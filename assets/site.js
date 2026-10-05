@@ -277,18 +277,18 @@
     if (rosters) return rosters;
     var raw = parse('pas-rosters');
     if (raw && Array.isArray(raw.kids) && raw.kids.length) {
-      rosters = { kid: 0, active: raw.active === 'next' ? 'next' : 'now', kids: raw.kids.slice(0, MAX_KIDS).map(function (k) {
+      rosters = { kid: 0, active: raw.active === 'now' ? 'now' : 'next', kids: raw.kids.slice(0, MAX_KIDS).map(function (k) {
         k = k && typeof k === 'object' ? k : {};
         return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next), teacher: cleanName(k.teacher), cardNote: String(k.cardNote == null ? '' : k.cardNote).slice(0, 110) };
       }) };
       if (typeof raw.kid === 'number' && raw.kid % 1 === 0 && raw.kid >= 0 && raw.kid < rosters.kids.length) rosters.kid = raw.kid;
     } else {
       // Carry over a board saved before each child had their own roster: it becomes the first child's.
-      var old = parse('pas-boards') || { active: 'now', now: parse('pas-board'), next: null };
+      var old = parse('pas-boards') || { active: parse('pas-board') ? 'now' : 'next', now: parse('pas-board'), next: null };   // someone new starts on the upcoming roster: planning the next term is why most people come
       var name = (old.now && old.now.name) || (old.next && old.next.name) || '';
       var kid = newKid(String(name).replace(/[’']s (week|board|roster)$/i, ''));
       kid.now = cleanBoard(old.now); kid.next = cleanBoard(old.next);
-      rosters = { kid: 0, active: old.active === 'next' ? 'next' : 'now', kids: [kid] };
+      rosters = { kid: 0, active: old.active === 'now' ? 'now' : 'next', kids: [kid] };
     }
     return rosters;
   }
@@ -480,8 +480,8 @@
       kidRemove.removeAttribute('data-armed');
       title.textContent = (kid.name ? possessive(kid.name) : 'Your') + (which === 'next' ? ' upcoming week' : ' current week');
       emptyText.textContent = which === 'next'
-        ? 'Nothing planned for the upcoming term yet. On any program, choose “Add to roster”, switch it to Upcoming, and pick the days.'
-        : 'Open a school’s page and choose “Add to roster” on any program. Pick the days, and it shows up here.';
+        ? 'Open a school’s page and choose “Add to roster” on any program. Pick the days, and it shows up here.'
+        : 'Nothing on the current roster yet. On any program, choose “Add to roster”, switch it to Current, and pick the days.';
       linkBox.value = shareUrl();
       emailLink.href = 'mailto:?subject=' + encodeURIComponent(heading(kid.name, which)) + '&body=' + encodeURIComponent(asText(kid.name, b, which) + '\n\n' + shareUrl());
       if (document.activeElement !== nameInput) nameInput.value = kid.name;
@@ -500,7 +500,7 @@
     kidAdd.addEventListener('click', function () {
       var r = loadRosters();
       if (r.kids.length >= MAX_KIDS) return;
-      r.kids.push(newKid('')); r.kid = r.kids.length - 1; r.active = 'now';
+      r.kids.push(newKid('')); r.kid = r.kids.length - 1; r.active = 'next';
       saveRosters(); say('New roster added. Give it a name, then add programs from a school’s page.'); render();
       nameInput.value = ''; nameInput.focus();
     });
@@ -699,12 +699,12 @@
     var fbtns = all(document, '[data-f]');
     var count = document.querySelector('#count'), clear = document.querySelector('#clear');
     var search = document.querySelector('#prog-search'), noMatch = document.querySelector('[data-nomatch]');
-    var state = { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', free: '' };
+    var state = { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL' };
     var terms = [];
     var findBtn = function (f, v) { for (var i = 0; i < fbtns.length; i++) if (fbtns[i].getAttribute('data-f') === f && fbtns[i].getAttribute('data-v') === v) return fbtns[i]; return null; };
     // Start from the page address (how the home page links in), then from the grade picked last time.
     var q0 = query();
-    ['type', 'grade', 'rel', 'hood', 'free'].forEach(function (f) { if (q0[f] && findBtn(f, q0[f])) state[f] = q0[f]; });
+    ['type', 'grade', 'rel', 'hood', 'cost'].forEach(function (f) { if (q0[f] && findBtn(f, q0[f])) state[f] = q0[f]; });
     if (!q0.grade) { var savedGrade = store('pas-grade'); if (savedGrade && findBtn('grade', savedGrade)) state.grade = savedGrade; }
     var gradeLabel = function (g) { return g === 'PK' ? 'Pre-K' : g === 'K' ? 'kindergarten' : 'grade ' + g; };
     var inList = function (el, attr, v) { return (' ' + (el.getAttribute(attr) || '') + ' ').indexOf(' ' + v + ' ') > -1; };
@@ -716,7 +716,7 @@
           && (state.type === 'ALL' || inList(it, 'data-types', state.type))
           && (state.rel === 'ALL' || it.getAttribute('data-rel') === state.rel)
           && (state.hood === 'ALL' || inList(it, 'data-hoods', state.hood))
-          && (!state.free || it.getAttribute('data-free') === '1');
+          && (state.cost === 'ALL' || inList(it, 'data-cost', state.cost));
         if (ok && terms.length) { var hay = it.getAttribute('data-search') || ''; ok = terms.every(function (w) { return w.test(hay); }); }
         it.hidden = !ok;
         if (ok) total++;
@@ -728,10 +728,9 @@
         if (badge) badge.textContent = n;
       });
       var bits = [];
-      ['type', 'rel', 'hood', 'free'].forEach(function (f) {
-        var on = f === 'free' ? state.free : state[f] !== 'ALL';
-        var b = on ? findBtn(f, state[f]) : null;
-        if (b) bits.push(f === 'hood' ? 'in ' + b.getAttribute('data-label') : b.getAttribute('data-label'));
+      ['type', 'rel', 'hood', 'cost'].forEach(function (f) {
+        var b = state[f] !== 'ALL' ? findBtn(f, state[f]) : null;
+        if (b) bits.push(f === 'hood' ? 'in ' + b.getAttribute('data-label') : f === 'cost' ? b.getAttribute('data-label').toLowerCase() : b.getAttribute('data-label'));
       });
       if (terms.length) bits.push('matching “' + search.value.trim() + '”');
       var what = (state.grade === 'ALL' ? '' : ' for ' + gradeLabel(state.grade)) + (bits.length ? ' (' + bits.join(', ') + ')' : '');
@@ -741,30 +740,29 @@
       if (noMatch) noMatch.hidden = total > 0;
       fbtns.forEach(function (b) {
         var f = b.getAttribute('data-f'), v = b.getAttribute('data-v');
-        b.setAttribute('aria-pressed', String(f === 'free' ? state.free === v : state[f] === v));
+        b.setAttribute('aria-pressed', String(state[f] === v));
       });
       // keep the address in step, so a filtered list can be bookmarked or sent to someone
       if (window.history && history.replaceState) {
         var parts = [];
-        ['type', 'grade', 'rel', 'hood'].forEach(function (f) { if (state[f] !== 'ALL') parts.push(f + '=' + encodeURIComponent(state[f])); });
-        if (state.free) parts.push('free=1');
+        ['type', 'grade', 'rel', 'hood', 'cost'].forEach(function (f) { if (state[f] !== 'ALL') parts.push(f + '=' + encodeURIComponent(state[f])); });
         try { history.replaceState(null, '', location.pathname + (parts.length ? '?' + parts.join('&') : '') + location.hash); } catch (e) { /* file preview */ }
       }
       return total;
     };
-    var NAMES = { type: 'program_type', rel: 'relation', hood: 'neighborhood', grade: 'grade', free: 'free' };
+    var NAMES = { type: 'program_type', rel: 'relation', hood: 'neighborhood', grade: 'grade', cost: 'cost' };
     fbtns.forEach(function (b) {
       if (b.tagName !== 'BUTTON') return;
       b.addEventListener('click', function () {
         var f = b.getAttribute('data-f'), v = b.getAttribute('data-v');
-        if (f === 'free') state.free = state.free ? '' : v; else state[f] = v;
+        state[f] = v;
         if (f === 'grade') store('pas-grade', v);
         apply();
-        track({ event: 'pas_filter', filter_type: NAMES[f], filter_value: f === 'free' ? (state.free ? 'on' : 'off') : v, school: fSchool });
+        track({ event: 'pas_filter', filter_type: NAMES[f], filter_value: v, school: fSchool });
       });
     });
     clear.addEventListener('click', function () {
-      state = { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', free: '' };
+      state = { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL' };
       terms = []; if (search) search.value = '';
       store('pas-grade', 'ALL');
       apply();
