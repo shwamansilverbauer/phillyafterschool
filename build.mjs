@@ -177,7 +177,7 @@ function card(p, school) {
   if (r.how === 'online') regText = ['Online.', regText].filter(Boolean).join(' ');
   if (r.how === 'phone') regText = [`By phone or in person${p.phone ? ': ' + phoneLink : ''}.`, regText].filter(Boolean).join(' ');
   if (r.how === 'school') regText = [regText, p.phone ? `School office: ${phoneLink}.` : ''].filter(Boolean).join(' ');
-  const rows = [['Where', esc(where)], ['Hours', esc(p.hours)], ['Cost', esc(p.cost)], ['Register', regText], ['Contact', r.how === 'school' ? '' : contact]]
+  const rows = [['Where', esc(where)], ['Hours', esc(p.hours)], ['Cost', esc(p.cost)], ['Register', regText], ['Next term', esc(r.nextTerm || '')], ['Contact', r.how === 'school' ? '' : contact]]
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
   const flag = [p.note, l.note].filter(Boolean).join(' ');
   const fix = correctionHref(`Correction: ${p.name} (${school.shortName})`);

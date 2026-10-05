@@ -54,6 +54,7 @@ Fields worth knowing:
 
 - `grades`: a range like `"K-5"` or `"PK-3"`, a single grade like `"8"`, or `null` when the provider doesn't publish grades.
 - `register.how`: `online` (needs `url`), `phone`, `contact`, `school` or `none`. `register.note` is shown next to it.
+- `register.nextTerm`: optional. When sign-ups open for the next term, semester or school year, in a sentence with dates. Leave it out when the provider doesn't say.
 - `note`: the yellow caution box. Use it for anything unconfirmed.
 - `schools`: one entry per school the program serves:
   - `relation`: `onsite`, `pickup` or `nearby`. Use `pickup` only when a source names the school.
