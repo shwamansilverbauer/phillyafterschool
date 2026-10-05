@@ -267,6 +267,9 @@
       "aftercare"
     ],
     "address": "530 Bainbridge St",
+    "neighborhoods": [
+      "Queen Village"
+    ],
     "grades": "K-8",
     "gradeNote": "",
     "hours": "Until 6:00 pm, Mon–Fri. Open most early dismissals and days off.",
@@ -324,6 +327,9 @@
       "low cost"
     ],
     "address": "101–31 Carpenter St (Front and Carpenter)",
+    "neighborhoods": [
+      "Queen Village"
+    ],
     "grades": "K-6",
     "gradeNote": "Ages 5–12",
     "hours": "3:00–6:00 pm, weekdays",
@@ -377,6 +383,10 @@
       "aftercare"
     ],
     "address": "500 Kenilworth St",
+    "neighborhoods": [
+      "Queen Village",
+      "East Passyunk"
+    ],
     "grades": "K-4",
     "gradeNote": "K–4. A separate Mini MOVE serves Pre-K.",
     "hours": "3:30–6:30 pm, Mon–Fri (Aug 24, 2026 – June 9, 2027)",
@@ -428,6 +438,9 @@
       "aftercare"
     ],
     "address": "416 Queen St",
+    "neighborhoods": [
+      "Queen Village"
+    ],
     "grades": "PK-3",
     "gradeNote": "Ages 3–9",
     "hours": "Until 5:45 pm, Mon–Fri. Escorted children arrive 3:45–4:00.",
@@ -470,6 +483,9 @@
       "aftercare"
     ],
     "address": "514 Bainbridge St",
+    "neighborhoods": [
+      "Queen Village"
+    ],
     "grades": "PK-6",
     "gradeNote": "Ages 4–12",
     "hours": "Until 6:00 pm. Half-day camps on early-dismissal days.",
@@ -526,6 +542,9 @@
       "childcare"
     ],
     "address": "401 Lombard St",
+    "neighborhoods": [
+      "Society Hill"
+    ],
     "grades": "K-5",
     "gradeNote": "",
     "hours": "3:30–6:00 pm, Mon–Fri. Full days on most district holidays and half days.",
@@ -573,6 +592,9 @@
       "design"
     ],
     "address": "800 S 8th St",
+    "neighborhoods": [
+      "Bella Vista"
+    ],
     "grades": "K-8",
     "gradeNote": "Ages 5–8 and 8–11 on weekdays; ages 11–15 on Fridays",
     "hours": "3:45–5:45 pm (ages 5–11); Fridays 4:00–6:00 pm (ages 11–15)",
@@ -634,6 +656,9 @@
       "instruments"
     ],
     "address": "761 S 8th St and 904 S 9th St",
+    "neighborhoods": [
+      "Bella Vista"
+    ],
     "grades": "K-5",
     "gradeNote": "Kindergarten and up; upper limit not published",
     "hours": "Classes start at 3:50 or 5:00 pm",
@@ -688,6 +713,10 @@
       "circuits"
     ],
     "address": "1001 Christian St (Bella Vista) and 615 S 3rd St (Queen Village)",
+    "neighborhoods": [
+      "Bella Vista",
+      "Queen Village"
+    ],
     "grades": "K-5",
     "gradeNote": "K–5 for pickup; classes run to age 14",
     "hours": "3:30–6:00 pm, Mon–Fri",
@@ -748,6 +777,9 @@
       "tabletop"
     ],
     "address": "125 South St",
+    "neighborhoods": [
+      "Queen Village"
+    ],
     "grades": "1-8",
     "gradeNote": "Ages 6–16",
     "hours": "Until 6:00 pm, on the School District calendar",
@@ -795,6 +827,9 @@
       "childcare"
     ],
     "address": "Bok, 1901 S 9th St",
+    "neighborhoods": [
+      "East Passyunk"
+    ],
     "grades": "PK-3",
     "gradeNote": "",
     "hours": "Mon–Fri. End time not published.",
@@ -847,6 +882,9 @@
       "tumbling"
     ],
     "address": "812 Chestnut St",
+    "neighborhoods": [
+      "Washington Square West"
+    ],
     "grades": null,
     "gradeNote": "Ages not published",
     "hours": "Mon–Fri during the school year",
@@ -891,6 +929,9 @@
       "childcare"
     ],
     "address": "1112 Chestnut St, Suite C",
+    "neighborhoods": [
+      "Washington Square West"
+    ],
     "grades": "K-5",
     "gradeNote": "",
     "hours": "2:30–6:00 pm. From 12:30 pm on early-release days; full days on most school holidays.",
@@ -932,6 +973,9 @@
       "low cost"
     ],
     "address": "12th and Wharton Sts",
+    "neighborhoods": [
+      "Passyunk Square"
+    ],
     "grades": "1-6",
     "gradeNote": "Ages 6–12",
     "hours": "Not confirmed for this year. City rec programs typically run 3:00–6:00 pm on weekdays.",
@@ -983,6 +1027,9 @@
       "low cost"
     ],
     "address": "1200 Carpenter St",
+    "neighborhoods": [
+      "Hawthorne"
+    ],
     "grades": "1-6",
     "gradeNote": "Ages 6–12",
     "hours": "3:00–6:00 pm, weekdays",
@@ -1039,6 +1086,9 @@
       "low cost"
     ],
     "address": "600–44 Lombard St",
+    "neighborhoods": [
+      "Society Hill"
+    ],
     "grades": "K-5",
     "gradeNote": "Ages 5–11",
     "hours": "3:00–6:00 pm, weekdays",
@@ -1088,6 +1138,9 @@
       "low cost"
     ],
     "address": "725 S 10th St (10th and Fitzwater)",
+    "neighborhoods": [
+      "Bella Vista"
+    ],
     "grades": "K-6",
     "gradeNote": "Ages 5–12",
     "hours": "Not published for this year",
@@ -1140,6 +1193,9 @@
       "free"
     ],
     "address": "1025 S 9th St",
+    "neighborhoods": [
+      "Bella Vista"
+    ],
     "grades": "3-8",
     "gradeNote": "",
     "hours": "Daily after school. Times not published.",
@@ -1186,6 +1242,9 @@
       "drop-in"
     ],
     "address": "Charles Santore Library, 932 S 7th St",
+    "neighborhoods": [
+      "Bella Vista"
+    ],
     "grades": "K-8",
     "gradeNote": "K–12",
     "hours": "After school during the school year. Hours vary by branch.",
@@ -1233,6 +1292,9 @@
       "free"
     ],
     "address": "719 Catharine St",
+    "neighborhoods": [
+      "Bella Vista"
+    ],
     "grades": "6-8",
     "gradeNote": "Weekday options are grades 6–12. K–5 classes meet on Saturdays only.",
     "hours": "Teen Lounge: 4–6 pm, Mon–Wed on school days (one Fleisher page lists Tue and Wed only). Weekday class times vary by term.",
@@ -1296,6 +1358,10 @@
       "teens"
     ],
     "address": "1311 S Juniper St and 2401 Washington Ave",
+    "neighborhoods": [
+      "Passyunk Square",
+      "Graduate Hospital"
+    ],
     "grades": "K-8",
     "gradeNote": "K–5, grades 6–7, and teens",
     "hours": "Mon–Fri",

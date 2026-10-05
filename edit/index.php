@@ -77,7 +77,7 @@ if (!edit_signed_in()) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=18be312a">
+<link rel="stylesheet" href="../assets/site.css?v=007ca812">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js'</script>
@@ -119,6 +119,7 @@ if (!edit_signed_in()) {
       <ul>
         <li><a href="../coppin/">Coppin</a></li><li><a href="../meredith/">Meredith</a></li><li><a href="../nebinger/">Nebinger</a></li>
         <li><a href="../#schools"><span data-copy="0898b0b426">All schools</span></a></li>
+        <li><a href="../neighborhoods/"><span data-copy="8ed176874c">By neighborhood</span></a></li>
         <li><a href="../suggest/"><span data-copy="6c51011791">Ask for your school</span></a></li>
       </ul>
     </div>
@@ -126,6 +127,7 @@ if (!edit_signed_in()) {
       <h2><a href="../programs/"><span data-copy="ab14d0a7db">Programs</span></a></h2>
       <ul>
         <li><a href="../programs/"><span data-copy="b8741ed7c0">All programs, A to Z</span></a></li>
+        <li><a href="../neighborhoods/"><span data-copy="3a356e1883">Programs by neighborhood</span></a></li>
         <li><a href="../suggest/"><span data-copy="0d1fc1aeaa">Suggest a program</span></a></li>
         <li><a href="../review/"><span data-copy="d2684e6248">Write a review</span></a></li>
       </ul>
@@ -178,7 +180,7 @@ if (!edit_signed_in()) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=18be312a">
+<link rel="stylesheet" href="../assets/site.css?v=007ca812">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js'</script>
@@ -216,6 +218,8 @@ if (!edit_signed_in()) {
     <li><a href="../meredith/">Meredith page</a></li>
     <li><a href="../coppin/">Coppin page</a></li>
     <li><a href="../programs/">All programs, A to Z</a></li>
+    <li><a href="../neighborhoods/">Neighborhoods</a></li>
+    <li><a href="../neighborhoods/queen-village/">A neighborhood page (Queen Village)</a></li>
     <li><a href="../programs/imagine-that-philly/">A program page (Imagine That Philly)</a></li>
     <li><a href="../board/">My child’s roster</a></li>
     <li><a href="../suggest/">Suggest a program</a></li>
@@ -245,6 +249,7 @@ if (!edit_signed_in()) {
       <ul>
         <li><a href="../coppin/">Coppin</a></li><li><a href="../meredith/">Meredith</a></li><li><a href="../nebinger/">Nebinger</a></li>
         <li><a href="../#schools"><span data-copy="0898b0b426">All schools</span></a></li>
+        <li><a href="../neighborhoods/"><span data-copy="8ed176874c">By neighborhood</span></a></li>
         <li><a href="../suggest/"><span data-copy="6c51011791">Ask for your school</span></a></li>
       </ul>
     </div>
@@ -252,6 +257,7 @@ if (!edit_signed_in()) {
       <h2><a href="../programs/"><span data-copy="ab14d0a7db">Programs</span></a></h2>
       <ul>
         <li><a href="../programs/"><span data-copy="b8741ed7c0">All programs, A to Z</span></a></li>
+        <li><a href="../neighborhoods/"><span data-copy="3a356e1883">Programs by neighborhood</span></a></li>
         <li><a href="../suggest/"><span data-copy="0d1fc1aeaa">Suggest a program</span></a></li>
         <li><a href="../review/"><span data-copy="d2684e6248">Write a review</span></a></li>
       </ul>
