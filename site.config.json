@@ -4,10 +4,11 @@
   "siteUrl": "https://phillyafterschool.org",
   "schoolYear": "2026–27",
   "contactEmail": "contact@phillyafterschool.org",
-  "supportUrl": "",
+  "supportUrl": "https://venmo.com/u/shwamanjosh",
+  "supportLabel": "Chip in on Venmo",
+  "supportHandle": "@shwamanjosh",
   "supportTaxDeductible": false,
   "gtmId": "GTM-MKNWQ3BC",
-  "supportMonthlyUrl": "",
   "builtBy": {
     "name": "Josh Silverbauer",
     "url": "https://joshsilverbauer.com",

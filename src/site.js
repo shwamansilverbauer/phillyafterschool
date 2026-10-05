@@ -17,6 +17,10 @@
     track({ event: 'pas_suggest_submit', suggest_kind: form.kind.value, school: form.school.value });
   });
 
+  // Support button
+  var give = document.querySelector('a[data-track="support"]');
+  if (give) give.addEventListener('click', function () { track({ event: 'pas_support_click' }); });
+
   // ----- home page: find your school -----
   var find = document.querySelector('#find-school');
   if (find) {

@@ -19,9 +19,9 @@ programs with a grade filter. Everything is generated from two data files.
 Fill in `site.config.json`:
 
 - `contactEmail`: where corrections go. Until it's set, the site says a contact address is coming.
-- `supportUrl`: your payment link (Stripe, Ko-fi, Buy Me a Coffee, etc.). Until it's set, the Support page says contributions are being set up.
+- `supportUrl`: where the Support button goes (currently a Venmo profile). If it's empty, the Support page says contributions are being set up.
+- `supportLabel` and `supportHandle`: the button text, and the handle shown under it for people who'd rather search in the app.
 - `siteUrl`: the domain you treat as the main one. Redirect the other domain to it at your host.
-- `supportMonthlyUrl`: optional second link for a recurring contribution.
 - `builtBy`: the name, link and short bio shown in the footer, on the home page and on About.
 - `gtmId`: optional, e.g. `GTM-XXXXXXX`.
 
@@ -79,9 +79,9 @@ A hidden field traps most spam bots.
 
 ## Analytics
 
-Set `gtmId` to load Google Tag Manager on every page. The site pushes three events to the data layer:
+Set `gtmId` to load Google Tag Manager on every page. The site pushes four events to the data layer:
 `pas_filter` (filter_type, filter_value, school), `pas_outbound` (link_type of register or website,
-program_id, school) and `pas_suggest_submit` (suggest_kind, school).
+program_id, school), `pas_suggest_submit` (suggest_kind, school) and `pas_support_click`.
 
 ## Keeping it current
 

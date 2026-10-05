@@ -306,8 +306,9 @@ ${cfg.builtBy ? `<section class="section" id="who">
 }
 
 function supportPage() {
-  const give = (cfg.supportUrl || cfg.supportMonthlyUrl)
-    ? `<p class="actions">${cfg.supportUrl ? `<a class="btn primary big" href="${esc(cfg.supportUrl)}" target="_blank" rel="noopener">Chip in once</a>` : ''}${cfg.supportMonthlyUrl ? `<a class="btn big" href="${esc(cfg.supportMonthlyUrl)}" target="_blank" rel="noopener">Chip in monthly</a>` : ''}</p>`
+  const give = cfg.supportUrl
+    ? `<p class="actions"><a class="btn primary big" data-track="support" href="${esc(cfg.supportUrl)}" target="_blank" rel="noopener">${esc(cfg.supportLabel || 'Chip in')}</a></p>
+  ${cfg.supportHandle ? `<p class="hint">Or search for <b>${esc(cfg.supportHandle)}</b> in the Venmo app.</p>` : ''}`
     : `<div class="panel"><h3>Online contributions are being set up</h3><p>Check back soon.</p></div>`;
   const hero = `    <h1>Help keep this current</h1>
     <p class="lede">Programs change their prices, hours and pickup routes every year. Each listing here is checked against the provider’s own page, and that takes time.</p>`;
