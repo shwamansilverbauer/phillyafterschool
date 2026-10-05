@@ -11,6 +11,21 @@ $OVERRIDES = json_decode(<<<'PAS_JSON'
 {}
 PAS_JSON
 , true);
+$EDIT_USER = "Silverbauer";
+$EDIT_HASH = '$2y$10$YM3U3P.TEB3.lr00uXCsbeNQW852A2Xdg/Rwbro4BIJULUT7bHiz2';
+$EDIT_KEY = hash('sha256', $EDIT_HASH . '|edit-sign-in');
+header('Cache-Control: no-store, private');
+header('X-Robots-Tag: noindex');
+function edit_token($exp) {
+  global $EDIT_KEY;
+  return $exp . '.' . hash_hmac('sha256', (string) $exp, $EDIT_KEY);
+}
+function edit_signed_in() {
+  if (!isset($_COOKIE['pas_edit']) || !is_string($_COOKIE['pas_edit'])) return false;
+  $parts = explode('.', $_COOKIE['pas_edit'], 2);
+  if (count($parts) !== 2 || !ctype_digit($parts[0]) || (int) $parts[0] < time()) return false;
+  return hash_equals(edit_token($parts[0]), $_COOKIE['pas_edit']);
+}
 
 function out($ok, $msg, $code) {
   http_response_code($code);
@@ -27,6 +42,9 @@ function tidy($v, $max) {
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
   out(false, 'Use the editor on the site.', 405);
+}
+if (!edit_signed_in()) {
+  out(false, 'You are signed out.', 401);
 }
 $in = json_decode(file_get_contents('php://input'), true);
 if (!is_array($in) || !isset($in['edits']) || !is_array($in['edits'])) {

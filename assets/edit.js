@@ -173,6 +173,7 @@
     if (n && n.closest('a, label, summary')) e.preventDefault();
   }, true);
   document.addEventListener('submit', function (e) {
+    if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-edit-allow')) return;   // the sign-in form
     e.preventDefault();
     hint = 'Forms are switched off while you’re editing.';
     refresh();
@@ -267,8 +268,17 @@
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: name, note: note, company: trap.value, edits: ids.map(function (id) { return { id: id, now: edits[id].now, page: edits[id].page }; }) }),
       }).then(function (r) {
-        return r.json().then(function (j) { return { ok: r.ok && j && j.ok, message: j && j.message }; });
+        return r.json().then(function (j) { return { ok: r.ok && j && j.ok, message: j && j.message, status: r.status }; });
       }).then(function (res) {
+        if (res.status === 401) {   // signed out: the edits stay saved in this browser
+          draw();
+          msg.textContent = 'You’re signed out, so nothing was sent. Your changes are still saved here. ';
+          var again = el('a', null, 'Sign in again');
+          again.href = cfg.home || '#';
+          msg.appendChild(again);
+          msg.appendChild(document.createTextNode(', then come back and send.'));
+          return;
+        }
         if (!res.ok) { draw(); showFallback(res.message || 'That didn’t send.'); return; }
         ids.forEach(function (id) { if (edits[id]) edits[id].sent = true; });
         save(); draw(); refresh();
