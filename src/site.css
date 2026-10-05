@@ -441,3 +441,23 @@ button.btn{cursor:pointer;font-family:inherit}
 .way .gbtn:hover{background:var(--yellow);color:var(--yellow-ink)}
 .grade-links{gap:8px}
 .grade-links .gbtn{padding:14px 6px}
+
+/* ---------- search: matches hidden by filters, and adding a program from the roster page ---------- */
+.search-more{margin-top:-2px}
+.search-more .clear{font-size:inherit}
+.adder{flex-direction:column;gap:12px;max-width:620px}
+.adder[hidden]{display:none}
+.adder-find{position:relative;display:flex;flex-direction:column;gap:8px}
+.adder-find label{font-weight:700}
+.adder-find input{font:inherit;font-size:1.05rem;width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.adder-find .finder-list{top:calc(100% + 6px)}
+.finder-list button{font:inherit;text-align:left;width:100%;border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 12px;border-radius:10px;color:#0B2140}
+.finder-list li[aria-selected="true"] button,.finder-list button:hover{background:#DAEDFE}
+.add-panel{gap:12px;border-color:var(--link);box-shadow:0 6px 18px rgba(7,21,39,.08)}
+.add-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.add-head h3{font-size:1.2rem}
+.add-head a{font-size:.93rem}
+.add-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.add-how{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;color:var(--muted);font-size:.95rem}
+.day:disabled{opacity:.45;cursor:not-allowed}
+#add-status:empty{display:none}

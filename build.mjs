@@ -398,7 +398,7 @@ const programRow = (p, depth) => {
 // One filter bar for every page that lists programs: search, program type, free or paid, neighborhood, and (on a school
 // page) how the program gets your child. The grade row sits in a strip that stays on screen while you scroll.
 // Filters also read from the page address (?type=music&grade=3), which is how the home page links into them.
-function filterBar({ list, depth, school = null, show = {}, searchLabel, placeholder = 'Try drums, art, homework…' }) {
+function filterBar({ list, depth, school = null, show = {}, searchLabel, placeholder = 'Its name, or try drums, art, chess…' }) {
   const on = { q: true, type: true, grade: true, hood: true, cost: true, ...show };
   const btn = (f, v, label, n, cls = 'tbtn', extra = '') => `<button type="button" class="${cls}" id="${f}-${v}" data-f="${f}" data-v="${v}" data-label="${esc(label)}" aria-pressed="${v === 'ALL'}"${extra}>${esc(label)}${n === null ? '' : ` (${n})`}</button>`;
   const types = TYPES.map(t => [t, list.filter(p => p.types.includes(t.id)).length]).filter(([, n]) => n);
@@ -414,8 +414,9 @@ function filterBar({ list, depth, school = null, show = {}, searchLabel, placeho
   }).join('') : '';
   return `<div class="fbar needs-js-block" data-filters${school ? ` data-school="${esc(school.id)}"` : ''}>
     ${on.q ? `<div class="finder">
-      <label for="prog-search">${T(searchLabel || `Looking for something specific?`)}</label>
+      <label for="prog-search">${T(searchLabel || `Looking for a particular program?`)}</label>
       <input id="prog-search" type="search" placeholder="${esc(placeholder)}" autocomplete="off">
+      <p class="hint search-more" id="search-more" aria-live="polite" hidden></p>
     </div>` : ''}
     ${typeRow}${relRow}${hoodRow}${costRow}
   </div>
@@ -502,7 +503,7 @@ function programPage(p) {
     const extra = [l.address ? `${s.shortName} children go to ${l.address}.` : '', l.distance ? l.distance.charAt(0).toUpperCase() + l.distance.slice(1) + '.' : ''].filter(Boolean).join(' ');
     const links = [
       l.registerUrl && r.how === 'online' ? `<a href="${esc(l.registerUrl)}" target="_blank" rel="noopener" data-track="register">${esc(r.label || 'Register')} (${esc(s.shortName)})</a>` : '',
-      `<a href="${link(s.id + '/', D)}#${esc(p.id)}">Add it to your week from the ${esc(s.shortName)} page</a>`,
+      `<a class="needs-js" href="${link('board/', D)}?add=${esc(p.id)}&amp;school=${esc(s.id)}">Add it to your week</a>`,
       `<a href="${link(s.id + '/', D)}">All ${forSchool(s).length} options for ${esc(s.shortName)}</a>`,
       l.sources?.length ? `<span>Source: ${sourceLinks(l.sources)}</span>` : '',
     ].filter(Boolean).join('');
@@ -534,7 +535,7 @@ function programPage(p) {
       ${gradeStrip(p)}
       <dl>${rows}</dl>
       ${p.note ? `<p class="flag">${esc(p.note)}</p>` : ''}
-      <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a></div>
+      <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a><a class="btn needs-js" href="${link('board/', D)}?add=${esc(p.id)}">${T(`Add to your week`)}</a></div>
     </article>
     <p class="hint">${T(`Prices, hours and pickup routes change during the year. Confirm with the provider before you enroll.`)}</p>
   </section>
@@ -669,12 +670,14 @@ const finderData = (() => {
     return [x.id, mine ? mine.name : x.name, `${x.address}, ${x.zip}`, mine ? mine.grades : x.grades, x.kind, mine ? mine.id : '', mine ? forSchool(mine).length : 0, near ? near[0] : '', near ? Math.round(near[1] * 10) / 10 : 0];
   });
   for (const s of schools) if (!rows.some(r => r[5] === s.id)) rows.push([s.id, s.name, s.address.split(',').slice(0, 1).join(''), s.grades, '', s.id, forSchool(s).length, '', 0]);   // a covered school the city list doesn't have
-  return { schools: rows, covered: Object.fromEntries(schools.map(s => [s.id, s.shortName])) };
+  // programs are [id, name, type, which schools]: the home page search finds these too
+  const progRows = [...programs].sort((a, b) => fullName(a).localeCompare(fullName(b))).map(p => [p.id, fullName(p), TYPE[p.types[0]].label, servedSummary(p)]);
+  return { schools: rows, covered: Object.fromEntries(schools.map(s => [s.id, s.shortName])), programs: progRows };
 })();
-const finderBox = (depth, label) => `<div class="find" data-finder data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}"${PREVIEW ? '' : ` data-src="${link('data/school-finder.json', depth)}"`}>
+const finderBox = (depth, label, withPrograms = false) => `<div class="find" data-finder${withPrograms ? ' data-programs' : ''} data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}"${PREVIEW ? '' : ` data-src="${link('data/school-finder.json', depth)}"`}>
       <label for="find-school">${T(label || `Find your school`)}</label>
-      <input id="find-school" type="search" role="combobox" aria-expanded="false" aria-controls="finder-list" aria-autocomplete="list" placeholder="Start typing a school name" autocomplete="off">
-      <ul id="finder-list" class="finder-list" role="listbox" aria-label="Schools" hidden></ul>
+      <input id="find-school" type="search" role="combobox" aria-expanded="false" aria-controls="finder-list" aria-autocomplete="list" placeholder="${withPrograms ? 'Start typing a school or program name' : 'Start typing a school name'}" autocomplete="off">
+      <ul id="finder-list" class="finder-list" role="listbox" aria-label="${withPrograms ? 'Schools and programs' : 'Schools'}" hidden></ul>
       <p class="hint">${T(`Every district and charter school in the city is in here. If yours isn’t covered yet, you can ask for it.`)} <noscript><a href="${link('schools/', depth)}">See the schools covered so far.</a></noscript></p>
       ${PREVIEW ? `<script type="application/json" id="finder-data">${JSON.stringify(finderData).replace(/</g, '\\u003c')}</script>` : ''}
     </div>`;
@@ -807,7 +810,7 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
       <span>Reviewed <b>${longDate(s.lastReviewed)}</b></span>
     </div>`;
   const body = `<div data-school-page="${esc(s.id)}" style="display:contents">
-  ${filterBar({ list, depth: 1, school: s, show: { hood: false }, placeholder: 'Try drums, art, homework, chess…' })}
+  ${filterBar({ list, depth: 1, school: s, show: { hood: false } })}
   <div class="legend">
     <span><i class="cell on">3</i> grade served</span>
     <span><i class="cell">7</i> not served</span>
@@ -854,7 +857,7 @@ function homePage() {
   const covered = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName));
   const hero = `    <h1>${T(`School’s out. Now what?`)}</h1>
     <p class="lede">${T(`Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.`)}</p>
-    ${finderBox(0)}`;
+    ${finderBox(0, `Find your school or a program`, true)}`;
   const body = `<section class="section" id="browse">
   <h2>${T(`Or start somewhere else`)}</h2>
   <div class="ways">
@@ -1307,10 +1310,13 @@ function boardPage() {
   const order = [...programs].sort((a, b) => a.name.localeCompare(b.name)).map(p => p.id);   // each program's card number
   const data = {
     total: programs.length,
+    suggest: link('suggest/', 1),
+    rels: Object.fromEntries(Object.entries(REL).map(([k, v]) => [k, v.pill])),
     types: Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, color: t.color, icon: t.icon }])),
     schools: Object.fromEntries(schools.map(s => [s.id, { name: s.shortName, path: link(s.id + '/', 1) }])),
     programs: Object.fromEntries(programs.map(p => [p.id, {
       name: p.name, hours: p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [], type: p.types[0], no: order.indexOf(p.id) + 1,
+      path: link(programPath(p), 1), q: [p.name, ...(p.offers || []), ...(p.keywords || []), ...p.types.map(t => TYPE[t].label)].join(' ').toLowerCase(),
       schools: Object.fromEntries(Object.entries(p.schools).map(([sid, l]) => [sid, { rel: l.relation, where: l.address || p.address || '' }])),
     }])),
   };
@@ -1339,8 +1345,17 @@ function boardPage() {
       <button type="button" class="tab" data-board="now" aria-pressed="false">Current</button>
     </div>
     <h2 id="board-title">Your upcoming week</h2>
+    <div class="adder needs-js-block" id="board-adder">
+      <div class="adder-find">
+        <label for="add-search">${T(`Add a program`)}</label>
+        <input id="add-search" type="search" role="combobox" aria-expanded="false" aria-controls="add-list" aria-autocomplete="list" placeholder="Start typing a program’s name" autocomplete="off">
+        <ul id="add-list" class="finder-list" role="listbox" aria-label="Programs" hidden></ul>
+      </div>
+      <div class="panel add-panel" id="add-panel" hidden></div>
+      <p class="hint" id="add-status" aria-live="polite"></p>
+    </div>
     <div class="panel" id="board-empty" hidden>
-      <p id="board-empty-text">Open a school’s page and choose “Add to roster” on any program. Pick the days, and it shows up here.</p>
+      <p id="board-empty-text">Search for a program above and pick its days. Or open a school’s page and choose “Add to roster” on any program.</p>
       <div class="actions">${schoolLinks}</div>
     </div>
     <p class="hint" id="board-hint" hidden>${T(`Drag a card by its colored top to move it to another day, or use the day buttons on the card.`)}</p>

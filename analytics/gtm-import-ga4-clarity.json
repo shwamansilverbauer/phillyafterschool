@@ -1,6 +1,6 @@
 {
   "exportFormatVersion": 2,
-  "exportTime": "2026-10-05 18:46:45",
+  "exportTime": "2026-10-05 22:23:17",
   "containerVersion": {
     "path": "accounts/0/containers/0/versions/0",
     "accountId": "0",
@@ -766,6 +766,71 @@
         "accountId": "0",
         "containerId": "0",
         "tagId": "12",
+        "name": "GA4 - Event - pas_program_pick",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_program_pick"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "program_id"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - program_id}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "method"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - method}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "11"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "13",
         "name": "Clarity - Base",
         "type": "html",
         "parentFolderId": "1",
@@ -789,12 +854,12 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "tagId": "13",
+        "tagId": "14",
         "name": "Clarity - Site events",
         "type": "html",
         "parentFolderId": "1",
         "firingTriggerId": [
-          "11"
+          "12"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "notes": "Sends each pas_ event to Clarity as a custom event, so recordings and heatmaps can be filtered by it.",
@@ -1067,6 +1132,31 @@
         "accountId": "0",
         "containerId": "0",
         "triggerId": "11",
+        "name": "CE - pas_program_pick",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_program_pick"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "12",
         "name": "CE - any pas_ event",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [

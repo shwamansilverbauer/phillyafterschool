@@ -164,6 +164,13 @@ Each pick is drawn as a card in its program type's color. "Make it a card" draws
 (for a text, a printout or a teacher), with an optional photo that is read on the device and never uploaded.
 The page address and the analytics event names still say "board" so older links and reports keep working.
 
+Finding one program by name works in three places. The roster page has an "Add a program" search: pick a
+program, say which school (assumed when the program serves one school, when that child's rosters already use
+a school, or from the school page looked at last), then tap the days. The home page search finds programs as
+well as schools. Every listing page's search box matches names, and when a filter is hiding a match it says
+so and offers to show it. A program's own page has "Add to your week", which opens the roster page with that
+program ready (`/board/?add=<program id>&school=<school id>`).
+
 ## The suggestion form
 
 `/ideas/` (feature requests) posts to the same handler and arrives with the type "A feature idea".
@@ -184,7 +191,8 @@ Set `gtmId` to load Google Tag Manager on every page. The site pushes these even
 program_id, school; school is empty on a program's own page), `pas_suggest_submit` (suggest_kind, school), `pas_support_click`, `pas_review_submit` (program_id,
 school, stars), `pas_board_add` (program_id, school, day, board, children) and `pas_board_share` (method, board).
 `pas_school_pick` (school, covered) fires when someone picks a school in the finder, and `pas_school_request` (school)
-when they ask for one that isn't covered. `pas_filter` reports filter_type as `grade`, `program_type`, `relation`,
+when they ask for one that isn't covered. `pas_program_pick` (program_id, method) fires when someone picks a program
+by name: method is `home_search`, `roster_search`, or `program_page` (the "Add to your week" button). `pas_filter` reports filter_type as `grade`, `program_type`, `relation`,
 `neighborhood` or `cost`. `pas_board_share` methods include `image_save`, `image_share` and `print`.
 `pas_outbound` also fires with link_type `calendar` and `review`. `pas_search` (search_term, results,
 school) fires when someone pauses typing in a school page's search box; searches with zero results
