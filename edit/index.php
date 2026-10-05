@@ -93,7 +93,7 @@ if (!edit_signed_in()) {
 <header class="band">
   <div class="in bar">
     <a class="brand" href="../"><span class="bus-mark"></span>Philly After School</a>
-    <nav class="nav" aria-label="Site"><a href="../">Schools</a><a href="../board/">My child’s roster<span class="count" data-board-count hidden></span></a><a href="../suggest/">Suggest a program</a><a href="../about/">About</a><a href="../support/">Buy me a coffee</a></nav>
+    <nav class="nav" aria-label="Site"><a href="../">Schools</a><a href="../board/">Build your week<span class="count" data-board-count hidden></span></a><a href="../suggest/">Suggest a program</a><a href="../about/">About</a><a href="../support/">Buy me a coffee</a></nav>
   </div>
   <div class="in hero">
     <h1>Sign in to edit</h1>
@@ -126,7 +126,6 @@ if (!edit_signed_in()) {
     <div>
       <h2><a href="../#schools"><span data-copy="06c76a46e4">Schools</span></a></h2>
       <ul>
-        <li><a href="../coppin/">Coppin</a></li><li><a href="../meredith/">Meredith</a></li><li><a href="../nebinger/">Nebinger</a></li>
         <li><a href="../#schools"><span data-copy="0898b0b426">All schools</span></a></li>
         <li><a href="../neighborhoods/"><span data-copy="8ed176874c">By neighborhood</span></a></li>
         <li><a href="../suggest/"><span data-copy="6c51011791">Ask for your school</span></a></li>
@@ -144,7 +143,7 @@ if (!edit_signed_in()) {
     <div>
       <h2><a href="../board/"><span data-copy="928655b7f0">Your family</span></a></h2>
       <ul>
-        <li><a href="../board/"><span data-copy="d5f68f1923">My child’s roster</span></a></li>
+        <li><a href="../board/"><span data-copy="82a8bb5146">Build your week</span></a></li>
       </ul>
     </div>
     <div>
@@ -153,6 +152,7 @@ if (!edit_signed_in()) {
         <li><a href="../about/"><span data-copy="5e461a2404">About this site</span></a></li>
         <li><a href="../about/#how"><span data-copy="5b2fc57ac3">How listings are checked</span></a></li>
         <li><a href="../about/#corrections"><span data-copy="1862eb688d">Send a correction</span></a></li>
+        <li><a href="../privacy/"><span data-copy="cf01481f62">Privacy</span></a></li>
         <li><a href="../support/"><span data-copy="fd1482eac6">Buy me a coffee</span></a></li>
       </ul>
     </div>
@@ -205,7 +205,7 @@ if (!edit_signed_in()) {
 <header class="band">
   <div class="in bar">
     <a class="brand" href="../"><span class="bus-mark"></span>Philly After School</a>
-    <nav class="nav" aria-label="Site"><a href="../">Schools</a><a href="../board/">My child’s roster<span class="count" data-board-count hidden></span></a><a href="../suggest/">Suggest a program</a><a href="../about/">About</a><a href="../support/">Buy me a coffee</a></nav>
+    <nav class="nav" aria-label="Site"><a href="../">Schools</a><a href="../board/">Build your week<span class="count" data-board-count hidden></span></a><a href="../suggest/">Suggest a program</a><a href="../about/">About</a><a href="../support/">Buy me a coffee</a></nav>
   </div>
   <div class="in hero">
     <h1>Edit the words on this site</h1>
@@ -239,12 +239,13 @@ if (!edit_signed_in()) {
     <li><a href="../neighborhoods/">Neighborhoods</a></li>
     <li><a href="../neighborhoods/queen-village/">A neighborhood page (Queen Village)</a></li>
     <li><a href="../programs/imagine-that-philly/">A program page (Imagine That Philly)</a></li>
-    <li><a href="../board/">My child’s roster</a></li>
+    <li><a href="../board/">Build your week</a></li>
     <li><a href="../suggest/">Suggest a program</a></li>
     <li><a href="../suggest/thanks/">Thank-you page after a suggestion</a></li>
     <li><a href="../review/">Write a review</a></li>
     <li><a href="../review/thanks/">Thank-you page after a review</a></li>
     <li><a href="../about/">About</a></li>
+    <li><a href="../privacy/">Privacy</a></li>
     <li><a href="../support/">Buy me a coffee</a></li>
     <li><a href="../404.html">Page not found</a></li>
   </ul>
@@ -265,7 +266,6 @@ if (!edit_signed_in()) {
     <div>
       <h2><a href="../#schools"><span data-copy="06c76a46e4">Schools</span></a></h2>
       <ul>
-        <li><a href="../coppin/">Coppin</a></li><li><a href="../meredith/">Meredith</a></li><li><a href="../nebinger/">Nebinger</a></li>
         <li><a href="../#schools"><span data-copy="0898b0b426">All schools</span></a></li>
         <li><a href="../neighborhoods/"><span data-copy="8ed176874c">By neighborhood</span></a></li>
         <li><a href="../suggest/"><span data-copy="6c51011791">Ask for your school</span></a></li>
@@ -283,7 +283,7 @@ if (!edit_signed_in()) {
     <div>
       <h2><a href="../board/"><span data-copy="928655b7f0">Your family</span></a></h2>
       <ul>
-        <li><a href="../board/"><span data-copy="d5f68f1923">My child’s roster</span></a></li>
+        <li><a href="../board/"><span data-copy="82a8bb5146">Build your week</span></a></li>
       </ul>
     </div>
     <div>
@@ -292,6 +292,7 @@ if (!edit_signed_in()) {
         <li><a href="../about/"><span data-copy="5e461a2404">About this site</span></a></li>
         <li><a href="../about/#how"><span data-copy="5b2fc57ac3">How listings are checked</span></a></li>
         <li><a href="../about/#corrections"><span data-copy="1862eb688d">Send a correction</span></a></li>
+        <li><a href="../privacy/"><span data-copy="cf01481f62">Privacy</span></a></li>
         <li><a href="../support/"><span data-copy="fd1482eac6">Buy me a coffee</span></a></li>
       </ul>
     </div>
