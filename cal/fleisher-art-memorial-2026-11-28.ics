@@ -1,0 +1,26 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:fleisher-art-memorial-2026-11-28@phillyafterschool.org
+DTSTAMP:20261005T120000Z
+DTSTART;VALUE=DATE:20261128
+DTEND;VALUE=DATE:20261129
+SUMMARY:Fleisher Art Memorial: Winter term public registrati
+ on expected to open
+DESCRIPTION:https://reg137.imperisoft.com/Fleisher/Search/Re
+ gistration.aspx\n\nFrom Philly After School: https://phillya
+ fterschool.org/
+URL:https://reg137.imperisoft.com/Fleisher/Search/Registrati
+ on.aspx
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Fleisher Art Memorial: Winter term public regist
+ ration expected to open
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

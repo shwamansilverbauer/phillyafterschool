@@ -1,0 +1,25 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:mister-johns-music-2026-11-02@phillyafterschool.org
+DTSTAMP:20261005T120000Z
+DTSTART;VALUE=DATE:20261102
+DTEND;VALUE=DATE:20261103
+SUMMARY:Mister John’s Music: Winter/Spring session goes on s
+ ale to new students
+DESCRIPTION:https://misterjohnsmusic.com/kids-group-classes-
+ 26-27/\n\nFrom Philly After School: https://phillyafterschoo
+ l.org/
+URL:https://misterjohnsmusic.com/kids-group-classes-26-27/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mister John’s Music: Winter/Spring session goes 
+ on sale to new students
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

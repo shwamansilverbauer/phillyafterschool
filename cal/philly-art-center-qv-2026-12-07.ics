@@ -1,0 +1,34 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:philly-art-center-qv-2026-12-07@phillyafterschool.org
+DTSTAMP:20261005T120000Z
+DTSTART;VALUE=DATE:20261207
+DTEND;VALUE=DATE:20261208
+SUMMARY:Philly Art Center\, Queen Village: Last day to chang
+ e a Winter/Spring registration
+DESCRIPTION:https://phillyartcenter.captyn.com/find?departme
+ nt=clu8qqzk2009293r866a7j7wg&filter=4&program=clv479vep03ki7
+ to5es3tmyjr&program=clwtkcaoi00kmsudp98n0ecv5&day=Monday&day
+ =Tuesday&day=Wednesday&day=Thursday&day=Friday&location=clu8
+ gptof0aahxkl2mj3v7mxl&tag=clv494qhk032olgi2d9i70vw6&tag=clv4
+ 94xs6032plgi2z23yr0a8\n\nFrom Philly After School: https://p
+ hillyafterschool.org/
+URL:https://phillyartcenter.captyn.com/find?department=clu8q
+ qzk2009293r866a7j7wg&filter=4&program=clv479vep03ki7to5es3tm
+ yjr&program=clwtkcaoi00kmsudp98n0ecv5&day=Monday&day=Tuesday
+ &day=Wednesday&day=Thursday&day=Friday&location=clu8gptof0aa
+ hxkl2mj3v7mxl&tag=clv494qhk032olgi2d9i70vw6&tag=clv494xs6032
+ plgi2z23yr0a8
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Philly Art Center\, Queen Village: Last day to c
+ hange a Winter/Spring registration
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR
