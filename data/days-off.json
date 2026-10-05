@@ -1,0 +1,31 @@
+{
+  "schoolYear": "2026–27",
+  "source": {
+    "label": "School District of Philadelphia 2026–2027 academic calendar",
+    "url": "https://www.philasd.org/calendar/"
+  },
+  "checked": "2026-10-05",
+  "lastDay": "2027-06-09",
+  "days": [
+    { "date": "2026-10-09", "name": "Staff professional development" },
+    { "date": "2026-10-12", "name": "Indigenous Peoples’ Day" },
+    { "date": "2026-11-03", "name": "Election Day" },
+    { "date": "2026-11-11", "name": "Veterans Day" },
+    { "date": "2026-11-16", "name": "Report card conferences" },
+    { "date": "2026-11-25", "name": "Staff professional development" },
+    { "date": "2026-11-26", "end": "2026-11-27", "name": "Thanksgiving recess" },
+    { "date": "2026-12-23", "end": "2027-01-01", "name": "Winter recess" },
+    { "date": "2027-01-15", "name": "Staff professional development" },
+    { "date": "2027-01-18", "name": "Dr. Martin Luther King Jr. Day" },
+    { "date": "2027-01-29", "name": "Report card conferences" },
+    { "date": "2027-02-12", "name": "Staff professional development" },
+    { "date": "2027-02-15", "name": "Presidents’ Day" },
+    { "date": "2027-03-10", "name": "Eid al-Fitr" },
+    { "date": "2027-03-22", "end": "2027-03-26", "name": "Spring recess and Good Friday" },
+    { "date": "2027-03-29", "name": "Staff professional development" },
+    { "date": "2027-04-16", "name": "Report card conferences" },
+    { "date": "2027-05-17", "name": "Eid al-Adha" },
+    { "date": "2027-05-18", "name": "Election Day", "note": "The district marks this date as tentative." },
+    { "date": "2027-05-31", "name": "Memorial Day" }
+  ]
+}

@@ -72,6 +72,10 @@ Fields worth knowing:
 - `neighborhoods`: list of the neighborhoods the program's building (or buildings) is in, like `["Bella Vista"]`. Decides which
   neighborhood pages it appears on. A program that runs inside a school can leave it out and takes the school's neighborhood.
 - `keywords`: optional list of plain words parents might search for (`"drums"`, `"karate"`, `"homework"`). Never shown, only searched.
+- `days`: optional list of the weekdays the program runs, from `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`. Shown on the card as "Monday to Friday" or the named days. Leave it out when the provider doesn't say; the program then shows under every day.
+- `daysNote`: optional sentence shown after the days, like `"Choose 1 to 5 days a week."`
+- `offerDays`: optional, for class-based programs: which class meets on which days, like `{ "Choir": ["tue", "thu"] }`. Each name must be in `offers`. A roster warns when a class is put on a day it doesn't meet.
+- `daysOff`: optional. What the program runs when district schools are closed: `{ "summary": "...", "url": "https://…", "dates": ["2026-11-03"], "sources": [{ "label": "…", "url": "https://…" }] }`. `dates` holds only the dates the provider itself posts (an empty list when it posts none). Puts the program on the "Days off from school" page.
 - `pickupBy`: optional. The latest time a child can be collected, like `"6:00 pm"`. Shown on the card and on rosters. Leave it out when the provider doesn't publish an end time.
 - `register.how`: `online` (needs `url`), `phone`, `contact`, `school` or `none`. `register.note` is shown next to it.
 - `register.nextTerm`: optional. When sign-ups open for the next term, semester or school year, in a sentence with dates. Leave it out when the provider doesn't say.
@@ -153,6 +157,33 @@ ready-made entry at the bottom of the email. To publish one, paste that entry in
 `data/reviews.json` (inside the square brackets, entries separated by commas) and commit.
 To remove a review, delete its entry. Cards show the average and the reviews for each program.
 
+## Days of the week, days off, and a saved school
+
+**Days.** A program's `days` show on its card and page. On a roster, a card placed on a day the listing doesn't
+show gets a yellow note ("Not listed for Thursdays. Runs Tue, Wed.") instead of being blocked, because class
+schedules change and the data can be behind. The add-to-roster day buttons for those days are drawn dashed.
+A "Day" filter row appears on a listing page by itself once at least two programs in that list run on some
+weekdays only; with fewer it would filter nothing, so it stays hidden.
+
+**Days off.** `/days-off/` lists the days School District of Philadelphia students are off, from
+`data/days-off.json` (`schoolYear`, `source`, `checked`, `lastDay`, and `days`: each with a `date`, a `name`,
+and an `end` for a break). Under each day it names the programs whose `daysOff.dates` include that date, and
+below that every program with `daysOff`. Past days drop off at build time and are hidden by the page between
+builds. The home page and each school page show a "Next day off" line. The build prints a note when a provider
+date isn't a district day off (a typo on their side, or a day only they close for). Replace the file's days
+each summer when the district publishes the new calendar.
+
+**A saved school.** A school page has "Save as my school". The choice is kept in the visitor's browser
+(`pas-my-school`), with no account. After that the home page shows a shortcut to the school, the citywide
+lists (A to Z, types, neighborhoods) open narrowed to programs that work for it with an "Any school" button
+beside it, and the roster's "Add a program" assumes it.
+
+**The week card's QR code.** `data/card-qr.json` holds the pattern for the code printed on the week card. It
+encodes the short address `/w`, which `.htaccess` sends to the home page with `utm_source=week_card` and
+`utm_medium=qr`. Sharing the card from a phone also attaches a link tagged `utm_medium=share`. If the site's
+address ever changes, regenerate the file (Python: `pip install qrcode`, encode `HTTPS://<DOMAIN>/W` at error
+level M with no border, and save each row as a string of 1s and 0s).
+
 ## Rosters
 
 `/board/` ("Build your week" in the menu) lets a visitor collect programs by weekday with "Add to roster"
@@ -192,9 +223,10 @@ program_id, school; school is empty on a program's own page), `pas_suggest_submi
 school, stars), `pas_board_add` (program_id, school, day, board, children) and `pas_board_share` (method, board).
 `pas_school_pick` (school, covered) fires when someone picks a school in the finder, and `pas_school_request` (school)
 when they ask for one that isn't covered. `pas_program_pick` (program_id, method) fires when someone picks a program
-by name: method is `home_search`, `roster_search`, or `program_page` (the "Add to your week" button). `pas_filter` reports filter_type as `grade`, `program_type`, `relation`,
-`neighborhood` or `cost`. `pas_board_share` methods include `image_save`, `image_share` and `print`.
-`pas_outbound` also fires with link_type `calendar` and `review`. `pas_search` (search_term, results,
+by name: method is `home_search`, `roster_search`, or `program_page` (the "Add to your week" button). `pas_school_save` (school)
+fires when someone saves a school as theirs. `pas_filter` reports filter_type as `grade`, `program_type`, `relation`,
+`neighborhood`, `cost`, `day` or `school`. `pas_board_share` methods include `image_save`, `image_share` and `print`.
+`pas_outbound` also fires with link_type `calendar`, `review` and `camp` (a day-off camp link). `pas_search` (search_term, results,
 school) fires when someone pauses typing in a school page's search box; searches with zero results
 show what parents want that isn't listed.
 

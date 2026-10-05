@@ -461,3 +461,34 @@ button.btn{cursor:pointer;font-family:inherit}
 .add-how{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;color:var(--muted);font-size:.95rem}
 .day:disabled{opacity:.45;cursor:not-allowed}
 #add-status:empty{display:none}
+
+/* ---------- days of the week, days off, saved school ---------- */
+.day.off{border-style:dashed;color:var(--muted);background:transparent}
+.day.off[aria-pressed="true"]{color:var(--yellow-ink);background:var(--yellow);border-style:dashed;border-color:var(--warn-ink)}
+.day-warn{flex-basis:100%;font-size:.93rem;color:var(--warn-ink);background:var(--warn);border-radius:10px;padding:8px 12px}
+.day-warn[hidden]{display:none}
+.tc-warn{display:block;font-size:.84rem;line-height:1.35;color:var(--warn-ink);background:var(--warn);border-radius:8px;padding:6px 8px}
+.pick.tc.tc-off{outline:2px dashed var(--warn-ink);outline-offset:-2px}
+.nextoff{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;background:var(--warn);color:var(--warn-ink);border-radius:14px;padding:12px 18px;margin:0}
+.nextoff a{color:inherit;font-weight:700}
+.offdays{display:flex;flex-direction:column;gap:10px}
+.offday{background:var(--surface);border:1px solid var(--line);border-radius:14px;scroll-margin-top:16px}
+.offday[hidden]{display:none}
+.offday summary{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr) auto;align-items:center;gap:4px 18px;padding:14px 18px;cursor:pointer;list-style:none}
+.offday summary::-webkit-details-marker{display:none}
+.offday summary b{font-family:var(--display);font-size:1.08rem}
+.offday summary > span:not(.pill){color:var(--muted)}
+.offday[open] summary{border-bottom:1px solid var(--line)}
+.offwho{display:flex;flex-direction:column;gap:8px;padding:14px 18px}
+.offwho .btn{font-size:.93rem;padding:6px 12px}
+.offwho .btn .hint{font-weight:400}
+@media (max-width:640px){.offday summary{grid-template-columns:minmax(0,1fr) auto}.offday summary > span:not(.pill){grid-column:1;grid-row:2}.offday summary .pill{grid-row:1 / span 2;grid-column:2}}
+.offprog{scroll-margin-top:16px}
+.offprog:target{outline:3px solid var(--yellow);outline-offset:2px}
+.mine-row{align-items:center;flex-wrap:wrap;gap:8px 14px;margin-top:4px}
+.savebtn{font:inherit;font-weight:700;font-size:.98rem;padding:9px 16px;border-radius:999px;border:2px solid var(--yellow);background:transparent;color:var(--hero-ink);cursor:pointer}
+.savebtn:hover{background:rgba(255,255,255,.12)}
+.savebtn[aria-pressed="true"]{background:var(--yellow);color:var(--yellow-ink)}
+.mine-row .hint{color:var(--hero-muted)}
+.find .mine{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 6px;color:var(--hero-muted);font-weight:700}
+.find .mine .btn{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink)}

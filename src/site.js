@@ -112,6 +112,45 @@
     });
   }
 
+  // ----- "my school": saved on this device, no account. The home page, lists and roster start from it. -----
+  function mySchool() {
+    try { var m = JSON.parse(store('pas-my-school') || 'null'); return m && /^[a-z0-9-]+$/.test(m.id || '') && typeof m.name === 'string' ? { id: m.id, name: m.name.slice(0, 60) } : null; } catch (e) { return null; }
+  }
+  // ----- the days a program runs: null when it doesn't say, otherwise whether that day is one of them -----
+  var DAY_FULL = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday' };
+  function daysFor(days, offerDays, cls) { return (cls && offerDays && offerDays[cls]) || days || null; }
+  function sayDays(list) {
+    var n = list.map(function (d) { return DAY_FULL[d]; });
+    return n.length < 3 ? n.join(' and ') : n.slice(0, -1).join(', ') + ' and ' + n[n.length - 1];
+  }
+  // "Not listed for Thursdays. It runs Tuesday and Wednesday." for the days in `picked` that the listing doesn't show.
+  function dayWarning(days, offerDays, cls, picked, brief) {
+    var runs = daysFor(days, offerDays, cls);
+    if (!runs) return '';
+    var off = picked.filter(function (d) { return runs.indexOf(d) < 0; });
+    if (!off.length) return '';
+    if (brief) return 'Not listed for ' + DAY_FULL[off[0]] + 's. Runs ' + runs.map(function (d) { return DAY_FULL[d].slice(0, 3); }).join(', ') + '.';
+    return 'Not listed for ' + off.map(function (d) { return DAY_FULL[d] + 's'; }).join(' or ') + '. ' + (cls && offerDays && offerDays[cls] ? cls : 'It') + ' runs ' + sayDays(runs) + ', so check with the program.';
+  }
+
+  // Days off that have passed since the site was last built are hidden, and the "next day off" line is filled in.
+  (function () {
+    var now = new Date(), today = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2);
+    var firstOff = null;
+    all(document, '[data-until]').forEach(function (d) { if (d.getAttribute('data-until') < today) d.hidden = true; else if (!firstOff) firstOff = d; });
+    if (firstOff && firstOff.tagName === 'DETAILS' && !/^#d-/.test(location.hash)) firstOff.open = true;
+    var asked = /^#d-/.test(location.hash) ? document.getElementById(location.hash.slice(1)) : null;
+    if (asked && asked.tagName === 'DETAILS') asked.open = true;
+    all(document, '[data-next-off]').forEach(function (b) {
+      var list; try { list = JSON.parse(b.getAttribute('data-next-off')); } catch (e) { return; }
+      var next = null;
+      list.forEach(function (d) { if (!next && d.u >= today) next = d; });
+      if (!next) return;
+      b.textContent = 'Next day off: ' + next.w + ' (' + next.n + ').' + (next.c ? ' ' + next.c + (next.c === 1 ? ' listed program has' : ' listed programs have') + ' a camp posted.' : '');
+      b.hidden = false;
+    });
+  })();
+
   // Support button
   var give = document.querySelector('a[data-track="support"]');
   if (give) give.addEventListener('click', function () { track({ event: 'pas_support_click' }); });
@@ -148,6 +187,16 @@
     var input = box.querySelector('input'), list = box.querySelector('.finder-list');
     var data = null, shown = [], active = -1;
     var withPrograms = box.hasAttribute('data-programs');
+    var saved = mySchool();
+    if (saved && !document.querySelector('[data-request-page]')) {   // a shortcut to the school saved on this device
+      var mine = el('p', 'mine');
+      mine.appendChild(el('span', null, 'Your school'));
+      var go = el('a', 'btn', saved.name);
+      go.href = (box.getAttribute('data-root') || '') + saved.id + '/' + (box.getAttribute('data-index') || '');
+      go.addEventListener('click', function () { track({ event: 'pas_school_pick', school: saved.id, covered: 'yes' }); });
+      mine.appendChild(go);
+      box.insertBefore(mine, box.firstChild);
+    }
     var close = function () { list.hidden = true; input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); active = -1; };
     var mark = function () {
       all(list, 'li').forEach(function (li, i) { li.setAttribute('aria-selected', String(i === active)); });
@@ -443,6 +492,8 @@
             });
             li.appendChild(note);
           }
+          var offDay = dayWarning(k.prog.days, k.prog.offerDays, k.note, [day[0]], true);
+          if (offDay) { li.className += ' tc-off'; li.appendChild(el('span', 'tc-warn', offDay)); }
           if (k.prog.pickupBy) li.appendChild(el('span', 'by-time', 'Pick up by ' + k.prog.pickupBy));
           if (k.link.where) li.appendChild(el('span', 'hint', k.link.where));
           if (!k.prog.pickupBy) li.appendChild(el('span', 'hint', k.prog.hours));
@@ -599,8 +650,8 @@
       [kid.now, kid.next].forEach(function (b) { DAYS.forEach(function (d) { b.days[d[0]].forEach(function (e) { var sid = entryKey(e).split('.')[1]; tally[sid] = (tally[sid] || 0) + 1; }); }); });
       ids.forEach(function (id) { if ((tally[id] || 0) > n) { best = id; n = tally[id]; } });
       if (best) return best;
-      var last = store('pas-school');
-      return last && ids.indexOf(last) > -1 ? last : '';
+      var mine = mySchool(), last = store('pas-school');
+      return mine && ids.indexOf(mine.id) > -1 ? mine.id : last && ids.indexOf(last) > -1 ? last : '';
     };
     var drawAdd = function () {
       addPanel.textContent = '';
@@ -628,17 +679,22 @@
         if (l.where) how.appendChild(el('span', null, l.where));
         addPanel.appendChild(how);
       }
-      var days = el('div', 'add-row'), key = adding.id + '.' + adding.school;
+      var days = el('div', 'add-row'), key = adding.id + '.' + adding.school, picked = [], pickedNote = '';
       days.setAttribute('role', 'group'); days.setAttribute('aria-label', 'Which days');
       days.appendChild(el('span', 'hint', adding.school ? 'Which days?' : 'Choose the school first, then the days.'));
       DAYS.forEach(function (d) {
         var bt = el('button', 'day', d[2]);
         bt.type = 'button'; bt.setAttribute('data-day', d[0]); bt.setAttribute('aria-label', d[1]);
         bt.disabled = !adding.school;
-        bt.setAttribute('aria-pressed', String(!!adding.school && findEntry(b.days[d[0]], key) > -1));
+        var isOn = !!adding.school && findEntry(b.days[d[0]], key) > -1;
+        bt.setAttribute('aria-pressed', String(isOn));
+        if (prog.days && prog.days.indexOf(d[0]) < 0) { bt.className += ' off'; bt.title = 'Not listed for ' + d[1] + 's'; }
+        if (isOn) { picked.push(d[0]); var at0 = findEntry(b.days[d[0]], key); if (!pickedNote) pickedNote = entryNote(b.days[d[0]][at0]); }
         days.appendChild(bt);
       });
       addPanel.appendChild(days);
+      var addWarn = dayWarning(prog.days, prog.offerDays, pickedNote, picked);
+      if (addWarn) addPanel.appendChild(el('p', 'day-warn', addWarn));
       var foot = el('div', 'actions'), done = el('button', 'btn', 'Done');
       done.type = 'button'; done.setAttribute('data-add-done', '');
       foot.appendChild(done);
@@ -754,7 +810,8 @@
       if (at == null || at > b.days[to].length) at = b.days[to].length;
       b.days[to].splice(at, 0, entry);
       saveRosters();
-      say(from === to ? savedNote() : 'Moved ' + label + ' to ' + toName + '. ' + savedNote());
+      var heads = k ? dayWarning(k.prog.days, k.prog.offerDays, k.note, [to]) : '';
+      say(from === to ? savedNote() : 'Moved ' + label + ' to ' + toName + '. ' + (heads ? 'Heads up: ' + heads.charAt(0).toLowerCase() + heads.slice(1) + ' ' : '') + savedNote());
       render();
     };
     var drag = null;
@@ -836,11 +893,11 @@
     var drawCard = function () {
       if (!canvas || !canvas.getContext || shared) return;
       var r = loadRosters(), kid = r.kids[r.kid], which = r.active, b = kid[which];
-      var ctx = canvas.getContext('2d'), W = 1080, H = 1350;
+      var ctx = canvas.getContext('2d'), W = 1080, H = 1350, FOOT = 160;
       var teacher = cleanName(kid.teacher), note = String(kid.cardNote || '').replace(/\s+/g, ' ').replace(/^ | $/g, '');
       ctx.clearRect(0, 0, W, H);
       ctx.fillStyle = '#0F4D90'; ctx.fillRect(0, 0, W, H);
-      ctx.fillStyle = '#0A3566'; ctx.fillRect(0, H - 70, W, 70);
+      ctx.fillStyle = '#0A3566'; ctx.fillRect(0, H - FOOT, W, FOOT);
       // brand
       ctx.fillStyle = '#F3C613'; box(ctx, 56, 58, 54, 28, 8); ctx.fill();
       ctx.fillStyle = '#FFFFFF'; ctx.beginPath(); ctx.arc(70, 90, 7, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(98, 90, 7, 0, 7); ctx.fill();
@@ -863,7 +920,7 @@
       ctx.font = '400 32px ' + BODY; ctx.fillStyle = '#CFE3FB';
       ctx.fillText(fit(ctx, 'After school' + (which === 'next' ? ', next term' : '') + (teacher ? '  ·  for ' + teacher : ''), textMax), 56, 248);
       // the five days
-      var top = 300, bottom = note ? 1158 : 1262, gap = 12, rowH = (bottom - top - gap * 4) / 5;
+      var top = 300, bottom = note ? 1068 : 1172, gap = 12, rowH = (bottom - top - gap * 4) / 5;
       DAYS.forEach(function (day, i) {
         var y = top + i * (rowH + gap);
         ctx.fillStyle = '#FFFFFF'; box(ctx, 48, y, 984, rowH, 22); ctx.fill();
@@ -874,20 +931,30 @@
         if (picks.length > 2) { ctx.font = '700 22px ' + BODY; ctx.fillText('+ ' + (picks.length - 2) + ' more', 123, y + rowH / 2 + 40); }
         ctx.textAlign = 'left';
         if (!picks.length) { ctx.fillStyle = '#7A8DA6'; ctx.font = '400 30px ' + BODY; ctx.fillText('No program', 232, y + rowH / 2 + 10); return; }
-        var showN = Math.min(picks.length, 2), blockH = 74, startY = y + (rowH - showN * blockH) / 2;
+        var showN = Math.min(picks.length, 2), blockH = Math.min(74, Math.floor(rowH / 2) - 1), startY = y + (rowH - showN * blockH) / 2;
         picks.slice(0, showN).forEach(function (k, j) {
           var by = startY + j * blockH, type = data.types[k.prog.type] || { color: '#0F4D90' };
           ctx.fillStyle = type.color; box(ctx, 222, by + 6, 10, blockH - 14, 5); ctx.fill();
-          ctx.fillStyle = '#0B2140'; ctx.font = '750 34px ' + DISPLAY; ctx.fillText(fit(ctx, k.prog.name, 760), 248, by + 34);
+          ctx.fillStyle = '#0B2140'; ctx.font = '750 34px ' + DISPLAY; ctx.fillText(fit(ctx, k.prog.name, 760), 248, by + (blockH < 74 ? 31 : 34));
           var bits = [k.note, k.prog.pickupBy ? 'pick up by ' + k.prog.pickupBy : '', k.link.where].filter(Boolean).join('  ·  ');
-          ctx.fillStyle = '#4D607A'; ctx.font = '400 25px ' + BODY; ctx.fillText(fit(ctx, bits || pillText(k), 760), 248, by + 66);
+          ctx.fillStyle = '#4D607A'; ctx.font = '400 25px ' + BODY; ctx.fillText(fit(ctx, bits || pillText(k), 760), 248, by + (blockH < 74 ? 61 : 66));
         });
       });
       if (note) {
-        ctx.fillStyle = '#0A3566'; box(ctx, 48, 1172, 984, 92, 22); ctx.fill();
-        ctx.fillStyle = '#FFFFFF'; ctx.font = '400 30px ' + BODY; ctx.fillText(fit(ctx, 'Note: ' + note, 930), 76, 1229);
+        ctx.fillStyle = '#0A3566'; box(ctx, 48, 1082, 984, 92, 22); ctx.fill();
+        ctx.fillStyle = '#FFFFFF'; ctx.font = '400 30px ' + BODY; ctx.fillText(fit(ctx, 'Note: ' + note, 930), 76, 1139);
       }
-      ctx.fillStyle = '#CFE3FB'; ctx.font = '400 26px ' + BODY; ctx.fillText('Made at phillyafterschool.org', 56, H - 27);
+      // footer: where this came from, so a shared or printed card leads back to the site
+      var host = String(data.site || '').replace(/^https?:\/\//, '') || 'phillyafterschool.org';
+      ctx.fillStyle = '#F3C613'; ctx.font = '800 40px ' + DISPLAY; ctx.fillText('Build your own week', 56, H - FOOT + 70);
+      ctx.fillStyle = '#FFFFFF'; ctx.font = '700 36px ' + BODY; ctx.fillText(host, 56, H - FOOT + 118);
+      if (data.qr && data.qr.length) {   // a QR code to the site, drawn from the pattern the build provides
+        var n = data.qr.length, quiet = 2, boxSize = 130, cell = boxSize / (n + quiet * 2), qx = W - 56 - boxSize, qy = H - FOOT + 15;
+        ctx.fillStyle = '#FFFFFF'; box(ctx, qx, qy, boxSize, boxSize, 10); ctx.fill();
+        ctx.fillStyle = '#0B2140';
+        for (var ry = 0; ry < n; ry++) for (var rx = 0; rx < n; rx++) if (data.qr[ry].charAt(rx) === '1') ctx.fillRect(qx + (rx + quiet) * cell, qy + (ry + quiet) * cell, Math.ceil(cell), Math.ceil(cell));
+        ctx.fillStyle = '#CFE3FB'; ctx.font = '400 24px ' + BODY; ctx.textAlign = 'right'; ctx.fillText('Scan to plan yours', qx - 20, H - FOOT + 118); ctx.textAlign = 'left';
+      }
     };
     var cardFile = function (done) {
       var name = (cleanName(activeKid().name) || 'our').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'our';
@@ -923,7 +990,7 @@
           shareCard.addEventListener('click', function () {
             cardFile(function (blob, name) {
               var file = new File([blob], name, { type: 'image/png' });
-              navigator.share({ files: [file], title: heading(activeKid().name, loadRosters().active) }).then(function () { track_share('image_share'); }, function () { /* closed without sharing */ });
+              navigator.share({ files: [file], title: heading(activeKid().name, loadRosters().active), text: 'Made at ' + String(data.site || '').replace(/^https?:\/\//, ''), url: (data.site || '') + '/?utm_source=week_card&utm_medium=share' }).then(function () { track_share('image_share'); }, function () { /* closed without sharing */ });
             });
           });
         }
@@ -956,15 +1023,34 @@
     var fSchool = fbar.getAttribute('data-school') || '';
     var items = all(document, '[data-item]');
     var groups = all(document, '[data-group]');
+    // Someone who saved their school sees the citywide lists narrowed to it, with one tap to widen them again.
+    var mineF = fSchool ? null : mySchool();
+    if (mineF && !items.some(function (it) { return (' ' + (it.getAttribute('data-schools') || '') + ' ').indexOf(' ' + mineF.id + ' ') > -1; })) mineF = null;
+    if (mineF) {
+      var srow = el('div', 'frow'), srail = el('div', 'rail');
+      srow.appendChild(el('span', 'flabel', 'School'));
+      srail.setAttribute('role', 'group'); srail.setAttribute('aria-label', 'School');
+      [[mineF.id, 'Works for ' + mineF.name, mineF.name], ['ALL', 'Any school', 'Any school']].forEach(function (o) {
+        var sb = el('button', 'tbtn', o[1]);
+        sb.type = 'button'; sb.id = 'school-' + o[0]; sb.setAttribute('data-f', 'school'); sb.setAttribute('data-v', o[0]); sb.setAttribute('data-label', o[2]); sb.setAttribute('aria-pressed', 'false');
+        srail.appendChild(sb);
+      });
+      srow.appendChild(srail);
+      var firstRow = fbar.querySelector('.frow');
+      if (firstRow) fbar.insertBefore(srow, firstRow); else fbar.appendChild(srow);
+    }
     var fbtns = all(document, '[data-f]');
     var count = document.querySelector('#count'), clear = document.querySelector('#clear');
     var search = document.querySelector('#prog-search'), noMatch = document.querySelector('[data-nomatch]'), searchMore = document.querySelector('#search-more');
-    var state = { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL' };
+    var FILTERS = ['type', 'grade', 'rel', 'hood', 'cost', 'day', 'school'];
+    var blank = function () { return { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL', day: 'ALL', school: 'ALL' }; };
+    var state = blank();
     var terms = [];
     var findBtn = function (f, v) { for (var i = 0; i < fbtns.length; i++) if (fbtns[i].getAttribute('data-f') === f && fbtns[i].getAttribute('data-v') === v) return fbtns[i]; return null; };
     // Start from the page address (how the home page links in), then from the grade picked last time.
     var q0 = query();
-    ['type', 'grade', 'rel', 'hood', 'cost'].forEach(function (f) { if (q0[f] && findBtn(f, q0[f])) state[f] = q0[f]; });
+    FILTERS.forEach(function (f) { if (q0[f] && findBtn(f, q0[f])) state[f] = q0[f]; });
+    if (mineF && !q0.school) state.school = mineF.id;   // "school=all" in the address keeps the wide view
     if (!q0.grade) { var savedGrade = store('pas-grade'); if (savedGrade && findBtn('grade', savedGrade)) state.grade = savedGrade; }
     var gradeLabel = function (g) { return g === 'PK' ? 'Pre-K' : g === 'K' ? 'kindergarten' : 'grade ' + g; };
     var inList = function (el, attr, v) { return (' ' + (el.getAttribute(attr) || '') + ' ').indexOf(' ' + v + ' ') > -1; };
@@ -976,7 +1062,9 @@
           && (state.type === 'ALL' || inList(it, 'data-types', state.type))
           && (state.rel === 'ALL' || it.getAttribute('data-rel') === state.rel)
           && (state.hood === 'ALL' || inList(it, 'data-hoods', state.hood))
-          && (state.cost === 'ALL' || inList(it, 'data-cost', state.cost));
+          && (state.cost === 'ALL' || inList(it, 'data-cost', state.cost))
+          && (state.day === 'ALL' || (it.getAttribute('data-days') || '*') === '*' || inList(it, 'data-days', state.day))
+          && (state.school === 'ALL' || inList(it, 'data-schools', state.school));
         if (terms.length) {
           var hay = it.getAttribute('data-search') || '', hit = terms.every(function (w) { return w.test(hay); });
           if (hit && !ok) hiddenHits++;   // it matches the search, and a filter is hiding it
@@ -992,9 +1080,9 @@
         if (badge) badge.textContent = n;
       });
       var bits = [];
-      ['type', 'rel', 'hood', 'cost'].forEach(function (f) {
+      ['school', 'type', 'rel', 'hood', 'cost', 'day'].forEach(function (f) {
         var b = state[f] !== 'ALL' ? findBtn(f, state[f]) : null;
-        if (b) bits.push(f === 'hood' ? 'in ' + b.getAttribute('data-label') : f === 'cost' ? b.getAttribute('data-label').toLowerCase() : b.getAttribute('data-label'));
+        if (b) bits.push(f === 'hood' ? 'in ' + b.getAttribute('data-label') : f === 'cost' ? b.getAttribute('data-label').toLowerCase() : f === 'day' ? 'on ' + DAY_FULL[state.day] + 's' : f === 'school' ? 'works for ' + b.getAttribute('data-label') : b.getAttribute('data-label'));
       });
       if (terms.length) bits.push('matching “' + search.value.trim() + '”');
       var what = (state.grade === 'ALL' ? '' : ' for ' + gradeLabel(state.grade)) + (bits.length ? ' (' + bits.join(', ') + ')' : '');
@@ -1009,7 +1097,7 @@
           searchMore.appendChild(document.createTextNode((total ? hiddenHits + ' more ' + (hiddenHits === 1 ? 'matches' : 'match') : hiddenHits + (hiddenHits === 1 ? ' program matches' : ' programs match')) + ' “' + search.value.trim() + '” outside your filters. '));
           var showAll = el('button', 'clear', hiddenHits === 1 ? 'Show it' : 'Show them');
           showAll.type = 'button';
-          showAll.addEventListener('click', function () { state = { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL' }; apply(); search.focus(); });
+          showAll.addEventListener('click', function () { state = blank(); apply(); search.focus(); });
           searchMore.appendChild(showAll);
         }
       }
@@ -1020,12 +1108,13 @@
       // keep the address in step, so a filtered list can be bookmarked or sent to someone
       if (window.history && history.replaceState) {
         var parts = [];
-        ['type', 'grade', 'rel', 'hood', 'cost'].forEach(function (f) { if (state[f] !== 'ALL') parts.push(f + '=' + encodeURIComponent(state[f])); });
+        FILTERS.forEach(function (f) { if (state[f] !== 'ALL') parts.push(f + '=' + encodeURIComponent(state[f])); });
+        if (mineF && state.school === 'ALL') parts.push('school=all');
         try { history.replaceState(null, '', location.pathname + (parts.length ? '?' + parts.join('&') : '') + location.hash); } catch (e) { /* file preview */ }
       }
       return total;
     };
-    var NAMES = { type: 'program_type', rel: 'relation', hood: 'neighborhood', grade: 'grade', cost: 'cost' };
+    var NAMES = { type: 'program_type', rel: 'relation', hood: 'neighborhood', grade: 'grade', cost: 'cost', day: 'day', school: 'school' };
     fbtns.forEach(function (b) {
       if (b.tagName !== 'BUTTON') return;
       b.addEventListener('click', function () {
@@ -1037,7 +1126,7 @@
       });
     });
     clear.addEventListener('click', function () {
-      state = { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL' };
+      state = blank();
       terms = []; if (search) search.value = '';
       store('pas-grade', 'ALL');
       apply();
@@ -1064,6 +1153,22 @@
   if (!page) return;
   var school = page.getAttribute('data-school-page');
   store('pas-school', school);
+  all(document, '[data-my-school]').forEach(function (btn) {
+    var id = btn.getAttribute('data-my-school'), name = btn.getAttribute('data-name'), note = document.querySelector('[data-my-school-note]');
+    var paint = function () {
+      var m = mySchool(), on = !!m && m.id === id;
+      btn.setAttribute('aria-pressed', String(on));
+      btn.textContent = on ? 'Saved as your school' : m ? 'Make ' + name + ' your school' : 'Save as my school';
+      if (note) note.textContent = on ? 'Saved on this device. The home page, lists and your roster now start from ' + name + '. Tap again to undo.' : '';
+    };
+    btn.addEventListener('click', function () {
+      var m = mySchool();
+      if (m && m.id === id) { try { window.localStorage.removeItem('pas-my-school'); } catch (e) { /* nothing saved */ } }
+      else { store('pas-my-school', JSON.stringify({ id: id, name: name })); track({ event: 'pas_school_save', school: id }); }
+      paint();
+    });
+    paint();
+  });
 
   // Add to roster: pick the days for a program, for one child, on their current or upcoming roster, with an optional class.
   var refreshers = [];
@@ -1073,6 +1178,12 @@
     if (!toggle || !panel) return;
     var kidRow = panel.querySelector('.kid-row');
     var key = card.id + '.' + school;
+    var cardDays = card.getAttribute('data-days'), cardOfferDays = null;
+    cardDays = cardDays && cardDays !== '*' ? cardDays.split(' ') : null;
+    try { cardOfferDays = JSON.parse(card.getAttribute('data-offer-days') || 'null'); } catch (e) { cardOfferDays = null; }
+    var warnLine = el('span', 'day-warn');
+    warnLine.hidden = true;
+    panel.appendChild(warnLine);
     var pending = '';   // a class chosen before any day is picked
     var currentClass = function (b) {   // null: not on the roster. false: different classes on different days.
       var found = null;
@@ -1085,16 +1196,18 @@
       return found;
     };
     var show = function () {
-      var r = loadRosters(), kid = r.kids[r.kid], b = kid[r.active], on = [];
+      var r = loadRosters(), kid = r.kids[r.kid], b = kid[r.active], on = [], onDays = [];
       all(panel, '.day').forEach(function (btn) {
         var has = findEntry(b.days[btn.getAttribute('data-day')], key) > -1;
         btn.setAttribute('aria-pressed', String(has));
-        if (has) on.push(btn.textContent);
+        if (has) { on.push(btn.textContent); onDays.push(btn.getAttribute('data-day')); }
       });
       var cls = currentClass(b);
       var mixed = cls === false;
       if (cls === null) cls = pending;
       if (mixed) cls = '';
+      var warn = dayWarning(cardDays, cardOfferDays, cls, onDays);   // a day picked that the listing doesn't show
+      warnLine.textContent = warn; warnLine.hidden = !warn;
       all(panel, '.cl').forEach(function (c) { c.setAttribute('aria-pressed', String(c.getAttribute('data-class') === cls)); });
       all(panel, '.wb').forEach(function (w) { w.setAttribute('aria-pressed', String(w.getAttribute('data-board') === r.active)); });
       if (kidRow) {   // with more than one child, choose whose roster this goes on

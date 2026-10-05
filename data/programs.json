@@ -119,6 +119,7 @@
     "grades": "3-8",
     "gradeNote": "3rd–5th program; a 6th–8th program also exists",
     "hours": "Seasonal (fall and spring), a couple of afternoons a week",
+    "daysNote": "Teams meet twice a week. The days vary by site.",
     "cost": "Not published on the pages checked",
     "phone": "215-247-8598",
     "email": "",
@@ -306,7 +307,29 @@
     ],
     "grades": "K-8",
     "gradeNote": "",
-    "hours": "Until 6:00 pm, Mon–Fri. Open most early dismissals and days off.",
+    "hours": "Until 6:00 pm. Open most early dismissals and days off.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysOff": {
+      "summary": "Community sites open for most school closures, including winter and spring breaks, at a separate full-day rate. Camps run 8 am to 4 pm for ages 4–12, with extended day to 6 pm. Early dismissals are covered for enrolled children.",
+      "url": "https://zhangsah.org/camps/",
+      "dates": [],
+      "sources": [
+        {
+          "label": "Zhang Sah after-school program",
+          "url": "https://zhangsah.org/after-school-program/"
+        },
+        {
+          "label": "Zhang Sah camps",
+          "url": "https://zhangsah.org/camps/"
+        }
+      ]
+    },
     "pickupBy": "6:00 pm",
     "cost": "Tuition not published. Takes CCIS subsidy and offers sibling discounts.",
     "price": "paid",
@@ -373,6 +396,13 @@
     "grades": "K-6",
     "gradeNote": "Ages 5–12",
     "hours": "3:00–6:00 pm, weekdays",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
     "pickupBy": "6:00 pm",
     "cost": "$100 per month in the 2025–26 listing",
     "price": "paid",
@@ -434,7 +464,32 @@
     ],
     "grades": "K-4",
     "gradeNote": "K–4. A separate Mini MOVE serves Pre-K.",
-    "hours": "3:30–6:30 pm, Mon–Fri (Aug 24, 2026 – June 9, 2027)",
+    "hours": "3:30–6:30 pm (Aug 24, 2026 – June 9, 2027)",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Enroll by the day.",
+    "daysOff": {
+      "summary": "Vacation camps, 9 am to 3:30 pm, for kindergarten and up (plus a pre-K camp for ages 3–5), at Queen Village and Bok, $97.32 a day. Dates are posted through November so far. MOVE After School also still runs 3:30 to 6:30 pm on district closure days, as drop-off.",
+      "url": "https://phillyinmovement.com/vacation-camps/",
+      "dates": [
+        "2026-10-09",
+        "2026-10-12",
+        "2026-11-03",
+        "2026-11-11",
+        "2026-11-16"
+      ],
+      "sources": [
+        {
+          "label": "Philly InMovement vacation camps",
+          "url": "https://phillyinmovement.com/vacation-camps/"
+        }
+      ]
+    },
     "pickupBy": "6:30 pm",
     "cost": "$51.52 per day, with add-ons of $6–$16 for advanced classes. $180 deposit per weekday enrolled.",
     "price": "paid",
@@ -494,7 +549,15 @@
     ],
     "grades": "PK-3",
     "gradeNote": "Ages 3–9",
-    "hours": "Until 5:45 pm, Mon–Fri. Escorted children arrive 3:45–4:00.",
+    "hours": "Until 5:45 pm. Escorted children arrive 3:45–4:00.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Choose 1 to 5 days a week.",
     "pickupBy": "5:45 pm",
     "cost": "Per week: $40 for 1 day, $70 for 2, $97 for 3, $116 for 4, $130 for 5",
     "price": "paid",
@@ -544,6 +607,25 @@
     "grades": "PK-6",
     "gradeNote": "Ages 4–12",
     "hours": "Until 6:00 pm. Half-day camps on early-dismissal days.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Choose 1 to 5 days a week.",
+    "daysOff": {
+      "summary": "Full-day vacation camps when public schools are closed, 9 am to 3 pm, for ages 5–12, registered separately. Extra care runs 8:15 to 9 am and 3 to 5:30 pm.",
+      "url": "https://phillyartcenter.com/vacation-camps-1",
+      "dates": [],
+      "sources": [
+        {
+          "label": "Philly Art Center vacation camps",
+          "url": "https://phillyartcenter.com/vacation-camps-1"
+        }
+      ]
+    },
     "pickupBy": "6:00 pm",
     "cost": "Not shown on the public page. Paid by season: 50% deposit, then two 25% installments. 5% sibling discount.",
     "price": "paid",
@@ -606,7 +688,54 @@
     ],
     "grades": "K-5",
     "gradeNote": "",
-    "hours": "3:30–6:00 pm, Mon–Fri. Full days on most district holidays and half days.",
+    "hours": "3:30–6:00 pm. Full days on most district holidays and half days.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "The monthly rate covers every day. A daily rate lets you pick days.",
+    "daysOff": {
+      "summary": "Full days, 8:30 am to 6 pm, on the school closure days it lists. Each day is registered separately.",
+      "url": "https://opcc.jumbula.com/",
+      "dates": [
+        "2026-10-09",
+        "2026-10-12",
+        "2026-11-03",
+        "2026-11-11",
+        "2026-11-16",
+        "2026-11-25",
+        "2026-12-23",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2027-01-15",
+        "2027-01-29",
+        "2027-02-12",
+        "2027-03-10",
+        "2027-03-22",
+        "2027-03-23",
+        "2027-03-24",
+        "2027-03-25",
+        "2027-03-26",
+        "2027-03-29",
+        "2027-04-16",
+        "2027-05-17",
+        "2027-05-18"
+      ],
+      "sources": [
+        {
+          "label": "Old Pine registration: school closures",
+          "url": "https://opcc.jumbula.com/"
+        },
+        {
+          "label": "Old Pine afterschool",
+          "url": "https://oldpinecommunitycenter.org/afterschool/"
+        }
+      ]
+    },
     "pickupBy": "6:00 pm",
     "cost": "$600 per month, or a daily rate. Financial aid and tuition subsidies available.",
     "price": "paid",
@@ -661,6 +790,48 @@
     "grades": "K-8",
     "gradeNote": "Ages 5–8 and 8–11 on weekdays; ages 11–15 on Fridays",
     "hours": "3:45–5:45 pm (ages 5–11); Fridays 4:00–6:00 pm (ages 11–15)",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "A class each weekday for ages 5–11. Ages 11–15 meet on Fridays.",
+    "daysOff": {
+      "summary": "Full-day sewing camps, 9 am to 3 pm, for ages 5–11, $99 a day. Afternoon care from 3 to 5 pm is $20.",
+      "url": "https://butcher-s-sew-shop-junior.jumbula.com/vacation-camps",
+      "dates": [
+        "2026-10-09",
+        "2026-10-12",
+        "2026-11-03",
+        "2026-11-11",
+        "2026-11-16",
+        "2026-11-25",
+        "2026-12-23",
+        "2027-01-15",
+        "2027-01-18",
+        "2027-01-29",
+        "2027-02-12",
+        "2027-02-15",
+        "2027-03-10",
+        "2027-03-22",
+        "2027-03-23",
+        "2027-03-24",
+        "2027-03-25",
+        "2027-03-26",
+        "2027-03-29",
+        "2027-04-16",
+        "2027-05-17",
+        "2027-05-18"
+      ],
+      "sources": [
+        {
+          "label": "Butcher’s Sew Shop Junior vacation camps",
+          "url": "https://butcher-s-sew-shop-junior.jumbula.com/vacation-camps"
+        }
+      ]
+    },
     "pickupBy": "5:45 pm (6:00 pm for the Friday teen class)",
     "cost": "Fall session: $741–$912 per weekday slot, plus a materials fee",
     "price": "paid",
@@ -711,7 +882,6 @@
     "offers": [
       "Piano",
       "Guitar",
-      "Ukulele",
       "Percussion",
       "Choir"
     ],
@@ -720,7 +890,8 @@
       "drums",
       "singing",
       "lessons",
-      "instruments"
+      "instruments",
+      "ukulele"
     ],
     "address": "761 S 8th St and 904 S 9th St",
     "neighborhoods": [
@@ -729,6 +900,40 @@
     "grades": "K-5",
     "gradeNote": "Kindergarten and up; upper limit not published",
     "hours": "Classes start at 3:50 or 5:00 pm",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Depends on the class. Piano and guitar meet every weekday, percussion on Monday and Friday, choir on Tuesday and Thursday.",
+    "offerDays": {
+      "Percussion": [
+        "mon",
+        "fri"
+      ],
+      "Choir": [
+        "tue",
+        "thu"
+      ]
+    },
+    "daysOff": {
+      "summary": "Full-day camps, 9 am to 3 pm, for ages 5–10, $90 a day. Fall dates are posted so far.",
+      "url": "https://misterjohnsmusic.com/day-camps/",
+      "dates": [
+        "2026-10-09",
+        "2026-10-12",
+        "2026-11-03",
+        "2026-11-11"
+      ],
+      "sources": [
+        {
+          "label": "Mister John’s Music day camps",
+          "url": "https://misterjohnsmusic.com/day-camps/"
+        }
+      ]
+    },
     "cost": "Fall (16 weeks): class $460, pickup $105, aftercare $400. Winter/Spring (22 weeks): $635, $145, $550.",
     "price": "paid",
     "phone": "267-223-9180",
@@ -746,7 +951,7 @@
         }
       ]
     },
-    "note": "Pickup runs only when at least three students from a school enroll for that day.",
+    "note": "Pickup runs only when at least three students from a school enroll for that day. Ukulele isn’t on the fall schedule; the class page says to check back for winter and spring.",
     "sources": [
       {
         "label": "Kids group classes 2026–27",
@@ -790,7 +995,25 @@
     ],
     "grades": "K-5",
     "gradeNote": "K–5 for pickup; classes run to age 14",
-    "hours": "3:30–6:00 pm, Mon–Fri",
+    "hours": "3:30–6:00 pm",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysOff": {
+      "summary": "Full-day vacation camps, 9 am to 3 pm, for kindergarten to 8th grade at Bella Vista and Queen Village. Children can stay until 6 pm on their regular after-school days. Dates and prices are in its registration calendar.",
+      "url": "https://www.cocoacademyphl.com/vacationcamps",
+      "dates": [],
+      "sources": [
+        {
+          "label": "CoCo Academy vacation camps",
+          "url": "https://www.cocoacademyphl.com/vacationcamps"
+        }
+      ]
+    },
     "pickupBy": "6:00 pm",
     "cost": "Not published",
     "phone": "215-253-7690",
@@ -857,6 +1080,25 @@
     "grades": "1-8",
     "gradeNote": "Ages 6–16",
     "hours": "Until 6:00 pm, on the School District calendar",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Choose 1 to 5 days a week.",
+    "daysOff": {
+      "summary": "Full-day board game camps when district schools are closed, 9 am to 3 pm with drop-off from 8:30, for ages 6–14. Aftercare from 3 to 6 pm costs extra. Camp dates had not been posted when we checked.",
+      "url": "https://www.queenandrookcafe.com/youth-programs/",
+      "dates": [],
+      "sources": [
+        {
+          "label": "Queen & Rook youth programs",
+          "url": "https://www.queenandrookcafe.com/youth-programs/"
+        }
+      ]
+    },
     "pickupBy": "6:00 pm",
     "cost": "Not published. Need-based scholarships available.",
     "price": "paid",
@@ -910,7 +1152,26 @@
     ],
     "grades": "PK-3",
     "gradeNote": "",
-    "hours": "Mon–Fri. End time not published.",
+    "hours": "End time not published.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Book 1 to 5 days a week for the semester.",
+    "daysOff": {
+      "summary": "Full days off are booked by the day, and children from any school are welcome. Dates, hours and prices are in its booking page.",
+      "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
+      "dates": [],
+      "sources": [
+        {
+          "label": "Beehive at Bok after school",
+          "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs"
+        }
+      ]
+    },
     "cost": "$680 per weekday for the semester. 10% off a full week, 20% off if paid in full.",
     "price": "paid",
     "phone": "267-414-5945",
@@ -970,6 +1231,32 @@
     "grades": null,
     "gradeNote": "Ages not published",
     "hours": "Mon–Fri during the school year",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Choose 1 to 5 days a week. Which class meets on which day is on its schedule.",
+    "daysOff": {
+      "summary": "School closing camps with parkour and dodgeball at 812 Chestnut St, 8:30 am to 3:30 pm, $69. Staying until 6 pm is $25 more for non-members. Fall dates are posted so far.",
+      "url": "https://www.movemakersphilly.com/range-of-motion-after-school-programming.html",
+      "dates": [
+        "2026-10-09",
+        "2026-10-12",
+        "2026-11-03",
+        "2026-11-11",
+        "2026-11-16",
+        "2026-11-25"
+      ],
+      "sources": [
+        {
+          "label": "Range of Motion after-school and school closing camps",
+          "url": "https://www.movemakersphilly.com/range-of-motion-after-school-programming.html"
+        }
+      ]
+    },
     "cost": "2025–26 rates: $369 per month for 1 day a week up to $529 for 5 days, plus $100 registration",
     "price": "paid",
     "phone": "267-600-1030",
@@ -1021,6 +1308,17 @@
     "grades": "K-5",
     "gradeNote": "",
     "hours": "2:30–6:00 pm. From 12:30 pm on early-release days; full days on most school holidays.",
+    "daysOff": {
+      "summary": "Camp days on teacher work days and most holidays: 8:30 am to 6 pm for enrolled children, 8:30 am to 3 pm for drop-ins. There is no school pickup on those days. On early-release days it picks up and runs 12:30 to 6 pm.",
+      "url": "https://ko12.org/after-school-pick-up-philadelphia",
+      "dates": [],
+      "sources": [
+        {
+          "label": "Kids on 12th after school",
+          "url": "https://ko12.org/after-school-pick-up-philadelphia"
+        }
+      ]
+    },
     "pickupBy": "6:00 pm",
     "cost": "Monthly rates start at $120",
     "price": "paid",
@@ -1129,6 +1427,13 @@
     "grades": "1-6",
     "gradeNote": "Ages 6–12",
     "hours": "3:00–6:00 pm, weekdays",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
     "pickupBy": "6:00 pm",
     "cost": "$80 per month in the 2025–26 listing",
     "price": "paid",
@@ -1193,6 +1498,13 @@
     "grades": "K-5",
     "gradeNote": "Ages 5–11",
     "hours": "3:00–6:00 pm, weekdays",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
     "pickupBy": "6:00 pm",
     "cost": "$120 per month in the 2025–26 listing",
     "price": "paid",
@@ -1309,6 +1621,13 @@
     "grades": "3-8",
     "gradeNote": "",
     "hours": "Daily after school. Times not published.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
     "cost": "Free",
     "price": "free",
     "phone": "215-602-0236",
@@ -1363,6 +1682,7 @@
     "grades": "K-8",
     "gradeNote": "K–12",
     "hours": "After school during the school year. Hours vary by branch.",
+    "daysNote": "Drop-in. Days vary by branch.",
     "cost": "Free",
     "price": "free",
     "phone": "",
@@ -1416,7 +1736,37 @@
     ],
     "grades": "6-8",
     "gradeNote": "Weekday options are grades 6–12. K–5 classes meet on Saturdays only.",
-    "hours": "Teen Lounge: 4–6 pm, Mon–Wed on school days (one Fleisher page lists Tue and Wed only). Weekday class times vary by term.",
+    "hours": "Teen Lounge: 4–6 pm, Tuesday and Wednesday on school days (one Fleisher page also lists Mondays). Children’s class times vary by term.",
+    "days": [
+      "tue",
+      "wed"
+    ],
+    "daysNote": "Teen Lounge only. Children’s classes are mostly on Saturdays.",
+    "daysOff": {
+      "summary": "One-day art camps on district days off for ages 5–11: drop-off 8:30 to 9:30 am, classes until 3:30 pm. After Camp Club runs 3:30 to 5:30 pm for an added fee. The price is not on its page.",
+      "url": "https://fleisher.org/day-off-camps/",
+      "dates": [
+        "2026-10-12",
+        "2026-11-03",
+        "2026-11-11",
+        "2027-02-15",
+        "2027-03-10",
+        "2027-03-22",
+        "2027-03-23",
+        "2027-03-24",
+        "2027-03-25",
+        "2027-03-26",
+        "2027-04-16",
+        "2027-05-17",
+        "2027-05-18"
+      ],
+      "sources": [
+        {
+          "label": "Fleisher day-off camps",
+          "url": "https://fleisher.org/day-off-camps/"
+        }
+      ]
+    },
     "pickupBy": "6:00 pm (Teen Lounge)",
     "cost": "Teen Lounge is free. Weekday classes: $95 base fee per term. Saturday classes: $65 base fee. Help available if cost is a barrier.",
     "price": "both",
@@ -1488,6 +1838,42 @@
     "grades": "K-8",
     "gradeNote": "K–5, grades 6–7, and teens",
     "hours": "Mon–Fri",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Kindergarten to 5th grade choose 2 to 5 days. Grades 6 and 7 come Tuesday to Thursday.",
+    "daysOff": {
+      "summary": "School’s Out Camp, 8:30 am to 6 pm, for ages 4 and up, $90 a day ($100 in the last week before the date).",
+      "url": "https://makomcommunity.org/schools-out-camp/",
+      "dates": [
+        "2026-10-12",
+        "2026-11-03",
+        "2026-11-11",
+        "2026-11-16",
+        "2027-01-15",
+        "2027-01-29",
+        "2027-02-12",
+        "2027-03-10",
+        "2027-03-22",
+        "2027-03-23",
+        "2027-03-24",
+        "2027-03-25",
+        "2027-03-26",
+        "2027-04-15",
+        "2027-05-17",
+        "2027-05-18"
+      ],
+      "sources": [
+        {
+          "label": "Makom School’s Out Camp",
+          "url": "https://makomcommunity.org/schools-out-camp/"
+        }
+      ]
+    },
     "cost": "K–5: $280 per month (Fridays only) to $857 (5 days), plus $200 enrollment fee. Tuition assistance available.",
     "price": "paid",
     "phone": "484-278-1335",

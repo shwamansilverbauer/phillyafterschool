@@ -1,6 +1,6 @@
 {
   "exportFormatVersion": 2,
-  "exportTime": "2026-10-05 22:23:17",
+  "exportTime": "2026-10-05 23:57:32",
   "containerVersion": {
     "path": "accounts/0/containers/0/versions/0",
     "accountId": "0",
@@ -831,6 +831,56 @@
         "accountId": "0",
         "containerId": "0",
         "tagId": "13",
+        "name": "GA4 - Event - pas_school_save",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_school_save"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "school"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - school}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "12"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "14",
         "name": "Clarity - Base",
         "type": "html",
         "parentFolderId": "1",
@@ -854,12 +904,12 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "tagId": "14",
+        "tagId": "15",
         "name": "Clarity - Site events",
         "type": "html",
         "parentFolderId": "1",
         "firingTriggerId": [
-          "12"
+          "13"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "notes": "Sends each pas_ event to Clarity as a custom event, so recordings and heatmaps can be filtered by it.",
@@ -1157,6 +1207,31 @@
         "accountId": "0",
         "containerId": "0",
         "triggerId": "12",
+        "name": "CE - pas_school_save",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_school_save"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "13",
         "name": "CE - any pas_ event",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
