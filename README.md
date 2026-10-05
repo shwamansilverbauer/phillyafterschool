@@ -82,6 +82,8 @@ Fields worth knowing:
   - `note`: a caution that applies to that school only.
   - `distance`: optional, e.g. `"three blocks from Nebinger"`.
   - `registerUrl`: optional, for providers with a separate sign-up link per school.
+  - `price` and `cost`: optional, when the price is different for this school (free through a partnership, say). They replace the
+    program's own `price` and `cost` on this school's page, and the program page shows the school's `cost` under that school.
   - `address`: optional, when a provider sends this school's children to a different location.
   - `sources`: optional, extra sources that apply to this school only (the school's own aftercare sheet, for example).
 

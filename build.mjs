@@ -97,6 +97,7 @@ for (const p of programs) {
     if (!schoolIds.has(sid)) errors.push(`${at}: unknown school "${sid}"`);
     if (!REL[l.relation]) errors.push(`${at}: relation for ${sid} must be onsite, pickup or nearby`);
     if (l.registerUrl && !isUrl(l.registerUrl)) errors.push(`${at}: registerUrl for ${sid} must be an https URL`);
+    if (l.price !== undefined && !['free', 'paid', 'both'].includes(l.price)) errors.push(`${at}: price for ${sid} must be "free", "paid" or "both"`);
     for (const s of l.sources || []) if (!isUrl(s.url)) errors.push(`${at}: source "${s.label}" for ${sid} needs an https URL`);
     if (p.register?.how === 'online' && !isUrl(l.registerUrl || p.register.url)) errors.push(`${at}: online registration needs a URL`);
   }
@@ -371,13 +372,19 @@ const schoolRow = (s, depth) => {
 // What the filters read on every listed program, whether it is drawn as a card or a row.
 const haystack = (p, extra = []) => [p.name, p.what, ...(p.offers || []), ...(p.keywords || []), ...p.types.map(t => TYPE[t].label), ...extra].join(' ').toLowerCase().replace(/martial arts/g, 'martial-arts');   // so a search for "art" doesn't pull in martial arts
 // Free, paid, both, or (when a provider doesn't publish a price) neither.
-const costKinds = p => p.price === 'both' ? ['free', 'paid'] : p.price ? [p.price] : [];
+// A price can differ by school (free for one school through a partnership, paid for the rest): a school's own
+// "price" and "cost" win on that school's page. On the citywide lists a program counts under every price it has anywhere.
+const kindsOf = price => price === 'both' ? ['free', 'paid'] : price ? [price] : [];
+const costKinds = (p, school) => school ? kindsOf(p.schools[school.id].price || p.price)
+  : [...new Set([...kindsOf(p.price), ...Object.values(p.schools).flatMap(l => kindsOf(l.price))])];
+const freeOnlyFor = p => kindsOf(p.price).includes('free') ? [] : schools.filter(s => kindsOf(p.schools[s.id]?.price).includes('free')).map(s => s.shortName);
 // A school's own clubs belong on that school's page. On the citywide lists (A to Z, the type pages) there would be
 // one near-identical "School clubs" entry per school, so they are left off those.
 const schoolRun = p => p.types.includes('clubs');
 const citywide = programs.filter(p => !schoolRun(p));
-const itemAttrs = (p, extra = []) => `data-item data-grades="${p._grades === null ? '*' : p._grades.join(' ')}" data-types="${p.types.join(' ')}" data-hoods="${programHoods(p).map(hoodSlug).join(' ')}" data-cost="${costKinds(p).join(' ')}" data-search="${esc(haystack(p, extra))}"`;
-const typeTags = p => p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('') + (costKinds(p).includes('free') ? `<span class="tag free">${p.price === 'both' ? 'Free option' : 'Free'}</span>` : '');
+const itemAttrs = (p, extra = [], school = null) => `data-item data-grades="${p._grades === null ? '*' : p._grades.join(' ')}" data-types="${p.types.join(' ')}" data-hoods="${programHoods(p).map(hoodSlug).join(' ')}" data-cost="${costKinds(p, school).join(' ')}" data-search="${esc(haystack(p, extra))}"`;
+const typeTags = (p, school = null) => p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')
+  + (!costKinds(p, school).includes('free') ? '' : `<span class="tag free">${school ? (costKinds(p, school).includes('paid') ? 'Free option' : 'Free') : freeOnlyFor(p).length ? `Free for ${esc(listNames(freeOnlyFor(p)))}` : p.price === 'both' ? 'Free option' : 'Free'}</span>`);
 const programRow = (p, depth) => {
   const served = schools.filter(s => p.schools[s.id]);
   return `<a class="prow" href="${link(programPath(p), depth)}" ${itemAttrs(p, [...served.map(s => s.shortName), ...programHoods(p)])}>
@@ -399,7 +406,7 @@ function filterBar({ list, depth, school = null, show = {}, searchLabel, placeho
   const relRow = school ? `<div class="frow"><span class="flabel">Pickup</span><div class="rail" role="group" aria-label="How your child gets there">${btn('rel', 'ALL', 'Any', null)}${Object.entries(REL).map(([k, v]) => [k, v.pill.replace('{s}', school.shortName), list.filter(p => p.schools[school.id].relation === k).length]).filter(([, , n]) => n).map(([k, label, n]) => btn('rel', k, label, n)).join('')}</div></div>` : '';
   const hoodList = [...new Set(list.flatMap(programHoods))].sort();
   const hoodRow = on.hood && hoodList.length > 1 ? `<div class="frow"><span class="flabel">Area</span><div class="rail" role="group" aria-label="Neighborhood">${btn('hood', 'ALL', 'Anywhere', null)}${hoodList.map(n => btn('hood', hoodSlug(n), n, list.filter(p => programHoods(p).includes(n)).length)).join('')}</div></div>` : '';
-  const costN = k => list.filter(p => costKinds(p).includes(k)).length, unpriced = list.filter(p => !costKinds(p).length).length;
+  const costN = k => list.filter(p => costKinds(p, school).includes(k)).length, unpriced = list.filter(p => !costKinds(p, school).length).length;
   const costRow = on.cost && costN('free') && costN('paid') ? `<div class="frow"><span class="flabel">Cost</span><div class="rail" role="group" aria-label="Cost">${btn('cost', 'ALL', 'Any', null)}${btn('cost', 'free', 'Free', costN('free'))}${btn('cost', 'paid', 'Paid', costN('paid'))}${unpriced ? `<span class="hint rail-note">${unpriced} ${unpriced === 1 ? 'doesn’t' : 'don’t'} publish a price, so ${unpriced === 1 ? 'it shows' : 'they show'} only under Any.</span>` : ''}</div></div>` : '';
   const gradeBtns = on.grade ? [['ALL', 'All']].concat(GRADES.map(g => [g, g])).map(([g, label]) => {
     const n = list.filter(p => (!school || p.schools[school.id].relation !== 'nearby') && (g === 'ALL' || p._grades === null || p._grades.includes(g))).length;
@@ -436,12 +443,12 @@ function card(p, school) {
       <ul>${reviewItems(revs)}</ul></details>
     <a href="${reviewUrl}" data-track="review">Write a review</a>${more}`
     : `<span>No reviews yet.</span> <a href="${reviewUrl}" data-track="review">Write the first one</a>${more}`;
-  const rows = [['Where', esc(where)], ['Hours', esc(p.hours)], ['Pick up by', esc(p.pickupBy || '')], ['Cost', esc(p.cost)], ['Register', registerText(p)], ['Next term', esc(r.nextTerm || '') + datesHtml(p, 1)], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
+  const rows = [['Where', esc(where)], ['Hours', esc(p.hours)], ['Pick up by', esc(p.pickupBy || '')], ['Cost', esc(l.cost || p.cost)], ['Register', registerText(p)], ['Next term', esc(r.nextTerm || '') + datesHtml(p, 1)], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
   const flag = [p.note, l.note].filter(Boolean).join(' ');
   const fix = correctionHref(`Correction: ${p.name} (${school.shortName})`);
-  return `<article class="prog" id="${esc(p.id)}" data-rel="${l.relation}" ${itemAttrs(p, [rel.pill.replace('{s}', school.shortName)])}>
-  <div class="top"><span class="pill ${l.relation}">${esc(rel.pill.replace('{s}', school.shortName))}</span><h3><a href="${link(programPath(p), 1)}">${esc(p.name)}</a></h3><p class="what">${esc(p.what)}</p><p class="tags">${typeTags(p)}</p>${p.offers?.length ? `<p class="offers"><b>Classes:</b> ${esc(p.offers.join(', '))}</p>` : ''}</div>
+  return `<article class="prog" id="${esc(p.id)}" data-rel="${l.relation}" ${itemAttrs(p, [rel.pill.replace('{s}', school.shortName)], school)}>
+  <div class="top"><span class="pill ${l.relation}">${esc(rel.pill.replace('{s}', school.shortName))}</span><h3><a href="${link(programPath(p), 1)}">${esc(p.name)}</a></h3><p class="what">${esc(p.what)}</p><p class="tags">${typeTags(p, school)}</p>${p.offers?.length ? `<p class="offers"><b>Classes:</b> ${esc(p.offers.join(', '))}</p>` : ''}</div>
   ${gradeStrip(p)}
   <dl>${rows}</dl>
   ${flag ? `<p class="flag">${esc(flag)}</p>` : ''}
@@ -503,6 +510,7 @@ function programPage(p) {
       <span class="pill ${l.relation}">${esc(REL[l.relation].pill.replace('{s}', s.shortName))}</span>
       <h3>${esc(s.name)}</h3>
       <p>${esc(line)}${extra ? ' ' + esc(extra) : ''}</p>
+      ${l.cost ? `<p><b>Cost:</b> ${esc(l.cost)}</p>` : ''}
       ${l.note ? `<p class="flag">${esc(l.note)}</p>` : ''}
       <p class="serve-links">${links}</p>
     </div>`;
@@ -1335,6 +1343,7 @@ function boardPage() {
       <p id="board-empty-text">Open a school’s page and choose “Add to roster” on any program. Pick the days, and it shows up here.</p>
       <div class="actions">${schoolLinks}</div>
     </div>
+    <p class="hint" id="board-hint" hidden>${T(`Drag a card by its colored top to move it to another day, or use the day buttons on the card.`)}</p>
     <div class="week" id="week"></div>
     <button type="button" class="clear" id="board-promote" hidden>The new term has started: make this the current roster</button>
   </section>

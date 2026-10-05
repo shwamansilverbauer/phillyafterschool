@@ -329,7 +329,8 @@
     "schools": {
       "nebinger": {
         "relation": "pickup",
-        "note": "The school’s page says the program “remains free for Nebinger students” and runs September 2 to June 12, without naming the year. Confirm the free spots still apply for 2026–27. The city’s list of free funded programs includes Zhang Sah’s Mt. Airy site but not Bainbridge Street.",
+        "price": "free",
+        "cost": "Free for Nebinger students, through the school’s partnership with Zhang Sah.",
         "sources": [
           {
             "label": "Nebinger extracurriculars",
