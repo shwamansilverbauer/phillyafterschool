@@ -6,7 +6,7 @@ $SITE = "Philly After School";
 function fail($msg, $code) {
   http_response_code($code);
   header('Content-Type: text/html; charset=utf-8');
-  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css?v=007ca812"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="./">Go back to the form</a></p></main></body></html>';
+  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css?v=7ce0726c"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="./">Go back to the form</a></p></main></body></html>';
   exit;
 }
 function field($key, $max) {
@@ -78,5 +78,5 @@ $saved = @file_put_contents($log, date('c') . ($sent ? ' (emailed)' : ' (EMAIL F
 if (!$sent && $saved === false) {
   fail('Something went wrong on our side. Please email ' . $TO . ' instead.', 500);
 }
-header('Location: thanks/', true, 303);
+header('Location: ' . ($kind === 'A feature idea' ? '../ideas/thanks/' : 'thanks/'), true, 303);
 exit;

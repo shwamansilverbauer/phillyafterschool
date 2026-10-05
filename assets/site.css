@@ -331,3 +331,78 @@ button.btn{cursor:pointer;font-family:inherit}
 .hoods{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
 .chips-row{display:flex;flex-wrap:wrap;gap:8px;max-width:none}
 .facts a{color:var(--hero-ink)}
+
+/* ---------- shared filters: type, pickup, area, cost rows; the grade strip stays on screen ---------- */
+.fbar{flex-direction:column;gap:12px;margin-bottom:-16px}
+.fbar .finder{margin-bottom:4px}
+.frow{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;min-width:0}
+@media (min-width:700px){.frow{grid-template-columns:5.5rem minmax(0,1fr);align-items:center;gap:10px}}
+.flabel{font-size:.86rem;font-weight:700;color:var(--muted)}
+.tbtn[style*="--tc"]{border-left:6px solid var(--tc)}
+.tbtn[style*="--tc"][aria-pressed="true"]{border-color:var(--ink)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;color:var(--muted);white-space:nowrap}
+.tag::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--tc,var(--muted))}
+.tag.free{color:var(--green-ink);background:var(--green-bg);border-radius:999px;padding:1px 9px}
+.tag.free::before{display:none}
+.prow .tally .tag{margin-right:6px}
+
+/* type chips, used on the home page and the type pages */
+.tchip{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1.5px solid var(--line);border-left:8px solid var(--tc);border-radius:12px;padding:9px 14px 9px 10px;text-decoration:none;color:var(--ink);font-weight:700}
+.tchip:hover{border-color:var(--tc)}
+.tchip .ticon{color:var(--tc);flex:0 0 auto}
+.tchip b{font-weight:400;color:var(--muted);font-size:.9rem}
+.chips-row.big .tchip{font-size:1.1rem;padding:14px 18px 14px 14px}
+.btn.quiet{border-color:var(--line);color:var(--ink)}
+
+/* ---------- home page: three ways in ---------- */
+.ways{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.way{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 24px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.way p{color:var(--muted)}
+.way .chips-row{gap:8px}
+.way .btn{font-size:.95rem;padding:7px 14px}
+.grade-links{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.grade-links .gbtn{text-decoration:none;padding:12px 6px}
+.grade-links .gbtn:hover{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink)}
+
+/* ---------- school finder: suggestions under the search box ---------- */
+.find{position:relative}
+.finder-list{list-style:none;margin:0;padding:6px;position:absolute;left:0;right:0;top:calc(100% - 2.2rem);z-index:20;background:#FFFFFF;color:#0B2140;border-radius:14px;box-shadow:0 12px 32px rgba(7,21,39,.28);display:flex;flex-direction:column;gap:2px;max-height:min(70vh,520px);overflow:auto}
+.find .hint{color:var(--hero-muted);min-height:2.2rem;margin-top:4px}
+.find .hint a{color:var(--hero-ink)}
+.prose .find .hint{color:var(--muted)}
+.prose .find input{border:1.5px solid var(--line)}
+.finder-list a{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 12px;border-radius:10px;text-decoration:none;color:#0B2140}
+.finder-list li[aria-selected="true"] a,.finder-list a:hover{background:#DAEDFE}
+.finder-meta{font-size:.88rem;color:#4D607A}
+.finder-note{padding:10px 12px;font-size:.93rem;color:#4D607A}
+.finder-note a{color:#1763B8}
+
+/* ---------- roster cards: each pick is a card that wears its program type ---------- */
+.pick.tc{--tc:var(--blue);border:2px solid var(--tc);border-radius:14px;padding:0 12px 12px;gap:6px;background:var(--surface);box-shadow:4px 4px 0 var(--tc);overflow:hidden;transition:transform .15s}
+.pick.tc:first-child{padding-top:0}
+.daycol ul{gap:18px}
+.daycol li.tc:nth-child(odd){transform:rotate(-.7deg)}
+.daycol li.tc:nth-child(even){transform:rotate(.6deg)}
+.daycol li.tc:hover,.daycol li.tc:focus-within{transform:none}
+@media (prefers-reduced-motion: reduce){.pick.tc{transition:none}}
+.tc-top{align-self:stretch;margin:0 -12px 4px;padding:7px 12px;display:flex;align-items:center;gap:6px;background:var(--tc);background-image:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.3) 50%,transparent 65%);color:#FFFFFF;font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.tc-top span{overflow-wrap:normal;word-break:normal;min-width:0}
+.tc-top svg{flex:0 0 auto}
+.tc-no{margin-left:auto;font-variant-numeric:tabular-nums;letter-spacing:0;text-transform:none;font-weight:400;opacity:.95;white-space:nowrap}
+.pick.tc b a{font-family:var(--display);font-stretch:112%;font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none}
+.pick.tc b a:hover{text-decoration:underline}
+
+/* ---------- the week card maker ---------- */
+.card-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:start}
+@media (min-width:860px){.card-grid{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:40px}}
+.card-fields{display:flex;flex-direction:column;gap:20px;min-width:0}
+.card-fields .actions{grid-area:auto;align-items:center;align-self:flex-start}
+.field input[type="file"]{font:inherit;font-size:.95rem;max-width:100%}
+.card-preview canvas{display:block;width:100%;max-width:380px;height:auto;border-radius:16px;box-shadow:0 10px 28px rgba(7,21,39,.25)}
+@media print{
+  body.print-card *{visibility:hidden}
+  body.print-card .card-preview,body.print-card .card-preview canvas{visibility:visible}
+  body.print-card .card-preview{position:fixed;inset:0;display:flex;justify-content:center;align-items:flex-start}
+  body.print-card .card-preview canvas{max-width:none;width:auto;height:96vh;box-shadow:none;border-radius:0}
+}

@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../../assets/site.css?v=007ca812">
+<link rel="stylesheet" href="../../assets/site.css?v=7ce0726c">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"ItemList","name":"After-school programs in Society Hill","itemListElement":[{"@type":"ListItem","position":1,"name":"Old Pine Community Center","url":"https://phillyafterschool.org/programs/old-pine/"},{"@type":"ListItem","position":2,"name":"Starr Garden Recreation Center","url":"https://phillyafterschool.org/programs/starr-garden-rec/"}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Philly After School","item":"https://phillyafterschool.org/"},{"@type":"ListItem","position":2,"name":"Neighborhoods","item":"https://phillyafterschool.org/neighborhoods/"},{"@type":"ListItem","position":3,"name":"Society Hill","item":"https://phillyafterschool.org/neighborhoods/society-hill/"}]}]}</script>
 </head>
 <body>
@@ -32,7 +32,7 @@
 <header class="band">
   <div class="in bar">
     <a class="brand" href="../../"><span class="bus-mark"></span>Philly After School</a>
-    <nav class="nav" aria-label="Site"><a href="../../">Schools</a><a href="../../board/">Build your week<span class="count" data-board-count hidden></span></a><a href="../../suggest/">Suggest a program</a><a href="../../about/">About</a><a href="../../support/">Buy me a coffee</a></nav>
+    <nav class="nav" aria-label="Site"><a href="../../schools/">Schools</a><a href="../../board/">Build your week<span class="count" data-board-count hidden></span></a><a href="../../suggest/">Suggest a program</a><a href="../../about/">About</a><a href="../../support/">Buy me a coffee</a></nav>
   </div>
   <div class="in hero">
     <p class="where"><a href="../../neighborhoods/"><span data-copy="ee9aa9711a">All neighborhoods</span></a></p>
@@ -49,20 +49,24 @@
 <main class="wrap">
 <section class="section">
   <h2><span data-copy="bbb2092610" data-tpl="Schools in {name}" data-vars="{&quot;name&quot;:&quot;Society Hill&quot;}">Schools in Society Hill</span></h2>
-  <p class="ask"><span data-copy="dac2a8fa8c" data-tpl="No school in {name} is on the site yet." data-vars="{&quot;name&quot;:&quot;Society Hill&quot;}">No school in Society Hill is on the site yet.</span> <a href="../../suggest/"><span data-copy="cb175bd67a">Ask for yours.</span></a></p>
+  <p class="ask"><span data-copy="dac2a8fa8c" data-tpl="No school in {name} is on the site yet." data-vars="{&quot;name&quot;:&quot;Society Hill&quot;}">No school in Society Hill is on the site yet.</span> <a href="../../schools/request/"><span data-copy="cb175bd67a">Ask for yours.</span></a></p>
 </section>
-<section class="section">
+
+<p class="ask" id="no-match" data-nomatch data-edit-reveal="Shown when the filters find nothing:" hidden><span data-copy="883a11e036">Nothing matches that. Know a program that should be listed?</span> <a href="../../suggest/"><span data-copy="c85d669959">Tell us about it.</span></a></p>
+<section class="section" data-group>
   <h2><span data-copy="1e419c3218" data-tpl="Programs based in {name}" data-vars="{&quot;name&quot;:&quot;Society Hill&quot;}">Programs based in Society Hill</span></h2>
   <p><span data-copy="c5fc322f8c">Each one shows the schools it serves. Open it for hours, cost and how to register.</span></p>
   <div class="schools">
-<a class="prow" href="../../programs/old-pine/" data-search="old pine community center traditional aftercare: homework help, snack, gym and recreation aftercare homework gym recreation childcare nebinger meredith society hill">
+<a class="prow" href="../../programs/old-pine/" data-item data-grades="K 1 2 3 4 5" data-types="aftercare" data-hoods="society-hill" data-free="0" data-search="old pine community center traditional aftercare: homework help, snack, gym and recreation aftercare homework gym recreation childcare aftercare nebinger meredith society hill">
   <h3>Old Pine Community Center</h3>
   <span class="what">Traditional aftercare: homework help, snack, gym and recreation</span>
+  <span class="tally"><span class="tag" style="--tc:#0F4D90">Aftercare</span></span>
   <span class="tally"><span class="pill pickup">Picks up from Nebinger</span><span class="pill pickup">Picks up from Meredith</span><span class="hint">Grades K to 5</span></span>
 </a>
-<a class="prow" href="../../programs/starr-garden-rec/" data-search="starr garden recreation center city rec center after-school program rec center recreation parks and rec city aftercare low cost nebinger meredith society hill">
+<a class="prow" href="../../programs/starr-garden-rec/" data-item data-grades="K 1 2 3 4 5" data-types="rec-center aftercare" data-hoods="society-hill" data-free="0" data-search="starr garden recreation center city rec center after-school program rec center recreation parks and rec city aftercare low cost rec centers aftercare nebinger meredith society hill">
   <h3>Starr Garden Recreation Center</h3>
   <span class="what">City rec center after-school program</span>
+  <span class="tally"><span class="tag" style="--tc:#3F6212">Rec centers</span><span class="tag" style="--tc:#0F4D90">Aftercare</span></span>
   <span class="tally"><span class="pill nearby">Nearby, no pickup</span><span class="pill nearby">Nearby, no pickup</span><span class="hint">Grades K to 5</span></span>
 </a>
   </div>
@@ -80,17 +84,18 @@
       <p><span data-copy="2ded0fc514">After-school programs in Philadelphia, sorted by the school your child goes to.</span></p>
     </div>
     <div>
-      <h2><a href="../../#schools"><span data-copy="06c76a46e4">Schools</span></a></h2>
+      <h2><a href="../../schools/"><span data-copy="06c76a46e4">Schools</span></a></h2>
       <ul>
-        <li><a href="../../#schools"><span data-copy="0898b0b426">All schools</span></a></li>
+        <li><a href="../../schools/"><span data-copy="0898b0b426">All schools</span></a></li>
         <li><a href="../../neighborhoods/"><span data-copy="8ed176874c">By neighborhood</span></a></li>
-        <li><a href="../../suggest/"><span data-copy="6c51011791">Ask for your school</span></a></li>
+        <li><a href="../../schools/request/"><span data-copy="6c51011791">Ask for your school</span></a></li>
       </ul>
     </div>
     <div>
       <h2><a href="../../programs/"><span data-copy="ab14d0a7db">Programs</span></a></h2>
       <ul>
         <li><a href="../../programs/"><span data-copy="b8741ed7c0">All programs, A to Z</span></a></li>
+        <li><a href="../../types/"><span data-copy="3e6c889cad">Programs by type</span></a></li>
         <li><a href="../../neighborhoods/"><span data-copy="3a356e1883">Programs by neighborhood</span></a></li>
         <li><a href="../../suggest/"><span data-copy="0d1fc1aeaa">Suggest a program</span></a></li>
         <li><a href="../../review/"><span data-copy="d2684e6248">Write a review</span></a></li>
@@ -108,6 +113,7 @@
         <li><a href="../../about/"><span data-copy="5e461a2404">About this site</span></a></li>
         <li><a href="../../about/#how"><span data-copy="5b2fc57ac3">How listings are checked</span></a></li>
         <li><a href="../../about/#corrections"><span data-copy="1862eb688d">Send a correction</span></a></li>
+        <li><a href="../../ideas/"><span data-copy="29c269f6e8">Request a feature</span></a></li>
         <li><a href="../../privacy/"><span data-copy="cf01481f62">Privacy</span></a></li>
         <li><a href="../../support/"><span data-copy="fd1482eac6">Buy me a coffee</span></a></li>
       </ul>
@@ -119,7 +125,7 @@
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../../assets/site.js?v=0cc89af4" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}"></script>
+<script src="../../assets/site.js?v=5aa2dbba" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}"></script>
 
 </body>
 </html>

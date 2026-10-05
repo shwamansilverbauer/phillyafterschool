@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://phillyafterschool.org/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://phillyafterschool.org/schools/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://phillyafterschool.org/nebinger/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://phillyafterschool.org/meredith/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://phillyafterschool.org/coppin/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://phillyafterschool.org/types/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://phillyafterschool.org/types/aftercare/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://phillyafterschool.org/types/music/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://phillyafterschool.org/types/art/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://phillyafterschool.org/types/movement/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://phillyafterschool.org/types/stem/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://phillyafterschool.org/types/academics/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://phillyafterschool.org/types/games/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://phillyafterschool.org/types/clubs/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://phillyafterschool.org/types/rec-center/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://phillyafterschool.org/programs/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://phillyafterschool.org/programs/imagine-that-philly/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://phillyafterschool.org/programs/nebinger-clubs/</loc><lastmod>2026-10-05</lastmod></url>
@@ -43,6 +54,7 @@
   <url><loc>https://phillyafterschool.org/neighborhoods/hawthorne/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://phillyafterschool.org/board/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://phillyafterschool.org/suggest/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://phillyafterschool.org/ideas/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://phillyafterschool.org/review/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://phillyafterschool.org/about/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://phillyafterschool.org/privacy/</loc><lastmod>2026-10-05</lastmod></url>

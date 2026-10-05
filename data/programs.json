@@ -3,6 +3,9 @@
     "id": "imagine-that-philly",
     "name": "Imagine That Philly",
     "what": "Morning care and after-school care run inside the school building",
+    "types": [
+      "aftercare"
+    ],
     "keywords": [
       "aftercare",
       "before care",
@@ -52,6 +55,13 @@
     "id": "nebinger-clubs",
     "name": "School clubs and teams",
     "what": "Art Studio, Song Writing, Garden Club, Rock Band, Chess, Debate Club, Student Government, Basketball, Soccer, Cheerleading. Robotics is listed as returning soon.",
+    "types": [
+      "clubs",
+      "art",
+      "music",
+      "movement",
+      "games"
+    ],
     "keywords": [
       "clubs",
       "sports",
@@ -96,6 +106,9 @@
     "id": "girls-on-the-run",
     "name": "Girls on the Run",
     "what": "Running and life-skills team that finishes with a 5K",
+    "types": [
+      "movement"
+    ],
     "keywords": [
       "running",
       "5K",
@@ -139,6 +152,11 @@
     "id": "nebinger-arts-partners",
     "name": "Arts partners and Science Olympiad",
     "what": "EgoPo drama residency (weekly, ends in a public performance), Rock Reach Dance (32 weeks, 45 minutes a week), Settlement Choir, Arden Theatre (grades 3–5, in classroom), Science Olympiad",
+    "types": [
+      "clubs",
+      "music",
+      "stem"
+    ],
     "keywords": [
       "drama",
       "theater",
@@ -183,6 +201,9 @@
     "id": "meredith-clubs",
     "name": "Meredith after-school clubs",
     "what": "Clubs run at the school. The Home & School Association posts the list each year.",
+    "types": [
+      "clubs"
+    ],
     "keywords": [
       "clubs"
     ],
@@ -216,6 +237,14 @@
     "id": "coppin-clubs",
     "name": "School clubs and ensembles",
     "what": "Robotics, Chess, Homework Club, Rock Band (HOME and HOME Jr.), Art, Vocal Music, Orchestra and Concert Band",
+    "types": [
+      "clubs",
+      "music",
+      "stem",
+      "art",
+      "games",
+      "academics"
+    ],
     "keywords": [
       "clubs",
       "music",
@@ -258,6 +287,10 @@
     "id": "zhang-sah",
     "name": "Zhang Sah",
     "what": "Martial arts class daily, plus snack, homework time, clubs and outdoor play",
+    "types": [
+      "movement",
+      "aftercare"
+    ],
     "keywords": [
       "martial arts",
       "taekwondo",
@@ -315,6 +348,10 @@
     "id": "shot-tower-rec",
     "name": "Shot Tower Recreation Center",
     "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
     "keywords": [
       "rec center",
       "recreation",
@@ -372,6 +409,10 @@
     "id": "philly-inmovement",
     "name": "Philly InMovement: MOVE After School",
     "what": "Gymnastics and movement. Pickup, a one-hour class and aftercare.",
+    "types": [
+      "movement",
+      "aftercare"
+    ],
     "offers": [
       "Gymnastics",
       "Aerials"
@@ -428,6 +469,11 @@
     "id": "settlement-kaleidoscope-plus",
     "name": "Settlement Music School: Kaleidoscope Plus",
     "what": "Music, theater and visual art classes every day, with homework help and snack",
+    "types": [
+      "music",
+      "art",
+      "aftercare"
+    ],
     "keywords": [
       "music",
       "theater",
@@ -474,6 +520,9 @@
     "id": "philly-art-center-qv",
     "name": "Philly Art Center, Queen Village",
     "what": "Studio art after school. Choose 1–5 days a week, by season.",
+    "types": [
+      "art"
+    ],
     "keywords": [
       "art",
       "drawing",
@@ -534,6 +583,9 @@
     "id": "old-pine",
     "name": "Old Pine Community Center",
     "what": "Traditional aftercare: homework help, snack, gym and recreation",
+    "types": [
+      "aftercare"
+    ],
     "keywords": [
       "aftercare",
       "homework",
@@ -584,6 +636,9 @@
     "id": "butchers-sew-shop",
     "name": "Butcher’s Sew Shop Junior",
     "what": "Sewing classes in Bella Vista",
+    "types": [
+      "art"
+    ],
     "keywords": [
       "sewing",
       "fashion",
@@ -641,6 +696,9 @@
     "id": "mister-johns-music",
     "name": "Mister John’s Music",
     "what": "Group piano, guitar, ukulele, percussion and choir, with optional aftercare around the class",
+    "types": [
+      "music"
+    ],
     "offers": [
       "Piano",
       "Guitar",
@@ -702,6 +760,9 @@
     "id": "coco-academy",
     "name": "CoCo Academy",
     "what": "STEAM makerspace: 3D printing, laser cutting, circuits, design software",
+    "types": [
+      "stem"
+    ],
     "keywords": [
       "STEM",
       "STEAM",
@@ -766,6 +827,9 @@
     "id": "queen-and-rook",
     "name": "Queen & Rook Game Cafe",
     "what": "Board games, trading card games and role-playing games",
+    "types": [
+      "games"
+    ],
     "keywords": [
       "board games",
       "card games",
@@ -821,6 +885,9 @@
     "id": "beehive-at-bok",
     "name": "Beehive at Bok",
     "what": "Play-based aftercare in the Bok building",
+    "types": [
+      "aftercare"
+    ],
     "keywords": [
       "play",
       "aftercare",
@@ -868,6 +935,9 @@
     "id": "movemakers",
     "name": "MoveMakers Philly",
     "what": "Dance and movement classes, with homework time and snack",
+    "types": [
+      "movement"
+    ],
     "offers": [
       "Hip hop",
       "Breaking",
@@ -920,6 +990,9 @@
     "id": "kids-on-12th",
     "name": "Kids on 12th",
     "what": "Aftercare with art, gym play, games and homework help",
+    "types": [
+      "aftercare"
+    ],
     "keywords": [
       "aftercare",
       "art",
@@ -964,6 +1037,10 @@
     "id": "columbus-square-rec",
     "name": "Columbus Square Recreation Center",
     "what": "City rec center after-school program",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
     "keywords": [
       "rec center",
       "recreation",
@@ -1018,6 +1095,10 @@
     "id": "hawthorne-cultural-center",
     "name": "Hawthorne Cultural Center",
     "what": "City rec center after-school program",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
     "keywords": [
       "rec center",
       "recreation",
@@ -1077,6 +1158,10 @@
     "id": "starr-garden-rec",
     "name": "Starr Garden Recreation Center",
     "what": "City rec center after-school program",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
     "keywords": [
       "rec center",
       "recreation",
@@ -1129,6 +1214,10 @@
     "id": "palumbo-rec",
     "name": "Palumbo Recreation Center",
     "what": "City-subsidized, staff-led afterschool program",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
     "keywords": [
       "rec center",
       "recreation",
@@ -1184,6 +1273,10 @@
     "id": "mighty-writers-el-futuro",
     "name": "Mighty Writers El Futuro",
     "what": "Free daily after-school writing academy. Bilingual English and Spanish.",
+    "types": [
+      "academics"
+    ],
+    "free": true,
     "keywords": [
       "writing",
       "reading",
@@ -1232,6 +1325,11 @@
     "id": "free-library-leap",
     "name": "Free Library LEAP",
     "what": "Free drop-in homework help, literacy and STEAM activities",
+    "types": [
+      "academics",
+      "stem"
+    ],
+    "free": true,
     "keywords": [
       "library",
       "homework help",
@@ -1279,6 +1377,10 @@
     "id": "fleisher-art-memorial",
     "name": "Fleisher Art Memorial",
     "what": "Free drop-in Teen Lounge and weekday art classes for older students",
+    "types": [
+      "art"
+    ],
+    "free": true,
     "keywords": [
       "art",
       "drawing",
@@ -1350,6 +1452,9 @@
     "id": "makom-community",
     "name": "Makom Community",
     "what": "Jewish afterschool enrichment and care",
+    "types": [
+      "aftercare"
+    ],
     "keywords": [
       "Jewish",
       "Judaism",
