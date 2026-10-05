@@ -109,7 +109,8 @@ for (const p of programs) {
 }
 for (const p of programs) {
   if (!Array.isArray(p.types) || !p.types.length || p.types.some(x => !TYPE[x])) errors.push(`program "${p.id}": types must list at least one of ${TYPES.map(t => t.id).join(', ')}`);
-  if (p.free !== undefined && typeof p.free !== 'boolean') errors.push(`program "${p.id}": free must be true or false`);
+  if (p.price !== undefined && !['free', 'paid', 'both'].includes(p.price)) errors.push(`program "${p.id}": price must be "free", "paid" or "both" (leave it out when the provider doesn't publish a price)`);
+  if (p.free !== undefined) errors.push(`program "${p.id}": "free" was replaced by "price" ("free", "paid" or "both")`);
   if (p.neighborhoods !== undefined && (!Array.isArray(p.neighborhoods) || !p.neighborhoods.length || p.neighborhoods.some(x => typeof x !== 'string' || !x.trim()))) errors.push(`program "${p.id}": neighborhoods must be a list of neighborhood names`);
 }
 for (const p of programs) for (const d of p.register?.dates || []) {
@@ -369,8 +370,14 @@ const schoolRow = (s, depth) => {
 };
 // What the filters read on every listed program, whether it is drawn as a card or a row.
 const haystack = (p, extra = []) => [p.name, p.what, ...(p.offers || []), ...(p.keywords || []), ...p.types.map(t => TYPE[t].label), ...extra].join(' ').toLowerCase().replace(/martial arts/g, 'martial-arts');   // so a search for "art" doesn't pull in martial arts
-const itemAttrs = (p, extra = []) => `data-item data-grades="${p._grades === null ? '*' : p._grades.join(' ')}" data-types="${p.types.join(' ')}" data-hoods="${programHoods(p).map(hoodSlug).join(' ')}" data-free="${p.free ? 1 : 0}" data-search="${esc(haystack(p, extra))}"`;
-const typeTags = p => p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('') + (p.free ? '<span class="tag free">Free</span>' : '');
+// Free, paid, both, or (when a provider doesn't publish a price) neither.
+const costKinds = p => p.price === 'both' ? ['free', 'paid'] : p.price ? [p.price] : [];
+// A school's own clubs belong on that school's page. On the citywide lists (A to Z, the type pages) there would be
+// one near-identical "School clubs" entry per school, so they are left off those.
+const schoolRun = p => p.types.includes('clubs');
+const citywide = programs.filter(p => !schoolRun(p));
+const itemAttrs = (p, extra = []) => `data-item data-grades="${p._grades === null ? '*' : p._grades.join(' ')}" data-types="${p.types.join(' ')}" data-hoods="${programHoods(p).map(hoodSlug).join(' ')}" data-cost="${costKinds(p).join(' ')}" data-search="${esc(haystack(p, extra))}"`;
+const typeTags = p => p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('') + (costKinds(p).includes('free') ? `<span class="tag free">${p.price === 'both' ? 'Free option' : 'Free'}</span>` : '');
 const programRow = (p, depth) => {
   const served = schools.filter(s => p.schools[s.id]);
   return `<a class="prow" href="${link(programPath(p), depth)}" ${itemAttrs(p, [...served.map(s => s.shortName), ...programHoods(p)])}>
@@ -381,19 +388,19 @@ const programRow = (p, depth) => {
 </a>`;
 };
 
-// One filter bar for every page that lists programs: search, program type, free, neighborhood, and (on a school
+// One filter bar for every page that lists programs: search, program type, free or paid, neighborhood, and (on a school
 // page) how the program gets your child. The grade row sits in a strip that stays on screen while you scroll.
 // Filters also read from the page address (?type=music&grade=3), which is how the home page links into them.
 function filterBar({ list, depth, school = null, show = {}, searchLabel, placeholder = 'Try drums, art, homework…' }) {
-  const on = { q: true, type: true, grade: true, hood: true, free: true, ...show };
+  const on = { q: true, type: true, grade: true, hood: true, cost: true, ...show };
   const btn = (f, v, label, n, cls = 'tbtn', extra = '') => `<button type="button" class="${cls}" id="${f}-${v}" data-f="${f}" data-v="${v}" data-label="${esc(label)}" aria-pressed="${v === 'ALL'}"${extra}>${esc(label)}${n === null ? '' : ` (${n})`}</button>`;
   const types = TYPES.map(t => [t, list.filter(p => p.types.includes(t.id)).length]).filter(([, n]) => n);
-  const freeN = list.filter(p => p.free).length;
   const typeRow = on.type && types.length > 1 ? `<div class="frow"><span class="flabel">Type</span><div class="rail" role="group" aria-label="Program type">${btn('type', 'ALL', 'All types', null)}${types.map(([t, n]) => btn('type', t.id, t.label, n, 'tbtn', ` style="--tc:${t.color}"`)).join('')}</div></div>` : '';
   const relRow = school ? `<div class="frow"><span class="flabel">Pickup</span><div class="rail" role="group" aria-label="How your child gets there">${btn('rel', 'ALL', 'Any', null)}${Object.entries(REL).map(([k, v]) => [k, v.pill.replace('{s}', school.shortName), list.filter(p => p.schools[school.id].relation === k).length]).filter(([, , n]) => n).map(([k, label, n]) => btn('rel', k, label, n)).join('')}</div></div>` : '';
   const hoodList = [...new Set(list.flatMap(programHoods))].sort();
   const hoodRow = on.hood && hoodList.length > 1 ? `<div class="frow"><span class="flabel">Area</span><div class="rail" role="group" aria-label="Neighborhood">${btn('hood', 'ALL', 'Anywhere', null)}${hoodList.map(n => btn('hood', hoodSlug(n), n, list.filter(p => programHoods(p).includes(n)).length)).join('')}</div></div>` : '';
-  const freeRow = on.free && freeN ? `<div class="frow"><span class="flabel">Cost</span><div class="rail" role="group" aria-label="Cost"><button type="button" class="tbtn" id="free-1" data-f="free" data-v="1" data-label="free" aria-pressed="false">Free options only (${freeN})</button></div></div>` : '';
+  const costN = k => list.filter(p => costKinds(p).includes(k)).length, unpriced = list.filter(p => !costKinds(p).length).length;
+  const costRow = on.cost && costN('free') && costN('paid') ? `<div class="frow"><span class="flabel">Cost</span><div class="rail" role="group" aria-label="Cost">${btn('cost', 'ALL', 'Any', null)}${btn('cost', 'free', 'Free', costN('free'))}${btn('cost', 'paid', 'Paid', costN('paid'))}${unpriced ? `<span class="hint rail-note">${unpriced} ${unpriced === 1 ? 'doesn’t' : 'don’t'} publish a price, so ${unpriced === 1 ? 'it shows' : 'they show'} only under Any.</span>` : ''}</div></div>` : '';
   const gradeBtns = on.grade ? [['ALL', 'All']].concat(GRADES.map(g => [g, g])).map(([g, label]) => {
     const n = list.filter(p => (!school || p.schools[school.id].relation !== 'nearby') && (g === 'ALL' || p._grades === null || p._grades.includes(g))).length;
     return `<button type="button" class="gbtn" id="grade-${g}" data-f="grade" data-v="${g}" aria-pressed="${g === 'ALL'}" aria-label="${g === 'ALL' ? 'All grades' : g === 'PK' ? 'Pre-K' : g === 'K' ? 'Kindergarten' : 'Grade ' + g}, ${n} ${school ? 'on-site or pickup programs' : 'programs'}"><span class="g">${label}</span><span class="n">${n}</span></button>`;
@@ -403,7 +410,7 @@ function filterBar({ list, depth, school = null, show = {}, searchLabel, placeho
       <label for="prog-search">${T(searchLabel || `Looking for something specific?`)}</label>
       <input id="prog-search" type="search" placeholder="${esc(placeholder)}" autocomplete="off">
     </div>` : ''}
-    ${typeRow}${relRow}${hoodRow}${freeRow}
+    ${typeRow}${relRow}${hoodRow}${costRow}
   </div>
   <section class="picker" aria-label="Filter by grade">
     ${on.grade ? `<div class="rail" role="group" aria-label="Grade">${gradeBtns}</div>` : ''}
@@ -505,7 +512,7 @@ function programPage(p) {
     <h1>${esc(fullName(p))}</h1>
     <p class="lede">${esc(p.what)}</p>
     <div class="facts">
-      <span>${p.types.map(t => `<a href="${link('types/' + t + '/', D)}">${esc(TYPE[t].label)}</a>`).join(', ')}</span>
+      <span>${p.types.map(t => typeCount(TYPE[t]) && !schoolRun(p) ? `<a href="${link('types/' + t + '/', D)}">${esc(TYPE[t].label)}</a>` : esc(TYPE[t].label)).join(', ')}</span>
       ${programHoods(p).length ? `<span>In <b>${hoodLinks(programHoods(p), D)}</b></span>` : ''}
       <span>Grades <b>${esc(gradeText(p))}</b></span>
       ${p.pickupBy ? `<span>Pick up by <b>${esc(p.pickupBy)}</b></span>` : ''}
@@ -562,9 +569,9 @@ ${schoolRows}
 }
 
 function programsPage() {
-  const list = [...programs].sort((a, b) => a.name.localeCompare(b.name));
+  const list = [...citywide].sort((a, b) => a.name.localeCompare(b.name));
   const hero = `    <h1>${T(`Every program, A to Z`)}</h1>
-    <p class="lede">${T(`All {n} after-school programs on this site, across every school. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.`, { n: programs.length })}</p>`;
+    <p class="lede">${T(`All {n} after-school programs on this site, across every school. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.`, { n: list.length })}</p>`;
   const body = `${filterBar({ list, depth: 1, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
 ${noMatch(1)}
 <section class="section" data-group>
@@ -573,18 +580,19 @@ ${list.map(p => programRow(p, 1)).join('\n')}
   </div>
 </section>
 <section class="section">
+  <p>${T(`Clubs a school runs for its own students aren’t in this list. They’re on that school’s page.`)}</p>
   <p>${T(`To see only what works with your child’s school,`)} <a href="${link('schools/', 1)}">${T(`start from your school.`)}</a> ${T(`Or see what’s close to home:`)} <a href="${link('neighborhoods/', 1)}">${T(`browse by neighborhood.`)}</a></p>
 </section>`;
   return layout({
     title: 'All after-school programs, A to Z',
-    description: `All ${programs.length} after-school programs listed on ${cfg.siteName}: filter by type, grade and neighborhood, with hours, cost, pickup and reviews.`,
+    description: `All ${citywide.length} after-school programs listed on ${cfg.siteName}: filter by type, grade and neighborhood, with hours, cost, pickup and reviews.`,
     pathName: 'programs/', depth: 1, current: null, hero, body,
     jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: list.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
   });
 }
 
 // ---------- program types: an index, and a page per type ----------
-const typeCount = t => programs.filter(p => p.types.includes(t.id)).length;
+const typeCount = t => citywide.filter(p => p.types.includes(t.id)).length;
 const liveTypes = () => TYPES.filter(t => typeCount(t));
 const typeChips = (depth, skip) => liveTypes().filter(t => t.id !== skip).map(t => `<a class="tchip" style="--tc:${t.color}" href="${link('types/' + t.id + '/', depth)}">${typeIcon(t)}<span>${esc(t.label)}</span><b>${typeCount(t)}</b></a>`).join('');
 function typesPage() {
@@ -599,7 +607,7 @@ function typesPage() {
 }
 function typePage(t) {
   const D = 2;
-  const list = programs.filter(p => p.types.includes(t.id)).sort((a, b) => a.name.localeCompare(b.name));
+  const list = citywide.filter(p => p.types.includes(t.id)).sort((a, b) => a.name.localeCompare(b.name));
   const hero = `    <p class="where"><a href="${link('types/', D)}">${T(`All types`)}</a></p>
     <h1>${T(`{type}: after-school programs`, { type: t.label })}</h1>
     <p class="lede">${T(`Every program on this site in this group, with the schools each one serves. Pick a grade to narrow it down.`)}</p>`;
@@ -609,6 +617,9 @@ ${noMatch(D)}
   <div class="schools">
 ${list.map(p => programRow(p, D)).join('\n')}
   </div>
+</section>
+<section class="section">
+  <p>${T(`Clubs a school runs for its own students aren’t in this list. They’re on that school’s page.`)} <a href="${link('schools/', D)}">${T(`Find your school.`)}</a></p>
 </section>
 <section class="section">
   <h2>${T(`Other kinds of program`)}</h2>

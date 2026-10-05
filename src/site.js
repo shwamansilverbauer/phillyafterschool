@@ -699,12 +699,12 @@
     var fbtns = all(document, '[data-f]');
     var count = document.querySelector('#count'), clear = document.querySelector('#clear');
     var search = document.querySelector('#prog-search'), noMatch = document.querySelector('[data-nomatch]');
-    var state = { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', free: '' };
+    var state = { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL' };
     var terms = [];
     var findBtn = function (f, v) { for (var i = 0; i < fbtns.length; i++) if (fbtns[i].getAttribute('data-f') === f && fbtns[i].getAttribute('data-v') === v) return fbtns[i]; return null; };
     // Start from the page address (how the home page links in), then from the grade picked last time.
     var q0 = query();
-    ['type', 'grade', 'rel', 'hood', 'free'].forEach(function (f) { if (q0[f] && findBtn(f, q0[f])) state[f] = q0[f]; });
+    ['type', 'grade', 'rel', 'hood', 'cost'].forEach(function (f) { if (q0[f] && findBtn(f, q0[f])) state[f] = q0[f]; });
     if (!q0.grade) { var savedGrade = store('pas-grade'); if (savedGrade && findBtn('grade', savedGrade)) state.grade = savedGrade; }
     var gradeLabel = function (g) { return g === 'PK' ? 'Pre-K' : g === 'K' ? 'kindergarten' : 'grade ' + g; };
     var inList = function (el, attr, v) { return (' ' + (el.getAttribute(attr) || '') + ' ').indexOf(' ' + v + ' ') > -1; };
@@ -716,7 +716,7 @@
           && (state.type === 'ALL' || inList(it, 'data-types', state.type))
           && (state.rel === 'ALL' || it.getAttribute('data-rel') === state.rel)
           && (state.hood === 'ALL' || inList(it, 'data-hoods', state.hood))
-          && (!state.free || it.getAttribute('data-free') === '1');
+          && (state.cost === 'ALL' || inList(it, 'data-cost', state.cost));
         if (ok && terms.length) { var hay = it.getAttribute('data-search') || ''; ok = terms.every(function (w) { return w.test(hay); }); }
         it.hidden = !ok;
         if (ok) total++;
@@ -728,10 +728,9 @@
         if (badge) badge.textContent = n;
       });
       var bits = [];
-      ['type', 'rel', 'hood', 'free'].forEach(function (f) {
-        var on = f === 'free' ? state.free : state[f] !== 'ALL';
-        var b = on ? findBtn(f, state[f]) : null;
-        if (b) bits.push(f === 'hood' ? 'in ' + b.getAttribute('data-label') : b.getAttribute('data-label'));
+      ['type', 'rel', 'hood', 'cost'].forEach(function (f) {
+        var b = state[f] !== 'ALL' ? findBtn(f, state[f]) : null;
+        if (b) bits.push(f === 'hood' ? 'in ' + b.getAttribute('data-label') : f === 'cost' ? b.getAttribute('data-label').toLowerCase() : b.getAttribute('data-label'));
       });
       if (terms.length) bits.push('matching “' + search.value.trim() + '”');
       var what = (state.grade === 'ALL' ? '' : ' for ' + gradeLabel(state.grade)) + (bits.length ? ' (' + bits.join(', ') + ')' : '');
@@ -741,30 +740,29 @@
       if (noMatch) noMatch.hidden = total > 0;
       fbtns.forEach(function (b) {
         var f = b.getAttribute('data-f'), v = b.getAttribute('data-v');
-        b.setAttribute('aria-pressed', String(f === 'free' ? state.free === v : state[f] === v));
+        b.setAttribute('aria-pressed', String(state[f] === v));
       });
       // keep the address in step, so a filtered list can be bookmarked or sent to someone
       if (window.history && history.replaceState) {
         var parts = [];
-        ['type', 'grade', 'rel', 'hood'].forEach(function (f) { if (state[f] !== 'ALL') parts.push(f + '=' + encodeURIComponent(state[f])); });
-        if (state.free) parts.push('free=1');
+        ['type', 'grade', 'rel', 'hood', 'cost'].forEach(function (f) { if (state[f] !== 'ALL') parts.push(f + '=' + encodeURIComponent(state[f])); });
         try { history.replaceState(null, '', location.pathname + (parts.length ? '?' + parts.join('&') : '') + location.hash); } catch (e) { /* file preview */ }
       }
       return total;
     };
-    var NAMES = { type: 'program_type', rel: 'relation', hood: 'neighborhood', grade: 'grade', free: 'free' };
+    var NAMES = { type: 'program_type', rel: 'relation', hood: 'neighborhood', grade: 'grade', cost: 'cost' };
     fbtns.forEach(function (b) {
       if (b.tagName !== 'BUTTON') return;
       b.addEventListener('click', function () {
         var f = b.getAttribute('data-f'), v = b.getAttribute('data-v');
-        if (f === 'free') state.free = state.free ? '' : v; else state[f] = v;
+        state[f] = v;
         if (f === 'grade') store('pas-grade', v);
         apply();
-        track({ event: 'pas_filter', filter_type: NAMES[f], filter_value: f === 'free' ? (state.free ? 'on' : 'off') : v, school: fSchool });
+        track({ event: 'pas_filter', filter_type: NAMES[f], filter_value: v, school: fSchool });
       });
     });
     clear.addEventListener('click', function () {
-      state = { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', free: '' };
+      state = { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL' };
       terms = []; if (search) search.value = '';
       store('pas-grade', 'ALL');
       apply();

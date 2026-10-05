@@ -64,7 +64,10 @@ Fields worth knowing:
 - `grades`: a range like `"K-5"` or `"PK-3"`, a single grade like `"8"`, or `null` when the provider doesn't publish grades.
 - `types`: required. One or more of `aftercare`, `music`, `art`, `movement`, `stem`, `academics`, `games`, `clubs`, `rec-center`.
   Drives the type filter and the type pages. The first one listed is the color and icon the program wears on a roster card.
-- `free`: optional, `true` when the program has a free option. Adds it to the "Free options only" filter.
+- `price`: `"free"`, `"paid"` or `"both"` (some of it is free, some paid). Drives the Free / Paid filter. Leave it out when the
+  provider doesn't publish a price; the program then shows only under "Any".
+- A program whose `types` include `clubs` is treated as a school's own clubs: it appears on that school's page (and its
+  neighborhood's) but not on the A to Z list or the type pages, where there would be one near-identical entry per school.
 - `offers`: optional list of class names a family chooses between, like `["Piano", "Guitar"]`. Shown on the card, searchable, and offered as a tag when adding the program to a roster. Names only: no days, times or prices.
 - `neighborhoods`: list of the neighborhoods the program's building (or buildings) is in, like `["Bella Vista"]`. Decides which
   neighborhood pages it appears on. A program that runs inside a school can leave it out and takes the school's neighborhood.
@@ -100,7 +103,7 @@ program in `data/programs.json` and its page follows.
 ## Finding programs: filters, types and the school finder
 
 Every page that lists programs (a school, a neighborhood, a type, the A to Z list) has the same filter bar:
-search, program type, free, neighborhood and grade. Filters also live in the page address
+search, program type, free or paid, neighborhood and grade. Filters also live in the page address
 (`/programs/?type=music&grade=3`), which is how the home page links into them.
 
 `/types/` and `/types/<type>/` are built from each program's `types`. The type names, colors and icons are the
@@ -180,7 +183,7 @@ program_id, school; school is empty on a program's own page), `pas_suggest_submi
 school, stars), `pas_board_add` (program_id, school, day, board, children) and `pas_board_share` (method, board).
 `pas_school_pick` (school, covered) fires when someone picks a school in the finder, and `pas_school_request` (school)
 when they ask for one that isn't covered. `pas_filter` reports filter_type as `grade`, `program_type`, `relation`,
-`neighborhood` or `free`. `pas_board_share` methods include `image_save`, `image_share` and `print`.
+`neighborhood` or `cost`. `pas_board_share` methods include `image_save`, `image_share` and `print`.
 `pas_outbound` also fires with link_type `calendar` and `review`. `pas_search` (search_term, results,
 school) fires when someone pauses typing in a school page's search box; searches with zero results
 show what parents want that isn't listed.

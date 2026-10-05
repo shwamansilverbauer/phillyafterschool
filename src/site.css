@@ -406,3 +406,4 @@ button.btn{cursor:pointer;font-family:inherit}
   body.print-card .card-preview{position:fixed;inset:0;display:flex;justify-content:center;align-items:flex-start}
   body.print-card .card-preview canvas{max-width:none;width:auto;height:96vh;box-shadow:none;border-radius:0}
 }
+.rail-note{flex:0 0 auto;align-self:center;margin-left:6px;white-space:nowrap}
