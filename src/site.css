@@ -268,3 +268,25 @@ button.btn{cursor:pointer;font-family:inherit}
 .pick .note{font:inherit;font-size:.93rem;width:100%;padding:6px 8px;border:1.5px dashed var(--line);border-radius:8px;background:transparent;color:var(--ink)}
 .pick .note:focus{border-style:solid}
 .pick .cls{font-weight:700}
+
+/* ---------- a page per program, and the A to Z list ---------- */
+.prog h3 a{color:inherit;text-decoration:none}
+.prog h3 a:hover{text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:4px;text-underline-offset:4px}
+.prog.solo{grid-template-areas:"strip" "facts" "flag" "actions"}
+@media (min-width:860px){.prog.solo{grid-template-areas:"strip facts" "actions facts" "flag flag";grid-template-rows:auto 1fr auto}}
+.serves{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.serve{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;min-width:0}
+.serve .flag{align-self:stretch}
+.serve-links{display:flex;flex-direction:column;gap:4px;font-size:.95rem;margin-top:auto}
+.serve-links span{color:var(--muted)}
+.revlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;max-width:70ch}
+.revlist li{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 20px;display:flex;flex-direction:column;gap:4px}
+.revlist .by{color:var(--muted);font-size:.88rem}
+.wrap > .src{grid-area:auto}
+.prow{display:flex;flex-direction:column;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 22px;text-decoration:none;color:var(--ink)}
+.prow:hover{border-color:var(--link)}
+.prow:hover h3{text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:4px;text-underline-offset:4px}
+.prow .what{color:var(--muted)}
+.prow .tally{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin-top:2px}
+.prose ol{margin:0;padding-left:1.4rem;display:flex;flex-direction:column;gap:8px}
+.prog.solo .actions,.section > .actions{align-self:flex-start}

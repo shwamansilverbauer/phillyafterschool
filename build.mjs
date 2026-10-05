@@ -21,10 +21,25 @@ const REL = {
   nearby: { pill: 'Nearby, no pickup', title: 'Nearby, no pickup found', blurb: 'Close to the school, but you or your child would need to get there. Best suited to older children or as a second stop.' },
 };
 const HOW = ['online', 'phone', 'contact', 'school', 'none'];
+
+// ---------- site copy ----------
+// Every sentence of site copy goes through T(). data/copy.json can replace any of them without touching
+// this file: entries are keyed by a fingerprint of the original sentence and hold { was, now }.
+// {name} tokens inside a sentence are filled in per page (the school's name, the dismissal time).
+const copyEdits = fs.existsSync(path.join(ROOT, 'data/copy.json')) ? readJson('data/copy.json') : {};
+const copyRegistry = new Map();
+const copyId = text => createHash('sha1').update(text).digest('hex').slice(0, 10);
+function T(original, vars) {
+  const id = copyId(original);
+  copyRegistry.set(id, original);
+  const now = typeof copyEdits[id]?.now === 'string' ? copyEdits[id].now : original;
+  const shown = vars ? now.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m)) : now;
+  return `<span data-copy="${id}"${vars ? ` data-tpl="${esc(now)}" data-vars="${esc(JSON.stringify(vars))}"` : ''}>${esc(shown)}</span>`;
+}
 // A short fingerprint of each asset, added to its URL. When the file changes, the URL changes,
 // so browsers and the host's CDN fetch the new one instead of a cached copy.
 const stamp = f => PREVIEW ? '' : '?v=' + createHash('sha1').update(fs.readFileSync(path.join(ROOT, f))).digest('hex').slice(0, 8);
-const CSS_V = stamp('src/site.css'), JS_V = stamp('src/site.js');
+const CSS_V = stamp('src/site.css'), JS_V = stamp('src/site.js'), EDIT_V = stamp('src/edit.js');
 
 // ---------- helpers ----------
 const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -87,6 +102,9 @@ reviews.forEach((r, i) => {
   if (!r.name || !r.comment) errors.push(`${at}: needs a name and a comment`);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(r.date || '')) errors.push(`${at}: date must be YYYY-MM-DD`);
 });
+for (const [id, e] of Object.entries(copyEdits)) {
+  if (!e || typeof e.now !== 'string' || !e.now.trim()) errors.push(`data/copy.json: entry "${id}" needs a "now" with the new wording`);
+}
 if (errors.length) {
   console.error('Data problems found. Nothing was built.\n- ' + errors.join('\n- '));
   process.exit(1);
@@ -121,7 +139,7 @@ function street(animate) {
   return `<svg class="street${animate ? ' go' : ''}" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${run(-10, sx)}${school}${run(sx + sw, 2010)}<rect class="st" x="0" y="${G}" width="2000" height="12"/><g class="bus"><g transform="translate(968,${G - 22})">${bus}</g></g></svg>`;
 }
 
-function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false }) {
+function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null }) {
   const canonical = cfg.siteUrl + '/' + pathName;
   const fullTitle = pathName === '' ? (PREVIEW ? cfg.siteName : `${cfg.siteName}: ${cfg.tagline}`) : `${title} | ${cfg.siteName}`;
   const nav = [['', 'Schools'], ['board/', 'My board'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Buy me a coffee']]
@@ -129,7 +147,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   const fix = correctionHref('Correction for Philly After School');
   const head = `${fragment ? '' : gtmHead + '\n'}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
-<link rel="canonical" href="${esc(canonical)}">
+<link rel="canonical" href="${esc(canonical)}">${noindex ? '\n<meta name="robots" content="noindex">' : ''}
 <meta property="og:title" content="${esc(fullTitle)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:type" content="website">
@@ -138,7 +156,9 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="${link('assets/site.css', depth)}${CSS_V}">`;
+<link rel="stylesheet" href="${link('assets/site.css', depth)}${CSS_V}">${jsonLd ? '\n<script type="application/ld+json">' + JSON.stringify(jsonLd).replace(/</g, '\\u003c') + '</script>' : ''}`;
+  // Edit mode (see /edit/) loads a second script. This tells site.js where to find it and where edits are sent.
+  const editCfg = { js: link('assets/edit.js', depth) + EDIT_V, send: PREVIEW ? '' : link('edit/send.php', depth), home: link('edit/', depth), contact: cfg.contactEmail || '' };
   const page = `${gtmBody}<script>document.documentElement.className+=' js'</script>
 <header class="band">
   <div class="in bar">
@@ -154,12 +174,12 @@ ${hero}
 ${body}
 </main>
 <footer class="foot"><div class="in">
-  <p>Listings come from each provider’s public pages and are not endorsements. Prices, hours and pickup routes change, so confirm with the provider before you enroll.</p>
-  <p>${esc(cfg.siteName)} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.</p>
-  <p>Know a program that’s missing, or see something out of date? <a href="${link('suggest/', depth)}">Tell us</a>. <a href="${link('about/', depth)}">About this site</a>. <a href="${link('support/', depth)}">Buy me a coffee</a>.</p>
+  <p>${T(`Listings come from each provider’s public pages and are not endorsements. Prices, hours and pickup routes change, so confirm with the provider before you enroll.`)}</p>
+  <p>${T(`{site} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.`, { site: cfg.siteName })}</p>
+  <p>${T(`Know a program that’s missing, or see something out of date?`)} <a href="${link('suggest/', depth)}">${T(`Tell us`)}</a>. <a href="${link('programs/', depth)}">${T(`All programs`)}</a>. <a href="${link('about/', depth)}">${T(`About this site`)}</a>. <a href="${link('support/', depth)}">${T(`Buy me a coffee`)}</a>.</p>
   ${cfg.builtBy ? `<p>Built by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
 </div></footer>
-<script src="${link('assets/site.js', depth)}${JS_V}"></script>
+<script src="${link('assets/site.js', depth)}${JS_V}" data-edit="${esc(JSON.stringify(editCfg))}"></script>
 ${scripts}`;
   if (fragment) return head + '\n' + page;
   return `<!doctype html>
@@ -214,48 +234,202 @@ const monthYear = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US'
 const schoolShort = id => (schools.find(s => s.id === id) || {}).shortName || '';
 const BOARD_DAYS = [['mon', 'Mon'], ['tue', 'Tue'], ['wed', 'Wed'], ['thu', 'Thu'], ['fri', 'Fri']];
 
+// ---------- pieces shared by the program card and the program page ----------
+const gradeText = p => { const g = p._grades; return g === null ? 'not published' : g.length === 1 ? g[0] : `${g[0]} to ${g[g.length - 1]}`; };
+const gradeStrip = p => {
+  const g = p._grades;
+  const cells = GRADES.map(x => `<i class="cell${g === null ? ' unk' : g.includes(x) ? ' on' : ''}">${x}</i>`).join('');
+  return `<div class="strip" role="img" aria-label="Grades served: ${esc(gradeText(p))}">${cells}${p.gradeNote ? `<span class="strip-note">${esc(p.gradeNote)}</span>` : ''}</div>`;
+};
+const phoneLink = p => p.phone ? `<a href="${telHref(p.phone)}">${esc(p.phone)}</a>` : '';
+const contactHtml = p => [phoneLink(p), p.email ? `<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>` : ''].filter(Boolean).join('<br>');
+const registerText = p => {
+  const r = p.register;
+  let t = esc(r.note || '');
+  if (r.how === 'online') t = ['Online.', t].filter(Boolean).join(' ');
+  if (r.how === 'phone') t = [`By phone or in person${p.phone ? ': ' + phoneLink(p) : ''}.`, t].filter(Boolean).join(' ');
+  if (r.how === 'school') t = [t, p.phone ? `School office: ${phoneLink(p)}.` : ''].filter(Boolean).join(' ');
+  return t;
+};
+const datesHtml = (p, depth) => upcomingDates(p).map(d => `<span class="cal" data-date="${d.date}"><b>${shortDate(d.date)}:</b> ${esc(d.label)}. ${PREVIEW ? '' : `<a href="${link('cal/' + p.id + '-' + d.date + '.ics', depth)}" data-track="calendar">Add to calendar</a> `}<a href="${esc(gcalUrl(p, d))}" target="_blank" rel="noopener" data-track="calendar">${PREVIEW ? 'Add to Google Calendar' : 'Google Calendar'}</a></span>`).join('');
+const average = revs => revs.reduce((a, x) => a + x.stars, 0) / revs.length;
+const reviewItems = revs => revs.map(x => `<li><span class="stars" role="img" aria-label="${x.stars} out of 5 stars">${stars(x.stars)}</span><p>${esc(x.comment)}</p><span class="by">${esc(x.name)}, ${esc(schoolShort(x.school))} parent, ${monthYear(x.date)}</span></li>`).join('');
+const sourceLinks = list => list.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join('');
+const programPath = p => `programs/${p.id}/`;
+// "School clubs and teams" means nothing away from its school's page, so on its own it carries the school's name.
+const fullName = p => {
+  const at = schools.filter(s => p.schools[s.id]);
+  return at.length === 1 && p.schools[at[0].id].relation === 'onsite' && !p.name.includes(at[0].shortName) ? `${p.name} at ${at[0].shortName}` : p.name;
+};
+
 // ---------- program card ----------
 function card(p, school) {
   const l = p.schools[school.id];
   const rel = REL[l.relation];
   const g = p._grades;
-  const cells = GRADES.map(x => `<i class="cell${g === null ? ' unk' : g.includes(x) ? ' on' : ''}">${x}</i>`).join('');
-  const gradeText = g === null ? 'not published' : g.length === 1 ? g[0] : `${g[0]} to ${g[g.length - 1]}`;
   const where = [l.address || p.address, l.distance].filter(Boolean).join(', ');
-  const sources = [...p.sources, ...(l.sources || [])];
   const r = p.register;
   const regUrl = r.how === 'online' ? (l.registerUrl || r.url) : null;
-  const phoneLink = p.phone ? `<a href="${telHref(p.phone)}">${esc(p.phone)}</a>` : '';
-  const emailLink = p.email ? `<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>` : '';
-  const contact = [phoneLink, emailLink].filter(Boolean).join('<br>');
-  let regText = esc(r.note || '');
-  if (r.how === 'online') regText = ['Online.', regText].filter(Boolean).join(' ');
-  if (r.how === 'phone') regText = [`By phone or in person${p.phone ? ': ' + phoneLink : ''}.`, regText].filter(Boolean).join(' ');
-  if (r.how === 'school') regText = [regText, p.phone ? `School office: ${phoneLink}.` : ''].filter(Boolean).join(' ');
-  const dateHtml = upcomingDates(p).map(d => `<span class="cal" data-date="${d.date}"><b>${shortDate(d.date)}:</b> ${esc(d.label)}. ${PREVIEW ? '' : `<a href="${link('cal/' + p.id + '-' + d.date + '.ics', 1)}" data-track="calendar">Add to calendar</a> `}<a href="${esc(gcalUrl(p, d))}" target="_blank" rel="noopener" data-track="calendar">${PREVIEW ? 'Add to Google Calendar' : 'Google Calendar'}</a></span>`).join('');
   const revs = reviewsFor(p.id);
-  const avg = revs.length ? revs.reduce((a, x) => a + x.stars, 0) / revs.length : 0;
+  const avg = revs.length ? average(revs) : 0;
   const reviewUrl = `${link('review/', 1)}?program=${p.id}&school=${school.id}`;
+  const more = `<a href="${link(programPath(p), 1)}">Full details</a>`;
   const revHtml = revs.length
     ? `<details><summary><span class="stars" aria-hidden="true">${stars(Math.floor(avg + 0.25))}</span> <b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'review' : 'reviews'}</summary>
-      <ul>${revs.map(x => `<li><span class="stars" role="img" aria-label="${x.stars} out of 5 stars">${stars(x.stars)}</span><p>${esc(x.comment)}</p><span class="by">${esc(x.name)}, ${esc(schoolShort(x.school))} parent, ${monthYear(x.date)}</span></li>`).join('')}</ul></details>
-    <a href="${reviewUrl}" data-track="review">Write a review</a>`
-    : `<span>No reviews yet.</span> <a href="${reviewUrl}" data-track="review">Write the first one</a>`;
-  const rows = [['Where', esc(where)], ['Hours', esc(p.hours)], ['Pick up by', esc(p.pickupBy || '')], ['Cost', esc(p.cost)], ['Register', regText], ['Next term', esc(r.nextTerm || '') + dateHtml], ['Contact', r.how === 'school' ? '' : contact]]
+      <ul>${reviewItems(revs)}</ul></details>
+    <a href="${reviewUrl}" data-track="review">Write a review</a>${more}`
+    : `<span>No reviews yet.</span> <a href="${reviewUrl}" data-track="review">Write the first one</a>${more}`;
+  const rows = [['Where', esc(where)], ['Hours', esc(p.hours)], ['Pick up by', esc(p.pickupBy || '')], ['Cost', esc(p.cost)], ['Register', registerText(p)], ['Next term', esc(r.nextTerm || '') + datesHtml(p, 1)], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
   const flag = [p.note, l.note].filter(Boolean).join(' ');
   const fix = correctionHref(`Correction: ${p.name} (${school.shortName})`);
   const haystack = [p.name, p.what, ...(p.offers || []), ...(p.keywords || []), rel.pill.replace('{s}', school.shortName)].join(' ').toLowerCase().replace(/martial arts/g, 'martial-arts');   // so a search for "art" doesn't pull in martial arts
   return `<article class="prog" id="${esc(p.id)}" data-rel="${l.relation}" data-grades="${g === null ? '*' : g.join(' ')}" data-search="${esc(haystack)}">
-  <div class="top"><span class="pill ${l.relation}">${esc(rel.pill.replace('{s}', school.shortName))}</span><h3>${esc(p.name)}</h3><p class="what">${esc(p.what)}</p>${p.offers?.length ? `<p class="offers"><b>Classes:</b> ${esc(p.offers.join(', '))}</p>` : ''}</div>
-  <div class="strip" role="img" aria-label="Grades served: ${esc(gradeText)}">${cells}${p.gradeNote ? `<span class="strip-note">${esc(p.gradeNote)}</span>` : ''}</div>
+  <div class="top"><span class="pill ${l.relation}">${esc(rel.pill.replace('{s}', school.shortName))}</span><h3><a href="${link(programPath(p), 1)}">${esc(p.name)}</a></h3><p class="what">${esc(p.what)}</p>${p.offers?.length ? `<p class="offers"><b>Classes:</b> ${esc(p.offers.join(', '))}</p>` : ''}</div>
+  ${gradeStrip(p)}
   <dl>${rows}</dl>
   ${flag ? `<p class="flag">${esc(flag)}</p>` : ''}
   <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a><button type="button" class="btn needs-js" data-board-toggle aria-expanded="false">Add to board</button>
     <div class="days" hidden><span class="which" role="group" aria-label="Which board"><button type="button" class="wb" data-board="now" aria-pressed="true">Current</button><button type="button" class="wb" data-board="next" aria-pressed="false">Upcoming</button></span><span class="hint">Which days?</span>${BOARD_DAYS.map(([k, n]) => `<button type="button" class="day" data-day="${k}" aria-pressed="false">${n}</button>`).join('')}${p.offers?.length ? `<span class="cls-row"><span class="hint">Which class? Optional.</span>${p.offers.map(o => `<button type="button" class="cl" data-class="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join('')}</span>` : ''}<a href="${link('board/', 1)}">See your board</a></div></div>
   <div class="rev">${revHtml}</div>
-  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sources.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join('')}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
+  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks([...p.sources, ...(l.sources || [])])}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
 </article>`;
+}
+
+// ---------- a page per program ----------
+const listNames = a => a.length < 3 ? a.join(' and ') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
+const servedBy = p => schools.filter(s => p.schools[s.id]);
+// "Picks up from Nebinger and Meredith; near Coppin"
+const servedSummary = p => {
+  const names = k => servedBy(p).filter(s => p.schools[s.id].relation === k).map(s => s.shortName);
+  const parts = [['onsite', 'runs at '], ['pickup', 'picks up from '], ['nearby', 'near ']].filter(([k]) => names(k).length).map(([k, lead]) => lead + listNames(names(k)));
+  const t = parts.join('; ');
+  return t.charAt(0).toUpperCase() + t.slice(1);
+};
+const programAddress = p => {
+  if (p.address) return p.address;
+  const served = servedBy(p);
+  return served.length === 1 && p.schools[served[0].id].relation === 'onsite' ? `${served[0].name}, ${served[0].address.split(',')[0]}` : '';
+};
+
+function programPage(p) {
+  const D = 2;
+  const served = servedBy(p);
+  const r = p.register;
+  const revs = reviewsFor(p.id);
+  const avg = revs.length ? average(revs) : 0;
+  const address = programAddress(p);
+  const regUrl = r.how === 'online' ? r.url : null;
+  const reviewUrl = `${link('review/', D)}?program=${p.id}${served.length === 1 ? '&school=' + served[0].id : ''}`;
+  const rows = [['Where', esc(address)], ['Classes', esc((p.offers || []).join(', '))], ['Hours', esc(p.hours)], ['Pick up by', esc(p.pickupBy || '')], ['Cost', esc(p.cost)], ['Register', registerText(p)], ['Next term', esc(r.nextTerm || '') + datesHtml(p, D)], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
+    .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+  const schoolRows = served.map(s => {
+    const l = p.schools[s.id];
+    const line = l.relation === 'onsite' ? `Runs at ${s.shortName}, so there’s no travel after the bell.`
+      : l.relation === 'pickup' ? `Picks up from ${s.shortName} at dismissal, which is ${s.dismissal}.`
+      : `We couldn’t find a pickup from ${s.shortName}, so your child would need to get there.`;
+    const extra = [l.address ? `${s.shortName} children go to ${l.address}.` : '', l.distance ? l.distance.charAt(0).toUpperCase() + l.distance.slice(1) + '.' : ''].filter(Boolean).join(' ');
+    const links = [
+      l.registerUrl && r.how === 'online' ? `<a href="${esc(l.registerUrl)}" target="_blank" rel="noopener" data-track="register">${esc(r.label || 'Register')} (${esc(s.shortName)})</a>` : '',
+      `<a href="${link(s.id + '/', D)}#${esc(p.id)}">Add it to your board from the ${esc(s.shortName)} page</a>`,
+      `<a href="${link(s.id + '/', D)}">All ${forSchool(s).length} options for ${esc(s.shortName)}</a>`,
+      l.sources?.length ? `<span>Source: ${sourceLinks(l.sources)}</span>` : '',
+    ].filter(Boolean).join('');
+    return `<div class="serve">
+      <span class="pill ${l.relation}">${esc(REL[l.relation].pill.replace('{s}', s.shortName))}</span>
+      <h3>${esc(s.name)}</h3>
+      <p>${esc(line)}${extra ? ' ' + esc(extra) : ''}</p>
+      ${l.note ? `<p class="flag">${esc(l.note)}</p>` : ''}
+      <p class="serve-links">${links}</p>
+    </div>`;
+  }).join('\n');
+  const fix = correctionHref(`Correction: ${p.name}`);
+  const hero = `    <p class="where"><a href="${link('programs/', D)}">${T(`All programs`)}</a> / ${esc(servedSummary(p))}</p>
+    <h1>${esc(fullName(p))}</h1>
+    <p class="lede">${esc(p.what)}</p>
+    <div class="facts">
+      <span>Grades <b>${esc(gradeText(p))}</b></span>
+      ${p.pickupBy ? `<span>Pick up by <b>${esc(p.pickupBy)}</b></span>` : ''}
+      ${revs.length ? `<span><b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'review' : 'reviews'}</span>` : ''}
+      <span>Checked <b>${longDate(p.lastVerified)}</b></span>
+    </div>`;
+  const body = `<div data-program-page="${esc(p.id)}" style="display:contents">
+  <section class="section">
+    <h2>${T(`The details`)}</h2>
+    <article class="prog solo">
+      ${gradeStrip(p)}
+      <dl>${rows}</dl>
+      ${p.note ? `<p class="flag">${esc(p.note)}</p>` : ''}
+      <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a></div>
+    </article>
+    <p class="hint">${T(`Prices, hours and pickup routes change during the year. Confirm with the provider before you enroll.`)}</p>
+  </section>
+  <section class="section" id="schools">
+    <h2>${T(`Which schools it works for`)}</h2>
+    <div class="serves">
+${schoolRows}
+    </div>
+    <p>${T(`Does it serve a school that isn’t shown here?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
+  </section>
+  <section class="section" id="reviews">
+    <h2>${T(`What parents say`)}</h2>
+    ${revs.length ? `<p><span class="stars" aria-hidden="true">${stars(Math.floor(avg + 0.25))}</span> <b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'review' : 'reviews'}</p>
+    <ul class="revlist">${reviewItems(revs)}</ul>` : `<p>${T(`No reviews yet. If your child has been, a few sentences help the next family choose.`)}</p>`}
+    <p class="actions"><a class="btn" href="${reviewUrl}" data-track="review">${revs.length ? T(`Write a review`) : T(`Write the first review`)}</a></p>
+    <p class="hint">${T(`Reviews are first-hand notes from parents and caregivers. Each one is read before it’s posted.`)}</p>
+  </section>
+  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks(p.sources)}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
+</div>`;
+  const url = `${cfg.siteUrl}/${programPath(p)}`;
+  const thing = {
+    '@type': address ? 'LocalBusiness' : 'Organization',
+    '@id': url + '#program',
+    name: fullName(p), description: p.what, url: p.website,
+    ...(address ? { address: `${address}, Philadelphia, PA` } : {}),
+    ...(p.phone ? { telephone: '+1-' + p.phone } : {}),
+    areaServed: served.map(s => ({ '@type': 'School', name: s.name, address: s.address })),
+    ...(revs.length ? {
+      aggregateRating: { '@type': 'AggregateRating', ratingValue: Number(avg.toFixed(1)), reviewCount: revs.length, bestRating: 5, worstRating: 1 },
+      review: revs.map(x => ({ '@type': 'Review', author: { '@type': 'Person', name: x.name }, datePublished: x.date, reviewBody: x.comment, reviewRating: { '@type': 'Rating', ratingValue: x.stars, bestRating: 5, worstRating: 1 } })),
+    } : {}),
+  };
+  const crumbs = { '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Programs', cfg.siteUrl + '/programs/'], [fullName(p), url]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) };
+  return layout({
+    title: `${fullName(p)}: hours, cost and pickup`,
+    description: `${fullName(p)}: ${p.what}. ${servedSummary(p)}. Grades, hours, cost, registration and parent reviews.`,
+    pathName: programPath(p), depth: D, current: null, hero, body,
+    jsonLd: { '@context': 'https://schema.org', '@graph': [thing, crumbs] },
+  });
+}
+
+function programsPage() {
+  const rows = [...programs].sort((a, b) => a.name.localeCompare(b.name)).map(p => {
+    const hay = [p.name, p.what, ...(p.offers || []), ...(p.keywords || []), ...servedBy(p).map(s => s.shortName)].join(' ').toLowerCase().replace(/martial arts/g, 'martial-arts');
+    return `<a class="prow" href="${link(programPath(p), 1)}" data-search="${esc(hay)}">
+  <h3>${esc(p.name)}</h3>
+  <span class="what">${esc(p.what)}</span>
+  <span class="tally">${servedBy(p).map(s => `<span class="pill ${p.schools[s.id].relation}">${esc(REL[p.schools[s.id].relation].pill.replace('{s}', s.shortName))}</span>`).join('')}<span class="hint">Grades ${esc(gradeText(p))}</span></span>
+</a>`;
+  }).join('\n');
+  const hero = `    <h1>${T(`Every program, A to Z`)}</h1>
+    <p class="lede">${T(`All {n} after-school programs on this site, across every school. Open one for its hours, cost, how to register and what parents say.`, { n: programs.length })}</p>
+    <div class="find needs-js-block">
+      <label for="find-program">${T(`Find a program`)}</label>
+      <input id="find-program" type="search" placeholder="A name, or try drums, art, chess…" autocomplete="off">
+    </div>`;
+  const body = `<section class="section">
+  <div class="schools">
+${rows}
+    <p class="ask" id="no-program" data-edit-reveal="Shown when the program search finds nothing:" hidden>${T(`Nothing matches that. Know a program that should be listed?`)} <a href="${link('suggest/', 1)}">${T(`Tell us about it.`)}</a></p>
+  </div>
+  <p>${T(`To see only what works with your child’s school and grade,`)} <a href="${link('', 1)}">${T(`start from your school.`)}</a></p>
+</section>`;
+  return layout({
+    title: 'All after-school programs, A to Z',
+    description: `All ${programs.length} after-school programs listed on ${cfg.siteName} for ${listNames(schools.map(s => s.shortName))} families, with hours, cost, pickup and reviews.`,
+    pathName: 'programs/', depth: 1, current: null, hero, body, showStreet: 'parked',
+    jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: [...programs].sort((a, b) => a.name.localeCompare(b.name)).map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
+  });
 }
 
 // ---------- pages ----------
@@ -274,15 +448,15 @@ function schoolPage(s) {
   const typeBtns = [['ALL', 'All types', list.length]].concat(Object.entries(REL).map(([k, v]) => [k, v.pill.replace('{s}', s.shortName), t[k]]))
     .map(([k, label, n]) => `<button type="button" class="tbtn" id="type-${k}" data-t="${k}" aria-pressed="${k === 'ALL'}">${esc(label)} (${n})</button>`).join('');
   const groups = Object.entries(REL).filter(([k]) => t[k]).map(([k, v]) => `<section class="group">
-  <h2>${esc(v.title.replace('{s}', s.shortName))} (<span class="n">${t[k]}</span>)</h2>
-  <p>${v.blurb}</p>
+  <h2>${T(v.title, { s: s.shortName })} (<span class="n">${t[k]}</span>)</h2>
+  <p>${T(v.blurb)}</p>
   <div class="list">
 ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n')}
   </div>
 </section>`).join('\n');
   const hero = `    <p class="where">${esc(s.name)}, ${esc(s.address.split(',')[0])}</p>
-    <h1>It’s ${esc(clock(s))} at ${esc(s.shortName)}. Now what?</h1>
-    <p class="lede">Every after-school program we could find that runs at the school, picks children up from ${esc(s.shortName)}, or sits within a short walk. Pick a grade to see what your child can join.</p>
+    <h1>${T(`It’s {time} at {school}. Now what?`, { time: clock(s), school: s.shortName })}</h1>
+    <p class="lede">${T(`Every after-school program we could find that runs at the school, picks children up from {school}, or sits within a short walk. Pick a grade to see what your child can join.`, { school: s.shortName })}</p>
     <div class="facts">
       <span>Dismissal <b>${esc(s.dismissal)}</b>${s.dismissalNote ? ` (${esc(s.dismissalNote)})` : ''}</span>
       <span>School office <b><a href="${telHref(s.phone)}">${esc(s.phone)}</a></b></span>
@@ -290,7 +464,7 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
     </div>`;
   const body = `<div data-school-page="${esc(s.id)}" style="display:contents">
   <div class="finder needs-js-block">
-    <label for="prog-search">Looking for something specific?</label>
+    <label for="prog-search">${T(`Looking for something specific?`)}</label>
     <input id="prog-search" type="search" placeholder="Try drums, art, homework, free…" autocomplete="off">
   </div>
   <section class="picker" aria-label="Filter programs">
@@ -302,15 +476,15 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
     <span><i class="cell on">3</i> grade served</span>
     <span><i class="cell">7</i> not served</span>
     <span><i class="cell unk">?</i> grades not published, so the program shows under every grade</span>
-    <span>The number under each grade counts programs at the school or with pickup.</span>
+    <span>${T(`The number under each grade counts programs at the school or with pickup.`)}</span>
   </div>
-  <p class="ask" id="no-match" hidden>Nothing here matches that. Know a program that should be listed? <a href="${link('suggest/', 1)}">Tell us about it.</a></p>
+  <p class="ask" id="no-match" data-edit-reveal="Shown when a search finds nothing:" hidden>${T(`Nothing here matches that. Know a program that should be listed?`)} <a href="${link('suggest/', 1)}">${T(`Tell us about it.`)}</a></p>
   <div class="groups">
 ${groups}
   </div>
-  <p class="ask">Know a program that serves ${esc(s.shortName)} and isn’t here? <a href="${link('suggest/', 1)}">Add it to the list.</a></p>
+  <p class="ask">${T(`Know a program that serves {school} and isn’t here?`, { school: s.shortName })} <a href="${link('suggest/', 1)}">${T(`Add it to the list.`)}</a></p>
   ${s.checkedNoPickup?.length ? `<section class="notes">
-    <h2>Checked, and not listing ${esc(s.shortName)} pickup</h2>
+    <h2>${T(`Checked, and not listing {school} pickup`, { school: s.shortName })}</h2>
     <ul>${s.checkedNoPickup.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
   </section>` : ''}
   ${s.alsoListed?.items?.length ? `<section class="notes">
@@ -319,12 +493,12 @@ ${groups}
     <ul>${s.alsoListed.items.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
   </section>` : ''}
   <section class="notes">
-    <h2>Before you enroll</h2>
+    <h2>${T(`Before you enroll`)}</h2>
     <ul>
-      <li>Pickup lists change every year, and most providers need a minimum number of children from a school. Ask each one to confirm ${esc(s.shortName)} pickup for the days you need.</li>
-      <li>Ask what happens on early-dismissal days and district days off.</li>
-      <li>City rec centers post each year’s after-school listing late, so call before counting on a price or a spot. Their listings live in the <a href="https://www.phila.gov/parks-rec-finder/#/locations" target="_blank" rel="noopener">Parks &amp; Rec finder</a>.</li>
-      <li>Free, city-funded programs are in the city’s <a href="https://www.phila.gov/ost/program-locator/#/" target="_blank" rel="noopener">After School and Summer Program Locator</a>.</li>
+      <li>${T(`Pickup lists change every year, and most providers need a minimum number of children from a school. Ask each one to confirm {school} pickup for the days you need.`, { school: s.shortName })}</li>
+      <li>${T(`Ask what happens on early-dismissal days and district days off.`)}</li>
+      <li>${T(`City rec centers post each year’s after-school listing late, so call before counting on a price or a spot. Their listings live in the`)} <a href="https://www.phila.gov/parks-rec-finder/#/locations" target="_blank" rel="noopener">${T(`Parks & Rec finder`)}</a>.</li>
+      <li>${T(`Free, city-funded programs are in the city’s`)} <a href="https://www.phila.gov/ost/program-locator/#/" target="_blank" rel="noopener">${T(`After School and Summer Program Locator`)}</a>.</li>
       ${(s.notes || []).map(x => `<li>${esc(x)}</li>`).join('\n      ')}
     </ul>
   </section>
@@ -343,38 +517,39 @@ function homePage() {
   <h3>${esc(s.name)}</h3>
   <span class="hood">${esc(s.neighborhood)}, grades ${esc(gradeSpan(s))}</span>
   <span class="tally">${t.onsite ? `<span class="pill onsite">${t.onsite} at school</span>` : ''}${t.pickup ? `<span class="pill pickup">${t.pickup} pick up</span>` : ''}${t.nearby ? `<span class="pill nearby">${t.nearby} nearby</span>` : ''}</span>
-  <span class="bell"><b>${esc(clock(s))}</b><span>dismissal</span></span>
+  <span class="bell"><b>${esc(clock(s))}</b><span>${T(`dismissal`)}</span></span>
 </a>`;
   }).join('\n');
-  const hero = `    <h1>School’s out. Now what?</h1>
-    <p class="lede">Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.</p>
+  const hero = `    <h1>${T(`School’s out. Now what?`)}</h1>
+    <p class="lede">${T(`Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.`)}</p>
     <div class="find">
-      <label for="find-school">Find your school</label>
+      <label for="find-school">${T(`Find your school`)}</label>
       <input id="find-school" type="search" placeholder="Start typing a school name" autocomplete="off">
     </div>`;
   const body = `<section class="section">
-  <h2>Schools</h2>
+  <h2>${T(`Schools`)}</h2>
   <div class="schools">
 ${rows}
-    <p class="ask" id="no-school" hidden>That school isn’t here yet. <a href="${link('suggest/', 0)}">Ask for it to be added.</a></p>
+    <p class="ask" id="no-school" data-edit-reveal="Shown when the school search finds nothing:" hidden>${T(`That school isn’t here yet.`)} <a href="${link('suggest/', 0)}">${T(`Ask for it to be added.`)}</a></p>
   </div>
-  <p>More schools in Queen Village, Bella Vista and South Philadelphia are on the way. <a href="${link('suggest/', 0)}">Ask for yours next.</a></p>
+  <p>${T(`More schools in Queen Village, Bella Vista and South Philadelphia are on the way.`)} <a href="${link('suggest/', 0)}">${T(`Ask for yours next.`)}</a></p>
+  <p>${T(`Looking for one program by name?`)} <a href="${link('programs/', 0)}">${T(`Browse all {n} programs, A to Z.`, { n: programs.length })}</a></p>
 </section>
 <section class="section">
-  <h2>How programs are sorted</h2>
+  <h2>${T(`How programs are sorted`)}</h2>
   <div class="kinds">
-    <div><span class="pill onsite">At the school</span><p>Runs in the school building or on its grounds. No travel.</p></div>
-    <div><span class="pill pickup">Picks up</span><p>Staff collect children at dismissal and walk or drive them to the program.</p></div>
-    <div><span class="pill nearby">Nearby</span><p>Close to the school, with no pickup we could find. A fit for older children or a second stop.</p></div>
+    <div><span class="pill onsite">${T(`At the school`)}</span><p>${T(`Runs in the school building or on its grounds. No travel.`)}</p></div>
+    <div><span class="pill pickup">${T(`Picks up`)}</span><p>${T(`Staff collect children at dismissal and walk or drive them to the program.`)}</p></div>
+    <div><span class="pill nearby">${T(`Nearby`)}</span><p>${T(`Close to the school, with no pickup we could find. A fit for older children or a second stop.`)}</p></div>
   </div>
 </section>
 <section class="section">
-  <h2>Checked by hand, dated, and sourced</h2>
-  <p>Every listing links to where the information came from and shows the day it was last checked. Nobody pays to be listed. If it saved you an evening of open tabs, <a href="${link('support/', 0)}">buy me a coffee.</a></p>
+  <h2>${T(`Checked by hand, dated, and sourced`)}</h2>
+  <p>${T(`Every listing links to where the information came from and shows the day it was last checked. Nobody pays to be listed. If it saved you an evening of open tabs,`)} <a href="${link('support/', 0)}">${T(`buy me a coffee.`)}</a></p>
 </section>
 ${cfg.builtBy ? `<section class="section" id="who">
-  <h2>Who built this</h2>
-  <p>${esc(cfg.builtBy.bio)}</p>
+  <h2>${T(`Who built this`)}</h2>
+  <p>${T(cfg.builtBy.bio)}</p>
 </section>` : ''}`;
   return layout({
     title: cfg.siteName, pathName: '', depth: 0, current: '', hero, body, fragment: PREVIEW, showStreet: 'go',
@@ -387,16 +562,16 @@ function supportPage() {
   const give = cfg.supportUrl
     ? `<p class="actions"><a class="btn primary big" data-track="support" href="${esc(cfg.supportUrl)}" target="_blank" rel="noopener">${esc(cfg.supportLabel || 'Buy me a coffee')}</a></p>
   ${cfg.supportHandle ? `<p class="hint">Or search for <b>${esc(cfg.supportHandle)}</b> in the Venmo app.</p>` : ''}`
-    : `<div class="panel"><h3>The coffee link is being set up</h3><p>Check back soon.</p></div>`;
-  const hero = `    <h1>Buy me a coffee</h1>
-    <p class="lede">${who ? `I’m ${esc(who)}. ` : ''}I built this because sorting out after-school care for my own kid was chaos. If it saved you an evening of open tabs, a coffee is a nice way to say so.</p>`;
+    : `<div class="panel"><h3>${T(`The coffee link is being set up`)}</h3><p>${T(`Check back soon.`)}</p></div>`;
+  const hero = `    <h1>${T(`Buy me a coffee`)}</h1>
+    <p class="lede">${T(`I’m {name}. I built this because sorting out after-school care for my own kid was chaos. If it saved you an evening of open tabs, a coffee is a nice way to say so.`, { name: who })}</p>`;
   const body = `<div class="prose">
   ${give}
   <ul>
-    <li>It goes to me, the person who built and updates this, for the hours spent checking listings and adding schools.</li>
-    <li>It’s a thank-you, not a charitable donation, so it isn’t tax-deductible.</li>
-    <li>It buys nothing on the site. Listings are free for every provider, and nobody pays to be listed or to be listed higher.</li>
-    <li>Not a coffee person? A correction or a missing program helps just as much. <a href="${link('suggest/', 1)}">Send one here.</a></li>
+    <li>${T(`It goes to me, the person who built and updates this, for the hours spent checking listings and adding schools.`)}</li>
+    <li>${T(`It’s a thank-you, not a charitable donation, so it isn’t tax-deductible.`)}</li>
+    <li>${T(`It buys nothing on the site. Listings are free for every provider, and nobody pays to be listed or to be listed higher.`)}</li>
+    <li>${T(`Not a coffee person? A correction or a missing program helps just as much.`)} <a href="${link('suggest/', 1)}">${T(`Send one here.`)}</a></li>
   </ul>
 </div>`;
   return layout({ title: 'Buy me a coffee', description: `Say thanks to the person who built and maintains ${cfg.siteName}.`, pathName: 'support/', depth: 1, current: 'support/', hero, body, showStreet: 'parked' });
@@ -404,63 +579,63 @@ function supportPage() {
 
 function aboutPage() {
   const mail = cfg.contactEmail ? `Email <a href="mailto:${esc(cfg.contactEmail)}">${esc(cfg.contactEmail)}</a>` : 'A contact address is being set up. Check back soon';
-  const hero = `    <h1>One place to see what’s possible after the last bell</h1>
-    <p class="lede">Finding after-school care means checking a dozen websites to learn who picks up from your school, for which grades, until when. ${esc(cfg.siteName)} puts that on one page per school.</p>`;
+  const hero = `    <h1>${T(`One place to see what’s possible after the last bell`)}</h1>
+    <p class="lede">${T(`Finding after-school care means checking a dozen websites to learn who picks up from your school, for which grades, until when. {site} puts that on one page per school.`, { site: cfg.siteName })}</p>`;
   const body = `<div class="prose">
-  <h2>How listings are checked</h2>
+  <h2>${T(`How listings are checked`)}</h2>
   <ul>
-    <li>Each listing comes from the provider’s own public pages, the school’s site, or city program data. The sources are linked on every card.</li>
-    <li>Every card shows the date it was last checked. When a detail could not be confirmed, the card says so in a yellow note.</li>
-    <li>A program is marked “picks up” only when a source names the school. Otherwise it is listed as nearby.</li>
+    <li>${T(`Each listing comes from the provider’s own public pages, the school’s site, or city program data. The sources are linked on every card.`)}</li>
+    <li>${T(`Every card shows the date it was last checked. When a detail could not be confirmed, the card says so in a yellow note.`)}</li>
+    <li>${T(`A program is marked “picks up” only when a source names the school. Otherwise it is listed as nearby.`)}</li>
   </ul>
-  <h2>What this site can’t promise</h2>
+  <h2>${T(`What this site can’t promise`)}</h2>
   <ul>
-    <li>A listing is not an endorsement, and nobody pays to appear here.</li>
-    <li>Prices, hours, openings and pickup routes change during the year. Confirm with the provider before you enroll.</li>
-    <li>${esc(cfg.siteName)} is independent. It is not affiliated with the School District of Philadelphia or any provider.</li>
+    <li>${T(`A listing is not an endorsement, and nobody pays to appear here.`)}</li>
+    <li>${T(`Prices, hours, openings and pickup routes change during the year. Confirm with the provider before you enroll.`)}</li>
+    <li>${T(`{site} is independent. It is not affiliated with the School District of Philadelphia or any provider.`, { site: cfg.siteName })}</li>
   </ul>
-  <h2 id="corrections">Corrections, new programs and new schools</h2>
-  <p>Parents and providers know these programs best. If something is wrong or missing, or you want your school added, <a href="${link('suggest/', 1)}">use the form</a>. ${mail}.</p>
-  <p>It helps to include the program, the school, what changed, and a link to where it’s published.</p>
-  <h2 id="reviews">Reviews</h2>
+  <h2 id="corrections">${T(`Corrections, new programs and new schools`)}</h2>
+  <p>${T(`Parents and providers know these programs best. If something is wrong or missing, or you want your school added,`)} <a href="${link('suggest/', 1)}">${T(`use the form`)}</a>. ${mail}.</p>
+  <p>${T(`It helps to include the program, the school, what changed, and a link to where it’s published.`)}</p>
+  <h2 id="reviews">${T(`Reviews`)}</h2>
   <ul>
-    <li>Reviews are first-hand notes from parents and caregivers. Each one is read before it’s posted and shows the reviewer’s first name and school.</li>
-    <li>We don’t post reviews that name children or individual staff, or reviews a program writes about itself.</li>
-    <li>Nobody pays to have a review posted or removed. A provider who thinks a review is wrong can use the form above or the contact address.</li>
+    <li>${T(`Reviews are first-hand notes from parents and caregivers. Each one is read before it’s posted and shows the reviewer’s first name and school.`)}</li>
+    <li>${T(`We don’t post reviews that name children or individual staff, or reviews a program writes about itself.`)}</li>
+    <li>${T(`Nobody pays to have a review posted or removed. A provider who thinks a review is wrong can use the form above or the contact address.`)}</li>
   </ul>
-  ${cfg.builtBy ? `<h2 id="who">Who built this</h2>
-  <p>${esc(cfg.builtBy.bio)}</p>` : ''}
+  ${cfg.builtBy ? `<h2 id="who">${T(`Who built this`)}</h2>
+  <p>${T(cfg.builtBy.bio)}</p>` : ''}
 </div>`;
   return layout({ title: 'About', description: `How ${cfg.siteName} gathers and checks after-school listings, and how to send a correction.`, pathName: 'about/', depth: 1, current: 'about/', hero, body, showStreet: 'parked' });
 }
 
 function suggestPage() {
   const opts = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<option>${esc(s.shortName)}</option>`).join('');
-  const hero = `    <h1>Know one we missed?</h1>
-    <p class="lede">Plenty of good programs are off the radar: a church basement, a dance studio that walks kids over, a neighbor who runs a homework club. Tell us and we’ll check it and add it. You can also fix a listing or ask for your school.</p>`;
+  const hero = `    <h1>${T(`Know one we missed?`)}</h1>
+    <p class="lede">${T(`Plenty of good programs are off the radar: a church basement, a dance studio that walks kids over, a neighbor who runs a homework club. Tell us and we’ll check it and add it. You can also fix a listing or ask for your school.`)}</p>`;
   const chips = (name, legend, values, attrs = '') => `<fieldset class="field chips"${attrs}>
-      <legend>${legend}</legend>
+      <legend>${T(legend)}</legend>
       <div class="chip-row">${values.map((v, i) => `<label class="chip"><input type="radio" name="${name}" value="${esc(v)}"${i === 0 ? ' checked' : ''}><span>${esc(v)}</span></label>`).join('')}</div>
     </fieldset>`;
   const body = `<div class="suggest">
   <form class="form panel" method="post" action="send.php" id="suggest-form">
     ${chips('kind', 'What are you sending?', ['A program that’s missing', 'A correction to a listing', 'A school to add'])}
     <div class="field" data-show="school" hidden>
-      <label for="f-newschool">School name</label>
+      <label for="f-newschool">${T(`School name`)}</label>
       <input id="f-newschool" name="newschool" type="text" maxlength="120" autocomplete="off" disabled>
-      <span class="hint">The neighborhood helps too, if you know it.</span>
+      <span class="hint">${T(`The neighborhood helps too, if you know it.`)}</span>
     </div>
     <div class="pair" data-show="program correction">
       <div class="field">
-        <label for="f-school">Which school?</label>
+        <label for="f-school">${T(`Which school?`)}</label>
         <select id="f-school" name="school">
           ${opts}
           <option>Another school</option>
         </select>
-        <span class="hint">For another school, name it in the details.</span>
+        <span class="hint">${T(`For another school, name it in the details.`)}</span>
       </div>
       <div class="field">
-        <label for="f-program">Program name</label>
+        <label for="f-program">${T(`Program name`)}</label>
         <input id="f-program" name="program" type="text" maxlength="150" autocomplete="off">
       </div>
     </div>
@@ -475,10 +650,10 @@ function suggestPage() {
       <textarea id="f-details" name="details" maxlength="4000" required></textarea>
     </div>
     <div class="about-you">
-      <h2>About you</h2>
-      <p class="hint">All optional. Your email is only used to ask a follow-up question about what you sent.</p>
+      <h2>${T(`About you`)}</h2>
+      <p class="hint">${T(`All optional. Your email is only used to ask a follow-up question about what you sent.`)}</p>
       <div class="field">
-        <label for="f-role">How do you know it?</label>
+        <label for="f-role">${T(`How do you know it?`)}</label>
         <select id="f-role" name="role">
           <option>I’m a parent or caregiver</option>
           <option>I run or work at the program</option>
@@ -488,11 +663,11 @@ function suggestPage() {
       </div>
       <div class="pair">
         <div class="field">
-          <label for="f-name">Your name</label>
+          <label for="f-name">${T(`Your name`)}</label>
           <input id="f-name" name="name" type="text" maxlength="100" autocomplete="name">
         </div>
         <div class="field">
-          <label for="f-email">Your email</label>
+          <label for="f-email">${T(`Your email`)}</label>
           <input id="f-email" name="email" type="email" maxlength="150" autocomplete="email">
         </div>
       </div>
@@ -501,24 +676,24 @@ function suggestPage() {
       <label for="f-company">Leave this blank</label>
       <input id="f-company" name="company" type="text" tabindex="-1" autocomplete="off">
     </div>
-    <div><button class="btn primary big" type="submit">Send it</button></div>
+    <div><button class="btn primary big" type="submit">${T(`Send it`)}</button></div>
   </form>
   <aside class="next">
-    <h2>What happens next</h2>
+    <h2>${T(`What happens next`)}</h2>
     <ol>
-      <li>Your note lands in a real inbox. A person reads it.</li>
-      <li>We check it against the program’s own information.</li>
-      <li>If it holds up, it goes on the school’s page with its source and the date.</li>
+      <li>${T(`Your note lands in a real inbox. A person reads it.`)}</li>
+      <li>${T(`We check it against the program’s own information.`)}</li>
+      <li>${T(`If it holds up, it goes on the school’s page with its source and the date.`)}</li>
     </ol>
-    <p class="hint">Nothing is published automatically, and nobody pays to be listed.</p>
+    <p class="hint">${T(`Nothing is published automatically, and nobody pays to be listed.`)}</p>
   </aside>
 </div>`;
   return layout({ title: 'Suggest a program', description: `Tell ${cfg.siteName} about an after-school program that’s missing, a correction, or a school to add.`, pathName: 'suggest/', depth: 1, current: 'suggest/', hero, body, showStreet: 'parked' });
 }
 
 function thanksPage() {
-  const hero = `    <h1>Got it. Thank you.</h1>
-    <p class="lede">We’ll check it against the program’s own information and add it if it holds up. <a href="${link('', 2)}">Back to the schools.</a></p>`;
+  const hero = `    <h1>${T(`Got it. Thank you.`)}</h1>
+    <p class="lede">${T(`We’ll check it against the program’s own information and add it if it holds up.`)} <a href="${link('', 2)}">${T(`Back to the schools.`)}</a></p>`;
   return layout({ title: 'Thank you', description: 'Your suggestion was sent.', pathName: 'suggest/thanks/', depth: 2, current: null, hero, body: '', showStreet: 'parked' });
 }
 
@@ -619,12 +794,12 @@ function boardPage() {
     }])),
   };
   const schoolLinks = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<a class="btn" href="${link(s.id + '/', 1)}">${esc(s.shortName)}</a>`).join('');
-  const hero = `    <h1>Build your week</h1>
-    <p class="lede">Monday might be martial arts and Thursday the rec center. Keep one board for what you’re doing now and one for what’s coming, then send either to your partner, a sitter, or the group chat.</p>`;
+  const hero = `    <h1>${T(`Build your week`)}</h1>
+    <p class="lede">${T(`Monday might be martial arts and Thursday the rec center. Keep one board for what you’re doing now and one for what’s coming, then send either to your partner, a sitter, or the group chat.`)}</p>`;
   const body = `<div data-board-page style="display:contents">
-  <noscript><p class="ask">The board needs JavaScript turned on.</p></noscript>
-  <div class="panel" id="board-shared" hidden>
-    <h2>Someone shared this week with you</h2>
+  <noscript><p class="ask">${T(`The board needs JavaScript turned on.`)}</p></noscript>
+  <div class="panel" id="board-shared" data-edit-reveal="Shown when someone opens a board a friend shared:" hidden>
+    <h2>${T(`Someone shared this week with you`)}</h2>
     <p id="board-shared-text">It isn’t saved on your device yet.</p>
     <div class="actions"><button type="button" class="btn primary" id="board-adopt">Make it my board</button><button type="button" class="btn" id="board-mine">See my own boards</button></div>
   </div>
@@ -643,7 +818,7 @@ function boardPage() {
   </section>
   <section class="board-tools" id="board-tools" hidden>
     <div class="field">
-      <label for="board-name">Name this week</label>
+      <label for="board-name">${T(`Name this week`)}</label>
       <input id="board-name" type="text" maxlength="40" placeholder="Sam’s week" autocomplete="off">
     </div>
     <div class="actions">
@@ -655,9 +830,9 @@ function boardPage() {
     </div>
     <p class="hint" id="board-status" aria-live="polite"></p>
     <div class="field">
-      <label for="board-link">Link to this week</label>
+      <label for="board-link">${T(`Link to this week`)}</label>
       <input id="board-link" type="text" readonly>
-      <span class="hint">Your boards save automatically on this device. The link is the copy you can keep anywhere: anyone who opens it sees this week, and it’s how you move a board to another phone or computer.</span>
+      <span class="hint">${T(`Your boards save automatically on this device. The link is the copy you can keep anywhere: anyone who opens it sees this week, and it’s how you move a board to another phone or computer.`)}</span>
     </div>
   </section>
   <script type="application/json" id="pas-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
@@ -668,65 +843,65 @@ function boardPage() {
 function reviewPage() {
   const progOpts = [...programs].sort((a, b) => a.name.localeCompare(b.name)).map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');
   const schoolOpts = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<option value="${esc(s.id)}">${esc(s.shortName)}</option>`).join('');
-  const hero = `    <h1>How did it go?</h1>
-    <p class="lede">A first-hand note from one family helps the next one choose. Every review is read before it’s posted.</p>`;
+  const hero = `    <h1>${T(`How did it go?`)}</h1>
+    <p class="lede">${T(`A first-hand note from one family helps the next one choose. Every review is read before it’s posted.`)}</p>`;
   const body = `<div class="suggest">
   <form class="form panel" method="post" action="send.php" id="review-form">
     <div class="pair">
       <div class="field">
-        <label for="r-program">Which program?</label>
+        <label for="r-program">${T(`Which program?`)}</label>
         <select id="r-program" name="program" required>${progOpts}</select>
       </div>
       <div class="field">
-        <label for="r-school">Your child’s school</label>
+        <label for="r-school">${T(`Your child’s school`)}</label>
         <select id="r-school" name="school" required>${schoolOpts}</select>
       </div>
     </div>
     <fieldset class="field chips">
-      <legend>Your rating</legend>
+      <legend>${T(`Your rating`)}</legend>
       <div class="chip-row">${[5, 4, 3, 2, 1].map((n, i) => `<label class="chip"><input type="radio" name="stars" value="${n}"${i === 0 ? ' required' : ''}><span>${n} ${n === 1 ? 'star' : 'stars'}</span></label>`).join('')}</div>
     </fieldset>
     <div class="field">
-      <label for="r-comment">Your review</label>
-      <span class="hint">What was pickup like? Homework help? Would you sign up again?</span>
+      <label for="r-comment">${T(`Your review`)}</label>
+      <span class="hint">${T(`What was pickup like? Homework help? Would you sign up again?`)}</span>
       <textarea id="r-comment" name="comment" minlength="20" maxlength="1200" required></textarea>
     </div>
     <div class="pair">
       <div class="field">
-        <label for="r-name">Your first name</label>
+        <label for="r-name">${T(`Your first name`)}</label>
         <input id="r-name" name="name" type="text" maxlength="40" autocomplete="given-name" required>
-        <span class="hint">Shown with your review.</span>
+        <span class="hint">${T(`Shown with your review.`)}</span>
       </div>
       <div class="field">
-        <label for="r-email">Your email</label>
+        <label for="r-email">${T(`Your email`)}</label>
         <input id="r-email" name="email" type="email" maxlength="150" autocomplete="email" required>
-        <span class="hint">Never shown. Only used if we need to confirm something.</span>
+        <span class="hint">${T(`Never shown. Only used if we need to confirm something.`)}</span>
       </div>
     </div>
-    <label class="check"><input type="checkbox" name="firsthand" value="yes" required><span>This is my own experience as a parent or caregiver.</span></label>
+    <label class="check"><input type="checkbox" name="firsthand" value="yes" required><span>${T(`This is my own experience as a parent or caregiver.`)}</span></label>
     <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
       <label for="r-company">Leave this blank</label>
       <input id="r-company" name="company" type="text" tabindex="-1" autocomplete="off">
     </div>
-    <div><button class="btn primary big" type="submit">Send review</button></div>
+    <div><button class="btn primary big" type="submit">${T(`Send review`)}</button></div>
   </form>
   <aside class="next">
-    <h2>House rules</h2>
+    <h2>${T(`House rules`)}</h2>
     <ul class="rules">
-      <li>First-hand only. Write about what your own family experienced.</li>
-      <li>Be specific and fair. Details help more than adjectives.</li>
-      <li>No names of children or individual staff.</li>
-      <li>Programs can’t review themselves.</li>
+      <li>${T(`First-hand only. Write about what your own family experienced.`)}</li>
+      <li>${T(`Be specific and fair. Details help more than adjectives.`)}</li>
+      <li>${T(`No names of children or individual staff.`)}</li>
+      <li>${T(`Programs can’t review themselves.`)}</li>
     </ul>
-    <p class="hint">Reviews show your first name and school, and appear after they’ve been read. Nobody pays to have a review posted or removed.</p>
+    <p class="hint">${T(`Reviews show your first name and school, and appear after they’ve been read. Nobody pays to have a review posted or removed.`)}</p>
   </aside>
 </div>`;
   return layout({ title: 'Write a review', description: `Share a first-hand review of an after-school program listed on ${cfg.siteName}.`, pathName: 'review/', depth: 1, current: null, hero, body, showStreet: 'parked' });
 }
 
 function reviewThanksPage() {
-  const hero = `    <h1>Thank you. It’s in.</h1>
-    <p class="lede">Your review will appear once it’s been read. <a href="${link('', 2)}">Back to the schools.</a></p>`;
+  const hero = `    <h1>${T(`Thank you. It’s in.`)}</h1>
+    <p class="lede">${T(`Your review will appear once it’s been read.`)} <a href="${link('', 2)}">${T(`Back to the schools.`)}</a></p>`;
   return layout({ title: 'Thank you', description: 'Your review was sent.', pathName: 'review/thanks/', depth: 2, current: null, hero, body: '', showStreet: 'parked' });
 }
 
@@ -832,9 +1007,139 @@ exit;
 `;
 }
 
+// ---------- edit mode: the page that turns it on, and the handler that receives the edits ----------
+function editPage() {
+  const pages = [['', 'Home'], ...schools.map(s => [s.id + '/', `${s.shortName} page`]), ['programs/', 'All programs, A to Z'], [programPath(programs[0]), `A program page (${programs[0].name})`],
+    ['board/', 'My board'], ['suggest/', 'Suggest a program'], ['suggest/thanks/', 'Thank-you page after a suggestion'], ['review/', 'Write a review'], ['review/thanks/', 'Thank-you page after a review'],
+    ['about/', 'About'], ['support/', 'Buy me a coffee'], ...(PREVIEW ? [] : [['404.html', 'Page not found']])];
+  const hero = `    <h1>Edit the words on this site</h1>
+    <p class="lede">Turn on editing, then click a sentence on any page and type. Nothing changes for visitors until your edits are sent and approved.</p>`;
+  const body = `<div class="prose" data-edit-page>
+  <div class="panel">
+    <h2 id="edit-state">Editing is off</h2>
+    <p id="edit-state-text">Turn it on and a bar appears at the bottom of every page.</p>
+    <div class="actions"><button type="button" class="btn primary big needs-js" id="edit-start">Start editing</button><button type="button" class="btn needs-js" id="edit-stop" hidden>Stop editing</button></div>
+    <noscript><p>Editing needs JavaScript turned on.</p></noscript>
+  </div>
+  <h2>How it works</h2>
+  <ol>
+    <li>Click any text with a dotted outline and type. Text you’ve changed turns yellow.</li>
+    <li>Move between pages with the menu or the list below. Your edits are kept in this browser as you go, so stay on the same phone or computer until you’ve sent them.</li>
+    <li>Choose “Review and send” in the bar at the bottom. You’ll see each change next to the original and can undo any of them.</li>
+    <li>Sending emails the changes to be approved. They appear on the site once they’re published.</li>
+  </ol>
+  <h2>Pages</h2>
+  <ul>
+    ${pages.map(([to, label]) => `<li><a href="${link(to, 1)}">${esc(label)}</a></li>`).join('\n    ')}
+  </ul>
+  <h2>What can’t be edited here</h2>
+  <ul>
+    <li>Program details: names, descriptions, hours and costs come from the listings data. Send fixes for those through <a href="${link('suggest/', 1)}">the suggestion form</a>.</li>
+    <li>Menu labels, text that changes as you click (filter counts, the board), the grey example text inside boxes, and the choices inside drop-downs.</li>
+    <li>Words in curly braces, like {school}, are filled in for each page. Leave them in the sentence.</li>
+  </ul>
+</div>`;
+  return layout({ title: 'Edit the copy', description: 'Edit the words on this site.', pathName: 'edit/', depth: 1, current: null, hero, body, noindex: true });
+}
+
+// Receives edits as JSON, emails a readable list plus a complete data/copy.json to paste in.
+// Nothing is published from here: the site only changes when copy.json is committed.
+function editPhp() {
+  const original = Object.fromEntries(copyRegistry);
+  const overrides = Object.fromEntries(Object.entries(copyEdits).filter(([id]) => copyRegistry.has(id)));
+  const nowdoc = o => "json_decode(<<<'PAS_JSON'\n" + JSON.stringify(o) + "\nPAS_JSON\n, true)";
+  return `<?php
+// Receives copy edits made in edit mode. Generated by build.mjs; edit it there.
+$TO = ${JSON.stringify(cfg.contactEmail)};
+$SITE = ${JSON.stringify(cfg.siteName)};
+$REPO = ${JSON.stringify(cfg.repo || '')};
+$ORIGINAL = ${nowdoc(original)};
+$OVERRIDES = ${nowdoc(overrides)};
+
+function out($ok, $msg, $code) {
+  http_response_code($code);
+  header('Content-Type: application/json; charset=utf-8');
+  echo json_encode(array('ok' => $ok, 'message' => $msg));
+  exit;
+}
+function tidy($v, $max) {
+  if (!is_string($v)) return '';
+  $v = strip_tags(str_replace(chr(0), '', $v));
+  $v = trim(preg_replace('/\\s+/u', ' ', $v));
+  return function_exists('mb_substr') ? mb_substr($v, 0, $max, 'UTF-8') : substr($v, 0, $max);
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+  out(false, 'Use the editor on the site.', 405);
+}
+$in = json_decode(file_get_contents('php://input'), true);
+if (!is_array($in) || !isset($in['edits']) || !is_array($in['edits'])) {
+  out(false, 'There was nothing to send.', 400);
+}
+// A hidden field people never fill in. If it has a value, a bot did it: act as if it worked.
+if (isset($in['company']) && $in['company'] !== '') {
+  out(true, 'Sent.', 200);
+}
+
+$name = tidy(isset($in['name']) ? $in['name'] : '', 60);
+$note = tidy(isset($in['note']) ? $in['note'] : '', 1000);
+$merged = is_array($OVERRIDES) ? $OVERRIDES : array();
+$lines = array();
+$n = 0;
+foreach (array_slice($in['edits'], 0, 300) as $e) {
+  if (!is_array($e) || !isset($e['id']) || !is_string($e['id']) || !isset($ORIGINAL[$e['id']])) continue;
+  $id = $e['id'];
+  $now = tidy(isset($e['now']) ? $e['now'] : '', 800);
+  $shown = isset($merged[$id]['now']) ? $merged[$id]['now'] : $ORIGINAL[$id];
+  if ($now === '' || $now === $shown) continue;
+  $page = tidy(isset($e['page']) ? $e['page'] : '', 120);
+  $n++;
+  $line = "$n." . ($page !== '' ? " On $page" : '') . "\\n   Was: $shown\\n   Now: $now\\n";
+  if (preg_match_all('/\\{\\w+\\}/', $ORIGINAL[$id], $m)) {
+    foreach (array_unique($m[0]) as $token) {
+      if (strpos($now, $token) === false) $line .= "   CHECK: the original has $token, which is filled in for each page. The new wording leaves it out.\\n";
+    }
+  }
+  $lines[] = $line;
+  if ($now === $ORIGINAL[$id]) unset($merged[$id]);
+  else $merged[$id] = array('was' => $ORIGINAL[$id], 'now' => $now);
+}
+if ($n === 0) {
+  out(false, 'Those changes are already on the site, or this page is out of date. Refresh the page and check.', 400);
+}
+
+$json = count($merged) ? json_encode($merged, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : '{}';
+$body = "Copy edits" . ($name !== '' ? " from $name" : '') . ": $n " . ($n === 1 ? 'change' : 'changes') . ".\\n\\n"
+  . ($note !== '' ? "Note: $note\\n\\n" : '')
+  . implode("\\n", $lines)
+  . "\\nTo publish all of them, replace everything in data/copy.json with the text between the two lines below, then commit.\\n"
+  . ($REPO !== '' ? "https://github.com/$REPO/edit/main/data/copy.json\\n" : '')
+  . "It already includes edits approved earlier. To leave one out, delete its entry before you paste.\\n\\n"
+  . "-----8<----- copy.json starts on the next line\\n"
+  . $json . "\\n"
+  . "-----8<----- copy.json ended on the line above\\n";
+
+$subject = "[$SITE] Copy edits" . ($name !== '' ? " from $name" : '') . " ($n)";
+$headers = array(
+  'From: ' . $SITE . ' <' . $TO . '>',
+  'MIME-Version: 1.0',
+  'Content-Type: text/plain; charset=UTF-8',
+  'Content-Transfer-Encoding: base64',
+);
+$sent = @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', chunk_split(base64_encode($body)), implode("\\r\\n", $headers));
+$log = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-copy-edits.log';
+@file_put_contents($log, date('c') . ($sent ? ' (emailed)' : ' (EMAIL FAILED)') . "\\n" . $body . "----\\n", FILE_APPEND | LOCK_EX);
+
+if (!$sent) {
+  out(false, 'The email did not go out.', 500);
+}
+out(true, 'Sent.', 200);
+`;
+}
+
 function notFoundPage() {
-  const hero = `    <h1>This jawn isn’t here</h1>
-    <p class="lede">The link may be old, or the page moved. <a href="/">Start from the list of schools.</a></p>`;
+  const hero = `    <h1>${T(`This jawn isn’t here`)}</h1>
+    <p class="lede">${T(`The link may be old, or the page moved.`)} <a href="/">${T(`Start from the list of schools.`)}</a></p>`;
   return layout({ title: 'Page not found', description: 'Page not found.', pathName: '404.html', depth: -1, current: null, hero, body: '', showStreet: 'parked' });
 }
 
@@ -843,6 +1148,8 @@ fs.rmSync(OUT, { recursive: true, force: true });
 const write = (rel, content) => { const f = path.join(OUT, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, content); };
 write('index.html', homePage());
 for (const s of schools) write(`${s.id}/index.html`, schoolPage(s));
+write('programs/index.html', programsPage());
+for (const p of programs) write(`${programPath(p)}index.html`, programPage(p));
 write('support/index.html', supportPage());
 write('about/index.html', aboutPage());
 write('suggest/index.html', suggestPage());
@@ -850,21 +1157,30 @@ write('suggest/thanks/index.html', thanksPage());
 write('board/index.html', boardPage());
 write('review/index.html', reviewPage());
 write('review/thanks/index.html', reviewThanksPage());
+write('edit/index.html', editPage());
+const notFound = notFoundPage();   // always rendered, so its copy is known to the editor
 write('assets/site.css', fs.readFileSync(path.join(ROOT, 'src/site.css')));
 write('assets/site.js', fs.readFileSync(path.join(ROOT, 'src/site.js')));
+write('assets/edit.js', fs.readFileSync(path.join(ROOT, 'src/edit.js')));
 if (!PREVIEW) {
-  write('404.html', notFoundPage());
+  write('404.html', notFound);
   if (cfg.contactEmail) write('suggest/send.php', sendPhp());
   if (cfg.contactEmail) write('review/send.php', reviewPhp());
+  if (cfg.contactEmail) write('edit/send.php', editPhp());   // after every page, so it knows every sentence
   for (const p of programs) for (const d of upcomingDates(p)) write(`cal/${p.id}-${d.date}.ics`, icsFile(p, d));
   write('data/reviews.json', JSON.stringify(reviews, null, 2));
   // Public copy of the data, so the monthly check (or anyone) can read exactly what the site shows.
   write('data/programs.json', JSON.stringify(programs.map(({ _grades, ...p }) => p), null, 2));
   write('data/schools.json', JSON.stringify(schools, null, 2));
   const latest = programs.map(p => p.lastVerified).sort().pop();
-  const urls = ['', ...schools.map(s => s.id + '/'), 'board/', 'suggest/', 'review/', 'about/', 'support/'];
-  write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${latest}</lastmod></url>`).join('\n')}\n</urlset>\n`);
+  const urls = [['', latest], ...schools.map(s => [s.id + '/', latest]), ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]),
+    ...['board/', 'suggest/', 'review/', 'about/', 'support/'].map(u => [u, latest])];
+  write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
   write('.htaccess', 'ErrorDocument 404 /404.html\nAddType text/calendar .ics\n');
 }
-console.log(`Built ${schools.length} school page(s) and ${programs.length} programs into ${path.relative(ROOT, OUT)}/`);
+// Edits in data/copy.json are matched to sentences by a fingerprint of the original wording.
+// If the original was reworded or removed in this file, the edit no longer applies: say so, but still build.
+const stale = Object.entries(copyEdits).filter(([id]) => !copyRegistry.has(id));
+if (stale.length) console.warn(`\nNote: ${stale.length} edit(s) in data/copy.json no longer match any sentence on the site, so they were skipped:\n` + stale.map(([id, e]) => `- ${id}: was "${e.was || '?'}" / now "${e.now}"`).join('\n') + '\n');
+console.log(`Built ${schools.length} school page(s), ${programs.length} program page(s) and ${copyRegistry.size} editable sentences into ${path.relative(ROOT, OUT)}/`);

@@ -9,9 +9,11 @@ programs with a grade filter. Everything is generated from two data files.
 |---|---|
 | `data/programs.json` | One record per program. Each program lists the schools it serves. |
 | `data/schools.json` | One record per school. Adding a record adds a page. |
+| `data/reviews.json` | Approved reviews. |
+| `data/copy.json` | Edits to the site's wording, made in edit mode. Starts empty. |
 | `site.config.json` | Site name, domain, contact email, support link, optional GTM ID. |
 | `build.mjs` | Builds the site into `dist/`. Needs Node 18+, no installs. |
-| `src/` | The stylesheet and the script for search and filtering. |
+| `src/` | The stylesheet, the script for search, filtering and boards, and the edit-mode script. |
 | `dist/` | The finished site, created by the build. Not stored in `main`; the `live` branch holds it. |
 
 ## Before launch
@@ -24,6 +26,7 @@ Fill in `site.config.json`:
 - `siteUrl`: the domain you treat as the main one. Redirect the other domain to it at your host.
 - `builtBy`: the name, link and short bio shown in the footer, on the home page and on About.
 - `gtmId`: optional, e.g. `GTM-XXXXXXX`.
+- `repo`: optional, `owner/name` on GitHub. Used only to put a link to `data/copy.json` in copy-edit emails.
 
 ## Build
 
@@ -75,6 +78,32 @@ Fields worth knowing:
 3. Add records for programs that are new (the school's own clubs and on-site care).
 4. Commit to `main`.
 
+## Program pages
+
+Every program gets its own page at `/programs/<id>/` (for example `/programs/zhang-sah/`), built from the
+same record as its cards: the details, each school it serves, and its reviews. `/programs/` lists them all
+A to Z. Both are in the sitemap, and each program page carries structured data (name, address, phone, and
+the star rating once there are reviews) for search engines. Nothing extra to maintain: add or edit a
+program in `data/programs.json` and its page follows.
+
+## Editing the site's wording
+
+Headlines, intros, section text, form labels and footer text can be edited on the site itself.
+
+1. Open `/edit/` and choose "Start editing". The page isn't linked from anywhere and is hidden from search engines.
+2. Click any outlined text on any page and type. Edits are kept in that browser only.
+3. "Review and send" emails the changes to `contactEmail`. The email lists each change and ends with a
+   complete `data/copy.json`.
+4. To publish, replace the contents of `data/copy.json` with that text and commit. To reject one change,
+   delete its entry first. To go back to the original wording everywhere, set the file to `{}`.
+
+Each entry is keyed by a fingerprint of the original sentence and holds `was` (the original) and `now`.
+Words in curly braces, like `{school}`, are filled in per page. If a sentence is later reworded in
+`build.mjs`, its entry stops matching; the build prints a note and carries on.
+
+Not editable this way: program and school details (they come from the data files), menu labels, and text
+the scripts write as you click (filter counts, the board).
+
 ## Reviews
 
 Reviews are approved by hand. The form at `/review/` emails each review to `contactEmail`, with a
@@ -100,7 +129,7 @@ A hidden field traps most spam bots.
 
 Set `gtmId` to load Google Tag Manager on every page. The site pushes these events to the data layer:
 `pas_filter` (filter_type, filter_value, school), `pas_outbound` (link_type of register or website,
-program_id, school), `pas_suggest_submit` (suggest_kind, school), `pas_support_click`, `pas_review_submit` (program_id,
+program_id, school; school is empty on a program's own page), `pas_suggest_submit` (suggest_kind, school), `pas_support_click`, `pas_review_submit` (program_id,
 school, stars), `pas_board_add` (program_id, school, day) and `pas_board_share` (method).
 `pas_outbound` also fires with link_type `calendar` and `review`. `pas_search` (search_term, results,
 school) fires when someone pauses typing in a school page's search box; searches with zero results
