@@ -71,6 +71,11 @@ for (const p of programs) {
   }
   if (['phone', 'school'].includes(p.register?.how) && !p.phone) errors.push(`${at}: register by phone needs a phone number`);
 }
+for (const p of programs) {
+  if (p.keywords !== undefined && (!Array.isArray(p.keywords) || p.keywords.some(x => typeof x !== 'string'))) errors.push(`program "${p.id}": keywords must be a list of words`);
+  // Class names travel inside board share links, so they can't contain the characters links use as separators.
+  if (p.offers !== undefined && (!Array.isArray(p.offers) || p.offers.some(x => typeof x !== 'string' || /[~,&=#]/.test(x)))) errors.push(`program "${p.id}": offers must be a list of class names without commas or the symbols ~ & = #`);
+}
 for (const p of programs) for (const d of p.register?.dates || []) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(d.date || '') || !d.label) errors.push(`program "${p.id}": each register.dates entry needs a date (YYYY-MM-DD) and a label`);
 }
@@ -240,13 +245,14 @@ function card(p, school) {
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
   const flag = [p.note, l.note].filter(Boolean).join(' ');
   const fix = correctionHref(`Correction: ${p.name} (${school.shortName})`);
-  return `<article class="prog" id="${esc(p.id)}" data-rel="${l.relation}" data-grades="${g === null ? '*' : g.join(' ')}">
-  <div class="top"><span class="pill ${l.relation}">${esc(rel.pill.replace('{s}', school.shortName))}</span><h3>${esc(p.name)}</h3><p class="what">${esc(p.what)}</p></div>
+  const haystack = [p.name, p.what, ...(p.offers || []), ...(p.keywords || []), rel.pill.replace('{s}', school.shortName)].join(' ').toLowerCase().replace(/martial arts/g, 'martial-arts');   // so a search for "art" doesn't pull in martial arts
+  return `<article class="prog" id="${esc(p.id)}" data-rel="${l.relation}" data-grades="${g === null ? '*' : g.join(' ')}" data-search="${esc(haystack)}">
+  <div class="top"><span class="pill ${l.relation}">${esc(rel.pill.replace('{s}', school.shortName))}</span><h3>${esc(p.name)}</h3><p class="what">${esc(p.what)}</p>${p.offers?.length ? `<p class="offers"><b>Classes:</b> ${esc(p.offers.join(', '))}</p>` : ''}</div>
   <div class="strip" role="img" aria-label="Grades served: ${esc(gradeText)}">${cells}${p.gradeNote ? `<span class="strip-note">${esc(p.gradeNote)}</span>` : ''}</div>
   <dl>${rows}</dl>
   ${flag ? `<p class="flag">${esc(flag)}</p>` : ''}
   <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a><button type="button" class="btn needs-js" data-board-toggle aria-expanded="false">Add to board</button>
-    <div class="days" hidden><span class="which" role="group" aria-label="Which board"><button type="button" class="wb" data-board="now" aria-pressed="true">Current</button><button type="button" class="wb" data-board="next" aria-pressed="false">Upcoming</button></span><span class="hint">Which days?</span>${BOARD_DAYS.map(([k, n]) => `<button type="button" class="day" data-day="${k}" aria-pressed="false">${n}</button>`).join('')}<a href="${link('board/', 1)}">See your board</a></div></div>
+    <div class="days" hidden><span class="which" role="group" aria-label="Which board"><button type="button" class="wb" data-board="now" aria-pressed="true">Current</button><button type="button" class="wb" data-board="next" aria-pressed="false">Upcoming</button></span><span class="hint">Which days?</span>${BOARD_DAYS.map(([k, n]) => `<button type="button" class="day" data-day="${k}" aria-pressed="false">${n}</button>`).join('')}${p.offers?.length ? `<span class="cls-row"><span class="hint">Which class? Optional.</span>${p.offers.map(o => `<button type="button" class="cl" data-class="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join('')}</span>` : ''}<a href="${link('board/', 1)}">See your board</a></div></div>
   <div class="rev">${revHtml}</div>
   <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sources.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join('')}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
 </article>`;
@@ -283,6 +289,10 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
       <span>Reviewed <b>${longDate(s.lastReviewed)}</b></span>
     </div>`;
   const body = `<div data-school-page="${esc(s.id)}" style="display:contents">
+  <div class="finder needs-js-block">
+    <label for="prog-search">Looking for something specific?</label>
+    <input id="prog-search" type="search" placeholder="Try drums, art, homework, free…" autocomplete="off">
+  </div>
   <section class="picker" aria-label="Filter programs">
     <div class="rail" role="group" aria-label="Grade">${gradeBtns}</div>
     <div class="rail" role="group" aria-label="Type">${typeBtns}</div>
@@ -294,6 +304,7 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
     <span><i class="cell unk">?</i> grades not published, so the program shows under every grade</span>
     <span>The number under each grade counts programs at the school or with pickup.</span>
   </div>
+  <p class="ask" id="no-match" hidden>Nothing here matches that. Know a program that should be listed? <a href="${link('suggest/', 1)}">Tell us about it.</a></p>
   <div class="groups">
 ${groups}
   </div>
@@ -603,7 +614,7 @@ function boardPage() {
   const data = {
     schools: Object.fromEntries(schools.map(s => [s.id, { name: s.shortName, path: link(s.id + '/', 1) }])),
     programs: Object.fromEntries(programs.map(p => [p.id, {
-      name: p.name, hours: p.hours, pickupBy: p.pickupBy || '',
+      name: p.name, hours: p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [],
       schools: Object.fromEntries(Object.entries(p.schools).map(([sid, l]) => [sid, { rel: l.relation, where: l.address || p.address || '' }])),
     }])),
   };

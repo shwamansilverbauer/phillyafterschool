@@ -254,3 +254,17 @@ button.btn{cursor:pointer;font-family:inherit}
 .wb[aria-pressed="true"]{background:var(--ink);color:var(--bg);font-weight:700}
 .by-time{font-weight:700}
 #board-promote{align-self:flex-start}
+
+/* ---------- search on a school page, classes on cards and boards ---------- */
+.needs-js-block{display:none}
+.js .needs-js-block{display:flex}
+.finder{flex-direction:column;gap:8px;max-width:520px;margin-bottom:-16px}
+.finder label{font-weight:700}
+.finder input{font:inherit;font-size:1.05rem;width:100%;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.offers{font-size:.95rem}
+.cls-row{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.cl{font:inherit;font-size:.93rem;padding:7px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.cl[aria-pressed="true"]{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink);font-weight:700}
+.pick .note{font:inherit;font-size:.93rem;width:100%;padding:6px 8px;border:1.5px dashed var(--line);border-radius:8px;background:transparent;color:var(--ink)}
+.pick .note:focus{border-style:solid}
+.pick .cls{font-weight:700}

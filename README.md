@@ -53,6 +53,8 @@ Open `data/programs.json`, change the fields, set `lastVerified` to today's date
 Fields worth knowing:
 
 - `grades`: a range like `"K-5"` or `"PK-3"`, a single grade like `"8"`, or `null` when the provider doesn't publish grades.
+- `offers`: optional list of class names a family chooses between, like `["Piano", "Guitar"]`. Shown on the card, searchable, and offered as a tag when adding the program to a board. Names only: no days, times or prices.
+- `keywords`: optional list of plain words parents might search for (`"drums"`, `"karate"`, `"homework"`). Never shown, only searched.
 - `pickupBy`: optional. The latest time a child can be collected, like `"6:00 pm"`. Shown on the card and on boards. Leave it out when the provider doesn't publish an end time.
 - `register.how`: `online` (needs `url`), `phone`, `contact`, `school` or `none`. `register.note` is shown next to it.
 - `register.nextTerm`: optional. When sign-ups open for the next term, semester or school year, in a sentence with dates. Leave it out when the provider doesn't say.
@@ -100,7 +102,9 @@ Set `gtmId` to load Google Tag Manager on every page. The site pushes these even
 `pas_filter` (filter_type, filter_value, school), `pas_outbound` (link_type of register or website,
 program_id, school), `pas_suggest_submit` (suggest_kind, school), `pas_support_click`, `pas_review_submit` (program_id,
 school, stars), `pas_board_add` (program_id, school, day) and `pas_board_share` (method).
-`pas_outbound` also fires with link_type `calendar` and `review`.
+`pas_outbound` also fires with link_type `calendar` and `review`. `pas_search` (search_term, results,
+school) fires when someone pauses typing in a school page's search box; searches with zero results
+show what parents want that isn't listed.
 
 ## Keeping it current
 
