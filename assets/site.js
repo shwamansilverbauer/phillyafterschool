@@ -8,6 +8,15 @@
     } catch (e) { return null; }
   }
 
+  // Events for Google Tag Manager. Harmless when GTM is not installed.
+  function track(data) { (window.dataLayer = window.dataLayer || []).push(data); }
+
+  // Suggest-a-program form
+  var form = document.querySelector('#suggest-form');
+  if (form) form.addEventListener('submit', function () {
+    track({ event: 'pas_suggest_submit', suggest_kind: form.kind.value, school: form.school.value });
+  });
+
   // ----- home page: find your school -----
   var find = document.querySelector('#find-school');
   if (find) {
@@ -28,7 +37,14 @@
   // ----- school page: grade and type filter -----
   var page = document.querySelector('[data-school-page]');
   if (!page) return;
+  var school = page.getAttribute('data-school-page');
   var grade = 'ALL', rel = 'ALL';
+  page.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[data-track]') : null;
+    if (!a) return;
+    var card = a.closest('.prog');
+    track({ event: 'pas_outbound', link_type: a.getAttribute('data-track'), program_id: card ? card.id : '', school: school });
+  });
   var groups = [].slice.call(page.querySelectorAll('.group'));
   var gbtns = [].slice.call(page.querySelectorAll('.gbtn'));
   var tbtns = [].slice.call(page.querySelectorAll('.tbtn'));
@@ -69,10 +85,10 @@
   }
 
   gbtns.forEach(function (b) {
-    b.addEventListener('click', function () { grade = b.getAttribute('data-g'); store('pas-grade', grade); apply(); });
+    b.addEventListener('click', function () { grade = b.getAttribute('data-g'); store('pas-grade', grade); apply(); track({ event: 'pas_filter', filter_type: 'grade', filter_value: grade, school: school }); });
   });
   tbtns.forEach(function (b) {
-    b.addEventListener('click', function () { rel = b.getAttribute('data-t'); apply(); });
+    b.addEventListener('click', function () { rel = b.getAttribute('data-t'); apply(); track({ event: 'pas_filter', filter_type: 'type', filter_value: rel, school: school }); });
   });
   clear.addEventListener('click', function () { grade = 'ALL'; rel = 'ALL'; store('pas-grade', 'ALL'); apply(); });
   apply();
