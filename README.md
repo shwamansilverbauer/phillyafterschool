@@ -146,8 +146,8 @@ A hidden field traps most spam bots.
 
 ## Analytics
 `analytics/gtm-import-ga4-clarity.json` imports into the GTM container (Admin > Import Container, "Merge"). It adds a Google tag,
-one GA4 event tag per event below, and Clarity. Replace the two placeholder IDs in the "GA4 Measurement ID" and
-"Clarity Project ID" variables before publishing.
+one GA4 event tag per event below, and Clarity. The GA4 and Clarity IDs live in the "GA4 Measurement ID" and
+"Clarity Project ID" variables.
 
 
 Set `gtmId` to load Google Tag Manager on every page. The site pushes these events to the data layer:

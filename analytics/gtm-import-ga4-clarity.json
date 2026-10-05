@@ -1,6 +1,6 @@
 {
   "exportFormatVersion": 2,
-  "exportTime": "2026-10-05 17:07:40",
+  "exportTime": "2026-10-05 17:13:37",
   "containerVersion": {
     "path": "accounts/0/containers/0/versions/0",
     "accountId": "0",
@@ -931,12 +931,12 @@
         "variableId": "1",
         "name": "GA4 Measurement ID",
         "type": "c",
-        "notes": "Placeholder. Replace with the real Measurement ID from GA4 > Admin > Data streams.",
+        "notes": "From GA4 > Admin > Data streams.",
         "parameter": [
           {
             "type": "TEMPLATE",
             "key": "value",
-            "value": "G-XXXXXXXXXX"
+            "value": "G-SMK7RGTH6E"
           }
         ],
         "parentFolderId": "1"
@@ -947,12 +947,12 @@
         "variableId": "2",
         "name": "Clarity Project ID",
         "type": "c",
-        "notes": "Placeholder. Replace with the project ID from Clarity > Settings > Overview.",
+        "notes": "From Clarity > Settings > Overview.",
         "parameter": [
           {
             "type": "TEMPLATE",
             "key": "value",
-            "value": "xxxxxxxxxx"
+            "value": "yt2hrr8yjn"
           }
         ],
         "parentFolderId": "1"
