@@ -93,9 +93,11 @@
     });
   }
 
-  // ----- the weekly board: kept in this browser, shared by link -----
+  // ----- weekly boards: a current one and an upcoming one, kept in this browser, shared by link -----
   var DAYS = [['mon', 'Monday', 'Mon'], ['tue', 'Tuesday', 'Tue'], ['wed', 'Wednesday', 'Wed'], ['thu', 'Thursday', 'Thu'], ['fri', 'Friday', 'Fri']];
-  var current = null;
+  var boards = null;
+  var storageOk = true;
+  try { window.localStorage.setItem('pas-test', '1'); window.localStorage.removeItem('pas-test'); } catch (e) { storageOk = false; }
   function emptyBoard() { return { name: '', days: { mon: [], tue: [], wed: [], thu: [], fri: [] } }; }
   function cleanBoard(b) {
     var out = emptyBoard();
@@ -108,18 +110,23 @@
     }
     return out;
   }
-  function loadBoard() {
-    if (current) return current;
-    var b = null;
-    try { b = JSON.parse(store('pas-board') || 'null'); } catch (e) { b = null; }
-    current = cleanBoard(b);
-    return current;
+  function parse(key) { try { return JSON.parse(store(key) || 'null'); } catch (e) { return null; } }
+  function loadBoards() {
+    if (boards) return boards;
+    var raw = parse('pas-boards');
+    if (!raw) raw = { active: 'now', now: parse('pas-board'), next: null };  // carry over a board made before there were two
+    boards = { active: raw.active === 'next' ? 'next' : 'now', now: cleanBoard(raw.now), next: cleanBoard(raw.next) };
+    return boards;
   }
-  function saveBoard(b) { current = b; store('pas-board', JSON.stringify(b)); updateCount(); }
-  function updateCount() {
-    var seen = {}, b = loadBoard();
+  function saveBoards() { store('pas-boards', JSON.stringify(boards)); updateCount(); }
+  function activeBoard() { var bs = loadBoards(); return bs[bs.active]; }
+  function countPicks(b) {
+    var seen = {};
     DAYS.forEach(function (day) { b.days[day[0]].forEach(function (k) { seen[k] = 1; }); });
-    var n = Object.keys(seen).length;
+    return Object.keys(seen).length;
+  }
+  function updateCount() {
+    var bs = loadBoards(), n = countPicks(bs.now) + countPicks(bs.next);
     all(document, '[data-board-count]').forEach(function (c) { c.textContent = n ? String(n) : ''; c.hidden = !n; });
   }
   updateCount();
@@ -127,31 +134,30 @@
   var boardPage = document.querySelector('[data-board-page]');
   if (boardPage) {
     var data = JSON.parse(document.getElementById('pas-data').textContent);
-    var week = boardPage.querySelector('#week');
-    var nameInput = boardPage.querySelector('#board-name');
-    var status = boardPage.querySelector('#board-status');
-    var tools = boardPage.querySelector('#board-tools');
-    var banner = boardPage.querySelector('#board-shared');
-    var emptyNote = boardPage.querySelector('#board-empty');
-    var linkBox = boardPage.querySelector('#board-link');
-    var title = boardPage.querySelector('#board-title');
+    var $ = function (id) { return boardPage.querySelector(id); };
+    var week = $('#week'), nameInput = $('#board-name'), status = $('#board-status'), tools = $('#board-tools');
+    var banner = $('#board-shared'), bannerText = $('#board-shared-text'), emptyNote = $('#board-empty'), emptyText = $('#board-empty-text');
+    var linkBox = $('#board-link'), title = $('#board-title'), tabs = $('#board-tabs'), promote = $('#board-promote'), emailLink = $('#board-email');
+    var WHICH = { now: 'current', next: 'upcoming' };
 
-    var encode = function (b) {
+    var encode = function (b, which) {
       var parts = [];
+      if (which === 'next') parts.push('b=next');
       if (b.name) parts.push('n=' + encodeURIComponent(b.name));
       DAYS.forEach(function (day) { if (b.days[day[0]].length) parts.push(day[0] + '=' + b.days[day[0]].join(',')); });
       return parts.join('&');
     };
     var decode = function (hash) {
-      var b = emptyBoard(), any = false;
+      var b = emptyBoard(), any = false, which = 'now';
       hash.replace(/^#/, '').split('&').forEach(function (p) {
         var i = p.indexOf('=');
         if (i < 0) return;
         var k = p.slice(0, i), v = p.slice(i + 1);
         if (k === 'n') { try { b.name = decodeURIComponent(v); } catch (e) { /* ignore */ } }
+        else if (k === 'b') { which = v === 'next' ? 'next' : 'now'; }
         else if (b.days[k]) { b.days[k] = v.split(','); any = true; }
       });
-      return any ? cleanBoard(b) : null;
+      return any ? { which: which, board: cleanBoard(b) } : null;
     };
     var shared = decode(location.hash);
     var lookup = function (key) {
@@ -161,16 +167,20 @@
     var pillText = function (k) {
       return k.link.rel === 'onsite' ? 'At ' + k.sch.name : k.link.rel === 'pickup' ? k.sch.name + ' pickup' : 'Near ' + k.sch.name;
     };
-    var shareUrl = function () { return location.href.split('#')[0] + '#' + encode(loadBoard()); };
-    var asText = function (b) {
-      var lines = [(b.name || 'After-school week') + ' (Philly After School)'];
+    var shareUrl = function () { var bs = loadBoards(); return location.href.split('#')[0] + '#' + encode(bs[bs.active], bs.active); };
+    var heading = function (b, which) { return (b.name || 'After-school week') + (which === 'next' ? ' (upcoming)' : ''); };
+    var asText = function (b, which) {
+      var lines = [heading(b, which) + ', from Philly After School'];
       DAYS.forEach(function (day) {
-        var picks = b.days[day[0]].map(lookup).filter(Boolean).map(function (k) { return k.prog.name + (k.link.where ? ' (' + k.link.where + ')' : ''); });
+        var picks = b.days[day[0]].map(lookup).filter(Boolean).map(function (k) {
+          return k.prog.name + (k.link.where ? ' (' + k.link.where + ')' : '') + (k.prog.pickupBy ? ', pick up by ' + k.prog.pickupBy : '');
+        });
         if (picks.length) lines.push(day[2] + ': ' + picks.join('; '));
       });
       return lines.join('\n');
     };
     var say = function (msg) { status.textContent = msg; };
+    var savedNote = function () { return storageOk ? 'Saved on this device.' : 'Your browser is blocking saved data, so this board will be gone when you close the page. Keep the link.'; };
     var copy = function (text, done) {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(function () { say(done); }, function () { linkBox.focus(); linkBox.select(); say('Copy it from the box below.'); });
@@ -178,12 +188,14 @@
     };
 
     var render = function () {
-      var b = shared || loadBoard();
+      var bs = loadBoards();
+      var which = shared ? shared.which : bs.active;
+      var b = shared ? shared.board : bs[which];
       var total = 0;
       week.textContent = '';
       DAYS.forEach(function (day) {
         var col = el('section', 'daycol');
-        col.appendChild(el('h2', null, day[1]));
+        col.appendChild(el('h3', null, day[1]));
         var list = el('ul'), n = 0;
         b.days[day[0]].forEach(function (key) {
           var k = lookup(key);
@@ -194,15 +206,16 @@
           var a = el('a', null, k.prog.name);
           a.href = k.sch.path + '#' + k.id;
           var strong = el('b'); strong.appendChild(a); li.appendChild(strong);
+          if (k.prog.pickupBy) li.appendChild(el('span', 'by-time', 'Pick up by ' + k.prog.pickupBy));
           if (k.link.where) li.appendChild(el('span', 'hint', k.link.where));
-          li.appendChild(el('span', 'hint', k.prog.hours));
+          if (!k.prog.pickupBy) li.appendChild(el('span', 'hint', k.prog.hours));
           if (!shared) {
             var rm = el('button', 'clear', 'Remove');
             rm.type = 'button';
             rm.addEventListener('click', function () {
-              var mine = loadBoard(), i = mine.days[day[0]].indexOf(key);
+              var mine = activeBoard(), i = mine.days[day[0]].indexOf(key);
               if (i > -1) mine.days[day[0]].splice(i, 1);
-              saveBoard(mine); say(''); render();
+              saveBoards(); say(savedNote()); render();
             });
             li.appendChild(rm);
           }
@@ -212,33 +225,63 @@
         week.appendChild(col);
       });
       banner.hidden = !shared;
+      tabs.hidden = !!shared;
       tools.hidden = !!shared || total === 0;
       emptyNote.hidden = !!shared || total > 0;
-      title.textContent = shared ? (b.name || 'A shared week') : (b.name || 'Your week');
-      if (!shared) { linkBox.value = shareUrl(); if (document.activeElement !== nameInput) nameInput.value = b.name; }
+      promote.hidden = !!shared || which !== 'next' || total === 0;
+      promote.textContent = 'The new term has started: make this my current board';
+      promote.removeAttribute('data-armed');
+      all(tabs, '.tab').forEach(function (t) { t.setAttribute('aria-pressed', String(t.getAttribute('data-board') === which)); });
+      if (shared) {
+        title.textContent = (b.name || 'A shared week') + (which === 'next' ? ' (upcoming)' : '');
+        bannerText.textContent = which === 'next' ? 'This is what they have planned for the upcoming term. It isn’t saved on your device yet.' : 'This is what they’re doing now. It isn’t saved on your device yet.';
+      } else {
+        title.textContent = b.name || (which === 'next' ? 'Your upcoming week' : 'Your current week');
+        emptyText.textContent = which === 'next'
+          ? 'Nothing planned for the upcoming term yet. On any program, choose “Add to board”, switch it to Upcoming, and pick the days.'
+          : 'Open a school’s page and choose “Add to board” on any program. Pick the days, and it shows up here.';
+        linkBox.value = shareUrl();
+        emailLink.href = 'mailto:?subject=' + encodeURIComponent(heading(b, which)) + '&body=' + encodeURIComponent(asText(b, which) + '\n\n' + shareUrl());
+        if (document.activeElement !== nameInput) nameInput.value = b.name;
+      }
     };
 
-    nameInput.addEventListener('input', function () { var b = loadBoard(); b.name = nameInput.value.slice(0, 40); saveBoard(b); render(); });
-    boardPage.querySelector('#board-copy-link').addEventListener('click', function () { copy(shareUrl(), 'Link copied. Paste it into a text or email.'); track({ event: 'pas_board_share', method: 'copy_link' }); });
-    boardPage.querySelector('#board-copy-text').addEventListener('click', function () { copy(asText(loadBoard()) + '\n' + shareUrl(), 'Copied as text, with the link.'); track({ event: 'pas_board_share', method: 'copy_text' }); });
-    var shareBtn = boardPage.querySelector('#board-share');
+    all(tabs, '.tab').forEach(function (t) {
+      t.addEventListener('click', function () { loadBoards().active = t.getAttribute('data-board'); saveBoards(); say(''); render(); });
+    });
+    nameInput.addEventListener('input', function () { activeBoard().name = nameInput.value.slice(0, 40); saveBoards(); say(savedNote()); render(); });
+    $('#board-copy-link').addEventListener('click', function () { copy(shareUrl(), 'Link copied. Paste it into a text or email.'); track({ event: 'pas_board_share', method: 'copy_link', board: WHICH[loadBoards().active] }); });
+    $('#board-copy-text').addEventListener('click', function () { var bs = loadBoards(); copy(asText(bs[bs.active], bs.active) + '\n' + shareUrl(), 'Copied as text, with the link.'); track({ event: 'pas_board_share', method: 'copy_text', board: WHICH[bs.active] }); });
+    emailLink.addEventListener('click', function () { track({ event: 'pas_board_share', method: 'email_self', board: WHICH[loadBoards().active] }); });
+    var shareBtn = $('#board-share');
     if (navigator.share) {
       shareBtn.hidden = false;
       shareBtn.addEventListener('click', function () {
-        var b = loadBoard();
-        navigator.share({ title: b.name || 'After-school week', text: asText(b), url: shareUrl() }).then(function () { track({ event: 'pas_board_share', method: 'share_sheet' }); }, function () { /* closed without sharing */ });
+        var bs = loadBoards(), b = bs[bs.active];
+        navigator.share({ title: heading(b, bs.active), text: asText(b, bs.active), url: shareUrl() }).then(function () { track({ event: 'pas_board_share', method: 'share_sheet', board: WHICH[bs.active] }); }, function () { /* closed without sharing */ });
       });
     }
-    boardPage.querySelector('#board-clear').addEventListener('click', function () { saveBoard(emptyBoard()); say('Board cleared.'); render(); });
+    $('#board-clear').addEventListener('click', function () { var bs = loadBoards(); bs[bs.active] = emptyBoard(); saveBoards(); say('Board cleared.'); render(); });
+    promote.addEventListener('click', function () {
+      if (!promote.getAttribute('data-armed')) {   // two taps, because it replaces the current board
+        promote.setAttribute('data-armed', '1');
+        promote.textContent = 'Tap again to replace your current board with this one';
+        return;
+      }
+      var bs = loadBoards();
+      bs.now = bs.next; bs.next = emptyBoard(); bs.active = 'now';
+      saveBoards(); say('Done. This is now your current board.'); render();
+    });
     var leaveShared = function (keep) {
-      if (keep) saveBoard(shared);
+      if (keep) { var bs = loadBoards(); bs[shared.which] = shared.board; bs.active = shared.which; saveBoards(); }
       shared = null;
       if (window.history && history.replaceState) history.replaceState(null, '', location.pathname + location.search);
       render();
     };
-    boardPage.querySelector('#board-adopt').addEventListener('click', function () { leaveShared(true); say('Saved as your board.'); });
-    boardPage.querySelector('#board-mine').addEventListener('click', function () { leaveShared(false); });
+    $('#board-adopt').addEventListener('click', function () { leaveShared(true); say('Saved as your board.'); });
+    $('#board-mine').addEventListener('click', function () { leaveShared(false); });
     render();
+    if (!shared && !storageOk) say(savedNote());
   }
 
   // ----- school page: grade and type filter, add-to-board -----
@@ -302,33 +345,43 @@
   var pressed = page.querySelector('.gbtn[aria-pressed="true"]');
   if (pressed && pressed.scrollIntoView && grade !== 'ALL') pressed.scrollIntoView({ block: 'nearest', inline: 'center' });
 
-  // Add to board: pick the days for a program.
+  // Add to board: pick the days for a program, on the current or the upcoming board.
+  var refreshers = [];
   all(page, '.prog').forEach(function (card) {
     var toggle = card.querySelector('[data-board-toggle]');
     var panel = card.querySelector('.days');
     if (!toggle || !panel) return;
     var key = card.id + '.' + school;
     var show = function () {
-      var b = loadBoard(), on = [];
+      var bs = loadBoards(), b = bs[bs.active], on = [];
       all(panel, '.day').forEach(function (btn) {
         var has = b.days[btn.getAttribute('data-day')].indexOf(key) > -1;
         btn.setAttribute('aria-pressed', String(has));
         if (has) on.push(btn.textContent);
       });
-      toggle.textContent = on.length ? 'On your board: ' + on.join(', ') : 'Add to board';
+      all(panel, '.wb').forEach(function (w) { w.setAttribute('aria-pressed', String(w.getAttribute('data-board') === bs.active)); });
+      toggle.textContent = on.length ? 'On your ' + (bs.active === 'next' ? 'upcoming' : 'current') + ' board: ' + on.join(', ') : 'Add to board';
       toggle.className = 'btn needs-js' + (on.length ? ' on' : '');
     };
+    refreshers.push(show);
     toggle.addEventListener('click', function () {
       panel.hidden = !panel.hidden;
       toggle.setAttribute('aria-expanded', String(!panel.hidden));
     });
     panel.addEventListener('click', function (e) {
-      var btn = e.target.closest ? e.target.closest('.day') : null;
-      if (!btn) return;
-      var day = btn.getAttribute('data-day'), b = loadBoard(), i = b.days[day].indexOf(key);
+      var target = e.target.closest ? e.target.closest('.day, .wb') : null;
+      if (!target) return;
+      var bs = loadBoards();
+      if (target.className.indexOf('wb') > -1) {
+        bs.active = target.getAttribute('data-board');
+        saveBoards();
+        refreshers.forEach(function (f) { f(); });
+        return;
+      }
+      var day = target.getAttribute('data-day'), b = bs[bs.active], i = b.days[day].indexOf(key);
       if (i > -1) b.days[day].splice(i, 1);
-      else { b.days[day].push(key); track({ event: 'pas_board_add', program_id: card.id, school: school, day: day }); }
-      saveBoard(b);
+      else { b.days[day].push(key); track({ event: 'pas_board_add', program_id: card.id, school: school, day: day, board: bs.active === 'next' ? 'upcoming' : 'current' }); }
+      saveBoards();
       show();
     });
     show();

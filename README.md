@@ -20,7 +20,7 @@ Fill in `site.config.json`:
 
 - `contactEmail`: where corrections go. Until it's set, the site says a contact address is coming.
 - `supportUrl`: where the Support button goes (currently a Venmo profile). If it's empty, the Support page says contributions are being set up.
-- `supportLabel` and `supportHandle`: the button text, and the handle shown under it for people who'd rather search in the app.
+- `supportLabel` and `supportHandle`: the button text on the "Buy me a coffee" page, and the handle shown under it for people who'd rather search in the app.
 - `siteUrl`: the domain you treat as the main one. Redirect the other domain to it at your host.
 - `builtBy`: the name, link and short bio shown in the footer, on the home page and on About.
 - `gtmId`: optional, e.g. `GTM-XXXXXXX`.
@@ -53,6 +53,7 @@ Open `data/programs.json`, change the fields, set `lastVerified` to today's date
 Fields worth knowing:
 
 - `grades`: a range like `"K-5"` or `"PK-3"`, a single grade like `"8"`, or `null` when the provider doesn't publish grades.
+- `pickupBy`: optional. The latest time a child can be collected, like `"6:00 pm"`. Shown on the card and on boards. Leave it out when the provider doesn't publish an end time.
 - `register.how`: `online` (needs `url`), `phone`, `contact`, `school` or `none`. `register.note` is shown next to it.
 - `register.nextTerm`: optional. When sign-ups open for the next term, semester or school year, in a sentence with dates. Leave it out when the provider doesn't say.
 - `register.dates`: optional list of `{ "date": "YYYY-MM-DD", "label": "..." }` for registration openings and deadlines. Each upcoming one gets "Add to calendar" links on the card; past dates drop off by themselves.
@@ -81,9 +82,10 @@ To remove a review, delete its entry. Cards show the average and the reviews for
 
 ## The weekly board
 
-`/board/` lets a visitor collect programs by weekday with "Add to board" on any card. The board
-is stored in the visitor's own browser, and the share link carries the whole week in the address,
-so nothing about it is stored on the server.
+`/board/` lets a visitor collect programs by weekday with "Add to board" on any card. There are two
+boards, Current and Upcoming, so a family can share what they do now and plan the next term.
+Boards are stored in the visitor's own browser, and the share link carries the whole week in the
+address, so nothing about them is stored on the server. There are no accounts.
 
 ## The suggestion form
 

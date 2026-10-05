@@ -119,7 +119,7 @@ function street(animate) {
 function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false }) {
   const canonical = cfg.siteUrl + '/' + pathName;
   const fullTitle = pathName === '' ? (PREVIEW ? cfg.siteName : `${cfg.siteName}: ${cfg.tagline}`) : `${title} | ${cfg.siteName}`;
-  const nav = [['', 'Schools'], ['board/', 'My board'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Support']]
+  const nav = [['', 'Schools'], ['board/', 'My board'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Buy me a coffee']]
     .map(([to, label]) => `<a href="${link(to, depth)}"${current === to ? ' aria-current="page"' : ''}>${label}${to === 'board/' ? '<span class="count" data-board-count hidden></span>' : ''}</a>`).join('');
   const fix = correctionHref('Correction for Philly After School');
   const head = `${fragment ? '' : gtmHead + '\n'}<title>${esc(fullTitle)}</title>
@@ -151,7 +151,7 @@ ${body}
 <footer class="foot"><div class="in">
   <p>Listings come from each provider’s public pages and are not endorsements. Prices, hours and pickup routes change, so confirm with the provider before you enroll.</p>
   <p>${esc(cfg.siteName)} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.</p>
-  <p>Know a program that’s missing, or see something out of date? <a href="${link('suggest/', depth)}">Tell us</a>. <a href="${link('about/', depth)}">About this site</a>. <a href="${link('support/', depth)}">Support it</a>.</p>
+  <p>Know a program that’s missing, or see something out of date? <a href="${link('suggest/', depth)}">Tell us</a>. <a href="${link('about/', depth)}">About this site</a>. <a href="${link('support/', depth)}">Buy me a coffee</a>.</p>
   ${cfg.builtBy ? `<p>Built by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
 </div></footer>
 <script src="${link('assets/site.js', depth)}${JS_V}"></script>
@@ -236,7 +236,7 @@ function card(p, school) {
       <ul>${revs.map(x => `<li><span class="stars" role="img" aria-label="${x.stars} out of 5 stars">${stars(x.stars)}</span><p>${esc(x.comment)}</p><span class="by">${esc(x.name)}, ${esc(schoolShort(x.school))} parent, ${monthYear(x.date)}</span></li>`).join('')}</ul></details>
     <a href="${reviewUrl}" data-track="review">Write a review</a>`
     : `<span>No reviews yet.</span> <a href="${reviewUrl}" data-track="review">Write the first one</a>`;
-  const rows = [['Where', esc(where)], ['Hours', esc(p.hours)], ['Cost', esc(p.cost)], ['Register', regText], ['Next term', esc(r.nextTerm || '') + dateHtml], ['Contact', r.how === 'school' ? '' : contact]]
+  const rows = [['Where', esc(where)], ['Hours', esc(p.hours)], ['Pick up by', esc(p.pickupBy || '')], ['Cost', esc(p.cost)], ['Register', regText], ['Next term', esc(r.nextTerm || '') + dateHtml], ['Contact', r.how === 'school' ? '' : contact]]
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
   const flag = [p.note, l.note].filter(Boolean).join(' ');
   const fix = correctionHref(`Correction: ${p.name} (${school.shortName})`);
@@ -246,7 +246,7 @@ function card(p, school) {
   <dl>${rows}</dl>
   ${flag ? `<p class="flag">${esc(flag)}</p>` : ''}
   <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a><button type="button" class="btn needs-js" data-board-toggle aria-expanded="false">Add to board</button>
-    <div class="days" hidden><span class="hint">Which days?</span>${BOARD_DAYS.map(([k, n]) => `<button type="button" class="day" data-day="${k}" aria-pressed="false">${n}</button>`).join('')}<a href="${link('board/', 1)}">See your board</a></div></div>
+    <div class="days" hidden><span class="which" role="group" aria-label="Which board"><button type="button" class="wb" data-board="now" aria-pressed="true">Current</button><button type="button" class="wb" data-board="next" aria-pressed="false">Upcoming</button></span><span class="hint">Which days?</span>${BOARD_DAYS.map(([k, n]) => `<button type="button" class="day" data-day="${k}" aria-pressed="false">${n}</button>`).join('')}<a href="${link('board/', 1)}">See your board</a></div></div>
   <div class="rev">${revHtml}</div>
   <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sources.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join('')}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
 </article>`;
@@ -359,7 +359,7 @@ ${rows}
 </section>
 <section class="section">
   <h2>Checked by hand, dated, and sourced</h2>
-  <p>Every listing links to where the information came from and shows the day it was last checked. Nobody pays to be listed. <a href="${link('support/', 0)}">Help keep it going.</a></p>
+  <p>Every listing links to where the information came from and shows the day it was last checked. Nobody pays to be listed. If it saved you an evening of open tabs, <a href="${link('support/', 0)}">buy me a coffee.</a></p>
 </section>
 ${cfg.builtBy ? `<section class="section" id="who">
   <h2>Who built this</h2>
@@ -372,22 +372,23 @@ ${cfg.builtBy ? `<section class="section" id="who">
 }
 
 function supportPage() {
+  const who = cfg.builtBy ? cfg.builtBy.name.split(' ')[0] : '';
   const give = cfg.supportUrl
-    ? `<p class="actions"><a class="btn primary big" data-track="support" href="${esc(cfg.supportUrl)}" target="_blank" rel="noopener">${esc(cfg.supportLabel || 'Chip in')}</a></p>
+    ? `<p class="actions"><a class="btn primary big" data-track="support" href="${esc(cfg.supportUrl)}" target="_blank" rel="noopener">${esc(cfg.supportLabel || 'Buy me a coffee')}</a></p>
   ${cfg.supportHandle ? `<p class="hint">Or search for <b>${esc(cfg.supportHandle)}</b> in the Venmo app.</p>` : ''}`
-    : `<div class="panel"><h3>Online contributions are being set up</h3><p>Check back soon.</p></div>`;
-  const hero = `    <h1>Help keep this current</h1>
-    <p class="lede">Programs change their prices, hours and pickup routes every year. Each listing here is checked against the provider’s own page, and that takes time.</p>`;
+    : `<div class="panel"><h3>The coffee link is being set up</h3><p>Check back soon.</p></div>`;
+  const hero = `    <h1>Buy me a coffee</h1>
+    <p class="lede">${who ? `I’m ${esc(who)}. ` : ''}I built this because sorting out after-school care for my own kid was chaos. If it saved you an evening of open tabs, a coffee is a nice way to say so.</p>`;
   const body = `<div class="prose">
-  <p>Contributions pay for hosting and for the hours spent re-checking listings and adding schools.</p>
   ${give}
   <ul>
-    <li>Listings are free for every provider. Nobody pays to be listed or to be listed higher.</li>
-    ${cfg.supportTaxDeductible ? '' : `<li>${esc(cfg.siteName)} is not a registered charity, so contributions are not tax-deductible.</li>`}
-    <li>Money isn’t the only way to help. A correction from a parent or provider is worth just as much. <a href="${link('suggest/', 1)}">Send one here.</a></li>
+    <li>It goes to me, the person who built and updates this, for the hours spent checking listings and adding schools.</li>
+    <li>It’s a thank-you, not a charitable donation, so it isn’t tax-deductible.</li>
+    <li>It buys nothing on the site. Listings are free for every provider, and nobody pays to be listed or to be listed higher.</li>
+    <li>Not a coffee person? A correction or a missing program helps just as much. <a href="${link('suggest/', 1)}">Send one here.</a></li>
   </ul>
 </div>`;
-  return layout({ title: 'Support this site', description: `Help keep ${cfg.siteName} accurate and growing.`, pathName: 'support/', depth: 1, current: 'support/', hero, body, showStreet: 'parked' });
+  return layout({ title: 'Buy me a coffee', description: `Say thanks to the person who built and maintains ${cfg.siteName}.`, pathName: 'support/', depth: 1, current: 'support/', hero, body, showStreet: 'parked' });
 }
 
 function aboutPage() {
@@ -602,28 +603,32 @@ function boardPage() {
   const data = {
     schools: Object.fromEntries(schools.map(s => [s.id, { name: s.shortName, path: link(s.id + '/', 1) }])),
     programs: Object.fromEntries(programs.map(p => [p.id, {
-      name: p.name, hours: p.hours,
+      name: p.name, hours: p.hours, pickupBy: p.pickupBy || '',
       schools: Object.fromEntries(Object.entries(p.schools).map(([sid, l]) => [sid, { rel: l.relation, where: l.address || p.address || '' }])),
     }])),
   };
   const schoolLinks = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<a class="btn" href="${link(s.id + '/', 1)}">${esc(s.shortName)}</a>`).join('');
   const hero = `    <h1>Build your week</h1>
-    <p class="lede">Monday might be martial arts and Thursday the rec center. Add programs to your board from any school’s page, then send the week to your partner, a sitter, or the group chat.</p>`;
+    <p class="lede">Monday might be martial arts and Thursday the rec center. Keep one board for what you’re doing now and one for what’s coming, then send either to your partner, a sitter, or the group chat.</p>`;
   const body = `<div data-board-page style="display:contents">
   <noscript><p class="ask">The board needs JavaScript turned on.</p></noscript>
   <div class="panel" id="board-shared" hidden>
     <h2>Someone shared this week with you</h2>
-    <p>It isn’t saved on your device yet.</p>
-    <div class="actions"><button type="button" class="btn primary" id="board-adopt">Make it my board</button><button type="button" class="btn" id="board-mine">See my own board</button></div>
-  </div>
-  <div class="panel" id="board-empty" hidden>
-    <h2>Your board is empty</h2>
-    <p>Open a school’s page and choose “Add to board” on any program. Pick the days, and it shows up here.</p>
-    <div class="actions">${schoolLinks}</div>
+    <p id="board-shared-text">It isn’t saved on your device yet.</p>
+    <div class="actions"><button type="button" class="btn primary" id="board-adopt">Make it my board</button><button type="button" class="btn" id="board-mine">See my own boards</button></div>
   </div>
   <section class="section">
-    <h2 id="board-title">Your week</h2>
+    <div class="tabs" id="board-tabs" role="group" aria-label="Which board">
+      <button type="button" class="tab" data-board="now" aria-pressed="true">Current</button>
+      <button type="button" class="tab" data-board="next" aria-pressed="false">Upcoming</button>
+    </div>
+    <h2 id="board-title">Your current week</h2>
+    <div class="panel" id="board-empty" hidden>
+      <p id="board-empty-text">Open a school’s page and choose “Add to board” on any program. Pick the days, and it shows up here.</p>
+      <div class="actions">${schoolLinks}</div>
+    </div>
     <div class="week" id="week"></div>
+    <button type="button" class="clear" id="board-promote" hidden>The new term has started: make this my current board</button>
   </section>
   <section class="board-tools" id="board-tools" hidden>
     <div class="field">
@@ -634,13 +639,14 @@ function boardPage() {
       <button type="button" class="btn primary" id="board-share" hidden>Share</button>
       <button type="button" class="btn" id="board-copy-link">Copy link</button>
       <button type="button" class="btn" id="board-copy-text">Copy as text</button>
-      <button type="button" class="clear" id="board-clear">Clear the board</button>
+      <a class="btn" id="board-email" href="mailto:">Email it to myself</a>
+      <button type="button" class="clear" id="board-clear">Clear this board</button>
     </div>
     <p class="hint" id="board-status" aria-live="polite"></p>
     <div class="field">
       <label for="board-link">Link to this week</label>
       <input id="board-link" type="text" readonly>
-      <span class="hint">Anyone with the link sees the same week. Your board is saved only in this browser, so the link is also how you move it to another device.</span>
+      <span class="hint">Your boards save automatically on this device. The link is the copy you can keep anywhere: anyone who opens it sees this week, and it’s how you move a board to another phone or computer.</span>
     </div>
   </section>
   <script type="application/json" id="pas-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
