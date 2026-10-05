@@ -297,7 +297,7 @@ ${rows}
 </section>
 ${cfg.builtBy ? `<section class="section" id="who">
   <h2>Who built this</h2>
-  <p>${esc(cfg.builtBy.bio)} <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.url.replace(/^https?:\/\//, ''))}</a></p>
+  <p>${esc(cfg.builtBy.bio)}</p>
 </section>` : ''}`;
   return layout({
     title: cfg.siteName, pathName: '', depth: 0, current: '', hero, body, fragment: PREVIEW, showStreet: 'go',
@@ -344,7 +344,7 @@ function aboutPage() {
   <p>Parents and providers know these programs best. If something is wrong or missing, or you want your school added, <a href="${link('suggest/', 1)}">use the form</a>. ${mail}.</p>
   <p>It helps to include the program, the school, what changed, and a link to where it’s published.</p>
   ${cfg.builtBy ? `<h2 id="who">Who built this</h2>
-  <p>${esc(cfg.builtBy.bio)} <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.url.replace(/^https?:\/\//, ''))}</a></p>` : ''}
+  <p>${esc(cfg.builtBy.bio)}</p>` : ''}
 </div>`;
   return layout({ title: 'About', description: `How ${cfg.siteName} gathers and checks after-school listings, and how to send a correction.`, pathName: 'about/', depth: 1, current: 'about/', hero, body, showStreet: 'parked' });
 }
@@ -353,70 +353,76 @@ function suggestPage() {
   const opts = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<option>${esc(s.shortName)}</option>`).join('');
   const hero = `    <h1>Know one we missed?</h1>
     <p class="lede">Plenty of good programs are off the radar: a church basement, a dance studio that walks kids over, a neighbor who runs a homework club. Tell us and we’ll check it and add it.</p>`;
-  const body = `<form class="form" method="post" action="send.php" id="suggest-form">
-  <div class="field">
-    <label for="f-kind">What are you sending?</label>
-    <select id="f-kind" name="kind">
-      <option>A program that’s missing</option>
-      <option>A correction to a listing</option>
-      <option>A school to add</option>
-    </select>
-  </div>
-  <div class="field">
-    <label for="f-school">Which school?</label>
-    <select id="f-school" name="school">
-      ${opts}
-      <option>Another school</option>
-    </select>
-    <span class="hint">If it’s another school, name it in the details.</span>
-  </div>
-  <div class="field">
-    <label for="f-program">Program name</label>
-    <input id="f-program" name="program" type="text" maxlength="150" autocomplete="off">
-  </div>
-  <div class="field">
-    <label for="f-website">Website or link, if there is one</label>
-    <input id="f-website" name="website" type="text" maxlength="300" inputmode="url" autocomplete="off" placeholder="https://">
-  </div>
-  <div class="field">
-    <label for="f-pickup">Does it pick up from the school?</label>
-    <select id="f-pickup" name="pickup">
-      <option>Not sure</option>
-      <option>Yes, staff pick up</option>
-      <option>It runs at the school</option>
-      <option>No, families get there themselves</option>
-    </select>
-  </div>
-  <div class="field">
-    <label for="f-details">Details</label>
-    <span class="hint">Grades, days and hours, cost, who to contact. Whatever you know.</span>
-    <textarea id="f-details" name="details" maxlength="4000" required></textarea>
-  </div>
-  <div class="field">
-    <label for="f-role">How do you know it?</label>
-    <select id="f-role" name="role">
-      <option>I’m a parent or caregiver</option>
-      <option>I run or work at the program</option>
-      <option>I work at the school</option>
-      <option>Other</option>
-    </select>
-  </div>
-  <div class="field">
-    <label for="f-name">Your name (optional)</label>
-    <input id="f-name" name="name" type="text" maxlength="100" autocomplete="name">
-  </div>
-  <div class="field">
-    <label for="f-email">Your email (optional)</label>
-    <input id="f-email" name="email" type="email" maxlength="150" autocomplete="email">
-    <span class="hint">Only used to ask you a follow-up question about this program.</span>
-  </div>
-  <div class="hp" aria-hidden="true">
-    <label for="f-company">Leave this blank</label>
-    <input id="f-company" name="company" type="text" tabindex="-1" autocomplete="off">
-  </div>
-  <div><button class="btn primary big" type="submit">Send it</button></div>
-  <p class="hint">Nothing is published automatically. Every suggestion is checked against the program’s own information first.</p>
-</form>`;
+  const chips = (name, legend, values) => `<fieldset class="field chips">
+      <legend>${legend}</legend>
+      <div class="chip-row">${values.map((v, i) => `<label class="chip"><input type="radio" name="${name}" value="${esc(v)}"${i === 0 ? ' checked' : ''}><span>${esc(v)}</span></label>`).join('')}</div>
+    </fieldset>`;
+  const body = `<div class="suggest">
+  <form class="form panel" method="post" action="send.php" id="suggest-form">
+    ${chips('kind', 'What are you sending?', ['A program that’s missing', 'A correction to a listing', 'A school to add'])}
+    <div class="pair">
+      <div class="field">
+        <label for="f-school">Which school?</label>
+        <select id="f-school" name="school">
+          ${opts}
+          <option>Another school</option>
+        </select>
+        <span class="hint">For another school, name it in the details.</span>
+      </div>
+      <div class="field">
+        <label for="f-program">Program name</label>
+        <input id="f-program" name="program" type="text" maxlength="150" autocomplete="off">
+      </div>
+    </div>
+    <div class="field">
+      <label for="f-website">Website or link, if there is one</label>
+      <input id="f-website" name="website" type="text" maxlength="300" inputmode="url" autocomplete="off" placeholder="https://">
+    </div>
+    ${chips('pickup', 'Does it pick up from the school?', ['Not sure', 'Yes, staff pick up', 'It runs at the school', 'No pickup'])}
+    <div class="field">
+      <label for="f-details">Details</label>
+      <span class="hint">Grades, days and hours, cost, who to contact. Whatever you know.</span>
+      <textarea id="f-details" name="details" maxlength="4000" required></textarea>
+    </div>
+    <div class="about-you">
+      <h2>About you</h2>
+      <p class="hint">All optional. Your email is only used to ask a follow-up question about this program.</p>
+      <div class="field">
+        <label for="f-role">How do you know it?</label>
+        <select id="f-role" name="role">
+          <option>I’m a parent or caregiver</option>
+          <option>I run or work at the program</option>
+          <option>I work at the school</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="pair">
+        <div class="field">
+          <label for="f-name">Your name</label>
+          <input id="f-name" name="name" type="text" maxlength="100" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="f-email">Your email</label>
+          <input id="f-email" name="email" type="email" maxlength="150" autocomplete="email">
+        </div>
+      </div>
+    </div>
+    <div class="hp" aria-hidden="true">
+      <label for="f-company">Leave this blank</label>
+      <input id="f-company" name="company" type="text" tabindex="-1" autocomplete="off">
+    </div>
+    <div><button class="btn primary big" type="submit">Send it</button></div>
+  </form>
+  <aside class="next">
+    <h2>What happens next</h2>
+    <ol>
+      <li>Your note lands in a real inbox. A person reads it.</li>
+      <li>We check it against the program’s own information.</li>
+      <li>If it holds up, it goes on the school’s page with its source and the date.</li>
+    </ol>
+    <p class="hint">Nothing is published automatically, and nobody pays to be listed.</p>
+  </aside>
+</div>`;
   return layout({ title: 'Suggest a program', description: `Tell ${cfg.siteName} about an after-school program that’s missing, a correction, or a school to add.`, pathName: 'suggest/', depth: 1, current: 'suggest/', hero, body, showStreet: 'parked' });
 }
 
