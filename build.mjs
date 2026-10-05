@@ -147,7 +147,10 @@ function street(animate) {
 
 function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false }) {
   const canonical = cfg.siteUrl + '/' + pathName;
-  const fullTitle = pathName === '' ? (PREVIEW ? cfg.siteName : `${cfg.siteName}: ${cfg.tagline}`) : `${title} | ${cfg.siteName}`;
+  // Search results show roughly 60 characters of a title and 155 of a description. The site name is added
+  // to a title only when it fits; a long description is cut at a word.
+  const fullTitle = pathName === '' ? (PREVIEW ? cfg.siteName : `${cfg.siteName}: ${cfg.tagline}`) : `${title} | ${cfg.siteName}`.length <= 65 ? `${title} | ${cfg.siteName}` : title;
+  if (description.length > 158) description = description.slice(0, 157).replace(/\s+\S*$/, '').replace(/[,;:.]$/, '') + '…';
   const nav = [['', 'Schools'], ['board/', 'My child’s roster'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Buy me a coffee']]
     .map(([to, label]) => `<a href="${link(to, depth)}"${current === to ? ' aria-current="page"' : ''}>${label}${to === 'board/' ? '<span class="count" data-board-count hidden></span>' : ''}</a>`).join('');
   const footSchools = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).slice(0, 8);   // past eight, "All schools" covers the rest
@@ -158,6 +161,15 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${esc(canonical)}">
+<meta property="og:site_name" content="${esc(cfg.siteName)}">
+<meta property="og:image" content="${cfg.siteUrl}/share.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${esc(cfg.siteName)}: a row of Philadelphia rowhouses, a school and a yellow school bus">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="${link('favicon.svg', depth)}" type="image/svg+xml">
+<link rel="icon" href="${link('favicon.png', depth)}" type="image/png" sizes="48x48">
+<link rel="apple-touch-icon" href="${link('apple-touch-icon.png', depth)}">
 <meta name="theme-color" content="#0F4D90">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -396,6 +408,14 @@ const programAddress = p => {
   return served.length === 1 && p.schools[served[0].id].relation === 'onsite' ? `${served[0].name}, ${served[0].address.split(',')[0]}` : '';
 };
 
+// The site name carries "after school" into the title when it fits. When it doesn't, the title says it itself,
+// unless the program's own name already does or the result would run long.
+const programTitle = p => {
+  const n = fullName(p), plain = `${n}: hours, cost and pickup`, said = `${n} after school: hours, cost, pickup`;
+  if (`${plain} | ${cfg.siteName}`.length <= 65) return plain;
+  return said.length <= 65 && !/after[- ]?school|aftercare/i.test(n) ? said : plain;
+};
+
 function programPage(p) {
   const D = 2;
   const served = servedBy(p);
@@ -480,7 +500,7 @@ ${schoolRows}
   };
   const crumbs = { '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Programs', cfg.siteUrl + '/programs/'], [fullName(p), url]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) };
   return layout({
-    title: `${fullName(p)}: hours, cost and pickup`,
+    title: programTitle(p),
     description: `${fullName(p)}: ${p.what}. ${servedSummary(p)}. Grades, hours, cost, registration and parent reviews.`,
     pathName: programPath(p), depth: D, current: null, hero, body,
     jsonLd: { '@context': 'https://schema.org', '@graph': [thing, crumbs] },
@@ -532,7 +552,7 @@ function schoolPage(s) {
 ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n')}
   </div>
 </section>`).join('\n');
-  const hero = `    <p class="where">${esc(s.name)}, ${esc(s.address.split(',')[0])}</p>
+  const hero = `    <p class="where">After-school programs and aftercare for ${esc(s.name)}, ${esc(s.address.split(',')[0])}</p>
     <h1>${T(`It’s {time} at {school}. Now what?`, { time: clock(s), school: s.shortName })}</h1>
     <p class="lede">${T(`Every after-school program we could find that runs at the school, picks children up from {school}, or sits within a short walk. Pick a grade to see what your child can join.`, { school: s.shortName })}</p>
     <div class="facts">
@@ -583,8 +603,12 @@ ${groups}
   </section>
 </div>`;
   return layout({
-    title: `After-school programs for ${s.shortName} families`,
-    description: `${list.length} after-school options for ${s.name} in Philadelphia: programs at the school, programs that pick up from ${s.shortName}, and ones nearby. Filter by grade, with hours, cost and where to register.`,
+    title: `${s.shortName} after-school programs and aftercare`,
+    description: `Aftercare and after-school programs for ${s.name}, Philadelphia: ${list.length} options at the school, with pickup, or nearby. Hours, cost and how to register.`,
+    jsonLd: { '@context': 'https://schema.org', '@graph': [
+      { '@type': 'ItemList', name: `After-school programs for ${s.name}`, itemListElement: list.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
+      { '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], [s.name, `${cfg.siteUrl}/${s.id}/`]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) },
+    ] },
     pathName: s.id + '/', depth: 1, current: null, hero, body,
   });
 }
@@ -624,7 +648,12 @@ ${cfg.builtBy ? `<section class="section" id="who">
 </section>` : ''}`;
   return layout({
     title: cfg.siteName, pathName: '', depth: 0, current: '', hero, body, fragment: PREVIEW, showStreet: 'go', roomy: true,
-    description: 'A school-by-school directory of after-school programs in Philadelphia: what runs at the school, who picks up at dismissal, hours, cost and where to register.',
+    description: 'After-school programs and aftercare in Philadelphia, school by school: what runs at the school, who picks up at dismissal, hours, cost and how to register.',
+    jsonLd: { '@context': 'https://schema.org', '@graph': [
+      { '@type': 'WebSite', '@id': cfg.siteUrl + '/#website', name: cfg.siteName, url: cfg.siteUrl + '/', description: cfg.tagline, publisher: { '@id': cfg.siteUrl + '/#org' } },
+      { '@type': 'Organization', '@id': cfg.siteUrl + '/#org', name: cfg.siteName, url: cfg.siteUrl + '/', logo: cfg.siteUrl + '/icon-512.png', ...(cfg.contactEmail ? { email: cfg.contactEmail } : {}), ...(cfg.builtBy ? { founder: { '@type': 'Person', name: cfg.builtBy.name, url: cfg.builtBy.url } } : {}) },
+      { '@type': 'ItemList', name: 'Schools', itemListElement: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map((x, i) => ({ '@type': 'ListItem', position: i + 1, name: x.name, url: `${cfg.siteUrl}/${x.id}/` })) },
+    ] },
   });
 }
 
@@ -839,7 +868,7 @@ function suggestPage() {
 function thanksPage() {
   const hero = `    <h1>${T(`Got it. Thank you.`)}</h1>
     <p class="lede">${T(`We’ll check it against the program’s own information and add it if it holds up.`)} <a href="${link('', 2)}">${T(`Back to the schools.`)}</a></p>`;
-  return layout({ title: 'Thank you', description: 'Your suggestion was sent.', pathName: 'suggest/thanks/', depth: 2, current: null, hero, body: '', showStreet: 'parked' });
+  return layout({ title: 'Thank you', description: 'Your suggestion was sent.', pathName: 'suggest/thanks/', depth: 2, current: null, hero, body: '', showStreet: 'parked', noindex: true });
 }
 
 // The form handler. Runs on the web host (PHP), emails the suggestion to the contact address,
@@ -1052,7 +1081,7 @@ function reviewPage() {
 function reviewThanksPage() {
   const hero = `    <h1>${T(`Thank you. It’s in.`)}</h1>
     <p class="lede">${T(`Your review will appear once it’s been read.`)} <a href="${link('', 2)}">${T(`Back to the schools.`)}</a></p>`;
-  return layout({ title: 'Thank you', description: 'Your review was sent.', pathName: 'review/thanks/', depth: 2, current: null, hero, body: '', showStreet: 'parked' });
+  return layout({ title: 'Thanks for your review', description: 'Your review was sent.', pathName: 'review/thanks/', depth: 2, current: null, hero, body: '', showStreet: 'parked', noindex: true });
 }
 
 // Review form handler. Emails the review with a ready-to-paste entry for data/reviews.json.
@@ -1392,7 +1421,7 @@ out(true, 'Sent.', 200);
 function notFoundPage() {
   const hero = `    <h1>${T(`This jawn isn’t here`)}</h1>
     <p class="lede">${T(`The link may be old, or the page moved.`)} <a href="/">${T(`Start from the list of schools.`)}</a></p>`;
-  return layout({ title: 'Page not found', description: 'Page not found.', pathName: '404.html', depth: -1, current: null, hero, body: '', showStreet: 'parked' });
+  return layout({ title: 'Page not found', description: 'Page not found.', pathName: '404.html', depth: -1, current: null, hero, body: '', showStreet: 'parked', noindex: true });
 }
 
 // ---------- write ----------
@@ -1416,6 +1445,7 @@ const notFound = notFoundPage();   // always rendered, so its copy is known to t
 write('assets/site.css', fs.readFileSync(path.join(ROOT, 'src/site.css')));
 write('assets/site.js', fs.readFileSync(path.join(ROOT, 'src/site.js')));
 write('assets/edit.js', fs.readFileSync(path.join(ROOT, 'src/edit.js')));
+for (const f of fs.readdirSync(path.join(ROOT, 'src/static'))) write(f, fs.readFileSync(path.join(ROOT, 'src/static', f)));   // icons and the share image, served from the top level
 if (!PREVIEW) {
   write('404.html', notFound);
   if (cfg.contactEmail) write('suggest/send.php', sendPhp());

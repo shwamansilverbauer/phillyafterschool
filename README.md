@@ -14,6 +14,8 @@ programs with a grade filter. Everything is generated from two data files.
 | `site.config.json` | Site name, domain, contact email, support link, optional GTM ID. |
 | `build.mjs` | Builds the site into `dist/`. Needs Node 18+, no installs. |
 | `src/` | The stylesheet, the script for search, filtering and boards, and the edit-mode script. |
+| `src/static/` | The site icon, the touch icon, the logo and the image shown when a link is shared. Copied to the top level as they are. |
+| `analytics/` | A Google Tag Manager import with GA4 and Microsoft Clarity set up for the site's events. Not published with the site. |
 | `dist/` | The finished site, created by the build. Not stored in `main`; the `live` branch holds it. |
 
 ## Before launch
@@ -143,6 +145,10 @@ The page address and the analytics event names still say "board" so older links 
 A hidden field traps most spam bots.
 
 ## Analytics
+`analytics/gtm-import-ga4-clarity.json` imports into the GTM container (Admin > Import Container, "Merge"). It adds a Google tag,
+one GA4 event tag per event below, and Clarity. Replace the two placeholder IDs in the "GA4 Measurement ID" and
+"Clarity Project ID" variables before publishing.
+
 
 Set `gtmId` to load Google Tag Manager on every page. The site pushes these events to the data layer:
 `pas_filter` (filter_type, filter_value, school), `pas_outbound` (link_type of register or website,
