@@ -11,14 +11,36 @@
     "phone": "",
     "email": "info@imaginethatphilly.org",
     "website": "https://imaginethatphilly.org/",
-    "register": { "how": "online", "url": "https://imaginethatphilly.org/programs", "label": "Send an inquiry", "note": "Fill in the inquiry form and name your school in the comments." },
+    "register": {
+      "how": "online",
+      "url": "https://imaginethatphilly.org/programs",
+      "label": "Send an inquiry",
+      "note": "Fill in the inquiry form and name your school in the comments."
+    },
     "note": "Neither the school nor the provider publishes grades, hours or price. Ask the school office for the current registration link.",
     "sources": [
-      { "label": "Nebinger extracurriculars", "url": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/" },
-      { "label": "Imagine That programs", "url": "https://imaginethatphilly.org/programs" }
+      {
+        "label": "Imagine That programs",
+        "url": "https://imaginethatphilly.org/programs"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "onsite", "note": "The school lists this as its on-site morning and after-school provider." } }
+    "schools": {
+      "nebinger": {
+        "relation": "onsite",
+        "note": "The school lists this as its on-site morning and after-school provider.",
+        "sources": [
+          {
+            "label": "Nebinger extracurriculars",
+            "url": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/"
+          }
+        ]
+      },
+      "coppin": {
+        "relation": "onsite",
+        "note": "Imagine That’s site names Coppin as one of its two school locations."
+      }
+    }
   },
   {
     "id": "nebinger-clubs",
@@ -32,13 +54,23 @@
     "phone": "215-400-8110",
     "email": "",
     "website": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/",
-    "register": { "how": "school", "note": "Sign-ups go through the school office or the club’s teacher." },
-    "note": "The school page lists the clubs without grades, days or sign-up details. Clubs usually meet once a week, so they supplement daily care.",
+    "register": {
+      "how": "school",
+      "note": "Sign-ups go through the school office or the club’s teacher."
+    },
+    "note": "The school page lists the clubs without grades, days or sign-up details. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
     "sources": [
-      { "label": "Nebinger extracurriculars", "url": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/" }
+      {
+        "label": "Nebinger extracurriculars",
+        "url": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "onsite" } }
+    "schools": {
+      "nebinger": {
+        "relation": "onsite"
+      }
+    }
   },
   {
     "id": "girls-on-the-run",
@@ -52,14 +84,29 @@
     "phone": "215-247-8598",
     "email": "",
     "website": "https://www.gotrphiladelphia.org/",
-    "register": { "how": "online", "url": "https://www.gotrphiladelphia.org/program-registration", "note": "Registration opens by season." },
+    "register": {
+      "how": "online",
+      "url": "https://www.gotrphiladelphia.org/program-registration",
+      "note": "Registration opens by season."
+    },
     "note": "",
     "sources": [
-      { "label": "Nebinger extracurriculars", "url": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/" },
-      { "label": "GOTR Philadelphia", "url": "https://www.gotrphiladelphia.org/" }
+      {
+        "label": "Nebinger extracurriculars",
+        "url": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/"
+      },
+      {
+        "label": "GOTR Philadelphia",
+        "url": "https://www.gotrphiladelphia.org/"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "onsite", "note": "Confirm with the school which grade band the Nebinger team covers this season." } }
+    "schools": {
+      "nebinger": {
+        "relation": "onsite",
+        "note": "Confirm with the school which grade band the Nebinger team covers this season."
+      }
+    }
   },
   {
     "id": "nebinger-arts-partners",
@@ -73,14 +120,87 @@
     "phone": "215-400-8110",
     "email": "",
     "website": "https://www.nebingerpta.org/s-projects-side-by-side",
-    "register": { "how": "school", "note": "Ask the school office which of these take sign-ups." },
+    "register": {
+      "how": "school",
+      "note": "Ask the school office which of these take sign-ups."
+    },
     "note": "Listed as extracurriculars, but the school does not say which ones meet after dismissal. Do not count on these for care.",
     "sources": [
-      { "label": "Nebinger extracurriculars", "url": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/" },
-      { "label": "Nebinger PTA programs", "url": "https://www.nebingerpta.org/s-projects-side-by-side" }
+      {
+        "label": "Nebinger extracurriculars",
+        "url": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/"
+      },
+      {
+        "label": "Nebinger PTA programs",
+        "url": "https://www.nebingerpta.org/s-projects-side-by-side"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "onsite" } }
+    "schools": {
+      "nebinger": {
+        "relation": "onsite"
+      }
+    }
+  },
+  {
+    "id": "meredith-clubs",
+    "name": "Meredith after-school clubs",
+    "what": "Clubs run at the school. The Home & School Association posts the list each year.",
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club",
+    "hours": "Varies by club",
+    "cost": "Not published",
+    "phone": "215-400-7990",
+    "email": "",
+    "website": "https://meredithmatters.org/internalexternal-activities/",
+    "register": {
+      "how": "school",
+      "note": "The club list and sign-up details are on the Home & School site."
+    },
+    "note": "The 2025–26 club list is posted; the Home & School Association says 2026–27 clubs are coming soon and subject to change. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Meredith Home & School: activities",
+        "url": "https://meredithmatters.org/internalexternal-activities/"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "meredith": {
+        "relation": "onsite"
+      }
+    }
+  },
+  {
+    "id": "coppin-clubs",
+    "name": "School clubs and ensembles",
+    "what": "Robotics, Chess, Homework Club, Rock Band (HOME and HOME Jr.), Art, Vocal Music, Orchestra and Concert Band",
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club",
+    "hours": "Varies by club",
+    "cost": "Not published",
+    "phone": "215-400-7970",
+    "email": "",
+    "website": "https://coppin.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Sign-ups go through the school office or the club’s teacher."
+    },
+    "note": "The school lists these without grades, days or sign-up details. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Coppin school site",
+        "url": "https://coppin.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "coppin": {
+        "relation": "onsite"
+      }
+    }
   },
   {
     "id": "zhang-sah",
@@ -94,14 +214,38 @@
     "phone": "215-923-6676",
     "email": "",
     "website": "https://zhangsah.org/after-school-program/",
-    "register": { "how": "online", "url": "https://schools.procareconnect.com/form/7417c5d3-b696-426e-913c-b9f0144431bb", "note": "Spots fill early each year." },
+    "register": {
+      "how": "online",
+      "url": "https://schools.procareconnect.com/form/7417c5d3-b696-426e-913c-b9f0144431bb",
+      "note": "Spots fill early each year."
+    },
     "note": "",
     "sources": [
-      { "label": "Zhang Sah after-school", "url": "https://zhangsah.org/after-school-program/" },
-      { "label": "Nebinger extracurriculars", "url": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/" }
+      {
+        "label": "Zhang Sah after-school",
+        "url": "https://zhangsah.org/after-school-program/"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "pickup", "note": "The school’s page says the program “remains free for Nebinger students” and runs September 2 to June 12, without naming the year. Confirm the free spots still apply for 2026–27. The city’s list of free funded programs includes Zhang Sah’s Mt. Airy site but not Bainbridge Street." } }
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "note": "The school’s page says the program “remains free for Nebinger students” and runs September 2 to June 12, without naming the year. Confirm the free spots still apply for 2026–27. The city’s list of free funded programs includes Zhang Sah’s Mt. Airy site but not Bainbridge Street.",
+        "sources": [
+          {
+            "label": "Nebinger extracurriculars",
+            "url": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/"
+          }
+        ]
+      },
+      "meredith": {
+        "relation": "pickup"
+      },
+      "coppin": {
+        "relation": "pickup",
+        "note": "Zhang Sah’s page lists the school under its former name, Jackson."
+      }
+    }
   },
   {
     "id": "shot-tower-rec",
@@ -115,13 +259,30 @@
     "phone": "215-685-1592",
     "email": "ShotTowerPlayground@phila.gov",
     "website": "https://www.phila.gov/parks-rec-finder/#/locations",
-    "register": { "how": "phone", "note": "Call or stop by the rec center. There is no online sign-up." },
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
     "note": "The city’s finder has not posted a 2026–27 listing yet; the newest one ran September 8, 2025 to June 12, 2026. Call to confirm the program and the price for this year. The finder also lists Girl Scouts, soccer and baseball clinics, a garden club and crafts here.",
     "sources": [
-      { "label": "City Parks & Rec finder", "url": "https://www.phila.gov/parks-rec-finder/#/locations" }
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "pickup", "distance": "six blocks east of Nebinger on the same street", "note": "An earlier Shot Tower listing says “Pick up from Nebinger Elementary school.” Confirm pickup is still offered this year." } }
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "distance": "six blocks east of Nebinger on the same street",
+        "note": "An earlier Shot Tower listing says “Pick up from Nebinger Elementary school.” Confirm pickup is still offered this year."
+      },
+      "meredith": {
+        "relation": "nearby",
+        "distance": "about seven blocks from Meredith",
+        "note": "Shot Tower’s listing has mentioned pickup from Nebinger only."
+      }
+    }
   },
   {
     "id": "philly-inmovement",
@@ -135,13 +296,33 @@
     "phone": "267-239-0844",
     "email": "info@phillyinmovement.com",
     "website": "https://phillyinmovement.com/move-after-school/",
-    "register": { "how": "online", "url": "https://app.iclasspro.com/portal/inmovement", "note": "Enrollment for 2026–27 opened in May." },
+    "register": {
+      "how": "online",
+      "url": "https://app.iclasspro.com/portal/inmovement",
+      "note": "Enrollment for 2026–27 opened in May."
+    },
     "note": "",
     "sources": [
-      { "label": "MOVE After School", "url": "https://phillyinmovement.com/move-after-school/" }
+      {
+        "label": "MOVE After School",
+        "url": "https://phillyinmovement.com/move-after-school/"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "pickup", "note": "Ask whether Mini MOVE (Pre-K, $40.66 per day) includes pickup from Nebinger’s Pre-K." } }
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "note": "Ask whether Mini MOVE (Pre-K, $40.66 per day) includes pickup from Nebinger’s Pre-K."
+      },
+      "meredith": {
+        "relation": "pickup"
+      },
+      "coppin": {
+        "relation": "pickup",
+        "address": "Bok, 1901 S 9th St",
+        "note": "Coppin children go to InMovement’s Bok location, not Queen Village."
+      }
+    }
   },
   {
     "id": "settlement-kaleidoscope-plus",
@@ -155,13 +336,26 @@
     "phone": "215-320-2670",
     "email": "tarrell.davis@settlementmusic.org",
     "website": "https://settlementmusic.org/afterschool/",
-    "register": { "how": "contact", "note": "Register by contacting Tarrell Davis, Early Childhood Program Director." },
+    "register": {
+      "how": "contact",
+      "note": "Register by contacting Tarrell Davis, Early Childhood Program Director."
+    },
     "note": "",
     "sources": [
-      { "label": "Settlement afterschool", "url": "https://settlementmusic.org/afterschool/" }
+      {
+        "label": "Settlement afterschool",
+        "url": "https://settlementmusic.org/afterschool/"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "pickup" } }
+    "schools": {
+      "nebinger": {
+        "relation": "pickup"
+      },
+      "meredith": {
+        "relation": "pickup"
+      }
+    }
   },
   {
     "id": "philly-art-center-qv",
@@ -175,14 +369,34 @@
     "phone": "215-765-2787",
     "email": "info@phillyartcenter.com",
     "website": "https://phillyartcenter.com/afterschool/program-information/",
-    "register": { "how": "online", "url": "https://phillyartcenter.captyn.com/find?department=clu8qqzk2009293r866a7j7wg&filter=4&program=clv479vep03ki7to5es3tmyjr&program=clwtkcaoi00kmsudp98n0ecv5&day=Monday&day=Tuesday&day=Wednesday&day=Thursday&day=Friday&location=clu8gptof0aahxkl2mj3v7mxl&tag=clv494qhk032olgi2d9i70vw6&tag=clv494xs6032plgi2z23yr0a8", "note": "Fall runs Aug 31–Dec 23; Winter/Spring runs Jan 4–June 9." },
+    "register": {
+      "how": "online",
+      "url": "https://phillyartcenter.captyn.com/find?department=clu8qqzk2009293r866a7j7wg&filter=4&program=clv479vep03ki7to5es3tmyjr&program=clwtkcaoi00kmsudp98n0ecv5&day=Monday&day=Tuesday&day=Wednesday&day=Thursday&day=Friday&location=clu8gptof0aahxkl2mj3v7mxl&tag=clv494qhk032olgi2d9i70vw6&tag=clv494xs6032plgi2z23yr0a8",
+      "note": "Fall runs Aug 31–Dec 23; Winter/Spring runs Jan 4–June 9."
+    },
     "note": "Pickup at any school depends on enough children enrolling from that school.",
     "sources": [
-      { "label": "Program information", "url": "https://phillyartcenter.com/afterschool/program-information/" },
-      { "label": "Queen Village pick-up", "url": "https://phillyartcenter.com/locations/queen-village/school-pick-up/" }
+      {
+        "label": "Program information",
+        "url": "https://phillyartcenter.com/afterschool/program-information/"
+      },
+      {
+        "label": "Queen Village pick-up",
+        "url": "https://phillyartcenter.com/locations/queen-village/school-pick-up/"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "pickup" } }
+    "schools": {
+      "nebinger": {
+        "relation": "pickup"
+      },
+      "meredith": {
+        "relation": "pickup"
+      },
+      "coppin": {
+        "relation": "pickup"
+      }
+    }
   },
   {
     "id": "old-pine",
@@ -196,14 +410,31 @@
     "phone": "215-627-2493",
     "email": "afterschool@oldpinecommunitycenter.org",
     "website": "https://oldpinecommunitycenter.org/afterschool/",
-    "register": { "how": "online", "url": "https://opcc.jumbula.com/", "note": "First-time families: email the program for help registering." },
+    "register": {
+      "how": "online",
+      "url": "https://opcc.jumbula.com/",
+      "note": "First-time families: email the program for help registering."
+    },
     "note": "Last year’s monthly option reached capacity. Register early.",
     "sources": [
-      { "label": "Old Pine afterschool", "url": "https://oldpinecommunitycenter.org/afterschool/" },
-      { "label": "2026–27 registration", "url": "https://opcc.jumbula.com/Afterschool20262027/RegularSchoolDaysMonthlyRate" }
+      {
+        "label": "Old Pine afterschool",
+        "url": "https://oldpinecommunitycenter.org/afterschool/"
+      },
+      {
+        "label": "2026–27 registration",
+        "url": "https://opcc.jumbula.com/Afterschool20262027/RegularSchoolDaysMonthlyRate"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "pickup" } }
+    "schools": {
+      "nebinger": {
+        "relation": "pickup"
+      },
+      "meredith": {
+        "relation": "pickup"
+      }
+    }
   },
   {
     "id": "butchers-sew-shop",
@@ -217,13 +448,32 @@
     "phone": "215-309-1866",
     "email": "megan@butcherssewshop.com",
     "website": "https://butcherssewshop.com/pages/youth-classes",
-    "register": { "how": "online", "url": "https://butcher-s-sew-shop-junior.jumbula.com/school-year-classes", "note": "50% deposit or pay in full." },
+    "register": {
+      "how": "online",
+      "url": "https://butcher-s-sew-shop-junior.jumbula.com/school-year-classes",
+      "note": "50% deposit or pay in full."
+    },
     "note": "Fall 2026 is nearly full: one Tuesday spot was open, the rest are waitlist. Winter and Spring 2027 sessions are listed for registration.",
     "sources": [
-      { "label": "School-year classes", "url": "https://butcher-s-sew-shop-junior.jumbula.com/school-year-classes" }
+      {
+        "label": "School-year classes",
+        "url": "https://butcher-s-sew-shop-junior.jumbula.com/school-year-classes"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "pickup", "distance": "a few blocks from Nebinger" } }
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "distance": "a few blocks from Nebinger"
+      },
+      "meredith": {
+        "relation": "pickup",
+        "distance": "a few blocks from Meredith"
+      },
+      "coppin": {
+        "relation": "pickup"
+      }
+    }
   },
   {
     "id": "mister-johns-music",
@@ -237,13 +487,30 @@
     "phone": "267-223-9180",
     "email": "",
     "website": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
-    "register": { "how": "online", "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/", "note": "Use the registration button for each instrument on the class page." },
+    "register": {
+      "how": "online",
+      "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
+      "note": "Use the registration button for each instrument on the class page."
+    },
     "note": "Pickup runs only when at least three students from a school enroll for that day.",
     "sources": [
-      { "label": "Kids group classes 2026–27", "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/" }
+      {
+        "label": "Kids group classes 2026–27",
+        "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "pickup" } }
+    "schools": {
+      "nebinger": {
+        "relation": "pickup"
+      },
+      "meredith": {
+        "relation": "pickup"
+      },
+      "coppin": {
+        "relation": "pickup"
+      }
+    }
   },
   {
     "id": "coco-academy",
@@ -257,14 +524,42 @@
     "phone": "215-253-7690",
     "email": "info@cocoacademyphl.com",
     "website": "https://www.cocoacademyphl.com/afterschool-bellavista",
-    "register": { "how": "contact", "note": "Call or email to enroll and to get current tuition." },
+    "register": {
+      "how": "contact",
+      "note": "Call or email to enroll and to get current tuition."
+    },
     "note": "",
     "sources": [
-      { "label": "Philly Family 2026–27 list", "url": "https://phillyfamily.com/after-school-programs/" },
-      { "label": "CoCo Academy", "url": "https://www.cocoacademyphl.com/afterschool-bellavista" }
+      {
+        "label": "Philly Family 2026–27 list",
+        "url": "https://phillyfamily.com/after-school-programs/"
+      },
+      {
+        "label": "CoCo Academy",
+        "url": "https://www.cocoacademyphl.com/afterschool-bellavista"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "pickup", "note": "Nebinger pickup comes from Philly Family’s 2026–27 list. CoCo’s own pages could not be loaded to confirm it or the price." } }
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "note": "Nebinger pickup comes from Philly Family’s 2026–27 list. CoCo’s own pages could not be loaded to confirm it or the price."
+      },
+      "meredith": {
+        "relation": "pickup",
+        "note": "Meredith pickup comes from Philly Family’s 2026–27 list. CoCo’s own pages could not be loaded to confirm it or the price."
+      },
+      "coppin": {
+        "relation": "pickup",
+        "note": "Coppin pickup comes from Philly Family’s 2026–27 list and Coppin’s own aftercare sheet. CoCo’s own pages could not be loaded to confirm it or the price.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ]
+      }
+    }
   },
   {
     "id": "queen-and-rook",
@@ -278,14 +573,33 @@
     "phone": "215-995-0043",
     "email": "kat@queenandrookcafe.com",
     "website": "https://www.queenandrookcafe.com/youth-programs/",
-    "register": { "how": "online", "url": "https://www.queenrookkeep.com/product/WInterAfterschool/FGRQPCBNZJCILGV4A5OGMYL7?cp=true&sa=false&sbp=false&q=true", "note": "Fall Afterschool 2026 sign-up. Days can be cancelled for low enrollment." },
+    "register": {
+      "how": "online",
+      "url": "https://www.queenrookkeep.com/product/WInterAfterschool/FGRQPCBNZJCILGV4A5OGMYL7?cp=true&sa=false&sbp=false&q=true",
+      "note": "Fall Afterschool 2026 sign-up. Days can be cancelled for low enrollment."
+    },
     "note": "",
     "sources": [
-      { "label": "Philly Family 2026–27 list", "url": "https://phillyfamily.com/after-school-programs/" },
-      { "label": "Youth programs", "url": "https://www.queenandrookcafe.com/youth-programs/" }
+      {
+        "label": "Philly Family 2026–27 list",
+        "url": "https://phillyfamily.com/after-school-programs/"
+      },
+      {
+        "label": "Youth programs",
+        "url": "https://www.queenandrookcafe.com/youth-programs/"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "pickup", "note": "Nebinger pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools." } }
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "note": "Nebinger pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools."
+      },
+      "meredith": {
+        "relation": "pickup",
+        "note": "Meredith pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools."
+      }
+    }
   },
   {
     "id": "beehive-at-bok",
@@ -299,13 +613,31 @@
     "phone": "267-414-5945",
     "email": "",
     "website": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
-    "register": { "how": "online", "url": "https://bookeo.com/beehivecommunity?type=41574EYC3LN19B4B8067C5", "note": "This link books the fall semester. Winter/Spring booking is on Beehive’s page. 25% non-refundable deposit." },
+    "register": {
+      "how": "online",
+      "url": "https://bookeo.com/beehivecommunity?type=41574EYC3LN19B4B8067C5",
+      "note": "This link books the fall semester. Winter/Spring booking is on Beehive’s page. 25% non-refundable deposit."
+    },
     "note": "",
     "sources": [
-      { "label": "Beehive After Care", "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs" }
+      {
+        "label": "Beehive After Care",
+        "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "pickup", "distance": "about a mile south of Nebinger", "note": "Ask how pickup from Nebinger works and whether it runs every day." } }
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "distance": "about a mile south of Nebinger",
+        "note": "Ask how pickup from Nebinger works and whether it runs every day."
+      },
+      "coppin": {
+        "relation": "pickup",
+        "distance": "about half a mile south of Coppin",
+        "note": "Ask how pickup from Coppin works and whether it runs every day."
+      }
+    }
   },
   {
     "id": "movemakers",
@@ -319,13 +651,99 @@
     "phone": "267-600-1030",
     "email": "",
     "website": "https://www.movemakersphilly.com/youthclasses.html",
-    "register": { "how": "online", "url": "https://www.movemakersphilly.com/youthclasses.html", "note": "Each school has its own sign-up link." },
+    "register": {
+      "how": "online",
+      "url": "https://www.movemakersphilly.com/youthclasses.html",
+      "note": "Each school has its own sign-up link."
+    },
     "note": "Prices shown are last year’s. Ask for 2026–27 rates and the age range.",
     "sources": [
-      { "label": "MoveMakers after school", "url": "https://www.movemakersphilly.com/youthclasses.html" }
+      {
+        "label": "MoveMakers after school",
+        "url": "https://www.movemakersphilly.com/youthclasses.html"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "pickup", "registerUrl": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100574" } }
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "registerUrl": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100574"
+      },
+      "meredith": {
+        "relation": "pickup",
+        "registerUrl": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100573"
+      }
+    }
+  },
+  {
+    "id": "kids-on-12th",
+    "name": "Kids on 12th",
+    "what": "Aftercare with art, gym play, games and homework help",
+    "address": "1112 Chestnut St, Suite C",
+    "grades": "K-5",
+    "gradeNote": "",
+    "hours": "2:30–6:00 pm. From 12:30 pm on early-release days; full days on most school holidays.",
+    "cost": "Monthly rates start at $120",
+    "phone": "",
+    "email": "",
+    "website": "https://ko12.org/after-school-pick-up-philadelphia",
+    "register": {
+      "how": "online",
+      "url": "https://ko12.org/contact",
+      "label": "Contact to enroll",
+      "note": "Enrollment starts with the contact form."
+    },
+    "note": "",
+    "sources": [
+      {
+        "label": "Kids on 12th pick-up",
+        "url": "https://ko12.org/after-school-pick-up-philadelphia"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "coppin": {
+        "relation": "pickup"
+      }
+    }
+  },
+  {
+    "id": "columbus-square-rec",
+    "name": "Columbus Square Recreation Center",
+    "what": "City rec center after-school program",
+    "address": "12th and Wharton Sts",
+    "grades": "1-6",
+    "gradeNote": "Ages 6–12",
+    "hours": "Not confirmed for this year. City rec programs typically run 3:00–6:00 pm on weekdays.",
+    "cost": "$130 in the 2025–26 listing",
+    "phone": "215-685-1890",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The city’s finder shows registration as closed and has no 2026–27 listing yet. Call about openings.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "coppin": {
+        "relation": "pickup",
+        "distance": "one block south of Coppin",
+        "note": "Named on Coppin’s own aftercare pickup sheet (posted May 2024). Confirm pickup still runs this year.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ]
+      }
+    }
   },
   {
     "id": "hawthorne-cultural-center",
@@ -339,13 +757,35 @@
     "phone": "215-685-1848",
     "email": "Hawthornecultural@phila.gov",
     "website": "https://www.phila.gov/parks-rec-finder/#/locations",
-    "register": { "how": "phone", "note": "Call or stop by the rec center. There is no online sign-up." },
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
     "note": "The 2026–27 listing is not posted yet; the newest ran August 25, 2025 to June 11, 2026.",
     "sources": [
-      { "label": "City Parks & Rec finder", "url": "https://www.phila.gov/parks-rec-finder/#/locations" }
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "nearby", "distance": "six blocks west of Nebinger on the same street" } }
+    "schools": {
+      "nebinger": {
+        "relation": "nearby",
+        "distance": "six blocks west of Nebinger on the same street"
+      },
+      "coppin": {
+        "relation": "pickup",
+        "distance": "three blocks up 12th St from Coppin",
+        "note": "Named on Coppin’s own aftercare pickup sheet (posted May 2024). Confirm pickup still runs this year.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ]
+      }
+    }
   },
   {
     "id": "starr-garden-rec",
@@ -359,13 +799,28 @@
     "phone": "215-686-1782",
     "email": "StarrGarden@phila.gov",
     "website": "https://www.phila.gov/parks-rec-finder/#/locations",
-    "register": { "how": "phone", "note": "Call or stop by the rec center. There is no online sign-up." },
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
     "note": "The city’s finder shows registration as closed. Ask about a waitlist.",
     "sources": [
-      { "label": "City Parks & Rec finder", "url": "https://www.phila.gov/parks-rec-finder/#/locations" }
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "nearby", "distance": "straight up 6th St from Nebinger" } }
+    "schools": {
+      "nebinger": {
+        "relation": "nearby",
+        "distance": "straight up 6th St from Nebinger"
+      },
+      "meredith": {
+        "relation": "nearby",
+        "distance": "about four blocks from Meredith"
+      }
+    }
   },
   {
     "id": "palumbo-rec",
@@ -379,14 +834,32 @@
     "phone": "215-686-1783",
     "email": "PalumboRec@phila.gov",
     "website": "https://www.phila.gov/parks-rec-finder/#/locations",
-    "register": { "how": "phone", "note": "Call or stop by the rec center. There is no online sign-up." },
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
     "note": "The city’s finder has no schedule for Palumbo’s program after June 2025. Call to confirm it is running.",
     "sources": [
-      { "label": "City Parks & Rec finder", "url": "https://www.phila.gov/parks-rec-finder/#/locations" },
-      { "label": "Bella Vista Neighbors: parks and rec", "url": "https://www.bellavistaneighbors.org/parks" }
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "Bella Vista Neighbors: parks and rec",
+        "url": "https://www.bellavistaneighbors.org/parks"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "nearby", "distance": "roughly a 10-minute walk from Nebinger" } }
+    "schools": {
+      "nebinger": {
+        "relation": "nearby",
+        "distance": "roughly a 10-minute walk from Nebinger"
+      },
+      "meredith": {
+        "relation": "nearby",
+        "distance": "five blocks west of Meredith on Fitzwater St"
+      }
+    }
   },
   {
     "id": "mighty-writers-el-futuro",
@@ -400,13 +873,30 @@
     "phone": "215-602-0236",
     "email": "cperegrina@mightywriters.org",
     "website": "https://mightywriters.org/philadelphia/",
-    "register": { "how": "online", "url": "https://mightywriters.org/participant-registration/", "note": "Or contact Claudia Peregrina at the center." },
+    "register": {
+      "how": "online",
+      "url": "https://mightywriters.org/participant-registration/",
+      "note": "Or contact Claudia Peregrina at the center."
+    },
     "note": "",
     "sources": [
-      { "label": "Mighty Writers Philadelphia", "url": "https://mightywriters.org/philadelphia/" }
+      {
+        "label": "Mighty Writers Philadelphia",
+        "url": "https://mightywriters.org/philadelphia/"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "nearby" } }
+    "schools": {
+      "nebinger": {
+        "relation": "nearby"
+      },
+      "meredith": {
+        "relation": "nearby"
+      },
+      "coppin": {
+        "relation": "nearby"
+      }
+    }
   },
   {
     "id": "free-library-leap",
@@ -420,13 +910,28 @@
     "phone": "",
     "email": "",
     "website": "https://libwww.freelibrary.org/programs/leap/",
-    "register": { "how": "none", "note": "No registration. Drop in." },
+    "register": {
+      "how": "none",
+      "note": "No registration. Drop in."
+    },
     "note": "Drop-in only, and caregivers stay responsible for the child. Call the branch to confirm it runs LEAP this year.",
     "sources": [
-      { "label": "LEAP", "url": "https://libwww.freelibrary.org/programs/leap/" }
+      {
+        "label": "LEAP",
+        "url": "https://libwww.freelibrary.org/programs/leap/"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "nearby", "distance": "the nearest branch to Nebinger" } }
+    "schools": {
+      "nebinger": {
+        "relation": "nearby",
+        "distance": "the nearest branch to Nebinger"
+      },
+      "meredith": {
+        "relation": "nearby",
+        "distance": "the nearest branch to Meredith"
+      }
+    }
   },
   {
     "id": "fleisher-art-memorial",
@@ -440,15 +945,41 @@
     "phone": "215-922-3456",
     "email": "cy@fleisher.org",
     "website": "https://fleisher.org/children-and-youth-programs-2/",
-    "register": { "how": "online", "url": "https://reg137.imperisoft.com/Fleisher/Search/Registration.aspx", "label": "Register for classes", "note": "Teen Lounge needs no registration. Fall 2026 class registration closed September 12; the winter term is the next chance." },
+    "register": {
+      "how": "online",
+      "url": "https://reg137.imperisoft.com/Fleisher/Search/Registration.aspx",
+      "label": "Register for classes",
+      "note": "Teen Lounge needs no registration. Fall 2026 class registration closed September 12; the winter term is the next chance."
+    },
     "note": "Nothing on weekday afternoons for K–5. Teen Lounge is for ages 13 and up. Fleisher also runs day-off camps (ages 5–12) when district schools are closed.",
     "sources": [
-      { "label": "Young Artists Program", "url": "https://fleisher.org/take-a-class/saturday-young-artist-program/" },
-      { "label": "Teen Lounge", "url": "https://fleisher.org/community-programs/teen-lounge/" },
-      { "label": "Fall 2026 term", "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/fall-2026/" }
+      {
+        "label": "Young Artists Program",
+        "url": "https://fleisher.org/take-a-class/saturday-young-artist-program/"
+      },
+      {
+        "label": "Teen Lounge",
+        "url": "https://fleisher.org/community-programs/teen-lounge/"
+      },
+      {
+        "label": "Fall 2026 term",
+        "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/fall-2026/"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "nearby", "distance": "about three blocks from Nebinger" } }
+    "schools": {
+      "nebinger": {
+        "relation": "nearby",
+        "distance": "about three blocks from Nebinger"
+      },
+      "meredith": {
+        "relation": "nearby",
+        "distance": "about three blocks from Meredith"
+      },
+      "coppin": {
+        "relation": "nearby"
+      }
+    }
   },
   {
     "id": "makom-community",
@@ -462,12 +993,35 @@
     "phone": "484-278-1335",
     "email": "beverly@makomcommunity.org",
     "website": "https://makomcommunity.org/",
-    "register": { "how": "online", "url": "https://makomcommunity.org/enroll/", "note": "" },
+    "register": {
+      "how": "online",
+      "url": "https://makomcommunity.org/enroll/",
+      "note": ""
+    },
     "note": "",
     "sources": [
-      { "label": "Makom tuition", "url": "https://makomcommunity.org/afterschool-enrichment/tuition/" }
+      {
+        "label": "Makom tuition",
+        "url": "https://makomcommunity.org/afterschool-enrichment/tuition/"
+      }
     ],
     "lastVerified": "2026-10-05",
-    "schools": { "nebinger": { "relation": "nearby", "note": "Makom picks up from several South Philly schools, but its site does not list which. Ask whether Nebinger is on the route." } }
+    "schools": {
+      "nebinger": {
+        "relation": "nearby",
+        "note": "Makom picks up from several South Philly schools, but its site does not list which. Ask whether Nebinger is on the route."
+      },
+      "coppin": {
+        "relation": "pickup",
+        "distance": "a few blocks from Coppin",
+        "note": "Named on Coppin’s own aftercare pickup sheet (posted May 2024). Makom’s site does not list its pickup schools, so confirm.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ]
+      }
+    }
   }
 ]

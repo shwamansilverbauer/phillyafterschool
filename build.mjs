@@ -60,6 +60,7 @@ for (const p of programs) {
     if (!schoolIds.has(sid)) errors.push(`${at}: unknown school "${sid}"`);
     if (!REL[l.relation]) errors.push(`${at}: relation for ${sid} must be onsite, pickup or nearby`);
     if (l.registerUrl && !isUrl(l.registerUrl)) errors.push(`${at}: registerUrl for ${sid} must be an https URL`);
+    for (const s of l.sources || []) if (!isUrl(s.url)) errors.push(`${at}: source "${s.label}" for ${sid} needs an https URL`);
     if (p.register?.how === 'online' && !isUrl(l.registerUrl || p.register.url)) errors.push(`${at}: online registration needs a URL`);
   }
   if (['phone', 'school'].includes(p.register?.how) && !p.phone) errors.push(`${at}: register by phone needs a phone number`);
@@ -135,6 +136,7 @@ ${body}
   <p>Listings come from each provider’s public pages and are not endorsements. Prices, hours and pickup routes change, so confirm with the provider before you enroll.</p>
   <p>${esc(cfg.siteName)} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.</p>
   <p>Something out of date? ${fix ? `<a href="${esc(fix)}">Send a correction</a>` : `<a href="${link('about/', depth)}#corrections">How to send a correction</a>`}. <a href="${link('about/', depth)}">About this site</a>. <a href="${link('support/', depth)}">Support it</a>.</p>
+  ${cfg.builtBy ? `<p>Built by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
 </div></footer>
 <script src="${link('assets/site.js', depth)}"></script>
 ${scripts}`;
@@ -160,7 +162,8 @@ function card(p, school) {
   const g = p._grades;
   const cells = GRADES.map(x => `<i class="cell${g === null ? ' unk' : g.includes(x) ? ' on' : ''}">${x}</i>`).join('');
   const gradeText = g === null ? 'not published' : g.length === 1 ? g[0] : `${g[0]} to ${g[g.length - 1]}`;
-  const where = [p.address, l.distance].filter(Boolean).join(', ');
+  const where = [l.address || p.address, l.distance].filter(Boolean).join(', ');
+  const sources = [...p.sources, ...(l.sources || [])];
   const r = p.register;
   const regUrl = r.how === 'online' ? (l.registerUrl || r.url) : null;
   const phoneLink = p.phone ? `<a href="${telHref(p.phone)}">${esc(p.phone)}</a>` : '';
@@ -180,7 +183,7 @@ function card(p, school) {
   <dl>${rows}</dl>
   ${flag ? `<p class="flag">${esc(flag)}</p>` : ''}
   <div class="actions">${regUrl ? `<a class="btn primary" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a></div>
-  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${p.sources.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join('')}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
+  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sources.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join('')}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
 </article>`;
 }
 
@@ -210,7 +213,7 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
     <h1>It’s ${esc(clock(s))} at ${esc(s.shortName)}. Now what?</h1>
     <p class="lede">Every after-school program we could find that runs at the school, picks children up from ${esc(s.shortName)}, or sits within a short walk. Pick a grade to see what your child can join.</p>
     <div class="facts">
-      <span>Dismissal <b>${esc(s.dismissal)}</b></span>
+      <span>Dismissal <b>${esc(s.dismissal)}</b>${s.dismissalNote ? ` (${esc(s.dismissalNote)})` : ''}</span>
       <span>School office <b><a href="${telHref(s.phone)}">${esc(s.phone)}</a></b></span>
       <span>Reviewed <b>${longDate(s.lastReviewed)}</b></span>
     </div>`;
@@ -233,6 +236,11 @@ ${groups}
     <h2>Checked, and not listing ${esc(s.shortName)} pickup</h2>
     <ul>${s.checkedNoPickup.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
   </section>` : ''}
+  ${s.alsoListed?.items?.length ? `<section class="notes">
+    <h2>${esc(s.alsoListed.title)}</h2>
+    <p>${esc(s.alsoListed.intro)}</p>
+    <ul>${s.alsoListed.items.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+  </section>` : ''}
   <section class="notes">
     <h2>Before you enroll</h2>
     <ul>
@@ -252,7 +260,7 @@ ${groups}
 }
 
 function homePage() {
-  const rows = schools.map(s => {
+  const rows = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => {
     const t = tally(s);
     return `<a class="school" href="${link(s.id + '/', 0)}" data-name="${esc((s.name + ' ' + s.shortName + ' ' + s.neighborhood).toLowerCase())}">
   <h3>${esc(s.name)}</h3>
@@ -286,7 +294,11 @@ ${rows}
 <section class="section">
   <h2>Checked by hand, dated, and sourced</h2>
   <p>Every listing links to where the information came from and shows the day it was last checked. Nobody pays to be listed. <a href="${link('support/', 0)}">Help keep it going.</a></p>
-</section>`;
+</section>
+${cfg.builtBy ? `<section class="section" id="who">
+  <h2>Who built this</h2>
+  <p>${esc(cfg.builtBy.bio)} <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.url.replace(/^https?:\/\//, ''))}</a></p>
+</section>` : ''}`;
   return layout({
     title: cfg.siteName, pathName: '', depth: 0, current: '', hero, body, fragment: PREVIEW, showStreet: 'go',
     description: 'A school-by-school directory of after-school programs in Philadelphia: what runs at the school, who picks up at dismissal, hours, cost and where to register.',
@@ -294,8 +306,8 @@ ${rows}
 }
 
 function supportPage() {
-  const give = cfg.supportUrl
-    ? `<p><a class="btn primary big" href="${esc(cfg.supportUrl)}" target="_blank" rel="noopener">Support ${esc(cfg.siteName)}</a></p>`
+  const give = (cfg.supportUrl || cfg.supportMonthlyUrl)
+    ? `<p class="actions">${cfg.supportUrl ? `<a class="btn primary big" href="${esc(cfg.supportUrl)}" target="_blank" rel="noopener">Chip in once</a>` : ''}${cfg.supportMonthlyUrl ? `<a class="btn big" href="${esc(cfg.supportMonthlyUrl)}" target="_blank" rel="noopener">Chip in monthly</a>` : ''}</p>`
     : `<div class="panel"><h3>Online contributions are being set up</h3><p>Check back soon.</p></div>`;
   const hero = `    <h1>Help keep this current</h1>
     <p class="lede">Programs change their prices, hours and pickup routes every year. Each listing here is checked against the provider’s own page, and that takes time.</p>`;
@@ -331,6 +343,8 @@ function aboutPage() {
   <h2 id="corrections">Corrections, new programs and new schools</h2>
   <p>Parents and providers know these programs best. If something is wrong or missing, or you want your school added, say so. ${mail}.</p>
   <p>It helps to include the program, the school, what changed, and a link to where it’s published.</p>
+  ${cfg.builtBy ? `<h2 id="who">Who built this</h2>
+  <p>${esc(cfg.builtBy.bio)} <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.url.replace(/^https?:\/\//, ''))}</a></p>` : ''}
 </div>`;
   return layout({ title: 'About', description: `How ${cfg.siteName} gathers and checks after-school listings, and how to send a correction.`, pathName: 'about/', depth: 1, current: 'about/', hero, body, showStreet: 'parked' });
 }
