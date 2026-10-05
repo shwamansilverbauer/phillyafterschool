@@ -26,6 +26,9 @@ Fill in `site.config.json`:
 - `siteUrl`: the domain you treat as the main one. Redirect the other domain to it at your host.
 - `builtBy`: the name, link and short bio shown in the footer, on the home page and on About.
 - `gtmId`: optional, e.g. `GTM-XXXXXXX`.
+- `editLogin`: optional, `{ "user": "...", "passwordHash": "..." }`. Puts a sign-in on `/edit/`. The hash is a bcrypt hash, never the
+  password itself. To change the password, make a new hash with `php -r 'echo password_hash("new password", PASSWORD_BCRYPT);'`
+  and replace `passwordHash`. Changing it signs everyone out.
 - `repo`: optional, `owner/name` on GitHub. Used only to put a link to `data/copy.json` in copy-edit emails.
 
 ## Build
@@ -90,7 +93,9 @@ program in `data/programs.json` and its page follows.
 
 Headlines, intros, section text, form labels and footer text can be edited on the site itself.
 
-1. Open `/edit/` and choose "Start editing". The page isn't linked from anywhere and is hidden from search engines.
+1. Open `/edit/`, sign in (when `editLogin` is set), and choose "Start editing". The page isn't linked from anywhere and is
+   hidden from search engines. A sign-in lasts 30 days on that device, and edits can only be sent while signed in.
+   Eight wrong tries from one address lock the form for 15 minutes.
 2. Click any outlined text on any page and type. Edits are kept in that browser only.
 3. "Review and send" emails the changes to `contactEmail`. The email lists each change and ends with a
    complete `data/copy.json`.

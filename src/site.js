@@ -47,6 +47,8 @@
       loadEditor(); showState();
     });
     stopBtn.addEventListener('click', function () { store('pas-edit', '0'); location.reload(); });
+    var signOut = editPage.querySelector('a[href="?out=1"]');
+    if (signOut) signOut.addEventListener('click', function () { store('pas-edit', '0'); });   // signing out also switches editing off
     showState();
   }
 

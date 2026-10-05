@@ -14,5 +14,9 @@
     "url": "https://joshsilverbauer.com",
     "bio": "Josh Silverbauer is a parent of two, with one in the Nebinger catchment. Navigating after-school programs was chaos for him, so he figured it was chaos for everyone else too. His wife Rachael told him to stop complaining and build something. So he built this."
   },
-  "repo": "shwamansilverbauer/phillyafterschool"
+  "repo": "shwamansilverbauer/phillyafterschool",
+  "editLogin": {
+    "user": "Silverbauer",
+    "passwordHash": "$2y$10$YM3U3P.TEB3.lr00uXCsbeNQW852A2Xdg/Rwbro4BIJULUT7bHiz2"
+  }
 }
