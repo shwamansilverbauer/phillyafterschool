@@ -6,7 +6,7 @@ $SITE = "Philly After School";
 function fail($msg, $code) {
   http_response_code($code);
   header('Content-Type: text/html; charset=utf-8');
-  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="./">Go back to the form</a></p></main></body></html>';
+  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css?v=28d81cbc"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="./">Go back to the form</a></p></main></body></html>';
   exit;
 }
 function field($key, $max) {
@@ -30,6 +30,7 @@ if (field('company', 200) !== '') {
 
 $kind = one_line(field('kind', 60));
 $school = one_line(field('school', 80));
+$newschool = one_line(field('newschool', 120));
 $program = one_line(field('program', 150));
 $website = one_line(field('website', 300));
 $pickup = one_line(field('pickup', 60));
@@ -38,8 +39,8 @@ $name = one_line(field('name', 100));
 $email = one_line(field('email', 150));
 $details = field('details', 4000);
 
-if ($details === '' && $program === '') {
-  fail('Please add a program name or some details so we know what to look for.', 400);
+if ($details === '' && $program === '' && $newschool === '') {
+  fail('Please add a school name, a program name or some details so we know what to look for.', 400);
 }
 if (substr_count(strtolower($details), 'http') > 5) {
   fail('That has too many links for us to accept. Please trim it and try again.', 400);
@@ -50,6 +51,7 @@ if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
 $body = "Type: $kind\n"
   . "School: $school\n"
+  . "New school: $newschool\n"
   . "Program: $program\n"
   . "Website: $website\n"
   . "Picks up: $pickup\n"
@@ -58,7 +60,8 @@ $body = "Type: $kind\n"
   . "Email: $email\n\n"
   . "Details:\n$details\n";
 
-$subject = one_line("[$SITE] $kind" . ($program !== '' ? ": $program" : '') . " ($school)");
+$what = $newschool !== '' ? $newschool : $program;
+$subject = one_line("[$SITE] $kind" . ($what !== '' ? ": $what" : '') . ($school !== '' ? " ($school)" : ''));
 $headers = array(
   'From: ' . $SITE . ' <' . $TO . '>',
   'MIME-Version: 1.0',
