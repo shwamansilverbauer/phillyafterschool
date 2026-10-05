@@ -21,5 +21,76 @@
       "Philly Music Factory (2100 Chestnut St). Greenfield, ICS and Marian Anderson only. Its sister site MoveMakers at 812 Chestnut does list Nebinger.",
       "Children’s Village (125 N 8th St), ages 5–13, takes CCIS subsidy. No Nebinger pickup is stated. Phone 215-931-0190."
     ]
+  },
+  {
+    "id": "meredith",
+    "name": "William M. Meredith School",
+    "shortName": "Meredith",
+    "address": "725 S 5th St, Philadelphia, PA 19147",
+    "neighborhood": "Queen Village",
+    "grades": "K-8",
+    "dismissal": "3:15 pm",
+    "dismissalNote": "K–2 at 3:15, grades 3–5 at 3:20, grades 6–8 at 3:24",
+    "phone": "215-400-7990",
+    "website": "https://meredith.philasd.org/",
+    "lastReviewed": "2026-10-05",
+    "notes": [
+      "Options thin out after 5th grade. For grades 6–8 the pickup choices are Zhang Sah, Queen & Rook and Butcher’s Sew Shop (Fridays), plus Philly Art Center through 6th. Fleisher is about three blocks away for children old enough to walk.",
+      "The city’s free, city-funded after-school programs do not include one at Meredith."
+    ],
+    "checkedNoPickup": [
+      "Christian Street YMCA (1724 Christian St), K–6. Its pickup list does not include Meredith.",
+      "Kids on 12th (1112 Chestnut St), K–5. Picks up from ICS, McCall, Greenfield, Russell Byers, Coppin and FACTS only.",
+      "Beehive at Bok. Its Bok pickup list is Kirkbride, Coppin, Nebinger, Southwark, Jenks and Vare-Washington.",
+      "ZAZZ (1923 Chestnut St), ages 5–12. Guaranteed pickup from Greenfield, ICS and Marian Anderson only."
+    ],
+    "alsoListed": {
+      "title": "Also on the Meredith Home & School list",
+      "intro": "The Home & School Association names these neighborhood programs. We haven’t confirmed whether they pick up from Meredith.",
+      "items": [
+        "Philly P.A.C.K. (233 Federal St): theater and dance classes. phillypack.org",
+        "Skilladelphia (401 Lombard St): basketball and lacrosse clinics and aftercare for girls and nonbinary players ages 5–14. skilladelphia.org"
+      ]
+    }
+  },
+  {
+    "id": "coppin",
+    "name": "Fanny Jackson Coppin School",
+    "shortName": "Coppin",
+    "address": "1213 S 12th St, Philadelphia, PA 19147",
+    "neighborhood": "Passyunk Square",
+    "grades": "PK-8",
+    "dismissal": "2:54 pm",
+    "phone": "215-400-7970",
+    "website": "https://coppin.philasd.org/",
+    "lastReviewed": "2026-10-05",
+    "notes": [
+      "Coppin dismisses earlier than most programs start. Ask each provider what time they collect children.",
+      "Options thin out after 5th grade. For grades 6–8 the pickup choices are Zhang Sah, Makom Community and Butcher’s Sew Shop (Fridays), plus Philly Art Center and the two rec centers through 6th.",
+      "The city’s free, city-funded after-school programs do not include one at Coppin."
+    ],
+    "checkedNoPickup": [
+      "Christian Street YMCA (1724 Christian St), K–6. It is on Coppin’s 2024 sheet, but the Y’s current pickup list does not include Coppin.",
+      "Old Pine Community Center. Picks up from McCall, Meredith, Nebinger and St. Peter’s only.",
+      "Settlement Music School. Escorts from Meredith, McCall and Nebinger only.",
+      "Queen & Rook Game Cafe. Its listed pickup schools do not include Coppin.",
+      "ZAZZ (1923 Chestnut St), ages 5–12. Guaranteed pickup from Greenfield, ICS and Marian Anderson only."
+    ],
+    "alsoListed": {
+      "title": "Also on Coppin’s aftercare pickup sheet",
+      "intro": "Coppin’s own sheet (posted May 2024) names these too. We haven’t confirmed their current details, so call before counting on them.",
+      "items": [
+        "Capitolo Playground, 215-685-1883",
+        "East Passyunk Recreation Center, 215-685-0008",
+        "Code Ninjas, 445-942-0955",
+        "Brilliant Minds, 215-928-3890",
+        "Early Childhood Environment, 215-844-0178",
+        "Principal Academy, 267-275-3835",
+        "Little Shepherds Christian Learning Center, 215-772-1825",
+        "Sawubona Creativity Project, 215-420-2555",
+        "The Dandelion Project, 215-490-9640",
+        "Fitness Alive, 267-702-6043"
+      ]
+    }
   }
 ]

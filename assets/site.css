@@ -60,7 +60,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .hero .where{color:var(--hero-muted);font-size:1rem}
 .hero a{color:var(--hero-ink)}
 .facts{display:flex;flex-wrap:wrap;gap:8px 12px;font-size:.98rem}
-.facts span{background:var(--hero-2);border-radius:999px;padding:6px 14px;color:var(--hero-muted)}
+.facts span{background:var(--hero-2);border-radius:16px;padding:6px 14px;color:var(--hero-muted)}
 .facts b{color:var(--hero-ink);font-weight:700}
 
 /* school search on the home page */
@@ -166,6 +166,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .src{grid-area:src;font-size:.86rem;color:var(--muted)}
 .src a{margin-right:10px;color:var(--muted)}
 .notes{border-top:1px solid var(--line);padding-top:24px;display:flex;flex-direction:column;gap:12px}
+.notes > p{color:var(--muted);max-width:70ch}
 .notes ul{margin:0;padding-left:1.2rem;display:flex;flex-direction:column;gap:8px;max-width:70ch}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:8px}
 
