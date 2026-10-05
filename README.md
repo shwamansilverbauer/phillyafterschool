@@ -31,6 +31,7 @@ Fill in `site.config.json`:
 - `editLogin`: optional, `{ "user": "...", "passwordHash": "..." }`. Puts a sign-in on `/edit/`. The hash is a bcrypt hash, never the
   password itself. To change the password, make a new hash with `php -r 'echo password_hash("new password", PASSWORD_BCRYPT);'`
   and replace `passwordHash`. Changing it signs everyone out.
+- `privacyUpdated`: the date shown at the bottom of `/privacy/`. Change it when that page changes in a way that matters.
 - `repo`: optional, `owner/name` on GitHub. Used only to put a link to `data/copy.json` in copy-edit emails.
 
 ## Build
@@ -130,7 +131,7 @@ To remove a review, delete its entry. Cards show the average and the reviews for
 
 ## Rosters
 
-`/board/` ("My child's roster" in the menu) lets a visitor collect programs by weekday with "Add to roster"
+`/board/` ("Build your week" in the menu) lets a visitor collect programs by weekday with "Add to roster"
 on any card. Each child has two rosters, Current and Upcoming, so a family can share what they do now and
 plan the next term. A family with more than one child adds a roster per child (up to six) and picks whose
 roster a program goes on. Rosters are stored in the visitor's own browser, and each share link carries one

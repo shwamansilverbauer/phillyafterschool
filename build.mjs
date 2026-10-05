@@ -151,9 +151,8 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   // to a title only when it fits; a long description is cut at a word.
   const fullTitle = pathName === '' ? (PREVIEW ? cfg.siteName : `${cfg.siteName}: ${cfg.tagline}`) : `${title} | ${cfg.siteName}`.length <= 65 ? `${title} | ${cfg.siteName}` : title;
   if (description.length > 158) description = description.slice(0, 157).replace(/\s+\S*$/, '').replace(/[,;:.]$/, '') + '…';
-  const nav = [['', 'Schools'], ['board/', 'My child’s roster'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Buy me a coffee']]
+  const nav = [['', 'Schools'], ['board/', 'Build your week'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Buy me a coffee']]
     .map(([to, label]) => `<a href="${link(to, depth)}"${current === to ? ' aria-current="page"' : ''}>${label}${to === 'board/' ? '<span class="count" data-board-count hidden></span>' : ''}</a>`).join('');
-  const footSchools = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).slice(0, 8);   // past eight, "All schools" covers the rest
   const head = `${first}${fragment ? '' : gtmHead + '\n'}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${esc(canonical)}">${noindex ? '\n<meta name="robots" content="noindex">' : ''}
@@ -200,7 +199,6 @@ ${body}
     <div>
       <h2><a href="${link('', depth)}#schools">${T(`Schools`)}</a></h2>
       <ul>
-        ${footSchools.map(s => `<li><a href="${link(s.id + '/', depth)}">${esc(s.shortName)}</a></li>`).join('')}
         <li><a href="${link('', depth)}#schools">${T(`All schools`)}</a></li>
         <li><a href="${link('neighborhoods/', depth)}">${T(`By neighborhood`)}</a></li>
         <li><a href="${link('suggest/', depth)}">${T(`Ask for your school`)}</a></li>
@@ -218,7 +216,7 @@ ${body}
     <div>
       <h2><a href="${link('board/', depth)}">${T(`Your family`)}</a></h2>
       <ul>
-        <li><a href="${link('board/', depth)}">${T(`My child’s roster`)}</a></li>
+        <li><a href="${link('board/', depth)}">${T(`Build your week`)}</a></li>
       </ul>
     </div>
     <div>
@@ -227,6 +225,7 @@ ${body}
         <li><a href="${link('about/', depth)}">${T(`About this site`)}</a></li>
         <li><a href="${link('about/', depth)}#how">${T(`How listings are checked`)}</a></li>
         <li><a href="${link('about/', depth)}#corrections">${T(`Send a correction`)}</a></li>
+        <li><a href="${link('privacy/', depth)}">${T(`Privacy`)}</a></li>
         <li><a href="${link('support/', depth)}">${T(`Buy me a coffee`)}</a></li>
       </ul>
     </div>
@@ -435,7 +434,7 @@ function programPage(p) {
     const extra = [l.address ? `${s.shortName} children go to ${l.address}.` : '', l.distance ? l.distance.charAt(0).toUpperCase() + l.distance.slice(1) + '.' : ''].filter(Boolean).join(' ');
     const links = [
       l.registerUrl && r.how === 'online' ? `<a href="${esc(l.registerUrl)}" target="_blank" rel="noopener" data-track="register">${esc(r.label || 'Register')} (${esc(s.shortName)})</a>` : '',
-      `<a href="${link(s.id + '/', D)}#${esc(p.id)}">Add it to your child’s roster from the ${esc(s.shortName)} page</a>`,
+      `<a href="${link(s.id + '/', D)}#${esc(p.id)}">Add it to your week from the ${esc(s.shortName)} page</a>`,
       `<a href="${link(s.id + '/', D)}">All ${forSchool(s).length} options for ${esc(s.shortName)}</a>`,
       l.sources?.length ? `<span>Source: ${sourceLinks(l.sources)}</span>` : '',
     ].filter(Boolean).join('');
@@ -731,6 +730,51 @@ ${comes.map(p => programRow(p, D)).join('\n')}
   });
 }
 
+function privacyPage() {
+  const mail = cfg.contactEmail ? `<a href="mailto:${esc(cfg.contactEmail)}">${esc(cfg.contactEmail)}</a>` : '';
+  const hero = `    <h1>${T(`Privacy, in plain English`)}</h1>
+    <p class="lede">${T(`This site is run by one parent. It collects as little as it can. Here is what it does collect, where it goes, and how to have it removed.`)}</p>`;
+  const body = `<div class="prose">
+  <h2>${T(`The short version`)}</h2>
+  <ul>
+    <li>${T(`There are no accounts and no ads, and nothing you send is sold.`)}</li>
+    <li>${T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us.`)}</li>
+    <li>${T(`If you send a suggestion or a review, it arrives as an email to the person who runs the site.`)}</li>
+    <li>${T(`We use Google Analytics and Microsoft Clarity to see how the site is used, so we can fix what’s confusing.`)}</li>
+  </ul>
+  <h2 id="rosters">${T(`Rosters and children’s names`)}</h2>
+  <ul>
+    <li>${T(`A roster lives in the browser you made it in. Clearing your browser’s site data deletes it.`)}</li>
+    <li>${T(`A child’s name is optional. If you add one, it stays on your device and appears in the link you choose to share.`)}</li>
+    <li>${T(`Anyone who has a roster’s link can see that roster, so share it the way you’d share a family calendar.`)}</li>
+    <li>${T(`When a shared roster is opened, the site removes the name from the page address before any analytics loads, and the roster page is set to be hidden in session recordings.`)}</li>
+  </ul>
+  <h2 id="forms">${T(`Suggestions, corrections and reviews`)}</h2>
+  <ul>
+    <li>${T(`What you type into a form is emailed to the site’s inbox, and a backup copy is kept on our web host in case the email goes missing.`)}</li>
+    <li>${T(`Your email address is used only to reply to you or to confirm something. It is never published.`)}</li>
+    <li>${T(`A review that is approved appears on the site with your first name, your child’s school and the month. Nothing else about you is shown.`)}</li>
+    <li>${T(`Please don’t include children’s names or other people’s personal details in what you send.`)}</li>
+  </ul>
+  <h2 id="analytics">${T(`Analytics and recordings`)}</h2>
+  <ul>
+    <li>${T(`Google Analytics records which pages are visited and which buttons, filters and searches are used, along with general details such as device type and approximate location. That includes the words typed into the program search box.`)}</li>
+    <li>${T(`Microsoft Clarity records how pages are used, including heatmaps and replays of scrolling and clicking, to help us improve the site. We have set it to hide form fields and the roster page.`)}</li>
+    <li>${T(`Both services use cookies and similar technologies, and Google and Microsoft handle that data under their own privacy terms:`)} <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">${T(`how Google uses information from sites that use its services`)}</a>, <a href="https://www.microsoft.com/privacy/privacystatement" target="_blank" rel="noopener">${T(`the Microsoft Privacy Statement`)}</a>.</li>
+    <li>${T(`You can block both with your browser’s privacy settings or a content blocker, and the site will still work.`)}</li>
+    <li>${T(`Like every website, our host keeps standard server logs, which include IP addresses.`)}</li>
+  </ul>
+  <h2 id="elsewhere">${T(`Links to other sites`)}</h2>
+  <p>${T(`Program websites, registration pages, calendars and Venmo are run by other organizations and have their own privacy practices.`)}</p>
+  <h2 id="children">${T(`Children`)}</h2>
+  <p>${T(`This site is written for parents and caregivers. It is not meant to be used by children, and we do not knowingly collect information from them.`)}</p>
+  <h2 id="remove">${T(`Seeing or removing what you sent`)}</h2>
+  <p>${T(`To have a review taken down, or a suggestion and your contact details deleted, email`)} ${mail}${T(`. Say what you sent and roughly when, and it will be removed.`)}</p>
+  <p class="hint">${T(`Last updated {date}. If this page changes in a way that matters, the date changes with it.`, { date: longDate(cfg.privacyUpdated || TODAY) })}</p>
+</div>`;
+  return layout({ title: 'Privacy', description: `What ${cfg.siteName} collects, where it goes and how to have it removed, in plain English.`, pathName: 'privacy/', depth: 1, current: null, hero, body, showStreet: 'parked' });
+}
+
 function supportPage() {
   const who = cfg.builtBy ? cfg.builtBy.name.split(' ')[0] : '';
   const give = cfg.supportUrl
@@ -825,7 +869,7 @@ function suggestPage() {
     </div>
     <div class="about-you">
       <h2>${T(`About you`)}</h2>
-      <p class="hint">${T(`All optional. Your email is only used to ask a follow-up question about what you sent.`)}</p>
+      <p class="hint">${T(`All optional. Your email is only used to ask a follow-up question about what you sent.`)} <a href="${link('privacy/', 1)}">${T(`How we handle it.`)}</a></p>
       <div class="field">
         <label for="f-role">${T(`How do you know it?`)}</label>
         <select id="f-role" name="role">
@@ -1016,7 +1060,7 @@ function boardPage() {
   </section>
   <script type="application/json" id="pas-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: 'My child’s roster', description: `Put together a Monday to Friday after-school roster for each child from ${cfg.siteName} listings and share it with a link.`, pathName: 'board/', depth: 1, current: 'board/', hero, body,
+  return layout({ title: 'Build your week', description: `Put together a Monday to Friday after-school roster for each child from ${cfg.siteName} listings and share it with a link.`, pathName: 'board/', depth: 1, current: 'board/', hero, body,
     // A shared roster link carries a child's first name after the #. This runs before any analytics loads:
     // it puts the shared roster aside for the page's own script and takes it out of the address.
     first: `<script>(function(){var h=location.hash;if(!/(^#|&)(mon|tue|wed|thu|fri)=/.test(h))return;window.__pasShared=h;try{sessionStorage.setItem('pas-shared',h)}catch(e){}try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}})();</script>\n` });
@@ -1057,7 +1101,7 @@ function reviewPage() {
       <div class="field">
         <label for="r-email">${T(`Your email`)}</label>
         <input id="r-email" name="email" type="email" maxlength="150" autocomplete="email" required>
-        <span class="hint">${T(`Never shown. Only used if we need to confirm something.`)}</span>
+        <span class="hint">${T(`Never shown. Only used if we need to confirm something.`)} <a href="${link('privacy/', 1)}">${T(`How we handle it.`)}</a></span>
       </div>
     </div>
     <label class="check"><input type="checkbox" name="firsthand" value="yes" required><span>${T(`This is my own experience as a parent or caregiver.`)}</span></label>
@@ -1291,8 +1335,8 @@ ${editPage()}`;
 
 function editPage() {
   const pages = [['', 'Home'], ...schools.map(s => [s.id + '/', `${s.shortName} page`]), ['programs/', 'All programs, A to Z'], ['neighborhoods/', 'Neighborhoods'], [hoodPath(hoods[0]), `A neighborhood page (${hoods[0].name})`], [programPath(programs[0]), `A program page (${programs[0].name})`],
-    ['board/', 'My child’s roster'], ['suggest/', 'Suggest a program'], ['suggest/thanks/', 'Thank-you page after a suggestion'], ['review/', 'Write a review'], ['review/thanks/', 'Thank-you page after a review'],
-    ['about/', 'About'], ['support/', 'Buy me a coffee'], ...(PREVIEW ? [] : [['404.html', 'Page not found']])];
+    ['board/', 'Build your week'], ['suggest/', 'Suggest a program'], ['suggest/thanks/', 'Thank-you page after a suggestion'], ['review/', 'Write a review'], ['review/thanks/', 'Thank-you page after a review'],
+    ['about/', 'About'], ['privacy/', 'Privacy'], ['support/', 'Buy me a coffee'], ...(PREVIEW ? [] : [['404.html', 'Page not found']])];
   const hero = `    <h1>Edit the words on this site</h1>
     <p class="lede">Turn on editing, then click a sentence on any page and type. Nothing changes for visitors until your edits are sent and approved.</p>`;
   const body = `<div class="prose" data-edit-page>
@@ -1437,6 +1481,7 @@ for (const p of programs) write(`${programPath(p)}index.html`, programPage(p));
 write('neighborhoods/index.html', neighborhoodsPage());
 for (const h of hoods) write(`${hoodPath(h)}index.html`, neighborhoodPage(h));
 write('support/index.html', supportPage());
+write('privacy/index.html', privacyPage());
 write('about/index.html', aboutPage());
 write('suggest/index.html', suggestPage());
 write('suggest/thanks/index.html', thanksPage());
@@ -1461,10 +1506,11 @@ if (!PREVIEW) {
   write('data/schools.json', JSON.stringify(schools, null, 2));
   const latest = programs.map(p => p.lastVerified).sort().pop();
   const urls = [['', latest], ...schools.map(s => [s.id + '/', latest]), ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]), ['neighborhoods/', latest], ...hoods.map(h => [hoodPath(h), latest]),
-    ...['board/', 'suggest/', 'review/', 'about/', 'support/'].map(u => [u, latest])];
+    ...['board/', 'suggest/', 'review/', 'about/', 'privacy/', 'support/'].map(u => [u, latest])];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
-  write('.htaccess', 'ErrorDocument 404 /404.html\nAddType text/calendar .ics\nDirectoryIndex index.html index.php\n');
+  const bare = cfg.siteUrl.replace(/^https?:\/\//, '');
+  write('.htaccess', `ErrorDocument 404 /404.html\nAddType text/calendar .ics\nDirectoryIndex index.html index.php\n\n# One address for the site: www goes to the bare domain.\n<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.${bare.replace(/\./g, '\\.')}$ [NC]\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n</IfModule>\n`);
 }
 // Edits in data/copy.json are matched to sentences by a fingerprint of the original wording.
 // If the original was reworded or removed in this file, the edit no longer applies: say so, but still build.
