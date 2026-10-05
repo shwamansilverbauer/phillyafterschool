@@ -13,9 +13,34 @@
 
   // Suggest-a-program form
   var form = document.querySelector('#suggest-form');
-  if (form) form.addEventListener('submit', function () {
-    track({ event: 'pas_suggest_submit', suggest_kind: form.kind.value, school: form.school.value });
-  });
+  if (form) {
+    // Show only the fields that fit what is being sent: a program, a correction, or a school.
+    var KINDS = ['program', 'correction', 'school'];
+    var kindInputs = [].slice.call(form.querySelectorAll('input[name="kind"]'));
+    var kindKey = function () {
+      for (var i = 0; i < kindInputs.length; i++) if (kindInputs[i].checked) return KINDS[i];
+      return 'program';
+    };
+    var sync = function () {
+      var key = kindKey();
+      [].slice.call(form.querySelectorAll('[data-show]')).forEach(function (el) {
+        var on = el.getAttribute('data-show').split(' ').indexOf(key) > -1;
+        el.hidden = !on;
+        [].slice.call(el.querySelectorAll('input, select, textarea')).forEach(function (c) { c.disabled = !on; });
+      });
+      [].slice.call(form.querySelectorAll('[data-text-' + key + ']')).forEach(function (el) {
+        el.textContent = el.getAttribute('data-text-' + key);
+      });
+      form.querySelector('#f-details').required = key !== 'school';
+      form.querySelector('#f-newschool').required = key === 'school';
+    };
+    kindInputs.forEach(function (i) { i.addEventListener('change', sync); });
+    sync();
+    form.addEventListener('submit', function () {
+      var key = kindKey();
+      track({ event: 'pas_suggest_submit', suggest_kind: key, school: key === 'school' ? 'new school' : form.querySelector('#f-school').value });
+    });
+  }
 
   // Support button
   var give = document.querySelector('a[data-track="support"]');

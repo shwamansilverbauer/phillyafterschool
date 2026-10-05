@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const PREVIEW = process.env.PREVIEW === '1';
@@ -19,6 +20,10 @@ const REL = {
   nearby: { pill: 'Nearby, no pickup', title: 'Nearby, no pickup found', blurb: 'Close to the school, but you or your child would need to get there. Best suited to older children or as a second stop.' },
 };
 const HOW = ['online', 'phone', 'contact', 'school', 'none'];
+// A short fingerprint of each asset, added to its URL. When the file changes, the URL changes,
+// so browsers and the host's CDN fetch the new one instead of a cached copy.
+const stamp = f => PREVIEW ? '' : '?v=' + createHash('sha1').update(fs.readFileSync(path.join(ROOT, f))).digest('hex').slice(0, 8);
+const CSS_V = stamp('src/site.css'), JS_V = stamp('src/site.js');
 
 // ---------- helpers ----------
 const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -116,7 +121,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="${link('assets/site.css', depth)}">`;
+<link rel="stylesheet" href="${link('assets/site.css', depth)}${CSS_V}">`;
   const page = `${gtmBody}<script>document.documentElement.className+=' js'</script>
 <header class="band">
   <div class="in bar">
@@ -137,7 +142,7 @@ ${body}
   <p>Know a program that’s missing, or see something out of date? <a href="${link('suggest/', depth)}">Tell us</a>. <a href="${link('about/', depth)}">About this site</a>. <a href="${link('support/', depth)}">Support it</a>.</p>
   ${cfg.builtBy ? `<p>Built by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
 </div></footer>
-<script src="${link('assets/site.js', depth)}"></script>
+<script src="${link('assets/site.js', depth)}${JS_V}"></script>
 ${scripts}`;
   if (fragment) return head + '\n' + page;
   return `<!doctype html>
@@ -353,15 +358,20 @@ function aboutPage() {
 function suggestPage() {
   const opts = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<option>${esc(s.shortName)}</option>`).join('');
   const hero = `    <h1>Know one we missed?</h1>
-    <p class="lede">Plenty of good programs are off the radar: a church basement, a dance studio that walks kids over, a neighbor who runs a homework club. Tell us and we’ll check it and add it.</p>`;
-  const chips = (name, legend, values) => `<fieldset class="field chips">
+    <p class="lede">Plenty of good programs are off the radar: a church basement, a dance studio that walks kids over, a neighbor who runs a homework club. Tell us and we’ll check it and add it. You can also fix a listing or ask for your school.</p>`;
+  const chips = (name, legend, values, attrs = '') => `<fieldset class="field chips"${attrs}>
       <legend>${legend}</legend>
       <div class="chip-row">${values.map((v, i) => `<label class="chip"><input type="radio" name="${name}" value="${esc(v)}"${i === 0 ? ' checked' : ''}><span>${esc(v)}</span></label>`).join('')}</div>
     </fieldset>`;
   const body = `<div class="suggest">
   <form class="form panel" method="post" action="send.php" id="suggest-form">
     ${chips('kind', 'What are you sending?', ['A program that’s missing', 'A correction to a listing', 'A school to add'])}
-    <div class="pair">
+    <div class="field" data-show="school" hidden>
+      <label for="f-newschool">School name</label>
+      <input id="f-newschool" name="newschool" type="text" maxlength="120" autocomplete="off" disabled>
+      <span class="hint">The neighborhood helps too, if you know it.</span>
+    </div>
+    <div class="pair" data-show="program correction">
       <div class="field">
         <label for="f-school">Which school?</label>
         <select id="f-school" name="school">
@@ -375,19 +385,19 @@ function suggestPage() {
         <input id="f-program" name="program" type="text" maxlength="150" autocomplete="off">
       </div>
     </div>
-    <div class="field">
-      <label for="f-website">Website or link, if there is one</label>
+    <div class="field" data-show="program correction">
+      <label for="f-website" data-text-program="Website or link, if there is one" data-text-correction="Link that shows the right information, if you have one">Website or link, if there is one</label>
       <input id="f-website" name="website" type="text" maxlength="300" inputmode="url" autocomplete="off" placeholder="https://">
     </div>
-    ${chips('pickup', 'Does it pick up from the school?', ['Not sure', 'Yes, staff pick up', 'It runs at the school', 'No pickup'])}
+    ${chips('pickup', 'Does it pick up from the school?', ['Not sure', 'Yes, staff pick up', 'It runs at the school', 'No pickup'], ' data-show="program"')}
     <div class="field">
-      <label for="f-details">Details</label>
-      <span class="hint">Grades, days and hours, cost, who to contact. Whatever you know.</span>
+      <label for="f-details" data-text-program="Details" data-text-correction="What needs fixing?" data-text-school="Anything else? (optional)">Details</label>
+      <span class="hint" data-text-program="Grades, days and hours, cost, who to contact. Whatever you know." data-text-correction="What the listing says now, and what it should say." data-text-school="Programs you already know serve this school, or why it should be next.">Grades, days and hours, cost, who to contact. Whatever you know.</span>
       <textarea id="f-details" name="details" maxlength="4000" required></textarea>
     </div>
     <div class="about-you">
       <h2>About you</h2>
-      <p class="hint">All optional. Your email is only used to ask a follow-up question about this program.</p>
+      <p class="hint">All optional. Your email is only used to ask a follow-up question about what you sent.</p>
       <div class="field">
         <label for="f-role">How do you know it?</label>
         <select id="f-role" name="role">
@@ -408,7 +418,7 @@ function suggestPage() {
         </div>
       </div>
     </div>
-    <div class="hp" aria-hidden="true">
+    <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
       <label for="f-company">Leave this blank</label>
       <input id="f-company" name="company" type="text" tabindex="-1" autocomplete="off">
     </div>
@@ -444,7 +454,7 @@ $SITE = ${JSON.stringify(cfg.siteName)};
 function fail($msg, $code) {
   http_response_code($code);
   header('Content-Type: text/html; charset=utf-8');
-  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="./">Go back to the form</a></p></main></body></html>';
+  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css${CSS_V}"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="./">Go back to the form</a></p></main></body></html>';
   exit;
 }
 function field($key, $max) {
@@ -468,6 +478,7 @@ if (field('company', 200) !== '') {
 
 $kind = one_line(field('kind', 60));
 $school = one_line(field('school', 80));
+$newschool = one_line(field('newschool', 120));
 $program = one_line(field('program', 150));
 $website = one_line(field('website', 300));
 $pickup = one_line(field('pickup', 60));
@@ -476,8 +487,8 @@ $name = one_line(field('name', 100));
 $email = one_line(field('email', 150));
 $details = field('details', 4000);
 
-if ($details === '' && $program === '') {
-  fail('Please add a program name or some details so we know what to look for.', 400);
+if ($details === '' && $program === '' && $newschool === '') {
+  fail('Please add a school name, a program name or some details so we know what to look for.', 400);
 }
 if (substr_count(strtolower($details), 'http') > 5) {
   fail('That has too many links for us to accept. Please trim it and try again.', 400);
@@ -488,6 +499,7 @@ if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
 $body = "Type: $kind\\n"
   . "School: $school\\n"
+  . "New school: $newschool\\n"
   . "Program: $program\\n"
   . "Website: $website\\n"
   . "Picks up: $pickup\\n"
@@ -496,7 +508,8 @@ $body = "Type: $kind\\n"
   . "Email: $email\\n\\n"
   . "Details:\\n$details\\n";
 
-$subject = one_line("[$SITE] $kind" . ($program !== '' ? ": $program" : '') . " ($school)");
+$what = $newschool !== '' ? $newschool : $program;
+$subject = one_line("[$SITE] $kind" . ($what !== '' ? ": $what" : '') . ($school !== '' ? " ($school)" : ''));
 $headers = array(
   'From: ' . $SITE . ' <' . $TO . '>',
   'MIME-Version: 1.0',
