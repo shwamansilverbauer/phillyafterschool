@@ -6,7 +6,7 @@
   --blue:#0F4D90; --link:#1763B8; --btn:#1763B8; --btn-ink:#FFFFFF;
   --yellow:#F3C613; --yellow-ink:#2A2100;
   --green-bg:#D6F3D2; --green-ink:#1F5A22; --sky-bg:#DAEDFE; --sky-ink:#0F4D90;
-  --warn:#FFF4C2; --warn-ink:#5C4700; --red:#CC3000; --cell-off:#E4ECF6; --cell-on:#0F4D90;
+  --warn:#FFF4C2; --warn-ink:#5C4700; --red:#CC3000; --cell-off:#E4ECF6; --cell-on:#0F4D90; --star:#B88A00;
   --hero:#0F4D90; --hero-2:#0A3566; --hero-ink:#FFFFFF; --hero-muted:#CFE3FB;
   --house-1:#1B60AD; --house-2:#2176D2; --house-3:#2E86E0; --house-trim:#0A3566; --school:#96C9FF;
   --display:"Archivo","Arial Black","Helvetica Neue",Arial,sans-serif;
@@ -17,7 +17,7 @@
   --blue:#0F4D90; --link:#7DB8FF; --btn:#2176D2; --btn-ink:#FFFFFF;
   --yellow:#F3C613; --yellow-ink:#2A2100;
   --green-bg:#143D1B; --green-ink:#B9F2B1; --sky-bg:#12345C; --sky-ink:#BFDDFF;
-  --warn:#3F3407; --warn-ink:#FFE98A; --red:#FF6A45; --cell-off:#182C47; --cell-on:#2176D2;
+  --warn:#3F3407; --warn-ink:#FFE98A; --red:#FF6A45; --cell-off:#182C47; --cell-on:#2176D2; --star:#F3C613;
   --hero:#0A2F5C; --hero-2:#061E3D; --hero-ink:#FFFFFF; --hero-muted:#B9D4F5;
   --house-1:#124A8A; --house-2:#17599F; --house-3:#1E6BBB; --house-trim:#061E3D; --school:#6FA9E6;
   color-scheme:dark}}
@@ -26,7 +26,7 @@
   --blue:#0F4D90; --link:#7DB8FF; --btn:#2176D2; --btn-ink:#FFFFFF;
   --yellow:#F3C613; --yellow-ink:#2A2100;
   --green-bg:#143D1B; --green-ink:#B9F2B1; --sky-bg:#12345C; --sky-ink:#BFDDFF;
-  --warn:#3F3407; --warn-ink:#FFE98A; --red:#FF6A45; --cell-off:#182C47; --cell-on:#2176D2;
+  --warn:#3F3407; --warn-ink:#FFE98A; --red:#FF6A45; --cell-off:#182C47; --cell-on:#2176D2; --star:#F3C613;
   --hero:#0A2F5C; --hero-2:#061E3D; --hero-ink:#FFFFFF; --hero-muted:#B9D4F5;
   --house-1:#124A8A; --house-2:#17599F; --house-3:#1E6BBB; --house-trim:#061E3D; --school:#6FA9E6;
   color-scheme:dark}
@@ -141,9 +141,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .list{display:flex;flex-direction:column;gap:12px}
 .prog{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px 22px;min-width:0;scroll-margin-top:190px;
   display:grid;grid-template-columns:minmax(0,1fr);gap:12px;
-  grid-template-areas:"top" "strip" "facts" "flag" "actions" "src"}
+  grid-template-areas:"top" "strip" "facts" "flag" "actions" "rev" "src"}
 @media (min-width:860px){.prog{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:12px 32px;
-  grid-template-areas:"top facts" "strip facts" "actions facts" "flag flag" "src src";grid-template-rows:auto auto 1fr}}
+  grid-template-areas:"top facts" "strip facts" "actions facts" "flag flag" "rev rev" "src src";grid-template-rows:auto auto 1fr}}
 .top{grid-area:top;display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0}
 .what{color:var(--muted)}
 .pill{display:inline-block;font-size:.84rem;font-weight:700;border-radius:999px;padding:3px 12px;white-space:nowrap}
@@ -207,3 +207,40 @@ button.btn{cursor:pointer;font-family:inherit}
 .next ol{margin:0;padding:0;list-style:none;counter-reset:n;display:flex;flex-direction:column;gap:14px}
 .next li{counter-increment:n;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}
 .next li::before{content:counter(n);font-family:var(--display);font-weight:800;width:34px;height:34px;border-radius:50%;background:var(--yellow);color:var(--yellow-ink);display:flex;align-items:center;justify-content:center}
+
+/* ---------- add to board, reviews, calendar links on cards ---------- */
+.nav .count{display:inline-block;margin-left:6px;min-width:22px;padding:0 6px;border-radius:999px;background:var(--yellow);color:var(--yellow-ink);font-size:.8rem;font-weight:700;text-align:center}
+.needs-js{display:none}
+.js .needs-js{display:inline-block}
+.btn.on{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink)}
+.days{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding-top:4px}
+.day{font:inherit;font-size:.95rem;min-width:54px;padding:9px 10px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.day[aria-pressed="true"]{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink);font-weight:700}
+.days a{font-size:.93rem;margin-left:4px}
+.rev{grid-area:rev;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;font-size:.95rem;border-top:1px solid var(--line);padding-top:12px;color:var(--muted)}
+.rev details{flex:1 1 100%;min-width:0;color:var(--ink)}
+.rev summary{cursor:pointer}
+.stars{color:var(--star);letter-spacing:1px}
+.rev ul{list-style:none;margin:12px 0 6px;padding:0;display:flex;flex-direction:column;gap:14px}
+.rev li{display:flex;flex-direction:column;gap:3px;max-width:65ch}
+.rev .by{color:var(--muted);font-size:.88rem}
+.cal{display:block;margin-top:6px}
+.cal a{white-space:nowrap;margin-right:10px}
+
+/* ---------- the weekly board ---------- */
+.week{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:start}
+@media (max-width:900px){.week{grid-template-columns:minmax(0,1fr)}}
+.daycol{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.daycol h2{font-size:1.1rem}
+.daycol ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.pick{display:flex;flex-direction:column;gap:4px;align-items:flex-start;border-top:1px solid var(--line);padding-top:12px;overflow-wrap:anywhere}
+.pick:first-child{border-top:0;padding-top:0}
+.pick .pill{white-space:normal}
+.board-tools{display:flex;flex-direction:column;gap:18px;max-width:620px}
+.panel .actions,.board-tools .actions{grid-area:auto;align-items:center;align-self:flex-start}
+.panel h2{font-size:1.25rem}
+
+/* ---------- review form extras ---------- */
+.check{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{width:22px;height:22px;margin:2px 0 0;flex:0 0 auto;accent-color:var(--btn)}
+.rules{margin:0;padding-left:1.2rem;display:flex;flex-direction:column;gap:10px}

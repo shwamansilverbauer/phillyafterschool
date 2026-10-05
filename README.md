@@ -55,6 +55,7 @@ Fields worth knowing:
 - `grades`: a range like `"K-5"` or `"PK-3"`, a single grade like `"8"`, or `null` when the provider doesn't publish grades.
 - `register.how`: `online` (needs `url`), `phone`, `contact`, `school` or `none`. `register.note` is shown next to it.
 - `register.nextTerm`: optional. When sign-ups open for the next term, semester or school year, in a sentence with dates. Leave it out when the provider doesn't say.
+- `register.dates`: optional list of `{ "date": "YYYY-MM-DD", "label": "..." }` for registration openings and deadlines. Each upcoming one gets "Add to calendar" links on the card; past dates drop off by themselves.
 - `note`: the yellow caution box. Use it for anything unconfirmed.
 - `schools`: one entry per school the program serves:
   - `relation`: `onsite`, `pickup` or `nearby`. Use `pickup` only when a source names the school.
@@ -71,6 +72,19 @@ Fields worth knowing:
 3. Add records for programs that are new (the school's own clubs and on-site care).
 4. Commit to `main`.
 
+## Reviews
+
+Reviews are approved by hand. The form at `/review/` emails each review to `contactEmail`, with a
+ready-made entry at the bottom of the email. To publish one, paste that entry into
+`data/reviews.json` (inside the square brackets, entries separated by commas) and commit.
+To remove a review, delete its entry. Cards show the average and the reviews for each program.
+
+## The weekly board
+
+`/board/` lets a visitor collect programs by weekday with "Add to board" on any card. The board
+is stored in the visitor's own browser, and the share link carries the whole week in the address,
+so nothing about it is stored on the server.
+
 ## The suggestion form
 
 `/suggest/` posts to `suggest/send.php`, which the build generates. It emails each suggestion to
@@ -80,9 +94,11 @@ A hidden field traps most spam bots.
 
 ## Analytics
 
-Set `gtmId` to load Google Tag Manager on every page. The site pushes four events to the data layer:
+Set `gtmId` to load Google Tag Manager on every page. The site pushes these events to the data layer:
 `pas_filter` (filter_type, filter_value, school), `pas_outbound` (link_type of register or website,
-program_id, school), `pas_suggest_submit` (suggest_kind, school) and `pas_support_click`.
+program_id, school), `pas_suggest_submit` (suggest_kind, school), `pas_support_click`, `pas_review_submit` (program_id,
+school, stars), `pas_board_add` (program_id, school, day) and `pas_board_share` (method).
+`pas_outbound` also fires with link_type `calendar` and `review`.
 
 ## Keeping it current
 

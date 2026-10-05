@@ -12,6 +12,7 @@ const readJson = f => JSON.parse(fs.readFileSync(path.join(ROOT, f), 'utf8'));
 const cfg = readJson('site.config.json');
 const schools = readJson('data/schools.json');
 const programs = readJson('data/programs.json');
+const reviews = fs.existsSync(path.join(ROOT, 'data/reviews.json')) ? readJson('data/reviews.json') : [];
 
 const GRADES = ['PK', 'K', '1', '2', '3', '4', '5', '6', '7', '8'];
 const REL = {
@@ -70,6 +71,17 @@ for (const p of programs) {
   }
   if (['phone', 'school'].includes(p.register?.how) && !p.phone) errors.push(`${at}: register by phone needs a phone number`);
 }
+for (const p of programs) for (const d of p.register?.dates || []) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(d.date || '') || !d.label) errors.push(`program "${p.id}": each register.dates entry needs a date (YYYY-MM-DD) and a label`);
+}
+reviews.forEach((r, i) => {
+  const at = `review ${i + 1}`;
+  if (!ids.has(r.programId)) errors.push(`${at}: unknown programId "${r.programId}"`);
+  if (!schoolIds.has(r.school)) errors.push(`${at}: unknown school "${r.school}"`);
+  if (!Number.isInteger(r.stars) || r.stars < 1 || r.stars > 5) errors.push(`${at}: stars must be a whole number from 1 to 5`);
+  if (!r.name || !r.comment) errors.push(`${at}: needs a name and a comment`);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(r.date || '')) errors.push(`${at}: date must be YYYY-MM-DD`);
+});
 if (errors.length) {
   console.error('Data problems found. Nothing was built.\n- ' + errors.join('\n- '));
   process.exit(1);
@@ -107,8 +119,8 @@ function street(animate) {
 function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false }) {
   const canonical = cfg.siteUrl + '/' + pathName;
   const fullTitle = pathName === '' ? (PREVIEW ? cfg.siteName : `${cfg.siteName}: ${cfg.tagline}`) : `${title} | ${cfg.siteName}`;
-  const nav = [['', 'Schools'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Support']]
-    .map(([to, label]) => `<a href="${link(to, depth)}"${current === to ? ' aria-current="page"' : ''}>${label}</a>`).join('');
+  const nav = [['', 'Schools'], ['board/', 'My board'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Support']]
+    .map(([to, label]) => `<a href="${link(to, depth)}"${current === to ? ' aria-current="page"' : ''}>${label}${to === 'board/' ? '<span class="count" data-board-count hidden></span>' : ''}</a>`).join('');
   const fix = correctionHref('Correction for Philly After School');
   const head = `${fragment ? '' : gtmHead + '\n'}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
@@ -159,6 +171,44 @@ ${page}
 `;
 }
 
+// ---------- calendar files for registration dates ----------
+const TODAY = new Date().toISOString().slice(0, 10);
+const ymd = iso => iso.replace(/-/g, '');
+const nextDay = iso => new Date(Date.parse(iso + 'T12:00:00Z') + 86400000).toISOString().slice(0, 10);
+const shortDate = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+const upcomingDates = p => (p.register.dates || []).filter(d => d.date >= TODAY);
+const calTitle = (p, d) => `${p.name}: ${d.label}`;
+const calDetails = p => `${p.register.url || p.website}\n\nFrom ${cfg.siteName}: ${cfg.siteUrl}/`;
+const gcalUrl = (p, d) => 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+  + '&text=' + encodeURIComponent(calTitle(p, d))
+  + '&dates=' + ymd(d.date) + '/' + ymd(nextDay(d.date))
+  + '&details=' + encodeURIComponent(calDetails(p));
+function icsFile(p, d) {
+  const text = s => String(s).replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+  const fold = line => line.match(/.{1,60}/gu).join('\r\n ');
+  return [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//' + cfg.siteName + '//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    'UID:' + p.id + '-' + d.date + '@' + cfg.siteUrl.replace(/^https?:\/\//, ''),
+    'DTSTAMP:' + ymd(TODAY) + 'T120000Z',
+    'DTSTART;VALUE=DATE:' + ymd(d.date),
+    'DTEND;VALUE=DATE:' + ymd(nextDay(d.date)),
+    'SUMMARY:' + text(calTitle(p, d)),
+    'DESCRIPTION:' + text(calDetails(p)),
+    'URL:' + (p.register.url || p.website),
+    'TRANSP:TRANSPARENT',
+    'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:' + text(calTitle(p, d)), 'TRIGGER:PT9H', 'END:VALARM',
+    'END:VEVENT', 'END:VCALENDAR',
+  ].map(fold).join('\r\n') + '\r\n';
+}
+
+// ---------- reviews ----------
+const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+const reviewsFor = id => reviews.filter(r => r.programId === id).sort((a, b) => b.date.localeCompare(a.date));
+const monthYear = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const schoolShort = id => (schools.find(s => s.id === id) || {}).shortName || '';
+const BOARD_DAYS = [['mon', 'Mon'], ['tue', 'Tue'], ['wed', 'Wed'], ['thu', 'Thu'], ['fri', 'Fri']];
+
 // ---------- program card ----------
 function card(p, school) {
   const l = p.schools[school.id];
@@ -177,7 +227,16 @@ function card(p, school) {
   if (r.how === 'online') regText = ['Online.', regText].filter(Boolean).join(' ');
   if (r.how === 'phone') regText = [`By phone or in person${p.phone ? ': ' + phoneLink : ''}.`, regText].filter(Boolean).join(' ');
   if (r.how === 'school') regText = [regText, p.phone ? `School office: ${phoneLink}.` : ''].filter(Boolean).join(' ');
-  const rows = [['Where', esc(where)], ['Hours', esc(p.hours)], ['Cost', esc(p.cost)], ['Register', regText], ['Next term', esc(r.nextTerm || '')], ['Contact', r.how === 'school' ? '' : contact]]
+  const dateHtml = upcomingDates(p).map(d => `<span class="cal" data-date="${d.date}"><b>${shortDate(d.date)}:</b> ${esc(d.label)}. ${PREVIEW ? '' : `<a href="${link('cal/' + p.id + '-' + d.date + '.ics', 1)}" data-track="calendar">Add to calendar</a> `}<a href="${esc(gcalUrl(p, d))}" target="_blank" rel="noopener" data-track="calendar">${PREVIEW ? 'Add to Google Calendar' : 'Google Calendar'}</a></span>`).join('');
+  const revs = reviewsFor(p.id);
+  const avg = revs.length ? revs.reduce((a, x) => a + x.stars, 0) / revs.length : 0;
+  const reviewUrl = `${link('review/', 1)}?program=${p.id}&school=${school.id}`;
+  const revHtml = revs.length
+    ? `<details><summary><span class="stars" aria-hidden="true">${stars(Math.floor(avg + 0.25))}</span> <b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'review' : 'reviews'}</summary>
+      <ul>${revs.map(x => `<li><span class="stars" role="img" aria-label="${x.stars} out of 5 stars">${stars(x.stars)}</span><p>${esc(x.comment)}</p><span class="by">${esc(x.name)}, ${esc(schoolShort(x.school))} parent, ${monthYear(x.date)}</span></li>`).join('')}</ul></details>
+    <a href="${reviewUrl}" data-track="review">Write a review</a>`
+    : `<span>No reviews yet.</span> <a href="${reviewUrl}" data-track="review">Write the first one</a>`;
+  const rows = [['Where', esc(where)], ['Hours', esc(p.hours)], ['Cost', esc(p.cost)], ['Register', regText], ['Next term', esc(r.nextTerm || '') + dateHtml], ['Contact', r.how === 'school' ? '' : contact]]
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
   const flag = [p.note, l.note].filter(Boolean).join(' ');
   const fix = correctionHref(`Correction: ${p.name} (${school.shortName})`);
@@ -186,7 +245,9 @@ function card(p, school) {
   <div class="strip" role="img" aria-label="Grades served: ${esc(gradeText)}">${cells}${p.gradeNote ? `<span class="strip-note">${esc(p.gradeNote)}</span>` : ''}</div>
   <dl>${rows}</dl>
   ${flag ? `<p class="flag">${esc(flag)}</p>` : ''}
-  <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a></div>
+  <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a><button type="button" class="btn needs-js" data-board-toggle aria-expanded="false">Add to board</button>
+    <div class="days" hidden><span class="hint">Which days?</span>${BOARD_DAYS.map(([k, n]) => `<button type="button" class="day" data-day="${k}" aria-pressed="false">${n}</button>`).join('')}<a href="${link('board/', 1)}">See your board</a></div></div>
+  <div class="rev">${revHtml}</div>
   <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sources.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join('')}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
 </article>`;
 }
@@ -349,6 +410,12 @@ function aboutPage() {
   <h2 id="corrections">Corrections, new programs and new schools</h2>
   <p>Parents and providers know these programs best. If something is wrong or missing, or you want your school added, <a href="${link('suggest/', 1)}">use the form</a>. ${mail}.</p>
   <p>It helps to include the program, the school, what changed, and a link to where it’s published.</p>
+  <h2 id="reviews">Reviews</h2>
+  <ul>
+    <li>Reviews are first-hand notes from parents and caregivers. Each one is read before it’s posted and shows the reviewer’s first name and school.</li>
+    <li>We don’t post reviews that name children or individual staff, or reviews a program writes about itself.</li>
+    <li>Nobody pays to have a review posted or removed. A provider who thinks a review is wrong can use the form above or the contact address.</li>
+  </ul>
   ${cfg.builtBy ? `<h2 id="who">Who built this</h2>
   <p>${esc(cfg.builtBy.bio)}</p>` : ''}
 </div>`;
@@ -531,6 +598,223 @@ exit;
 `;
 }
 
+function boardPage() {
+  const data = {
+    schools: Object.fromEntries(schools.map(s => [s.id, { name: s.shortName, path: link(s.id + '/', 1) }])),
+    programs: Object.fromEntries(programs.map(p => [p.id, {
+      name: p.name, hours: p.hours,
+      schools: Object.fromEntries(Object.entries(p.schools).map(([sid, l]) => [sid, { rel: l.relation, where: l.address || p.address || '' }])),
+    }])),
+  };
+  const schoolLinks = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<a class="btn" href="${link(s.id + '/', 1)}">${esc(s.shortName)}</a>`).join('');
+  const hero = `    <h1>Build your week</h1>
+    <p class="lede">Monday might be martial arts and Thursday the rec center. Add programs to your board from any school’s page, then send the week to your partner, a sitter, or the group chat.</p>`;
+  const body = `<div data-board-page style="display:contents">
+  <noscript><p class="ask">The board needs JavaScript turned on.</p></noscript>
+  <div class="panel" id="board-shared" hidden>
+    <h2>Someone shared this week with you</h2>
+    <p>It isn’t saved on your device yet.</p>
+    <div class="actions"><button type="button" class="btn primary" id="board-adopt">Make it my board</button><button type="button" class="btn" id="board-mine">See my own board</button></div>
+  </div>
+  <div class="panel" id="board-empty" hidden>
+    <h2>Your board is empty</h2>
+    <p>Open a school’s page and choose “Add to board” on any program. Pick the days, and it shows up here.</p>
+    <div class="actions">${schoolLinks}</div>
+  </div>
+  <section class="section">
+    <h2 id="board-title">Your week</h2>
+    <div class="week" id="week"></div>
+  </section>
+  <section class="board-tools" id="board-tools" hidden>
+    <div class="field">
+      <label for="board-name">Name this week</label>
+      <input id="board-name" type="text" maxlength="40" placeholder="Sam’s week" autocomplete="off">
+    </div>
+    <div class="actions">
+      <button type="button" class="btn primary" id="board-share" hidden>Share</button>
+      <button type="button" class="btn" id="board-copy-link">Copy link</button>
+      <button type="button" class="btn" id="board-copy-text">Copy as text</button>
+      <button type="button" class="clear" id="board-clear">Clear the board</button>
+    </div>
+    <p class="hint" id="board-status" aria-live="polite"></p>
+    <div class="field">
+      <label for="board-link">Link to this week</label>
+      <input id="board-link" type="text" readonly>
+      <span class="hint">Anyone with the link sees the same week. Your board is saved only in this browser, so the link is also how you move it to another device.</span>
+    </div>
+  </section>
+  <script type="application/json" id="pas-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
+</div>`;
+  return layout({ title: 'Build your week', description: `Put together a Monday to Friday after-school plan from ${cfg.siteName} listings and share it with a link.`, pathName: 'board/', depth: 1, current: 'board/', hero, body });
+}
+
+function reviewPage() {
+  const progOpts = [...programs].sort((a, b) => a.name.localeCompare(b.name)).map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');
+  const schoolOpts = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<option value="${esc(s.id)}">${esc(s.shortName)}</option>`).join('');
+  const hero = `    <h1>How did it go?</h1>
+    <p class="lede">A first-hand note from one family helps the next one choose. Every review is read before it’s posted.</p>`;
+  const body = `<div class="suggest">
+  <form class="form panel" method="post" action="send.php" id="review-form">
+    <div class="pair">
+      <div class="field">
+        <label for="r-program">Which program?</label>
+        <select id="r-program" name="program" required>${progOpts}</select>
+      </div>
+      <div class="field">
+        <label for="r-school">Your child’s school</label>
+        <select id="r-school" name="school" required>${schoolOpts}</select>
+      </div>
+    </div>
+    <fieldset class="field chips">
+      <legend>Your rating</legend>
+      <div class="chip-row">${[5, 4, 3, 2, 1].map((n, i) => `<label class="chip"><input type="radio" name="stars" value="${n}"${i === 0 ? ' required' : ''}><span>${n} ${n === 1 ? 'star' : 'stars'}</span></label>`).join('')}</div>
+    </fieldset>
+    <div class="field">
+      <label for="r-comment">Your review</label>
+      <span class="hint">What was pickup like? Homework help? Would you sign up again?</span>
+      <textarea id="r-comment" name="comment" minlength="20" maxlength="1200" required></textarea>
+    </div>
+    <div class="pair">
+      <div class="field">
+        <label for="r-name">Your first name</label>
+        <input id="r-name" name="name" type="text" maxlength="40" autocomplete="given-name" required>
+        <span class="hint">Shown with your review.</span>
+      </div>
+      <div class="field">
+        <label for="r-email">Your email</label>
+        <input id="r-email" name="email" type="email" maxlength="150" autocomplete="email" required>
+        <span class="hint">Never shown. Only used if we need to confirm something.</span>
+      </div>
+    </div>
+    <label class="check"><input type="checkbox" name="firsthand" value="yes" required><span>This is my own experience as a parent or caregiver.</span></label>
+    <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+      <label for="r-company">Leave this blank</label>
+      <input id="r-company" name="company" type="text" tabindex="-1" autocomplete="off">
+    </div>
+    <div><button class="btn primary big" type="submit">Send review</button></div>
+  </form>
+  <aside class="next">
+    <h2>House rules</h2>
+    <ul class="rules">
+      <li>First-hand only. Write about what your own family experienced.</li>
+      <li>Be specific and fair. Details help more than adjectives.</li>
+      <li>No names of children or individual staff.</li>
+      <li>Programs can’t review themselves.</li>
+    </ul>
+    <p class="hint">Reviews show your first name and school, and appear after they’ve been read. Nobody pays to have a review posted or removed.</p>
+  </aside>
+</div>`;
+  return layout({ title: 'Write a review', description: `Share a first-hand review of an after-school program listed on ${cfg.siteName}.`, pathName: 'review/', depth: 1, current: null, hero, body, showStreet: 'parked' });
+}
+
+function reviewThanksPage() {
+  const hero = `    <h1>Thank you. It’s in.</h1>
+    <p class="lede">Your review will appear once it’s been read. <a href="${link('', 2)}">Back to the schools.</a></p>`;
+  return layout({ title: 'Thank you', description: 'Your review was sent.', pathName: 'review/thanks/', depth: 2, current: null, hero, body: '', showStreet: 'parked' });
+}
+
+// Review form handler. Emails the review with a ready-to-paste entry for data/reviews.json.
+function reviewPhp() {
+  const phpList = arr => 'array(' + arr.map(x => JSON.stringify(x)).join(', ') + ')';
+  return `<?php
+// Receives the "Write a review" form. Generated by build.mjs; edit it there.
+$TO = ${JSON.stringify(cfg.contactEmail)};
+$SITE = ${JSON.stringify(cfg.siteName)};
+$PROGRAMS = ${phpList(programs.map(p => p.id))};
+$SCHOOLS = ${phpList(schools.map(s => s.id))};
+
+function fail($msg, $code) {
+  http_response_code($code);
+  header('Content-Type: text/html; charset=utf-8');
+  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css${CSS_V}"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="javascript:history.back()">Go back to the form</a></p></main></body></html>';
+  exit;
+}
+function field($key, $max) {
+  $v = (isset($_POST[$key]) && is_string($_POST[$key])) ? trim($_POST[$key]) : '';
+  $v = str_replace(chr(0), '', $v);
+  return function_exists('mb_substr') ? mb_substr($v, 0, $max, 'UTF-8') : substr($v, 0, $max);
+}
+function one_line($v) {
+  return trim(preg_replace('/[\\r\\n\\t]+/', ' ', $v));
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+  header('Location: ./', true, 303);
+  exit;
+}
+// A hidden field people never see. If it is filled in, a bot did it: act as if it worked.
+if (field('company', 200) !== '') {
+  header('Location: thanks/', true, 303);
+  exit;
+}
+
+$program = one_line(field('program', 80));
+$school = one_line(field('school', 40));
+$stars = (int) field('stars', 2);
+$name = one_line(field('name', 40));
+$email = one_line(field('email', 150));
+$comment = field('comment', 1200);
+
+if (!in_array($program, $PROGRAMS, true) || !in_array($school, $SCHOOLS, true)) {
+  fail('Please choose the program and school from the lists.', 400);
+}
+if ($stars < 1 || $stars > 5) {
+  fail('Please choose a rating from 1 to 5 stars.', 400);
+}
+if (strlen($comment) < 20) {
+  fail('Please write a sentence or two so other families know what to expect.', 400);
+}
+if ($name === '') {
+  fail('Please add your first name. It is shown with your review.', 400);
+}
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  fail('Please add a working email address. It is never shown.', 400);
+}
+if (field('firsthand', 5) !== 'yes') {
+  fail('Please confirm this is your own experience.', 400);
+}
+if (substr_count(strtolower($comment), 'http') > 1) {
+  fail('Reviews cannot include links. Please remove them and try again.', 400);
+}
+
+$entry = json_encode(array(
+  'programId' => $program,
+  'school' => $school,
+  'name' => $name,
+  'stars' => $stars,
+  'comment' => trim(preg_replace('/\\s+/', ' ', $comment)),
+  'date' => date('Y-m-d'),
+), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+$body = "New review, waiting for your approval.\\n\\n"
+  . "Program: $program\\n"
+  . "School: $school\\n"
+  . "Stars: $stars\\n"
+  . "From: $name <$email>\\n\\n"
+  . "$comment\\n\\n"
+  . "To publish it, add this entry to data/reviews.json (inside the square brackets, with a comma between entries):\\n\\n"
+  . "$entry\\n";
+
+$subject = one_line("[$SITE] Review: $program ($stars stars)");
+$headers = array(
+  'From: ' . $SITE . ' <' . $TO . '>',
+  'Reply-To: ' . $email,
+  'MIME-Version: 1.0',
+  'Content-Type: text/plain; charset=UTF-8',
+);
+
+$sent = @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\\r\\n", $headers));
+$log = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-reviews.log';
+$saved = @file_put_contents($log, date('c') . ($sent ? ' (emailed)' : ' (EMAIL FAILED)') . "\\n" . $body . "----\\n", FILE_APPEND | LOCK_EX);
+
+if (!$sent && $saved === false) {
+  fail('Something went wrong on our side. Please email ' . $TO . ' instead.', 500);
+}
+header('Location: thanks/', true, 303);
+exit;
+`;
+}
+
 function notFoundPage() {
   const hero = `    <h1>This jawn isn’t here</h1>
     <p class="lede">The link may be old, or the page moved. <a href="/">Start from the list of schools.</a></p>`;
@@ -546,18 +830,24 @@ write('support/index.html', supportPage());
 write('about/index.html', aboutPage());
 write('suggest/index.html', suggestPage());
 write('suggest/thanks/index.html', thanksPage());
+write('board/index.html', boardPage());
+write('review/index.html', reviewPage());
+write('review/thanks/index.html', reviewThanksPage());
 write('assets/site.css', fs.readFileSync(path.join(ROOT, 'src/site.css')));
 write('assets/site.js', fs.readFileSync(path.join(ROOT, 'src/site.js')));
 if (!PREVIEW) {
   write('404.html', notFoundPage());
   if (cfg.contactEmail) write('suggest/send.php', sendPhp());
+  if (cfg.contactEmail) write('review/send.php', reviewPhp());
+  for (const p of programs) for (const d of upcomingDates(p)) write(`cal/${p.id}-${d.date}.ics`, icsFile(p, d));
+  write('data/reviews.json', JSON.stringify(reviews, null, 2));
   // Public copy of the data, so the monthly check (or anyone) can read exactly what the site shows.
   write('data/programs.json', JSON.stringify(programs.map(({ _grades, ...p }) => p), null, 2));
   write('data/schools.json', JSON.stringify(schools, null, 2));
   const latest = programs.map(p => p.lastVerified).sort().pop();
-  const urls = ['', ...schools.map(s => s.id + '/'), 'suggest/', 'about/', 'support/'];
+  const urls = ['', ...schools.map(s => s.id + '/'), 'board/', 'suggest/', 'review/', 'about/', 'support/'];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${latest}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
-  write('.htaccess', 'ErrorDocument 404 /404.html\n');
+  write('.htaccess', 'ErrorDocument 404 /404.html\nAddType text/calendar .ics\n');
 }
 console.log(`Built ${schools.length} school page(s) and ${programs.length} programs into ${path.relative(ROOT, OUT)}/`);
