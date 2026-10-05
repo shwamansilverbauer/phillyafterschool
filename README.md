@@ -70,6 +70,19 @@ Fields worth knowing:
 3. Add records for programs that are new (the school's own clubs and on-site care).
 4. Commit to `main`.
 
+## The suggestion form
+
+`/suggest/` posts to `suggest/send.php`, which the build generates. It emails each suggestion to
+`contactEmail` and also appends it to `phillyafterschool-suggestions.log` in the folder above
+`public_html`, so nothing is lost if an email goes missing. It needs a host that runs PHP.
+A hidden field traps most spam bots.
+
+## Analytics
+
+Set `gtmId` to load Google Tag Manager on every page. The site pushes three events to the data layer:
+`pas_filter` (filter_type, filter_value, school), `pas_outbound` (link_type of register or website,
+program_id, school) and `pas_suggest_submit` (suggest_kind, school).
+
 ## Keeping it current
 
 `dist/data/programs.json` is published with the site, so a scheduled check can read exactly

@@ -71,8 +71,8 @@ if (errors.length) {
 }
 
 // ---------- page shell ----------
-const gtmHead = cfg.gtmId ? `<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${esc(cfg.gtmId)}');</script>` : '';
-const gtmBody = cfg.gtmId ? `<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${esc(cfg.gtmId)}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>` : '';
+const gtmHead = cfg.gtmId && !PREVIEW ? `<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${esc(cfg.gtmId)}');</script>` : '';
+const gtmBody = cfg.gtmId && !PREVIEW ? `<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${esc(cfg.gtmId)}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>` : '';
 const correctionHref = (subject) => cfg.contactEmail ? `mailto:${cfg.contactEmail}?subject=${encodeURIComponent(subject)}` : null;
 
 // The block: a row of rowhouses, a school with the city flag, and a bus. Drawn from a fixed seed so it never changes between builds.
@@ -102,10 +102,10 @@ function street(animate) {
 function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false }) {
   const canonical = cfg.siteUrl + '/' + pathName;
   const fullTitle = pathName === '' ? (PREVIEW ? cfg.siteName : `${cfg.siteName}: ${cfg.tagline}`) : `${title} | ${cfg.siteName}`;
-  const nav = [['', 'Schools'], ['about/', 'About'], ['support/', 'Support']]
+  const nav = [['', 'Schools'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Support']]
     .map(([to, label]) => `<a href="${link(to, depth)}"${current === to ? ' aria-current="page"' : ''}>${label}</a>`).join('');
   const fix = correctionHref('Correction for Philly After School');
-  const head = `<title>${esc(fullTitle)}</title>
+  const head = `${fragment ? '' : gtmHead + '\n'}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${esc(canonical)}">
 <meta property="og:title" content="${esc(fullTitle)}">
@@ -116,8 +116,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="${link('assets/site.css', depth)}">
-${gtmHead}`;
+<link rel="stylesheet" href="${link('assets/site.css', depth)}">`;
   const page = `${gtmBody}<script>document.documentElement.className+=' js'</script>
 <header class="band">
   <div class="in bar">
@@ -135,7 +134,7 @@ ${body}
 <footer class="foot"><div class="in">
   <p>Listings come from each provider’s public pages and are not endorsements. Prices, hours and pickup routes change, so confirm with the provider before you enroll.</p>
   <p>${esc(cfg.siteName)} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.</p>
-  <p>Something out of date? ${fix ? `<a href="${esc(fix)}">Send a correction</a>` : `<a href="${link('about/', depth)}#corrections">How to send a correction</a>`}. <a href="${link('about/', depth)}">About this site</a>. <a href="${link('support/', depth)}">Support it</a>.</p>
+  <p>Know a program that’s missing, or see something out of date? <a href="${link('suggest/', depth)}">Tell us</a>. <a href="${link('about/', depth)}">About this site</a>. <a href="${link('support/', depth)}">Support it</a>.</p>
   ${cfg.builtBy ? `<p>Built by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
 </div></footer>
 <script src="${link('assets/site.js', depth)}"></script>
@@ -182,7 +181,7 @@ function card(p, school) {
   <div class="strip" role="img" aria-label="Grades served: ${esc(gradeText)}">${cells}${p.gradeNote ? `<span class="strip-note">${esc(p.gradeNote)}</span>` : ''}</div>
   <dl>${rows}</dl>
   ${flag ? `<p class="flag">${esc(flag)}</p>` : ''}
-  <div class="actions">${regUrl ? `<a class="btn primary" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a></div>
+  <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a></div>
   <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sources.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join('')}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
 </article>`;
 }
@@ -217,7 +216,7 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
       <span>School office <b><a href="${telHref(s.phone)}">${esc(s.phone)}</a></b></span>
       <span>Reviewed <b>${longDate(s.lastReviewed)}</b></span>
     </div>`;
-  const body = `<div data-school-page style="display:contents">
+  const body = `<div data-school-page="${esc(s.id)}" style="display:contents">
   <section class="picker" aria-label="Filter programs">
     <div class="rail" role="group" aria-label="Grade">${gradeBtns}</div>
     <div class="rail" role="group" aria-label="Type">${typeBtns}</div>
@@ -232,6 +231,7 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
   <div class="groups">
 ${groups}
   </div>
+  <p class="ask">Know a program that serves ${esc(s.shortName)} and isn’t here? <a href="${link('suggest/', 1)}">Add it to the list.</a></p>
   ${s.checkedNoPickup?.length ? `<section class="notes">
     <h2>Checked, and not listing ${esc(s.shortName)} pickup</h2>
     <ul>${s.checkedNoPickup.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
@@ -279,9 +279,9 @@ function homePage() {
   <h2>Schools</h2>
   <div class="schools">
 ${rows}
-    <p class="ask" id="no-school" hidden>That school isn’t here yet. <a href="${link('about/', 0)}#corrections">Ask for it to be added.</a></p>
+    <p class="ask" id="no-school" hidden>That school isn’t here yet. <a href="${link('suggest/', 0)}">Ask for it to be added.</a></p>
   </div>
-  <p>More schools in Queen Village, Bella Vista and South Philadelphia are on the way. <a href="${link('about/', 0)}#corrections">Ask for yours next.</a></p>
+  <p>More schools in Queen Village, Bella Vista and South Philadelphia are on the way. <a href="${link('suggest/', 0)}">Ask for yours next.</a></p>
 </section>
 <section class="section">
   <h2>How programs are sorted</h2>
@@ -317,7 +317,7 @@ function supportPage() {
   <ul>
     <li>Listings are free for every provider. Nobody pays to be listed or to be listed higher.</li>
     ${cfg.supportTaxDeductible ? '' : `<li>${esc(cfg.siteName)} is not a registered charity, so contributions are not tax-deductible.</li>`}
-    <li>Money isn’t the only way to help. A correction from a parent or provider is worth just as much. <a href="${link('about/', 1)}#corrections">Here’s how to send one.</a></li>
+    <li>Money isn’t the only way to help. A correction from a parent or provider is worth just as much. <a href="${link('suggest/', 1)}">Send one here.</a></li>
   </ul>
 </div>`;
   return layout({ title: 'Support this site', description: `Help keep ${cfg.siteName} accurate and growing.`, pathName: 'support/', depth: 1, current: 'support/', hero, body, showStreet: 'parked' });
@@ -341,12 +341,174 @@ function aboutPage() {
     <li>${esc(cfg.siteName)} is independent. It is not affiliated with the School District of Philadelphia or any provider.</li>
   </ul>
   <h2 id="corrections">Corrections, new programs and new schools</h2>
-  <p>Parents and providers know these programs best. If something is wrong or missing, or you want your school added, say so. ${mail}.</p>
+  <p>Parents and providers know these programs best. If something is wrong or missing, or you want your school added, <a href="${link('suggest/', 1)}">use the form</a>. ${mail}.</p>
   <p>It helps to include the program, the school, what changed, and a link to where it’s published.</p>
   ${cfg.builtBy ? `<h2 id="who">Who built this</h2>
   <p>${esc(cfg.builtBy.bio)} <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.url.replace(/^https?:\/\//, ''))}</a></p>` : ''}
 </div>`;
   return layout({ title: 'About', description: `How ${cfg.siteName} gathers and checks after-school listings, and how to send a correction.`, pathName: 'about/', depth: 1, current: 'about/', hero, body, showStreet: 'parked' });
+}
+
+function suggestPage() {
+  const opts = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<option>${esc(s.shortName)}</option>`).join('');
+  const hero = `    <h1>Know one we missed?</h1>
+    <p class="lede">Plenty of good programs are off the radar: a church basement, a dance studio that walks kids over, a neighbor who runs a homework club. Tell us and we’ll check it and add it.</p>`;
+  const body = `<form class="form" method="post" action="send.php" id="suggest-form">
+  <div class="field">
+    <label for="f-kind">What are you sending?</label>
+    <select id="f-kind" name="kind">
+      <option>A program that’s missing</option>
+      <option>A correction to a listing</option>
+      <option>A school to add</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="f-school">Which school?</label>
+    <select id="f-school" name="school">
+      ${opts}
+      <option>Another school</option>
+    </select>
+    <span class="hint">If it’s another school, name it in the details.</span>
+  </div>
+  <div class="field">
+    <label for="f-program">Program name</label>
+    <input id="f-program" name="program" type="text" maxlength="150" autocomplete="off">
+  </div>
+  <div class="field">
+    <label for="f-website">Website or link, if there is one</label>
+    <input id="f-website" name="website" type="text" maxlength="300" inputmode="url" autocomplete="off" placeholder="https://">
+  </div>
+  <div class="field">
+    <label for="f-pickup">Does it pick up from the school?</label>
+    <select id="f-pickup" name="pickup">
+      <option>Not sure</option>
+      <option>Yes, staff pick up</option>
+      <option>It runs at the school</option>
+      <option>No, families get there themselves</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="f-details">Details</label>
+    <span class="hint">Grades, days and hours, cost, who to contact. Whatever you know.</span>
+    <textarea id="f-details" name="details" maxlength="4000" required></textarea>
+  </div>
+  <div class="field">
+    <label for="f-role">How do you know it?</label>
+    <select id="f-role" name="role">
+      <option>I’m a parent or caregiver</option>
+      <option>I run or work at the program</option>
+      <option>I work at the school</option>
+      <option>Other</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="f-name">Your name (optional)</label>
+    <input id="f-name" name="name" type="text" maxlength="100" autocomplete="name">
+  </div>
+  <div class="field">
+    <label for="f-email">Your email (optional)</label>
+    <input id="f-email" name="email" type="email" maxlength="150" autocomplete="email">
+    <span class="hint">Only used to ask you a follow-up question about this program.</span>
+  </div>
+  <div class="hp" aria-hidden="true">
+    <label for="f-company">Leave this blank</label>
+    <input id="f-company" name="company" type="text" tabindex="-1" autocomplete="off">
+  </div>
+  <div><button class="btn primary big" type="submit">Send it</button></div>
+  <p class="hint">Nothing is published automatically. Every suggestion is checked against the program’s own information first.</p>
+</form>`;
+  return layout({ title: 'Suggest a program', description: `Tell ${cfg.siteName} about an after-school program that’s missing, a correction, or a school to add.`, pathName: 'suggest/', depth: 1, current: 'suggest/', hero, body, showStreet: 'parked' });
+}
+
+function thanksPage() {
+  const hero = `    <h1>Got it. Thank you.</h1>
+    <p class="lede">We’ll check it against the program’s own information and add it if it holds up. <a href="${link('', 2)}">Back to the schools.</a></p>`;
+  return layout({ title: 'Thank you', description: 'Your suggestion was sent.', pathName: 'suggest/thanks/', depth: 2, current: null, hero, body: '', showStreet: 'parked' });
+}
+
+// The form handler. Runs on the web host (PHP), emails the suggestion to the contact address,
+// and keeps a copy in a log file outside the public folder in case the email does not arrive.
+function sendPhp() {
+  return `<?php
+// Receives the "Suggest a program" form. Generated by build.mjs; edit it there.
+$TO = ${JSON.stringify(cfg.contactEmail)};
+$SITE = ${JSON.stringify(cfg.siteName)};
+
+function fail($msg, $code) {
+  http_response_code($code);
+  header('Content-Type: text/html; charset=utf-8');
+  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="./">Go back to the form</a></p></main></body></html>';
+  exit;
+}
+function field($key, $max) {
+  $v = (isset($_POST[$key]) && is_string($_POST[$key])) ? trim($_POST[$key]) : '';
+  $v = str_replace(chr(0), '', $v);
+  return function_exists('mb_substr') ? mb_substr($v, 0, $max, 'UTF-8') : substr($v, 0, $max);
+}
+function one_line($v) {
+  return trim(preg_replace('/[\\r\\n\\t]+/', ' ', $v));
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+  header('Location: ./', true, 303);
+  exit;
+}
+// A hidden field people never see. If it is filled in, a bot did it: act as if it worked.
+if (field('company', 200) !== '') {
+  header('Location: thanks/', true, 303);
+  exit;
+}
+
+$kind = one_line(field('kind', 60));
+$school = one_line(field('school', 80));
+$program = one_line(field('program', 150));
+$website = one_line(field('website', 300));
+$pickup = one_line(field('pickup', 60));
+$role = one_line(field('role', 60));
+$name = one_line(field('name', 100));
+$email = one_line(field('email', 150));
+$details = field('details', 4000);
+
+if ($details === '' && $program === '') {
+  fail('Please add a program name or some details so we know what to look for.', 400);
+}
+if (substr_count(strtolower($details), 'http') > 5) {
+  fail('That has too many links for us to accept. Please trim it and try again.', 400);
+}
+if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  $email = '';
+}
+
+$body = "Type: $kind\\n"
+  . "School: $school\\n"
+  . "Program: $program\\n"
+  . "Website: $website\\n"
+  . "Picks up: $pickup\\n"
+  . "Sent by: $role\\n"
+  . "Name: $name\\n"
+  . "Email: $email\\n\\n"
+  . "Details:\\n$details\\n";
+
+$subject = one_line("[$SITE] $kind" . ($program !== '' ? ": $program" : '') . " ($school)");
+$headers = array(
+  'From: ' . $SITE . ' <' . $TO . '>',
+  'MIME-Version: 1.0',
+  'Content-Type: text/plain; charset=UTF-8',
+);
+if ($email !== '') {
+  $headers[] = 'Reply-To: ' . $email;
+}
+
+$sent = @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\\r\\n", $headers));
+$log = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-suggestions.log';
+$saved = @file_put_contents($log, date('c') . ($sent ? ' (emailed)' : ' (EMAIL FAILED)') . "\\n" . $body . "----\\n", FILE_APPEND | LOCK_EX);
+
+if (!$sent && $saved === false) {
+  fail('Something went wrong on our side. Please email ' . $TO . ' instead.', 500);
+}
+header('Location: thanks/', true, 303);
+exit;
+`;
 }
 
 function notFoundPage() {
@@ -362,15 +524,18 @@ write('index.html', homePage());
 for (const s of schools) write(`${s.id}/index.html`, schoolPage(s));
 write('support/index.html', supportPage());
 write('about/index.html', aboutPage());
+write('suggest/index.html', suggestPage());
+write('suggest/thanks/index.html', thanksPage());
 write('assets/site.css', fs.readFileSync(path.join(ROOT, 'src/site.css')));
 write('assets/site.js', fs.readFileSync(path.join(ROOT, 'src/site.js')));
 if (!PREVIEW) {
   write('404.html', notFoundPage());
+  if (cfg.contactEmail) write('suggest/send.php', sendPhp());
   // Public copy of the data, so the monthly check (or anyone) can read exactly what the site shows.
   write('data/programs.json', JSON.stringify(programs.map(({ _grades, ...p }) => p), null, 2));
   write('data/schools.json', JSON.stringify(schools, null, 2));
   const latest = programs.map(p => p.lastVerified).sort().pop();
-  const urls = ['', ...schools.map(s => s.id + '/'), 'about/', 'support/'];
+  const urls = ['', ...schools.map(s => s.id + '/'), 'suggest/', 'about/', 'support/'];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${latest}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
   write('.htaccess', 'ErrorDocument 404 /404.html\n');

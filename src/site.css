@@ -175,3 +175,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .foot .in{padding-block:28px 40px;display:flex;flex-direction:column;gap:10px}
 .foot p{max-width:72ch}
 .foot a{color:var(--hero-ink)}
+
+/* ---------- suggest-a-program form ---------- */
+.form{display:flex;flex-direction:column;gap:20px;max-width:620px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-weight:700}
+.hint{color:var(--muted);font-size:.93rem}
+.field input,.field select,.field textarea{font:inherit;width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}
+.field textarea{min-height:150px;resize:vertical}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+button.btn{cursor:pointer;font-family:inherit}
