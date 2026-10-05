@@ -277,18 +277,18 @@
     if (rosters) return rosters;
     var raw = parse('pas-rosters');
     if (raw && Array.isArray(raw.kids) && raw.kids.length) {
-      rosters = { kid: 0, active: raw.active === 'next' ? 'next' : 'now', kids: raw.kids.slice(0, MAX_KIDS).map(function (k) {
+      rosters = { kid: 0, active: raw.active === 'now' ? 'now' : 'next', kids: raw.kids.slice(0, MAX_KIDS).map(function (k) {
         k = k && typeof k === 'object' ? k : {};
         return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next), teacher: cleanName(k.teacher), cardNote: String(k.cardNote == null ? '' : k.cardNote).slice(0, 110) };
       }) };
       if (typeof raw.kid === 'number' && raw.kid % 1 === 0 && raw.kid >= 0 && raw.kid < rosters.kids.length) rosters.kid = raw.kid;
     } else {
       // Carry over a board saved before each child had their own roster: it becomes the first child's.
-      var old = parse('pas-boards') || { active: 'now', now: parse('pas-board'), next: null };
+      var old = parse('pas-boards') || { active: parse('pas-board') ? 'now' : 'next', now: parse('pas-board'), next: null };   // someone new starts on the upcoming roster: planning the next term is why most people come
       var name = (old.now && old.now.name) || (old.next && old.next.name) || '';
       var kid = newKid(String(name).replace(/[’']s (week|board|roster)$/i, ''));
       kid.now = cleanBoard(old.now); kid.next = cleanBoard(old.next);
-      rosters = { kid: 0, active: old.active === 'next' ? 'next' : 'now', kids: [kid] };
+      rosters = { kid: 0, active: old.active === 'now' ? 'now' : 'next', kids: [kid] };
     }
     return rosters;
   }
@@ -480,8 +480,8 @@
       kidRemove.removeAttribute('data-armed');
       title.textContent = (kid.name ? possessive(kid.name) : 'Your') + (which === 'next' ? ' upcoming week' : ' current week');
       emptyText.textContent = which === 'next'
-        ? 'Nothing planned for the upcoming term yet. On any program, choose “Add to roster”, switch it to Upcoming, and pick the days.'
-        : 'Open a school’s page and choose “Add to roster” on any program. Pick the days, and it shows up here.';
+        ? 'Open a school’s page and choose “Add to roster” on any program. Pick the days, and it shows up here.'
+        : 'Nothing on the current roster yet. On any program, choose “Add to roster”, switch it to Current, and pick the days.';
       linkBox.value = shareUrl();
       emailLink.href = 'mailto:?subject=' + encodeURIComponent(heading(kid.name, which)) + '&body=' + encodeURIComponent(asText(kid.name, b, which) + '\n\n' + shareUrl());
       if (document.activeElement !== nameInput) nameInput.value = kid.name;
@@ -500,7 +500,7 @@
     kidAdd.addEventListener('click', function () {
       var r = loadRosters();
       if (r.kids.length >= MAX_KIDS) return;
-      r.kids.push(newKid('')); r.kid = r.kids.length - 1; r.active = 'now';
+      r.kids.push(newKid('')); r.kid = r.kids.length - 1; r.active = 'next';
       saveRosters(); say('New roster added. Give it a name, then add programs from a school’s page.'); render();
       nameInput.value = ''; nameInput.focus();
     });

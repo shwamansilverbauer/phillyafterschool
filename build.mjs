@@ -446,7 +446,7 @@ function card(p, school) {
   <dl>${rows}</dl>
   ${flag ? `<p class="flag">${esc(flag)}</p>` : ''}
   <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a><button type="button" class="btn needs-js" data-board-toggle data-clarity-mask="true" aria-expanded="false">Add to roster</button>
-    <div class="days" data-clarity-mask="true" hidden><span class="kid-row" hidden></span><span class="which" role="group" aria-label="Current or upcoming roster"><button type="button" class="wb" data-board="now" aria-pressed="true">Current</button><button type="button" class="wb" data-board="next" aria-pressed="false">Upcoming</button></span><span class="hint">Which days?</span>${BOARD_DAYS.map(([k, n]) => `<button type="button" class="day" data-day="${k}" aria-pressed="false">${n}</button>`).join('')}${p.offers?.length ? `<span class="cls-row"><span class="hint">Which class? Optional.</span>${p.offers.map(o => `<button type="button" class="cl" data-class="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join('')}</span>` : ''}<a href="${link('board/', 1)}">See the roster</a></div></div>
+    <div class="days" data-clarity-mask="true" hidden><span class="kid-row" hidden></span><span class="which" role="group" aria-label="Current or upcoming roster"><button type="button" class="wb" data-board="next" aria-pressed="true">Upcoming</button><button type="button" class="wb" data-board="now" aria-pressed="false">Current</button></span><span class="hint">Which days?</span>${BOARD_DAYS.map(([k, n]) => `<button type="button" class="day" data-day="${k}" aria-pressed="false">${n}</button>`).join('')}${p.offers?.length ? `<span class="cls-row"><span class="hint">Which class? Optional.</span>${p.offers.map(o => `<button type="button" class="cl" data-class="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join('')}</span>` : ''}<a href="${link('board/', 1)}">See the roster</a></div></div>
   <div class="rev">${revHtml}</div>
   <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks([...p.sources, ...(l.sources || [])])}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
 </article>`;
@@ -1308,7 +1308,7 @@ function boardPage() {
   };
   const schoolLinks = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<a class="btn" href="${link(s.id + '/', 1)}">${esc(s.shortName)}</a>`).join('');
   const hero = `    <h1>${T(`Build your week`)}</h1>
-    <p class="lede">${T(`Monday might be martial arts and Thursday the rec center. Keep one roster for what your child is doing now and one for what’s coming, then send either to your partner, a sitter, or the group chat. More than one child? Each gets their own.`)}</p>`;
+    <p class="lede">${T(`Monday might be martial arts and Thursday the rec center. Plan the term that’s coming, keep a second roster for what your child is doing now, and send either to your partner, a sitter, or the group chat. More than one child? Each gets their own.`)}</p>`;
   const body = `<div data-board-page data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`The roster needs JavaScript turned on.`)}</p></noscript>
   <div class="panel" id="board-shared" data-edit-reveal="Shown when someone opens a roster a friend shared:" hidden>
@@ -1327,10 +1327,10 @@ function boardPage() {
       <div class="actions"><button type="button" class="btn" id="kid-add">Add another child</button><button type="button" class="clear" id="kid-remove" hidden>Remove this child</button></div>
     </div>
     <div class="tabs" id="board-tabs" role="group" aria-label="Current or upcoming roster">
-      <button type="button" class="tab" data-board="now" aria-pressed="true">Current</button>
-      <button type="button" class="tab" data-board="next" aria-pressed="false">Upcoming</button>
+      <button type="button" class="tab" data-board="next" aria-pressed="true">Upcoming</button>
+      <button type="button" class="tab" data-board="now" aria-pressed="false">Current</button>
     </div>
-    <h2 id="board-title">Your current week</h2>
+    <h2 id="board-title">Your upcoming week</h2>
     <div class="panel" id="board-empty" hidden>
       <p id="board-empty-text">Open a school’s page and choose “Add to roster” on any program. Pick the days, and it shows up here.</p>
       <div class="actions">${schoolLinks}</div>
