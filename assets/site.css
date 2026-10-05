@@ -294,3 +294,12 @@ button.btn{cursor:pointer;font-family:inherit}
 /* ---------- sign-in for the edit page ---------- */
 .signin{max-width:440px;width:100%}
 .signin .btn{width:100%;text-align:center}
+
+/* ---------- home page: more room between sections ---------- */
+.wrap.roomy{gap:clamp(44px,6vw,68px);padding-block:clamp(44px,6vw,64px) clamp(72px,10vw,112px)}
+.roomy .section{gap:22px}
+.roomy .section + .section{border-top:1px solid var(--line);padding-top:clamp(44px,6vw,68px)}
+.roomy .schools{gap:14px}
+.roomy .schools + p{margin-top:10px}
+.roomy .kinds{gap:16px}
+.roomy .kinds div{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 24px;gap:12px}
