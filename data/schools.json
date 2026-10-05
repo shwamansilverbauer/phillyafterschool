@@ -1,0 +1,25 @@
+[
+  {
+    "id": "nebinger",
+    "name": "George W. Nebinger School",
+    "shortName": "Nebinger",
+    "address": "601 Carpenter St, Philadelphia, PA 19147",
+    "neighborhood": "Queen Village / Bella Vista",
+    "grades": "PK-8",
+    "dismissal": "3:39 pm",
+    "phone": "215-400-8110",
+    "website": "https://nebinger.philasd.org/",
+    "lastReviewed": "2026-10-05",
+    "notes": [
+      "Options thin out after 5th grade. For grades 6–8 the pickup choices are Zhang Sah, Queen & Rook and Butcher’s Sew Shop (Fridays), plus Philly Art Center and Shot Tower through 6th. Fleisher and Mighty Writers are both within a few blocks for children old enough to walk.",
+      "The city’s free, city-funded after-school programs do not include one at Nebinger. The nearest are school-based programs at Vare-Washington for its own students."
+    ],
+    "checkedNoPickup": [
+      "Christian Street YMCA (1724 Christian St), K–6. Its pickup list does not include Nebinger.",
+      "Kids on 12th (204 S 12th St), K–5. Picks up from McCall, Greenfield, ICS, FACTS, Russell Byers and Coppin only.",
+      "ZAZZ (1923 Chestnut St), ages 5–12. Guaranteed pickup from Greenfield, ICS and Marian Anderson only.",
+      "Philly Music Factory (2100 Chestnut St). Greenfield, ICS and Marian Anderson only. Its sister site MoveMakers at 812 Chestnut does list Nebinger.",
+      "Children’s Village (125 N 8th St), ages 5–13, takes CCIS subsidy. No Nebinger pickup is stated. Phone 215-931-0190."
+    ]
+  }
+]

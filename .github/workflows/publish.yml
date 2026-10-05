@@ -1,0 +1,50 @@
+# Builds the site whenever main changes and publishes the finished files to the "live" branch.
+# The web host deploys the "live" branch, so merging a change to main is all it takes to update the site.
+name: Build and publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build (stops here if the data has a problem)
+        run: node build.mjs
+
+      - name: Publish dist/ to the live branch
+        env:
+          REMOTE: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+        run: |
+          if git ls-remote --exit-code --heads "$REMOTE" live >/dev/null 2>&1; then
+            git clone --quiet --depth 1 --branch live "$REMOTE" out
+          else
+            mkdir out && git -C out init --quiet -b live && git -C out remote add origin "$REMOTE"
+          fi
+          find out -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -a dist/. out/
+          cd out
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "The built site is unchanged. Nothing to publish."
+          else
+            git commit --quiet -m "Publish site from ${GITHUB_SHA::7}"
+            git push --quiet origin live
+          fi
