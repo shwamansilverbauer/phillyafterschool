@@ -1,6 +1,6 @@
 {
   "exportFormatVersion": 2,
-  "exportTime": "2026-10-05 16:54:33",
+  "exportTime": "2026-10-05 17:07:40",
   "containerVersion": {
     "path": "accounts/0/containers/0/versions/0",
     "accountId": "0",
@@ -28,6 +28,27 @@
             "type": "TEMPLATE",
             "key": "tagId",
             "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "configSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "page_location"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{Page URL - no fragment}}"
+                  }
+                ]
+              }
+            ]
           }
         ],
         "firingTriggerId": [
@@ -940,6 +961,22 @@
         "accountId": "0",
         "containerId": "0",
         "variableId": "3",
+        "name": "Page URL - no fragment",
+        "type": "jsm",
+        "parentFolderId": "1",
+        "notes": "The page address without anything after #. Shared roster links carry a child’s first name there.",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function() {\n  return window.location.href.split(\"#\")[0];\n}"
+          }
+        ]
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "4",
         "name": "DLV - filter_type",
         "type": "v",
         "parameter": [
@@ -964,7 +1001,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "4",
+        "variableId": "5",
         "name": "DLV - filter_value",
         "type": "v",
         "parameter": [
@@ -989,7 +1026,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "5",
+        "variableId": "6",
         "name": "DLV - school",
         "type": "v",
         "parameter": [
@@ -1014,7 +1051,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "6",
+        "variableId": "7",
         "name": "DLV - search_term",
         "type": "v",
         "parameter": [
@@ -1039,7 +1076,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "7",
+        "variableId": "8",
         "name": "DLV - results",
         "type": "v",
         "parameter": [
@@ -1064,7 +1101,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "8",
+        "variableId": "9",
         "name": "DLV - link_type",
         "type": "v",
         "parameter": [
@@ -1089,7 +1126,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "9",
+        "variableId": "10",
         "name": "DLV - program_id",
         "type": "v",
         "parameter": [
@@ -1114,7 +1151,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "10",
+        "variableId": "11",
         "name": "DLV - day",
         "type": "v",
         "parameter": [
@@ -1139,7 +1176,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "11",
+        "variableId": "12",
         "name": "DLV - board",
         "type": "v",
         "parameter": [
@@ -1164,7 +1201,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "12",
+        "variableId": "13",
         "name": "DLV - children",
         "type": "v",
         "parameter": [
@@ -1189,7 +1226,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "13",
+        "variableId": "14",
         "name": "DLV - method",
         "type": "v",
         "parameter": [
@@ -1214,7 +1251,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "14",
+        "variableId": "15",
         "name": "DLV - suggest_kind",
         "type": "v",
         "parameter": [
@@ -1239,7 +1276,7 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "variableId": "15",
+        "variableId": "16",
         "name": "DLV - stars",
         "type": "v",
         "parameter": [
