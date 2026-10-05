@@ -77,14 +77,14 @@ if (!edit_signed_in()) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=37af28ae">
+<link rel="stylesheet" href="../assets/site.css?v=75486195">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js'</script>
 <header class="band">
   <div class="in bar">
     <a class="brand" href="../"><span class="bus-mark"></span>Philly After School</a>
-    <nav class="nav" aria-label="Site"><a href="../">Schools</a><a href="../board/">My board<span class="count" data-board-count hidden></span></a><a href="../suggest/">Suggest a program</a><a href="../about/">About</a><a href="../support/">Buy me a coffee</a></nav>
+    <nav class="nav" aria-label="Site"><a href="../">Schools</a><a href="../board/">My child’s roster<span class="count" data-board-count hidden></span></a><a href="../suggest/">Suggest a program</a><a href="../about/">About</a><a href="../support/">Buy me a coffee</a></nav>
   </div>
   <div class="in hero">
     <h1>Sign in to edit</h1>
@@ -114,7 +114,7 @@ if (!edit_signed_in()) {
   <p><span data-copy="c755eb60b8">Know a program that’s missing, or see something out of date?</span> <a href="../suggest/"><span data-copy="b2aec36343">Tell us</span></a>. <a href="../programs/"><span data-copy="982d5244f7">All programs</span></a>. <a href="../about/"><span data-copy="5e461a2404">About this site</span></a>. <a href="../support/"><span data-copy="fd1482eac6">Buy me a coffee</span></a>.</p>
   <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
 </div></footer>
-<script src="../assets/site.js?v=15943d5c" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}"></script>
+<script src="../assets/site.js?v=c2e73d52" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}"></script>
 
 </body>
 </html>
@@ -140,14 +140,14 @@ if (!edit_signed_in()) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=37af28ae">
+<link rel="stylesheet" href="../assets/site.css?v=75486195">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js'</script>
 <header class="band">
   <div class="in bar">
     <a class="brand" href="../"><span class="bus-mark"></span>Philly After School</a>
-    <nav class="nav" aria-label="Site"><a href="../">Schools</a><a href="../board/">My board<span class="count" data-board-count hidden></span></a><a href="../suggest/">Suggest a program</a><a href="../about/">About</a><a href="../support/">Buy me a coffee</a></nav>
+    <nav class="nav" aria-label="Site"><a href="../">Schools</a><a href="../board/">My child’s roster<span class="count" data-board-count hidden></span></a><a href="../suggest/">Suggest a program</a><a href="../about/">About</a><a href="../support/">Buy me a coffee</a></nav>
   </div>
   <div class="in hero">
     <h1>Edit the words on this site</h1>
@@ -179,7 +179,7 @@ if (!edit_signed_in()) {
     <li><a href="../coppin/">Coppin page</a></li>
     <li><a href="../programs/">All programs, A to Z</a></li>
     <li><a href="../programs/imagine-that-philly/">A program page (Imagine That Philly)</a></li>
-    <li><a href="../board/">My board</a></li>
+    <li><a href="../board/">My child’s roster</a></li>
     <li><a href="../suggest/">Suggest a program</a></li>
     <li><a href="../suggest/thanks/">Thank-you page after a suggestion</a></li>
     <li><a href="../review/">Write a review</a></li>
@@ -191,7 +191,7 @@ if (!edit_signed_in()) {
   <h2>What can’t be edited here</h2>
   <ul>
     <li>Program details: names, descriptions, hours and costs come from the listings data. Send fixes for those through <a href="../suggest/">the suggestion form</a>.</li>
-    <li>Menu labels, text that changes as you click (filter counts, the board), the grey example text inside boxes, and the choices inside drop-downs.</li>
+    <li>Menu labels, text that changes as you click (filter counts, the roster), the grey example text inside boxes, and the choices inside drop-downs.</li>
     <li>Words in curly braces, like {school}, are filled in for each page. Leave them in the sentence.</li>
   </ul>
 </div>
@@ -202,7 +202,7 @@ if (!edit_signed_in()) {
   <p><span data-copy="c755eb60b8">Know a program that’s missing, or see something out of date?</span> <a href="../suggest/"><span data-copy="b2aec36343">Tell us</span></a>. <a href="../programs/"><span data-copy="982d5244f7">All programs</span></a>. <a href="../about/"><span data-copy="5e461a2404">About this site</span></a>. <a href="../support/"><span data-copy="fd1482eac6">Buy me a coffee</span></a>.</p>
   <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
 </div></footer>
-<script src="../assets/site.js?v=15943d5c" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}"></script>
+<script src="../assets/site.js?v=c2e73d52" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}"></script>
 
 </body>
 </html>
