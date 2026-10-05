@@ -7,4 +7,6 @@ DirectoryIndex index.html index.php
 RewriteEngine On
 RewriteCond %{HTTP_HOST} ^www\.phillyafterschool\.org$ [NC]
 RewriteRule ^ https://phillyafterschool.org%{REQUEST_URI} [R=301,L]
+# The short address in the week card's QR code.
+RewriteRule ^w/?$ /?utm_source=week_card&utm_medium=qr [NC,R=302,L]
 </IfModule>
