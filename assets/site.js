@@ -251,7 +251,10 @@
       });
       return any ? { which: which, name: name, board: cleanBoard(b) } : null;
     };
-    var shared = decode(location.hash);
+    // The page's first script moved a shared roster out of the address (see build.mjs) so analytics never sees the name in it.
+    var sharedHash = window.__pasShared || '';
+    try { sharedHash = sharedHash || window.sessionStorage.getItem('pas-shared') || ''; } catch (e) { /* no session storage */ }
+    var shared = decode(sharedHash || location.hash);
     var lookup = function (entry) {
       var p = entryKey(entry).split('.'), prog = data.programs[p[0]], sch = data.schools[p[1]];
       return prog && sch && prog.schools[p[1]] ? { id: p[0], prog: prog, sch: sch, link: prog.schools[p[1]], note: entryNote(entry) } : null;
@@ -437,6 +440,7 @@
         msg = 'Saved to your rosters.';
       }
       shared = null;
+      try { window.sessionStorage.removeItem('pas-shared'); } catch (e) { /* nothing stored */ }
       if (window.history && history.replaceState) history.replaceState(null, '', location.pathname + location.search);
       render();
       say(msg);
