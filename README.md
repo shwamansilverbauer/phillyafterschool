@@ -62,6 +62,9 @@ Open `data/programs.json`, change the fields, set `lastVerified` to today's date
 Fields worth knowing:
 
 - `grades`: a range like `"K-5"` or `"PK-3"`, a single grade like `"8"`, or `null` when the provider doesn't publish grades.
+- `types`: required. One or more of `aftercare`, `music`, `art`, `movement`, `stem`, `academics`, `games`, `clubs`, `rec-center`.
+  Drives the type filter and the type pages. The first one listed is the color and icon the program wears on a roster card.
+- `free`: optional, `true` when the program has a free option. Adds it to the "Free options only" filter.
 - `offers`: optional list of class names a family chooses between, like `["Piano", "Guitar"]`. Shown on the card, searchable, and offered as a tag when adding the program to a roster. Names only: no days, times or prices.
 - `neighborhoods`: list of the neighborhoods the program's building (or buildings) is in, like `["Bella Vista"]`. Decides which
   neighborhood pages it appears on. A program that runs inside a school can leave it out and takes the school's neighborhood.
@@ -93,6 +96,22 @@ same record as its cards: the details, each school it serves, and its reviews. `
 A to Z. Both are in the sitemap, and each program page carries structured data (name, address, phone, and
 the star rating once there are reviews) for search engines. Nothing extra to maintain: add or edit a
 program in `data/programs.json` and its page follows.
+
+## Finding programs: filters, types and the school finder
+
+Every page that lists programs (a school, a neighborhood, a type, the A to Z list) has the same filter bar:
+search, program type, free, neighborhood and grade. Filters also live in the page address
+(`/programs/?type=music&grade=3`), which is how the home page links into them.
+
+`/types/` and `/types/<type>/` are built from each program's `types`. The type names, colors and icons are the
+`TYPES` list at the top of `build.mjs`.
+
+The search box on the home page looks through `data/all-schools.json`: every district and charter school in
+Philadelphia with any grade from K to 8, taken from the City's "Schools" open dataset. Schools with a record in
+`data/schools.json` (matched by street address) open their page. The rest open `/schools/request/`, where a
+parent can ask for the school with one tap. Each request is emailed to `contactEmail` with a running count and
+logged in `phillyafterschool-school-requests.log` above `public_html`. Refresh `data/all-schools.json` when the
+City updates its list (about once a year).
 
 ## Neighborhood pages
 
@@ -136,9 +155,13 @@ on any card. Each child has two rosters, Current and Upcoming, so a family can s
 plan the next term. A family with more than one child adds a roster per child (up to six) and picks whose
 roster a program goes on. Rosters are stored in the visitor's own browser, and each share link carries one
 child's week in the address, so nothing about them is stored on the server. There are no accounts.
+Each pick is drawn as a card in its program type's color. "Make it a card" draws the week as one picture
+(for a text, a printout or a teacher), with an optional photo that is read on the device and never uploaded.
 The page address and the analytics event names still say "board" so older links and reports keep working.
 
 ## The suggestion form
+
+`/ideas/` (feature requests) posts to the same handler and arrives with the type "A feature idea".
 
 `/suggest/` posts to `suggest/send.php`, which the build generates. It emails each suggestion to
 `contactEmail` and also appends it to `phillyafterschool-suggestions.log` in the folder above
@@ -155,6 +178,9 @@ Set `gtmId` to load Google Tag Manager on every page. The site pushes these even
 `pas_filter` (filter_type, filter_value, school), `pas_outbound` (link_type of register or website,
 program_id, school; school is empty on a program's own page), `pas_suggest_submit` (suggest_kind, school), `pas_support_click`, `pas_review_submit` (program_id,
 school, stars), `pas_board_add` (program_id, school, day, board, children) and `pas_board_share` (method, board).
+`pas_school_pick` (school, covered) fires when someone picks a school in the finder, and `pas_school_request` (school)
+when they ask for one that isn't covered. `pas_filter` reports filter_type as `grade`, `program_type`, `relation`,
+`neighborhood` or `free`. `pas_board_share` methods include `image_save`, `image_share` and `print`.
 `pas_outbound` also fires with link_type `calendar` and `review`. `pas_search` (search_term, results,
 school) fires when someone pauses typing in a school page's search box; searches with zero results
 show what parents want that isn't listed.

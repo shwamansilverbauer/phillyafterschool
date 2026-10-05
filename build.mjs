@@ -13,6 +13,7 @@ const cfg = readJson('site.config.json');
 const schools = readJson('data/schools.json');
 const programs = readJson('data/programs.json');
 const reviews = fs.existsSync(path.join(ROOT, 'data/reviews.json')) ? readJson('data/reviews.json') : [];
+const cityList = fs.existsSync(path.join(ROOT, 'data/all-schools.json')) ? readJson('data/all-schools.json') : { schools: [] };
 
 const GRADES = ['PK', 'K', '1', '2', '3', '4', '5', '6', '7', '8'];
 const REL = {
@@ -21,6 +22,21 @@ const REL = {
   nearby: { pill: 'Nearby, no pickup', title: 'Nearby, no pickup found', blurb: 'Close to the school, but you or your child would need to get there. Best suited to older children or as a second stop.' },
 };
 const HOW = ['online', 'phone', 'contact', 'school', 'none'];
+// Program types: what a family is shopping for. Each has a color and a small icon, used on filters and roster cards.
+// A program can have several; the first one listed in data/programs.json is the one its roster card wears.
+const TYPES = [
+  { id: 'aftercare', label: 'Aftercare', color: '#0F4D90', icon: 'M12 3 3 11h2.5v9h5v-6h3v6h5v-9H21z' },
+  { id: 'music', label: 'Music', color: '#6B3FA0', icon: 'M9 4v10.2A3.5 3.5 0 1 0 11 17V8h7V4z' },
+  { id: 'art', label: 'Art & making', color: '#C2410C', icon: 'M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.8-1.8 0-.5-.2-.9-.5-1.2-.3-.3-.4-.7-.4-1.1 0-.9.7-1.7 1.7-1.7H17a4 4 0 0 0 4-4c0-4.5-4-8.2-9-8.2zM6.5 12a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z' },
+  { id: 'movement', label: 'Sports & movement', color: '#1F7A3A', icon: 'M13 2 4 14h6l-1 8 9-12h-6z' },
+  { id: 'stem', label: 'STEM', color: '#0E7C86', icon: 'M9 3h6v2h-1v4.6l5.2 8.6A1.8 1.8 0 0 1 17.7 21H6.3a1.8 1.8 0 0 1-1.5-2.8L10 9.6V5H9z' },
+  { id: 'academics', label: 'Reading & homework', color: '#A16207', icon: 'M4 5a2 2 0 0 1 2-2h13v16H6.5a.5.5 0 0 0 0 1H19v2H6a2 2 0 0 1-2-2z' },
+  { id: 'games', label: 'Games', color: '#B4237A', icon: 'M6 3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3zm2.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM12 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM8.5 14a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z' },
+  { id: 'clubs', label: 'School clubs', color: '#2166B8', icon: 'M5 3h2v1h11l-2.5 4L18 12H7v9H5z' },
+  { id: 'rec-center', label: 'Rec centers', color: '#3F6212', icon: 'M12 2 6 10h3l-4 6h6v5h2v-5h6l-4-6h3z' },
+];
+const TYPE = Object.fromEntries(TYPES.map(t => [t.id, t]));
+const typeIcon = (t, size = 18) => `<svg class="ticon" width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="${t.icon}"/></svg>`;
 
 // ---------- site copy ----------
 // Every sentence of site copy goes through T(). data/copy.json can replace any of them without touching
@@ -92,6 +108,8 @@ for (const p of programs) {
   if (p.offers !== undefined && (!Array.isArray(p.offers) || p.offers.some(x => typeof x !== 'string' || /[~,&=#]/.test(x)))) errors.push(`program "${p.id}": offers must be a list of class names without commas or the symbols ~ & = #`);
 }
 for (const p of programs) {
+  if (!Array.isArray(p.types) || !p.types.length || p.types.some(x => !TYPE[x])) errors.push(`program "${p.id}": types must list at least one of ${TYPES.map(t => t.id).join(', ')}`);
+  if (p.free !== undefined && typeof p.free !== 'boolean') errors.push(`program "${p.id}": free must be true or false`);
   if (p.neighborhoods !== undefined && (!Array.isArray(p.neighborhoods) || !p.neighborhoods.length || p.neighborhoods.some(x => typeof x !== 'string' || !x.trim()))) errors.push(`program "${p.id}": neighborhoods must be a list of neighborhood names`);
 }
 for (const p of programs) for (const d of p.register?.dates || []) {
@@ -151,7 +169,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   // to a title only when it fits; a long description is cut at a word.
   const fullTitle = pathName === '' ? (PREVIEW ? cfg.siteName : `${cfg.siteName}: ${cfg.tagline}`) : `${title} | ${cfg.siteName}`.length <= 65 ? `${title} | ${cfg.siteName}` : title;
   if (description.length > 158) description = description.slice(0, 157).replace(/\s+\S*$/, '').replace(/[,;:.]$/, '') + '…';
-  const nav = [['', 'Schools'], ['board/', 'Build your week'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Buy me a coffee']]
+  const nav = [['schools/', 'Schools'], ['board/', 'Build your week'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Buy me a coffee']]
     .map(([to, label]) => `<a href="${link(to, depth)}"${current === to ? ' aria-current="page"' : ''}>${label}${to === 'board/' ? '<span class="count" data-board-count hidden></span>' : ''}</a>`).join('');
   const head = `${first}${fragment ? '' : gtmHead + '\n'}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
@@ -197,17 +215,18 @@ ${body}
       <p>${T(`After-school programs in Philadelphia, sorted by the school your child goes to.`)}</p>
     </div>
     <div>
-      <h2><a href="${link('', depth)}#schools">${T(`Schools`)}</a></h2>
+      <h2><a href="${link('schools/', depth)}">${T(`Schools`)}</a></h2>
       <ul>
-        <li><a href="${link('', depth)}#schools">${T(`All schools`)}</a></li>
+        <li><a href="${link('schools/', depth)}">${T(`All schools`)}</a></li>
         <li><a href="${link('neighborhoods/', depth)}">${T(`By neighborhood`)}</a></li>
-        <li><a href="${link('suggest/', depth)}">${T(`Ask for your school`)}</a></li>
+        <li><a href="${link('schools/request/', depth)}">${T(`Ask for your school`)}</a></li>
       </ul>
     </div>
     <div>
       <h2><a href="${link('programs/', depth)}">${T(`Programs`)}</a></h2>
       <ul>
         <li><a href="${link('programs/', depth)}">${T(`All programs, A to Z`)}</a></li>
+        <li><a href="${link('types/', depth)}">${T(`Programs by type`)}</a></li>
         <li><a href="${link('neighborhoods/', depth)}">${T(`Programs by neighborhood`)}</a></li>
         <li><a href="${link('suggest/', depth)}">${T(`Suggest a program`)}</a></li>
         <li><a href="${link('review/', depth)}">${T(`Write a review`)}</a></li>
@@ -225,6 +244,7 @@ ${body}
         <li><a href="${link('about/', depth)}">${T(`About this site`)}</a></li>
         <li><a href="${link('about/', depth)}#how">${T(`How listings are checked`)}</a></li>
         <li><a href="${link('about/', depth)}#corrections">${T(`Send a correction`)}</a></li>
+        <li><a href="${link('ideas/', depth)}">${T(`Request a feature`)}</a></li>
         <li><a href="${link('privacy/', depth)}">${T(`Privacy`)}</a></li>
         <li><a href="${link('support/', depth)}">${T(`Buy me a coffee`)}</a></li>
       </ul>
@@ -347,15 +367,50 @@ const schoolRow = (s, depth) => {
   <span class="bell"><b>${esc(clock(s))}</b><span>${T(`dismissal`)}</span></span>
 </a>`;
 };
+// What the filters read on every listed program, whether it is drawn as a card or a row.
+const haystack = (p, extra = []) => [p.name, p.what, ...(p.offers || []), ...(p.keywords || []), ...p.types.map(t => TYPE[t].label), ...extra].join(' ').toLowerCase().replace(/martial arts/g, 'martial-arts');   // so a search for "art" doesn't pull in martial arts
+const itemAttrs = (p, extra = []) => `data-item data-grades="${p._grades === null ? '*' : p._grades.join(' ')}" data-types="${p.types.join(' ')}" data-hoods="${programHoods(p).map(hoodSlug).join(' ')}" data-free="${p.free ? 1 : 0}" data-search="${esc(haystack(p, extra))}"`;
+const typeTags = p => p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('') + (p.free ? '<span class="tag free">Free</span>' : '');
 const programRow = (p, depth) => {
   const served = schools.filter(s => p.schools[s.id]);
-  const hay = [p.name, p.what, ...(p.offers || []), ...(p.keywords || []), ...served.map(s => s.shortName), ...programHoods(p)].join(' ').toLowerCase().replace(/martial arts/g, 'martial-arts');
-  return `<a class="prow" href="${link(programPath(p), depth)}" data-search="${esc(hay)}">
+  return `<a class="prow" href="${link(programPath(p), depth)}" ${itemAttrs(p, [...served.map(s => s.shortName), ...programHoods(p)])}>
   <h3>${esc(p.name)}</h3>
   <span class="what">${esc(p.what)}</span>
+  <span class="tally">${typeTags(p)}</span>
   <span class="tally">${served.map(s => `<span class="pill ${p.schools[s.id].relation}">${esc(REL[p.schools[s.id].relation].pill.replace('{s}', s.shortName))}</span>`).join('')}<span class="hint">Grades ${esc(gradeText(p))}</span></span>
 </a>`;
 };
+
+// One filter bar for every page that lists programs: search, program type, free, neighborhood, and (on a school
+// page) how the program gets your child. The grade row sits in a strip that stays on screen while you scroll.
+// Filters also read from the page address (?type=music&grade=3), which is how the home page links into them.
+function filterBar({ list, depth, school = null, show = {}, searchLabel, placeholder = 'Try drums, art, homework…' }) {
+  const on = { q: true, type: true, grade: true, hood: true, free: true, ...show };
+  const btn = (f, v, label, n, cls = 'tbtn', extra = '') => `<button type="button" class="${cls}" id="${f}-${v}" data-f="${f}" data-v="${v}" data-label="${esc(label)}" aria-pressed="${v === 'ALL'}"${extra}>${esc(label)}${n === null ? '' : ` (${n})`}</button>`;
+  const types = TYPES.map(t => [t, list.filter(p => p.types.includes(t.id)).length]).filter(([, n]) => n);
+  const freeN = list.filter(p => p.free).length;
+  const typeRow = on.type && types.length > 1 ? `<div class="frow"><span class="flabel">Type</span><div class="rail" role="group" aria-label="Program type">${btn('type', 'ALL', 'All types', null)}${types.map(([t, n]) => btn('type', t.id, t.label, n, 'tbtn', ` style="--tc:${t.color}"`)).join('')}</div></div>` : '';
+  const relRow = school ? `<div class="frow"><span class="flabel">Pickup</span><div class="rail" role="group" aria-label="How your child gets there">${btn('rel', 'ALL', 'Any', null)}${Object.entries(REL).map(([k, v]) => [k, v.pill.replace('{s}', school.shortName), list.filter(p => p.schools[school.id].relation === k).length]).filter(([, , n]) => n).map(([k, label, n]) => btn('rel', k, label, n)).join('')}</div></div>` : '';
+  const hoodList = [...new Set(list.flatMap(programHoods))].sort();
+  const hoodRow = on.hood && hoodList.length > 1 ? `<div class="frow"><span class="flabel">Area</span><div class="rail" role="group" aria-label="Neighborhood">${btn('hood', 'ALL', 'Anywhere', null)}${hoodList.map(n => btn('hood', hoodSlug(n), n, list.filter(p => programHoods(p).includes(n)).length)).join('')}</div></div>` : '';
+  const freeRow = on.free && freeN ? `<div class="frow"><span class="flabel">Cost</span><div class="rail" role="group" aria-label="Cost"><button type="button" class="tbtn" id="free-1" data-f="free" data-v="1" data-label="free" aria-pressed="false">Free options only (${freeN})</button></div></div>` : '';
+  const gradeBtns = on.grade ? [['ALL', 'All']].concat(GRADES.map(g => [g, g])).map(([g, label]) => {
+    const n = list.filter(p => (!school || p.schools[school.id].relation !== 'nearby') && (g === 'ALL' || p._grades === null || p._grades.includes(g))).length;
+    return `<button type="button" class="gbtn" id="grade-${g}" data-f="grade" data-v="${g}" aria-pressed="${g === 'ALL'}" aria-label="${g === 'ALL' ? 'All grades' : g === 'PK' ? 'Pre-K' : g === 'K' ? 'Kindergarten' : 'Grade ' + g}, ${n} ${school ? 'on-site or pickup programs' : 'programs'}"><span class="g">${label}</span><span class="n">${n}</span></button>`;
+  }).join('') : '';
+  return `<div class="fbar needs-js-block" data-filters${school ? ` data-school="${esc(school.id)}"` : ''}>
+    ${on.q ? `<div class="finder">
+      <label for="prog-search">${T(searchLabel || `Looking for something specific?`)}</label>
+      <input id="prog-search" type="search" placeholder="${esc(placeholder)}" autocomplete="off">
+    </div>` : ''}
+    ${typeRow}${relRow}${hoodRow}${freeRow}
+  </div>
+  <section class="picker" aria-label="Filter by grade">
+    ${on.grade ? `<div class="rail" role="group" aria-label="Grade">${gradeBtns}</div>` : ''}
+    <div class="status"><span id="count" aria-live="polite"></span><button type="button" class="clear" id="clear" hidden>Clear filters</button></div>
+  </section>`;
+}
+const noMatch = depth => `<p class="ask" id="no-match" data-nomatch data-edit-reveal="Shown when the filters find nothing:" hidden>${T(`Nothing matches that. Know a program that should be listed?`)} <a href="${link('suggest/', depth)}">${T(`Tell us about it.`)}</a></p>`;
 
 // ---------- program card ----------
 function card(p, school) {
@@ -378,9 +433,8 @@ function card(p, school) {
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
   const flag = [p.note, l.note].filter(Boolean).join(' ');
   const fix = correctionHref(`Correction: ${p.name} (${school.shortName})`);
-  const haystack = [p.name, p.what, ...(p.offers || []), ...(p.keywords || []), rel.pill.replace('{s}', school.shortName)].join(' ').toLowerCase().replace(/martial arts/g, 'martial-arts');   // so a search for "art" doesn't pull in martial arts
-  return `<article class="prog" id="${esc(p.id)}" data-rel="${l.relation}" data-grades="${g === null ? '*' : g.join(' ')}" data-search="${esc(haystack)}">
-  <div class="top"><span class="pill ${l.relation}">${esc(rel.pill.replace('{s}', school.shortName))}</span><h3><a href="${link(programPath(p), 1)}">${esc(p.name)}</a></h3><p class="what">${esc(p.what)}</p>${p.offers?.length ? `<p class="offers"><b>Classes:</b> ${esc(p.offers.join(', '))}</p>` : ''}</div>
+  return `<article class="prog" id="${esc(p.id)}" data-rel="${l.relation}" ${itemAttrs(p, [rel.pill.replace('{s}', school.shortName)])}>
+  <div class="top"><span class="pill ${l.relation}">${esc(rel.pill.replace('{s}', school.shortName))}</span><h3><a href="${link(programPath(p), 1)}">${esc(p.name)}</a></h3><p class="what">${esc(p.what)}</p><p class="tags">${typeTags(p)}</p>${p.offers?.length ? `<p class="offers"><b>Classes:</b> ${esc(p.offers.join(', '))}</p>` : ''}</div>
   ${gradeStrip(p)}
   <dl>${rows}</dl>
   ${flag ? `<p class="flag">${esc(flag)}</p>` : ''}
@@ -451,6 +505,7 @@ function programPage(p) {
     <h1>${esc(fullName(p))}</h1>
     <p class="lede">${esc(p.what)}</p>
     <div class="facts">
+      <span>${p.types.map(t => `<a href="${link('types/' + t + '/', D)}">${esc(TYPE[t].label)}</a>`).join(', ')}</span>
       ${programHoods(p).length ? `<span>In <b>${hoodLinks(programHoods(p), D)}</b></span>` : ''}
       <span>Grades <b>${esc(gradeText(p))}</b></span>
       ${p.pickupBy ? `<span>Pick up by <b>${esc(p.pickupBy)}</b></span>` : ''}
@@ -507,25 +562,67 @@ ${schoolRows}
 }
 
 function programsPage() {
-  const rows = [...programs].sort((a, b) => a.name.localeCompare(b.name)).map(p => programRow(p, 1)).join('\n');
+  const list = [...programs].sort((a, b) => a.name.localeCompare(b.name));
   const hero = `    <h1>${T(`Every program, A to Z`)}</h1>
-    <p class="lede">${T(`All {n} after-school programs on this site, across every school. Open one for its hours, cost, how to register and what parents say.`, { n: programs.length })}</p>
-    <div class="find needs-js-block">
-      <label for="find-program">${T(`Find a program`)}</label>
-      <input id="find-program" type="search" placeholder="A name, or try drums, art, chess…" autocomplete="off">
-    </div>`;
-  const body = `<section class="section">
+    <p class="lede">${T(`All {n} after-school programs on this site, across every school. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.`, { n: programs.length })}</p>`;
+  const body = `${filterBar({ list, depth: 1, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
+${noMatch(1)}
+<section class="section" data-group>
   <div class="schools">
-${rows}
-    <p class="ask" id="no-program" data-edit-reveal="Shown when the program search finds nothing:" hidden>${T(`Nothing matches that. Know a program that should be listed?`)} <a href="${link('suggest/', 1)}">${T(`Tell us about it.`)}</a></p>
+${list.map(p => programRow(p, 1)).join('\n')}
   </div>
-  <p>${T(`To see only what works with your child’s school and grade,`)} <a href="${link('', 1)}">${T(`start from your school.`)}</a> ${T(`Or see what’s close to home:`)} <a href="${link('neighborhoods/', 1)}">${T(`browse by neighborhood.`)}</a></p>
+</section>
+<section class="section">
+  <p>${T(`To see only what works with your child’s school,`)} <a href="${link('schools/', 1)}">${T(`start from your school.`)}</a> ${T(`Or see what’s close to home:`)} <a href="${link('neighborhoods/', 1)}">${T(`browse by neighborhood.`)}</a></p>
 </section>`;
   return layout({
     title: 'All after-school programs, A to Z',
-    description: `All ${programs.length} after-school programs listed on ${cfg.siteName} for ${listNames(schools.map(s => s.shortName))} families, with hours, cost, pickup and reviews.`,
-    pathName: 'programs/', depth: 1, current: null, hero, body, showStreet: 'parked',
-    jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: [...programs].sort((a, b) => a.name.localeCompare(b.name)).map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
+    description: `All ${programs.length} after-school programs listed on ${cfg.siteName}: filter by type, grade and neighborhood, with hours, cost, pickup and reviews.`,
+    pathName: 'programs/', depth: 1, current: null, hero, body,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: list.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
+  });
+}
+
+// ---------- program types: an index, and a page per type ----------
+const typeCount = t => programs.filter(p => p.types.includes(t.id)).length;
+const liveTypes = () => TYPES.filter(t => typeCount(t));
+const typeChips = (depth, skip) => liveTypes().filter(t => t.id !== skip).map(t => `<a class="tchip" style="--tc:${t.color}" href="${link('types/' + t.id + '/', depth)}">${typeIcon(t)}<span>${esc(t.label)}</span><b>${typeCount(t)}</b></a>`).join('');
+function typesPage() {
+  const hero = `    <h1>${T(`After school, by what they do`)}</h1>
+    <p class="lede">${T(`Pick the kind of program you’re after. Each list can be narrowed by grade and neighborhood.`)}</p>`;
+  const body = `<section class="section">
+  <div class="chips-row big">${typeChips(1)}</div>
+  <p>${T(`A program can sit in more than one group: a rec center is also aftercare, and a school’s clubs may include music and chess.`)}</p>
+</section>`;
+  return layout({ title: 'After-school programs by type', description: `Browse Philadelphia after-school programs by type: ${listNames(liveTypes().map(t => t.label.toLowerCase()))}.`, pathName: 'types/', depth: 1, current: null, hero, body, showStreet: 'parked',
+    jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: liveTypes().map((t, i) => ({ '@type': 'ListItem', position: i + 1, name: t.label, url: `${cfg.siteUrl}/types/${t.id}/` })) } });
+}
+function typePage(t) {
+  const D = 2;
+  const list = programs.filter(p => p.types.includes(t.id)).sort((a, b) => a.name.localeCompare(b.name));
+  const hero = `    <p class="where"><a href="${link('types/', D)}">${T(`All types`)}</a></p>
+    <h1>${T(`{type}: after-school programs`, { type: t.label })}</h1>
+    <p class="lede">${T(`Every program on this site in this group, with the schools each one serves. Pick a grade to narrow it down.`)}</p>`;
+  const body = `${filterBar({ list, depth: D, show: { type: false } })}
+${noMatch(D)}
+<section class="section" data-group>
+  <div class="schools">
+${list.map(p => programRow(p, D)).join('\n')}
+  </div>
+</section>
+<section class="section">
+  <h2>${T(`Other kinds of program`)}</h2>
+  <div class="chips-row">${typeChips(D, t.id)}</div>
+</section>`;
+  const url = `${cfg.siteUrl}/types/${t.id}/`;
+  return layout({
+    title: `${t.label} after-school programs in Philadelphia`,
+    description: `${plural(list.length, 'after-school program', 'after-school programs')} in Philadelphia for ${t.label.toLowerCase()}: who picks up from which school, grades, hours and cost.`,
+    pathName: `types/${t.id}/`, depth: D, current: null, hero, body,
+    jsonLd: { '@context': 'https://schema.org', '@graph': [
+      { '@type': 'ItemList', name: `${t.label} after-school programs`, itemListElement: list.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
+      { '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Program types', cfg.siteUrl + '/types/'], [t.label, url]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) },
+    ] },
   });
 }
 
@@ -535,16 +632,146 @@ const tally = s => Object.fromEntries(Object.keys(REL).map(k => [k, forSchool(s)
 const clock = s => s.dismissal.replace(/\s*[ap]m$/i, '');
 const gradeSpan = s => { const g = expandGrades(s.grades); const nm = x => x === 'PK' ? 'Pre-K' : x === 'K' ? 'K' : x; return `${nm(g[0])} to ${nm(g[g.length - 1])}`; };
 
+// ---------- the school finder: every district and charter school in the city ----------
+// Schools with a page here are marked as covered. The rest lead to a page where a family can ask for theirs.
+const streetKey = a => String(a).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+const milesBetween = (a, b) => {
+  const rad = x => x * Math.PI / 180, dLat = rad(b.lat - a.lat), dLng = rad(b.lng - a.lng);
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLng / 2) ** 2;
+  return 3958.8 * 2 * Math.asin(Math.sqrt(h));
+};
+const finderData = (() => {
+  const byStreet = new Map(schools.map(s => [streetKey(s.address.split(',')[0]), s]));
+  const placed = schools.map(s => ({ s, at: cityList.schools.find(x => streetKey(x.address) === streetKey(s.address.split(',')[0])) })).filter(x => x.at);
+  const rows = cityList.schools.map(x => {
+    const mine = byStreet.get(streetKey(x.address));
+    const near = mine || !placed.length ? null : placed.map(c => [c.s.id, milesBetween(x, c.at)]).sort((a, b) => a[1] - b[1])[0];
+    // [id, name, address, grades, kind, covered school id, programs listed, nearest covered school id, miles to it]
+    return [x.id, mine ? mine.name : x.name, `${x.address}, ${x.zip}`, mine ? mine.grades : x.grades, x.kind, mine ? mine.id : '', mine ? forSchool(mine).length : 0, near ? near[0] : '', near ? Math.round(near[1] * 10) / 10 : 0];
+  });
+  for (const s of schools) if (!rows.some(r => r[5] === s.id)) rows.push([s.id, s.name, s.address.split(',').slice(0, 1).join(''), s.grades, '', s.id, forSchool(s).length, '', 0]);   // a covered school the city list doesn't have
+  return { schools: rows, covered: Object.fromEntries(schools.map(s => [s.id, s.shortName])) };
+})();
+const finderBox = (depth, label) => `<div class="find" data-finder data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}"${PREVIEW ? '' : ` data-src="${link('data/school-finder.json', depth)}"`}>
+      <label for="find-school">${T(label || `Find your school`)}</label>
+      <input id="find-school" type="search" role="combobox" aria-expanded="false" aria-controls="finder-list" aria-autocomplete="list" placeholder="Start typing a school name" autocomplete="off">
+      <ul id="finder-list" class="finder-list" role="listbox" aria-label="Schools" hidden></ul>
+      <p class="hint">${T(`Every district and charter school in the city is in here. If yours isn’t covered yet, you can ask for it.`)} <noscript><a href="${link('schools/', depth)}">See the schools covered so far.</a></noscript></p>
+      ${PREVIEW ? `<script type="application/json" id="finder-data">${JSON.stringify(finderData).replace(/</g, '\\u003c')}</script>` : ''}
+    </div>`;
+
+function schoolsPage() {
+  const rows = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => schoolRow(s, 1)).join('\n');
+  const hero = `    <h1>${T(`Schools`)}</h1>
+    <p class="lede">${T(`Search for any district or charter school in Philadelphia. The ones below already have a page; the rest you can ask for.`)}</p>
+    ${finderBox(1)}`;
+  const body = `<section class="section" id="covered">
+  <h2>${T(`Covered so far`)}</h2>
+  <div class="schools">
+${rows}
+  </div>
+  <p>${T(`Schools are added one at a time, because every pickup list has to be checked. The ones parents ask for most go first.`)}</p>
+</section>`;
+  return layout({ title: 'Schools', description: `Find after-school programs by school in Philadelphia. ${listNames(schools.map(s => s.shortName))} are covered so far; ask for yours.`, pathName: 'schools/', depth: 1, current: 'schools/', hero, body, showStreet: 'parked',
+    jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', name: 'Schools', itemListElement: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map((x, i) => ({ '@type': 'ListItem', position: i + 1, name: x.name, url: `${cfg.siteUrl}/${x.id}/` })) } });
+}
+
+// The page for a school that isn't covered yet. One page serves them all: the script fills in the school from ?s=.
+function schoolRequestPage() {
+  const D = 2;
+  const hero = `    <p class="where"><a href="${link('schools/', D)}">${T(`All schools`)}</a></p>
+    <h1 id="req-title">${T(`This school isn’t covered yet`)}</h1>
+    <p class="lede" id="req-meta">${T(`Search for your school to see whether it has a page.`)}</p>`;
+  const body = `<div class="prose" data-request-page data-send="${PREVIEW ? '' : 'send.php'}" data-root="${link('', D).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}"${PREVIEW ? '' : ` data-src="${link('data/school-finder.json', D)}"`}>
+  <div class="panel" id="req-panel" hidden>
+    <h2>${T(`Want it added?`)}</h2>
+    <p>${T(`Each school takes real checking, so the ones parents ask for most go first. One tap adds your vote.`)}</p>
+    <div class="actions"><button type="button" class="btn primary big" id="req-btn">Ask for this school</button></div>
+    <p class="hint" id="req-status" aria-live="polite"></p>
+  </div>
+  <div class="panel" id="req-near" hidden>
+    <h2>${T(`In the meantime`)}</h2>
+    <p id="req-near-text"></p>
+    <div class="actions"><a class="btn" id="req-near-link" href="${link('schools/', D)}">See that school</a><a class="btn" href="${link('neighborhoods/', D)}">${T(`Browse by neighborhood`)}</a><a class="btn" href="${link('programs/', D)}">${T(`All programs`)}</a></div>
+  </div>
+  <p id="req-tell-wrap" hidden>${T(`Know which programs pick up from this school?`)} <a id="req-tell" href="${link('suggest/', D)}">${T(`Tell us, and it gets covered faster.`)}</a></p>
+  <div id="req-search">
+    <h2>${T(`Look up a school`)}</h2>
+    ${finderBox(D, `School name`)}
+  </div>
+  <noscript><p class="ask">${T(`This page needs JavaScript. You can also ask for a school with the suggestion form.`)}</p></noscript>
+</div>`;
+  return layout({ title: 'Ask for a school', description: 'Ask for your school to be added.', pathName: 'schools/request/', depth: D, current: null, hero, body, noindex: true });
+}
+
+// Receives "ask for this school". Emails the request and keeps a log, so demand can be counted.
+function schoolRequestPhp() {
+  const names = Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`]));
+  return `<?php
+// Receives a request for a school that isn't covered yet. Generated by build.mjs; edit it there.
+$TO = ${JSON.stringify(cfg.contactEmail)};
+$SITE = ${JSON.stringify(cfg.siteName)};
+$SCHOOLS = json_decode(<<<'PAS_JSON'
+${JSON.stringify(names)}
+PAS_JSON
+, true);
+header('Cache-Control: no-store');
+function out($ok, $msg, $code) {
+  http_response_code($code);
+  header('Content-Type: application/json; charset=utf-8');
+  echo json_encode(array('ok' => $ok, 'message' => $msg));
+  exit;
+}
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+  out(false, 'Use the button on the site.', 405);
+}
+$in = json_decode(file_get_contents('php://input'), true);
+$id = (is_array($in) && isset($in['s']) && is_string($in['s'])) ? $in['s'] : '';
+if (is_array($in) && isset($in['company']) && $in['company'] !== '') {
+  out(true, 'Thanks.', 200);
+}
+if (!isset($SCHOOLS[$id])) {
+  out(false, 'We could not find that school.', 400);
+}
+// At most 12 requests an hour from one address, so nobody can flood the inbox.
+$dir = dirname($_SERVER['DOCUMENT_ROOT']);
+$file = $dir . '/phillyafterschool-request-limits.json';
+$who = substr(hash('sha256', isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : ''), 0, 16);
+$seen = @json_decode((string) @file_get_contents($file), true);
+if (!is_array($seen)) $seen = array();
+$recent = array();
+foreach ($seen as $k => $times) {
+  if (!is_array($times)) continue;
+  $keep = array();
+  foreach ($times as $t) { if (is_int($t) && $t > time() - 3600) $keep[] = $t; }
+  if ($keep) $recent[$k] = $keep;
+}
+if (isset($recent[$who]) && count($recent[$who]) >= 12) {
+  out(true, 'Thanks.', 200);
+}
+$recent[$who][] = time();
+@file_put_contents($file, json_encode($recent), LOCK_EX);
+
+$name = $SCHOOLS[$id];
+$log = $dir . '/phillyafterschool-school-requests.log';
+$saved = @file_put_contents($log, date('c') . "\\t" . $id . "\\t" . $name . "\\n", FILE_APPEND | LOCK_EX);
+$count = 0;
+$lines = @file($log);
+if (is_array($lines)) { foreach ($lines as $line) { $parts = explode("\\t", $line); if (isset($parts[1]) && $parts[1] === $id) $count++; } }
+$body = "A parent asked for this school to be added:\\n\\n$name\\n\\nRequests for it so far: " . max(1, $count) . "\\n";
+$headers = array('From: ' . $SITE . ' <' . $TO . '>', 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8');
+$sent = @mail($TO, '=?UTF-8?B?' . base64_encode("[$SITE] School request: $name") . '?=', $body, implode("\\r\\n", $headers));
+if (!$sent && $saved === false) {
+  out(false, 'That did not go through. Please try again later.', 500);
+}
+out(true, 'Thanks.', 200);
+`;
+}
+
 function schoolPage(s) {
   const list = forSchool(s);
   const t = tally(s);
-  const gradeBtns = [['ALL', 'All']].concat(GRADES.map(g => [g, g])).map(([g, label]) => {
-    const n = list.filter(p => p.schools[s.id].relation !== 'nearby' && (g === 'ALL' || (p._grades && p._grades.includes(g)))).length;
-    return `<button type="button" class="gbtn" id="grade-${g}" data-g="${g}" aria-pressed="${g === 'ALL'}" aria-label="${g === 'ALL' ? 'All grades' : g === 'PK' ? 'Pre-K' : g === 'K' ? 'Kindergarten' : 'Grade ' + g}, ${n} on-site or pickup programs"><span class="g">${label}</span><span class="n">${n}</span></button>`;
-  }).join('');
-  const typeBtns = [['ALL', 'All types', list.length]].concat(Object.entries(REL).map(([k, v]) => [k, v.pill.replace('{s}', s.shortName), t[k]]))
-    .map(([k, label, n]) => `<button type="button" class="tbtn" id="type-${k}" data-t="${k}" aria-pressed="${k === 'ALL'}">${esc(label)} (${n})</button>`).join('');
-  const groups = Object.entries(REL).filter(([k]) => t[k]).map(([k, v]) => `<section class="group">
+  const groups = Object.entries(REL).filter(([k]) => t[k]).map(([k, v]) => `<section class="group" data-group>
   <h2>${T(v.title, { s: s.shortName })} (<span class="n">${t[k]}</span>)</h2>
   <p>${T(v.blurb)}</p>
   <div class="list">
@@ -561,22 +788,14 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
       <span>Reviewed <b>${longDate(s.lastReviewed)}</b></span>
     </div>`;
   const body = `<div data-school-page="${esc(s.id)}" style="display:contents">
-  <div class="finder needs-js-block">
-    <label for="prog-search">${T(`Looking for something specific?`)}</label>
-    <input id="prog-search" type="search" placeholder="Try drums, art, homework, free…" autocomplete="off">
-  </div>
-  <section class="picker" aria-label="Filter programs">
-    <div class="rail" role="group" aria-label="Grade">${gradeBtns}</div>
-    <div class="rail" role="group" aria-label="Type">${typeBtns}</div>
-    <div class="status"><span id="count" aria-live="polite"></span><button type="button" class="clear" id="clear" hidden>Clear filters</button></div>
-  </section>
+  ${filterBar({ list, depth: 1, school: s, show: { hood: false }, placeholder: 'Try drums, art, homework, chess…' })}
   <div class="legend">
     <span><i class="cell on">3</i> grade served</span>
     <span><i class="cell">7</i> not served</span>
     <span><i class="cell unk">?</i> grades not published, so the program shows under every grade</span>
     <span>${T(`The number under each grade counts programs at the school or with pickup.`)}</span>
   </div>
-  <p class="ask" id="no-match" data-edit-reveal="Shown when a search finds nothing:" hidden>${T(`Nothing here matches that. Know a program that should be listed?`)} <a href="${link('suggest/', 1)}">${T(`Tell us about it.`)}</a></p>
+  ${noMatch(1)}
   <div class="groups">
 ${groups}
   </div>
@@ -613,21 +832,34 @@ ${groups}
 }
 
 function homePage() {
-  const rows = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => schoolRow(s, 0)).join('\n');
+  const covered = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName));
   const hero = `    <h1>${T(`School’s out. Now what?`)}</h1>
     <p class="lede">${T(`Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.`)}</p>
-    <div class="find">
-      <label for="find-school">${T(`Find your school`)}</label>
-      <input id="find-school" type="search" placeholder="Start typing a school name" autocomplete="off">
-    </div>`;
-  const body = `<section class="section" id="schools">
-  <h2>${T(`Schools`)}</h2>
-  <div class="schools">
-${rows}
-    <p class="ask" id="no-school" data-edit-reveal="Shown when the school search finds nothing:" hidden>${T(`That school isn’t here yet.`)} <a href="${link('suggest/', 0)}">${T(`Ask for it to be added.`)}</a></p>
+    ${finderBox(0)}`;
+  const body = `<section class="section" id="browse">
+  <h2>${T(`Or start somewhere else`)}</h2>
+  <div class="ways">
+    <div class="way">
+      <h3>${T(`By program type`)}</h3>
+      <p>${T(`Music, art, sports, plain old aftercare.`)}</p>
+      <div class="chips-row">${typeChips(0)}</div>
+    </div>
+    <div class="way">
+      <h3>${T(`By neighborhood`)}</h3>
+      <p>${T(`What’s based near home, and who comes to pick up.`)}</p>
+      <div class="chips-row">${hoods.slice(0, 6).map(h => `<a class="btn" href="${link(hoodPath(h), 0)}">${esc(h.name)}</a>`).join('')}<a class="btn quiet" href="${link('neighborhoods/', 0)}">${T(`All neighborhoods`)}</a></div>
+    </div>
+    <div class="way">
+      <h3>${T(`By grade`)}</h3>
+      <p>${T(`Everything that takes your child’s grade.`)}</p>
+      <div class="grade-links">${GRADES.map(g => `<a class="gbtn" href="${link('programs/', 0)}?grade=${g}" aria-label="${g === 'PK' ? 'Pre-K' : g === 'K' ? 'Kindergarten' : 'Grade ' + g}"><span class="g">${g}</span></a>`).join('')}</div>
+    </div>
   </div>
-  <p>${T(`More schools in Queen Village, Bella Vista and South Philadelphia are on the way.`)} <a href="${link('suggest/', 0)}">${T(`Ask for yours next.`)}</a></p>
-  <p>${T(`Looking for one program by name?`)} <a href="${link('programs/', 0)}">${T(`Browse all {n} programs, A to Z.`, { n: programs.length })}</a> ${T(`Or start from where you live:`)} <a href="${link('neighborhoods/', 0)}">${T(`browse by neighborhood.`)}</a></p>
+</section>
+<section class="section" id="schools">
+  <h2>${T(`Schools covered so far`)}</h2>
+  <div class="chips-row">${covered.slice(0, 12).map(s => `<a class="btn" href="${link(s.id + '/', 0)}">${esc(s.shortName)}</a>`).join('')}<a class="btn quiet" href="${link('schools/', 0)}">${covered.length > 12 ? `All ${covered.length} schools` : T(`All schools`)}</a></div>
+  <p>${T(`Schools are added one at a time, because every pickup list has to be checked. Search for yours above and ask for it: the ones parents ask for most go first.`)}</p>
 </section>
 <section class="section">
   <h2>${T(`How programs are sorted`)}</h2>
@@ -646,7 +878,7 @@ ${cfg.builtBy ? `<section class="section" id="who">
   <p>${T(cfg.builtBy.bio)}</p>
 </section>` : ''}`;
   return layout({
-    title: cfg.siteName, pathName: '', depth: 0, current: '', hero, body, fragment: PREVIEW, showStreet: 'go', roomy: true,
+    title: cfg.siteName, pathName: '', depth: 0, current: null, hero, body, fragment: PREVIEW, showStreet: 'go', roomy: true,
     description: 'After-school programs and aftercare in Philadelphia, school by school: what runs at the school, who picks up at dismissal, hours, cost and how to register.',
     jsonLd: { '@context': 'https://schema.org', '@graph': [
       { '@type': 'WebSite', '@id': cfg.siteUrl + '/#website', name: cfg.siteName, url: cfg.siteUrl + '/', description: cfg.tagline, publisher: { '@id': cfg.siteUrl + '/#org' } },
@@ -668,7 +900,7 @@ function neighborhoodsPage() {
   <div class="hoods">
 ${cards}
   </div>
-  <p>${T(`A program is listed where its building is. Many pick up from schools in other neighborhoods, so your school’s page is still the fullest list.`)} <a href="${link('', 1)}#schools">${T(`Find your school.`)}</a></p>
+  <p>${T(`A program is listed where its building is. Many pick up from schools in other neighborhoods, so your school’s page is still the fullest list.`)} <a href="${link('schools/', 1)}">${T(`Find your school.`)}</a></p>
   <p>${T(`Don’t see your neighborhood?`)} <a href="${link('suggest/', 1)}">${T(`Tell us which school or program to add.`)}</a></p>
 </section>`;
   return layout({
@@ -698,16 +930,18 @@ function neighborhoodPage(h) {
   <h2>${T(`Schools in {name}`, { name: h.name })}</h2>
   ${h.schools.length ? `<div class="schools">
 ${h.schools.map(s => schoolRow(s, D)).join('\n')}
-  </div>` : `<p class="ask">${T(`No school in {name} is on the site yet.`, { name: h.name })} <a href="${link('suggest/', D)}">${T(`Ask for yours.`)}</a></p>`}
+  </div>` : `<p class="ask">${T(`No school in {name} is on the site yet.`, { name: h.name })} <a href="${link('schools/request/', D)}">${T(`Ask for yours.`)}</a></p>`}
 </section>
-<section class="section">
+${based.length + comes.length > 3 ? filterBar({ list: [...based, ...comes], depth: D, show: { hood: false, q: false } }) : ''}
+${noMatch(D)}
+<section class="section" data-group>
   <h2>${T(`Programs based in {name}`, { name: h.name })}</h2>
   <p>${T(`Each one shows the schools it serves. Open it for hours, cost and how to register.`)}</p>
   <div class="schools">
 ${based.map(p => programRow(p, D)).join('\n')}
   </div>
 </section>
-${comes.length ? `<section class="section">
+${comes.length ? `<section class="section" data-group>
   <h2>${T(`Based elsewhere, but they pick up here`)}</h2>
   <p>${T(`These programs are in another neighborhood and collect children from a school in {name}.`, { name: h.name })}</p>
   <div class="schools">
@@ -748,12 +982,14 @@ function privacyPage() {
     <li>${T(`A child’s name is optional. If you add one, it stays on your device and appears in the link you choose to share.`)}</li>
     <li>${T(`Anyone who has a roster’s link can see that roster, so share it the way you’d share a family calendar.`)}</li>
     <li>${T(`When a shared roster is opened, the site removes the name from the page address before any analytics loads, and the roster page is set to be hidden in session recordings.`)}</li>
+    <li>${T(`If you add a photo to a week card, the card is made in your own browser. The photo is not uploaded, not saved, and gone when you close the page.`)}</li>
   </ul>
   <h2 id="forms">${T(`Suggestions, corrections and reviews`)}</h2>
   <ul>
     <li>${T(`What you type into a form is emailed to the site’s inbox, and a backup copy is kept on our web host in case the email goes missing.`)}</li>
     <li>${T(`Your email address is used only to reply to you or to confirm something. It is never published.`)}</li>
     <li>${T(`A review that is approved appears on the site with your first name, your child’s school and the month. Nothing else about you is shown.`)}</li>
+    <li>${T(`Asking for a school to be covered sends only the school’s name.`)}</li>
     <li>${T(`Please don’t include children’s names or other people’s personal details in what you send.`)}</li>
   </ul>
   <h2 id="analytics">${T(`Analytics and recordings`)}</h2>
@@ -909,6 +1145,51 @@ function suggestPage() {
   return layout({ title: 'Suggest a program', description: `Tell ${cfg.siteName} about an after-school program that’s missing, a correction, or a school to add.`, pathName: 'suggest/', depth: 1, current: 'suggest/', hero, body, showStreet: 'parked' });
 }
 
+function ideasPage() {
+  const hero = `    <h1>${T(`What should this site do next?`)}</h1>
+    <p class="lede">${T(`A missing filter, something confusing, a thing you wish it did. One person builds this, and reads every one.`)}</p>`;
+  const body = `<div class="suggest">
+  <form class="form panel" method="post" action="${link('suggest/send.php', 1)}" id="idea-form" data-clarity-mask="true">
+    <input type="hidden" name="kind" value="A feature idea">
+    <div class="field">
+      <label for="i-details">${T(`Your idea`)}</label>
+      <span class="hint">${T(`What were you trying to do, and what would have made it easier?`)}</span>
+      <textarea id="i-details" name="details" maxlength="4000" required></textarea>
+    </div>
+    <div class="pair">
+      <div class="field">
+        <label for="i-name">${T(`Your name (optional)`)}</label>
+        <input id="i-name" name="name" type="text" maxlength="100" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="i-email">${T(`Your email (optional)`)}</label>
+        <input id="i-email" name="email" type="email" maxlength="150" autocomplete="email">
+        <span class="hint">${T(`Only used to ask a follow-up question.`)} <a href="${link('privacy/', 1)}">${T(`How we handle it.`)}</a></span>
+      </div>
+    </div>
+    <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+      <label for="i-company">Leave this blank</label>
+      <input id="i-company" name="company" type="text" tabindex="-1" autocomplete="off">
+    </div>
+    <div><button class="btn primary big" type="submit">${T(`Send the idea`)}</button></div>
+  </form>
+  <aside class="next">
+    <h2>${T(`Other things you can send`)}</h2>
+    <ul class="rules">
+      <li><a href="${link('suggest/', 1)}">${T(`A program that’s missing, or a correction`)}</a></li>
+      <li><a href="${link('schools/request/', 1)}">${T(`A school you want covered`)}</a></li>
+      <li><a href="${link('review/', 1)}">${T(`A review of a program your child went to`)}</a></li>
+    </ul>
+  </aside>
+</div>`;
+  return layout({ title: 'Request a feature', description: `Tell ${cfg.siteName} what the site should do next.`, pathName: 'ideas/', depth: 1, current: null, hero, body, showStreet: 'parked' });
+}
+function ideasThanksPage() {
+  const hero = `    <h1>${T(`Got it. Thank you.`)}</h1>
+    <p class="lede">${T(`Ideas get read, and the ones that help the most families get built first.`)} <a href="${link('', 2)}">${T(`Back to the start.`)}</a></p>`;
+  return layout({ title: 'Thanks for the idea', description: 'Your idea was sent.', pathName: 'ideas/thanks/', depth: 2, current: null, hero, body: '', showStreet: 'parked', noindex: true });
+}
+
 function thanksPage() {
   const hero = `    <h1>${T(`Got it. Thank you.`)}</h1>
     <p class="lede">${T(`We’ll check it against the program’s own information and add it if it holds up.`)} <a href="${link('', 2)}">${T(`Back to the schools.`)}</a></p>`;
@@ -998,16 +1279,19 @@ $saved = @file_put_contents($log, date('c') . ($sent ? ' (emailed)' : ' (EMAIL F
 if (!$sent && $saved === false) {
   fail('Something went wrong on our side. Please email ' . $TO . ' instead.', 500);
 }
-header('Location: thanks/', true, 303);
+header('Location: ' . ($kind === 'A feature idea' ? '../ideas/thanks/' : 'thanks/'), true, 303);
 exit;
 `;
 }
 
 function boardPage() {
+  const order = [...programs].sort((a, b) => a.name.localeCompare(b.name)).map(p => p.id);   // each program's card number
   const data = {
+    total: programs.length,
+    types: Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, color: t.color, icon: t.icon }])),
     schools: Object.fromEntries(schools.map(s => [s.id, { name: s.shortName, path: link(s.id + '/', 1) }])),
     programs: Object.fromEntries(programs.map(p => [p.id, {
-      name: p.name, hours: p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [],
+      name: p.name, hours: p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [], type: p.types[0], no: order.indexOf(p.id) + 1,
       schools: Object.fromEntries(Object.entries(p.schools).map(([sid, l]) => [sid, { rel: l.relation, where: l.address || p.address || '' }])),
     }])),
   };
@@ -1056,6 +1340,36 @@ function boardPage() {
       <label for="board-link">${T(`Link to this roster`)}</label>
       <input id="board-link" type="text" readonly>
       <span class="hint">${T(`Rosters save automatically on this device. The link is the copy you can keep anywhere: anyone who opens it sees this roster, and it’s how you move one to another phone or computer.`)}</span>
+    </div>
+  </section>
+  <section class="section card-maker" id="card-maker" hidden>
+    <h2>${T(`Make it a card`)}</h2>
+    <p>${T(`One picture of the week to text, print, or hand to your child’s teacher, so they know where your child goes each day and who they are.`)}</p>
+    <div class="card-grid">
+      <div class="card-fields">
+        <div class="field">
+          <label for="card-teacher">${T(`Who it’s for (optional)`)}</label>
+          <input id="card-teacher" type="text" maxlength="40" placeholder="Ms. Rivera, Room 12" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="card-note">${T(`A note (optional)`)}</label>
+          <input id="card-note" type="text" maxlength="110" placeholder="Grandma picks up on Fridays." autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="card-photo">${T(`Your child’s photo (optional)`)}</label>
+          <input id="card-photo" type="file" accept="image/*">
+          <span class="hint">${T(`The photo never leaves this device. The card is made here in your browser, nothing is uploaded, and the photo isn’t saved.`)}</span>
+          <button type="button" class="clear" id="card-photo-clear" hidden>Remove the photo</button>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn primary" id="card-share" hidden>Share the card</button>
+          <button type="button" class="btn" id="card-save">Save as image</button>
+          <button type="button" class="btn" id="card-print">Print</button>
+        </div>
+        <p class="hint" id="card-status" aria-live="polite"></p>
+        <p class="hint">${T(`To email it to a teacher, share or save the card, then attach it to a message from your own email.`)}</p>
+      </div>
+      <div class="card-preview"><canvas id="card-canvas" width="1080" height="1350" role="img" aria-label="Preview of the week card"></canvas></div>
     </div>
   </section>
   <script type="application/json" id="pas-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
@@ -1334,8 +1648,8 @@ ${editPage()}`;
 }
 
 function editPage() {
-  const pages = [['', 'Home'], ...schools.map(s => [s.id + '/', `${s.shortName} page`]), ['programs/', 'All programs, A to Z'], ['neighborhoods/', 'Neighborhoods'], [hoodPath(hoods[0]), `A neighborhood page (${hoods[0].name})`], [programPath(programs[0]), `A program page (${programs[0].name})`],
-    ['board/', 'Build your week'], ['suggest/', 'Suggest a program'], ['suggest/thanks/', 'Thank-you page after a suggestion'], ['review/', 'Write a review'], ['review/thanks/', 'Thank-you page after a review'],
+  const pages = [['', 'Home'], ['schools/', 'Schools'], ['schools/request/', 'A school that isn’t covered yet'], ...schools.map(s => [s.id + '/', `${s.shortName} page`]), ['types/', 'Program types'], [`types/${liveTypes()[0].id}/`, `A type page (${liveTypes()[0].label})`], ['programs/', 'All programs, A to Z'], ['neighborhoods/', 'Neighborhoods'], [hoodPath(hoods[0]), `A neighborhood page (${hoods[0].name})`], [programPath(programs[0]), `A program page (${programs[0].name})`],
+    ['board/', 'Build your week'], ['suggest/', 'Suggest a program'], ['suggest/thanks/', 'Thank-you page after a suggestion'], ['ideas/', 'Request a feature'], ['ideas/thanks/', 'Thank-you page after an idea'], ['review/', 'Write a review'], ['review/thanks/', 'Thank-you page after a review'],
     ['about/', 'About'], ['privacy/', 'Privacy'], ['support/', 'Buy me a coffee'], ...(PREVIEW ? [] : [['404.html', 'Page not found']])];
   const hero = `    <h1>Edit the words on this site</h1>
     <p class="lede">Turn on editing, then click a sentence on any page and type. Nothing changes for visitors until your edits are sent and approved.</p>`;
@@ -1476,6 +1790,10 @@ fs.rmSync(OUT, { recursive: true, force: true });
 const write = (rel, content) => { const f = path.join(OUT, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, content); };
 write('index.html', homePage());
 for (const s of schools) write(`${s.id}/index.html`, schoolPage(s));
+write('schools/index.html', schoolsPage());
+write('schools/request/index.html', schoolRequestPage());
+write('types/index.html', typesPage());
+for (const t of liveTypes()) write(`types/${t.id}/index.html`, typePage(t));
 write('programs/index.html', programsPage());
 for (const p of programs) write(`${programPath(p)}index.html`, programPage(p));
 write('neighborhoods/index.html', neighborhoodsPage());
@@ -1485,6 +1803,8 @@ write('privacy/index.html', privacyPage());
 write('about/index.html', aboutPage());
 write('suggest/index.html', suggestPage());
 write('suggest/thanks/index.html', thanksPage());
+write('ideas/index.html', ideasPage());
+write('ideas/thanks/index.html', ideasThanksPage());
 write('board/index.html', boardPage());
 write('review/index.html', reviewPage());
 write('review/thanks/index.html', reviewThanksPage());
@@ -1498,6 +1818,8 @@ if (!PREVIEW) {
   write('404.html', notFound);
   if (cfg.contactEmail) write('suggest/send.php', sendPhp());
   if (cfg.contactEmail) write('review/send.php', reviewPhp());
+  if (cfg.contactEmail) write('schools/request/send.php', schoolRequestPhp());
+  write('data/school-finder.json', JSON.stringify(finderData));
   if (cfg.contactEmail) write('edit/send.php', editPhp());   // after every page, so it knows every sentence
   for (const p of programs) for (const d of upcomingDates(p)) write(`cal/${p.id}-${d.date}.ics`, icsFile(p, d));
   write('data/reviews.json', JSON.stringify(reviews, null, 2));
@@ -1505,8 +1827,8 @@ if (!PREVIEW) {
   write('data/programs.json', JSON.stringify(programs.map(({ _grades, ...p }) => p), null, 2));
   write('data/schools.json', JSON.stringify(schools, null, 2));
   const latest = programs.map(p => p.lastVerified).sort().pop();
-  const urls = [['', latest], ...schools.map(s => [s.id + '/', latest]), ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]), ['neighborhoods/', latest], ...hoods.map(h => [hoodPath(h), latest]),
-    ...['board/', 'suggest/', 'review/', 'about/', 'privacy/', 'support/'].map(u => [u, latest])];
+  const urls = [['', latest], ['schools/', latest], ...schools.map(s => [s.id + '/', latest]), ['types/', latest], ...liveTypes().map(t => [`types/${t.id}/`, latest]), ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]), ['neighborhoods/', latest], ...hoods.map(h => [hoodPath(h), latest]),
+    ...['board/', 'suggest/', 'ideas/', 'review/', 'about/', 'privacy/', 'support/'].map(u => [u, latest])];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
   const bare = cfg.siteUrl.replace(/^https?:\/\//, '');

@@ -1,0 +1,2598 @@
+{
+ "source": "City of Philadelphia “Schools” dataset (OpenDataPhilly), district and charter schools with any grade from K to 8. Left out: one juvenile justice school, one transition center, one online-only school and one temporary duplicate.",
+ "sourceUrl": "https://opendataphilly.org/datasets/schools/",
+ "sourceUpdated": "2026-08-26",
+ "retrieved": "2026-10-05",
+ "schools": [
+  {
+   "id": "a-l-fitzpatrick-school",
+   "name": "A.L. Fitzpatrick School",
+   "address": "11061 Knights Rd",
+   "zip": "19154",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0803,
+   "lng": -74.9765
+  },
+  {
+   "id": "abram-s-jenks-school",
+   "name": "Abram S. Jenks School",
+   "address": "2501 S 13th St",
+   "zip": "19148",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 39.9189,
+   "lng": -75.1684
+  },
+  {
+   "id": "academy-for-the-middle-years-at-northwest",
+   "name": "Academy for the Middle Years at Northwest",
+   "address": "6000 Ridge Ave",
+   "zip": "19128",
+   "grades": "6-8",
+   "kind": "District",
+   "lat": 40.0311,
+   "lng": -75.2128
+  },
+  {
+   "id": "ad-prima-charter-school",
+   "name": "Ad Prima Charter School",
+   "address": "1922 N 63rd St",
+   "zip": "19151",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.9846,
+   "lng": -75.2477
+  },
+  {
+   "id": "ad-prima-charter-school-2",
+   "name": "Ad Prima Charter School",
+   "address": "8034 Thouron Ave",
+   "zip": "19150",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.0726,
+   "lng": -75.1715
+  },
+  {
+   "id": "add-b-anderson-school",
+   "name": "Add B. Anderson School",
+   "address": "1034 S 60th St",
+   "zip": "19143",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9467,
+   "lng": -75.2457
+  },
+  {
+   "id": "alain-locke-school",
+   "name": "Alain Locke School",
+   "address": "4550 Haverford Ave",
+   "zip": "19139",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9622,
+   "lng": -75.2124
+  },
+  {
+   "id": "albert-m-greenfield-school",
+   "name": "Albert M. Greenfield School",
+   "address": "2200 Chestnut St",
+   "zip": "19103",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9523,
+   "lng": -75.1774
+  },
+  {
+   "id": "alexander-adaire-school",
+   "name": "Alexander Adaire School",
+   "address": "1300 E Palmer St",
+   "zip": "19125",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9725,
+   "lng": -75.1303
+  },
+  {
+   "id": "alexander-k-mcclure-school",
+   "name": "Alexander K. McClure School",
+   "address": "600 W Hunting Park Ave",
+   "zip": "19140",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0152,
+   "lng": -75.1376
+  },
+  {
+   "id": "allen-m-stearne-school",
+   "name": "Allen M. Stearne School",
+   "address": "1655 Unity St",
+   "zip": "19124",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0118,
+   "lng": -75.0851
+  },
+  {
+   "id": "alliance-for-progress-charter-school",
+   "name": "Alliance for Progress Charter School",
+   "address": "1722 Cecil B Moore Ave",
+   "zip": "19121",
+   "grades": "K-5",
+   "kind": "Charter",
+   "lat": 39.9793,
+   "lng": -75.1639
+  },
+  {
+   "id": "alliance-for-progress-charter-school-annex",
+   "name": "Alliance for Progress Charter School (Annex)",
+   "address": "1821 Cecil B Moore Ave",
+   "zip": "19121",
+   "grades": "6-8",
+   "kind": "Charter",
+   "lat": 39.9799,
+   "lng": -75.1655
+  },
+  {
+   "id": "alternative-middle-years-at-james-martin",
+   "name": "Alternative Middle Years at James Martin",
+   "address": "600 E Thompson St",
+   "zip": "19125",
+   "grades": "6-8",
+   "kind": "District",
+   "lat": 39.9728,
+   "lng": -75.1276
+  },
+  {
+   "id": "andrew-hamilton-school",
+   "name": "Andrew Hamilton School",
+   "address": "5640 Spruce St",
+   "zip": "19139",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9554,
+   "lng": -75.2355
+  },
+  {
+   "id": "andrew-j-morrison-school",
+   "name": "Andrew J. Morrison School",
+   "address": "5100 N 3rd St",
+   "zip": "19120",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0295,
+   "lng": -75.1295
+  },
+  {
+   "id": "anna-b-day-school",
+   "name": "Anna B. Day School",
+   "address": "6324 Crittenden St",
+   "zip": "19138",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0586,
+   "lng": -75.1681
+  },
+  {
+   "id": "anna-l-lingelbach-school",
+   "name": "Anna L. Lingelbach School",
+   "address": "6340 Wayne Ave",
+   "zip": "19144",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0373,
+   "lng": -75.1897
+  },
+  {
+   "id": "anne-frank-school",
+   "name": "Anne Frank School",
+   "address": "2000 Bowler St",
+   "zip": "19115",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0883,
+   "lng": -75.0282
+  },
+  {
+   "id": "antonia-pantoja-charter-school",
+   "name": "Antonia Pantoja Charter School",
+   "address": "4101 N American St",
+   "zip": "19140",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.0131,
+   "lng": -75.1309
+  },
+  {
+   "id": "avery-d-harrington-school",
+   "name": "Avery D. Harrington School",
+   "address": "5300 Baltimore Ave",
+   "zip": "19143",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9474,
+   "lng": -75.2306
+  },
+  {
+   "id": "bache-martin-school",
+   "name": "Bache-Martin School",
+   "address": "2201 Brown St",
+   "zip": "19130",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.97,
+   "lng": -75.1741
+  },
+  {
+   "id": "baldi-school",
+   "name": "Baldi School",
+   "address": "8801 Verree Rd",
+   "zip": "19115",
+   "grades": "6-8",
+   "kind": "District",
+   "lat": 40.092,
+   "lng": -75.0526
+  },
+  {
+   "id": "bayard-taylor-school",
+   "name": "Bayard Taylor School",
+   "address": "3698 N Randolph St",
+   "zip": "19140",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0071,
+   "lng": -75.1381
+  },
+  {
+   "id": "belmont-academy-charter-school",
+   "name": "Belmont Academy Charter School",
+   "address": "907 N 41st St",
+   "zip": "19104",
+   "grades": "PK-K",
+   "kind": "Charter",
+   "lat": 39.9707,
+   "lng": -75.2056
+  },
+  {
+   "id": "belmont-charter-school",
+   "name": "Belmont Charter School",
+   "address": "4030 Brown St",
+   "zip": "19104",
+   "grades": "K-12",
+   "kind": "Charter",
+   "lat": 39.967,
+   "lng": -75.2048
+  },
+  {
+   "id": "benjamin-b-comegys-school",
+   "name": "Benjamin B. Comegys School",
+   "address": "5100 Greenway Ave",
+   "zip": "19143",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9405,
+   "lng": -75.2163
+  },
+  {
+   "id": "benjamin-franklin-school",
+   "name": "Benjamin Franklin School",
+   "address": "5737 Rising Sun Ave",
+   "zip": "19120",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0424,
+   "lng": -75.1043
+  },
+  {
+   "id": "boys-latin-of-philadelphia-charter-school",
+   "name": "Boys Latin of Philadelphia Charter School",
+   "address": "344 N Felton St",
+   "zip": "19139",
+   "grades": "6-8",
+   "kind": "Charter",
+   "lat": 39.9682,
+   "lng": -75.2448
+  },
+  {
+   "id": "bridesburg-school",
+   "name": "Bridesburg School",
+   "address": "2824 Jenks St",
+   "zip": "19137",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0003,
+   "lng": -75.0667
+  },
+  {
+   "id": "carver-high-school-of-engineering-and-science",
+   "name": "Carver High School of Engineering and Science",
+   "address": "1600 W Norris St",
+   "zip": "19121",
+   "grades": "7-12",
+   "kind": "District",
+   "lat": 39.9834,
+   "lng": -75.1613
+  },
+  {
+   "id": "castor-gardens-middle-school",
+   "name": "Castor Gardens Middle School",
+   "address": "1800 Cottman Ave",
+   "zip": "19111",
+   "grades": "6-8",
+   "kind": "District",
+   "lat": 40.0524,
+   "lng": -75.0691
+  },
+  {
+   "id": "cayuga-school",
+   "name": "Cayuga School",
+   "address": "4344 N 5th St",
+   "zip": "19140",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0178,
+   "lng": -75.1351
+  },
+  {
+   "id": "charles-w-henry-school",
+   "name": "Charles W. Henry School",
+   "address": "601 Carpenter Ln",
+   "zip": "19119",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0463,
+   "lng": -75.1966
+  },
+  {
+   "id": "christopher-columbus-charter-school",
+   "name": "Christopher Columbus Charter School",
+   "address": "916 Christian St",
+   "zip": "19147",
+   "grades": "K-4",
+   "kind": "Charter",
+   "lat": 39.9386,
+   "lng": -75.1586
+  },
+  {
+   "id": "christopher-columbus-charter-school-south",
+   "name": "Christopher Columbus Charter School (South)",
+   "address": "1242 S 13th St",
+   "zip": "19147",
+   "grades": "5-8",
+   "kind": "Charter",
+   "lat": 39.9341,
+   "lng": -75.1656
+  },
+  {
+   "id": "clara-barton-school",
+   "name": "Clara Barton School",
+   "address": "4600 Rosehill St",
+   "zip": "19120",
+   "grades": "K-2",
+   "kind": "District",
+   "lat": 40.0204,
+   "lng": -75.1195
+  },
+  {
+   "id": "community-academy-of-philadelphia-charter-school",
+   "name": "Community Academy of Philadelphia Charter School",
+   "address": "1100 E Erie Ave",
+   "zip": "19124",
+   "grades": "K-12",
+   "kind": "Charter",
+   "lat": 40.0047,
+   "lng": -75.1067
+  },
+  {
+   "id": "cook-wissahickon-school",
+   "name": "Cook-Wissahickon School",
+   "address": "201 E Salaignac St",
+   "zip": "19128",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0225,
+   "lng": -75.2068
+  },
+  {
+   "id": "crossroads-accelerated-academy",
+   "name": "Crossroads Accelerated Academy",
+   "address": "4300 Westminster Ave",
+   "zip": "19104",
+   "grades": "7-10",
+   "kind": "District",
+   "lat": 39.9694,
+   "lng": -75.2105
+  },
+  {
+   "id": "crossroads-at-hunting-park",
+   "name": "Crossroads at Hunting Park",
+   "address": "4224 N Front St",
+   "zip": "19140",
+   "grades": "3-6",
+   "kind": "District",
+   "lat": 40.0152,
+   "lng": -75.1262
+  },
+  {
+   "id": "d-newlin-fell-school",
+   "name": "D. Newlin Fell School",
+   "address": "900 W Oregon Ave",
+   "zip": "19148",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9155,
+   "lng": -75.1631
+  },
+  {
+   "id": "deep-roots-charter-school",
+   "name": "Deep Roots Charter School",
+   "address": "3556 Frankford Ave",
+   "zip": "19134",
+   "grades": "K-5",
+   "kind": "Charter",
+   "lat": 39.9981,
+   "lng": -75.1018
+  },
+  {
+   "id": "delaplaine-mcdaniel-school",
+   "name": "Delaplaine McDaniel School",
+   "address": "1801 S 22nd St",
+   "zip": "19145",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9296,
+   "lng": -75.1818
+  },
+  {
+   "id": "discovery-charter-school",
+   "name": "Discovery Charter School",
+   "address": "4700 Parkside Ave",
+   "zip": "19131",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.9773,
+   "lng": -75.2141
+  },
+  {
+   "id": "dr-ethel-allen-school",
+   "name": "Dr. Ethel Allen School",
+   "address": "3200 W Lehigh Ave",
+   "zip": "19132",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9972,
+   "lng": -75.1836
+  },
+  {
+   "id": "e-washington-rhodes-school",
+   "name": "E. Washington Rhodes School",
+   "address": "2900 W Clearfield St",
+   "zip": "19132",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0028,
+   "lng": -75.1781
+  },
+  {
+   "id": "edward-gideon-school",
+   "name": "Edward Gideon School",
+   "address": "2817 W Glenwood Ave",
+   "zip": "19121",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9844,
+   "lng": -75.1808
+  },
+  {
+   "id": "edward-heston-school",
+   "name": "Edward Heston School",
+   "address": "1621 N 54th St",
+   "zip": "19131",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9779,
+   "lng": -75.2297
+  },
+  {
+   "id": "edward-t-steel-school",
+   "name": "Edward T. Steel School",
+   "address": "4301 Wayne Ave",
+   "zip": "19140",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0188,
+   "lng": -75.1569
+  },
+  {
+   "id": "edwin-forrest-school",
+   "name": "Edwin Forrest School",
+   "address": "7300 Cottage St",
+   "zip": "19136",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0345,
+   "lng": -75.036
+  },
+  {
+   "id": "edwin-m-stanton-school",
+   "name": "Edwin M. Stanton School",
+   "address": "901 S 17th St",
+   "zip": "19146",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9404,
+   "lng": -75.1709
+  },
+  {
+   "id": "eleanor-c-emlen-school",
+   "name": "Eleanor C. Emlen School",
+   "address": "6501 Chew Ave",
+   "zip": "19119",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0541,
+   "lng": -75.1781
+  },
+  {
+   "id": "eliza-b-kirkbride-school",
+   "name": "Eliza B. Kirkbride School",
+   "address": "1501 S 7th St",
+   "zip": "19147",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.93,
+   "lng": -75.1565
+  },
+  {
+   "id": "ellwood-school",
+   "name": "Ellwood School",
+   "address": "6701 N 13th St",
+   "zip": "19126",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.055,
+   "lng": -75.1385
+  },
+  {
+   "id": "esperanza-academy-charter-school",
+   "name": "Esperanza Academy Charter School",
+   "address": "4261 N 5th St",
+   "zip": "19140",
+   "grades": "6-8",
+   "kind": "Charter",
+   "lat": 40.0158,
+   "lng": -75.1342
+  },
+  {
+   "id": "esperanza-academy-charter-school-2",
+   "name": "Esperanza Academy Charter School",
+   "address": "201 W Hunting Park Ave",
+   "zip": "19140",
+   "grades": "K-5",
+   "kind": "Charter",
+   "lat": 40.0147,
+   "lng": -75.1291
+  },
+  {
+   "id": "ethan-allen-school",
+   "name": "Ethan Allen School",
+   "address": "6329 Battersby St",
+   "zip": "19149",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0298,
+   "lng": -75.0619
+  },
+  {
+   "id": "eugenio-maria-de-hostos-charter-school",
+   "name": "Eugenio Maria de Hostos Charter School",
+   "address": "6301 N 2nd St",
+   "zip": "19120",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.0467,
+   "lng": -75.1219
+  },
+  {
+   "id": "f-amedee-bregy-school",
+   "name": "F. Amedee Bregy School",
+   "address": "1700 Bigler St",
+   "zip": "19145",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9146,
+   "lng": -75.1767
+  },
+  {
+   "id": "fanny-jackson-coppin-school",
+   "name": "Fanny Jackson Coppin School",
+   "address": "1213 S 12th St",
+   "zip": "19147",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9346,
+   "lng": -75.1635
+  },
+  {
+   "id": "feltonville-intermediate-school",
+   "name": "Feltonville Intermediate School",
+   "address": "238 E Wyoming Ave",
+   "zip": "19120",
+   "grades": "3-5",
+   "kind": "District",
+   "lat": 40.0203,
+   "lng": -75.121
+  },
+  {
+   "id": "feltonville-school-of-arts-and-sciences",
+   "name": "Feltonville School of Arts and Sciences",
+   "address": "210 E Courtland St",
+   "zip": "19120",
+   "grades": "6-8",
+   "kind": "District",
+   "lat": 40.0193,
+   "lng": -75.1217
+  },
+  {
+   "id": "first-philadelphia-preparatory-charter-school",
+   "name": "First Philadelphia Preparatory Charter School",
+   "address": "4300 Tacony St",
+   "zip": "19124",
+   "grades": "K-12",
+   "kind": "Charter",
+   "lat": 40.0072,
+   "lng": -75.0824
+  },
+  {
+   "id": "fitler-academics-plus-school",
+   "name": "Fitler Academics Plus School",
+   "address": "140 W Seymour St",
+   "zip": "19144",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0261,
+   "lng": -75.1663
+  },
+  {
+   "id": "folk-arts-cultural-treasures-charter-school",
+   "name": "Folk Arts-Cultural Treasures Charter School",
+   "address": "1023 Callowhill St",
+   "zip": "19123",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.959,
+   "lng": -75.1561
+  },
+  {
+   "id": "fox-chase-school",
+   "name": "Fox Chase School",
+   "address": "500 Rhawn St",
+   "zip": "19111",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0749,
+   "lng": -75.0808
+  },
+  {
+   "id": "frances-e-willard-school",
+   "name": "Frances E. Willard School",
+   "address": "1930 E Elkhart St",
+   "zip": "19134",
+   "grades": "K-4",
+   "kind": "District",
+   "lat": 39.9934,
+   "lng": -75.1162
+  },
+  {
+   "id": "francis-hopkinson-school",
+   "name": "Francis Hopkinson School",
+   "address": "4001 L St",
+   "zip": "19124",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0084,
+   "lng": -75.1023
+  },
+  {
+   "id": "francis-s-key-school",
+   "name": "Francis S. Key School",
+   "address": "2230 S 8th St",
+   "zip": "19148",
+   "grades": "K-6",
+   "kind": "District",
+   "lat": 39.9209,
+   "lng": -75.1605
+  },
+  {
+   "id": "franklin-s-edmonds-school",
+   "name": "Franklin S. Edmonds School",
+   "address": "8025 Thouron Ave",
+   "zip": "19150",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.073,
+   "lng": -75.171
+  },
+  {
+   "id": "franklin-towne-charter-elementary-school",
+   "name": "Franklin Towne Charter Elementary School",
+   "address": "4259 Richmond St",
+   "zip": "19137",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.9955,
+   "lng": -75.0747
+  },
+  {
+   "id": "freire-charter-school",
+   "name": "Freire Charter School",
+   "address": "1026 Market St",
+   "zip": "19107",
+   "grades": "5-8",
+   "kind": "Charter",
+   "lat": 39.9514,
+   "lng": -75.1581
+  },
+  {
+   "id": "general-david-b-birney-charter-school",
+   "name": "General David B Birney Charter School",
+   "address": "900 Lindley Ave",
+   "zip": "19141",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.0294,
+   "lng": -75.1384
+  },
+  {
+   "id": "general-george-a-mccall-school",
+   "name": "General George A. McCall School",
+   "address": "325 S 7th St",
+   "zip": "19106",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9446,
+   "lng": -75.1524
+  },
+  {
+   "id": "general-george-g-meade-school",
+   "name": "General George G. Meade School",
+   "address": "1600 N 18th St",
+   "zip": "19121",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9786,
+   "lng": -75.1647
+  },
+  {
+   "id": "general-louis-wagner-school",
+   "name": "General Louis Wagner School",
+   "address": "1701 Chelten Ave",
+   "zip": "19126",
+   "grades": "6-8",
+   "kind": "District",
+   "lat": 40.0517,
+   "lng": -75.1477
+  },
+  {
+   "id": "general-philip-kearny-school",
+   "name": "General Philip Kearny School",
+   "address": "601 Fairmount Ave",
+   "zip": "19123",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9639,
+   "lng": -75.1481
+  },
+  {
+   "id": "george-w-childs-school",
+   "name": "George W. Childs School",
+   "address": "1599 Wharton St",
+   "zip": "19146",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9346,
+   "lng": -75.1705
+  },
+  {
+   "id": "george-w-nebinger-school",
+   "name": "George W. Nebinger School",
+   "address": "601 Carpenter St",
+   "zip": "19147",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9367,
+   "lng": -75.1538
+  },
+  {
+   "id": "george-w-sharswood-school",
+   "name": "George W. Sharswood School",
+   "address": "2300 S 2nd St",
+   "zip": "19148",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9189,
+   "lng": -75.1508
+  },
+  {
+   "id": "gilbert-spruance-school",
+   "name": "Gilbert Spruance School",
+   "address": "6401 Horrocks St",
+   "zip": "19149",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0374,
+   "lng": -75.0728
+  },
+  {
+   "id": "girard-academic-music-program",
+   "name": "Girard Academic Music Program",
+   "address": "2136 W Ritner St",
+   "zip": "19145",
+   "grades": "5-12",
+   "kind": "District",
+   "lat": 39.9218,
+   "lng": -75.183
+  },
+  {
+   "id": "global-leadership-academy-charter-school",
+   "name": "Global Leadership Academy Charter School",
+   "address": "4601 W Girard Ave",
+   "zip": "19131",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.9733,
+   "lng": -75.2155
+  },
+  {
+   "id": "global-leadership-academy-at-huey",
+   "name": "Global Leadership Academy at Huey",
+   "address": "5200 Pine St",
+   "zip": "19143",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.9533,
+   "lng": -75.2269
+  },
+  {
+   "id": "gloria-casarez-elementary-school",
+   "name": "Gloria Casarez Elementary School",
+   "address": "800 E Ontario St",
+   "zip": "19134",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 39.9996,
+   "lng": -75.1142
+  },
+  {
+   "id": "green-woods-charter-school",
+   "name": "Green Woods Charter School",
+   "address": "468 Domino Ln",
+   "zip": "19128",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.0431,
+   "lng": -75.234
+  },
+  {
+   "id": "grover-washington-jr-school",
+   "name": "Grover Washington, Jr. School",
+   "address": "201 E Olney Ave",
+   "zip": "19120",
+   "grades": "5-8",
+   "kind": "District",
+   "lat": 40.0355,
+   "lng": -75.118
+  },
+  {
+   "id": "guion-s-bluford-elementary-school",
+   "name": "Guion S Bluford Elementary School",
+   "address": "5720 Media St",
+   "zip": "19131",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9737,
+   "lng": -75.236
+  },
+  {
+   "id": "hamilton-disston-school",
+   "name": "Hamilton Disston School",
+   "address": "6801 Cottage St",
+   "zip": "19135",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0283,
+   "lng": -75.0467
+  },
+  {
+   "id": "harambee-institute-of-science-and-technology-charter-school",
+   "name": "Harambee Institute of Science and Technology Charter School",
+   "address": "640 N 66th St",
+   "zip": "19151",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.9732,
+   "lng": -75.2523
+  },
+  {
+   "id": "henry-a-brown-school",
+   "name": "Henry A. Brown School",
+   "address": "1946 E Sergeant St",
+   "zip": "19125",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9866,
+   "lng": -75.1274
+  },
+  {
+   "id": "henry-c-lea-school",
+   "name": "Henry C. Lea School",
+   "address": "4700 Locust St",
+   "zip": "19139",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9545,
+   "lng": -75.2163
+  },
+  {
+   "id": "henry-h-houston-school",
+   "name": "Henry H. Houston School",
+   "address": "7300 Rural Ln",
+   "zip": "19119",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0591,
+   "lng": -75.1948
+  },
+  {
+   "id": "henry-w-lawton-school",
+   "name": "Henry W. Lawton School",
+   "address": "6101 Jackson St",
+   "zip": "19135",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0206,
+   "lng": -75.059
+  },
+  {
+   "id": "hill-freedman-world-academy",
+   "name": "Hill-Freedman World Academy",
+   "address": "1100 E Mt Pleasant Ave",
+   "zip": "19150",
+   "grades": "6-12",
+   "kind": "District",
+   "lat": 40.0712,
+   "lng": -75.1752
+  },
+  {
+   "id": "honorable-luis-munoz-marin-school",
+   "name": "Honorable Luis Munoz-Marin School",
+   "address": "3300 N 3rd St",
+   "zip": "19140",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0012,
+   "lng": -75.1356
+  },
+  {
+   "id": "horatio-b-hackett-school",
+   "name": "Horatio B. Hackett School",
+   "address": "2161 E York St",
+   "zip": "19125",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 39.9811,
+   "lng": -75.1268
+  },
+  {
+   "id": "impact-charter-school-west",
+   "name": "Impact Charter School West",
+   "address": "5600 Chester Ave",
+   "zip": "19143",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.9371,
+   "lng": -75.2253
+  },
+  {
+   "id": "independence-charter-school",
+   "name": "Independence Charter School",
+   "address": "1600 Lombard St",
+   "zip": "19146",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.9449,
+   "lng": -75.169
+  },
+  {
+   "id": "inquiry-charter-school",
+   "name": "Inquiry Charter School",
+   "address": "1301 Belmont Ave",
+   "zip": "19104",
+   "grades": "K-5",
+   "kind": "Charter",
+   "lat": 39.975,
+   "lng": -75.2122
+  },
+  {
+   "id": "isaac-a-sheppard-school",
+   "name": "Isaac A. Sheppard School",
+   "address": "120 W Cambria St",
+   "zip": "19133",
+   "grades": "K-4",
+   "kind": "District",
+   "lat": 39.9937,
+   "lng": -75.1316
+  },
+  {
+   "id": "j-hampton-moore-school",
+   "name": "J. Hampton Moore School",
+   "address": "6900 Summerdale Ave",
+   "zip": "19111",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0491,
+   "lng": -75.0769
+  },
+  {
+   "id": "james-dobson-school",
+   "name": "James Dobson School",
+   "address": "4667 Umbria St",
+   "zip": "19127",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0314,
+   "lng": -75.2305
+  },
+  {
+   "id": "james-g-blaine-school",
+   "name": "James G. Blaine School",
+   "address": "3001 W Berks St",
+   "zip": "19121",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9853,
+   "lng": -75.1831
+  },
+  {
+   "id": "james-j-sullivan-school",
+   "name": "James J. Sullivan School",
+   "address": "5300 Ditman St",
+   "zip": "19124",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.016,
+   "lng": -75.0669
+  },
+  {
+   "id": "james-logan-school",
+   "name": "James Logan School",
+   "address": "1700 Lindley Ave",
+   "zip": "19141",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0309,
+   "lng": -75.1521
+  },
+  {
+   "id": "james-r-lowell-school",
+   "name": "James R. Lowell School",
+   "address": "450 W Nedro Ave",
+   "zip": "19120",
+   "grades": "K-4",
+   "kind": "District",
+   "lat": 40.0405,
+   "lng": -75.1289
+  },
+  {
+   "id": "james-r-ludlow-school",
+   "name": "James R. Ludlow School",
+   "address": "550 W Master St",
+   "zip": "19122",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9726,
+   "lng": -75.1459
+  },
+  {
+   "id": "james-rhoads-school",
+   "name": "James Rhoads School",
+   "address": "4901 Parrish St",
+   "zip": "19139",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9673,
+   "lng": -75.2201
+  },
+  {
+   "id": "jay-cooke-school",
+   "name": "Jay Cooke School",
+   "address": "1300 W Loudon St",
+   "zip": "19141",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0255,
+   "lng": -75.1461
+  },
+  {
+   "id": "jenks-academy-for-arts-and-sciences",
+   "name": "Jenks Academy for Arts and Sciences",
+   "address": "8301 Germantown Ave",
+   "zip": "19118",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0748,
+   "lng": -75.2034
+  },
+  {
+   "id": "john-b-stetson-middle-school",
+   "name": "John B Stetson Middle School",
+   "address": "3200 B St",
+   "zip": "19134",
+   "grades": "5-8",
+   "kind": "District",
+   "lat": 39.9987,
+   "lng": -75.1256
+  },
+  {
+   "id": "john-b-kelly-school",
+   "name": "John B. Kelly School",
+   "address": "5116 Pulaski Ave",
+   "zip": "19144",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0251,
+   "lng": -75.1724
+  },
+  {
+   "id": "john-barry-school",
+   "name": "John Barry School",
+   "address": "5900 Race St",
+   "zip": "19139",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9644,
+   "lng": -75.2386
+  },
+  {
+   "id": "john-f-hartranft-school",
+   "name": "John F. Hartranft School",
+   "address": "720 W Cumberland St",
+   "zip": "19133",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9892,
+   "lng": -75.145
+  },
+  {
+   "id": "john-f-mccloskey-school",
+   "name": "John F. McCloskey School",
+   "address": "8500 Pickering St",
+   "zip": "19150",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0814,
+   "lng": -75.1747
+  },
+  {
+   "id": "john-h-taggart-school",
+   "name": "John H. Taggart School",
+   "address": "400 W Porter St",
+   "zip": "19148",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9171,
+   "lng": -75.1548
+  },
+  {
+   "id": "john-h-webster-school",
+   "name": "John H. Webster School",
+   "address": "3400 Frankford Ave",
+   "zip": "19134",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 39.9962,
+   "lng": -75.1055
+  },
+  {
+   "id": "john-hancock-demonstration-middle-school-labrum-campus",
+   "name": "John Hancock Demonstration Middle School- Labrum Campus",
+   "address": "10800 Hawley Rd",
+   "zip": "19114",
+   "grades": "6-8",
+   "kind": "District",
+   "lat": 40.0807,
+   "lng": -74.9878
+  },
+  {
+   "id": "john-hancock-demonstration-school",
+   "name": "John Hancock Demonstration School",
+   "address": "3700 Morrell Ave",
+   "zip": "19114",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0674,
+   "lng": -74.9892
+  },
+  {
+   "id": "john-m-patterson-school",
+   "name": "John M. Patterson School",
+   "address": "7000 Buist Ave",
+   "zip": "19142",
+   "grades": "K-4",
+   "kind": "District",
+   "lat": 39.9161,
+   "lng": -75.2368
+  },
+  {
+   "id": "john-marshall-school",
+   "name": "John Marshall School",
+   "address": "4500 Griscom St",
+   "zip": "19124",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0147,
+   "lng": -75.0875
+  },
+  {
+   "id": "john-moffet-school",
+   "name": "John Moffet School",
+   "address": "127 W Oxford St",
+   "zip": "19122",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 39.9747,
+   "lng": -75.1359
+  },
+  {
+   "id": "john-welsh-school",
+   "name": "John Welsh School",
+   "address": "2331 N 4th St",
+   "zip": "19133",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9865,
+   "lng": -75.1393
+  },
+  {
+   "id": "joseph-greenberg-school",
+   "name": "Joseph Greenberg School",
+   "address": "600 Sharon Ln",
+   "zip": "19115",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0957,
+   "lng": -75.0576
+  },
+  {
+   "id": "joseph-h-brown-school",
+   "name": "Joseph H. Brown School",
+   "address": "3600 Stanwood St",
+   "zip": "19136",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0435,
+   "lng": -75.0246
+  },
+  {
+   "id": "joseph-pennell-school",
+   "name": "Joseph Pennell School",
+   "address": "1800 Nedro Ave",
+   "zip": "19141",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0434,
+   "lng": -75.1508
+  },
+  {
+   "id": "joseph-w-catharine-school",
+   "name": "Joseph W. Catharine School",
+   "address": "6600 Chester Ave",
+   "zip": "19142",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 39.9274,
+   "lng": -75.2399
+  },
+  {
+   "id": "julia-r-masterman-school",
+   "name": "Julia R. Masterman School",
+   "address": "1699 Spring Garden St",
+   "zip": "19130",
+   "grades": "5-12",
+   "kind": "District",
+   "lat": 39.9635,
+   "lng": -75.1657
+  },
+  {
+   "id": "julia-w-howe-school",
+   "name": "Julia W. Howe School",
+   "address": "5800 N 13th St",
+   "zip": "19141",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0413,
+   "lng": -75.1422
+  },
+  {
+   "id": "julia-de-burgos-school",
+   "name": "Julia de Burgos School",
+   "address": "401 W Lehigh Ave",
+   "zip": "19133",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9928,
+   "lng": -75.1386
+  },
+  {
+   "id": "juniata-park-academy",
+   "name": "Juniata Park Academy",
+   "address": "801 E Hunting Park Ave",
+   "zip": "19124",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0124,
+   "lng": -75.1112
+  },
+  {
+   "id": "kipp-north-philadelphia-academy",
+   "name": "KIPP North Philadelphia Academy",
+   "address": "2539 N 16th St",
+   "zip": "19132",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.992,
+   "lng": -75.158
+  },
+  {
+   "id": "kipp-octavius-catto-charter-school",
+   "name": "KIPP Octavius Catto Charter School",
+   "address": "4601 Market St",
+   "zip": "19139",
+   "grades": "K-4",
+   "kind": "Charter",
+   "lat": 39.9593,
+   "lng": -75.2147
+  },
+  {
+   "id": "kipp-philadelphia-elementary-academy",
+   "name": "KIPP Philadelphia Elementary Academy",
+   "address": "2409 W Westmoreland St",
+   "zip": "19129",
+   "grades": "K-4",
+   "kind": "Charter",
+   "lat": 40.0059,
+   "lng": -75.169
+  },
+  {
+   "id": "kipp-philadelphia-preparatory-academy",
+   "name": "KIPP Philadelphia Preparatory Academy",
+   "address": "2600 W Clearfield St",
+   "zip": "19132",
+   "grades": "5-8",
+   "kind": "Charter",
+   "lat": 40.0024,
+   "lng": -75.1736
+  },
+  {
+   "id": "kipp-west-philadelphia-elementary-academy",
+   "name": "KIPP West Philadelphia Elementary Academy",
+   "address": "5070 Parkside Ave",
+   "zip": "19131",
+   "grades": "K-4",
+   "kind": "Charter",
+   "lat": 39.9796,
+   "lng": -75.2212
+  },
+  {
+   "id": "kipp-west-philadelphia-preparatory-charter-school",
+   "name": "KIPP West Philadelphia Preparatory Charter School",
+   "address": "5900 Baltimore Ave",
+   "zip": "19143",
+   "grades": "5-8",
+   "kind": "Charter",
+   "lat": 39.9445,
+   "lng": -75.2426
+  },
+  {
+   "id": "kenderton-elementary-school",
+   "name": "Kenderton Elementary School",
+   "address": "1500 W Ontario St",
+   "zip": "19140",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0051,
+   "lng": -75.1541
+  },
+  {
+   "id": "kennedy-c-crossan-school",
+   "name": "Kennedy C. Crossan School",
+   "address": "7350 Bingham St",
+   "zip": "19111",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0622,
+   "lng": -75.0813
+  },
+  {
+   "id": "keystone-academy-charter-school",
+   "name": "Keystone Academy Charter School",
+   "address": "4521 Longshore Ave",
+   "zip": "19135",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.0275,
+   "lng": -75.044
+  },
+  {
+   "id": "laboratory-charter-school-of-communication-and-languages",
+   "name": "Laboratory Charter School of Communication and Languages",
+   "address": "926 W Sedgley Ave",
+   "zip": "19140",
+   "grades": "K-5",
+   "kind": "Charter",
+   "lat": 40.0014,
+   "lng": -75.1452
+  },
+  {
+   "id": "laura-h-carnell-school",
+   "name": "Laura H. Carnell School",
+   "address": "1100 Devereaux Ave",
+   "zip": "19111",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.039,
+   "lng": -75.0841
+  },
+  {
+   "id": "laura-w-waring-school",
+   "name": "Laura W. Waring School",
+   "address": "1801 Green St",
+   "zip": "19130",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9649,
+   "lng": -75.1676
+  },
+  {
+   "id": "lewis-c-cassidy-academics-plus-school",
+   "name": "Lewis C. Cassidy Academics Plus School",
+   "address": "6523 Lansdowne Ave",
+   "zip": "19151",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9752,
+   "lng": -75.2508
+  },
+  {
+   "id": "lewis-elkin-school",
+   "name": "Lewis Elkin School",
+   "address": "3199 D St",
+   "zip": "19134",
+   "grades": "K-4",
+   "kind": "District",
+   "lat": 39.997,
+   "lng": -75.1209
+  },
+  {
+   "id": "louis-h-farrell-school",
+   "name": "Louis H. Farrell School",
+   "address": "8300 Castor Ave",
+   "zip": "19152",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0665,
+   "lng": -75.0523
+  },
+  {
+   "id": "mast-community-charter-school-ii",
+   "name": "MaST Community Charter School II",
+   "address": "6501 New State Rd",
+   "zip": "19135",
+   "grades": "3-12",
+   "kind": "Charter",
+   "lat": 40.0179,
+   "lng": -75.0451
+  },
+  {
+   "id": "mast-community-charter-school-ii-lawncrest-campus",
+   "name": "MaST Community Charter School II (Lawncrest Campus)",
+   "address": "6238 Rising Sun Ave",
+   "zip": "19111",
+   "grades": "K-2",
+   "kind": "Charter",
+   "lat": 40.0484,
+   "lng": -75.0974
+  },
+  {
+   "id": "mast-iii-charter-school",
+   "name": "MaST III Charter School",
+   "address": "1 Crown Way",
+   "zip": "19154",
+   "grades": "K-11",
+   "kind": "Charter",
+   "lat": 40.1094,
+   "lng": -74.9917
+  },
+  {
+   "id": "marian-anderson-neighborhood-academy",
+   "name": "Marian Anderson Neighborhood Academy",
+   "address": "2000 Catharine St",
+   "zip": "19146",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9419,
+   "lng": -75.1759
+  },
+  {
+   "id": "mariana-bracetti-academy-charter-school",
+   "name": "Mariana Bracetti Academy Charter School",
+   "address": "1840 Torresdale Ave",
+   "zip": "19124",
+   "grades": "K-12",
+   "kind": "Charter",
+   "lat": 40.0056,
+   "lng": -75.0939
+  },
+  {
+   "id": "maritime-academy-charter-school-macs",
+   "name": "Maritime Academy Charter School (MACS)",
+   "address": "2275 Bridge St",
+   "zip": "19137",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.0074,
+   "lng": -75.0656
+  },
+  {
+   "id": "martha-washington-school",
+   "name": "Martha Washington School",
+   "address": "766 N 44th St",
+   "zip": "19104",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9662,
+   "lng": -75.2113
+  },
+  {
+   "id": "mary-m-bethune-school",
+   "name": "Mary M. Bethune School",
+   "address": "3301 Old York Rd",
+   "zip": "19140",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0036,
+   "lng": -75.1482
+  },
+  {
+   "id": "mastery-charter-school-at-cleveland",
+   "name": "Mastery Charter School at Cleveland",
+   "address": "3701 N 19th St",
+   "zip": "19140",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.0109,
+   "lng": -75.1587
+  },
+  {
+   "id": "mastery-charter-school-at-clymer",
+   "name": "Mastery Charter School at Clymer",
+   "address": "1201 W Rush St",
+   "zip": "19133",
+   "grades": "K-6",
+   "kind": "Charter",
+   "lat": 39.9958,
+   "lng": -75.1506
+  },
+  {
+   "id": "mastery-charter-school-at-douglass",
+   "name": "Mastery Charter School at Douglass",
+   "address": "2118 W Norris St",
+   "zip": "19121",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.9846,
+   "lng": -75.1696
+  },
+  {
+   "id": "mastery-charter-school-at-gratz",
+   "name": "Mastery Charter School at Gratz",
+   "address": "1798 W Hunting Park Ave",
+   "zip": "19140",
+   "grades": "7-12",
+   "kind": "Charter",
+   "lat": 40.0142,
+   "lng": -75.1561
+  },
+  {
+   "id": "mastery-charter-school-at-hardy-williams",
+   "name": "Mastery Charter School at Hardy Williams",
+   "address": "5400 Warrington Ave",
+   "zip": "19143",
+   "grades": "K-12",
+   "kind": "Charter",
+   "lat": 39.9416,
+   "lng": -75.2264
+  },
+  {
+   "id": "mastery-charter-school-at-harrity",
+   "name": "Mastery Charter School at Harrity",
+   "address": "5601 Christian St",
+   "zip": "19143",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.9488,
+   "lng": -75.2358
+  },
+  {
+   "id": "mastery-charter-school-at-lenfest",
+   "name": "Mastery Charter School at Lenfest",
+   "address": "35 S 4th St",
+   "zip": "19106",
+   "grades": "7-12",
+   "kind": "Charter",
+   "lat": 39.9495,
+   "lng": -75.147
+  },
+  {
+   "id": "mastery-charter-school-at-mann",
+   "name": "Mastery Charter School at Mann",
+   "address": "5376 W Berks St",
+   "zip": "19131",
+   "grades": "K-6",
+   "kind": "Charter",
+   "lat": 39.9856,
+   "lng": -75.2313
+  },
+  {
+   "id": "mastery-charter-school-at-pastorius",
+   "name": "Mastery Charter School at Pastorius",
+   "address": "5650 Sprague St",
+   "zip": "19138",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.0482,
+   "lng": -75.1614
+  },
+  {
+   "id": "mastery-charter-school-at-pickett",
+   "name": "Mastery Charter School at Pickett",
+   "address": "5700 Wayne Ave",
+   "zip": "19144",
+   "grades": "6-12",
+   "kind": "Charter",
+   "lat": 40.0321,
+   "lng": -75.1807
+  },
+  {
+   "id": "mastery-charter-school-at-shoemaker",
+   "name": "Mastery Charter School at Shoemaker",
+   "address": "5301 Media St",
+   "zip": "19131",
+   "grades": "7-12",
+   "kind": "Charter",
+   "lat": 39.9758,
+   "lng": -75.2284
+  },
+  {
+   "id": "mastery-charter-school-at-smedley",
+   "name": "Mastery Charter School at Smedley",
+   "address": "1790 Bridge St",
+   "zip": "19124",
+   "grades": "K-6",
+   "kind": "Charter",
+   "lat": 40.0198,
+   "lng": -75.0739
+  },
+  {
+   "id": "mastery-charter-school-at-thomas-campus",
+   "name": "Mastery Charter School at Thomas Campus",
+   "address": "927 Johnston St",
+   "zip": "19148",
+   "grades": "K-12",
+   "kind": "Charter",
+   "lat": 39.9147,
+   "lng": -75.1636
+  },
+  {
+   "id": "mastery-charter-school-at-wister",
+   "name": "Mastery Charter School at Wister",
+   "address": "67 E Bringhurst St",
+   "zip": "19144",
+   "grades": "K-5",
+   "kind": "Charter",
+   "lat": 40.0332,
+   "lng": -75.1667
+  },
+  {
+   "id": "mastery-prep-elementary-charter-school",
+   "name": "Mastery Prep Elementary Charter School",
+   "address": "1801 W Pike St",
+   "zip": "19140",
+   "grades": "K-3",
+   "kind": "Charter",
+   "lat": 40.0135,
+   "lng": -75.1561
+  },
+  {
+   "id": "mastery-school-thomas-campus",
+   "name": "Mastery School Thomas Campus",
+   "address": "814 Bigler St",
+   "zip": "19148",
+   "grades": "K-6",
+   "kind": "Charter",
+   "lat": 39.9128,
+   "lng": -75.1631
+  },
+  {
+   "id": "mathematics-science-and-technology-community-charter-school-mast",
+   "name": "Mathematics, Science, and Technology Community Charter School (MaST)",
+   "address": "1800 Byberry Rd",
+   "zip": "19116",
+   "grades": "K-12",
+   "kind": "Charter",
+   "lat": 40.1136,
+   "lng": -75.0061
+  },
+  {
+   "id": "mayfair-school",
+   "name": "Mayfair School",
+   "address": "3001 Princeton Ave",
+   "zip": "19149",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0393,
+   "lng": -75.0519
+  },
+  {
+   "id": "memphis-street-academy-charter-school-at-j-p-jones",
+   "name": "Memphis Street Academy Charter School at J.P. Jones",
+   "address": "2950 Memphis St",
+   "zip": "19134",
+   "grades": "5-8",
+   "kind": "Charter",
+   "lat": 39.9862,
+   "lng": -75.1129
+  },
+  {
+   "id": "middle-years-alternative-school",
+   "name": "Middle Years Alternative School",
+   "address": "4725 Fairmount Ave",
+   "zip": "19139",
+   "grades": "5-8",
+   "kind": "District",
+   "lat": 39.9644,
+   "lng": -75.2158
+  },
+  {
+   "id": "morton-mcmichael-school",
+   "name": "Morton McMichael School",
+   "address": "3543 Fairmount Ave",
+   "zip": "19104",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9665,
+   "lng": -75.1948
+  },
+  {
+   "id": "new-foundations-charter-school",
+   "name": "New Foundations Charter School",
+   "address": "8001 Torresdale Ave",
+   "zip": "19136",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.0351,
+   "lng": -75.0242
+  },
+  {
+   "id": "northeast-community-propel-academy",
+   "name": "Northeast Community Propel Academy",
+   "address": "7500 Rowland Ave",
+   "zip": "19136",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0436,
+   "lng": -75.04
+  },
+  {
+   "id": "northwood-academy-charter-school",
+   "name": "Northwood Academy Charter School",
+   "address": "4621 Castor Ave",
+   "zip": "19124",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.0204,
+   "lng": -75.0947
+  },
+  {
+   "id": "olney-school",
+   "name": "Olney School",
+   "address": "5301 N Water St",
+   "zip": "19120",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0311,
+   "lng": -75.1209
+  },
+  {
+   "id": "overbrook-educational-center",
+   "name": "Overbrook Educational Center",
+   "address": "6722 Lansdowne Ave",
+   "zip": "19151",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9741,
+   "lng": -75.2545
+  },
+  {
+   "id": "overbrook-elementary-school",
+   "name": "Overbrook Elementary School",
+   "address": "2032 N 62nd St",
+   "zip": "19151",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.982,
+   "lng": -75.2456
+  },
+  {
+   "id": "pan-american-academy-charter-school",
+   "name": "Pan American Academy Charter School",
+   "address": "2830 N American St",
+   "zip": "19133",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.9945,
+   "lng": -75.136
+  },
+  {
+   "id": "paul-l-dunbar-school",
+   "name": "Paul L. Dunbar School",
+   "address": "1750 N 12th St",
+   "zip": "19122",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9792,
+   "lng": -75.1542
+  },
+  {
+   "id": "penn-treaty-high-school",
+   "name": "Penn Treaty High School",
+   "address": "600 E Thompson St",
+   "zip": "19125",
+   "grades": "6-12",
+   "kind": "District",
+   "lat": 39.9727,
+   "lng": -75.1272
+  },
+  {
+   "id": "penrose-school",
+   "name": "Penrose School",
+   "address": "2515 S 78th St",
+   "zip": "19153",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9078,
+   "lng": -75.2476
+  },
+  {
+   "id": "people-for-people-charter-school",
+   "name": "People for People Charter School",
+   "address": "800 N Broad St",
+   "zip": "19130",
+   "grades": "K-12",
+   "kind": "Charter",
+   "lat": 39.9681,
+   "lng": -75.1607
+  },
+  {
+   "id": "philadelphia-academy-charter-school",
+   "name": "Philadelphia Academy Charter School",
+   "address": "11000 Roosevelt Blvd",
+   "zip": "19116",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.1007,
+   "lng": -75.0105
+  },
+  {
+   "id": "philadelphia-hebrew-public-charter-school",
+   "name": "Philadelphia Hebrew Public Charter School",
+   "address": "3300 Henry Ave",
+   "zip": "19129",
+   "grades": "K-2",
+   "kind": "Charter",
+   "lat": 40.012,
+   "lng": -75.1833
+  },
+  {
+   "id": "philadelphia-learning-academy-north",
+   "name": "Philadelphia Learning Academy North",
+   "address": "4224 N Front St",
+   "zip": "19140",
+   "grades": "8-12",
+   "kind": "District",
+   "lat": 40.015,
+   "lng": -75.1263
+  },
+  {
+   "id": "philadelphia-montessori-charter-school",
+   "name": "Philadelphia Montessori Charter School",
+   "address": "2227 Island Ave",
+   "zip": "19142",
+   "grades": "K-6",
+   "kind": "Charter",
+   "lat": 39.9166,
+   "lng": -75.2452
+  },
+  {
+   "id": "philadelphia-performing-arts-charter-school",
+   "name": "Philadelphia Performing Arts Charter School",
+   "address": "1600 Vine St",
+   "zip": "19102",
+   "grades": "6-12",
+   "kind": "Charter",
+   "lat": 39.9579,
+   "lng": -75.1663
+  },
+  {
+   "id": "philadelphia-performing-arts-charter-string-theory-e-campus",
+   "name": "Philadelphia Performing Arts Charter: String Theory (E. Campus)",
+   "address": "2407 S Broad St",
+   "zip": "19148",
+   "grades": "K-1",
+   "kind": "Charter",
+   "lat": 39.9203,
+   "lng": -75.1702
+  },
+  {
+   "id": "philadelphia-performing-arts-a-string-theory-charter-school",
+   "name": "Philadelphia Performing Arts: a String Theory Charter School",
+   "address": "2600 S Broad St",
+   "zip": "19145",
+   "grades": "2-5",
+   "kind": "Charter",
+   "lat": 39.9178,
+   "lng": -75.1715
+  },
+  {
+   "id": "potter-thomas-school",
+   "name": "Potter-Thomas School",
+   "address": "3001 N 6th St",
+   "zip": "19133",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9972,
+   "lng": -75.1407
+  },
+  {
+   "id": "prince-hall-school",
+   "name": "Prince Hall School",
+   "address": "6101 N Gratz St",
+   "zip": "19141",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0477,
+   "lng": -75.1496
+  },
+  {
+   "id": "rhawnhurst-school",
+   "name": "Rhawnhurst School",
+   "address": "7809 Castor Ave",
+   "zip": "19152",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0587,
+   "lng": -75.0581
+  },
+  {
+   "id": "richard-allen-preparatory-charter-school",
+   "name": "Richard Allen Preparatory Charter School",
+   "address": "2601 S 58th St",
+   "zip": "19143",
+   "grades": "5-8",
+   "kind": "Charter",
+   "lat": 39.9283,
+   "lng": -75.2186
+  },
+  {
+   "id": "richard-r-wright-school",
+   "name": "Richard R. Wright School",
+   "address": "2201 N 28th St",
+   "zip": "19132",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 39.9903,
+   "lng": -75.1775
+  },
+  {
+   "id": "richmond-school",
+   "name": "Richmond School",
+   "address": "2944 Belgrade St",
+   "zip": "19134",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 39.9835,
+   "lng": -75.1105
+  },
+  {
+   "id": "robert-b-pollock-school",
+   "name": "Robert B. Pollock School",
+   "address": "2875 Welsh Rd",
+   "zip": "19152",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0598,
+   "lng": -75.0276
+  },
+  {
+   "id": "robert-e-lamberton-school",
+   "name": "Robert E. Lamberton School",
+   "address": "7501 Woodbine Ave",
+   "zip": "19151",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9756,
+   "lng": -75.2665
+  },
+  {
+   "id": "robert-morris-school",
+   "name": "Robert Morris School",
+   "address": "2600 W Thompson St",
+   "zip": "19121",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9754,
+   "lng": -75.1787
+  },
+  {
+   "id": "roberto-clemente-school",
+   "name": "Roberto Clemente School",
+   "address": "122 W Erie Ave",
+   "zip": "19140",
+   "grades": "6-8",
+   "kind": "District",
+   "lat": 40.0068,
+   "lng": -75.1297
+  },
+  {
+   "id": "rudolph-blankenburg-school",
+   "name": "Rudolph Blankenburg School",
+   "address": "4600 W Girard Ave",
+   "zip": "19131",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9726,
+   "lng": -75.2151
+  },
+  {
+   "id": "russell-byers-charter-school",
+   "name": "Russell Byers Charter School",
+   "address": "1911 Arch St",
+   "zip": "19103",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.9559,
+   "lng": -75.1716
+  },
+  {
+   "id": "russell-h-conwell-school",
+   "name": "Russell H. Conwell School",
+   "address": "1849 E Clearfield St",
+   "zip": "19134",
+   "grades": "5-8",
+   "kind": "District",
+   "lat": 39.9944,
+   "lng": -75.1148
+  },
+  {
+   "id": "s-weir-mitchell-school",
+   "name": "S. Weir Mitchell School",
+   "address": "5500 Kingsessing Ave",
+   "zip": "19143",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9368,
+   "lng": -75.2237
+  },
+  {
+   "id": "sadie-alexander-school",
+   "name": "Sadie Alexander School",
+   "address": "4209 Spruce St",
+   "zip": "19104",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9531,
+   "lng": -75.2082
+  },
+  {
+   "id": "samuel-gompers-school",
+   "name": "Samuel Gompers School",
+   "address": "5701 Wynnefield Ave",
+   "zip": "19131",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9926,
+   "lng": -75.2381
+  },
+  {
+   "id": "samuel-pennypacker-school",
+   "name": "Samuel Pennypacker School",
+   "address": "1858 E Washington Ln",
+   "zip": "19138",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0653,
+   "lng": -75.1589
+  },
+  {
+   "id": "samuel-powel-school",
+   "name": "Samuel Powel School",
+   "address": "3610 Warren St",
+   "zip": "19104",
+   "grades": "K-4",
+   "kind": "District",
+   "lat": 39.9579,
+   "lng": -75.1947
+  },
+  {
+   "id": "sankofa-freedom-academy-charter-school",
+   "name": "Sankofa Freedom Academy Charter School",
+   "address": "2501 Kensington Ave",
+   "zip": "19125",
+   "grades": "K-12",
+   "kind": "Charter",
+   "lat": 39.9871,
+   "lng": -75.1286
+  },
+  {
+   "id": "science-leadership-academy-middle-school",
+   "name": "Science Leadership Academy Middle School",
+   "address": "3610 Warren St",
+   "zip": "19104",
+   "grades": "5-8",
+   "kind": "District",
+   "lat": 39.9577,
+   "lng": -75.1946
+  },
+  {
+   "id": "shawmont-school",
+   "name": "Shawmont School",
+   "address": "535 Shawmont Ave",
+   "zip": "19128",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0515,
+   "lng": -75.2385
+  },
+  {
+   "id": "solomon-solis-cohen-school",
+   "name": "Solomon Solis-Cohen School",
+   "address": "7001 Horrocks St",
+   "zip": "19149",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0449,
+   "lng": -75.0646
+  },
+  {
+   "id": "southwark-school",
+   "name": "Southwark School",
+   "address": "1835 S 9th St",
+   "zip": "19148",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9259,
+   "lng": -75.1602
+  },
+  {
+   "id": "southwest-leadership-academy-charter-school",
+   "name": "Southwest Leadership Academy Charter School",
+   "address": "7101 Paschall Ave",
+   "zip": "19142",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.9181,
+   "lng": -75.2426
+  },
+  {
+   "id": "spring-garden-school",
+   "name": "Spring Garden School",
+   "address": "1146 Melon St",
+   "zip": "19123",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9652,
+   "lng": -75.1561
+  },
+  {
+   "id": "stephen-decatur-school",
+   "name": "Stephen Decatur School",
+   "address": "3500 Academy Rd",
+   "zip": "19154",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0957,
+   "lng": -74.9706
+  },
+  {
+   "id": "stephen-girard-school",
+   "name": "Stephen Girard School",
+   "address": "1800 Snyder Ave",
+   "zip": "19145",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 39.9246,
+   "lng": -75.1768
+  },
+  {
+   "id": "tacony-academy-charter-school",
+   "name": "Tacony Academy Charter School",
+   "address": "1330 Rhawn St",
+   "zip": "19111",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.067,
+   "lng": -75.0662
+  },
+  {
+   "id": "tanner-g-duckrey-school",
+   "name": "Tanner G. Duckrey School",
+   "address": "1501 W Diamond St",
+   "zip": "19121",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9853,
+   "lng": -75.159
+  },
+  {
+   "id": "the-academy-of-continued-education-school",
+   "name": "The Academy of Continued Education School",
+   "address": "440 N Broad St",
+   "zip": "19130",
+   "grades": "K-12",
+   "kind": "District",
+   "lat": 39.961,
+   "lng": -75.1626
+  },
+  {
+   "id": "the-philadelphia-charter-school-for-arts-and-sciences",
+   "name": "The Philadelphia Charter School for Arts and Sciences",
+   "address": "1197 Haworth St",
+   "zip": "19124",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.0248,
+   "lng": -75.0866
+  },
+  {
+   "id": "the-science-leadership-academy-at-beeber",
+   "name": "The Science Leadership Academy at Beeber",
+   "address": "5925 Malvern Ave",
+   "zip": "19131",
+   "grades": "5-12",
+   "kind": "District",
+   "lat": 39.9862,
+   "lng": -75.2423
+  },
+  {
+   "id": "theodore-roosevelt-school",
+   "name": "Theodore Roosevelt School",
+   "address": "430 E Washington Ln",
+   "zip": "19144",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0482,
+   "lng": -75.1751
+  },
+  {
+   "id": "thomas-g-morton-school",
+   "name": "Thomas G. Morton School",
+   "address": "2501 S 63rd St",
+   "zip": "19142",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 39.9237,
+   "lng": -75.2269
+  },
+  {
+   "id": "thomas-holme-school",
+   "name": "Thomas Holme School",
+   "address": "9125 Academy Rd",
+   "zip": "19114",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.055,
+   "lng": -75.0091
+  },
+  {
+   "id": "thomas-k-finletter-school",
+   "name": "Thomas K. Finletter School",
+   "address": "6100 N Front St",
+   "zip": "19120",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0436,
+   "lng": -75.1192
+  },
+  {
+   "id": "thomas-m-peirce-school",
+   "name": "Thomas M. Peirce School",
+   "address": "2300 W Cambria St",
+   "zip": "19132",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 39.9986,
+   "lng": -75.1683
+  },
+  {
+   "id": "thomas-mifflin-school",
+   "name": "Thomas Mifflin School",
+   "address": "3624 Conrad St",
+   "zip": "19129",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0135,
+   "lng": -75.1916
+  },
+  {
+   "id": "thurgood-marshall-school",
+   "name": "Thurgood Marshall School",
+   "address": "5120 N 6th St",
+   "zip": "19120",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0302,
+   "lng": -75.1346
+  },
+  {
+   "id": "universal-charter-school-at-alcorn",
+   "name": "Universal Charter School at Alcorn",
+   "address": "3200 Dickinson St",
+   "zip": "19146",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.9352,
+   "lng": -75.1977
+  },
+  {
+   "id": "universal-charter-school-at-creighton",
+   "name": "Universal Charter School at Creighton",
+   "address": "5401 Tabor Ave",
+   "zip": "19120",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.0344,
+   "lng": -75.1052
+  },
+  {
+   "id": "universal-charter-school-at-vare",
+   "name": "Universal Charter School at Vare",
+   "address": "1901 S 23rd St",
+   "zip": "19145",
+   "grades": "5-8",
+   "kind": "Charter",
+   "lat": 39.9285,
+   "lng": -75.1836
+  },
+  {
+   "id": "universal-institute-charter-school",
+   "name": "Universal Institute Charter School",
+   "address": "801 S 15th St",
+   "zip": "19146",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 39.9409,
+   "lng": -75.1677
+  },
+  {
+   "id": "vare-washington-school",
+   "name": "Vare-Washington School",
+   "address": "1198 S 5th St",
+   "zip": "19147",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9339,
+   "lng": -75.1528
+  },
+  {
+   "id": "warren-g-harding-school",
+   "name": "Warren G. Harding School",
+   "address": "2000 Wakeling St",
+   "zip": "19124",
+   "grades": "6-8",
+   "kind": "District",
+   "lat": 40.0129,
+   "lng": -75.0746
+  },
+  {
+   "id": "watson-comly-school",
+   "name": "Watson Comly School",
+   "address": "1001 Byberry Rd",
+   "zip": "19116",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.121,
+   "lng": -75.0091
+  },
+  {
+   "id": "west-oak-lane-charter-school",
+   "name": "West Oak Lane Charter School",
+   "address": "7115 Stenton Ave",
+   "zip": "19138",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.0595,
+   "lng": -75.1634
+  },
+  {
+   "id": "west-philadelphia-achievement-charter-school",
+   "name": "West Philadelphia Achievement Charter School",
+   "address": "6701 Callowhill St",
+   "zip": "19151",
+   "grades": "K-5",
+   "kind": "Charter",
+   "lat": 39.9707,
+   "lng": -75.2541
+  },
+  {
+   "id": "widener-memorial-school",
+   "name": "Widener Memorial School",
+   "address": "1450 W Olney Ave",
+   "zip": "19141",
+   "grades": "K-12",
+   "kind": "District",
+   "lat": 40.0367,
+   "lng": -75.1466
+  },
+  {
+   "id": "william-c-bryant-school",
+   "name": "William C. Bryant School",
+   "address": "6001 Cedar Ave",
+   "zip": "19143",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9528,
+   "lng": -75.2436
+  },
+  {
+   "id": "william-c-longstreth-school",
+   "name": "William C. Longstreth School",
+   "address": "5700 Willows Ave",
+   "zip": "19143",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9407,
+   "lng": -75.2324
+  },
+  {
+   "id": "william-cramp-school",
+   "name": "William Cramp School",
+   "address": "3449 N Mascher St",
+   "zip": "19140",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0026,
+   "lng": -75.1299
+  },
+  {
+   "id": "william-d-kelley-school",
+   "name": "William D. Kelley School",
+   "address": "1601 N 28th St",
+   "zip": "19121",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9804,
+   "lng": -75.1803
+  },
+  {
+   "id": "william-dick-school",
+   "name": "William Dick School",
+   "address": "2498 W Diamond St",
+   "zip": "19121",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9867,
+   "lng": -75.1738
+  },
+  {
+   "id": "william-h-hunter-school",
+   "name": "William H. Hunter School",
+   "address": "2400 N Front St",
+   "zip": "19133",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9874,
+   "lng": -75.1321
+  },
+  {
+   "id": "william-h-loesche-school",
+   "name": "William H. Loesche School",
+   "address": "595 Tomlinson Rd",
+   "zip": "19116",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.114,
+   "lng": -75.0236
+  },
+  {
+   "id": "william-h-ziegler-school",
+   "name": "William H. Ziegler School",
+   "address": "5935 Saul St",
+   "zip": "19149",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 40.0301,
+   "lng": -75.0754
+  },
+  {
+   "id": "william-m-meredith-school",
+   "name": "William M. Meredith School",
+   "address": "725 S 5th St",
+   "zip": "19147",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9397,
+   "lng": -75.151
+  },
+  {
+   "id": "william-mckinley-school",
+   "name": "William McKinley School",
+   "address": "2101 N Orkney St",
+   "zip": "19122",
+   "grades": "K-8",
+   "kind": "District",
+   "lat": 39.9831,
+   "lng": -75.1412
+  },
+  {
+   "id": "william-rowen-school",
+   "name": "William Rowen School",
+   "address": "6841 N 19th St",
+   "zip": "19126",
+   "grades": "K-5",
+   "kind": "District",
+   "lat": 40.0587,
+   "lng": -75.1486
+  },
+  {
+   "id": "william-t-tilden-school",
+   "name": "William T. Tilden School",
+   "address": "6601 Elmwood Ave",
+   "zip": "19142",
+   "grades": "5-8",
+   "kind": "District",
+   "lat": 39.9214,
+   "lng": -75.2324
+  },
+  {
+   "id": "wissahickon-charter-school",
+   "name": "Wissahickon Charter School",
+   "address": "815 E Washington Ln",
+   "zip": "19138",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.052,
+   "lng": -75.1732
+  },
+  {
+   "id": "wissahickon-charter-school-2",
+   "name": "Wissahickon Charter School",
+   "address": "4700 Wissahickon Ave",
+   "zip": "19144",
+   "grades": "K-8",
+   "kind": "Charter",
+   "lat": 40.0156,
+   "lng": -75.1726
+  },
+  {
+   "id": "young-scholars-charter-school",
+   "name": "Young Scholars Charter School",
+   "address": "900 N Marshall St",
+   "zip": "19123",
+   "grades": "6-8",
+   "kind": "Charter",
+   "lat": 39.9677,
+   "lng": -75.1482
+  }
+ ]
+}
