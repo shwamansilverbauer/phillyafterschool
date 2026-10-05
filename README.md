@@ -111,7 +111,7 @@ the scripts write as you click (filter counts, the board).
 
 ## Reviews
 
-Reviews are approved by hand. The form at `/review/` emails each review to `contactEmail`, with a
+Reviews are approved before they appear. The form at `/review/` emails each review to `contactEmail`, with a
 ready-made entry at the bottom of the email. To publish one, paste that entry into
 `data/reviews.json` (inside the square brackets, entries separated by commas) and commit.
 To remove a review, delete its entry. Cards show the average and the reviews for each program.

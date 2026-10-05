@@ -142,7 +142,7 @@ function street(animate) {
   return `<svg class="street${animate ? ' go' : ''}" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${run(-10, sx)}${school}${run(sx + sw, 2010)}<rect class="st" x="0" y="${G}" width="2000" height="12"/><g class="bus"><g transform="translate(968,${G - 22})">${bus}</g></g></svg>`;
 }
 
-function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null }) {
+function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false }) {
   const canonical = cfg.siteUrl + '/' + pathName;
   const fullTitle = pathName === '' ? (PREVIEW ? cfg.siteName : `${cfg.siteName}: ${cfg.tagline}`) : `${title} | ${cfg.siteName}`;
   const nav = [['', 'Schools'], ['board/', 'My board'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Buy me a coffee']]
@@ -173,7 +173,7 @@ ${hero}
   </div>
   ${showStreet ? street(showStreet === 'go') : ''}
 </header>
-<main class="wrap">
+<main class="wrap${roomy ? ' roomy' : ''}">
 ${body}
 </main>
 <footer class="foot"><div class="in">
@@ -547,7 +547,7 @@ ${rows}
   </div>
 </section>
 <section class="section">
-  <h2>${T(`Checked by hand, dated, and sourced`)}</h2>
+  <h2>${T(`Every listing is dated and sourced`)}</h2>
   <p>${T(`Every listing links to where the information came from and shows the day it was last checked. Nobody pays to be listed. If it saved you an evening of open tabs,`)} <a href="${link('support/', 0)}">${T(`buy me a coffee.`)}</a></p>
 </section>
 ${cfg.builtBy ? `<section class="section" id="who">
@@ -555,7 +555,7 @@ ${cfg.builtBy ? `<section class="section" id="who">
   <p>${T(cfg.builtBy.bio)}</p>
 </section>` : ''}`;
   return layout({
-    title: cfg.siteName, pathName: '', depth: 0, current: '', hero, body, fragment: PREVIEW, showStreet: 'go',
+    title: cfg.siteName, pathName: '', depth: 0, current: '', hero, body, fragment: PREVIEW, showStreet: 'go', roomy: true,
     description: 'A school-by-school directory of after-school programs in Philadelphia: what runs at the school, who picks up at dismissal, hours, cost and where to register.',
   });
 }
