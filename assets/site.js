@@ -390,6 +390,7 @@
       week.textContent = '';
       DAYS.forEach(function (day) {
         var col = el('section', 'daycol');
+        col.setAttribute('data-day', day[0]);
         col.appendChild(el('h3', null, day[1]));
         var list = el('ul'), n = 0;
         b.days[day[0]].forEach(function (key) {
@@ -397,6 +398,7 @@
           if (!k) return;
           n++; total++;
           var li = el('li', 'pick tc');
+          li.setAttribute('data-day', day[0]); li.setAttribute('data-entry', key);
           var type = data.types[k.prog.type];
           if (type) {   // the card wears its program type: color band, icon, and its number in the set
             li.style.setProperty('--tc', type.color);
@@ -408,6 +410,7 @@
             svg.appendChild(shape); band.appendChild(svg);
             band.appendChild(el('span', null, type.label));
             band.appendChild(el('span', 'tc-no', 'No. ' + k.prog.no));
+            if (!shared) band.title = 'Drag to another day';
             li.appendChild(band);
           }
           li.appendChild(el('span', 'pill ' + k.link.rel, pillText(k)));
@@ -431,6 +434,17 @@
           if (k.link.where) li.appendChild(el('span', 'hint', k.link.where));
           if (!k.prog.pickupBy) li.appendChild(el('span', 'hint', k.prog.hours));
           if (!shared) {
+            var mv = el('span', 'tc-move');
+            mv.appendChild(el('span', 'hint', 'Move to'));
+            DAYS.forEach(function (d2) {
+              var mb = el('button', 'mv', d2[2].charAt(0) + (d2[0] === 'tue' || d2[0] === 'thu' ? d2[2].charAt(1) : ''));
+              mb.type = 'button';
+              mb.setAttribute('aria-label', 'Move ' + k.prog.name + ' to ' + d2[1]);
+              if (d2[0] === day[0]) { mb.disabled = true; mb.setAttribute('aria-label', k.prog.name + ' is on ' + d2[1]); }
+              mb.addEventListener('click', function () { moveEntry(day[0], key, d2[0], null); });
+              mv.appendChild(mb);
+            });
+            li.appendChild(mv);
             var rm = el('button', 'clear', 'Remove');
             rm.type = 'button';
             rm.addEventListener('click', function () {
@@ -449,6 +463,7 @@
       tabs.hidden = !!shared;
       kidBar.hidden = !!shared;
       tools.hidden = !!shared || total === 0;
+      var dragHint = $('#board-hint'); if (dragHint) dragHint.hidden = !!shared || total === 0;
       if (maker) maker.hidden = !!shared || total === 0;
       emptyNote.hidden = !!shared || total > 0;
       promote.hidden = !!shared || which !== 'next' || total === 0;
@@ -557,6 +572,81 @@
     };
     adopt.addEventListener('click', function () { leaveShared(true); });
     $('#board-mine').addEventListener('click', function () { leaveShared(false); });
+    // ----- moving cards: drag one by its colored top to another day, or use the day buttons on the card -----
+    var moveEntry = function (from, entry, to, at) {
+      var b = activeBoard(), i = b.days[from].indexOf(entry);
+      if (i < 0) return;
+      var k = lookup(entry), label = k ? k.prog.name : 'That';
+      var toName = DAYS.filter(function (d) { return d[0] === to; })[0][1];
+      if (from !== to && findEntry(b.days[to], entryKey(entry)) > -1) { say(label + ' is already on ' + toName + '.'); return; }
+      if (from !== to && b.days[to].length >= 8) { say(toName + ' is full.'); return; }
+      b.days[from].splice(i, 1);
+      if (at == null || at > b.days[to].length) at = b.days[to].length;
+      b.days[to].splice(at, 0, entry);
+      saveRosters();
+      say(from === to ? savedNote() : 'Moved ' + label + ' to ' + toName + '. ' + savedNote());
+      render();
+    };
+    var drag = null;
+    var endDrag = function () {
+      if (!drag) return;
+      if (drag.ghost && drag.ghost.parentNode) drag.ghost.parentNode.removeChild(drag.ghost);
+      if (drag.li) drag.li.classList.remove('dragging');
+      all(week, '.daycol.drop').forEach(function (c) { c.classList.remove('drop'); });
+      document.body.classList.remove('is-dragging');
+      drag = null;
+    };
+    var columnAt = function (x, y) {
+      var under = document.elementFromPoint(x, y);
+      return under && under.closest ? under.closest('.daycol') : null;
+    };
+    week.addEventListener('pointerdown', function (e) {
+      var handle = e.target.closest ? e.target.closest('.tc-top') : null;
+      if (!handle || shared || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      var li = handle.closest('li.pick');
+      drag = { li: li, day: li.getAttribute('data-day'), entry: li.getAttribute('data-entry'), x: e.clientX, y: e.clientY, started: false, ghost: null, handle: handle };
+      try { handle.setPointerCapture(e.pointerId); } catch (err) { /* older browsers */ }
+    });
+    week.addEventListener('pointermove', function (e) {
+      if (!drag) return;
+      if (!drag.started) {
+        if (Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) < 8) return;
+        drag.started = true;
+        var box = drag.li.getBoundingClientRect();
+        drag.dx = e.clientX - box.left; drag.dy = e.clientY - box.top;
+        drag.ghost = drag.li.cloneNode(true);
+        drag.ghost.className += ' ghost';
+        drag.ghost.style.width = box.width + 'px';
+        document.body.appendChild(drag.ghost);
+        drag.li.classList.add('dragging');
+        document.body.classList.add('is-dragging');
+      }
+      e.preventDefault();
+      drag.ghost.style.left = (e.clientX - drag.dx) + 'px';
+      drag.ghost.style.top = (e.clientY - drag.dy) + 'px';
+      var col = columnAt(e.clientX, e.clientY);
+      all(week, '.daycol.drop').forEach(function (c) { if (c !== col) c.classList.remove('drop'); });
+      if (col) col.classList.add('drop');
+      // on a phone the days are stacked: scroll when the card is held near the top or bottom of the screen
+      if (e.clientY < 70) window.scrollBy(0, -14); else if (e.clientY > window.innerHeight - 70) window.scrollBy(0, 14);
+    });
+    week.addEventListener('pointerup', function (e) {
+      if (!drag) return;
+      var d = drag, col = d.started ? columnAt(e.clientX, e.clientY) : null;
+      var at = null;
+      if (col) {   // drop above the first card whose middle is below the pointer
+        at = 0;
+        all(col, 'li.pick').forEach(function (other) {
+          if (other === d.li) return;
+          var r = other.getBoundingClientRect();
+          if (e.clientY > r.top + r.height / 2) at++;
+        });
+      }
+      endDrag();
+      if (col) moveEntry(d.day, d.entry, col.getAttribute('data-day'), at);
+    });
+    week.addEventListener('pointercancel', endDrag);
+
     // ----- the week card: one picture of the roster, drawn here in the browser -----
     // Nothing is uploaded. An optional photo is read straight off the device, drawn onto the card, and never stored.
     var maker = $('#card-maker'), canvas = $('#card-canvas');

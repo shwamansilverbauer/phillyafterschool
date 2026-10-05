@@ -407,3 +407,37 @@ button.btn{cursor:pointer;font-family:inherit}
   body.print-card .card-preview canvas{max-width:none;width:auto;height:96vh;box-shadow:none;border-radius:0}
 }
 .rail-note{flex:0 0 auto;align-self:center;margin-left:6px;white-space:nowrap}
+
+/* ---------- moving roster cards between days ---------- */
+.tc-no{flex:none}
+.pick.tc .tc-top{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.tc-move{display:flex;flex-wrap:wrap;align-items:center;gap:4px}
+.tc-move .hint{font-size:.8rem;margin-right:2px}
+.mv{font:inherit;font-size:.78rem;font-weight:700;min-width:30px;padding:5px 6px;border-radius:8px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.mv:hover:not(:disabled){border-color:var(--tc)}
+.mv:disabled{background:var(--tc);border-color:var(--tc);color:#FFFFFF;cursor:default}
+.pick.tc.dragging{opacity:.35}
+.pick.tc.ghost{position:fixed;z-index:80;pointer-events:none;margin:0;list-style:none;transform:rotate(2.5deg);box-shadow:0 18px 40px rgba(7,21,39,.35);opacity:.96}
+.is-dragging{cursor:grabbing;user-select:none;-webkit-user-select:none}
+.is-dragging .pick.tc .tc-top{cursor:grabbing}
+.daycol{transition:border-color .12s,background .12s}
+.daycol.drop{border-color:var(--link);border-style:dashed;background:var(--sky-bg)}
+
+/* ---------- home page: the three ways in, wider and each its own color ---------- */
+#browse{margin-inline:calc(50% - min(640px, 50vw - 20px))}
+#browse > h2{margin-inline:calc((min(1280px, 100vw - 40px) - min(1000px, 100vw - 40px)) / 2)}
+.ways{grid-template-columns:minmax(0,1fr);gap:18px}
+@media (min-width:900px){.ways{grid-template-columns:minmax(0,1.5fr) minmax(0,1.1fr) minmax(0,1fr)}}
+.way{border:0;padding:26px 28px;gap:14px}
+.way h3{font-size:1.35rem}
+.way p{color:inherit;opacity:.85}
+.way:nth-child(1){background:var(--sky-bg);color:var(--sky-ink)}
+.way:nth-child(2){background:var(--green-bg);color:var(--green-ink)}
+.way:nth-child(3){background:var(--warn);color:var(--warn-ink)}
+.way .tchip,.way .btn,.way .gbtn{background:var(--surface);color:var(--ink);border-color:transparent}
+.way .tchip{border-left:8px solid var(--tc)}
+.way:nth-child(2) .btn{color:var(--green-ink)}
+.way:nth-child(2) .btn:hover{border-color:var(--green-ink)}
+.way .gbtn:hover{background:var(--yellow);color:var(--yellow-ink)}
+.grade-links{gap:8px}
+.grade-links .gbtn{padding:14px 6px}
