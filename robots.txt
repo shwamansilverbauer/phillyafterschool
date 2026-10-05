@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://phillyafterschool.org/sitemap.xml

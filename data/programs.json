@@ -1,0 +1,770 @@
+[
+  {
+    "id": "imagine-that-philly",
+    "name": "Imagine That Philly",
+    "what": "Morning care and after-school care run inside the school building",
+    "address": "",
+    "grades": null,
+    "gradeNote": "Grades not published",
+    "hours": "Before and after school. Times not published.",
+    "cost": "Not published",
+    "phone": "",
+    "email": "info@imaginethatphilly.org",
+    "website": "https://imaginethatphilly.org/",
+    "register": {
+      "how": "online",
+      "url": "https://imaginethatphilly.org/programs",
+      "label": "Send an inquiry",
+      "note": "Fill in the inquiry form and name your school in the comments."
+    },
+    "note": "Neither the school nor the provider publishes grades, hours or price. Ask the school office for the current registration link.",
+    "sources": [
+      {
+        "label": "Nebinger extracurriculars",
+        "url": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/"
+      },
+      {
+        "label": "Imagine That programs",
+        "url": "https://imaginethatphilly.org/programs"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "onsite",
+        "note": "The school lists this as its on-site morning and after-school provider."
+      }
+    }
+  },
+  {
+    "id": "nebinger-clubs",
+    "name": "School clubs and teams",
+    "what": "Art Studio, Song Writing, Garden Club, Rock Band, Chess, Debate Club, Student Government, Basketball, Soccer, Cheerleading. Robotics is listed as returning soon.",
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club",
+    "hours": "Varies by club and season",
+    "cost": "Not published",
+    "phone": "215-400-8110",
+    "email": "",
+    "website": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/",
+    "register": {
+      "how": "school",
+      "note": "Sign-ups go through the school office or the club’s teacher."
+    },
+    "note": "The school page lists the clubs without grades, days or sign-up details. Clubs usually meet once a week, so they supplement daily care.",
+    "sources": [
+      {
+        "label": "Nebinger extracurriculars",
+        "url": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "onsite"
+      }
+    }
+  },
+  {
+    "id": "girls-on-the-run",
+    "name": "Girls on the Run",
+    "what": "Running and life-skills team that finishes with a 5K",
+    "address": "",
+    "grades": "3-8",
+    "gradeNote": "3rd–5th program; a 6th–8th program also exists",
+    "hours": "Seasonal (fall and spring), a couple of afternoons a week",
+    "cost": "Not published on the pages checked",
+    "phone": "215-247-8598",
+    "email": "",
+    "website": "https://www.gotrphiladelphia.org/",
+    "register": {
+      "how": "online",
+      "url": "https://www.gotrphiladelphia.org/program-registration",
+      "note": "Registration opens by season."
+    },
+    "note": "",
+    "sources": [
+      {
+        "label": "Nebinger extracurriculars",
+        "url": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/"
+      },
+      {
+        "label": "GOTR Philadelphia",
+        "url": "https://www.gotrphiladelphia.org/"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "onsite",
+        "note": "Confirm with the school which grade band the Nebinger team covers this season."
+      }
+    }
+  },
+  {
+    "id": "nebinger-arts-partners",
+    "name": "Arts partners and Science Olympiad",
+    "what": "EgoPo drama residency (weekly, ends in a public performance), Rock Reach Dance (32 weeks, 45 minutes a week), Settlement Choir, Arden Theatre (grades 3–5, in classroom), Science Olympiad",
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies; Arden is grades 3–5",
+    "hours": "Weekly. Several of these run during the school day.",
+    "cost": "Funded by the school and PTA",
+    "phone": "215-400-8110",
+    "email": "",
+    "website": "https://www.nebingerpta.org/s-projects-side-by-side",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office which of these take sign-ups."
+    },
+    "note": "Listed as extracurriculars, but the school does not say which ones meet after dismissal. Do not count on these for care.",
+    "sources": [
+      {
+        "label": "Nebinger extracurriculars",
+        "url": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/"
+      },
+      {
+        "label": "Nebinger PTA programs",
+        "url": "https://www.nebingerpta.org/s-projects-side-by-side"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "onsite"
+      }
+    }
+  },
+  {
+    "id": "zhang-sah",
+    "name": "Zhang Sah",
+    "what": "Martial arts class daily, plus snack, homework time, clubs and outdoor play",
+    "address": "530 Bainbridge St",
+    "grades": "K-8",
+    "gradeNote": "",
+    "hours": "Until 6:00 pm, Mon–Fri. Open most early dismissals and days off.",
+    "cost": "Tuition not published. Takes CCIS subsidy and offers sibling discounts.",
+    "phone": "215-923-6676",
+    "email": "",
+    "website": "https://zhangsah.org/after-school-program/",
+    "register": {
+      "how": "online",
+      "url": "https://schools.procareconnect.com/form/7417c5d3-b696-426e-913c-b9f0144431bb",
+      "note": "Spots fill early each year."
+    },
+    "note": "",
+    "sources": [
+      {
+        "label": "Zhang Sah after-school",
+        "url": "https://zhangsah.org/after-school-program/"
+      },
+      {
+        "label": "Nebinger extracurriculars",
+        "url": "https://nebinger.philasd.org/about-us/programs-curriculum/extra-curricular-activities-ec/"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "note": "The school’s page says the program “remains free for Nebinger students” and runs September 2 to June 12, without naming the year. Confirm the free spots still apply for 2026–27. The city’s list of free funded programs includes Zhang Sah’s Mt. Airy site but not Bainbridge Street."
+      }
+    }
+  },
+  {
+    "id": "shot-tower-rec",
+    "name": "Shot Tower Recreation Center",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "address": "101–31 Carpenter St (Front and Carpenter)",
+    "grades": "K-6",
+    "gradeNote": "Ages 5–12",
+    "hours": "3:00–6:00 pm, weekdays",
+    "cost": "$100 per month in the 2025–26 listing",
+    "phone": "215-685-1592",
+    "email": "ShotTowerPlayground@phila.gov",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The city’s finder has not posted a 2026–27 listing yet; the newest one ran September 8, 2025 to June 12, 2026. Call to confirm the program and the price for this year. The finder also lists Girl Scouts, soccer and baseball clinics, a garden club and crafts here.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "distance": "six blocks east of Nebinger on the same street",
+        "note": "An earlier Shot Tower listing says “Pick up from Nebinger Elementary school.” Confirm pickup is still offered this year."
+      }
+    }
+  },
+  {
+    "id": "philly-inmovement",
+    "name": "Philly InMovement: MOVE After School",
+    "what": "Gymnastics and movement. Pickup, a one-hour class and aftercare.",
+    "address": "500 Kenilworth St",
+    "grades": "K-4",
+    "gradeNote": "K–4. A separate Mini MOVE serves Pre-K.",
+    "hours": "3:30–6:30 pm, Mon–Fri (Aug 24, 2026 – June 9, 2027)",
+    "cost": "$51.52 per day, with add-ons of $6–$16 for advanced classes. $180 deposit per weekday enrolled.",
+    "phone": "267-239-0844",
+    "email": "info@phillyinmovement.com",
+    "website": "https://phillyinmovement.com/move-after-school/",
+    "register": {
+      "how": "online",
+      "url": "https://app.iclasspro.com/portal/inmovement",
+      "note": "Enrollment for 2026–27 opened in May."
+    },
+    "note": "",
+    "sources": [
+      {
+        "label": "MOVE After School",
+        "url": "https://phillyinmovement.com/move-after-school/"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "note": "Ask whether Mini MOVE (Pre-K, $40.66 per day) includes pickup from Nebinger’s Pre-K."
+      }
+    }
+  },
+  {
+    "id": "settlement-kaleidoscope-plus",
+    "name": "Settlement Music School: Kaleidoscope Plus",
+    "what": "Music, theater and visual art classes every day, with homework help and snack",
+    "address": "416 Queen St",
+    "grades": "PK-3",
+    "gradeNote": "Ages 3–9",
+    "hours": "Until 5:45 pm, Mon–Fri. Escorted children arrive 3:45–4:00.",
+    "cost": "Per week: $40 for 1 day, $70 for 2, $97 for 3, $116 for 4, $130 for 5",
+    "phone": "215-320-2670",
+    "email": "tarrell.davis@settlementmusic.org",
+    "website": "https://settlementmusic.org/afterschool/",
+    "register": {
+      "how": "contact",
+      "note": "Register by contacting Tarrell Davis, Early Childhood Program Director."
+    },
+    "note": "",
+    "sources": [
+      {
+        "label": "Settlement afterschool",
+        "url": "https://settlementmusic.org/afterschool/"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "pickup"
+      }
+    }
+  },
+  {
+    "id": "philly-art-center-qv",
+    "name": "Philly Art Center, Queen Village",
+    "what": "Studio art after school. Choose 1–5 days a week, by season.",
+    "address": "514 Bainbridge St",
+    "grades": "PK-6",
+    "gradeNote": "Ages 4–12",
+    "hours": "Until 6:00 pm. Half-day camps on early-dismissal days.",
+    "cost": "Not shown on the public page. Paid by season: 50% deposit, then two 25% installments. 5% sibling discount.",
+    "phone": "215-765-2787",
+    "email": "info@phillyartcenter.com",
+    "website": "https://phillyartcenter.com/afterschool/program-information/",
+    "register": {
+      "how": "online",
+      "url": "https://phillyartcenter.captyn.com/find?department=clu8qqzk2009293r866a7j7wg&filter=4&program=clv479vep03ki7to5es3tmyjr&program=clwtkcaoi00kmsudp98n0ecv5&day=Monday&day=Tuesday&day=Wednesday&day=Thursday&day=Friday&location=clu8gptof0aahxkl2mj3v7mxl&tag=clv494qhk032olgi2d9i70vw6&tag=clv494xs6032plgi2z23yr0a8",
+      "note": "Fall runs Aug 31–Dec 23; Winter/Spring runs Jan 4–June 9."
+    },
+    "note": "Pickup at any school depends on enough children enrolling from that school.",
+    "sources": [
+      {
+        "label": "Program information",
+        "url": "https://phillyartcenter.com/afterschool/program-information/"
+      },
+      {
+        "label": "Queen Village pick-up",
+        "url": "https://phillyartcenter.com/locations/queen-village/school-pick-up/"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "pickup"
+      }
+    }
+  },
+  {
+    "id": "old-pine",
+    "name": "Old Pine Community Center",
+    "what": "Traditional aftercare: homework help, snack, gym and recreation",
+    "address": "401 Lombard St",
+    "grades": "K-5",
+    "gradeNote": "",
+    "hours": "3:30–6:00 pm, Mon–Fri. Full days on most district holidays and half days.",
+    "cost": "$600 per month, or a daily rate. Financial aid and tuition subsidies available.",
+    "phone": "215-627-2493",
+    "email": "afterschool@oldpinecommunitycenter.org",
+    "website": "https://oldpinecommunitycenter.org/afterschool/",
+    "register": {
+      "how": "online",
+      "url": "https://opcc.jumbula.com/",
+      "note": "First-time families: email the program for help registering."
+    },
+    "note": "Last year’s monthly option reached capacity. Register early.",
+    "sources": [
+      {
+        "label": "Old Pine afterschool",
+        "url": "https://oldpinecommunitycenter.org/afterschool/"
+      },
+      {
+        "label": "2026–27 registration",
+        "url": "https://opcc.jumbula.com/Afterschool20262027/RegularSchoolDaysMonthlyRate"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "pickup"
+      }
+    }
+  },
+  {
+    "id": "butchers-sew-shop",
+    "name": "Butcher’s Sew Shop Junior",
+    "what": "Sewing classes in Bella Vista",
+    "address": "800 S 8th St",
+    "grades": "K-8",
+    "gradeNote": "Ages 5–8 and 8–11 on weekdays; ages 11–15 on Fridays",
+    "hours": "3:45–5:45 pm (ages 5–11); Fridays 4:00–6:00 pm (ages 11–15)",
+    "cost": "Fall session: $741–$912 per weekday slot, plus a materials fee",
+    "phone": "215-309-1866",
+    "email": "megan@butcherssewshop.com",
+    "website": "https://butcherssewshop.com/pages/youth-classes",
+    "register": {
+      "how": "online",
+      "url": "https://butcher-s-sew-shop-junior.jumbula.com/school-year-classes",
+      "note": "50% deposit or pay in full."
+    },
+    "note": "Fall 2026 is nearly full: one Tuesday spot was open, the rest are waitlist. Winter and Spring 2027 sessions are listed for registration.",
+    "sources": [
+      {
+        "label": "School-year classes",
+        "url": "https://butcher-s-sew-shop-junior.jumbula.com/school-year-classes"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "distance": "a few blocks from Nebinger"
+      }
+    }
+  },
+  {
+    "id": "mister-johns-music",
+    "name": "Mister John’s Music",
+    "what": "Group piano, guitar, ukulele, percussion and choir, with optional aftercare around the class",
+    "address": "761 S 8th St and 904 S 9th St",
+    "grades": "K-5",
+    "gradeNote": "Kindergarten and up; upper limit not published",
+    "hours": "Classes start at 3:50 or 5:00 pm",
+    "cost": "Fall (16 weeks): class $460, pickup $105, aftercare $400. Winter/Spring (22 weeks): $635, $145, $550.",
+    "phone": "267-223-9180",
+    "email": "",
+    "website": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
+    "register": {
+      "how": "online",
+      "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
+      "note": "Use the registration button for each instrument on the class page."
+    },
+    "note": "Pickup runs only when at least three students from a school enroll for that day.",
+    "sources": [
+      {
+        "label": "Kids group classes 2026–27",
+        "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "pickup"
+      }
+    }
+  },
+  {
+    "id": "coco-academy",
+    "name": "CoCo Academy",
+    "what": "STEAM makerspace: 3D printing, laser cutting, circuits, design software",
+    "address": "1001 Christian St (Bella Vista) and 615 S 3rd St (Queen Village)",
+    "grades": "K-5",
+    "gradeNote": "K–5 for pickup; classes run to age 14",
+    "hours": "3:30–6:00 pm, Mon–Fri",
+    "cost": "Not published",
+    "phone": "215-253-7690",
+    "email": "info@cocoacademyphl.com",
+    "website": "https://www.cocoacademyphl.com/afterschool-bellavista",
+    "register": {
+      "how": "contact",
+      "note": "Call or email to enroll and to get current tuition."
+    },
+    "note": "",
+    "sources": [
+      {
+        "label": "Philly Family 2026–27 list",
+        "url": "https://phillyfamily.com/after-school-programs/"
+      },
+      {
+        "label": "CoCo Academy",
+        "url": "https://www.cocoacademyphl.com/afterschool-bellavista"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "note": "Nebinger pickup comes from Philly Family’s 2026–27 list. CoCo’s own pages could not be loaded to confirm it or the price."
+      }
+    }
+  },
+  {
+    "id": "queen-and-rook",
+    "name": "Queen & Rook Game Cafe",
+    "what": "Board games, trading card games and role-playing games",
+    "address": "125 South St",
+    "grades": "1-8",
+    "gradeNote": "Ages 6–16",
+    "hours": "Until 6:00 pm, on the School District calendar",
+    "cost": "Not published. Need-based scholarships available.",
+    "phone": "215-995-0043",
+    "email": "kat@queenandrookcafe.com",
+    "website": "https://www.queenandrookcafe.com/youth-programs/",
+    "register": {
+      "how": "online",
+      "url": "https://www.queenrookkeep.com/product/WInterAfterschool/FGRQPCBNZJCILGV4A5OGMYL7?cp=true&sa=false&sbp=false&q=true",
+      "note": "Fall Afterschool 2026 sign-up. Days can be cancelled for low enrollment."
+    },
+    "note": "",
+    "sources": [
+      {
+        "label": "Philly Family 2026–27 list",
+        "url": "https://phillyfamily.com/after-school-programs/"
+      },
+      {
+        "label": "Youth programs",
+        "url": "https://www.queenandrookcafe.com/youth-programs/"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "note": "Nebinger pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools."
+      }
+    }
+  },
+  {
+    "id": "beehive-at-bok",
+    "name": "Beehive at Bok",
+    "what": "Play-based aftercare in the Bok building",
+    "address": "Bok, 1901 S 9th St",
+    "grades": "PK-3",
+    "gradeNote": "",
+    "hours": "Mon–Fri. End time not published.",
+    "cost": "$680 per weekday for the semester. 10% off a full week, 20% off if paid in full.",
+    "phone": "267-414-5945",
+    "email": "",
+    "website": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
+    "register": {
+      "how": "online",
+      "url": "https://bookeo.com/beehivecommunity?type=41574EYC3LN19B4B8067C5",
+      "note": "This link books the fall semester. Winter/Spring booking is on Beehive’s page. 25% non-refundable deposit."
+    },
+    "note": "",
+    "sources": [
+      {
+        "label": "Beehive After Care",
+        "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "distance": "about a mile south of Nebinger",
+        "note": "Ask how pickup from Nebinger works and whether it runs every day."
+      }
+    }
+  },
+  {
+    "id": "movemakers",
+    "name": "MoveMakers Philly",
+    "what": "Hip hop, breaking, martial arts, parkour and acrobatics, with homework time and snack",
+    "address": "812 Chestnut St",
+    "grades": null,
+    "gradeNote": "Ages not published",
+    "hours": "Mon–Fri during the school year",
+    "cost": "2025–26 rates: $369 per month for 1 day a week up to $529 for 5 days, plus $100 registration",
+    "phone": "267-600-1030",
+    "email": "",
+    "website": "https://www.movemakersphilly.com/youthclasses.html",
+    "register": {
+      "how": "online",
+      "url": "https://www.movemakersphilly.com/youthclasses.html",
+      "note": "Each school has its own sign-up link."
+    },
+    "note": "Prices shown are last year’s. Ask for 2026–27 rates and the age range.",
+    "sources": [
+      {
+        "label": "MoveMakers after school",
+        "url": "https://www.movemakersphilly.com/youthclasses.html"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "registerUrl": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100574"
+      }
+    }
+  },
+  {
+    "id": "hawthorne-cultural-center",
+    "name": "Hawthorne Cultural Center",
+    "what": "City rec center after-school program",
+    "address": "1200 Carpenter St",
+    "grades": "1-6",
+    "gradeNote": "Ages 6–12",
+    "hours": "3:00–6:00 pm, weekdays",
+    "cost": "$80 per month in the 2025–26 listing",
+    "phone": "215-685-1848",
+    "email": "Hawthornecultural@phila.gov",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The 2026–27 listing is not posted yet; the newest ran August 25, 2025 to June 11, 2026.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "nearby",
+        "distance": "six blocks west of Nebinger on the same street"
+      }
+    }
+  },
+  {
+    "id": "starr-garden-rec",
+    "name": "Starr Garden Recreation Center",
+    "what": "City rec center after-school program",
+    "address": "600–44 Lombard St",
+    "grades": "K-5",
+    "gradeNote": "Ages 5–11",
+    "hours": "3:00–6:00 pm, weekdays",
+    "cost": "$120 per month in the 2025–26 listing",
+    "phone": "215-686-1782",
+    "email": "StarrGarden@phila.gov",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The city’s finder shows registration as closed. Ask about a waitlist.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "nearby",
+        "distance": "straight up 6th St from Nebinger"
+      }
+    }
+  },
+  {
+    "id": "palumbo-rec",
+    "name": "Palumbo Recreation Center",
+    "what": "City-subsidized, staff-led afterschool program",
+    "address": "725 S 10th St (10th and Fitzwater)",
+    "grades": "K-6",
+    "gradeNote": "Ages 5–12",
+    "hours": "Not published for this year",
+    "cost": "City-subsidized. Current fee not published.",
+    "phone": "215-686-1783",
+    "email": "PalumboRec@phila.gov",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The city’s finder has no schedule for Palumbo’s program after June 2025. Call to confirm it is running.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "Bella Vista Neighbors: parks and rec",
+        "url": "https://www.bellavistaneighbors.org/parks"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "nearby",
+        "distance": "roughly a 10-minute walk from Nebinger"
+      }
+    }
+  },
+  {
+    "id": "mighty-writers-el-futuro",
+    "name": "Mighty Writers El Futuro",
+    "what": "Free daily after-school writing academy. Bilingual English and Spanish.",
+    "address": "1025 S 9th St",
+    "grades": "3-8",
+    "gradeNote": "",
+    "hours": "Daily after school. Times not published.",
+    "cost": "Free",
+    "phone": "215-602-0236",
+    "email": "cperegrina@mightywriters.org",
+    "website": "https://mightywriters.org/philadelphia/",
+    "register": {
+      "how": "online",
+      "url": "https://mightywriters.org/participant-registration/",
+      "note": "Or contact Claudia Peregrina at the center."
+    },
+    "note": "",
+    "sources": [
+      {
+        "label": "Mighty Writers Philadelphia",
+        "url": "https://mightywriters.org/philadelphia/"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "nearby"
+      }
+    }
+  },
+  {
+    "id": "free-library-leap",
+    "name": "Free Library LEAP",
+    "what": "Free drop-in homework help, literacy and STEAM activities",
+    "address": "Charles Santore Library, 932 S 7th St",
+    "grades": "K-8",
+    "gradeNote": "K–12",
+    "hours": "After school during the school year. Hours vary by branch.",
+    "cost": "Free",
+    "phone": "",
+    "email": "",
+    "website": "https://libwww.freelibrary.org/programs/leap/",
+    "register": {
+      "how": "none",
+      "note": "No registration. Drop in."
+    },
+    "note": "Drop-in only, and caregivers stay responsible for the child. Call the branch to confirm it runs LEAP this year.",
+    "sources": [
+      {
+        "label": "LEAP",
+        "url": "https://libwww.freelibrary.org/programs/leap/"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "nearby",
+        "distance": "the nearest branch to Nebinger"
+      }
+    }
+  },
+  {
+    "id": "fleisher-art-memorial",
+    "name": "Fleisher Art Memorial",
+    "what": "Free drop-in Teen Lounge and weekday art classes for older students",
+    "address": "719 Catharine St",
+    "grades": "6-8",
+    "gradeNote": "Weekday options are grades 6–12. K–5 classes meet on Saturdays only.",
+    "hours": "Teen Lounge: 4–6 pm, Mon–Wed on school days (one Fleisher page lists Tue and Wed only). Weekday class times vary by term.",
+    "cost": "Teen Lounge is free. Weekday classes: $95 base fee per term. Saturday classes: $65 base fee. Help available if cost is a barrier.",
+    "phone": "215-922-3456",
+    "email": "cy@fleisher.org",
+    "website": "https://fleisher.org/children-and-youth-programs-2/",
+    "register": {
+      "how": "online",
+      "url": "https://reg137.imperisoft.com/Fleisher/Search/Registration.aspx",
+      "label": "Register for classes",
+      "note": "Teen Lounge needs no registration. Fall 2026 class registration closed September 12; the winter term is the next chance."
+    },
+    "note": "Nothing on weekday afternoons for K–5. Teen Lounge is for ages 13 and up. Fleisher also runs day-off camps (ages 5–12) when district schools are closed.",
+    "sources": [
+      {
+        "label": "Young Artists Program",
+        "url": "https://fleisher.org/take-a-class/saturday-young-artist-program/"
+      },
+      {
+        "label": "Teen Lounge",
+        "url": "https://fleisher.org/community-programs/teen-lounge/"
+      },
+      {
+        "label": "Fall 2026 term",
+        "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/fall-2026/"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "nearby",
+        "distance": "about three blocks from Nebinger"
+      }
+    }
+  },
+  {
+    "id": "makom-community",
+    "name": "Makom Community",
+    "what": "Jewish afterschool enrichment and care",
+    "address": "1311 S Juniper St and 2401 Washington Ave",
+    "grades": "K-8",
+    "gradeNote": "K–5, grades 6–7, and teens",
+    "hours": "Mon–Fri",
+    "cost": "K–5: $280 per month (Fridays only) to $857 (5 days), plus $200 enrollment fee. Tuition assistance available.",
+    "phone": "484-278-1335",
+    "email": "beverly@makomcommunity.org",
+    "website": "https://makomcommunity.org/",
+    "register": {
+      "how": "online",
+      "url": "https://makomcommunity.org/enroll/",
+      "note": ""
+    },
+    "note": "",
+    "sources": [
+      {
+        "label": "Makom tuition",
+        "url": "https://makomcommunity.org/afterschool-enrichment/tuition/"
+      }
+    ],
+    "lastVerified": "2026-10-05",
+    "schools": {
+      "nebinger": {
+        "relation": "nearby",
+        "note": "Makom picks up from several South Philly schools, but its site does not list which. Ask whether Nebinger is on the route."
+      }
+    }
+  }
+]
