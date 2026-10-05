@@ -1038,7 +1038,7 @@ function edit_signed_in() {
 function editSignInPage() {
   const hero = `    <h1>Sign in to edit</h1>
     <p class="lede">This page is for the people who look after the site’s wording.</p>`;
-  const body = `<div class="suggest">
+  const body = `<div class="signin">
   <form class="form panel" method="post" action="./" data-edit-allow>
     <?php if ($error !== '') { ?><p class="flag" role="alert"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p><?php } ?>
     <div class="field">

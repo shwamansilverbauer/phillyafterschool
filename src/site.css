@@ -185,7 +185,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .field legend{margin-bottom:9px}
 .hint{color:var(--muted);font-size:.93rem}
 .pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px 18px;align-items:start}
-.field input[type="text"],.field input[type="email"],.field select,.field textarea{font:inherit;font-size:1.05rem;width:100%;min-height:58px;padding:16px 18px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink);transition:border-color .12s}
+.field input[type="text"],.field input[type="email"],.field input[type="password"],.field select,.field textarea{font:inherit;font-size:1.05rem;width:100%;min-height:58px;padding:16px 18px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink);transition:border-color .12s}
 .field input:hover,.field select:hover,.field textarea:hover{border-color:var(--muted)}
 .field input:focus,.field select:focus,.field textarea:focus{outline:3px solid var(--yellow);outline-offset:1px;border-color:var(--link)}
 .field textarea{min-height:210px;resize:vertical;line-height:1.5}
@@ -290,3 +290,7 @@ button.btn{cursor:pointer;font-family:inherit}
 .prow .tally{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin-top:2px}
 .prose ol{margin:0;padding-left:1.4rem;display:flex;flex-direction:column;gap:8px}
 .prog.solo .actions,.section > .actions{align-self:flex-start}
+
+/* ---------- sign-in for the edit page ---------- */
+.signin{max-width:440px;width:100%}
+.signin .btn{width:100%;text-align:center}
