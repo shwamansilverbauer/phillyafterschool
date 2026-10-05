@@ -3,6 +3,12 @@
     "id": "imagine-that-philly",
     "name": "Imagine That Philly",
     "what": "Morning care and after-school care run inside the school building",
+    "keywords": [
+      "aftercare",
+      "before care",
+      "morning care",
+      "childcare"
+    ],
     "address": "",
     "grades": null,
     "gradeNote": "Grades not published",
@@ -46,6 +52,20 @@
     "id": "nebinger-clubs",
     "name": "School clubs and teams",
     "what": "Art Studio, Song Writing, Garden Club, Rock Band, Chess, Debate Club, Student Government, Basketball, Soccer, Cheerleading. Robotics is listed as returning soon.",
+    "keywords": [
+      "clubs",
+      "sports",
+      "music",
+      "art",
+      "gardening",
+      "debate",
+      "chess",
+      "band",
+      "basketball",
+      "soccer",
+      "cheerleading",
+      "robotics"
+    ],
     "address": "",
     "grades": null,
     "gradeNote": "Varies by club",
@@ -76,6 +96,12 @@
     "id": "girls-on-the-run",
     "name": "Girls on the Run",
     "what": "Running and life-skills team that finishes with a 5K",
+    "keywords": [
+      "running",
+      "5K",
+      "sports",
+      "girls"
+    ],
     "address": "",
     "grades": "3-8",
     "gradeNote": "3rd–5th program; a 6th–8th program also exists",
@@ -113,6 +139,16 @@
     "id": "nebinger-arts-partners",
     "name": "Arts partners and Science Olympiad",
     "what": "EgoPo drama residency (weekly, ends in a public performance), Rock Reach Dance (32 weeks, 45 minutes a week), Settlement Choir, Arden Theatre (grades 3–5, in classroom), Science Olympiad",
+    "keywords": [
+      "drama",
+      "theater",
+      "theatre",
+      "acting",
+      "dance",
+      "choir",
+      "singing",
+      "science"
+    ],
     "address": "",
     "grades": null,
     "gradeNote": "Varies; Arden is grades 3–5",
@@ -147,6 +183,9 @@
     "id": "meredith-clubs",
     "name": "Meredith after-school clubs",
     "what": "Clubs run at the school. The Home & School Association posts the list each year.",
+    "keywords": [
+      "clubs"
+    ],
     "address": "",
     "grades": null,
     "gradeNote": "Varies by club",
@@ -177,6 +216,18 @@
     "id": "coppin-clubs",
     "name": "School clubs and ensembles",
     "what": "Robotics, Chess, Homework Club, Rock Band (HOME and HOME Jr.), Art, Vocal Music, Orchestra and Concert Band",
+    "keywords": [
+      "clubs",
+      "music",
+      "band",
+      "orchestra",
+      "singing",
+      "robotics",
+      "chess",
+      "STEM",
+      "homework",
+      "art"
+    ],
     "address": "",
     "grades": null,
     "gradeNote": "Varies by club",
@@ -207,6 +258,14 @@
     "id": "zhang-sah",
     "name": "Zhang Sah",
     "what": "Martial arts class daily, plus snack, homework time, clubs and outdoor play",
+    "keywords": [
+      "martial arts",
+      "taekwondo",
+      "tae kwon do",
+      "karate",
+      "homework",
+      "aftercare"
+    ],
     "address": "530 Bainbridge St",
     "grades": "K-8",
     "gradeNote": "",
@@ -253,6 +312,17 @@
     "id": "shot-tower-rec",
     "name": "Shot Tower Recreation Center",
     "what": "City rec center after-school program: homework help, gym and activities",
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
     "address": "101–31 Carpenter St (Front and Carpenter)",
     "grades": "K-6",
     "gradeNote": "Ages 5–12",
@@ -296,6 +366,16 @@
     "id": "philly-inmovement",
     "name": "Philly InMovement: MOVE After School",
     "what": "Gymnastics and movement. Pickup, a one-hour class and aftercare.",
+    "offers": [
+      "Gymnastics",
+      "Aerials"
+    ],
+    "keywords": [
+      "gym",
+      "tumbling",
+      "movement",
+      "aftercare"
+    ],
     "address": "500 Kenilworth St",
     "grades": "K-4",
     "gradeNote": "K–4. A separate Mini MOVE serves Pre-K.",
@@ -338,6 +418,15 @@
     "id": "settlement-kaleidoscope-plus",
     "name": "Settlement Music School: Kaleidoscope Plus",
     "what": "Music, theater and visual art classes every day, with homework help and snack",
+    "keywords": [
+      "music",
+      "theater",
+      "theatre",
+      "drama",
+      "art",
+      "homework",
+      "aftercare"
+    ],
     "address": "416 Queen St",
     "grades": "PK-3",
     "gradeNote": "Ages 3–9",
@@ -372,6 +461,14 @@
     "id": "philly-art-center-qv",
     "name": "Philly Art Center, Queen Village",
     "what": "Studio art after school. Choose 1–5 days a week, by season.",
+    "keywords": [
+      "art",
+      "drawing",
+      "painting",
+      "crafts",
+      "studio",
+      "aftercare"
+    ],
     "address": "514 Bainbridge St",
     "grades": "PK-6",
     "gradeNote": "Ages 4–12",
@@ -421,6 +518,13 @@
     "id": "old-pine",
     "name": "Old Pine Community Center",
     "what": "Traditional aftercare: homework help, snack, gym and recreation",
+    "keywords": [
+      "aftercare",
+      "homework",
+      "gym",
+      "recreation",
+      "childcare"
+    ],
     "address": "401 Lombard St",
     "grades": "K-5",
     "gradeNote": "",
@@ -461,6 +565,13 @@
     "id": "butchers-sew-shop",
     "name": "Butcher’s Sew Shop Junior",
     "what": "Sewing classes in Bella Vista",
+    "keywords": [
+      "sewing",
+      "fashion",
+      "crafts",
+      "textiles",
+      "design"
+    ],
     "address": "800 S 8th St",
     "grades": "K-8",
     "gradeNote": "Ages 5–8 and 8–11 on weekdays; ages 11–15 on Fridays",
@@ -508,6 +619,20 @@
     "id": "mister-johns-music",
     "name": "Mister John’s Music",
     "what": "Group piano, guitar, ukulele, percussion and choir, with optional aftercare around the class",
+    "offers": [
+      "Piano",
+      "Guitar",
+      "Ukulele",
+      "Percussion",
+      "Choir"
+    ],
+    "keywords": [
+      "music",
+      "drums",
+      "singing",
+      "lessons",
+      "instruments"
+    ],
     "address": "761 S 8th St and 904 S 9th St",
     "grades": "K-5",
     "gradeNote": "Kindergarten and up; upper limit not published",
@@ -552,6 +677,16 @@
     "id": "coco-academy",
     "name": "CoCo Academy",
     "what": "STEAM makerspace: 3D printing, laser cutting, circuits, design software",
+    "keywords": [
+      "STEM",
+      "STEAM",
+      "maker",
+      "makerspace",
+      "3D printing",
+      "engineering",
+      "technology",
+      "circuits"
+    ],
     "address": "1001 Christian St (Bella Vista) and 615 S 3rd St (Queen Village)",
     "grades": "K-5",
     "gradeNote": "K–5 for pickup; classes run to age 14",
@@ -602,6 +737,16 @@
     "id": "queen-and-rook",
     "name": "Queen & Rook Game Cafe",
     "what": "Board games, trading card games and role-playing games",
+    "keywords": [
+      "board games",
+      "card games",
+      "games",
+      "role-playing",
+      "RPG",
+      "D&D",
+      "dungeons and dragons",
+      "tabletop"
+    ],
     "address": "125 South St",
     "grades": "1-8",
     "gradeNote": "Ages 6–16",
@@ -644,6 +789,11 @@
     "id": "beehive-at-bok",
     "name": "Beehive at Bok",
     "what": "Play-based aftercare in the Bok building",
+    "keywords": [
+      "play",
+      "aftercare",
+      "childcare"
+    ],
     "address": "Bok, 1901 S 9th St",
     "grades": "PK-3",
     "gradeNote": "",
@@ -682,7 +832,20 @@
   {
     "id": "movemakers",
     "name": "MoveMakers Philly",
-    "what": "Hip hop, breaking, martial arts, parkour and acrobatics, with homework time and snack",
+    "what": "Dance and movement classes, with homework time and snack",
+    "offers": [
+      "Hip hop",
+      "Breaking",
+      "Martial arts",
+      "Parkour",
+      "Acrobatics"
+    ],
+    "keywords": [
+      "dance",
+      "breakdancing",
+      "hip-hop",
+      "tumbling"
+    ],
     "address": "812 Chestnut St",
     "grades": null,
     "gradeNote": "Ages not published",
@@ -719,6 +882,14 @@
     "id": "kids-on-12th",
     "name": "Kids on 12th",
     "what": "Aftercare with art, gym play, games and homework help",
+    "keywords": [
+      "aftercare",
+      "art",
+      "gym",
+      "games",
+      "homework",
+      "childcare"
+    ],
     "address": "1112 Chestnut St, Suite C",
     "grades": "K-5",
     "gradeNote": "",
@@ -752,6 +923,14 @@
     "id": "columbus-square-rec",
     "name": "Columbus Square Recreation Center",
     "what": "City rec center after-school program",
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "aftercare",
+      "low cost"
+    ],
     "address": "12th and Wharton Sts",
     "grades": "1-6",
     "gradeNote": "Ages 6–12",
@@ -795,6 +974,14 @@
     "id": "hawthorne-cultural-center",
     "name": "Hawthorne Cultural Center",
     "what": "City rec center after-school program",
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "aftercare",
+      "low cost"
+    ],
     "address": "1200 Carpenter St",
     "grades": "1-6",
     "gradeNote": "Ages 6–12",
@@ -843,6 +1030,14 @@
     "id": "starr-garden-rec",
     "name": "Starr Garden Recreation Center",
     "what": "City rec center after-school program",
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "aftercare",
+      "low cost"
+    ],
     "address": "600–44 Lombard St",
     "grades": "K-5",
     "gradeNote": "Ages 5–11",
@@ -884,6 +1079,14 @@
     "id": "palumbo-rec",
     "name": "Palumbo Recreation Center",
     "what": "City-subsidized, staff-led afterschool program",
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "aftercare",
+      "low cost"
+    ],
     "address": "725 S 10th St (10th and Fitzwater)",
     "grades": "K-6",
     "gradeNote": "Ages 5–12",
@@ -928,6 +1131,14 @@
     "id": "mighty-writers-el-futuro",
     "name": "Mighty Writers El Futuro",
     "what": "Free daily after-school writing academy. Bilingual English and Spanish.",
+    "keywords": [
+      "writing",
+      "reading",
+      "literacy",
+      "bilingual",
+      "Spanish",
+      "free"
+    ],
     "address": "1025 S 9th St",
     "grades": "3-8",
     "gradeNote": "",
@@ -965,6 +1176,15 @@
     "id": "free-library-leap",
     "name": "Free Library LEAP",
     "what": "Free drop-in homework help, literacy and STEAM activities",
+    "keywords": [
+      "library",
+      "homework help",
+      "reading",
+      "STEM",
+      "STEAM",
+      "free",
+      "drop-in"
+    ],
     "address": "Charles Santore Library, 932 S 7th St",
     "grades": "K-8",
     "gradeNote": "K–12",
@@ -1000,6 +1220,18 @@
     "id": "fleisher-art-memorial",
     "name": "Fleisher Art Memorial",
     "what": "Free drop-in Teen Lounge and weekday art classes for older students",
+    "keywords": [
+      "art",
+      "drawing",
+      "painting",
+      "clay",
+      "ceramics",
+      "photography",
+      "animation",
+      "printmaking",
+      "teens",
+      "free"
+    ],
     "address": "719 Catharine St",
     "grades": "6-8",
     "gradeNote": "Weekday options are grades 6–12. K–5 classes meet on Saturdays only.",
@@ -1056,6 +1288,13 @@
     "id": "makom-community",
     "name": "Makom Community",
     "what": "Jewish afterschool enrichment and care",
+    "keywords": [
+      "Jewish",
+      "Judaism",
+      "enrichment",
+      "aftercare",
+      "teens"
+    ],
     "address": "1311 S Juniper St and 2401 Washington Ave",
     "grades": "K-8",
     "gradeNote": "K–5, grades 6–7, and teens",
