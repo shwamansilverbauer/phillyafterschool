@@ -60,6 +60,8 @@ Fields worth knowing:
 
 - `grades`: a range like `"K-5"` or `"PK-3"`, a single grade like `"8"`, or `null` when the provider doesn't publish grades.
 - `offers`: optional list of class names a family chooses between, like `["Piano", "Guitar"]`. Shown on the card, searchable, and offered as a tag when adding the program to a roster. Names only: no days, times or prices.
+- `neighborhoods`: list of the neighborhoods the program's building (or buildings) is in, like `["Bella Vista"]`. Decides which
+  neighborhood pages it appears on. A program that runs inside a school can leave it out and takes the school's neighborhood.
 - `keywords`: optional list of plain words parents might search for (`"drums"`, `"karate"`, `"homework"`). Never shown, only searched.
 - `pickupBy`: optional. The latest time a child can be collected, like `"6:00 pm"`. Shown on the card and on rosters. Leave it out when the provider doesn't publish an end time.
 - `register.how`: `online` (needs `url`), `phone`, `contact`, `school` or `none`. `register.note` is shown next to it.
@@ -88,6 +90,14 @@ same record as its cards: the details, each school it serves, and its reviews. `
 A to Z. Both are in the sitemap, and each program page carries structured data (name, address, phone, and
 the star rating once there are reviews) for search engines. Nothing extra to maintain: add or edit a
 program in `data/programs.json` and its page follows.
+
+## Neighborhood pages
+
+`/neighborhoods/` lists every neighborhood that has a school or a program, and each one gets a page at
+`/neighborhoods/<name>/` (for example `/neighborhoods/bella-vista/`) showing the schools there, the programs
+based there, and programs from elsewhere that pick up from a school there. They are built from each school's
+`neighborhood` text (use " / " between two names for a school on a border) and each program's `neighborhoods`
+list. A new neighborhood name anywhere in the data creates its page; spell names the same way each time.
 
 ## Editing the site's wording
 

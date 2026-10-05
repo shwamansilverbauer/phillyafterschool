@@ -91,6 +91,9 @@ for (const p of programs) {
   // Class names travel inside roster share links, so they can't contain the characters links use as separators.
   if (p.offers !== undefined && (!Array.isArray(p.offers) || p.offers.some(x => typeof x !== 'string' || /[~,&=#]/.test(x)))) errors.push(`program "${p.id}": offers must be a list of class names without commas or the symbols ~ & = #`);
 }
+for (const p of programs) {
+  if (p.neighborhoods !== undefined && (!Array.isArray(p.neighborhoods) || !p.neighborhoods.length || p.neighborhoods.some(x => typeof x !== 'string' || !x.trim()))) errors.push(`program "${p.id}": neighborhoods must be a list of neighborhood names`);
+}
 for (const p of programs) for (const d of p.register?.dates || []) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(d.date || '') || !d.label) errors.push(`program "${p.id}": each register.dates entry needs a date (YYYY-MM-DD) and a label`);
 }
@@ -187,6 +190,7 @@ ${body}
       <ul>
         ${footSchools.map(s => `<li><a href="${link(s.id + '/', depth)}">${esc(s.shortName)}</a></li>`).join('')}
         <li><a href="${link('', depth)}#schools">${T(`All schools`)}</a></li>
+        <li><a href="${link('neighborhoods/', depth)}">${T(`By neighborhood`)}</a></li>
         <li><a href="${link('suggest/', depth)}">${T(`Ask for your school`)}</a></li>
       </ul>
     </div>
@@ -194,6 +198,7 @@ ${body}
       <h2><a href="${link('programs/', depth)}">${T(`Programs`)}</a></h2>
       <ul>
         <li><a href="${link('programs/', depth)}">${T(`All programs, A to Z`)}</a></li>
+        <li><a href="${link('neighborhoods/', depth)}">${T(`Programs by neighborhood`)}</a></li>
         <li><a href="${link('suggest/', depth)}">${T(`Suggest a program`)}</a></li>
         <li><a href="${link('review/', depth)}">${T(`Write a review`)}</a></li>
       </ul>
@@ -303,6 +308,44 @@ const fullName = p => {
   return at.length === 1 && p.schools[at[0].id].relation === 'onsite' && !p.name.includes(at[0].shortName) ? `${p.name} at ${at[0].shortName}` : p.name;
 };
 
+// ---------- neighborhoods ----------
+// A school's neighborhood comes from its "neighborhood" text ("Queen Village / Bella Vista" counts as both).
+// A program's comes from its "neighborhoods" list; one that runs inside a school takes that school's.
+const hoodSlug = n => n.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const schoolHoods = s => String(s.neighborhood || '').split('/').map(x => x.trim()).filter(Boolean);
+const programHoods = p => p.neighborhoods?.length ? p.neighborhoods
+  : [...new Set(schools.filter(s => p.schools[s.id]?.relation === 'onsite').flatMap(schoolHoods))];
+const hoods = (() => {
+  const m = new Map();
+  const at = n => { const k = hoodSlug(n); if (!m.has(k)) m.set(k, { id: k, name: n, schools: [], programs: [] }); return m.get(k); };
+  for (const s of schools) for (const n of schoolHoods(s)) at(n).schools.push(s);
+  for (const p of programs) for (const n of programHoods(p)) at(n).programs.push(p);
+  return [...m.values()].sort((a, b) => (b.schools.length + b.programs.length) - (a.schools.length + a.programs.length) || a.name.localeCompare(b.name));
+})();
+const hoodPath = h => `neighborhoods/${h.id}/`;
+const hoodLinks = (names, depth) => names.map(n => `<a href="${link('neighborhoods/' + hoodSlug(n) + '/', depth)}">${esc(n)}</a>`).join(', ');
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+
+// Rows used on the home page, the A to Z list and the neighborhood pages.
+const schoolRow = (s, depth) => {
+  const t = Object.fromEntries(Object.keys(REL).map(k => [k, programs.filter(p => p.schools[s.id]?.relation === k).length]));
+  return `<a class="school" href="${link(s.id + '/', depth)}" data-name="${esc((s.name + ' ' + s.shortName + ' ' + s.neighborhood).toLowerCase())}">
+  <h3>${esc(s.name)}</h3>
+  <span class="hood">${esc(s.neighborhood)}, grades ${esc(gradeSpan(s))}</span>
+  <span class="tally">${t.onsite ? `<span class="pill onsite">${t.onsite} at school</span>` : ''}${t.pickup ? `<span class="pill pickup">${t.pickup} pick up</span>` : ''}${t.nearby ? `<span class="pill nearby">${t.nearby} nearby</span>` : ''}</span>
+  <span class="bell"><b>${esc(clock(s))}</b><span>${T(`dismissal`)}</span></span>
+</a>`;
+};
+const programRow = (p, depth) => {
+  const served = schools.filter(s => p.schools[s.id]);
+  const hay = [p.name, p.what, ...(p.offers || []), ...(p.keywords || []), ...served.map(s => s.shortName), ...programHoods(p)].join(' ').toLowerCase().replace(/martial arts/g, 'martial-arts');
+  return `<a class="prow" href="${link(programPath(p), depth)}" data-search="${esc(hay)}">
+  <h3>${esc(p.name)}</h3>
+  <span class="what">${esc(p.what)}</span>
+  <span class="tally">${served.map(s => `<span class="pill ${p.schools[s.id].relation}">${esc(REL[p.schools[s.id].relation].pill.replace('{s}', s.shortName))}</span>`).join('')}<span class="hint">Grades ${esc(gradeText(p))}</span></span>
+</a>`;
+};
+
 // ---------- program card ----------
 function card(p, school) {
   const l = p.schools[school.id];
@@ -389,6 +432,7 @@ function programPage(p) {
     <h1>${esc(fullName(p))}</h1>
     <p class="lede">${esc(p.what)}</p>
     <div class="facts">
+      ${programHoods(p).length ? `<span>In <b>${hoodLinks(programHoods(p), D)}</b></span>` : ''}
       <span>Grades <b>${esc(gradeText(p))}</b></span>
       ${p.pickupBy ? `<span>Pick up by <b>${esc(p.pickupBy)}</b></span>` : ''}
       ${revs.length ? `<span><b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'review' : 'reviews'}</span>` : ''}
@@ -444,14 +488,7 @@ ${schoolRows}
 }
 
 function programsPage() {
-  const rows = [...programs].sort((a, b) => a.name.localeCompare(b.name)).map(p => {
-    const hay = [p.name, p.what, ...(p.offers || []), ...(p.keywords || []), ...servedBy(p).map(s => s.shortName)].join(' ').toLowerCase().replace(/martial arts/g, 'martial-arts');
-    return `<a class="prow" href="${link(programPath(p), 1)}" data-search="${esc(hay)}">
-  <h3>${esc(p.name)}</h3>
-  <span class="what">${esc(p.what)}</span>
-  <span class="tally">${servedBy(p).map(s => `<span class="pill ${p.schools[s.id].relation}">${esc(REL[p.schools[s.id].relation].pill.replace('{s}', s.shortName))}</span>`).join('')}<span class="hint">Grades ${esc(gradeText(p))}</span></span>
-</a>`;
-  }).join('\n');
+  const rows = [...programs].sort((a, b) => a.name.localeCompare(b.name)).map(p => programRow(p, 1)).join('\n');
   const hero = `    <h1>${T(`Every program, A to Z`)}</h1>
     <p class="lede">${T(`All {n} after-school programs on this site, across every school. Open one for its hours, cost, how to register and what parents say.`, { n: programs.length })}</p>
     <div class="find needs-js-block">
@@ -463,7 +500,7 @@ function programsPage() {
 ${rows}
     <p class="ask" id="no-program" data-edit-reveal="Shown when the program search finds nothing:" hidden>${T(`Nothing matches that. Know a program that should be listed?`)} <a href="${link('suggest/', 1)}">${T(`Tell us about it.`)}</a></p>
   </div>
-  <p>${T(`To see only what works with your child’s school and grade,`)} <a href="${link('', 1)}">${T(`start from your school.`)}</a></p>
+  <p>${T(`To see only what works with your child’s school and grade,`)} <a href="${link('', 1)}">${T(`start from your school.`)}</a> ${T(`Or see what’s close to home:`)} <a href="${link('neighborhoods/', 1)}">${T(`browse by neighborhood.`)}</a></p>
 </section>`;
   return layout({
     title: 'All after-school programs, A to Z',
@@ -501,6 +538,7 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
     <div class="facts">
       <span>Dismissal <b>${esc(s.dismissal)}</b>${s.dismissalNote ? ` (${esc(s.dismissalNote)})` : ''}</span>
       <span>School office <b><a href="${telHref(s.phone)}">${esc(s.phone)}</a></b></span>
+      ${schoolHoods(s).length ? `<span>Neighborhood <b>${hoodLinks(schoolHoods(s), 1)}</b></span>` : ''}
       <span>Reviewed <b>${longDate(s.lastReviewed)}</b></span>
     </div>`;
   const body = `<div data-school-page="${esc(s.id)}" style="display:contents">
@@ -552,15 +590,7 @@ ${groups}
 }
 
 function homePage() {
-  const rows = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => {
-    const t = tally(s);
-    return `<a class="school" href="${link(s.id + '/', 0)}" data-name="${esc((s.name + ' ' + s.shortName + ' ' + s.neighborhood).toLowerCase())}">
-  <h3>${esc(s.name)}</h3>
-  <span class="hood">${esc(s.neighborhood)}, grades ${esc(gradeSpan(s))}</span>
-  <span class="tally">${t.onsite ? `<span class="pill onsite">${t.onsite} at school</span>` : ''}${t.pickup ? `<span class="pill pickup">${t.pickup} pick up</span>` : ''}${t.nearby ? `<span class="pill nearby">${t.nearby} nearby</span>` : ''}</span>
-  <span class="bell"><b>${esc(clock(s))}</b><span>${T(`dismissal`)}</span></span>
-</a>`;
-  }).join('\n');
+  const rows = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => schoolRow(s, 0)).join('\n');
   const hero = `    <h1>${T(`School’s out. Now what?`)}</h1>
     <p class="lede">${T(`Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.`)}</p>
     <div class="find">
@@ -574,7 +604,7 @@ ${rows}
     <p class="ask" id="no-school" data-edit-reveal="Shown when the school search finds nothing:" hidden>${T(`That school isn’t here yet.`)} <a href="${link('suggest/', 0)}">${T(`Ask for it to be added.`)}</a></p>
   </div>
   <p>${T(`More schools in Queen Village, Bella Vista and South Philadelphia are on the way.`)} <a href="${link('suggest/', 0)}">${T(`Ask for yours next.`)}</a></p>
-  <p>${T(`Looking for one program by name?`)} <a href="${link('programs/', 0)}">${T(`Browse all {n} programs, A to Z.`, { n: programs.length })}</a></p>
+  <p>${T(`Looking for one program by name?`)} <a href="${link('programs/', 0)}">${T(`Browse all {n} programs, A to Z.`, { n: programs.length })}</a> ${T(`Or start from where you live:`)} <a href="${link('neighborhoods/', 0)}">${T(`browse by neighborhood.`)}</a></p>
 </section>
 <section class="section">
   <h2>${T(`How programs are sorted`)}</h2>
@@ -595,6 +625,80 @@ ${cfg.builtBy ? `<section class="section" id="who">
   return layout({
     title: cfg.siteName, pathName: '', depth: 0, current: '', hero, body, fragment: PREVIEW, showStreet: 'go', roomy: true,
     description: 'A school-by-school directory of after-school programs in Philadelphia: what runs at the school, who picks up at dismissal, hours, cost and where to register.',
+  });
+}
+
+function neighborhoodsPage() {
+  const cards = hoods.map(h => `<a class="prow" href="${link(hoodPath(h), 1)}">
+  <h3>${esc(h.name)}</h3>
+  <span class="what">${[h.schools.length ? plural(h.schools.length, 'school', 'schools') : '', plural(h.programs.length, 'program', 'programs')].filter(Boolean).join(', ')}</span>
+  ${h.schools.length ? `<span class="tally">${h.schools.map(s => `<span class="pill nearby">${esc(s.shortName)}</span>`).join('')}</span>` : ''}
+</a>`).join('\n');
+  const hero = `    <h1>${T(`After school, by neighborhood`)}</h1>
+    <p class="lede">${T(`Start from where you live. Each neighborhood lists the schools there and the programs based there, plus the ones that come to pick up.`)}</p>`;
+  const body = `<section class="section">
+  <div class="hoods">
+${cards}
+  </div>
+  <p>${T(`A program is listed where its building is. Many pick up from schools in other neighborhoods, so your school’s page is still the fullest list.`)} <a href="${link('', 1)}#schools">${T(`Find your school.`)}</a></p>
+  <p>${T(`Don’t see your neighborhood?`)} <a href="${link('suggest/', 1)}">${T(`Tell us which school or program to add.`)}</a></p>
+</section>`;
+  return layout({
+    title: 'After-school programs by neighborhood',
+    description: `After-school programs and schools in ${listNames(hoods.map(h => h.name))}, Philadelphia: what’s based in each neighborhood and who picks up.`,
+    pathName: 'neighborhoods/', depth: 1, current: null, hero, body, showStreet: 'parked',
+    jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: hoods.map((h, i) => ({ '@type': 'ListItem', position: i + 1, name: h.name, url: `${cfg.siteUrl}/${hoodPath(h)}` })) },
+  });
+}
+
+function neighborhoodPage(h) {
+  const D = 2;
+  const here = new Set(h.programs.map(p => p.id));
+  const based = [...h.programs].sort((a, b) => a.name.localeCompare(b.name));
+  // Programs with a building somewhere else that collect children from a school in this neighborhood.
+  const comes = programs.filter(p => !here.has(p.id) && h.schools.some(s => p.schools[s.id]?.relation === 'pickup')).sort((a, b) => a.name.localeCompare(b.name));
+  const others = hoods.filter(x => x.id !== h.id);
+  const hero = `    <p class="where"><a href="${link('neighborhoods/', D)}">${T(`All neighborhoods`)}</a></p>
+    <h1>${T(`After school in {name}`, { name: h.name })}</h1>
+    <p class="lede">${T(`The schools in {name}, the after-school programs based there, and the ones that come to pick up.`, { name: h.name })}</p>
+    <div class="facts">
+      ${h.schools.length ? `<span><b>${h.schools.length}</b> ${h.schools.length === 1 ? 'school' : 'schools'}</span>` : ''}
+      <span><b>${based.length}</b> ${based.length === 1 ? 'program' : 'programs'} based here</span>
+      ${comes.length ? `<span><b>${comes.length}</b> more that pick up</span>` : ''}
+    </div>`;
+  const body = `<section class="section">
+  <h2>${T(`Schools in {name}`, { name: h.name })}</h2>
+  ${h.schools.length ? `<div class="schools">
+${h.schools.map(s => schoolRow(s, D)).join('\n')}
+  </div>` : `<p class="ask">${T(`No school in {name} is on the site yet.`, { name: h.name })} <a href="${link('suggest/', D)}">${T(`Ask for yours.`)}</a></p>`}
+</section>
+<section class="section">
+  <h2>${T(`Programs based in {name}`, { name: h.name })}</h2>
+  <p>${T(`Each one shows the schools it serves. Open it for hours, cost and how to register.`)}</p>
+  <div class="schools">
+${based.map(p => programRow(p, D)).join('\n')}
+  </div>
+</section>
+${comes.length ? `<section class="section">
+  <h2>${T(`Based elsewhere, but they pick up here`)}</h2>
+  <p>${T(`These programs are in another neighborhood and collect children from a school in {name}.`, { name: h.name })}</p>
+  <div class="schools">
+${comes.map(p => programRow(p, D)).join('\n')}
+  </div>
+</section>` : ''}
+<section class="section">
+  <h2>${T(`Other neighborhoods`)}</h2>
+  <p class="chips-row">${others.map(x => `<a class="btn" href="${link(hoodPath(x), D)}">${esc(x.name)}</a>`).join('')}</p>
+</section>`;
+  const url = `${cfg.siteUrl}/${hoodPath(h)}`;
+  return layout({
+    title: `After-school programs in ${h.name}, Philadelphia`,
+    description: `${plural(based.length, 'after-school program', 'after-school programs')} based in ${h.name}, Philadelphia${comes.length ? `, plus ${comes.length} more that pick up from ${listNames(h.schools.map(s => s.shortName))}` : ''}. Hours, cost, pickup and reviews.`,
+    pathName: hoodPath(h), depth: D, current: null, hero, body,
+    jsonLd: { '@context': 'https://schema.org', '@graph': [
+      { '@type': 'ItemList', name: `After-school programs in ${h.name}`, itemListElement: [...based, ...comes].map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
+      { '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Neighborhoods', cfg.siteUrl + '/neighborhoods/'], [h.name, url]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) },
+    ] },
   });
 }
 
@@ -1154,7 +1258,7 @@ ${editPage()}`;
 }
 
 function editPage() {
-  const pages = [['', 'Home'], ...schools.map(s => [s.id + '/', `${s.shortName} page`]), ['programs/', 'All programs, A to Z'], [programPath(programs[0]), `A program page (${programs[0].name})`],
+  const pages = [['', 'Home'], ...schools.map(s => [s.id + '/', `${s.shortName} page`]), ['programs/', 'All programs, A to Z'], ['neighborhoods/', 'Neighborhoods'], [hoodPath(hoods[0]), `A neighborhood page (${hoods[0].name})`], [programPath(programs[0]), `A program page (${programs[0].name})`],
     ['board/', 'My child’s roster'], ['suggest/', 'Suggest a program'], ['suggest/thanks/', 'Thank-you page after a suggestion'], ['review/', 'Write a review'], ['review/thanks/', 'Thank-you page after a review'],
     ['about/', 'About'], ['support/', 'Buy me a coffee'], ...(PREVIEW ? [] : [['404.html', 'Page not found']])];
   const hero = `    <h1>Edit the words on this site</h1>
@@ -1298,6 +1402,8 @@ write('index.html', homePage());
 for (const s of schools) write(`${s.id}/index.html`, schoolPage(s));
 write('programs/index.html', programsPage());
 for (const p of programs) write(`${programPath(p)}index.html`, programPage(p));
+write('neighborhoods/index.html', neighborhoodsPage());
+for (const h of hoods) write(`${hoodPath(h)}index.html`, neighborhoodPage(h));
 write('support/index.html', supportPage());
 write('about/index.html', aboutPage());
 write('suggest/index.html', suggestPage());
@@ -1321,7 +1427,7 @@ if (!PREVIEW) {
   write('data/programs.json', JSON.stringify(programs.map(({ _grades, ...p }) => p), null, 2));
   write('data/schools.json', JSON.stringify(schools, null, 2));
   const latest = programs.map(p => p.lastVerified).sort().pop();
-  const urls = [['', latest], ...schools.map(s => [s.id + '/', latest]), ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]),
+  const urls = [['', latest], ...schools.map(s => [s.id + '/', latest]), ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]), ['neighborhoods/', latest], ...hoods.map(h => [hoodPath(h), latest]),
     ...['board/', 'suggest/', 'review/', 'about/', 'support/'].map(u => [u, latest])];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
@@ -1331,4 +1437,6 @@ if (!PREVIEW) {
 // If the original was reworded or removed in this file, the edit no longer applies: say so, but still build.
 const stale = Object.entries(copyEdits).filter(([id]) => !copyRegistry.has(id));
 if (stale.length) console.warn(`\nNote: ${stale.length} edit(s) in data/copy.json no longer match any sentence on the site, so they were skipped:\n` + stale.map(([id, e]) => `- ${id}: was "${e.was || '?'}" / now "${e.now}"`).join('\n') + '\n');
-console.log(`Built ${schools.length} school page(s), ${programs.length} program page(s) and ${copyRegistry.size} editable sentences into ${path.relative(ROOT, OUT)}/`);
+const noHood = programs.filter(p => !programHoods(p).length);
+if (noHood.length) console.warn(`\nNote: no neighborhood for ${noHood.map(p => p.id).join(', ')}. Add "neighborhoods" in data/programs.json so they show on a neighborhood page.\n`);
+console.log(`Built ${schools.length} school page(s), ${hoods.length} neighborhood page(s), ${programs.length} program page(s) and ${copyRegistry.size} editable sentences into ${path.relative(ROOT, OUT)}/`);

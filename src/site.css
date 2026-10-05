@@ -326,3 +326,8 @@ button.btn{cursor:pointer;font-family:inherit}
 .foot-cols a:hover{color:var(--hero-ink);text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:2px;text-underline-offset:4px}
 .foot-fine{margin-top:clamp(36px,5vw,56px);padding-top:24px;border-top:1px solid color-mix(in srgb,var(--hero-muted) 28%,transparent);display:flex;flex-direction:column;gap:8px;font-size:.88rem}
 .section[id],.prose h2[id]{scroll-margin-top:24px}
+
+/* ---------- neighborhoods ---------- */
+.hoods{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.chips-row{display:flex;flex-wrap:wrap;gap:8px;max-width:none}
+.facts a{color:var(--hero-ink)}
