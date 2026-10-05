@@ -59,9 +59,9 @@ Open `data/programs.json`, change the fields, set `lastVerified` to today's date
 Fields worth knowing:
 
 - `grades`: a range like `"K-5"` or `"PK-3"`, a single grade like `"8"`, or `null` when the provider doesn't publish grades.
-- `offers`: optional list of class names a family chooses between, like `["Piano", "Guitar"]`. Shown on the card, searchable, and offered as a tag when adding the program to a board. Names only: no days, times or prices.
+- `offers`: optional list of class names a family chooses between, like `["Piano", "Guitar"]`. Shown on the card, searchable, and offered as a tag when adding the program to a roster. Names only: no days, times or prices.
 - `keywords`: optional list of plain words parents might search for (`"drums"`, `"karate"`, `"homework"`). Never shown, only searched.
-- `pickupBy`: optional. The latest time a child can be collected, like `"6:00 pm"`. Shown on the card and on boards. Leave it out when the provider doesn't publish an end time.
+- `pickupBy`: optional. The latest time a child can be collected, like `"6:00 pm"`. Shown on the card and on rosters. Leave it out when the provider doesn't publish an end time.
 - `register.how`: `online` (needs `url`), `phone`, `contact`, `school` or `none`. `register.note` is shown next to it.
 - `register.nextTerm`: optional. When sign-ups open for the next term, semester or school year, in a sentence with dates. Leave it out when the provider doesn't say.
 - `register.dates`: optional list of `{ "date": "YYYY-MM-DD", "label": "..." }` for registration openings and deadlines. Each upcoming one gets "Add to calendar" links on the card; past dates drop off by themselves.
@@ -107,7 +107,7 @@ Words in curly braces, like `{school}`, are filled in per page. If a sentence is
 `build.mjs`, its entry stops matching; the build prints a note and carries on.
 
 Not editable this way: program and school details (they come from the data files), menu labels, and text
-the scripts write as you click (filter counts, the board).
+the scripts write as you click (filter counts, the roster).
 
 ## Reviews
 
@@ -116,12 +116,14 @@ ready-made entry at the bottom of the email. To publish one, paste that entry in
 `data/reviews.json` (inside the square brackets, entries separated by commas) and commit.
 To remove a review, delete its entry. Cards show the average and the reviews for each program.
 
-## The weekly board
+## Rosters
 
-`/board/` lets a visitor collect programs by weekday with "Add to board" on any card. There are two
-boards, Current and Upcoming, so a family can share what they do now and plan the next term.
-Boards are stored in the visitor's own browser, and the share link carries the whole week in the
-address, so nothing about them is stored on the server. There are no accounts.
+`/board/` ("My child's roster" in the menu) lets a visitor collect programs by weekday with "Add to roster"
+on any card. Each child has two rosters, Current and Upcoming, so a family can share what they do now and
+plan the next term. A family with more than one child adds a roster per child (up to six) and picks whose
+roster a program goes on. Rosters are stored in the visitor's own browser, and each share link carries one
+child's week in the address, so nothing about them is stored on the server. There are no accounts.
+The page address and the analytics event names still say "board" so older links and reports keep working.
 
 ## The suggestion form
 
@@ -135,7 +137,7 @@ A hidden field traps most spam bots.
 Set `gtmId` to load Google Tag Manager on every page. The site pushes these events to the data layer:
 `pas_filter` (filter_type, filter_value, school), `pas_outbound` (link_type of register or website,
 program_id, school; school is empty on a program's own page), `pas_suggest_submit` (suggest_kind, school), `pas_support_click`, `pas_review_submit` (program_id,
-school, stars), `pas_board_add` (program_id, school, day) and `pas_board_share` (method).
+school, stars), `pas_board_add` (program_id, school, day, board, children) and `pas_board_share` (method, board).
 `pas_outbound` also fires with link_type `calendar` and `review`. `pas_search` (search_term, results,
 school) fires when someone pauses typing in a school page's search box; searches with zero results
 show what parents want that isn't listed.

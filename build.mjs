@@ -88,7 +88,7 @@ for (const p of programs) {
 }
 for (const p of programs) {
   if (p.keywords !== undefined && (!Array.isArray(p.keywords) || p.keywords.some(x => typeof x !== 'string'))) errors.push(`program "${p.id}": keywords must be a list of words`);
-  // Class names travel inside board share links, so they can't contain the characters links use as separators.
+  // Class names travel inside roster share links, so they can't contain the characters links use as separators.
   if (p.offers !== undefined && (!Array.isArray(p.offers) || p.offers.some(x => typeof x !== 'string' || /[~,&=#]/.test(x)))) errors.push(`program "${p.id}": offers must be a list of class names without commas or the symbols ~ & = #`);
 }
 for (const p of programs) for (const d of p.register?.dates || []) {
@@ -145,7 +145,7 @@ function street(animate) {
 function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false }) {
   const canonical = cfg.siteUrl + '/' + pathName;
   const fullTitle = pathName === '' ? (PREVIEW ? cfg.siteName : `${cfg.siteName}: ${cfg.tagline}`) : `${title} | ${cfg.siteName}`;
-  const nav = [['', 'Schools'], ['board/', 'My board'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Buy me a coffee']]
+  const nav = [['', 'Schools'], ['board/', 'My child’s roster'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Buy me a coffee']]
     .map(([to, label]) => `<a href="${link(to, depth)}"${current === to ? ' aria-current="page"' : ''}>${label}${to === 'board/' ? '<span class="count" data-board-count hidden></span>' : ''}</a>`).join('');
   const fix = correctionHref('Correction for Philly After School');
   const head = `${fragment ? '' : gtmHead + '\n'}<title>${esc(fullTitle)}</title>
@@ -292,8 +292,8 @@ function card(p, school) {
   ${gradeStrip(p)}
   <dl>${rows}</dl>
   ${flag ? `<p class="flag">${esc(flag)}</p>` : ''}
-  <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a><button type="button" class="btn needs-js" data-board-toggle aria-expanded="false">Add to board</button>
-    <div class="days" hidden><span class="which" role="group" aria-label="Which board"><button type="button" class="wb" data-board="now" aria-pressed="true">Current</button><button type="button" class="wb" data-board="next" aria-pressed="false">Upcoming</button></span><span class="hint">Which days?</span>${BOARD_DAYS.map(([k, n]) => `<button type="button" class="day" data-day="${k}" aria-pressed="false">${n}</button>`).join('')}${p.offers?.length ? `<span class="cls-row"><span class="hint">Which class? Optional.</span>${p.offers.map(o => `<button type="button" class="cl" data-class="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join('')}</span>` : ''}<a href="${link('board/', 1)}">See your board</a></div></div>
+  <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a><button type="button" class="btn needs-js" data-board-toggle aria-expanded="false">Add to roster</button>
+    <div class="days" hidden><span class="kid-row" hidden></span><span class="which" role="group" aria-label="Current or upcoming roster"><button type="button" class="wb" data-board="now" aria-pressed="true">Current</button><button type="button" class="wb" data-board="next" aria-pressed="false">Upcoming</button></span><span class="hint">Which days?</span>${BOARD_DAYS.map(([k, n]) => `<button type="button" class="day" data-day="${k}" aria-pressed="false">${n}</button>`).join('')}${p.offers?.length ? `<span class="cls-row"><span class="hint">Which class? Optional.</span>${p.offers.map(o => `<button type="button" class="cl" data-class="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join('')}</span>` : ''}<a href="${link('board/', 1)}">See the roster</a></div></div>
   <div class="rev">${revHtml}</div>
   <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks([...p.sources, ...(l.sources || [])])}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
 </article>`;
@@ -334,7 +334,7 @@ function programPage(p) {
     const extra = [l.address ? `${s.shortName} children go to ${l.address}.` : '', l.distance ? l.distance.charAt(0).toUpperCase() + l.distance.slice(1) + '.' : ''].filter(Boolean).join(' ');
     const links = [
       l.registerUrl && r.how === 'online' ? `<a href="${esc(l.registerUrl)}" target="_blank" rel="noopener" data-track="register">${esc(r.label || 'Register')} (${esc(s.shortName)})</a>` : '',
-      `<a href="${link(s.id + '/', D)}#${esc(p.id)}">Add it to your board from the ${esc(s.shortName)} page</a>`,
+      `<a href="${link(s.id + '/', D)}#${esc(p.id)}">Add it to your child’s roster from the ${esc(s.shortName)} page</a>`,
       `<a href="${link(s.id + '/', D)}">All ${forSchool(s).length} options for ${esc(s.shortName)}</a>`,
       l.sources?.length ? `<span>Source: ${sourceLinks(l.sources)}</span>` : '',
     ].filter(Boolean).join('');
@@ -798,49 +798,54 @@ function boardPage() {
   };
   const schoolLinks = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<a class="btn" href="${link(s.id + '/', 1)}">${esc(s.shortName)}</a>`).join('');
   const hero = `    <h1>${T(`Build your week`)}</h1>
-    <p class="lede">${T(`Monday might be martial arts and Thursday the rec center. Keep one board for what you’re doing now and one for what’s coming, then send either to your partner, a sitter, or the group chat.`)}</p>`;
+    <p class="lede">${T(`Monday might be martial arts and Thursday the rec center. Keep one roster for what your child is doing now and one for what’s coming, then send either to your partner, a sitter, or the group chat. More than one child? Each gets their own.`)}</p>`;
   const body = `<div data-board-page style="display:contents">
-  <noscript><p class="ask">${T(`The board needs JavaScript turned on.`)}</p></noscript>
-  <div class="panel" id="board-shared" data-edit-reveal="Shown when someone opens a board a friend shared:" hidden>
+  <noscript><p class="ask">${T(`The roster needs JavaScript turned on.`)}</p></noscript>
+  <div class="panel" id="board-shared" data-edit-reveal="Shown when someone opens a roster a friend shared:" hidden>
     <h2>${T(`Someone shared this week with you`)}</h2>
     <p id="board-shared-text">It isn’t saved on your device yet.</p>
-    <div class="actions"><button type="button" class="btn primary" id="board-adopt">Make it my board</button><button type="button" class="btn" id="board-mine">See my own boards</button></div>
+    <div class="actions"><button type="button" class="btn primary" id="board-adopt">Save it to my rosters</button><button type="button" class="btn" id="board-mine">See my own rosters</button></div>
   </div>
   <section class="section">
-    <div class="tabs" id="board-tabs" role="group" aria-label="Which board">
+    <div class="kid-bar" id="kid-bar">
+      <div class="kids" id="kid-tabs" role="group" aria-label="Which child" hidden></div>
+      <div class="field">
+        <label for="board-name">${T(`Child’s name`)}</label>
+        <input id="board-name" type="text" maxlength="40" placeholder="Sam" autocomplete="off">
+        <span class="hint">${T(`Optional. It shows on the roster you share.`)}</span>
+      </div>
+      <div class="actions"><button type="button" class="btn" id="kid-add">Add another child</button><button type="button" class="clear" id="kid-remove" hidden>Remove this child</button></div>
+    </div>
+    <div class="tabs" id="board-tabs" role="group" aria-label="Current or upcoming roster">
       <button type="button" class="tab" data-board="now" aria-pressed="true">Current</button>
       <button type="button" class="tab" data-board="next" aria-pressed="false">Upcoming</button>
     </div>
     <h2 id="board-title">Your current week</h2>
     <div class="panel" id="board-empty" hidden>
-      <p id="board-empty-text">Open a school’s page and choose “Add to board” on any program. Pick the days, and it shows up here.</p>
+      <p id="board-empty-text">Open a school’s page and choose “Add to roster” on any program. Pick the days, and it shows up here.</p>
       <div class="actions">${schoolLinks}</div>
     </div>
     <div class="week" id="week"></div>
-    <button type="button" class="clear" id="board-promote" hidden>The new term has started: make this my current board</button>
+    <button type="button" class="clear" id="board-promote" hidden>The new term has started: make this the current roster</button>
   </section>
   <section class="board-tools" id="board-tools" hidden>
-    <div class="field">
-      <label for="board-name">${T(`Name this week`)}</label>
-      <input id="board-name" type="text" maxlength="40" placeholder="Sam’s week" autocomplete="off">
-    </div>
     <div class="actions">
       <button type="button" class="btn primary" id="board-share" hidden>Share</button>
       <button type="button" class="btn" id="board-copy-link">Copy link</button>
       <button type="button" class="btn" id="board-copy-text">Copy as text</button>
       <a class="btn" id="board-email" href="mailto:">Email it to myself</a>
-      <button type="button" class="clear" id="board-clear">Clear this board</button>
+      <button type="button" class="clear" id="board-clear">Clear this roster</button>
     </div>
     <p class="hint" id="board-status" aria-live="polite"></p>
     <div class="field">
-      <label for="board-link">${T(`Link to this week`)}</label>
+      <label for="board-link">${T(`Link to this roster`)}</label>
       <input id="board-link" type="text" readonly>
-      <span class="hint">${T(`Your boards save automatically on this device. The link is the copy you can keep anywhere: anyone who opens it sees this week, and it’s how you move a board to another phone or computer.`)}</span>
+      <span class="hint">${T(`Rosters save automatically on this device. The link is the copy you can keep anywhere: anyone who opens it sees this roster, and it’s how you move one to another phone or computer.`)}</span>
     </div>
   </section>
   <script type="application/json" id="pas-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: 'Build your week', description: `Put together a Monday to Friday after-school plan from ${cfg.siteName} listings and share it with a link.`, pathName: 'board/', depth: 1, current: 'board/', hero, body });
+  return layout({ title: 'My child’s roster', description: `Put together a Monday to Friday after-school roster for each child from ${cfg.siteName} listings and share it with a link.`, pathName: 'board/', depth: 1, current: 'board/', hero, body });
 }
 
 function reviewPage() {
@@ -1112,7 +1117,7 @@ ${editPage()}`;
 
 function editPage() {
   const pages = [['', 'Home'], ...schools.map(s => [s.id + '/', `${s.shortName} page`]), ['programs/', 'All programs, A to Z'], [programPath(programs[0]), `A program page (${programs[0].name})`],
-    ['board/', 'My board'], ['suggest/', 'Suggest a program'], ['suggest/thanks/', 'Thank-you page after a suggestion'], ['review/', 'Write a review'], ['review/thanks/', 'Thank-you page after a review'],
+    ['board/', 'My child’s roster'], ['suggest/', 'Suggest a program'], ['suggest/thanks/', 'Thank-you page after a suggestion'], ['review/', 'Write a review'], ['review/thanks/', 'Thank-you page after a review'],
     ['about/', 'About'], ['support/', 'Buy me a coffee'], ...(PREVIEW ? [] : [['404.html', 'Page not found']])];
   const hero = `    <h1>Edit the words on this site</h1>
     <p class="lede">Turn on editing, then click a sentence on any page and type. Nothing changes for visitors until your edits are sent and approved.</p>`;
@@ -1137,7 +1142,7 @@ function editPage() {
   <h2>What can’t be edited here</h2>
   <ul>
     <li>Program details: names, descriptions, hours and costs come from the listings data. Send fixes for those through <a href="${link('suggest/', 1)}">the suggestion form</a>.</li>
-    <li>Menu labels, text that changes as you click (filter counts, the board), the grey example text inside boxes, and the choices inside drop-downs.</li>
+    <li>Menu labels, text that changes as you click (filter counts, the roster), the grey example text inside boxes, and the choices inside drop-downs.</li>
     <li>Words in curly braces, like {school}, are filled in for each page. Leave them in the sentence.</li>
   </ul>
 </div>`;

@@ -1,5 +1,5 @@
 // Small enhancements. Every page reads fine without JavaScript; this adds the school search,
-// the grade/type filter, the weekly board, and a few form conveniences.
+// the grade/type filter, the rosters, and a few form conveniences.
 (function () {
   function store(key, value) {
     try {
@@ -155,16 +155,16 @@
     });
   }
 
-  // ----- weekly boards: a current one and an upcoming one, kept in this browser, shared by link -----
+  // ----- rosters: one per child, each with a current week and an upcoming one, kept in this browser, shared by link -----
   var DAYS = [['mon', 'Monday', 'Mon'], ['tue', 'Tuesday', 'Tue'], ['wed', 'Wednesday', 'Wed'], ['thu', 'Thursday', 'Thu'], ['fri', 'Friday', 'Fri']];
-  var boards = null;
+  var MAX_KIDS = 6;
+  var rosters = null;
   var storageOk = true;
   try { window.localStorage.setItem('pas-test', '1'); window.localStorage.removeItem('pas-test'); } catch (e) { storageOk = false; }
-  function emptyBoard() { return { name: '', days: { mon: [], tue: [], wed: [], thu: [], fri: [] } }; }
+  function emptyBoard() { return { days: { mon: [], tue: [], wed: [], thu: [], fri: [] } }; }
   function cleanBoard(b) {
     var out = emptyBoard();
     if (b && typeof b === 'object') {
-      if (typeof b.name === 'string') out.name = b.name.slice(0, 40);
       DAYS.forEach(function (day) {
         var a = b.days && b.days[day[0]];
         if (Array.isArray(a)) out.days[day[0]] = a.filter(function (x) { return typeof x === 'string' && /^[a-z0-9-]+\.[a-z0-9-]+(~[^~,&=#]{1,40})?$/.test(x); }).slice(0, 8);
@@ -172,6 +172,9 @@
     }
     return out;
   }
+  function cleanName(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').replace(/^ | $/g, '').slice(0, 40); }
+  function newKid(name) { return { name: cleanName(name), now: emptyBoard(), next: emptyBoard() }; }
+  function possessive(name) { return name + '’s'; }
   // A pick is "program.school", optionally followed by "~" and a class or short note.
   function entryKey(e) { var i = e.indexOf('~'); return i < 0 ? e : e.slice(0, i); }
   function entryNote(e) { var i = e.indexOf('~'); return i < 0 ? '' : e.slice(i + 1); }
@@ -179,22 +182,37 @@
   function makeEntry(key, note) { note = cleanNote(note); return note ? key + '~' + note : key; }
   function findEntry(list, key) { for (var i = 0; i < list.length; i++) if (entryKey(list[i]) === key) return i; return -1; }
   function parse(key) { try { return JSON.parse(store(key) || 'null'); } catch (e) { return null; } }
-  function loadBoards() {
-    if (boards) return boards;
-    var raw = parse('pas-boards');
-    if (!raw) raw = { active: 'now', now: parse('pas-board'), next: null };  // carry over a board made before there were two
-    boards = { active: raw.active === 'next' ? 'next' : 'now', now: cleanBoard(raw.now), next: cleanBoard(raw.next) };
-    return boards;
+  function loadRosters() {
+    if (rosters) return rosters;
+    var raw = parse('pas-rosters');
+    if (raw && Array.isArray(raw.kids) && raw.kids.length) {
+      rosters = { kid: 0, active: raw.active === 'next' ? 'next' : 'now', kids: raw.kids.slice(0, MAX_KIDS).map(function (k) {
+        k = k && typeof k === 'object' ? k : {};
+        return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next) };
+      }) };
+      if (typeof raw.kid === 'number' && raw.kid % 1 === 0 && raw.kid >= 0 && raw.kid < rosters.kids.length) rosters.kid = raw.kid;
+    } else {
+      // Carry over a board saved before each child had their own roster: it becomes the first child's.
+      var old = parse('pas-boards') || { active: 'now', now: parse('pas-board'), next: null };
+      var name = (old.now && old.now.name) || (old.next && old.next.name) || '';
+      var kid = newKid(String(name).replace(/[’']s (week|board|roster)$/i, ''));
+      kid.now = cleanBoard(old.now); kid.next = cleanBoard(old.next);
+      rosters = { kid: 0, active: old.active === 'next' ? 'next' : 'now', kids: [kid] };
+    }
+    return rosters;
   }
-  function saveBoards() { store('pas-boards', JSON.stringify(boards)); updateCount(); }
-  function activeBoard() { var bs = loadBoards(); return bs[bs.active]; }
+  function saveRosters() { store('pas-rosters', JSON.stringify(rosters)); updateCount(); }
+  function activeKid() { var r = loadRosters(); return r.kids[r.kid]; }
+  function activeBoard() { var r = loadRosters(); return r.kids[r.kid][r.active]; }
+  function kidLabel(k, i) { return k.name || 'Child ' + (i + 1); }
   function countPicks(b) {
     var seen = {};
     DAYS.forEach(function (day) { b.days[day[0]].forEach(function (k) { seen[entryKey(k)] = 1; }); });
     return Object.keys(seen).length;
   }
   function updateCount() {
-    var bs = loadBoards(), n = countPicks(bs.now) + countPicks(bs.next);
+    var n = 0;
+    loadRosters().kids.forEach(function (k) { n += countPicks(k.now) + countPicks(k.next); });
     all(document, '[data-board-count]').forEach(function (c) { c.textContent = n ? String(n) : ''; c.hidden = !n; });
   }
   updateCount();
@@ -206,31 +224,32 @@
     var week = $('#week'), nameInput = $('#board-name'), status = $('#board-status'), tools = $('#board-tools');
     var banner = $('#board-shared'), bannerText = $('#board-shared-text'), emptyNote = $('#board-empty'), emptyText = $('#board-empty-text');
     var linkBox = $('#board-link'), title = $('#board-title'), tabs = $('#board-tabs'), promote = $('#board-promote'), emailLink = $('#board-email');
+    var kidBar = $('#kid-bar'), kidTabs = $('#kid-tabs'), kidAdd = $('#kid-add'), kidRemove = $('#kid-remove'), adopt = $('#board-adopt');
     var WHICH = { now: 'current', next: 'upcoming' };
 
-    var encode = function (b, which) {
+    var encode = function (name, b, which) {
       var parts = [];
       if (which === 'next') parts.push('b=next');
-      if (b.name) parts.push('n=' + encodeURIComponent(b.name));
+      if (name) parts.push('n=' + encodeURIComponent(name));
       DAYS.forEach(function (day) {
         if (b.days[day[0]].length) parts.push(day[0] + '=' + b.days[day[0]].map(function (e) { var n = entryNote(e); return entryKey(e) + (n ? '~' + encodeURIComponent(n) : ''); }).join(','));
       });
       return parts.join('&');
     };
     var decode = function (hash) {
-      var b = emptyBoard(), any = false, which = 'now';
+      var b = emptyBoard(), any = false, which = 'now', name = '';
       hash.replace(/^#/, '').split('&').forEach(function (p) {
         var i = p.indexOf('=');
         if (i < 0) return;
         var k = p.slice(0, i), v = p.slice(i + 1);
-        if (k === 'n') { try { b.name = decodeURIComponent(v); } catch (e) { /* ignore */ } }
+        if (k === 'n') { try { name = cleanName(decodeURIComponent(v)); } catch (e) { /* ignore */ } }
         else if (k === 'b') { which = v === 'next' ? 'next' : 'now'; }
         else if (b.days[k]) {
           b.days[k] = v.split(',').map(function (e) { var n = entryNote(e); try { n = decodeURIComponent(n); } catch (err) { n = ''; } return makeEntry(entryKey(e), n); });
           any = true;
         }
       });
-      return any ? { which: which, board: cleanBoard(b) } : null;
+      return any ? { which: which, name: name, board: cleanBoard(b) } : null;
     };
     var shared = decode(location.hash);
     var lookup = function (entry) {
@@ -240,10 +259,10 @@
     var pillText = function (k) {
       return k.link.rel === 'onsite' ? 'At ' + k.sch.name : k.link.rel === 'pickup' ? k.sch.name + ' pickup' : 'Near ' + k.sch.name;
     };
-    var shareUrl = function () { var bs = loadBoards(); return location.href.split('#')[0] + '#' + encode(bs[bs.active], bs.active); };
-    var heading = function (b, which) { return (b.name || 'After-school week') + (which === 'next' ? ' (upcoming)' : ''); };
-    var asText = function (b, which) {
-      var lines = [heading(b, which) + ', from Philly After School'];
+    var shareUrl = function () { var r = loadRosters(), k = activeKid(); return location.href.split('#')[0] + '#' + encode(k.name, k[r.active], r.active); };
+    var heading = function (name, which) { return (name ? possessive(name) + ' after-school roster' : 'After-school roster') + (which === 'next' ? ' (upcoming)' : ''); };
+    var asText = function (name, b, which) {
+      var lines = [heading(name, which) + ', from Philly After School'];
       DAYS.forEach(function (day) {
         var picks = b.days[day[0]].map(lookup).filter(Boolean).map(function (k) {
           return k.prog.name + (k.note ? ': ' + k.note : '') + (k.link.where ? ' (' + k.link.where + ')' : '') + (k.prog.pickupBy ? ', pick up by ' + k.prog.pickupBy : '');
@@ -253,17 +272,26 @@
       return lines.join('\n');
     };
     var say = function (msg) { status.textContent = msg; };
-    var savedNote = function () { return storageOk ? 'Saved on this device.' : 'Your browser is blocking saved data, so this board will be gone when you close the page. Keep the link.'; };
+    var savedNote = function () { return storageOk ? 'Saved on this device.' : 'Your browser is blocking saved data, so this roster will be gone when you close the page. Keep the link.'; };
     var copy = function (text, done) {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(function () { say(done); }, function () { linkBox.focus(); linkBox.select(); say('Copy it from the box below.'); });
       } else { linkBox.focus(); linkBox.select(); say('Copy it from the box below.'); }
     };
+    // Where a shared roster would be saved: the child with the same name, an untouched first roster, or a new child.
+    var adoptSlot = function () {
+      var r = loadRosters(), at = -1;
+      if (shared.name) r.kids.forEach(function (k, i) { if (at < 0 && k.name.toLowerCase() === shared.name.toLowerCase()) at = i; });
+      if (at < 0 && r.kids.length === 1 && !r.kids[0].name && !countPicks(r.kids[0].now) && !countPicks(r.kids[0].next)) at = 0;
+      return at;
+    };
 
     var render = function () {
-      var bs = loadBoards();
-      var which = shared ? shared.which : bs.active;
-      var b = shared ? shared.board : bs[which];
+      var r = loadRosters();
+      var which = shared ? shared.which : r.active;
+      var kid = shared ? null : r.kids[r.kid];
+      var name = shared ? shared.name : kid.name;
+      var b = shared ? shared.board : kid[which];
       var total = 0;
       week.textContent = '';
       DAYS.forEach(function (day) {
@@ -288,7 +316,7 @@
             if (k.prog.offers.length) note.setAttribute('list', 'offers-' + k.id);
             note.addEventListener('change', function () {
               var mine = activeBoard(), i = mine.days[day[0]].indexOf(key);
-              if (i > -1) { mine.days[day[0]][i] = makeEntry(entryKey(key), note.value); saveBoards(); say(savedNote()); render(); }
+              if (i > -1) { mine.days[day[0]][i] = makeEntry(entryKey(key), note.value); saveRosters(); say(savedNote()); render(); }
             });
             li.appendChild(note);
           }
@@ -301,7 +329,7 @@
             rm.addEventListener('click', function () {
               var mine = activeBoard(), i = mine.days[day[0]].indexOf(key);
               if (i > -1) mine.days[day[0]].splice(i, 1);
-              saveBoards(); say(savedNote()); render();
+              saveRosters(); say(savedNote()); render();
             });
             li.appendChild(rm);
           }
@@ -312,59 +340,108 @@
       });
       banner.hidden = !shared;
       tabs.hidden = !!shared;
+      kidBar.hidden = !!shared;
       tools.hidden = !!shared || total === 0;
       emptyNote.hidden = !!shared || total > 0;
       promote.hidden = !!shared || which !== 'next' || total === 0;
-      promote.textContent = 'The new term has started: make this my current board';
+      promote.textContent = 'The new term has started: make this the current roster';
       promote.removeAttribute('data-armed');
       all(tabs, '.tab').forEach(function (t) { t.setAttribute('aria-pressed', String(t.getAttribute('data-board') === which)); });
       if (shared) {
-        title.textContent = (b.name || 'A shared week') + (which === 'next' ? ' (upcoming)' : '');
-        bannerText.textContent = which === 'next' ? 'This is what they have planned for the upcoming term. It isn’t saved on your device yet.' : 'This is what they’re doing now. It isn’t saved on your device yet.';
-      } else {
-        title.textContent = b.name || (which === 'next' ? 'Your upcoming week' : 'Your current week');
-        emptyText.textContent = which === 'next'
-          ? 'Nothing planned for the upcoming term yet. On any program, choose “Add to board”, switch it to Upcoming, and pick the days.'
-          : 'Open a school’s page and choose “Add to board” on any program. Pick the days, and it shows up here.';
-        linkBox.value = shareUrl();
-        emailLink.href = 'mailto:?subject=' + encodeURIComponent(heading(b, which)) + '&body=' + encodeURIComponent(asText(b, which) + '\n\n' + shareUrl());
-        if (document.activeElement !== nameInput) nameInput.value = b.name;
+        title.textContent = (name ? possessive(name) + ' roster' : 'A shared roster') + (which === 'next' ? ' (upcoming)' : '');
+        bannerText.textContent = (which === 'next' ? 'This is what they have planned for the upcoming term.' : 'This is what they’re doing now.') + ' It isn’t saved on your device yet.';
+        var slot = adoptSlot();
+        adopt.textContent = slot > -1 && r.kids[slot].name && countPicks(r.kids[slot][which])
+          ? 'Replace ' + possessive(r.kids[slot].name) + ' ' + WHICH[which] + ' roster with this'
+          : 'Save it to my rosters';
+        return;
       }
+      // one chip per child, once there is more than one
+      kidTabs.textContent = '';
+      kidTabs.hidden = r.kids.length < 2;
+      r.kids.forEach(function (k, i) {
+        var chip = el('button', 'kid', kidLabel(k, i));
+        chip.type = 'button';
+        chip.setAttribute('aria-pressed', String(i === r.kid));
+        chip.addEventListener('click', function () { r.kid = i; saveRosters(); say(''); render(); });
+        kidTabs.appendChild(chip);
+      });
+      kidAdd.hidden = r.kids.length >= MAX_KIDS;
+      kidRemove.hidden = r.kids.length < 2;
+      kidRemove.textContent = 'Remove ' + (kid.name ? possessive(kid.name) + ' rosters' : 'this child');
+      kidRemove.removeAttribute('data-armed');
+      title.textContent = (kid.name ? possessive(kid.name) : 'Your') + (which === 'next' ? ' upcoming week' : ' current week');
+      emptyText.textContent = which === 'next'
+        ? 'Nothing planned for the upcoming term yet. On any program, choose “Add to roster”, switch it to Upcoming, and pick the days.'
+        : 'Open a school’s page and choose “Add to roster” on any program. Pick the days, and it shows up here.';
+      linkBox.value = shareUrl();
+      emailLink.href = 'mailto:?subject=' + encodeURIComponent(heading(kid.name, which)) + '&body=' + encodeURIComponent(asText(kid.name, b, which) + '\n\n' + shareUrl());
+      if (document.activeElement !== nameInput) nameInput.value = kid.name;
     };
 
     all(tabs, '.tab').forEach(function (t) {
-      t.addEventListener('click', function () { loadBoards().active = t.getAttribute('data-board'); saveBoards(); say(''); render(); });
+      t.addEventListener('click', function () { loadRosters().active = t.getAttribute('data-board'); saveRosters(); say(''); render(); });
     });
-    nameInput.addEventListener('input', function () { activeBoard().name = nameInput.value.slice(0, 40); saveBoards(); say(savedNote()); render(); });
-    $('#board-copy-link').addEventListener('click', function () { copy(shareUrl(), 'Link copied. Paste it into a text or email.'); track({ event: 'pas_board_share', method: 'copy_link', board: WHICH[loadBoards().active] }); });
-    $('#board-copy-text').addEventListener('click', function () { var bs = loadBoards(); copy(asText(bs[bs.active], bs.active) + '\n' + shareUrl(), 'Copied as text, with the link.'); track({ event: 'pas_board_share', method: 'copy_text', board: WHICH[bs.active] }); });
-    emailLink.addEventListener('click', function () { track({ event: 'pas_board_share', method: 'email_self', board: WHICH[loadBoards().active] }); });
+    nameInput.addEventListener('input', function () { activeKid().name = nameInput.value.replace(/\s+/g, ' ').slice(0, 40); saveRosters(); say(savedNote()); render(); });
+    nameInput.addEventListener('blur', function () { var k = activeKid(); if (k.name !== cleanName(k.name)) { k.name = cleanName(k.name); saveRosters(); render(); } });
+    kidAdd.addEventListener('click', function () {
+      var r = loadRosters();
+      if (r.kids.length >= MAX_KIDS) return;
+      r.kids.push(newKid('')); r.kid = r.kids.length - 1; r.active = 'now';
+      saveRosters(); say('New roster added. Give it a name, then add programs from a school’s page.'); render();
+      nameInput.value = ''; nameInput.focus();
+    });
+    kidRemove.addEventListener('click', function () {
+      if (!kidRemove.getAttribute('data-armed')) {   // two taps, because it deletes both of that child's rosters
+        kidRemove.setAttribute('data-armed', '1');
+        kidRemove.textContent = 'Tap again to remove both of their rosters';
+        return;
+      }
+      var r = loadRosters();
+      if (r.kids.length < 2) return;
+      r.kids.splice(r.kid, 1); r.kid = Math.max(0, r.kid - 1);
+      saveRosters(); say('Removed.'); render();
+    });
+    var track_share = function (method) { track({ event: 'pas_board_share', method: method, board: WHICH[loadRosters().active] }); };
+    $('#board-copy-link').addEventListener('click', function () { copy(shareUrl(), 'Link copied. Paste it into a text or email.'); track_share('copy_link'); });
+    $('#board-copy-text').addEventListener('click', function () { var r = loadRosters(), k = activeKid(); copy(asText(k.name, k[r.active], r.active) + '\n' + shareUrl(), 'Copied as text, with the link.'); track_share('copy_text'); });
+    emailLink.addEventListener('click', function () { track_share('email_self'); });
     var shareBtn = $('#board-share');
     if (navigator.share) {
       shareBtn.hidden = false;
       shareBtn.addEventListener('click', function () {
-        var bs = loadBoards(), b = bs[bs.active];
-        navigator.share({ title: heading(b, bs.active), text: asText(b, bs.active), url: shareUrl() }).then(function () { track({ event: 'pas_board_share', method: 'share_sheet', board: WHICH[bs.active] }); }, function () { /* closed without sharing */ });
+        var r = loadRosters(), k = activeKid();
+        navigator.share({ title: heading(k.name, r.active), text: asText(k.name, k[r.active], r.active), url: shareUrl() }).then(function () { track_share('share_sheet'); }, function () { /* closed without sharing */ });
       });
     }
-    $('#board-clear').addEventListener('click', function () { var bs = loadBoards(); bs[bs.active] = emptyBoard(); saveBoards(); say('Board cleared.'); render(); });
+    $('#board-clear').addEventListener('click', function () { var r = loadRosters(); r.kids[r.kid][r.active] = emptyBoard(); saveRosters(); say('Roster cleared.'); render(); });
     promote.addEventListener('click', function () {
-      if (!promote.getAttribute('data-armed')) {   // two taps, because it replaces the current board
+      if (!promote.getAttribute('data-armed')) {   // two taps, because it replaces the current roster
         promote.setAttribute('data-armed', '1');
-        promote.textContent = 'Tap again to replace your current board with this one';
+        promote.textContent = 'Tap again to replace the current roster with this one';
         return;
       }
-      var bs = loadBoards();
-      bs.now = bs.next; bs.next = emptyBoard(); bs.active = 'now';
-      saveBoards(); say('Done. This is now your current board.'); render();
+      var r = loadRosters(), k = activeKid();
+      k.now = k.next; k.next = emptyBoard(); r.active = 'now';
+      saveRosters(); say('Done. This is now the current roster.'); render();
     });
     var leaveShared = function (keep) {
-      if (keep) { var bs = loadBoards(); bs[shared.which] = shared.board; bs.active = shared.which; saveBoards(); }
+      var msg = '';
+      if (keep) {
+        var r = loadRosters(), at = adoptSlot();
+        if (at < 0 && r.kids.length >= MAX_KIDS) { say('You already have ' + MAX_KIDS + ' rosters. Remove one first, then open the link again.'); bannerText.textContent = status.textContent; return; }
+        if (at < 0) { r.kids.push(newKid(shared.name)); at = r.kids.length - 1; }
+        if (!r.kids[at].name) r.kids[at].name = shared.name;
+        r.kids[at][shared.which] = shared.board; r.kid = at; r.active = shared.which;
+        saveRosters();
+        msg = 'Saved to your rosters.';
+      }
       shared = null;
       if (window.history && history.replaceState) history.replaceState(null, '', location.pathname + location.search);
       render();
+      say(msg);
     };
-    $('#board-adopt').addEventListener('click', function () { leaveShared(true); say('Saved as your board.'); });
+    adopt.addEventListener('click', function () { leaveShared(true); });
     $('#board-mine').addEventListener('click', function () { leaveShared(false); });
     Object.keys(data.programs).forEach(function (id) {   // suggestions for the class field
       if (!data.programs[id].offers.length) return;
@@ -376,7 +453,7 @@
     if (!shared && !storageOk) say(savedNote());
   }
 
-  // ----- school page: grade and type filter, add-to-board -----
+  // ----- school page: grade and type filter, search, add to roster -----
   var page = document.querySelector('[data-school-page]');
   if (!page) return;
   var school = page.getAttribute('data-school-page');
@@ -449,15 +526,16 @@
   var pressed = page.querySelector('.gbtn[aria-pressed="true"]');
   if (pressed && pressed.scrollIntoView && grade !== 'ALL') pressed.scrollIntoView({ block: 'nearest', inline: 'center' });
 
-  // Add to board: pick the days for a program, on the current or the upcoming board, with an optional class.
+  // Add to roster: pick the days for a program, for one child, on their current or upcoming roster, with an optional class.
   var refreshers = [];
   all(page, '.prog').forEach(function (card) {
     var toggle = card.querySelector('[data-board-toggle]');
     var panel = card.querySelector('.days');
     if (!toggle || !panel) return;
+    var kidRow = panel.querySelector('.kid-row');
     var key = card.id + '.' + school;
     var pending = '';   // a class chosen before any day is picked
-    var currentClass = function (b) {   // null: not on the board. false: different classes on different days.
+    var currentClass = function (b) {   // null: not on the roster. false: different classes on different days.
       var found = null;
       for (var i = 0; i < DAYS.length; i++) {
         var at = findEntry(b.days[DAYS[i][0]], key);
@@ -468,7 +546,7 @@
       return found;
     };
     var show = function () {
-      var bs = loadBoards(), b = bs[bs.active], on = [];
+      var r = loadRosters(), kid = r.kids[r.kid], b = kid[r.active], on = [];
       all(panel, '.day').forEach(function (btn) {
         var has = findEntry(b.days[btn.getAttribute('data-day')], key) > -1;
         btn.setAttribute('aria-pressed', String(has));
@@ -479,8 +557,25 @@
       if (cls === null) cls = pending;
       if (mixed) cls = '';
       all(panel, '.cl').forEach(function (c) { c.setAttribute('aria-pressed', String(c.getAttribute('data-class') === cls)); });
-      all(panel, '.wb').forEach(function (w) { w.setAttribute('aria-pressed', String(w.getAttribute('data-board') === bs.active)); });
-      toggle.textContent = on.length ? 'On your ' + (bs.active === 'next' ? 'upcoming' : 'current') + ' board: ' + on.join(', ') + (mixed ? ' (different classes)' : cls ? ' (' + cls + ')' : '') : 'Add to board';
+      all(panel, '.wb').forEach(function (w) { w.setAttribute('aria-pressed', String(w.getAttribute('data-board') === r.active)); });
+      if (kidRow) {   // with more than one child, choose whose roster this goes on
+        kidRow.textContent = '';
+        kidRow.hidden = r.kids.length < 2;
+        if (r.kids.length > 1) {
+          kidRow.appendChild(el('span', 'hint', 'Whose roster?'));
+          r.kids.forEach(function (k, i) {
+            var btn = el('button', 'kd', kidLabel(k, i));
+            btn.type = 'button';
+            btn.setAttribute('data-kid', String(i));
+            btn.setAttribute('aria-pressed', String(i === r.kid));
+            kidRow.appendChild(btn);
+          });
+        }
+      }
+      var whose = r.kids.length > 1 ? possessive(kidLabel(kid, r.kid)) : kid.name ? possessive(kid.name) : 'your';
+      toggle.textContent = on.length
+        ? 'On ' + whose + ' ' + (r.active === 'next' ? 'upcoming' : 'current') + ' roster: ' + on.join(', ') + (mixed ? ' (different classes)' : cls ? ' (' + cls + ')' : '')
+        : r.kids.length > 1 ? 'Add to ' + whose + ' roster' : 'Add to roster';
       toggle.className = 'btn needs-js' + (on.length ? ' on' : '');
     };
     refreshers.push(show);
@@ -489,12 +584,21 @@
       toggle.setAttribute('aria-expanded', String(!panel.hidden));
     });
     panel.addEventListener('click', function (e) {
-      var target = e.target.closest ? e.target.closest('.day, .wb, .cl') : null;
+      var target = e.target.closest ? e.target.closest('.day, .wb, .cl, .kd') : null;
       if (!target) return;
-      var bs = loadBoards(), b = bs[bs.active];
+      var r = loadRosters(), b = activeBoard();
+      if (target.className.indexOf('kd') > -1) {
+        r.kid = Number(target.getAttribute('data-kid')) || 0;
+        pending = '';
+        saveRosters();
+        refreshers.forEach(function (f) { f(); });
+        var again = panel.querySelector('.kd[aria-pressed="true"]');   // the row was rebuilt: keep the keyboard where it was
+        if (again) again.focus();
+        return;
+      }
       if (target.className.indexOf('wb') > -1) {
-        bs.active = target.getAttribute('data-board');
-        saveBoards();
+        r.active = target.getAttribute('data-board');
+        saveRosters();
         refreshers.forEach(function (f) { f(); });
         return;
       }
@@ -503,7 +607,7 @@
         var chosen = target.getAttribute('data-class');
         pending = (had === null ? pending : had || '') === chosen ? '' : chosen;
         DAYS.forEach(function (d) { var at = findEntry(b.days[d[0]], key); if (at > -1) b.days[d[0]][at] = makeEntry(key, pending); });
-        saveBoards();
+        saveRosters();
         show();
         return;
       }
@@ -512,9 +616,9 @@
       else {
         var cls = currentClass(b);
         b.days[day].push(makeEntry(key, cls === null ? pending : cls || ''));
-        track({ event: 'pas_board_add', program_id: card.id, school: school, day: day, board: bs.active === 'next' ? 'upcoming' : 'current' });
+        track({ event: 'pas_board_add', program_id: card.id, school: school, day: day, board: r.active === 'next' ? 'upcoming' : 'current', children: r.kids.length });
       }
-      saveBoards();
+      saveRosters();
       show();
     });
     show();
