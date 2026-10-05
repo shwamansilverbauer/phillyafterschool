@@ -147,6 +147,7 @@
   all(document, '[data-finder]').forEach(function (box) {
     var input = box.querySelector('input'), list = box.querySelector('.finder-list');
     var data = null, shown = [], active = -1;
+    var withPrograms = box.hasAttribute('data-programs');
     var close = function () { list.hidden = true; input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); active = -1; };
     var mark = function () {
       all(list, 'li').forEach(function (li, i) { li.setAttribute('aria-selected', String(i === active)); });
@@ -157,24 +158,36 @@
       list.textContent = '';
       shown = []; active = -1;
       if (!words.length) { close(); return; }
-      if (!data) { var wait = el('li', 'finder-note', 'Loading schools…'); list.appendChild(wait); list.hidden = false; return; }
+      if (!data) { var wait = el('li', 'finder-note', 'Loading…'); list.appendChild(wait); list.hidden = false; return; }
       var tests = words.map(function (w) { return new RegExp('(^|[^a-z0-9])' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')); });
-      var hits = data.schools.filter(function (r) { var hay = (r[1] + ' ' + r[2]).toLowerCase(); return tests.every(function (t) { return t.test(hay); }); });
-      hits.sort(function (a, b) { return (b[5] ? 1 : 0) - (a[5] ? 1 : 0) || a[1].localeCompare(b[1]); });
-      shown = hits.slice(0, 8);
+      var match = function (hay) { hay = hay.toLowerCase(); return tests.every(function (t) { return t.test(hay); }); };
+      var root = box.getAttribute('data-root') || '', index = box.getAttribute('data-index') || '';
+      var schoolHits = data.schools.filter(function (r) { return match(r[1] + ' ' + r[2]); });
+      schoolHits.sort(function (a, b) { return (b[5] ? 1 : 0) - (a[5] ? 1 : 0) || a[1].localeCompare(b[1]); });
+      // programs are [id, name, type, which schools]; matched on the name alone, so a school search stays a school search
+      var progHits = withPrograms ? (data.programs || []).filter(function (r) { return match(r[1]); }) : [];
+      var keepSchools = progHits.length ? Math.max(8 - progHits.length, Math.min(schoolHits.length, 5)) : 8;
+      var hits = schoolHits.concat(progHits);
+      shown = schoolHits.slice(0, keepSchools).map(function (r) {
+        return { href: schoolHref(box, r), name: r[1], meta: r[2] + (r[3] ? ' · grades ' + r[3] : '') + (r[4] ? ' · ' + r[4] : ''), pill: r[5] ? 'onsite' : 'nearby', pillText: r[5] ? r[6] + ' programs listed' : 'Not covered yet: ask for it',
+          event: { event: 'pas_school_pick', school: r[5] || r[0], covered: r[5] ? 'yes' : 'no' } };
+      });
+      shown = shown.concat(progHits.slice(0, 8 - shown.length).map(function (r) {
+        return { href: root + 'programs/' + r[0] + '/' + index, name: r[1], meta: r[2] + (r[3] ? ' · ' + r[3] : ''), pill: 'pickup', pillText: 'Program', event: { event: 'pas_program_pick', program_id: r[0], method: 'home_search' } };
+      }));
       shown.forEach(function (r, i) {
         var li = el('li'); li.id = 'finder-opt-' + i; li.setAttribute('role', 'option');
-        var a = el('a'); a.href = schoolHref(box, r); a.tabIndex = -1;
-        a.appendChild(el('b', null, r[1]));
-        a.appendChild(el('span', 'finder-meta', r[2] + (r[3] ? ' · grades ' + r[3] : '') + (r[4] ? ' · ' + r[4] : '')));
-        a.appendChild(el('span', 'pill ' + (r[5] ? 'onsite' : 'nearby'), r[5] ? r[6] + ' programs listed' : 'Not covered yet: ask for it'));
-        a.addEventListener('click', function () { track({ event: 'pas_school_pick', school: r[5] || r[0], covered: r[5] ? 'yes' : 'no' }); });
+        var a = el('a'); a.href = r.href; a.tabIndex = -1;
+        a.appendChild(el('b', null, r.name));
+        a.appendChild(el('span', 'finder-meta', r.meta));
+        a.appendChild(el('span', 'pill ' + r.pill, r.pillText));
+        a.addEventListener('click', function () { track(r.event); });
         li.appendChild(a); list.appendChild(li);
       });
       if (hits.length > shown.length) list.appendChild(el('li', 'finder-note', (hits.length - shown.length) + ' more. Keep typing to narrow it down.'));
       if (!hits.length) {
         var none = el('li', 'finder-note');
-        none.appendChild(document.createTextNode('No district or charter school matches that. '));
+        none.appendChild(document.createTextNode(withPrograms ? 'No school or program matches that. ' : 'No district or charter school matches that. '));
         var ask = el('a', null, 'Tell us about it.'); ask.href = (box.getAttribute('data-root') || '') + 'suggest/' + (box.getAttribute('data-index') || '') + '?kind=school&newschool=' + encodeURIComponent(input.value.trim());
         none.appendChild(ask); list.appendChild(none);
       }
@@ -193,8 +206,8 @@
         var pick = shown[active > -1 ? active : 0];
         if (!pick) return;
         e.preventDefault();
-        track({ event: 'pas_school_pick', school: pick[5] || pick[0], covered: pick[5] ? 'yes' : 'no' });
-        location.href = schoolHref(box, pick);
+        track(pick.event);
+        location.href = pick.href;
       } else if (e.key === 'Escape') { close(); }
     });
     document.addEventListener('click', function (e) { if (!box.contains(e.target)) close(); });
@@ -460,6 +473,7 @@
         week.appendChild(col);
       });
       banner.hidden = !shared;
+      if (adder) { adder.hidden = !!shared; drawAdd(); }
       tabs.hidden = !!shared;
       kidBar.hidden = !!shared;
       tools.hidden = !!shared || total === 0;
@@ -495,8 +509,8 @@
       kidRemove.removeAttribute('data-armed');
       title.textContent = (kid.name ? possessive(kid.name) : 'Your') + (which === 'next' ? ' upcoming week' : ' current week');
       emptyText.textContent = which === 'next'
-        ? 'Open a school’s page and choose “Add to roster” on any program. Pick the days, and it shows up here.'
-        : 'Nothing on the current roster yet. On any program, choose “Add to roster”, switch it to Current, and pick the days.';
+        ? 'Search for a program above and pick its days. Or open a school’s page and choose “Add to roster” on any program.'
+        : 'Nothing on the current roster yet. Search for a program above and pick its days.';
       linkBox.value = shareUrl();
       emailLink.href = 'mailto:?subject=' + encodeURIComponent(heading(kid.name, which)) + '&body=' + encodeURIComponent(asText(kid.name, b, which) + '\n\n' + shareUrl());
       if (document.activeElement !== nameInput) nameInput.value = kid.name;
@@ -516,7 +530,7 @@
       var r = loadRosters();
       if (r.kids.length >= MAX_KIDS) return;
       r.kids.push(newKid('')); r.kid = r.kids.length - 1; r.active = 'next';
-      saveRosters(); say('New roster added. Give it a name, then add programs from a school’s page.'); render();
+      saveRosters(); say('New roster added. Give it a name, then search for programs to add.'); render();
       nameInput.value = ''; nameInput.focus();
     });
     kidRemove.addEventListener('click', function () {
@@ -572,6 +586,162 @@
     };
     adopt.addEventListener('click', function () { leaveShared(true); });
     $('#board-mine').addEventListener('click', function () { leaveShared(false); });
+    // ----- add a program without leaving the page: search by name, say which school, pick the days -----
+    var adder = $('#board-adder'), addInput = $('#add-search'), addList = $('#add-list'), addPanel = $('#add-panel'), addStatus = $('#add-status');
+    var adding = null;   // the program being added: { id, school }
+    var addShown = [], addActive = -1;
+    var schoolsOf = function (prog) { return Object.keys(prog.schools).filter(function (id) { return data.schools[id]; }); };
+    // Which school to assume: the only one, the one already on this child's rosters, or the one looked at last.
+    var guessSchool = function (prog) {
+      var ids = schoolsOf(prog);
+      if (ids.length === 1) return ids[0];
+      var kid = activeKid(), tally = {}, best = '', n = 0;
+      [kid.now, kid.next].forEach(function (b) { DAYS.forEach(function (d) { b.days[d[0]].forEach(function (e) { var sid = entryKey(e).split('.')[1]; tally[sid] = (tally[sid] || 0) + 1; }); }); });
+      ids.forEach(function (id) { if ((tally[id] || 0) > n) { best = id; n = tally[id]; } });
+      if (best) return best;
+      var last = store('pas-school');
+      return last && ids.indexOf(last) > -1 ? last : '';
+    };
+    var drawAdd = function () {
+      addPanel.textContent = '';
+      addPanel.hidden = !adding || !!shared;
+      if (!adding || shared) return;
+      var prog = data.programs[adding.id], b = activeBoard(), ids = schoolsOf(prog);
+      var head = el('div', 'add-head');
+      head.appendChild(el('h3', null, prog.name));
+      var more = el('a', null, 'Full details'); more.href = prog.path; head.appendChild(more);
+      addPanel.appendChild(head);
+      if (ids.length > 1) {
+        var row = el('div', 'add-row');
+        row.setAttribute('role', 'group'); row.setAttribute('aria-label', 'Which school');
+        row.appendChild(el('span', 'hint', 'Which school?'));
+        ids.forEach(function (id) {
+          var bt = el('button', 'kd', data.schools[id].name);
+          bt.type = 'button'; bt.setAttribute('data-school', id); bt.setAttribute('aria-pressed', String(id === adding.school));
+          row.appendChild(bt);
+        });
+        addPanel.appendChild(row);
+      }
+      if (adding.school) {
+        var l = prog.schools[adding.school], how = el('p', 'add-how');
+        how.appendChild(el('span', 'pill ' + l.rel, (data.rels[l.rel] || '').replace('{s}', data.schools[adding.school].name)));
+        if (l.where) how.appendChild(el('span', null, l.where));
+        addPanel.appendChild(how);
+      }
+      var days = el('div', 'add-row'), key = adding.id + '.' + adding.school;
+      days.setAttribute('role', 'group'); days.setAttribute('aria-label', 'Which days');
+      days.appendChild(el('span', 'hint', adding.school ? 'Which days?' : 'Choose the school first, then the days.'));
+      DAYS.forEach(function (d) {
+        var bt = el('button', 'day', d[2]);
+        bt.type = 'button'; bt.setAttribute('data-day', d[0]); bt.setAttribute('aria-label', d[1]);
+        bt.disabled = !adding.school;
+        bt.setAttribute('aria-pressed', String(!!adding.school && findEntry(b.days[d[0]], key) > -1));
+        days.appendChild(bt);
+      });
+      addPanel.appendChild(days);
+      var foot = el('div', 'actions'), done = el('button', 'btn', 'Done');
+      done.type = 'button'; done.setAttribute('data-add-done', '');
+      foot.appendChild(done);
+      addPanel.appendChild(foot);
+    };
+    var closeAdd = function () { addList.hidden = true; addInput.setAttribute('aria-expanded', 'false'); addInput.removeAttribute('aria-activedescendant'); addActive = -1; };
+    var pickAdd = function (id, schoolId, how) {
+      var prog = data.programs[id];
+      if (!prog) return;
+      adding = { id: id, school: schoolId && prog.schools[schoolId] && data.schools[schoolId] ? schoolId : guessSchool(prog) };
+      addInput.value = ''; closeAdd(); addStatus.textContent = '';
+      drawAdd();
+      track({ event: 'pas_program_pick', program_id: id, method: how });
+      var first = addPanel.querySelector(adding.school ? '.day' : '.kd');
+      if (first) first.focus();
+    };
+    var renderAdd = function () {
+      var words = addInput.value.toLowerCase().split(/\s+/).filter(Boolean);
+      addList.textContent = ''; addShown = []; addActive = -1;
+      if (!words.length) { closeAdd(); return; }
+      var tests = words.map(function (w) { return new RegExp('(^|[^a-z0-9])' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')); });
+      var every = function (hay) { return tests.every(function (t) { return t.test(hay); }); };
+      var hits = Object.keys(data.programs).filter(function (id) { return every(data.programs[id].q); });
+      var rank = function (id) { return every(data.programs[id].name.toLowerCase()) ? 0 : 1; };   // a match in the name comes first
+      hits.sort(function (a, b) { return rank(a) - rank(b) || data.programs[a].name.localeCompare(data.programs[b].name); });
+      addShown = hits.slice(0, 8);
+      var b = activeBoard();
+      addShown.forEach(function (id, i) {
+        var prog = data.programs[id], names = schoolsOf(prog).map(function (sid) { return data.schools[sid].name; });
+        var li = el('li'); li.id = 'add-opt-' + i; li.setAttribute('role', 'option');
+        var bt = el('button'); bt.type = 'button'; bt.tabIndex = -1;
+        bt.appendChild(el('b', null, prog.name));
+        bt.appendChild(el('span', 'finder-meta', (data.types[prog.type] ? data.types[prog.type].label + ' · ' : '') + names.slice(0, 3).join(', ') + (names.length > 3 ? ' and ' + (names.length - 3) + ' more' : '')));
+        var on = DAYS.filter(function (d) { return b.days[d[0]].some(function (e) { return entryKey(e).split('.')[0] === id; }); }).map(function (d) { return d[2]; });
+        if (on.length) bt.appendChild(el('span', 'pill onsite', 'On this week: ' + on.join(', ')));
+        bt.addEventListener('click', function () { pickAdd(id, '', 'roster_search'); });
+        li.appendChild(bt); addList.appendChild(li);
+      });
+      if (hits.length > addShown.length) addList.appendChild(el('li', 'finder-note', (hits.length - addShown.length) + ' more. Keep typing to narrow it down.'));
+      if (!hits.length) {
+        var none = el('li', 'finder-note');
+        none.appendChild(document.createTextNode('No program by that name is listed yet. '));
+        var ask = el('a', null, 'Tell us about it.'); ask.href = data.suggest;
+        none.appendChild(ask); addList.appendChild(none);
+      }
+      addList.hidden = false; addInput.setAttribute('aria-expanded', 'true');
+    };
+    if (adder) {
+      addInput.addEventListener('input', renderAdd);
+      addInput.addEventListener('focus', function () { if (addInput.value) renderAdd(); });
+      addInput.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          if (!addShown.length) return;
+          e.preventDefault();
+          addActive = e.key === 'ArrowDown' ? (addActive + 1) % addShown.length : (addActive <= 0 ? addShown.length - 1 : addActive - 1);
+          all(addList, 'li[role="option"]').forEach(function (li, i) { li.setAttribute('aria-selected', String(i === addActive)); });
+          addInput.setAttribute('aria-activedescendant', 'add-opt-' + addActive);
+        } else if (e.key === 'Enter') {
+          var pick = addShown[addActive > -1 ? addActive : 0];
+          if (!pick) return;
+          e.preventDefault();
+          pickAdd(pick, '', 'roster_search');
+        } else if (e.key === 'Escape') { closeAdd(); }
+      });
+      document.addEventListener('click', function (e) { if (!adder.contains(e.target)) closeAdd(); });
+      addPanel.addEventListener('click', function (e) {
+        var t = e.target.closest ? e.target.closest('[data-school], [data-day], [data-add-done]') : null;
+        if (!t || !adding) return;
+        if (t.hasAttribute('data-add-done')) { adding = null; addStatus.textContent = ''; drawAdd(); addInput.focus(); return; }
+        if (t.hasAttribute('data-school')) {
+          adding.school = t.getAttribute('data-school');
+          store('pas-school', adding.school);
+          drawAdd();
+          var again = addPanel.querySelector('.kd[aria-pressed="true"]');
+          if (again) again.focus();
+          return;
+        }
+        var day = t.getAttribute('data-day'), r = loadRosters(), b = activeBoard(), key = adding.id + '.' + adding.school, prog = data.programs[adding.id];
+        var dayName = DAYS.filter(function (d) { return d[0] === day; })[0][1];
+        var i = findEntry(b.days[day], key), msg;
+        if (i > -1) { b.days[day].splice(i, 1); msg = 'Took ' + prog.name + ' off ' + dayName + '. '; }
+        else {
+          if (b.days[day].length >= 8) { addStatus.textContent = dayName + ' is full.'; return; }
+          var note = '';   // keep the class already chosen for this program on another day
+          DAYS.forEach(function (d) { var at = findEntry(b.days[d[0]], key); if (at > -1 && !note) note = entryNote(b.days[d[0]][at]); });
+          b.days[day].push(makeEntry(key, note));
+          track({ event: 'pas_board_add', program_id: adding.id, school: adding.school, day: day, board: r.active === 'next' ? 'upcoming' : 'current', children: r.kids.length });
+          msg = 'Added ' + prog.name + ' to ' + dayName + '. ';
+        }
+        saveRosters();
+        render();
+        addStatus.textContent = msg + savedNote();
+        var same = addPanel.querySelector('[data-day="' + day + '"]');
+        if (same) same.focus();
+      });
+      // Arriving from a program's page ("Add to your week"): open that program here, ready for its days.
+      var asked = query();
+      if (asked.add && data.programs[asked.add] && !shared) {
+        if (window.history && history.replaceState) { try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* file preview */ } }
+        window.setTimeout(function () { pickAdd(asked.add, asked.school || '', 'program_page'); if (adder.scrollIntoView) adder.scrollIntoView({ block: 'center' }); }, 0);
+      }
+    }
+
     // ----- moving cards: drag one by its colored top to another day, or use the day buttons on the card -----
     var moveEntry = function (from, entry, to, at) {
       var b = activeBoard(), i = b.days[from].indexOf(entry);
@@ -788,7 +958,7 @@
     var groups = all(document, '[data-group]');
     var fbtns = all(document, '[data-f]');
     var count = document.querySelector('#count'), clear = document.querySelector('#clear');
-    var search = document.querySelector('#prog-search'), noMatch = document.querySelector('[data-nomatch]');
+    var search = document.querySelector('#prog-search'), noMatch = document.querySelector('[data-nomatch]'), searchMore = document.querySelector('#search-more');
     var state = { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL' };
     var terms = [];
     var findBtn = function (f, v) { for (var i = 0; i < fbtns.length; i++) if (fbtns[i].getAttribute('data-f') === f && fbtns[i].getAttribute('data-v') === v) return fbtns[i]; return null; };
@@ -799,7 +969,7 @@
     var gradeLabel = function (g) { return g === 'PK' ? 'Pre-K' : g === 'K' ? 'kindergarten' : 'grade ' + g; };
     var inList = function (el, attr, v) { return (' ' + (el.getAttribute(attr) || '') + ' ').indexOf(' ' + v + ' ') > -1; };
     var apply = function () {
-      var total = 0;
+      var total = 0, hiddenHits = 0;
       items.forEach(function (it) {
         var gs = it.getAttribute('data-grades') || '*';
         var ok = (state.grade === 'ALL' || gs === '*' || inList(it, 'data-grades', state.grade))
@@ -807,7 +977,11 @@
           && (state.rel === 'ALL' || it.getAttribute('data-rel') === state.rel)
           && (state.hood === 'ALL' || inList(it, 'data-hoods', state.hood))
           && (state.cost === 'ALL' || inList(it, 'data-cost', state.cost));
-        if (ok && terms.length) { var hay = it.getAttribute('data-search') || ''; ok = terms.every(function (w) { return w.test(hay); }); }
+        if (terms.length) {
+          var hay = it.getAttribute('data-search') || '', hit = terms.every(function (w) { return w.test(hay); });
+          if (hit && !ok) hiddenHits++;   // it matches the search, and a filter is hiding it
+          ok = ok && hit;
+        }
         it.hidden = !ok;
         if (ok) total++;
       });
@@ -827,7 +1001,18 @@
       var filtered = state.grade !== 'ALL' || bits.length > 0;
       count.textContent = total ? total + (total === 1 ? ' program' : ' programs') + (filtered ? what : fSchool ? ' for all grades' : '') : 'No programs' + what + '. Try fewer filters.';
       clear.hidden = !filtered;
-      if (noMatch) noMatch.hidden = total > 0;
+      if (noMatch) noMatch.hidden = total > 0 || hiddenHits > 0;
+      if (searchMore) {
+        searchMore.textContent = '';
+        searchMore.hidden = !hiddenHits;
+        if (hiddenHits) {
+          searchMore.appendChild(document.createTextNode((total ? hiddenHits + ' more ' + (hiddenHits === 1 ? 'matches' : 'match') : hiddenHits + (hiddenHits === 1 ? ' program matches' : ' programs match')) + ' “' + search.value.trim() + '” outside your filters. '));
+          var showAll = el('button', 'clear', hiddenHits === 1 ? 'Show it' : 'Show them');
+          showAll.type = 'button';
+          showAll.addEventListener('click', function () { state = { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL' }; apply(); search.focus(); });
+          searchMore.appendChild(showAll);
+        }
+      }
       fbtns.forEach(function (b) {
         var f = b.getAttribute('data-f'), v = b.getAttribute('data-v');
         b.setAttribute('aria-pressed', String(state[f] === v));
@@ -878,6 +1063,7 @@
   var page = document.querySelector('[data-school-page]');
   if (!page) return;
   var school = page.getAttribute('data-school-page');
+  store('pas-school', school);
 
   // Add to roster: pick the days for a program, for one child, on their current or upcoming roster, with an optional class.
   var refreshers = [];
