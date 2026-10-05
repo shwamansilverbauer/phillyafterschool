@@ -73,6 +73,15 @@ if (!edit_signed_in()) {
 <meta property="og:description" content="Sign in to edit the words on this site.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://phillyafterschool.org/edit/">
+<meta property="og:site_name" content="Philly After School">
+<meta property="og:image" content="https://phillyafterschool.org/share.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Philly After School: a row of Philadelphia rowhouses, a school and a yellow school bus">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon.png" type="image/png" sizes="48x48">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="theme-color" content="#0F4D90">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -176,6 +185,15 @@ if (!edit_signed_in()) {
 <meta property="og:description" content="Edit the words on this site.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://phillyafterschool.org/edit/">
+<meta property="og:site_name" content="Philly After School">
+<meta property="og:image" content="https://phillyafterschool.org/share.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Philly After School: a row of Philadelphia rowhouses, a school and a yellow school bus">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon.png" type="image/png" sizes="48x48">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="theme-color" content="#0F4D90">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
