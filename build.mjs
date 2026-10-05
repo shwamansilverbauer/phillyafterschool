@@ -147,7 +147,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   const fullTitle = pathName === '' ? (PREVIEW ? cfg.siteName : `${cfg.siteName}: ${cfg.tagline}`) : `${title} | ${cfg.siteName}`;
   const nav = [['', 'Schools'], ['board/', 'My child’s roster'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Buy me a coffee']]
     .map(([to, label]) => `<a href="${link(to, depth)}"${current === to ? ' aria-current="page"' : ''}>${label}${to === 'board/' ? '<span class="count" data-board-count hidden></span>' : ''}</a>`).join('');
-  const fix = correctionHref('Correction for Philly After School');
+  const footSchools = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).slice(0, 8);   // past eight, "All schools" covers the rest
   const head = `${fragment ? '' : gtmHead + '\n'}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${esc(canonical)}">${noindex ? '\n<meta name="robots" content="noindex">' : ''}
@@ -177,10 +177,48 @@ ${hero}
 ${body}
 </main>
 <footer class="foot"><div class="in">
-  <p>${T(`Listings come from each provider’s public pages and are not endorsements. Prices, hours and pickup routes change, so confirm with the provider before you enroll.`)}</p>
-  <p>${T(`{site} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.`, { site: cfg.siteName })}</p>
-  <p>${T(`Know a program that’s missing, or see something out of date?`)} <a href="${link('suggest/', depth)}">${T(`Tell us`)}</a>. <a href="${link('programs/', depth)}">${T(`All programs`)}</a>. <a href="${link('about/', depth)}">${T(`About this site`)}</a>. <a href="${link('support/', depth)}">${T(`Buy me a coffee`)}</a>.</p>
-  ${cfg.builtBy ? `<p>Built by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
+  <nav class="foot-cols" aria-label="Footer">
+    <div class="foot-brand">
+      <a class="brand" href="${link('', depth)}"><span class="bus-mark"></span>${esc(cfg.siteName)}</a>
+      <p>${T(`After-school programs in Philadelphia, sorted by the school your child goes to.`)}</p>
+    </div>
+    <div>
+      <h2><a href="${link('', depth)}#schools">${T(`Schools`)}</a></h2>
+      <ul>
+        ${footSchools.map(s => `<li><a href="${link(s.id + '/', depth)}">${esc(s.shortName)}</a></li>`).join('')}
+        <li><a href="${link('', depth)}#schools">${T(`All schools`)}</a></li>
+        <li><a href="${link('suggest/', depth)}">${T(`Ask for your school`)}</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2><a href="${link('programs/', depth)}">${T(`Programs`)}</a></h2>
+      <ul>
+        <li><a href="${link('programs/', depth)}">${T(`All programs, A to Z`)}</a></li>
+        <li><a href="${link('suggest/', depth)}">${T(`Suggest a program`)}</a></li>
+        <li><a href="${link('review/', depth)}">${T(`Write a review`)}</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2><a href="${link('board/', depth)}">${T(`Your family`)}</a></h2>
+      <ul>
+        <li><a href="${link('board/', depth)}">${T(`My child’s roster`)}</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2><a href="${link('about/', depth)}">${T(`About`)}</a></h2>
+      <ul>
+        <li><a href="${link('about/', depth)}">${T(`About this site`)}</a></li>
+        <li><a href="${link('about/', depth)}#how">${T(`How listings are checked`)}</a></li>
+        <li><a href="${link('about/', depth)}#corrections">${T(`Send a correction`)}</a></li>
+        <li><a href="${link('support/', depth)}">${T(`Buy me a coffee`)}</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="foot-fine">
+    <p>${T(`Listings come from each provider’s public pages and are not endorsements. Prices, hours and pickup routes change, so confirm with the provider before you enroll.`)}</p>
+    <p>${T(`{site} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.`, { site: cfg.siteName })}</p>
+    ${cfg.builtBy ? `<p>Built by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
+  </div>
 </div></footer>
 <script src="${link('assets/site.js', depth)}${JS_V}" data-edit="${esc(JSON.stringify(editCfg))}"></script>
 ${scripts}`;
@@ -529,7 +567,7 @@ function homePage() {
       <label for="find-school">${T(`Find your school`)}</label>
       <input id="find-school" type="search" placeholder="Start typing a school name" autocomplete="off">
     </div>`;
-  const body = `<section class="section">
+  const body = `<section class="section" id="schools">
   <h2>${T(`Schools`)}</h2>
   <div class="schools">
 ${rows}
@@ -585,7 +623,7 @@ function aboutPage() {
   const hero = `    <h1>${T(`One place to see what’s possible after the last bell`)}</h1>
     <p class="lede">${T(`Finding after-school care means checking a dozen websites to learn who picks up from your school, for which grades, until when. {site} puts that on one page per school.`, { site: cfg.siteName })}</p>`;
   const body = `<div class="prose">
-  <h2>${T(`How listings are checked`)}</h2>
+  <h2 id="how">${T(`How listings are checked`)}</h2>
   <ul>
     <li>${T(`Each listing comes from the provider’s own public pages, the school’s site, or city program data. The sources are linked on every card.`)}</li>
     <li>${T(`Every card shows the date it was last checked. When a detail could not be confirmed, the card says so in a yellow note.`)}</li>

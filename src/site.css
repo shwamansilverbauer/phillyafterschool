@@ -313,3 +313,16 @@ button.btn{cursor:pointer;font-family:inherit}
 .kid[aria-pressed="true"],.kd[aria-pressed="true"]{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink);font-weight:700}
 .kid-bar .actions{grid-area:auto;align-items:center;align-self:flex-start;gap:8px 18px}
 .kid-row{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+
+/* ---------- footer with sections ---------- */
+.foot .in{padding-block:clamp(40px,6vw,64px) 40px;gap:0}
+.foot-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 24px}
+.foot-brand{grid-column:1 / -1;display:flex;flex-direction:column;gap:12px;max-width:34ch}
+@media (min-width:860px){.foot-cols{grid-template-columns:minmax(0,1.7fr) repeat(4,minmax(0,1fr));gap:32px}.foot-brand{grid-column:auto}}
+.foot-cols h2{font-size:1rem;font-stretch:112%;font-weight:800;letter-spacing:0;margin-bottom:12px}
+.foot-cols h2 a{color:var(--hero-ink);text-decoration:none}
+.foot-cols ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.foot-cols li a{color:var(--hero-muted);text-decoration:none}
+.foot-cols a:hover{color:var(--hero-ink);text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:2px;text-underline-offset:4px}
+.foot-fine{margin-top:clamp(36px,5vw,56px);padding-top:24px;border-top:1px solid color-mix(in srgb,var(--hero-muted) 28%,transparent);display:flex;flex-direction:column;gap:8px;font-size:.88rem}
+.section[id],.prose h2[id]{scroll-margin-top:24px}
