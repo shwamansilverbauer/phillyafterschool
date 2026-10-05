@@ -18,6 +18,46 @@
   // Events for Google Tag Manager. Harmless when GTM is not installed.
   function track(data) { (window.dataLayer = window.dataLayer || []).push(data); }
 
+  // ----- edit mode: switched on from /edit/, it loads a second script that makes the site's copy editable -----
+  var editCfg = null;
+  try { editCfg = JSON.parse(document.currentScript.getAttribute('data-edit')); } catch (e) { /* no edit mode on this page */ }
+  var editLoaded = false;
+  function loadEditor() {
+    if (editLoaded || !editCfg) return;
+    editLoaded = true;
+    window.PAS_EDIT = editCfg;
+    var s = document.createElement('script');
+    s.src = editCfg.js;
+    document.body.appendChild(s);
+  }
+  if (store('pas-edit') === '1') loadEditor();
+  var editPage = document.querySelector('[data-edit-page]');
+  if (editPage) {
+    var startBtn = editPage.querySelector('#edit-start'), stopBtn = editPage.querySelector('#edit-stop');
+    var stateTitle = editPage.querySelector('#edit-state'), stateText = editPage.querySelector('#edit-state-text');
+    var showState = function () {
+      var on = store('pas-edit') === '1';
+      startBtn.hidden = on; stopBtn.hidden = !on;
+      stateTitle.textContent = on ? 'Editing is on' : 'Editing is off';
+      stateText.textContent = on ? 'Open any page from the menu or the list below, click a sentence and type.' : 'Turn it on and a bar appears at the bottom of every page.';
+    };
+    startBtn.addEventListener('click', function () {
+      store('pas-edit', '1');
+      if (store('pas-edit') !== '1') { stateText.textContent = 'This browser is blocking saved data, so editing can’t carry from page to page. Try a regular (not private) window.'; return; }
+      loadEditor(); showState();
+    });
+    stopBtn.addEventListener('click', function () { store('pas-edit', '0'); location.reload(); });
+    showState();
+  }
+
+  // Clicks on register, website, calendar and review links, on school pages and program pages.
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[data-track]') : null;
+    if (!a || a.getAttribute('data-track') === 'support') return;
+    var card = a.closest('.prog[id]'), prog = a.closest('[data-program-page]'), sch = a.closest('[data-school-page]');
+    track({ event: 'pas_outbound', link_type: a.getAttribute('data-track'), program_id: card ? card.id : prog ? prog.getAttribute('data-program-page') : '', school: sch ? sch.getAttribute('data-school-page') : '' });
+  });
+
   // ----- suggest-a-program form -----
   var form = document.querySelector('#suggest-form');
   if (form) {
@@ -90,6 +130,26 @@
         if (ok) shown++;
       });
       none.hidden = shown > 0;
+    });
+  }
+
+  // ----- all programs, A to Z: find one by name or by what it teaches -----
+  var findProg = document.querySelector('#find-program');
+  if (findProg) {
+    var prows = all(document, '.prow');
+    var noProg = document.querySelector('#no-program');
+    findProg.addEventListener('input', function () {
+      var words = findProg.value.toLowerCase().split(/\s+/).filter(Boolean).map(function (w) {
+        return new RegExp('(^|[^a-z0-9-])' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+      });
+      var shown = 0;
+      prows.forEach(function (r) {
+        var hay = r.getAttribute('data-search') || '';
+        var ok = words.every(function (w) { return w.test(hay); });
+        r.hidden = !ok;
+        if (ok) shown++;
+      });
+      noProg.hidden = shown > 0;
     });
   }
 
@@ -319,12 +379,6 @@
   if (!page) return;
   var school = page.getAttribute('data-school-page');
   var grade = 'ALL', rel = 'ALL';
-  page.addEventListener('click', function (e) {
-    var a = e.target.closest ? e.target.closest('a[data-track]') : null;
-    if (!a) return;
-    var card = a.closest('.prog');
-    track({ event: 'pas_outbound', link_type: a.getAttribute('data-track'), program_id: card ? card.id : '', school: school });
-  });
   var groups = all(page, '.group');
   var gbtns = all(page, '.gbtn');
   var tbtns = all(page, '.tbtn');
@@ -367,9 +421,9 @@
       : 'Nothing for ' + gradeLabel(grade) + q + '. Try a different search or filter.';
     clear.hidden = grade === 'ALL' && rel === 'ALL' && !terms.length;
     noMatch.hidden = total > 0 || !terms.length;
-    return total;
     gbtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-g') === grade)); });
     tbtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-t') === rel)); });
+    return total;
   }
 
   gbtns.forEach(function (b) {
