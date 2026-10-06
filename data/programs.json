@@ -100,7 +100,75 @@
       "nebinger": {
         "relation": "onsite"
       }
-    }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
   },
   {
     "id": "girls-on-the-run",
@@ -589,7 +657,64 @@
       "coppin": {
         "relation": "onsite"
       }
-    }
+    },
+    "clubs": [
+      {
+        "name": "Robotics",
+        "tags": [
+          "stem",
+          "robotics"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Homework Club",
+        "tags": [
+          "academics",
+          "homework"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Art",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Vocal Music",
+        "tags": [
+          "music",
+          "singing"
+        ]
+      },
+      {
+        "name": "Orchestra",
+        "tags": [
+          "music",
+          "orchestra"
+        ]
+      },
+      {
+        "name": "Concert Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      }
+    ]
   },
   {
     "id": "zhang-sah",
