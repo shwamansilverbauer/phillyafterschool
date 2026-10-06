@@ -133,6 +133,11 @@ function first_name(string $v): string {
   $v = preg_replace('/[^\p{L}\p{M} \'’.-]+/u', '', $v) ?? '';
   return trim(mb_substr(trim(preg_replace('/\s+/u', ' ', $v) ?? ''), 0, 20, 'UTF-8'));
 }
+// What an adult calls themselves: "Josh", "Josh - Jasper's dad", "Ms Rivera (teacher)". Up to 30 characters.
+function adult_name(string $v): string {
+  $v = preg_replace('/[^\p{L}\p{M} \'’.,()-]+/u', '', $v) ?? '';
+  return trim(mb_substr(trim(preg_replace('/\s+/u', ' ', $v) ?? ''), 0, 30, 'UTF-8'));
+}
 function group_name(string $v): string {
   $v = preg_replace('/[<>"&]+/u', '', $v) ?? '';
   return trim(mb_substr(trim(preg_replace('/\s+/u', ' ', $v) ?? ''), 0, 50, 'UTF-8'));
@@ -360,8 +365,8 @@ switch ($method . ' ' . $action) {
 
   case 'POST set_name': {
     $u = need_user();
-    $name = first_name(str($in, 'name', 40));
-    if ($name === '') fail('name', 'Add your first name, so the group knows who is asking.');
+    $name = adult_name(str($in, 'name', 60));
+    if ($name === '') fail('name', 'Add your name, so the group knows who is asking.');
     q('UPDATE users SET name = ? WHERE id = ?', array($name, $u['id']));
     out(array('ok' => true, 'name' => $name));
   }
@@ -379,7 +384,7 @@ switch ($method . ' ' . $action) {
     $u = need_user();
     $name = group_name(str($in, 'name', 80));
     if ($name === '') fail('name', 'Give the group a name, like “Room 12”.');
-    if ($u['name'] === '') fail('yourname', 'Add your first name first, so people joining know whose group it is.');
+    if ($u['name'] === '') fail('yourname', 'Add your name first, so people joining know whose group it is.');
     if ((int) val('SELECT COUNT(*) FROM grp WHERE owner_id = ? AND expires > ?', array($u['id'], now())) >= MAX_OWNED) fail('limit', 'You’ve made ' . MAX_OWNED . ' groups, which is the most one person can have. Delete one first.');
     $gid = substr(preg_replace('/[^A-Za-z0-9]/', '', b64(random_bytes(18))) ?? '', 0, 14);
     if (strlen($gid) < 10) $gid = bin2hex(random_bytes(7));
@@ -396,7 +401,7 @@ switch ($method . ' ' . $action) {
     $u = need_user();
     if (too_many('join:' . $u['id'], 10, 3600)) fail('slow', 'Too many tries. Check the code with whoever gave it to you, and try again in an hour.', 429);
     note('join:' . $u['id']);
-    if ($u['name'] === '') fail('yourname', 'Add your first name, so the group knows who is asking.');
+    if ($u['name'] === '') fail('yourname', 'Add your name, so the group knows who is asking.');
     $code = tidy_code(str($in, 'code', 40));
     $g = strlen($code) === 12 ? row('SELECT id, name, owner_id FROM grp WHERE code_mac = ? AND expires > ?', array(code_mac($code), now())) : null;
     if (!$g) fail('code', 'No group has that code. Check it with whoever gave it to you.', 404);
