@@ -202,38 +202,344 @@
   {
     "id": "meredith-clubs",
     "name": "Meredith after-school clubs",
-    "what": "Clubs run at the school. The Home & School Association posts the list each year.",
+    "what": "Teacher-run clubs at the school: Nature Club, Chess, Science Club, Rock Band, Choir, Arts and Crafts, Debate, Newspaper, Playwriting, Cheer and more. Most meet one afternoon a week.",
     "types": [
-      "clubs"
+      "clubs",
+      "art",
+      "music",
+      "stem",
+      "games",
+      "academics",
+      "movement"
     ],
     "keywords": [
-      "clubs"
+      "clubs",
+      "nature",
+      "gardening",
+      "outdoors",
+      "environment",
+      "running",
+      "chess",
+      "science",
+      "Science Olympiad",
+      "band",
+      "choir",
+      "singing",
+      "art",
+      "crafts",
+      "painting",
+      "debate",
+      "newspaper",
+      "writing",
+      "playwriting",
+      "reading",
+      "book club",
+      "theater",
+      "drama",
+      "improv",
+      "cheerleading",
+      "stage crew"
     ],
     "address": "",
-    "grades": null,
-    "gradeNote": "Varies by club",
-    "hours": "Varies by club",
+    "grades": "K-8",
+    "gradeNote": "Each club has its own grades",
+    "hours": "3:30 to 4:30 or 5:00 pm, by club",
     "cost": "Not published",
     "phone": "215-400-7990",
     "email": "",
     "website": "https://meredithmatters.org/internalexternal-activities/",
     "register": {
       "how": "school",
-      "note": "The club list and sign-up details are on the Home & School site."
+      "note": "Each club signs up its own way: a form, an email to the teacher, or tryouts. The links and teacher contacts are on the school’s club sheet. The Chess interest form closes October 7, and families hear by October 12."
     },
-    "note": "The 2025–26 club list is posted; the Home & School Association says 2026–27 clubs are coming soon and subject to change. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "note": "The school’s sheet is marked tentative and says clubs can change. A club doesn’t meet when its teacher is out, and the school says no aftercare is available on those days, so keep a backup. A few rows on the sheet haven’t been updated this year; the listing’s full details say which.",
     "sources": [
+      {
+        "label": "Meredith after-school clubs sheet, 2026–27",
+        "url": "https://docs.google.com/spreadsheets/d/1FGIV9bDa2OKzL1VZ5hgBb2JCFId4H3OI5_sPFBze_SY/edit?gid=0#gid=0"
+      },
       {
         "label": "Meredith Home & School: activities",
         "url": "https://meredithmatters.org/internalexternal-activities/"
       }
     ],
-    "lastVerified": "2026-10-05",
+    "lastVerified": "2026-10-06",
     "schools": {
       "meredith": {
         "relation": "onsite"
       }
-    }
+    },
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu"
+    ],
+    "daysNote": "No club is listed for Fridays. Each club meets on its own day.",
+    "clubs": [
+      {
+        "name": "Arts and Crafts",
+        "what": "Art projects of all kinds.",
+        "days": [
+          "tue"
+        ],
+        "time": "3:30–5:00 pm",
+        "grades": "K-3",
+        "when": "October to December, then March to May",
+        "status": "Registration closed",
+        "note": "The sheet’s note says Tuesday is for 1st and 2nd grade and Wednesday for 3rd, so check the day. This row has no update date for this year.",
+        "tags": [
+          "art",
+          "crafts"
+        ]
+      },
+      {
+        "name": "Cheer Club",
+        "what": "Cheer and drill, performing at Meredith Stars home basketball games.",
+        "days": [
+          "thu"
+        ],
+        "time": "3:30–5:00 pm",
+        "grades": "4-8",
+        "when": "First three quarters",
+        "status": "Tryouts, date to be announced",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      },
+      {
+        "name": "Chess",
+        "what": "The Thundering Rooks play in the city’s scholastic chess league. All abilities welcome; enrollment is limited.",
+        "days": [
+          "wed"
+        ],
+        "time": "3:30–4:30 pm",
+        "grades": "K-8",
+        "when": "October to May",
+        "status": "Interest form open until October 7; coaches reply by October 12",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Choir",
+        "what": "Singing and harmonizing.",
+        "days": [
+          "tue"
+        ],
+        "time": "3:30–4:30 pm",
+        "grades": "4-8",
+        "when": "October to December",
+        "status": "Open, up to 30 students",
+        "tags": [
+          "music",
+          "singing"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "what": "Debate and argument techniques, competing on real-world topics that matter to middle schoolers.",
+        "days": [
+          "mon"
+        ],
+        "time": "3:30–4:30 pm",
+        "grades": "5-8",
+        "when": "Late October to May",
+        "status": "Up to 20 students; sign-up form to come",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Decompression Club",
+        "what": "Stretching, breathing and general physical and mental wellbeing.",
+        "days": [
+          "wed"
+        ],
+        "time": "3:30–4:30 pm",
+        "grades": "6-8",
+        "when": "All year",
+        "status": "Taking sign-ups",
+        "tags": [
+          "wellness"
+        ]
+      },
+      {
+        "name": "Drama and Improv Club",
+        "what": "Learn, practice and perform improvisational theater.",
+        "days": [
+          "thu"
+        ],
+        "time": "3:30 to 4:30 or 4:45 pm",
+        "grades": "4-8",
+        "when": "October until the spring musical starts rehearsals",
+        "status": "Open, up to 20 students",
+        "tags": [
+          "theater",
+          "drama",
+          "improv"
+        ]
+      },
+      {
+        "name": "Nature Club",
+        "what": "Plant and look after native, pollinator-friendly plants, build a habitat for local birds and insects, and learn about native trees, plants and animals.",
+        "days": [
+          "wed"
+        ],
+        "time": "3:30–5:00 pm",
+        "grades": "3-5",
+        "when": "All year",
+        "status": "Taking sign-ups by email",
+        "note": "Meets by the picnic tables at dismissal. This row was last updated in November 2025, so confirm it is running.",
+        "tags": [
+          "nature",
+          "gardening",
+          "outdoors",
+          "environment"
+        ]
+      },
+      {
+        "name": "Newspaper",
+        "what": "A student-run newspaper about the Meredith community and its events.",
+        "days": [
+          "mon"
+        ],
+        "time": "3:30–4:45 pm",
+        "grades": "4-8",
+        "when": "Issue 1 runs October to December; Issue 2 about February to May",
+        "status": "First 30 students, then a waitlist. Each issue is a separate sign-up",
+        "tags": [
+          "academics",
+          "writing",
+          "newspaper"
+        ]
+      },
+      {
+        "name": "Painting Club",
+        "what": "Kindergartners explore painting and basic color theory.",
+        "days": [
+          "thu"
+        ],
+        "time": "3:30–4:15 pm",
+        "grades": "K",
+        "when": "November 5 to January 7",
+        "status": "Up to 8 students; sign-up form to come",
+        "tags": [
+          "art",
+          "painting"
+        ]
+      },
+      {
+        "name": "Playwriting Club",
+        "what": "Write your own plays.",
+        "days": [
+          "tue"
+        ],
+        "time": "3:30–4:30 pm",
+        "grades": "3-8",
+        "when": "October 13 to May",
+        "status": "Open, up to 20 students",
+        "tags": [
+          "academics",
+          "writing",
+          "theater"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "what": "Weekly practice toward an end-of-year performance. Everyone is welcome whether or not they make the main band.",
+        "days": [
+          "tue"
+        ],
+        "time": "3:30–4:30 pm",
+        "grades": "6-8",
+        "when": "All year",
+        "status": "Auditions in October",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Science Club",
+        "what": "STEM activities in preparation for the Science Olympiad. Selected members compete as the Meredith Science Team.",
+        "days": [
+          "wed"
+        ],
+        "time": "3:30–5:00 pm",
+        "grades": "4-8",
+        "when": "All year; 4th and 5th graders join in the spring",
+        "status": "Taking sign-ups",
+        "tags": [
+          "stem",
+          "science",
+          "Science Olympiad"
+        ]
+      },
+      {
+        "name": "Sports Book Club",
+        "what": "Read for pleasure, with a rotating sports book for group discussion.",
+        "days": [
+          "tue"
+        ],
+        "time": "3:30–4:30 pm",
+        "grades": "6-8",
+        "when": "All year",
+        "status": "Taking sign-ups",
+        "tags": [
+          "academics",
+          "reading",
+          "book club"
+        ]
+      },
+      {
+        "name": "Stage Crew",
+        "what": "Theater arts and production design. The crew runs the spring musical.",
+        "days": [
+          "mon"
+        ],
+        "time": "3:30–4:30 pm",
+        "grades": "6-8",
+        "when": "April and May, plus the musical",
+        "status": "The teacher chooses students in the spring, with preference to 8th graders",
+        "tags": [
+          "theater",
+          "stage crew"
+        ]
+      },
+      {
+        "name": "Students Run Philly Style",
+        "what": "A running team that trains for distance races with adult mentors.",
+        "days": [
+          "tue",
+          "thu"
+        ],
+        "time": "3:30–4:30 pm, plus Saturday mornings",
+        "grades": "5-8",
+        "gradeNote": "Age 11 and up",
+        "when": "February to June and August to November",
+        "status": "Registration opens in February",
+        "note": "Meets in front of the school.",
+        "tags": [
+          "movement",
+          "running",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Meredith GSA",
+        "what": "A space for students identifying as LGBT+ to talk, make art and discuss books and movies.",
+        "time": "Lunchtime, every other Monday",
+        "grades": "6-8",
+        "when": "All year",
+        "status": "Taking sign-ups",
+        "roster": false,
+        "tags": []
+      }
+    ]
   },
   {
     "id": "coppin-clubs",
@@ -1019,7 +1325,7 @@
   {
     "id": "coco-academy",
     "name": "CoCo Academy",
-    "what": "STEAM makerspace: 3D printing, laser cutting, circuits, design software",
+    "what": "STEAM makerspace: 3D printing, laser cutting, robotics, circuits and design software",
     "types": [
       "stem"
     ],
@@ -1031,7 +1337,8 @@
       "3D printing",
       "engineering",
       "technology",
-      "circuits"
+      "circuits",
+      "robotics"
     ],
     "address": "1001 Christian St (Bella Vista) and 615 S 3rd St (Queen Village)",
     "neighborhoods": [
@@ -1040,7 +1347,7 @@
     ],
     "grades": "K-5",
     "gradeNote": "K–5 for pickup; classes run to age 14",
-    "hours": "3:30–6:00 pm",
+    "hours": "3:30–6:00 pm. Snack and arrival until 4, the main project from 4 to 5, then more projects and STEAM activities.",
     "days": [
       "mon",
       "tue",
@@ -1060,38 +1367,53 @@
       ]
     },
     "pickupBy": "6:00 pm",
-    "cost": "Not published",
+    "cost": "Queen Village, winter and spring 2027: $1,008 per weekday for the 21-week term (Mondays, Thursdays, Fridays) or $1,056 for 22 weeks (Tuesdays, Wednesdays). That is $48 a week for each day, pickup included, with a three-installment plan. $25 late fee after 6 pm. Bella Vista prices and fall 2026 prices could not be confirmed.",
     "phone": "215-253-7690",
     "email": "info@cocoacademyphl.com",
     "website": "https://www.cocoacademyphl.com/afterschool-bellavista",
     "register": {
-      "how": "contact",
-      "note": "Call or email to enroll and to get current tuition."
+      "how": "online",
+      "url": "https://www.cocoacademyphl.com/afterschool-bellavista",
+      "label": "Register",
+      "note": "Sign up by weekday from CoCo’s after-school page for your location; it links to their booking system. A 3% fee applies to cancelling or transferring up to a month before classes start, and there is no refund after that.",
+      "nextTerm": "Queen Village’s winter and spring term runs January 4 to June 9, 2027."
     },
     "note": "",
     "sources": [
       {
-        "label": "Philly Family 2026–27 list",
-        "url": "https://phillyfamily.com/after-school-programs/"
+        "label": "CoCo Academy Queen Village after school",
+        "url": "https://www.cocoacademyphl.com/afterschool-queenvillage"
       },
       {
-        "label": "CoCo Academy",
+        "label": "CoCo Academy Bella Vista after school",
         "url": "https://www.cocoacademyphl.com/afterschool-bellavista"
+      },
+      {
+        "label": "Philly Family 2026–27 list",
+        "url": "https://phillyfamily.com/after-school-programs/"
       }
     ],
-    "lastVerified": "2026-10-05",
+    "lastVerified": "2026-10-06",
     "schools": {
       "nebinger": {
         "relation": "pickup",
-        "note": "Nebinger pickup comes from Philly Family’s 2026–27 list. CoCo’s own pages could not be loaded to confirm it or the price."
+        "note": "Nebinger pickup comes from Philly Family’s 2026–27 list. CoCo’s Queen Village page doesn’t list Nebinger, and its Bella Vista page could not be loaded to confirm pickup or price, so ask CoCo which location picks up."
       },
       "meredith": {
         "relation": "pickup",
-        "note": "Meredith pickup comes from Philly Family’s 2026–27 list. CoCo’s own pages could not be loaded to confirm it or the price."
+        "address": "615 S 3rd St (Queen Village)",
+        "registerUrl": "https://www.cocoacademyphl.com/afterschool-queenvillage",
+        "note": "CoCo’s Queen Village page lists Meredith pickup: staff collect children at dismissal and walk them to 615 S 3rd St.",
+        "sources": [
+          {
+            "label": "CoCo Academy Queen Village after school",
+            "url": "https://www.cocoacademyphl.com/afterschool-queenvillage"
+          }
+        ]
       },
       "coppin": {
         "relation": "pickup",
-        "note": "Coppin pickup comes from Philly Family’s 2026–27 list and Coppin’s own aftercare sheet. CoCo’s own pages could not be loaded to confirm it or the price.",
+        "note": "Coppin pickup comes from Philly Family’s 2026–27 list and Coppin’s own aftercare sheet. CoCo’s Queen Village page doesn’t list Coppin, and its Bella Vista page could not be loaded to confirm pickup or price, so ask CoCo which location picks up.",
         "sources": [
           {
             "label": "Coppin aftercare pickup sheet",
@@ -1099,6 +1421,14 @@
           }
         ]
       }
+    },
+    "rate": {
+      "per": "term",
+      "eachDay": [
+        1008,
+        1056
+      ],
+      "extra": "Queen Village’s winter and spring 2027 price for one weekday, a 21 or 22-week term. Bella Vista’s price isn’t confirmed."
     }
   },
   {

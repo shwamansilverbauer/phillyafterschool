@@ -302,6 +302,17 @@ could trigger the email with their own wording. To change the token, change it i
 To see what would go out, run the workflow by hand (Actions > Send date emails > Run workflow) with "Only count what
 would be sent" ticked, and optionally a date to pretend it is. Locally, with `KLAVIYO_API_KEY` set in your shell: `node build.mjs && node scripts/send-alerts.mjs --dry-run --today 2026-11-01`.
 
+## A school's clubs, listed one by one
+
+A school-run listing can carry `clubs`: a list where each club has a `name` and, when the school publishes them,
+`what`, `days`, `time`, `grades` (a range like `3-5`; `gradeNote` replaces how it's shown), `when` (its season),
+`status` (how sign-up stands), a `note`, and `tags`. The listing's own page shows a card per club. The clubs
+become the listing's classes, so a roster can say "Nature Club" on Wednesday and warn about the wrong day, and a
+themed week judges each club by its own grades and tags (tags are program types such as `music`, or keywords
+such as `nature`). `"roster": false` lists a club without offering it on the roster, for one that meets at
+lunch. Use `clubs` or `offers`, not both. Teacher names, emails and room numbers are left out on purpose: the
+listing links to the school's own sheet for those.
+
 ## Accounts and share groups (pilot)
 
 A share group lets a class, a carpool or a few friends see each other's after-school weeks. It is the only part

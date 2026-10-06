@@ -1302,11 +1302,19 @@
       var rolled = null;      // the last roll: { kid, which, before, sig, theme }. "before" is the week as it was before the first roll.
       var rollerSeen = false;
       var themeName = function (id) { var b = roller.querySelector('[data-theme="' + id + '"] b'); return b ? b.textContent : 'Themed'; };
+      var inTheme = function (theme, tags) { return tags.some(function (t) { return theme.types.indexOf(t) > -1 || (theme.words || []).indexOf(t) > -1; }); };
+      // A listing made of separate clubs is judged club by club: each has its own grades and its own kind.
+      var classFits = function (p, c, theme, grade) {
+        var info = p.cls && p.cls[c];
+        if (!info) return true;
+        return (!grade || !info.g || info.g.indexOf(grade) > -1) && inTheme(theme, info.t);
+      };
       var themePool = function (theme, sid, grade) {
         return Object.keys(data.programs).filter(function (id) {
           var p = data.programs[id];
-          var fits = p.types.some(function (t) { return theme.types.indexOf(t) > -1; }) || (theme.words || []).some(function (w) { return p.kw.indexOf(w) > -1; });
-          return p.schools[sid] && fits && (!grade || !p.grades || p.grades.indexOf(grade) > -1);
+          if (!p.schools[sid] || (grade && p.grades && p.grades.indexOf(grade) < 0)) return false;
+          if (p.cls) return p.offers.some(function (c) { return classFits(p, c, theme, grade); });
+          return inTheme(theme, p.types) || inTheme(theme, p.kw);
         });
       };
       // One program a day. A program or class already used this week costs points, so the week spreads out before it repeats;
@@ -1318,10 +1326,11 @@
           ids.forEach(function (id) {
             var p = data.programs[id];
             if (p.days && p.days.indexOf(d[0]) < 0) return;
-            var classes = p.offers.length ? p.offers.filter(function (c) { var on = p.offerDays && p.offerDays[c]; return !on || on.indexOf(d[0]) > -1; }) : [''];
-            var kind = '', kindUse = 99;
-            p.types.forEach(function (t) { if (theme.types.indexOf(t) > -1 && (usedType[t] || 0) < kindUse) { kind = t; kindUse = usedType[t] || 0; } });
+            var classes = p.offers.length ? p.offers.filter(function (c) { var on = p.offerDays && p.offerDays[c]; return (!on || on.indexOf(d[0]) > -1) && classFits(p, c, theme, grade); }) : [''];
             classes.forEach(function (c) {
+              var kind = '', kindUse = 99;
+              (p.cls && p.cls[c] ? p.cls[c].t : p.types).forEach(function (t) { if (theme.types.indexOf(t) > -1 && (usedType[t] || 0) < kindUse) { kind = t; kindUse = usedType[t] || 0; } });
+              if (kindUse === 99) kindUse = 0;   // in the theme by a keyword, not a type
               var score = (used[id] || 0) * 7 + (usedClass[id + '~' + c] || 0) * 100 + (theme.mix ? kindUse * 6 : 0) + (!p.days ? 30 : p.schools[sid].rel === 'nearby' ? 3 : 0) + Math.random() * 12;
               if (!best || score < best.score) best = { id: id, c: c, kind: kind, score: score };
             });

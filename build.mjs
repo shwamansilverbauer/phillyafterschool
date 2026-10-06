@@ -143,6 +143,29 @@ for (const p of programs) {
   }
   if (['phone', 'school'].includes(p.register?.how) && !p.phone) errors.push(`${at}: register by phone needs a phone number`);
 }
+// A school's own clubs can be listed one by one under "clubs": each with a name and, when the school says, what it
+// is, its days, time, grades, season, sign-up status, a note, and tags (program types and keywords, for the themed
+// weeks). They become the listing's classes, so a roster can say which club and which day. "roster": false keeps
+// one off the roster (a lunchtime club, say) while still listing it.
+for (const p of programs) {
+  if (p.clubs === undefined) continue;
+  const at = `program "${p.id}"`;
+  if (!Array.isArray(p.clubs) || !p.clubs.length) { errors.push(`${at}: clubs must be a list`); continue; }
+  if (p.offers !== undefined || p.offerDays !== undefined) errors.push(`${at}: use clubs or offers, not both`);
+  p._cls = {};
+  for (const c of p.clubs) {
+    if (!c || typeof c.name !== 'string' || !c.name.trim()) { errors.push(`${at}: every club needs a name`); continue; }
+    for (const f of ['what', 'time', 'when', 'status', 'note', 'gradeNote']) if (c[f] !== undefined && (typeof c[f] !== 'string' || !c[f].trim())) errors.push(`${at}: club "${c.name}" ${f} must be text`);
+    if (c.days !== undefined && !(Array.isArray(c.days) && c.days.length && c.days.every(d => WEEK.includes(d)))) errors.push(`${at}: club "${c.name}" days must list some of ${WEEK.join(', ')}`);
+    if (c.tags !== undefined && (!Array.isArray(c.tags) || c.tags.some(x => typeof x !== 'string'))) errors.push(`${at}: club "${c.name}" tags must be a list of words`);
+    try { c._grades = expandGrades(c.grades); } catch (e) { errors.push(`${at}: club "${c.name}": ${e.message}`); c._grades = null; }
+    if (c.roster !== false) p._cls[c.name] = { g: c._grades, t: (c.tags || []).map(t => t.toLowerCase()) };
+  }
+  const onRoster = p.clubs.filter(c => c.roster !== false && typeof c.name === 'string');
+  p.offers = onRoster.map(c => c.name);
+  const od = Object.fromEntries(onRoster.filter(c => Array.isArray(c.days)).map(c => [c.name, c.days]));
+  if (Object.keys(od).length) p.offerDays = od;
+}
 for (const p of programs) {
   if (p.keywords !== undefined && (!Array.isArray(p.keywords) || p.keywords.some(x => typeof x !== 'string'))) errors.push(`program "${p.id}": keywords must be a list of words`);
   // Class names travel inside roster share links, so they can't contain the characters links use as separators.
@@ -753,7 +776,7 @@ function programPage(p) {
   const address = programAddress(p);
   const regUrl = r.how === 'online' ? outUrl(r.url, { type: 'register', program: p }) : null;
   const reviewUrl = `${link('review/', D)}?program=${p.id}${served.length === 1 ? '&school=' + served[0].id : ''}`;
-  const rows = [['Where', esc(address)], ['Classes', esc((p.offers || []).join(', '))], ['Hours', esc(p.hours)], ['Days', esc(daysLine(p))], ['Pick up by', esc(p.pickupBy || '')], ['Cost', esc(p.cost)], ['Days off', p.daysOff ? `${esc(p.daysOff.summary)} <a href="${link(offPath, D)}#${esc(p.id)}">Dates and details</a>` : ''], ['Register', registerText(p)], ['Next term', esc(r.nextTerm || '') + datesHtml(p, D)], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
+  const rows = [['Where', esc(address)], ['Classes', p.clubs ? '' : esc((p.offers || []).join(', '))], ['Hours', esc(p.hours)], ['Days', esc(daysLine(p))], ['Pick up by', esc(p.pickupBy || '')], ['Cost', esc(p.cost)], ['Days off', p.daysOff ? `${esc(p.daysOff.summary)} <a href="${link(offPath, D)}#${esc(p.id)}">Dates and details</a>` : ''], ['Register', registerText(p)], ['Next term', esc(r.nextTerm || '') + datesHtml(p, D)], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
   const schoolRows = served.map(s => {
     const l = p.schools[s.id];
@@ -777,6 +800,20 @@ function programPage(p) {
     </div>`;
   }).join('\n');
   const fix = correctionHref(`Correction: ${p.name}`);
+  const clubGrades = c => c.gradeNote || (c._grades === null ? '' : c._grades.length === 1 ? (c._grades[0] === 'K' ? 'Kindergarten' : c._grades[0] === 'PK' ? 'Pre-K' : 'Grade ' + c._grades[0]) : c._grades.length === GRADES.length - 1 && c._grades[0] === 'K' ? 'All grades' : `Grades ${c._grades[0]}–${c._grades[c._grades.length - 1]}`);
+  const clubsHtml = p.clubs ? `<section class="section">
+    <h2>${T(`This year’s clubs`)}</h2>
+    <p class="hint">${T(`From the school’s own list. Days, grades and openings change, so check with the club’s teacher before you count on one.`)}</p>
+    <div class="clubs">
+${p.clubs.map(c => `      <article class="club">
+        <h3>${esc(c.name)}</h3>
+        <p class="club-when">${[c.days ? `<b>${esc(c.days.map(d => DAY_NAME[d] + 's').join(' and '))}</b>` : '', esc(c.time || ''), esc(clubGrades(c))].filter(Boolean).join(' <span aria-hidden="true">·</span> ')}</p>
+        ${c.what ? `<p>${esc(c.what)}</p>` : ''}
+        <dl>${[['Runs', c.when], ['Sign-up', c.status]].filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+        ${c.note ? `<p class="flag">${esc(c.note)}</p>` : ''}
+      </article>`).join('\n')}
+    </div>
+  </section>` : '';
   const hero = `    <p class="where"><a href="${link('programs/', D)}">${T(`All programs`)}</a> / ${esc(servedSummary(p))}</p>
     <h1>${esc(fullName(p))}</h1>
     <p class="lede">${esc(p.what)}</p>
@@ -799,6 +836,7 @@ function programPage(p) {
     </article>
     <p class="hint">${T(`Prices, hours and pickup routes change during the year. Confirm with the provider before you enroll.`)}</p>
   </section>
+  ${clubsHtml}
   ${alertsBox(D, { program: p, place: 'program', title: T(`Tell me when sign-ups open`), lede: T(`One email when {program} posts a sign-up date, a deadline or a day-off camp. Just this program. For every program at your school, sign up on your school’s page.`, { program: fullName(p) }) })}
   <section class="section" id="schools">
     <h2>${T(`Which schools it works for`)}</h2>
@@ -1796,7 +1834,7 @@ function boardPage() {
     themes: Object.fromEntries(THEMES.map(t => [t.id, { types: t.types, mix: !!t.mix, words: t.words || [] }])),
     programs: Object.fromEntries(programs.map(p => [p.id, {
       name: p.name, hours: p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [], type: p.types[0], no: order.indexOf(p.id) + 1,
-      days: p.days || null, offerDays: p.offerDays || null, rate: p.rate || null, types: p.types, grades: p._grades, kw: (p.keywords || []).map(k => k.toLowerCase()),
+      days: p.days || null, offerDays: p.offerDays || null, rate: p.rate || null, types: p.types, grades: p._grades, kw: (p.keywords || []).map(k => k.toLowerCase()), cls: p._cls || null,
       path: link(programPath(p), 1), q: [p.name, ...(p.offers || []), ...(p.keywords || []), ...p.types.map(t => TYPE[t].label)].join(' ').toLowerCase(),
       schools: Object.fromEntries(Object.entries(p.schools).map(([sid, l]) => [sid, { rel: l.relation, where: l.address || p.address || '', free: (l.price || p.price) === 'free' }])),
     }])),
@@ -2392,7 +2430,7 @@ if (!PREVIEW) {
   for (const p of programs) for (const d of upcomingDates(p)) write(`cal/${p.id}-${d.date}.ics`, icsFile(p, d));
   write('data/reviews.json', JSON.stringify(reviews, null, 2));
   // Public copy of the data, so the monthly check (or anyone) can read exactly what the site shows.
-  write('data/programs.json', JSON.stringify(programs.map(({ _grades, ...p }) => p), null, 2));
+  write('data/programs.json', JSON.stringify(programs.map(({ _grades, _cls, ...p }) => (p.clubs ? { ...p, clubs: p.clubs.map(({ _grades: g, ...c }) => c) } : p)), null, 2));
   write('data/schools.json', JSON.stringify(schools, null, 2));
   write('data/alerts.json', JSON.stringify(alertsFeed(), null, 2));   // read by scripts/send-alerts.mjs once a day
   const latest = programs.map(p => p.lastVerified).sort().pop();

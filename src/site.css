@@ -799,3 +799,15 @@ button.btn{cursor:pointer;font-family:inherit}
 .g-code.small{font-size:1.05rem;padding:4px 10px;display:inline-block;vertical-align:middle}
 .g-how{margin:0;padding-left:1.3rem;display:flex;flex-direction:column;gap:6px;color:var(--muted);max-width:60ch}
 .g-made h3{font-size:1.1rem;margin-top:6px}
+
+/* ---------- a school's clubs, one card each, on the listing's own page ---------- */
+.clubs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.club{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.club h3{font-size:1.15rem}
+.club-when{margin:0;color:var(--muted)}
+.club-when b{color:var(--ink)}
+.club p{margin:0}
+.club dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;font-size:.95rem}
+.club dt{font-weight:700}
+.club dd{margin:0}
+.club .flag{font-size:.93rem}
