@@ -1740,6 +1740,14 @@ function boardPage() {
     </div>
     <p class="hint" id="board-hint" hidden>${T(`Drag a card by its colored top to move it to another day, or use the day buttons on the card.`)}</p>
     <div class="week" id="week"></div>
+    <div class="share-cta" id="share-cta" hidden>
+      <canvas id="share-thumb" width="216" height="270" aria-hidden="true"></canvas>
+      <div class="share-cta-text">
+        <b>${T(`Looks right? Make it a picture.`)}</b>
+        <span>${T(`One card of the week to text to your partner, stick on the fridge or hand to a teacher.`)}</span>
+      </div>
+      <button type="button" class="btn primary big" id="share-cta-btn">${T(`Share this schedule`)}</button>
+    </div>
     <button type="button" class="clear" id="board-promote" hidden>The new term has started: make this the current roster</button>
   </section>
   <section class="section costbox" id="board-cost" hidden>
@@ -1768,7 +1776,7 @@ function boardPage() {
     </div>
   </section>
   <section class="section card-maker" id="card-maker" hidden>
-    <h2>${T(`Make it a card`)}</h2>
+    <h2 tabindex="-1">${T(`Make it a card`)}</h2>
     <p>${T(`One picture of the week to text, print, or hand to your child’s teacher, so they know where your child goes each day and who they are.`)}</p>
     <div class="card-grid">
       <div class="card-fields">

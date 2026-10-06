@@ -665,3 +665,20 @@ button.btn{cursor:pointer;font-family:inherit}
 .suggest .panel.alerts{max-width:none}
 .suggest .alerts-row,.suggest .alerts-row:has(select){grid-template-columns:minmax(0,1fr)}
 .suggest .alerts-row:has(select) .btn{justify-self:stretch}
+
+/* ----- "Share this schedule": the strip under the week that leads to the card ----- */
+.share-cta{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px 18px;align-items:center;background:var(--hero);color:var(--hero-ink);border-radius:18px;padding:16px 20px}
+.share-cta[hidden]{display:none}
+.share-cta canvas{display:block;width:60px;height:75px;border-radius:7px;background:var(--hero-2);box-shadow:0 4px 12px rgba(0,0,0,.3);transform:rotate(-4deg)}
+.share-cta-text{display:flex;flex-direction:column;gap:2px;min-width:0}
+.share-cta-text b{font-family:var(--display);font-stretch:112%;font-size:1.2rem;line-height:1.15}
+.share-cta-text span{color:var(--hero-muted)}
+.share-cta .btn{grid-column:1/-1;justify-self:start;background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink)}
+@media (min-width:720px){
+  .share-cta{grid-template-columns:auto minmax(0,1fr) auto;padding:18px 24px}
+  .share-cta .btn{grid-column:auto}
+}
+.card-maker h2:focus{outline:none}
+.card-maker.flash{border-radius:18px;box-shadow:0 0 0 6px var(--bg),0 0 0 10px var(--yellow)}
+@media (prefers-reduced-motion: no-preference){.card-maker{transition:box-shadow .5s}}
+@media print{.share-cta{display:none}}

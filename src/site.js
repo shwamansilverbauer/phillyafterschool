@@ -893,6 +893,7 @@
       tools.hidden = !!shared || total === 0;
       var dragHint = $('#board-hint'); if (dragHint) dragHint.hidden = !!shared || total === 0;
       if (maker) maker.hidden = !!shared || total === 0;
+      var shareCta = $('#share-cta'); if (shareCta) shareCta.hidden = !maker || !!shared || total === 0;
       emptyNote.hidden = !!shared || total > 0;
       promote.hidden = !!shared || which !== 'next' || total === 0;
       promote.textContent = 'The new term has started: make this the current roster';
@@ -1485,6 +1486,18 @@
         window.addEventListener('afterprint', after);
         track_share('print');
         window.print();
+      });
+      // A small copy of the card sits in the "Share this schedule" strip under the week, so people see what they would send.
+      var thumb = $('#share-thumb'), paintCard = drawCard;
+      drawCard = function () { paintCard(); if (thumb) { try { var t = thumb.getContext('2d'); t.clearRect(0, 0, thumb.width, thumb.height); t.drawImage(canvas, 0, 0, thumb.width, thumb.height); } catch (e) { /* the strip works without its preview */ } } };
+      var shareCtaBtn = $('#share-cta-btn');
+      if (shareCtaBtn) shareCtaBtn.addEventListener('click', function () {
+        var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        maker.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
+        maker.classList.add('flash');
+        setTimeout(function () { maker.classList.remove('flash'); }, 2200);
+        var head = maker.querySelector('h2'); if (head) { try { head.focus({ preventScroll: true }); } catch (e) { /* older browsers */ } }
+        track_share('cta_click');
       });
       if (document.fonts && document.fonts.load) {   // draw again once the site's fonts are ready
         Promise.all([document.fonts.load('850 92px Archivo'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(drawCard, function () { /* fall back to system fonts */ });
