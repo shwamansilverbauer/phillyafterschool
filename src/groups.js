@@ -7,6 +7,8 @@
   var ROOT = host.getAttribute('data-root') || '';          // path back to the top of the site
   var INDEX = host.getAttribute('data-index') || '';        // "index.html" in the preview copy
   var API = host.getAttribute('data-api');                  // empty in the preview copy: nothing to talk to
+  var KL_KEY = host.getAttribute('data-kl-key') || '', KL_LIST = host.getAttribute('data-kl-list') || '';   // the email list accounts are added to
+  var LIST_NOTE = KL_LIST ? 'Making an account adds your name and email to our email list, for occasional news about the site. Every email has an unsubscribe link.' : '';
   var DAYS = [['mon', 'Monday', 'Mon'], ['tue', 'Tuesday', 'Tue'], ['wed', 'Wednesday', 'Wed'], ['thu', 'Thursday', 'Thu'], ['fri', 'Friday', 'Fri']];
 
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
@@ -47,7 +49,7 @@
     box.textContent = '';
     var wrap = el('div', 'signin');
     wrap.appendChild(el('h3', null, 'Sign in with your email'));
-    wrap.appendChild(el('p', 'hint', lede || 'No password. We email you a link and a 6-digit code; either one signs you in. Your email is only used for this.'));
+    wrap.appendChild(el('p', 'hint', lede || 'No password. We email you a link and a 6-digit code; either one signs you in.'));
     var form = el('form', 'signin-row');
     var input = el('input'); input.type = 'email'; input.required = true; input.autocomplete = 'email'; input.placeholder = 'you@example.com'; input.setAttribute('aria-label', 'Your email'); input.maxLength = 150;
     var send = el('button', 'btn primary', 'Email me a sign-in link'); send.type = 'submit';
@@ -86,6 +88,36 @@
     });
   }
 
+  // ----- every account has a first and last name; a new one is added to the email list, once -----
+  function nameFields(prefix, me) {
+    var wrap = el('div', 'pair');
+    var mk = function (id, label, value, auto, max) {
+      var f = el('div', 'field'), l = el('label', null, label), i = el('input');
+      l.htmlFor = prefix + id; i.id = prefix + id; i.type = 'text'; i.required = true; i.maxLength = max; i.value = value || ''; i.autocomplete = auto;
+      f.appendChild(l); f.appendChild(i); wrap.appendChild(f);
+      return i;
+    };
+    var first = mk('first', 'Your first name', me.first, 'given-name', 30), last = mk('last', 'Your last name', me.last, 'family-name', 40);
+    return { box: wrap, first: first, last: last };
+  }
+  function listOnce(me) {
+    if (!me || me.listed || me.listing || !me.ready || !KL_KEY || !KL_LIST || !API) return;
+    me.listing = true;   // one try per page, however many times this is called
+    window.fetch('https://a.klaviyo.com/client/subscriptions?company_id=' + encodeURIComponent(KL_KEY), {
+      method: 'POST',
+      headers: { 'content-type': 'application/vnd.api+json', revision: '2026-07-15' },
+      body: JSON.stringify({ data: { type: 'subscription',
+        attributes: { custom_source: 'phillyafterschool.org account', profile: { data: { type: 'profile', attributes: { email: me.email, first_name: me.first, last_name: me.last, properties: { has_account: true }, subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } } } } } },
+        relationships: { list: { data: { type: 'list', id: KL_LIST } } } } })
+    }).then(function (r) { if (r.status >= 200 && r.status < 300) { me.listed = true; call('listed', {}); } }, function () { /* blocked or offline: it is tried again at the next sign-in */ });
+  }
+  function saveNames(me, first, last) {
+    return call('set_name', { first: first, last: last }).then(function (r) {
+      if (r.ok) { me.first = r.first; me.last = r.last; me.ready = true; listOnce(me); }
+      return r;
+    });
+  }
+
   // =====================================================================================================
   // The profile page: sign in, your first name, your groups, make a group, sign out, delete the account
   // =====================================================================================================
@@ -107,21 +139,40 @@
     var drawProfile = function (d) {
       account.textContent = '';
       var me = d.user, groups = d.groups || [];
+      if (!me.ready) {   // a new account: first and last name, then the rest
+        var fin = el('section', 'panel');
+        fin.appendChild(el('h2', null, 'Finish your account'));
+        var fl = el('p', null, 'Signed in as '); fl.appendChild(el('b', null, me.email)); fin.appendChild(fl);
+        var ff = el('form', 'g-form'), fn = nameFields('new-', me);
+        ff.appendChild(fn.box);
+        ff.appendChild(el('p', 'hint', 'A group’s creator sees your name when you ask to join, so they know who you are. Other members don’t see it. ' + LIST_NOTE));
+        var fs = el('p', 'g-status'); fs.setAttribute('aria-live', 'polite'); ff.appendChild(fs);
+        var fa = el('div', 'actions'), fb = el('button', 'btn primary', 'Finish'); fb.type = 'submit';
+        var fo = btn('btn', 'Sign out'); fo.addEventListener('click', function () { call('logout', {}).then(function () { set('pas-in', null); drawSignedOut(); }); });
+        fa.appendChild(fb); fa.appendChild(fo); ff.appendChild(fa);
+        ff.addEventListener('submit', function (e) {
+          e.preventDefault(); fb.disabled = true;
+          saveNames(me, fn.first.value, fn.last.value).then(function (r) { fb.disabled = false; if (!r.ok) { fs.textContent = r.message; fs.className = 'g-status bad'; return; } drawProfile(d); });
+        });
+        fin.appendChild(ff); account.appendChild(fin);
+        fn.first.focus();
+        return;
+      }
+      listOnce(me);
       // who you are
       var who = el('section', 'panel');
       who.appendChild(el('h2', null, 'Your account'));
       var line = el('p', null, 'Signed in as '); line.appendChild(el('b', null, me.email)); who.appendChild(line);
-      var nameForm = el('form', 'g-row');
-      var nameLabel = el('label', null, 'Your name'); nameLabel.htmlFor = 'acct-name';
-      var nameInput = el('input'); nameInput.id = 'acct-name'; nameInput.type = 'text'; nameInput.maxLength = 30; nameInput.placeholder = 'Josh, or Ms Rivera (teacher)'; nameInput.value = me.name || ''; nameInput.autocomplete = 'given-name';
+      var nameForm = el('form', 'g-form'), nf0 = nameFields('acct-', me);
       var nameSave = el('button', 'btn', 'Save'); nameSave.type = 'submit';
       var nameNote = el('span', 'hint'); nameNote.setAttribute('aria-live', 'polite');
-      nameForm.appendChild(nameLabel); nameForm.appendChild(nameInput); nameForm.appendChild(nameSave); nameForm.appendChild(nameNote);
+      var nameActs = el('div', 'actions'); nameActs.appendChild(nameSave); nameActs.appendChild(nameNote);
+      nameForm.appendChild(nf0.box); nameForm.appendChild(nameActs);
       who.appendChild(nameForm);
-      who.appendChild(el('p', 'hint', 'A first name is enough. A group’s creator sees it when you ask to join, next to the child you’re adding (“Josh wants to add Jasper”), so they know who you are. Other members don’t see it.'));
+      who.appendChild(el('p', 'hint', 'A group’s creator sees your name when you ask to join, so they know who you are. Other members don’t see it.'));
       nameForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        call('set_name', { name: nameInput.value }).then(function (r) { nameNote.textContent = r.ok ? 'Saved.' : r.message; if (r.ok) { me.name = r.name; nameInput.value = r.name; } });
+        saveNames(me, nf0.first.value, nf0.last.value).then(function (r) { nameNote.textContent = r.ok ? 'Saved.' : r.message; if (r.ok) { nf0.first.value = r.first; nf0.last.value = r.last; } });
       });
       account.appendChild(who);
       // your groups
@@ -154,10 +205,7 @@
       make.appendChild(makeForm); make.appendChild(made);
       makeForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        var start = me.name ? Promise.resolve({ ok: true }) : call('set_name', { name: nameInput.value });
-        start.then(function (r) {
-          if (!r.ok) { made.textContent = ''; made.appendChild(el('p', 'g-status bad', 'Add your name at the top first, so people joining know whose group it is.')); nameInput.focus(); return; }
-          if (r.name) me.name = r.name;
+        Promise.resolve({ ok: true }).then(function () {
           call('group_create', { name: gi.value }).then(function (c) {
             made.textContent = '';
             if (!c.ok) { made.appendChild(el('p', 'g-status bad', c.message)); return; }
@@ -561,12 +609,10 @@
       kf.appendChild(kl); kf.appendChild(ki); kf.appendChild(el('span', 'hint', 'First name only. It’s what the group sees.'));
       form.appendChild(kf);
       var ni = null;
-      if (!me.name) {
-        var nf = el('div', 'field');
-        var nl = el('label', null, 'Your name'); nl.htmlFor = 'gs-me';
-        ni = el('input'); ni.id = 'gs-me'; ni.type = 'text'; ni.maxLength = 30; ni.autocomplete = 'given-name';
-        nf.appendChild(nl); nf.appendChild(ni); nf.appendChild(el('span', 'hint', 'A first name is enough. Only the group’s creator sees it, next to your child’s name, so they know who’s asking.'));
-        form.appendChild(nf);
+      if (!me.ready) {
+        ni = nameFields('gs-', me);
+        form.appendChild(ni.box);
+        form.appendChild(el('p', 'hint', 'Only the group’s creator sees your name, next to your child’s, so they know who’s asking. ' + LIST_NOTE));
       }
       form.appendChild(el('p', 'hint', 'This shares the first name above and the programs on this child’s current and upcoming weeks with the group’s approved members. Addresses, notes, the teacher’s name and photos are not shared. It keeps itself up to date, and you can stop any time.'));
       var status = el('p', 'g-status'); status.setAttribute('aria-live', 'polite'); form.appendChild(status);
@@ -582,10 +628,9 @@
         var child = { name: ki.value, now: toWeek(kid.now), next: toWeek(kid.next) };
         if (!ki.value.replace(/\s+/g, '')) { status.textContent = 'Add your child’s first name.'; status.className = 'g-status bad'; ki.focus(); return; }
         go.disabled = true; status.className = 'g-status'; status.textContent = 'Adding…';
-        var named = ni ? call('set_name', { name: ni.value }) : Promise.resolve({ ok: true });
+        var named = ni ? saveNames(me, ni.first.value, ni.last.value) : Promise.resolve({ ok: true });
         named.then(function (r) {
           if (!r.ok) { go.disabled = false; status.textContent = r.message; status.className = 'g-status bad'; return; }
-          if (r.name) me.name = r.name;
           var req = chosen ? call('kid_save', { group: chosen, kid: child }) : call('group_join', { code: codeInput.value, kid: child });
           req.then(function (d) {
             go.disabled = false;
@@ -604,7 +649,7 @@
     };
     var refresh = function (msg) {
       call('me').then(function (d) {
-        if (d.ok && d.user) { set('pas-in', '1'); me = d.user; myGroups = d.groups || []; } else { me = null; myGroups = []; if (d.ok) set('pas-in', null); }
+        if (d.ok && d.user) { set('pas-in', '1'); me = d.user; myGroups = d.groups || []; listOnce(me); } else { me = null; myGroups = []; if (d.ok) set('pas-in', null); }
         // pick up new names for groups that were renamed
         var changed = false;
         board.rosters().kids.forEach(function (k) { links(k).forEach(function (l) { myGroups.forEach(function (g) { if (g.id === l.g && g.name !== l.n) { l.n = g.name; changed = true; } }); }); });

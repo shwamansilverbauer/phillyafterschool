@@ -1272,10 +1272,11 @@ function privacyPage() {
   ${GROUPS ? `<h2 id="groups">${T(`Accounts and share groups`)}</h2>
   <p>${T(`A share group lets a class, a carpool or a few friends see each other’s after-school weeks. It is optional, and it is the only part of the site that keeps anything about a child on our server.`)}</p>
   <ul>
-    <li>${T(`An account is an email address and the name you give, which can be just a first name. The email is used to sign you in and to tell you when someone asks to join your group or when you are approved. Other members never see it, and it is not added to any mailing list.`)}</li>
+    <li>${T(`An account is an email address and your first and last name. The email signs you in and tells you when someone asks to join your group or when you are approved. Other members never see it.`)}</li>
+    <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
     <li>${T(`There are no passwords. We email you a link and a 6-digit code; each works once and for 15 minutes. A cookie then keeps that device signed in for 30 days, and you can sign out everywhere from your account page.`)}</li>
     <li>${T(`When you add a week to a group, we store the child’s first name as you type it and the programs on their current and upcoming weeks. We do not store a last name, school, address, pickup time, note, teacher’s name, photo, price or day-off plan.`)}</li>
-    <li>${T(`Only signed-in people the group’s creator has approved can see a group. The creator sees the first name of each adult who asks to join. A group can’t be searched for, isn’t listed anywhere, and its link shows nothing to anyone else.`)}</li>
+    <li>${T(`Only signed-in people the group’s creator has approved can see a group. The creator sees the first and last name of each adult who asks to join or is in the group; other members don’t. A group can’t be searched for, isn’t listed anywhere, and its link shows nothing to anyone else.`)}</li>
     <li>${T(`Someone who joins to view only, such as a teacher, can see and print the group and cannot change it.`)}</li>
     <li>${T(`Anyone in a group can print it or take a screenshot, so join groups with people you would share a class list with.`)}</li>
     <li>${T(`Groups are kept in a file on our web host, outside the public site. Google Analytics and Microsoft Clarity are not loaded on the account and group pages.`)}</li>
@@ -1711,8 +1712,8 @@ ${cards}
 // ---------- share groups (accounts, class codes) ----------
 // "groups" in site.config.json turns them on. While "pilot" is true nothing links to them: the pages exist at
 // /account/ and /groups/, and the block on the roster page only shows in a browser that has visited one of them.
-const GROUPS = cfg.groups && cfg.contactEmail ? { pilot: cfg.groups.pilot !== false } : null;
-const groupsAttrs = depth => `data-groups data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}" data-api="${PREVIEW ? '' : link('groups/api.php', depth)}"`;
+const GROUPS = cfg.groups && cfg.contactEmail ? { pilot: cfg.groups.pilot !== false, klaviyoList: cfg.groups.klaviyoList || '' } : null;
+const groupsAttrs = depth => `data-groups data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}" data-api="${PREVIEW ? '' : link('groups/api.php', depth)}"${GROUPS.klaviyoList && ALERTS?.klaviyoKey ? ` data-kl-key="${esc(ALERTS.klaviyoKey)}" data-kl-list="${esc(GROUPS.klaviyoList)}"` : ''}`;
 const groupsScript = depth => `<script src="${link('assets/groups.js', depth)}${GROUPS_V}"></script>`;
 function accountPage() {
   const hero = `    <h1>${T(`Your account`)}</h1>

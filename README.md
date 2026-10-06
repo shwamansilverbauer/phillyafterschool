@@ -310,7 +310,8 @@ of the site with accounts and the only part that stores anything about a child o
   group there and get a code. On Build your week, "Add this week to a group or class" asks for the code and the
   child's first name. The group's creator approves each person; until then they see nothing. A teacher joins
   the same way as "view only". A shared week updates itself from the device it was shared from.
-- **What is stored.** An account is an email and a first name. A child in a group is a first name and the
+- **What is stored.** An account is an email and a first and last name (both required before making or joining
+  a group; only a group's creator sees them). A child in a group is a first name and the
   program ids (and a class, only when the program lists it) on the current and upcoming weeks. Nothing else:
   the server drops free-text notes, schools and anything it doesn't recognise. Group codes are kept encrypted.
 - **Where.** `src/server/groups-api.php` is the whole server side; the build copies it to `groups/api.php` with
@@ -321,6 +322,11 @@ of the site with accounts and the only part that stores anything about a child o
 - **Limits and expiry.** Links and codes last 15 minutes and work once; five wrong codes kill a code; three
   sign-in emails per address per 15 minutes. A device stays signed in 30 days. Every group is deleted two weeks
   after `lastDay` in `data/days-off.json`.
+- **The email list.** `"klaviyoList"` under `groups` names a Klaviyo list ("Account holders"). When an account's
+  name is saved for the first time, the browser subscribes that email, first name and last name to it with the
+  public key (the same call the dates form uses), sets the profile property `has_account`, and tells the server
+  so it isn't done twice. An ad blocker can stop the call; it is tried again at each sign-in until it works.
+  Nothing about children or groups is sent. Leave `klaviyoList` out to turn this off.
 - **Emails it sends.** The sign-in email, "someone asked to join" to a group's creator (the adult's first name
   only), and "you're in" to the person approved. They go out with PHP `mail()` from the contact address.
 - **Privacy.** The account and group pages load no Google Tag Manager or Clarity (`quiet: true` in `layout`),
