@@ -541,3 +541,26 @@ button.btn{cursor:pointer;font-family:inherit}
   @keyframes kite-sway{from{transform:rotate(0deg)}to{transform:rotate(5deg)}}
   @keyframes swing-sway{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
 }
+
+/* ---------- own prices on the roster, and the day-off plan ---------- */
+.cost-lines .cost-own{grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:.9rem}
+.cost-own input{font:inherit;width:6.5em;padding:7px 9px;border-radius:9px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}
+.cost-own select,.offpick select{font:inherit;font-size:.95rem;padding:7px 9px;border-radius:9px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);max-width:100%}
+.cost-own .btn{padding:6px 14px;font-size:.92rem}
+.offplan{background:var(--surface);border:2px solid var(--yellow);border-radius:18px;padding:22px 24px;gap:10px}
+.off-count{font-weight:700;color:var(--ink)}
+.off-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.off-list[hidden],.offpick[hidden],.offmine[hidden]{display:none}
+.off-list li{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;padding:9px 0;border-top:1px solid var(--line)}
+.off-list li b{min-width:7.2em}
+.off-list li .clear{margin-left:auto;font-size:.88rem}
+.offpick{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding-top:10px;border-top:1px dashed var(--line)}
+.offpick .hint{flex-basis:100%}
+.offpick .day{min-width:0;font-size:.92rem;padding:7px 12px}
+.offday summary .offmine{grid-column:1 / -1;font-size:.9rem;font-weight:700;color:var(--green-ink);background:var(--green-bg);border-radius:8px;padding:3px 10px;justify-self:start}
+@media print{
+  body.print-plan *{visibility:hidden}
+  body.print-plan #plan,body.print-plan #plan *{visibility:visible}
+  body.print-plan #plan{position:absolute;left:0;top:0;width:100%;border:0}
+  body.print-plan #off-actions,body.print-plan #off-kids,body.print-plan .off-list .clear,body.print-plan #off-status{display:none}
+}

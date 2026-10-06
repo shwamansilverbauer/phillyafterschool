@@ -1421,6 +1421,7 @@ function daysOffPage() {
   <div class="offwho">
     ${camps.length ? `<p class="chips-row">${camps.map(p => `<a class="btn" href="#${esc(p.id)}">${esc(p.name)}${many && upcoming(d)(p).length < d.dates.length ? ` <span class="hint">(${upcoming(d)(p).map(shortDate).join(', ')})</span>` : ''}</a>`).join('')}</p>` : `<p class="hint">No listed program has posted a camp for ${many ? 'this break' : 'this day'} yet. The programs below that haven’t posted dates may still cover it.</p>`}
     ${d.note ? `<p class="hint">${esc(d.note)}</p>` : ''}
+    ${d.dates.filter(x => x >= TODAY).map(x => `<div class="offpick" data-off-day="${x}" data-clarity-mask="true" hidden></div>`).join('')}
   </div>
 </details>`;
   }).join('\n');
@@ -1444,7 +1445,22 @@ function daysOffPage() {
       <span>Calendar checked <b>${longDate(daysOff.checked)}</b></span>
       <span><b>${campPrograms.length}</b> programs run something</span>
     </div>`;
+  const planData = {
+    programs: Object.fromEntries(campPrograms.map(p => [p.id, { name: p.name, url: p.daysOff.url }])),
+    days: offDays.flatMap(d => d.dates.filter(x => x >= TODAY).map(x => ({ d: x, label: dayDate(x), name: d.name, camps: campPrograms.filter(p => p.daysOff.dates.includes(x)).map(p => p.id) }))),
+    page: `${cfg.siteUrl}/${offPath}`,
+  };
   const body = `<div style="display:contents">
+<section class="section offplan needs-js-block" id="plan" data-off-plan data-clarity-mask="true">
+  <h2>${T(`Build your day-off plan`)}</h2>
+  <p>${T(`Open a day below and choose where your child will be. Your picks are saved on this device and gathered here.`)}</p>
+  <div class="kids" id="off-kids" role="group" aria-label="Which child" hidden></div>
+  <p class="off-count" id="off-count"></p>
+  <ol class="off-list" id="off-list"></ol>
+  <div class="actions" id="off-actions" hidden><button type="button" class="btn" id="off-copy">Copy as text</button><a class="btn" id="off-email" href="mailto:">Email it to myself</a><button type="button" class="btn" id="off-print">Print</button><button type="button" class="clear" id="off-clear">Clear this plan</button></div>
+  <p class="hint" id="off-status" aria-live="polite"></p>
+  <script type="application/json" id="off-data">${JSON.stringify(planData).replace(/</g, '\\u003c')}</script>
+</section>
 <section class="section" id="days">
   <h2>${T(`Days off still to come`)}</h2>
   <p>${T(`These are the School District of Philadelphia’s dates. Open a day to see who has posted a camp for it. A program is named only when its own site lists that date.`)}</p>
@@ -1544,8 +1560,9 @@ function boardPage() {
     <p id="cost-month"></p>
     <ul class="cost-lines" id="cost-lines"></ul>
     <p class="cost-family" id="cost-family" hidden></p>
-    <p class="hint">${T(`An estimate from each program’s published prices, for half a school year: 18 weeks of school, or five monthly bills. It leaves out registration fees, deposits, materials, sibling discounts, subsidies and financial aid. Confirm the price with each program before you budget on it.`)}</p>
+    <p class="hint">${T(`An estimate from each program’s published prices, for half a school year: 18 weeks of school, or five monthly bills. It leaves out registration fees, deposits, materials, sibling discounts, subsidies and financial aid. If you know what you’ll pay, add it to any line; it stays on this device. Confirm the price with each program before you budget on it.`)}</p>
   </section>
+  ${nextOff(1).replace(T(`Days off this year, and who’s open`), T(`Plan the days off too`))}
   <section class="board-tools" id="board-tools" hidden>
     <div class="actions">
       <button type="button" class="btn primary" id="board-share" hidden>Share</button>

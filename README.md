@@ -174,6 +174,11 @@ builds. The home page and each school page show a "Next day off" line. The build
 date isn't a district day off (a typo on their side, or a day only they close for). Replace the file's days
 each summer when the district publishes the new calendar.
 
+**A day-off plan.** On the same page, "Build your day-off plan" lets a family choose, for each day off, where a
+child will be: one of the camps posted for that date, another listed program (flagged as not posted for that
+date), or at home. Picks are saved with the rosters in the browser, per child, and gathered in a list that can
+be copied, emailed or printed. Each pick fires `pas_dayoff_pick` (program_id, day).
+
 The day-off page has its own look: a yellow band with navy type (`.band.dayoff` in the stylesheet) and its
 own drawing, `dayScene()` in `build.mjs`: the school shut, the bus asleep, a swing and a kite going up. Its
 share picture is `src/static/share-days-off.png`; any page can name its own with `shareImage` in `layout()`.
@@ -189,6 +194,8 @@ price it used. A semester is half a school year: 18 weeks of school for daily an
 for monthly ones, and one term for term prices. Free programs (and a school link marked free) count as $0,
 programs with no `rate` are listed as not counted, and with more than one child a family total is shown.
 It is an estimate, and says so: fees, deposits, discounts and aid are left out.
+A parent can type what they pay on any line (per week, per month or for the semester), which fills in programs
+that publish no price and replaces a listed one. Those figures stay in the browser and never go into a share link.
 
 **The week card's QR code.** `data/card-qr.json` holds the pattern for the code printed on the week card. It
 encodes the short address `/w`, which `.htaccess` sends to the home page with `utm_source=week_card` and
