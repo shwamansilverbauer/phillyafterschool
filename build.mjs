@@ -1272,7 +1272,7 @@ function privacyPage() {
   ${GROUPS ? `<h2 id="groups">${T(`Accounts and share groups`)}</h2>
   <p>${T(`A share group lets a class, a carpool or a few friends see each other’s after-school weeks. It is optional, and it is the only part of the site that keeps anything about a child on our server.`)}</p>
   <ul>
-    <li>${T(`An account is an email address and your first name. The email is used to sign you in and to tell you when someone asks to join your group or when you are approved. Other members never see it, and it is not added to any mailing list.`)}</li>
+    <li>${T(`An account is an email address and the name you give, which can be just a first name. The email is used to sign you in and to tell you when someone asks to join your group or when you are approved. Other members never see it, and it is not added to any mailing list.`)}</li>
     <li>${T(`There are no passwords. We email you a link and a 6-digit code; each works once and for 15 minutes. A cookie then keeps that device signed in for 30 days, and you can sign out everywhere from your account page.`)}</li>
     <li>${T(`When you add a week to a group, we store the child’s first name as you type it and the programs on their current and upcoming weeks. We do not store a last name, school, address, pickup time, note, teacher’s name, photo, price or day-off plan.`)}</li>
     <li>${T(`Only signed-in people the group’s creator has approved can see a group. The creator sees the first name of each adult who asks to join. A group can’t be searched for, isn’t listed anywhere, and its link shows nothing to anyone else.`)}</li>

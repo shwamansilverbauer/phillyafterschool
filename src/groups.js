@@ -112,13 +112,13 @@
       who.appendChild(el('h2', null, 'Your account'));
       var line = el('p', null, 'Signed in as '); line.appendChild(el('b', null, me.email)); who.appendChild(line);
       var nameForm = el('form', 'g-row');
-      var nameLabel = el('label', null, 'Your first name'); nameLabel.htmlFor = 'acct-name';
-      var nameInput = el('input'); nameInput.id = 'acct-name'; nameInput.type = 'text'; nameInput.maxLength = 20; nameInput.value = me.name || ''; nameInput.autocomplete = 'given-name';
+      var nameLabel = el('label', null, 'Your name'); nameLabel.htmlFor = 'acct-name';
+      var nameInput = el('input'); nameInput.id = 'acct-name'; nameInput.type = 'text'; nameInput.maxLength = 30; nameInput.placeholder = 'Josh, or Ms Rivera (teacher)'; nameInput.value = me.name || ''; nameInput.autocomplete = 'given-name';
       var nameSave = el('button', 'btn', 'Save'); nameSave.type = 'submit';
       var nameNote = el('span', 'hint'); nameNote.setAttribute('aria-live', 'polite');
       nameForm.appendChild(nameLabel); nameForm.appendChild(nameInput); nameForm.appendChild(nameSave); nameForm.appendChild(nameNote);
       who.appendChild(nameForm);
-      who.appendChild(el('p', 'hint', 'A group’s creator sees this name when you ask to join, so they know who you are. Other members don’t see it.'));
+      who.appendChild(el('p', 'hint', 'A first name is enough. A group’s creator sees it when you ask to join, next to the child you’re adding (“Josh wants to add Jasper”), so they know who you are. Other members don’t see it.'));
       nameForm.addEventListener('submit', function (e) {
         e.preventDefault();
         call('set_name', { name: nameInput.value }).then(function (r) { nameNote.textContent = r.ok ? 'Saved.' : r.message; if (r.ok) { me.name = r.name; nameInput.value = r.name; } });
@@ -156,7 +156,7 @@
         e.preventDefault();
         var start = me.name ? Promise.resolve({ ok: true }) : call('set_name', { name: nameInput.value });
         start.then(function (r) {
-          if (!r.ok) { made.textContent = ''; made.appendChild(el('p', 'g-status bad', 'Add your first name at the top first, so people joining know whose group it is.')); nameInput.focus(); return; }
+          if (!r.ok) { made.textContent = ''; made.appendChild(el('p', 'g-status bad', 'Add your name at the top first, so people joining know whose group it is.')); nameInput.focus(); return; }
           if (r.name) me.name = r.name;
           call('group_create', { name: gi.value }).then(function (c) {
             made.textContent = '';
@@ -563,9 +563,9 @@
       var ni = null;
       if (!me.name) {
         var nf = el('div', 'field');
-        var nl = el('label', null, 'Your first name'); nl.htmlFor = 'gs-me';
-        ni = el('input'); ni.id = 'gs-me'; ni.type = 'text'; ni.maxLength = 20; ni.autocomplete = 'given-name';
-        nf.appendChild(nl); nf.appendChild(ni); nf.appendChild(el('span', 'hint', 'Only the group’s creator sees it, so they know who’s asking.'));
+        var nl = el('label', null, 'Your name'); nl.htmlFor = 'gs-me';
+        ni = el('input'); ni.id = 'gs-me'; ni.type = 'text'; ni.maxLength = 30; ni.autocomplete = 'given-name';
+        nf.appendChild(nl); nf.appendChild(ni); nf.appendChild(el('span', 'hint', 'A first name is enough. Only the group’s creator sees it, next to your child’s name, so they know who’s asking.'));
         form.appendChild(nf);
       }
       form.appendChild(el('p', 'hint', 'This shares the first name above and the programs on this child’s current and upcoming weeks with the group’s approved members. Addresses, notes, the teacher’s name and photos are not shared. It keeps itself up to date, and you can stop any time.'));
