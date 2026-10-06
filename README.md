@@ -212,7 +212,9 @@ that publish no price and replaces a listed one. Those figures stay in the brows
 (and, under `dayoff`, the one on the day-camp card) encodes the short address `/w`, which `.htaccess` sends to the home page with `utm_source=week_card` and
 `utm_medium=qr`. "Share the card" sends the picture with a line of text and a link tagged `utm_medium=share`,
 and no title: Apple's share sheet appeared to turn a title into a second copy of the picture. "Copy picture"
-puts one PNG on the clipboard for pasting. If the site's
+puts one PNG on the clipboard with the line "Make your own at phillyafterschool.org" (in Safari as a second
+item, so both paste; in Chrome as rich text under the picture, which mail and documents keep). Copying from inside Apple's own share sheet pastes the
+picture twice, which the site can't change; the button is the way around it. If the site's
 address ever changes, regenerate the file (Python: `pip install qrcode`, encode `HTTPS://<DOMAIN>/W` at error
 level M with no border, and save each row as a string of 1s and 0s).
 
