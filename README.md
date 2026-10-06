@@ -257,7 +257,7 @@ The pieces:
   (`school`, or `all` for a school that isn't listed), the school's name and the page it was on. Nothing else. A sign-up with
   an address already on the list updates its school. Set `alerts.doubleOptIn` to `true` if the Klaviyo list is switched
   to double opt-in, so the form tells people to check their inbox. Each sign-up fires `pas_alert_signup` (school, place).
-- **Following one program.** Every program page has its own box. It adds the address to the same list but sends no
+- **Following one program.** Every program page has its own box, "Tell me when sign-ups open". It adds the address to the same list but sends no
   school. Instead a second request adds the program's id to a `programs` list on the person's Klaviyo profile
   (appended, so following a second program keeps the first, and a school chosen earlier stays). Followers get that
   program's sign-up dates, its day-off camps and its `updates`, and nothing else. `pas_alert_signup` carries the
@@ -268,7 +268,9 @@ The pieces:
   `register.dates` is all it takes to get it emailed. The feed also has an entry for each program's own day-off camp (sent
   only to that program's followers, and skipped for anyone whose school email already lists the camp) and for each
   item in a program's optional `updates` list: `"updates": [{ "date": "2026-11-04", "text": "Fridays are full for the winter session." }]`.
-  An update goes out on the first send day after its date, to the program's followers only.
+  An update goes out on the first send day on or after its date, to the program's followers only, and is dropped two
+  days after that. So an update merged later than its send day is never sent: give it a date a few days ahead, or
+  change the date when you merge. The monthly check dates its notes a week out for that reason.
 - **The daily job.** `.github/workflows/alerts.yml` runs every morning, builds the site and runs `scripts/send-alerts.mjs`.
   It reads the list from Klaviyo and records one "School dates" event for each person who is due an email. Someone who
   just joined gets one "welcome" email the next morning with every date already announced; after that they get the

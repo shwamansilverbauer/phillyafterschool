@@ -676,9 +676,9 @@ const alertsBox = (depth, { school = null, program = null, place, title, lede })
         <label for="al-company-${place}">Leave this blank</label>
         <input id="al-company-${place}" name="company" type="text" tabindex="-1" autocomplete="off">
       </div>
-      <button class="btn primary big" type="submit">${program ? T(`Follow this program`) : T(`Send me the dates`)}</button>
+      <button class="btn primary big" type="submit">${program ? T(`Tell me`) : T(`Send me the dates`)}</button>
     </div>
-    <p class="hint">${program ? T(`Only when this program has something new, on a {day} morning. Every email has an unsubscribe link.`, { day: SEND_DAY_NAME }) : T(`One email on {day} morning, and only in a week with a date coming up. Every email has an unsubscribe link.`, { day: SEND_DAY_NAME })} <a href="${link('privacy/', depth)}#email">${T(`How we handle your email.`)}</a></p>
+    <p class="hint">${program ? T(`Only when this program posts something new, on a {day} morning. Every email has an unsubscribe link.`, { day: SEND_DAY_NAME }) : T(`One email on {day} morning, and only in a week with a date coming up. Every email has an unsubscribe link.`, { day: SEND_DAY_NAME })} <a href="${link('privacy/', depth)}#email">${T(`How we handle your email.`)}</a></p>
     <p class="alerts-status" data-alerts-status aria-live="polite"></p>
   </form>
   <noscript><p class="hint">${T(`Signing up needs JavaScript.`)}</p></noscript>
@@ -695,7 +695,7 @@ function alertsPage() {
       <li>${T(`A heads-up when sign-ups open or a deadline is close at a program that serves your school.`)}</li>
       <li>${T(`Each district day off at least {n} days ahead, with the listed programs running a camp that day.`, { n: LEAD.dayoff })}</li>
       <li>${T(`One email a week at most. If your school isn’t listed yet, you get the days off and every listed program’s dates.`)}</li>
-      <li>${T(`Only care about one program? Each program’s page has its own sign-up, for emails about that program alone.`)}</li>
+      <li>${T(`Waiting on one program? Each program’s page has a “Tell me when sign-ups open” box, for emails about that program alone.`)}</li>
       <li>${T(`No account, and no questions about your children.`)}</li>
     </ul>
     ${soon.length ? `<h2>${T(`Dates coming up`)}</h2>
@@ -783,7 +783,7 @@ function programPage(p) {
     </article>
     <p class="hint">${T(`Prices, hours and pickup routes change during the year. Confirm with the provider before you enroll.`)}</p>
   </section>
-  ${alertsBox(D, { program: p, place: 'program', title: T(`Get emails about {program}`, { program: fullName(p) }), lede: T(`Just this program: its sign-up dates, deadlines and day-off camps, plus the occasional note when something about it changes. For every program at your school, sign up on your school’s page.`) })}
+  ${alertsBox(D, { program: p, place: 'program', title: T(`Tell me when sign-ups open`), lede: T(`One email when {program} posts a sign-up date, a deadline or a day-off camp. Just this program. For every program at your school, sign up on your school’s page.`, { program: fullName(p) }) })}
   <section class="section" id="schools">
     <h2>${T(`Which schools it works for`)}</h2>
     <div class="serves">

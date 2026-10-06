@@ -65,8 +65,8 @@ export function eventFor(person, due, feed) {
   const school = feed.schools.find(s => s.id === person.school);
   const followed = (person.programs || []).map(id => (feed.programs || []).find(p => p.id === id)?.name).filter(Boolean);
   const names = followed.length > 3 ? `${followed.slice(0, 2).join(', ')} and ${followed.length - 2} more programs` : followed.length > 1 ? `${followed.slice(0, -1).join(', ')} and ${followed[followed.length - 1]}` : followed[0];
-  const whose = school ? ` for ${school.name} families` : person.school === 'all' ? '' : followed.length === 1 ? ` at ${followed[0]}` : followed.length ? ' at the programs you follow' : '';
-  const reason = [school ? `you asked for ${school.name} dates` : person.school === 'all' ? 'you asked for dates for every school' : '', followed.length ? `you follow ${names}` : ''].filter(Boolean).join(' and ') || 'you asked for dates';
+  const whose = school ? ` for ${school.name} families` : person.school === 'all' ? '' : followed.length === 1 ? ` at ${followed[0]}` : followed.length ? ' at the programs you asked about' : '';
+  const reason = [school ? `you asked for ${school.name} dates` : person.school === 'all' ? 'you asked for dates for every school' : '', followed.length ? `you asked to hear about ${names}` : ''].filter(Boolean).join(' and ') || 'you asked for dates';
   const first = due.items[0];
   const lead = first.kind === 'dayoff' ? `No school ${shortDay(first.date)} (${first.title.replace(/^No school: /, '')})` : first.kind === 'update' ? `${first.title}: an update` : first.kind === 'camp' ? `${first.title.replace(/: camp on a day off$/, '')} camp, ${shortDay(first.date)}` : `${shortDay(first.date)}: ${first.title}`;
   const more = due.items.length - 1;
