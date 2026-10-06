@@ -682,3 +682,35 @@ button.btn{cursor:pointer;font-family:inherit}
 .card-maker.flash{border-radius:18px;box-shadow:0 0 0 6px var(--bg),0 0 0 10px var(--yellow)}
 @media (prefers-reduced-motion: no-preference){.card-maker{transition:box-shadow .5s}}
 @media print{.share-cta{display:none}}
+
+/* ---------- roster: roll a themed week ---------- */
+.js .roller{display:block}
+.roller{max-width:860px;border:2px solid var(--line);border-radius:18px;background:var(--surface)}
+.roller[hidden]{display:none}
+.roller summary{display:flex;align-items:center;gap:14px;padding:14px 20px;cursor:pointer;list-style:none;border-radius:16px}
+.roller summary::-webkit-details-marker{display:none}
+.roller summary svg{flex:none;color:var(--link);transition:transform .25s}
+.roller summary:hover svg{transform:rotate(-14deg)}
+.roller summary::after{content:"";flex:none;margin-left:auto;width:10px;height:10px;border-right:2.5px solid var(--muted);border-bottom:2.5px solid var(--muted);transform:rotate(45deg);transition:transform .2s}
+.roller[open] summary::after{transform:rotate(-135deg)}
+.roller-head{display:flex;flex-direction:column;gap:2px;min-width:0}
+.roller-head b{font-family:var(--display);font-size:1.2rem}
+.roller-head > span{color:var(--muted);font-size:.95rem}
+.roller-body{display:flex;flex-direction:column;gap:16px;padding:6px 20px 20px}
+.roller-themes{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.theme{font:inherit;text-align:left;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;border:2px solid var(--line);border-left:8px solid var(--tc);background:var(--bg);color:var(--ink);cursor:pointer}
+.theme svg{flex:none;color:var(--tc)}
+.theme > span{display:flex;flex-direction:column;gap:1px;min-width:0}
+.theme b{font-family:var(--display);font-size:1.08rem}
+.theme > span > span{color:var(--muted);font-size:.9rem}
+.theme .theme-n{font-size:.82rem}
+.theme .theme-n:empty{display:none}
+.theme:hover:not(:disabled){border-color:var(--tc);background:var(--surface)}
+.theme:disabled{opacity:.55;cursor:not-allowed}
+.roller .theme[data-armed],.roller .theme[data-armed]:hover,#roll-again[data-armed]{border-color:var(--yellow);background:var(--yellow);color:var(--yellow-ink)}
+.theme[data-armed] svg,.theme[data-armed] > span > span{color:var(--yellow-ink)}
+.roller-status{font-weight:700;min-height:1.4em}
+.roller-status:empty{display:none}
+.roll-ask{align-items:center;flex-wrap:wrap;gap:10px 16px}
+@media (prefers-reduced-motion:reduce){.roller summary svg,.roller summary::after{transition:none}}
+@media print{.roller,.roll-ask{display:none!important}}

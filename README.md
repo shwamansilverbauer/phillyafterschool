@@ -184,6 +184,17 @@ builds. The home page and each school page show a "Next day off" line. The build
 date isn't a district day off (a typo on their side, or a day only they close for). Replace the file's days
 each summer when the district publishes the new calendar.
 
+**A themed week.** On the roster page, "Roll a themed week" fills Monday to Friday at random for a chosen school
+and theme (Music Prodigy, Mathlete, The Da Vinci, Move It or Lose It, Jack of All Trades). The themes are the
+`THEMES` list near the top of `build.mjs`: each has a name, a one-line blurb and the program types it draws
+from, and `mix: true` makes it try for a different type each day. To add a theme, add a line. A roll places one
+program a day, only on days the program lists, only in classes offered that day, and only for the grade chosen
+(the grade is optional and is never saved or sent). It spreads across programs and classes before it repeats,
+and treats a program that doesn't publish its days as a last resort, saying so when it uses one. Replacing a
+week someone built by hand takes two taps, and "Put back what I had" restores it until the page is reloaded.
+Each school page links in with `board/?roll=<school id>`. A roll fires `pas_theme_week` (theme, school, method
+of `roll`, `again` or `undo`).
+
 **A day-off plan.** On the same page, "Build your day-off plan" lets a family choose, for each day off, where a
 child will be: one of the camps posted for that date, another listed program (flagged as not posted for that
 date), or at home. Picks are saved with the rosters in the browser, per child, and gathered in a list that can
@@ -314,6 +325,7 @@ when they ask for one that isn't covered. `pas_program_pick` (program_id, method
 by name: method is `home_search`, `roster_search`, or `program_page` (the "Add to your week" button). `pas_school_save` (school)
 fires when someone saves a school as theirs. `pas_alert_signup` (school, program_id, place) fires when someone signs up for dates by email or follows a program; the address is never sent to analytics. `pas_filter` reports filter_type as `grade`, `program_type`, `relation`,
 `neighborhood`, `cost`, `day` or `school`. `pas_board_share` methods include `image_save`, `image_share` and `print`. The method `cta_click` is the "Share this schedule" button under the week, which leads down to the card; it is a click, not a share.
+`pas_theme_week` (theme, school, method) fires when someone rolls a themed week on the roster page.
 `pas_outbound` also fires with link_type `calendar`, `review` and `camp` (a day-off camp link). `pas_search` (search_term, results,
 school) fires when someone pauses typing in a school page's search box; searches with zero results
 show what parents want that isn't listed.

@@ -41,6 +41,16 @@ const TYPES = [
   { id: 'rec-center', label: 'Rec centers', color: '#3F6212', icon: 'M12 2 6 10h3l-4 6h6v5h2v-5h6l-4-6h3z' },
 ];
 const TYPE = Object.fromEntries(TYPES.map(t => [t.id, t]));
+// Themed weeks on the roster page: pick a school and a theme, and the page fills Monday to Friday at random from the
+// programs of those types. A "mix" theme tries for a different kind of program each day. To add a theme, add a line.
+const DICE = 'M6 3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3zm2.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM12 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM8.5 14a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z';
+const THEMES = [
+  { id: 'music', name: 'Music Prodigy', blurb: 'Music every day', types: ['music'] },
+  { id: 'mathlete', name: 'Mathlete', blurb: 'STEM, chess and homework help', types: ['stem', 'academics', 'games'] },
+  { id: 'davinci', name: 'The Da Vinci', blurb: 'Art, science and music', types: ['art', 'stem', 'music'], mix: true },
+  { id: 'move', name: 'Move It or Lose It', blurb: 'On their feet all week', types: ['movement'] },
+  { id: 'sampler', name: 'Jack of All Trades', blurb: 'Something different every day', types: ['music', 'art', 'movement', 'stem', 'academics', 'games'], mix: true, icon: DICE, color: '#0F4D90' },
+];
 const typeIcon = (t, size = 18) => `<svg class="ticon" width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="${t.icon}"/></svg>`;
 
 // ---------- site copy ----------
@@ -1068,6 +1078,7 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
   <div class="groups">
 ${groups}
   </div>
+  <p class="ask roll-ask needs-js-block"><span>${T(`Can’t decide? Let a theme pick for you.`)}</span> <a class="btn" href="${link('board/', 1)}?roll=${esc(s.id)}">${T(`Roll a themed week for {school}`, { school: s.shortName })}</a></p>
   <p class="ask">${T(`Know a program that serves {school} and isn’t here?`, { school: s.shortName })} <a href="${link('suggest/', 1)}">${T(`Add it to the list.`)}</a></p>
   ${alertsBox(1, { school: s, place: 'school', title: T(`Get {school} dates by email`, { school: s.shortName }), lede: T(`Sign-up openings and deadlines for these programs, and a heads-up before each day off.`) })}
   ${s.checkedNoPickup?.length ? `<section class="notes">
@@ -1693,9 +1704,10 @@ function boardPage() {
     rels: Object.fromEntries(Object.entries(REL).map(([k, v]) => [k, v.pill])),
     types: Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, color: t.color, icon: t.icon }])),
     schools: Object.fromEntries(schools.map(s => [s.id, { name: s.shortName, path: link(s.id + '/', 1) }])),
+    themes: Object.fromEntries(THEMES.map(t => [t.id, { types: t.types, mix: !!t.mix }])),
     programs: Object.fromEntries(programs.map(p => [p.id, {
       name: p.name, hours: p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [], type: p.types[0], no: order.indexOf(p.id) + 1,
-      days: p.days || null, offerDays: p.offerDays || null, rate: p.rate || null,
+      days: p.days || null, offerDays: p.offerDays || null, rate: p.rate || null, types: p.types, grades: p._grades,
       path: link(programPath(p), 1), q: [p.name, ...(p.offers || []), ...(p.keywords || []), ...p.types.map(t => TYPE[t].label)].join(' ').toLowerCase(),
       schools: Object.fromEntries(Object.entries(p.schools).map(([sid, l]) => [sid, { rel: l.relation, where: l.address || p.address || '', free: (l.price || p.price) === 'free' }])),
     }])),
@@ -1734,6 +1746,28 @@ function boardPage() {
       <div class="panel add-panel" id="add-panel" hidden></div>
       <p class="hint" id="add-status" aria-live="polite"></p>
     </div>
+    <details class="roller needs-js-block" id="roller">
+      <summary><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="${DICE}"/></svg><span class="roller-head"><b>${T(`Roll a themed week`)}</b><span>${T(`Pick a school and a theme, and we’ll fill Monday to Friday.`)}</span></span></summary>
+      <div class="roller-body">
+        <div class="pair">
+          <div class="field">
+            <label for="roll-school">${T(`School`)}</label>
+            <select id="roll-school"><option value="">Choose a school</option>${[...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<option value="${esc(s.id)}">${esc(s.shortName)}</option>`).join('')}</select>
+          </div>
+          <div class="field">
+            <label for="roll-grade">${T(`Grade`)}</label>
+            <select id="roll-grade"><option value="">Any grade</option>${GRADES.map(g => `<option value="${g}">${g === 'PK' ? 'Pre-K' : g === 'K' ? 'Kindergarten' : 'Grade ' + g}</option>`).join('')}</select>
+            <span class="hint">${T(`Optional. It skips programs that don’t take that grade, and it isn’t saved.`)}</span>
+          </div>
+        </div>
+        <div class="roller-themes" id="roll-themes" role="group" aria-label="Theme">
+          ${THEMES.map(t => `<button type="button" class="theme" data-theme="${t.id}" style="--tc:${t.color || TYPE[t.types[0]].color}" disabled><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="${t.icon || TYPE[t.types[0]].icon}"/></svg><span><b>${T(t.name)}</b><span>${T(t.blurb)}</span><span class="theme-n" data-n></span></span></button>`).join('\n          ')}
+        </div>
+        <p class="roller-status" id="roll-status" aria-live="polite"></p>
+        <div class="actions" id="roll-after" hidden><button type="button" class="btn" id="roll-again">Roll again</button><button type="button" class="clear" id="roll-undo">Put back what I had</button></div>
+        <p class="hint">${T(`A themed week is a starting point, picked at random from what’s listed for that school. Check days, ages and open spots with each program before you plan around it.`)}</p>
+      </div>
+    </details>
     <div class="panel" id="board-empty" hidden>
       <p id="board-empty-text">Search for a program above and pick its days. Or open a school’s page and choose “Add to roster” on any program.</p>
       <div class="actions">${schoolLinks}</div>
