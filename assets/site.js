@@ -99,7 +99,7 @@
   if (ideaForm) ideaForm.addEventListener('submit', function () { track({ event: 'pas_suggest_submit', suggest_kind: 'idea', school: '' }); });
 
   // ----- dates by email: the sign-up goes from this page straight to Klaviyo, with its public key -----
-  // Only a first name, the email address and the chosen school are sent. Nothing from a roster goes with it.
+  // Only a first name, the email address and the chosen school or program are sent. Nothing from a roster goes with it.
   all(document, 'form[data-alerts]').forEach(function (form) {
     var sel = form.querySelector('select[name="school"]');
     var status = form.querySelector('[data-alerts-status]');
@@ -116,13 +116,20 @@
       if (form.elements.company && form.elements.company.value) return;   // only a script fills the hidden field
       if (!first) { say('Add your first name so we know what to call you.', 'bad'); form.elements.first_name.focus(); return; }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { say('That email address doesn’t look right. Check it and try again.', 'bad'); form.elements.email.focus(); return; }
-      var field = form.elements.school, school = field.value;
+      var follow = form.elements.program || null;   // a program page follows that one program instead of a school
+      var field = follow || form.elements.school, school = follow ? '' : field.value;
       var name = sel ? (sel.options[sel.selectedIndex].getAttribute('data-name') || '') : (field.getAttribute('data-name') || '');
       if (form.getAttribute('data-preview')) { say('This is the preview, so nothing was sent. Sign-ups work on the live site.'); return; }
       btn.disabled = true;
       say('Sending…');
-      var props = { school: school, signup_place: place };
-      if (name) props.school_name = name;
+      // Following a program leaves any school already on the address alone, and adds the program to its list.
+      var props = follow ? { signup_place: place } : { school: school, signup_place: place };
+      if (name && !follow) props.school_name = name;
+      var klaviyo = function (path, body) {
+        return fetch('https://a.klaviyo.com/client/' + path + '?company_id=' + encodeURIComponent(form.getAttribute('data-key')), {
+          method: 'POST', headers: { 'content-type': 'application/vnd.api+json', revision: '2026-07-15' }, body: JSON.stringify(body)
+        }).then(function (r) { if (r.status < 200 || r.status > 299) throw new Error('status ' + r.status); return r; });
+      };
       fetch('https://a.klaviyo.com/client/subscriptions?company_id=' + encodeURIComponent(form.getAttribute('data-key')), {
         method: 'POST',
         headers: { 'content-type': 'application/vnd.api+json', revision: '2026-07-15' },
@@ -131,12 +138,16 @@
           relationships: { list: { data: { type: 'list', id: form.getAttribute('data-list') } } } } })
       }).then(function (r) {
         if (r.status < 200 || r.status > 299) throw new Error('status ' + r.status);
+        if (!follow) return r;
+        return klaviyo('profiles', { data: { type: 'profile', attributes: { email: email }, meta: { patch_properties: { append: { programs: follow.value } } } } });
+      }).then(function () {
         row.hidden = true;
         var hint = form.querySelector('.hint'); if (hint) hint.hidden = true;
         say(form.getAttribute('data-confirm')
           ? 'Almost there. Check your inbox for a confirmation email and tap the button in it.'
+          : follow ? 'You’re following ' + name + ', ' + first + '. If it already has dates posted, they reach you tomorrow morning. After that, you’ll hear when it posts something new.'
           : 'You’re on the list' + (name ? ' for ' + name : '') + ', ' + first + '. Dates already on the calendar reach you tomorrow morning. After that, it’s one email a week at most.', 'good');
-        track({ event: 'pas_alert_signup', school: school, place: place });
+        track({ event: 'pas_alert_signup', school: school, program_id: follow ? follow.value : '', place: place });
       }).catch(function () {
         btn.disabled = false;
         say('That didn’t go through. Please try again in a minute.', 'bad');

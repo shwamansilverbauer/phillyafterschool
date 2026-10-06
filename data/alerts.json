@@ -18,7 +18,197 @@
       "name": "Coppin"
     }
   ],
+  "programs": [
+    {
+      "id": "imagine-that-philly",
+      "name": "Imagine That Philly"
+    },
+    {
+      "id": "nebinger-clubs",
+      "name": "School clubs and teams at Nebinger"
+    },
+    {
+      "id": "girls-on-the-run",
+      "name": "Girls on the Run at Nebinger"
+    },
+    {
+      "id": "nebinger-arts-partners",
+      "name": "Arts partners and Science Olympiad at Nebinger"
+    },
+    {
+      "id": "meredith-clubs",
+      "name": "Meredith after-school clubs"
+    },
+    {
+      "id": "coppin-clubs",
+      "name": "School clubs and ensembles at Coppin"
+    },
+    {
+      "id": "zhang-sah",
+      "name": "Zhang Sah"
+    },
+    {
+      "id": "shot-tower-rec",
+      "name": "Shot Tower Recreation Center"
+    },
+    {
+      "id": "philly-inmovement",
+      "name": "Philly InMovement: MOVE After School"
+    },
+    {
+      "id": "settlement-kaleidoscope-plus",
+      "name": "Settlement Music School: Kaleidoscope Plus"
+    },
+    {
+      "id": "philly-art-center-qv",
+      "name": "Philly Art Center, Queen Village"
+    },
+    {
+      "id": "old-pine",
+      "name": "Old Pine Community Center"
+    },
+    {
+      "id": "butchers-sew-shop",
+      "name": "Butcher’s Sew Shop Junior"
+    },
+    {
+      "id": "mister-johns-music",
+      "name": "Mister John’s Music"
+    },
+    {
+      "id": "coco-academy",
+      "name": "CoCo Academy"
+    },
+    {
+      "id": "queen-and-rook",
+      "name": "Queen & Rook Game Cafe"
+    },
+    {
+      "id": "beehive-at-bok",
+      "name": "Beehive at Bok"
+    },
+    {
+      "id": "movemakers",
+      "name": "MoveMakers Philly"
+    },
+    {
+      "id": "kids-on-12th",
+      "name": "Kids on 12th"
+    },
+    {
+      "id": "columbus-square-rec",
+      "name": "Columbus Square Recreation Center"
+    },
+    {
+      "id": "hawthorne-cultural-center",
+      "name": "Hawthorne Cultural Center"
+    },
+    {
+      "id": "starr-garden-rec",
+      "name": "Starr Garden Recreation Center"
+    },
+    {
+      "id": "palumbo-rec",
+      "name": "Palumbo Recreation Center"
+    },
+    {
+      "id": "mighty-writers-el-futuro",
+      "name": "Mighty Writers El Futuro"
+    },
+    {
+      "id": "free-library-leap",
+      "name": "Free Library LEAP"
+    },
+    {
+      "id": "fleisher-art-memorial",
+      "name": "Fleisher Art Memorial"
+    },
+    {
+      "id": "makom-community",
+      "name": "Makom Community"
+    }
+  ],
   "alerts": [
+    {
+      "id": "camp-butchers-sew-shop-2026-10-09",
+      "kind": "camp",
+      "date": "2026-10-09",
+      "sendOn": "2026-09-27",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2026-10-09",
+      "when": "Friday, October 9",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Staff professional development). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-mister-johns-music-2026-10-09",
+      "kind": "camp",
+      "date": "2026-10-09",
+      "sendOn": "2026-09-27",
+      "schools": [],
+      "programs": [
+        "mister-johns-music"
+      ],
+      "within": "off-2026-10-09",
+      "when": "Friday, October 9",
+      "title": "Mister John’s Music: camp on a day off",
+      "text": "School is closed (Staff professional development). Mister John’s Music has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-movemakers-2026-10-09",
+      "kind": "camp",
+      "date": "2026-10-09",
+      "sendOn": "2026-09-27",
+      "schools": [],
+      "programs": [
+        "movemakers"
+      ],
+      "within": "off-2026-10-09",
+      "when": "Friday, October 9",
+      "title": "MoveMakers Philly: camp on a day off",
+      "text": "School is closed (Staff professional development). MoveMakers Philly has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/movemakers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2026-10-09",
+      "kind": "camp",
+      "date": "2026-10-09",
+      "sendOn": "2026-09-27",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2026-10-09",
+      "when": "Friday, October 9",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Staff professional development). Old Pine Community Center has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-philly-inmovement-2026-10-09",
+      "kind": "camp",
+      "date": "2026-10-09",
+      "sendOn": "2026-09-27",
+      "schools": [],
+      "programs": [
+        "philly-inmovement"
+      ],
+      "within": "off-2026-10-09",
+      "when": "Friday, October 9",
+      "title": "Philly InMovement: MOVE After School: camp on a day off",
+      "text": "School is closed (Staff professional development). Philly InMovement: MOVE After School has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/philly-inmovement/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
     {
       "id": "off-2026-10-09",
       "kind": "dayoff",
@@ -27,11 +217,124 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Friday, October 9",
       "title": "No school: Staff professional development",
       "text": "5 listed programs have posted a camp: Butcher’s Sew Shop Junior, Mister John’s Music, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-10-09",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2026-10-12",
+      "kind": "camp",
+      "date": "2026-10-12",
+      "sendOn": "2026-09-27",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2026-10-12",
+      "when": "Monday, October 12",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Indigenous Peoples’ Day). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-fleisher-art-memorial-2026-10-12",
+      "kind": "camp",
+      "date": "2026-10-12",
+      "sendOn": "2026-09-27",
+      "schools": [],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "within": "off-2026-10-12",
+      "when": "Monday, October 12",
+      "title": "Fleisher Art Memorial: camp on a day off",
+      "text": "School is closed (Indigenous Peoples’ Day). Fleisher Art Memorial has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-makom-community-2026-10-12",
+      "kind": "camp",
+      "date": "2026-10-12",
+      "sendOn": "2026-09-27",
+      "schools": [],
+      "programs": [
+        "makom-community"
+      ],
+      "within": "off-2026-10-12",
+      "when": "Monday, October 12",
+      "title": "Makom Community: camp on a day off",
+      "text": "School is closed (Indigenous Peoples’ Day). Makom Community has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/makom-community/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-mister-johns-music-2026-10-12",
+      "kind": "camp",
+      "date": "2026-10-12",
+      "sendOn": "2026-09-27",
+      "schools": [],
+      "programs": [
+        "mister-johns-music"
+      ],
+      "within": "off-2026-10-12",
+      "when": "Monday, October 12",
+      "title": "Mister John’s Music: camp on a day off",
+      "text": "School is closed (Indigenous Peoples’ Day). Mister John’s Music has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-movemakers-2026-10-12",
+      "kind": "camp",
+      "date": "2026-10-12",
+      "sendOn": "2026-09-27",
+      "schools": [],
+      "programs": [
+        "movemakers"
+      ],
+      "within": "off-2026-10-12",
+      "when": "Monday, October 12",
+      "title": "MoveMakers Philly: camp on a day off",
+      "text": "School is closed (Indigenous Peoples’ Day). MoveMakers Philly has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/movemakers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2026-10-12",
+      "kind": "camp",
+      "date": "2026-10-12",
+      "sendOn": "2026-09-27",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2026-10-12",
+      "when": "Monday, October 12",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Indigenous Peoples’ Day). Old Pine Community Center has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-philly-inmovement-2026-10-12",
+      "kind": "camp",
+      "date": "2026-10-12",
+      "sendOn": "2026-09-27",
+      "schools": [],
+      "programs": [
+        "philly-inmovement"
+      ],
+      "within": "off-2026-10-12",
+      "when": "Monday, October 12",
+      "title": "Philly InMovement: MOVE After School: camp on a day off",
+      "text": "School is closed (Indigenous Peoples’ Day). Philly InMovement: MOVE After School has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/philly-inmovement/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "off-2026-10-12",
@@ -41,6 +344,7 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Monday, October 12",
       "title": "No school: Indigenous Peoples’ Day",
       "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
@@ -57,10 +361,125 @@
         "meredith",
         "coppin"
       ],
+      "programs": [
+        "mister-johns-music"
+      ],
       "when": "Monday, November 2",
       "title": "Mister John’s Music",
       "text": "Winter/Spring session goes on sale to new students.",
       "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2026-11-03",
+      "kind": "camp",
+      "date": "2026-11-03",
+      "sendOn": "2026-10-18",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2026-11-03",
+      "when": "Tuesday, November 3",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Election Day). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-fleisher-art-memorial-2026-11-03",
+      "kind": "camp",
+      "date": "2026-11-03",
+      "sendOn": "2026-10-18",
+      "schools": [],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "within": "off-2026-11-03",
+      "when": "Tuesday, November 3",
+      "title": "Fleisher Art Memorial: camp on a day off",
+      "text": "School is closed (Election Day). Fleisher Art Memorial has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-makom-community-2026-11-03",
+      "kind": "camp",
+      "date": "2026-11-03",
+      "sendOn": "2026-10-18",
+      "schools": [],
+      "programs": [
+        "makom-community"
+      ],
+      "within": "off-2026-11-03",
+      "when": "Tuesday, November 3",
+      "title": "Makom Community: camp on a day off",
+      "text": "School is closed (Election Day). Makom Community has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/makom-community/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-mister-johns-music-2026-11-03",
+      "kind": "camp",
+      "date": "2026-11-03",
+      "sendOn": "2026-10-18",
+      "schools": [],
+      "programs": [
+        "mister-johns-music"
+      ],
+      "within": "off-2026-11-03",
+      "when": "Tuesday, November 3",
+      "title": "Mister John’s Music: camp on a day off",
+      "text": "School is closed (Election Day). Mister John’s Music has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-movemakers-2026-11-03",
+      "kind": "camp",
+      "date": "2026-11-03",
+      "sendOn": "2026-10-18",
+      "schools": [],
+      "programs": [
+        "movemakers"
+      ],
+      "within": "off-2026-11-03",
+      "when": "Tuesday, November 3",
+      "title": "MoveMakers Philly: camp on a day off",
+      "text": "School is closed (Election Day). MoveMakers Philly has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/movemakers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2026-11-03",
+      "kind": "camp",
+      "date": "2026-11-03",
+      "sendOn": "2026-10-18",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2026-11-03",
+      "when": "Tuesday, November 3",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Election Day). Old Pine Community Center has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-philly-inmovement-2026-11-03",
+      "kind": "camp",
+      "date": "2026-11-03",
+      "sendOn": "2026-10-18",
+      "schools": [],
+      "programs": [
+        "philly-inmovement"
+      ],
+      "within": "off-2026-11-03",
+      "when": "Tuesday, November 3",
+      "title": "Philly InMovement: MOVE After School: camp on a day off",
+      "text": "School is closed (Election Day). Philly InMovement: MOVE After School has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/philly-inmovement/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -71,11 +490,124 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Tuesday, November 3",
       "title": "No school: Election Day",
       "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-11-03",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2026-11-11",
+      "kind": "camp",
+      "date": "2026-11-11",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2026-11-11",
+      "when": "Wednesday, November 11",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Veterans Day). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-fleisher-art-memorial-2026-11-11",
+      "kind": "camp",
+      "date": "2026-11-11",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "within": "off-2026-11-11",
+      "when": "Wednesday, November 11",
+      "title": "Fleisher Art Memorial: camp on a day off",
+      "text": "School is closed (Veterans Day). Fleisher Art Memorial has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-makom-community-2026-11-11",
+      "kind": "camp",
+      "date": "2026-11-11",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "makom-community"
+      ],
+      "within": "off-2026-11-11",
+      "when": "Wednesday, November 11",
+      "title": "Makom Community: camp on a day off",
+      "text": "School is closed (Veterans Day). Makom Community has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/makom-community/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-mister-johns-music-2026-11-11",
+      "kind": "camp",
+      "date": "2026-11-11",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "mister-johns-music"
+      ],
+      "within": "off-2026-11-11",
+      "when": "Wednesday, November 11",
+      "title": "Mister John’s Music: camp on a day off",
+      "text": "School is closed (Veterans Day). Mister John’s Music has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-movemakers-2026-11-11",
+      "kind": "camp",
+      "date": "2026-11-11",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "movemakers"
+      ],
+      "within": "off-2026-11-11",
+      "when": "Wednesday, November 11",
+      "title": "MoveMakers Philly: camp on a day off",
+      "text": "School is closed (Veterans Day). MoveMakers Philly has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/movemakers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2026-11-11",
+      "kind": "camp",
+      "date": "2026-11-11",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2026-11-11",
+      "when": "Wednesday, November 11",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Veterans Day). Old Pine Community Center has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-philly-inmovement-2026-11-11",
+      "kind": "camp",
+      "date": "2026-11-11",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "philly-inmovement"
+      ],
+      "within": "off-2026-11-11",
+      "when": "Wednesday, November 11",
+      "title": "Philly InMovement: MOVE After School: camp on a day off",
+      "text": "School is closed (Veterans Day). Philly InMovement: MOVE After School has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/philly-inmovement/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "off-2026-11-11",
@@ -85,11 +617,92 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Wednesday, November 11",
       "title": "No school: Veterans Day",
       "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-11-11",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2026-11-16",
+      "kind": "camp",
+      "date": "2026-11-16",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2026-11-16",
+      "when": "Monday, November 16",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Report card conferences). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-makom-community-2026-11-16",
+      "kind": "camp",
+      "date": "2026-11-16",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "makom-community"
+      ],
+      "within": "off-2026-11-16",
+      "when": "Monday, November 16",
+      "title": "Makom Community: camp on a day off",
+      "text": "School is closed (Report card conferences). Makom Community has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/makom-community/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-movemakers-2026-11-16",
+      "kind": "camp",
+      "date": "2026-11-16",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "movemakers"
+      ],
+      "within": "off-2026-11-16",
+      "when": "Monday, November 16",
+      "title": "MoveMakers Philly: camp on a day off",
+      "text": "School is closed (Report card conferences). MoveMakers Philly has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/movemakers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2026-11-16",
+      "kind": "camp",
+      "date": "2026-11-16",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2026-11-16",
+      "when": "Monday, November 16",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Report card conferences). Old Pine Community Center has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-philly-inmovement-2026-11-16",
+      "kind": "camp",
+      "date": "2026-11-16",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "philly-inmovement"
+      ],
+      "within": "off-2026-11-16",
+      "when": "Monday, November 16",
+      "title": "Philly InMovement: MOVE After School: camp on a day off",
+      "text": "School is closed (Report card conferences). Philly InMovement: MOVE After School has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/philly-inmovement/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "off-2026-11-16",
@@ -99,11 +712,60 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Monday, November 16",
       "title": "No school: Report card conferences",
       "text": "5 listed programs have posted a camp: Butcher’s Sew Shop Junior, Makom Community, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-11-16",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2026-11-25",
+      "kind": "camp",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2026-11-25",
+      "when": "Wednesday, November 25",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Staff professional development). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-movemakers-2026-11-25",
+      "kind": "camp",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [],
+      "programs": [
+        "movemakers"
+      ],
+      "within": "off-2026-11-25",
+      "when": "Wednesday, November 25",
+      "title": "MoveMakers Philly: camp on a day off",
+      "text": "School is closed (Staff professional development). MoveMakers Philly has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/movemakers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2026-11-25",
+      "kind": "camp",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2026-11-25",
+      "when": "Wednesday, November 25",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Staff professional development). Old Pine Community Center has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "off-2026-11-25",
@@ -113,6 +775,7 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Wednesday, November 25",
       "title": "No school: Staff professional development",
       "text": "3 listed programs have posted a camp: Butcher’s Sew Shop Junior, MoveMakers Philly and Old Pine Community Center.",
@@ -127,6 +790,7 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Thursday, November 26 to Friday, November 27",
       "title": "No school: Thanksgiving recess",
       "text": "No listed program has posted a camp for it yet.",
@@ -142,6 +806,9 @@
         "nebinger",
         "meredith",
         "coppin"
+      ],
+      "programs": [
+        "fleisher-art-memorial"
       ],
       "when": "Saturday, November 28",
       "title": "Fleisher Art Memorial",
@@ -159,6 +826,9 @@
         "meredith",
         "coppin"
       ],
+      "programs": [
+        "butchers-sew-shop"
+      ],
       "when": "Monday, November 30",
       "title": "Butcher’s Sew Shop Junior",
       "text": "Last day of early-bird pricing for Winter and Spring sessions.",
@@ -175,10 +845,45 @@
         "meredith",
         "coppin"
       ],
+      "programs": [
+        "philly-art-center-qv"
+      ],
       "when": "Monday, December 7",
       "title": "Philly Art Center, Queen Village",
       "text": "Last day to change a Winter/Spring registration.",
       "url": "https://phillyafterschool.org/programs/philly-art-center-qv/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2026-12-23",
+      "kind": "camp",
+      "date": "2026-12-23",
+      "sendOn": "2026-12-13",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2026-12-23",
+      "when": "Wednesday, December 23",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Winter recess). Butcher’s Sew Shop Junior has posted a camp for Dec 23.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2026-12-23",
+      "kind": "camp",
+      "date": "2026-12-23",
+      "sendOn": "2026-12-13",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2026-12-23",
+      "when": "Wednesday, December 23 to Wednesday, December 30",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Winter recess). Old Pine Community Center has posted a camp for Dec 23, Dec 28, Dec 29 and Dec 30.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -189,11 +894,60 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Wednesday, December 23 to Friday, January 1",
       "title": "No school: Winter recess",
       "text": "2 listed programs have posted a camp: Butcher’s Sew Shop Junior and Old Pine Community Center.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-12-23",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2027-01-15",
+      "kind": "camp",
+      "date": "2027-01-15",
+      "sendOn": "2027-01-03",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2027-01-15",
+      "when": "Friday, January 15",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Staff professional development). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-makom-community-2027-01-15",
+      "kind": "camp",
+      "date": "2027-01-15",
+      "sendOn": "2027-01-03",
+      "schools": [],
+      "programs": [
+        "makom-community"
+      ],
+      "within": "off-2027-01-15",
+      "when": "Friday, January 15",
+      "title": "Makom Community: camp on a day off",
+      "text": "School is closed (Staff professional development). Makom Community has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/makom-community/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2027-01-15",
+      "kind": "camp",
+      "date": "2027-01-15",
+      "sendOn": "2027-01-03",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2027-01-15",
+      "when": "Friday, January 15",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Staff professional development). Old Pine Community Center has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "off-2027-01-15",
@@ -203,11 +957,28 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Friday, January 15",
       "title": "No school: Staff professional development",
       "text": "3 listed programs have posted a camp: Butcher’s Sew Shop Junior, Makom Community and Old Pine Community Center.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-01-15",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2027-01-18",
+      "kind": "camp",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2027-01-18",
+      "when": "Monday, January 18",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Dr. Martin Luther King Jr. Day). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "off-2027-01-18",
@@ -217,11 +988,60 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Monday, January 18",
       "title": "No school: Dr. Martin Luther King Jr. Day",
       "text": "One listed program has posted a camp: Butcher’s Sew Shop Junior.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-01-18",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2027-01-29",
+      "kind": "camp",
+      "date": "2027-01-29",
+      "sendOn": "2027-01-17",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2027-01-29",
+      "when": "Friday, January 29",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Report card conferences). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-makom-community-2027-01-29",
+      "kind": "camp",
+      "date": "2027-01-29",
+      "sendOn": "2027-01-17",
+      "schools": [],
+      "programs": [
+        "makom-community"
+      ],
+      "within": "off-2027-01-29",
+      "when": "Friday, January 29",
+      "title": "Makom Community: camp on a day off",
+      "text": "School is closed (Report card conferences). Makom Community has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/makom-community/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2027-01-29",
+      "kind": "camp",
+      "date": "2027-01-29",
+      "sendOn": "2027-01-17",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2027-01-29",
+      "when": "Friday, January 29",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Report card conferences). Old Pine Community Center has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "off-2027-01-29",
@@ -231,11 +1051,60 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Friday, January 29",
       "title": "No school: Report card conferences",
       "text": "3 listed programs have posted a camp: Butcher’s Sew Shop Junior, Makom Community and Old Pine Community Center.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-01-29",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2027-02-12",
+      "kind": "camp",
+      "date": "2027-02-12",
+      "sendOn": "2027-01-31",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2027-02-12",
+      "when": "Friday, February 12",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Staff professional development). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-makom-community-2027-02-12",
+      "kind": "camp",
+      "date": "2027-02-12",
+      "sendOn": "2027-01-31",
+      "schools": [],
+      "programs": [
+        "makom-community"
+      ],
+      "within": "off-2027-02-12",
+      "when": "Friday, February 12",
+      "title": "Makom Community: camp on a day off",
+      "text": "School is closed (Staff professional development). Makom Community has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/makom-community/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2027-02-12",
+      "kind": "camp",
+      "date": "2027-02-12",
+      "sendOn": "2027-01-31",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2027-02-12",
+      "when": "Friday, February 12",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Staff professional development). Old Pine Community Center has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "off-2027-02-12",
@@ -245,11 +1114,44 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Friday, February 12",
       "title": "No school: Staff professional development",
       "text": "3 listed programs have posted a camp: Butcher’s Sew Shop Junior, Makom Community and Old Pine Community Center.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-02-12",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2027-02-15",
+      "kind": "camp",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2027-02-15",
+      "when": "Monday, February 15",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Presidents’ Day). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-fleisher-art-memorial-2027-02-15",
+      "kind": "camp",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "within": "off-2027-02-15",
+      "when": "Monday, February 15",
+      "title": "Fleisher Art Memorial: camp on a day off",
+      "text": "School is closed (Presidents’ Day). Fleisher Art Memorial has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "off-2027-02-15",
@@ -259,11 +1161,76 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Monday, February 15",
       "title": "No school: Presidents’ Day",
       "text": "2 listed programs have posted a camp: Butcher’s Sew Shop Junior and Fleisher Art Memorial.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-02-15",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2027-03-10",
+      "kind": "camp",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2027-03-10",
+      "when": "Wednesday, March 10",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Eid al-Fitr). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-fleisher-art-memorial-2027-03-10",
+      "kind": "camp",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "within": "off-2027-03-10",
+      "when": "Wednesday, March 10",
+      "title": "Fleisher Art Memorial: camp on a day off",
+      "text": "School is closed (Eid al-Fitr). Fleisher Art Memorial has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-makom-community-2027-03-10",
+      "kind": "camp",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [],
+      "programs": [
+        "makom-community"
+      ],
+      "within": "off-2027-03-10",
+      "when": "Wednesday, March 10",
+      "title": "Makom Community: camp on a day off",
+      "text": "School is closed (Eid al-Fitr). Makom Community has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/makom-community/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2027-03-10",
+      "kind": "camp",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2027-03-10",
+      "when": "Wednesday, March 10",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Eid al-Fitr). Old Pine Community Center has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "off-2027-03-10",
@@ -273,11 +1240,76 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Wednesday, March 10",
       "title": "No school: Eid al-Fitr",
       "text": "4 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community and Old Pine Community Center.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-03-10",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2027-03-22",
+      "kind": "camp",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2027-03-22",
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Spring recess and Good Friday). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-fleisher-art-memorial-2027-03-22",
+      "kind": "camp",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "within": "off-2027-03-22",
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "Fleisher Art Memorial: camp on a day off",
+      "text": "School is closed (Spring recess and Good Friday). Fleisher Art Memorial has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-makom-community-2027-03-22",
+      "kind": "camp",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [],
+      "programs": [
+        "makom-community"
+      ],
+      "within": "off-2027-03-22",
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "Makom Community: camp on a day off",
+      "text": "School is closed (Spring recess and Good Friday). Makom Community has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/makom-community/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2027-03-22",
+      "kind": "camp",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2027-03-22",
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Spring recess and Good Friday). Old Pine Community Center has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "off-2027-03-22",
@@ -287,11 +1319,44 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Monday, March 22 to Friday, March 26",
       "title": "No school: Spring recess and Good Friday",
       "text": "4 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community and Old Pine Community Center.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-03-22",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2027-03-29",
+      "kind": "camp",
+      "date": "2027-03-29",
+      "sendOn": "2027-03-14",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2027-03-29",
+      "when": "Monday, March 29",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Staff professional development). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2027-03-29",
+      "kind": "camp",
+      "date": "2027-03-29",
+      "sendOn": "2027-03-14",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2027-03-29",
+      "when": "Monday, March 29",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Staff professional development). Old Pine Community Center has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "off-2027-03-29",
@@ -301,11 +1366,60 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Monday, March 29",
       "title": "No school: Staff professional development",
       "text": "2 listed programs have posted a camp: Butcher’s Sew Shop Junior and Old Pine Community Center.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-03-29",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2027-04-16",
+      "kind": "camp",
+      "date": "2027-04-16",
+      "sendOn": "2027-04-04",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2027-04-16",
+      "when": "Friday, April 16",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Report card conferences). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-fleisher-art-memorial-2027-04-16",
+      "kind": "camp",
+      "date": "2027-04-16",
+      "sendOn": "2027-04-04",
+      "schools": [],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "within": "off-2027-04-16",
+      "when": "Friday, April 16",
+      "title": "Fleisher Art Memorial: camp on a day off",
+      "text": "School is closed (Report card conferences). Fleisher Art Memorial has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2027-04-16",
+      "kind": "camp",
+      "date": "2027-04-16",
+      "sendOn": "2027-04-04",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2027-04-16",
+      "when": "Friday, April 16",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Report card conferences). Old Pine Community Center has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "off-2027-04-16",
@@ -315,11 +1429,76 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Friday, April 16",
       "title": "No school: Report card conferences",
       "text": "3 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial and Old Pine Community Center.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-04-16",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2027-05-17",
+      "kind": "camp",
+      "date": "2027-05-17",
+      "sendOn": "2027-05-02",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2027-05-17",
+      "when": "Monday, May 17",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Eid al-Adha). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-fleisher-art-memorial-2027-05-17",
+      "kind": "camp",
+      "date": "2027-05-17",
+      "sendOn": "2027-05-02",
+      "schools": [],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "within": "off-2027-05-17",
+      "when": "Monday, May 17",
+      "title": "Fleisher Art Memorial: camp on a day off",
+      "text": "School is closed (Eid al-Adha). Fleisher Art Memorial has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-makom-community-2027-05-17",
+      "kind": "camp",
+      "date": "2027-05-17",
+      "sendOn": "2027-05-02",
+      "schools": [],
+      "programs": [
+        "makom-community"
+      ],
+      "within": "off-2027-05-17",
+      "when": "Monday, May 17",
+      "title": "Makom Community: camp on a day off",
+      "text": "School is closed (Eid al-Adha). Makom Community has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/makom-community/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2027-05-17",
+      "kind": "camp",
+      "date": "2027-05-17",
+      "sendOn": "2027-05-02",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2027-05-17",
+      "when": "Monday, May 17",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Eid al-Adha). Old Pine Community Center has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "off-2027-05-17",
@@ -329,11 +1508,76 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Monday, May 17",
       "title": "No school: Eid al-Adha",
       "text": "4 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community and Old Pine Community Center.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-05-17",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-butchers-sew-shop-2027-05-18",
+      "kind": "camp",
+      "date": "2027-05-18",
+      "sendOn": "2027-05-02",
+      "schools": [],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "within": "off-2027-05-18",
+      "when": "Tuesday, May 18",
+      "title": "Butcher’s Sew Shop Junior: camp on a day off",
+      "text": "School is closed (Election Day). Butcher’s Sew Shop Junior has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-fleisher-art-memorial-2027-05-18",
+      "kind": "camp",
+      "date": "2027-05-18",
+      "sendOn": "2027-05-02",
+      "schools": [],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "within": "off-2027-05-18",
+      "when": "Tuesday, May 18",
+      "title": "Fleisher Art Memorial: camp on a day off",
+      "text": "School is closed (Election Day). Fleisher Art Memorial has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-makom-community-2027-05-18",
+      "kind": "camp",
+      "date": "2027-05-18",
+      "sendOn": "2027-05-02",
+      "schools": [],
+      "programs": [
+        "makom-community"
+      ],
+      "within": "off-2027-05-18",
+      "when": "Tuesday, May 18",
+      "title": "Makom Community: camp on a day off",
+      "text": "School is closed (Election Day). Makom Community has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/makom-community/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-old-pine-2027-05-18",
+      "kind": "camp",
+      "date": "2027-05-18",
+      "sendOn": "2027-05-02",
+      "schools": [],
+      "programs": [
+        "old-pine"
+      ],
+      "within": "off-2027-05-18",
+      "when": "Tuesday, May 18",
+      "title": "Old Pine Community Center: camp on a day off",
+      "text": "School is closed (Election Day). Old Pine Community Center has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "off-2027-05-18",
@@ -343,6 +1587,7 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Tuesday, May 18",
       "title": "No school: Election Day",
       "text": "4 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community and Old Pine Community Center.",
@@ -357,6 +1602,7 @@
       "schools": [
         "*"
       ],
+      "programs": [],
       "when": "Monday, May 31",
       "title": "No school: Memorial Day",
       "text": "No listed program has posted a camp for it yet.",
