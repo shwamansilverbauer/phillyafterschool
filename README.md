@@ -207,7 +207,8 @@ that publish no price and replaces a listed one. Those figures stay in the brows
 
 **The week card's QR code.** `data/card-qr.json` holds the pattern for the code printed on the week card. It
 encodes the short address `/w`, which `.htaccess` sends to the home page with `utm_source=week_card` and
-`utm_medium=qr`. Sharing the card from a phone also attaches a link tagged `utm_medium=share`. If the site's
+`utm_medium=qr`. The card is shared as a picture on its own: sending a link with it made Messages attach the
+picture twice, so the address and the code on the card are what lead back. If the site's
 address ever changes, regenerate the file (Python: `pip install qrcode`, encode `HTTPS://<DOMAIN>/W` at error
 level M with no border, and save each row as a string of 1s and 0s).
 
