@@ -1489,6 +1489,7 @@ function daysOffPage() {
         </div>
         <div class="actions">
           <button type="button" class="btn primary" id="off-share" hidden>Share the card</button>
+          <button type="button" class="btn" id="off-copy-pic" hidden>Copy picture</button>
           <button type="button" class="btn" id="off-save">Save as image</button>
           <button type="button" class="btn" id="off-print">Print</button>
         </div>
@@ -1637,6 +1638,7 @@ function boardPage() {
         </div>
         <div class="actions">
           <button type="button" class="btn primary" id="card-share" hidden>Share the card</button>
+          <button type="button" class="btn" id="card-copy-pic" hidden>Copy picture</button>
           <button type="button" class="btn" id="card-save">Save as image</button>
           <button type="button" class="btn" id="card-print">Print</button>
         </div>
