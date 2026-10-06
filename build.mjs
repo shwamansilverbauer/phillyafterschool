@@ -48,7 +48,7 @@ const TYPE = Object.fromEntries(TYPES.map(t => [t.id, t]));
 const DICE = 'M6 3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3zm2.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM12 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM8.5 14a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z';
 const THEMES = [
   { id: 'music', name: 'Music Prodigy', blurb: 'Music every day', types: ['music'] },
-  { id: 'mathlete', name: 'Mathlete', blurb: 'STEM, chess and homework help', types: ['stem', 'games'], words: ['homework', 'homework help', 'math'] },
+  { id: 'mathlete', name: 'Mathlete', blurb: 'STEM, chess and homework help', types: ['stem', 'games'], words: ['homework help', 'math'] },
   { id: 'davinci', name: 'The Da Vinci', blurb: 'Art, science and music', types: ['art', 'stem', 'music'], mix: true },
   { id: 'move', name: 'Move It or Lose It', blurb: 'On their feet all week', types: ['movement'] },
   { id: 'crafts', name: 'Glitter and Glue', blurb: 'Arts and crafts all week', types: ['art'] },
