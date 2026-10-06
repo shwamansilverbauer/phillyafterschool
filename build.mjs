@@ -1739,12 +1739,33 @@ function accountPage() {
 </div>`;
   return layout({ title: 'Your account', description: `Sign in to ${cfg.siteName} to make or join a share group.`, pathName: 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
 }
+// What the group and join pages need to know about programs: names and colors to show, classes to recognise.
+const groupsInfo = () => ({
+  site: cfg.siteName,
+  types: Object.fromEntries(TYPES.map(t => [t.id, { color: t.color }])),
+  programs: Object.fromEntries(programs.map(p => [p.id, { name: p.name, type: p.types[0], offers: p.offers || [] }])),
+});
+function joinPage() {
+  const hero = `    <h1>${T(`Join a class or group`)}</h1>
+    <p class="lede">${T(`Enter the code you were given, sign in with your email, and pick the week to share. The group’s creator approves you before you see anything.`)}</p>`;
+  const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
+  <noscript><p class="ask">${T(`Joining a group needs JavaScript turned on.`)}</p></noscript>
+  <div class="g-page" id="join"></div>
+  <section class="notes">
+    <h2>${T(`What a group sees`)}</h2>
+    <ul>
+      <li>${T(`Your child’s first name and the programs on their week. No last names, addresses, notes or photos.`)}</li>
+      <li>${T(`Only signed-in people the group’s creator has approved. Its link shows nothing to anyone else.`)}</li>
+      <li>${T(`You can take the week back out, leave the group or delete your account at any time.`)}</li>
+    </ul>
+    <p><a href="${link('privacy/', 1)}#groups">${T(`The full details are on the privacy page.`)}</a></p>
+  </section>
+  <script type="application/json" id="groups-data">${JSON.stringify(groupsInfo()).replace(/</g, '\\u003c')}</script>
+</div>`;
+  return layout({ title: 'Join a group', description: `Join a private share group on ${cfg.siteName} with the code you were given.`, pathName: 'join/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
+}
 function groupPage() {
-  const info = {
-    site: cfg.siteName,
-    types: Object.fromEntries(TYPES.map(t => [t.id, { color: t.color }])),
-    programs: Object.fromEntries(programs.map(p => [p.id, { name: p.name, type: p.types[0] }])),
-  };
+  const info = groupsInfo();
   const hero = `    <h1 id="group-title">${T(`Your group`)}</h1>
     <p class="lede" id="group-lede">${T(`Only this group’s approved members can see it.`)}</p>`;
   const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
@@ -2357,6 +2378,7 @@ if (GROUPS) {
   write('assets/groups.js', fs.readFileSync(path.join(ROOT, 'src/groups.js')));
   write('account/index.html', accountPage());
   write('groups/index.html', groupPage());
+  write('join/index.html', joinPage());
   if (!PREVIEW) write('groups/api.php', groupsApiPhp());
 }
 for (const f of fs.readdirSync(path.join(ROOT, 'src/static'))) write(f, fs.readFileSync(path.join(ROOT, 'src/static', f)));   // icons and the share image, served from the top level

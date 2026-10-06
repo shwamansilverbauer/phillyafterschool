@@ -298,7 +298,7 @@ switch ($method . ' ' . $action) {
     $email = strtolower(str($in, 'email', 150));
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) fail('email', 'That email address doesn’t look right.');
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|join|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
     if (too_many('mail:' . h($email), 3, 900) || too_many('mail:' . h($email), 8, 86400) || too_many('ip:' . who(), 10, 900) || too_many('ip:' . who(), 40, 86400)) {
       fail('slow', 'That’s a lot of sign-in emails. Use the newest one, or wait 15 minutes and try again.', 429);
     }
@@ -411,6 +411,17 @@ switch ($method . ' ' . $action) {
     q('INSERT INTO members (group_id, user_id, role, status, created) VALUES (?, ?, ?, ?, ?)', array($gid, $u['id'], 'owner', 'approved', now()));
     db()->commit();
     out(array('ok' => true, 'id' => $gid, 'name' => $name, 'code' => $code));
+  }
+
+  // Is this code right, and which group is it? Asked once someone is signed in, before they pick whose week to share.
+  case 'POST group_peek': {
+    $u = need_user();
+    if (too_many('join:' . $u['id'], 10, 3600)) fail('slow', 'Too many tries. Check the code with whoever gave it to you, and try again in an hour.', 429);
+    $code = tidy_code(str($in, 'code', 40));
+    $g = strlen($code) === 12 ? row('SELECT id, name FROM grp WHERE code_mac = ? AND expires > ?', array(code_mac($code), now())) : null;
+    if (!$g) { note('join:' . $u['id']); fail('code', 'No group has that code. Check it with whoever gave it to you.', 404); }
+    $m = row('SELECT status FROM members WHERE group_id = ? AND user_id = ?', array($g['id'], $u['id']));
+    out(array('ok' => true, 'id' => $g['id'], 'name' => $g['name'], 'member' => (bool) $m, 'status' => $m ? $m['status'] : ''));
   }
 
   // Ask to join with a code. The owner still has to approve; until then nothing in the group can be seen.
