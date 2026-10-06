@@ -133,6 +133,7 @@ async function main() {
   const today = value('--today') || localDay(new Date());
   if (!/^\d{4}-\d{2}-\d{2}$/.test(today)) throw new Error('--today needs a date like 2026-11-01');
   console.log(`Today is ${today} in Philadelphia. The feed has ${feed.alerts.length} dates; emails go out on ${feed.sendDay}s.`);
+  console.log(`Secrets found: KLAVIYO_API_KEY ${KEY ? 'yes' : 'NO'}, ALERTS_TOKEN ${TOKEN ? 'yes' : 'NO'}.`);   // never the values
   if (!KEY) return console.log('There is no KLAVIYO_API_KEY secret, so nothing was sent.');
   if (!TOKEN && !DRY) return console.log('There is no ALERTS_TOKEN secret, so nothing was sent.');
 
