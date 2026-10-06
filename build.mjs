@@ -158,6 +158,10 @@ if (daysOff) {
 for (const p of programs) for (const d of p.register?.dates || []) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(d.date || '') || !d.label) errors.push(`program "${p.id}": each register.dates entry needs a date (YYYY-MM-DD) and a label`);
 }
+// "updates" are short dated notes about a program (a new price, a new class). They are emailed to the people following it.
+for (const p of programs) if (p.updates !== undefined) {
+  if (!Array.isArray(p.updates) || p.updates.some(u => !/^\d{4}-\d{2}-\d{2}$/.test(u?.date || '') || typeof u.text !== 'string' || !u.text.trim() || u.text.length > 300)) errors.push(`program "${p.id}": each updates entry needs a date (YYYY-MM-DD) and a text of up to 300 characters`);
+}
 reviews.forEach((r, i) => {
   const at = `review ${i + 1}`;
   if (!ids.has(r.programId)) errors.push(`${at}: unknown programId "${r.programId}"`);
@@ -586,17 +590,34 @@ const LEAD = { register: 1, dayoff: 10, ...(ALERTS?.lead || {}) };   // least no
 const longDay = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' });
 // A date is announced on the last send day that still leaves `lead` days of notice, so there is one email a week at most.
 const sendOn = (iso, lead) => { let d = isoAdd(iso, -lead); while (weekday(d) !== SEND_DAY) d = isoAdd(d, -1); return d; };
+const nextSend = iso => { let d = iso; while (weekday(d) !== SEND_DAY) d = isoAdd(d, 1); return d; };   // the first send day on or after a date
 const mailUrl = (rel, hash = '') => `${cfg.siteUrl}/${rel}?utm_source=klaviyo&utm_medium=email&utm_campaign=dates${hash}`;
 const alertItems = [
   ...programs.flatMap(p => upcomingDates(p).map(d => ({
     id: `reg-${p.id}-${d.date}`, kind: 'register', date: d.date, sendOn: sendOn(d.date, LEAD.register),
-    schools: schools.filter(s => p.schools[s.id]).map(s => s.id),
+    schools: schools.filter(s => p.schools[s.id]).map(s => s.id), programs: [p.id],
     when: longDay(d.date), title: p.name, text: d.label + '.', url: mailUrl(programPath(p)), button: 'See the listing',
   }))),
+  // A program's own camp days go only to the people following that program. Anyone who also gets the day-off
+  // entry for the same day (it lists every camp) is not told twice: "within" names the entry that covers it.
+  ...offDays.filter(d => d.date >= TODAY).flatMap(d => campsOn(d).map(p => {
+    const days = p.daysOff.dates.filter(x => d.dates.includes(x));
+    return {
+      id: `camp-${p.id}-${d.date}`, kind: 'camp', date: d.date, sendOn: sendOn(d.date, LEAD.dayoff), schools: [], programs: [p.id], within: `off-${d.date}`,
+      when: days.length === 1 ? longDay(days[0]) : `${longDay(days[0])} to ${longDay(days[days.length - 1])}`, title: `${p.name}: camp on a day off`,
+      text: `School is closed (${d.name}). ${p.name} has posted a camp${days.length < d.dates.length ? ` for ${listNames(days.map(shortDate))}` : ''}.`,
+      url: mailUrl(programPath(p)), button: 'See the listing',
+    };
+  })),
+  // Notes from a program's "updates" list go out on the first send day after they are added, to its followers.
+  ...programs.flatMap(p => (p.updates || []).map(u => ({
+    id: `news-${p.id}-${u.date}`, kind: 'update', date: u.date, sendOn: nextSend(u.date), expires: isoAdd(nextSend(u.date), 2), schools: [], programs: [p.id],
+    when: 'Update', title: p.name, text: u.text.trim(), url: mailUrl(programPath(p)), button: 'See the listing',
+  }))).filter(a => a.expires >= TODAY),
   ...offDays.filter(d => d.date >= TODAY).map(d => {
     const camps = campsOn(d);
     return {
-      id: `off-${d.date}`, kind: 'dayoff', date: d.date, sendOn: sendOn(d.date, LEAD.dayoff), schools: ['*'],
+      id: `off-${d.date}`, kind: 'dayoff', date: d.date, sendOn: sendOn(d.date, LEAD.dayoff), schools: ['*'], programs: [],
       when: d.end ? `${longDay(d.date)} to ${longDay(d.end)}` : longDay(d.date), title: `No school: ${d.name}`,
       text: camps.length ? `${camps.length === 1 ? 'One listed program has' : camps.length + ' listed programs have'} posted a camp: ${listNames(camps.map(p => p.name))}.` : 'No listed program has posted a camp for it yet.',
       url: mailUrl(offPath, `#d-${d.date}`), button: camps.length ? 'See who’s open' : 'See the day',
@@ -607,15 +628,17 @@ const alertsFeed = () => ({
   about: `Dated reminders for ${cfg.siteName}. Each one is emailed on its sendOn day to people who asked for their school's dates.`,
   generated: TODAY, site: cfg.siteUrl, metric: ALERTS?.metric || 'School dates', sendDay: SEND_DAY_NAME,
   schools: schools.map(s => ({ id: s.id, name: s.shortName })),
+  programs: programs.map(p => ({ id: p.id, name: fullName(p) })),
   alerts: alertItems,
 });
-// The sign-up box. With a school it asks for a first name and an email; without one it also asks which school.
-const alertsBox = (depth, { school = null, place, title, lede }) => !ALERTS ? '' : `<section class="panel alerts" id="by-email">
+// The sign-up box. With a school or a program it asks for a first name and an email; without either it also asks which school.
+// A program box follows that one program: its dates, its day-off camps and its updates, and nothing else.
+const alertsBox = (depth, { school = null, program = null, place, title, lede }) => !ALERTS ? '' : `<section class="panel alerts" id="by-email">
   <h2>${title}</h2>
   <p>${lede}</p>
   <form class="alerts-form" data-alerts data-place="${place}" data-key="${esc(ALERTS.klaviyoKey)}" data-list="${esc(ALERTS.listId)}"${ALERTS.doubleOptIn ? ' data-confirm="1"' : ''}${PREVIEW ? ' data-preview="1"' : ''} data-clarity-mask="true" novalidate>
     <div class="alerts-row">
-      ${school ? `<input type="hidden" name="school" value="${esc(school.id)}" data-name="${esc(school.shortName)}">` : `<div class="field">
+      ${program ? `<input type="hidden" name="program" value="${esc(program.id)}" data-name="${esc(fullName(program))}">` : school ? `<input type="hidden" name="school" value="${esc(school.id)}" data-name="${esc(school.shortName)}">` : `<div class="field">
         <label for="al-school-${place}">${T(`Your school`)}</label>
         <select id="al-school-${place}" name="school">
           ${[...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<option value="${esc(s.id)}" data-name="${esc(s.shortName)}">${esc(s.shortName)}</option>`).join('')}
@@ -634,9 +657,9 @@ const alertsBox = (depth, { school = null, place, title, lede }) => !ALERTS ? ''
         <label for="al-company-${place}">Leave this blank</label>
         <input id="al-company-${place}" name="company" type="text" tabindex="-1" autocomplete="off">
       </div>
-      <button class="btn primary big" type="submit">${T(`Send me the dates`)}</button>
+      <button class="btn primary big" type="submit">${program ? T(`Follow this program`) : T(`Send me the dates`)}</button>
     </div>
-    <p class="hint">${T(`One email on {day} morning, and only in a week with a date coming up. Every email has an unsubscribe link.`, { day: SEND_DAY_NAME })} <a href="${link('privacy/', depth)}#email">${T(`How we handle your email.`)}</a></p>
+    <p class="hint">${program ? T(`Only when this program has something new, on a {day} morning. Every email has an unsubscribe link.`, { day: SEND_DAY_NAME }) : T(`One email on {day} morning, and only in a week with a date coming up. Every email has an unsubscribe link.`, { day: SEND_DAY_NAME })} <a href="${link('privacy/', depth)}#email">${T(`How we handle your email.`)}</a></p>
     <p class="alerts-status" data-alerts-status aria-live="polite"></p>
   </form>
   <noscript><p class="hint">${T(`Signing up needs JavaScript.`)}</p></noscript>
@@ -653,6 +676,7 @@ function alertsPage() {
       <li>${T(`A heads-up when sign-ups open or a deadline is close at a program that serves your school.`)}</li>
       <li>${T(`Each district day off at least {n} days ahead, with the listed programs running a camp that day.`, { n: LEAD.dayoff })}</li>
       <li>${T(`One email a week at most. If your school isn’t listed yet, you get the days off and every listed program’s dates.`)}</li>
+      <li>${T(`Only care about one program? Each program’s page has its own sign-up, for emails about that program alone.`)}</li>
       <li>${T(`No account, and no questions about your children.`)}</li>
     </ul>
     ${soon.length ? `<h2>${T(`Dates coming up`)}</h2>
@@ -740,6 +764,7 @@ function programPage(p) {
     </article>
     <p class="hint">${T(`Prices, hours and pickup routes change during the year. Confirm with the provider before you enroll.`)}</p>
   </section>
+  ${alertsBox(D, { program: p, place: 'program', title: T(`Get emails about {program}`, { program: fullName(p) }), lede: T(`Just this program: its sign-up dates, deadlines and day-off camps, plus the occasional note when something about it changes. For every program at your school, sign up on your school’s page.`) })}
   <section class="section" id="schools">
     <h2>${T(`Which schools it works for`)}</h2>
     <div class="serves">
@@ -1202,7 +1227,7 @@ function privacyPage() {
     <li>${T(`There are no accounts and no ads, and nothing you send is sold.`)}</li>
     <li>${T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us.`)}</li>
     <li>${T(`If you send a suggestion or a review, it arrives as an email to the person who runs the site.`)}</li>
-    ${ALERTS ? `<li>${T(`If you ask for dates by email, your first name, your email address and the school you picked are kept by Klaviyo, the service that sends the emails.`)}</li>` : ''}
+    ${ALERTS ? `<li>${T(`If you ask for dates by email, your first name, your email address and the school or program you picked are kept by Klaviyo, the service that sends the emails.`)}</li>` : ''}
     <li>${T(`We use Google Analytics and Microsoft Clarity to see how the site is used, so we can fix what’s confusing.`)}</li>
   </ul>
   <h2 id="rosters">${T(`Rosters and children’s names`)}</h2>
@@ -1224,7 +1249,7 @@ function privacyPage() {
   </ul>
   ${ALERTS ? `<h2 id="email">${T(`Dates by email`)}</h2>
   <ul>
-    <li>${T(`The sign-up form sends three things: your first name, your email address and the school you chose. They go from your browser to Klaviyo, the email service we use, and are stored there.`)}</li>
+    <li>${T(`The sign-up form sends three things: your first name, your email address and the school or program you chose. They go from your browser to Klaviyo, the email service we use, and are stored there.`)}</li>
     <li>${T(`It never asks for a child’s name, grade or anything else about your family, and your roster is not sent with it.`)}</li>
     <li>${T(`Klaviyo also notes which page you signed up on. Like most email services, it records whether an email was opened and which links were clicked, and it may estimate a general location from your internet connection.`)}</li>
     <li>${T(`Your name and address are used for these date emails and nothing else. They are not shared with the programs listed here, and they are not sold.`)}</li>

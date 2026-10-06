@@ -257,10 +257,18 @@ The pieces:
   (`school`, or `all` for a school that isn't listed), the school's name and the page it was on. Nothing else. A sign-up with
   an address already on the list updates its school. Set `alerts.doubleOptIn` to `true` if the Klaviyo list is switched
   to double opt-in, so the form tells people to check their inbox. Each sign-up fires `pas_alert_signup` (school, place).
+- **Following one program.** Every program page has its own box. It adds the address to the same list but sends no
+  school. Instead a second request adds the program's id to a `programs` list on the person's Klaviyo profile
+  (appended, so following a second program keeps the first, and a school chosen earlier stays). Followers get that
+  program's sign-up dates, its day-off camps and its `updates`, and nothing else. `pas_alert_signup` carries the
+  `program_id`.
 - **The feed.** The build writes `data/alerts.json`: every upcoming `register.dates` entry and every district day off, each
   with `sendOn`, the day it is announced. That is the last send day (`alerts.sendDay`, 0 for Sunday) that still leaves
   the notice in `alerts.lead` (1 day for a sign-up date, 10 for a day off). So adding a date to a program's
-  `register.dates` is all it takes to get it emailed.
+  `register.dates` is all it takes to get it emailed. The feed also has an entry for each program's own day-off camp (sent
+  only to that program's followers, and skipped for anyone whose school email already lists the camp) and for each
+  item in a program's optional `updates` list: `"updates": [{ "date": "2026-11-04", "text": "Fridays are full for the winter session." }]`.
+  An update goes out on the first send day after its date, to the program's followers only.
 - **The daily job.** `.github/workflows/alerts.yml` runs every morning, builds the site and runs `scripts/send-alerts.mjs`.
   It reads the list from Klaviyo and records one "School dates" event for each person who is due an email. Someone who
   just joined gets one "welcome" email the next morning with every date already announced; after that they get the
@@ -290,7 +298,7 @@ school, stars), `pas_board_add` (program_id, school, day, board, children) and `
 `pas_school_pick` (school, covered) fires when someone picks a school in the finder, and `pas_school_request` (school)
 when they ask for one that isn't covered. `pas_program_pick` (program_id, method) fires when someone picks a program
 by name: method is `home_search`, `roster_search`, or `program_page` (the "Add to your week" button). `pas_school_save` (school)
-fires when someone saves a school as theirs. `pas_alert_signup` (school, place) fires when someone signs up for dates by email; the address is never sent to analytics. `pas_filter` reports filter_type as `grade`, `program_type`, `relation`,
+fires when someone saves a school as theirs. `pas_alert_signup` (school, program_id, place) fires when someone signs up for dates by email or follows a program; the address is never sent to analytics. `pas_filter` reports filter_type as `grade`, `program_type`, `relation`,
 `neighborhood`, `cost`, `day` or `school`. `pas_board_share` methods include `image_save`, `image_share` and `print`.
 `pas_outbound` also fires with link_type `calendar`, `review` and `camp` (a day-off camp link). `pas_search` (search_term, results,
 school) fires when someone pauses typing in a school page's search box; searches with zero results
