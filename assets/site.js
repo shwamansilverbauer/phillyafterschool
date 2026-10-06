@@ -790,6 +790,7 @@
       return lines.join('\n');
     };
     var say = function (msg) { status.textContent = msg; };
+    var syncRoller = null;   // set further down, by the themed-week section
     var savedNote = function () { return storageOk ? 'Saved on this device.' : 'Your browser is blocking saved data, so this roster will be gone when you close the page. Keep the link.'; };
     var copy = function (text, done) {
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -887,6 +888,7 @@
       });
       banner.hidden = !shared;
       if (adder) { adder.hidden = !!shared; drawAdd(); }
+      if (syncRoller) syncRoller(total);
       drawCost(b);
       tabs.hidden = !!shared;
       kidBar.hidden = !!shared;
@@ -1274,6 +1276,113 @@
       if (asked.add && data.programs[asked.add] && !shared) {
         if (window.history && history.replaceState) { try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* file preview */ } }
         window.setTimeout(function () { pickAdd(asked.add, asked.school || '', 'program_page'); if (adder.scrollIntoView) adder.scrollIntoView({ block: 'center' }); }, 0);
+      }
+    }
+
+    // ----- a themed week: pick a school and a theme, and Monday to Friday fills at random from the matching programs -----
+    var roller = $('#roller');
+    if (roller && data.themes) {
+      var rollSchool = $('#roll-school'), rollGrade = $('#roll-grade'), rollStatus = $('#roll-status'), rollAfter = $('#roll-after'), rollUndo = $('#roll-undo'), rollAgain = $('#roll-again');
+      var themeBtns = all(roller, '[data-theme]');
+      var rolled = null;      // the last roll: { kid, which, before, sig, theme }. "before" is the week as it was before the first roll.
+      var rollerSeen = false;
+      var themeName = function (id) { var b = roller.querySelector('[data-theme="' + id + '"] b'); return b ? b.textContent : 'Themed'; };
+      var themePool = function (theme, sid, grade) {
+        return Object.keys(data.programs).filter(function (id) {
+          var p = data.programs[id];
+          return p.schools[sid] && p.types.some(function (t) { return theme.types.indexOf(t) > -1; }) && (!grade || !p.grades || p.grades.indexOf(grade) > -1);
+        });
+      };
+      // One program a day. A program or class already used this week costs points, so the week spreads out before it repeats;
+      // a program that doesn’t publish its days is a last resort, one that is only nearby costs a little; the rest is chance.
+      var rollWeek = function (theme, sid, grade) {
+        var ids = themePool(theme, sid, grade), used = {}, usedClass = {}, usedType = {}, board = emptyBoard(), guessed = [], n = 0;
+        DAYS.forEach(function (d) {
+          var best = null;
+          ids.forEach(function (id) {
+            var p = data.programs[id];
+            if (p.days && p.days.indexOf(d[0]) < 0) return;
+            var classes = p.offers.length ? p.offers.filter(function (c) { var on = p.offerDays && p.offerDays[c]; return !on || on.indexOf(d[0]) > -1; }) : [''];
+            var kind = '', kindUse = 99;
+            p.types.forEach(function (t) { if (theme.types.indexOf(t) > -1 && (usedType[t] || 0) < kindUse) { kind = t; kindUse = usedType[t] || 0; } });
+            classes.forEach(function (c) {
+              var score = (used[id] || 0) * 7 + (usedClass[id + '~' + c] || 0) * 100 + (theme.mix ? kindUse * 6 : 0) + (!p.days ? 30 : p.schools[sid].rel === 'nearby' ? 3 : 0) + Math.random() * 12;
+              if (!best || score < best.score) best = { id: id, c: c, kind: kind, score: score };
+            });
+          });
+          if (!best) return;
+          used[best.id] = (used[best.id] || 0) + 1;
+          usedClass[best.id + '~' + best.c] = 1;
+          usedType[best.kind] = (usedType[best.kind] || 0) + 1;
+          board.days[d[0]].push(makeEntry(best.id + '.' + sid, best.c));
+          n++;
+          var prog = data.programs[best.id];
+          if (!prog.days && guessed.indexOf(prog.name) < 0) guessed.push(prog.name);
+        });
+        return { board: board, guessed: guessed, n: n };
+      };
+      var sameSpot = function () { var r = loadRosters(); return !!rolled && rolled.kid === r.kid && rolled.which === r.active; };
+      // A week someone built by hand, or changed since the last roll, takes a second tap to replace.
+      var needsOk = function () { var b = activeBoard(); return countPicks(b) > 0 && !(sameSpot() && rolled.sig === JSON.stringify(b.days)); };
+      var disarm = function () { themeBtns.concat([rollAgain]).forEach(function (b) { b.removeAttribute('data-armed'); }); };
+      var drawThemes = function () {
+        var sid = rollSchool.value, grade = rollGrade.value;
+        themeBtns.forEach(function (b) {
+          var n = sid ? themePool(data.themes[b.getAttribute('data-theme')], sid, grade).length : 0;
+          b.disabled = !n;
+          b.querySelector('[data-n]').textContent = !sid ? '' : n ? n + (n === 1 ? ' program' : ' programs') + ' to draw from' : 'Nothing listed yet';
+        });
+        disarm();
+      };
+      var doRoll = function (id, btn, how) {
+        var theme = data.themes[id], sid = rollSchool.value, r = loadRosters();
+        if (!theme || shared) return;
+        if (!sid || !data.schools[sid]) { rollStatus.textContent = 'Choose a school first.'; rollSchool.focus(); return; }
+        if (needsOk() && !btn.getAttribute('data-armed')) {
+          disarm(); btn.setAttribute('data-armed', '1');
+          rollStatus.textContent = 'This replaces the week below. Tap again to go ahead.';
+          return;
+        }
+        disarm();
+        var res = rollWeek(theme, sid, rollGrade.value);
+        if (!res.n) { rollStatus.textContent = 'Nothing is listed for that theme at ' + data.schools[sid].name + ' yet.'; return; }
+        if (!sameSpot()) rolled = { kid: r.kid, which: r.active, before: cleanBoard(activeBoard()) };
+        r.kids[r.kid][r.active] = res.board;
+        rolled.sig = JSON.stringify(res.board.days); rolled.theme = id;
+        saveRosters(); say(''); render();
+        rollUndo.textContent = countPicks(rolled.before) ? 'Put back what I had' : 'Clear it';
+        rollAfter.hidden = false;
+        rollStatus.textContent = themeName(id) + ' week rolled for ' + data.schools[sid].name + (res.n < 5 ? ', with ' + res.n + ' of the 5 days filled' : '') + '. '
+          + (res.guessed.length ? 'The day is a guess for ' + res.guessed.join('; ') + ', which ' + (res.guessed.length > 1 ? 'don’t' : 'doesn’t') + ' publish ' + (res.guessed.length > 1 ? 'their' : 'its') + ' days. ' : '')
+          + savedNote();
+        track({ event: 'pas_theme_week', theme: id, school: sid, method: how });
+      };
+      themeBtns.forEach(function (b) { b.addEventListener('click', function () { doRoll(b.getAttribute('data-theme'), b, 'roll'); }); });
+      rollAgain.addEventListener('click', function () { if (rolled) doRoll(rolled.theme, rollAgain, 'again'); });
+      rollUndo.addEventListener('click', function () {
+        if (!sameSpot()) return;
+        var r = loadRosters(), had = countPicks(rolled.before);
+        r.kids[r.kid][r.active] = rolled.before;
+        track({ event: 'pas_theme_week', theme: rolled.theme, school: rollSchool.value, method: 'undo' });
+        rolled = null; rollAfter.hidden = true; disarm();
+        saveRosters(); render();
+        rollStatus.textContent = had ? 'Your week is back the way it was.' : 'Cleared.';
+      });
+      rollSchool.addEventListener('change', function () { if (rollSchool.value) store('pas-school', rollSchool.value); rollStatus.textContent = ''; drawThemes(); });
+      rollGrade.addEventListener('change', function () { rollStatus.textContent = ''; drawThemes(); });
+      // Start from the school in the link ("Roll a themed week for Nebinger"), the saved school, or the one looked at last.
+      var rollAsk = query().roll || '', mineNow = mySchool(), lastSchool = store('pas-school');
+      var startSchool = data.schools[rollAsk] ? rollAsk : mineNow && data.schools[mineNow.id] ? mineNow.id : lastSchool && data.schools[lastSchool] ? lastSchool : Object.keys(data.schools).length === 1 ? Object.keys(data.schools)[0] : '';
+      if (startSchool) rollSchool.value = startSchool;
+      drawThemes();
+      syncRoller = function (total) {
+        roller.hidden = !!shared;
+        if (!rollerSeen) { rollerSeen = true; roller.open = total === 0 || !!data.schools[rollAsk]; }   // open on an empty week; a click away otherwise
+        if (rolled && !sameSpot()) { rolled = null; rollAfter.hidden = true; rollStatus.textContent = ''; disarm(); }
+      };
+      if (data.schools[rollAsk] && !shared) {
+        if (window.history && history.replaceState) { try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* file preview */ } }
+        window.setTimeout(function () { if (roller.scrollIntoView) roller.scrollIntoView({ block: 'center' }); }, 0);
       }
     }
 
