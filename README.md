@@ -285,6 +285,18 @@ could trigger the email with their own wording. To change the token, change it i
 To see what would go out, run the workflow by hand (Actions > Send date emails > Run workflow) with "Only count what
 would be sent" ticked, and optionally a date to pretend it is. Locally, with `KLAVIYO_API_KEY` set in your shell: `node build.mjs && node scripts/send-alerts.mjs --dry-run --today 2026-11-01`.
 
+## Links out to programs
+
+Every link to a program's own site (Register, Website, Camp details, a source on the program's own domain, and the
+address inside a calendar entry) carries UTM tags: `utm_source=phillyafterschool.org`, `utm_medium=referral`,
+`utm_campaign` set to the school whose page the link is on (or `directory` when there is none), and `utm_content`
+set to the kind of link (`register`, `website`, `camp`, `source`, `calendar`). A program that looks at its own
+analytics can then see what this site sent it, and from which school's families. The tags are added to the end of
+the address as text, so the rest of it is untouched. School district, city and library addresses are never tagged.
+Add `"noUtm": true` to a program if its site misbehaves with the tags, or set `"outboundUtm": false` in
+`site.config.json` to turn them all off. The data files stay clean: `data/programs.json` holds the plain addresses.
+This site's own count of those clicks is the `pas_outbound` event.
+
 ## Analytics
 `analytics/gtm-import-ga4-clarity.json` imports into the GTM container (Admin > Import Container, "Merge"). It adds a Google tag,
 one GA4 event tag per event below, and Clarity. The GA4 and Clarity IDs live in the "GA4 Measurement ID" and

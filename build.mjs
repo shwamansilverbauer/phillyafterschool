@@ -83,6 +83,25 @@ const telHref = p => 'tel:+1' + p.replace(/\D/g, '');
 // ---------- validation: fail the build on bad data, so mistakes never reach the site ----------
 const errors = [];
 const isUrl = u => /^https:\/\/\S+$/.test(u || '');
+// ---------- links out to programs ----------
+// Every link to a program's own site carries UTM tags, so the program can see in its own analytics what this
+// site sent it: the source is this site, the campaign is the school the visitor was looking at (or "directory"),
+// and the content is the kind of link (register, website, camp, source, calendar). The tags are added as plain
+// text, so the rest of the address is left exactly as it was. Set "outboundUtm": false in site.config.json to
+// switch them off, or "noUtm": true on one program if its site breaks with extra tags. District, city and library
+// addresses are never tagged.
+const UTM = cfg.outboundUtm === false ? null : { source: new URL(cfg.siteUrl).host, medium: 'referral', skip: ['philasd.org', 'phila.gov', 'freelibrary.org'], ...(cfg.outboundUtm || {}) };
+const outUrl = (url, { type, school = null, program = null } = {}) => {
+  if (!UTM || !url || program?.noUtm || /[?&]utm_/.test(url)) return url;
+  const host = (url.match(/^https?:\/\/([^/?#]+)/) || [])[1] || '';
+  if (UTM.skip.some(d => host === d || host.endsWith('.' + d))) return url;   // schools, the city and the library have no use for the tags
+  const cut = url.indexOf('#'), base = cut < 0 ? url : url.slice(0, cut), hash = cut < 0 ? '' : url.slice(cut);
+  const tags = `utm_source=${encodeURIComponent(UTM.source)}&utm_medium=${encodeURIComponent(UTM.medium)}&utm_campaign=${encodeURIComponent(school?.id || 'directory')}&utm_content=${encodeURIComponent(type || 'link')}`;
+  return base + (base.includes('?') ? (/[?&]$/.test(base) ? '' : '&') : '?') + tags + hash;
+};
+const bareHost = u => { try { return new URL(u).host.replace(/^www\./, ''); } catch { return ''; } };
+// A source link is tagged only when it points at the program's own site, not at a school or city page.
+const ownHosts = p => new Set([p.website, p.register?.url, p.daysOff?.url, ...Object.values(p.schools || {}).map(l => l.registerUrl)].filter(Boolean).map(bareHost));
 const ids = new Set();
 const schoolIds = new Set(schools.map(s => s.id));
 for (const p of programs) {
@@ -394,7 +413,7 @@ const nextDay = iso => new Date(Date.parse(iso + 'T12:00:00Z') + 86400000).toISO
 const shortDate = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
 const upcomingDates = p => (p.register.dates || []).filter(d => d.date >= TODAY);
 const calTitle = (p, d) => `${p.name}: ${d.label}`;
-const calDetails = p => `${p.register.url || p.website}\n\nFrom ${cfg.siteName}: ${cfg.siteUrl}/`;
+const calDetails = p => `${outUrl(p.register.url || p.website, { type: 'calendar', program: p })}\n\nFrom ${cfg.siteName}: ${cfg.siteUrl}/`;
 const gcalUrl = (p, d) => 'https://calendar.google.com/calendar/render?action=TEMPLATE'
   + '&text=' + encodeURIComponent(calTitle(p, d))
   + '&dates=' + ymd(d.date) + '/' + ymd(nextDay(d.date))
@@ -445,7 +464,7 @@ const registerText = p => {
 const datesHtml = (p, depth) => upcomingDates(p).map(d => `<span class="cal" data-date="${d.date}"><b>${shortDate(d.date)}:</b> ${esc(d.label)}. ${PREVIEW ? '' : `<a href="${link('cal/' + p.id + '-' + d.date + '.ics', depth)}" data-track="calendar">Add to calendar</a> `}<a href="${esc(gcalUrl(p, d))}" target="_blank" rel="noopener" data-track="calendar">${PREVIEW ? 'Add to Google Calendar' : 'Google Calendar'}</a></span>`).join('');
 const average = revs => revs.reduce((a, x) => a + x.stars, 0) / revs.length;
 const reviewItems = revs => revs.map(x => `<li><span class="stars" role="img" aria-label="${x.stars} out of 5 stars">${stars(x.stars)}</span><p>${esc(x.comment)}</p><span class="by">${esc(x.name)}, ${esc(schoolShort(x.school))} parent, ${monthYear(x.date)}</span></li>`).join('');
-const sourceLinks = list => list.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join('');
+const sourceLinks = (list, p = null, school = null) => { const own = p ? ownHosts(p) : null; return list.map(s => `<a href="${esc(own?.has(bareHost(s.url)) ? outUrl(s.url, { type: 'source', school, program: p }) : s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join(''); };
 const programPath = p => `programs/${p.id}/`;
 // "School clubs and teams" means nothing away from its school's page, so on its own it carries the school's name.
 const fullName = p => {
@@ -549,7 +568,7 @@ function card(p, school) {
   const g = p._grades;
   const where = [l.address || p.address, l.distance].filter(Boolean).join(', ');
   const r = p.register;
-  const regUrl = r.how === 'online' ? (l.registerUrl || r.url) : null;
+  const regUrl = r.how === 'online' ? outUrl(l.registerUrl || r.url, { type: 'register', school, program: p }) : null;
   const revs = reviewsFor(p.id);
   const avg = revs.length ? average(revs) : 0;
   const reviewUrl = `${link('review/', 1)}?program=${p.id}&school=${school.id}`;
@@ -568,10 +587,10 @@ function card(p, school) {
   ${gradeStrip(p)}
   <dl>${rows}</dl>
   ${flag ? `<p class="flag">${esc(flag)}</p>` : ''}
-  <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a><button type="button" class="btn needs-js" data-board-toggle data-clarity-mask="true" aria-expanded="false">Add to roster</button>
+  <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(outUrl(p.website, { type: 'website', school, program: p }))}" target="_blank" rel="noopener">Website</a><button type="button" class="btn needs-js" data-board-toggle data-clarity-mask="true" aria-expanded="false">Add to roster</button>
     <div class="days" data-clarity-mask="true" hidden><span class="kid-row" hidden></span><span class="which" role="group" aria-label="Current or upcoming roster"><button type="button" class="wb" data-board="next" aria-pressed="true">Upcoming</button><button type="button" class="wb" data-board="now" aria-pressed="false">Current</button></span><span class="hint">Which days?</span>${BOARD_DAYS.map(([k, n]) => `<button type="button" class="day${p.days && !p.days.includes(k) ? ' off" title="Not listed for ' + DAY_NAME[k] + 's' : ''}" data-day="${k}" aria-pressed="false">${n}</button>`).join('')}${p.offers?.length ? `<span class="cls-row"><span class="hint">Which class? Optional.</span>${p.offers.map(o => `<button type="button" class="cl" data-class="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join('')}</span>` : ''}<a href="${link('board/', 1)}">See the roster</a></div></div>
   <div class="rev">${revHtml}</div>
-  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks([...p.sources, ...(l.sources || [])])}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
+  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks([...p.sources, ...(l.sources || [])], p, school)}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
 </article>`;
 }
 
@@ -716,7 +735,7 @@ function programPage(p) {
   const revs = reviewsFor(p.id);
   const avg = revs.length ? average(revs) : 0;
   const address = programAddress(p);
-  const regUrl = r.how === 'online' ? r.url : null;
+  const regUrl = r.how === 'online' ? outUrl(r.url, { type: 'register', program: p }) : null;
   const reviewUrl = `${link('review/', D)}?program=${p.id}${served.length === 1 ? '&school=' + served[0].id : ''}`;
   const rows = [['Where', esc(address)], ['Classes', esc((p.offers || []).join(', '))], ['Hours', esc(p.hours)], ['Days', esc(daysLine(p))], ['Pick up by', esc(p.pickupBy || '')], ['Cost', esc(p.cost)], ['Days off', p.daysOff ? `${esc(p.daysOff.summary)} <a href="${link(offPath, D)}#${esc(p.id)}">Dates and details</a>` : ''], ['Register', registerText(p)], ['Next term', esc(r.nextTerm || '') + datesHtml(p, D)], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
@@ -727,10 +746,10 @@ function programPage(p) {
       : `We couldn’t find a pickup from ${s.shortName}, so your child would need to get there.`;
     const extra = [l.address ? `${s.shortName} children go to ${l.address}.` : '', l.distance ? l.distance.charAt(0).toUpperCase() + l.distance.slice(1) + '.' : ''].filter(Boolean).join(' ');
     const links = [
-      l.registerUrl && r.how === 'online' ? `<a href="${esc(l.registerUrl)}" target="_blank" rel="noopener" data-track="register">${esc(r.label || 'Register')} (${esc(s.shortName)})</a>` : '',
+      l.registerUrl && r.how === 'online' ? `<a href="${esc(outUrl(l.registerUrl, { type: 'register', school: s, program: p }))}" target="_blank" rel="noopener" data-track="register">${esc(r.label || 'Register')} (${esc(s.shortName)})</a>` : '',
       `<a class="needs-js" href="${link('board/', D)}?add=${esc(p.id)}&amp;school=${esc(s.id)}">Add it to your week</a>`,
       `<a href="${link(s.id + '/', D)}">All ${forSchool(s).length} options for ${esc(s.shortName)}</a>`,
-      l.sources?.length ? `<span>Source: ${sourceLinks(l.sources)}</span>` : '',
+      l.sources?.length ? `<span>Source: ${sourceLinks(l.sources, p, s)}</span>` : '',
     ].filter(Boolean).join('');
     return `<div class="serve">
       <span class="pill ${l.relation}">${esc(REL[l.relation].pill.replace('{s}', s.shortName))}</span>
@@ -760,7 +779,7 @@ function programPage(p) {
       ${gradeStrip(p)}
       <dl>${rows}</dl>
       ${p.note ? `<p class="flag">${esc(p.note)}</p>` : ''}
-      <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(p.website)}" target="_blank" rel="noopener">Website</a><a class="btn needs-js" href="${link('board/', D)}?add=${esc(p.id)}">${T(`Add to your week`)}</a></div>
+      <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(outUrl(p.website, { type: 'website', program: p }))}" target="_blank" rel="noopener">Website</a><a class="btn needs-js" href="${link('board/', D)}?add=${esc(p.id)}">${T(`Add to your week`)}</a></div>
     </article>
     <p class="hint">${T(`Prices, hours and pickup routes change during the year. Confirm with the provider before you enroll.`)}</p>
   </section>
@@ -779,7 +798,7 @@ ${schoolRows}
     <p class="actions"><a class="btn" href="${reviewUrl}" data-track="review">${revs.length ? T(`Write a review`) : T(`Write the first review`)}</a></p>
     <p class="hint">${T(`Reviews are first-hand notes from parents and caregivers. Each one is read before it’s posted.`)}</p>
   </section>
-  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks(p.sources)}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
+  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks(p.sources, p)}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
 </div>`;
   const url = `${cfg.siteUrl}/${programPath(p)}`;
   const thing = {
@@ -1266,6 +1285,7 @@ function privacyPage() {
   </ul>
   <h2 id="elsewhere">${T(`Links to other sites`)}</h2>
   <p>${T(`Program websites, registration pages, calendars and Venmo are run by other organizations and have their own privacy practices.`)}</p>
+  <p>${T(`Links to a program’s own site carry a short tag saying the visit came from {site}, and from which school’s page. The tag says nothing about you.`, { site: cfg.siteName })}</p>
   <h2 id="children">${T(`Children`)}</h2>
   <p>${T(`This site is written for parents and caregivers. It is not meant to be used by children, and we do not knowingly collect information from them.`)}</p>
   <h2 id="remove">${T(`Seeing or removing what you sent`)}</h2>
@@ -1574,8 +1594,8 @@ function daysOffPage() {
   <dt>Dates posted</dt><dd>${dates.length ? esc(dates.map(shortDate).join(', ')) + '.' : 'None on its site when we checked. Ask which days it covers.'}</dd>
   ${programAddress(p) ? `<dt>Where</dt><dd>${esc(programAddress(p))}</dd>` : ''}
   ${served.length ? `<dt>On school days</dt><dd>${esc(servedSummary(p))}.</dd>` : ''}</dl>
-  <div class="actions"><a class="btn primary" data-track="camp" href="${esc(p.daysOff.url)}" target="_blank" rel="noopener">Camp details</a><a class="btn" href="${link(programPath(p), D)}">Full listing</a></div>
-  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks(p.daysOff.sources)}</p>
+  <div class="actions"><a class="btn primary" data-track="camp" href="${esc(outUrl(p.daysOff.url, { type: 'camp', program: p }))}" target="_blank" rel="noopener">Camp details</a><a class="btn" href="${link(programPath(p), D)}">Full listing</a></div>
+  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks(p.daysOff.sources, p)}</p>
 </article>`;
   }).join('\n');
   const hero = `    <h1>${T(`School’s closed. Now what?`)}</h1>
