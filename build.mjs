@@ -243,8 +243,18 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   // to a title only when it fits; a long description is cut at a word.
   const fullTitle = pathName === '' ? (PREVIEW ? cfg.siteName : `${cfg.siteName}: ${cfg.tagline}`) : `${title} | ${cfg.siteName}`.length <= 65 ? `${title} | ${cfg.siteName}` : title;
   if (description.length > 158) description = description.slice(0, 157).replace(/\s+\S*$/, '').replace(/[,;:.]$/, '') + '…';
-  const nav = [['schools/', 'Schools'], ...(daysOff ? [[offPath, 'Day-off programs']] : []), ['board/', 'Build your week'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Buy me a coffee']]
-    .map(([to, label]) => `<a href="${link(to, depth)}"${current === to ? ' aria-current="page"' : ''}>${label}${to === 'board/' ? '<span class="count" data-board-count hidden></span>' : ''}</a>`).join('');
+  // The menu: four groups that open, then About and the support button. Each group is a <details>, so it works without scripts.
+  const navHref = to => { const [p, hash] = to.split('#'); return link(p, depth) + (hash ? '#' + hash : ''); };
+  const menus = [
+    ['Programs', [['programs/', 'After-school programs'], ...(daysOff ? [[offPath, 'Day-camp programs']] : [])]],
+    ['Search by', [['schools/', 'School'], ['neighborhoods/', 'Neighborhood'], ['types/', 'Program type'], ['programs/#by-day', 'Day of week']]],
+    ['Build a schedule', [['board/', 'After-school schedule'], ...(daysOff ? [[offPath + '#plan', 'Day-camp schedule']] : [])]],
+    ['Suggest', [['suggest/', 'A program'], ['ideas/', 'A feature'], ['schools/request/', 'A school']]],
+  ];
+  const nav = menus.map(([label, items]) => {
+    const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
+    return `<details class="menu${here ? ' here' : ''}"><summary>${label}${label === 'Build a schedule' ? '<span class="count" data-board-count hidden></span>' : ''}</summary><ul>${items.map(([to, text]) => `<li><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
+  }).join('') + `<a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a><a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`;
   const head = `${first}${fragment ? '' : gtmHead + '\n'}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${esc(canonical)}">${noindex ? '\n<meta name="robots" content="noindex">' : ''}
@@ -302,7 +312,7 @@ ${body}
         <li><a href="${link('programs/', depth)}">${T(`All programs, A to Z`)}</a></li>
         <li><a href="${link('types/', depth)}">${T(`Programs by type`)}</a></li>
         <li><a href="${link('neighborhoods/', depth)}">${T(`Programs by neighborhood`)}</a></li>
-        ${daysOff ? `<li><a href="${link(offPath, depth)}">${T(`Day-off programs`)}</a></li>` : ''}
+        ${daysOff ? `<li><a href="${link(offPath, depth)}">${T(`Day-camp programs`)}</a></li>` : ''}
         <li><a href="${link('suggest/', depth)}">${T(`Suggest a program`)}</a></li>
         <li><a href="${link('review/', depth)}">${T(`Write a review`)}</a></li>
       </ul>
@@ -310,7 +320,8 @@ ${body}
     <div>
       <h2><a href="${link('board/', depth)}">${T(`Your family`)}</a></h2>
       <ul>
-        <li><a href="${link('board/', depth)}">${T(`Build your week`)}</a></li>
+        <li><a href="${link('board/', depth)}">${T(`After-school schedule`)}</a></li>
+        ${daysOff ? `<li><a href="${link(offPath, depth)}#plan">${T(`Day-camp schedule`)}</a></li>` : ''}
       </ul>
     </div>
     <div>
@@ -505,7 +516,7 @@ function filterBar({ list, depth, school = null, show = {}, searchLabel, placeho
   const costRow = on.cost && costN('free') && costN('paid') ? `<div class="frow"><span class="flabel">Cost</span><div class="rail" role="group" aria-label="Cost">${btn('cost', 'ALL', 'Any', null)}${btn('cost', 'free', 'Free', costN('free'))}${btn('cost', 'paid', 'Paid', costN('paid'))}${unpriced ? `<span class="hint rail-note">${unpriced} ${unpriced === 1 ? 'doesn’t' : 'don’t'} publish a price, so ${unpriced === 1 ? 'it shows' : 'they show'} only under Any.</span>` : ''}</div></div>` : '';
   // The day row appears once at least two programs in the list run on some weekdays only; until then it would filter nothing.
   const dayN = d => list.filter(p => !p.days || p.days.includes(d)).length;
-  const dayRow = on.day !== false && list.filter(pickyDays).length > 1 ? `<div class="frow"><span class="flabel">Day</span><div class="rail" role="group" aria-label="Day of the week">${btn('day', 'ALL', 'Any day', null)}${WEEK.map(d => btn('day', d, DAY_NAME[d].slice(0, 3), dayN(d))).join('')}${list.some(p => !p.days) ? `<span class="hint rail-note">Programs that don’t publish their days show under every day.</span>` : ''}</div></div>` : '';
+  const dayRow = on.day === true || (on.day !== false && list.filter(pickyDays).length > 1) ? `<div class="frow" id="by-day"><span class="flabel">Day</span><div class="rail" role="group" aria-label="Day of the week">${btn('day', 'ALL', 'Any day', null)}${WEEK.map(d => btn('day', d, DAY_NAME[d].slice(0, 3), dayN(d))).join('')}${list.some(p => !p.days) ? `<span class="hint rail-note">Programs that don’t publish their days show under every day.</span>` : ''}</div></div>` : '';
   const gradeBtns = on.grade ? [['ALL', 'All']].concat(GRADES.map(g => [g, g])).map(([g, label]) => {
     const n = list.filter(p => (!school || p.schools[school.id].relation !== 'nearby') && (g === 'ALL' || p._grades === null || p._grades.includes(g))).length;
     return `<button type="button" class="gbtn" id="grade-${g}" data-f="grade" data-v="${g}" aria-pressed="${g === 'ALL'}" aria-label="${g === 'ALL' ? 'All grades' : g === 'PK' ? 'Pre-K' : g === 'K' ? 'Kindergarten' : 'Grade ' + g}, ${n} ${school ? 'on-site or pickup programs' : 'programs'}"><span class="g">${label}</span><span class="n">${n}</span></button>`;
@@ -679,7 +690,7 @@ function programsPage() {
   const list = [...citywide].sort((a, b) => a.name.localeCompare(b.name));
   const hero = `    <h1>${T(`Every program, A to Z`)}</h1>
     <p class="lede">${T(`All {n} after-school programs on this site, across every school. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.`, { n: list.length })}</p>`;
-  const body = `${filterBar({ list, depth: 1, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
+  const body = `${filterBar({ list, depth: 1, show: { day: true }, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
 ${noMatch(1)}
 <section class="section" data-group>
   <div class="schools">
@@ -1439,7 +1450,7 @@ function daysOffPage() {
 </article>`;
   }).join('\n');
   const hero = `    <h1>${T(`School’s closed. Now what?`)}</h1>
-    <p class="lede">${T(`The days district schools are closed this year, and the listed programs that run a camp or a full day when they are.`)}</p>
+    <p class="lede">${T(`Day camps for the days district schools are closed this year, and a schedule you can build from them.`)}</p>
     <div class="facts">
       <span>School year <b>${esc(daysOff.schoolYear)}</b></span>
       <span>Calendar checked <b>${longDate(daysOff.checked)}</b></span>
@@ -1452,7 +1463,7 @@ function daysOffPage() {
   };
   const body = `<div style="display:contents">
 <section class="section offplan needs-js-block" id="plan" data-off-plan data-clarity-mask="true">
-  <h2>${T(`Build your day-off plan`)}</h2>
+  <h2>${T(`Build your day-camp schedule`)}</h2>
   <p>${T(`Open a day below and choose where your child will be. Your picks are saved on this device and gathered here.`)}</p>
   <div class="kids" id="off-kids" role="group" aria-label="Which child" hidden></div>
   <p class="off-count" id="off-count"></p>
@@ -1488,11 +1499,11 @@ ${cards}
 </section>
 </div>`;
   return layout({
-    title: `Day-off programs in Philadelphia: camps when school is closed`,
+    title: `Day camps for days off school in Philadelphia`,
     description: `Every day School District of Philadelphia schools are closed in ${daysOff.schoolYear}, and the after-school programs that run a camp or full-day care on those days.`,
     pathName: offPath, depth: D, current: offPath, hero, body, theme: 'dayoff', showStreet: 'dayoff',
     shareImage: { file: 'share-days-off.png', alt: `${cfg.siteName} day-off programs: a park on a morning with no school, a kite going up and a school bus parked` },
-    jsonLd: { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Day-off programs', `${cfg.siteUrl}/${offPath}`]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) },
+    jsonLd: { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Day-camp programs', `${cfg.siteUrl}/${offPath}`]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) },
   });
 }
 

@@ -158,6 +158,13 @@ ready-made entry at the bottom of the email. To publish one, paste that entry in
 `data/reviews.json` (inside the square brackets, entries separated by commas) and commit.
 To remove a review, delete its entry. Cards show the average and the reviews for each program.
 
+## The menu
+
+The header has four groups that open (Programs, Search by, Build a schedule, Suggest), then About and the
+"Help the site keep going" button, which goes to the support page. The groups are defined in `layout()` in
+`build.mjs` as a list of labels and links. Each is a `<details>` element, so it opens without scripts; the
+script only closes the others. "Day of week" lands on the A to Z page at its Day filter, which always shows there.
+
 ## Days of the week, days off, and a saved school
 
 **Days.** A program's `days` show on its card and page. On a roster, a card placed on a day the listing doesn't
@@ -166,7 +173,7 @@ schedules change and the data can be behind. The add-to-roster day buttons for t
 A "Day" filter row appears on a listing page by itself once at least two programs in that list run on some
 weekdays only; with fewer it would filter nothing, so it stays hidden.
 
-**Days off.** `/days-off/` ("Day-off programs" in the menu and footer) lists the days School District of Philadelphia students are off, from
+**Days off.** `/days-off/` ("Day-camp programs" in the menu and footer) lists the days School District of Philadelphia students are off, from
 `data/days-off.json` (`schoolYear`, `source`, `checked`, `lastDay`, and `days`: each with a `date`, a `name`,
 and an `end` for a break). Under each day it names the programs whose `daysOff.dates` include that date, and
 below that every program with `daysOff`. Past days drop off at build time and are hidden by the page between

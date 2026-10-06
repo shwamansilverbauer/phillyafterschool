@@ -564,3 +564,29 @@ button.btn{cursor:pointer;font-family:inherit}
   body.print-plan #plan{position:absolute;left:0;top:0;width:100%;border:0}
   body.print-plan #off-actions,body.print-plan #off-kids,body.print-plan .off-list .clear,body.print-plan #off-status{display:none}
 }
+
+/* ---------- the menu: groups that open ---------- */
+.nav{align-items:center;gap:6px 20px}
+.menu{position:relative}
+.menu summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;padding-block:4px;border-bottom:3px solid transparent;color:var(--hero-ink)}
+.menu summary::-webkit-details-marker{display:none}
+.menu summary::after{content:"";width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg)}
+.menu[open] summary::after{transform:translateY(2px) rotate(225deg)}
+.menu summary:hover,.menu.here summary,.menu[open] summary{border-bottom-color:var(--yellow)}
+.menu summary:focus-visible{outline:2px solid var(--hero-ink);outline-offset:4px;border-radius:4px}
+.menu summary .count{margin-left:0}
+.menu ul{list-style:none;margin:0;padding:8px;position:absolute;left:-12px;top:calc(100% + 10px);z-index:40;min-width:236px;background:#FFFFFF;border-radius:14px;box-shadow:0 14px 34px rgba(7,21,39,.3);display:flex;flex-direction:column;gap:2px}
+.menu:last-of-type ul{left:auto;right:-12px}
+.nav .menu ul a{display:block;padding:10px 12px;border-radius:9px;border:0;color:#0B2140;font-weight:700;text-decoration:none}
+.nav .menu ul a:hover,.nav .menu ul a[aria-current="page"]{background:#DAEDFE;border:0}
+.nav a.nav-cta{background:var(--yellow);color:var(--yellow-ink);border:0;border-radius:999px;padding:7px 16px;font-weight:700}
+.nav a.nav-cta:hover,.nav a.nav-cta[aria-current="page"]{background:#FFD83A}
+.band.dayoff .menu summary:hover,.band.dayoff .menu.here summary,.band.dayoff .menu[open] summary{border-bottom-color:#0B2140}
+.band.dayoff .nav a.nav-cta{background:#0B2140;color:#FFFFFF}
+.band.dayoff .nav a.nav-cta:hover{background:#0F4D90}
+#by-day{scroll-margin-top:90px}
+@media (max-width:820px){
+  .bar{position:relative}
+  .menu{position:static}
+  .menu ul,.menu:last-of-type ul{left:12px;right:12px;top:calc(100% - 6px);min-width:0}
+}

@@ -151,6 +151,17 @@
     });
   })();
 
+  // ----- the menu: one group open at a time; a tap elsewhere or Escape closes it -----
+  var menus = all(document, 'details.menu');
+  menus.forEach(function (m) {
+    m.addEventListener('toggle', function () { if (m.open) menus.forEach(function (o) { if (o !== m) o.open = false; }); });
+  });
+  document.addEventListener('click', function (e) { menus.forEach(function (m) { if (m.open && !m.contains(e.target)) m.open = false; }); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    menus.forEach(function (m) { if (m.open) { m.open = false; var sm = m.querySelector('summary'); if (sm) sm.focus(); } });
+  });
+
   // Support button
   var give = document.querySelector('a[data-track="support"]');
   if (give) give.addEventListener('click', function () { track({ event: 'pas_support_click' }); });
