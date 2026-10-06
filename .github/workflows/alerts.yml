@@ -6,6 +6,7 @@ name: Send date emails
 on:
   schedule:
     - cron: '7 11 * * *'   # 7:07am in Philadelphia in summer, 6:07am in winter
+    - cron: '37 14 * * *'  # a second try three and a half hours later, because GitHub sometimes skips a scheduled run. Nothing sends twice: Klaviyo keeps only the first copy of each email.
   workflow_dispatch:
     inputs:
       dry_run:
