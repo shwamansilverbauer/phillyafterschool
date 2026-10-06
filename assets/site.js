@@ -1314,7 +1314,9 @@
           var p = data.programs[id];
           if (!p.schools[sid] || (grade && p.grades && p.grades.indexOf(grade) < 0)) return false;
           if (p.cls) return p.offers.some(function (c) { return classFits(p, c, theme, grade); });
-          return inTheme(theme, p.types) || inTheme(theme, p.kw);
+          // A whole program is in a theme by its type, or by a keyword the theme names. (A keyword that happens to
+          // spell a type, like an aftercare that mentions "games", doesn't make it a games program.)
+          return p.types.some(function (x) { return theme.types.indexOf(x) > -1; }) || p.kw.some(function (w) { return (theme.words || []).indexOf(w) > -1; });
         });
       };
       // One program a day. A program or class already used this week costs points, so the week spreads out before it repeats;
