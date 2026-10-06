@@ -185,9 +185,13 @@ date isn't a district day off (a typo on their side, or a day only they close fo
 each summer when the district publishes the new calendar.
 
 **A themed week.** On the roster page, "Roll a themed week" fills Monday to Friday at random for a chosen school
-and theme (Music Prodigy, Mathlete, The Da Vinci, Move It or Lose It, Jack of All Trades). The themes are the
+and theme (Music Prodigy, Mathlete, The Da Vinci, Move It or Lose It, Glitter and Glue, Bookworm, Just for
+Fun, Wild Child, Jack of All Trades). The themes are the
 `THEMES` list near the top of `build.mjs`: each has a name, a one-line blurb and the program types it draws
-from, and `mix: true` makes it try for a different type each day. To add a theme, add a line. A roll places one
+from, and `mix: true` makes it try for a different type each day. `words` also lets in any program with one
+of those `keywords`, whatever its type: Wild Child has no type of its own and is filled entirely that way
+(gardening, nature, outdoors, running and so on), so it shows "Nothing listed yet" for a school until a
+program with one of those keywords is listed. To add a theme, add a line. A roll places one
 program a day, only on days the program lists, only in classes offered that day, and only for the grade chosen
 (the grade is optional and is never saved or sent). It spreads across programs and classes before it repeats,
 and treats a program that doesn't publish its days as a last resort, saying so when it uses one. Replacing a

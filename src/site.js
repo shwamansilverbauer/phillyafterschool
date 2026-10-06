@@ -1305,7 +1305,8 @@
       var themePool = function (theme, sid, grade) {
         return Object.keys(data.programs).filter(function (id) {
           var p = data.programs[id];
-          return p.schools[sid] && p.types.some(function (t) { return theme.types.indexOf(t) > -1; }) && (!grade || !p.grades || p.grades.indexOf(grade) > -1);
+          var fits = p.types.some(function (t) { return theme.types.indexOf(t) > -1; }) || (theme.words || []).some(function (w) { return p.kw.indexOf(w) > -1; });
+          return p.schools[sid] && fits && (!grade || !p.grades || p.grades.indexOf(grade) > -1);
         });
       };
       // One program a day. A program or class already used this week costs points, so the week spreads out before it repeats;

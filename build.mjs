@@ -42,13 +42,19 @@ const TYPES = [
 ];
 const TYPE = Object.fromEntries(TYPES.map(t => [t.id, t]));
 // Themed weeks on the roster page: pick a school and a theme, and the page fills Monday to Friday at random from the
-// programs of those types. A "mix" theme tries for a different kind of program each day. To add a theme, add a line.
+// programs of those types. A "mix" theme tries for a different kind of program each day. "words" also lets in any
+// program with one of those keywords (the "keywords" list in data/programs.json), whatever its type, so a theme
+// with no type of its own fills up as matching programs are listed. To add a theme, add a line.
 const DICE = 'M6 3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3zm2.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM12 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM8.5 14a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z';
 const THEMES = [
   { id: 'music', name: 'Music Prodigy', blurb: 'Music every day', types: ['music'] },
   { id: 'mathlete', name: 'Mathlete', blurb: 'STEM, chess and homework help', types: ['stem', 'academics', 'games'] },
   { id: 'davinci', name: 'The Da Vinci', blurb: 'Art, science and music', types: ['art', 'stem', 'music'], mix: true },
   { id: 'move', name: 'Move It or Lose It', blurb: 'On their feet all week', types: ['movement'] },
+  { id: 'crafts', name: 'Glitter and Glue', blurb: 'Arts and crafts all week', types: ['art'] },
+  { id: 'bookworm', name: 'Bookworm', blurb: 'Reading, writing and the library', types: ['academics'] },
+  { id: 'fun', name: 'Just for Fun', blurb: 'Games, play and rec time', types: ['games', 'rec-center'], words: ['play', 'games'] },
+  { id: 'outside', name: 'Wild Child', blurb: 'Outside whenever possible', types: [], words: ['gardening', 'garden', 'nature', 'outdoors', 'outdoor', 'running', 'hiking', 'farm', 'environment'], icon: 'M12 2 6 10h3l-4 6h6v5h2v-5h6l-4-6h3z', color: '#3F6212' },
   { id: 'sampler', name: 'Jack of All Trades', blurb: 'Something different every day', types: ['music', 'art', 'movement', 'stem', 'academics', 'games'], mix: true, icon: DICE, color: '#0F4D90' },
 ];
 const typeIcon = (t, size = 18) => `<svg class="ticon" width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="${t.icon}"/></svg>`;
@@ -1766,10 +1772,10 @@ function boardPage() {
     rels: Object.fromEntries(Object.entries(REL).map(([k, v]) => [k, v.pill])),
     types: Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, color: t.color, icon: t.icon }])),
     schools: Object.fromEntries(schools.map(s => [s.id, { name: s.shortName, path: link(s.id + '/', 1) }])),
-    themes: Object.fromEntries(THEMES.map(t => [t.id, { types: t.types, mix: !!t.mix }])),
+    themes: Object.fromEntries(THEMES.map(t => [t.id, { types: t.types, mix: !!t.mix, words: t.words || [] }])),
     programs: Object.fromEntries(programs.map(p => [p.id, {
       name: p.name, hours: p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [], type: p.types[0], no: order.indexOf(p.id) + 1,
-      days: p.days || null, offerDays: p.offerDays || null, rate: p.rate || null, types: p.types, grades: p._grades,
+      days: p.days || null, offerDays: p.offerDays || null, rate: p.rate || null, types: p.types, grades: p._grades, kw: (p.keywords || []).map(k => k.toLowerCase()),
       path: link(programPath(p), 1), q: [p.name, ...(p.offers || []), ...(p.keywords || []), ...p.types.map(t => TYPE[t].label)].join(' ').toLowerCase(),
       schools: Object.fromEntries(Object.entries(p.schools).map(([sid, l]) => [sid, { rel: l.relation, where: l.address || p.address || '', free: (l.price || p.price) === 'free' }])),
     }])),
