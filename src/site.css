@@ -639,3 +639,27 @@ button.btn{cursor:pointer;font-family:inherit}
   .menu summary{gap:8px}
   .nav a.nav-cta{padding:7px 18px;margin-left:4px}
 }
+
+/* ----- dates by email ----- */
+.panel.alerts{gap:12px;max-width:820px;scroll-margin-top:24px}
+.panel.alerts > p{color:var(--muted);max-width:60ch;margin:0}
+.alerts-form{display:flex;flex-direction:column;gap:12px;position:relative}
+.alerts-row{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;align-items:end}
+.alerts-row[hidden]{display:none}
+.alerts-row .btn{min-height:58px;justify-content:center}
+.alerts-status{margin:0;font-weight:700;min-height:1.4em}
+.alerts-status:empty{display:none}
+.alerts-status.good{background:var(--yellow);color:var(--yellow-ink);border-radius:12px;padding:14px 16px}
+.alerts-status.bad{color:var(--warn-ink);background:var(--warn);border-radius:12px;padding:10px 14px}
+.alerts-line{margin:0}
+.next .rules.ticks,.next .rules.soon{list-style:none;padding-left:0}
+.next .rules.ticks li,.next .rules.soon li{counter-increment:none;grid-template-columns:14px minmax(0,1fr);gap:12px}
+.next .rules.ticks li::before{content:"";width:12px;height:12px;margin-top:.42em;background:var(--yellow);border-radius:50%}
+.next .rules.soon li{grid-template-columns:4.4em minmax(0,1fr)}
+.next .rules.soon li::before{content:none}
+@media (min-width:640px){
+  .alerts-row{grid-template-columns:minmax(0,1fr) auto}
+  .alerts-row:has(select){grid-template-columns:minmax(0,.8fr) minmax(0,1fr) auto}
+}
+.suggest .panel.alerts{max-width:none}
+.suggest .alerts-row,.suggest .alerts-row:has(select){grid-template-columns:minmax(0,1fr)}

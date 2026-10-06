@@ -1,0 +1,49 @@
+# Every morning: work out which subscribers are due a "dates" email and tell Klaviyo.
+# Most mornings there is nothing to send and the job ends in a few seconds.
+# It needs two repository secrets, KLAVIYO_API_KEY and ALERTS_TOKEN, and does nothing without them.
+name: Send date emails
+
+on:
+  schedule:
+    - cron: '7 11 * * *'   # 7:07am in Philadelphia in summer, 6:07am in winter
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Only count what would be sent'
+        type: boolean
+        default: true
+      today:
+        description: 'Pretend it is this day (YYYY-MM-DD). Dry runs only.'
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: alerts
+  cancel-in-progress: false
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build the site, which writes the dates feed
+        run: node build.mjs
+
+      - name: Tell Klaviyo who is due an email
+        env:
+          KLAVIYO_API_KEY: ${{ secrets.KLAVIYO_API_KEY }}
+          ALERTS_TOKEN: ${{ secrets.ALERTS_TOKEN }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+          TODAY: ${{ github.event_name == 'workflow_dispatch' && inputs.today || '' }}
+        run: |
+          set -- 
+          if [ "$DRY_RUN" = "true" ]; then set -- "$@" --dry-run; fi
+          if [ "$DRY_RUN" = "true" ] && [ -n "$TODAY" ]; then set -- "$@" --today "$TODAY"; fi
+          node scripts/send-alerts.mjs "$@"

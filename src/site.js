@@ -98,6 +98,50 @@
   var ideaForm = document.querySelector('#idea-form');
   if (ideaForm) ideaForm.addEventListener('submit', function () { track({ event: 'pas_suggest_submit', suggest_kind: 'idea', school: '' }); });
 
+  // ----- dates by email: the sign-up goes from this page straight to Klaviyo, with its public key -----
+  // Only the email address and the chosen school are sent. Nothing from a roster goes with it.
+  all(document, 'form[data-alerts]').forEach(function (form) {
+    var sel = form.querySelector('select[name="school"]');
+    var status = form.querySelector('[data-alerts-status]');
+    var row = form.querySelector('.alerts-row');
+    var btn = form.querySelector('button[type="submit"]');
+    var place = form.getAttribute('data-place') || '';
+    var saved = mySchool();
+    if (sel && saved && all(sel, 'option').some(function (o) { return o.value === saved.id; })) sel.value = saved.id;
+    function say(msg, kind) { status.textContent = msg; status.className = 'alerts-status' + (kind ? ' ' + kind : ''); }
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = form.elements.email.value.trim();
+      if (form.elements.company && form.elements.company.value) return;   // only a script fills the hidden field
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { say('That email address doesn’t look right. Check it and try again.', 'bad'); form.elements.email.focus(); return; }
+      var field = form.elements.school, school = field.value;
+      var name = sel ? (sel.options[sel.selectedIndex].getAttribute('data-name') || '') : (field.getAttribute('data-name') || '');
+      if (form.getAttribute('data-preview')) { say('This is the preview, so nothing was sent. Sign-ups work on the live site.'); return; }
+      btn.disabled = true;
+      say('Sending…');
+      var props = { school: school, signup_place: place };
+      if (name) props.school_name = name;
+      fetch('https://a.klaviyo.com/client/subscriptions?company_id=' + encodeURIComponent(form.getAttribute('data-key')), {
+        method: 'POST',
+        headers: { 'content-type': 'application/vnd.api+json', revision: '2026-07-15' },
+        body: JSON.stringify({ data: { type: 'subscription',
+          attributes: { custom_source: 'phillyafterschool.org ' + place, profile: { data: { type: 'profile', attributes: { email: email, properties: props, subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } } } } } },
+          relationships: { list: { data: { type: 'list', id: form.getAttribute('data-list') } } } } })
+      }).then(function (r) {
+        if (r.status < 200 || r.status > 299) throw new Error('status ' + r.status);
+        row.hidden = true;
+        var hint = form.querySelector('.hint'); if (hint) hint.hidden = true;
+        say(form.getAttribute('data-confirm')
+          ? 'Almost there. Check your inbox for a confirmation email and tap the button in it.'
+          : 'You’re on the list' + (name ? ' for ' + name : '') + '. Dates already on the calendar reach you tomorrow morning. After that, it’s one email a week at most.', 'good');
+        track({ event: 'pas_alert_signup', school: school, place: place });
+      }).catch(function () {
+        btn.disabled = false;
+        say('That didn’t go through. Please try again in a minute.', 'bad');
+      });
+    });
+  });
+
   // ----- review form: arrive with the program and school already chosen -----
   var review = document.querySelector('#review-form');
   if (review) {

@@ -19,5 +19,16 @@
     "user": "Silverbauer",
     "passwordHash": "$2y$10$YM3U3P.TEB3.lr00uXCsbeNQW852A2Xdg/Rwbro4BIJULUT7bHiz2"
   },
-  "privacyUpdated": "2026-10-05"
+  "privacyUpdated": "2026-10-05",
+  "alerts": {
+    "klaviyoKey": "RJsBTu",
+    "listId": "QQ848w",
+    "metric": "School dates",
+    "doubleOptIn": false,
+    "sendDay": 0,
+    "lead": {
+      "register": 1,
+      "dayoff": 10
+    }
+  }
 }

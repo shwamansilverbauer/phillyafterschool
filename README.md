@@ -15,6 +15,8 @@ programs with a grade filter. Everything is generated from two data files.
 | `build.mjs` | Builds the site into `dist/`. Needs Node 18+, no installs. |
 | `src/` | The stylesheet, the script for search, filtering and boards, and the edit-mode script. |
 | `src/static/` | The site icon, the touch icon, the logo and the image shown when a link is shared. Copied to the top level as they are. |
+| `scripts/send-alerts.mjs` | The daily job behind the date emails. Run by `.github/workflows/alerts.yml`. |
+| `email/` | The date email's template, as it was uploaded to Klaviyo. Kept here for reference; Klaviyo holds the live copy. |
 | `analytics/` | A Google Tag Manager import with GA4 and Microsoft Clarity set up for the site's events. Not published with the site. |
 | `dist/` | The finished site, created by the build. Not stored in `main`; the `live` branch holds it. |
 
@@ -245,6 +247,36 @@ program ready (`/board/?add=<program id>&school=<school id>`).
 `public_html`, so nothing is lost if an email goes missing. It needs a host that runs PHP.
 A hidden field traps most spam bots.
 
+## Dates by email
+
+Parents can ask for their school's dates by email: on each school page, the home page, the day-camp page and `/alerts/`.
+The pieces:
+
+- **The sign-up form** posts from the visitor's browser straight to Klaviyo with the public key in `site.config.json`
+  (`alerts.klaviyoKey`) and adds the address to the list in `alerts.listId`. It sends the email address, the school's id
+  (`school`, or `all` for a school that isn't listed), the school's name and the page it was on. Nothing else. A sign-up with
+  an address already on the list updates its school. Set `alerts.doubleOptIn` to `true` if the Klaviyo list is switched
+  to double opt-in, so the form tells people to check their inbox. Each sign-up fires `pas_alert_signup` (school, place).
+- **The feed.** The build writes `data/alerts.json`: every upcoming `register.dates` entry and every district day off, each
+  with `sendOn`, the day it is announced. That is the last send day (`alerts.sendDay`, 0 for Sunday) that still leaves
+  the notice in `alerts.lead` (1 day for a sign-up date, 10 for a day off). So adding a date to a program's
+  `register.dates` is all it takes to get it emailed.
+- **The daily job.** `.github/workflows/alerts.yml` runs every morning, builds the site and runs `scripts/send-alerts.mjs`.
+  It reads the list from Klaviyo and records one "School dates" event for each person who is due an email. Someone who
+  just joined gets one "welcome" email the next morning with every date already announced; after that they get the
+  weekly one. A missed morning is made up on either of the next two, and Klaviyo ignores a repeat of an event it already
+  has, so nobody gets the same email twice. The job never prints an email address, because its log is public.
+- **The flow.** In Klaviyo, the flow "School dates email" is triggered by that event and sends the template in `email/`.
+  It only fires for events that carry the right `token`, and only for people on the list.
+
+The job needs two repository secrets (Settings > Secrets and variables > Actions) and does nothing without them:
+`KLAVIYO_API_KEY`, a private Klaviyo key with Events: full, Profiles: read and Lists: read; and `ALERTS_TOKEN`, the word
+the flow's trigger checks. The token matters because Klaviyo's public key can also record events: without it, anyone
+could trigger the email with their own wording. To change the token, change it in both places.
+
+To see what would go out, run the workflow by hand (Actions > Send date emails > Run workflow) with "Only count what
+would be sent" ticked, and optionally a date to pretend it is. Locally, with `KLAVIYO_API_KEY` set in your shell: `node build.mjs && node scripts/send-alerts.mjs --dry-run --today 2026-11-01`.
+
 ## Analytics
 `analytics/gtm-import-ga4-clarity.json` imports into the GTM container (Admin > Import Container, "Merge"). It adds a Google tag,
 one GA4 event tag per event below, and Clarity. The GA4 and Clarity IDs live in the "GA4 Measurement ID" and
@@ -258,7 +290,7 @@ school, stars), `pas_board_add` (program_id, school, day, board, children) and `
 `pas_school_pick` (school, covered) fires when someone picks a school in the finder, and `pas_school_request` (school)
 when they ask for one that isn't covered. `pas_program_pick` (program_id, method) fires when someone picks a program
 by name: method is `home_search`, `roster_search`, or `program_page` (the "Add to your week" button). `pas_school_save` (school)
-fires when someone saves a school as theirs. `pas_filter` reports filter_type as `grade`, `program_type`, `relation`,
+fires when someone saves a school as theirs. `pas_alert_signup` (school, place) fires when someone signs up for dates by email; the address is never sent to analytics. `pas_filter` reports filter_type as `grade`, `program_type`, `relation`,
 `neighborhood`, `cost`, `day` or `school`. `pas_board_share` methods include `image_save`, `image_share` and `print`.
 `pas_outbound` also fires with link_type `calendar`, `review` and `camp` (a day-off camp link). `pas_search` (search_term, results,
 school) fires when someone pauses typing in a school page's search box; searches with zero results

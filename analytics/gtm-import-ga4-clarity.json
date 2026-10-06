@@ -1,6 +1,6 @@
 {
   "exportFormatVersion": 2,
-  "exportTime": "2026-10-06 00:16:54",
+  "exportTime": "2026-10-06 02:33:47",
   "containerVersion": {
     "path": "accounts/0/containers/0/versions/0",
     "accountId": "0",
@@ -946,6 +946,71 @@
         "accountId": "0",
         "containerId": "0",
         "tagId": "15",
+        "name": "GA4 - Event - pas_alert_signup",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_alert_signup"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "school"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - school}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "place"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - place}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "14"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "16",
         "name": "Clarity - Base",
         "type": "html",
         "parentFolderId": "1",
@@ -969,12 +1034,12 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "tagId": "16",
+        "tagId": "17",
         "name": "Clarity - Site events",
         "type": "html",
         "parentFolderId": "1",
         "firingTriggerId": [
-          "14"
+          "15"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "notes": "Sends each pas_ event to Clarity as a custom event, so recordings and heatmaps can be filtered by it.",
@@ -1322,6 +1387,31 @@
         "accountId": "0",
         "containerId": "0",
         "triggerId": "14",
+        "name": "CE - pas_alert_signup",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_alert_signup"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "15",
         "name": "CE - any pas_ event",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1739,6 +1829,31 @@
             "type": "TEMPLATE",
             "key": "name",
             "value": "covered"
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "18",
+        "name": "DLV - place",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "place"
           }
         ],
         "parentFolderId": "1"

@@ -323,6 +323,7 @@ ${body}
       <ul>
         <li><a href="${link('board/', depth)}">${T(`After-school schedule`)}</a></li>
         ${daysOff ? `<li><a href="${link(offPath, depth)}#plan">${T(`Day-camp schedule`)}</a></li>` : ''}
+        ${ALERTS ? `<li><a href="${link(alertsPath, depth)}">${T(`Dates by email`)}</a></li>` : ''}
       </ul>
     </div>
     <div>
@@ -572,6 +573,92 @@ function card(p, school) {
 
 // ---------- a page per program ----------
 const listNames = a => a.length < 3 ? a.join(' and ') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
+
+// ---------- dates by email ----------
+// Sign-ups go from the visitor's browser straight to Klaviyo, using the public key in site.config.json.
+// Once a day scripts/send-alerts.mjs reads data/alerts.json (written below) and tells Klaviyo who is due an email.
+// The private key lives only in the repository's secrets. Nothing in this file or on the site ever holds it.
+const ALERTS = cfg.alerts?.klaviyoKey && cfg.alerts?.listId ? cfg.alerts : null;
+const alertsPath = 'alerts/';
+const SEND_DAY = ALERTS?.sendDay ?? 0;   // 0 is Sunday
+const SEND_DAY_NAME = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][SEND_DAY];
+const LEAD = { register: 1, dayoff: 10, ...(ALERTS?.lead || {}) };   // least notice, in days, before each kind of date
+const longDay = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' });
+// A date is announced on the last send day that still leaves `lead` days of notice, so there is one email a week at most.
+const sendOn = (iso, lead) => { let d = isoAdd(iso, -lead); while (weekday(d) !== SEND_DAY) d = isoAdd(d, -1); return d; };
+const mailUrl = (rel, hash = '') => `${cfg.siteUrl}/${rel}?utm_source=klaviyo&utm_medium=email&utm_campaign=dates${hash}`;
+const alertItems = [
+  ...programs.flatMap(p => upcomingDates(p).map(d => ({
+    id: `reg-${p.id}-${d.date}`, kind: 'register', date: d.date, sendOn: sendOn(d.date, LEAD.register),
+    schools: schools.filter(s => p.schools[s.id]).map(s => s.id),
+    when: longDay(d.date), title: p.name, text: d.label + '.', url: mailUrl(programPath(p)), button: 'See the listing',
+  }))),
+  ...offDays.filter(d => d.date >= TODAY).map(d => {
+    const camps = campsOn(d);
+    return {
+      id: `off-${d.date}`, kind: 'dayoff', date: d.date, sendOn: sendOn(d.date, LEAD.dayoff), schools: ['*'],
+      when: d.end ? `${longDay(d.date)} to ${longDay(d.end)}` : longDay(d.date), title: `No school: ${d.name}`,
+      text: camps.length ? `${camps.length === 1 ? 'One listed program has' : camps.length + ' listed programs have'} posted a camp: ${listNames(camps.map(p => p.name))}.` : 'No listed program has posted a camp for it yet.',
+      url: mailUrl(offPath, `#d-${d.date}`), button: camps.length ? 'See who’s open' : 'See the day',
+    };
+  }),
+].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
+const alertsFeed = () => ({
+  about: `Dated reminders for ${cfg.siteName}. Each one is emailed on its sendOn day to people who asked for their school's dates.`,
+  generated: TODAY, site: cfg.siteUrl, metric: ALERTS?.metric || 'School dates', sendDay: SEND_DAY_NAME,
+  schools: schools.map(s => ({ id: s.id, name: s.shortName })),
+  alerts: alertItems,
+});
+// The sign-up box. With a school it asks for an email only; without one it asks which school.
+const alertsBox = (depth, { school = null, place, title, lede }) => !ALERTS ? '' : `<section class="panel alerts" id="by-email">
+  <h2>${title}</h2>
+  <p>${lede}</p>
+  <form class="alerts-form" data-alerts data-place="${place}" data-key="${esc(ALERTS.klaviyoKey)}" data-list="${esc(ALERTS.listId)}"${ALERTS.doubleOptIn ? ' data-confirm="1"' : ''}${PREVIEW ? ' data-preview="1"' : ''} data-clarity-mask="true" novalidate>
+    <div class="alerts-row">
+      ${school ? `<input type="hidden" name="school" value="${esc(school.id)}" data-name="${esc(school.shortName)}">` : `<div class="field">
+        <label for="al-school-${place}">${T(`Your school`)}</label>
+        <select id="al-school-${place}" name="school">
+          ${[...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<option value="${esc(s.id)}" data-name="${esc(s.shortName)}">${esc(s.shortName)}</option>`).join('')}
+          <option value="all" data-name="">${T(`A school that isn’t listed yet`)}</option>
+        </select>
+      </div>`}
+      <div class="field">
+        <label for="al-email-${place}">${T(`Your email`)}</label>
+        <input id="al-email-${place}" name="email" type="email" maxlength="150" autocomplete="email" inputmode="email" required>
+      </div>
+      <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+        <label for="al-company-${place}">Leave this blank</label>
+        <input id="al-company-${place}" name="company" type="text" tabindex="-1" autocomplete="off">
+      </div>
+      <button class="btn primary big" type="submit">${T(`Send me the dates`)}</button>
+    </div>
+    <p class="hint">${T(`One email on {day} morning, and only in a week with a date coming up. Every email has an unsubscribe link.`, { day: SEND_DAY_NAME })} <a href="${link('privacy/', depth)}#email">${T(`How we handle your email.`)}</a></p>
+    <p class="alerts-status" data-alerts-status aria-live="polite"></p>
+  </form>
+  <noscript><p class="hint">${T(`Signing up needs JavaScript.`)}</p></noscript>
+</section>`;
+function alertsPage() {
+  const hero = `    <h1>${T(`The dates, before they sneak up on you`)}</h1>
+    <p class="lede">${T(`Sign-up openings, deadlines and days off for your school, by email. One short email on {day} morning, and nothing in a week with no dates.`, { day: SEND_DAY_NAME })}</p>`;
+  const soon = alertItems.filter(a => a.date >= TODAY).slice(0, 6);
+  const body = `<div class="suggest">
+  ${alertsBox(1, { place: 'page', title: T(`Where should they go?`), lede: T(`Pick your school and leave an email address. That’s the whole form.`) })}
+  <aside class="next">
+    <h2>${T(`What you’ll get`)}</h2>
+    <ul class="rules ticks">
+      <li>${T(`A heads-up when sign-ups open or a deadline is close at a program that serves your school.`)}</li>
+      <li>${T(`Each district day off at least {n} days ahead, with the listed programs running a camp that day.`, { n: LEAD.dayoff })}</li>
+      <li>${T(`One email a week at most. If your school isn’t listed yet, you get the days off and every listed program’s dates.`)}</li>
+      <li>${T(`No account, and no questions about your children.`)}</li>
+    </ul>
+    ${soon.length ? `<h2>${T(`Dates coming up`)}</h2>
+    <ul class="rules soon">
+      ${soon.map(a => `<li><b>${shortDate(a.date)}</b><span>${esc(a.kind === 'register' ? `${a.title}: ${a.text}` : a.title.replace(/^No school: /, 'No school, ') + '.')}</span></li>`).join('\n      ')}
+    </ul>` : ''}
+  </aside>
+</div>`;
+  return layout({ title: 'Dates by email', description: `Get after-school sign-up dates, deadlines and days off for your Philadelphia school by email from ${cfg.siteName}.`, pathName: alertsPath, depth: 1, current: null, hero, body, showStreet: 'parked' });
+}
 const servedBy = p => schools.filter(s => p.schools[s.id]);
 // "Picks up from Nebinger and Meredith; near Coppin"
 const servedSummary = p => {
@@ -934,6 +1021,7 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
 ${groups}
   </div>
   <p class="ask">${T(`Know a program that serves {school} and isn’t here?`, { school: s.shortName })} <a href="${link('suggest/', 1)}">${T(`Add it to the list.`)}</a></p>
+  ${alertsBox(1, { school: s, place: 'school', title: T(`Get {school} dates by email`, { school: s.shortName }), lede: T(`Sign-up openings and deadlines for these programs, and a heads-up before each day off.`) })}
   ${s.checkedNoPickup?.length ? `<section class="notes">
     <h2>${T(`Checked, and not listing {school} pickup`, { school: s.shortName })}</h2>
     <ul>${s.checkedNoPickup.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
@@ -996,6 +1084,7 @@ function homePage() {
   <div class="chips-row">${covered.slice(0, 12).map(s => `<a class="btn" href="${link(s.id + '/', 0)}">${esc(s.shortName)}</a>`).join('')}<a class="btn quiet" href="${link('schools/', 0)}">${covered.length > 12 ? `All ${covered.length} schools` : T(`All schools`)}</a></div>
   <p>${T(`Schools are added one at a time, because every pickup list has to be checked. Search for yours above and ask for it: the ones parents ask for most go first.`)}</p>
 </section>
+${alertsBox(0, { place: 'home', title: T(`Get the dates by email`), lede: T(`Sign-up openings, deadlines and days off for your school, so none of them sneaks up on you.`) })}
 <section class="section">
   <h2>${T(`How programs are sorted`)}</h2>
   <div class="kinds">
@@ -1109,6 +1198,7 @@ function privacyPage() {
     <li>${T(`There are no accounts and no ads, and nothing you send is sold.`)}</li>
     <li>${T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us.`)}</li>
     <li>${T(`If you send a suggestion or a review, it arrives as an email to the person who runs the site.`)}</li>
+    ${ALERTS ? `<li>${T(`If you ask for dates by email, your email address and the school you picked are kept by Klaviyo, the service that sends the emails.`)}</li>` : ''}
     <li>${T(`We use Google Analytics and Microsoft Clarity to see how the site is used, so we can fix what’s confusing.`)}</li>
   </ul>
   <h2 id="rosters">${T(`Rosters and children’s names`)}</h2>
@@ -1128,7 +1218,16 @@ function privacyPage() {
     <li>${T(`Asking for a school to be covered sends only the school’s name.`)}</li>
     <li>${T(`Please don’t include children’s names or other people’s personal details in what you send.`)}</li>
   </ul>
-  <h2 id="analytics">${T(`Analytics and recordings`)}</h2>
+  ${ALERTS ? `<h2 id="email">${T(`Dates by email`)}</h2>
+  <ul>
+    <li>${T(`The sign-up form sends two things: your email address and the school you chose. It goes from your browser to Klaviyo, the email service we use, and is stored there.`)}</li>
+    <li>${T(`It never asks for a child’s name, grade or anything else about your family, and your roster is not sent with it.`)}</li>
+    <li>${T(`Klaviyo also notes which page you signed up on. Like most email services, it records whether an email was opened and which links were clicked, and it may estimate a general location from your internet connection.`)}</li>
+    <li>${T(`Your address is used for these date emails and nothing else. It is not shared with the programs listed here, and it is not sold.`)}</li>
+    <li>${T(`Every email has an unsubscribe link, and using it stops the emails. To have your address deleted altogether, email us.`)}</li>
+    <li>${T(`Klaviyo handles that data under its own terms:`)} <a href="https://www.klaviyo.com/legal/privacy-notice" target="_blank" rel="noopener">${T(`Klaviyo’s privacy notice`)}</a>.</li>
+  </ul>
+  ` : ''}<h2 id="analytics">${T(`Analytics and recordings`)}</h2>
   <ul>
     <li>${T(`Google Analytics records which pages are visited and which buttons, filters and searches are used, along with general details such as device type and approximate location. That includes the words typed into the program search box.`)}</li>
     <li>${T(`Microsoft Clarity records how pages are used, including heatmaps and replays of scrolling and clicking, to help us improve the site. We have set it to hide form fields and the roster page.`)}</li>
@@ -1141,7 +1240,7 @@ function privacyPage() {
   <h2 id="children">${T(`Children`)}</h2>
   <p>${T(`This site is written for parents and caregivers. It is not meant to be used by children, and we do not knowingly collect information from them.`)}</p>
   <h2 id="remove">${T(`Seeing or removing what you sent`)}</h2>
-  <p>${T(`To have a review taken down, or a suggestion and your contact details deleted, email`)} ${mail}${T(`. Say what you sent and roughly when, and it will be removed.`)}</p>
+  <p>${T(`To have a review taken down, your email address removed from the date emails, or a suggestion and your contact details deleted, email`)} ${mail}${T(`. Say what you sent and roughly when, and it will be removed.`)}</p>
   <p class="hint">${T(`Last updated {date}. If this page changes in a way that matters, the date changes with it.`, { date: longDate(cfg.privacyUpdated || TODAY) })}</p>
 </div>`;
   return layout({ title: 'Privacy', description: `What ${cfg.siteName} collects, where it goes and how to have it removed, in plain English.`, pathName: 'privacy/', depth: 1, current: null, hero, body, showStreet: 'parked' });
@@ -1508,6 +1607,7 @@ ${dayRows}
   </div>
   <p class="src">Calendar: <a href="${esc(daysOff.source.url)}" target="_blank" rel="noopener">${esc(daysOff.source.label)}</a></p>
 </section>
+${alertsBox(D, { place: 'days_off', title: T(`Get a heads-up before each day off`), lede: T(`An email at least {n} days ahead, with the listed programs running a camp that day.`, { n: LEAD.dayoff }) })}
 <section class="section" id="who">
   <h2>${T(`Who runs something when school is closed`)}</h2>
   <p>${T(`{n} listed programs say they run camps or full days on days off. {m} of them had no dates on their site when we checked, so ask which days they cover.`, { n: campPrograms.length, m: noDates.length })}</p>
@@ -1602,6 +1702,7 @@ function boardPage() {
     <p class="hint">${T(`An estimate from each program’s published prices, for half a school year: 18 weeks of school, or five monthly bills. It leaves out registration fees, deposits, materials, sibling discounts, subsidies and financial aid. If you know what you’ll pay, add it to any line; it stays on this device. Confirm the price with each program before you budget on it.`)}</p>
   </section>
   ${nextOff(1).replace(T(`Days off this year, and who’s open`), T(`Plan the days off too`))}
+  ${ALERTS ? `<p class="hint alerts-line">${T(`Want next term’s sign-up dates before they open?`)} <a href="${link(alertsPath, 1)}">${T(`Get the dates by email.`)}</a></p>` : ''}
   <section class="board-tools" id="board-tools" hidden>
     <div class="actions">
       <button type="button" class="btn primary" id="board-share" hidden>Share</button>
@@ -2083,6 +2184,7 @@ write('ideas/index.html', ideasPage());
 write('ideas/thanks/index.html', ideasThanksPage());
 write('board/index.html', boardPage());
 if (daysOff) write(offPath + 'index.html', daysOffPage());
+if (ALERTS) write(alertsPath + 'index.html', alertsPage());
 write('review/index.html', reviewPage());
 write('review/thanks/index.html', reviewThanksPage());
 if (GATED) write('edit/index.php', editIndexPhp()); else write('edit/index.html', editPage());
@@ -2103,9 +2205,10 @@ if (!PREVIEW) {
   // Public copy of the data, so the monthly check (or anyone) can read exactly what the site shows.
   write('data/programs.json', JSON.stringify(programs.map(({ _grades, ...p }) => p), null, 2));
   write('data/schools.json', JSON.stringify(schools, null, 2));
+  write('data/alerts.json', JSON.stringify(alertsFeed(), null, 2));   // read by scripts/send-alerts.mjs once a day
   const latest = programs.map(p => p.lastVerified).sort().pop();
   const urls = [['', latest], ['schools/', latest], ...schools.map(s => [s.id + '/', latest]), ['types/', latest], ...liveTypes().map(t => [`types/${t.id}/`, latest]), ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]), ['neighborhoods/', latest], ...hoods.map(h => [hoodPath(h), latest]),
-    ...[...(daysOff ? [offPath] : []), 'board/', 'suggest/', 'ideas/', 'review/', 'about/', 'privacy/', 'support/'].map(u => [u, latest])];
+    ...[...(daysOff ? [offPath] : []), ...(ALERTS ? [alertsPath] : []), 'board/', 'suggest/', 'ideas/', 'review/', 'about/', 'privacy/', 'support/'].map(u => [u, latest])];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
   const bare = cfg.siteUrl.replace(/^https?:\/\//, '');
