@@ -112,12 +112,21 @@
     });
   }
 
-  // Copy a canvas to the clipboard as one PNG, so it pastes into a message once. Safari wants the picture promised up front.
-  function copyCanvas(canvas, done) {
+  // Copy a canvas to the clipboard as one PNG, with a line saying where to make one.
+  // Safari can hold the picture and the line as two things, so both paste into a message. Chrome holds one thing:
+  // there the line rides along as rich text, which mail and documents paste under the picture, and a chat app
+  // that takes only the picture still gets the picture.
+  function copyCanvas(canvas, line, done) {
+    var CI = window.ClipboardItem;
     var blobLater = new Promise(function (resolve, reject) { canvas.toBlob(function (b) { if (b) resolve(b); else reject(new Error('no picture')); }, 'image/png'); });
+    var together = function () {
+      var site = line.replace(/^.* at /, ''), html = '<img src="' + canvas.toDataURL('image/png') + '" alt=""><p>' + line.replace(site, '<a href="https://' + site + '">' + site + '</a>') + '</p>';
+      return blobLater.then(function (b) { return navigator.clipboard.write([new CI({ 'image/png': b, 'text/html': new Blob([html], { type: 'text/html' }) })]); })
+        .catch(function () { return blobLater.then(function (b) { return navigator.clipboard.write([new CI({ 'image/png': b })]); }); });
+    };
     var write;
-    try { write = navigator.clipboard.write([new window.ClipboardItem({ 'image/png': blobLater })]); }
-    catch (e) { write = blobLater.then(function (b) { return navigator.clipboard.write([new window.ClipboardItem({ 'image/png': b })]); }); }
+    try { write = navigator.clipboard.write([new CI({ 'image/png': blobLater }), new CI({ 'text/plain': Promise.resolve(new Blob([line], { type: 'text/plain' })) })]).catch(together); }
+    catch (e) { write = together(); }
     write.then(function () { done(true); }, function () { done(false); });
   }
   var canCopyPicture = !!(navigator.clipboard && navigator.clipboard.write && window.ClipboardItem);
@@ -577,7 +586,7 @@
       var copyPic = planEl.querySelector('#off-copy-pic');
       if (copyPic && canCopyPicture) {
         copyPic.hidden = false;
-        copyPic.addEventListener('click', function () { copyCanvas(canvas, function (ok) { cardStatus.textContent = ok ? 'Picture copied. Paste it into a message.' : 'Copying didn’t work in this browser. Use Save as image.'; if (ok) shareEvent('image_copy'); }); });
+        copyPic.addEventListener('click', function () { copyCanvas(canvas, 'Plan your own at ' + String(od.site || '').replace(/^https?:\/\//, '') + '/days-off', function (ok) { cardStatus.textContent = ok ? 'Picture copied. Paste it into a message.' : 'Copying didn’t work in this browser. Use Save as image.'; if (ok) shareEvent('image_copy'); }); });
       }
       planEl.querySelector('#off-print').addEventListener('click', function () {
         document.body.classList.add('print-card');
@@ -1403,7 +1412,7 @@
             cardFile(function (blob, name) {
               var file = new File([blob], name, { type: 'image/png' });
               // No title: Apple's share sheet turns a title into a second preview of the picture. The link rides along as text.
-              navigator.share({ files: [file], text: heading(activeKid().name, loadRosters().active) + '. Build your own week:', url: (data.site || '') + '/?utm_source=week_card&utm_medium=share' }).then(function () { track_share('image_share'); }, function () { /* closed without sharing */ });
+              navigator.share({ files: [file], text: heading(activeKid().name, loadRosters().active) + '. Make your own at', url: (data.site || '') + '/?utm_source=week_card&utm_medium=share' }).then(function () { track_share('image_share'); }, function () { /* closed without sharing */ });
             });
           });
         }
@@ -1411,7 +1420,7 @@
       var copyCard = $('#card-copy-pic');
       if (copyCard && canCopyPicture) {
         copyCard.hidden = false;
-        copyCard.addEventListener('click', function () { copyCanvas(canvas, function (ok) { cardStatus.textContent = ok ? 'Picture copied. Paste it into a message.' : 'Copying didn’t work in this browser. Use Save as image.'; if (ok) track_share('image_copy'); }); });
+        copyCard.addEventListener('click', function () { copyCanvas(canvas, 'Make your own at ' + String(data.site || '').replace(/^https?:\/\//, ''), function (ok) { cardStatus.textContent = ok ? 'Picture copied. Paste it into a message.' : 'Copying didn’t work in this browser. Use Save as image.'; if (ok) track_share('image_copy'); }); });
       }
       $('#card-print').addEventListener('click', function () {
         document.body.classList.add('print-card');
