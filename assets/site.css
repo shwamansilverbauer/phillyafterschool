@@ -658,8 +658,10 @@ button.btn{cursor:pointer;font-family:inherit}
 .next .rules.soon li{grid-template-columns:4.4em minmax(0,1fr)}
 .next .rules.soon li::before{content:none}
 @media (min-width:640px){
-  .alerts-row{grid-template-columns:minmax(0,1fr) auto}
-  .alerts-row:has(select){grid-template-columns:minmax(0,.8fr) minmax(0,1fr) auto}
+  .alerts-row{grid-template-columns:minmax(0,.7fr) minmax(0,1fr) auto}
+  .alerts-row:has(select){grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .alerts-row:has(select) .btn{justify-self:start;padding-inline:28px}
 }
 .suggest .panel.alerts{max-width:none}
 .suggest .alerts-row,.suggest .alerts-row:has(select){grid-template-columns:minmax(0,1fr)}
+.suggest .alerts-row:has(select) .btn{justify-self:stretch}
