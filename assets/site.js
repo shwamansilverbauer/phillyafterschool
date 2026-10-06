@@ -112,6 +112,16 @@
     });
   }
 
+  // Copy a canvas to the clipboard as one PNG, so it pastes into a message once. Safari wants the picture promised up front.
+  function copyCanvas(canvas, done) {
+    var blobLater = new Promise(function (resolve, reject) { canvas.toBlob(function (b) { if (b) resolve(b); else reject(new Error('no picture')); }, 'image/png'); });
+    var write;
+    try { write = navigator.clipboard.write([new window.ClipboardItem({ 'image/png': blobLater })]); }
+    catch (e) { write = blobLater.then(function (b) { return navigator.clipboard.write([new window.ClipboardItem({ 'image/png': b })]); }); }
+    write.then(function () { done(true); }, function () { done(false); });
+  }
+  var canCopyPicture = !!(navigator.clipboard && navigator.clipboard.write && window.ClipboardItem);
+
   // ----- "my school": saved on this device, no account. The home page, lists and roster start from it. -----
   function mySchool() {
     try { var m = JSON.parse(store('pas-my-school') || 'null'); return m && /^[a-z0-9-]+$/.test(m.id || '') && typeof m.name === 'string' ? { id: m.id, name: m.name.slice(0, 60) } : null; } catch (e) { return null; }
@@ -558,11 +568,16 @@
           shareBtn.hidden = false;
           shareBtn.addEventListener('click', function () {
             cardFile(function (blob, name) {
-              // the picture goes alone: a link sent with it makes Messages attach the picture twice
-              navigator.share({ files: [new File([blob], name, { type: 'image/png' })], title: (activeKid().name ? possessive(activeKid().name) : 'Our') + ' days off' }).then(function () { shareEvent('image_share'); }, function () { /* closed without sharing */ });
+              // No title: Apple's share sheet turns a title into a second preview of the picture. The link rides along as text.
+              navigator.share({ files: [new File([blob], name, { type: 'image/png' })], text: (activeKid().name ? possessive(activeKid().name) : 'Our') + ' days off. Plan yours:', url: (od.site || '') + '/days-off/?utm_source=dayoff_card&utm_medium=share' }).then(function () { shareEvent('image_share'); }, function () { /* closed without sharing */ });
             });
           });
         }
+      }
+      var copyPic = planEl.querySelector('#off-copy-pic');
+      if (copyPic && canCopyPicture) {
+        copyPic.hidden = false;
+        copyPic.addEventListener('click', function () { copyCanvas(canvas, function (ok) { cardStatus.textContent = ok ? 'Picture copied. Paste it into a message.' : 'Copying didn’t work in this browser. Use Save as image.'; if (ok) shareEvent('image_copy'); }); });
       }
       planEl.querySelector('#off-print').addEventListener('click', function () {
         document.body.classList.add('print-card');
@@ -1387,10 +1402,16 @@
           shareCard.addEventListener('click', function () {
             cardFile(function (blob, name) {
               var file = new File([blob], name, { type: 'image/png' });
-              navigator.share({ files: [file], title: heading(activeKid().name, loadRosters().active) }).then(function () { track_share('image_share'); }, function () { /* closed without sharing */ });
+              // No title: Apple's share sheet turns a title into a second preview of the picture. The link rides along as text.
+              navigator.share({ files: [file], text: heading(activeKid().name, loadRosters().active) + '. Build your own week:', url: (data.site || '') + '/?utm_source=week_card&utm_medium=share' }).then(function () { track_share('image_share'); }, function () { /* closed without sharing */ });
             });
           });
         }
+      }
+      var copyCard = $('#card-copy-pic');
+      if (copyCard && canCopyPicture) {
+        copyCard.hidden = false;
+        copyCard.addEventListener('click', function () { copyCanvas(canvas, function (ok) { cardStatus.textContent = ok ? 'Picture copied. Paste it into a message.' : 'Copying didn’t work in this browser. Use Save as image.'; if (ok) track_share('image_copy'); }); });
       }
       $('#card-print').addEventListener('click', function () {
         document.body.classList.add('print-card');
