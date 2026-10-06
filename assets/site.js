@@ -174,7 +174,7 @@
   // Narrow screens: a Menu button that opens every group in one panel. A tap elsewhere or Escape closes either. -----
   var menus = all(document, 'details.menu');
   var menuBtn = document.querySelector('.menu-btn'), siteNav = document.querySelector('#site-nav');
-  var narrow = window.matchMedia ? window.matchMedia('(max-width: 1059px)') : { matches: false };
+  var narrow = window.matchMedia ? window.matchMedia('(max-width: 1099px)') : { matches: false };
   var panelOpen = function () { return !!siteNav && siteNav.className.indexOf('open') > -1; };
   var setPanel = function (open) {
     if (!siteNav || !menuBtn) return;

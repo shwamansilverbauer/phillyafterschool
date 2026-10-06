@@ -593,11 +593,11 @@ button.btn{cursor:pointer;font-family:inherit}
 .nav a.nav-cta{padding:6px 14px}
 .menu-btn{display:none;font:inherit;font-weight:700;align-items:center;gap:9px;padding:8px 14px;border-radius:999px;border:2px solid var(--hero-ink);background:transparent;color:var(--hero-ink);cursor:pointer}
 .menu-bars{display:block;width:16px;height:2px;background:currentColor;box-shadow:0 -5px 0 currentColor,0 5px 0 currentColor}
-@media (min-width:1060px){
+@media (min-width:1100px){
   .bar{flex-wrap:nowrap}
   .nav{flex-wrap:nowrap;white-space:nowrap;margin-left:auto}
 }
-@media (max-width:1059px){
+@media (max-width:1099px){
   .js .menu-btn{display:inline-flex}
   .js .nav{display:none}
   .js .nav.open{display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:2px;position:absolute;left:12px;right:12px;top:calc(100% - 4px);z-index:50;background:#FFFFFF;border-radius:16px;padding:12px;box-shadow:0 16px 40px rgba(7,21,39,.34);max-height:calc(100vh - 96px);overflow:auto}
@@ -613,7 +613,7 @@ button.btn{cursor:pointer;font-family:inherit}
   .menu{position:static}
   .menu ul,.menu:last-of-type ul{left:12px;right:12px;top:calc(100% - 6px);min-width:0}
 }
-@media (max-width:1059px){
+@media (max-width:1099px){
   .js .nav.open .menu ul a{padding:8px 12px}
   .js .nav.open > a{padding:8px 12px}
   .js .nav.open .menu summary{padding-top:8px}
@@ -631,3 +631,11 @@ button.btn{cursor:pointer;font-family:inherit}
 .offcard[hidden]{display:none}
 .offcard h3{font-size:1.2rem}
 @media (prefers-reduced-motion: reduce){.off-list li{transform:none}}
+
+/* ---------- header: room between the menu items. The bar runs wider than the page so they can spread out. ---------- */
+.in.bar{max-width:1280px}
+@media (min-width:1100px){
+  .nav{gap:6px clamp(20px, 2.1vw, 34px)}
+  .menu summary{gap:8px}
+  .nav a.nav-cta{padding:7px 18px;margin-left:4px}
+}
