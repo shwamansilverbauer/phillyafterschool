@@ -369,7 +369,7 @@
     });
     return out;
   }
-  function newKid(name) { return { name: cleanName(name), now: emptyBoard(), next: emptyBoard(), teacher: '', cardNote: '', off: {}, prices: {} }; }
+  function newKid(name) { return { name: cleanName(name), now: emptyBoard(), next: emptyBoard(), teacher: '', cardNote: '', off: {}, offNote: '', prices: {} }; }
   function possessive(name) { return name + '’s'; }
   // A pick is "program.school", optionally followed by "~" and a class or short note.
   function entryKey(e) { var i = e.indexOf('~'); return i < 0 ? e : e.slice(0, i); }
@@ -384,7 +384,7 @@
     if (raw && Array.isArray(raw.kids) && raw.kids.length) {
       rosters = { kid: 0, active: raw.active === 'now' ? 'now' : 'next', kids: raw.kids.slice(0, MAX_KIDS).map(function (k) {
         k = k && typeof k === 'object' ? k : {};
-        return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next), teacher: cleanName(k.teacher), cardNote: String(k.cardNote == null ? '' : k.cardNote).slice(0, 110), off: cleanOff(k.off), prices: cleanPrices(k.prices) };
+        return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next), teacher: cleanName(k.teacher), cardNote: String(k.cardNote == null ? '' : k.cardNote).slice(0, 110), off: cleanOff(k.off), offNote: String(k.offNote == null ? '' : k.offNote).slice(0, 110), prices: cleanPrices(k.prices) };
       }) };
       if (typeof raw.kid === 'number' && raw.kid % 1 === 0 && raw.kid >= 0 && raw.kid < rosters.kids.length) rosters.kid = raw.kid;
     } else {
@@ -430,6 +430,150 @@
       planned(kid).forEach(function (d) { lines.push(d.label + ' (' + d.name + '): ' + label(kid.off[d.d])); });
       return lines.join('\n') + '\n\nPlanned at ' + od.page;
     };
+    // ----- the day-camp card: the plan as one picture, in the day-off colors -----
+    var cardBox = planEl.querySelector('#off-card'), canvas = planEl.querySelector('#off-canvas'), noteBox = planEl.querySelector('#off-note');
+    var photoBox = planEl.querySelector('#off-photo'), photoClear = planEl.querySelector('#off-photo-clear'), cardStatus = planEl.querySelector('#off-card-status');
+    var photo = null;
+    var DISPLAY = '"Archivo", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
+    var fit = function (ctx, text, max) { if (ctx.measureText(text).width <= max) return text; while (text.length > 1 && ctx.measureText(text + '…').width > max) text = text.slice(0, -1); return text.replace(/\s+$/, '') + '…'; };
+    var box = function (ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); };
+    var NAVY = '#0B2140', YELLOW = '#F3C613';
+    var drawOffCard = function () {
+      if (!canvas || !canvas.getContext) return;
+      var kid = activeKid(), mine = planned(kid), ctx = canvas.getContext('2d'), W = 1080, H = 1350, FOOT = 160;
+      var note = String(kid.offNote || '').replace(/\s+/g, ' ').replace(/^ | $/g, '');
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = YELLOW; ctx.fillRect(0, 0, W, H);
+      // brand
+      ctx.fillStyle = '#0F4D90'; box(ctx, 56, 58, 54, 28, 8); ctx.fill();
+      ctx.fillStyle = NAVY; ctx.beginPath(); ctx.arc(70, 90, 7, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(98, 90, 7, 0, 7); ctx.fill();
+      ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+      ctx.font = '800 32px ' + DISPLAY; ctx.fillText('Philly After School', 126, 86);
+      // top right: the child's photo, or a kite
+      var textMax = 720;
+      if (photo) {
+        var cx = 916, cy = 176, rad = 104;
+        ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, rad, 0, 7); ctx.closePath(); ctx.clip();
+        var pw = photo.naturalWidth || photo.width, ph = photo.naturalHeight || photo.height, side = Math.min(pw, ph);
+        ctx.drawImage(photo, (pw - side) / 2, (ph - side) / 2, side, side, cx - rad, cy - rad, rad * 2, rad * 2);
+        ctx.restore();
+        ctx.lineWidth = 8; ctx.strokeStyle = NAVY; ctx.beginPath(); ctx.arc(cx, cy, rad, 0, 7); ctx.stroke();
+      } else {
+        var kx = 930, ky = 140;
+        ctx.strokeStyle = '#0A3566'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(kx, ky + 66); ctx.bezierCurveTo(kx - 34, ky + 100, kx + 30, ky + 120, kx - 6, ky + 150); ctx.stroke();
+        ctx.fillStyle = '#1763B8';
+        [[kx - 12, ky + 96, 1], [kx + 8, ky + 126, -1]].forEach(function (b) { ctx.beginPath(); ctx.moveTo(b[0] - 12 * b[2], b[1] - 8); ctx.lineTo(b[0] + 12 * b[2], b[1]); ctx.lineTo(b[0] - 10 * b[2], b[1] + 9); ctx.closePath(); ctx.fill(); });
+        ctx.fillStyle = '#CC3000'; ctx.beginPath(); ctx.moveTo(kx, ky - 66); ctx.lineTo(kx + 50, ky); ctx.lineTo(kx, ky + 66); ctx.lineTo(kx - 50, ky); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle = '#FFF6D6'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(kx, ky - 66); ctx.lineTo(kx, ky + 66); ctx.moveTo(kx - 50, ky); ctx.lineTo(kx + 50, ky); ctx.stroke();
+      }
+      // title
+      var title = (kid.name ? possessive(kid.name) : 'Our') + ' days off', size = 92;
+      do { ctx.font = '850 ' + size + 'px ' + DISPLAY; size -= 4; } while (ctx.measureText(title).width > textMax && size > 44);
+      ctx.fillStyle = NAVY; ctx.fillText(fit(ctx, title, textMax), 56, 196);
+      ctx.font = '400 32px ' + BODY; ctx.fillStyle = '#263A57'; ctx.fillText('No school? Here’s the plan.', 56, 248);
+      // the days: up to seven, then a line for the rest
+      var top = 300, bottom = note ? 1068 : 1172, gap = 12, max = 7;
+      var shown = mine.length > max ? mine.slice(0, max - 1) : mine, extra = mine.length - shown.length;
+      var slots = shown.length + (extra ? 1 : 0), rowH = Math.min(slots < 4 ? 140 : 124, (bottom - top - gap * (slots - 1)) / Math.max(slots, 1));
+      shown.forEach(function (d, i) {
+        var y = top + i * (rowH + gap), v = kid.off[d.d], prog = od.programs[v];
+        ctx.fillStyle = '#FFFFFF'; box(ctx, 48, y, 984, rowH, 22); ctx.fill();
+        ctx.fillStyle = NAVY; box(ctx, 48, y, 196, rowH, 22); ctx.fill(); ctx.fillRect(216, y, 28, rowH);
+        var parts = d.label.split(', ');
+        ctx.textAlign = 'center';
+        ctx.fillStyle = YELLOW; ctx.font = '700 24px ' + BODY; ctx.fillText(parts[0], 146, y + rowH / 2 - 16);
+        ctx.fillStyle = '#FFFFFF'; ctx.font = '800 40px ' + DISPLAY; ctx.fillText(parts[1] || '', 146, y + rowH / 2 + 28);
+        ctx.textAlign = 'left';
+        ctx.fillStyle = prog ? prog.color : '#7A8DA6'; box(ctx, 268, y + rowH / 2 - 30, 10, 60, 5); ctx.fill();
+        ctx.fillStyle = NAVY; ctx.font = '750 34px ' + DISPLAY; ctx.fillText(fit(ctx, label(v), 710), 294, y + rowH / 2 - 2);
+        ctx.fillStyle = '#4D607A'; ctx.font = '400 25px ' + BODY; ctx.fillText(fit(ctx, d.name, 710), 294, y + rowH / 2 + 32);
+      });
+      if (extra) {
+        var ey = top + shown.length * (rowH + gap);
+        ctx.fillStyle = 'rgba(255,255,255,.55)'; box(ctx, 48, ey, 984, rowH, 22); ctx.fill();
+        ctx.fillStyle = NAVY; ctx.font = '700 32px ' + BODY; ctx.textAlign = 'center'; ctx.fillText('and ' + extra + ' more ' + (extra === 1 ? 'day' : 'days') + ' planned', W / 2, ey + rowH / 2 + 11); ctx.textAlign = 'left';
+      }
+      // with room to spare, the park fills it: grass, trees, the school shut and the bus asleep
+      var used = top + slots * (rowH + gap), free = bottom - used;
+      if (free > 190) {
+        var g = bottom + (note ? 0 : 18);
+        ctx.fillStyle = '#E2B300'; [[60, 150, 120], [200, 110, 150], [370, 170, 110], [700, 130, 160], [880, 160, 130]].forEach(function (b) { ctx.fillRect(b[0], g - b[1], b[2], b[1]); });
+        ctx.fillStyle = '#3E9E57'; ctx.beginPath(); ctx.moveTo(0, g - 44); ctx.quadraticCurveTo(W / 2, g - 76, W, g - 40); ctx.lineTo(W, g + 20); ctx.lineTo(0, g + 20); ctx.closePath(); ctx.fill();
+        [[150, 40], [930, 46]].forEach(function (t) { ctx.fillStyle = '#0A3566'; ctx.fillRect(t[0] - 5, g - 110, 10, 66); ctx.fillStyle = '#1F6B36'; ctx.beginPath(); ctx.arc(t[0] - 12, g - 124, t[1], 0, 7); ctx.fill(); ctx.fillStyle = '#2C8444'; ctx.beginPath(); ctx.arc(t[0] + 14, g - 136, t[1] * 0.85, 0, 7); ctx.fill(); });
+        ctx.fillStyle = '#FFF6D6'; ctx.fillRect(400, g - 166, 230, 118); ctx.fillStyle = '#0A3566'; ctx.fillRect(396, g - 174, 238, 10); ctx.fillRect(498, g - 92, 36, 44);
+        ctx.fillStyle = '#C7D6E8'; for (var c = 0; c < 5; c++) { ctx.fillRect(418 + c * 42, g - 150, 24, 26); }
+        ctx.fillStyle = YELLOW; ctx.strokeStyle = NAVY; ctx.lineWidth = 3; box(ctx, 660, g - 86, 96, 40, 8); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = NAVY; for (var w2 = 0; w2 < 4; w2++) ctx.fillRect(670 + w2 * 20, g - 78, 14, 13);
+        ctx.beginPath(); ctx.arc(682, g - 44, 9, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(736, g - 44, 9, 0, 7); ctx.fill();
+        ctx.font = '800 22px ' + DISPLAY; ctx.fillText('z', 764, g - 96); ctx.font = '800 28px ' + DISPLAY; ctx.fillText('z', 782, g - 118); ctx.font = '800 34px ' + DISPLAY; ctx.fillText('z', 804, g - 144);
+        ctx.fillStyle = '#2C8444'; ctx.fillRect(0, g - 30, W, 60);
+      }
+      if (note) {
+        ctx.fillStyle = '#0A3566'; box(ctx, 48, 1082, 984, 92, 22); ctx.fill();
+        ctx.fillStyle = '#FFFFFF'; ctx.font = '400 30px ' + BODY; ctx.fillText(fit(ctx, 'Note: ' + note, 930), 76, 1139);
+      }
+      // footer: where it came from
+      ctx.fillStyle = NAVY; ctx.fillRect(0, H - FOOT, W, FOOT);
+      var host = String(od.site || '').replace(/^https?:\/\//, '') || 'phillyafterschool.org';
+      ctx.fillStyle = YELLOW; ctx.font = '800 40px ' + DISPLAY; ctx.fillText('Plan your days off', 56, H - FOOT + 70);
+      ctx.fillStyle = '#FFFFFF'; ctx.font = '700 36px ' + BODY; ctx.fillText(host, 56, H - FOOT + 118);
+      if (od.qr && od.qr.length) {
+        var n = od.qr.length, quiet = 3, boxSize = 138, cell = boxSize / (n + quiet * 2), qx = W - 56 - boxSize, qy = H - FOOT + 11;
+        ctx.fillStyle = '#FFFFFF'; box(ctx, qx, qy, boxSize, boxSize, 10); ctx.fill();
+        ctx.fillStyle = NAVY;
+        for (var ry = 0; ry < n; ry++) for (var rx = 0; rx < n; rx++) if (od.qr[ry].charAt(rx) === '1') ctx.fillRect(qx + (rx + quiet) * cell, qy + (ry + quiet) * cell, Math.ceil(cell), Math.ceil(cell));
+        ctx.fillStyle = '#CFE3FB'; ctx.font = '400 24px ' + BODY; ctx.textAlign = 'right'; ctx.fillText('Scan to plan yours', qx - 20, H - FOOT + 118); ctx.textAlign = 'left';
+      }
+    };
+    var shareEvent = function (method) { track({ event: 'pas_board_share', method: method, board: 'day_camp' }); };
+    var cardFile = function (done) {
+      var name = (cleanName(activeKid().name) || 'our').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'our';
+      canvas.toBlob(function (blob) { done(blob, name + '-days-off.png'); }, 'image/png');
+    };
+    if (cardBox && canvas && canvas.getContext && canvas.toBlob) {
+      noteBox.addEventListener('input', function () { activeKid().offNote = noteBox.value.slice(0, 110); saveRosters(); drawOffCard(); });
+      photoBox.addEventListener('change', function () {
+        var file = photoBox.files && photoBox.files[0];
+        if (!file) return;
+        var url = URL.createObjectURL(file), img = new Image();
+        img.onload = function () { URL.revokeObjectURL(url); photo = img; photoClear.hidden = false; cardStatus.textContent = 'Photo added. It stays on this device.'; drawOffCard(); };
+        img.onerror = function () { URL.revokeObjectURL(url); cardStatus.textContent = 'That file couldn’t be read as a picture. Try a JPG or PNG.'; };
+        img.src = url;
+      });
+      photoClear.addEventListener('click', function () { photo = null; photoBox.value = ''; photoClear.hidden = true; cardStatus.textContent = 'Photo removed.'; drawOffCard(); });
+      planEl.querySelector('#off-save').addEventListener('click', function () {
+        cardFile(function (blob, name) {
+          var a = el('a'); a.href = URL.createObjectURL(blob); a.download = name;
+          document.body.appendChild(a); a.click(); document.body.removeChild(a);
+          setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+          cardStatus.textContent = 'Saved as ' + name + '. Attach it to a text or an email.';
+          shareEvent('image_save');
+        });
+      });
+      var shareBtn = planEl.querySelector('#off-share');
+      if (navigator.share && navigator.canShare && window.File) {
+        var probe = null;
+        try { probe = new File([new Blob(['x'], { type: 'image/png' })], 'days-off.png', { type: 'image/png' }); } catch (e) { probe = null; }
+        if (probe && navigator.canShare({ files: [probe] })) {
+          shareBtn.hidden = false;
+          shareBtn.addEventListener('click', function () {
+            cardFile(function (blob, name) {
+              // the picture goes alone: a link sent with it makes Messages attach the picture twice
+              navigator.share({ files: [new File([blob], name, { type: 'image/png' })], title: (activeKid().name ? possessive(activeKid().name) : 'Our') + ' days off' }).then(function () { shareEvent('image_share'); }, function () { /* closed without sharing */ });
+            });
+          });
+        }
+      }
+      planEl.querySelector('#off-print').addEventListener('click', function () {
+        document.body.classList.add('print-card');
+        var after = function () { document.body.classList.remove('print-card'); window.removeEventListener('afterprint', after); };
+        window.addEventListener('afterprint', after);
+        shareEvent('print');
+        window.print();
+      });
+      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('850 92px Archivo'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (!cardBox.hidden) drawOffCard(); }, function () { /* system fonts will do */ });
+    } else cardBox = null;
+
     var draw = function () {
       var r = loadRosters(), kid = r.kids[r.kid], whose = kid.name ? possessive(kid.name) : r.kids.length > 1 ? possessive(kidLabel(kid, r.kid)) : 'Your child’s';
       kidsRow.textContent = ''; kidsRow.hidden = r.kids.length < 2;
@@ -441,9 +585,14 @@
       var mine = planned(kid);
       countEl.textContent = mine.length ? whose + ' plan: ' + mine.length + ' of ' + days.length + ' days off covered.' : 'Nothing planned yet. ' + days.length + ' days off are still to come this year.';
       listEl.textContent = ''; listEl.hidden = !mine.length; actions.hidden = !mine.length;
+      if (cardBox) { cardBox.hidden = !mine.length; if (mine.length) { if (document.activeElement !== noteBox) noteBox.value = kid.offNote || ''; drawOffCard(); } }
       mine.forEach(function (d) {
         var v = kid.off[d.d], li = el('li');
-        li.appendChild(el('b', null, d.label));
+        li.style.setProperty('--tc', od.programs[v] ? od.programs[v].color : '#7A8DA6');
+        var stub = el('span', 'off-date');   // the date, like a ticket stub
+        stub.appendChild(el('span', null, d.label.split(',')[0]));
+        stub.appendChild(el('b', null, d.label.split(', ')[1] || d.label));
+        li.appendChild(stub);
         li.appendChild(el('span', 'hint', d.name));
         if (od.programs[v]) { var a = el('a', null, od.programs[v].name); a.href = '#' + v; li.appendChild(a); } else li.appendChild(el('span', null, label(v)));
         if (od.programs[v] && d.camps.indexOf(v) < 0) li.appendChild(el('span', 'tc-warn', 'It hasn’t posted this date. Ask if it’s open.'));
@@ -493,11 +642,6 @@
       var text = asText(activeKid());
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { statusEl.textContent = 'Copied.'; }, function () { statusEl.textContent = 'Copying didn’t work here. Use Email it to myself.'; });
       else statusEl.textContent = 'Copying didn’t work here. Use Email it to myself.';
-    });
-    planEl.querySelector('#off-print').addEventListener('click', function () {
-      document.body.classList.add('print-plan');
-      window.print();
-      window.setTimeout(function () { document.body.classList.remove('print-plan'); }, 500);
     });
     var clearBtn = planEl.querySelector('#off-clear');
     clearBtn.addEventListener('click', function () {

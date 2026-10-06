@@ -1458,7 +1458,8 @@ function daysOffPage() {
       <span><b>${campPrograms.length}</b> programs run something</span>
     </div>`;
   const planData = {
-    programs: Object.fromEntries(campPrograms.map(p => [p.id, { name: p.name, url: p.daysOff.url }])),
+    programs: Object.fromEntries(campPrograms.map(p => [p.id, { name: p.name, url: p.daysOff.url, color: TYPE[p.types[0]].color }])),
+    site: cfg.siteUrl, qr: cardQr?.dayoff && cardQr.dayoff.text.toLowerCase().startsWith(cfg.siteUrl.toLowerCase() + '/') ? cardQr.dayoff.rows : null,
     days: offDays.flatMap(d => d.dates.filter(x => x >= TODAY).map(x => ({ d: x, label: dayDate(x), name: d.name, camps: campPrograms.filter(p => p.daysOff.dates.includes(x)).map(p => p.id) }))),
     page: `${cfg.siteUrl}/${offPath}`,
   };
@@ -1469,8 +1470,33 @@ function daysOffPage() {
   <div class="kids" id="off-kids" role="group" aria-label="Which child" hidden></div>
   <p class="off-count" id="off-count"></p>
   <ol class="off-list" id="off-list"></ol>
-  <div class="actions" id="off-actions" hidden><button type="button" class="btn" id="off-copy">Copy as text</button><a class="btn" id="off-email" href="mailto:">Email it to myself</a><button type="button" class="btn" id="off-print">Print</button><button type="button" class="clear" id="off-clear">Clear this plan</button></div>
+  <div class="actions" id="off-actions" hidden><button type="button" class="btn" id="off-copy">Copy as text</button><a class="btn" id="off-email" href="mailto:">Email it to myself</a><button type="button" class="clear" id="off-clear">Clear this plan</button></div>
   <p class="hint" id="off-status" aria-live="polite"></p>
+  <div class="card-maker offcard" id="off-card" hidden>
+    <h3>${T(`Make it a card`)}</h3>
+    <p>${T(`One picture of the days off to text to a sitter, a grandparent or the group chat.`)}</p>
+    <div class="card-grid">
+      <div class="card-fields">
+        <div class="field">
+          <label for="off-note">${T(`A note (optional)`)}</label>
+          <input id="off-note" type="text" maxlength="110" placeholder="Grandpa does drop-off on camp days." autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="off-photo">${T(`Your child’s photo (optional)`)}</label>
+          <input id="off-photo" type="file" accept="image/*">
+          <span class="hint">${T(`The photo never leaves this device. The card is made here in your browser, nothing is uploaded, and the photo isn’t saved.`)}</span>
+          <button type="button" class="clear" id="off-photo-clear" hidden>Remove the photo</button>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn primary" id="off-share" hidden>Share the card</button>
+          <button type="button" class="btn" id="off-save">Save as image</button>
+          <button type="button" class="btn" id="off-print">Print</button>
+        </div>
+        <p class="hint" id="off-card-status" aria-live="polite"></p>
+      </div>
+      <div class="card-preview"><canvas id="off-canvas" width="1080" height="1350" role="img" aria-label="Preview of the day-camp schedule card"></canvas></div>
+    </div>
+  </div>
   <script type="application/json" id="off-data">${JSON.stringify(planData).replace(/</g, '\\u003c')}</script>
 </section>
 <section class="section" id="days">
@@ -2081,7 +2107,7 @@ if (!PREVIEW) {
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
   const bare = cfg.siteUrl.replace(/^https?:\/\//, '');
-  write('.htaccess', `ErrorDocument 404 /404.html\nAddType text/calendar .ics\nDirectoryIndex index.html index.php\n\n# One address for the site: www goes to the bare domain.\n<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.${bare.replace(/\./g, '\\.')}$ [NC]\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n${cardQr ? `# The short address in the week card's QR code.\nRewriteRule ^w/?$ ${cardQr.goesTo} [NC,R=302,L]\n` : ''}</IfModule>\n`);
+  write('.htaccess', `ErrorDocument 404 /404.html\nAddType text/calendar .ics\nDirectoryIndex index.html index.php\n\n# One address for the site: www goes to the bare domain.\n<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.${bare.replace(/\./g, '\\.')}$ [NC]\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n${cardQr ? `# The short addresses in the QR codes on the week card and the day-camp card.\nRewriteRule ^w/?$ ${cardQr.goesTo} [NC,R=302,L]\n${cardQr.dayoff ? `RewriteRule ^d/?$ ${cardQr.dayoff.goesTo} [NC,R=302,L]\n` : ''}` : ''}</IfModule>\n`);
 }
 // Edits in data/copy.json are matched to sentences by a fingerprint of the original wording.
 // If the original was reworded or removed in this file, the edit no longer applies: say so, but still build.

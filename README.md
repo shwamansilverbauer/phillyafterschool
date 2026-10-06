@@ -185,7 +185,10 @@ each summer when the district publishes the new calendar.
 **A day-off plan.** On the same page, "Build your day-off plan" lets a family choose, for each day off, where a
 child will be: one of the camps posted for that date, another listed program (flagged as not posted for that
 date), or at home. Picks are saved with the rosters in the browser, per child, and gathered in a list that can
-be copied, emailed or printed. Each pick fires `pas_dayoff_pick` (program_id, day).
+be copied or emailed. "Make it a card" draws the schedule as a picture in the day-off colors, with an optional
+note and photo (the photo never leaves the device) and its own QR code: `/d`, which `.htaccess` sends to the
+day-camp page tagged `utm_source=dayoff_card`. Each pick fires `pas_dayoff_pick` (program_id, day); saving, sharing
+or printing the card fires `pas_board_share` with board `day_camp`.
 
 The day-off page has its own look: a yellow band with navy type (`.band.dayoff` in the stylesheet) and its
 own drawing, `dayScene()` in `build.mjs`: the school shut, the bus asleep, a swing and a kite going up. Its
@@ -206,7 +209,7 @@ A parent can type what they pay on any line (per week, per month or for the seme
 that publish no price and replaces a listed one. Those figures stay in the browser and never go into a share link.
 
 **The week card's QR code.** `data/card-qr.json` holds the pattern for the code printed on the week card. It
-encodes the short address `/w`, which `.htaccess` sends to the home page with `utm_source=week_card` and
+(and, under `dayoff`, the one on the day-camp card) encodes the short address `/w`, which `.htaccess` sends to the home page with `utm_source=week_card` and
 `utm_medium=qr`. The card is shared as a picture on its own: sending a link with it made Messages attach the
 picture twice, so the address and the code on the card are what lead back. If the site's
 address ever changes, regenerate the file (Python: `pip install qrcode`, encode `HTTPS://<DOMAIN>/W` at error
