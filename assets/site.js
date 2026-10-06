@@ -1243,7 +1243,7 @@
           shareCard.addEventListener('click', function () {
             cardFile(function (blob, name) {
               var file = new File([blob], name, { type: 'image/png' });
-              navigator.share({ files: [file], title: heading(activeKid().name, loadRosters().active), text: 'Made at ' + String(data.site || '').replace(/^https?:\/\//, ''), url: (data.site || '') + '/?utm_source=week_card&utm_medium=share' }).then(function () { track_share('image_share'); }, function () { /* closed without sharing */ });
+              navigator.share({ files: [file], title: heading(activeKid().name, loadRosters().active) }).then(function () { track_share('image_share'); }, function () { /* closed without sharing */ });
             });
           });
         }
