@@ -768,3 +768,34 @@ button.btn{cursor:pointer;font-family:inherit}
   body.print-group .g-scroll{position:absolute;left:0;top:0;width:100%;border:0;overflow:visible}
   body.print-group .g-table{min-width:0;font-size:11pt}
 }
+
+/* ---------- joining a group, step by step ---------- */
+.g-steps{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 8px;counter-reset:gstep}
+.g-steps li{counter-increment:gstep;display:flex;align-items:center;gap:7px;font-size:.92rem;color:var(--muted);padding:5px 12px 5px 5px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.g-steps li::before{content:counter(gstep);display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--line);color:var(--ink);font-weight:700;font-size:.85rem}
+.g-steps li.now{color:var(--ink);font-weight:700;border-color:var(--blue)}
+.g-steps li.now::before{background:var(--blue);color:#FFFFFF}
+.g-steps li.done::before{content:"✓";background:var(--green-bg);color:var(--green-ink)}
+.g-callout{border:2px solid var(--yellow)}
+.g-top{max-width:620px}
+.g-top[hidden]{display:none}
+.g-top .btn{align-self:flex-start;cursor:pointer;font:inherit;font-weight:700}
+.g-top .btn.primary{background:var(--btn);color:#FFFFFF}
+.g-top .btn:disabled{opacity:.5;cursor:not-allowed}
+.code-input{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace!important;font-size:1.25rem!important;letter-spacing:.08em;text-transform:uppercase}
+.signin-code{display:flex;flex-direction:column;gap:10px}
+.signin-code[hidden]{display:none}
+.signin-sent{margin:0;font-size:1.05rem}
+.signin-row[hidden]{display:none}
+.g-opts{display:flex;flex-direction:column;gap:8px}
+.g-opt{display:flex;align-items:flex-start;gap:12px;padding:13px 16px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg);cursor:pointer}
+.g-opt input{margin:4px 0 0;width:18px;height:18px;flex:none;accent-color:var(--blue)}
+.g-opt > span{display:flex;flex-direction:column;gap:2px;min-width:0}
+.g-opt > span span{color:var(--muted);font-size:.93rem}
+.g-opt:has(input:checked){border-color:var(--blue);background:var(--surface);box-shadow:inset 0 0 0 1px var(--blue)}
+.g-opt.off{opacity:.6;cursor:not-allowed}
+.g-invite{display:flex;flex-direction:column;gap:10px}
+.g-invite-text{font:inherit;font-size:.98rem;line-height:1.45;width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);resize:vertical}
+.g-code.small{font-size:1.05rem;padding:4px 10px;display:inline-block;vertical-align:middle}
+.g-how{margin:0;padding-left:1.3rem;display:flex;flex-direction:column;gap:6px;color:var(--muted);max-width:60ch}
+.g-made h3{font-size:1.1rem;margin-top:6px}

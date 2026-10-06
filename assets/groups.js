@@ -49,19 +49,28 @@
     box.textContent = '';
     var wrap = el('div', 'signin');
     wrap.appendChild(el('h3', null, 'Sign in with your email'));
-    wrap.appendChild(el('p', 'hint', lede || 'No password. We email you a link and a 6-digit code; either one signs you in.'));
+    var intro = el('p', 'hint', lede || 'No password to remember. We email you a 6-digit code, and you type it here.');
+    wrap.appendChild(intro);
     var form = el('form', 'signin-row');
     var input = el('input'); input.type = 'email'; input.required = true; input.autocomplete = 'email'; input.placeholder = 'you@example.com'; input.setAttribute('aria-label', 'Your email'); input.maxLength = 150;
-    var send = el('button', 'btn primary', 'Email me a sign-in link'); send.type = 'submit';
+    var send = el('button', 'btn primary', 'Email me a code'); send.type = 'submit';
     form.appendChild(input); form.appendChild(send);
     var status = el('p', 'g-status'); status.setAttribute('aria-live', 'polite');
-    var codeForm = el('form', 'signin-row'); codeForm.hidden = true;
-    var code = el('input'); code.type = 'text'; code.inputMode = 'numeric'; code.autocomplete = 'one-time-code'; code.maxLength = 7; code.placeholder = '123 456'; code.setAttribute('aria-label', '6-digit code from the email');
+    // step two, shown once the email has gone
+    var step2 = el('div', 'signin-code'); step2.hidden = true;
+    var sentTo = el('p', 'signin-sent');
+    var codeForm = el('form', 'signin-row');
+    var code = el('input'); code.type = 'text'; code.inputMode = 'numeric'; code.autocomplete = 'one-time-code'; code.maxLength = 7; code.placeholder = '123 456'; code.className = 'code-input'; code.setAttribute('aria-label', '6-digit code from the email');
     var go = el('button', 'btn primary', 'Sign in'); go.type = 'submit';
     codeForm.appendChild(code); codeForm.appendChild(go);
-    wrap.appendChild(form); wrap.appendChild(status); wrap.appendChild(codeForm);
+    var help = el('p', 'hint', 'It can take a minute, and it may be in spam. The email also has a button that signs you in on whichever device you tap it on. ');
+    var again = btn('clear', 'Use a different email or send it again');
+    help.appendChild(again);
+    step2.appendChild(sentTo); step2.appendChild(codeForm); step2.appendChild(help);
+    wrap.appendChild(form); wrap.appendChild(step2); wrap.appendChild(status);
     box.appendChild(wrap);
     var req = '';
+    again.addEventListener('click', function () { step2.hidden = true; form.hidden = false; intro.hidden = false; status.textContent = ''; status.className = 'g-status'; input.focus(); });
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(input.value.trim())) { status.textContent = 'That email address doesn’t look right.'; status.className = 'g-status bad'; return; }
@@ -70,10 +79,12 @@
         send.disabled = false;
         if (!d.ok) { status.textContent = d.message; status.className = 'g-status bad'; return; }
         req = d.req;
-        status.className = 'g-status good';
-        status.textContent = 'Check your email. Tap the link on this device, or type the 6-digit code here. Both last ' + d.minutes + ' minutes.';
-        send.textContent = 'Send a new email';
-        codeForm.hidden = false; code.focus();
+        status.textContent = ''; status.className = 'g-status';
+        sentTo.textContent = '';
+        sentTo.appendChild(document.createTextNode('We emailed a 6-digit code to '));
+        sentTo.appendChild(el('b', null, input.value.trim()));
+        sentTo.appendChild(document.createTextNode('. Type it here (it lasts ' + d.minutes + ' minutes):'));
+        form.hidden = true; intro.hidden = true; step2.hidden = false; code.value = ''; code.focus();
       });
     });
     codeForm.addEventListener('submit', function (e) {
@@ -81,11 +92,61 @@
       go.disabled = true;
       call('login_finish', { req: req, code: code.value }).then(function (d) {
         go.disabled = false;
-        if (!d.ok) { status.textContent = d.message; status.className = 'g-status bad'; if (d.error === 'expired') { codeForm.hidden = true; } return; }
+        if (!d.ok) { status.textContent = d.message; status.className = 'g-status bad'; return; }
         set('pas-in', '1');
         done(d);
       });
     });
+  }
+
+  // ----- small things several pages share -----
+  function sget(key) { try { return window.sessionStorage.getItem(key); } catch (e) { return null; } }
+  function sset(key, value) { try { if (value == null) window.sessionStorage.removeItem(key); else window.sessionStorage.setItem(key, value); } catch (e) { /* storage blocked */ } }
+  function tidyCode(v) { return String(v || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12); }
+  function showCode(c) { c = tidyCode(c); return c.length === 12 ? c.slice(0, 4) + '-' + c.slice(4, 8) + '-' + c.slice(8) : c; }
+  function firstWord(s) { return String(s || '').replace(/^\s+/, '').split(/\s+/)[0].slice(0, 20); }
+  function readRosters() { try { var r = JSON.parse(window.localStorage.getItem('pas-rosters') || 'null'); return r && Array.isArray(r.kids) ? r : null; } catch (e) { return null; } }
+  // What leaves the device for a child's week: program ids, and a class only when it's one the program lists. No school, address or note.
+  function weekOf(b, programs) {
+    var out = {};
+    DAYS.forEach(function (d) {
+      out[d[0]] = [];
+      ((b && b.days && b.days[d[0]]) || []).forEach(function (e) {
+        var i = e.indexOf('~'), id = (i < 0 ? e : e.slice(0, i)).split('.')[0], c = i < 0 ? '' : e.slice(i + 1), p = programs[id];
+        if (!p) return;
+        var v = c && (p.offers || []).indexOf(c) > -1 ? id + '~' + c : id;
+        if (out[d[0]].indexOf(v) < 0) out[d[0]].push(v);
+      });
+    });
+    return out;
+  }
+  function weekCount(b) { var n = 0; DAYS.forEach(function (d) { n += ((b && b.days && b.days[d[0]]) || []).length; }); return n; }
+  // The invitation a group's creator sends: a link that opens the join page with the code already in it.
+  function inviteLink(code) { var a = document.createElement('a'); a.href = page('join/'); return a.href.replace(/index\.html$/, '') + '#' + showCode(code); }
+  function inviteBlock(name, code, say) {
+    var wrap = el('div', 'g-invite');
+    wrap.appendChild(el('p', null, 'Send this to the parents and teacher you want in the group. The link opens the join page with the code filled in, and nobody sees anything until you approve them.'));
+    var link = inviteLink(code);
+    var text = 'Join “' + name + '” on Philly After School to see who’s doing what after school. Tap ' + link + ' and follow the steps. If it asks for a code, it’s ' + showCode(code) + '. I’ll approve you once you ask.';
+    var box = el('textarea', 'g-invite-text'); box.readOnly = true; box.rows = 4; box.value = text; box.setAttribute('aria-label', 'Invitation to send');
+    box.addEventListener('focus', function () { box.select(); });
+    wrap.appendChild(box);
+    var acts = el('div', 'actions');
+    var copy = btn('btn primary', 'Copy the invitation');
+    copy.addEventListener('click', function () {
+      var ok = function () { say('Invitation copied. Paste it into a text or the class chat.', 'good'); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, function () { box.focus(); box.select(); });
+      else { box.focus(); box.select(); }
+    });
+    acts.appendChild(copy);
+    if (navigator.share) {
+      var sh = btn('btn', 'Send it…');
+      sh.addEventListener('click', function () { navigator.share({ text: text }).then(function () {}, function () {}); });
+      acts.appendChild(sh);
+    }
+    wrap.appendChild(acts);
+    var codeLine = el('p', 'hint', 'The code on its own: '); codeLine.appendChild(el('span', 'g-code small', showCode(code))); wrap.appendChild(codeLine);
+    return wrap;
   }
 
   // ----- every account has a first and last name; a new one is added to the email list, once -----
@@ -125,6 +186,7 @@
   if (account) {
     set('pas-groups', '1');   // while groups are a pilot, visiting this page is what switches them on in this browser
     var goNext = function (next) {
+      if (next === 'join') { location.href = page('join/'); return true; }
       if (next === 'board') { location.href = page('board/') + '?group=1'; return true; }
       var m = /^groups\?g=([A-Za-z0-9]+)$/.exec(next || '');
       if (m) { location.href = page('groups/') + '?g=' + m[1]; return true; }
@@ -133,6 +195,11 @@
     var drawSignedOut = function (msg) {
       account.textContent = '';
       if (msg) { var p = el('p', 'g-status bad', msg); account.appendChild(p); }
+      var have = el('div', 'panel g-callout');
+      have.appendChild(el('h2', null, 'Were you given a group code?'));
+      have.appendChild(el('p', null, 'Joining has its own page that walks you through it: the code, signing in, and picking your child’s week.'));
+      var hj = el('a', 'btn primary', 'Join a group with a code'); hj.href = page('join/'); have.appendChild(hj);
+      account.appendChild(have);
       var box = el('div', 'panel'); account.appendChild(box);
       signInBox(box, 'account', function (d) { drawProfile(d); });
     };
@@ -192,6 +259,23 @@
       });
       mine.appendChild(list);
       account.appendChild(mine);
+      // join a group: the code goes here
+      var join = el('section', 'panel g-callout');
+      join.appendChild(el('h2', null, 'Join a group with a code'));
+      join.appendChild(el('p', null, 'Type the code the group’s creator gave you. Next you pick which child’s week to share.'));
+      var jf = el('form', 'g-row');
+      var jl = el('label', null, 'Group code'); jl.htmlFor = 'join-code';
+      var ji = el('input'); ji.id = 'join-code'; ji.type = 'text'; ji.maxLength = 20; ji.autocomplete = 'off'; ji.placeholder = 'ABCD-EFGH-JKMN'; ji.className = 'code-input'; ji.setAttribute('autocapitalize', 'characters');
+      var jb = el('button', 'btn primary', 'Next'); jb.type = 'submit';
+      var jn = el('span', 'hint'); jn.setAttribute('aria-live', 'polite');
+      jf.appendChild(jl); jf.appendChild(ji); jf.appendChild(jb); jf.appendChild(jn);
+      jf.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (tidyCode(ji.value).length !== 12) { jn.textContent = 'A code is 12 letters and numbers, like ABCD-EFGH-JKMN.'; return; }
+        sset('pas-join', tidyCode(ji.value)); location.href = page('join/');
+      });
+      join.appendChild(jf);
+      account.appendChild(join);
       // make a group
       var make = el('section', 'panel');
       make.appendChild(el('h2', null, 'Make a group'));
@@ -209,12 +293,15 @@
           call('group_create', { name: gi.value }).then(function (c) {
             made.textContent = '';
             if (!c.ok) { made.appendChild(el('p', 'g-status bad', c.message)); return; }
-            made.appendChild(el('p', 'g-status good', '“' + c.name + '” is ready. Give this code to the parents and teacher you want in it:'));
-            made.appendChild(el('p', 'g-code', c.code));
+            var madeSay = el('p', 'g-status good', '“' + c.name + '” is ready. Two things to do next:');
+            made.appendChild(madeSay);
+            made.appendChild(el('h3', null, '1. Add your own child’s week'));
             var acts = el('div', 'actions');
-            var add = el('a', 'btn primary', 'Add your child’s week'); add.href = page('board/') + '?group=' + c.id;
+            var add = el('a', 'btn primary', 'Add your child’s week'); add.href = page('join/') + '?g=' + c.id;
             var open = el('a', 'btn', 'Open the group'); open.href = page('groups/') + '?g=' + c.id;
             acts.appendChild(add); acts.appendChild(open); made.appendChild(acts);
+            made.appendChild(el('h3', null, '2. Invite the others'));
+            made.appendChild(inviteBlock(c.name, c.code, function (m, k) { madeSay.textContent = m; madeSay.className = 'g-status ' + (k || ''); }));
             gi.value = '';
             if (noneYet.parentNode) noneYet.parentNode.removeChild(noneYet);
             var li = el('li'); var a = el('a', null, c.name); a.href = open.href; li.appendChild(a); li.appendChild(el('span', 'hint', 'You made this group')); list.appendChild(li);
@@ -284,7 +371,15 @@
           signInBox(box, 'groups?g=' + gid, function () { load(); }, 'This group is only for its members. Sign in with the email you joined with. No password: we email you a link and a 6-digit code.');
           return;
         }
-        if (!d.ok) { groupBox.textContent = ''; var p = el('div', 'panel'); p.appendChild(el('p', null, d.message)); var a = el('a', 'btn', 'Your groups'); a.href = page('account/'); p.appendChild(a); groupBox.appendChild(p); return; }
+        if (!d.ok) {
+          groupBox.textContent = '';
+          var p = el('div', 'panel'); p.appendChild(el('p', null, d.message));
+          p.appendChild(el('p', null, 'If you were given this group’s code, join with it first. The person who made the group then approves you.'));
+          var pa = el('div', 'actions');
+          var j = el('a', 'btn primary', 'Join with a code'); j.href = page('join/'); pa.appendChild(j);
+          var a = el('a', 'btn', 'Your groups'); a.href = page('account/'); pa.appendChild(a);
+          p.appendChild(pa); groupBox.appendChild(p); return;
+        }
         set('pas-in', '1');
         draw(d);
       });
@@ -345,7 +440,7 @@
       if (!kids.length) {
         var none = el('div', 'panel');
         none.appendChild(el('p', null, 'No weeks here yet. Add your child’s from Build your week, and hand the code to the others.'));
-        var na = el('a', 'btn primary', 'Add a week'); na.href = page('board/') + '?group=' + gid; none.appendChild(na);
+        var na = el('a', 'btn primary', 'Add a week'); na.href = page('join/') + '?g=' + gid; none.appendChild(na);
         view.appendChild(none);
       } else {
         // by day: each program, and who is there
@@ -418,7 +513,7 @@
         you.appendChild(ml);
       }
       var ya = el('div', 'actions');
-      if (d.role !== 'viewer') { var add = el('a', 'btn', mine.length ? 'Add another child’s week' : 'Add your child’s week'); add.href = page('board/') + '?group=' + gid; ya.appendChild(add); }
+      if (d.role !== 'viewer') { var add = el('a', 'btn', mine.length ? 'Add another child’s week' : 'Add your child’s week'); add.href = page('join/') + '?g=' + gid; ya.appendChild(add); }
       var acct = el('a', 'btn', 'Your account'); acct.href = page('account/'); ya.appendChild(acct);
       if (d.role !== 'owner') {
         var leave = btn('clear', 'Leave this group');
@@ -433,14 +528,14 @@
       if (d.role === 'owner') {
         var own = el('section', 'panel');
         own.appendChild(el('h2', null, 'Running the group'));
-        own.appendChild(el('p', null, 'The code to hand out. Anyone who uses it still waits for you to approve them.'));
-        var codeRow = el('div', 'g-row');
-        var codeEl = el('span', 'g-code', d.code || '');
-        var copy = btn('btn', 'Copy the code'), fresh = btn('clear', 'Make a new code');
-        copy.addEventListener('click', function () { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(codeEl.textContent).then(function () { say('Code copied.', 'good'); }); });
-        twoTap(fresh, 'Tap again: the old code stops working', function () { call('group_code', { group: gid }).then(function (r) { if (r.ok) { codeEl.textContent = r.code; d.code = r.code; say('New code made. People already in the group stay in.', 'good'); } }); });
-        codeRow.appendChild(codeEl); codeRow.appendChild(copy); codeRow.appendChild(fresh);
-        own.appendChild(codeRow);
+        own.appendChild(el('h3', null, 'Invite people'));
+        var inviteHost = el('div');
+        var drawInvite = function () { inviteHost.textContent = ''; inviteHost.appendChild(inviteBlock(d.name, d.code || '', say)); };
+        drawInvite();
+        own.appendChild(inviteHost);
+        var fresh = btn('clear', 'Make a new code');
+        twoTap(fresh, 'Tap again: the old code and invitation stop working', function () { call('group_code', { group: gid }).then(function (r) { if (r.ok) { d.code = r.code; drawInvite(); say('New code made. People already in the group stay in.', 'good'); } }); });
+        own.appendChild(fresh);
         var members = (d.members || []).filter(function (m) { return m.status === 'approved'; });
         own.appendChild(el('h3', null, 'Who’s in (' + members.length + ')'));
         var ol = el('ul', 'g-list');
@@ -484,7 +579,195 @@
   }
 
   // =====================================================================================================
-  // On Build your week: add this child's week to a group, and keep it up to date afterwards
+  // Joining, step by step: the code, signing in, your name, whose week, done
+  // =====================================================================================================
+  var joinBox = document.getElementById('join');
+  if (joinBox) {
+    set('pas-groups', '1');
+    var jinfo = JSON.parse(document.getElementById('groups-data').textContent);
+    var jq = query();
+    var target = { code: '', gid: (jq.g || '').replace(/[^A-Za-z0-9]/g, '').slice(0, 30), name: '', member: false };
+    // An invitation link carries the code after the #. Take it out of the address and keep it for this tab only.
+    var fromLink = tidyCode(location.hash);
+    if (fromLink.length === 12) { sset('pas-join', fromLink); try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { location.hash = ''; } }
+    if (!target.gid) target.code = tidyCode(sget('pas-join'));
+    var jme = null, jgroups = [];
+    var STEPS = ['Code', 'Sign in', 'Your name', 'Who’s joining', 'Done'];
+    var frame = function (n, heading) {
+      joinBox.textContent = '';
+      var ol = el('ol', 'g-steps');
+      STEPS.forEach(function (s, i) { var li = el('li', i + 1 < n ? 'done' : i + 1 === n ? 'now' : '', s); if (i + 1 === n) li.setAttribute('aria-current', 'step'); ol.appendChild(li); });
+      joinBox.appendChild(ol);
+      var panel = el('section', 'panel');
+      panel.appendChild(el('h2', null, heading));
+      joinBox.appendChild(panel);
+      return panel;
+    };
+    var route = function () {
+      if (!target.gid && target.code.length !== 12) return stepCode();
+      if (!jme) return stepSignIn();
+      if (!jme.ready) return stepName();
+      if (target.gid) {
+        var g = jgroups.filter(function (x) { return x.id === target.gid; })[0];
+        if (!g) return stepCode('You’re not in that group yet. Enter its code to join.', true);
+        target.name = g.name; target.member = true;
+        return stepWho();
+      }
+      if (!target.name) {
+        frame(4, 'Checking the code…');
+        return call('group_peek', { code: target.code }).then(function (d) {
+          if (d.http === 401) { jme = null; return route(); }
+          if (!d.ok) { target.code = ''; sset('pas-join', null); return stepCode(d.message); }
+          target.name = d.name; target.gid2 = d.id; target.member = !!d.member;
+          stepWho();
+        });
+      }
+      stepWho();
+    };
+    var stepCode = function (msg, dropGid) {
+      if (dropGid) target.gid = '';
+      var panel = frame(1, 'Enter the group’s code');
+      panel.appendChild(el('p', null, 'It’s the 12 letters and numbers the group’s creator sent you. If they sent a link, tapping it fills this in for you.'));
+      if (msg) panel.appendChild(el('p', 'g-status bad', msg));
+      var f = el('form', 'g-row');
+      var l = el('label', null, 'Group code'); l.htmlFor = 'jc';
+      var i = el('input'); i.id = 'jc'; i.type = 'text'; i.maxLength = 20; i.autocomplete = 'off'; i.placeholder = 'ABCD-EFGH-JKMN'; i.className = 'code-input'; i.setAttribute('autocapitalize', 'characters');
+      var b = el('button', 'btn primary', 'Next'); b.type = 'submit';
+      var note = el('span', 'hint'); note.setAttribute('aria-live', 'polite');
+      f.appendChild(l); f.appendChild(i); f.appendChild(b); f.appendChild(note);
+      f.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var c = tidyCode(i.value);
+        if (c.length !== 12) { note.textContent = 'A code is 12 letters and numbers, like ABCD-EFGH-JKMN.'; return; }
+        target.code = c; target.name = ''; sset('pas-join', c); route();
+      });
+      panel.appendChild(f);
+      var alt = el('p', 'hint', 'No code? '); var mk = el('a', null, 'Make your own group'); mk.href = page('account/'); alt.appendChild(mk); alt.appendChild(document.createTextNode(' and invite people to it.'));
+      panel.appendChild(alt);
+      i.focus();
+    };
+    var stepSignIn = function () {
+      var panel = frame(2, 'Sign in, or make an account');
+      var box = el('div'); panel.appendChild(box);
+      signInBox(box, 'join', function (d) { jme = d.user; jgroups = d.groups || []; route(); }, 'Groups are only for people their creator approves, so you need an account. No password: we email you a 6-digit code, and you type it here. New here? This makes your account.');
+      var dup = box.querySelector('h3'); if (dup) dup.parentNode.removeChild(dup);   // the step already has its heading
+    };
+    var stepName = function () {
+      var panel = frame(3, 'Your name');
+      var f = el('form', 'g-form'), n = nameFields('jn-', jme);
+      f.appendChild(n.box);
+      f.appendChild(el('p', 'hint', 'The group’s creator sees your name when you ask to join, so they know who you are. Other members don’t see it. ' + LIST_NOTE));
+      var s = el('p', 'g-status'); s.setAttribute('aria-live', 'polite'); f.appendChild(s);
+      var b = el('button', 'btn primary', 'Next'); b.type = 'submit'; var a = el('div', 'actions'); a.appendChild(b); f.appendChild(a);
+      f.addEventListener('submit', function (e) {
+        e.preventDefault(); b.disabled = true;
+        saveNames(jme, n.first.value, n.last.value).then(function (r) { b.disabled = false; if (!r.ok) { s.textContent = r.message; s.className = 'g-status bad'; return; } route(); });
+      });
+      panel.appendChild(f); n.first.focus();
+    };
+    var stepWho = function () {
+      var gid = target.gid || target.gid2 || '';
+      var panel = frame(4, 'Joining “' + target.name + '”');
+      var r = readRosters(), kids = [];
+      if (r) r.kids.forEach(function (k, i) {
+        var n = weekCount(k.now) + weekCount(k.next);
+        var linked = (Array.isArray(k.groups) ? k.groups : []).some(function (l) { return l.g === gid; });
+        if (n || k.name) kids.push({ i: i, k: k, n: n, linked: linked });
+      });
+      var usable = kids.filter(function (x) { return x.n && !x.linked; });
+      panel.appendChild(el('p', null, usable.length ? 'Whose week do you want the group to see?' : 'There’s no week saved on this device yet. Build your child’s week first, then come back: your place here is kept.'));
+      var f = el('form', 'g-form'), opts = el('div', 'g-opts'), radios = [];
+      var want = parseInt(sget('pas-join-kid') || '', 10);
+      var opt = function (value, title, sub, disabled) {
+        var lab = el('label', 'g-opt' + (disabled ? ' off' : '')), rd = el('input'); rd.type = 'radio'; rd.name = 'who'; rd.value = value; rd.disabled = !!disabled;
+        var txt = el('span'); txt.appendChild(el('b', null, title)); if (sub) txt.appendChild(el('span', null, sub));
+        lab.appendChild(rd); lab.appendChild(txt); opts.appendChild(lab); radios.push(rd);
+        return rd;
+      };
+      kids.forEach(function (x) {
+        opt('k' + x.i, x.k.name || 'Child ' + (x.i + 1), x.linked ? 'Already in this group' : x.n ? x.n + (x.n === 1 ? ' program' : ' programs') + ' on their current and upcoming weeks' : 'No programs on their week yet', x.linked || !x.n);
+      });
+      opt('build', usable.length ? 'A child whose week isn’t built yet' : 'Build my child’s week first', 'Takes you to Build your week. Come back here when it’s ready.');
+      if (!target.member) opt('view', 'Nobody. I’m a teacher or caregiver', 'You’ll be able to see and print the group, and not change it.');
+      var pick = radios.filter(function (rd) { return rd.value === 'k' + want && !rd.disabled; })[0] || radios.filter(function (rd) { return !rd.disabled; })[0];
+      if (pick) pick.checked = true;
+      f.appendChild(opts);
+      var nameField = el('div', 'field');
+      var nl = el('label', null, 'Child’s first name, as the group will see it'); nl.htmlFor = 'jk';
+      var ni = el('input'); ni.id = 'jk'; ni.type = 'text'; ni.maxLength = 20; ni.autocomplete = 'off';
+      nameField.appendChild(nl); nameField.appendChild(ni); nameField.appendChild(el('span', 'hint', 'First name only.'));
+      f.appendChild(nameField);
+      var consent = el('p', 'hint', 'This shares that first name and the programs on the child’s current and upcoming weeks with the group’s approved members. Addresses, notes, the teacher’s name and photos are not shared. It keeps itself up to date from this device, and you can stop any time.');
+      f.appendChild(consent);
+      var s = el('p', 'g-status'); s.setAttribute('aria-live', 'polite'); f.appendChild(s);
+      var go = el('button', 'btn primary', ''); go.type = 'submit';
+      var acts = el('div', 'actions'); acts.appendChild(go);
+      if (!target.gid) { var back = btn('btn', 'Use a different code'); back.addEventListener('click', function () { target.code = ''; target.name = ''; sset('pas-join', null); stepCode(); }); acts.appendChild(back); }
+      f.appendChild(acts);
+      var chosen = function () { var v = ''; radios.forEach(function (rd) { if (rd.checked) v = rd.value; }); return v; };
+      var sync = function () {
+        var v = chosen(), isKid = v.charAt(0) === 'k';
+        nameField.hidden = !isKid; consent.hidden = !isKid;
+        if (isKid) { var kid = r.kids[+v.slice(1)]; ni.value = firstWord(kid.name); }
+        go.textContent = v === 'build' ? 'Go to Build your week' : target.member ? 'Add to the group' : v === 'view' ? 'Ask to view the group' : 'Ask to join';
+      };
+      radios.forEach(function (rd) { rd.addEventListener('change', sync); });
+      sync();
+      f.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var v = chosen();
+        if (v === 'build') { sset('pas-join-return', '1'); location.href = page('board/'); return; }
+        var body, action;
+        if (v === 'view') { action = 'group_join'; body = { code: target.code, viewer: true }; }
+        else {
+          var idx = +v.slice(1), kid = r.kids[idx];
+          if (!ni.value.replace(/\s+/g, '')) { s.textContent = 'Add your child’s first name.'; s.className = 'g-status bad'; ni.focus(); return; }
+          var child = { name: ni.value, now: weekOf(kid.now, jinfo.programs), next: weekOf(kid.next, jinfo.programs) };
+          if (target.gid) { action = 'kid_save'; body = { group: target.gid, kid: child }; } else { action = 'group_join'; body = { code: target.code, kid: child }; }
+        }
+        go.disabled = true; s.className = 'g-status'; s.textContent = 'Sending…';
+        call(action, body).then(function (d) {
+          go.disabled = false;
+          if (d.http === 401) { jme = null; return route(); }
+          if (!d.ok) { s.textContent = d.message; s.className = 'g-status bad'; return; }
+          var id = target.gid || d.id;
+          if (v !== 'view' && d.kid) {   // remember, on this device, that this roster is shared, so changes carry over
+            try {
+              var fresh = readRosters();
+              if (fresh && fresh.kids[+v.slice(1)]) {
+                var k = fresh.kids[+v.slice(1)];
+                k.groups = (Array.isArray(k.groups) ? k.groups : []).concat([{ g: id, k: d.kid, n: d.name || target.name, c: firstWord(ni.value) || ni.value.slice(0, 20) }]);
+                window.localStorage.setItem('pas-rosters', JSON.stringify(fresh));
+              }
+            } catch (e2) { /* storage blocked: the week is in the group, it just won't update itself */ }
+          }
+          sset('pas-join', null); sset('pas-join-kid', null); sset('pas-join-return', null);
+          stepDone(id, d.status === 'approved', v === 'view');
+        });
+      });
+      panel.appendChild(f);
+    };
+    var stepDone = function (id, inAlready, viewOnly) {
+      var panel = frame(5, inAlready ? 'Added to “' + target.name + '”' : 'Request sent');
+      if (inAlready) panel.appendChild(el('p', null, 'The week is in the group now, and it will keep itself up to date when you change it on this device.'));
+      else {
+        panel.appendChild(el('p', null, 'The person who made “' + target.name + '” has been emailed. When they approve you, you’ll get an email and the group will open for you.'));
+        panel.appendChild(el('p', 'hint', viewOnly ? 'Until then the group shows you nothing.' : 'Until then the group shows you nothing, and nobody in it sees your child’s week.'));
+      }
+      var acts = el('div', 'actions');
+      var open = el('a', 'btn primary', inAlready ? 'Open the group' : 'See your request'); open.href = page('groups/') + '?g=' + id; acts.appendChild(open);
+      var wk = el('a', 'btn', 'Back to Build your week'); wk.href = page('board/'); acts.appendChild(wk);
+      var ac = el('a', 'btn', 'Your account'); ac.href = page('account/'); acts.appendChild(ac);
+      panel.appendChild(acts);
+    };
+    call('me').then(function (d) {
+      if (d.ok && d.user) { set('pas-in', '1'); jme = d.user; jgroups = d.groups || []; listOnce(jme); }
+      route();
+    });
+  }
+
+  // =====================================================================================================
+  // On Build your week: what this child's week is shared with, the way in to joining, and keeping it up to date
   // =====================================================================================================
   var share = document.getElementById('group-share');
   var board = window.pasBoard;   // set by site.js on the roster page
@@ -493,25 +776,9 @@
     var pilot = share.getAttribute('data-pilot') === '1';
     if (pilot && get('pas-groups') !== '1' && !asked.group) return;   // unlisted while it's a pilot
     if (asked.group) set('pas-groups', '1');
-    var me = null, myGroups = [], open = false, pickedGroup = '', notice = '';
-    var entryId = function (e) { var i = e.indexOf('~'); return (i < 0 ? e : e.slice(0, i)).split('.')[0]; };
-    var entryCls = function (e) { var i = e.indexOf('~'); return i < 0 ? '' : e.slice(i + 1); };
-    // What leaves the device: program ids, and a class only when it's one the program lists. No school, address or note.
-    var toWeek = function (b) {
-      var out = {};
-      DAYS.forEach(function (d) {
-        out[d[0]] = [];
-        (b.days[d[0]] || []).forEach(function (e) {
-          var id = entryId(e), p = board.data.programs[id], c = entryCls(e);
-          if (!p) return;
-          var v = c && p.offers.indexOf(c) > -1 ? id + '~' + c : id;
-          if (out[d[0]].indexOf(v) < 0) out[d[0]].push(v);
-        });
-      });
-      return out;
-    };
+    var me = null, myGroups = [], notice = '';
+    var toWeek = function (b) { return weekOf(b, board.data.programs); };
     var links = function (kid) { return Array.isArray(kid.groups) ? kid.groups : []; };
-    var firstWord = function (s) { return String(s || '').replace(/^\s+/, '').split(/\s+/)[0].slice(0, 20); };
 
     // ----- keeping shared weeks current -----
     var timer = null, lastSent = '';
@@ -535,19 +802,43 @@
         }
       });
     };
-    board.onSave = function () { if (timer) window.clearTimeout(timer); timer = window.setTimeout(syncNow, 1500); };
+    board.onSave = function () { if (timer) window.clearTimeout(timer); timer = window.setTimeout(syncNow, 1500); drawTop(); };
     board.onKidGone = function (kid) { links(kid).forEach(function (l) { call('kid_delete', { kid: l.k }); }); };
     // The roster page redraws on every keystroke; this block only needs to when the child or the view changes.
     var shownFor = '';
-    board.onShow = function () { var key = board.rosters().kid + '|' + !!board.shared(); if (key !== shownFor) { shownFor = key; open = false; draw(); } };
+    board.onShow = function () { var key = board.rosters().kid + '|' + !!board.shared(); if (key !== shownFor) { shownFor = key; draw(); } };
 
+    // Someone sent here from the join page to build a week sees the way back at the top, where they are working.
+    var topNote = el('div', 'panel g-callout g-top'); topNote.hidden = true;
+    var anchor = document.getElementById('board-adder');
+    if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(topNote, anchor);
+    var drawTop = function () {
+      var midway = tidyCode(sget('pas-join')).length === 12 && !board.shared();
+      topNote.hidden = !midway; topNote.textContent = '';
+      if (!midway) return;
+      var kid = board.kid(), n = weekCount(kid.now) + weekCount(kid.next);
+      topNote.appendChild(el('p', null, n ? 'You’re part-way through joining a group. When this week looks right, carry on.' : 'You’re part-way through joining a group. Add your child’s programs below, then carry on.'));
+      var cont = btn('btn primary', 'Continue joining'); cont.disabled = !n;
+      cont.addEventListener('click', toJoin());
+      topNote.appendChild(cont);
+    };
+    var toJoin = function (extra) { return function () { sset('pas-join-kid', String(board.rosters().kid)); location.href = page('join/') + (extra || ''); }; };
     var draw = function () {
+      drawTop();
       share.textContent = '';
       share.hidden = !!board.shared();
       if (board.shared()) return;
-      var kid = board.kid(), mine = links(kid);
+      var kid = board.kid(), mine = links(kid), who = kid.name ? firstWord(kid.name) + '’s week' : 'this week';
       share.appendChild(el('h2', null, 'Share with a class or group'));
       if (notice) share.appendChild(el('p', 'g-status bad', notice));
+      var midway = tidyCode(sget('pas-join')).length === 12;
+      if (midway) {   // came here from the join page to build the week first
+        var back = el('div', 'panel g-callout');
+        back.appendChild(el('p', null, 'You’re part-way through joining a group. When ' + who + ' looks right, pick up where you left off.'));
+        var cont = btn('btn primary', 'Continue joining with ' + who);
+        cont.addEventListener('click', toJoin());
+        back.appendChild(cont); share.appendChild(back);
+      }
       if (mine.length) {
         var ul = el('ul', 'g-list');
         mine.forEach(function (l) {
@@ -567,87 +858,27 @@
       } else {
         share.appendChild(el('p', null, 'See who else from the class is doing what. A group shows first names and programs only, to people its creator has approved.'));
       }
-      if (!open) {
-        var start = btn('btn' + (mine.length ? '' : ' primary'), mine.length ? 'Add this week to another group' : 'Add this week to a group or class');
-        start.addEventListener('click', function () { open = true; draw(); });
-        var row = el('div', 'actions'); row.appendChild(start);
-        var acct = el('a', 'btn', signedInHint() ? 'Your groups' : 'Make a group'); acct.href = page('account/'); row.appendChild(acct);
-        share.appendChild(row);
-        return;
+      var row = el('div', 'actions');
+      if (!midway) {
+        var code = btn('btn primary', 'I have a group code');
+        code.addEventListener('click', toJoin());
+        row.appendChild(code);
       }
-      var panel = el('div', 'panel add-panel'); share.appendChild(panel);
-      if (!me) {
-        if (signedInHint()) { panel.appendChild(el('p', 'g-status', 'Checking…')); refresh(); return; }
-        signInBox(panel, 'board', function (d) { me = d.user; myGroups = d.groups || []; draw(); }, 'Groups need a sign-in, so only approved people can see them. No password: we email you a link and a 6-digit code.');
-        return;
-      }
-      var form = el('form', 'g-form');
       var taken = mine.map(function (l) { return l.g; });
-      var avail = myGroups.filter(function (g) { return taken.indexOf(g.id) < 0 && g.role !== 'viewer'; });
-      var codeInput = null, radios = [];
-      if (avail.length) {
-        var fs = el('fieldset', 'field chips'); fs.appendChild(el('legend', null, 'Which group?'));
-        var chips = el('div', 'chip-row');
-        avail.concat([{ id: '', name: 'Another group: I have a code' }]).forEach(function (g, i) {
-          var lab = el('label', 'chip'), r = el('input'); r.type = 'radio'; r.name = 'grp'; r.value = g.id;
-          r.checked = pickedGroup ? g.id === pickedGroup : i === 0;
-          lab.appendChild(r); lab.appendChild(el('span', null, g.name)); chips.appendChild(lab); radios.push(r);
-          r.addEventListener('change', function () { codeField.hidden = r.value !== ''; });
-        });
-        fs.appendChild(chips); form.appendChild(fs);
-      }
-      var codeField = el('div', 'field');
-      var cl = el('label', null, 'Group code'); cl.htmlFor = 'gs-code';
-      codeInput = el('input'); codeInput.id = 'gs-code'; codeInput.type = 'text'; codeInput.maxLength = 20; codeInput.autocomplete = 'off'; codeInput.placeholder = 'ABCD-EFGH-JKMN'; codeInput.setAttribute('autocapitalize', 'characters');
-      codeField.appendChild(cl); codeField.appendChild(codeInput);
-      codeField.appendChild(el('span', 'hint', 'From whoever made the group.'));
-      codeField.hidden = avail.length > 0 && !(radios.length && radios[radios.length - 1].checked);
-      form.appendChild(codeField);
-      var kf = el('div', 'field');
-      var kl = el('label', null, 'Child’s first name'); kl.htmlFor = 'gs-kid';
-      var ki = el('input'); ki.id = 'gs-kid'; ki.type = 'text'; ki.maxLength = 20; ki.value = firstWord(kid.name); ki.autocomplete = 'off';
-      kf.appendChild(kl); kf.appendChild(ki); kf.appendChild(el('span', 'hint', 'First name only. It’s what the group sees.'));
-      form.appendChild(kf);
-      var ni = null;
-      if (!me.ready) {
-        ni = nameFields('gs-', me);
-        form.appendChild(ni.box);
-        form.appendChild(el('p', 'hint', 'Only the group’s creator sees your name, next to your child’s, so they know who’s asking. ' + LIST_NOTE));
-      }
-      form.appendChild(el('p', 'hint', 'This shares the first name above and the programs on this child’s current and upcoming weeks with the group’s approved members. Addresses, notes, the teacher’s name and photos are not shared. It keeps itself up to date, and you can stop any time.'));
-      var status = el('p', 'g-status'); status.setAttribute('aria-live', 'polite'); form.appendChild(status);
-      var acts = el('div', 'actions');
-      var go = el('button', 'btn primary', 'Add to the group'); go.type = 'submit';
-      var cancel = btn('btn', 'Cancel');
-      cancel.addEventListener('click', function () { open = false; draw(); });
-      acts.appendChild(go); acts.appendChild(cancel); form.appendChild(acts);
-      panel.appendChild(form);
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var chosen = ''; radios.forEach(function (r) { if (r.checked) chosen = r.value; });
-        var child = { name: ki.value, now: toWeek(kid.now), next: toWeek(kid.next) };
-        if (!ki.value.replace(/\s+/g, '')) { status.textContent = 'Add your child’s first name.'; status.className = 'g-status bad'; ki.focus(); return; }
-        go.disabled = true; status.className = 'g-status'; status.textContent = 'Adding…';
-        var named = ni ? saveNames(me, ni.first.value, ni.last.value) : Promise.resolve({ ok: true });
-        named.then(function (r) {
-          if (!r.ok) { go.disabled = false; status.textContent = r.message; status.className = 'g-status bad'; return; }
-          var req = chosen ? call('kid_save', { group: chosen, kid: child }) : call('group_join', { code: codeInput.value, kid: child });
-          req.then(function (d) {
-            go.disabled = false;
-            if (d.http === 401) { me = null; draw(); return; }
-            if (!d.ok) { status.textContent = d.message; status.className = 'g-status bad'; return; }
-            var gidNew = chosen || d.id;
-            kid.groups = links(kid).concat([{ g: gidNew, k: d.kid, n: d.name, c: firstWord(ki.value) || ki.value.slice(0, 20) }]);
-            board.save();
-            board.track({ event: 'pas_group_share', method: chosen ? 'my_group' : 'code' });
-            open = false; pickedGroup = '';
-            notice = '';
-            refresh(d.status === 'approved' ? 'Added to ' + d.name + '.' : 'Request sent. ' + d.name + '’s creator has been emailed, and you’ll get an email when they approve you.');
-          });
-        });
+      myGroups.filter(function (g) { return taken.indexOf(g.id) < 0; }).slice(0, 4).forEach(function (g) {
+        var b = btn('btn', 'Add ' + who + ' to ' + g.name);
+        b.addEventListener('click', toJoin('?g=' + g.id));
+        row.appendChild(b);
       });
+      var acct = el('a', 'btn', signedInHint() ? 'Your groups' : 'Make a group'); acct.href = page('account/'); row.appendChild(acct);
+      share.appendChild(row);
+      if (!mine.length && !midway) {
+        var how = el('ol', 'g-how');
+        ['Get a code from whoever made the group, or make your own group.', 'Tap “I have a group code”, type it in and sign in with your email.', 'Pick this week and ask to join. The group’s creator approves you.'].forEach(function (s) { how.appendChild(el('li', null, s)); });
+        share.appendChild(how);
+      }
     };
-    var refresh = function (msg) {
+    var refresh = function () {
       call('me').then(function (d) {
         if (d.ok && d.user) { set('pas-in', '1'); me = d.user; myGroups = d.groups || []; listOnce(me); } else { me = null; myGroups = []; if (d.ok) set('pas-in', null); }
         // pick up new names for groups that were renamed
@@ -655,12 +886,9 @@
         board.rosters().kids.forEach(function (k) { links(k).forEach(function (l) { myGroups.forEach(function (g) { if (g.id === l.g && g.name !== l.n) { l.n = g.name; changed = true; } }); }); });
         if (changed) board.save();
         draw();
-        if (msg) { var p = el('p', 'g-status good', msg); share.insertBefore(p, share.children[1] || null); }
       });
     };
     if (asked.group) {
-      open = true;
-      if (asked.group !== '1') pickedGroup = String(asked.group).replace(/[^A-Za-z0-9]/g, '');
       try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* file preview */ }
       window.setTimeout(function () { if (share.scrollIntoView) share.scrollIntoView({ block: 'center' }); }, 60);
     }
