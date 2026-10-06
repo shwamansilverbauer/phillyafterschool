@@ -145,7 +145,7 @@
         var hint = form.querySelector('.hint'); if (hint) hint.hidden = true;
         say(form.getAttribute('data-confirm')
           ? 'Almost there. Check your inbox for a confirmation email and tap the button in it.'
-          : follow ? 'You’re following ' + name + ', ' + first + '. If it already has dates posted, they reach you tomorrow morning. After that, you’ll hear when it posts something new.'
+          : follow ? 'Done, ' + first + '. You’ll hear when ' + name + ' posts a date. If it already has some posted, they reach you tomorrow morning.'
           : 'You’re on the list' + (name ? ' for ' + name : '') + ', ' + first + '. Dates already on the calendar reach you tomorrow morning. After that, it’s one email a week at most.', 'good');
         track({ event: 'pas_alert_signup', school: school, program_id: follow ? follow.value : '', place: place });
       }).catch(function () {
