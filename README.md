@@ -72,6 +72,7 @@ Fields worth knowing:
 - `neighborhoods`: list of the neighborhoods the program's building (or buildings) is in, like `["Bella Vista"]`. Decides which
   neighborhood pages it appears on. A program that runs inside a school can leave it out and takes the school's neighborhood.
 - `keywords`: optional list of plain words parents might search for (`"drums"`, `"karate"`, `"homework"`). Never shown, only searched.
+- `rate`: optional. The published price in a form the roster can add up. `per` is `"day"`, `"week"`, `"month"` or `"term"`, with exactly one of: `flat` (one price whatever the days, like `{ "per": "month", "flat": 100 }`), `eachDay` (a price for each weekday attended, like `{ "per": "day", "eachDay": 40 }` or `{ "per": "term", "eachDay": [741, 912] }` for a range), or `byDays` (a price for each number of days a week, like `{ "per": "week", "byDays": { "1": 40, "2": 70 } }`). Optional extras: `monthCap` (a monthly rate that caps a daily one), `fullWeekOff` (a discount for five days, as `0.1`), `atLeast: true` (the provider publishes only a starting price) and `extra` (a sentence on what the figure leaves out). Only from prices the provider publishes; leave it out otherwise and the roster says the program isn't counted.
 - `days`: optional list of the weekdays the program runs, from `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`. Shown on the card as "Monday to Friday" or the named days. Leave it out when the provider doesn't say; the program then shows under every day.
 - `daysNote`: optional sentence shown after the days, like `"Choose 1 to 5 days a week."`
 - `offerDays`: optional, for class-based programs: which class meets on which days, like `{ "Choir": ["tue", "thu"] }`. Each name must be in `offers`. A roster warns when a class is put on a day it doesn't meet.
@@ -177,6 +178,13 @@ each summer when the district publishes the new calendar.
 (`pas-my-school`), with no account. After that the home page shows a shortcut to the school, the citywide
 lists (A to Z, types, neighborhoods) open narrowed to programs that work for it with an "Any school" button
 beside it, and the roster's "Add a program" assumes it.
+
+**What a roster costs.** The roster page adds up a child's roster from each program's `rate` and the number of
+days it is on: "About $1,720 to $2,230 for a semester", a monthly figure, and a line per program showing the
+price it used. A semester is half a school year: 18 weeks of school for daily and weekly prices, five bills
+for monthly ones, and one term for term prices. Free programs (and a school link marked free) count as $0,
+programs with no `rate` are listed as not counted, and with more than one child a family total is shown.
+It is an estimate, and says so: fees, deposits, discounts and aid are left out.
 
 **The week card's QR code.** `data/card-qr.json` holds the pattern for the code printed on the week card. It
 encodes the short address `/w`, which `.htaccess` sends to the home page with `utm_source=week_card` and

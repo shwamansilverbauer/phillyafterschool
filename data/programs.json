@@ -405,6 +405,11 @@
     ],
     "pickupBy": "6:00 pm",
     "cost": "$100 per month in the 2025–26 listing",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
     "price": "paid",
     "phone": "215-685-1592",
     "email": "ShotTowerPlayground@phila.gov",
@@ -492,6 +497,11 @@
     },
     "pickupBy": "6:30 pm",
     "cost": "$51.52 per day, with add-ons of $6–$16 for advanced classes. $180 deposit per weekday enrolled.",
+    "rate": {
+      "per": "day",
+      "eachDay": 51.52,
+      "extra": "Add-ons for advanced classes and the deposit are extra."
+    },
     "price": "paid",
     "phone": "267-239-0844",
     "email": "info@phillyinmovement.com",
@@ -560,6 +570,16 @@
     "daysNote": "Choose 1 to 5 days a week.",
     "pickupBy": "5:45 pm",
     "cost": "Per week: $40 for 1 day, $70 for 2, $97 for 3, $116 for 4, $130 for 5",
+    "rate": {
+      "per": "week",
+      "byDays": {
+        "1": 40,
+        "2": 70,
+        "3": 97,
+        "4": 116,
+        "5": 130
+      }
+    },
     "price": "paid",
     "phone": "215-320-2670",
     "email": "tarrell.davis@settlementmusic.org",
@@ -737,7 +757,12 @@
       ]
     },
     "pickupBy": "6:00 pm",
-    "cost": "$600 per month, or a daily rate. Financial aid and tuition subsidies available.",
+    "cost": "$600 per month, or $40 a day. Financial aid and tuition subsidies available.",
+    "rate": {
+      "per": "day",
+      "eachDay": 40,
+      "monthCap": 600
+    },
     "price": "paid",
     "phone": "215-627-2493",
     "email": "afterschool@oldpinecommunitycenter.org",
@@ -757,6 +782,10 @@
       {
         "label": "2026–27 registration",
         "url": "https://opcc.jumbula.com/Afterschool20262027/RegularSchoolDaysMonthlyRate"
+      },
+      {
+        "label": "Old Pine registration: daily rate",
+        "url": "https://opcc.jumbula.com/Afterschool20262027/RegularSchoolDaysDailyRate"
       }
     ],
     "lastVerified": "2026-10-05",
@@ -834,6 +863,14 @@
     },
     "pickupBy": "5:45 pm (6:00 pm for the Friday teen class)",
     "cost": "Fall session: $741–$912 per weekday slot, plus a materials fee",
+    "rate": {
+      "per": "term",
+      "eachDay": [
+        741,
+        912
+      ],
+      "extra": "Fall session prices. A materials fee is extra."
+    },
     "price": "paid",
     "phone": "215-309-1866",
     "email": "megan@butcherssewshop.com",
@@ -935,6 +972,14 @@
       ]
     },
     "cost": "Fall (16 weeks): class $460, pickup $105, aftercare $400. Winter/Spring (22 weeks): $635, $145, $550.",
+    "rate": {
+      "per": "term",
+      "eachDay": [
+        460,
+        965
+      ],
+      "extra": "Fall prices. The low end is the class alone; the high end adds pickup and aftercare."
+    },
     "price": "paid",
     "phone": "267-223-9180",
     "email": "",
@@ -1173,6 +1218,11 @@
       ]
     },
     "cost": "$680 per weekday for the semester. 10% off a full week, 20% off if paid in full.",
+    "rate": {
+      "per": "term",
+      "eachDay": 680,
+      "fullWeekOff": 0.1
+    },
     "price": "paid",
     "phone": "267-414-5945",
     "email": "",
@@ -1257,7 +1307,18 @@
         }
       ]
     },
-    "cost": "2025–26 rates: $369 per month for 1 day a week up to $529 for 5 days, plus $100 registration",
+    "cost": "2025–26 rates, per month: $369 for 1 day a week, $399 for 2, $449 for 3, $489 for 4, $529 for 5, plus $100 registration",
+    "rate": {
+      "per": "month",
+      "byDays": {
+        "1": 369,
+        "2": 399,
+        "3": 449,
+        "4": 489,
+        "5": 529
+      },
+      "extra": "2025–26 rates. A $100 registration fee is extra."
+    },
     "price": "paid",
     "phone": "267-600-1030",
     "email": "",
@@ -1321,6 +1382,11 @@
     },
     "pickupBy": "6:00 pm",
     "cost": "Monthly rates start at $120",
+    "rate": {
+      "per": "month",
+      "flat": 120,
+      "atLeast": true
+    },
     "price": "paid",
     "phone": "",
     "email": "",
@@ -1436,6 +1502,11 @@
     ],
     "pickupBy": "6:00 pm",
     "cost": "$80 per month in the 2025–26 listing",
+    "rate": {
+      "per": "month",
+      "flat": 80,
+      "extra": "From the 2025–26 listing."
+    },
     "price": "paid",
     "phone": "215-685-1848",
     "email": "Hawthornecultural@phila.gov",
@@ -1507,6 +1578,11 @@
     ],
     "pickupBy": "6:00 pm",
     "cost": "$120 per month in the 2025–26 listing",
+    "rate": {
+      "per": "month",
+      "flat": 120,
+      "extra": "From the 2025–26 listing."
+    },
     "price": "paid",
     "phone": "215-686-1782",
     "email": "StarrGarden@phila.gov",
@@ -1874,7 +1950,18 @@
         }
       ]
     },
-    "cost": "K–5: $280 per month (Fridays only) to $857 (5 days), plus $200 enrollment fee. Tuition assistance available.",
+    "cost": "K–5, per month: $280 for Fridays only, $553 for 2 days, $623 for 3, $741 for 4, $857 for 5, plus a $200 family enrollment fee. Tuition assistance available.",
+    "rate": {
+      "per": "month",
+      "byDays": {
+        "1": 280,
+        "2": 553,
+        "3": 623,
+        "4": 741,
+        "5": 857
+      },
+      "extra": "The one-day rate is for Fridays. A $200 family enrollment fee is extra."
+    },
     "price": "paid",
     "phone": "484-278-1335",
     "email": "beverly@makomcommunity.org",

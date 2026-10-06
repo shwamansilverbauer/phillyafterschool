@@ -525,6 +525,7 @@
       });
       banner.hidden = !shared;
       if (adder) { adder.hidden = !!shared; drawAdd(); }
+      drawCost(b);
       tabs.hidden = !!shared;
       kidBar.hidden = !!shared;
       tools.hidden = !!shared || total === 0;
@@ -637,6 +638,83 @@
     };
     adopt.addEventListener('click', function () { leaveShared(true); });
     $('#board-mine').addEventListener('click', function () { leaveShared(false); });
+    // ----- what the roster costs: an estimate for half a school year, from the prices programs publish -----
+    var WEEKS = 18, BILLS = 5;   // a semester: 18 weeks of school, or five monthly bills
+    var money = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
+    var span = function (lo, hi) { return money(lo) + (Math.round(hi) > Math.round(lo) ? ' to ' + money(hi) : ''); };
+    var exact = function (n) { return n % 1 ? '$' + n.toFixed(2) : money(n); };   // a published price, cents and all
+    var priced = function (lo, hi) { return exact(lo) + (hi > lo ? ' to ' + exact(hi) : ''); };
+    var tidy = function (n) { return n >= 200 ? Math.round(n / 10) * 10 : Math.round(n); };
+    // The cost of one program for n days a week: { lo, hi } for the semester, with a few words on how it's priced.
+    var costOf = function (prog, link, n) {
+      if (link.free) return { lo: 0, hi: 0, how: 'Free' };
+      var r = prog.rate;
+      if (!r) return null;
+      var lo, hi, how, unit = r.per === 'day' ? 'a day' : r.per === 'week' ? 'a week' : r.per === 'month' ? 'a month' : 'for the term';
+      var pair = function (x) { return Array.isArray(x) ? x : [x, x]; };
+      if (r.flat !== undefined) { lo = pair(r.flat)[0]; hi = pair(r.flat)[1]; how = (r.atLeast ? 'from ' : '') + priced(lo, hi) + ' ' + unit; }
+      else if (r.eachDay !== undefined) {
+        lo = pair(r.eachDay)[0] * n; hi = pair(r.eachDay)[1] * n;
+        how = priced(pair(r.eachDay)[0], pair(r.eachDay)[1]) + (r.per === 'day' ? ' a day' : ' per weekday ' + unit);
+        if (r.fullWeekOff && n === 5) { lo *= 1 - r.fullWeekOff; hi *= 1 - r.fullWeekOff; how += ', less ' + Math.round(r.fullWeekOff * 100) + '% for a full week'; }
+      } else {   // a price for each number of days a week; between two published tiers, the range they bound
+        var tiers = Object.keys(r.byDays).map(Number).sort(function (a, b) { return a - b; });
+        if (r.byDays[n] !== undefined) { lo = hi = r.byDays[n]; }
+        else {
+          var below = tiers.filter(function (t) { return t < n; }).pop(), above = tiers.filter(function (t) { return t > n; })[0];
+          lo = r.byDays[below !== undefined ? below : above]; hi = r.byDays[above !== undefined ? above : below];
+        }
+        how = priced(lo, hi) + ' ' + unit + ' for ' + n + (n === 1 ? ' day' : ' days');
+      }
+      var times = r.per === 'day' ? WEEKS : r.per === 'week' ? WEEKS : r.per === 'month' ? BILLS : 1;
+      lo *= times; hi *= times;
+      if (r.monthCap) { lo = Math.min(lo, r.monthCap * BILLS); hi = Math.min(hi, r.monthCap * BILLS); if (hi === r.monthCap * BILLS) how += ', capped at ' + money(r.monthCap) + ' a month'; }
+      return { lo: lo, hi: hi, how: how, more: !!r.atLeast, extra: r.extra || '' };
+    };
+    var boardCost = function (b) {
+      var seen = {}, order = [];
+      DAYS.forEach(function (day) { b.days[day[0]].forEach(function (e) { var key = entryKey(e); if (!seen[key]) { seen[key] = 0; order.push(key); } seen[key]++; }); });
+      var out = { lo: 0, hi: 0, more: false, lines: [], missing: 0, counted: 0 };
+      order.forEach(function (key) {
+        var k = lookup(key);
+        if (!k) return;
+        var n = seen[key], c = costOf(k.prog, k.link, n);
+        if (!c) { out.missing++; out.lines.push({ name: k.prog.name, n: n, none: true }); return; }
+        out.lo += c.lo; out.hi += c.hi; out.more = out.more || !!c.more; out.counted++;
+        out.lines.push({ name: k.prog.name, n: n, c: c });
+      });
+      return out;
+    };
+    var totalText = function (t) { return (t.more ? 'At least ' : 'About ') + (tidy(t.hi) > tidy(t.lo) && !t.more ? money(tidy(t.lo)) + ' to ' + money(tidy(t.hi)) : money(tidy(t.lo))); };
+    var drawCost = function (b) {
+      var boxEl = $('#board-cost');
+      if (!boxEl) return;
+      var t = boardCost(b), lines = $('#cost-lines'), family = $('#cost-family');
+      boxEl.hidden = !!shared || !t.lines.length;
+      if (boxEl.hidden) return;
+      $('#cost-total').textContent = !t.counted ? 'No published prices to add up yet' : t.hi === 0 && !t.more ? (t.missing ? '$0 counted so far' : 'Free for a semester') : totalText(t) + ' for a semester';
+      $('#cost-month').textContent = t.counted && t.hi > 0 ? 'That’s ' + totalText({ lo: t.lo / BILLS, hi: t.hi / BILLS, more: t.more }).replace(/^A/, 'a') + ' a month.' + (t.missing ? ' ' + t.missing + (t.missing === 1 ? ' program isn’t' : ' programs aren’t') + ' counted, because ' + (t.missing === 1 ? 'it doesn’t' : 'they don’t') + ' publish a price.' : '')
+        : t.missing ? (t.counted ? 'The rest is free, but ' + t.missing + (t.missing === 1 ? ' program doesn’t' : ' programs don’t') + ' publish a price, so ask.' : 'None of these programs publish a price we can add up. Ask each one.') : '';
+      lines.textContent = '';
+      t.lines.forEach(function (l) {
+        var li = el('li');
+        li.appendChild(el('b', null, l.name));
+        li.appendChild(el('span', 'cost-days', l.n + (l.n === 1 ? ' day a week' : ' days a week')));
+        if (l.none) li.appendChild(el('span', 'cost-none', 'Price not published. Not counted.'));
+        else {
+          li.appendChild(el('span', 'cost-how', l.c.how));
+          li.appendChild(el('span', 'cost-sum', l.c.hi === 0 ? '$0' : (l.c.more ? 'at least ' : '') + span(l.c.lo, l.c.hi)));
+          if (l.c.extra) li.appendChild(el('span', 'hint', l.c.extra));
+        }
+        lines.appendChild(li);
+      });
+      // every child together, once there is more than one roster with something on it
+      var r = loadRosters(), all2 = { lo: 0, hi: 0, more: false }, withPicks = 0;
+      r.kids.forEach(function (kd) { var c = boardCost(kd[r.active]); if (c.lines.length) withPicks++; all2.lo += c.lo; all2.hi += c.hi; all2.more = all2.more || c.more; });
+      family.hidden = withPicks < 2;
+      if (withPicks > 1) family.textContent = 'All ' + withPicks + ' children’s ' + WHICH[r.active] + ' rosters: ' + totalText(all2).replace(/^A/, 'a') + ' for a semester.';
+    };
+
     // ----- add a program without leaving the page: search by name, say which school, pick the days -----
     var adder = $('#board-adder'), addInput = $('#add-search'), addList = $('#add-list'), addPanel = $('#add-panel'), addStatus = $('#add-status');
     var adding = null;   // the program being added: { id, school }

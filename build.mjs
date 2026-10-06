@@ -133,6 +133,14 @@ for (const p of programs) {
       if (!okDays(a)) errors.push(`${at}: offerDays for "${o}" must list some of ${WEEK.join(', ')}`); else p.offerDays[o] = WEEK.filter(d => a.includes(d));
     }
   }
+  if (p.rate !== undefined) {   // a published price in a form the roster can add up
+    const r = p.rate, num = x => typeof x === 'number' && x >= 0, amt = x => num(x) || (Array.isArray(x) && x.length === 2 && x.every(num) && x[0] <= x[1]);
+    const shapes = ['flat', 'eachDay', 'byDays'].filter(k => r?.[k] !== undefined);
+    if (!r || !['day', 'week', 'month', 'term'].includes(r.per)) errors.push(`${at}: rate.per must be day, week, month or term`);
+    else if (shapes.length !== 1) errors.push(`${at}: rate needs exactly one of flat, eachDay or byDays`);
+    else if (shapes[0] === 'byDays' ? !(r.byDays && Object.entries(r.byDays).length && Object.entries(r.byDays).every(([k, v]) => /^[1-5]$/.test(k) && num(v))) : !amt(r[shapes[0]])) errors.push(`${at}: rate amounts must be numbers (or a [low, high] pair), and byDays keys 1 to 5`);
+    else if (r.per === 'day' && shapes[0] !== 'eachDay') errors.push(`${at}: a per-day rate uses eachDay`);
+  }
   if (p.daysOff !== undefined) {
     const o = p.daysOff;
     if (!o || typeof o.summary !== 'string' || !o.summary.trim()) errors.push(`${at}: daysOff needs a summary`);
@@ -1451,9 +1459,9 @@ function boardPage() {
     schools: Object.fromEntries(schools.map(s => [s.id, { name: s.shortName, path: link(s.id + '/', 1) }])),
     programs: Object.fromEntries(programs.map(p => [p.id, {
       name: p.name, hours: p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [], type: p.types[0], no: order.indexOf(p.id) + 1,
-      days: p.days || null, offerDays: p.offerDays || null,
+      days: p.days || null, offerDays: p.offerDays || null, rate: p.rate || null,
       path: link(programPath(p), 1), q: [p.name, ...(p.offers || []), ...(p.keywords || []), ...p.types.map(t => TYPE[t].label)].join(' ').toLowerCase(),
-      schools: Object.fromEntries(Object.entries(p.schools).map(([sid, l]) => [sid, { rel: l.relation, where: l.address || p.address || '' }])),
+      schools: Object.fromEntries(Object.entries(p.schools).map(([sid, l]) => [sid, { rel: l.relation, where: l.address || p.address || '', free: (l.price || p.price) === 'free' }])),
     }])),
   };
   const schoolLinks = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<a class="btn" href="${link(s.id + '/', 1)}">${esc(s.shortName)}</a>`).join('');
@@ -1497,6 +1505,14 @@ function boardPage() {
     <p class="hint" id="board-hint" hidden>${T(`Drag a card by its colored top to move it to another day, or use the day buttons on the card.`)}</p>
     <div class="week" id="week"></div>
     <button type="button" class="clear" id="board-promote" hidden>The new term has started: make this the current roster</button>
+  </section>
+  <section class="section costbox" id="board-cost" hidden>
+    <h2>${T(`What this roster costs`)}</h2>
+    <p class="cost-total" id="cost-total"></p>
+    <p id="cost-month"></p>
+    <ul class="cost-lines" id="cost-lines"></ul>
+    <p class="cost-family" id="cost-family" hidden></p>
+    <p class="hint">${T(`An estimate from each program’s published prices, for half a school year: 18 weeks of school, or five monthly bills. It leaves out registration fees, deposits, materials, sibling discounts, subsidies and financial aid. Confirm the price with each program before you budget on it.`)}</p>
   </section>
   <section class="board-tools" id="board-tools" hidden>
     <div class="actions">

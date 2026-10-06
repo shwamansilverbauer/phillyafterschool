@@ -492,3 +492,17 @@ button.btn{cursor:pointer;font-family:inherit}
 .mine-row .hint{color:var(--hero-muted)}
 .find .mine{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 6px;color:var(--hero-muted);font-weight:700}
 .find .mine .btn{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink)}
+
+/* ---------- what the roster costs ---------- */
+.costbox{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px 26px;gap:10px;max-width:760px}
+.costbox[hidden]{display:none}
+.costbox .cost-total{font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,4vw,2.1rem);line-height:1.15;color:var(--ink)}
+.cost-lines{list-style:none;margin:6px 0 4px;padding:0;display:flex;flex-direction:column}
+.cost-lines li{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1.6fr) auto;gap:2px 16px;align-items:baseline;padding:10px 0;border-top:1px solid var(--line)}
+.cost-lines .cost-days{grid-column:1;grid-row:2;color:var(--muted);font-size:.93rem}
+.cost-lines .cost-how,.cost-lines .cost-none{grid-column:2;grid-row:1 / span 2;color:var(--muted);font-size:.95rem}
+.cost-lines .cost-sum{grid-column:3;grid-row:1 / span 2;font-weight:700;text-align:right;white-space:nowrap}
+.cost-lines .hint{grid-column:1 / -1;font-size:.86rem}
+.cost-family{font-weight:700;background:var(--sky-bg);color:var(--sky-ink);border-radius:12px;padding:10px 14px}
+.cost-family[hidden]{display:none}
+@media (max-width:600px){.costbox{padding:20px 18px}.cost-lines li{grid-template-columns:minmax(0,1fr) auto}.cost-lines .cost-how,.cost-lines .cost-none{grid-column:1 / -1;grid-row:3}.cost-lines .cost-sum{grid-column:2;grid-row:1 / span 2}.cost-lines .hint{grid-row:4}}
