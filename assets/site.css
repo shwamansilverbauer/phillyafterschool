@@ -618,3 +618,16 @@ button.btn{cursor:pointer;font-family:inherit}
   .js .nav.open > a{padding:8px 12px}
   .js .nav.open .menu summary{padding-top:8px}
 }
+
+/* ---------- the day-camp schedule: picks as ticket stubs, and its own card ---------- */
+.off-list{gap:10px;margin-top:4px}
+.off-list li{border:1px solid var(--line);border-left:8px solid var(--tc,#7A8DA6);border-radius:14px;padding:10px 14px 10px 12px;background:var(--bg);align-items:center;box-shadow:0 2px 0 rgba(7,21,39,.06)}
+.off-list li:nth-child(odd){transform:rotate(-.35deg)}
+.off-list li:nth-child(even){transform:rotate(.3deg)}
+.off-list .off-date{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:76px;padding:6px 10px;border-radius:10px;background:var(--yellow);color:var(--yellow-ink);font-size:.8rem;line-height:1.15;border-right:2px dashed rgba(42,33,0,.35)}
+.off-list .off-date b{font-family:var(--display);font-size:1.05rem;min-width:0}
+.off-list li > a,.off-list li > span:not(.hint):not(.off-date):not(.tc-warn){font-weight:700}
+.offcard{border-top:1px solid var(--line);padding-top:18px;margin-top:8px;display:flex;flex-direction:column;gap:12px}
+.offcard[hidden]{display:none}
+.offcard h3{font-size:1.2rem}
+@media (prefers-reduced-motion: reduce){.off-list li{transform:none}}
