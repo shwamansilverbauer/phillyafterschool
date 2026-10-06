@@ -161,6 +161,7 @@ for (const p of programs) {
     try { c._grades = expandGrades(c.grades); } catch (e) { errors.push(`${at}: club "${c.name}": ${e.message}`); c._grades = null; }
     if (c.roster !== false) p._cls[c.name] = { g: c._grades, t: (c.tags || []).map(t => t.toLowerCase()) };
   }
+  for (const c of p.clubs) for (const t of c.tags || []) if (TYPE[t] && Array.isArray(p.types) && !p.types.includes(t)) p.types.push(t);
   const onRoster = p.clubs.filter(c => c.roster !== false && typeof c.name === 'string');
   p.offers = onRoster.map(c => c.name);
   const od = Object.fromEntries(onRoster.filter(c => Array.isArray(c.days)).map(c => [c.name, c.days]));
@@ -551,6 +552,11 @@ const freeOnlyFor = p => kindsOf(p.price).includes('free') ? [] : schools.filter
 // A school's own clubs belong on that school's page. On the citywide lists (A to Z, the type pages) there would be
 // one near-identical "School clubs" entry per school, so they are left off those.
 const schoolRun = p => p.types.includes('clubs');
+// A school's clubs, by the kind of program each one is. Used to mention them next to the citywide lists.
+const clubGrades = c => c.gradeNote || (c._grades == null ? '' : c._grades.length === 1 ? (c._grades[0] === 'K' ? 'Kindergarten' : c._grades[0] === 'PK' ? 'Pre-K' : 'Grade ' + c._grades[0]) : c._grades.length === GRADES.length - 1 && c._grades[0] === 'K' ? 'All grades' : `Grades ${c._grades[0]}–${c._grades[c._grades.length - 1]}`);
+const clubsOfType = (p, typeId) => (p.clubs || []).filter(c => c.roster !== false && (c.tags || []).includes(typeId));
+const clubBrief = c => { const bits = [clubGrades(c).replace(/^G/, 'g').replace(/^A/, 'a').replace(/^K/, 'k'), c.days ? c.days.map(d => DAY_NAME[d] + 's').join(' and ') : ''].filter(Boolean); return c.name + (bits.length ? ` (${bits.join(', ')})` : ''); };
+const clubsByType = p => Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, clubs: clubsOfType(p, t.id).map(c => c.name) }]).filter(([, v]) => v.clubs.length));
 const citywide = programs.filter(p => !schoolRun(p));
 const itemAttrs = (p, extra = [], school = null) => `data-item data-grades="${p._grades === null ? '*' : p._grades.join(' ')}" data-types="${p.types.join(' ')}" data-hoods="${programHoods(p).map(hoodSlug).join(' ')}" data-cost="${costKinds(p, school).join(' ')}" data-days="${p.days ? p.days.join(' ') : '*'}" data-schools="${schools.filter(x => p.schools[x.id]).map(x => x.id).join(' ')}" data-search="${esc(haystack(p, extra))}"`;
 const typeTags = (p, school = null) => p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')
@@ -622,7 +628,7 @@ function card(p, school) {
   const flag = [p.note, l.note].filter(Boolean).join(' ');
   const fix = correctionHref(`Correction: ${p.name} (${school.shortName})`);
   return `<article class="prog" id="${esc(p.id)}" data-rel="${l.relation}"${p.offerDays ? ` data-offer-days="${esc(JSON.stringify(p.offerDays))}"` : ''} ${itemAttrs(p, [rel.pill.replace('{s}', school.shortName)], school)}>
-  <div class="top"><span class="pill ${l.relation}">${esc(rel.pill.replace('{s}', school.shortName))}</span><h3><a href="${link(programPath(p), 1)}">${esc(p.name)}</a></h3><p class="what">${esc(p.what)}</p><p class="tags">${typeTags(p, school)}</p>${p.offers?.length ? `<p class="offers"><b>Classes:</b> ${esc(p.offers.join(', '))}</p>` : ''}</div>
+  <div class="top"><span class="pill ${l.relation}">${esc(rel.pill.replace('{s}', school.shortName))}</span><h3><a href="${link(programPath(p), 1)}">${esc(p.name)}</a></h3><p class="what">${esc(p.what)}</p><p class="tags">${typeTags(p, school)}</p>${p.offers?.length ? `<p class="offers"><b>${p.clubs ? 'Clubs' : 'Classes'}:</b> ${esc(p.offers.join(', '))}</p>` : ''}${p.clubs ? `<p class="club-match" data-club-match="${esc(JSON.stringify(clubsByType(p)))}" hidden></p>` : ''}</div>
   ${gradeStrip(p)}
   <dl>${rows}</dl>
   ${flag ? `<p class="flag">${esc(flag)}</p>` : ''}
@@ -801,7 +807,6 @@ function programPage(p) {
     </div>`;
   }).join('\n');
   const fix = correctionHref(`Correction: ${p.name}`);
-  const clubGrades = c => c.gradeNote || (c._grades === null ? '' : c._grades.length === 1 ? (c._grades[0] === 'K' ? 'Kindergarten' : c._grades[0] === 'PK' ? 'Pre-K' : 'Grade ' + c._grades[0]) : c._grades.length === GRADES.length - 1 && c._grades[0] === 'K' ? 'All grades' : `Grades ${c._grades[0]}–${c._grades[c._grades.length - 1]}`);
   const clubsHtml = clubsDetailed ? `<section class="section">
     <h2>${T(`This year’s clubs`)}</h2>
     <p class="hint">${T(`From the school’s own list. Days, grades and openings change, so check with the club’s teacher before you count on one.`)}</p>
@@ -917,6 +922,8 @@ function typesPage() {
 function typePage(t) {
   const D = 2;
   const list = citywide.filter(p => p.types.includes(t.id)).sort((a, b) => a.name.localeCompare(b.name));
+  // One line per school that runs clubs of this kind for its own students.
+  const schoolClubs = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).flatMap(s => forSchool(s).filter(p => p.clubs && p.schools[s.id].relation === 'onsite').map(p => ({ s, p, clubs: clubsOfType(p, t.id) })).filter(x => x.clubs.length));
   const hero = `    <p class="where"><a href="${link('types/', D)}">${T(`All types`)}</a></p>
     <h1>${T(`{type}: after-school programs`, { type: t.label })}</h1>
     <p class="lede">${T(`Every program on this site in this group, with the schools each one serves. Pick a grade to narrow it down.`)}</p>`;
@@ -927,9 +934,17 @@ ${noMatch(D)}
 ${list.map(p => programRow(p, D)).join('\n')}
   </div>
 </section>
-<section class="section">
+${schoolClubs.length ? `<section class="section school-clubs" data-school-clubs>
+  <h2>${T(`{type} clubs at the school itself`, { type: t.label })}</h2>
+  <p class="hint">${T(`Run by a school for its own students, so they aren’t in the list above.`)}</p>
+  <ul class="sc-list">
+${schoolClubs.map(({ s, p, clubs }) => `    <li data-school="${esc(s.id)}"><b><a href="${link(s.id + '/', D)}">${esc(s.shortName)}</a>:</b> ${esc(clubs.map(clubBrief).join(', '))}. <a href="${link(programPath(p), D)}">${T(`All {school} clubs`, { school: s.shortName })}</a></li>`).join('\n')}
+  </ul>
+  <p class="sc-more needs-js-block" hidden><button type="button" class="clear">See clubs at other schools</button></p>
+  <p class="hint">${T(`Don’t see your school?`)} <a href="${link('schools/', D)}">${T(`Find your school.`)}</a></p>
+</section>` : `<section class="section">
   <p>${T(`Clubs a school runs for its own students aren’t in this list. They’re on that school’s page.`)} <a href="${link('schools/', D)}">${T(`Find your school.`)}</a></p>
-</section>
+</section>`}
 <section class="section">
   <h2>${T(`Other kinds of program`)}</h2>
   <div class="chips-row">${typeChips(D, t.id)}</div>

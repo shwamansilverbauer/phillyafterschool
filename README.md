@@ -310,7 +310,11 @@ A school-run listing can carry `clubs`: a list where each club has a `name` and,
 become the listing's classes, so a roster can say "Nature Club" on Wednesday and warn about the wrong day, and a
 themed week judges each club by its own grades and tags (tags are program types such as `music`, or keywords
 such as `nature`). `"roster": false` lists a club without offering it on the roster, for one that meets at
-lunch. Use `clubs` or `offers`, not both. Teacher names, emails and room numbers are left out on purpose: the
+lunch. Clubs never become listings of their own. Instead each type page ends with a
+"clubs at the school itself" strip, one line per school naming the clubs tagged with that type (someone who has
+saved a school sees only theirs until they ask for the rest), and on a school's page, filtering by a type adds
+"Music clubs here: Choir, Rock Band" to the clubs card. A clubs listing automatically carries every type its
+clubs are tagged with. Use `clubs` or `offers`, not both. Teacher names, emails and room numbers are left out on purpose: the
 listing links to the school's own sheet for those.
 
 ## Accounts and share groups (pilot)

@@ -265,6 +265,15 @@
   var today = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
   all(document, '.cal[data-date]').forEach(function (c) { if (c.getAttribute('data-date') < today) c.hidden = true; });
 
+  // ----- a type page's "clubs at the school itself": someone who has saved a school sees theirs, with the rest a tap away -----
+  all(document, '[data-school-clubs]').forEach(function (box) {
+    var mine = mySchool(), lines = all(box, 'li[data-school]'), more = box.querySelector('.sc-more');
+    if (!mine || !more || lines.length < 2 || !lines.some(function (li) { return li.getAttribute('data-school') === mine.id; })) return;
+    lines.forEach(function (li) { li.hidden = li.getAttribute('data-school') !== mine.id; });
+    more.hidden = false;
+    more.querySelector('button').addEventListener('click', function () { lines.forEach(function (li) { li.hidden = false; }); more.hidden = true; });
+  });
+
   // ----- find your school: every district and charter school in the city, covered or not -----
   function query() {
     var out = {};
@@ -1705,6 +1714,14 @@
         }
         it.hidden = !ok;
         if (ok) total++;
+        // A school's clubs listing says which of its clubs fit the kind being looked at: "Music clubs here: Choir, Rock Band".
+        var cm = it.querySelector('[data-club-match]');
+        if (cm) {
+          var fits = null;
+          if (state.type !== 'ALL') { try { fits = JSON.parse(cm.getAttribute('data-club-match'))[state.type] || null; } catch (e) { fits = null; } }
+          cm.hidden = !fits;
+          cm.textContent = fits ? fits.label + ' clubs here: ' + fits.clubs.join(', ') : '';
+        }
       });
       groups.forEach(function (g) {
         var n = all(g, '[data-item]').filter(function (it) { return !it.hidden; }).length;
