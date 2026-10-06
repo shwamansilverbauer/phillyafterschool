@@ -2,7 +2,7 @@
 // Accounts and share groups for Philly After School. Copied into the site by build.mjs; edit it here.
 //
 // What this stores, and nothing more:
-//   an account     - an email address and the parent's first name
+//   an account     - an email address and the adult's first and last name
 //   a group        - a name, its owner, and a join code (kept encrypted)
 //   a membership   - who is in which group, and whether the owner has approved them
 //   a child        - a first name and the programs on their current and upcoming week (no school, address, note or photo)
@@ -74,6 +74,12 @@ function db(): PDO {
     $db->exec('CREATE TABLE IF NOT EXISTS members (id INTEGER PRIMARY KEY, group_id TEXT NOT NULL REFERENCES grp(id) ON DELETE CASCADE, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, role TEXT NOT NULL, status TEXT NOT NULL, created INTEGER NOT NULL, UNIQUE (group_id, user_id))');
     $db->exec('CREATE TABLE IF NOT EXISTS kids (id INTEGER PRIMARY KEY, member_id INTEGER NOT NULL REFERENCES members(id) ON DELETE CASCADE, name TEXT NOT NULL, now_json TEXT NOT NULL, next_json TEXT NOT NULL, updated INTEGER NOT NULL)');
     $db->exec('CREATE TABLE IF NOT EXISTS throttle (k TEXT NOT NULL, t INTEGER NOT NULL)');
+    // Added after the first version: first and last name, and whether the account has been added to the email list.
+    $cols = array();
+    foreach ($db->query('PRAGMA table_info(users)') as $c) $cols[] = $c['name'];
+    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0') as $col => $type) {
+      if (!in_array($col, $cols, true)) $db->exec('ALTER TABLE users ADD COLUMN ' . $col . ' ' . $type);
+    }
     $db->exec('CREATE INDEX IF NOT EXISTS throttle_k ON throttle (k, t)');
     $db->exec('CREATE INDEX IF NOT EXISTS members_user ON members (user_id)');
     $db->exec('CREATE INDEX IF NOT EXISTS kids_member ON kids (member_id)');
@@ -133,10 +139,10 @@ function first_name(string $v): string {
   $v = preg_replace('/[^\p{L}\p{M} \'’.-]+/u', '', $v) ?? '';
   return trim(mb_substr(trim(preg_replace('/\s+/u', ' ', $v) ?? ''), 0, 20, 'UTF-8'));
 }
-// What an adult calls themselves: "Josh", "Josh - Jasper's dad", "Ms Rivera (teacher)". Up to 30 characters.
-function adult_name(string $v): string {
-  $v = preg_replace('/[^\p{L}\p{M} \'’.,()-]+/u', '', $v) ?? '';
-  return trim(mb_substr(trim(preg_replace('/\s+/u', ' ', $v) ?? ''), 0, 30, 'UTF-8'));
+// An adult's first or last name: letters, spaces, hyphens, apostrophes and periods.
+function person_name(string $v, int $max): string {
+  $v = preg_replace('/[^\p{L}\p{M} \'’.-]+/u', '', $v) ?? '';
+  return trim(mb_substr(trim(preg_replace('/\s+/u', ' ', $v) ?? ''), 0, $max, 'UTF-8'));
 }
 function group_name(string $v): string {
   $v = preg_replace('/[<>"&]+/u', '', $v) ?? '';
@@ -154,14 +160,14 @@ function current_user(): ?array {
   $done = true;
   $sid = isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s']) ? $_COOKIE['pas_s'] : '';
   if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return null;
-  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
+  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
   if (!$s) return null;
   if ($s['seen'] < now() - 86400) {   // once a day, push the 30 days out again
     $exp = now() + SESSION_DAYS * 86400;
     q('UPDATE sessions SET seen = ?, expires = ? WHERE id = ?', array(now(), $exp, $s['sid']));
     set_session_cookie($sid, $exp);
   }
-  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'sid' => (int) $s['sid']);
+  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'sid' => (int) $s['sid']);
   return $user;
 }
 function need_user(): array {
@@ -274,7 +280,9 @@ function my_groups(int $uid): array {
   }
   return $list;
 }
-function me_out(array $u): array { return array('email' => $u['email'], 'name' => $u['name']); }
+// "ready" means the account has the first and last name every account needs before it can make or join a group.
+function ready(array $u): bool { return $u['first'] !== '' && $u['last'] !== ''; }
+function me_out(array $u): array { return array('email' => $u['email'], 'first' => $u['first'], 'last' => $u['last'], 'ready' => ready($u), 'listed' => (bool) $u['listed']); }
 function year_end(): int {
   global $CFG;
   $t = isset($CFG['yearEnd']) ? strtotime($CFG['yearEnd'] . ' 23:59:59 America/New_York') : false;
@@ -329,11 +337,11 @@ switch ($method . ' ' . $action) {
       }
     }
     q('UPDATE logins SET used = 1 WHERE id = ?', array($login['id']));
-    $user = row('SELECT id, email, name FROM users WHERE email = ?', array($login['email']));
+    $user = row('SELECT id, email, name, first, last, listed FROM users WHERE email = ?', array($login['email']));
     $new = false;
     if (!$user) {
       q('INSERT INTO users (email, created) VALUES (?, ?)', array($login['email'], now()));
-      $user = array('id' => (int) db()->lastInsertId(), 'email' => $login['email'], 'name' => '');
+      $user = array('id' => (int) db()->lastInsertId(), 'email' => $login['email'], 'name' => '', 'first' => '', 'last' => '', 'listed' => 0);
       $new = true;
     }
     $sid = b64(random_bytes(32));
@@ -363,12 +371,21 @@ switch ($method . ' ' . $action) {
     out(array('ok' => true));
   }
 
+  // Every account needs a first and last name: it is how a group's creator knows who is asking to join.
   case 'POST set_name': {
     $u = need_user();
-    $name = adult_name(str($in, 'name', 60));
-    if ($name === '') fail('name', 'Add your name, so the group knows who is asking.');
-    q('UPDATE users SET name = ? WHERE id = ?', array($name, $u['id']));
-    out(array('ok' => true, 'name' => $name));
+    $first = person_name(str($in, 'first', 60), 30);
+    $last = person_name(str($in, 'last', 60), 40);
+    if ($first === '' || $last === '') fail('name', 'Add your first and last name.');
+    q('UPDATE users SET first = ?, last = ?, name = ? WHERE id = ?', array($first, $last, $first . ' ' . $last, $u['id']));
+    out(array('ok' => true, 'first' => $first, 'last' => $last));
+  }
+
+  // The browser says it has added this account to the email list, so it is not asked to again.
+  case 'POST listed': {
+    $u = need_user();
+    q('UPDATE users SET listed = 1 WHERE id = ?', array($u['id']));
+    out(array('ok' => true));
   }
 
   // Deletes the account, every child's week it shared, and every group it made (for everyone in them).
@@ -384,7 +401,7 @@ switch ($method . ' ' . $action) {
     $u = need_user();
     $name = group_name(str($in, 'name', 80));
     if ($name === '') fail('name', 'Give the group a name, like “Room 12”.');
-    if ($u['name'] === '') fail('yourname', 'Add your name first, so people joining know whose group it is.');
+    if (!ready($u)) fail('yourname', 'Add your first and last name first, so people joining know whose group it is.');
     if ((int) val('SELECT COUNT(*) FROM grp WHERE owner_id = ? AND expires > ?', array($u['id'], now())) >= MAX_OWNED) fail('limit', 'You’ve made ' . MAX_OWNED . ' groups, which is the most one person can have. Delete one first.');
     $gid = substr(preg_replace('/[^A-Za-z0-9]/', '', b64(random_bytes(18))) ?? '', 0, 14);
     if (strlen($gid) < 10) $gid = bin2hex(random_bytes(7));
@@ -400,8 +417,8 @@ switch ($method . ' ' . $action) {
   case 'POST group_join': {
     $u = need_user();
     if (too_many('join:' . $u['id'], 10, 3600)) fail('slow', 'Too many tries. Check the code with whoever gave it to you, and try again in an hour.', 429);
+    if (!ready($u)) fail('yourname', 'Add your first and last name, so the group knows who is asking.');
     note('join:' . $u['id']);
-    if ($u['name'] === '') fail('yourname', 'Add your name, so the group knows who is asking.');
     $code = tidy_code(str($in, 'code', 40));
     $g = strlen($code) === 12 ? row('SELECT id, name, owner_id FROM grp WHERE code_mac = ? AND expires > ?', array(code_mac($code), now())) : null;
     if (!$g) fail('code', 'No group has that code. Check it with whoever gave it to you.', 404);
