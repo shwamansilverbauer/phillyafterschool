@@ -3,3 +3,6 @@ preview/
 node_modules/
 .DS_Store
 *.log
+phillyafterschool-data/
+phillyafterschool-*.json
+last-mail.txt
