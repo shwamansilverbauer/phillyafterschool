@@ -627,6 +627,7 @@
         });
       });
       var shareBtn = planEl.querySelector('#off-share');
+      // The link goes inside the text: several apps (Messenger among them) drop a separate url when a picture is attached.
       if (navigator.share && navigator.canShare && window.File) {
         var probe = null;
         try { probe = new File([new Blob(['x'], { type: 'image/png' })], 'days-off.png', { type: 'image/png' }); } catch (e) { probe = null; }
@@ -635,7 +636,7 @@
           shareBtn.addEventListener('click', function () {
             cardFile(function (blob, name) {
               // No title: Apple's share sheet turns a title into a second preview of the picture. The link rides along as text.
-              navigator.share({ files: [new File([blob], name, { type: 'image/png' })], text: (activeKid().name ? possessive(activeKid().name) : 'Our') + ' days off. Plan yours:', url: (od.site || '') + '/days-off/?utm_source=dayoff_card&utm_medium=share' }).then(function () { shareEvent('image_share'); }, function () { /* closed without sharing */ });
+              navigator.share({ files: [new File([blob], name, { type: 'image/png' })], text: (activeKid().name ? possessive(activeKid().name) : 'Our') + ' days off. Plan yours: ' + (od.site || '') + '/days-off/?utm_source=dayoff_card&utm_medium=share' }).then(function () { shareEvent('image_share'); }, function () { /* closed without sharing */ });
             });
           });
         }
@@ -1579,7 +1580,7 @@
             cardFile(function (blob, name) {
               var file = new File([blob], name, { type: 'image/png' });
               // No title: Apple's share sheet turns a title into a second preview of the picture. The link rides along as text.
-              navigator.share({ files: [file], text: heading(activeKid().name, loadRosters().active) + '. Make your own at', url: (data.site || '') + '/?utm_source=week_card&utm_medium=share' }).then(function () { track_share('image_share'); }, function () { /* closed without sharing */ });
+              navigator.share({ files: [file], text: heading(activeKid().name, loadRosters().active) + '. Make your own at ' + (data.site || '') + '/?utm_source=week_card&utm_medium=share' }).then(function () { track_share('image_share'); }, function () { /* closed without sharing */ });
             });
           });
         }
