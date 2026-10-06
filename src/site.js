@@ -151,14 +151,32 @@
     });
   })();
 
-  // ----- the menu: one group open at a time; a tap elsewhere or Escape closes it -----
+  // ----- the menu. Wide screens: the logo on the left, groups on the right, one open at a time.
+  // Narrow screens: a Menu button that opens every group in one panel. A tap elsewhere or Escape closes either. -----
   var menus = all(document, 'details.menu');
+  var menuBtn = document.querySelector('.menu-btn'), siteNav = document.querySelector('#site-nav');
+  var narrow = window.matchMedia ? window.matchMedia('(max-width: 1059px)') : { matches: false };
+  var panelOpen = function () { return !!siteNav && siteNav.className.indexOf('open') > -1; };
+  var setPanel = function (open) {
+    if (!siteNav || !menuBtn) return;
+    siteNav.className = 'nav' + (open ? ' open' : '');
+    menuBtn.setAttribute('aria-expanded', String(open));
+    menus.forEach(function (m) { m.open = open; });
+  };
+  if (menuBtn) menuBtn.addEventListener('click', function () { setPanel(!panelOpen()); });
+  if (narrow.addEventListener) narrow.addEventListener('change', function () { setPanel(false); });
   menus.forEach(function (m) {
-    m.addEventListener('toggle', function () { if (m.open) menus.forEach(function (o) { if (o !== m) o.open = false; }); });
+    m.addEventListener('toggle', function () { if (m.open && !panelOpen()) menus.forEach(function (o) { if (o !== m) o.open = false; }); });
+    var sm = m.querySelector('summary');
+    if (sm) sm.addEventListener('click', function (e) { if (panelOpen()) e.preventDefault(); });   // in the panel the groups stay open
   });
-  document.addEventListener('click', function (e) { menus.forEach(function (m) { if (m.open && !m.contains(e.target)) m.open = false; }); });
+  document.addEventListener('click', function (e) {
+    if (panelOpen()) { if (!siteNav.contains(e.target) && !menuBtn.contains(e.target)) setPanel(false); return; }
+    menus.forEach(function (m) { if (m.open && !m.contains(e.target)) m.open = false; });
+  });
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
+    if (panelOpen()) { setPanel(false); menuBtn.focus(); return; }
     menus.forEach(function (m) { if (m.open) { m.open = false; var sm = m.querySelector('summary'); if (sm) sm.focus(); } });
   });
 

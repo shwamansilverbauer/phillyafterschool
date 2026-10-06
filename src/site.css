@@ -585,8 +585,36 @@ button.btn{cursor:pointer;font-family:inherit}
 .band.dayoff .nav a.nav-cta{background:#0B2140;color:#FFFFFF}
 .band.dayoff .nav a.nav-cta:hover{background:#0F4D90}
 #by-day{scroll-margin-top:90px}
-@media (max-width:820px){
-  .bar{position:relative}
+
+/* ---------- header layout: logo left, menu right on one line; a Menu button on narrow screens ---------- */
+.band{overflow:visible;position:relative;z-index:30}
+.bar{position:relative}
+.nav{gap:6px 15px}
+.nav a.nav-cta{padding:6px 14px}
+.menu-btn{display:none;font:inherit;font-weight:700;align-items:center;gap:9px;padding:8px 14px;border-radius:999px;border:2px solid var(--hero-ink);background:transparent;color:var(--hero-ink);cursor:pointer}
+.menu-bars{display:block;width:16px;height:2px;background:currentColor;box-shadow:0 -5px 0 currentColor,0 5px 0 currentColor}
+@media (min-width:1060px){
+  .bar{flex-wrap:nowrap}
+  .nav{flex-wrap:nowrap;white-space:nowrap;margin-left:auto}
+}
+@media (max-width:1059px){
+  .js .menu-btn{display:inline-flex}
+  .js .nav{display:none}
+  .js .nav.open{display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:2px;position:absolute;left:12px;right:12px;top:calc(100% - 4px);z-index:50;background:#FFFFFF;border-radius:16px;padding:12px;box-shadow:0 16px 40px rgba(7,21,39,.34);max-height:calc(100vh - 96px);overflow:auto}
+  .js .nav.open .menu{position:static}
+  .js .nav.open .menu summary{color:#4D607A;font-size:.86rem;font-weight:700;border:0;padding:10px 12px 2px;cursor:default}
+  .js .nav.open .menu summary::after{display:none}
+  .js .nav.open .menu summary .count{display:none}
+  .js .nav.open .menu ul,.js .nav.open .menu:last-of-type ul{position:static;box-shadow:none;padding:0;min-width:0;background:none}
+  .js .nav.open > a{display:block;color:#0B2140;font-weight:700;border:0;padding:10px 12px;border-radius:9px}
+  .js .nav.open > a:hover{background:#DAEDFE}
+  .js .nav.open > a.nav-cta,.js .band.dayoff .nav.open > a.nav-cta{background:var(--yellow);color:var(--yellow-ink);text-align:center;border-radius:999px;margin-top:8px}
+  /* without scripts the groups simply wrap under the logo */
   .menu{position:static}
   .menu ul,.menu:last-of-type ul{left:12px;right:12px;top:calc(100% - 6px);min-width:0}
+}
+@media (max-width:1059px){
+  .js .nav.open .menu ul a{padding:8px 12px}
+  .js .nav.open > a{padding:8px 12px}
+  .js .nav.open .menu summary{padding-top:8px}
 }

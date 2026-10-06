@@ -282,7 +282,8 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <header class="band${theme ? ' ' + theme : ''}">
   <div class="in bar">
     <a class="brand" href="${link('', depth)}"><span class="bus-mark"></span>${esc(cfg.siteName)}</a>
-    <nav class="nav" aria-label="Site">${nav}</nav>
+    <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true"></span>Menu</button>
+    <nav class="nav" id="site-nav" aria-label="Site">${nav}</nav>
   </div>
   <div class="in hero">
 ${hero}
