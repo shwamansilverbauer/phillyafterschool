@@ -163,7 +163,7 @@ To remove a review, delete its entry. Cards show the average and the reviews for
 The header has four groups that open (Programs, Search by, Build a schedule, Suggest), then About and the
 "Help the site keep going" button, which goes to the support page. The groups are defined in `layout()` in
 `build.mjs` as a list of labels and links. Each is a `<details>` element, so it opens without scripts; the
-script only closes the others. From 1060px wide the logo sits on the left and the menu on the right, on one
+script only closes the others. From 1100px wide the logo sits on the left and the menu on the right, on one
 line; below that a Menu button opens every group in a single panel. "Day of week" lands on the A to Z page at its Day filter, which always shows there.
 
 ## Days of the week, days off, and a saved school
