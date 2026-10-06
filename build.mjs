@@ -70,7 +70,7 @@ function T(original, vars) {
 // A short fingerprint of each asset, added to its URL. When the file changes, the URL changes,
 // so browsers and the host's CDN fetch the new one instead of a cached copy.
 const stamp = f => PREVIEW ? '' : '?v=' + createHash('sha1').update(fs.readFileSync(path.join(ROOT, f))).digest('hex').slice(0, 8);
-const CSS_V = stamp('src/site.css'), JS_V = stamp('src/site.js'), EDIT_V = stamp('src/edit.js');
+const CSS_V = stamp('src/site.css'), JS_V = stamp('src/site.js'), EDIT_V = stamp('src/edit.js'), GROUPS_V = stamp('src/groups.js');
 
 // ---------- helpers ----------
 const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -270,7 +270,7 @@ function street(animate) {
   return `<svg class="street${animate ? ' go' : ''}" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${run(-10, sx)}${school}${run(sx + sw, 2010)}<rect class="st" x="0" y="${G}" width="2000" height="12"/><g class="bus"><g transform="translate(968,${G - 22})">${bus}</g></g></svg>`;
 }
 
-function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false, first = '', theme = '', shareImage = null }) {
+function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false, first = '', theme = '', shareImage = null, quiet = false }) {
   const canonical = cfg.siteUrl + '/' + pathName;
   // Search results show roughly 60 characters of a title and 155 of a description. The site name is added
   // to a title only when it fits; a long description is cut at a word.
@@ -288,7 +288,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
     return `<details class="menu${here ? ' here' : ''}"><summary>${label}${label === 'Build a schedule' ? '<span class="count" data-board-count hidden></span>' : ''}</summary><ul>${items.map(([to, text]) => `<li><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
   }).join('') + `<a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a><a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`;
-  const head = `${first}${fragment ? '' : gtmHead + '\n'}<title>${esc(fullTitle)}</title>
+  const head = `${first}${fragment || quiet ? '' : gtmHead + '\n'}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${esc(canonical)}">${noindex ? '\n<meta name="robots" content="noindex">' : ''}
 <meta property="og:title" content="${esc(fullTitle)}">
@@ -311,7 +311,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <link rel="stylesheet" href="${link('assets/site.css', depth)}${CSS_V}">${jsonLd ? '\n<script type="application/ld+json">' + JSON.stringify(jsonLd).replace(/</g, '\\u003c') + '</script>' : ''}`;
   // Edit mode (see /edit/) loads a second script. This tells site.js where to find it and where edits are sent.
   const editCfg = { js: link('assets/edit.js', depth) + EDIT_V, send: PREVIEW ? '' : link('edit/send.php', depth), home: link('edit/', depth), contact: cfg.contactEmail || '' };
-  const page = `${gtmBody}<script>document.documentElement.className+=' js'</script>
+  const page = `${quiet ? '' : gtmBody}<script>document.documentElement.className+=' js'</script>
 <header class="band${theme ? ' ' + theme : ''}">
   <div class="in bar">
     <a class="brand" href="${link('', depth)}"><span class="bus-mark"></span>${esc(cfg.siteName)}</a>
@@ -1254,8 +1254,8 @@ function privacyPage() {
   const body = `<div class="prose">
   <h2>${T(`The short version`)}</h2>
   <ul>
-    <li>${T(`There are no accounts and no ads, and nothing you send is sold.`)}</li>
-    <li>${T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us.`)}</li>
+    <li>${GROUPS ? T(`There are no ads, and nothing you send is sold. You only need an account for share groups, which are optional.`) : T(`There are no accounts and no ads, and nothing you send is sold.`)}</li>
+    <li>${GROUPS ? T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us unless you choose to add one to a share group.`) : T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us.`)}</li>
     <li>${T(`If you send a suggestion or a review, it arrives as an email to the person who runs the site.`)}</li>
     ${ALERTS ? `<li>${T(`If you ask for dates by email, your first name, your email address and the school or program you picked are kept by Klaviyo, the service that sends the emails.`)}</li>` : ''}
     <li>${T(`We use Google Analytics and Microsoft Clarity to see how the site is used, so we can fix what’s confusing.`)}</li>
@@ -1269,6 +1269,19 @@ function privacyPage() {
     <li>${T(`When a shared roster is opened, the site removes the name from the page address before any analytics loads, and the roster page is set to be hidden in session recordings.`)}</li>
     <li>${T(`If you add a photo to a week card, the card is made in your own browser. The photo is not uploaded, not saved, and gone when you close the page.`)}</li>
   </ul>
+  ${GROUPS ? `<h2 id="groups">${T(`Accounts and share groups`)}</h2>
+  <p>${T(`A share group lets a class, a carpool or a few friends see each other’s after-school weeks. It is optional, and it is the only part of the site that keeps anything about a child on our server.`)}</p>
+  <ul>
+    <li>${T(`An account is an email address and your first name. The email is used to sign you in and to tell you when someone asks to join your group or when you are approved. Other members never see it, and it is not added to any mailing list.`)}</li>
+    <li>${T(`There are no passwords. We email you a link and a 6-digit code; each works once and for 15 minutes. A cookie then keeps that device signed in for 30 days, and you can sign out everywhere from your account page.`)}</li>
+    <li>${T(`When you add a week to a group, we store the child’s first name as you type it and the programs on their current and upcoming weeks. We do not store a last name, school, address, pickup time, note, teacher’s name, photo, price or day-off plan.`)}</li>
+    <li>${T(`Only signed-in people the group’s creator has approved can see a group. The creator sees the first name of each adult who asks to join. A group can’t be searched for, isn’t listed anywhere, and its link shows nothing to anyone else.`)}</li>
+    <li>${T(`Someone who joins to view only, such as a teacher, can see and print the group and cannot change it.`)}</li>
+    <li>${T(`Anyone in a group can print it or take a screenshot, so join groups with people you would share a class list with.`)}</li>
+    <li>${T(`Groups are kept in a file on our web host, outside the public site. Google Analytics and Microsoft Clarity are not loaded on the account and group pages.`)}</li>
+    <li>${T(`You can take a week out of a group, leave a group, or delete your account from the site at any time, and it is removed straight away. A group’s creator can remove anyone. Every group is deleted two weeks after the last day of school.`)}</li>
+    <li>${T(`Accounts are for parents, caregivers and teachers. Children should not make one.`)}</li>
+  </ul>` : ''}
   <h2 id="forms">${T(`Suggestions, corrections and reviews`)}</h2>
   <ul>
     <li>${T(`What you type into a form is emailed to the site’s inbox, and a backup copy is kept on our web host in case the email goes missing.`)}</li>
@@ -1695,6 +1708,54 @@ ${cards}
   });
 }
 
+// ---------- share groups (accounts, class codes) ----------
+// "groups" in site.config.json turns them on. While "pilot" is true nothing links to them: the pages exist at
+// /account/ and /groups/, and the block on the roster page only shows in a browser that has visited one of them.
+const GROUPS = cfg.groups && cfg.contactEmail ? { pilot: cfg.groups.pilot !== false } : null;
+const groupsAttrs = depth => `data-groups data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}" data-api="${PREVIEW ? '' : link('groups/api.php', depth)}"`;
+const groupsScript = depth => `<script src="${link('assets/groups.js', depth)}${GROUPS_V}"></script>`;
+function accountPage() {
+  const hero = `    <h1>${T(`Your account`)}</h1>
+    <p class="lede">${T(`An account is only for share groups: a class, a carpool or a few friends who want to see each other’s after-school weeks. Rosters work without one.`)}</p>`;
+  const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
+  <noscript><p class="ask">${T(`Accounts need JavaScript turned on.`)}</p></noscript>
+  <div class="g-page" id="account"></div>
+  <section class="notes">
+    <h2>${T(`How groups keep things private`)}</h2>
+    <ul>
+      <li>${T(`A group shows a child’s first name and the programs on their week. No last names, addresses, notes or photos.`)}</li>
+      <li>${T(`Only signed-in people the group’s creator has approved can see it. A group can’t be searched for, and its link shows nothing to anyone else.`)}</li>
+      <li>${T(`You can take a week out of a group, leave a group, or delete your account at any time. Groups delete themselves when the school year ends.`)}</li>
+    </ul>
+    <p><a href="${link('privacy/', 1)}#groups">${T(`The full details are on the privacy page.`)}</a></p>
+  </section>
+</div>`;
+  return layout({ title: 'Your account', description: `Sign in to ${cfg.siteName} to make or join a share group.`, pathName: 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
+}
+function groupPage() {
+  const info = {
+    site: cfg.siteName,
+    types: Object.fromEntries(TYPES.map(t => [t.id, { color: t.color }])),
+    programs: Object.fromEntries(programs.map(p => [p.id, { name: p.name, type: p.types[0] }])),
+  };
+  const hero = `    <h1 id="group-title">${T(`Your group`)}</h1>
+    <p class="lede" id="group-lede">${T(`Only this group’s approved members can see it.`)}</p>`;
+  const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
+  <noscript><p class="ask">${T(`Groups need JavaScript turned on.`)}</p></noscript>
+  <div class="g-page" id="group"></div>
+  <script type="application/json" id="groups-data">${JSON.stringify(info).replace(/</g, '\\u003c')}</script>
+</div>`;
+  return layout({ title: 'A share group', description: `A private share group on ${cfg.siteName}.`, pathName: 'groups/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
+}
+// The server side: one file, copied from src/server with the few settings it needs.
+function groupsApiPhp() {
+  const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, yearEnd: end });
+  const src = fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8');
+  if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
+  return src.replace(`'/*CONFIG*/'`, () => `'` + conf.replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`);
+}
+
 function boardPage() {
   const order = [...programs].sort((a, b) => a.name.localeCompare(b.name)).map(p => p.id);   // each program's card number
   const data = {
@@ -1794,6 +1855,7 @@ function boardPage() {
   </section>
   ${nextOff(1).replace(T(`Days off this year, and who’s open`), T(`Plan the days off too`))}
   ${ALERTS ? `<p class="hint alerts-line">${T(`Want next term’s sign-up dates before they open?`)} <a href="${link(alertsPath, 1)}">${T(`Get the dates by email.`)}</a></p>` : ''}
+  ${GROUPS ? `<section class="section group-share" id="group-share" ${groupsAttrs(1)} data-pilot="${GROUPS.pilot ? 1 : 0}" hidden></section>` : ''}
   <section class="board-tools" id="board-tools" hidden>
     <div class="actions">
       <button type="button" class="btn primary" id="board-share" hidden>Share</button>
@@ -1845,6 +1907,7 @@ function boardPage() {
   return layout({ title: 'Build your week', description: `Put together a Monday to Friday after-school roster for each child from ${cfg.siteName} listings and share it with a link.`, pathName: 'board/', depth: 1, current: 'board/', hero, body,
     // A shared roster link carries a child's first name after the #. This runs before any analytics loads:
     // it puts the shared roster aside for the page's own script and takes it out of the address.
+    scripts: GROUPS ? groupsScript(1) : '',
     first: `<script>(function(){var h=location.hash;if(!/(^#|&)(mon|tue|wed|thu|fri)=/.test(h))return;window.__pasShared=h;try{sessionStorage.setItem('pas-shared',h)}catch(e){}try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}})();</script>\n` });
 }
 
@@ -2283,6 +2346,12 @@ const notFound = notFoundPage();   // always rendered, so its copy is known to t
 write('assets/site.css', fs.readFileSync(path.join(ROOT, 'src/site.css')));
 write('assets/site.js', fs.readFileSync(path.join(ROOT, 'src/site.js')));
 write('assets/edit.js', fs.readFileSync(path.join(ROOT, 'src/edit.js')));
+if (GROUPS) {
+  write('assets/groups.js', fs.readFileSync(path.join(ROOT, 'src/groups.js')));
+  write('account/index.html', accountPage());
+  write('groups/index.html', groupPage());
+  if (!PREVIEW) write('groups/api.php', groupsApiPhp());
+}
 for (const f of fs.readdirSync(path.join(ROOT, 'src/static'))) write(f, fs.readFileSync(path.join(ROOT, 'src/static', f)));   // icons and the share image, served from the top level
 if (!PREVIEW) {
   write('404.html', notFound);

@@ -1,6 +1,6 @@
 {
   "exportFormatVersion": 2,
-  "exportTime": "2026-10-06 13:41:16",
+  "exportTime": "2026-10-06 16:20:52",
   "containerVersion": {
     "path": "accounts/0/containers/0/versions/0",
     "accountId": "0",
@@ -1106,6 +1106,56 @@
         "accountId": "0",
         "containerId": "0",
         "tagId": "17",
+        "name": "GA4 - Event - pas_group_share",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_group_share"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "method"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - method}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "16"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "18",
         "name": "Clarity - Base",
         "type": "html",
         "parentFolderId": "1",
@@ -1129,12 +1179,12 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "tagId": "18",
+        "tagId": "19",
         "name": "Clarity - Site events",
         "type": "html",
         "parentFolderId": "1",
         "firingTriggerId": [
-          "16"
+          "17"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "notes": "Sends each pas_ event to Clarity as a custom event, so recordings and heatmaps can be filtered by it.",
@@ -1532,6 +1582,31 @@
         "accountId": "0",
         "containerId": "0",
         "triggerId": "16",
+        "name": "CE - pas_group_share",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_group_share"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "17",
         "name": "CE - any pas_ event",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [

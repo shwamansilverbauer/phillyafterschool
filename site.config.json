@@ -30,5 +30,8 @@
       "register": 1,
       "dayoff": 10
     }
+  },
+  "groups": {
+    "pilot": true
   }
 }

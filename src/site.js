@@ -445,7 +445,12 @@
     });
     return out;
   }
-  function newKid(name) { return { name: cleanName(name), now: emptyBoard(), next: emptyBoard(), teacher: '', cardNote: '', off: {}, offNote: '', prices: {} }; }
+  // A roster added to a share group remembers it: [{ g: group id, k: the child's id there, n: the group's name, c: the first name shared }].
+  function cleanLinks(a) {
+    return (Array.isArray(a) ? a : []).filter(function (l) { return l && /^[A-Za-z0-9]{6,30}$/.test(l.g || '') && typeof l.k === 'number' && l.k > 0; }).slice(0, 12)
+      .map(function (l) { return { g: l.g, k: l.k, n: String(l.n == null ? '' : l.n).slice(0, 50), c: String(l.c == null ? '' : l.c).slice(0, 20) }; });
+  }
+  function newKid(name) { return { name: cleanName(name), now: emptyBoard(), next: emptyBoard(), teacher: '', cardNote: '', off: {}, offNote: '', prices: {}, groups: [] }; }
   function possessive(name) { return name + '’s'; }
   // A pick is "program.school", optionally followed by "~" and a class or short note.
   function entryKey(e) { var i = e.indexOf('~'); return i < 0 ? e : e.slice(0, i); }
@@ -460,7 +465,7 @@
     if (raw && Array.isArray(raw.kids) && raw.kids.length) {
       rosters = { kid: 0, active: raw.active === 'now' ? 'now' : 'next', kids: raw.kids.slice(0, MAX_KIDS).map(function (k) {
         k = k && typeof k === 'object' ? k : {};
-        return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next), teacher: cleanName(k.teacher), cardNote: String(k.cardNote == null ? '' : k.cardNote).slice(0, 110), off: cleanOff(k.off), offNote: String(k.offNote == null ? '' : k.offNote).slice(0, 110), prices: cleanPrices(k.prices) };
+        return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next), teacher: cleanName(k.teacher), cardNote: String(k.cardNote == null ? '' : k.cardNote).slice(0, 110), off: cleanOff(k.off), offNote: String(k.offNote == null ? '' : k.offNote).slice(0, 110), prices: cleanPrices(k.prices), groups: cleanLinks(k.groups) };
       }) };
       if (typeof raw.kid === 'number' && raw.kid % 1 === 0 && raw.kid >= 0 && raw.kid < rosters.kids.length) rosters.kid = raw.kid;
     } else {
@@ -473,7 +478,7 @@
     }
     return rosters;
   }
-  function saveRosters() { store('pas-rosters', JSON.stringify(rosters)); updateCount(); }
+  function saveRosters() { store('pas-rosters', JSON.stringify(rosters)); updateCount(); if (window.pasBoard && window.pasBoard.onSave) window.pasBoard.onSave(); }
   function activeKid() { var r = loadRosters(); return r.kids[r.kid]; }
   function activeBoard() { var r = loadRosters(); return r.kids[r.kid][r.active]; }
   function kidLabel(k, i) { return k.name || 'Child ' + (i + 1); }
@@ -791,6 +796,13 @@
       return lines.join('\n');
     };
     var say = function (msg) { status.textContent = msg; };
+    // What the share-groups script (groups.js) needs from this page. It adds onSave, onKidGone and onShow.
+    window.pasBoard = {
+      data: data, track: track,
+      rosters: loadRosters, kid: activeKid,
+      shared: function () { return shared; },
+      save: function () { store('pas-rosters', JSON.stringify(rosters)); }
+    };
     var syncRoller = null;   // set further down, by the themed-week section
     var savedNote = function () { return storageOk ? 'Saved on this device.' : 'Your browser is blocking saved data, so this roster will be gone when you close the page. Keep the link.'; };
     var copy = function (text, done) {
@@ -890,6 +902,7 @@
       banner.hidden = !shared;
       if (adder) { adder.hidden = !!shared; drawAdd(); }
       if (syncRoller) syncRoller(total);
+      if (window.pasBoard && window.pasBoard.onShow) window.pasBoard.onShow();
       drawCost(b);
       tabs.hidden = !!shared;
       kidBar.hidden = !!shared;
@@ -959,6 +972,7 @@
       }
       var r = loadRosters();
       if (r.kids.length < 2) return;
+      if (window.pasBoard && window.pasBoard.onKidGone) window.pasBoard.onKidGone(r.kids[r.kid]);   // take their week out of any share group too
       r.kids.splice(r.kid, 1); r.kid = Math.max(0, r.kid - 1);
       saveRosters(); say('Removed.'); render();
     });

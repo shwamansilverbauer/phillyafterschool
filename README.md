@@ -298,6 +298,37 @@ could trigger the email with their own wording. To change the token, change it i
 To see what would go out, run the workflow by hand (Actions > Send date emails > Run workflow) with "Only count what
 would be sent" ticked, and optionally a date to pretend it is. Locally, with `KLAVIYO_API_KEY` set in your shell: `node build.mjs && node scripts/send-alerts.mjs --dry-run --today 2026-11-01`.
 
+## Accounts and share groups (pilot)
+
+A share group lets a class, a carpool or a few friends see each other's after-school weeks. It is the only part
+of the site with accounts and the only part that stores anything about a child on the server.
+
+- **Turning it on.** `"groups": { "pilot": true }` in `site.config.json`. While `pilot` is true nothing links to
+  it: the pages are `/account/` and `/groups/`, and the "Share with a class or group" block on the roster page
+  only shows in a browser that has visited one of them. Remove `groups` to take the whole thing out of the build.
+- **How it works for a parent.** Sign in on `/account/` (an emailed link and a 6-digit code, no password), make a
+  group there and get a code. On Build your week, "Add this week to a group or class" asks for the code and the
+  child's first name. The group's creator approves each person; until then they see nothing. A teacher joins
+  the same way as "view only". A shared week updates itself from the device it was shared from.
+- **What is stored.** An account is an email and a first name. A child in a group is a first name and the
+  program ids (and a class, only when the program lists it) on the current and upcoming weeks. Nothing else:
+  the server drops free-text notes, schools and anything it doesn't recognise. Group codes are kept encrypted.
+- **Where.** `src/server/groups-api.php` is the whole server side; the build copies it to `groups/api.php` with
+  four settings (site name, address, sender, the date groups expire). It keeps one SQLite file and a key in a
+  folder named `phillyafterschool-data`, next to (not inside) the public folder on the host. Deleting that
+  folder in the host's file manager wipes every account and group. It is not in git and not backed up by this
+  repository.
+- **Limits and expiry.** Links and codes last 15 minutes and work once; five wrong codes kill a code; three
+  sign-in emails per address per 15 minutes. A device stays signed in 30 days. Every group is deleted two weeks
+  after `lastDay` in `data/days-off.json`.
+- **Emails it sends.** The sign-in email, "someone asked to join" to a group's creator (the adult's first name
+  only), and "you're in" to the person approved. They go out with PHP `mail()` from the contact address.
+- **Privacy.** The account and group pages load no Google Tag Manager or Clarity (`quiet: true` in `layout`),
+  are `noindex`, and are left out of the sitemap. `src/groups.js` runs only on those two pages and the roster
+  page. The privacy page's "Accounts and share groups" section describes all of this; keep the two in step.
+- **Analytics.** Adding a week to a group fires `pas_group_share` (method `code` or `my_group`) on the roster
+  page. No names, emails or group ids are ever sent.
+
 ## Links out to programs
 
 Every link to a program's own site (Register, Website, Camp details, a source on the program's own domain, and the
