@@ -183,6 +183,37 @@ const gtmBody = cfg.gtmId && !PREVIEW ? `<noscript><iframe src="https://www.goog
 const correctionHref = (subject) => cfg.contactEmail ? `mailto:${cfg.contactEmail}?subject=${encodeURIComponent(subject)}` : null;
 
 // The block: a row of rowhouses, a school with the city flag, and a bus. Drawn from a fixed seed so it never changes between builds.
+// The day-off scene: the same block on a weekday with no school. Morning light, the school shut, the bus asleep
+// out front, an empty swing and a kite going up. It sits on a yellow band, so the page reads as a different day.
+function dayScene() {
+  let seed = 23;
+  const rnd = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
+  const G = 122;   // where things stand on the grass
+  // the block behind the park, hazy in the morning sun
+  let far = '', x = -10;
+  while (x < 2010) { const w = 40 + Math.floor(rnd() * 26), h = 30 + Math.floor(rnd() * 40); far += `<rect class="far" x="${x}" y="${G - h - 4}" width="${w + 1}" height="${h + 8}"/>`; x += w; }
+  const tree = (tx, r) => `<rect class="trunk" x="${tx - 2.5}" y="${G - r - 14}" width="5" height="${r + 16}"/><circle class="leaf2" cx="${tx - r * 0.35}" cy="${G - r - 20}" r="${r}"/><circle class="leaf" cx="${tx + r * 0.3}" cy="${G - r - 26}" r="${r * 0.9}"/>`;
+  const trees = [[120, 20], [330, 16], [520, 22], [705, 17], [1265, 21], [1430, 16], [1620, 22], [1830, 18]].map(([tx, r]) => tree(tx, r)).join('');
+  // the school, shades down
+  const sx = 820, sw = 130, sy = 44;
+  let school = `<rect class="sc" x="${sx}" y="${sy}" width="${sw}" height="${G - sy}"/><rect class="sct" x="${sx - 2}" y="${sy - 5}" width="${sw + 4}" height="6"/><polygon class="sc" points="${sx + 35},${sy - 5} ${sx + 65},${sy - 20} ${sx + 95},${sy - 5}"/>`;
+  for (let r = 0; r < 2; r++) for (let c = 0; c < 5; c++) school += `<rect class="shade" x="${sx + 10 + c * 23.5}" y="${sy + 12 + r * 26}" width="14" height="16"/>`;
+  school += `<rect class="sct" x="${sx + 54}" y="${G - 24}" width="22" height="24"/>`;
+  // the bus, parked and asleep
+  let bus = `<rect class="by" x="0" y="0" width="50" height="21" rx="4"/><rect class="by" x="44" y="8" width="13" height="13" rx="3"/>`;
+  for (let i = 0; i < 4; i++) bus += `<rect class="bw" x="${5 + i * 10.5}" y="4" width="7.5" height="7" rx="1"/>`;
+  bus += `<circle class="wh" cx="12" cy="22" r="5"/><circle class="hub" cx="12" cy="22" r="1.8"/><circle class="wh" cx="42" cy="22" r="5"/><circle class="hub" cx="42" cy="22" r="1.8"/>`;
+  const zs = [[1012, G - 30, 9], [1021, G - 41, 12], [1033, G - 54, 15]].map(([zx, zy, size]) => `<text class="zz" x="${zx}" y="${zy}" font-size="${size}">z</text>`).join('');
+  // a swing set, one seat moving
+  const wx = 1064, top = G - 50;
+  const swing = `<path class="frame" d="M${wx - 22},${G} L${wx - 14},${top} H${wx + 34} L${wx + 42},${G}"/><g class="swing" style="transform-origin:${wx + 10}px ${top}px"><path class="rope" d="M${wx + 4},${top} V${G - 14} M${wx + 16},${top} V${G - 14}"/><rect class="seat" x="${wx + 1}" y="${G - 15}" width="18" height="4" rx="2"/></g>`;
+  // someone small flying a kite: the string turns about the hand that holds it
+  const hx = 1152, hy = G - 22, kx = 1112, ky = 28;
+  const flyer = `<circle class="kid" cx="${hx + 5}" cy="${G - 27}" r="4.5"/><path class="kid" d="M${hx + 1},${G - 21} h8 l2,21 h-12z"/><path class="arm" d="M${hx + 3},${G - 19} L${hx},${hy}"/>`;
+  const kite = `<g class="kite" style="transform-origin:${hx}px ${hy}px"><path class="string" d="M${hx},${hy} L${kx},${ky + 16}"/><path class="tail" d="M${kx},${ky + 16} q-7,8 0,15 t0,15"/><polygon class="bow" points="${kx - 5},${ky + 28} ${kx + 4},${ky + 31} ${kx - 4},${ky + 35}"/><polygon class="bow" points="${kx + 5},${ky + 41} ${kx - 4},${ky + 44} ${kx + 4},${ky + 48}"/><polygon class="kt" points="${kx},${ky - 16} ${kx + 12},${ky} ${kx},${ky + 16} ${kx - 12},${ky}"/><path class="spar" d="M${kx},${ky - 16} V${ky + 16} M${kx - 12},${ky} H${kx + 12}"/></g>`;
+  return `<svg class="street dayscene" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${far}<path class="grass" d="M0,${G - 6} Q500,${G - 16} 1000,${G - 4} T2000,${G - 8} V140 H0Z"/>${trees}${school}<path class="grass2" d="M0,${G + 2} Q520,${G - 4} 1000,${G} T2000,${G} V140 H0Z"/><g transform="translate(962,${G - 26})">${bus}</g>${zs}${swing}${flyer}${kite}</svg>`;
+}
+
 function street(animate) {
   let seed = 11;
   const rnd = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
@@ -206,13 +237,13 @@ function street(animate) {
   return `<svg class="street${animate ? ' go' : ''}" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${run(-10, sx)}${school}${run(sx + sw, 2010)}<rect class="st" x="0" y="${G}" width="2000" height="12"/><g class="bus"><g transform="translate(968,${G - 22})">${bus}</g></g></svg>`;
 }
 
-function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false, first = '' }) {
+function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false, first = '', theme = '', shareImage = null }) {
   const canonical = cfg.siteUrl + '/' + pathName;
   // Search results show roughly 60 characters of a title and 155 of a description. The site name is added
   // to a title only when it fits; a long description is cut at a word.
   const fullTitle = pathName === '' ? (PREVIEW ? cfg.siteName : `${cfg.siteName}: ${cfg.tagline}`) : `${title} | ${cfg.siteName}`.length <= 65 ? `${title} | ${cfg.siteName}` : title;
   if (description.length > 158) description = description.slice(0, 157).replace(/\s+\S*$/, '').replace(/[,;:.]$/, '') + '…';
-  const nav = [['schools/', 'Schools'], ['board/', 'Build your week'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Buy me a coffee']]
+  const nav = [['schools/', 'Schools'], ...(daysOff ? [[offPath, 'Day-off programs']] : []), ['board/', 'Build your week'], ['suggest/', 'Suggest a program'], ['about/', 'About'], ['support/', 'Buy me a coffee']]
     .map(([to, label]) => `<a href="${link(to, depth)}"${current === to ? ' aria-current="page"' : ''}>${label}${to === 'board/' ? '<span class="count" data-board-count hidden></span>' : ''}</a>`).join('');
   const head = `${first}${fragment ? '' : gtmHead + '\n'}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
@@ -222,10 +253,10 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <meta property="og:type" content="website">
 <meta property="og:url" content="${esc(canonical)}">
 <meta property="og:site_name" content="${esc(cfg.siteName)}">
-<meta property="og:image" content="${cfg.siteUrl}/share.png">
+<meta property="og:image" content="${cfg.siteUrl}/${shareImage ? shareImage.file : 'share.png'}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="${esc(cfg.siteName)}: a row of Philadelphia rowhouses, a school and a yellow school bus">
+<meta property="og:image:alt" content="${esc(shareImage ? shareImage.alt : `${cfg.siteName}: a row of Philadelphia rowhouses, a school and a yellow school bus`)}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="${link('favicon.svg', depth)}" type="image/svg+xml">
 <link rel="icon" href="${link('favicon.png', depth)}" type="image/png" sizes="48x48">
@@ -238,7 +269,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   // Edit mode (see /edit/) loads a second script. This tells site.js where to find it and where edits are sent.
   const editCfg = { js: link('assets/edit.js', depth) + EDIT_V, send: PREVIEW ? '' : link('edit/send.php', depth), home: link('edit/', depth), contact: cfg.contactEmail || '' };
   const page = `${gtmBody}<script>document.documentElement.className+=' js'</script>
-<header class="band">
+<header class="band${theme ? ' ' + theme : ''}">
   <div class="in bar">
     <a class="brand" href="${link('', depth)}"><span class="bus-mark"></span>${esc(cfg.siteName)}</a>
     <nav class="nav" aria-label="Site">${nav}</nav>
@@ -246,7 +277,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   <div class="in hero">
 ${hero}
   </div>
-  ${showStreet ? street(showStreet === 'go') : ''}
+  ${showStreet === 'dayoff' ? dayScene() : showStreet ? street(showStreet === 'go') : ''}
 </header>
 <main class="wrap${roomy ? ' roomy' : ''}">
 ${body}
@@ -271,7 +302,7 @@ ${body}
         <li><a href="${link('programs/', depth)}">${T(`All programs, A to Z`)}</a></li>
         <li><a href="${link('types/', depth)}">${T(`Programs by type`)}</a></li>
         <li><a href="${link('neighborhoods/', depth)}">${T(`Programs by neighborhood`)}</a></li>
-        ${daysOff ? `<li><a href="${link(offPath, depth)}">${T(`Days off from school`)}</a></li>` : ''}
+        ${daysOff ? `<li><a href="${link(offPath, depth)}">${T(`Day-off programs`)}</a></li>` : ''}
         <li><a href="${link('suggest/', depth)}">${T(`Suggest a program`)}</a></li>
         <li><a href="${link('review/', depth)}">${T(`Write a review`)}</a></li>
       </ul>
@@ -1441,10 +1472,11 @@ ${cards}
 </section>
 </div>`;
   return layout({
-    title: `Days off from school: camps and full-day care, ${daysOff.schoolYear}`,
+    title: `Day-off programs in Philadelphia: camps when school is closed`,
     description: `Every day School District of Philadelphia schools are closed in ${daysOff.schoolYear}, and the after-school programs that run a camp or full-day care on those days.`,
-    pathName: offPath, depth: D, current: null, hero, body,
-    jsonLd: { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Days off from school', `${cfg.siteUrl}/${offPath}`]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) },
+    pathName: offPath, depth: D, current: offPath, hero, body, theme: 'dayoff', showStreet: 'dayoff',
+    shareImage: { file: 'share-days-off.png', alt: `${cfg.siteName} day-off programs: a park on a morning with no school, a kite going up and a school bus parked` },
+    jsonLd: { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Day-off programs', `${cfg.siteUrl}/${offPath}`]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) },
   });
 }
 

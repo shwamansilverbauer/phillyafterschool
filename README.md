@@ -166,13 +166,17 @@ schedules change and the data can be behind. The add-to-roster day buttons for t
 A "Day" filter row appears on a listing page by itself once at least two programs in that list run on some
 weekdays only; with fewer it would filter nothing, so it stays hidden.
 
-**Days off.** `/days-off/` lists the days School District of Philadelphia students are off, from
+**Days off.** `/days-off/` ("Day-off programs" in the menu and footer) lists the days School District of Philadelphia students are off, from
 `data/days-off.json` (`schoolYear`, `source`, `checked`, `lastDay`, and `days`: each with a `date`, a `name`,
 and an `end` for a break). Under each day it names the programs whose `daysOff.dates` include that date, and
 below that every program with `daysOff`. Past days drop off at build time and are hidden by the page between
 builds. The home page and each school page show a "Next day off" line. The build prints a note when a provider
 date isn't a district day off (a typo on their side, or a day only they close for). Replace the file's days
 each summer when the district publishes the new calendar.
+
+The day-off page has its own look: a yellow band with navy type (`.band.dayoff` in the stylesheet) and its
+own drawing, `dayScene()` in `build.mjs`: the school shut, the bus asleep, a swing and a kite going up. Its
+share picture is `src/static/share-days-off.png`; any page can name its own with `shareImage` in `layout()`.
 
 **A saved school.** A school page has "Save as my school". The choice is kept in the visitor's browser
 (`pas-my-school`), with no account. After that the home page shows a shortcut to the school, the citywide

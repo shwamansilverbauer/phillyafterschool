@@ -506,3 +506,38 @@ button.btn{cursor:pointer;font-family:inherit}
 .cost-family{font-weight:700;background:var(--sky-bg);color:var(--sky-ink);border-radius:12px;padding:10px 14px}
 .cost-family[hidden]{display:none}
 @media (max-width:600px){.costbox{padding:20px 18px}.cost-lines li{grid-template-columns:minmax(0,1fr) auto}.cost-lines .cost-how,.cost-lines .cost-none{grid-column:1 / -1;grid-row:3}.cost-lines .cost-sum{grid-column:2;grid-row:1 / span 2}.cost-lines .hint{grid-row:4}}
+
+/* ---------- day-off programs: the same block on a morning with no school. Yellow band, navy type. ---------- */
+.band.dayoff{--hero:#F3C613;--hero-2:#E2B300;--hero-ink:#0B2140;--hero-muted:#263A57}
+.band.dayoff .bus-mark{background:#0F4D90}
+.band.dayoff .nav a:hover,.band.dayoff .nav a[aria-current="page"]{border-bottom-color:#0B2140}
+.band.dayoff .nav .count{background:#0B2140;color:#FFFFFF}
+.band.dayoff .facts span{background:rgba(255,255,255,.42)}
+.dayscene .far{fill:#E2B300}
+.dayscene .grass{fill:#3E9E57}
+.dayscene .grass2{fill:#2C8444}
+.dayscene .trunk{fill:#0A3566}
+.dayscene .leaf{fill:#2C8444}
+.dayscene .leaf2{fill:#1F6B36}
+.dayscene .sc{fill:#FFF6D6}
+.dayscene .sct{fill:#0A3566}
+.dayscene .shade{fill:#C7D6E8}
+.dayscene .by{fill:#F3C613;stroke:#0B2140;stroke-width:1.2}
+.dayscene .zz{fill:#0B2140;font-family:var(--display);font-weight:800}
+.dayscene .frame{fill:none;stroke:#0A3566;stroke-width:3.5;stroke-linejoin:round;stroke-linecap:round}
+.dayscene .rope{fill:none;stroke:#0A3566;stroke-width:1.4}
+.dayscene .seat{fill:#CC3000}
+.dayscene .kid{fill:#0A3566}
+.dayscene .arm{fill:none;stroke:#0A3566;stroke-width:2.4;stroke-linecap:round}
+.dayscene .string{fill:none;stroke:#0A3566;stroke-width:1}
+.dayscene .tail{fill:none;stroke:#0A3566;stroke-width:1.4}
+.dayscene .bow{fill:#1763B8}
+.dayscene .kt{fill:#CC3000}
+.dayscene .spar{fill:none;stroke:#FFF6D6;stroke-width:1.2}
+@media (prefers-reduced-motion: no-preference){
+  .dayscene .kite{animation:kite-up 2.6s cubic-bezier(.2,.7,.2,1) .35s both,kite-sway 5.5s ease-in-out 3s infinite alternate}
+  .dayscene .swing{animation:swing-sway 3.2s ease-in-out infinite alternate}
+  @keyframes kite-up{from{transform:rotate(-44deg)}to{transform:rotate(0deg)}}
+  @keyframes kite-sway{from{transform:rotate(0deg)}to{transform:rotate(5deg)}}
+  @keyframes swing-sway{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
+}
