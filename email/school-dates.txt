@@ -1,6 +1,6 @@
 {{ event.heading }}
 
-{{ event.intro }}
+{% if person.first_name %}Hi {{ person.first_name }}. {% endif %}{{ event.intro }}
 {% for d in event.dates %}
 {{ d.when }}
 {{ d.title }}
@@ -13,5 +13,5 @@ You're getting this because you asked for dates at phillyafterschool.org.
 Wrong school? Sign up again with this address: https://phillyafterschool.org/alerts/
 Unsubscribe: {% unsubscribe_link %}
 
-Philly After School · {{ organization.full_address|default:"[[POSTAL_ADDRESS]]" }}
-An independent community project. Not affiliated with the School District of Philadelphia.
+Philly After School is an independent community project. Not affiliated with the School District of Philadelphia.
+{{ organization.full_address|default:"[[POSTAL_ADDRESS]]" }}

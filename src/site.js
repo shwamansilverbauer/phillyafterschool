@@ -99,7 +99,7 @@
   if (ideaForm) ideaForm.addEventListener('submit', function () { track({ event: 'pas_suggest_submit', suggest_kind: 'idea', school: '' }); });
 
   // ----- dates by email: the sign-up goes from this page straight to Klaviyo, with its public key -----
-  // Only the email address and the chosen school are sent. Nothing from a roster goes with it.
+  // Only a first name, the email address and the chosen school are sent. Nothing from a roster goes with it.
   all(document, 'form[data-alerts]').forEach(function (form) {
     var sel = form.querySelector('select[name="school"]');
     var status = form.querySelector('[data-alerts-status]');
@@ -112,7 +112,9 @@
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var email = form.elements.email.value.trim();
+      var first = form.elements.first_name.value.replace(/\s+/g, ' ').trim().slice(0, 60);
       if (form.elements.company && form.elements.company.value) return;   // only a script fills the hidden field
+      if (!first) { say('Add your first name so we know what to call you.', 'bad'); form.elements.first_name.focus(); return; }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { say('That email address doesn’t look right. Check it and try again.', 'bad'); form.elements.email.focus(); return; }
       var field = form.elements.school, school = field.value;
       var name = sel ? (sel.options[sel.selectedIndex].getAttribute('data-name') || '') : (field.getAttribute('data-name') || '');
@@ -125,7 +127,7 @@
         method: 'POST',
         headers: { 'content-type': 'application/vnd.api+json', revision: '2026-07-15' },
         body: JSON.stringify({ data: { type: 'subscription',
-          attributes: { custom_source: 'phillyafterschool.org ' + place, profile: { data: { type: 'profile', attributes: { email: email, properties: props, subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } } } } } },
+          attributes: { custom_source: 'phillyafterschool.org ' + place, profile: { data: { type: 'profile', attributes: { email: email, first_name: first, properties: props, subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } } } } } },
           relationships: { list: { data: { type: 'list', id: form.getAttribute('data-list') } } } } })
       }).then(function (r) {
         if (r.status < 200 || r.status > 299) throw new Error('status ' + r.status);
@@ -133,7 +135,7 @@
         var hint = form.querySelector('.hint'); if (hint) hint.hidden = true;
         say(form.getAttribute('data-confirm')
           ? 'Almost there. Check your inbox for a confirmation email and tap the button in it.'
-          : 'You’re on the list' + (name ? ' for ' + name : '') + '. Dates already on the calendar reach you tomorrow morning. After that, it’s one email a week at most.', 'good');
+          : 'You’re on the list' + (name ? ' for ' + name : '') + ', ' + first + '. Dates already on the calendar reach you tomorrow morning. After that, it’s one email a week at most.', 'good');
         track({ event: 'pas_alert_signup', school: school, place: place });
       }).catch(function () {
         btn.disabled = false;

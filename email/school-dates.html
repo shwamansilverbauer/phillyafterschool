@@ -18,7 +18,7 @@
         <tr>
           <td style="padding:28px 28px 6px;font-family:Arial,Helvetica,sans-serif;color:#0B2140;">
             <h1 style="margin:0 0 10px;font-family:'Arial Black',Arial,Helvetica,sans-serif;font-weight:800;font-size:26px;line-height:1.15;color:#0B2140;">{{ event.heading }}</h1>
-            <p style="margin:0;font-size:16px;line-height:1.5;color:#4D607A;">{{ event.intro }}</p>
+            <p style="margin:0;font-size:16px;line-height:1.5;color:#4D607A;">{% if person.first_name %}Hi {{ person.first_name }}. {% endif %}{{ event.intro }}</p>
           </td>
         </tr>
         {% for d in event.dates %}
@@ -54,9 +54,9 @@
             <br>
             {% unsubscribe 'Unsubscribe' %}
             <br><br>
-            Philly After School · {{ organization.full_address|default:"[[POSTAL_ADDRESS]]" }}
+            Philly After School is an independent community project. Not affiliated with the School District of Philadelphia.
             <br>
-            An independent community project. Not affiliated with the School District of Philadelphia.
+            <span style="font-size:10px;color:#A9B5C6;">{{ organization.full_address|default:"[[POSTAL_ADDRESS]]" }}</span>
           </td>
         </tr>
       </table>

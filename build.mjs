@@ -609,7 +609,7 @@ const alertsFeed = () => ({
   schools: schools.map(s => ({ id: s.id, name: s.shortName })),
   alerts: alertItems,
 });
-// The sign-up box. With a school it asks for an email only; without one it asks which school.
+// The sign-up box. With a school it asks for a first name and an email; without one it also asks which school.
 const alertsBox = (depth, { school = null, place, title, lede }) => !ALERTS ? '' : `<section class="panel alerts" id="by-email">
   <h2>${title}</h2>
   <p>${lede}</p>
@@ -622,6 +622,10 @@ const alertsBox = (depth, { school = null, place, title, lede }) => !ALERTS ? ''
           <option value="all" data-name="">${T(`A school that isn’t listed yet`)}</option>
         </select>
       </div>`}
+      <div class="field">
+        <label for="al-name-${place}">${T(`Your first name`)}</label>
+        <input id="al-name-${place}" name="first_name" type="text" maxlength="60" autocomplete="given-name" required>
+      </div>
       <div class="field">
         <label for="al-email-${place}">${T(`Your email`)}</label>
         <input id="al-email-${place}" name="email" type="email" maxlength="150" autocomplete="email" inputmode="email" required>
@@ -642,7 +646,7 @@ function alertsPage() {
     <p class="lede">${T(`Sign-up openings, deadlines and days off for your school, by email. One short email on {day} morning, and nothing in a week with no dates.`, { day: SEND_DAY_NAME })}</p>`;
   const soon = alertItems.filter(a => a.date >= TODAY).slice(0, 6);
   const body = `<div class="suggest">
-  ${alertsBox(1, { place: 'page', title: T(`Where should they go?`), lede: T(`Pick your school and leave an email address. That’s the whole form.`) })}
+  ${alertsBox(1, { place: 'page', title: T(`Where should they go?`), lede: T(`Pick your school, then leave your first name and an email address. That’s the whole form.`) })}
   <aside class="next">
     <h2>${T(`What you’ll get`)}</h2>
     <ul class="rules ticks">
@@ -1198,7 +1202,7 @@ function privacyPage() {
     <li>${T(`There are no accounts and no ads, and nothing you send is sold.`)}</li>
     <li>${T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us.`)}</li>
     <li>${T(`If you send a suggestion or a review, it arrives as an email to the person who runs the site.`)}</li>
-    ${ALERTS ? `<li>${T(`If you ask for dates by email, your email address and the school you picked are kept by Klaviyo, the service that sends the emails.`)}</li>` : ''}
+    ${ALERTS ? `<li>${T(`If you ask for dates by email, your first name, your email address and the school you picked are kept by Klaviyo, the service that sends the emails.`)}</li>` : ''}
     <li>${T(`We use Google Analytics and Microsoft Clarity to see how the site is used, so we can fix what’s confusing.`)}</li>
   </ul>
   <h2 id="rosters">${T(`Rosters and children’s names`)}</h2>
@@ -1220,11 +1224,11 @@ function privacyPage() {
   </ul>
   ${ALERTS ? `<h2 id="email">${T(`Dates by email`)}</h2>
   <ul>
-    <li>${T(`The sign-up form sends two things: your email address and the school you chose. It goes from your browser to Klaviyo, the email service we use, and is stored there.`)}</li>
+    <li>${T(`The sign-up form sends three things: your first name, your email address and the school you chose. They go from your browser to Klaviyo, the email service we use, and are stored there.`)}</li>
     <li>${T(`It never asks for a child’s name, grade or anything else about your family, and your roster is not sent with it.`)}</li>
     <li>${T(`Klaviyo also notes which page you signed up on. Like most email services, it records whether an email was opened and which links were clicked, and it may estimate a general location from your internet connection.`)}</li>
-    <li>${T(`Your address is used for these date emails and nothing else. It is not shared with the programs listed here, and it is not sold.`)}</li>
-    <li>${T(`Every email has an unsubscribe link, and using it stops the emails. To have your address deleted altogether, email us.`)}</li>
+    <li>${T(`Your name and address are used for these date emails and nothing else. They are not shared with the programs listed here, and they are not sold.`)}</li>
+    <li>${T(`Every email has an unsubscribe link, and using it stops the emails. To have your name and address deleted altogether, email us.`)}</li>
     <li>${T(`Klaviyo handles that data under its own terms:`)} <a href="https://www.klaviyo.com/legal/privacy-notice" target="_blank" rel="noopener">${T(`Klaviyo’s privacy notice`)}</a>.</li>
   </ul>
   ` : ''}<h2 id="analytics">${T(`Analytics and recordings`)}</h2>

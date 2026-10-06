@@ -253,7 +253,7 @@ Parents can ask for their school's dates by email: on each school page, the home
 The pieces:
 
 - **The sign-up form** posts from the visitor's browser straight to Klaviyo with the public key in `site.config.json`
-  (`alerts.klaviyoKey`) and adds the address to the list in `alerts.listId`. It sends the email address, the school's id
+  (`alerts.klaviyoKey`) and adds the address to the list in `alerts.listId`. It sends a first name, the email address, the school's id
   (`school`, or `all` for a school that isn't listed), the school's name and the page it was on. Nothing else. A sign-up with
   an address already on the list updates its school. Set `alerts.doubleOptIn` to `true` if the Klaviyo list is switched
   to double opt-in, so the form tells people to check their inbox. Each sign-up fires `pas_alert_signup` (school, place).
