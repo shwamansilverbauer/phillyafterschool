@@ -57,6 +57,37 @@ If the data has a problem, step 2 stops and the live site stays as it was. The "
 
 To put the site on a different host, run `node build.mjs` and upload the contents of `dist/`.
 
+## Summer camps
+
+Summer camps are their own list, in `data/camps.json`, and their own page, `/summer-camps/`. Nothing in the file is tied
+to a school or to the after-school pages. The file has:
+
+- `season`: the summer most listings describe (`2026`). A camp whose own `season` is later shows a yellow
+  "Summer 2027" pill; the rest say "2026 details".
+- `camps`: one entry per camp. `id`, `name`, `what`, `types` (the same list as programs, plus `nature` and
+  `daycamp`), `ages` (as the camp states them), `ageMin` and `ageMax` (years; the grade picker is worked out from
+  them: pre-K is 3 and 4, kindergarten 5, 1st grade 6), `season`, `weeks`, `hours`, `extended` (before and after
+  care), `cost`, `weekly` (the lowest regular full-day week, a number), `price` (`free` or `paid`), `aid`,
+  `address`, `neighborhoods` (grouped into parts of the city by `CAMP_AREAS` in `build.mjs`; leave it empty for a
+  camp that runs all over), `phone`, `website`, `registerUrl`, `signup` (what the camp says about when sign-ups
+  open), `note` (the yellow caution), `program` (the id of the same provider's school-year listing), `sources`,
+  `checked`.
+- `check`, on every camp: the quickest way to read it again. `url` (the one page to open), `how` (`fetch`,
+  `browser` or `person`), `look` (where on the page the weeks and price sit) and `notes` (what tripped us up).
+- `todo`: camps known to run in the city that haven't been read yet, with why. `dropped`: camps looked at and left
+  out, with why.
+
+Only what a camp's own site says goes in. To update a camp: open `check.url` the way `check.how` says, change the
+fields, set `season` to the summer the page now describes, set `checked` to today, and fix `check` if the page moved.
+The build writes the whole worklist into `data/check.json` under `camps`, oldest summer first.
+
+## Weekend classes
+
+A listing in `data/programs.json` with a `weekend` block shows on `/weekends/` and gets a "Weekends" row on its own
+page: `{ "summary": "...", "days": ["sat"], "term": "Fall 2026: ...", "cost": "...", "note": "...", "url": "https://…",
+"sources": [...], "check": { "url", "how", "look", "notes" }, "checked": "YYYY-MM-DD" }`. A place that only runs on
+weekends (or only weekends and day camps) leaves `schools` as `{}`, like a day-camp-only listing.
+
 ## Edit a listing
 
 Open `data/programs.json`, change the fields, set `lastVerified` to today's date, and commit to `main`.
@@ -64,7 +95,7 @@ Open `data/programs.json`, change the fields, set `lastVerified` to today's date
 Fields worth knowing:
 
 - `grades`: a range like `"K-5"` or `"PK-3"`, a single grade like `"8"`, or `null` when the provider doesn't publish grades.
-- `types`: required. One or more of `aftercare`, `music`, `theater`, `art`, `movement`, `stem`, `academics`, `games`, `clubs`, `rec-center`.
+- `types`: required. One or more of `aftercare`, `music`, `theater`, `art`, `movement`, `stem`, `academics`, `games`, `nature`, `daycamp`, `clubs`, `rec-center`.
   Drives the type filter and the type pages. The first one listed is the color and icon the program wears on a roster card.
 - `price`: `"free"`, `"paid"` or `"both"` (some of it is free, some paid). Drives the Free / Paid filter. Leave it out when the
   provider doesn't publish a price; the program then shows only under "Any".
@@ -84,7 +115,7 @@ Fields worth knowing:
 - `register.nextTerm`: optional. When sign-ups open for the next term, semester or school year, in a sentence with dates. Leave it out when the provider doesn't say.
 - `register.dates`: optional list of `{ "date": "YYYY-MM-DD", "label": "..." }` for registration openings and deadlines. Each upcoming one gets "Add to calendar" links on the card; past dates drop off by themselves.
 - `note`: the yellow caution box. Use it for anything unconfirmed.
-- `schools`: one entry per school the program serves. Leave it as `{}` only for a day-camp-only listing: a place with `daysOff` that runs nothing on a weekday afternoon (a theater with Saturday classes and holiday camps, say). That listing gets its own page and a card on the day-camp page, and stays off every school page, the A to Z list, the type and neighborhood pages and the roster.
+- `schools`: one entry per school the program serves. Leave it as `{}` only for a listing with `daysOff` or `weekend` that runs nothing on a weekday afternoon (a theater with Saturday classes and holiday camps, say). That listing gets its own page and a card on the day-camp page, and stays off every school page, the A to Z list, the type and neighborhood pages and the roster.
   Otherwise:
   - `relation`: `onsite`, `pickup` or `nearby`. Use `pickup` only when a source names the school.
   - `note`: a caution that applies to that school only.

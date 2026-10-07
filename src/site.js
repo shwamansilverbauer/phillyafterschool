@@ -1697,7 +1697,8 @@
       if (terms.length) bits.push('matching “' + search.value.trim() + '”');
       var what = (state.grade === 'ALL' ? '' : ' for ' + gradeLabel(state.grade)) + (bits.length ? ' (' + bits.join(', ') + ')' : '');
       var filtered = state.grade !== 'ALL' || bits.length > 0;
-      count.textContent = total ? total + (total === 1 ? ' program' : ' programs') + (filtered ? what : fSchool ? ' for all grades' : '') : 'No programs' + what + '. Try fewer filters.';
+      var noun = fbar.getAttribute('data-noun') || 'program', nouns = fbar.getAttribute('data-nouns') || 'programs';   // the summer camp page counts camps
+      count.textContent = total ? total + ' ' + (total === 1 ? noun : nouns) + (filtered ? what : fSchool ? ' for all grades' : '') : 'No ' + nouns + what + '. Try fewer filters.';
       clear.hidden = !filtered;
       if (noMatch) noMatch.hidden = total > 0 || hiddenHits > 0;
       if (searchMore) {

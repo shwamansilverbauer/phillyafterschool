@@ -15,6 +15,9 @@ const programs = readJson('data/programs.json');
 const reviews = fs.existsSync(path.join(ROOT, 'data/reviews.json')) ? readJson('data/reviews.json') : [];
 const cityList = fs.existsSync(path.join(ROOT, 'data/all-schools.json')) ? readJson('data/all-schools.json') : { schools: [] };
 const daysOff = fs.existsSync(path.join(ROOT, 'data/days-off.json')) ? readJson('data/days-off.json') : null;
+// Summer camps are their own list with their own file: nothing in it is tied to a school or to the after-school pages.
+const campsFile = fs.existsSync(path.join(ROOT, 'data/camps.json')) ? readJson('data/camps.json') : null;
+const summerCamps = campsFile?.camps || [];
 // The QR code printed on the week card: a short address (/w) that .htaccess sends to the home page with campaign tags.
 const cardQr = fs.existsSync(path.join(ROOT, 'data/card-qr.json')) ? readJson('data/card-qr.json') : null;
 
@@ -38,6 +41,8 @@ const TYPES = [
   { id: 'stem', label: 'STEM', color: '#0E7C86', icon: 'M9 3h6v2h-1v4.6l5.2 8.6A1.8 1.8 0 0 1 17.7 21H6.3a1.8 1.8 0 0 1-1.5-2.8L10 9.6V5H9z' },
   { id: 'academics', label: 'Reading & homework', color: '#A16207', icon: 'M4 5a2 2 0 0 1 2-2h13v16H6.5a.5.5 0 0 0 0 1H19v2H6a2 2 0 0 1-2-2z' },
   { id: 'games', label: 'Games', color: '#B4237A', icon: 'M6 3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3zm2.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM12 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM8.5 14a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z' },
+  { id: 'nature', label: 'Nature & outdoors', color: '#4D6B1F', icon: 'M5 21c0-7 4-13 14-16-1 9-5 14-11 15l3-7-4 8z' },
+  { id: 'daycamp', label: 'All-round day camp', color: '#0B6E99', icon: 'M12 2 2 20h20zm0 5.5 5.6 10.5H13v-4h-2v4H6.4z' },
   { id: 'clubs', label: 'School clubs', color: '#2166B8', icon: 'M5 3h2v1h11l-2.5 4L18 12H7v9H5z' },
   { id: 'rec-center', label: 'Rec centers', color: '#3F6212', icon: 'M12 2 6 10h3l-4 6h6v5h2v-5h6l-4-6h3z' },
 ];
@@ -135,7 +140,18 @@ for (const p of programs) {
   for (const s of p.sources || []) if (!isUrl(s.url)) errors.push(`${at}: source "${s.label}" needs an https URL`);
   // A listing with no school is allowed only for a place that runs day camps and nothing on a weekday afternoon.
   if (!p.schools) p.schools = {};
-  if (!Object.keys(p.schools).length && !p.daysOff) errors.push(`${at}: not linked to any school (only a day-camp listing, one with "daysOff", may leave "schools" empty)`);
+  if (!Object.keys(p.schools).length && !p.daysOff && !p.weekend) errors.push(`${at}: not linked to any school (only a listing with "daysOff" or "weekend" may leave "schools" empty)`);
+  if (p.weekend !== undefined) {   // Saturday or Sunday classes
+    const w = p.weekend;
+    if (!w || typeof w.summary !== 'string' || !w.summary.trim()) errors.push(`${at}: weekend needs a summary`);
+    else {
+      if (!Array.isArray(w.days) || !w.days.length || w.days.some(d => !['sat', 'sun'].includes(d))) errors.push(`${at}: weekend.days must list "sat", "sun" or both`);
+      if (!isUrl(w.url)) errors.push(`${at}: weekend.url must be an https URL`);
+      if (!w.sources?.length || w.sources.some(x => !isUrl(x.url) || !x.label)) errors.push(`${at}: weekend needs at least one source with a label and an https URL`);
+      if (w.grades !== undefined) { try { w._grades = expandGrades(w.grades); } catch (e) { errors.push(`${at}: weekend.grades: ${e.message}`); } }
+      if (w.check && (!isUrl(w.check.url) || !['fetch', 'browser', 'person'].includes(w.check.how) || !w.check.look)) errors.push(`${at}: weekend.check needs url, how (fetch, browser or person) and look`);
+    }
+  }
   for (const [sid, l] of Object.entries(p.schools || {})) {
     if (!schoolIds.has(sid)) errors.push(`${at}: unknown school "${sid}"`);
     if (!REL[l.relation]) errors.push(`${at}: relation for ${sid} must be onsite, pickup or nearby`);
@@ -209,6 +225,18 @@ function checkList() {
       oldestCheck: links.map(r => r.checked).sort()[0] || '' },
     links,
     pages: [...pages.values()].sort((a, b) => b.programs.length - a.programs.length || a.url.localeCompare(b.url)),
+    // Weekend classes: one row per listing with a "weekend" block, oldest check first, each with the quickest way to read it again.
+    weekend: programs.filter(p => p.weekend).map(p => ({ program: p.id, term: p.weekend.term || '', checked: p.weekend.checked || p.lastVerified, ...(p.weekend.check || { url: p.weekend.url, how: 'fetch', look: '' }) }))
+      .sort((a, b) => a.checked.localeCompare(b.checked) || a.program.localeCompare(b.program)),
+    // Summer camps: the camps still showing an older summer come first, then the oldest checks. "todo" is the camps not read yet.
+    camps: campsFile ? {
+      season: campsFile.season,
+      summary: { camps: summerCamps.length, showingNextSummer: summerCamps.filter(c => c.season > campsFile.season).length, needingABrowser: summerCamps.filter(c => c.check.how === 'browser').length, needingAPerson: summerCamps.filter(c => c.check.how === 'person').length, notReadYet: (campsFile.todo || []).length },
+      list: summerCamps.map(c => ({ camp: c.id, name: c.name, season: c.season || null, checked: c.checked, ...c.check, ...(c.signup ? { signup: c.signup } : {}) }))
+        .sort((a, b) => (a.season || 0) - (b.season || 0) || a.checked.localeCompare(b.checked) || a.camp.localeCompare(b.camp)),
+      todo: campsFile.todo || [],
+      dropped: campsFile.dropped || [],
+    } : null,
   };
 }
 // A school's own clubs can be listed one by one under "clubs": each with a name and, when the school says, what it
@@ -303,6 +331,30 @@ for (const [id, e] of Object.entries(copyEdits)) {
 if (cfg.editLogin && (!cfg.editLogin.user || !/^\$2[aby]\$\d\d\$[.\/A-Za-z0-9]{53}$/.test(cfg.editLogin.passwordHash || ''))) {
   errors.push('site.config.json: editLogin needs a user and a passwordHash (a bcrypt hash, never the password itself)');
 }
+{
+  const seenCamp = new Set();
+  for (const c of summerCamps) {
+    const at = `camp "${c.id || c.name || '?'}"`;
+    if (!/^[a-z0-9-]+$/.test(c.id || '')) errors.push(`${at}: id must be lowercase letters, digits and dashes`);
+    if (seenCamp.has(c.id)) errors.push(`${at}: duplicate id`); seenCamp.add(c.id);
+    for (const k of ['name', 'what']) if (!c[k]) errors.push(`${at}: missing ${k}`);
+    if (!Array.isArray(c.types) || !c.types.length || c.types.some(x => !TYPE[x])) errors.push(`${at}: types must list at least one of ${TYPES.map(t => t.id).join(', ')}`);
+    if (!isUrl(c.website)) errors.push(`${at}: website must be an https URL`);
+    if (c.registerUrl !== undefined && !isUrl(c.registerUrl)) errors.push(`${at}: registerUrl must be an https URL`);
+    if (!c.sources?.length || c.sources.some(x => !isUrl(x.url) || !x.label)) errors.push(`${at}: needs at least one source with a label and an https URL`);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(c.checked || '')) errors.push(`${at}: checked must be YYYY-MM-DD`);
+    if (c.season !== undefined && !(Number.isInteger(c.season) && c.season >= 2025 && c.season <= 2100)) errors.push(`${at}: season is the summer the details describe, like 2026 (leave it out when the listing has no dated details)`);
+    for (const k of ['ageMin', 'ageMax', 'weekly']) if (c[k] !== undefined && !(typeof c[k] === 'number' && c[k] >= 0)) errors.push(`${at}: ${k} must be a number`);
+    if (c.price !== undefined && !['free', 'paid'].includes(c.price)) errors.push(`${at}: price must be "free" or "paid"`);
+    if (c.program !== undefined && !programs.some(p => p.id === c.program)) errors.push(`${at}: program "${c.program}" is not a listing in data/programs.json`);
+    if (!c.check || !isUrl(c.check.url) || !['fetch', 'browser', 'person'].includes(c.check.how) || !c.check.look) errors.push(`${at}: check needs url, how (fetch, browser or person) and look: the quickest way to read this camp again`);
+    // Grades for the shared grade picker, worked out from ages: pre-K is 3 and 4, kindergarten 5, 1st grade 6, and so on.
+    const lo = c.ageMin ?? null, hi = c.ageMax ?? null;
+    c._grades = lo === null && hi === null ? null : GRADES.filter(g => { const a = g === 'PK' ? 4 : g === 'K' ? 5 : Number(g) + 5; return (lo === null || a >= Math.floor(lo)) && (hi === null || a <= hi); });
+    if (c._grades && !c._grades.length) c._grades = null;
+    c.schools = {};
+  }
+}
 if (errors.length) {
   console.error('Data problems found. Nothing was built.\n- ' + errors.join('\n- '));
   process.exit(1);
@@ -377,7 +429,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   // The menu: four groups that open, then About and the support button. Each group is a <details>, so it works without scripts.
   const navHref = to => { const [p, hash] = to.split('#'); return link(p, depth) + (hash ? '#' + hash : ''); };
   const menus = [
-    ['Programs', [['programs/', 'After-school programs'], ...(daysOff ? [[offPath, 'Day-camp programs']] : [])]],
+    ['Programs', [['programs/', 'After-school programs'], ...(programs.some(p => p.weekend) ? [['weekends/', 'Weekend classes']] : []), ...(daysOff ? [[offPath, 'Day-camp programs']] : []), ...(summerCamps.length ? [['summer-camps/', 'Summer camps']] : [])]],
     ['Search by', [['schools/', 'School'], ['neighborhoods/', 'Neighborhood'], ['types/', 'Program type'], ['programs/#by-day', 'Day of week']]],
     ['Build a schedule', [['board/', 'After-school schedule'], ...(daysOff ? [[offPath + '#plan', 'Day-camp schedule']] : [])]],
     ['Suggest', [['suggest/', 'A program'], ['ideas/', 'A feature'], ['schools/request/', 'A school']]],
@@ -456,7 +508,9 @@ ${body}
         <li><a href="${link('programs/', depth)}">${T(`All programs, A to Z`)}</a></li>
         <li><a href="${link('types/', depth)}">${T(`Programs by type`)}</a></li>
         <li><a href="${link('neighborhoods/', depth)}">${T(`Programs by neighborhood`)}</a></li>
+        ${programs.some(p => p.weekend) ? `<li><a href="${link('weekends/', depth)}">${T(`Weekend classes`)}</a></li>` : ''}
         ${daysOff ? `<li><a href="${link(offPath, depth)}">${T(`Day-camp programs`)}</a></li>` : ''}
+        ${summerCamps.length ? `<li><a href="${link('summer-camps/', depth)}">${T(`Summer camps`)}</a></li>` : ''}
         <li><a href="${link('suggest/', depth)}">${T(`Suggest a program`)}</a></li>
         <li><a href="${link('review/', depth)}">${T(`Write a review`)}</a></li>
       </ul>
@@ -854,7 +908,7 @@ const programAddress = p => {
 // The site name carries "after school" into the title when it fits. When it doesn't, the title says it itself,
 // unless the program's own name already does or the result would run long.
 const programTitle = p => {
-  if (campOnly(p)) return `${fullName(p)}: day camps when school is closed`;
+  if (campOnly(p)) return p.daysOff && p.weekend ? `${fullName(p)}: day camps and weekend classes` : p.weekend ? `${fullName(p)}: weekend classes for kids` : `${fullName(p)}: day camps when school is closed`;
   const n = fullName(p), plain = `${n}: hours, cost and pickup`, said = `${n} after school: hours, cost, pickup`;
   if (`${plain} | ${cfg.siteName}`.length <= 65) return plain;
   return said.length <= 65 && !/after[- ]?school|aftercare/i.test(n) ? said : plain;
@@ -870,7 +924,7 @@ function programPage(p) {
   const regUrl = r.how === 'online' ? outUrl(r.url, { type: 'register', program: p }) : null;
   const reviewUrl = `${link('review/', D)}?program=${p.id}${served.length === 1 ? '&school=' + served[0].id : ''}`;
   const clubsDetailed = !!p.clubs && p.clubs.some(c => c.days || c.time || c.what);   // a bare list of names stays a line of text
-  const rows = [['Where', esc(address)], [p.clubs ? 'Clubs' : 'Classes', clubsDetailed ? '' : esc((p.offers || []).join(', '))], ['Hours', esc(p.hours)], ['Days', esc(daysLine(p))], ['Pick up by', esc(p.pickupBy || '')], ['Cost', esc(p.cost)], ['Days off', p.daysOff ? `${esc(p.daysOff.summary)} <a href="${link(offPath, D)}#${esc(p.id)}">Dates and details</a>` : ''], ['Register', registerText(p)], ['Next term', esc(r.nextTerm || '') + datesHtml(p, D)], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
+  const rows = [['Where', esc(address)], [p.clubs ? 'Clubs' : 'Classes', clubsDetailed ? '' : esc((p.offers || []).join(', '))], ['Hours', esc(p.hours)], ['Days', esc(daysLine(p))], ['Pick up by', esc(p.pickupBy || '')], ['Cost', esc(p.cost)], ['Days off', p.daysOff ? `${esc(p.daysOff.summary)} <a href="${link(offPath, D)}#${esc(p.id)}">Dates and details</a>` : ''], ['Weekends', p.weekend ? `${esc(p.weekend.summary)} <a href="${link(weekendPath, D)}#${esc(p.id)}">Term and cost</a>` : ''], ['Register', registerText(p)], ['Next term', esc(r.nextTerm || '') + datesHtml(p, D)], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
   const schoolRows = served.map(s => {
     const l = p.schools[s.id];
@@ -909,7 +963,7 @@ ${p.clubs.map(c => `      <article class="club">
   </section>` : '';
   const camp = campOnly(p);
   const hoodHas = n => hoods.some(h => h.id === hoodSlug(n));
-  const hero = `    <p class="where">${camp ? `<a href="${link(offPath, D)}">${T(`Day-camp programs`)}</a> / ${T(`Day camps only`)}` : `<a href="${link('programs/', D)}">${T(`All programs`)}</a> / ${esc(servedSummary(p))}`}</p>
+  const hero = `    <p class="where">${camp ? (p.daysOff ? `<a href="${link(offPath, D)}">${T(`Day-camp programs`)}</a>` : `<a href="${link(weekendPath, D)}">${T(`Weekend classes`)}</a>`) + ' / ' + (p.daysOff && p.weekend ? T(`Day camps and weekend classes`) : p.weekend ? T(`Weekends only`) : T(`Day camps only`)) : `<a href="${link('programs/', D)}">${T(`All programs`)}</a> / ${esc(servedSummary(p))}`}</p>
     <h1>${esc(fullName(p))}</h1>
     <p class="lede">${esc(p.what)}</p>
     <div class="facts">
@@ -927,15 +981,15 @@ ${p.clubs.map(c => `      <article class="club">
       ${gradeStrip(p)}
       <dl>${rows}</dl>
       ${p.note ? `<p class="flag">${esc(p.note)}</p>` : ''}
-      <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(outUrl(p.website, { type: 'website', program: p }))}" target="_blank" rel="noopener">Website</a>${camp ? `<a class="btn" href="${link(offPath, D)}#${esc(p.id)}">${T(`See its camp days`)}</a>` : `<a class="btn needs-js" href="${link('board/', D)}?add=${esc(p.id)}">${T(`Add to your week`)}</a>`}</div>
+      <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(outUrl(p.website, { type: 'website', program: p }))}" target="_blank" rel="noopener">Website</a>${camp ? (p.daysOff ? `<a class="btn" href="${link(offPath, D)}#${esc(p.id)}">${T(`See its camp days`)}</a>` : '') + (p.weekend ? `<a class="btn" href="${link(weekendPath, D)}#${esc(p.id)}">${T(`See its weekend classes`)}</a>` : '') : `<a class="btn needs-js" href="${link('board/', D)}?add=${esc(p.id)}">${T(`Add to your week`)}</a>`}</div>
     </article>
     <p class="hint">${T(`Prices, hours and pickup routes change during the year. Confirm with the provider before you enroll.`)}</p>
   </section>
   ${clubsHtml}
   ${alertsBox(D, { program: p, place: 'program', title: T(`Tell me when sign-ups open`), lede: T(`One email when {program} posts a sign-up date, a deadline or a day-off camp. Just this program. For every program at your school, sign up on your school’s page.`, { program: fullName(p) }) })}
   ${camp ? `<section class="section" id="schools">
-    <h2>${T(`Listed for its day camps`)}</h2>
-    <p>${T(`We couldn’t find a weekday after-school program here, so it isn’t on any school’s page. It’s listed because it runs camps on days school is closed, and children from any school can go.`)} <a href="${link(offPath, D)}#${esc(p.id)}">${T(`See its camp days.`)}</a></p>
+    <h2>${p.daysOff && p.weekend ? T(`Listed for its day camps and weekend classes`) : p.weekend ? T(`Listed for its weekend classes`) : T(`Listed for its day camps`)}</h2>
+    <p>${T(`We couldn’t find a weekday after-school program here, so it isn’t on any school’s page.`)} ${p.daysOff ? T(`It runs camps on days school is closed, and children from any school can go.`) + ` <a href="${link(offPath, D)}#${esc(p.id)}">${T(`See its camp days.`)}</a> ` : ''}${p.weekend ? T(`It runs classes on weekends.`) + ` <a href="${link(weekendPath, D)}#${esc(p.id)}">${T(`See its weekend classes.`)}</a>` : ''}</p>
     <p>${T(`Does it run something after school that we missed?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
   </section>` : `<section class="section" id="schools">
     <h2>${T(`Which schools it works for`)}</h2>
@@ -966,10 +1020,10 @@ ${schoolRows}
       review: revs.map(x => ({ '@type': 'Review', author: { '@type': 'Person', name: x.name }, datePublished: x.date, reviewBody: x.comment, reviewRating: { '@type': 'Rating', ratingValue: x.stars, bestRating: 5, worstRating: 1 } })),
     } : {}),
   };
-  const crumbs = { '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], camp ? ['Day-camp programs', `${cfg.siteUrl}/${offPath}`] : ['Programs', cfg.siteUrl + '/programs/'], [fullName(p), url]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) };
+  const crumbs = { '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], camp ? (p.daysOff ? ['Day-camp programs', `${cfg.siteUrl}/${offPath}`] : ['Weekend classes', `${cfg.siteUrl}/${weekendPath}`]) : ['Programs', cfg.siteUrl + '/programs/'], [fullName(p), url]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) };
   return layout({
     title: programTitle(p),
-    description: camp ? `${fullName(p)}: ${p.what}. Day camps on days Philadelphia schools are closed: dates, hours, grades and how to register.` : `${fullName(p)}: ${p.what}. ${servedSummary(p)}. Grades, hours, cost, registration and parent reviews.`,
+    description: camp ? `${fullName(p)}: ${p.what}. ${p.daysOff ? 'Day camps on days Philadelphia schools are closed' : 'Weekend classes for kids'}: dates, hours, grades and how to register.` : `${fullName(p)}: ${p.what}. ${servedSummary(p)}. Grades, hours, cost, registration and parent reviews.`,
     pathName: programPath(p), depth: D, current: null, hero, body,
     jsonLd: { '@context': 'https://schema.org', '@graph': [thing, crumbs] },
   });
@@ -2626,6 +2680,121 @@ out(true, 'Sent.', 200);
 `;
 }
 
+// ---------- summer camps: one page, built from data/camps.json ----------
+// Each camp carries the summer its details describe ("season"). Until a camp posts next summer, last summer's weeks,
+// hours and price stay up as a guide and the card says which summer they are.
+const campsPath = 'summer-camps/';
+const weekendPath = 'weekends/';
+// The area filter groups a citywide list into a handful of parts of the city. A neighborhood missing here falls under
+// "Elsewhere in the city"; a camp with no neighborhood (it runs all over) shows under every area.
+const CAMP_AREAS = [
+  ['Center City and nearby', ['Center City', 'Rittenhouse', 'Washington Square West', 'Logan Square', 'Old City', 'Penn’s Landing', 'Fitler Square', 'Callowhill', 'Fairmount', 'Society Hill']],
+  ['South Philly', ['Queen Village', 'Bella Vista', 'Passyunk Square', 'East Passyunk', 'Pennsport', 'Dickinson Narrows', 'Hawthorne', 'Graduate Hospital']],
+  ['Kensington, Fishtown and North', ['South Kensington', 'Kensington', 'Fishtown', 'Northern Liberties', 'Fairhill', 'Port Richmond']],
+  ['Northwest', ['Mount Airy', 'Germantown', 'Chestnut Hill', 'Roxborough', 'Manayunk', 'East Falls']],
+  ['West Philly', ['Cobbs Creek', 'West Fairmount Park', 'University City', 'West Philadelphia']],
+  ['Northeast', ['Fox Chase']],
+];
+const campAreas = c => { const n = c.neighborhoods || []; if (!n.length) return CAMP_AREAS.map(a => a[0]); const out = new Set(n.map(x => (CAMP_AREAS.find(a => a[1].includes(x)) || ['Elsewhere in the city'])[0])); return [...out]; };
+const seasonPill = c => c.season ? `<span class="pill season ${campsFile && c.season > campsFile.season ? 'next' : 'nearby'}">${c.season > campsFile.season ? 'Summer ' + c.season : c.season + ' details'}</span>` : `<span class="pill season none">No dates yet</span>`;
+function summerCampsPage() {
+  const D = 1;
+  const base = campsFile.season, next = base + 1;
+  const list = [...summerCamps].sort((a, b) => a.name.localeCompare(b.name));
+  const shaped = list.map(c => ({ ...c, neighborhoods: campAreas(c) }));   // what the filter bar sees
+  const ahead = list.filter(c => c.season > base).length;
+  const cards = list.map((c, i) => {
+    const where = [c.address, (c.neighborhoods || []).join(', ')].filter(Boolean);
+    const rows = [['Ages', c.ages], ['Weeks', c.weeks], ['Hours', c.hours], ['Before and after', c.extended], ['Cost', c.cost], ['Help with cost', c.aid], ['Where', where.length === 2 ? `${where[0]} (${where[1]})` : where[0]], ['Signing up', c.signup], ['Phone', c.phone]]
+      .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${k === 'Phone' ? `<a href="tel:+1-${esc(v)}">${esc(v)}</a>` : esc(v)}</dd>`).join('');
+    const prog = c.program ? programs.find(p => p.id === c.program) : null;
+    return `<article class="prog offprog camp" id="${esc(c.id)}" ${itemAttrs(shaped[i], [c.ages || '', c.address || '', ...(c.neighborhoods || [])])}>
+  <div class="top"><h3>${esc(c.name)}</h3><p class="what">${esc(c.what)}</p><p class="tags">${c.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p><p>${seasonPill(c)}</p></div>
+  <dl>${rows}</dl>
+  ${c.note ? `<p class="flag">${esc(c.note)}</p>` : ''}
+  <div class="actions"><a class="btn primary" data-track="camp" href="${esc(outUrl(c.registerUrl || c.website, { type: 'camp' }))}" target="_blank" rel="noopener">${c.registerUrl ? 'Find or book a spot' : 'Camp details'}</a>${c.registerUrl ? `<a class="btn" data-track="website" href="${esc(outUrl(c.website, { type: 'camp' }))}" target="_blank" rel="noopener">Camp details</a>` : ''}${prog ? `<a class="btn" href="${link(programPath(prog), D)}">Its school-year listing</a>` : ''}</div>
+  <p class="src">Checked ${longDate(c.checked)}. Sources: ${sourceLinks(c.sources, c)}</p>
+</article>`;
+  }).join('\n');
+  const todo = campsFile.todo || [];
+  const hero = `    <h1>${T(`Summer camps in Philadelphia`)}</h1>
+    <p class="lede">${T(`Day camps inside the city, with the ages, weeks, hours and prices each camp posts on its own site.`)}</p>
+    <div class="facts">
+      <span><b>${list.length}</b> camps</span>
+      <span><b>${ahead}</b> already showing ${next}</span>
+      <span>Checked <b>${longDate(campsFile.checked)}</b></span>
+    </div>`;
+  const body = `<section class="section">
+  <p class="flag camp-guide"><b>${T(`Most of what’s here is from summer {year}, shown as a guide.`, { year: base })}</b> ${T(`Camps usually post next summer between December and March. Each listing changes to {year} when its camp posts dates and prices, and says so on its card.`, { year: next })}</p>
+</section>
+${filterBar({ list: shaped, depth: D, searchLabel: `Looking for a particular camp?`, placeholder: 'Its name, or try art, tennis, Mount Airy…' }).replace('data-filters', 'data-filters data-noun="camp" data-nouns="camps"')}
+<p class="hint">${T(`Grades here are worked out from each camp’s ages, so check the age line on the card.`)}</p>
+${noMatch(D)}
+<section class="section" data-group>
+  <div class="list">
+${cards}
+  </div>
+</section>
+${todo.length ? `<section class="section">
+  <h2>${T(`Camps we haven’t been able to read yet`)}</h2>
+  <p>${T(`These run day camps in the city too. Their details go up once we’ve read them on the camp’s own site.`)}</p>
+  <ul class="plain cols">${todo.map(t => `<li>${esc(t.name)}</li>`).join('')}</ul>
+</section>` : ''}
+<section class="section">
+  <p>${T(`Know a city day camp that isn’t here, or see something out of date?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
+  <p class="hint">${T(`Listings come from each camp’s public pages and are not endorsements. Dates, prices and openings change, so confirm with the camp before you plan around it.`)}</p>
+</section>`;
+  return layout({
+    title: 'Summer day camps in Philadelphia: ages, weeks, hours and prices',
+    description: `${list.length} summer day camps inside Philadelphia in one list: ages, weeks, hours, cost, before and after care, and when sign-ups open. Filter by type, grade and part of the city.`,
+    pathName: campsPath, depth: D, current: null, hero, body,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: list.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, url: `${cfg.siteUrl}/${campsPath}#${c.id}` })) },
+  });
+}
+
+// ---------- weekend classes: any listing with a "weekend" block ----------
+const weekendPrograms = programs.filter(p => p.weekend).sort((a, b) => a.name.localeCompare(b.name));
+const WEEKEND_DAY = { sat: 'Saturday', sun: 'Sunday' };
+function weekendPage() {
+  const D = 1;
+  const cards = weekendPrograms.map(p => {
+    const w = p.weekend, served = servedBy(p);
+    const rows = [['What runs', w.summary], ['Term', w.term], ['Cost', w.cost], ['Where', programAddress(p)], ['On school days', served.length ? servedSummary(p) + '.' : '']]
+      .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
+    const wp = w._grades !== undefined ? { ...p, _grades: w._grades } : p;   // the weekend classes can take other grades than the weekday program
+    return `<article class="prog offprog" id="${esc(p.id)}" ${itemAttrs(wp, [...programHoods(p), ...w.days.map(d => WEEKEND_DAY[d])])} data-wk="${w.days.join(' ')}">
+  <div class="top"><h3><a href="${link(programPath(p), D)}">${esc(fullName(p))}</a></h3><p class="tags">${p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p><p>${w.days.map(d => `<span class="pill nearby">${WEEKEND_DAY[d]}</span>`).join(' ')} <span class="hint">Grades ${esc(gradeText(wp))}</span></p></div>
+  <dl>${rows}</dl>
+  ${w.note ? `<p class="flag">${esc(w.note)}</p>` : ''}
+  <div class="actions"><a class="btn primary" data-track="weekend" href="${esc(outUrl(w.url, { type: 'weekend', program: p }))}" target="_blank" rel="noopener">Class details</a><a class="btn" href="${link(programPath(p), D)}">Full listing</a></div>
+  <p class="src">Checked ${longDate(w.checked || p.lastVerified)}. Sources: ${sourceLinks(w.sources, p)}</p>
+</article>`;
+  }).join('\n');
+  const hero = `    <h1>${T(`Saturday and Sunday classes`)}</h1>
+    <p class="lede">${T(`Weekend classes for kids from the programs on this site: what runs, which term, and what it costs.`)}</p>
+    <div class="facts">
+      <span><b>${weekendPrograms.length}</b> programs with weekend classes</span>
+      <span><b>${weekendPrograms.filter(p => p.weekend.days.includes('sun')).length}</b> on Sundays too</span>
+    </div>`;
+  const body = `${filterBar({ list: weekendPrograms.map(p => (p.weekend._grades !== undefined ? { ...p, _grades: p.weekend._grades } : p)), depth: D, show: { cost: false, day: false, hood: false }, searchLabel: `Looking for a particular class?`, placeholder: 'A name, or try piano, acting, gymnastics…' })}
+${noMatch(D)}
+<section class="section" data-group>
+  <div class="list">
+${cards}
+  </div>
+</section>
+<section class="section">
+  <p>${T(`We started with the programs already on this site. Other listed programs may run weekend classes that their sites don’t spell out by day, so ask.`)} ${T(`Know a weekend class that should be here?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
+  <p class="hint">${T(`Weekend terms start and fill on their own dates, so check with the provider before you count on a class.`)}</p>
+</section>`;
+  return layout({
+    title: 'Weekend classes for kids in Philadelphia',
+    description: `Saturday and Sunday classes for kids from ${weekendPrograms.length} Philadelphia programs: music, theater, art, dance and gymnastics, with terms, times and cost.`,
+    pathName: weekendPath, depth: D, current: null, hero, body,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: weekendPrograms.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
+  });
+}
+
 function notFoundPage() {
   const hero = `    <h1>${T(`This jawn isn’t here`)}</h1>
     <p class="lede">${T(`The link may be old, or the page moved.`)} <a href="/">${T(`Start from the list of schools.`)}</a></p>`;
@@ -2654,6 +2823,8 @@ write('ideas/index.html', ideasPage());
 write('ideas/thanks/index.html', ideasThanksPage());
 write('board/index.html', boardPage());
 if (daysOff) write(offPath + 'index.html', daysOffPage());
+if (summerCamps.length) write(campsPath + 'index.html', summerCampsPage());
+if (weekendPrograms.length) write(weekendPath + 'index.html', weekendPage());
 if (ALERTS) write(alertsPath + 'index.html', alertsPage());
 write('review/index.html', reviewPage());
 write('review/thanks/index.html', reviewThanksPage());
@@ -2682,8 +2853,9 @@ if (!PREVIEW) {
   for (const p of programs) for (const d of upcomingDates(p)) write(`cal/${p.id}-${d.date}.ics`, icsFile(p, d));
   write('data/reviews.json', JSON.stringify(reviews, null, 2));
   // Public copy of the data, so the monthly check (or anyone) can read exactly what the site shows.
-  write('data/programs.json', JSON.stringify(programs.map(({ _grades, _cls, ...p }) => (p.clubs ? { ...p, clubs: p.clubs.map(({ _grades: g, ...c }) => c) } : p)), null, 2));
+  write('data/programs.json', JSON.stringify(programs.map(({ _grades, _cls, ...p }) => { if (p.weekend) { const { _grades: wg, ...w } = p.weekend; p = { ...p, weekend: w }; } return p.clubs ? { ...p, clubs: p.clubs.map(({ _grades: g, ...c }) => c) } : p; }), null, 2));
   write('data/schools.json', JSON.stringify(schools, null, 2));
+  if (campsFile) write('data/camps.json', JSON.stringify({ ...campsFile, camps: summerCamps.map(({ _grades, schools: _s, ...c }) => c) }, null, 2));
   const check = checkList();
   write('data/check.json', JSON.stringify(check, null, 2));   // the monthly check's worklist
   const loose = check.links.filter(r => r.basis === 'none'), off = check.links.filter(r => r.notOnProviderList && r.basis !== 'none');
@@ -2692,7 +2864,7 @@ if (!PREVIEW) {
   write('data/alerts.json', JSON.stringify(alertsFeed(), null, 2));   // read by scripts/send-alerts.mjs once a day
   const latest = programs.map(p => p.lastVerified).sort().pop();
   const urls = [['', latest], ['schools/', latest], ...schools.map(s => [s.id + '/', latest]), ['types/', latest], ...liveTypes().map(t => [`types/${t.id}/`, latest]), ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]), ['neighborhoods/', latest], ...hoods.map(h => [hoodPath(h), latest]),
-    ...[...(daysOff ? [offPath] : []), ...(ALERTS ? [alertsPath] : []), 'board/', 'suggest/', 'ideas/', 'review/', 'about/', 'privacy/', 'support/'].map(u => [u, latest])];
+    ...[...(daysOff ? [offPath] : []), ...(summerCamps.length ? [campsPath] : []), ...(weekendPrograms.length ? [weekendPath] : []), ...(ALERTS ? [alertsPath] : []), 'board/', 'suggest/', 'ideas/', 'review/', 'about/', 'privacy/', 'support/'].map(u => [u, latest])];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
   const bare = cfg.siteUrl.replace(/^https?:\/\//, '');
