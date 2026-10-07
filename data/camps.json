@@ -1196,73 +1196,412 @@
         "look": "The program page shows registration status and the school list. Dates, hours and grades come from a spring phila.gov post titled “Register now… Summer Achievers”.",
         "notes": "The dated post changes each spring (May 8 in 2026)."
       }
+    },
+    {
+      "id": "allens-lane-art-camp",
+      "name": "Allens Lane Art Center summer art camp",
+      "what": "A new workshop, medium and theme each week, from painting and ceramics to improv and film, with time in the park and a Friday showcase.",
+      "types": [
+        "art"
+      ],
+      "ages": "Ages 5–12",
+      "ageMin": 5,
+      "ageMax": 12,
+      "season": 2026,
+      "weeks": "June 15 to August 7, 2026. No camp June 19 or July 3.",
+      "hours": "Classes 9:30 am to 3:30 pm, with drop-off from 8:30",
+      "extended": "Before care from 8:30 am is free. After care 3:30 to 5:30 pm, $120 a week.",
+      "cost": "$380 a week; $360 for the two holiday weeks",
+      "weekly": 380,
+      "aid": "5% off per child with a family membership. Early-bird price of $360 to the end of February. Full and partial scholarships may be available.",
+      "address": "601 W Allens Ln",
+      "neighborhoods": [
+        "Mount Airy"
+      ],
+      "website": "https://allenslane.org/summer-camp/",
+      "price": "paid",
+      "signup": "Sign-ups for 2026 started January 26 at 8 am.",
+      "sources": [
+        {
+          "label": "Allens Lane Art Center summer art camp",
+          "url": "https://allenslane.org/summer-camp/"
+        }
+      ],
+      "checked": "2026-10-07",
+      "check": {
+        "url": "https://allenslane.org/summer-camp/",
+        "how": "browser",
+        "look": "Dates are at the top under “About Summer Camp”. Prices, discounts and before and after care are in the “Fees & Discounts” section.",
+        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
+      }
+    },
+    {
+      "id": "nlarts-summer-camp",
+      "name": "NLArts summer art camp",
+      "what": "Studio art, outdoor play and creative play in equal parts, with trips around the city and a Friday open house for families.",
+      "types": [
+        "art"
+      ],
+      "ages": "Rising kindergarten to 5th grade, with a counselor-in-training program for grades 6–8",
+      "ageMin": 5,
+      "ageMax": 13,
+      "season": 2026,
+      "weeks": "Weekly sessions in summer 2026, none the weeks of June 29 and July 20",
+      "hours": "8:30 am to 3:30 pm",
+      "extended": "After Hours care to 5:30 pm brings the week to $420.",
+      "cost": "$300 a week; $280 for siblings",
+      "weekly": 300,
+      "aid": "Scholarship awards are available.",
+      "address": "700–702 N 3rd St",
+      "neighborhoods": [
+        "Northern Liberties"
+      ],
+      "website": "https://www.nlarts.org/summer-art-camp",
+      "price": "paid",
+      "note": "Summer 2026 sold out and its waitlist closed. Session dates sit behind headings we didn’t open.",
+      "sources": [
+        {
+          "label": "NLArts summer art camp",
+          "url": "https://www.nlarts.org/summer-art-camp"
+        }
+      ],
+      "checked": "2026-10-07",
+      "check": {
+        "url": "https://www.nlarts.org/summer-art-camp",
+        "how": "browser",
+        "look": "Fees by grade group are in the “Information & Fees” section. Session dates are inside the headings under “Sessions & Themes”, which open on a click.",
+        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. The old address /summer-art-camp-program is now a menu of programs."
+      }
+    },
+    {
+      "id": "yes-and-camp",
+      "name": "Yes! And… Collaborative Arts camps",
+      "what": "Kids make theater together: acting, movement, visual art and storytelling, ending in a show they create themselves.",
+      "types": [
+        "theater",
+        "art"
+      ],
+      "ages": "Imagination Camp for rising K–4th grade; Theater Camp for rising 5th–8th",
+      "ageMin": 5,
+      "ageMax": 13,
+      "season": 2026,
+      "weeks": "June 22 to August 21, 2026, as one-, two- and three-week camps",
+      "hours": "9 am to 3 pm",
+      "extended": "Before care from 8 am and late care to 5 pm (Monday to Thursday), $8 an hour.",
+      "cost": "Sliding scale from $5 to $350 a week; the camp’s own cost is $350",
+      "weekly": 350,
+      "aid": "Anyone can ask for a lower rate on the sliding scale, with no paperwork, and full scholarships are offered.",
+      "address": "21 W Washington Ln",
+      "neighborhoods": [
+        "Germantown"
+      ],
+      "website": "https://www.yesandcamp.org/summer-camps",
+      "price": "paid",
+      "signup": "For 2026, dates came out January 15 and sign-ups opened January 27 for returning families and February 1 for new ones.",
+      "sources": [
+        {
+          "label": "Yes! And… Collaborative Arts camps",
+          "url": "https://www.yesandcamp.org/summer-camps"
+        }
+      ],
+      "checked": "2026-10-07",
+      "check": {
+        "url": "https://www.yesandcamp.org/summer-camps",
+        "how": "browser",
+        "look": "The summer camps page links to a page per camp (Imagination Camp, Theater Camp). Each has a “Dates” block and a “Tuition and Fees” section.",
+        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
+      }
+    },
+    {
+      "id": "zazz-summer-camp",
+      "name": "ZAZZ Dance & Drama",
+      "what": "Dance and drama sessions each day, with outdoor lunch, games, art projects and a Friday show. Ages 11–14 get performer intensives and a two-week musical.",
+      "types": [
+        "theater",
+        "movement"
+      ],
+      "ages": "Ages 5–14",
+      "ageMin": 5,
+      "ageMax": 14,
+      "season": 2026,
+      "weeks": "June 15 to August 21, 2026, by the week",
+      "hours": "9 am to 3:30 pm",
+      "extended": "Early care 8 to 9 am, $10 a day. Late programming 3 to 6 pm, $25 a day.",
+      "cost": "$350 a week; $700 for the two-week musical; plus a one-time $50 registration fee",
+      "weekly": 350,
+      "aid": "10% off for siblings. Payment plans and need-based help if cost is a barrier.",
+      "address": "1923 Chestnut St, 2nd floor",
+      "neighborhoods": [
+        "Rittenhouse"
+      ],
+      "website": "https://zazzphilly.com/summer-camp/",
+      "price": "paid",
+      "sources": [
+        {
+          "label": "ZAZZ Dance & Drama",
+          "url": "https://zazzphilly.com/summer-camp/"
+        }
+      ],
+      "checked": "2026-10-07",
+      "check": {
+        "url": "https://zazzphilly.com/summer-camp/",
+        "how": "browser",
+        "look": "Weeks and themes are listed by age group, with a “Rates” block and an “Extended care” block between them.",
+        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. A plain fetch came back without details earlier the same day."
+      }
+    },
+    {
+      "id": "sawubona-summer-camp",
+      "name": "Sawubona Creativity Project",
+      "what": "Theatre camp where each week is built around a different musical or movie, with dance routines, skits and a showcase.",
+      "types": [
+        "theater"
+      ],
+      "season": 2026,
+      "weeks": "June 22 to August 21, 2026, in nine themed weeks",
+      "address": "1626 E Passyunk Ave",
+      "neighborhoods": [
+        "East Passyunk"
+      ],
+      "website": "https://www.sawubonacreativityproject.org/campinformationandschedules",
+      "note": "The page lists the summer weeks but not the summer price, hours or ages. Its one-day camps on days off run 8:30 am to 5:30 pm for $60, for pre-K to 6th grade.",
+      "sources": [
+        {
+          "label": "Sawubona Creativity Project",
+          "url": "https://www.sawubonacreativityproject.org/campinformationandschedules"
+        }
+      ],
+      "checked": "2026-10-07",
+      "check": {
+        "url": "https://www.sawubonacreativityproject.org/campinformationandschedules",
+        "how": "browser",
+        "look": "The page lists each summer week by its theme and dates. Price, hours and ages for summer are on the page each week links to.",
+        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
+      }
+    },
+    {
+      "id": "zoomdance-camp",
+      "name": "ZoomDance camp",
+      "what": "Movement classes, dancing, art projects and story games for young children, with park trips, water play and time to rest.",
+      "types": [
+        "movement"
+      ],
+      "ages": "Ages 2½ to 7",
+      "ageMin": 2.5,
+      "ageMax": 7,
+      "season": 2026,
+      "weeks": "June 29 to August 21, 2026",
+      "hours": "9 am to 3 pm",
+      "extended": "Extra care from 8:30 am and to 5 pm.",
+      "cost": "Sliding-scale pricing; the amounts are in a section we didn’t open",
+      "aid": "Sliding-scale pricing, new for 2026.",
+      "address": "1415 S 9th St (at The Dandelion Project)",
+      "neighborhoods": [
+        "Passyunk Square"
+      ],
+      "phone": "215-326-9613",
+      "website": "https://zoomdance.com/camps/",
+      "note": "Prices are behind a heading we didn’t open.",
+      "sources": [
+        {
+          "label": "ZoomDance camp",
+          "url": "https://zoomdance.com/camps/"
+        }
+      ],
+      "checked": "2026-10-07",
+      "check": {
+        "url": "https://zoomdance.com/camps/",
+        "how": "browser",
+        "look": "Dates, ages, hours and location are at the top. Pricing is under the “Sliding Scale Pricing” heading, which opens on a click.",
+        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
+      }
+    },
+    {
+      "id": "dandelion-summer-camp",
+      "name": "The Dandelion Project summer camp",
+      "what": "Open-ended play and creative offerings with a daily park trip, themed weeks like messy science and band camp, and all-outdoor weeks at FDR Park.",
+      "types": [
+        "daycamp",
+        "nature"
+      ],
+      "ages": "Ages 5–11; one band camp week for ages 10–15",
+      "ageMin": 5,
+      "ageMax": 15,
+      "season": 2026,
+      "weeks": "June 15 to August 28, 2026",
+      "hours": "9 am to 3 pm",
+      "extended": "After care is run by ZoomDance in the same building on select weeks.",
+      "cost": "$400 a week, with sliding-scale codes that bring it down as far as $260",
+      "weekly": 400,
+      "aid": "A trust-based sliding scale: families who need to pay less pick a lower rate at checkout.",
+      "address": "1415 S 9th St; FDR Park",
+      "neighborhoods": [
+        "Passyunk Square",
+        "South Philadelphia"
+      ],
+      "website": "https://www.thedandelionproject.us/summer-camp",
+      "price": "paid",
+      "program": "dandelion-after-school",
+      "sources": [
+        {
+          "label": "The Dandelion Project summer camp",
+          "url": "https://www.thedandelionproject.us/summer-camp"
+        }
+      ],
+      "checked": "2026-10-07",
+      "check": {
+        "url": "https://www.thedandelionproject.us/summer-camp",
+        "how": "browser",
+        "look": "Price and sliding scale are in the intro. Each of the three camp types has its own block of dates.",
+        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. The site answered 429 to a plain fetch earlier the same day. The old address /summercamp is gone."
+      }
+    },
+    {
+      "id": "rutabaga-naturearts",
+      "name": "Rutabaga NatureArts summer camp",
+      "what": "Hikes and exploring around East Falls, turning what kids find outdoors into artwork. Most of the day is spent outside.",
+      "types": [
+        "nature",
+        "art"
+      ],
+      "ages": "Ages 5 and up, in two groups",
+      "ageMin": 5,
+      "season": 2026,
+      "weeks": "June 15 to August 21, 2026",
+      "hours": "8:30 am to 3 pm",
+      "extended": "Before care from 7:30 am, $12 a day. After care to 5:30 pm, $25 a day.",
+      "cost": "$475 a week; a single day, when open, is $95",
+      "weekly": 475,
+      "aid": "$10 off a week when you book three or more, 5% off for siblings, and a limited number of sliding-scale spots.",
+      "address": "3800 Vaux St",
+      "neighborhoods": [
+        "East Falls"
+      ],
+      "website": "https://www.rutabagatoylibrary.com/summer-camp",
+      "price": "paid",
+      "signup": "The page says 2027 summer camp information is coming soon. For 2026 the early-bird discount ran through February 28.",
+      "sources": [
+        {
+          "label": "Rutabaga NatureArts summer camp",
+          "url": "https://www.rutabagatoylibrary.com/summer-camp"
+        }
+      ],
+      "checked": "2026-10-07",
+      "check": {
+        "url": "https://www.rutabagatoylibrary.com/summer-camp",
+        "how": "browser",
+        "look": "Ages, dates and schedule are under “Basics”, then “Pricing” and “Discounts”.",
+        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. The site answered 429 to a plain fetch earlier the same day."
+      }
+    },
+    {
+      "id": "skate-the-foundry-camp",
+      "name": "Skate The Foundry skateboard camp",
+      "what": "Full days of skateboarding by age and skill level, with group skates, free skates and trips such as the Art Museum.",
+      "types": [
+        "movement"
+      ],
+      "ages": "Ages 7–13",
+      "ageMin": 7,
+      "ageMax": 13,
+      "season": 2026,
+      "weeks": "One week was listed for 2026: June 22 to 26 at Paine’s Park",
+      "hours": "9 am to 3 pm",
+      "cost": "$600 a week; $550 before May 1",
+      "weekly": 600,
+      "aid": "5% off for siblings on full-day camps.",
+      "address": "Paine’s Park and its West Philly skatepark",
+      "neighborhoods": [
+        "West Philadelphia",
+        "Fairmount"
+      ],
+      "phone": "215-954-0750",
+      "website": "https://www.skatethefoundry.com/camp/",
+      "price": "paid",
+      "note": "Only one summer week had a date when we checked. It also runs single-day camps on days off.",
+      "sources": [
+        {
+          "label": "Skate The Foundry skateboard camp",
+          "url": "https://www.skatethefoundry.com/camp/"
+        }
+      ],
+      "checked": "2026-10-07",
+      "check": {
+        "url": "https://www.skatethefoundry.com/camp/",
+        "how": "browser",
+        "look": "“Summer Camp Details” gives the price, then a week-by-week list of dates. Ages and hours are under “Additional Information”.",
+        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. The page is long because it embeds reviews."
+      }
+    },
+    {
+      "id": "lavner-tech-camp-upenn",
+      "name": "Camp Tech Revolution at UPenn (Lavner)",
+      "what": "Weekly tech camps in robotics, coding, game design, Minecraft, Roblox, filmmaking and digital art.",
+      "types": [
+        "stem"
+      ],
+      "ages": "Ages 6–14",
+      "ageMin": 6,
+      "ageMax": 14,
+      "season": 2026,
+      "extended": "Early arrival 8 to 9 am and an extended day 3 to 5:45 pm are add-ons.",
+      "address": "235 S 33rd St (University of Pennsylvania)",
+      "neighborhoods": [
+        "University City"
+      ],
+      "phone": "888-854-2267",
+      "website": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camps-tech-camps-stem-camps-university-of-pennsylvania-upenn/",
+      "note": "Dates and prices weren’t on the page we read. The address for its St. Peter’s School location now leads to this UPenn page.",
+      "sources": [
+        {
+          "label": "Camp Tech Revolution at UPenn (Lavner)",
+          "url": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camps-tech-camps-stem-camps-university-of-pennsylvania-upenn/"
+        }
+      ],
+      "checked": "2026-10-07",
+      "check": {
+        "url": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camps-tech-camps-stem-camps-university-of-pennsylvania-upenn/",
+        "how": "browser",
+        "look": "The location page describes the camp and its address. Weeks and prices are in the enrollment system behind “Enroll Now”.",
+        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
+      }
     }
   ],
   "todo": [
-    {
-      "name": "Allens Lane Art Center summer art camp",
-      "url": "https://allenslane.org/summer-camp/",
-      "why": "Not read yet: the page could not be opened on 2026-10-07."
-    },
     {
       "name": "University City Arts League art day camps",
       "url": "http://www.ucartsleague.org/",
       "why": "Not read yet: the page could not be opened on 2026-10-07."
     },
     {
-      "name": "Northern Liberties Arts (NLArts) summer art camp",
-      "url": "https://www.nlarts.org/summer-art-camp-program",
-      "why": "Not read yet: the page could not be opened on 2026-10-07."
-    },
-    {
       "name": "PlayArts summer camp",
       "url": "https://www.playartsphilly.com/",
-      "why": "Not read yet: the page could not be opened on 2026-10-07."
+      "why": "Its 2026 summer camp page was gone on 2026-10-07. The site showed day camps for days off at 1320 N 5th St, but nothing for summer."
     },
     {
       "name": "Philadelphia Girls Choir choral camp",
       "url": "https://www.phillygirlschoir.org/choral-camp/",
-      "why": "Not read yet: the page could not be opened on 2026-10-07."
+      "why": "The camp address now leads to another organization’s home page, with no camp on it (2026-10-07)."
     },
     {
       "name": "Girls Rock Philly",
       "url": "https://www.girlsrockphilly.org/",
-      "why": "Not read yet: the page could not be opened on 2026-10-07."
-    },
-    {
-      "name": "Yes! And… Collaborative Arts summer camps",
-      "url": "https://www.yesandcamp.org/summer-camps",
-      "why": "Not read yet: the page could not be opened on 2026-10-07."
-    },
-    {
-      "name": "Sawubona Creativity Project",
-      "url": "https://www.sawubonacreativityproject.org/campinformationandschedules",
-      "why": "Not read yet: the page could not be opened on 2026-10-07."
-    },
-    {
-      "name": "Zazz Dance & Drama",
-      "url": "https://zazzphilly.com/summer-camp/",
-      "why": "The page came back without camp details on 2026-10-07; it needs a browser."
+      "why": "Its camp page still described summer 2022 and 2023 on 2026-10-07."
     },
     {
       "name": "Philadelphia Rock Gym youth camps",
       "url": "https://philarockgym.com/youth-camps/",
-      "why": "The site could not be read on 2026-10-07."
+      "why": "Read in a browser on 2026-10-07: summer camps for ages 6–15 at $480 a full-day week ($590 for Camp Real Rock), with registration “coming soon”. The page doesn’t say which of its gyms are in the city or give dates."
     },
     {
       "name": "Move It Kidz 4 Fitness",
       "url": "https://moveitkidz4fitness.com/k4f-summer-camp",
-      "why": "No camp page was found on its site on 2026-10-07."
-    },
-    {
-      "name": "ZoomDance camps",
-      "url": "https://zoomdance.com/camps/",
-      "why": "The site could not be read on 2026-10-07."
+      "why": "Its camp page returned “page not found” on 2026-10-07."
     },
     {
       "name": "Ed Snider Youth Hockey & Education camps",
       "url": "https://sniderhockey.org/hockey-programs",
-      "why": "The page gave hours but no dates, ages, price or rink on 2026-10-07."
+      "why": "Read in a browser on 2026-10-07: the hockey page has a Summer Camps tab, but its dates, ages, cost and rinks weren’t in the page text."
     },
     {
       "name": "Wissahickon Skating Club hockey camp",
@@ -1270,43 +1609,18 @@
       "why": "The page still showed 2024 dates on 2026-10-07."
     },
     {
-      "name": "Skate The Foundry skateboard camp",
-      "url": "https://www.skatethefoundry.com/camp/",
-      "why": "The page showed one 2025 week and no address on 2026-10-07; confirm it is in the city."
-    },
-    {
       "name": "The Skateboard Academy at Rizzo Rink",
       "url": "https://theskateboardacademycom.bigcartel.com/",
       "why": "No 2026 camp page was found on 2026-10-07."
     },
     {
-      "name": "The Dandelion Project summer camp",
-      "url": "https://www.thedandelionproject.us/summer-camp",
-      "why": "The site answered 429 (too many requests) on 2026-10-07."
-    },
-    {
-      "name": "Rutabaga Toy Library NatureArts camp",
-      "url": "https://www.rutabagatoylibrary.com/summer-camp",
-      "why": "The site answered 429 (too many requests) on 2026-10-07."
-    },
-    {
       "name": "STEM Prep Academy summer camp",
       "url": "https://stempreparatory.org/stem-summer-camp",
-      "why": "Not read yet: the page could not be opened on 2026-10-07."
+      "why": "Its summer camp page returned “page not found” on 2026-10-07, and its programs page showed nothing readable."
     },
     {
       "name": "LocoRobo summer robotics",
       "url": "https://locorobo.co/locosummer-modern-robotics.html",
-      "why": "Not read yet: the page could not be opened on 2026-10-07."
-    },
-    {
-      "name": "Lavner Camps at St. Peter’s School",
-      "url": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camp-st-peters-school/",
-      "why": "Not read yet: the page could not be opened on 2026-10-07."
-    },
-    {
-      "name": "Lavner Camps at the University of Pennsylvania",
-      "url": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camp-university-of-pennsylvania-upenn/",
       "why": "Not read yet: the page could not be opened on 2026-10-07."
     },
     {
@@ -1317,17 +1631,17 @@
     {
       "name": "Kids on 12th summer camp",
       "url": "https://ko12kids.com/summer-camp",
-      "why": "Not read yet: the page could not be opened on 2026-10-07."
+      "why": "The camp site showed an error page in a browser on 2026-10-07."
     },
     {
       "name": "ESF Camps at Friends Select",
       "url": "https://www.esfcamps.com/friendsselect/",
-      "why": "Not read yet: the page could not be opened on 2026-10-07."
+      "why": "Read in a browser on 2026-10-07: the rates page is gone and the location page showed no dates or prices."
     },
     {
       "name": "CORA Early Years at Huntingdon Mills",
       "url": "https://www.coraservices.org/services/early-childhood/early-years-huntingdon-mills/",
-      "why": "Not read yet: the page could not be opened on 2026-10-07."
+      "why": "Read in a browser on 2026-10-07: the page gives contact details only, nothing about summer camp."
     },
     {
       "name": "Girl Scouts day camp at Shelly Ridge",
