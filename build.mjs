@@ -516,7 +516,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <meta property="og:type" content="website">
 <meta property="og:url" content="${esc(canonical)}">
 <meta property="og:site_name" content="${esc(cfg.siteName)}">
-<meta property="og:image" content="${cfg.siteUrl}/${shareImage ? shareImage.file : 'share.png'}">
+<meta property="og:image" content="${cfg.siteUrl}/${shareImage ? shareImage.file : 'share.png'}${stamp('src/static/' + (shareImage ? shareImage.file : 'share.png'))}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="${esc(shareImage ? shareImage.alt : `${cfg.siteName}: a row of Philadelphia rowhouses, a school and a yellow school bus`)}">
