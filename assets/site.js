@@ -1590,11 +1590,13 @@
       var ctx = canvas.getContext('2d'), W = 1080, H = 1350 + EXTRA, FOOT = 160;
       var teacher = cleanName(kid.teacher), note = String(kid.cardNote || '').replace(/\s+/g, ' ').replace(/^ | $/g, '');
       ctx.clearRect(0, 0, W, H);
-      ctx.fillStyle = '#0F4D90'; ctx.fillRect(0, 0, W, H);
+      // a daytime sky, like the top of the site, over the site's deep-blue footer
+      var sky = ctx.createLinearGradient(0, 0, 0, H - FOOT); sky.addColorStop(0, '#96C9FF'); sky.addColorStop(1, '#C3E1FF');
+      ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
       ctx.fillStyle = '#0A3566'; ctx.fillRect(0, H - FOOT, W, FOOT);
       // brand
       ctx.fillStyle = '#F3C613'; box(ctx, 56, 58, 54, 28, 8); ctx.fill();
-      ctx.fillStyle = '#FFFFFF'; ctx.beginPath(); ctx.arc(70, 90, 7, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(98, 90, 7, 0, 7); ctx.fill();
+      ctx.fillStyle = '#0B2140'; ctx.beginPath(); ctx.arc(70, 90, 7, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(98, 90, 7, 0, 7); ctx.fill();
       ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
       ctx.font = '800 32px ' + DISPLAY; ctx.fillText('Philly After School', 126, 86);
       // photo
@@ -1610,8 +1612,8 @@
       // title
       var title = (kid.name ? possessive(kid.name) : 'Our') + ' week', size = 92;
       do { ctx.font = '850 ' + size + 'px ' + DISPLAY; size -= 4; } while (ctx.measureText(title).width > textMax && size > 44);
-      ctx.fillStyle = '#FFFFFF'; ctx.fillText(fit(ctx, title, textMax), 56, 196);
-      ctx.font = '400 32px ' + BODY; ctx.fillStyle = '#CFE3FB';
+      ctx.fillStyle = '#0B2140'; ctx.fillText(fit(ctx, title, textMax), 56, 196);
+      ctx.font = '400 32px ' + BODY; ctx.fillStyle = '#1F3A60';
       ctx.fillText(fit(ctx, (wkOn ? 'After school and weekends' : 'After school') + (which === 'next' ? ', next term' : '') + (teacher ? '  ·  for ' + teacher : ''), textMax), 56, 248);
       // the five days
       var top = 300, bottom = note ? 1068 : 1172, gap = 12, rowH = (bottom - top - gap * 4) / 5;
@@ -1639,7 +1641,7 @@
         WKDAYS.forEach(function (day, i) {
           var x = 48 + i * (cw + gap);
           ctx.fillStyle = '#FFFFFF'; box(ctx, x, wy, cw, wh, 22); ctx.fill();
-          ctx.fillStyle = '#CFE3FB'; box(ctx, x, wy, 104, wh, 22); ctx.fill(); ctx.fillRect(x + 78, wy, 26, wh);
+          ctx.fillStyle = '#FFEFA2'; box(ctx, x, wy, 104, wh, 22); ctx.fill(); ctx.fillRect(x + 78, wy, 26, wh);
           var picks = b.wk[day[0]].map(wkLookup).filter(Boolean);
           ctx.fillStyle = '#0B2140'; ctx.font = '800 34px ' + DISPLAY; ctx.textAlign = 'center';
           ctx.fillText(day[2].toUpperCase(), x + 52, wy + wh / 2 + (picks.length > 2 ? 0 : 12));

@@ -1,5 +1,7 @@
-/* Layout: a deep-blue band carries the header and each page's headline; on the home page it ends in a
-   block of rowhouses with a school and a yellow bus. Below it, one left-aligned working column.
+/* Layout: a sky-blue band with navy type carries the header and each page's headline (it is the afternoon,
+   so the sky is a daytime one); on the home page it ends in a block of rowhouses with a school, a yellow bus
+   and the sun between two roofs. Below it, one left-aligned working column. The footer is the deep blue.
+   In dark mode the band is the deep blue too, with white type, and the sun is down.
    Colors come from the City of Philadelphia's own palette: Ben Franklin blues, Bell Yellow, Kelly Drive green. */
 :root{
   --bg:#F5F8FC; --surface:#FFFFFF; --ink:#0B2140; --muted:#4D607A; --line:#D3DEEC;
@@ -7,8 +9,13 @@
   --yellow:#F3C613; --yellow-ink:#2A2100;
   --green-bg:#D6F3D2; --green-ink:#1F5A22; --sky-bg:#DAEDFE; --sky-ink:#0F4D90;
   --warn:#FFF4C2; --warn-ink:#5C4700; --red:#CC3000; --cell-off:#E4ECF6; --cell-on:#0F4D90; --star:#B88A00;
-  --hero:#0F4D90; --hero-2:#0A3566; --hero-ink:#FFFFFF; --hero-muted:#CFE3FB;
-  --house-1:#1B60AD; --house-2:#2176D2; --house-3:#2E86E0; --house-trim:#0A3566; --school:#96C9FF;
+  /* the band is a daytime sky: light Ben Franklin blue with navy type. The footer keeps the deep blue. */
+  --hero:#96C9FF; --hero-low:#C3E1FF; --hero-2:#7DB8F5; --hero-ink:#0B2140; --hero-muted:#1F3A60;
+  --hero-accent:#0B2140; --hero-chip:rgba(255,255,255,.62); --hero-field:#2F65A6; --topbar:rgba(255,255,255,.38);
+  --cta:#0B2140; --cta-ink:#FFFFFF; --cta-hover:#0F4D90;
+  --foot:#0A3566; --foot-ink:#FFFFFF; --foot-muted:#CFE3FB;
+  --house-1:#1B60AD; --house-2:#2176D2; --house-3:#2E86E0; --house-trim:#0A3566; --school:#FFFFFF; --school-win:#2176D2;
+  --street:#0A3566; --scene-line:#0A3566; --scene-drop:#1763B8; --cloud-1:.95; --cloud-2:.8; --sun:1; --note:#0A3566;
   --display:"Archivo","Arial Black","Helvetica Neue",Arial,sans-serif;
   --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
 }
@@ -18,8 +25,12 @@
   --yellow:#F3C613; --yellow-ink:#2A2100;
   --green-bg:#143D1B; --green-ink:#B9F2B1; --sky-bg:#12345C; --sky-ink:#BFDDFF;
   --warn:#3F3407; --warn-ink:#FFE98A; --red:#FF6A45; --cell-off:#182C47; --cell-on:#2176D2; --star:#F3C613;
-  --hero:#0A2F5C; --hero-2:#061E3D; --hero-ink:#FFFFFF; --hero-muted:#B9D4F5;
-  --house-1:#124A8A; --house-2:#17599F; --house-3:#1E6BBB; --house-trim:#061E3D; --school:#6FA9E6;
+  --hero:#0A2F5C; --hero-low:#0A2F5C; --hero-2:#061E3D; --hero-ink:#FFFFFF; --hero-muted:#B9D4F5;
+  --hero-accent:#F3C613; --hero-chip:#061E3D; --hero-field:transparent; --topbar:rgba(0,0,0,.2);
+  --cta:#F3C613; --cta-ink:#2A2100; --cta-hover:#FFD83A;
+  --foot:#061E3D; --foot-ink:#FFFFFF; --foot-muted:#B9D4F5;
+  --house-1:#124A8A; --house-2:#17599F; --house-3:#1E6BBB; --house-trim:#061E3D; --school:#6FA9E6; --school-win:#F3C613;
+  --street:#061E3D; --scene-line:#CFE3FB; --scene-drop:#EAF4FF; --cloud-1:.3; --cloud-2:.18; --sun:0; --note:#F3C613;
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#071527; --surface:#0E2038; --ink:#E9F1FB; --muted:#9DB2CC; --line:#1E3350;
@@ -27,8 +38,12 @@
   --yellow:#F3C613; --yellow-ink:#2A2100;
   --green-bg:#143D1B; --green-ink:#B9F2B1; --sky-bg:#12345C; --sky-ink:#BFDDFF;
   --warn:#3F3407; --warn-ink:#FFE98A; --red:#FF6A45; --cell-off:#182C47; --cell-on:#2176D2; --star:#F3C613;
-  --hero:#0A2F5C; --hero-2:#061E3D; --hero-ink:#FFFFFF; --hero-muted:#B9D4F5;
-  --house-1:#124A8A; --house-2:#17599F; --house-3:#1E6BBB; --house-trim:#061E3D; --school:#6FA9E6;
+  --hero:#0A2F5C; --hero-low:#0A2F5C; --hero-2:#061E3D; --hero-ink:#FFFFFF; --hero-muted:#B9D4F5;
+  --hero-accent:#F3C613; --hero-chip:#061E3D; --hero-field:transparent; --topbar:rgba(0,0,0,.2);
+  --cta:#F3C613; --cta-ink:#2A2100; --cta-hover:#FFD83A;
+  --foot:#061E3D; --foot-ink:#FFFFFF; --foot-muted:#B9D4F5;
+  --house-1:#124A8A; --house-2:#17599F; --house-3:#1E6BBB; --house-trim:#061E3D; --school:#6FA9E6; --school-win:#F3C613;
+  --street:#061E3D; --scene-line:#CFE3FB; --scene-drop:#EAF4FF; --cloud-1:.3; --cloud-2:.18; --sun:0; --note:#F3C613;
   color-scheme:dark}
 
 *,*::before,*::after{box-sizing:border-box}
@@ -54,19 +69,19 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .bus-mark::before{left:3px}.bus-mark::after{right:3px}
 .nav{display:flex;flex-wrap:wrap;gap:4px 22px;font-size:1rem}
 .nav a{color:var(--hero-ink);text-decoration:none;padding-block:4px;border-bottom:3px solid transparent}
-.nav a:hover,.nav a[aria-current="page"]{border-bottom-color:var(--yellow)}
+.nav a:hover,.nav a[aria-current="page"]{border-bottom-color:var(--hero-accent)}
 .hero{padding-block:clamp(28px,6vw,64px) clamp(28px,5vw,52px);display:flex;flex-direction:column;gap:18px}
 .hero .lede{color:var(--hero-muted);font-size:clamp(1.05rem,2.2vw,1.25rem);max-width:60ch}
 .hero .where{color:var(--hero-muted);font-size:1rem}
 .hero a{color:var(--hero-ink)}
 .facts{display:flex;flex-wrap:wrap;gap:8px 12px;font-size:.98rem}
-.facts span{background:var(--hero-2);border-radius:16px;padding:6px 14px;color:var(--hero-muted)}
+.facts span{background:var(--hero-chip);border-radius:16px;padding:6px 14px;color:var(--hero-muted)}
 .facts b{color:var(--hero-ink);font-weight:700}
 
 /* school search on the home page */
 .find{display:flex;flex-direction:column;gap:8px;max-width:520px}
 .find label{font-weight:700}
-.find input{font:inherit;font-size:1.1rem;width:100%;padding:14px 16px;border-radius:12px;border:2px solid transparent;background:#FFFFFF;color:#0B2140}
+.find input{font:inherit;font-size:1.1rem;width:100%;padding:14px 16px;border-radius:12px;border:2px solid var(--hero-field);background:#FFFFFF;color:#0B2140}
 .find input::placeholder{color:#5B6E88}
 
 /* the block: rowhouses, a school, a bus */
@@ -75,15 +90,21 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .street .cn,.street .dr,.street .wd{fill:var(--house-trim)}
 .street .wl{fill:var(--yellow)}
 .street .sc{fill:var(--school)}
-.street .scw{fill:var(--yellow)}
+.street .scw{fill:var(--school-win)}
 .street .sct{fill:var(--house-trim)}
-.street .st{fill:var(--hero-2)}
+.street .st{fill:var(--street)}
 .street .by{fill:var(--yellow)}
 .street .bw,.street .wh{fill:#0B2140}
 .street .hub{fill:#CFE3FB}
 .street .stop{fill:#CC3000}
 .street .fb{fill:var(--house-3)}.street .fy{fill:var(--yellow)}
-.street .pole{stroke:#CFE3FB;stroke-width:1.5}
+.street .pole{stroke:var(--scene-line);stroke-width:1.5}
+.street .sunwrap{opacity:var(--sun)}
+.street .sun{fill:var(--yellow)}
+.street .rays line{stroke:var(--yellow);stroke-width:3;stroke-linecap:round}
+.street .cloud ellipse{fill:#FFFFFF}
+.street .cloud.c1{opacity:var(--cloud-1)}
+.street .cloud.c2{opacity:var(--cloud-2)}
 .street .bus{transform:translateX(150px)}
 @media (prefers-reduced-motion: no-preference){
   .street.go .bus{animation:drive 4.5s cubic-bezier(.45,0,.2,1) .5s both}
@@ -171,10 +192,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:8px}
 
 /* ---------- footer ---------- */
-.foot{background:var(--hero-2);color:var(--hero-muted);font-size:.95rem}
+.foot{background:var(--foot);color:var(--foot-muted);font-size:.95rem}
 .foot .in{padding-block:28px 40px;display:flex;flex-direction:column;gap:10px}
 .foot p{max-width:72ch}
-.foot a{color:var(--hero-ink)}
+.foot a{color:var(--foot-ink)}
 
 /* ---------- suggest-a-program form ---------- */
 .suggest{display:grid;grid-template-columns:minmax(0,1fr);gap:28px;align-items:start}
@@ -209,7 +230,7 @@ button.btn{cursor:pointer;font-family:inherit}
 .next li::before{content:counter(n);font-family:var(--display);font-weight:800;width:34px;height:34px;border-radius:50%;background:var(--yellow);color:var(--yellow-ink);display:flex;align-items:center;justify-content:center}
 
 /* ---------- add to board, reviews, calendar links on cards ---------- */
-.nav .count{display:inline-block;margin-left:6px;min-width:22px;padding:0 6px;border-radius:999px;background:var(--yellow);color:var(--yellow-ink);font-size:.8rem;font-weight:700;text-align:center}
+.nav .count{display:inline-block;margin-left:6px;min-width:22px;padding:0 6px;border-radius:999px;background:var(--cta);color:var(--cta-ink);font-size:.8rem;font-weight:700;text-align:center}
 .needs-js{display:none}
 .js .needs-js{display:inline-block}
 .btn.on{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink)}
@@ -320,11 +341,11 @@ button.btn{cursor:pointer;font-family:inherit}
 .foot-brand{grid-column:1 / -1;display:flex;flex-direction:column;gap:12px;max-width:34ch}
 @media (min-width:860px){.foot-cols{grid-template-columns:minmax(0,1.7fr) repeat(4,minmax(0,1fr));gap:32px}.foot-brand{grid-column:auto}}
 .foot-cols h2{font-size:1rem;font-stretch:112%;font-weight:800;letter-spacing:0;margin-bottom:12px}
-.foot-cols h2 a{color:var(--hero-ink);text-decoration:none}
+.foot-cols h2 a{color:var(--foot-ink);text-decoration:none}
 .foot-cols ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
-.foot-cols li a{color:var(--hero-muted);text-decoration:none}
-.foot-cols a:hover{color:var(--hero-ink);text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:2px;text-underline-offset:4px}
-.foot-fine{margin-top:clamp(36px,5vw,56px);padding-top:24px;border-top:1px solid color-mix(in srgb,var(--hero-muted) 28%,transparent);display:flex;flex-direction:column;gap:8px;font-size:.88rem}
+.foot-cols li a{color:var(--foot-muted);text-decoration:none}
+.foot-cols a:hover{color:var(--foot-ink);text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:2px;text-underline-offset:4px}
+.foot-fine{margin-top:clamp(36px,5vw,56px);padding-top:24px;border-top:1px solid color-mix(in srgb,var(--foot-muted) 28%,transparent);display:flex;flex-direction:column;gap:8px;font-size:.88rem}
 .section[id],.prose h2[id]{scroll-margin-top:24px}
 
 /* ---------- neighborhoods ---------- */
@@ -486,12 +507,12 @@ button.btn{cursor:pointer;font-family:inherit}
 .offprog{scroll-margin-top:16px}
 .offprog:target{outline:3px solid var(--yellow);outline-offset:2px}
 .mine-row{align-items:center;flex-wrap:wrap;gap:8px 14px;margin-top:4px}
-.savebtn{font:inherit;font-weight:700;font-size:.98rem;padding:9px 16px;border-radius:999px;border:2px solid var(--yellow);background:transparent;color:var(--hero-ink);cursor:pointer}
-.savebtn:hover{background:rgba(255,255,255,.12)}
-.savebtn[aria-pressed="true"]{background:var(--yellow);color:var(--yellow-ink)}
+.savebtn{font:inherit;font-weight:700;font-size:.98rem;padding:9px 16px;border-radius:999px;border:2px solid var(--hero-accent);background:transparent;color:var(--hero-ink);cursor:pointer}
+.savebtn:hover{background:rgba(255,255,255,.3)}
+.savebtn[aria-pressed="true"]{background:var(--yellow);border-color:var(--hero-accent);color:var(--yellow-ink)}
 .mine-row .hint{color:var(--hero-muted)}
 .find .mine{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 6px;color:var(--hero-muted);font-weight:700}
-.find .mine .btn{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink)}
+.find .mine .btn{background:var(--cta);border-color:var(--cta);color:var(--cta-ink)}
 
 /* ---------- what the roster costs ---------- */
 .costbox{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px 26px;gap:10px;max-width:760px}
@@ -508,7 +529,7 @@ button.btn{cursor:pointer;font-family:inherit}
 @media (max-width:600px){.costbox{padding:20px 18px}.cost-lines li{grid-template-columns:minmax(0,1fr) auto}.cost-lines .cost-how,.cost-lines .cost-none{grid-column:1 / -1;grid-row:3}.cost-lines .cost-sum{grid-column:2;grid-row:1 / span 2}.cost-lines .hint{grid-row:4}}
 
 /* ---------- day-off programs: the same block on a morning with no school. Yellow band, navy type. ---------- */
-.band.dayoff{--hero:#F3C613;--hero-2:#E2B300;--hero-ink:#0B2140;--hero-muted:#263A57}
+.band.dayoff{--hero:#F3C613;--hero-low:#F3C613;--hero-2:#E2B300;--hero-ink:#0B2140;--hero-muted:#263A57;--hero-accent:#0B2140;--hero-chip:rgba(255,255,255,.42);--hero-field:transparent;--topbar:rgba(11,33,64,.12);--cta:#0B2140;--cta-ink:#FFFFFF;--cta-hover:#0F4D90}
 .band.dayoff .bus-mark{background:#0F4D90}
 .band.dayoff .nav a:hover,.band.dayoff .nav a[aria-current="page"]{border-bottom-color:#0B2140}
 .band.dayoff .nav .count{background:#0B2140;color:#FFFFFF}
@@ -572,15 +593,15 @@ button.btn{cursor:pointer;font-family:inherit}
 .menu summary::-webkit-details-marker{display:none}
 .menu summary::after{content:"";width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg)}
 .menu[open] summary::after{transform:translateY(2px) rotate(225deg)}
-.menu summary:hover,.menu.here summary,.menu[open] summary{border-bottom-color:var(--yellow)}
+.menu summary:hover,.menu.here summary,.menu[open] summary{border-bottom-color:var(--hero-accent)}
 .menu summary:focus-visible{outline:2px solid var(--hero-ink);outline-offset:4px;border-radius:4px}
 .menu summary .count{margin-left:0}
 .menu ul{list-style:none;margin:0;padding:8px;position:absolute;left:-12px;top:calc(100% + 10px);z-index:40;min-width:236px;background:#FFFFFF;border-radius:14px;box-shadow:0 14px 34px rgba(7,21,39,.3);display:flex;flex-direction:column;gap:2px}
 .menu:last-of-type ul{left:auto;right:-12px}
 .nav .menu ul a{display:block;padding:10px 12px;border-radius:9px;border:0;color:#0B2140;font-weight:700;text-decoration:none}
 .nav .menu ul a:hover,.nav .menu ul a[aria-current="page"]{background:#DAEDFE;border:0}
-.nav a.nav-cta{background:var(--yellow);color:var(--yellow-ink);border:0;border-radius:999px;padding:7px 16px;font-weight:700}
-.nav a.nav-cta:hover,.nav a.nav-cta[aria-current="page"]{background:#FFD83A}
+.nav a.nav-cta{background:var(--cta);color:var(--cta-ink);border:0;border-radius:999px;padding:7px 16px;font-weight:700}
+.nav a.nav-cta:hover,.nav a.nav-cta[aria-current="page"]{background:var(--cta-hover)}
 .band.dayoff .menu summary:hover,.band.dayoff .menu.here summary,.band.dayoff .menu[open] summary{border-bottom-color:#0B2140}
 .band.dayoff .nav a.nav-cta{background:#0B2140;color:#FFFFFF}
 .band.dayoff .nav a.nav-cta:hover{background:#0F4D90}
@@ -673,7 +694,7 @@ button.btn{cursor:pointer;font-family:inherit}
 .share-cta-text{display:flex;flex-direction:column;gap:2px;min-width:0}
 .share-cta-text b{font-family:var(--display);font-stretch:112%;font-size:1.2rem;line-height:1.15}
 .share-cta-text span{color:var(--hero-muted)}
-.share-cta .btn{grid-column:1/-1;justify-self:start;background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink)}
+.share-cta .btn{grid-column:1/-1;justify-self:start;background:var(--cta);border-color:var(--cta);color:var(--cta-ink)}
 @media (min-width:720px){
   .share-cta{grid-template-columns:auto minmax(0,1fr) auto;padding:18px 24px}
   .share-cta .btn{grid-column:auto}
@@ -856,10 +877,10 @@ button.btn{cursor:pointer;font-family:inherit}
 .stat-table .nil{color:var(--line)}
 .stats>.stat-table{max-width:420px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
 /* the strip above the menu: Log in and Register, or Your account */
-.topbar{background:rgba(0,0,0,.2);font-size:.92rem}
+.topbar{background:var(--topbar);font-size:.92rem}
 .topbar .in{max-width:1280px;display:flex;justify-content:flex-end;align-items:center;gap:6px 10px;padding-block:6px}
 .topbar a{color:var(--hero-ink);text-decoration:none;font-weight:700;padding:3px 2px;border-bottom:2px solid transparent}
-.topbar a:hover{border-bottom-color:var(--yellow)}
+.topbar a:hover{border-bottom-color:var(--hero-accent)}
 .topbar span{color:var(--hero-muted)}
 .band.dayoff .topbar{background:rgba(11,33,64,.12)}
 .band.dayoff .topbar a:hover{border-bottom-color:#0B2140}
@@ -882,7 +903,7 @@ html:not(.signed) .when-in{display:none!important}
 html.signed .when-out{display:none!important}
 /* the footer's support ask */
 .foot-support{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin-top:4px}
-.foot-cta{background:transparent;border:1.5px solid var(--hero-ink);color:var(--hero-ink);text-decoration:none;font-weight:700;border-radius:999px;padding:8px 16px}
+.foot-cta{background:transparent;border:1.5px solid var(--foot-ink);color:var(--foot-ink);text-decoration:none;font-weight:700;border-radius:999px;padding:8px 16px}
 .foot-cta:hover{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink)}
 /* after a card has gone out: keep the week? */
 .card-next{display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:2px solid var(--yellow);border-radius:16px;padding:16px 18px;background:var(--surface)}
@@ -912,7 +933,8 @@ html.signed .when-out{display:none!important}
    headline below it scroll away. --bar-h is the bar's height, kept up to date by site.js, so things that stick
    under it (the grade row, the next-day-off box) and links that jump down the page clear it. */
 .sitebar{position:sticky;top:0;z-index:40;box-shadow:0 1px 0 rgba(0,0,0,.14)}
-.pagehead{z-index:1}
+.pagehead{z-index:1;background:linear-gradient(180deg,var(--hero),var(--hero-low))}
+.band :focus-visible{outline-color:var(--hero-accent)}
 .topstrip{z-index:1}
 html{scroll-padding-top:calc(var(--bar-h,64px) + 12px)}
 .sitebar .bar{padding-block:12px}
@@ -935,10 +957,10 @@ ul.cols li{break-inside:avoid;padding:3px 0}
 .wkndscene .aw1{fill:var(--yellow)}
 .wkndscene .aw2{fill:#FFF6D6}
 .wkndscene .knob{fill:var(--yellow)}
-.wkndscene .note ellipse{fill:var(--yellow)}
-.wkndscene .note path{fill:none;stroke:var(--yellow);stroke-width:1.8;stroke-linecap:round}
+.wkndscene .note ellipse{fill:var(--note)}
+.wkndscene .note path{fill:none;stroke:var(--note);stroke-width:1.8;stroke-linecap:round}
 .wkndscene .note{opacity:.9}
-.wkndscene .bstr{fill:none;stroke:#CFE3FB;stroke-width:1}
+.wkndscene .bstr{fill:none;stroke:var(--scene-line);stroke-width:1}
 .wkndscene .bal1{fill:#E4572E}
 .wkndscene .bal2{fill:var(--yellow)}
 .wkndscene .tyre{fill:none;stroke:#0B2140;stroke-width:2.2}
@@ -962,8 +984,8 @@ ul.cols li{break-inside:avoid;padding:3px 0}
 .summerscene .sun{fill:var(--yellow)}
 .summerscene .rays line{stroke:var(--yellow);stroke-width:3;stroke-linecap:round}
 .summerscene .cloud ellipse{fill:#FFFFFF}
-.summerscene .cloud.c1{opacity:.3}
-.summerscene .cloud.c2{opacity:.18}
+.summerscene .cloud.c1{opacity:var(--cloud-1)}
+.summerscene .cloud.c2{opacity:var(--cloud-2)}
 .summerscene .grass{fill:#2C8444}
 .summerscene .grass2{fill:#1F6B36}
 .summerscene .trunk{fill:#0B2140}
@@ -972,16 +994,16 @@ ul.cols li{break-inside:avoid;padding:3px 0}
 .summerscene .tent1{fill:var(--yellow)}
 .summerscene .tent2{fill:#FFF6D6}
 .summerscene .flap{fill:#0B2140}
-.summerscene .pole{stroke:#FFF6D6;stroke-width:2}
+.summerscene .pole{stroke:var(--scene-line);stroke-width:2}
 .summerscene .pennant polygon{fill:#E4572E}
 .summerscene .spk{fill:#0B2140}
-.summerscene .drops{fill:none;stroke:#EAF4FF;stroke-width:2.6;stroke-linecap:round;stroke-dasharray:1 8}
+.summerscene .drops{fill:none;stroke:var(--scene-drop);stroke-width:2.6;stroke-linecap:round;stroke-dasharray:1 8}
 .summerscene .kid{fill:#0B2140}
 .summerscene .arm{fill:none;stroke:#0B2140;stroke-width:2.4;stroke-linecap:round}
 @media (prefers-reduced-motion: no-preference){
-  .summerscene .rays{animation:sun-turn 40s linear infinite}
-  .summerscene .drift.d1{animation:cloud-drift 26s ease-in-out infinite alternate}
-  .summerscene .drift.d2{animation:cloud-drift 38s ease-in-out infinite alternate-reverse}
+  .summerscene .rays,.street .rays{animation:sun-turn 40s linear infinite}
+  .summerscene .drift.d1,.street .drift.d1{animation:cloud-drift 26s ease-in-out infinite alternate}
+  .summerscene .drift.d2,.street .drift.d2{animation:cloud-drift 38s ease-in-out infinite alternate-reverse}
   .summerscene .pennant{animation:pennant-wave 1.6s ease-in-out infinite alternate}
   .summerscene .drops{animation:spray .7s linear infinite}
   .summerscene .hop{animation:kid-hop 1.1s ease-in-out infinite alternate}
