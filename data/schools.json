@@ -3,6 +3,9 @@
     "id": "nebinger",
     "name": "George W. Nebinger School",
     "shortName": "Nebinger",
+    "aliases": [
+      "Nebinger"
+    ],
     "address": "601 Carpenter St, Philadelphia, PA 19147",
     "neighborhood": "Queen Village / Bella Vista",
     "grades": "PK-8",
@@ -26,6 +29,9 @@
     "id": "meredith",
     "name": "William M. Meredith School",
     "shortName": "Meredith",
+    "aliases": [
+      "Meredith"
+    ],
     "address": "725 S 5th St, Philadelphia, PA 19147",
     "neighborhood": "Queen Village",
     "grades": "K-8",
@@ -57,6 +63,10 @@
     "id": "coppin",
     "name": "Fanny Jackson Coppin School",
     "shortName": "Coppin",
+    "aliases": [
+      "Coppin",
+      "Jackson"
+    ],
     "address": "1213 S 12th St, Philadelphia, PA 19147",
     "neighborhood": "Passyunk Square",
     "grades": "PK-8",
@@ -97,6 +107,10 @@
     "id": "vare-washington",
     "name": "Vare-Washington Elementary School",
     "shortName": "Vare-Washington",
+    "aliases": [
+      "Vare-Washington",
+      "Vare Washington"
+    ],
     "address": "1198 S 5th St, Philadelphia, PA 19147",
     "neighborhood": "Pennsport / Dickinson Narrows",
     "grades": "K-8",
@@ -131,6 +145,9 @@
     "id": "mccall",
     "name": "General George A. McCall School",
     "shortName": "McCall",
+    "aliases": [
+      "McCall"
+    ],
     "address": "325 S 7th St, Philadelphia, PA 19106",
     "neighborhood": "Society Hill / Washington Square West",
     "grades": "K-8",

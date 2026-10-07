@@ -43,11 +43,13 @@
             "label": "Nebinger extracurriculars",
             "url": "https://nebinger.philasd.org/#ourschool"
           }
-        ]
+        ],
+        "checked": "2026-10-05"
       },
       "coppin": {
         "relation": "onsite",
-        "note": "Imagine That’s site names Coppin as one of its two school locations."
+        "note": "Imagine That’s site names Coppin as one of its two school locations.",
+        "checked": "2026-10-05"
       }
     }
   },
@@ -99,7 +101,8 @@
     "lastVerified": "2026-10-05",
     "schools": {
       "nebinger": {
-        "relation": "onsite"
+        "relation": "onsite",
+        "checked": "2026-10-05"
       }
     },
     "clubs": [
@@ -222,11 +225,12 @@
         "url": "https://www.gotrphiladelphia.org/"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-10-05",
     "schools": {
       "nebinger": {
         "relation": "onsite",
-        "note": "Confirm with the school which grade band the Nebinger team covers this season."
+        "note": "Confirm with the school which grade band the Nebinger team covers this season.",
+        "checked": "2026-10-05"
       },
       "mccall": {
         "relation": "onsite",
@@ -236,7 +240,8 @@
             "label": "McCall sports and clubs",
             "url": "https://mccall.philasd.org/students/"
           }
-        ]
+        ],
+        "checked": "2026-10-06"
       }
     }
   },
@@ -286,7 +291,8 @@
     "lastVerified": "2026-10-05",
     "schools": {
       "nebinger": {
-        "relation": "onsite"
+        "relation": "onsite",
+        "checked": "2026-10-05"
       }
     }
   },
@@ -357,7 +363,8 @@
     "lastVerified": "2026-10-06",
     "schools": {
       "meredith": {
-        "relation": "onsite"
+        "relation": "onsite",
+        "checked": "2026-10-05"
       }
     },
     "days": [
@@ -747,7 +754,8 @@
     "lastVerified": "2026-10-05",
     "schools": {
       "coppin": {
-        "relation": "onsite"
+        "relation": "onsite",
+        "checked": "2026-10-05"
       }
     },
     "clubs": [
@@ -892,22 +900,36 @@
             "label": "Nebinger extracurriculars",
             "url": "https://nebinger.philasd.org/#ourschool"
           }
-        ]
+        ],
+        "checked": "2026-10-06"
       },
       "meredith": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "coppin": {
         "relation": "pickup",
-        "note": "Zhang Sah’s page lists the school under its former name, Jackson."
+        "note": "Zhang Sah’s page lists the school under its former name, Jackson.",
+        "checked": "2026-10-06"
       },
       "vare-washington": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "mccall": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       }
-    }
+    },
+    "pickupLists": [
+      {
+        "where": "Queen Village, 530 Bainbridge St",
+        "text": "Meredith, Jackson, CCS, Nebinger, McCall, ICS, St. Mary, St. Peter’s, Vare-Washington",
+        "url": "https://zhangsah.org/after-school-program/",
+        "read": "2026-10-06",
+        "how": "browser"
+      }
+    ]
   },
   {
     "id": "shot-tower-rec",
@@ -969,22 +991,25 @@
         "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-10-05",
     "schools": {
       "nebinger": {
         "relation": "pickup",
         "distance": "six blocks east of Nebinger on the same street",
-        "note": "An earlier Shot Tower listing says “Pick up from Nebinger Elementary school.” Confirm pickup is still offered this year."
+        "note": "An earlier Shot Tower listing says “Pick up from Nebinger Elementary school.” Confirm pickup is still offered this year.",
+        "checked": "2026-10-05"
       },
       "meredith": {
         "relation": "nearby",
         "distance": "about seven blocks from Meredith",
-        "note": "Shot Tower’s listing has mentioned pickup from Nebinger only."
+        "note": "Shot Tower’s listing has mentioned pickup from Nebinger only.",
+        "checked": "2026-10-05"
       },
       "vare-washington": {
         "relation": "nearby",
         "distance": "about half a mile east of Vare-Washington",
-        "note": "Shot Tower’s listing has mentioned pickup from Nebinger only."
+        "note": "Shot Tower’s listing has mentioned pickup from Nebinger only.",
+        "checked": "2026-10-06"
       }
     }
   },
@@ -1067,20 +1092,40 @@
     "schools": {
       "nebinger": {
         "relation": "pickup",
-        "note": "Ask whether Mini MOVE (Pre-K, $40.66 per day) includes pickup from Nebinger’s Pre-K."
+        "note": "Ask whether Mini MOVE (Pre-K, $40.66 per day) includes pickup from Nebinger’s Pre-K.",
+        "checked": "2026-10-06"
       },
       "meredith": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "coppin": {
         "relation": "pickup",
         "address": "Bok, 1901 S 9th St",
-        "note": "Coppin children go to InMovement’s Bok location, not Queen Village."
+        "note": "Coppin children go to InMovement’s Bok location, not Queen Village.",
+        "checked": "2026-10-06"
       },
       "mccall": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       }
-    }
+    },
+    "pickupLists": [
+      {
+        "where": "Queen Village, 500 Kenilworth St",
+        "text": "William M. Meredith, George W. Nebinger, General George A McCall, Independence Charter School (Wednesdays Only)",
+        "url": "https://phillyinmovement.com/move-after-school/",
+        "read": "2026-10-06",
+        "how": "fetch"
+      },
+      {
+        "where": "Bok, 1901 S 9th St",
+        "text": "Fanny Jackson Coppin, Southwark School, Eliza B. Kirkbride",
+        "url": "https://phillyinmovement.com/move-after-school/",
+        "read": "2026-10-06",
+        "how": "fetch"
+      }
+    ]
   },
   {
     "id": "settlement-kaleidoscope-plus",
@@ -1145,15 +1190,26 @@
     "lastVerified": "2026-10-06",
     "schools": {
       "nebinger": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "meredith": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "mccall": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       }
-    }
+    },
+    "pickupLists": [
+      {
+        "text": "William M. Meredith Elementary School, George W. Nebinger Elementary School, and General George McCall Elementary School",
+        "url": "https://settlementmusic.org/afterschool/",
+        "read": "2026-10-06",
+        "how": "fetch"
+      }
+    ]
   },
   {
     "id": "philly-art-center-qv",
@@ -1228,21 +1284,35 @@
     "lastVerified": "2026-10-06",
     "schools": {
       "nebinger": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "meredith": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "coppin": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "vare-washington": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "mccall": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       }
-    }
+    },
+    "pickupLists": [
+      {
+        "where": "Queen Village Pickup Schools",
+        "text": "McCall, Meredith, Nebinger, Coppin, Southwark, Vare-Washington, Independence Charter",
+        "url": "https://phillyartcenter.com/afterschool/program-information/",
+        "read": "2026-10-06",
+        "how": "browser"
+      }
+    ]
   },
   {
     "id": "old-pine",
@@ -1347,16 +1417,27 @@
     "lastVerified": "2026-10-06",
     "schools": {
       "nebinger": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "meredith": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "mccall": {
         "relation": "pickup",
-        "distance": "about four blocks from McCall"
+        "distance": "about four blocks from McCall",
+        "checked": "2026-10-06"
       }
-    }
+    },
+    "pickupLists": [
+      {
+        "text": "McCall, Meredith, Nebinger, and St. Peter’s elementary schools",
+        "url": "https://oldpinecommunitycenter.org/afterschool/",
+        "read": "2026-10-06",
+        "how": "fetch"
+      }
+    ]
   },
   {
     "id": "butchers-sew-shop",
@@ -1458,20 +1539,32 @@
     "schools": {
       "nebinger": {
         "relation": "pickup",
-        "distance": "a few blocks from Nebinger"
+        "distance": "a few blocks from Nebinger",
+        "checked": "2026-10-06"
       },
       "meredith": {
         "relation": "pickup",
-        "distance": "a few blocks from Meredith"
+        "distance": "a few blocks from Meredith",
+        "checked": "2026-10-06"
       },
       "coppin": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "mccall": {
         "relation": "pickup",
-        "note": "Butcher’s picks up from McCall on Tuesdays and Thursdays only."
+        "note": "Butcher’s picks up from McCall on Tuesdays and Thursdays only.",
+        "checked": "2026-10-06"
       }
-    }
+    },
+    "pickupLists": [
+      {
+        "text": "Meredith School, Coppin School, Nebinger School, McCall School (Tuesdays & Thursdays ONLY), Southwark School (Mondays, Wednesdays & Fridays ONLY)",
+        "url": "https://butcher-s-sew-shop-junior.jumbula.com/school-year-classes",
+        "read": "2026-10-06",
+        "how": "fetch"
+      }
+    ]
   },
   {
     "id": "mister-johns-music",
@@ -1570,21 +1663,34 @@
     "lastVerified": "2026-10-06",
     "schools": {
       "nebinger": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "meredith": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "coppin": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "vare-washington": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "mccall": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       }
-    }
+    },
+    "pickupLists": [
+      {
+        "text": "CCCS, Fanny Jackson Coppin, Independence Charter School, Marian Anderson, Meredith, McCall, Nebinger, Stanton (M/W/R only) and Vare-Washington",
+        "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
+        "read": "2026-10-06",
+        "how": "fetch"
+      }
+    ]
   },
   {
     "id": "coco-academy",
@@ -1665,7 +1771,8 @@
             "label": "CoCo Academy Bella Vista after school",
             "url": "https://www.cocoacademyphl.com/afterschool-bellavista"
           }
-        ]
+        ],
+        "checked": "2026-10-05"
       },
       "meredith": {
         "relation": "pickup",
@@ -1677,7 +1784,8 @@
             "label": "CoCo Academy Queen Village after school",
             "url": "https://www.cocoacademyphl.com/afterschool-queenvillage"
           }
-        ]
+        ],
+        "checked": "2026-10-06"
       },
       "coppin": {
         "relation": "pickup",
@@ -1693,7 +1801,8 @@
             "label": "Coppin aftercare pickup sheet",
             "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
           }
-        ]
+        ],
+        "checked": "2026-10-05"
       },
       "vare-washington": {
         "relation": "pickup",
@@ -1705,7 +1814,8 @@
             "label": "CoCo Academy Queen Village after school",
             "url": "https://www.cocoacademyphl.com/afterschool-queenvillage"
           }
-        ]
+        ],
+        "checked": "2026-10-06"
       },
       "mccall": {
         "relation": "pickup",
@@ -1717,7 +1827,8 @@
             "label": "CoCo Academy Queen Village after school",
             "url": "https://www.cocoacademyphl.com/afterschool-queenvillage"
           }
-        ]
+        ],
+        "checked": "2026-10-06"
       }
     },
     "rate": {
@@ -1727,7 +1838,24 @@
         1056
       ],
       "extra": "The winter and spring 2027 price for one weekday at either location: a 21 or 22-week term."
-    }
+    },
+    "pickupLists": [
+      {
+        "where": "Queen Village, 615 S 3rd St",
+        "text": "McCall, Meredith, Vare-Washington, St. Mary’s, St. Peter’s",
+        "url": "https://www.cocoacademyphl.com/afterschool-queenvillage",
+        "read": "2026-10-06",
+        "how": "fetch"
+      },
+      {
+        "where": "Bella Vista, 1001 Christian St",
+        "text": "Christopher Columbus Charter, Coppin, Independence Charter, Marian Anderson, Nebinger, Stanton",
+        "url": "https://www.cocoacademyphl.com/afterschool-bellavista",
+        "read": "2026-10-05",
+        "how": "person",
+        "note": "From page text Josh pasted. The names are as recorded then, not the page’s exact sentence."
+      }
+    ]
   },
   {
     "id": "queen-and-rook",
@@ -1799,21 +1927,35 @@
     "schools": {
       "nebinger": {
         "relation": "pickup",
-        "note": "Nebinger pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools."
+        "note": "Nebinger pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools.",
+        "checked": "2026-10-06"
       },
       "meredith": {
         "relation": "pickup",
-        "note": "Meredith pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools."
+        "note": "Meredith pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools.",
+        "checked": "2026-10-06"
       },
       "vare-washington": {
         "relation": "pickup",
-        "note": "Vare-Washington pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools."
+        "note": "Vare-Washington pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools.",
+        "checked": "2026-10-06"
       },
       "mccall": {
         "relation": "pickup",
-        "note": "McCall pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools."
+        "note": "McCall pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools.",
+        "checked": "2026-10-06"
       }
-    }
+    },
+    "pickupLists": [
+      {
+        "text": "Meredith, McCall, Nebinger, St. Peter’s, Vare-Washington",
+        "url": "https://phillyfamily.com/after-school-programs/",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "third-party",
+        "note": "Philadelphia Family’s list. The cafe’s own page names no schools."
+      }
+    ]
   },
   {
     "id": "beehive-at-bok",
@@ -1881,19 +2023,38 @@
       "nebinger": {
         "relation": "pickup",
         "distance": "about a mile south of Nebinger",
-        "note": "Ask how pickup from Nebinger works and whether it runs every day."
+        "note": "Ask how pickup from Nebinger works and whether it runs every day.",
+        "checked": "2026-10-06"
       },
       "coppin": {
         "relation": "pickup",
         "distance": "about half a mile south of Coppin",
-        "note": "Ask how pickup from Coppin works and whether it runs every day."
+        "note": "Ask how pickup from Coppin works and whether it runs every day.",
+        "checked": "2026-10-06"
       },
       "vare-washington": {
         "relation": "pickup",
         "distance": "about a mile southwest of Vare-Washington",
-        "note": "Ask how pickup from Vare-Washington works and whether it runs every day."
+        "note": "Ask how pickup from Vare-Washington works and whether it runs every day.",
+        "checked": "2026-10-06"
       }
-    }
+    },
+    "pickupLists": [
+      {
+        "where": "Beehive @ Bok, 2026-2027",
+        "text": "Monday through Friday from Kirkbride, Coppin, Nebinger, Southwark, Jenks, and Vare Washington",
+        "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
+        "read": "2026-10-06",
+        "how": "browser"
+      },
+      {
+        "where": "Beehive @ Ethical Society, 2026-2027",
+        "text": "Monday through Friday from MANA, Stanton, Greenfield and ICS",
+        "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
+        "read": "2026-10-06",
+        "how": "browser"
+      }
+    ]
   },
   {
     "id": "movemakers",
@@ -1980,16 +2141,35 @@
     "schools": {
       "nebinger": {
         "relation": "pickup",
-        "registerUrl": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100574"
+        "registerUrl": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100574",
+        "checked": "2026-10-06"
       },
       "meredith": {
         "relation": "pickup",
-        "registerUrl": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100573"
+        "registerUrl": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100573",
+        "checked": "2026-10-06"
       },
       "mccall": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       }
-    }
+    },
+    "pickupLists": [
+      {
+        "where": "812 Chestnut St",
+        "text": "McCall Elementary, Meredith Elementary, Nebinger Elementary",
+        "url": "https://www.movemakersphilly.com/youthclasses.html",
+        "read": "2026-10-06",
+        "how": "fetch"
+      },
+      {
+        "where": "2100 Chestnut St",
+        "text": "Albert M. Greenfield School, Independence Charter School, Marian Anderson School",
+        "url": "https://www.movemakersphilly.com/youthclasses.html",
+        "read": "2026-10-06",
+        "how": "fetch"
+      }
+    ]
   },
   {
     "id": "kids-on-12th",
@@ -2051,12 +2231,23 @@
     "lastVerified": "2026-10-06",
     "schools": {
       "coppin": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       },
       "mccall": {
-        "relation": "pickup"
+        "relation": "pickup",
+        "checked": "2026-10-06"
       }
-    }
+    },
+    "pickupLists": [
+      {
+        "text": "Independence Charter School (ICS), McCall Elementary School, Greenfield Elementary School, Russell Byers Elementary School, Fanny Jackson Coppin Elementary School, Folk Arts Cultural Treasures Charter School (FACTS)",
+        "url": "https://ko12.org/after-school-pick-up-philadelphia",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "note": "The same six schools showed in a browser on the same day."
+      }
+    ]
   },
   {
     "id": "columbus-square-rec",
@@ -2113,7 +2304,8 @@
             "label": "Coppin aftercare pickup sheet",
             "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
           }
-        ]
+        ],
+        "checked": "2026-10-05"
       }
     }
   },
@@ -2178,7 +2370,8 @@
     "schools": {
       "nebinger": {
         "relation": "nearby",
-        "distance": "six blocks west of Nebinger on the same street"
+        "distance": "six blocks west of Nebinger on the same street",
+        "checked": "2026-10-05"
       },
       "coppin": {
         "relation": "pickup",
@@ -2189,7 +2382,8 @@
             "label": "Coppin aftercare pickup sheet",
             "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
           }
-        ]
+        ],
+        "checked": "2026-10-05"
       }
     }
   },
@@ -2250,19 +2444,22 @@
         "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-10-05",
     "schools": {
       "nebinger": {
         "relation": "nearby",
-        "distance": "straight up 6th St from Nebinger"
+        "distance": "straight up 6th St from Nebinger",
+        "checked": "2026-10-05"
       },
       "meredith": {
         "relation": "nearby",
-        "distance": "about four blocks from Meredith"
+        "distance": "about four blocks from Meredith",
+        "checked": "2026-10-05"
       },
       "mccall": {
         "relation": "nearby",
-        "distance": "about two blocks from McCall"
+        "distance": "about two blocks from McCall",
+        "checked": "2026-10-06"
       }
     }
   },
@@ -2318,11 +2515,13 @@
     "schools": {
       "nebinger": {
         "relation": "nearby",
-        "distance": "roughly a 10-minute walk from Nebinger"
+        "distance": "roughly a 10-minute walk from Nebinger",
+        "checked": "2026-10-05"
       },
       "meredith": {
         "relation": "nearby",
-        "distance": "five blocks west of Meredith on Fitzwater St"
+        "distance": "five blocks west of Meredith on Fitzwater St",
+        "checked": "2026-10-05"
       }
     }
   },
@@ -2372,19 +2571,23 @@
         "url": "https://mightywriters.org/philadelphia/"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-10-05",
     "schools": {
       "nebinger": {
-        "relation": "nearby"
+        "relation": "nearby",
+        "checked": "2026-10-05"
       },
       "meredith": {
-        "relation": "nearby"
+        "relation": "nearby",
+        "checked": "2026-10-05"
       },
       "coppin": {
-        "relation": "nearby"
+        "relation": "nearby",
+        "checked": "2026-10-05"
       },
       "vare-washington": {
-        "relation": "nearby"
+        "relation": "nearby",
+        "checked": "2026-10-06"
       }
     }
   },
@@ -2429,19 +2632,22 @@
         "url": "https://libwww.freelibrary.org/programs/leap/"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-10-05",
     "schools": {
       "nebinger": {
         "relation": "nearby",
-        "distance": "the nearest branch to Nebinger"
+        "distance": "the nearest branch to Nebinger",
+        "checked": "2026-10-05"
       },
       "meredith": {
         "relation": "nearby",
-        "distance": "the nearest branch to Meredith"
+        "distance": "the nearest branch to Meredith",
+        "checked": "2026-10-05"
       },
       "vare-washington": {
         "relation": "nearby",
-        "distance": "about five blocks from Vare-Washington"
+        "distance": "about five blocks from Vare-Washington",
+        "checked": "2026-10-06"
       }
     }
   },
@@ -2535,26 +2741,31 @@
         "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/fall-2026/"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-10-05",
     "schools": {
       "nebinger": {
         "relation": "nearby",
-        "distance": "about three blocks from Nebinger"
+        "distance": "about three blocks from Nebinger",
+        "checked": "2026-10-05"
       },
       "meredith": {
         "relation": "nearby",
-        "distance": "about three blocks from Meredith"
+        "distance": "about three blocks from Meredith",
+        "checked": "2026-10-05"
       },
       "coppin": {
-        "relation": "nearby"
+        "relation": "nearby",
+        "checked": "2026-10-05"
       },
       "vare-washington": {
         "relation": "nearby",
-        "distance": "about half a mile from Vare-Washington"
+        "distance": "about half a mile from Vare-Washington",
+        "checked": "2026-10-06"
       },
       "mccall": {
         "relation": "nearby",
-        "distance": "about half a mile from McCall"
+        "distance": "about half a mile from McCall",
+        "checked": "2026-10-06"
       }
     }
   },
@@ -2652,7 +2863,8 @@
     "schools": {
       "nebinger": {
         "relation": "nearby",
-        "note": "Makom’s pickup list (Greenfield, Childs, ICS, Marian Anderson, Stanton, The Philadelphia School, Wild Seeds and Vare-Washington) does not include Nebinger."
+        "note": "Makom’s pickup list (Greenfield, Childs, ICS, Marian Anderson, Stanton, The Philadelphia School, Wild Seeds and Vare-Washington) does not include Nebinger.",
+        "checked": "2026-10-05"
       },
       "coppin": {
         "relation": "pickup",
@@ -2663,7 +2875,8 @@
             "label": "Coppin aftercare pickup sheet",
             "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
           }
-        ]
+        ],
+        "checked": "2026-10-05"
       },
       "vare-washington": {
         "relation": "pickup",
@@ -2674,9 +2887,19 @@
             "label": "Makom afterschool enrichment",
             "url": "https://makomcommunity.org/afterschool-enrichment/"
           }
-        ]
+        ],
+        "checked": "2026-10-06"
       }
-    }
+    },
+    "pickupLists": [
+      {
+        "where": "2401 Washington Avenue",
+        "text": "Greenfield Elementary School, GW Childs Elementary School, Independence Charter School, Marian Anderson Neighborhood Academy, Stanton Elementary School, The Philadelphia School, Wild Seeds ALC at The Dandelion Project, Vare Washington Elementary School",
+        "url": "https://makomcommunity.org/afterschool-enrichment/",
+        "read": "2026-10-06",
+        "how": "fetch"
+      }
+    ]
   },
   {
     "id": "vare-washington-edey",
@@ -2751,7 +2974,8 @@
     "lastVerified": "2026-10-06",
     "schools": {
       "vare-washington": {
-        "relation": "onsite"
+        "relation": "onsite",
+        "checked": "2026-10-06"
       }
     }
   },
@@ -2803,7 +3027,8 @@
     "lastVerified": "2026-10-06",
     "schools": {
       "vare-washington": {
-        "relation": "onsite"
+        "relation": "onsite",
+        "checked": "2026-10-06"
       }
     },
     "clubs": [
@@ -2921,7 +3146,8 @@
     "lastVerified": "2026-10-06",
     "schools": {
       "mccall": {
-        "relation": "onsite"
+        "relation": "onsite",
+        "checked": "2026-10-06"
       }
     }
   },
@@ -2981,7 +3207,8 @@
     "lastVerified": "2026-10-06",
     "schools": {
       "mccall": {
-        "relation": "onsite"
+        "relation": "onsite",
+        "checked": "2026-10-06"
       }
     },
     "clubs": [

@@ -1,0 +1,1576 @@
+{
+  "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
+  "summary": {
+    "pages": 72,
+    "pagesNeedingABrowser": 2,
+    "pagesNeedingAPerson": 1,
+    "links": 84,
+    "pickupLinks": 51,
+    "pickupOnAStoredList": 43,
+    "pickupFromAThirdPartyList": 4,
+    "pickupOnItsOwnSource": 3,
+    "pickupWithNothingBehindIt": 1,
+    "pickupNotOnTheProvidersList": 1,
+    "oldestCheck": "2026-10-05"
+  },
+  "links": [
+    {
+      "program": "shot-tower-rec",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-10-05",
+      "basis": "none"
+    },
+    {
+      "program": "makom-community",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-05",
+      "basis": "own-source",
+      "notOnProviderList": true
+    },
+    {
+      "program": "coco-academy",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-05",
+      "basis": "list",
+      "list": {
+        "where": "Bella Vista, 1001 Christian St",
+        "read": "2026-10-05",
+        "how": "person",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "coco-academy",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-10-05",
+      "basis": "list",
+      "list": {
+        "where": "Bella Vista, 1001 Christian St",
+        "read": "2026-10-05",
+        "how": "person",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "columbus-square-rec",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-05",
+      "basis": "own-source"
+    },
+    {
+      "program": "coppin-clubs",
+      "school": "coppin",
+      "relation": "onsite",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "fleisher-art-memorial",
+      "school": "coppin",
+      "relation": "nearby",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "fleisher-art-memorial",
+      "school": "meredith",
+      "relation": "nearby",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "fleisher-art-memorial",
+      "school": "nebinger",
+      "relation": "nearby",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "free-library-leap",
+      "school": "meredith",
+      "relation": "nearby",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "free-library-leap",
+      "school": "nebinger",
+      "relation": "nearby",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "nebinger",
+      "relation": "onsite",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "hawthorne-cultural-center",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-05",
+      "basis": "own-source"
+    },
+    {
+      "program": "hawthorne-cultural-center",
+      "school": "nebinger",
+      "relation": "nearby",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "imagine-that-philly",
+      "school": "coppin",
+      "relation": "onsite",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "imagine-that-philly",
+      "school": "nebinger",
+      "relation": "onsite",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "makom-community",
+      "school": "nebinger",
+      "relation": "nearby",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "meredith-clubs",
+      "school": "meredith",
+      "relation": "onsite",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "mighty-writers-el-futuro",
+      "school": "coppin",
+      "relation": "nearby",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "mighty-writers-el-futuro",
+      "school": "meredith",
+      "relation": "nearby",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "mighty-writers-el-futuro",
+      "school": "nebinger",
+      "relation": "nearby",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "nebinger-arts-partners",
+      "school": "nebinger",
+      "relation": "onsite",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "nebinger-clubs",
+      "school": "nebinger",
+      "relation": "onsite",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "palumbo-rec",
+      "school": "meredith",
+      "relation": "nearby",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "palumbo-rec",
+      "school": "nebinger",
+      "relation": "nearby",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "shot-tower-rec",
+      "school": "meredith",
+      "relation": "nearby",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "starr-garden-rec",
+      "school": "meredith",
+      "relation": "nearby",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "starr-garden-rec",
+      "school": "nebinger",
+      "relation": "nearby",
+      "checked": "2026-10-05"
+    },
+    {
+      "program": "beehive-at-bok",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Beehive @ Bok, 2026-2027",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "beehive-at-bok",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Beehive @ Bok, 2026-2027",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "beehive-at-bok",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Beehive @ Bok, 2026-2027",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "butchers-sew-shop",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "butchers-sew-shop",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "butchers-sew-shop",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "butchers-sew-shop",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "coco-academy",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 615 S 3rd St",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "coco-academy",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 615 S 3rd St",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "coco-academy",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 615 S 3rd St",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "fleisher-art-memorial",
+      "school": "mccall",
+      "relation": "nearby",
+      "checked": "2026-10-06"
+    },
+    {
+      "program": "fleisher-art-memorial",
+      "school": "vare-washington",
+      "relation": "nearby",
+      "checked": "2026-10-06"
+    },
+    {
+      "program": "free-library-leap",
+      "school": "vare-washington",
+      "relation": "nearby",
+      "checked": "2026-10-06"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "mccall",
+      "relation": "onsite",
+      "checked": "2026-10-06"
+    },
+    {
+      "program": "kids-on-12th",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "kids-on-12th",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "makom-community",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "2401 Washington Avenue",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "mccall-clubs",
+      "school": "mccall",
+      "relation": "onsite",
+      "checked": "2026-10-06"
+    },
+    {
+      "program": "mighty-writers-el-futuro",
+      "school": "vare-washington",
+      "relation": "nearby",
+      "checked": "2026-10-06"
+    },
+    {
+      "program": "mister-johns-music",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "mister-johns-music",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "mister-johns-music",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "mister-johns-music",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "mister-johns-music",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "movemakers",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "812 Chestnut St",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "movemakers",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "812 Chestnut St",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "movemakers",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "812 Chestnut St",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "old-pine",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "old-pine",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "old-pine",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-art-center-qv",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village Pickup Schools",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-art-center-qv",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village Pickup Schools",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-art-center-qv",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village Pickup Schools",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-art-center-qv",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village Pickup Schools",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-art-center-qv",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village Pickup Schools",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-inmovement",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Bok, 1901 S 9th St",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-inmovement",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 500 Kenilworth St",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-inmovement",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 500 Kenilworth St",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-inmovement",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 500 Kenilworth St",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "queen-and-rook",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "third-party-list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "third-party"
+      }
+    },
+    {
+      "program": "queen-and-rook",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "third-party-list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "third-party"
+      }
+    },
+    {
+      "program": "queen-and-rook",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "third-party-list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "third-party"
+      }
+    },
+    {
+      "program": "queen-and-rook",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "third-party-list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "third-party"
+      }
+    },
+    {
+      "program": "settlement-kaleidoscope-plus",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "settlement-kaleidoscope-plus",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "settlement-kaleidoscope-plus",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "shot-tower-rec",
+      "school": "vare-washington",
+      "relation": "nearby",
+      "checked": "2026-10-06"
+    },
+    {
+      "program": "starr-garden-rec",
+      "school": "mccall",
+      "relation": "nearby",
+      "checked": "2026-10-06"
+    },
+    {
+      "program": "sunrise-mccall",
+      "school": "mccall",
+      "relation": "onsite",
+      "checked": "2026-10-06"
+    },
+    {
+      "program": "vare-washington-clubs",
+      "school": "vare-washington",
+      "relation": "onsite",
+      "checked": "2026-10-06"
+    },
+    {
+      "program": "vare-washington-edey",
+      "school": "vare-washington",
+      "relation": "onsite",
+      "checked": "2026-10-06"
+    },
+    {
+      "program": "zhang-sah",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 530 Bainbridge St",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zhang-sah",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 530 Bainbridge St",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zhang-sah",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 530 Bainbridge St",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zhang-sah",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 530 Bainbridge St",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zhang-sah",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 530 Bainbridge St",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://nebinger.philasd.org/#ourschool",
+      "how": "fetch",
+      "programs": [
+        "imagine-that-philly",
+        "nebinger-clubs",
+        "girls-on-the-run",
+        "nebinger-arts-partners",
+        "zhang-sah"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/",
+      "how": "fetch",
+      "programs": [
+        "shot-tower-rec",
+        "columbus-square-rec",
+        "hawthorne-cultural-center",
+        "starr-garden-rec",
+        "palumbo-rec"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/parks-rec-finder/#/locations",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "shot-tower-rec",
+        "columbus-square-rec",
+        "hawthorne-cultural-center",
+        "starr-garden-rec",
+        "palumbo-rec"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf",
+      "how": "fetch",
+      "programs": [
+        "coco-academy",
+        "columbus-square-rec",
+        "hawthorne-cultural-center",
+        "makom-community"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://mccall.philasd.org/students/",
+      "how": "fetch",
+      "programs": [
+        "girls-on-the-run",
+        "mccall-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://app.iclasspro.com/portal/inmovement",
+      "how": "fetch",
+      "programs": [
+        "philly-inmovement"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://bookeo.com/beehivecommunity?type=41574EYC3LN19B4B8067C5",
+      "how": "fetch",
+      "programs": [
+        "beehive-at-bok"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://butcher-s-sew-shop-junior.jumbula.com/school-year-classes",
+      "how": "fetch",
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "lists": [
+        {
+          "program": "butchers-sew-shop",
+          "text": "Meredith School, Coppin School, Nebinger School, McCall School (Tuesdays & Thursdays ONLY), Southwark School (Mondays, Wednesdays & Fridays ONLY)",
+          "read": "2026-10-06",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://butcher-s-sew-shop-junior.jumbula.com/vacation-camps",
+      "how": "fetch",
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://butcherssewshop.com/pages/youth-classes",
+      "how": "fetch",
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100573",
+      "how": "fetch",
+      "programs": [
+        "movemakers"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100574",
+      "how": "fetch",
+      "programs": [
+        "movemakers"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://coppin.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "coppin-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://docs.google.com/spreadsheets/d/1FGIV9bDa2OKzL1VZ5hgBb2JCFId4H3OI5_sPFBze_SY/edit?gid=0#gid=0",
+      "how": "fetch",
+      "programs": [
+        "meredith-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://fleisher.org/children-and-youth-programs-2/",
+      "how": "fetch",
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/fall-2026/",
+      "how": "fetch",
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://fleisher.org/day-off-camps/",
+      "how": "fetch",
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://fleisher.org/take-a-class/saturday-young-artist-program/",
+      "how": "fetch",
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://imaginethatphilly.org/",
+      "how": "fetch",
+      "programs": [
+        "imagine-that-philly"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://imaginethatphilly.org/programs",
+      "how": "fetch",
+      "programs": [
+        "imagine-that-philly"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://ko12.org/after-school-pick-up-philadelphia",
+      "how": "fetch",
+      "programs": [
+        "kids-on-12th"
+      ],
+      "lists": [
+        {
+          "program": "kids-on-12th",
+          "text": "Independence Charter School (ICS), McCall Elementary School, Greenfield Elementary School, Russell Byers Elementary School, Fanny Jackson Coppin Elementary School, Folk Arts Cultural Treasures Charter School (FACTS)",
+          "read": "2026-10-06",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://ko12.org/contact",
+      "how": "fetch",
+      "programs": [
+        "kids-on-12th"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://libwww.freelibrary.org/programs/leap/",
+      "how": "fetch",
+      "programs": [
+        "free-library-leap"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://makomcommunity.org/",
+      "how": "fetch",
+      "programs": [
+        "makom-community"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://makomcommunity.org/afterschool-enrichment/",
+      "how": "fetch",
+      "programs": [
+        "makom-community"
+      ],
+      "lists": [
+        {
+          "program": "makom-community",
+          "where": "2401 Washington Avenue",
+          "text": "Greenfield Elementary School, GW Childs Elementary School, Independence Charter School, Marian Anderson Neighborhood Academy, Stanton Elementary School, The Philadelphia School, Wild Seeds ALC at The Dandelion Project, Vare Washington Elementary School",
+          "read": "2026-10-06",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://makomcommunity.org/afterschool-enrichment/tuition/",
+      "how": "fetch",
+      "programs": [
+        "makom-community"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://makomcommunity.org/enroll/",
+      "how": "fetch",
+      "programs": [
+        "makom-community"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://makomcommunity.org/schools-out-camp/",
+      "how": "fetch",
+      "programs": [
+        "makom-community"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://mccall.philasd.org/wp-content/uploads/sites/484/2025/08/McCall-School-Handbook-25-26.pdf",
+      "how": "fetch",
+      "programs": [
+        "sunrise-mccall"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://meredithmatters.org/internalexternal-activities/",
+      "how": "fetch",
+      "programs": [
+        "meredith-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://mightywriters.org/participant-registration/",
+      "how": "fetch",
+      "programs": [
+        "mighty-writers-el-futuro"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://mightywriters.org/philadelphia/",
+      "how": "fetch",
+      "programs": [
+        "mighty-writers-el-futuro"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://misterjohnsmusic.com/day-camps/",
+      "how": "fetch",
+      "programs": [
+        "mister-johns-music"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
+      "how": "fetch",
+      "programs": [
+        "mister-johns-music"
+      ],
+      "lists": [
+        {
+          "program": "mister-johns-music",
+          "text": "CCCS, Fanny Jackson Coppin, Independence Charter School, Marian Anderson, Meredith, McCall, Nebinger, Stanton (M/W/R only) and Vare-Washington",
+          "read": "2026-10-06",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://oldpinecommunitycenter.org/afterschool/",
+      "how": "fetch",
+      "programs": [
+        "old-pine"
+      ],
+      "lists": [
+        {
+          "program": "old-pine",
+          "text": "McCall, Meredith, Nebinger, and St. Peter’s elementary schools",
+          "read": "2026-10-06",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://opcc.jumbula.com/",
+      "how": "fetch",
+      "programs": [
+        "old-pine"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://opcc.jumbula.com/Afterschool20262027/RegularSchoolDaysDailyRate",
+      "how": "fetch",
+      "programs": [
+        "old-pine"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://opcc.jumbula.com/Afterschool20262027/RegularSchoolDaysMonthlyRate",
+      "how": "fetch",
+      "programs": [
+        "old-pine"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://phillyartcenter.captyn.com/find?department=clu8qqzk2009293r866a7j7wg&filter=4&program=clv479vep03ki7to5es3tmyjr&program=clwtkcaoi00kmsudp98n0ecv5&day=Monday&day=Tuesday&day=Wednesday&day=Thursday&day=Friday&location=clu8gptof0aahxkl2mj3v7mxl&tag=clv494qhk032olgi2d9i70vw6&tag=clv494xs6032plgi2z23yr0a8",
+      "how": "fetch",
+      "programs": [
+        "philly-art-center-qv"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://phillyartcenter.com/afterschool/program-information/",
+      "how": "fetch",
+      "programs": [
+        "philly-art-center-qv"
+      ],
+      "lists": [
+        {
+          "program": "philly-art-center-qv",
+          "where": "Queen Village Pickup Schools",
+          "text": "McCall, Meredith, Nebinger, Coppin, Southwark, Vare-Washington, Independence Charter",
+          "read": "2026-10-06",
+          "how": "browser",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://phillyartcenter.com/locations/queen-village/school-pick-up/",
+      "how": "fetch",
+      "programs": [
+        "philly-art-center-qv"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://phillyartcenter.com/vacation-camps-1",
+      "how": "fetch",
+      "programs": [
+        "philly-art-center-qv"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://phillyfamily.com/after-school-programs/",
+      "how": "fetch",
+      "programs": [
+        "queen-and-rook"
+      ],
+      "lists": [
+        {
+          "program": "queen-and-rook",
+          "text": "Meredith, McCall, Nebinger, St. Peter’s, Vare-Washington",
+          "read": "2026-10-06",
+          "how": "fetch",
+          "by": "third-party"
+        }
+      ]
+    },
+    {
+      "url": "https://phillyinmovement.com/move-after-school/",
+      "how": "fetch",
+      "programs": [
+        "philly-inmovement"
+      ],
+      "lists": [
+        {
+          "program": "philly-inmovement",
+          "where": "Queen Village, 500 Kenilworth St",
+          "text": "William M. Meredith, George W. Nebinger, General George A McCall, Independence Charter School (Wednesdays Only)",
+          "read": "2026-10-06",
+          "how": "fetch",
+          "by": "provider"
+        },
+        {
+          "program": "philly-inmovement",
+          "where": "Bok, 1901 S 9th St",
+          "text": "Fanny Jackson Coppin, Southwark School, Eliza B. Kirkbride",
+          "read": "2026-10-06",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://phillyinmovement.com/vacation-camps/",
+      "how": "fetch",
+      "programs": [
+        "philly-inmovement"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://reg137.imperisoft.com/Fleisher/Search/Registration.aspx",
+      "how": "fetch",
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://schools.procareconnect.com/form/7417c5d3-b696-426e-913c-b9f0144431bb",
+      "how": "fetch",
+      "programs": [
+        "zhang-sah"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://settlementmusic.org/afterschool/",
+      "how": "fetch",
+      "programs": [
+        "settlement-kaleidoscope-plus"
+      ],
+      "lists": [
+        {
+          "program": "settlement-kaleidoscope-plus",
+          "text": "William M. Meredith Elementary School, George W. Nebinger Elementary School, and General George McCall Elementary School",
+          "read": "2026-10-06",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://vare.philasd.org/after-school-clubs/",
+      "how": "fetch",
+      "programs": [
+        "vare-washington-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://vare.philasd.org/extra-curricular-activities/",
+      "how": "fetch",
+      "programs": [
+        "vare-washington-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
+      "how": "browser",
+      "why": "On 2026-10-06 a plain fetch was served the 2023–24 page (pickup from Coppin and Southwark only) while a browser showed the 2026–27 lists.",
+      "programs": [
+        "beehive-at-bok"
+      ],
+      "lists": [
+        {
+          "program": "beehive-at-bok",
+          "where": "Beehive @ Bok, 2026-2027",
+          "text": "Monday through Friday from Kirkbride, Coppin, Nebinger, Southwark, Jenks, and Vare Washington",
+          "read": "2026-10-06",
+          "how": "browser",
+          "by": "provider"
+        },
+        {
+          "program": "beehive-at-bok",
+          "where": "Beehive @ Ethical Society, 2026-2027",
+          "text": "Monday through Friday from MANA, Stanton, Greenfield and ICS",
+          "read": "2026-10-06",
+          "how": "browser",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://www.bellavistaneighbors.org/parks",
+      "how": "fetch",
+      "programs": [
+        "palumbo-rec"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.cocoacademyphl.com/afterschool-bellavista",
+      "how": "person",
+      "why": "A plain fetch got HTTP 429 on 2026-10-06 and the browser extension is not allowed on the site. Josh pastes the page text.",
+      "programs": [
+        "coco-academy"
+      ],
+      "lists": [
+        {
+          "program": "coco-academy",
+          "where": "Bella Vista, 1001 Christian St",
+          "text": "Christopher Columbus Charter, Coppin, Independence Charter, Marian Anderson, Nebinger, Stanton",
+          "read": "2026-10-05",
+          "how": "person",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://www.cocoacademyphl.com/afterschool-queenvillage",
+      "how": "fetch",
+      "programs": [
+        "coco-academy"
+      ],
+      "lists": [
+        {
+          "program": "coco-academy",
+          "where": "Queen Village, 615 S 3rd St",
+          "text": "McCall, Meredith, Vare-Washington, St. Mary’s, St. Peter’s",
+          "read": "2026-10-06",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://www.cocoacademyphl.com/vacationcamps",
+      "how": "fetch",
+      "programs": [
+        "coco-academy"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.gotrphiladelphia.org/",
+      "how": "fetch",
+      "programs": [
+        "girls-on-the-run"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.gotrphiladelphia.org/program-registration",
+      "how": "fetch",
+      "programs": [
+        "girls-on-the-run"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.gpca-phila.org/prek-8",
+      "how": "fetch",
+      "programs": [
+        "vare-washington-edey"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.hisawyer.com/coco-academy/schedules?location_id%5B%5D=154921&widget_tags=afterschool+winter+spring+2027",
+      "how": "fetch",
+      "programs": [
+        "coco-academy"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.movemakersphilly.com/range-of-motion-after-school-programming.html",
+      "how": "fetch",
+      "programs": [
+        "movemakers"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.movemakersphilly.com/youthclasses.html",
+      "how": "fetch",
+      "programs": [
+        "movemakers"
+      ],
+      "lists": [
+        {
+          "program": "movemakers",
+          "where": "812 Chestnut St",
+          "text": "McCall Elementary, Meredith Elementary, Nebinger Elementary",
+          "read": "2026-10-06",
+          "how": "fetch",
+          "by": "provider"
+        },
+        {
+          "program": "movemakers",
+          "where": "2100 Chestnut St",
+          "text": "Albert M. Greenfield School, Independence Charter School, Marian Anderson School",
+          "read": "2026-10-06",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://www.nebingerpta.org/s-projects-side-by-side",
+      "how": "fetch",
+      "programs": [
+        "nebinger-arts-partners"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/2026-03-06-seats-filling-fast-for-spring-break-camp-at-extended-day-extended-year-schools/",
+      "how": "fetch",
+      "programs": [
+        "vare-washington-edey"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/media/20240924172821/EDEY-One-pager-Vare.pdf",
+      "how": "fetch",
+      "programs": [
+        "vare-washington-edey"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/programs/extended-day-extended-year/",
+      "how": "fetch",
+      "programs": [
+        "vare-washington-edey"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.queenandrookcafe.com/youth-programs/",
+      "how": "fetch",
+      "programs": [
+        "queen-and-rook"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.queenrookkeep.com/product/WInterAfterschool/FGRQPCBNZJCILGV4A5OGMYL7?cp=true&sa=false&sbp=false&q=true",
+      "how": "fetch",
+      "programs": [
+        "queen-and-rook"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.sunriseofphila.org/program-sites",
+      "how": "fetch",
+      "programs": [
+        "sunrise-mccall"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.sunriseofphila.org/school-year",
+      "how": "fetch",
+      "programs": [
+        "sunrise-mccall"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.sunriseofphila.org/services-8",
+      "how": "fetch",
+      "programs": [
+        "sunrise-mccall"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://zhangsah.org/after-school-program/",
+      "how": "fetch",
+      "programs": [
+        "zhang-sah"
+      ],
+      "lists": [
+        {
+          "program": "zhang-sah",
+          "where": "Queen Village, 530 Bainbridge St",
+          "text": "Meredith, Jackson, CCS, Nebinger, McCall, ICS, St. Mary, St. Peter’s, Vare-Washington",
+          "read": "2026-10-06",
+          "how": "browser",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://zhangsah.org/camps/",
+      "how": "fetch",
+      "programs": [
+        "zhang-sah"
+      ],
+      "lists": []
+    }
+  ]
+}
