@@ -4,10 +4,14 @@
 // What this stores, and nothing more:
 //   an account     - an email address and the adult's first and last name
 //   a group        - a name, its owner, and a join code (kept encrypted)
-//   a membership   - who is in which group, and whether the owner has approved them
+//   an invitation  - an email address a group's owner has invited; only invited addresses can join
+//   a membership   - who is in which group
 //   a child        - a first name and the programs on their current and upcoming week (no school, address, note or photo)
 // Everything lives in one small database file kept outside the public folder. Nothing here is ever written into a page:
 // a group is only sent, as data, to a signed-in member the owner has approved.
+//
+// Nobody finds or asks their way into a group. Its owner invites email addresses; an invited person signs in with that
+// address (which proves it is theirs) and gives the code from the invitation. Both are needed.
 //
 // Signing in has no passwords. The site emails a link (and a 6-digit code for the device that asked); each works once
 // and for 15 minutes. A device then stays signed in for 30 days.
@@ -29,6 +33,7 @@ const MAX_OWNED = 10;       // groups one person can own
 const MAX_JOINED = 30;      // groups one person can be in
 const MAX_MEMBERS = 80;     // people in one group
 const MAX_KIDS = 6;         // children one member can add to one group
+const MAX_INVITES = 60;     // addresses one group can have invited
 const DAYS = array('mon', 'tue', 'wed', 'thu', 'fri');
 
 function out(array $data, int $code = 200): void { http_response_code($code); echo json_encode($data); exit; }
@@ -73,6 +78,7 @@ function db(): PDO {
     $db->exec('CREATE TABLE IF NOT EXISTS grp (id TEXT PRIMARY KEY, name TEXT NOT NULL, owner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, code_mac TEXT NOT NULL UNIQUE, code_enc TEXT NOT NULL, created INTEGER NOT NULL, expires INTEGER NOT NULL)');
     $db->exec('CREATE TABLE IF NOT EXISTS members (id INTEGER PRIMARY KEY, group_id TEXT NOT NULL REFERENCES grp(id) ON DELETE CASCADE, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, role TEXT NOT NULL, status TEXT NOT NULL, created INTEGER NOT NULL, UNIQUE (group_id, user_id))');
     $db->exec('CREATE TABLE IF NOT EXISTS kids (id INTEGER PRIMARY KEY, member_id INTEGER NOT NULL REFERENCES members(id) ON DELETE CASCADE, name TEXT NOT NULL, now_json TEXT NOT NULL, next_json TEXT NOT NULL, updated INTEGER NOT NULL)');
+    $db->exec('CREATE TABLE IF NOT EXISTS invites (id INTEGER PRIMARY KEY, group_id TEXT NOT NULL REFERENCES grp(id) ON DELETE CASCADE, email TEXT NOT NULL, created INTEGER NOT NULL, UNIQUE (group_id, email))');
     $db->exec('CREATE TABLE IF NOT EXISTS throttle (k TEXT NOT NULL, t INTEGER NOT NULL)');
     // Added after the first version: first and last name, and whether the account has been added to the email list.
     $cols = array();
@@ -265,6 +271,36 @@ function kid_out(array $k, bool $mine): array {
 function membership(string $gid, int $uid): ?array {
   return row('SELECT m.id, m.role, m.status, g.name, g.owner_id, g.expires, g.code_enc FROM members m JOIN grp g ON g.id = m.group_id WHERE m.group_id = ? AND m.user_id = ? AND g.expires > ?', array($gid, $uid, now()));
 }
+// A group can only be joined from an email address its owner invited. Signing in proves the address.
+function invited(string $gid, string $email): bool {
+  return (bool) row('SELECT 1 AS x FROM invites WHERE group_id = ? AND email = ?', array($gid, strtolower($email)));
+}
+function not_invited(array $u): void {
+  fail('notinvited', 'That code is for a group that hasn’t invited ' . $u['email'] . '. Sign in with the address your invitation was sent to, or ask the person who invited you to add this one.', 403);
+}
+function invite_out(string $gid): array {
+  $list = array();
+  foreach (q('SELECT i.email, (SELECT COUNT(*) FROM members m JOIN users u ON u.id = m.user_id WHERE m.group_id = i.group_id AND u.email = i.email) AS joined FROM invites i WHERE i.group_id = ? ORDER BY i.created, i.id', array($gid)) as $i) {
+    $list[] = array('email' => $i['email'], 'joined' => (bool) $i['joined']);
+  }
+  return $list;
+}
+function send_invite(array $u, array $g, string $gname, string $to): bool {
+  global $CFG;
+  $code = code_open($g['code_enc']);
+  $url = $CFG['siteUrl'] . '/join/#' . $code;
+  $from = $u['name'] . ' (' . $u['email'] . ')';
+  $e = function ($v) { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); };
+  $text = "$from invited you to the group \"$gname\" on " . $CFG['siteName'] . ", to share your children's after-school weeks with each other.\n\n"
+    . "To join, open this link and sign in with this email address ($to):\n$url\n\nIf it asks for a code: $code\n\n"
+    . "Only invited addresses can join, and a group shows first names and programs only. If you don't know " . $u['name'] . ", ignore this email: nothing happens unless you join.\n";
+  $html = email_html($u['name'] . ' invited you to “' . $gname . '”',
+    '<p style="margin:0 0 10px">' . $e($from) . ' invited you to a private group, to share your children’s after-school weeks with each other.</p>'
+    . '<p style="margin:0">Sign in with this email address (' . $e($to) . '). If it asks for a code: <b style="font-family:monospace;font-size:18px">' . $e($code) . '</b></p>',
+    'Join the group', $url,
+    'Only invited addresses can join, and a group shows first names and programs only. If you don’t know ' . $u['name'] . ', ignore this email: nothing happens unless you join.');
+  return send_mail($to, $u['name'] . ' invited you to “' . $gname . '” on ' . $CFG['siteName'], $text, $html);
+}
 function need_owner(string $gid, array $u): array {
   $m = membership($gid, $u['id']);
   if (!$m || $m['role'] !== 'owner') fail('forbidden', 'Only the person who made this group can do that.', 403);
@@ -416,23 +452,24 @@ switch ($method . ' ' . $action) {
   // Is this code right, and which group is it? Asked once someone is signed in, before they pick whose week to share.
   case 'POST group_peek': {
     $u = need_user();
-    if (too_many('join:' . $u['id'], 10, 3600)) fail('slow', 'Too many tries. Check the code with whoever gave it to you, and try again in an hour.', 429);
+    if (too_many('join:' . $u['id'], 10, 3600)) fail('slow', 'Too many tries. Check the code in your invitation, and try again in an hour.', 429);
     $code = tidy_code(str($in, 'code', 40));
     $g = strlen($code) === 12 ? row('SELECT id, name FROM grp WHERE code_mac = ? AND expires > ?', array(code_mac($code), now())) : null;
-    if (!$g) { note('join:' . $u['id']); fail('code', 'No group has that code. Check it with whoever gave it to you.', 404); }
+    if (!$g) { note('join:' . $u['id']); fail('code', 'No group has that code. Check it against your invitation email.', 404); }
     $m = row('SELECT status FROM members WHERE group_id = ? AND user_id = ?', array($g['id'], $u['id']));
+    if (!$m && !invited($g['id'], $u['email'])) { note('join:' . $u['id']); not_invited($u); }
     out(array('ok' => true, 'id' => $g['id'], 'name' => $g['name'], 'member' => (bool) $m, 'status' => $m ? $m['status'] : ''));
   }
 
-  // Ask to join with a code. The owner still has to approve; until then nothing in the group can be seen.
+  // Join a group: the code from the invitation, from an address the owner invited. Both, or nothing.
   case 'POST group_join': {
     $u = need_user();
-    if (too_many('join:' . $u['id'], 10, 3600)) fail('slow', 'Too many tries. Check the code with whoever gave it to you, and try again in an hour.', 429);
-    if (!ready($u)) fail('yourname', 'Add your first and last name, so the group knows who is asking.');
+    if (too_many('join:' . $u['id'], 10, 3600)) fail('slow', 'Too many tries. Check the code in your invitation, and try again in an hour.', 429);
+    if (!ready($u)) fail('yourname', 'Add your first and last name, so the group knows who you are.');
     note('join:' . $u['id']);
     $code = tidy_code(str($in, 'code', 40));
     $g = strlen($code) === 12 ? row('SELECT id, name, owner_id FROM grp WHERE code_mac = ? AND expires > ?', array(code_mac($code), now())) : null;
-    if (!$g) fail('code', 'No group has that code. Check it with whoever gave it to you.', 404);
+    if (!$g) fail('code', 'No group has that code. Check it against your invitation email.', 404);
     $viewer = !empty($in['viewer']);
     $kid = isset($in['kid']) && is_array($in['kid']) ? $in['kid'] : null;
     $kidName = $kid ? first_name(str($kid, 'name', 40)) : '';
@@ -440,10 +477,12 @@ switch ($method . ' ' . $action) {
     $m = row('SELECT id, role, status FROM members WHERE group_id = ? AND user_id = ?', array($g['id'], $u['id']));
     $isNew = !$m;
     if (!$m) {
+      if (!invited($g['id'], $u['email'])) not_invited($u);
       if ((int) val('SELECT COUNT(*) FROM members WHERE group_id = ?', array($g['id'])) >= MAX_MEMBERS) fail('limit', 'That group is full.');
       if ((int) val('SELECT COUNT(*) FROM members WHERE user_id = ?', array($u['id'])) >= MAX_JOINED) fail('limit', 'You’re in as many groups as one person can be. Leave one first.');
-      q('INSERT INTO members (group_id, user_id, role, status, created) VALUES (?, ?, ?, ?, ?)', array($g['id'], $u['id'], $viewer ? 'viewer' : 'member', 'pending', now()));
-      $m = array('id' => (int) db()->lastInsertId(), 'role' => $viewer ? 'viewer' : 'member', 'status' => 'pending');
+      // The owner chose this address, so there is no second approval step.
+      q('INSERT INTO members (group_id, user_id, role, status, created) VALUES (?, ?, ?, ?, ?)', array($g['id'], $u['id'], $viewer ? 'viewer' : 'member', 'approved', now()));
+      $m = array('id' => (int) db()->lastInsertId(), 'role' => $viewer ? 'viewer' : 'member', 'status' => 'approved');
     } elseif (!$viewer && $m['role'] === 'viewer') {
       q('UPDATE members SET role = ? WHERE id = ?', array('member', $m['id']));
     }
@@ -453,16 +492,57 @@ switch ($method . ' ' . $action) {
       q('INSERT INTO kids (member_id, name, now_json, next_json, updated) VALUES (?, ?, ?, ?, ?)', array($m['id'], $kidName, clean_week($kid['now'] ?? null), clean_week($kid['next'] ?? null), now()));
       $kidId = (int) db()->lastInsertId();
     }
-    if ($isNew && !too_many('ask:' . $g['id'], 20, 86400)) {   // tell the owner, by name only
+    if ($isNew && !too_many('ask:' . $g['id'], 20, 86400)) {   // tell the owner who came in, by the adult's name only
       note('ask:' . $g['id']);
       $owner = row('SELECT email FROM users WHERE id = ?', array($g['owner_id']));
       $url = $CFG['siteUrl'] . '/groups/?g=' . $g['id'];
-      $who = $u['name'] . ($viewer ? ' (to view only)' : '');
-      if ($owner) send_mail($owner['email'], $u['name'] . ' asked to join ' . $g['name'],
-        "$who asked to join your group \"" . $g['name'] . "\" on " . $CFG['siteName'] . ".\n\nNobody sees the group until you approve them. Sign in to approve or decline:\n$url\n",
-        email_html('Someone asked to join ' . $g['name'], '<p style="margin:0">' . htmlspecialchars($who, ENT_QUOTES, 'UTF-8') . ' asked to join your group. Nobody sees the group until you approve them.</p>', 'Approve or decline', $url, 'You’re getting this because you made this group on ' . $CFG['siteName'] . '.'));
+      $who = $u['name'] . ($viewer ? ' (viewing only)' : '');
+      if ($owner) send_mail($owner['email'], $u['name'] . ' joined ' . $g['name'],
+        "$who joined your group \"" . $g['name'] . "\" on " . $CFG['siteName'] . ", from the address you invited (" . $u['email'] . ").\n\nIf that isn't who you expected, remove them here:\n$url\n",
+        email_html($u['name'] . ' joined ' . $g['name'], '<p style="margin:0">' . htmlspecialchars($who, ENT_QUOTES, 'UTF-8') . ' joined your group from the address you invited (' . htmlspecialchars($u['email'], ENT_QUOTES, 'UTF-8') . '). If that isn’t who you expected, you can remove them.</p>', 'Open the group', $url, 'You’re getting this because you made this group on ' . $CFG['siteName'] . '.'));
     }
     out(array('ok' => true, 'id' => $g['id'], 'name' => $g['name'], 'status' => $m['status'], 'kid' => $kidId));
+  }
+
+  // Invite people by email address. Each gets the link and the code; only these addresses can join.
+  case 'POST invite_add': {
+    $u = need_user();
+    $gid = str($in, 'group', 30);
+    $g = need_owner($gid, $u);
+    if (!ready($u)) fail('yourname', 'Add your first and last name first, so the people you invite know who it’s from.');
+    $raw = isset($in['emails']) ? $in['emails'] : '';
+    if (is_array($raw)) $raw = implode(' ', array_filter($raw, 'is_string'));
+    $parts = preg_split('/[\s,;<>]+/', strtolower(mb_substr((string) $raw, 0, 6000, 'UTF-8')), -1, PREG_SPLIT_NO_EMPTY) ?: array();
+    $good = array(); $bad = array();
+    foreach (array_slice(array_values(array_unique($parts)), 0, 40) as $e) {
+      if (strlen($e) <= 150 && filter_var($e, FILTER_VALIDATE_EMAIL)) $good[] = $e; else $bad[] = mb_substr($e, 0, 60, 'UTF-8');
+    }
+    if (!$good) fail('email', $bad ? 'Those don’t look like email addresses.' : 'Add at least one email address.');
+    $sent = 0; $held = 0; $full = false;
+    foreach ($good as $e) {
+      if ($e === $u['email']) continue;   // the owner is already in
+      $has = invited($gid, $e);
+      if (!$has) {
+        if ((int) val('SELECT COUNT(*) FROM invites WHERE group_id = ?', array($gid)) >= MAX_INVITES) { $full = true; break; }
+        q('INSERT INTO invites (group_id, email, created) VALUES (?, ?, ?)', array($gid, $e, now()));
+      }
+      // Limits on the emails themselves: per owner per day, and per address per day, so nobody's inbox is flooded.
+      if (too_many('inv:' . $u['id'], 60, 86400) || too_many('invto:' . h($e), 3, 86400)) { $held++; continue; }
+      note('inv:' . $u['id']); note('invto:' . h($e));
+      if (send_invite($u, $g, $g['name'], $e)) $sent++; else $held++;
+    }
+    out(array('ok' => true, 'sent' => $sent, 'held' => $held, 'full' => $full, 'bad' => $bad, 'invites' => invite_out($gid)));
+  }
+
+  // Take an address off the list. If that person already joined, they and their children's weeks leave the group too.
+  case 'POST invite_remove': {
+    $u = need_user();
+    $gid = str($in, 'group', 30);
+    need_owner($gid, $u);
+    $email = strtolower(str($in, 'email', 150));
+    q('DELETE FROM invites WHERE group_id = ? AND email = ?', array($gid, $email));
+    q('DELETE FROM members WHERE group_id = ? AND role != ? AND user_id IN (SELECT id FROM users WHERE email = ?)', array($gid, 'owner', $email));
+    out(array('ok' => true, 'invites' => invite_out($gid)));
   }
 
   // Add or update one of your own children in a group you belong to.
@@ -527,11 +607,12 @@ switch ($method . ' ' . $action) {
     if ($m['role'] === 'owner') {
       $base['code'] = code_open($m['code_enc']);
       $base['members'] = array();
-      foreach (q('SELECT m.id, m.role, m.status, u.name FROM members m JOIN users u ON u.id = m.user_id WHERE m.group_id = ? ORDER BY m.status DESC, m.created', array($gid)) as $x) {
+      foreach (q('SELECT m.id, m.role, m.status, u.name, u.email FROM members m JOIN users u ON u.id = m.user_id WHERE m.group_id = ? ORDER BY m.status DESC, m.created', array($gid)) as $x) {
         $names = array();
         foreach (q('SELECT name FROM kids WHERE member_id = ? ORDER BY id', array($x['id'])) as $k) $names[] = $k['name'];
-        $base['members'][] = array('id' => (int) $x['id'], 'name' => $x['name'], 'role' => $x['role'], 'status' => $x['status'], 'kids' => $names);
+        $base['members'][] = array('id' => (int) $x['id'], 'name' => $x['name'], 'email' => $x['email'], 'role' => $x['role'], 'status' => $x['status'], 'kids' => $names);
       }
+      $base['invites'] = invite_out($gid);
     }
     out($base);
   }
@@ -552,6 +633,7 @@ switch ($method . ' ' . $action) {
       }
     } else {
       q('DELETE FROM members WHERE id = ?', array($mid));   // declining or removing takes their children's weeks with it
+      q('DELETE FROM invites WHERE group_id = ? AND email = ?', array($gid, strtolower($x['email'])));   // and their invitation, so they can't walk back in
     }
     out(array('ok' => true));
   }

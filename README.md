@@ -325,13 +325,15 @@ of the site with accounts and the only part that stores anything about a child o
 - **Turning it on.** `"groups": { "pilot": true }` in `site.config.json`. While `pilot` is true nothing links to
   it: the pages are `/account/` and `/groups/`, and the "Share with a class or group" block on the roster page
   only shows in a browser that has visited one of them. Remove `groups` to take the whole thing out of the build.
-- **How it works for a parent.** A creator signs in on `/account/` (a 6-digit code by email, no password), makes
-  a group and gets an invitation to send: a link to `/join/#CODE` plus the code. `/join/` walks a joiner through
-  five steps: the code, signing in, their name, whose week (a child on this device, "build it first", or view
-  only for a teacher), done. The creator approves each person; until then they see nothing. The account page
-  has a code box and the roster page an "I have a group code" button, and both lead to `/join/`. A shared week
-  updates itself from the device it was shared from. The code in an invitation link sits after the `#`, is
-  taken out of the address at once and kept for that tab only.
+- **How it works for a parent.** Groups are invitation only. A creator signs in on `/account/` (a 6-digit code
+  by email, no password), starts a group and types the email addresses to invite. Each address gets an
+  invitation with a link to `/join/#CODE` and the code. Joining needs both: being signed in with an invited
+  address (signing in proves the address) and the code. There is no asking to join and no approval step; the
+  creator is emailed when someone comes in, and can remove anyone, which also removes their invitation.
+  `/join/` walks a joiner through five steps: the code, signing in, their name, whose week (a child on this
+  device, "build it first", or view only), done. A shared week updates itself from the device it was shared
+  from. The code in an invitation link sits after the `#`, is taken out of the address at once and kept for
+  that tab only.
 - **What is stored.** An account is an email and a first and last name (both required before making or joining
   a group; only a group's creator sees them). A child in a group is a first name and the
   program ids (and a class, only when the program lists it) on the current and upcoming weeks. Nothing else:
@@ -341,6 +343,9 @@ of the site with accounts and the only part that stores anything about a child o
   folder named `phillyafterschool-data`, next to (not inside) the public folder on the host. Deleting that
   folder in the host's file manager wipes every account and group. It is not in git and not backed up by this
   repository.
+- **Invitations.** Up to 60 addresses per group. An invited address is stored with the group until it is removed
+  or the group ends, and is used only to send the invitation and to check who may join. Invitation emails are
+  limited to 60 a day per creator and 3 a day per address.
 - **Limits and expiry.** Links and codes last 15 minutes and work once; five wrong codes kill a code; three
   sign-in emails per address per 15 minutes. A device stays signed in 30 days. Every group is deleted two weeks
   after `lastDay` in `data/days-off.json`.

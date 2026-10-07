@@ -1330,15 +1330,17 @@ function privacyPage() {
     <li>${T(`If you add a photo to a week card, the card is made in your own browser. The photo is not uploaded, not saved, and gone when you close the page.`)}</li>
   </ul>
   ${GROUPS ? `<h2 id="groups">${T(`Accounts and share groups`)}</h2>
-  <p>${T(`A share group lets a class, a carpool or a few friends see each other’s after-school weeks. It is optional, and it is the only part of the site that keeps anything about a child on our server.`)}</p>
+  <p>${T(`A share group lets a few families who know each other see each other’s after-school weeks. It is optional, invitation only, and the only part of the site that keeps anything about a child on our server.`)}</p>
   <ul>
-    <li>${T(`An account is an email address and your first and last name. The email signs you in and tells you when someone asks to join your group or when you are approved. Other members never see it.`)}</li>
+    <li>${T(`An account is an email address and your first and last name. The email signs you in and tells you when someone joins a group you made. Other members never see it.`)}</li>
     <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
     <li>${T(`There are no passwords. We email you a link and a 6-digit code; each works once and for 15 minutes. A cookie then keeps that device signed in for 30 days, and you can sign out everywhere from your account page.`)}</li>
     <li>${T(`When you add a week to a group, we store the child’s first name as you type it and the programs on their current and upcoming weeks. We do not store a last name, school, address, pickup time, note, teacher’s name, photo, price or day-off plan.`)}</li>
-    <li>${T(`Only signed-in people the group’s creator has approved can see a group. The creator sees the first and last name of each adult who asks to join or is in the group; other members don’t. A group can’t be searched for, isn’t listed anywhere, and its link shows nothing to anyone else.`)}</li>
-    <li>${T(`Someone who joins to view only, such as a teacher, can see and print the group and cannot change it.`)}</li>
-    <li>${T(`Anyone in a group can print it or take a screenshot, so join groups with people you would share a class list with.`)}</li>
+    <li>${T(`Nobody can find a group or ask to join one. The person who made it invites email addresses, and only someone signed in with an invited address, who also has the code from the invitation, gets in. A group isn’t listed anywhere, and its link shows nothing to anyone else.`)}</li>
+    <li>${T(`If someone invites you, they give us your email address so we can send the invitation and recognise you if you join. We keep it with that group, use it for nothing else, and delete it when you are removed or the group ends. The invitation shows the name and email of the person who invited you.`)}</li>
+    <li>${T(`A group’s creator sees the name and email address of each adult in it; other members don’t.`)}</li>
+    <li>${T(`Someone who joins to view only, such as a caregiver, can see and print the group and cannot change it.`)}</li>
+    <li>${T(`Anyone in a group can print it or take a screenshot, so keep groups to people you know and would tell where your child is anyway.`)}</li>
     <li>${T(`Groups are kept in a file on our web host, outside the public site. Google Analytics and Microsoft Clarity are not loaded on the account and group pages.`)}</li>
     <li>${T(`You can take a week out of a group, leave a group, or delete your account from the site at any time, and it is removed straight away. A group’s creator can remove anyone. Every group is deleted two weeks after the last day of school.`)}</li>
     <li>${T(`Accounts are for parents, caregivers and teachers. Children should not make one.`)}</li>
@@ -1777,7 +1779,7 @@ const groupsAttrs = depth => `data-groups data-root="${link('', depth) === './' 
 const groupsScript = depth => `<script src="${link('assets/groups.js', depth)}${GROUPS_V}"></script>`;
 function accountPage() {
   const hero = `    <h1>${T(`Your account`)}</h1>
-    <p class="lede">${T(`An account is only for share groups: a class, a carpool or a few friends who want to see each other’s after-school weeks. Rosters work without one.`)}</p>`;
+    <p class="lede">${T(`An account is only for share groups: a few families you know who want to see each other’s after-school weeks. Rosters work without one.`)}</p>`;
   const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`Accounts need JavaScript turned on.`)}</p></noscript>
   <div class="g-page" id="account"></div>
@@ -1785,7 +1787,7 @@ function accountPage() {
     <h2>${T(`How groups keep things private`)}</h2>
     <ul>
       <li>${T(`A group shows a child’s first name and the programs on their week. No last names, addresses, notes or photos.`)}</li>
-      <li>${T(`Only signed-in people the group’s creator has approved can see it. A group can’t be searched for, and its link shows nothing to anyone else.`)}</li>
+      <li>${T(`Groups are invitation only. Its creator invites email addresses, and only those addresses can join. A group can’t be searched for, and its link shows nothing to anyone else.`)}</li>
       <li>${T(`You can take a week out of a group, leave a group, or delete your account at any time. Groups delete themselves when the school year ends.`)}</li>
     </ul>
     <p><a href="${link('privacy/', 1)}#groups">${T(`The full details are on the privacy page.`)}</a></p>
@@ -1800,8 +1802,8 @@ const groupsInfo = () => ({
   programs: Object.fromEntries(programs.map(p => [p.id, { name: p.name, type: p.types[0], offers: p.offers || [] }])),
 });
 function joinPage() {
-  const hero = `    <h1>${T(`Join a class or group`)}</h1>
-    <p class="lede">${T(`Enter the code you were given, sign in with your email, and pick the week to share. The group’s creator approves you before you see anything.`)}</p>`;
+  const hero = `    <h1>${T(`Join a group`)}</h1>
+    <p class="lede">${T(`Groups are invitation only. Enter the code from your invitation, sign in with the email address it was sent to, and pick the week to share.`)}</p>`;
   const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`Joining a group needs JavaScript turned on.`)}</p></noscript>
   <div class="g-page" id="join"></div>
@@ -1809,7 +1811,7 @@ function joinPage() {
     <h2>${T(`What a group sees`)}</h2>
     <ul>
       <li>${T(`Your child’s first name and the programs on their week. No last names, addresses, notes or photos.`)}</li>
-      <li>${T(`Only signed-in people the group’s creator has approved. Its link shows nothing to anyone else.`)}</li>
+      <li>${T(`Only the people its creator invited by email address. Its link shows nothing to anyone else.`)}</li>
       <li>${T(`You can take the week back out, leave the group or delete your account at any time.`)}</li>
     </ul>
     <p><a href="${link('privacy/', 1)}#groups">${T(`The full details are on the privacy page.`)}</a></p>
@@ -1821,7 +1823,7 @@ function joinPage() {
 function groupPage() {
   const info = groupsInfo();
   const hero = `    <h1 id="group-title">${T(`Your group`)}</h1>
-    <p class="lede" id="group-lede">${T(`Only this group’s approved members can see it.`)}</p>`;
+    <p class="lede" id="group-lede">${T(`Only the people invited to this group can see it.`)}</p>`;
   const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`Groups need JavaScript turned on.`)}</p></noscript>
   <div class="g-page" id="group"></div>
