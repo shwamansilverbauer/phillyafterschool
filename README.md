@@ -259,6 +259,13 @@ The day-off page has its own look: a yellow band with navy type (`.band.dayoff` 
 own drawing, `dayScene()` in `build.mjs`: the school shut, the bus asleep, a swing and a kite going up. Its
 share picture is `src/static/share-days-off.png`; any page can name its own with `shareImage` in `layout()`.
 
+**Colours.** Every colour is a named value at the top of `src/site.css`. The band at the top of each page is a
+daytime sky (`--hero` fading to `--hero-low`) with navy type (`--hero-ink`, `--hero-muted`); the header button
+is `--cta`; the footer keeps the deep blue (`--foot`). Navy on the sky measures 9:1 or better, above the old
+white-on-deep-blue. Dark mode has its own set just below, where the band is deep blue and the sun in the home
+scene is switched off (`--sun`). The week card (`drawCard` in `src/site.js`) and the link-preview picture
+(`src/static/share.png`, 1200 by 630) use the same sky and footer, so change them together.
+
 **A saved school.** A school page has "Save as my school". The choice is kept in the visitor's browser
 (`pas-my-school`), with no account. After that the home page shows a shortcut to the school, the citywide
 lists (A to Z, types, neighborhoods) open narrowed to programs that work for it with an "Any school" button

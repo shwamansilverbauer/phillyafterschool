@@ -479,7 +479,13 @@ function street(animate) {
   let bus = `<rect class="by" x="0" y="0" width="50" height="21" rx="4"/><rect class="by" x="44" y="8" width="13" height="13" rx="3"/><rect class="stop" x="0" y="11" width="2.5" height="5"/>`;
   for (let i = 0; i < 4; i++) bus += `<rect class="bw" x="${5 + i * 10.5}" y="4" width="7.5" height="7" rx="1"/>`;
   bus += `<circle class="wh" cx="12" cy="22" r="5"/><circle class="hub" cx="12" cy="22" r="1.8"/><circle class="wh" cx="42" cy="22" r="5"/><circle class="hub" cx="42" cy="22" r="1.8"/>`;
-  return `<svg class="street${animate ? ' go' : ''}" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${run(-10, sx)}${school}${run(sx + sw, 2010)}<rect class="st" x="0" y="${G}" width="2000" height="12"/><g class="bus"><g transform="translate(968,${G - 22})">${bus}</g></g></svg>`;
+  // the afternoon sky behind the block: a sun in the gap between two rowhouses, and a few clouds over the roofs
+  const ux = 1040, uy = 43;
+  let rays = '';
+  for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; rays += `<line x1="${(ux + Math.cos(a) * 26).toFixed(1)}" y1="${(uy + Math.sin(a) * 26).toFixed(1)}" x2="${(ux + Math.cos(a) * 33).toFixed(1)}" y2="${(uy + Math.sin(a) * 33).toFixed(1)}"/>`; }
+  const cloud = (px, py, k, sc) => `<g class="cloud c${k}" transform="translate(${px},${py}) scale(${sc})"><ellipse cx="0" cy="0" rx="22" ry="8"/><ellipse cx="-12" cy="-6" rx="11" ry="8"/><ellipse cx="8" cy="-8" rx="13" ry="10"/></g>`;
+  const sky = `<g class="sky"><g class="sunwrap"><g class="rays" style="transform-origin:${ux}px ${uy}px">${rays}</g><circle class="sun" cx="${ux}" cy="${uy}" r="21"/></g><g class="drift d1">${cloud(1128, 20, 1, .85)}${cloud(590, 22, 1, 1)}${cloud(1700, 18, 1, .9)}</g><g class="drift d2">${cloud(1380, 26, 2, .7)}${cloud(330, 24, 2, .75)}${cloud(1900, 30, 2, .7)}</g></g>`;
+  return `<svg class="street${animate ? ' go' : ''}" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${sky}${run(-10, sx)}${school}${run(sx + sw, 2010)}<rect class="st" x="0" y="${G}" width="2000" height="12"/><g class="bus"><g transform="translate(968,${G - 22})">${bus}</g></g></svg>`;
 }
 
 function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false, first = '', theme = '', shareImage = null, quiet = false }) {
@@ -518,7 +524,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <link rel="icon" href="${link('favicon.svg', depth)}" type="image/svg+xml">
 <link rel="icon" href="${link('favicon.png', depth)}" type="image/png" sizes="48x48">
 <link rel="apple-touch-icon" href="${link('apple-touch-icon.png', depth)}">
-<meta name="theme-color" content="#0F4D90">
+<meta name="theme-color" content="#96C9FF">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
