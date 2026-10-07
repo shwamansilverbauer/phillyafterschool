@@ -821,9 +821,10 @@ button.btn{cursor:pointer;font-family:inherit}
 .club-match{margin:0;font-weight:700;background:var(--yellow);color:var(--yellow-ink);border-radius:10px;padding:8px 12px;align-self:flex-start}
 .club-match[hidden]{display:none}
 /* accounts: Google as a second way in, the profile panel, and the three parts of "Keep and share this week" */
-.signin-alt{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding-top:4px}
+.signin-alt{display:flex;flex-direction:column;align-items:stretch;gap:12px}
 .signin-alt[hidden]{display:none}
-.signin-or{color:var(--muted);font-size:.95rem}
+.signin-or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.9rem}
+.signin-or::before,.signin-or::after{content:"";flex:1;height:1px;background:var(--line)}
 .signin-alt>.btn{cursor:pointer;font:inherit;font-weight:700;background:var(--surface)}
 .g-google[hidden]{display:none}
 .g-google{min-height:44px}
@@ -856,14 +857,10 @@ button.btn{cursor:pointer;font-family:inherit}
 .stats>.stat-table{max-width:420px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
 /* the strip above the menu: Log in and Register, or Your account */
 .topbar{background:rgba(0,0,0,.2);font-size:.92rem}
-.topbar .in{max-width:1280px;display:flex;justify-content:flex-end;align-items:center;gap:6px 18px;padding-block:6px}
+.topbar .in{max-width:1280px;display:flex;justify-content:flex-end;align-items:center;gap:6px 10px;padding-block:6px}
 .topbar a{color:var(--hero-ink);text-decoration:none;font-weight:700;padding:3px 2px;border-bottom:2px solid transparent}
 .topbar a:hover{border-bottom-color:var(--yellow)}
-.topbar a.top-reg{border:1.5px solid var(--hero-ink);border-radius:999px;padding:2px 13px}
-.topbar a.top-reg:hover{background:var(--hero-ink);color:var(--hero);border-color:var(--hero-ink)}
-.topbar .when-in{display:none}
-html.signed .topbar .when-in{display:inline}
-html.signed .topbar .when-out{display:none}
+.topbar span{color:var(--hero-muted)}
 .band.dayoff .topbar{background:rgba(11,33,64,.12)}
 .band.dayoff .topbar a:hover{border-bottom-color:#0B2140}
 @media print{.topbar{display:none}}
@@ -880,3 +877,34 @@ html.signed .topbar .when-out{display:none}
 .gbtn.mine{min-width:76px}
 .gbtn.mine .g{font-size:.95rem}
 @media print{.or-line{display:none}}
+/* shown to someone signed in, or to someone who isn't: decided before the page paints (see layout in build.mjs) */
+html:not(.signed) .when-in{display:none!important}
+html.signed .when-out{display:none!important}
+/* the footer's support ask */
+.foot-support{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin-top:4px}
+.foot-cta{background:transparent;border:1.5px solid var(--hero-ink);color:var(--hero-ink);text-decoration:none;font-weight:700;border-radius:999px;padding:8px 16px}
+.foot-cta:hover{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink)}
+/* after a card has gone out: keep the week? */
+.card-next{display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:2px solid var(--yellow);border-radius:16px;padding:16px 18px;background:var(--surface)}
+.card-next[hidden]{display:none}
+.card-next b{font-family:var(--display);font-stretch:112%;font-size:1.15rem;line-height:1.2}
+/* the account page for someone signed out: the form, and beside it what an account is for */
+.acct-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:28px;align-items:start}
+.acct-why{display:flex;flex-direction:column;gap:14px;min-width:0}
+.acct-why h2{font-size:1.5rem}
+.acct-art{background:linear-gradient(160deg,#DCEBFB,#F3F8FE);border-radius:20px;padding:14px 10px 4px}
+.acct-art svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto}
+.art-frame{fill:#FFFFFF;stroke:#0B2140;stroke-width:3}
+.art-line{fill:#D5E2F2}
+.art-chip{fill:#E3EEFA}
+.art-ink{fill:#0B2140}
+.acct-points{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.acct-points li{position:relative;padding-left:34px;line-height:1.45}
+.acct-points li::before{content:"";position:absolute;left:0;top:.15em;width:22px;height:22px;border-radius:50%;background:var(--yellow) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'%3E%3Cpath d='M6 11.3l3.3 3.3L16 7.7' fill='none' stroke='%232A2100' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/22px no-repeat}
+.acct-points b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.08rem}
+@media (min-width:900px){
+  html:not(.signed) .acct-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:44px}
+  html:not(.signed) .acct-grid .acct-why{order:-1}
+  html:not(.signed) .acct-grid .g-page{position:sticky;top:20px}
+}
+.g-support .btn{align-self:flex-start}

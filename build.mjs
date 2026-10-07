@@ -382,7 +382,9 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   const nav = menus.map(([label, items]) => {
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
     return `<details class="menu${here ? ' here' : ''}"><summary>${label}${label === 'Build a schedule' ? '<span class="count" data-board-count hidden></span>' : ''}</summary><ul>${items.map(([to, text]) => `<li><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
-  }).join('') + `<a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a><a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`;
+  }).join('') + `<a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
+    ? `<a class="nav-cta when-out" href="${link('account/', depth)}?new=1">Create a free account</a><a class="nav-cta when-in" href="${link('account/', depth)}">Your account</a>`
+    : `<a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`}`;
   const head = `${first}${fragment || quiet ? '' : gtmHead + '\n'}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${esc(canonical)}">${noindex ? '\n<meta name="robots" content="noindex">' : ''}
@@ -406,12 +408,12 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <link rel="stylesheet" href="${link('assets/site.css', depth)}${CSS_V}">${jsonLd ? '\n<script type="application/ld+json">' + JSON.stringify(jsonLd).replace(/</g, '\\u003c') + '</script>' : ''}`;
   // Edit mode (see /edit/) loads a second script. This tells site.js where to find it and where edits are sent.
   const editCfg = { js: link('assets/edit.js', depth) + EDIT_V, send: PREVIEW ? '' : link('edit/send.php', depth), home: link('edit/', depth), contact: cfg.contactEmail || '' };
-  // The strip above the menu: Log in and Register, or "Your account" once this browser has signed in. Which one shows
-  // is decided before the page paints, from a flag the account pages keep in this browser (no request is made).
+  // The strip above the menu holds "Log in" for someone who isn't signed in. The menu's own button is "Create a free
+  // account" for them and "Your account" once this browser has signed in. Which shows is decided before the page
+  // paints, from a flag the account pages keep in this browser (no request is made).
   const topbar = GROUPS ? `
-  <div class="topbar"><div class="in">
-    <a class="when-out" href="${link('account/', depth)}">Log in</a><a class="when-out top-reg" href="${link('account/', depth)}?new=1">Register</a>
-    <a class="when-in" href="${link('account/', depth)}">Your account</a>
+  <div class="topbar when-out"><div class="in">
+    <span>Already have an account?</span><a href="${link('account/', depth)}">Log in</a>
   </div></div>` : '';
   const page = `${quiet ? '' : gtmBody}<script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
 <header class="band${theme ? ' ' + theme : ''}">${topbar}
@@ -433,6 +435,7 @@ ${body}
     <div class="foot-brand">
       <a class="brand" href="${link('', depth)}"><span class="bus-mark"></span>${esc(cfg.siteName)}</a>
       <p>${T(`After-school programs in Philadelphia, sorted by the school your child goes to.`)}</p>
+      ${cfg.supportUrl ? `<p class="foot-support"><span>${T(`Free, and run by one parent.`)}</span> <a class="btn foot-cta" href="${link('support/', depth)}">Help the site keep going</a></p>` : ''}
     </div>
     <div>
       <h2><a href="${link('schools/', depth)}">${T(`Schools`)}</a></h2>
@@ -1409,7 +1412,7 @@ function privacyPage() {
   <p>${T(`An account is optional. It lets you keep your school and a child’s week in a profile, share a week with one person, and join a share group of a few families who know each other. These are the only parts of the site that keep anything about a child on our server, and only when you choose to use them.`)}</p>
   <ul>
     <li>${T(`An account is an email address and your first and last name. The email signs you in and tells you when someone opens a week you shared or joins a group you made. Other members never see it.`)}</li>${GROUPS.google ? `
-    <li>${T(`You can sign in with Google instead of an emailed code. Google’s sign-in is only loaded if you choose it. Google then knows you signed in to this site, and tells us your name and email address. We ask for nothing else and never see your Google password.`)}</li>` : ''}
+    <li>${T(`You can sign in with Google instead of an emailed code. Google’s button is loaded on the pages where you sign in, so Google can see that someone opened that page. If you use it, Google tells us your name and email address. We ask for nothing else and never see your Google password.`)}</li>` : ''}
     <li>${T(`If you keep your school in your profile, we store which school. If you keep your children’s grades, we store the grades and nothing about which child is in which. If you keep a week in your profile, we store the child’s first name, the programs on their current and upcoming weeks, and the school each program was picked under, so the week can be put back on another device. Notes you type are not stored.`)}</li>
     <li>${T(`Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.`)}</li>
     <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
@@ -1858,11 +1861,40 @@ const GROUPS = cfg.groups && cfg.contactEmail ? { pilot: cfg.groups.pilot !== fa
 const groupsAttrs = depth => `data-groups data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}" data-api="${PREVIEW ? '' : link('groups/api.php', depth)}"${GROUPS.klaviyoList && ALERTS?.klaviyoKey ? ` data-kl-key="${esc(ALERTS.klaviyoKey)}" data-kl-list="${esc(GROUPS.klaviyoList)}"` : ''}${GROUPS.google && !PREVIEW ? ` data-google="${esc(GROUPS.google)}"` : ''} data-pilot="${GROUPS.pilot ? 1 : 0}"`;
 const groupsScript = depth => `<script src="${link('assets/groups.js', depth)}${GROUPS_V}"></script>`;
 function accountPage() {
-  const hero = `    <h1>${T(`Your account`)}</h1>
-    <p class="lede">${T(`Keep your school and your child’s week in a profile, so they’re on every device you sign in on, and share a week with one person. Everything else on the site works without an account.`)}</p>`;
+  // Signed out, this is the page that makes the case for an account: what you get on one side, the form on the other.
+  // Signed in, it is the profile. Both headings are in the page and the right one shows before it paints.
+  const hero = `    <h1><span class="when-out">${T(`Your free account`)}</span><span class="when-in">${T(`Your account`)}</span></h1>
+    <p class="lede when-out">${T(`Save your school, your kids’ grades and your week, and share a week with the people who need it. It takes about a minute, and there’s no password to remember.`)}</p>
+    <p class="lede when-in">${T(`Keep your school and your child’s week in a profile, so they’re on every device you sign in on, and share a week with one person. Everything else on the site works without an account.`)}</p>`;
+  const art = `<svg viewBox="0 0 520 300" aria-hidden="true" focusable="false">
+  <defs><g id="acct-week"><rect width="120" height="152" rx="11" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/><path d="M0 11a11 11 0 0 1 11-11h98a11 11 0 0 1 11 11v17H0z" fill="#0F4D90"/><text x="11" y="19" font-size="11" font-weight="800" fill="#FFFFFF" font-family="Archivo, Arial, sans-serif">Sam’s week</text><circle cx="17" cy="44" r="7.5" fill="#E3EEFA"/><text x="17" y="47.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">M</text><rect x="31" y="38" width="62" height="12" rx="6" fill="#1F7A3A"/><circle cx="17" cy="65" r="7.5" fill="#E3EEFA"/><text x="17" y="68.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">T</text><rect x="31" y="59" width="48" height="12" rx="6" fill="#B4237A"/><circle cx="17" cy="86" r="7.5" fill="#E3EEFA"/><text x="17" y="89.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">W</text><rect x="31" y="80" width="70" height="12" rx="6" fill="#0E7C86"/><circle cx="17" cy="107" r="7.5" fill="#E3EEFA"/><text x="17" y="110.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">T</text><rect x="31" y="101" width="40" height="12" rx="6" fill="#6B3FA0"/><circle cx="17" cy="128" r="7.5" fill="#E3EEFA"/><text x="17" y="131.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">F</text><rect x="31" y="122" width="56" height="12" rx="6" fill="#C2410C"/></g></defs>
+  <rect x="238" y="20" width="250" height="186" rx="13" class="art-frame"/>
+  <path d="M212 214h302a7 7 0 0 1-7 12H219a7 7 0 0 1-7-12z" fill="#0B2140"/>
+  <use href="#acct-week" x="262" y="38"/>
+  <rect x="398" y="42" width="72" height="9" rx="4.5" class="art-line"/><rect x="398" y="60" width="54" height="9" rx="4.5" class="art-line"/><rect x="398" y="78" width="66" height="9" rx="4.5" class="art-line"/>
+  <rect x="394" y="110" width="82" height="26" rx="13" fill="#F3C613"/><text x="435" y="127.5" text-anchor="middle" font-size="11" font-weight="800" fill="#2A2100" font-family="Archivo, Arial, sans-serif">Nebinger</text>
+  <rect x="394" y="144" width="82" height="26" rx="13" class="art-chip"/><text x="435" y="161.5" text-anchor="middle" font-size="11" font-weight="800" class="art-ink" font-family="Archivo, Arial, sans-serif">Grades K, 3</text>
+  <rect x="30" y="62" width="150" height="226" rx="22" class="art-frame"/><rect x="88" y="71" width="34" height="5" rx="2.5" fill="#0B2140"/>
+  <use href="#acct-week" x="45" y="92"/>
+  <path d="M128 58C140 22 212 16 240 54" fill="none" stroke="#0F4D90" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round"/>
+  <circle cx="184" cy="29" r="17" fill="#F3C613"/><path d="M176 29.5l5.5 5.5 10-11" fill="none" stroke="#2A2100" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
   const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`Accounts need JavaScript turned on.`)}</p></noscript>
-  <div class="g-page" id="account"></div>
+  <div class="acct-grid">
+    <div class="g-page" id="account"></div>
+    <section class="acct-why when-out" aria-labelledby="acct-why-h">
+      <div class="acct-art">${art}</div>
+      <h2 id="acct-why-h">${T(`What an account gives you`)}</h2>
+      <ul class="acct-points">
+        <li><b>${T(`Save your school.`)}</b> ${T(`Every list starts from it, on any device you sign in on.`)}</li>
+        <li><b>${T(`Save your kids’ grades.`)}</b> ${T(`Lists open on the programs that take them.`)}</li>
+        <li><b>${T(`Keep your week.`)}</b> ${T(`Build it on your phone tonight, find it on your laptop tomorrow.`)}</li>
+        <li><b>${T(`Share a week with one person.`)}</b> ${T(`A grandparent or a sitter signs in to see it, and you can take it back.`)}</li>
+      </ul>
+      <p class="hint">${T(`It’s free. Nothing goes into your profile unless you put it there, and you can delete the account whenever you like.`)}</p>
+    </section>
+  </div>
   <section class="notes">
     <h2>${T(`What an account keeps, and who sees it`)}</h2>
     <ul>
@@ -2022,8 +2054,6 @@ function boardPage() {
   </section>
   ${nextOff(1).replace(T(`Days off this year, and who’s open`), T(`Plan the days off too`))}
   ${ALERTS ? `<p class="hint alerts-line">${T(`Want next term’s sign-up dates before they open?`)} <a href="${link(alertsPath, 1)}">${T(`Get the dates by email.`)}</a></p>` : ''}
-  ${GROUPS ? `<section class="section group-share" id="group-share" ${groupsAttrs(1)} hidden></section>` : ''}
-  ${GROUPS ? `<p class="or-line" id="or-card" hidden><span>${T(`or`)}</span></p>` : ''}
   <section class="section card-maker" id="card-maker" hidden>
     <h2 tabindex="-1">${T(`Make it a card`)}</h2>
     <p>${T(`One picture of the week to text, print, or hand to your child’s teacher, so they know where your child goes each day and who they are.`)}</p>
@@ -2051,13 +2081,19 @@ function boardPage() {
         </div>
         <p class="hint" id="card-status" aria-live="polite"></p>
         <p class="hint">${T(`To email it to a teacher, share or save the card, then attach it to a message from your own email.`)}</p>
+        ${GROUPS ? `<div class="card-next" id="card-next" data-edit-reveal="Shown once someone has shared, saved, copied or printed a card:" hidden>
+          <b>${T(`Want to keep this week too?`)}</b>
+          <span>${T(`Save it to a free account so it’s on your phone and your computer, or share it with someone who signs in to see it.`)}</span>
+          <a class="btn primary" href="#group-share">${T(`Save or share this week`)}</a>
+        </div>` : ''}
       </div>
       <div class="card-preview"><canvas id="card-canvas" width="1080" height="1350" role="img" aria-label="Preview of the week card"></canvas></div>
     </div>
   </section>
+  ${GROUPS ? `<section class="section group-share" id="group-share" ${groupsAttrs(1)} hidden></section>` : ''}
   <script type="application/json" id="pas-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: 'Build your week', description: `Put together a Monday to Friday after-school roster for each child from ${cfg.siteName} listings and share it with a link.`, pathName: 'board/', depth: 1, current: 'board/', hero, body,
+  return layout({ title: 'Build your week', description: `Put together a Monday to Friday after-school roster for each child from ${cfg.siteName} listings and turn it into a card to share.`, pathName: 'board/', depth: 1, current: 'board/', hero, body,
     // An old shared-roster link carries a child's first name after the #. Those links are retired, but one may still be
     // opened. This runs before any analytics loads: it notes that one arrived and takes it out of the address.
     scripts: GROUPS ? groupsScript(1) : '',

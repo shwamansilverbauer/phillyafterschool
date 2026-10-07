@@ -329,16 +329,23 @@ another device), share a week with one person, and, while it is a pilot, join a 
 These are the only parts of the site that store anything about a child on the server.
 
 - **Turning it on.** `"groups": { ... }` in `site.config.json`. Remove `groups` to take accounts out of the build.
-  With it on, every page gets a strip above the menu ("Log in" and "Register", or "Your account" once that
-  browser has signed in; the choice is made from a flag in the browser, no request), the footer links to the
-  account page, and Build your week gets a "Keep and share this week" block.
-- **Signing in.** A 6-digit code by email (no password), or Google. Set `"googleClientId"` under `groups` to the
-  OAuth client ID from Google Cloud (a public value; there is no secret) to offer Google. Google's script is
-  only fetched when someone taps "Use Google instead", and the option is hidden inside the Facebook and
-  Instagram apps, where Google refuses to sign in. The server asks Google whether the token is real, then
-  checks it was issued to this site and that the address is one Google runs (Gmail or a Workspace domain);
-  anything else is sent to the email code. A new account needs a first and last name before it can do anything;
-  Google supplies them.
+  With it on, the menu's yellow button is "Create a free account" (or "Your account" once that browser has signed
+  in), a strip above the menu offers "Log in" to anyone signed out, and the support ask ("Help the site keep
+  going") moves to the footer and the account page. Which version shows is decided from a flag in the browser, with
+  no request: elements carry the class `when-out` or `when-in`.
+- **The account page.** Signed out, `/account/` is a landing page: what an account gives you (with a drawing of a
+  week on a phone and a laptop) beside the form. `?new=1` words the form for someone registering and `?next=board`
+  sends them back to Build your week afterwards. Signed in, the same address is the profile.
+- **Build your week.** The card comes first. Once someone shares, saves, copies or prints a card, a box asks
+  whether they want to keep the week too, and points at the block under the card maker: "Save this week, or share
+  it" for someone signed out (Create a free account, Log in), "Keep and share this week" for someone signed in.
+- **Signing in.** Google's button first, then a 6-digit code by email (no password). Set `"googleClientId"` under
+  `groups` to the OAuth client ID from Google Cloud (a public value; there is no secret) to offer Google. The
+  button is Google's own, so its script loads on every page that shows the sign-in form; it is left out inside
+  the Facebook and Instagram apps, where Google refuses to sign in, and the form works without it if the script
+  can't be fetched. The server asks Google whether the token is real, then checks it was issued to this site and
+  that the address is one Google runs (Gmail or a Workspace domain); anything else is sent to the email code. A
+  new account needs a first and last name before it can do anything; Google supplies them.
 - **Profile.** "Keep this week in my profile" on Build your week stores the child's first name and, for the
   current and upcoming weeks, each pick as `program.school` (plus a class the program lists). Free-text notes,
   the teacher's name, the card note, prices and day-off plans stay on the device. The roster remembers the

@@ -744,7 +744,7 @@
     var $ = function (id) { return boardPage.querySelector(id); };
     var week = $('#week'), nameInput = $('#board-name'), status = $('#board-status'), tools = $('#board-tools');
     var banner = $('#board-retired'), emptyNote = $('#board-empty'), emptyText = $('#board-empty-text');
-    var title = $('#board-title'), tabs = $('#board-tabs'), promote = $('#board-promote'), orCard = $('#or-card');
+    var title = $('#board-title'), tabs = $('#board-tabs'), promote = $('#board-promote');
     var kidBar = $('#kid-bar'), kidTabs = $('#kid-tabs'), kidAdd = $('#kid-add'), kidRemove = $('#kid-remove');
     var WHICH = { now: 'current', next: 'upcoming' };
 
@@ -884,7 +884,6 @@
       var dragHint = $('#board-hint'); if (dragHint) dragHint.hidden = !!shared || total === 0;
       if (maker) maker.hidden = !!shared || total === 0;
       var shareCta = $('#share-cta'); if (shareCta) shareCta.hidden = !maker || !!shared || total === 0;
-      if (orCard) orCard.hidden = !maker || total === 0;   // "or" sits between the account block and "Make it a card"
       emptyNote.hidden = !!shared || total > 0;
       promote.hidden = !!shared || which !== 'next' || total === 0;
       promote.textContent = 'The new term has started: make this the current roster';
@@ -940,7 +939,12 @@
       r.kids.splice(r.kid, 1); r.kid = Math.max(0, r.kid - 1);
       saveRosters(); say('Removed.'); render();
     });
-    var track_share = function (method) { track({ event: 'pas_board_share', method: method, board: WHICH[loadRosters().active] }); };
+    var cardNext = $('#card-next');
+    var track_share = function (method) {
+      track({ event: 'pas_board_share', method: method, board: WHICH[loadRosters().active] });
+      // Someone who has just sent, saved, copied or printed a card is asked whether they want to keep the week too.
+      if (cardNext && /^(image_|print$)/.test(method) && document.getElementById('group-share')) cardNext.hidden = false;
+    };
     $('#board-clear').addEventListener('click', function () { var r = loadRosters(); r.kids[r.kid][r.active] = emptyBoard(); saveRosters(); say('Roster cleared.'); render(); });
     promote.addEventListener('click', function () {
       if (!promote.getAttribute('data-armed')) {   // two taps, because it replaces the current roster
