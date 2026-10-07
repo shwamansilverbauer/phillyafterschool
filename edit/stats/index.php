@@ -30,7 +30,7 @@ function edit_signed_in() {
 }
 
 if (!edit_signed_in()) { header('Location: ../', true, 303); exit; }
-$SCHOOLS = json_decode('{"nebinger":"Nebinger","meredith":"Meredith","coppin":"Coppin"}', true);
+$SCHOOLS = json_decode('{"nebinger":"Nebinger","meredith":"Meredith","coppin":"Coppin","vare-washington":"Vare-Washington","mccall":"McCall"}', true);
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();

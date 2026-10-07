@@ -267,6 +267,8 @@ if (!edit_signed_in()) {
     <li><a href="../nebinger/">Nebinger page</a></li>
     <li><a href="../meredith/">Meredith page</a></li>
     <li><a href="../coppin/">Coppin page</a></li>
+    <li><a href="../vare-washington/">Vare-Washington page</a></li>
+    <li><a href="../mccall/">McCall page</a></li>
     <li><a href="../types/">Program types</a></li>
     <li><a href="../types/aftercare/">A type page (Aftercare)</a></li>
     <li><a href="../programs/">All programs, A to Z</a></li>

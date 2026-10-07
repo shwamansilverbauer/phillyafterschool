@@ -16,6 +16,14 @@
     {
       "id": "coppin",
       "name": "Coppin"
+    },
+    {
+      "id": "vare-washington",
+      "name": "Vare-Washington"
+    },
+    {
+      "id": "mccall",
+      "name": "McCall"
     }
   ],
   "programs": [
@@ -29,7 +37,7 @@
     },
     {
       "id": "girls-on-the-run",
-      "name": "Girls on the Run at Nebinger"
+      "name": "Girls on the Run"
     },
     {
       "id": "nebinger-arts-partners",
@@ -126,6 +134,22 @@
     {
       "id": "makom-community",
       "name": "Makom Community"
+    },
+    {
+      "id": "vare-washington-edey",
+      "name": "Extended Day, Extended Year at Vare-Washington"
+    },
+    {
+      "id": "vare-washington-clubs",
+      "name": "School clubs and teams at Vare-Washington"
+    },
+    {
+      "id": "sunrise-mccall",
+      "name": "Sunrise of Philadelphia at McCall"
+    },
+    {
+      "id": "mccall-clubs",
+      "name": "McCall clubs and teams"
     }
   ],
   "alerts": [
@@ -359,7 +383,9 @@
       "schools": [
         "nebinger",
         "meredith",
-        "coppin"
+        "coppin",
+        "vare-washington",
+        "mccall"
       ],
       "programs": [
         "mister-johns-music"
@@ -805,7 +831,9 @@
       "schools": [
         "nebinger",
         "meredith",
-        "coppin"
+        "coppin",
+        "vare-washington",
+        "mccall"
       ],
       "programs": [
         "fleisher-art-memorial"
@@ -824,7 +852,8 @@
       "schools": [
         "nebinger",
         "meredith",
-        "coppin"
+        "coppin",
+        "mccall"
       ],
       "programs": [
         "butchers-sew-shop"
@@ -843,7 +872,9 @@
       "schools": [
         "nebinger",
         "meredith",
-        "coppin"
+        "coppin",
+        "vare-washington",
+        "mccall"
       ],
       "programs": [
         "philly-art-center-qv"
