@@ -196,6 +196,15 @@
     var cur = deviceSchool();
     if (!cur || cur.id !== id) set('pas-my-school', JSON.stringify({ id: id, name: name }));
   }
+  // The grades kept in a profile are copied to this browser, where the lists read them (no request from those pages).
+  // Keeping grades for the first time, or changing them, makes "My kids" the grade the lists start on.
+  function adoptGrades(list) {
+    list = Array.isArray(list) ? list.filter(function (g) { return typeof g === 'string'; }) : [];
+    var was = get('pas-my-grades') || '[]', now = JSON.stringify(list);
+    if (list.length) { set('pas-my-grades', now); if (was !== now) set('pas-grade', 'MINE'); }
+    else { set('pas-my-grades', null); if (get('pas-grade') === 'MINE') set('pas-grade', 'ALL'); }
+  }
+  function gradeWord(g) { return g === 'PK' ? 'Pre-K' : g; }
   function shortDate(t) { var d = new Date(t * 1000); return isNaN(d) ? '' : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
   function weekCount(b) { var n = 0; DAYS.forEach(function (d) { n += ((b && b.days && b.days[d[0]]) || []).length; }); return n; }
   // Inviting people: the owner types email addresses, each gets an invitation, and only those addresses can join.
@@ -333,7 +342,7 @@
       // what is kept in the profile: a school, and any weeks
       var prof = el('section', 'panel');
       prof.appendChild(el('h2', null, 'Kept in your profile'));
-      prof.appendChild(el('p', null, 'Your school and your child’s week can live in your profile, so they’re there when you sign in on another phone or computer. Nothing goes in unless you put it there.'));
+      prof.appendChild(el('p', null, 'Your school, your children’s grades and your child’s week can live in your profile, so they’re there when you sign in on another phone or computer. Nothing goes in unless you put it there.'));
       var schoolRow = el('form', 'g-row');
       var sl = el('label', null, 'Your school'); sl.htmlFor = 'prof-school';
       var ss = el('select'); ss.id = 'prof-school';
@@ -364,6 +373,28 @@
       };
       ss.addEventListener('change', saveSchool);
       schoolRow.addEventListener('submit', function (e) { e.preventDefault(); });
+      var gradeRow = el('div', 'g-grades');
+      var gl0 = el('span', 'g-label', 'Your children’s grades'); gl0.id = 'prof-grades-label'; gradeRow.appendChild(gl0);
+      var gradeRail = el('div', 'g-grade-rail'); gradeRail.setAttribute('role', 'group'); gradeRail.setAttribute('aria-labelledby', 'prof-grades-label');
+      var gradeNote = el('span', 'hint'); gradeNote.setAttribute('aria-live', 'polite');
+      var keptGrades = [], gradeBtns = [];
+      (ainfo.grades || []).forEach(function (g) {
+        var b = btn('gbtn', ''); b.appendChild(el('span', 'g', g)); b.setAttribute('aria-pressed', 'false'); b.setAttribute('aria-label', g === 'PK' ? 'Pre-K' : g === 'K' ? 'Kindergarten' : 'Grade ' + g);
+        b.addEventListener('click', function () {
+          var want = keptGrades.indexOf(g) > -1 ? keptGrades.filter(function (x) { return x !== g; }) : keptGrades.concat([g]);
+          gradeNote.textContent = 'Saving…';
+          call('grades_save', { grades: want }).then(function (r) {
+            if (!r.ok) { gradeNote.textContent = r.message; return; }
+            adoptGrades(r.grades); paintGrades(r.grades);
+            gradeNote.textContent = r.grades.length ? 'Kept. Lists of programs now start on “My kid' + (r.grades.length === 1 ? '' : 's') + '”: programs that take ' + r.grades.map(gradeWord).join(' or ') + '.' : 'No grades kept.';
+          });
+        });
+        gradeBtns.push([g, b]); gradeRail.appendChild(b);
+      });
+      var paintGrades = function (list) { keptGrades = list || []; gradeBtns.forEach(function (x) { x[1].setAttribute('aria-pressed', String(keptGrades.indexOf(x[0]) > -1)); }); };
+      gradeRow.appendChild(gradeRail); gradeRow.appendChild(gradeNote);
+      gradeRow.appendChild(el('span', 'hint', 'Tap each grade you have a child in. We keep the grades only, not which child is in which.'));
+      if ((ainfo.grades || []).length) prof.appendChild(gradeRow);
       var weeksHead = el('h3', null, 'Weeks'); prof.appendChild(weeksHead);
       var weeksBox = el('div'); prof.appendChild(weeksBox);
       var toBoard = el('p', 'hint', 'To keep a week here, or put one on this device, open '); var tb = el('a', null, 'Build your week'); tb.href = page('board/') + '?back=1'; toBoard.appendChild(tb); toBoard.appendChild(document.createTextNode(' and look for “Keep and share this week”.'));
@@ -386,11 +417,11 @@
       var loadProfile = function () {
         call('profile').then(function (p) {
           if (!p.ok) return;
-          adoptSchool(p.school, schoolName(p.school));
-          paintSchool(p.school); paintWeeks(p.weeks || []);
+          adoptSchool(p.school, schoolName(p.school)); adoptGrades(p.grades);
+          paintSchool(p.school); paintGrades(p.grades || []); paintWeeks(p.weeks || []);
         });
       };
-      paintSchool(me.school || ''); loadProfile();
+      paintSchool(me.school || ''); paintGrades(me.grades || []); loadProfile();
       account.appendChild(prof);
       // sharing: weeks shared with one person, and groups
       var mine = el('section', 'panel');
@@ -469,7 +500,7 @@
       var so = btn('btn', 'Sign out'), sa = btn('btn', 'Sign out on every device'), del = btn('clear', 'Delete my account');
       acts.appendChild(so); acts.appendChild(sa); acts.appendChild(del);
       out.appendChild(acts);
-      out.appendChild(el('p', 'hint', 'Deleting your account removes your email, the school and weeks kept in your profile, every week you shared, and every group you made (for everyone in it). Rosters saved on this device stay.'));
+      out.appendChild(el('p', 'hint', 'Deleting your account removes your email, the school, grades and weeks kept in your profile, every week you shared, and every group you made (for everyone in it). Rosters saved on this device stay.'));
       so.addEventListener('click', function () { call('logout', {}).then(function () { set('pas-in', null); drawSignedOut(); }); });
       sa.addEventListener('click', function () { call('logout_all', {}).then(function () { set('pas-in', null); drawSignedOut(); }); });
       twoTap(del, 'Tap again to delete everything', function () { call('delete_account', {}).then(function (r) { if (r.ok) { set('pas-in', null); unlinkAll(); drawSignedOut('Your account and everything you shared are deleted.'); } }); });
@@ -499,6 +530,7 @@
       if (r && Array.isArray(r.kids)) { r.kids.forEach(function (k) { delete k.groups; delete k.prof; }); window.localStorage.setItem('pas-rosters', JSON.stringify(r)); }
     } catch (e) { /* nothing saved */ }
     set('pas-prof-school', null);
+    adoptGrades([]);
   }
   // A week taken out of the profile: this device's copy stays, it just stops being sent.
   function unkeep(weekId) {
@@ -1041,7 +1073,7 @@
     // What the profile holds, compared with this device: a newer copy there replaces the one here.
     var reconcile = function (p) {
       profile = p;
-      adoptSchool(p.school, schoolName(p.school));
+      adoptSchool(p.school, schoolName(p.school)); adoptGrades(p.grades);
       var changed = false;
       board.rosters().kids.forEach(function (k) {
         if (!k.prof) return;
@@ -1090,7 +1122,6 @@
         var si = el('a', 'btn primary', 'Log in or register'); si.href = page('account/') + '?next=board'; row0.appendChild(si);
         if (groupsOn()) { var inv0 = btn('btn', 'I was invited to a group'); inv0.addEventListener('click', toJoin()); row0.appendChild(inv0); }
         share.appendChild(row0);
-        share.appendChild(el('p', 'hint', 'You don’t need one to build a week, print it or make a card. This week stays on this device unless you choose otherwise.'));
         return;
       }
       if (!me.ready) {
@@ -1162,6 +1193,9 @@
       } else if (profile && profile.school && schoolName(profile.school)) {
         keep.appendChild(el('p', 'hint', schoolName(profile.school) + ' is kept in your profile as your school.'));
       }
+      var gp = el('p', 'hint', profile && profile.grades && profile.grades.length ? 'Your children’s grades in your profile: ' + profile.grades.map(gradeWord).join(', ') + '. ' : 'Keep your children’s grades in your profile and lists of programs start on them. ');
+      var ga = el('a', null, profile && profile.grades && profile.grades.length ? 'Change' : 'Add grades'); ga.href = page('account/'); gp.appendChild(ga);
+      keep.appendChild(gp);
       share.appendChild(keep);
 
       // ----- 2. one person -----
@@ -1294,7 +1328,7 @@
         if (changed) board.save();
         if (!me) { draw(); return; }
         call('profile').then(function (p) {
-          if (p.ok) reconcile({ school: p.school || '', weeks: p.weeks || [] });
+          if (p.ok) reconcile({ school: p.school || '', grades: p.grades || [], weeks: p.weeks || [] });
           draw();
           syncNow();
         });

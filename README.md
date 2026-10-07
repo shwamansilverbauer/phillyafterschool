@@ -342,6 +342,11 @@ These are the only parts of the site that store anything about a child on the se
   copy in the profile takes it, keeping its own notes for the same program. "Put it on this device" rebuilds a
   kept week on a new device. A kept school is also that device's saved school, and saving a different school
   on a school's page updates the profile (only for someone signed in who keeps one there).
+- **Grades.** On the account page a parent taps the grades their children are in. Only the grades are stored
+  (`users.grades`, for example `K,3`), not which child is in which. The account pages copy them to the browser
+  (`pas-my-grades`), and every list with a grade row then gets a "My kids" choice next to "All" that shows
+  programs taking any of those grades; it becomes the starting grade when grades are first kept or changed.
+  With exactly one grade kept, the themed-week roller starts on it.
 - **Share with one person.** The parent types one email address. That makes a private list for that child's
   week (a group marked `solo`), invites the address, and emails "{Name} shared {Child}'s week with you". The
   recipient must sign in with that address, goes straight in, and can look and print but not change anything.
@@ -349,8 +354,8 @@ These are the only parts of the site that store anything about a child on the se
   it. What is shared is the same as in a group: first name and program ids, never the school, address or notes.
 - **Week links are retired.** A week used to be shareable as a link that held the whole week after the `#`.
   Anyone could open one and it could not be taken back, so the buttons are gone and an old link now shows a
-  notice instead of a week. "Copy as text", "Email it to myself" and cards remain; none of them carries a link
-  to a week.
+  notice instead of a week. "Copy as text", "Email it to myself" and the share-sheet button went with them: a
+  week leaves the page as a card (a picture made on the device) or through an account, and no other way.
 - **Share groups (pilot).** `"pilot": true` keeps groups for several families unlisted: "Start a group" on the
   account page and "Share with a group" on Build your week only show in a browser that has been let in
   (`/account/?groups=1`, opening a group invitation, or already being in a group). Set `"pilot": false` to show

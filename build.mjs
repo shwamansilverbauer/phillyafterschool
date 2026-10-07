@@ -1335,7 +1335,7 @@ function privacyPage() {
     <li>${T(`A child’s name is optional. If you add one, it stays on your device unless you keep or share that week through an account.`)}</li>
     <li>${T(`A week can no longer be shared as a link. A link showed the week to anyone who had it and could not be taken back, so links made before October 2026 have stopped opening.`)}</li>
     <li>${T(`If one of those older links is opened, the site still removes the name from the page address before any analytics loads. The roster page is set to be hidden in session recordings.`)}</li>
-    <li>${T(`Copying a week as text, emailing it to yourself or making a card all happen on your own device. What you do with the text or the picture is up to you.`)}</li>
+    <li>${T(`Making a card happens on your own device. What you do with the picture is up to you.`)}</li>
     <li>${T(`If you add a photo to a week card, the card is made in your own browser. The photo is not uploaded, not saved, and gone when you close the page.`)}</li>
   </ul>
   ${GROUPS ? `<h2 id="groups">${T(`Accounts, profiles and sharing`)}</h2>
@@ -1343,7 +1343,7 @@ function privacyPage() {
   <ul>
     <li>${T(`An account is an email address and your first and last name. The email signs you in and tells you when someone opens a week you shared or joins a group you made. Other members never see it.`)}</li>${GROUPS.google ? `
     <li>${T(`You can sign in with Google instead of an emailed code. Google’s sign-in is only loaded if you choose it. Google then knows you signed in to this site, and tells us your name and email address. We ask for nothing else and never see your Google password.`)}</li>` : ''}
-    <li>${T(`If you keep your school in your profile, we store which school. If you keep a week in your profile, we store the child’s first name, the programs on their current and upcoming weeks, and the school each program was picked under, so the week can be put back on another device. Notes you type are not stored.`)}</li>
+    <li>${T(`If you keep your school in your profile, we store which school. If you keep your children’s grades, we store the grades and nothing about which child is in which. If you keep a week in your profile, we store the child’s first name, the programs on their current and upcoming weeks, and the school each program was picked under, so the week can be put back on another device. Notes you type are not stored.`)}</li>
     <li>${T(`Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.`)}</li>
     <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
     <li>${T(`There are no passwords. We email you a link and a 6-digit code; each works once and for 15 minutes. A cookie then keeps that device signed in for 30 days, and you can sign out everywhere from your account page.`)}</li>
@@ -1805,7 +1805,7 @@ function accountPage() {
     </ul>
     <p><a href="${link('privacy/', 1)}#groups">${T(`The full details are on the privacy page.`)}</a></p>
   </section>
-  <script type="application/json" id="groups-data">${JSON.stringify({ schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })) }).replace(/</g, '\\u003c')}</script>
+  <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })) }).replace(/</g, '\\u003c')}</script>
 </div>`;
   return layout({ title: 'Your account', description: `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
 }
@@ -1848,7 +1848,7 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, yearEnd: end, googleClientId: GROUPS.google });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, yearEnd: end, googleClientId: GROUPS.google, grades: GRADES });
   const src = fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8');
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   return src.replace(`'/*CONFIG*/'`, () => `'` + conf.replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`);
@@ -1916,7 +1916,7 @@ function boardPage() {
           <div class="field">
             <label for="roll-grade">${T(`Grade`)}</label>
             <select id="roll-grade"><option value="">Any grade</option>${GRADES.map(g => `<option value="${g}">${g === 'PK' ? 'Pre-K' : g === 'K' ? 'Kindergarten' : 'Grade ' + g}</option>`).join('')}</select>
-            <span class="hint">${T(`Optional. It skips programs that don’t take that grade, and it isn’t saved.`)}</span>
+            <span class="hint">${T(`Optional. It skips programs that don’t take that grade.`)}</span>
           </div>
         </div>
         <div class="roller-themes" id="roll-themes" role="group" aria-label="Theme">
@@ -1942,6 +1942,8 @@ function boardPage() {
       <button type="button" class="btn primary big" id="share-cta-btn">${T(`Share this schedule`)}</button>
     </div>
     <button type="button" class="clear" id="board-promote" hidden>The new term has started: make this the current roster</button>
+    <p class="hint" id="board-status" aria-live="polite"></p>
+    <div class="board-tools" id="board-tools" hidden><button type="button" class="clear" id="board-clear">Clear this roster</button></div>
   </section>
   <section class="section costbox" id="board-cost" hidden>
     <h2>${T(`What this roster costs`)}</h2>
@@ -1954,16 +1956,7 @@ function boardPage() {
   ${nextOff(1).replace(T(`Days off this year, and who’s open`), T(`Plan the days off too`))}
   ${ALERTS ? `<p class="hint alerts-line">${T(`Want next term’s sign-up dates before they open?`)} <a href="${link(alertsPath, 1)}">${T(`Get the dates by email.`)}</a></p>` : ''}
   ${GROUPS ? `<section class="section group-share" id="group-share" ${groupsAttrs(1)} hidden></section>` : ''}
-  <section class="board-tools" id="board-tools" hidden>
-    <div class="actions">
-      <button type="button" class="btn primary" id="board-share" hidden>Share</button>
-      <button type="button" class="btn" id="board-copy-text">Copy as text</button>
-      <a class="btn" id="board-email" href="mailto:">Email it to myself</a>
-      <button type="button" class="clear" id="board-clear">Clear this roster</button>
-    </div>
-    <p class="hint" id="board-status" aria-live="polite"></p>
-    <p class="hint">${T(`Rosters save automatically on this device. To have one on another phone or computer, or to share it with someone, use “Keep and share this week” above.`)}</p>
-  </section>
+  ${GROUPS ? `<p class="or-line" id="or-card" hidden><span>${T(`or`)}</span></p>` : ''}
   <section class="section card-maker" id="card-maker" hidden>
     <h2 tabindex="-1">${T(`Make it a card`)}</h2>
     <p>${T(`One picture of the week to text, print, or hand to your child’s teacher, so they know where your child goes each day and who they are.`)}</p>
@@ -2324,7 +2317,7 @@ $SCHOOLS = json_decode('${names}', true);
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'school_saved' => 'Schools kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted');
+$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -2336,12 +2329,17 @@ if ($have) {
   // A question the database can't answer yet (a table added in a later version) counts as zero.
   $n = function ($sql, $args = array()) use ($db) { try { $st = $db->prepare($sql); $st->execute($args); return (int) $st->fetchColumn(); } catch (Exception $e) { return 0; } };
   $t = time();
+  $byGrade = array();
+  try { foreach ($db->query("SELECT grades FROM users WHERE grades != ''") as $r) foreach (explode(',', $r['grades']) as $g) $byGrade[$g] = (isset($byGrade[$g]) ? $byGrade[$g] : 0) + 1; } catch (Exception $e) { /* before grades existed */ }
+  $gradeLine = '';
+  foreach (array(${GRADES.map(g => `'${g}'`).join(', ')}) as $g) { if (isset($byGrade[$g])) $gradeLine .= ($gradeLine === '' ? '' : ', ') . $g . ': ' . $byGrade[$g]; }
   $accounts = $n('SELECT COUNT(*) FROM users');
   $tiles[] = array($accounts, 'accounts', $n('SELECT COUNT(*) FROM users WHERE created > ?', array($t - 7 * 86400)) . ' new in 7 days, ' . $n('SELECT COUNT(*) FROM users WHERE created > ?', array($t - 30 * 86400)) . ' in 30');
   $tiles[] = array($n('SELECT COUNT(DISTINCT user_id) FROM sessions WHERE seen > ?', array($t - 30 * 86400)), 'people signed in during the last 30 days', '');
   $tiles[] = array($n("SELECT COUNT(*) FROM users WHERE via = 'google'"), 'accounts made with Google', ($accounts - $n("SELECT COUNT(*) FROM users WHERE via = 'google'")) . ' made with an emailed code');
   $tiles[] = array($n('SELECT COUNT(*) FROM users WHERE listed = 1'), 'accounts added to the email list', $n("SELECT COUNT(*) FROM users WHERE first = ''") . ' accounts haven’t added a name yet');
   $tiles[] = array($n("SELECT COUNT(*) FROM users WHERE school != ''"), 'profiles with a school kept', '');
+  $tiles[] = array($n("SELECT COUNT(*) FROM users WHERE grades != ''"), 'profiles with grades kept', $gradeLine);
   $tiles[] = array($n('SELECT COUNT(*) FROM weeks'), 'weeks kept in profiles', 'by ' . $n('SELECT COUNT(DISTINCT user_id) FROM weeks') . ' people');
   $tiles[] = array($n('SELECT COUNT(*) FROM grp WHERE solo = 1 AND expires > ?', array($t)), 'weeks shared with one person or more', $n('SELECT COUNT(*) FROM members m JOIN grp g ON g.id = m.group_id WHERE g.solo = 1 AND m.role != ?', array('owner')) . ' people have opened one');
   $tiles[] = array($n('SELECT COUNT(*) FROM grp WHERE solo = 0 AND expires > ?', array($t)), 'groups', $n("SELECT COUNT(*) FROM (SELECT g.id FROM grp g JOIN members m ON m.group_id = g.id WHERE g.solo = 0 AND m.status = 'approved' GROUP BY g.id HAVING COUNT(*) >= 2)") . ' have two or more adults; the biggest has ' . $n("SELECT COALESCE(MAX(c), 0) FROM (SELECT COUNT(*) AS c FROM members m JOIN grp g ON g.id = m.group_id WHERE g.solo = 0 AND m.status = 'approved' GROUP BY m.group_id)"));
