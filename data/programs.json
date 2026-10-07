@@ -997,21 +997,21 @@
     "lastVerified": "2026-10-05",
     "schools": {
       "nebinger": {
-        "relation": "pickup",
+        "relation": "nearby",
         "distance": "six blocks east of Nebinger on the same street",
-        "note": "An earlier Shot Tower listing says “Pick up from Nebinger Elementary school.” Confirm pickup is still offered this year.",
-        "checked": "2026-10-05"
+        "note": "The city’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-10-07"
       },
       "meredith": {
         "relation": "nearby",
         "distance": "about seven blocks from Meredith",
-        "note": "Shot Tower’s listing has mentioned pickup from Nebinger only.",
+        "note": "The city’s listing doesn’t mention pickup from any school.",
         "checked": "2026-10-05"
       },
       "vare-washington": {
         "relation": "nearby",
         "distance": "about half a mile east of Vare-Washington",
-        "note": "Shot Tower’s listing has mentioned pickup from Nebinger only.",
+        "note": "The city’s listing doesn’t mention pickup from any school.",
         "checked": "2026-10-06"
       }
     }
@@ -2515,7 +2515,18 @@
         "by": "provider",
         "note": "The same list showed in a browser on the same day."
       }
-    ]
+    ],
+    "daysOff": {
+      "summary": "A spring break camp the week the district is off, 9 am to 3 pm, on a sliding scale of $260 to $400 for the week. Kids cook and bake, do crafts and small science experiments, build with recycled materials and walk to nearby playgrounds. Next spring’s dates and sign-up weren’t posted when we checked.",
+      "url": "https://www.thedandelionproject.us/spring-break-camp",
+      "dates": [],
+      "sources": [
+        {
+          "label": "Dandelion spring break camp",
+          "url": "https://www.thedandelionproject.us/spring-break-camp"
+        }
+      ]
+    }
   },
   {
     "id": "movemakers",
@@ -4020,9 +4031,26 @@
     "gradeNote": "Ages 5–10",
     "hours": "Day camps run 9 am to 3 pm, or to 6 pm.",
     "daysOff": {
-      "summary": "Full-day camps on the days schools close for holidays or teacher development, open to any child aged 5–10. 9 am to 3 pm is $80 and 9 am to 6 pm is $110, or $1,120 for all 16 days of 2026–27. Financial aid is offered.",
+      "summary": "Full-day camps on 16 days schools are closed in 2026–27, open to any child aged 5–10. 9 am to 3 pm is $80 and 9 am to 6 pm is $110, or $1,120 for all 16 days to 6 pm. No camp on November 25, Martin Luther King Jr. Day or Memorial Day. Financial aid is offered.",
       "url": "https://www.playartsphilly.com/day-camps",
-      "dates": [],
+      "dates": [
+        "2026-09-18",
+        "2026-09-21",
+        "2026-10-09",
+        "2026-10-12",
+        "2026-11-03",
+        "2026-11-11",
+        "2026-11-16",
+        "2027-01-15",
+        "2027-01-29",
+        "2027-02-12",
+        "2027-02-15",
+        "2027-03-10",
+        "2027-03-29",
+        "2027-04-16",
+        "2027-05-17",
+        "2027-05-18"
+      ],
       "sources": [
         {
           "label": "PlayArts day camps",
@@ -4041,7 +4069,7 @@
       "label": "See camp days",
       "note": "The page has a button for the full-year package and one for booking by the day."
     },
-    "note": "The 16 camp days are in a schedule PDF on its page that we couldn’t read. Its after-school programs run inside other schools, none of them on this site.",
+    "note": "The camp days come from the 2026–27 schedule on its page; May 18 is marked tentative, like the district’s own calendar. PlayArts also runs Pre-K half-day camps on Fridays, but only inside the schools where it runs after-school, none of them on this site.",
     "sources": [
       {
         "label": "PlayArts day camps",
@@ -4161,5 +4189,1003 @@
     ],
     "lastVerified": "2026-10-07",
     "schools": {}
+  },
+  {
+    "id": "pafa-saturday-art",
+    "name": "PAFA Saturday Studio Art",
+    "what": "Saturday morning drawing classes for middle schoolers at the Pennsylvania Academy of the Fine Arts",
+    "types": [
+      "art"
+    ],
+    "keywords": [
+      "art",
+      "drawing",
+      "PAFA",
+      "Pennsylvania Academy of the Fine Arts",
+      "museum",
+      "middle school",
+      "Saturday"
+    ],
+    "address": "118–128 N Broad St",
+    "neighborhoods": [
+      "Center City"
+    ],
+    "grades": "5-8",
+    "gradeNote": "Ages 10–14",
+    "hours": "Weekend classes only are listed here.",
+    "cost": "$480 a term",
+    "price": "paid",
+    "phone": "215-972-7600",
+    "email": "",
+    "website": "https://www.pafa.org/education/center-art-education/youth-family/saturday-studio-art-classes",
+    "register": {
+      "how": "online",
+      "url": "https://pafa-museum.coursestorm.com/category/saturday-art-classes-for-ages-10-14",
+      "label": "See classes",
+      "note": "Sign-up is on PAFA’s class registration site."
+    },
+    "note": "PAFA runs a separate Saturday section for high schoolers.",
+    "sources": [
+      {
+        "label": "PAFA Saturday Studio Art Classes",
+        "url": "https://www.pafa.org/education/center-art-education/youth-family/saturday-studio-art-classes"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "A seven-week Saturday drawing class for ages 10–14, taught in PAFA’s studios.",
+      "days": [
+        "sat"
+      ],
+      "grades": "5-8",
+      "term": "Fall 2026: October 24 to December 12. Spring 2027: January 30 to April 17.",
+      "times": {
+        "sat": "10 am to noon"
+      },
+      "cost": "$480 a term. Family-level members get 10% off.",
+      "url": "https://www.pafa.org/education/center-art-education/youth-family/saturday-studio-art-classes",
+      "check": {
+        "url": "https://www.pafa.org/education/center-art-education/youth-family/saturday-studio-art-classes",
+        "how": "fetch",
+        "look": "Each term block gives its dates, the 10 am to noon time and the $480 price.",
+        "notes": "An older Young Artist Academy page on the same site still shows a 2025 class; ignore it."
+      },
+      "sources": [
+        {
+          "label": "PAFA Saturday Studio Art Classes",
+          "url": "https://www.pafa.org/education/center-art-education/youth-family/saturday-studio-art-classes"
+        }
+      ],
+      "checked": "2026-10-07"
+    }
+  },
+  {
+    "id": "moore-young-artists-workshop",
+    "name": "Moore Young Artists Workshop",
+    "what": "Three-hour Saturday studio courses for grades 6–12 at Moore College of Art & Design",
+    "types": [
+      "art"
+    ],
+    "keywords": [
+      "art",
+      "animation",
+      "character design",
+      "fashion",
+      "sewing",
+      "drawing",
+      "painting",
+      "Moore College",
+      "middle school",
+      "Saturday"
+    ],
+    "address": "1916 Race St",
+    "neighborhoods": [
+      "Logan Square"
+    ],
+    "grades": "6-8",
+    "gradeNote": "Grades 6–8 and 9–12",
+    "hours": "Weekend classes only are listed here.",
+    "cost": "$620 a course",
+    "price": "paid",
+    "phone": "215-965-4015",
+    "email": "",
+    "website": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/",
+    "register": {
+      "how": "online",
+      "url": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/",
+      "label": "See courses",
+      "note": "Each course has its own sign-up on Moore’s page."
+    },
+    "note": "Fall sign-up closed on September 18. Moore says new courses come out each fall, spring and summer.",
+    "sources": [
+      {
+        "label": "Moore Young Artists Workshop, fall 2026",
+        "url": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Ten Saturdays of studio courses. For grades 6–8 this fall: animation, character design, anatomy drawing, fashion illustration and sewing, and drawing and painting. Each course meets in the morning or the afternoon.",
+      "days": [
+        "sat"
+      ],
+      "grades": "6-8",
+      "term": "Fall 2026: October 3 to December 12. Sign-up closed September 18.",
+      "times": {
+        "sat": "9 am to noon, or 1 to 4 pm"
+      },
+      "cost": "$620 a course.",
+      "url": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/",
+      "check": {
+        "url": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/",
+        "how": "fetch",
+        "look": "The Program Details block gives the dates, grades and price; each course below says morning or afternoon.",
+        "notes": "The page address carries the term (fall-2026-youth-courses), so look for the spring page once fall ends."
+      },
+      "sources": [
+        {
+          "label": "Moore Young Artists Workshop, fall 2026",
+          "url": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/"
+        }
+      ],
+      "checked": "2026-10-07"
+    }
+  },
+  {
+    "id": "philadelphia-museum-of-art-kids",
+    "name": "Philadelphia Museum of Art: Art Kids Classes",
+    "what": "Weekly Saturday art classes by age group in the museum’s classrooms",
+    "types": [
+      "art"
+    ],
+    "keywords": [
+      "art",
+      "museum",
+      "Philadelphia Museum of Art",
+      "PMA",
+      "painting",
+      "Saturday"
+    ],
+    "address": "2600 Benjamin Franklin Pkwy",
+    "neighborhoods": [
+      "Fairmount"
+    ],
+    "grades": "PK-5",
+    "gradeNote": "Ages 3–10, in four age groups",
+    "hours": "Weekend classes only are listed here.",
+    "cost": "$270 a semester, or $230 for members",
+    "price": "paid",
+    "phone": "215-763-8100",
+    "email": "",
+    "website": "https://www.philamuseum.org/events/art-kids-classes-7-8",
+    "register": {
+      "how": "online",
+      "url": "https://www.philamuseum.org/events/art-kids-classes-7-8",
+      "label": "See the class",
+      "note": "Each age group has its own page on the museum’s site."
+    },
+    "note": "Fall 2026 sold out. The museum says to come back in January for spring 2027.",
+    "sources": [
+      {
+        "label": "Philadelphia Museum of Art, Art Kids Classes",
+        "url": "https://www.philamuseum.org/events/art-kids-classes-7-8"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Registered Saturday classes for ages 3–4, 5–6, 7–8 and 9–10. Each group meets either late morning or early afternoon.",
+      "days": [
+        "sat"
+      ],
+      "grades": "PK-5",
+      "term": "Fall 2026: October 3 to December 12, with no class November 21 or 28. Sold out; spring 2027 sign-up opens in January.",
+      "times": {
+        "sat": "10:30 am to noon, or 1 to 2:30 pm"
+      },
+      "cost": "$270 a semester, $230 for members. Tuition help may be available if you ask.",
+      "url": "https://www.philamuseum.org/events/art-kids-classes-7-8",
+      "check": {
+        "url": "https://www.philamuseum.org/events/art-kids-classes-7-8",
+        "how": "fetch",
+        "look": "The event description gives the Saturday date range, the two session times and the price with the member price.",
+        "notes": "Only the ages 7–8 page was read; the other groups have pages ending -3-4, -5-6 and -9-10. The weekend Art Kids Studio is a free drop-in, not this class."
+      },
+      "sources": [
+        {
+          "label": "Philadelphia Museum of Art, Art Kids Classes",
+          "url": "https://www.philamuseum.org/events/art-kids-classes-7-8"
+        }
+      ],
+      "checked": "2026-10-07"
+    }
+  },
+  {
+    "id": "made-institute-sunday-sewing",
+    "name": "MADE Institute: Sunday Sewing",
+    "what": "Sunday sewing classes for kids and teens at a West Philly sewing school",
+    "types": [
+      "art"
+    ],
+    "keywords": [
+      "sewing",
+      "fashion",
+      "making",
+      "MADE Institute",
+      "West Philadelphia",
+      "Sunday"
+    ],
+    "address": "4719 Pine St",
+    "neighborhoods": [
+      "West Philadelphia"
+    ],
+    "grades": "2-8",
+    "gradeNote": "Ages 7–12; a teen class takes ages 13–17",
+    "hours": "Weekend classes only are listed here.",
+    "cost": "$200 a month",
+    "price": "paid",
+    "phone": "855-623-3745",
+    "email": "",
+    "website": "https://made-institute.com/weekend-sewing",
+    "register": {
+      "how": "online",
+      "url": "https://made-institute.com/courses-items/p/kids-sunday-sewing",
+      "label": "Sign up",
+      "note": "Teens sign up on a separate page on the same site."
+    },
+    "sources": [
+      {
+        "label": "MADE Institute weekend sewing",
+        "url": "https://made-institute.com/weekend-sewing"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Kids Sunday Sewing for ages 7–12 meets in the morning, and Teen Sunday Sewing for ages 13–17 in the afternoon.",
+      "days": [
+        "sun"
+      ],
+      "grades": "2-8",
+      "term": "Fall 2026: September 13 to December 20.",
+      "times": {
+        "sun": "10 am to noon (ages 7–12), 2 to 4 pm (teens)"
+      },
+      "cost": "$200 a month.",
+      "url": "https://made-institute.com/weekend-sewing",
+      "check": {
+        "url": "https://made-institute.com/weekend-sewing",
+        "how": "fetch",
+        "look": "Each of the two class blocks lists its ages, Sunday time, date range and monthly price."
+      },
+      "sources": [
+        {
+          "label": "MADE Institute weekend sewing",
+          "url": "https://made-institute.com/weekend-sewing"
+        }
+      ],
+      "checked": "2026-10-07"
+    }
+  },
+  {
+    "id": "rock-school-for-dance",
+    "name": "The Rock School for Dance Education",
+    "what": "Saturday pre-ballet for ages 3 to 6 at the ballet school on South Broad Street",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "dance",
+      "ballet",
+      "pre-ballet",
+      "Rock School",
+      "South Broad",
+      "Saturday"
+    ],
+    "address": "1101 S Broad St",
+    "neighborhoods": [
+      "South Philadelphia"
+    ],
+    "grades": "PK-1",
+    "gradeNote": "Pre-ballet is for ages 3–6",
+    "hours": "Weekend classes only are listed here.",
+    "cost": "Nine payments of $95 for ages 4–6 ($80 for age 3), plus a $75 registration fee and a $135 spring showcase fee",
+    "price": "paid",
+    "phone": "",
+    "email": "",
+    "website": "https://www.therockschool.org/pre-ballet",
+    "register": {
+      "how": "online",
+      "url": "https://app.jackrabbitclass.com/regv2.asp?id=552627",
+      "label": "Register",
+      "note": "The school’s page links to its registration form."
+    },
+    "note": "Ballet classes for age 7 and up meet several days a week, some by placement, and are on a separate page of the school’s site.",
+    "sources": [
+      {
+        "label": "The Rock School pre-ballet",
+        "url": "https://www.therockschool.org/pre-ballet"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Pre-ballet by age, one class a week from September to June. Age 3 meets at 9:15 am or 12:15 pm, age 4 at 10 am, age 5 at 9 or 11 am and age 6 at 11:30 am. Several sections were full with a waitlist when we checked.",
+      "days": [
+        "sat"
+      ],
+      "grades": "PK-1",
+      "term": "2026–27 school year, September to June. A child must be the class age by August 31, 2026.",
+      "times": {
+        "sat": "9 am to 1 pm, by age"
+      },
+      "cost": "Nine payments of $95 for ages 4–6, or $80 for age 3, plus a $75 registration fee and a $135 spring showcase fee.",
+      "url": "https://www.therockschool.org/pre-ballet",
+      "check": {
+        "url": "https://www.therockschool.org/pre-ballet",
+        "how": "fetch",
+        "look": "Each pre-ballet level is a block under the Philadelphia location with its tuition and its Saturday time.",
+        "notes": "The page also lists a West Chester location with similar times; use the Philadelphia blocks only."
+      },
+      "sources": [
+        {
+          "label": "The Rock School pre-ballet",
+          "url": "https://www.therockschool.org/pre-ballet"
+        }
+      ],
+      "checked": "2026-10-07"
+    }
+  },
+  {
+    "id": "koresh-school-of-dance",
+    "name": "Koresh School of Dance",
+    "what": "A Saturday morning pre-ballet class for ages 4 to 6 near Rittenhouse Square",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "dance",
+      "ballet",
+      "pre-ballet",
+      "Koresh",
+      "Rittenhouse",
+      "Saturday"
+    ],
+    "address": "2002 Rittenhouse Square St",
+    "neighborhoods": [
+      "Rittenhouse"
+    ],
+    "grades": "PK-1",
+    "gradeNote": "Saturday class is for ages 4–6",
+    "hours": "Weekend classes only are listed here.",
+    "cost": "$286 a session for one class a week, plus $25 for new students",
+    "price": "paid",
+    "phone": "215-751-0959",
+    "email": "",
+    "website": "https://www.koreshdance.org/children-classes",
+    "register": {
+      "how": "phone",
+      "note": "Call or email the school to enroll. It takes cards or cash, not checks."
+    },
+    "note": "Koresh teaches ages 5–14 on weekday afternoons, which we haven’t matched to any school.",
+    "sources": [
+      {
+        "label": "Koresh School of Dance children’s classes",
+        "url": "https://www.koreshdance.org/children-classes"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Pre Ballet for ages 4–6 is the one Saturday class for younger children. The other Saturday classes are for ages 16–18.",
+      "days": [
+        "sat"
+      ],
+      "grades": "PK-1",
+      "term": "Fall 2026: September 14 to December 12.",
+      "times": {
+        "sat": "10 to 10:45 am"
+      },
+      "cost": "$286 a session, plus a one-time $25 fee for new students. Scholarships and payment plans for some students.",
+      "url": "https://www.koreshdance.org/children-classes",
+      "check": {
+        "url": "https://www.koreshdance.org/children-classes",
+        "how": "fetch",
+        "look": "The fall schedule is listed day by day with a Saturday block, and the tuition table sits below it.",
+        "notes": "The street address is on the school-info page, not this one."
+      },
+      "sources": [
+        {
+          "label": "Koresh School of Dance children’s classes",
+          "url": "https://www.koreshdance.org/children-classes"
+        }
+      ],
+      "checked": "2026-10-07"
+    }
+  },
+  {
+    "id": "school-of-philadelphia-ballet",
+    "name": "School of Philadelphia Ballet",
+    "what": "Saturday and Sunday ballet classes for ages 3 to 7, with no audition",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "dance",
+      "ballet",
+      "creative movement",
+      "pre-ballet",
+      "Philadelphia Ballet",
+      "North Broad",
+      "Saturday",
+      "Sunday"
+    ],
+    "address": "323 N Broad St",
+    "neighborhoods": [
+      "Center City"
+    ],
+    "grades": "PK-2",
+    "gradeNote": "Children’s Program is for ages 3–7",
+    "hours": "Weekend classes only are listed here.",
+    "cost": "$90 a month for ages 3–5 and $110 for ages 5–6, once a week, plus an $80 registration fee and a $125 showcase fee",
+    "price": "paid",
+    "phone": "215-551-7000",
+    "email": "",
+    "website": "https://philadelphiaballet.org/school/childrens-programs/",
+    "register": {
+      "how": "online",
+      "url": "https://philadelphiaballet.org/school/childrens-programs/",
+      "label": "See classes",
+      "note": "Each class time has its own Register link in the table on the school’s page."
+    },
+    "note": "From age 8 the school is by audition and meets several days a week.",
+    "sources": [
+      {
+        "label": "School of Philadelphia Ballet Children’s Program",
+        "url": "https://philadelphiaballet.org/school/childrens-programs/"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Creative Movement (ages 3–4), Pre-Ballet (4–5) and Primary (5–6) each meet once a week, on Saturday morning or Sunday midday. Foundations classes for ages 6–7 pair a Saturday with a weekday.",
+      "days": [
+        "sat",
+        "sun"
+      ],
+      "grades": "PK-2",
+      "term": "2026–27 school year, August 31 to June 6.",
+      "times": {
+        "sat": "9 am to 1 pm, by age",
+        "sun": "11 am to 2 pm, by age"
+      },
+      "cost": "$90 a month for ages 3–5, $110 for ages 5–6, and $185 to $195 for twice a week at ages 6–7. Add an $80 registration fee and a $125 showcase fee. Scholarships may be available.",
+      "url": "https://philadelphiaballet.org/school/childrens-programs/",
+      "check": {
+        "url": "https://philadelphiaballet.org/school/childrens-programs/",
+        "how": "fetch",
+        "look": "A table lists each class with its ages, Saturday and Sunday times and monthly tuition.",
+        "notes": "Classes need a minimum enrollment to run. Ages 8 and up are on the student-programs page."
+      },
+      "sources": [
+        {
+          "label": "School of Philadelphia Ballet Children’s Program",
+          "url": "https://philadelphiaballet.org/school/childrens-programs/"
+        }
+      ],
+      "checked": "2026-10-07"
+    }
+  },
+  {
+    "id": "zazz-dance",
+    "name": "ZAZZ",
+    "what": "Short Saturday and Sunday dance series for ages 4 to 6 in Center City",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "dance",
+      "pre-ballet",
+      "Nutcracker",
+      "ZAZZ",
+      "Philly Dance Fitness",
+      "Chestnut Street",
+      "Saturday",
+      "Sunday"
+    ],
+    "address": "1923 Chestnut St, 2nd floor",
+    "neighborhoods": [
+      "Rittenhouse"
+    ],
+    "grades": "PK-1",
+    "gradeNote": "Weekend series are for ages 4–6",
+    "hours": "Weekend classes only are listed here.",
+    "cost": "$132.50 for the Saturday series, $122.50 for a Sunday series",
+    "price": "paid",
+    "phone": "215-645-2717",
+    "email": "",
+    "website": "https://zazzphilly.com/early-childhood/",
+    "register": {
+      "how": "contact",
+      "note": "The page says to sign up for the full series but showed no sign-up link, so call."
+    },
+    "note": "ZAZZ also runs a weekday after-school program for K–5, which we haven’t matched to any school.",
+    "sources": [
+      {
+        "label": "ZAZZ early childhood classes",
+        "url": "https://zazzphilly.com/early-childhood/"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "A seven-week fall series: Nutcracker Pre-Ballet for ages 4–6 on Saturdays, and Dance Basics for ages 4–6 on Sundays. A Sunday class for ages 2½ to 3½ runs at the same time.",
+      "days": [
+        "sat",
+        "sun"
+      ],
+      "grades": "PK-1",
+      "term": "Fall 2026: seven weeks from October 31 and November 1, skipping Thanksgiving weekend.",
+      "times": {
+        "sat": "9:30 am",
+        "sun": "9:30 am"
+      },
+      "cost": "$132.50 for the Saturday series, $122.50 for a Sunday series.",
+      "url": "https://zazzphilly.com/early-childhood/",
+      "check": {
+        "url": "https://zazzphilly.com/early-childhood/",
+        "how": "fetch",
+        "look": "The fall session block lists each series on one line with its ages, day, time and price.",
+        "notes": "The site calls itself ZAZZ by Philly Dance Fitness."
+      },
+      "sources": [
+        {
+          "label": "ZAZZ early childhood classes",
+          "url": "https://zazzphilly.com/early-childhood/"
+        }
+      ],
+      "checked": "2026-10-07"
+    }
+  },
+  {
+    "id": "temple-music-prep-cmsp",
+    "name": "Temple Music Prep: Community Music Scholars",
+    "what": "Low-cost Saturday morning instrument lessons, theory and ensembles at Temple University",
+    "types": [
+      "music"
+    ],
+    "keywords": [
+      "music",
+      "strings",
+      "violin",
+      "brass",
+      "winds",
+      "jazz",
+      "orchestra",
+      "band",
+      "lessons",
+      "Temple University",
+      "Saturday"
+    ],
+    "address": "Presser Hall, 2001 N 13th St",
+    "neighborhoods": [
+      "North Philadelphia"
+    ],
+    "grades": "K-8",
+    "gradeNote": "Kindergarten to 12th grade",
+    "hours": "Weekend classes only are listed here.",
+    "cost": "$240 for the year for individual lessons or $180 for group lessons, in four payments. Ensembles add $40.",
+    "price": "paid",
+    "phone": "215-204-1512",
+    "email": "",
+    "website": "https://boyer.temple.edu/musicprep/CMSP",
+    "register": {
+      "how": "online",
+      "url": "https://boyer.temple.edu/musicprep/CMSP",
+      "label": "How to apply",
+      "note": "The upper division takes a free application and a video audition. The String Project and the Brass & Wind Project need no audition."
+    },
+    "note": "The program is aimed at Philadelphia students from families with limited means. String Project students bring their own instrument.",
+    "sources": [
+      {
+        "label": "Temple Music Prep Community Music Scholars Program",
+        "url": "https://boyer.temple.edu/musicprep/CMSP"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Lessons, a free theory class and string, jazz and wind ensembles on Saturday mornings for Philadelphia students. It includes the Philadelphia String Project for grades 2–7 and a Brass & Wind Project for grades 3–6, both for beginners.",
+      "days": [
+        "sat"
+      ],
+      "grades": "K-8",
+      "term": "2026–27: September to May. The upper division began September 12, the String and Brass & Wind Projects September 19.",
+      "times": {
+        "sat": "mornings"
+      },
+      "cost": "$240 for the year for individual lessons or $180 for group lessons. Theory is free and ensembles add $40. More help is available with proof of need.",
+      "url": "https://boyer.temple.edu/musicprep/CMSP",
+      "check": {
+        "url": "https://boyer.temple.edu/musicprep/CMSP",
+        "how": "fetch",
+        "look": "The day, building, start dates and fees are in the program description and the sections for each division.",
+        "notes": "Class times are not on the page. Temple Music Prep’s Center City class list loads by script and has not been read."
+      },
+      "sources": [
+        {
+          "label": "Temple Music Prep Community Music Scholars Program",
+          "url": "https://boyer.temple.edu/musicprep/CMSP"
+        }
+      ],
+      "checked": "2026-10-07"
+    }
+  },
+  {
+    "id": "wissahickon-skating-club",
+    "name": "Wissahickon Skating Club",
+    "what": "Saturday group skating lessons and Sunday learn-to-play hockey at a Chestnut Hill rink",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "ice skating",
+      "skating",
+      "hockey",
+      "learn to skate",
+      "Chestnut Hill",
+      "Saturday",
+      "Sunday"
+    ],
+    "address": "550 W Willow Grove Ave",
+    "neighborhoods": [
+      "Chestnut Hill"
+    ],
+    "grades": "PK-8",
+    "gradeNote": "Skating lessons from age 2½; hockey skills for ages 4–13",
+    "hours": "Weekend classes only are listed here.",
+    "cost": "$215 for an eight-week series",
+    "price": "paid",
+    "phone": "215-247-1759",
+    "email": "",
+    "website": "https://wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
+    "register": {
+      "how": "online",
+      "url": "https://www.wissskating.com/index.php/membership/about-mywsconnect-com/",
+      "label": "How to register",
+      "note": "Sign-up is online only, through the club’s member site."
+    },
+    "note": "The club’s home page said the rink was closed for repairs when we checked, so call before you go.",
+    "sources": [
+      {
+        "label": "Wissahickon Skating Club 2026–27 season",
+        "url": "https://wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Group skating lessons open to the public on Saturdays, in eight-week series, and youth Learn to Play Hockey on Sundays. Hockey players need full protective equipment.",
+      "days": [
+        "sat",
+        "sun"
+      ],
+      "grades": "PK-8",
+      "term": "Fall series I ran September to early November 2026; series II runs early November to mid-January; a winter series runs late January to March 2027.",
+      "times": {
+        "sat": "11:45 am",
+        "sun": "12:40 to 1:40 pm (hockey)"
+      },
+      "cost": "$215 for an eight-week series.",
+      "note": "The club’s home page said the rink was closed for repairs when we checked, so call before you go.",
+      "url": "https://wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
+      "check": {
+        "url": "https://wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
+        "how": "fetch",
+        "look": "The season page lists the Saturday 11:45 am group lesson series and the Sunday hockey lessons with their dates and the $215 fee.",
+        "notes": "Ages and levels are on a separate group-lessons page. Check the home page for a closure notice."
+      },
+      "sources": [
+        {
+          "label": "Wissahickon Skating Club 2026–27 season",
+          "url": "https://wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/"
+        }
+      ],
+      "checked": "2026-10-07"
+    }
+  },
+  {
+    "id": "penn-ice-rink",
+    "name": "Penn Ice Rink",
+    "what": "Sunday learn-to-skate group lessons from age 5 at the University of Pennsylvania’s rink",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "ice skating",
+      "skating",
+      "learn to skate",
+      "Penn",
+      "University City",
+      "Sunday"
+    ],
+    "address": "3130 Walnut St",
+    "neighborhoods": [
+      "University City"
+    ],
+    "grades": "K-8",
+    "gradeNote": "Age 5 and up",
+    "hours": "Weekend classes only are listed here.",
+    "cost": "$175 for a five-week session, plus $18.50 once a season for a Learn to Skate USA membership",
+    "price": "paid",
+    "phone": "215-898-1923",
+    "email": "",
+    "website": "https://icerink.business-services.upenn.edu/skating-lessons/group-lessons-5-years-old-through-adults",
+    "register": {
+      "how": "online",
+      "url": "https://icerink.business-services.upenn.edu/skating-lessons/group-lessons-5-years-old-through-adults",
+      "label": "See sessions",
+      "note": "The rink’s page links to its sign-up for each session."
+    },
+    "note": "The rink said a class for ages 3–6 would be announced in the fall.",
+    "sources": [
+      {
+        "label": "Penn Ice Rink group lessons",
+        "url": "https://icerink.business-services.upenn.edu/skating-lessons/group-lessons-5-years-old-through-adults"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Group lessons by age and skill, in five-week sessions. Each week is a 25-minute lesson and 30 minutes of practice, with skate rental and Sunday public skating included.",
+      "days": [
+        "sun"
+      ],
+      "grades": "K-8",
+      "term": "2026–27: six sessions from September 13 to May 9. Session 2 runs October 18 to November 15 and session 3 November 22 to January 3.",
+      "times": {
+        "sun": "noon"
+      },
+      "cost": "$175 a session, plus $18.50 once a season. A parent pass is $35.",
+      "url": "https://icerink.business-services.upenn.edu/skating-lessons/group-lessons-5-years-old-through-adults",
+      "check": {
+        "url": "https://icerink.business-services.upenn.edu/skating-lessons/group-lessons-5-years-old-through-adults",
+        "how": "fetch",
+        "look": "The body text gives the Sunday noon start, the six lists of session dates and the $175 fee.",
+        "notes": "Sessions fill and close; session 1 was full."
+      },
+      "sources": [
+        {
+          "label": "Penn Ice Rink group lessons",
+          "url": "https://icerink.business-services.upenn.edu/skating-lessons/group-lessons-5-years-old-through-adults"
+        }
+      ],
+      "checked": "2026-10-07"
+    }
+  },
+  {
+    "id": "starfinder-saturday-soccer",
+    "name": "Starfinder: Saturday soccer",
+    "what": "Low-cost Saturday soccer for ages 6 to 14 on an indoor field in Manayunk",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "soccer",
+      "Starfinder",
+      "Golazo Girls",
+      "Vamos Boys",
+      "Manayunk",
+      "indoor",
+      "Saturday"
+    ],
+    "address": "4015 Main St",
+    "neighborhoods": [
+      "Manayunk"
+    ],
+    "grades": "1-8",
+    "gradeNote": "Ages 6–14",
+    "hours": "Weekend classes only are listed here.",
+    "cost": "$50 for six days, with sliding-scale and pay-what-you-can options",
+    "price": "paid",
+    "phone": "215-764-5410",
+    "email": "",
+    "website": "https://starfinderfoundation.org/programs/middle-school-programs/",
+    "register": {
+      "how": "online",
+      "url": "https://starfinderfoundation.org/programs/middle-school-programs/",
+      "label": "See programs",
+      "note": "Use the Sign Up button on Starfinder’s page."
+    },
+    "note": "Starfinder also lists Short Shots, a pre-K soccer class; its day and price weren’t on the page we read.",
+    "sources": [
+      {
+        "label": "Starfinder elementary and middle school programs",
+        "url": "https://starfinderfoundation.org/programs/middle-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Golazo Girls & Vamos Boys: Saturday soccer for all genders, ages 6–14. The page doesn’t give the time or the session dates.",
+      "days": [
+        "sat"
+      ],
+      "grades": "1-8",
+      "term": "Fall and winter Saturdays. Dates are on its sign-up page.",
+      "cost": "$50 for six days. Sliding scale and pay-what-you-can.",
+      "url": "https://starfinderfoundation.org/programs/middle-school-programs/",
+      "check": {
+        "url": "https://starfinderfoundation.org/programs/middle-school-programs/",
+        "how": "fetch",
+        "look": "A Saturdays heading for Golazo Girls & Vamos Boys gives the ages and the $50 price.",
+        "notes": "Session dates and times are only on its RecDesk sign-up pages, which were not read."
+      },
+      "sources": [
+        {
+          "label": "Starfinder elementary and middle school programs",
+          "url": "https://starfinderfoundation.org/programs/middle-school-programs/"
+        }
+      ],
+      "checked": "2026-10-07"
+    }
+  },
+  {
+    "id": "franklin-institute-pacts",
+    "name": "The Franklin Institute: PACTS",
+    "what": "A free Saturday science program for grades 6 to 8 at the Franklin Institute",
+    "types": [
+      "stem"
+    ],
+    "keywords": [
+      "science",
+      "STEM",
+      "Franklin Institute",
+      "PACTS",
+      "mentoring",
+      "middle school",
+      "free",
+      "Saturday"
+    ],
+    "address": "222 N 20th St",
+    "neighborhoods": [
+      "Logan Square"
+    ],
+    "grades": "6-8",
+    "gradeNote": "Grades 6–8",
+    "hours": "Weekend classes only are listed here.",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-448-1200",
+    "email": "",
+    "website": "https://fi.edu/pacts",
+    "register": {
+      "how": "online",
+      "url": "https://fi.edu/pacts",
+      "label": "How to apply",
+      "note": "Entry is by application, through the link on the museum’s page."
+    },
+    "sources": [
+      {
+        "label": "The Franklin Institute PACTS",
+        "url": "https://fi.edu/pacts"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Partnerships for Achieving Careers in Technology and Science: hands-on science workshops and mentoring for Philadelphia-area students in grades 6–8, twice a month on Saturday mornings.",
+      "days": [
+        "sat"
+      ],
+      "grades": "6-8",
+      "term": "During the school year, twice a month. The page gives no dates.",
+      "times": {
+        "sat": "mornings, twice a month"
+      },
+      "cost": "Free.",
+      "url": "https://fi.edu/pacts",
+      "check": {
+        "url": "https://fi.edu/pacts",
+        "how": "fetch",
+        "look": "The program description gives the grades, the twice-monthly Saturday mornings and that it is free.",
+        "notes": "No dates, clock times or application deadline on the page."
+      },
+      "sources": [
+        {
+          "label": "The Franklin Institute PACTS",
+          "url": "https://fi.edu/pacts"
+        }
+      ],
+      "checked": "2026-10-07"
+    }
+  },
+  {
+    "id": "macguffin-theatre",
+    "name": "MacGuffin Theatre & Film Company",
+    "what": "Saturday theatre classes by age group near Rittenhouse Square",
+    "types": [
+      "theater"
+    ],
+    "keywords": [
+      "theatre",
+      "theater",
+      "acting",
+      "clowning",
+      "improv",
+      "musical theatre",
+      "MacGuffin",
+      "Rittenhouse",
+      "Saturday"
+    ],
+    "address": "2030 Sansom St, 2nd floor",
+    "neighborhoods": [
+      "Rittenhouse"
+    ],
+    "grades": "2-8",
+    "gradeNote": "Ages 7–10, and 11–18",
+    "hours": "Weekend classes only are listed here.",
+    "cost": "$295 for the production class, $245 for clowning or improv, $35 for a drop-in class",
+    "price": "paid",
+    "phone": "215-922-1141",
+    "email": "",
+    "website": "https://macguffintf.com/classes/fall-2026/",
+    "register": {
+      "how": "online",
+      "url": "https://macguffintf.com/classes/fall-2026/",
+      "label": "See classes",
+      "note": "Each class on MacGuffin’s page links to its sign-up."
+    },
+    "note": "Fall began September 19, so it is mid-term. MacGuffin posts a new set of classes for winter and spring.",
+    "sources": [
+      {
+        "label": "MacGuffin fall 2026 classes",
+        "url": "https://macguffintf.com/classes/fall-2026/"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Ages 7–10 rehearse a short show in a production class, then can stay for clowning. Ages 11–18 have drop-in musical theatre and acting at noon and comedy improv in the afternoon.",
+      "days": [
+        "sat"
+      ],
+      "grades": "2-8",
+      "term": "Fall 2026: September 19 to November 7.",
+      "times": {
+        "sat": "9:30 am to noon (ages 7–10), noon to 3 pm (ages 11–18)"
+      },
+      "cost": "$295 for the production class, $245 for clowning or improv, $35 for a drop-in class. Some need-based scholarships.",
+      "url": "https://macguffintf.com/classes/fall-2026/",
+      "check": {
+        "url": "https://macguffintf.com/classes/fall-2026/youth-classes-ages-7-10/",
+        "how": "fetch",
+        "look": "Each class block lists its day, time, date range and tuition; ages 11–18 are on a sibling page.",
+        "notes": "The page address changes each term. Its Thursday classes meet in Fort Washington, outside the city."
+      },
+      "sources": [
+        {
+          "label": "MacGuffin fall 2026 classes",
+          "url": "https://macguffintf.com/classes/fall-2026/"
+        }
+      ],
+      "checked": "2026-10-07"
+    }
   }
 ]

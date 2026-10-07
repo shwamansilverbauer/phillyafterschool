@@ -73,6 +73,12 @@
   }
 
   // ----- signing in: an email with a link (for this device) and a 6-digit code (for the page that asked) -----
+  // The sign-up page (/register/) is the one account page that loads analytics. It is told that a sign-up started and
+  // how (email or Google), and that it finished: never the address, the name or anything typed.
+  function signupStep(step, method) {
+    if (!document.querySelector('#account[data-mode="register"]')) return;
+    (window.dataLayer = window.dataLayer || []).push({ event: 'pas_signup', step: step, method: method });
+  }
   function signInBox(box, next, done, lede) {
     box.textContent = '';
     var wrap = el('div', 'signin');
@@ -111,6 +117,7 @@
           if (!d.ok) { status.textContent = d.message; status.className = 'g-status bad'; return; }
           status.textContent = '';
           set('pas-in', '1');
+          signupStep('signed_in', 'google');
           done(d);
         });
       };
@@ -134,6 +141,7 @@
         send.disabled = false;
         if (!d.ok) { status.textContent = d.message; status.className = 'g-status bad'; return; }
         req = d.req;
+        signupStep('code_sent', 'email');
         status.textContent = ''; status.className = 'g-status';
         sentTo.textContent = '';
         sentTo.appendChild(document.createTextNode('We emailed a 6-digit code to '));
@@ -149,6 +157,7 @@
         go.disabled = false;
         if (!d.ok) { status.textContent = d.message; status.className = 'g-status bad'; return; }
         set('pas-in', '1');
+        signupStep('signed_in', 'email');
         done(d);
       });
     });
@@ -1158,7 +1167,7 @@
 
       if (!signedInHint() || !me) {
         if (signedInHint() && !me && !checked) { share.appendChild(el('p', 'hint', 'Checking your account…')); return; }
-        share.appendChild(el('p', null, 'A free account keeps ' + who + ' in your profile, so it’s on your phone and your computer, and lets you share it with one person, like a grandparent or a sitter, who signs in to see it.'));
+        share.appendChild(el('p', null, 'A free account keeps ' + who + ' in your profile, so it’s on your phone and your computer, and lets you share it with one person, like a grandparent or a sitter, who signs in to see it.' + (groupsOn() ? ' You can also share it with a small group of families you invite.' : '')));
         var row0 = el('div', 'actions');
         var si = el('a', 'btn primary', 'Create a free account'); si.href = page('register/') + '?next=board'; row0.appendChild(si);
         var li0 = el('a', 'btn', 'Log in'); li0.href = page('account/') + '?next=board'; row0.appendChild(li0);
@@ -1316,7 +1325,7 @@
       // ----- 3. groups (unlisted while they're a pilot) -----
       if (!groupsOn() && !inGroups.length) return;
       var grp = el('div', 'g-part');
-      grp.appendChild(el('h3', null, 'Share with a group'));
+      grp.appendChild(el('h3', null, 'Share with a small group'));
       var midway = tidyCode(sget('pas-join')).length === 12;
       if (midway) {   // came here from the join page to build the week first
         var back = el('div', 'panel g-callout');

@@ -1,26 +1,19 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 84,
+    "pages": 103,
     "pagesNeedingABrowser": 2,
     "pagesNeedingAPerson": 2,
     "links": 88,
-    "pickupLinks": 53,
+    "pickupLinks": 52,
     "pickupOnAStoredList": 45,
     "pickupFromAThirdPartyList": 4,
     "pickupOnItsOwnSource": 3,
-    "pickupWithNothingBehindIt": 1,
+    "pickupWithNothingBehindIt": 0,
     "pickupNotOnTheProvidersList": 1,
     "oldestCheck": "2026-10-05"
   },
   "links": [
-    {
-      "program": "shot-tower-rec",
-      "school": "nebinger",
-      "relation": "pickup",
-      "checked": "2026-10-05",
-      "basis": "none"
-    },
     {
       "program": "makom-community",
       "school": "coppin",
@@ -866,6 +859,12 @@
       "school": "mccall",
       "relation": "nearby",
       "checked": "2026-10-07"
+    },
+    {
+      "program": "shot-tower-rec",
+      "school": "nebinger",
+      "relation": "nearby",
+      "checked": "2026-10-07"
     }
   ],
   "pages": [
@@ -935,6 +934,14 @@
       "lists": []
     },
     {
+      "url": "https://app.jackrabbitclass.com/regv2.asp?id=552627",
+      "how": "fetch",
+      "programs": [
+        "rock-school-for-dance"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://ardentheatre.org/arden-drama-school",
       "how": "fetch",
       "programs": [
@@ -955,6 +962,14 @@
       "how": "fetch",
       "programs": [
         "beehive-at-bok"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://boyer.temple.edu/musicprep/CMSP",
+      "how": "fetch",
+      "programs": [
+        "temple-music-prep-cmsp"
       ],
       "lists": []
     },
@@ -1023,6 +1038,14 @@
       "lists": []
     },
     {
+      "url": "https://fi.edu/pacts",
+      "how": "fetch",
+      "programs": [
+        "franklin-institute-pacts"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://fleisher.org/children-and-youth-programs-2/",
       "how": "fetch",
       "programs": [
@@ -1051,6 +1074,14 @@
       "how": "fetch",
       "programs": [
         "fleisher-art-memorial"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://icerink.business-services.upenn.edu/skating-lessons/group-lessons-5-years-old-through-adults",
+      "how": "fetch",
+      "programs": [
+        "penn-ice-rink"
       ],
       "lists": []
     },
@@ -1099,6 +1130,30 @@
       "how": "fetch",
       "programs": [
         "free-library-leap"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://macguffintf.com/classes/fall-2026/",
+      "how": "fetch",
+      "programs": [
+        "macguffin-theatre"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://made-institute.com/courses-items/p/kids-sunday-sewing",
+      "how": "fetch",
+      "programs": [
+        "made-institute-sunday-sewing"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://made-institute.com/weekend-sewing",
+      "how": "fetch",
+      "programs": [
+        "made-institute-sunday-sewing"
       ],
       "lists": []
     },
@@ -1208,6 +1263,14 @@
       ]
     },
     {
+      "url": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/",
+      "how": "fetch",
+      "programs": [
+        "moore-young-artists-workshop"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://oldpinecommunitycenter.org/afterschool/",
       "how": "fetch",
       "programs": [
@@ -1244,6 +1307,22 @@
       "how": "fetch",
       "programs": [
         "old-pine"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://pafa-museum.coursestorm.com/category/saturday-art-classes-for-ages-10-14",
+      "how": "fetch",
+      "programs": [
+        "pafa-saturday-art"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://philadelphiaballet.org/school/childrens-programs/",
+      "how": "fetch",
+      "programs": [
+        "school-of-philadelphia-ballet"
       ],
       "lists": []
     },
@@ -1378,6 +1457,14 @@
       ]
     },
     {
+      "url": "https://starfinderfoundation.org/programs/middle-school-programs/",
+      "how": "fetch",
+      "programs": [
+        "starfinder-saturday-soccer"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://vare.philasd.org/after-school-clubs/",
       "how": "fetch",
       "programs": [
@@ -1398,6 +1485,14 @@
       "how": "fetch",
       "programs": [
         "walnut-street-theatre-school"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
+      "how": "fetch",
+      "programs": [
+        "wissahickon-skating-club"
       ],
       "lists": []
     },
@@ -1520,6 +1615,14 @@
       "lists": []
     },
     {
+      "url": "https://www.koreshdance.org/children-classes",
+      "how": "fetch",
+      "programs": [
+        "koresh-school-of-dance"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.movemakersphilly.com/range-of-motion-after-school-programming.html",
       "how": "fetch",
       "programs": [
@@ -1585,6 +1688,14 @@
       "lists": []
     },
     {
+      "url": "https://www.pafa.org/education/center-art-education/youth-family/saturday-studio-art-classes",
+      "how": "fetch",
+      "programs": [
+        "pafa-saturday-art"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.phila.gov/2026-03-06-seats-filling-fast-for-spring-break-camp-at-extended-day-extended-year-schools/",
       "how": "fetch",
       "programs": [
@@ -1605,6 +1716,14 @@
       "how": "fetch",
       "programs": [
         "vare-washington-edey"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.philamuseum.org/events/art-kids-classes-7-8",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-museum-of-art-kids"
       ],
       "lists": []
     },
@@ -1689,6 +1808,38 @@
       ]
     },
     {
+      "url": "https://www.thedandelionproject.us/spring-break-camp",
+      "how": "fetch",
+      "programs": [
+        "dandelion-after-school"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.therockschool.org/pre-ballet",
+      "how": "fetch",
+      "programs": [
+        "rock-school-for-dance"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.wissskating.com/index.php/membership/about-mywsconnect-com/",
+      "how": "fetch",
+      "programs": [
+        "wissahickon-skating-club"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://zazzphilly.com/early-childhood/",
+      "how": "fetch",
+      "programs": [
+        "zazz-dance"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://zhangsah.org/after-school-program/",
       "how": "fetch",
       "programs": [
@@ -1733,12 +1884,56 @@
       "notes": "The page address has the term in it, so the next term is a new page."
     },
     {
+      "program": "franklin-institute-pacts",
+      "term": "During the school year, twice a month. The page gives no dates.",
+      "checked": "2026-10-07",
+      "url": "https://fi.edu/pacts",
+      "how": "fetch",
+      "look": "The program description gives the grades, the twice-monthly Saturday mornings and that it is free.",
+      "notes": "No dates, clock times or application deadline on the page."
+    },
+    {
+      "program": "koresh-school-of-dance",
+      "term": "Fall 2026: September 14 to December 12.",
+      "checked": "2026-10-07",
+      "url": "https://www.koreshdance.org/children-classes",
+      "how": "fetch",
+      "look": "The fall schedule is listed day by day with a Saturday block, and the tuition table sits below it.",
+      "notes": "The street address is on the school-info page, not this one."
+    },
+    {
+      "program": "macguffin-theatre",
+      "term": "Fall 2026: September 19 to November 7.",
+      "checked": "2026-10-07",
+      "url": "https://macguffintf.com/classes/fall-2026/youth-classes-ages-7-10/",
+      "how": "fetch",
+      "look": "Each class block lists its day, time, date range and tuition; ages 11–18 are on a sibling page.",
+      "notes": "The page address changes each term. Its Thursday classes meet in Fort Washington, outside the city."
+    },
+    {
+      "program": "made-institute-sunday-sewing",
+      "term": "Fall 2026: September 13 to December 20.",
+      "checked": "2026-10-07",
+      "url": "https://made-institute.com/weekend-sewing",
+      "how": "fetch",
+      "look": "Each of the two class blocks lists its ages, Sunday time, date range and monthly price."
+    },
+    {
       "program": "mister-johns-music",
       "term": "2026–27: fall runs August 31 to December 20, and winter and spring January 4 to June 13",
       "checked": "2026-10-07",
       "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
       "how": "fetch",
       "look": "Each instrument section lists its levels as lines like “Level, SATURDAYS at a time (age)”."
+    },
+    {
+      "program": "moore-young-artists-workshop",
+      "term": "Fall 2026: October 3 to December 12. Sign-up closed September 18.",
+      "checked": "2026-10-07",
+      "url": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/",
+      "how": "fetch",
+      "look": "The Program Details block gives the dates, grades and price; each course below says morning or afternoon.",
+      "notes": "The page address carries the term (fall-2026-youth-courses), so look for the spring page once fall ends."
     },
     {
       "program": "movemakers",
@@ -1758,6 +1953,33 @@
       "notes": "The day headings are images, so a plain text read loses them; the fetch tool reads them."
     },
     {
+      "program": "pafa-saturday-art",
+      "term": "Fall 2026: October 24 to December 12. Spring 2027: January 30 to April 17.",
+      "checked": "2026-10-07",
+      "url": "https://www.pafa.org/education/center-art-education/youth-family/saturday-studio-art-classes",
+      "how": "fetch",
+      "look": "Each term block gives its dates, the 10 am to noon time and the $480 price.",
+      "notes": "An older Young Artist Academy page on the same site still shows a 2025 class; ignore it."
+    },
+    {
+      "program": "penn-ice-rink",
+      "term": "2026–27: six sessions from September 13 to May 9. Session 2 runs October 18 to November 15 and session 3 November 22 to January 3.",
+      "checked": "2026-10-07",
+      "url": "https://icerink.business-services.upenn.edu/skating-lessons/group-lessons-5-years-old-through-adults",
+      "how": "fetch",
+      "look": "The body text gives the Sunday noon start, the six lists of session dates and the $175 fee.",
+      "notes": "Sessions fill and close; session 1 was full."
+    },
+    {
+      "program": "philadelphia-museum-of-art-kids",
+      "term": "Fall 2026: October 3 to December 12, with no class November 21 or 28. Sold out; spring 2027 sign-up opens in January.",
+      "checked": "2026-10-07",
+      "url": "https://www.philamuseum.org/events/art-kids-classes-7-8",
+      "how": "fetch",
+      "look": "The event description gives the Saturday date range, the two session times and the price with the member price.",
+      "notes": "Only the ages 7–8 page was read; the other groups have pages ending -3-4, -5-6 and -9-10. The weekend Art Kids Studio is a free drop-in, not this class."
+    },
+    {
       "program": "philly-inmovement",
       "term": "2026–27 school year: August 31 to June 13",
       "checked": "2026-10-07",
@@ -1767,6 +1989,42 @@
       "notes": "The PDF grids read poorly: some Saturday slots come back without class names."
     },
     {
+      "program": "rock-school-for-dance",
+      "term": "2026–27 school year, September to June. A child must be the class age by August 31, 2026.",
+      "checked": "2026-10-07",
+      "url": "https://www.therockschool.org/pre-ballet",
+      "how": "fetch",
+      "look": "Each pre-ballet level is a block under the Philadelphia location with its tuition and its Saturday time.",
+      "notes": "The page also lists a West Chester location with similar times; use the Philadelphia blocks only."
+    },
+    {
+      "program": "school-of-philadelphia-ballet",
+      "term": "2026–27 school year, August 31 to June 6.",
+      "checked": "2026-10-07",
+      "url": "https://philadelphiaballet.org/school/childrens-programs/",
+      "how": "fetch",
+      "look": "A table lists each class with its ages, Saturday and Sunday times and monthly tuition.",
+      "notes": "Classes need a minimum enrollment to run. Ages 8 and up are on the student-programs page."
+    },
+    {
+      "program": "starfinder-saturday-soccer",
+      "term": "Fall and winter Saturdays. Dates are on its sign-up page.",
+      "checked": "2026-10-07",
+      "url": "https://starfinderfoundation.org/programs/middle-school-programs/",
+      "how": "fetch",
+      "look": "A Saturdays heading for Golazo Girls & Vamos Boys gives the ages and the $50 price.",
+      "notes": "Session dates and times are only on its RecDesk sign-up pages, which were not read."
+    },
+    {
+      "program": "temple-music-prep-cmsp",
+      "term": "2026–27: September to May. The upper division began September 12, the String and Brass & Wind Projects September 19.",
+      "checked": "2026-10-07",
+      "url": "https://boyer.temple.edu/musicprep/CMSP",
+      "how": "fetch",
+      "look": "The day, building, start dates and fees are in the program description and the sections for each division.",
+      "notes": "Class times are not on the page. Temple Music Prep’s Center City class list loads by script and has not been read."
+    },
+    {
       "program": "walnut-street-theatre-school",
       "term": "Fall 2026: October 10 to December 19, with no class November 28",
       "checked": "2026-10-07",
@@ -1774,6 +2032,24 @@
       "how": "fetch",
       "look": "Each class card shows the title with its age range, then the day, the time, the date range and the price.",
       "notes": "The category address changes with the term (classes-for-kids4). The site’s home page loads by script and comes back empty."
+    },
+    {
+      "program": "wissahickon-skating-club",
+      "term": "Fall series I ran September to early November 2026; series II runs early November to mid-January; a winter series runs late January to March 2027.",
+      "checked": "2026-10-07",
+      "url": "https://wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
+      "how": "fetch",
+      "look": "The season page lists the Saturday 11:45 am group lesson series and the Sunday hockey lessons with their dates and the $215 fee.",
+      "notes": "Ages and levels are on a separate group-lessons page. Check the home page for a closure notice."
+    },
+    {
+      "program": "zazz-dance",
+      "term": "Fall 2026: seven weeks from October 31 and November 1, skipping Thanksgiving weekend.",
+      "checked": "2026-10-07",
+      "url": "https://zazzphilly.com/early-childhood/",
+      "how": "fetch",
+      "look": "The fall session block lists each series on one line with its ages, day, time and price.",
+      "notes": "The site calls itself ZAZZ by Philly Dance Fitness."
     }
   ],
   "camps": {

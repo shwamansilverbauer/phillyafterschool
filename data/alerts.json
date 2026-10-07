@@ -182,6 +182,62 @@
     {
       "id": "skate-the-foundry",
       "name": "Skate The Foundry"
+    },
+    {
+      "id": "pafa-saturday-art",
+      "name": "PAFA Saturday Studio Art"
+    },
+    {
+      "id": "moore-young-artists-workshop",
+      "name": "Moore Young Artists Workshop"
+    },
+    {
+      "id": "philadelphia-museum-of-art-kids",
+      "name": "Philadelphia Museum of Art: Art Kids Classes"
+    },
+    {
+      "id": "made-institute-sunday-sewing",
+      "name": "MADE Institute: Sunday Sewing"
+    },
+    {
+      "id": "rock-school-for-dance",
+      "name": "The Rock School for Dance Education"
+    },
+    {
+      "id": "koresh-school-of-dance",
+      "name": "Koresh School of Dance"
+    },
+    {
+      "id": "school-of-philadelphia-ballet",
+      "name": "School of Philadelphia Ballet"
+    },
+    {
+      "id": "zazz-dance",
+      "name": "ZAZZ"
+    },
+    {
+      "id": "temple-music-prep-cmsp",
+      "name": "Temple Music Prep: Community Music Scholars"
+    },
+    {
+      "id": "wissahickon-skating-club",
+      "name": "Wissahickon Skating Club"
+    },
+    {
+      "id": "penn-ice-rink",
+      "name": "Penn Ice Rink"
+    },
+    {
+      "id": "starfinder-saturday-soccer",
+      "name": "Starfinder: Saturday soccer"
+    },
+    {
+      "id": "franklin-institute-pacts",
+      "name": "The Franklin Institute: PACTS"
+    },
+    {
+      "id": "macguffin-theatre",
+      "name": "MacGuffin Theatre & Film Company"
     }
   ],
   "alerts": [
@@ -266,6 +322,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-playarts-day-camps-2026-10-09",
+      "kind": "camp",
+      "date": "2026-10-09",
+      "sendOn": "2026-09-27",
+      "schools": [],
+      "programs": [
+        "playarts-day-camps"
+      ],
+      "within": "off-2026-10-09",
+      "when": "Friday, October 9",
+      "title": "PlayArts day camps: camp on a day off",
+      "text": "School is closed (Staff professional development). PlayArts day camps has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2026-10-09",
       "kind": "dayoff",
       "date": "2026-10-09",
@@ -276,7 +348,7 @@
       "programs": [],
       "when": "Friday, October 9",
       "title": "No school: Staff professional development",
-      "text": "5 listed programs have posted a camp: Butcher’s Sew Shop Junior, Mister John’s Music, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
+      "text": "6 listed programs have posted a camp: Butcher’s Sew Shop Junior, Mister John’s Music, MoveMakers Philly, Old Pine Community Center, Philly InMovement: MOVE After School and PlayArts day camps.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-10-09",
       "button": "See who’s open"
     },
@@ -409,6 +481,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-playarts-day-camps-2026-10-12",
+      "kind": "camp",
+      "date": "2026-10-12",
+      "sendOn": "2026-09-27",
+      "schools": [],
+      "programs": [
+        "playarts-day-camps"
+      ],
+      "within": "off-2026-10-12",
+      "when": "Monday, October 12",
+      "title": "PlayArts day camps: camp on a day off",
+      "text": "School is closed (Indigenous Peoples’ Day). PlayArts day camps has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2026-10-12",
       "kind": "dayoff",
       "date": "2026-10-12",
@@ -419,7 +507,7 @@
       "programs": [],
       "when": "Monday, October 12",
       "title": "No school: Indigenous Peoples’ Day",
-      "text": "8 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
+      "text": "9 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center, Philly InMovement: MOVE After School and PlayArts day camps.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-10-12",
       "button": "See who’s open"
     },
@@ -573,6 +661,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-playarts-day-camps-2026-11-03",
+      "kind": "camp",
+      "date": "2026-11-03",
+      "sendOn": "2026-10-18",
+      "schools": [],
+      "programs": [
+        "playarts-day-camps"
+      ],
+      "within": "off-2026-11-03",
+      "when": "Tuesday, November 3",
+      "title": "PlayArts day camps: camp on a day off",
+      "text": "School is closed (Election Day). PlayArts day camps has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "camp-skate-the-foundry-2026-11-03",
       "kind": "camp",
       "date": "2026-11-03",
@@ -599,7 +703,7 @@
       "programs": [],
       "when": "Tuesday, November 3",
       "title": "No school: Election Day",
-      "text": "9 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center, Philly InMovement: MOVE After School and Skate The Foundry.",
+      "text": "10 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center, Philly InMovement: MOVE After School, PlayArts day camps and Skate The Foundry.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-11-03",
       "button": "See who’s open"
     },
@@ -732,6 +836,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-playarts-day-camps-2026-11-11",
+      "kind": "camp",
+      "date": "2026-11-11",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "playarts-day-camps"
+      ],
+      "within": "off-2026-11-11",
+      "when": "Wednesday, November 11",
+      "title": "PlayArts day camps: camp on a day off",
+      "text": "School is closed (Veterans Day). PlayArts day camps has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2026-11-11",
       "kind": "dayoff",
       "date": "2026-11-11",
@@ -742,7 +862,7 @@
       "programs": [],
       "when": "Wednesday, November 11",
       "title": "No school: Veterans Day",
-      "text": "8 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
+      "text": "9 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center, Philly InMovement: MOVE After School and PlayArts day camps.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-11-11",
       "button": "See who’s open"
     },
@@ -827,6 +947,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-playarts-day-camps-2026-11-16",
+      "kind": "camp",
+      "date": "2026-11-16",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "playarts-day-camps"
+      ],
+      "within": "off-2026-11-16",
+      "when": "Monday, November 16",
+      "title": "PlayArts day camps: camp on a day off",
+      "text": "School is closed (Report card conferences). PlayArts day camps has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2026-11-16",
       "kind": "dayoff",
       "date": "2026-11-16",
@@ -837,7 +973,7 @@
       "programs": [],
       "when": "Monday, November 16",
       "title": "No school: Report card conferences",
-      "text": "5 listed programs have posted a camp: Butcher’s Sew Shop Junior, Makom Community, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
+      "text": "6 listed programs have posted a camp: Butcher’s Sew Shop Junior, Makom Community, MoveMakers Philly, Old Pine Community Center, Philly InMovement: MOVE After School and PlayArts day camps.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-11-16",
       "button": "See who’s open"
     },
@@ -1093,6 +1229,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-playarts-day-camps-2027-01-15",
+      "kind": "camp",
+      "date": "2027-01-15",
+      "sendOn": "2027-01-03",
+      "schools": [],
+      "programs": [
+        "playarts-day-camps"
+      ],
+      "within": "off-2027-01-15",
+      "when": "Friday, January 15",
+      "title": "PlayArts day camps: camp on a day off",
+      "text": "School is closed (Staff professional development). PlayArts day camps has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2027-01-15",
       "kind": "dayoff",
       "date": "2027-01-15",
@@ -1103,7 +1255,7 @@
       "programs": [],
       "when": "Friday, January 15",
       "title": "No school: Staff professional development",
-      "text": "3 listed programs have posted a camp: Butcher’s Sew Shop Junior, Makom Community and Old Pine Community Center.",
+      "text": "4 listed programs have posted a camp: Butcher’s Sew Shop Junior, Makom Community, Old Pine Community Center and PlayArts day camps.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-01-15",
       "button": "See who’s open"
     },
@@ -1187,6 +1339,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-playarts-day-camps-2027-01-29",
+      "kind": "camp",
+      "date": "2027-01-29",
+      "sendOn": "2027-01-17",
+      "schools": [],
+      "programs": [
+        "playarts-day-camps"
+      ],
+      "within": "off-2027-01-29",
+      "when": "Friday, January 29",
+      "title": "PlayArts day camps: camp on a day off",
+      "text": "School is closed (Report card conferences). PlayArts day camps has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2027-01-29",
       "kind": "dayoff",
       "date": "2027-01-29",
@@ -1197,7 +1365,7 @@
       "programs": [],
       "when": "Friday, January 29",
       "title": "No school: Report card conferences",
-      "text": "3 listed programs have posted a camp: Butcher’s Sew Shop Junior, Makom Community and Old Pine Community Center.",
+      "text": "4 listed programs have posted a camp: Butcher’s Sew Shop Junior, Makom Community, Old Pine Community Center and PlayArts day camps.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-01-29",
       "button": "See who’s open"
     },
@@ -1250,6 +1418,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-playarts-day-camps-2027-02-12",
+      "kind": "camp",
+      "date": "2027-02-12",
+      "sendOn": "2027-01-31",
+      "schools": [],
+      "programs": [
+        "playarts-day-camps"
+      ],
+      "within": "off-2027-02-12",
+      "when": "Friday, February 12",
+      "title": "PlayArts day camps: camp on a day off",
+      "text": "School is closed (Staff professional development). PlayArts day camps has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2027-02-12",
       "kind": "dayoff",
       "date": "2027-02-12",
@@ -1260,7 +1444,7 @@
       "programs": [],
       "when": "Friday, February 12",
       "title": "No school: Staff professional development",
-      "text": "3 listed programs have posted a camp: Butcher’s Sew Shop Junior, Makom Community and Old Pine Community Center.",
+      "text": "4 listed programs have posted a camp: Butcher’s Sew Shop Junior, Makom Community, Old Pine Community Center and PlayArts day camps.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-02-12",
       "button": "See who’s open"
     },
@@ -1297,6 +1481,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-playarts-day-camps-2027-02-15",
+      "kind": "camp",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [],
+      "programs": [
+        "playarts-day-camps"
+      ],
+      "within": "off-2027-02-15",
+      "when": "Monday, February 15",
+      "title": "PlayArts day camps: camp on a day off",
+      "text": "School is closed (Presidents’ Day). PlayArts day camps has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2027-02-15",
       "kind": "dayoff",
       "date": "2027-02-15",
@@ -1307,7 +1507,7 @@
       "programs": [],
       "when": "Monday, February 15",
       "title": "No school: Presidents’ Day",
-      "text": "2 listed programs have posted a camp: Butcher’s Sew Shop Junior and Fleisher Art Memorial.",
+      "text": "3 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial and PlayArts day camps.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-02-15",
       "button": "See who’s open"
     },
@@ -1376,6 +1576,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-playarts-day-camps-2027-03-10",
+      "kind": "camp",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [],
+      "programs": [
+        "playarts-day-camps"
+      ],
+      "within": "off-2027-03-10",
+      "when": "Wednesday, March 10",
+      "title": "PlayArts day camps: camp on a day off",
+      "text": "School is closed (Eid al-Fitr). PlayArts day camps has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2027-03-10",
       "kind": "dayoff",
       "date": "2027-03-10",
@@ -1386,7 +1602,7 @@
       "programs": [],
       "when": "Wednesday, March 10",
       "title": "No school: Eid al-Fitr",
-      "text": "4 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community and Old Pine Community Center.",
+      "text": "5 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Old Pine Community Center and PlayArts day camps.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-03-10",
       "button": "See who’s open"
     },
@@ -1502,6 +1718,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-playarts-day-camps-2027-03-29",
+      "kind": "camp",
+      "date": "2027-03-29",
+      "sendOn": "2027-03-14",
+      "schools": [],
+      "programs": [
+        "playarts-day-camps"
+      ],
+      "within": "off-2027-03-29",
+      "when": "Monday, March 29",
+      "title": "PlayArts day camps: camp on a day off",
+      "text": "School is closed (Staff professional development). PlayArts day camps has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2027-03-29",
       "kind": "dayoff",
       "date": "2027-03-29",
@@ -1512,7 +1744,7 @@
       "programs": [],
       "when": "Monday, March 29",
       "title": "No school: Staff professional development",
-      "text": "2 listed programs have posted a camp: Butcher’s Sew Shop Junior and Old Pine Community Center.",
+      "text": "3 listed programs have posted a camp: Butcher’s Sew Shop Junior, Old Pine Community Center and PlayArts day camps.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-03-29",
       "button": "See who’s open"
     },
@@ -1565,6 +1797,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-playarts-day-camps-2027-04-16",
+      "kind": "camp",
+      "date": "2027-04-16",
+      "sendOn": "2027-04-04",
+      "schools": [],
+      "programs": [
+        "playarts-day-camps"
+      ],
+      "within": "off-2027-04-16",
+      "when": "Friday, April 16",
+      "title": "PlayArts day camps: camp on a day off",
+      "text": "School is closed (Report card conferences). PlayArts day camps has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2027-04-16",
       "kind": "dayoff",
       "date": "2027-04-16",
@@ -1575,7 +1823,7 @@
       "programs": [],
       "when": "Friday, April 16",
       "title": "No school: Report card conferences",
-      "text": "3 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial and Old Pine Community Center.",
+      "text": "4 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Old Pine Community Center and PlayArts day camps.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-04-16",
       "button": "See who’s open"
     },
@@ -1644,6 +1892,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-playarts-day-camps-2027-05-17",
+      "kind": "camp",
+      "date": "2027-05-17",
+      "sendOn": "2027-05-02",
+      "schools": [],
+      "programs": [
+        "playarts-day-camps"
+      ],
+      "within": "off-2027-05-17",
+      "when": "Monday, May 17",
+      "title": "PlayArts day camps: camp on a day off",
+      "text": "School is closed (Eid al-Adha). PlayArts day camps has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2027-05-17",
       "kind": "dayoff",
       "date": "2027-05-17",
@@ -1654,7 +1918,7 @@
       "programs": [],
       "when": "Monday, May 17",
       "title": "No school: Eid al-Adha",
-      "text": "4 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community and Old Pine Community Center.",
+      "text": "5 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Old Pine Community Center and PlayArts day camps.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-05-17",
       "button": "See who’s open"
     },
@@ -1723,6 +1987,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-playarts-day-camps-2027-05-18",
+      "kind": "camp",
+      "date": "2027-05-18",
+      "sendOn": "2027-05-02",
+      "schools": [],
+      "programs": [
+        "playarts-day-camps"
+      ],
+      "within": "off-2027-05-18",
+      "when": "Tuesday, May 18",
+      "title": "PlayArts day camps: camp on a day off",
+      "text": "School is closed (Election Day). PlayArts day camps has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2027-05-18",
       "kind": "dayoff",
       "date": "2027-05-18",
@@ -1733,7 +2013,7 @@
       "programs": [],
       "when": "Tuesday, May 18",
       "title": "No school: Election Day",
-      "text": "4 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community and Old Pine Community Center.",
+      "text": "5 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Old Pine Community Center and PlayArts day camps.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2027-05-18",
       "button": "See who’s open"
     },
