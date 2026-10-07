@@ -92,5 +92,64 @@
         "Fitness Alive, 267-702-6043"
       ]
     }
+  },
+  {
+    "id": "vare-washington",
+    "name": "Vare-Washington Elementary School",
+    "shortName": "Vare-Washington",
+    "address": "1198 S 5th St, Philadelphia, PA 19147",
+    "neighborhood": "Pennsport / Dickinson Narrows",
+    "grades": "K-8",
+    "dismissal": "2:54 pm",
+    "phone": "215-400-8120",
+    "website": "https://vare.philasd.org/",
+    "lastReviewed": "2026-10-06",
+    "notes": [
+      "Vare-Washington has free before and after school care in the building, through the City’s Extended Day, Extended Year program. The City’s page says registration is closed for now, so ask the school office about openings.",
+      "Dismissal is 2:54 pm, earlier than at most schools nearby. Most outside programs start at 3:30, so ask each one when its staff collect.",
+      "For grades 6–8, Zhang Sah takes children through 8th grade and Queen & Rook through age 16. Ask the other programs about older children. Fleisher is about half a mile away for children old enough to walk."
+    ],
+    "checkedNoPickup": [
+      "Philly InMovement. Its Queen Village studio picks up from Meredith, Nebinger, McCall and ICS (Wednesdays); its Bok site from Coppin, Southwark and Kirkbride.",
+      "Settlement Music School. Escorts from Meredith, Nebinger and McCall only.",
+      "Old Pine Community Center. Picks up from McCall, Meredith, Nebinger and St. Peter’s only.",
+      "Butcher’s Sew Shop Junior. Meredith, Coppin, Nebinger, McCall (Tuesdays and Thursdays) and Southwark (Mondays, Wednesdays and Fridays).",
+      "MoveMakers (812 Chestnut St). McCall, Meredith and Nebinger only.",
+      "Kids on 12th (1112 Chestnut St), K–5. Picks up from ICS, McCall, Greenfield, Russell Byers, Coppin and FACTS only.",
+      "Christian Street YMCA (1724 Christian St). Serves Stanton, ICS and Marian Anderson.",
+      "Imagine That Philly. Runs inside Coppin and Nebinger only."
+    ],
+    "alsoListed": {
+      "title": "Also on the school’s own clubs page",
+      "intro": "The school’s clubs page, last updated in January 2025, describes this program. We haven’t confirmed it for 2026–27.",
+      "items": [
+        "The Rock School for Dance Education (1101 S Broad St), grades 2–4. The school’s page says the Rock School collects students at 3 pm, class runs to 4:15 pm, families pick up at the Rock School, and it costs $90 a month."
+      ]
+    }
+  },
+  {
+    "id": "mccall",
+    "name": "General George A. McCall School",
+    "shortName": "McCall",
+    "address": "325 S 7th St, Philadelphia, PA 19106",
+    "neighborhood": "Society Hill / Washington Square West",
+    "grades": "K-8",
+    "dismissal": "3:39 pm",
+    "dismissalNote": "Kindergarten and bus riders at 3:30, grades 1–2 at 3:35, grades 3–5 at 3:37, grades 6–8 at 3:39, per the school’s 2023 bell schedule",
+    "phone": "215-400-7840",
+    "website": "https://mccall.philasd.org/",
+    "lastReviewed": "2026-10-06",
+    "notes": [
+      "McCall has a free before and after school program in the building, run by Sunrise of Philadelphia. After school runs until 5:30 pm.",
+      "Ten outside programs name McCall on their own pickup lists.",
+      "Options thin out after 5th grade. Zhang Sah takes children through 8th grade, Queen & Rook through age 16, and Butcher’s Sew Shop through 15 (Tuesdays and Thursdays from McCall). Sunrise takes grades 6–8 too."
+    ],
+    "checkedNoPickup": [
+      "Beehive at Bok. Its Bok list is Kirkbride, Coppin, Nebinger, Southwark, Jenks and Vare-Washington; its Rittenhouse list is Marian Anderson, Stanton, Greenfield and ICS.",
+      "Makom Community. Picks up from Greenfield, Childs, ICS, Marian Anderson, Stanton, The Philadelphia School, Wild Seeds and Vare-Washington.",
+      "ZAZZ (1923 Chestnut St). Greenfield, ICS and Marian Anderson only.",
+      "Christian Street YMCA (1724 Christian St). Serves Stanton, ICS and Marian Anderson.",
+      "Imagine That Philly. Runs inside Coppin and Nebinger only."
+    ]
   }
 ]

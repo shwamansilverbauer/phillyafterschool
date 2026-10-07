@@ -563,7 +563,9 @@ const schoolRun = p => p.types.includes('clubs');
 // A school's clubs, by the kind of program each one is. Used to mention them next to the citywide lists.
 const clubGrades = c => c.gradeNote || (c._grades == null ? '' : c._grades.length === 1 ? (c._grades[0] === 'K' ? 'Kindergarten' : c._grades[0] === 'PK' ? 'Pre-K' : 'Grade ' + c._grades[0]) : c._grades.length === GRADES.length - 1 && c._grades[0] === 'K' ? 'All grades' : `Grades ${c._grades[0]}–${c._grades[c._grades.length - 1]}`);
 const clubsOfType = (p, typeId) => (p.clubs || []).filter(c => c.roster !== false && (c.tags || []).includes(typeId));
-const clubBrief = c => { const bits = [clubGrades(c).replace(/^G/, 'g').replace(/^A/, 'a').replace(/^K/, 'k'), c.days ? c.days.map(d => DAY_NAME[d] + 's').join(' and ') : ''].filter(Boolean); return c.name + (bits.length ? ` (${bits.join(', ')})` : ''); };
+// "Tuesdays and Thursdays", "Tuesdays, Wednesdays and Thursdays", or "Monday to Thursday" for a run of four or five.
+const clubDays = c => { const d = c.days, i = d.map(x => WEEK.indexOf(x)); const run = d.length >= 4 && i.every((v, k) => k === 0 || v === i[k - 1] + 1); const n = d.map(x => DAY_NAME[x] + 's'); return run ? `${DAY_NAME[d[0]]} to ${DAY_NAME[d[d.length - 1]]}` : n.length < 3 ? n.join(' and ') : n.slice(0, -1).join(', ') + ' and ' + n[n.length - 1]; };
+const clubBrief = c => { const bits = [clubGrades(c).replace(/^G/, 'g').replace(/^A/, 'a').replace(/^K/, 'k'), c.days ? clubDays(c) : ''].filter(Boolean); return c.name + (bits.length ? ` (${bits.join(', ')})` : ''); };
 const clubsByType = p => Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, clubs: clubsOfType(p, t.id).map(c => c.name) }]).filter(([, v]) => v.clubs.length));
 const citywide = programs.filter(p => !schoolRun(p));
 const itemAttrs = (p, extra = [], school = null) => `data-item data-grades="${p._grades === null ? '*' : p._grades.join(' ')}" data-types="${p.types.join(' ')}" data-hoods="${programHoods(p).map(hoodSlug).join(' ')}" data-cost="${costKinds(p, school).join(' ')}" data-days="${p.days ? p.days.join(' ') : '*'}" data-schools="${schools.filter(x => p.schools[x.id]).map(x => x.id).join(' ')}" data-search="${esc(haystack(p, extra))}"`;
@@ -821,7 +823,7 @@ function programPage(p) {
     <div class="clubs">
 ${p.clubs.map(c => `      <article class="club">
         <h3>${esc(c.name)}</h3>
-        <p class="club-when">${[c.days ? `<b>${esc(c.days.map(d => DAY_NAME[d] + 's').join(' and '))}</b>` : '', esc(c.time || ''), esc(clubGrades(c))].filter(Boolean).join(' <span aria-hidden="true">·</span> ')}</p>
+        <p class="club-when">${[c.days ? `<b>${esc(clubDays(c))}</b>` : '', esc(c.time || ''), esc(clubGrades(c))].filter(Boolean).join(' <span aria-hidden="true">·</span> ')}</p>
         ${c.what ? `<p>${esc(c.what)}</p>` : ''}
         <dl>${[['Runs', c.when], ['Sign-up', c.status]].filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
         ${c.note ? `<p class="flag">${esc(c.note)}</p>` : ''}
