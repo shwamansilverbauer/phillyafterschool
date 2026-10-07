@@ -820,3 +820,50 @@ button.btn{cursor:pointer;font-family:inherit}
 .sc-more[hidden]{display:none!important}
 .club-match{margin:0;font-weight:700;background:var(--yellow);color:var(--yellow-ink);border-radius:10px;padding:8px 12px;align-self:flex-start}
 .club-match[hidden]{display:none}
+/* accounts: Google as a second way in, the profile panel, and the three parts of "Keep and share this week" */
+.signin-alt{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding-top:4px}
+.signin-alt[hidden]{display:none}
+.signin-or{color:var(--muted);font-size:.95rem}
+.signin-alt>.btn{cursor:pointer;font:inherit;font-weight:700;background:var(--surface)}
+.g-google[hidden]{display:none}
+.g-google{min-height:44px}
+.g-row select{font:inherit;font-size:1.05rem;flex:1 1 220px;min-width:0;min-height:50px;padding:10px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}
+.g-row select:focus{outline:3px solid var(--yellow);outline-offset:1px;border-color:var(--link)}
+.g-row .hint{flex:0 0 100%}
+.g-page .panel h3{font-size:1.1rem;margin-top:8px}
+.g-part{display:flex;flex-direction:column;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.g-part h3{font-size:1.15rem;margin:0}
+.g-part p{margin:0}
+.g-part .actions{align-items:center}
+.g-part .panel{box-shadow:none}
+.g-part>.clear{align-self:flex-start}
+.g-acts{margin-left:auto;display:flex;gap:14px}
+.g-list .g-acts .clear{margin-left:0}
+.g-list li.hint{padding:8px 0}
+/* the owner's numbers page */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:4px}
+.stat b{font-family:var(--display,inherit);font-size:2rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-weight:700}
+.stat small{color:var(--muted);font-size:.9rem;line-height:1.35}
+.stat-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.stat-table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+.stat-table th,.stat-table td{padding:9px 14px;text-align:right;border-top:1px solid var(--line);white-space:nowrap}
+.stat-table th[scope="row"],.stat-table thead th:first-child{text-align:left}
+.stat-table thead th{border-top:0;font-size:.85rem;white-space:normal;vertical-align:bottom}
+.stat-table tfoot th,.stat-table tfoot td{font-weight:700;border-top:2px solid var(--ink)}
+.stat-table .nil{color:var(--line)}
+.stats>.stat-table{max-width:420px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+/* the strip above the menu: Log in and Register, or Your account */
+.topbar{background:rgba(0,0,0,.2);font-size:.92rem}
+.topbar .in{max-width:1280px;display:flex;justify-content:flex-end;align-items:center;gap:6px 18px;padding-block:6px}
+.topbar a{color:var(--hero-ink);text-decoration:none;font-weight:700;padding:3px 2px;border-bottom:2px solid transparent}
+.topbar a:hover{border-bottom-color:var(--yellow)}
+.topbar a.top-reg{border:1.5px solid var(--hero-ink);border-radius:999px;padding:2px 13px}
+.topbar a.top-reg:hover{background:var(--hero-ink);color:var(--hero);border-color:var(--hero-ink)}
+.topbar .when-in{display:none}
+html.signed .topbar .when-in{display:inline}
+html.signed .topbar .when-out{display:none}
+.band.dayoff .topbar{background:rgba(11,33,64,.12)}
+.band.dayoff .topbar a:hover{border-bottom-color:#0B2140}
+@media print{.topbar{display:none}}

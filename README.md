@@ -223,7 +223,7 @@ for monthly ones, and one term for term prices. Free programs (and a school link
 programs with no `rate` are listed as not counted, and with more than one child a family total is shown.
 It is an estimate, and says so: fees, deposits, discounts and aid are left out.
 A parent can type what they pay on any line (per week, per month or for the semester), which fills in programs
-that publish no price and replaces a listed one. Those figures stay in the browser and never go into a share link.
+that publish no price and replaces a listed one. Those figures stay in the browser and are never sent anywhere.
 
 **The week card's QR code.** `data/card-qr.json` holds the pattern for the code printed on the week card. It
 (and, under `dayoff`, the one on the day-camp card) encodes the short address `/w`, which `.htaccess` sends to the home page with `utm_source=week_card` and
@@ -240,8 +240,9 @@ level M with no border, and save each row as a string of 1s and 0s).
 `/board/` ("Build your week" in the menu) lets a visitor collect programs by weekday with "Add to roster"
 on any card. Each child has two rosters, Current and Upcoming, so a family can share what they do now and
 plan the next term. A family with more than one child adds a roster per child (up to six) and picks whose
-roster a program goes on. Rosters are stored in the visitor's own browser, and each share link carries one
-child's week in the address, so nothing about them is stored on the server. There are no accounts.
+roster a program goes on. Rosters are stored in the visitor's own browser. Nothing about them reaches the
+server unless a signed-in parent keeps a week in their profile or shares it (see "Accounts, profiles and
+sharing"). A week can no longer be shared as a link.
 Each pick is drawn as a card in its program type's color. "Make it a card" draws the week as one picture
 (for a text, a printout or a teacher), with an optional photo that is read on the device and never uploaded.
 The page address and the analytics event names still say "board" so older links and reports keep working.
@@ -317,50 +318,73 @@ saved a school sees only theirs until they ask for the rest), and on a school's 
 clubs are tagged with. Use `clubs` or `offers`, not both. Teacher names, emails and room numbers are left out on purpose: the
 listing links to the school's own sheet for those.
 
-## Accounts and share groups (pilot)
+## Accounts, profiles and sharing
 
-A share group lets a class, a carpool or a few friends see each other's after-school weeks. It is the only part
-of the site with accounts and the only part that stores anything about a child on the server.
+An account is optional. It lets a parent keep their school and a child's week in a profile (so they are there on
+another device), share a week with one person, and, while it is a pilot, join a share group of a few families.
+These are the only parts of the site that store anything about a child on the server.
 
-- **Turning it on.** `"groups": { "pilot": true }` in `site.config.json`. While `pilot` is true nothing links to
-  it: the pages are `/account/` and `/groups/`, and the "Share with a class or group" block on the roster page
-  only shows in a browser that has visited one of them. Remove `groups` to take the whole thing out of the build.
-- **How it works for a parent.** Groups are invitation only. A creator signs in on `/account/` (a 6-digit code
-  by email, no password), starts a group and types the email addresses to invite. Each address gets an
-  invitation with a link to `/join/#CODE` and the code. Joining needs both: being signed in with an invited
-  address (signing in proves the address) and the code. There is no asking to join and no approval step; the
-  creator is emailed when someone comes in, and can remove anyone, which also removes their invitation.
-  `/join/` walks a joiner through five steps: the code, signing in, their name, whose week (a child on this
-  device, "build it first", or view only), done. A shared week updates itself from the device it was shared
-  from. The code in an invitation link sits after the `#`, is taken out of the address at once and kept for
-  that tab only.
-- **What is stored.** An account is an email and a first and last name (both required before making or joining
-  a group; only a group's creator sees them). A child in a group is a first name and the
-  program ids (and a class, only when the program lists it) on the current and upcoming weeks. Nothing else:
-  the server drops free-text notes, schools and anything it doesn't recognise. Group codes are kept encrypted.
+- **Turning it on.** `"groups": { ... }` in `site.config.json`. Remove `groups` to take accounts out of the build.
+  With it on, every page gets a strip above the menu ("Log in" and "Register", or "Your account" once that
+  browser has signed in; the choice is made from a flag in the browser, no request), the footer links to the
+  account page, and Build your week gets a "Keep and share this week" block.
+- **Signing in.** A 6-digit code by email (no password), or Google. Set `"googleClientId"` under `groups` to the
+  OAuth client ID from Google Cloud (a public value; there is no secret) to offer Google. Google's script is
+  only fetched when someone taps "Use Google instead", and the option is hidden inside the Facebook and
+  Instagram apps, where Google refuses to sign in. The server asks Google whether the token is real, then
+  checks it was issued to this site and that the address is one Google runs (Gmail or a Workspace domain);
+  anything else is sent to the email code. A new account needs a first and last name before it can do anything;
+  Google supplies them.
+- **Profile.** "Keep this week in my profile" on Build your week stores the child's first name and, for the
+  current and upcoming weeks, each pick as `program.school` (plus a class the program lists). Free-text notes,
+  the teacher's name, the card note, prices and day-off plans stay on the device. The roster remembers the
+  profile week it belongs to (`prof: { id, u }`); changes go up by themselves, and a device that finds a newer
+  copy in the profile takes it, keeping its own notes for the same program. "Put it on this device" rebuilds a
+  kept week on a new device. A kept school is also that device's saved school, and saving a different school
+  on a school's page updates the profile (only for someone signed in who keeps one there).
+- **Share with one person.** The parent types one email address. That makes a private list for that child's
+  week (a group marked `solo`), invites the address, and emails "{Name} shared {Child}'s week with you". The
+  recipient must sign in with that address, goes straight in, and can look and print but not change anything.
+  More addresses can be added to the same list; each can be removed, and "Stop sharing with everyone" deletes
+  it. What is shared is the same as in a group: first name and program ids, never the school, address or notes.
+- **Week links are retired.** A week used to be shareable as a link that held the whole week after the `#`.
+  Anyone could open one and it could not be taken back, so the buttons are gone and an old link now shows a
+  notice instead of a week. "Copy as text", "Email it to myself" and cards remain; none of them carries a link
+  to a week.
+- **Share groups (pilot).** `"pilot": true` keeps groups for several families unlisted: "Start a group" on the
+  account page and "Share with a group" on Build your week only show in a browser that has been let in
+  (`/account/?groups=1`, opening a group invitation, or already being in a group). Set `"pilot": false` to show
+  them to everyone. Groups are invitation only: the creator types addresses, each gets a link to `/join/#CODE`
+  and the code, and joining needs both an invited address and the code. There is no asking to join; the
+  creator is emailed when someone comes in and can remove anyone, which also removes their invitation.
 - **Where.** `src/server/groups-api.php` is the whole server side; the build copies it to `groups/api.php` with
-  four settings (site name, address, sender, the date groups expire). It keeps one SQLite file and a key in a
-  folder named `phillyafterschool-data`, next to (not inside) the public folder on the host. Deleting that
-  folder in the host's file manager wipes every account and group. It is not in git and not backed up by this
-  repository.
-- **Invitations.** Up to 60 addresses per group. An invited address is stored with the group until it is removed
-  or the group ends, and is used only to send the invitation and to check who may join. Invitation emails are
-  limited to 60 a day per creator and 3 a day per address.
-- **Limits and expiry.** Links and codes last 15 minutes and work once; five wrong codes kill a code; three
-  sign-in emails per address per 15 minutes. A device stays signed in 30 days. Every group is deleted two weeks
-  after `lastDay` in `data/days-off.json`.
-- **The email list.** `"klaviyoList"` under `groups` names a Klaviyo list ("Account holders"). When an account's
-  name is saved for the first time, the browser subscribes that email, first name and last name to it with the
-  public key (the same call the dates form uses), sets the profile property `has_account`, and tells the server
-  so it isn't done twice. An ad blocker can stop the call; it is tried again at each sign-in until it works.
-  Nothing about children or groups is sent. Leave `klaviyoList` out to turn this off.
-- **Emails it sends.** The sign-in email, "someone asked to join" to a group's creator (the adult's first name
-  only), and "you're in" to the person approved. They go out with PHP `mail()` from the contact address.
-- **Privacy.** The account and group pages load no Google Tag Manager or Clarity (`quiet: true` in `layout`),
-  are `noindex`, and are left out of the sitemap. `src/groups.js` runs only on those two pages and the roster
-  page. The privacy page's "Accounts and share groups" section describes all of this; keep the two in step.
-- **Analytics.** Adding a week to a group fires `pas_group_share` (method `code` or `my_group`) on the roster
-  page. No names, emails or group ids are ever sent.
+  its settings (site name, address, sender, the date shared weeks expire, the Google client ID). It keeps one
+  SQLite file and a key in a folder named `phillyafterschool-data`, next to (not inside) the public folder on
+  the host. Deleting that folder in the host's file manager wipes every account, profile and group. It is not
+  in git and not backed up by this repository.
+- **Limits and expiry.** Sign-in links and codes last 15 minutes and work once; five wrong codes kill a code;
+  three sign-in emails per address per 15 minutes. A device stays signed in 30 days. Up to 60 invited addresses
+  per group, 60 invitation emails a day per person and 3 a day per address. A profile holds 6 weeks. Every
+  shared week and group is deleted two weeks after `lastDay` in `data/days-off.json`; profiles stay.
+- **The email list.** `"klaviyoList"` under `groups` names a Klaviyo list ("Account holders"). When an account
+  first has a name, the browser subscribes that email, first name and last name to it with the public key,
+  sets the profile property `has_account`, and tells the server so it isn't done twice. An ad blocker can stop
+  the call; it is tried again at each sign-in until it works. Nothing about children is sent. Leave
+  `klaviyoList` out to turn this off.
+- **Emails it sends.** The sign-in email, invitations, and "{Name} joined" to whoever shared or made the group.
+  They go out with PHP `mail()` from the contact address.
+- **The numbers page.** `/edit/stats/`, behind the same sign-in as `/edit/`, shows counts: accounts, how they
+  signed in, schools and weeks kept, weeks shared, groups, invitations, and a table by day. It prints no name,
+  address, group name or week. The daily counts come from a `tally` table that holds a word, a date and a
+  number.
+- **The edit sign-in's key.** The cookie that says "signed in to /edit/" is signed with a key the server makes
+  on first use and keeps in `phillyafterschool-edit.key` next to the public folder. It must never be derived
+  only from values in this repository, which is public.
+- **Privacy.** The account, invitation, group and numbers pages load no Google Tag Manager or Clarity
+  (`quiet: true` in `layout`), are `noindex`, and are left out of the sitemap. Build your week does load them:
+  it is masked in session recordings, and the only event is `pas_group_share` with a `method` (`profile`,
+  `profile_school`, `one_person`, `code`, `my_group`), never a name, address or id. The privacy page's
+  "Accounts, profiles and sharing" section describes all of this; keep the two in step.
 
 ## Links out to programs
 

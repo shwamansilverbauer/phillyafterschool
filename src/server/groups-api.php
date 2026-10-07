@@ -7,6 +7,9 @@
 //   an invitation  - an email address a group's owner has invited; only invited addresses can join
 //   a membership   - who is in which group
 //   a child        - a first name and the programs on their current and upcoming week (no school, address, note or photo)
+//   a profile      - only if the person asks: the school they saved, and a child's week (first name, programs, and the
+//                    school each program is listed under, so it can be put back on another device)
+//   a tally        - how many accounts, groups and so on were made each day. Numbers only, for the site's owner.
 // Everything lives in one small database file kept outside the public folder. Nothing here is ever written into a page:
 // a group is only sent, as data, to a signed-in member the owner has approved.
 //
@@ -14,7 +17,7 @@
 // address (which proves it is theirs) and gives the code from the invitation. Both are needed.
 //
 // Signing in has no passwords. The site emails a link (and a 6-digit code for the device that asked); each works once
-// and for 15 minutes. A device then stays signed in for 30 days.
+// and for 15 minutes. Or Google vouches for the address. A device then stays signed in for 30 days.
 
 declare(strict_types=1);
 
@@ -34,6 +37,8 @@ const MAX_JOINED = 30;      // groups one person can be in
 const MAX_MEMBERS = 80;     // people in one group
 const MAX_KIDS = 6;         // children one member can add to one group
 const MAX_INVITES = 60;     // addresses one group can have invited
+const MAX_SOLO = 12;        // "share this week with one person" lists one account can have (one per child)
+const MAX_WEEKS = 6;        // children's weeks one profile can hold
 const DAYS = array('mon', 'tue', 'wed', 'thu', 'fri');
 
 function out(array $data, int $code = 200): void { http_response_code($code); echo json_encode($data); exit; }
@@ -80,11 +85,26 @@ function db(): PDO {
     $db->exec('CREATE TABLE IF NOT EXISTS kids (id INTEGER PRIMARY KEY, member_id INTEGER NOT NULL REFERENCES members(id) ON DELETE CASCADE, name TEXT NOT NULL, now_json TEXT NOT NULL, next_json TEXT NOT NULL, updated INTEGER NOT NULL)');
     $db->exec('CREATE TABLE IF NOT EXISTS invites (id INTEGER PRIMARY KEY, group_id TEXT NOT NULL REFERENCES grp(id) ON DELETE CASCADE, email TEXT NOT NULL, created INTEGER NOT NULL, UNIQUE (group_id, email))');
     $db->exec('CREATE TABLE IF NOT EXISTS throttle (k TEXT NOT NULL, t INTEGER NOT NULL)');
+    $db->exec('CREATE TABLE IF NOT EXISTS weeks (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, name TEXT NOT NULL, now_json TEXT NOT NULL, next_json TEXT NOT NULL, updated INTEGER NOT NULL)');
+    $hadTally = (bool) $db->query("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'tally'")->fetchColumn();
+    $db->exec('CREATE TABLE IF NOT EXISTS tally (k TEXT NOT NULL, day TEXT NOT NULL, n INTEGER NOT NULL, PRIMARY KEY (k, day))');
     // Added after the first version: first and last name, and whether the account has been added to the email list.
     $cols = array();
     foreach ($db->query('PRAGMA table_info(users)') as $c) $cols[] = $c['name'];
-    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0') as $col => $type) {
+    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'") as $col => $type) {
       if (!in_array($col, $cols, true)) $db->exec('ALTER TABLE users ADD COLUMN ' . $col . ' ' . $type);
+    }
+    // A group made by "share this week with one person" is marked, so joining it skips the question about whose week to add.
+    $gcols = array();
+    foreach ($db->query('PRAGMA table_info(grp)') as $c) $gcols[] = $c['name'];
+    if (!in_array('solo', $gcols, true)) $db->exec('ALTER TABLE grp ADD COLUMN solo INTEGER NOT NULL DEFAULT 0');
+    $db->exec('CREATE INDEX IF NOT EXISTS weeks_user ON weeks (user_id)');
+    if (!$hadTally) {   // start the daily counts from what is already here
+      $day = "strftime('%Y-%m-%d', created, 'unixepoch', '-4 hours')";
+      $db->exec("INSERT OR IGNORE INTO tally (k, day, n) SELECT 'account', $day, COUNT(*) FROM users GROUP BY 2");
+      $db->exec("INSERT OR IGNORE INTO tally (k, day, n) SELECT 'group', $day, COUNT(*) FROM grp GROUP BY 2");
+      $db->exec("INSERT OR IGNORE INTO tally (k, day, n) SELECT 'invite', $day, COUNT(*) FROM invites GROUP BY 2");
+      $db->exec("INSERT OR IGNORE INTO tally (k, day, n) SELECT 'join', $day, COUNT(*) FROM members WHERE role != 'owner' GROUP BY 2");
     }
     $db->exec('CREATE INDEX IF NOT EXISTS throttle_k ON throttle (k, t)');
     $db->exec('CREATE INDEX IF NOT EXISTS members_user ON members (user_id)');
@@ -97,6 +117,10 @@ function db(): PDO {
 function q(string $sql, array $args = array()): PDOStatement { $st = db()->prepare($sql); $st->execute($args); return $st; }
 function row(string $sql, array $args = array()) { $r = q($sql, $args)->fetch(); return $r === false ? null : $r; }
 function val(string $sql, array $args = array()) { $v = q($sql, $args)->fetchColumn(); return $v === false ? null : $v; }
+// One more of something today, for the owner's numbers page. No names, no addresses: a word, a date and a count.
+function bump(string $k): void {
+  try { q('INSERT INTO tally (k, day, n) VALUES (?, ?, 1) ON CONFLICT(k, day) DO UPDATE SET n = n + 1', array($k, (new DateTime('now', new DateTimeZone('America/New_York')))->format('Y-m-d'))); } catch (Exception $e) { /* counting never gets in the way */ }
+}
 
 // Now and then, clear out what has expired: used links, old sessions, and groups past the end of the school year.
 function tidy(): void {
@@ -166,14 +190,14 @@ function current_user(): ?array {
   $done = true;
   $sid = isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s']) ? $_COOKIE['pas_s'] : '';
   if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return null;
-  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
+  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
   if (!$s) return null;
   if ($s['seen'] < now() - 86400) {   // once a day, push the 30 days out again
     $exp = now() + SESSION_DAYS * 86400;
     q('UPDATE sessions SET seen = ?, expires = ? WHERE id = ?', array(now(), $exp, $s['sid']));
     set_session_cookie($sid, $exp);
   }
-  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'sid' => (int) $s['sid']);
+  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'school' => (string) $s['school'], 'sid' => (int) $s['sid']);
   return $user;
 }
 function need_user(): array {
@@ -242,9 +266,19 @@ function programs(): array {
   $p = array();
   $list = json_decode((string) @file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/data/programs.json'), true);
   if (is_array($list)) foreach ($list as $x) {
-    if (is_array($x) && isset($x['id']) && is_string($x['id'])) $p[$x['id']] = isset($x['offers']) && is_array($x['offers']) ? $x['offers'] : array();
+    if (is_array($x) && isset($x['id']) && is_string($x['id'])) $p[$x['id']] = array(
+      'offers' => isset($x['offers']) && is_array($x['offers']) ? $x['offers'] : array(),
+      'schools' => isset($x['schools']) && is_array($x['schools']) ? array_map('strval', array_keys($x['schools'])) : array());
   }
   return $p;
+}
+function schools(): array {
+  static $s = null;
+  if ($s !== null) return $s;
+  $s = array();
+  $list = json_decode((string) @file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/data/schools.json'), true);
+  if (is_array($list)) foreach ($list as $x) { if (is_array($x) && isset($x['id']) && is_string($x['id'])) $s[] = $x['id']; }
+  return $s;
 }
 function clean_week($w): string {
   $known = programs();
@@ -257,19 +291,47 @@ function clean_week($w): string {
       $parts = explode('~', $e, 2);
       $id = $parts[0];
       if (!isset($known[$id])) continue;                                   // only programs the site lists
-      $cls = isset($parts[1]) && in_array($parts[1], $known[$id], true) ? $parts[1] : '';   // free-text notes never leave the device
+      $cls = isset($parts[1]) && in_array($parts[1], $known[$id]['offers'], true) ? $parts[1] : '';   // free-text notes never leave the device
       $entry = $cls === '' ? $id : $id . '~' . $cls;
       if (!in_array($entry, $out[$d], true)) $out[$d][] = $entry;
     }
   }
   return json_encode($out);
 }
+// A week saved to someone's own profile also keeps which school each program was picked under ("program.school"),
+// because that is what puts it back on another device. Still no free-text notes.
+function clean_week_full($w): string {
+  $known = programs();
+  $out = array();
+  foreach (DAYS as $d) {
+    $out[$d] = array();
+    if (!is_array($w) || !isset($w[$d]) || !is_array($w[$d])) continue;
+    foreach (array_slice($w[$d], 0, 8) as $e) {
+      if (!is_string($e)) continue;
+      $parts = explode('~', $e, 2);
+      $key = explode('.', $parts[0], 2);
+      if (count($key) !== 2 || !isset($known[$key[0]]) || !in_array($key[1], $known[$key[0]]['schools'], true)) continue;
+      $cls = isset($parts[1]) && in_array($parts[1], $known[$key[0]]['offers'], true) ? $parts[1] : '';
+      $entry = $parts[0] . ($cls === '' ? '' : '~' . $cls);
+      if (!in_array($entry, $out[$d], true)) $out[$d][] = $entry;
+    }
+  }
+  return json_encode($out);
+}
+function week_out(array $w): array {
+  return array('id' => (int) $w['id'], 'name' => $w['name'], 'now' => json_decode($w['now_json'], true), 'next' => json_decode($w['next_json'], true), 'updated' => (int) $w['updated']);
+}
+function profile_out(array $u): array {
+  $weeks = array();
+  foreach (q('SELECT * FROM weeks WHERE user_id = ? ORDER BY id', array($u['id'])) as $w) $weeks[] = week_out($w);
+  return array('school' => $u['school'], 'weeks' => $weeks);
+}
 function kid_out(array $k, bool $mine): array {
   return array('id' => (int) $k['id'], 'name' => $k['name'], 'now' => json_decode($k['now_json'], true), 'next' => json_decode($k['next_json'], true), 'mine' => $mine);
 }
 
 function membership(string $gid, int $uid): ?array {
-  return row('SELECT m.id, m.role, m.status, g.name, g.owner_id, g.expires, g.code_enc FROM members m JOIN grp g ON g.id = m.group_id WHERE m.group_id = ? AND m.user_id = ? AND g.expires > ?', array($gid, $uid, now()));
+  return row('SELECT m.id, m.role, m.status, g.name, g.owner_id, g.expires, g.code_enc, g.solo FROM members m JOIN grp g ON g.id = m.group_id WHERE m.group_id = ? AND m.user_id = ? AND g.expires > ?', array($gid, $uid, now()));
 }
 // A group can only be joined from an email address its owner invited. Signing in proves the address.
 function invited(string $gid, string $email): bool {
@@ -291,6 +353,17 @@ function send_invite(array $u, array $g, string $gname, string $to): bool {
   $url = $CFG['siteUrl'] . '/join/#' . $code;
   $from = $u['name'] . ' (' . $u['email'] . ')';
   $e = function ($v) { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); };
+  if (!empty($g['solo'])) {   // one week, shared with this person: they only look
+    $text = "$from shared \"$gname\" with you on " . $CFG['siteName'] . ": the after-school programs their child goes to each day.\n\n"
+      . "To see it, open this link and sign in with this email address ($to):\n$url\n\nIf it asks for a code: $code\n\n"
+      . "It only opens for this address, and it shows a first name and programs. If you don't know " . $u['name'] . ", ignore this email.\n";
+    $html = email_html($u['name'] . ' shared “' . $gname . '” with you',
+      '<p style="margin:0 0 10px">' . $e($from) . ' shared the after-school programs their child goes to each day.</p>'
+      . '<p style="margin:0">Sign in with this email address (' . $e($to) . '). If it asks for a code: <b style="font-family:monospace;font-size:18px">' . $e($code) . '</b></p>',
+      'See the week', $url,
+      'It only opens for this address, and it shows a first name and programs. If you don’t know ' . $u['name'] . ', ignore this email.');
+    return send_mail($to, $u['name'] . ' shared “' . $gname . '” with you on ' . $CFG['siteName'], $text, $html);
+  }
   $text = "$from invited you to the group \"$gname\" on " . $CFG['siteName'] . ", to share your children's after-school weeks with each other.\n\n"
     . "To join, open this link and sign in with this email address ($to):\n$url\n\nIf it asks for a code: $code\n\n"
     . "Only invited addresses can join, and a group shows first names and programs only. If you don't know " . $u['name'] . ", ignore this email: nothing happens unless you join.\n";
@@ -301,6 +374,19 @@ function send_invite(array $u, array $g, string $gname, string $to): bool {
     'Only invited addresses can join, and a group shows first names and programs only. If you don’t know ' . $u['name'] . ', ignore this email: nothing happens unless you join.');
   return send_mail($to, $u['name'] . ' invited you to “' . $gname . '” on ' . $CFG['siteName'], $text, $html);
 }
+// Put one address on a group's list and email it. Returns 'sent', 'held' (on the list, email not sent), 'full' or 'self'.
+function invite_one(array $u, array $g, string $gid, string $e): string {
+  if ($e === $u['email']) return 'self';   // the owner is already in
+  if (!invited($gid, $e)) {
+    if ((int) val('SELECT COUNT(*) FROM invites WHERE group_id = ?', array($gid)) >= MAX_INVITES) return 'full';
+    q('INSERT INTO invites (group_id, email, created) VALUES (?, ?, ?)', array($gid, $e, now()));
+    bump('invite');
+  }
+  // Limits on the emails themselves: per owner per day, and per address per day, so nobody's inbox is flooded.
+  if (too_many('inv:' . $u['id'], 60, 86400) || too_many('invto:' . h($e), 3, 86400)) return 'held';
+  note('inv:' . $u['id']); note('invto:' . h($e));
+  return send_invite($u, $g, $g['name'], $e) ? 'sent' : 'held';
+}
 function need_owner(string $gid, array $u): array {
   $m = membership($gid, $u['id']);
   if (!$m || $m['role'] !== 'owner') fail('forbidden', 'Only the person who made this group can do that.', 403);
@@ -308,8 +394,8 @@ function need_owner(string $gid, array $u): array {
 }
 function my_groups(int $uid): array {
   $list = array();
-  foreach (q('SELECT g.id, g.name, m.role, m.status, m.id AS mid FROM members m JOIN grp g ON g.id = m.group_id WHERE m.user_id = ? AND g.expires > ? ORDER BY g.name COLLATE NOCASE', array($uid, now())) as $g) {
-    $item = array('id' => $g['id'], 'name' => $g['name'], 'role' => $g['role'], 'status' => $g['status'], 'kids' => array());
+  foreach (q('SELECT g.id, g.name, g.solo, m.role, m.status, m.id AS mid FROM members m JOIN grp g ON g.id = m.group_id WHERE m.user_id = ? AND g.expires > ? ORDER BY g.name COLLATE NOCASE', array($uid, now())) as $g) {
+    $item = array('id' => $g['id'], 'name' => $g['name'], 'role' => $g['role'], 'status' => $g['status'], 'solo' => (bool) $g['solo'], 'kids' => array());
     foreach (q('SELECT id, name FROM kids WHERE member_id = ? ORDER BY id', array($g['mid'])) as $k) $item['kids'][] = array('id' => (int) $k['id'], 'name' => $k['name']);
     if ($g['role'] === 'owner') $item['waiting'] = (int) val('SELECT COUNT(*) FROM members WHERE group_id = ? AND status = ?', array($g['id'], 'pending'));
     $list[] = $item;
@@ -318,7 +404,66 @@ function my_groups(int $uid): array {
 }
 // "ready" means the account has the first and last name every account needs before it can make or join a group.
 function ready(array $u): bool { return $u['first'] !== '' && $u['last'] !== ''; }
-function me_out(array $u): array { return array('email' => $u['email'], 'first' => $u['first'], 'last' => $u['last'], 'ready' => ready($u), 'listed' => (bool) $u['listed']); }
+function me_out(array $u): array {
+  return array('email' => $u['email'], 'first' => $u['first'], 'last' => $u['last'], 'ready' => ready($u), 'listed' => (bool) $u['listed'],
+    'school' => isset($u['school']) ? (string) $u['school'] : '', 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0);
+}
+// Signs this browser in as the account with this address, making the account if it is new.
+function sign_in(string $email, string $via, string $next, string $first = '', string $last = ''): void {
+  $user = row('SELECT id, email, name, first, last, listed, school FROM users WHERE email = ?', array($email));
+  $new = false;
+  if (!$user) {
+    q('INSERT INTO users (email, created, via) VALUES (?, ?, ?)', array($email, now(), $via));
+    $user = array('id' => (int) db()->lastInsertId(), 'email' => $email, 'name' => '', 'first' => '', 'last' => '', 'listed' => 0, 'school' => '');
+    $new = true;
+    bump('account');
+  }
+  if ($user['first'] === '' && $user['last'] === '' && $first !== '' && $last !== '') {   // Google already knows their name
+    q('UPDATE users SET first = ?, last = ?, name = ? WHERE id = ?', array($first, $last, $first . ' ' . $last, $user['id']));
+    $user['first'] = $first; $user['last'] = $last; $user['name'] = $first . ' ' . $last;
+  }
+  $sid = b64(random_bytes(32));
+  $exp = now() + SESSION_DAYS * 86400;
+  q('INSERT INTO sessions (user_id, sid_hash, expires, seen) VALUES (?, ?, ?, ?)', array($user['id'], h($sid), $exp, now()));
+  set_session_cookie($sid, $exp);
+  bump('signin_' . $via);
+  $user['id'] = (int) $user['id'];
+  out(array('ok' => true, 'next' => $next, 'new' => $new, 'user' => me_out($user), 'groups' => my_groups($user['id'])));
+}
+function http_get(string $url): string {
+  if (function_exists('curl_init')) {
+    $c = curl_init($url);
+    curl_setopt_array($c, array(CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 8, CURLOPT_CONNECTTIMEOUT => 5, CURLOPT_FOLLOWLOCATION => false));
+    $r = curl_exec($c);
+    curl_close($c);
+    return is_string($r) ? $r : '';
+  }
+  $r = @file_get_contents($url, false, stream_context_create(array('http' => array('timeout' => 8, 'ignore_errors' => true))));
+  return is_string($r) ? $r : '';
+}
+// Google signs a short statement saying which address just signed in, for this site only. We ask Google whether the
+// statement is real, then check it was made for us, is still fresh, and is about an address Google is the authority on.
+function google_email(string $jwt): array {
+  global $CFG;
+  $client = isset($CFG['googleClientId']) ? (string) $CFG['googleClientId'] : '';
+  if ($client === '') fail('google', 'Signing in with Google isn’t set up.', 404);
+  if (strlen($jwt) > 4096 || !preg_match('/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/', $jwt)) fail('google', 'Google didn’t confirm that sign-in. Try again, or use the email code instead.', 401);
+  $base = 'https://oauth2.googleapis.com/tokeninfo';
+  if (PHP_SAPI === 'cli-server' && getenv('PAS_TEST_TOKENINFO')) $base = (string) getenv('PAS_TEST_TOKENINFO');   // the local test server only
+  $raw = http_get($base . '?id_token=' . rawurlencode($jwt));
+  if ($raw === '') fail('google_down', 'We couldn’t reach Google to check that sign-in. Use the email code instead.', 502);
+  $c = json_decode($raw, true);
+  $ok = is_array($c) && isset($c['aud'], $c['iss'], $c['exp'], $c['email']) && hash_equals($client, (string) $c['aud'])
+    && in_array($c['iss'], array('accounts.google.com', 'https://accounts.google.com'), true) && (int) $c['exp'] > now()
+    && isset($c['email_verified']) && ($c['email_verified'] === true || $c['email_verified'] === 'true');
+  if (!$ok) fail('google', 'Google didn’t confirm that sign-in. Try again, or use the email code instead.', 401);
+  $email = strtolower((string) $c['email']);
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 150) fail('google', 'Google didn’t confirm that sign-in. Try again, or use the email code instead.', 401);
+  // Google is only the authority on addresses it runs: Gmail, and an organisation's Google Workspace.
+  $own = preg_match('/@(gmail|googlemail)\.com$/', $email) || (isset($c['hd']) && is_string($c['hd']) && $c['hd'] !== '');
+  if (!$own) fail('google_other', 'That Google account uses an address Google doesn’t run (' . $email . '). Sign in with the email code instead, so we can check the address is yours.', 403);
+  return array('email' => $email, 'first' => person_name(isset($c['given_name']) && is_string($c['given_name']) ? $c['given_name'] : '', 30), 'last' => person_name(isset($c['family_name']) && is_string($c['family_name']) ? $c['family_name'] : '', 40));
+}
 function year_end(): int {
   global $CFG;
   $t = isset($CFG['yearEnd']) ? strtotime($CFG['yearEnd'] . ' 23:59:59 America/New_York') : false;
@@ -373,18 +518,17 @@ switch ($method . ' ' . $action) {
       }
     }
     q('UPDATE logins SET used = 1 WHERE id = ?', array($login['id']));
-    $user = row('SELECT id, email, name, first, last, listed FROM users WHERE email = ?', array($login['email']));
-    $new = false;
-    if (!$user) {
-      q('INSERT INTO users (email, created) VALUES (?, ?)', array($login['email'], now()));
-      $user = array('id' => (int) db()->lastInsertId(), 'email' => $login['email'], 'name' => '', 'first' => '', 'last' => '', 'listed' => 0);
-      $new = true;
-    }
-    $sid = b64(random_bytes(32));
-    $exp = now() + SESSION_DAYS * 86400;
-    q('INSERT INTO sessions (user_id, sid_hash, expires, seen) VALUES (?, ?, ?, ?)', array($user['id'], h($sid), $exp, now()));
-    set_session_cookie($sid, $exp);
-    out(array('ok' => true, 'next' => $login['next'], 'new' => $new, 'user' => me_out($user), 'groups' => my_groups((int) $user['id'])));
+    sign_in($login['email'], 'email', $login['next']);
+  }
+
+  // Signing in with Google instead of the emailed code.
+  case 'POST login_google': {
+    if (too_many('try:' . who(), 30, 900)) fail('slow', 'Too many tries. Wait 15 minutes and try again.', 429);
+    note('try:' . who());
+    $next = str($in, 'next', 80);
+    if (!preg_match('~^(board|account|join|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
+    $g = google_email(str($in, 'credential', 4200));
+    sign_in($g['email'], 'google', $next, $g['first'], $g['last']);
   }
 
   case 'GET me': {
@@ -427,9 +571,87 @@ switch ($method . ' ' . $action) {
   // Deletes the account, every child's week it shared, and every group it made (for everyone in them).
   case 'POST delete_account': {
     $u = need_user();
-    q('DELETE FROM users WHERE id = ?', array($u['id']));   // memberships, children, sessions and owned groups go with it
+    q('DELETE FROM users WHERE id = ?', array($u['id']));   // memberships, children, saved weeks, sessions and owned groups go with it
+    bump('account_deleted');
     set_session_cookie('', now() - 3600);
     out(array('ok' => true));
+  }
+
+  // ----- a profile: the school and the weeks someone chose to keep with their account -----
+  case 'GET profile': {
+    $u = need_user();
+    out(array('ok' => true) + profile_out($u));
+  }
+
+  case 'POST school_save': {
+    $u = need_user();
+    $school = str($in, 'school', 60);
+    if ($school !== '' && !in_array($school, schools(), true)) fail('school', 'That school isn’t one the site covers yet.');
+    if ($school !== '' && $u['school'] === '') bump('school_saved');
+    q('UPDATE users SET school = ? WHERE id = ?', array($school, $u['id']));
+    out(array('ok' => true, 'school' => $school));
+  }
+
+  // Keep one child's week with the account, or update one that is already there.
+  case 'POST week_save': {
+    $u = need_user();
+    $w = isset($in['week']) && is_array($in['week']) ? $in['week'] : array();
+    $name = first_name(str($w, 'name', 40));
+    if ($name === '') fail('kid', 'Add your child’s first name first, so you can tell the weeks apart.');
+    $id = isset($w['id']) ? (int) $w['id'] : 0;
+    if ($id) {
+      if (!row('SELECT id FROM weeks WHERE id = ? AND user_id = ?', array($id, $u['id']))) fail('gone', 'That week is no longer in your profile.', 404);
+      q('UPDATE weeks SET name = ?, now_json = ?, next_json = ?, updated = ? WHERE id = ?', array($name, clean_week_full($w['now'] ?? null), clean_week_full($w['next'] ?? null), now(), $id));
+    } else {
+      if ((int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) >= MAX_WEEKS) fail('limit', 'Your profile holds ' . MAX_WEEKS . ' weeks, which is the most it takes. Remove one first.');
+      q('INSERT INTO weeks (user_id, name, now_json, next_json, updated) VALUES (?, ?, ?, ?, ?)', array($u['id'], $name, clean_week_full($w['now'] ?? null), clean_week_full($w['next'] ?? null), now()));
+      $id = (int) db()->lastInsertId();
+      bump('week_saved');
+    }
+    out(array('ok' => true, 'week' => week_out(row('SELECT * FROM weeks WHERE id = ?', array($id)))));
+  }
+
+  case 'POST week_delete': {
+    $u = need_user();
+    q('DELETE FROM weeks WHERE id = ? AND user_id = ?', array(isset($in['week']) ? (int) $in['week'] : 0, $u['id']));
+    out(array('ok' => true));
+  }
+
+  // Share one child's week with one person: a private list of its own, which that person can only look at.
+  // The first address makes the list; later ones are added to it.
+  case 'POST share_one': {
+    $u = need_user();
+    if (!ready($u)) fail('yourname', 'Add your first and last name on your account page first, so the person you share with knows who it’s from.');
+    $email = strtolower(str($in, 'email', 150));
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) fail('email', 'That email address doesn’t look right.');
+    if ($email === $u['email']) fail('email', 'That’s your own address. To see this week on another device, save it to your profile instead.');
+    $gid = str($in, 'group', 30);
+    $kidId = null; $made = false;
+    if ($gid !== '') {
+      $g = need_owner($gid, $u);
+      if (empty($g['solo'])) fail('bad', 'That request was not understood.');
+    } else {
+      $kid = isset($in['kid']) && is_array($in['kid']) ? $in['kid'] : array();
+      $kidName = first_name(str($kid, 'name', 40));
+      if ($kidName === '') fail('kid', 'Add your child’s first name first.');
+      if ((int) val('SELECT COUNT(*) FROM grp WHERE owner_id = ? AND solo = 1 AND expires > ?', array($u['id'], now())) >= MAX_SOLO) fail('limit', 'You’re sharing as many weeks as one account can. Stop sharing one first.');
+      $gid = substr(preg_replace('/[^A-Za-z0-9]/', '', b64(random_bytes(18))) ?? '', 0, 14);
+      if (strlen($gid) < 10) $gid = bin2hex(random_bytes(7));
+      $code = new_code();
+      $gname = group_name($kidName . '’s week');
+      db()->beginTransaction();
+      q('INSERT INTO grp (id, name, owner_id, code_mac, code_enc, created, expires, solo) VALUES (?, ?, ?, ?, ?, ?, ?, 1)', array($gid, $gname, $u['id'], code_mac($code), code_seal($code), now(), year_end()));
+      q('INSERT INTO members (group_id, user_id, role, status, created) VALUES (?, ?, ?, ?, ?)', array($gid, $u['id'], 'owner', 'approved', now()));
+      q('INSERT INTO kids (member_id, name, now_json, next_json, updated) VALUES (?, ?, ?, ?, ?)', array((int) db()->lastInsertId(), $kidName, clean_week($kid['now'] ?? null), clean_week($kid['next'] ?? null), now()));
+      $kidId = (int) db()->lastInsertId();
+      db()->commit();
+      bump('share');
+      $made = true;
+      $g = need_owner($gid, $u);
+    }
+    $r = invite_one($u, $g, $gid, $email);
+    if ($r === 'full') fail('limit', 'That week is already shared with as many people as it takes.');
+    out(array('ok' => true, 'id' => $gid, 'name' => $g['name'], 'kid' => $kidId, 'made' => $made, 'sent' => $r === 'sent', 'invites' => invite_out($gid)));
   }
 
   // ----- groups -----
@@ -438,7 +660,7 @@ switch ($method . ' ' . $action) {
     $name = group_name(str($in, 'name', 80));
     if ($name === '') fail('name', 'Give the group a name, like “Room 12”.');
     if (!ready($u)) fail('yourname', 'Add your first and last name first, so people joining know whose group it is.');
-    if ((int) val('SELECT COUNT(*) FROM grp WHERE owner_id = ? AND expires > ?', array($u['id'], now())) >= MAX_OWNED) fail('limit', 'You’ve made ' . MAX_OWNED . ' groups, which is the most one person can have. Delete one first.');
+    if ((int) val('SELECT COUNT(*) FROM grp WHERE owner_id = ? AND solo = 0 AND expires > ?', array($u['id'], now())) >= MAX_OWNED) fail('limit', 'You’ve made ' . MAX_OWNED . ' groups, which is the most one person can have. Delete one first.');
     $gid = substr(preg_replace('/[^A-Za-z0-9]/', '', b64(random_bytes(18))) ?? '', 0, 14);
     if (strlen($gid) < 10) $gid = bin2hex(random_bytes(7));
     $code = new_code();
@@ -446,6 +668,7 @@ switch ($method . ' ' . $action) {
     q('INSERT INTO grp (id, name, owner_id, code_mac, code_enc, created, expires) VALUES (?, ?, ?, ?, ?, ?, ?)', array($gid, $name, $u['id'], code_mac($code), code_seal($code), now(), year_end()));
     q('INSERT INTO members (group_id, user_id, role, status, created) VALUES (?, ?, ?, ?, ?)', array($gid, $u['id'], 'owner', 'approved', now()));
     db()->commit();
+    bump('group');
     out(array('ok' => true, 'id' => $gid, 'name' => $name, 'code' => $code));
   }
 
@@ -454,11 +677,11 @@ switch ($method . ' ' . $action) {
     $u = need_user();
     if (too_many('join:' . $u['id'], 10, 3600)) fail('slow', 'Too many tries. Check the code in your invitation, and try again in an hour.', 429);
     $code = tidy_code(str($in, 'code', 40));
-    $g = strlen($code) === 12 ? row('SELECT id, name FROM grp WHERE code_mac = ? AND expires > ?', array(code_mac($code), now())) : null;
+    $g = strlen($code) === 12 ? row('SELECT id, name, solo FROM grp WHERE code_mac = ? AND expires > ?', array(code_mac($code), now())) : null;
     if (!$g) { note('join:' . $u['id']); fail('code', 'No group has that code. Check it against your invitation email.', 404); }
     $m = row('SELECT status FROM members WHERE group_id = ? AND user_id = ?', array($g['id'], $u['id']));
     if (!$m && !invited($g['id'], $u['email'])) { note('join:' . $u['id']); not_invited($u); }
-    out(array('ok' => true, 'id' => $g['id'], 'name' => $g['name'], 'member' => (bool) $m, 'status' => $m ? $m['status'] : ''));
+    out(array('ok' => true, 'id' => $g['id'], 'name' => $g['name'], 'solo' => (bool) $g['solo'], 'member' => (bool) $m, 'status' => $m ? $m['status'] : ''));
   }
 
   // Join a group: the code from the invitation, from an address the owner invited. Both, or nothing.
@@ -468,9 +691,9 @@ switch ($method . ' ' . $action) {
     if (!ready($u)) fail('yourname', 'Add your first and last name, so the group knows who you are.');
     note('join:' . $u['id']);
     $code = tidy_code(str($in, 'code', 40));
-    $g = strlen($code) === 12 ? row('SELECT id, name, owner_id FROM grp WHERE code_mac = ? AND expires > ?', array(code_mac($code), now())) : null;
+    $g = strlen($code) === 12 ? row('SELECT id, name, owner_id, solo FROM grp WHERE code_mac = ? AND expires > ?', array(code_mac($code), now())) : null;
     if (!$g) fail('code', 'No group has that code. Check it against your invitation email.', 404);
-    $viewer = !empty($in['viewer']);
+    $viewer = !empty($in['viewer']) || !empty($g['solo']);   // a week shared with one person is only looked at
     $kid = isset($in['kid']) && is_array($in['kid']) ? $in['kid'] : null;
     $kidName = $kid ? first_name(str($kid, 'name', 40)) : '';
     if (!$viewer && $kidName === '') fail('kid', 'Add your child’s first name.');
@@ -483,6 +706,7 @@ switch ($method . ' ' . $action) {
       // The owner chose this address, so there is no second approval step.
       q('INSERT INTO members (group_id, user_id, role, status, created) VALUES (?, ?, ?, ?, ?)', array($g['id'], $u['id'], $viewer ? 'viewer' : 'member', 'approved', now()));
       $m = array('id' => (int) db()->lastInsertId(), 'role' => $viewer ? 'viewer' : 'member', 'status' => 'approved');
+      bump('join');
     } elseif (!$viewer && $m['role'] === 'viewer') {
       q('UPDATE members SET role = ? WHERE id = ?', array('member', $m['id']));
     }
@@ -501,7 +725,7 @@ switch ($method . ' ' . $action) {
         "$who joined your group \"" . $g['name'] . "\" on " . $CFG['siteName'] . ", from the address you invited (" . $u['email'] . ").\n\nIf that isn't who you expected, remove them here:\n$url\n",
         email_html($u['name'] . ' joined ' . $g['name'], '<p style="margin:0">' . htmlspecialchars($who, ENT_QUOTES, 'UTF-8') . ' joined your group from the address you invited (' . htmlspecialchars($u['email'], ENT_QUOTES, 'UTF-8') . '). If that isn’t who you expected, you can remove them.</p>', 'Open the group', $url, 'You’re getting this because you made this group on ' . $CFG['siteName'] . '.'));
     }
-    out(array('ok' => true, 'id' => $g['id'], 'name' => $g['name'], 'status' => $m['status'], 'kid' => $kidId));
+    out(array('ok' => true, 'id' => $g['id'], 'name' => $g['name'], 'status' => $m['status'], 'kid' => $kidId, 'solo' => (bool) $g['solo']));
   }
 
   // Invite people by email address. Each gets the link and the code; only these addresses can join.
@@ -520,16 +744,9 @@ switch ($method . ' ' . $action) {
     if (!$good) fail('email', $bad ? 'Those don’t look like email addresses.' : 'Add at least one email address.');
     $sent = 0; $held = 0; $full = false;
     foreach ($good as $e) {
-      if ($e === $u['email']) continue;   // the owner is already in
-      $has = invited($gid, $e);
-      if (!$has) {
-        if ((int) val('SELECT COUNT(*) FROM invites WHERE group_id = ?', array($gid)) >= MAX_INVITES) { $full = true; break; }
-        q('INSERT INTO invites (group_id, email, created) VALUES (?, ?, ?)', array($gid, $e, now()));
-      }
-      // Limits on the emails themselves: per owner per day, and per address per day, so nobody's inbox is flooded.
-      if (too_many('inv:' . $u['id'], 60, 86400) || too_many('invto:' . h($e), 3, 86400)) { $held++; continue; }
-      note('inv:' . $u['id']); note('invto:' . h($e));
-      if (send_invite($u, $g, $g['name'], $e)) $sent++; else $held++;
+      $r = invite_one($u, $g, $gid, $e);
+      if ($r === 'full') { $full = true; break; }
+      if ($r === 'sent') $sent++; elseif ($r === 'held') $held++;
     }
     out(array('ok' => true, 'sent' => $sent, 'held' => $held, 'full' => $full, 'bad' => $bad, 'invites' => invite_out($gid)));
   }
@@ -551,6 +768,7 @@ switch ($method . ' ' . $action) {
     $gid = str($in, 'group', 30);
     $m = membership($gid, $u['id']);
     if (!$m) fail('forbidden', 'You’re not in that group.', 403);
+    if (!empty($m['solo']) && $m['role'] !== 'owner') fail('forbidden', 'This week was shared with you to look at. Only the person who shared it can change it.', 403);
     $kid = isset($in['kid']) && is_array($in['kid']) ? $in['kid'] : array();
     $name = first_name(str($kid, 'name', 40));
     if ($name === '') fail('kid', 'Add your child’s first name.');
@@ -581,7 +799,19 @@ switch ($method . ' ' . $action) {
       q('UPDATE kids SET now_json = ?, next_json = ?, updated = ? WHERE id = ?', array(clean_week($kid['now'] ?? null), clean_week($kid['next'] ?? null), now(), $kidId));
       $done[] = $kidId;
     }
-    out(array('ok' => true, 'done' => $done, 'gone' => $gone));
+    // Weeks kept in the profile: the same device sends those along too.
+    $saved = array(); $lost = array();
+    foreach (isset($in['weeks']) && is_array($in['weeks']) ? array_slice($in['weeks'], 0, MAX_WEEKS) : array() as $w) {
+      if (!is_array($w) || !isset($w['id'])) continue;
+      $wid = (int) $w['id'];
+      if (!row('SELECT id FROM weeks WHERE id = ? AND user_id = ?', array($wid, $u['id']))) { $lost[] = $wid; continue; }
+      $name = first_name(str($w, 'name', 40));
+      $t = now();
+      if ($name !== '') q('UPDATE weeks SET name = ? WHERE id = ?', array($name, $wid));
+      q('UPDATE weeks SET now_json = ?, next_json = ?, updated = ? WHERE id = ?', array(clean_week_full($w['now'] ?? null), clean_week_full($w['next'] ?? null), $t, $wid));
+      $saved[] = array('id' => $wid, 'updated' => $t);
+    }
+    out(array('ok' => true, 'done' => $done, 'gone' => $gone, 'weeks' => $saved, 'weeksGone' => $lost));
   }
 
   case 'POST kid_delete': {
@@ -597,7 +827,7 @@ switch ($method . ' ' . $action) {
     $gid = isset($_GET['g']) && is_string($_GET['g']) ? substr($_GET['g'], 0, 30) : '';
     $m = membership($gid, $u['id']);
     if (!$m) fail('forbidden', 'You’re not in that group, or it no longer exists.', 403);
-    $base = array('ok' => true, 'id' => $gid, 'name' => $m['name'], 'role' => $m['role'], 'status' => $m['status'], 'expires' => (new DateTime('@' . (int) $m['expires']))->setTimezone(new DateTimeZone('America/New_York'))->format('Y-m-d'));
+    $base = array('ok' => true, 'id' => $gid, 'name' => $m['name'], 'role' => $m['role'], 'status' => $m['status'], 'solo' => !empty($m['solo']), 'expires' => (new DateTime('@' . (int) $m['expires']))->setTimezone(new DateTimeZone('America/New_York'))->format('Y-m-d'));
     if ($m['status'] !== 'approved') out($base);   // waiting: the name of the group and nothing else
     $kids = array();
     foreach (q('SELECT k.*, m.user_id FROM kids k JOIN members m ON m.id = k.member_id WHERE m.group_id = ? AND m.status = ? ORDER BY k.name COLLATE NOCASE, k.id', array($gid, 'approved')) as $k) {
@@ -673,6 +903,7 @@ switch ($method . ' ' . $action) {
     $gid = str($in, 'group', 30);
     need_owner($gid, $u);
     q('DELETE FROM grp WHERE id = ?', array($gid));
+    bump('group_deleted');
     out(array('ok' => true));
   }
 }

@@ -341,8 +341,15 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <link rel="stylesheet" href="${link('assets/site.css', depth)}${CSS_V}">${jsonLd ? '\n<script type="application/ld+json">' + JSON.stringify(jsonLd).replace(/</g, '\\u003c') + '</script>' : ''}`;
   // Edit mode (see /edit/) loads a second script. This tells site.js where to find it and where edits are sent.
   const editCfg = { js: link('assets/edit.js', depth) + EDIT_V, send: PREVIEW ? '' : link('edit/send.php', depth), home: link('edit/', depth), contact: cfg.contactEmail || '' };
-  const page = `${quiet ? '' : gtmBody}<script>document.documentElement.className+=' js'</script>
-<header class="band${theme ? ' ' + theme : ''}">
+  // The strip above the menu: Log in and Register, or "Your account" once this browser has signed in. Which one shows
+  // is decided before the page paints, from a flag the account pages keep in this browser (no request is made).
+  const topbar = GROUPS ? `
+  <div class="topbar"><div class="in">
+    <a class="when-out" href="${link('account/', depth)}">Log in</a><a class="when-out top-reg" href="${link('account/', depth)}?new=1">Register</a>
+    <a class="when-in" href="${link('account/', depth)}">Your account</a>
+  </div></div>` : '';
+  const page = `${quiet ? '' : gtmBody}<script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
+<header class="band${theme ? ' ' + theme : ''}">${topbar}
   <div class="in bar">
     <a class="brand" href="${link('', depth)}"><span class="bus-mark"></span>${esc(cfg.siteName)}</a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true"></span>Menu</button>
@@ -387,6 +394,7 @@ ${body}
         <li><a href="${link('board/', depth)}">${T(`After-school schedule`)}</a></li>
         ${daysOff ? `<li><a href="${link(offPath, depth)}#plan">${T(`Day-camp schedule`)}</a></li>` : ''}
         ${ALERTS ? `<li><a href="${link(alertsPath, depth)}">${T(`Dates by email`)}</a></li>` : ''}
+        ${GROUPS ? `<li><a href="${link('account/', depth)}">${T(`Your account`)}</a></li>` : ''}
       </ul>
     </div>
     <div>
@@ -407,7 +415,7 @@ ${body}
     ${cfg.builtBy ? `<p>Built by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
   </div>
 </div></footer>
-<script src="${link('assets/site.js', depth)}${JS_V}" data-edit="${esc(JSON.stringify(editCfg))}"></script>
+<script src="${link('assets/site.js', depth)}${JS_V}" data-edit="${esc(JSON.stringify(editCfg))}"${GROUPS && !PREVIEW ? ` data-api="${link('groups/api.php', depth)}"` : ''}></script>
 ${scripts}`;
   if (fragment) return head + '\n' + page;
   return `<!doctype html>
@@ -1314,8 +1322,8 @@ function privacyPage() {
   const body = `<div class="prose">
   <h2>${T(`The short version`)}</h2>
   <ul>
-    <li>${GROUPS ? T(`There are no ads, and nothing you send is sold. You only need an account for share groups, which are optional.`) : T(`There are no accounts and no ads, and nothing you send is sold.`)}</li>
-    <li>${GROUPS ? T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us unless you choose to add one to a share group.`) : T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us.`)}</li>
+    <li>${GROUPS ? T(`There are no ads, and nothing you send is sold. An account is optional: it is for keeping your school or a week in a profile, and for sharing a week with someone.`) : T(`There are no accounts and no ads, and nothing you send is sold.`)}</li>
+    <li>${GROUPS ? T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us unless you sign in and choose to keep one in your profile or share one.`) : T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us.`)}</li>
     <li>${T(`If you send a suggestion or a review, it arrives as an email to the person who runs the site.`)}</li>
     ${ALERTS ? `<li>${T(`If you ask for dates by email, your first name, your email address and the school or program you picked are kept by Klaviyo, the service that sends the emails.`)}</li>` : ''}
     <li>${T(`We use Google Analytics and Microsoft Clarity to see how the site is used, so we can fix what’s confusing.`)}</li>
@@ -1324,15 +1332,19 @@ function privacyPage() {
   <ul>
     <li>${T(`A roster lives in the browser you made it in. Clearing your browser’s site data deletes it.`)}</li>
     <li>${T(`If you save a school as yours, that choice is kept in your own browser too. Our visit counts record that a school was saved, not who saved it.`)}</li>
-    <li>${T(`A child’s name is optional. If you add one, it stays on your device and appears in the link you choose to share.`)}</li>
-    <li>${T(`Anyone who has a roster’s link can see that roster, so share it the way you’d share a family calendar.`)}</li>
-    <li>${T(`When a shared roster is opened, the site removes the name from the page address before any analytics loads, and the roster page is set to be hidden in session recordings.`)}</li>
+    <li>${T(`A child’s name is optional. If you add one, it stays on your device unless you keep or share that week through an account.`)}</li>
+    <li>${T(`A week can no longer be shared as a link. A link showed the week to anyone who had it and could not be taken back, so links made before October 2026 have stopped opening.`)}</li>
+    <li>${T(`If one of those older links is opened, the site still removes the name from the page address before any analytics loads. The roster page is set to be hidden in session recordings.`)}</li>
+    <li>${T(`Copying a week as text, emailing it to yourself or making a card all happen on your own device. What you do with the text or the picture is up to you.`)}</li>
     <li>${T(`If you add a photo to a week card, the card is made in your own browser. The photo is not uploaded, not saved, and gone when you close the page.`)}</li>
   </ul>
-  ${GROUPS ? `<h2 id="groups">${T(`Accounts and share groups`)}</h2>
-  <p>${T(`A share group lets a few families who know each other see each other’s after-school weeks. It is optional, invitation only, and the only part of the site that keeps anything about a child on our server.`)}</p>
+  ${GROUPS ? `<h2 id="groups">${T(`Accounts, profiles and sharing`)}</h2>
+  <p>${T(`An account is optional. It lets you keep your school and a child’s week in a profile, share a week with one person, and join a share group of a few families who know each other. These are the only parts of the site that keep anything about a child on our server, and only when you choose to use them.`)}</p>
   <ul>
-    <li>${T(`An account is an email address and your first and last name. The email signs you in and tells you when someone joins a group you made. Other members never see it.`)}</li>
+    <li>${T(`An account is an email address and your first and last name. The email signs you in and tells you when someone opens a week you shared or joins a group you made. Other members never see it.`)}</li>${GROUPS.google ? `
+    <li>${T(`You can sign in with Google instead of an emailed code. Google’s sign-in is only loaded if you choose it. Google then knows you signed in to this site, and tells us your name and email address. We ask for nothing else and never see your Google password.`)}</li>` : ''}
+    <li>${T(`If you keep your school in your profile, we store which school. If you keep a week in your profile, we store the child’s first name, the programs on their current and upcoming weeks, and the school each program was picked under, so the week can be put back on another device. Notes you type are not stored.`)}</li>
+    <li>${T(`Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.`)}</li>
     <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
     <li>${T(`There are no passwords. We email you a link and a 6-digit code; each works once and for 15 minutes. A cookie then keeps that device signed in for 30 days, and you can sign out everywhere from your account page.`)}</li>
     <li>${T(`When you add a week to a group, we store the child’s first name as you type it and the programs on their current and upcoming weeks. We do not store a last name, school, address, pickup time, note, teacher’s name, photo, price or day-off plan.`)}</li>
@@ -1341,8 +1353,9 @@ function privacyPage() {
     <li>${T(`A group’s creator sees the name and email address of each adult in it; other members don’t.`)}</li>
     <li>${T(`Someone who joins to view only, such as a caregiver, can see and print the group and cannot change it.`)}</li>
     <li>${T(`Anyone in a group can print it or take a screenshot, so keep groups to people you know and would tell where your child is anyway.`)}</li>
-    <li>${T(`Groups are kept in a file on our web host, outside the public site. Google Analytics and Microsoft Clarity are not loaded on the account and group pages.`)}</li>
-    <li>${T(`You can take a week out of a group, leave a group, or delete your account from the site at any time, and it is removed straight away. A group’s creator can remove anyone. Every group is deleted two weeks after the last day of school.`)}</li>
+    <li>${T(`Accounts, profiles and groups are kept in a file on our web host, outside the public site. Google Analytics and Microsoft Clarity are not loaded on the account, invitation and group pages. The Build your week page does load them: it is hidden in session recordings, and analytics is told only that something was kept or shared, never what or with whom.`)}</li>
+    <li>${T(`We keep a daily count of how many accounts, shared weeks and groups were made, to see whether this is used. The counts hold no names, addresses or weeks.`)}</li>
+    <li>${T(`You can take a week out of your profile or out of a group, stop sharing, leave a group, or delete your account from the site at any time, and it is removed straight away. A group’s creator can remove anyone. Every shared week and group is deleted two weeks after the last day of school.`)}</li>
     <li>${T(`Accounts are for parents, caregivers and teachers. Children should not make one.`)}</li>
   </ul>` : ''}
   <h2 id="forms">${T(`Suggestions, corrections and reviews`)}</h2>
@@ -1774,26 +1787,27 @@ ${cards}
 // ---------- share groups (accounts, class codes) ----------
 // "groups" in site.config.json turns them on. While "pilot" is true nothing links to them: the pages exist at
 // /account/ and /groups/, and the block on the roster page only shows in a browser that has visited one of them.
-const GROUPS = cfg.groups && cfg.contactEmail ? { pilot: cfg.groups.pilot !== false, klaviyoList: cfg.groups.klaviyoList || '' } : null;
-const groupsAttrs = depth => `data-groups data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}" data-api="${PREVIEW ? '' : link('groups/api.php', depth)}"${GROUPS.klaviyoList && ALERTS?.klaviyoKey ? ` data-kl-key="${esc(ALERTS.klaviyoKey)}" data-kl-list="${esc(GROUPS.klaviyoList)}"` : ''}`;
+const GROUPS = cfg.groups && cfg.contactEmail ? { pilot: cfg.groups.pilot !== false, klaviyoList: cfg.groups.klaviyoList || '', google: /^[0-9a-z-]+\.apps\.googleusercontent\.com$/.test(cfg.groups.googleClientId || '') ? cfg.groups.googleClientId : '' } : null;
+const groupsAttrs = depth => `data-groups data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}" data-api="${PREVIEW ? '' : link('groups/api.php', depth)}"${GROUPS.klaviyoList && ALERTS?.klaviyoKey ? ` data-kl-key="${esc(ALERTS.klaviyoKey)}" data-kl-list="${esc(GROUPS.klaviyoList)}"` : ''}${GROUPS.google && !PREVIEW ? ` data-google="${esc(GROUPS.google)}"` : ''} data-pilot="${GROUPS.pilot ? 1 : 0}"`;
 const groupsScript = depth => `<script src="${link('assets/groups.js', depth)}${GROUPS_V}"></script>`;
 function accountPage() {
   const hero = `    <h1>${T(`Your account`)}</h1>
-    <p class="lede">${T(`An account is only for share groups: a few families you know who want to see each other’s after-school weeks. Rosters work without one.`)}</p>`;
+    <p class="lede">${T(`Keep your school and your child’s week in a profile, so they’re on every device you sign in on, and share a week with one person. Everything else on the site works without an account.`)}</p>`;
   const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`Accounts need JavaScript turned on.`)}</p></noscript>
   <div class="g-page" id="account"></div>
   <section class="notes">
-    <h2>${T(`How groups keep things private`)}</h2>
+    <h2>${T(`What an account keeps, and who sees it`)}</h2>
     <ul>
-      <li>${T(`A group shows a child’s first name and the programs on their week. No last names, addresses, notes or photos.`)}</li>
-      <li>${T(`Groups are invitation only. Its creator invites email addresses, and only those addresses can join. A group can’t be searched for, and its link shows nothing to anyone else.`)}</li>
-      <li>${T(`You can take a week out of a group, leave a group, or delete your account at any time. Groups delete themselves when the school year ends.`)}</li>
+      <li>${T(`Nothing goes into your profile unless you put it there: a school, or a child’s first name and the programs on their week. No last names, addresses, notes or photos.`)}</li>
+      <li>${T(`A shared week opens only for the email address you sent it to, once that person has signed in. It can’t be searched for, and its link shows nothing to anyone else.`)}</li>
+      <li>${T(`You can take a week back, stop sharing, or delete your account at any time. Shared weeks delete themselves when the school year ends.`)}</li>
     </ul>
     <p><a href="${link('privacy/', 1)}#groups">${T(`The full details are on the privacy page.`)}</a></p>
   </section>
+  <script type="application/json" id="groups-data">${JSON.stringify({ schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })) }).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: 'Your account', description: `Sign in to ${cfg.siteName} to make or join a share group.`, pathName: 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
+  return layout({ title: 'Your account', description: `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
 }
 // What the group and join pages need to know about programs: names and colors to show, classes to recognise.
 const groupsInfo = () => ({
@@ -1802,23 +1816,23 @@ const groupsInfo = () => ({
   programs: Object.fromEntries(programs.map(p => [p.id, { name: p.name, type: p.types[0], offers: p.offers || [] }])),
 });
 function joinPage() {
-  const hero = `    <h1>${T(`Join a group`)}</h1>
-    <p class="lede">${T(`Groups are invitation only. Enter the code from your invitation, sign in with the email address it was sent to, and pick the week to share.`)}</p>`;
+  const hero = `    <h1>${T(`Open your invitation`)}</h1>
+    <p class="lede">${T(`Someone shared a week with you or invited you to a group. Sign in with the email address the invitation was sent to: it only opens for that address.`)}</p>`;
   const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`Joining a group needs JavaScript turned on.`)}</p></noscript>
   <div class="g-page" id="join"></div>
   <section class="notes">
-    <h2>${T(`What a group sees`)}</h2>
+    <h2>${T(`What gets shared`)}</h2>
     <ul>
-      <li>${T(`Your child’s first name and the programs on their week. No last names, addresses, notes or photos.`)}</li>
-      <li>${T(`Only the people its creator invited by email address. Its link shows nothing to anyone else.`)}</li>
-      <li>${T(`You can take the week back out, leave the group or delete your account at any time.`)}</li>
+      <li>${T(`A child’s first name and the programs on their week. No last names, addresses, notes or photos.`)}</li>
+      <li>${T(`Only the people invited by email address can see it. Its link shows nothing to anyone else.`)}</li>
+      <li>${T(`If you add your own child’s week to a group, you can take it back out, leave the group or delete your account at any time.`)}</li>
     </ul>
     <p><a href="${link('privacy/', 1)}#groups">${T(`The full details are on the privacy page.`)}</a></p>
   </section>
   <script type="application/json" id="groups-data">${JSON.stringify(groupsInfo()).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: 'Join a group', description: `Join a private share group on ${cfg.siteName} with the code you were given.`, pathName: 'join/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
+  return layout({ title: 'Open your invitation', description: `Open an invitation on ${cfg.siteName} with the email address it was sent to.`, pathName: 'join/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
 }
 function groupPage() {
   const info = groupsInfo();
@@ -1834,7 +1848,7 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, yearEnd: end });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, yearEnd: end, googleClientId: GROUPS.google });
   const src = fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8');
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   return src.replace(`'/*CONFIG*/'`, () => `'` + conf.replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`);
@@ -1862,10 +1876,10 @@ function boardPage() {
     <p class="lede">${T(`Monday might be martial arts and Thursday the rec center. Plan the term that’s coming, keep a second roster for what your child is doing now, and send either to your partner, a sitter, or the group chat. More than one child? Each gets their own.`)}</p>`;
   const body = `<div data-board-page data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`The roster needs JavaScript turned on.`)}</p></noscript>
-  <div class="panel" id="board-shared" data-edit-reveal="Shown when someone opens a roster a friend shared:" hidden>
-    <h2>${T(`Someone shared this week with you`)}</h2>
-    <p id="board-shared-text">It isn’t saved on your device yet.</p>
-    <div class="actions"><button type="button" class="btn primary" id="board-adopt">Save it to my rosters</button><button type="button" class="btn" id="board-mine">See my own rosters</button></div>
+  <div class="panel" id="board-retired" data-edit-reveal="Shown when someone opens an old link to a week:" hidden>
+    <h2>${T(`That link doesn’t open a week any more`)}</h2>
+    <p>${T(`Weeks used to be shared as a link that anyone could open. They aren’t now. Ask the person who sent it to share the week with your email address instead: you’ll get an invitation, and it will open once you sign in.`)}</p>
+    <div class="actions"><button type="button" class="btn" id="board-retired-ok">OK</button></div>
   </div>
   <section class="section">
     <div class="kid-bar" id="kid-bar">
@@ -1939,21 +1953,16 @@ function boardPage() {
   </section>
   ${nextOff(1).replace(T(`Days off this year, and who’s open`), T(`Plan the days off too`))}
   ${ALERTS ? `<p class="hint alerts-line">${T(`Want next term’s sign-up dates before they open?`)} <a href="${link(alertsPath, 1)}">${T(`Get the dates by email.`)}</a></p>` : ''}
-  ${GROUPS ? `<section class="section group-share" id="group-share" ${groupsAttrs(1)} data-pilot="${GROUPS.pilot ? 1 : 0}" hidden></section>` : ''}
+  ${GROUPS ? `<section class="section group-share" id="group-share" ${groupsAttrs(1)} hidden></section>` : ''}
   <section class="board-tools" id="board-tools" hidden>
     <div class="actions">
       <button type="button" class="btn primary" id="board-share" hidden>Share</button>
-      <button type="button" class="btn" id="board-copy-link">Copy link</button>
       <button type="button" class="btn" id="board-copy-text">Copy as text</button>
       <a class="btn" id="board-email" href="mailto:">Email it to myself</a>
       <button type="button" class="clear" id="board-clear">Clear this roster</button>
     </div>
     <p class="hint" id="board-status" aria-live="polite"></p>
-    <div class="field">
-      <label for="board-link">${T(`Link to this roster`)}</label>
-      <input id="board-link" type="text" readonly>
-      <span class="hint">${T(`Rosters save automatically on this device. The link is the copy you can keep anywhere: anyone who opens it sees this roster, and it’s how you move one to another phone or computer.`)}</span>
-    </div>
+    <p class="hint">${T(`Rosters save automatically on this device. To have one on another phone or computer, or to share it with someone, use “Keep and share this week” above.`)}</p>
   </section>
   <section class="section card-maker" id="card-maker" hidden>
     <h2 tabindex="-1">${T(`Make it a card`)}</h2>
@@ -1989,10 +1998,10 @@ function boardPage() {
   <script type="application/json" id="pas-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;
   return layout({ title: 'Build your week', description: `Put together a Monday to Friday after-school roster for each child from ${cfg.siteName} listings and share it with a link.`, pathName: 'board/', depth: 1, current: 'board/', hero, body,
-    // A shared roster link carries a child's first name after the #. This runs before any analytics loads:
-    // it puts the shared roster aside for the page's own script and takes it out of the address.
+    // An old shared-roster link carries a child's first name after the #. Those links are retired, but one may still be
+    // opened. This runs before any analytics loads: it notes that one arrived and takes it out of the address.
     scripts: GROUPS ? groupsScript(1) : '',
-    first: `<script>(function(){var h=location.hash;if(!/(^#|&)(mon|tue|wed|thu|fri)=/.test(h))return;window.__pasShared=h;try{sessionStorage.setItem('pas-shared',h)}catch(e){}try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}})();</script>\n` });
+    first: `<script>(function(){var h=location.hash;if(!/(^#|&)(mon|tue|wed|thu|fri)=/.test(h))return;window.__pasShared=h;try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}})();</script>\n` });
 }
 
 function reviewPage() {
@@ -2166,17 +2175,32 @@ exit;
 // With editLogin set in site.config.json, /edit/ asks for a username and password, and edits can only be
 // sent while signed in. The preview has no sign-in: it cannot send anything.
 const GATED = !!cfg.editLogin && !PREVIEW;
-// Shared by the edit page and the handler. Signing in sets a cookie that is signed with a key derived from
-// the password hash, so there is nothing to store on the server and changing the password signs everyone out.
+// Shared by the edit page, the numbers page and the handler. Signing in sets a signed cookie. The key that signs it is
+// made on the server the first time it is needed and kept outside the public folder. It is mixed with the password
+// hash, so changing the password signs everyone out. (The key must never be worked out from this repository alone:
+// the repository is public, and a key anyone can compute is a cookie anyone can forge.)
 function editAuthPhp() {
   return `$EDIT_USER = ${JSON.stringify(cfg.editLogin.user)};
 $EDIT_HASH = '${cfg.editLogin.passwordHash}';
-$EDIT_KEY = hash('sha256', $EDIT_HASH . '|edit-sign-in');
 header('Cache-Control: no-store, private');
 header('X-Robots-Tag: noindex');
+function edit_key() {
+  global $EDIT_HASH;
+  static $k = null;
+  if ($k !== null) return $k;
+  $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-edit.key';
+  $raw = @file_get_contents($file);
+  if ($raw === false || strlen(trim($raw)) !== 64) {
+    $raw = bin2hex(random_bytes(32));
+    if (@file_put_contents($file, $raw, LOCK_EX) === false) { http_response_code(503); exit('Signing in is not available right now.'); }
+    @chmod($file, 0600);
+    $raw = (string) @file_get_contents($file);   // if two requests raced, both read back the same key
+  }
+  $k = hash_hmac('sha256', $EDIT_HASH . '|edit-sign-in', trim($raw));
+  return $k;
+}
 function edit_token($exp) {
-  global $EDIT_KEY;
-  return $exp . '.' . hash_hmac('sha256', (string) $exp, $EDIT_KEY);
+  return $exp . '.' . hash_hmac('sha256', (string) $exp, edit_key());
 }
 function edit_signed_in() {
   if (!isset($_COOKIE['pas_edit']) || !is_string($_COOKIE['pas_edit'])) return false;
@@ -2262,6 +2286,95 @@ ${editSignInPage()}<?php
 ${editPage()}`;
 }
 
+// The owner's numbers page, behind the same sign-in as the edit page. Counts only: it never prints a name, an email
+// address, a group's name or anything from a child's week.
+function editStatsPhp() {
+  const hero = `    <h1>Site numbers</h1>
+    <p class="lede">Accounts, profiles, shared weeks and groups. Counts only: no names, addresses or weeks are shown here.</p>`;
+  const body = `<div class="prose stats">
+<?php if (!$have) { ?>
+  <div class="panel"><p>Nobody has made an account yet, so there is nothing to count.</p></div>
+<?php } else { ?>
+  <h2>Right now</h2>
+  <div class="stat-grid">
+    <?php foreach ($tiles as $tile) { ?><div class="stat"><b><?php echo number_format($tile[0]); ?></b><span><?php echo htmlspecialchars($tile[1], ENT_QUOTES, 'UTF-8'); ?></span><?php if ($tile[2] !== '') { ?><small><?php echo htmlspecialchars($tile[2], ENT_QUOTES, 'UTF-8'); ?></small><?php } ?></div><?php } ?>
+  </div>
+  <h2>Schools kept in profiles</h2>
+  <?php if (!$bySchool) { ?><p class="hint">None yet.</p><?php } else { ?>
+  <table class="stat-table"><tbody><?php foreach ($bySchool as $row) { ?><tr><th scope="row"><?php echo htmlspecialchars($row[0], ENT_QUOTES, 'UTF-8'); ?></th><td><?php echo number_format($row[1]); ?></td></tr><?php } ?></tbody></table>
+  <?php } ?>
+  <h2>What happened, and when</h2>
+  <div class="stat-scroll"><table class="stat-table">
+    <thead><tr><th scope="col"></th><th scope="col">Today</th><th scope="col">Yesterday</th><th scope="col">Last 7 days</th><th scope="col">Last 30 days</th><th scope="col">Ever</th></tr></thead>
+    <tbody>
+    <?php foreach ($cols as $key => $label) { ?><tr><th scope="row"><?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?></th><?php foreach (array(1, -1, 7, 30, 0) as $span) { $v = $sum($key, $span); ?><td><?php echo $v ? number_format($v) : '<span class="nil">0</span>'; ?></td><?php } ?></tr><?php } ?>
+    </tbody>
+  </table></div>
+  <p class="hint">“Ever” counts everything since accounts began, including accounts and groups that were later deleted. Sign-ins by method and profile saves have been counted since October 6, 2026. Days are Philadelphia days, and “last 7 days” includes today.</p>
+<?php } ?>
+  <p><a class="btn" href="../">Back to editing</a> <a class="btn" href="../?out=1">Sign out</a></p>
+</div>`;
+  const page = layout({ title: 'Site numbers', description: 'Counts of accounts, shared weeks and groups.', pathName: 'edit/stats/', depth: 2, current: null, hero, body, noindex: true, quiet: true });
+  const names = JSON.stringify(Object.fromEntries(schools.map(s => [s.id, s.shortName]))).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  return `<?php
+// The owner's numbers page. Generated by build.mjs; edit it there.
+${editAuthPhp()}
+if (!edit_signed_in()) { header('Location: ../', true, 303); exit; }
+$SCHOOLS = json_decode('${names}', true);
+$file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
+$have = is_file($file);
+$tiles = array(); $bySchool = array(); $days = array(); $ever = array();
+$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'school_saved' => 'Schools kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted');
+if ($have) {
+  try {
+    $db = new PDO('sqlite:' . $file);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $db->exec('PRAGMA busy_timeout=3000');
+  } catch (Exception $e) { $have = false; }
+}
+if ($have) {
+  // A question the database can't answer yet (a table added in a later version) counts as zero.
+  $n = function ($sql, $args = array()) use ($db) { try { $st = $db->prepare($sql); $st->execute($args); return (int) $st->fetchColumn(); } catch (Exception $e) { return 0; } };
+  $t = time();
+  $accounts = $n('SELECT COUNT(*) FROM users');
+  $tiles[] = array($accounts, 'accounts', $n('SELECT COUNT(*) FROM users WHERE created > ?', array($t - 7 * 86400)) . ' new in 7 days, ' . $n('SELECT COUNT(*) FROM users WHERE created > ?', array($t - 30 * 86400)) . ' in 30');
+  $tiles[] = array($n('SELECT COUNT(DISTINCT user_id) FROM sessions WHERE seen > ?', array($t - 30 * 86400)), 'people signed in during the last 30 days', '');
+  $tiles[] = array($n("SELECT COUNT(*) FROM users WHERE via = 'google'"), 'accounts made with Google', ($accounts - $n("SELECT COUNT(*) FROM users WHERE via = 'google'")) . ' made with an emailed code');
+  $tiles[] = array($n('SELECT COUNT(*) FROM users WHERE listed = 1'), 'accounts added to the email list', $n("SELECT COUNT(*) FROM users WHERE first = ''") . ' accounts haven’t added a name yet');
+  $tiles[] = array($n("SELECT COUNT(*) FROM users WHERE school != ''"), 'profiles with a school kept', '');
+  $tiles[] = array($n('SELECT COUNT(*) FROM weeks'), 'weeks kept in profiles', 'by ' . $n('SELECT COUNT(DISTINCT user_id) FROM weeks') . ' people');
+  $tiles[] = array($n('SELECT COUNT(*) FROM grp WHERE solo = 1 AND expires > ?', array($t)), 'weeks shared with one person or more', $n('SELECT COUNT(*) FROM members m JOIN grp g ON g.id = m.group_id WHERE g.solo = 1 AND m.role != ?', array('owner')) . ' people have opened one');
+  $tiles[] = array($n('SELECT COUNT(*) FROM grp WHERE solo = 0 AND expires > ?', array($t)), 'groups', $n("SELECT COUNT(*) FROM (SELECT g.id FROM grp g JOIN members m ON m.group_id = g.id WHERE g.solo = 0 AND m.status = 'approved' GROUP BY g.id HAVING COUNT(*) >= 2)") . ' have two or more adults; the biggest has ' . $n("SELECT COALESCE(MAX(c), 0) FROM (SELECT COUNT(*) AS c FROM members m JOIN grp g ON g.id = m.group_id WHERE g.solo = 0 AND m.status = 'approved' GROUP BY m.group_id)"));
+  $tiles[] = array($n("SELECT COUNT(DISTINCT m.user_id) FROM members m JOIN grp g ON g.id = m.group_id WHERE g.solo = 0 AND m.status = 'approved'"), 'adults in groups', $n('SELECT COUNT(*) FROM kids k JOIN members m ON m.id = k.member_id JOIN grp g ON g.id = m.group_id WHERE g.solo = 0') . ' children’s weeks in them');
+  $invites = $n('SELECT COUNT(*) FROM invites');
+  $joined = $n('SELECT COUNT(*) FROM invites i WHERE EXISTS (SELECT 1 FROM members m JOIN users u ON u.id = m.user_id WHERE m.group_id = i.group_id AND u.email = i.email)');
+  $tiles[] = array($invites, 'invitations outstanding or accepted', $joined . ' accepted, ' . ($invites - $joined) . ' not yet');
+  try {
+    foreach ($db->query("SELECT school, COUNT(*) AS c FROM users WHERE school != '' GROUP BY school ORDER BY c DESC, school") as $r) $bySchool[] = array(isset($SCHOOLS[$r['school']]) ? $SCHOOLS[$r['school']] : $r['school'], (int) $r['c']);
+  } catch (Exception $e) { /* before profiles existed */ }
+  $tz = new DateTimeZone('America/New_York');
+  for ($i = 0; $i < 30; $i++) { $d = new DateTime('now', $tz); $d->modify('-' . $i . ' day'); $days[$d->format('Y-m-d')] = array(); }
+  try {
+    foreach ($db->query('SELECT k, day, n FROM tally') as $r) {
+      if (!isset($cols[$r['k']])) continue;
+      $ever[$r['k']] = (isset($ever[$r['k']]) ? $ever[$r['k']] : 0) + (int) $r['n'];
+      if (isset($days[$r['day']])) $days[$r['day']][$r['k']] = (int) $r['n'];
+    }
+  } catch (Exception $e) { /* before counting began */ }
+}
+// One number for the table: today (1), yesterday (-1), the last N days including today, or ever (0).
+$sum = function ($key, $span) use (&$days, &$ever) {
+  if ($span === 0) return isset($ever[$key]) ? $ever[$key] : 0;
+  $rows = array_values($days);
+  if ($span === -1) return isset($rows[1][$key]) ? $rows[1][$key] : 0;
+  $t = 0;
+  for ($i = 0; $i < $span && $i < count($rows); $i++) $t += isset($rows[$i][$key]) ? $rows[$i][$key] : 0;
+  return $t;
+};
+?>
+${page}`;
+}
+
 function editPage() {
   const pages = [['', 'Home'], ['schools/', 'Schools'], ['schools/request/', 'A school that isn’t covered yet'], ...schools.map(s => [s.id + '/', `${s.shortName} page`]), ['types/', 'Program types'], [`types/${liveTypes()[0].id}/`, `A type page (${liveTypes()[0].label})`], ['programs/', 'All programs, A to Z'], ['neighborhoods/', 'Neighborhoods'], [hoodPath(hoods[0]), `A neighborhood page (${hoods[0].name})`], [programPath(programs[0]), `A program page (${programs[0].name})`],
     ['board/', 'Build your week'], ['suggest/', 'Suggest a program'], ['suggest/thanks/', 'Thank-you page after a suggestion'], ['ideas/', 'Request a feature'], ['ideas/thanks/', 'Thank-you page after an idea'], ['review/', 'Write a review'], ['review/thanks/', 'Thank-you page after a review'],
@@ -2274,7 +2387,7 @@ function editPage() {
     <p id="edit-state-text">Turn it on and a bar appears at the bottom of every page.</p>
     <div class="actions"><button type="button" class="btn primary big needs-js" id="edit-start">Start editing</button><button type="button" class="btn needs-js" id="edit-stop" hidden>Stop editing</button></div>
     <noscript><p>Editing needs JavaScript turned on.</p></noscript>
-  </div>${GATED ? '\n  <p class="hint">You’re signed in on this device for 30 days. <a href="?out=1">Sign out</a></p>' : ''}
+  </div>${GATED ? '\n  <p class="hint">You’re signed in on this device for 30 days. <a href="?out=1">Sign out</a></p>' : ''}${GATED && GROUPS ? '\n  <p><a class="btn" href="stats/">Site numbers: accounts, shared weeks and groups</a></p>' : ''}
   <h2>How it works</h2>
   <ol>
     <li>Click any text with a dotted outline and type. Text you’ve changed turns yellow.</li>
@@ -2426,6 +2539,7 @@ if (ALERTS) write(alertsPath + 'index.html', alertsPage());
 write('review/index.html', reviewPage());
 write('review/thanks/index.html', reviewThanksPage());
 if (GATED) write('edit/index.php', editIndexPhp()); else write('edit/index.html', editPage());
+if (GATED && GROUPS) write('edit/stats/index.php', editStatsPhp());
 const notFound = notFoundPage();   // always rendered, so its copy is known to the editor
 write('assets/site.css', fs.readFileSync(path.join(ROOT, 'src/site.css')));
 write('assets/site.js', fs.readFileSync(path.join(ROOT, 'src/site.js')));
