@@ -322,6 +322,13 @@ program ready (`/board/?add=<program id>&school=<school id>`).
 `public_html`, so nothing is lost if an email goes missing. It needs a host that runs PHP.
 A hidden field traps most spam bots.
 
+The form sends four kinds of thing: a program that's missing, a camp that's missing (`?kind=camp`, with a
+summer-camp or days-off choice), an update to a listing (`?kind=correction`), and a school to add. A new program
+or camp must come with its own website, in the browser and again in `send.php`: a listing is only ever published
+from what its own site says, so one without a site can't be checked. Every program page and every summer camp
+card has a "Suggest an update" button that opens the form on that listing (`?kind=correction&fix=p:<id>` or
+`c:<id>`), and the email carries a `Listing:` line. The summer camps page has a "Suggest a camp" section.
+
 ## Dates by email
 
 Parents can ask for their school's dates by email: on each school page, the home page, the day-camp page and `/alerts/`.
@@ -430,6 +437,24 @@ These are the only parts of the site that store anything about a child on the se
   group invitation, or already being in a group). Groups are invitation only: the creator types addresses, each gets a link to `/join/#CODE`
   and the code, and joining needs both an invited address and the code. There is no asking to join; the
   creator is emailed when someone comes in and can remove anyone, which also removes their invitation.
+- **Program directors: claiming a listing.** Parents and directors use the same account; a director is simply an
+  account that holds a claim. `/directors/` explains it and holds the tool. A claim needs an account whose email
+  address is at the listing's own website address (`example.org` and `mail.example.org` count as the same place).
+  The build works out each listing's address and hands the list to the server (`claimListings()` in `build.mjs`):
+  programs are `p:<id>`, summer camps `c:<id>`. Where the address is shared by many unrelated people the claim is
+  `manual` and waits for the owner: any `.gov` or `.edu`, the names in `CLAIM_SHARED` (the school district,
+  booking and site-builder services, the library, the YMCA), and every school-clubs listing. Add a name to
+  `CLAIM_SHARED` when a listing's website turns out to be shared. A personal address (Gmail and the like) can never
+  claim anything, because no listing's website is there.
+  A claimed listing shows a "Claimed" mark, fetched from `groups/api.php?action=claimed` (listing keys only, never
+  who). A director can propose changes to a listing they hold; nothing changes on the site. Each claim and each
+  proposed change is emailed to the contact address and listed on `/edit/claims/` (behind the edit sign-in), where
+  the owner approves or declines a waiting claim, takes a claim away, and marks a proposed change published or
+  declined; the director is emailed each time. To apply a change, edit the listing data as usual (or paste it to
+  Claude), then mark it published. One account can hold 12 claims and one listing 5 claimants.
+  `/directors/` loads analytics with the tool masked in recordings; the only event is `pas_claim` with a `step`
+  (`claimed`, `waiting`, `address_mismatch`, `refused`, `change_sent`). There are no student accounts, on purpose:
+  the site never asks a child for an email address, and the week builder and card work without an account.
 - **Where.** `src/server/groups-api.php` is the whole server side; the build copies it to `groups/api.php` with
   its settings (site name, address, sender, the date shared weeks expire, the Google client ID). It keeps one
   SQLite file and a key in a folder named `phillyafterschool-data`, next to (not inside) the public folder on

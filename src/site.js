@@ -72,11 +72,20 @@
     track({ event: 'pas_outbound', link_type: a.getAttribute('data-track'), program_id: card ? card.id : prog ? prog.getAttribute('data-program-page') : '', school: sch ? sch.getAttribute('data-school-page') : '' });
   });
 
+  // ----- "Claimed": listings whose own director has claimed them. One small request, and only on pages that list any. -----
+  var marks = all(document, '[data-claimed]');
+  if (marks.length && window.fetch && marks[0].getAttribute('data-api')) {
+    window.fetch(marks[0].getAttribute('data-api') + '?action=claimed', { credentials: 'omit' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      if (!d || !d.ok || !d.claimed) return;
+      marks.forEach(function (m) { if (d.claimed.indexOf(m.getAttribute('data-claimed')) > -1) m.hidden = false; });
+    }, function () { /* offline: no marks */ });
+  }
+
   // ----- suggest-a-program form -----
   var form = document.querySelector('#suggest-form');
   if (form) {
-    // Show only the fields that fit what is being sent: a program, a correction, or a school.
-    var KINDS = ['program', 'correction', 'school'];
+    // Show only the fields that fit what is being sent: a program, a camp, an update to a listing, or a school.
+    var KINDS = ['program', 'camp', 'correction', 'school'];
     var kindInputs = all(form, 'input[name="kind"]');
     var kindKey = function () {
       for (var i = 0; i < kindInputs.length; i++) if (kindInputs[i].checked) return KINDS[i];
@@ -92,8 +101,12 @@
       all(form, '[data-text-' + key + ']').forEach(function (t) {
         t.textContent = t.getAttribute('data-text-' + key);
       });
-      form.querySelector('#f-details').required = key !== 'school';
+      form.querySelector('#f-details').required = key === 'correction';
       form.querySelector('#f-newschool').required = key === 'school';
+      // A new program or camp needs a name and its own website: every listing is checked against it.
+      var isNew = key === 'program' || key === 'camp';
+      form.querySelector('#f-program').required = isNew;
+      form.querySelector('#f-website').required = isNew;
     };
     kindInputs.forEach(function (i) { i.addEventListener('change', sync); });
     var asked = query();   // arriving from "ask for a school" or "request a feature"
@@ -101,6 +114,14 @@
     if (wanted > -1 && kindInputs[wanted]) kindInputs[wanted].checked = true;
     sync();
     if (asked.newschool) form.querySelector('#f-newschool').value = asked.newschool.slice(0, 120);
+    // Arriving from "Suggest an update" on a listing: the listing is already named.
+    if (asked.program) form.querySelector('#f-program').value = asked.program.slice(0, 150);
+    if (/^[pc]:[a-z0-9-]{1,80}$/.test(asked.fix || '')) {
+      form.querySelector('#f-listing').value = asked.fix;
+      var sch = form.querySelector('#f-school');
+      if (sch) sch.value = 'No particular school';
+      var det = form.querySelector('#f-details'); if (det) det.focus();
+    }
     form.addEventListener('submit', function () {
       var key = kindKey();
       track({ event: 'pas_suggest_submit', suggest_kind: key, school: key === 'school' ? 'new school' : form.querySelector('#f-school').value });
