@@ -1377,7 +1377,8 @@
         "how": "browser",
         "look": "The page lists each summer week by its theme and dates. Price, hours and ages for summer are on the page each week links to.",
         "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
-      }
+      },
+      "program": "sawubona-creativity-project"
     },
     {
       "id": "zoomdance-camp",
@@ -1531,7 +1532,8 @@
         "how": "browser",
         "look": "“Summer Camp Details” gives the price, then a week-by-week list of dates. Ages and hours are under “Additional Information”.",
         "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. The page is long because it embeds reviews."
-      }
+      },
+      "program": "skate-the-foundry"
     },
     {
       "id": "lavner-tech-camp-upenn",
@@ -1565,6 +1567,45 @@
         "look": "The location page describes the camp and its address. Weeks and prices are in the enrollment system behind “Enroll Now”.",
         "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
       }
+    },
+    {
+      "id": "philly-rock-gym-camps",
+      "name": "Philadelphia Rock Gym summer camps",
+      "what": "Climbing camps with bouldering, team games and crafts. Camp Real Rock adds a Friday trip to climb outdoors with guides.",
+      "types": [
+        "movement"
+      ],
+      "ages": "Discovery Camp ages 6–14; Camp Real Rock ages 8–15",
+      "ageMin": 6,
+      "ageMax": 15,
+      "hours": "9 am to 3 pm, or a half day to noon",
+      "extended": "Early and late care, $20 an hour.",
+      "cost": "$480 a week for a full day, $310 for half days; Camp Real Rock is $590",
+      "weekly": 480,
+      "price": "paid",
+      "address": "2412 E York St (Fishtown); 3500 Scotts Ln (East Falls)",
+      "neighborhoods": [
+        "Fishtown",
+        "East Falls"
+      ],
+      "phone": "877-822-7673",
+      "website": "https://philarockgym.com/youth-camps/",
+      "signup": "The page said registration is coming soon.",
+      "note": "No dates were posted, and the page doesn’t say which summer the prices are for. It also has gyms outside the city.",
+      "program": "philly-rock-gym-day-camps",
+      "sources": [
+        {
+          "label": "Philadelphia Rock Gym youth camps",
+          "url": "https://philarockgym.com/youth-camps/"
+        }
+      ],
+      "checked": "2026-10-07",
+      "check": {
+        "url": "https://philarockgym.com/youth-camps/",
+        "how": "browser",
+        "look": "The Summer Camps section has a block per camp with ages, prices and hours. Gym addresses are on each location’s own page.",
+        "notes": "Read in a browser on 2026-10-07. The site could not be read by the fetch tool the same day."
+      }
     }
   ],
   "todo": [
@@ -1587,11 +1628,6 @@
       "name": "Girls Rock Philly",
       "url": "https://www.girlsrockphilly.org/",
       "why": "Its camp page still described summer 2022 and 2023 on 2026-10-07."
-    },
-    {
-      "name": "Philadelphia Rock Gym youth camps",
-      "url": "https://philarockgym.com/youth-camps/",
-      "why": "Read in a browser on 2026-10-07: summer camps for ages 6–15 at $480 a full-day week ($590 for Camp Real Rock), with registration “coming soon”. The page doesn’t say which of its gyms are in the city or give dates."
     },
     {
       "name": "Move It Kidz 4 Fitness",

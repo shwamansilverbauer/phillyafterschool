@@ -148,6 +148,7 @@ for (const p of programs) {
       if (!Array.isArray(w.days) || !w.days.length || w.days.some(d => !['sat', 'sun'].includes(d))) errors.push(`${at}: weekend.days must list "sat", "sun" or both`);
       if (!isUrl(w.url)) errors.push(`${at}: weekend.url must be an https URL`);
       if (!w.sources?.length || w.sources.some(x => !isUrl(x.url) || !x.label)) errors.push(`${at}: weekend needs at least one source with a label and an https URL`);
+      if (w.times !== undefined && (!w.times || typeof w.times !== 'object' || Object.entries(w.times).some(([k, v]) => !(w.days || []).includes(k) || typeof v !== 'string' || !v.trim()))) errors.push(`${at}: weekend.times gives a short time range for a day in weekend.days, like { "sat": "9 am to 1 pm" }`);
       if (w.grades !== undefined) { try { w._grades = expandGrades(w.grades); } catch (e) { errors.push(`${at}: weekend.grades: ${e.message}`); } }
       if (w.check && (!isUrl(w.check.url) || !['fetch', 'browser', 'person'].includes(w.check.how) || !w.check.look)) errors.push(`${at}: weekend.check needs url, how (fetch, browser or person) and look`);
     }
@@ -397,6 +398,67 @@ function dayScene() {
   return `<svg class="street dayscene" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${far}<path class="grass" d="M0,${G - 6} Q500,${G - 16} 1000,${G - 4} T2000,${G - 8} V140 H0Z"/>${trees}${school}<path class="grass2" d="M0,${G + 2} Q520,${G - 4} 1000,${G} T2000,${G} V140 H0Z"/><g transform="translate(962,${G - 26})">${bus}</g>${zs}${swing}${flyer}${kite}</svg>`;
 }
 
+// Saturday on the block, for the weekend classes page: the same row houses with a studio where the school would be,
+// notes drifting up from its window, balloons by the door and someone arriving by bike.
+function weekendScene() {
+  let seed = 37;
+  const rnd = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
+  const G = 128;
+  const house = (x, w) => {
+    const h = 54 + Math.floor(rnd() * 44), y = G - h, cols = w >= 56 ? 3 : 2, rows = Math.max(1, Math.floor((h - 38) / 22));
+    const gap = (w - cols * 8) / (cols + 1);
+    let s = `<rect class="hs${1 + Math.floor(rnd() * 3)}" x="${x}" y="${y}" width="${w}" height="${h}"/><rect class="cn" x="${x - 1}" y="${y - 4}" width="${w + 2}" height="5"/>`;
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++)
+      s += `<rect class="${rnd() < 0.18 ? 'wl' : 'wd'}" x="${(x + gap + c * (8 + gap)).toFixed(1)}" y="${y + 10 + r * 22}" width="8" height="12"/>`;
+    return s + `<rect class="dr" x="${(x + w / 2 - 5).toFixed(1)}" y="${G - 18}" width="10" height="18"/>`;
+  };
+  const run = (from, to) => { let s = '', x = from; while (x < to) { let w = 44 + Math.floor(rnd() * 22); if (to - x - w < 40) w = to - x; s += house(x, w); x += w; } return s; };
+  // the studio: a sign over the top, a striped awning, one big lit window and a door
+  const sx = 868, sw = 124, sy = 56;
+  let studio = `<rect class="sc" x="${sx}" y="${sy}" width="${sw}" height="${G - sy}"/><rect class="sct" x="${sx - 2}" y="${sy - 5}" width="${sw + 4}" height="6"/><rect class="sign" x="${sx + 22}" y="${sy - 21}" width="${sw - 44}" height="16" rx="3"/>`;
+  for (let i = 0; i < 5; i++) studio += `<circle class="bulb" cx="${sx + 34 + i * 14}" cy="${sy - 13}" r="2.6"/>`;
+  for (let i = 0; i < 8; i++) studio += `<polygon class="${i % 2 ? 'aw2' : 'aw1'}" points="${sx - 4 + i * 16.5},${sy + 22} ${sx + 12.5 + i * 16.5},${sy + 22} ${sx + 10.5 + i * 16.5},${sy + 34} ${sx - 6 + i * 16.5},${sy + 34}"/>`;
+  studio += `<rect class="scw" x="${sx + 12}" y="${sy + 40}" width="58" height="22" rx="2"/><rect class="sct" x="${sx + 40}" y="${sy + 40}" width="2" height="22"/><rect class="sct" x="${sx + 86}" y="${G - 32}" width="24" height="32"/><circle class="knob" cx="${sx + 105}" cy="${G - 15}" r="1.6"/>`;
+  // three notes rising from the window, one after another
+  const note = (nx, ny, k) => `<g class="note n${k}"><ellipse cx="${nx}" cy="${ny}" rx="3.6" ry="2.7" transform="rotate(-20 ${nx} ${ny})"/><path d="M${nx + 3.2},${ny - 1} V${ny - 13} q5,1 5.5,6"/></g>`;
+  const notes = note(sx + 26, sy + 30, 1) + note(sx + 44, sy + 26, 2) + note(sx + 60, sy + 32, 3);
+  // two balloons tied by the door
+  const bx = sx + sw + 9;
+  const balloons = `<g class="balloons"><path class="bstr" d="M${bx},${G - 4} Q${bx - 3},${G - 24} ${bx - 4},${G - 44} M${bx},${G - 4} Q${bx + 5},${G - 22} ${bx + 7},${G - 36}"/><ellipse class="bal1" cx="${bx - 4}" cy="${G - 52}" rx="6.5" ry="8"/><ellipse class="bal2" cx="${bx + 7}" cy="${G - 44}" rx="6.5" ry="8"/></g>`;
+  // someone small on a bike, riding in from the left and stopping outside
+  const kx = sx - 44, wy = G - 7;
+  const bike = `<g class="bike"><g transform="translate(${kx},0)"><circle class="tyre" cx="0" cy="${wy}" r="6.5"/><circle class="tyre" cx="23" cy="${wy}" r="6.5"/><path class="bfr" d="M0,${wy} L8,${wy - 11} H18 L23,${wy} M8,${wy - 11} L12,${wy} L18,${wy - 11} M18,${wy - 11} L20,${wy - 16} h4 M6,${wy - 13} h6"/><path class="rider" d="M9,${wy - 13} L12,${wy - 26} L20,${wy - 17}"/><circle class="rhead" cx="12.5" cy="${wy - 31}" r="4.4"/><path class="rhelm" d="M8,${wy - 32} a4.6,4.6 0 0 1 9.2,0z"/></g></g>`;
+  return `<svg class="street wkndscene" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${run(-10, sx)}${studio}${run(sx + sw, 2010)}<rect class="st" x="0" y="${G}" width="2000" height="12"/>${notes}${balloons}${bike}</svg>`;
+}
+
+// A summer day, for the summer camps page: a turning sun, slow clouds, tents on the grass with a pennant flying,
+// and two kids running through a sprinkler.
+function summerScene() {
+  let seed = 53;
+  const rnd = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
+  const G = 124;
+  let far = '', x = -10;
+  while (x < 2010) { const w = 38 + Math.floor(rnd() * 30), h = 22 + Math.floor(rnd() * 34); far += `<rect class="far" x="${x}" y="${G - h - 8}" width="${w + 1}" height="${h + 12}"/>`; x += w; }
+  const cx = 1126, cy = 34;
+  let rays = '';
+  for (let i = 0; i < 10; i++) { const a = i * Math.PI / 5; rays += `<line x1="${(cx + Math.cos(a) * 20).toFixed(1)}" y1="${(cy + Math.sin(a) * 20).toFixed(1)}" x2="${(cx + Math.cos(a) * 28).toFixed(1)}" y2="${(cy + Math.sin(a) * 28).toFixed(1)}"/>`; }
+  const sun = `<g class="rays" style="transform-origin:${cx}px ${cy}px">${rays}</g><circle class="sun" cx="${cx}" cy="${cy}" r="14"/>`;
+  const cloud = (px, py, k, sc) => `<g class="cloud c${k}" transform="translate(${px},${py}) scale(${sc})"><ellipse cx="0" cy="0" rx="22" ry="8"/><ellipse cx="-12" cy="-6" rx="11" ry="8"/><ellipse cx="8" cy="-8" rx="13" ry="10"/></g>`;
+  const clouds = `<g class="drift d1">${cloud(880, 30, 1, 1)}${cloud(300, 26, 1, 1.2)}${cloud(1560, 34, 1, 1.1)}</g><g class="drift d2">${cloud(1010, 52, 2, .7)}${cloud(560, 48, 2, .8)}${cloud(1800, 50, 2, .75)}</g>`;
+  const tree = (tx, r) => `<rect class="trunk" x="${tx - 2.5}" y="${G - r - 12}" width="5" height="${r + 14}"/><circle class="leaf2" cx="${tx - r * 0.35}" cy="${G - r - 18}" r="${r}"/><circle class="leaf" cx="${tx + r * 0.3}" cy="${G - r - 24}" r="${r * 0.9}"/>`;
+  const trees = [[90, 19], [270, 15], [470, 21], [660, 16], [812, 18], [1210, 17], [1390, 21], [1590, 16], [1790, 20], [1940, 15]].map(([tx, r]) => tree(tx, r)).join('');
+  const tent = (tx, w, h, k) => `<polygon class="tent${k}" points="${tx},${G} ${tx + w / 2},${G - h} ${tx + w},${G}"/><polygon class="flap" points="${tx + w / 2 - w * 0.13},${G} ${tx + w / 2},${G - h * 0.62} ${tx + w / 2 + w * 0.13},${G}"/>`;
+  const tents = tent(862, 62, 44, 1) + tent(918, 46, 32, 2);
+  const px = 990;
+  const flag = `<line class="pole" x1="${px}" y1="${G}" x2="${px}" y2="${G - 58}"/><g class="pennant" style="transform-origin:${px}px ${G - 52}px"><polygon points="${px},${G - 58} ${px + 26},${G - 52} ${px},${G - 46}"/></g>`;
+  // the sprinkler: three arcs of drops, and two kids either side of it
+  const qx = 1052;
+  const spray = `<rect class="spk" x="${qx - 3}" y="${G - 5}" width="6" height="5" rx="1"/><path class="drops" d="M${qx},${G - 5} q-16,-40 -34,-2"/><path class="drops" d="M${qx},${G - 5} q0,-46 0,-34"/><path class="drops" d="M${qx},${G - 5} q16,-40 34,-2"/>`;
+  const kid = (ax, up) => `<circle class="kid" cx="${ax}" cy="${G - 27}" r="4.4"/><path class="kid" d="M${ax - 4},${G - 21} h8 l2,21 h-12z"/><path class="arm" d="M${ax - 3},${G - 19} l${up ? '-7,-9' : '-7,4'} M${ax + 3},${G - 19} l${up ? '7,-9' : '7,4'}"/>`;
+  const kids = `<g class="hop h1">${kid(qx - 30, true)}</g><g class="hop h2">${kid(qx + 32, false)}</g>`;
+  return `<svg class="street summerscene" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${clouds}${sun}${far}<path class="grass" d="M0,${G - 6} Q500,${G - 18} 1000,${G - 5} T2000,${G - 9} V140 H0Z"/>${trees}${tents}${flag}<path class="grass2" d="M0,${G + 3} Q520,${G - 3} 1000,${G + 1} T2000,${G} V140 H0Z"/>${spray}${kids}</svg>`;
+}
+
 function street(animate) {
   let seed = 11;
   const rnd = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
@@ -482,7 +544,7 @@ ${topbar}<header class="band sitebar${theme ? ' ' + theme : ''}">
   <div class="in hero">
 ${hero}
   </div>
-  ${showStreet === 'dayoff' ? dayScene() : showStreet ? street(showStreet === 'go') : ''}
+  ${showStreet === 'dayoff' ? dayScene() : showStreet === 'weekend' ? weekendScene() : showStreet === 'summer' ? summerScene() : showStreet ? street(showStreet === 'go') : ''}
 </div>
 <main class="wrap${roomy ? ' roomy' : ''}">
 ${body}
@@ -1984,7 +2046,7 @@ function accountPage(register = false) {
 const groupsInfo = () => ({
   site: cfg.siteName,
   types: Object.fromEntries(TYPES.map(t => [t.id, { color: t.color }])),
-  programs: Object.fromEntries(programs.map(p => [p.id, { name: p.name, type: p.types[0], offers: p.offers || [] }])),
+  programs: Object.fromEntries(programs.map(p => [p.id, { name: p.name, type: p.types[0], offers: p.offers || [], ...(p.weekend ? { wk: 1 } : {}) }])),
 });
 function joinPage() {
   const hero = `    <h1>${T(`Open your invitation`)}</h1>
@@ -2035,6 +2097,9 @@ function boardPage() {
     types: Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, color: t.color, icon: t.icon }])),
     schools: Object.fromEntries(schools.map(s => [s.id, { name: s.shortName, path: link(s.id + '/', 1) }])),
     themes: Object.fromEntries(THEMES.map(t => [t.id, { types: t.types, mix: !!t.mix, words: t.words || [] }])),
+    // Programs with weekend classes, for the optional Saturday and Sunday. Some of them are not after-school listings at all.
+    weekendPath: link(weekendPath, 1),
+    weekend: Object.fromEntries(programs.filter(p => p.weekend).map(p => [p.id, { name: p.name, type: p.types[0], days: p.weekend.days, times: p.weekend.times || null, path: link(programPath(p), 1) }])),
     programs: Object.fromEntries(programs.filter(p => !campOnly(p)).map(p => [p.id, {
       name: p.name, hours: p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [], type: p.types[0], no: order.indexOf(p.id) + 1,
       days: p.days || null, offerDays: p.offerDays || null, rate: p.rate || null, types: p.types, grades: p._grades, kw: (p.keywords || []).map(k => k.toLowerCase()), cls: p._cls || null,
@@ -2104,6 +2169,7 @@ function boardPage() {
     </div>
     <p class="hint" id="board-hint" hidden>${T(`Drag a card by its colored top to move it to another day, or use the day buttons on the card.`)}</p>
     <div class="week" id="week"></div>
+    <div class="wkend" id="wkend" hidden></div>
     <div class="share-cta" id="share-cta" hidden>
       <canvas id="share-thumb" width="216" height="270" aria-hidden="true"></canvas>
       <div class="share-cta-text">
@@ -2747,7 +2813,7 @@ ${todo.length ? `<section class="section">
   return layout({
     title: 'Summer day camps in Philadelphia: ages, weeks, hours and prices',
     description: `${list.length} summer day camps inside Philadelphia in one list: ages, weeks, hours, cost, before and after care, and when sign-ups open. Filter by type, grade and part of the city.`,
-    pathName: campsPath, depth: D, current: null, hero, body,
+    pathName: campsPath, depth: D, current: null, hero, body, showStreet: 'summer',
     jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: list.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, url: `${cfg.siteUrl}/${campsPath}#${c.id}` })) },
   });
 }
@@ -2766,7 +2832,7 @@ function weekendPage() {
   <div class="top"><h3><a href="${link(programPath(p), D)}">${esc(fullName(p))}</a></h3><p class="tags">${p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p><p>${w.days.map(d => `<span class="pill nearby">${WEEKEND_DAY[d]}</span>`).join(' ')} <span class="hint">Grades ${esc(gradeText(wp))}</span></p></div>
   <dl>${rows}</dl>
   ${w.note ? `<p class="flag">${esc(w.note)}</p>` : ''}
-  <div class="actions"><a class="btn primary" data-track="weekend" href="${esc(outUrl(w.url, { type: 'weekend', program: p }))}" target="_blank" rel="noopener">Class details</a><a class="btn" href="${link(programPath(p), D)}">Full listing</a></div>
+  <div class="actions"><a class="btn primary" data-track="weekend" href="${esc(outUrl(w.url, { type: 'weekend', program: p }))}" target="_blank" rel="noopener">Class details</a><a class="btn" href="${link(programPath(p), D)}">Full listing</a>${w.days.map(d => `<a class="btn needs-js" href="${link('board/', D)}?wk=${esc(p.id)}&amp;day=${d}">Add ${WEEKEND_DAY[d]} to your week</a>`).join('')}</div>
   <p class="src">Checked ${longDate(w.checked || p.lastVerified)}. Sources: ${sourceLinks(w.sources, p)}</p>
 </article>`;
   }).join('\n');
@@ -2790,7 +2856,7 @@ ${cards}
   return layout({
     title: 'Weekend classes for kids in Philadelphia',
     description: `Saturday and Sunday classes for kids from ${weekendPrograms.length} Philadelphia programs: music, theater, art, dance and gymnastics, with terms, times and cost.`,
-    pathName: weekendPath, depth: D, current: null, hero, body,
+    pathName: weekendPath, depth: D, current: null, hero, body, showStreet: 'weekend',
     jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: weekendPrograms.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
   });
 }

@@ -88,6 +88,18 @@ page: `{ "summary": "...", "days": ["sat"], "term": "Fall 2026: ...", "cost": ".
 "sources": [...], "check": { "url", "how", "look", "notes" }, "checked": "YYYY-MM-DD" }`. A place that only runs on
 weekends (or only weekends and day camps) leaves `schools` as `{}`, like a day-camp-only listing.
 
+Optional `"times": { "sat": "9:30 am to 12:30 pm", "sun": "..." }` gives the short time shown in the week builder
+and on the card when a parent has typed nothing of their own.
+
+**Weekends in Build your week.** The board has an "Add Saturday and Sunday" button under the weekdays. Weekend picks
+are kept beside the weekdays, not in them (`board.wk = { sat: [], sun: [] }`, each entry a program id, or
+`id~what the parent typed`), so pickup, the cost estimate and the week roller never see them. A weekend pick has no
+school and no pickup label. Each class card on `/weekends/` has an "Add Saturday to your week" button
+(`board/?wk=ID&day=sat`). The card is one image for the whole week: with weekend picks it grows by one row,
+Saturday and Sunday side by side under Friday; without them it is the same card as before. In a profile or a
+shared week the weekend travels as two more days, `sat` and `sun`, holding program ids only: the server drops
+what a parent typed, and any program that has no class on that day. Weeks saved before this open unchanged.
+
 ## Edit a listing
 
 Open `data/programs.json`, change the fields, set `lastVerified` to today's date, and commit to `main`.

@@ -1041,6 +1041,9 @@
       ],
       "grades": "K-8",
       "term": "2026–27 school year: August 31 to June 13",
+      "times": {
+        "sat": "about 10 am to 1:45 pm"
+      },
       "cost": "About $119 a month for a one-hour class; longer classes cost more.",
       "note": "We read the schedule from PDF grids, so confirm the class and time with the gym.",
       "url": "https://phillyinmovement.com/school-aged-classes/",
@@ -1632,6 +1635,10 @@
       ],
       "grades": "PK-5",
       "term": "2026–27: fall runs August 31 to December 20, and winter and spring January 4 to June 13",
+      "times": {
+        "sat": "about 9:30 am to 1:45 pm",
+        "sun": "about 10 am to 2:30 pm"
+      },
       "cost": "Fall (16 weeks) $460; winter and spring (22 weeks) $635.",
       "note": "Some weekend sections are only for continuing students, so check which level your child would start in.",
       "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
@@ -1768,6 +1775,10 @@
       ],
       "grades": "1-8",
       "term": "Spring 2027: to June 4, starting January 31 for grades 1–4 and January 10 for grades 5–8",
+      "times": {
+        "sat": "9 am to 1 pm",
+        "sun": "9 am to noon"
+      },
       "cost": "$595 a class; $675 for the musicals. 20% off two classes, 25% off three or more.",
       "url": "https://www.musictheatrephilly.com/grades-1-4",
       "sources": [
@@ -1864,6 +1875,9 @@
       ],
       "grades": "PK-8",
       "term": "Fall 2026: eight weeks to October 31, then a three-Saturday mini-semester November 7 to 21",
+      "times": {
+        "sat": "10 am to 4 pm"
+      },
       "note": "Prices aren’t on the page, and no winter or spring classes were posted yet.",
       "url": "https://ardentheatre.org/arden-drama-school",
       "sources": [
@@ -1930,6 +1944,9 @@
       ],
       "grades": "K-8",
       "term": "Fall 2026: October 10 to December 19, with no class November 28",
+      "times": {
+        "sat": "9 am to 1:05 pm"
+      },
       "cost": "$300 to $400 a class.",
       "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4",
       "sources": [
@@ -2526,6 +2543,9 @@
       ],
       "grades": "K-8",
       "term": "2026–27 school year",
+      "times": {
+        "sat": "10 am to 1 pm"
+      },
       "note": "Prices and term dates aren’t on the schedule page, and the 2100 Chestnut classes show no ages. Ask before you sign up.",
       "url": "https://www.movemakersphilly.com/schedule-390284.html",
       "sources": [
@@ -3775,5 +3795,228 @@
         ]
       }
     ]
+  },
+  {
+    "id": "sawubona-creativity-project",
+    "name": "Sawubona Creativity Project",
+    "what": "A theatre on East Passyunk that runs one-day theatre camps when schools are closed",
+    "types": [
+      "theater"
+    ],
+    "keywords": [
+      "theatre",
+      "drama",
+      "acting",
+      "dance",
+      "musical",
+      "Disney",
+      "Broadway",
+      "camp",
+      "East Passyunk"
+    ],
+    "address": "1626 E Passyunk Ave",
+    "neighborhoods": [
+      "East Passyunk"
+    ],
+    "grades": "PK-6",
+    "gradeNote": "Pre-K to 6th grade",
+    "hours": "Nothing listed for weekday afternoons. One-day camps run 8:30 am to 5:30 pm.",
+    "daysOff": {
+      "summary": "One-day theatre camps when schools are closed, 8:30 am to 5:30 pm, $60 (its 2025–26 price), for pre-K to 6th grade. Kids improvise dance routines, write skits and learn scenes, and the day ends with a 5:05 pm showcase for families.",
+      "url": "https://www.sawubonacreativityproject.org/campinformationandschedules",
+      "dates": [],
+      "sources": [
+        {
+          "label": "Sawubona Creativity Project",
+          "url": "https://www.sawubonacreativityproject.org/campinformationandschedules"
+        }
+      ]
+    },
+    "cost": "$60 a day for a full-day camp (its 2025–26 price)",
+    "price": "paid",
+    "phone": "",
+    "email": "",
+    "website": "https://www.sawubonacreativityproject.org/campinformationandschedules",
+    "register": {
+      "how": "online",
+      "url": "https://www.sawubonacreativityproject.org/campinformationandschedules",
+      "label": "See camp days",
+      "note": "Sign-up links are on the camp page."
+    },
+    "note": "The page doesn’t list which days it opens this school year, and the price shown is last year’s. It also runs a spring break week and summer camps.",
+    "sources": [
+      {
+        "label": "Sawubona Creativity Project",
+        "url": "https://www.sawubonacreativityproject.org/campinformationandschedules"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "schools": {}
+  },
+  {
+    "id": "playarts-day-camps",
+    "name": "PlayArts day camps",
+    "what": "Full-day art and play camps at the Maas Building on days school is closed",
+    "types": [
+      "art"
+    ],
+    "keywords": [
+      "art",
+      "play",
+      "camp",
+      "day camp",
+      "Maas Building",
+      "South Kensington",
+      "Kensington"
+    ],
+    "address": "1320 N 5th St (Maas Building)",
+    "neighborhoods": [
+      "South Kensington"
+    ],
+    "grades": "K-5",
+    "gradeNote": "Ages 5–10",
+    "hours": "Day camps run 9 am to 3 pm, or to 6 pm.",
+    "daysOff": {
+      "summary": "Full-day camps on the days schools close for holidays or teacher development, open to any child aged 5–10. 9 am to 3 pm is $80 and 9 am to 6 pm is $110, or $1,120 for all 16 days of 2026–27. Financial aid is offered.",
+      "url": "https://www.playartsphilly.com/day-camps",
+      "dates": [],
+      "sources": [
+        {
+          "label": "PlayArts day camps",
+          "url": "https://www.playartsphilly.com/day-camps"
+        }
+      ]
+    },
+    "cost": "$80 a day to 3 pm or $110 to 6 pm. A package of all 16 full-day camps to 6 pm is $1,120 for the year.",
+    "price": "paid",
+    "phone": "",
+    "email": "",
+    "website": "https://www.playartsphilly.com/day-camps",
+    "register": {
+      "how": "online",
+      "url": "https://www.playartsphilly.com/day-camps",
+      "label": "See camp days",
+      "note": "The page has a button for the full-year package and one for booking by the day."
+    },
+    "note": "The 16 camp days are in a schedule PDF on its page that we couldn’t read. Its after-school programs run inside other schools, none of them on this site.",
+    "sources": [
+      {
+        "label": "PlayArts day camps",
+        "url": "https://www.playartsphilly.com/day-camps"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "schools": {}
+  },
+  {
+    "id": "philly-rock-gym-day-camps",
+    "name": "Philadelphia Rock Gym",
+    "what": "Climbing camps at its Fishtown and East Falls gyms on days school is closed",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "climbing",
+      "rock climbing",
+      "bouldering",
+      "PRG",
+      "camp",
+      "Fishtown",
+      "East Falls"
+    ],
+    "address": "2412 E York St (Fishtown) and 3500 Scotts Ln (East Falls)",
+    "neighborhoods": [
+      "Fishtown",
+      "East Falls"
+    ],
+    "grades": "1-8",
+    "gradeNote": "Ages 6–15",
+    "hours": "Day-off camps run 9 am to 3 pm, or a half day to noon.",
+    "daysOff": {
+      "summary": "Kids Day Off camps for ages 6–15, no experience needed: 9 am to 3 pm for $99, or 9 am to noon for $60.50, with snacks and gear included. Early and late care is $20 an hour. You pick the gym and the days when you register.",
+      "url": "https://philarockgym.com/youth-camps/",
+      "dates": [],
+      "sources": [
+        {
+          "label": "Philadelphia Rock Gym youth camps",
+          "url": "https://philarockgym.com/youth-camps/"
+        }
+      ]
+    },
+    "cost": "$99 a full day or $60.50 a half day. Early and late care is $20 an hour.",
+    "price": "paid",
+    "phone": "877-822-7673",
+    "email": "",
+    "website": "https://philarockgym.com/youth-camps/",
+    "register": {
+      "how": "online",
+      "url": "https://philarockgym.com/youth-camps/",
+      "label": "See camp days",
+      "note": "Sign-up links are on the camp page."
+    },
+    "note": "The camp days are chosen in its registration system, so we couldn’t list them. It also has gyms outside the city.",
+    "sources": [
+      {
+        "label": "Philadelphia Rock Gym youth camps",
+        "url": "https://philarockgym.com/youth-camps/"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "schools": {}
+  },
+  {
+    "id": "skate-the-foundry",
+    "name": "Skate The Foundry",
+    "what": "Skateboarding camps on days school is closed, for beginners to advanced",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "skateboarding",
+      "skateboard",
+      "skate",
+      "camp",
+      "Paine’s Park",
+      "West Philly"
+    ],
+    "address": "Its West Philly skatepark",
+    "neighborhoods": [
+      "West Philadelphia"
+    ],
+    "grades": "2-8",
+    "gradeNote": "Ages 7–13",
+    "hours": "Camps run 9 am to 3 pm unless the listing says otherwise.",
+    "daysOff": {
+      "summary": "Holiday and school-day-off skateboard camps for ages 7–13, all levels. Election Day, November 3, was the one day posted when we checked. Bring a skateboard, helmet and pads.",
+      "url": "https://www.skatethefoundry.com/camp/",
+      "dates": [
+        "2026-11-03"
+      ],
+      "sources": [
+        {
+          "label": "Skate The Foundry camps",
+          "url": "https://www.skatethefoundry.com/camp/"
+        }
+      ]
+    },
+    "cost": "The day-camp price is in its booking system, not on the page.",
+    "phone": "215-954-0750",
+    "email": "",
+    "website": "https://www.skatethefoundry.com/camp/",
+    "register": {
+      "how": "online",
+      "url": "https://www.skatethefoundry.com/camp/",
+      "label": "See camp days",
+      "note": "Sign-up links are on the camp page."
+    },
+    "note": "The page gives no street address or day-camp price, so check both when you book. Its site says first-timers should take a lesson or two before a camp.",
+    "sources": [
+      {
+        "label": "Skate The Foundry camps",
+        "url": "https://www.skatethefoundry.com/camp/"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "schools": {}
   }
 ]
