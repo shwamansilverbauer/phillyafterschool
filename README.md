@@ -201,8 +201,8 @@ of `roll`, `again` or `undo`).
 
 **A day-off plan.** On the same page, "Build your day-off plan" lets a family choose, for each day off, where a
 child will be: one of the camps posted for that date, another listed program (flagged as not posted for that
-date), or at home. Picks are saved with the rosters in the browser, per child, and gathered in a list that can
-be copied or emailed. "Make it a card" draws the schedule as a picture in the day-off colors, with an optional
+date), or at home. Picks are saved with the rosters in the browser, per child, and gathered in a list. There is
+no copy or email button: the plan leaves the page as a card. "Make it a card" draws the schedule as a picture in the day-off colors, with an optional
 note and photo (the photo never leaves the device) and its own QR code: `/d`, which `.htaccess` sends to the
 day-camp page tagged `utm_source=dayoff_card`. Each pick fires `pas_dayoff_pick` (program_id, day); saving, sharing
 or printing the card fires `pas_board_share` with board `day_camp`.
@@ -354,7 +354,7 @@ These are the only parts of the site that store anything about a child on the se
   it. What is shared is the same as in a group: first name and program ids, never the school, address or notes.
 - **Week links are retired.** A week used to be shareable as a link that held the whole week after the `#`.
   Anyone could open one and it could not be taken back, so the buttons are gone and an old link now shows a
-  notice instead of a week. "Copy as text", "Email it to myself" and the share-sheet button went with them: a
+  notice instead of a week. "Copy as text", "Email it to myself" and the share-sheet button went with them (on the day-off planner too): a
   week leaves the page as a card (a picture made on the device) or through an account, and no other way.
 - **Share groups (pilot).** `"pilot": true` keeps groups for several families unlisted: "Start a group" on the
   account page and "Share with a group" on Build your week only show in a browser that has been let in

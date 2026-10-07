@@ -1718,7 +1718,7 @@ function daysOffPage() {
   <div class="kids" id="off-kids" role="group" aria-label="Which child" hidden></div>
   <p class="off-count" id="off-count"></p>
   <ol class="off-list" id="off-list"></ol>
-  <div class="actions" id="off-actions" hidden><button type="button" class="btn" id="off-copy">Copy as text</button><a class="btn" id="off-email" href="mailto:">Email it to myself</a><button type="button" class="clear" id="off-clear">Clear this plan</button></div>
+  <div class="actions" id="off-actions" hidden><button type="button" class="clear" id="off-clear">Clear this plan</button></div>
   <p class="hint" id="off-status" aria-live="polite"></p>
   <div class="card-maker offcard" id="off-card" hidden>
     <h3>${T(`Make it a card`)}</h3>
