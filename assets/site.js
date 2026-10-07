@@ -755,7 +755,7 @@
     var $ = function (id) { return boardPage.querySelector(id); };
     var week = $('#week'), nameInput = $('#board-name'), status = $('#board-status'), tools = $('#board-tools');
     var banner = $('#board-retired'), emptyNote = $('#board-empty'), emptyText = $('#board-empty-text');
-    var title = $('#board-title'), tabs = $('#board-tabs'), promote = $('#board-promote'), emailLink = $('#board-email');
+    var title = $('#board-title'), tabs = $('#board-tabs'), promote = $('#board-promote'), orCard = $('#or-card');
     var kidBar = $('#kid-bar'), kidTabs = $('#kid-tabs'), kidAdd = $('#kid-add'), kidRemove = $('#kid-remove');
     var WHICH = { now: 'current', next: 'upcoming' };
 
@@ -790,16 +790,6 @@
       return k.link.rel === 'onsite' ? 'At ' + k.sch.name : k.link.rel === 'pickup' ? k.sch.name + ' pickup' : 'Near ' + k.sch.name;
     };
     var heading = function (name, which) { return (name ? possessive(name) + ' after-school roster' : 'After-school roster') + (which === 'next' ? ' (upcoming)' : ''); };
-    var asText = function (name, b, which) {
-      var lines = [heading(name, which) + ', from Philly After School'];
-      DAYS.forEach(function (day) {
-        var picks = b.days[day[0]].map(lookup).filter(Boolean).map(function (k) {
-          return k.prog.name + (k.note ? ': ' + k.note : '') + (k.link.where ? ' (' + k.link.where + ')' : '') + (k.prog.pickupBy ? ', pick up by ' + k.prog.pickupBy : '');
-        });
-        if (picks.length) lines.push(day[2] + ': ' + picks.join('; '));
-      });
-      return lines.join('\n');
-    };
     var say = function (msg) { status.textContent = msg; };
     // What the share-groups script (groups.js) needs from this page. It adds onSave, onKidGone and onShow.
     window.pasBoard = {
@@ -811,12 +801,7 @@
       redraw: function () { render(); }   // after the share-groups script changes a roster (a week put back from a profile)
     };
     var syncRoller = null;   // set further down, by the themed-week section
-    var savedNote = function () { return storageOk ? 'Saved on this device.' : 'Your browser is blocking saved data, so this roster will be gone when you close the page. Email it to yourself or make a card to keep a copy.'; };
-    var copy = function (text, done) {
-      var cant = function () { say('Copying didn’t work in this browser. Use “Email it to myself” instead.'); };
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { say(done); }, cant);
-      else cant();
-    };
+    var savedNote = function () { return storageOk ? 'Saved on this device.' : 'Your browser is blocking saved data, so this roster will be gone when you close the page. Make a card to keep a copy.'; };
 
     var render = function () {
       var r = loadRosters();
@@ -910,6 +895,7 @@
       var dragHint = $('#board-hint'); if (dragHint) dragHint.hidden = !!shared || total === 0;
       if (maker) maker.hidden = !!shared || total === 0;
       var shareCta = $('#share-cta'); if (shareCta) shareCta.hidden = !maker || !!shared || total === 0;
+      if (orCard) orCard.hidden = !maker || total === 0;   // "or" sits between the account block and "Make it a card"
       emptyNote.hidden = !!shared || total > 0;
       promote.hidden = !!shared || which !== 'next' || total === 0;
       promote.textContent = 'The new term has started: make this the current roster';
@@ -933,7 +919,6 @@
       emptyText.textContent = which === 'next'
         ? 'Search for a program above and pick its days. Or open a school’s page and choose “Add to roster” on any program.'
         : 'Nothing on the current roster yet. Search for a program above and pick its days.';
-      emailLink.href = 'mailto:?subject=' + encodeURIComponent(heading(kid.name, which)) + '&body=' + encodeURIComponent(asText(kid.name, b, which));
       if (document.activeElement !== nameInput) nameInput.value = kid.name;
       if (maker) {
         if (document.activeElement !== teacherBox) teacherBox.value = kid.teacher || '';
@@ -967,16 +952,6 @@
       saveRosters(); say('Removed.'); render();
     });
     var track_share = function (method) { track({ event: 'pas_board_share', method: method, board: WHICH[loadRosters().active] }); };
-    $('#board-copy-text').addEventListener('click', function () { var r = loadRosters(), k = activeKid(); copy(asText(k.name, k[r.active], r.active), 'Copied as text.'); track_share('copy_text'); });
-    emailLink.addEventListener('click', function () { track_share('email_self'); });
-    var shareBtn = $('#board-share');
-    if (navigator.share) {
-      shareBtn.hidden = false;
-      shareBtn.addEventListener('click', function () {
-        var r = loadRosters(), k = activeKid();
-        navigator.share({ title: heading(k.name, r.active), text: asText(k.name, k[r.active], r.active) }).then(function () { track_share('share_sheet'); }, function () { /* closed without sharing */ });
-      });
-    }
     $('#board-clear').addEventListener('click', function () { var r = loadRosters(); r.kids[r.kid][r.active] = emptyBoard(); saveRosters(); say('Roster cleared.'); render(); });
     promote.addEventListener('click', function () {
       if (!promote.getAttribute('data-armed')) {   // two taps, because it replaces the current roster
@@ -1368,6 +1343,8 @@
       });
       rollSchool.addEventListener('change', function () { if (rollSchool.value) store('pas-school', rollSchool.value); rollStatus.textContent = ''; drawThemes(); });
       rollGrade.addEventListener('change', function () { rollStatus.textContent = ''; drawThemes(); });
+      // One grade kept in the profile is the obvious starting point; with several, the parent picks.
+      try { var keptGrades = JSON.parse(store('pas-my-grades') || '[]'); if (Array.isArray(keptGrades) && keptGrades.length === 1 && all(rollGrade, 'option').some(function (o) { return o.value === keptGrades[0]; })) rollGrade.value = keptGrades[0]; } catch (e) { /* nothing kept */ }
       // Start from the school in the link ("Roll a themed week for Nebinger"), the saved school, or the one looked at last.
       var rollAsk = query().roll || '', mineNow = mySchool(), lastSchool = store('pas-school');
       var startSchool = data.schools[rollAsk] ? rollAsk : mineNow && data.schools[mineNow.id] ? mineNow.id : lastSchool && data.schools[lastSchool] ? lastSchool : Object.keys(data.schools).length === 1 ? Object.keys(data.schools)[0] : '';
@@ -1643,6 +1620,20 @@
       var firstRow = fbar.querySelector('.frow');
       if (firstRow) fbar.insertBefore(srow, firstRow); else fbar.appendChild(srow);
     }
+    // Grades a signed-in parent keeps in their profile (the account pages copy them to this browser) become one more
+    // choice on the grade row: programs that take any of their children's grades.
+    var myGrades = [];
+    try { myGrades = (JSON.parse(store('pas-my-grades') || '[]') || []).filter(function (g) { return typeof g === 'string' && !!document.getElementById('grade-' + g) && g !== 'ALL'; }).slice(0, 10); } catch (e) { myGrades = []; }
+    var gradeAll = document.getElementById('grade-ALL');
+    if (myGrades.length && gradeAll) {
+      var mineBtn = el('button', 'gbtn mine');
+      mineBtn.type = 'button'; mineBtn.id = 'grade-MINE';
+      mineBtn.setAttribute('data-f', 'grade'); mineBtn.setAttribute('data-v', 'MINE'); mineBtn.setAttribute('aria-pressed', 'false');
+      mineBtn.setAttribute('aria-label', (myGrades.length === 1 ? 'My child’s grade: ' : 'My children’s grades: ') + myGrades.join(', '));
+      mineBtn.appendChild(el('span', 'g', myGrades.length === 1 ? 'My kid' : 'My kids'));
+      mineBtn.appendChild(el('span', 'n', myGrades.join(', ')));
+      gradeAll.parentNode.insertBefore(mineBtn, gradeAll.nextSibling);
+    }
     var fbtns = all(document, '[data-f]');
     var count = document.querySelector('#count'), clear = document.querySelector('#clear');
     var search = document.querySelector('#prog-search'), noMatch = document.querySelector('[data-nomatch]'), searchMore = document.querySelector('#search-more');
@@ -1656,13 +1647,15 @@
     FILTERS.forEach(function (f) { if (q0[f] && findBtn(f, q0[f])) state[f] = q0[f]; });
     if (mineF && !q0.school) state.school = mineF.id;   // "school=all" in the address keeps the wide view
     if (!q0.grade) { var savedGrade = store('pas-grade'); if (savedGrade && findBtn('grade', savedGrade)) state.grade = savedGrade; }
-    var gradeLabel = function (g) { return g === 'PK' ? 'Pre-K' : g === 'K' ? 'kindergarten' : 'grade ' + g; };
+    var gradeName = function (g) { return g === 'PK' ? 'Pre-K' : g === 'K' ? 'kindergarten' : 'grade ' + g; };
+    var gradeLabel = function (g) { return g !== 'MINE' ? gradeName(g) : myGrades.length === 1 ? gradeName(myGrades[0]) : myGrades.map(function (x) { return x === 'PK' ? 'Pre-K' : x; }).join(' or '); };
+    var gradeFits = function (it) { return state.grade === 'MINE' ? myGrades.some(function (g) { return inList(it, 'data-grades', g); }) : inList(it, 'data-grades', state.grade); };
     var inList = function (el, attr, v) { return (' ' + (el.getAttribute(attr) || '') + ' ').indexOf(' ' + v + ' ') > -1; };
     var apply = function () {
       var total = 0, hiddenHits = 0;
       items.forEach(function (it) {
         var gs = it.getAttribute('data-grades') || '*';
-        var ok = (state.grade === 'ALL' || gs === '*' || inList(it, 'data-grades', state.grade))
+        var ok = (state.grade === 'ALL' || gs === '*' || gradeFits(it))
           && (state.type === 'ALL' || inList(it, 'data-types', state.type))
           && (state.rel === 'ALL' || it.getAttribute('data-rel') === state.rel)
           && (state.hood === 'ALL' || inList(it, 'data-hoods', state.hood))

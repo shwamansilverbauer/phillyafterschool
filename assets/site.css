@@ -867,3 +867,16 @@ html.signed .topbar .when-out{display:none}
 .band.dayoff .topbar{background:rgba(11,33,64,.12)}
 .band.dayoff .topbar a:hover{border-bottom-color:#0B2140}
 @media print{.topbar{display:none}}
+/* "or" between the account block and Make it a card; grades in the profile; My kids on the grade row */
+.or-line{display:flex;align-items:center;gap:14px;max-width:760px;margin:6px 0;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:.85rem}
+.or-line[hidden]{display:none}
+.or-line::before,.or-line::after{content:"";flex:1;height:1px;background:var(--line)}
+.board-tools{display:block;margin-top:4px;max-width:none}
+.board-tools[hidden]{display:none}
+.g-grades{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.g-label{font-weight:700}
+.g-grade-rail{display:flex;flex-wrap:wrap;gap:8px}
+.g-grade-rail .gbtn{flex:0 0 auto;min-width:54px;min-height:46px;justify-content:center}
+.gbtn.mine{min-width:76px}
+.gbtn.mine .g{font-size:.95rem}
+@media print{.or-line{display:none}}

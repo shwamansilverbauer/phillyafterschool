@@ -7,8 +7,9 @@
 //   an invitation  - an email address a group's owner has invited; only invited addresses can join
 //   a membership   - who is in which group
 //   a child        - a first name and the programs on their current and upcoming week (no school, address, note or photo)
-//   a profile      - only if the person asks: the school they saved, and a child's week (first name, programs, and the
-//                    school each program is listed under, so it can be put back on another device)
+//   a profile      - only if the person asks: the school they saved, the grades their children are in (just the
+//                    grades), and a child's week (first name, programs, and the school each program is listed
+//                    under, so it can be put back on another device)
 //   a tally        - how many accounts, groups and so on were made each day. Numbers only, for the site's owner.
 // Everything lives in one small database file kept outside the public folder. Nothing here is ever written into a page:
 // a group is only sent, as data, to a signed-in member the owner has approved.
@@ -21,7 +22,7 @@
 
 declare(strict_types=1);
 
-$CFG = json_decode('{"siteName":"Philly After School","siteUrl":"https://phillyafterschool.org","from":"contact@phillyafterschool.org","yearEnd":"2027-06-23","googleClientId":"420915102949-7gfu5o00gn6oionaijid2jak6om38rda.apps.googleusercontent.com"}', true);
+$CFG = json_decode('{"siteName":"Philly After School","siteUrl":"https://phillyafterschool.org","from":"contact@phillyafterschool.org","yearEnd":"2027-06-23","googleClientId":"420915102949-7gfu5o00gn6oionaijid2jak6om38rda.apps.googleusercontent.com","grades":["PK","K","1","2","3","4","5","6","7","8"]}', true);
 if (!is_array($CFG)) { http_response_code(500); exit; }
 
 header('Content-Type: application/json; charset=utf-8');
@@ -91,7 +92,7 @@ function db(): PDO {
     // Added after the first version: first and last name, and whether the account has been added to the email list.
     $cols = array();
     foreach ($db->query('PRAGMA table_info(users)') as $c) $cols[] = $c['name'];
-    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'") as $col => $type) {
+    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
       if (!in_array($col, $cols, true)) $db->exec('ALTER TABLE users ADD COLUMN ' . $col . ' ' . $type);
     }
     // A group made by "share this week with one person" is marked, so joining it skips the question about whose week to add.
@@ -190,14 +191,14 @@ function current_user(): ?array {
   $done = true;
   $sid = isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s']) ? $_COOKIE['pas_s'] : '';
   if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return null;
-  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
+  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school, u.grades FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
   if (!$s) return null;
   if ($s['seen'] < now() - 86400) {   // once a day, push the 30 days out again
     $exp = now() + SESSION_DAYS * 86400;
     q('UPDATE sessions SET seen = ?, expires = ? WHERE id = ?', array(now(), $exp, $s['sid']));
     set_session_cookie($sid, $exp);
   }
-  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'school' => (string) $s['school'], 'sid' => (int) $s['sid']);
+  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'school' => (string) $s['school'], 'grades' => (string) $s['grades'], 'sid' => (int) $s['sid']);
   return $user;
 }
 function need_user(): array {
@@ -321,10 +322,11 @@ function clean_week_full($w): string {
 function week_out(array $w): array {
   return array('id' => (int) $w['id'], 'name' => $w['name'], 'now' => json_decode($w['now_json'], true), 'next' => json_decode($w['next_json'], true), 'updated' => (int) $w['updated']);
 }
+function grade_list(string $kept): array { return $kept === '' ? array() : explode(',', $kept); }
 function profile_out(array $u): array {
   $weeks = array();
   foreach (q('SELECT * FROM weeks WHERE user_id = ? ORDER BY id', array($u['id'])) as $w) $weeks[] = week_out($w);
-  return array('school' => $u['school'], 'weeks' => $weeks);
+  return array('school' => $u['school'], 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => $weeks);
 }
 function kid_out(array $k, bool $mine): array {
   return array('id' => (int) $k['id'], 'name' => $k['name'], 'now' => json_decode($k['now_json'], true), 'next' => json_decode($k['next_json'], true), 'mine' => $mine);
@@ -406,15 +408,15 @@ function my_groups(int $uid): array {
 function ready(array $u): bool { return $u['first'] !== '' && $u['last'] !== ''; }
 function me_out(array $u): array {
   return array('email' => $u['email'], 'first' => $u['first'], 'last' => $u['last'], 'ready' => ready($u), 'listed' => (bool) $u['listed'],
-    'school' => isset($u['school']) ? (string) $u['school'] : '', 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0);
+    'school' => isset($u['school']) ? (string) $u['school'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0);
 }
 // Signs this browser in as the account with this address, making the account if it is new.
 function sign_in(string $email, string $via, string $next, string $first = '', string $last = ''): void {
-  $user = row('SELECT id, email, name, first, last, listed, school FROM users WHERE email = ?', array($email));
+  $user = row('SELECT id, email, name, first, last, listed, school, grades FROM users WHERE email = ?', array($email));
   $new = false;
   if (!$user) {
     q('INSERT INTO users (email, created, via) VALUES (?, ?, ?)', array($email, now(), $via));
-    $user = array('id' => (int) db()->lastInsertId(), 'email' => $email, 'name' => '', 'first' => '', 'last' => '', 'listed' => 0, 'school' => '');
+    $user = array('id' => (int) db()->lastInsertId(), 'email' => $email, 'name' => '', 'first' => '', 'last' => '', 'listed' => 0, 'school' => '', 'grades' => '');
     $new = true;
     bump('account');
   }
@@ -590,6 +592,18 @@ switch ($method . ' ' . $action) {
     if ($school !== '' && $u['school'] === '') bump('school_saved');
     q('UPDATE users SET school = ? WHERE id = ?', array($school, $u['id']));
     out(array('ok' => true, 'school' => $school));
+  }
+
+  // Which grades their children are in, so lists can start there. Only the grades: not which child, and no names.
+  case 'POST grades_save': {
+    $u = need_user();
+    $all = isset($CFG['grades']) && is_array($CFG['grades']) ? $CFG['grades'] : array();
+    $asked = isset($in['grades']) && is_array($in['grades']) ? $in['grades'] : array();
+    $keep = array();
+    foreach ($all as $g) { if (in_array($g, $asked, true)) $keep[] = $g; }   // the site's own order, and nothing it doesn't list
+    if ($keep && $u['grades'] === '') bump('grades_saved');
+    q('UPDATE users SET grades = ? WHERE id = ?', array(implode(',', $keep), $u['id']));
+    out(array('ok' => true, 'grades' => $keep));
   }
 
   // Keep one child's week with the account, or update one that is already there.

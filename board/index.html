@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=58c24b9d">
+<link rel="stylesheet" href="../assets/site.css?v=d75a009a">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -88,7 +88,7 @@
           <div class="field">
             <label for="roll-grade"><span data-copy="aecc49c153">Grade</span></label>
             <select id="roll-grade"><option value="">Any grade</option><option value="PK">Pre-K</option><option value="K">Kindergarten</option><option value="1">Grade 1</option><option value="2">Grade 2</option><option value="3">Grade 3</option><option value="4">Grade 4</option><option value="5">Grade 5</option><option value="6">Grade 6</option><option value="7">Grade 7</option><option value="8">Grade 8</option></select>
-            <span class="hint"><span data-copy="f623cba1cb">Optional. It skips programs that don’t take that grade, and it isn’t saved.</span></span>
+            <span class="hint"><span data-copy="044cf1802b">Optional. It skips programs that don’t take that grade.</span></span>
           </div>
         </div>
         <div class="roller-themes" id="roll-themes" role="group" aria-label="Theme">
@@ -122,6 +122,8 @@
       <button type="button" class="btn primary big" id="share-cta-btn"><span data-copy="8fd63544b7">Share this schedule</span></button>
     </div>
     <button type="button" class="clear" id="board-promote" hidden>The new term has started: make this the current roster</button>
+    <p class="hint" id="board-status" aria-live="polite"></p>
+    <div class="board-tools" id="board-tools" hidden><button type="button" class="clear" id="board-clear">Clear this roster</button></div>
   </section>
   <section class="section costbox" id="board-cost" hidden>
     <h2><span data-copy="32f0ed93d5">What this roster costs</span></h2>
@@ -134,16 +136,7 @@
   <p class="nextoff"><b data-next-off="[{&quot;u&quot;:&quot;2026-10-09&quot;,&quot;w&quot;:&quot;Fri, Oct 9&quot;,&quot;n&quot;:&quot;Staff professional development&quot;,&quot;c&quot;:5},{&quot;u&quot;:&quot;2026-10-12&quot;,&quot;w&quot;:&quot;Mon, Oct 12&quot;,&quot;n&quot;:&quot;Indigenous Peoples’ Day&quot;,&quot;c&quot;:7},{&quot;u&quot;:&quot;2026-11-03&quot;,&quot;w&quot;:&quot;Tue, Nov 3&quot;,&quot;n&quot;:&quot;Election Day&quot;,&quot;c&quot;:7},{&quot;u&quot;:&quot;2026-11-11&quot;,&quot;w&quot;:&quot;Wed, Nov 11&quot;,&quot;n&quot;:&quot;Veterans Day&quot;,&quot;c&quot;:7},{&quot;u&quot;:&quot;2026-11-16&quot;,&quot;w&quot;:&quot;Mon, Nov 16&quot;,&quot;n&quot;:&quot;Report card conferences&quot;,&quot;c&quot;:5},{&quot;u&quot;:&quot;2026-11-25&quot;,&quot;w&quot;:&quot;Wed, Nov 25&quot;,&quot;n&quot;:&quot;Staff professional development&quot;,&quot;c&quot;:3},{&quot;u&quot;:&quot;2026-11-27&quot;,&quot;w&quot;:&quot;Nov 26 to Nov 27&quot;,&quot;n&quot;:&quot;Thanksgiving recess&quot;,&quot;c&quot;:0},{&quot;u&quot;:&quot;2027-01-01&quot;,&quot;w&quot;:&quot;Dec 23 to Jan 1&quot;,&quot;n&quot;:&quot;Winter recess&quot;,&quot;c&quot;:2},{&quot;u&quot;:&quot;2027-01-15&quot;,&quot;w&quot;:&quot;Fri, Jan 15&quot;,&quot;n&quot;:&quot;Staff professional development&quot;,&quot;c&quot;:3},{&quot;u&quot;:&quot;2027-01-18&quot;,&quot;w&quot;:&quot;Mon, Jan 18&quot;,&quot;n&quot;:&quot;Dr. Martin Luther King Jr. Day&quot;,&quot;c&quot;:1},{&quot;u&quot;:&quot;2027-01-29&quot;,&quot;w&quot;:&quot;Fri, Jan 29&quot;,&quot;n&quot;:&quot;Report card conferences&quot;,&quot;c&quot;:3},{&quot;u&quot;:&quot;2027-02-12&quot;,&quot;w&quot;:&quot;Fri, Feb 12&quot;,&quot;n&quot;:&quot;Staff professional development&quot;,&quot;c&quot;:3}]" hidden></b> <a href="../days-off/"><span data-copy="743e0828a8">Plan the days off too</span></a></p>
   <p class="hint alerts-line"><span data-copy="7efefe9180">Want next term’s sign-up dates before they open?</span> <a href="../alerts/"><span data-copy="d63b67808e">Get the dates by email.</span></a></p>
   <section class="section group-share" id="group-share" data-groups data-root="../" data-index="" data-api="../groups/api.php" data-kl-key="RJsBTu" data-kl-list="Wib7TV" data-google="420915102949-7gfu5o00gn6oionaijid2jak6om38rda.apps.googleusercontent.com" data-pilot="1" hidden></section>
-  <section class="board-tools" id="board-tools" hidden>
-    <div class="actions">
-      <button type="button" class="btn primary" id="board-share" hidden>Share</button>
-      <button type="button" class="btn" id="board-copy-text">Copy as text</button>
-      <a class="btn" id="board-email" href="mailto:">Email it to myself</a>
-      <button type="button" class="clear" id="board-clear">Clear this roster</button>
-    </div>
-    <p class="hint" id="board-status" aria-live="polite"></p>
-    <p class="hint"><span data-copy="839e6af28b">Rosters save automatically on this device. To have one on another phone or computer, or to share it with someone, use “Keep and share this week” above.</span></p>
-  </section>
+  <p class="or-line" id="or-card" hidden><span><span data-copy="1758356db2">or</span></span></p>
   <section class="section card-maker" id="card-maker" hidden>
     <h2 tabindex="-1"><span data-copy="14ec1581e9">Make it a card</span></h2>
     <p><span data-copy="ac085f0036">One picture of the week to text, print, or hand to your child’s teacher, so they know where your child goes each day and who they are.</span></p>
@@ -230,7 +223,7 @@
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=ceae995d" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
-<script src="../assets/groups.js?v=557d4e61"></script>
+<script src="../assets/site.js?v=1b7deea2" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/groups.js?v=476f7eb9"></script>
 </body>
 </html>
