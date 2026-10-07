@@ -24,30 +24,55 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=d75a009a">
+<link rel="stylesheet" href="../assets/site.css?v=b0127125">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
 <header class="band">
-  <div class="topbar"><div class="in">
-    <a class="when-out" href="../account/">Log in</a><a class="when-out top-reg" href="../account/?new=1">Register</a>
-    <a class="when-in" href="../account/">Your account</a>
+  <div class="topbar when-out"><div class="in">
+    <span>Already have an account?</span><a href="../account/">Log in</a>
   </div></div>
   <div class="in bar">
     <a class="brand" href="../"><span class="bus-mark"></span>Philly After School</a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true"></span>Menu</button>
-    <nav class="nav" id="site-nav" aria-label="Site"><details class="menu"><summary>Programs</summary><ul><li><a href="../programs/">After-school programs</a></li><li><a href="../days-off/">Day-camp programs</a></li></ul></details><details class="menu"><summary>Search by</summary><ul><li><a href="../schools/">School</a></li><li><a href="../neighborhoods/">Neighborhood</a></li><li><a href="../types/">Program type</a></li><li><a href="../programs/#by-day">Day of week</a></li></ul></details><details class="menu"><summary>Build a schedule<span class="count" data-board-count hidden></span></summary><ul><li><a href="../board/">After-school schedule</a></li><li><a href="../days-off/#plan">Day-camp schedule</a></li></ul></details><details class="menu"><summary>Suggest</summary><ul><li><a href="../suggest/">A program</a></li><li><a href="../ideas/">A feature</a></li><li><a href="../schools/request/">A school</a></li></ul></details><a href="../about/">About</a><a class="nav-cta" href="../support/">Help the site keep going</a></nav>
+    <nav class="nav" id="site-nav" aria-label="Site"><details class="menu"><summary>Programs</summary><ul><li><a href="../programs/">After-school programs</a></li><li><a href="../days-off/">Day-camp programs</a></li></ul></details><details class="menu"><summary>Search by</summary><ul><li><a href="../schools/">School</a></li><li><a href="../neighborhoods/">Neighborhood</a></li><li><a href="../types/">Program type</a></li><li><a href="../programs/#by-day">Day of week</a></li></ul></details><details class="menu"><summary>Build a schedule<span class="count" data-board-count hidden></span></summary><ul><li><a href="../board/">After-school schedule</a></li><li><a href="../days-off/#plan">Day-camp schedule</a></li></ul></details><details class="menu"><summary>Suggest</summary><ul><li><a href="../suggest/">A program</a></li><li><a href="../ideas/">A feature</a></li><li><a href="../schools/request/">A school</a></li></ul></details><a href="../about/">About</a><a class="nav-cta when-out" href="../account/?new=1">Create a free account</a><a class="nav-cta when-in" href="../account/">Your account</a></nav>
   </div>
   <div class="in hero">
-    <h1><span data-copy="4ab2910209">Your account</span></h1>
-    <p class="lede"><span data-copy="0701e850dd">Keep your school and your child’s week in a profile, so they’re on every device you sign in on, and share a week with one person. Everything else on the site works without an account.</span></p>
+    <h1><span class="when-out"><span data-copy="c3020058b7">Your free account</span></span><span class="when-in"><span data-copy="4ab2910209">Your account</span></span></h1>
+    <p class="lede when-out"><span data-copy="f1b7a0fc62">Save your school, your kids’ grades and your week, and share a week with the people who need it. It takes about a minute, and there’s no password to remember.</span></p>
+    <p class="lede when-in"><span data-copy="0701e850dd">Keep your school and your child’s week in a profile, so they’re on every device you sign in on, and share a week with one person. Everything else on the site works without an account.</span></p>
   </div>
   
 </header>
 <main class="wrap">
 <div data-groups data-root="../" data-index="" data-api="../groups/api.php" data-kl-key="RJsBTu" data-kl-list="Wib7TV" data-google="420915102949-7gfu5o00gn6oionaijid2jak6om38rda.apps.googleusercontent.com" data-pilot="1" data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask"><span data-copy="6efbd57efc">Accounts need JavaScript turned on.</span></p></noscript>
-  <div class="g-page" id="account"></div>
+  <div class="acct-grid">
+    <div class="g-page" id="account"></div>
+    <section class="acct-why when-out" aria-labelledby="acct-why-h">
+      <div class="acct-art"><svg viewBox="0 0 520 300" aria-hidden="true" focusable="false">
+  <defs><g id="acct-week"><rect width="120" height="152" rx="11" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/><path d="M0 11a11 11 0 0 1 11-11h98a11 11 0 0 1 11 11v17H0z" fill="#0F4D90"/><text x="11" y="19" font-size="11" font-weight="800" fill="#FFFFFF" font-family="Archivo, Arial, sans-serif">Sam’s week</text><circle cx="17" cy="44" r="7.5" fill="#E3EEFA"/><text x="17" y="47.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">M</text><rect x="31" y="38" width="62" height="12" rx="6" fill="#1F7A3A"/><circle cx="17" cy="65" r="7.5" fill="#E3EEFA"/><text x="17" y="68.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">T</text><rect x="31" y="59" width="48" height="12" rx="6" fill="#B4237A"/><circle cx="17" cy="86" r="7.5" fill="#E3EEFA"/><text x="17" y="89.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">W</text><rect x="31" y="80" width="70" height="12" rx="6" fill="#0E7C86"/><circle cx="17" cy="107" r="7.5" fill="#E3EEFA"/><text x="17" y="110.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">T</text><rect x="31" y="101" width="40" height="12" rx="6" fill="#6B3FA0"/><circle cx="17" cy="128" r="7.5" fill="#E3EEFA"/><text x="17" y="131.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">F</text><rect x="31" y="122" width="56" height="12" rx="6" fill="#C2410C"/></g></defs>
+  <rect x="238" y="20" width="250" height="186" rx="13" class="art-frame"/>
+  <path d="M212 214h302a7 7 0 0 1-7 12H219a7 7 0 0 1-7-12z" fill="#0B2140"/>
+  <use href="#acct-week" x="262" y="38"/>
+  <rect x="398" y="42" width="72" height="9" rx="4.5" class="art-line"/><rect x="398" y="60" width="54" height="9" rx="4.5" class="art-line"/><rect x="398" y="78" width="66" height="9" rx="4.5" class="art-line"/>
+  <rect x="394" y="110" width="82" height="26" rx="13" fill="#F3C613"/><text x="435" y="127.5" text-anchor="middle" font-size="11" font-weight="800" fill="#2A2100" font-family="Archivo, Arial, sans-serif">Nebinger</text>
+  <rect x="394" y="144" width="82" height="26" rx="13" class="art-chip"/><text x="435" y="161.5" text-anchor="middle" font-size="11" font-weight="800" class="art-ink" font-family="Archivo, Arial, sans-serif">Grades K, 3</text>
+  <rect x="30" y="62" width="150" height="226" rx="22" class="art-frame"/><rect x="88" y="71" width="34" height="5" rx="2.5" fill="#0B2140"/>
+  <use href="#acct-week" x="45" y="92"/>
+  <path d="M128 58C140 22 212 16 240 54" fill="none" stroke="#0F4D90" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round"/>
+  <circle cx="184" cy="29" r="17" fill="#F3C613"/><path d="M176 29.5l5.5 5.5 10-11" fill="none" stroke="#2A2100" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></div>
+      <h2 id="acct-why-h"><span data-copy="191885e234">What an account gives you</span></h2>
+      <ul class="acct-points">
+        <li><b><span data-copy="b612bdccf0">Save your school.</span></b> <span data-copy="49dfeab767">Every list starts from it, on any device you sign in on.</span></li>
+        <li><b><span data-copy="3a538b642b">Save your kids’ grades.</span></b> <span data-copy="c715faf072">Lists open on the programs that take them.</span></li>
+        <li><b><span data-copy="24d8908789">Keep your week.</span></b> <span data-copy="19e77bcabf">Build it on your phone tonight, find it on your laptop tomorrow.</span></li>
+        <li><b><span data-copy="d3a0950676">Share a week with one person.</span></b> <span data-copy="4523317b1d">A grandparent or a sitter signs in to see it, and you can take it back.</span></li>
+      </ul>
+      <p class="hint"><span data-copy="fac03138c7">It’s free. Nothing goes into your profile unless you put it there, and you can delete the account whenever you like.</span></p>
+    </section>
+  </div>
   <section class="notes">
     <h2><span data-copy="733d535919">What an account keeps, and who sees it</span></h2>
     <ul>
@@ -65,6 +90,7 @@
     <div class="foot-brand">
       <a class="brand" href="../"><span class="bus-mark"></span>Philly After School</a>
       <p><span data-copy="2ded0fc514">After-school programs in Philadelphia, sorted by the school your child goes to.</span></p>
+      <p class="foot-support"><span><span data-copy="e877ba88ef">Free, and run by one parent.</span></span> <a class="btn foot-cta" href="../support/">Help the site keep going</a></p>
     </div>
     <div>
       <h2><a href="../schools/"><span data-copy="06c76a46e4">Schools</span></a></h2>
@@ -112,7 +138,7 @@
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=b6496214" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
-<script src="../assets/groups.js?v=476f7eb9"></script>
+<script src="../assets/site.js?v=c9c64171" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/groups.js?v=652749bd"></script>
 </body>
 </html>

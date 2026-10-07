@@ -75,39 +75,33 @@
     var again = btn('clear', 'Use a different email or send it again');
     help.appendChild(again);
     step2.appendChild(sentTo); step2.appendChild(codeForm); step2.appendChild(help);
-    wrap.appendChild(form); wrap.appendChild(step2);
-    // Google, for people who would rather not wait for an email. Its script is only fetched when someone asks for it,
-    // and not at all inside apps (Facebook, Instagram) whose built-in browsers Google refuses to sign in from.
+    // Google first, for people who would rather not wait for an email: one tap on its own button. The button is
+    // Google's, so its script loads with this form. It isn't offered inside apps (Facebook, Instagram) whose built-in
+    // browsers Google refuses to sign in from, and it quietly goes away if the script can't be fetched.
     var alt = null;
     if (GOOGLE && API && !/FBAN|FBAV|FB_IAB|Instagram|MicroMessenger|Line\//i.test(navigator.userAgent || '')) {
-      alt = el('div', 'signin-alt');
-      alt.appendChild(el('span', 'signin-or', 'or'));
-      var gb = btn('btn', 'Use Google instead');
-      var gslot = el('div', 'g-google'); gslot.hidden = true;
-      var gnote = el('p', 'hint'); gnote.hidden = true;
-      alt.appendChild(gb); alt.appendChild(gslot); alt.appendChild(gnote);
-      gb.addEventListener('click', function () {
-        gb.disabled = true; status.className = 'g-status'; status.textContent = 'Loading Google…';
-        loadGoogle(function (ok) {
-          gb.disabled = false;
-          if (!ok) { status.textContent = 'Couldn’t load Google’s sign-in. Use the email code instead.'; status.className = 'g-status bad'; return; }
-          status.textContent = '';
-          window.google.accounts.id.initialize({ client_id: GOOGLE, ux_mode: 'popup', auto_select: false, callback: function (resp) {
-            status.className = 'g-status'; status.textContent = 'Signing you in…';
-            call('login_google', { credential: (resp && resp.credential) || '', next: next }).then(function (d) {
-              if (!d.ok) { status.textContent = d.message; status.className = 'g-status bad'; return; }
-              status.textContent = '';
-              set('pas-in', '1');
-              done(d);
-            });
-          } });
-          window.google.accounts.id.renderButton(gslot, { type: 'standard', theme: 'outline', size: 'large', text: 'continue_with', shape: 'pill', logo_alignment: 'left' });
-          gb.hidden = true; gslot.hidden = false; gnote.hidden = false;
-          gnote.textContent = 'Tap the Google button to finish. Google learns that you signed in to this site; we get your name and email address from it and nothing else.';
-        });
-      });
+      alt = el('div', 'signin-alt'); alt.hidden = true;
+      var gslot = el('div', 'g-google');
+      alt.appendChild(gslot);
+      alt.appendChild(el('span', 'signin-or', 'or use your email'));
       wrap.appendChild(alt);
+      googleUse = function (resp) {   // whichever sign-in form is on the page gets the answer
+        status.className = 'g-status'; status.textContent = 'Signing you in…';
+        call('login_google', { credential: (resp && resp.credential) || '', next: next }).then(function (d) {
+          if (!d.ok) { status.textContent = d.message; status.className = 'g-status bad'; return; }
+          status.textContent = '';
+          set('pas-in', '1');
+          done(d);
+        });
+      };
+      loadGoogle(function (ok) {
+        if (!ok || !alt.parentNode) return;
+        if (!googleReady) { googleReady = true; window.google.accounts.id.initialize({ client_id: GOOGLE, ux_mode: 'popup', auto_select: false, callback: function (resp) { if (googleUse) googleUse(resp); } }); }
+        alt.hidden = false;
+        window.google.accounts.id.renderButton(gslot, { type: 'standard', theme: 'outline', size: 'large', text: 'continue_with', shape: 'pill', logo_alignment: 'left', width: Math.max(220, Math.min(380, wrap.clientWidth || 320)) });
+      });
     }
+    wrap.appendChild(form); wrap.appendChild(step2);
     wrap.appendChild(status);
     box.appendChild(wrap);
     var req = '';
@@ -140,7 +134,7 @@
     });
   }
 
-  var googleWait = null;
+  var googleWait = null, googleReady = false, googleUse = null;
   function loadGoogle(cb) {
     if (window.google && window.google.accounts && window.google.accounts.id) return cb(true);
     if (googleWait) { googleWait.push(cb); return; }
@@ -291,9 +285,9 @@
       account.textContent = '';
       if (msg) { var p = el('p', 'g-status bad', msg); account.appendChild(p); }
       var box = el('div', 'panel'); account.appendChild(box);
-      signInBox(box, wantNext, function (d) { if (wantNext === 'board' && d.user.ready) goNext('board'); else drawProfile(d); }, 'New here? This makes your account. No password to remember: we email you a 6-digit code, and you type it here.');
+      signInBox(box, wantNext, function (d) { if (wantNext === 'board' && d.user.ready) goNext('board'); else drawProfile(d); }, 'One step for both: if you’re new, this makes your account. No password. With email, we send a 6-digit code and you type it here.');
       var sh = box.querySelector('h3');
-      if (sh) sh.textContent = aq.new ? 'Register with your email' : 'Log in or register with your email';
+      if (sh) sh.textContent = aq.new ? 'Create your account' : 'Log in, or create an account';
       var have = el('div', 'panel g-callout');
       have.appendChild(el('h2', null, 'Did someone send you an invitation?'));
       have.appendChild(el('p', null, 'Tap the link in the email. Or start here: it walks you through the code and signing in with the address the invitation was sent to.'));
@@ -493,6 +487,12 @@
         });
       });
       account.appendChild(make);
+      // the site's one ask
+      var help = el('section', 'panel g-support');
+      help.appendChild(el('h2', null, 'Help the site keep going'));
+      help.appendChild(el('p', null, 'Philly After School is free and run by one parent. If it saved you an evening of searching, you can chip in toward what it costs to run.'));
+      var ha = el('a', 'btn', 'Buy me a coffee'); ha.href = page('support/'); help.appendChild(ha);
+      account.appendChild(help);
       // leaving
       var out = el('section', 'panel');
       out.appendChild(el('h2', null, 'Signing out'));
@@ -1112,14 +1112,15 @@
       var picks = weekCount(kid.now) + weekCount(kid.next);
       var solo = links(kid).filter(function (l) { return l.s; })[0] || null;
       var inGroups = links(kid).filter(function (l) { return !l.s; });
-      share.appendChild(el('h2', null, 'Keep and share this week'));
+      share.appendChild(el('h2', null, signedInHint() && me ? 'Keep and share this week' : 'Save this week, or share it'));
       if (notice) share.appendChild(el('p', 'g-status bad', notice));
 
       if (!signedInHint() || !me) {
         if (signedInHint() && !me && !checked) { share.appendChild(el('p', 'hint', 'Checking your account…')); return; }
-        share.appendChild(el('p', null, 'With a free account you can keep ' + who + ' in your profile, so it’s on your phone and your computer, and share it with one person, like a grandparent or a sitter, who signs in to see it.'));
+        share.appendChild(el('p', null, 'A free account keeps ' + who + ' in your profile, so it’s on your phone and your computer, and lets you share it with one person, like a grandparent or a sitter, who signs in to see it.'));
         var row0 = el('div', 'actions');
-        var si = el('a', 'btn primary', 'Log in or register'); si.href = page('account/') + '?next=board'; row0.appendChild(si);
+        var si = el('a', 'btn primary', 'Create a free account'); si.href = page('account/') + '?new=1&next=board'; row0.appendChild(si);
+        var li0 = el('a', 'btn', 'Log in'); li0.href = page('account/') + '?next=board'; row0.appendChild(li0);
         if (groupsOn()) { var inv0 = btn('btn', 'I was invited to a group'); inv0.addEventListener('click', toJoin()); row0.appendChild(inv0); }
         share.appendChild(row0);
         return;
