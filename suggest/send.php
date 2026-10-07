@@ -6,7 +6,7 @@ $SITE = "Philly After School";
 function fail($msg, $code) {
   http_response_code($code);
   header('Content-Type: text/html; charset=utf-8');
-  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css?v=e07c089d"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="./">Go back to the form</a></p></main></body></html>';
+  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css?v=f1469bdd"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="./">Go back to the form</a></p></main></body></html>';
   exit;
 }
 function field($key, $max) {
@@ -33,6 +33,8 @@ $school = one_line(field('school', 80));
 $newschool = one_line(field('newschool', 120));
 $program = one_line(field('program', 150));
 $website = one_line(field('website', 300));
+$camptype = one_line(field('camptype', 60));
+$listing = preg_match('/^[pc]:[a-z0-9-]{1,80}$/', field('listing', 90)) ? field('listing', 90) : '';
 $pickup = one_line(field('pickup', 60));
 $role = one_line(field('role', 60));
 $name = one_line(field('name', 100));
@@ -45,6 +47,14 @@ if ($details === '' && $program === '' && $newschool === '') {
 if (substr_count(strtolower($details), 'http') > 5) {
   fail('That has too many links for us to accept. Please trim it and try again.', 400);
 }
+// A new program or camp needs its own website: every listing is checked against it.
+$isNew = strpos($kind, 'A program') === 0 || strpos($kind, 'A camp') === 0;
+if ($isNew && !preg_match('~^(https?://)?[a-z0-9][a-z0-9.-]*\.[a-z]{2,}([/?#]\S*)?$~i', $website)) {
+  fail('Please add the website of the program or camp. We check every listing against its own website, so we can’t add one without it.', 400);
+}
+if ($isNew && $program === '') {
+  fail('Please add the name of the program or camp.', 400);
+}
 if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
   $email = '';
 }
@@ -53,6 +63,8 @@ $body = "Type: $kind\n"
   . "School: $school\n"
   . "New school: $newschool\n"
   . "Program: $program\n"
+  . ($listing !== '' ? "Listing: $listing\n" : '')
+  . ($camptype !== '' ? "Camp type: $camptype\n" : '')
   . "Website: $website\n"
   . "Picks up: $pickup\n"
   . "Sent by: $role\n"

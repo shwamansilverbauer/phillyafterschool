@@ -11,6 +11,9 @@
 //                    grades), and a child's week (first name, programs, and the school each program is listed
 //                    under, so it can be put back on another device)
 //   a tally        - how many accounts, groups and so on were made each day. Numbers only, for the site's owner.
+//   a claim        - for someone who runs a program: which listing their account has claimed, and whether it stands.
+//                    A claim needs an account whose email address is at the listing's own website address.
+//   a proposed edit - what a claimed listing's director asked to have changed. The site's owner reads and applies it.
 // Everything lives in one small database file kept outside the public folder. Nothing here is ever written into a page:
 // a group is only sent, as data, to a signed-in member the owner has approved.
 //
@@ -22,7 +25,7 @@
 
 declare(strict_types=1);
 
-$CFG = json_decode('{"siteName":"Philly After School","siteUrl":"https://phillyafterschool.org","from":"contact@phillyafterschool.org","yearEnd":"2027-06-23","googleClientId":"420915102949-7gfu5o00gn6oionaijid2jak6om38rda.apps.googleusercontent.com","grades":["PK","K","1","2","3","4","5","6","7","8"]}', true);
+$CFG = json_decode('{"siteName":"Philly After School","siteUrl":"https://phillyafterschool.org","from":"contact@phillyafterschool.org","yearEnd":"2027-06-23","googleClientId":"420915102949-7gfu5o00gn6oionaijid2jak6om38rda.apps.googleusercontent.com","grades":["PK","K","1","2","3","4","5","6","7","8"],"listings":{"p:imagine-that-philly":{"n":"Imagine That Philly","d":"imaginethatphilly.org","m":"match"},"p:nebinger-clubs":{"n":"School clubs and teams at Nebinger","d":"philasd.org","m":"manual"},"p:girls-on-the-run":{"n":"Girls on the Run","d":"gotrphiladelphia.org","m":"match"},"p:nebinger-arts-partners":{"n":"Arts partners and Science Olympiad at Nebinger","d":"nebingerpta.org","m":"match"},"p:meredith-clubs":{"n":"Meredith after-school clubs","d":"meredithmatters.org","m":"manual"},"p:coppin-clubs":{"n":"School clubs and ensembles at Coppin","d":"philasd.org","m":"manual"},"p:zhang-sah":{"n":"Zhang Sah","d":"zhangsah.org","m":"match"},"p:shot-tower-rec":{"n":"Shot Tower Recreation Center","d":"phila.gov","m":"manual"},"p:philly-inmovement":{"n":"Philly InMovement: MOVE After School","d":"phillyinmovement.com","m":"match"},"p:settlement-kaleidoscope-plus":{"n":"Settlement Music School: Kaleidoscope Plus","d":"settlementmusic.org","m":"match"},"p:philly-art-center-qv":{"n":"Philly Art Center, Queen Village","d":"phillyartcenter.com","m":"match"},"p:old-pine":{"n":"Old Pine Community Center","d":"oldpinecommunitycenter.org","m":"match"},"p:butchers-sew-shop":{"n":"Butcher’s Sew Shop Junior","d":"butcherssewshop.com","m":"match"},"p:mister-johns-music":{"n":"Mister John’s Music","d":"misterjohnsmusic.com","m":"match"},"p:music-theatre-philly":{"n":"Music Theatre Philly","d":"musictheatrephilly.com","m":"match"},"p:arden-drama-school":{"n":"Arden Drama School","d":"ardentheatre.org","m":"match"},"p:walnut-street-theatre-school":{"n":"Walnut Street Theatre School","d":"coursestorm.com","m":"manual"},"p:coco-academy":{"n":"CoCo Academy","d":"cocoacademyphl.com","m":"match"},"p:queen-and-rook":{"n":"Queen & Rook Game Cafe","d":"queenandrookcafe.com","m":"match"},"p:beehive-at-bok":{"n":"Beehive at Bok","d":"beehiveatbok.com","m":"match"},"p:dandelion-after-school":{"n":"Dandelion After School","d":"thedandelionproject.us","m":"match"},"p:movemakers":{"n":"MoveMakers Philly","d":"movemakersphilly.com","m":"match"},"p:kids-on-12th":{"n":"Kids on 12th","d":"ko12.org","m":"match"},"p:columbus-square-rec":{"n":"Columbus Square Recreation Center","d":"phila.gov","m":"manual"},"p:hawthorne-cultural-center":{"n":"Hawthorne Cultural Center","d":"phila.gov","m":"manual"},"p:starr-garden-rec":{"n":"Starr Garden Recreation Center","d":"phila.gov","m":"manual"},"p:palumbo-rec":{"n":"Palumbo Recreation Center","d":"phila.gov","m":"manual"},"p:mighty-writers-el-futuro":{"n":"Mighty Writers El Futuro","d":"mightywriters.org","m":"match"},"p:free-library-leap":{"n":"Free Library LEAP","d":"freelibrary.org","m":"manual"},"p:fleisher-art-memorial":{"n":"Fleisher Art Memorial","d":"fleisher.org","m":"match"},"p:makom-community":{"n":"Makom Community","d":"makomcommunity.org","m":"match"},"p:vare-washington-edey":{"n":"Extended Day, Extended Year at Vare-Washington","d":"phila.gov","m":"manual"},"p:vare-washington-clubs":{"n":"School clubs and teams at Vare-Washington","d":"philasd.org","m":"manual"},"p:sunrise-mccall":{"n":"Sunrise of Philadelphia at McCall","d":"sunriseofphila.org","m":"match"},"p:mccall-clubs":{"n":"McCall clubs and teams","d":"philasd.org","m":"manual"},"p:sawubona-creativity-project":{"n":"Sawubona Creativity Project","d":"sawubonacreativityproject.org","m":"match"},"p:playarts-day-camps":{"n":"PlayArts day camps","d":"playartsphilly.com","m":"match"},"p:philly-rock-gym-day-camps":{"n":"Philadelphia Rock Gym","d":"philarockgym.com","m":"match"},"p:skate-the-foundry":{"n":"Skate The Foundry","d":"skatethefoundry.com","m":"match"},"p:pafa-saturday-art":{"n":"PAFA Saturday Studio Art","d":"pafa.org","m":"match"},"p:moore-young-artists-workshop":{"n":"Moore Young Artists Workshop","d":"moore.edu","m":"manual"},"p:philadelphia-museum-of-art-kids":{"n":"Philadelphia Museum of Art: Art Kids Classes","d":"philamuseum.org","m":"match"},"p:made-institute-sunday-sewing":{"n":"MADE Institute: Sunday Sewing","d":"made-institute.com","m":"match"},"p:rock-school-for-dance":{"n":"The Rock School for Dance Education","d":"therockschool.org","m":"match"},"p:koresh-school-of-dance":{"n":"Koresh School of Dance","d":"koreshdance.org","m":"match"},"p:school-of-philadelphia-ballet":{"n":"School of Philadelphia Ballet","d":"philadelphiaballet.org","m":"match"},"p:zazz-dance":{"n":"ZAZZ","d":"zazzphilly.com","m":"match"},"p:temple-music-prep-cmsp":{"n":"Temple Music Prep: Community Music Scholars","d":"temple.edu","m":"manual"},"p:wissahickon-skating-club":{"n":"Wissahickon Skating Club","d":"wissskating.com","m":"match"},"p:penn-ice-rink":{"n":"Penn Ice Rink","d":"upenn.edu","m":"manual"},"p:starfinder-saturday-soccer":{"n":"Starfinder: Saturday soccer","d":"starfinderfoundation.org","m":"match"},"p:franklin-institute-pacts":{"n":"The Franklin Institute: PACTS","d":"fi.edu","m":"manual"},"p:macguffin-theatre":{"n":"MacGuffin Theatre & Film Company","d":"macguffintf.com","m":"match"},"c:philly-art-center":{"n":"Philly Art Center (summer camp)","d":"phillyartcenter.com","m":"match"},"c:fleisher-art-memorial-camp":{"n":"Fleisher Art Memorial (summer camp)","d":"fleisher.org","m":"match"},"c:mister-johns-music-camp":{"n":"Mister John’s Music (summer camp)","d":"misterjohnsmusic.com","m":"match"},"c:music-theatre-philly-camp":{"n":"Music Theatre Philly (summer camp)","d":"musictheatrephilly.com","m":"match"},"c:movemakers-camp":{"n":"MoveMakers Philly (summer camp)","d":"movemakersphilly.com","m":"match"},"c:queen-and-rook-camp":{"n":"Queen & Rook Game Cafe (summer camp)","d":"queenrookkeep.com","m":"match"},"c:parks-and-rec-camps":{"n":"Philadelphia Parks & Recreation day camps (summer camp)","d":"phila.gov","m":"manual"},"c:theatre-horizon-woodmere":{"n":"Theatre Horizon drama camp at Woodmere (summer camp)","d":"theatrehorizon.org","m":"match"},"c:butchers-sew-shop-camp":{"n":"Butcher’s Sew Shop Junior (summer camp)","d":"jumbula.com","m":"manual"},"c:clay-studio-camp":{"n":"The Clay Studio (summer camp)","d":"theclaystudio.org","m":"match"},"c:pafa-camp":{"n":"PAFA summer art camp (summer camp)","d":"pafa.org","m":"match"},"c:moore-young-artists":{"n":"Moore College of Art & Design youth courses (summer camp)","d":"moore.edu","m":"manual"},"c:school-of-rock-philadelphia":{"n":"School of Rock Philadelphia (summer camp)","d":"schoolofrock.com","m":"manual"},"c:arden-summer-camp":{"n":"Arden Drama School (summer camp)","d":"ardentheatre.org","m":"match"},"c:camp-walnut":{"n":"Camp Walnut at Walnut Street Theatre (summer camp)","d":"coursestorm.com","m":"manual"},"c:macguffin-camps":{"n":"MacGuffin Theatre & Film Company (summer camp)","d":"macguffintf.com","m":"match"},"c:flipout-camp":{"n":"FlipOut Productions (summer camp)","d":"flipoutproductions.com","m":"match"},"c:philadelphia-ballet-camps":{"n":"School of Philadelphia Ballet dance camps (summer camp)","d":"philadelphiaballet.org","m":"match"},"c:wissahickon-figure-skating":{"n":"Wissahickon Skating Club figure skating camp (summer camp)","d":"wissskating.com","m":"match"},"c:philadelphia-dance-academy":{"n":"The Philadelphia Dance Academy (summer camp)","d":"philadelphiadanceacademy.com","m":"match"},"c:legacy-tennis-camp":{"n":"Legacy Youth Tennis community camp (summer camp)","d":"legacyyte.org","m":"match"},"c:ceo-camp-phield-house":{"n":"C.E.O. Camp at Phield House (summer camp)","d":"phieldhouse.com","m":"match"},"c:awbury-adventures":{"n":"Awbury Adventures at Awbury Arboretum (summer camp)","d":"awbury.org","m":"match"},"c:camp-schuylkill":{"n":"Camp Schuylkill at the Schuylkill Center (summer camp)","d":"schuylkillcenter.org","m":"match"},"c:morris-arboretum-camp":{"n":"Nature Explorers at Morris Arboretum & Gardens (summer camp)","d":"morrisarboretum.org","m":"match"},"c:circus-arts-camp":{"n":"Philadelphia School of Circus Arts (summer camp)","d":"phillycircus.com","m":"match"},"c:work-to-ride-camp":{"n":"Work to Ride at Chamounix Equestrian Center (summer camp)","d":"worktoride.net","m":"match"},"c:seaport-summer-camp":{"n":"Seaport Summer Camp at Independence Seaport Museum (summer camp)","d":"phillyseaport.org","m":"match"},"c:taller-puertorriqueno-camp":{"n":"Taller Puertorriqueño (summer camp)","d":"tallerpr.org","m":"match"},"c:camp-tps":{"n":"Camp TPS at The Philadelphia School (summer camp)","d":"tpschool.org","m":"match"},"c:ymca-day-camps":{"n":"Greater Philadelphia YMCA day camps (summer camp)","d":"philaymca.org","m":"manual"},"c:summer-achievers-edey":{"n":"Summer Achievers at Extended Day, Extended Year schools (summer camp)","d":"phila.gov","m":"manual"},"c:allens-lane-art-camp":{"n":"Allens Lane Art Center summer art camp (summer camp)","d":"allenslane.org","m":"match"},"c:nlarts-summer-camp":{"n":"NLArts summer art camp (summer camp)","d":"nlarts.org","m":"match"},"c:yes-and-camp":{"n":"Yes! And… Collaborative Arts camps (summer camp)","d":"yesandcamp.org","m":"match"},"c:zazz-summer-camp":{"n":"ZAZZ Dance & Drama (summer camp)","d":"zazzphilly.com","m":"match"},"c:sawubona-summer-camp":{"n":"Sawubona Creativity Project (summer camp)","d":"sawubonacreativityproject.org","m":"match"},"c:zoomdance-camp":{"n":"ZoomDance camp (summer camp)","d":"zoomdance.com","m":"match"},"c:dandelion-summer-camp":{"n":"The Dandelion Project summer camp (summer camp)","d":"thedandelionproject.us","m":"match"},"c:rutabaga-naturearts":{"n":"Rutabaga NatureArts summer camp (summer camp)","d":"rutabagatoylibrary.com","m":"match"},"c:skate-the-foundry-camp":{"n":"Skate The Foundry skateboard camp (summer camp)","d":"skatethefoundry.com","m":"match"},"c:lavner-tech-camp-upenn":{"n":"Camp Tech Revolution at UPenn (Lavner) (summer camp)","d":"lavnercampsandprograms.com","m":"match"},"c:philly-rock-gym-camps":{"n":"Philadelphia Rock Gym summer camps (summer camp)","d":"philarockgym.com","m":"match"},"c:coco-academy-summer-camp":{"n":"CoCo Academy (summer camp)","d":"cocoacademyphl.com","m":"match"}}}', true);
 if (!is_array($CFG)) { http_response_code(500); exit; }
 
 header('Content-Type: application/json; charset=utf-8');
@@ -40,6 +43,8 @@ const MAX_KIDS = 6;         // children one member can add to one group
 const MAX_INVITES = 60;     // addresses one group can have invited
 const MAX_SOLO = 12;        // "share this week with one person" lists one account can have (one per child)
 const MAX_WEEKS = 6;        // children's weeks one profile can hold
+const MAX_CLAIMS = 12;      // listings one account can claim
+const MAX_CLAIMANTS = 5;    // accounts that can hold a claim on one listing
 const DAYS = array('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun');
 const WEEKEND = array('sat', 'sun');   // weekend picks are a program with weekend classes: no school, no pickup
 
@@ -101,6 +106,10 @@ function db(): PDO {
     foreach ($db->query('PRAGMA table_info(grp)') as $c) $gcols[] = $c['name'];
     if (!in_array('solo', $gcols, true)) $db->exec('ALTER TABLE grp ADD COLUMN solo INTEGER NOT NULL DEFAULT 0');
     $db->exec('CREATE INDEX IF NOT EXISTS weeks_user ON weeks (user_id)');
+    // Directors: a claim on a listing ("p:<program id>" or "c:<camp id>") and the changes a director has proposed for it.
+    $db->exec("CREATE TABLE IF NOT EXISTS claims (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, listing TEXT NOT NULL, status TEXT NOT NULL, domain TEXT NOT NULL DEFAULT '', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0, UNIQUE (user_id, listing))");
+    $db->exec("CREATE TABLE IF NOT EXISTS edits (id INTEGER PRIMARY KEY, claim_id INTEGER NOT NULL REFERENCES claims(id) ON DELETE CASCADE, listing TEXT NOT NULL, body TEXT NOT NULL, link TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'new', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0)");
+    $db->exec('CREATE INDEX IF NOT EXISTS claims_listing ON claims (listing, status)');
     if (!$hadTally) {   // start the daily counts from what is already here
       $day = "strftime('%Y-%m-%d', created, 'unixepoch', '-4 hours')";
       $db->exec("INSERT OR IGNORE INTO tally (k, day, n) SELECT 'account', $day, COUNT(*) FROM users GROUP BY 2");
@@ -418,7 +427,45 @@ function my_groups(int $uid): array {
 function ready(array $u): bool { return $u['first'] !== '' && $u['last'] !== ''; }
 function me_out(array $u): array {
   return array('email' => $u['email'], 'first' => $u['first'], 'last' => $u['last'], 'ready' => ready($u), 'listed' => (bool) $u['listed'],
-    'school' => isset($u['school']) ? (string) $u['school'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0);
+    'school' => isset($u['school']) ? (string) $u['school'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0,
+    'claims' => isset($u['id']) ? (int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) : 0);
+}
+
+// ---------- directors: claiming a listing ----------
+// The build hands over every listing that can be claimed: its name, the address of its own website, and whether an
+// email at that address is proof enough ("match") or the site's owner has to say yes ("manual": a city, school
+// district, university or booking site, where many unrelated people share the address).
+function listings(): array {
+  global $CFG;
+  return isset($CFG['listings']) && is_array($CFG['listings']) ? $CFG['listings'] : array();
+}
+// "mail.example.org" and "example.org" are the same place: compare the last two parts of each.
+function base_domain(string $host): string {
+  $host = strtolower(trim($host, ". \t"));
+  $parts = array_values(array_filter(explode('.', $host), 'strlen'));
+  return count($parts) >= 2 ? implode('.', array_slice($parts, -2)) : $host;
+}
+function email_domain(string $email): string {
+  $at = strrpos($email, '@');
+  return $at === false ? '' : base_domain(substr($email, $at + 1));
+}
+function claim_out(array $c): array {
+  $l = listings();
+  $edits = array();
+  foreach (q('SELECT id, body, link, status, created FROM edits WHERE claim_id = ? ORDER BY id DESC LIMIT 20', array($c['id'])) as $e) {
+    $edits[] = array('id' => (int) $e['id'], 'body' => $e['body'], 'link' => $e['link'], 'status' => $e['status'], 'created' => (int) $e['created']);
+  }
+  return array('listing' => $c['listing'], 'name' => isset($l[$c['listing']]) ? $l[$c['listing']]['n'] : 'A listing no longer on the site', 'status' => $c['status'], 'gone' => !isset($l[$c['listing']]), 'edits' => $edits);
+}
+function my_claims(int $uid): array {
+  $out = array();
+  foreach (q("SELECT id, listing, status FROM claims WHERE user_id = ? ORDER BY id", array($uid)) as $c) $out[] = claim_out($c);
+  return $out;
+}
+function tell_owner(string $subject, string $text): void {
+  global $CFG;
+  if (empty($CFG['from'])) return;
+  send_mail($CFG['from'], '[' . $CFG['siteName'] . '] ' . $subject, $text, email_html($subject, '<p style="margin:0;white-space:pre-line">' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</p>', 'Open the review page', $CFG['siteUrl'] . '/edit/claims/', 'You get this because you run ' . $CFG['siteName'] . '.'));
 }
 // Signs this browser in as the account with this address, making the account if it is new.
 function sign_in(string $email, string $via, string $next, string $first = '', string $last = ''): void {
@@ -491,7 +538,7 @@ switch ($method . ' ' . $action) {
     $email = strtolower(str($in, 'email', 150));
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) fail('email', 'That email address doesn’t look right.');
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|join|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|join|directors|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
     if (too_many('mail:' . h($email), 3, 900) || too_many('mail:' . h($email), 8, 86400) || too_many('ip:' . who(), 10, 900) || too_many('ip:' . who(), 40, 86400)) {
       fail('slow', 'That’s a lot of sign-in emails. Use the newest one, or wait 15 minutes and try again.', 429);
     }
@@ -538,7 +585,7 @@ switch ($method . ' ' . $action) {
     if (too_many('try:' . who(), 30, 900)) fail('slow', 'Too many tries. Wait 15 minutes and try again.', 429);
     note('try:' . who());
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|join|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|join|directors|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
     $g = google_email(str($in, 'credential', 4200));
     sign_in($g['email'], 'google', $next, $g['first'], $g['last']);
   }
@@ -587,6 +634,76 @@ switch ($method . ' ' . $action) {
     bump('account_deleted');
     set_session_cookie('', now() - 3600);
     out(array('ok' => true));
+  }
+
+  // ----- directors -----
+  // Which listings carry a "claimed by the program" mark. Public, and only the listing keys: never who claimed them.
+  case 'GET claimed': {
+    $keys = array();
+    foreach (q("SELECT DISTINCT listing FROM claims WHERE status = 'ok'") as $r) $keys[] = $r['listing'];
+    out(array('ok' => true, 'claimed' => $keys));
+  }
+
+  case 'GET claims': {
+    $u = need_user();
+    out(array('ok' => true, 'domain' => email_domain($u['email']), 'claims' => my_claims($u['id'])));
+  }
+
+  // Claim a listing. The account's email address has to be at the listing's own website address. Where that address is
+  // shared by many unrelated people, the claim waits for the site's owner.
+  case 'POST claim_add': {
+    $u = need_user();
+    if (!ready($u)) fail('name', 'Add your first and last name to your account first.');
+    $key = str($in, 'listing', 90);
+    $l = listings();
+    if (!isset($l[$key])) fail('listing', 'That listing isn’t on the site any more.', 404);
+    $want = (string) $l[$key]['d'];
+    $have = email_domain($u['email']);
+    if ($want === '' || $have === '' || !hash_equals($want, $have)) {
+      bump('claim_mismatch');
+      fail('domain', 'This listing’s website is at ' . ($want === '' ? 'an address we can’t check' : $want) . ', and you’re signed in with an address at ' . $have . '. To claim it, sign in with an email address at ' . ($want === '' ? 'its website' : $want) . '.', 403);
+    }
+    $mine = row('SELECT id, status FROM claims WHERE user_id = ? AND listing = ?', array($u['id'], $key));
+    if ($mine && $mine['status'] !== 'declined') out(array('ok' => true, 'status' => $mine['status'], 'claims' => my_claims($u['id'])));
+    if ($mine) fail('declined', 'This claim was turned down. Write to us if that looks wrong.', 403);
+    if (too_many('claim:' . $u['id'], 8, 86400)) fail('slow', 'That’s a lot of claims for one day. Try again tomorrow.', 429);
+    if ((int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) >= MAX_CLAIMS) fail('limit', 'One account can claim up to ' . MAX_CLAIMS . ' listings. Write to us if you run more.');
+    if ((int) val("SELECT COUNT(*) FROM claims WHERE listing = ? AND status != 'declined'", array($key)) >= MAX_CLAIMANTS) fail('limit', 'This listing already has ' . MAX_CLAIMANTS . ' people on it. Ask a colleague to give up theirs, or write to us.');
+    note('claim:' . $u['id']);
+    $status = $l[$key]['m'] === 'match' ? 'ok' : 'pending';
+    q('INSERT INTO claims (user_id, listing, status, domain, created, decided) VALUES (?, ?, ?, ?, ?, ?)', array($u['id'], $key, $status, $have, now(), $status === 'ok' ? now() : 0));
+    bump($status === 'ok' ? 'claim' : 'claim_pending');
+    $who = $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>';
+    if ($status === 'ok') tell_owner('Listing claimed: ' . $l[$key]['n'], $who . ' claimed “' . $l[$key]['n'] . '”.' . "\n\nTheir email address is at " . $have . ', the same address as the listing’s website, so the claim stands without you. You can take it away on the review page.');
+    else tell_owner('A claim needs your yes: ' . $l[$key]['n'], $who . ' asked to claim “' . $l[$key]['n'] . '”.' . "\n\nTheir email address is at " . $have . ', which matches the listing’s website, but that address is shared by many people (a city, school district, university or booking site), so it waits for you. Approve or decline it on the review page.');
+    out(array('ok' => true, 'status' => $status, 'claims' => my_claims($u['id'])));
+  }
+
+  case 'POST claim_drop': {
+    $u = need_user();
+    q("DELETE FROM claims WHERE user_id = ? AND listing = ? AND status != 'declined'", array($u['id'], str($in, 'listing', 90)));   // a declined claim stays, so it can't simply be asked for again
+    out(array('ok' => true, 'claims' => my_claims($u['id'])));
+  }
+
+  // A director proposes a change to a listing they have claimed. Nothing on the site changes: the owner reads it.
+  case 'POST edit_add': {
+    $u = need_user();
+    $key = str($in, 'listing', 90);
+    $c = row("SELECT id FROM claims WHERE user_id = ? AND listing = ? AND status = 'ok'", array($u['id'], $key));
+    if (!$c) fail('claim', 'You can propose changes once your claim on this listing stands.', 403);
+    $body = trim(mb_substr(isset($in['body']) && is_string($in['body']) ? str_replace(chr(0), '', $in['body']) : '', 0, 3000, 'UTF-8'));
+    $link = str($in, 'link', 300);
+    if ($link !== '' && !preg_match('~^https?://[^\s<>"]+$~i', $link)) fail('link', 'That link doesn’t look right. It should start with https://');
+    if (mb_strlen($body, 'UTF-8') < 10) fail('body', 'Say what should change, in a sentence or two.');
+    if (substr_count(strtolower($body), 'http') > 5) fail('body', 'That has too many links. Put the one page that shows the change in the link box.');
+    if (too_many('edit:' . $u['id'], 6, 86400)) fail('slow', 'That’s a lot of changes for one day. Put the rest in one note tomorrow.', 429);
+    note('edit:' . $u['id']);
+    q('INSERT INTO edits (claim_id, listing, body, link, created) VALUES (?, ?, ?, ?, ?)', array($c['id'], $key, $body, $link, now()));
+    bump('edit_proposed');
+    $l = listings();
+    $name = isset($l[$key]) ? $l[$key]['n'] : $key;
+    tell_owner('Proposed change: ' . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '” (' . $key . '), proposes:' . "\n\n" . $body . ($link !== '' ? "\n\nLink: " . $link : '') . "\n\nNothing on the site has changed. Mark it published or declined on the review page.");
+    out(array('ok' => true, 'claims' => my_claims($u['id'])));
   }
 
   // ----- a profile: the school and the weeks someone chose to keep with their account -----
