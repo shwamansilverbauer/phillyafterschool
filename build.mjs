@@ -32,6 +32,7 @@ const HOW = ['online', 'phone', 'contact', 'school', 'none'];
 const TYPES = [
   { id: 'aftercare', label: 'Aftercare', color: '#0F4D90', icon: 'M12 3 3 11h2.5v9h5v-6h3v6h5v-9H21z' },
   { id: 'music', label: 'Music', color: '#6B3FA0', icon: 'M9 4v10.2A3.5 3.5 0 1 0 11 17V8h7V4z' },
+  { id: 'theater', label: 'Theater', color: '#A3162E', icon: 'M4 3h16v8a8 8 0 0 1-16 0zM8.5 6.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM8.5 12a3.5 3.5 0 0 0 7 0z' },
   { id: 'art', label: 'Art & making', color: '#C2410C', icon: 'M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.8-1.8 0-.5-.2-.9-.5-1.2-.3-.3-.4-.7-.4-1.1 0-.9.7-1.7 1.7-1.7H17a4 4 0 0 0 4-4c0-4.5-4-8.2-9-8.2zM6.5 12a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z' },
   { id: 'movement', label: 'Sports & movement', color: '#1F7A3A', icon: 'M13 2 4 14h6l-1 8 9-12h-6z' },
   { id: 'stem', label: 'STEM', color: '#0E7C86', icon: 'M9 3h6v2h-1v4.6l5.2 8.6A1.8 1.8 0 0 1 17.7 21H6.3a1.8 1.8 0 0 1-1.5-2.8L10 9.6V5H9z' },
@@ -132,7 +133,9 @@ for (const p of programs) {
   if (!p.register || !HOW.includes(p.register.how)) errors.push(`${at}: register.how must be one of ${HOW.join(', ')}`);
   if (!p.sources?.length) errors.push(`${at}: needs at least one source`);
   for (const s of p.sources || []) if (!isUrl(s.url)) errors.push(`${at}: source "${s.label}" needs an https URL`);
-  if (!p.schools || !Object.keys(p.schools).length) errors.push(`${at}: not linked to any school`);
+  // A listing with no school is allowed only for a place that runs day camps and nothing on a weekday afternoon.
+  if (!p.schools) p.schools = {};
+  if (!Object.keys(p.schools).length && !p.daysOff) errors.push(`${at}: not linked to any school (only a day-camp listing, one with "daysOff", may leave "schools" empty)`);
   for (const [sid, l] of Object.entries(p.schools || {})) {
     if (!schoolIds.has(sid)) errors.push(`${at}: unknown school "${sid}"`);
     if (!REL[l.relation]) errors.push(`${at}: relation for ${sid} must be onsite, pickup or nearby`);
@@ -383,7 +386,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
     return `<details class="menu${here ? ' here' : ''}"><summary>${label}${label === 'Build a schedule' ? '<span class="count" data-board-count hidden></span>' : ''}</summary><ul>${items.map(([to, text]) => `<li><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
   }).join('') + `<a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
-    ? `<a class="nav-cta when-out" href="${link('account/', depth)}?new=1">Create a free account</a><a class="nav-cta when-in" href="${link('account/', depth)}">Your account</a>`
+    ? `<a class="nav-cta when-out" href="${link('register/', depth)}">Create a free account</a><a class="nav-cta when-in" href="${link('account/', depth)}">Your account</a>`
     : `<a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`}`;
   const head = `${first}${fragment || quiet ? '' : gtmHead + '\n'}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
@@ -601,7 +604,7 @@ const hoods = (() => {
   const m = new Map();
   const at = n => { const k = hoodSlug(n); if (!m.has(k)) m.set(k, { id: k, name: n, schools: [], programs: [] }); return m.get(k); };
   for (const s of schools) for (const n of schoolHoods(s)) at(n).schools.push(s);
-  for (const p of programs) for (const n of programHoods(p)) at(n).programs.push(p);
+  for (const p of programs) if (Object.keys(p.schools || {}).length) for (const n of programHoods(p)) at(n).programs.push(p);
   return [...m.values()].sort((a, b) => (b.schools.length + b.programs.length) - (a.schools.length + a.programs.length) || a.name.localeCompare(b.name));
 })();
 const hoodPath = h => `neighborhoods/${h.id}/`;
@@ -630,6 +633,9 @@ const freeOnlyFor = p => kindsOf(p.price).includes('free') ? [] : schools.filter
 // A school's own clubs belong on that school's page. On the citywide lists (A to Z, the type pages) there would be
 // one near-identical "School clubs" entry per school, so they are left off those.
 const schoolRun = p => p.types.includes('clubs');
+// A day-camp-only listing: it runs camps when school is closed but nothing on a weekday afternoon, so it is linked to
+// no school. It gets its own page and a place on the day-camp page, and stays off every after-school list.
+const campOnly = p => !Object.keys(p.schools).length;
 // A school's clubs, by the kind of program each one is. Used to mention them next to the citywide lists.
 const clubGrades = c => c.gradeNote || (c._grades == null ? '' : c._grades.length === 1 ? (c._grades[0] === 'K' ? 'Kindergarten' : c._grades[0] === 'PK' ? 'Pre-K' : 'Grade ' + c._grades[0]) : c._grades.length === GRADES.length - 1 && c._grades[0] === 'K' ? 'All grades' : `Grades ${c._grades[0]}–${c._grades[c._grades.length - 1]}`);
 const clubsOfType = (p, typeId) => (p.clubs || []).filter(c => c.roster !== false && (c.tags || []).includes(typeId));
@@ -637,7 +643,7 @@ const clubsOfType = (p, typeId) => (p.clubs || []).filter(c => c.roster !== fals
 const clubDays = c => { const d = c.days, i = d.map(x => WEEK.indexOf(x)); const run = d.length >= 4 && i.every((v, k) => k === 0 || v === i[k - 1] + 1); const n = d.map(x => DAY_NAME[x] + 's'); return run ? `${DAY_NAME[d[0]]} to ${DAY_NAME[d[d.length - 1]]}` : n.length < 3 ? n.join(' and ') : n.slice(0, -1).join(', ') + ' and ' + n[n.length - 1]; };
 const clubBrief = c => { const bits = [clubGrades(c).replace(/^G/, 'g').replace(/^A/, 'a').replace(/^K/, 'k'), c.days ? clubDays(c) : ''].filter(Boolean); return c.name + (bits.length ? ` (${bits.join(', ')})` : ''); };
 const clubsByType = p => Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, clubs: clubsOfType(p, t.id).map(c => c.name) }]).filter(([, v]) => v.clubs.length));
-const citywide = programs.filter(p => !schoolRun(p));
+const citywide = programs.filter(p => !schoolRun(p) && !campOnly(p));
 const itemAttrs = (p, extra = [], school = null) => `data-item data-grades="${p._grades === null ? '*' : p._grades.join(' ')}" data-types="${p.types.join(' ')}" data-hoods="${programHoods(p).map(hoodSlug).join(' ')}" data-cost="${costKinds(p, school).join(' ')}" data-days="${p.days ? p.days.join(' ') : '*'}" data-schools="${schools.filter(x => p.schools[x.id]).map(x => x.id).join(' ')}" data-search="${esc(haystack(p, extra))}"`;
 const typeTags = (p, school = null) => p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')
   + (!costKinds(p, school).includes('free') ? '' : `<span class="tag free">${school ? (costKinds(p, school).includes('paid') ? 'Free option' : 'Free') : freeOnlyFor(p).length ? `Free for ${esc(listNames(freeOnlyFor(p)))}` : p.price === 'both' ? 'Free option' : 'Free'}</span>`);
@@ -848,6 +854,7 @@ const programAddress = p => {
 // The site name carries "after school" into the title when it fits. When it doesn't, the title says it itself,
 // unless the program's own name already does or the result would run long.
 const programTitle = p => {
+  if (campOnly(p)) return `${fullName(p)}: day camps when school is closed`;
   const n = fullName(p), plain = `${n}: hours, cost and pickup`, said = `${n} after school: hours, cost, pickup`;
   if (`${plain} | ${cfg.siteName}`.length <= 65) return plain;
   return said.length <= 65 && !/after[- ]?school|aftercare/i.test(n) ? said : plain;
@@ -900,12 +907,14 @@ ${p.clubs.map(c => `      <article class="club">
       </article>`).join('\n')}
     </div>
   </section>` : '';
-  const hero = `    <p class="where"><a href="${link('programs/', D)}">${T(`All programs`)}</a> / ${esc(servedSummary(p))}</p>
+  const camp = campOnly(p);
+  const hoodHas = n => hoods.some(h => h.id === hoodSlug(n));
+  const hero = `    <p class="where">${camp ? `<a href="${link(offPath, D)}">${T(`Day-camp programs`)}</a> / ${T(`Day camps only`)}` : `<a href="${link('programs/', D)}">${T(`All programs`)}</a> / ${esc(servedSummary(p))}`}</p>
     <h1>${esc(fullName(p))}</h1>
     <p class="lede">${esc(p.what)}</p>
     <div class="facts">
       <span>${p.types.map(t => typeCount(TYPE[t]) && !schoolRun(p) ? `<a href="${link('types/' + t + '/', D)}">${esc(TYPE[t].label)}</a>` : esc(TYPE[t].label)).join(', ')}</span>
-      ${programHoods(p).length ? `<span>In <b>${hoodLinks(programHoods(p), D)}</b></span>` : ''}
+      ${programHoods(p).length ? `<span>In <b>${programHoods(p).every(hoodHas) ? hoodLinks(programHoods(p), D) : esc(programHoods(p).join(', '))}</b></span>` : ''}
       <span>Grades <b>${esc(gradeText(p))}</b></span>
       ${p.pickupBy ? `<span>Pick up by <b>${esc(p.pickupBy)}</b></span>` : ''}
       ${revs.length ? `<span><b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'review' : 'reviews'}</span>` : ''}
@@ -918,19 +927,23 @@ ${p.clubs.map(c => `      <article class="club">
       ${gradeStrip(p)}
       <dl>${rows}</dl>
       ${p.note ? `<p class="flag">${esc(p.note)}</p>` : ''}
-      <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(outUrl(p.website, { type: 'website', program: p }))}" target="_blank" rel="noopener">Website</a><a class="btn needs-js" href="${link('board/', D)}?add=${esc(p.id)}">${T(`Add to your week`)}</a></div>
+      <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(outUrl(p.website, { type: 'website', program: p }))}" target="_blank" rel="noopener">Website</a>${camp ? `<a class="btn" href="${link(offPath, D)}#${esc(p.id)}">${T(`See its camp days`)}</a>` : `<a class="btn needs-js" href="${link('board/', D)}?add=${esc(p.id)}">${T(`Add to your week`)}</a>`}</div>
     </article>
     <p class="hint">${T(`Prices, hours and pickup routes change during the year. Confirm with the provider before you enroll.`)}</p>
   </section>
   ${clubsHtml}
   ${alertsBox(D, { program: p, place: 'program', title: T(`Tell me when sign-ups open`), lede: T(`One email when {program} posts a sign-up date, a deadline or a day-off camp. Just this program. For every program at your school, sign up on your school’s page.`, { program: fullName(p) }) })}
-  <section class="section" id="schools">
+  ${camp ? `<section class="section" id="schools">
+    <h2>${T(`Listed for its day camps`)}</h2>
+    <p>${T(`We couldn’t find a weekday after-school program here, so it isn’t on any school’s page. It’s listed because it runs camps on days school is closed, and children from any school can go.`)} <a href="${link(offPath, D)}#${esc(p.id)}">${T(`See its camp days.`)}</a></p>
+    <p>${T(`Does it run something after school that we missed?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
+  </section>` : `<section class="section" id="schools">
     <h2>${T(`Which schools it works for`)}</h2>
     <div class="serves">
 ${schoolRows}
     </div>
     <p>${T(`Does it serve a school that isn’t shown here?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
-  </section>
+  </section>`}
   <section class="section" id="reviews">
     <h2>${T(`What parents say`)}</h2>
     ${revs.length ? `<p><span class="stars" aria-hidden="true">${stars(Math.floor(avg + 0.25))}</span> <b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'review' : 'reviews'}</p>
@@ -953,10 +966,10 @@ ${schoolRows}
       review: revs.map(x => ({ '@type': 'Review', author: { '@type': 'Person', name: x.name }, datePublished: x.date, reviewBody: x.comment, reviewRating: { '@type': 'Rating', ratingValue: x.stars, bestRating: 5, worstRating: 1 } })),
     } : {}),
   };
-  const crumbs = { '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Programs', cfg.siteUrl + '/programs/'], [fullName(p), url]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) };
+  const crumbs = { '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], camp ? ['Day-camp programs', `${cfg.siteUrl}/${offPath}`] : ['Programs', cfg.siteUrl + '/programs/'], [fullName(p), url]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) };
   return layout({
     title: programTitle(p),
-    description: `${fullName(p)}: ${p.what}. ${servedSummary(p)}. Grades, hours, cost, registration and parent reviews.`,
+    description: camp ? `${fullName(p)}: ${p.what}. Day camps on days Philadelphia schools are closed: dates, hours, grades and how to register.` : `${fullName(p)}: ${p.what}. ${servedSummary(p)}. Grades, hours, cost, registration and parent reviews.`,
     pathName: programPath(p), depth: D, current: null, hero, body,
     jsonLd: { '@context': 'https://schema.org', '@graph': [thing, crumbs] },
   });
@@ -1862,11 +1875,14 @@ ${cards}
 const GROUPS = cfg.groups && cfg.contactEmail ? { pilot: cfg.groups.pilot !== false, klaviyoList: cfg.groups.klaviyoList || '', google: /^[0-9a-z-]+\.apps\.googleusercontent\.com$/.test(cfg.groups.googleClientId || '') ? cfg.groups.googleClientId : '' } : null;
 const groupsAttrs = depth => `data-groups data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}" data-api="${PREVIEW ? '' : link('groups/api.php', depth)}"${GROUPS.klaviyoList && ALERTS?.klaviyoKey ? ` data-kl-key="${esc(ALERTS.klaviyoKey)}" data-kl-list="${esc(GROUPS.klaviyoList)}"` : ''}${GROUPS.google && !PREVIEW ? ` data-google="${esc(GROUPS.google)}"` : ''} data-pilot="${GROUPS.pilot ? 1 : 0}"`;
 const groupsScript = depth => `<script src="${link('assets/groups.js', depth)}${GROUPS_V}"></script>`;
-function accountPage() {
-  // Signed out, this is the page that makes the case for an account: what you get on one side, the form on the other.
-  // Signed in, it is the profile. Both headings are in the page and the right one shows before it paints.
-  const hero = `    <h1><span class="when-out">${T(`Your free account`)}</span><span class="when-in">${T(`Your account`)}</span></h1>
-    <p class="lede when-out">${T(`Save your school, your kids’ grades and your week, and share a week with the people who need it. It takes about a minute, and there’s no password to remember.`)}</p>
+function accountPage(register = false) {
+  // Two addresses, one form. /register/ is the page that makes the case for an account: what you get on one side, the
+  // form on the other. /account/ is where you log in and, once signed in, your profile; both of its headings are in
+  // the page and the right one shows before it paints. Someone already signed in who opens /register/ is sent on.
+  const hero = register ? `    <h1>${T(`Create your free account`)}</h1>
+    <p class="lede">${T(`Save your school, your kids’ grades and your week, and share a week with the people who need it. It takes about a minute, and there’s no password to remember.`)}</p>`
+    : `    <h1><span class="when-out">${T(`Log in to your account`)}</span><span class="when-in">${T(`Your account`)}</span></h1>
+    <p class="lede when-out">${T(`Your school, your kids’ grades and your week, on any device. There’s no password to remember.`)} ${T(`New here?`)} <a href="${link('register/', 1)}">${T(`Create a free account`)}</a></p>
     <p class="lede when-in">${T(`Keep your school and your child’s week in a profile, so they’re on every device you sign in on, and share a week with one person. Everything else on the site works without an account.`)}</p>`;
   const art = `<svg viewBox="0 0 520 300" aria-hidden="true" focusable="false">
   <defs><g id="acct-week"><rect width="120" height="152" rx="11" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/><path d="M0 11a11 11 0 0 1 11-11h98a11 11 0 0 1 11 11v17H0z" fill="#0F4D90"/><text x="11" y="19" font-size="11" font-weight="800" fill="#FFFFFF" font-family="Archivo, Arial, sans-serif">Sam’s week</text><circle cx="17" cy="44" r="7.5" fill="#E3EEFA"/><text x="17" y="47.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">M</text><rect x="31" y="38" width="62" height="12" rx="6" fill="#1F7A3A"/><circle cx="17" cy="65" r="7.5" fill="#E3EEFA"/><text x="17" y="68.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">T</text><rect x="31" y="59" width="48" height="12" rx="6" fill="#B4237A"/><circle cx="17" cy="86" r="7.5" fill="#E3EEFA"/><text x="17" y="89.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">W</text><rect x="31" y="80" width="70" height="12" rx="6" fill="#0E7C86"/><circle cx="17" cy="107" r="7.5" fill="#E3EEFA"/><text x="17" y="110.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">T</text><rect x="31" y="101" width="40" height="12" rx="6" fill="#6B3FA0"/><circle cx="17" cy="128" r="7.5" fill="#E3EEFA"/><text x="17" y="131.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">F</text><rect x="31" y="122" width="56" height="12" rx="6" fill="#C2410C"/></g></defs>
@@ -1884,7 +1900,7 @@ function accountPage() {
   const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`Accounts need JavaScript turned on.`)}</p></noscript>
   <div class="acct-grid">
-    <div class="g-page" id="account"></div>
+    <div class="g-page" id="account"${register ? ' data-mode="register"' : ''}></div>
     <section class="acct-why when-out" aria-labelledby="acct-why-h">
       <div class="acct-art">${art}</div>
       <h2 id="acct-why-h">${T(`What an account gives you`)}</h2>
@@ -1908,7 +1924,7 @@ function accountPage() {
   </section>
   <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })) }).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: 'Your account', description: `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
+  return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to save your school, your kids’ grades and your week, and to share a week.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
 }
 // What the group and join pages need to know about programs: names and colors to show, classes to recognise.
 const groupsInfo = () => ({
@@ -1958,14 +1974,14 @@ function groupsApiPhp() {
 function boardPage() {
   const order = [...programs].sort((a, b) => a.name.localeCompare(b.name)).map(p => p.id);   // each program's card number
   const data = {
-    total: programs.length,
+    total: programs.filter(p => !campOnly(p)).length,
     site: cfg.siteUrl, qr: cardQr && cardQr.text.toLowerCase().startsWith(cfg.siteUrl.toLowerCase() + '/') ? cardQr.rows : null,
     suggest: link('suggest/', 1),
     rels: Object.fromEntries(Object.entries(REL).map(([k, v]) => [k, v.pill])),
     types: Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, color: t.color, icon: t.icon }])),
     schools: Object.fromEntries(schools.map(s => [s.id, { name: s.shortName, path: link(s.id + '/', 1) }])),
     themes: Object.fromEntries(THEMES.map(t => [t.id, { types: t.types, mix: !!t.mix, words: t.words || [] }])),
-    programs: Object.fromEntries(programs.map(p => [p.id, {
+    programs: Object.fromEntries(programs.filter(p => !campOnly(p)).map(p => [p.id, {
       name: p.name, hours: p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [], type: p.types[0], no: order.indexOf(p.id) + 1,
       days: p.days || null, offerDays: p.offerDays || null, rate: p.rate || null, types: p.types, grades: p._grades, kw: (p.keywords || []).map(k => k.toLowerCase()), cls: p._cls || null,
       path: link(programPath(p), 1), q: [p.name, ...(p.offers || []), ...(p.keywords || []), ...p.types.map(t => TYPE[t].label)].join(' ').toLowerCase(),
@@ -2650,6 +2666,7 @@ write('assets/edit.js', fs.readFileSync(path.join(ROOT, 'src/edit.js')));
 if (GROUPS) {
   write('assets/groups.js', fs.readFileSync(path.join(ROOT, 'src/groups.js')));
   write('account/index.html', accountPage());
+  write('register/index.html', accountPage(true));
   write('groups/index.html', groupPage());
   write('join/index.html', joinPage());
   if (!PREVIEW) write('groups/api.php', groupsApiPhp());

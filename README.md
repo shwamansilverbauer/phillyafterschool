@@ -64,7 +64,7 @@ Open `data/programs.json`, change the fields, set `lastVerified` to today's date
 Fields worth knowing:
 
 - `grades`: a range like `"K-5"` or `"PK-3"`, a single grade like `"8"`, or `null` when the provider doesn't publish grades.
-- `types`: required. One or more of `aftercare`, `music`, `art`, `movement`, `stem`, `academics`, `games`, `clubs`, `rec-center`.
+- `types`: required. One or more of `aftercare`, `music`, `theater`, `art`, `movement`, `stem`, `academics`, `games`, `clubs`, `rec-center`.
   Drives the type filter and the type pages. The first one listed is the color and icon the program wears on a roster card.
 - `price`: `"free"`, `"paid"` or `"both"` (some of it is free, some paid). Drives the Free / Paid filter. Leave it out when the
   provider doesn't publish a price; the program then shows only under "Any".
@@ -84,7 +84,8 @@ Fields worth knowing:
 - `register.nextTerm`: optional. When sign-ups open for the next term, semester or school year, in a sentence with dates. Leave it out when the provider doesn't say.
 - `register.dates`: optional list of `{ "date": "YYYY-MM-DD", "label": "..." }` for registration openings and deadlines. Each upcoming one gets "Add to calendar" links on the card; past dates drop off by themselves.
 - `note`: the yellow caution box. Use it for anything unconfirmed.
-- `schools`: one entry per school the program serves:
+- `schools`: one entry per school the program serves. Leave it as `{}` only for a day-camp-only listing: a place with `daysOff` that runs nothing on a weekday afternoon (a theater with Saturday classes and holiday camps, say). That listing gets its own page and a card on the day-camp page, and stays off every school page, the A to Z list, the type and neighborhood pages and the roster.
+  Otherwise:
   - `relation`: `onsite`, `pickup` or `nearby`. Use `pickup` only when a source names the school.
   - `note`: a caution that applies to that school only.
   - `distance`: optional, e.g. `"three blocks from Nebinger"`.
@@ -333,9 +334,11 @@ These are the only parts of the site that store anything about a child on the se
   in), a strip above the menu offers "Log in" to anyone signed out, and the support ask ("Help the site keep
   going") moves to the footer and the account page. Which version shows is decided from a flag in the browser, with
   no request: elements carry the class `when-out` or `when-in`.
-- **The account page.** Signed out, `/account/` is a landing page: what an account gives you (with a drawing of a
-  week on a phone and a laptop) beside the form. `?new=1` words the form for someone registering and `?next=board`
-  sends them back to Build your week afterwards. Signed in, the same address is the profile.
+- **Creating an account and logging in.** Two addresses share one form. `/register/` is the landing page for
+  creating an account: what an account gives you (with a drawing of a week on a phone and a laptop) beside the
+  form. `/account/` is where you log in and, signed in, your profile; someone already signed in who opens
+  `/register/` is sent there. `?next=board` on either sends them back to Build your week afterwards. The old
+  address `/account/?new=1` forwards to `/register/`. Neither page loads analytics.
 - **Build your week.** The card comes first. Once someone shares, saves, copies or prints a card, a box asks
   whether they want to keep the week too, and points at the block under the card maker: "Save this week, or share
   it" for someone signed out (Create a free account, Log in), "Keep and share this week" for someone signed in.

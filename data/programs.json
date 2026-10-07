@@ -1042,7 +1042,8 @@
     "types": [
       "music",
       "art",
-      "aftercare"
+      "aftercare",
+      "theater"
     ],
     "keywords": [
       "music",
@@ -1599,6 +1600,187 @@
         "how": "fetch"
       }
     ]
+  },
+  {
+    "id": "music-theatre-philly",
+    "name": "Music Theatre Philly",
+    "what": "Musical theater, acting, voice and dance classes that end in a showcase",
+    "types": [
+      "theater",
+      "music",
+      "movement"
+    ],
+    "keywords": [
+      "musical theatre",
+      "musical theater",
+      "theatre",
+      "drama",
+      "acting",
+      "singing",
+      "voice",
+      "tap",
+      "ballet",
+      "dance",
+      "Broadway",
+      "showcase",
+      "MTP"
+    ],
+    "address": "1301 Locust St",
+    "neighborhoods": [
+      "Washington Square West"
+    ],
+    "grades": "1-8",
+    "gradeNote": "Grades 1–8 here. It also has PreK–K and high-school classes",
+    "hours": "Weekday classes start at 4:30, 5:30 or 6:30 pm and run an hour. The MTP Presents musicals rehearse for about two hours from 4:30.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu"
+    ],
+    "daysNote": "Depends on the class and the grade. There are Saturday and Sunday morning classes too.",
+    "offers": [
+      "Musical Theatre",
+      "Acting",
+      "Tap Dance",
+      "Broadway Ballet",
+      "Broadway Dance",
+      "Group Voice Lessons",
+      "MTP Presents musical"
+    ],
+    "offerDays": {
+      "Musical Theatre": [
+        "mon"
+      ],
+      "Acting": [
+        "mon"
+      ],
+      "Tap Dance": [
+        "thu"
+      ],
+      "Broadway Ballet": [
+        "thu"
+      ],
+      "Broadway Dance": [
+        "tue"
+      ],
+      "Group Voice Lessons": [
+        "tue",
+        "wed"
+      ],
+      "MTP Presents musical": [
+        "tue",
+        "wed"
+      ]
+    },
+    "cost": "$595 a class for the spring session; the MTP Presents musicals are $675. 20% off two classes, 25% off three or more. Scholarships and payment plans are available.",
+    "rate": {
+      "per": "term",
+      "eachDay": [
+        595,
+        675
+      ],
+      "extra": "The spring 2027 session price for one class a week. The high end is an MTP Presents musical."
+    },
+    "price": "paid",
+    "phone": "445-223-2683",
+    "email": "",
+    "website": "https://www.musictheatrephilly.com/about-mtp-classes",
+    "register": {
+      "how": "online",
+      "url": "https://www.musictheatrephilly.com/about-mtp-classes",
+      "label": "See classes",
+      "note": "Each class has its own Register button on the page for its grade.",
+      "nextTerm": "The class pages list the spring 2027 session: January 31 to June 4 for grades 1–4 and January 10 to June 4 for grades 5–8, with showcases on June 5 and 6."
+    },
+    "note": "The pages we read list the spring 2027 session, so ask whether a fall class still has room. There is no school pickup. Tuesday and Wednesday voice lessons and musicals are split by grade: grades 1–4 on Tuesday, grades 5–8 on Wednesday.",
+    "sources": [
+      {
+        "label": "Music Theatre Philly grades 1–4",
+        "url": "https://www.musictheatrephilly.com/grades-1-4"
+      },
+      {
+        "label": "Music Theatre Philly grades 5–8",
+        "url": "https://www.musictheatrephilly.com/grades-5-8"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "schools": {
+      "mccall": {
+        "relation": "nearby",
+        "distance": "about a 12-minute walk west of McCall",
+        "checked": "2026-10-07"
+      }
+    }
+  },
+  {
+    "id": "arden-drama-school",
+    "name": "Arden Drama School",
+    "what": "Arden Theatre’s school: full-day theater camps on days off, and Saturday classes",
+    "types": [
+      "theater"
+    ],
+    "keywords": [
+      "theatre",
+      "drama",
+      "acting",
+      "musical theatre",
+      "musical theater",
+      "play",
+      "Play-in-a-Day",
+      "Arden Theatre",
+      "Old City",
+      "camp"
+    ],
+    "address": "40 N 2nd St",
+    "neighborhoods": [
+      "Old City"
+    ],
+    "grades": "K-8",
+    "gradeNote": "Day camps for K–5 and for 6–8. Saturday classes run K–12",
+    "hours": "Nothing on weekday afternoons. Day camps run 9 am to 5 pm; weekly classes meet on Saturdays.",
+    "daysOff": {
+      "summary": "Play-in-a-Day for grades K–5: the group makes up and performs its own play, 9 am to 5 pm (9 to 4 on December 31). One-day musical theatre workshops for grades 6–8 run 9:30 am to 4:30 pm on the same days through December 29. Financial aid is available.",
+      "url": "https://ardentheatre.org/play-in-a-day",
+      "dates": [
+        "2026-10-12",
+        "2026-11-03",
+        "2026-11-11",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31"
+      ],
+      "sources": [
+        {
+          "label": "Arden Play-in-a-Day",
+          "url": "https://ardentheatre.org/play-in-a-day"
+        }
+      ]
+    },
+    "cost": "Not on the pages we could read. Each date’s price shows on Arden’s booking page.",
+    "phone": "215-922-1122",
+    "email": "",
+    "website": "https://ardentheatre.org/arden-drama-school",
+    "register": {
+      "how": "online",
+      "url": "https://ardentheatre.org/play-in-a-day",
+      "label": "See dates",
+      "note": "Each camp day has its own booking link on Arden’s page."
+    },
+    "note": "Arden’s weekly classes are on Saturdays (grades K–12, eight weeks from September 12), so there is nothing here for a weekday afternoon.",
+    "sources": [
+      {
+        "label": "Arden Drama School",
+        "url": "https://ardentheatre.org/arden-drama-school"
+      },
+      {
+        "label": "Arden Play-in-a-Day",
+        "url": "https://ardentheatre.org/play-in-a-day"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "schools": {}
   },
   {
     "id": "coco-academy",

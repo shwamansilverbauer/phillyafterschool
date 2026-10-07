@@ -270,6 +270,9 @@
   var account = document.getElementById('account');
   if (account) {
     var aq = query();
+    var registering = account.getAttribute('data-mode') === 'register';   // the page at /register/
+    // The old address for creating an account was /account/?new=1. It still works: it goes to the real page.
+    if (aq.new && !registering && !signedInHint()) { location.replace(page('register/') + (aq.next === 'board' ? '?next=board' : '')); return; }
     if (aq.groups) set('pas-groups', '1');   // while groups are a pilot, this is the way in for someone who wasn't invited to one
     var ainfo = {}; try { ainfo = JSON.parse(document.getElementById('groups-data').textContent); } catch (e) { /* older page */ }
     var groupsOn = host.getAttribute('data-pilot') !== '1' || get('pas-groups') === '1';
@@ -287,7 +290,7 @@
       var box = el('div', 'panel'); account.appendChild(box);
       signInBox(box, wantNext, function (d) { if (wantNext === 'board' && d.user.ready) goNext('board'); else drawProfile(d); }, 'One step for both: if you’re new, this makes your account. No password. With email, we send a 6-digit code and you type it here.');
       var sh = box.querySelector('h3');
-      if (sh) sh.textContent = aq.new ? 'Create your account' : 'Log in, or create an account';
+      if (sh) sh.textContent = registering ? 'Create your account' : 'Log in, or create an account';
       var have = el('div', 'panel g-callout');
       have.appendChild(el('h2', null, 'Did someone send you an invitation?'));
       have.appendChild(el('p', null, 'Tap the link in the email. Or start here: it walks you through the code and signing in with the address the invitation was sent to.'));
@@ -295,6 +298,7 @@
       account.appendChild(have);
     };
     var drawProfile = function (d) {
+      if (registering) { location.replace(page('account/') + (wantNext === 'board' ? '?next=board' : '')); return; }   // signed in: the profile lives at /account/
       account.textContent = '';
       var me = d.user, groups = d.groups || [];
       if (!me.ready) {   // a new account: first and last name, then the rest
@@ -1119,7 +1123,7 @@
         if (signedInHint() && !me && !checked) { share.appendChild(el('p', 'hint', 'Checking your account…')); return; }
         share.appendChild(el('p', null, 'A free account keeps ' + who + ' in your profile, so it’s on your phone and your computer, and lets you share it with one person, like a grandparent or a sitter, who signs in to see it.'));
         var row0 = el('div', 'actions');
-        var si = el('a', 'btn primary', 'Create a free account'); si.href = page('account/') + '?new=1&next=board'; row0.appendChild(si);
+        var si = el('a', 'btn primary', 'Create a free account'); si.href = page('register/') + '?next=board'; row0.appendChild(si);
         var li0 = el('a', 'btn', 'Log in'); li0.href = page('account/') + '?next=board'; row0.appendChild(li0);
         if (groupsOn()) { var inv0 = btn('btn', 'I was invited to a group'); inv0.addEventListener('click', toJoin()); row0.appendChild(inv0); }
         share.appendChild(row0);
