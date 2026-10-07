@@ -93,10 +93,14 @@ Fields worth knowing:
     program's own `price` and `cost` on this school's page, and the program page shows the school's `cost` under that school.
   - `address`: optional, when a provider sends this school's children to a different location.
   - `sources`: optional, extra sources that apply to this school only (the school's own aftercare sheet, for example).
+  - `checked`: the day this program-to-school link was last confirmed against a source (`YYYY-MM-DD`). `lastVerified` stays
+    the day the listing's own details (hours, price, registration) were last checked.
+- `pickupLists`: the provider's pickup lists as they were last read, one entry per list the provider publishes. See
+  "Keeping it current".
 
 ## Add a school
 
-1. Add a record to `data/schools.json` (copy Nebinger's and change it). The `id` becomes the URL: `"meredith"` gives `/meredith/`. Optional fields: `dismissalNote` (staggered dismissal times), `checkedNoPickup` (providers checked that don't serve the school) and `alsoListed` (programs the school names that haven't been confirmed yet).
+1. Add a record to `data/schools.json` (copy Nebinger's and change it). The `id` becomes the URL: `"meredith"` gives `/meredith/`. `aliases` lists the other names providers use for the school ("Jackson" for Coppin, "Vare Washington" without the hyphen), so the build can tell whether a provider's pickup list names it. Optional fields: `dismissalNote` (staggered dismissal times), `checkedNoPickup` (providers checked that don't serve the school) and `alsoListed` (programs the school names that haven't been confirmed yet).
 2. In `data/programs.json`, add that school's `id` under `schools` for every program that serves it. Most providers are already there; they just need the new tag.
 3. Add records for programs that are new (the school's own clubs and on-site care).
 4. Commit to `main`.
@@ -425,7 +429,45 @@ show what parents want that isn't listed.
 
 ## Keeping it current
 
-`dist/data/programs.json` is published with the site, so a scheduled check can read exactly
-what the site shows, compare each listing to its sources, and report what changed. Review
-the report and merge the changes you agree with. Busy times: March to May (next year's registration opens)
+A check of the listings is a comparison, not fresh research. Three things in the data make that possible, and the
+build turns them into one worklist, `dist/data/check.json`, published with the site next to `programs.json`.
+
+- **Pickup lists as last read.** A program's `pickupLists` holds each list of schools its provider publishes:
+  `{ "where": "Queen Village, 530 Bainbridge St", "text": "Meredith, Jackson, CCS, Nebinger, …", "url": "https://…",
+  "read": "2026-10-06", "how": "browser" }`. `text` is the list in the page's own words. `how` is how it was read
+  that day: `browser`, `fetch`, or `person` (someone pasted it). `by` is `provider` unless a school (`school`) or
+  someone else (`third-party`, such as a magazine's roundup) published it. `where` says which location or section
+  when a provider has more than one list. `note` is for anything odd about the reading.
+- **A date on every link.** `schools.<id>.checked` is the day that program-to-school link was last confirmed.
+- **Pages that can't be trusted through a plain fetch.** `data/reading.json` lists sites or pages that need a real
+  browser (`"how": "browser"`: a JavaScript app, or a site that has served an old copy) or a person (`"how":
+  "person"`: it blocks automated reading), each with a `why`. `match` is the start of the address without
+  `https://`. This exists because it has happened: on October 6, 2026 a plain fetch of Beehive's page returned its
+  2023–24 pickup list while a browser showed the 2026–27 one.
+
+`check.json` has three parts:
+
+- `links`: every program-to-school link with its `checked` date. Pickup links also say what backs them (`basis`):
+  `list` (the school is named in a stored list from the provider or the school), `own-source` (the link has its own
+  source, such as the school's aftercare sheet), `third-party-list` (only someone else's roundup names it), or
+  `none`. `notOnProviderList` marks a link whose provider publishes a list that doesn't name the school. The order is
+  what needs attention first: `none`, then `notOnProviderList`, then the oldest `checked`. The build prints a note
+  for the first two.
+- `pages`: every page to read, once each however many listings lean on it, with how to read it, which programs
+  depend on it, and what its pickup list said last time.
+- `summary`: the counts.
+
+How a check uses it:
+
+1. Read each page in `pages` once. For a page marked `browser` or `person`, a plain fetch is not evidence: report
+   what it returned and leave the data alone unless a browser or a person read it.
+2. Where a page has stored `lists`, compare. Same schools: set the list's `read`, and `checked` on the links it
+   names, to today. Different: update `text`, and treat every school added or dropped as a decision for the site's
+   owner. A school that has gone from a list is flagged, never silently removed.
+3. A provider that publishes a pickup list and has none stored gets one.
+4. If a page that used to read fine returns something implausible (an earlier school year, a much shorter list than
+   the stored one), add it to `data/reading.json` rather than trusting it.
+5. Set `lastVerified` only on listings whose own details were re-read, and `checked` only on links confirmed.
+
+Review the report and merge the changes you agree with. Busy times: March to May (next year's registration opens)
 and late August (rec centers post their listings).

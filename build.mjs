@@ -139,9 +139,74 @@ for (const p of programs) {
     if (l.registerUrl && !isUrl(l.registerUrl)) errors.push(`${at}: registerUrl for ${sid} must be an https URL`);
     if (l.price !== undefined && !['free', 'paid', 'both'].includes(l.price)) errors.push(`${at}: price for ${sid} must be "free", "paid" or "both"`);
     for (const s of l.sources || []) if (!isUrl(s.url)) errors.push(`${at}: source "${s.label}" for ${sid} needs an https URL`);
+    if (l.checked !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(l.checked)) errors.push(`${at}: checked for ${sid} must be YYYY-MM-DD`);
     if (p.register?.how === 'online' && !isUrl(l.registerUrl || p.register.url)) errors.push(`${at}: online registration needs a URL`);
   }
   if (['phone', 'school'].includes(p.register?.how) && !p.phone) errors.push(`${at}: register by phone needs a phone number`);
+  // The provider's pickup lists, kept as they were last read, so the next check is a comparison and not fresh research.
+  if (p.pickupLists !== undefined) {
+    if (!Array.isArray(p.pickupLists) || !p.pickupLists.length) errors.push(`${at}: pickupLists must be a list`);
+    else for (const x of p.pickupLists) {
+      if (!x || typeof x.text !== 'string' || !x.text.trim()) { errors.push(`${at}: every pickup list needs its text`); continue; }
+      if (!isUrl(x.url)) errors.push(`${at}: a pickup list needs the https URL it was read from`);
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(x.read || '')) errors.push(`${at}: a pickup list needs "read", the date it was read (YYYY-MM-DD)`);
+      if (!['browser', 'fetch', 'person'].includes(x.how)) errors.push(`${at}: a pickup list's "how" must be browser, fetch or person`);
+      if (x.by !== undefined && !['provider', 'school', 'third-party'].includes(x.by)) errors.push(`${at}: a pickup list's "by" must be provider, school or third-party`);
+      for (const f of ['where', 'note']) if (x[f] !== undefined && (typeof x[f] !== 'string' || !x[f].trim())) errors.push(`${at}: a pickup list's ${f} must be text`);
+    }
+  }
+}
+// Pages that can't be trusted through a plain fetch: some serve an old copy, some are JavaScript apps, some block
+// automated reading. The monthly check reads this before deciding what a page "says".
+const reading = fs.existsSync(path.join(ROOT, 'data/reading.json')) ? readJson('data/reading.json') : [];
+if (!Array.isArray(reading)) errors.push('data/reading.json must be a list');
+else for (const r of reading) {
+  if (!r || typeof r.match !== 'string' || !r.match.trim() || /^https?:/.test(r.match)) errors.push('data/reading.json: every entry needs "match", a site or page address without https://');
+  else if (!['browser', 'person'].includes(r.how)) errors.push(`data/reading.json: "${r.match}" how must be browser or person`);
+  else if (typeof r.why !== 'string' || !r.why.trim()) errors.push(`data/reading.json: "${r.match}" needs a "why"`);
+}
+const howToRead = url => { const bare = String(url).replace(/^https?:\/\/(www\.)?/, ''); return (Array.isArray(reading) ? reading : []).find(r => r && typeof r.match === 'string' && bare.startsWith(r.match.replace(/^www\./, ''))) || null; };
+// Is this school named in a stored pickup list? Names are matched loosely ("Vare Washington" is "Vare-Washington").
+const flat = v => String(v).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+const namesSchool = (text, s) => [s.shortName, ...(s.aliases || [])].some(a => (' ' + flat(text) + ' ').includes(' ' + flat(a) + ' '));
+// What the monthly check works from: every page to read (once, however many listings lean on it), what it said last
+// time, and every program-to-school link with the date it was last confirmed and what backs it.
+function checkList() {
+  const pages = new Map();
+  const page = url => { if (!pages.has(url)) { const r = howToRead(url); pages.set(url, { url, how: r ? r.how : 'fetch', ...(r ? { why: r.why } : {}), programs: [], lists: [] }); } return pages.get(url); };
+  const links = [];
+  for (const p of programs) {
+    const mine = new Set([p.website, p.register?.url, ...(p.sources || []).map(x => x.url), ...(p.daysOff?.sources || []).map(x => x.url), p.daysOff?.url,
+      ...Object.values(p.schools).flatMap(l => [l.registerUrl, ...(l.sources || []).map(x => x.url)]), ...(p.pickupLists || []).map(x => x.url)].filter(isUrl));
+    for (const u of mine) page(u).programs.push(p.id);
+    for (const x of p.pickupLists || []) page(x.url).lists.push({ program: p.id, ...(x.where ? { where: x.where } : {}), text: x.text, read: x.read, how: x.how, by: x.by || 'provider' });
+    for (const [sid, l] of Object.entries(p.schools)) {
+      const s = schools.find(x => x.id === sid);
+      const row = { program: p.id, school: sid, relation: l.relation, checked: l.checked || p.lastVerified };
+      if (l.relation === 'pickup') {
+        const named = (p.pickupLists || []).filter(x => namesSchool(x.text, s));
+        const own = named.find(x => (x.by || 'provider') !== 'third-party') || null;
+        const hit = own || named[0] || null;
+        row.basis = own ? 'list' : (l.sources || []).length ? 'own-source' : hit ? 'third-party-list' : 'none';
+        if (hit) row.list = { ...(hit.where ? { where: hit.where } : {}), read: hit.read, how: hit.how, by: hit.by || 'provider' };
+        // The provider publishes a list, it has been read, and this school isn't on it.
+        if (!own && (p.pickupLists || []).some(x => (x.by || 'provider') === 'provider')) row.notOnProviderList = true;
+      }
+      links.push(row);
+    }
+  }
+  const rank = r => (r.basis === 'none' ? 0 : r.notOnProviderList ? 1 : 2);
+  links.sort((a, b) => rank(a) - rank(b) || a.checked.localeCompare(b.checked) || a.program.localeCompare(b.program) || a.school.localeCompare(b.school));
+  const pickup = links.filter(r => r.relation === 'pickup');
+  return {
+    about: 'Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, "Keeping it current", says how to use it.',
+    summary: { pages: pages.size, pagesNeedingABrowser: [...pages.values()].filter(x => x.how === 'browser').length, pagesNeedingAPerson: [...pages.values()].filter(x => x.how === 'person').length,
+      links: links.length, pickupLinks: pickup.length, pickupOnAStoredList: pickup.filter(r => r.basis === 'list').length, pickupFromAThirdPartyList: pickup.filter(r => r.basis === 'third-party-list').length,
+      pickupOnItsOwnSource: pickup.filter(r => r.basis === 'own-source').length, pickupWithNothingBehindIt: pickup.filter(r => r.basis === 'none').length, pickupNotOnTheProvidersList: pickup.filter(r => r.notOnProviderList).length,
+      oldestCheck: links.map(r => r.checked).sort()[0] || '' },
+    links,
+    pages: [...pages.values()].sort((a, b) => b.programs.length - a.programs.length || a.url.localeCompare(b.url)),
+  };
 }
 // A school's own clubs can be listed one by one under "clubs": each with a name and, when the school says, what it
 // is, its days, time, grades, season, sign-up status, a note, and tags (program types and keywords, for the themed
@@ -2564,6 +2629,11 @@ if (!PREVIEW) {
   // Public copy of the data, so the monthly check (or anyone) can read exactly what the site shows.
   write('data/programs.json', JSON.stringify(programs.map(({ _grades, _cls, ...p }) => (p.clubs ? { ...p, clubs: p.clubs.map(({ _grades: g, ...c }) => c) } : p)), null, 2));
   write('data/schools.json', JSON.stringify(schools, null, 2));
+  const check = checkList();
+  write('data/check.json', JSON.stringify(check, null, 2));   // the monthly check's worklist
+  const loose = check.links.filter(r => r.basis === 'none'), off = check.links.filter(r => r.notOnProviderList && r.basis !== 'none');
+  if (loose.length) console.log(`Note: ${loose.length} pickup link(s) rest on no stored list and no source of their own: ${loose.map(r => `${r.program} → ${r.school}`).join(', ')}.`);
+  if (off.length) console.log(`Note: ${off.length} pickup link(s) are not on the provider's own list as last read: ${off.map(r => `${r.program} → ${r.school}`).join(', ')}.`);
   write('data/alerts.json', JSON.stringify(alertsFeed(), null, 2));   // read by scripts/send-alerts.mjs once a day
   const latest = programs.map(p => p.lastVerified).sort().pop();
   const urls = [['', latest], ['schools/', latest], ...schools.map(s => [s.id + '/', latest]), ['types/', latest], ...liveTypes().map(t => [`types/${t.id}/`, latest]), ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]), ['neighborhoods/', latest], ...hoods.map(h => [hoodPath(h), latest]),

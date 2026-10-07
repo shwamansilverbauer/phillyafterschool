@@ -1,0 +1,38 @@
+[
+  {
+    "match": "beehiveatbok.com",
+    "how": "browser",
+    "why": "On 2026-10-06 a plain fetch was served the 2023–24 page (pickup from Coppin and Southwark only) while a browser showed the 2026–27 lists.",
+    "seen": "2026-10-06"
+  },
+  {
+    "match": "cocoacademyphl.com/afterschool-bellavista",
+    "how": "person",
+    "why": "A plain fetch got HTTP 429 on 2026-10-06 and the browser extension is not allowed on the site. Josh pastes the page text.",
+    "seen": "2026-10-06"
+  },
+  {
+    "match": "phila.gov/parks-rec-finder",
+    "how": "browser",
+    "why": "A JavaScript app: a plain fetch returns no listings.",
+    "seen": "2026-10-06"
+  },
+  {
+    "match": "phila.gov/ost/program-locator",
+    "how": "browser",
+    "why": "A JavaScript app: a plain fetch returns no listings.",
+    "seen": "2026-10-06"
+  },
+  {
+    "match": "gotrphiladelphia.org/locations",
+    "how": "browser",
+    "why": "Team sites are an embedded map that does not come through a plain fetch.",
+    "seen": "2026-10-06"
+  },
+  {
+    "match": "skilladelphia.org",
+    "how": "person",
+    "why": "The site blocks automated reading.",
+    "seen": "2026-10-06"
+  }
+]
