@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>(function(){var h=location.hash;if(!/(^#|&)(mon|tue|wed|thu|fri)=/.test(h))return;window.__pasShared=h;try{sessionStorage.setItem('pas-shared',h)}catch(e){}try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}})();</script>
+<script>(function(){var h=location.hash;if(!/(^#|&)(mon|tue|wed|thu|fri)=/.test(h))return;window.__pasShared=h;try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}})();</script>
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-MKNWQ3BC');</script>
 <title>Build your week | Philly After School</title>
 <meta name="description" content="Put together a Monday to Friday after-school roster for each child from Philly After School listings and share it with a link.">
@@ -25,11 +25,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=219c47a2">
+<link rel="stylesheet" href="../assets/site.css?v=58c24b9d">
 </head>
 <body>
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js'</script>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
 <header class="band">
+  <div class="topbar"><div class="in">
+    <a class="when-out" href="../account/">Log in</a><a class="when-out top-reg" href="../account/?new=1">Register</a>
+    <a class="when-in" href="../account/">Your account</a>
+  </div></div>
   <div class="in bar">
     <a class="brand" href="../"><span class="bus-mark"></span>Philly After School</a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true"></span>Menu</button>
@@ -44,10 +48,10 @@
 <main class="wrap">
 <div data-board-page data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask"><span data-copy="7bf39f5748">The roster needs JavaScript turned on.</span></p></noscript>
-  <div class="panel" id="board-shared" data-edit-reveal="Shown when someone opens a roster a friend shared:" hidden>
-    <h2><span data-copy="edf718ef2e">Someone shared this week with you</span></h2>
-    <p id="board-shared-text">It isn’t saved on your device yet.</p>
-    <div class="actions"><button type="button" class="btn primary" id="board-adopt">Save it to my rosters</button><button type="button" class="btn" id="board-mine">See my own rosters</button></div>
+  <div class="panel" id="board-retired" data-edit-reveal="Shown when someone opens an old link to a week:" hidden>
+    <h2><span data-copy="6058b0c1c4">That link doesn’t open a week any more</span></h2>
+    <p><span data-copy="a394925693">Weeks used to be shared as a link that anyone could open. They aren’t now. Ask the person who sent it to share the week with your email address instead: you’ll get an invitation, and it will open once you sign in.</span></p>
+    <div class="actions"><button type="button" class="btn" id="board-retired-ok">OK</button></div>
   </div>
   <section class="section">
     <div class="kid-bar" id="kid-bar">
@@ -129,21 +133,16 @@
   </section>
   <p class="nextoff"><b data-next-off="[{&quot;u&quot;:&quot;2026-10-09&quot;,&quot;w&quot;:&quot;Fri, Oct 9&quot;,&quot;n&quot;:&quot;Staff professional development&quot;,&quot;c&quot;:5},{&quot;u&quot;:&quot;2026-10-12&quot;,&quot;w&quot;:&quot;Mon, Oct 12&quot;,&quot;n&quot;:&quot;Indigenous Peoples’ Day&quot;,&quot;c&quot;:7},{&quot;u&quot;:&quot;2026-11-03&quot;,&quot;w&quot;:&quot;Tue, Nov 3&quot;,&quot;n&quot;:&quot;Election Day&quot;,&quot;c&quot;:7},{&quot;u&quot;:&quot;2026-11-11&quot;,&quot;w&quot;:&quot;Wed, Nov 11&quot;,&quot;n&quot;:&quot;Veterans Day&quot;,&quot;c&quot;:7},{&quot;u&quot;:&quot;2026-11-16&quot;,&quot;w&quot;:&quot;Mon, Nov 16&quot;,&quot;n&quot;:&quot;Report card conferences&quot;,&quot;c&quot;:5},{&quot;u&quot;:&quot;2026-11-25&quot;,&quot;w&quot;:&quot;Wed, Nov 25&quot;,&quot;n&quot;:&quot;Staff professional development&quot;,&quot;c&quot;:3},{&quot;u&quot;:&quot;2026-11-27&quot;,&quot;w&quot;:&quot;Nov 26 to Nov 27&quot;,&quot;n&quot;:&quot;Thanksgiving recess&quot;,&quot;c&quot;:0},{&quot;u&quot;:&quot;2027-01-01&quot;,&quot;w&quot;:&quot;Dec 23 to Jan 1&quot;,&quot;n&quot;:&quot;Winter recess&quot;,&quot;c&quot;:2},{&quot;u&quot;:&quot;2027-01-15&quot;,&quot;w&quot;:&quot;Fri, Jan 15&quot;,&quot;n&quot;:&quot;Staff professional development&quot;,&quot;c&quot;:3},{&quot;u&quot;:&quot;2027-01-18&quot;,&quot;w&quot;:&quot;Mon, Jan 18&quot;,&quot;n&quot;:&quot;Dr. Martin Luther King Jr. Day&quot;,&quot;c&quot;:1},{&quot;u&quot;:&quot;2027-01-29&quot;,&quot;w&quot;:&quot;Fri, Jan 29&quot;,&quot;n&quot;:&quot;Report card conferences&quot;,&quot;c&quot;:3},{&quot;u&quot;:&quot;2027-02-12&quot;,&quot;w&quot;:&quot;Fri, Feb 12&quot;,&quot;n&quot;:&quot;Staff professional development&quot;,&quot;c&quot;:3}]" hidden></b> <a href="../days-off/"><span data-copy="743e0828a8">Plan the days off too</span></a></p>
   <p class="hint alerts-line"><span data-copy="7efefe9180">Want next term’s sign-up dates before they open?</span> <a href="../alerts/"><span data-copy="d63b67808e">Get the dates by email.</span></a></p>
-  <section class="section group-share" id="group-share" data-groups data-root="../" data-index="" data-api="../groups/api.php" data-kl-key="RJsBTu" data-kl-list="Wib7TV" data-pilot="1" hidden></section>
+  <section class="section group-share" id="group-share" data-groups data-root="../" data-index="" data-api="../groups/api.php" data-kl-key="RJsBTu" data-kl-list="Wib7TV" data-google="420915102949-7gfu5o00gn6oionaijid2jak6om38rda.apps.googleusercontent.com" data-pilot="1" hidden></section>
   <section class="board-tools" id="board-tools" hidden>
     <div class="actions">
       <button type="button" class="btn primary" id="board-share" hidden>Share</button>
-      <button type="button" class="btn" id="board-copy-link">Copy link</button>
       <button type="button" class="btn" id="board-copy-text">Copy as text</button>
       <a class="btn" id="board-email" href="mailto:">Email it to myself</a>
       <button type="button" class="clear" id="board-clear">Clear this roster</button>
     </div>
     <p class="hint" id="board-status" aria-live="polite"></p>
-    <div class="field">
-      <label for="board-link"><span data-copy="b0688fdc15">Link to this roster</span></label>
-      <input id="board-link" type="text" readonly>
-      <span class="hint"><span data-copy="f7ce857f48">Rosters save automatically on this device. The link is the copy you can keep anywhere: anyone who opens it sees this roster, and it’s how you move one to another phone or computer.</span></span>
-    </div>
+    <p class="hint"><span data-copy="839e6af28b">Rosters save automatically on this device. To have one on another phone or computer, or to share it with someone, use “Keep and share this week” above.</span></p>
   </section>
   <section class="section card-maker" id="card-maker" hidden>
     <h2 tabindex="-1"><span data-copy="14ec1581e9">Make it a card</span></h2>
@@ -210,6 +209,7 @@
         <li><a href="../board/"><span data-copy="55cf06857b">After-school schedule</span></a></li>
         <li><a href="../days-off/#plan"><span data-copy="ef8a7dc9b4">Day-camp schedule</span></a></li>
         <li><a href="../alerts/"><span data-copy="d4819c397f">Dates by email</span></a></li>
+        <li><a href="../account/"><span data-copy="4ab2910209">Your account</span></a></li>
       </ul>
     </div>
     <div>
@@ -230,7 +230,7 @@
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=f007d2af" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}"></script>
-<script src="../assets/groups.js?v=4f5f33bb"></script>
+<script src="../assets/site.js?v=ceae995d" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/groups.js?v=557d4e61"></script>
 </body>
 </html>

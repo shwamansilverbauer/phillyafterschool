@@ -24,11 +24,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=219c47a2">
+<link rel="stylesheet" href="../assets/site.css?v=58c24b9d">
 </head>
 <body>
-<script>document.documentElement.className+=' js'</script>
+<script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
 <header class="band">
+  <div class="topbar"><div class="in">
+    <a class="when-out" href="../account/">Log in</a><a class="when-out top-reg" href="../account/?new=1">Register</a>
+    <a class="when-in" href="../account/">Your account</a>
+  </div></div>
   <div class="in bar">
     <a class="brand" href="../"><span class="bus-mark"></span>Philly After School</a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true"></span>Menu</button>
@@ -41,7 +45,7 @@
   
 </header>
 <main class="wrap">
-<div data-groups data-root="../" data-index="" data-api="../groups/api.php" data-kl-key="RJsBTu" data-kl-list="Wib7TV" data-clarity-mask="true" style="display:contents">
+<div data-groups data-root="../" data-index="" data-api="../groups/api.php" data-kl-key="RJsBTu" data-kl-list="Wib7TV" data-google="420915102949-7gfu5o00gn6oionaijid2jak6om38rda.apps.googleusercontent.com" data-pilot="1" data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask"><span data-copy="1020e6eb49">Groups need JavaScript turned on.</span></p></noscript>
   <div class="g-page" id="group"></div>
   <script type="application/json" id="groups-data">{"site":"Philly After School","types":{"aftercare":{"color":"#0F4D90"},"music":{"color":"#6B3FA0"},"art":{"color":"#C2410C"},"movement":{"color":"#1F7A3A"},"stem":{"color":"#0E7C86"},"academics":{"color":"#A16207"},"games":{"color":"#B4237A"},"clubs":{"color":"#2166B8"},"rec-center":{"color":"#3F6212"}},"programs":{"imagine-that-philly":{"name":"Imagine That Philly","type":"aftercare","offers":[]},"nebinger-clubs":{"name":"School clubs and teams","type":"clubs","offers":["Art Studio","Song Writing","Garden Club","Rock Band","Chess","Debate Club","Student Government","Basketball","Soccer","Cheerleading"]},"girls-on-the-run":{"name":"Girls on the Run","type":"movement","offers":[]},"nebinger-arts-partners":{"name":"Arts partners and Science Olympiad","type":"clubs","offers":[]},"meredith-clubs":{"name":"Meredith after-school clubs","type":"clubs","offers":["Arts and Crafts","Cheer Club","Chess","Choir","Debate Club","Decompression Club","Drama and Improv Club","Nature Club","Newspaper","Painting Club","Playwriting Club","Rock Band","Science Club","Sports Book Club","Stage Crew","Students Run Philly Style"]},"coppin-clubs":{"name":"School clubs and ensembles","type":"clubs","offers":["Robotics","Chess","Homework Club","Rock Band","Art","Vocal Music","Orchestra","Concert Band"]},"zhang-sah":{"name":"Zhang Sah","type":"movement","offers":[]},"shot-tower-rec":{"name":"Shot Tower Recreation Center","type":"rec-center","offers":[]},"philly-inmovement":{"name":"Philly InMovement: MOVE After School","type":"movement","offers":["Gymnastics","Aerials"]},"settlement-kaleidoscope-plus":{"name":"Settlement Music School: Kaleidoscope Plus","type":"music","offers":[]},"philly-art-center-qv":{"name":"Philly Art Center, Queen Village","type":"art","offers":[]},"old-pine":{"name":"Old Pine Community Center","type":"aftercare","offers":[]},"butchers-sew-shop":{"name":"Butcher’s Sew Shop Junior","type":"art","offers":[]},"mister-johns-music":{"name":"Mister John’s Music","type":"music","offers":["Piano","Guitar","Percussion","Choir"]},"coco-academy":{"name":"CoCo Academy","type":"stem","offers":[]},"queen-and-rook":{"name":"Queen & Rook Game Cafe","type":"games","offers":[]},"beehive-at-bok":{"name":"Beehive at Bok","type":"aftercare","offers":[]},"movemakers":{"name":"MoveMakers Philly","type":"movement","offers":["Hip hop","Breaking","Martial arts","Parkour","Acrobatics"]},"kids-on-12th":{"name":"Kids on 12th","type":"aftercare","offers":[]},"columbus-square-rec":{"name":"Columbus Square Recreation Center","type":"rec-center","offers":[]},"hawthorne-cultural-center":{"name":"Hawthorne Cultural Center","type":"rec-center","offers":[]},"starr-garden-rec":{"name":"Starr Garden Recreation Center","type":"rec-center","offers":[]},"palumbo-rec":{"name":"Palumbo Recreation Center","type":"rec-center","offers":[]},"mighty-writers-el-futuro":{"name":"Mighty Writers El Futuro","type":"academics","offers":[]},"free-library-leap":{"name":"Free Library LEAP","type":"academics","offers":[]},"fleisher-art-memorial":{"name":"Fleisher Art Memorial","type":"art","offers":[]},"makom-community":{"name":"Makom Community","type":"aftercare","offers":[]}}}</script>
@@ -78,6 +82,7 @@
         <li><a href="../board/"><span data-copy="55cf06857b">After-school schedule</span></a></li>
         <li><a href="../days-off/#plan"><span data-copy="ef8a7dc9b4">Day-camp schedule</span></a></li>
         <li><a href="../alerts/"><span data-copy="d4819c397f">Dates by email</span></a></li>
+        <li><a href="../account/"><span data-copy="4ab2910209">Your account</span></a></li>
       </ul>
     </div>
     <div>
@@ -98,7 +103,7 @@
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=f007d2af" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}"></script>
-<script src="../assets/groups.js?v=4f5f33bb"></script>
+<script src="../assets/site.js?v=ceae995d" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/groups.js?v=557d4e61"></script>
 </body>
 </html>

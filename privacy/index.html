@@ -24,11 +24,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=219c47a2">
+<link rel="stylesheet" href="../assets/site.css?v=58c24b9d">
 </head>
 <body>
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js'</script>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
 <header class="band">
+  <div class="topbar"><div class="in">
+    <a class="when-out" href="../account/">Log in</a><a class="when-out top-reg" href="../account/?new=1">Register</a>
+    <a class="when-in" href="../account/">Your account</a>
+  </div></div>
   <div class="in bar">
     <a class="brand" href="../"><span class="bus-mark"></span>Philly After School</a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true"></span>Menu</button>
@@ -44,8 +48,8 @@
 <div class="prose">
   <h2><span data-copy="f7dd5c66e9">The short version</span></h2>
   <ul>
-    <li><span data-copy="7341049a10">There are no ads, and nothing you send is sold. You only need an account for share groups, which are optional.</span></li>
-    <li><span data-copy="a629ef45b8">Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us unless you choose to add one to a share group.</span></li>
+    <li><span data-copy="a5fc51381d">There are no ads, and nothing you send is sold. An account is optional: it is for keeping your school or a week in a profile, and for sharing a week with someone.</span></li>
+    <li><span data-copy="3b888bbdc0">Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us unless you sign in and choose to keep one in your profile or share one.</span></li>
     <li><span data-copy="66b0cd85db">If you send a suggestion or a review, it arrives as an email to the person who runs the site.</span></li>
     <li><span data-copy="ed9ee7d193">If you ask for dates by email, your first name, your email address and the school or program you picked are kept by Klaviyo, the service that sends the emails.</span></li>
     <li><span data-copy="f844260e06">We use Google Analytics and Microsoft Clarity to see how the site is used, so we can fix what’s confusing.</span></li>
@@ -54,15 +58,19 @@
   <ul>
     <li><span data-copy="5c228fe5c0">A roster lives in the browser you made it in. Clearing your browser’s site data deletes it.</span></li>
     <li><span data-copy="b7dac40b19">If you save a school as yours, that choice is kept in your own browser too. Our visit counts record that a school was saved, not who saved it.</span></li>
-    <li><span data-copy="f4fc9e377c">A child’s name is optional. If you add one, it stays on your device and appears in the link you choose to share.</span></li>
-    <li><span data-copy="1153331328">Anyone who has a roster’s link can see that roster, so share it the way you’d share a family calendar.</span></li>
-    <li><span data-copy="049b308e9d">When a shared roster is opened, the site removes the name from the page address before any analytics loads, and the roster page is set to be hidden in session recordings.</span></li>
+    <li><span data-copy="1253e5b11d">A child’s name is optional. If you add one, it stays on your device unless you keep or share that week through an account.</span></li>
+    <li><span data-copy="72d228d3ed">A week can no longer be shared as a link. A link showed the week to anyone who had it and could not be taken back, so links made before October 2026 have stopped opening.</span></li>
+    <li><span data-copy="2d3a826155">If one of those older links is opened, the site still removes the name from the page address before any analytics loads. The roster page is set to be hidden in session recordings.</span></li>
+    <li><span data-copy="d1b7a9b214">Copying a week as text, emailing it to yourself or making a card all happen on your own device. What you do with the text or the picture is up to you.</span></li>
     <li><span data-copy="2e3b852749">If you add a photo to a week card, the card is made in your own browser. The photo is not uploaded, not saved, and gone when you close the page.</span></li>
   </ul>
-  <h2 id="groups"><span data-copy="8445554d1a">Accounts and share groups</span></h2>
-  <p><span data-copy="81d5eef02f">A share group lets a few families who know each other see each other’s after-school weeks. It is optional, invitation only, and the only part of the site that keeps anything about a child on our server.</span></p>
+  <h2 id="groups"><span data-copy="069e85c867">Accounts, profiles and sharing</span></h2>
+  <p><span data-copy="ea76bf36e5">An account is optional. It lets you keep your school and a child’s week in a profile, share a week with one person, and join a share group of a few families who know each other. These are the only parts of the site that keep anything about a child on our server, and only when you choose to use them.</span></p>
   <ul>
-    <li><span data-copy="5c32619e73">An account is an email address and your first and last name. The email signs you in and tells you when someone joins a group you made. Other members never see it.</span></li>
+    <li><span data-copy="ec48d4711a">An account is an email address and your first and last name. The email signs you in and tells you when someone opens a week you shared or joins a group you made. Other members never see it.</span></li>
+    <li><span data-copy="27db72fc86">You can sign in with Google instead of an emailed code. Google’s sign-in is only loaded if you choose it. Google then knows you signed in to this site, and tells us your name and email address. We ask for nothing else and never see your Google password.</span></li>
+    <li><span data-copy="fc98cda5ac">If you keep your school in your profile, we store which school. If you keep a week in your profile, we store the child’s first name, the programs on their current and upcoming weeks, and the school each program was picked under, so the week can be put back on another device. Notes you type are not stored.</span></li>
+    <li><span data-copy="b97f9e1314">Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.</span></li>
     <li><span data-copy="036b101d10">Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.</span></li>
     <li><span data-copy="61b57a197b">There are no passwords. We email you a link and a 6-digit code; each works once and for 15 minutes. A cookie then keeps that device signed in for 30 days, and you can sign out everywhere from your account page.</span></li>
     <li><span data-copy="f04d299ecb">When you add a week to a group, we store the child’s first name as you type it and the programs on their current and upcoming weeks. We do not store a last name, school, address, pickup time, note, teacher’s name, photo, price or day-off plan.</span></li>
@@ -71,8 +79,9 @@
     <li><span data-copy="0e7432357e">A group’s creator sees the name and email address of each adult in it; other members don’t.</span></li>
     <li><span data-copy="0a4f76533e">Someone who joins to view only, such as a caregiver, can see and print the group and cannot change it.</span></li>
     <li><span data-copy="dc603f7563">Anyone in a group can print it or take a screenshot, so keep groups to people you know and would tell where your child is anyway.</span></li>
-    <li><span data-copy="ace13b8a79">Groups are kept in a file on our web host, outside the public site. Google Analytics and Microsoft Clarity are not loaded on the account and group pages.</span></li>
-    <li><span data-copy="2c6157b069">You can take a week out of a group, leave a group, or delete your account from the site at any time, and it is removed straight away. A group’s creator can remove anyone. Every group is deleted two weeks after the last day of school.</span></li>
+    <li><span data-copy="bc0c4ad9e8">Accounts, profiles and groups are kept in a file on our web host, outside the public site. Google Analytics and Microsoft Clarity are not loaded on the account, invitation and group pages. The Build your week page does load them: it is hidden in session recordings, and analytics is told only that something was kept or shared, never what or with whom.</span></li>
+    <li><span data-copy="fa3a27cb62">We keep a daily count of how many accounts, shared weeks and groups were made, to see whether this is used. The counts hold no names, addresses or weeks.</span></li>
+    <li><span data-copy="a469bdc578">You can take a week out of your profile or out of a group, stop sharing, leave a group, or delete your account from the site at any time, and it is removed straight away. A group’s creator can remove anyone. Every shared week and group is deleted two weeks after the last day of school.</span></li>
     <li><span data-copy="4e6404e3a7">Accounts are for parents, caregivers and teachers. Children should not make one.</span></li>
   </ul>
   <h2 id="forms"><span data-copy="7f8f847dc5">Suggestions, corrections and reviews</span></h2>
@@ -107,7 +116,7 @@
   <p><span data-copy="5677caacfb">This site is written for parents and caregivers. It is not meant to be used by children, and we do not knowingly collect information from them.</span></p>
   <h2 id="remove"><span data-copy="e9d0974c5f">Seeing or removing what you sent</span></h2>
   <p><span data-copy="39a1146667">To have a review taken down, your email address removed from the date emails, or a suggestion and your contact details deleted, email</span> <a href="mailto:contact@phillyafterschool.org">contact@phillyafterschool.org</a><span data-copy="30beaab727">. Say what you sent and roughly when, and it will be removed.</span></p>
-  <p class="hint"><span data-copy="b149e0bbf0" data-tpl="Last updated {date}. If this page changes in a way that matters, the date changes with it." data-vars="{&quot;date&quot;:&quot;October 5, 2026&quot;}">Last updated October 5, 2026. If this page changes in a way that matters, the date changes with it.</span></p>
+  <p class="hint"><span data-copy="b149e0bbf0" data-tpl="Last updated {date}. If this page changes in a way that matters, the date changes with it." data-vars="{&quot;date&quot;:&quot;October 6, 2026&quot;}">Last updated October 6, 2026. If this page changes in a way that matters, the date changes with it.</span></p>
 </div>
 </main>
 <footer class="foot"><div class="in">
@@ -141,6 +150,7 @@
         <li><a href="../board/"><span data-copy="55cf06857b">After-school schedule</span></a></li>
         <li><a href="../days-off/#plan"><span data-copy="ef8a7dc9b4">Day-camp schedule</span></a></li>
         <li><a href="../alerts/"><span data-copy="d4819c397f">Dates by email</span></a></li>
+        <li><a href="../account/"><span data-copy="4ab2910209">Your account</span></a></li>
       </ul>
     </div>
     <div>
@@ -161,7 +171,7 @@
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=f007d2af" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}"></script>
+<script src="../assets/site.js?v=ceae995d" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 
 </body>
 </html>

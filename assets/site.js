@@ -422,7 +422,7 @@
     });
   }
 
-  // ----- rosters: one per child, each with a current week and an upcoming one, kept in this browser, shared by link -----
+  // ----- rosters: one per child, each with a current week and an upcoming one, kept in this browser -----
   var DAYS = [['mon', 'Monday', 'Mon'], ['tue', 'Tuesday', 'Tue'], ['wed', 'Wednesday', 'Wed'], ['thu', 'Thursday', 'Thu'], ['fri', 'Friday', 'Fri']];
   var MAX_KIDS = 6;
   var rosters = null;
@@ -457,8 +457,10 @@
   // A roster added to a share group remembers it: [{ g: group id, k: the child's id there, n: the group's name, c: the first name shared }].
   function cleanLinks(a) {
     return (Array.isArray(a) ? a : []).filter(function (l) { return l && /^[A-Za-z0-9]{6,30}$/.test(l.g || '') && typeof l.k === 'number' && l.k > 0; }).slice(0, 12)
-      .map(function (l) { return { g: l.g, k: l.k, n: String(l.n == null ? '' : l.n).slice(0, 50), c: String(l.c == null ? '' : l.c).slice(0, 20) }; });
+      .map(function (l) { var o = { g: l.g, k: l.k, n: String(l.n == null ? '' : l.n).slice(0, 50), c: String(l.c == null ? '' : l.c).slice(0, 20) }; if (l.s) o.s = 1; return o; });
   }
+  // A roster kept in the signed-in person's profile remembers which one: { id: its id there, u: when the two last matched }.
+  function cleanProf(p) { return p && typeof p.id === 'number' && p.id > 0 ? { id: p.id, u: typeof p.u === 'number' ? p.u : 0 } : null; }
   function newKid(name) { return { name: cleanName(name), now: emptyBoard(), next: emptyBoard(), teacher: '', cardNote: '', off: {}, offNote: '', prices: {}, groups: [] }; }
   function possessive(name) { return name + '’s'; }
   // A pick is "program.school", optionally followed by "~" and a class or short note.
@@ -474,7 +476,7 @@
     if (raw && Array.isArray(raw.kids) && raw.kids.length) {
       rosters = { kid: 0, active: raw.active === 'now' ? 'now' : 'next', kids: raw.kids.slice(0, MAX_KIDS).map(function (k) {
         k = k && typeof k === 'object' ? k : {};
-        return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next), teacher: cleanName(k.teacher), cardNote: String(k.cardNote == null ? '' : k.cardNote).slice(0, 110), off: cleanOff(k.off), offNote: String(k.offNote == null ? '' : k.offNote).slice(0, 110), prices: cleanPrices(k.prices), groups: cleanLinks(k.groups) };
+        return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next), teacher: cleanName(k.teacher), cardNote: String(k.cardNote == null ? '' : k.cardNote).slice(0, 110), off: cleanOff(k.off), offNote: String(k.offNote == null ? '' : k.offNote).slice(0, 110), prices: cleanPrices(k.prices), groups: cleanLinks(k.groups), prof: cleanProf(k.prof) };
       }) };
       if (typeof raw.kid === 'number' && raw.kid % 1 === 0 && raw.kid >= 0 && raw.kid < rosters.kids.length) rosters.kid = raw.kid;
     } else {
@@ -752,20 +754,11 @@
     var data = JSON.parse(document.getElementById('pas-data').textContent);
     var $ = function (id) { return boardPage.querySelector(id); };
     var week = $('#week'), nameInput = $('#board-name'), status = $('#board-status'), tools = $('#board-tools');
-    var banner = $('#board-shared'), bannerText = $('#board-shared-text'), emptyNote = $('#board-empty'), emptyText = $('#board-empty-text');
-    var linkBox = $('#board-link'), title = $('#board-title'), tabs = $('#board-tabs'), promote = $('#board-promote'), emailLink = $('#board-email');
-    var kidBar = $('#kid-bar'), kidTabs = $('#kid-tabs'), kidAdd = $('#kid-add'), kidRemove = $('#kid-remove'), adopt = $('#board-adopt');
+    var banner = $('#board-retired'), emptyNote = $('#board-empty'), emptyText = $('#board-empty-text');
+    var title = $('#board-title'), tabs = $('#board-tabs'), promote = $('#board-promote'), emailLink = $('#board-email');
+    var kidBar = $('#kid-bar'), kidTabs = $('#kid-tabs'), kidAdd = $('#kid-add'), kidRemove = $('#kid-remove');
     var WHICH = { now: 'current', next: 'upcoming' };
 
-    var encode = function (name, b, which) {
-      var parts = [];
-      if (which === 'next') parts.push('b=next');
-      if (name) parts.push('n=' + encodeURIComponent(name));
-      DAYS.forEach(function (day) {
-        if (b.days[day[0]].length) parts.push(day[0] + '=' + b.days[day[0]].map(function (e) { var n = entryNote(e); return entryKey(e) + (n ? '~' + encodeURIComponent(n) : ''); }).join(','));
-      });
-      return parts.join('&');
-    };
     var decode = function (hash) {
       var b = emptyBoard(), any = false, which = 'now', name = '';
       hash.replace(/^#/, '').split('&').forEach(function (p) {
@@ -781,10 +774,14 @@
       });
       return any ? { which: which, name: name, board: cleanBoard(b) } : null;
     };
-    // The page's first script moved a shared roster out of the address (see build.mjs) so analytics never sees the name in it.
+    // A week used to be shareable as a link that held the whole week. Those links are retired: anyone could open one and it
+    // could not be taken back. The page's first script still moves an old link out of the address (see build.mjs) so
+    // analytics never sees the name in it; here it is only noticed, never shown.
     var sharedHash = window.__pasShared || '';
-    try { sharedHash = sharedHash || window.sessionStorage.getItem('pas-shared') || ''; } catch (e) { /* no session storage */ }
-    var shared = decode(sharedHash || location.hash);
+    try { sharedHash = sharedHash || window.sessionStorage.getItem('pas-shared') || ''; window.sessionStorage.removeItem('pas-shared'); } catch (e) { /* no session storage */ }
+    var oldLink = !!decode(sharedHash || location.hash);
+    if (oldLink && window.history && history.replaceState) { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* file preview */ } }
+    var shared = null;
     var lookup = function (entry) {
       var p = entryKey(entry).split('.'), prog = data.programs[p[0]], sch = data.schools[p[1]];
       return prog && sch && prog.schools[p[1]] ? { id: p[0], prog: prog, sch: sch, link: prog.schools[p[1]], note: entryNote(entry) } : null;
@@ -792,7 +789,6 @@
     var pillText = function (k) {
       return k.link.rel === 'onsite' ? 'At ' + k.sch.name : k.link.rel === 'pickup' ? k.sch.name + ' pickup' : 'Near ' + k.sch.name;
     };
-    var shareUrl = function () { var r = loadRosters(), k = activeKid(); return location.href.split('#')[0] + '#' + encode(k.name, k[r.active], r.active); };
     var heading = function (name, which) { return (name ? possessive(name) + ' after-school roster' : 'After-school roster') + (which === 'next' ? ' (upcoming)' : ''); };
     var asText = function (name, b, which) {
       var lines = [heading(name, which) + ', from Philly After School'];
@@ -810,21 +806,16 @@
       data: data, track: track,
       rosters: loadRosters, kid: activeKid,
       shared: function () { return shared; },
-      save: function () { store('pas-rosters', JSON.stringify(rosters)); }
+      save: function () { store('pas-rosters', JSON.stringify(rosters)); },
+      emptyBoard: emptyBoard, newKid: newKid, maxKids: MAX_KIDS,
+      redraw: function () { render(); }   // after the share-groups script changes a roster (a week put back from a profile)
     };
     var syncRoller = null;   // set further down, by the themed-week section
-    var savedNote = function () { return storageOk ? 'Saved on this device.' : 'Your browser is blocking saved data, so this roster will be gone when you close the page. Keep the link.'; };
+    var savedNote = function () { return storageOk ? 'Saved on this device.' : 'Your browser is blocking saved data, so this roster will be gone when you close the page. Email it to yourself or make a card to keep a copy.'; };
     var copy = function (text, done) {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(function () { say(done); }, function () { linkBox.focus(); linkBox.select(); say('Copy it from the box below.'); });
-      } else { linkBox.focus(); linkBox.select(); say('Copy it from the box below.'); }
-    };
-    // Where a shared roster would be saved: the child with the same name, an untouched first roster, or a new child.
-    var adoptSlot = function () {
-      var r = loadRosters(), at = -1;
-      if (shared.name) r.kids.forEach(function (k, i) { if (at < 0 && k.name.toLowerCase() === shared.name.toLowerCase()) at = i; });
-      if (at < 0 && r.kids.length === 1 && !r.kids[0].name && !countPicks(r.kids[0].now) && !countPicks(r.kids[0].next)) at = 0;
-      return at;
+      var cant = function () { say('Copying didn’t work in this browser. Use “Email it to myself” instead.'); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { say(done); }, cant);
+      else cant();
     };
 
     var render = function () {
@@ -908,7 +899,7 @@
         col.appendChild(n ? list : el('p', 'hint', 'Nothing yet.'));
         week.appendChild(col);
       });
-      banner.hidden = !shared;
+      banner.hidden = !oldLink;
       if (adder) { adder.hidden = !!shared; drawAdd(); }
       if (syncRoller) syncRoller(total);
       if (window.pasBoard && window.pasBoard.onShow) window.pasBoard.onShow();
@@ -924,15 +915,6 @@
       promote.textContent = 'The new term has started: make this the current roster';
       promote.removeAttribute('data-armed');
       all(tabs, '.tab').forEach(function (t) { t.setAttribute('aria-pressed', String(t.getAttribute('data-board') === which)); });
-      if (shared) {
-        title.textContent = (name ? possessive(name) + ' roster' : 'A shared roster') + (which === 'next' ? ' (upcoming)' : '');
-        bannerText.textContent = (which === 'next' ? 'This is what they have planned for the upcoming term.' : 'This is what they’re doing now.') + ' It isn’t saved on your device yet.';
-        var slot = adoptSlot();
-        adopt.textContent = slot > -1 && r.kids[slot].name && countPicks(r.kids[slot][which])
-          ? 'Replace ' + possessive(r.kids[slot].name) + ' ' + WHICH[which] + ' roster with this'
-          : 'Save it to my rosters';
-        return;
-      }
       // one chip per child, once there is more than one
       kidTabs.textContent = '';
       kidTabs.hidden = r.kids.length < 2;
@@ -951,8 +933,7 @@
       emptyText.textContent = which === 'next'
         ? 'Search for a program above and pick its days. Or open a school’s page and choose “Add to roster” on any program.'
         : 'Nothing on the current roster yet. Search for a program above and pick its days.';
-      linkBox.value = shareUrl();
-      emailLink.href = 'mailto:?subject=' + encodeURIComponent(heading(kid.name, which)) + '&body=' + encodeURIComponent(asText(kid.name, b, which) + '\n\n' + shareUrl());
+      emailLink.href = 'mailto:?subject=' + encodeURIComponent(heading(kid.name, which)) + '&body=' + encodeURIComponent(asText(kid.name, b, which));
       if (document.activeElement !== nameInput) nameInput.value = kid.name;
       if (maker) {
         if (document.activeElement !== teacherBox) teacherBox.value = kid.teacher || '';
@@ -986,15 +967,14 @@
       saveRosters(); say('Removed.'); render();
     });
     var track_share = function (method) { track({ event: 'pas_board_share', method: method, board: WHICH[loadRosters().active] }); };
-    $('#board-copy-link').addEventListener('click', function () { copy(shareUrl(), 'Link copied. Paste it into a text or email.'); track_share('copy_link'); });
-    $('#board-copy-text').addEventListener('click', function () { var r = loadRosters(), k = activeKid(); copy(asText(k.name, k[r.active], r.active) + '\n' + shareUrl(), 'Copied as text, with the link.'); track_share('copy_text'); });
+    $('#board-copy-text').addEventListener('click', function () { var r = loadRosters(), k = activeKid(); copy(asText(k.name, k[r.active], r.active), 'Copied as text.'); track_share('copy_text'); });
     emailLink.addEventListener('click', function () { track_share('email_self'); });
     var shareBtn = $('#board-share');
     if (navigator.share) {
       shareBtn.hidden = false;
       shareBtn.addEventListener('click', function () {
         var r = loadRosters(), k = activeKid();
-        navigator.share({ title: heading(k.name, r.active), text: asText(k.name, k[r.active], r.active), url: shareUrl() }).then(function () { track_share('share_sheet'); }, function () { /* closed without sharing */ });
+        navigator.share({ title: heading(k.name, r.active), text: asText(k.name, k[r.active], r.active) }).then(function () { track_share('share_sheet'); }, function () { /* closed without sharing */ });
       });
     }
     $('#board-clear').addEventListener('click', function () { var r = loadRosters(); r.kids[r.kid][r.active] = emptyBoard(); saveRosters(); say('Roster cleared.'); render(); });
@@ -1008,25 +988,7 @@
       k.now = k.next; k.next = emptyBoard(); r.active = 'now';
       saveRosters(); say('Done. This is now the current roster.'); render();
     });
-    var leaveShared = function (keep) {
-      var msg = '';
-      if (keep) {
-        var r = loadRosters(), at = adoptSlot();
-        if (at < 0 && r.kids.length >= MAX_KIDS) { say('You already have ' + MAX_KIDS + ' rosters. Remove one first, then open the link again.'); bannerText.textContent = status.textContent; return; }
-        if (at < 0) { r.kids.push(newKid(shared.name)); at = r.kids.length - 1; }
-        if (!r.kids[at].name) r.kids[at].name = shared.name;
-        r.kids[at][shared.which] = shared.board; r.kid = at; r.active = shared.which;
-        saveRosters();
-        msg = 'Saved to your rosters.';
-      }
-      shared = null;
-      try { window.sessionStorage.removeItem('pas-shared'); } catch (e) { /* nothing stored */ }
-      if (window.history && history.replaceState) history.replaceState(null, '', location.pathname + location.search);
-      render();
-      say(msg);
-    };
-    adopt.addEventListener('click', function () { leaveShared(true); });
-    $('#board-mine').addEventListener('click', function () { leaveShared(false); });
+    $('#board-retired-ok').addEventListener('click', function () { oldLink = false; banner.hidden = true; });
     // ----- what the roster costs: an estimate for half a school year, from the prices programs publish -----
     var WEEKS = 18, BILLS = 5;   // a semester: 18 weeks of school, or five monthly bills
     var money = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
@@ -1813,9 +1775,16 @@
     };
     btn.addEventListener('click', function () {
       var m = mySchool();
-      if (m && m.id === id) { try { window.localStorage.removeItem('pas-my-school'); } catch (e) { /* nothing saved */ } }
+      var on = !(m && m.id === id);
+      if (!on) { try { window.localStorage.removeItem('pas-my-school'); } catch (e) { /* nothing saved */ } }
       else { store('pas-my-school', JSON.stringify({ id: id, name: name })); track({ event: 'pas_school_save', school: id }); }
       paint();
+      // Someone signed in who keeps their school in their profile: keep the two in step. Nothing is sent for anyone else.
+      var tag = document.querySelector('script[data-api]'), api = tag ? tag.getAttribute('data-api') : '';
+      if (api && window.fetch && store('pas-in') === '1' && store('pas-prof-school') === '1') {
+        window.fetch(api + '?action=school_save', { method: 'POST', credentials: 'same-origin', headers: { 'X-PAS': '1', 'Content-Type': 'application/json' }, body: JSON.stringify({ school: on ? id : '' }) })
+          .then(function (r) { if (r.ok && note && on) note.textContent = 'Saved on this device and in your profile. The home page, lists and your roster now start from ' + name + '. Tap again to undo.'; }, function () { /* offline: the device still has it */ });
+      }
     });
     paint();
   });

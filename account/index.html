@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Your account | Philly After School</title>
-<meta name="description" content="Sign in to Philly After School to make or join a share group.">
+<meta name="description" content="Sign in to Philly After School to keep your school and week in a profile, or to share a week.">
 <link rel="canonical" href="https://phillyafterschool.org/account/">
 <meta name="robots" content="noindex">
 <meta property="og:title" content="Your account | Philly After School">
-<meta property="og:description" content="Sign in to Philly After School to make or join a share group.">
+<meta property="og:description" content="Sign in to Philly After School to keep your school and week in a profile, or to share a week.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://phillyafterschool.org/account/">
 <meta property="og:site_name" content="Philly After School">
@@ -24,11 +24,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=219c47a2">
+<link rel="stylesheet" href="../assets/site.css?v=58c24b9d">
 </head>
 <body>
-<script>document.documentElement.className+=' js'</script>
+<script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
 <header class="band">
+  <div class="topbar"><div class="in">
+    <a class="when-out" href="../account/">Log in</a><a class="when-out top-reg" href="../account/?new=1">Register</a>
+    <a class="when-in" href="../account/">Your account</a>
+  </div></div>
   <div class="in bar">
     <a class="brand" href="../"><span class="bus-mark"></span>Philly After School</a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true"></span>Menu</button>
@@ -36,23 +40,24 @@
   </div>
   <div class="in hero">
     <h1><span data-copy="4ab2910209">Your account</span></h1>
-    <p class="lede"><span data-copy="449cc6d024">An account is only for share groups: a few families you know who want to see each other’s after-school weeks. Rosters work without one.</span></p>
+    <p class="lede"><span data-copy="0701e850dd">Keep your school and your child’s week in a profile, so they’re on every device you sign in on, and share a week with one person. Everything else on the site works without an account.</span></p>
   </div>
   
 </header>
 <main class="wrap">
-<div data-groups data-root="../" data-index="" data-api="../groups/api.php" data-kl-key="RJsBTu" data-kl-list="Wib7TV" data-clarity-mask="true" style="display:contents">
+<div data-groups data-root="../" data-index="" data-api="../groups/api.php" data-kl-key="RJsBTu" data-kl-list="Wib7TV" data-google="420915102949-7gfu5o00gn6oionaijid2jak6om38rda.apps.googleusercontent.com" data-pilot="1" data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask"><span data-copy="6efbd57efc">Accounts need JavaScript turned on.</span></p></noscript>
   <div class="g-page" id="account"></div>
   <section class="notes">
-    <h2><span data-copy="608527d0ba">How groups keep things private</span></h2>
+    <h2><span data-copy="733d535919">What an account keeps, and who sees it</span></h2>
     <ul>
-      <li><span data-copy="f676116a93">A group shows a child’s first name and the programs on their week. No last names, addresses, notes or photos.</span></li>
-      <li><span data-copy="73277130af">Groups are invitation only. Its creator invites email addresses, and only those addresses can join. A group can’t be searched for, and its link shows nothing to anyone else.</span></li>
-      <li><span data-copy="282f1e6948">You can take a week out of a group, leave a group, or delete your account at any time. Groups delete themselves when the school year ends.</span></li>
+      <li><span data-copy="bb4ca64d0e">Nothing goes into your profile unless you put it there: a school, or a child’s first name and the programs on their week. No last names, addresses, notes or photos.</span></li>
+      <li><span data-copy="0dea7d9d59">A shared week opens only for the email address you sent it to, once that person has signed in. It can’t be searched for, and its link shows nothing to anyone else.</span></li>
+      <li><span data-copy="d05870eaa7">You can take a week back, stop sharing, or delete your account at any time. Shared weeks delete themselves when the school year ends.</span></li>
     </ul>
     <p><a href="../privacy/#groups"><span data-copy="2888e0b6c6">The full details are on the privacy page.</span></a></p>
   </section>
+  <script type="application/json" id="groups-data">{"schools":[{"id":"coppin","name":"Coppin"},{"id":"meredith","name":"Meredith"},{"id":"nebinger","name":"Nebinger"}]}</script>
 </div>
 </main>
 <footer class="foot"><div class="in">
@@ -86,6 +91,7 @@
         <li><a href="../board/"><span data-copy="55cf06857b">After-school schedule</span></a></li>
         <li><a href="../days-off/#plan"><span data-copy="ef8a7dc9b4">Day-camp schedule</span></a></li>
         <li><a href="../alerts/"><span data-copy="d4819c397f">Dates by email</span></a></li>
+        <li><a href="../account/"><span data-copy="4ab2910209">Your account</span></a></li>
       </ul>
     </div>
     <div>
@@ -106,7 +112,7 @@
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=f007d2af" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}"></script>
-<script src="../assets/groups.js?v=4f5f33bb"></script>
+<script src="../assets/site.js?v=ceae995d" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/groups.js?v=557d4e61"></script>
 </body>
 </html>
