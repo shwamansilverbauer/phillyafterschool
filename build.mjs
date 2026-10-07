@@ -1057,7 +1057,7 @@ ${p.clubs.map(c => `      <article class="club">
   ${alertsBox(D, { program: p, place: 'program', title: T(`Tell me when sign-ups open`), lede: T(`One email when {program} posts a sign-up date, a deadline or a day-off camp. Just this program. For every program at your school, sign up on your school’s page.`, { program: fullName(p) }) })}
   ${camp ? `<section class="section" id="schools">
     <h2>${p.daysOff && p.weekend ? T(`Listed for its day camps and weekend classes`) : p.weekend ? T(`Listed for its weekend classes`) : T(`Listed for its day camps`)}</h2>
-    <p>${T(`We couldn’t find a weekday after-school program here, so it isn’t on any school’s page.`)} ${p.daysOff ? T(`It runs camps on days school is closed, and children from any school can go.`) + ` <a href="${link(offPath, D)}#${esc(p.id)}">${T(`See its camp days.`)}</a> ` : ''}${p.weekend ? T(`It runs classes on weekends.`) + ` <a href="${link(weekendPath, D)}#${esc(p.id)}">${T(`See its weekend classes.`)}</a>` : ''}</p>
+    <p>${p.scope === 'weekend' ? T(`We’ve only read up on its weekend classes so far, so it isn’t on any school’s page.`) : T(`We couldn’t find a weekday after-school program here, so it isn’t on any school’s page.`)} ${p.daysOff ? T(`It runs camps on days school is closed, and children from any school can go.`) + ` <a href="${link(offPath, D)}#${esc(p.id)}">${T(`See its camp days.`)}</a> ` : ''}${p.weekend ? T(`It runs classes on weekends.`) + ` <a href="${link(weekendPath, D)}#${esc(p.id)}">${T(`See its weekend classes.`)}</a>` : ''}</p>
     <p>${T(`Does it run something after school that we missed?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
   </section>` : `<section class="section" id="schools">
     <h2>${T(`Which schools it works for`)}</h2>
@@ -1560,7 +1560,7 @@ function privacyPage() {
     <li>${T(`A group’s creator sees the name and email address of each adult in it; other members don’t.`)}</li>
     <li>${T(`Someone who joins to view only, such as a caregiver, can see and print the group and cannot change it.`)}</li>
     <li>${T(`Anyone in a group can print it or take a screenshot, so keep groups to people you know and would tell where your child is anyway.`)}</li>
-    <li>${T(`Accounts, profiles and groups are kept in a file on our web host, outside the public site. Google Analytics and Microsoft Clarity are not loaded on the account, invitation and group pages. The Build your week page does load them: it is hidden in session recordings, and analytics is told only that something was kept or shared, never what or with whom.`)}</li>
+    <li>${T(`Accounts, profiles and groups are kept in a file on our web host, outside the public site. Google Analytics and Microsoft Clarity are not loaded on your account page, on invitations or on group pages. Two pages around them do load them. The page where you create an account counts visits: its form is hidden in session recordings, and analytics is told only that a sign-up started, whether it used email or Google, and that it finished, never the address or a name. The Build your week page is hidden in session recordings too, and analytics is told only that something was kept or shared, never what or with whom.`)}</li>
     <li>${T(`We keep a daily count of how many accounts, shared weeks and groups were made, to see whether this is used. The counts hold no names, addresses or weeks.`)}</li>
     <li>${T(`You can take a week out of your profile or out of a group, stop sharing, leave a group, or delete your account from the site at any time, and it is removed straight away. A group’s creator can remove anyone. Every shared week and group is deleted two weeks after the last day of school.`)}</li>
     <li>${T(`Accounts are for parents, caregivers and teachers. Children should not make one.`)}</li>
@@ -2022,7 +2022,7 @@ function accountPage(register = false) {
   const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`Accounts need JavaScript turned on.`)}</p></noscript>
   <div class="acct-grid">
-    <div class="g-page" id="account"${register ? ' data-mode="register"' : ''}></div>
+    <div class="g-page" id="account"${register ? ' data-mode="register" data-clarity-mask="true"' : ''}></div>
     <section class="acct-why when-out" aria-labelledby="acct-why-h">
       <div class="acct-art">${art}</div>
       <h2 id="acct-why-h">${T(`What an account gives you`)}</h2>
@@ -2030,7 +2030,8 @@ function accountPage(register = false) {
         <li><b>${T(`Save your school.`)}</b> ${T(`Every list starts from it, on any device you sign in on.`)}</li>
         <li><b>${T(`Save your kids’ grades.`)}</b> ${T(`Lists open on the programs that take them.`)}</li>
         <li><b>${T(`Keep your week.`)}</b> ${T(`Build it on your phone tonight, find it on your laptop tomorrow.`)}</li>
-        <li><b>${T(`Share a week with one person.`)}</b> ${T(`A grandparent or a sitter signs in to see it, and you can take it back.`)}</li>
+        <li><b>${T(`Share a week with one person.`)}</b> ${T(`A grandparent or a sitter signs in to see it, and you can take it back.`)}</li>${GROUPS.pilot ? '' : `
+        <li><b>${T(`Share with a small group.`)}</b> ${T(`A few families you invite by email see each other’s weeks. Nobody else can find the group or ask to join.`)}</li>`}
       </ul>
       <p class="hint">${T(`It’s free. Nothing goes into your profile unless you put it there, and you can delete the account whenever you like.`)}</p>
     </section>
@@ -2046,7 +2047,7 @@ function accountPage(register = false) {
   </section>
   <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })) }).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to save your school, your kids’ grades and your week, and to share a week.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
+  return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to save your school, your kids’ grades and your week, and to share a week.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: !register, scripts: groupsScript(1) });
 }
 // What the group and join pages need to know about programs: names and colors to show, classes to recognise.
 const groupsInfo = () => ({
@@ -2831,7 +2832,7 @@ function weekendPage() {
   const D = 1;
   const cards = weekendPrograms.map(p => {
     const w = p.weekend, served = servedBy(p);
-    const rows = [['What runs', w.summary], ['Term', w.term], ['Cost', w.cost], ['Where', programAddress(p)], ['On school days', served.length ? servedSummary(p) + '.' : '']]
+    const rows = [['What runs', w.summary], ['Term', w.term], ['Cost', w.cost], ['Where', programAddress(p) + (programHoods(p).length && !/\(/.test(programAddress(p)) ? ` (${programHoods(p).join(', ')})` : '')], ['On school days', served.length ? servedSummary(p) + '.' : '']]
       .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
     const wp = w._grades !== undefined ? { ...p, _grades: w._grades } : p;   // the weekend classes can take other grades than the weekday program
     return `<article class="prog offprog" id="${esc(p.id)}" ${itemAttrs(wp, [...programHoods(p), ...w.days.map(d => WEEKEND_DAY[d])])} data-wk="${w.days.join(' ')}">
@@ -2843,9 +2844,9 @@ function weekendPage() {
 </article>`;
   }).join('\n');
   const hero = `    <h1>${T(`Saturday and Sunday classes`)}</h1>
-    <p class="lede">${T(`Weekend classes for kids from the programs on this site: what runs, which term, and what it costs.`)}</p>
+    <p class="lede">${T(`Weekend classes for kids around the city: what runs, which term, and what it costs.`)}</p>
     <div class="facts">
-      <span><b>${weekendPrograms.length}</b> programs with weekend classes</span>
+      <span><b>${weekendPrograms.length}</b> places with weekend classes</span>
       <span><b>${weekendPrograms.filter(p => p.weekend.days.includes('sun')).length}</b> on Sundays too</span>
     </div>`;
   const body = `${filterBar({ list: weekendPrograms.map(p => (p.weekend._grades !== undefined ? { ...p, _grades: p.weekend._grades } : p)), depth: D, show: { cost: false, day: false, hood: false }, searchLabel: `Looking for a particular class?`, placeholder: 'A name, or try piano, acting, gymnastics…' })}
@@ -2856,12 +2857,12 @@ ${cards}
   </div>
 </section>
 <section class="section">
-  <p>${T(`We started with the programs already on this site. Other listed programs may run weekend classes that their sites don’t spell out by day, so ask.`)} ${T(`Know a weekend class that should be here?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
+  <p>${T(`This covers the programs already on this site, plus weekend-only places from a first sweep of the city. It isn’t every class in Philadelphia, and some listed programs run weekend classes that their sites don’t spell out by day, so ask.`)} ${T(`Know a weekend class that should be here?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
   <p class="hint">${T(`Weekend terms start and fill on their own dates, so check with the provider before you count on a class.`)}</p>
 </section>`;
   return layout({
     title: 'Weekend classes for kids in Philadelphia',
-    description: `Saturday and Sunday classes for kids from ${weekendPrograms.length} Philadelphia programs: music, theater, art, dance and gymnastics, with terms, times and cost.`,
+    description: `Saturday and Sunday classes for kids at ${weekendPrograms.length} places in Philadelphia: music, theater, art, dance, skating, soccer and science, with terms, times and cost.`,
     pathName: weekendPath, depth: D, current: null, hero, body, showStreet: 'weekend',
     jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: weekendPrograms.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
   });

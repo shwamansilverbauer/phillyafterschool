@@ -232,10 +232,10 @@ function email_html(string $heading, string $lines, string $button, string $url,
   return '<!doctype html><html lang="en"><body style="margin:0;background:#F4F8FD;font-family:Arial,Helvetica,sans-serif;color:#0B2140">'
     . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:28px 14px">'
     . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#FFFFFF;border-radius:14px;border:1px solid #D5E2F2">'
-    . '<tr><td style="background:#0F4D90;color:#FFFFFF;border-radius:14px 14px 0 0;padding:16px 24px;font-weight:bold;font-size:16px">' . $e($CFG['siteName']) . '</td></tr>'
+    . '<tr><td style="background:#96C9FF;color:#0B2140;border-radius:14px 14px 0 0;padding:16px 24px;font-weight:bold;font-size:16px"><span style="display:inline-block;width:24px;height:13px;background:#F3C613;border-radius:4px 6px 3px 3px;vertical-align:middle;margin-right:9px"></span>' . $e($CFG['siteName']) . '</td></tr>'
     . '<tr><td style="padding:24px"><h1 style="margin:0 0 12px;font-size:22px;line-height:1.25">' . $e($heading) . '</h1>'
     . '<div style="font-size:16px;line-height:1.5">' . $lines . '</div>'
-    . ($button !== '' ? '<p style="margin:22px 0"><a href="' . $e($url) . '" style="display:inline-block;background:#F3C613;color:#2A2100;font-weight:bold;text-decoration:none;border-radius:999px;padding:13px 26px;font-size:16px">' . $e($button) . '</a></p>' : '')
+    . ($button !== '' ? '<p style="margin:22px 0"><a href="' . $e($url) . '" style="display:inline-block;background:#0B2140;color:#FFFFFF;font-weight:bold;text-decoration:none;border-radius:999px;padding:13px 26px;font-size:16px">' . $e($button) . '</a></p>' : '')
     . '<p style="margin:18px 0 0;font-size:13px;line-height:1.5;color:#4D607A">' . $e($foot) . '</p>'
     . '</td></tr></table></td></tr></table></body></html>';
 }

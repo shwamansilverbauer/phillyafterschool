@@ -19,7 +19,7 @@
     "user": "Silverbauer",
     "passwordHash": "$2y$10$YM3U3P.TEB3.lr00uXCsbeNQW852A2Xdg/Rwbro4BIJULUT7bHiz2"
   },
-  "privacyUpdated": "2026-10-06",
+  "privacyUpdated": "2026-10-07",
   "alerts": {
     "klaviyoKey": "RJsBTu",
     "listId": "QQ848w",
@@ -32,7 +32,7 @@
     }
   },
   "groups": {
-    "pilot": true,
+    "pilot": false,
     "klaviyoList": "Wib7TV",
     "googleClientId": "420915102949-7gfu5o00gn6oionaijid2jak6om38rda.apps.googleusercontent.com"
   }

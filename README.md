@@ -91,6 +91,10 @@ weekends (or only weekends and day camps) leaves `schools` as `{}`, like a day-c
 Optional `"times": { "sat": "9:30 am to 12:30 pm", "sun": "..." }` gives the short time shown in the week builder
 and on the card when a parent has typed nothing of their own.
 
+A place found in a sweep for weekend classes, where nothing else about it has been read, carries
+`"scope": "weekend"`. Its page then says only its weekend classes have been read, instead of saying it has no
+weekday program. Take the field off once its weekday classes have been checked against the schools.
+
 **Weekends in Build your week.** The board has an "Add Saturday and Sunday" button under the weekdays. Weekend picks
 are kept beside the weekdays, not in them (`board.wk = { sat: [], sun: [] }`, each entry a program id, or
 `id~what the parent typed`), so pickup, the cost estimate and the week roller never see them. A weekend pick has no
@@ -388,7 +392,7 @@ These are the only parts of the site that store anything about a child on the se
   creating an account: what an account gives you (with a drawing of a week on a phone and a laptop) beside the
   form. `/account/` is where you log in and, signed in, your profile; someone already signed in who opens
   `/register/` is sent there. `?next=board` on either sends them back to Build your week afterwards. The old
-  address `/account/?new=1` forwards to `/register/`. Neither page loads analytics.
+  address `/account/?new=1` forwards to `/register/`. `/register/` loads analytics (see Privacy below); `/account/` does not.
 - **Build your week.** The card comes first. Once someone shares, saves, copies or prints a card, a box asks
   whether they want to keep the week too, and points at the block under the card maker: "Save this week, or share
   it" for someone signed out (Create a free account, Log in), "Keep and share this week" for someone signed in.
@@ -420,10 +424,10 @@ These are the only parts of the site that store anything about a child on the se
   Anyone could open one and it could not be taken back, so the buttons are gone and an old link now shows a
   notice instead of a week. "Copy as text", "Email it to myself" and the share-sheet button went with them (on the day-off planner too): a
   week leaves the page as a card (a picture made on the device) or through an account, and no other way.
-- **Share groups (pilot).** `"pilot": true` keeps groups for several families unlisted: "Start a group" on the
-  account page and "Share with a group" on Build your week only show in a browser that has been let in
-  (`/account/?groups=1`, opening a group invitation, or already being in a group). Set `"pilot": false` to show
-  them to everyone. Groups are invitation only: the creator types addresses, each gets a link to `/join/#CODE`
+- **Small share groups.** Open to everyone since October 2026 (`"pilot": false`): "Start a group" on the
+  account page and "Share with a small group" on Build your week show to anyone signed in. Setting
+  `"pilot": true` hides them again, except in a browser that has been let in (`/account/?groups=1`, opening a
+  group invitation, or already being in a group). Groups are invitation only: the creator types addresses, each gets a link to `/join/#CODE`
   and the code, and joining needs both an invited address and the code. There is no asking to join; the
   creator is emailed when someone comes in and can remove anyone, which also removes their invitation.
 - **Where.** `src/server/groups-api.php` is the whole server side; the build copies it to `groups/api.php` with
@@ -452,7 +456,11 @@ These are the only parts of the site that store anything about a child on the se
 - **Privacy.** The account, invitation, group and numbers pages load no Google Tag Manager or Clarity
   (`quiet: true` in `layout`), are `noindex`, and are left out of the sitemap. Build your week does load them:
   it is masked in session recordings, and the only event is `pas_group_share` with a `method` (`profile`,
-  `profile_school`, `one_person`, `code`, `my_group`), never a name, address or id. The privacy page's
+  `profile_school`, `one_person`, `code`, `my_group`), never a name, address or id. The sign-up page,
+  `/register/`, also loads them so visits can be counted (`quiet: !register`): its form is masked in session
+  recordings (`data-clarity-mask`), and it sends `pas_signup` with a `step` (`code_sent`, `signed_in`) and a
+  `method` (`email`, `google`), never the address. A new person finishes on `/account/`, which is quiet, and
+  sign-in links in emails land on `/account/` too, so no token ever reaches a page with analytics. The privacy page's
   "Accounts, profiles and sharing" section describes all of this; keep the two in step.
 
 ## Links out to programs
