@@ -1,6 +1,18 @@
 // Small enhancements. Every page reads fine without JavaScript; this adds the school search,
 // the grade/type filter, the rosters, and a few form conveniences.
 (function () {
+  // The menu bar sticks to the top of the screen. Its height goes into --bar-h so the things that stick under it, and
+  // links that jump down a page, leave room for it.
+  (function () {
+    var bar = document.querySelector('.sitebar');
+    if (!bar) return;
+    var last = 0;
+    var measure = function () { var h = Math.round(bar.getBoundingClientRect().height); if (h && h !== last) { last = h; document.documentElement.style.setProperty('--bar-h', h + 'px'); } };
+    measure();
+    window.addEventListener('resize', measure);
+    window.addEventListener('load', measure);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure, function () { /* system fonts */ });
+  })();
   function store(key, value) {
     try {
       if (value === undefined) return window.localStorage.getItem(key);

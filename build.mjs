@@ -411,22 +411,24 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   // The strip above the menu holds "Log in" for someone who isn't signed in. The menu's own button is "Create a free
   // account" for them and "Your account" once this browser has signed in. Which shows is decided before the page
   // paints, from a flag the account pages keep in this browser (no request is made).
-  const topbar = GROUPS ? `
-  <div class="topbar when-out"><div class="in">
+  const topbar = GROUPS ? `<div class="band topstrip when-out${theme ? ' ' + theme : ''}"><div class="topbar"><div class="in">
     <span>Already have an account?</span><a href="${link('account/', depth)}">Log in</a>
-  </div></div>` : '';
+  </div></div></div>
+` : '';
   const page = `${quiet ? '' : gtmBody}<script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
-<header class="band${theme ? ' ' + theme : ''}">${topbar}
+${topbar}<header class="band sitebar${theme ? ' ' + theme : ''}">
   <div class="in bar">
     <a class="brand" href="${link('', depth)}"><span class="bus-mark"></span>${esc(cfg.siteName)}</a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true"></span>Menu</button>
     <nav class="nav" id="site-nav" aria-label="Site">${nav}</nav>
   </div>
+</header>
+<div class="band pagehead${theme ? ' ' + theme : ''}">
   <div class="in hero">
 ${hero}
   </div>
   ${showStreet === 'dayoff' ? dayScene() : showStreet ? street(showStreet === 'go') : ''}
-</header>
+</div>
 <main class="wrap${roomy ? ' roomy' : ''}">
 ${body}
 </main>

@@ -119,7 +119,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 
 /* ---------- filter bar on a school page ---------- */
 .picker{display:none}
-.js .picker{display:flex;flex-direction:column;gap:10px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:12px;border-bottom:1px solid var(--line);margin-bottom:-12px}
+.js .picker{display:flex;flex-direction:column;gap:10px;position:sticky;top:calc(var(--bar-h,64px) + env(safe-area-inset-top,0px));z-index:5;background:var(--bg);padding-block:12px;border-bottom:1px solid var(--line);margin-bottom:-12px}
 .rail{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:3px}
 .rail::-webkit-scrollbar{display:none}
 .gbtn{font:inherit;flex:1 0 auto;min-width:52px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:7px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:0}
@@ -203,7 +203,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 button.btn{cursor:pointer;font-family:inherit}
 .next{display:flex;flex-direction:column;gap:14px}
-@media (min-width:900px){.next{position:sticky;top:24px}}
+@media (min-width:900px){.next{position:sticky;top:calc(var(--bar-h,64px) + 24px)}}
 .next ol{margin:0;padding:0;list-style:none;counter-reset:n;display:flex;flex-direction:column;gap:14px}
 .next li{counter-increment:n;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}
 .next li::before{content:counter(n);font-family:var(--display);font-weight:800;width:34px;height:34px;border-radius:50%;background:var(--yellow);color:var(--yellow-ink);display:flex;align-items:center;justify-content:center}
@@ -905,6 +905,19 @@ html.signed .when-out{display:none!important}
 @media (min-width:900px){
   html:not(.signed) .acct-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:44px}
   html:not(.signed) .acct-grid .acct-why{order:-1}
-  html:not(.signed) .acct-grid .g-page{position:sticky;top:20px}
+  html:not(.signed) .acct-grid .g-page{position:sticky;top:calc(var(--bar-h,64px) + 20px)}
 }
 .g-support .btn{align-self:flex-start}
+/* the menu bar stays at the top of the screen as the page scrolls; the "Log in" strip above it and the page's
+   headline below it scroll away. --bar-h is the bar's height, kept up to date by site.js, so things that stick
+   under it (the grade row, the next-day-off box) and links that jump down the page clear it. */
+.sitebar{position:sticky;top:0;z-index:40;box-shadow:0 1px 0 rgba(0,0,0,.14)}
+.pagehead{z-index:1}
+.topstrip{z-index:1}
+html{scroll-padding-top:calc(var(--bar-h,64px) + 12px)}
+.sitebar .bar{padding-block:12px}
+@media (max-width:1099px){
+  .sitebar .bar{padding-block:9px}
+  .js .nav.open{max-height:calc(100vh - var(--bar-h,64px) - 20px);max-height:calc(100dvh - var(--bar-h,64px) - 20px);overflow-y:auto;overscroll-behavior:contain}
+}
+@media print{.sitebar{position:static;box-shadow:none}}
