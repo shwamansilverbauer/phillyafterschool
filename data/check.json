@@ -1,10 +1,10 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 74,
+    "pages": 79,
     "pagesNeedingABrowser": 2,
     "pagesNeedingAPerson": 2,
-    "links": 87,
+    "links": 88,
     "pickupLinks": 53,
     "pickupOnAStoredList": 45,
     "pickupFromAThirdPartyList": 4,
@@ -860,6 +860,12 @@
         "how": "fetch",
         "by": "provider"
       }
+    },
+    {
+      "program": "music-theatre-philly",
+      "school": "mccall",
+      "relation": "nearby",
+      "checked": "2026-10-07"
     }
   ],
   "pages": [
@@ -925,6 +931,22 @@
       "how": "fetch",
       "programs": [
         "philly-inmovement"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://ardentheatre.org/arden-drama-school",
+      "how": "fetch",
+      "programs": [
+        "arden-drama-school"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://ardentheatre.org/play-in-a-day",
+      "how": "fetch",
+      "programs": [
+        "arden-drama-school"
       ],
       "lists": []
     },
@@ -1513,6 +1535,30 @@
           "by": "provider"
         }
       ]
+    },
+    {
+      "url": "https://www.musictheatrephilly.com/about-mtp-classes",
+      "how": "fetch",
+      "programs": [
+        "music-theatre-philly"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.musictheatrephilly.com/grades-1-4",
+      "how": "fetch",
+      "programs": [
+        "music-theatre-philly"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.musictheatrephilly.com/grades-5-8",
+      "how": "fetch",
+      "programs": [
+        "music-theatre-philly"
+      ],
+      "lists": []
     },
     {
       "url": "https://www.nebingerpta.org/s-projects-side-by-side",

@@ -84,6 +84,14 @@
       "name": "Mister John’s Music"
     },
     {
+      "id": "music-theatre-philly",
+      "name": "Music Theatre Philly"
+    },
+    {
+      "id": "arden-drama-school",
+      "name": "Arden Drama School"
+    },
+    {
       "id": "coco-academy",
       "name": "CoCo Academy"
     },
@@ -253,6 +261,22 @@
       "button": "See who’s open"
     },
     {
+      "id": "camp-arden-drama-school-2026-10-12",
+      "kind": "camp",
+      "date": "2026-10-12",
+      "sendOn": "2026-09-27",
+      "schools": [],
+      "programs": [
+        "arden-drama-school"
+      ],
+      "within": "off-2026-10-12",
+      "when": "Monday, October 12",
+      "title": "Arden Drama School: camp on a day off",
+      "text": "School is closed (Indigenous Peoples’ Day). Arden Drama School has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/arden-drama-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "camp-butchers-sew-shop-2026-10-12",
       "kind": "camp",
       "date": "2026-10-12",
@@ -375,7 +399,7 @@
       "programs": [],
       "when": "Monday, October 12",
       "title": "No school: Indigenous Peoples’ Day",
-      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
+      "text": "8 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-10-12",
       "button": "See who’s open"
     },
@@ -398,6 +422,22 @@
       "title": "Mister John’s Music",
       "text": "Winter/Spring session goes on sale to new students.",
       "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-arden-drama-school-2026-11-03",
+      "kind": "camp",
+      "date": "2026-11-03",
+      "sendOn": "2026-10-18",
+      "schools": [],
+      "programs": [
+        "arden-drama-school"
+      ],
+      "within": "off-2026-11-03",
+      "when": "Tuesday, November 3",
+      "title": "Arden Drama School: camp on a day off",
+      "text": "School is closed (Election Day). Arden Drama School has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/arden-drama-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -523,9 +563,25 @@
       "programs": [],
       "when": "Tuesday, November 3",
       "title": "No school: Election Day",
-      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
+      "text": "8 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-11-03",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-arden-drama-school-2026-11-11",
+      "kind": "camp",
+      "date": "2026-11-11",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "arden-drama-school"
+      ],
+      "within": "off-2026-11-11",
+      "when": "Wednesday, November 11",
+      "title": "Arden Drama School: camp on a day off",
+      "text": "School is closed (Veterans Day). Arden Drama School has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/arden-drama-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "camp-butchers-sew-shop-2026-11-11",
@@ -650,7 +706,7 @@
       "programs": [],
       "when": "Wednesday, November 11",
       "title": "No school: Veterans Day",
-      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
+      "text": "8 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-11-11",
       "button": "See who’s open"
     },
@@ -890,6 +946,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-arden-drama-school-2026-12-23",
+      "kind": "camp",
+      "date": "2026-12-23",
+      "sendOn": "2026-12-13",
+      "schools": [],
+      "programs": [
+        "arden-drama-school"
+      ],
+      "within": "off-2026-12-23",
+      "when": "Monday, December 28 to Thursday, December 31",
+      "title": "Arden Drama School: camp on a day off",
+      "text": "School is closed (Winter recess). Arden Drama School has posted a camp for Dec 28, Dec 29, Dec 30 and Dec 31.",
+      "url": "https://phillyafterschool.org/programs/arden-drama-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "camp-butchers-sew-shop-2026-12-23",
       "kind": "camp",
       "date": "2026-12-23",
@@ -932,7 +1004,7 @@
       "programs": [],
       "when": "Wednesday, December 23 to Friday, January 1",
       "title": "No school: Winter recess",
-      "text": "2 listed programs have posted a camp: Butcher’s Sew Shop Junior and Old Pine Community Center.",
+      "text": "3 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior and Old Pine Community Center.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-12-23",
       "button": "See who’s open"
     },
