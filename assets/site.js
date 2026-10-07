@@ -440,7 +440,10 @@
   var rosters = null;
   var storageOk = true;
   try { window.localStorage.setItem('pas-test', '1'); window.localStorage.removeItem('pas-test'); } catch (e) { storageOk = false; }
-  function emptyBoard() { return { days: { mon: [], tue: [], wed: [], thu: [], fri: [] } }; }
+  // The weekend is kept beside the five school days, not among them: a weekend class has no school and no pickup, so
+  // its picks are just "program", optionally followed by "~" and a class or a time.
+  var WKDAYS = [['sat', 'Saturday', 'Sat'], ['sun', 'Sunday', 'Sun']];
+  function emptyBoard() { return { days: { mon: [], tue: [], wed: [], thu: [], fri: [] }, wk: { sat: [], sun: [] } }; }
   function cleanBoard(b) {
     var out = emptyBoard();
     if (b && typeof b === 'object') {
@@ -448,9 +451,14 @@
         var a = b.days && b.days[day[0]];
         if (Array.isArray(a)) out.days[day[0]] = a.filter(function (x) { return typeof x === 'string' && /^[a-z0-9-]+\.[a-z0-9-]+(~[^~,&=#]{1,40})?$/.test(x); }).slice(0, 8);
       });
+      WKDAYS.forEach(function (day) {
+        var a = b.wk && b.wk[day[0]];
+        if (Array.isArray(a)) out.wk[day[0]] = a.filter(function (x) { return typeof x === 'string' && /^[a-z0-9-]+(~[^~,&=#]{1,40})?$/.test(x); }).slice(0, 6);
+      });
     }
     return out;
   }
+  function weekendCount(b) { return b && b.wk ? b.wk.sat.length + b.wk.sun.length : 0; }
   function cleanName(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').replace(/^ | $/g, '').slice(0, 40); }
   // A day-off plan is { "2026-10-09": "program-id" } ("home" for a day at home); own prices are { "program.school": { a: 120, per: "month" } }.
   function cleanOff(o) {
@@ -486,7 +494,7 @@
     if (rosters) return rosters;
     var raw = parse('pas-rosters');
     if (raw && Array.isArray(raw.kids) && raw.kids.length) {
-      rosters = { kid: 0, active: raw.active === 'now' ? 'now' : 'next', kids: raw.kids.slice(0, MAX_KIDS).map(function (k) {
+      rosters = { kid: 0, active: raw.active === 'now' ? 'now' : 'next', wk: !!raw.wk, kids: raw.kids.slice(0, MAX_KIDS).map(function (k) {
         k = k && typeof k === 'object' ? k : {};
         return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next), teacher: cleanName(k.teacher), cardNote: String(k.cardNote == null ? '' : k.cardNote).slice(0, 110), off: cleanOff(k.off), offNote: String(k.offNote == null ? '' : k.offNote).slice(0, 110), prices: cleanPrices(k.prices), groups: cleanLinks(k.groups), prof: cleanProf(k.prof) };
       }) };
@@ -508,6 +516,7 @@
   function countPicks(b) {
     var seen = {};
     DAYS.forEach(function (day) { b.days[day[0]].forEach(function (k) { seen[entryKey(k)] = 1; }); });
+    WKDAYS.forEach(function (day) { ((b.wk && b.wk[day[0]]) || []).forEach(function (k) { seen['wk:' + entryKey(k)] = 1; }); });
     return Object.keys(seen).length;
   }
   function updateCount() {
@@ -888,6 +897,7 @@
       banner.hidden = !oldLink;
       if (adder) { adder.hidden = !!shared; drawAdd(); }
       if (syncRoller) syncRoller(total);
+      total += drawWeekend(b);   // from here on, "anything on this week" includes the weekend
       if (window.pasBoard && window.pasBoard.onShow) window.pasBoard.onShow();
       drawCost(b);
       tabs.hidden = !!shared;
@@ -927,7 +937,114 @@
       }
     };
 
+    // ----- the weekend: an optional Saturday and Sunday under the five school days -----
+    // A weekend class has no school and no pickup, so a pick is just the program, with a class or a time typed beside it.
+    var wkBox = $('#wkend'), wkStatus = '';
+    var wkLookup = function (entry) { var id = entryKey(entry), p = data.weekend && data.weekend[id]; return p ? { id: id, prog: p, note: entryNote(entry) } : null; };
+    var drawWeekend = function (b) {
+      if (!wkBox) return 0;
+      var r = loadRosters(), n = weekendCount(b), any = Object.keys(data.weekend || {}).length > 0;
+      wkBox.textContent = '';
+      wkBox.hidden = !!shared || !any;
+      if (shared || !any) return n;
+      if (!r.wk && !n) {   // off until someone asks for it
+        var ask = el('p', 'wk-ask');
+        var on = el('button', 'btn', 'Add Saturday and Sunday'); on.type = 'button'; on.id = 'wk-on';
+        on.addEventListener('click', function () { loadRosters().wk = true; saveRosters(); render(); var first = wkBox.querySelector('select'); if (first) first.focus(); });
+        ask.appendChild(on);
+        ask.appendChild(el('span', 'hint', 'Weekend classes can go on the same week and the same card.'));
+        wkBox.appendChild(ask);
+        return n;
+      }
+      var head = el('div', 'wk-head');
+      head.appendChild(el('h3', null, 'The weekend'));
+      var more = el('a', null, 'See every weekend class'); more.href = data.weekendPath; head.appendChild(more);
+      wkBox.appendChild(head);
+      var grid = el('div', 'wk-grid');
+      WKDAYS.forEach(function (day) {
+        var col = el('section', 'wkcol');
+        col.setAttribute('data-wkday', day[0]);
+        col.appendChild(el('h3', null, day[1]));
+        var list = el('ul'), shown = 0;
+        b.wk[day[0]].forEach(function (entry) {
+          var k = wkLookup(entry);
+          if (!k) return;
+          shown++;
+          var li = el('li', 'pick tc wkpick');
+          var type = data.types[k.prog.type];
+          if (type) {
+            li.style.setProperty('--tc', type.color);
+            var band = el('span', 'tc-top');
+            var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('width', '16'); svg.setAttribute('height', '16'); svg.setAttribute('aria-hidden', 'true');
+            var shape = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            shape.setAttribute('d', type.icon); shape.setAttribute('fill', 'currentColor'); shape.setAttribute('fill-rule', 'evenodd');
+            svg.appendChild(shape); band.appendChild(svg);
+            band.appendChild(el('span', null, type.label));
+            li.appendChild(band);
+          }
+          var a = el('a', null, k.prog.name); a.href = k.prog.path;
+          var strong = el('b'); strong.appendChild(a); li.appendChild(strong);
+          var note = el('input', 'note');
+          note.type = 'text'; note.maxLength = 40; note.value = k.note;
+          note.placeholder = 'Class or time';
+          note.setAttribute('aria-label', 'Class or time for ' + k.prog.name + ' on ' + day[1]);
+          note.addEventListener('change', function () {
+            var mine = activeBoard(), i = mine.wk[day[0]].indexOf(entry);
+            if (i > -1) { mine.wk[day[0]][i] = makeEntry(k.id, note.value); saveRosters(); wkStatus = savedNote(); render(); }
+          });
+          li.appendChild(note);
+          if (k.prog.times && k.prog.times[day[0]]) li.appendChild(el('span', 'hint', 'Classes run ' + k.prog.times[day[0]]));
+          if (k.prog.days.indexOf(day[0]) < 0) { li.className += ' tc-off'; li.appendChild(el('span', 'tc-warn', 'Not listed for ' + day[1] + 's')); }
+          var rm = el('button', 'clear', 'Remove'); rm.type = 'button';
+          rm.addEventListener('click', function () {
+            var mine = activeBoard(), i = mine.wk[day[0]].indexOf(entry);
+            if (i > -1) mine.wk[day[0]].splice(i, 1);
+            saveRosters(); wkStatus = 'Removed. ' + savedNote(); render();
+          });
+          li.appendChild(rm);
+          list.appendChild(li);
+        });
+        col.appendChild(shown ? list : el('p', 'hint', 'Nothing yet.'));
+        // what can be added: the programs with a class that day, minus the ones already here
+        var have = b.wk[day[0]].map(entryKey);
+        var open = Object.keys(data.weekend).filter(function (id) { return data.weekend[id].days.indexOf(day[0]) > -1 && have.indexOf(id) < 0; })
+          .sort(function (x, y) { return data.weekend[x].name.localeCompare(data.weekend[y].name); });
+        if (open.length && b.wk[day[0]].length < 6) {
+          var sel = el('select', 'wk-add'); sel.setAttribute('aria-label', 'Add a ' + day[1] + ' class');
+          var first = el('option', null, 'Add a ' + day[1] + ' class…'); first.value = ''; sel.appendChild(first);
+          open.forEach(function (id) { var o = el('option', null, data.weekend[id].name); o.value = id; sel.appendChild(o); });
+          sel.addEventListener('change', function () { if (sel.value) addWeekend(sel.value, day[0], 'roster_weekend'); });
+          col.appendChild(sel);
+        }
+        grid.appendChild(col);
+      });
+      wkBox.appendChild(grid);
+      var foot = el('p', 'wk-foot');
+      var say2 = el('span', 'hint'); say2.setAttribute('aria-live', 'polite'); say2.textContent = wkStatus || 'Weekend classes aren’t in the cost estimate.'; wkStatus = '';
+      foot.appendChild(say2);
+      if (!n) {
+        var off = el('button', 'clear', 'Hide the weekend'); off.type = 'button';
+        off.addEventListener('click', function () { loadRosters().wk = false; saveRosters(); render(); });
+        foot.appendChild(off);
+      }
+      wkBox.appendChild(foot);
+      return n;
+    };
+    var addWeekend = function (id, day, how) {
+      var p = data.weekend && data.weekend[id], r = loadRosters(), b = activeBoard();
+      if (!p || !b.wk[day]) return;
+      r.wk = true;
+      if (b.wk[day].map(entryKey).indexOf(id) < 0 && b.wk[day].length < 6) {
+        b.wk[day].push(id);
+        track({ event: 'pas_board_add', program_id: id, school: 'weekend', day: day, method: how, board: r.active === 'next' ? 'upcoming' : 'current', children: r.kids.length });
+        wkStatus = 'Added ' + p.name + ' to ' + (day === 'sat' ? 'Saturday' : 'Sunday') + '. ' + savedNote();
+      }
+      saveRosters(); render();
+    };
+
     all(tabs, '.tab').forEach(function (t) {
+
       t.addEventListener('click', function () { loadRosters().active = t.getAttribute('data-board'); saveRosters(); say(''); render(); });
     });
     nameInput.addEventListener('input', function () { activeKid().name = nameInput.value.replace(/\s+/g, ' ').slice(0, 40); saveRosters(); say(savedNote()); render(); });
@@ -1239,6 +1356,10 @@
       });
       // Arriving from a program's page ("Add to your week"): open that program here, ready for its days.
       var asked = query();
+      if (asked.wk && data.weekend && data.weekend[asked.wk] && !shared) {   // from the weekend classes page: "Add Saturday to your week"
+        if (window.history && history.replaceState) { try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* file preview */ } }
+        window.setTimeout(function () { addWeekend(asked.wk, asked.day === 'sun' ? 'sun' : 'sat', 'weekend_page'); if (wkBox && wkBox.scrollIntoView) wkBox.scrollIntoView({ block: 'center' }); }, 0);
+      }
       if (asked.add && data.programs[asked.add] && !shared) {
         if (window.history && history.replaceState) { try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* file preview */ } }
         window.setTimeout(function () { pickAdd(asked.add, asked.school || '', 'program_page'); if (adder.scrollIntoView) adder.scrollIntoView({ block: 'center' }); }, 0);
@@ -1325,6 +1446,7 @@
         var res = rollWeek(theme, sid, rollGrade.value);
         if (!res.n) { rollStatus.textContent = 'Nothing is listed for that theme at ' + data.schools[sid].name + ' yet.'; return; }
         if (!sameSpot()) rolled = { kid: r.kid, which: r.active, before: cleanBoard(activeBoard()) };
+        res.board.wk = cleanBoard(activeBoard()).wk;   // a themed week fills Monday to Friday; the weekend stays as it was
         r.kids[r.kid][r.active] = res.board;
         rolled.sig = JSON.stringify(res.board.days); rolled.theme = id;
         saveRosters(); say(''); render();
@@ -1461,7 +1583,11 @@
     var drawCard = function () {
       if (!canvas || !canvas.getContext || shared) return;
       var r = loadRosters(), kid = r.kids[r.kid], which = r.active, b = kid[which];
-      var ctx = canvas.getContext('2d'), W = 1080, H = 1350, FOOT = 160;
+      // A week with something on Saturday or Sunday gets a taller card: the five days keep their size and the weekend
+      // sits in one more row beneath them, split in two.
+      var wkOn = weekendCount(b) > 0, EXTRA = wkOn ? 184 : 0;
+      if (canvas.height !== 1350 + EXTRA) canvas.height = 1350 + EXTRA;
+      var ctx = canvas.getContext('2d'), W = 1080, H = 1350 + EXTRA, FOOT = 160;
       var teacher = cleanName(kid.teacher), note = String(kid.cardNote || '').replace(/\s+/g, ' ').replace(/^ | $/g, '');
       ctx.clearRect(0, 0, W, H);
       ctx.fillStyle = '#0F4D90'; ctx.fillRect(0, 0, W, H);
@@ -1486,7 +1612,7 @@
       do { ctx.font = '850 ' + size + 'px ' + DISPLAY; size -= 4; } while (ctx.measureText(title).width > textMax && size > 44);
       ctx.fillStyle = '#FFFFFF'; ctx.fillText(fit(ctx, title, textMax), 56, 196);
       ctx.font = '400 32px ' + BODY; ctx.fillStyle = '#CFE3FB';
-      ctx.fillText(fit(ctx, 'After school' + (which === 'next' ? ', next term' : '') + (teacher ? '  ·  for ' + teacher : ''), textMax), 56, 248);
+      ctx.fillText(fit(ctx, (wkOn ? 'After school and weekends' : 'After school') + (which === 'next' ? ', next term' : '') + (teacher ? '  ·  for ' + teacher : ''), textMax), 56, 248);
       // the five days
       var top = 300, bottom = note ? 1068 : 1172, gap = 12, rowH = (bottom - top - gap * 4) / 5;
       DAYS.forEach(function (day, i) {
@@ -1508,9 +1634,31 @@
           ctx.fillStyle = '#4D607A'; ctx.font = '400 25px ' + BODY; ctx.fillText(fit(ctx, bits || pillText(k), 760), 248, by + (blockH < 74 ? 61 : 66));
         });
       });
+      if (wkOn) {   // Saturday and Sunday, side by side
+        var wy = bottom + gap, wh = EXTRA - gap, cw = (984 - gap) / 2;
+        WKDAYS.forEach(function (day, i) {
+          var x = 48 + i * (cw + gap);
+          ctx.fillStyle = '#FFFFFF'; box(ctx, x, wy, cw, wh, 22); ctx.fill();
+          ctx.fillStyle = '#CFE3FB'; box(ctx, x, wy, 104, wh, 22); ctx.fill(); ctx.fillRect(x + 78, wy, 26, wh);
+          var picks = b.wk[day[0]].map(wkLookup).filter(Boolean);
+          ctx.fillStyle = '#0B2140'; ctx.font = '800 34px ' + DISPLAY; ctx.textAlign = 'center';
+          ctx.fillText(day[2].toUpperCase(), x + 52, wy + wh / 2 + (picks.length > 2 ? 0 : 12));
+          if (picks.length > 2) { ctx.font = '700 19px ' + BODY; ctx.fillText('+ ' + (picks.length - 2) + ' more', x + 52, wy + wh / 2 + 30); }
+          ctx.textAlign = 'left';
+          var tw = cw - 104 - 46;
+          if (!picks.length) { ctx.fillStyle = '#7A8DA6'; ctx.font = '400 27px ' + BODY; ctx.fillText('Nothing planned', x + 126, wy + wh / 2 + 9); return; }
+          var showN = Math.min(picks.length, 2), blockH = 76, startY = wy + (wh - showN * blockH) / 2;
+          picks.slice(0, showN).forEach(function (k, j) {
+            var by = startY + j * blockH, type = data.types[k.prog.type] || { color: '#0F4D90' };
+            ctx.fillStyle = type.color; box(ctx, x + 120, by + 8, 9, blockH - 18, 4.5); ctx.fill();
+            ctx.fillStyle = '#0B2140'; ctx.font = '750 28px ' + DISPLAY; ctx.fillText(fit(ctx, k.prog.name, tw), x + 142, by + 33);
+            ctx.fillStyle = '#4D607A'; ctx.font = '400 22px ' + BODY; ctx.fillText(fit(ctx, k.note || (k.prog.times && k.prog.times[day[0]]) || 'Weekend class', tw), x + 142, by + 61);
+          });
+        });
+      }
       if (note) {
-        ctx.fillStyle = '#0A3566'; box(ctx, 48, 1082, 984, 92, 22); ctx.fill();
-        ctx.fillStyle = '#FFFFFF'; ctx.font = '400 30px ' + BODY; ctx.fillText(fit(ctx, 'Note: ' + note, 930), 76, 1139);
+        ctx.fillStyle = '#0A3566'; box(ctx, 48, 1082 + EXTRA, 984, 92, 22); ctx.fill();
+        ctx.fillStyle = '#FFFFFF'; ctx.font = '400 30px ' + BODY; ctx.fillText(fit(ctx, 'Note: ' + note, 930), 76, 1139 + EXTRA);
       }
       // footer: where this came from, so a shared or printed card leads back to the site
       var host = String(data.site || '').replace(/^https?:\/\//, '') || 'phillyafterschool.org';
@@ -1578,7 +1726,7 @@
       });
       // A small copy of the card sits in the "Share this schedule" strip under the week, so people see what they would send.
       var thumb = $('#share-thumb'), paintCard = drawCard;
-      drawCard = function () { paintCard(); if (thumb) { try { var t = thumb.getContext('2d'); t.clearRect(0, 0, thumb.width, thumb.height); t.drawImage(canvas, 0, 0, thumb.width, thumb.height); } catch (e) { /* the strip works without its preview */ } } };
+      drawCard = function () { paintCard(); if (thumb) { try { var th = Math.round(thumb.width * canvas.height / canvas.width); if (thumb.height !== th) thumb.height = th; var t = thumb.getContext('2d'); t.clearRect(0, 0, thumb.width, thumb.height); t.drawImage(canvas, 0, 0, thumb.width, thumb.height); } catch (e) { /* the strip works without its preview */ } } };
       var shareCtaBtn = $('#share-cta-btn');
       if (shareCtaBtn) shareCtaBtn.addEventListener('click', function () {
         var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;

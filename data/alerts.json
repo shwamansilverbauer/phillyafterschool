@@ -166,6 +166,22 @@
     {
       "id": "mccall-clubs",
       "name": "McCall clubs and teams"
+    },
+    {
+      "id": "sawubona-creativity-project",
+      "name": "Sawubona Creativity Project"
+    },
+    {
+      "id": "playarts-day-camps",
+      "name": "PlayArts day camps"
+    },
+    {
+      "id": "philly-rock-gym-day-camps",
+      "name": "Philadelphia Rock Gym"
+    },
+    {
+      "id": "skate-the-foundry",
+      "name": "Skate The Foundry"
     }
   ],
   "alerts": [
@@ -557,6 +573,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-skate-the-foundry-2026-11-03",
+      "kind": "camp",
+      "date": "2026-11-03",
+      "sendOn": "2026-10-18",
+      "schools": [],
+      "programs": [
+        "skate-the-foundry"
+      ],
+      "within": "off-2026-11-03",
+      "when": "Tuesday, November 3",
+      "title": "Skate The Foundry: camp on a day off",
+      "text": "School is closed (Election Day). Skate The Foundry has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/skate-the-foundry/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2026-11-03",
       "kind": "dayoff",
       "date": "2026-11-03",
@@ -567,7 +599,7 @@
       "programs": [],
       "when": "Tuesday, November 3",
       "title": "No school: Election Day",
-      "text": "8 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center and Philly InMovement: MOVE After School.",
+      "text": "9 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center, Philly InMovement: MOVE After School and Skate The Foundry.",
       "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-11-03",
       "button": "See who’s open"
     },

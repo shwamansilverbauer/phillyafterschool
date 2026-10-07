@@ -1,7 +1,7 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 80,
+    "pages": 84,
     "pagesNeedingABrowser": 2,
     "pagesNeedingAPerson": 2,
     "links": 88,
@@ -1248,6 +1248,14 @@
       "lists": []
     },
     {
+      "url": "https://philarockgym.com/youth-camps/",
+      "how": "fetch",
+      "programs": [
+        "philly-rock-gym-day-camps"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://phillyartcenter.captyn.com/find?department=clu8qqzk2009293r866a7j7wg&filter=4&program=clv479vep03ki7to5es3tmyjr&program=clwtkcaoi00kmsudp98n0ecv5&day=Monday&day=Tuesday&day=Wednesday&day=Thursday&day=Friday&location=clu8gptof0aahxkl2mj3v7mxl&tag=clv494qhk032olgi2d9i70vw6&tag=clv494xs6032plgi2z23yr0a8",
       "how": "fetch",
       "programs": [
@@ -1601,6 +1609,14 @@
       "lists": []
     },
     {
+      "url": "https://www.playartsphilly.com/day-camps",
+      "how": "fetch",
+      "programs": [
+        "playarts-day-camps"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.queenandrookcafe.com/youth-programs/",
       "how": "fetch",
       "programs": [
@@ -1613,6 +1629,22 @@
       "how": "fetch",
       "programs": [
         "queen-and-rook"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.sawubonacreativityproject.org/campinformationandschedules",
+      "how": "fetch",
+      "programs": [
+        "sawubona-creativity-project"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.skatethefoundry.com/camp/",
+      "how": "fetch",
+      "programs": [
+        "skate-the-foundry"
       ],
       "lists": []
     },
@@ -1747,13 +1779,24 @@
   "camps": {
     "season": 2026,
     "summary": {
-      "camps": 42,
+      "camps": 43,
       "showingNextSummer": 1,
-      "needingABrowser": 17,
+      "needingABrowser": 18,
       "needingAPerson": 0,
-      "notReadYet": 17
+      "notReadYet": 16
     },
     "list": [
+      {
+        "camp": "philly-rock-gym-camps",
+        "name": "Philadelphia Rock Gym summer camps",
+        "season": null,
+        "checked": "2026-10-07",
+        "url": "https://philarockgym.com/youth-camps/",
+        "how": "browser",
+        "look": "The Summer Camps section has a block per camp with ages, prices and hours. Gym addresses are on each location’s own page.",
+        "notes": "Read in a browser on 2026-10-07. The site could not be read by the fetch tool the same day.",
+        "signup": "The page said registration is coming soon."
+      },
       {
         "camp": "allens-lane-art-camp",
         "name": "Allens Lane Art Center summer art camp",
@@ -2200,11 +2243,6 @@
         "name": "Girls Rock Philly",
         "url": "https://www.girlsrockphilly.org/",
         "why": "Its camp page still described summer 2022 and 2023 on 2026-10-07."
-      },
-      {
-        "name": "Philadelphia Rock Gym youth camps",
-        "url": "https://philarockgym.com/youth-camps/",
-        "why": "Read in a browser on 2026-10-07: summer camps for ages 6–15 at $480 a full-day week ($590 for Camp Real Rock), with registration “coming soon”. The page doesn’t say which of its gyms are in the city or give dates."
       },
       {
         "name": "Move It Kidz 4 Fitness",

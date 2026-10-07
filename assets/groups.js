@@ -12,6 +12,26 @@
   var GOOGLE = host.getAttribute('data-google') || '';      // Google's public client id for "sign in with Google"; empty turns it off
   var LIST_NOTE = KL_LIST ? 'Making an account adds your name and email to our email list, for occasional news about the site. Every email has an unsubscribe link.' : '';
   var DAYS = [['mon', 'Monday', 'Mon'], ['tue', 'Tuesday', 'Tue'], ['wed', 'Wednesday', 'Wed'], ['thu', 'Thursday', 'Thu'], ['fri', 'Friday', 'Fri']];
+  // A week can also carry weekend classes. On a device they sit beside the five days (board.wk); once they leave it
+  // they travel as two more days, "sat" and "sun", holding program ids (and a class the program lists), nothing else.
+  var WKDAYS = [['sat', 'Saturday', 'Sat'], ['sun', 'Sunday', 'Sun']];
+  function weekendOut(b, out, offersOf) {
+    WKDAYS.forEach(function (d) {
+      out[d[0]] = [];
+      ((b && b.wk && b.wk[d[0]]) || []).forEach(function (e) {
+        if (typeof e !== 'string') return;
+        var i = e.indexOf('~'), id = i < 0 ? e : e.slice(0, i), c = i < 0 ? '' : e.slice(i + 1), offers = offersOf(id);
+        if (!offers) return;
+        var v = c && offers.indexOf(c) > -1 ? id + '~' + c : id;
+        if (out[d[0]].indexOf(v) < 0) out[d[0]].push(v);
+      });
+    });
+    return out;
+  }
+  // The days a shared week shows: Monday to Friday, plus Saturday and Sunday when any child has something there.
+  function daysShown(kids, which) {
+    return DAYS.concat(WKDAYS.filter(function (d) { return kids.some(function (k) { return ((k[which] && k[which][d[0]]) || []).length > 0; }); }));
+  }
 
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function btn(cls, text) { var b = el('button', cls, text); b.type = 'button'; return b; }
@@ -152,6 +172,7 @@
   function tidyCode(v) { return String(v || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12); }
   function showCode(c) { c = tidyCode(c); return c.length === 12 ? c.slice(0, 4) + '-' + c.slice(4, 8) + '-' + c.slice(8) : c; }
   function firstWord(s) { return String(s || '').replace(/^\s+/, '').split(/\s+/)[0].slice(0, 20); }
+  var weekendOf = null;   // on Build your week: the programs with weekend classes, which may not be after-school listings at all
   function readRosters() { try { var r = JSON.parse(window.localStorage.getItem('pas-rosters') || 'null'); return r && Array.isArray(r.kids) ? r : null; } catch (e) { return null; } }
   // What leaves the device for a child's week: program ids, and a class only when it's one the program lists. No school, address or note.
   function weekOf(b, programs) {
@@ -165,7 +186,7 @@
         if (out[d[0]].indexOf(v) < 0) out[d[0]].push(v);
       });
     });
-    return out;
+    return weekendOut(b, out, function (id) { var p = programs[id]; return p && (p.wk || (weekendOf && weekendOf[id])) ? (p.offers || []) : weekendOf && weekendOf[id] ? [] : null; });
   }
   // What goes to someone's own profile: the same, plus the school each program was picked under, which is what lets the
   // week be put back on another device. Still no free-text notes.
@@ -180,7 +201,7 @@
         if (out[d[0]].indexOf(v) < 0) out[d[0]].push(v);
       });
     });
-    return out;
+    return weekendOut(b, out, function (id) { var p = programs[id]; return p && (p.wk || (weekendOf && weekendOf[id])) ? (p.offers || []) : weekendOf && weekendOf[id] ? [] : null; });
   }
   function deviceSchool() { try { var m = JSON.parse(get('pas-my-school') || 'null'); return m && typeof m.id === 'string' ? m : null; } catch (e) { return null; } }
   // The school kept in a profile is the one this device starts from, too.
@@ -200,7 +221,12 @@
   }
   function gradeWord(g) { return g === 'PK' ? 'Pre-K' : g; }
   function shortDate(t) { var d = new Date(t * 1000); return isNaN(d) ? '' : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
-  function weekCount(b) { var n = 0; DAYS.forEach(function (d) { n += ((b && b.days && b.days[d[0]]) || []).length; }); return n; }
+  function weekCount(b) {
+    var n = 0;
+    DAYS.forEach(function (d) { n += ((b && b.days && b.days[d[0]]) || []).length; });
+    WKDAYS.forEach(function (d) { n += ((b && b.wk && b.wk[d[0]]) || []).length + ((b && b.days && b.days[d[0]]) || []).length; });   // on a device (wk) or as it came back from the server (days)
+    return n;
+  }
   // Inviting people: the owner types email addresses, each gets an invitation, and only those addresses can join.
   function inviteForm(gid, done) {
     var f = el('form', 'g-form g-invite');
@@ -597,7 +623,7 @@
       }
       var kids = d.kids || [];
       // Open on whichever has more in it: early in a term that is usually the upcoming one.
-      var count = function (w) { var n = 0; kids.forEach(function (k) { DAYS.forEach(function (dd) { n += (k[w][dd[0]] || []).length; }); }); return n; };
+      var count = function (w) { var n = 0; kids.forEach(function (k) { DAYS.concat(WKDAYS).forEach(function (dd) { n += (k[w][dd[0]] || []).length; }); }); return n; };
       if (!draw.picked) { which = count('next') > count('now') ? 'next' : 'now'; }
       lede.textContent = d.solo ? 'A first name and programs only. It opens for the people it was shared with and nobody else.'
         : kids.length ? kids.length + (kids.length === 1 ? ' child' : ' children') + '. First names and programs only, seen by the people this group’s creator invited.' : 'Nobody has added a week yet.';
@@ -643,8 +669,9 @@
       } else {
         // by day: each program, and who is there
         view.appendChild(el('h2', null, 'By day'));
-        var grid = el('div', 'week g-week');
-        DAYS.forEach(function (day) {
+        var grid = el('div', 'week g-week'), showDays = daysShown(kids, which);
+        if (showDays.length > 5) grid.className += ' g-week7';
+        showDays.forEach(function (day) {
           var col = el('section', 'daycol');
           col.appendChild(el('h3', null, day[1]));
           var by = {}, order = [], off = [];
@@ -678,12 +705,12 @@
         var scroll = el('div', 'g-scroll'), table = el('table', 'g-table');
         var cap = el('caption', null, d.name + ': ' + (which === 'next' ? 'upcoming' : 'current') + ' after-school programs'); table.appendChild(cap);
         var thead = el('thead'), hr = el('tr'); hr.appendChild(el('th', null, 'Child'));
-        DAYS.forEach(function (day) { var th = el('th', null, day[1]); th.scope = 'col'; hr.appendChild(th); });
+        showDays.forEach(function (day) { var th = el('th', null, day[1]); th.scope = 'col'; hr.appendChild(th); });
         thead.appendChild(hr); table.appendChild(thead);
         var tb = el('tbody');
         kids.forEach(function (k) {
           var tr = el('tr'); var th = el('th', null, k.name); th.scope = 'row'; tr.appendChild(th);
-          DAYS.forEach(function (day) {
+          showDays.forEach(function (day) {
             var td = el('td');
             (k[which][day[0]] || []).forEach(function (e) { var p = progName(e); td.appendChild(el('span', null, p.name + (p.cls ? ': ' + p.cls : ''))); });
             tr.appendChild(td);
@@ -1012,6 +1039,7 @@
     var groupsOn = function () { return !pilot || get('pas-groups') === '1'; };   // groups for several families stay unlisted while they're a pilot
     var me = null, myGroups = [], notice = '', profile = null, people = {}, checked = false;
     var P = board.data.programs;
+    weekendOf = board.data.weekend || null;
     var toWeek = function (b) { return weekOf(b, P); };
     var toFull = function (b) { return weekFull(b, P); };
     var links = function (kid) { return Array.isArray(kid.groups) ? kid.groups : []; };
@@ -1067,6 +1095,15 @@
             if (!p || !p.schools || !p.schools[parts[1]]) return;   // a program or school the site no longer lists
             var had = (old.days[d[0]] || []).filter(function (x) { return x.split('~')[0] === key; })[0];
             fresh.days[d[0]].push(e.indexOf('~') > -1 ? e : (had || e));
+          });
+        });
+        WKDAYS.forEach(function (d) {
+          ((w[which] && w[which][d[0]]) || []).forEach(function (e) {
+            if (typeof e !== 'string' || !fresh.wk) return;
+            var id = e.split('~')[0];
+            if (!weekendOf || !weekendOf[id]) return;   // no longer runs on weekends
+            var had = ((old.wk && old.wk[d[0]]) || []).filter(function (x) { return x.split('~')[0] === id; })[0];
+            fresh.wk[d[0]].push(e.indexOf('~') > -1 ? e : (had || e));
           });
         });
         k[which] = fresh;

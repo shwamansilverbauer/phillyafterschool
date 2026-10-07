@@ -40,7 +40,8 @@ const MAX_KIDS = 6;         // children one member can add to one group
 const MAX_INVITES = 60;     // addresses one group can have invited
 const MAX_SOLO = 12;        // "share this week with one person" lists one account can have (one per child)
 const MAX_WEEKS = 6;        // children's weeks one profile can hold
-const DAYS = array('mon', 'tue', 'wed', 'thu', 'fri');
+const DAYS = array('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun');
+const WEEKEND = array('sat', 'sun');   // weekend picks are a program with weekend classes: no school, no pickup
 
 function out(array $data, int $code = 200): void { http_response_code($code); echo json_encode($data); exit; }
 function fail(string $error, string $message, int $code = 400): void { out(array('ok' => false, 'error' => $error, 'message' => $message), $code); }
@@ -269,7 +270,8 @@ function programs(): array {
   if (is_array($list)) foreach ($list as $x) {
     if (is_array($x) && isset($x['id']) && is_string($x['id'])) $p[$x['id']] = array(
       'offers' => isset($x['offers']) && is_array($x['offers']) ? $x['offers'] : array(),
-      'schools' => isset($x['schools']) && is_array($x['schools']) ? array_map('strval', array_keys($x['schools'])) : array());
+      'schools' => isset($x['schools']) && is_array($x['schools']) ? array_map('strval', array_keys($x['schools'])) : array(),
+      'weekend' => (isset($x['weekend']) && is_array($x['weekend']) && isset($x['weekend']['days']) && is_array($x['weekend']['days'])) ? $x['weekend']['days'] : array());
   }
   return $p;
 }
@@ -292,6 +294,7 @@ function clean_week($w): string {
       $parts = explode('~', $e, 2);
       $id = $parts[0];
       if (!isset($known[$id])) continue;                                   // only programs the site lists
+      if (in_array($d, WEEKEND, true) && !in_array($d, $known[$id]['weekend'], true)) continue; // and on a weekend, only ones with classes that day
       $cls = isset($parts[1]) && in_array($parts[1], $known[$id]['offers'], true) ? $parts[1] : '';   // free-text notes never leave the device
       $entry = $cls === '' ? $id : $id . '~' . $cls;
       if (!in_array($entry, $out[$d], true)) $out[$d][] = $entry;
@@ -310,6 +313,13 @@ function clean_week_full($w): string {
     foreach (array_slice($w[$d], 0, 8) as $e) {
       if (!is_string($e)) continue;
       $parts = explode('~', $e, 2);
+      if (in_array($d, WEEKEND, true)) {   // a weekend pick has no school: just the program, if it runs on weekends
+        if (!isset($known[$parts[0]]) || !in_array($d, $known[$parts[0]]['weekend'], true)) continue;
+        $wcls = isset($parts[1]) && in_array($parts[1], $known[$parts[0]]['offers'], true) ? $parts[1] : '';
+        $wentry = $parts[0] . ($wcls === '' ? '' : '~' . $wcls);
+        if (count($out[$d]) < 6 && !in_array($wentry, $out[$d], true)) $out[$d][] = $wentry;
+        continue;
+      }
       $key = explode('.', $parts[0], 2);
       if (count($key) !== 2 || !isset($known[$key[0]]) || !in_array($key[1], $known[$key[0]]['schools'], true)) continue;
       $cls = isset($parts[1]) && in_array($parts[1], $known[$key[0]]['offers'], true) ? $parts[1] : '';
