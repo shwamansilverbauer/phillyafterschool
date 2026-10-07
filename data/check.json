@@ -1779,11 +1779,11 @@
   "camps": {
     "season": 2026,
     "summary": {
-      "camps": 43,
+      "camps": 44,
       "showingNextSummer": 1,
       "needingABrowser": 18,
-      "needingAPerson": 0,
-      "notReadYet": 17
+      "needingAPerson": 1,
+      "notReadYet": 16
     },
     "list": [
       {
@@ -1886,6 +1886,17 @@
         "how": "browser",
         "look": "Dates, hours and add-on fees are in the camp policies page. Camp weeks and tuition sit in the booking listing at public.theclaystudio.org/public/3/camps, which needs a browser.",
         "signup": "The 2026 early-bird discount ran January 2 to February 15."
+      },
+      {
+        "camp": "coco-academy-summer-camp",
+        "name": "CoCo Academy",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://www.cocoacademyphl.com/summercamp",
+        "how": "person",
+        "look": "The top paragraph gives ages, the first and last week and the daily hours. Prices, early drop-off, extended day and the July 4 week are under “Pricing” in the Camp Info section lower down.",
+        "notes": "The site does not allow automated reading and the browser extension is not allowed on it, so Josh pastes the page text (last pasted 2026-10-07). Registration runs through Sawyer, one link per location.",
+        "signup": "Online. Its camp page has a separate Register button for Bella Vista and for Queen Village, and early drop-off and extended day are add-ons at checkout."
       },
       {
         "camp": "dandelion-summer-camp",
@@ -2303,11 +2314,6 @@
         "name": "Future Stars summer camps",
         "url": "https://www.futurestars.com/",
         "why": "Not read yet: the page could not be opened on 2026-10-07."
-      },
-      {
-        "name": "CoCo Academy summer camp",
-        "url": "https://www.cocoacademyphl.com/summercamp",
-        "why": "Asked for on 2026-10-07. The site does not allow automated reading, so the page text has to be pasted in by a person."
       }
     ],
     "dropped": [

@@ -1606,6 +1606,47 @@
         "look": "The Summer Camps section has a block per camp with ages, prices and hours. Gym addresses are on each location’s own page.",
         "notes": "Read in a browser on 2026-10-07. The site could not be read by the fetch tool the same day."
       }
+    },
+    {
+      "id": "coco-academy-summer-camp",
+      "name": "CoCo Academy",
+      "what": "Weekly STEAM camps. Kids work on projects in the week’s theme, design and build their own inventions, and test them outside at a nearby park. Themes include robotics, motion, energy, rocket science and everyday machines.",
+      "types": [
+        "stem"
+      ],
+      "ages": "Ages 5–14",
+      "ageMin": 5,
+      "ageMax": 14,
+      "season": 2026,
+      "weeks": "June 8 to September 4, 2026, booked by the week. The July 4 week runs four days, June 29 to July 2.",
+      "hours": "9 am to 3 pm, Monday to Friday",
+      "extended": "Early drop-off from 8:30 am, $36 a week. Extended day to 5:30 pm, $100 a week, except the weeks of June 8, August 24 and August 31.",
+      "cost": "$480 a week. The four-day July 4 week is $384.",
+      "weekly": 480,
+      "price": "paid",
+      "address": "1001 Christian St and 615 S 3rd St",
+      "neighborhoods": [
+        "Bella Vista",
+        "Queen Village"
+      ],
+      "phone": "215-253-7690",
+      "website": "https://www.cocoacademyphl.com/summercamp",
+      "signup": "Online. Its camp page has a separate Register button for Bella Vista and for Queen Village, and early drop-off and extended day are add-ons at checkout.",
+      "note": "Send a labeled water bottle, a lunch that doesn’t need a fridge, and two snacks each day. Most themes run twice over the summer, so check the week’s theme when you book.",
+      "program": "coco-academy",
+      "sources": [
+        {
+          "label": "CoCo Academy summer camp",
+          "url": "https://www.cocoacademyphl.com/summercamp"
+        }
+      ],
+      "checked": "2026-10-07",
+      "check": {
+        "url": "https://www.cocoacademyphl.com/summercamp",
+        "how": "person",
+        "look": "The top paragraph gives ages, the first and last week and the daily hours. Prices, early drop-off, extended day and the July 4 week are under “Pricing” in the Camp Info section lower down.",
+        "notes": "The site does not allow automated reading and the browser extension is not allowed on it, so Josh pastes the page text (last pasted 2026-10-07). Registration runs through Sawyer, one link per location."
+      }
     }
   ],
   "todo": [
@@ -1688,11 +1729,6 @@
       "name": "Future Stars summer camps",
       "url": "https://www.futurestars.com/",
       "why": "Not read yet: the page could not be opened on 2026-10-07."
-    },
-    {
-      "name": "CoCo Academy summer camp",
-      "url": "https://www.cocoacademyphl.com/summercamp",
-      "why": "Asked for on 2026-10-07. The site does not allow automated reading, so the page text has to be pasted in by a person."
     }
   ],
   "dropped": [
