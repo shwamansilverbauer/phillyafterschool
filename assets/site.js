@@ -513,15 +513,10 @@
     var now0 = new Date(), today0 = now0.getFullYear() + '-' + ('0' + (now0.getMonth() + 1)).slice(-2) + '-' + ('0' + now0.getDate()).slice(-2);
     var days = od.days.filter(function (d) { return d.d >= today0; });
     var kidsRow = planEl.querySelector('#off-kids'), countEl = planEl.querySelector('#off-count'), listEl = planEl.querySelector('#off-list');
-    var actions = planEl.querySelector('#off-actions'), statusEl = planEl.querySelector('#off-status'), emailEl = planEl.querySelector('#off-email');
+    var actions = planEl.querySelector('#off-actions'), statusEl = planEl.querySelector('#off-status');
     var HOME = 'home';
     var label = function (v) { return v === HOME ? 'At home or with family' : od.programs[v] ? od.programs[v].name : ''; };
     var planned = function (kid) { return days.filter(function (d) { return kid.off[d.d] && label(kid.off[d.d]); }); };
-    var asText = function (kid) {
-      var lines = [(kid.name ? possessive(kid.name) : 'Our') + ' day-off plan'];
-      planned(kid).forEach(function (d) { lines.push(d.label + ' (' + d.name + '): ' + label(kid.off[d.d])); });
-      return lines.join('\n') + '\n\nPlanned at ' + od.page;
-    };
     // ----- the day-camp card: the plan as one picture, in the day-off colors -----
     var cardBox = planEl.querySelector('#off-card'), canvas = planEl.querySelector('#off-canvas'), noteBox = planEl.querySelector('#off-note');
     var photoBox = planEl.querySelector('#off-photo'), photoClear = planEl.querySelector('#off-photo-clear'), cardStatus = planEl.querySelector('#off-card-status');
@@ -699,7 +694,6 @@
         li.appendChild(rm);
         listEl.appendChild(li);
       });
-      emailEl.href = 'mailto:?subject=' + encodeURIComponent((kid.name ? possessive(kid.name) : 'Our') + ' day-off plan') + '&body=' + encodeURIComponent(asText(kid));
       // the pick row under each date
       all(document, '.offpick[data-off-day]').forEach(function (row) {
         var date = row.getAttribute('data-off-day'), d = null;
@@ -736,11 +730,6 @@
         }
       });
     };
-    planEl.querySelector('#off-copy').addEventListener('click', function () {
-      var text = asText(activeKid());
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { statusEl.textContent = 'Copied.'; }, function () { statusEl.textContent = 'Copying didn’t work here. Use Email it to myself.'; });
-      else statusEl.textContent = 'Copying didn’t work here. Use Email it to myself.';
-    });
     var clearBtn = planEl.querySelector('#off-clear');
     clearBtn.addEventListener('click', function () {
       if (clearBtn.getAttribute('data-armed')) { activeKid().off = {}; saveRosters(); clearBtn.removeAttribute('data-armed'); clearBtn.textContent = 'Clear this plan'; statusEl.textContent = 'Plan cleared.'; draw(); }
