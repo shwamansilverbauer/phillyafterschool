@@ -12,6 +12,12 @@
     "seen": "2026-10-06"
   },
   {
+    "match": "cocoacademyphl.com/summercamp",
+    "how": "person",
+    "why": "The site’s robots.txt disallows all automated reading (seen 2026-10-07) and the browser extension is not allowed on the site. Josh pastes the page text.",
+    "seen": "2026-10-07"
+  },
+  {
     "match": "phila.gov/parks-rec-finder",
     "how": "browser",
     "why": "A JavaScript app: a plain fetch returns no listings.",
