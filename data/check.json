@@ -1,12 +1,12 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 72,
+    "pages": 74,
     "pagesNeedingABrowser": 2,
-    "pagesNeedingAPerson": 1,
-    "links": 84,
-    "pickupLinks": 51,
-    "pickupOnAStoredList": 43,
+    "pagesNeedingAPerson": 2,
+    "links": 87,
+    "pickupLinks": 53,
+    "pickupOnAStoredList": 45,
     "pickupFromAThirdPartyList": 4,
     "pickupOnItsOwnSource": 3,
     "pickupWithNothingBehindIt": 1,
@@ -830,6 +830,36 @@
         "how": "browser",
         "by": "provider"
       }
+    },
+    {
+      "program": "dandelion-after-school",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-07",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-07",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "dandelion-after-school",
+      "school": "nebinger",
+      "relation": "nearby",
+      "checked": "2026-10-07"
+    },
+    {
+      "program": "dandelion-after-school",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-10-07",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-07",
+        "how": "fetch",
+        "by": "provider"
+      }
     }
   ],
   "pages": [
@@ -1443,6 +1473,15 @@
       "lists": []
     },
     {
+      "url": "https://www.hisawyer.com/the-dandelion-project/schedules",
+      "how": "person",
+      "why": "On 2026-10-07 the browser extension was not allowed on the booking page and a plain fetch was refused, so its dates, ages and hours were not read.",
+      "programs": [
+        "dandelion-after-school"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.movemakersphilly.com/range-of-motion-after-school-programming.html",
       "how": "fetch",
       "programs": [
@@ -1546,6 +1585,22 @@
         "sunrise-mccall"
       ],
       "lists": []
+    },
+    {
+      "url": "https://www.thedandelionproject.us/dandelion-after-school",
+      "how": "fetch",
+      "programs": [
+        "dandelion-after-school"
+      ],
+      "lists": [
+        {
+          "program": "dandelion-after-school",
+          "text": "Coppin Elementary: Monday-Friday. Southwark Elementary: Monday, Thursday, Friday. Kirkbride Elementary: Monday-Friday. Vare-Washington Elementary: Monday Friday. If you are from a different South Philly school and are interested, reach out!",
+          "read": "2026-10-07",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
     },
     {
       "url": "https://zhangsah.org/after-school-program/",

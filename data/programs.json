@@ -2057,6 +2057,100 @@
     ]
   },
   {
+    "id": "dandelion-after-school",
+    "name": "Dandelion After School",
+    "what": "Play-based aftercare from The Dandelion Project, built around social-emotional learning",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "childcare",
+      "play",
+      "cooking",
+      "baking",
+      "crafts",
+      "art",
+      "dramatic play",
+      "music",
+      "dance",
+      "games",
+      "neighborhood walks",
+      "social emotional learning",
+      "SEL",
+      "snack",
+      "Dandelion Project"
+    ],
+    "address": "1415 S 9th St",
+    "neighborhoods": [
+      "Passyunk Square"
+    ],
+    "grades": null,
+    "gradeNote": "Grades not published",
+    "hours": "After school, with a snack. End time not published.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Enroll for 1 to 5 days a week.",
+    "cost": "$165 a month for each weekday enrolled, billed monthly (two days a week is $330 a month). Pickup from the schools it lists is free. 5% off for siblings, 5% off for a full week, 10% off for BIPOC youth.",
+    "rate": {
+      "per": "month",
+      "eachDay": 165,
+      "fullWeekOff": 0.05
+    },
+    "price": "paid",
+    "phone": "215-792-3289",
+    "email": "hello@thedandelionproject.us",
+    "website": "https://www.thedandelionproject.us/dandelion-after-school",
+    "register": {
+      "how": "online",
+      "url": "https://www.hisawyer.com/the-dandelion-project/schedules",
+      "note": "The Sign Up button on Dandelion’s page opens its booking page."
+    },
+    "note": "Dandelion’s page doesn’t give grades or an end time, so ask before you sign up. Each afternoon mixes cooking, crafts, dramatic play, music, games and neighborhood walks.",
+    "sources": [
+      {
+        "label": "Dandelion After School",
+        "url": "https://www.thedandelionproject.us/dandelion-after-school"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "schools": {
+      "coppin": {
+        "relation": "pickup",
+        "distance": "about a 10-minute walk from Coppin",
+        "note": "Dandelion lists free pickup from Coppin Monday to Friday.",
+        "checked": "2026-10-07"
+      },
+      "vare-washington": {
+        "relation": "pickup",
+        "distance": "about half a mile west of Vare-Washington",
+        "note": "Dandelion lists free pickup from Vare-Washington. Its page reads “Monday Friday”, which could mean every day or those two days, so ask which.",
+        "checked": "2026-10-07"
+      },
+      "nebinger": {
+        "relation": "nearby",
+        "distance": "about a 15-minute walk south of Nebinger",
+        "note": "Nebinger isn’t on Dandelion’s pickup list. Its page invites families at other South Philly schools to get in touch.",
+        "checked": "2026-10-07"
+      }
+    },
+    "pickupLists": [
+      {
+        "text": "Coppin Elementary: Monday-Friday. Southwark Elementary: Monday, Thursday, Friday. Kirkbride Elementary: Monday-Friday. Vare-Washington Elementary: Monday Friday. If you are from a different South Philly school and are interested, reach out!",
+        "url": "https://www.thedandelionproject.us/dandelion-after-school",
+        "read": "2026-10-07",
+        "how": "fetch",
+        "by": "provider",
+        "note": "The same list showed in a browser on the same day."
+      }
+    ]
+  },
+  {
     "id": "movemakers",
     "name": "MoveMakers Philly",
     "what": "Dance and movement classes, with homework time and snack",
