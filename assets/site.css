@@ -921,3 +921,10 @@ html{scroll-padding-top:calc(var(--bar-h,64px) + 12px)}
   .js .nav.open{max-height:calc(100vh - var(--bar-h,64px) - 20px);max-height:calc(100dvh - var(--bar-h,64px) - 20px);overflow-y:auto;overscroll-behavior:contain}
 }
 @media print{.sitebar{position:static;box-shadow:none}}
+/* summer camps and weekend classes */
+.pill.season.next{background:var(--yellow);color:var(--yellow-ink)}
+.pill.season.none{background:transparent;border:1px dashed var(--line);color:var(--muted)}
+.camp .what{margin:0}
+.camp-guide{margin:0}
+ul.cols{list-style:none;padding:0;margin:10px 0 0;columns:3 15rem;column-gap:28px}
+ul.cols li{break-inside:avoid;padding:3px 0}

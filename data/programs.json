@@ -63,6 +63,7 @@
       "music",
       "movement",
       "games",
+      "nature",
       "academics"
     ],
     "keywords": [
@@ -308,7 +309,8 @@
       "games",
       "academics",
       "movement",
-      "theater"
+      "theater",
+      "nature"
     ],
     "keywords": [
       "clubs",
@@ -1126,7 +1128,31 @@
         "read": "2026-10-06",
         "how": "fetch"
       }
-    ]
+    ],
+    "weekend": {
+      "summary": "School-age gymnastics, tumbling and aerials classes for kindergarten and up meet on Saturdays at the Queen Village and Bok gyms, roughly 10 am to 1:45 pm.",
+      "days": [
+        "sat"
+      ],
+      "grades": "K-8",
+      "term": "2026–27 school year: August 31 to June 13",
+      "cost": "About $119 a month for a one-hour class; longer classes cost more.",
+      "note": "We read the schedule from PDF grids, so confirm the class and time with the gym.",
+      "url": "https://phillyinmovement.com/school-aged-classes/",
+      "sources": [
+        {
+          "label": "Philly InMovement school-aged classes",
+          "url": "https://phillyinmovement.com/school-aged-classes/"
+        }
+      ],
+      "check": {
+        "url": "https://phillyinmovement.com/school-aged-classes/",
+        "how": "fetch",
+        "look": "Days and times are in the Saturday column of the two linked school-aged schedule PDFs (Bok and Queen Village). Prices are in the weekend tuition table on the page.",
+        "notes": "The PDF grids read poorly: some Saturday slots come back without class names."
+      },
+      "checked": "2026-10-07"
+    }
   },
   {
     "id": "settlement-kaleidoscope-plus",
@@ -1692,7 +1718,31 @@
         "read": "2026-10-06",
         "how": "fetch"
       }
-    ]
+    ],
+    "weekend": {
+      "summary": "Group piano and guitar classes meet on Saturdays, about 9:30 am to 1:45 pm, and percussion and piano groups on Sundays, about 10 am to 2:30 pm, for roughly ages 4 to 10.",
+      "days": [
+        "sat",
+        "sun"
+      ],
+      "grades": "PK-5",
+      "term": "2026–27: fall runs August 31 to December 20, and winter and spring January 4 to June 13",
+      "cost": "Fall (16 weeks) $460; winter and spring (22 weeks) $635.",
+      "note": "Some weekend sections are only for continuing students, so check which level your child would start in.",
+      "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
+      "sources": [
+        {
+          "label": "Mister John’s Music group classes 2026–27",
+          "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/"
+        }
+      ],
+      "check": {
+        "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
+        "how": "fetch",
+        "look": "Each instrument section lists its levels as lines like “Level, SATURDAYS at a time (age)”."
+      },
+      "checked": "2026-10-07"
+    }
   },
   {
     "id": "music-theatre-philly",
@@ -1804,6 +1854,34 @@
         "distance": "about a 12-minute walk west of McCall",
         "checked": "2026-10-07"
       }
+    },
+    "weekend": {
+      "summary": "Grades 1–4: Musical Theatre on Saturdays at 9 am, and Tap, Group Voice and the Finding Nemo Kids musical on Sunday mornings. Grades 5–8: Tap, High School Musical Jr. and Advanced Group Voice on Saturdays, 9 am to 1 pm.",
+      "days": [
+        "sat",
+        "sun"
+      ],
+      "grades": "1-8",
+      "term": "Spring 2027: to June 4, starting January 31 for grades 1–4 and January 10 for grades 5–8",
+      "cost": "$595 a class; $675 for the musicals. 20% off two classes, 25% off three or more.",
+      "url": "https://www.musictheatrephilly.com/grades-1-4",
+      "sources": [
+        {
+          "label": "Music Theatre Philly grades 1–4",
+          "url": "https://www.musictheatrephilly.com/grades-1-4"
+        },
+        {
+          "label": "Music Theatre Philly grades 5–8",
+          "url": "https://www.musictheatrephilly.com/grades-5-8"
+        }
+      ],
+      "check": {
+        "url": "https://www.musictheatrephilly.com/grades-1-4",
+        "how": "fetch",
+        "look": "Classes are listed under day-of-week headings, which are images, each line giving class, grades, time and price. Repeat for the grades 5–8 page.",
+        "notes": "The day headings are images, so a plain text read loses them; the fetch tool reads them."
+      },
+      "checked": "2026-10-07"
     }
   },
   {
@@ -1831,7 +1909,7 @@
     ],
     "grades": "K-8",
     "gradeNote": "Day camps for K–5 and for 6–8. Saturday classes run K–12",
-    "hours": "Nothing on weekday afternoons. Day camps run 9 am to 5 pm; weekly classes meet on Saturdays.",
+    "hours": "Nothing on weekday afternoons. Day camps run 9 am to 5 pm, and weekly classes meet on Saturdays.",
     "daysOff": {
       "summary": "Play-in-a-Day for grades K–5: the group makes up and performs its own play, 9 am to 5 pm (9 to 4 on December 31). One-day musical theatre workshops for grades 6–8 run 9:30 am to 4:30 pm on the same days through December 29. Financial aid is available.",
       "url": "https://ardentheatre.org/play-in-a-day",
@@ -1861,7 +1939,7 @@
       "label": "See dates",
       "note": "Each camp day has its own booking link on Arden’s page."
     },
-    "note": "Arden’s weekly classes are on Saturdays (grades K–12, eight weeks from September 12), so there is nothing here for a weekday afternoon.",
+    "note": "Arden’s weekly classes are on Saturdays, so there is nothing here for a weekday afternoon.",
     "sources": [
       {
         "label": "Arden Drama School",
@@ -1873,7 +1951,96 @@
       }
     ],
     "lastVerified": "2026-10-07",
-    "schools": {}
+    "schools": {},
+    "weekend": {
+      "summary": "Saturday acting and musical theatre classes for grades K–8, between 10 am and 4 pm, plus Bookworms for ages 2–5.",
+      "days": [
+        "sat"
+      ],
+      "grades": "PK-8",
+      "term": "Fall 2026: eight weeks to October 31, then a three-Saturday mini-semester November 7 to 21",
+      "note": "Prices aren’t on the page, and no winter or spring classes were posted yet.",
+      "url": "https://ardentheatre.org/arden-drama-school",
+      "sources": [
+        {
+          "label": "Arden Drama School",
+          "url": "https://ardentheatre.org/arden-drama-school"
+        }
+      ],
+      "check": {
+        "url": "https://ardentheatre.org/arden-drama-school",
+        "how": "fetch",
+        "look": "Classes are grouped by grade band under the eight-week and mini-semester headings, each with a “Saturdays” line and its own registration link."
+      },
+      "checked": "2026-10-07"
+    }
+  },
+  {
+    "id": "walnut-street-theatre-school",
+    "name": "Walnut Street Theatre School",
+    "what": "Saturday acting and musical theatre classes for kids and teens at the Walnut Street Theatre",
+    "types": [
+      "theater"
+    ],
+    "keywords": [
+      "theatre",
+      "drama",
+      "acting",
+      "musical theatre",
+      "musical theater",
+      "Walnut Street Theatre",
+      "Saturday"
+    ],
+    "address": "825 Walnut St",
+    "neighborhoods": [
+      "Washington Square West"
+    ],
+    "grades": "K-8",
+    "gradeNote": "Ages 5–17, in three age groups",
+    "hours": "Nothing on weekday afternoons. Kids’ classes meet on Saturday mornings.",
+    "cost": "$300 to $400 for a ten-week class",
+    "price": "paid",
+    "phone": "215-574-3550",
+    "email": "",
+    "website": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4",
+    "register": {
+      "how": "online",
+      "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4",
+      "label": "See classes",
+      "note": "Each class has its own page on the theatre school’s registration site."
+    },
+    "note": "We found no after-school classes on weekdays and no camps posted for days off this school year. In past years it has run a one-day Presidents’ Day camp and a spring break camp.",
+    "sources": [
+      {
+        "label": "Walnut Street Theatre School classes for kids",
+        "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4"
+      }
+    ],
+    "lastVerified": "2026-10-07",
+    "schools": {},
+    "weekend": {
+      "summary": "Acting and musical theatre classes on Saturdays between 9 am and 1:05 pm, in groups for ages 5–7, 8–11 and 12–17. Each ends in a showcase for family and friends.",
+      "days": [
+        "sat"
+      ],
+      "grades": "K-8",
+      "term": "Fall 2026: October 10 to December 19, with no class November 28",
+      "cost": "$300 to $400 a class.",
+      "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4",
+      "sources": [
+        {
+          "label": "Walnut Street Theatre School classes for kids",
+          "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4"
+        }
+      ],
+      "check": {
+        "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4",
+        "how": "fetch",
+        "look": "Each class card shows the title with its age range, then the day, the time, the date range and the price.",
+        "notes": "The category address changes with the term (classes-for-kids4). The site’s home page loads by script and comes back empty."
+      },
+      "checked": "2026-10-07"
+    }
   },
   {
     "id": "coco-academy",
@@ -2446,7 +2613,29 @@
         "read": "2026-10-06",
         "how": "fetch"
       }
-    ]
+    ],
+    "weekend": {
+      "summary": "Saturday hip hop and breaking classes run 10:15 am to 1 pm at 2100 Chestnut St. Hip hop (K–2nd, and 8 and up) and martial arts and parkour (8 and up) run 10 to 11:30 am at 812 Chestnut St.",
+      "days": [
+        "sat"
+      ],
+      "grades": "K-8",
+      "term": "2026–27 school year",
+      "note": "Prices and term dates aren’t on the schedule page, and the 2100 Chestnut classes show no ages. Ask before you sign up.",
+      "url": "https://www.movemakersphilly.com/schedule-390284.html",
+      "sources": [
+        {
+          "label": "MoveMakers Philly class schedule",
+          "url": "https://www.movemakersphilly.com/schedule-390284.html"
+        }
+      ],
+      "check": {
+        "url": "https://www.movemakersphilly.com/schedule-390284.html",
+        "how": "fetch",
+        "look": "Each studio’s weekly schedule has a Saturday row listing times and class names."
+      },
+      "checked": "2026-10-07"
+    }
   },
   {
     "id": "kids-on-12th",
@@ -3044,6 +3233,30 @@
         "distance": "about half a mile from McCall",
         "checked": "2026-10-06"
       }
+    },
+    "weekend": {
+      "summary": "Young Artists Program classes for ages 5 to 18 meet mainly on Saturdays: drawing and painting, mixed media and sculpture for grades K–5, and other classes for grades 6–12.",
+      "days": [
+        "sat"
+      ],
+      "grades": "K-8",
+      "term": "Fall 2026: Saturday classes run September 19 to November 21",
+      "cost": "A $65 base fee, with the option to pay more, up to $130.",
+      "note": "Class times weren’t readable, and fall sign-up closed September 12. Ask about openings or the next term.",
+      "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/fall-2026/",
+      "sources": [
+        {
+          "label": "Fleisher children and youth programs, fall 2026",
+          "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/fall-2026/"
+        }
+      ],
+      "check": {
+        "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/fall-2026/",
+        "how": "browser",
+        "look": "Dates sit in the intro text. The Saturday class grid is an embedded schedule and a “Fall listings” link to the registration system.",
+        "notes": "The page address has the term in it, so the next term is a new page."
+      },
+      "checked": "2026-10-07"
     }
   },
   {

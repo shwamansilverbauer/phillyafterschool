@@ -1,7 +1,7 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 79,
+    "pages": 80,
     "pagesNeedingABrowser": 2,
     "pagesNeedingAPerson": 2,
     "links": 88,
@@ -1386,6 +1386,14 @@
       "lists": []
     },
     {
+      "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4",
+      "how": "fetch",
+      "programs": [
+        "walnut-street-theatre-school"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
       "how": "browser",
       "why": "On 2026-10-06 a plain fetch was served the 2023–24 page (pickup from Coppin and Southwark only) while a browser showed the 2026–27 lists.",
@@ -1673,5 +1681,570 @@
       ],
       "lists": []
     }
-  ]
+  ],
+  "weekend": [
+    {
+      "program": "arden-drama-school",
+      "term": "Fall 2026: eight weeks to October 31, then a three-Saturday mini-semester November 7 to 21",
+      "checked": "2026-10-07",
+      "url": "https://ardentheatre.org/arden-drama-school",
+      "how": "fetch",
+      "look": "Classes are grouped by grade band under the eight-week and mini-semester headings, each with a “Saturdays” line and its own registration link."
+    },
+    {
+      "program": "fleisher-art-memorial",
+      "term": "Fall 2026: Saturday classes run September 19 to November 21",
+      "checked": "2026-10-07",
+      "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/fall-2026/",
+      "how": "browser",
+      "look": "Dates sit in the intro text. The Saturday class grid is an embedded schedule and a “Fall listings” link to the registration system.",
+      "notes": "The page address has the term in it, so the next term is a new page."
+    },
+    {
+      "program": "mister-johns-music",
+      "term": "2026–27: fall runs August 31 to December 20, and winter and spring January 4 to June 13",
+      "checked": "2026-10-07",
+      "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
+      "how": "fetch",
+      "look": "Each instrument section lists its levels as lines like “Level, SATURDAYS at a time (age)”."
+    },
+    {
+      "program": "movemakers",
+      "term": "2026–27 school year",
+      "checked": "2026-10-07",
+      "url": "https://www.movemakersphilly.com/schedule-390284.html",
+      "how": "fetch",
+      "look": "Each studio’s weekly schedule has a Saturday row listing times and class names."
+    },
+    {
+      "program": "music-theatre-philly",
+      "term": "Spring 2027: to June 4, starting January 31 for grades 1–4 and January 10 for grades 5–8",
+      "checked": "2026-10-07",
+      "url": "https://www.musictheatrephilly.com/grades-1-4",
+      "how": "fetch",
+      "look": "Classes are listed under day-of-week headings, which are images, each line giving class, grades, time and price. Repeat for the grades 5–8 page.",
+      "notes": "The day headings are images, so a plain text read loses them; the fetch tool reads them."
+    },
+    {
+      "program": "philly-inmovement",
+      "term": "2026–27 school year: August 31 to June 13",
+      "checked": "2026-10-07",
+      "url": "https://phillyinmovement.com/school-aged-classes/",
+      "how": "fetch",
+      "look": "Days and times are in the Saturday column of the two linked school-aged schedule PDFs (Bok and Queen Village). Prices are in the weekend tuition table on the page.",
+      "notes": "The PDF grids read poorly: some Saturday slots come back without class names."
+    },
+    {
+      "program": "walnut-street-theatre-school",
+      "term": "Fall 2026: October 10 to December 19, with no class November 28",
+      "checked": "2026-10-07",
+      "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4",
+      "how": "fetch",
+      "look": "Each class card shows the title with its age range, then the day, the time, the date range and the price.",
+      "notes": "The category address changes with the term (classes-for-kids4). The site’s home page loads by script and comes back empty."
+    }
+  ],
+  "camps": {
+    "season": 2026,
+    "summary": {
+      "camps": 32,
+      "showingNextSummer": 1,
+      "needingABrowser": 7,
+      "needingAPerson": 0,
+      "notReadYet": 28
+    },
+    "list": [
+      {
+        "camp": "arden-summer-camp",
+        "name": "Arden Drama School",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://ardentheatre.org/arden-drama-school",
+        "how": "browser",
+        "look": "Dates, hours and prices sit in the kids summer camp brochure, a PDF linked from the summer section of the Arden Drama School page.",
+        "notes": "The page itself comes back with no camp details through a plain fetch, and the brochure’s address changes each year."
+      },
+      {
+        "camp": "awbury-adventures",
+        "name": "Awbury Adventures at Awbury Arboretum",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://awbury.org/summer-camp/",
+        "how": "fetch",
+        "look": "A session list grouped by age band gives each session’s dates and price. Hours, after-camp and financial aid are in the text around it.",
+        "notes": "The page is mid-changeover: the header says 2027 while the session list and prices are still 2026.",
+        "signup": "Registration for summer 2027 opens February 1, 2027 at 9 am, and a week earlier for family members. The page gives the 2027 season as June 14 to August 20."
+      },
+      {
+        "camp": "butchers-sew-shop-camp",
+        "name": "Butcher’s Sew Shop Junior",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://butcher-s-sew-shop-junior.jumbula.com/summer-camp",
+        "how": "fetch",
+        "look": "The Jumbula summer-camp page lists each themed week as a row with dates, age group and price, with hours, extended care and discounts in the page text.",
+        "notes": "Details live on the shop’s Jumbula registration site."
+      },
+      {
+        "camp": "camp-tps",
+        "name": "Camp TPS at The Philadelphia School",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://www.tpschool.org/tps-experience/camptps",
+        "how": "fetch",
+        "look": "Season dates are in the intro of the Camp TPS page. The price range and daily hours are on the linked Rates & Info page, and per-camp weeks are in the linked catalog."
+      },
+      {
+        "camp": "camp-walnut",
+        "name": "Camp Walnut at Walnut Street Theatre",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://walnutstreettheatre.coursestorm.com/",
+        "how": "browser",
+        "look": "Each division is a separate course card in the CourseStorm catalog. Dates, hours and price are on the individual course page.",
+        "notes": "The category address has the year in it. Listing pages load by script and come back empty; individual course pages fetch fine."
+      },
+      {
+        "camp": "ceo-camp-phield-house",
+        "name": "C.E.O. Camp at Phield House",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://www.phieldhouse.com/youth/summer-camp/",
+        "how": "fetch",
+        "look": "The week list, weekly price and before and after care terms are in the body text of the Phield House summer camp page.",
+        "notes": "ceocampspa.com is the same camp but returns only a title to a plain fetch."
+      },
+      {
+        "camp": "circus-arts-camp",
+        "name": "Philadelphia School of Circus Arts",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://phillycircus.com/camp/",
+        "how": "browser",
+        "look": "Price, hours, age groups and care fees are in the camp page text. The week dates sit behind the enrollment link."
+      },
+      {
+        "camp": "clay-studio-camp",
+        "name": "The Clay Studio",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://theclaystudio.org/camp-policies",
+        "how": "browser",
+        "look": "Dates, hours and add-on fees are in the camp policies page. Camp weeks and tuition sit in the booking listing at public.theclaystudio.org/public/3/camps, which needs a browser.",
+        "signup": "The 2026 early-bird discount ran January 2 to February 15."
+      },
+      {
+        "camp": "fleisher-art-memorial-camp",
+        "name": "Fleisher Art Memorial",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://fleisher.org/take-a-class/summer-workshops-for-children-and-youth/",
+        "how": "fetch",
+        "look": "Session dates are listed week by week and prices appear as member and non-member rates per age group in the page body.",
+        "notes": "The street address is not on the camp page; it is Fleisher’s own building.",
+        "signup": "Sign-ups for 2026 opened January 12."
+      },
+      {
+        "camp": "flipout-camp",
+        "name": "FlipOut Productions",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://www.flipoutproductions.com/summercamp",
+        "how": "browser",
+        "look": "The Summer Camp page shows age groups and activities. Weeks and prices are probably inside an embedded registration widget.",
+        "signup": "Sign-ups for 2026 opened January 1."
+      },
+      {
+        "camp": "legacy-tennis-camp",
+        "name": "Legacy Youth Tennis community camp",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://legacyyte.org/tennis_camps/full-day-summer-camp/",
+        "how": "fetch",
+        "look": "Dates, hours, ages and the flat seven-week price are in the body text of the full-day camp page.",
+        "notes": "The price is one fee for the whole summer, not weekly. The page prints dates without a year.",
+        "signup": "The page says registration opens January 5."
+      },
+      {
+        "camp": "macguffin-camps",
+        "name": "MacGuffin Theatre & Film Company",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://macguffintf.com/camps/",
+        "how": "fetch",
+        "look": "The camps page lists each camp with ages and dates and links to per-camp pages with hours. Tuition appears only in the Sawyer booking widget.",
+        "signup": "Sign-ups for the 2026 camps began December 1, 2025."
+      },
+      {
+        "camp": "mister-johns-music-camp",
+        "name": "Mister John’s Music",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://misterjohnsmusic.com/summer-camp/",
+        "how": "fetch",
+        "look": "Weeks and themes are a dated list in the page body, with the weekly price and the early and late fees in the text beside it.",
+        "notes": "The Register buttons come back with empty links through a plain fetch.",
+        "signup": "Sign-ups for 2026 opened January 12."
+      },
+      {
+        "camp": "moore-young-artists",
+        "name": "Moore College of Art & Design youth courses",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://moore.edu/academics/youth-education/",
+        "how": "fetch",
+        "look": "Dates, the daily schedule and the price per course are in the Program Details text.",
+        "notes": "The camp page has the year in its address, so next summer is a new page. Start from the youth-education page to find it."
+      },
+      {
+        "camp": "morris-arboretum-camp",
+        "name": "Nature Explorers at Morris Arboretum & Gardens",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://www.morrisarboretum.org/learn-discover/kids-families/summer-camp",
+        "how": "fetch",
+        "look": "Session dates, member and non-member prices, hours and age groups are all in the body text of the summer camp page."
+      },
+      {
+        "camp": "movemakers-camp",
+        "name": "MoveMakers Philly",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://www.movemakersphilly.com/summer-camp.html",
+        "how": "fetch",
+        "look": "Weeks are on the overview page. Hours, price and discounts are in the text of each camp’s own subpage, which links to Mindbody for booking.",
+        "notes": "Three camp subpages with the year in their titles, so the addresses may change for 2027."
+      },
+      {
+        "camp": "music-theatre-philly-camp",
+        "name": "Music Theatre Philly",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://www.musictheatrephilly.com/summer-camps",
+        "how": "fetch",
+        "look": "A week-by-week list gives dates, theme, grades and price, each with its own Sawyer register link.",
+        "notes": "Hours, care fees and discounts sit on /about-camps and the Pre-K weeks on /summer-camps-pre-k."
+      },
+      {
+        "camp": "pafa-camp",
+        "name": "PAFA summer art camp",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://www.pafa.org/family-programs/summer-art-camp",
+        "how": "fetch",
+        "look": "Dates, hours, price and discounts are in the body of the family-programs summer art camp page. Sign-up is on CourseStorm.",
+        "notes": "pafa.org/camp is a stale page still showing summer 2024. Use the family-programs address."
+      },
+      {
+        "camp": "parks-and-rec-camps",
+        "name": "Philadelphia Parks & Recreation day camps",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://www.phila.gov/services/culture-recreation/activities-and-events/register-for-summer-camp/",
+        "how": "fetch",
+        "look": "The service page gives ages, fee waivers and the steps for finding a rec center. Dates were only in a news post, and fees and hours are set per center.",
+        "notes": "The dated post was first published in 2024 and its dates may be stale; do not copy them."
+      },
+      {
+        "camp": "philadelphia-ballet-camps",
+        "name": "School of Philadelphia Ballet dance camps",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://philadelphiaballet.org/school/summer-programs/philadelphia-summer-childrens-programs/",
+        "how": "fetch",
+        "look": "Camp themes, dates, the daily schedule and tuition sit in the Summer Dance Camps section, with a registration link per camp.",
+        "notes": "Separate pages exist for the New Jersey and Bala Cynwyd locations; use the Philadelphia page only.",
+        "signup": "Sign-ups for 2026 opened January 1."
+      },
+      {
+        "camp": "philadelphia-dance-academy",
+        "name": "The Philadelphia Dance Academy",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://philadelphiadanceacademy.com/summer-program/",
+        "how": "fetch",
+        "look": "The Summer Dance Programs page lists programs and ages only. Dates and weekly tuition are probably in the registration portal.",
+        "notes": "An older, undated page at /programs/summer-program2/ has prices that look like 2023. Do not use it.",
+        "signup": "The page says summer enrollment opens December 1."
+      },
+      {
+        "camp": "philly-art-center",
+        "name": "Philly Art Center",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://phillyartcenter.com/camps/summer-camps/",
+        "how": "fetch",
+        "look": "The “By-the-week” date line is near the top and prices are in the “Weekly Rates” list on the same page. Sign-up buttons go to Captyn.",
+        "notes": "There is a fourth location in Cherry Hill, NJ, which is left out. Tween camps run on select weeks only."
+      },
+      {
+        "camp": "queen-and-rook-camp",
+        "name": "Queen & Rook Game Cafe",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://www.queenrookkeep.com/product/Summercamp/GUYDZS52EHKPGJPXAUNJ7HMP",
+        "how": "fetch",
+        "look": "Hours, price, aftercare and discounts are in the product description. The week dates are in the product’s option picker, which a plain fetch does not return.",
+        "notes": "The camp is sold on a separate store site, not the cafe’s own."
+      },
+      {
+        "camp": "school-of-rock-philadelphia",
+        "name": "School of Rock Philadelphia",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://www.schoolofrock.com/locations/philadelphia/music-camps",
+        "how": "fetch",
+        "look": "The listing page gives camp names and dates. Each camp’s own page holds hours, ages and price.",
+        "notes": "The listing page can still return last year’s line-up with no prices; open a dated camp page for the price."
+      },
+      {
+        "camp": "seaport-summer-camp",
+        "name": "Seaport Summer Camp at Independence Seaport Museum",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://www.phillyseaport.org/camp",
+        "how": "fetch",
+        "look": "Weeks and themes are listed on the camp page with a registration link per week. Prices sit in a pricing section on the same page."
+      },
+      {
+        "camp": "summer-achievers-edey",
+        "name": "Summer Achievers at Extended Day, Extended Year schools",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://www.phila.gov/programs/extended-day-extended-year/",
+        "how": "fetch",
+        "look": "The program page shows registration status and the school list. Dates, hours and grades come from a spring phila.gov post titled “Register now… Summer Achievers”.",
+        "notes": "The dated post changes each spring (May 8 in 2026)."
+      },
+      {
+        "camp": "taller-puertorriqueno-camp",
+        "name": "Taller Puertorriqueño",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://tallerpr.org/education/summer-camp/",
+        "how": "fetch",
+        "look": "Dates, hours, age groups and the weekly rate are all in the body text of the Summer Camp page. Sign-up is a linked interest form.",
+        "signup": "For 2026 the interest form opened March 1, with a May 31 deadline."
+      },
+      {
+        "camp": "theatre-horizon-woodmere",
+        "name": "Theatre Horizon drama camp at Woodmere",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://theatrehorizon.org/summer-drama-camp/",
+        "how": "browser",
+        "look": "A week-by-week table lists “Woodmere Art Museum, Chestnut Hill”. Each site’s price and sign-up link sit in a pop-up opened by its button."
+      },
+      {
+        "camp": "wissahickon-figure-skating",
+        "name": "Wissahickon Skating Club figure skating camp",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://www.wissskating.com/product/get-the-edge-summer-figure-skating-camp/",
+        "how": "fetch",
+        "look": "Dates, hours and prices are in the body text of the camp’s product page.",
+        "notes": "Older copies of this camp are still up on the club’s calendar. The club’s hockey camp page still showed 2024 dates on this check."
+      },
+      {
+        "camp": "work-to-ride-camp",
+        "name": "Work to Ride at Chamounix Equestrian Center",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://worktoride.net/summer-camp/",
+        "how": "fetch",
+        "look": "Dates sit under a “Summer Camp Dates” heading and prices are in each camp type’s line. Sign-up is by PDF forms.",
+        "signup": "The page is headed 2027 and says to check back for dates."
+      },
+      {
+        "camp": "ymca-day-camps",
+        "name": "Greater Philadelphia YMCA day camps",
+        "season": 2026,
+        "checked": "2026-10-07",
+        "url": "https://www.philaymca.org/node/260",
+        "how": "browser",
+        "look": "The summer day camp page lists every branch and a Camp Finder. Week dates and member and non-member rates are most likely in the registration portal or the linked Camp Handbook PDF.",
+        "notes": "Each branch has its own page, on the pattern philaymca.org/camp/roxborough.",
+        "signup": "For 2026, sign-ups opened January 7 for family members, January 14 for members and January 21 for everyone."
+      },
+      {
+        "camp": "camp-schuylkill",
+        "name": "Camp Schuylkill at the Schuylkill Center",
+        "season": 2027,
+        "checked": "2026-10-07",
+        "url": "https://schuylkillcenter.org/education/camp-schuylkill/",
+        "how": "fetch",
+        "look": "The season dates sit at the top of the Camp Schuylkill page and the prices are listed per age group lower down.",
+        "signup": "Registration for 2027 wasn’t open yet when we checked."
+      }
+    ],
+    "todo": [
+      {
+        "name": "Allens Lane Art Center summer art camp",
+        "url": "https://allenslane.org/summer-camp/",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "University City Arts League art day camps",
+        "url": "http://www.ucartsleague.org/",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "Northern Liberties Arts (NLArts) summer art camp",
+        "url": "https://www.nlarts.org/summer-art-camp-program",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "PlayArts summer camp",
+        "url": "https://www.playartsphilly.com/",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "Philadelphia Girls Choir choral camp",
+        "url": "https://www.phillygirlschoir.org/choral-camp/",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "Girls Rock Philly",
+        "url": "https://www.girlsrockphilly.org/",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "Yes! And… Collaborative Arts summer camps",
+        "url": "https://www.yesandcamp.org/summer-camps",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "Sawubona Creativity Project",
+        "url": "https://www.sawubonacreativityproject.org/campinformationandschedules",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "Zazz Dance & Drama",
+        "url": "https://zazzphilly.com/summer-camp/",
+        "why": "The page came back without camp details on 2026-10-07; it needs a browser."
+      },
+      {
+        "name": "Philadelphia Rock Gym youth camps",
+        "url": "https://philarockgym.com/youth-camps/",
+        "why": "The site could not be read on 2026-10-07."
+      },
+      {
+        "name": "Move It Kidz 4 Fitness",
+        "url": "https://moveitkidz4fitness.com/k4f-summer-camp",
+        "why": "No camp page was found on its site on 2026-10-07."
+      },
+      {
+        "name": "ZoomDance camps",
+        "url": "https://zoomdance.com/camps/",
+        "why": "The site could not be read on 2026-10-07."
+      },
+      {
+        "name": "Ed Snider Youth Hockey & Education camps",
+        "url": "https://sniderhockey.org/hockey-programs",
+        "why": "The page gave hours but no dates, ages, price or rink on 2026-10-07."
+      },
+      {
+        "name": "Wissahickon Skating Club hockey camp",
+        "url": "https://www.wissskating.com/camps/",
+        "why": "The page still showed 2024 dates on 2026-10-07."
+      },
+      {
+        "name": "Skate The Foundry skateboard camp",
+        "url": "https://www.skatethefoundry.com/camp/",
+        "why": "The page showed one 2025 week and no address on 2026-10-07; confirm it is in the city."
+      },
+      {
+        "name": "The Skateboard Academy at Rizzo Rink",
+        "url": "https://theskateboardacademycom.bigcartel.com/",
+        "why": "No 2026 camp page was found on 2026-10-07."
+      },
+      {
+        "name": "The Dandelion Project summer camp",
+        "url": "https://www.thedandelionproject.us/summer-camp",
+        "why": "The site answered 429 (too many requests) on 2026-10-07."
+      },
+      {
+        "name": "Rutabaga Toy Library NatureArts camp",
+        "url": "https://www.rutabagatoylibrary.com/summer-camp",
+        "why": "The site answered 429 (too many requests) on 2026-10-07."
+      },
+      {
+        "name": "STEM Prep Academy summer camp",
+        "url": "https://stempreparatory.org/stem-summer-camp",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "LocoRobo summer robotics",
+        "url": "https://locorobo.co/locosummer-modern-robotics.html",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "Lavner Camps at St. Peter’s School",
+        "url": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camp-st-peters-school/",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "Lavner Camps at the University of Pennsylvania",
+        "url": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camp-university-of-pennsylvania-upenn/",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "Nerd Street / Localhost esports camp",
+        "url": "https://nerdstreet.com/",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "Kids on 12th summer camp",
+        "url": "https://ko12kids.com/summer-camp",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "ESF Camps at Friends Select",
+        "url": "https://www.esfcamps.com/friendsselect/",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "CORA Early Years at Huntingdon Mills",
+        "url": "https://www.coraservices.org/services/early-childhood/early-years-huntingdon-mills/",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "Girl Scouts day camp at Shelly Ridge",
+        "url": "https://www.gsep.org/en/camp/camp.html",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      },
+      {
+        "name": "Future Stars summer camps",
+        "url": "https://www.futurestars.com/",
+        "why": "Not read yet: the page could not be opened on 2026-10-07."
+      }
+    ],
+    "dropped": [
+      {
+        "name": "Academy of Natural Sciences summer camp",
+        "why": "Its own page said it would not host a summer camp in 2026.",
+        "seen": "2026-10-07"
+      },
+      {
+        "name": "Somos Philly Spanish immersion camp",
+        "why": "Reported as no longer operating.",
+        "seen": "2026-10-07"
+      },
+      {
+        "name": "Snapology of Philadelphia",
+        "why": "No location inside the city was found on its site.",
+        "seen": "2026-10-07"
+      },
+      {
+        "name": "Code Ninjas South Philadelphia",
+        "why": "Its page said “location coming soon”.",
+        "seen": "2026-10-07"
+      },
+      {
+        "name": "Vets in Training (HousePaws)",
+        "why": "Not inside the city.",
+        "seen": "2026-10-07"
+      }
+    ]
+  }
 }
