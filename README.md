@@ -101,8 +101,16 @@ Labor Day, and works out which of those weeks each camp runs:
 - **Children.** A summer belongs to a child, and the children are the same ones as in the week builder and the
   day-camp plan (`pas-rosters` in the browser). Each child carries `sum`: `{ y: 2027, w: { "2027-06-07": [camp ids] },
   age: "7" }`. "Add a sibling" adds a child; a first name is optional and typed on the page. A child with an
-  after-school roster can only be removed on the week builder, where share groups are told. Nothing about a summer is
-  sent anywhere: it isn't part of a profile or a share group.
+  after-school roster can only be removed on the week builder, where share groups are told. A summer stays in the
+  browser unless its owner keeps it in their profile (next point). It is never part of a share group.
+- **Kept in a profile.** Signed in, a parent can press "Keep this summer in my profile" (`#sum-profile`, drawn by
+  `groups.js`, which the page loads). The server then holds one summer per account (table `summers`): the year, and
+  for each child a first name and camp ids by week. Ages, the calendar's title and photos never leave the device.
+  While it is kept (`sumProf` in `pas-rosters`), changes are sent a moment after they're made (`summer_save`); a
+  newer copy in the profile replaces the one on the device at the next visit. Another device is told what the profile
+  holds and can put it there, or replace it with its own, each on a second tap when something would be lost.
+  `summer_delete` takes it out; deleting the account deletes it. No action shares a summer or reads someone else's.
+  Signing in from the box goes to `/account/?next=summer` (or `/register/`) and comes back.
 - **Add to calendar** saves `summer-2027.ics`, made in the browser: one Monday-to-Friday entry per camp week, titled
   with the child's name and the camp. The day-camp plan has the same button (`days-off.ics`, one entry per planned
   day). `saveCalendar()` in `site.js` writes both.
@@ -111,8 +119,12 @@ Labor Day, and works out which of those weeks each camp runs:
   the children's names ("Sam and Rae's summer") and can be typed over (`sumTitle`, kept in the browser). A photo can
   go in the corner; it is drawn in the browser and never saved or uploaded. The pictures can be saved one at a time
   or all at once, shared, copied or printed.
+- **Sharing a picture** (this card, the week card and the day-camp card) goes through `pictureSharer()` in `site.js`.
+  Safari only opens a share sheet from inside the tap, so each card keeps its picture ready after every redraw and
+  hands it over at once. If the sheet can't open (some in-app browsers), the card says so and points to "Save as
+  image".
 - The one analytics event is `pas_summer` with an `action` (add, remove, age, sibling_add, copy_sibling, copy, share,
-  calendar, card_save, card_share, card_copy, card_print, print, clear), the camp id, the week number and how many
+  calendar, card_save, card_share, card_copy, card_print, print, clear, profile_keep, profile_put, profile_stop), the camp id, the week number and how many
   children there are. Names, titles and photos are never in it, and the whole section is masked in recordings.
 - The schedule switches to the next summer on September 1.
 

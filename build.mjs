@@ -1446,7 +1446,7 @@ function homePage() {
       <div class="start-head">${who('parent')}<div><p class="kicker">${T(`Start here`)}</p> <h2>${T(`Parents`)}</h2></div></div>
       <p>${T(`See what works with your child’s school, then put the week together.`)}</p>
       <div class="start-list">
-        ${go('#find-school', T(`Find your school`), T(`Every program that runs there, picks up or sits nearby`), 'school')}
+        ${go('#find-school', T(`Find your school`), T(`Every program that’s there, picks up or is nearby`), 'school')}
         ${go(link('board/', 0), T(`Build a schedule`), T(`A week of programs, and a card to send`), 'week')}
         ${GROUPS ? `<span class="when-out" style="display:contents">${go(link('register/', 0), T(`Create a free account`), T(`Keep your school and week on every device`), 'person')}</span><span class="when-in" style="display:contents">${go(link('account/', 0), T(`Your account`), T(`Your school, your week and who you share it with`), 'person')}</span>` : ''}
       </div>
@@ -1636,7 +1636,7 @@ function privacyPage() {
   <h2 id="rosters">${T(`Rosters and children’s names`)}</h2>
   <ul>
     <li>${T(`A roster lives in the browser you made it in. Clearing your browser’s site data deletes it.`)}</li>
-    <li>${T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us. A photo you add to a calendar picture is used once, in your browser, and isn’t saved or uploaded.`)}</li>
+    <li>${(GROUPS ? T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us unless you sign in and choose to keep the summer in your profile. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`) : T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`))}</li>
     <li>${T(`If you save a school as yours, that choice is kept in your own browser too. Our visit counts record that a school was saved, not who saved it.`)}</li>
     <li>${T(`A child’s name is optional. If you add one, it stays on your device unless you keep or share that week through an account.`)}</li>
     <li>${T(`A week can no longer be shared as a link. A link showed the week to anyone who had it and could not be taken back, so links made before October 2026 have stopped opening.`)}</li>
@@ -1650,6 +1650,7 @@ function privacyPage() {
     <li>${T(`An account is an email address and your first and last name. The email signs you in and tells you when someone opens a week you shared or joins a group you made. Other members never see it.`)}</li>${GROUPS.google ? `
     <li>${T(`You can sign in with Google instead of an emailed code. Google’s button is loaded on the pages where you sign in, so Google can see that someone opened that page. If you use it, Google tells us your name and email address. We ask for nothing else and never see your Google password.`)}</li>` : ''}
     <li>${T(`If you keep your school in your profile, we store which school. If you keep your children’s grades, we store the grades and nothing about which child is in which. If you keep a week in your profile, we store the child’s first name, the programs on their current and upcoming weeks, and the school each program was picked under, so the week can be put back on another device. Notes you type are not stored.`)}</li>
+    <li>${T(`If you keep a summer schedule in your profile, we store each child’s first name as you typed it and the camps picked for each week, so the summer is there on your other devices. Ages, the calendar’s title and photos are not stored. A summer in your profile can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The summer schedule section is hidden in session recordings, and analytics is told only that a summer was kept, never what is in it.`)}</li>
     <li>${T(`Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.`)}</li>
     <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
     <li>${T(`There are no passwords. We email you a link and a 6-digit code; each works once and for 15 minutes. A cookie then keeps that device signed in for 30 days, and you can sign out everywhere from your account page.`)}</li>
@@ -2556,7 +2557,7 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, listings: claimListings(), photos: GROUPS.photos });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos });
   const src = fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8');
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   return src.replace(`'/*CONFIG*/'`, () => `'` + conf.replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`);
@@ -3033,7 +3034,7 @@ $SCHOOLS = json_decode('${names}', true);
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
+$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -3333,6 +3334,7 @@ ${guide ? `<section class="section">
   <ol class="sum-weeks" id="sum-weeks"></ol>
   <div class="actions sum-tools" id="sum-tools" hidden><button type="button" class="btn primary" id="sum-share" hidden>Share the plan</button><button type="button" class="btn" id="sum-cal">Add to calendar</button><button type="button" class="btn" id="sum-copy">Copy the plan as text</button><button type="button" class="btn" id="sum-print">Print the list</button><button type="button" class="clear" id="sum-clear">Clear the plan</button></div>
   <p class="hint" id="sum-status" aria-live="polite"></p>
+  ${GROUPS ? `<div class="sum-profile" id="sum-profile" ${groupsAttrs(D)} hidden></div>` : ''}
   <div class="card-maker sumcard" id="sum-card" hidden>
     <h3>${T(`Make it a calendar`)}</h3>
     <p>${T(`One picture of the whole summer, or a calendar for each month, to print for the fridge or send to family. Every child with a camp picked is on it.`)}</p>
@@ -3388,7 +3390,7 @@ ${chartRows}
   return layout({
     title: `Summer ${year} camp schedule for Philadelphia, week by week`,
     description: `Plan summer ${year} in Philadelphia week by week: see which of ${P.dated.length} city day camps run each of the ${P.weeks.length} weeks between the last day of school and Labor Day.`,
-    pathName: summerPath, depth: D, current: null, hero, body, showStreet: 'summer',
+    pathName: summerPath, depth: D, current: null, hero, body, showStreet: 'summer', scripts: GROUPS ? groupsScript(D) : '',
   });
 }
 function summerCampsPage() {

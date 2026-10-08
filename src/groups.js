@@ -307,14 +307,15 @@
     var aq = query();
     var registering = account.getAttribute('data-mode') === 'register';   // the page at /register/
     // The old address for creating an account was /account/?new=1. It still works: it goes to the real page.
-    if (aq.new && !registering && !signedInHint()) { location.replace(page('register/') + (aq.next === 'board' ? '?next=board' : '')); return; }
+    if (aq.new && !registering && !signedInHint()) { location.replace(page('register/') + (aq.next === 'board' || aq.next === 'summer' ? '?next=' + aq.next : '')); return; }
     if (aq.groups) set('pas-groups', '1');   // while groups are a pilot, this is the way in for someone who wasn't invited to one
     var ainfo = {}; try { ainfo = JSON.parse(document.getElementById('groups-data').textContent); } catch (e) { /* older page */ }
     var groupsOn = host.getAttribute('data-pilot') !== '1' || get('pas-groups') === '1';
-    var wantNext = aq.next === 'board' ? 'board' : 'account';
+    var wantNext = aq.next === 'board' || aq.next === 'summer' ? aq.next : 'account';
     var goNext = function (next) {
       if (next === 'join') { location.href = page('join/'); return true; }
       if (next === 'board') { location.href = page('board/') + '?back=1'; return true; }
+      if (next === 'summer') { location.href = page('summer-schedule/') + '#plan'; return true; }
       if (next === 'managers' || next === 'directors') { location.href = page('managers/'); return true; }
       var m = /^groups\?g=([A-Za-z0-9]+)$/.exec(next || '');
       if (m) { location.href = page('groups/') + '?g=' + m[1]; return true; }
@@ -324,7 +325,7 @@
       account.textContent = '';
       if (msg) { var p = el('p', 'g-status bad', msg); account.appendChild(p); }
       var box = el('div', 'panel'); account.appendChild(box);
-      signInBox(box, wantNext, function (d) { if (wantNext === 'board' && d.user.ready) goNext('board'); else drawProfile(d); }, 'One step for both: if you’re new, this makes your account. No password. With email, we send a 6-digit code and you type it here.');
+      signInBox(box, wantNext, function (d) { if (wantNext !== 'account' && d.user.ready) goNext(wantNext); else drawProfile(d); }, 'One step for both: if you’re new, this makes your account. No password. With email, we send a 6-digit code and you type it here.');
       var sh = box.querySelector('h3');
       if (sh) sh.textContent = registering ? 'Create your account' : 'Log in, or create an account';
       var have = el('div', 'panel g-callout');
@@ -334,7 +335,7 @@
       account.appendChild(have);
     };
     var drawProfile = function (d) {
-      if (registering) { location.replace(page('account/') + (wantNext === 'board' ? '?next=board' : '')); return; }   // signed in: the profile lives at /account/
+      if (registering) { location.replace(page('account/') + (wantNext !== 'account' ? '?next=' + wantNext : '')); return; }   // signed in: the profile lives at /account/
       account.textContent = '';
       var me = d.user, groups = d.groups || [];
       if (!me.ready) {   // a new account: first and last name, then the rest
@@ -350,7 +351,7 @@
         fa.appendChild(fb); fa.appendChild(fo); ff.appendChild(fa);
         ff.addEventListener('submit', function (e) {
           e.preventDefault(); fb.disabled = true;
-          saveNames(me, fn.first.value, fn.last.value).then(function (r) { fb.disabled = false; if (!r.ok) { fs.textContent = r.message; fs.className = 'g-status bad'; return; } if (wantNext === 'board') { goNext('board'); return; } drawProfile(d); });
+          saveNames(me, fn.first.value, fn.last.value).then(function (r) { fb.disabled = false; if (!r.ok) { fs.textContent = r.message; fs.className = 'g-status bad'; return; } if (wantNext !== 'account') { goNext(wantNext); return; } drawProfile(d); });
         });
         fin.appendChild(ff); account.appendChild(fin);
         fn.first.focus();
@@ -448,11 +449,26 @@
         });
         weeksBox.appendChild(ul);
       };
+      // the summer schedule, when one is kept: who is on it and how many weeks each has
+      prof.appendChild(el('h3', null, 'Summer'));
+      var summerBox = el('div'); prof.appendChild(summerBox);
+      var paintSummer = function (sm) {
+        summerBox.textContent = '';
+        var open = el('a', null, 'the summer schedule'); open.href = page('summer-schedule/') + '#plan';
+        if (!sm) { var none = el('p', 'hint', 'No summer kept yet. To keep one here, open '); none.appendChild(open); none.appendChild(document.createTextNode(' and look for “Keep it in your profile”.')); summerBox.appendChild(none); return; }
+        var ul = el('ul', 'g-list'), li = el('li');
+        li.appendChild(el('b', null, 'Summer ' + sm.y));
+        li.appendChild(el('span', 'hint', summerLine(sm) + ' · last changed ' + shortDate(sm.updated)));
+        var rm = btn('clear', 'Remove from my profile');
+        twoTap(rm, 'Tap again to remove it', function () { call('summer_delete', {}).then(function () { unkeepSummer(); loadProfile(); }); });
+        li.appendChild(rm); ul.appendChild(li); summerBox.appendChild(ul);
+        var more = el('p', 'hint', 'To change it, or put it on this device, open '); more.appendChild(open); more.appendChild(document.createTextNode('.')); summerBox.appendChild(more);
+      };
       var loadProfile = function () {
         call('profile').then(function (p) {
           if (!p.ok) return;
           adoptSchool(p.school, schoolName(p.school)); adoptGrades(p.grades);
-          paintSchool(p.school); paintGrades(p.grades || []); paintWeeks(p.weeks || []);
+          paintSchool(p.school); paintGrades(p.grades || []); paintWeeks(p.weeks || []); paintSummer(p.summer || null);
         });
       };
       paintSchool(me.school || ''); paintGrades(me.grades || []); loadProfile();
@@ -882,7 +898,7 @@
   function unlinkAll() {
     try {
       var r = JSON.parse(window.localStorage.getItem('pas-rosters') || 'null');
-      if (r && Array.isArray(r.kids)) { r.kids.forEach(function (k) { delete k.groups; delete k.prof; }); window.localStorage.setItem('pas-rosters', JSON.stringify(r)); }
+      if (r && Array.isArray(r.kids)) { r.kids.forEach(function (k) { delete k.groups; delete k.prof; }); delete r.sumProf; window.localStorage.setItem('pas-rosters', JSON.stringify(r)); }
     } catch (e) { /* nothing saved */ }
     set('pas-prof-school', null);
     adoptGrades([]);
@@ -1349,6 +1365,127 @@
     call('me').then(function (d) {
       if (d.ok && d.user) { set('pas-in', '1'); jme = d.user; jgroups = d.groups || []; listOnce(jme); }
       route();
+    });
+  }
+
+  // A summer taken out of the profile: this device's copy stays, it just stops being sent.
+  function unkeepSummer() {
+    try {
+      var r = JSON.parse(window.localStorage.getItem('pas-rosters') || 'null');
+      if (r && r.sumProf) { delete r.sumProf; window.localStorage.setItem('pas-rosters', JSON.stringify(r)); }
+    } catch (e) { /* nothing saved */ }
+  }
+  // "Sam: 5 weeks, Rae: 3 weeks" for a summer kept in a profile.
+  function summerLine(sm) {
+    var bits = (sm.kids || []).map(function (k, i) { var n = Object.keys(k.w || {}).length; return (k.name || 'Child ' + (i + 1)) + ': ' + n + (n === 1 ? ' week' : ' weeks'); });
+    return bits.join(', ') || 'Nothing on it yet';
+  }
+
+  // =====================================================================================================
+  // On the summer schedule: keeping the summer in a profile. It is the account holder's own copy, for their other
+  // devices. Nothing here shares it with anyone. What leaves the device: each child's first name and their camps by week.
+  // =====================================================================================================
+  var sumBox = document.getElementById('sum-profile');
+  var summer = window.pasSummer;   // set by site.js on the summer schedule
+  if (sumBox && summer && API) {
+    var sMe = null, sKept = null, sLoaded = false, sNote = '', sBad = false, sTimer = null, sSent = '';
+    var sRos = function () { return summer.rosters(); };
+    var sHas = function () { return sRos().kids.some(function (k) { return k.sum && k.sum.y === summer.year && Object.keys(k.sum.w || {}).length > 0; }); };
+    var sBody = function () { return { y: summer.year, kids: sRos().kids.map(function (k) { return { name: firstWord(k.name), w: (k.sum && k.sum.y === summer.year && k.sum.w) || {} }; }) }; };
+    var sPush = function (then) {
+      var body = sBody(), text = JSON.stringify(body);
+      call('summer_save', { summer: body }).then(function (d) {
+        if (d.http === 401) { sMe = null; sNote = 'Sign in again to keep your summer up to date in your profile.'; sBad = true; sDraw(); return; }
+        if (!d.ok) { sNote = d.message || 'That didn’t save. Try again.'; sBad = true; sDraw(); return; }
+        sSent = text; sKept = d.summer; sRos().sumProf = { u: d.summer.updated }; summer.save();
+        if (then) then();
+      });
+    };
+    // The profile's copy, put onto this device: children are matched by first name, then a child with no name yet, then added.
+    var sApply = function (sm) {
+      var r = sRos(), used = [];
+      (sm.kids || []).forEach(function (sk, i) {
+        var name = String(sk.name || ''), at = -1;
+        if (name) r.kids.forEach(function (k, j) { if (at < 0 && used.indexOf(j) < 0 && firstWord(k.name).toLowerCase() === name.toLowerCase()) at = j; });
+        if (at < 0 && !name && i < r.kids.length && used.indexOf(i) < 0) at = i;
+        if (at < 0) r.kids.forEach(function (k, j) { if (at < 0 && used.indexOf(j) < 0 && !k.name) at = j; });   // a child nobody has named yet: their summer is being replaced anyway
+        if (at < 0) { if (r.kids.length >= summer.maxKids) return; r.kids.push(summer.newKid(name)); at = r.kids.length - 1; }
+        used.push(at);
+        var k = r.kids[at], w = {};
+        summer.weeks.forEach(function (d) { var ids = ((sk.w && sk.w[d]) || []).filter(function (id) { return typeof id === 'string' && summer.camps[id]; }).slice(0, 6); if (ids.length) w[d] = ids; });
+        k.sum = { y: summer.year, w: w, age: (k.sum && k.sum.age) || '' };
+        if (!k.name && name) k.name = name;
+      });
+      r.kids.forEach(function (k, j) { if (used.indexOf(j) < 0 && k.sum && k.sum.y === summer.year) k.sum.w = {}; });   // the profile's copy is the whole summer
+      r.sumProf = { u: sm.updated }; sSent = JSON.stringify(sBody());
+      summer.save(); summer.redraw();
+    };
+    var sDraw = function () {
+      sumBox.textContent = ''; sumBox.hidden = false;
+      sumBox.appendChild(el('h3', null, 'Keep it in your profile'));
+      if (sNote) sumBox.appendChild(el('p', 'g-status' + (sBad ? ' bad' : ''), sNote));
+      if (!sMe) {
+        var out = el('p', null, 'With a free account, this summer is there on your phone and your computer. It stays yours: there’s no sharing it from here.');
+        sumBox.appendChild(out);
+        var oa = el('div', 'actions');
+        var li = el('a', 'btn', 'Log in'); li.href = page('account/') + '?next=summer'; oa.appendChild(li);
+        var ca = el('a', 'btn', 'Create a free account'); ca.href = page('register/') + '?next=summer'; oa.appendChild(ca);
+        sumBox.appendChild(oa);
+        return;
+      }
+      if (!sLoaded) { sumBox.appendChild(el('p', 'hint', 'Checking your profile…')); return; }
+      var linked = !!sRos().sumProf, there = sKept && sKept.y === summer.year ? sKept : null;
+      var acts = el('div', 'actions');
+      if (linked) {
+        sumBox.appendChild(el('p', null, 'This summer is kept in your profile. Changes you make here are saved there, and show up on your other devices.'));
+        var stop = btn('clear', 'Take it out of my profile');
+        twoTap(stop, 'Tap again to take it out', function () { call('summer_delete', {}).then(function (d) { if (!d.ok) return; sKept = null; sRos().sumProf = null; summer.save(); sNote = 'Taken out of your profile. It’s still on this device.'; sBad = false; summer.track({ event: 'pas_summer', action: 'profile_stop' }); sDraw(); }); });
+        acts.appendChild(stop);
+      } else if (there) {
+        sumBox.appendChild(el('p', null, 'Your profile already has a summer: ' + summerLine(there) + '.'));
+        var put = btn('btn primary', 'Put it on this device');
+        var doPut = function () { sApply(there); sNote = 'Done. This is the summer from your profile.'; sBad = false; summer.track({ event: 'pas_summer', action: 'profile_put' }); sDraw(); };
+        if (sHas()) twoTap(put, 'It replaces the summer on this device. Tap again', doPut); else put.addEventListener('click', doPut);
+        acts.appendChild(put);
+        if (sHas()) {
+          var mine = btn('btn', 'Keep this device’s summer instead');
+          twoTap(mine, 'It replaces the one in your profile. Tap again', function () { sPush(function () { sNote = 'Kept. Your profile now has this summer.'; sBad = false; summer.track({ event: 'pas_summer', action: 'profile_keep' }); sDraw(); }); });
+          acts.appendChild(mine);
+        }
+      } else if (sHas()) {
+        sumBox.appendChild(el('p', null, 'Keep this summer with your account, so it’s there on your other devices. It stays yours: there’s no sharing it from here.'));
+        var keep = btn('btn primary', 'Keep this summer in my profile');
+        keep.addEventListener('click', function () { keep.disabled = true; sPush(function () { sNote = 'Kept. Changes you make here are saved to your profile.'; sBad = false; summer.track({ event: 'pas_summer', action: 'profile_keep' }); sDraw(); }); });
+        acts.appendChild(keep);
+      } else {
+        sumBox.appendChild(el('p', 'hint', 'Add a camp to a week, and you can keep the summer in your profile.'));
+      }
+      if (acts.childNodes.length) sumBox.appendChild(acts);
+      sumBox.appendChild(el('p', 'hint', 'Your profile gets each child’s first name and their camps by week. Ages, the calendar’s title and photos stay on this device.'));
+    };
+    // Every change on the page lands here. A kept summer is sent a moment later; otherwise the box just keeps up.
+    var sWas = '';
+    summer.onSave = function () {
+      var key = (sMe ? 1 : 0) + '|' + (sRos().sumProf ? 1 : 0) + '|' + (sHas() ? 1 : 0);
+      if (key !== sWas) { sWas = key; if (sNote && !sBad) sNote = ''; sDraw(); }
+      if (!sMe || !sRos().sumProf) return;
+      if (sTimer) window.clearTimeout(sTimer);
+      sTimer = window.setTimeout(function () { sTimer = null; if (sRos().sumProf && JSON.stringify(sBody()) !== sSent) sPush(); }, 1500);
+    };
+    sDraw();
+    if (signedInHint()) call('me').then(function (d) {
+      if (!d.ok || !d.user) { if (d.ok) set('pas-in', null); return; }
+      set('pas-in', '1'); sMe = d.user; sDraw();
+      call('profile').then(function (p) {
+        sLoaded = true;
+        if (!p.ok) { sNote = 'Couldn’t reach your profile just now.'; sBad = true; sDraw(); return; }
+        sKept = p.summer || null;
+        var link = sRos().sumProf;
+        if (link && !sKept) { sRos().sumProf = null; summer.save(); }                                  // taken out of the profile somewhere else
+        else if (link && sKept.y === summer.year && sKept.updated > link.u) sApply(sKept);            // changed on another device since
+        else if (link) { sSent = ''; if (JSON.stringify(sBody()) !== JSON.stringify({ y: sKept.y, kids: sKept.kids })) sPush(); }   // changed here while signed out or offline
+        sWas = ''; summer.onSave();
+      });
     });
   }
 

@@ -109,6 +109,8 @@ function db(): PDO {
     foreach ($db->query('PRAGMA table_info(grp)') as $c) $gcols[] = $c['name'];
     if (!in_array('solo', $gcols, true)) $db->exec('ALTER TABLE grp ADD COLUMN solo INTEGER NOT NULL DEFAULT 0');
     $db->exec('CREATE INDEX IF NOT EXISTS weeks_user ON weeks (user_id)');
+    // A summer schedule kept in a profile: one per account. Each child's first name and their camps by week, nothing else.
+    $db->exec('CREATE TABLE IF NOT EXISTS summers (user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, year INTEGER NOT NULL, json TEXT NOT NULL, updated INTEGER NOT NULL)');
     // Directors: a claim on a listing ("p:<program id>" or "c:<camp id>") and the changes a director has proposed for it.
     $db->exec("CREATE TABLE IF NOT EXISTS claims (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, listing TEXT NOT NULL, status TEXT NOT NULL, domain TEXT NOT NULL DEFAULT '', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0, UNIQUE (user_id, listing))");
     $db->exec("CREATE TABLE IF NOT EXISTS edits (id INTEGER PRIMARY KEY, claim_id INTEGER NOT NULL REFERENCES claims(id) ON DELETE CASCADE, listing TEXT NOT NULL, body TEXT NOT NULL, link TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'new', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0)");
@@ -352,10 +354,42 @@ function week_out(array $w): array {
   return array('id' => (int) $w['id'], 'name' => $w['name'], 'now' => json_decode($w['now_json'], true), 'next' => json_decode($w['next_json'], true), 'updated' => (int) $w['updated']);
 }
 function grade_list(string $kept): array { return $kept === '' ? array() : explode(',', $kept); }
+// A summer for the profile: the year, and for each child a first name and the camps picked for each week (the week's
+// Monday). Only camps the site lists, only dates in that year. No ages, no titles, no photos: those stay on the device.
+function clean_summer($s): ?array {
+  global $CFG;
+  if (!is_array($s)) return null;
+  $year = isset($s['y']) && is_int($s['y']) ? $s['y'] : 0;
+  if ($year < 2024 || $year > 2100) return null;
+  $known = isset($CFG['camps']) && is_array($CFG['camps']) ? $CFG['camps'] : array();
+  $kids = array();
+  foreach (isset($s['kids']) && is_array($s['kids']) ? array_slice($s['kids'], 0, MAX_KIDS) : array() as $k) {
+    if (!is_array($k)) continue;
+    $w = array();
+    foreach (isset($k['w']) && is_array($k['w']) ? array_slice($k['w'], 0, 20, true) : array() as $d => $ids) {
+      if (!is_string($d) || !preg_match('/^' . $year . '-\d{2}-\d{2}$/', $d) || !is_array($ids)) continue;
+      $keep = array();
+      foreach (array_slice($ids, 0, 6) as $id) { if (is_string($id) && in_array($id, $known, true) && !in_array($id, $keep, true)) $keep[] = $id; }
+      if ($keep) $w[$d] = $keep;
+    }
+    $kids[] = array('name' => first_name(str($k, 'name', 40)), 'w' => (object) $w);
+  }
+  return $kids ? array($year, json_encode(array('kids' => $kids))) : null;
+}
+function summer_out(int $uid): ?array {
+  $s = row('SELECT year, json, updated FROM summers WHERE user_id = ?', array($uid));
+  if (!$s) return null;
+  $d = json_decode($s['json'], true);
+  $kids = array();
+  foreach (is_array($d) && isset($d['kids']) && is_array($d['kids']) ? $d['kids'] : array() as $k) {
+    $kids[] = array('name' => isset($k['name']) ? (string) $k['name'] : '', 'w' => (object) (isset($k['w']) && is_array($k['w']) ? $k['w'] : array()));   // an empty set of weeks stays an object, not a list
+  }
+  return array('y' => (int) $s['year'], 'kids' => $kids, 'updated' => (int) $s['updated']);
+}
 function profile_out(array $u): array {
   $weeks = array();
   foreach (q('SELECT * FROM weeks WHERE user_id = ? ORDER BY id', array($u['id'])) as $w) $weeks[] = week_out($w);
-  return array('school' => $u['school'], 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => $weeks);
+  return array('school' => $u['school'], 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => $weeks, 'summer' => summer_out((int) $u['id']));
 }
 function kid_out(array $k, bool $mine): array {
   return array('id' => (int) $k['id'], 'name' => $k['name'], 'now' => json_decode($k['now_json'], true), 'next' => json_decode($k['next_json'], true), 'mine' => $mine);
@@ -556,7 +590,7 @@ switch ($method . ' ' . $action) {
     $email = strtolower(str($in, 'email', 150));
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) fail('email', 'That email address doesn’t look right.');
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|join|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|join|summer|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
     if (too_many('mail:' . h($email), 3, 900) || too_many('mail:' . h($email), 8, 86400) || too_many('ip:' . who(), 10, 900) || too_many('ip:' . who(), 40, 86400)) {
       fail('slow', 'That’s a lot of sign-in emails. Use the newest one, or wait 15 minutes and try again.', 429);
     }
@@ -603,7 +637,7 @@ switch ($method . ' ' . $action) {
     if (too_many('try:' . who(), 30, 900)) fail('slow', 'Too many tries. Wait 15 minutes and try again.', 429);
     note('try:' . who());
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|join|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|join|summer|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
     $g = google_email(str($in, 'credential', 4200));
     sign_in($g['email'], 'google', $next, $g['first'], $g['last']);
   }
@@ -836,6 +870,24 @@ switch ($method . ' ' . $action) {
   case 'POST week_delete': {
     $u = need_user();
     q('DELETE FROM weeks WHERE id = ? AND user_id = ?', array(isset($in['week']) ? (int) $in['week'] : 0, $u['id']));
+    out(array('ok' => true));
+  }
+
+  // Keep the summer schedule with the account, or replace the one that's there. It is the account holder's alone:
+  // nothing here can be shared, and no other action reads it.
+  case 'POST summer_save': {
+    $u = need_user();
+    $s = clean_summer($in['summer'] ?? null);
+    if (!$s) fail('summer', 'That summer couldn’t be read. Reload the page and try again.');
+    $had = (bool) row('SELECT user_id FROM summers WHERE user_id = ?', array($u['id']));
+    q('INSERT INTO summers (user_id, year, json, updated) VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET year = excluded.year, json = excluded.json, updated = excluded.updated', array($u['id'], $s[0], $s[1], now()));
+    if (!$had) bump('summer_saved');
+    out(array('ok' => true, 'summer' => summer_out((int) $u['id'])));
+  }
+
+  case 'POST summer_delete': {
+    $u = need_user();
+    q('DELETE FROM summers WHERE user_id = ?', array($u['id']));
     out(array('ok' => true));
   }
 
