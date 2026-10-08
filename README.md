@@ -167,6 +167,11 @@ The home page opens with two "Start here" boxes, one for parents (find your scho
 account) and one for program managers (claim a listing, add a program, add a camp), then a "More than weekday
 afternoons" section that points at weekend classes, day camps and summer camps.
 
+The filters and the grade row scroll away with the page. Once they are out of sight, a slim bar is fixed under
+the menu bar (`#quickbar`, written by `filterBar()`): a search box that filters the list as you type and keeps
+the main search box in step, a "Filters" button that goes back up to the filters and shows how many are on, and
+a line saying what is showing with a Clear link. It goes away again at the footer.
+
 A filter row that is wider than the screen scrolls sideways. `site.js` wraps each `.rail` so it gets a fade at
 the edge that has more and a round arrow button that moves it along; both disappear when there is nothing further
 that way.
@@ -452,8 +457,9 @@ These are the only parts of the site that store anything about a child on the se
   group invitation, or already being in a group). Groups are invitation only: the creator types addresses, each gets a link to `/join/#CODE`
   and the code, and joining needs both an invited address and the code. There is no asking to join; the
   creator is emailed when someone comes in and can remove anyone, which also removes their invitation.
-- **Program directors: claiming a listing.** Parents and directors use the same account; a director is simply an
-  account that holds a claim. `/directors/` explains it and holds the tool. A claim needs an account whose email
+- **Program managers: claiming a listing.** The site calls the people who run a program "program managers". Parents
+  and managers use the same account; a manager is simply an account that holds a claim. The page first lived at
+  `/directors/`, which now forwards (`movedPage()` in `build.mjs`). `/managers/` explains it and holds the tool. A claim needs an account whose email
   address is at the listing's own website address (`example.org` and `mail.example.org` count as the same place).
   The build works out each listing's address and hands the list to the server (`claimListings()` in `build.mjs`):
   programs are `p:<id>`, summer camps `c:<id>`. Where the address is shared by many unrelated people the claim is
@@ -462,12 +468,12 @@ These are the only parts of the site that store anything about a child on the se
   `CLAIM_SHARED` when a listing's website turns out to be shared. A personal address (Gmail and the like) can never
   claim anything, because no listing's website is there.
   A claimed listing shows a "Claimed" mark, fetched from `groups/api.php?action=claimed` (listing keys only, never
-  who). A director can propose changes to a listing they hold; nothing changes on the site. Each claim and each
+  who). A manager can propose changes to a listing they hold; nothing changes on the site. Each claim and each
   proposed change is emailed to the contact address and listed on `/edit/claims/` (behind the edit sign-in), where
   the owner approves or declines a waiting claim, takes a claim away, and marks a proposed change published or
-  declined; the director is emailed each time. To apply a change, edit the listing data as usual (or paste it to
+  declined; the manager is emailed each time. To apply a change, edit the listing data as usual (or paste it to
   Claude), then mark it published. One account can hold 12 claims and one listing 5 claimants.
-  `/directors/` opens on a search of every listing, which works signed out; picking one asks for a sign-in at that
+  `/managers/` opens on a search of every listing, which works signed out; picking one asks for a sign-in at that
   listing's address. The home page's "Program managers" box links there, `?q=` prefills the search, and a
   listing's "Claim this listing" link lands there with the listing picked (`?l=`). "Continue with Google" works for
   a Google Workspace address at the program's own website; a personal Gmail signs in but can claim nothing, and the
@@ -476,14 +482,14 @@ These are the only parts of the site that store anything about a child on the se
   **Photos are switched off.** They are meant as a paid extra, and there is no paid tier yet, so
   `"groups": { "photos": false }` (the default) hides the photo form, drops the photo from the list of benefits
   and makes the server refuse uploads. Set it to `true` to turn the whole thing on; `PAS_PHOTOS=1 node build.mjs`
-  does the same for a test build. How it works when on: a director can send one photo per listing, with a line describing it and a tick that they have the
+  does the same for a test build. How it works when on: a manager can send one photo per listing, with a line describing it and a tick that they have the
   right to use it. The browser shrinks it to a JPEG (1600 pixels on the long side) before it leaves the device; the
   server checks it is a JPEG, redraws it, and keeps it in `phillyafterschool-data/photos/`, outside the public
   folder. Nothing shows until the owner publishes it on `/edit/claims/`, where a photo can also be declined or
   taken down. A published photo is served by `groups/api.php?action=photo&l=<key>&v=<id>`, and listing pages put
-  it into a `data-photo` slot from the same `claimed` request that brings the marks. A director can replace or
+  it into a `data-photo` slot from the same `claimed` request that brings the marks. A manager can replace or
   remove theirs; giving up the claim or deleting the account removes it.
-  `/directors/` loads analytics with the tool masked in recordings; the only event is `pas_claim` with a `step`
+  `/managers/` loads analytics with the tool masked in recordings; the only event is `pas_claim` with a `step`
   (`picked`, `claimed`, `waiting`, `address_mismatch`, `refused`, `change_sent`, `photo_sent`). There are no student accounts, on purpose:
   the site never asks a child for an email address, and the week builder and card work without an account.
 - **Where.** `src/server/groups-api.php` is the whole server side; the build copies it to `groups/api.php` with

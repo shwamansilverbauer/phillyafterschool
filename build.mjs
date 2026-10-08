@@ -599,7 +599,7 @@ ${body}
         <li><a href="${link('about/', depth)}#how">${T(`How listings are checked`)}</a></li>
         <li><a href="${link('about/', depth)}#corrections">${T(`Send a correction`)}</a></li>
         <li><a href="${link('contact/', depth)}">${T(`Contact us`)}</a></li>${GROUPS ? `
-        <li><a href="${link('directors/', depth)}">${T(`For program directors`)}</a></li>` : ''}
+        <li><a href="${link('managers/', depth)}">${T(`For program managers`)}</a></li>` : ''}
         <li><a href="${link('ideas/', depth)}">${T(`Request a feature`)}</a></li>
         <li><a href="${link('privacy/', depth)}">${T(`Privacy`)}</a></li>
         <li><a href="${link('support/', depth)}">${T(`Buy me a coffee`)}</a></li>
@@ -813,7 +813,16 @@ function filterBar({ list, depth, school = null, show = {}, searchLabel, placeho
   <section class="picker" aria-label="Filter by grade">
     ${on.grade ? `<div class="rail" role="group" aria-label="Grade">${gradeBtns}</div>` : ''}
     <div class="status"><span id="count" aria-live="polite"></span><button type="button" class="clear" id="clear" hidden>Clear filters</button></div>
-  </section>`;
+  </section>
+  <div class="quickbar" id="quickbar" hidden>
+    <div class="in">
+      <div class="quick-row">
+        ${on.q ? `<input id="quick-search" type="search" aria-label="${esc(T(searchLabel || `Looking for a particular program?`))}" placeholder="Search this list" autocomplete="off">` : ''}
+        <button type="button" class="btn" id="quick-filters">Filters<span class="quick-n" id="quick-n" hidden></span></button>
+      </div>
+      <p class="quick-status"><span id="quick-count"></span> <button type="button" class="clear" id="quick-clear" hidden>Clear</button></p>
+    </div>
+  </div>`;
 }
 const noMatch = depth => `<p class="ask" id="no-match" data-nomatch data-edit-reveal="Shown when the filters find nothing:" hidden>${T(`Nothing matches that. Know a program that should be listed?`)} <a href="${link('suggest/', depth)}">${T(`Tell us about it.`)}</a></p>`;
 
@@ -1398,7 +1407,15 @@ function homePage() {
   const hero = `    <h1>${T(`School’s out. Now what?`)}</h1>
     <p class="lede">${T(`Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.`)}</p>
     ${finderBox(0, `Find your school or a program`, true)}`;
-  const go = (href, label, hint) => `<a class="start-go" href="${href}"><span><b>${label}</b>${hint ? `<small>${hint}</small>` : ''}</span></a>`;
+  const ICON = {
+    school: 'M12 2 2 8v2h20V8zM4.5 11.5v6h3v-6zm6 0v6h3v-6zm6 0v6h3v-6zM2 19v3h20v-3z',
+    week: 'M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zM5 9.5h14V19H5zm2 2.5v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2z',
+    person: 'M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9zm0 2c-4.4 0-8 2.2-8 5v2h16v-2c0-2.8-3.6-5-8-5z',
+    claim: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.4 14.2-4-4 1.6-1.6 2.4 2.4 5.2-5.2 1.6 1.6z',
+    plus: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4z',
+    tent: 'M12 3 1.5 20h21zm0 7 2.6 8H9.4z',
+  };
+  const go = (href, label, hint, icon) => `<a class="start-go" href="${href}"><span class="start-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="${ICON[icon]}"/></svg></span><span><b>${label}</b>${hint ? `<small>${hint}</small>` : ''}</span></a>`;
   const more = [
     weekendPrograms.length ? [link(weekendPath, 0), T(`Weekend classes`), T(`Saturday and Sunday classes at {n} places: music, dance, art, skating, science.`, { n: weekendPrograms.length }), '#6B3FA0'] : null,
     daysOff ? [link(offPath, 0), T(`Day camps`), T(`{n} programs run camps on the days school is closed, with a planner for the year.`, { n: campPrograms.length }), '#B88A00'] : null,
@@ -1412,9 +1429,9 @@ function homePage() {
       <h2>${T(`Parents`)}</h2>
       <p>${T(`See what works with your child’s school, then put the week together.`)}</p>
       <div class="start-list">
-        ${go('#find-school', T(`Find your school`), T(`Every program that runs there, picks up or sits nearby`))}
-        ${go(link('board/', 0), T(`Build a schedule`), T(`A week of programs, and a card to send`))}
-        ${GROUPS ? `<span class="when-out" style="display:contents">${go(link('register/', 0), T(`Create a free account`), T(`Keep your school and week on every device`))}</span><span class="when-in" style="display:contents">${go(link('account/', 0), T(`Your account`), T(`Your school, your week and who you share it with`))}</span>` : ''}
+        ${go('#find-school', T(`Find your school`), T(`Every program that runs there, picks up or sits nearby`), 'school')}
+        ${go(link('board/', 0), T(`Build a schedule`), T(`A week of programs, and a card to send`), 'week')}
+        ${GROUPS ? `<span class="when-out" style="display:contents">${go(link('register/', 0), T(`Create a free account`), T(`Keep your school and week on every device`), 'person')}</span><span class="when-in" style="display:contents">${go(link('account/', 0), T(`Your account`), T(`Your school, your week and who you share it with`), 'person')}</span>` : ''}
       </div>
     </div>
     <div class="start managers">
@@ -1422,20 +1439,13 @@ function homePage() {
       <h2>${T(`Program managers`)}</h2>
       <p>${T(`Run an after-school program, a weekend class or a camp? Make sure parents see it right.`)}</p>
       <div class="start-list">
-        ${GROUPS ? go(link('directors/', 0), T(`Claim your listing`), T(`Keep its dates, costs and hours current yourself`)) : ''}
-        ${go(link('suggest/', 0), T(`Add a program`), T(`Not listed yet? Send its name and website`))}
-        ${go(link('suggest/', 0) + '?kind=camp', T(`Add a camp`), T(`Summer camps and camps on days off`))}
+        ${GROUPS ? go(link('managers/', 0), T(`Claim your listing`), T(`Keep its dates, costs and hours current yourself`), 'claim') : ''}
+        ${go(link('suggest/', 0), T(`Add a program`), T(`Not listed yet? Send its name and website`), 'plus')}
+        ${go(link('suggest/', 0) + '?kind=camp', T(`Add a camp`), T(`Summer camps and camps on days off`), 'tent')}
       </div>
     </div>
   </div>
 </section>
-${more.length ? `<section class="section" id="more">
-  <h2>${T(`More than weekday afternoons`)}</h2>
-  <p>${T(`After school is where this started. The same listings now cover the rest of a family’s calendar.`)}</p>
-  <div class="mores">
-    ${more.map(([href, name, text, color]) => `<a class="more-card" href="${href}" style="--tc:${color}"><h3>${name}</h3><p>${text}</p><span class="more-go">${T(`Have a look`)}</span></a>`).join('\n    ')}
-  </div>
-</section>` : ''}
 <section class="section" id="browse">
   <h2>${T(`Or start somewhere else`)}</h2>
   <div class="ways">
@@ -1456,6 +1466,13 @@ ${more.length ? `<section class="section" id="more">
     </div>
   </div>
 </section>
+${more.length ? `<section class="section" id="more">
+  <h2>${T(`More than weekday afternoons`)}</h2>
+  <p>${T(`After school is where this started. The same listings now cover the rest of a family’s calendar.`)}</p>
+  <div class="mores">
+    ${more.map(([href, name, text, color]) => `<a class="more-card" href="${href}" style="--tc:${color}"><h3>${name}</h3><p>${text}</p><span class="more-go">${T(`Have a look`)}</span></a>`).join('\n    ')}
+  </div>
+</section>` : ''}
 <section class="section" id="schools">
   <h2>${T(`Schools covered so far`)}</h2>
   <div class="chips-row">${covered.slice(0, 12).map(s => `<a class="btn" href="${link(s.id + '/', 0)}">${esc(s.shortName)}</a>`).join('')}<a class="btn quiet" href="${link('schools/', 0)}">${covered.length > 12 ? `All ${covered.length} schools` : T(`All schools`)}</a></div>
@@ -1608,7 +1625,7 @@ function privacyPage() {
     <li>${T(`You can take a week out of your profile or out of a group, stop sharing, leave a group, or delete your account from the site at any time, and it is removed straight away. A group’s creator can remove anyone. Every shared week and group is deleted two weeks after the last day of school.`)}</li>
     <li>${T(`Accounts are for parents, caregivers, teachers and the people who run programs. Children should not make one, and the site never asks a child for an email address: building a week and making a card work without an account.`)}</li>
   </ul>
-  <h2 id="directors">${T(`If you run a program and claim its listing`)}</h2>
+  <h2 id="managers">${T(`If you manage a program and claim its listing`)}</h2>
   <ul>
     <li>${T(`Claiming uses the same account. We check one thing: that the email address you signed in with is at the listing’s own website address. We keep which listing you claimed, when, and whether the claim stands.`)}</li>
     <li>${T(`The public sees a “Claimed” mark on the listing and nothing about you. Your name and email address are seen only by the person who runs this site.`)}</li>
@@ -1788,7 +1805,7 @@ function suggestPage() {
     </ol>
     <p class="hint">${T(`Nothing is published automatically, and nobody pays to be listed.`)}</p>${GROUPS ? `
     <h2>${T(`Run the program yourself?`)}</h2>
-    <p>${T(`Claim your listing with your work email and send changes as its director.`)} <a href="${link('directors/', 1)}">${T(`How claiming works`)}</a></p>` : ''}
+    <p>${T(`Claim your listing with your work email and send changes as its manager.`)} <a href="${link('managers/', 1)}">${T(`How claiming works`)}</a></p>` : ''}
   </aside>
 </div>`;
   return layout({ title: 'Suggest a program or camp', description: `Tell ${cfg.siteName} about an after-school program or camp that’s missing, an update to a listing, or a school to add.`, pathName: 'suggest/', depth: 1, current: 'suggest/', hero, body, showStreet: 'parked' });
@@ -1989,7 +2006,7 @@ function contactPage() {
       ${cfg.contactEmail ? `<li>${T(`Email`)} <a href="mailto:${esc(cfg.contactEmail)}">${esc(cfg.contactEmail)}</a></li>` : ''}
       <li>${T(`A program or camp that’s missing, or a listing that’s wrong:`)} <a href="${link('suggest/', 1)}">${T(`use the suggestion form`)}</a>${T(`, so it reaches the right pile.`)}</li>
       <li>${T(`An idea for the site:`)} <a href="${link('ideas/', 1)}">${T(`request a feature`)}</a>.</li>
-      ${GROUPS ? `<li>${T(`You run a program:`)} <a href="${link('directors/', 1)}">${T(`claim your listing`)}</a>.</li>` : ''}
+      ${GROUPS ? `<li>${T(`You run a program:`)} <a href="${link('managers/', 1)}">${T(`claim your listing`)}</a>.</li>` : ''}
     </ul>
     <p class="hint">${T(`One parent reads these, usually within a few days.`)} <a href="${link('privacy/', 1)}#forms">${T(`How we handle what you send.`)}</a></p>
   </aside>
@@ -2196,7 +2213,7 @@ const claimListings = () => Object.fromEntries([
   ...summerCamps.map(c => ['c:' + c.id, { n: c.name + ' (summer camp)', d: baseDomain(c.website), m: claimMode(baseDomain(c.website)) }]),
 ]);
 // Under a listing: suggest an update (anyone), and claim it (whoever runs it).
-const listingTools = (key, name, depth, noun) => `<p class="listing-tools"><a class="btn" href="${link('suggest/', depth)}?kind=correction&amp;fix=${encodeURIComponent(key)}&amp;program=${encodeURIComponent(name)}">${T(`Suggest an update`)}</a>${GROUPS ? ` <span class="hint">${noun === 'camp' ? T(`Run this camp?`) : T(`Run this program?`)} <a href="${link('directors/', depth)}?l=${encodeURIComponent(key)}">${T(`Claim this listing`)}</a></span>` : ''}</p>`;
+const listingTools = (key, name, depth, noun) => `<p class="listing-tools"><a class="btn" href="${link('suggest/', depth)}?kind=correction&amp;fix=${encodeURIComponent(key)}&amp;program=${encodeURIComponent(name)}">${T(`Suggest an update`)}</a>${GROUPS ? ` <span class="hint">${noun === 'camp' ? T(`Run this camp?`) : T(`Run this program?`)} <a href="${link('managers/', depth)}?l=${encodeURIComponent(key)}">${T(`Claim this listing`)}</a></span>` : ''}</p>`;
 const photoSlot = key => GROUPS && !PREVIEW ? `<figure class="listing-photo" data-photo="${esc(key)}" hidden></figure>` : '';
 const claimedMark = (key, depth) => GROUPS && !PREVIEW ? `<span class="claimed-mark" data-claimed="${esc(key)}" data-api="${link('groups/api.php', depth)}" hidden><b>${T(`Claimed`)}</b> ${T(`by the people who run it`)}</span>` : '';
 const groupsScript = depth => `<script src="${link('assets/groups.js', depth)}${GROUPS_V}"></script>`;
@@ -2237,7 +2254,7 @@ function accountPage(register = false) {
         <li><b>${T(`Share with a small group.`)}</b> ${T(`A few families you invite by email see each other’s weeks. Nobody else can find the group or ask to join.`)}</li>`}
       </ul>
       <p class="hint">${T(`It’s free. Nothing goes into your profile unless you put it there, and you can delete the account whenever you like.`)}</p>
-      <p class="hint">${T(`Run a program or camp?`)} <a href="${link('directors/', 1)}">${T(`Claim your listing`)}</a>${T(`. It’s the same account.`)}</p>
+      <p class="hint">${T(`Run a program or camp?`)} <a href="${link('managers/', 1)}">${T(`Claim your listing`)}</a>${T(`. It’s the same account.`)}</p>
     </section>
   </div>
   <section class="notes">
@@ -2253,7 +2270,16 @@ function accountPage(register = false) {
 </div>`;
   return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to save your school, your kids’ grades and your week, and to share a week.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: !register, scripts: groupsScript(1) });
 }
-// ---------- for the people who run a program: find a listing and claim it ----------
+// A page whose address changed: send the visitor on, keeping anything after the address (?l=, ?q=).
+const movedPage = (to, depth) => `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>This page has moved</title>
+<link rel="canonical" href="${cfg.siteUrl}/${to}">
+<script>location.replace(${JSON.stringify(link(to, depth))} + location.search + location.hash);</script>
+<meta http-equiv="refresh" content="0;url=${link(to, depth)}"></head>
+<body><p><a href="${link(to, depth)}">This page has moved. Go to it.</a></p></body></html>
+`;
+
+// ---------- for the people who manage a program: find a listing and claim it ----------
 const claimBenefits = depth => `<ul class="benefits">
       <li><b>${T(`Keep your dates current.`)}</b> ${T(`Post sign-up openings, deadlines, term dates and camp days as soon as you set them, instead of waiting for us to find them.`)}</li>
       <li><b>${T(`Fix your costs and hours.`)}</b> ${T(`When a price or a pickup time changes, send it once and the listing follows.`)}</li>
@@ -2292,16 +2318,16 @@ function directorsPage() {
       <li>${T(`Listings are free and stay free. Nobody pays to be listed or to be ranked higher.`)}${GROUPS.photos ? '' : ' ' + T(`Paid extras, such as a photo at the top of your listing, are planned for later.`)}</li>
       <li>${T(`Not on the site yet?`)} <a href="${link('suggest/', 1)}">${T(`Suggest your program`)}</a> ${T(`or`)} <a href="${link('suggest/', 1)}?kind=camp">${T(`your camp`)}</a>${T(`, with its website, and claim it once it’s up.`)}</li>
     </ul>
-    <p><a href="${link('privacy/', 1)}#directors">${T(`What we keep about a claim is on the privacy page.`)}</a></p>
+    <p><a href="${link('privacy/', 1)}#managers">${T(`What we keep about a claim is on the privacy page.`)}</a></p>
   </section>
 </div>`;
-  return layout({ title: 'For program directors: find and claim your listing', description: `Run an after-school program or camp in Philadelphia? Find your ${cfg.siteName} listing, claim it with your work email, and keep its dates, costs and hours up to date. Free.`, pathName: 'directors/', depth: 1, current: null, hero, body, scripts: groupsScript(1) });
+  return layout({ title: 'For program managers: find and claim your listing', description: `Run an after-school program or camp in Philadelphia? Find your ${cfg.siteName} listing, claim it with your work email, and keep its dates, costs and hours up to date. Free.`, pathName: 'managers/', depth: 1, current: null, hero, body, scripts: groupsScript(1) });
 }
 
 // The owner's review page for claims and the changes directors propose, behind the same sign-in as the edit page.
 function editClaimsPhp() {
   const hero = `    <h1>Claims and proposed changes</h1>
-    <p class="lede">Who has claimed which listing, the claims waiting for your yes, and the changes directors have asked for.</p>`;
+    <p class="lede">Who has claimed which listing, the claims waiting for your yes, and the changes program managers have asked for.</p>`;
   const e = v => `<?php echo htmlspecialchars(${v}, ENT_QUOTES, 'UTF-8'); ?>`;
   const act = (does, label, cls = 'btn') => `<button class="${cls}" type="submit" name="do" value="${does}">${label}</button>`;
   const form = (idVar, buttons) => `<form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="${e('$csrf')}"><input type="hidden" name="id" value="<?php echo (int) ${idVar}; ?>">${buttons}</form>`;
@@ -2318,8 +2344,8 @@ function editClaimsPhp() {
     ${form('$c["id"]', act('claim_ok', 'Approve the claim', 'btn primary') + act('claim_no', 'Decline'))}
   </div><?php } ?>
 
-  <h2>Changes directors have proposed (<?php echo count($edits); ?> new)</h2>
-  <?php if (!$edits) { ?><p class="hint">None waiting.</p><?php } else { ?><p class="hint">Nothing here has changed the site. To apply one, paste it to Claude (or edit the listing data), then mark it published so the director is told.</p><?php } ?>
+  <h2>Changes program managers have proposed (<?php echo count($edits); ?> new)</h2>
+  <?php if (!$edits) { ?><p class="hint">None waiting.</p><?php } else { ?><p class="hint">Nothing here has changed the site. To apply one, paste it to Claude (or edit the listing data), then mark it published so the manager is told.</p><?php } ?>
   <?php foreach ($edits as $x) { ?><div class="panel">
     <h3>${e('$name($x["listing"])')} <span class="hint">${e('$x["listing"]')}</span></h3>
     <p class="hint">From ${e('$x["first"] . " " . $x["last"]')} &lt;${e('$x["email"]')}&gt;, ${e('$day($x["created"])')}</p>
@@ -2352,7 +2378,7 @@ Link: ${e('$x["link"]')}<?php } ?></pre>
 <?php } ?>
   <p><a class="btn" href="../">Back to editing</a> <a class="btn" href="../?out=1">Sign out</a></p>
 </div>`;
-  const page = layout({ title: 'Claims and proposed changes', description: 'Claims on listings and the changes directors have proposed.', pathName: 'edit/claims/', depth: 2, current: null, hero, body, noindex: true, quiet: true });
+  const page = layout({ title: 'Claims and proposed changes', description: 'Claims on listings and the changes program managers have proposed.', pathName: 'edit/claims/', depth: 2, current: null, hero, body, noindex: true, quiet: true });
   const names = JSON.stringify(Object.fromEntries(Object.entries(claimListings()).map(([k, v]) => [k, v.n]))).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
   return `<?php
 // The owner's review page for listing claims. Generated by build.mjs; edit it there.
@@ -2403,7 +2429,7 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
       $to = $do === 'claim_ok' ? 'ok' : 'declined';
       $db->prepare('UPDATE claims SET status = ?, decided = ? WHERE id = ?')->execute(array($to, time(), $id));
       $n = $name($c['listing']);
-      if ($to === 'ok') tell($c['email'], 'Your claim on ' . $n . ' is approved', 'Hi ' . $c['first'] . ",\\n\\nYour claim on “" . $n . '” at ' . $SITE . ' is approved. The listing now shows as claimed, and you can send changes to it here:' . "\\n" . $SITE_URL . '/directors/');
+      if ($to === 'ok') tell($c['email'], 'Your claim on ' . $n . ' is approved', 'Hi ' . $c['first'] . ",\\n\\nYour claim on “" . $n . '” at ' . $SITE . ' is approved. The listing now shows as claimed, and you can send changes to it here:' . "\\n" . $SITE_URL . '/managers/');
       else tell($c['email'], 'About your claim on ' . $n, 'Hi ' . $c['first'] . ",\\n\\nWe couldn’t confirm your claim on “" . $n . '” at ' . $SITE . ', so it has been ' . ($do === 'claim_remove' ? 'removed' : 'declined') . '. If that looks wrong, reply to this email and tell us how you’re connected to the program.');
       $msg = $to === 'ok' ? 'Approved, and they’ve been told.' : 'Done, and they’ve been told.';
     }
@@ -2412,7 +2438,7 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($x) {
       $db->prepare('UPDATE edits SET status = ?, decided = ? WHERE id = ?')->execute(array($do === 'edit_done' ? 'done' : 'declined', time(), $id));
       $n = $name($x['listing']);
-      if ($do === 'edit_done') tell($x['email'], 'Your change to ' . $n . ' is published', 'Hi ' . $x['first'] . ",\\n\\nThe change you sent for “" . $n . '” is on the site now. Have a look, and send another if anything is off:' . "\\n" . $SITE_URL . '/directors/');
+      if ($do === 'edit_done') tell($x['email'], 'Your change to ' . $n . ' is published', 'Hi ' . $x['first'] . ",\\n\\nThe change you sent for “" . $n . '” is on the site now. Have a look, and send another if anything is off:' . "\\n" . $SITE_URL . '/managers/');
       else tell($x['email'], 'About the change you sent for ' . $n, 'Hi ' . $x['first'] . ",\\n\\nWe weren’t able to make the change you sent for “" . $n . '”, usually because we couldn’t find it on the program’s own website. Reply to this email if you’d like to talk it through.');
       $msg = $do === 'edit_done' ? 'Marked published, and they’ve been told.' : 'Declined, and they’ve been told.';
     }
@@ -2425,7 +2451,7 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($do === 'photo_ok') {
           $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE listing = ? AND status = 'ok' AND id != ?")->execute(array(time(), $x['listing'], $id));   // one photo a listing
           $db->prepare("UPDATE photos SET status = 'ok', decided = ? WHERE id = ?")->execute(array(time(), $id));
-          tell($x['email'], 'Your photo for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",\n\nThe photo you sent for “" . $n . '” is on the listing now. You can replace or remove it here:' . "\n" . $SITE_URL . '/directors/');
+          tell($x['email'], 'Your photo for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",\n\nThe photo you sent for “" . $n . '” is on the listing now. You can replace or remove it here:' . "\n" . $SITE_URL . '/managers/');
           $msg = 'Published, and they’ve been told.';
         } else {
           $was = $x['status'];
@@ -2968,7 +2994,7 @@ $SCHOOLS = json_decode('${names}', true);
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by directors', 'photo_sent' => 'Photos sent by directors');
+$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -3220,7 +3246,7 @@ ${todo.length ? `<section class="section">
 <section class="section">
   <h2 id="suggest-camp">${T(`Suggest a camp`)}</h2>
   <p>${T(`Know a city day camp that isn’t here? Send its name and its website, and we’ll read it and add it.`)}</p>
-  <p><a class="btn primary" href="${link('suggest/', D)}?kind=camp">${T(`Suggest a camp`)}</a>${GROUPS ? ` <a class="btn" href="${link('directors/', D)}">${T(`I run a camp`)}</a>` : ''}</p>
+  <p><a class="btn primary" href="${link('suggest/', D)}?kind=camp">${T(`Suggest a camp`)}</a>${GROUPS ? ` <a class="btn" href="${link('managers/', D)}">${T(`I run a camp`)}</a>` : ''}</p>
   <p class="hint">${T(`Listings come from each camp’s public pages and are not endorsements. Dates, prices and openings change, so confirm with the camp before you plan around it.`)}</p>
 </section>`;
   return layout({
@@ -3322,7 +3348,8 @@ if (GROUPS) {
   write('register/index.html', accountPage(true));
   write('groups/index.html', groupPage());
   write('join/index.html', joinPage());
-  write('directors/index.html', directorsPage());
+  write('managers/index.html', directorsPage());
+  write('directors/index.html', movedPage('managers/', 1));   // the page's first address
   if (!PREVIEW) write('groups/api.php', groupsApiPhp());
 }
 for (const f of fs.readdirSync(path.join(ROOT, 'src/static'))) write(f, fs.readFileSync(path.join(ROOT, 'src/static', f)));   // icons and the share image, served from the top level
@@ -3348,7 +3375,7 @@ if (!PREVIEW) {
   write('data/alerts.json', JSON.stringify(alertsFeed(), null, 2));   // read by scripts/send-alerts.mjs once a day
   const latest = programs.map(p => p.lastVerified).sort().pop();
   const urls = [['', latest], ['schools/', latest], ...schools.map(s => [s.id + '/', latest]), ['types/', latest], ...liveTypes().map(t => [`types/${t.id}/`, latest]), ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]), ['neighborhoods/', latest], ...hoods.map(h => [hoodPath(h), latest]),
-    ...[...(daysOff ? [offPath] : []), ...(summerCamps.length ? [campsPath] : []), ...(weekendPrograms.length ? [weekendPath] : []), ...(ALERTS ? [alertsPath] : []), 'board/', 'suggest/', ...(GROUPS ? ['directors/'] : []), 'ideas/', 'review/', 'about/', 'contact/', 'privacy/', 'support/'].map(u => [u, latest])];
+    ...[...(daysOff ? [offPath] : []), ...(summerCamps.length ? [campsPath] : []), ...(weekendPrograms.length ? [weekendPath] : []), ...(ALERTS ? [alertsPath] : []), 'board/', 'suggest/', ...(GROUPS ? ['managers/'] : []), 'ideas/', 'review/', 'about/', 'contact/', 'privacy/', 'support/'].map(u => [u, latest])];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
   const bare = cfg.siteUrl.replace(/^https?:\/\//, '');
