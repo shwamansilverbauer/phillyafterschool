@@ -437,7 +437,8 @@
   // rows are [id, name, address, grades, kind, covered school id, programs listed, nearest covered id, miles]
   function schoolHref(box, row) {
     var root = box.getAttribute('data-root') || '', index = box.getAttribute('data-index') || '';
-    return row[5] ? root + row[5] + '/' + index : root + 'schools/request/' + index + '?s=' + row[0];
+    if (row[5]) return root + row[5] + '/' + index;
+    return box.hasAttribute('data-school-pages') ? root + 'schools/' + row[0] + '/' : root + 'schools/request/' + index + '?s=' + row[0];   // each school has a page of its own, except in the preview copy
   }
   all(document, '[data-finder]').forEach(function (box) {
     var input = box.querySelector('input'), list = box.querySelector('.finder-list');
@@ -521,17 +522,21 @@
   // ----- a school that isn't covered yet: say so, take the request, point somewhere useful -----
   var reqPage = document.querySelector('[data-request-page]');
   if (reqPage) {
-    var slug = query().s || '';
+    var fixed = reqPage.getAttribute('data-slug') || '';   // a school's own page: everything is already written out, and only the buttons need wiring
+    var slug = fixed || query().s || '';
     loadFinder(reqPage, function (d) {
       var row = null;
       if (d) d.schools.forEach(function (r) { if (r[0] === slug) row = r; });
       if (!row) return;   // no school chosen: the page stays as a search box
       var root = reqPage.getAttribute('data-root') || '', index = reqPage.getAttribute('data-index') || '';
       if (row[5]) { location.replace(root + row[5] + '/' + index); return; }   // it has a page after all
+      if (!fixed && document.querySelector('[data-finder][data-school-pages]')) { location.replace(root + 'schools/' + row[0] + '/'); return; }   // the old address for a school: on to its own page
       var $ = function (id) { return document.getElementById(id); };
-      $('req-title').textContent = row[1] + ' isn’t covered yet';
-      $('req-meta').textContent = row[2] + (row[3] ? ' · grades ' + row[3] : '') + (row[4] ? ' · ' + row[4] + ' school' : '') + '. We haven’t checked which programs pick up here.';
-      document.title = row[1] + ' | Philly After School';
+      if (!fixed) {
+        $('req-title').textContent = row[1] + ' isn’t covered yet';
+        $('req-meta').textContent = row[2] + (row[3] ? ' · grades ' + row[3] : '') + (row[4] ? ' · ' + row[4] + ' school' : '') + '. We haven’t checked which programs pick up here.';
+        document.title = row[1] + ' | Philly After School';
+      }
       var btn = $('req-btn'), status = $('req-status');
       var asked = [];
       try { asked = JSON.parse(store('pas-requested') || '[]') || []; } catch (e) { asked = []; }
@@ -583,6 +588,7 @@
             }, function () { nBtn.disabled = false; nSay('That didn’t go through. Please try again in a minute.', 'bad'); });
         });
       }
+      if (fixed) return;
       if (row[7] && row[8] <= 2 && d.covered[row[7]]) {   // close enough that the same programs may reach both
         $('req-near-text').textContent = 'The closest school with a page is ' + d.covered[row[7]] + ', about ' + row[8] + (row[8] === 1 ? ' mile' : ' miles') + ' away. Programs that serve it may be near you too, but ask each one whether it picks up from ' + row[1] + '.';
         $('req-near-link').textContent = 'See ' + d.covered[row[7]];
@@ -1974,6 +1980,7 @@
     } catch (e) { /* nothing to carry over */ }
     var kid = function () { return r.kids[r.kid]; };
     var plan = function () { return sumOf(kid()); };
+    var campHref = function (id) { return sd.campUrl ? sd.campUrl.replace('CAMP-ID', id) : sd.campsPage + '#' + id; };   // each camp's own page
     var say = function (t) { statusEl.textContent = t || ''; };
     var picksOf = function (k, i) { return sumOf(k).w[sd.weeks[i].d] || []; };
     var picks = function (i) { return picksOf(kid(), i); };
@@ -2047,7 +2054,7 @@
         var box = el('div', 'sum-picks');
         mine.forEach(function (id) {
           var c = sd.camps[id], chip = el('span', 'sum-chip' + (c.w.indexOf(i) < 0 ? ' ask' : ''));
-          var a = el('a', null, c.n); a.href = sd.campsPage + '#' + id; chip.appendChild(a);
+          var a = el('a', null, c.n); a.href = campHref(id); chip.appendChild(a);
           var bits = [c.h, price(c), c.w.indexOf(i) < 0 ? (c.w.length ? 'not a week it listed' : 'no dates listed') : c.x ? '' : 'ran this week in ' + c.y].filter(Boolean).join(' · ');
           if (bits) chip.appendChild(el('small', null, bits));
           var x = el('button', 'sum-x', '×'); x.type = 'button'; x.setAttribute('aria-label', 'Take ' + c.n + ' off ' + wk.label);
@@ -2152,7 +2159,7 @@
           picksOf(x.k, i).forEach(function (id) {
             var c = sd.camps[id];
             events.push({ uid: 'summer-' + sd.year + '-' + x.i + '-' + wk.d + '-' + id, start: wk.d, days: 5, title: (x.name ? x.name + ': ' : '') + c.n,
-              text: [c.h, price(c), c.hood, c.w.indexOf(i) < 0 ? 'The camp hasn’t listed this week. Check with the camp.' : c.x ? '' : 'This is the week it ran in ' + c.y + '. Check the ' + sd.year + ' dates with the camp.'].filter(Boolean).join('\n'), url: new URL(sd.campsPage + '#' + id, location.href).href });
+              text: [c.h, price(c), c.hood, c.w.indexOf(i) < 0 ? 'The camp hasn’t listed this week. Check with the camp.' : c.x ? '' : 'This is the week it ran in ' + c.y + '. Check the ' + sd.year + ' dates with the camp.'].filter(Boolean).join('\n'), url: new URL(campHref(id), location.href).href });
           });
         });
       });
