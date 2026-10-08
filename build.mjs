@@ -763,6 +763,12 @@ const haystack = (p, extra = []) => [p.name, p.what, ...(p.offers || []), ...(p.
 // From it: how far a program is from a school, in a straight line, and the points a page hands to the map.
 const GEO = fs.existsSync(path.join(ROOT, 'data/geo.json')) ? readJson('data/geo.json').places || {} : {};
 const coordsOf = text => streetAddresses(text).map(a => GEO[addressKey(a)]).filter(Boolean);
+{
+  // Say which addresses the map and the distances can't use yet, so whoever changed one knows to run the lookup.
+  const texts = [...programs.flatMap(p => [p.address, ...Object.values(p.schools || {}).map(l => l.address)]), ...summerCamps.map(c => c.address), ...schools.map(s => s.address)];
+  const lost = [...new Set(texts.flatMap(t => streetAddresses(t)).filter(a => !GEO[addressKey(a)]))];
+  if (lost.length) console.log(`Note: ${lost.length} address(es) have no place in data/geo.json, so they are left off the map and out of the distances: ${lost.join('; ')}. Run "node scripts/geocode.mjs".`);
+}
 const milesApart = (a, b) => { const rad = x => x * Math.PI / 180, h = Math.sin(rad(b[0] - a[0]) / 2) ** 2 + Math.cos(rad(a[0])) * Math.cos(rad(b[0])) * Math.sin(rad(b[1] - a[1]) / 2) ** 2; return 2 * 3958.8 * Math.asin(Math.sqrt(h)); };
 const SCHOOL_LL = Object.fromEntries(schools.map(s => [s.id, coordsOf(s.address)[0]]).filter(x => x[1]));
 // A listing's places: its own address, plus any address it uses for one school. For one school's page, that school's place first.
@@ -3522,6 +3528,11 @@ const CAMP_AREAS = [
   ['West Philly', ['Cobbs Creek', 'West Fairmount Park', 'University City', 'West Philadelphia']],
   ['Northeast', ['Fox Chase']],
 ];
+{
+  const known = new Set(CAMP_AREAS.flatMap(a => a[1]));
+  const odd = [...new Set([...summerCamps, ...programs.filter(p => p.weekend)].flatMap(x => x.neighborhoods || []).filter(n => !known.has(n)))];
+  if (odd.length) console.log(`Note: ${odd.join(', ')} ${odd.length === 1 ? 'is' : 'are'} not in a part of the city (CAMP_AREAS in build.mjs), so camps and weekend classes there show under "Elsewhere in the city".`);
+}
 const campAreas = c => { const n = c.neighborhoods || []; if (!n.length) return CAMP_AREAS.map(a => a[0]); const out = new Set(n.map(x => (CAMP_AREAS.find(a => a[1].includes(x)) || ['Elsewhere in the city'])[0])); return [...out]; };
 const seasonPill = c => c.season ? `<span class="pill season ${campsFile && c.season > campsFile.season ? 'next' : 'nearby'}">${c.season > campsFile.season ? 'Summer ' + c.season : c.season + ' details'}</span>` : `<span class="pill season none">No dates yet</span>`;
 // ---------- summer schedule: which weeks each camp runs, worked out from the dates it lists ----------
