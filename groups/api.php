@@ -14,6 +14,8 @@
 //   a claim        - for someone who runs a program: which listing their account has claimed, and whether it stands.
 //                    A claim needs an account whose email address is at the listing's own website address.
 //   a proposed edit - what a claimed listing's director asked to have changed. The site's owner reads and applies it.
+//   a listing photo - one picture a director sent for a listing they claimed, with a line describing it. It is kept
+//                    outside the public folder and shown on the listing only after the site's owner approves it.
 // Everything lives in one small database file kept outside the public folder. Nothing here is ever written into a page:
 // a group is only sent, as data, to a signed-in member the owner has approved.
 //
@@ -45,6 +47,7 @@ const MAX_SOLO = 12;        // "share this week with one person" lists one accou
 const MAX_WEEKS = 6;        // children's weeks one profile can hold
 const MAX_CLAIMS = 12;      // listings one account can claim
 const MAX_CLAIMANTS = 5;    // accounts that can hold a claim on one listing
+const PHOTO_BYTES = 1600000; // the biggest listing photo accepted, after the browser has shrunk it
 const DAYS = array('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun');
 const WEEKEND = array('sat', 'sun');   // weekend picks are a program with weekend classes: no school, no pickup
 
@@ -110,6 +113,8 @@ function db(): PDO {
     $db->exec("CREATE TABLE IF NOT EXISTS claims (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, listing TEXT NOT NULL, status TEXT NOT NULL, domain TEXT NOT NULL DEFAULT '', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0, UNIQUE (user_id, listing))");
     $db->exec("CREATE TABLE IF NOT EXISTS edits (id INTEGER PRIMARY KEY, claim_id INTEGER NOT NULL REFERENCES claims(id) ON DELETE CASCADE, listing TEXT NOT NULL, body TEXT NOT NULL, link TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'new', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0)");
     $db->exec('CREATE INDEX IF NOT EXISTS claims_listing ON claims (listing, status)');
+    $db->exec("CREATE TABLE IF NOT EXISTS photos (id INTEGER PRIMARY KEY, claim_id INTEGER NOT NULL REFERENCES claims(id) ON DELETE CASCADE, listing TEXT NOT NULL, alt TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'new', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0)");
+    $db->exec('CREATE INDEX IF NOT EXISTS photos_listing ON photos (listing, status)');
     if (!$hadTally) {   // start the daily counts from what is already here
       $day = "strftime('%Y-%m-%d', created, 'unixepoch', '-4 hours')";
       $db->exec("INSERT OR IGNORE INTO tally (k, day, n) SELECT 'account', $day, COUNT(*) FROM users GROUP BY 2");
@@ -141,6 +146,11 @@ function tidy(): void {
   q('DELETE FROM sessions WHERE expires < ?', array($t));
   q('DELETE FROM throttle WHERE t < ?', array($t - 2 * 86400));
   q('DELETE FROM grp WHERE expires < ?', array($t));
+  // Photo files whose record has gone (a deleted account, a replaced or declined photo).
+  $dir = data_dir() . '/photos';
+  if (is_dir($dir)) foreach ((array) @scandir($dir) as $f) {
+    if (preg_match('/^(\d+)\.jpg$/', (string) $f, $m) && !val("SELECT 1 FROM photos WHERE id = ? AND status != 'declined'", array((int) $m[1]))) @unlink($dir . '/' . $f);
+  }
 }
 
 // ---------- slowing down guessing and floods ----------
@@ -164,7 +174,7 @@ if ($method === 'POST') {
     $host = isset($_SERVER['HTTP_HOST']) ? (string) $_SERVER['HTTP_HOST'] : '';
     if (!is_string($origin) || strcasecmp($origin . ($port ? ':' . $port : ''), $host) !== 0) fail('forbidden', 'That request was not accepted.', 403);
   }
-  $raw = (string) file_get_contents('php://input', false, null, 0, 60000);
+  $raw = (string) file_get_contents('php://input', false, null, 0, $action === 'photo_add' ? 2400000 : 60000);
   $in = json_decode($raw, true);
   if (!is_array($in)) fail('bad', 'That request was not understood.');
 } elseif ($method !== 'GET') {
@@ -455,8 +465,16 @@ function claim_out(array $c): array {
   foreach (q('SELECT id, body, link, status, created FROM edits WHERE claim_id = ? ORDER BY id DESC LIMIT 20', array($c['id'])) as $e) {
     $edits[] = array('id' => (int) $e['id'], 'body' => $e['body'], 'link' => $e['link'], 'status' => $e['status'], 'created' => (int) $e['created']);
   }
-  return array('listing' => $c['listing'], 'name' => isset($l[$c['listing']]) ? $l[$c['listing']]['n'] : 'A listing no longer on the site', 'status' => $c['status'], 'gone' => !isset($l[$c['listing']]), 'edits' => $edits);
+  $ph = row("SELECT id, status, alt FROM photos WHERE claim_id = ? AND status != 'declined' ORDER BY id DESC LIMIT 1", array($c['id']));
+  $live = photo_live($c['listing']);
+  return array('listing' => $c['listing'], 'name' => isset($l[$c['listing']]) ? $l[$c['listing']]['n'] : 'A listing no longer on the site', 'status' => $c['status'], 'gone' => !isset($l[$c['listing']]), 'edits' => $edits,
+    'photo' => $ph ? array('status' => $ph['status'], 'alt' => $ph['alt']) : null, 'photoLive' => $live ? (int) $live['id'] : 0);
 }
+// The photo a listing shows: the newest approved one whose claim still stands.
+function photo_live(string $key): ?array {
+  return row("SELECT p.id, p.alt FROM photos p JOIN claims c ON c.id = p.claim_id WHERE p.listing = ? AND p.status = 'ok' AND c.status = 'ok' ORDER BY p.id DESC LIMIT 1", array($key));
+}
+function photo_file(int $id): string { return data_dir() . '/photos/' . $id . '.jpg'; }
 function my_claims(int $uid): array {
   $out = array();
   foreach (q("SELECT id, listing, status FROM claims WHERE user_id = ? ORDER BY id", array($uid)) as $c) $out[] = claim_out($c);
@@ -639,9 +657,71 @@ switch ($method . ' ' . $action) {
   // ----- directors -----
   // Which listings carry a "claimed by the program" mark. Public, and only the listing keys: never who claimed them.
   case 'GET claimed': {
-    $keys = array();
+    $keys = array(); $photos = array();
     foreach (q("SELECT DISTINCT listing FROM claims WHERE status = 'ok'") as $r) $keys[] = $r['listing'];
-    out(array('ok' => true, 'claimed' => $keys));
+    foreach ($keys as $k) { $ph = photo_live($k); if ($ph && is_file(photo_file((int) $ph['id']))) $photos[$k] = array('v' => (int) $ph['id'], 'alt' => $ph['alt']); }
+    out(array('ok' => true, 'claimed' => $keys, 'photos' => (object) $photos));
+  }
+
+  // The approved photo for a listing. Public: it is what the listing page shows.
+  case 'GET photo': {
+    $ph = photo_live(isset($_GET['l']) && is_string($_GET['l']) ? substr($_GET['l'], 0, 90) : '');
+    $file = $ph ? photo_file((int) $ph['id']) : '';
+    if (!$ph || !is_file($file)) { http_response_code(404); exit; }
+    header('Content-Type: image/jpeg');
+    header('Cache-Control: public, max-age=604800');   // the page asks for it by version, so a new photo has a new address
+    header('Content-Length: ' . filesize($file));
+    header_remove('X-Robots-Tag');
+    readfile($file);
+    exit;
+  }
+
+  // A director sends one photo for a listing they hold. It waits for the owner; nothing shows until it is approved.
+  case 'POST photo_add': {
+    $u = need_user();
+    $key = str($in, 'listing', 90);
+    $c = row("SELECT id FROM claims WHERE user_id = ? AND listing = ? AND status = 'ok'", array($u['id'], $key));
+    if (!$c) fail('claim', 'You can add a photo once your claim on this listing stands.', 403);
+    if (empty($in['permission'])) fail('permission', 'Tick the box to say you have the right to use this photo.');
+    $alt = str($in, 'alt', 160);
+    if (mb_strlen($alt, 'UTF-8') < 8) fail('alt', 'Describe the photo in a few words, for people who can’t see it.');
+    if (too_many('photo:' . $u['id'], 6, 86400)) fail('slow', 'That’s a lot of photos for one day. Try again tomorrow.', 429);
+    $b64 = isset($in['data']) && is_string($in['data']) ? $in['data'] : '';
+    $bin = strlen($b64) > 20 ? base64_decode($b64, true) : false;
+    if ($bin === false || strlen($bin) < 2000) fail('photo', 'That photo didn’t come through. Try choosing it again.');
+    if (strlen($bin) > PHOTO_BYTES) fail('photo', 'That photo is too big. Try a smaller one.');
+    $info = @getimagesizefromstring($bin);
+    if (!$info || $info[2] !== IMAGETYPE_JPEG || $info[0] < 400 || $info[1] < 300 || $info[0] > 2400 || $info[1] > 2400) fail('photo', 'That doesn’t look like a photo we can use. Try a different one, at least 400 pixels wide.');
+    if (function_exists('imagecreatefromstring')) {   // draw it again, so nothing rides along inside the file
+      $img = @imagecreatefromstring($bin);
+      if (!$img) fail('photo', 'That photo couldn’t be read. Try a different one.');
+      ob_start(); imagejpeg($img, null, 86); $bin = (string) ob_get_clean(); imagedestroy($img);
+    }
+    note('photo:' . $u['id']);
+    $dir = data_dir() . '/photos';
+    if (!is_dir($dir) && !@mkdir($dir, 0700, true) && !is_dir($dir)) fail('storage', 'Photos are not available right now.', 503);
+    foreach (q("SELECT id FROM photos WHERE claim_id = ? AND status = 'new'", array($c['id'])) as $old) @unlink(photo_file((int) $old['id']));   // a newer photo replaces one still waiting
+    q("DELETE FROM photos WHERE claim_id = ? AND status = 'new'", array($c['id']));
+    q('INSERT INTO photos (claim_id, listing, alt, created) VALUES (?, ?, ?, ?)', array($c['id'], $key, $alt, now()));
+    $id = (int) db()->lastInsertId();
+    if (@file_put_contents(photo_file($id), $bin, LOCK_EX) === false) { q('DELETE FROM photos WHERE id = ?', array($id)); fail('storage', 'The photo could not be saved. Please try again.', 503); }
+    @chmod(photo_file($id), 0600);
+    bump('photo_sent');
+    $l = listings();
+    $name = isset($l[$key]) ? $l[$key]['n'] : $key;
+    tell_owner('A photo to approve: ' . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '”, sent a photo for it.' . "\n\nThey describe it as: " . $alt . "\n\nThey ticked that they have the right to use it and permission from the families of any children shown. It is not on the site. Look at it and publish or decline it on the review page.");
+    out(array('ok' => true, 'claims' => my_claims($u['id'])));
+  }
+
+  // The director takes their photo off the listing (a waiting one, or the one that is showing).
+  case 'POST photo_drop': {
+    $u = need_user();
+    $c = row("SELECT id FROM claims WHERE user_id = ? AND listing = ?", array($u['id'], str($in, 'listing', 90)));
+    if ($c) {
+      foreach (q('SELECT id FROM photos WHERE claim_id = ?', array($c['id'])) as $old) @unlink(photo_file((int) $old['id']));
+      q('DELETE FROM photos WHERE claim_id = ?', array($c['id']));
+    }
+    out(array('ok' => true, 'claims' => my_claims($u['id'])));
   }
 
   case 'GET claims': {

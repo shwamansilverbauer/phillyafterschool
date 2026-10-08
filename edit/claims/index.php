@@ -40,7 +40,8 @@ $csrf = hash_hmac('sha256', 'claims-form', edit_key());
 $said = isset($_GET['said']) && is_string($_GET['said']) ? substr($_GET['said'], 0, 200) : '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
-$pending = array(); $claims = array(); $declined = array(); $edits = array();
+$pending = array(); $claims = array(); $declined = array(); $edits = array(); $photosNew = array(); $photosLive = array();
+$photoFile = function ($id) { return dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/photos/' . (int) $id . '.jpg'; };
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -50,6 +51,13 @@ if ($have) {
     $db->exec('PRAGMA foreign_keys=ON');
     $db->query('SELECT 1 FROM claims LIMIT 1');
   } catch (Exception $e) { $have = false; }   // no database yet, or one from before claims existed
+}
+// A photo, shown to the owner only: this page is behind the sign-in, and a waiting photo has no public address.
+if ($have && isset($_GET['photo'])) {
+  $f = $photoFile($_GET['photo']);
+  if (!ctype_digit((string) $_GET['photo']) || !is_file($f)) { http_response_code(404); exit; }
+  header('Content-Type: image/jpeg'); header('X-Content-Type-Options: nosniff'); header('Content-Length: ' . filesize($f));
+  readfile($f); exit;
 }
 // Tells a director what was decided. Plain text, from the site's own address.
 function tell($to, $subject, $text) {
@@ -81,6 +89,31 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
       $msg = $do === 'edit_done' ? 'Marked published, and they’ve been told.' : 'Declined, and they’ve been told.';
     }
   }
+  if ($ok && in_array($do, array('photo_ok', 'photo_no'), true)) {
+    try {
+      $st = $db->prepare('SELECT p.id, p.listing, p.status, u.email, u.first FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.id = ?'); $st->execute(array($id)); $x = $st->fetch();
+      if ($x) {
+        $n = $name($x['listing']);
+        if ($do === 'photo_ok') {
+          $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE listing = ? AND status = 'ok' AND id != ?")->execute(array(time(), $x['listing'], $id));   // one photo a listing
+          $db->prepare("UPDATE photos SET status = 'ok', decided = ? WHERE id = ?")->execute(array(time(), $id));
+          tell($x['email'], 'Your photo for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",
+
+The photo you sent for “" . $n . '” is on the listing now. You can replace or remove it here:' . "
+" . $SITE_URL . '/directors/');
+          $msg = 'Published, and they’ve been told.';
+        } else {
+          $was = $x['status'];
+          $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), $id));
+          @unlink($photoFile($id));
+          tell($x['email'], 'About the photo you sent for ' . $n, 'Hi ' . $x['first'] . ",
+
+We " . ($was === 'ok' ? 'have taken down' : 'weren’t able to use') . ' the photo you sent for “' . $n . '”. You’re welcome to send another: a clear picture of the space or an activity works best, with permission from the families of any children in it. Reply to this email with any questions.');
+          $msg = $was === 'ok' ? 'Taken down, and they’ve been told.' : 'Declined, and they’ve been told.';
+        }
+      }
+    } catch (Exception $e) { /* a database from before photos: nothing to do */ }
+  }
   header('Location: ./?said=' . rawurlencode($msg), true, 303);
   exit;
 }
@@ -88,6 +121,9 @@ if ($have) {
   $all = $db->query('SELECT c.id, c.listing, c.status, c.domain, c.created, u.email, u.first, u.last FROM claims c JOIN users u ON u.id = c.user_id ORDER BY c.id DESC')->fetchAll();
   foreach ($all as $c) { if ($c['status'] === 'pending') $pending[] = $c; elseif ($c['status'] === 'ok') $claims[] = $c; else $declined[] = $c; }
   $edits = $db->query("SELECT e.id, e.listing, e.body, e.link, e.created, u.email, u.first, u.last FROM edits e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.status = 'new' ORDER BY e.id")->fetchAll();
+  try {
+    foreach ($db->query("SELECT p.id, p.listing, p.alt, p.status, p.created, u.email, u.first, u.last FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.status != 'declined' AND c.status = 'ok' ORDER BY p.id") as $x) { if (!is_file($photoFile($x['id']))) continue; if ($x['status'] === 'new') $photosNew[] = $x; else $photosLive[] = $x; }
+  } catch (Exception $e) { /* a database from before photos */ }
 }
 ?>
 <!doctype html>
@@ -116,7 +152,7 @@ if ($have) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../../assets/site.css?v=f1469bdd">
+<link rel="stylesheet" href="../../assets/site.css?v=7ac5a4aa">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -161,6 +197,18 @@ if ($have) {
 Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?></pre>
     <form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $x["id"]; ?>"><button class="btn primary" type="submit" name="do" value="edit_done">Mark published</button><button class="btn" type="submit" name="do" value="edit_no">Decline</button></form>
   </div><?php } ?>
+
+  <h2>Photos waiting for you (<?php echo count($photosNew); ?>)</h2>
+  <?php if (!$photosNew) { ?><p class="hint">None waiting. A photo shows on a listing only after you publish it here.</p><?php } ?>
+  <?php foreach ($photosNew as $x) { ?><div class="panel">
+    <h3><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?></h3>
+    <p class="hint">From <?php echo htmlspecialchars($x["first"] . " " . $x["last"], ENT_QUOTES, 'UTF-8'); ?> &lt;<?php echo htmlspecialchars($x["email"], ENT_QUOTES, 'UTF-8'); ?>&gt;, <?php echo htmlspecialchars($day($x["created"]), ENT_QUOTES, 'UTF-8'); ?>. They ticked that they have the right to use it and permission from the families of any children shown.</p>
+    <p><img class="review-photo" src="./?photo=<?php echo (int) $x["id"]; ?>" alt=""></p>
+    <p>Described as: <b><?php echo htmlspecialchars($x["alt"], ENT_QUOTES, 'UTF-8'); ?></b></p>
+    <form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $x["id"]; ?>"><button class="btn primary" type="submit" name="do" value="photo_ok">Publish the photo</button><button class="btn" type="submit" name="do" value="photo_no">Decline</button></form>
+  </div><?php } ?>
+  <?php if ($photosLive) { ?><h2>Photos on the site (<?php echo count($photosLive); ?>)</h2>
+  <div class="review-grid"><?php foreach ($photosLive as $x) { ?><div class="panel"><p><img class="review-photo" src="./?photo=<?php echo (int) $x["id"]; ?>" alt=""></p><p><b><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?></b><br><span class="hint"><?php echo htmlspecialchars($x["alt"], ENT_QUOTES, 'UTF-8'); ?></span></p><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $x["id"]; ?>"><button class="btn" type="submit" name="do" value="photo_no">Take it down</button></form></div><?php } ?></div><?php } ?>
 
   <h2>Claimed listings (<?php echo count($claims); ?>)</h2>
   <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>
@@ -217,6 +265,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
         <li><a href="../../about/"><span data-copy="5e461a2404">About this site</span></a></li>
         <li><a href="../../about/#how"><span data-copy="5b2fc57ac3">How listings are checked</span></a></li>
         <li><a href="../../about/#corrections"><span data-copy="1862eb688d">Send a correction</span></a></li>
+        <li><a href="../../contact/"><span data-copy="4832e45812">Contact us</span></a></li>
         <li><a href="../../directors/"><span data-copy="4a5d910312">For program directors</span></a></li>
         <li><a href="../../ideas/"><span data-copy="29c269f6e8">Request a feature</span></a></li>
         <li><a href="../../privacy/"><span data-copy="cf01481f62">Privacy</span></a></li>
@@ -227,10 +276,11 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
   <div class="foot-fine">
     <p><span data-copy="b7e5078568">Listings come from each provider’s public pages and are not endorsements. Prices, hours and pickup routes change, so confirm with the provider before you enroll.</span></p>
     <p><span data-copy="ab9dba162b" data-tpl="{site} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed." data-vars="{&quot;site&quot;:&quot;Philly After School&quot;}">Philly After School is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.</span></p>
+    <p><span data-copy="1ec7041a18">Questions?</span> <a href="mailto:contact@phillyafterschool.org">contact@phillyafterschool.org</a> <span data-copy="1758356db2">or</span> <a href="../../contact/"><span data-copy="fa1e614bfa">send a message</span></a>.</p>
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../../assets/site.js?v=4e358ba9" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
+<script src="../../assets/site.js?v=ba3b71dc" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
 
 </body>
 </html>

@@ -1053,3 +1053,27 @@ ol.steps{margin:10px 0 0;padding-left:1.3em;display:flex;flex-direction:column;g
 .claim-body{white-space:pre-line}
 #claim-find{font:inherit;width:100%;max-width:520px;padding:11px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
 pre.edit-ask{white-space:pre-wrap;font:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:8px 0}
+
+/* ---------- for directors: the home page panel, benefits, photos; and the contact page ---------- */
+.for-directors{display:flex;flex-direction:column;gap:12px;border:2px solid var(--line);border-radius:18px;padding:22px 24px;background:var(--surface)}
+.dir-find label{font-weight:700;display:block;margin-bottom:6px}
+.dir-find-row{display:flex;flex-wrap:wrap;gap:8px;max-width:560px}
+.dir-find-row input{font:inherit;flex:1 1 220px;min-width:0;padding:11px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}
+ul.benefits{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px 22px}
+ul.benefits li{border-left:4px solid var(--yellow);padding:2px 0 2px 12px}
+ul.benefits b{display:block}
+.listing-photo{margin:0 0 16px;border-radius:16px;overflow:hidden;background:var(--cell-off);max-width:760px}
+.listing-photo img{display:block;width:100%;height:auto;max-height:420px;object-fit:cover}
+.camp .listing-photo{margin:0 0 10px;max-width:none}
+.camp .listing-photo img{max-height:180px}
+.claim h4{font-family:var(--display);font-stretch:112%;font-size:1.02rem;margin:8px 0 0}
+.claim-photo{align-self:stretch;max-width:640px;border-top:1px dashed var(--line);margin-top:10px;padding-top:6px}
+.claim-photo input[type=text]{font:inherit;width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.claim-photo label{font-weight:700;display:block;margin:10px 0 4px}
+.claim-photo label.check{font-weight:400;display:flex}
+.claim-photo-now{display:block;max-width:320px;width:100%;height:auto;border-radius:12px;margin:8px 0}
+button.linklike{font:inherit;background:none;border:0;padding:0;color:var(--link);text-decoration:underline;cursor:pointer}
+.review-photo{display:block;max-width:420px;width:100%;height:auto;border-radius:12px}
+.review-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.for-directors ul.benefits{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:640px){.for-directors ul.benefits{grid-template-columns:minmax(0,1fr)}}

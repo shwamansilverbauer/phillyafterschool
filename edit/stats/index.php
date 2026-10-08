@@ -34,7 +34,7 @@ $SCHOOLS = json_decode('{"nebinger":"Nebinger","meredith":"Meredith","coppin":"C
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by directors');
+$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by directors', 'photo_sent' => 'Photos sent by directors');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -113,7 +113,7 @@ $sum = function ($key, $span) use (&$days, &$ever) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../../assets/site.css?v=f1469bdd">
+<link rel="stylesheet" href="../../assets/site.css?v=7ac5a4aa">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -202,6 +202,7 @@ $sum = function ($key, $span) use (&$days, &$ever) {
         <li><a href="../../about/"><span data-copy="5e461a2404">About this site</span></a></li>
         <li><a href="../../about/#how"><span data-copy="5b2fc57ac3">How listings are checked</span></a></li>
         <li><a href="../../about/#corrections"><span data-copy="1862eb688d">Send a correction</span></a></li>
+        <li><a href="../../contact/"><span data-copy="4832e45812">Contact us</span></a></li>
         <li><a href="../../directors/"><span data-copy="4a5d910312">For program directors</span></a></li>
         <li><a href="../../ideas/"><span data-copy="29c269f6e8">Request a feature</span></a></li>
         <li><a href="../../privacy/"><span data-copy="cf01481f62">Privacy</span></a></li>
@@ -212,10 +213,11 @@ $sum = function ($key, $span) use (&$days, &$ever) {
   <div class="foot-fine">
     <p><span data-copy="b7e5078568">Listings come from each provider’s public pages and are not endorsements. Prices, hours and pickup routes change, so confirm with the provider before you enroll.</span></p>
     <p><span data-copy="ab9dba162b" data-tpl="{site} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed." data-vars="{&quot;site&quot;:&quot;Philly After School&quot;}">Philly After School is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.</span></p>
+    <p><span data-copy="1ec7041a18">Questions?</span> <a href="mailto:contact@phillyafterschool.org">contact@phillyafterschool.org</a> <span data-copy="1758356db2">or</span> <a href="../../contact/"><span data-copy="fa1e614bfa">send a message</span></a>.</p>
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../../assets/site.js?v=4e358ba9" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
+<script src="../../assets/site.js?v=ba3b71dc" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
 
 </body>
 </html>
