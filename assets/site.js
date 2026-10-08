@@ -531,6 +531,39 @@
           .then(function (j) { if (j && j.ok) finish(); else { btn.disabled = false; status.textContent = 'That didn’t go through. Please try again.'; } },
             function () { btn.disabled = false; status.textContent = 'That didn’t go through. Please try again.'; });
       });
+      // "Email me when it's added": first name, email and which school go straight to Klaviyo, like the dates sign-up.
+      // The school is kept on the address as one of its "waiting_schools", so the people waiting on a school can be
+      // found, and written to, when it gets its page. Asking by email counts as asking for the school, too.
+      var nf = $('req-notify');
+      if (nf) {
+        var nStatus = $('req-notify-status'), nBtn = nf.querySelector('button[type="submit"]'), nRow = nf.querySelector('.alerts-row');
+        var nSay = function (msg, kind) { nStatus.textContent = msg; nStatus.className = 'alerts-status' + (kind ? ' ' + kind : ''); };
+        $('req-notify-title').textContent = 'Get an email when ' + row[1] + ' is added';
+        nf.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var email = nf.elements.email.value.trim(), first = nf.elements.first_name.value.replace(/\s+/g, ' ').trim().slice(0, 60);
+          if (nf.elements.company && nf.elements.company.value) return;   // only a script fills the hidden field
+          if (!first) { nSay('Add your first name so we know what to call you.', 'bad'); nf.elements.first_name.focus(); return; }
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { nSay('That email address doesn’t look right. Check it and try again.', 'bad'); nf.elements.email.focus(); return; }
+          if (nf.getAttribute('data-preview')) { nSay('This is the preview, so nothing was sent. Sign-ups work on the live site.'); return; }
+          nBtn.disabled = true; nSay('Sending…');
+          var kl = function (path, body) {
+            return window.fetch('https://a.klaviyo.com/client/' + path + '?company_id=' + encodeURIComponent(nf.getAttribute('data-key')), {
+              method: 'POST', headers: { 'content-type': 'application/vnd.api+json', revision: '2026-07-15' }, body: JSON.stringify(body)
+            }).then(function (r) { if (r.status < 200 || r.status > 299) throw new Error('status ' + r.status); return r; });
+          };
+          kl('subscriptions', { data: { type: 'subscription',
+            attributes: { custom_source: 'phillyafterschool.org school_request', profile: { data: { type: 'profile', attributes: { email: email, first_name: first, properties: { signup_place: 'school_request', waiting_school_name: row[1] }, subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } } } } } },
+            relationships: { list: { data: { type: 'list', id: nf.getAttribute('data-list') } } } } })
+            .then(function () { return kl('profiles', { data: { type: 'profile', attributes: { email: email }, meta: { patch_properties: { append: { waiting_schools: slug } } } } }); })
+            .then(function () {
+              nRow.hidden = true;
+              nSay(nf.getAttribute('data-confirm') ? 'Almost there. Check your inbox for a confirmation email and tap the button in it.' : 'Done, ' + first + '. You’ll get an email when ' + row[1] + ' has its page.', 'good');
+              track({ event: 'pas_school_notify', school: slug });
+              if (asked.indexOf(slug) < 0 && !btn.disabled) btn.click();   // and count the request
+            }, function () { nBtn.disabled = false; nSay('That didn’t go through. Please try again in a minute.', 'bad'); });
+        });
+      }
       if (row[7] && row[8] <= 2 && d.covered[row[7]]) {   // close enough that the same programs may reach both
         $('req-near-text').textContent = 'The closest school with a page is ' + d.covered[row[7]] + ', about ' + row[8] + (row[8] === 1 ? ' mile' : ' miles') + ' away. Programs that serve it may be near you too, but ask each one whether it picks up from ' + row[1] + '.';
         $('req-near-link').textContent = 'See ' + d.covered[row[7]];
