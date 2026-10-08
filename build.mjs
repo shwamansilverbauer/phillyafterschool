@@ -597,7 +597,8 @@ ${body}
       <ul>
         <li><a href="${link('about/', depth)}">${T(`About this site`)}</a></li>
         <li><a href="${link('about/', depth)}#how">${T(`How listings are checked`)}</a></li>
-        <li><a href="${link('about/', depth)}#corrections">${T(`Send a correction`)}</a></li>${GROUPS ? `
+        <li><a href="${link('about/', depth)}#corrections">${T(`Send a correction`)}</a></li>
+        <li><a href="${link('contact/', depth)}">${T(`Contact us`)}</a></li>${GROUPS ? `
         <li><a href="${link('directors/', depth)}">${T(`For program directors`)}</a></li>` : ''}
         <li><a href="${link('ideas/', depth)}">${T(`Request a feature`)}</a></li>
         <li><a href="${link('privacy/', depth)}">${T(`Privacy`)}</a></li>
@@ -608,6 +609,7 @@ ${body}
   <div class="foot-fine">
     <p>${T(`Listings come from each provider’s public pages and are not endorsements. Prices, hours and pickup routes change, so confirm with the provider before you enroll.`)}</p>
     <p>${T(`{site} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.`, { site: cfg.siteName })}</p>
+    ${cfg.contactEmail ? `<p>${T(`Questions?`)} <a href="mailto:${esc(cfg.contactEmail)}">${esc(cfg.contactEmail)}</a> ${T(`or`)} <a href="${link('contact/', depth)}">${T(`send a message`)}</a>.</p>` : ''}
     ${cfg.builtBy ? `<p>Built by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
   </div>
 </div></footer>
@@ -1047,6 +1049,7 @@ ${p.clubs.map(c => `      <article class="club">
   const body = `<div data-program-page="${esc(p.id)}" style="display:contents">
   <section class="section">
     <h2>${T(`The details`)}</h2>
+    ${photoSlot('p:' + p.id)}
     <article class="prog solo">
       ${gradeStrip(p)}
       <dl>${rows}</dl>
@@ -1434,6 +1437,18 @@ ${alertsBox(0, { place: 'home', title: T(`Get the dates by email`), lede: T(`Sig
   <h2>${T(`Every listing is dated and sourced`)}</h2>
   <p>${T(`Every listing links to where the information came from and shows the day it was last checked. Nobody pays to be listed. If it saved you an evening of open tabs,`)} <a href="${link('support/', 0)}">${T(`buy me a coffee.`)}</a></p>
 </section>
+${GROUPS ? `<section class="section" id="directors">
+  <div class="panel for-directors">
+    <h2>${T(`Run a program or camp?`)}</h2>
+    <p>${T(`Claim your listing and keep it right yourself. It’s free.`)}</p>
+    <form class="dir-find" action="${link('directors/', 0)}" method="get" role="search">
+      <label for="dir-q">${T(`Find your listing`)}</label>
+      <div class="dir-find-row"><input id="dir-q" name="q" type="search" autocomplete="off" placeholder="Your program’s name"><button class="btn primary" type="submit">${T(`Find it`)}</button></div>
+    </form>
+    ${claimBenefits(0)}
+    <p><a href="${link('directors/', 0)}">${T(`How claiming works`)}</a></p>
+  </div>
+</section>` : ''}
 ${cfg.builtBy ? `<section class="section" id="who">
   <h2>${T(`Who built this`)}</h2>
   <p>${T(cfg.builtBy.bio)}</p>
@@ -1573,6 +1588,7 @@ function privacyPage() {
     <li>${T(`Claiming uses the same account. We check one thing: that the email address you signed in with is at the listing’s own website address. We keep which listing you claimed, when, and whether the claim stands.`)}</li>
     <li>${T(`The public sees a “Claimed” mark on the listing and nothing about you. Your name and email address are seen only by the person who runs this site.`)}</li>
     <li>${T(`Changes you propose are kept with your claim and emailed to the site’s inbox. They are checked and published by a person, and you are told by email when that happens.`)}</li>
+    <li>${T(`A photo you send for your listing is shrunk in your browser before it leaves your device, kept on our web host, and shown on the listing only after a person approves it. You can replace or remove it at any time. Send only a photo you have the right to use, with permission from the families of any children in it.`)}</li>
     <li>${T(`You can give up a claim at any time, and deleting your account removes your claims and the changes you proposed.`)}</li>
     <li>${T(`The page where you claim a listing loads Google Analytics and Microsoft Clarity to count visits. The part where you sign in and manage claims is hidden in session recordings.`)}</li>
   </ul>` : ''}
@@ -1904,6 +1920,122 @@ exit;
 `;
 }
 
+// ---------- contact: a page with a form, for anything that isn't a suggestion ----------
+function contactPage() {
+  const hero = `    <h1>${T(`Get in touch`)}</h1>
+    <p class="lede">${T(`A question, a problem with the site, something for the press, or just hello. This goes to the parent who runs the site.`)}</p>`;
+  const body = `<div class="suggest">
+  <form class="form panel" method="post" action="send.php" id="contact-form" data-clarity-mask="true">
+    <div class="pair">
+      <div class="field">
+        <label for="c-name">${T(`Your name`)}</label>
+        <input id="c-name" name="name" type="text" maxlength="100" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <label for="c-email">${T(`Your email`)}</label>
+        <input id="c-email" name="email" type="email" maxlength="150" autocomplete="email" required>
+        <span class="hint">${T(`So we can write back. It’s used for nothing else.`)}</span>
+      </div>
+    </div>
+    <div class="field">
+      <label for="c-topic">${T(`What’s it about?`)}</label>
+      <select id="c-topic" name="topic">
+        <option>A question</option>
+        <option>Something isn’t working</option>
+        <option>I run a program or camp</option>
+        <option>My account</option>
+        <option>Press or partnerships</option>
+        <option>Something else</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="c-message">${T(`Your message`)}</label>
+      <textarea id="c-message" name="message" maxlength="4000" required></textarea>
+    </div>
+    <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+      <label for="c-company">Leave this blank</label>
+      <input id="c-company" name="company" type="text" tabindex="-1" autocomplete="off">
+    </div>
+    <div><button class="btn primary big" type="submit">${T(`Send it`)}</button></div>
+  </form>
+  <aside class="next">
+    <h2>${T(`Other ways`)}</h2>
+    <ul class="plain">
+      ${cfg.contactEmail ? `<li>${T(`Email`)} <a href="mailto:${esc(cfg.contactEmail)}">${esc(cfg.contactEmail)}</a></li>` : ''}
+      <li>${T(`A program or camp that’s missing, or a listing that’s wrong:`)} <a href="${link('suggest/', 1)}">${T(`use the suggestion form`)}</a>${T(`, so it reaches the right pile.`)}</li>
+      <li>${T(`An idea for the site:`)} <a href="${link('ideas/', 1)}">${T(`request a feature`)}</a>.</li>
+      ${GROUPS ? `<li>${T(`You run a program:`)} <a href="${link('directors/', 1)}">${T(`claim your listing`)}</a>.</li>` : ''}
+    </ul>
+    <p class="hint">${T(`One parent reads these, usually within a few days.`)} <a href="${link('privacy/', 1)}#forms">${T(`How we handle what you send.`)}</a></p>
+  </aside>
+</div>`;
+  return layout({ title: 'Contact', description: `Get in touch with ${cfg.siteName}: a question, a problem with the site, or anything else.`, pathName: 'contact/', depth: 1, current: null, hero, body, showStreet: 'parked' });
+}
+function contactThanksPage() {
+  const hero = `    <h1>${T(`Sent. Thank you.`)}</h1>
+    <p class="lede">${T(`Your message is in the inbox. You’ll hear back by email, usually within a few days.`)} <a href="${link('', 2)}">${T(`Back to the schools.`)}</a></p>`;
+  return layout({ title: 'Message sent', description: 'Your message was sent.', pathName: 'contact/thanks/', depth: 2, current: null, hero, body: '', showStreet: 'parked', noindex: true });
+}
+function contactPhp() {
+  return `<?php
+// Receives the contact form. Generated by build.mjs; edit it there.
+$TO = ${JSON.stringify(cfg.contactEmail)};
+$SITE = ${JSON.stringify(cfg.siteName)};
+
+function fail($msg, $code) {
+  http_response_code($code);
+  header('Content-Type: text/html; charset=utf-8');
+  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css${CSS_V}"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="./">Go back and try again</a></p></main></body></html>';
+  exit;
+}
+function field($key, $max) {
+  $v = (isset($_POST[$key]) && is_string($_POST[$key])) ? trim($_POST[$key]) : '';
+  $v = str_replace(chr(0), '', $v);
+  return function_exists('mb_substr') ? mb_substr($v, 0, $max, 'UTF-8') : substr($v, 0, $max);
+}
+function one_line($v) {
+  return trim(preg_replace('/[\\r\\n\\t]+/', ' ', $v));
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+  header('Location: ./', true, 303);
+  exit;
+}
+// A hidden field people never see. If it is filled in, a bot did it: act as if it worked.
+if (field('company', 200) !== '') {
+  header('Location: thanks/', true, 303);
+  exit;
+}
+$name = one_line(field('name', 100));
+$email = one_line(field('email', 150));
+$topic = one_line(field('topic', 60));
+$message = field('message', 4000);
+if ($message === '') fail('Please write a message.', 400);
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) fail('Please add your email address, so we can write back.', 400);
+if (substr_count(strtolower($message), 'http') > 4) fail('That has too many links for us to accept. Please trim it and try again.', 400);
+// At most 5 messages from one address in an hour.
+$file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-contact-times.json';
+$who = substr(hash('sha256', isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : ''), 0, 16);
+$times = @json_decode((string) @file_get_contents($file), true);
+if (!is_array($times)) $times = array();
+$recent = array();
+foreach ($times as $k => $list) { if (!is_array($list)) continue; $keep = array(); foreach ($list as $t) { if (is_int($t) && $t > time() - 3600) $keep[] = $t; } if ($keep) $recent[$k] = $keep; }
+if (isset($recent[$who]) && count($recent[$who]) >= 5) fail('That’s a lot of messages in an hour. Please try again later, or email ' . $TO . '.', 429);
+$recent[$who][] = time();
+@file_put_contents($file, json_encode($recent), LOCK_EX);
+
+$body = "Topic: $topic\\n" . "Name: $name\\n" . "Email: $email\\n\\n" . "Message:\\n$message\\n";
+$subject = one_line("[$SITE] Contact: $topic" . ($name !== '' ? " ($name)" : ''));
+$headers = array('From: ' . $SITE . ' <' . $TO . '>', 'Reply-To: ' . $email, 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8');
+$sent = @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\\r\\n", $headers));
+$log = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-suggestions.log';
+$saved = @file_put_contents($log, date('c') . ($sent ? ' (emailed)' : ' (EMAIL FAILED)') . "\\n" . $body . "----\\n", FILE_APPEND | LOCK_EX);
+if (!$sent && $saved === false) fail('Something went wrong on our side. Please email ' . $TO . ' instead.', 500);
+header('Location: thanks/', true, 303);
+exit;
+`;
+}
+
 // ---------- days off: when district schools are closed, and who runs something ----------
 function daysOffPage() {
   const D = 1;
@@ -2040,6 +2172,7 @@ const claimListings = () => Object.fromEntries([
 ]);
 // Under a listing: suggest an update (anyone), and claim it (whoever runs it).
 const listingTools = (key, name, depth, noun) => `<p class="listing-tools"><a class="btn" href="${link('suggest/', depth)}?kind=correction&amp;fix=${encodeURIComponent(key)}&amp;program=${encodeURIComponent(name)}">${T(`Suggest an update`)}</a>${GROUPS ? ` <span class="hint">${noun === 'camp' ? T(`Run this camp?`) : T(`Run this program?`)} <a href="${link('directors/', depth)}?l=${encodeURIComponent(key)}">${T(`Claim this listing`)}</a></span>` : ''}</p>`;
+const photoSlot = key => GROUPS && !PREVIEW ? `<figure class="listing-photo" data-photo="${esc(key)}" hidden></figure>` : '';
 const claimedMark = (key, depth) => GROUPS && !PREVIEW ? `<span class="claimed-mark" data-claimed="${esc(key)}" data-api="${link('groups/api.php', depth)}" hidden><b>${T(`Claimed`)}</b> ${T(`by the people who run it`)}</span>` : '';
 const groupsScript = depth => `<script src="${link('assets/groups.js', depth)}${GROUPS_V}"></script>`;
 function accountPage(register = false) {
@@ -2095,37 +2228,49 @@ function accountPage(register = false) {
 </div>`;
   return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to save your school, your kids’ grades and your week, and to share a week.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: !register, scripts: groupsScript(1) });
 }
-// ---------- for the people who run a program: claim a listing ----------
+// ---------- for the people who run a program: find a listing and claim it ----------
+const claimBenefits = depth => `<ul class="benefits">
+      <li><b>${T(`Keep your dates current.`)}</b> ${T(`Post sign-up openings, deadlines, term dates and camp days as soon as you set them, instead of waiting for us to find them.`)}</li>
+      <li><b>${T(`Fix your costs and hours.`)}</b> ${T(`When a price or a pickup time changes, send it once and the listing follows.`)}</li>
+      <li><b>${T(`Add a photo.`)}</b> ${T(`One picture of your space or an activity at the top of your listing.`)}</li>
+      <li><b>${T(`Show parents it’s kept up.`)}</b> ${T(`A “Claimed” mark tells them the listing is looked after by the people who run it.`)}</li>
+    </ul>`;
 function directorsPage() {
   const L = claimListings();
-  const hero = `    <h1>${T(`Run a program or camp?`)}</h1>
-    <p class="lede">${T(`Claim your listing, so parents can see it’s kept up by the people who run it, and send us changes as its director. It’s free, and it takes a couple of minutes.`)}</p>`;
+  const hero = `    <h1>${T(`Run a program or camp? Claim your listing.`)}</h1>
+    <p class="lede">${T(`Find your program below and claim it with your work email. Then keep its dates, costs and photo up to date yourself. It’s free, and it takes a couple of minutes.`)}</p>`;
   const body = `<div ${groupsAttrs(1)} style="display:contents">
-  <section class="section">
-    <h2>${T(`How claiming works`)}</h2>
-    <ol class="steps">
-      <li><b>${T(`Sign in with your work email.`)}</b> ${T(`It has to be an address at your program’s own website: if the listing’s website is example.org, an address ending in @example.org. That is how we know you speak for it.`)}</li>
-      <li><b>${T(`Pick your listing.`)}</b> ${T(`If the addresses match, the claim stands straight away.`)}</li>
-      <li><b>${T(`Send changes when something moves.`)}</b> ${T(`New hours, a new price, next term’s sign-up date. We read each one and update the listing, usually within a few days.`)}</li>
-    </ol>
-  </section>
   <noscript><p class="ask">${T(`Claiming a listing needs JavaScript turned on.`)}</p></noscript>
   <div class="g-page" id="claims" data-clarity-mask="true"></div>
   <script type="application/json" id="claims-data">${JSON.stringify(Object.entries(L).map(([k, v]) => [k, v.n, v.d, v.m === 'match' ? 1 : 0])).replace(/</g, '\\u003c')}</script>
+  <section class="section" id="why">
+    <h2>${T(`What claiming gets you`)}</h2>
+    ${claimBenefits(1)}
+  </section>
+  <section class="section">
+    <h2>${T(`How claiming works`)}</h2>
+    <ol class="steps">
+      <li><b>${T(`Find your listing.`)}</b> ${T(`Search by name above. Every program and summer camp on the site is there.`)}</li>
+      <li><b>${T(`Sign in with your work email.`)}</b> ${T(`It has to be an address at your program’s own website: if the listing’s website is example.org, an address ending in @example.org. That is how we know you speak for it. If the addresses match, the claim stands straight away.`)}</li>
+      <li><b>${T(`Send changes when something moves.`)}</b> ${T(`New dates, a new price, a photo. We read each one and update the listing, usually within a few days.`)}</li>
+    </ol>
+  </section>
   <section class="notes">
     <h2>${T(`Good to know`)}</h2>
     <ul>
       <li>${T(`A personal address (Gmail, Yahoo and so on) can’t claim a listing, even if it’s the one printed on your flyer. We have no way to tell it apart from anyone else’s.`)}</li>
+      <li>${T(`“Continue with Google” works if your work email is a Google account at your program’s address. A personal Gmail account will sign you in, but it can’t claim anything.`)}</li>
       <li>${T(`Some listings sit on a website many people share: a city rec center, a school’s clubs, a program inside a university. Those claims wait for us to say yes, and we may write to ask a question first.`)}</li>
-      <li>${T(`Parents see one thing: a “Claimed” mark on the listing. Your name and email address are never shown.`)}</li>
-      <li>${T(`A claim doesn’t change what the listing says. Changes you send are checked against your website like any other, then published.`)}</li>
+      <li>${T(`Parents see a “Claimed” mark and your photo on the listing. Your name and email address are never shown.`)}</li>
+      <li>${T(`A claim doesn’t change what the listing says by itself. Changes and photos you send are looked at by a person, then published.`)}</li>
+      <li>${T(`Only send a photo you have the right to use, with permission from the families of any children in it.`)}</li>
       <li>${T(`Listings are free and stay free. Nobody pays to be listed or to be ranked higher.`)}</li>
       <li>${T(`Not on the site yet?`)} <a href="${link('suggest/', 1)}">${T(`Suggest your program`)}</a> ${T(`or`)} <a href="${link('suggest/', 1)}?kind=camp">${T(`your camp`)}</a>${T(`, with its website, and claim it once it’s up.`)}</li>
     </ul>
     <p><a href="${link('privacy/', 1)}#directors">${T(`What we keep about a claim is on the privacy page.`)}</a></p>
   </section>
 </div>`;
-  return layout({ title: 'For program directors: claim your listing', description: `Run an after-school program or camp in Philadelphia? Claim your ${cfg.siteName} listing with your work email and send updates as its director. Free.`, pathName: 'directors/', depth: 1, current: null, hero, body, scripts: groupsScript(1) });
+  return layout({ title: 'For program directors: find and claim your listing', description: `Run an after-school program or camp in Philadelphia? Find your ${cfg.siteName} listing, claim it with your work email, and keep its dates, costs and photo up to date. Free.`, pathName: 'directors/', depth: 1, current: null, hero, body, scripts: groupsScript(1) });
 }
 
 // The owner's review page for claims and the changes directors propose, behind the same sign-in as the edit page.
@@ -2159,6 +2304,18 @@ Link: ${e('$x["link"]')}<?php } ?></pre>
     ${form('$x["id"]', act('edit_done', 'Mark published', 'btn primary') + act('edit_no', 'Decline'))}
   </div><?php } ?>
 
+  <h2>Photos waiting for you (<?php echo count($photosNew); ?>)</h2>
+  <?php if (!$photosNew) { ?><p class="hint">None waiting. A photo shows on a listing only after you publish it here.</p><?php } ?>
+  <?php foreach ($photosNew as $x) { ?><div class="panel">
+    <h3>${e('$name($x["listing"])')}</h3>
+    <p class="hint">From ${e('$x["first"] . " " . $x["last"]')} &lt;${e('$x["email"]')}&gt;, ${e('$day($x["created"])')}. They ticked that they have the right to use it and permission from the families of any children shown.</p>
+    <p><img class="review-photo" src="./?photo=<?php echo (int) $x["id"]; ?>" alt=""></p>
+    <p>Described as: <b>${e('$x["alt"]')}</b></p>
+    ${form('$x["id"]', act('photo_ok', 'Publish the photo', 'btn primary') + act('photo_no', 'Decline'))}
+  </div><?php } ?>
+  <?php if ($photosLive) { ?><h2>Photos on the site (<?php echo count($photosLive); ?>)</h2>
+  <div class="review-grid"><?php foreach ($photosLive as $x) { ?><div class="panel"><p><img class="review-photo" src="./?photo=<?php echo (int) $x["id"]; ?>" alt=""></p><p><b>${e('$name($x["listing"])')}</b><br><span class="hint">${e('$x["alt"]')}</span></p>${form('$x["id"]', act('photo_no', 'Take it down'))}</div><?php } ?></div><?php } ?>
+
   <h2>Claimed listings (<?php echo count($claims); ?>)</h2>
   <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>
   <div class="stat-scroll"><table class="stat-table"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th><th scope="col"></th></tr></thead><tbody>
@@ -2186,7 +2343,8 @@ $csrf = hash_hmac('sha256', 'claims-form', edit_key());
 $said = isset($_GET['said']) && is_string($_GET['said']) ? substr($_GET['said'], 0, 200) : '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
-$pending = array(); $claims = array(); $declined = array(); $edits = array();
+$pending = array(); $claims = array(); $declined = array(); $edits = array(); $photosNew = array(); $photosLive = array();
+$photoFile = function ($id) { return dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/photos/' . (int) $id . '.jpg'; };
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -2196,6 +2354,13 @@ if ($have) {
     $db->exec('PRAGMA foreign_keys=ON');
     $db->query('SELECT 1 FROM claims LIMIT 1');
   } catch (Exception $e) { $have = false; }   // no database yet, or one from before claims existed
+}
+// A photo, shown to the owner only: this page is behind the sign-in, and a waiting photo has no public address.
+if ($have && isset($_GET['photo'])) {
+  $f = $photoFile($_GET['photo']);
+  if (!ctype_digit((string) $_GET['photo']) || !is_file($f)) { http_response_code(404); exit; }
+  header('Content-Type: image/jpeg'); header('X-Content-Type-Options: nosniff'); header('Content-Length: ' . filesize($f));
+  readfile($f); exit;
 }
 // Tells a director what was decided. Plain text, from the site's own address.
 function tell($to, $subject, $text) {
@@ -2227,6 +2392,26 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
       $msg = $do === 'edit_done' ? 'Marked published, and they’ve been told.' : 'Declined, and they’ve been told.';
     }
   }
+  if ($ok && in_array($do, array('photo_ok', 'photo_no'), true)) {
+    try {
+      $st = $db->prepare('SELECT p.id, p.listing, p.status, u.email, u.first FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.id = ?'); $st->execute(array($id)); $x = $st->fetch();
+      if ($x) {
+        $n = $name($x['listing']);
+        if ($do === 'photo_ok') {
+          $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE listing = ? AND status = 'ok' AND id != ?")->execute(array(time(), $x['listing'], $id));   // one photo a listing
+          $db->prepare("UPDATE photos SET status = 'ok', decided = ? WHERE id = ?")->execute(array(time(), $id));
+          tell($x['email'], 'Your photo for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",\n\nThe photo you sent for “" . $n . '” is on the listing now. You can replace or remove it here:' . "\n" . $SITE_URL . '/directors/');
+          $msg = 'Published, and they’ve been told.';
+        } else {
+          $was = $x['status'];
+          $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), $id));
+          @unlink($photoFile($id));
+          tell($x['email'], 'About the photo you sent for ' . $n, 'Hi ' . $x['first'] . ",\n\nWe " . ($was === 'ok' ? 'have taken down' : 'weren’t able to use') . ' the photo you sent for “' . $n . '”. You’re welcome to send another: a clear picture of the space or an activity works best, with permission from the families of any children in it. Reply to this email with any questions.');
+          $msg = $was === 'ok' ? 'Taken down, and they’ve been told.' : 'Declined, and they’ve been told.';
+        }
+      }
+    } catch (Exception $e) { /* a database from before photos: nothing to do */ }
+  }
   header('Location: ./?said=' . rawurlencode($msg), true, 303);
   exit;
 }
@@ -2234,6 +2419,9 @@ if ($have) {
   $all = $db->query('SELECT c.id, c.listing, c.status, c.domain, c.created, u.email, u.first, u.last FROM claims c JOIN users u ON u.id = c.user_id ORDER BY c.id DESC')->fetchAll();
   foreach ($all as $c) { if ($c['status'] === 'pending') $pending[] = $c; elseif ($c['status'] === 'ok') $claims[] = $c; else $declined[] = $c; }
   $edits = $db->query("SELECT e.id, e.listing, e.body, e.link, e.created, u.email, u.first, u.last FROM edits e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.status = 'new' ORDER BY e.id")->fetchAll();
+  try {
+    foreach ($db->query("SELECT p.id, p.listing, p.alt, p.status, p.created, u.email, u.first, u.last FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.status != 'declined' AND c.status = 'ok' ORDER BY p.id") as $x) { if (!is_file($photoFile($x['id']))) continue; if ($x['status'] === 'new') $photosNew[] = $x; else $photosLive[] = $x; }
+  } catch (Exception $e) { /* a database from before photos */ }
 }
 ?>
 ${page}`;
@@ -2755,7 +2943,7 @@ $SCHOOLS = json_decode('${names}', true);
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by directors');
+$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by directors', 'photo_sent' => 'Photos sent by directors');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -2972,7 +3160,7 @@ function summerCampsPage() {
       .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${k === 'Phone' ? `<a href="tel:+1-${esc(v)}">${esc(v)}</a>` : esc(v)}</dd>`).join('');
     const prog = c.program ? programs.find(p => p.id === c.program) : null;
     return `<article class="prog offprog camp" id="${esc(c.id)}" ${itemAttrs(shaped[i], [c.ages || '', c.address || '', ...(c.neighborhoods || [])])}>
-  <div class="top"><h3>${esc(c.name)}</h3><p class="what">${esc(c.what)}</p><p class="tags">${c.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p><p>${seasonPill(c)}</p></div>
+  <div class="top">${photoSlot('c:' + c.id)}<h3>${esc(c.name)}</h3><p class="what">${esc(c.what)}</p><p class="tags">${c.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p><p>${seasonPill(c)}</p></div>
   <dl>${rows}</dl>
   ${c.note ? `<p class="flag">${esc(c.note)}</p>` : ''}
   <div class="actions"><a class="btn primary" data-track="camp" href="${esc(outUrl(c.registerUrl || c.website, { type: 'camp' }))}" target="_blank" rel="noopener">${c.registerUrl ? 'Find or book a spot' : 'Camp details'}</a>${c.registerUrl ? `<a class="btn" data-track="website" href="${esc(outUrl(c.website, { type: 'camp' }))}" target="_blank" rel="noopener">Camp details</a>` : ''}${prog ? `<a class="btn" href="${link(programPath(prog), D)}">Its school-year listing</a>` : ''}</div>
@@ -3087,6 +3275,8 @@ write('suggest/index.html', suggestPage());
 write('suggest/thanks/index.html', thanksPage());
 write('ideas/index.html', ideasPage());
 write('ideas/thanks/index.html', ideasThanksPage());
+write('contact/index.html', contactPage());
+write('contact/thanks/index.html', contactThanksPage());
 write('board/index.html', boardPage());
 if (daysOff) write(offPath + 'index.html', daysOffPage());
 if (summerCamps.length) write(campsPath + 'index.html', summerCampsPage());
@@ -3114,6 +3304,7 @@ for (const f of fs.readdirSync(path.join(ROOT, 'src/static'))) write(f, fs.readF
 if (!PREVIEW) {
   write('404.html', notFound);
   if (cfg.contactEmail) write('suggest/send.php', sendPhp());
+  if (cfg.contactEmail) write('contact/send.php', contactPhp());
   if (cfg.contactEmail) write('review/send.php', reviewPhp());
   if (cfg.contactEmail) write('schools/request/send.php', schoolRequestPhp());
   write('data/school-finder.json', JSON.stringify(finderData));
@@ -3132,7 +3323,7 @@ if (!PREVIEW) {
   write('data/alerts.json', JSON.stringify(alertsFeed(), null, 2));   // read by scripts/send-alerts.mjs once a day
   const latest = programs.map(p => p.lastVerified).sort().pop();
   const urls = [['', latest], ['schools/', latest], ...schools.map(s => [s.id + '/', latest]), ['types/', latest], ...liveTypes().map(t => [`types/${t.id}/`, latest]), ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]), ['neighborhoods/', latest], ...hoods.map(h => [hoodPath(h), latest]),
-    ...[...(daysOff ? [offPath] : []), ...(summerCamps.length ? [campsPath] : []), ...(weekendPrograms.length ? [weekendPath] : []), ...(ALERTS ? [alertsPath] : []), 'board/', 'suggest/', ...(GROUPS ? ['directors/'] : []), 'ideas/', 'review/', 'about/', 'privacy/', 'support/'].map(u => [u, latest])];
+    ...[...(daysOff ? [offPath] : []), ...(summerCamps.length ? [campsPath] : []), ...(weekendPrograms.length ? [weekendPath] : []), ...(ALERTS ? [alertsPath] : []), 'board/', 'suggest/', ...(GROUPS ? ['directors/'] : []), 'ideas/', 'review/', 'about/', 'contact/', 'privacy/', 'support/'].map(u => [u, latest])];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
   const bare = cfg.siteUrl.replace(/^https?:\/\//, '');

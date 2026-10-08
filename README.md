@@ -329,6 +329,13 @@ from what its own site says, so one without a site can't be checked. Every progr
 card has a "Suggest an update" button that opens the form on that listing (`?kind=correction&fix=p:<id>` or
 `c:<id>`), and the email carries a `Listing:` line. The summer camps page has a "Suggest a camp" section.
 
+## The contact page
+
+`/contact/` is a plain form (name, email, topic, message) that posts to `contact/send.php`. Like the suggestion
+form it emails `contactEmail`, sets Reply-To to the sender, appends a copy to
+`phillyafterschool-suggestions.log`, and has a hidden field for bots; it also takes at most five messages an hour
+from one address. The footer shows `contactEmail` and links to the page.
+
 ## Dates by email
 
 Parents can ask for their school's dates by email: on each school page, the home page, the day-camp page and `/alerts/`.
@@ -452,8 +459,21 @@ These are the only parts of the site that store anything about a child on the se
   the owner approves or declines a waiting claim, takes a claim away, and marks a proposed change published or
   declined; the director is emailed each time. To apply a change, edit the listing data as usual (or paste it to
   Claude), then mark it published. One account can hold 12 claims and one listing 5 claimants.
+  `/directors/` opens on a search of every listing, which works signed out; picking one asks for a sign-in at that
+  listing's address. The home page has a "Run a program or camp?" panel whose search lands there (`?q=`), and a
+  listing's "Claim this listing" link lands there with the listing picked (`?l=`). "Continue with Google" works for
+  a Google Workspace address at the program's own website; a personal Gmail signs in but can claim nothing, and the
+  page says so.
+  An update is sent in boxes (dates, cost, days and hours, anything else) and reaches the owner as labelled lines.
+  **Photos.** A director can send one photo per listing, with a line describing it and a tick that they have the
+  right to use it. The browser shrinks it to a JPEG (1600 pixels on the long side) before it leaves the device; the
+  server checks it is a JPEG, redraws it, and keeps it in `phillyafterschool-data/photos/`, outside the public
+  folder. Nothing shows until the owner publishes it on `/edit/claims/`, where a photo can also be declined or
+  taken down. A published photo is served by `groups/api.php?action=photo&l=<key>&v=<id>`, and listing pages put
+  it into a `data-photo` slot from the same `claimed` request that brings the marks. A director can replace or
+  remove theirs; giving up the claim or deleting the account removes it.
   `/directors/` loads analytics with the tool masked in recordings; the only event is `pas_claim` with a `step`
-  (`claimed`, `waiting`, `address_mismatch`, `refused`, `change_sent`). There are no student accounts, on purpose:
+  (`picked`, `claimed`, `waiting`, `address_mismatch`, `refused`, `change_sent`, `photo_sent`). There are no student accounts, on purpose:
   the site never asks a child for an email address, and the week builder and card work without an account.
 - **Where.** `src/server/groups-api.php` is the whole server side; the build copies it to `groups/api.php` with
   its settings (site name, address, sender, the date shared weeks expire, the Google client ID). It keeps one

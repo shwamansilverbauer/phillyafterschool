@@ -78,6 +78,17 @@
     window.fetch(marks[0].getAttribute('data-api') + '?action=claimed', { credentials: 'omit' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
       if (!d || !d.ok || !d.claimed) return;
       marks.forEach(function (m) { if (d.claimed.indexOf(m.getAttribute('data-claimed')) > -1) m.hidden = false; });
+      // A photo the director sent and the site's owner approved.
+      var api = marks[0].getAttribute('data-api');
+      all(document, '[data-photo]').forEach(function (slot) {
+        var ph = d.photos && d.photos[slot.getAttribute('data-photo')];
+        if (!ph) return;
+        var img = document.createElement('img');
+        img.alt = ph.alt || ''; img.decoding = 'async';   // not lazy: a picture inside a hidden box would never load, and the box shows only once it has
+        img.src = api + '?action=photo&l=' + encodeURIComponent(slot.getAttribute('data-photo')) + '&v=' + ph.v;
+        img.onload = function () { slot.hidden = false; };
+        slot.appendChild(img);
+      });
     }, function () { /* offline: no marks */ });
   }
 

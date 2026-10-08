@@ -568,7 +568,7 @@
     }
   }
 
-  // ----- the directors page: claim a listing with an email address at its website, then propose changes -----
+  // ----- the directors page: find a listing, claim it with an email address at its website, then keep it up to date -----
   var claimsBox = document.getElementById('claims');
   if (claimsBox) {
     var LIST = [];
@@ -576,124 +576,221 @@
     var byKey = {};
     LIST.forEach(function (l) { byKey[l[0]] = { key: l[0], name: l[1], domain: l[2], match: l[3] === 1 }; });
     var cq = query();
-    var wanted = byKey[cq.l] ? cq.l : (byKey[sget('pas-claim')] ? sget('pas-claim') : '');
+    var wanted = byKey[cq.l] ? cq.l : (byKey[sget('pas-claim')] ? sget('pas-claim') : '');   // the listing someone has said they want
     if (byKey[cq.l]) sset('pas-claim', cq.l);   // kept through signing in
+    var findText = (cq.q || '').replace(/\+/g, ' ').slice(0, 80);
+    var cMe = null, cDomain = '', cClaims = [], cState = 'checking';   // checking | out | name | in
     var said = '', saidBad = false;
+    var PERSONAL = /^(gmail|googlemail|yahoo|hotmail|outlook|live|msn|aol|icloud|me|comcast|verizon|proton|protonmail)\.(com|net|me)$/;
     var when = function (t) { try { return new Date(t * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); } catch (e) { return ''; } };
     var STATUS = { ok: 'Claimed', pending: 'Waiting for our yes', declined: 'Not approved' };
     var EDIT = { 'new': 'Waiting to be read', done: 'Published', declined: 'Not made' };
-
-    var drawClaimsOut = function (msg) {
-      claimsBox.textContent = '';
-      if (msg) claimsBox.appendChild(el('p', 'g-status bad', msg));
-      var box = el('div', 'panel'); claimsBox.appendChild(box);
-      signInBox(box, 'directors', function (d) { drawClaims(d.user); },
-        (wanted ? 'To claim ' + byKey[wanted].name + ', sign in with an email address at ' + (byKey[wanted].domain || 'its website') + '. ' : 'Sign in with your work email: the one at your program’s website address. ') + 'No password. We send a 6-digit code and you type it here.');
-      var sh = box.querySelector('h3'); if (sh) sh.textContent = 'Sign in to claim a listing';
+    var pushStep = function (step) { (window.dataLayer = window.dataLayer || []).push({ event: 'pas_claim', step: step }); };
+    var field = function (form, id, label, tag, attrs) {
+      var l = el('label', null, label); l.htmlFor = id;
+      var i = el(tag || 'input'); i.id = id;
+      Object.keys(attrs || {}).forEach(function (k) { i[k] = attrs[k]; });
+      form.appendChild(l); form.appendChild(i);
+      return i;
     };
 
-    var drawClaims = function (me) {
+    // Shrinks a chosen picture in the browser and hands back a JPEG, so the original file (and whatever is tucked
+    // inside it, such as where it was taken) never leaves the device.
+    var shrink = function (file, done) {
+      var url = (window.URL || window.webkitURL).createObjectURL(file), img = new Image();
+      img.onload = function () {
+        var tryAt = function (side, quality) {
+          var k = Math.min(1, side / Math.max(img.naturalWidth, img.naturalHeight));
+          var c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          return { data: c.toDataURL('image/jpeg', quality), w: c.width, h: c.height };
+        };
+        var out = tryAt(1600, 0.86);
+        if (out.data.length > 1900000) out = tryAt(1280, 0.8);
+        (window.URL || window.webkitURL).revokeObjectURL(url);
+        if (out.w < 400 || out.h < 300) { done(null, 'That photo is too small. Use one at least 400 pixels wide.'); return; }
+        if (out.data.length > 2100000) { done(null, 'That photo is too big to send. Try a different one.'); return; }
+        done(out);
+      };
+      img.onerror = function () { (window.URL || window.webkitURL).revokeObjectURL(url); done(null, 'That file couldn’t be read as a photo. Try a JPEG or PNG.'); };
+      img.src = url;
+    };
+
+    var reload = function () {
+      return call('claims').then(function (d) {
+        if (!d.ok) { if (d.http === 401) { cMe = null; cState = 'out'; said = 'Please sign in again.'; saidBad = true; } else { said = d.message; saidBad = true; } return; }
+        cDomain = d.domain; cClaims = d.claims || [];
+      });
+    };
+    var signedIn = function (user) {
+      cMe = user; cState = user.ready ? 'in' : 'name';
+      if (cState === 'in') return reload().then(render);
+      render();
+    };
+
+    // one listing the account holds: its status, a change to send, a photo
+    var claimItem = function (c) {
+      var item = el('div', 'claim');
+      item.appendChild(el('h3', null, c.name));
+      item.appendChild(el('p', 'claim-status ' + c.status, STATUS[c.status] || c.status));
+      if (c.status === 'pending') item.appendChild(el('p', 'hint', 'This listing’s website is one many people share, so a person checks the claim. You’ll get an email either way.'));
+      if (c.status === 'declined') item.appendChild(el('p', 'hint', 'We couldn’t confirm this one. Reply to the email we sent if that looks wrong.'));
+      if (c.gone) item.appendChild(el('p', 'hint', 'This listing has been taken off the site.'));
+      if (c.status === 'ok' && !c.gone) {
+        var view = el('a', 'btn', 'See the listing');
+        view.href = c.listing.charAt(0) === 'p' ? page('programs/' + c.listing.slice(2) + '/') : page('summer-camps/') + '#' + c.listing.slice(2);
+        // a change: dates, cost, hours, anything else
+        var form = el('form', 'g-form claim-edit');
+        form.appendChild(el('h4', null, 'Send an update'));
+        form.appendChild(el('p', 'hint', 'Fill in only what has changed.'));
+        var fd = field(form, 'cd-' + c.listing, 'Dates', 'textarea', { rows: 2, maxLength: 700, placeholder: 'Sign-ups open November 3. Winter term runs January 5 to March 20.' });
+        var fc = field(form, 'cc-' + c.listing, 'Cost', 'input', { type: 'text', maxLength: 300, placeholder: '$420 a month for five days' });
+        var fh = field(form, 'ch-' + c.listing, 'Days and hours', 'input', { type: 'text', maxLength: 300, placeholder: 'Monday to Friday, dismissal to 6:30 pm' });
+        var fo = field(form, 'ce-' + c.listing, 'Anything else', 'textarea', { rows: 3, maxLength: 1500, placeholder: 'Grades, pickup schools, how to register, what the listing gets wrong.' });
+        var li = field(form, 'cl-' + c.listing, 'A page on your website that shows it (optional)', 'input', { type: 'url', maxLength: 300, placeholder: 'https://' });
+        form.appendChild(el('p', 'hint', 'A person reads this and updates the listing, usually within a few days. You’ll get an email when it’s published.'));
+        var fs2 = el('p', 'g-status'); fs2.setAttribute('aria-live', 'polite'); form.appendChild(fs2);
+        var sb = el('button', 'btn primary', 'Send the update'); sb.type = 'submit';
+        var fa2 = el('div', 'actions'); fa2.appendChild(sb); fa2.appendChild(view); form.appendChild(fa2);
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var parts = [['Dates', fd.value], ['Cost', fc.value], ['Days and hours', fh.value], ['Other', fo.value]].filter(function (x) { return x[1].replace(/\s+/g, '') !== ''; });
+          if (!parts.length) { fs2.textContent = 'Fill in at least one box.'; fs2.className = 'g-status bad'; return; }
+          sb.disabled = true;
+          call('edit_add', { listing: c.listing, body: parts.map(function (x) { return x[0] + ': ' + x[1].replace(/^\s+|\s+$/g, ''); }).join('\n'), link: li.value.trim() }).then(function (r) {
+            sb.disabled = false;
+            if (!r.ok) { fs2.textContent = r.message; fs2.className = 'g-status bad'; return; }
+            said = 'Sent. We’ll email you when the update to ' + c.name + ' is published.'; saidBad = false;
+            pushStep('change_sent');
+            cClaims = r.claims || []; render();
+          });
+        });
+        item.appendChild(form);
+        if (c.edits && c.edits.length) {
+          var ul = el('ul', 'g-list claim-edits');
+          c.edits.forEach(function (x) {
+            var li2 = el('li');
+            li2.appendChild(el('span', 'claim-status ' + (x.status === 'done' ? 'ok' : x.status === 'declined' ? 'declined' : 'pending'), (EDIT[x.status] || x.status) + (when(x.created) ? ' · sent ' + when(x.created) : '')));
+            li2.appendChild(el('span', 'claim-body', x.body.length > 260 ? x.body.slice(0, 260) + '…' : x.body));
+            ul.appendChild(li2);
+          });
+          item.appendChild(ul);
+        }
+        // the photo
+        var pf = el('form', 'g-form claim-photo');
+        pf.appendChild(el('h4', null, 'Your photo'));
+        if (c.photoLive) {
+          var live = el('img', 'claim-photo-now'); live.alt = ''; live.src = API + '?action=photo&l=' + encodeURIComponent(c.listing) + '&v=' + c.photoLive; pf.appendChild(live);
+          pf.appendChild(el('p', 'claim-status ok', 'On your listing'));
+        }
+        if (c.photo && c.photo.status === 'new') pf.appendChild(el('p', 'claim-status pending', c.photoLive ? 'A newer photo is waiting to be approved' : 'Your photo is waiting to be approved'));
+        pf.appendChild(el('p', 'hint', 'One picture of your space or an activity, shown at the top of your listing once a person has approved it. It is shrunk on your device before it’s sent.'));
+        var pick = field(pf, 'cp-' + c.listing, c.photoLive || c.photo ? 'Choose a different photo' : 'Choose a photo', 'input', { type: 'file', accept: 'image/jpeg,image/png,image/webp,image/*' });
+        var prev = el('img', 'claim-photo-now'); prev.alt = ''; prev.hidden = true; pf.appendChild(prev);
+        var alt = field(pf, 'ca-' + c.listing, 'Describe it in a few words', 'input', { type: 'text', maxLength: 160, placeholder: 'Children building a robot at a workbench' });
+        var okRow = el('label', 'check');
+        var ok = el('input'); ok.type = 'checkbox'; okRow.appendChild(ok);
+        okRow.appendChild(document.createTextNode(' I have the right to use this photo, and permission from the families of any children in it.'));
+        pf.appendChild(okRow);
+        var ps = el('p', 'g-status'); ps.setAttribute('aria-live', 'polite'); pf.appendChild(ps);
+        var pa = el('div', 'actions');
+        var pb = el('button', 'btn primary', 'Send the photo'); pb.type = 'submit'; pa.appendChild(pb);
+        if (c.photoLive || c.photo) {
+          var rm = btn('btn', 'Remove my photo');
+          twoTap(rm, 'Tap again to remove it', function () { call('photo_drop', { listing: c.listing }).then(function (r) { if (r.ok) { cClaims = r.claims || []; said = 'Your photo is off ' + c.name + '.'; saidBad = false; } else { said = r.message; saidBad = true; } render(); }); });
+          pa.appendChild(rm);
+        }
+        pf.appendChild(pa);
+        var ready = null;
+        pick.addEventListener('change', function () {
+          ready = null; prev.hidden = true; ps.textContent = ''; ps.className = 'g-status';
+          if (!pick.files || !pick.files[0]) return;
+          ps.textContent = 'Getting the photo ready…';
+          shrink(pick.files[0], function (out, err) {
+            if (!out) { ps.textContent = err; ps.className = 'g-status bad'; return; }
+            ready = out; prev.src = out.data; prev.hidden = false; ps.textContent = '';
+          });
+        });
+        pf.addEventListener('submit', function (e) {
+          e.preventDefault();
+          if (!ready) { ps.textContent = 'Choose a photo first.'; ps.className = 'g-status bad'; return; }
+          if (alt.value.replace(/\s+/g, ' ').replace(/^ | $/g, '').length < 8) { ps.textContent = 'Describe the photo in a few words, for people who can’t see it.'; ps.className = 'g-status bad'; return; }
+          if (!ok.checked) { ps.textContent = 'Tick the box to say you have the right to use this photo.'; ps.className = 'g-status bad'; return; }
+          pb.disabled = true; ps.className = 'g-status'; ps.textContent = 'Sending…';
+          call('photo_add', { listing: c.listing, alt: alt.value, permission: true, data: ready.data.slice(ready.data.indexOf(',') + 1) }).then(function (r) {
+            pb.disabled = false;
+            if (!r.ok) { ps.textContent = r.message; ps.className = 'g-status bad'; return; }
+            said = 'Photo sent. It goes on ' + c.name + ' once a person has looked at it, and we’ll email you.'; saidBad = false;
+            pushStep('photo_sent');
+            cClaims = r.claims || []; render();
+          });
+        });
+        item.appendChild(pf);
+      }
+      if (c.status !== 'declined') {
+        var drop = btn('clear', 'Give up this claim');
+        twoTap(drop, 'Tap again to give it up', function () {
+          call('claim_drop', { listing: c.listing }).then(function (r) { if (!r.ok) { said = r.message; saidBad = true; } else { said = 'You no longer hold ' + c.name + '.'; saidBad = false; cClaims = r.claims || []; } render(); });
+        });
+        item.appendChild(drop);
+      }
+      return item;
+    };
+
+    var render = function (keepFocus) {
       claimsBox.textContent = '';
-      if (!me.ready) {   // a new account: a name first, so we know who is claiming
+      var held = {};
+      cClaims.forEach(function (c) { held[c.listing] = c; });
+      if (said) { var sp = el('p', 'g-status ' + (saidBad ? 'bad' : 'good'), said); sp.setAttribute('role', 'status'); claimsBox.appendChild(sp); }
+
+      if (cState === 'name') {   // a new account: a name first, so we know who is claiming
         var fin = el('section', 'panel');
         fin.appendChild(el('h2', null, 'First, your name'));
-        var fl = el('p', null, 'Signed in as '); fl.appendChild(el('b', null, me.email)); fin.appendChild(fl);
-        var ff = el('form', 'g-form'), fn = nameFields('dir-', me);
+        var fl = el('p', null, 'Signed in as '); fl.appendChild(el('b', null, cMe.email)); fin.appendChild(fl);
+        var ff = el('form', 'g-form'), fn = nameFields('dir-', cMe);
         ff.appendChild(fn.box);
         ff.appendChild(el('p', 'hint', 'Only the person who runs this site sees your name. It is never shown on a listing. ' + LIST_NOTE));
         var fs = el('p', 'g-status'); fs.setAttribute('aria-live', 'polite'); ff.appendChild(fs);
         var fb = el('button', 'btn primary', 'Continue'); fb.type = 'submit'; ff.appendChild(fb);
         ff.addEventListener('submit', function (e) {
           e.preventDefault(); fb.disabled = true;
-          saveNames(me, fn.first.value, fn.last.value).then(function (r) { fb.disabled = false; if (!r.ok) { fs.textContent = r.message; fs.className = 'g-status bad'; return; } drawClaims(me); });
+          saveNames(cMe, fn.first.value, fn.last.value).then(function (r) { fb.disabled = false; if (!r.ok) { fs.textContent = r.message; fs.className = 'g-status bad'; return; } signedIn(cMe); });
         });
         fin.appendChild(ff); claimsBox.appendChild(fin); fn.first.focus();
         return;
       }
-      claimsBox.appendChild(el('p', 'g-status', 'Loading your listings…'));
-      call('claims').then(function (d) {
-        if (!d.ok) { if (d.http === 401) { drawClaimsOut('Please sign in again.'); return; } claimsBox.textContent = ''; claimsBox.appendChild(el('p', 'g-status bad', d.message)); return; }
-        paint(me, d.domain, d.claims || []);
-      });
-    };
 
-    var paint = function (me, domain, claims) {
-      claimsBox.textContent = '';
-      var held = {};
-      claims.forEach(function (c) { held[c.listing] = c; });
-
-      // who is signed in
-      var who = el('section', 'panel');
-      var wp = el('p', null, 'Signed in as '); wp.appendChild(el('b', null, me.email)); wp.appendChild(document.createTextNode('. You can claim listings whose website is at ')); wp.appendChild(el('b', null, domain || 'your address')); wp.appendChild(document.createTextNode('.'));
-      who.appendChild(wp);
-      var wa = el('div', 'actions');
-      var acct = el('a', 'btn', 'Your account'); acct.href = page('account/'); wa.appendChild(acct);
-      var so = btn('btn', 'Sign out'); so.addEventListener('click', function () { call('logout', {}).then(function () { set('pas-in', null); drawClaimsOut(); }); }); wa.appendChild(so);
-      who.appendChild(wa); claimsBox.appendChild(who);
-      if (said) { var sp = el('p', 'g-status' + (saidBad ? ' bad' : ' good'), said); sp.setAttribute('role', 'status'); claimsBox.appendChild(sp); }
-
-      // the listings this account holds
-      if (claims.length) {
-        var mine = el('section', 'panel');
-        mine.appendChild(el('h2', null, claims.length === 1 ? 'Your listing' : 'Your listings'));
-        claims.forEach(function (c) {
-          var item = el('div', 'claim');
-          var h = el('h3', null, c.name); item.appendChild(h);
-          item.appendChild(el('p', 'claim-status ' + c.status, STATUS[c.status] || c.status));
-          if (c.status === 'pending') item.appendChild(el('p', 'hint', 'This listing’s website is one many people share, so a person checks the claim. You’ll get an email either way.'));
-          if (c.status === 'declined') item.appendChild(el('p', 'hint', 'We couldn’t confirm this one. Reply to the email we sent if that looks wrong.'));
-          if (c.gone) item.appendChild(el('p', 'hint', 'This listing has been taken off the site.'));
-          if (c.status === 'ok' && !c.gone) {
-            var view = el('a', 'btn', 'See the listing');
-            view.href = c.listing.charAt(0) === 'p' ? page('programs/' + c.listing.slice(2) + '/') : page('summer-camps/') + '#' + c.listing.slice(2);
-            var form = el('form', 'g-form claim-edit');
-            var tl = el('label', null, 'What should change?'); tl.htmlFor = 'ce-' + c.listing;
-            var ta = el('textarea'); ta.id = 'ce-' + c.listing; ta.maxLength = 3000; ta.rows = 4; ta.required = true; ta.placeholder = 'For example: fall hours are now 3 to 6:30 pm, and the price went up to $420 a month.';
-            var ll = el('label', null, 'A page on your website that shows it (optional)'); ll.htmlFor = 'cl-' + c.listing;
-            var li = el('input'); li.id = 'cl-' + c.listing; li.type = 'url'; li.maxLength = 300; li.placeholder = 'https://';
-            var fs2 = el('p', 'g-status'); fs2.setAttribute('aria-live', 'polite');
-            var sb = el('button', 'btn primary', 'Send the change'); sb.type = 'submit';
-            form.appendChild(tl); form.appendChild(ta); form.appendChild(ll); form.appendChild(li); form.appendChild(el('p', 'hint', 'A person reads this and updates the listing, usually within a few days. You’ll get an email when it’s published.')); form.appendChild(fs2);
-            var fa2 = el('div', 'actions'); fa2.appendChild(sb); fa2.appendChild(view); form.appendChild(fa2);
-            form.addEventListener('submit', function (e) {
-              e.preventDefault(); sb.disabled = true;
-              call('edit_add', { listing: c.listing, body: ta.value, link: li.value.trim() }).then(function (r) {
-                sb.disabled = false;
-                if (!r.ok) { fs2.textContent = r.message; fs2.className = 'g-status bad'; return; }
-                said = 'Sent. We’ll email you when the change to ' + c.name + ' is published.'; saidBad = false;
-                (window.dataLayer = window.dataLayer || []).push({ event: 'pas_claim', step: 'change_sent' });
-                paint(me, domain, r.claims || []);
-              });
-            });
-            item.appendChild(form);
-          }
-          if (c.edits && c.edits.length) {
-            var ul = el('ul', 'g-list claim-edits');
-            c.edits.forEach(function (x) {
-              var li2 = el('li');
-              li2.appendChild(el('span', 'claim-status ' + (x.status === 'done' ? 'ok' : x.status === 'declined' ? 'declined' : 'pending'), (EDIT[x.status] || x.status) + (when(x.created) ? ' · sent ' + when(x.created) : '')));
-              li2.appendChild(el('span', 'claim-body', x.body.length > 220 ? x.body.slice(0, 220) + '…' : x.body));
-              ul.appendChild(li2);
-            });
-            item.appendChild(ul);
-          }
-          if (c.status !== 'declined') {
-            var drop = btn('clear', 'Give up this claim');
-            twoTap(drop, 'Tap again to give it up', function () {
-              call('claim_drop', { listing: c.listing }).then(function (r) { if (!r.ok) { said = r.message; saidBad = true; } else { said = 'You no longer hold ' + c.name + '.'; saidBad = false; } paint(me, domain, r.ok ? (r.claims || []) : claims); });
-            });
-            item.appendChild(drop);
-          }
-          mine.appendChild(item);
-        });
-        claimsBox.appendChild(mine);
+      if (cState === 'in') {
+        var who = el('section', 'panel');
+        var wp = el('p', null, 'Signed in as '); wp.appendChild(el('b', null, cMe.email)); wp.appendChild(document.createTextNode('. '));
+        if (PERSONAL.test(cDomain)) wp.appendChild(document.createTextNode('That’s a personal address, so it can’t claim a listing. Sign out and sign in with your work email: the one at your program’s website address.'));
+        else { wp.appendChild(document.createTextNode('You can claim listings whose website is at ')); wp.appendChild(el('b', null, cDomain || 'your address')); wp.appendChild(document.createTextNode('.')); }
+        who.appendChild(wp);
+        var wa = el('div', 'actions');
+        var acct = el('a', 'btn', 'Your account'); acct.href = page('account/'); wa.appendChild(acct);
+        var so = btn('btn', 'Sign out'); so.addEventListener('click', function () { call('logout', {}).then(function () { set('pas-in', null); cMe = null; cClaims = []; cDomain = ''; cState = 'out'; said = ''; render(); }); }); wa.appendChild(so);
+        who.appendChild(wa); claimsBox.appendChild(who);
+        if (cClaims.length) {
+          var mine = el('section', 'panel');
+          mine.appendChild(el('h2', null, cClaims.length === 1 ? 'Your listing' : 'Your listings'));
+          cClaims.forEach(function (c) { mine.appendChild(claimItem(c)); });
+          claimsBox.appendChild(mine);
+        }
       }
 
-      // claim another
-      var add = el('section', 'panel');
-      add.appendChild(el('h2', null, claims.length ? 'Claim another listing' : 'Claim your listing'));
-      var sl = el('label', null, 'Find it by name'); sl.htmlFor = 'claim-find';
-      var si = el('input'); si.id = 'claim-find'; si.type = 'search'; si.autocomplete = 'off'; si.placeholder = 'Start typing your program’s name';
+      // signing in, once someone has picked the listing they want
+      if (cState === 'out' && wanted && byKey[wanted]) {
+        var sbox = el('div', 'panel'); sbox.id = 'claim-signin'; claimsBox.appendChild(sbox);
+        signInBox(sbox, 'directors', function (d) { signedIn(d.user); },
+          'To claim ' + byKey[wanted].name + ', sign in with an email address at ' + (byKey[wanted].domain || 'its website') + '. No password. We send a 6-digit code and you type it here.');
+        var sh = sbox.querySelector('h3'); if (sh) sh.textContent = 'Sign in to claim ' + byKey[wanted].name;
+      }
+
+      // find a listing
+      var add = el('section', 'panel'); add.id = 'claim-search';
+      add.appendChild(el('h2', null, cState === 'in' && cClaims.length ? 'Claim another listing' : 'Find your listing'));
+      var sl = el('label', null, 'Search by name'); sl.htmlFor = 'claim-find';
+      var si = el('input'); si.id = 'claim-find'; si.type = 'search'; si.autocomplete = 'off'; si.placeholder = 'Start typing your program’s name'; si.value = findText;
       var results = el('ul', 'g-list claim-results');
       var note = el('p', 'hint');
       add.appendChild(sl); add.appendChild(si); add.appendChild(results); add.appendChild(note);
@@ -701,47 +798,78 @@
         b.disabled = true; st.className = 'g-status'; st.textContent = 'Checking…';
         call('claim_add', { listing: l.key }).then(function (r) {
           b.disabled = false;
-          (window.dataLayer = window.dataLayer || []).push({ event: 'pas_claim', step: r.ok ? (r.status === 'ok' ? 'claimed' : 'waiting') : (r.error === 'domain' ? 'address_mismatch' : 'refused') });
+          pushStep(r.ok ? (r.status === 'ok' ? 'claimed' : 'waiting') : (r.error === 'domain' ? 'address_mismatch' : 'refused'));
           if (!r.ok) { st.textContent = r.message; st.className = 'g-status bad'; return; }
-          sset('pas-claim', null); wanted = '';
-          said = r.status === 'ok' ? 'It’s yours: ' + l.name + ' now shows as claimed. Send a change whenever something moves.' : 'Asked. ' + l.name + ' is on a website many people share, so a person checks the claim. You’ll get an email either way.';
-          saidBad = false;
-          paint(me, domain, r.claims || []);
+          sset('pas-claim', null); wanted = ''; findText = '';
+          said = r.status === 'ok' ? 'It’s yours: ' + l.name + ' now shows as claimed. Send an update or a photo whenever you like.' : 'Asked. ' + l.name + ' is on a website many people share, so a person checks the claim. You’ll get an email either way.';
+          saidBad = false; cClaims = r.claims || [];
+          render();
           window.scrollTo(0, Math.max(0, claimsBox.getBoundingClientRect().top + window.pageYOffset - 90));
         });
       };
       var show = function () {
         var text = si.value.trim().toLowerCase();
+        findText = si.value;
         results.textContent = '';
         var pool = LIST.map(function (l) { return byKey[l[0]]; }).filter(function (l) { return !held[l.key]; });
-        var hits = text.length < 2 ? (wanted && !held[wanted] ? [byKey[wanted]] : pool.filter(function (l) { return domain && l.domain === domain; }))
+        var hits = text.length < 2 ? (wanted && byKey[wanted] && !held[wanted] ? [byKey[wanted]] : (cState === 'in' && cDomain ? pool.filter(function (l) { return l.domain === cDomain; }) : []))
           : pool.filter(function (l) { return l.name.toLowerCase().indexOf(text) > -1; });
         hits.slice(0, 8).forEach(function (l) {
           var li3 = el('li');
           li3.appendChild(el('b', null, l.name));
-          var same = !!domain && l.domain === domain;
-          li3.appendChild(el('span', 'hint', l.domain ? 'Website at ' + l.domain + (same ? (l.match ? '. Your address matches.' : '. Your address matches, and a person checks this one.') : '. You’re signed in at ' + domain + ', which doesn’t match.') : 'No website we can check.'));
           var st = el('p', 'g-status'); st.setAttribute('aria-live', 'polite');
-          if (same) { var b = btn('btn primary', 'Claim this listing'); b.addEventListener('click', function () { claim(l, b, st); }); li3.appendChild(b); }
-          else li3.appendChild(el('span', 'hint', 'To claim it, sign out and sign in with an address at ' + (l.domain || 'its website') + '.'));
+          if (cState === 'in') {
+            var same = !!cDomain && l.domain === cDomain;
+            li3.appendChild(el('span', 'hint', l.domain ? 'Website at ' + l.domain + (same ? (l.match ? '. Your address matches.' : '. Your address matches, and a person checks this one.') : '. You’re signed in at ' + cDomain + ', which doesn’t match.') : 'No website we can check.'));
+            if (same) { var b = btn('btn primary', 'Claim this listing'); b.addEventListener('click', function () { claim(l, b, st); }); li3.appendChild(b); }
+            else li3.appendChild(el('span', 'hint', 'To claim it, sign out and sign in with an address at ' + (l.domain || 'its website') + '.'));
+          } else {
+            li3.appendChild(el('span', 'hint', l.domain ? 'Website at ' + l.domain + '. You’ll need an email address there to claim it.' : 'No website we can check.'));
+            if (wanted === l.key) li3.appendChild(el('span', 'claim-status', 'Sign in above to claim it'));
+            else {
+              var pickIt = btn('btn primary', 'Claim this listing');
+              pickIt.addEventListener('click', function () {
+                wanted = l.key; sset('pas-claim', l.key); pushStep('picked');
+                render();
+                var box = document.getElementById('claim-signin');
+                if (box) { window.scrollTo(0, Math.max(0, box.getBoundingClientRect().top + window.pageYOffset - 90)); var em = box.querySelector('input[type=email]'); if (em) em.focus(); }
+              });
+              li3.appendChild(pickIt);
+            }
+          }
           li3.appendChild(st);
           results.appendChild(li3);
         });
-        note.textContent = text.length < 2 ? (hits.length ? '' : 'No listing has a website at ' + (domain || 'your address') + '. Search by name to check, or suggest your program below.') : (hits.length ? (hits.length > 8 ? 'Showing the first 8. Keep typing to narrow it.' : '') : 'Nothing by that name is listed yet.');
+        note.textContent = text.length < 2
+          ? (hits.length ? '' : (cState === 'in' ? 'No listing has a website at ' + (cDomain || 'your address') + '. Search by name to check, or suggest your program below.' : 'Every program and summer camp on the site is here: ' + LIST.length + ' listings.'))
+          : (hits.length ? (hits.length > 8 ? 'Showing the first 8. Keep typing to narrow it.' : '') : 'Nothing by that name is listed yet.');
       };
       si.addEventListener('input', show);
       show();
       var miss = el('p', 'hint', 'Not on the site yet? ');
       var sg = el('a', null, 'Suggest your program or camp'); sg.href = page('suggest/'); miss.appendChild(sg); miss.appendChild(document.createTextNode(', with its website, and claim it once it’s up.'));
       add.appendChild(miss);
+      if (cState === 'out' && !wanted) {
+        var have = el('p', 'hint', 'Already claimed yours? ');
+        var hl = btn('linklike', 'Sign in');
+        hl.addEventListener('click', function () {
+          var box = el('div', 'panel'); box.id = 'claim-signin'; claimsBox.insertBefore(box, add);
+          signInBox(box, 'directors', function (d) { signedIn(d.user); }, 'Sign in with your work email. No password. We send a 6-digit code and you type it here.');
+          var h = box.querySelector('h3'); if (h) h.textContent = 'Sign in';
+          have.hidden = true;
+        });
+        have.appendChild(hl); add.appendChild(have);
+      }
       claimsBox.appendChild(add);
+      if (keepFocus) { var again = document.getElementById('claim-find'); if (again) again.focus(); }
     };
 
-    if (!API) { claimsBox.appendChild(el('p', 'g-status', 'Claiming doesn’t work in this preview copy of the site.')); }
+    if (!API) { cState = 'out'; render(); claimsBox.appendChild(el('p', 'g-status', 'Claiming doesn’t work in this preview copy of the site.')); }
+    else if (!signedInHint()) { cState = 'out'; render(); }   // nothing to wait for: the search is there at once
     else {
-      claimsBox.appendChild(el('p', 'g-status', 'Checking whether you’re signed in…'));
+      cState = 'out'; render();
       call('me').then(function (d) {
-        if (d.ok && d.user) { set('pas-in', '1'); drawClaims(d.user); } else { if (d.ok) set('pas-in', null); drawClaimsOut(d.ok ? '' : d.message); }
+        if (d.ok && d.user) { set('pas-in', '1'); signedIn(d.user); } else { if (d.ok) set('pas-in', null); }
       });
     }
   }
