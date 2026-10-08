@@ -654,7 +654,7 @@
       if (c.gone) item.appendChild(el('p', 'hint', 'This listing has been taken off the site.'));
       if (c.status === 'ok' && !c.gone) {
         var view = el('a', 'btn', 'See the listing');
-        view.href = c.listing.charAt(0) === 'p' ? page('programs/' + c.listing.slice(2) + '/') : page('summer-camps/') + '#' + c.listing.slice(2);
+        view.href = c.listing.charAt(0) === 'p' ? page('programs/' + c.listing.slice(2) + '/') : page('summer-camps/' + c.listing.slice(2) + '/');
         // is there space: one of three words, on the listing straight away, and off again after a month
         var spBox = el('div', 'claim-space');
         spBox.appendChild(el('h4', null, 'Is there space right now?'));
@@ -878,6 +878,35 @@
           li3.appendChild(st);
           results.appendChild(li3);
         });
+        // A place with several listings (an after-school program and a camp, say) can take them all in one go.
+        var mine = cState === 'in' && cDomain && text.length < 2 ? pool.filter(function (l) { return l.domain === cDomain; }) : [];
+        if (mine.length > 1) {
+          var allLi = el('li', 'claim-all');
+          allLi.appendChild(el('b', null, mine.length + ' listings have a website at ' + cDomain));
+          var allSt = el('p', 'g-status'); allSt.setAttribute('aria-live', 'polite');
+          var allBtn = btn('btn primary', 'Claim all ' + mine.length);
+          allBtn.addEventListener('click', function () {
+            allBtn.disabled = true; allSt.className = 'g-status'; allSt.textContent = 'Checking…';
+            var got = 0, waiting = 0, bad = '', last = null;
+            var next = function (i) {
+              if (i >= mine.length) {
+                if (last) cClaims = last;
+                sset('pas-claim', null); wanted = ''; findText = '';
+                said = (got ? got + (got === 1 ? ' listing is yours' : ' listings are yours') + ' and now show as claimed. ' : '') + (waiting ? waiting + (waiting === 1 ? ' is' : ' are') + ' on a website many people share, so a person checks ' + (waiting === 1 ? 'that claim' : 'those claims') + '. ' : '') + (bad ? bad : '');
+                saidBad = !got && !waiting; pushStep(got ? 'claimed_all' : waiting ? 'waiting' : 'refused');
+                render(); window.scrollTo(0, Math.max(0, claimsBox.getBoundingClientRect().top + window.pageYOffset - 90));
+                return;
+              }
+              call('claim_add', { listing: mine[i].key }).then(function (r) {
+                if (r.ok) { if (r.status === 'ok') got++; else waiting++; last = r.claims || last; } else bad = r.message || 'One of them couldn’t be claimed.';
+                next(i + 1);
+              });
+            };
+            next(0);
+          });
+          allLi.appendChild(allBtn); allLi.appendChild(allSt);
+          results.insertBefore(allLi, results.firstChild);
+        }
         note.textContent = text.length < 2
           ? (hits.length ? '' : (cState === 'in' ? 'No listing has a website at ' + (cDomain || 'your address') + '. Search by name to check, or suggest your program below.' : 'Every program and summer camp on the site is here: ' + LIST.length + ' listings.'))
           : (hits.length ? (hits.length > 8 ? 'Showing the first 8. Keep typing to narrow it.' : '') : 'Nothing by that name is listed yet.');

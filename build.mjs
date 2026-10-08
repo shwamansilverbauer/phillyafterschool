@@ -1265,7 +1265,7 @@ const finderData = (() => {
   const progRows = [...programs].sort((a, b) => fullName(a).localeCompare(fullName(b))).map(p => [p.id, fullName(p), TYPE[p.types[0]].label, servedSummary(p)]);
   return { schools: rows, covered: Object.fromEntries(schools.map(s => [s.id, s.shortName])), programs: progRows };
 })();
-const finderBox = (depth, label, withPrograms = false) => `<div class="find" data-finder${withPrograms ? ' data-programs' : ''} data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}"${PREVIEW ? '' : ` data-src="${link('data/school-finder.json', depth)}"`}>
+const finderBox = (depth, label, withPrograms = false) => `<div class="find" data-finder${withPrograms ? ' data-programs' : ''}${PREVIEW ? '' : ' data-school-pages'} data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}"${PREVIEW ? '' : ` data-src="${link('data/school-finder.json', depth)}"`}>
       <label for="find-school">${T(label || `Find your school`)}</label>
       <input id="find-school" type="search" role="combobox" aria-expanded="false" aria-controls="finder-list" aria-autocomplete="list" placeholder="${withPrograms ? 'Start typing a school or program name' : 'Start typing a school name'}" autocomplete="off">
       <ul id="finder-list" class="finder-list" role="listbox" aria-label="${withPrograms ? 'Schools and programs' : 'Schools'}" hidden></ul>
@@ -1284,10 +1284,118 @@ function schoolsPage() {
 ${rows}
   </div>
   <p>${T(`Schools are added one at a time, because every pickup list has to be checked. The ones parents ask for most go first.`)}</p>
-</section>`;
+</section>${SCHOOL_PAGES && uncovered.length ? `
+<section class="section" id="not-yet">
+  <h2>${T(`Not covered yet`)}</h2>
+  <p>${T(`Each of these has a page showing what’s close to it, where you can ask for it and be told when it’s added.`)}</p>
+  <ul class="plain cols">${uncovered.map(x => `<li><a href="${link(uncoveredPath(x), 1)}">${esc(x.name)}</a></li>`).join('')}</ul>
+</section>` : ''}`;
   return layout({ title: 'Schools', description: `Find after-school programs by school in Philadelphia. ${listNames(schools.map(s => s.shortName))} are covered so far; ask for yours.`, pathName: 'schools/', depth: 1, current: 'schools/', hero, body, showStreet: 'parked',
     jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', name: 'Schools', itemListElement: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map((x, i) => ({ '@type': 'ListItem', position: i + 1, name: x.name, url: `${cfg.siteUrl}/${x.id}/` })) } });
 }
+
+// ---------- a page for each school that isn't covered yet ----------
+// Every district and charter school gets an address of its own (/schools/<id>/): what we list close to it, measured in a
+// straight line, and the way to ask for it and to be told when it is added. Nothing on it claims a program picks up
+// from the school, because nobody has checked. A page with fewer than three things nearby is kept out of search
+// engines, so they aren't handed a row of near-empty pages. The preview copy keeps the single shared page instead.
+const SCHOOL_PAGES = !PREVIEW;
+const uncovered = cityList.schools.filter(x => { const r = finderData.schools.find(y => y[0] === x.id); return r && !r[5]; }).sort((a, b) => a.name.localeCompare(b.name));
+const uncoveredPath = x => `schools/${x.id}/`;
+const nearTo = (at, list, placesFn, max) => list.map(p => [p, placesFn(p).length ? Math.min(...placesFn(p).map(b => milesApart(at, b))) : Infinity]).filter(x => x[1] <= max).sort((a, b) => a[1] - b[1]);
+const milesPill = m => `<span class="pill mi-pill">${m < 0.1 ? 'Under 0.1 mi' : (Math.round(m * 10) / 10).toFixed(1) + ' mi'}</span>`;
+const nearbyFor = x => {
+  const at = [x.lat, x.lng];
+  return {
+    after: nearTo(at, programs.filter(p => Object.keys(p.schools || {}).length && !schoolRun(p)), p => placesOf(p), 1),
+    weekend: nearTo(at, weekendPrograms, p => placesOf(p), 2).slice(0, 8),
+    camps: nearTo(at, summerCamps, c => coordsOf(c.address), 2).slice(0, 8),
+  };
+};
+function uncoveredSchoolPage(x) {
+  const D = 2, row = finderData.schools.find(y => y[0] === x.id), near = nearbyFor(x);
+  const total = near.after.length + near.weekend.length + near.camps.length;
+  const closest = row[7] && finderData.covered[row[7]] ? { id: row[7], name: finderData.covered[row[7]], miles: row[8] } : null;
+  const kind = x.kind ? `${x.kind} school` : 'School';
+  const hero = `    <p class="where"><a href="${link('schools/', D)}">${T(`All schools`)}</a></p>
+    <h1>${T(`After school near {school}`, { school: x.name })}</h1>
+    <p class="lede">${esc(`${x.address}, Philadelphia, PA ${x.zip}`)}${x.grades ? ` · grades ${esc(x.grades)}` : ''} · ${esc(kind)}. ${T(`We haven’t checked which programs pick up from this school yet. Here is what’s close, and how to ask for it to be covered.`)}</p>
+    <div class="facts">
+      <span><b>${near.after.length}</b> after-school ${near.after.length === 1 ? 'program' : 'programs'} within a mile</span>
+      ${near.weekend.length + near.camps.length ? `<span><b>${near.weekend.length + near.camps.length}</b> weekend classes and camps within two</span>` : ''}
+      ${closest ? `<span>Closest covered school: <a href="${link(closest.id + '/', D)}">${esc(closest.name)}</a>, ${closest.miles} ${closest.miles === 1 ? 'mile' : 'miles'}</span>` : ''}
+    </div>`;
+  const body = `<div data-request-page data-slug="${esc(x.id)}" data-send="${link('schools/request/', D)}send.php" data-root="${link('', D).replace(/index\.html$/, '')}" data-index="" data-src="${link('data/school-finder.json', D)}" style="display:contents">
+  <section class="section">
+  <div class="panel" id="req-panel">
+    <h2>${T(`Want {school} added?`, { school: x.name })}</h2>
+    <p>${T(`Each school takes real checking, so the ones parents ask for most go first. One tap adds your vote.`)}</p>
+    <div class="actions needs-js-block"><button type="button" class="btn primary big" id="req-btn">Ask for ${esc(x.name)}</button></div>
+    <p class="hint" id="req-status" aria-live="polite"></p>
+    ${ALERTS ? `<form class="alerts-form req-notify needs-js-block" id="req-notify" data-key="${esc(ALERTS.klaviyoKey)}" data-list="${esc(ALERTS.listId)}"${ALERTS.doubleOptIn ? ' data-confirm="1"' : ''} data-clarity-mask="true" novalidate>
+      <h3 id="req-notify-title">Get an email when ${esc(x.name)} is added</h3>
+      <div class="alerts-row">
+        <div class="field">
+          <label for="req-name">${T(`Your first name`)}</label>
+          <input id="req-name" name="first_name" type="text" maxlength="60" autocomplete="given-name" required>
+        </div>
+        <div class="field">
+          <label for="req-email">${T(`Your email`)}</label>
+          <input id="req-email" name="email" type="email" maxlength="150" autocomplete="email" inputmode="email" required>
+        </div>
+        <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+          <label for="req-company">Leave this blank</label>
+          <input id="req-company" name="company" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <button class="btn primary big" type="submit">${T(`Email me when it’s added`)}</button>
+      </div>
+      <p class="hint">${T(`One email when this school gets its page. It also adds you to our email list, for occasional news about the site. Every email has an unsubscribe link.`)} <a href="${link('privacy/', D)}#email">${T(`How we handle your email.`)}</a></p>
+      <p class="alerts-status" id="req-notify-status" aria-live="polite"></p>
+    </form>` : ''}
+    <p>${T(`Know which programs pick up from this school?`)} <a href="${link('suggest/', D)}?kind=school&amp;newschool=${encodeURIComponent(x.name)}">${T(`Tell us, and it gets covered faster.`)}</a></p>
+  </div>
+  </section>
+  <section class="section">
+    <h2>${T(`After-school programs within a mile`)}</h2>
+    ${near.after.length ? `<p>${T(`These are close to {school}, in a straight line. We don’t know yet whether any of them pick up from it, so ask the program.`, { school: x.name })}</p>
+    <div class="schools">
+${near.after.map(([p, m]) => `<a class="prow" href="${link(programPath(p), D)}"><h3>${esc(p.name)}</h3><span class="what">${esc(p.what)}</span><span class="tally">${typeTags(p)}</span><span class="tally">${milesPill(m)}<span class="hint">${esc(servedSummary(p))} · grades ${esc(gradeText(p))}</span></span></a>`).join('\n')}
+    </div>` : `<p class="ask">${T(`Nothing we list is within a mile of {school} yet.`, { school: x.name })} <a href="${link('suggest/', D)}">${T(`Tell us about a program near it.`)}</a></p>`}
+  </section>
+  ${near.weekend.length ? `<section class="section">
+    <h2>${T(`Weekend classes within two miles`)}</h2>
+    <p>${T(`Saturday and Sunday classes take children from any school.`)}</p>
+    <div class="schools">
+${near.weekend.map(([p, m]) => `<a class="prow" href="${link(weekendPath, D)}#${esc(p.id)}"><h3>${esc(p.name)}</h3><span class="what">${esc(p.weekend.summary)}</span><span class="tally">${milesPill(m)}${p.weekend.days.map(d => `<span class="pill nearby">${WEEKEND_DAY[d]}</span>`).join('')}${programHoods(p).map(n => `<span class="pill hood">${esc(n)}</span>`).join('')}</span></a>`).join('\n')}
+    </div>
+    <p><a class="btn" href="${link(weekendPath, D)}">${T(`All weekend classes`)}</a></p>
+  </section>` : ''}
+  ${near.camps.length ? `<section class="section">
+    <h2>${T(`Summer camps within two miles`)}</h2>
+    <div class="schools">
+${near.camps.map(([c, m]) => `<a class="prow" href="${link(campPath(c), D)}"><h3>${esc(c.name)}</h3><span class="what">${esc(c.what)}</span><span class="tally">${milesPill(m)}<span class="hint">${[campAges(c), campPrice(c)].filter(Boolean).map(esc).join(' · ')}</span></span></a>`).join('\n')}
+    </div>
+    <p><a class="btn" href="${link(campsPath, D)}">${T(`All summer camps`)}</a></p>
+  </section>` : ''}
+  <section class="section">
+    <h2>${T(`In the meantime`)}</h2>
+    <p>${closest && closest.miles <= 2 ? T(`The closest school with a page is {name}, about {miles} away. Programs that serve it may reach {school} too, but ask each one.`, { name: closest.name, miles: closest.miles === 1 ? '1 mile' : closest.miles + ' miles', school: x.name }) : T(`No school with a page is close by yet. You can still browse by neighborhood or look through every program.`)}</p>
+    <div class="actions">${closest && closest.miles <= 2 ? `<a class="btn" href="${link(closest.id + '/', D)}">See ${esc(closest.name)}</a>` : ''}<a class="btn" href="${link('neighborhoods/', D)}">${T(`Browse by neighborhood`)}</a><a class="btn" href="${link('programs/', D)}">${T(`All programs`)}</a></div>
+  </section>
+  <section class="section" id="req-search">
+    <h2>${T(`Look up another school`)}</h2>
+    ${finderBox(D, `School name`)}
+  </section>
+</div>`;
+  const url = `${cfg.siteUrl}/${uncoveredPath(x)}`;
+  return layout({
+    title: `After-school programs near ${x.name}`,
+    description: `What’s near ${x.name} in Philadelphia: ${plural(near.after.length, 'after-school program', 'after-school programs')} within a mile, plus weekend classes and summer camps close by. Ask for the school to be covered.`,
+    pathName: uncoveredPath(x), depth: D, current: null, hero, body, noindex: total < 3,
+    jsonLd: { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Schools', cfg.siteUrl + '/schools/'], [x.name, url]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) },
+  });
+}
+const uncoveredIndexed = () => uncovered.filter(x => { const n = nearbyFor(x); return n.after.length + n.weekend.length + n.camps.length >= 3; });
 
 // The page for a school that isn't covered yet. One page serves them all: the script fills in the school from ?s=.
 function schoolRequestPage() {
@@ -3445,11 +3553,11 @@ function summerSchedulePage() {
   const schoolNote = i => P.lastDay && mondayOf(P.lastDay) === P.weeks[i] ? `School’s last day is ${new Date(P.lastDay + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' })}.` : '';
   const head = P.weeks.map((w, i) => { const d = utcDay(w); return `<th scope="col" data-w="${i}"><span>${MONTH_NAMES[d.getUTCMonth()].slice(0, 3)}</span><b>${d.getUTCDate()}</b></th>`; }).join('');
   const chartRows = P.dated.map(({ c, on, exact }) => `<tr data-camp="${esc(c.id)}" data-ages="${c.ageMin || 0} ${c.ageMax || 99}">
-  <th scope="row"><a href="${link(campsPath, D)}#${esc(c.id)}">${esc(c.name)}</a><small>${[ageLine(c), price(c), exact ? `${year} dates` : `${c.season} dates`].filter(Boolean).map(esc).join(' · ')}</small></th>
+  <th scope="row"><a href="${link(campPath(c), D)}">${esc(c.name)}</a><small>${[ageLine(c), price(c), exact ? `${year} dates` : `${c.season} dates`].filter(Boolean).map(esc).join(' · ')}</small></th>
   ${P.weeks.map((w, i) => on.includes(i) ? `<td class="on${exact ? ' exact' : ''}" data-w="${i}"><span class="vh">${exact ? 'Runs' : 'Ran in ' + c.season}</span></td>` : `<td data-w="${i}"></td>`).join('')}
 </tr>`).join('\n');
   const data = {
-    year, base, page: `${cfg.siteUrl}/${summerPath}`, campsPage: link(campsPath, D),
+    year, base, page: `${cfg.siteUrl}/${summerPath}`, campsPage: link(campsPath, D), campUrl: link(`${campsPath}CAMP-ID/`, D),
     weeks: P.weeks.map((w, i) => ({ d: w, label: P.label(w), note: schoolNote(i) })),
     camps: Object.fromEntries(P.camps.map(({ c, on, exact }) => [c.id, { n: c.name, w: on, y: c.season || 0, x: exact ? 1 : 0, p: typeof c.weekly === 'number' ? c.weekly : null, h: shortHours(c), a: [c.ageMin || 0, c.ageMax || 99], hood: (c.neighborhoods || []).join(', ') }])),
   };
@@ -3524,7 +3632,7 @@ ${chartRows}
   </div>
   ${P.undated.length ? `<h3 class="sub">${T(`No dates listed yet`)}</h3>
   <p>${T(`These camps haven’t put dates we can chart on their sites. You can still add one to any week above, then check with the camp.`)}</p>
-  <ul class="plain cols">${P.undated.map(({ c }) => `<li><a href="${link(campsPath, D)}#${esc(c.id)}">${esc(c.name)}</a></li>`).join('')}</ul>` : ''}
+  <ul class="plain cols">${P.undated.map(({ c }) => `<li><a href="${link(campPath(c), D)}">${esc(c.name)}</a></li>`).join('')}</ul>` : ''}
 </section>
 <section class="section">
   <p><a class="btn" href="${link(campsPath, D)}">${T(`Every camp, with ages, hours and prices`)}</a></p>
@@ -3537,24 +3645,86 @@ ${chartRows}
     pathName: summerPath, depth: D, current: null, hero, body, showStreet: 'summer', scripts: GROUPS ? groupsScript(D) : '',
   });
 }
+// ---------- a page per summer camp ----------
+// The list shows a short card for each camp; everything the camp posts is on its own page, which search engines can find.
+const campPath = c => `${campsPath}${c.id}/`;
+const campAges = c => c.ageMin || c.ageMax ? (c.ageMin && c.ageMax ? `Ages ${String(c.ageMin).replace('.5', '½')}–${c.ageMax}` : c.ageMin ? `Ages ${String(c.ageMin).replace('.5', '½')} and up` : `Up to age ${c.ageMax}`) : '';
+const campPrice = c => c.weekly === 0 || (c.weekly === undefined && c.price === 'free') ? 'Free' : c.weekly ? `$${c.weekly} a week` : '';
+const campHoursShort = c => String(c.hours || '').split(/[.;] /)[0].replace(/\.$/, '');
+const campWeeksShort = c => { const m = /(January|February|March|April|May|June|July|August|September) \d{1,2} to (?:(?:January|February|March|April|May|June|July|August|September) )?\d{1,2}(?:, \d{4})?/.exec(String(c.weeks || '')); return m ? m[0] : ''; };
+function campPage(c) {
+  const D = 2, year = summerYear;
+  const where = [c.address, (c.neighborhoods || []).join(', ')].filter(Boolean);
+  const rows = [['Ages', fold(esc(c.ages || ''))], ['Weeks', fold(esc(c.weeks || ''))], ['Hours', fold(esc(c.hours || ''))], ['Before and after', fold(esc(c.extended || ''))], ['Cost', fold(esc(c.cost || ''))], ['Help with cost', fold(esc(c.aid || ''))], ['Where', esc(where.length === 2 ? `${where[0]} (${where[1]})` : where[0] || '')], ['Signing up', fold(esc(c.signup || ''))], ['Phone', c.phone ? `<a href="tel:+1-${esc(c.phone)}">${esc(c.phone)}</a>` : '']]
+    .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+  const prog = c.program ? programs.find(p => p.id === c.program) : null;
+  const plan = summerPlan.camps.find(x => x.c.id === c.id) || { on: [], exact: false };
+  const areas = campAreas(c).length === CAMP_AREAS.length ? [] : campAreas(c);
+  // the camps closest to this one, for someone still looking
+  const here = coordsOf(c.address);
+  const near = here.length ? summerCamps.filter(x => x.id !== c.id && coordsOf(x.address).length).map(x => [x, Math.min(...here.flatMap(a => coordsOf(x.address).map(b => milesApart(a, b))))]).sort((a, b) => a[1] - b[1]).slice(0, 4) : [];
+  const hero = `    <p class="where"><a href="${link(campsPath, D)}">${T(`Summer camps`)}</a>${areas.length ? ` <span class="served">${areas.map(a => `<span class="pill nearby wrap">${esc(a)}</span>`).join(' ')}</span>` : ''}</p>
+    <h1>${esc(c.name)}</h1>
+    <p class="lede">${esc(c.what)}</p>
+    <div class="facts">
+      <span>${c.types.map(t => esc(TYPE[t].label)).join(', ')}</span>
+      ${campAges(c) ? `<span><b>${esc(campAges(c))}</b></span>` : ''}
+      ${campPrice(c) ? `<span><b>${esc(campPrice(c))}</b></span>` : ''}
+      <span>${c.season ? (c.season >= year ? `Summer <b>${c.season}</b> details` : `<b>${c.season}</b> details, as a guide`) : 'No dates yet'}</span>
+      <span>Checked <b>${longDate(c.checked)}</b></span>
+      ${claimedMark('c:' + c.id, D)}
+      ${spaceSlot('c:' + c.id, D)}
+    </div>`;
+  const body = `<div style="display:contents">
+  ${c.season && c.season < year ? `<section class="section"><p class="flag camp-guide"><b>${T(`These are its summer {year} details, shown as a guide.`, { year: c.season })}</b> ${T(`It hasn’t posted summer {next} yet. This page changes when it does.`, { next: year })}</p></section>` : ''}
+  <section class="section">
+    <h2>${T(`The details`)}</h2>
+    ${photoSlot('c:' + c.id)}
+    <article class="prog solo camp">
+      <div class="strip camp-weeks">${plan.on.length ? `<p class="camp-weeks-h">${plan.exact ? T(`Weeks it runs in {year}`, { year }) : T(`Weeks it ran in {year}`, { year: c.season })}</p>
+        <ol class="weekstrip">${summerPlan.weeks.map((w, i) => { const d = utcDay(w); return `<li class="${plan.on.includes(i) ? 'on' + (plan.exact ? ' exact' : '') : ''}"><span>${MONTH_NAMES[d.getUTCMonth()].slice(0, 3)}</span><b>${d.getUTCDate()}</b><i class="vh">${plan.on.includes(i) ? 'runs' : 'no camp'}</i></li>`; }).join('')}</ol>
+        <p class="hint">${plan.exact ? T(`Each box is a week, named by its Monday.`) : T(`Each box is a week, named by its Monday in {year}: last summer’s weeks, moved to the same week of the calendar.`, { year })}</p>` : `<p class="hint">${T(`It hasn’t listed dates we can chart.`)}</p>`}</div>
+      <dl>${rows}</dl>
+      ${c.note ? `<p class="flag">${esc(c.note)}</p>` : ''}
+      <div class="actions"><a class="btn primary" data-track="camp" href="${esc(outUrl(c.registerUrl || c.website, { type: 'camp' }))}" target="_blank" rel="noopener">${c.registerUrl ? T(`Find or book a spot`) : T(`The camp’s website`)}</a>${c.registerUrl ? `<a class="btn" data-track="website" href="${esc(outUrl(c.website, { type: 'camp' }))}" target="_blank" rel="noopener">${T(`The camp’s website`)}</a>` : ''}<a class="btn needs-js" href="${link(summerPath, D)}?add=${esc(c.id)}">${T(`Add to your summer`)}</a>${prog ? `<a class="btn" href="${link(programPath(prog), D)}">${T(`Its school-year listing`)}</a>` : ''}</div>
+    </article>
+    <p class="hint">${T(`Dates, prices and openings change, and many camps fill early. Confirm with the camp before you plan around a week.`)}</p>
+    ${listingTools('c:' + c.id, c.name, D, 'camp')}
+  </section>
+  ${near.length ? `<section class="section">
+    <h2>${T(`Camps close to this one`)}</h2>
+    <div class="schools">
+${near.map(([x, m]) => `<a class="prow" href="${link(campPath(x), D)}"><h3>${esc(x.name)}</h3><span class="what">${esc(x.what)}</span><span class="tally"><span class="pill mi-pill">${m < 0.1 ? 'Next door' : (Math.round(m * 10) / 10).toFixed(1) + ' mi'}</span><span class="hint">${[campAges(x), campPrice(x)].filter(Boolean).map(esc).join(' · ')}</span></span></a>`).join('\n')}
+    </div>
+    <p><a class="btn" href="${link(campsPath, D)}">${T(`All summer camps`)}</a> <a class="btn" href="${link(summerPath, D)}">${T(`Plan your summer, week by week`)}</a></p>
+  </section>` : `<section class="section"><p><a class="btn" href="${link(campsPath, D)}">${T(`All summer camps`)}</a> <a class="btn" href="${link(summerPath, D)}">${T(`Plan your summer, week by week`)}</a></p></section>`}
+  <p class="src">Checked ${longDate(c.checked)}. Sources: ${sourceLinks(c.sources, c)}</p>
+</div>`;
+  const url = `${cfg.siteUrl}/${campPath(c)}`;
+  const desc = [campAges(c), campWeeksShort(c), campHoursShort(c), campPrice(c)].filter(Boolean).join(', ');
+  return layout({
+    title: `${c.name}: summer camp in Philadelphia`,
+    description: `${c.name}: ${c.what.replace(/\.$/, '')}. ${desc ? desc + '. ' : ''}Weeks, hours, cost and how to sign up.`,
+    pathName: campPath(c), depth: D, current: null, hero, body, showStreet: 'summer',
+    jsonLd: { '@context': 'https://schema.org', '@graph': [
+      { '@type': c.address && coordsOf(c.address).length ? 'LocalBusiness' : 'Organization', '@id': url + '#camp', name: c.name, description: c.what, url: c.website, ...(coordsOf(c.address).length ? { address: `${streetAddresses(c.address)[0]}, Philadelphia, PA`, geo: { '@type': 'GeoCoordinates', latitude: coordsOf(c.address)[0][0], longitude: coordsOf(c.address)[0][1] } } : {}), ...(c.phone ? { telephone: '+1-' + c.phone } : {}) },
+      { '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Summer camps', `${cfg.siteUrl}/${campsPath}`], [c.name, url]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) },
+    ] },
+  });
+}
 function summerCampsPage() {
   const D = 1;
   const base = campsFile.season, next = base + 1;
   const list = [...summerCamps].sort((a, b) => a.name.localeCompare(b.name));
   const shaped = list.map(c => ({ ...c, neighborhoods: campAreas(c) }));   // what the filter bar sees
   const ahead = list.filter(c => c.season > base).length;
+  // On the list each camp is a short card: what it is, the handful of facts people sort by, and the way to its own page.
   const cards = list.map((c, i) => {
-    const where = [c.address, (c.neighborhoods || []).join(', ')].filter(Boolean);
-    const rows = [['Ages', c.ages], ['Weeks', c.weeks], ['Hours', c.hours], ['Before and after', c.extended], ['Cost', c.cost], ['Help with cost', c.aid], ['Where', where.length === 2 ? `${where[0]} (${where[1]})` : where[0]], ['Signing up', c.signup], ['Phone', c.phone]]
-      .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${k === 'Phone' ? `<a href="tel:+1-${esc(v)}">${esc(v)}</a>` : esc(v)}</dd>`).join('');
-    const prog = c.program ? programs.find(p => p.id === c.program) : null;
-    return `<article class="prog offprog camp" id="${esc(c.id)}" ${itemAttrs(shaped[i], [c.ages || '', c.address || '', ...(c.neighborhoods || [])])}>
-  <div class="top">${photoSlot('c:' + c.id)}<h3>${esc(c.name)}</h3><p class="what">${esc(c.what)}</p><p class="tags">${c.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p><p>${seasonPill(c)} ${spaceSlot('c:' + c.id, D)}</p></div>
-  <dl>${rows}</dl>
-  ${c.note ? `<p class="flag">${esc(c.note)}</p>` : ''}
-  <div class="actions"><a class="btn primary" data-track="camp" href="${esc(outUrl(c.registerUrl || c.website, { type: 'camp' }))}" target="_blank" rel="noopener">${c.registerUrl ? 'Find or book a spot' : 'Camp details'}</a>${c.registerUrl ? `<a class="btn" data-track="website" href="${esc(outUrl(c.website, { type: 'camp' }))}" target="_blank" rel="noopener">Camp details</a>` : ''}<a class="btn needs-js" href="${link(summerPath, D)}?add=${esc(c.id)}">Add to your summer</a>${prog ? `<a class="btn" href="${link(programPath(prog), D)}">Its school-year listing</a>` : ''}</div>
-  <p class="src">${claimedMark('c:' + c.id, D)} Checked ${longDate(c.checked)}. Sources: ${sourceLinks(c.sources, c)}</p>
-  ${listingTools('c:' + c.id, c.name, D, 'camp')}
+    const facts = [campAges(c), campWeeksShort(c), campHoursShort(c), campPrice(c), (c.neighborhoods || []).join(', ')].filter(Boolean);
+    return `<article class="campcard offprog" id="${esc(c.id)}" ${itemAttrs(shaped[i], [c.ages || '', c.address || '', ...(c.neighborhoods || [])])}>
+  <div class="top"><h3><a href="${link(campPath(c), D)}">${esc(c.name)}</a></h3><p class="what">${esc(c.what)}</p><p class="tags">${c.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p></div>
+  <p class="camp-facts">${seasonPill(c)} ${spaceSlot('c:' + c.id, D)}${facts.map(f => `<span>${esc(f)}</span>`).join('')}</p>
+  <div class="actions"><a class="btn primary" href="${link(campPath(c), D)}">${T(`Full details`)}</a><a class="btn needs-js" href="${link(summerPath, D)}?add=${esc(c.id)}">Add to your summer</a></div>
 </article>`;
   }).join('\n');
   const todo = campsFile.todo || [];
@@ -3570,10 +3740,10 @@ function summerCampsPage() {
   <p><a class="btn primary" href="${link(summerPath, D)}">${T(`Plan your summer, week by week`)}</a></p>
 </section>
 ${filterBar({ list: shaped, depth: D, near: true, searchLabel: `Looking for a particular camp?`, placeholder: 'Its name, or try art, tennis, Mount Airy…' }).replace('data-filters', 'data-filters data-noun="camp" data-nouns="camps"')}
-<p class="hint">${T(`Grades here are worked out from each camp’s ages, so check the age line on the card.`)}</p>
+<p class="hint">${T(`Grades here are worked out from each camp’s ages, so check the ages on the camp’s page. Each camp has its own page with everything it posts.`)}</p>
 ${noMatch(D)}
 <section class="section" data-group>
-  <div class="list">
+  <div class="list camplist">
 ${cards}
   </div>
 </section>
@@ -3592,7 +3762,7 @@ ${todo.length ? `<section class="section">
     title: 'Summer day camps in Philadelphia: ages, weeks, hours and prices',
     description: `${list.length} summer day camps inside Philadelphia in one list: ages, weeks, hours, cost, before and after care, and when sign-ups open. Filter by type, grade and part of the city.`,
     pathName: campsPath, depth: D, current: null, hero, body, showStreet: 'summer',
-    jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: list.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, url: `${cfg.siteUrl}/${campsPath}#${c.id}` })) },
+    jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: list.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, url: `${cfg.siteUrl}/${campPath(c)}` })) },
   });
 }
 
@@ -3667,6 +3837,7 @@ write('index.html', homePage());
 for (const s of schools) write(`${s.id}/index.html`, schoolPage(s));
 write('schools/index.html', schoolsPage());
 write('schools/request/index.html', schoolRequestPage());
+if (SCHOOL_PAGES) for (const x of uncovered) write(uncoveredPath(x) + 'index.html', uncoveredSchoolPage(x));
 write('types/index.html', typesPage());
 for (const t of liveTypes()) write(`types/${t.id}/index.html`, typePage(t));
 write('programs/index.html', programsPage());
@@ -3686,6 +3857,7 @@ write('contact/thanks/index.html', contactThanksPage());
 write('board/index.html', boardPage());
 if (daysOff) write(offPath + 'index.html', daysOffPage());
 if (summerCamps.length) write(campsPath + 'index.html', summerCampsPage());
+for (const c of summerCamps) write(campPath(c) + 'index.html', campPage(c));
 if (summerCamps.length) write(summerPath + 'index.html', summerSchedulePage());
 if (weekendPrograms.length) write(weekendPath + 'index.html', weekendPage());
 if (ALERTS) write(alertsPath + 'index.html', alertsPage());
@@ -3732,7 +3904,7 @@ if (!PREVIEW) {
   write('data/alerts.json', JSON.stringify(alertsFeed(), null, 2));   // read by scripts/send-alerts.mjs once a day
   const latest = programs.map(p => p.lastVerified).sort().pop();
   const urls = [['', latest], ['schools/', latest], ...schools.map(s => [s.id + '/', latest]), ['types/', latest], ...liveTypes().map(t => [`types/${t.id}/`, latest]), ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]), ['neighborhoods/', latest], ...hoods.map(h => [hoodPath(h), latest]),
-    ...[...(daysOff ? [offPath] : []), ...(summerCamps.length ? [campsPath, summerPath] : []), ...(weekendPrograms.length ? [weekendPath] : []), ...(ALERTS ? [alertsPath] : []), 'board/', 'suggest/', ...(GROUPS ? ['managers/'] : []), 'ideas/', 'review/', 'about/', 'contact/', 'privacy/', ...(cfg.termsLive === true ? ['terms/'] : []), 'support/'].map(u => [u, latest])];
+    ...[...(daysOff ? [offPath] : []), ...(summerCamps.length ? [campsPath, summerPath, ...summerCamps.map(campPath)] : []), ...(SCHOOL_PAGES ? uncoveredIndexed().map(uncoveredPath) : []), ...(weekendPrograms.length ? [weekendPath] : []), ...(ALERTS ? [alertsPath] : []), 'board/', 'suggest/', ...(GROUPS ? ['managers/'] : []), 'ideas/', 'review/', 'about/', 'contact/', 'privacy/', ...(cfg.termsLive === true ? ['terms/'] : []), 'support/'].map(u => [u, latest])];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
   const bare = cfg.siteUrl.replace(/^https?:\/\//, '');

@@ -66,8 +66,15 @@ published.
 
 ## Schools that aren't covered yet
 
-`/schools/request/?s=ID` is the page for a school the site knows about (from `data/all-schools.json`) but hasn't
-covered. "Ask for this school" counts a vote. Under it, "Email me when it's added" takes a first name and an email
+Every school in `data/all-schools.json` that isn't covered has a page of its own at `/schools/ID/`
+(`uncoveredSchoolPage()`): the after-school programs within a mile, and the weekend classes and summer camps within
+two, measured in a straight line from the school's coordinates, plus the nearest covered school. It never says a
+program picks up from the school, because nobody has checked. A page with fewer than three things nearby is marked
+`noindex` and left out of the sitemap, so search engines aren't handed near-empty pages; the rest are indexed. The
+schools page links to all of them. `/schools/request/?s=ID`, the old address, forwards to the school's page, and with
+no school chosen it is still the search box. The preview copy has no school pages and keeps the one shared page.
+
+On a school's page, "Ask for this school" counts a vote. Under it, "Email me when it's added" takes a first name and an email
 address and sends them straight to Klaviyo with the browser key, onto the same list as the dates emails, with
 `signup_place: school_request`, `waiting_school_name` (the latest school asked for) and the school's id appended to
 `waiting_schools`. Nothing sends the "it's here" email yet: when a school goes live, build a Klaviyo segment where
@@ -98,6 +105,10 @@ unset), and `termsUpdated` sets the date shown: change it when the terms change 
 
 ## Is there space
 
+A place with more than one listing (an after-school program and a camp, say) signs in once on `/managers/`, is shown
+every listing at its website address, and can claim them all with one button. Each claimed listing then has its own
+update form and space question on that one page.
+
 A manager whose claim stands can mark a listing "Spots open", "Waitlist" or "Full" on `/managers/` (or "Don't show").
 It is one of three fixed words, so it goes on the listing at once, without review, with the day it was set
 (`space_set`; table `space`). It stops showing after 30 days (`SPACE_DAYS`) unless set again, and when nobody holds
@@ -106,7 +117,9 @@ page, its card on school pages, weekend cards and camp cards. This is free and s
 
 ## Summer camps
 
-Summer camps are their own list, in `data/camps.json`, and their own page, `/summer-camps/`. Nothing in the file is tied
+Summer camps are their own list, in `data/camps.json`. `/summer-camps/` lists them as short cards (ages, dates,
+hours, weekly price, neighborhood), and each camp has its own page at `/summer-camps/ID/` (`campPage()`) with
+everything it posts, the weeks it runs, the camps closest to it, and the tools to suggest an update or claim it. Nothing in the file is tied
 to a school or to the after-school pages. The file has:
 
 - `season`: the summer most listings describe (`2026`). A camp whose own `season` is later shows a yellow
