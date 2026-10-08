@@ -307,15 +307,17 @@
     var aq = query();
     var registering = account.getAttribute('data-mode') === 'register';   // the page at /register/
     // The old address for creating an account was /account/?new=1. It still works: it goes to the real page.
-    if (aq.new && !registering && !signedInHint()) { location.replace(page('register/') + (aq.next === 'board' || aq.next === 'summer' ? '?next=' + aq.next : '')); return; }
+    if (aq.new && !registering && !signedInHint()) { location.replace(page('register/') + (/^(board|summer|daysoff|calendar)$/.test(aq.next || '') ? '?next=' + aq.next : '')); return; }
     if (aq.groups) set('pas-groups', '1');   // while groups are a pilot, this is the way in for someone who wasn't invited to one
     var ainfo = {}; try { ainfo = JSON.parse(document.getElementById('groups-data').textContent); } catch (e) { /* older page */ }
     var groupsOn = host.getAttribute('data-pilot') !== '1' || get('pas-groups') === '1';
-    var wantNext = aq.next === 'board' || aq.next === 'summer' ? aq.next : 'account';
+    var wantNext = /^(board|summer|daysoff|calendar)$/.test(aq.next || '') ? aq.next : 'account';
     var goNext = function (next) {
       if (next === 'join') { location.href = page('join/'); return true; }
       if (next === 'board') { location.href = page('board/') + '?back=1'; return true; }
       if (next === 'summer') { location.href = page('summer-schedule/') + '#plan'; return true; }
+      if (next === 'daysoff') { location.href = page('days-off/') + '#plan'; return true; }
+      if (next === 'calendar') { location.href = page('calendar/'); return true; }
       if (next === 'managers' || next === 'directors') { location.href = page('managers/'); return true; }
       var m = /^groups\?g=([A-Za-z0-9]+)$/.exec(next || '');
       if (m) { location.href = page('groups/') + '?g=' + m[1]; return true; }
@@ -464,11 +466,26 @@
         li.appendChild(rm); ul.appendChild(li); summerBox.appendChild(ul);
         var more = el('p', 'hint', 'To change it, or put it on this device, open '); more.appendChild(open); more.appendChild(document.createTextNode('.')); summerBox.appendChild(more);
       };
+      // the days-off plan, when one is kept
+      prof.appendChild(el('h3', null, 'Days off'));
+      var offBox2 = el('div'); prof.appendChild(offBox2);
+      var paintDaysOff = function (dp) {
+        offBox2.textContent = '';
+        var open = el('a', null, 'the days-off page'); open.href = page('days-off/') + '#plan';
+        if (!dp) { var none = el('p', 'hint', 'No days-off plan kept yet. To keep one here, open '); none.appendChild(open); none.appendChild(document.createTextNode(' and look for “Keep it in your profile”.')); offBox2.appendChild(none); return; }
+        var ul = el('ul', 'g-list'), li = el('li');
+        li.appendChild(el('b', null, 'School year ' + dp.y + '–' + String(dp.y + 1).slice(2)));
+        li.appendChild(el('span', 'hint', daysOffLine(dp) + ' · last changed ' + shortDate(dp.updated)));
+        var rm = btn('clear', 'Remove from my profile');
+        twoTap(rm, 'Tap again to remove it', function () { call('daysoff_delete', {}).then(function () { unkeepPlan('offProf'); loadProfile(); }); });
+        li.appendChild(rm); ul.appendChild(li); offBox2.appendChild(ul);
+        var more = el('p', 'hint', 'To change it, or put it on this device, open '); more.appendChild(open); more.appendChild(document.createTextNode('.')); offBox2.appendChild(more);
+      };
       var loadProfile = function () {
         call('profile').then(function (p) {
           if (!p.ok) return;
           adoptSchool(p.school, schoolName(p.school)); adoptGrades(p.grades);
-          paintSchool(p.school); paintGrades(p.grades || []); paintWeeks(p.weeks || []); paintSummer(p.summer || null);
+          paintSchool(p.school); paintGrades(p.grades || []); paintWeeks(p.weeks || []); paintSummer(p.summer || null); paintDaysOff(p.daysoff || null);
         });
       };
       paintSchool(me.school || ''); paintGrades(me.grades || []); loadProfile();
@@ -945,7 +962,7 @@
   function unlinkAll() {
     try {
       var r = JSON.parse(window.localStorage.getItem('pas-rosters') || 'null');
-      if (r && Array.isArray(r.kids)) { r.kids.forEach(function (k) { delete k.groups; delete k.prof; }); delete r.sumProf; window.localStorage.setItem('pas-rosters', JSON.stringify(r)); }
+      if (r && Array.isArray(r.kids)) { r.kids.forEach(function (k) { delete k.groups; delete k.prof; }); delete r.sumProf; delete r.offProf; window.localStorage.setItem('pas-rosters', JSON.stringify(r)); }
     } catch (e) { /* nothing saved */ }
     set('pas-prof-school', null);
     adoptGrades([]);
@@ -1415,124 +1432,180 @@
     });
   }
 
-  // A summer taken out of the profile: this device's copy stays, it just stops being sent.
-  function unkeepSummer() {
+  // A summer or a days-off plan taken out of the profile: this device's copy stays, it just stops being sent.
+  function unkeepPlan(flag) {
     try {
       var r = JSON.parse(window.localStorage.getItem('pas-rosters') || 'null');
-      if (r && r.sumProf) { delete r.sumProf; window.localStorage.setItem('pas-rosters', JSON.stringify(r)); }
+      if (r && r[flag]) { delete r[flag]; window.localStorage.setItem('pas-rosters', JSON.stringify(r)); }
     } catch (e) { /* nothing saved */ }
   }
+  function unkeepSummer() { unkeepPlan('sumProf'); }
   // "Sam: 5 weeks, Rae: 3 weeks" for a summer kept in a profile.
   function summerLine(sm) {
     var bits = (sm.kids || []).map(function (k, i) { var n = Object.keys(k.w || {}).length; return (k.name || 'Child ' + (i + 1)) + ': ' + n + (n === 1 ? ' week' : ' weeks'); });
     return bits.join(', ') || 'Nothing on it yet';
   }
+  // "Sam: 6 days, Rae: 2 days" for a days-off plan kept in a profile.
+  function daysOffLine(p) {
+    var bits = (p.kids || []).map(function (k, i) { var n = Object.keys(k.d || {}).length; return (k.name || 'Child ' + (i + 1)) + ': ' + n + (n === 1 ? ' day' : ' days'); });
+    return bits.join(', ') || 'Nothing on it yet';
+  }
 
   // =====================================================================================================
-  // On the summer schedule: keeping the summer in a profile. It is the account holder's own copy, for their other
-  // devices. Nothing here shares it with anyone. What leaves the device: each child's first name and their camps by week.
+  // On the summer schedule and the days-off page: keeping the plan in a profile. It is the account holder's own copy,
+  // for their other devices. Nothing here shares it with anyone. What leaves the device: each child's first name and
+  // their picks (camps by week, or a place for each day off).
   // =====================================================================================================
-  var sumBox = document.getElementById('sum-profile');
-  var summer = window.pasSummer;   // set by site.js on the summer schedule
-  if (sumBox && summer && API) {
-    var sMe = null, sKept = null, sLoaded = false, sNote = '', sBad = false, sTimer = null, sSent = '';
-    var sRos = function () { return summer.rosters(); };
-    var sHas = function () { return sRos().kids.some(function (k) { return k.sum && k.sum.y === summer.year && Object.keys(k.sum.w || {}).length > 0; }); };
-    var sBody = function () { return { y: summer.year, kids: sRos().kids.map(function (k) { return { name: firstWord(k.name), w: (k.sum && k.sum.y === summer.year && k.sum.w) || {} }; }) }; };
-    var sPush = function (then) {
-      var body = sBody(), text = JSON.stringify(body);
-      call('summer_save', { summer: body }).then(function (d) {
-        if (d.http === 401) { sMe = null; sNote = 'Sign in again to keep your summer up to date in your profile.'; sBad = true; sDraw(); return; }
-        if (!d.ok) { sNote = d.message || 'That didn’t save. Try again.'; sBad = true; sDraw(); return; }
-        sSent = text; sKept = d.summer; sRos().sumProf = { u: d.summer.updated }; summer.save();
+  // The profile's copy, put onto this device: children are matched by first name, then a child with no name yet, then
+  // added. `put` writes one child's picks; `clear` empties a child the profile's copy doesn't have.
+  function matchKids(plan, copy, put, clear) {
+    var r = plan.rosters(), used = [];
+    (copy.kids || []).forEach(function (sk, i) {
+      var name = String(sk.name || ''), at = -1;
+      if (name) r.kids.forEach(function (k, j) { if (at < 0 && used.indexOf(j) < 0 && firstWord(k.name).toLowerCase() === name.toLowerCase()) at = j; });
+      if (at < 0 && !name && i < r.kids.length && used.indexOf(i) < 0) at = i;
+      if (at < 0) r.kids.forEach(function (k, j) { if (at < 0 && used.indexOf(j) < 0 && !k.name) at = j; });   // a child nobody has named yet: their plan is being replaced anyway
+      if (at < 0) { if (r.kids.length >= plan.maxKids) return; r.kids.push(plan.newKid(name)); at = r.kids.length - 1; }
+      used.push(at);
+      put(r.kids[at], sk);
+      if (!r.kids[at].name && name) r.kids[at].name = name;
+    });
+    r.kids.forEach(function (k, j) { if (used.indexOf(j) < 0) clear(k); });   // the profile's copy is the whole plan
+  }
+  // K: box (where the panel is drawn), plan (what site.js exposes), field (the profile's name for it: its actions are
+  // field_save and field_delete), flag (set on this device while it is kept), next (where signing in comes back to),
+  // event (the analytics event), n (the words for it), has(), body(), apply(copy), line(copy), empty and gets (two hints).
+  function keepPlan(K) {
+    var box = K.box, plan = K.plan, n = K.n;
+    var me = null, kept = null, loaded = false, note = '', bad = false, timer = null, sent = '';
+    var ros = function () { return plan.rosters(); };
+    var tell = function (action) { var o = { event: K.event, action: action }; plan.track(o); };
+    var push = function (then) {
+      var body = K.body(), text = JSON.stringify(body), data = {}; data[K.field] = body;
+      call(K.field + '_save', data).then(function (d) {
+        if (d.http === 401) { me = null; note = 'Sign in again to keep ' + n.your + ' up to date in your profile.'; bad = true; draw(); return; }
+        if (!d.ok) { note = d.message || 'That didn’t save. Try again.'; bad = true; draw(); return; }
+        sent = text; kept = d[K.field]; ros()[K.flag] = { u: kept.updated }; plan.save();
         if (then) then();
       });
     };
-    // The profile's copy, put onto this device: children are matched by first name, then a child with no name yet, then added.
-    var sApply = function (sm) {
-      var r = sRos(), used = [];
-      (sm.kids || []).forEach(function (sk, i) {
-        var name = String(sk.name || ''), at = -1;
-        if (name) r.kids.forEach(function (k, j) { if (at < 0 && used.indexOf(j) < 0 && firstWord(k.name).toLowerCase() === name.toLowerCase()) at = j; });
-        if (at < 0 && !name && i < r.kids.length && used.indexOf(i) < 0) at = i;
-        if (at < 0) r.kids.forEach(function (k, j) { if (at < 0 && used.indexOf(j) < 0 && !k.name) at = j; });   // a child nobody has named yet: their summer is being replaced anyway
-        if (at < 0) { if (r.kids.length >= summer.maxKids) return; r.kids.push(summer.newKid(name)); at = r.kids.length - 1; }
-        used.push(at);
-        var k = r.kids[at], w = {};
-        summer.weeks.forEach(function (d) { var ids = ((sk.w && sk.w[d]) || []).filter(function (id) { return typeof id === 'string' && summer.camps[id]; }).slice(0, 6); if (ids.length) w[d] = ids; });
-        k.sum = { y: summer.year, w: w, age: (k.sum && k.sum.age) || '' };
-        if (!k.name && name) k.name = name;
-      });
-      r.kids.forEach(function (k, j) { if (used.indexOf(j) < 0 && k.sum && k.sum.y === summer.year) k.sum.w = {}; });   // the profile's copy is the whole summer
-      r.sumProf = { u: sm.updated }; sSent = JSON.stringify(sBody());
-      summer.save(); summer.redraw();
-    };
-    var sDraw = function () {
-      sumBox.textContent = ''; sumBox.hidden = false;
-      sumBox.appendChild(el('h3', null, 'Keep it in your profile'));
-      if (sNote) sumBox.appendChild(el('p', 'g-status' + (sBad ? ' bad' : ''), sNote));
-      if (!sMe) {
-        var out = el('p', null, 'With a free account, this summer is there on your phone and your computer. It stays yours: there’s no sharing it from here.');
-        sumBox.appendChild(out);
+    var apply = function (copy) { K.apply(copy); ros()[K.flag] = { u: copy.updated }; sent = JSON.stringify(K.body()); plan.save(); plan.redraw(); };
+    var draw = function () {
+      box.textContent = ''; box.hidden = false;
+      box.appendChild(el('h3', null, 'Keep it in your profile'));
+      if (note) box.appendChild(el('p', 'g-status' + (bad ? ' bad' : ''), note));
+      if (!me) {
+        box.appendChild(el('p', null, 'With a free account, ' + n.it + ' is there on your phone and your computer. It stays yours: there’s no sharing it from here.'));
         var oa = el('div', 'actions');
-        var li = el('a', 'btn', 'Log in'); li.href = page('account/') + '?next=summer'; oa.appendChild(li);
-        var ca = el('a', 'btn', 'Create a free account'); ca.href = page('register/') + '?next=summer'; oa.appendChild(ca);
-        sumBox.appendChild(oa);
+        var li = el('a', 'btn', 'Log in'); li.href = page('account/') + '?next=' + K.next; oa.appendChild(li);
+        var ca = el('a', 'btn', 'Create a free account'); ca.href = page('register/') + '?next=' + K.next; oa.appendChild(ca);
+        box.appendChild(oa);
         return;
       }
-      if (!sLoaded) { sumBox.appendChild(el('p', 'hint', 'Checking your profile…')); return; }
-      var linked = !!sRos().sumProf, there = sKept && sKept.y === summer.year ? sKept : null;
+      if (!loaded) { box.appendChild(el('p', 'hint', 'Checking your profile…')); return; }
+      var linked = !!ros()[K.flag], there = kept && kept.y === plan.year ? kept : null;
       var acts = el('div', 'actions');
       if (linked) {
-        sumBox.appendChild(el('p', null, 'This summer is kept in your profile. Changes you make here are saved there, and show up on your other devices.'));
+        box.appendChild(el('p', null, n.It + ' is kept in your profile. Changes you make here are saved there, and show up on your other devices.'));
         var stop = btn('clear', 'Take it out of my profile');
-        twoTap(stop, 'Tap again to take it out', function () { call('summer_delete', {}).then(function (d) { if (!d.ok) return; sKept = null; sRos().sumProf = null; summer.save(); sNote = 'Taken out of your profile. It’s still on this device.'; sBad = false; summer.track({ event: 'pas_summer', action: 'profile_stop' }); sDraw(); }); });
+        twoTap(stop, 'Tap again to take it out', function () { call(K.field + '_delete', {}).then(function (d) { if (!d.ok) return; kept = null; ros()[K.flag] = null; plan.save(); note = 'Taken out of your profile. It’s still on this device.'; bad = false; tell('profile_stop'); draw(); }); });
         acts.appendChild(stop);
       } else if (there) {
-        sumBox.appendChild(el('p', null, 'Your profile already has a summer: ' + summerLine(there) + '.'));
+        box.appendChild(el('p', null, 'Your profile already has ' + n.a + ': ' + K.line(there) + '.'));
         var put = btn('btn primary', 'Put it on this device');
-        var doPut = function () { sApply(there); sNote = 'Done. This is the summer from your profile.'; sBad = false; summer.track({ event: 'pas_summer', action: 'profile_put' }); sDraw(); };
-        if (sHas()) twoTap(put, 'It replaces the summer on this device. Tap again', doPut); else put.addEventListener('click', doPut);
+        var doPut = function () { apply(there); note = 'Done. This is ' + n.the + ' from your profile.'; bad = false; tell('profile_put'); draw(); };
+        if (K.has()) twoTap(put, 'It replaces ' + n.the + ' on this device. Tap again', doPut); else put.addEventListener('click', doPut);
         acts.appendChild(put);
-        if (sHas()) {
-          var mine = btn('btn', 'Keep this device’s summer instead');
-          twoTap(mine, 'It replaces the one in your profile. Tap again', function () { sPush(function () { sNote = 'Kept. Your profile now has this summer.'; sBad = false; summer.track({ event: 'pas_summer', action: 'profile_keep' }); sDraw(); }); });
+        if (K.has()) {
+          var mine = btn('btn', 'Keep this device’s ' + n.word + ' instead');
+          twoTap(mine, 'It replaces the one in your profile. Tap again', function () { push(function () { note = 'Kept. Your profile now has ' + n.it + '.'; bad = false; tell('profile_keep'); draw(); }); });
           acts.appendChild(mine);
         }
-      } else if (sHas()) {
-        sumBox.appendChild(el('p', null, 'Keep this summer with your account, so it’s there on your other devices. It stays yours: there’s no sharing it from here.'));
-        var keep = btn('btn primary', 'Keep this summer in my profile');
-        keep.addEventListener('click', function () { keep.disabled = true; sPush(function () { sNote = 'Kept. Changes you make here are saved to your profile.'; sBad = false; summer.track({ event: 'pas_summer', action: 'profile_keep' }); sDraw(); }); });
+      } else if (K.has()) {
+        box.appendChild(el('p', null, 'Keep ' + n.it + ' with your account, so it’s there on your other devices. It stays yours: there’s no sharing it from here.'));
+        var keep = btn('btn primary', 'Keep ' + n.it + ' in my profile');
+        keep.addEventListener('click', function () { keep.disabled = true; push(function () { note = 'Kept. Changes you make here are saved to your profile.'; bad = false; tell('profile_keep'); draw(); }); });
         acts.appendChild(keep);
       } else {
-        sumBox.appendChild(el('p', 'hint', 'Add a camp to a week, and you can keep the summer in your profile.'));
+        box.appendChild(el('p', 'hint', K.empty));
       }
-      if (acts.childNodes.length) sumBox.appendChild(acts);
-      sumBox.appendChild(el('p', 'hint', 'Your profile gets each child’s first name and their camps by week. Ages, the calendar’s title and photos stay on this device.'));
+      if (acts.childNodes.length) box.appendChild(acts);
+      box.appendChild(el('p', 'hint', K.gets));
+      if (linked && K.more) box.appendChild(K.more());
     };
-    // Every change on the page lands here. A kept summer is sent a moment later; otherwise the box just keeps up.
-    var sWas = '';
-    summer.onSave = function () {
-      var key = (sMe ? 1 : 0) + '|' + (sRos().sumProf ? 1 : 0) + '|' + (sHas() ? 1 : 0);
-      if (key !== sWas) { sWas = key; if (sNote && !sBad) sNote = ''; sDraw(); }
-      if (!sMe || !sRos().sumProf) return;
-      if (sTimer) window.clearTimeout(sTimer);
-      sTimer = window.setTimeout(function () { sTimer = null; if (sRos().sumProf && JSON.stringify(sBody()) !== sSent) sPush(); }, 1500);
+    // Every change on the page lands here. A kept plan is sent a moment later; otherwise the box just keeps up.
+    var was = '';
+    plan.onSave = function () {
+      var key = (me ? 1 : 0) + '|' + (ros()[K.flag] ? 1 : 0) + '|' + (K.has() ? 1 : 0);
+      if (key !== was) { was = key; if (note && !bad) note = ''; draw(); }
+      if (!me || !ros()[K.flag]) return;
+      if (timer) window.clearTimeout(timer);
+      timer = window.setTimeout(function () { timer = null; if (ros()[K.flag] && JSON.stringify(K.body()) !== sent) push(); }, 1500);
     };
-    sDraw();
+    draw();
     if (signedInHint()) call('me').then(function (d) {
       if (!d.ok || !d.user) { if (d.ok) set('pas-in', null); return; }
-      set('pas-in', '1'); sMe = d.user; sDraw();
+      set('pas-in', '1'); me = d.user; draw();
       call('profile').then(function (p) {
-        sLoaded = true;
-        if (!p.ok) { sNote = 'Couldn’t reach your profile just now.'; sBad = true; sDraw(); return; }
-        sKept = p.summer || null;
-        var link = sRos().sumProf;
-        if (link && !sKept) { sRos().sumProf = null; summer.save(); }                                  // taken out of the profile somewhere else
-        else if (link && sKept.y === summer.year && sKept.updated > link.u) sApply(sKept);            // changed on another device since
-        else if (link) { sSent = ''; if (JSON.stringify(sBody()) !== JSON.stringify({ y: sKept.y, kids: sKept.kids })) sPush(); }   // changed here while signed out or offline
-        sWas = ''; summer.onSave();
+        loaded = true;
+        if (!p.ok) { note = 'Couldn’t reach your profile just now.'; bad = true; draw(); return; }
+        kept = p[K.field] || null;
+        var link = ros()[K.flag];
+        if (link && !kept) { ros()[K.flag] = null; plan.save(); }                                  // taken out of the profile somewhere else
+        else if (link && kept.y === plan.year && kept.updated > link.u) apply(kept);             // changed on another device since
+        else if (link) { sent = ''; if (JSON.stringify(K.body()) !== JSON.stringify({ y: kept.y, kids: kept.kids })) push(); }   // changed here while signed out or offline
+        was = ''; plan.onSave();
       });
+    });
+  }
+  // Where the whole year is: a line under a kept plan.
+  function yearLink() {
+    var p = el('p', 'hint', 'See everything you’ve planned for the year in one place: ');
+    var a = el('a', null, 'My kids’ calendar'); a.href = page('calendar/'); p.appendChild(a); p.appendChild(document.createTextNode('.'));
+    return p;
+  }
+
+  var hasYear = !!document.querySelector('[data-groups][data-year="1"]');   // the year calendar exists on this copy of the site
+  var sumBox = document.getElementById('sum-profile');
+  var summer = window.pasSummer;   // set by site.js on the summer schedule
+  if (sumBox && summer && API) keepPlan({
+    box: sumBox, plan: summer, field: 'summer', flag: 'sumProf', next: 'summer', event: 'pas_summer', more: hasYear ? yearLink : null,
+    n: { it: 'this summer', It: 'This summer', a: 'a summer', the: 'the summer', your: 'your summer', word: 'summer' },
+    has: function () { return summer.rosters().kids.some(function (k) { return k.sum && k.sum.y === summer.year && Object.keys(k.sum.w || {}).length > 0; }); },
+    body: function () { return { y: summer.year, kids: summer.rosters().kids.map(function (k) { return { name: firstWord(k.name), w: (k.sum && k.sum.y === summer.year && k.sum.w) || {} }; }) }; },
+    apply: function (sm) {
+      matchKids(summer, sm, function (k, sk) {
+        var w = {};
+        summer.weeks.forEach(function (d) { var ids = ((sk.w && sk.w[d]) || []).filter(function (id) { return typeof id === 'string' && summer.camps[id]; }).slice(0, 6); if (ids.length) w[d] = ids; });
+        k.sum = { y: summer.year, w: w, age: (k.sum && k.sum.age) || '' };
+      }, function (k) { if (k.sum && k.sum.y === summer.year) k.sum.w = {}; });
+    },
+    line: summerLine,
+    empty: 'Add a camp to a week, and you can keep the summer in your profile.',
+    gets: 'Your profile gets each child’s first name and their camps by week. Ages, the calendar’s title and photos stay on this device.'
+  });
+
+  var offBox = document.getElementById('off-profile');
+  var daysOff = window.pasDaysOff;   // set by site.js on the days-off page
+  if (offBox && daysOff && API) {
+    var offPicks = function (k) { var d = {}; daysOff.days.forEach(function (day) { var v = k.off && k.off[day]; if (v === 'home' || (v && daysOff.programs[v])) d[day] = v; }); return d; };
+    keepPlan({
+      box: offBox, plan: daysOff, field: 'daysoff', flag: 'offProf', next: 'daysoff', event: 'pas_dayoff', more: hasYear ? yearLink : null,
+      n: { it: 'this plan', It: 'This plan', a: 'a days-off plan', the: 'the plan', your: 'your days off', word: 'plan' },
+      has: function () { return daysOff.rosters().kids.some(function (k) { return Object.keys(offPicks(k)).length > 0; }); },
+      body: function () { return { y: daysOff.year, kids: daysOff.rosters().kids.map(function (k) { return { name: firstWord(k.name), d: offPicks(k) }; }) }; },
+      apply: function (copy) {
+        // Only the days still to come are replaced: a day that has gone by keeps whatever this device had.
+        var wipe = function (k) { daysOff.days.forEach(function (day) { if (k.off) delete k.off[day]; }); };
+        matchKids(daysOff, copy, function (k, sk) {
+          if (!k.off) k.off = {};
+          wipe(k);
+          daysOff.days.forEach(function (day) { var v = sk.d && sk.d[day]; if (v === 'home' || (typeof v === 'string' && daysOff.programs[v])) k.off[day] = v; });
+        }, wipe);
+      },
+      line: daysOffLine,
+      empty: 'Choose a plan for a day, and you can keep your days off in your profile.',
+      gets: 'Your profile gets each child’s first name and where they’ll be on each day off. The calendar’s title and photos stay on this device.'
     });
   }
 

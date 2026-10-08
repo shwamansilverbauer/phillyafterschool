@@ -680,6 +680,8 @@
         return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next), teacher: cleanName(k.teacher), cardNote: String(k.cardNote == null ? '' : k.cardNote).slice(0, 110), off: cleanOff(k.off), offNote: String(k.offNote == null ? '' : k.offNote).slice(0, 110), prices: cleanPrices(k.prices), groups: cleanLinks(k.groups), prof: cleanProf(k.prof), sum: cleanSum(k.sum) };
       }) };
       rosters.sumTitle = cleanName(raw.sumTitle);
+      rosters.offTitle = cleanName(raw.offTitle);
+      rosters.offProf = raw.offProf && typeof raw.offProf.u === 'number' ? { u: raw.offProf.u } : null;   // set while the days off are kept in a profile
       rosters.sumProf = raw.sumProf && typeof raw.sumProf.u === 'number' ? { u: raw.sumProf.u } : null;   // set while the summer is kept in a profile
       if (typeof raw.kid === 'number' && raw.kid % 1 === 0 && raw.kid >= 0 && raw.kid < rosters.kids.length) rosters.kid = raw.kid;
     } else {
@@ -692,7 +694,7 @@
     }
     return rosters;
   }
-  function saveRosters() { store('pas-rosters', JSON.stringify(rosters)); updateCount(); if (window.pasBoard && window.pasBoard.onSave) window.pasBoard.onSave(); if (window.pasSummer && window.pasSummer.onSave) window.pasSummer.onSave(); }
+  function saveRosters() { store('pas-rosters', JSON.stringify(rosters)); updateCount(); if (window.pasBoard && window.pasBoard.onSave) window.pasBoard.onSave(); if (window.pasSummer && window.pasSummer.onSave) window.pasSummer.onSave(); if (window.pasDaysOff && window.pasDaysOff.onSave) window.pasDaysOff.onSave(); }
   function activeKid() { var r = loadRosters(); return r.kids[r.kid]; }
   function activeBoard() { var r = loadRosters(); return r.kids[r.kid][r.active]; }
   function kidLabel(k, i) { return k.name || 'Child ' + (i + 1); }
@@ -710,249 +712,428 @@
   updateCount();
 
 
-  // ----- day-off plan: for each day school is closed, where this child will be. Kept with the rosters, on this device. -----
+  // ----- days off: for each day school is closed, where each child will be. Kept with the rosters, on this device. -----
   var planEl = document.querySelector('[data-off-plan]');
   if (planEl) (function () {
     var od = JSON.parse(document.getElementById('off-data').textContent);
+    var $o = function (sel) { return planEl.querySelector(sel); };
     var now0 = new Date(), today0 = now0.getFullYear() + '-' + ('0' + (now0.getMonth() + 1)).slice(-2) + '-' + ('0' + now0.getDate()).slice(-2);
-    var days = od.days.filter(function (d) { return d.d >= today0; });
-    var kidsRow = planEl.querySelector('#off-kids'), countEl = planEl.querySelector('#off-count'), listEl = planEl.querySelector('#off-list');
-    var actions = planEl.querySelector('#off-actions'), statusEl = planEl.querySelector('#off-status');
+    od.days.forEach(function (d, i) { d.i = i; });
+    var days = od.days.filter(function (d) { return d.d >= today0; });   // a day that has gone by since the site was built drops out
+    var daysEl = $o('#off-days'), stripEl = $o('#off-strip'), countEl = $o('#off-count'), openEl = $o('#off-open');
+    var toolsEl = $o('#off-tools'), statusEl = $o('#off-status'), nameBox = $o('#off-name');
+    var kidsRow = $o('#off-kids'), kidAdd = $o('#off-kid-add'), kidDrop = $o('#off-kid-drop');
+    var chart = document.querySelector('.off-chart'), chartNote = document.getElementById('off-chart-note');
     var HOME = 'home';
+    var ids = Object.keys(od.programs).sort(function (a, b) { return od.programs[a].name.localeCompare(od.programs[b].name); });
+    var r = loadRosters();
+    var kid = function () { return r.kids[r.kid]; };
     var label = function (v) { return v === HOME ? 'At home or with family' : od.programs[v] ? od.programs[v].name : ''; };
-    var planned = function (kid) { return days.filter(function (d) { return kid.off[d.d] && label(kid.off[d.d]); }); };
-    // ----- the day-camp card: the plan as one picture, in the day-off colors -----
-    var cardBox = planEl.querySelector('#off-card'), canvas = planEl.querySelector('#off-canvas'), noteBox = planEl.querySelector('#off-note');
-    var photoBox = planEl.querySelector('#off-photo'), photoClear = planEl.querySelector('#off-photo-clear'), cardStatus = planEl.querySelector('#off-card-status');
-    var photo = null;
+    var pickOf = function (k, d) { var v = k.off[d.d]; return v && label(v) ? v : ''; };
+    var plannedOf = function (k) { return days.filter(function (d) { return pickOf(k, d); }); };
+    var planners = function () { return r.kids.map(function (k, i) { return { k: k, i: i, name: k.name || (r.kids.length > 1 ? 'Child ' + (i + 1) : '') }; }).filter(function (x) { return plannedOf(x.k).length > 0; }); };
+    var posted = function (v, d) { return v === HOME || d.camps.indexOf(v) > -1; };
+    var say = function (t) { statusEl.textContent = t || ''; };
+    var ev = function (action, more) { var o = { event: 'pas_dayoff', action: action, days_planned: plannedOf(kid()).length, children: r.kids.length }; if (more) Object.keys(more).forEach(function (x) { o[x] = more[x]; }); track(o); };
+    var openDay = '';
+    // One place a day: picking the same one again takes it off, picking another replaces it.
+    var set = function (d, val, how) {
+      var me = kid(), was = pickOf(me, d), p = od.programs[val];
+      if (val && val !== was) { me.off[d.d] = val; track({ event: 'pas_dayoff_pick', program_id: val, day: d.d, method: how }); }
+      else { delete me.off[d.d]; val = ''; }
+      saveRosters();
+      say(val ? label(val) + ' is on ' + d.label + '.' + (p && !posted(val, d) ? (p.n ? ' It hasn’t posted that date, so ask if it’s open.' : ' It hasn’t posted any dates, so ask if it’s open.') : '') : label(was) + ' is off ' + d.label + '.');
+      draw();
+    };
+    // The other days of the same break this pick could cover: days with nothing on them yet, and for a program only the dates it posted.
+    var restOfBreak = function (d, v) { return days.filter(function (x) { return x.b === d.b && x.d !== d.d && !pickOf(kid(), x) && (v === HOME || x.camps.indexOf(v) > -1); }); };
+    var option = function (v, d, small) {
+      var b = el('button', 'sum-opt'); b.type = 'button';
+      b.appendChild(el('b', null, label(v)));
+      if (small) b.appendChild(el('small', null, small));
+      b.addEventListener('click', function () { openDay = ''; set(d, v, 'day_list'); });
+      return b;
+    };
+    var drawCard = function () { /* set below, once the canvas is ready */ };
+    var draw = function () {
+      var me = kid(), mine = plannedOf(me), many = r.kids.length > 1;
+      kidsRow.textContent = ''; kidsRow.hidden = !many;
+      if (many) r.kids.forEach(function (k, i) {
+        var chip = el('button', 'kid', kidLabel(k, i)); chip.type = 'button'; chip.setAttribute('aria-pressed', String(i === r.kid));
+        chip.addEventListener('click', function () { r.kid = i; saveRosters(); openDay = ''; say(''); draw(); });
+        kidsRow.appendChild(chip);
+      });
+      kidAdd.hidden = r.kids.length >= MAX_KIDS;
+      var bare = !countPicks(me.now) && !countPicks(me.next) && !(me.sum && Object.keys(me.sum.w || {}).length) && !(me.groups || []).length && !me.prof;
+      kidDrop.hidden = !many || !bare;   // a child with an after-school roster is removed on the roster page, where share groups are told
+      if (document.activeElement !== nameBox) nameBox.value = me.name || '';
+      daysEl.textContent = ''; stripEl.textContent = '';
+      // a sibling's days, to start from
+      var same = planEl.querySelector('.sum-same'); if (same) same.parentNode.removeChild(same);
+      if (many && !mine.length) {
+        var others = r.kids.filter(function (k) { return k !== me && plannedOf(k).length > 0; });
+        if (others.length) {
+          same = el('p', 'sum-same'); same.appendChild(el('span', 'hint', 'Going to the same places? '));
+          others.forEach(function (k) {
+            var b = el('button', 'clear', 'Copy ' + possessive(kidLabel(k, r.kids.indexOf(k))) + ' days'); b.type = 'button';
+            b.addEventListener('click', function () { plannedOf(k).forEach(function (d) { me.off[d.d] = k.off[d.d]; }); saveRosters(); ev('copy_sibling'); say('Copied. Change any day that’s different.'); draw(); });
+            same.appendChild(b);
+          });
+          daysEl.parentNode.insertBefore(same, daysEl);
+        }
+      }
+      days.forEach(function (d) {
+        var v = pickOf(me, d), p = od.programs[v];
+        stripEl.appendChild(el('i', v ? 'on' : ''));
+        var li = el('li', 'sum-week' + (v ? ' has' : '')); li.id = 'd-' + d.d;
+        var when = el('div', 'sum-when'); when.appendChild(el('b', null, d.label)); when.appendChild(el('span', 'hint', d.name));
+        li.appendChild(when);
+        var box = el('div', 'sum-picks');
+        if (v) {
+          var chip = el('span', 'sum-chip' + (posted(v, d) ? '' : ' ask'));
+          if (p) { var a = el('a', null, p.name); a.href = p.href; chip.appendChild(a); } else chip.appendChild(el('b', null, label(v)));
+          var bits = p ? (posted(v, d) ? 'Camp posted for this day' : p.n ? 'hasn’t posted this date' : 'no dates posted') : '';
+          if (bits) chip.appendChild(el('small', null, bits));
+          var x = el('button', 'sum-x', '×'); x.type = 'button'; x.setAttribute('aria-label', 'Take ' + label(v) + ' off ' + d.label);
+          x.addEventListener('click', function () { set(d, v, 'day_list'); });
+          chip.appendChild(x); box.appendChild(chip);
+          var rest = restOfBreak(d, v);
+          if (rest.length) {
+            var fill = el('button', 'clear', 'Same for ' + (rest.length === 1 ? 'the other day' : 'the other ' + rest.length + ' days') + ' of ' + d.name.replace(/^(\S)/, function (c) { return c.toLowerCase(); })); fill.type = 'button';
+            fill.addEventListener('click', function () { rest.forEach(function (o) { me.off[o.d] = v; }); saveRosters(); ev('fill_break', { days: rest.length }); say('Done: ' + label(v) + ' is on ' + (rest.length + 1) + ' days of ' + d.name + '.'); draw(); });
+            box.appendChild(fill);
+          }
+        } else box.appendChild(el('span', 'sum-none', d.camps.length ? (d.camps.length === 1 ? '1 camp posted' : d.camps.length + ' camps posted') : 'No camp posted yet'));
+        li.appendChild(box);
+        var add = el('button', 'btn sum-add', v ? 'Change' : 'Choose'); add.type = 'button';
+        add.setAttribute('aria-expanded', openDay === d.d ? 'true' : 'false');
+        add.setAttribute('aria-label', (v ? 'Change the plan for ' : 'Choose a plan for ') + d.label);
+        add.addEventListener('click', function () { openDay = openDay === d.d ? '' : d.d; draw(); var o = daysEl.querySelector('.sum-choose'); if (o && o.scrollIntoView) o.scrollIntoView({ block: 'nearest' }); });
+        li.appendChild(add);
+        if (openDay === d.d) {
+          var ch = el('div', 'sum-choose');
+          var runs = ids.filter(function (id) { return id !== v && d.camps.indexOf(id) > -1; });
+          var quiet = ids.filter(function (id) { return id !== v && d.camps.indexOf(id) < 0; });
+          ch.appendChild(el('p', 'sum-choose-h', d.camps.length ? (d.camps.length === 1 ? '1 program has posted a camp for this day' : d.camps.length + ' programs have posted a camp for this day') : 'No listed program has posted a camp for this day yet'));
+          var grid = el('div', 'sum-opts');
+          runs.forEach(function (id) { grid.appendChild(option(id, d, [od.programs[id].hood, 'Camp posted'].filter(Boolean).join(' · '))); });
+          if (v !== HOME) grid.appendChild(option(HOME, d, 'No camp that day'));
+          ch.appendChild(grid);
+          if (quiet.length) {
+            var more = el('details', 'sum-more');
+            more.appendChild(el('summary', null, quiet.length + (quiet.length === 1 ? ' program that hasn’t' : ' programs that haven’t') + ' posted this date'));
+            var g2 = el('div', 'sum-opts'); quiet.forEach(function (id) { g2.appendChild(option(id, d, [od.programs[id].hood, od.programs[id].n ? 'Other dates posted' : 'No dates posted'].filter(Boolean).join(' · '))); }); more.appendChild(g2);
+            ch.appendChild(more);
+          }
+          li.appendChild(ch);
+        }
+        daysEl.appendChild(li);
+      });
+      var whose = me.name ? possessive(me.name) + ' days off: ' : many ? possessive(kidLabel(me, r.kid)) + ' days off: ' : '';
+      countEl.textContent = mine.length ? whose + mine.length + ' of ' + days.length + ' planned.' : whose + 'Nothing planned yet. ' + days.length + (days.length === 1 ? ' day off is' : ' days off are') + ' still to come this year.';
+      var open = days.filter(function (d) { return d.camps.length; }).length;
+      openEl.textContent = open ? 'Camps are posted for ' + open + ' of those days so far. Programs post a few months at a time.' : 'No camps are posted yet. Programs post a few months at a time.';
+      toolsEl.hidden = !planners().length;
+      // the chart: which boxes are in this child's plan; a day that has gone by loses its column
+      if (chart) {
+        all(chart, '[data-w]').forEach(function (c) { if (od.days[+c.getAttribute('data-w')].d < today0) c.hidden = true; });
+        all(chart, 'tbody tr').forEach(function (tr) {
+          var id = tr.getAttribute('data-camp'), p = od.programs[id];
+          all(tr, 'td.on').forEach(function (td) {
+            var d = od.days[+td.getAttribute('data-w')], b = td.querySelector('button'), inPlan = pickOf(me, d) === id;
+            if (!b) {
+              b = el('button'); b.type = 'button';
+              b.addEventListener('click', function () { openDay = ''; set(d, id, 'chart'); });
+              td.textContent = ''; td.appendChild(b);
+            }
+            b.setAttribute('aria-pressed', inPlan ? 'true' : 'false');
+            b.setAttribute('aria-label', p.name + ', ' + d.label + (inPlan ? ', in your plan' : ''));
+            td.classList.toggle('picked', inPlan);
+          });
+        });
+      }
+      if (chartNote) chartNote.textContent = many ? 'Taps go on ' + possessive(kidLabel(me, r.kid)) + ' days off.' : '';
+      drawCard();
+    };
+    // ----- children -----
+    nameBox.addEventListener('input', function () { kid().name = cleanName(nameBox.value); saveRosters(); draw(); });
+    kidAdd.addEventListener('click', function () {
+      if (r.kids.length >= MAX_KIDS) return;
+      r.kids.push(newKid('')); r.kid = r.kids.length - 1; saveRosters(); openDay = '';
+      ev('sibling_add'); say('Added. Type a first name if you’d like it on the calendar.'); draw();
+      if (nameBox.focus) nameBox.focus();
+    });
+    var dropSure = false;
+    kidDrop.addEventListener('click', function () {
+      if (r.kids.length < 2) return;
+      if (!dropSure) { dropSure = true; kidDrop.textContent = 'Remove ' + kidLabel(kid(), r.kid) + ' and their days off? Tap again'; window.setTimeout(function () { dropSure = false; kidDrop.textContent = 'Remove this child'; }, 5000); return; }
+      dropSure = false; kidDrop.textContent = 'Remove this child';
+      r.kids.splice(r.kid, 1); r.kid = Math.max(0, r.kid - 1); saveRosters(); openDay = ''; say('Removed.'); draw();
+    });
+    // ----- the plan as text, and as a calendar file -----
+    var asText = function () {
+      var who = planners(), lines = [];
+      who.forEach(function (x, n) {
+        if (n) lines.push('');
+        lines.push((x.name ? possessive(x.name) + ' days off, ' : 'Days off, ') + od.schoolYear);
+        plannedOf(x.k).forEach(function (d) { var v = pickOf(x.k, d); lines.push(d.label + ' (' + d.name + '): ' + label(v) + (posted(v, d) ? '' : ' (date not posted, ask)')); });
+      });
+      lines.push('Made at ' + od.page);
+      return lines.join('\n');
+    };
+    $o('#off-copy').addEventListener('click', function () {
+      var text = asText(), done = function () { say('Copied. Paste it into a text or an email.'); ev('copy'); };
+      var old = function () { var ta = el('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; } document.body.removeChild(ta); if (ok) done(); else say('This browser wouldn’t copy it. Try Print instead.'); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, old); else old();
+    });
+    var shareText = $o('#off-share-text');
+    if (navigator.share) {
+      shareText.hidden = false;
+      shareText.addEventListener('click', function () { navigator.share({ text: asText() }).then(function () { ev('share'); }, function (e) { if (!e || e.name !== 'AbortError') say('Sharing didn’t open here. Use “Copy the plan as text” instead.'); }); });
+    }
+    // Each planned day becomes one all-day entry. The file is made here, so the names in it go nowhere.
+    $o('#off-cal').addEventListener('click', function () {
+      var events = [];
+      planners().forEach(function (x) {
+        plannedOf(x.k).forEach(function (d) {
+          var v = pickOf(x.k, d), p = od.programs[v];
+          events.push({ uid: 'dayoff-' + x.i + '-' + d.d, start: d.d, days: 1, title: (x.name ? x.name + ': ' : '') + label(v) + ' (no school)',
+            text: ['No school: ' + d.name + '.', p && !posted(v, d) ? 'The program hasn’t posted this date. Ask if it’s open.' : ''].filter(Boolean).join('\n'), url: p ? p.url : od.page });
+        });
+      });
+      if (!events.length) { say('Choose a plan for a day first.'); return; }
+      saveCalendar('days-off.ics', events);
+      say('Saved days-off.ics with ' + events.length + (events.length === 1 ? ' day' : ' days') + '. Open the file to add them to your calendar.');
+      track({ event: 'pas_board_share', method: 'calendar', board: 'day_camp' });
+    });
+    $o('#off-print-list').addEventListener('click', function () { ev('print'); window.print(); });
+    var clearBtn = $o('#off-clear'), sure = false;
+    clearBtn.addEventListener('click', function () {
+      if (!sure) { sure = true; clearBtn.textContent = 'Clear every day' + (r.kids.length > 1 ? ' for ' + kidLabel(kid(), r.kid) : '') + '? Tap again'; window.setTimeout(function () { sure = false; clearBtn.textContent = 'Clear the plan'; }, 5000); return; }
+      sure = false; clearBtn.textContent = 'Clear the plan';
+      kid().off = {}; saveRosters(); openDay = ''; draw(); say('Cleared.'); ev('clear');
+    });
+
+    // ----- the calendar picture: every day off on one card, or a card for each month, with every child on it -----
+    var cardBox = $o('#off-card'), canvas = $o('#off-canvas'), pagesEl = $o('#off-pages'), titleBox = $o('#off-title');
+    var photoBox = $o('#off-photo'), photoClear = $o('#off-photo-clear'), cardStatus = $o('#off-card-status');
+    var photo = null, page = 'all';
+    var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     var DISPLAY = '"Archivo", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
-    var fit = function (ctx, text, max) { if (ctx.measureText(text).width <= max) return text; while (text.length > 1 && ctx.measureText(text + '…').width > max) text = text.slice(0, -1); return text.replace(/\s+$/, '') + '…'; };
-    var box = function (ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); };
     var NAVY = '#0B2140', YELLOW = '#F3C613';
-    var drawOffCard = function () {
-      if (!canvas || !canvas.getContext) return;
-      var kid = activeKid(), mine = planned(kid), ctx = canvas.getContext('2d'), W = 1080, H = 1350, FOOT = 160;
-      var note = String(kid.offNote || '').replace(/\s+/g, ' ').replace(/^ | $/g, '');
+    var INKS = [['#DAEDFE', '#1763B8'], ['#FFEFA2', '#B88A00'], ['#D6F3D2', '#2C8444'], ['#F0DDF7', '#6B3FA0'], ['#FFD9CC', '#CC3000'], ['#E4ECF6', '#4D607A']];
+    var utc = function (iso, n) { var d = new Date(iso + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + (n || 0)); return d; };
+    var isoOf = function (d) { return d.toISOString().slice(0, 10); };
+    var byDate = {}; days.forEach(function (d) { byDate[d.d] = d; });
+    // the months that still have a day off in them, in order
+    var months = (function () { var out = []; days.forEach(function (d) { var k = d.d.slice(0, 7); if (!out.length || out[out.length - 1].k !== k) out.push({ k: k, y: +d.d.slice(0, 4), m: +d.d.slice(5, 7) - 1 }); }); return out; })();
+    // each break or single day as one line: its dates, and the days in it
+    var groups = (function () { var out = []; days.forEach(function (d) { var g = out.length && out[out.length - 1].b === d.b ? out[out.length - 1] : null; if (!g) { g = { b: d.b, name: d.name, days: [] }; out.push(g); } g.days.push(d); }); return out; })();
+    var shortDay = function (iso) { var d = utc(iso); return MONTHS[d.getUTCMonth()].slice(0, 3) + ' ' + d.getUTCDate(); };
+    var fitText = function (ctx, text, max) { if (ctx.measureText(text).width <= max) return text; while (text.length > 1 && ctx.measureText(text + '…').width > max) text = text.slice(0, -1); return text.replace(/\s+$/, '') + '…'; };
+    var rbox = function (ctx, x, y, w, h, rad) { rad = Math.min(rad, h / 2, w / 2); ctx.beginPath(); ctx.moveTo(x + rad, y); ctx.arcTo(x + w, y, x + w, y + h, rad); ctx.arcTo(x + w, y + h, x, y + h, rad); ctx.arcTo(x, y + h, x, y, rad); ctx.arcTo(x, y, x + w, y, rad); ctx.closePath(); };
+    var shortLabel = function (v) { return v === HOME ? 'At home' : label(v); };
+    var defaultTitle = function () {
+      var named = planners().filter(function (x) { return x.k.name; }).map(function (x) { return x.k.name; });
+      if (named.length && named.length === planners().length && named.length <= 3) return (named.length === 1 ? possessive(named[0]) : named.length === 2 ? named[0] + ' and ' + possessive(named[1]) : named[0] + ', ' + named[1] + ' and ' + possessive(named[2])) + ' days off';
+      return 'Our days off';
+    };
+    var cardTitle = function () { return cleanName(r.offTitle) || defaultTitle(); };
+    var paint = function (which) {
+      var ctx = canvas.getContext('2d'), W = 1080, H = 1350, FOOT = 150, who = planners(), many = who.length > 1;
       ctx.clearRect(0, 0, W, H);
-      ctx.fillStyle = YELLOW; ctx.fillRect(0, 0, W, H);
+      var sky = ctx.createLinearGradient(0, 0, 0, H - FOOT); sky.addColorStop(0, '#96C9FF'); sky.addColorStop(1, '#C3E1FF');
+      ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#0A3566'; ctx.fillRect(0, H - FOOT, W, FOOT);
       // brand
-      ctx.fillStyle = '#0F4D90'; box(ctx, 56, 58, 54, 28, 8); ctx.fill();
+      ctx.fillStyle = YELLOW; rbox(ctx, 56, 58, 54, 28, 8); ctx.fill();
       ctx.fillStyle = NAVY; ctx.beginPath(); ctx.arc(70, 90, 7, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(98, 90, 7, 0, 7); ctx.fill();
       ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
       ctx.font = '800 32px ' + DISPLAY; ctx.fillText('Philly After School', 126, 86);
-      // top right: the child's photo, or a kite
-      var textMax = 720;
+      // top right: the photo, or a kite
+      var cx = 928, cy = 158, rad = 100;
       if (photo) {
-        var cx = 916, cy = 176, rad = 104;
         ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, rad, 0, 7); ctx.closePath(); ctx.clip();
         var pw = photo.naturalWidth || photo.width, ph = photo.naturalHeight || photo.height, side = Math.min(pw, ph);
         ctx.drawImage(photo, (pw - side) / 2, (ph - side) / 2, side, side, cx - rad, cy - rad, rad * 2, rad * 2);
         ctx.restore();
-        ctx.lineWidth = 8; ctx.strokeStyle = NAVY; ctx.beginPath(); ctx.arc(cx, cy, rad, 0, 7); ctx.stroke();
+        ctx.lineWidth = 8; ctx.strokeStyle = YELLOW; ctx.beginPath(); ctx.arc(cx, cy, rad, 0, 7); ctx.stroke();
       } else {
-        var kx = 930, ky = 140;
+        var kx = 934, ky = 128;
         ctx.strokeStyle = '#0A3566'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(kx, ky + 66); ctx.bezierCurveTo(kx - 34, ky + 100, kx + 30, ky + 120, kx - 6, ky + 150); ctx.stroke();
         ctx.fillStyle = '#1763B8';
         [[kx - 12, ky + 96, 1], [kx + 8, ky + 126, -1]].forEach(function (b) { ctx.beginPath(); ctx.moveTo(b[0] - 12 * b[2], b[1] - 8); ctx.lineTo(b[0] + 12 * b[2], b[1]); ctx.lineTo(b[0] - 10 * b[2], b[1] + 9); ctx.closePath(); ctx.fill(); });
         ctx.fillStyle = '#CC3000'; ctx.beginPath(); ctx.moveTo(kx, ky - 66); ctx.lineTo(kx + 50, ky); ctx.lineTo(kx, ky + 66); ctx.lineTo(kx - 50, ky); ctx.closePath(); ctx.fill();
         ctx.strokeStyle = '#FFF6D6'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(kx, ky - 66); ctx.lineTo(kx, ky + 66); ctx.moveTo(kx - 50, ky); ctx.lineTo(kx + 50, ky); ctx.stroke();
       }
-      // title
-      var title = (kid.name ? possessive(kid.name) : 'Our') + ' days off', size = 92;
+      // title, and which calendar this is
+      var textMax = 720, title = cardTitle(), size = 88;
       do { ctx.font = '850 ' + size + 'px ' + DISPLAY; size -= 4; } while (ctx.measureText(title).width > textMax && size > 44);
-      ctx.fillStyle = NAVY; ctx.fillText(fit(ctx, title, textMax), 56, 196);
-      ctx.font = '400 32px ' + BODY; ctx.fillStyle = '#263A57'; ctx.fillText('No school? Here’s the plan.', 56, 248);
-      // the days: up to seven, then a line for the rest
-      var top = 300, bottom = note ? 1068 : 1172, gap = 12, max = 7;
-      var shown = mine.length > max ? mine.slice(0, max - 1) : mine, extra = mine.length - shown.length;
-      var slots = shown.length + (extra ? 1 : 0), rowH = Math.min(slots < 4 ? 140 : 124, (bottom - top - gap * (slots - 1)) / Math.max(slots, 1));
-      shown.forEach(function (d, i) {
-        var y = top + i * (rowH + gap), v = kid.off[d.d], prog = od.programs[v];
-        ctx.fillStyle = '#FFFFFF'; box(ctx, 48, y, 984, rowH, 22); ctx.fill();
-        ctx.fillStyle = NAVY; box(ctx, 48, y, 196, rowH, 22); ctx.fill(); ctx.fillRect(216, y, 28, rowH);
-        var parts = d.label.split(', ');
-        ctx.textAlign = 'center';
-        ctx.fillStyle = YELLOW; ctx.font = '700 24px ' + BODY; ctx.fillText(parts[0], 146, y + rowH / 2 - 16);
-        ctx.fillStyle = '#FFFFFF'; ctx.font = '800 40px ' + DISPLAY; ctx.fillText(parts[1] || '', 146, y + rowH / 2 + 28);
+      ctx.fillStyle = NAVY; ctx.fillText(fitText(ctx, title, textMax), 56, 190);
+      var sub = which === 'all' ? 'No school, ' + od.schoolYear : MONTHS[which.m] + ' ' + which.y;
+      ctx.font = '700 34px ' + BODY; ctx.fillStyle = '#1F3A60'; ctx.fillText(sub, 56, 244);
+      if (many) {
+        var lx = 56 + ctx.measureText(sub).width + 34;
+        ctx.font = '700 26px ' + BODY;
+        who.forEach(function (x, n) {
+          var lab = fitText(ctx, x.name, 170), w = ctx.measureText(lab).width;
+          if (lx + 30 + w > 56 + textMax) return;
+          ctx.fillStyle = INKS[n % 6][1]; ctx.beginPath(); ctx.arc(lx + 10, 235, 10, 0, 7); ctx.fill();
+          ctx.fillStyle = NAVY; ctx.fillText(lab, lx + 28, 244);
+          lx += 28 + w + 26;
+        });
+      }
+      var top = 290, bottom = H - FOOT - 28, X = 48, WIDE = 984;
+      if (which === 'all') {
+        // one row for each day off or break: its dates on a yellow tab, then a column for each child
+        var gap = 6, n = Math.max(groups.length, 8), rowH = Math.min(84, (bottom - top - gap * (n - 1)) / n), TAB = 236, colW = (WIDE - TAB - 14) / Math.max(1, who.length);
+        groups.forEach(function (g, i) {
+          var y = top + i * (rowH + gap), a = g.days[0].d, z = g.days[g.days.length - 1].d;
+          ctx.fillStyle = '#FFFFFF'; rbox(ctx, X, y, WIDE, rowH, 14); ctx.fill();
+          ctx.fillStyle = YELLOW; rbox(ctx, X, y, TAB, rowH, 14); ctx.fill(); ctx.fillRect(X + TAB - 20, y, 20, rowH);
+          var fs = rowH < 40 ? 20 : rowH < 52 ? 23 : 27;
+          ctx.fillStyle = '#2A2100'; ctx.font = '800 ' + fs + 'px ' + DISPLAY; ctx.textAlign = 'center';
+          ctx.fillText(fitText(ctx, a === z ? utc(a).toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' }) + ', ' + shortDay(a) : shortDay(a) + ' – ' + shortDay(z), TAB - 20), X + TAB / 2, y + rowH / 2 + fs * 0.36); ctx.textAlign = 'left';
+          who.forEach(function (x, c) {
+            var cxl = X + TAB + 14 + c * colW, mine = [];
+            g.days.forEach(function (d) { var v = pickOf(x.k, d); if (v && mine.indexOf(shortLabel(v)) < 0) mine.push(shortLabel(v)); });
+            ctx.fillStyle = INKS[c % 6][1]; rbox(ctx, cxl, y + 7, 8, rowH - 14, 4); ctx.fill();
+            if (!mine.length) { ctx.fillStyle = '#9DB2CC'; ctx.font = '400 ' + (fs - 3) + 'px ' + BODY; ctx.fillText(who.length > 2 ? 'open' : fitText(ctx, g.name, colW - 34), cxl + 20, y + rowH / 2 + fs * 0.32); return; }
+            ctx.fillStyle = NAVY; ctx.font = '750 ' + (who.length > 2 ? fs - 4 : fs - 1) + 'px ' + DISPLAY;
+            ctx.fillText(fitText(ctx, mine.join(' + '), colW - 34), cxl + 20, y + rowH / 2 + fs * 0.34);
+          });
+        });
+      } else {
+        // a month: Monday to Friday across and a row a week. A day off is yellow, with a bar for each child's plan.
+        var first = new Date(Date.UTC(which.y, which.m, 1, 12)), start = utc(isoOf(first), -((first.getUTCDay() + 6) % 7)), rows = [];
+        for (var wk = 0; wk < 6; wk++) { var mon = utc(isoOf(start), wk * 7), any = false; for (var q = 0; q < 5; q++) if (utc(isoOf(mon), q).getUTCMonth() === which.m) any = true; if (any) rows.push(mon); }
+        var HEAD = 44, g2 = 8, cellW = (WIDE - g2 * 4) / 5, rH = Math.min(214, (bottom - top - HEAD - g2 * (rows.length - 1)) / rows.length);
+        ctx.font = '800 24px ' + DISPLAY; ctx.fillStyle = '#1F3A60'; ctx.textAlign = 'center';
+        ['MON', 'TUE', 'WED', 'THU', 'FRI'].forEach(function (d, c) { ctx.fillText(d, X + c * (cellW + g2) + cellW / 2, top + 28); });
         ctx.textAlign = 'left';
-        ctx.fillStyle = prog ? prog.color : '#7A8DA6'; box(ctx, 268, y + rowH / 2 - 30, 10, 60, 5); ctx.fill();
-        ctx.fillStyle = NAVY; ctx.font = '750 34px ' + DISPLAY; ctx.fillText(fit(ctx, label(v), 710), 294, y + rowH / 2 - 2);
-        ctx.fillStyle = '#4D607A'; ctx.font = '400 25px ' + BODY; ctx.fillText(fit(ctx, d.name, 710), 294, y + rowH / 2 + 32);
-      });
-      if (extra) {
-        var ey = top + shown.length * (rowH + gap);
-        ctx.fillStyle = 'rgba(255,255,255,.55)'; box(ctx, 48, ey, 984, rowH, 22); ctx.fill();
-        ctx.fillStyle = NAVY; ctx.font = '700 32px ' + BODY; ctx.textAlign = 'center'; ctx.fillText('and ' + extra + ' more ' + (extra === 1 ? 'day' : 'days') + ' planned', W / 2, ey + rowH / 2 + 11); ctx.textAlign = 'left';
+        rows.forEach(function (mon, rn) {
+          var y = top + HEAD + rn * (rH + g2);
+          for (var c = 0; c < 5; c++) {
+            var dt = utc(isoOf(mon), c), inMonth = dt.getUTCMonth() === which.m, x = X + c * (cellW + g2), off = byDate[isoOf(dt)];
+            ctx.fillStyle = off ? YELLOW : inMonth ? 'rgba(255,255,255,.62)' : 'rgba(255,255,255,.3)'; rbox(ctx, x, y, cellW, rH, 14); ctx.fill();
+            ctx.fillStyle = off ? '#2A2100' : inMonth ? '#3A5578' : '#7C93B1'; ctx.font = '800 26px ' + DISPLAY;
+            ctx.fillText(String(dt.getUTCDate()), x + 12, y + 32);
+            if (!inMonth || dt.getUTCDate() === 1) { ctx.font = '700 18px ' + BODY; ctx.fillText(MONTHS[dt.getUTCMonth()].slice(0, 3), x + 12 + (dt.getUTCDate() > 9 ? 38 : 22), y + 31); }
+            if (!off) continue;
+            ctx.fillStyle = '#4A3B00'; ctx.font = '700 17px ' + BODY; ctx.fillText(fitText(ctx, off.name, cellW - 22), x + 12, y + 56);
+            var bars = who.map(function (w, wn) { return { n: wn, v: pickOf(w.k, off) }; }).filter(function (b) { return b.v; });
+            if (!bars.length) { ctx.fillStyle = '#6B5800'; ctx.font = '400 18px ' + BODY; ctx.fillText('nothing yet', x + 12, y + 84); continue; }
+            var room = rH - 72, bh = Math.min(38, (room - 4 * (bars.length - 1)) / bars.length), fsz = Math.max(13, Math.min(19, Math.floor(bh * 0.52)));
+            bars.forEach(function (b, bn) {
+              var by = y + 66 + bn * (bh + 4), ink = INKS[b.n % 6];
+              ctx.fillStyle = '#FFFFFF'; rbox(ctx, x + 8, by, cellW - 16, bh, 9); ctx.fill();
+              ctx.fillStyle = ink[1]; rbox(ctx, x + 8, by, 9, bh, 4); ctx.fill();
+              var fz = fsz, lab = shortLabel(b.v);
+              do { ctx.font = '750 ' + fz + 'px ' + DISPLAY; fz--; } while (ctx.measureText(lab).width > cellW - 44 && fz >= 13);   // shrink a long name before cutting it
+              ctx.fillStyle = NAVY;
+              ctx.fillText(fitText(ctx, lab, cellW - 44), x + 26, by + bh / 2 + fsz * 0.36);
+            });
+          }
+        });
       }
-      // with room to spare, the park fills it: grass, trees, the school shut and the bus asleep
-      var used = top + slots * (rowH + gap), free = bottom - used;
-      if (free > 190) {
-        var g = bottom + (note ? 0 : 18);
-        ctx.fillStyle = '#E2B300'; [[60, 150, 120], [200, 110, 150], [370, 170, 110], [700, 130, 160], [880, 160, 130]].forEach(function (b) { ctx.fillRect(b[0], g - b[1], b[2], b[1]); });
-        ctx.fillStyle = '#3E9E57'; ctx.beginPath(); ctx.moveTo(0, g - 44); ctx.quadraticCurveTo(W / 2, g - 76, W, g - 40); ctx.lineTo(W, g + 20); ctx.lineTo(0, g + 20); ctx.closePath(); ctx.fill();
-        [[150, 40], [930, 46]].forEach(function (t) { ctx.fillStyle = '#0A3566'; ctx.fillRect(t[0] - 5, g - 110, 10, 66); ctx.fillStyle = '#1F6B36'; ctx.beginPath(); ctx.arc(t[0] - 12, g - 124, t[1], 0, 7); ctx.fill(); ctx.fillStyle = '#2C8444'; ctx.beginPath(); ctx.arc(t[0] + 14, g - 136, t[1] * 0.85, 0, 7); ctx.fill(); });
-        ctx.fillStyle = '#FFF6D6'; ctx.fillRect(400, g - 166, 230, 118); ctx.fillStyle = '#0A3566'; ctx.fillRect(396, g - 174, 238, 10); ctx.fillRect(498, g - 92, 36, 44);
-        ctx.fillStyle = '#C7D6E8'; for (var c = 0; c < 5; c++) { ctx.fillRect(418 + c * 42, g - 150, 24, 26); }
-        ctx.fillStyle = YELLOW; ctx.strokeStyle = NAVY; ctx.lineWidth = 3; box(ctx, 660, g - 86, 96, 40, 8); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = NAVY; for (var w2 = 0; w2 < 4; w2++) ctx.fillRect(670 + w2 * 20, g - 78, 14, 13);
-        ctx.beginPath(); ctx.arc(682, g - 44, 9, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(736, g - 44, 9, 0, 7); ctx.fill();
-        ctx.font = '800 22px ' + DISPLAY; ctx.fillText('z', 764, g - 96); ctx.font = '800 28px ' + DISPLAY; ctx.fillText('z', 782, g - 118); ctx.font = '800 34px ' + DISPLAY; ctx.fillText('z', 804, g - 144);
-        ctx.fillStyle = '#2C8444'; ctx.fillRect(0, g - 30, W, 60);
-      }
-      if (note) {
-        ctx.fillStyle = '#0A3566'; box(ctx, 48, 1082, 984, 92, 22); ctx.fill();
-        ctx.fillStyle = '#FFFFFF'; ctx.font = '400 30px ' + BODY; ctx.fillText(fit(ctx, 'Note: ' + note, 930), 76, 1139);
-      }
-      // footer: where it came from
-      ctx.fillStyle = NAVY; ctx.fillRect(0, H - FOOT, W, FOOT);
-      var host = String(od.site || '').replace(/^https?:\/\//, '') || 'phillyafterschool.org';
-      ctx.fillStyle = YELLOW; ctx.font = '800 40px ' + DISPLAY; ctx.fillText('Plan your days off', 56, H - FOOT + 70);
-      ctx.fillStyle = '#FFFFFF'; ctx.font = '700 36px ' + BODY; ctx.fillText(host, 56, H - FOOT + 118);
+      // footer: where this came from
+      var host = String(od.page || '').replace(/^https?:\/\//, '').replace(/\/$/, '') || 'phillyafterschool.org/days-off';
+      ctx.fillStyle = YELLOW; ctx.font = '800 38px ' + DISPLAY; ctx.fillText('Plan your days off', 56, H - FOOT + 64);
+      ctx.fillStyle = '#FFFFFF'; ctx.font = '700 32px ' + BODY; ctx.fillText(host, 56, H - FOOT + 110);
       if (od.qr && od.qr.length) {
-        var n = od.qr.length, quiet = 3, boxSize = 138, cell = boxSize / (n + quiet * 2), qx = W - 56 - boxSize, qy = H - FOOT + 11;
-        ctx.fillStyle = '#FFFFFF'; box(ctx, qx, qy, boxSize, boxSize, 10); ctx.fill();
+        var qn = od.qr.length, quiet = 3, boxSize = 128, cell = boxSize / (qn + quiet * 2), qx = W - 56 - boxSize, qy = H - FOOT + 11;
+        ctx.fillStyle = '#FFFFFF'; rbox(ctx, qx, qy, boxSize, boxSize, 10); ctx.fill();
         ctx.fillStyle = NAVY;
-        for (var ry = 0; ry < n; ry++) for (var rx = 0; rx < n; rx++) if (od.qr[ry].charAt(rx) === '1') ctx.fillRect(qx + (rx + quiet) * cell, qy + (ry + quiet) * cell, Math.ceil(cell), Math.ceil(cell));
-        ctx.fillStyle = '#CFE3FB'; ctx.font = '400 24px ' + BODY; ctx.textAlign = 'right'; ctx.fillText('Scan to plan yours', qx - 20, H - FOOT + 118); ctx.textAlign = 'left';
-      }
+        for (var ry = 0; ry < qn; ry++) for (var rx = 0; rx < qn; rx++) if (od.qr[ry].charAt(rx) === '1') ctx.fillRect(qx + (rx + quiet) * cell, qy + (ry + quiet) * cell, Math.ceil(cell), Math.ceil(cell));
+      } else { ctx.fillStyle = '#CFE3FB'; ctx.font = '400 24px ' + BODY; ctx.textAlign = 'right'; ctx.fillText('Check dates with each program', W - 56, H - FOOT + 110); ctx.textAlign = 'left'; }
       offSharer.stale();
     };
     var offSharer = pictureSharer(canvas);
     var shareEvent = function (method) { track({ event: 'pas_board_share', method: method, board: 'day_camp' }); };
-    var cardFile = function (done) {
-      var name = (cleanName(activeKid().name) || 'our').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'our';
-      canvas.toBlob(function (blob) { done(blob, name + '-days-off.png'); }, 'image/png');
-    };
+    var pageList = function () { return [['all', 'Every day off', 'all']].concat(months.map(function (o) { return [o.k, MONTHS[o.m], o]; })); };
+    var current = function () { var hit = null; pageList().forEach(function (p) { if (p[0] === page) hit = p; }); return hit || pageList()[0]; };
+    var slug = function () { return (cardTitle().toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'our-days-off'); };
+    var fileName = function (p) { return slug() + (p[0] === 'all' ? '' : '-' + p[1].toLowerCase()) + '.png'; };
     if (cardBox && canvas && canvas.getContext && canvas.toBlob) {
-      noteBox.addEventListener('input', function () { activeKid().offNote = noteBox.value.slice(0, 110); saveRosters(); drawOffCard(); });
+      drawCard = function () {
+        var any = planners().length > 0;
+        cardBox.hidden = !any;
+        if (!any) return;
+        titleBox.placeholder = defaultTitle();
+        if (document.activeElement !== titleBox) titleBox.value = r.offTitle || '';
+        pagesEl.textContent = '';
+        pageList().forEach(function (p) {
+          var b = el('button', 'kid', p[1]); b.type = 'button'; b.setAttribute('aria-pressed', String(p[0] === current()[0]));
+          b.addEventListener('click', function () { page = p[0]; drawCard(); });
+          pagesEl.appendChild(b);
+        });
+        paint(current()[2]);
+      };
+      var fileOf = function (p, done) { paint(p[2]); canvas.toBlob(function (blob) { done(blob, fileName(p)); }, 'image/png'); };
+      var saveBlob = function (blob, name) { var a = el('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000); };
+      titleBox.addEventListener('input', function () { r.offTitle = titleBox.value.slice(0, 40); saveRosters(); paint(current()[2]); });
       photoBox.addEventListener('change', function () {
         var file = photoBox.files && photoBox.files[0];
         if (!file) return;
         var url = URL.createObjectURL(file), img = new Image();
-        img.onload = function () { URL.revokeObjectURL(url); photo = img; photoClear.hidden = false; cardStatus.textContent = 'Photo added. It stays on this device.'; drawOffCard(); };
+        img.onload = function () { URL.revokeObjectURL(url); photo = img; photoClear.hidden = false; cardStatus.textContent = 'Photo added. It stays on this device.'; drawCard(); };
         img.onerror = function () { URL.revokeObjectURL(url); cardStatus.textContent = 'That file couldn’t be read as a picture. Try a JPG or PNG.'; };
         img.src = url;
       });
-      photoClear.addEventListener('click', function () { photo = null; photoBox.value = ''; photoClear.hidden = true; cardStatus.textContent = 'Photo removed.'; drawOffCard(); });
-      planEl.querySelector('#off-save').addEventListener('click', function () {
-        cardFile(function (blob, name) {
-          var a = el('a'); a.href = URL.createObjectURL(blob); a.download = name;
-          document.body.appendChild(a); a.click(); document.body.removeChild(a);
-          setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
-          cardStatus.textContent = 'Saved as ' + name + '. Attach it to a text or an email.';
-          shareEvent('image_save');
-        });
+      photoClear.addEventListener('click', function () { photo = null; photoBox.value = ''; photoClear.hidden = true; cardStatus.textContent = 'Photo removed.'; drawCard(); });
+      $o('#off-save').addEventListener('click', function () {
+        fileOf(current(), function (blob, name) { saveBlob(blob, name); cardStatus.textContent = 'Saved as ' + name + '.'; shareEvent('image_save'); });
       });
-      var shareBtn = planEl.querySelector('#off-share');
+      $o('#off-save-all').addEventListener('click', function () {
+        var list = pageList(), n = 0;
+        var next = function () {
+          if (n >= list.length) { paint(current()[2]); cardStatus.textContent = 'Saved ' + list.length + ' pictures. If only one arrived, your browser asked whether to allow the rest.'; shareEvent('image_save_all'); return; }
+          fileOf(list[n], function (blob, name) { saveBlob(blob, name); n++; window.setTimeout(next, 350); });
+        };
+        next();
+      });
+      var picShare = $o('#off-share');
       // The link goes inside the text: several apps (Messenger among them) drop a separate url when a picture is attached.
       if (navigator.share && navigator.canShare && window.File) {
         var probe = null;
         try { probe = new File([new Blob(['x'], { type: 'image/png' })], 'days-off.png', { type: 'image/png' }); } catch (e) { probe = null; }
         if (probe && navigator.canShare({ files: [probe] })) {
-          shareBtn.hidden = false;
-          shareBtn.addEventListener('click', function () {
-            var who = cleanName(activeKid().name);
+          picShare.hidden = false;
+          picShare.addEventListener('click', function () {
             // No title: Apple's share sheet turns a title into a second preview of the picture. The link rides along as text.
-            offSharer.share(((who || 'our').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'our') + '-days-off.png', (who ? possessive(who) : 'Our') + ' days off. Plan yours: ' + (od.site || '') + '/days-off/?utm_source=dayoff_card&utm_medium=share',
+            offSharer.share(fileName(current()), cardTitle() + '. Plan yours: ' + (od.site || '') + '/days-off/?utm_source=dayoff_card&utm_medium=share',
               function () { shareEvent('image_share'); }, function () { cardStatus.textContent = 'Sharing didn’t open here. Use Save as image, then send the picture.'; });
           });
         }
       }
-      var copyPic = planEl.querySelector('#off-copy-pic');
+      var copyPic = $o('#off-copy-pic');
       if (copyPic && canCopyPicture) {
         copyPic.hidden = false;
         copyPic.addEventListener('click', function () { copyCanvas(canvas, 'Plan your own at ' + String(od.site || '').replace(/^https?:\/\//, '') + '/days-off', function (ok) { cardStatus.textContent = ok ? 'Picture copied. Paste it into a message.' : 'Copying didn’t work in this browser. Use Save as image.'; if (ok) shareEvent('image_copy'); }); });
       }
-      planEl.querySelector('#off-print').addEventListener('click', function () {
+      $o('#off-print').addEventListener('click', function () {
         document.body.classList.add('print-card');
         var after = function () { document.body.classList.remove('print-card'); window.removeEventListener('afterprint', after); };
         window.addEventListener('afterprint', after);
         shareEvent('print');
         window.print();
       });
-      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('850 92px Archivo'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (!cardBox.hidden) drawOffCard(); }, function () { /* system fonts will do */ });
-    } else cardBox = null;
+      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('850 88px Archivo'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (!cardBox.hidden) drawCard(); }, function () { /* system fonts will do */ });
+    } else if (cardBox) cardBox.hidden = true;
 
-    var calBtn = planEl.querySelector('#off-cal');
-    if (calBtn) calBtn.addEventListener('click', function () {
-      var kid = activeKid(), mine = planned(kid);
-      if (!mine.length) return;
-      saveCalendar('days-off.ics', mine.map(function (d) {
-        var v = kid.off[d.d];
-        return { uid: 'dayoff-' + d.d + '-' + v, start: d.d, days: 1, title: (kid.name ? kid.name + ': ' : '') + label(v) + ' (no school)', text: 'No school: ' + d.name + '.', url: od.programs[v] ? od.programs[v].url : od.page };
-      }));
-      statusEl.textContent = 'Saved days-off.ics with ' + mine.length + (mine.length === 1 ? ' day' : ' days') + '. Open the file to add them to your calendar.';
-      track({ event: 'pas_board_share', method: 'calendar', board: 'day_camp' });
-    });
-    var draw = function () {
-      var r = loadRosters(), kid = r.kids[r.kid], whose = kid.name ? possessive(kid.name) : r.kids.length > 1 ? possessive(kidLabel(kid, r.kid)) : 'Your child’s';
-      kidsRow.textContent = ''; kidsRow.hidden = r.kids.length < 2;
-      if (r.kids.length > 1) r.kids.forEach(function (k, i) {
-        var chip = el('button', 'kid', kidLabel(k, i)); chip.type = 'button'; chip.setAttribute('aria-pressed', String(i === r.kid));
-        chip.addEventListener('click', function () { r.kid = i; saveRosters(); statusEl.textContent = ''; draw(); });
-        kidsRow.appendChild(chip);
-      });
-      var mine = planned(kid);
-      countEl.textContent = mine.length ? whose + ' plan: ' + mine.length + ' of ' + days.length + ' days off covered.' : 'Nothing planned yet. ' + days.length + ' days off are still to come this year.';
-      listEl.textContent = ''; listEl.hidden = !mine.length; actions.hidden = !mine.length;
-      if (cardBox) { cardBox.hidden = !mine.length; if (mine.length) { if (document.activeElement !== noteBox) noteBox.value = kid.offNote || ''; drawOffCard(); } }
-      mine.forEach(function (d) {
-        var v = kid.off[d.d], li = el('li');
-        li.style.setProperty('--tc', od.programs[v] ? od.programs[v].color : '#7A8DA6');
-        var stub = el('span', 'off-date');   // the date, like a ticket stub
-        stub.appendChild(el('span', null, d.label.split(',')[0]));
-        stub.appendChild(el('b', null, d.label.split(', ')[1] || d.label));
-        li.appendChild(stub);
-        li.appendChild(el('span', 'hint', d.name));
-        if (od.programs[v]) { var a = el('a', null, od.programs[v].name); a.href = '#' + v; li.appendChild(a); } else li.appendChild(el('span', null, label(v)));
-        if (od.programs[v] && d.camps.indexOf(v) < 0) li.appendChild(el('span', 'tc-warn', 'It hasn’t posted this date. Ask if it’s open.'));
-        var rm = el('button', 'clear', 'Remove'); rm.type = 'button';
-        rm.addEventListener('click', function () { delete kid.off[d.d]; saveRosters(); draw(); });
-        li.appendChild(rm);
-        listEl.appendChild(li);
-      });
-      // the pick row under each date
-      all(document, '.offpick[data-off-day]').forEach(function (row) {
-        var date = row.getAttribute('data-off-day'), d = null;
-        days.forEach(function (x) { if (x.d === date) d = x; });
-        row.textContent = '';
-        if (!d) { row.hidden = true; return; }
-        row.hidden = false;
-        var v = kid.off[date] || '';
-        row.appendChild(el('span', 'hint', (row.parentNode.querySelectorAll('.offpick').length > 1 ? d.label + ': ' : '') + whose.replace(/^Your child’s$/, 'Your') + ' plan'));
-        var set = function (val) {
-          if (val) { kid.off[date] = val; track({ event: 'pas_dayoff_pick', program_id: val, day: date }); } else delete kid.off[date];
-          saveRosters(); statusEl.textContent = val ? 'Saved on this device.' : ''; draw();
-        };
-        d.camps.forEach(function (id) {
-          var b = el('button', 'day', od.programs[id].name); b.type = 'button'; b.setAttribute('aria-pressed', String(v === id));
-          b.addEventListener('click', function () { set(v === id ? '' : id); });
-          row.appendChild(b);
-        });
-        var sel = el('select'); sel.setAttribute('aria-label', 'Another plan for ' + d.label);
-        var first = el('option', null, d.camps.length ? 'Somewhere else…' : 'Choose…'); first.value = ''; sel.appendChild(first);
-        var home = el('option', null, 'At home or with family'); home.value = HOME; home.selected = v === HOME; sel.appendChild(home);
-        var grp = document.createElement('optgroup'); grp.label = 'Programs that haven’t posted this date';
-        Object.keys(od.programs).forEach(function (id) { if (d.camps.indexOf(id) > -1) return; var o = el('option', null, od.programs[id].name); o.value = id; o.selected = v === id; grp.appendChild(o); });
-        if (grp.children.length) sel.appendChild(grp);
-        sel.addEventListener('change', function () { set(sel.value); });
-        row.appendChild(sel);
-        // show the pick on the closed row too
-        var det = row.closest ? row.closest('details') : null, sum = det ? det.querySelector('summary') : null;
-        if (sum) {
-          var tag = sum.querySelector('.offmine'); if (!tag) { tag = el('span', 'offmine'); sum.appendChild(tag); }
-          var picks = all(det, '.offpick[data-off-day]').map(function (x) { return kid.off[x.getAttribute('data-off-day')]; }).filter(function (x) { return x && label(x); });
-          var names = picks.map(label).filter(function (n, i, a) { return a.indexOf(n) === i; });
-          tag.textContent = names.length ? 'Planned: ' + names.join(', ') : ''; tag.hidden = !names.length;
-        }
-      });
+    // What the accounts script (groups.js) needs to keep the days off in a profile. It adds onSave.
+    window.pasDaysOff = {
+      year: od.year, days: days.map(function (d) { return d.d; }), programs: od.programs, track: track, maxKids: MAX_KIDS, newKid: newKid,
+      rosters: function () { return r; },
+      save: function () { store('pas-rosters', JSON.stringify(r)); },
+      redraw: function () { openDay = ''; draw(); }
     };
-    var clearBtn = planEl.querySelector('#off-clear');
-    clearBtn.addEventListener('click', function () {
-      if (clearBtn.getAttribute('data-armed')) { activeKid().off = {}; saveRosters(); clearBtn.removeAttribute('data-armed'); clearBtn.textContent = 'Clear this plan'; statusEl.textContent = 'Plan cleared.'; draw(); }
-      else { clearBtn.setAttribute('data-armed', '1'); clearBtn.textContent = 'Tap again to clear every day'; }
-    });
+    // An email's "See who's open" button names the day: open it.
+    var asked = /^#d-(\d{4}-\d{2}-\d{2})$/.exec(location.hash || '');
+    if (asked && byDate[asked[1]]) openDay = asked[1];
     draw();
+    if (openDay) window.setTimeout(function () { var row = document.getElementById('d-' + openDay); if (row && row.scrollIntoView) row.scrollIntoView({ block: 'start' }); }, 0);
+    if (!storageOk) say('This browser is blocking saved data, so your plan won’t be here when you come back. Copy or print it before you leave.');
   })();
 
   var boardPage = document.querySelector('[data-board-page]');

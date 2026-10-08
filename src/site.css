@@ -522,18 +522,6 @@ button.btn{cursor:pointer;font-family:inherit}
 .pick.tc.tc-off{outline:2px dashed var(--warn-ink);outline-offset:-2px}
 .nextoff{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;background:var(--warn);color:var(--warn-ink);border-radius:14px;padding:12px 18px;margin:0}
 .nextoff a{color:inherit;font-weight:700}
-.offdays{display:flex;flex-direction:column;gap:10px}
-.offday{background:var(--surface);border:1px solid var(--line);border-radius:14px;scroll-margin-top:16px}
-.offday[hidden]{display:none}
-.offday summary{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr) auto;align-items:center;gap:4px 18px;padding:14px 18px;cursor:pointer;list-style:none}
-.offday summary::-webkit-details-marker{display:none}
-.offday summary b{font-family:var(--display);font-size:1.08rem}
-.offday summary > span:not(.pill){color:var(--muted)}
-.offday[open] summary{border-bottom:1px solid var(--line)}
-.offwho{display:flex;flex-direction:column;gap:8px;padding:14px 18px}
-.offwho .btn{font-size:.93rem;padding:6px 12px}
-.offwho .btn .hint{font-weight:400}
-@media (max-width:640px){.offday summary{grid-template-columns:minmax(0,1fr) auto}.offday summary > span:not(.pill){grid-column:1;grid-row:2}.offday summary .pill{grid-row:1 / span 2;grid-column:2}}
 .offprog{scroll-margin-top:16px}
 .camplist{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
 .campcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 20px;min-width:0;display:flex;flex-direction:column;gap:10px}
@@ -578,12 +566,7 @@ button.btn{cursor:pointer;font-family:inherit}
 @media (max-width:600px){.costbox{padding:20px 18px}.cost-lines li{grid-template-columns:minmax(0,1fr) auto}.cost-lines .cost-how,.cost-lines .cost-none{grid-column:1 / -1;grid-row:3}.cost-lines .cost-sum{grid-column:2;grid-row:1 / span 2}.cost-lines .hint{grid-row:4}}
 
 /* ---------- day-off programs: the same block on a morning with no school. Yellow band, navy type. ---------- */
-.band.dayoff{--hero:#F3C613;--hero-low:#F3C613;--hero-2:#E2B300;--hero-ink:#0B2140;--hero-muted:#263A57;--hero-accent:#0B2140;--hero-chip:rgba(255,255,255,.42);--hero-field:transparent;--topbar:rgba(11,33,64,.12);--cta:#0B2140;--cta-ink:#FFFFFF;--cta-hover:#0F4D90}
-.band.dayoff .bus-mark{background:#0F4D90}
-.band.dayoff .nav a:hover,.band.dayoff .nav a[aria-current="page"]{border-bottom-color:#0B2140}
-.band.dayoff .nav .count{background:#0B2140;color:#FFFFFF}
-.band.dayoff .facts span{background:rgba(255,255,255,.42)}
-.dayscene .far{fill:#E2B300}
+.dayscene .far{fill:var(--house-1);opacity:.55}
 .dayscene .grass{fill:#3E9E57}
 .dayscene .grass2{fill:#2C8444}
 .dayscene .trunk{fill:#0A3566}
@@ -615,24 +598,12 @@ button.btn{cursor:pointer;font-family:inherit}
 /* ---------- own prices on the roster, and the day-off plan ---------- */
 .cost-lines .cost-own{grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:.9rem}
 .cost-own input{font:inherit;width:6.5em;padding:7px 9px;border-radius:9px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}
-.cost-own select,.offpick select{font:inherit;font-size:.95rem;padding:7px 9px;border-radius:9px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);max-width:100%}
+.cost-own select{font:inherit;font-size:.95rem;padding:7px 9px;border-radius:9px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);max-width:100%}
 .cost-own .btn{padding:6px 14px;font-size:.92rem}
-.offplan{background:var(--surface);border:2px solid var(--yellow);border-radius:18px;padding:22px 24px;gap:10px}
-.off-count{font-weight:700;color:var(--ink)}
-.off-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
-.off-list[hidden],.offpick[hidden],.offmine[hidden]{display:none}
-.off-list li{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;padding:9px 0;border-top:1px solid var(--line)}
-.off-list li b{min-width:7.2em}
-.off-list li .clear{margin-left:auto;font-size:.88rem}
-.offpick{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding-top:10px;border-top:1px dashed var(--line)}
-.offpick .hint{flex-basis:100%}
-.offpick .day{min-width:0;font-size:.92rem;padding:7px 12px}
-.offday summary .offmine{grid-column:1 / -1;font-size:.9rem;font-weight:700;color:var(--green-ink);background:var(--green-bg);border-radius:8px;padding:3px 10px;justify-self:start}
 @media print{
   body.print-plan *{visibility:hidden}
   body.print-plan #plan,body.print-plan #plan *{visibility:visible}
   body.print-plan #plan{position:absolute;left:0;top:0;width:100%;border:0}
-  body.print-plan #off-actions,body.print-plan #off-kids,body.print-plan .off-list .clear,body.print-plan #off-status{display:none}
 }
 
 /* ---------- the menu: groups that open ---------- */
@@ -651,9 +622,6 @@ button.btn{cursor:pointer;font-family:inherit}
 .nav .menu ul a:hover,.nav .menu ul a[aria-current="page"]{background:#DAEDFE;border:0}
 .nav a.nav-cta{background:var(--cta);color:var(--cta-ink);border:0;border-radius:999px;padding:7px 16px;font-weight:700}
 .nav a.nav-cta:hover,.nav a.nav-cta[aria-current="page"]{background:var(--cta-hover)}
-.band.dayoff .menu summary:hover,.band.dayoff .menu.here summary,.band.dayoff .menu[open] summary{border-bottom-color:#0B2140}
-.band.dayoff .nav a.nav-cta{background:#0B2140;color:#FFFFFF}
-.band.dayoff .nav a.nav-cta:hover{background:#0F4D90}
 #by-day{scroll-margin-top:90px}
 
 /* ---------- header layout: logo left, menu right on one line; a Menu button on narrow screens ---------- */
@@ -678,7 +646,7 @@ button.btn{cursor:pointer;font-family:inherit}
   .js .nav.open .menu ul,.js .nav.open .menu:last-of-type ul{position:static;box-shadow:none;padding:0;min-width:0;background:none}
   .js .nav.open > a{display:block;color:#0B2140;font-weight:700;border:0;padding:10px 12px;border-radius:9px}
   .js .nav.open > a:hover{background:#DAEDFE}
-  .js .nav.open > a.nav-cta,.js .band.dayoff .nav.open > a.nav-cta{background:var(--yellow);color:var(--yellow-ink);text-align:center;border-radius:999px;margin-top:8px}
+  .js .nav.open > a.nav-cta{background:var(--yellow);color:var(--yellow-ink);text-align:center;border-radius:999px;margin-top:8px}
   /* without scripts the groups simply wrap under the logo */
   .menu{position:static}
   .menu ul,.menu:last-of-type ul{left:12px;right:12px;top:calc(100% - 6px);min-width:0}
@@ -690,17 +658,6 @@ button.btn{cursor:pointer;font-family:inherit}
 }
 
 /* ---------- the day-camp schedule: picks as ticket stubs, and its own card ---------- */
-.off-list{gap:10px;margin-top:4px}
-.off-list li{border:1px solid var(--line);border-left:8px solid var(--tc,#7A8DA6);border-radius:14px;padding:10px 14px 10px 12px;background:var(--bg);align-items:center;box-shadow:0 2px 0 rgba(7,21,39,.06)}
-.off-list li:nth-child(odd){transform:rotate(-.35deg)}
-.off-list li:nth-child(even){transform:rotate(.3deg)}
-.off-list .off-date{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:76px;padding:6px 10px;border-radius:10px;background:var(--yellow);color:var(--yellow-ink);font-size:.8rem;line-height:1.15;border-right:2px dashed rgba(42,33,0,.35)}
-.off-list .off-date b{font-family:var(--display);font-size:1.05rem;min-width:0}
-.off-list li > a,.off-list li > span:not(.hint):not(.off-date):not(.tc-warn){font-weight:700}
-.offcard{border-top:1px solid var(--line);padding-top:18px;margin-top:8px;display:flex;flex-direction:column;gap:12px}
-.offcard[hidden]{display:none}
-.offcard h3{font-size:1.2rem}
-@media (prefers-reduced-motion: reduce){.off-list li{transform:none}}
 
 /* ---------- header: room between the menu items. The bar runs wider than the page so they can spread out. ---------- */
 .in.bar{max-width:1280px}
@@ -934,8 +891,6 @@ button.btn{cursor:pointer;font-family:inherit}
 .topbar a{color:var(--hero-ink);text-decoration:none;font-weight:700;padding:3px 2px;border-bottom:2px solid transparent}
 .topbar a:hover{border-bottom-color:var(--hero-accent)}
 .topbar span{color:var(--hero-muted)}
-.band.dayoff .topbar{background:rgba(11,33,64,.12)}
-.band.dayoff .topbar a:hover{border-bottom-color:#0B2140}
 @media print{.topbar{display:none}}
 /* "or" between the account block and Make it a card; grades in the profile; My kids on the grade row */
 .or-line{display:flex;align-items:center;gap:14px;max-width:760px;margin:6px 0;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:.85rem}
@@ -1223,7 +1178,18 @@ ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .sum-pages{display:flex;flex-wrap:wrap;gap:8px}
 .sum-pages .kid{font-size:.95rem;padding:8px 16px}
 .sum-tally{display:flex;flex-direction:column;gap:5px;min-width:0}
-.sum-tally #sum-count{font-weight:700}
+.sum-tally #sum-count,.sum-tally #off-count{font-weight:700}
+.off-top{grid-template-columns:minmax(0,220px) minmax(0,1fr)}
+@media (max-width:860px){.off-top{grid-template-columns:minmax(0,1fr)}}
+.off-days .sum-week{scroll-margin-top:84px}
+.off-days .sum-picks .clear{font-size:.9rem}
+.off-chart{min-width:1240px}
+.off-chart thead th[hidden],.off-chart td[hidden]{display:none}
+.off-dates{display:flex;flex-direction:column;gap:0}
+.off-dates li{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;padding:9px 0;border-top:1px solid var(--line)}
+.off-dates li[hidden]{display:none}
+.off-dates li b{min-width:9.5em;font-family:var(--display);font-stretch:112%}
+.off-dates li .hint{flex-basis:100%}
 .sum-strip{display:flex;gap:4px}
 .sum-strip i{flex:1 1 0;height:12px;border-radius:4px;background:var(--cell-off)}
 .sum-strip i.on{background:var(--cell-on)}
@@ -1293,3 +1259,4 @@ ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
   .sum{border:0;padding:0}
   .sum-chip{border:1px solid #000}
 }
+@media (max-width:640px){.off-chart{min-width:1420px}}

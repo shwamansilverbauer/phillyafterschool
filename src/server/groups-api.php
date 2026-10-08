@@ -115,6 +115,8 @@ function db(): PDO {
     $db->exec("CREATE TABLE IF NOT EXISTS space (listing TEXT PRIMARY KEY, state TEXT NOT NULL, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, updated INTEGER NOT NULL)");
     // A summer schedule kept in a profile: one per account. Each child's first name and their camps by week, nothing else.
     $db->exec('CREATE TABLE IF NOT EXISTS summers (user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, year INTEGER NOT NULL, json TEXT NOT NULL, updated INTEGER NOT NULL)');
+    // A days-off plan kept in a profile: one per account. Each child's first name and where they'll be on each day school is closed.
+    $db->exec('CREATE TABLE IF NOT EXISTS daysoffs (user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, year INTEGER NOT NULL, json TEXT NOT NULL, updated INTEGER NOT NULL)');
     // Directors: a claim on a listing ("p:<program id>" or "c:<camp id>") and the changes a director has proposed for it.
     $db->exec("CREATE TABLE IF NOT EXISTS claims (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, listing TEXT NOT NULL, status TEXT NOT NULL, domain TEXT NOT NULL DEFAULT '', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0, UNIQUE (user_id, listing))");
     $db->exec("CREATE TABLE IF NOT EXISTS edits (id INTEGER PRIMARY KEY, claim_id INTEGER NOT NULL REFERENCES claims(id) ON DELETE CASCADE, listing TEXT NOT NULL, body TEXT NOT NULL, link TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'new', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0)");
@@ -433,10 +435,39 @@ function summer_out(int $uid): ?array {
   }
   return array('y' => (int) $s['year'], 'kids' => $kids, 'updated' => (int) $s['updated']);
 }
+// A days-off plan for the profile: the school year (the year it starts), and for each child a first name and, for each
+// day school is closed, one listed program or "home". Notes, titles and photos stay on the device.
+function clean_daysoff($s): ?array {
+  if (!is_array($s)) return null;
+  $year = isset($s['y']) && is_int($s['y']) ? $s['y'] : 0;
+  if ($year < 2024 || $year > 2100) return null;
+  $known = programs();
+  $kids = array();
+  foreach (isset($s['kids']) && is_array($s['kids']) ? array_slice($s['kids'], 0, MAX_KIDS) : array() as $k) {
+    if (!is_array($k)) continue;
+    $d = array();
+    foreach (isset($k['d']) && is_array($k['d']) ? array_slice($k['d'], 0, 120, true) : array() as $day => $id) {
+      if (!is_string($day) || !preg_match('/^(' . $year . '|' . ($year + 1) . ')-\d{2}-\d{2}$/', $day) || !is_string($id)) continue;
+      if ($id === 'home' || isset($known[$id])) $d[$day] = $id;
+    }
+    $kids[] = array('name' => first_name(str($k, 'name', 40)), 'd' => (object) $d);
+  }
+  return $kids ? array($year, json_encode(array('kids' => $kids))) : null;
+}
+function daysoff_out(int $uid): ?array {
+  $s = row('SELECT year, json, updated FROM daysoffs WHERE user_id = ?', array($uid));
+  if (!$s) return null;
+  $d = json_decode($s['json'], true);
+  $kids = array();
+  foreach (is_array($d) && isset($d['kids']) && is_array($d['kids']) ? $d['kids'] : array() as $k) {
+    $kids[] = array('name' => isset($k['name']) ? (string) $k['name'] : '', 'd' => (object) (isset($k['d']) && is_array($k['d']) ? $k['d'] : array()));   // an empty plan stays an object, not a list
+  }
+  return array('y' => (int) $s['year'], 'kids' => $kids, 'updated' => (int) $s['updated']);
+}
 function profile_out(array $u): array {
   $weeks = array();
   foreach (q('SELECT * FROM weeks WHERE user_id = ? ORDER BY id', array($u['id'])) as $w) $weeks[] = week_out($w);
-  return array('school' => $u['school'], 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => $weeks, 'summer' => summer_out((int) $u['id']));
+  return array('school' => $u['school'], 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => $weeks, 'summer' => summer_out((int) $u['id']), 'daysoff' => daysoff_out((int) $u['id']));
 }
 function kid_out(array $k, bool $mine): array {
   return array('id' => (int) $k['id'], 'name' => $k['name'], 'now' => json_decode($k['now_json'], true), 'next' => json_decode($k['next_json'], true), 'mine' => $mine);
@@ -653,7 +684,7 @@ switch ($method . ' ' . $action) {
     $email = strtolower(str($in, 'email', 150));
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) fail('email', 'That email address doesn’t look right.');
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|join|summer|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|join|summer|daysoff|calendar|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
     if (too_many('mail:' . h($email), 3, 900) || too_many('mail:' . h($email), 8, 86400) || too_many('ip:' . who(), 10, 900) || too_many('ip:' . who(), 40, 86400)) {
       fail('slow', 'That’s a lot of sign-in emails. Use the newest one, or wait 15 minutes and try again.', 429);
     }
@@ -700,7 +731,7 @@ switch ($method . ' ' . $action) {
     if (too_many('try:' . who(), 30, 900)) fail('slow', 'Too many tries. Wait 15 minutes and try again.', 429);
     note('try:' . who());
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|join|summer|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|join|summer|daysoff|calendar|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
     $g = google_email(str($in, 'credential', 4200));
     sign_in($g['email'], 'google', $next, $g['first'], $g['last']);
   }
@@ -971,6 +1002,23 @@ switch ($method . ' ' . $action) {
   case 'POST summer_delete': {
     $u = need_user();
     q('DELETE FROM summers WHERE user_id = ?', array($u['id']));
+    out(array('ok' => true));
+  }
+
+  // The same for a days-off plan: the account holder's alone, never shared, read by no other action.
+  case 'POST daysoff_save': {
+    $u = need_user();
+    $s = clean_daysoff($in['daysoff'] ?? null);
+    if (!$s) fail('daysoff', 'That plan couldn’t be read. Reload the page and try again.');
+    $had = (bool) row('SELECT user_id FROM daysoffs WHERE user_id = ?', array($u['id']));
+    q('INSERT INTO daysoffs (user_id, year, json, updated) VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET year = excluded.year, json = excluded.json, updated = excluded.updated', array($u['id'], $s[0], $s[1], now()));
+    if (!$had) bump('daysoff_saved');
+    out(array('ok' => true, 'daysoff' => daysoff_out((int) $u['id'])));
+  }
+
+  case 'POST daysoff_delete': {
+    $u = need_user();
+    q('DELETE FROM daysoffs WHERE user_id = ?', array($u['id']));
     out(array('ok' => true));
   }
 

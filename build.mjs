@@ -1929,6 +1929,7 @@ function privacyPage() {
     <li>${T(`You can sign in with Google instead of an emailed code. Google’s button is loaded on the pages where you sign in, so Google can see that someone opened that page. If you use it, Google tells us your name and email address. We ask for nothing else and never see your Google password.`)}</li>` : ''}
     <li>${T(`If you keep your school in your profile, we store which school. If you keep your children’s grades, we store the grades and nothing about which child is in which. If you keep a week in your profile, we store the child’s first name, the programs on their current and upcoming weeks, and the school each program was picked under, so the week can be put back on another device. Notes you type are not stored.`)}</li>
     <li>${T(`If you keep a summer schedule in your profile, we store each child’s first name as you typed it and the camps picked for each week, so the summer is there on your other devices. Ages, the calendar’s title and photos are not stored. A summer in your profile can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The summer schedule section is hidden in session recordings, and analytics is told only that a summer was kept, never what is in it.`)}</li>
+    <li>${T(`If you keep a days-off plan in your profile, we store each child’s first name as you typed it and the place picked for each day school is closed. The calendar’s title and photos are not stored. The plan can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The planner is hidden in session recordings, and analytics is never told what is in a plan you keep.`)}</li>
     <li>${T(`Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.`)}</li>
     <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
     <li>${T(`There are no passwords. We email you a link and a 6-digit code; each works once and for 15 minutes. A cookie then keeps that device signed in for 30 days, and you can sign out everywhere from your account page.`)}</li>
@@ -2408,20 +2409,15 @@ exit;
 // ---------- days off: when district schools are closed, and who runs something ----------
 function daysOffPage() {
   const D = 1;
-  const upcoming = d => p => p.daysOff.dates.filter(x => d.dates.includes(x));
   const noDates = campPrograms.filter(p => !p.daysOff.dates.some(x => x >= TODAY));
-  const dayRows = offDays.map(d => {
-    const camps = campsOn(d);
-    const many = d.dates.length > 1;
-    return `<details class="offday" id="d-${d.date}" data-until="${d.until}">
-  <summary><b>${d.end ? `${shortDate(d.date)} – ${shortDate(d.end)}` : dayDate(d.date)}</b><span>${esc(d.name)}</span><span class="pill ${camps.length ? 'onsite' : 'nearby'}">${camps.length ? `${camps.length} ${camps.length === 1 ? 'camp' : 'camps'} posted` : 'None posted yet'}</span></summary>
-  <div class="offwho">
-    ${camps.length ? `<p class="chips-row">${camps.map(p => `<a class="btn" href="#${esc(p.id)}">${esc(p.name)}${many && upcoming(d)(p).length < d.dates.length ? ` <span class="hint">(${upcoming(d)(p).map(shortDate).join(', ')})</span>` : ''}</a>`).join('')}</p>` : `<p class="hint">No listed program has posted a camp for ${many ? 'this break' : 'this day'} yet. The programs below that haven’t posted dates may still cover it.</p>`}
-    ${d.note ? `<p class="hint">${esc(d.note)}</p>` : ''}
-    ${d.dates.filter(x => x >= TODAY).map(x => `<div class="offpick" data-off-day="${x}" data-clarity-mask="true" hidden></div>`).join('')}
-  </div>
-</details>`;
-  }).join('\n');
+  const dated = campPrograms.filter(p => p.daysOff.dates.some(x => x >= TODAY));
+  // every weekday still to come that school is closed, each with the break it belongs to and who has posted a camp for it
+  const days = offDays.flatMap((d, bi) => d.dates.filter(x => x >= TODAY).map(x => ({ d: x, label: dayDate(x), name: d.name, b: bi, note: d.note || '', camps: campPrograms.filter(p => p.daysOff.dates.includes(x)).map(p => p.id) })));
+  const head = days.map((x, i) => { const dt = utcDay(x.d); return `<th scope="col" data-w="${i}" title="${esc(x.name)}"><span>${MONTH_NAMES[dt.getUTCMonth()].slice(0, 3)}</span><b>${dt.getUTCDate()}</b><span class="vh">, ${esc(x.name)}</span></th>`; }).join('');
+  const chartRows = dated.map(p => `<tr data-camp="${esc(p.id)}">
+  <th scope="row"><a href="#${esc(p.id)}">${esc(p.name)}</a><small>${esc([programHoods(p).join(', '), `${p.daysOff.dates.filter(x => x >= TODAY).length} posted`].filter(Boolean).join(' · '))}</small></th>
+  ${days.map((x, i) => x.camps.includes(p.id) ? `<td class="on exact" data-w="${i}"><span class="vh">Open</span></td>` : `<td data-w="${i}"></td>`).join('')}
+</tr>`).join('\n');
   const cards = campPrograms.map(p => {
     const dates = p.daysOff.dates.filter(x => x >= TODAY);
     const served = servedBy(p);
@@ -2436,61 +2432,87 @@ function daysOffPage() {
 </article>`;
   }).join('\n');
   const hero = `    <h1>${T(`School’s closed. Now what?`)}</h1>
-    <p class="lede">${T(`Day camps for the days district schools are closed this year, and a schedule you can build from them.`)}</p>
+    <p class="lede">${T(`Every day district schools are closed this year, who runs a camp on each, and a plan you can build for each child.`)}</p>
     <div class="facts">
       <span>School year <b>${esc(daysOff.schoolYear)}</b></span>
       <span>Calendar checked <b>${longDate(daysOff.checked)}</b></span>
+      <span><b>${offDays.reduce((n, d) => n + d.dates.filter(y => y >= TODAY).length, 0)}</b> days off to come</span>
       <span><b>${campPrograms.length}</b> programs run something</span>
     </div>`;
   const planData = {
-    programs: Object.fromEntries(campPrograms.map(p => [p.id, { name: p.name, url: p.daysOff.url, color: TYPE[p.types[0]].color }])),
+    year: +String(daysOff.schoolYear).slice(0, 4), schoolYear: daysOff.schoolYear,
+    programs: Object.fromEntries(campPrograms.map(p => [p.id, { name: p.name, url: p.daysOff.url, href: link(programPath(p), D), color: TYPE[p.types[0]].color, hood: programHoods(p).join(', '), n: p.daysOff.dates.filter(x => x >= TODAY).length }])),
     site: cfg.siteUrl, qr: cardQr?.dayoff && cardQr.dayoff.text.toLowerCase().startsWith(cfg.siteUrl.toLowerCase() + '/') ? cardQr.dayoff.rows : null,
-    days: offDays.flatMap(d => d.dates.filter(x => x >= TODAY).map(x => ({ d: x, label: dayDate(x), name: d.name, camps: campPrograms.filter(p => p.daysOff.dates.includes(x)).map(p => p.id) }))),
+    days: days.map(({ note, ...x }) => x),
     page: `${cfg.siteUrl}/${offPath}`,
   };
   const body = `<div style="display:contents">
-<section class="section offplan needs-js-block" id="plan" data-off-plan data-clarity-mask="true">
-  <h2>${T(`Build your day-camp schedule`)}</h2>
-  <p>${T(`Open a day below and choose where your child will be. Your picks are saved on this device and gathered here.`)}</p>
-  <div class="kids" id="off-kids" role="group" aria-label="Which child" hidden></div>
-  <p class="off-count" id="off-count"></p>
-  <ol class="off-list" id="off-list"></ol>
-  <div class="actions" id="off-actions" hidden><button type="button" class="btn" id="off-cal">Add to calendar</button><button type="button" class="clear" id="off-clear">Clear this plan</button></div>
+<section class="section sum offsum needs-js-block" id="plan" data-off-plan data-clarity-mask="true">
+  <h2>${T(`Your days off`)}</h2>
+  <p>${T(`Choose where each child will be on each day school is closed. Your picks are saved on this device and nowhere else.`)}</p>
+  <div class="sum-kids"><div class="kids" id="off-kids" role="group" aria-label="Which child"></div><button type="button" class="clear" id="off-kid-add">Add a sibling</button><button type="button" class="clear" id="off-kid-drop" hidden>Remove this child</button></div>
+  <div class="sum-top off-top">
+    <div class="field sum-name"><label for="off-name">${T(`First name (optional)`)}</label>
+      <input id="off-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${T(`Stays on this device.`)}</span></div>
+    <div class="sum-tally"><div class="sum-strip" id="off-strip" aria-hidden="true"></div><p id="off-count" aria-live="polite"></p><p class="hint" id="off-open"></p></div>
+  </div>
+  <ol class="sum-weeks off-days" id="off-days"></ol>
+  <div class="actions sum-tools" id="off-tools" hidden><button type="button" class="btn primary" id="off-share-text" hidden>Share the plan</button><button type="button" class="btn" id="off-cal">Add to calendar</button><button type="button" class="btn" id="off-copy">Copy the plan as text</button><button type="button" class="btn" id="off-print-list">Print the list</button><button type="button" class="clear" id="off-clear">Clear the plan</button></div>
   <p class="hint" id="off-status" aria-live="polite"></p>
-  <div class="card-maker offcard" id="off-card" hidden>
-    <h3>${T(`Make it a card`)}</h3>
-    <p>${T(`One picture of the days off to text to a sitter, a grandparent or the group chat.`)}</p>
+  ${GROUPS ? `<div class="sum-profile" id="off-profile" ${groupsAttrs(D)} hidden></div>` : ''}
+  <div class="card-maker sumcard" id="off-card" hidden>
+    <h3>${T(`Make it a calendar`)}</h3>
+    <p>${T(`One picture of every day off, or a calendar for each month, to print for the fridge or send to a sitter. Every child with a day planned is on it.`)}</p>
     <div class="card-grid">
       <div class="card-fields">
+        <div class="sum-pages" id="off-pages" role="group" aria-label="Which calendar"></div>
         <div class="field">
-          <label for="off-note">${T(`A note (optional)`)}</label>
-          <input id="off-note" type="text" maxlength="110" placeholder="Grandpa does drop-off on camp days." autocomplete="off">
+          <label for="off-title">${T(`Title`)}</label>
+          <input id="off-title" type="text" maxlength="40" placeholder="Our days off" autocomplete="off">
         </div>
         <div class="field">
-          <label for="off-photo">${T(`Your child’s photo (optional)`)}</label>
+          <label for="off-photo">${T(`A photo (optional)`)}</label>
           <input id="off-photo" type="file" accept="image/*">
-          <span class="hint">${T(`The photo never leaves this device. The card is made here in your browser, nothing is uploaded, and the photo isn’t saved.`)}</span>
+          <span class="hint">${T(`The photo never leaves this device. The calendar is made here in your browser, nothing is uploaded, and the photo isn’t saved.`)}</span>
           <button type="button" class="clear" id="off-photo-clear" hidden>Remove the photo</button>
         </div>
         <div class="actions">
-          <button type="button" class="btn primary" id="off-share" hidden>Share the card</button>
+          <button type="button" class="btn primary" id="off-share" hidden>Share the calendar</button>
           <button type="button" class="btn" id="off-copy-pic" hidden>Copy picture</button>
           <button type="button" class="btn" id="off-save">Save as image</button>
+          <button type="button" class="btn" id="off-save-all">Save all of them</button>
           <button type="button" class="btn" id="off-print">Print</button>
         </div>
         <p class="hint" id="off-card-status" aria-live="polite"></p>
       </div>
-      <div class="card-preview"><canvas id="off-canvas" width="1080" height="1350" role="img" aria-label="Preview of the day-camp schedule card"></canvas></div>
+      <div class="card-preview"><canvas id="off-canvas" width="1080" height="1350" role="img" aria-label="Preview of the days-off calendar"></canvas></div>
     </div>
   </div>
   <script type="application/json" id="off-data">${JSON.stringify(planData).replace(/</g, '\\u003c')}</script>
 </section>
+<section class="section sum-chart-section" id="chart">
+  <h2>${T(`Who’s open each day off`)}</h2>
+  <p>${T(`Each column is a day district schools are closed. A filled box means the program’s own site lists a camp that day. The chart scrolls sideways.`)} <span class="needs-js">${T(`Tap a box to put that day in your plan.`)}</span></p>
+  <p class="sum-key"><span><i class="k exact"></i>${T(`Camp posted`)}</span><span class="needs-js"><i class="k picked"></i>${T(`In your plan`)}</span></p>
+  <p class="hint" id="off-chart-note" aria-live="polite"></p>
+  ${dated.length ? `<div class="sum-chart-wrap" role="region" aria-label="Who’s open each day off" tabindex="0">
+    <table class="sum-chart off-chart">
+      <thead><tr><th scope="col">Program</th>${head}</tr></thead>
+      <tbody>
+${chartRows}
+      </tbody>
+    </table>
+  </div>` : `<p class="hint">${T(`No listed program has posted a camp date yet.`)}</p>`}
+  ${noDates.length ? `<h3 class="sub">${T(`No dates posted yet`)}</h3>
+  <p>${T(`These programs say they run on days off but had no dates on their sites when we checked. You can still put one on any day above, then ask whether it’s open.`)}</p>
+  <ul class="plain cols">${noDates.map(p => `<li><a href="#${esc(p.id)}">${esc(p.name)}</a></li>`).join('')}</ul>` : ''}
+</section>
 <section class="section" id="days">
   <h2>${T(`Days off still to come`)}</h2>
-  <p>${T(`These are the School District of Philadelphia’s dates. Open a day to see who has posted a camp for it. A program is named only when its own site lists that date.`)}</p>
-  <div class="offdays">
-${dayRows}
-  </div>
+  <p>${T(`These are the School District of Philadelphia’s dates. A program is counted only when its own site lists that date.`)}</p>
+  <ul class="plain off-dates">
+${offDays.map(d => { const n = campsOn(d).length; return `    <li data-until="${d.until}"><b>${d.end ? `${shortDate(d.date)} – ${shortDate(d.end)}` : dayDate(d.date)}</b> <span>${esc(d.name)}</span> <span class="pill ${n ? 'onsite' : 'nearby'}">${n ? `${n} ${n === 1 ? 'camp' : 'camps'} posted` : 'None posted yet'}</span>${d.note ? ` <span class="hint">${esc(d.note)}</span>` : ''}</li>`; }).join('\n')}
+  </ul>
   <p class="src">Calendar: <a href="${esc(daysOff.source.url)}" target="_blank" rel="noopener">${esc(daysOff.source.label)}</a></p>
 </section>
 ${alertsBox(D, { place: 'days_off', title: T(`Get a heads-up before each day off`), lede: T(`An email at least {n} days ahead, with the listed programs running a camp that day.`, { n: LEAD.dayoff }) })}
@@ -2515,7 +2537,7 @@ ${cards}
   return layout({
     title: `Day camps for days off school in Philadelphia`,
     description: `Every day School District of Philadelphia schools are closed in ${daysOff.schoolYear}, and the after-school programs that run a camp or full-day care on those days.`,
-    pathName: offPath, depth: D, current: offPath, hero, body, theme: 'dayoff', showStreet: 'dayoff',
+    pathName: offPath, depth: D, current: offPath, hero, body, showStreet: 'dayoff', scripts: GROUPS ? groupsScript(D) : '',
     shareImage: { file: 'share-days-off.png', alt: `${cfg.siteName} day-off programs: a park on a morning with no school, a kite going up and a school bus parked` },
     jsonLd: { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Day-camp programs', `${cfg.siteUrl}/${offPath}`]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) },
   });
@@ -3325,7 +3347,7 @@ $SCHOOLS = json_decode('${names}', true);
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
+$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);

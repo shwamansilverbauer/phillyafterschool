@@ -402,8 +402,8 @@ weekdays only; with fewer it would filter nothing, so it stays hidden.
 
 **Days off.** `/days-off/` ("Day-camp programs" in the menu and footer) lists the days School District of Philadelphia students are off, from
 `data/days-off.json` (`schoolYear`, `source`, `checked`, `lastDay`, and `days`: each with a `date`, a `name`,
-and an `end` for a break). Under each day it names the programs whose `daysOff.dates` include that date, and
-below that every program with `daysOff`. Past days drop off at build time and are hidden by the page between
+and an `end` for a break). It shows which programs' `daysOff.dates` include each date, the district's list of days,
+and every program with `daysOff`. Past days drop off at build time and are hidden by the page between
 builds. The home page and each school page show a "Next day off" line. The build prints a note when a provider
 date isn't a district day off (a typo on their side, or a day only they close for). Replace the file's days
 each summer when the district publishes the new calendar.
@@ -423,17 +423,31 @@ week someone built by hand takes two taps, and "Put back what I had" restores it
 Each school page links in with `board/?roll=<school id>`. A roll fires `pas_theme_week` (theme, school, method
 of `roll`, `again` or `undo`).
 
-**A day-off plan.** On the same page, "Build your day-off plan" lets a family choose, for each day off, where a
-child will be: one of the camps posted for that date, another listed program (flagged as not posted for that
-date), or at home. Picks are saved with the rosters in the browser, per child, and gathered in a list. There is
-no copy or email button: the plan leaves the page as a card. "Make it a card" draws the schedule as a picture in the day-off colors, with an optional
-note and photo (the photo never leaves the device) and its own QR code: `/d`, which `.htaccess` sends to the
-day-camp page tagged `utm_source=dayoff_card`. Each pick fires `pas_dayoff_pick` (program_id, day); saving, sharing
-or printing the card fires `pas_board_share` with board `day_camp`.
+**Your days off.** The same page is laid out like the summer schedule and shares its code and its look:
 
-The day-off page has its own look: a yellow band with navy type (`.band.dayoff` in the stylesheet) and its
-own drawing, `dayScene()` in `build.mjs`: the school shut, the bus asleep, a swing and a kite going up. Its
-share picture is `src/static/share-days-off.png`; any page can name its own with `shareImage` in `layout()`.
+- "Your days off" (`[data-off-plan]`) has a row for every weekday still to come that school is closed. For each, a
+  family chooses one place for each child: a program that posted a camp for that date, another listed program (marked
+  "ask", because it hasn't posted the date), or at home. On a break, one tap repeats a pick on the other days of the
+  break the program posted. Picks are saved with the rosters in the browser, per child (`off` on each child:
+  `{ "2026-11-03": "program-id" }`, or `"home"`). Siblings, first names and "copy Sam's days" work as on the summer page.
+- "Who's open each day off" is a chart of every program against every day, filled where the program's own site lists
+  the date. It reads without JavaScript; with it, a tap puts that day in the plan (tap again to take it off).
+- The plan leaves the page as a calendar file for every child (`days-off.ics`), as text, as a printed list, or as
+  pictures: every day off on one card, or a calendar for each month with the days off in yellow and a bar for each
+  child. The title can be typed over (`offTitle`); a photo is drawn in the browser and never saved or uploaded. The
+  card keeps its QR code, `/d`, which `.htaccess` sends to the page tagged `utm_source=dayoff_card`.
+- **Kept in a profile.** Signed in, "Keep this plan in my profile" (`#off-profile`) stores one plan per account
+  (table `daysoffs`): the school year, and for each child a first name and the pick for each day. `keepPlan()` in
+  `groups.js` runs this box and the summer one from the same code; the server actions are `daysoff_save` and
+  `daysoff_delete`, and `profile` returns it as `daysoff`. It is never shared and no other action reads it.
+- An email's "See who's open" button links to `days-off/#d-2026-11-03`, which opens that day's choices.
+- Each pick fires `pas_dayoff_pick` (program_id, day, method). Other actions fire `pas_dayoff` with an `action`
+  (copy_sibling, fill_break, sibling_add, copy, share, print, clear, profile_keep, profile_put, profile_stop); saving,
+  sharing or printing a picture and saving the calendar file fire `pas_board_share` with board `day_camp`.
+
+The page uses the same blue band as the rest of the site, with its own drawing, `dayScene()` in `build.mjs`: the
+school shut, the bus asleep, a swing and a kite going up. Its share picture is `src/static/share-days-off.png`; any
+page can name its own with `shareImage` in `layout()`.
 
 **Colours.** Every colour is a named value at the top of `src/site.css`. The band at the top of each page is a
 daytime sky (`--hero` fading to `--hero-low`) with navy type (`--hero-ink`, `--hero-muted`); the header button
