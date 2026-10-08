@@ -778,19 +778,23 @@ This site's own count of those clicks is the `pas_outbound` event.
 
 ## Changing the site's address
 
-The site is moving from phillyafterschool.org to phillyafterschool.com. Almost everything takes its address
+The site lives at phillyafterschool.org and is staying there: a move to phillyafterschool.com was prepared in
+October 2026 and then decided against, so the .com simply forwards to the .org. This section is here in case
+the address ever does change. Almost everything takes its address
 from `siteUrl` in `site.config.json`: links, the sitemap, `robots.txt`, canonical tags, emails the site sends,
 share text, the tags on links out. Two settings sit beside it:
 
 - `formerHosts`: other addresses that answer for the site. `.htaccess` sends each one (with or without www) to
-  the same page on `siteUrl`, with a 301. Both domains have to be attached to the same site folder in Hostinger
-  (the second as a parked domain, with its own certificate) for this to run. The hourly check looks at it.
+  the same page on `siteUrl`, with a 301. That rule only runs for a domain attached to the same site folder in
+  Hostinger (as a parked domain, with its own certificate). Today phillyafterschool.com is forwarded by a redirect
+  set in Hostinger instead, which lands on the home page whatever the link was. The hourly check watches that it
+  still arrives.
 - `calendarIdHost`: the name inside every calendar entry's id (`CAL_ID_HOST` in `src/site.js` is the same
   value). It stays `phillyafterschool.org` for good, so a calendar file saved again after the move updates the
   entries a parent already has instead of doubling them.
 
-The switch itself, once phillyafterschool.com opens the site over https and is listed as an allowed origin on
-the Google sign-in client:
+A switch, once the new domain opens the site over https and is listed as an allowed origin on the Google
+sign-in client:
 
 1. In `site.config.json`, set `siteUrl` to the new address and `formerHosts` to the old one.
 2. `python3 scripts/card-qr.py` to redraw the QR codes on the cards for the new address.
