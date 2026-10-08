@@ -68,6 +68,22 @@ async function pages() {
   else pass('Pages', `${urls.length} pages opened`);
 }
 
+// ----- the site's other addresses still lead here -----
+async function others() {
+  if (LOCAL || !(cfg.formerHosts || []).length) return;
+  const bad = [], home = [];
+  for (const host of cfg.formerHosts) {
+    try {
+      const r = await fetch(`https://${host}/schools/`, { headers: { 'user-agent': 'phillyafterschool-site-check' }, redirect: 'manual', signal: AbortSignal.timeout(20000) });
+      const to = r.headers.get('location') || '';
+      if (r.status !== 301 || !to.startsWith(cfg.siteUrl)) bad.push(`${host} answered ${r.status}${to ? ' and pointed to ' + to : ''}`);
+      else if (!to.startsWith(cfg.siteUrl + '/schools/')) home.push(host);   // it arrives, but at the front door rather than the same page
+    } catch { bad.push(`${host} did not answer`); }
+  }
+  if (bad.length) fail('Other addresses', bad.join('; '), 'Old links, shared cards and QR codes go through these. Check the domain is still attached to the site in Hostinger and has its certificate.');
+  else pass('Other addresses', `${cfg.formerHosts.join(', ')} lead${cfg.formerHosts.length === 1 ? 's' : ''} here${home.length ? ' (' + home.join(', ') + ' to the home page only)' : ', page for page'}`);
+}
+
 // ----- was it rebuilt last night? -----
 async function fresh() {
   const r = await get(`${SITE}/data/alerts.json`);
@@ -138,6 +154,7 @@ async function jobs() {
 }
 
 await pages();
+await others();
 await fresh();
 await accounts();
 await forms();

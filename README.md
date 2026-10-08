@@ -776,6 +776,32 @@ Add `"noUtm": true` to a program if its site misbehaves with the tags, or set `"
 `site.config.json` to turn them all off. The data files stay clean: `data/programs.json` holds the plain addresses.
 This site's own count of those clicks is the `pas_outbound` event.
 
+## Changing the site's address
+
+The site is moving from phillyafterschool.org to phillyafterschool.com. Almost everything takes its address
+from `siteUrl` in `site.config.json`: links, the sitemap, `robots.txt`, canonical tags, emails the site sends,
+share text, the tags on links out. Two settings sit beside it:
+
+- `formerHosts`: other addresses that answer for the site. `.htaccess` sends each one (with or without www) to
+  the same page on `siteUrl`, with a 301. Both domains have to be attached to the same site folder in Hostinger
+  (the second as a parked domain, with its own certificate) for this to run. The hourly check looks at it.
+- `calendarIdHost`: the name inside every calendar entry's id (`CAL_ID_HOST` in `src/site.js` is the same
+  value). It stays `phillyafterschool.org` for good, so a calendar file saved again after the move updates the
+  entries a parent already has instead of doubling them.
+
+The switch itself, once phillyafterschool.com opens the site over https and is listed as an allowed origin on
+the Google sign-in client:
+
+1. In `site.config.json`, set `siteUrl` to the new address and `formerHosts` to the old one.
+2. `python3 scripts/card-qr.py` to redraw the QR codes on the cards for the new address.
+3. Change the address in `email/` and in the two live Klaviyo templates, and the three `custom_source` labels
+   in `src/site.js` and `src/groups.js`.
+4. Build, run the tests, push. Then check an old deep link lands on the same page at the new address.
+
+What a move costs: people sign in again (the sign-in cookie belongs to the old address), and a plan kept only on
+a device stays behind with the old address. Plans kept in a profile come back at the next sign-in. The accounts
+database does not move: both addresses are served from the same folder.
+
 ## Parents and program managers, told apart
 
 Every account is one or the other. A **manager** holds a claim (approved or waiting) or made the account on

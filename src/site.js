@@ -326,6 +326,9 @@
     };
   }
 
+  // The name inside every calendar entry's id. It is the site's first address and stays that way if the address
+  // changes, so a file saved again updates the entries a calendar already has instead of doubling them.
+  var CAL_ID_HOST = 'phillyafterschool.org';
   // A calendar file (.ics) made here in the browser and handed to the device, so what's in it goes nowhere else.
   // Each event is { uid, start: "2027-06-07", days: 5, title, text, url }, and lasts whole days.
   function saveCalendar(name, events) {
@@ -335,7 +338,7 @@
     var stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+Z$/, 'Z');
     var lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Philly After School//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
     events.forEach(function (e) {
-      lines.push('BEGIN:VEVENT', 'UID:' + e.uid + '@' + location.hostname, 'DTSTAMP:' + stamp, 'DTSTART;VALUE=DATE:' + ymd(e.start), 'DTEND;VALUE=DATE:' + ymd(e.start, e.days || 1), 'SUMMARY:' + esc(e.title));
+      lines.push('BEGIN:VEVENT', 'UID:' + e.uid + '@' + CAL_ID_HOST, 'DTSTAMP:' + stamp, 'DTSTART;VALUE=DATE:' + ymd(e.start), 'DTEND;VALUE=DATE:' + ymd(e.start, e.days || 1), 'SUMMARY:' + esc(e.title));
       if (e.text) lines.push('DESCRIPTION:' + esc(e.text));
       if (e.url) lines.push('URL:' + e.url);
       if (e.rule) lines.push('RRULE:' + e.rule);   // an entry that repeats, and the days it skips
@@ -1062,7 +1065,7 @@
         });
       }
       // footer: where this came from
-      var host = String(od.page || '').replace(/^https?:\/\//, '').replace(/\/$/, '') || 'phillyafterschool.org/days-off';
+      var host = String(od.page || '').replace(/^https?:\/\//, '').replace(/\/$/, '') || location.host + '/days-off';
       ctx.fillStyle = YELLOW; ctx.font = '800 38px ' + DISPLAY; ctx.fillText('Plan your days off', 56, H - FOOT + 64);
       ctx.fillStyle = '#FFFFFF'; ctx.font = '700 32px ' + BODY; ctx.fillText(host, 56, H - FOOT + 110);
       if (od.qr && od.qr.length) {
@@ -2067,7 +2070,7 @@
         ctx.fillStyle = '#FFFFFF'; ctx.font = '400 30px ' + BODY; ctx.fillText(fit(ctx, 'Note: ' + note, 930), 76, 1139 + EXTRA);
       }
       // footer: where this came from, so a shared or printed card leads back to the site
-      var host = String(data.site || '').replace(/^https?:\/\//, '') || 'phillyafterschool.org';
+      var host = String(data.site || '').replace(/^https?:\/\//, '') || location.host;
       ctx.fillStyle = '#F3C613'; ctx.font = '800 40px ' + DISPLAY; ctx.fillText('Build your own week', 56, H - FOOT + 70);
       ctx.fillStyle = '#FFFFFF'; ctx.font = '700 36px ' + BODY; ctx.fillText(host, 56, H - FOOT + 118);
       if (data.qr && data.qr.length) {   // a QR code to the site, drawn from the pattern the build provides
@@ -2510,7 +2513,7 @@
         });
       }
       // footer: where this came from
-      var host = String(sd.page || '').replace(/^https?:\/\//, '').replace(/\/$/, '') || 'phillyafterschool.org/summer-schedule';
+      var host = String(sd.page || '').replace(/^https?:\/\//, '').replace(/\/$/, '') || location.host + '/summer-schedule';
       ctx.fillStyle = YELLOW; ctx.font = '800 38px ' + DISPLAY; ctx.fillText('Plan your summer', 56, H - FOOT + 64);
       ctx.fillStyle = '#FFFFFF'; ctx.font = '700 32px ' + BODY; ctx.fillText(host, 56, H - FOOT + 110);
       ctx.fillStyle = '#CFE3FB'; ctx.font = '400 24px ' + BODY; ctx.textAlign = 'right'; ctx.fillText('Check dates with each camp', W - 56, H - FOOT + 110); ctx.textAlign = 'left';
@@ -2964,7 +2967,7 @@
         });
       }
       ctx.fillStyle = YELLOW; ctx.font = '800 38px ' + DISPLAY; ctx.fillText('Plan your year', 56, H - FOOT + 64);
-      ctx.fillStyle = '#FFFFFF'; ctx.font = '700 32px ' + BODY; ctx.fillText(String(yd.site || '').replace(/^https?:\/\//, '') || 'phillyafterschool.org', 56, H - FOOT + 110);
+      ctx.fillStyle = '#FFFFFF'; ctx.font = '700 32px ' + BODY; ctx.fillText(String(yd.site || '').replace(/^https?:\/\//, '') || location.host, 56, H - FOOT + 110);
       ctx.fillStyle = '#CFE3FB'; ctx.font = '400 24px ' + BODY; ctx.textAlign = 'right'; ctx.fillText('Check dates with each program', W - 56, H - FOOT + 110); ctx.textAlign = 'left';
       yearSharer.stale();
     };
