@@ -315,6 +315,8 @@ if (daysOff) {
 for (const p of programs) for (const d of p.register?.dates || []) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(d.date || '') || !d.label) errors.push(`program "${p.id}": each register.dates entry needs a date (YYYY-MM-DD) and a label`);
 }
+// A school's "added" is the day its page went up. People who asked to be told get one email that morning or the next.
+for (const s of schools) if (s.added !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(s.added)) errors.push(`school "${s.id}": added must be YYYY-MM-DD, the day its page went live`);
 // "updates" are short dated notes about a program (a new price, a new class). They are emailed to the people following it.
 for (const p of programs) if (p.updates !== undefined) {
   if (!Array.isArray(p.updates) || p.updates.some(u => !/^\d{4}-\d{2}-\d{2}$/.test(u?.date || '') || typeof u.text !== 'string' || !u.text.trim() || u.text.length > 300)) errors.push(`program "${p.id}": each updates entry needs a date (YYYY-MM-DD) and a text of up to 300 characters`);
@@ -349,6 +351,9 @@ if (cfg.editLogin && (!cfg.editLogin.user || !/^\$2[aby]\$\d\d\$[.\/A-Za-z0-9]{5
     for (const k of ['ageMin', 'ageMax', 'weekly']) if (c[k] !== undefined && !(typeof c[k] === 'number' && c[k] >= 0)) errors.push(`${at}: ${k} must be a number`);
     if (c.price !== undefined && !['free', 'paid'].includes(c.price)) errors.push(`${at}: price must be "free" or "paid"`);
     if (c.program !== undefined && !programs.some(p => p.id === c.program)) errors.push(`${at}: program "${c.program}" is not a listing in data/programs.json`);
+    // "dates" are the camp's own sign-up dates and "updates" are short dated notes. Both are emailed to the people who asked about the camp.
+    if (c.dates !== undefined && (!Array.isArray(c.dates) || c.dates.some(d => !/^\d{4}-\d{2}-\d{2}$/.test(d?.date || '') || typeof d.label !== 'string' || !d.label.trim() || d.label.length > 120))) errors.push(`${at}: each dates entry needs a date (YYYY-MM-DD) and a label of up to 120 characters`);
+    if (c.updates !== undefined && (!Array.isArray(c.updates) || c.updates.some(u => !/^\d{4}-\d{2}-\d{2}$/.test(u?.date || '') || typeof u.text !== 'string' || !u.text.trim() || u.text.length > 300))) errors.push(`${at}: each updates entry needs a date (YYYY-MM-DD) and a text of up to 300 characters`);
     if (!c.check || !isUrl(c.check.url) || !['fetch', 'browser', 'person'].includes(c.check.how) || !c.check.look) errors.push(`${at}: check needs url, how (fetch, browser or person) and look: the quickest way to read this camp again`);
     // Grades for the shared grade picker, worked out from ages: pre-K is 3 and 4, kindergarten 5, 1st grade 6, and so on.
     const lo = c.ageMin ?? null, hi = c.ageMax ?? null;
@@ -941,21 +946,44 @@ const alertItems = [
     };
   }),
 ].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
+// Entries that need the camp list and the city's school list, which are read further down this file.
+//   a camp's own sign-up dates and notes  -> the people who asked about that camp
+//   a school that has just been given a page -> the people who asked to be told when it was added
+const lateAlertItems = () => [
+  ...summerCamps.flatMap(c => (c.dates || []).filter(d => d.date >= TODAY).map(d => ({
+    id: `campreg-${c.id}-${d.date}`, kind: 'register', date: d.date, sendOn: sendOn(d.date, LEAD.register), schools: [], programs: [], camps: [c.id],
+    when: longDay(d.date), title: c.name, text: d.label.trim().replace(/\.$/, '') + '.', url: mailUrl(campPath(c)), button: 'See the camp',
+  }))),
+  ...summerCamps.flatMap(c => (c.updates || []).map(u => ({
+    id: `campnews-${c.id}-${u.date}`, kind: 'update', date: u.date, sendOn: nextSend(u.date), expires: isoAdd(nextSend(u.date), 2), schools: [], programs: [], camps: [c.id],
+    when: 'Update', title: c.name, text: u.text.trim(), url: mailUrl(campPath(c)), button: 'See the camp',
+  }))).filter(a => a.expires >= TODAY),
+  ...schools.filter(s => s.added).map(s => {
+    const n = forSchool(s).length;
+    return {
+      id: `added-${s.id}`, kind: 'added', date: s.added, sendOn: s.added, expires: isoAdd(s.added, 2), schools: [], programs: [],
+      waiting: finderData.schools.filter(r => r[5] === s.id).map(r => r[0]),
+      when: 'New', title: `${s.shortName} now has a page`, text: `You asked to be told. ${n === 1 ? 'One program is' : n + ' programs are'} listed for ${s.shortName} so far: the ones at the school, the ones that pick up from it and the ones close by.`,
+      url: mailUrl(`${s.id}/`), button: 'See the page',
+    };
+  }).filter(a => a.expires >= TODAY),
+];
 const alertsFeed = () => ({
   about: `Dated reminders for ${cfg.siteName}. Each one is emailed on its sendOn day to people who asked for their school's dates.`,
   generated: TODAY, site: cfg.siteUrl, metric: ALERTS?.metric || 'School dates', sendDay: SEND_DAY_NAME,
   schools: schools.map(s => ({ id: s.id, name: s.shortName })),
   programs: programs.map(p => ({ id: p.id, name: fullName(p) })),
-  alerts: alertItems,
+  camps: summerCamps.map(c => ({ id: c.id, name: c.name })),
+  alerts: [...alertItems, ...lateAlertItems()].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id)),
 });
 // The sign-up box. With a school or a program it asks for a first name and an email; without either it also asks which school.
 // A program box follows that one program: its dates, its day-off camps and its updates, and nothing else.
-const alertsBox = (depth, { school = null, program = null, place, title, lede }) => !ALERTS ? '' : `<section class="panel alerts" id="by-email">
+const alertsBox = (depth, { school = null, program = null, camp = null, place, title, lede }) => !ALERTS ? '' : `<section class="panel alerts" id="by-email">
   <h2>${title}</h2>
   <p>${lede}</p>
   <form class="alerts-form" data-alerts data-place="${place}" data-key="${esc(ALERTS.klaviyoKey)}" data-list="${esc(ALERTS.listId)}"${ALERTS.doubleOptIn ? ' data-confirm="1"' : ''}${PREVIEW ? ' data-preview="1"' : ''} data-clarity-mask="true" novalidate>
     <div class="alerts-row">
-      ${program ? `<input type="hidden" name="program" value="${esc(program.id)}" data-name="${esc(fullName(program))}">` : school ? `<input type="hidden" name="school" value="${esc(school.id)}" data-name="${esc(school.shortName)}">` : `<div class="field">
+      ${camp ? `<input type="hidden" name="camp" value="${esc(camp.id)}" data-name="${esc(camp.name)}">` : program ? `<input type="hidden" name="program" value="${esc(program.id)}" data-name="${esc(fullName(program))}">` : school ? `<input type="hidden" name="school" value="${esc(school.id)}" data-name="${esc(school.shortName)}">` : `<div class="field">
         <label for="al-school-${place}">${T(`Your school`)}</label>
         <select id="al-school-${place}" name="school">
           ${[...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<option value="${esc(s.id)}" data-name="${esc(s.shortName)}">${esc(s.shortName)}</option>`).join('')}
@@ -974,9 +1002,9 @@ const alertsBox = (depth, { school = null, program = null, place, title, lede })
         <label for="al-company-${place}">Leave this blank</label>
         <input id="al-company-${place}" name="company" type="text" tabindex="-1" autocomplete="off">
       </div>
-      <button class="btn primary big" type="submit">${program ? T(`Tell me`) : T(`Send me the dates`)}</button>
+      <button class="btn primary big" type="submit">${program || camp ? T(`Tell me`) : T(`Send me the dates`)}</button>
     </div>
-    <p class="hint">${program ? T(`Only when this program posts something new, on a {day} morning. Every email has an unsubscribe link.`, { day: SEND_DAY_NAME }) : T(`One email on {day} morning, and only in a week with a date coming up. Every email has an unsubscribe link.`, { day: SEND_DAY_NAME })} <a href="${link('privacy/', depth)}#email">${T(`How we handle your email.`)}</a></p>
+    <p class="hint">${camp ? T(`Only about this camp, on a {day} morning. We read each camp’s site again about once a month, so the email can come a few weeks after the camp’s own announcement. If a camp fills fast, watch its site too. Every email has an unsubscribe link.`, { day: SEND_DAY_NAME }) : program ? T(`Only when this program posts something new, on a {day} morning. Every email has an unsubscribe link.`, { day: SEND_DAY_NAME }) : T(`One email on {day} morning, and only in a week with a date coming up. Every email has an unsubscribe link.`, { day: SEND_DAY_NAME })} <a href="${link('privacy/', depth)}#email">${T(`How we handle your email.`)}</a></p>
     <p class="alerts-status" data-alerts-status aria-live="polite"></p>
   </form>
   <noscript><p class="hint">${T(`Signing up needs JavaScript.`)}</p></noscript>
@@ -994,6 +1022,7 @@ function alertsPage() {
       <li>${T(`Each district day off at least {n} days ahead, with the listed programs running a camp that day.`, { n: LEAD.dayoff })}</li>
       <li>${T(`One email a week at most. If your school isn’t listed yet, you get the days off and every listed program’s dates.`)}</li>
       <li>${T(`Waiting on one program? Each program’s page has a “Tell me when sign-ups open” box, for emails about that program alone.`)}</li>
+      ${summerCamps.length ? `<li>${T(`Waiting on a summer camp? Each camp’s page has a box to be emailed when it posts next summer or names a sign-up day.`)}</li>` : ''}
       <li>${T(`No account, and no questions about your children.`)}</li>
     </ul>
     ${soon.length ? `<h2>${T(`Dates coming up`)}</h2>
@@ -1300,6 +1329,8 @@ ${rows}
 // from the school, because nobody has checked. A page with fewer than three things nearby is kept out of search
 // engines, so they aren't handed a row of near-empty pages. The preview copy keeps the single shared page instead.
 const SCHOOL_PAGES = !PREVIEW;
+// A covered school's row in the city list: its "not covered yet" page is no longer made, so that address is sent on.
+const movedSchools = finderData.schools.filter(r => r[5] && r[0] !== r[5]).map(r => [r[0], r[5]]);
 const uncovered = cityList.schools.filter(x => { const r = finderData.schools.find(y => y[0] === x.id); return r && !r[5]; }).sort((a, b) => a.name.localeCompare(b.name));
 const uncoveredPath = x => `schools/${x.id}/`;
 const nearTo = (at, list, placesFn, max) => list.map(p => [p, placesFn(p).length ? Math.min(...placesFn(p).map(b => milesApart(at, b))) : Infinity]).filter(x => x[1] <= max).sort((a, b) => a[1] - b[1]);
@@ -1904,6 +1935,7 @@ function privacyPage() {
     <li>${T(`Accounts, profiles and groups are kept in a file on our web host, outside the public site. Google Analytics and Microsoft Clarity are not loaded on your account page, on invitations or on group pages. Two pages around them do load them. The page where you create an account counts visits: its form is hidden in session recordings, and analytics is told only that a sign-up started, whether it used email or Google, and that it finished, never the address or a name. The Build your week page is hidden in session recordings too, and analytics is told only that something was kept or shared, never what or with whom.`)}</li>
     <li>${T(`We keep a daily count of how many accounts, shared weeks and groups were made, to see whether this is used. The counts hold no names, addresses or weeks.`)}</li>
     <li>${T(`You can take a week out of your profile or out of a group, stop sharing, leave a group, or delete your account from the site at any time, and it is removed straight away. A group’s creator can remove anyone. Every shared week and group is deleted two weeks after the last day of school.`)}</li>
+    <li>${T(`A safety copy of the accounts database is made each day and kept for 14 days, in case something breaks, and our web host keeps its own backups. So what you delete is gone from the site straight away, and leaves those copies as they are replaced, usually within a month.`)}</li>
     <li>${T(`Accounts are for parents, caregivers, teachers and the people who run programs. Children should not make one, and the site never asks a child for an email address: building a week and making a card work without an account.`)}</li>
   </ul>
   <h2 id="managers">${T(`If you manage a program and claim its listing`)}</h2>
@@ -1933,6 +1965,7 @@ ${GROUPS.photos ? `    <li>${T(`A photo you send for your listing is shrunk in y
   ${ALERTS ? `<h2 id="email">${T(`Dates by email`)}</h2>
   <ul>
     <li>${T(`The sign-up form sends three things: your first name, your email address and the school or program you chose. They go from your browser to Klaviyo, the email service we use, and are stored there.`)}</li>
+    ${summerCamps.length ? `<li>${T(`On a summer camp’s page the same form sends the camp you asked about, and you hear about that camp alone.`)}</li>` : ''}
     <li>${T(`It never asks for a child’s name, grade or anything else about your family, and your roster is not sent with it.`)}</li>
     <li>${T(`Klaviyo also notes which page you signed up on. Like most email services, it records whether an email was opened and which links were clicked, and it may estimate a general location from your internet connection.`)}</li>
     <li>${T(`Your name and address are used for these date emails and nothing else. They are not shared with the programs listed here, and they are not sold.`)}</li>
@@ -3648,6 +3681,8 @@ ${chartRows}
 // ---------- a page per summer camp ----------
 // The list shows a short card for each camp; everything the camp posts is on its own page, which search engines can find.
 const campPath = c => `${campsPath}${c.id}/`;
+// A camp shaped like a program, for the calendar files and links a sign-up date gets.
+const campAsListing = c => ({ id: 'camp-' + c.id, name: c.name, website: c.website, register: { url: c.registerUrl || c.website } });
 const campAges = c => c.ageMin || c.ageMax ? (c.ageMin && c.ageMax ? `Ages ${String(c.ageMin).replace('.5', '½')}–${c.ageMax}` : c.ageMin ? `Ages ${String(c.ageMin).replace('.5', '½')} and up` : `Up to age ${c.ageMax}`) : '';
 const campPrice = c => c.weekly === 0 || (c.weekly === undefined && c.price === 'free') ? 'Free' : c.weekly ? `$${c.weekly} a week` : '';
 const campHoursShort = c => String(c.hours || '').split(/[.;] /)[0].replace(/\.$/, '');
@@ -3656,8 +3691,11 @@ function campPage(c) {
   const D = 2, year = summerYear;
   const where = [c.address, (c.neighborhoods || []).join(', ')].filter(Boolean);
   const rows = [['Ages', fold(esc(c.ages || ''))], ['Weeks', fold(esc(c.weeks || ''))], ['Hours', fold(esc(c.hours || ''))], ['Before and after', fold(esc(c.extended || ''))], ['Cost', fold(esc(c.cost || ''))], ['Help with cost', fold(esc(c.aid || ''))], ['Where', esc(where.length === 2 ? `${where[0]} (${where[1]})` : where[0] || '')], ['Signing up', fold(esc(c.signup || ''))], ['Phone', c.phone ? `<a href="tel:+1-${esc(c.phone)}">${esc(c.phone)}</a>` : '']]
-    .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+    .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`);
   const prog = c.program ? programs.find(p => p.id === c.program) : null;
+  const campDates = (c.dates || []).filter(d => d.date >= TODAY);
+  const campCal = campAsListing(c);
+  if (campDates.length) rows.splice(-1, 0, `<dt>Dates</dt><dd class="dates">${campDates.map(d => `<span class="cal" data-date="${d.date}"><b>${shortDate(d.date)}:</b> ${esc(d.label.replace(/\.$/, ''))}. ${PREVIEW ? '' : `<a href="${link('cal/' + campCal.id + '-' + d.date + '.ics', D)}" data-track="calendar">Add to calendar</a> `}<a href="${esc(gcalUrl(campCal, d))}" target="_blank" rel="noopener" data-track="calendar">${PREVIEW ? 'Add to Google Calendar' : 'Google Calendar'}</a></span>`).join('')}</dd>`);
   const plan = summerPlan.camps.find(x => x.c.id === c.id) || { on: [], exact: false };
   const areas = campAreas(c).length === CAMP_AREAS.length ? [] : campAreas(c);
   // the camps closest to this one, for someone still looking
@@ -3676,7 +3714,7 @@ function campPage(c) {
       ${spaceSlot('c:' + c.id, D)}
     </div>`;
   const body = `<div style="display:contents">
-  ${c.season && c.season < year ? `<section class="section"><p class="flag camp-guide"><b>${T(`These are its summer {year} details, shown as a guide.`, { year: c.season })}</b> ${T(`It hasn’t posted summer {next} yet. This page changes when it does.`, { next: year })}</p></section>` : ''}
+  ${c.season && c.season < year ? `<section class="section"><p class="flag camp-guide"><b>${T(`These are its summer {year} details, shown as a guide.`, { year: c.season })}</b> ${T(`It hasn’t posted summer {next} yet. This page changes when it does.`, { next: year })}${ALERTS ? ` <a href="#by-email">${T(`Get an email when it does.`)}</a>` : ''}</p></section>` : ''}
   <section class="section">
     <h2>${T(`The details`)}</h2>
     ${photoSlot('c:' + c.id)}
@@ -3684,13 +3722,16 @@ function campPage(c) {
       <div class="strip camp-weeks">${plan.on.length ? `<p class="camp-weeks-h">${plan.exact ? T(`Weeks it runs in {year}`, { year }) : T(`Weeks it ran in {year}`, { year: c.season })}</p>
         <ol class="weekstrip">${summerPlan.weeks.map((w, i) => { const d = utcDay(w); return `<li class="${plan.on.includes(i) ? 'on' + (plan.exact ? ' exact' : '') : ''}"><span>${MONTH_NAMES[d.getUTCMonth()].slice(0, 3)}</span><b>${d.getUTCDate()}</b><i class="vh">${plan.on.includes(i) ? 'runs' : 'no camp'}</i></li>`; }).join('')}</ol>
         <p class="hint">${plan.exact ? T(`Each box is a week, named by its Monday.`) : T(`Each box is a week, named by its Monday in {year}: last summer’s weeks, moved to the same week of the calendar.`, { year })}</p>` : `<p class="hint">${T(`It hasn’t listed dates we can chart.`)}</p>`}</div>
-      <dl>${rows}</dl>
+      <dl>${rows.join('')}</dl>
       ${c.note ? `<p class="flag">${esc(c.note)}</p>` : ''}
       <div class="actions"><a class="btn primary" data-track="camp" href="${esc(outUrl(c.registerUrl || c.website, { type: 'camp' }))}" target="_blank" rel="noopener">${c.registerUrl ? T(`Find or book a spot`) : T(`The camp’s website`)}</a>${c.registerUrl ? `<a class="btn" data-track="website" href="${esc(outUrl(c.website, { type: 'camp' }))}" target="_blank" rel="noopener">${T(`The camp’s website`)}</a>` : ''}<a class="btn needs-js" href="${link(summerPath, D)}?add=${esc(c.id)}">${T(`Add to your summer`)}</a>${prog ? `<a class="btn" href="${link(programPath(prog), D)}">${T(`Its school-year listing`)}</a>` : ''}</div>
     </article>
     <p class="hint">${T(`Dates, prices and openings change, and many camps fill early. Confirm with the camp before you plan around a week.`)}</p>
     ${listingTools('c:' + c.id, c.name, D, 'camp')}
   </section>
+  ${c.season && c.season < year
+    ? alertsBox(D, { camp: c, place: 'camp', title: T(`Tell me when it posts summer {year}`, { year }), lede: T(`One email when {camp} posts its {year} dates and prices, and one before sign-ups open if it names a day. Just this camp.`, { camp: c.name, year }) })
+    : alertsBox(D, { camp: c, place: 'camp', title: T(`Tell me when something changes`), lede: T(`One email before sign-ups open at {camp}, if it names a day, and one when its dates or prices change. Just this camp.`, { camp: c.name }) })}
   ${near.length ? `<section class="section">
     <h2>${T(`Camps close to this one`)}</h2>
     <div class="schools">
@@ -3736,7 +3777,7 @@ function summerCampsPage() {
       <span>Checked <b>${longDate(campsFile.checked)}</b></span>
     </div>`;
   const body = `<section class="section">
-  <p class="flag camp-guide"><b>${T(`Most of what’s here is from summer {year}, shown as a guide.`, { year: base })}</b> ${T(`Camps usually post next summer between December and March. Each listing changes to {year} when its camp posts dates and prices, and says so on its card.`, { year: next })}</p>
+  <p class="flag camp-guide"><b>${T(`Most of what’s here is from summer {year}, shown as a guide.`, { year: base })}</b> ${T(`Camps usually post next summer between December and March. Each listing changes to {year} when its camp posts dates and prices, and says so on its card.`, { year: next })}${ALERTS ? ' ' + T(`Waiting on one camp? Its page has a box to be emailed when it posts.`) : ''}</p>
   <p><a class="btn primary" href="${link(summerPath, D)}">${T(`Plan your summer, week by week`)}</a></p>
 </section>
 ${filterBar({ list: shaped, depth: D, near: true, searchLabel: `Looking for a particular camp?`, placeholder: 'Its name, or try art, tennis, Mount Airy…' }).replace('data-filters', 'data-filters data-noun="camp" data-nouns="camps"')}
@@ -3891,6 +3932,7 @@ if (!PREVIEW) {
   write('data/school-finder.json', JSON.stringify(finderData));
   if (cfg.contactEmail) write('edit/send.php', editPhp());   // after every page, so it knows every sentence
   for (const p of programs) for (const d of upcomingDates(p)) write(`cal/${p.id}-${d.date}.ics`, icsFile(p, d));
+  for (const c of summerCamps) for (const d of (c.dates || []).filter(x => x.date >= TODAY)) write(`cal/camp-${c.id}-${d.date}.ics`, icsFile(campAsListing(c), d));
   write('data/reviews.json', JSON.stringify(reviews, null, 2));
   // Public copy of the data, so the monthly check (or anyone) can read exactly what the site shows.
   write('data/programs.json', JSON.stringify(programs.map(({ _grades, _cls, ...p }) => { if (p.weekend) { const { _grades: wg, ...w } = p.weekend; p = { ...p, weekend: w }; } return p.clubs ? { ...p, clubs: p.clubs.map(({ _grades: g, ...c }) => c) } : p; }), null, 2));
@@ -3908,7 +3950,7 @@ if (!PREVIEW) {
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
   const bare = cfg.siteUrl.replace(/^https?:\/\//, '');
-  write('.htaccess', `ErrorDocument 404 /404.html\nAddType text/calendar .ics\nDirectoryIndex index.html index.php\n\n# One address for the site: www goes to the bare domain.\n<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.${bare.replace(/\./g, '\\.')}$ [NC]\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n${cardQr ? `# The short addresses in the QR codes on the week card and the day-camp card.\nRewriteRule ^w/?$ ${cardQr.goesTo} [NC,R=302,L]\n${cardQr.dayoff ? `RewriteRule ^d/?$ ${cardQr.dayoff.goesTo} [NC,R=302,L]\n` : ''}` : ''}</IfModule>\n`);
+  write('.htaccess', `ErrorDocument 404 /404.html\nAddType text/calendar .ics\nDirectoryIndex index.html index.php\n\n# One address for the site: www goes to the bare domain.\n<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.${bare.replace(/\./g, '\\.')}$ [NC]\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n${cardQr ? `# The short addresses in the QR codes on the week card and the day-camp card.\nRewriteRule ^w/?$ ${cardQr.goesTo} [NC,R=302,L]\n${cardQr.dayoff ? `RewriteRule ^d/?$ ${cardQr.dayoff.goesTo} [NC,R=302,L]\n` : ''}` : ''}${movedSchools.length ? `# A school that has been added: its old "not covered yet" address goes to its page.\n${movedSchools.map(([from, to]) => `RewriteRule ^schools/${from}/?$ /${to}/ [R=301,L]\n`).join('')}` : ''}</IfModule>\n`);
 }
 // Edits in data/copy.json are matched to sentences by a fingerprint of the original wording.
 // If the original was reworded or removed in this file, the edit no longer applies: say so, but still build.

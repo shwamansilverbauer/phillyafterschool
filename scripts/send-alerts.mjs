@@ -38,12 +38,15 @@ const shortDay = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US',
 // Everyone gets each date once. Dates already announced when someone joins come in one "welcome" email the
 // morning after they join; later dates come in that week's email.
 // A person can have a school (its dates and every day off; "all" means every school), follow programs (that
-// program's dates, camps and updates only), or both.
+// program's dates, camps and updates only), follow summer camps (that camp's sign-up dates and notes only), be
+// waiting for a school to be added (one email when it is), or any mix of these.
 export function dueFor(person, feed, today) {
-  const follows = person.programs || [];
+  const follows = person.programs || [], camps = person.camps || [], waiting = person.waiting || [];
   const bySchool = a => !!person.school && (person.school === 'all' ? a.schools.length > 0 : a.schools.includes('*') || a.schools.includes(person.school));
   const byProgram = a => (a.programs || []).some(id => follows.includes(id));
-  const wanted = feed.alerts.filter(a => (a.expires || a.date) >= today && (bySchool(a) || byProgram(a)));
+  const byCamp = a => (a.camps || []).some(id => camps.includes(id));
+  const byWaiting = a => (a.waiting || []).some(id => waiting.includes(id));
+  const wanted = feed.alerts.filter(a => (a.expires || a.date) >= today && (bySchool(a) || byProgram(a) || byCamp(a) || byWaiting(a)));
   const got = new Set(wanted.map(a => a.id));
   const ahead = wanted.filter(a => !(a.within && got.has(a.within)));   // a day-off entry already names the camp
   const welcomeDay = isoAdd(person.joined, 1);
@@ -63,12 +66,17 @@ export function dueFor(person, feed, today) {
 
 export function eventFor(person, due, feed) {
   const school = feed.schools.find(s => s.id === person.school);
-  const followed = (person.programs || []).map(id => (feed.programs || []).find(p => p.id === id)?.name).filter(Boolean);
-  const names = followed.length > 3 ? `${followed.slice(0, 2).join(', ')} and ${followed.length - 2} more programs` : followed.length > 1 ? `${followed.slice(0, -1).join(', ')} and ${followed[followed.length - 1]}` : followed[0];
+  const followed = [
+    ...(person.programs || []).map(id => (feed.programs || []).find(p => p.id === id)?.name),
+    ...(person.camps || []).map(id => (feed.camps || []).find(c => c.id === id)?.name),
+  ].filter(Boolean);
+  const onlyAdded = due.items.every(a => a.kind === 'added');
+  const names = followed.length > 3 ? `${followed.slice(0, 2).join(', ')} and ${followed.length - 2} more` : followed.length > 1 ? `${followed.slice(0, -1).join(', ')} and ${followed[followed.length - 1]}` : followed[0];
   const whose = school ? ` for ${school.name} families` : person.school === 'all' ? '' : followed.length === 1 ? ` at ${followed[0]}` : followed.length ? ' at the programs you asked about' : '';
-  const reason = [school ? `you asked for ${school.name} dates` : person.school === 'all' ? 'you asked for dates for every school' : '', followed.length ? `you asked to hear about ${names}` : ''].filter(Boolean).join(' and ') || 'you asked for dates';
+  const reason = onlyAdded ? 'you asked to be told when this school was added'
+    : [school ? `you asked for ${school.name} dates` : person.school === 'all' ? 'you asked for dates for every school' : '', followed.length ? `you asked to hear about ${names}` : ''].filter(Boolean).join(' and ') || 'you asked for dates';
   const first = due.items[0];
-  const lead = first.kind === 'dayoff' ? `No school ${shortDay(first.date)} (${first.title.replace(/^No school: /, '')})` : first.kind === 'update' ? `${first.title}: an update` : first.kind === 'camp' ? `${first.title.replace(/: camp on a day off$/, '')} camp, ${shortDay(first.date)}` : `${shortDay(first.date)}: ${first.title}`;
+  const lead = first.kind === 'added' ? first.title : first.kind === 'dayoff' ? `No school ${shortDay(first.date)} (${first.title.replace(/^No school: /, '')})` : first.kind === 'update' ? `${first.title}: an update` : first.kind === 'camp' ? `${first.title.replace(/: camp on a day off$/, '')} camp, ${shortDay(first.date)}` : `${shortDay(first.date)}: ${first.title}`;
   const more = due.items.length - 1;
   const subject = due.kind === 'welcome'
     ? `You’re on the list. Here’s what’s coming up${school ? ' for ' + school.name : followed.length === 1 && person.school !== 'all' ? ' at ' + followed[0] : ''}`
@@ -79,13 +87,15 @@ export function eventFor(person, due, feed) {
     kind: due.kind,
     subject,
     preview: due.kind === 'welcome' ? `${due.items.length} date${due.items.length > 1 ? 's' : ''} already on the calendar.` : due.items.map(line).join(' · ').slice(0, 160),
-    heading: due.kind === 'welcome' ? 'You’re on the list' : 'Dates coming up',
-    intro: due.kind === 'welcome'
+    heading: onlyAdded ? 'Your school is here' : due.kind === 'welcome' ? 'You’re on the list' : 'Dates coming up',
+    intro: onlyAdded ? 'The school you were waiting for has its own page now.'
+      : due.kind === 'welcome'
       ? `Here is what’s already on the calendar${whose}. After this you’ll hear from us on ${feed.sendDay} mornings, and only when there’s something new.`
       : `Here’s what’s coming up${whose}.`,
     reason,
     school: person.school || '',
     programs: person.programs || [],
+    camps: person.camps || [],
     school_name: school ? school.name : '',
     school_url: school ? `${feed.site}/${school.id}/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates` : `${feed.site}/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates`,
     dates: due.items.map(a => ({ when: a.when, title: a.title, text: a.text, url: a.url, button: a.button, kind: a.kind })),
@@ -115,9 +125,12 @@ async function subscribers(listId) {
       const a = p.attributes || {};
       if (!a.email) continue;
       const school = String(a.properties?.school || '').toLowerCase();
-      const programs = [].concat(a.properties?.programs || []).map(x => String(x).toLowerCase()).filter(x => /^[a-z0-9-]+$/.test(x));
-      // No school and no programs means the address was added some other way: send it everything.
-      people.push({ id: p.id, email: a.email, school: /^[a-z0-9-]+$/.test(school) ? school : programs.length ? '' : 'all', programs, joined: localDay(new Date(a.joined_group_at || Date.now())) });
+      const ids = key => [].concat(a.properties?.[key] || []).map(x => String(x).toLowerCase()).filter(x => /^[a-z0-9-]+$/.test(x));
+      const programs = ids('programs'), camps = ids('camps'), waiting = ids('waiting_schools');
+      // Someone who only asked about a program, a camp or a school that isn't covered yet hears about that and nothing
+      // else. An address with none of these was added some other way: send it everything.
+      const narrow = programs.length || camps.length || waiting.length;
+      people.push({ id: p.id, email: a.email, school: /^[a-z0-9-]+$/.test(school) ? school : narrow ? '' : 'all', programs, camps, waiting, joined: localDay(new Date(a.joined_group_at || Date.now())) });
     }
     url = page.links?.next || null;
     if (url && API !== 'https://a.klaviyo.com') url = url.replace('https://a.klaviyo.com', API);
@@ -139,8 +152,8 @@ async function main() {
 
   const people = await subscribers(cfg.alerts.listId);
   const bySchool = {};
-  for (const p of people) bySchool[p.school || 'programs only'] = (bySchool[p.school || 'programs only'] || 0) + 1;
-  console.log(`${people.length} subscriber(s): ${Object.entries(bySchool).map(([k, n]) => `${k} ${n}`).join(', ') || 'none yet'}. ${people.filter(p => p.programs.length).length} follow at least one program.`);
+  for (const p of people) bySchool[p.school || 'no school'] = (bySchool[p.school || 'no school'] || 0) + 1;
+  console.log(`${people.length} subscriber(s): ${Object.entries(bySchool).map(([k, n]) => `${k} ${n}`).join(', ') || 'none yet'}. ${people.filter(p => p.programs.length).length} follow at least one program, ${people.filter(p => p.camps.length).length} at least one camp, ${people.filter(p => p.waiting.length).length} are waiting for a school.`);
 
   let sent = 0;
   const tally = {};

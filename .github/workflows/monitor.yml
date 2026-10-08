@@ -1,0 +1,61 @@
+# Every hour: is the site up, was it rebuilt last night, do accounts work, was the database copied, did the
+# daily jobs run? When a check fails this opens an issue assigned to the repository's owner, which GitHub emails.
+# While it keeps failing the same issue is updated (no new email every hour). When everything passes, it is closed.
+# The checks only read. scripts/site-check.mjs says exactly what is looked at.
+name: Check the site
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+
+concurrency:
+  group: monitor
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check the site
+        id: check
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/site-check.mjs --report report.md
+
+      - name: Open, update or close the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OUTCOME: ${{ steps.check.outcome }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          title="Site check: something needs a look"
+          [ -f report.md ] || echo "The site check itself could not finish. Read the log of this run in the Actions tab." > report.md
+          open=$(gh issue list --state open --search "in:title \"Site check:\"" --json number --jq '.[0].number // empty')
+          if [ "$OUTCOME" = "failure" ]; then
+            if [ -z "$open" ]; then
+              gh issue create --title "$title" --body-file report.md --assignee "$OWNER" || gh issue create --title "$title" --body-file report.md
+            else
+              gh issue edit "$open" --body-file report.md
+            fi
+          elif [ -n "$open" ]; then
+            gh issue comment "$open" --body "Back to normal: every check passed. Closing this."
+            gh issue close "$open"
+          fi
+
+      - name: Mark this run as failed when a check failed
+        if: steps.check.outcome == 'failure'
+        run: exit 1

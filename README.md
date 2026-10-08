@@ -64,6 +64,41 @@ has gone by comes off the day-camp page, and the summer schedule moves to the ne
 past days in the browser as well, so nothing stale shows in between. If the built site is unchanged, nothing is
 published.
 
+## Backups, and knowing when something breaks
+
+**Backups.** Everything that makes the pages is in this repository, so GitHub is the backup for the site itself. The one
+thing that is not is the accounts database (`phillyafterschool-data/groups.sqlite`, next to the public folder on the
+host): accounts, share groups, claims, saved weeks and summers. Two things cover it:
+
+- The first request of each day makes a clean copy at `phillyafterschool-data/backups/groups-YYYY-MM-DD.sqlite` and
+  the last 14 are kept (`BACKUP_DAYS` in `src/server/groups-api.php`). A copy made this way is whole even while the
+  site is in use, which a plain file copy of a database in use may not be.
+- Hostinger backs the whole site up daily, which carries those copies off the server. Check once, in Hostinger under
+  Files > Backups > Restore and download, that the `phillyafterschool-data` folder is inside the backup.
+
+To go back to a copy: in Hostinger's file manager, replace `groups.sqlite` with the copy you want (renamed), and delete
+`groups.sqlite-wal` and `groups.sqlite-shm` if they are there. Anything done after that copy was made is lost, and anyone who signed in after it
+signs in again. Listing photos sent by program managers are files in `phillyafterschool-data/photos`, covered by the host's
+backup.
+
+**The hourly check.** `.github/workflows/monitor.yml` runs `scripts/site-check.mjs` every hour. It only reads. It checks
+that the sitemap and a spread of pages open, that the site was rebuilt in the last two days, that the accounts service
+answers and can write (`groups/api.php?action=health`, which says nothing about anyone), that a database copy was made
+in the last two days, that the three forms answer, that the https certificate has more than 10 days left, and that the
+two daily jobs (the build, and the date emails) last ran, and last passed, inside 36 hours.
+
+When a check fails it opens an issue titled "Site check: something needs a look", assigned to the repository's owner,
+which GitHub emails. The issue says what failed and what to do. While something keeps failing the same issue is
+updated, with no new email each hour, and it closes itself when everything passes. Each address is tried three times
+before it counts as a failure. Run it yourself any time: Actions > Check the site > Run workflow, or locally
+`node scripts/site-check.mjs`.
+
+Two limits. GitHub's scheduler is often hours late and sometimes skips a run, so this is a daily safety net more
+than a minute-by-minute alarm; for that, point a free uptime service at the home page and at
+`https://phillyafterschool.org/groups/api.php?action=health` (it should contain `"ok":true`). And GitHub pauses
+scheduled jobs in a repository that has had no changes for 60 days; merging the monthly check keeps that from
+happening, and the check itself says so if a daily job stops.
+
 ## Schools that aren't covered yet
 
 Every school in `data/all-schools.json` that isn't covered has a page of its own at `/schools/ID/`
@@ -132,8 +167,10 @@ to a school or to the after-school pages. The file has:
   the listing counts under the "Free or offers aid" filter; discounts don't count),
   `address`, `neighborhoods` (grouped into parts of the city by `CAMP_AREAS` in `build.mjs`; leave it empty for a
   camp that runs all over), `phone`, `website`, `registerUrl`, `signup` (what the camp says about when sign-ups
-  open), `note` (the yellow caution), `program` (the id of the same provider's school-year listing), `sources`,
-  `checked`.
+  open), `dates` (specific sign-up dates, each `{ "date", "label" }`: shown with "Add to calendar" and emailed to
+  the camp's followers), `updates` (short dated notes emailed to its followers; see "Dates by email"), `note` (the
+  yellow caution), `program` (the id of the same provider's school-year listing), `sources`, `checked`.
+  A camp's `id` is its address (`/summer-camps/ID/`) and what followers and saved summers point at: never change one.
 - `check`, on every camp: the quickest way to read it again. `url` (the one page to open), `how` (`fetch`,
   `browser` or `person`), `look` (where on the page the weeks and price sit) and `notes` (what tripped us up).
 - `todo`: camps known to run in the city that haven't been read yet, with why. `dropped`: camps looked at and left
@@ -266,7 +303,10 @@ Fields worth knowing:
 1. Add a record to `data/schools.json` (copy Nebinger's and change it). The `id` becomes the URL: `"meredith"` gives `/meredith/`. `aliases` lists the other names providers use for the school ("Jackson" for Coppin, "Vare Washington" without the hyphen), so the build can tell whether a provider's pickup list names it. Optional fields: `dismissalNote` (staggered dismissal times), `checkedNoPickup` (providers checked that don't serve the school) and `alsoListed` (programs the school names that haven't been confirmed yet).
 2. In `data/programs.json`, add that school's `id` under `schools` for every program that serves it. Most providers are already there; they just need the new tag.
 3. Add records for programs that are new (the school's own clubs and on-site care).
-4. Commit to `main`.
+4. Give the school record `"added": "YYYY-MM-DD"` with the day it goes live. Parents who asked on the school's old
+   "not covered yet" page to be told get one email that morning. Its old address (`/schools/<city id>/`) is
+   sent on to the new page by a line the build writes into `.htaccess`.
+5. Commit to `main`.
 
 ## Program pages
 
@@ -483,6 +523,20 @@ The pieces:
   (appended, so following a second program keeps the first, and a school chosen earlier stays). Followers get that
   program's sign-up dates, its day-off camps and its `updates`, and nothing else. `pas_alert_signup` carries the
   `program_id`.
+- **Following one summer camp.** Every camp's page has the same box ("Tell me when it posts summer 2027" while the camp
+  still shows last summer, "Tell me when something changes" after). It sends no school; the camp's id is appended to a
+  `camps` list on the person's Klaviyo profile, and `signup_place` is `camp`. Followers get that camp's `dates` and
+  `updates` and nothing else: in `data/camps.json` a camp can carry
+  `"dates": [{ "date": "2027-01-15", "label": "Summer 2027 registration opens at 10am" }]` (shown on its page with
+  "Add to calendar", and emailed the Sunday before) and `"updates": [{ "date": "2026-12-08", "text": "Summer 2027 is
+  posted: nine weeks from June 21, $395 a week." }]` (emailed on the first Sunday on or after its date, exactly like a
+  program's updates). The monthly check writes both when a camp posts its new summer, so the email trails the camp's own
+  announcement by up to a few weeks, and the box says so. `pas_alert_signup` carries the `camp_id`.
+- **Waiting for a school.** The form on a not-yet-covered school's page appends that school's id from the city list to
+  `waiting_schools` on the profile. When the school is added, give its record in `data/schools.json` an
+  `"added": "YYYY-MM-DD"` with the day it goes live. Everyone waiting for it gets one email that morning (or either of
+  the next two), and nothing else: someone who only asked about a school, a program or a camp is never sent every
+  school's dates. An `added` more than two days old sends nothing, so set it on the day you publish.
 - **The feed.** The build writes `data/alerts.json`: every upcoming `register.dates` entry and every district day off, each
   with `sendOn`, the day it is announced. That is the last send day (`alerts.sendDay`, 0 for Sunday) that still leaves
   the notice in `alerts.lead` (1 day for a sign-up date, 10 for a day off). So adding a date to a program's

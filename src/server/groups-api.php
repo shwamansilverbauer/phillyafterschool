@@ -48,6 +48,7 @@ const MAX_WEEKS = 6;        // children's weeks one profile can hold
 const MAX_CLAIMS = 12;      // listings one account can claim
 const MAX_CLAIMANTS = 5;    // accounts that can hold a claim on one listing
 const SPACE_DAYS = 30;      // how long "spots open", "waitlist" or "full" stays up before the manager has to say it again
+const BACKUP_DAYS = 14;      // how many daily copies of the database are kept
 const PHOTO_BYTES = 1600000; // the biggest listing photo accepted, after the browser has shrunk it
 const DAYS = array('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun');
 const WEEKEND = array('sat', 'sun');   // weekend picks are a program with weekend classes: no school, no pickup
@@ -156,6 +157,49 @@ function tidy(): void {
   if (is_dir($dir)) foreach ((array) @scandir($dir) as $f) {
     if (preg_match('/^(\d+)\.jpg$/', (string) $f, $m) && !val("SELECT 1 FROM photos WHERE id = ? AND status != 'declined'", array((int) $m[1]))) @unlink($dir . '/' . $f);
   }
+}
+
+// ---------- a copy of the database, once a day ----------
+// The first request of each day writes a clean copy of the database into backups/, next to it and outside the public
+// folder, and the oldest copies beyond BACKUP_DAYS are removed. A copy made this way is whole even while the site is
+// being used, which a plain file copy of a database in use may not be. The host's own nightly backup then carries
+// these copies off the server. To go back to one: replace groups.sqlite with it (and delete groups.sqlite-wal and
+// groups.sqlite-shm if they are there).
+function today_ny(): string { return (new DateTime('now', new DateTimeZone('America/New_York')))->format('Y-m-d'); }
+function backup_dir(): string { return data_dir() . '/backups'; }
+function last_backup(): string {
+  $days = array();
+  foreach ((array) @scandir(backup_dir()) as $f) if (preg_match('/^groups-(\d{4}-\d{2}-\d{2})\.sqlite$/', (string) $f, $m)) $days[] = $m[1];
+  return $days ? max($days) : '';
+}
+function backup(): void {
+  $dir = backup_dir();
+  $file = $dir . '/groups-' . today_ny() . '.sqlite';
+  if (is_file($file)) return;
+  try {
+    if (!is_dir($dir) && !@mkdir($dir, 0700, true) && !is_dir($dir)) return;
+    $part = $dir . '/part-' . bin2hex(random_bytes(6)) . '.tmp';
+    try {
+      db()->exec('VACUUM INTO ' . db()->quote($part));
+    } catch (Exception $e) {
+      // An older SQLite has no VACUUM INTO: fold the log into the file, then copy it while nothing else can write.
+      @unlink($part);
+      db()->exec('PRAGMA wal_checkpoint(TRUNCATE)');
+      db()->exec('BEGIN IMMEDIATE');
+      $copied = @copy(data_dir() . '/groups.sqlite', $part);
+      db()->exec('COMMIT');
+      if (!$copied) { @unlink($part); return; }
+    }
+    @chmod($part, 0600);
+    if (is_file($file) || !@rename($part, $file)) @unlink($part);   // another request got there first
+    $old = array();
+    foreach ((array) @scandir($dir) as $f) {
+      if (preg_match('/^groups-\d{4}-\d{2}-\d{2}\.sqlite$/', (string) $f)) $old[] = (string) $f;
+      elseif (preg_match('/^part-[0-9a-f]+\.tmp$/', (string) $f) && (int) @filemtime($dir . '/' . $f) < now() - 3600) @unlink($dir . '/' . $f);
+    }
+    rsort($old);
+    foreach (array_slice($old, BACKUP_DAYS) as $f) @unlink($dir . '/' . $f);
+  } catch (Exception $e) { /* a copy that fails never gets in the way of the site; the health check reports its age */ }
 }
 
 // ---------- slowing down guessing and floods ----------
@@ -590,8 +634,19 @@ function year_end(): int {
 }
 
 tidy();
+backup();
 
 switch ($method . ' ' . $action) {
+
+  // ----- is everything working? Read by the site check that runs every hour. Nothing about anyone is in the answer. -----
+  case 'GET health': {
+    $ok = true;
+    try { $n = (int) val('SELECT COUNT(*) FROM sqlite_master'); $ok = $n > 0; q('INSERT INTO throttle (k, t) VALUES (?, ?)', array('health', now())); q('DELETE FROM throttle WHERE k = ?', array('health')); }
+    catch (Exception $e) { $ok = false; }
+    $last = last_backup();
+    $age = $last === '' ? -1 : (int) round((strtotime(today_ny()) - strtotime($last)) / 86400);
+    out(array('ok' => $ok, 'database' => $ok, 'day' => today_ny(), 'backup' => $last, 'backupAgeDays' => $age, 'backupsKept' => count(glob(backup_dir() . '/groups-*.sqlite') ?: array())), $ok ? 200 : 503);
+  }
 
   // ----- signing in -----
   case 'POST login_start': {
