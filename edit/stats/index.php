@@ -31,6 +31,8 @@ function edit_signed_in() {
 
 if (!edit_signed_in()) { header('Location: ../', true, 303); exit; }
 $SCHOOLS = json_decode('{"nebinger":"Nebinger","meredith":"Meredith","coppin":"Coppin","vare-washington":"Vare-Washington","mccall":"McCall"}', true);
+$LISTINGS = json_decode('{"p:imagine-that-philly":"Imagine That Philly","p:nebinger-clubs":"School clubs and teams at Nebinger","p:girls-on-the-run":"Girls on the Run","p:nebinger-arts-partners":"Arts partners and Science Olympiad at Nebinger","p:meredith-clubs":"Meredith after-school clubs","p:coppin-clubs":"School clubs and ensembles at Coppin","p:zhang-sah":"Zhang Sah","p:shot-tower-rec":"Shot Tower Recreation Center","p:philly-inmovement":"Philly InMovement: MOVE After School","p:settlement-kaleidoscope-plus":"Settlement Music School: Kaleidoscope Plus","p:philly-art-center-qv":"Philly Art Center, Queen Village","p:old-pine":"Old Pine Community Center","p:butchers-sew-shop":"Butcher’s Sew Shop Junior","p:mister-johns-music":"Mister John’s Music","p:music-theatre-philly":"Music Theatre Philly","p:arden-drama-school":"Arden Drama School","p:walnut-street-theatre-school":"Walnut Street Theatre School","p:coco-academy":"CoCo Academy","p:queen-and-rook":"Queen & Rook Game Cafe","p:beehive-at-bok":"Beehive at Bok","p:dandelion-after-school":"Dandelion After School","p:movemakers":"MoveMakers Philly","p:kids-on-12th":"Kids on 12th","p:columbus-square-rec":"Columbus Square Recreation Center","p:hawthorne-cultural-center":"Hawthorne Cultural Center","p:starr-garden-rec":"Starr Garden Recreation Center","p:palumbo-rec":"Palumbo Recreation Center","p:mighty-writers-el-futuro":"Mighty Writers El Futuro","p:free-library-leap":"Free Library LEAP","p:fleisher-art-memorial":"Fleisher Art Memorial","p:makom-community":"Makom Community","p:vare-washington-edey":"Extended Day, Extended Year at Vare-Washington","p:vare-washington-clubs":"School clubs and teams at Vare-Washington","p:sunrise-mccall":"Sunrise of Philadelphia at McCall","p:mccall-clubs":"McCall clubs and teams","p:sawubona-creativity-project":"Sawubona Creativity Project","p:playarts-day-camps":"PlayArts day camps","p:philly-rock-gym-day-camps":"Philadelphia Rock Gym","p:skate-the-foundry":"Skate The Foundry","p:pafa-saturday-art":"PAFA Saturday Studio Art","p:moore-young-artists-workshop":"Moore Young Artists Workshop","p:philadelphia-museum-of-art-kids":"Philadelphia Museum of Art: Art Kids Classes","p:made-institute-sunday-sewing":"MADE Institute: Sunday Sewing","p:rock-school-for-dance":"The Rock School for Dance Education","p:koresh-school-of-dance":"Koresh School of Dance","p:school-of-philadelphia-ballet":"School of Philadelphia Ballet","p:zazz-dance":"ZAZZ","p:temple-music-prep-cmsp":"Temple Music Prep: Community Music Scholars","p:wissahickon-skating-club":"Wissahickon Skating Club","p:penn-ice-rink":"Penn Ice Rink","p:starfinder-saturday-soccer":"Starfinder: Saturday soccer","p:franklin-institute-pacts":"The Franklin Institute: PACTS","p:macguffin-theatre":"MacGuffin Theatre & Film Company","c:philly-art-center":"Philly Art Center (summer camp)","c:fleisher-art-memorial-camp":"Fleisher Art Memorial (summer camp)","c:mister-johns-music-camp":"Mister John’s Music (summer camp)","c:music-theatre-philly-camp":"Music Theatre Philly (summer camp)","c:movemakers-camp":"MoveMakers Philly (summer camp)","c:queen-and-rook-camp":"Queen & Rook Game Cafe (summer camp)","c:parks-and-rec-camps":"Philadelphia Parks & Recreation day camps (summer camp)","c:theatre-horizon-woodmere":"Theatre Horizon drama camp at Woodmere (summer camp)","c:butchers-sew-shop-camp":"Butcher’s Sew Shop Junior (summer camp)","c:clay-studio-camp":"The Clay Studio (summer camp)","c:pafa-camp":"PAFA summer art camp (summer camp)","c:moore-young-artists":"Moore College of Art & Design youth courses (summer camp)","c:school-of-rock-philadelphia":"School of Rock Philadelphia (summer camp)","c:arden-summer-camp":"Arden Drama School (summer camp)","c:camp-walnut":"Camp Walnut at Walnut Street Theatre (summer camp)","c:macguffin-camps":"MacGuffin Theatre & Film Company (summer camp)","c:flipout-camp":"FlipOut Productions (summer camp)","c:philadelphia-ballet-camps":"School of Philadelphia Ballet dance camps (summer camp)","c:wissahickon-figure-skating":"Wissahickon Skating Club figure skating camp (summer camp)","c:philadelphia-dance-academy":"The Philadelphia Dance Academy (summer camp)","c:legacy-tennis-camp":"Legacy Youth Tennis community camp (summer camp)","c:ceo-camp-phield-house":"C.E.O. Camp at Phield House (summer camp)","c:awbury-adventures":"Awbury Adventures at Awbury Arboretum (summer camp)","c:camp-schuylkill":"Camp Schuylkill at the Schuylkill Center (summer camp)","c:morris-arboretum-camp":"Nature Explorers at Morris Arboretum & Gardens (summer camp)","c:circus-arts-camp":"Philadelphia School of Circus Arts (summer camp)","c:work-to-ride-camp":"Work to Ride at Chamounix Equestrian Center (summer camp)","c:seaport-summer-camp":"Seaport Summer Camp at Independence Seaport Museum (summer camp)","c:taller-puertorriqueno-camp":"Taller Puertorriqueño (summer camp)","c:camp-tps":"Camp TPS at The Philadelphia School (summer camp)","c:ymca-day-camps":"Greater Philadelphia YMCA day camps (summer camp)","c:summer-achievers-edey":"Summer Achievers at Extended Day, Extended Year schools (summer camp)","c:allens-lane-art-camp":"Allens Lane Art Center summer art camp (summer camp)","c:nlarts-summer-camp":"NLArts summer art camp (summer camp)","c:yes-and-camp":"Yes! And… Collaborative Arts camps (summer camp)","c:zazz-summer-camp":"ZAZZ Dance & Drama (summer camp)","c:sawubona-summer-camp":"Sawubona Creativity Project (summer camp)","c:zoomdance-camp":"ZoomDance camp (summer camp)","c:dandelion-summer-camp":"The Dandelion Project summer camp (summer camp)","c:rutabaga-naturearts":"Rutabaga NatureArts summer camp (summer camp)","c:skate-the-foundry-camp":"Skate The Foundry skateboard camp (summer camp)","c:lavner-tech-camp-upenn":"Camp Tech Revolution at UPenn (Lavner) (summer camp)","c:philly-rock-gym-camps":"Philadelphia Rock Gym summer camps (summer camp)","c:coco-academy-summer-camp":"CoCo Academy (summer camp)"}', true);
+$topListings = array(); $hitsSince = '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
@@ -68,6 +70,17 @@ if ($have) {
     foreach ($db->query("SELECT school, COUNT(*) AS c FROM users WHERE school != '' GROUP BY school ORDER BY c DESC, school") as $r) $bySchool[] = array(isset($SCHOOLS[$r['school']]) ? $SCHOOLS[$r['school']] : $r['school'], (int) $r['c']);
   } catch (Exception $e) { /* before profiles existed */ }
   $tz = new DateTimeZone('America/New_York');
+  try {
+    $from = (new DateTime('-29 days', $tz))->format('Y-m-d');
+    $per = array();
+    $st = $db->prepare('SELECT listing, k, SUM(n) AS n FROM hits WHERE day >= ? GROUP BY listing, k'); $st->execute(array($from));
+    foreach ($st as $r) { if (!isset($per[$r['listing']])) $per[$r['listing']] = array('view' => 0, 'signup' => 0, 'site' => 0, 'plan' => 0, 'email' => 0); if (isset($per[$r['listing']][$r['k']])) $per[$r['listing']][$r['k']] = (int) $r['n']; }
+    uasort($per, function ($a, $b) { return $b['view'] <=> $a['view'] ?: array_sum($b) <=> array_sum($a); });
+    $claimed = array(); foreach ($db->query("SELECT DISTINCT listing FROM claims WHERE status = 'ok'") as $r) $claimed[$r['listing']] = true;
+    foreach (array_slice($per, 0, 40, true) as $key => $v) $topListings[] = array(isset($LISTINGS[$key]) ? $LISTINGS[$key] : $key, $v['view'], $v['signup'], $v['site'], $v['plan'], $v['email'], isset($claimed[$key]));
+    $first = (string) $db->query('SELECT MIN(day) FROM hits')->fetchColumn();
+    $hitsSince = $first === '' ? '' : (new DateTime($first, $tz))->format('F j, Y');
+  } catch (Exception $e) { /* before counting began */ }
   for ($i = 0; $i < 30; $i++) { $d = new DateTime('now', $tz); $d->modify('-' . $i . ' day'); $days[$d->format('Y-m-d')] = array(); }
   try {
     foreach ($db->query('SELECT k, day, n FROM tally') as $r) {
@@ -113,7 +126,7 @@ $sum = function ($key, $span) use (&$days, &$ever) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../../assets/site.css?v=14732bf9">
+<link rel="stylesheet" href="../../assets/site.css?v=c406edff">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -154,6 +167,16 @@ $sum = function ($key, $span) use (&$days, &$ever) {
     <?php foreach ($cols as $key => $label) { ?><tr><th scope="row"><?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?></th><?php foreach (array(1, -1, 7, 30, 0) as $span) { $v = $sum($key, $span); ?><td><?php echo $v ? number_format($v) : '<span class="nil">0</span>'; ?></td><?php } ?></tr><?php } ?>
     </tbody>
   </table></div>
+  <h2>Listings, last 30 days</h2>
+  <?php if (!$topListings) { ?><p class="hint">Nothing counted yet. A listing appears here once its page has been opened.</p><?php } else { ?>
+  <div class="stat-scroll"><table class="stat-table">
+    <thead><tr><th scope="col">Listing</th><th scope="col">Opened</th><th scope="col">Clicks to sign up</th><th scope="col">Clicks to its website</th><th scope="col">Put on a plan</th><th scope="col">Asked for emails</th></tr></thead>
+    <tbody>
+    <?php foreach ($topListings as $row) { ?><tr><th scope="row"><?php echo htmlspecialchars($row[0], ENT_QUOTES, 'UTF-8'); ?><?php if ($row[6]) { ?> <span class="hint">(claimed)</span><?php } ?></th><?php for ($i = 1; $i <= 5; $i++) { ?><td><?php echo $row[$i] ? number_format($row[$i]) : '<span class="nil">0</span>'; ?></td><?php } ?></tr><?php } ?>
+    </tbody>
+  </table></div>
+  <p class="hint">The 40 most-opened listings. Numbers only: nothing about who. A manager sees the same numbers for a listing they have claimed, and their own signed-in visits aren’t counted. Counting began <?php echo htmlspecialchars($hitsSince, ENT_QUOTES, 'UTF-8'); ?>.</p>
+  <?php } ?>
   <p class="hint">“Ever” counts everything since accounts began, including accounts and groups that were later deleted. Sign-ins by method and profile saves have been counted since October 6, 2026. Days are Philadelphia days, and “last 7 days” includes today.</p>
 <?php } ?>
   <p><a class="btn" href="../">Back to editing</a> <a class="btn" href="../?out=1">Sign out</a></p>
@@ -218,7 +241,7 @@ $sum = function ($key, $span) use (&$days, &$ever) {
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../../assets/site.js?v=e053f5e2" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
+<script src="../../assets/site.js?v=56c7c129" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
 
 </body>
 </html>

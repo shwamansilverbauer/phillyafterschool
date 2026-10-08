@@ -64,11 +64,32 @@
     showState();
   }
 
+  // ----- counting for "your listing this month": one more for a listing each time its page is opened, a link on it is
+  // followed, it goes on a plan or someone asks for its emails. Only the listing and the kind are sent: nothing about
+  // who, no cookie, and what was picked for which child stays here. A page left open counts once. -----
+  var hitApi = (function () { var t = document.querySelector('script[data-api]'); return t ? t.getAttribute('data-api') : ''; })();
+  function hit(listing, kind) {
+    if (!hitApi || !window.fetch || !listing || navigator.webdriver || store('pas-edit') === '1') return;   // not a script driving a browser, and not the owner editing
+    try { window.fetch(hitApi + '?action=hit', { method: 'POST', credentials: 'same-origin', keepalive: true, headers: { 'Content-Type': 'application/json', 'X-PAS': '1' }, body: JSON.stringify({ l: listing, k: kind }) }).catch(function () { /* counting never gets in the way */ }); } catch (e) { /* nor here */ }
+  }
+  (function () {
+    var p = document.querySelector('[data-program-page]'), c = document.querySelector('[data-camp-page]');
+    var key = p ? 'p:' + p.getAttribute('data-program-page') : c ? 'c:' + c.getAttribute('data-camp-page') : '';
+    if (!key) return;
+    var seen = [];
+    try { seen = JSON.parse(window.sessionStorage.getItem('pas-seen') || '[]'); } catch (e) { seen = []; }
+    if (!Array.isArray(seen) || seen.indexOf(key) > -1) return;   // already counted while this tab has been open
+    try { window.sessionStorage.setItem('pas-seen', JSON.stringify(seen.concat(key).slice(-80))); } catch (e) { /* counted anyway */ }
+    hit(key, 'view');
+  })();
+
   // Clicks on register, website, calendar and review links, on school pages and program pages.
   document.addEventListener('click', function (e) {
     var a = e.target.closest ? e.target.closest('a[data-track]') : null;
     if (!a || a.getAttribute('data-track') === 'support') return;
     var card = a.closest('.prog[id]'), prog = a.closest('[data-program-page]'), sch = a.closest('[data-school-page]');
+    var campPage = a.closest('[data-camp-page]'), kind = { register: 'signup', camp: 'signup', website: 'site' }[a.getAttribute('data-track')];
+    if (kind) hit(campPage ? 'c:' + campPage.getAttribute('data-camp-page') : card ? 'p:' + card.id : prog ? 'p:' + prog.getAttribute('data-program-page') : '', kind);
     track({ event: 'pas_outbound', link_type: a.getAttribute('data-track'), program_id: card ? card.id : prog ? prog.getAttribute('data-program-page') : '', school: sch ? sch.getAttribute('data-school-page') : '' });
   });
 
@@ -241,6 +262,7 @@
           : follow ? 'Done, ' + first + '. You’ll hear when ' + name + ' posts a date. If it already has some posted, they reach you tomorrow morning.'
           : 'You’re on the list' + (name ? ' for ' + name : '') + ', ' + first + '. Dates already on the calendar reach you tomorrow morning. After that, it’s one email a week at most.', 'good');
         track({ event: 'pas_alert_signup', school: school, program_id: follow && !camp ? follow.value : '', camp_id: camp ? camp.value : '', place: place });
+        if (follow) hit((camp ? 'c:' : 'p:') + follow.value, 'email');
       }).catch(function () {
         btn.disabled = false;
         say('That didn’t go through. Please try again in a minute.', 'bad');
@@ -742,7 +764,7 @@
     // One place a day: picking the same one again takes it off, picking another replaces it.
     var set = function (d, val, how) {
       var me = kid(), was = pickOf(me, d), p = od.programs[val];
-      if (val && val !== was) { me.off[d.d] = val; track({ event: 'pas_dayoff_pick', program_id: val, day: d.d, method: how }); }
+      if (val && val !== was) { me.off[d.d] = val; track({ event: 'pas_dayoff_pick', program_id: val, day: d.d, method: how }); if (val !== HOME) hit('p:' + val, 'plan'); }
       else { delete me.off[d.d]; val = ''; }
       saveRosters();
       say(val ? label(val) + ' is on ' + d.label + '.' + (p && !posted(val, d) ? (p.n ? ' It hasn’t posted that date, so ask if it’s open.' : ' It hasn’t posted any dates, so ask if it’s open.') : '') : label(was) + ' is off ' + d.label + '.');
@@ -1418,6 +1440,7 @@
       if (b.wk[day].map(entryKey).indexOf(id) < 0 && b.wk[day].length < 6) {
         b.wk[day].push(id);
         track({ event: 'pas_board_add', program_id: id, school: 'weekend', day: day, method: how, board: r.active === 'next' ? 'upcoming' : 'current', children: r.kids.length });
+        hit('p:' + id, 'plan');
         wkStatus = 'Added ' + p.name + ' to ' + (day === 'sat' ? 'Saturday' : 'Sunday') + '. ' + savedNote();
       }
       saveRosters(); render();
@@ -1726,6 +1749,7 @@
           DAYS.forEach(function (d) { var at = findEntry(b.days[d[0]], key); if (at > -1 && !note) note = entryNote(b.days[d[0]][at]); });
           b.days[day].push(makeEntry(key, note));
           track({ event: 'pas_board_add', program_id: adding.id, school: adding.school, day: day, board: r.active === 'next' ? 'upcoming' : 'current', children: r.kids.length });
+          hit('p:' + adding.id, 'plan');
           msg = 'Added ' + prog.name + ' to ' + dayName + '. ';
         }
         saveRosters();
@@ -2189,6 +2213,7 @@
       if (list.length) s.w[d] = list; else delete s.w[d];
       saveRosters();
       ev(at > -1 ? 'remove' : 'add', { camp_id: id, week: i + 1, method: how });
+      if (at < 0) hit('c:' + id, 'plan');
       say(at > -1 ? c.n + ' is off ' + sd.weeks[i].label + '.' : c.n + ' is on ' + sd.weeks[i].label + '.' + (c.w.indexOf(i) < 0 ? (c.w.length ? ' It didn’t list that week, so check with the camp.' : ' It hasn’t listed dates, so check with the camp.') : !c.x ? ' That’s the week it ran in ' + c.y + '.' : ''));
       draw();
     };
@@ -3456,6 +3481,7 @@
         var cls = currentClass(b);
         b.days[day].push(makeEntry(key, cls === null ? pending : cls || ''));
         track({ event: 'pas_board_add', program_id: card.id, school: school, day: day, board: r.active === 'next' ? 'upcoming' : 'current', children: r.kids.length });
+        hit('p:' + card.id, 'plan');
       }
       saveRosters();
       show();
