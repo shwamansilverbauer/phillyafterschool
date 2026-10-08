@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../../assets/site.css?v=200dbf64">
+<link rel="stylesheet" href="../../assets/site.css?v=f44a0475">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"ItemList","name":"STEM after-school programs","itemListElement":[{"@type":"ListItem","position":1,"name":"CoCo Academy","url":"https://phillyafterschool.org/programs/coco-academy/"},{"@type":"ListItem","position":2,"name":"Free Library LEAP","url":"https://phillyafterschool.org/programs/free-library-leap/"}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Philly After School","item":"https://phillyafterschool.org/"},{"@type":"ListItem","position":2,"name":"Program types","item":"https://phillyafterschool.org/types/"},{"@type":"ListItem","position":3,"name":"STEM","item":"https://phillyafterschool.org/types/stem/"}]}]}</script>
 </head>
 <body>
@@ -56,6 +56,7 @@
     </div>
     <div class="frow"><span class="flabel">Area</span><div class="rail" role="group" aria-label="Neighborhood"><button type="button" class="tbtn" id="hood-ALL" data-f="hood" data-v="ALL" data-label="Anywhere" aria-pressed="true">Anywhere</button><button type="button" class="tbtn" id="hood-bella-vista" data-f="hood" data-v="bella-vista" data-label="Bella Vista" aria-pressed="false">Bella Vista (2)</button><button type="button" class="tbtn" id="hood-queen-village" data-f="hood" data-v="queen-village" data-label="Queen Village" aria-pressed="false">Queen Village (1)</button></div></div>
   </div>
+  
   <section class="picker" aria-label="Filter by grade">
     <div class="rail" role="group" aria-label="Grade"><button type="button" class="gbtn" id="grade-ALL" data-f="grade" data-v="ALL" aria-pressed="true" aria-label="All grades, 2 programs"><span class="g">All</span><span class="n">2</span></button><button type="button" class="gbtn" id="grade-PK" data-f="grade" data-v="PK" aria-pressed="false" aria-label="Pre-K, 0 programs"><span class="g">PK</span><span class="n">0</span></button><button type="button" class="gbtn" id="grade-K" data-f="grade" data-v="K" aria-pressed="false" aria-label="Kindergarten, 2 programs"><span class="g">K</span><span class="n">2</span></button><button type="button" class="gbtn" id="grade-1" data-f="grade" data-v="1" aria-pressed="false" aria-label="Grade 1, 2 programs"><span class="g">1</span><span class="n">2</span></button><button type="button" class="gbtn" id="grade-2" data-f="grade" data-v="2" aria-pressed="false" aria-label="Grade 2, 2 programs"><span class="g">2</span><span class="n">2</span></button><button type="button" class="gbtn" id="grade-3" data-f="grade" data-v="3" aria-pressed="false" aria-label="Grade 3, 2 programs"><span class="g">3</span><span class="n">2</span></button><button type="button" class="gbtn" id="grade-4" data-f="grade" data-v="4" aria-pressed="false" aria-label="Grade 4, 2 programs"><span class="g">4</span><span class="n">2</span></button><button type="button" class="gbtn" id="grade-5" data-f="grade" data-v="5" aria-pressed="false" aria-label="Grade 5, 2 programs"><span class="g">5</span><span class="n">2</span></button><button type="button" class="gbtn" id="grade-6" data-f="grade" data-v="6" aria-pressed="false" aria-label="Grade 6, 1 programs"><span class="g">6</span><span class="n">1</span></button><button type="button" class="gbtn" id="grade-7" data-f="grade" data-v="7" aria-pressed="false" aria-label="Grade 7, 1 programs"><span class="g">7</span><span class="n">1</span></button><button type="button" class="gbtn" id="grade-8" data-f="grade" data-v="8" aria-pressed="false" aria-label="Grade 8, 1 programs"><span class="g">8</span><span class="n">1</span></button></div>
     <div class="status"><span id="count" aria-live="polite"></span><button type="button" class="clear" id="clear" hidden>Clear filters</button></div>
@@ -72,13 +73,13 @@
 <p class="ask" id="no-match" data-nomatch data-edit-reveal="Shown when the filters find nothing:" hidden><span data-copy="883a11e036">Nothing matches that. Know a program that should be listed?</span> <a href="../../suggest/"><span data-copy="c85d669959">Tell us about it.</span></a></p>
 <section class="section" data-group>
   <div class="schools">
-<a class="prow" href="../../programs/coco-academy/" data-item data-grades="K 1 2 3 4 5" data-types="stem" data-hoods="bella-vista queen-village" data-cost="" data-days="mon tue wed thu fri" data-schools="nebinger meredith coppin vare-washington mccall" data-search="coco academy steam makerspace: 3d printing, laser cutting, robotics, circuits and design software stem steam maker makerspace 3d printing engineering technology circuits robotics stem nebinger meredith coppin vare-washington mccall bella vista queen village">
+<a class="prow" href="../../programs/coco-academy/" data-item data-grades="K 1 2 3 4 5" data-types="stem" data-hoods="bella-vista queen-village" data-cost="" data-days="mon tue wed thu fri" data-schools="nebinger meredith coppin vare-washington mccall" data-ll="39.93925,-75.15948;39.94125,-75.14757" data-search="coco academy steam makerspace: 3d printing, laser cutting, robotics, circuits and design software stem steam maker makerspace 3d printing engineering technology circuits robotics stem nebinger meredith coppin vare-washington mccall bella vista queen village">
   <h3>CoCo Academy</h3>
   <span class="what">STEAM makerspace: 3D printing, laser cutting, robotics, circuits and design software</span>
   <span class="tally"><span class="tag" style="--tc:#0E7C86">STEM</span></span>
   <span class="tally"><span class="pill pickup">Picks up from Nebinger</span><span class="pill pickup">Picks up from Meredith</span><span class="pill pickup">Picks up from Coppin</span><span class="pill pickup">Picks up from Vare-Washington</span><span class="pill pickup">Picks up from McCall</span><span class="hint">Grades K to 5</span></span>
 </a>
-<a class="prow" href="../../programs/free-library-leap/" data-item data-grades="K 1 2 3 4 5 6 7 8" data-types="academics stem" data-hoods="bella-vista" data-cost="free" data-days="*" data-schools="nebinger meredith vare-washington" data-search="free library leap free drop-in homework help, literacy and steam activities library homework help reading stem steam free drop-in reading &amp; homework stem nebinger meredith vare-washington bella vista">
+<a class="prow" href="../../programs/free-library-leap/" data-item data-grades="K 1 2 3 4 5 6 7 8" data-types="academics stem" data-hoods="bella-vista" data-cost="free help" data-days="*" data-schools="nebinger meredith vare-washington" data-ll="39.93736,-75.15506" data-search="free library leap free drop-in homework help, literacy and steam activities library homework help reading stem steam free drop-in reading &amp; homework stem nebinger meredith vare-washington bella vista">
   <h3>Free Library LEAP</h3>
   <span class="what">Free drop-in homework help, literacy and STEAM activities</span>
   <span class="tally"><span class="tag" style="--tc:#A16207">Reading &amp; homework</span><span class="tag" style="--tc:#0E7C86">STEM</span><span class="tag free">Free</span></span>
@@ -149,6 +150,7 @@
         <li><a href="../../managers/"><span data-copy="c192560a97">For program managers</span></a></li>
         <li><a href="../../ideas/"><span data-copy="29c269f6e8">Request a feature</span></a></li>
         <li><a href="../../privacy/"><span data-copy="cf01481f62">Privacy</span></a></li>
+        <li><a href="../../terms/"><span data-copy="8a069ed1c6">Terms of use</span></a></li>
         <li><a href="../../support/"><span data-copy="fd1482eac6">Buy me a coffee</span></a></li>
       </ul>
     </div>
@@ -160,7 +162,7 @@
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../../assets/site.js?v=955f971f" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
+<script src="../../assets/site.js?v=a8b12719" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
 
 </body>
 </html>

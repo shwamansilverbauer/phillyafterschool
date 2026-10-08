@@ -73,11 +73,23 @@
   });
 
   // ----- "Claimed": listings whose own director has claimed them. One small request, and only on pages that list any. -----
-  var marks = all(document, '[data-claimed]');
+  var marks = all(document, '[data-claimed],[data-space]');
   if (marks.length && window.fetch && marks[0].getAttribute('data-api')) {
     window.fetch(marks[0].getAttribute('data-api') + '?action=claimed', { credentials: 'omit' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
       if (!d || !d.ok || !d.claimed) return;
-      marks.forEach(function (m) { if (d.claimed.indexOf(m.getAttribute('data-claimed')) > -1) m.hidden = false; });
+      marks.forEach(function (m) { if (m.hasAttribute('data-claimed') && d.claimed.indexOf(m.getAttribute('data-claimed')) > -1) m.hidden = false; });
+      // "Is there space?", as the listing's manager last said it, with the day they said it.
+      var SPACE = { open: 'Spots open', waitlist: 'Waitlist', full: 'Full' };
+      all(document, '[data-space]').forEach(function (m) {
+        var sp = d.space && d.space[m.getAttribute('data-space')];
+        if (!sp || !SPACE[sp.s]) return;
+        var when = new Date(sp.t * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        m.textContent = ''; m.className = 'space-mark ' + sp.s;
+        m.appendChild(el('b', null, SPACE[sp.s]));
+        m.appendChild(el('span', null, ' as of ' + when));
+        m.title = 'What the program told us on ' + when + '. Check with the program before you count on it.';
+        m.hidden = false;
+      });
       // A photo the director sent and the site's owner approved.
       var api = marks[0].getAttribute('data-api');
       all(document, '[data-photo]').forEach(function (slot) {
@@ -387,6 +399,13 @@
   var d = new Date();
   var today = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
   all(document, '.cal[data-date]').forEach(function (c) { if (c.getAttribute('data-date') < today) c.hidden = true; });
+  // A camp's list of days: the ones that have gone by drop off, even before the site is next rebuilt.
+  all(document, '[data-day-list]').forEach(function (dd) {
+    var list = []; try { list = JSON.parse(dd.getAttribute('data-day-list')) || []; } catch (e) { return; }
+    var left = list.filter(function (x) { return x[0] >= today; });
+    if (left.length === list.length) return;
+    dd.textContent = left.length ? left.map(function (x) { return x[1]; }).join(', ') + '.' : 'The days it posted have passed. Ask which ones it covers next.';
+  });
 
   // ----- a type page's "clubs at the school itself": someone who has saved a school sees theirs, with the rest a tap away -----
   all(document, '[data-school-clubs]').forEach(function (box) {
@@ -2413,6 +2432,116 @@
     // Once the filters have scrolled off the top, a slim bar takes their place: a search box, and a button back to them.
     var qbar = document.getElementById('quickbar'), quick = null;
     if (qbar) quick = { bar: qbar, search: document.getElementById('quick-search'), go: document.getElementById('quick-filters'), n: document.getElementById('quick-n'), count: document.getElementById('quick-count'), clear: document.getElementById('quick-clear'), status: qbar.querySelector('.quick-status') };
+    var afterFilter = null;   // the map redraws when the filters change
+    // ----- nearest first, and the map -----
+    // Each listing carries the points it is at (data-ll). Distances are worked out here, in the browser, from a saved
+    // school or from where the person is; neither is sent anywhere. The map library and its pictures load only once
+    // someone asks for the map.
+    var nearEl = document.querySelector('[data-near]');
+    if (nearEl) (function () {
+      var statusEl = document.getElementById('near-status'), mapWrap = document.getElementById('near-map'), mapBox = document.getElementById('near-mapbox');
+      var bSchool = document.getElementById('near-school'), bMe = document.getElementById('near-me'), bOff = document.getElementById('near-off'), bMap = document.getElementById('map-toggle');
+      var schoolsLL = {}; try { schoolsLL = JSON.parse(nearEl.getAttribute('data-schools')) || {}; } catch (e) { schoolsLL = {}; }
+      var num = function (s) { var p = String(s || '').split(','); var a = parseFloat(p[0]), b = parseFloat(p[1]); return isFinite(a) && isFinite(b) ? [a, b] : null; };
+      var here = num(nearEl.getAttribute('data-here')), hereName = nearEl.getAttribute('data-here-name') || '';
+      var ref = here ? { ll: here, label: hereName, kind: 'school' } : null;
+      var places = function (it) { return String(it.getAttribute('data-ll') || '').split(';').map(num).filter(Boolean); };
+      var miles = function (a, b) { var rad = function (x) { return x * Math.PI / 180; }, h = Math.pow(Math.sin(rad(b[0] - a[0]) / 2), 2) + Math.cos(rad(a[0])) * Math.cos(rad(b[0])) * Math.pow(Math.sin(rad(b[1] - a[1]) / 2), 2); return 2 * 3958.8 * Math.asin(Math.sqrt(h)); };
+      var milesTo = function (it) { var ps = places(it); return ref && ps.length ? Math.min.apply(null, ps.map(function (x) { return miles(ref.ll, x); })) : Infinity; };
+      var short = function (m) { return m < 0.1 ? 'Under 0.1 mi' : (Math.round(m * 10) / 10).toFixed(1) + ' mi'; };
+      items.forEach(function (it, i) { it._ord = i; });
+      var firstGroup = groups.length ? groups[0] : null, groupHome = firstGroup ? firstGroup.parentNode : null, mark = null;
+      if (firstGroup && groups.every(function (g) { return g.parentNode === groupHome; })) { mark = document.createComment('lists'); groupHome.insertBefore(mark, groups[groups.length - 1].nextSibling); }
+      var say = function (t) { if (statusEl) statusEl.textContent = t || ''; };
+      var order = function () {
+        // the little distance label on each listing
+        items.forEach(function (it) {
+          var pill = it.querySelector('.mi-pill'), m = ref && !here ? milesTo(it) : Infinity;
+          it._mi = ref ? milesTo(it) : Infinity;
+          if (m === Infinity) { if (pill) pill.parentNode.removeChild(pill); return; }
+          if (!pill) { pill = el('span', 'pill mi-pill'); var home = it.querySelector('.tally') || it.querySelector('.top'); if (home) home.appendChild(pill); }
+          pill.textContent = short(m);
+        });
+        if (here) return;   // a school's page keeps its own order: on-site, pickup, nearby
+        var by = ref ? function (a, b) { return (a._mi - b._mi) || (a._ord - b._ord); } : function (a, b) { return a._ord - b._ord; };
+        var homes = [];
+        items.forEach(function (it) { if (homes.indexOf(it.parentNode) < 0) homes.push(it.parentNode); });
+        homes.forEach(function (home) { items.filter(function (it) { return it.parentNode === home; }).sort(by).forEach(function (it) { home.appendChild(it); }); });
+        if (mark) {   // lists under headings (parts of the city): the one with the nearest place comes first
+          var gs = groups.slice().map(function (g, i) { var best = Infinity; all(g, '[data-item]').forEach(function (it) { if (it._mi < best) best = it._mi; }); return { g: g, i: i, best: best }; });
+          gs.sort(ref ? function (a, b) { return (a.best - b.best) || (a.i - b.i); } : function (a, b) { return a.i - b.i; });
+          gs.forEach(function (x) { groupHome.insertBefore(x.g, mark); });
+        }
+      };
+      var press = function () {
+        if (bSchool) bSchool.setAttribute('aria-pressed', String(!!ref && ref.kind === 'school'));
+        if (bMe) bMe.setAttribute('aria-pressed', String(!!ref && ref.kind === 'me'));
+        if (bOff) bOff.hidden = !ref;
+      };
+      var setRef = function (r, note) {
+        ref = r; order(); press();
+        say(r ? 'Nearest to ' + r.label + ' first. Distances are in a straight line.' + (note ? ' ' + note : '') : '');
+        track({ event: 'pas_near', from: r ? r.kind : 'off' });
+        if (drawMap) drawMap();
+      };
+      var saved = mySchool();
+      if (bSchool && saved && schoolsLL[saved.id]) {
+        bSchool.hidden = false; bSchool.textContent = 'From ' + saved.name;
+        bSchool.addEventListener('click', function () { if (ref && ref.kind === 'school') setRef(null); else setRef({ ll: schoolsLL[saved.id], label: saved.name, kind: 'school' }); });
+      }
+      if (bMe) {
+        if (!navigator.geolocation) bMe.hidden = true;
+        bMe.addEventListener('click', function () {
+          if (ref && ref.kind === 'me') { setRef(null); return; }
+          say('Asking your browser where you are…');
+          navigator.geolocation.getCurrentPosition(function (pos) {
+            setRef({ ll: [pos.coords.latitude, pos.coords.longitude], label: 'where you are', kind: 'me' }, 'Your location stays in this browser.');
+          }, function () { say('Your browser didn’t share a location. You can allow it in the browser’s settings' + (bSchool && !bSchool.hidden ? ', or measure from your school instead.' : '.')); }, { enableHighAccuracy: false, timeout: 12000, maximumAge: 600000 });
+        });
+      }
+      if (bOff) bOff.addEventListener('click', function () { setRef(null); });
+      // ----- the map -----
+      var drawMap = null, map = null, layer = null, base = nearEl.getAttribute('data-leaflet');
+      var startMap = function () {
+        var L = window.L;
+        map = L.map(mapBox, { scrollWheelZoom: false });
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
+        layer = L.layerGroup().addTo(map);
+        drawMap = function () {
+          if (!map || mapWrap.hidden) return;
+          layer.clearLayers();
+          var pts = [];
+          items.forEach(function (it) {
+            if (it.hidden) return;
+            var h = it.querySelector('h3'), name = h ? h.textContent : '';
+            places(it).forEach(function (ll) {
+              var box = el('div', 'map-pop'); box.appendChild(el('b', null, name));
+              if (ref) box.appendChild(el('span', null, short(miles(ref.ll, ll)) + ' from ' + ref.label));
+              if (it.id) { var a = el('a', null, 'See it in the list'); a.href = '#' + it.id; a.addEventListener('click', function () { map.closePopup(); }); box.appendChild(a); }
+              L.circleMarker(ll, { radius: 9, color: '#0B2140', weight: 2, fillColor: '#F3C613', fillOpacity: 1 }).bindPopup(box).addTo(layer);
+              pts.push(ll);
+            });
+          });
+          if (ref) { L.circleMarker(ref.ll, { radius: 10, color: '#FFFFFF', weight: 3, fillColor: '#1763B8', fillOpacity: 1 }).bindTooltip(ref.kind === 'me' ? 'You are here' : ref.label, { permanent: true, direction: 'top', offset: [0, -8] }).addTo(layer); pts.push(ref.ll); }
+          if (pts.length) map.fitBounds(L.latLngBounds(pts).pad(0.12), { maxZoom: 16 }); else map.setView([39.9526, -75.1652], 12);
+        };
+        drawMap();
+      };
+      if (bMap && base) bMap.addEventListener('click', function () {
+        var open = mapWrap.hidden;
+        mapWrap.hidden = !open; bMap.setAttribute('aria-expanded', String(open)); bMap.textContent = open ? 'Hide the map' : 'Show the map';
+        if (!open) return;
+        track({ event: 'pas_map_open' });
+        if (map) { map.invalidateSize(); drawMap(); return; }
+        if (window.L) { startMap(); return; }
+        var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = base + 'leaflet.css'; document.head.appendChild(css);
+        var js = document.createElement('script'); js.src = base + 'leaflet.js';
+        js.onload = startMap; js.onerror = function () { say('The map didn’t load. Check your connection and try again.'); };
+        document.head.appendChild(js);
+      });
+      afterFilter = function () { if (drawMap) drawMap(); };
+      if (here) order();
+    })();
     var blank = function () { return { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL', day: 'ALL', school: 'ALL' }; };
     var state = blank();
     var terms = [];
@@ -2459,6 +2588,7 @@
         var badge = g.querySelector('.n');
         if (badge) badge.textContent = n;
       });
+      if (afterFilter) afterFilter();
       var bits = [];
       ['school', 'type', 'rel', 'hood', 'cost', 'day'].forEach(function (f) {
         var b = state[f] !== 'ALL' ? findBtn(f, state[f]) : null;

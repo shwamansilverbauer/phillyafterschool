@@ -655,6 +655,24 @@
       if (c.status === 'ok' && !c.gone) {
         var view = el('a', 'btn', 'See the listing');
         view.href = c.listing.charAt(0) === 'p' ? page('programs/' + c.listing.slice(2) + '/') : page('summer-camps/') + '#' + c.listing.slice(2);
+        // is there space: one of three words, on the listing straight away, and off again after a month
+        var spBox = el('div', 'claim-space');
+        spBox.appendChild(el('h4', null, 'Is there space right now?'));
+        var spNow = c.space ? c.space.s : '';
+        var spRow = el('div', 'actions'), spSay = el('p', 'hint');
+        spSay.textContent = c.space ? 'Showing on your listing since ' + shortDate(c.space.t) + '. It comes down after 30 days unless you set it again.' : 'Parents see this on your listing straight away. It comes down after 30 days unless you set it again, so it never goes stale.';
+        [['open', 'Spots open'], ['waitlist', 'Waitlist'], ['full', 'Full'], ['', 'Don’t show']].forEach(function (o) {
+          var b = btn('kid', o[1]); b.setAttribute('aria-pressed', String(spNow === o[0]));
+          b.addEventListener('click', function () {
+            call('space_set', { listing: c.listing, state: o[0] }).then(function (r) {
+              if (!r.ok) { spSay.textContent = r.message || 'That didn’t save. Try again.'; return; }
+              pushStep('space_' + (o[0] || 'cleared')); cClaims = r.claims || cClaims; said = ''; render();
+            });
+          });
+          spRow.appendChild(b);
+        });
+        spBox.appendChild(spRow); spBox.appendChild(spSay);
+        item.appendChild(spBox);
         // a change: dates, cost, hours, anything else
         var form = el('form', 'g-form claim-edit');
         form.appendChild(el('h4', null, 'Send an update'));

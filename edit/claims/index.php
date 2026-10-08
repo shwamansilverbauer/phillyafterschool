@@ -152,7 +152,7 @@ if ($have) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../../assets/site.css?v=200dbf64">
+<link rel="stylesheet" href="../../assets/site.css?v=f44a0475">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -269,6 +269,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
         <li><a href="../../managers/"><span data-copy="c192560a97">For program managers</span></a></li>
         <li><a href="../../ideas/"><span data-copy="29c269f6e8">Request a feature</span></a></li>
         <li><a href="../../privacy/"><span data-copy="cf01481f62">Privacy</span></a></li>
+        <li><a href="../../terms/"><span data-copy="8a069ed1c6">Terms of use</span></a></li>
         <li><a href="../../support/"><span data-copy="fd1482eac6">Buy me a coffee</span></a></li>
       </ul>
     </div>
@@ -280,7 +281,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../../assets/site.js?v=955f971f" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
+<script src="../../assets/site.js?v=a8b12719" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
 
 </body>
 </html>
