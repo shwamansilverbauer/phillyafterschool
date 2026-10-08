@@ -1080,7 +1080,7 @@
         if (open.length && b.wk[day[0]].length < 6) {
           var sel = el('select', 'wk-add'); sel.setAttribute('aria-label', 'Add a ' + day[1] + ' class');
           var first = el('option', null, 'Add a ' + day[1] + ' class…'); first.value = ''; sel.appendChild(first);
-          open.forEach(function (id) { var o = el('option', null, data.weekend[id].name); o.value = id; sel.appendChild(o); });
+          open.forEach(function (id) { var o = el('option', null, data.weekend[id].name + (data.weekend[id].hood ? ' · ' + data.weekend[id].hood : '')); o.value = id; sel.appendChild(o); });
           sel.addEventListener('change', function () { if (sel.value) addWeekend(sel.value, day[0], 'roster_weekend'); });
           col.appendChild(sel);
         }
@@ -1820,6 +1820,164 @@
     if (!shared && !storageOk) say(savedNote());
   }
 
+  // ----- summer schedule: a camp for each week of the summer, kept on this device and nowhere else -----
+  var sumEl = document.querySelector('[data-summer]');
+  if (sumEl) (function () {
+    var sd = JSON.parse(document.getElementById('summer-data').textContent);
+    var weeksEl = sumEl.querySelector('#sum-weeks'), stripEl = sumEl.querySelector('#sum-strip'), countEl = sumEl.querySelector('#sum-count'), costEl = sumEl.querySelector('#sum-cost');
+    var toolsEl = sumEl.querySelector('#sum-tools'), statusEl = sumEl.querySelector('#sum-status'), ageBox = sumEl.querySelector('#sum-age');
+    var chart = document.querySelector('.sum-chart'), chartNote = document.getElementById('sum-chart-note');
+    var ids = Object.keys(sd.camps).sort(function (a, b) { return sd.camps[a].n.localeCompare(sd.camps[b].n); });
+    // The plan: { y: the summer, w: { "2027-06-07": [camp ids] }, age: "7" }. A plan made for another summer starts over.
+    var plan = { y: sd.year, w: {}, age: '' };
+    try {
+      var kept = JSON.parse(store('pas-summer') || 'null');
+      if (kept && kept.y === sd.year && kept.w && typeof kept.w === 'object') {
+        sd.weeks.forEach(function (wk) {
+          var got = Array.isArray(kept.w[wk.d]) ? kept.w[wk.d].filter(function (id, i, a) { return typeof id === 'string' && sd.camps[id] && a.indexOf(id) === i; }).slice(0, 6) : [];
+          if (got.length) plan.w[wk.d] = got;
+        });
+        if (/^\d{1,2}$/.test(String(kept.age || ''))) plan.age = String(kept.age);
+      }
+    } catch (e) { /* start with an empty summer */ }
+    var save = function () { store('pas-summer', JSON.stringify(plan)); };
+    var say = function (t) { statusEl.textContent = t || ''; };
+    var picks = function (i) { return plan.w[sd.weeks[i].d] || []; };
+    var fitsAge = function (c) { if (!plan.age) return true; var a = +plan.age; return a >= Math.floor(c.a[0]) && a <= c.a[1]; };
+    var price = function (c) { return c.p === 0 ? 'Free' : c.p ? '$' + c.p + ' a week' : ''; };
+    var dates = function (c) { return !c.w.length ? 'No dates listed' : c.x ? sd.year + ' dates' : c.y + ' dates, as a guide'; };
+    var covered = function () { return sd.weeks.filter(function (w, i) { return picks(i).length; }).length; };
+    var openWeek = -1;
+    var toggle = function (id, i, how) {
+      var d = sd.weeks[i].d, list = plan.w[d] || [], at = list.indexOf(id), c = sd.camps[id];
+      if (at > -1) list.splice(at, 1);
+      else {
+        if (list.length >= 6) { say('That week already has six camps. Take one off first.'); return; }
+        list.push(id);
+      }
+      if (list.length) plan.w[d] = list; else delete plan.w[d];
+      save();
+      track({ event: 'pas_summer', action: at > -1 ? 'remove' : 'add', camp_id: id, week: i + 1, method: how, weeks_covered: covered() });
+      say(at > -1 ? c.n + ' is off ' + sd.weeks[i].label + '.' : c.n + ' is on ' + sd.weeks[i].label + '.' + (c.w.indexOf(i) < 0 ? (c.w.length ? ' It didn’t list that week, so check with the camp.' : ' It hasn’t listed dates, so check with the camp.') : !c.x ? ' That’s the week it ran in ' + c.y + '.' : ''));
+      draw();
+    };
+    var option = function (id, i) {
+      var c = sd.camps[id], b = el('button', 'sum-opt');
+      b.type = 'button';
+      b.appendChild(el('b', null, c.n));
+      b.appendChild(el('small', null, [c.hood, c.h, price(c), dates(c)].filter(Boolean).join(' · ')));
+      b.addEventListener('click', function () { openWeek = -1; toggle(id, i, 'week_list'); });
+      return b;
+    };
+    var draw = function () {
+      var n = covered(), total = 0, unpriced = 0, booked = 0;
+      weeksEl.textContent = ''; stripEl.textContent = '';
+      sd.weeks.forEach(function (wk, i) {
+        var mine = picks(i);
+        var cell = el('i', mine.length ? 'on' : ''); stripEl.appendChild(cell);
+        var li = el('li', 'sum-week' + (mine.length ? ' has' : ''));
+        var when = el('div', 'sum-when'); when.appendChild(el('b', null, wk.label));
+        if (wk.note) when.appendChild(el('span', 'hint', wk.note));
+        li.appendChild(when);
+        var box = el('div', 'sum-picks');
+        mine.forEach(function (id) {
+          var c = sd.camps[id], chip = el('span', 'sum-chip' + (c.w.indexOf(i) < 0 ? ' ask' : ''));
+          var a = el('a', null, c.n); a.href = sd.campsPage + '#' + id; chip.appendChild(a);
+          var bits = [c.h, price(c), c.w.indexOf(i) < 0 ? (c.w.length ? 'not a week it listed' : 'no dates listed') : c.x ? '' : 'ran this week in ' + c.y].filter(Boolean).join(' · ');
+          if (bits) chip.appendChild(el('small', null, bits));
+          var x = el('button', 'sum-x', '×'); x.type = 'button'; x.setAttribute('aria-label', 'Take ' + c.n + ' off ' + wk.label);
+          x.addEventListener('click', function () { toggle(id, i, 'week_list'); });
+          chip.appendChild(x); box.appendChild(chip);
+          booked++; if (c.p === null) unpriced++; else total += c.p;
+        });
+        if (!mine.length) box.appendChild(el('span', 'sum-none', 'Nothing yet'));
+        li.appendChild(box);
+        var add = el('button', 'btn sum-add', mine.length ? 'Add another' : 'Add a camp'); add.type = 'button';
+        add.setAttribute('aria-expanded', openWeek === i ? 'true' : 'false');
+        add.addEventListener('click', function () { openWeek = openWeek === i ? -1 : i; draw(); var o = weeksEl.querySelector('.sum-choose'); if (o && o.scrollIntoView) o.scrollIntoView({ block: 'nearest' }); });
+        li.appendChild(add);
+        if (openWeek === i) {
+          var ch = el('div', 'sum-choose');
+          var open = ids.filter(function (id) { return mine.indexOf(id) < 0 && fitsAge(sd.camps[id]); });
+          var runs = open.filter(function (id) { return sd.camps[id].w.indexOf(i) > -1; });
+          var undated = open.filter(function (id) { return !sd.camps[id].w.length; });
+          ch.appendChild(el('p', 'sum-choose-h', runs.length ? (runs.length === 1 ? '1 camp lists this week' : runs.length + ' camps list this week') + (plan.age ? ' for age ' + plan.age : '') : 'No camp' + (plan.age ? ' for age ' + plan.age : '') + ' lists this week yet'));
+          var grid = el('div', 'sum-opts'); runs.forEach(function (id) { grid.appendChild(option(id, i)); }); ch.appendChild(grid);
+          if (undated.length) {
+            var more = el('details', 'sum-more'), sm = el('summary', null, undated.length + (undated.length === 1 ? ' camp that hasn’t' : ' camps that haven’t') + ' listed dates');
+            more.appendChild(sm);
+            var g2 = el('div', 'sum-opts'); undated.forEach(function (id) { g2.appendChild(option(id, i)); }); more.appendChild(g2);
+            ch.appendChild(more);
+          }
+          li.appendChild(ch);
+        }
+        weeksEl.appendChild(li);
+      });
+      countEl.textContent = n ? n + ' of ' + sd.weeks.length + (n === 1 ? ' weeks has a camp.' : ' weeks have a camp.') : 'No weeks filled in yet. ' + sd.weeks.length + ' to go.';
+      costEl.textContent = booked ? (total ? 'About $' + total.toLocaleString('en-US') + ' at the weekly prices the camps posted' : booked - unpriced ? 'Free, by the prices the camps posted' : '') + (unpriced ? (total || booked - unpriced ? ', not counting ' : '') + (unpriced === 1 ? '1 camp-week' : unpriced + ' camp-weeks') + ' with no weekly price posted' : '') + '. Before-care, after-care and sibling prices aren’t counted.' : '';
+      toolsEl.hidden = !n;
+      // the chart: which boxes are in the plan, and which camps suit the age picked
+      if (chart) all(chart, 'tbody tr').forEach(function (tr) {
+        var id = tr.getAttribute('data-camp'), c = sd.camps[id];
+        tr.hidden = !!c && !fitsAge(c);
+        all(tr, 'td.on').forEach(function (td) {
+          var i = +td.getAttribute('data-w'), b = td.querySelector('button'), inPlan = picks(i).indexOf(id) > -1;
+          if (!b) {
+            b = el('button'); b.type = 'button';
+            b.addEventListener('click', function () { toggle(id, i, 'chart'); });
+            td.textContent = ''; td.appendChild(b);
+          }
+          b.setAttribute('aria-pressed', inPlan ? 'true' : 'false');
+          b.setAttribute('aria-label', c.n + ', ' + sd.weeks[i].label + (inPlan ? ', in your summer' : c.x ? '' : ', ran in ' + c.y));
+          td.classList.toggle('picked', inPlan);
+        });
+      });
+      if (chartNote) chartNote.textContent = plan.age ? 'Showing camps that take age ' + plan.age + '.' : '';
+    };
+    var asText = function () {
+      var lines = ['Summer ' + sd.year], total = 0;
+      sd.weeks.forEach(function (wk, i) {
+        var mine = picks(i).map(function (id) { var c = sd.camps[id]; if (c.p) total += c.p; return c.n + ([c.h, price(c)].filter(Boolean).length ? ' (' + [c.h, price(c)].filter(Boolean).join(', ') + ')' : ''); });
+        lines.push(wk.label + ': ' + (mine.length ? mine.join(' + ') : 'nothing yet'));
+      });
+      if (total) lines.push('About $' + total.toLocaleString('en-US') + ' at posted weekly prices.');
+      lines.push('Made at ' + sd.page);
+      return lines.join('\n');
+    };
+    ageBox.value = plan.age;
+    ageBox.addEventListener('change', function () { plan.age = ageBox.value; save(); openWeek = -1; draw(); track({ event: 'pas_summer', action: 'age', weeks_covered: covered() }); });
+    sumEl.querySelector('#sum-copy').addEventListener('click', function () {
+      var text = asText(), done = function () { say('Copied. Paste it into a text or an email.'); track({ event: 'pas_summer', action: 'copy', weeks_covered: covered() }); };
+      var old = function () { var ta = el('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; } document.body.removeChild(ta); if (ok) done(); else say('This browser wouldn’t copy it. Try Print instead.'); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, old); else old();
+    });
+    var shareBtn = sumEl.querySelector('#sum-share');
+    if (navigator.share) {
+      shareBtn.hidden = false;
+      shareBtn.addEventListener('click', function () { navigator.share({ text: asText() }).then(function () { track({ event: 'pas_summer', action: 'share', weeks_covered: covered() }); }, function () { /* closed without sharing */ }); });
+    }
+    sumEl.querySelector('#sum-print').addEventListener('click', function () { track({ event: 'pas_summer', action: 'print', weeks_covered: covered() }); window.print(); });
+    var clearBtn = sumEl.querySelector('#sum-clear'), sure = false;
+    clearBtn.addEventListener('click', function () {
+      if (!sure) { sure = true; clearBtn.textContent = 'Clear every week? Tap again'; window.setTimeout(function () { sure = false; clearBtn.textContent = 'Clear the plan'; }, 5000); return; }
+      sure = false; clearBtn.textContent = 'Clear the plan';
+      plan.w = {}; save(); openWeek = -1; draw(); say('Cleared.'); track({ event: 'pas_summer', action: 'clear', weeks_covered: 0 });
+    });
+    draw();
+    if (!storageOk) say('This browser is blocking saved data, so your summer won’t be here when you come back. Copy or print it before you leave.');
+    // From a camp's card: "Add to your summer" lands on that camp's row of the chart.
+    var asked = query().add;
+    if (asked && sd.camps[asked]) {
+      var c0 = sd.camps[asked], row = chart ? chart.querySelector('tr[data-camp="' + asked + '"]') : null;
+      if (row && c0.w.length) {
+        if (row.hidden) { plan.age = ''; ageBox.value = ''; draw(); }
+        row.classList.add('ask');
+        if (chartNote) chartNote.textContent = 'Tap the weeks you want for ' + c0.n + '.';
+        window.setTimeout(function () { var wrap = document.getElementById('chart'); if (wrap && wrap.scrollIntoView) wrap.scrollIntoView(); if (row.scrollIntoView) row.scrollIntoView({ block: 'center' }); }, 0);
+      } else say(c0.n + ' hasn’t listed dates we can chart. Add it to any week with “Add a camp”, under the camps that haven’t listed dates.');
+    }
+  })();
+
   // ----- filters: one engine for every page that lists programs (school, A to Z, type, neighborhood) -----
   var fbar = document.querySelector('[data-filters]');
   if (fbar) {
@@ -1827,7 +1985,7 @@
     var items = all(document, '[data-item]');
     var groups = all(document, '[data-group]');
     // Someone who saved their school sees the citywide lists narrowed to it, with one tap to widen them again.
-    var mineF = fSchool ? null : mySchool();
+    var mineF = fSchool || fbar.hasAttribute('data-noschool') ? null : mySchool();   // weekend classes go by neighborhood, never by school
     if (mineF && !items.some(function (it) { return (' ' + (it.getAttribute('data-schools') || '') + ' ').indexOf(' ' + mineF.id + ' ') > -1; })) mineF = null;
     if (mineF) {
       var srow = el('div', 'frow'), srail = el('div', 'rail');
