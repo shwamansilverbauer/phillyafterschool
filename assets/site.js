@@ -207,7 +207,8 @@
       if (form.elements.company && form.elements.company.value) return;   // only a script fills the hidden field
       if (!first) { say('Add your first name so we know what to call you.', 'bad'); form.elements.first_name.focus(); return; }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { say('That email address doesn’t look right. Check it and try again.', 'bad'); form.elements.email.focus(); return; }
-      var follow = form.elements.program || null;   // a program page follows that one program instead of a school
+      var camp = form.elements.camp || null;         // a summer camp's page follows that one camp
+      var follow = form.elements.program || camp || null;   // a program page follows that one program instead of a school
       var field = follow || form.elements.school, school = follow ? '' : field.value;
       var name = sel ? (sel.options[sel.selectedIndex].getAttribute('data-name') || '') : (field.getAttribute('data-name') || '');
       if (form.getAttribute('data-preview')) { say('This is the preview, so nothing was sent. Sign-ups work on the live site.'); return; }
@@ -230,15 +231,16 @@
       }).then(function (r) {
         if (r.status < 200 || r.status > 299) throw new Error('status ' + r.status);
         if (!follow) return r;
-        return klaviyo('profiles', { data: { type: 'profile', attributes: { email: email }, meta: { patch_properties: { append: { programs: follow.value } } } } });
+        return klaviyo('profiles', { data: { type: 'profile', attributes: { email: email }, meta: { patch_properties: { append: camp ? { camps: camp.value } : { programs: follow.value } } } } });
       }).then(function () {
         row.hidden = true;
         var hint = form.querySelector('.hint'); if (hint) hint.hidden = true;
         say(form.getAttribute('data-confirm')
           ? 'Almost there. Check your inbox for a confirmation email and tap the button in it.'
+          : camp ? 'Done, ' + first + '. You’ll hear when ' + name + ' posts next summer or names a sign-up day. We read each camp’s site about once a month, so keep an eye on a camp that fills fast.'
           : follow ? 'Done, ' + first + '. You’ll hear when ' + name + ' posts a date. If it already has some posted, they reach you tomorrow morning.'
           : 'You’re on the list' + (name ? ' for ' + name : '') + ', ' + first + '. Dates already on the calendar reach you tomorrow morning. After that, it’s one email a week at most.', 'good');
-        track({ event: 'pas_alert_signup', school: school, program_id: follow ? follow.value : '', place: place });
+        track({ event: 'pas_alert_signup', school: school, program_id: follow && !camp ? follow.value : '', camp_id: camp ? camp.value : '', place: place });
       }).catch(function () {
         btn.disabled = false;
         say('That didn’t go through. Please try again in a minute.', 'bad');

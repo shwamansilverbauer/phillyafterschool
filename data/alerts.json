@@ -240,6 +240,184 @@
       "name": "MacGuffin Theatre & Film Company"
     }
   ],
+  "camps": [
+    {
+      "id": "philly-art-center",
+      "name": "Philly Art Center"
+    },
+    {
+      "id": "fleisher-art-memorial-camp",
+      "name": "Fleisher Art Memorial"
+    },
+    {
+      "id": "mister-johns-music-camp",
+      "name": "Mister John’s Music"
+    },
+    {
+      "id": "music-theatre-philly-camp",
+      "name": "Music Theatre Philly"
+    },
+    {
+      "id": "movemakers-camp",
+      "name": "MoveMakers Philly"
+    },
+    {
+      "id": "queen-and-rook-camp",
+      "name": "Queen & Rook Game Cafe"
+    },
+    {
+      "id": "parks-and-rec-camps",
+      "name": "Philadelphia Parks & Recreation day camps"
+    },
+    {
+      "id": "theatre-horizon-woodmere",
+      "name": "Theatre Horizon drama camp at Woodmere"
+    },
+    {
+      "id": "butchers-sew-shop-camp",
+      "name": "Butcher’s Sew Shop Junior"
+    },
+    {
+      "id": "clay-studio-camp",
+      "name": "The Clay Studio"
+    },
+    {
+      "id": "pafa-camp",
+      "name": "PAFA summer art camp"
+    },
+    {
+      "id": "moore-young-artists",
+      "name": "Moore College of Art & Design youth courses"
+    },
+    {
+      "id": "school-of-rock-philadelphia",
+      "name": "School of Rock Philadelphia"
+    },
+    {
+      "id": "arden-summer-camp",
+      "name": "Arden Drama School"
+    },
+    {
+      "id": "camp-walnut",
+      "name": "Camp Walnut at Walnut Street Theatre"
+    },
+    {
+      "id": "macguffin-camps",
+      "name": "MacGuffin Theatre & Film Company"
+    },
+    {
+      "id": "flipout-camp",
+      "name": "FlipOut Productions"
+    },
+    {
+      "id": "philadelphia-ballet-camps",
+      "name": "School of Philadelphia Ballet dance camps"
+    },
+    {
+      "id": "wissahickon-figure-skating",
+      "name": "Wissahickon Skating Club figure skating camp"
+    },
+    {
+      "id": "philadelphia-dance-academy",
+      "name": "The Philadelphia Dance Academy"
+    },
+    {
+      "id": "legacy-tennis-camp",
+      "name": "Legacy Youth Tennis community camp"
+    },
+    {
+      "id": "ceo-camp-phield-house",
+      "name": "C.E.O. Camp at Phield House"
+    },
+    {
+      "id": "awbury-adventures",
+      "name": "Awbury Adventures at Awbury Arboretum"
+    },
+    {
+      "id": "camp-schuylkill",
+      "name": "Camp Schuylkill at the Schuylkill Center"
+    },
+    {
+      "id": "morris-arboretum-camp",
+      "name": "Nature Explorers at Morris Arboretum & Gardens"
+    },
+    {
+      "id": "circus-arts-camp",
+      "name": "Philadelphia School of Circus Arts"
+    },
+    {
+      "id": "work-to-ride-camp",
+      "name": "Work to Ride at Chamounix Equestrian Center"
+    },
+    {
+      "id": "seaport-summer-camp",
+      "name": "Seaport Summer Camp at Independence Seaport Museum"
+    },
+    {
+      "id": "taller-puertorriqueno-camp",
+      "name": "Taller Puertorriqueño"
+    },
+    {
+      "id": "camp-tps",
+      "name": "Camp TPS at The Philadelphia School"
+    },
+    {
+      "id": "ymca-day-camps",
+      "name": "Greater Philadelphia YMCA day camps"
+    },
+    {
+      "id": "summer-achievers-edey",
+      "name": "Summer Achievers at Extended Day, Extended Year schools"
+    },
+    {
+      "id": "allens-lane-art-camp",
+      "name": "Allens Lane Art Center summer art camp"
+    },
+    {
+      "id": "nlarts-summer-camp",
+      "name": "NLArts summer art camp"
+    },
+    {
+      "id": "yes-and-camp",
+      "name": "Yes! And… Collaborative Arts camps"
+    },
+    {
+      "id": "zazz-summer-camp",
+      "name": "ZAZZ Dance & Drama"
+    },
+    {
+      "id": "sawubona-summer-camp",
+      "name": "Sawubona Creativity Project"
+    },
+    {
+      "id": "zoomdance-camp",
+      "name": "ZoomDance camp"
+    },
+    {
+      "id": "dandelion-summer-camp",
+      "name": "The Dandelion Project summer camp"
+    },
+    {
+      "id": "rutabaga-naturearts",
+      "name": "Rutabaga NatureArts summer camp"
+    },
+    {
+      "id": "skate-the-foundry-camp",
+      "name": "Skate The Foundry skateboard camp"
+    },
+    {
+      "id": "lavner-tech-camp-upenn",
+      "name": "Camp Tech Revolution at UPenn (Lavner)"
+    },
+    {
+      "id": "philly-rock-gym-camps",
+      "name": "Philadelphia Rock Gym summer camps"
+    },
+    {
+      "id": "coco-academy-summer-camp",
+      "name": "CoCo Academy"
+    }
+  ],
   "alerts": [
     {
       "id": "camp-butchers-sew-shop-2026-10-09",

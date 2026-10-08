@@ -10,4 +10,10 @@ RewriteRule ^ https://phillyafterschool.org%{REQUEST_URI} [R=301,L]
 # The short addresses in the QR codes on the week card and the day-camp card.
 RewriteRule ^w/?$ /?utm_source=week_card&utm_medium=qr [NC,R=302,L]
 RewriteRule ^d/?$ /days-off/?utm_source=dayoff_card&utm_medium=qr [NC,R=302,L]
+# A school that has been added: its old "not covered yet" address goes to its page.
+RewriteRule ^schools/fanny-jackson-coppin-school/?$ /coppin/ [R=301,L]
+RewriteRule ^schools/general-george-a-mccall-school/?$ /mccall/ [R=301,L]
+RewriteRule ^schools/george-w-nebinger-school/?$ /nebinger/ [R=301,L]
+RewriteRule ^schools/vare-washington-school/?$ /vare-washington/ [R=301,L]
+RewriteRule ^schools/william-m-meredith-school/?$ /meredith/ [R=301,L]
 </IfModule>
