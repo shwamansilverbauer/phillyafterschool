@@ -36,7 +36,7 @@ $topListings = array(); $hitsSince = '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
+$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -54,6 +54,17 @@ if ($have) {
   foreach (array('PK', 'K', '1', '2', '3', '4', '5', '6', '7', '8') as $g) { if (isset($byGrade[$g])) $gradeLine .= ($gradeLine === '' ? '' : ', ') . $g . ': ' . $byGrade[$g]; }
   $accounts = $n('SELECT COUNT(*) FROM users');
   $tiles[] = array($accounts, 'accounts', $n('SELECT COUNT(*) FROM users WHERE created > ?', array($t - 7 * 86400)) . ' new in 7 days, ' . $n('SELECT COUNT(*) FROM users WHERE created > ?', array($t - 30 * 86400)) . ' in 30');
+  // Parents and program managers. A manager holds a claim (approved or waiting) or made the account on the managers' page.
+  $isMgr = "(%s EXISTS (SELECT 1 FROM claims c WHERE c.user_id = u.id AND c.status != 'declined'))";
+  $mgr = function ($since) use ($db, $isMgr) {
+    foreach (array("u.origin = 'managers' OR", '') as $door) {   // the second try is for a database from before accounts noted their door
+      try { $st = $db->prepare('SELECT COUNT(*) FROM users u WHERE u.created > ? AND ' . sprintf($isMgr, $door)); $st->execute(array($since)); return (int) $st->fetchColumn(); } catch (Exception $e) { /* try the next */ }
+    }
+    return 0;
+  };
+  $managers = $mgr(0);
+  $tiles[] = array($accounts - $managers, 'parents with an account', ($n('SELECT COUNT(*) FROM users WHERE created > ?', array($t - 30 * 86400)) - $mgr($t - 30 * 86400)) . ' new in 30 days');
+  $tiles[] = array($managers, 'program managers with an account', $mgr($t - 30 * 86400) . ' new in 30 days. ' . $n("SELECT COUNT(DISTINCT user_id) FROM claims WHERE status = 'ok'") . ' hold a claimed listing, ' . $n("SELECT COUNT(DISTINCT listing) FROM claims WHERE status = 'ok'") . ' listings claimed');
   $tiles[] = array($n('SELECT COUNT(DISTINCT user_id) FROM sessions WHERE seen > ?', array($t - 30 * 86400)), 'people signed in during the last 30 days', '');
   $tiles[] = array($n("SELECT COUNT(*) FROM users WHERE via = 'google'"), 'accounts made with Google', ($accounts - $n("SELECT COUNT(*) FROM users WHERE via = 'google'")) . ' made with an emailed code');
   $tiles[] = array($n('SELECT COUNT(*) FROM users WHERE listed = 1'), 'accounts added to the email list', $n("SELECT COUNT(*) FROM users WHERE first = ''") . ' accounts haven’t added a name yet');
@@ -126,7 +137,7 @@ $sum = function ($key, $span) use (&$days, &$ever) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../../assets/site.css?v=c406edff">
+<link rel="stylesheet" href="../../assets/site.css?v=632c85f8">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -137,7 +148,7 @@ $sum = function ($key, $span) use (&$days, &$ever) {
   <div class="in bar">
     <a class="brand" href="../../"><span class="bus-mark"></span>Philly After School</a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true"></span>Menu</button>
-    <nav class="nav" id="site-nav" aria-label="Site"><details class="menu"><summary>Programs</summary><ul><li><a href="../../programs/">After-school programs</a></li><li><a href="../../weekends/">Weekend classes</a></li><li><a href="../../days-off/">Day-camp programs</a></li><li><a href="../../summer-camps/">Summer camps</a></li></ul></details><details class="menu"><summary>Search by</summary><ul><li><a href="../../schools/">School</a></li><li><a href="../../neighborhoods/">Neighborhood</a></li><li><a href="../../types/">Program type</a></li><li><a href="../../programs/#by-day">Day of week</a></li></ul></details><details class="menu"><summary>Build a schedule<span class="count" data-board-count hidden></span></summary><ul><li><a href="../../board/">After-school schedule</a></li><li><a href="../../days-off/#plan">Day-camp schedule</a></li><li><a href="../../summer-schedule/">Summer schedule</a></li><li><a href="../../calendar/">My kids’ calendar</a></li></ul></details><details class="menu"><summary>Suggest</summary><ul><li><a href="../../suggest/">A program</a></li><li><a href="../../suggest/?kind=camp">A camp</a></li><li><a href="../../suggest/?kind=correction">An update to a listing</a></li><li><a href="../../ideas/">A feature</a></li><li><a href="../../schools/request/">A school</a></li></ul></details><a href="../../about/">About</a><a class="nav-cta when-out" href="../../register/">Create a free account</a><a class="nav-cta when-in" href="../../account/">Your account</a></nav>
+    <nav class="nav" id="site-nav" aria-label="Site"><details class="menu"><summary>Programs</summary><ul><li><a href="../../programs/">After-school programs</a></li><li><a href="../../weekends/">Weekend classes</a></li><li><a href="../../days-off/">Day-camp programs</a></li><li><a href="../../summer-camps/">Summer camps</a></li></ul></details><details class="menu"><summary>Search by</summary><ul><li><a href="../../schools/">School</a></li><li><a href="../../neighborhoods/">Neighborhood</a></li><li><a href="../../types/">Program type</a></li><li><a href="../../programs/#by-day">Day of week</a></li></ul></details><details class="menu"><summary>Build a schedule<span class="count" data-board-count hidden></span></summary><ul><li><a href="../../schedules/">All the planners</a></li><li><a href="../../board/">After-school schedule</a></li><li><a href="../../days-off/#plan">Day-camp schedule</a></li><li><a href="../../summer-schedule/">Summer schedule</a></li><li><a href="../../calendar/">My kids’ calendar</a></li></ul></details><details class="menu"><summary>Suggest</summary><ul><li><a href="../../suggest/">A program</a></li><li><a href="../../suggest/?kind=camp">A camp</a></li><li><a href="../../suggest/?kind=correction">An update to a listing</a></li><li><a href="../../ideas/">A feature</a></li><li><a href="../../schools/request/">A school</a></li></ul></details><a href="../../about/">About</a><a class="nav-cta when-out" href="../../register/">Create a free account</a><a class="nav-cta when-in" href="../../account/">Your account</a></nav>
   </div>
 </header>
 <div class="band pagehead">
@@ -211,7 +222,7 @@ $sum = function ($key, $span) use (&$days, &$ever) {
       </ul>
     </div>
     <div>
-      <h2><a href="../../board/"><span data-copy="928655b7f0">Your family</span></a></h2>
+      <h2><a href="../../schedules/"><span data-copy="928655b7f0">Your family</span></a></h2>
       <ul>
         <li><a href="../../board/"><span data-copy="55cf06857b">After-school schedule</span></a></li>
         <li><a href="../../days-off/#plan"><span data-copy="ef8a7dc9b4">Day-camp schedule</span></a></li>

@@ -67,6 +67,7 @@
       return r.json().then(function (d) {
         d.http = r.status;
         if (r.status === 401) set('pas-in', null);
+        if (d.user && d.user.role) noteRole(d.user);
         return d;
       }, function () { return { ok: false, http: r.status, message: 'Something went wrong on our side. Please try again.' }; });
     }, function () { return { ok: false, http: 0, message: 'Couldn’t reach the site. Check your connection and try again.' }; });
@@ -75,9 +76,43 @@
   // ----- signing in: an email with a link (for this device) and a 6-digit code (for the page that asked) -----
   // The sign-up page (/register/) is the one account page that loads analytics. It is told that a sign-up started and
   // how (email or Google), and that it finished: never the address, the name or anything typed.
-  function signupStep(step, method) {
-    if (!document.querySelector('#account[data-mode="register"]')) return;
-    (window.dataLayer = window.dataLayer || []).push({ event: 'pas_signup', step: step, method: method });
+  // The managers' page loads it too, and says so: "role" is which of the two doors the sign-up came through.
+  function signupStep(step, method, d) {
+    var role = document.querySelector('#account[data-mode="register"]') ? 'parent' : document.getElementById('claims') ? 'manager' : '';
+    if (!role) return;
+    var ev = { event: 'pas_signup', step: step, method: method, role: role };
+    if (d) ev.account = d['new'] ? 'new' : 'returning';
+    (window.dataLayer = window.dataLayer || []).push(ev);
+  }
+
+  // Parent or program manager? The server says which, and this device keeps the one word, so the pages that count
+  // visits can tell the two groups apart. The email list is told as well, once the account is on it: the word, and
+  // for a manager the names of the listings they hold. Nothing else about the person goes with it.
+  function noteRole(u, listings) {
+    if (!u || !/^(parent|manager)$/.test(u.role || '')) return;
+    if (get('pas-role') !== u.role) {
+      set('pas-role', u.role);
+      if (window.dataLayer) window.dataLayer.push({ event: 'pas_role', pas_role: u.role, pas_signed_in: 'yes' });
+      if (typeof window.clarity === 'function') window.clarity('set', 'role', u.role);
+    }
+    if (!KL_KEY || !u.email || !u.listed) return;
+    var mark = 0, i;
+    for (i = 0; i < u.email.length; i++) mark = (mark * 31 + u.email.charCodeAt(i)) % 9973;   // tells two accounts on one device apart without keeping the address
+    var was = {}; try { was = JSON.parse(get('pas-kl-role') || '{}') || {}; } catch (e) { was = {}; }
+    var names = listings ? listings.join(' | ') : null;
+    if (was.m === mark && was.r === u.role && (names === null || was.l === names)) return;
+    var asking = mark + '|' + u.role + '|' + names;
+    if (noteRole.asking === asking) return;   // already on its way from this page
+    noteRole.asking = asking;
+    var props = { role: u.role };
+    if (names !== null) props.claimed_listings = listings;
+    window.fetch('https://a.klaviyo.com/client/profiles?company_id=' + encodeURIComponent(KL_KEY), {
+      method: 'POST',
+      headers: { 'content-type': 'application/vnd.api+json', revision: '2026-07-15' },
+      body: JSON.stringify({ data: { type: 'profile', attributes: { email: u.email, properties: props } } })
+    }).then(function (r) {
+      if (r.status >= 200 && r.status < 300) set('pas-kl-role', JSON.stringify({ m: mark, r: u.role, l: names === null ? (was.m === mark ? was.l : undefined) : names }));
+    }, function () { /* blocked or offline: tried again another time */ });
   }
   function signInBox(box, next, done, lede) {
     box.textContent = '';
@@ -117,7 +152,7 @@
           if (!d.ok) { status.textContent = d.message; status.className = 'g-status bad'; return; }
           status.textContent = '';
           set('pas-in', '1');
-          signupStep('signed_in', 'google');
+          signupStep('signed_in', 'google', d);
           done(d);
         });
       };
@@ -157,7 +192,7 @@
         go.disabled = false;
         if (!d.ok) { status.textContent = d.message; status.className = 'g-status bad'; return; }
         set('pas-in', '1');
-        signupStep('signed_in', 'email');
+        signupStep('signed_in', 'email', d);
         done(d);
       });
     });
@@ -288,9 +323,9 @@
       method: 'POST',
       headers: { 'content-type': 'application/vnd.api+json', revision: '2026-07-15' },
       body: JSON.stringify({ data: { type: 'subscription',
-        attributes: { custom_source: 'phillyafterschool.org account', profile: { data: { type: 'profile', attributes: { email: me.email, first_name: me.first, last_name: me.last, properties: { has_account: true }, subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } } } } } },
+        attributes: { custom_source: 'phillyafterschool.org account', profile: { data: { type: 'profile', attributes: { email: me.email, first_name: me.first, last_name: me.last, properties: { has_account: true, role: me.role === 'manager' ? 'manager' : 'parent' }, subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } } } } } },
         relationships: { list: { data: { type: 'list', id: KL_LIST } } } } })
-    }).then(function (r) { if (r.status >= 200 && r.status < 300) { me.listed = true; call('listed', {}); } }, function () { /* blocked or offline: it is tried again at the next sign-in */ });
+    }).then(function (r) { if (r.status >= 200 && r.status < 300) { me.listed = true; call('listed', {}); if (window.pasClaimNames) noteRole(me, window.pasClaimNames()); } }, function () { /* blocked or offline: it is tried again at the next sign-in */ });
   }
   function saveNames(me, first, last) {
     return call('set_name', { first: first, last: last }).then(function (r) {
@@ -583,7 +618,7 @@
       out.appendChild(el('p', 'hint', 'Deleting your account removes your email, the school, grades and weeks kept in your profile, every week you shared, and every group you made (for everyone in it). Rosters saved on this device stay.'));
       so.addEventListener('click', function () { call('logout', {}).then(function () { set('pas-in', null); drawSignedOut(); }); });
       sa.addEventListener('click', function () { call('logout_all', {}).then(function () { set('pas-in', null); drawSignedOut(); }); });
-      twoTap(del, 'Tap again to delete everything', function () { call('delete_account', {}).then(function (r) { if (r.ok) { set('pas-in', null); unlinkAll(); drawSignedOut('Your account and everything you shared are deleted.'); } }); });
+      twoTap(del, 'Tap again to delete everything', function () { call('delete_account', {}).then(function (r) { if (r.ok) { set('pas-in', null); set('pas-role', null); set('pas-kl-role', null); unlinkAll(); drawSignedOut('Your account and everything you shared are deleted.'); } }); });
       account.appendChild(out);
     };
     // Arriving from the email: the token is after the #, so it never reaches a server log. Use it once and take it out of the address.
@@ -655,10 +690,20 @@
       return call('claims').then(function (d) {
         if (!d.ok) { if (d.http === 401) { cMe = null; cState = 'out'; said = 'Please sign in again.'; saidBad = true; } else { said = d.message; saidBad = true; } return; }
         cDomain = d.domain; cClaims = d.claims || [];
+        tellRole();
       });
+    };
+    // The names of the listings this account holds, for the email list: "manager of X" is what makes a useful note there.
+    var claimNames = function () { return cClaims.filter(function (c) { return c.status === 'ok' && !c.gone; }).map(function (c) { return c.name; }).slice(0, 20); };
+    window.pasClaimNames = claimNames;
+    var tellRole = function () {
+      if (!cMe) return;
+      if (cClaims.some(function (c) { return c.status !== 'declined'; })) cMe.role = 'manager';
+      noteRole(cMe, claimNames());
     };
     var signedIn = function (user) {
       cMe = user; cState = user.ready ? 'in' : 'name';
+      listOnce(cMe);   // making an account adds it to the email list, whichever page it was made on
       if (cState === 'in') return reload().then(render);
       render();
     };
@@ -881,7 +926,7 @@
           if (!r.ok) { st.textContent = r.message; st.className = 'g-status bad'; return; }
           sset('pas-claim', null); wanted = ''; findText = '';
           said = r.status === 'ok' ? 'It’s yours: ' + l.name + ' now shows as claimed. Send an update whenever something changes.' : 'Asked. ' + l.name + ' is on a website many people share, so a person checks the claim. You’ll get an email either way.';
-          saidBad = false; cClaims = r.claims || [];
+          saidBad = false; cClaims = r.claims || []; tellRole();
           render();
           window.scrollTo(0, Math.max(0, claimsBox.getBoundingClientRect().top + window.pageYOffset - 90));
         });
@@ -931,7 +976,7 @@
             var got = 0, waiting = 0, bad = '', last = null;
             var next = function (i) {
               if (i >= mine.length) {
-                if (last) cClaims = last;
+                if (last) { cClaims = last; tellRole(); }
                 sset('pas-claim', null); wanted = ''; findText = '';
                 said = (got ? got + (got === 1 ? ' listing is yours' : ' listings are yours') + ' and now show as claimed. ' : '') + (waiting ? waiting + (waiting === 1 ? ' is' : ' are') + ' on a website many people share, so a person checks ' + (waiting === 1 ? 'that claim' : 'those claims') + '. ' : '') + (bad ? bad : '');
                 saidBad = !got && !waiting; pushStep(got ? 'claimed_all' : waiting ? 'waiting' : 'refused');

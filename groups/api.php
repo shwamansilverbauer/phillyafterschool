@@ -107,7 +107,7 @@ function db(): PDO {
     // Added after the first version: first and last name, and whether the account has been added to the email list.
     $cols = array();
     foreach ($db->query('PRAGMA table_info(users)') as $c) $cols[] = $c['name'];
-    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
+    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''", 'origin' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
       if (!in_array($col, $cols, true)) $db->exec('ALTER TABLE users ADD COLUMN ' . $col . ' ' . $type);
     }
     // A group made by "share this week with one person" is marked, so joining it skips the question about whose week to add.
@@ -269,14 +269,14 @@ function current_user(): ?array {
   $done = true;
   $sid = isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s']) ? $_COOKIE['pas_s'] : '';
   if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return null;
-  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school, u.grades FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
+  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school, u.grades, u.origin FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
   if (!$s) return null;
   if ($s['seen'] < now() - 86400) {   // once a day, push the 30 days out again
     $exp = now() + SESSION_DAYS * 86400;
     q('UPDATE sessions SET seen = ?, expires = ? WHERE id = ?', array(now(), $exp, $s['sid']));
     set_session_cookie($sid, $exp);
   }
-  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'school' => (string) $s['school'], 'grades' => (string) $s['grades'], 'sid' => (int) $s['sid']);
+  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'school' => (string) $s['school'], 'grades' => (string) $s['grades'], 'origin' => (string) $s['origin'], 'sid' => (int) $s['sid']);
   return $user;
 }
 function need_user(): array {
@@ -555,9 +555,15 @@ function my_groups(int $uid): array {
 // "ready" means the account has the first and last name every account needs before it can make or join a group.
 function ready(array $u): bool { return $u['first'] !== '' && $u['last'] !== ''; }
 function me_out(array $u): array {
+  $claims = isset($u['id']) ? (int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) : 0;
   return array('email' => $u['email'], 'first' => $u['first'], 'last' => $u['last'], 'ready' => ready($u), 'listed' => (bool) $u['listed'],
     'school' => isset($u['school']) ? (string) $u['school'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0,
-    'claims' => isset($u['id']) ? (int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) : 0);
+    'claims' => $claims, 'role' => role_of($u, $claims));
+}
+// Parent or program manager? A manager is an account that holds a claim (approved or waiting), or one that was made on
+// the managers' page. Everyone else is a parent. It is a label for counting and for the email list, never shown publicly.
+function role_of(array $u, int $claims): string {
+  return $claims > 0 || (isset($u['origin']) && $u['origin'] === 'managers') ? 'manager' : 'parent';
 }
 
 // ---------- directors: claiming a listing ----------
@@ -628,13 +634,15 @@ function tell_owner(string $subject, string $text): void {
 }
 // Signs this browser in as the account with this address, making the account if it is new.
 function sign_in(string $email, string $via, string $next, string $first = '', string $last = ''): void {
-  $user = row('SELECT id, email, name, first, last, listed, school, grades FROM users WHERE email = ?', array($email));
+  $user = row('SELECT id, email, name, first, last, listed, school, grades, origin FROM users WHERE email = ?', array($email));
   $new = false;
   if (!$user) {
-    q('INSERT INTO users (email, created, via) VALUES (?, ?, ?)', array($email, now(), $via));
-    $user = array('id' => (int) db()->lastInsertId(), 'email' => $email, 'name' => '', 'first' => '', 'last' => '', 'listed' => 0, 'school' => '', 'grades' => '');
+    $origin = preg_match('~^(managers|directors)$~', $next) ? 'managers' : 'parents';   // which door they came in by
+    q('INSERT INTO users (email, created, via, origin) VALUES (?, ?, ?, ?)', array($email, now(), $via, $origin));
+    $user = array('id' => (int) db()->lastInsertId(), 'email' => $email, 'name' => '', 'first' => '', 'last' => '', 'listed' => 0, 'school' => '', 'grades' => '', 'origin' => $origin);
     $new = true;
     bump('account');
+    bump($origin === 'managers' ? 'account_manager' : 'account_parent');
   }
   if ($user['first'] === '' && $user['last'] === '' && $first !== '' && $last !== '') {   // Google already knows their name
     q('UPDATE users SET first = ?, last = ?, name = ? WHERE id = ?', array($first, $last, $first . ' ' . $last, $user['id']));
