@@ -676,7 +676,8 @@
           });
           item.appendChild(ul);
         }
-        // the photo
+        // the photo: a paid extra, so the form is there only when photos are switched on
+        if (claimsBox.getAttribute('data-photos') !== '1') return dropBtn(item, c);
         var pf = el('form', 'g-form claim-photo');
         pf.appendChild(el('h4', null, 'Your photo'));
         if (c.photoLive) {
@@ -727,6 +728,9 @@
         });
         item.appendChild(pf);
       }
+      return dropBtn(item, c);
+    };
+    var dropBtn = function (item, c) {
       if (c.status !== 'declined') {
         var drop = btn('clear', 'Give up this claim');
         twoTap(drop, 'Tap again to give it up', function () {
@@ -801,7 +805,7 @@
           pushStep(r.ok ? (r.status === 'ok' ? 'claimed' : 'waiting') : (r.error === 'domain' ? 'address_mismatch' : 'refused'));
           if (!r.ok) { st.textContent = r.message; st.className = 'g-status bad'; return; }
           sset('pas-claim', null); wanted = ''; findText = '';
-          said = r.status === 'ok' ? 'It’s yours: ' + l.name + ' now shows as claimed. Send an update or a photo whenever you like.' : 'Asked. ' + l.name + ' is on a website many people share, so a person checks the claim. You’ll get an email either way.';
+          said = r.status === 'ok' ? 'It’s yours: ' + l.name + ' now shows as claimed. Send an update whenever something changes.' : 'Asked. ' + l.name + ' is on a website many people share, so a person checks the claim. You’ll get an email either way.';
           saidBad = false; cClaims = r.claims || [];
           render();
           window.scrollTo(0, Math.max(0, claimsBox.getBoundingClientRect().top + window.pageYOffset - 90));
