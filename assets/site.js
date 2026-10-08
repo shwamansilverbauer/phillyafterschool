@@ -267,6 +267,29 @@
   }
   var canCopyPicture = !!(navigator.clipboard && navigator.clipboard.write && window.ClipboardItem);
 
+  // Sharing a picture has to start inside the tap itself: Safari refuses a share sheet that opens a moment later, once
+  // the picture has been made. So each card keeps its picture ready: stale() after every redraw, share() from the tap.
+  // When the share sheet won't open at all (some in-app browsers), fail() gets to say so instead of nothing happening.
+  function pictureSharer(canvas) {
+    var blob = null, timer = 0;
+    return {
+      stale: function () {
+        blob = null;
+        if (!canvas || !canvas.toBlob || !navigator.share) return;
+        window.clearTimeout(timer);
+        timer = window.setTimeout(function () { try { canvas.toBlob(function (b) { blob = b; }, 'image/png'); } catch (e) { blob = null; } }, 150);
+      },
+      share: function (name, text, ok, fail) {
+        var go = function (b) {
+          var sent;
+          try { sent = navigator.share({ files: [new File([b], name, { type: 'image/png' })], text: text }); } catch (e) { fail(); return; }
+          sent.then(ok, function (e) { if (!e || e.name !== 'AbortError') fail(); });   // AbortError: they closed the sheet themselves
+        };
+        if (blob) go(blob); else canvas.toBlob(function (b) { if (b) go(b); else fail(); }, 'image/png');
+      }
+    };
+  }
+
   // A calendar file (.ics) made here in the browser and handed to the device, so what's in it goes nowhere else.
   // Each event is { uid, start: "2027-06-07", days: 5, title, text, url }, and lasts whole days.
   function saveCalendar(name, events) {
@@ -597,6 +620,7 @@
         return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next), teacher: cleanName(k.teacher), cardNote: String(k.cardNote == null ? '' : k.cardNote).slice(0, 110), off: cleanOff(k.off), offNote: String(k.offNote == null ? '' : k.offNote).slice(0, 110), prices: cleanPrices(k.prices), groups: cleanLinks(k.groups), prof: cleanProf(k.prof), sum: cleanSum(k.sum) };
       }) };
       rosters.sumTitle = cleanName(raw.sumTitle);
+      rosters.sumProf = raw.sumProf && typeof raw.sumProf.u === 'number' ? { u: raw.sumProf.u } : null;   // set while the summer is kept in a profile
       if (typeof raw.kid === 'number' && raw.kid % 1 === 0 && raw.kid >= 0 && raw.kid < rosters.kids.length) rosters.kid = raw.kid;
     } else {
       // Carry over a board saved before each child had their own roster: it becomes the first child's.
@@ -608,7 +632,7 @@
     }
     return rosters;
   }
-  function saveRosters() { store('pas-rosters', JSON.stringify(rosters)); updateCount(); if (window.pasBoard && window.pasBoard.onSave) window.pasBoard.onSave(); }
+  function saveRosters() { store('pas-rosters', JSON.stringify(rosters)); updateCount(); if (window.pasBoard && window.pasBoard.onSave) window.pasBoard.onSave(); if (window.pasSummer && window.pasSummer.onSave) window.pasSummer.onSave(); }
   function activeKid() { var r = loadRosters(); return r.kids[r.kid]; }
   function activeBoard() { var r = loadRosters(); return r.kids[r.kid][r.active]; }
   function kidLabel(k, i) { return k.name || 'Child ' + (i + 1); }
@@ -731,7 +755,9 @@
         for (var ry = 0; ry < n; ry++) for (var rx = 0; rx < n; rx++) if (od.qr[ry].charAt(rx) === '1') ctx.fillRect(qx + (rx + quiet) * cell, qy + (ry + quiet) * cell, Math.ceil(cell), Math.ceil(cell));
         ctx.fillStyle = '#CFE3FB'; ctx.font = '400 24px ' + BODY; ctx.textAlign = 'right'; ctx.fillText('Scan to plan yours', qx - 20, H - FOOT + 118); ctx.textAlign = 'left';
       }
+      offSharer.stale();
     };
+    var offSharer = pictureSharer(canvas);
     var shareEvent = function (method) { track({ event: 'pas_board_share', method: method, board: 'day_camp' }); };
     var cardFile = function (done) {
       var name = (cleanName(activeKid().name) || 'our').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'our';
@@ -765,10 +791,10 @@
         if (probe && navigator.canShare({ files: [probe] })) {
           shareBtn.hidden = false;
           shareBtn.addEventListener('click', function () {
-            cardFile(function (blob, name) {
-              // No title: Apple's share sheet turns a title into a second preview of the picture. The link rides along as text.
-              navigator.share({ files: [new File([blob], name, { type: 'image/png' })], text: (activeKid().name ? possessive(activeKid().name) : 'Our') + ' days off. Plan yours: ' + (od.site || '') + '/days-off/?utm_source=dayoff_card&utm_medium=share' }).then(function () { shareEvent('image_share'); }, function () { /* closed without sharing */ });
-            });
+            var who = cleanName(activeKid().name);
+            // No title: Apple's share sheet turns a title into a second preview of the picture. The link rides along as text.
+            offSharer.share(((who || 'our').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'our') + '-days-off.png', (who ? possessive(who) : 'Our') + ' days off. Plan yours: ' + (od.site || '') + '/days-off/?utm_source=dayoff_card&utm_medium=share',
+              function () { shareEvent('image_share'); }, function () { cardStatus.textContent = 'Sharing didn’t open here. Use Save as image, then send the picture.'; });
           });
         }
       }
@@ -1783,7 +1809,9 @@
         for (var ry = 0; ry < n; ry++) for (var rx = 0; rx < n; rx++) if (data.qr[ry].charAt(rx) === '1') ctx.fillRect(qx + (rx + quiet) * cell, qy + (ry + quiet) * cell, Math.ceil(cell), Math.ceil(cell));
         ctx.fillStyle = '#CFE3FB'; ctx.font = '400 24px ' + BODY; ctx.textAlign = 'right'; ctx.fillText('Scan to plan yours', qx - 20, H - FOOT + 118); ctx.textAlign = 'left';
       }
+      weekSharer.stale();
     };
+    var weekSharer = pictureSharer(canvas);
     var cardFile = function (done) {
       var name = (cleanName(activeKid().name) || 'our').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'our';
       canvas.toBlob(function (blob) { done(blob, name + '-week.png'); }, 'image/png');
@@ -1816,11 +1844,10 @@
         if (probe && navigator.canShare({ files: [probe] })) {
           shareCard.hidden = false;
           shareCard.addEventListener('click', function () {
-            cardFile(function (blob, name) {
-              var file = new File([blob], name, { type: 'image/png' });
-              // No title: Apple's share sheet turns a title into a second preview of the picture. The link rides along as text.
-              navigator.share({ files: [file], text: heading(activeKid().name, loadRosters().active) + '. Make your own at ' + (data.site || '') + '/?utm_source=week_card&utm_medium=share' }).then(function () { track_share('image_share'); }, function () { /* closed without sharing */ });
-            });
+            var who = (cleanName(activeKid().name) || 'our').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'our';
+            // No title: Apple's share sheet turns a title into a second preview of the picture. The link rides along as text.
+            weekSharer.share(who + '-week.png', heading(activeKid().name, loadRosters().active) + '. Make your own at ' + (data.site || '') + '/?utm_source=week_card&utm_medium=share',
+              function () { track_share('image_share'); }, function () { cardStatus.textContent = 'Sharing didn’t open here. Use Save as image, then send the picture.'; });
           });
         }
       }
@@ -2063,7 +2090,7 @@
     var shareBtn = $s('#sum-share');
     if (navigator.share) {
       shareBtn.hidden = false;
-      shareBtn.addEventListener('click', function () { navigator.share({ text: asText() }).then(function () { ev('share'); }, function () { /* closed without sharing */ }); });
+      shareBtn.addEventListener('click', function () { navigator.share({ text: asText() }).then(function () { ev('share'); }, function (e) { if (!e || e.name !== 'AbortError') say('Sharing didn’t open here. Use “Copy the plan as text” instead.'); }); });
     }
     // Each camp week becomes one Monday-to-Friday entry. The file is made here, so the names in it go nowhere.
     $s('#sum-cal').addEventListener('click', function () {
@@ -2217,7 +2244,9 @@
       ctx.fillStyle = YELLOW; ctx.font = '800 38px ' + DISPLAY; ctx.fillText('Plan your summer', 56, H - FOOT + 64);
       ctx.fillStyle = '#FFFFFF'; ctx.font = '700 32px ' + BODY; ctx.fillText(host, 56, H - FOOT + 110);
       ctx.fillStyle = '#CFE3FB'; ctx.font = '400 24px ' + BODY; ctx.textAlign = 'right'; ctx.fillText('Check dates with each camp', W - 56, H - FOOT + 110); ctx.textAlign = 'left';
+      sumSharer.stale();
     };
+    var sumSharer = pictureSharer(canvas);
     var pageList = function () { return [['all', 'Whole summer', 'all']].concat(months.map(function (o) { return [String(o.m), MONTHS[o.m], o]; })); };
     var current = function () { var hit = null; pageList().forEach(function (p) { if (p[0] === page) hit = p; }); return hit || pageList()[0]; };
     var slug = function () { return (cardTitle().toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'our-summer'); };
@@ -2267,9 +2296,8 @@
         if (probe && navigator.canShare({ files: [probe] })) {
           picShare.hidden = false;
           picShare.addEventListener('click', function () {
-            fileOf(current(), function (blob, name) {
-              navigator.share({ files: [new File([blob], name, { type: 'image/png' })], text: cardTitle() + '. Plan yours: ' + sd.page + '?utm_source=summer_card&utm_medium=share' }).then(function () { ev('card_share'); }, function () { /* closed without sharing */ });
-            });
+            sumSharer.share(fileName(current()), cardTitle() + '. Plan yours: ' + sd.page + '?utm_source=summer_card&utm_medium=share',
+              function () { ev('card_share'); }, function () { cardStatus.textContent = 'Sharing didn’t open here. Use Save as image, then send the picture.'; });
           });
         }
       }
@@ -2287,6 +2315,13 @@
       if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('850 88px Archivo'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (!cardBox.hidden) drawCard(); }, function () { /* system fonts will do */ });
     } else if (cardBox) cardBox.hidden = true;
 
+    // What the accounts script (groups.js) needs to keep the summer in a profile. It adds onSave.
+    window.pasSummer = {
+      year: sd.year, weeks: sd.weeks.map(function (w) { return w.d; }), camps: sd.camps, track: track, maxKids: MAX_KIDS, newKid: newKid,
+      rosters: function () { return r; },
+      save: function () { store('pas-rosters', JSON.stringify(r)); },
+      redraw: function () { openWeek = -1; draw(); }
+    };
     draw();
     if (!storageOk) say('This browser is blocking saved data, so your summer won’t be here when you come back. Copy or print it before you leave.');
     // From a camp's card: "Add to your summer" lands on that camp's row of the chart.

@@ -1109,6 +1109,7 @@ ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .start h2{font-size:clamp(1.5rem,3.4vw,1.9rem)}
 .start > p{color:var(--muted)}
 .start-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+@media (min-width:761px){.start-list{display:grid;grid-auto-rows:1fr;flex:1}}   /* side by side: three rows of one height, filling the box, so the two boxes line up */
 .start-go{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:14px;padding:13px 16px}
 .start-go::after{content:"";flex:none;margin-left:auto;width:9px;height:9px;border-right:2.5px solid var(--link);border-bottom:2.5px solid var(--link);transform:rotate(-45deg)}
 .start-go:hover{border-color:var(--link);background:var(--sky-bg)}
@@ -1169,6 +1170,10 @@ ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .sum-top .field label{font-size:.95rem}
 .sum-age select,.sum-name input[type="text"]{min-height:50px;padding:10px 14px}
 .sum-tally{padding-top:4px}
+.sum-profile{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.sum-profile[hidden]{display:none}
+.sum-profile h3{font-size:1.1rem}
+.sum-profile .actions{align-self:flex-start}
 .sum-same{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;margin:0}
 .sumcard{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;display:flex;flex-direction:column;gap:12px}
 .sumcard[hidden]{display:none}
@@ -1240,7 +1245,7 @@ ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 @media (max-width:640px){.sum-chart thead th:first-child,.sum-chart tbody th{width:8rem;min-width:8rem;max-width:8rem;padding-left:10px;padding-right:8px;font-size:.86rem}.sum-chart tbody th small{display:none}.sum-chart{min-width:700px}.sum-chart td{min-width:40px}}
 @media print{.sum-chart-wrap{max-height:none}}
 @media print{
-  .sum-add,.sum-choose,.sum-x,.sum-tools,.sum-top .field,.sum-kids .clear,.sum-same,.sum-chart-section,.camp-guide{display:none!important}
+  .sum-add,.sum-choose,.sum-x,.sum-tools,.sum-profile,.sum-top .field,.sum-kids .clear,.sum-same,.sum-chart-section,.camp-guide{display:none!important}
   body:not(.print-card) .sumcard{display:none!important}
   .sum{border:0;padding:0}
   .sum-chip{border:1px solid #000}
