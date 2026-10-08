@@ -96,11 +96,24 @@ Labor Day, and works out which of those weeks each camp runs:
   weeks on, to the same week of the calendar, and marked as last summer's dates (blue). Anything older, or a line
   with no date range, has no weeks and sits under "No dates listed yet"; a parent can still add it to a week.
 - The page has a chart of every camp by week, which works without JavaScript, and "Your summer", where a parent adds
-  camps to weeks from each week's list or by tapping the chart. Picks are saved in the browser only
-  (`pas-summer`: the year, camp ids by week, and the age picked). Nothing is sent anywhere; the plan can be copied
-  as text, shared or printed. Each camp card on `/summer-camps/` has "Add to your summer"
-  (`summer-schedule/?add=ID`). The one analytics event is `pas_summer` with an `action` (add, remove, age, copy,
-  share, print, clear), the camp id and the week number.
+  camps to weeks from each week's list or by tapping the chart. Each camp card on `/summer-camps/` has "Add to your
+  summer" (`summer-schedule/?add=ID`).
+- **Children.** A summer belongs to a child, and the children are the same ones as in the week builder and the
+  day-camp plan (`pas-rosters` in the browser). Each child carries `sum`: `{ y: 2027, w: { "2027-06-07": [camp ids] },
+  age: "7" }`. "Add a sibling" adds a child; a first name is optional and typed on the page. A child with an
+  after-school roster can only be removed on the week builder, where share groups are told. Nothing about a summer is
+  sent anywhere: it isn't part of a profile or a share group.
+- **Add to calendar** saves `summer-2027.ics`, made in the browser: one Monday-to-Friday entry per camp week, titled
+  with the child's name and the camp. The day-camp plan has the same button (`days-off.ics`, one entry per planned
+  day). `saveCalendar()` in `site.js` writes both.
+- **Make it a calendar** draws the plan as a picture, like the week card: the whole summer on one card (a row a week,
+  a column a child), or a card for each month (Monday to Friday, a bar for each child's camp). The title defaults to
+  the children's names ("Sam and Rae's summer") and can be typed over (`sumTitle`, kept in the browser). A photo can
+  go in the corner; it is drawn in the browser and never saved or uploaded. The pictures can be saved one at a time
+  or all at once, shared, copied or printed.
+- The one analytics event is `pas_summer` with an `action` (add, remove, age, sibling_add, copy_sibling, copy, share,
+  calendar, card_save, card_share, card_copy, card_print, print, clear), the camp id, the week number and how many
+  children there are. Names, titles and photos are never in it, and the whole section is masked in recordings.
 - The schedule switches to the next summer on September 1.
 
 ## Weekend classes
@@ -194,6 +207,8 @@ program in `data/programs.json` and its page follows.
 The home page opens with two "Start here" boxes, one for parents (find your school, build a schedule, create an
 account) and one for program managers (claim a listing, add a program, add a camp), then a "More than weekday
 afternoons" section that points at weekend classes, day camps and summer camps. Each box has a picture of who it is for (a grown-up with a child, a person with a clipboard), drawn in `WHO` in `homePage()`.
+
+The top of a program's page says which schools it works for as colored labels (`servedPills()`): yellow for pickup, green for on-site, blue for nearby, the same colors as on the cards.
 
 On a program's own page, a row of "The details" longer than about a hundred characters shows its first two lines with a "More" link (`fold()` in `build.mjs`). It is a `<details>` element holding the whole text, so it opens without JavaScript and nothing is left out of the page.
 

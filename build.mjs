@@ -979,6 +979,11 @@ const servedSummary = p => {
   const t = parts.join('; ');
   return t.charAt(0).toUpperCase() + t.slice(1);
 };
+// The same summary as colored labels, for the top of a program's page: pickup in yellow, on-site in green, nearby in blue.
+const servedPills = p => {
+  const names = k => servedBy(p).filter(s => p.schools[s.id].relation === k).map(s => s.shortName);
+  return [['onsite', 'Runs at '], ['pickup', 'Picks up from '], ['nearby', 'Near ']].filter(([k]) => names(k).length).map(([k, lead]) => `<span class="pill ${k} wrap">${esc(lead + listNames(names(k)))}</span>`).join(' ');
+};
 const programAddress = p => {
   if (p.address) return p.address;
   const served = servedBy(p);
@@ -1050,7 +1055,7 @@ ${p.clubs.map(c => `      <article class="club">
   </section>` : '';
   const camp = campOnly(p);
   const hoodHas = n => hoods.some(h => h.id === hoodSlug(n));
-  const hero = `    <p class="where">${camp ? (p.daysOff ? `<a href="${link(offPath, D)}">${T(`Day-camp programs`)}</a>` : `<a href="${link(weekendPath, D)}">${T(`Weekend classes`)}</a>`) + ' / ' + (p.daysOff && p.weekend ? T(`Day camps and weekend classes`) : p.weekend ? T(`Weekends only`) : T(`Day camps only`)) : `<a href="${link('programs/', D)}">${T(`All programs`)}</a> / ${esc(servedSummary(p))}`}</p>
+  const hero = `    <p class="where">${camp ? (p.daysOff ? `<a href="${link(offPath, D)}">${T(`Day-camp programs`)}</a>` : `<a href="${link(weekendPath, D)}">${T(`Weekend classes`)}</a>`) + ' / ' + (p.daysOff && p.weekend ? T(`Day camps and weekend classes`) : p.weekend ? T(`Weekends only`) : T(`Day camps only`)) : `<a href="${link('programs/', D)}">${T(`All programs`)}</a> <span class="served">${servedPills(p)}</span>`}</p>
     <h1>${esc(fullName(p))}</h1>
     <p class="lede">${esc(p.what)}</p>
     <div class="facts">
@@ -1631,7 +1636,7 @@ function privacyPage() {
   <h2 id="rosters">${T(`Rosters and children’s names`)}</h2>
   <ul>
     <li>${T(`A roster lives in the browser you made it in. Clearing your browser’s site data deletes it.`)}</li>
-    <li>${T(`A summer schedule is kept the same way: the camps you picked for each week stay in your browser and are not sent to us.`)}</li>
+    <li>${T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us. A photo you add to a calendar picture is used once, in your browser, and isn’t saved or uploaded.`)}</li>
     <li>${T(`If you save a school as yours, that choice is kept in your own browser too. Our visit counts record that a school was saved, not who saved it.`)}</li>
     <li>${T(`A child’s name is optional. If you add one, it stays on your device unless you keep or share that week through an account.`)}</li>
     <li>${T(`A week can no longer be shared as a link. A link showed the week to anyone who had it and could not be taken back, so links made before October 2026 have stopped opening.`)}</li>
@@ -2162,7 +2167,7 @@ function daysOffPage() {
   <div class="kids" id="off-kids" role="group" aria-label="Which child" hidden></div>
   <p class="off-count" id="off-count"></p>
   <ol class="off-list" id="off-list"></ol>
-  <div class="actions" id="off-actions" hidden><button type="button" class="clear" id="off-clear">Clear this plan</button></div>
+  <div class="actions" id="off-actions" hidden><button type="button" class="btn" id="off-cal">Add to calendar</button><button type="button" class="clear" id="off-clear">Clear this plan</button></div>
   <p class="hint" id="off-status" aria-live="polite"></p>
   <div class="card-maker offcard" id="off-card" hidden>
     <h3>${T(`Make it a card`)}</h3>
@@ -3316,15 +3321,46 @@ ${guide ? `<section class="section">
 </section>` : ''}
 <section class="section sum needs-js-block" id="plan" data-summer data-clarity-mask="true">
   <h2>${T(`Your summer`)}</h2>
-  <p>${T(`Add a camp to each week. Your picks are saved on this device and nowhere else.`)}</p>
+  <p>${T(`Add a camp to each week, for one child or for each of them. Your picks are saved on this device and nowhere else.`)}</p>
+  <div class="sum-kids"><div class="kids" id="sum-kids" role="group" aria-label="Which child"></div><button type="button" class="clear" id="sum-kid-add">Add a sibling</button><button type="button" class="clear" id="sum-kid-drop" hidden>Remove this child</button></div>
   <div class="sum-top">
-    <div class="field sum-age"><label for="sum-age">${T(`Your child’s age this summer (optional)`)}</label>
+    <div class="field sum-name"><label for="sum-name">${T(`First name (optional)`)}</label>
+      <input id="sum-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${T(`Stays on this device.`)}</span></div>
+    <div class="field sum-age"><label for="sum-age">${T(`Age this summer (optional)`)}</label>
       <select id="sum-age"><option value="">Any age</option>${Array.from({ length: 15 }, (_, i) => `<option value="${i + 3}">${i + 3}</option>`).join('')}</select></div>
     <div class="sum-tally"><div class="sum-strip" id="sum-strip" aria-hidden="true"></div><p id="sum-count" aria-live="polite"></p><p class="hint" id="sum-cost"></p></div>
   </div>
   <ol class="sum-weeks" id="sum-weeks"></ol>
-  <div class="actions sum-tools" id="sum-tools" hidden><button type="button" class="btn primary" id="sum-share" hidden>Share the plan</button><button type="button" class="btn" id="sum-copy">Copy the plan as text</button><button type="button" class="btn" id="sum-print">Print</button><button type="button" class="clear" id="sum-clear">Clear the plan</button></div>
+  <div class="actions sum-tools" id="sum-tools" hidden><button type="button" class="btn primary" id="sum-share" hidden>Share the plan</button><button type="button" class="btn" id="sum-cal">Add to calendar</button><button type="button" class="btn" id="sum-copy">Copy the plan as text</button><button type="button" class="btn" id="sum-print">Print the list</button><button type="button" class="clear" id="sum-clear">Clear the plan</button></div>
   <p class="hint" id="sum-status" aria-live="polite"></p>
+  <div class="card-maker sumcard" id="sum-card" hidden>
+    <h3>${T(`Make it a calendar`)}</h3>
+    <p>${T(`One picture of the whole summer, or a calendar for each month, to print for the fridge or send to family. Every child with a camp picked is on it.`)}</p>
+    <div class="card-grid">
+      <div class="card-fields">
+        <div class="sum-pages" id="sum-pages" role="group" aria-label="Which calendar"></div>
+        <div class="field">
+          <label for="sum-title">${T(`Title`)}</label>
+          <input id="sum-title" type="text" maxlength="40" placeholder="Our summer" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="sum-photo">${T(`A photo (optional)`)}</label>
+          <input id="sum-photo" type="file" accept="image/*">
+          <span class="hint">${T(`The photo never leaves this device. The calendar is made here in your browser, nothing is uploaded, and the photo isn’t saved.`)}</span>
+          <button type="button" class="clear" id="sum-photo-clear" hidden>Remove the photo</button>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn primary" id="sum-pic-share" hidden>Share the calendar</button>
+          <button type="button" class="btn" id="sum-pic-copy" hidden>Copy picture</button>
+          <button type="button" class="btn" id="sum-pic-save">Save as image</button>
+          <button type="button" class="btn" id="sum-pic-all">Save all of them</button>
+          <button type="button" class="btn" id="sum-pic-print">Print</button>
+        </div>
+        <p class="hint" id="sum-card-status" aria-live="polite"></p>
+      </div>
+      <div class="card-preview"><canvas id="sum-canvas" width="1080" height="1350" role="img" aria-label="Preview of the summer calendar"></canvas></div>
+    </div>
+  </div>
   <script type="application/json" id="summer-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </section>
 <section class="section sum-chart-section" id="chart">
