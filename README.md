@@ -57,6 +57,13 @@ If the data has a problem, step 2 stops and the live site stays as it was. The "
 
 To put the site on a different host, run `node build.mjs` and upload the contents of `dist/`.
 
+## Rebuilt every night
+
+`.github/workflows/publish.yml` also runs once a night. Nothing in the data changes, but the pages do: a day off that
+has gone by comes off the day-camp page, and the summer schedule moves to the next summer on September 1. Pages hide
+past days in the browser as well, so nothing stale shows in between. If the built site is unchanged, nothing is
+published.
+
 ## Schools that aren't covered yet
 
 `/schools/request/?s=ID` is the page for a school the site knows about (from `data/all-schools.json`) but hasn't
@@ -68,10 +75,34 @@ address and sends them straight to Klaviyo with the browser key, onto the same l
 
 ## Terms of use
 
-`termsPage()` in `build.mjs` is a draft. It is built into the preview copy only, with a banner saying so, until
-`"termsLive": true` is set in `site.config.json`; then it is written to `/terms/`, linked from the footer and added
-to the sitemap. `termsOperator` names who runs the site in the liability line (the site's name if unset), and
-`termsUpdated` sets the date shown.
+`termsPage()` in `build.mjs` writes `/terms/`, linked from the footer and from the account page, because
+`"termsLive": true` is set in `site.config.json`. Set it to `false` and the page goes back to being a draft that is
+built into the preview copy only. `termsOperator` names who runs the site in the liability line (the site's name if
+unset), and `termsUpdated` sets the date shown: change it when the terms change in a way that matters.
+
+## Where things are: distances and the map
+
+- `data/geo.json` holds a latitude and longitude for every street address in the data. `node scripts/geocode.mjs`
+  fills it in from the U.S. Census Bureau's free address lookup; run it by hand after adding or changing an address.
+  It only asks about addresses it doesn't have, and lists any it couldn't place so they can be added by hand
+  (`byHand` names the ones that were). `scripts/addresses.mjs` is the one place that pulls street addresses out of an
+  `address` line; add a place with no street number to its `KNOWN` list.
+- On a school's page, a program that isn't in the building and has no hand-written `distance` gets "about 0.3 miles
+  from Nebinger, in a straight line", measured from the address it uses for that school.
+- Each listing in a filtered list carries its points (`data-ll`). The filter bar's "Nearest" row (`near: true` on
+  `filterBar`) sorts a citywide list by distance from the parent's saved school or from where they are, and labels
+  each listing with the miles. The location is used in the browser only. On a school's page the row is just the map.
+- "Show the map" loads Leaflet from `assets/leaflet/` (copied from `src/vendor/leaflet`, so no other site is asked
+  for the library) and map pictures from OpenStreetMap, and only then. The map follows the filters. The preview copy
+  has no map. Events: `pas_near` with `from` (school, me, off) and `pas_map_open`; never a location.
+
+## Is there space
+
+A manager whose claim stands can mark a listing "Spots open", "Waitlist" or "Full" on `/managers/` (or "Don't show").
+It is one of three fixed words, so it goes on the listing at once, without review, with the day it was set
+(`space_set`; table `space`). It stops showing after 30 days (`SPACE_DAYS`) unless set again, and when nobody holds
+the claim. The public `claimed` request carries it, and pages fill their `[data-space]` slots from that: the program
+page, its card on school pages, weekend cards and camp cards. This is free and stays free.
 
 ## Summer camps
 
@@ -83,7 +114,9 @@ to a school or to the after-school pages. The file has:
 - `camps`: one entry per camp. `id`, `name`, `what`, `types` (the same list as programs, plus `nature` and
   `daycamp`), `ages` (as the camp states them), `ageMin` and `ageMax` (years; the grade picker is worked out from
   them: pre-K is 3 and 4, kindergarten 5, 1st grade 6), `season`, `weeks`, `hours`, `extended` (before and after
-  care), `cost`, `weekly` (the lowest regular full-day week, a number), `price` (`free` or `paid`), `aid`,
+  care), `cost`, `weekly` (the lowest regular full-day week, a number), `price` (`free` or `paid`), `aid` (when it or
+  `cost` names financial aid, a scholarship, tuition assistance, a sliding scale, pay-what-you-can or a subsidy,
+  the listing counts under the "Free or offers aid" filter; discounts don't count),
   `address`, `neighborhoods` (grouped into parts of the city by `CAMP_AREAS` in `build.mjs`; leave it empty for a
   camp that runs all over), `phone`, `website`, `registerUrl`, `signup` (what the camp says about when sign-ups
   open), `note` (the yellow caution), `program` (the id of the same provider's school-year listing), `sources`,

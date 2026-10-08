@@ -1,10 +1,12 @@
-# Builds the site whenever main changes and publishes the finished files to the "live" branch.
+# Builds the site whenever main changes, and once a night, and publishes the finished files to the "live" branch.
 # The web host deploys the "live" branch, so merging a change to main is all it takes to update the site.
 name: Build and publish
 
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: '23 8 * * *'   # every night, about 4:23am in Philadelphia in summer and 3:23am in winter: a day off that has gone by comes off the pages
   workflow_dispatch:
 
 permissions:

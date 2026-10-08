@@ -47,6 +47,7 @@ const MAX_SOLO = 12;        // "share this week with one person" lists one accou
 const MAX_WEEKS = 6;        // children's weeks one profile can hold
 const MAX_CLAIMS = 12;      // listings one account can claim
 const MAX_CLAIMANTS = 5;    // accounts that can hold a claim on one listing
+const SPACE_DAYS = 30;      // how long "spots open", "waitlist" or "full" stays up before the manager has to say it again
 const PHOTO_BYTES = 1600000; // the biggest listing photo accepted, after the browser has shrunk it
 const DAYS = array('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun');
 const WEEKEND = array('sat', 'sun');   // weekend picks are a program with weekend classes: no school, no pickup
@@ -109,6 +110,8 @@ function db(): PDO {
     foreach ($db->query('PRAGMA table_info(grp)') as $c) $gcols[] = $c['name'];
     if (!in_array('solo', $gcols, true)) $db->exec('ALTER TABLE grp ADD COLUMN solo INTEGER NOT NULL DEFAULT 0');
     $db->exec('CREATE INDEX IF NOT EXISTS weeks_user ON weeks (user_id)');
+    // "Is there space?": what a listing's own manager last said. One row per listing; it stops showing after SPACE_DAYS.
+    $db->exec("CREATE TABLE IF NOT EXISTS space (listing TEXT PRIMARY KEY, state TEXT NOT NULL, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, updated INTEGER NOT NULL)");
     // A summer schedule kept in a profile: one per account. Each child's first name and their camps by week, nothing else.
     $db->exec('CREATE TABLE IF NOT EXISTS summers (user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, year INTEGER NOT NULL, json TEXT NOT NULL, updated INTEGER NOT NULL)');
     // Directors: a claim on a listing ("p:<program id>" or "c:<camp id>") and the changes a director has proposed for it.
@@ -502,7 +505,12 @@ function claim_out(array $c): array {
   $ph = row("SELECT id, status, alt FROM photos WHERE claim_id = ? AND status != 'declined' ORDER BY id DESC LIMIT 1", array($c['id']));
   $live = photo_live($c['listing']);
   return array('listing' => $c['listing'], 'name' => isset($l[$c['listing']]) ? $l[$c['listing']]['n'] : 'A listing no longer on the site', 'status' => $c['status'], 'gone' => !isset($l[$c['listing']]), 'edits' => $edits,
-    'photo' => $ph ? array('status' => $ph['status'], 'alt' => $ph['alt']) : null, 'photoLive' => $live ? (int) $live['id'] : 0);
+    'photo' => $ph ? array('status' => $ph['status'], 'alt' => $ph['alt']) : null, 'photoLive' => $live ? (int) $live['id'] : 0, 'space' => space_of($c['listing']));
+}
+// What a listing's manager last said about space, while it is fresh and someone still holds the claim.
+function space_of(string $key): ?array {
+  $s = row("SELECT s.state, s.updated FROM space s WHERE s.listing = ? AND s.updated > ? AND EXISTS (SELECT 1 FROM claims c WHERE c.listing = s.listing AND c.status = 'ok')", array($key, now() - SPACE_DAYS * 86400));
+  return $s ? array('s' => $s['state'], 't' => (int) $s['updated']) : null;
 }
 // The photo a listing shows: the newest approved one whose claim still stands.
 function photo_live(string $key): ?array {
@@ -694,7 +702,9 @@ switch ($method . ' ' . $action) {
     $keys = array(); $photos = array();
     foreach (q("SELECT DISTINCT listing FROM claims WHERE status = 'ok'") as $r) $keys[] = $r['listing'];
     foreach ($keys as $k) { $ph = photo_live($k); if ($ph && is_file(photo_file((int) $ph['id']))) $photos[$k] = array('v' => (int) $ph['id'], 'alt' => $ph['alt']); }
-    out(array('ok' => true, 'claimed' => $keys, 'photos' => (object) $photos));
+    $space = array();
+    foreach ($keys as $k) { $sp = space_of($k); if ($sp) $space[$k] = $sp; }
+    out(array('ok' => true, 'claimed' => $keys, 'photos' => (object) $photos, 'space' => (object) $space));
   }
 
   // The approved photo for a listing. Public: it is what the listing page shows.
@@ -797,6 +807,24 @@ switch ($method . ' ' . $action) {
   case 'POST claim_drop': {
     $u = need_user();
     q("DELETE FROM claims WHERE user_id = ? AND listing = ? AND status != 'declined'", array($u['id'], str($in, 'listing', 90)));   // a declined claim stays, so it can't simply be asked for again
+    out(array('ok' => true, 'claims' => my_claims($u['id'])));
+  }
+
+  // "Is there space?" A manager whose claim stands says open, waitlist or full, or takes the answer down. One of
+  // three fixed words, so it goes on the listing at once, with the day it was said. It comes down by itself after
+  // SPACE_DAYS, because an old "spots open" is worse than none.
+  case 'POST space_set': {
+    $u = need_user();
+    $key = str($in, 'listing', 90);
+    $c = row("SELECT id FROM claims WHERE user_id = ? AND listing = ? AND status = 'ok'", array($u['id'], $key));
+    if (!$c) fail('claim', 'You can set this once your claim on this listing stands.', 403);
+    $state = str($in, 'state', 12);
+    if ($state === '') q('DELETE FROM space WHERE listing = ?', array($key));
+    else {
+      if (!in_array($state, array('open', 'waitlist', 'full'), true)) fail('state', 'Pick open, waitlist or full.');
+      q('INSERT INTO space (listing, state, user_id, updated) VALUES (?, ?, ?, ?) ON CONFLICT(listing) DO UPDATE SET state = excluded.state, user_id = excluded.user_id, updated = excluded.updated', array($key, $state, $u['id'], now()));
+      bump('space_set');
+    }
     out(array('ok' => true, 'claims' => my_claims($u['id'])));
   }
 

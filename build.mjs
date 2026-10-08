@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
+import { streetAddresses, addressKey } from './scripts/addresses.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const PREVIEW = process.env.PREVIEW === '1';
@@ -752,9 +753,32 @@ const haystack = (p, extra = []) => [p.name, p.what, ...(p.offers || []), ...(p.
 // Free, paid, both, or (when a provider doesn't publish a price) neither.
 // A price can differ by school (free for one school through a partnership, paid for the rest): a school's own
 // "price" and "cost" win on that school's page. On the citywide lists a program counts under every price it has anywhere.
+// ---------- where things are ----------
+// data/geo.json holds a latitude and longitude for each street address in the data (scripts/geocode.mjs fills it in).
+// From it: how far a program is from a school, in a straight line, and the points a page hands to the map.
+const GEO = fs.existsSync(path.join(ROOT, 'data/geo.json')) ? readJson('data/geo.json').places || {} : {};
+const coordsOf = text => streetAddresses(text).map(a => GEO[addressKey(a)]).filter(Boolean);
+const milesApart = (a, b) => { const rad = x => x * Math.PI / 180, h = Math.sin(rad(b[0] - a[0]) / 2) ** 2 + Math.cos(rad(a[0])) * Math.cos(rad(b[0])) * Math.sin(rad(b[1] - a[1]) / 2) ** 2; return 2 * 3958.8 * Math.asin(Math.sqrt(h)); };
+const SCHOOL_LL = Object.fromEntries(schools.map(s => [s.id, coordsOf(s.address)[0]]).filter(x => x[1]));
+// A listing's places: its own address, plus any address it uses for one school. For one school's page, that school's place first.
+const placesOf = (p, school = null) => {
+  const own = coordsOf(p.address), mine = school ? coordsOf(p.schools?.[school.id]?.address) : Object.values(p.schools || {}).flatMap(l => coordsOf(l.address));
+  const all = school && mine.length ? mine : [...own, ...mine];
+  return all.filter((x, i) => all.findIndex(y => y[0] === x[0] && y[1] === x[1]) === i);
+};
+const milesFrom = (school, p) => { const from = SCHOOL_LL[school.id], to = placesOf(p, school); return from && to.length ? Math.min(...to.map(x => milesApart(from, x))) : null; };
+const milesText = m => m < 0.1 ? 'under a tenth of a mile' : (Math.round(m * 10) / 10 === 1 ? '1 mile' : `${(Math.round(m * 10) / 10).toFixed(1)} miles`);
 const kindsOf = price => price === 'both' ? ['free', 'paid'] : price ? [price] : [];
-const costKinds = (p, school) => school ? kindsOf(p.schools[school.id].price || p.price)
-  : [...new Set([...kindsOf(p.price), ...Object.values(p.schools).flatMap(l => kindsOf(l.price))])];
+// "Help with cost" means the listing itself says there is need-based help: financial aid, a scholarship, tuition
+// assistance, a sliding scale, pay-what-you-can or a state subsidy. A sibling or early-bird discount doesn't count,
+// and neither does a sentence saying there is none. It is read from the cost, aid and note lines we wrote.
+const HELP_WORDS = /financial aid|tuition assistance|scholarship|sliding[- ]scale|pay[- ]what[- ]you[- ]can|\bCCIS\b|\bELRC\b|Child Care Works|subsid(?:y|ies)\b/i;
+const saysHelp = t => { const m = HELP_WORDS.exec(String(t || '')); return !!m && !/\b(no|not|without|doesn’t|don’t|isn’t)\b[^.]{0,30}$/i.test(String(t).slice(0, m.index)); };
+const offersHelp = (p, school) => [p.cost, p.aid, ...(school ? [p.schools?.[school.id]?.cost] : Object.values(p.schools || {}).map(l => l.cost))].some(saysHelp);
+const costKinds = (p, school) => {
+  const k = school ? kindsOf(p.schools[school.id].price || p.price) : [...new Set([...kindsOf(p.price), ...Object.values(p.schools || {}).flatMap(l => kindsOf(l.price))])];
+  return k.includes('free') || offersHelp(p, school) ? [...k, 'help'] : k;   // "help": free, or says it has help with cost
+};
 const freeOnlyFor = p => kindsOf(p.price).includes('free') ? [] : schools.filter(s => kindsOf(p.schools[s.id]?.price).includes('free')).map(s => s.shortName);
 // A school's own clubs belong on that school's page. On the citywide lists (A to Z, the type pages) there would be
 // one near-identical "School clubs" entry per school, so they are left off those.
@@ -770,7 +794,7 @@ const clubDays = c => { const d = c.days, i = d.map(x => WEEK.indexOf(x)); const
 const clubBrief = c => { const bits = [clubGrades(c).replace(/^G/, 'g').replace(/^A/, 'a').replace(/^K/, 'k'), c.days ? clubDays(c) : ''].filter(Boolean); return c.name + (bits.length ? ` (${bits.join(', ')})` : ''); };
 const clubsByType = p => Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, clubs: clubsOfType(p, t.id).map(c => c.name) }]).filter(([, v]) => v.clubs.length));
 const citywide = programs.filter(p => !schoolRun(p) && !campOnly(p));
-const itemAttrs = (p, extra = [], school = null) => `data-item data-grades="${p._grades === null ? '*' : p._grades.join(' ')}" data-types="${p.types.join(' ')}" data-hoods="${programHoods(p).map(hoodSlug).join(' ')}" data-cost="${costKinds(p, school).join(' ')}" data-days="${p.days ? p.days.join(' ') : '*'}" data-schools="${schools.filter(x => p.schools[x.id]).map(x => x.id).join(' ')}" data-search="${esc(haystack(p, extra))}"`;
+const itemAttrs = (p, extra = [], school = null) => `data-item data-grades="${p._grades === null ? '*' : p._grades.join(' ')}" data-types="${p.types.join(' ')}" data-hoods="${programHoods(p).map(hoodSlug).join(' ')}" data-cost="${costKinds(p, school).join(' ')}" data-days="${p.days ? p.days.join(' ') : '*'}" data-schools="${schools.filter(x => p.schools[x.id]).map(x => x.id).join(' ')}"${placesOf(p, school).length ? ` data-ll="${placesOf(p, school).map(x => x.join(',')).join(';')}"` : ''} data-search="${esc(haystack(p, extra))}"`;
 const typeTags = (p, school = null) => p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')
   + (!costKinds(p, school).includes('free') ? '' : `<span class="tag free">${school ? (costKinds(p, school).includes('paid') ? 'Free option' : 'Free') : freeOnlyFor(p).length ? `Free for ${esc(listNames(freeOnlyFor(p)))}` : p.price === 'both' ? 'Free option' : 'Free'}</span>`);
 const programRow = (p, depth) => {
@@ -786,7 +810,13 @@ const programRow = (p, depth) => {
 // One filter bar for every page that lists programs: search, program type, free or paid, neighborhood, and (on a school
 // page) how the program gets your child. The grade row sits in a strip that stays on screen while you scroll.
 // Filters also read from the page address (?type=music&grade=3), which is how the home page links into them.
-function filterBar({ list, depth, school = null, show = {}, searchLabel, placeholder = 'Its name, or try drums, art, chess…' }) {
+// "Nearest first" and the map. On a school's page the school is the place everything is measured from, so there is only
+// the map; on a citywide list a parent picks their saved school or where they are. The map is not loaded, and nothing
+// is asked of OpenStreetMap, until someone opens it. The preview copy has no map: it can't load one.
+const nearRow = (depth, here) => !Object.keys(GEO).length ? '' : `<div class="frow nearbar" data-near${PREVIEW ? '' : ` data-leaflet="${link('assets/leaflet/', depth)}"`} data-schools="${esc(JSON.stringify(SCHOOL_LL))}"${here && SCHOOL_LL[here.id] ? ` data-here="${SCHOOL_LL[here.id].join(',')}" data-here-name="${esc(here.shortName)}"` : ''}><span class="flabel">${here ? 'Map' : 'Nearest'}</span><div class="rail" role="group" aria-label="${here ? 'Map' : 'Nearest first, and the map'}">${here ? '' : `<button type="button" class="tbtn" id="near-school" aria-pressed="false" hidden></button><button type="button" class="tbtn" id="near-me" aria-pressed="false">From where I am</button><button type="button" class="tbtn" id="near-off" hidden>Back to A to Z</button>`}${PREVIEW ? '' : `<button type="button" class="tbtn" id="map-toggle" aria-expanded="false">Show the map</button>`}</div></div>`;
+const nearMap = depth => !Object.keys(GEO).length ? '' : `<p class="hint near-status" id="near-status" aria-live="polite"></p>
+  <div class="mapwrap" id="near-map" hidden><div class="mapbox" id="near-mapbox" role="region" aria-label="Map of the places in this list"></div><p class="hint">${T(`Places are put on the map from their street address. The map’s pictures come from OpenStreetMap.`)} <a href="${link('privacy/', depth)}#map">${T(`What that means for your privacy.`)}</a></p></div>`;
+function filterBar({ list, depth, school = null, show = {}, near = false, searchLabel, placeholder = 'Its name, or try drums, art, chess…' }) {
   const on = { q: true, type: true, grade: true, hood: true, cost: true, ...show };
   const btn = (f, v, label, n, cls = 'tbtn', extra = '') => `<button type="button" class="${cls}" id="${f}-${v}" data-f="${f}" data-v="${v}" data-label="${esc(label)}" aria-pressed="${v === 'ALL'}"${extra}>${esc(label)}${n === null ? '' : ` (${n})`}</button>`;
   const types = TYPES.map(t => [t, list.filter(p => p.types.includes(t.id)).length]).filter(([, n]) => n);
@@ -794,8 +824,8 @@ function filterBar({ list, depth, school = null, show = {}, searchLabel, placeho
   const relRow = school ? `<div class="frow"><span class="flabel">Pickup</span><div class="rail" role="group" aria-label="How your child gets there">${btn('rel', 'ALL', 'Any', null)}${Object.entries(REL).map(([k, v]) => [k, v.pill.replace('{s}', school.shortName), list.filter(p => p.schools[school.id].relation === k).length]).filter(([, , n]) => n).map(([k, label, n]) => btn('rel', k, label, n)).join('')}</div></div>` : '';
   const hoodList = [...new Set(list.flatMap(programHoods))].sort();
   const hoodRow = on.hood && hoodList.length > 1 ? `<div class="frow"><span class="flabel">Area</span><div class="rail" role="group" aria-label="Neighborhood">${btn('hood', 'ALL', 'Anywhere', null)}${hoodList.map(n => btn('hood', hoodSlug(n), n, list.filter(p => programHoods(p).includes(n)).length)).join('')}</div></div>` : '';
-  const costN = k => list.filter(p => costKinds(p, school).includes(k)).length, unpriced = list.filter(p => !costKinds(p, school).length).length;
-  const costRow = on.cost && costN('free') && costN('paid') ? `<div class="frow"><span class="flabel">Cost</span><div class="rail" role="group" aria-label="Cost">${btn('cost', 'ALL', 'Any', null)}${btn('cost', 'free', 'Free', costN('free'))}${btn('cost', 'paid', 'Paid', costN('paid'))}${unpriced ? `<span class="hint rail-note">${unpriced} ${unpriced === 1 ? 'doesn’t' : 'don’t'} publish a price, so ${unpriced === 1 ? 'it shows' : 'they show'} only under Any.</span>` : ''}</div></div>` : '';
+  const costN = k => list.filter(p => costKinds(p, school).includes(k)).length, unpriced = list.filter(p => !costKinds(p, school).filter(k => k !== 'help').length).length;
+  const costRow = on.cost && costN('free') && costN('paid') ? `<div class="frow"><span class="flabel">Cost</span><div class="rail" role="group" aria-label="Cost">${btn('cost', 'ALL', 'Any', null)}${btn('cost', 'free', 'Free', costN('free'))}${costN('help') > costN('free') ? btn('cost', 'help', 'Free or offers aid', costN('help')) : ''}${btn('cost', 'paid', 'Paid', costN('paid'))}${unpriced ? `<span class="hint rail-note">${unpriced} ${unpriced === 1 ? 'doesn’t' : 'don’t'} publish a price, so ${unpriced === 1 ? 'it shows' : 'they show'} only under Any.</span>` : ''}</div></div>` : '';
   // The day row appears once at least two programs in the list run on some weekdays only; until then it would filter nothing.
   const dayN = d => list.filter(p => !p.days || p.days.includes(d)).length;
   const dayRow = on.day === true || (on.day !== false && list.filter(pickyDays).length > 1) ? `<div class="frow" id="by-day"><span class="flabel">Day</span><div class="rail" role="group" aria-label="Day of the week">${btn('day', 'ALL', 'Any day', null)}${WEEK.map(d => btn('day', d, DAY_NAME[d].slice(0, 3), dayN(d))).join('')}${list.some(p => !p.days) ? `<span class="hint rail-note">Programs that don’t publish their days show under every day.</span>` : ''}</div></div>` : '';
@@ -809,8 +839,9 @@ function filterBar({ list, depth, school = null, show = {}, searchLabel, placeho
       <input id="prog-search" type="search" placeholder="${esc(placeholder)}" autocomplete="off">
       <p class="hint search-more" id="search-more" aria-live="polite" hidden></p>
     </div>` : ''}
-    ${typeRow}${relRow}${hoodRow}${costRow}${dayRow}
+    ${typeRow}${relRow}${hoodRow}${costRow}${dayRow}${near ? nearRow(depth, school) : ''}
   </div>
+  ${near ? nearMap(depth) : ''}
   <section class="picker" aria-label="Filter by grade">
     ${on.grade ? `<div class="rail" role="group" aria-label="Grade">${gradeBtns}</div>` : ''}
     <div class="status"><span id="count" aria-live="polite"></span><button type="button" class="clear" id="clear" hidden>Clear filters</button></div>
@@ -832,7 +863,8 @@ function card(p, school) {
   const l = p.schools[school.id];
   const rel = REL[l.relation];
   const g = p._grades;
-  const where = [l.address || p.address, l.distance].filter(Boolean).join(', ');
+  const mi = l.relation === 'onsite' ? null : milesFrom(school, p);
+  const where = [l.address || p.address, l.distance || (mi !== null ? `about ${milesText(mi)} from ${school.shortName}, in a straight line` : '')].filter(Boolean).join(', ');
   const r = p.register;
   const regUrl = r.how === 'online' ? outUrl(l.registerUrl || r.url, { type: 'register', school, program: p }) : null;
   const revs = reviewsFor(p.id);
@@ -849,7 +881,7 @@ function card(p, school) {
   const flag = [p.note, l.note].filter(Boolean).join(' ');
   const fix = correctionHref(`Correction: ${p.name} (${school.shortName})`);
   return `<article class="prog" id="${esc(p.id)}" data-rel="${l.relation}"${p.offerDays ? ` data-offer-days="${esc(JSON.stringify(p.offerDays))}"` : ''} ${itemAttrs(p, [rel.pill.replace('{s}', school.shortName)], school)}>
-  <div class="top"><span class="pill ${l.relation}">${esc(rel.pill.replace('{s}', school.shortName))}</span><h3><a href="${link(programPath(p), 1)}">${esc(p.name)}</a></h3><p class="what">${esc(p.what)}</p><p class="tags">${typeTags(p, school)}</p>${p.offers?.length ? `<p class="offers"><b>${p.clubs ? 'Clubs' : 'Classes'}:</b> ${esc(p.offers.join(', '))}</p>` : ''}${p.clubs ? `<p class="club-match" data-club-match="${esc(JSON.stringify(clubsByType(p)))}" hidden></p>` : ''}</div>
+  <div class="top"><span class="pill ${l.relation}">${esc(rel.pill.replace('{s}', school.shortName))}</span>${spaceSlot('p:' + p.id, 1)}<h3><a href="${link(programPath(p), 1)}">${esc(p.name)}</a></h3><p class="what">${esc(p.what)}</p><p class="tags">${typeTags(p, school)}</p>${p.offers?.length ? `<p class="offers"><b>${p.clubs ? 'Clubs' : 'Classes'}:</b> ${esc(p.offers.join(', '))}</p>` : ''}${p.clubs ? `<p class="club-match" data-club-match="${esc(JSON.stringify(clubsByType(p)))}" hidden></p>` : ''}</div>
   ${gradeStrip(p)}
   <dl>${rows}</dl>
   ${flag ? `<p class="flag">${esc(flag)}</p>` : ''}
@@ -1067,6 +1099,7 @@ ${p.clubs.map(c => `      <article class="club">
       ${revs.length ? `<span><b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'review' : 'reviews'}</span>` : ''}
       <span>Checked <b>${longDate(p.lastVerified)}</b></span>
       ${claimedMark('p:' + p.id, D)}
+      ${spaceSlot('p:' + p.id, D)}
     </div>`;
   const body = `<div data-program-page="${esc(p.id)}" style="display:contents">
   <section class="section">
@@ -1129,7 +1162,7 @@ function programsPage() {
   const list = [...citywide].sort((a, b) => a.name.localeCompare(b.name));
   const hero = `    <h1>${T(`Every program, A to Z`)}</h1>
     <p class="lede">${T(`All {n} after-school programs on this site, across every school. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.`, { n: list.length })}</p>`;
-  const body = `${filterBar({ list, depth: 1, show: { day: true }, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
+  const body = `${filterBar({ list, depth: 1, show: { day: true }, near: true, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
 ${noMatch(1)}
 <section class="section" data-group>
   <div class="schools">
@@ -1390,7 +1423,7 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
     <p class="mine-row needs-js-block"><button type="button" class="savebtn" data-my-school="${esc(s.id)}" data-name="${esc(s.shortName)}" aria-pressed="false">Save as my school</button><span class="hint" data-my-school-note aria-live="polite"></span></p>`;
   const body = `<div data-school-page="${esc(s.id)}" style="display:contents">
   ${nextOff(1, list)}
-  ${filterBar({ list, depth: 1, school: s, show: { hood: false } })}
+  ${filterBar({ list, depth: 1, school: s, show: { hood: false }, near: true })}
   <div class="legend">
     <span><i class="cell on">3</i> grade served</span>
     <span><i class="cell">7</i> not served</span>
@@ -1771,6 +1804,7 @@ function privacyPage() {
     <li>${T(`The public sees a “Claimed” mark on the listing and nothing about you. Your name and email address are seen only by the person who runs this site.`)}</li>
     <li>${T(`Changes you propose are kept with your claim and emailed to the site’s inbox. They are checked and published by a person, and you are told by email when that happens.`)}</li>
 ${GROUPS.photos ? `    <li>${T(`A photo you send for your listing is shrunk in your browser before it leaves your device, kept on our web host, and shown on the listing only after a person approves it. You can replace or remove it at any time. Send only a photo you have the right to use, with permission from the families of any children in it.`)}</li>` : ''}
+    <li>${T(`If you say whether there’s space, the listing shows “Spots open”, “Waitlist” or “Full” and the day you said it. It goes up at once, without anyone checking it, and comes down after 30 days unless you set it again.`)}</li>
     <li>${T(`You can give up a claim at any time, and deleting your account removes your claims and the changes you proposed.`)}</li>
     <li>${T(`The page where you claim a listing loads Google Analytics and Microsoft Clarity to count visits. The part where you sign in and manage claims is hidden in session recordings.`)}</li>
   </ul>` : ''}
@@ -1781,6 +1815,12 @@ ${GROUPS.photos ? `    <li>${T(`A photo you send for your listing is shrunk in y
     <li>${T(`A review that is approved appears on the site with your first name, your child’s school and the month. Nothing else about you is shown.`)}</li>
     <li>${T(`Asking for a school to be covered sends only the school’s name.`)}</li>
     <li>${T(`Please don’t include children’s names or other people’s personal details in what you send.`)}</li>
+  </ul>
+  <h2 id="map">${T(`Distances and the map`)}</h2>
+  <ul>
+    <li>${T(`“From where I am” asks your browser for your location. It is used on your device to work out distances, it is not sent to us, and it is not kept.`)}</li>
+    <li>${T(`The map stays off until you tap “Show the map”. Its pictures then come from OpenStreetMap’s servers, which see your internet address and which part of the city you looked at, as any website you visit does.`)} <a href="https://osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener">${T(`OpenStreetMap’s privacy policy`)}</a>.</li>
+    <li>${T(`Distances are measured in a straight line from street addresses, so a walk is usually a little longer.`)}</li>
   </ul>
   ${ALERTS ? `<h2 id="email">${T(`Dates by email`)}</h2>
   <ul>
@@ -2241,7 +2281,7 @@ function daysOffPage() {
     return `<article class="prog offprog" id="${esc(p.id)}">
   <div class="top"><h3><a href="${link(programPath(p), D)}">${esc(fullName(p))}</a></h3><p class="tags">${p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p></div>
   <dl><dt>What it runs</dt><dd>${esc(p.daysOff.summary)}</dd>
-  <dt>Dates posted</dt><dd>${dates.length ? esc(dates.map(shortDate).join(', ')) + '.' : 'None on its site when we checked. Ask which days it covers.'}</dd>
+  <dt>Dates posted</dt><dd${dates.length ? ` data-day-list="${esc(JSON.stringify(dates.map(x => [x, shortDate(x)])))}"` : ''}>${dates.length ? esc(dates.map(shortDate).join(', ')) + '.' : 'None on its site when we checked. Ask which days it covers.'}</dd>
   ${programAddress(p) ? `<dt>Where</dt><dd>${esc(programAddress(p))}</dd>` : ''}
   ${served.length ? `<dt>On school days</dt><dd>${esc(servedSummary(p))}.</dd>` : ''}</dl>
   <div class="actions"><a class="btn primary" data-track="camp" href="${esc(outUrl(p.daysOff.url, { type: 'camp', program: p }))}" target="_blank" rel="noopener">Camp details</a><a class="btn" href="${link(programPath(p), D)}">Full listing</a></div>
@@ -2355,6 +2395,8 @@ const claimListings = () => Object.fromEntries([
 // Under a listing: suggest an update (anyone), and claim it (whoever runs it).
 const listingTools = (key, name, depth, noun) => `<p class="listing-tools"><a class="btn" href="${link('suggest/', depth)}?kind=correction&amp;fix=${encodeURIComponent(key)}&amp;program=${encodeURIComponent(name)}">${T(`Suggest an update`)}</a>${GROUPS ? ` <span class="hint">${noun === 'camp' ? T(`Run this camp?`) : T(`Run this program?`)} <a href="${link('managers/', depth)}?l=${encodeURIComponent(key)}">${T(`Claim this listing`)}</a></span>` : ''}</p>`;
 const photoSlot = key => GROUPS && !PREVIEW ? `<figure class="listing-photo" data-photo="${esc(key)}" hidden></figure>` : '';
+// "Spots open", "Waitlist" or "Full", as the listing's own manager last said it. Empty until the page asks the server.
+const spaceSlot = (key, depth) => GROUPS && !PREVIEW ? `<span class="space-mark" data-space="${esc(key)}" data-api="${link('groups/api.php', depth)}" hidden></span>` : '';
 const claimedMark = (key, depth) => GROUPS && !PREVIEW ? `<span class="claimed-mark" data-claimed="${esc(key)}" data-api="${link('groups/api.php', depth)}" hidden><b>${T(`Claimed`)}</b> ${T(`by the people who run it`)}</span>` : '';
 const groupsScript = depth => `<script src="${link('assets/groups.js', depth)}${GROUPS_V}"></script>`;
 function accountPage(register = false) {
@@ -2393,7 +2435,8 @@ function accountPage(register = false) {
         <li><b>${T(`Share a week with one person.`)}</b> ${T(`A grandparent or a sitter signs in to see it, and you can take it back.`)}</li>${GROUPS.pilot ? '' : `
         <li><b>${T(`Share with a small group.`)}</b> ${T(`A few families you invite by email see each other’s weeks. Nobody else can find the group or ask to join.`)}</li>`}
       </ul>
-      <p class="hint">${T(`It’s free. Nothing goes into your profile unless you put it there, and you can delete the account whenever you like.`)}</p>
+      <p class="hint">${T(`It’s free. Nothing goes into your profile unless you put it there, and you can delete the account whenever you like.`)}</p>${cfg.termsLive === true ? `
+      <p class="hint">${T(`Making an account means you agree to the`)} <a href="${link('terms/', 1)}">${T(`terms of use`)}</a>.</p>` : ''}
       <p class="hint">${T(`Run a program or camp?`)} <a href="${link('managers/', 1)}">${T(`Claim your listing`)}</a>${T(`. It’s the same account.`)}</p>
     </section>
   </div>
@@ -2422,6 +2465,7 @@ const movedPage = (to, depth) => `<!doctype html>
 // ---------- for the people who manage a program: find a listing and claim it ----------
 const claimBenefits = depth => `<ul class="benefits">
       <li><b>${T(`Keep your dates current.`)}</b> ${T(`Post sign-up openings, deadlines, term dates and camp days as soon as you set them, instead of waiting for us to find them.`)}</li>
+      <li><b>${T(`Say whether there’s space.`)}</b> ${T(`Mark your listing “Spots open”, “Waitlist” or “Full”. It shows to parents straight away, with the date.`)}</li>
       <li><b>${T(`Fix your costs and hours.`)}</b> ${T(`When a price or a pickup time changes, send it once and the listing follows.`)}</li>
 ${GROUPS.photos ? `      <li><b>${T(`Add a photo.`)}</b> ${T(`One picture of your space or an activity at the top of your listing.`)}</li>
 ` : ''}      <li><b>${T(`Show parents it’s kept up.`)}</b> ${T(`A “Claimed” mark tells them the listing is looked after by the people who run it.`)}</li>
@@ -3134,7 +3178,7 @@ $SCHOOLS = json_decode('${names}', true);
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
+$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -3505,7 +3549,7 @@ function summerCampsPage() {
       .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${k === 'Phone' ? `<a href="tel:+1-${esc(v)}">${esc(v)}</a>` : esc(v)}</dd>`).join('');
     const prog = c.program ? programs.find(p => p.id === c.program) : null;
     return `<article class="prog offprog camp" id="${esc(c.id)}" ${itemAttrs(shaped[i], [c.ages || '', c.address || '', ...(c.neighborhoods || [])])}>
-  <div class="top">${photoSlot('c:' + c.id)}<h3>${esc(c.name)}</h3><p class="what">${esc(c.what)}</p><p class="tags">${c.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p><p>${seasonPill(c)}</p></div>
+  <div class="top">${photoSlot('c:' + c.id)}<h3>${esc(c.name)}</h3><p class="what">${esc(c.what)}</p><p class="tags">${c.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p><p>${seasonPill(c)} ${spaceSlot('c:' + c.id, D)}</p></div>
   <dl>${rows}</dl>
   ${c.note ? `<p class="flag">${esc(c.note)}</p>` : ''}
   <div class="actions"><a class="btn primary" data-track="camp" href="${esc(outUrl(c.registerUrl || c.website, { type: 'camp' }))}" target="_blank" rel="noopener">${c.registerUrl ? 'Find or book a spot' : 'Camp details'}</a>${c.registerUrl ? `<a class="btn" data-track="website" href="${esc(outUrl(c.website, { type: 'camp' }))}" target="_blank" rel="noopener">Camp details</a>` : ''}<a class="btn needs-js" href="${link(summerPath, D)}?add=${esc(c.id)}">Add to your summer</a>${prog ? `<a class="btn" href="${link(programPath(prog), D)}">Its school-year listing</a>` : ''}</div>
@@ -3525,7 +3569,7 @@ function summerCampsPage() {
   <p class="flag camp-guide"><b>${T(`Most of what’s here is from summer {year}, shown as a guide.`, { year: base })}</b> ${T(`Camps usually post next summer between December and March. Each listing changes to {year} when its camp posts dates and prices, and says so on its card.`, { year: next })}</p>
   <p><a class="btn primary" href="${link(summerPath, D)}">${T(`Plan your summer, week by week`)}</a></p>
 </section>
-${filterBar({ list: shaped, depth: D, searchLabel: `Looking for a particular camp?`, placeholder: 'Its name, or try art, tennis, Mount Airy…' }).replace('data-filters', 'data-filters data-noun="camp" data-nouns="camps"')}
+${filterBar({ list: shaped, depth: D, near: true, searchLabel: `Looking for a particular camp?`, placeholder: 'Its name, or try art, tennis, Mount Airy…' }).replace('data-filters', 'data-filters data-noun="camp" data-nouns="camps"')}
 <p class="hint">${T(`Grades here are worked out from each camp’s ages, so check the age line on the card.`)}</p>
 ${noMatch(D)}
 <section class="section" data-group>
@@ -3573,7 +3617,7 @@ function weekendPage() {
       .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
     const wp = shape(p);   // the weekend classes can take other grades than the weekday program
     return `<article class="prog offprog" id="${esc(p.id)}" ${itemAttrs(wp, [...hoodsHere, ...w.days.map(d => WEEKEND_DAY[d])])} data-wk="${w.days.join(' ')}">
-  <div class="top"><h3><a href="${link(programPath(p), D)}">${esc(fullName(p))}</a></h3><p class="tags">${p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p><p>${hoodsHere.map(n => `<span class="pill hood">${esc(n)}</span>`).join(' ')} ${w.days.map(d => `<span class="pill nearby">${WEEKEND_DAY[d]}</span>`).join(' ')} <span class="hint">Grades ${esc(gradeText(wp))}</span></p></div>
+  <div class="top"><h3><a href="${link(programPath(p), D)}">${esc(fullName(p))}</a></h3><p class="tags">${p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p><p>${hoodsHere.map(n => `<span class="pill hood">${esc(n)}</span>`).join(' ')} ${w.days.map(d => `<span class="pill nearby">${WEEKEND_DAY[d]}</span>`).join(' ')} ${spaceSlot('p:' + p.id, D)} <span class="hint">Grades ${esc(gradeText(wp))}</span></p></div>
   <dl>${rows}</dl>
   ${w.note ? `<p class="flag">${esc(w.note)}</p>` : ''}
   <div class="actions"><a class="btn primary" data-track="weekend" href="${esc(outUrl(w.url, { type: 'weekend', program: p }))}" target="_blank" rel="noopener">Class details</a><a class="btn" href="${link(programPath(p), D)}">Full listing</a>${w.days.map(d => `<a class="btn needs-js" href="${link('board/', D)}?wk=${esc(p.id)}&amp;day=${d}">Add ${WEEKEND_DAY[d]} to your week</a>`).join('')}</div>
@@ -3588,7 +3632,7 @@ function weekendPage() {
       <span><b>${weekendPrograms.filter(p => p.weekend.days.includes('sun')).length}</b> on Sundays too</span>
       <span><b>${new Set(weekendPrograms.flatMap(programHoods)).size}</b> neighborhoods</span>
     </div>`;
-  const body = `${filterBar({ list: weekendPrograms.map(shape), depth: D, show: { cost: false, day: false }, searchLabel: `Looking for a particular class?`, placeholder: 'A name or a neighborhood, or try piano, acting…' }).replace('data-filters', 'data-filters data-noschool data-noun="place" data-nouns="places"')}
+  const body = `${filterBar({ list: weekendPrograms.map(shape), depth: D, show: { cost: false, day: false }, near: true, searchLabel: `Looking for a particular class?`, placeholder: 'A name or a neighborhood, or try piano, acting…' }).replace('data-filters', 'data-filters data-noschool data-noun="place" data-nouns="places"')}
 <p class="hint">${T(`A weekend class has no school pickup, so this list goes by where the class is. Any child can sign up, whichever school they go to.`)}</p>
 ${noMatch(D)}
 ${areas.map(([a, list]) => `<section class="section" data-group>
@@ -3664,7 +3708,8 @@ if (GROUPS) {
   write('directors/index.html', movedPage('managers/', 1));   // the page's first address
   if (!PREVIEW) write('groups/api.php', groupsApiPhp());
 }
-for (const f of fs.readdirSync(path.join(ROOT, 'src/static'))) write(f, fs.readFileSync(path.join(ROOT, 'src/static', f)));   // icons and the share image, served from the top level
+for (const f of fs.readdirSync(path.join(ROOT, 'src/static'))) write(f, fs.readFileSync(path.join(ROOT, 'src/static', f)));
+if (!PREVIEW) for (const f of fs.readdirSync(path.join(ROOT, 'src/vendor/leaflet'))) write('assets/leaflet/' + f, fs.readFileSync(path.join(ROOT, 'src/vendor/leaflet', f)));   // the map library, served from this site so no other one is asked for it   // icons and the share image, served from the top level
 if (!PREVIEW) {
   write('404.html', notFound);
   if (cfg.contactEmail) write('suggest/send.php', sendPhp());
