@@ -75,7 +75,7 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
       $to = $do === 'claim_ok' ? 'ok' : 'declined';
       $db->prepare('UPDATE claims SET status = ?, decided = ? WHERE id = ?')->execute(array($to, time(), $id));
       $n = $name($c['listing']);
-      if ($to === 'ok') tell($c['email'], 'Your claim on ' . $n . ' is approved', 'Hi ' . $c['first'] . ",\n\nYour claim on “" . $n . '” at ' . $SITE . ' is approved. The listing now shows as claimed, and you can send changes to it here:' . "\n" . $SITE_URL . '/directors/');
+      if ($to === 'ok') tell($c['email'], 'Your claim on ' . $n . ' is approved', 'Hi ' . $c['first'] . ",\n\nYour claim on “" . $n . '” at ' . $SITE . ' is approved. The listing now shows as claimed, and you can send changes to it here:' . "\n" . $SITE_URL . '/managers/');
       else tell($c['email'], 'About your claim on ' . $n, 'Hi ' . $c['first'] . ",\n\nWe couldn’t confirm your claim on “" . $n . '” at ' . $SITE . ', so it has been ' . ($do === 'claim_remove' ? 'removed' : 'declined') . '. If that looks wrong, reply to this email and tell us how you’re connected to the program.');
       $msg = $to === 'ok' ? 'Approved, and they’ve been told.' : 'Done, and they’ve been told.';
     }
@@ -84,7 +84,7 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($x) {
       $db->prepare('UPDATE edits SET status = ?, decided = ? WHERE id = ?')->execute(array($do === 'edit_done' ? 'done' : 'declined', time(), $id));
       $n = $name($x['listing']);
-      if ($do === 'edit_done') tell($x['email'], 'Your change to ' . $n . ' is published', 'Hi ' . $x['first'] . ",\n\nThe change you sent for “" . $n . '” is on the site now. Have a look, and send another if anything is off:' . "\n" . $SITE_URL . '/directors/');
+      if ($do === 'edit_done') tell($x['email'], 'Your change to ' . $n . ' is published', 'Hi ' . $x['first'] . ",\n\nThe change you sent for “" . $n . '” is on the site now. Have a look, and send another if anything is off:' . "\n" . $SITE_URL . '/managers/');
       else tell($x['email'], 'About the change you sent for ' . $n, 'Hi ' . $x['first'] . ",\n\nWe weren’t able to make the change you sent for “" . $n . '”, usually because we couldn’t find it on the program’s own website. Reply to this email if you’d like to talk it through.');
       $msg = $do === 'edit_done' ? 'Marked published, and they’ve been told.' : 'Declined, and they’ve been told.';
     }
@@ -100,7 +100,7 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
           tell($x['email'], 'Your photo for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",
 
 The photo you sent for “" . $n . '” is on the listing now. You can replace or remove it here:' . "
-" . $SITE_URL . '/directors/');
+" . $SITE_URL . '/managers/');
           $msg = 'Published, and they’ve been told.';
         } else {
           $was = $x['status'];
@@ -132,11 +132,11 @@ if ($have) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Claims and proposed changes | Philly After School</title>
-<meta name="description" content="Claims on listings and the changes directors have proposed.">
+<meta name="description" content="Claims on listings and the changes program managers have proposed.">
 <link rel="canonical" href="https://phillyafterschool.org/edit/claims/">
 <meta name="robots" content="noindex">
 <meta property="og:title" content="Claims and proposed changes | Philly After School">
-<meta property="og:description" content="Claims on listings and the changes directors have proposed.">
+<meta property="og:description" content="Claims on listings and the changes program managers have proposed.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://phillyafterschool.org/edit/claims/">
 <meta property="og:site_name" content="Philly After School">
@@ -152,7 +152,7 @@ if ($have) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../../assets/site.css?v=71e30b0e">
+<link rel="stylesheet" href="../../assets/site.css?v=f898fb77">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -169,7 +169,7 @@ if ($have) {
 <div class="band pagehead">
   <div class="in hero">
     <h1>Claims and proposed changes</h1>
-    <p class="lede">Who has claimed which listing, the claims waiting for your yes, and the changes directors have asked for.</p>
+    <p class="lede">Who has claimed which listing, the claims waiting for your yes, and the changes program managers have asked for.</p>
   </div>
   
 </div>
@@ -187,8 +187,8 @@ if ($have) {
     <form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn primary" type="submit" name="do" value="claim_ok">Approve the claim</button><button class="btn" type="submit" name="do" value="claim_no">Decline</button></form>
   </div><?php } ?>
 
-  <h2>Changes directors have proposed (<?php echo count($edits); ?> new)</h2>
-  <?php if (!$edits) { ?><p class="hint">None waiting.</p><?php } else { ?><p class="hint">Nothing here has changed the site. To apply one, paste it to Claude (or edit the listing data), then mark it published so the director is told.</p><?php } ?>
+  <h2>Changes program managers have proposed (<?php echo count($edits); ?> new)</h2>
+  <?php if (!$edits) { ?><p class="hint">None waiting.</p><?php } else { ?><p class="hint">Nothing here has changed the site. To apply one, paste it to Claude (or edit the listing data), then mark it published so the manager is told.</p><?php } ?>
   <?php foreach ($edits as $x) { ?><div class="panel">
     <h3><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?> <span class="hint"><?php echo htmlspecialchars($x["listing"], ENT_QUOTES, 'UTF-8'); ?></span></h3>
     <p class="hint">From <?php echo htmlspecialchars($x["first"] . " " . $x["last"], ENT_QUOTES, 'UTF-8'); ?> &lt;<?php echo htmlspecialchars($x["email"], ENT_QUOTES, 'UTF-8'); ?>&gt;, <?php echo htmlspecialchars($day($x["created"]), ENT_QUOTES, 'UTF-8'); ?></p>
@@ -266,7 +266,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
         <li><a href="../../about/#how"><span data-copy="5b2fc57ac3">How listings are checked</span></a></li>
         <li><a href="../../about/#corrections"><span data-copy="1862eb688d">Send a correction</span></a></li>
         <li><a href="../../contact/"><span data-copy="4832e45812">Contact us</span></a></li>
-        <li><a href="../../directors/"><span data-copy="4a5d910312">For program directors</span></a></li>
+        <li><a href="../../managers/"><span data-copy="c192560a97">For program managers</span></a></li>
         <li><a href="../../ideas/"><span data-copy="29c269f6e8">Request a feature</span></a></li>
         <li><a href="../../privacy/"><span data-copy="cf01481f62">Privacy</span></a></li>
         <li><a href="../../support/"><span data-copy="fd1482eac6">Buy me a coffee</span></a></li>
@@ -280,7 +280,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../../assets/site.js?v=20b837fe" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
+<script src="../../assets/site.js?v=b1eaf431" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
 
 </body>
 </html>

@@ -315,7 +315,7 @@
     var goNext = function (next) {
       if (next === 'join') { location.href = page('join/'); return true; }
       if (next === 'board') { location.href = page('board/') + '?back=1'; return true; }
-      if (next === 'directors') { location.href = page('directors/'); return true; }
+      if (next === 'managers' || next === 'directors') { location.href = page('managers/'); return true; }
       var m = /^groups\?g=([A-Za-z0-9]+)$/.exec(next || '');
       if (m) { location.href = page('groups/') + '?g=' + m[1]; return true; }
       return false;
@@ -531,8 +531,8 @@
       var help = el('section', 'panel g-support');
       var dir = el('section', 'panel');
       dir.appendChild(el('h2', null, me.claims ? 'Your listings' : 'Run a program or camp?'));
-      dir.appendChild(el('p', null, me.claims ? 'This account has claimed ' + (me.claims === 1 ? 'a listing' : me.claims + ' listings') + '. Send changes or give one up from the directors page.' : 'This same account can claim your program’s listing, if your email address is at its website. Then you can send changes as its director.'));
-      var dl = el('a', 'btn', me.claims ? 'Manage your listings' : 'Claim your listing'); dl.href = page('directors/'); dir.appendChild(dl);
+      dir.appendChild(el('p', null, me.claims ? 'This account has claimed ' + (me.claims === 1 ? 'a listing' : me.claims + ' listings') + '. Send changes or give one up from the program managers page.' : 'This same account can claim your program’s listing, if your email address is at its website. Then you can send changes as its manager.'));
+      var dl = el('a', 'btn', me.claims ? 'Manage your listings' : 'Claim your listing'); dl.href = page('managers/'); dir.appendChild(dl);
       account.appendChild(dir);
       help.appendChild(el('h2', null, 'Help the site keep going'));
       help.appendChild(el('p', null, 'Philly After School is free and run by one parent. If it saved you an evening of searching, you can chip in toward what it costs to run.'));
@@ -785,7 +785,7 @@
       // signing in, once someone has picked the listing they want
       if (cState === 'out' && wanted && byKey[wanted]) {
         var sbox = el('div', 'panel'); sbox.id = 'claim-signin'; claimsBox.appendChild(sbox);
-        signInBox(sbox, 'directors', function (d) { signedIn(d.user); },
+        signInBox(sbox, 'managers', function (d) { signedIn(d.user); },
           'To claim ' + byKey[wanted].name + ', sign in with an email address at ' + (byKey[wanted].domain || 'its website') + '. No password. We send a 6-digit code and you type it here.');
         var sh = sbox.querySelector('h3'); if (sh) sh.textContent = 'Sign in to claim ' + byKey[wanted].name;
       }
@@ -858,7 +858,7 @@
         var hl = btn('linklike', 'Sign in');
         hl.addEventListener('click', function () {
           var box = el('div', 'panel'); box.id = 'claim-signin'; claimsBox.insertBefore(box, add);
-          signInBox(box, 'directors', function (d) { signedIn(d.user); }, 'Sign in with your work email. No password. We send a 6-digit code and you type it here.');
+          signInBox(box, 'managers', function (d) { signedIn(d.user); }, 'Sign in with your work email. No password. We send a 6-digit code and you type it here.');
           var h = box.querySelector('h3'); if (h) h.textContent = 'Sign in';
           have.hidden = true;
         });

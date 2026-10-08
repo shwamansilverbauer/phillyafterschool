@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=71e30b0e">
+<link rel="stylesheet" href="../assets/site.css?v=f898fb77">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ItemList","itemListElement":[{"@type":"ListItem","position":1,"name":"Arden Drama School","url":"https://phillyafterschool.org/programs/arden-drama-school/"},{"@type":"ListItem","position":2,"name":"Fleisher Art Memorial","url":"https://phillyafterschool.org/programs/fleisher-art-memorial/"},{"@type":"ListItem","position":3,"name":"Koresh School of Dance","url":"https://phillyafterschool.org/programs/koresh-school-of-dance/"},{"@type":"ListItem","position":4,"name":"MacGuffin Theatre & Film Company","url":"https://phillyafterschool.org/programs/macguffin-theatre/"},{"@type":"ListItem","position":5,"name":"MADE Institute: Sunday Sewing","url":"https://phillyafterschool.org/programs/made-institute-sunday-sewing/"},{"@type":"ListItem","position":6,"name":"Mister John’s Music","url":"https://phillyafterschool.org/programs/mister-johns-music/"},{"@type":"ListItem","position":7,"name":"Moore Young Artists Workshop","url":"https://phillyafterschool.org/programs/moore-young-artists-workshop/"},{"@type":"ListItem","position":8,"name":"MoveMakers Philly","url":"https://phillyafterschool.org/programs/movemakers/"},{"@type":"ListItem","position":9,"name":"Music Theatre Philly","url":"https://phillyafterschool.org/programs/music-theatre-philly/"},{"@type":"ListItem","position":10,"name":"PAFA Saturday Studio Art","url":"https://phillyafterschool.org/programs/pafa-saturday-art/"},{"@type":"ListItem","position":11,"name":"Penn Ice Rink","url":"https://phillyafterschool.org/programs/penn-ice-rink/"},{"@type":"ListItem","position":12,"name":"Philadelphia Museum of Art: Art Kids Classes","url":"https://phillyafterschool.org/programs/philadelphia-museum-of-art-kids/"},{"@type":"ListItem","position":13,"name":"Philly InMovement: MOVE After School","url":"https://phillyafterschool.org/programs/philly-inmovement/"},{"@type":"ListItem","position":14,"name":"School of Philadelphia Ballet","url":"https://phillyafterschool.org/programs/school-of-philadelphia-ballet/"},{"@type":"ListItem","position":15,"name":"Starfinder: Saturday soccer","url":"https://phillyafterschool.org/programs/starfinder-saturday-soccer/"},{"@type":"ListItem","position":16,"name":"Temple Music Prep: Community Music Scholars","url":"https://phillyafterschool.org/programs/temple-music-prep-cmsp/"},{"@type":"ListItem","position":17,"name":"The Franklin Institute: PACTS","url":"https://phillyafterschool.org/programs/franklin-institute-pacts/"},{"@type":"ListItem","position":18,"name":"The Rock School for Dance Education","url":"https://phillyafterschool.org/programs/rock-school-for-dance/"},{"@type":"ListItem","position":19,"name":"Walnut Street Theatre School","url":"https://phillyafterschool.org/programs/walnut-street-theatre-school/"},{"@type":"ListItem","position":20,"name":"Wissahickon Skating Club","url":"https://phillyafterschool.org/programs/wissahickon-skating-club/"},{"@type":"ListItem","position":21,"name":"ZAZZ","url":"https://phillyafterschool.org/programs/zazz-dance/"}]}</script>
 </head>
 <body>
@@ -63,6 +63,15 @@
     <div class="rail" role="group" aria-label="Grade"><button type="button" class="gbtn" id="grade-ALL" data-f="grade" data-v="ALL" aria-pressed="true" aria-label="All grades, 21 programs"><span class="g">All</span><span class="n">21</span></button><button type="button" class="gbtn" id="grade-PK" data-f="grade" data-v="PK" aria-pressed="false" aria-label="Pre-K, 8 programs"><span class="g">PK</span><span class="n">8</span></button><button type="button" class="gbtn" id="grade-K" data-f="grade" data-v="K" aria-pressed="false" aria-label="Kindergarten, 14 programs"><span class="g">K</span><span class="n">14</span></button><button type="button" class="gbtn" id="grade-1" data-f="grade" data-v="1" aria-pressed="false" aria-label="Grade 1, 16 programs"><span class="g">1</span><span class="n">16</span></button><button type="button" class="gbtn" id="grade-2" data-f="grade" data-v="2" aria-pressed="false" aria-label="Grade 2, 15 programs"><span class="g">2</span><span class="n">15</span></button><button type="button" class="gbtn" id="grade-3" data-f="grade" data-v="3" aria-pressed="false" aria-label="Grade 3, 14 programs"><span class="g">3</span><span class="n">14</span></button><button type="button" class="gbtn" id="grade-4" data-f="grade" data-v="4" aria-pressed="false" aria-label="Grade 4, 14 programs"><span class="g">4</span><span class="n">14</span></button><button type="button" class="gbtn" id="grade-5" data-f="grade" data-v="5" aria-pressed="false" aria-label="Grade 5, 15 programs"><span class="g">5</span><span class="n">15</span></button><button type="button" class="gbtn" id="grade-6" data-f="grade" data-v="6" aria-pressed="false" aria-label="Grade 6, 15 programs"><span class="g">6</span><span class="n">15</span></button><button type="button" class="gbtn" id="grade-7" data-f="grade" data-v="7" aria-pressed="false" aria-label="Grade 7, 15 programs"><span class="g">7</span><span class="n">15</span></button><button type="button" class="gbtn" id="grade-8" data-f="grade" data-v="8" aria-pressed="false" aria-label="Grade 8, 15 programs"><span class="g">8</span><span class="n">15</span></button></div>
     <div class="status"><span id="count" aria-live="polite"></span><button type="button" class="clear" id="clear" hidden>Clear filters</button></div>
   </section>
+  <div class="quickbar" id="quickbar" hidden>
+    <div class="in">
+      <div class="quick-row">
+        <input id="quick-search" type="search" aria-label="&lt;span data-copy=&quot;ea126e4246&quot;&gt;Looking for a particular class?&lt;/span&gt;" placeholder="Search this list" autocomplete="off">
+        <button type="button" class="btn" id="quick-filters">Filters<span class="quick-n" id="quick-n" hidden></span></button>
+      </div>
+      <p class="quick-status"><span id="quick-count"></span> <button type="button" class="clear" id="quick-clear" hidden>Clear</button></p>
+    </div>
+  </div>
 <p class="ask" id="no-match" data-nomatch data-edit-reveal="Shown when the filters find nothing:" hidden><span data-copy="883a11e036">Nothing matches that. Know a program that should be listed?</span> <a href="../suggest/"><span data-copy="c85d669959">Tell us about it.</span></a></p>
 <section class="section" data-group>
   <div class="list">
@@ -264,7 +273,7 @@
         <li><a href="../about/#how"><span data-copy="5b2fc57ac3">How listings are checked</span></a></li>
         <li><a href="../about/#corrections"><span data-copy="1862eb688d">Send a correction</span></a></li>
         <li><a href="../contact/"><span data-copy="4832e45812">Contact us</span></a></li>
-        <li><a href="../directors/"><span data-copy="4a5d910312">For program directors</span></a></li>
+        <li><a href="../managers/"><span data-copy="c192560a97">For program managers</span></a></li>
         <li><a href="../ideas/"><span data-copy="29c269f6e8">Request a feature</span></a></li>
         <li><a href="../privacy/"><span data-copy="cf01481f62">Privacy</span></a></li>
         <li><a href="../support/"><span data-copy="fd1482eac6">Buy me a coffee</span></a></li>
@@ -278,7 +287,7 @@
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=20b837fe" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=b1eaf431" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 
 </body>
 </html>

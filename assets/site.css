@@ -140,7 +140,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 
 /* ---------- filter bar on a school page ---------- */
 .picker{display:none}
-.js .picker{display:flex;flex-direction:column;gap:10px;position:sticky;top:calc(var(--bar-h,64px) + env(safe-area-inset-top,0px));z-index:5;background:var(--bg);padding-block:12px;border-bottom:1px solid var(--line);margin-bottom:-12px}
+.js .picker{display:flex;flex-direction:column;gap:10px;padding-block:12px;border-bottom:1px solid var(--line);margin-bottom:-12px}
 .rail{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:3px}
 .rail::-webkit-scrollbar{display:none}
 .gbtn{font:inherit;flex:1 0 auto;min-width:52px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:7px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:0}
@@ -931,7 +931,7 @@ html.signed .when-out{display:none!important}
 .g-support .btn{align-self:flex-start}
 /* the menu bar stays at the top of the screen as the page scrolls; the "Log in" strip above it and the page's
    headline below it scroll away. --bar-h is the bar's height, kept up to date by site.js, so things that stick
-   under it (the grade row, the next-day-off box) and links that jump down the page clear it. */
+   under it (the search-and-filters bar, the next-day-off box) and links that jump down the page clear it. */
 .sitebar{position:sticky;top:0;z-index:40;box-shadow:0 1px 0 rgba(0,0,0,.14)}
 .pagehead{z-index:1;background:linear-gradient(180deg,var(--hero),var(--hero-low))}
 .band :focus-visible{outline-color:var(--hero-accent)}
@@ -1082,8 +1082,8 @@ ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .start h2{font-size:clamp(1.5rem,3.4vw,1.9rem)}
 .start > p{color:var(--muted)}
 .start-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
-.start-go{display:flex;align-items:center;justify-content:space-between;gap:14px;text-decoration:none;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:14px;padding:13px 16px}
-.start-go::after{content:"";flex:none;width:9px;height:9px;border-right:2.5px solid var(--link);border-bottom:2.5px solid var(--link);transform:rotate(-45deg)}
+.start-go{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:14px;padding:13px 16px}
+.start-go::after{content:"";flex:none;margin-left:auto;width:9px;height:9px;border-right:2.5px solid var(--link);border-bottom:2.5px solid var(--link);transform:rotate(-45deg)}
 .start-go:hover{border-color:var(--link);background:var(--sky-bg)}
 .start-go span{display:flex;flex-direction:column;gap:2px;min-width:0}
 .start-go b{font-family:var(--display);font-stretch:112%;font-weight:750;font-size:1.08rem}
@@ -1113,3 +1113,18 @@ ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .rail-wrap::after{right:0;background:linear-gradient(90deg,transparent,var(--bg) 62%)}
 .rail-wrap.more-left::before,.rail-wrap.more-right::after{opacity:1}
 @media print{.rail-go{display:none}}
+
+.start-ic{flex:none;width:42px;height:42px;border-radius:12px;background:var(--yellow);color:var(--yellow-ink);display:flex;align-items:center;justify-content:center}
+.start-ic svg{width:23px;height:23px;fill:currentColor;display:block}
+.start.managers .start-ic{background:var(--blue);color:#FFFFFF}
+
+/* ---------- once the filters have scrolled away: a slim bar with a search box and a way back to them ---------- */
+.quickbar{position:fixed;left:0;right:0;top:var(--bar-h,64px);z-index:30;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 8px 18px rgba(7,21,39,.1)}
+.quickbar .in{padding-block:8px;display:flex;flex-direction:column;gap:4px}
+.quick-row{display:flex;gap:8px;align-items:stretch}
+.quick-row input{font:inherit;flex:1 1 auto;min-width:0;padding:9px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}
+.quick-row .btn{flex:none;display:inline-flex;align-items:center;gap:8px}
+.quick-n{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--yellow);color:var(--yellow-ink);font-size:.8rem;font-weight:700}
+.quick-status{margin:0;font-size:.86rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.quick-status .clear{font-size:.86rem}
+@media print{.quickbar{display:none}}

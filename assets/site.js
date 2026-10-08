@@ -1860,6 +1860,9 @@
     var count = document.querySelector('#count'), clear = document.querySelector('#clear');
     var search = document.querySelector('#prog-search'), noMatch = document.querySelector('[data-nomatch]'), searchMore = document.querySelector('#search-more');
     var FILTERS = ['type', 'grade', 'rel', 'hood', 'cost', 'day', 'school'];
+    // Once the filters have scrolled off the top, a slim bar takes their place: a search box, and a button back to them.
+    var qbar = document.getElementById('quickbar'), quick = null;
+    if (qbar) quick = { bar: qbar, search: document.getElementById('quick-search'), go: document.getElementById('quick-filters'), n: document.getElementById('quick-n'), count: document.getElementById('quick-count'), clear: document.getElementById('quick-clear'), status: qbar.querySelector('.quick-status') };
     var blank = function () { return { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL', day: 'ALL', school: 'ALL' }; };
     var state = blank();
     var terms = [];
@@ -1917,6 +1920,14 @@
       var noun = fbar.getAttribute('data-noun') || 'program', nouns = fbar.getAttribute('data-nouns') || 'programs';   // the summer camp page counts camps
       count.textContent = total ? total + ' ' + (total === 1 ? noun : nouns) + (filtered ? what : fSchool ? ' for all grades' : '') : 'No ' + nouns + what + '. Try fewer filters.';
       clear.hidden = !filtered;
+      if (quick) {   // the slim bar says the same thing in less room
+        var live = FILTERS.filter(function (f) { return state[f] !== 'ALL'; }).length;
+        quick.n.textContent = live; quick.n.hidden = !live;
+        quick.count.textContent = filtered ? count.textContent : '';
+        quick.clear.hidden = !filtered;
+        quick.status.hidden = !filtered;
+        if (quick.search && document.activeElement !== quick.search) quick.search.value = search ? search.value : '';
+      }
       if (noMatch) noMatch.hidden = total > 0 || hiddenHits > 0;
       if (searchMore) {
         searchMore.textContent = '';
@@ -1970,6 +1981,45 @@
         var term = search.value.trim().toLowerCase();
         if (term.length >= 3) searchTimer = setTimeout(function () { track({ event: 'pas_search', search_term: term, results: found, school: fSchool }); }, 1200);
       });
+    }
+    if (quick) {
+      var siteBar = document.querySelector('.sitebar'), filtersEnd = document.querySelector('.picker') || fbar, footer = document.querySelector('.foot');
+      var under = function () { return siteBar ? Math.max(0, siteBar.getBoundingClientRect().bottom) : 0; };
+      var calm = function () { return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; };
+      var placeBar = function () {
+        var top = under();
+        var past = filtersEnd.getBoundingClientRect().bottom < top + 2;                       // the filters are out of sight above
+        var inList = !footer || footer.getBoundingClientRect().top > top + 180;                // and the list is still on screen
+        quick.bar.hidden = !(document.activeElement === quick.search || (past && inList));   // never pulled away from someone typing in it
+      };
+      var waiting = false;
+      var onMove = function () { if (waiting) return; waiting = true; (window.requestAnimationFrame || window.setTimeout)(function () { waiting = false; placeBar(); }, 16); };
+      window.addEventListener('scroll', onMove, { passive: true });
+      window.addEventListener('resize', onMove);
+      placeBar();
+      quick.go.addEventListener('click', function () {
+        var y = window.pageYOffset + fbar.getBoundingClientRect().top - under() - 14;
+        if (window.scrollTo) { try { window.scrollTo({ top: y, behavior: calm() ? 'auto' : 'smooth' }); } catch (e) { window.scrollTo(0, y); } }
+        var firstBtn = fbar.querySelector('button');
+        if (firstBtn && firstBtn.focus) { try { firstBtn.focus({ preventScroll: true }); } catch (e) { /* older browsers scroll; fine */ } }
+        track({ event: 'pas_filter_open', school: fSchool });
+      });
+      quick.clear.addEventListener('click', function () { clear.click(); });
+      if (quick.search) quick.search.addEventListener('blur', function () { window.setTimeout(placeBar, 60); });
+      if (quick.search && search) {
+        quick.search.addEventListener('input', function () {
+          search.value = quick.search.value;
+          var ev; try { ev = new Event('input', { bubbles: true }); } catch (e) { ev = document.createEvent('Event'); ev.initEvent('input', true, true); }
+          search.dispatchEvent(ev);
+          // keep what was found under the bar, not above it or off the bottom
+          var first = null;
+          for (var i = 0; i < items.length; i++) if (!items[i].hidden) { first = items[i]; break; }
+          if (first) {
+            var r = first.getBoundingClientRect(), edge = quick.bar.getBoundingClientRect().bottom + 12;
+            if (r.top < edge - 4 || r.top > window.innerHeight * 0.6) window.scrollTo(0, window.pageYOffset + r.top - edge);
+          }
+        });
+      }
     }
     apply();
     var pressedGrade = document.querySelector('.gbtn[aria-pressed="true"]');
