@@ -679,6 +679,7 @@ switch ($method . ' ' . $action) {
   // A director sends one photo for a listing they hold. It waits for the owner; nothing shows until it is approved.
   case 'POST photo_add': {
     $u = need_user();
+    if (empty($CFG['photos'])) fail('off', 'Photos on listings aren’t available yet.', 403);   // a paid extra, switched on in site.config.json
     $key = str($in, 'listing', 90);
     $c = row("SELECT id FROM claims WHERE user_id = ? AND listing = ? AND status = 'ok'", array($u['id'], $key));
     if (!$c) fail('claim', 'You can add a photo once your claim on this listing stands.', 403);

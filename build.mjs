@@ -1398,7 +1398,44 @@ function homePage() {
   const hero = `    <h1>${T(`School’s out. Now what?`)}</h1>
     <p class="lede">${T(`Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.`)}</p>
     ${finderBox(0, `Find your school or a program`, true)}`;
+  const go = (href, label, hint) => `<a class="start-go" href="${href}"><span><b>${label}</b>${hint ? `<small>${hint}</small>` : ''}</span></a>`;
+  const more = [
+    weekendPrograms.length ? [link(weekendPath, 0), T(`Weekend classes`), T(`Saturday and Sunday classes at {n} places: music, dance, art, skating, science.`, { n: weekendPrograms.length }), '#6B3FA0'] : null,
+    daysOff ? [link(offPath, 0), T(`Day camps`), T(`{n} programs run camps on the days school is closed, with a planner for the year.`, { n: campPrograms.length }), '#B88A00'] : null,
+    summerCamps.length ? [link(campsPath, 0), T(`Summer camps`), T(`{n} day camps in the city, with ages, weeks, hours and prices.`, { n: summerCamps.length }), '#2C8444'] : null,
+  ].filter(Boolean);
   const body = `${nextOff(0)}
+<section class="section" id="start">
+  <div class="starts">
+    <div class="start">
+      <p class="kicker">${T(`Start here`)}</p>
+      <h2>${T(`Parents`)}</h2>
+      <p>${T(`See what works with your child’s school, then put the week together.`)}</p>
+      <div class="start-list">
+        ${go('#find-school', T(`Find your school`), T(`Every program that runs there, picks up or sits nearby`))}
+        ${go(link('board/', 0), T(`Build a schedule`), T(`A week of programs, and a card to send`))}
+        ${GROUPS ? `<span class="when-out" style="display:contents">${go(link('register/', 0), T(`Create a free account`), T(`Keep your school and week on every device`))}</span><span class="when-in" style="display:contents">${go(link('account/', 0), T(`Your account`), T(`Your school, your week and who you share it with`))}</span>` : ''}
+      </div>
+    </div>
+    <div class="start managers">
+      <p class="kicker">${T(`Start here`)}</p>
+      <h2>${T(`Program managers`)}</h2>
+      <p>${T(`Run an after-school program, a weekend class or a camp? Make sure parents see it right.`)}</p>
+      <div class="start-list">
+        ${GROUPS ? go(link('directors/', 0), T(`Claim your listing`), T(`Keep its dates, costs and hours current yourself`)) : ''}
+        ${go(link('suggest/', 0), T(`Add a program`), T(`Not listed yet? Send its name and website`))}
+        ${go(link('suggest/', 0) + '?kind=camp', T(`Add a camp`), T(`Summer camps and camps on days off`))}
+      </div>
+    </div>
+  </div>
+</section>
+${more.length ? `<section class="section" id="more">
+  <h2>${T(`More than weekday afternoons`)}</h2>
+  <p>${T(`After school is where this started. The same listings now cover the rest of a family’s calendar.`)}</p>
+  <div class="mores">
+    ${more.map(([href, name, text, color]) => `<a class="more-card" href="${href}" style="--tc:${color}"><h3>${name}</h3><p>${text}</p><span class="more-go">${T(`Have a look`)}</span></a>`).join('\n    ')}
+  </div>
+</section>` : ''}
 <section class="section" id="browse">
   <h2>${T(`Or start somewhere else`)}</h2>
   <div class="ways">
@@ -1437,18 +1474,6 @@ ${alertsBox(0, { place: 'home', title: T(`Get the dates by email`), lede: T(`Sig
   <h2>${T(`Every listing is dated and sourced`)}</h2>
   <p>${T(`Every listing links to where the information came from and shows the day it was last checked. Nobody pays to be listed. If it saved you an evening of open tabs,`)} <a href="${link('support/', 0)}">${T(`buy me a coffee.`)}</a></p>
 </section>
-${GROUPS ? `<section class="section" id="directors">
-  <div class="panel for-directors">
-    <h2>${T(`Run a program or camp?`)}</h2>
-    <p>${T(`Claim your listing and keep it right yourself. It’s free.`)}</p>
-    <form class="dir-find" action="${link('directors/', 0)}" method="get" role="search">
-      <label for="dir-q">${T(`Find your listing`)}</label>
-      <div class="dir-find-row"><input id="dir-q" name="q" type="search" autocomplete="off" placeholder="Your program’s name"><button class="btn primary" type="submit">${T(`Find it`)}</button></div>
-    </form>
-    ${claimBenefits(0)}
-    <p><a href="${link('directors/', 0)}">${T(`How claiming works`)}</a></p>
-  </div>
-</section>` : ''}
 ${cfg.builtBy ? `<section class="section" id="who">
   <h2>${T(`Who built this`)}</h2>
   <p>${T(cfg.builtBy.bio)}</p>
@@ -1588,7 +1613,7 @@ function privacyPage() {
     <li>${T(`Claiming uses the same account. We check one thing: that the email address you signed in with is at the listing’s own website address. We keep which listing you claimed, when, and whether the claim stands.`)}</li>
     <li>${T(`The public sees a “Claimed” mark on the listing and nothing about you. Your name and email address are seen only by the person who runs this site.`)}</li>
     <li>${T(`Changes you propose are kept with your claim and emailed to the site’s inbox. They are checked and published by a person, and you are told by email when that happens.`)}</li>
-    <li>${T(`A photo you send for your listing is shrunk in your browser before it leaves your device, kept on our web host, and shown on the listing only after a person approves it. You can replace or remove it at any time. Send only a photo you have the right to use, with permission from the families of any children in it.`)}</li>
+${GROUPS.photos ? `    <li>${T(`A photo you send for your listing is shrunk in your browser before it leaves your device, kept on our web host, and shown on the listing only after a person approves it. You can replace or remove it at any time. Send only a photo you have the right to use, with permission from the families of any children in it.`)}</li>` : ''}
     <li>${T(`You can give up a claim at any time, and deleting your account removes your claims and the changes you proposed.`)}</li>
     <li>${T(`The page where you claim a listing loads Google Analytics and Microsoft Clarity to count visits. The part where you sign in and manage claims is hidden in session recordings.`)}</li>
   </ul>` : ''}
@@ -1960,7 +1985,7 @@ function contactPage() {
   </form>
   <aside class="next">
     <h2>${T(`Other ways`)}</h2>
-    <ul class="plain">
+    <ul class="other-ways">
       ${cfg.contactEmail ? `<li>${T(`Email`)} <a href="mailto:${esc(cfg.contactEmail)}">${esc(cfg.contactEmail)}</a></li>` : ''}
       <li>${T(`A program or camp that’s missing, or a listing that’s wrong:`)} <a href="${link('suggest/', 1)}">${T(`use the suggestion form`)}</a>${T(`, so it reaches the right pile.`)}</li>
       <li>${T(`An idea for the site:`)} <a href="${link('ideas/', 1)}">${T(`request a feature`)}</a>.</li>
@@ -2155,7 +2180,7 @@ ${cards}
 // ---------- share groups (accounts, class codes) ----------
 // "groups" in site.config.json turns them on. While "pilot" is true nothing links to them: the pages exist at
 // /account/ and /groups/, and the block on the roster page only shows in a browser that has visited one of them.
-const GROUPS = cfg.groups && cfg.contactEmail ? { pilot: cfg.groups.pilot !== false, klaviyoList: cfg.groups.klaviyoList || '', google: /^[0-9a-z-]+\.apps\.googleusercontent\.com$/.test(cfg.groups.googleClientId || '') ? cfg.groups.googleClientId : '' } : null;
+const GROUPS = cfg.groups && cfg.contactEmail ? { photos: cfg.groups.photos === true || process.env.PAS_PHOTOS === '1', pilot: cfg.groups.pilot !== false, klaviyoList: cfg.groups.klaviyoList || '', google: /^[0-9a-z-]+\.apps\.googleusercontent\.com$/.test(cfg.groups.googleClientId || '') ? cfg.groups.googleClientId : '' } : null;
 const groupsAttrs = depth => `data-groups data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}" data-api="${PREVIEW ? '' : link('groups/api.php', depth)}"${GROUPS.klaviyoList && ALERTS?.klaviyoKey ? ` data-kl-key="${esc(ALERTS.klaviyoKey)}" data-kl-list="${esc(GROUPS.klaviyoList)}"` : ''}${GROUPS.google && !PREVIEW ? ` data-google="${esc(GROUPS.google)}"` : ''} data-pilot="${GROUPS.pilot ? 1 : 0}"`;
 // ---------- directors: which listings can be claimed, and how ----------
 // Someone who runs a program claims its listing by signing in with an email address at the listing's own website
@@ -2232,16 +2257,16 @@ function accountPage(register = false) {
 const claimBenefits = depth => `<ul class="benefits">
       <li><b>${T(`Keep your dates current.`)}</b> ${T(`Post sign-up openings, deadlines, term dates and camp days as soon as you set them, instead of waiting for us to find them.`)}</li>
       <li><b>${T(`Fix your costs and hours.`)}</b> ${T(`When a price or a pickup time changes, send it once and the listing follows.`)}</li>
-      <li><b>${T(`Add a photo.`)}</b> ${T(`One picture of your space or an activity at the top of your listing.`)}</li>
-      <li><b>${T(`Show parents it’s kept up.`)}</b> ${T(`A “Claimed” mark tells them the listing is looked after by the people who run it.`)}</li>
+${GROUPS.photos ? `      <li><b>${T(`Add a photo.`)}</b> ${T(`One picture of your space or an activity at the top of your listing.`)}</li>
+` : ''}      <li><b>${T(`Show parents it’s kept up.`)}</b> ${T(`A “Claimed” mark tells them the listing is looked after by the people who run it.`)}</li>
     </ul>`;
 function directorsPage() {
   const L = claimListings();
   const hero = `    <h1>${T(`Run a program or camp? Claim your listing.`)}</h1>
-    <p class="lede">${T(`Find your program below and claim it with your work email. Then keep its dates, costs and photo up to date yourself. It’s free, and it takes a couple of minutes.`)}</p>`;
+    <p class="lede">${T(`Find your program below and claim it with your work email. Then keep its dates, costs and hours up to date yourself. It’s free, and it takes a couple of minutes.`)}</p>`;
   const body = `<div ${groupsAttrs(1)} style="display:contents">
   <noscript><p class="ask">${T(`Claiming a listing needs JavaScript turned on.`)}</p></noscript>
-  <div class="g-page" id="claims" data-clarity-mask="true"></div>
+  <div class="g-page" id="claims" data-clarity-mask="true"${GROUPS.photos ? ' data-photos="1"' : ''}></div>
   <script type="application/json" id="claims-data">${JSON.stringify(Object.entries(L).map(([k, v]) => [k, v.n, v.d, v.m === 'match' ? 1 : 0])).replace(/</g, '\\u003c')}</script>
   <section class="section" id="why">
     <h2>${T(`What claiming gets you`)}</h2>
@@ -2252,7 +2277,7 @@ function directorsPage() {
     <ol class="steps">
       <li><b>${T(`Find your listing.`)}</b> ${T(`Search by name above. Every program and summer camp on the site is there.`)}</li>
       <li><b>${T(`Sign in with your work email.`)}</b> ${T(`It has to be an address at your program’s own website: if the listing’s website is example.org, an address ending in @example.org. That is how we know you speak for it. If the addresses match, the claim stands straight away.`)}</li>
-      <li><b>${T(`Send changes when something moves.`)}</b> ${T(`New dates, a new price, a photo. We read each one and update the listing, usually within a few days.`)}</li>
+      <li><b>${T(`Send changes when something moves.`)}</b> ${T(`New dates, a new price, new hours. We read each one and update the listing, usually within a few days.`)}</li>
     </ol>
   </section>
   <section class="notes">
@@ -2261,16 +2286,16 @@ function directorsPage() {
       <li>${T(`A personal address (Gmail, Yahoo and so on) can’t claim a listing, even if it’s the one printed on your flyer. We have no way to tell it apart from anyone else’s.`)}</li>
       <li>${T(`“Continue with Google” works if your work email is a Google account at your program’s address. A personal Gmail account will sign you in, but it can’t claim anything.`)}</li>
       <li>${T(`Some listings sit on a website many people share: a city rec center, a school’s clubs, a program inside a university. Those claims wait for us to say yes, and we may write to ask a question first.`)}</li>
-      <li>${T(`Parents see a “Claimed” mark and your photo on the listing. Your name and email address are never shown.`)}</li>
-      <li>${T(`A claim doesn’t change what the listing says by itself. Changes and photos you send are looked at by a person, then published.`)}</li>
-      <li>${T(`Only send a photo you have the right to use, with permission from the families of any children in it.`)}</li>
-      <li>${T(`Listings are free and stay free. Nobody pays to be listed or to be ranked higher.`)}</li>
+      <li>${T(`Parents see a “Claimed” mark on the listing. Your name and email address are never shown.`)}</li>
+      <li>${T(`A claim doesn’t change what the listing says by itself. Changes you send are looked at by a person, then published.`)}</li>${GROUPS.photos ? `
+      <li>${T(`Only send a photo you have the right to use, with permission from the families of any children in it.`)}</li>` : ''}
+      <li>${T(`Listings are free and stay free. Nobody pays to be listed or to be ranked higher.`)}${GROUPS.photos ? '' : ' ' + T(`Paid extras, such as a photo at the top of your listing, are planned for later.`)}</li>
       <li>${T(`Not on the site yet?`)} <a href="${link('suggest/', 1)}">${T(`Suggest your program`)}</a> ${T(`or`)} <a href="${link('suggest/', 1)}?kind=camp">${T(`your camp`)}</a>${T(`, with its website, and claim it once it’s up.`)}</li>
     </ul>
     <p><a href="${link('privacy/', 1)}#directors">${T(`What we keep about a claim is on the privacy page.`)}</a></p>
   </section>
 </div>`;
-  return layout({ title: 'For program directors: find and claim your listing', description: `Run an after-school program or camp in Philadelphia? Find your ${cfg.siteName} listing, claim it with your work email, and keep its dates, costs and photo up to date. Free.`, pathName: 'directors/', depth: 1, current: null, hero, body, scripts: groupsScript(1) });
+  return layout({ title: 'For program directors: find and claim your listing', description: `Run an after-school program or camp in Philadelphia? Find your ${cfg.siteName} listing, claim it with your work email, and keep its dates, costs and hours up to date. Free.`, pathName: 'directors/', depth: 1, current: null, hero, body, scripts: groupsScript(1) });
 }
 
 // The owner's review page for claims and the changes directors propose, behind the same sign-in as the edit page.
@@ -2466,7 +2491,7 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, listings: claimListings() });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, listings: claimListings(), photos: GROUPS.photos });
   const src = fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8');
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   return src.replace(`'/*CONFIG*/'`, () => `'` + conf.replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`);

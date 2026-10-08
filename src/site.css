@@ -1055,10 +1055,6 @@ ol.steps{margin:10px 0 0;padding-left:1.3em;display:flex;flex-direction:column;g
 pre.edit-ask{white-space:pre-wrap;font:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:8px 0}
 
 /* ---------- for directors: the home page panel, benefits, photos; and the contact page ---------- */
-.for-directors{display:flex;flex-direction:column;gap:12px;border:2px solid var(--line);border-radius:18px;padding:22px 24px;background:var(--surface)}
-.dir-find label{font-weight:700;display:block;margin-bottom:6px}
-.dir-find-row{display:flex;flex-wrap:wrap;gap:8px;max-width:560px}
-.dir-find-row input{font:inherit;flex:1 1 220px;min-width:0;padding:11px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}
 ul.benefits{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px 22px}
 ul.benefits li{border-left:4px solid var(--yellow);padding:2px 0 2px 12px}
 ul.benefits b{display:block}
@@ -1075,5 +1071,45 @@ ul.benefits b{display:block}
 button.linklike{font:inherit;background:none;border:0;padding:0;color:var(--link);text-decoration:underline;cursor:pointer}
 .review-photo{display:block;max-width:420px;width:100%;height:auto;border-radius:12px}
 .review-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
-.for-directors ul.benefits{grid-template-columns:repeat(2,minmax(0,1fr))}
-@media (max-width:640px){.for-directors ul.benefits{grid-template-columns:minmax(0,1fr)}}
+ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+
+/* ---------- home: two "start here" boxes, and the rest of the calendar ---------- */
+.starts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:760px){.starts{grid-template-columns:minmax(0,1fr)}}
+.start{background:var(--surface);border:1px solid var(--line);border-top:6px solid var(--yellow);border-radius:18px;padding:24px 26px 26px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.start.managers{border-top-color:var(--blue)}
+.start .kicker{font-weight:700;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.start h2{font-size:clamp(1.5rem,3.4vw,1.9rem)}
+.start > p{color:var(--muted)}
+.start-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.start-go{display:flex;align-items:center;justify-content:space-between;gap:14px;text-decoration:none;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:14px;padding:13px 16px}
+.start-go::after{content:"";flex:none;width:9px;height:9px;border-right:2.5px solid var(--link);border-bottom:2.5px solid var(--link);transform:rotate(-45deg)}
+.start-go:hover{border-color:var(--link);background:var(--sky-bg)}
+.start-go span{display:flex;flex-direction:column;gap:2px;min-width:0}
+.start-go b{font-family:var(--display);font-stretch:112%;font-weight:750;font-size:1.08rem}
+.start-go small{font-size:.92rem;color:var(--muted)}
+.mores{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:6px}
+.more-card{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--tc);border-radius:16px;padding:20px 22px}
+.more-card:hover{border-color:var(--tc)}
+.more-card p{color:var(--muted)}
+.more-go{margin-top:auto;font-weight:700;color:var(--link);text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- contact: the "other ways" list (a plain list inside a column that numbers its steps) ---------- */
+.next ul.other-ways{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.next ul.other-ways li{display:block;counter-increment:none;border-left:4px solid var(--yellow);padding-left:12px}
+.next ul.other-ways li::before{content:none}
+
+/* ---------- filter rows that scroll sideways: a fade at the edge and an arrow to press ---------- */
+.rail-wrap{position:relative;min-width:0}
+.rail-go{position:absolute;top:50%;z-index:2;width:36px;height:36px;margin-top:-18px;padding:0;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);box-shadow:0 2px 10px rgba(7,21,39,.2);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.rail-go[hidden]{display:none}
+.rail-go::before{content:"";width:9px;height:9px;border-right:2.5px solid currentColor;border-bottom:2.5px solid currentColor;transform:rotate(-45deg);margin-left:-4px}
+.rail-go.prev{left:-6px}
+.rail-go.prev::before{transform:rotate(135deg);margin-left:4px}
+.rail-go.fwd{right:-6px}
+.rail-go:hover{border-color:var(--ink)}
+.rail-wrap::before,.rail-wrap::after{content:"";position:absolute;top:0;bottom:0;width:64px;pointer-events:none;z-index:1;opacity:0;transition:opacity .15s}
+.rail-wrap::before{left:0;background:linear-gradient(270deg,transparent,var(--bg) 62%)}
+.rail-wrap::after{right:0;background:linear-gradient(90deg,transparent,var(--bg) 62%)}
+.rail-wrap.more-left::before,.rail-wrap.more-right::after{opacity:1}
+@media print{.rail-go{display:none}}

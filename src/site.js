@@ -92,6 +92,41 @@
     }, function () { /* offline: no marks */ });
   }
 
+  // ----- filter rows that scroll sideways: show that there is more, and give an arrow to press -----
+  all(document, '.rail').forEach(function (rail) {
+    var wrap = document.createElement('div'); wrap.className = 'rail-wrap';
+    rail.parentNode.insertBefore(wrap, rail); wrap.appendChild(rail);
+    var mk = function (cls, label, dir) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rail-go ' + cls; b.hidden = true;
+      b.setAttribute('aria-label', label);
+      b.addEventListener('click', function () {
+        var by = Math.max(120, Math.round(rail.clientWidth * 0.7)) * dir;
+        var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (rail.scrollBy) rail.scrollBy({ left: by, behavior: calm ? 'auto' : 'smooth' }); else rail.scrollLeft += by;
+      });
+      wrap.appendChild(b);
+      return b;
+    };
+    var name = rail.getAttribute('aria-label') || 'choices';
+    var prev = mk('prev', 'Show earlier ' + name.toLowerCase() + ' choices', -1), fwd = mk('fwd', 'Show more ' + name.toLowerCase() + ' choices', 1);
+    var sync = function () {
+      var left = rail.scrollLeft > 4, right = rail.scrollLeft + rail.clientWidth < rail.scrollWidth - 4;
+      prev.hidden = !left; fwd.hidden = !right;
+      wrap.className = 'rail-wrap' + (left ? ' more-left' : '') + (right ? ' more-right' : '');
+    };
+    rail.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    if (window.ResizeObserver) new window.ResizeObserver(sync).observe(rail);
+    sync(); window.setTimeout(sync, 400);   // again once fonts have settled the widths
+  });
+  // "Find your school" on the home page: go to the search box and put the cursor in it.
+  all(document, 'a[href="#find-school"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var box = document.getElementById('find-school'); if (!box) return;
+      e.preventDefault(); window.scrollTo(0, 0); box.focus();
+    });
+  });
+
   // ----- suggest-a-program form -----
   var form = document.querySelector('#suggest-form');
   if (form) {

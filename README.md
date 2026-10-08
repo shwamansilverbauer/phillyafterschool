@@ -163,6 +163,14 @@ program in `data/programs.json` and its page follows.
 
 ## Finding programs: filters, types and the school finder
 
+The home page opens with two "Start here" boxes, one for parents (find your school, build a schedule, create an
+account) and one for program managers (claim a listing, add a program, add a camp), then a "More than weekday
+afternoons" section that points at weekend classes, day camps and summer camps.
+
+A filter row that is wider than the screen scrolls sideways. `site.js` wraps each `.rail` so it gets a fade at
+the edge that has more and a round arrow button that moves it along; both disappear when there is nothing further
+that way.
+
 Every page that lists programs (a school, a neighborhood, a type, the A to Z list) has the same filter bar:
 search, program type, free or paid, neighborhood and grade. Filters also live in the page address
 (`/programs/?type=music&grade=3`), which is how the home page links into them.
@@ -460,12 +468,15 @@ These are the only parts of the site that store anything about a child on the se
   declined; the director is emailed each time. To apply a change, edit the listing data as usual (or paste it to
   Claude), then mark it published. One account can hold 12 claims and one listing 5 claimants.
   `/directors/` opens on a search of every listing, which works signed out; picking one asks for a sign-in at that
-  listing's address. The home page has a "Run a program or camp?" panel whose search lands there (`?q=`), and a
+  listing's address. The home page's "Program managers" box links there, `?q=` prefills the search, and a
   listing's "Claim this listing" link lands there with the listing picked (`?l=`). "Continue with Google" works for
   a Google Workspace address at the program's own website; a personal Gmail signs in but can claim nothing, and the
   page says so.
   An update is sent in boxes (dates, cost, days and hours, anything else) and reaches the owner as labelled lines.
-  **Photos.** A director can send one photo per listing, with a line describing it and a tick that they have the
+  **Photos are switched off.** They are meant as a paid extra, and there is no paid tier yet, so
+  `"groups": { "photos": false }` (the default) hides the photo form, drops the photo from the list of benefits
+  and makes the server refuse uploads. Set it to `true` to turn the whole thing on; `PAS_PHOTOS=1 node build.mjs`
+  does the same for a test build. How it works when on: a director can send one photo per listing, with a line describing it and a tick that they have the
   right to use it. The browser shrinks it to a JPEG (1600 pixels on the long side) before it leaves the device; the
   server checks it is a JPEG, redraws it, and keeps it in `phillyafterschool-data/photos/`, outside the public
   folder. Nothing shows until the owner publishes it on `/edit/claims/`, where a photo can also be declined or
