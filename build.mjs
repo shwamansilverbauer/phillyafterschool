@@ -369,6 +369,11 @@ if (errors.length) {
 
 // ---------- page shell ----------
 const gtmHead = cfg.gtmId && !PREVIEW ? `<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${esc(cfg.gtmId)}');</script>` : '';
+// Who is looking, in one word: "visitor" (never signed in on this device), "parent" or "manager". It is set before Tag
+// Manager loads, so every visit and event can be split by it, and handed to Clarity as a custom tag. No name, no
+// address, no listing: the word comes from the last sign-in on this device (see noteRole in src/groups.js).
+const roleHead = cfg.gtmId && !PREVIEW ? `<script>(function(w){var r='visitor',s='no';try{var v=localStorage.getItem('pas-role');if(v==='parent'||v==='manager')r=v;if(localStorage.getItem('pas-in')==='1')s='yes'}catch(e){}w.dataLayer=w.dataLayer||[];w.dataLayer.push({pas_role:r,pas_signed_in:s});w.clarity=w.clarity||function(){(w.clarity.q=w.clarity.q||[]).push(arguments)};w.clarity('set','role',r);w.clarity('set','signed_in',s)})(window);</script>
+` : '';
 const gtmBody = cfg.gtmId && !PREVIEW ? `<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${esc(cfg.gtmId)}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>` : '';
 const correctionHref = (subject) => cfg.contactEmail ? `mailto:${cfg.contactEmail}?subject=${encodeURIComponent(subject)}` : null;
 
@@ -505,7 +510,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   const menus = [
     ['Programs', [['programs/', 'After-school programs'], ...(programs.some(p => p.weekend) ? [['weekends/', 'Weekend classes']] : []), ...(daysOff ? [[offPath, 'Day-camp programs']] : []), ...(summerCamps.length ? [['summer-camps/', 'Summer camps']] : [])]],
     ['Search by', [['schools/', 'School'], ['neighborhoods/', 'Neighborhood'], ['types/', 'Program type'], ['programs/#by-day', 'Day of week']]],
-    ['Build a schedule', [['board/', 'After-school schedule'], ...(daysOff ? [[offPath + '#plan', 'Day-camp schedule']] : []), ...(summerCamps.length ? [['summer-schedule/', 'Summer schedule']] : []), ...(GROUPS && daysOff ? [['calendar/', 'My kids’ calendar']] : [])]],
+    ['Build a schedule', [['schedules/', 'All the planners'], ['board/', 'After-school schedule'], ...(daysOff ? [[offPath + '#plan', 'Day-camp schedule']] : []), ...(summerCamps.length ? [['summer-schedule/', 'Summer schedule']] : []), ...(GROUPS && daysOff ? [['calendar/', 'My kids’ calendar']] : [])]],
     ['Suggest', [['suggest/', 'A program'], ['suggest/?kind=camp', 'A camp'], ['suggest/?kind=correction', 'An update to a listing'], ['ideas/', 'A feature'], ['schools/request/', 'A school']]],
   ];
   const nav = menus.map(([label, items]) => {
@@ -514,7 +519,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   }).join('') + `<a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
     ? `<a class="nav-cta when-out" href="${link('register/', depth)}">Create a free account</a><a class="nav-cta when-in" href="${link('account/', depth)}">Your account</a>`
     : `<a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`}`;
-  const head = `${first}${fragment || quiet ? '' : gtmHead + '\n'}<title>${esc(fullTitle)}</title>
+  const head = `${first}${fragment || quiet ? '' : roleHead + gtmHead + '\n'}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${esc(canonical)}">${noindex ? '\n<meta name="robots" content="noindex">' : ''}
 <meta property="og:title" content="${esc(fullTitle)}">
@@ -590,7 +595,7 @@ ${body}
       </ul>
     </div>
     <div>
-      <h2><a href="${link('board/', depth)}">${T(`Your family`)}</a></h2>
+      <h2><a href="${link('schedules/', depth)}">${T(`Your family`)}</a></h2>
       <ul>
         <li><a href="${link('board/', depth)}">${T(`After-school schedule`)}</a></li>
         ${daysOff ? `<li><a href="${link(offPath, depth)}#plan">${T(`Day-camp schedule`)}</a></li>` : ''}
@@ -1310,8 +1315,8 @@ const finderBox = (depth, label, withPrograms = false) => `<div class="find" dat
 
 function schoolsPage() {
   const rows = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => schoolRow(s, 1)).join('\n');
-  const hero = `    <h1>${T(`Schools`)}</h1>
-    <p class="lede">${T(`Search for any district or charter school in Philadelphia. The ones below already have a page; the rest you can ask for.`)}</p>
+  const hero = `    <h1>${T(`Find your school`)}</h1>
+    <p class="lede">${T(`Pick your child’s school to see every program that runs in the building, picks up at dismissal or is close enough to walk to.`)}</p>
     ${finderBox(1)}`;
   const body = `<section class="section" id="covered">
   <h2>${T(`Covered so far`)}</h2>
@@ -1645,9 +1650,9 @@ function homePage() {
       <div class="start-head">${who('parent')}<div><p class="kicker">${T(`Start here`)}</p> <h2>${T(`Parents`)}</h2></div></div>
       <p>${T(`See what works with your child’s school, then put the week together.`)}</p>
       <div class="start-list">
-        ${go('#find-school', T(`Find your school`), T(`Every program that’s there, picks up or is nearby`), 'school')}
-        ${go(link('board/', 0), T(`Build a schedule`), T(`A week of programs, and a card to send`), 'week')}
-        ${GROUPS ? `<span class="when-out" style="display:contents">${go(link('register/', 0), T(`Create a free account`), T(`Keep your school and week on every device`), 'person')}</span><span class="when-in" style="display:contents">${go(link('account/', 0), T(`Your account`), T(`Your school, your week and who you share it with`), 'person')}</span>` : ''}
+        ${go(link('schools/', 0), T(`Find your school`), T(`Every program that’s there, picks up or is nearby`), 'school')}
+        ${go(link(schedulesPath, 0), T(`Build a schedule`), T(`The school week, days off and the summer`), 'week')}
+        ${GROUPS ? `<span class="when-out" style="display:contents">${go(link('register/', 0), T(`Create a free account`), T(`Keep every plan, and get the whole year in one calendar`), 'person')}</span><span class="when-in" style="display:contents">${go(link('account/', 0), T(`Your account`), T(`Your plans, your kids’ calendar and who you share with`), 'person')}</span>` : ''}
       </div>
     </div>
     <div class="start managers">
@@ -1933,6 +1938,8 @@ function privacyPage() {
     <li>${T(`“My kids’ calendar” is drawn in your browser, for you alone, from the plans on your device and the ones in your profile. Opening it stores nothing new and sends nothing about your plans. It has no link of its own, so nobody else can open it. A picture or calendar file you save is a copy on your device that we never receive. So it can tell you when a date changes, the page remembers what your last file held, on your device only. Google Analytics and Microsoft Clarity are not loaded on it.`)}</li>
     <li>${T(`Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.`)}</li>
     <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
+    <li>${T(`The email list also notes whether an account belongs to a parent or to someone who manages a program, so each gets only the news meant for them. For a manager it notes the name of the listing they hold.`)}</li>
+    <li>${T(`Once you have signed in, this device remembers one word, “parent” or “manager”. On the pages that load analytics, that word is passed along so we can count the two groups separately. Your name, your email address and anything in your profile are not.`)}</li>
     <li>${T(`There are no passwords. We email you a link and a 6-digit code; each works once and for 15 minutes. A cookie then keeps that device signed in for 30 days, and you can sign out everywhere from your account page.`)}</li>
     <li>${T(`When you add a week to a group, we store the child’s first name as you type it and the programs on their current and upcoming weeks. We do not store a last name, school, address, pickup time, note, teacher’s name, photo, price or day-off plan.`)}</li>
     <li>${T(`Nobody can find a group or ask to join one. The person who made it invites email addresses, and only someone signed in with an invited address, who also has the code from the invitation, gets in. A group isn’t listed anywhere, and its link shows nothing to anyone else.`)}</li>
@@ -2581,10 +2588,10 @@ function accountPage(register = false) {
   // form on the other. /account/ is where you log in and, once signed in, your profile; both of its headings are in
   // the page and the right one shows before it paints. Someone already signed in who opens /register/ is sent on.
   const hero = register ? `    <h1>${T(`Create your free account`)}</h1>
-    <p class="lede">${T(`Save your school, your kids’ grades and your week, and share a week with the people who need it. It takes about a minute, and there’s no password to remember.`)}</p>`
+    <p class="lede">${GROUPS && daysOff ? T(`Keep every plan you build, the school week, the days off and the summer, and see them together in one private calendar for the whole year. It takes about a minute, and there’s no password to remember.`) : T(`Save your school, your kids’ grades and your week, and share a week with the people who need it. It takes about a minute, and there’s no password to remember.`)}</p>`
     : `    <h1><span class="when-out">${T(`Log in to your account`)}</span><span class="when-in">${T(`Your account`)}</span></h1>
-    <p class="lede when-out">${T(`Your school, your kids’ grades and your week, on any device. There’s no password to remember.`)} ${T(`New here?`)} <a href="${link('register/', 1)}">${T(`Create a free account`)}</a></p>
-    <p class="lede when-in">${T(`Keep your school and your child’s week in a profile, so they’re on every device you sign in on, and share a week with one person. Everything else on the site works without an account.`)}</p>`;
+    <p class="lede when-out">${T(`Your school, your plans and your kids’ calendar for the year, on any device. There’s no password to remember.`)} ${T(`New here?`)} <a href="${link('register/', 1)}">${T(`Create a free account`)}</a></p>
+    <p class="lede when-in">${T(`Keep your school and your plans in a profile, so they’re on every device you sign in on, see the whole year in one calendar, and share a week with one person. Everything else on the site works without an account.`)}</p>`;
   const art = `<svg viewBox="0 0 520 300" aria-hidden="true" focusable="false">
   <defs><g id="acct-week"><rect width="120" height="152" rx="11" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/><path d="M0 11a11 11 0 0 1 11-11h98a11 11 0 0 1 11 11v17H0z" fill="#0F4D90"/><text x="11" y="19" font-size="11" font-weight="800" fill="#FFFFFF" font-family="Archivo, Arial, sans-serif">Sam’s week</text><circle cx="17" cy="44" r="7.5" fill="#E3EEFA"/><text x="17" y="47.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">M</text><rect x="31" y="38" width="62" height="12" rx="6" fill="#1F7A3A"/><circle cx="17" cy="65" r="7.5" fill="#E3EEFA"/><text x="17" y="68.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">T</text><rect x="31" y="59" width="48" height="12" rx="6" fill="#B4237A"/><circle cx="17" cy="86" r="7.5" fill="#E3EEFA"/><text x="17" y="89.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">W</text><rect x="31" y="80" width="70" height="12" rx="6" fill="#0E7C86"/><circle cx="17" cy="107" r="7.5" fill="#E3EEFA"/><text x="17" y="110.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">T</text><rect x="31" y="101" width="40" height="12" rx="6" fill="#6B3FA0"/><circle cx="17" cy="128" r="7.5" fill="#E3EEFA"/><text x="17" y="131.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">F</text><rect x="31" y="122" width="56" height="12" rx="6" fill="#C2410C"/></g></defs>
   <rect x="238" y="20" width="250" height="186" rx="13" class="art-frame"/>
@@ -2606,10 +2613,10 @@ function accountPage(register = false) {
       <div class="acct-art">${art}</div>
       <h2 id="acct-why-h">${T(`What an account gives you`)}</h2>
       <ul class="acct-points">
-        <li><b>${T(`Save your school.`)}</b> ${T(`Every list starts from it, on any device you sign in on.`)}</li>
-        <li><b>${T(`Save your kids’ grades.`)}</b> ${T(`Lists open on the programs that take them.`)}</li>
-        <li><b>${T(`Keep your week.`)}</b> ${T(`Build it on your phone tonight, find it on your laptop tomorrow.`)}</li>
-        ${GROUPS && daysOff ? `<li><b>${T(`See the whole year.`)}</b> ${T(`Your week, the days off, the summer and every sign-up date in one private calendar.`)}</li>` : ''}
+        ${GROUPS && daysOff ? `<li><b>${T(`See the whole year in one calendar.`)}</b> ${T(`“My kids’ calendar” puts the school week, every day off, the camp weeks and each sign-up date in date order. Only you can open it.`)}</li>
+        <li><b>${T(`Put it on your phone.`)}</b> ${T(`One calendar file for the year that you can bring up to date, and a picture of any month for the fridge.`)}</li>
+        <li><b>${T(`Keep every plan.`)}</b> ${T(`The week, the days off and the summer: build them on your phone tonight, find them on your laptop tomorrow.`)}</li>` : `<li><b>${T(`Keep your week.`)}</b> ${T(`Build it on your phone tonight, find it on your laptop tomorrow.`)}</li>`}
+        <li><b>${T(`Save your school and grades.`)}</b> ${T(`Every list starts from your school and opens on the programs that take your kids.`)}</li>
         <li><b>${T(`Share a week with one person.`)}</b> ${T(`A grandparent or a sitter signs in to see it, and you can take it back.`)}</li>${GROUPS.pilot ? '' : `
         <li><b>${T(`Share with a small group.`)}</b> ${T(`A few families you invite by email see each other’s weeks. Nobody else can find the group or ask to join.`)}</li>`}
       </ul>
@@ -2629,7 +2636,7 @@ function accountPage(register = false) {
   </section>
   <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })) }).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to save your school, your kids’ grades and your week, and to share a week.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: !register, scripts: groupsScript(1) });
+  return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to keep your week, days-off and summer plans, and see the whole year in one private calendar.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: !register, scripts: groupsScript(1) });
 }
 // A page whose address changed: send the visitor on, keeping anything after the address (?l=, ?q=).
 const movedPage = (to, depth) => `<!doctype html>
@@ -2641,14 +2648,58 @@ const movedPage = (to, depth) => `<!doctype html>
 `;
 
 // ---------- for the people who manage a program: find a listing and claim it ----------
-const claimBenefits = depth => `<ul class="benefits">
-      <li><b>${T(`Keep your dates current.`)}</b> ${T(`Post sign-up openings, deadlines, term dates and camp days as soon as you set them, instead of waiting for us to find them.`)}</li>
-      <li><b>${T(`Say whether there’s space.`)}</b> ${T(`Mark your listing “Spots open”, “Waitlist” or “Full”. It shows to parents straight away, with the date.`)}</li>
-      <li><b>${T(`See your numbers.`)}</b> ${T(`How many times your listing was opened this month, how many clicks went on to your sign-up page and website, and how many families put you on a plan.`)}</li>
-      <li><b>${T(`Fix your costs and hours.`)}</b> ${T(`When a price or a pickup time changes, send it once and the listing follows.`)}</li>
-${GROUPS.photos ? `      <li><b>${T(`Add a photo.`)}</b> ${T(`One picture of your space or an activity at the top of your listing.`)}</li>
-` : ''}      <li><b>${T(`Show parents it’s kept up.`)}</b> ${T(`A “Claimed” mark tells them the listing is looked after by the people who run it.`)}</li>
-    </ul>`;
+// What claiming gets you, in the order the example listing beside it is numbered.
+const CLAIM_GETS = () => [
+  ['dates', T(`Keep your dates current.`), T(`Post sign-up openings, deadlines, term dates and camp days as soon as you set them, instead of waiting for us to find them.`)],
+  ['space', T(`Say whether there’s space.`), T(`Mark your listing “Spots open”, “Waitlist” or “Full”. It shows to parents straight away, with the date.`)],
+  ['numbers', T(`See your numbers.`), T(`How many times your listing was opened this month, how many clicks went on to your sign-up page and website, and how many families put you on a plan.`)],
+  ['costs', T(`Fix your costs and hours.`), T(`When a price or a pickup time changes, send it once and the listing follows.`)],
+  ...(GROUPS.photos ? [['photo', T(`Add a photo.`), T(`One picture of your space or an activity at the top of your listing.`)]] : []),
+  ['claimed', T(`Show parents it’s kept up.`), T(`A “Claimed” mark tells them the listing is looked after by the people who run it.`)],
+];
+const claimBenefits = () => `<ol class="benefits">
+${CLAIM_GETS().map(([, name, text], i) => `      <li><i class="demo-n" aria-hidden="true">${i + 1}</i><b>${name}</b> ${text}</li>`).join('\n')}
+    </ol>`;
+// A picture of a claimed listing, built from the same parts a real one uses. The program is invented, and says so.
+function claimDemo() {
+  const at = Object.fromEntries(CLAIM_GETS().map(([k], i) => [k, `<i class="demo-n" aria-hidden="true">${i + 1}</i>`]));
+  const bars = [3, 5, 4, 7, 6, 2, 1, 6, 8, 9, 7, 10, 4, 3, 8, 11, 9, 12, 10, 5, 4, 9, 13, 12, 14, 11, 6, 5, 12, 15];
+  const spark = `<svg class="claim-spark" viewBox="0 0 300 44" preserveAspectRatio="none" focusable="false">${bars.map((v, i) => { const h = Math.max(3, Math.round(v / 15 * 40)); return `<rect x="${i * 10 + 1}" y="${44 - h}" width="8" height="${h}" rx="2"/>`; }).join('')}</svg>`;
+  const photo = GROUPS.photos ? `<div class="demo-photo">${at.photo}<svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="400" height="120" fill="#F6E7C8"/><rect y="86" width="400" height="34" fill="#D9B98A"/><rect x="26" y="20" width="74" height="52" rx="4" fill="#FFFFFF" stroke="#B88A00" stroke-width="3"/><path d="M36 62l16-20 12 13 9-8 17 15z" fill="#2C8444"/><circle cx="84" cy="34" r="6" fill="#F3C613"/><rect x="120" y="14" width="56" height="66" rx="4" fill="#FFFFFF" stroke="#B4237A" stroke-width="3"/><circle cx="148" cy="42" r="15" fill="#B4237A"/><circle cx="148" cy="42" r="7" fill="#F3C613"/><rect x="214" y="60" width="150" height="10" rx="3" fill="#8A5A2B"/><rect x="226" y="70" width="8" height="34" fill="#8A5A2B"/><rect x="344" y="70" width="8" height="34" fill="#8A5A2B"/><rect x="236" y="36" width="22" height="24" rx="4" fill="#1763B8"/><rect x="266" y="42" width="18" height="18" rx="4" fill="#C2410C"/><rect x="292" y="32" width="20" height="28" rx="4" fill="#2C8444"/><path d="M322 60V30M318 30h8" stroke="#0B2140" stroke-width="3" stroke-linecap="round"/><path d="M332 60V26M328 26h8" stroke="#6B3FA0" stroke-width="3" stroke-linecap="round"/></svg></div>` : '';
+  return `<figure class="claim-demo">
+      <div class="demo-page" aria-hidden="true">
+        <div class="demo-bar"><i></i><i></i><i></i><span>${esc(cfg.siteUrl.replace(/^https?:\/\//, ''))}/programs/your-program/</span></div>
+        <div class="demo-hero">
+          <p class="demo-name">${T(`Maple Street Arts Club`)}</p>
+          <p class="demo-what">${T(`Painting, clay and printmaking after school, with pickup from two schools`)}</p>
+          <p class="demo-chips"><span>${T(`Art`)}</span><span>${T(`Grades`)} <b>K ${T(`to`)} 5</b></span><span class="claimed-mark"><b>${T(`Claimed`)}</b> ${T(`by the people who run it`)}${at.claimed}</span><span class="space-mark open"><b>${T(`Spots open`)}</b> ${T(`as of Oct 6`)}${at.space}</span></p>
+        </div>
+        <div class="demo-body">
+          ${photo}
+          <div class="strip">${GRADES.map(g => `<i class="cell${['K', '1', '2', '3', '4', '5'].includes(String(g)) ? ' on' : ''}">${g}</i>`).join('')}</div>
+          <dl>
+            <dt>${T(`Hours`)}</dt><dd>${T(`Monday to Thursday, dismissal to 6 pm`)}${at.costs}</dd>
+            <dt>${T(`Cost`)}</dt><dd>${T(`$95 a week, with a sibling discount`)}</dd>
+            <dt>${T(`Dates`)}</dt><dd><b>${T(`Winter term sign-up opens November 12`)}</b>${at.dates}<br><span class="demo-link">${T(`Add to calendar`)}</span></dd>
+          </dl>
+          <p class="demo-actions"><span class="btn primary">${T(`Sign up`)}</span><span class="btn">${T(`Website`)}</span></p>
+        </div>
+      </div>
+      <div class="demo-stats" aria-hidden="true">
+        <p class="demo-only">${T(`Only you see this`)}${at.numbers}</p>
+        <div class="claim-stats">
+          <h4>${T(`Your listing, last 30 days`)}</h4>
+          <div class="claim-nums">
+            <div class="claim-num"><b>412</b><span>${T(`times your listing was opened`)}</span></div>
+            <div class="claim-num"><b>57</b><span>${T(`clicks to sign up`)}</span></div>
+            <div class="claim-num"><b>23</b><span>${T(`times it was put on a family’s plan`)}</span></div>
+          </div>
+          ${spark}
+        </div>
+      </div>
+      <figcaption>${T(`An example of a claimed listing. The program and its numbers are made up.`)}</figcaption>
+    </figure>`;
+}
 function directorsPage() {
   const L = claimListings();
   const hero = `    <h1>${T(`Run a program or camp? Claim your listing.`)}</h1>
@@ -2659,7 +2710,11 @@ function directorsPage() {
   <script type="application/json" id="claims-data">${JSON.stringify(Object.entries(L).map(([k, v]) => [k, v.n, v.d, v.m === 'match' ? 1 : 0])).replace(/</g, '\\u003c')}</script>
   <section class="section" id="why">
     <h2>${T(`What claiming gets you`)}</h2>
-    ${claimBenefits(1)}
+    <p>${T(`Your listing is already on the site, and parents are already reading it. Claim it and it becomes yours to keep right.`)}</p>
+    <div class="claim-show">
+      ${claimDemo()}
+      ${claimBenefits()}
+    </div>
   </section>
   <section class="section">
     <h2>${T(`How claiming works`)}</h2>
@@ -3369,7 +3424,7 @@ $topListings = array(); $hitsSince = '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
+$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -3387,6 +3442,17 @@ if ($have) {
   foreach (array(${GRADES.map(g => `'${g}'`).join(', ')}) as $g) { if (isset($byGrade[$g])) $gradeLine .= ($gradeLine === '' ? '' : ', ') . $g . ': ' . $byGrade[$g]; }
   $accounts = $n('SELECT COUNT(*) FROM users');
   $tiles[] = array($accounts, 'accounts', $n('SELECT COUNT(*) FROM users WHERE created > ?', array($t - 7 * 86400)) . ' new in 7 days, ' . $n('SELECT COUNT(*) FROM users WHERE created > ?', array($t - 30 * 86400)) . ' in 30');
+  // Parents and program managers. A manager holds a claim (approved or waiting) or made the account on the managers' page.
+  $isMgr = "(%s EXISTS (SELECT 1 FROM claims c WHERE c.user_id = u.id AND c.status != 'declined'))";
+  $mgr = function ($since) use ($db, $isMgr) {
+    foreach (array("u.origin = 'managers' OR", '') as $door) {   // the second try is for a database from before accounts noted their door
+      try { $st = $db->prepare('SELECT COUNT(*) FROM users u WHERE u.created > ? AND ' . sprintf($isMgr, $door)); $st->execute(array($since)); return (int) $st->fetchColumn(); } catch (Exception $e) { /* try the next */ }
+    }
+    return 0;
+  };
+  $managers = $mgr(0);
+  $tiles[] = array($accounts - $managers, 'parents with an account', ($n('SELECT COUNT(*) FROM users WHERE created > ?', array($t - 30 * 86400)) - $mgr($t - 30 * 86400)) . ' new in 30 days');
+  $tiles[] = array($managers, 'program managers with an account', $mgr($t - 30 * 86400) . ' new in 30 days. ' . $n("SELECT COUNT(DISTINCT user_id) FROM claims WHERE status = 'ok'") . ' hold a claimed listing, ' . $n("SELECT COUNT(DISTINCT listing) FROM claims WHERE status = 'ok'") . ' listings claimed');
   $tiles[] = array($n('SELECT COUNT(DISTINCT user_id) FROM sessions WHERE seen > ?', array($t - 30 * 86400)), 'people signed in during the last 30 days', '');
   $tiles[] = array($n("SELECT COUNT(*) FROM users WHERE via = 'google'"), 'accounts made with Google', ($accounts - $n("SELECT COUNT(*) FROM users WHERE via = 'google'")) . ' made with an emailed code');
   $tiles[] = array($n('SELECT COUNT(*) FROM users WHERE listed = 1'), 'accounts added to the email list', $n("SELECT COUNT(*) FROM users WHERE first = ''") . ' accounts haven’t added a name yet');
@@ -3649,6 +3715,73 @@ const summerPlan = (() => {
 // no address of its own for any family: nothing about a child is ever in the page that is served, or in a link.
 const yearPath = 'calendar/';
 const YEAR_PAGE = !!(GROUPS && daysOff);
+// ---------- the planners in one place: the week, the days off, the summer, and the calendar they add up to ----------
+const schedulesPath = 'schedules/';
+function schedulesPage() {
+  const D = 1;
+  const daysLeft = offDays.reduce((n, d) => n + d.dates.length, 0);
+  const weeks = summerCamps.length ? summerPlan.weeks.length : 0;
+  const ICON = {
+    week: 'M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zM5 9.5h14V19H5zm2 2.5v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2z',
+    tent: 'M12 3 1.5 20h21zm0 7 2.6 8H9.4z',
+    sun: 'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM11 1h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8L7 8.4zm11.4 11.4 1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4 7 15.6l1.4 1.4-2.8 2.8zM15.6 7l2.8-2.8 1.4 1.4L17 8.4z',
+    year: 'M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zM5 9.5h14V19H5zm2.6 4.9 2.9 2.9 5.9-5.9-1.4-1.4-4.5 4.5-1.5-1.5z',
+  };
+  // A small picture of what each planner makes. Drawn, not photographed: no real child's plan is shown anywhere.
+  const pill = (x, y, w, c) => `<rect x="${x}" y="${y}" width="${w}" height="11" rx="5.5" fill="${c}"/>`;
+  const ART = {
+    week: ['M', 'T', 'W', 'T', 'F'].map((d, i) => `<g transform="translate(${14 + i * 51} 14)"><rect width="45" height="82" rx="9" class="pa-card"/><text x="22.5" y="19" text-anchor="middle" class="pa-day">${d}</text>${pill(6, 30, 33, ['#1F7A3A', '#B4237A', '#0E7C86', '#6B3FA0', '#C2410C'][i])}<rect x="6" y="48" width="${[26, 33, 20, 30, 24][i]}" height="6" rx="3" class="pa-line"/><rect x="6" y="60" width="${[33, 18, 28, 22, 31][i]}" height="6" rx="3" class="pa-line"/></g>`).join(''),
+    off: `<rect x="14" y="10" width="252" height="90" rx="10" class="pa-card"/>${[0, 1, 2, 3].map(r => [0, 1, 2, 3, 4, 5, 6].map(c => { const on = [[0, 1], [1, 3], [1, 4], [3, 0]].some(([a, b]) => a === r && b === c); return `<rect x="${26 + c * 33}" y="${20 + r * 19}" width="28" height="14" rx="4" ${on ? 'fill="#F3C613"' : 'class="pa-cell"'}/>${on ? `<rect x="${30 + c * 33}" y="${25 + r * 19}" width="20" height="4" rx="2" fill="${['#0E7C86', '#B4237A', '#B4237A', '#1F7A3A'][[[0, 1], [1, 3], [1, 4], [3, 0]].findIndex(([a, b]) => a === r && b === c)]}"/>` : ''}`; }).join('')).join('')}`,
+    sum: `<rect x="14" y="10" width="252" height="90" rx="10" class="pa-card"/>${Array.from({ length: 10 }, (_, i) => `<rect x="${24 + i * 23.5}" y="20" width="19" height="6" rx="3" class="pa-line"/>`).join('')}${pill(24, 36, 66, '#2C8444')}${pill(94.5, 36, 42.5, '#C2410C')}${pill(141.5, 36, 19, '#6B3FA0')}<rect x="165" y="36" width="19" height="11" rx="5.5" class="pa-gap"/>${pill(188.5, 36, 66, '#0E7C86')}${pill(24, 58, 42.5, '#B4237A')}${pill(71, 58, 89.5, '#2C8444')}${pill(165, 58, 42.5, '#1763B8')}<rect x="212" y="58" width="19" height="11" rx="5.5" class="pa-gap"/>${pill(235.5, 58, 19, '#C2410C')}<rect x="24" y="80" width="90" height="6" rx="3" class="pa-line"/>`,
+    year: [['NOV', '3', '#F3C613', 150], ['JAN', '12', '#1763B8', 120], ['JUN', '22', '#2C8444', 164]].map(([m, d, c, w], i) => `<g transform="translate(14 ${10 + i * 31})"><rect width="252" height="26" rx="8" class="pa-card"/><rect x="5" y="4" width="34" height="18" rx="5" fill="${c}"/><text x="22" y="17" text-anchor="middle" class="pa-date"${c === '#F3C613' ? ' fill="#2A2100"' : ' fill="#FFFFFF"'}>${d}</text><text x="49" y="11.5" class="pa-mon">${m}</text><rect x="49" y="15" width="${w}" height="6" rx="3" class="pa-line"/></g>`).join(''),
+  };
+  const art = k => `<div class="plan-art" aria-hidden="true"><svg viewBox="0 0 280 110" focusable="false">${ART[k]}</svg></div>`;
+  const icon = k => `<span class="plan-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="${ICON[k]}"/></svg></span>`;
+  const card = ({ k, artKey, color, kicker, name, text, points, cta, id }) => `<article class="plan-card" id="${id}" style="--tc:${color}">
+      ${art(artKey)}
+      <div class="plan-head">${icon(k)}<div><p class="kicker">${kicker}</p><h2>${name}</h2></div></div>
+      <p>${text}</p>
+      <ul class="plan-points">${points.map(x => `<li>${x}</li>`).join('')}</ul>
+      <p class="plan-go">${cta}</p>
+    </article>`;
+  const btn = (href, label, what) => `<a class="btn primary" href="${href}">${label}</a>`;
+  const cards = [
+    card({ k: 'week', artKey: 'week', id: 'week', color: '#1763B8', kicker: T(`Monday to Friday`), name: T(`Build your week`),
+      text: T(`Put a program on each afternoon and see the whole week in one place. More than one child? Each gets their own.`),
+      points: [T(`Add programs day by day, or roll a themed week to start from`), T(`See what the week comes to, from each program’s published prices`), T(`Turn it into one picture to text, print, or hand to a teacher`)],
+      cta: btn(link('board/', D), T(`Build your week`), 'week') }),
+    daysOff ? card({ k: 'tent', artKey: 'off', id: 'days-off', color: '#B88A00', kicker: daysLeft ? T(`{n} days off still to come`, { n: daysLeft }) : T(`Days school is closed`), name: T(`Build your day-camp plan`),
+      text: T(`Every day district schools are closed this year, and the {n} programs that run a camp on them.`, { n: campPrograms.length }),
+      points: [T(`See who’s open on each day off, break by break`), T(`Pick a camp, or a day at home, for each child`), T(`Save it as a calendar picture, or put the days in your phone’s calendar`)],
+      cta: btn(link(offPath, D) + '#plan', T(`Plan the days off`), 'daysoff') }) : '',
+    summerCamps.length ? card({ k: 'sun', artKey: 'sum', id: 'summer', color: '#2C8444', kicker: T(`{n} weeks of summer`, { n: weeks }), name: T(`Build your summer`),
+      text: T(`The weeks between the last day of school and Labor Day, and which of {n} camps run in each one.`, { n: summerCamps.length }),
+      points: [T(`See on one chart which camps run each week`), T(`Line up a camp for every week, child by child, and see what it adds up to`), T(`Make it a calendar picture, or put the weeks in your phone’s calendar`)],
+      cta: btn(link(summerPath, D), T(`Plan your summer`), 'summer') }) : '',
+    YEAR_PAGE ? card({ k: 'year', artKey: 'year', id: 'year', color: '#6B3FA0', kicker: T(`With a free account`), name: T(`My kids’ calendar`),
+      text: T(`The three plans above, added up: the school week, every day off, the camp weeks and the sign-up dates, in date order for the whole year.`),
+      points: [T(`One calendar file for your phone, which you can bring up to date later`), T(`A picture of any month to send or print`), T(`Private: it has no link, and only you can open it`)],
+      cta: `<span class="when-out">${btn(link('register/', D) + '?next=calendar', T(`Create a free account`), 'year_register')}</span><span class="when-in">${btn(link(yearPath, D), T(`Open my kids’ calendar`), 'year')}</span>` }) : '',
+  ].filter(Boolean);
+  const hero = `    <h1>${T(`Build a schedule`)}</h1>
+    <p class="lede">${T(`Three planners, one for each part of a family’s year: the school week, the days school is closed, and the summer. All three are free and work without an account.`)}</p>`;
+  const body = `<section class="section" id="planners">
+  <div class="plans">
+    ${cards.join('\n    ')}
+  </div>
+</section>
+<section class="notes">
+  <h2>${T(`How the planners work`)}</h2>
+  <ul>
+    <li>${T(`Nothing to put on a plan yet?`)} <a href="${link('schools/', D)}">${T(`Find your school`)}</a> ${T(`to see what works with it, or`)} <a href="${link('programs/', D)}">${T(`look through every program`)}</a>.</li>
+    <li>${T(`A plan stays on the phone or computer you made it on. Nothing about your child is sent to us.`)}</li>${GROUPS ? `
+    <li>${T(`With a free account you can keep each plan in your profile, so it’s on every device you sign in on.`)} <a class="when-out" href="${link('register/', D)}">${T(`Create a free account`)}</a></li>` : ''}
+    <li>${T(`Days, hours and prices come from each program’s own website. Check with the program before you count on a spot.`)}</li>
+  </ul>
+</section>`;
+  return layout({ title: 'Build a schedule: the week, days off and summer', description: `Free planners for Philadelphia families: build the after-school week, plan the days school is closed, and line up summer camps week by week.`, pathName: schedulesPath, depth: D, current: schedulesPath, hero, body });
+}
+
 function calendarPage() {
   const D = 1, P = summerCamps.length ? summerPlan : null;
   const shortHours = c => String(c.hours || '').split(/\. /)[0].replace(/\.$/, '');
@@ -4059,6 +4192,7 @@ write('ideas/thanks/index.html', ideasThanksPage());
 write('contact/index.html', contactPage());
 write('contact/thanks/index.html', contactThanksPage());
 write('board/index.html', boardPage());
+write(schedulesPath + 'index.html', schedulesPage());
 if (daysOff) write(offPath + 'index.html', daysOffPage());
 if (summerCamps.length) write(campsPath + 'index.html', summerCampsPage());
 for (const c of summerCamps) write(campPath(c) + 'index.html', campPage(c));
@@ -4110,7 +4244,7 @@ if (!PREVIEW) {
   write('data/alerts.json', JSON.stringify(alertsFeed(), null, 2));   // read by scripts/send-alerts.mjs once a day
   const latest = programs.map(p => p.lastVerified).sort().pop();
   const urls = [['', latest], ['schools/', latest], ...schools.map(s => [s.id + '/', latest]), ['types/', latest], ...liveTypes().map(t => [`types/${t.id}/`, latest]), ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]), ['neighborhoods/', latest], ...hoods.map(h => [hoodPath(h), latest]),
-    ...[...(daysOff ? [offPath] : []), ...(summerCamps.length ? [campsPath, summerPath, ...summerCamps.map(campPath)] : []), ...(SCHOOL_PAGES ? uncoveredIndexed().map(uncoveredPath) : []), ...(weekendPrograms.length ? [weekendPath] : []), ...(ALERTS ? [alertsPath] : []), 'board/', 'suggest/', ...(GROUPS ? ['managers/'] : []), 'ideas/', 'review/', 'about/', 'contact/', 'privacy/', ...(cfg.termsLive === true ? ['terms/'] : []), 'support/'].map(u => [u, latest])];
+    ...[...(daysOff ? [offPath] : []), ...(summerCamps.length ? [campsPath, summerPath, ...summerCamps.map(campPath)] : []), ...(SCHOOL_PAGES ? uncoveredIndexed().map(uncoveredPath) : []), ...(weekendPrograms.length ? [weekendPath] : []), ...(ALERTS ? [alertsPath] : []), schedulesPath, 'board/', 'suggest/', ...(GROUPS ? ['managers/'] : []), 'ideas/', 'review/', 'about/', 'contact/', 'privacy/', ...(cfg.termsLive === true ? ['terms/'] : []), 'support/'].map(u => [u, latest])];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
   const bare = cfg.siteUrl.replace(/^https?:\/\//, '');

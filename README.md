@@ -432,7 +432,8 @@ To remove a review, delete its entry. Cards show the average and the reviews for
 
 ## The menu
 
-The header has four groups that open (Programs, Search by, Build a schedule, Suggest), then About and the
+The header has four groups that open (Programs, Search by, Build a schedule, Suggest; the first item under
+Build a schedule is `/schedules/`, the page that introduces all the planners), then About and the
 "Help the site keep going" button, which goes to the support page. The groups are defined in `layout()` in
 `build.mjs` as a list of labels and links. Each is a `<details>` element, so it opens without scripts; the
 script only closes the others. From 1100px wide the logo sits on the left and the menu on the right, on one
@@ -724,8 +725,11 @@ These are the only parts of the site that store anything about a child on the se
   taken down. A published photo is served by `groups/api.php?action=photo&l=<key>&v=<id>`, and listing pages put
   it into a `data-photo` slot from the same `claimed` request that brings the marks. A manager can replace or
   remove theirs; giving up the claim or deleting the account removes it.
-  `/managers/` loads analytics with the tool masked in recordings; the only event is `pas_claim` with a `step`
-  (`picked`, `claimed`, `waiting`, `address_mismatch`, `refused`, `change_sent`, `photo_sent`). There are no student accounts, on purpose:
+  `/managers/` loads analytics with the tool masked in recordings; its events are `pas_claim` with a `step`
+  (`picked`, `claimed`, `waiting`, `address_mismatch`, `refused`, `change_sent`, `photo_sent`) and `pas_signup`
+  with `role: manager` when someone signs in there. The "What claiming gets you" section shows an example
+  listing (`claimDemo()` in `build.mjs`): an invented program, drawn from the same parts a real listing uses, with
+  numbers that match the list beside it (`CLAIM_GETS`). Change a benefit there and the picture's numbers follow. There are no student accounts, on purpose:
   the site never asks a child for an email address, and the week builder and card work without an account.
 - **Where.** `src/server/groups-api.php` is the whole server side; the build copies it to `groups/api.php` with
   its settings (site name, address, sender, the date shared weeks expire, the Google client ID). It keeps one
@@ -772,6 +776,37 @@ Add `"noUtm": true` to a program if its site misbehaves with the tags, or set `"
 `site.config.json` to turn them all off. The data files stay clean: `data/programs.json` holds the plain addresses.
 This site's own count of those clicks is the `pas_outbound` event.
 
+## Parents and program managers, told apart
+
+Every account is one or the other. A **manager** holds a claim (approved or waiting) or made the account on
+`/managers/` (`users.origin`); everyone else is a **parent**. `role_of()` in `src/server/groups-api.php` decides,
+and `me` returns it as `role`. Four places use it:
+
+- **The numbers page** (`/edit/stats/`): tiles for parents and for program managers with an account, and rows
+  for new accounts of each kind per day (`account_parent`, `account_manager`). This is the exact count.
+- **Tag Manager, GA4.** Before Tag Manager loads, every page that loads it pushes `pas_role` (`visitor`,
+  `parent` or `manager`) and `pas_signed_in` (`yes` or `no`) to the data layer (`roleHead` in `build.mjs`). The
+  word comes from `localStorage` (`pas-role`), written by `noteRole()` in `src/groups.js` after a sign-in on this
+  device. The import file sends them with every page view and event as `visitor_role` and `signed_in`; register
+  both in GA4 (Admin > Custom definitions) as event-scoped dimensions. `pas_signup` carries `role` (which page:
+  `parent` for `/register/`, `manager` for `/managers/`) and `account` (`new` or `returning`).
+- **Clarity.** The same script sets two custom tags, `role` and `signed_in`, so recordings and heatmaps filter by
+  them (Filters > Custom tags). Nothing to set up.
+- **Klaviyo.** An account goes onto the accounts list with `has_account: true` and `role`. A manager's profile
+  also gets `claimed_listings` (the names of the listings they hold), updated from `/managers/`. Segment on
+  `role equals manager` or `role equals parent`. People who only asked for dates by email have no `role`: they
+  are on the dates list with `school`, `programs` or `camps`.
+
+It is a word for counting: no name, address or listing goes to analytics with it. The privacy page says so.
+
+## The planners in one place
+
+`/schedules/` (`schedulesPage()` in `build.mjs`) is where "Build a schedule" on the home page and the first item
+of the menu lead: one block each for the week (`/board/`), days off (`/days-off/#plan`), the summer
+(`/summer-schedule/`) and My kids' calendar (`/calendar/`, or the sign-up page for someone signed out). The
+counts on it (days off still to come, weeks of summer, camps) are worked out at build time. The small pictures
+are drawn in the build; none shows a real plan.
+
 ## Analytics
 `analytics/gtm-import-ga4-clarity.json` imports into the GTM container (Admin > Import Container, "Merge"). It adds a Google tag,
 one GA4 event tag per event below, and Clarity. The GA4 and Clarity IDs live in the "GA4 Measurement ID" and
@@ -791,6 +826,10 @@ fires when someone saves a school as theirs. `pas_alert_signup` (school, program
 `pas_outbound` also fires with link_type `calendar`, `review` and `camp` (a day-off camp link). `pas_search` (search_term, results,
 school) fires when someone pauses typing in a school page's search box; searches with zero results
 show what parents want that isn't listed.
+`pas_signup` (step, method, role, account), `pas_claim` (step), `pas_dayoff` (action, days_planned, children),
+`pas_summer` (action, weeks_covered, children), `pas_near` (from), `pas_map_open`, `pas_filter_open` (school) and
+`pas_school_notify` (school) each have a tag in the import file too. Every page view and event also carries
+`visitor_role` and `signed_in` (see "Parents and program managers, told apart").
 
 ## Keeping it current
 
