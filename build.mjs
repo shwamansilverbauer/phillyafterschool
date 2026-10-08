@@ -499,7 +499,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   const menus = [
     ['Programs', [['programs/', 'After-school programs'], ...(programs.some(p => p.weekend) ? [['weekends/', 'Weekend classes']] : []), ...(daysOff ? [[offPath, 'Day-camp programs']] : []), ...(summerCamps.length ? [['summer-camps/', 'Summer camps']] : [])]],
     ['Search by', [['schools/', 'School'], ['neighborhoods/', 'Neighborhood'], ['types/', 'Program type'], ['programs/#by-day', 'Day of week']]],
-    ['Build a schedule', [['board/', 'After-school schedule'], ...(daysOff ? [[offPath + '#plan', 'Day-camp schedule']] : [])]],
+    ['Build a schedule', [['board/', 'After-school schedule'], ...(daysOff ? [[offPath + '#plan', 'Day-camp schedule']] : []), ...(summerCamps.length ? [['summer-schedule/', 'Summer schedule']] : [])]],
     ['Suggest', [['suggest/', 'A program'], ['suggest/?kind=camp', 'A camp'], ['suggest/?kind=correction', 'An update to a listing'], ['ideas/', 'A feature'], ['schools/request/', 'A school']]],
   ];
   const nav = menus.map(([label, items]) => {
@@ -994,6 +994,13 @@ const programTitle = p => {
   return said.length <= 65 && !/after[- ]?school|aftercare/i.test(n) ? said : plain;
 };
 
+// A long row on a program's page shows its first two lines; a tap opens the rest. It is a <details>, so it works
+// without JavaScript, and the whole text sits in the summary, so nothing is cut out of the page for search or a screen reader.
+const fold = (html, tail = '') => {
+  if (!html) return tail;
+  if (html.replace(/<[^>]+>/g, '').length <= 105) return html + tail;
+  return `<details class="fold"><summary><span class="fold-text">${html}</span><span class="fold-more" aria-hidden="true"><span class="m">${T(`More`)}</span><span class="l">${T(`Less`)}</span></span></summary></details>${tail}`;
+};
 function programPage(p) {
   const D = 2;
   const served = servedBy(p);
@@ -1004,7 +1011,7 @@ function programPage(p) {
   const regUrl = r.how === 'online' ? outUrl(r.url, { type: 'register', program: p }) : null;
   const reviewUrl = `${link('review/', D)}?program=${p.id}${served.length === 1 ? '&school=' + served[0].id : ''}`;
   const clubsDetailed = !!p.clubs && p.clubs.some(c => c.days || c.time || c.what);   // a bare list of names stays a line of text
-  const rows = [['Where', esc(address)], [p.clubs ? 'Clubs' : 'Classes', clubsDetailed ? '' : esc((p.offers || []).join(', '))], ['Hours', esc(p.hours)], ['Days', esc(daysLine(p))], ['Pick up by', esc(p.pickupBy || '')], ['Cost', esc(p.cost)], ['Days off', p.daysOff ? `${esc(p.daysOff.summary)} <a href="${link(offPath, D)}#${esc(p.id)}">Dates and details</a>` : ''], ['Weekends', p.weekend ? `${esc(p.weekend.summary)} <a href="${link(weekendPath, D)}#${esc(p.id)}">Term and cost</a>` : ''], ['Register', registerText(p)], ['Next term', esc(r.nextTerm || '') + datesHtml(p, D)], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
+  const rows = [['Where', esc(address)], [p.clubs ? 'Clubs' : 'Classes', clubsDetailed ? '' : fold(esc((p.offers || []).join(', ')))], ['Hours', fold(esc(p.hours))], ['Days', esc(daysLine(p))], ['Pick up by', esc(p.pickupBy || '')], ['Cost', fold(esc(p.cost))], ['Days off', p.daysOff ? fold(esc(p.daysOff.summary), ` <a href="${link(offPath, D)}#${esc(p.id)}">Dates and details</a>`) : ''], ['Weekends', p.weekend ? fold(esc(p.weekend.summary), ` <a href="${link(weekendPath, D)}#${esc(p.id)}">Term and cost</a>`) : ''], ['Register', fold(registerText(p))], ['Next term', fold(esc(r.nextTerm || ''), datesHtml(p, D))], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
   const schoolRows = served.map(s => {
     const l = p.schools[s.id];
@@ -1415,18 +1422,23 @@ function homePage() {
     plus: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4z',
     tent: 'M12 3 1.5 20h21zm0 7 2.6 8H9.4z',
   };
+  // Who each box is for: a grown-up with a child, and someone holding a clipboard.
+  const WHO = {
+    parent: '<circle cx="18" cy="13" r="7"/><path d="M5 42v-8a13 13 0 0 1 26 0v8z"/><g class="cut"><circle cx="35" cy="25" r="5.5"/><path d="M25.5 42v-3.500a9.500 9.500 0 0 1 19 0V42z"/></g>',
+    manager: '<circle cx="17" cy="13" r="7"/><path d="M4 42v-8a13 13 0 0 1 26 0v8z"/><g class="cut"><rect x="26" y="20" width="18" height="22" rx="3"/><rect x="31.500" y="17" width="7" height="5.500" rx="1.500"/></g><path class="mark" d="m30.500 31.500 3.200 3.200 6-7"/>',
+  };
+  const who = k => `<span class="start-who" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false">${WHO[k]}</svg></span>`;
   const go = (href, label, hint, icon) => `<a class="start-go" href="${href}"><span class="start-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="${ICON[icon]}"/></svg></span><span><b>${label}</b>${hint ? `<small>${hint}</small>` : ''}</span></a>`;
   const more = [
     weekendPrograms.length ? [link(weekendPath, 0), T(`Weekend classes`), T(`Saturday and Sunday classes at {n} places: music, dance, art, skating, science.`, { n: weekendPrograms.length }), '#6B3FA0'] : null,
     daysOff ? [link(offPath, 0), T(`Day camps`), T(`{n} programs run camps on the days school is closed, with a planner for the year.`, { n: campPrograms.length }), '#B88A00'] : null,
-    summerCamps.length ? [link(campsPath, 0), T(`Summer camps`), T(`{n} day camps in the city, with ages, weeks, hours and prices.`, { n: summerCamps.length }), '#2C8444'] : null,
+    summerCamps.length ? [link(campsPath, 0), T(`Summer camps`), T(`{n} day camps in the city, with ages, hours and prices, and a schedule to plan the summer week by week.`, { n: summerCamps.length }), '#2C8444'] : null,
   ].filter(Boolean);
   const body = `${nextOff(0)}
 <section class="section" id="start">
   <div class="starts">
     <div class="start">
-      <p class="kicker">${T(`Start here`)}</p>
-      <h2>${T(`Parents`)}</h2>
+      <div class="start-head">${who('parent')}<div><p class="kicker">${T(`Start here`)}</p> <h2>${T(`Parents`)}</h2></div></div>
       <p>${T(`See what works with your child’s school, then put the week together.`)}</p>
       <div class="start-list">
         ${go('#find-school', T(`Find your school`), T(`Every program that runs there, picks up or sits nearby`), 'school')}
@@ -1435,8 +1447,7 @@ function homePage() {
       </div>
     </div>
     <div class="start managers">
-      <p class="kicker">${T(`Start here`)}</p>
-      <h2>${T(`Program managers`)}</h2>
+      <div class="start-head">${who('manager')}<div><p class="kicker">${T(`Start here`)}</p> <h2>${T(`Program managers`)}</h2></div></div>
       <p>${T(`Run an after-school program, a weekend class or a camp? Make sure parents see it right.`)}</p>
       <div class="start-list">
         ${GROUPS ? go(link('managers/', 0), T(`Claim your listing`), T(`Keep its dates, costs and hours current yourself`), 'claim') : ''}
@@ -1520,7 +1531,12 @@ ${cards}
   </div>
   <p>${T(`A program is listed where its building is. Many pick up from schools in other neighborhoods, so your school’s page is still the fullest list.`)} <a href="${link('schools/', 1)}">${T(`Find your school.`)}</a></p>
   <p>${T(`Don’t see your neighborhood?`)} <a href="${link('suggest/', 1)}">${T(`Tell us which school or program to add.`)}</a></p>
-</section>`;
+</section>
+${weekendPrograms.length ? `<section class="section" id="weekends">
+  <h2>${T(`Weekend classes, by part of the city`)}</h2>
+  <p>${T(`Saturday and Sunday classes aren’t tied to a school, so they’re listed by where they are.`)}</p>
+  <p class="chips-row">${weekendByArea().map(([a, l]) => `<a class="btn" href="${link(weekendPath, 1)}?hood=${hoodSlug(a)}">${esc(a)} (${l.length})</a>`).join('')}<a class="btn quiet" href="${link(weekendPath, 1)}">${T(`All weekend classes`)}</a></p>
+</section>` : ''}`;
   return layout({
     title: 'After-school programs by neighborhood',
     description: `After-school programs and schools in ${listNames(hoods.map(h => h.name))}, Philadelphia: what’s based in each neighborhood and who picks up.`,
@@ -1536,6 +1552,10 @@ function neighborhoodPage(h) {
   // Programs with a building somewhere else that collect children from a school in this neighborhood.
   const comes = programs.filter(p => !here.has(p.id) && h.schools.some(s => p.schools[s.id]?.relation === 'pickup')).sort((a, b) => a.name.localeCompare(b.name));
   const others = hoods.filter(x => x.id !== h.id);
+  // Weekend classes go by where they are, not by school: the ones in this neighborhood first, then the rest of this part of the city.
+  const wkHere = weekendPrograms.filter(p => programHoods(p).includes(h.name));
+  const wkArea = (CAMP_AREAS.find(a => a[1].includes(h.name)) || [null])[0];
+  const wkNear = wkArea ? weekendPrograms.filter(p => !wkHere.includes(p) && weekendAreas(p).includes(wkArea)) : [];
   const hero = `    <p class="where"><a href="${link('neighborhoods/', D)}">${T(`All neighborhoods`)}</a></p>
     <h1>${T(`After school in {name}`, { name: h.name })}</h1>
     <p class="lede">${T(`The schools in {name}, the after-school programs based there, and the ones that come to pick up.`, { name: h.name })}</p>
@@ -1543,6 +1563,7 @@ function neighborhoodPage(h) {
       ${h.schools.length ? `<span><b>${h.schools.length}</b> ${h.schools.length === 1 ? 'school' : 'schools'}</span>` : ''}
       <span><b>${based.length}</b> ${based.length === 1 ? 'program' : 'programs'} based here</span>
       ${comes.length ? `<span><b>${comes.length}</b> more that pick up</span>` : ''}
+      ${wkHere.length ? `<span><b>${wkHere.length}</b> with weekend classes</span>` : ''}
     </div>`;
   const body = `<section class="section">
   <h2>${T(`Schools in {name}`, { name: h.name })}</h2>
@@ -1565,6 +1586,18 @@ ${comes.length ? `<section class="section" data-group>
   <div class="schools">
 ${comes.map(p => programRow(p, D)).join('\n')}
   </div>
+</section>` : ''}
+${wkHere.length + wkNear.length ? `<section class="section" id="weekends">
+  <h2>${wkHere.length ? T(`Weekend classes in {name}`, { name: h.name }) : T(`Weekend classes near {name}`, { name: h.name })}</h2>
+  <p>${T(`Saturday and Sunday classes go by where they are. Any child can sign up, whichever school they go to.`)}</p>
+  ${wkHere.length ? `<div class="schools">
+${wkHere.map(p => weekendRow(p, D)).join('\n')}
+  </div>` : ''}
+  ${wkNear.length ? `${wkHere.length ? `<h3 class="sub">${T(`Close by, in {area}`, { area: wkArea })}</h3>` : ''}
+  <div class="schools">
+${wkNear.map(p => weekendRow(p, D)).join('\n')}
+  </div>` : ''}
+  <p><a class="btn" href="${link(weekendPath, D)}${wkArea ? '?hood=' + hoodSlug(wkArea) : ''}">${wkArea ? T(`All weekend classes in {area}`, { area: wkArea }) : T(`All weekend classes`)}</a></p>
 </section>` : ''}
 <section class="section">
   <h2>${T(`Other neighborhoods`)}</h2>
@@ -1598,6 +1631,7 @@ function privacyPage() {
   <h2 id="rosters">${T(`Rosters and children’s names`)}</h2>
   <ul>
     <li>${T(`A roster lives in the browser you made it in. Clearing your browser’s site data deletes it.`)}</li>
+    <li>${T(`A summer schedule is kept the same way: the camps you picked for each week stay in your browser and are not sent to us.`)}</li>
     <li>${T(`If you save a school as yours, that choice is kept in your own browser too. Our visit counts record that a school was saved, not who saved it.`)}</li>
     <li>${T(`A child’s name is optional. If you add one, it stays on your device unless you keep or share that week through an account.`)}</li>
     <li>${T(`A week can no longer be shared as a link. A link showed the week to anyone who had it and could not be taken back, so links made before October 2026 have stopped opening.`)}</li>
@@ -2535,7 +2569,7 @@ function boardPage() {
     themes: Object.fromEntries(THEMES.map(t => [t.id, { types: t.types, mix: !!t.mix, words: t.words || [] }])),
     // Programs with weekend classes, for the optional Saturday and Sunday. Some of them are not after-school listings at all.
     weekendPath: link(weekendPath, 1),
-    weekend: Object.fromEntries(programs.filter(p => p.weekend).map(p => [p.id, { name: p.name, type: p.types[0], days: p.weekend.days, times: p.weekend.times || null, path: link(programPath(p), 1) }])),
+    weekend: Object.fromEntries(programs.filter(p => p.weekend).map(p => [p.id, { name: p.name, hood: programHoods(p)[0] || '', type: p.types[0], days: p.weekend.days, times: p.weekend.times || null, path: link(programPath(p), 1) }])),
     programs: Object.fromEntries(programs.filter(p => !campOnly(p)).map(p => [p.id, {
       name: p.name, hours: p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [], type: p.types[0], no: order.indexOf(p.id) + 1,
       days: p.days || null, offerDays: p.offerDays || null, rate: p.rate || null, types: p.types, grades: p._grades, kw: (p.keywords || []).map(k => k.toLowerCase()), cls: p._cls || null,
@@ -3192,13 +3226,135 @@ const weekendPath = 'weekends/';
 const CAMP_AREAS = [
   ['Center City and nearby', ['Center City', 'Rittenhouse', 'Washington Square West', 'Logan Square', 'Old City', 'Penn’s Landing', 'Fitler Square', 'Callowhill', 'Fairmount', 'Society Hill']],
   ['South Philly', ['Queen Village', 'Bella Vista', 'Passyunk Square', 'East Passyunk', 'Pennsport', 'Dickinson Narrows', 'Hawthorne', 'Graduate Hospital', 'South Philadelphia']],
-  ['Kensington, Fishtown and North', ['South Kensington', 'Kensington', 'Fishtown', 'Northern Liberties', 'Fairhill', 'Port Richmond']],
+  ['Kensington, Fishtown and North', ['South Kensington', 'Kensington', 'Fishtown', 'Northern Liberties', 'Fairhill', 'Port Richmond', 'North Philadelphia']],
   ['Northwest', ['Mount Airy', 'Germantown', 'Chestnut Hill', 'Roxborough', 'Manayunk', 'East Falls']],
   ['West Philly', ['Cobbs Creek', 'West Fairmount Park', 'University City', 'West Philadelphia']],
   ['Northeast', ['Fox Chase']],
 ];
 const campAreas = c => { const n = c.neighborhoods || []; if (!n.length) return CAMP_AREAS.map(a => a[0]); const out = new Set(n.map(x => (CAMP_AREAS.find(a => a[1].includes(x)) || ['Elsewhere in the city'])[0])); return [...out]; };
 const seasonPill = c => c.season ? `<span class="pill season ${campsFile && c.season > campsFile.season ? 'next' : 'nearby'}">${c.season > campsFile.season ? 'Summer ' + c.season : c.season + ' details'}</span>` : `<span class="pill season none">No dates yet</span>`;
+// ---------- summer schedule: which weeks each camp runs, worked out from the dates it lists ----------
+// A camp's weeks come from the first date range in its "weeks" line ("June 8 to August 28, 2026 … none June 29 to
+// July 3"). A camp whose weeks can't be written as one range carries a "runs" list instead ([[first day, last day], …],
+// with "skips" for the Mondays of weeks off). A line with no range in it gives no weeks, and the schedule says so.
+// The schedule is for the coming summer. A camp that has posted that summer shows its real weeks; one still showing
+// last summer is moved 52 weeks on, onto the same week of the calendar, and marked as last summer's dates.
+const summerPath = 'summer-schedule/';
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const utcDay = iso => new Date(iso + 'T12:00:00Z');
+const plusDays = (iso, n) => new Date(utcDay(iso).getTime() + n * 864e5).toISOString().slice(0, 10);
+const mondayOf = iso => plusDays(iso, -((utcDay(iso).getUTCDay() + 6) % 7));
+function campWeeks(c) {
+  const year = c.season;
+  if (!year) return [];
+  const md = (m, d) => `${year}-${String(MONTH_NAMES.indexOf(m) + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  let runs = [], skips = [];
+  if (Array.isArray(c.runs)) {
+    if (c.runs.some(r => !String(r[0]).startsWith(year + '-') || !String(r[1]).startsWith(year + '-'))) { console.warn(`Note: ${c.name} has "runs" dates outside its ${year} season, so the summer schedule ignores them.`); return []; }
+    runs = c.runs; skips = (c.skips || []).map(mondayOf);
+  } else {
+    const M = MONTH_NAMES.join('|');
+    const range = () => new RegExp(`(${M}) (\\d{1,2}) to (?:(${M}) )?(\\d{1,2})(?:, (\\d{4}))?`);
+    // What a line says about time off is read apart from the dates the camp runs.
+    const off = [];
+    const main = String(c.weeks || '').replace(/\b(?:none|no (?:regular )?camp|closed)\b([^.]*)/gi, (all, rest) => { off.push(rest); return ' '; });
+    const r = range().exec(main);
+    if (r && (!r[5] || +r[5] === year)) runs.push([md(r[1], r[2]), md(r[3] || r[1], r[4])]);
+    for (const part of off) {
+      if (/weeks? of/i.test(part)) for (const x of part.matchAll(new RegExp(`(${M}) (\\d{1,2})`, 'g'))) skips.push(mondayOf(md(x[1], x[2])));
+      else { const o = range().exec(part); if (o) { const a = md(o[1], o[2]), b = md(o[3] || o[1], o[4]); for (let w = mondayOf(a); w <= b; w = plusDays(w, 7)) if ([0, 1, 2, 3, 4].filter(i => plusDays(w, i) >= a && plusDays(w, i) <= b).length >= 3) skips.push(w); } }   // a single day off doesn't cancel the week
+    }
+  }
+  const out = new Set();
+  for (const [a, b] of runs) for (let w = mondayOf(a); w <= b; w = plusDays(w, 7)) if ([0, 1, 2, 3, 4].some(i => plusDays(w, i) >= a && plusDays(w, i) <= b)) out.add(w);
+  for (const s of skips) out.delete(s);
+  return [...out].sort();
+}
+const summerYear = +TODAY.slice(0, 4) + (TODAY.slice(5) > '08-31' ? 1 : 0);
+const summerPlan = (() => {
+  let labor = `${summerYear}-09-01`; while (utcDay(labor).getUTCDay() !== 1) labor = plusDays(labor, 1);   // Labor Day
+  const lastDay = daysOff?.lastDay?.startsWith(summerYear + '-') ? daysOff.lastDay : null;
+  let w = mondayOf(lastDay || `${summerYear}-06-08`);
+  if (lastDay && utcDay(lastDay).getUTCDay() >= 4) w = plusDays(w, 7);   // school runs through Thursday or Friday, so camp starts the week after
+  const weeks = [];
+  for (; w < labor; w = plusDays(w, 7)) weeks.push(w);
+  const label = m => { const a = utcDay(m), b = utcDay(plusDays(m, 4)); const mo = d => MONTH_NAMES[d.getUTCMonth()]; return a.getUTCMonth() === b.getUTCMonth() ? `${mo(a)} ${a.getUTCDate()}–${b.getUTCDate()}` : `${mo(a)} ${a.getUTCDate()} – ${mo(b)} ${b.getUTCDate()}`; };
+  const camps = [...summerCamps].sort((a, b) => a.name.localeCompare(b.name)).map(c => {
+    const gap = summerYear - (c.season || 0);
+    const on = gap === 0 || gap === 1 ? campWeeks(c).map(m => weeks.indexOf(plusDays(m, 364 * gap))).filter(i => i > -1) : [];
+    return { c, on, exact: gap === 0 };
+  });
+  return { weeks, label, lastDay, camps, dated: camps.filter(x => x.on.length), undated: camps.filter(x => !x.on.length) };
+})();
+function summerSchedulePage() {
+  const D = 1, P = summerPlan, year = summerYear, base = campsFile.season;
+  const guide = P.dated.filter(x => !x.exact).length;
+  const price = c => c.weekly === 0 ? 'Free' : c.weekly ? `$${c.weekly} a week` : '';
+  const shortHours = c => String(c.hours || '').split(/\. /)[0].replace(/\.$/, '');
+  const ageLine = c => c.ageMin || c.ageMax ? `Ages ${c.ageMin ? String(c.ageMin).replace('.5', '½') : ''}${c.ageMin && c.ageMax ? '–' : ''}${c.ageMax || (c.ageMin ? ' and up' : '')}`.replace('Ages –', 'Up to age ') : '';
+  const schoolNote = i => P.lastDay && mondayOf(P.lastDay) === P.weeks[i] ? `School’s last day is ${new Date(P.lastDay + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' })}.` : '';
+  const head = P.weeks.map((w, i) => { const d = utcDay(w); return `<th scope="col" data-w="${i}"><span>${MONTH_NAMES[d.getUTCMonth()].slice(0, 3)}</span><b>${d.getUTCDate()}</b></th>`; }).join('');
+  const chartRows = P.dated.map(({ c, on, exact }) => `<tr data-camp="${esc(c.id)}" data-ages="${c.ageMin || 0} ${c.ageMax || 99}">
+  <th scope="row"><a href="${link(campsPath, D)}#${esc(c.id)}">${esc(c.name)}</a><small>${[ageLine(c), price(c), exact ? `${year} dates` : `${c.season} dates`].filter(Boolean).map(esc).join(' · ')}</small></th>
+  ${P.weeks.map((w, i) => on.includes(i) ? `<td class="on${exact ? ' exact' : ''}" data-w="${i}"><span class="vh">${exact ? 'Runs' : 'Ran in ' + c.season}</span></td>` : `<td data-w="${i}"></td>`).join('')}
+</tr>`).join('\n');
+  const data = {
+    year, base, page: `${cfg.siteUrl}/${summerPath}`, campsPage: link(campsPath, D),
+    weeks: P.weeks.map((w, i) => ({ d: w, label: P.label(w), note: schoolNote(i) })),
+    camps: Object.fromEntries(P.camps.map(({ c, on, exact }) => [c.id, { n: c.name, w: on, y: c.season || 0, x: exact ? 1 : 0, p: typeof c.weekly === 'number' ? c.weekly : null, h: shortHours(c), a: [c.ageMin || 0, c.ageMax || 99], hood: (c.neighborhoods || []).join(', ') }])),
+  };
+  const hero = `    <h1>${T(`Plan your summer, week by week`)}</h1>
+    <p class="lede">${T(`{n} weeks between the last day of school and Labor Day. See which camps run each week, and line up your own summer.`, { n: P.weeks.length })}</p>
+    <div class="facts">
+      <span>Summer <b>${year}</b></span>
+      <span><b>${P.weeks.length}</b> weeks</span>
+      <span><b>${P.dated.length}</b> camps with dates</span>
+    </div>`;
+  const body = `<div style="display:contents">
+${guide ? `<section class="section">
+  <p class="flag camp-guide"><b>${T(`Most of these dates are from summer {year}, shown as a guide.`, { year: base })}</b> ${T(`A camp that hasn’t posted {next} yet is shown on the weeks it ran last summer, moved to the same week of the calendar. Camps usually post between December and March, and each one switches to its real dates when it does.`, { next: year })}</p>
+</section>` : ''}
+<section class="section sum needs-js-block" id="plan" data-summer data-clarity-mask="true">
+  <h2>${T(`Your summer`)}</h2>
+  <p>${T(`Add a camp to each week. Your picks are saved on this device and nowhere else.`)}</p>
+  <div class="sum-top">
+    <div class="field sum-age"><label for="sum-age">${T(`Your child’s age this summer (optional)`)}</label>
+      <select id="sum-age"><option value="">Any age</option>${Array.from({ length: 15 }, (_, i) => `<option value="${i + 3}">${i + 3}</option>`).join('')}</select></div>
+    <div class="sum-tally"><div class="sum-strip" id="sum-strip" aria-hidden="true"></div><p id="sum-count" aria-live="polite"></p><p class="hint" id="sum-cost"></p></div>
+  </div>
+  <ol class="sum-weeks" id="sum-weeks"></ol>
+  <div class="actions sum-tools" id="sum-tools" hidden><button type="button" class="btn primary" id="sum-share" hidden>Share the plan</button><button type="button" class="btn" id="sum-copy">Copy the plan as text</button><button type="button" class="btn" id="sum-print">Print</button><button type="button" class="clear" id="sum-clear">Clear the plan</button></div>
+  <p class="hint" id="sum-status" aria-live="polite"></p>
+  <script type="application/json" id="summer-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
+</section>
+<section class="section sum-chart-section" id="chart">
+  <h2>${T(`When each camp runs`)}</h2>
+  <p>${T(`Each column is a week, named by its Monday. A filled box means the camp listed that week. The chart scrolls sideways and down.`)} <span class="needs-js">${T(`Tap a box to add that week to your summer.`)}</span></p>
+  <p class="sum-key"><span><i class="k exact"></i>${T(`{year} dates`, { year })}</span><span><i class="k"></i>${T(`{year} dates, as a guide`, { year: base })}</span><span class="needs-js"><i class="k picked"></i>${T(`In your summer`)}</span></p>
+  <p class="hint" id="sum-chart-note" aria-live="polite"></p>
+  <div class="sum-chart-wrap" role="region" aria-label="When each camp runs" tabindex="0">
+    <table class="sum-chart">
+      <thead><tr><th scope="col">Camp</th>${head}</tr></thead>
+      <tbody>
+${chartRows}
+      </tbody>
+    </table>
+  </div>
+  ${P.undated.length ? `<h3 class="sub">${T(`No dates listed yet`)}</h3>
+  <p>${T(`These camps haven’t put dates we can chart on their sites. You can still add one to any week above, then check with the camp.`)}</p>
+  <ul class="plain cols">${P.undated.map(({ c }) => `<li><a href="${link(campsPath, D)}#${esc(c.id)}">${esc(c.name)}</a></li>`).join('')}</ul>` : ''}
+</section>
+<section class="section">
+  <p><a class="btn" href="${link(campsPath, D)}">${T(`Every camp, with ages, hours and prices`)}</a></p>
+  <p class="hint">${T(`Dates, prices and openings change, and many camps fill early. Confirm with the camp before you plan around a week.`)}</p>
+</section>
+</div>`;
+  return layout({
+    title: `Summer ${year} camp schedule for Philadelphia, week by week`,
+    description: `Plan summer ${year} in Philadelphia week by week: see which of ${P.dated.length} city day camps run each of the ${P.weeks.length} weeks between the last day of school and Labor Day.`,
+    pathName: summerPath, depth: D, current: null, hero, body, showStreet: 'summer',
+  });
+}
 function summerCampsPage() {
   const D = 1;
   const base = campsFile.season, next = base + 1;
@@ -3214,7 +3370,7 @@ function summerCampsPage() {
   <div class="top">${photoSlot('c:' + c.id)}<h3>${esc(c.name)}</h3><p class="what">${esc(c.what)}</p><p class="tags">${c.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p><p>${seasonPill(c)}</p></div>
   <dl>${rows}</dl>
   ${c.note ? `<p class="flag">${esc(c.note)}</p>` : ''}
-  <div class="actions"><a class="btn primary" data-track="camp" href="${esc(outUrl(c.registerUrl || c.website, { type: 'camp' }))}" target="_blank" rel="noopener">${c.registerUrl ? 'Find or book a spot' : 'Camp details'}</a>${c.registerUrl ? `<a class="btn" data-track="website" href="${esc(outUrl(c.website, { type: 'camp' }))}" target="_blank" rel="noopener">Camp details</a>` : ''}${prog ? `<a class="btn" href="${link(programPath(prog), D)}">Its school-year listing</a>` : ''}</div>
+  <div class="actions"><a class="btn primary" data-track="camp" href="${esc(outUrl(c.registerUrl || c.website, { type: 'camp' }))}" target="_blank" rel="noopener">${c.registerUrl ? 'Find or book a spot' : 'Camp details'}</a>${c.registerUrl ? `<a class="btn" data-track="website" href="${esc(outUrl(c.website, { type: 'camp' }))}" target="_blank" rel="noopener">Camp details</a>` : ''}<a class="btn needs-js" href="${link(summerPath, D)}?add=${esc(c.id)}">Add to your summer</a>${prog ? `<a class="btn" href="${link(programPath(prog), D)}">Its school-year listing</a>` : ''}</div>
   <p class="src">${claimedMark('c:' + c.id, D)} Checked ${longDate(c.checked)}. Sources: ${sourceLinks(c.sources, c)}</p>
   ${listingTools('c:' + c.id, c.name, D, 'camp')}
 </article>`;
@@ -3229,6 +3385,7 @@ function summerCampsPage() {
     </div>`;
   const body = `<section class="section">
   <p class="flag camp-guide"><b>${T(`Most of what’s here is from summer {year}, shown as a guide.`, { year: base })}</b> ${T(`Camps usually post next summer between December and March. Each listing changes to {year} when its camp posts dates and prices, and says so on its card.`, { year: next })}</p>
+  <p><a class="btn primary" href="${link(summerPath, D)}">${T(`Plan your summer, week by week`)}</a></p>
 </section>
 ${filterBar({ list: shaped, depth: D, searchLabel: `Looking for a particular camp?`, placeholder: 'Its name, or try art, tennis, Mount Airy…' }).replace('data-filters', 'data-filters data-noun="camp" data-nouns="camps"')}
 <p class="hint">${T(`Grades here are worked out from each camp’s ages, so check the age line on the card.`)}</p>
@@ -3260,43 +3417,58 @@ ${todo.length ? `<section class="section">
 // ---------- weekend classes: any listing with a "weekend" block ----------
 const weekendPrograms = programs.filter(p => p.weekend).sort((a, b) => a.name.localeCompare(b.name));
 const WEEKEND_DAY = { sat: 'Saturday', sun: 'Sunday' };
+// A weekend class has no school and no pickup, so where it is decides who it suits: the page groups and filters by
+// part of the city (the same areas the summer camps use) and each card names its neighborhood.
+const weekendAreas = p => campAreas({ neighborhoods: programHoods(p) });
+const weekendByArea = () => [...CAMP_AREAS.map(a => a[0]), 'Elsewhere in the city'].map(a => [a, weekendPrograms.filter(p => weekendAreas(p)[0] === a)]).filter(([, l]) => l.length);
+const weekendRow = (p, depth) => `<a class="prow" href="${link(weekendPath, depth)}#${esc(p.id)}">
+  <h3>${esc(p.name)}</h3>
+  <span class="what">${esc(p.weekend.summary)}</span>
+  <span class="tally">${p.weekend.days.map(d => `<span class="pill nearby">${WEEKEND_DAY[d]}</span>`).join('')}${programHoods(p).map(n => `<span class="pill hood">${esc(n)}</span>`).join('')}<span class="hint">Grades ${esc(gradeText(p.weekend._grades !== undefined ? { ...p, _grades: p.weekend._grades } : p))}</span></span>
+</a>`;
 function weekendPage() {
   const D = 1;
-  const cards = weekendPrograms.map(p => {
-    const w = p.weekend, served = servedBy(p);
-    const rows = [['What runs', w.summary], ['Term', w.term], ['Cost', w.cost], ['Where', programAddress(p) + (programHoods(p).length && !/\(/.test(programAddress(p)) ? ` (${programHoods(p).join(', ')})` : '')], ['On school days', served.length ? servedSummary(p) + '.' : '']]
+  const shape = p => ({ ...p, ...(p.weekend._grades !== undefined ? { _grades: p.weekend._grades } : {}), neighborhoods: weekendAreas(p) });   // what the filter bar sees
+  const card = p => {
+    const w = p.weekend, hoodsHere = programHoods(p);
+    const rows = [['What runs', w.summary], ['Term', w.term], ['Cost', w.cost], ['Where', programAddress(p) + (hoodsHere.length && !/\(/.test(programAddress(p)) ? ` (${hoodsHere.join(', ')})` : '')]]
       .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
-    const wp = w._grades !== undefined ? { ...p, _grades: w._grades } : p;   // the weekend classes can take other grades than the weekday program
-    return `<article class="prog offprog" id="${esc(p.id)}" ${itemAttrs(wp, [...programHoods(p), ...w.days.map(d => WEEKEND_DAY[d])])} data-wk="${w.days.join(' ')}">
-  <div class="top"><h3><a href="${link(programPath(p), D)}">${esc(fullName(p))}</a></h3><p class="tags">${p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p><p>${w.days.map(d => `<span class="pill nearby">${WEEKEND_DAY[d]}</span>`).join(' ')} <span class="hint">Grades ${esc(gradeText(wp))}</span></p></div>
+    const wp = shape(p);   // the weekend classes can take other grades than the weekday program
+    return `<article class="prog offprog" id="${esc(p.id)}" ${itemAttrs(wp, [...hoodsHere, ...w.days.map(d => WEEKEND_DAY[d])])} data-wk="${w.days.join(' ')}">
+  <div class="top"><h3><a href="${link(programPath(p), D)}">${esc(fullName(p))}</a></h3><p class="tags">${p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p><p>${hoodsHere.map(n => `<span class="pill hood">${esc(n)}</span>`).join(' ')} ${w.days.map(d => `<span class="pill nearby">${WEEKEND_DAY[d]}</span>`).join(' ')} <span class="hint">Grades ${esc(gradeText(wp))}</span></p></div>
   <dl>${rows}</dl>
   ${w.note ? `<p class="flag">${esc(w.note)}</p>` : ''}
   <div class="actions"><a class="btn primary" data-track="weekend" href="${esc(outUrl(w.url, { type: 'weekend', program: p }))}" target="_blank" rel="noopener">Class details</a><a class="btn" href="${link(programPath(p), D)}">Full listing</a>${w.days.map(d => `<a class="btn needs-js" href="${link('board/', D)}?wk=${esc(p.id)}&amp;day=${d}">Add ${WEEKEND_DAY[d]} to your week</a>`).join('')}</div>
   <p class="src">Checked ${longDate(w.checked || p.lastVerified)}. Sources: ${sourceLinks(w.sources, p)}</p>
 </article>`;
-  }).join('\n');
+  };
+  const areas = weekendByArea();
   const hero = `    <h1>${T(`Saturday and Sunday classes`)}</h1>
-    <p class="lede">${T(`Weekend classes for kids around the city: what runs, which term, and what it costs.`)}</p>
+    <p class="lede">${T(`Weekend classes for kids, by part of the city: what runs, which term, and what it costs.`)}</p>
     <div class="facts">
       <span><b>${weekendPrograms.length}</b> places with weekend classes</span>
       <span><b>${weekendPrograms.filter(p => p.weekend.days.includes('sun')).length}</b> on Sundays too</span>
+      <span><b>${new Set(weekendPrograms.flatMap(programHoods)).size}</b> neighborhoods</span>
     </div>`;
-  const body = `${filterBar({ list: weekendPrograms.map(p => (p.weekend._grades !== undefined ? { ...p, _grades: p.weekend._grades } : p)), depth: D, show: { cost: false, day: false, hood: false }, searchLabel: `Looking for a particular class?`, placeholder: 'A name, or try piano, acting, gymnastics…' })}
+  const body = `${filterBar({ list: weekendPrograms.map(shape), depth: D, show: { cost: false, day: false }, searchLabel: `Looking for a particular class?`, placeholder: 'A name or a neighborhood, or try piano, acting…' }).replace('data-filters', 'data-filters data-noschool data-noun="place" data-nouns="places"')}
+<p class="hint">${T(`A weekend class has no school pickup, so this list goes by where the class is. Any child can sign up, whichever school they go to.`)}</p>
 ${noMatch(D)}
-<section class="section" data-group>
+${areas.map(([a, list]) => `<section class="section" data-group>
+  <h2>${esc(a)}</h2>
   <div class="list">
-${cards}
+${list.map(card).join('\n')}
   </div>
-</section>
+</section>`).join('\n')}
 <section class="section">
   <p>${T(`This covers the programs already on this site, plus weekend-only places from a first sweep of the city. It isn’t every class in Philadelphia, and some listed programs run weekend classes that their sites don’t spell out by day, so ask.`)} ${T(`Know a weekend class that should be here?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
   <p class="hint">${T(`Weekend terms start and fill on their own dates, so check with the provider before you count on a class.`)}</p>
 </section>`;
+  const ordered = areas.flatMap(([, l]) => l);
   return layout({
-    title: 'Weekend classes for kids in Philadelphia',
-    description: `Saturday and Sunday classes for kids at ${weekendPrograms.length} places in Philadelphia: music, theater, art, dance, skating, soccer and science, with terms, times and cost.`,
+    title: 'Weekend classes for kids in Philadelphia, by neighborhood',
+    description: `Saturday and Sunday classes for kids at ${weekendPrograms.length} places in Philadelphia, by part of the city: music, theater, art, dance, skating, soccer and science, with terms, times and cost.`,
     pathName: weekendPath, depth: D, current: null, hero, body, showStreet: 'weekend',
-    jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: weekendPrograms.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
+    jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: ordered.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
   });
 }
 
@@ -3331,6 +3503,7 @@ write('contact/thanks/index.html', contactThanksPage());
 write('board/index.html', boardPage());
 if (daysOff) write(offPath + 'index.html', daysOffPage());
 if (summerCamps.length) write(campsPath + 'index.html', summerCampsPage());
+if (summerCamps.length) write(summerPath + 'index.html', summerSchedulePage());
 if (weekendPrograms.length) write(weekendPath + 'index.html', weekendPage());
 if (ALERTS) write(alertsPath + 'index.html', alertsPage());
 write('review/index.html', reviewPage());
@@ -3375,7 +3548,7 @@ if (!PREVIEW) {
   write('data/alerts.json', JSON.stringify(alertsFeed(), null, 2));   // read by scripts/send-alerts.mjs once a day
   const latest = programs.map(p => p.lastVerified).sort().pop();
   const urls = [['', latest], ['schools/', latest], ...schools.map(s => [s.id + '/', latest]), ['types/', latest], ...liveTypes().map(t => [`types/${t.id}/`, latest]), ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]), ['neighborhoods/', latest], ...hoods.map(h => [hoodPath(h), latest]),
-    ...[...(daysOff ? [offPath] : []), ...(summerCamps.length ? [campsPath] : []), ...(weekendPrograms.length ? [weekendPath] : []), ...(ALERTS ? [alertsPath] : []), 'board/', 'suggest/', ...(GROUPS ? ['managers/'] : []), 'ideas/', 'review/', 'about/', 'contact/', 'privacy/', 'support/'].map(u => [u, latest])];
+    ...[...(daysOff ? [offPath] : []), ...(summerCamps.length ? [campsPath, summerPath] : []), ...(weekendPrograms.length ? [weekendPath] : []), ...(ALERTS ? [alertsPath] : []), 'board/', 'suggest/', ...(GROUPS ? ['managers/'] : []), 'ideas/', 'review/', 'about/', 'contact/', 'privacy/', 'support/'].map(u => [u, latest])];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
   const bare = cfg.siteUrl.replace(/^https?:\/\//, '');

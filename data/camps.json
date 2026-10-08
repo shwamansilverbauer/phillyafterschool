@@ -649,6 +649,7 @@
       "ageMax": 6,
       "season": 2026,
       "weeks": "Four weeks in 2026: June 22, July 6, July 27 and August 10",
+      "runs": [["2026-06-22", "2026-06-26"], ["2026-07-06", "2026-07-10"], ["2026-07-27", "2026-07-31"], ["2026-08-10", "2026-08-14"]],
       "hours": "9 am to noon",
       "cost": "$325 a week for the half day",
       "weekly": 325,

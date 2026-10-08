@@ -81,12 +81,40 @@ Only what a camp's own site says goes in. To update a camp: open `check.url` the
 fields, set `season` to the summer the page now describes, set `checked` to today, and fix `check` if the page moved.
 The build writes the whole worklist into `data/check.json` under `camps`, oldest summer first.
 
+**The summer schedule** (`/summer-schedule/`) is built from the same file. It lays out the coming summer as weeks,
+Monday to Friday, from the week of the district's last day (`lastDay` in `data/days-off.json`) to the week before
+Labor Day, and works out which of those weeks each camp runs:
+
+- The weeks come from the first date range in the camp's `weeks` line, so write it as "June 8 to August 28, 2026".
+  Weeks off are read from the same line when it says "none June 29 to July 3", "no camp June 29 to July 3" or
+  "none the week of June 29". A single day off ("no camp July 3") doesn't cancel the week.
+- A camp whose weeks aren't one range (four separate weeks, say) carries `runs`: a list of
+  `["first day", "last day"]` pairs, with optional `skips` (any day in a week it doesn't run). `runs` replaces what
+  the `weeks` line would give. If its dates aren't in the camp's `season` year the build says so and ignores them,
+  so update `runs` whenever `season` changes.
+- A camp whose `season` is the coming summer shows its real weeks (green). A camp still on last summer is moved 52
+  weeks on, to the same week of the calendar, and marked as last summer's dates (blue). Anything older, or a line
+  with no date range, has no weeks and sits under "No dates listed yet"; a parent can still add it to a week.
+- The page has a chart of every camp by week, which works without JavaScript, and "Your summer", where a parent adds
+  camps to weeks from each week's list or by tapping the chart. Picks are saved in the browser only
+  (`pas-summer`: the year, camp ids by week, and the age picked). Nothing is sent anywhere; the plan can be copied
+  as text, shared or printed. Each camp card on `/summer-camps/` has "Add to your summer"
+  (`summer-schedule/?add=ID`). The one analytics event is `pas_summer` with an `action` (add, remove, age, copy,
+  share, print, clear), the camp id and the week number.
+- The schedule switches to the next summer on September 1.
+
 ## Weekend classes
 
 A listing in `data/programs.json` with a `weekend` block shows on `/weekends/` and gets a "Weekends" row on its own
 page: `{ "summary": "...", "days": ["sat"], "term": "Fall 2026: ...", "cost": "...", "note": "...", "url": "https://…",
 "sources": [...], "check": { "url", "how", "look", "notes" }, "checked": "YYYY-MM-DD" }`. A place that only runs on
 weekends (or only weekends and day camps) leaves `schools` as `{}`, like a day-camp-only listing.
+
+Weekend classes go by where they are, not by school. `/weekends/` groups and filters them by part of the city (the
+`CAMP_AREAS` list the summer camps use, worked out from each listing's `neighborhoods`), each card names its
+neighborhood, and a parent's saved school never narrows the list. Each neighborhood page has a "Weekend classes in"
+section: the places in that neighborhood, then the rest of that part of the city. A neighborhood that isn't in
+`CAMP_AREAS` falls under "Elsewhere in the city", so add new ones there.
 
 Optional `"times": { "sat": "9:30 am to 12:30 pm", "sun": "..." }` gives the short time shown in the week builder
 and on the card when a parent has typed nothing of their own.
@@ -165,7 +193,9 @@ program in `data/programs.json` and its page follows.
 
 The home page opens with two "Start here" boxes, one for parents (find your school, build a schedule, create an
 account) and one for program managers (claim a listing, add a program, add a camp), then a "More than weekday
-afternoons" section that points at weekend classes, day camps and summer camps.
+afternoons" section that points at weekend classes, day camps and summer camps. Each box has a picture of who it is for (a grown-up with a child, a person with a clipboard), drawn in `WHO` in `homePage()`.
+
+On a program's own page, a row of "The details" longer than about a hundred characters shows its first two lines with a "More" link (`fold()` in `build.mjs`). It is a `<details>` element holding the whole text, so it opens without JavaScript and nothing is left out of the page.
 
 The filters and the grade row scroll away with the page. Once they are out of sight, a slim bar is fixed under
 the menu bar (`#quickbar`, written by `filterBar()`): a search box that filters the list as you type and keeps
