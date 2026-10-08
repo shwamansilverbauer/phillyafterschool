@@ -302,6 +302,7 @@
   // =====================================================================================================
   // The profile page: sign in, your first name, your groups, make a group, sign out, delete the account
   // =====================================================================================================
+  var hasYearPage = !!document.querySelector('[data-groups][data-year="1"]');   // the year calendar exists on this copy of the site
   var account = document.getElementById('account');
   if (account) {
     var aq = query();
@@ -467,6 +468,7 @@
         var more = el('p', 'hint', 'To change it, or put it on this device, open '); more.appendChild(open); more.appendChild(document.createTextNode('.')); summerBox.appendChild(more);
       };
       // the days-off plan, when one is kept
+      if (hasYearPage) { var yr = el('p', 'year-link'); var ya = el('a', 'btn', 'My kids’ calendar'); ya.href = page('calendar/'); yr.appendChild(ya); yr.appendChild(el('span', 'hint', ' Everything you’ve planned for the year, in one place.')); prof.appendChild(yr); }
       prof.appendChild(el('h3', null, 'Days off'));
       var offBox2 = el('div'); prof.appendChild(offBox2);
       var paintDaysOff = function (dp) {
@@ -1500,6 +1502,7 @@
         var li = el('a', 'btn', 'Log in'); li.href = page('account/') + '?next=' + K.next; oa.appendChild(li);
         var ca = el('a', 'btn', 'Create a free account'); ca.href = page('register/') + '?next=' + K.next; oa.appendChild(ca);
         box.appendChild(oa);
+        if (K.more) { var yp = el('p', 'hint', 'An account also lines up your week, your days off and your summer in one private calendar: '); var yl = el('a', null, 'My kids’ calendar'); yl.href = page('calendar/'); yp.appendChild(yl); yp.appendChild(document.createTextNode('.')); box.appendChild(yp); }
         return;
       }
       if (!loaded) { box.appendChild(el('p', 'hint', 'Checking your profile…')); return; }
@@ -1565,7 +1568,7 @@
     return p;
   }
 
-  var hasYear = !!document.querySelector('[data-groups][data-year="1"]');   // the year calendar exists on this copy of the site
+  var hasYear = hasYearPage;
   var sumBox = document.getElementById('sum-profile');
   var summer = window.pasSummer;   // set by site.js on the summer schedule
   if (sumBox && summer && API) keepPlan({
@@ -1607,6 +1610,29 @@
       empty: 'Choose a plan for a day, and you can keep your days off in your profile.',
       gets: 'Your profile gets each child’s first name and where they’ll be on each day off. The calendar’s title and photos stay on this device.'
     });
+  }
+
+  // =====================================================================================================
+  // My kids' calendar: the page is only filled in for someone who is signed in. It gets what their profile holds and
+  // hands it to site.js, which draws the year from that and from the plans on this device. Nothing is sent from here.
+  // =====================================================================================================
+  var yearBox = document.getElementById('year');
+  if (yearBox && window.pasYear && API) {
+    var yOut = document.getElementById('year-out'), yWait = document.getElementById('year-wait');
+    var yearOut = function () { set('pas-in', null); document.documentElement.classList.remove('signed'); yOut.hidden = false; yearBox.hidden = true; if (yWait) yWait.hidden = true; };
+    if (signedInHint()) {
+      yOut.hidden = true;
+      call('me').then(function (d) {
+        if (!d.ok || !d.user) { yearOut(); return; }
+        set('pas-in', '1');
+        call('profile').then(function (p) {
+          if (yWait) yWait.hidden = true;
+          yearBox.hidden = false;
+          window.pasYear.show(p.ok ? p : null);
+          if (!p.ok) { var warn = el('p', 'g-status bad', 'Couldn’t reach your profile just now, so this shows only what’s on this device. Reload to try again.'); yearBox.insertBefore(warn, yearBox.firstChild.nextSibling); }
+        });
+      });
+    }
   }
 
   // =====================================================================================================
