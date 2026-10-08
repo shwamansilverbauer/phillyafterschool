@@ -138,6 +138,25 @@ unset), and `termsUpdated` sets the date shown: change it when the terms change 
   for the library) and map pictures from OpenStreetMap, and only then. The map follows the filters. The preview copy
   has no map. Events: `pas_near` with `from` (school, me, off) and `pas_map_open`; never a location.
 
+## Your listing this month
+
+A manager who has claimed a listing sees its numbers on `/managers/`: how many times it was opened, clicks to sign up,
+clicks to its website, times it was put on a family's plan, and people who asked for its emails, for the last 30 days
+(and the 30 before, once counting has run that long), with page views day by day.
+
+- **What is kept.** One row per listing, kind and day in the `hits` table: `view`, `signup`, `site`, `plan`, `email`
+  (`HIT_KINDS`). A number, and nothing about who. Rows older than 400 days are deleted.
+- **How it is counted.** `hit()` in `site.js` posts the listing and the kind to `groups/api.php?action=hit`: a view when a
+  program's or camp's own page is opened (once per tab, via `sessionStorage`), `signup` and `site` when a register,
+  camp or website link is followed from its page or its card, `plan` when it is added to a week, a day off or a summer
+  week, and `email` when someone signs up for its emails. Nothing else goes with it.
+- **What is left out.** A browser driven by a script, the owner while editing, and a listing's own manager while signed
+  in. More than `HITS_AN_HOUR` counts from one internet address in an hour are dropped; for that the server keeps a
+  keyed hash of the address in the `throttle` table for up to two days, as it already does for sign-in attempts.
+- **Who sees it.** `claim_out()` adds `stats` to each claim the signed-in account holds. `/edit/stats/` lists the 40
+  most-opened listings for the owner. There is no public view.
+- The preview copy counts nothing.
+
 ## Is there space
 
 A place with more than one listing (an after-school program and a camp, say) signs in once on `/managers/`, is shown

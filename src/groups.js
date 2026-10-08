@@ -674,6 +674,28 @@
       if (c.status === 'ok' && !c.gone) {
         var view = el('a', 'btn', 'See the listing');
         view.href = c.listing.charAt(0) === 'p' ? page('programs/' + c.listing.slice(2) + '/') : page('summer-camps/' + c.listing.slice(2) + '/');
+        // your listing this month: how often it was opened, followed, planned and asked about. Numbers, never people.
+        if (c.stats) {
+          var st = c.stats, stBox = el('div', 'claim-stats'), day0 = function (iso) { var d = new Date(iso + 'T12:00:00Z'); return isNaN(d) ? '' : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }); };
+          var young = !st.since || st.since > st.from;   // counting began inside the last 30 days
+          stBox.appendChild(el('h4', null, young ? 'Your listing so far' : 'Your listing, last 30 days'));
+          var tiles = el('div', 'claim-nums');
+          [['view', 'time your listing was opened', 'times your listing was opened'], ['signup', 'click to sign up', 'clicks to sign up'], ['site', 'click to your website', 'clicks to your website'], ['plan', 'time it was put on a family’s plan', 'times it was put on a family’s plan'], ['email', 'person asked for its emails', 'people asked for its emails']].forEach(function (t) {
+            var tile = el('div', 'claim-num');
+            tile.appendChild(el('b', null, String(st.now[t[0]] || 0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')));
+            tile.appendChild(el('span', null, st.now[t[0]] === 1 ? t[1] : t[2]));
+            if (st.full) tile.appendChild(el('small', null, (st.prev[t[0]] || 0) + ' in the 30 days before'));
+            tiles.appendChild(tile);
+          });
+          stBox.appendChild(tiles);
+          var max = Math.max.apply(null, st.views.concat(1)), ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg');
+          svg.setAttribute('viewBox', '0 0 300 44'); svg.setAttribute('class', 'claim-spark'); svg.setAttribute('role', 'img'); svg.setAttribute('preserveAspectRatio', 'none');
+          svg.setAttribute('aria-label', 'Times the listing was opened, day by day for 30 days. Busiest day: ' + max + '.');
+          st.views.forEach(function (v, i) { var r = document.createElementNS(ns, 'rect'), h = v ? Math.max(3, Math.round(v / max * 40)) : 1; r.setAttribute('x', String(i * 10 + 1)); r.setAttribute('y', String(44 - h)); r.setAttribute('width', '8'); r.setAttribute('height', String(h)); r.setAttribute('rx', '2'); if (!v) r.setAttribute('class', 'nil'); svg.appendChild(r); });
+          stBox.appendChild(svg);
+          stBox.appendChild(el('p', 'hint', 'Opened, day by day, ' + day0(st.from) + ' to today.' + (st.since ? ' Counting began ' + day0(st.since) + '.' : ' Counting has just begun.') + ' These are numbers only: nothing about who visited. Your own visits while you’re signed in aren’t counted.'));
+          item.appendChild(stBox);
+        }
         // is there space: one of three words, on the listing straight away, and off again after a month
         var spBox = el('div', 'claim-space');
         spBox.appendChild(el('h4', null, 'Is there space right now?'));

@@ -10,6 +10,8 @@
 //   a profile      - only if the person asks: the school they saved, the grades their children are in (just the
 //                    grades), and a child's week (first name, programs, and the school each program is listed
 //                    under, so it can be put back on another device)
+//   a count        - for each listing and each day, how many times its page was opened, its links were followed, it was
+//                    put on a plan, or someone asked for its emails. A number, and nothing about who.
 //   a tally        - how many accounts, groups and so on were made each day. Numbers only, for the site's owner.
 //   a claim        - for someone who runs a program: which listing their account has claimed, and whether it stands.
 //                    A claim needs an account whose email address is at the listing's own website address.
@@ -48,6 +50,8 @@ const MAX_WEEKS = 6;        // children's weeks one profile can hold
 const MAX_CLAIMS = 12;      // listings one account can claim
 const MAX_CLAIMANTS = 5;    // accounts that can hold a claim on one listing
 const SPACE_DAYS = 30;      // how long "spots open", "waitlist" or "full" stays up before the manager has to say it again
+const HIT_KINDS = array('view', 'site', 'signup', 'email', 'plan');   // what is counted for a listing, a number a day
+const HITS_AN_HOUR = 240;   // counts taken from one internet address in an hour before the rest are dropped
 const BACKUP_DAYS = 14;      // how many daily copies of the database are kept
 const PHOTO_BYTES = 1600000; // the biggest listing photo accepted, after the browser has shrunk it
 const DAYS = array('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun');
@@ -115,6 +119,8 @@ function db(): PDO {
     $db->exec("CREATE TABLE IF NOT EXISTS space (listing TEXT PRIMARY KEY, state TEXT NOT NULL, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, updated INTEGER NOT NULL)");
     // A summer schedule kept in a profile: one per account. Each child's first name and their camps by week, nothing else.
     $db->exec('CREATE TABLE IF NOT EXISTS summers (user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, year INTEGER NOT NULL, json TEXT NOT NULL, updated INTEGER NOT NULL)');
+    // "Your listing this month": a number for each listing, kind and day. Nothing about who.
+    $db->exec('CREATE TABLE IF NOT EXISTS hits (listing TEXT NOT NULL, k TEXT NOT NULL, day TEXT NOT NULL, n INTEGER NOT NULL, PRIMARY KEY (listing, k, day))');
     // A days-off plan kept in a profile: one per account. Each child's first name and where they'll be on each day school is closed.
     $db->exec('CREATE TABLE IF NOT EXISTS daysoffs (user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, year INTEGER NOT NULL, json TEXT NOT NULL, updated INTEGER NOT NULL)');
     // Directors: a claim on a listing ("p:<program id>" or "c:<camp id>") and the changes a director has proposed for it.
@@ -154,6 +160,7 @@ function tidy(): void {
   q('DELETE FROM sessions WHERE expires < ?', array($t));
   q('DELETE FROM throttle WHERE t < ?', array($t - 2 * 86400));
   q('DELETE FROM grp WHERE expires < ?', array($t));
+  q('DELETE FROM hits WHERE day < ?', array((new DateTime('-400 days', new DateTimeZone('America/New_York')))->format('Y-m-d')));
   // Photo files whose record has gone (a deleted account, a replaced or declined photo).
   $dir = data_dir() . '/photos';
   if (is_dir($dir)) foreach ((array) @scandir($dir) as $f) {
@@ -571,6 +578,22 @@ function email_domain(string $email): string {
   $at = strrpos($email, '@');
   return $at === false ? '' : base_domain(substr($email, $at + 1));
 }
+// A listing's numbers for its manager: the last 30 days, the 30 before, and its page views day by day.
+function stats_of(string $key): array {
+  $tz = new DateTimeZone('America/New_York');
+  $day = function (int $back) use ($tz): string { return (new DateTime('-' . $back . ' days', $tz))->format('Y-m-d'); };
+  $from = $day(29); $before = $day(59);
+  $now = array(); $prev = array(); $views = array();
+  foreach (HIT_KINDS as $k) { $now[$k] = 0; $prev[$k] = 0; }
+  for ($i = 29; $i >= 0; $i--) $views[$day($i)] = 0;
+  foreach (q('SELECT k, day, n FROM hits WHERE listing = ? AND day >= ?', array($key, $before)) as $r) {
+    if (!isset($now[$r['k']])) continue;
+    if ($r['day'] >= $from) { $now[$r['k']] += (int) $r['n']; if ($r['k'] === 'view' && isset($views[$r['day']])) $views[$r['day']] = (int) $r['n']; }
+    else $prev[$r['k']] += (int) $r['n'];
+  }
+  $since = (string) val('SELECT MIN(day) FROM hits');   // the day counting began, for every listing alike
+  return array('now' => $now, 'prev' => $prev, 'views' => array_values($views), 'from' => $from, 'since' => $since, 'full' => $since !== '' && $since <= $before);
+}
 function claim_out(array $c): array {
   $l = listings();
   $edits = array();
@@ -580,7 +603,8 @@ function claim_out(array $c): array {
   $ph = row("SELECT id, status, alt FROM photos WHERE claim_id = ? AND status != 'declined' ORDER BY id DESC LIMIT 1", array($c['id']));
   $live = photo_live($c['listing']);
   return array('listing' => $c['listing'], 'name' => isset($l[$c['listing']]) ? $l[$c['listing']]['n'] : 'A listing no longer on the site', 'status' => $c['status'], 'gone' => !isset($l[$c['listing']]), 'edits' => $edits,
-    'photo' => $ph ? array('status' => $ph['status'], 'alt' => $ph['alt']) : null, 'photoLive' => $live ? (int) $live['id'] : 0, 'space' => space_of($c['listing']));
+    'photo' => $ph ? array('status' => $ph['status'], 'alt' => $ph['alt']) : null, 'photoLive' => $live ? (int) $live['id'] : 0, 'space' => space_of($c['listing']),
+    'stats' => $c['status'] === 'ok' && isset($l[$c['listing']]) ? stats_of($c['listing']) : null);
 }
 // What a listing's manager last said about space, while it is fresh and someone still holds the claim.
 function space_of(string $key): ?array {
@@ -668,6 +692,22 @@ tidy();
 backup();
 
 switch ($method . ' ' . $action) {
+
+  // ----- one more for a listing: its page was opened, a link on it was followed, it went on a plan, or someone asked
+  // for its emails. Only the number is kept. A listing's own manager, signed in, is not counted. The answer is the same
+  // whatever happened, so nothing can be learned by asking. -----
+  case 'POST hit': {
+    $key = str($in, 'l', 90); $k = str($in, 'k', 12);
+    $l = listings();
+    if (!isset($l[$key]) || !in_array($k, HIT_KINDS, true)) out(array('ok' => true));
+    $w = 'hit:' . who();
+    if (too_many($w, HITS_AN_HOUR, 3600)) out(array('ok' => true));
+    note($w);
+    $u = current_user();
+    if ($u && val("SELECT 1 FROM claims WHERE user_id = ? AND listing = ? AND status = 'ok'", array($u['id'], $key))) out(array('ok' => true));
+    q('INSERT INTO hits (listing, k, day, n) VALUES (?, ?, ?, 1) ON CONFLICT(listing, k, day) DO UPDATE SET n = n + 1', array($key, $k, today_ny()));
+    out(array('ok' => true));
+  }
 
   // ----- is everything working? Read by the site check that runs every hour. Nothing about anyone is in the answer. -----
   case 'GET health': {

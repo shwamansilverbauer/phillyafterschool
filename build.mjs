@@ -1980,6 +1980,13 @@ ${GROUPS.photos ? `    <li>${T(`A photo you send for your listing is shrunk in y
     <li>${T(`Every email has an unsubscribe link, and using it stops the emails. To have your name and address deleted altogether, email us.`)}</li>
     <li>${T(`Klaviyo handles that data under its own terms:`)} <a href="https://www.klaviyo.com/legal/privacy-notice" target="_blank" rel="noopener">${T(`Klaviyo’s privacy notice`)}</a>.</li>
   </ul>
+  ` : ''}${GROUPS ? `<h2 id="counts">${T(`Counts for each listing`)}</h2>
+  <ul>
+    <li>${T(`We keep a count, for each listing and each day, of how many times its page was opened, how many times its sign-up and website links were followed, how many times it was put on a plan, and how many people asked for its emails.`)}</li>
+    <li>${T(`It is a number and nothing else. No cookie is set, and nothing says who you are, which child a plan was for, or what else you looked at.`)}</li>
+    <li>${T(`To stop a count being run up, the server keeps a scrambled form of the internet address behind each count for up to two days. It can’t be turned back into the address and isn’t tied to what was counted.`)}</li>
+    <li>${T(`The people who run a listing they have claimed can see that listing’s numbers. Nobody else can, apart from us.`)}</li>
+  </ul>
   ` : ''}<h2 id="analytics">${T(`Analytics and recordings`)}</h2>
   <ul>
     <li>${T(`Google Analytics records which pages are visited and which buttons, filters and searches are used, along with general details such as device type and approximate location. That includes the words typed into the program search box.`)}</li>
@@ -2637,6 +2644,7 @@ const movedPage = (to, depth) => `<!doctype html>
 const claimBenefits = depth => `<ul class="benefits">
       <li><b>${T(`Keep your dates current.`)}</b> ${T(`Post sign-up openings, deadlines, term dates and camp days as soon as you set them, instead of waiting for us to find them.`)}</li>
       <li><b>${T(`Say whether there’s space.`)}</b> ${T(`Mark your listing “Spots open”, “Waitlist” or “Full”. It shows to parents straight away, with the date.`)}</li>
+      <li><b>${T(`See your numbers.`)}</b> ${T(`How many times your listing was opened this month, how many clicks went on to your sign-up page and website, and how many families put you on a plan.`)}</li>
       <li><b>${T(`Fix your costs and hours.`)}</b> ${T(`When a price or a pickup time changes, send it once and the listing follows.`)}</li>
 ${GROUPS.photos ? `      <li><b>${T(`Add a photo.`)}</b> ${T(`One picture of your space or an activity at the top of your listing.`)}</li>
 ` : ''}      <li><b>${T(`Show parents it’s kept up.`)}</b> ${T(`A “Claimed” mark tells them the listing is looked after by the people who run it.`)}</li>
@@ -3335,6 +3343,16 @@ function editStatsPhp() {
     <?php foreach ($cols as $key => $label) { ?><tr><th scope="row"><?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?></th><?php foreach (array(1, -1, 7, 30, 0) as $span) { $v = $sum($key, $span); ?><td><?php echo $v ? number_format($v) : '<span class="nil">0</span>'; ?></td><?php } ?></tr><?php } ?>
     </tbody>
   </table></div>
+  <h2>Listings, last 30 days</h2>
+  <?php if (!$topListings) { ?><p class="hint">Nothing counted yet. A listing appears here once its page has been opened.</p><?php } else { ?>
+  <div class="stat-scroll"><table class="stat-table">
+    <thead><tr><th scope="col">Listing</th><th scope="col">Opened</th><th scope="col">Clicks to sign up</th><th scope="col">Clicks to its website</th><th scope="col">Put on a plan</th><th scope="col">Asked for emails</th></tr></thead>
+    <tbody>
+    <?php foreach ($topListings as $row) { ?><tr><th scope="row"><?php echo htmlspecialchars($row[0], ENT_QUOTES, 'UTF-8'); ?><?php if ($row[6]) { ?> <span class="hint">(claimed)</span><?php } ?></th><?php for ($i = 1; $i <= 5; $i++) { ?><td><?php echo $row[$i] ? number_format($row[$i]) : '<span class="nil">0</span>'; ?></td><?php } ?></tr><?php } ?>
+    </tbody>
+  </table></div>
+  <p class="hint">The 40 most-opened listings. Numbers only: nothing about who. A manager sees the same numbers for a listing they have claimed, and their own signed-in visits aren’t counted. Counting began <?php echo htmlspecialchars($hitsSince, ENT_QUOTES, 'UTF-8'); ?>.</p>
+  <?php } ?>
   <p class="hint">“Ever” counts everything since accounts began, including accounts and groups that were later deleted. Sign-ins by method and profile saves have been counted since October 6, 2026. Days are Philadelphia days, and “last 7 days” includes today.</p>
 <?php } ?>
   <p><a class="btn" href="../">Back to editing</a> <a class="btn" href="../?out=1">Sign out</a></p>
@@ -3346,6 +3364,8 @@ function editStatsPhp() {
 ${editAuthPhp()}
 if (!edit_signed_in()) { header('Location: ../', true, 303); exit; }
 $SCHOOLS = json_decode('${names}', true);
+$LISTINGS = json_decode('${JSON.stringify(Object.fromEntries(Object.entries(claimListings()).map(([k, v]) => [k, v.n]))).replace(/\\/g, '\\\\').replace(/'/g, "\\'")}', true);
+$topListings = array(); $hitsSince = '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
@@ -3383,6 +3403,17 @@ if ($have) {
     foreach ($db->query("SELECT school, COUNT(*) AS c FROM users WHERE school != '' GROUP BY school ORDER BY c DESC, school") as $r) $bySchool[] = array(isset($SCHOOLS[$r['school']]) ? $SCHOOLS[$r['school']] : $r['school'], (int) $r['c']);
   } catch (Exception $e) { /* before profiles existed */ }
   $tz = new DateTimeZone('America/New_York');
+  try {
+    $from = (new DateTime('-29 days', $tz))->format('Y-m-d');
+    $per = array();
+    $st = $db->prepare('SELECT listing, k, SUM(n) AS n FROM hits WHERE day >= ? GROUP BY listing, k'); $st->execute(array($from));
+    foreach ($st as $r) { if (!isset($per[$r['listing']])) $per[$r['listing']] = array('view' => 0, 'signup' => 0, 'site' => 0, 'plan' => 0, 'email' => 0); if (isset($per[$r['listing']][$r['k']])) $per[$r['listing']][$r['k']] = (int) $r['n']; }
+    uasort($per, function ($a, $b) { return $b['view'] <=> $a['view'] ?: array_sum($b) <=> array_sum($a); });
+    $claimed = array(); foreach ($db->query("SELECT DISTINCT listing FROM claims WHERE status = 'ok'") as $r) $claimed[$r['listing']] = true;
+    foreach (array_slice($per, 0, 40, true) as $key => $v) $topListings[] = array(isset($LISTINGS[$key]) ? $LISTINGS[$key] : $key, $v['view'], $v['signup'], $v['site'], $v['plan'], $v['email'], isset($claimed[$key]));
+    $first = (string) $db->query('SELECT MIN(day) FROM hits')->fetchColumn();
+    $hitsSince = $first === '' ? '' : (new DateTime($first, $tz))->format('F j, Y');
+  } catch (Exception $e) { /* before counting began */ }
   for ($i = 0; $i < 30; $i++) { $d = new DateTime('now', $tz); $d->modify('-' . $i . ' day'); $days[$d->format('Y-m-d')] = array(); }
   try {
     foreach ($db->query('SELECT k, day, n FROM tally') as $r) {
@@ -3845,7 +3876,7 @@ function campPage(c) {
       ${claimedMark('c:' + c.id, D)}
       ${spaceSlot('c:' + c.id, D)}
     </div>`;
-  const body = `<div style="display:contents">
+  const body = `<div data-camp-page="${esc(c.id)}" style="display:contents">
   ${c.season && c.season < year ? `<section class="section"><p class="flag camp-guide"><b>${T(`These are its summer {year} details, shown as a guide.`, { year: c.season })}</b> ${T(`It hasn’t posted summer {next} yet. This page changes when it does.`, { next: year })}${ALERTS ? ` <a href="#by-email">${T(`Get an email when it does.`)}</a>` : ''}</p></section>` : ''}
   <section class="section">
     <h2>${T(`The details`)}</h2>
