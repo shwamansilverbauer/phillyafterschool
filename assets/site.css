@@ -73,6 +73,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .hero{padding-block:clamp(28px,6vw,64px) clamp(28px,5vw,52px);display:flex;flex-direction:column;gap:18px}
 .hero .lede{color:var(--hero-muted);font-size:clamp(1.05rem,2.2vw,1.25rem);max-width:60ch}
 .hero .where{color:var(--hero-muted);font-size:1rem}
+.pill.wrap{white-space:normal;border-radius:14px;line-height:1.35;padding:4px 12px}
+.hero .where .served{display:inline-flex;flex-wrap:wrap;gap:6px;vertical-align:middle;margin-left:8px}
+.hero .where .pill{font-size:.92rem}
+@media (max-width:640px){.hero .where .served{display:flex;margin:8px 0 0}}
 .hero a{color:var(--hero-ink)}
 .facts{display:flex;flex-wrap:wrap;gap:8px 12px;font-size:.98rem}
 .facts span{background:var(--hero-chip);border-radius:16px;padding:6px 14px;color:var(--hero-muted)}
@@ -1156,9 +1160,20 @@ ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .sum{background:var(--surface);border:2px solid var(--yellow);border-radius:18px;padding:22px 24px;gap:12px}
 .js .sum.needs-js-block{display:flex;flex-direction:column}
-.sum-top{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:16px 28px;align-items:end}
-@media (max-width:700px){.sum-top{grid-template-columns:minmax(0,1fr)}}
-.sum-age select{min-height:50px;padding:10px 14px}
+.sum-kids{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+.sum-kids .kids[hidden]{display:none}
+.sum-top{display:grid;grid-template-columns:minmax(0,220px) minmax(0,190px) minmax(0,1fr);gap:16px 24px;align-items:start}
+@media (max-width:860px){.sum-top{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.sum-tally{grid-column:1 / -1}}
+@media (max-width:460px){.sum-top{grid-template-columns:minmax(0,1fr)}}
+.sum-top .field{gap:6px}
+.sum-top .field label{font-size:.95rem}
+.sum-age select,.sum-name input[type="text"]{min-height:50px;padding:10px 14px}
+.sum-tally{padding-top:4px}
+.sum-same{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;margin:0}
+.sumcard{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;display:flex;flex-direction:column;gap:12px}
+.sumcard[hidden]{display:none}
+.sum-pages{display:flex;flex-wrap:wrap;gap:8px}
+.sum-pages .kid{font-size:.95rem;padding:8px 16px}
 .sum-tally{display:flex;flex-direction:column;gap:5px;min-width:0}
 .sum-tally #sum-count{font-weight:700}
 .sum-strip{display:flex;gap:4px}
@@ -1225,7 +1240,8 @@ ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 @media (max-width:640px){.sum-chart thead th:first-child,.sum-chart tbody th{width:8rem;min-width:8rem;max-width:8rem;padding-left:10px;padding-right:8px;font-size:.86rem}.sum-chart tbody th small{display:none}.sum-chart{min-width:700px}.sum-chart td{min-width:40px}}
 @media print{.sum-chart-wrap{max-height:none}}
 @media print{
-  .sum-add,.sum-choose,.sum-x,.sum-tools,.sum-age,.sum-chart-section,.camp-guide{display:none!important}
+  .sum-add,.sum-choose,.sum-x,.sum-tools,.sum-top .field,.sum-kids .clear,.sum-same,.sum-chart-section,.camp-guide{display:none!important}
+  body:not(.print-card) .sumcard{display:none!important}
   .sum{border:0;padding:0}
   .sum-chip{border:1px solid #000}
 }
