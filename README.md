@@ -546,7 +546,9 @@ The pieces:
   An update goes out on the first send day on or after its date, to the program's followers only, and is dropped two
   days after that. So an update merged later than its send day is never sent: give it a date a few days ahead, or
   change the date when you merge. The monthly check dates its notes a week out for that reason.
-- **The daily job.** `.github/workflows/alerts.yml` runs every morning, builds the site and runs `scripts/send-alerts.mjs`.
+- **The daily job.** `.github/workflows/alerts.yml` is started every hour, because GitHub runs scheduled jobs late,
+  sometimes by hours. Only a run that lands between 6:30 and 10:30 in the morning, Philadelphia time, does anything:
+  it builds the site and runs `scripts/send-alerts.mjs`. A run started by hand sends at any hour.
   It reads the list from Klaviyo and records one "School dates" event for each person who is due an email. Someone who
   just joined gets one "welcome" email the next morning with every date already announced; after that they get the
   weekly one. A missed morning is made up on either of the next two, and Klaviyo ignores a repeat of an event it already

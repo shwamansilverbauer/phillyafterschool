@@ -1,12 +1,14 @@
 # Every morning: work out which subscribers are due a "dates" email and tell Klaviyo.
 # Most mornings there is nothing to send and the job ends in a few seconds.
+# It is started every hour because GitHub runs scheduled jobs late, sometimes by hours. Only a run that lands
+# between 6:30 and 10:30 in the morning, Philadelphia time, does anything; the rest stop at the first step.
+# Nothing sends twice: Klaviyo keeps only the first copy of each email.
 # It needs two repository secrets, KLAVIYO_API_KEY and ALERTS_TOKEN, and does nothing without them.
 name: Send date emails
 
 on:
   schedule:
-    - cron: '7 11 * * *'   # 7:07am in Philadelphia in summer, 6:07am in winter
-    - cron: '37 14 * * *'  # a second try three and a half hours later, because GitHub sometimes skips a scheduled run. Nothing sends twice: Klaviyo keeps only the first copy of each email.
+    - cron: '7 * * * *'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -28,16 +30,27 @@ jobs:
   send:
     runs-on: ubuntu-latest
     steps:
+      - name: Is it morning in Philadelphia?
+        id: clock
+        run: |
+          now=$(TZ=America/New_York date +%H%M)
+          echo "It is $now in Philadelphia."
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || { [ "$((10#$now))" -ge 630 ] && [ "$((10#$now))" -lt 1030 ]; }; then echo "go=yes" >> "$GITHUB_OUTPUT"; else echo "Outside 6:30 to 10:30, so there is nothing to do."; fi
+
       - uses: actions/checkout@v4
+        if: steps.clock.outputs.go == 'yes'
 
       - uses: actions/setup-node@v4
+        if: steps.clock.outputs.go == 'yes'
         with:
           node-version: 20
 
       - name: Build the site, which writes the dates feed
+        if: steps.clock.outputs.go == 'yes'
         run: node build.mjs
 
       - name: Tell Klaviyo who is due an email
+        if: steps.clock.outputs.go == 'yes'
         env:
           KLAVIYO_API_KEY: ${{ secrets.KLAVIYO_API_KEY }}
           ALERTS_TOKEN: ${{ secrets.ALERTS_TOKEN }}
@@ -46,5 +59,6 @@ jobs:
         run: |
           set -- 
           if [ "$DRY_RUN" = "true" ]; then set -- "$@" --dry-run; fi
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "$DRY_RUN" != "true" ]; then set -- "$@" --any-time; fi
           if [ "$DRY_RUN" = "true" ] && [ -n "$TODAY" ]; then set -- "$@" --today "$TODAY"; fi
           node scripts/send-alerts.mjs "$@"

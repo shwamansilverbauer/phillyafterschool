@@ -8,6 +8,7 @@
 //   node build.mjs && node scripts/send-alerts.mjs            send what is due
 //   node scripts/send-alerts.mjs --dry-run                    count what would be sent, send nothing
 //   node scripts/send-alerts.mjs --today 2026-11-01           pretend it is another day (use with --dry-run)
+//   node scripts/send-alerts.mjs --any-time                   send even outside the morning window
 //
 // It needs two secrets from the environment and does nothing without them:
 //   KLAVIYO_API_KEY   a private Klaviyo key (Events: full, Profiles: read, Lists: read)
@@ -29,6 +30,7 @@ const API = (process.env.KLAVIYO_API || 'https://a.klaviyo.com').replace(/\/$/, 
 const REVISION = '2026-07-15';
 const ZONE = 'America/New_York';
 const CATCH_UP = 2;   // a missed morning is made up on either of the next two
+const WINDOW = ['06:30', '10:30'];   // Philadelphia time. The job is started every hour because GitHub runs scheduled jobs late, sometimes by hours; only a run that lands in the morning sends.
 
 const isoAdd = (iso, n) => new Date(Date.parse(iso + 'T12:00:00Z') + n * 864e5).toISOString().slice(0, 10);
 const localDay = when => new Intl.DateTimeFormat('en-CA', { timeZone: ZONE, year: 'numeric', month: '2-digit', day: '2-digit' }).format(when);
@@ -149,6 +151,8 @@ async function main() {
   console.log(`Secrets found: KLAVIYO_API_KEY ${KEY ? 'yes' : 'NO'}, ALERTS_TOKEN ${TOKEN ? 'yes' : 'NO'}.`);   // never the values
   if (!KEY) return console.log('There is no KLAVIYO_API_KEY secret, so nothing was sent.');
   if (!TOKEN && !DRY) return console.log('There is no ALERTS_TOKEN secret, so nothing was sent.');
+  const clock = new Intl.DateTimeFormat('en-GB', { timeZone: ZONE, hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
+  if (!DRY && !flag('--any-time') && (clock < WINDOW[0] || clock >= WINDOW[1])) return console.log(`It is ${clock} in Philadelphia. Emails only go out between ${WINDOW[0]} and ${WINDOW[1]}, so nothing was sent.`);
 
   const people = await subscribers(cfg.alerts.listId);
   const bySchool = {};
