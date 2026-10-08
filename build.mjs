@@ -505,7 +505,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   const menus = [
     ['Programs', [['programs/', 'After-school programs'], ...(programs.some(p => p.weekend) ? [['weekends/', 'Weekend classes']] : []), ...(daysOff ? [[offPath, 'Day-camp programs']] : []), ...(summerCamps.length ? [['summer-camps/', 'Summer camps']] : [])]],
     ['Search by', [['schools/', 'School'], ['neighborhoods/', 'Neighborhood'], ['types/', 'Program type'], ['programs/#by-day', 'Day of week']]],
-    ['Build a schedule', [['board/', 'After-school schedule'], ...(daysOff ? [[offPath + '#plan', 'Day-camp schedule']] : []), ...(summerCamps.length ? [['summer-schedule/', 'Summer schedule']] : [])]],
+    ['Build a schedule', [['board/', 'After-school schedule'], ...(daysOff ? [[offPath + '#plan', 'Day-camp schedule']] : []), ...(summerCamps.length ? [['summer-schedule/', 'Summer schedule']] : []), ...(GROUPS && daysOff ? [['calendar/', 'My kids’ calendar']] : [])]],
     ['Suggest', [['suggest/', 'A program'], ['suggest/?kind=camp', 'A camp'], ['suggest/?kind=correction', 'An update to a listing'], ['ideas/', 'A feature'], ['schools/request/', 'A school']]],
   ];
   const nav = menus.map(([label, items]) => {
@@ -1930,6 +1930,7 @@ function privacyPage() {
     <li>${T(`If you keep your school in your profile, we store which school. If you keep your children’s grades, we store the grades and nothing about which child is in which. If you keep a week in your profile, we store the child’s first name, the programs on their current and upcoming weeks, and the school each program was picked under, so the week can be put back on another device. Notes you type are not stored.`)}</li>
     <li>${T(`If you keep a summer schedule in your profile, we store each child’s first name as you typed it and the camps picked for each week, so the summer is there on your other devices. Ages, the calendar’s title and photos are not stored. A summer in your profile can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The summer schedule section is hidden in session recordings, and analytics is told only that a summer was kept, never what is in it.`)}</li>
     <li>${T(`If you keep a days-off plan in your profile, we store each child’s first name as you typed it and the place picked for each day school is closed. The calendar’s title and photos are not stored. The plan can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The planner is hidden in session recordings, and analytics is never told what is in a plan you keep.`)}</li>
+    <li>${T(`“My kids’ calendar” is drawn in your browser, for you alone, from the plans on your device and the ones in your profile. Opening it stores nothing new and sends nothing about your plans. It has no link of its own, so nobody else can open it. A picture or calendar file you save is a copy on your device that we never receive. So it can tell you when a date changes, the page remembers what your last file held, on your device only. Google Analytics and Microsoft Clarity are not loaded on it.`)}</li>
     <li>${T(`Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.`)}</li>
     <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
     <li>${T(`There are no passwords. We email you a link and a 6-digit code; each works once and for 15 minutes. A cookie then keeps that device signed in for 30 days, and you can sign out everywhere from your account page.`)}</li>
@@ -2547,7 +2548,7 @@ ${cards}
 // "groups" in site.config.json turns them on. While "pilot" is true nothing links to them: the pages exist at
 // /account/ and /groups/, and the block on the roster page only shows in a browser that has visited one of them.
 const GROUPS = cfg.groups && cfg.contactEmail ? { photos: cfg.groups.photos === true || process.env.PAS_PHOTOS === '1', pilot: cfg.groups.pilot !== false, klaviyoList: cfg.groups.klaviyoList || '', google: /^[0-9a-z-]+\.apps\.googleusercontent\.com$/.test(cfg.groups.googleClientId || '') ? cfg.groups.googleClientId : '' } : null;
-const groupsAttrs = depth => `data-groups data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}" data-api="${PREVIEW ? '' : link('groups/api.php', depth)}"${GROUPS.klaviyoList && ALERTS?.klaviyoKey ? ` data-kl-key="${esc(ALERTS.klaviyoKey)}" data-kl-list="${esc(GROUPS.klaviyoList)}"` : ''}${GROUPS.google && !PREVIEW ? ` data-google="${esc(GROUPS.google)}"` : ''} data-pilot="${GROUPS.pilot ? 1 : 0}"`;
+const groupsAttrs = depth => `data-groups data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}" data-api="${PREVIEW ? '' : link('groups/api.php', depth)}"${GROUPS.klaviyoList && ALERTS?.klaviyoKey ? ` data-kl-key="${esc(ALERTS.klaviyoKey)}" data-kl-list="${esc(GROUPS.klaviyoList)}"` : ''}${GROUPS.google && !PREVIEW ? ` data-google="${esc(GROUPS.google)}"` : ''} data-pilot="${GROUPS.pilot ? 1 : 0}"${YEAR_PAGE && !PREVIEW ? ' data-year="1"' : ''}`;
 // ---------- directors: which listings can be claimed, and how ----------
 // Someone who runs a program claims its listing by signing in with an email address at the listing's own website
 // address. That is proof enough for a program with its own site ("match"). Where the address is shared by many
@@ -2601,6 +2602,7 @@ function accountPage(register = false) {
         <li><b>${T(`Save your school.`)}</b> ${T(`Every list starts from it, on any device you sign in on.`)}</li>
         <li><b>${T(`Save your kids’ grades.`)}</b> ${T(`Lists open on the programs that take them.`)}</li>
         <li><b>${T(`Keep your week.`)}</b> ${T(`Build it on your phone tonight, find it on your laptop tomorrow.`)}</li>
+        ${GROUPS && daysOff ? `<li><b>${T(`See the whole year.`)}</b> ${T(`Your week, the days off, the summer and every sign-up date in one private calendar.`)}</li>` : ''}
         <li><b>${T(`Share a week with one person.`)}</b> ${T(`A grandparent or a sitter signs in to see it, and you can take it back.`)}</li>${GROUPS.pilot ? '' : `
         <li><b>${T(`Share with a small group.`)}</b> ${T(`A few families you invite by email see each other’s weeks. Nobody else can find the group or ask to join.`)}</li>`}
       </ul>
@@ -3610,6 +3612,103 @@ const summerPlan = (() => {
   });
   return { weeks, label, lastDay, camps, dated: camps.filter(x => x.on.length), undated: camps.filter(x => !x.on.length) };
 })();
+// ---------- my kids' calendar: the whole year from every plan, for a signed-in parent ----------
+// The page is a shell. What is on it comes from the plans in the browser and, once someone signs in, the ones kept in
+// their profile: the after-school week, the days off, the summer, and the sign-up dates of whatever was picked. It has
+// no address of its own for any family: nothing about a child is ever in the page that is served, or in a link.
+const yearPath = 'calendar/';
+const YEAR_PAGE = !!(GROUPS && daysOff);
+function calendarPage() {
+  const D = 1, P = summerCamps.length ? summerPlan : null;
+  const shortHours = c => String(c.hours || '').split(/\. /)[0].replace(/\.$/, '');
+  const data = {
+    year: +String(daysOff.schoolYear).slice(0, 4), schoolYear: daysOff.schoolYear, lastDay: daysOff.lastDay || '', site: cfg.siteUrl,
+    board: link('board/', D), offPage: link(offPath, D), sumPage: link(summerPath, D),
+    offDays: offDays.flatMap((d, bi) => d.dates.filter(x => x >= TODAY).map(x => ({ d: x, name: d.name, b: bi }))),
+    // every listing a week or a day off can name: its name, its page, the sign-up dates it has posted, and the days off it posted a camp for
+    programs: Object.fromEntries(programs.map(p => [p.id, { n: p.name, href: link(programPath(p), D), dates: upcomingDates(p).map(d => ({ date: d.date, label: d.label })), ...(p.daysOff ? { off: p.daysOff.dates.filter(x => x >= TODAY), url: p.daysOff.url } : {}) }])),
+    summer: P ? {
+      year: summerYear, weeks: P.weeks.map(w => ({ d: w, label: P.label(w) })),
+      camps: Object.fromEntries(P.camps.map(({ c, on, exact }) => [c.id, { n: c.name, w: on, x: exact ? 1 : 0, y: c.season || 0, h: shortHours(c), href: link(campPath(c), D), dates: (c.dates || []).filter(d => d.date >= TODAY).map(d => ({ date: d.date, label: d.label })) }])),
+    } : null,
+  };
+  const hero = `    <h1>${T(`My kids’ calendar`)}</h1>
+    <p class="lede">${T(`Everything you’ve planned for the school year and the summer, in one place: the after-school week, every day off, camp weeks and sign-up dates. Only you can see it.`)}</p>`;
+  const body = `<div ${groupsAttrs(D)} data-year-page data-clarity-mask="true" style="display:contents">
+  <noscript><p class="ask">${T(`The calendar needs JavaScript turned on.`)}</p></noscript>
+  <section class="section year-out" id="year-out">
+    <h2>${T(`The whole year, lined up`)}</h2>
+    <p>${T(`Sign in and what you’ve planned comes together on one page, on any device.`)}</p>
+    <ul class="rules ticks">
+      <li>${T(`Every day school is closed, with where each child will be.`)}</li>
+      <li>${T(`The summer, week by week.`)}</li>
+      <li>${T(`Sign-up openings and deadlines for the programs and camps you chose.`)}</li>
+      <li>${T(`A calendar picture for each month, and a file that puts it all in your phone’s calendar.`)}</li>
+    </ul>
+    <div class="actions"><a class="btn primary big" href="${link('register/', D)}?next=calendar">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=calendar">${T(`Log in`)}</a></div>
+    <p class="hint">${T(`It’s private. There is no link to your calendar and no way to share it from here: a picture or a file you save is yours to send.`)}</p>
+    <p class="hint">${T(`Planning doesn’t need an account:`)} <a href="${link('board/', D)}">${T(`build a week`)}</a>, <a href="${link(offPath, D)}#plan">${T(`plan the days off`)}</a>${P ? `, <a href="${link(summerPath, D)}">${T(`plan the summer`)}</a>` : ''}.</p>
+  </section>
+  <p class="hint when-in" id="year-wait">${T(`Getting your calendar…`)}</p>
+  <section class="section sum year needs-js-block" id="year" hidden>
+    <h2 id="year-h">${T(`The year`)}</h2>
+    <ul class="year-src" id="year-src"></ul>
+    <div class="flag year-changed" id="year-changed" hidden></div>
+    <div id="year-empty" hidden></div>
+    <div id="year-full">
+      <div class="year-file">
+        <h3>${T(`Put it in your phone’s calendar`)}</h3>
+        <p>${T(`One file with everything ticked below. Open it and your calendar app adds the entries. It’s a copy: if a date changes later, this page will say so, and you download it again.`)}</p>
+        <fieldset class="year-opts" id="year-opts">
+          <legend class="vh">${T(`What goes in the file`)}</legend>
+          <label><input type="checkbox" id="year-o-off" checked> ${T(`Days off, with each child’s plan`)}</label>
+          <label><input type="checkbox" id="year-o-sum" checked> ${T(`Summer camp weeks`)}</label>
+          <label><input type="checkbox" id="year-o-guide"> ${T(`Camps still showing last summer’s weeks, as a guide`)}</label>
+          <label><input type="checkbox" id="year-o-signup" checked> ${T(`Sign-up dates`)}</label>
+          <label><input type="checkbox" id="year-o-week"> ${T(`The after-school week, repeating every school week`)}</label>
+        </fieldset>
+        <div class="actions"><button type="button" class="btn primary" id="year-dl">Download the calendar file</button><button type="button" class="btn" id="year-print">Print this page</button></div>
+        <p class="hint" id="year-status" aria-live="polite"></p>
+      </div>
+      <div id="year-week"></div>
+      <div id="year-agenda"></div>
+      <div class="card-maker sumcard" id="year-card" hidden>
+        <h3>${T(`Make it a picture`)}</h3>
+        <p>${T(`A calendar for each month, to print for the fridge or send to family. It’s made here in your browser.`)}</p>
+        <div class="card-grid">
+          <div class="card-fields">
+            <div class="sum-pages" id="year-pages" role="group" aria-label="Which calendar"></div>
+            <div class="field">
+              <label for="year-title">${T(`Title`)}</label>
+              <input id="year-title" type="text" maxlength="40" placeholder="Our year" autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="year-photo">${T(`A photo (optional)`)}</label>
+              <input id="year-photo" type="file" accept="image/*">
+              <span class="hint">${T(`The photo never leaves this device. The calendar is made here in your browser, nothing is uploaded, and the photo isn’t saved.`)}</span>
+              <button type="button" class="clear" id="year-photo-clear" hidden>Remove the photo</button>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn primary" id="year-pic-share" hidden>Share the calendar</button>
+              <button type="button" class="btn" id="year-pic-copy" hidden>Copy picture</button>
+              <button type="button" class="btn" id="year-pic-save">Save as image</button>
+              <button type="button" class="btn" id="year-pic-all">Save all of them</button>
+              <button type="button" class="btn" id="year-pic-print">Print</button>
+            </div>
+            <p class="hint" id="year-card-status" aria-live="polite"></p>
+          </div>
+          <div class="card-preview"><canvas id="year-canvas" width="1080" height="1350" role="img" aria-label="Preview of the calendar"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script type="application/json" id="year-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
+</div>`;
+  return layout({
+    title: 'My kids’ calendar', description: `A private calendar of everything you’ve planned on ${cfg.siteName}: the after-school week, days off, summer camps and sign-up dates.`,
+    pathName: yearPath, depth: D, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(D),
+  });
+}
 function summerSchedulePage() {
   const D = 1, P = summerPlan, year = summerYear, base = campsFile.season;
   const guide = P.dated.filter(x => !x.exact).length;
@@ -3933,6 +4032,7 @@ if (daysOff) write(offPath + 'index.html', daysOffPage());
 if (summerCamps.length) write(campsPath + 'index.html', summerCampsPage());
 for (const c of summerCamps) write(campPath(c) + 'index.html', campPage(c));
 if (summerCamps.length) write(summerPath + 'index.html', summerSchedulePage());
+if (YEAR_PAGE) write(yearPath + 'index.html', calendarPage());
 if (weekendPrograms.length) write(weekendPath + 'index.html', weekendPage());
 if (ALERTS) write(alertsPath + 'index.html', alertsPage());
 write('review/index.html', reviewPage());

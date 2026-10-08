@@ -227,6 +227,33 @@ Labor Day, and works out which of those weeks each camp runs:
   children there are. Names, titles and photos are never in it, and the whole section is masked in recordings.
 - The schedule switches to the next summer on September 1.
 
+## My kids' calendar
+
+`/calendar/` (`calendarPage()`) is the whole year in one place, for a signed-in parent only. The page that is served is
+a shell with the listings' names and dates in it and nothing about anyone; it is kept out of search, and loads no
+analytics or recordings.
+
+- **Who sees what.** Signed out, the page explains what it is and offers to log in or create an account
+  (`?next=calendar` brings them back). Signed in, `groups.js` asks the server who this is and for the profile, and hands
+  the profile to `window.pasYear.show()` in `site.js`, which draws everything in the browser. Nothing about a plan is
+  sent from this page. There is no link to a family's calendar and no way to share it from the site.
+- **Where the plans come from.** Each kind of plan comes from the profile when it is kept there, otherwise from this
+  device: the days-off plan and the summer as a whole, the after-school week child by child. Children are matched by
+  first name. The top of the page says which is which and links to the planner to change it or keep it. The individual
+  planners stay free and work without an account; only this combined view asks for one.
+- **What is on it.** "Every school week" (each child's current roster, or the upcoming one when the current is empty),
+  then month by month: every day school is closed with each child's plan (or a link to plan it), camp weeks, the
+  last day of school, and every upcoming sign-up date (`register.dates`, and a camp's `dates`) of a program or camp a
+  child is down for. A camp still on last summer's weeks is marked as a guide.
+- **The calendar file** (`school-year-2026-27.ics`) holds what is ticked: days off, camp weeks, guide weeks (off by
+  default), sign-up dates, and the after-school week as entries that repeat every school week and skip the days off
+  (off by default). Each entry has a fixed id, so opening a newer copy updates the old entries in most calendar apps.
+- **When a date changes.** A file is a copy. At each download the page keeps, in the browser (`pas-year-file`), what
+  the file held; on later visits it lists what is new, moved, changed or gone since, with "Download it again".
+- **Pictures.** "School weeks" on one card, and a calendar for each month with something on it: days off in yellow
+  with a bar for each child, camp weeks as bars across the row, and a flag on a sign-up date. Title (`yearTitle`) and
+  photo work as on the other cards, and stay on the device.
+
 ## Weekend classes
 
 A listing in `data/programs.json` with a `weekend` block shows on `/weekends/` and gets a "Weekends" row on its own
