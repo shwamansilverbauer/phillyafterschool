@@ -601,7 +601,8 @@ ${body}
         <li><a href="${link('contact/', depth)}">${T(`Contact us`)}</a></li>${GROUPS ? `
         <li><a href="${link('managers/', depth)}">${T(`For program managers`)}</a></li>` : ''}
         <li><a href="${link('ideas/', depth)}">${T(`Request a feature`)}</a></li>
-        <li><a href="${link('privacy/', depth)}">${T(`Privacy`)}</a></li>
+        <li><a href="${link('privacy/', depth)}">${T(`Privacy`)}</a></li>${TERMS ? `
+        <li><a href="${link('terms/', depth)}">${T(`Terms of use`)}</a></li>` : ''}
         <li><a href="${link('support/', depth)}">${T(`Buy me a coffee`)}</a></li>
       </ul>
     </div>
@@ -1267,6 +1268,26 @@ function schoolRequestPage() {
     <p>${T(`Each school takes real checking, so the ones parents ask for most go first. One tap adds your vote.`)}</p>
     <div class="actions"><button type="button" class="btn primary big" id="req-btn">Ask for this school</button></div>
     <p class="hint" id="req-status" aria-live="polite"></p>
+    ${ALERTS ? `<form class="alerts-form req-notify" id="req-notify" data-key="${esc(ALERTS.klaviyoKey)}" data-list="${esc(ALERTS.listId)}"${ALERTS.doubleOptIn ? ' data-confirm="1"' : ''}${PREVIEW ? ' data-preview="1"' : ''} data-clarity-mask="true" novalidate>
+      <h3 id="req-notify-title">${T(`Get an email when it’s added`)}</h3>
+      <div class="alerts-row">
+        <div class="field">
+          <label for="req-name">${T(`Your first name`)}</label>
+          <input id="req-name" name="first_name" type="text" maxlength="60" autocomplete="given-name" required>
+        </div>
+        <div class="field">
+          <label for="req-email">${T(`Your email`)}</label>
+          <input id="req-email" name="email" type="email" maxlength="150" autocomplete="email" inputmode="email" required>
+        </div>
+        <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+          <label for="req-company">Leave this blank</label>
+          <input id="req-company" name="company" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <button class="btn primary big" type="submit">${T(`Email me when it’s added`)}</button>
+      </div>
+      <p class="hint">${T(`One email when this school gets its page. It also adds you to our email list, for occasional news about the site. Every email has an unsubscribe link.`)} <a href="${link('privacy/', D)}#email">${T(`How we handle your email.`)}</a></p>
+      <p class="alerts-status" id="req-notify-status" aria-live="polite"></p>
+    </form>` : ''}
   </div>
   <div class="panel" id="req-near" hidden>
     <h2>${T(`In the meantime`)}</h2>
@@ -1620,6 +1641,84 @@ ${wkNear.map(p => weekendRow(p, D)).join('\n')}
   });
 }
 
+// ---------- terms of use ----------
+// A draft until "termsLive": true is set in site.config.json. Until then it is built into the preview copy only, with a
+// banner saying so, and nothing on the live site links to it.
+const TERMS = cfg.termsLive === true || PREVIEW;
+function termsPage() {
+  const mail = cfg.contactEmail ? `<a href="mailto:${esc(cfg.contactEmail)}">${esc(cfg.contactEmail)}</a>` : '';
+  const who = cfg.termsOperator ? esc(cfg.termsOperator) : esc(cfg.siteName);
+  const hero = `    <h1>${T(`Terms of use`)}</h1>
+    <p class="lede">${T(`The rules for using this site, in plain English. Using the site means you agree to them.`)}</p>`;
+  const body = `<div class="prose">
+  ${cfg.termsLive === true ? '' : `<p class="flag"><b>Draft for review.</b> This page is only in the preview. It is not on the live site, and it has not been checked by a lawyer.</p>`}
+  <h2>${T(`What this site is`)}</h2>
+  <ul>
+    <li>${T(`{site} is a free directory. It gathers what after-school programs, weekend classes and camps in Philadelphia say about themselves on their own websites, and arranges it by school and neighborhood.`, { site: cfg.siteName })}</li>
+    <li>${T(`We don’t run any of the programs listed, and we aren’t a child care provider, a school, a booking service or an agent for any program.`)}</li>
+    <li>${T(`A listing is not a recommendation. We don’t inspect programs, check licences or insurance, run background checks on staff, or verify that a program is safe or right for your child.`)}</li>
+    <li>${T(`Hours, prices, dates, pickup routes and openings change, and what’s here can be out of date or wrong. Confirm everything with the program before you enroll, pay or rely on a pickup.`)}</li>
+    <li>${T(`Choosing a program, and arranging how your child gets there and home, is your decision and your responsibility.`)}</li>
+  </ul>
+  <h2>${T(`Who can use it`)}</h2>
+  <ul>
+    <li>${T(`The site is for adults: parents, guardians, caregivers and the people who run programs. Accounts are for people 18 and over. Children should not make an account or send us anything.`)}</li>
+    <li>${T(`If you make an account, use your own email address and your real name, and keep access to that email to yourself. You are responsible for what’s done from your account.`)}</li>
+  </ul>
+  <h2>${T(`Children’s information`)}</h2>
+  <ul>
+    <li>${T(`The site works without telling us anything about a child. If you choose to keep a week or a summer in your profile, or share a week, you decide what first name to use, and you can use a nickname or an initial.`)}</li>
+    <li>${T(`Only add a child you are the parent or guardian of, or have that person’s permission to add.`)}</li>
+    <li>${T(`What we store, and how to delete it, is on the privacy page.`)} <a href="${link('privacy/', 1)}">${T(`Read the privacy page.`)}</a></li>
+  </ul>
+  ${GROUPS ? `<h2>${T(`Sharing a week, and groups`)}</h2>
+  <ul>
+    <li>${T(`When you share a week or start a group, you choose who sees it. We send the invitation to the email address you give and check that the person signs in with that address. We don’t know who they are beyond that, and we don’t screen anyone.`)}</li>
+    <li>${T(`Only invite people you know and would tell where your child is anyway. Anyone you invite can print or screenshot what they see.`)}</li>
+    <li>${T(`What happens between you and other people you meet or connect with through the site is between you and them. That includes carpools, shared pickups, playdates, babysitting and money. We are not a party to those arrangements and are not responsible for them.`)}</li>
+    <li>${T(`You can stop sharing, leave a group or delete your account at any time.`)}</li>
+  </ul>` : ''}
+  <h2>${T(`Reviews, suggestions and corrections`)}</h2>
+  <ul>
+    <li>${T(`A review should be your own first-hand experience, honest, and about the program rather than a named person. Don’t include children’s names or anyone’s private details.`)}</li>
+    <li>${T(`We read reviews before they are posted, and we may shorten one, decline it or take it down. A review is the opinion of the person who wrote it, not ours.`)}</li>
+    <li>${T(`By sending a review, suggestion or correction you let us publish it on the site and use it to improve the listings. You keep the rights to what you wrote.`)}</li>
+  </ul>
+  ${GROUPS ? `<h2>${T(`If you run a program`)}</h2>
+  <ul>
+    <li>${T(`Listings are free. We build them from your public website, and you can ask us to correct or remove one at any time.`)}</li>
+    <li>${T(`Claim a listing only if you work for that program and are allowed to speak for it. What you send us about it must be accurate and yours to share.`)}</li>
+    <li>${T(`Changes you propose are read before they go on the site. We may edit them to fit the page, decline them, or remove a claim.`)}</li>
+    <li>${T(`A listing doesn’t make us your partner, agent or advertiser, and we don’t promise it will bring enrollments.`)}</li>
+  </ul>` : ''}
+  <h2>${T(`What’s not allowed`)}</h2>
+  <ul>
+    <li>${T(`Don’t use the site to harass anyone, to pretend to be someone else, or to collect information about children or families.`)}</li>
+    <li>${T(`Don’t copy the listings in bulk to republish or sell them, and don’t try to break, overload or get around the site’s protections.`)}</li>
+    <li>${T(`We can suspend an account or remove content that breaks these rules.`)}</li>
+  </ul>
+  <h2>${T(`Links and other services`)}</h2>
+  <ul>
+    <li>${T(`The site links to programs’ own websites and sign-up pages. Those are theirs: their terms, prices and privacy practices apply there, and anything you buy or sign is between you and them.`)}</li>
+    <li>${T(`Program names and logos belong to their owners. The rest of the site, including how the listings are written and arranged, is ours. You’re welcome to link to any page and to share the cards and calendars you make.`)}</li>
+  </ul>
+  <h2>${T(`No guarantees, and limits on our responsibility`)}</h2>
+  <ul>
+    <li>${T(`The site is provided as it is, free of charge, without any promise that it is complete, accurate, available or free of errors.`)}</li>
+    <li>${T(`As far as the law allows, {who} is not liable for loss or harm that comes from using the site, from relying on a listing, from a program you chose, or from your dealings with other people who use the site.`, { who })}</li>
+    <li>${T(`Nothing here limits any right you have that the law doesn’t allow to be limited.`)}</li>
+  </ul>
+  <h2>${T(`Changes, and how to reach us`)}</h2>
+  <ul>
+    <li>${T(`We may change the site or these terms. When the terms change in a way that matters, the date below changes with them. If you keep using the site after that, the new terms apply.`)}</li>
+    <li>${T(`These terms are governed by the laws of Pennsylvania.`)}</li>
+    <li>${T(`Questions about any of this:`)} ${mail}</li>
+  </ul>
+  <p class="hint">${T(`Last updated {date}.`, { date: longDate(cfg.termsUpdated || TODAY) })}</p>
+</div>`;
+  return layout({ title: 'Terms of use', description: `The rules for using ${cfg.siteName}: what the site is and isn’t, accounts, sharing, reviews and listings.`, pathName: 'terms/', depth: 1, current: null, hero, body, showStreet: 'parked', noindex: cfg.termsLive !== true });
+}
+
 function privacyPage() {
   const mail = cfg.contactEmail ? `<a href="mailto:${esc(cfg.contactEmail)}">${esc(cfg.contactEmail)}</a>` : '';
   const hero = `    <h1>${T(`Privacy, in plain English`)}</h1>
@@ -1630,7 +1729,8 @@ function privacyPage() {
     <li>${GROUPS ? T(`There are no ads, and nothing you send is sold. An account is optional: it is for keeping your school or a week in a profile, and for sharing a week with someone.`) : T(`There are no accounts and no ads, and nothing you send is sold.`)}</li>
     <li>${GROUPS ? T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us unless you sign in and choose to keep one in your profile or share one.`) : T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us.`)}</li>
     <li>${T(`If you send a suggestion or a review, it arrives as an email to the person who runs the site.`)}</li>
-    ${ALERTS ? `<li>${T(`If you ask for dates by email, your first name, your email address and the school or program you picked are kept by Klaviyo, the service that sends the emails.`)}</li>` : ''}
+    ${ALERTS ? `<li>${T(`If you ask for dates by email, your first name, your email address and the school or program you picked are kept by Klaviyo, the service that sends the emails.`)}</li>
+    <li>${T(`If you ask to be emailed when a school is added, the same three things are kept by Klaviyo: your first name, your email address and which school you’re waiting for. It also adds you to our email list for occasional news about the site.`)}</li>` : ''}
     <li>${T(`We use Google Analytics and Microsoft Clarity to see how the site is used, so we can fix what’s confusing.`)}</li>
   </ul>
   <h2 id="rosters">${T(`Rosters and children’s names`)}</h2>
@@ -3531,6 +3631,7 @@ write('neighborhoods/index.html', neighborhoodsPage());
 for (const h of hoods) write(`${hoodPath(h)}index.html`, neighborhoodPage(h));
 write('support/index.html', supportPage());
 write('privacy/index.html', privacyPage());
+if (TERMS) write('terms/index.html', termsPage());
 write('about/index.html', aboutPage());
 write('suggest/index.html', suggestPage());
 write('suggest/thanks/index.html', thanksPage());
@@ -3586,7 +3687,7 @@ if (!PREVIEW) {
   write('data/alerts.json', JSON.stringify(alertsFeed(), null, 2));   // read by scripts/send-alerts.mjs once a day
   const latest = programs.map(p => p.lastVerified).sort().pop();
   const urls = [['', latest], ['schools/', latest], ...schools.map(s => [s.id + '/', latest]), ['types/', latest], ...liveTypes().map(t => [`types/${t.id}/`, latest]), ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]), ['neighborhoods/', latest], ...hoods.map(h => [hoodPath(h), latest]),
-    ...[...(daysOff ? [offPath] : []), ...(summerCamps.length ? [campsPath, summerPath] : []), ...(weekendPrograms.length ? [weekendPath] : []), ...(ALERTS ? [alertsPath] : []), 'board/', 'suggest/', ...(GROUPS ? ['managers/'] : []), 'ideas/', 'review/', 'about/', 'contact/', 'privacy/', 'support/'].map(u => [u, latest])];
+    ...[...(daysOff ? [offPath] : []), ...(summerCamps.length ? [campsPath, summerPath] : []), ...(weekendPrograms.length ? [weekendPath] : []), ...(ALERTS ? [alertsPath] : []), 'board/', 'suggest/', ...(GROUPS ? ['managers/'] : []), 'ideas/', 'review/', 'about/', 'contact/', 'privacy/', ...(cfg.termsLive === true ? ['terms/'] : []), 'support/'].map(u => [u, latest])];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
   const bare = cfg.siteUrl.replace(/^https?:\/\//, '');

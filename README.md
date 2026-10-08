@@ -57,6 +57,22 @@ If the data has a problem, step 2 stops and the live site stays as it was. The "
 
 To put the site on a different host, run `node build.mjs` and upload the contents of `dist/`.
 
+## Schools that aren't covered yet
+
+`/schools/request/?s=ID` is the page for a school the site knows about (from `data/all-schools.json`) but hasn't
+covered. "Ask for this school" counts a vote. Under it, "Email me when it's added" takes a first name and an email
+address and sends them straight to Klaviyo with the browser key, onto the same list as the dates emails, with
+`signup_place: school_request`, `waiting_school_name` (the latest school asked for) and the school's id appended to
+`waiting_schools`. Nothing sends the "it's here" email yet: when a school goes live, build a Klaviyo segment where
+`waiting_schools` contains its id and write to it.
+
+## Terms of use
+
+`termsPage()` in `build.mjs` is a draft. It is built into the preview copy only, with a banner saying so, until
+`"termsLive": true` is set in `site.config.json`; then it is written to `/terms/`, linked from the footer and added
+to the sitemap. `termsOperator` names who runs the site in the liability line (the site's name if unset), and
+`termsUpdated` sets the date shown.
+
 ## Summer camps
 
 Summer camps are their own list, in `data/camps.json`, and their own page, `/summer-camps/`. Nothing in the file is tied
