@@ -352,7 +352,7 @@
   // The page a followed or saved thing lives on.
   function markHref(k) {
     var id = k.slice(2);
-    return k.charAt(0) === 'p' ? page('programs/' + id + '/') : k.charAt(0) === 'c' ? page('summer-camps/' + id + '/') : id === 'all' ? page('alerts/') : page(id + '/');
+    return k.charAt(0) === 'p' ? page('programs/' + id + '/') : k.charAt(0) === 'c' ? page('summer-camps/' + id + '/') : k.charAt(0) === 'w' ? page(id + '/') + '#this-week' : id === 'all' ? page('alerts/') : page(id + '/');
   }
 
   // =====================================================================================================
@@ -512,7 +512,7 @@
         fol.appendChild(el('p', 'hint', 'Saved so you can find them again. A favorite sends no email.'));
         var favBox = el('div'); fol.appendChild(favBox);
         var marksNote = el('p', 'g-status'); marksNote.setAttribute('aria-live', 'polite'); fol.appendChild(marksNote);
-        var kindWord = { p: 'Program', c: 'Summer camp', s: 'School' };
+        var kindWord = { p: 'Program', c: 'Summer camp', s: 'School', w: 'Sunday email' };
         var drawMarks = function () {
           var named = MK.state.named || { follows: [], favs: [], muted: [] };
           var fill = function (box, items, empty, removeLabel, remove, addToWeek) {
@@ -530,7 +530,7 @@
             });
             box.appendChild(ul);
           };
-          fill(folBox, named.follows, 'You aren’t following anything yet.', 'Stop following', function (x) { return MK.follow(x.k, false); });
+          fill(folBox, named.follows, 'You aren’t following anything yet.', 'Stop following', function (x) { return MK.follow(x.k, false).then(function (r) { paintWeek(); return r; }); });
           // listings stopped from an email: nothing about them is sent, even by way of a school that is followed
           mutedBox.textContent = '';
           if ((named.muted || []).length) {
@@ -541,7 +541,7 @@
           }
           fill(favBox, named.favs, 'No favorites yet. Tap “Save to favorites” on a program’s or camp’s page.', 'Remove', function (x) { return MK.fav(x.k, false); }, true);
         };
-        MK.load().then(drawMarks);
+        MK.load().then(function () { drawMarks(); paintWeek(); });
         account.appendChild(fol);
       }
       // what is kept in the profile: a school, and any weeks
@@ -557,7 +557,29 @@
       schoolRow.appendChild(sl); schoolRow.appendChild(ss); schoolRow.appendChild(sn);
       prof.appendChild(schoolRow);
       var schoolName = function (id) { var f = (ainfo.schools || []).filter(function (x) { return x.id === id; })[0]; return f ? f.name : ''; };
+      // "This week at your school": a Sunday email about the week ahead, off until it is ticked here
+      var wkRow = el('label', 'g-check g-week'), wk = el('input'), wkText = el('span'), wkNote = el('p', 'hint');
+      wk.type = 'checkbox'; wk.id = 'prof-week'; wkNote.setAttribute('aria-live', 'polite');
+      wkRow.appendChild(wk); wkRow.appendChild(wkText);
+      var weekKey = function () { return me.school ? 'w:' + me.school : ''; };
+      var weekOn = function () { return !!MK && !!weekKey() && MK.state.follows.indexOf(weekKey()) > -1; };
+      var paintWeek = function () {
+        var name = schoolName(me.school || '');
+        wkRow.hidden = !MK;
+        wk.disabled = !name; wk.checked = weekOn();
+        wkText.textContent = name ? 'Email me “This week at ' + name + '” on Sunday mornings: days off, the school’s own dates and sign-ups for the week ahead. It only comes in weeks with something out of the ordinary.' : 'Email me “This week at your school” on Sunday mornings. Keep your school above to turn this on.';
+      };
+      wk.addEventListener('change', function () {
+        var k = weekKey(), want = wk.checked; if (!k || !MK) return;
+        wk.disabled = true; wkNote.textContent = 'Saving…';
+        MK.follow(k, want).then(function (r) {
+          wk.disabled = false;
+          wkNote.textContent = r && r.ok === false ? r.message : want ? 'On. The first one comes the next Sunday with something to say. Every one has a link to turn it off.' : 'Off.';
+          paintWeek(); if (typeof drawMarks === 'function') drawMarks();
+        });
+      });
       var devNote = el('p', 'hint'); prof.appendChild(devNote);
+      prof.appendChild(wkRow); prof.appendChild(wkNote);
       var paintSchool = function (kept) {
         ss.value = kept || '';
         devNote.textContent = '';
@@ -571,9 +593,15 @@
       };
       var saveSchool = function () {
         sn.textContent = 'Saving…';
+        var hadWeek = weekOn(), oldKey = weekKey();
         call('school_save', { school: ss.value }).then(function (r) {
           sn.textContent = r.ok ? (r.school ? 'Kept.' : 'Taken out of your profile. This device still remembers it until you change it on the school’s page.') : r.message;
-          if (r.ok) { me.school = r.school; noteRole(me); adoptSchool(r.school, schoolName(r.school)); paintSchool(r.school); }
+          if (r.ok) {
+            me.school = r.school; noteRole(me); adoptSchool(r.school, schoolName(r.school)); paintSchool(r.school);
+            // the Sunday email follows the school: off for the old one, on for the new
+            if (hadWeek && oldKey !== weekKey()) MK.follow(oldKey, false).then(function () { return weekKey() ? MK.follow(weekKey(), true) : null; }).then(function () { paintWeek(); if (typeof drawMarks === 'function') drawMarks(); wkNote.textContent = weekKey() ? 'The Sunday email moved to ' + schoolName(me.school) + '.' : 'The Sunday email is off, because no school is kept.'; });
+            else paintWeek();
+          }
         });
       };
       ss.addEventListener('change', saveSchool);
@@ -670,7 +698,7 @@
           paintSchool(p.school); paintGrades(p.grades || []); paintWeeks(p.weeks || []); paintSummer(p.summer || null); paintDaysOff(p.daysoff || null);
         });
       };
-      paintSchool(me.school || ''); paintGrades(me.grades || []); loadProfile();
+      paintSchool(me.school || ''); paintGrades(me.grades || []); paintWeek(); loadProfile();
       account.appendChild(prof);
       // sharing: weeks shared with one person, and groups
       var mine = part(el('section', 'panel'), 'sharing', 'Sharing');

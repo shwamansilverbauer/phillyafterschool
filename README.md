@@ -648,6 +648,10 @@ The pieces:
   has, so nobody gets the same email twice. The job never prints an email address, because its log is public.
 - **The flow.** In Klaviyo, the flow "School dates email" is triggered by that event and sends the template in `email/`.
   It only fires for events that carry the right `token`, and only for people on the list.
+  The flow keeps its own copy of the template, so changing the email takes two steps: update the standalone
+  template "School dates" in Klaviyo from `email/` (with the postal address put back in place of
+  `[[POSTAL_ADDRESS]]`), then set the flow's email to use that template again, which makes it take a fresh copy.
+  Editing the standalone template alone changes nothing that is sent.
 
 The job needs two repository secrets (Settings > Secrets and variables > Actions) and does nothing without them:
 `KLAVIYO_API_KEY`, a private Klaviyo key with Events: full, Profiles: read and Lists: read; and `ALERTS_TOKEN`, the word
@@ -903,6 +907,32 @@ the footer.
 
 The form for a school that isn't covered yet ("tell me when it's added") is unchanged: a first name and an email,
 no account.
+
+## This week at your school
+
+The things a family has to remember that aren't on the district calendar: picture day, pretzel day, a half day.
+
+- **The data** is `data/school-dates.json`, keyed by school id: `weekly` entries
+  (`{ "day": "wed", "title": "Pretzel day", "by": "parent" }`, optional `note`, `from`, `until`) repeat every school
+  week on that weekday; `dates` entries (`{ "date": "2026-10-14", "title": "Picture day", "note": "K to 2", "by":
+  "parent" }`) are single days. `by` is `"parent"` (sent in and approved) or `"school"` (from the school's own
+  site, with the `url`). Nothing goes in that hasn't been approved, and the monthly check doesn't touch the file.
+  The file is keyed by a place's id rather than tied to the district list, so a daycare or preschool can be added
+  later as another kind of place.
+- **On the school's page**, `schoolWeekSection()` shows "This week at {school}" (`#this-week`): this week and the
+  next, day by day, from `schoolWeek()`: district days off, the last day of school, the school's dates, the weekly
+  things (skipped on a day off) and sign-up dates at the programs that serve the school. From Saturday it shows the
+  coming week. The nightly rebuild keeps it current.
+- **Sending one in.** "Know a date that's missing?" under the section posts to `suggest/send.php` as "A date at a
+  school" with what and when. It arrives in the site's inbox like any suggestion. To publish it, add it to
+  `data/school-dates.json`.
+- **The Sunday email** is opt-in, from the account page only: a tick box under the school kept in the profile.
+  It is a follow with the key `w:<school>` ("This week at Nebinger"), so everything a follow has applies: it is
+  listed under "Places you follow", told to Klaviyo as the `weeks` property, stopped from a link in the email,
+  and honored through the stopped list. Changing the school in the profile moves it; clearing the school turns it
+  off. The feed has one `week` entry per school per week, sent the Sunday before (`sendOn`) and only when the
+  week has something other than the every-week things (`special`). Someone who turns it on by Tuesday still gets
+  that week's. The entry carries `lines` (day by day), which the email template lists, and `text` as a fallback.
 
 ## Links down a long page
 

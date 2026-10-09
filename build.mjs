@@ -106,6 +106,16 @@ const telHref = p => 'tel:+1' + p.replace(/\D/g, '');
 
 // ---------- validation: fail the build on bad data, so mistakes never reach the site ----------
 const errors = [];
+// What's on at each school (data/school-dates.json): weekly things and single days, each approved before it goes in.
+const schoolDatesFile = fs.existsSync(path.join(ROOT, 'data/school-dates.json')) ? readJson('data/school-dates.json') : { schools: {} };
+const WEEKDAY_IDS = ['mon', 'tue', 'wed', 'thu', 'fri'];
+for (const [id, sd] of Object.entries(schoolDatesFile.schools || {})) {
+  const at = `data/school-dates.json, "${id}"`;
+  if (!schools.some(x => x.id === id)) errors.push(`${at}: there is no school with that id in data/schools.json`);
+  const source = (e, where) => { if (!['school', 'parent'].includes(e?.by)) errors.push(`${where}: "by" must be "school" or "parent"`); if (e?.by === 'school' && !/^https?:\/\//.test(e.url || '')) errors.push(`${where}: an entry from the school needs the "url" it came from`); if (typeof e?.title !== 'string' || !e.title.trim() || e.title.length > 80) errors.push(`${where}: "title" is needed, up to 80 characters`); if (e?.note !== undefined && (typeof e.note !== 'string' || e.note.length > 160)) errors.push(`${where}: "note" is a sentence of up to 160 characters`); };
+  for (const [i, e] of (sd.weekly || []).entries()) { const w = `${at}, weekly ${i + 1}`; source(e, w); if (!WEEKDAY_IDS.includes(e?.day)) errors.push(`${w}: "day" must be one of ${WEEKDAY_IDS.join(', ')}`); for (const k of ['from', 'until']) if (e?.[k] !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(e[k])) errors.push(`${w}: "${k}" must be YYYY-MM-DD`); }
+  for (const [i, e] of (sd.dates || []).entries()) { const w = `${at}, dates ${i + 1}`; source(e, w); if (!/^\d{4}-\d{2}-\d{2}$/.test(e?.date || '')) errors.push(`${w}: "date" must be YYYY-MM-DD`); }
+}
 const isUrl = u => /^https:\/\/\S+$/.test(u || '');
 // ---------- links out to programs ----------
 // Every link to a program's own site carries UTM tags, so the program can see in its own analytics what this
@@ -926,6 +936,32 @@ const LEAD = { register: 1, dayoff: 10, ...(ALERTS?.lead || {}) };   // least no
 const longDay = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' });
 // A date is announced on the last send day that still leaves `lead` days of notice, so there is one email a week at most.
 const sendOn = (iso, lead) => { let d = isoAdd(iso, -lead); while (weekday(d) !== SEND_DAY) d = isoAdd(d, -1); return d; };
+// ----- this week at a school -----
+// One school week (Monday to Friday, named by its Monday): the days school is closed, the school's own dates, the
+// things that happen every week, and sign-up dates at the programs that serve the school. "special" says whether
+// anything in it is out of the ordinary: a week with only the every-week things is not worth an email.
+const weekMonday = iso => isoAdd(iso, -((weekday(iso) + 6) % 7));
+const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const schoolWeek = (s, monday) => {
+  const sd = schoolDatesFile.schools?.[s.id] || {}, days = [0, 1, 2, 3, 4].map(n => isoAdd(monday, n)), week = [0, 1, 2, 3, 4, 5, 6].map(n => isoAdd(monday, n));
+  const closed = new Map(offDays.flatMap(d => d.dates.map(x => [x, d.name])));
+  const lines = [];
+  for (const d of days) {
+    if (closed.has(d)) { lines.push({ d, kind: 'off', what: `No school: ${closed.get(d)}` }); continue; }
+    if (daysOff?.lastDay && d > daysOff.lastDay) continue;
+    if (d === daysOff?.lastDay) lines.push({ d, kind: 'last', what: 'Last day of school' });
+    for (const e of sd.dates || []) if (e.date === d) lines.push({ d, kind: 'date', what: e.title.trim(), note: e.note || '', by: e.by });
+    for (const e of sd.weekly || []) if (e.day === WEEKDAY_IDS[weekday(d) - 1] && (!e.from || e.from <= d) && (!e.until || e.until >= d)) lines.push({ d, kind: 'weekly', what: e.title.trim(), note: e.note || '', by: e.by });
+  }
+  for (const p of forSchool(s)) for (const r of p.register.dates || []) if (week.includes(r.date)) lines.push({ d: r.date, kind: 'signup', what: `Sign-ups, ${p.name}: ${r.label.trim().replace(/\.$/, '')}`, href: programPath(p) });
+  const order = { off: 0, last: 1, date: 2, weekly: 3, signup: 4 };
+  lines.sort((a, b) => a.d.localeCompare(b.d) || order[a.kind] - order[b.kind]);
+  return { monday, lines, special: lines.some(l => l.kind !== 'weekly') };
+};
+const weekLabel = monday => `Week of ${new Date(monday + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' })}`;
+// The weeks a school's page shows: this one (the coming one, from Saturday) and the next.
+const thisMonday = () => weekMonday(isoAdd(TODAY, weekday(TODAY) === 6 ? 2 : weekday(TODAY) === 0 ? 1 : 0));
+
 // ----- when did each date reach the site? -----
 // A sign-up date is news, so the email about it goes out the morning after the date first appeared here. "Here" is
 // read from the repository's own history: the day of the first commit on the main line whose copy of the data file
@@ -1011,6 +1047,17 @@ const alertItems = [
 //   a camp's own sign-up dates and notes  -> the people who asked about that camp
 //   a school that has just been given a page -> the people who asked to be told when it was added
 const lateAlertItems = () => [
+  // "This week at your school": one entry a school a week, sent the Sunday before to the accounts that asked for it,
+  // and only when the week has something out of the ordinary. Someone who turns it on by Tuesday still gets that week's.
+  ...schools.flatMap(s => [-7, 0, 7, 14].map(n => schoolWeek(s, isoAdd(thisMonday(), n))).filter(w => w.special && isoAdd(w.monday, 2) >= TODAY).map(w => {
+    const byDay = [...new Set(w.lines.map(l => l.d))].map(d => ({ when: DAY_NAMES[weekday(d)], what: w.lines.filter(l => l.d === d).map(l => l.what + (l.note ? ` (${l.note})` : '')).join('; ') }));
+    return {
+      id: `week-${s.id}-${w.monday}`, kind: 'week', date: isoAdd(w.monday, 4), sendOn: isoAdd(w.monday, -1), expires: isoAdd(w.monday, 2), schools: [], programs: [], weeks: [s.id],
+      when: weekLabel(w.monday), title: `This week at ${s.shortName}`, text: byDay.map(x => `${x.when}: ${x.what}.`).join(' '), lines: byDay,
+      first: w.lines.filter(l => l.kind !== 'weekly').slice(0, 2).map(l => `${DAY_NAMES[weekday(l.d)]}: ${l.what.replace(/^No school: /, 'no school, ')}`).join('; '),
+      url: mailUrl(`${s.id}/`, '#this-week'), button: `See ${s.shortName}’s week`,
+    };
+  })),
   ...summerCamps.flatMap(c => (c.dates || []).filter(d => d.date >= TODAY).flatMap(d => signupItems({
     id: `campreg-${c.id}`, schools: [], programs: [], camps: [c.id], title: c.name, url: mailUrl(campPath(c)), button: 'See the camp',
   }, `c:${c.id}`, d, d.label.trim().replace(/\.$/, '')))),
@@ -1643,6 +1690,43 @@ out(true, 'Thanks.', 200);
 `;
 }
 
+// "This week at {school}" on the school's page: this week and next, the things that happen every week, a pointer to
+// the Sunday email (turned on in the account), and a way to send in a date that's missing.
+function schoolWeekSection(s) {
+  const sd = schoolDatesFile.schools?.[s.id] || {};
+  const weeks = [schoolWeek(s, thisMonday()), schoolWeek(s, isoAdd(thisMonday(), 7))];
+  const tag = l => l.by === 'parent' ? ` <span class="wk-by">${T(`from a parent`)}</span>` : l.by === 'school' ? ` <span class="wk-by">${T(`school calendar`)}</span>` : '';
+  const show = (w, title) => {
+    const days = [...new Set(w.lines.map(l => l.d))];
+    return `<div class="wk-card">
+      <h3>${title} <span class="hint">${esc(weekLabel(w.monday).replace(/^Week of /, ''))}</span></h3>
+      ${days.length ? `<dl>${days.map(d => `<dt>${esc(dayDate(d))}</dt><dd>${w.lines.filter(l => l.d === d).map(l => `<span class="wk-${l.kind}">${l.href ? `<a href="${link(l.href, 1)}">${esc(l.what)}</a>` : esc(l.what)}${l.note ? ` <span class="hint">${esc(l.note)}</span>` : ''}${tag(l)}</span>`).join('')}</dd>`).join('')}</dl>` : `<p class="hint">${T(`Nothing out of the ordinary that we know of.`)}</p>`}
+    </div>`;
+  };
+  return `<section class="section this-week" id="this-week">
+    <h2>${T(`This week at {school}`, { school: s.shortName })}</h2>
+    <p>${T(`Days off, the school’s own dates and sign-ups at the programs that serve it, a week at a time. School dates come from parents and the school’s calendar; go by what the school sends home.`)}</p>
+    <div class="wk-cards">
+      ${show(weeks[0], weekday(TODAY) === 6 || weekday(TODAY) === 0 ? T(`This coming week`) : T(`This week`))}
+      ${show(weeks[1], T(`The week after`))}
+    </div>
+    ${GROUPS && ALERTS ? `<p class="wk-mail"><b>${T(`Want this on Sunday mornings?`)}</b> ${T(`It’s an email you turn on in your account, and it only comes in weeks with something out of the ordinary.`)} <a href="${link('account/', 1)}#profile">${T(`Turn it on`)}</a></p>` : ''}
+    ${cfg.contactEmail ? `<details class="wk-add">
+      <summary>${T(`Know a date that’s missing?`)}</summary>
+      <form class="wk-form" method="post" action="${link('suggest/send.php', 1)}" data-clarity-mask="true">
+        <input type="hidden" name="kind" value="A date at a school">
+        <input type="hidden" name="school" value="${esc(s.shortName)}">
+        <div class="field"><label for="wk-what-${esc(s.id)}">${T(`What is it?`)}</label><input id="wk-what-${esc(s.id)}" name="program" type="text" maxlength="80" required placeholder="Picture day" autocomplete="off"></div>
+        <div class="field"><label for="wk-when-${esc(s.id)}">${T(`When?`)}</label><input id="wk-when-${esc(s.id)}" name="when" type="text" maxlength="120" required placeholder="Oct 14, or every Wednesday" autocomplete="off"></div>
+        <div class="field wide"><label for="wk-details-${esc(s.id)}">${T(`Anything else? (optional)`)}</label><input id="wk-details-${esc(s.id)}" name="details" type="text" maxlength="300" placeholder="Which grades, what to bring" autocomplete="off"></div>
+        <div class="field wide"><label for="wk-email-${esc(s.id)}">${T(`Your email (optional)`)}</label><input id="wk-email-${esc(s.id)}" name="email" type="email" maxlength="150" autocomplete="email"><span class="hint">${T(`Only used to ask you a question about it. Please leave out children’s names.`)}</span></div>
+        <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label>Leave this blank <input name="company" type="text" tabindex="-1" autocomplete="off"></label></div>
+        <div class="wide"><button class="btn" type="submit">${T(`Send it`)}</button> <span class="hint">${T(`We read each one before it goes on the page.`)}</span></div>
+      </form>
+    </details>` : ''}
+  </section>`;
+}
+
 function schoolPage(s) {
   const list = forSchool(s);
   const t = tally(s);
@@ -1663,8 +1747,10 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
       <span>Reviewed <b>${longDate(s.lastReviewed)}</b></span>
     </div>
     <p class="mine-row needs-js-block"><button type="button" class="savebtn" data-my-school="${esc(s.id)}" data-name="${esc(s.shortName)}" aria-pressed="false">Save as my school</button><span class="hint" data-my-school-note aria-live="polite"></span></p>`;
+  const wk0 = schoolWeek(s, thisMonday());
   const body = `<div data-school-page="${esc(s.id)}" style="display:contents">
   ${nextOff(1, list)}
+  <p class="nextoff wk-jump"><a href="#this-week">${T(`This week at {school}`, { school: s.shortName })}</a>${wk0.lines.length ? ` <span class="hint">${esc(wk0.lines.length === 1 ? '1 thing on' : wk0.lines.length + ' things on')}</span>` : ''}</p>
   ${filterBar({ list, depth: 1, school: s, show: { hood: false }, near: true })}
   <div class="legend">
     <span><i class="cell on">3</i> grade served</span>
@@ -1678,6 +1764,7 @@ ${groups}
   </div>
   <p class="ask roll-ask needs-js-block"><span>${T(`Can’t decide? Let a theme pick for you.`)}</span> <a class="btn" href="${link('board/', 1)}?roll=${esc(s.id)}">${T(`Roll a themed week for {school}`, { school: s.shortName })}</a></p>
   <p class="ask">${T(`Know a program that serves {school} and isn’t here?`, { school: s.shortName })} <a href="${link('suggest/', 1)}">${T(`Add it to the list.`)}</a></p>
+  ${schoolWeekSection(s)}
   ${datesBox(1, { key: 's:' + s.id, name: s.shortName, place: 'school', cls: 'wide', title: T(`Get {school} dates by email`, { school: s.shortName }), lede: T(`Sign-up openings and deadlines for these programs, and a heads-up before each day off.`), hint: T(`Sign-up dates reach you the morning after they’re posted here, then again the day before and at about 8 that morning. Days off come in a {day} round-up.`, { day: SEND_DAY_NAME }), old: { school: s, place: 'school', title: T(`Get {school} dates by email`, { school: s.shortName }), lede: T(`Sign-up openings and deadlines for these programs, and a heads-up before each day off.`) } })}
   ${s.checkedNoPickup?.length ? `<section class="notes">
     <h2>${T(`Checked, and not listing {school} pickup`, { school: s.shortName })}</h2>
@@ -2065,6 +2152,7 @@ ${GROUPS.photos ? `    <li>${T(`A photo you send for your listing is shrunk in y
     <li>${T(`Your email address is used only to reply to you or to confirm something. It is never published.`)}</li>
     <li>${T(`A review that is approved appears on the site with your first name, your child’s school and the month. Nothing else about you is shown.`)}</li>
     <li>${T(`Asking for a school to be covered sends only the school’s name.`)}</li>
+    <li>${T(`A date you send in for a school’s page (picture day, a half day) is read by a person before it is published. What is published is the date and what it is, marked “from a parent”: never your name or email.`)}</li>
     <li>${T(`Please don’t include children’s names or other people’s personal details in what you send.`)}</li>
   </ul>
   <h2 id="map" data-jump-to="The map">${T(`Distances and the map`)}</h2>
@@ -2081,6 +2169,7 @@ ${GROUPS.photos ? `    <li>${T(`A photo you send for your listing is shrunk in y
     <li>${T(`Every date email has a link for each listing in it, “Stop emails about …”. It stops that one listing without signing in, including its dates that would have reached you through a school you follow, and you can undo it on the spot or from your account page.`)}</li>
     <li>${T(`That link works because it carries a random code that belongs to your account. The code is kept with your account and on your email-list profile, and it can do one thing: stop emails. It can’t open your account or show anything in it, and the page it opens never says whose it is.`)}</li>
     <li>${T(`So that a stop always holds, we keep a list of what has been stopped in a scrambled form that can’t be read back into a person or a listing without that code. The entry for a deleted account stays on that list, so its emails stay stopped.`)}</li>
+    <li>${T(`“This week at your school” is an email you turn on in your account, for the school kept in your profile. It is off until you tick it. It works like following: which school it is for is kept in your account and on your email-list profile, and you can turn it off there or from the link in any of those emails.`)}</li>
     <li>${T(`A favorite is different. It is kept in your account and nowhere else: it isn’t sent to Klaviyo, and it sends no email.`)}</li>
     <li>${T(`A phone number is optional. If you add one and tick the box agreeing to texts, we keep the number, the day you agreed and the wording you agreed to, in your account. It is for texts about what you follow and nothing else. Texts have not started yet; until they do, the number is not passed to any texting service. You can remove it on your account page at any time, and a text will always say how to stop them. Message and data rates may apply.`)}</li>
     <li>${T(`Asking to be told when a school is added still takes only a first name and an email address, with no account.`)}</li>` : `<li>${T(`The sign-up form sends three things: your first name, your email address and the school or program you chose. They go from your browser to Klaviyo, the email service we use, and are stored there.`)}</li>
@@ -2350,6 +2439,7 @@ $website = one_line(field('website', 300));
 $camptype = one_line(field('camptype', 60));
 $listing = preg_match('/^[pc]:[a-z0-9-]{1,80}$/', field('listing', 90)) ? field('listing', 90) : '';
 $pickup = one_line(field('pickup', 60));
+$when = one_line(field('when', 120));
 $role = one_line(field('role', 60));
 $name = one_line(field('name', 100));
 $email = one_line(field('email', 150));
@@ -2376,7 +2466,7 @@ if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 $body = "Type: $kind\\n"
   . "School: $school\\n"
   . "New school: $newschool\\n"
-  . "Program: $program\\n"
+  . ($when !== '' ? "What: $program\\nWhen: $when\\n" : "Program: $program\\n")
   . ($listing !== '' ? "Listing: $listing\\n" : '')
   . ($camptype !== '' ? "Camp type: $camptype\\n" : '')
   . "Website: $website\\n"
@@ -3572,7 +3662,7 @@ if ($have) {
   $tiles[] = array($n("SELECT COUNT(*) FROM users WHERE grades != ''"), 'profiles with grades kept', $gradeLine);
   $tiles[] = array($n("SELECT COUNT(*) FROM users WHERE hood != ''"), 'profiles with a neighborhood kept', '');
   $tiles[] = array($n("SELECT COUNT(*) FROM users WHERE phone != '' AND phone_ok > 0"), 'people who agreed to texts', 'texts aren’t being sent yet');
-  $tiles[] = array($n('SELECT COUNT(*) FROM follows WHERE live = 1'), 'follows', 'by ' . $n('SELECT COUNT(DISTINCT user_id) FROM follows WHERE live = 1') . ' people: ' . $n("SELECT COUNT(*) FROM follows WHERE live = 1 AND k LIKE 'p:%'") . ' programs, ' . $n("SELECT COUNT(*) FROM follows WHERE live = 1 AND k LIKE 'c:%'") . ' camps, ' . $n("SELECT COUNT(*) FROM follows WHERE live = 1 AND k LIKE 's:%'") . ' schools');
+  $tiles[] = array($n('SELECT COUNT(*) FROM follows WHERE live = 1'), 'follows', 'by ' . $n('SELECT COUNT(DISTINCT user_id) FROM follows WHERE live = 1') . ' people: ' . $n("SELECT COUNT(*) FROM follows WHERE live = 1 AND k LIKE 'p:%'") . ' programs, ' . $n("SELECT COUNT(*) FROM follows WHERE live = 1 AND k LIKE 'c:%'") . ' camps, ' . $n("SELECT COUNT(*) FROM follows WHERE live = 1 AND k LIKE 's:%'") . ' schools' . ', ' . $n("SELECT COUNT(*) FROM follows WHERE live = 1 AND k LIKE 'w:%'") . ' Sunday emails');
   $tiles[] = array($n('SELECT COUNT(*) FROM favs'), 'favorites saved', 'by ' . $n('SELECT COUNT(DISTINCT user_id) FROM favs') . ' people');
   $tiles[] = array($n('SELECT COUNT(*) FROM weeks'), 'weeks kept in profiles', 'by ' . $n('SELECT COUNT(DISTINCT user_id) FROM weeks') . ' people');
   $tiles[] = array($n('SELECT COUNT(*) FROM grp WHERE solo = 1 AND expires > ?', array($t)), 'weeks shared with one person or more', $n('SELECT COUNT(*) FROM members m JOIN grp g ON g.id = m.group_id WHERE g.solo = 1 AND m.role != ?', array('owner')) . ' people have opened one');

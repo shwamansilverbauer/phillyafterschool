@@ -1,6 +1,13 @@
 [
   {
     "date": "2026-10-09",
+    "title": "This week at your school",
+    "text": "Each school’s page now shows the week ahead: days off, the school’s own dates and sign-ups. You can get it by email on Sunday mornings: keep your school in your profile and tick the box under it.",
+    "href": "account/#profile",
+    "link": "Turn on the Sunday email"
+  },
+  {
+    "date": "2026-10-09",
     "title": "Your own dates, and faster emails",
     "text": "Add picture day, pretzel day or a form that’s due to My kids’ calendar, for one child or everyone. And a sign-up date you follow is now emailed the morning after it’s posted, then the day before and that morning, each with a link to stop that one listing.",
     "href": "calendar/#year-own",

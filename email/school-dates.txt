@@ -4,10 +4,11 @@
 {% for d in event.dates %}
 {{ d.when }}
 {{ d.title }}
-{{ d.text }}
-{{ d.url|safe }}
+{% if d.lines %}{% for l in d.lines %}{{ l.when }}: {{ l.what }}
+{% endfor %}{% else %}{{ d.text }}
+{% endif %}{{ d.url|safe }}
 {% endfor %}
-These dates come from each program's own site and the School District of Philadelphia calendar. Dates move, so check with the program before you plan around one.
+These dates come from each program's own site and the School District of Philadelphia calendar; a school's own dates come from parents and the school's calendar. Dates move, so check with the program or the school before you plan around one.
 
 You're getting this because {{ event.reason|default:"you asked for dates" }} at phillyafterschool.org.
 {% if event.stops %}{% for s in event.stops %}Stop emails about {{ s.name }}: {{ s.url|safe }}

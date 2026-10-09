@@ -1,0 +1,11 @@
+{
+  "about": "What's on at each school: the things a family has to remember that aren't on the district calendar. \"weekly\" entries repeat every school week on that weekday; \"dates\" entries are single days. \"by\" says where it came from: \"school\" (the school's own site or calendar, with \"url\") or \"parent\" (sent in by a parent and approved by Josh). Nothing goes in here that hasn't been approved.",
+  "schools": {
+    "nebinger": {
+      "weekly": [
+        { "day": "wed", "title": "Pretzel day", "by": "parent" }
+      ],
+      "dates": []
+    }
+  }
+}
