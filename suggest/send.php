@@ -6,7 +6,7 @@ $SITE = "Philly After School";
 function fail($msg, $code) {
   http_response_code($code);
   header('Content-Type: text/html; charset=utf-8');
-  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css?v=958a8430"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="./">Go back to the form</a></p></main></body></html>';
+  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css?v=e8336d8f"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="./">Go back to the form</a></p></main></body></html>';
   exit;
 }
 function field($key, $max) {
@@ -36,6 +36,7 @@ $website = one_line(field('website', 300));
 $camptype = one_line(field('camptype', 60));
 $listing = preg_match('/^[pc]:[a-z0-9-]{1,80}$/', field('listing', 90)) ? field('listing', 90) : '';
 $pickup = one_line(field('pickup', 60));
+$when = one_line(field('when', 120));
 $role = one_line(field('role', 60));
 $name = one_line(field('name', 100));
 $email = one_line(field('email', 150));
@@ -62,7 +63,7 @@ if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 $body = "Type: $kind\n"
   . "School: $school\n"
   . "New school: $newschool\n"
-  . "Program: $program\n"
+  . ($when !== '' ? "What: $program\nWhen: $when\n" : "Program: $program\n")
   . ($listing !== '' ? "Listing: $listing\n" : '')
   . ($camptype !== '' ? "Camp type: $camptype\n" : '')
   . "Website: $website\n"

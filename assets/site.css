@@ -1470,3 +1470,25 @@ html.signed .year-out{display:none}
 .stop-box{max-width:640px;gap:14px}
 .stop-box h2{margin:0}
 .stop-box .clear{align-self:flex-start}
+
+/* ---------- this week at a school ---------- */
+.this-week{scroll-margin-top:calc(var(--bar-h,64px) + 16px)}
+.wk-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.wk-card{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--yellow);border-radius:14px;padding:14px 18px 16px;min-width:0}
+.wk-card h3{margin:0 0 8px;font-size:1.08rem;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.wk-card h3 .hint{font-family:var(--body);font-weight:400}
+.wk-card dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 16px;margin:0}
+.wk-card dt{font-weight:700;color:var(--muted);white-space:nowrap}
+.wk-card dd{margin:0;display:flex;flex-direction:column;gap:4px;min-width:0;overflow-wrap:anywhere}
+.wk-off{font-weight:700}
+.wk-by{font-size:.8rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 8px;white-space:nowrap}
+.wk-mail{background:var(--sky-bg);color:var(--sky-ink);border-radius:12px;padding:12px 16px;max-width:none}
+.wk-mail a{font-weight:700}
+.wk-add summary{cursor:pointer;font-weight:700;color:var(--link)}
+.wk-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px;margin-top:12px;max-width:720px;position:relative}
+.wk-form .wide{grid-column:1/-1}
+.wk-form .field{gap:6px}
+.wk-form .field input{font:inherit;font-size:1.02rem;width:100%;min-height:50px;padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}
+.g-week{margin-top:6px;max-width:640px;color:var(--ink);font-size:1rem}
+.g-week input:disabled + span{color:var(--muted)}
+.nextoff.wk-jump{background:var(--sky-bg);color:var(--sky-ink);margin-top:-28px}

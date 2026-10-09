@@ -72,7 +72,7 @@ if ($have) {
   $tiles[] = array($n("SELECT COUNT(*) FROM users WHERE grades != ''"), 'profiles with grades kept', $gradeLine);
   $tiles[] = array($n("SELECT COUNT(*) FROM users WHERE hood != ''"), 'profiles with a neighborhood kept', '');
   $tiles[] = array($n("SELECT COUNT(*) FROM users WHERE phone != '' AND phone_ok > 0"), 'people who agreed to texts', 'texts aren’t being sent yet');
-  $tiles[] = array($n('SELECT COUNT(*) FROM follows WHERE live = 1'), 'follows', 'by ' . $n('SELECT COUNT(DISTINCT user_id) FROM follows WHERE live = 1') . ' people: ' . $n("SELECT COUNT(*) FROM follows WHERE live = 1 AND k LIKE 'p:%'") . ' programs, ' . $n("SELECT COUNT(*) FROM follows WHERE live = 1 AND k LIKE 'c:%'") . ' camps, ' . $n("SELECT COUNT(*) FROM follows WHERE live = 1 AND k LIKE 's:%'") . ' schools');
+  $tiles[] = array($n('SELECT COUNT(*) FROM follows WHERE live = 1'), 'follows', 'by ' . $n('SELECT COUNT(DISTINCT user_id) FROM follows WHERE live = 1') . ' people: ' . $n("SELECT COUNT(*) FROM follows WHERE live = 1 AND k LIKE 'p:%'") . ' programs, ' . $n("SELECT COUNT(*) FROM follows WHERE live = 1 AND k LIKE 'c:%'") . ' camps, ' . $n("SELECT COUNT(*) FROM follows WHERE live = 1 AND k LIKE 's:%'") . ' schools' . ', ' . $n("SELECT COUNT(*) FROM follows WHERE live = 1 AND k LIKE 'w:%'") . ' Sunday emails');
   $tiles[] = array($n('SELECT COUNT(*) FROM favs'), 'favorites saved', 'by ' . $n('SELECT COUNT(DISTINCT user_id) FROM favs') . ' people');
   $tiles[] = array($n('SELECT COUNT(*) FROM weeks'), 'weeks kept in profiles', 'by ' . $n('SELECT COUNT(DISTINCT user_id) FROM weeks') . ' people');
   $tiles[] = array($n('SELECT COUNT(*) FROM grp WHERE solo = 1 AND expires > ?', array($t)), 'weeks shared with one person or more', $n('SELECT COUNT(*) FROM members m JOIN grp g ON g.id = m.group_id WHERE g.solo = 1 AND m.role != ?', array('owner')) . ' people have opened one');
@@ -141,7 +141,7 @@ $sum = function ($key, $span) use (&$days, &$ever) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../../assets/site.css?v=958a8430">
+<link rel="stylesheet" href="../../assets/site.css?v=e8336d8f">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -256,7 +256,7 @@ $sum = function ($key, $span) use (&$days, &$ever) {
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../../assets/site.js?v=54abe47d" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
+<script src="../../assets/site.js?v=7ac77636" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
 
 </body>
 </html>

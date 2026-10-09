@@ -405,7 +405,9 @@ const MAX_FOLLOWS = 60;
 const MAX_FAVS = 120;
 // Is this something that can be followed or saved? A program or camp on the site, or (to follow) a school it covers.
 function mark_name(string $k, bool $schoolsToo): ?string {
-  if (!preg_match('~^(p|c|s):[a-z0-9-]{1,80}$~', $k)) return null;
+  if (!preg_match('~^(p|c|s|w):[a-z0-9-]{1,80}$~', $k)) return null;
+  // "w:<school>" is the Sunday email, "This week at <school>": followed like anything else, for a school with a page
+  if ($k[0] === 'w') { $n = school_names(); $id = substr($k, 2); return $schoolsToo && isset($n[$id]) ? 'This week at ' . $n[$id] : null; }
   if ($k[0] === 's') { $n = school_names(); $id = substr($k, 2); return !$schoolsToo ? null : ($id === 'all' ? 'Every school on the site' : (isset($n[$id]) ? $n[$id] : null)); }
   $l = listings();
   return isset($l[$k]) ? preg_replace('~ \\(summer camp\\)$~', '', (string) $l[$k]['n']) : null;   // the list says what kind it is beside the name

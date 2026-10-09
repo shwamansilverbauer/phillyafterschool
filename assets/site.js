@@ -325,7 +325,7 @@
   if (marksHost && window.fetch && window.Promise) MK = (function () {
     var API = marksHost.getAttribute('data-api') || '', KEY = marksHost.getAttribute('data-dates-key') || '', LIST = marksHost.getAttribute('data-dates-list') || '';
     var state = { user: null, follows: [], favs: [], lists: null, loaded: false };
-    var PROP = { p: 'programs', c: 'camps', s: 'schools' };
+    var PROP = { p: 'programs', c: 'camps', s: 'schools', w: 'weeks' };
     function api(action, body) {
       if (!API) return Promise.resolve({ ok: false, message: 'This is the preview, so nothing was saved. It works on the live site.' });
       var o = { credentials: 'same-origin', headers: { 'X-PAS': '1' } };
@@ -401,7 +401,7 @@
     var raw = (location.hash || '').replace(/^#/, '') || (location.search || '').replace(/^\?/, ''), got = {};
     raw.split('&').forEach(function (p) { var i = p.indexOf('='); if (i > 0) { try { got[p.slice(0, i)] = decodeURIComponent(p.slice(i + 1)); } catch (e) { /* not ours */ } } });
     try { history.replaceState(null, '', location.pathname); } catch (e) { /* the address stays as it was */ }
-    var c = /^[a-f0-9]{32}$/.test(got.c || '') ? got.c : '', k = /^(p|c|s):[a-z0-9-]{1,80}$/.test(got.k || '') ? got.k : '';
+    var c = /^[a-f0-9]{32}$/.test(got.c || '') ? got.c : '', k = /^(p|c|s|w):[a-z0-9-]{1,80}$/.test(got.k || '') ? got.k : '';
     var account = (stopEl.getAttribute('data-root') || '') + 'account/' + (stopEl.getAttribute('data-index') || '') + '#following';
     var btn = function (cls, text, go) { var b = el('button', cls, text); b.type = 'button'; b.addEventListener('click', function () { go(b); }); return b; };
     var paint = function (parts) { box.textContent = ''; parts.forEach(function (x) { if (x) box.appendChild(x); }); };
@@ -415,7 +415,7 @@
     var done = function (d, name, was) {
       var acts = el('div', 'actions');
       acts.appendChild(btn('btn', 'Undo', function (b) { b.disabled = true; MK.api('stop', { c: c, k: k, 'do': 'undo', follow: was }).then(function (r) { if (!r.ok) return failed(r); paint([el('h2', null, 'Undone. Emails about ' + name + ' will keep coming.'), still(r.left.filter(function (x) { return x.k !== k; }))]); }); }));
-      paint([el('h2', null, 'Done. No more emails about ' + name + '.'), el('p', null, k.charAt(0) === 's' ? 'You won’t get this school’s dates or its days off.' : 'That includes its dates that would have reached you through a school you follow.'), still(d.left), acts]);
+      paint([el('h2', null, k.charAt(0) === 'w' ? 'Done. “' + name + '” is off.' : 'Done. No more emails about ' + name + '.'), el('p', null, k.charAt(0) === 'w' ? 'The Sunday email is off. You can turn it back on in your account.' : k.charAt(0) === 's' ? 'You won’t get this school’s dates or its days off.' : 'That includes its dates that would have reached you through a school you follow.'), still(d.left), acts]);
       MK.load();   // if this browser is signed in, the email list is told straight away
     };
     if (!c || !k) { paint([el('h2', null, 'This link is missing something'), el('p', null, 'It may have been cut off on its way from the email. You can stop following from your account page instead.'), signIn()]); return; }
@@ -426,7 +426,7 @@
       var acts = el('div', 'actions');
       acts.appendChild(btn('btn primary', 'Stop these emails', function (b) { b.disabled = true; ask('stop', k).then(function (r) { if (!r.ok) return failed(r); done(r, name, d.on); }); }));
       var keep = el('a', 'btn', 'Keep them'); keep.href = stopEl.getAttribute('data-root') || './'; acts.appendChild(keep);
-      var parts = [el('h2', null, 'Stop emails about ' + name + '?'), el('p', null, 'You’ll stop getting its sign-up dates and reminders. Anything else you follow stays as it is.'), acts];
+      var parts = [el('h2', null, k.charAt(0) === 'w' ? 'Stop “' + name + '”?' : 'Stop emails about ' + name + '?'), el('p', null, k.charAt(0) === 'w' ? 'The Sunday email about the week ahead will stop. Anything else you follow stays as it is.' : 'You’ll stop getting its sign-up dates and reminders. Anything else you follow stays as it is.'), acts];
       if (d.left.length > 1) {
         var armed = false;
         parts.push(btn('clear', 'Stop every date email instead', function (b) {

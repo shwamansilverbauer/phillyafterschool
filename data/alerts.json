@@ -690,6 +690,130 @@
       "button": "See who’s open"
     },
     {
+      "id": "week-coppin-2026-10-12",
+      "kind": "week",
+      "date": "2026-10-16",
+      "sendOn": "2026-10-11",
+      "expires": "2026-10-14",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "coppin"
+      ],
+      "when": "Week of October 12",
+      "title": "This week at Coppin",
+      "text": "Monday: No school: Indigenous Peoples’ Day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Indigenous Peoples’ Day"
+        }
+      ],
+      "first": "Monday: no school, Indigenous Peoples’ Day",
+      "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Coppin’s week"
+    },
+    {
+      "id": "week-mccall-2026-10-12",
+      "kind": "week",
+      "date": "2026-10-16",
+      "sendOn": "2026-10-11",
+      "expires": "2026-10-14",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mccall"
+      ],
+      "when": "Week of October 12",
+      "title": "This week at McCall",
+      "text": "Monday: No school: Indigenous Peoples’ Day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Indigenous Peoples’ Day"
+        }
+      ],
+      "first": "Monday: no school, Indigenous Peoples’ Day",
+      "url": "https://phillyafterschool.org/mccall/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See McCall’s week"
+    },
+    {
+      "id": "week-meredith-2026-10-12",
+      "kind": "week",
+      "date": "2026-10-16",
+      "sendOn": "2026-10-11",
+      "expires": "2026-10-14",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "meredith"
+      ],
+      "when": "Week of October 12",
+      "title": "This week at Meredith",
+      "text": "Monday: No school: Indigenous Peoples’ Day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Indigenous Peoples’ Day"
+        }
+      ],
+      "first": "Monday: no school, Indigenous Peoples’ Day",
+      "url": "https://phillyafterschool.org/meredith/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Meredith’s week"
+    },
+    {
+      "id": "week-nebinger-2026-10-12",
+      "kind": "week",
+      "date": "2026-10-16",
+      "sendOn": "2026-10-11",
+      "expires": "2026-10-14",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "nebinger"
+      ],
+      "when": "Week of October 12",
+      "title": "This week at Nebinger",
+      "text": "Monday: No school: Indigenous Peoples’ Day. Wednesday: Pretzel day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Indigenous Peoples’ Day"
+        },
+        {
+          "when": "Wednesday",
+          "what": "Pretzel day"
+        }
+      ],
+      "first": "Monday: no school, Indigenous Peoples’ Day",
+      "url": "https://phillyafterschool.org/nebinger/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Nebinger’s week"
+    },
+    {
+      "id": "week-vare-washington-2026-10-12",
+      "kind": "week",
+      "date": "2026-10-16",
+      "sendOn": "2026-10-11",
+      "expires": "2026-10-14",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "vare-washington"
+      ],
+      "when": "Week of October 12",
+      "title": "This week at Vare-Washington",
+      "text": "Monday: No school: Indigenous Peoples’ Day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Indigenous Peoples’ Day"
+        }
+      ],
+      "first": "Monday: no school, Indigenous Peoples’ Day",
+      "url": "https://phillyafterschool.org/vare-washington/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Vare-Washington’s week"
+    },
+    {
       "id": "reg-mister-johns-music-2026-11-02",
       "schools": [
         "nebinger",
