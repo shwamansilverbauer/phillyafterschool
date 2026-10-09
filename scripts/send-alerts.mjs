@@ -158,6 +158,22 @@ export function withoutStopped(person, stopped, feed) {
     weeks: (person.weeks || []).filter(id => !off('w:' + id)),
     muted: [...(feed?.programs || []).map(x => 'p:' + x.id), ...(feed?.camps || []).map(x => 'c:' + x.id)].filter(key => has('mute|' + key)) };
 }
+// An account can choose notifications on its phone instead of these emails. The site says so in the same list, as
+// one more scrambled entry ("nomail"), and only while the account still has a device that can get them.
+export const emailOff = (person, stopped) => !!(person.stopCode && stopped && stopped.has(stopHash(person.stopCode, 'nomail')));
+// The site sends the notifications itself, from what each account follows. This only asks it to, which is safe to do
+// any number of times: each date is told to each account once. Counts come back, never who.
+async function pushRun(site, dry, today) {
+  try {
+    const r = await fetch((process.env.PAS_SITE_API || site + '/groups/api.php') + '?action=push_run', { method: 'POST', headers: { 'X-PAS': '1', 'content-type': 'application/json', accept: 'application/json' }, body: JSON.stringify({ dry, today }) });
+    const d = await r.json();
+    if (!d || d.ok !== true) throw new Error('the site answered ' + r.status);
+    if (d.ran === false && !d.dry) return console.log(`Notifications: the site didn’t send any this time (${d.why || 'no reason given'}).`);
+    console.log(dry ? `Notifications: ${d.people || 0} account(s) with a device would be told something today.` : `Notifications: ${d.people || 0} account(s) were due something, and ${d.sent || 0} notification(s) were delivered.`);
+  } catch (err) {
+    console.log(`Notifications: couldn’t ask the site to send them (${String(err.message || err).slice(0, 120)}). The emails are not affected; the next run asks again.`);
+  }
+}
 async function stoppedList(site) {
   const url = (process.env.PAS_SITE_API || site + '/groups/api.php') + '?action=stopped';
   for (let attempt = 1; ; attempt++) {
@@ -228,11 +244,15 @@ async function main() {
   const clock = new Intl.DateTimeFormat('en-GB', { timeZone: ZONE, hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
   if (!DRY && !flag('--any-time') && (clock < WINDOW[0] || clock >= WINDOW[1])) return console.log(`It is ${clock} in Philadelphia. Emails only go out between ${WINDOW[0]} and ${WINDOW[1]}, so nothing was sent.`);
 
+  if (cfg.groups) await pushRun(feed.site, DRY, today);
   const listed = await subscribers(cfg.alerts.listId);
   const stopped = cfg.groups ? await stoppedList(feed.site) : new Set();
-  const people = listed.map(p => withoutStopped(p, stopped, feed));
-  const fewer = people.filter((p, i) => (p.muted || []).length || p.programs.length + p.camps.length + p.schools.length + (p.school ? 1 : 0) < listed[i].programs.length + listed[i].camps.length + listed[i].schools.length + (listed[i].school ? 1 : 0)).length;
-  console.log(`${stopped.size} stopped follow(s) on the site’s list; ${fewer} subscriber(s) have something left out because of it.`);
+  const noMail = listed.filter(p => emailOff(p, stopped)).length;
+  if (noMail) console.log(`${noMail} subscriber(s) get notifications on a device instead of these emails, so they are left out below.`);
+  const mailed = listed.filter(p => !emailOff(p, stopped));
+  const people = mailed.map(p => withoutStopped(p, stopped, feed));
+  const fewer = people.filter((p, i) => (p.muted || []).length || p.programs.length + p.camps.length + p.schools.length + (p.school ? 1 : 0) < mailed[i].programs.length + mailed[i].camps.length + mailed[i].schools.length + (mailed[i].school ? 1 : 0)).length;
+  console.log(`${stopped.size - noMail} stopped follow(s) on the site’s list; ${fewer} subscriber(s) have something left out because of it.`);
   const bySchool = {};
   for (const p of people) bySchool[p.school || 'no school'] = (bySchool[p.school || 'no school'] || 0) + 1;
   console.log(`${people.length} subscriber(s): ${Object.entries(bySchool).map(([k, n]) => `${k} ${n}`).join(', ') || 'none yet'}. ${people.filter(p => p.programs.length).length} follow at least one program, ${people.filter(p => p.camps.length).length} at least one camp, ${people.filter(p => p.waiting.length).length} are waiting for a school.`);

@@ -51,6 +51,9 @@ const MAX_CLAIMS = 12;      // listings one account can claim
 const MAX_CLAIMANTS = 5;    // accounts that can hold a claim on one listing
 const SPACE_DAYS = 30;      // how long "spots open", "waitlist" or "full" stays up before the manager has to say it again
 const HIT_KINDS = array('view', 'site', 'signup', 'email', 'plan', 'ask');   // what is counted for a listing, a number a day ("ask" only by the server, when a question is sent)
+const PUSH_SUBS = 8;         // devices one account can get notifications on
+const PUSH_WINDOW = array('07:50', '11:50');   // Philadelphia time: when the day's notifications go out, the same hours as the emails
+const PUSH_A_RUN = 400;     // notifications sent in one go before the rest wait for the next
 const PREMIUM_PHOTOS = 6;   // photos a premium listing can show
 const WORDS_MAX = 900;      // "in their own words", in characters
 const OFFER_MAX = 140;      // the offer or event line
@@ -148,6 +151,14 @@ function db(): PDO {
     $pcols = array(); foreach ($db->query('PRAGMA table_info(photos)') as $c) $pcols[] = $c['name'];
     if (!in_array('kind', $pcols, true)) $db->exec("ALTER TABLE photos ADD COLUMN kind TEXT NOT NULL DEFAULT 'photo'");
     $db->exec('CREATE TABLE IF NOT EXISTS premium (listing TEXT PRIMARY KEY, since INTEGER NOT NULL)');
+    // Notifications on a phone or computer (web push). A device that asked for them (the address its browser's
+    // notification service gave it, and the two keys that let a message be sealed for it alone), which dates each
+    // account has already been told about, and a few values the server keeps for itself (its own signing key).
+    if (!in_array('push_only', $cols, true)) $db->exec('ALTER TABLE users ADD COLUMN push_only INTEGER NOT NULL DEFAULT 0');
+    $db->exec('CREATE TABLE IF NOT EXISTS push_subs (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, endpoint TEXT NOT NULL UNIQUE, p256dh TEXT NOT NULL, auth TEXT NOT NULL, created INTEGER NOT NULL, fails INTEGER NOT NULL DEFAULT 0)');
+    $db->exec('CREATE INDEX IF NOT EXISTS push_subs_user ON push_subs (user_id)');
+    $db->exec('CREATE TABLE IF NOT EXISTS push_sent (user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, k TEXT NOT NULL, day TEXT NOT NULL, PRIMARY KEY (user_id, k))');
+    $db->exec('CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT NOT NULL)');
     $db->exec("CREATE TABLE IF NOT EXISTS extras (id INTEGER PRIMARY KEY, claim_id INTEGER NOT NULL REFERENCES claims(id) ON DELETE CASCADE, listing TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL, until TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'new', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0)");
     $db->exec('CREATE INDEX IF NOT EXISTS extras_listing ON extras (listing, kind, status)');
     $db->exec('CREATE TABLE IF NOT EXISTS hits_school (listing TEXT NOT NULL, school TEXT NOT NULL, month TEXT NOT NULL, n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (listing, school, month))');
@@ -183,6 +194,7 @@ function tidy(): void {
   q('DELETE FROM throttle WHERE t < ?', array($t - 2 * 86400));
   q('DELETE FROM grp WHERE expires < ?', array($t));
   q('DELETE FROM hits WHERE day < ?', array((new DateTime('-400 days', new DateTimeZone('America/New_York')))->format('Y-m-d')));
+  q('DELETE FROM push_sent WHERE day < ?', array((new DateTime('-45 days', new DateTimeZone('America/New_York')))->format('Y-m-d')));
   q('DELETE FROM hits_school WHERE month < ?', array((new DateTime('-400 days', new DateTimeZone('America/New_York')))->format('Y-m')));
   q("DELETE FROM extras WHERE kind = 'offer' AND until != '' AND until < ?", array((new DateTime('-30 days', new DateTimeZone('America/New_York')))->format('Y-m-d')));   // offers long past their last day
   // Photo files whose record has gone (a deleted account, a replaced or declined photo).
@@ -683,7 +695,7 @@ function me_out(array $u): array {
   $claims = isset($u['id']) ? (int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) : 0;
   return array('email' => $u['email'], 'first' => $u['first'], 'last' => $u['last'], 'ready' => ready($u), 'listed' => (bool) $u['listed'],
     'school' => isset($u['school']) ? (string) $u['school'] : '', 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'phone' => isset($u['phone']) && !empty($u['phone_ok']) ? phone_show((string) $u['phone']) : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0,
-    'claims' => $claims, 'role' => role_of($u, $claims));
+    'claims' => $claims, 'role' => role_of($u, $claims), 'push' => isset($u['id']) ? push_state((int) $u['id']) : array('devices' => 0, 'only' => false));
 }
 // Parent or program manager? A manager is an account that holds a claim (approved or waiting), or one that was made on
 // the managers' page. Everyone else is a parent. It is a label for counting and for the email list, never shown publicly.
@@ -725,6 +737,192 @@ function stats_of(string $key): array {
   $since = (string) val('SELECT MIN(day) FROM hits');   // the day counting began, for every listing alike
   return array('now' => $now, 'prev' => $prev, 'views' => array_values($views), 'from' => $from, 'since' => $since, 'full' => $since !== '' && $since <= $before);
 }
+// ---------- notifications on a phone or computer (web push) ----------
+// A browser that is allowed to show notifications gives the page an address at its own notification service (Google's
+// for Chrome and Android, Apple's for Safari and iPhones, Mozilla's for Firefox) and two keys. A message for that
+// device is sealed with those keys, so the service carrying it can't read it, and signed with a key this server made
+// for itself, so the service knows who is sending. Nothing here needs an app, an account with anyone, or a password.
+function meta_get(string $k): string { return (string) val('SELECT v FROM meta WHERE k = ?', array($k)); }
+function meta_set(string $k, string $v): void { q('INSERT INTO meta (k, v) VALUES (?, ?) ON CONFLICT(k) DO UPDATE SET v = excluded.v', array($k, $v)); }
+function b64u_dec(string $s): string {
+  $r = base64_decode(strtr($s, '-_', '+/') . str_repeat('=', (4 - strlen($s) % 4) % 4), true);
+  return $r === false ? '' : $r;
+}
+function ec_point(array $details): string {   // a P-256 public key as the 65 bytes browsers use
+  return "\x04" . str_pad($details['ec']['x'], 32, "\0", STR_PAD_LEFT) . str_pad($details['ec']['y'], 32, "\0", STR_PAD_LEFT);
+}
+// The server's own signing key, made the first time it is needed and kept in the database (so the daily copy has it).
+function vapid(): ?array {
+  static $v = false;
+  if ($v !== false) return $v;
+  $v = null;
+  if (!function_exists('openssl_pkey_derive') || !function_exists('hash_hkdf')) return $v;
+  $pem = meta_get('vapid');
+  if ($pem === '') {
+    $new = @openssl_pkey_new(array('curve_name' => 'prime256v1', 'private_key_type' => OPENSSL_KEYTYPE_EC));
+    $made = '';
+    if (!$new || !@openssl_pkey_export($new, $made) || $made === '') return $v;
+    q('INSERT OR IGNORE INTO meta (k, v) VALUES (?, ?)', array('vapid', $made));   // two first requests at once: the first one's key stands
+    $pem = meta_get('vapid');
+  }
+  $key = @openssl_pkey_get_private($pem);
+  $d = $key ? openssl_pkey_get_details($key) : null;
+  if (!$d || !isset($d['ec']['x'], $d['ec']['y'])) return $v;
+  $v = array('key' => $key, 'pub' => ec_point($d));
+  return $v;
+}
+// Only the notification services browsers really use: the server never posts to an address just because someone gave it one.
+function push_endpoint_ok(string $url): bool {
+  $test = (string) getenv('PAS_TEST_PUSH');   // a stand-in on this machine, for the tests
+  if ($test !== '' && strpos($url, $test) === 0) return true;
+  $u = parse_url($url);
+  if (!$u || !isset($u['scheme'], $u['host']) || strtolower($u['scheme']) !== 'https' || isset($u['user']) || (isset($u['port']) && (int) $u['port'] !== 443) || strlen($url) > 600) return false;
+  $h = strtolower($u['host']);
+  foreach (array('fcm.googleapis.com', 'updates.push.services.mozilla.com') as $one) if ($h === $one) return true;
+  foreach (array('.push.apple.com', '.notify.windows.com', '.push.services.mozilla.com') as $end) if (substr($h, -strlen($end)) === $end) return true;
+  return false;
+}
+function push_state(int $uid): array {
+  try { return array('devices' => (int) val('SELECT COUNT(*) FROM push_subs WHERE user_id = ?', array($uid)), 'only' => (bool) val('SELECT push_only FROM users WHERE id = ?', array($uid))); }
+  catch (Exception $e) { return array('devices' => 0, 'only' => false); }
+}
+// Seals one message for one device and hands it to that device's notification service. Returns the service's answer:
+// 201 or 200 is taken, 404 or 410 means the device is gone, 0 means the service couldn't be reached.
+function push_send(array $sub, array $payload, int $ttl): int {
+  global $CFG;
+  $v = vapid();
+  if (!$v || !function_exists('curl_init') || !push_endpoint_ok($sub['endpoint'])) return 0;
+  $ua = b64u_dec($sub['p256dh']); $auth = b64u_dec($sub['auth']);
+  if (strlen($ua) !== 65 || $ua[0] !== "\x04" || strlen($auth) !== 16) return 410;   // not keys a message can be sealed with
+  $eph = @openssl_pkey_new(array('curve_name' => 'prime256v1', 'private_key_type' => OPENSSL_KEYTYPE_EC));
+  if (!$eph) return 0;
+  $as = ec_point(openssl_pkey_get_details($eph));
+  $uaPem = "-----BEGIN PUBLIC KEY-----\n" . chunk_split(base64_encode(hex2bin('3059301306072a8648ce3d020106082a8648ce3d030107034200') . $ua), 64, "\n") . "-----END PUBLIC KEY-----\n";
+  $shared = @openssl_pkey_derive($uaPem, $eph, 32);
+  if ($shared === false || $shared === '') return 410;
+  $shared = str_pad($shared, 32, "\0", STR_PAD_LEFT);
+  // RFC 8291: a key for this message from the shared secret and the device's own secret, then RFC 8188's aes128gcm
+  $ikm = hash_hkdf('sha256', $shared, 32, "WebPush: info\0" . $ua . $as, $auth);
+  $salt = random_bytes(16);
+  $cek = hash_hkdf('sha256', $ikm, 16, "Content-Encoding: aes128gcm\0", $salt);
+  $nonce = hash_hkdf('sha256', $ikm, 12, "Content-Encoding: nonce\0", $salt);
+  $plain = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "\x02";   // 2 marks the last (only) record
+  if (strlen($plain) > 3800) return 0;
+  $tag = '';
+  $ct = openssl_encrypt($plain, 'aes-128-gcm', $cek, OPENSSL_RAW_DATA, $nonce, $tag);
+  if ($ct === false) return 0;
+  $body = $salt . pack('N', 4096) . chr(65) . $as . $ct . $tag;
+  // who is sending: a short-lived signed note naming the service it is for
+  $u = parse_url($sub['endpoint']);
+  $aud = $u['scheme'] . '://' . $u['host'] . (isset($u['port']) ? ':' . $u['port'] : '');
+  $head = b64('{"typ":"JWT","alg":"ES256"}') . '.' . b64((string) json_encode(array('aud' => $aud, 'exp' => now() + 12 * 3600, 'sub' => 'mailto:' . $CFG['from']), JSON_UNESCAPED_SLASHES));
+  $der = '';
+  if (!openssl_sign($head, $der, $v['key'], OPENSSL_ALGO_SHA256)) return 0;
+  // the signature comes as two numbers wrapped up (DER); the service wants them plain, 32 bytes each
+  $o = 2 + ((ord($der[1]) & 0x80) ? (ord($der[1]) & 0x7F) : 0); $sig = '';
+  for ($i = 0; $i < 2; $i++) { $len = ord($der[$o + 1]); $sig .= str_pad(ltrim(substr($der, $o + 2, $len), "\0"), 32, "\0", STR_PAD_LEFT); $o += 2 + $len; }
+  $c = curl_init($sub['endpoint']);
+  curl_setopt_array($c, array(CURLOPT_POST => true, CURLOPT_POSTFIELDS => $body, CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 8, CURLOPT_CONNECTTIMEOUT => 5, CURLOPT_FOLLOWLOCATION => false,
+    CURLOPT_HTTPHEADER => array('Authorization: vapid t=' . $head . '.' . b64($sig) . ', k=' . b64($v['pub']), 'Content-Encoding: aes128gcm', 'Content-Type: application/octet-stream', 'TTL: ' . $ttl, 'Urgency: normal', 'Expect:')));
+  curl_exec($c);
+  $status = (int) curl_getinfo($c, CURLINFO_RESPONSE_CODE);
+  curl_close($c);
+  return $status;
+}
+// Sends one notification to every device an account has. A device its service says is gone is forgotten. Returns how many took it.
+function push_to_user(int $uid, array $payload, int $ttl): int {
+  $ok = 0;
+  foreach (q('SELECT id, endpoint, p256dh, auth, fails FROM push_subs WHERE user_id = ?', array($uid)) as $sub) {
+    $st = push_send($sub, $payload, $ttl);
+    if ($st >= 200 && $st < 300) { $ok++; if ((int) $sub['fails']) q('UPDATE push_subs SET fails = 0 WHERE id = ?', array($sub['id'])); }
+    elseif ($st === 404 || $st === 410 || $st === 403 && (int) $sub['fails'] >= 3) q('DELETE FROM push_subs WHERE id = ?', array($sub['id']));
+    else q('UPDATE push_subs SET fails = fails + 1 WHERE id = ?', array($sub['id']));
+  }
+  return $ok;
+}
+// The dates feed the build writes (the same one the emails are worked out from).
+function push_feed(): ?array {
+  $file = rtrim((string) $_SERVER['DOCUMENT_ROOT'], '/') . '/data/alerts.json';
+  $d = is_file($file) ? json_decode((string) file_get_contents($file), true) : null;
+  return is_array($d) && isset($d['alerts']) && is_array($d['alerts']) ? $d : null;
+}
+// What an account is due today, from what it follows. The same rules as the emails (scripts/send-alerts.mjs, dueFor):
+// a school brings its programs' dates and every day off, a program or camp brings its own, a listing stopped from an
+// email is left out, and a date with a reminder due the same day as its news is told once.
+function push_due(array $follows, array $mutedKeys, array $feed, string $today): array {
+  $schools = array(); $programs = array(); $camps = array(); $weeks = array();
+  foreach ($follows as $k) {
+    $id = substr($k, 2);
+    if ($k[0] === 's') $schools[] = $id; elseif ($k[0] === 'p') $programs[] = $id; elseif ($k[0] === 'c') $camps[] = $id; elseif ($k[0] === 'w') $weeks[] = $id;
+  }
+  $list = function ($a, $key) { return isset($a[$key]) && is_array($a[$key]) ? $a[$key] : array(); };
+  $wanted = array(); $got = array();
+  foreach ($feed['alerts'] as $a) {
+    if (!is_array($a) || !isset($a['id'], $a['date'], $a['sendOn'])) continue;
+    if ((isset($a['expires']) ? $a['expires'] : $a['date']) < $today) continue;
+    $isMuted = false;
+    foreach ($list($a, 'programs') as $id) if (in_array('p:' . $id, $mutedKeys, true)) $isMuted = true;
+    foreach ($list($a, 'camps') as $id) if (in_array('c:' . $id, $mutedKeys, true)) $isMuted = true;
+    if ($isMuted) continue;
+    $as = $list($a, 'schools');
+    $bySchool = $schools && (in_array('all', $schools, true) ? count($as) > 0 : in_array('*', $as, true) || count(array_intersect($as, $schools)) > 0);
+    if ($bySchool || array_intersect($list($a, 'programs'), $programs) || array_intersect($list($a, 'camps'), $camps) || array_intersect($list($a, 'weeks'), $weeks)) { $wanted[] = $a; $got[$a['id']] = true; }
+  }
+  $stage = function ($a) { $k = isset($a['kind']) ? $a['kind'] : ''; return $k === 'soon' ? 1 : ($k === 'today' ? 2 : 0); };
+  $base = function ($a) { return preg_replace('/-(eve|day)$/', '', $a['id']); };
+  $due = array();
+  foreach ($wanted as $a) if ($a['sendOn'] === $today && !(isset($a['within']) && isset($got[$a['within']]))) $due[] = $a;   // a day off already names its camps
+  $out = array();
+  foreach ($due as $a) {
+    $later = false;
+    foreach ($due as $b) if ($b['id'] !== $a['id'] && $base($b) === $base($a) && $stage($b) < $stage($a)) $later = true;
+    if (!$later) $out[] = $a;
+  }
+  return $out;
+}
+// The notification for a day's dates: the first one named, the rest counted.
+function push_note(array $items, array $feed): array {
+  $a = $items[0]; $k = isset($a['kind']) ? $a['kind'] : '';
+  $short = function ($iso) { $d = DateTime::createFromFormat('!Y-m-d', $iso, new DateTimeZone('UTC')); return $d ? $d->format('D, M j') : $iso; };
+  $t = isset($a['title']) ? (string) $a['title'] : 'A date you follow';
+  $title = $k === 'soon' ? 'Tomorrow: ' . $t : ($k === 'today' ? 'Today: ' . $t : ($k === 'dayoff' ? 'No school ' . $short($a['date']) : ($k === 'week' || $k === 'added' ? $t : ($k === 'update' ? $t . ': an update' : ($k === 'camp' ? preg_replace('/: camp on a day off$/', '', $t) . ' camp, ' . $short($a['date']) : $short($a['date']) . ': ' . $t)))));
+  $body = $k === 'dayoff' ? preg_replace('/^No school: /', '', $t) . '. ' . (isset($a['text']) ? $a['text'] : '') : (isset($a['text']) ? (string) $a['text'] : '');
+  $more = count($items) - 1;
+  if ($more > 0) $body = rtrim($body) . ' Plus ' . $more . ' more ' . ($more === 1 ? 'date' : 'dates') . ' today.';
+  $url = isset($a['url']) ? (string) $a['url'] : (isset($feed['site']) ? $feed['site'] . '/' : '/');
+  $url = str_replace(array('utm_source=klaviyo', 'utm_medium=email'), array('utm_source=push', 'utm_medium=notification'), $url);
+  return array('title' => mb_substr($title, 0, 90, 'UTF-8'), 'body' => mb_substr(trim($body), 0, 300, 'UTF-8'), 'url' => $url, 'tag' => 'dates-' . $a['id']);
+}
+// The morning's notifications: every account with a device, whatever it is due today and hasn't been told. Safe to
+// ask for more than once: each date is told to each account one time, and nothing goes out outside the morning.
+function push_run(string $today, bool $dry): array {
+  $feed = push_feed();
+  if (!$feed) return array('people' => 0, 'sent' => 0, 'note' => 'no feed');
+  $stops = array(); foreach (q('SELECT h FROM stops') as $r) $stops[$r['h']] = true;
+  $keys = array(); foreach (listings() as $k => $l) $keys[] = $k;
+  $people = 0; $sent = 0;
+  foreach (q('SELECT DISTINCT user_id FROM push_subs ORDER BY user_id') as $r) {
+    $uid = (int) $r['user_id'];
+    $follows = array(); foreach (q('SELECT k FROM follows WHERE user_id = ? AND live = 1', array($uid)) as $f) $follows[] = $f['k'];
+    if (!$follows) continue;
+    $mutedKeys = array();
+    if ($stops) { $code = stop_code($uid); foreach ($keys as $k) if (isset($stops[stop_hash($code, 'mute|' . $k)])) $mutedKeys[] = $k; }
+    $told = array(); foreach (q('SELECT k FROM push_sent WHERE user_id = ?', array($uid)) as $t) $told[$t['k']] = true;
+    $items = array(); foreach (push_due($follows, $mutedKeys, $feed, $today) as $a) if (!isset($told[$a['id']])) $items[] = $a;
+    if (!$items) continue;
+    $people++;
+    if ($dry) continue;
+    if ($sent >= PUSH_A_RUN) break;   // the rest go with the next run
+    $soon = true; foreach ($items as $a) if (!in_array(isset($a['kind']) ? $a['kind'] : '', array('soon', 'today'), true)) $soon = false;
+    $ok = push_to_user($uid, push_note($items, $feed), $soon ? 6 * 3600 : 24 * 3600);   // a reminder for today is no use tomorrow
+    $left = (int) val('SELECT COUNT(*) FROM push_subs WHERE user_id = ?', array($uid));
+    if ($ok || !$left) foreach ($items as $a) q('INSERT OR IGNORE INTO push_sent (user_id, k, day) VALUES (?, ?, ?)', array($uid, $a['id'], $today));   // a service that was down gets another try next run
+    $sent += $ok;
+  }
+  if ($sent) { try { q('INSERT INTO tally (k, day, n) VALUES (?, ?, ?) ON CONFLICT(k, day) DO UPDATE SET n = n + excluded.n', array('push_sent', today_ny(), $sent)); } catch (Exception $e) { /* counting never gets in the way */ } }
+  return array('people' => $people, 'sent' => $sent);
+}
+
 // ---------- premium listings ----------
 // A switch for the whole site (site.config.json, "groups": { "premium": ... }): "off", nothing anywhere; "preview",
 // premium content shows only to the people who hold the listing, so it can be set up and looked at before anyone
@@ -1147,6 +1345,9 @@ switch ($method . ' ' . $action) {
   case 'GET stopped': {
     $list = array();
     foreach (q('SELECT h FROM stops ORDER BY created DESC LIMIT 20000') as $r) $list[] = $r['h'];
+    // An account that chose notifications instead of emails, and has a device that can still get them: "nomail",
+    // scrambled the same way. If its last device goes, it drops off this list and the emails start again.
+    foreach (q('SELECT DISTINCT u.id FROM users u JOIN push_subs s ON s.user_id = u.id WHERE u.push_only = 1 LIMIT 20000') as $r) $list[] = stop_hash(stop_code((int) $r['id']), 'nomail');
     out(array('ok' => true, 'list' => $list));
   }
 
@@ -1282,6 +1483,81 @@ switch ($method . ' ' . $action) {
     $l = listings();
     if (!isset($l[$key]) || !premium_shows($key, current_user())) out(array('ok' => true, 'premium' => false));
     out(array('ok' => true, 'premium' => true, 'preview' => premium_mode() === 'preview') + extras_out($key));
+  }
+
+  // ----- notifications -----
+  // The key a browser needs before it can ask its notification service for an address. Public by design.
+  case 'GET push_key': {
+    $v = vapid();
+    if (!$v) fail('off', 'Notifications aren’t available right now.', 503);
+    out(array('ok' => true, 'key' => b64($v['pub'])));
+  }
+
+  // This device wants notifications: keep the address and keys its browser was given.
+  case 'POST push_on': {
+    $u = need_user();
+    if (!vapid()) fail('off', 'Notifications aren’t available right now.', 503);
+    $endpoint = isset($in['endpoint']) && is_string($in['endpoint']) ? trim($in['endpoint']) : '';
+    $p256dh = str($in, 'p256dh', 120); $auth = str($in, 'auth', 40);
+    if (!push_endpoint_ok($endpoint)) fail('service', 'This browser’s notification service isn’t one we can send to yet. The emails still work.');
+    if (strlen(b64u_dec($p256dh)) !== 65 || strlen(b64u_dec($auth)) !== 16) fail('keys', 'This browser didn’t give us what we need to send it a notification. Try turning them on again.');
+    $mine = row('SELECT id, user_id FROM push_subs WHERE endpoint = ?', array($endpoint));
+    if (!$mine && (int) val('SELECT COUNT(*) FROM push_subs WHERE user_id = ?', array($u['id'])) >= PUSH_SUBS) fail('full', 'That’s the most devices one account can have notifications on (' . PUSH_SUBS . '). Turn them off on one first.');
+    if (too_many('push:' . $u['id'], 20, 86400)) fail('slow', 'That’s a lot of changes for one day. Try again tomorrow.', 429);
+    note('push:' . $u['id']);
+    // a device belongs to whoever turned notifications on there last (a shared computer, a second account)
+    q('INSERT INTO push_subs (user_id, endpoint, p256dh, auth, created) VALUES (?, ?, ?, ?, ?) ON CONFLICT(endpoint) DO UPDATE SET user_id = excluded.user_id, p256dh = excluded.p256dh, auth = excluded.auth, fails = 0', array($u['id'], $endpoint, $p256dh, $auth, now()));
+    if (!$mine) bump('push_on');
+    out(array('ok' => true, 'push' => push_state($u['id'])));
+  }
+
+  // This device no longer wants them.
+  case 'POST push_off': {
+    $u = need_user();
+    $endpoint = isset($in['endpoint']) && is_string($in['endpoint']) ? trim($in['endpoint']) : '';
+    if (!empty($in['all'])) q('DELETE FROM push_subs WHERE user_id = ?', array($u['id']));
+    else q('DELETE FROM push_subs WHERE user_id = ? AND endpoint = ?', array($u['id'], $endpoint));
+    if (!(int) val('SELECT COUNT(*) FROM push_subs WHERE user_id = ?', array($u['id']))) q('UPDATE users SET push_only = 0 WHERE id = ?', array($u['id']));   // no device left: back to emails
+    out(array('ok' => true, 'push' => push_state($u['id'])));
+  }
+
+  // Notifications instead of the date emails, or as well as them.
+  case 'POST push_mode': {
+    $u = need_user();
+    $only = !empty($in['only']);
+    if ($only && !(int) val('SELECT COUNT(*) FROM push_subs WHERE user_id = ?', array($u['id']))) fail('none', 'Turn notifications on for a device first.');
+    q('UPDATE users SET push_only = ? WHERE id = ?', array($only ? 1 : 0, $u['id']));
+    out(array('ok' => true, 'push' => push_state($u['id'])));
+  }
+
+  // "Send me a test": one notification to every device the account has, so they can see it arrive.
+  case 'POST push_test': {
+    $u = need_user();
+    if (too_many('pusht:' . $u['id'], 6, 3600)) fail('slow', 'That’s a lot of tests. Wait a while and try again.', 429);
+    note('pusht:' . $u['id']);
+    $n = push_to_user($u['id'], array('title' => $CFG['siteName'], 'body' => 'Notifications are on. This is what a sign-up date will look like.', 'url' => $CFG['siteUrl'] . '/account/#emails', 'tag' => 'test'), 600);
+    if (!$n) fail('none', 'The test couldn’t be delivered to any of your devices. Turn notifications off and on again on this one.', 502);
+    out(array('ok' => true, 'sent' => $n, 'push' => push_state($u['id'])));
+  }
+
+  // The morning's notifications. Anyone can ask (the job that sends the emails does, every hour of the morning),
+  // because asking only makes the server do what it would do anyway: each date is told to each account once, and
+  // only between PUSH_WINDOW. It answers with counts and nothing else.
+  case 'POST push_run': {
+    $test = (string) getenv('PAS_TEST_PUSH') !== '';   // the tests choose the day and the hour
+    $dry = !empty($in['dry']);
+    $today = $test && preg_match('/^\d{4}-\d{2}-\d{2}$/', str($in, 'today', 10)) ? str($in, 'today', 10) : today_ny();
+    $clock = (new DateTime('now', new DateTimeZone('America/New_York')))->format('H:i');
+    $open = ($clock >= PUSH_WINDOW[0] && $clock < PUSH_WINDOW[1]) || ($test && !empty($in['any']));
+    if (!$dry && !$open) out(array('ok' => true, 'ran' => false, 'why' => 'outside the morning'));
+    if (!$dry) {
+      if (!($test && !empty($in['any'])) && (int) meta_get('push_ran') > now() - 240) out(array('ok' => true, 'ran' => false, 'why' => 'just ran'));
+      if (!($test && !empty($in['any'])) && too_many('pushrun:' . who(), 12, 3600)) out(array('ok' => true, 'ran' => false, 'why' => 'asked too often'));
+      note('pushrun:' . who());
+      meta_set('push_ran', (string) now());
+    } elseif (!$test && too_many('pushdry:' . who(), 20, 3600)) out(array('ok' => true, 'ran' => false, 'why' => 'asked too often'));
+    else note('pushdry:' . who());
+    out(array('ok' => true, 'ran' => !$dry, 'dry' => $dry) + push_run($today, $dry));
   }
 
   // A parent's question, sent on to the people who run the program. It is not kept: the site passes it along, with

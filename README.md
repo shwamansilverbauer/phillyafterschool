@@ -467,6 +467,50 @@ about it is sent anywhere.
   `program_id` and `nudge_place` (week or profile). The profile loads no analytics, so only Build your week is
   counted.
 
+## Notifications without an app
+
+A parent can get the same dates as the emails as a notification on a phone or computer (web push). Nothing is
+installed from an app store, there is no account with anyone to set up, and no secret to keep: the server makes its
+own key.
+
+- **Turning it on.** Account page, "Emails and notifications", "Turn on notifications on this device" (`#push`, in
+  `groups.js`). The browser asks for permission, the page registers the service worker (`src/sw.js`, served as
+  `/sw.js`), asks the browser for an address at its notification service using the site's public key
+  (`GET push_key`), and gives the address and its two keys to the server (`push_on`, table `push_subs`). "Send me a
+  test" sends one (`push_test`). One account can have `PUSH_SUBS` devices.
+- **iPhones.** Safari only delivers notifications to a site that has been added to the Home Screen, which is what
+  `manifest.webmanifest` is for (`display: standalone`). On an iPhone in Safari the page shows the four steps
+  instead of the button. The Home Screen copy keeps its own sign-in, so the parent logs in there once.
+- **What is sent.** `push_run()` in the server reads the same feed the emails are worked out from
+  (`data/alerts.json`, written by the build) and, for each account with a device, works out what is due today from
+  what it follows (`push_due()`, the same rules as `dueFor()` in `scripts/send-alerts.mjs`: schools, programs, camps,
+  the Sunday week, and nothing about a listing stopped from an email). One notification a morning: the first date
+  named, the rest counted. Each date is told to each account once (`push_sent`). There is no catching up on a
+  missed morning and no "welcome" notification.
+- **When.** Only between `PUSH_WINDOW` (7:50 to 11:50, Philadelphia). The job that sends the emails asks the site
+  to do it (`POST push_run`) at each hourly run. Anyone can ask, because asking only makes the server do what it
+  would do anyway; it answers with two counts. A dry run of the job asks for counts only.
+- **How a message is protected.** Each one is sealed for the device with the keys its browser gave (RFC 8291,
+  `aes128gcm`), so the notification service carrying it can't read it, and signed with the server's key (VAPID,
+  ES256) so the service knows who is sending. The key is made on first use and kept in the `meta` table, so the
+  daily copy of the database has it. `push_send()` does this with PHP's own openssl functions.
+- **Where it will send.** Only to Google's, Apple's, Mozilla's and Microsoft's notification services
+  (`push_endpoint_ok()`): the server never posts to an address just because a browser supplied it.
+- **Devices that go away.** A service that answers 404 or 410 means the device is gone, and it is forgotten. A
+  service that is down leaves the date untold, so the next run tries again.
+- **Instead of the emails.** A tick box under the device controls. The email job has to know, without the site
+  ever telling it who: the public list at `GET stopped` gains one more scrambled entry per such account
+  (`sha256(stop code | nomail)`), only while the account still has a device, and `emailOff()` in the job leaves
+  those addresses out. When the last device goes, the entry goes and the emails start again by themselves.
+- **The service worker** shows a notification and opens a page when one is tapped, and nothing else: it keeps no
+  copy of the site and doesn't touch page requests. A notification can only open an address on this site.
+- **Testing.** The tests play the notification service themselves: a stand-in on the test machine that receives
+  what the site posts, opens it with a device's keys and checks the signature, and a comparison over every morning
+  in the feed between what the site would tell a phone and what the email job would send. `PAS_TEST_PUSH` (set
+  only on the test machine) lets the stand-in's address through and lets a test choose the day.
+- **Not checked from here:** a real phone. Whether the host's PHP can make the key is answered by opening
+  `groups/api.php?action=push_key`.
+
 ## Premium listings
 
 Built, and kept out of sight until there is a way to pay for one. A premium listing adds, on top of everything a

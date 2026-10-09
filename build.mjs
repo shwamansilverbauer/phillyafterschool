@@ -547,7 +547,8 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="${link('favicon.svg', depth)}" type="image/svg+xml">
 <link rel="icon" href="${link('favicon.png', depth)}" type="image/png" sizes="48x48">
-<link rel="apple-touch-icon" href="${link('apple-touch-icon.png', depth)}">
+<link rel="apple-touch-icon" href="${link('apple-touch-icon.png', depth)}">${GROUPS && !PREVIEW ? `
+<link rel="manifest" href="${link('manifest.webmanifest', depth)}">` : ''}
 <meta name="theme-color" content="#96C9FF">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2182,6 +2183,8 @@ ${GROUPS.photos || GROUPS.premium !== 'off' ? `    <li>${T(`A photo you send for
     <li>${T(`So that a stop always holds, we keep a list of what has been stopped in a scrambled form that can’t be read back into a person or a listing without that code. The entry for a deleted account stays on that list, so its emails stay stopped.`)}</li>
     <li>${T(`“This week at your school” is an email you turn on in your account, for the school kept there. It is off until you tick it. It works like following: which school it is for is kept in your account and on your email-list profile, and you can turn it off there or from the link in any of those emails.`)}</li>
     <li>${T(`A favorite is different. It is kept in your account and nowhere else: it isn’t sent to Klaviyo, and it sends no email.`)}</li>
+    <li>${T(`Notifications on your phone or computer are optional, and off until you turn them on from your account page. When you do, your browser gives us an address at its own notification service (Google’s for Chrome and Android, Apple’s for Safari and iPhones, Mozilla’s for Firefox) and two keys. We keep those with your account and use them only to send you the dates for what you follow. Each notification is sealed so that the notification service carrying it can’t read it. Turning notifications off on a device removes that device, and deleting your account removes them all.`)}</li>
+    <li>${T(`If you choose notifications instead of the date emails, those emails stop while one of your devices can still get notifications, and start again by themselves if none can.`)}</li>
     <li>${T(`A phone number is optional. If you add one and tick the box agreeing to texts, we keep the number, the day you agreed and the wording you agreed to, in your account. It is for texts about what you follow and nothing else. Texts have not started yet; until they do, the number is not passed to any texting service. You can remove it on your account page at any time, and a text will always say how to stop them. Message and data rates may apply.`)}</li>
     <li>${T(`Asking to be told when a school is added still takes only a first name and an email address, with no account.`)}</li>` : `<li>${T(`The sign-up form sends three things: your first name, your email address and the school or program you chose. They go from your browser to Klaviyo, the email service we use, and are stored there.`)}</li>
     ${summerCamps.length ? `<li>${T(`On a summer camp’s page the same form sends the camp you asked about, and you hear about that camp alone.`)}</li>` : ''}`}
@@ -3733,7 +3736,7 @@ $topListings = array(); $hitsSince = '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'hood_saved' => 'Neighborhoods kept', 'phone_saved' => 'Phone numbers added for texts', 'follow' => 'Follows started', 'stop_one' => 'Listings stopped from an email', 'stop_all' => 'Everything stopped from an email', 'fav' => 'Favorites saved', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'email_changed' => 'Email addresses changed', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers', 'extra_sent' => 'Words and offer lines sent by program managers', 'ask' => 'Questions sent to programs');
+$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'hood_saved' => 'Neighborhoods kept', 'phone_saved' => 'Phone numbers added for texts', 'follow' => 'Follows started', 'stop_one' => 'Listings stopped from an email', 'stop_all' => 'Everything stopped from an email', 'fav' => 'Favorites saved', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'email_changed' => 'Email addresses changed', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers', 'push_on' => 'Devices that turned notifications on', 'push_sent' => 'Notifications delivered', 'extra_sent' => 'Words and offer lines sent by program managers', 'ask' => 'Questions sent to programs');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -4555,6 +4558,15 @@ const notFound = notFoundPage();   // always rendered, so its copy is known to t
 write('assets/site.css', fs.readFileSync(path.join(ROOT, 'src/site.css')));
 write('assets/site.js', fs.readFileSync(path.join(ROOT, 'src/site.js')));
 write('assets/edit.js', fs.readFileSync(path.join(ROOT, 'src/edit.js')));
+// Notifications without an app: a service worker at the top of the site (it shows a notification and opens a page,
+// nothing else), and the short description a phone needs before the site can sit on its Home Screen, which is what
+// an iPhone asks for before it will deliver them.
+if (GROUPS && !PREVIEW) {
+  write('sw.js', fs.readFileSync(path.join(ROOT, 'src/sw.js')));
+  write('manifest.webmanifest', JSON.stringify({ name: cfg.siteName, short_name: cfg.siteName.length > 12 ? cfg.siteName.replace(/^Philly /, '') : cfg.siteName, description: 'After-school programs in Philadelphia, sorted by the school your child goes to.',
+    start_url: '/?utm_source=homescreen&utm_medium=app', scope: '/', display: 'standalone', background_color: '#96C9FF', theme_color: '#96C9FF',
+    icons: [{ src: '/icon-192.png', sizes: '192x192', type: 'image/png' }, { src: '/icon-512.png', sizes: '512x512', type: 'image/png' }] }, null, 2) + '\n');
+}
 if (GROUPS && GROUPS.premium !== 'off') write('assets/qr.js', fs.readFileSync(path.join(ROOT, 'src/qr.js')));   // draws the code on a premium listing's flyer; loaded only when one is asked for
 if (GROUPS) {
   write('assets/groups.js', fs.readFileSync(path.join(ROOT, 'src/groups.js')));
