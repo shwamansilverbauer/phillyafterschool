@@ -1,0 +1,23 @@
+[
+  {
+    "date": "2026-10-09",
+    "title": "Follow and favorites",
+    "text": "Follow a program, a camp or your school and its dates come by email. Save a listing as a favorite to find it again. Both are listed on this page.",
+    "href": "programs/",
+    "link": "Find a program to follow"
+  },
+  {
+    "date": "2026-10-08",
+    "title": "One page for every planner",
+    "text": "The week, the days off and the summer, side by side, with what each one does.",
+    "href": "schedules/",
+    "link": "See the planners"
+  },
+  {
+    "date": "2026-10-07",
+    "title": "My kids’ calendar",
+    "text": "Everything you’ve planned for the year in one private calendar, with a file for your phone.",
+    "href": "calendar/",
+    "link": "Open my kids’ calendar"
+  }
+]

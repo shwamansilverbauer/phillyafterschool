@@ -270,6 +270,199 @@
     });
   });
 
+  // ----- a dot on "Your account" when the site has news this device hasn't seen (the account page lists it) -----
+  (function () {
+    var a = document.querySelector('.nav-cta[data-news]'), dot = a ? a.querySelector('.news-dot') : null;
+    if (!dot || store('pas-in') !== '1') return;
+    if ((store('pas-news') || '') < a.getAttribute('data-news')) dot.hidden = false;
+  })();
+
+  // ----- following and favorites -----
+  // Following a program, a camp or a school: its dates come by email. Saving a listing: it is kept in the account as
+  // a favorite, and nothing is emailed. Both belong to an account, so the server holds the list and this page asks it.
+  // The emails themselves are sent from the email list (Klaviyo), which this browser tells directly with the public
+  // key, exactly as the old sign-up form did: the address, and which listing. The server remembers what the list has
+  // yet to be told, so a change made on a device that then lost its connection is finished the next time.
+  var marksHost = document.querySelector('[data-follow]') || document.querySelector('[data-groups]');
+  var MK = null;
+  if (marksHost && window.fetch && window.Promise) MK = (function () {
+    var API = marksHost.getAttribute('data-api') || '', KEY = marksHost.getAttribute('data-dates-key') || '', LIST = marksHost.getAttribute('data-dates-list') || '';
+    var state = { user: null, follows: [], favs: [], lists: null, loaded: false };
+    var PROP = { p: 'programs', c: 'camps', s: 'schools' };
+    function api(action, body) {
+      if (!API) return Promise.resolve({ ok: false, message: 'This is the preview, so nothing was saved. It works on the live site.' });
+      var o = { credentials: 'same-origin', headers: { 'X-PAS': '1' } };
+      if (body) { o.method = 'POST'; o.headers['Content-Type'] = 'application/json'; o.body = JSON.stringify(body); }
+      return window.fetch(API + '?action=' + action, o).then(function (r) {
+        return r.json().then(function (d) { d.http = r.status; return d; }, function () { return { ok: false, http: r.status, message: 'Something went wrong on our side. Please try again.' }; });
+      }, function () { return { ok: false, http: 0, message: 'Couldn’t reach the site. Check your connection and try again.' }; });
+    }
+    function klaviyo(path, body) {
+      return window.fetch('https://a.klaviyo.com/client/' + path + '?company_id=' + encodeURIComponent(KEY), {
+        method: 'POST', headers: { 'content-type': 'application/vnd.api+json', revision: '2026-07-15' }, body: JSON.stringify(body)
+      }).then(function (r) { if (r.status < 200 || r.status > 299) throw new Error('status ' + r.status); return r; });
+    }
+    // One change, told to the email list: on (join the dates list, add the listing) or off (take the listing away).
+    function tell(ch) {
+      var u = state.user, prop = PROP[ch.k.charAt(0)], patch = {};
+      if (!u || !KEY || !LIST || !prop) return Promise.reject(new Error('nothing to tell'));
+      patch[prop] = ch.k.slice(2);
+      if (!ch.on) return klaviyo('profiles', { data: { type: 'profile', attributes: { email: u.email }, meta: { patch_properties: { unappend: patch } } } });
+      var who = { email: u.email, properties: { follows_from_account: true }, subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } } };
+      if (u.first) who.first_name = u.first;
+      return klaviyo('subscriptions', { data: { type: 'subscription',
+        attributes: { custom_source: 'phillyafterschool.org follow', profile: { data: { type: 'profile', attributes: who } } },
+        relationships: { list: { data: { type: 'list', id: LIST } } } } })
+        .then(function () { return klaviyo('profiles', { data: { type: 'profile', attributes: { email: u.email }, meta: { patch_properties: { append: patch } } } }); });
+    }
+    var busy = null;
+    function sync(list) {
+      if (!list || !list.length || !KEY || !LIST) return Promise.resolve();
+      if (busy) return busy.then(function () { return sync(list); });
+      var done = [];
+      busy = list.reduce(function (p, ch) { return p.then(function () { return tell(ch).then(function () { done.push({ k: ch.k, on: !!ch.on }); }, function () { /* tried again next time */ }); }); }, Promise.resolve())
+        .then(function () { return done.length ? api('follow_synced', { keys: done }) : null; })
+        .then(function () { busy = null; }, function () { busy = null; });
+      return busy;
+    }
+    function take(d) {
+      if (!d || !d.ok) return d;
+      if ('user' in d) state.user = d.user || null;
+      state.follows = (d.follows || []).map(function (x) { return x.k; });
+      state.favs = (d.favs || []).map(function (x) { return x.k; });
+      state.named = { follows: d.follows || [], favs: d.favs || [] };
+      if (d.lists) state.lists = d.lists;
+      state.loaded = true;
+      if (state.user) sync(d.sync);
+      return d;
+    }
+    return {
+      state: state, api: api, sync: sync,
+      load: function () { return api('marks').then(take); },
+      follow: function (k, on) { return api('follow', { key: k, on: !!on }).then(take); },
+      fav: function (k, on) { return api('fav', { key: k, on: !!on }).then(take); },
+      clear: function () { return api('follow_clear', {}).then(function (d) { if (d && d.ok && d.sync) return sync(d.sync); }); }
+    };
+  })();
+  window.pasMarks = MK;
+
+  (function () {
+    var boxes = all(document, '[data-follow]');
+    if (!boxes.length || !MK) return;
+    var signedHint = function () { return store('pas-in') === '1'; };
+    // The sign-in form lives in the accounts script, which listing pages don't carry until someone needs it.
+    var accounts = function (then) {
+      if (window.pasAccount) { then(window.pasAccount); return; }
+      var src = boxes[0].getAttribute('data-accounts');
+      if (!src) { then(null); return; }
+      var t = document.createElement('script'); t.src = src;
+      t.onload = function () { then(window.pasAccount || null); };
+      t.onerror = function () { then(null); };
+      document.body.appendChild(t);
+    };
+    var painters = [];
+    var paintAll = function () { painters.forEach(function (p) { p(); }); };
+    boxes.forEach(function (box) {
+      var fixed = box.getAttribute('data-follow'), pick = box.querySelector('[data-follow-pick]'), place = box.getAttribute('data-place') || '';
+      var fb = box.querySelector('[data-follow-btn]'), vb = box.querySelector('[data-fav-btn]');
+      var status = box.querySelector('[data-follow-status]'), signin = box.querySelector('[data-follow-signin]'), more = box.querySelector('[data-follow-more]');
+      var followLabel = fb.textContent, favLabel = vb ? vb.textContent : '';
+      var key = function () { return pick ? 's:' + pick.value : fixed; };
+      var name = function () { return pick ? (pick.options[pick.selectedIndex].getAttribute('data-name') || '') : (box.getAttribute('data-name') || ''); };
+      var say = function (msg, kind) { status.textContent = msg || ''; status.className = 'follow-status' + (kind ? ' ' + kind : ''); };
+      var saved = mySchool();
+      if (pick && saved && all(pick, 'option').some(function (o) { return o.value === saved.id; })) pick.value = saved.id;
+      var paint = function () {
+        var on = MK.state.follows.indexOf(key()) > -1;
+        fb.textContent = on ? 'Following' : followLabel;
+        fb.className = 'btn ' + (on ? 'following' : 'primary');
+        fb.setAttribute('aria-pressed', String(on));
+        fb.title = on ? 'Tap to stop following' : '';
+        if (vb) { var f = MK.state.favs.indexOf(key()) > -1; vb.textContent = f ? 'Saved to favorites' : favLabel; vb.className = 'btn' + (f ? ' saved' : ''); vb.setAttribute('aria-pressed', String(f)); }
+        box.classList.toggle('is-following', on);
+      };
+      painters.push(paint);
+      if (pick) pick.addEventListener('change', function () { say(''); paint(); });
+      var followed = function () {
+        var k = key(), kind = k.charAt(0);
+        say(kind === 's' ? 'You’re following ' + name() + '. One email on a Sunday morning, and only in a week with a date coming up.'
+          : kind === 'c' ? 'You’re following ' + name() + '. You’ll hear when it posts next summer or names a sign-up day.'
+          : 'You’re following ' + name() + '. You’ll hear when it posts a date.', 'good');
+        track({ event: 'pas_alert_signup', school: kind === 's' ? k.slice(2) : '', program_id: kind === 'p' ? k.slice(2) : '', camp_id: kind === 'c' ? k.slice(2) : '', place: place });
+        if (kind !== 's') hit(k, 'email');
+        basics();
+      };
+      // A new account has no name yet. Ask once, here, with the two things that make the site start in the right place.
+      var basics = function () {
+        var u = MK.state.user, L = MK.state.lists;
+        if (!u || u.ready || !more || !L) return;
+        more.textContent = ''; more.hidden = false;
+        var f = document.createElement('form'); f.className = 'follow-basics';
+        var h = document.createElement('p'); h.className = 'follow-basics-h'; h.textContent = 'One more step: tell us who you are, so the site starts in the right place.'; f.appendChild(h);
+        var field = function (id, label, node) { var w = document.createElement('div'); w.className = 'field'; var l = document.createElement('label'); l.htmlFor = id; l.textContent = label; node.id = id; w.appendChild(l); w.appendChild(node); f.appendChild(w); return node; };
+        var input = function (auto, max) { var i = document.createElement('input'); i.type = 'text'; i.required = true; i.maxLength = max; i.autocomplete = auto; return i; };
+        var select = function (none, items, value) { var sl = document.createElement('select'); var o0 = document.createElement('option'); o0.value = ''; o0.textContent = none; sl.appendChild(o0); Object.keys(items).forEach(function (id) { var o = document.createElement('option'); o.value = id; o.textContent = items[id]; sl.appendChild(o); }); sl.value = value || ''; return sl; };
+        var first = field('fb-first-' + place, 'Your first name', input('given-name', 30)), last = field('fb-last-' + place, 'Your last name', input('family-name', 40));
+        first.value = u.first || ''; last.value = u.last || '';
+        var dev = mySchool(), fixedSchool = !pick && fixed.charAt(0) === 's' ? fixed.slice(2) : '';
+        var school = field('fb-school-' + place, 'Your school (optional)', select('Not listed, or rather not say', L.schools || {}, u.school || fixedSchool || (pick && pick.value !== 'all' ? pick.value : '') || (dev ? dev.id : '')));
+        var hood = field('fb-hood-' + place, 'Your neighborhood (optional)', select('Rather not say', L.hoods || {}, u.hood || ''));
+        var b = document.createElement('button'); b.type = 'submit'; b.className = 'btn primary'; b.textContent = 'Save'; f.appendChild(b);
+        var note = document.createElement('p'); note.className = 'hint'; note.textContent = 'Your name shows to someone you share a week with. Your school and neighborhood only set where lists start, and which news reaches you.'; f.appendChild(note);
+        f.addEventListener('submit', function (e) {
+          e.preventDefault(); b.disabled = true;
+          MK.api('basics', { first: first.value, last: last.value, school: school.value, hood: hood.value }).then(function (r) {
+            b.disabled = false;
+            if (!r.ok) { note.textContent = r.message; note.className = 'hint bad'; return; }
+            MK.state.user = r.user; more.hidden = true; more.textContent = '';
+            // the school kept in the profile becomes this device's school too, as it does on the account page
+            if (r.user.school && L.schools && L.schools[r.user.school]) { try { window.localStorage.setItem('pas-prof-school', '1'); var cur = mySchool(); if (!cur || cur.id !== r.user.school) window.localStorage.setItem('pas-my-school', JSON.stringify({ id: r.user.school, name: L.schools[r.user.school] })); } catch (e) { /* storage blocked */ } }
+            say('Thanks, ' + r.first + '. ' + status.textContent, 'good');
+            accounts(function (A) { if (A && A.added) A.added(r.user); });   // the account joins the site's own email list, as any new account does
+          });
+        });
+        more.appendChild(f);
+      };
+      var act = function (what) {
+        if (box.getAttribute('data-preview')) { say('This is the preview, so nothing was saved. Following works on the live site.'); return; }
+        var k = key();
+        if (!MK.state.user) { open(what); return; }
+        var list = what === 'fav' ? MK.state.favs : MK.state.follows, on = list.indexOf(k) < 0, b = what === 'fav' ? vb : fb;
+        b.disabled = true;
+        MK[what](k, on).then(function (d) {
+          b.disabled = false;
+          if (!d.ok) { if (d.http === 401) { MK.state.user = null; try { window.localStorage.removeItem('pas-in'); } catch (e) { /* storage blocked */ } open(what); return; } say(d.message, 'bad'); return; }
+          paintAll();
+          if (what === 'fav') { say(on ? name() + ' is in your favorites. Find it on your account page.' : 'Taken out of your favorites.', on ? 'good' : ''); track({ event: 'pas_favorite', action: on ? 'save' : 'remove', listing: k, place: place }); }
+          else if (on) followed();
+          else say('Stopped. No more emails about ' + name() + '.');
+        });
+      };
+      var open = function (what) {
+        say(''); signin.hidden = false; signin.textContent = 'Loading…';
+        accounts(function (A) {
+          if (!A) { signin.hidden = true; say('The sign-in couldn’t load. Check your connection and try again.', 'bad'); return; }
+          signin.textContent = '';
+          A.signIn(signin, (what === 'fav' ? 'v:' : 'f:') + key(), function () {
+            signin.hidden = true; signin.textContent = '';
+            MK.load().then(function () {   // signing in from this button already did what was asked
+              paintAll();
+              var k = key(), did = (what === 'fav' ? MK.state.favs : MK.state.follows).indexOf(k) > -1;
+              if (!did) { act(what); return; }
+              if (what === 'fav') { say(name() + ' is in your favorites. Find it on your account page.', 'good'); track({ event: 'pas_favorite', action: 'save', listing: k, place: place }); basics(); }
+              else followed();
+            });
+          }, what === 'fav' ? 'Favorites are kept in a free account. No password: we email you a 6-digit code, and you type it here.' : 'Sign in, and you’re following. If you’re new, this makes your free account. No password: we email you a 6-digit code, and you type it here.');
+          var first = signin.querySelector('input'); if (first) first.focus();
+        });
+      };
+      fb.addEventListener('click', function () { act('follow'); });
+      if (vb) vb.addEventListener('click', function () { act('fav'); });
+      paint();
+    });
+    if (signedHint()) MK.load().then(paintAll);
+  })();
+
   // ----- review form: arrive with the program and school already chosen -----
   var review = document.querySelector('#review-form');
   if (review) {

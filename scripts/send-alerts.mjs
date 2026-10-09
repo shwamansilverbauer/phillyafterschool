@@ -44,7 +44,9 @@ const shortDay = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US',
 // waiting for a school to be added (one email when it is), or any mix of these.
 export function dueFor(person, feed, today) {
   const follows = person.programs || [], camps = person.camps || [], waiting = person.waiting || [];
-  const bySchool = a => !!person.school && (person.school === 'all' ? a.schools.length > 0 : a.schools.includes('*') || a.schools.includes(person.school));
+  // The schools someone hears about: the one a sign-up form set, and any an account follows. "all" is every school.
+  const mine = [person.school, ...(person.schools || [])].filter(Boolean);
+  const bySchool = a => mine.length > 0 && (mine.includes('all') ? a.schools.length > 0 : a.schools.includes('*') || a.schools.some(s => mine.includes(s)));
   const byProgram = a => (a.programs || []).some(id => follows.includes(id));
   const byCamp = a => (a.camps || []).some(id => camps.includes(id));
   const byWaiting = a => (a.waiting || []).some(id => waiting.includes(id));
@@ -67,21 +69,25 @@ export function dueFor(person, feed, today) {
 }
 
 export function eventFor(person, due, feed) {
-  const school = feed.schools.find(s => s.id === person.school);
+  const mine = [...new Set([person.school, ...(person.schools || [])].filter(Boolean))];
+  const everySchool = mine.includes('all');
+  const known = mine.map(id => feed.schools.find(s => s.id === id)).filter(Boolean);
+  const school = !everySchool && known.length === 1 ? known[0] : null;   // one school: the email is about that school
+  const schoolNames = known.length > 1 ? `${known.slice(0, -1).map(s => s.name).join(', ')} and ${known[known.length - 1].name}` : '';
   const followed = [
     ...(person.programs || []).map(id => (feed.programs || []).find(p => p.id === id)?.name),
     ...(person.camps || []).map(id => (feed.camps || []).find(c => c.id === id)?.name),
   ].filter(Boolean);
   const onlyAdded = due.items.every(a => a.kind === 'added');
   const names = followed.length > 3 ? `${followed.slice(0, 2).join(', ')} and ${followed.length - 2} more` : followed.length > 1 ? `${followed.slice(0, -1).join(', ')} and ${followed[followed.length - 1]}` : followed[0];
-  const whose = school ? ` for ${school.name} families` : person.school === 'all' ? '' : followed.length === 1 ? ` at ${followed[0]}` : followed.length ? ' at the programs you asked about' : '';
+  const whose = school ? ` for ${school.name} families` : everySchool ? '' : schoolNames ? ` for ${schoolNames}` : followed.length === 1 ? ` at ${followed[0]}` : followed.length ? ' at the programs you asked about' : '';
   const reason = onlyAdded ? 'you asked to be told when this school was added'
-    : [school ? `you asked for ${school.name} dates` : person.school === 'all' ? 'you asked for dates for every school' : '', followed.length ? `you asked to hear about ${names}` : ''].filter(Boolean).join(' and ') || 'you asked for dates';
+    : [school ? `you asked for ${school.name} dates` : everySchool ? 'you asked for dates for every school' : schoolNames ? `you asked for ${schoolNames} dates` : '', followed.length ? `you asked to hear about ${names}` : ''].filter(Boolean).join(' and ') || 'you asked for dates';
   const first = due.items[0];
   const lead = first.kind === 'added' ? first.title : first.kind === 'dayoff' ? `No school ${shortDay(first.date)} (${first.title.replace(/^No school: /, '')})` : first.kind === 'update' ? `${first.title}: an update` : first.kind === 'camp' ? `${first.title.replace(/: camp on a day off$/, '')} camp, ${shortDay(first.date)}` : `${shortDay(first.date)}: ${first.title}`;
   const more = due.items.length - 1;
   const subject = due.kind === 'welcome'
-    ? `You’re on the list. Here’s what’s coming up${school ? ' for ' + school.name : followed.length === 1 && person.school !== 'all' ? ' at ' + followed[0] : ''}`
+    ? `You’re on the list. Here’s what’s coming up${school ? ' for ' + school.name : followed.length === 1 && !mine.length ? ' at ' + followed[0] : ''}`
     : lead + (more ? `, plus ${more} more date${more > 1 ? 's' : ''}` : '');
   const line = a => a.kind === 'dayoff' || a.kind === 'camp' ? a.title : `${a.title}: ${a.text.replace(/\.$/, '')}`;
   return {
@@ -95,7 +101,7 @@ export function eventFor(person, due, feed) {
       ? `Here is what’s already on the calendar${whose}. After this you’ll hear from us on ${feed.sendDay} mornings, and only when there’s something new.`
       : `Here’s what’s coming up${whose}.`,
     reason,
-    school: person.school || '',
+    school: school ? school.id : everySchool ? 'all' : '',
     programs: person.programs || [],
     camps: person.camps || [],
     school_name: school ? school.name : '',
@@ -128,11 +134,14 @@ async function subscribers(listId) {
       if (!a.email) continue;
       const school = String(a.properties?.school || '').toLowerCase();
       const ids = key => [].concat(a.properties?.[key] || []).map(x => String(x).toLowerCase()).filter(x => /^[a-z0-9-]+$/.test(x));
-      const programs = ids('programs'), camps = ids('camps'), waiting = ids('waiting_schools');
+      const programs = ids('programs'), camps = ids('camps'), waiting = ids('waiting_schools'), followedSchools = ids('schools');
+      // An address whose follows are kept by an account hears about exactly what the account follows, even when that is
+      // nothing: it is never treated as "added some other way".
+      const managed = a.properties?.follows_from_account === true;
       // Someone who only asked about a program, a camp or a school that isn't covered yet hears about that and nothing
       // else. An address with none of these was added some other way: send it everything.
-      const narrow = programs.length || camps.length || waiting.length;
-      people.push({ id: p.id, email: a.email, school: /^[a-z0-9-]+$/.test(school) ? school : narrow ? '' : 'all', programs, camps, waiting, joined: localDay(new Date(a.joined_group_at || Date.now())) });
+      const narrow = programs.length || camps.length || waiting.length || followedSchools.length || managed;
+      people.push({ id: p.id, email: a.email, school: /^[a-z0-9-]+$/.test(school) ? school : narrow ? '' : 'all', schools: followedSchools, programs, camps, waiting, joined: localDay(new Date(a.joined_group_at || Date.now())) });
     }
     url = page.links?.next || null;
     if (url && API !== 'https://a.klaviyo.com') url = url.replace('https://a.klaviyo.com', API);

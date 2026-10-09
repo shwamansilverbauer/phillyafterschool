@@ -806,6 +806,45 @@ What a move costs: people sign in again (the sign-in cookie belongs to the old a
 a device stays behind with the old address. Plans kept in a profile come back at the next sign-in. The accounts
 database does not move: both addresses are served from the same folder.
 
+## Follow and favorites
+
+Dates by email now run on accounts. A **follow** means the listing's or school's dates are emailed; a **favorite**
+keeps a listing in the account and emails nothing. `followBox()` in `build.mjs` draws the box: inside the details
+card on a program's or camp's page, and as a wide box on a school page, the home page, the days-off page and
+`/alerts/` (those last three with a school picker). Without accounts (`groups` unset) the old sign-up form,
+`alertsBox()`, is used instead.
+
+- **Signed out.** Tapping Follow or Save fetches `assets/groups.js` (listing pages don't carry it otherwise) and
+  shows its sign-in form in the box. The sign-in is started with `next` set to `f:<key>` or `v:<key>`, and the
+  server does the follow or the save itself when the sign-in finishes (`sign_in()`), so it also works when
+  someone taps the button in the email on another device: they land back on the listing, already following.
+- **A new account** is then asked, in the box, for a first and last name and (both optional) a school and a
+  neighborhood (`POST basics`). The account page's "Finish your account" step asks the same. The neighborhood list
+  is every neighborhood the site names (`accountHoods()`), plus "Somewhere else". There is no phone number field:
+  texting needs its own consent wording, so it waits until there is something to consent to.
+- **Where it is kept.** Tables `follows` and `favs` in the accounts database, keyed `p:<program>`, `c:<camp>` or
+  `s:<school>` (`s:all` is every school). `GET marks` paints the buttons; `POST follow` and `POST fav` change them.
+- **The emails** are still sent from Klaviyo by `scripts/send-alerts.mjs`, which reads each address's `programs`,
+  `camps` and `schools` properties there. The browser tells Klaviyo (public key, as the old form did): a follow
+  subscribes the address to the dates list with `follows_from_account: true` and appends to the right property; an
+  unfollow unappends. Each `follows` row has a `synced` flag, and a turned-off follow stays as a row until the
+  browser confirms Klaviyo has dropped it, so a change made just before a connection died is finished next time.
+  An address marked `follows_from_account` hears about exactly what it follows, even when that is nothing.
+- **The account page** lists "Places you follow" and "Favorites" (`.g-marks`), each with a way to stop, and a
+  favorite program has "Add to your week". Deleting the account unfollows everything first.
+- **Counts.** `follow`, `fav` and `hood_saved` in the tally; tiles on `/edit/stats/`. The analytics event for a
+  follow is still `pas_alert_signup`; a favorite is `pas_favorite` (action, listing, place).
+
+The form for a school that isn't covered yet ("tell me when it's added") is unchanged: a first name and an email,
+no account.
+
+## What's new
+
+`data/news.json` is a short list, newest first: `{ "date", "title", "text", "href", "link" }`. The account page
+shows the latest five under "What's new", and "Your account" in the header carries a dot until the newest one has
+been seen on that device (`pas-news` in `localStorage`). Add an entry when something ships that an account holder
+would want to know about.
+
 ## Parents and program managers, told apart
 
 Every account is one or the other. A **manager** holds a claim (approved or waiting) or made the account on
@@ -822,7 +861,8 @@ and `me` returns it as `role`. Four places use it:
   `parent` for `/register/`, `manager` for `/managers/`) and `account` (`new` or `returning`).
 - **Clarity.** The same script sets two custom tags, `role` and `signed_in`, so recordings and heatmaps filter by
   them (Filters > Custom tags). Nothing to set up.
-- **Klaviyo.** An account goes onto the accounts list with `has_account: true` and `role`. A manager's profile
+- **Klaviyo.** An account goes onto the accounts list with `has_account: true` and `role`, and its profile also
+  carries `home_school` and `neighborhood` when the account has them. A manager's profile
   also gets `claimed_listings` (the names of the listings they hold), updated from `/managers/`. Segment on
   `role equals manager` or `role equals parent`. People who only asked for dates by email have no `role`: they
   are on the dates list with `school`, `programs` or `camps`.

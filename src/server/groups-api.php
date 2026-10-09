@@ -107,7 +107,7 @@ function db(): PDO {
     // Added after the first version: first and last name, and whether the account has been added to the email list.
     $cols = array();
     foreach ($db->query('PRAGMA table_info(users)') as $c) $cols[] = $c['name'];
-    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''", 'origin' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
+    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''", 'origin' => "TEXT NOT NULL DEFAULT ''", 'hood' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
       if (!in_array($col, $cols, true)) $db->exec('ALTER TABLE users ADD COLUMN ' . $col . ' ' . $type);
     }
     // A group made by "share this week with one person" is marked, so joining it skips the question about whose week to add.
@@ -122,6 +122,11 @@ function db(): PDO {
     // "Your listing this month": a number for each listing, kind and day. Nothing about who.
     $db->exec('CREATE TABLE IF NOT EXISTS hits (listing TEXT NOT NULL, k TEXT NOT NULL, day TEXT NOT NULL, n INTEGER NOT NULL, PRIMARY KEY (listing, k, day))');
     // A days-off plan kept in a profile: one per account. Each child's first name and where they'll be on each day school is closed.
+    // What an account follows (it is emailed when that listing or school posts a date) and what it has saved as a
+    // favorite (kept for quick access, no emails). Keys are "p:<program>", "c:<camp>" or "s:<school>". A follow that
+    // has been turned off stays as a row with live = 0 until the browser confirms the email list has dropped it too.
+    $db->exec('CREATE TABLE IF NOT EXISTS follows (user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, k TEXT NOT NULL, live INTEGER NOT NULL DEFAULT 1, synced INTEGER NOT NULL DEFAULT 0, created INTEGER NOT NULL, PRIMARY KEY (user_id, k))');
+    $db->exec('CREATE TABLE IF NOT EXISTS favs (user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, k TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY (user_id, k))');
     $db->exec('CREATE TABLE IF NOT EXISTS daysoffs (user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, year INTEGER NOT NULL, json TEXT NOT NULL, updated INTEGER NOT NULL)');
     // Directors: a claim on a listing ("p:<program id>" or "c:<camp id>") and the changes a director has proposed for it.
     $db->exec("CREATE TABLE IF NOT EXISTS claims (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, listing TEXT NOT NULL, status TEXT NOT NULL, domain TEXT NOT NULL DEFAULT '', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0, UNIQUE (user_id, listing))");
@@ -269,14 +274,14 @@ function current_user(): ?array {
   $done = true;
   $sid = isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s']) ? $_COOKIE['pas_s'] : '';
   if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return null;
-  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school, u.grades, u.origin FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
+  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school, u.grades, u.origin, u.hood FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
   if (!$s) return null;
   if ($s['seen'] < now() - 86400) {   // once a day, push the 30 days out again
     $exp = now() + SESSION_DAYS * 86400;
     q('UPDATE sessions SET seen = ?, expires = ? WHERE id = ?', array(now(), $exp, $s['sid']));
     set_session_cookie($sid, $exp);
   }
-  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'school' => (string) $s['school'], 'grades' => (string) $s['grades'], 'origin' => (string) $s['origin'], 'sid' => (int) $s['sid']);
+  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'school' => (string) $s['school'], 'grades' => (string) $s['grades'], 'origin' => (string) $s['origin'], 'hood' => (string) $s['hood'], 'sid' => (int) $s['sid']);
   return $user;
 }
 function need_user(): array {
@@ -352,13 +357,57 @@ function programs(): array {
   }
   return $p;
 }
-function schools(): array {
+function schools(): array { return array_keys(school_names()); }
+function school_names(): array {
   static $s = null;
   if ($s !== null) return $s;
   $s = array();
   $list = json_decode((string) @file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/data/schools.json'), true);
-  if (is_array($list)) foreach ($list as $x) { if (is_array($x) && isset($x['id']) && is_string($x['id'])) $s[] = $x['id']; }
+  if (is_array($list)) foreach ($list as $x) { if (is_array($x) && isset($x['id']) && is_string($x['id'])) $s[$x['id']] = isset($x['shortName']) && is_string($x['shortName']) ? $x['shortName'] : $x['id']; }
   return $s;
+}
+// The neighborhoods someone can say they live in: the ones the site has pages for.
+function hoods(): array {
+  global $CFG;
+  return isset($CFG['hoods']) && is_array($CFG['hoods']) ? $CFG['hoods'] : array();
+}
+
+// ---------- following and favorites ----------
+const MAX_FOLLOWS = 60;
+const MAX_FAVS = 120;
+// Is this something that can be followed or saved? A program or camp on the site, or (to follow) a school it covers.
+function mark_name(string $k, bool $schoolsToo): ?string {
+  if (!preg_match('~^(p|c|s):[a-z0-9-]{1,80}$~', $k)) return null;
+  if ($k[0] === 's') { $n = school_names(); $id = substr($k, 2); return !$schoolsToo ? null : ($id === 'all' ? 'Every school on the site' : (isset($n[$id]) ? $n[$id] : null)); }
+  $l = listings();
+  return isset($l[$k]) ? preg_replace('~ \\(summer camp\\)$~', '', (string) $l[$k]['n']) : null;   // the list says what kind it is beside the name
+}
+function follow_on(int $uid, string $k): bool {
+  if (mark_name($k, true) === null) return false;
+  $had = row('SELECT live FROM follows WHERE user_id = ? AND k = ?', array($uid, $k));
+  if ($had && (int) $had['live'] === 1) return true;
+  if ((int) val('SELECT COUNT(*) FROM follows WHERE user_id = ? AND live = 1', array($uid)) >= MAX_FOLLOWS) return false;
+  q('INSERT INTO follows (user_id, k, live, synced, created) VALUES (?, ?, 1, 0, ?) ON CONFLICT(user_id, k) DO UPDATE SET live = 1, synced = 0', array($uid, $k, now()));
+  bump('follow');
+  return true;
+}
+function fav_on(int $uid, string $k): bool {
+  if (mark_name($k, false) === null) return false;
+  if ((int) val('SELECT COUNT(*) FROM favs WHERE user_id = ?', array($uid)) >= MAX_FAVS) return false;
+  $had = row('SELECT 1 AS x FROM favs WHERE user_id = ? AND k = ?', array($uid, $k));
+  if (!$had) { q('INSERT INTO favs (user_id, k, created) VALUES (?, ?, ?)', array($uid, $k, now())); bump('fav'); }
+  return true;
+}
+// Everything a page needs to paint its Follow and Save buttons, and what the email list has yet to be told.
+function marks_out(int $uid): array {
+  $follows = array(); $sync = array(); $favs = array();
+  foreach (q('SELECT k, live, synced FROM follows WHERE user_id = ? ORDER BY created, k', array($uid)) as $r) {
+    $n = mark_name($r['k'], true);
+    if ((int) $r['live'] === 1 && $n !== null) $follows[] = array('k' => $r['k'], 'n' => $n);
+    if ((int) $r['synced'] === 0) $sync[] = array('k' => $r['k'], 'on' => (int) $r['live'] === 1 && $n !== null);
+  }
+  foreach (q('SELECT k FROM favs WHERE user_id = ? ORDER BY created, k', array($uid)) as $r) { $n = mark_name($r['k'], false); if ($n !== null) $favs[] = array('k' => $r['k'], 'n' => $n); }
+  return array('follows' => $follows, 'favs' => $favs, 'sync' => $sync);
 }
 function clean_week($w): string {
   $known = programs();
@@ -474,7 +523,7 @@ function daysoff_out(int $uid): ?array {
 function profile_out(array $u): array {
   $weeks = array();
   foreach (q('SELECT * FROM weeks WHERE user_id = ? ORDER BY id', array($u['id'])) as $w) $weeks[] = week_out($w);
-  return array('school' => $u['school'], 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => $weeks, 'summer' => summer_out((int) $u['id']), 'daysoff' => daysoff_out((int) $u['id']));
+  return array('school' => $u['school'], 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => $weeks, 'summer' => summer_out((int) $u['id']), 'daysoff' => daysoff_out((int) $u['id'])) + marks_out((int) $u['id']);
 }
 function kid_out(array $k, bool $mine): array {
   return array('id' => (int) $k['id'], 'name' => $k['name'], 'now' => json_decode($k['now_json'], true), 'next' => json_decode($k['next_json'], true), 'mine' => $mine);
@@ -557,7 +606,7 @@ function ready(array $u): bool { return $u['first'] !== '' && $u['last'] !== '';
 function me_out(array $u): array {
   $claims = isset($u['id']) ? (int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) : 0;
   return array('email' => $u['email'], 'first' => $u['first'], 'last' => $u['last'], 'ready' => ready($u), 'listed' => (bool) $u['listed'],
-    'school' => isset($u['school']) ? (string) $u['school'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0,
+    'school' => isset($u['school']) ? (string) $u['school'] : '', 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0,
     'claims' => $claims, 'role' => role_of($u, $claims));
 }
 // Parent or program manager? A manager is an account that holds a claim (approved or waiting), or one that was made on
@@ -634,12 +683,12 @@ function tell_owner(string $subject, string $text): void {
 }
 // Signs this browser in as the account with this address, making the account if it is new.
 function sign_in(string $email, string $via, string $next, string $first = '', string $last = ''): void {
-  $user = row('SELECT id, email, name, first, last, listed, school, grades, origin FROM users WHERE email = ?', array($email));
+  $user = row('SELECT id, email, name, first, last, listed, school, grades, origin, hood FROM users WHERE email = ?', array($email));
   $new = false;
   if (!$user) {
     $origin = preg_match('~^(managers|directors)$~', $next) ? 'managers' : 'parents';   // which door they came in by
     q('INSERT INTO users (email, created, via, origin) VALUES (?, ?, ?, ?)', array($email, now(), $via, $origin));
-    $user = array('id' => (int) db()->lastInsertId(), 'email' => $email, 'name' => '', 'first' => '', 'last' => '', 'listed' => 0, 'school' => '', 'grades' => '', 'origin' => $origin);
+    $user = array('id' => (int) db()->lastInsertId(), 'email' => $email, 'name' => '', 'first' => '', 'last' => '', 'listed' => 0, 'school' => '', 'grades' => '', 'origin' => $origin, 'hood' => '');
     $new = true;
     bump('account');
     bump($origin === 'managers' ? 'account_manager' : 'account_parent');
@@ -654,6 +703,8 @@ function sign_in(string $email, string $via, string $next, string $first = '', s
   set_session_cookie($sid, $exp);
   bump('signin_' . $via);
   $user['id'] = (int) $user['id'];
+  // Signing in from a Follow or Save button: do what was asked, whichever device the sign-in finished on.
+  if (preg_match('~^([fv]):((?:p|c|s):[a-z0-9-]{1,80})$~', $next, $m)) { if ($m[1] === 'f') follow_on($user['id'], $m[2]); else fav_on($user['id'], $m[2]); }
   out(array('ok' => true, 'next' => $next, 'new' => $new, 'user' => me_out($user), 'groups' => my_groups($user['id'])));
 }
 function http_get(string $url): string {
@@ -732,7 +783,7 @@ switch ($method . ' ' . $action) {
     $email = strtolower(str($in, 'email', 150));
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) fail('email', 'That email address doesn’t look right.');
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|join|summer|daysoff|calendar|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|join|summer|daysoff|calendar|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80})$~', $next)) $next = 'account';
     if (too_many('mail:' . h($email), 3, 900) || too_many('mail:' . h($email), 8, 86400) || too_many('ip:' . who(), 10, 900) || too_many('ip:' . who(), 40, 86400)) {
       fail('slow', 'That’s a lot of sign-in emails. Use the newest one, or wait 15 minutes and try again.', 429);
     }
@@ -779,7 +830,7 @@ switch ($method . ' ' . $action) {
     if (too_many('try:' . who(), 30, 900)) fail('slow', 'Too many tries. Wait 15 minutes and try again.', 429);
     note('try:' . who());
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|join|summer|daysoff|calendar|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|join|summer|daysoff|calendar|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80})$~', $next)) $next = 'account';
     $g = google_email(str($in, 'credential', 4200));
     sign_in($g['email'], 'google', $next, $g['first'], $g['last']);
   }
@@ -812,6 +863,85 @@ switch ($method . ' ' . $action) {
     if ($first === '' || $last === '') fail('name', 'Add your first and last name.');
     q('UPDATE users SET first = ?, last = ?, name = ? WHERE id = ?', array($first, $last, $first . ' ' . $last, $u['id']));
     out(array('ok' => true, 'first' => $first, 'last' => $last));
+  }
+
+  // The rest of a new account in one go: a name, and (if they like) their school and neighborhood.
+  case 'POST basics': {
+    $u = need_user();
+    $first = person_name(str($in, 'first', 60), 30);
+    $last = person_name(str($in, 'last', 60), 40);
+    if ($first === '' || $last === '') fail('name', 'Add your first and last name.');
+    $school = str($in, 'school', 60);
+    if ($school !== '' && !in_array($school, schools(), true)) $school = '';
+    $hood = str($in, 'hood', 60);
+    if ($hood !== '' && !isset(hoods()[$hood])) $hood = '';
+    if ($school !== '' && $u['school'] === '') bump('school_saved');
+    if ($hood !== '' && $u['hood'] === '') bump('hood_saved');
+    q('UPDATE users SET first = ?, last = ?, name = ?, school = CASE WHEN ? != \'\' THEN ? ELSE school END, hood = CASE WHEN ? != \'\' THEN ? ELSE hood END WHERE id = ?', array($first, $last, $first . ' ' . $last, $school, $school, $hood, $hood, $u['id']));
+    $fresh = row('SELECT id, email, name, first, last, listed, school, grades, origin, hood FROM users WHERE id = ?', array($u['id']));
+    $fresh['id'] = (int) $fresh['id'];
+    out(array('ok' => true, 'first' => $first, 'last' => $last, 'user' => me_out($fresh)));
+  }
+
+  case 'POST hood_save': {
+    $u = need_user();
+    $hood = str($in, 'hood', 60);
+    if ($hood !== '' && !isset(hoods()[$hood])) fail('hood', 'That isn’t a neighborhood on the list.');
+    if ($hood !== '' && $u['hood'] === '') bump('hood_saved');
+    q('UPDATE users SET hood = ? WHERE id = ?', array($hood, $u['id']));
+    out(array('ok' => true, 'hood' => $hood));
+  }
+
+  // ----- following and favorites -----
+  case 'GET marks': {
+    $u = current_user();
+    if (!$u) out(array('ok' => true, 'user' => null));
+    // a new account is asked for its name, school and neighborhood on the spot: the page needs the two lists to offer
+    out(array('ok' => true, 'user' => me_out($u)) + marks_out($u['id']) + (ready($u) ? array() : array('lists' => array('schools' => school_names(), 'hoods' => hoods()))));
+  }
+
+  case 'POST follow': {
+    $u = need_user();
+    $k = str($in, 'key', 90);
+    if (mark_name($k, true) === null) fail('key', 'That isn’t something on the site to follow.');
+    if (!empty($in['on'])) {
+      if (!follow_on($u['id'], $k)) fail('full', 'That’s the most one account can follow (' . MAX_FOLLOWS . '). Stop following something first.');
+    } else {
+      q('UPDATE follows SET live = 0, synced = 0 WHERE user_id = ? AND k = ?', array($u['id'], $k));
+    }
+    out(array('ok' => true) + marks_out($u['id']));
+  }
+
+  // The browser has told the email list about these, so they need no more telling. A follow that was turned off goes.
+  case 'POST follow_synced': {
+    $u = need_user();
+    $keys = isset($in['keys']) && is_array($in['keys']) ? array_slice($in['keys'], 0, MAX_FOLLOWS * 2) : array();
+    foreach ($keys as $x) {
+      if (!is_array($x) || !isset($x['k']) || !is_string($x['k'])) continue;
+      $live = !empty($x['on']) ? 1 : 0;   // only if nothing changed in the meantime
+      q('UPDATE follows SET synced = 1 WHERE user_id = ? AND k = ? AND live = ?', array($u['id'], $x['k'], $live));
+    }
+    q('DELETE FROM follows WHERE user_id = ? AND live = 0 AND synced = 1', array($u['id']));
+    out(array('ok' => true) + marks_out($u['id']));
+  }
+
+  // Turns every follow off, for an account about to be deleted: the browser then tells the email list.
+  case 'POST follow_clear': {
+    $u = need_user();
+    q('UPDATE follows SET live = 0, synced = 0 WHERE user_id = ? AND live = 1', array($u['id']));
+    out(array('ok' => true) + marks_out($u['id']));
+  }
+
+  case 'POST fav': {
+    $u = need_user();
+    $k = str($in, 'key', 90);
+    if (mark_name($k, false) === null) fail('key', 'That isn’t a listing on the site.');
+    if (!empty($in['on'])) {
+      if (!fav_on($u['id'], $k)) fail('full', 'That’s the most one account can save (' . MAX_FAVS . '). Take one off first.');
+    } else {
+      q('DELETE FROM favs WHERE user_id = ? AND k = ?', array($u['id'], $k));
+    }
+    out(array('ok' => true) + marks_out($u['id']));
   }
 
   // The browser says it has added this account to the email list, so it is not asked to again.
