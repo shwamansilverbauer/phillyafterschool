@@ -790,7 +790,8 @@
       };
       // ----- the profile page: one card with everything on it, and nothing to fill in -----
       var card = el('section', 'panel prof-card'); card.id = 'card';
-      var lastP = null;
+      var rvCard = el('section', 'panel rv-nudge'); rvCard.id = 'rv-nudge'; rvCard.hidden = true; rvCard.setAttribute('aria-live', 'polite');   // "has your family been to ...?", when it is time to ask
+      var lastP = null, rvAsked = false;
       var gradeName = function (g) { return g === 'PK' ? 'Pre-K' : g === 'K' ? 'K' : g + (g === '1' ? 'st' : g === '2' ? 'nd' : g === '3' ? 'rd' : 'th'); };
       var listWords = function (a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; };
       var kidNames = function (p) {   // first names, from the plans kept in the account and the ones on this device
@@ -872,6 +873,25 @@
           row('Sharing', say(sb.join(', ').replace(/^o/, 'O')), 'Open', page('account/') + '#sharing');
         }
         if (me.claims) row('Listings', say(me.claims === 1 ? 'One listing claimed' : me.claims + ' listings claimed'), 'Manage', page('managers/'));
+        // reviews: the programs on their weeks (here or kept in the account) that they could tell other parents about
+        var RVW = window.pasReview, progNames = ainfo.programs || {};
+        if (RVW) {
+          var onWeeks = [];
+          (p.weeks || []).forEach(function (w) {
+            ['now', 'next'].forEach(function (b) {
+              var bd = w[b] || {};
+              Object.keys(bd).forEach(function (d) { (Array.isArray(bd[d]) ? bd[d] : []).forEach(function (e) { var k = String(e).split('~')[0].split('.'); onWeeks.push({ id: k[0], school: k[1] || '', now: b === 'now' }); }); });
+            });
+          });
+          var could = RVW.list(onWeeks).filter(function (i) { return !i.done && !i.never && progNames[i.id]; });
+          if (could.length) row('Reviews', function (dd) {
+            dd.appendChild(el('span', 'hint pc-wide', 'Has your family been to ' + (could.length === 1 ? 'this one' : 'any of these') + '? A short review helps the next family choose.'));
+            var box = el('span', 'pc-chips');
+            could.slice(0, 8).forEach(function (i) { var a = el('a', 'pc-chip', progNames[i.id]); a.href = RVW.href(page('review/'), i); box.appendChild(a); });
+            dd.appendChild(box);
+          });
+          if (lastP && !rvAsked) { rvAsked = true; RVW.mount(rvCard, progNames, 'profile', page('review/'), onWeeks); }
+        }
         card.appendChild(el('p', 'hint pc-foot', 'What your account holds, with the names and dates saved on this device. Nobody else sees this page.'));
       };
       var loadProfile = function () {
@@ -885,7 +905,7 @@
       paintSchool(me.school || ''); paintGrades(me.grades || []); paintWeek(); loadProfile();
       put(prof, 'account');
       // the profile page: the card, then what's new on the site
-      paintCard(); put(card, 'profile');
+      paintCard(); put(card, 'profile'); put(rvCard, 'profile');
       if (NEWS.length) put(newsBox, 'profile');
       // sharing: weeks shared with one person, and groups
       var mine = part(el('section', 'panel'), 'sharing', 'Sharing');
@@ -1123,6 +1143,26 @@
         });
         spBox.appendChild(spRow); spBox.appendChild(spSay);
         item.appendChild(spBox);
+        // asking their own families for a review: a link that opens the form with the program already chosen
+        if (c.listing.charAt(0) === 'p') {
+          var askBox = el('div', 'claim-ask');
+          askBox.appendChild(el('h4', null, 'Ask your families for a review'));
+          askBox.appendChild(el('p', 'hint', 'Reviews are what parents read first. This link opens the review form with ' + c.name + ' already chosen. Send it to every family, not only the ones you expect to be happy. Each review is read before it’s posted, and a program can’t review itself.'));
+          var askUrl = ''; try { askUrl = new URL(page('review/') + '?program=' + encodeURIComponent(c.listing.slice(2)), location.href).href; } catch (e) { askUrl = ''; }
+          var askIn = el('input'); askIn.type = 'text'; askIn.readOnly = true; askIn.value = askUrl; askIn.setAttribute('aria-label', 'Review link for ' + c.name); askIn.addEventListener('focus', function () { askIn.select(); });
+          var askMsg = 'We’re listed on Philly After School, a free site Philadelphia parents use to find after-school programs. If your child comes to ' + c.name + ', a short review helps other families find us. It takes about two minutes: ' + askUrl;
+          var askSay = el('span', 'hint'); askSay.setAttribute('aria-live', 'polite');
+          var copyIt = function (text, done) {
+            var ok = function () { askSay.textContent = done; }, no = function () { askIn.focus(); askIn.select(); askSay.textContent = 'Couldn’t copy here. The link is selected: copy it from the box.'; };
+            if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, no); else no();
+          };
+          var askActs = el('div', 'actions'), askLink = btn('btn', 'Copy the link'), askText = btn('btn', 'Copy a message to send');
+          askLink.addEventListener('click', function () { copyIt(askUrl, 'Link copied.'); });
+          askText.addEventListener('click', function () { copyIt(askMsg, 'Message copied. Paste it into an email or a text to your families.'); });
+          askActs.appendChild(askLink); askActs.appendChild(askText); askActs.appendChild(askSay);
+          askBox.appendChild(askIn); askBox.appendChild(askActs);
+          if (askUrl) item.appendChild(askBox);
+        }
         // a change: dates, cost, hours, anything else
         var form = el('form', 'g-form claim-edit');
         form.appendChild(el('h4', null, 'Send an update'));
