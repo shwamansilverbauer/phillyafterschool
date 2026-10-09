@@ -29,7 +29,7 @@
 
 declare(strict_types=1);
 
-$CFG = json_decode('{"siteName":"Philly After School","siteUrl":"https://phillyafterschool.org","from":"contact@phillyafterschool.org","yearEnd":"2027-06-23","googleClientId":"420915102949-7gfu5o00gn6oionaijid2jak6om38rda.apps.googleusercontent.com","grades":["PK","K","1","2","3","4","5","6","7","8"],"listings":{"p:imagine-that-philly":{"n":"Imagine That Philly","d":"imaginethatphilly.org","m":"match"},"p:nebinger-clubs":{"n":"School clubs and teams at Nebinger","d":"philasd.org","m":"manual"},"p:girls-on-the-run":{"n":"Girls on the Run","d":"gotrphiladelphia.org","m":"match"},"p:nebinger-arts-partners":{"n":"Arts partners and Science Olympiad at Nebinger","d":"nebingerpta.org","m":"match"},"p:meredith-clubs":{"n":"Meredith after-school clubs","d":"meredithmatters.org","m":"manual"},"p:coppin-clubs":{"n":"School clubs and ensembles at Coppin","d":"philasd.org","m":"manual"},"p:zhang-sah":{"n":"Zhang Sah","d":"zhangsah.org","m":"match"},"p:shot-tower-rec":{"n":"Shot Tower Recreation Center","d":"phila.gov","m":"manual"},"p:philly-inmovement":{"n":"Philly InMovement: MOVE After School","d":"phillyinmovement.com","m":"match"},"p:settlement-kaleidoscope-plus":{"n":"Settlement Music School: Kaleidoscope Plus","d":"settlementmusic.org","m":"match"},"p:philly-art-center-qv":{"n":"Philly Art Center, Queen Village","d":"phillyartcenter.com","m":"match"},"p:old-pine":{"n":"Old Pine Community Center","d":"oldpinecommunitycenter.org","m":"match"},"p:butchers-sew-shop":{"n":"Butcher’s Sew Shop Junior","d":"butcherssewshop.com","m":"match"},"p:mister-johns-music":{"n":"Mister John’s Music","d":"misterjohnsmusic.com","m":"match"},"p:music-theatre-philly":{"n":"Music Theatre Philly","d":"musictheatrephilly.com","m":"match"},"p:arden-drama-school":{"n":"Arden Drama School","d":"ardentheatre.org","m":"match"},"p:walnut-street-theatre-school":{"n":"Walnut Street Theatre School","d":"coursestorm.com","m":"manual"},"p:coco-academy":{"n":"CoCo Academy","d":"cocoacademyphl.com","m":"match"},"p:queen-and-rook":{"n":"Queen & Rook Game Cafe","d":"queenandrookcafe.com","m":"match"},"p:beehive-at-bok":{"n":"Beehive at Bok","d":"beehiveatbok.com","m":"match"},"p:dandelion-after-school":{"n":"Dandelion After School","d":"thedandelionproject.us","m":"match"},"p:movemakers":{"n":"MoveMakers Philly","d":"movemakersphilly.com","m":"match"},"p:kids-on-12th":{"n":"Kids on 12th","d":"ko12.org","m":"match"},"p:columbus-square-rec":{"n":"Columbus Square Recreation Center","d":"phila.gov","m":"manual"},"p:hawthorne-cultural-center":{"n":"Hawthorne Cultural Center","d":"phila.gov","m":"manual"},"p:starr-garden-rec":{"n":"Starr Garden Recreation Center","d":"phila.gov","m":"manual"},"p:palumbo-rec":{"n":"Palumbo Recreation Center","d":"phila.gov","m":"manual"},"p:mighty-writers-el-futuro":{"n":"Mighty Writers El Futuro","d":"mightywriters.org","m":"match"},"p:free-library-leap":{"n":"Free Library LEAP","d":"freelibrary.org","m":"manual"},"p:fleisher-art-memorial":{"n":"Fleisher Art Memorial","d":"fleisher.org","m":"match"},"p:makom-community":{"n":"Makom Community","d":"makomcommunity.org","m":"match"},"p:vare-washington-edey":{"n":"Extended Day, Extended Year at Vare-Washington","d":"phila.gov","m":"manual"},"p:vare-washington-clubs":{"n":"School clubs and teams at Vare-Washington","d":"philasd.org","m":"manual"},"p:sunrise-mccall":{"n":"Sunrise of Philadelphia at McCall","d":"sunriseofphila.org","m":"match"},"p:mccall-clubs":{"n":"McCall clubs and teams","d":"philasd.org","m":"manual"},"p:sawubona-creativity-project":{"n":"Sawubona Creativity Project","d":"sawubonacreativityproject.org","m":"match"},"p:playarts-day-camps":{"n":"PlayArts day camps","d":"playartsphilly.com","m":"match"},"p:philly-rock-gym-day-camps":{"n":"Philadelphia Rock Gym","d":"philarockgym.com","m":"match"},"p:skate-the-foundry":{"n":"Skate The Foundry","d":"skatethefoundry.com","m":"match"},"p:pafa-saturday-art":{"n":"PAFA Saturday Studio Art","d":"pafa.org","m":"match"},"p:moore-young-artists-workshop":{"n":"Moore Young Artists Workshop","d":"moore.edu","m":"manual"},"p:philadelphia-museum-of-art-kids":{"n":"Philadelphia Museum of Art: Art Kids Classes","d":"philamuseum.org","m":"match"},"p:made-institute-sunday-sewing":{"n":"MADE Institute: Sunday Sewing","d":"made-institute.com","m":"match"},"p:rock-school-for-dance":{"n":"The Rock School for Dance Education","d":"therockschool.org","m":"match"},"p:koresh-school-of-dance":{"n":"Koresh School of Dance","d":"koreshdance.org","m":"match"},"p:school-of-philadelphia-ballet":{"n":"School of Philadelphia Ballet","d":"philadelphiaballet.org","m":"match"},"p:zazz-dance":{"n":"ZAZZ","d":"zazzphilly.com","m":"match"},"p:temple-music-prep-cmsp":{"n":"Temple Music Prep: Community Music Scholars","d":"temple.edu","m":"manual"},"p:wissahickon-skating-club":{"n":"Wissahickon Skating Club","d":"wissskating.com","m":"match"},"p:penn-ice-rink":{"n":"Penn Ice Rink","d":"upenn.edu","m":"manual"},"p:starfinder-saturday-soccer":{"n":"Starfinder: Saturday soccer","d":"starfinderfoundation.org","m":"match"},"p:franklin-institute-pacts":{"n":"The Franklin Institute: PACTS","d":"fi.edu","m":"manual"},"p:macguffin-theatre":{"n":"MacGuffin Theatre & Film Company","d":"macguffintf.com","m":"match"},"c:philly-art-center":{"n":"Philly Art Center (summer camp)","d":"phillyartcenter.com","m":"match"},"c:fleisher-art-memorial-camp":{"n":"Fleisher Art Memorial (summer camp)","d":"fleisher.org","m":"match"},"c:mister-johns-music-camp":{"n":"Mister John’s Music (summer camp)","d":"misterjohnsmusic.com","m":"match"},"c:music-theatre-philly-camp":{"n":"Music Theatre Philly (summer camp)","d":"musictheatrephilly.com","m":"match"},"c:movemakers-camp":{"n":"MoveMakers Philly (summer camp)","d":"movemakersphilly.com","m":"match"},"c:queen-and-rook-camp":{"n":"Queen & Rook Game Cafe (summer camp)","d":"queenrookkeep.com","m":"match"},"c:parks-and-rec-camps":{"n":"Philadelphia Parks & Recreation day camps (summer camp)","d":"phila.gov","m":"manual"},"c:theatre-horizon-woodmere":{"n":"Theatre Horizon drama camp at Woodmere (summer camp)","d":"theatrehorizon.org","m":"match"},"c:butchers-sew-shop-camp":{"n":"Butcher’s Sew Shop Junior (summer camp)","d":"jumbula.com","m":"manual"},"c:clay-studio-camp":{"n":"The Clay Studio (summer camp)","d":"theclaystudio.org","m":"match"},"c:pafa-camp":{"n":"PAFA summer art camp (summer camp)","d":"pafa.org","m":"match"},"c:moore-young-artists":{"n":"Moore College of Art & Design youth courses (summer camp)","d":"moore.edu","m":"manual"},"c:school-of-rock-philadelphia":{"n":"School of Rock Philadelphia (summer camp)","d":"schoolofrock.com","m":"manual"},"c:arden-summer-camp":{"n":"Arden Drama School (summer camp)","d":"ardentheatre.org","m":"match"},"c:camp-walnut":{"n":"Camp Walnut at Walnut Street Theatre (summer camp)","d":"coursestorm.com","m":"manual"},"c:macguffin-camps":{"n":"MacGuffin Theatre & Film Company (summer camp)","d":"macguffintf.com","m":"match"},"c:flipout-camp":{"n":"FlipOut Productions (summer camp)","d":"flipoutproductions.com","m":"match"},"c:philadelphia-ballet-camps":{"n":"School of Philadelphia Ballet dance camps (summer camp)","d":"philadelphiaballet.org","m":"match"},"c:wissahickon-figure-skating":{"n":"Wissahickon Skating Club figure skating camp (summer camp)","d":"wissskating.com","m":"match"},"c:philadelphia-dance-academy":{"n":"The Philadelphia Dance Academy (summer camp)","d":"philadelphiadanceacademy.com","m":"match"},"c:legacy-tennis-camp":{"n":"Legacy Youth Tennis community camp (summer camp)","d":"legacyyte.org","m":"match"},"c:ceo-camp-phield-house":{"n":"C.E.O. Camp at Phield House (summer camp)","d":"phieldhouse.com","m":"match"},"c:awbury-adventures":{"n":"Awbury Adventures at Awbury Arboretum (summer camp)","d":"awbury.org","m":"match"},"c:camp-schuylkill":{"n":"Camp Schuylkill at the Schuylkill Center (summer camp)","d":"schuylkillcenter.org","m":"match"},"c:morris-arboretum-camp":{"n":"Nature Explorers at Morris Arboretum & Gardens (summer camp)","d":"morrisarboretum.org","m":"match"},"c:circus-arts-camp":{"n":"Philadelphia School of Circus Arts (summer camp)","d":"phillycircus.com","m":"match"},"c:work-to-ride-camp":{"n":"Work to Ride at Chamounix Equestrian Center (summer camp)","d":"worktoride.net","m":"match"},"c:seaport-summer-camp":{"n":"Seaport Summer Camp at Independence Seaport Museum (summer camp)","d":"phillyseaport.org","m":"match"},"c:taller-puertorriqueno-camp":{"n":"Taller Puertorriqueño (summer camp)","d":"tallerpr.org","m":"match"},"c:camp-tps":{"n":"Camp TPS at The Philadelphia School (summer camp)","d":"tpschool.org","m":"match"},"c:ymca-day-camps":{"n":"Greater Philadelphia YMCA day camps (summer camp)","d":"philaymca.org","m":"manual"},"c:summer-achievers-edey":{"n":"Summer Achievers at Extended Day, Extended Year schools (summer camp)","d":"phila.gov","m":"manual"},"c:allens-lane-art-camp":{"n":"Allens Lane Art Center summer art camp (summer camp)","d":"allenslane.org","m":"match"},"c:nlarts-summer-camp":{"n":"NLArts summer art camp (summer camp)","d":"nlarts.org","m":"match"},"c:yes-and-camp":{"n":"Yes! And… Collaborative Arts camps (summer camp)","d":"yesandcamp.org","m":"match"},"c:zazz-summer-camp":{"n":"ZAZZ Dance & Drama (summer camp)","d":"zazzphilly.com","m":"match"},"c:sawubona-summer-camp":{"n":"Sawubona Creativity Project (summer camp)","d":"sawubonacreativityproject.org","m":"match"},"c:zoomdance-camp":{"n":"ZoomDance camp (summer camp)","d":"zoomdance.com","m":"match"},"c:dandelion-summer-camp":{"n":"The Dandelion Project summer camp (summer camp)","d":"thedandelionproject.us","m":"match"},"c:rutabaga-naturearts":{"n":"Rutabaga NatureArts summer camp (summer camp)","d":"rutabagatoylibrary.com","m":"match"},"c:skate-the-foundry-camp":{"n":"Skate The Foundry skateboard camp (summer camp)","d":"skatethefoundry.com","m":"match"},"c:lavner-tech-camp-upenn":{"n":"Camp Tech Revolution at UPenn (Lavner) (summer camp)","d":"lavnercampsandprograms.com","m":"match"},"c:philly-rock-gym-camps":{"n":"Philadelphia Rock Gym summer camps (summer camp)","d":"philarockgym.com","m":"match"},"c:coco-academy-summer-camp":{"n":"CoCo Academy (summer camp)","d":"cocoacademyphl.com","m":"match"}},"camps":["philly-art-center","fleisher-art-memorial-camp","mister-johns-music-camp","music-theatre-philly-camp","movemakers-camp","queen-and-rook-camp","parks-and-rec-camps","theatre-horizon-woodmere","butchers-sew-shop-camp","clay-studio-camp","pafa-camp","moore-young-artists","school-of-rock-philadelphia","arden-summer-camp","camp-walnut","macguffin-camps","flipout-camp","philadelphia-ballet-camps","wissahickon-figure-skating","philadelphia-dance-academy","legacy-tennis-camp","ceo-camp-phield-house","awbury-adventures","camp-schuylkill","morris-arboretum-camp","circus-arts-camp","work-to-ride-camp","seaport-summer-camp","taller-puertorriqueno-camp","camp-tps","ymca-day-camps","summer-achievers-edey","allens-lane-art-camp","nlarts-summer-camp","yes-and-camp","zazz-summer-camp","sawubona-summer-camp","zoomdance-camp","dandelion-summer-camp","rutabaga-naturearts","skate-the-foundry-camp","lavner-tech-camp-upenn","philly-rock-gym-camps","coco-academy-summer-camp"],"photos":false}', true);
+$CFG = json_decode('{"siteName":"Philly After School","siteUrl":"https://phillyafterschool.org","from":"contact@phillyafterschool.org","yearEnd":"2027-06-23","googleClientId":"420915102949-7gfu5o00gn6oionaijid2jak6om38rda.apps.googleusercontent.com","grades":["PK","K","1","2","3","4","5","6","7","8"],"listings":{"p:imagine-that-philly":{"n":"Imagine That Philly","d":"imaginethatphilly.org","m":"match"},"p:nebinger-clubs":{"n":"School clubs and teams at Nebinger","d":"philasd.org","m":"manual"},"p:girls-on-the-run":{"n":"Girls on the Run","d":"gotrphiladelphia.org","m":"match"},"p:nebinger-arts-partners":{"n":"Arts partners and Science Olympiad at Nebinger","d":"nebingerpta.org","m":"match"},"p:meredith-clubs":{"n":"Meredith after-school clubs","d":"meredithmatters.org","m":"manual"},"p:coppin-clubs":{"n":"School clubs and ensembles at Coppin","d":"philasd.org","m":"manual"},"p:zhang-sah":{"n":"Zhang Sah","d":"zhangsah.org","m":"match"},"p:shot-tower-rec":{"n":"Shot Tower Recreation Center","d":"phila.gov","m":"manual"},"p:philly-inmovement":{"n":"Philly InMovement: MOVE After School","d":"phillyinmovement.com","m":"match"},"p:settlement-kaleidoscope-plus":{"n":"Settlement Music School: Kaleidoscope Plus","d":"settlementmusic.org","m":"match"},"p:philly-art-center-qv":{"n":"Philly Art Center, Queen Village","d":"phillyartcenter.com","m":"match"},"p:old-pine":{"n":"Old Pine Community Center","d":"oldpinecommunitycenter.org","m":"match"},"p:butchers-sew-shop":{"n":"Butcher’s Sew Shop Junior","d":"butcherssewshop.com","m":"match"},"p:mister-johns-music":{"n":"Mister John’s Music","d":"misterjohnsmusic.com","m":"match"},"p:music-theatre-philly":{"n":"Music Theatre Philly","d":"musictheatrephilly.com","m":"match"},"p:arden-drama-school":{"n":"Arden Drama School","d":"ardentheatre.org","m":"match"},"p:walnut-street-theatre-school":{"n":"Walnut Street Theatre School","d":"coursestorm.com","m":"manual"},"p:coco-academy":{"n":"CoCo Academy","d":"cocoacademyphl.com","m":"match"},"p:queen-and-rook":{"n":"Queen & Rook Game Cafe","d":"queenandrookcafe.com","m":"match"},"p:beehive-at-bok":{"n":"Beehive at Bok","d":"beehiveatbok.com","m":"match"},"p:dandelion-after-school":{"n":"Dandelion After School","d":"thedandelionproject.us","m":"match"},"p:movemakers":{"n":"MoveMakers Philly","d":"movemakersphilly.com","m":"match"},"p:kids-on-12th":{"n":"Kids on 12th","d":"ko12.org","m":"match"},"p:columbus-square-rec":{"n":"Columbus Square Recreation Center","d":"phila.gov","m":"manual"},"p:hawthorne-cultural-center":{"n":"Hawthorne Cultural Center","d":"phila.gov","m":"manual"},"p:starr-garden-rec":{"n":"Starr Garden Recreation Center","d":"phila.gov","m":"manual"},"p:palumbo-rec":{"n":"Palumbo Recreation Center","d":"phila.gov","m":"manual"},"p:mighty-writers-el-futuro":{"n":"Mighty Writers El Futuro","d":"mightywriters.org","m":"match"},"p:free-library-leap":{"n":"Free Library LEAP","d":"freelibrary.org","m":"manual"},"p:fleisher-art-memorial":{"n":"Fleisher Art Memorial","d":"fleisher.org","m":"match"},"p:makom-community":{"n":"Makom Community","d":"makomcommunity.org","m":"match"},"p:vare-washington-edey":{"n":"Extended Day, Extended Year at Vare-Washington","d":"phila.gov","m":"manual"},"p:vare-washington-clubs":{"n":"School clubs and teams at Vare-Washington","d":"philasd.org","m":"manual"},"p:sunrise-mccall":{"n":"Sunrise of Philadelphia at McCall","d":"sunriseofphila.org","m":"match"},"p:mccall-clubs":{"n":"McCall clubs and teams","d":"philasd.org","m":"manual"},"p:sawubona-creativity-project":{"n":"Sawubona Creativity Project","d":"sawubonacreativityproject.org","m":"match"},"p:playarts-day-camps":{"n":"PlayArts day camps","d":"playartsphilly.com","m":"match"},"p:philly-rock-gym-day-camps":{"n":"Philadelphia Rock Gym","d":"philarockgym.com","m":"match"},"p:skate-the-foundry":{"n":"Skate The Foundry","d":"skatethefoundry.com","m":"match"},"p:pafa-saturday-art":{"n":"PAFA Saturday Studio Art","d":"pafa.org","m":"match"},"p:moore-young-artists-workshop":{"n":"Moore Young Artists Workshop","d":"moore.edu","m":"manual"},"p:philadelphia-museum-of-art-kids":{"n":"Philadelphia Museum of Art: Art Kids Classes","d":"philamuseum.org","m":"match"},"p:made-institute-sunday-sewing":{"n":"MADE Institute: Sunday Sewing","d":"made-institute.com","m":"match"},"p:rock-school-for-dance":{"n":"The Rock School for Dance Education","d":"therockschool.org","m":"match"},"p:koresh-school-of-dance":{"n":"Koresh School of Dance","d":"koreshdance.org","m":"match"},"p:school-of-philadelphia-ballet":{"n":"School of Philadelphia Ballet","d":"philadelphiaballet.org","m":"match"},"p:zazz-dance":{"n":"ZAZZ","d":"zazzphilly.com","m":"match"},"p:temple-music-prep-cmsp":{"n":"Temple Music Prep: Community Music Scholars","d":"temple.edu","m":"manual"},"p:wissahickon-skating-club":{"n":"Wissahickon Skating Club","d":"wissskating.com","m":"match"},"p:penn-ice-rink":{"n":"Penn Ice Rink","d":"upenn.edu","m":"manual"},"p:starfinder-saturday-soccer":{"n":"Starfinder: Saturday soccer","d":"starfinderfoundation.org","m":"match"},"p:franklin-institute-pacts":{"n":"The Franklin Institute: PACTS","d":"fi.edu","m":"manual"},"p:macguffin-theatre":{"n":"MacGuffin Theatre & Film Company","d":"macguffintf.com","m":"match"},"c:philly-art-center":{"n":"Philly Art Center (summer camp)","d":"phillyartcenter.com","m":"match"},"c:fleisher-art-memorial-camp":{"n":"Fleisher Art Memorial (summer camp)","d":"fleisher.org","m":"match"},"c:mister-johns-music-camp":{"n":"Mister John’s Music (summer camp)","d":"misterjohnsmusic.com","m":"match"},"c:music-theatre-philly-camp":{"n":"Music Theatre Philly (summer camp)","d":"musictheatrephilly.com","m":"match"},"c:movemakers-camp":{"n":"MoveMakers Philly (summer camp)","d":"movemakersphilly.com","m":"match"},"c:queen-and-rook-camp":{"n":"Queen & Rook Game Cafe (summer camp)","d":"queenrookkeep.com","m":"match"},"c:parks-and-rec-camps":{"n":"Philadelphia Parks & Recreation day camps (summer camp)","d":"phila.gov","m":"manual"},"c:theatre-horizon-woodmere":{"n":"Theatre Horizon drama camp at Woodmere (summer camp)","d":"theatrehorizon.org","m":"match"},"c:butchers-sew-shop-camp":{"n":"Butcher’s Sew Shop Junior (summer camp)","d":"jumbula.com","m":"manual"},"c:clay-studio-camp":{"n":"The Clay Studio (summer camp)","d":"theclaystudio.org","m":"match"},"c:pafa-camp":{"n":"PAFA summer art camp (summer camp)","d":"pafa.org","m":"match"},"c:moore-young-artists":{"n":"Moore College of Art & Design youth courses (summer camp)","d":"moore.edu","m":"manual"},"c:school-of-rock-philadelphia":{"n":"School of Rock Philadelphia (summer camp)","d":"schoolofrock.com","m":"manual"},"c:arden-summer-camp":{"n":"Arden Drama School (summer camp)","d":"ardentheatre.org","m":"match"},"c:camp-walnut":{"n":"Camp Walnut at Walnut Street Theatre (summer camp)","d":"coursestorm.com","m":"manual"},"c:macguffin-camps":{"n":"MacGuffin Theatre & Film Company (summer camp)","d":"macguffintf.com","m":"match"},"c:flipout-camp":{"n":"FlipOut Productions (summer camp)","d":"flipoutproductions.com","m":"match"},"c:philadelphia-ballet-camps":{"n":"School of Philadelphia Ballet dance camps (summer camp)","d":"philadelphiaballet.org","m":"match"},"c:wissahickon-figure-skating":{"n":"Wissahickon Skating Club figure skating camp (summer camp)","d":"wissskating.com","m":"match"},"c:philadelphia-dance-academy":{"n":"The Philadelphia Dance Academy (summer camp)","d":"philadelphiadanceacademy.com","m":"match"},"c:legacy-tennis-camp":{"n":"Legacy Youth Tennis community camp (summer camp)","d":"legacyyte.org","m":"match"},"c:ceo-camp-phield-house":{"n":"C.E.O. Camp at Phield House (summer camp)","d":"phieldhouse.com","m":"match"},"c:awbury-adventures":{"n":"Awbury Adventures at Awbury Arboretum (summer camp)","d":"awbury.org","m":"match"},"c:camp-schuylkill":{"n":"Camp Schuylkill at the Schuylkill Center (summer camp)","d":"schuylkillcenter.org","m":"match"},"c:morris-arboretum-camp":{"n":"Nature Explorers at Morris Arboretum & Gardens (summer camp)","d":"morrisarboretum.org","m":"match"},"c:circus-arts-camp":{"n":"Philadelphia School of Circus Arts (summer camp)","d":"phillycircus.com","m":"match"},"c:work-to-ride-camp":{"n":"Work to Ride at Chamounix Equestrian Center (summer camp)","d":"worktoride.net","m":"match"},"c:seaport-summer-camp":{"n":"Seaport Summer Camp at Independence Seaport Museum (summer camp)","d":"phillyseaport.org","m":"match"},"c:taller-puertorriqueno-camp":{"n":"Taller Puertorriqueño (summer camp)","d":"tallerpr.org","m":"match"},"c:camp-tps":{"n":"Camp TPS at The Philadelphia School (summer camp)","d":"tpschool.org","m":"match"},"c:ymca-day-camps":{"n":"Greater Philadelphia YMCA day camps (summer camp)","d":"philaymca.org","m":"manual"},"c:summer-achievers-edey":{"n":"Summer Achievers at Extended Day, Extended Year schools (summer camp)","d":"phila.gov","m":"manual"},"c:allens-lane-art-camp":{"n":"Allens Lane Art Center summer art camp (summer camp)","d":"allenslane.org","m":"match"},"c:nlarts-summer-camp":{"n":"NLArts summer art camp (summer camp)","d":"nlarts.org","m":"match"},"c:yes-and-camp":{"n":"Yes! And… Collaborative Arts camps (summer camp)","d":"yesandcamp.org","m":"match"},"c:zazz-summer-camp":{"n":"ZAZZ Dance & Drama (summer camp)","d":"zazzphilly.com","m":"match"},"c:sawubona-summer-camp":{"n":"Sawubona Creativity Project (summer camp)","d":"sawubonacreativityproject.org","m":"match"},"c:zoomdance-camp":{"n":"ZoomDance camp (summer camp)","d":"zoomdance.com","m":"match"},"c:dandelion-summer-camp":{"n":"The Dandelion Project summer camp (summer camp)","d":"thedandelionproject.us","m":"match"},"c:rutabaga-naturearts":{"n":"Rutabaga NatureArts summer camp (summer camp)","d":"rutabagatoylibrary.com","m":"match"},"c:skate-the-foundry-camp":{"n":"Skate The Foundry skateboard camp (summer camp)","d":"skatethefoundry.com","m":"match"},"c:lavner-tech-camp-upenn":{"n":"Camp Tech Revolution at UPenn (Lavner) (summer camp)","d":"lavnercampsandprograms.com","m":"match"},"c:philly-rock-gym-camps":{"n":"Philadelphia Rock Gym summer camps (summer camp)","d":"philarockgym.com","m":"match"},"c:coco-academy-summer-camp":{"n":"CoCo Academy (summer camp)","d":"cocoacademyphl.com","m":"match"}},"camps":["philly-art-center","fleisher-art-memorial-camp","mister-johns-music-camp","music-theatre-philly-camp","movemakers-camp","queen-and-rook-camp","parks-and-rec-camps","theatre-horizon-woodmere","butchers-sew-shop-camp","clay-studio-camp","pafa-camp","moore-young-artists","school-of-rock-philadelphia","arden-summer-camp","camp-walnut","macguffin-camps","flipout-camp","philadelphia-ballet-camps","wissahickon-figure-skating","philadelphia-dance-academy","legacy-tennis-camp","ceo-camp-phield-house","awbury-adventures","camp-schuylkill","morris-arboretum-camp","circus-arts-camp","work-to-ride-camp","seaport-summer-camp","taller-puertorriqueno-camp","camp-tps","ymca-day-camps","summer-achievers-edey","allens-lane-art-camp","nlarts-summer-camp","yes-and-camp","zazz-summer-camp","sawubona-summer-camp","zoomdance-camp","dandelion-summer-camp","rutabaga-naturearts","skate-the-foundry-camp","lavner-tech-camp-upenn","philly-rock-gym-camps","coco-academy-summer-camp"],"photos":false,"hoods":{"bella-vista":"Bella Vista","callowhill":"Callowhill","center-city":"Center City","chestnut-hill":"Chestnut Hill","cobbs-creek":"Cobbs Creek","dickinson-narrows":"Dickinson Narrows","east-falls":"East Falls","east-passyunk":"East Passyunk","fairhill":"Fairhill","fairmount":"Fairmount","fishtown":"Fishtown","fitler-square":"Fitler Square","fox-chase":"Fox Chase","germantown":"Germantown","graduate-hospital":"Graduate Hospital","hawthorne":"Hawthorne","kensington":"Kensington","logan-square":"Logan Square","manayunk":"Manayunk","mount-airy":"Mount Airy","north-philadelphia":"North Philadelphia","northern-liberties":"Northern Liberties","old-city":"Old City","passyunk-square":"Passyunk Square","penn-s-landing":"Penn’s Landing","pennsport":"Pennsport","port-richmond":"Port Richmond","queen-village":"Queen Village","rittenhouse":"Rittenhouse","roxborough":"Roxborough","society-hill":"Society Hill","south-kensington":"South Kensington","south-philadelphia":"South Philadelphia","university-city":"University City","washington-square-west":"Washington Square West","west-fairmount-park":"West Fairmount Park","west-philadelphia":"West Philadelphia","other":"Somewhere else"}}', true);
 if (!is_array($CFG)) { http_response_code(500); exit; }
 
 header('Content-Type: application/json; charset=utf-8');
@@ -107,7 +107,7 @@ function db(): PDO {
     // Added after the first version: first and last name, and whether the account has been added to the email list.
     $cols = array();
     foreach ($db->query('PRAGMA table_info(users)') as $c) $cols[] = $c['name'];
-    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''", 'origin' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
+    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''", 'origin' => "TEXT NOT NULL DEFAULT ''", 'hood' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
       if (!in_array($col, $cols, true)) $db->exec('ALTER TABLE users ADD COLUMN ' . $col . ' ' . $type);
     }
     // A group made by "share this week with one person" is marked, so joining it skips the question about whose week to add.
@@ -122,6 +122,11 @@ function db(): PDO {
     // "Your listing this month": a number for each listing, kind and day. Nothing about who.
     $db->exec('CREATE TABLE IF NOT EXISTS hits (listing TEXT NOT NULL, k TEXT NOT NULL, day TEXT NOT NULL, n INTEGER NOT NULL, PRIMARY KEY (listing, k, day))');
     // A days-off plan kept in a profile: one per account. Each child's first name and where they'll be on each day school is closed.
+    // What an account follows (it is emailed when that listing or school posts a date) and what it has saved as a
+    // favorite (kept for quick access, no emails). Keys are "p:<program>", "c:<camp>" or "s:<school>". A follow that
+    // has been turned off stays as a row with live = 0 until the browser confirms the email list has dropped it too.
+    $db->exec('CREATE TABLE IF NOT EXISTS follows (user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, k TEXT NOT NULL, live INTEGER NOT NULL DEFAULT 1, synced INTEGER NOT NULL DEFAULT 0, created INTEGER NOT NULL, PRIMARY KEY (user_id, k))');
+    $db->exec('CREATE TABLE IF NOT EXISTS favs (user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, k TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY (user_id, k))');
     $db->exec('CREATE TABLE IF NOT EXISTS daysoffs (user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, year INTEGER NOT NULL, json TEXT NOT NULL, updated INTEGER NOT NULL)');
     // Directors: a claim on a listing ("p:<program id>" or "c:<camp id>") and the changes a director has proposed for it.
     $db->exec("CREATE TABLE IF NOT EXISTS claims (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, listing TEXT NOT NULL, status TEXT NOT NULL, domain TEXT NOT NULL DEFAULT '', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0, UNIQUE (user_id, listing))");
@@ -269,14 +274,14 @@ function current_user(): ?array {
   $done = true;
   $sid = isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s']) ? $_COOKIE['pas_s'] : '';
   if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return null;
-  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school, u.grades, u.origin FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
+  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school, u.grades, u.origin, u.hood FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
   if (!$s) return null;
   if ($s['seen'] < now() - 86400) {   // once a day, push the 30 days out again
     $exp = now() + SESSION_DAYS * 86400;
     q('UPDATE sessions SET seen = ?, expires = ? WHERE id = ?', array(now(), $exp, $s['sid']));
     set_session_cookie($sid, $exp);
   }
-  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'school' => (string) $s['school'], 'grades' => (string) $s['grades'], 'origin' => (string) $s['origin'], 'sid' => (int) $s['sid']);
+  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'school' => (string) $s['school'], 'grades' => (string) $s['grades'], 'origin' => (string) $s['origin'], 'hood' => (string) $s['hood'], 'sid' => (int) $s['sid']);
   return $user;
 }
 function need_user(): array {
@@ -352,13 +357,57 @@ function programs(): array {
   }
   return $p;
 }
-function schools(): array {
+function schools(): array { return array_keys(school_names()); }
+function school_names(): array {
   static $s = null;
   if ($s !== null) return $s;
   $s = array();
   $list = json_decode((string) @file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/data/schools.json'), true);
-  if (is_array($list)) foreach ($list as $x) { if (is_array($x) && isset($x['id']) && is_string($x['id'])) $s[] = $x['id']; }
+  if (is_array($list)) foreach ($list as $x) { if (is_array($x) && isset($x['id']) && is_string($x['id'])) $s[$x['id']] = isset($x['shortName']) && is_string($x['shortName']) ? $x['shortName'] : $x['id']; }
   return $s;
+}
+// The neighborhoods someone can say they live in: the ones the site has pages for.
+function hoods(): array {
+  global $CFG;
+  return isset($CFG['hoods']) && is_array($CFG['hoods']) ? $CFG['hoods'] : array();
+}
+
+// ---------- following and favorites ----------
+const MAX_FOLLOWS = 60;
+const MAX_FAVS = 120;
+// Is this something that can be followed or saved? A program or camp on the site, or (to follow) a school it covers.
+function mark_name(string $k, bool $schoolsToo): ?string {
+  if (!preg_match('~^(p|c|s):[a-z0-9-]{1,80}$~', $k)) return null;
+  if ($k[0] === 's') { $n = school_names(); $id = substr($k, 2); return !$schoolsToo ? null : ($id === 'all' ? 'Every school on the site' : (isset($n[$id]) ? $n[$id] : null)); }
+  $l = listings();
+  return isset($l[$k]) ? preg_replace('~ \\(summer camp\\)$~', '', (string) $l[$k]['n']) : null;   // the list says what kind it is beside the name
+}
+function follow_on(int $uid, string $k): bool {
+  if (mark_name($k, true) === null) return false;
+  $had = row('SELECT live FROM follows WHERE user_id = ? AND k = ?', array($uid, $k));
+  if ($had && (int) $had['live'] === 1) return true;
+  if ((int) val('SELECT COUNT(*) FROM follows WHERE user_id = ? AND live = 1', array($uid)) >= MAX_FOLLOWS) return false;
+  q('INSERT INTO follows (user_id, k, live, synced, created) VALUES (?, ?, 1, 0, ?) ON CONFLICT(user_id, k) DO UPDATE SET live = 1, synced = 0', array($uid, $k, now()));
+  bump('follow');
+  return true;
+}
+function fav_on(int $uid, string $k): bool {
+  if (mark_name($k, false) === null) return false;
+  if ((int) val('SELECT COUNT(*) FROM favs WHERE user_id = ?', array($uid)) >= MAX_FAVS) return false;
+  $had = row('SELECT 1 AS x FROM favs WHERE user_id = ? AND k = ?', array($uid, $k));
+  if (!$had) { q('INSERT INTO favs (user_id, k, created) VALUES (?, ?, ?)', array($uid, $k, now())); bump('fav'); }
+  return true;
+}
+// Everything a page needs to paint its Follow and Save buttons, and what the email list has yet to be told.
+function marks_out(int $uid): array {
+  $follows = array(); $sync = array(); $favs = array();
+  foreach (q('SELECT k, live, synced FROM follows WHERE user_id = ? ORDER BY created, k', array($uid)) as $r) {
+    $n = mark_name($r['k'], true);
+    if ((int) $r['live'] === 1 && $n !== null) $follows[] = array('k' => $r['k'], 'n' => $n);
+    if ((int) $r['synced'] === 0) $sync[] = array('k' => $r['k'], 'on' => (int) $r['live'] === 1 && $n !== null);
+  }
+  foreach (q('SELECT k FROM favs WHERE user_id = ? ORDER BY created, k', array($uid)) as $r) { $n = mark_name($r['k'], false); if ($n !== null) $favs[] = array('k' => $r['k'], 'n' => $n); }
+  return array('follows' => $follows, 'favs' => $favs, 'sync' => $sync);
 }
 function clean_week($w): string {
   $known = programs();
@@ -474,7 +523,7 @@ function daysoff_out(int $uid): ?array {
 function profile_out(array $u): array {
   $weeks = array();
   foreach (q('SELECT * FROM weeks WHERE user_id = ? ORDER BY id', array($u['id'])) as $w) $weeks[] = week_out($w);
-  return array('school' => $u['school'], 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => $weeks, 'summer' => summer_out((int) $u['id']), 'daysoff' => daysoff_out((int) $u['id']));
+  return array('school' => $u['school'], 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => $weeks, 'summer' => summer_out((int) $u['id']), 'daysoff' => daysoff_out((int) $u['id'])) + marks_out((int) $u['id']);
 }
 function kid_out(array $k, bool $mine): array {
   return array('id' => (int) $k['id'], 'name' => $k['name'], 'now' => json_decode($k['now_json'], true), 'next' => json_decode($k['next_json'], true), 'mine' => $mine);
@@ -557,7 +606,7 @@ function ready(array $u): bool { return $u['first'] !== '' && $u['last'] !== '';
 function me_out(array $u): array {
   $claims = isset($u['id']) ? (int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) : 0;
   return array('email' => $u['email'], 'first' => $u['first'], 'last' => $u['last'], 'ready' => ready($u), 'listed' => (bool) $u['listed'],
-    'school' => isset($u['school']) ? (string) $u['school'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0,
+    'school' => isset($u['school']) ? (string) $u['school'] : '', 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0,
     'claims' => $claims, 'role' => role_of($u, $claims));
 }
 // Parent or program manager? A manager is an account that holds a claim (approved or waiting), or one that was made on
@@ -634,12 +683,12 @@ function tell_owner(string $subject, string $text): void {
 }
 // Signs this browser in as the account with this address, making the account if it is new.
 function sign_in(string $email, string $via, string $next, string $first = '', string $last = ''): void {
-  $user = row('SELECT id, email, name, first, last, listed, school, grades, origin FROM users WHERE email = ?', array($email));
+  $user = row('SELECT id, email, name, first, last, listed, school, grades, origin, hood FROM users WHERE email = ?', array($email));
   $new = false;
   if (!$user) {
     $origin = preg_match('~^(managers|directors)$~', $next) ? 'managers' : 'parents';   // which door they came in by
     q('INSERT INTO users (email, created, via, origin) VALUES (?, ?, ?, ?)', array($email, now(), $via, $origin));
-    $user = array('id' => (int) db()->lastInsertId(), 'email' => $email, 'name' => '', 'first' => '', 'last' => '', 'listed' => 0, 'school' => '', 'grades' => '', 'origin' => $origin);
+    $user = array('id' => (int) db()->lastInsertId(), 'email' => $email, 'name' => '', 'first' => '', 'last' => '', 'listed' => 0, 'school' => '', 'grades' => '', 'origin' => $origin, 'hood' => '');
     $new = true;
     bump('account');
     bump($origin === 'managers' ? 'account_manager' : 'account_parent');
@@ -654,6 +703,8 @@ function sign_in(string $email, string $via, string $next, string $first = '', s
   set_session_cookie($sid, $exp);
   bump('signin_' . $via);
   $user['id'] = (int) $user['id'];
+  // Signing in from a Follow or Save button: do what was asked, whichever device the sign-in finished on.
+  if (preg_match('~^([fv]):((?:p|c|s):[a-z0-9-]{1,80})$~', $next, $m)) { if ($m[1] === 'f') follow_on($user['id'], $m[2]); else fav_on($user['id'], $m[2]); }
   out(array('ok' => true, 'next' => $next, 'new' => $new, 'user' => me_out($user), 'groups' => my_groups($user['id'])));
 }
 function http_get(string $url): string {
@@ -732,7 +783,7 @@ switch ($method . ' ' . $action) {
     $email = strtolower(str($in, 'email', 150));
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) fail('email', 'That email address doesn’t look right.');
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|join|summer|daysoff|calendar|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|join|summer|daysoff|calendar|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80})$~', $next)) $next = 'account';
     if (too_many('mail:' . h($email), 3, 900) || too_many('mail:' . h($email), 8, 86400) || too_many('ip:' . who(), 10, 900) || too_many('ip:' . who(), 40, 86400)) {
       fail('slow', 'That’s a lot of sign-in emails. Use the newest one, or wait 15 minutes and try again.', 429);
     }
@@ -779,7 +830,7 @@ switch ($method . ' ' . $action) {
     if (too_many('try:' . who(), 30, 900)) fail('slow', 'Too many tries. Wait 15 minutes and try again.', 429);
     note('try:' . who());
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|join|summer|daysoff|calendar|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?)$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|join|summer|daysoff|calendar|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80})$~', $next)) $next = 'account';
     $g = google_email(str($in, 'credential', 4200));
     sign_in($g['email'], 'google', $next, $g['first'], $g['last']);
   }
@@ -812,6 +863,85 @@ switch ($method . ' ' . $action) {
     if ($first === '' || $last === '') fail('name', 'Add your first and last name.');
     q('UPDATE users SET first = ?, last = ?, name = ? WHERE id = ?', array($first, $last, $first . ' ' . $last, $u['id']));
     out(array('ok' => true, 'first' => $first, 'last' => $last));
+  }
+
+  // The rest of a new account in one go: a name, and (if they like) their school and neighborhood.
+  case 'POST basics': {
+    $u = need_user();
+    $first = person_name(str($in, 'first', 60), 30);
+    $last = person_name(str($in, 'last', 60), 40);
+    if ($first === '' || $last === '') fail('name', 'Add your first and last name.');
+    $school = str($in, 'school', 60);
+    if ($school !== '' && !in_array($school, schools(), true)) $school = '';
+    $hood = str($in, 'hood', 60);
+    if ($hood !== '' && !isset(hoods()[$hood])) $hood = '';
+    if ($school !== '' && $u['school'] === '') bump('school_saved');
+    if ($hood !== '' && $u['hood'] === '') bump('hood_saved');
+    q('UPDATE users SET first = ?, last = ?, name = ?, school = CASE WHEN ? != \'\' THEN ? ELSE school END, hood = CASE WHEN ? != \'\' THEN ? ELSE hood END WHERE id = ?', array($first, $last, $first . ' ' . $last, $school, $school, $hood, $hood, $u['id']));
+    $fresh = row('SELECT id, email, name, first, last, listed, school, grades, origin, hood FROM users WHERE id = ?', array($u['id']));
+    $fresh['id'] = (int) $fresh['id'];
+    out(array('ok' => true, 'first' => $first, 'last' => $last, 'user' => me_out($fresh)));
+  }
+
+  case 'POST hood_save': {
+    $u = need_user();
+    $hood = str($in, 'hood', 60);
+    if ($hood !== '' && !isset(hoods()[$hood])) fail('hood', 'That isn’t a neighborhood on the list.');
+    if ($hood !== '' && $u['hood'] === '') bump('hood_saved');
+    q('UPDATE users SET hood = ? WHERE id = ?', array($hood, $u['id']));
+    out(array('ok' => true, 'hood' => $hood));
+  }
+
+  // ----- following and favorites -----
+  case 'GET marks': {
+    $u = current_user();
+    if (!$u) out(array('ok' => true, 'user' => null));
+    // a new account is asked for its name, school and neighborhood on the spot: the page needs the two lists to offer
+    out(array('ok' => true, 'user' => me_out($u)) + marks_out($u['id']) + (ready($u) ? array() : array('lists' => array('schools' => school_names(), 'hoods' => hoods()))));
+  }
+
+  case 'POST follow': {
+    $u = need_user();
+    $k = str($in, 'key', 90);
+    if (mark_name($k, true) === null) fail('key', 'That isn’t something on the site to follow.');
+    if (!empty($in['on'])) {
+      if (!follow_on($u['id'], $k)) fail('full', 'That’s the most one account can follow (' . MAX_FOLLOWS . '). Stop following something first.');
+    } else {
+      q('UPDATE follows SET live = 0, synced = 0 WHERE user_id = ? AND k = ?', array($u['id'], $k));
+    }
+    out(array('ok' => true) + marks_out($u['id']));
+  }
+
+  // The browser has told the email list about these, so they need no more telling. A follow that was turned off goes.
+  case 'POST follow_synced': {
+    $u = need_user();
+    $keys = isset($in['keys']) && is_array($in['keys']) ? array_slice($in['keys'], 0, MAX_FOLLOWS * 2) : array();
+    foreach ($keys as $x) {
+      if (!is_array($x) || !isset($x['k']) || !is_string($x['k'])) continue;
+      $live = !empty($x['on']) ? 1 : 0;   // only if nothing changed in the meantime
+      q('UPDATE follows SET synced = 1 WHERE user_id = ? AND k = ? AND live = ?', array($u['id'], $x['k'], $live));
+    }
+    q('DELETE FROM follows WHERE user_id = ? AND live = 0 AND synced = 1', array($u['id']));
+    out(array('ok' => true) + marks_out($u['id']));
+  }
+
+  // Turns every follow off, for an account about to be deleted: the browser then tells the email list.
+  case 'POST follow_clear': {
+    $u = need_user();
+    q('UPDATE follows SET live = 0, synced = 0 WHERE user_id = ? AND live = 1', array($u['id']));
+    out(array('ok' => true) + marks_out($u['id']));
+  }
+
+  case 'POST fav': {
+    $u = need_user();
+    $k = str($in, 'key', 90);
+    if (mark_name($k, false) === null) fail('key', 'That isn’t a listing on the site.');
+    if (!empty($in['on'])) {
+      if (!fav_on($u['id'], $k)) fail('full', 'That’s the most one account can save (' . MAX_FAVS . '). Take one off first.');
+    } else {
+      q('DELETE FROM favs WHERE user_id = ? AND k = ?', array($u['id'], $k));
+    }
+    out(array('ok' => true) + marks_out($u['id']));
   }
 
   // The browser says it has added this account to the email list, so it is not asked to again.

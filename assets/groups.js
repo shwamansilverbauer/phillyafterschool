@@ -100,18 +100,19 @@
     for (i = 0; i < u.email.length; i++) mark = (mark * 31 + u.email.charCodeAt(i)) % 9973;   // tells two accounts on one device apart without keeping the address
     var was = {}; try { was = JSON.parse(get('pas-kl-role') || '{}') || {}; } catch (e) { was = {}; }
     var names = listings ? listings.join(' | ') : null;
-    if (was.m === mark && was.r === u.role && (names === null || was.l === names)) return;
-    var asking = mark + '|' + u.role + '|' + names;
+    var place = (u.school || '') + '/' + (u.hood || '');   // where they are: which school they kept, and their neighborhood
+    if (was.m === mark && was.r === u.role && (was.p || '/') === place && (names === null || was.l === names)) return;
+    var asking = mark + '|' + u.role + '|' + place + '|' + names;
     if (noteRole.asking === asking) return;   // already on its way from this page
     noteRole.asking = asking;
-    var props = { role: u.role };
+    var props = { role: u.role, home_school: u.school || '', neighborhood: u.hood || '' };
     if (names !== null) props.claimed_listings = listings;
     window.fetch('https://a.klaviyo.com/client/profiles?company_id=' + encodeURIComponent(KL_KEY), {
       method: 'POST',
       headers: { 'content-type': 'application/vnd.api+json', revision: '2026-07-15' },
       body: JSON.stringify({ data: { type: 'profile', attributes: { email: u.email, properties: props } } })
     }).then(function (r) {
-      if (r.status >= 200 && r.status < 300) set('pas-kl-role', JSON.stringify({ m: mark, r: u.role, l: names === null ? (was.m === mark ? was.l : undefined) : names }));
+      if (r.status >= 200 && r.status < 300) set('pas-kl-role', JSON.stringify({ m: mark, r: u.role, p: place, l: names === null ? (was.m === mark ? was.l : undefined) : names }));
     }, function () { /* blocked or offline: tried again another time */ });
   }
   function signInBox(box, next, done, lede) {
@@ -327,11 +328,19 @@
         relationships: { list: { data: { type: 'list', id: KL_LIST } } } } })
     }).then(function (r) { if (r.status >= 200 && r.status < 300) { me.listed = true; call('listed', {}); if (window.pasClaimNames) noteRole(me, window.pasClaimNames()); } }, function () { /* blocked or offline: it is tried again at the next sign-in */ });
   }
+  // Listing pages fetch this script only when someone taps Follow or Save while signed out (see src/site.js).
+  window.pasAccount = { signIn: signInBox, added: listOnce };
   function saveNames(me, first, last) {
     return call('set_name', { first: first, last: last }).then(function (r) {
       if (r.ok) { me.first = r.first; me.last = r.last; me.ready = true; listOnce(me); }
       return r;
     });
+  }
+
+  // The page a followed or saved thing lives on.
+  function markHref(k) {
+    var id = k.slice(2);
+    return k.charAt(0) === 'p' ? page('programs/' + id + '/') : k.charAt(0) === 'c' ? page('summer-camps/' + id + '/') : id === 'all' ? page('alerts/') : page(id + '/');
   }
 
   // =====================================================================================================
@@ -355,6 +364,8 @@
       if (next === 'daysoff') { location.href = page('days-off/') + '#plan'; return true; }
       if (next === 'calendar') { location.href = page('calendar/'); return true; }
       if (next === 'managers' || next === 'directors') { location.href = page('managers/'); return true; }
+      var fm = /^[fv]:(p|c|s):([a-z0-9-]+)$/.exec(next || '');   // signed in from a Follow or Save button: back to that page
+      if (fm) { location.href = markHref(fm[1] + ':' + fm[2]) + '#by-email'; return true; }
       var m = /^groups\?g=([A-Za-z0-9]+)$/.exec(next || '');
       if (m) { location.href = page('groups/') + '?g=' + m[1]; return true; }
       return false;
@@ -382,6 +393,19 @@
         var fl = el('p', null, 'Signed in as '); fl.appendChild(el('b', null, me.email)); fin.appendChild(fl);
         var ff = el('form', 'g-form'), fn = nameFields('new-', me);
         ff.appendChild(fn.box);
+        var pickOf = function (id, label, none, items, value) {
+          var w = el('div', 'field'), l = el('label', null, label), sl = el('select');
+          l.htmlFor = id; sl.id = id;
+          var o0 = el('option', null, none); o0.value = ''; sl.appendChild(o0);
+          (items || []).forEach(function (x) { var o = el('option', null, x.name); o.value = x.id; sl.appendChild(o); });
+          sl.value = value || '';
+          w.appendChild(l); w.appendChild(sl); ff.appendChild(w);
+          return sl;
+        };
+        var devSchool = deviceSchool();
+        var newSchool = pickOf('new-school', 'Your school (optional)', 'Not listed, or rather not say', ainfo.schools, me.school || (devSchool ? devSchool.id : ''));
+        var newHood = pickOf('new-hood', 'Your neighborhood (optional)', 'Rather not say', ainfo.hoods, me.hood || '');
+        ff.appendChild(el('p', 'hint', 'Your school and neighborhood set where lists start, and which news reaches you.'));
         ff.appendChild(el('p', 'hint', 'Anyone you share a week with or invite to a group sees your name on the invitation, and a group’s creator sees it when you join. ' + LIST_NOTE));
         var fs = el('p', 'g-status'); fs.setAttribute('aria-live', 'polite'); ff.appendChild(fs);
         var fa = el('div', 'actions'), fb = el('button', 'btn primary', 'Finish'); fb.type = 'submit';
@@ -389,7 +413,15 @@
         fa.appendChild(fb); fa.appendChild(fo); ff.appendChild(fa);
         ff.addEventListener('submit', function (e) {
           e.preventDefault(); fb.disabled = true;
-          saveNames(me, fn.first.value, fn.last.value).then(function (r) { fb.disabled = false; if (!r.ok) { fs.textContent = r.message; fs.className = 'g-status bad'; return; } if (wantNext !== 'account') { goNext(wantNext); return; } drawProfile(d); });
+          call('basics', { first: fn.first.value, last: fn.last.value, school: newSchool.value, hood: newHood.value }).then(function (r) {
+            fb.disabled = false;
+            if (!r.ok) { fs.textContent = r.message; fs.className = 'g-status bad'; return; }
+            Object.keys(r.user).forEach(function (k) { me[k] = r.user[k]; });
+            if (me.school) adoptSchool(me.school, (ainfo.schools || []).filter(function (x) { return x.id === me.school; }).map(function (x) { return x.name; })[0] || '');
+            listOnce(me);
+            if (wantNext !== 'account') { goNext(wantNext); return; }
+            drawProfile(d);
+          });
         });
         fin.appendChild(ff); account.appendChild(fin);
         fn.first.focus();
@@ -412,6 +444,61 @@
         saveNames(me, nf0.first.value, nf0.last.value).then(function (r) { nameNote.textContent = r.ok ? 'Saved.' : r.message; if (r.ok) { nf0.first.value = r.first; nf0.last.value = r.last; } });
       });
       account.appendChild(who);
+      // what's new on the site, for someone who has been before
+      var NEWS = ainfo.news || [];
+      if (NEWS.length) {
+        var seenNews = get('pas-news') || '';
+        var newsBox = el('section', 'panel g-news');
+        newsBox.appendChild(el('h2', null, 'What’s new'));
+        var nul = el('ul', 'g-list');
+        NEWS.slice(0, 5).forEach(function (n) {
+          var li = el('li', n.date > seenNews ? 'fresh' : '');
+          var when = ''; try { when = new Date(n.date + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }); } catch (e) { when = n.date; }
+          var top = el('p', 'news-top'); top.appendChild(el('b', null, n.title)); top.appendChild(el('span', 'hint', ' ' + when)); li.appendChild(top);
+          var body = el('p', null, n.text + ' ');
+          if (n.href) { var na = el('a', null, n.link || 'Have a look'); na.href = page(n.href.split('#')[0]) + (n.href.indexOf('#') > -1 ? '#' + n.href.split('#')[1] : ''); body.appendChild(na); }
+          li.appendChild(body); nul.appendChild(li);
+        });
+        newsBox.appendChild(nul);
+        account.appendChild(newsBox);
+        set('pas-news', NEWS[0].date);   // seen: the dot on "Your account" goes
+        var dot = document.querySelector('.nav-cta .news-dot'); if (dot) dot.hidden = true;
+      }
+      // what you follow (its dates come by email) and your favorites (kept here, nothing emailed)
+      var MK = window.pasMarks;
+      if (MK) {
+        var fol = el('section', 'panel g-marks');
+        fol.appendChild(el('h2', null, 'Places you follow'));
+        fol.appendChild(el('p', null, 'When one of these posts a sign-up date, a deadline or a day off, it’s in your Sunday email. Follow a program, a camp or a school from its own page.'));
+        var folBox = el('div'); fol.appendChild(folBox);
+        fol.appendChild(el('h3', null, 'Favorites'));
+        fol.appendChild(el('p', 'hint', 'Saved so you can find them again. A favorite sends no email.'));
+        var favBox = el('div'); fol.appendChild(favBox);
+        var marksNote = el('p', 'g-status'); marksNote.setAttribute('aria-live', 'polite'); fol.appendChild(marksNote);
+        var kindWord = { p: 'Program', c: 'Summer camp', s: 'School' };
+        var drawMarks = function () {
+          var named = MK.state.named || { follows: [], favs: [] };
+          var fill = function (box, items, empty, removeLabel, remove, addToWeek) {
+            box.textContent = '';
+            if (!items.length) { box.appendChild(el('p', 'hint', empty)); return; }
+            var ul = el('ul', 'g-list');
+            items.forEach(function (x) {
+              var li = el('li'), a = el('a', null, x.n); a.href = markHref(x.k);
+              var b0 = el('b'); b0.appendChild(a); li.appendChild(b0);
+              li.appendChild(el('span', 'hint', kindWord[x.k.charAt(0)] || ''));
+              if (addToWeek && x.k.charAt(0) === 'p') { var aw = el('a', 'g-add', 'Add to your week'); aw.href = page('board/') + '?add=' + encodeURIComponent(x.k.slice(2)); li.appendChild(aw); }
+              var rm = btn('clear', removeLabel);
+              rm.addEventListener('click', function () { rm.disabled = true; remove(x).then(function (r) { if (r && r.ok === false) { marksNote.textContent = r.message; rm.disabled = false; return; } marksNote.textContent = ''; drawMarks(); }); });
+              li.appendChild(rm); ul.appendChild(li);
+            });
+            box.appendChild(ul);
+          };
+          fill(folBox, named.follows, 'You aren’t following anything yet.', 'Stop following', function (x) { return MK.follow(x.k, false); });
+          fill(favBox, named.favs, 'No favorites yet. Tap “Save to favorites” on a program’s or camp’s page.', 'Remove', function (x) { return MK.fav(x.k, false); }, true);
+        };
+        MK.load().then(drawMarks);
+        account.appendChild(fol);
+      }
       // what is kept in the profile: a school, and any weeks
       var prof = el('section', 'panel');
       prof.appendChild(el('h2', null, 'Kept in your profile'));
@@ -441,7 +528,7 @@
         sn.textContent = 'Saving…';
         call('school_save', { school: ss.value }).then(function (r) {
           sn.textContent = r.ok ? (r.school ? 'Kept.' : 'Taken out of your profile. This device still remembers it until you change it on the school’s page.') : r.message;
-          if (r.ok) { adoptSchool(r.school, schoolName(r.school)); paintSchool(r.school); }
+          if (r.ok) { me.school = r.school; noteRole(me); adoptSchool(r.school, schoolName(r.school)); paintSchool(r.school); }
         });
       };
       ss.addEventListener('change', saveSchool);
@@ -468,6 +555,19 @@
       gradeRow.appendChild(gradeRail); gradeRow.appendChild(gradeNote);
       gradeRow.appendChild(el('span', 'hint', 'Tap each grade you have a child in. We keep the grades only, not which child is in which.'));
       if ((ainfo.grades || []).length) prof.appendChild(gradeRow);
+      if ((ainfo.hoods || []).length) {
+        var hoodRow = el('form', 'g-row');
+        var hl = el('label', null, 'Your neighborhood'); hl.htmlFor = 'prof-hood';
+        var hs = el('select'); hs.id = 'prof-hood';
+        var h0 = el('option', null, 'None kept'); h0.value = ''; hs.appendChild(h0);
+        ainfo.hoods.forEach(function (x) { var o = el('option', null, x.name); o.value = x.id; hs.appendChild(o); });
+        hs.value = me.hood || '';
+        var hn = el('span', 'hint'); hn.setAttribute('aria-live', 'polite');
+        hs.addEventListener('change', function () { hn.textContent = 'Saving…'; call('hood_save', { hood: hs.value }).then(function (r) { hn.textContent = r.ok ? (r.hood ? 'Kept.' : 'Taken out of your profile.') : r.message; if (r.ok) { me.hood = r.hood; noteRole(me); } }); });
+        hoodRow.addEventListener('submit', function (e) { e.preventDefault(); });
+        hoodRow.appendChild(hl); hoodRow.appendChild(hs); hoodRow.appendChild(hn);
+        prof.appendChild(hoodRow);
+      }
       var weeksHead = el('h3', null, 'Weeks'); prof.appendChild(weeksHead);
       var weeksBox = el('div'); prof.appendChild(weeksBox);
       var toBoard = el('p', 'hint', 'To keep a week here, or put one on this device, open '); var tb = el('a', null, 'Build your week'); tb.href = page('board/') + '?back=1'; toBoard.appendChild(tb); toBoard.appendChild(document.createTextNode(' and look for “Keep and share this week”.'));
@@ -615,10 +715,10 @@
       var so = btn('btn', 'Sign out'), sa = btn('btn', 'Sign out on every device'), del = btn('clear', 'Delete my account');
       acts.appendChild(so); acts.appendChild(sa); acts.appendChild(del);
       out.appendChild(acts);
-      out.appendChild(el('p', 'hint', 'Deleting your account removes your email, the school, grades and weeks kept in your profile, every week you shared, and every group you made (for everyone in it). Rosters saved on this device stay.'));
+      out.appendChild(el('p', 'hint', 'Deleting your account removes your email, the school, grades and weeks kept in your profile, what you follow and your favorites, every week you shared, and every group you made (for everyone in it). Rosters saved on this device stay.'));
       so.addEventListener('click', function () { call('logout', {}).then(function () { set('pas-in', null); drawSignedOut(); }); });
       sa.addEventListener('click', function () { call('logout_all', {}).then(function () { set('pas-in', null); drawSignedOut(); }); });
-      twoTap(del, 'Tap again to delete everything', function () { call('delete_account', {}).then(function (r) { if (r.ok) { set('pas-in', null); set('pas-role', null); set('pas-kl-role', null); unlinkAll(); drawSignedOut('Your account and everything you shared are deleted.'); } }); });
+      twoTap(del, 'Tap again to delete everything', function () { (window.pasMarks ? window.pasMarks.clear().then(null, function () { /* the unsubscribe link still works */ }) : Promise.resolve()).then(function () { return call('delete_account', {}); }).then(function (r) { if (r.ok) { set('pas-in', null); set('pas-role', null); set('pas-kl-role', null); unlinkAll(); drawSignedOut('Your account and everything you shared are deleted.'); } }); });
       account.appendChild(out);
     };
     // Arriving from the email: the token is after the #, so it never reaches a server log. Use it once and take it out of the address.
