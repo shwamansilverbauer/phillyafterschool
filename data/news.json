@@ -1,6 +1,13 @@
 [
   {
     "date": "2026-10-09",
+    "title": "Tell the next family how it’s going",
+    "text": "Once a program has been on your week for a few weeks, we may ask if you’d write a short review. It takes about two minutes and helps the next family choose. You can say “not yet”, or “don’t ask about this one”.",
+    "href": "review/",
+    "link": "Write a review"
+  },
+  {
+    "date": "2026-10-09",
     "title": "My profile, and your account",
     "text": "My profile is one card now: you, your kids, your school, what you follow, your favorites, your schedules and calendars. To change any of it, go to your account. You can change the email address you sign in with there, too.",
     "href": "account/",

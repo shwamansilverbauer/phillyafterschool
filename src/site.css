@@ -1553,3 +1553,20 @@ html.signed .year-out{display:none}
   .js .nav.open > a.nav-cta.when-in{order:-2;margin:0 0 6px}
   .js .nav.open > a.nav-acct{order:-1;text-align:center;border:2px solid #0B2140;border-radius:999px;margin-bottom:8px;padding:8px 12px}
 }
+
+/* "Has your family been to ...?": asked on Build your week and on the profile, when a program has been on a week a while */
+.rv-nudge{border:2px solid var(--yellow);border-radius:16px;background:var(--surface);padding:18px 20px;display:flex;flex-direction:column;gap:10px;max-width:860px}
+.rv-nudge h2{margin:0;font-size:1.3rem}
+.rv-nudge p{margin:0}
+.rv-nudge .actions{grid-area:auto;align-items:center;align-self:flex-start;gap:8px 14px}
+.rv-nudge button{cursor:pointer;font:inherit}
+.rv-nudge .btn{font-weight:700}
+.rv-nudge button.btn{background:var(--surface)}
+.rv-yours{margin:0;background:var(--warn);color:var(--warn-ink);border-radius:12px;padding:10px 14px;font-weight:700;max-width:60ch}
+.rv-more{display:flex;flex-direction:column;gap:10px}
+.rv-more h2,.rv-more p{margin:0}
+.rv-chips{display:flex;flex-wrap:wrap;gap:8px}
+.pc-row dd > .pc-wide{flex:1 1 100%}
+/* a claimed listing: the link a program sends its families */
+.claim-ask{border-top:1px solid var(--line);padding-top:12px;margin-top:6px;display:flex;flex-direction:column;gap:8px;align-self:stretch}
+.claim-ask input{font:inherit;font-size:.95rem;width:100%;max-width:560px;min-height:44px;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}

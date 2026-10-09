@@ -1309,10 +1309,11 @@ ${schoolRows}
     </div>
     <p>${T(`Does it serve a school that isn’t shown here?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
   </section>`}
-  <section class="section" id="reviews">
+  <section class="section" id="reviews" data-rv-program="${esc(p.id)}">
     <h2>${T(`What parents say`)}</h2>
     ${revs.length ? `<p><span class="stars" aria-hidden="true">${stars(Math.floor(avg + 0.25))}</span> <b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'review' : 'reviews'}</p>
     <ul class="revlist">${reviewItems(revs)}</ul>` : `<p>${T(`No reviews yet. If your child has been, a few sentences help the next family choose.`)}</p>`}
+    <p class="rv-yours" hidden></p>
     <p class="actions"><a class="btn" href="${reviewUrl}" data-track="review">${revs.length ? T(`Write a review`) : T(`Write the first review`)}</a></p>
     <p class="hint">${T(`Reviews are first-hand notes from parents and caregivers. Each one is read before it’s posted.`)}</p>
   </section>
@@ -2155,6 +2156,8 @@ ${GROUPS.photos ? `    <li>${T(`A photo you send for your listing is shrunk in y
     <li>${T(`What you type into a form is emailed to the site’s inbox, and a backup copy is kept on our web host in case the email goes missing.`)}</li>
     <li>${T(`Your email address is used only to reply to you or to confirm something. It is never published.`)}</li>
     <li>${T(`A review that is approved appears on the site with your first name, your child’s school and the month. Nothing else about you is shown.`)}</li>
+    <li>${T(`When a program has been on your week for a few weeks, the site may ask whether you’d review it. That is worked out in your browser, from the rosters on your device. Your device remembers the day it first saw each program on a roster, when it last asked, and which programs you reviewed or said not to ask about. None of that is sent to us, and “Don’t ask about this one” ends it for that program.`)}</li>${GROUPS ? `
+    <li>${T(`If you are signed in, the review form fills in your first name and email address from your account so you don’t have to type them. You can change either before you send it.`)}</li>` : ''}
     <li>${T(`Asking for a school to be covered sends only the school’s name.`)}</li>
     <li>${T(`A date you send in for a school’s page (picture day, a half day) is read by a person before it is published. What is published is the date and what it is, marked “from a parent”: never your name or email.`)}</li>
     <li>${T(`Please don’t include children’s names or other people’s personal details in what you send.`)}</li>
@@ -2853,7 +2856,7 @@ function profilePage() {
   const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`Your profile needs JavaScript turned on.`)}</p></noscript>
   <div class="g-page" id="account" data-view="profile"></div>
-  <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })), hoods: accountHoods(), news: NEWS.slice(0, 5) }).replace(/</g, '\\u003c')}</script>
+  <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })), hoods: accountHoods(), news: NEWS.slice(0, 5), programs: Object.fromEntries(programs.map(p => [p.id, p.name])) }).replace(/</g, '\\u003c')}</script>
 </div>`;
   return layout({ title: 'My profile', description: `Your ${cfg.siteName} profile: you, your kids, your school, what you follow, your favorites and your plans, on one card.`, pathName: 'profile/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
 }
@@ -3255,6 +3258,7 @@ function boardPage() {
     <p class="hint" id="board-status" aria-live="polite"></p>
     <div class="board-tools" id="board-tools" hidden><button type="button" class="clear" id="board-clear">Clear this roster</button></div>
   </section>
+  <section class="section rv-nudge" id="rv-nudge" data-rv-place="week" data-review="${link('review/', 1)}" aria-live="polite" hidden></section>
   <section class="section costbox" id="board-cost" hidden>
     <h2>${T(`What this roster costs`)}</h2>
     <p class="cost-total" id="cost-total"></p>
@@ -3301,6 +3305,7 @@ function boardPage() {
       <div class="card-preview"><canvas id="card-canvas" width="1080" height="1350" role="img" aria-label="Preview of the week card"></canvas></div>
     </div>
   </section>
+  ${rvNames()}
   ${GROUPS ? `<section class="section group-share" id="group-share" ${groupsAttrs(1)} hidden></section>` : ''}
   <script type="application/json" id="pas-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;
@@ -3311,13 +3316,15 @@ function boardPage() {
     first: `<script>(function(){var h=location.hash;if(!/(^#|&)(mon|tue|wed|thu|fri)=/.test(h))return;window.__pasShared=h;try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}})();</script>\n` });
 }
 
+// The names of the programs that can be reviewed, for the pages that ask "has your family been to ...?".
+const rvNames = () => `<script type="application/json" id="rv-names">${JSON.stringify(Object.fromEntries(programs.map(p => [p.id, p.name]))).replace(/</g, '\\u003c')}</script>`;
 function reviewPage() {
   const progOpts = [...programs].sort((a, b) => a.name.localeCompare(b.name)).map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');
   const schoolOpts = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<option value="${esc(s.id)}">${esc(s.shortName)}</option>`).join('');
   const hero = `    <h1>${T(`How did it go?`)}</h1>
     <p class="lede">${T(`A first-hand note from one family helps the next one choose. Every review is read before it’s posted.`)}</p>`;
   const body = `<div class="suggest">
-  <form class="form panel" method="post" action="send.php" id="review-form" data-clarity-mask="true">
+  <form class="form panel" method="post" action="send.php" id="review-form" data-clarity-mask="true"${GROUPS && !PREVIEW ? ` data-api="${link('groups/api.php', 1)}"` : ''}>
     <div class="pair">
       <div class="field">
         <label for="r-program">${T(`Which program?`)}</label>
@@ -3373,7 +3380,9 @@ function reviewPage() {
 function reviewThanksPage() {
   const hero = `    <h1>${T(`Thank you. It’s in.`)}</h1>
     <p class="lede">${T(`Your review will appear once it’s been read.`)} <a href="${link('', 2)}">${T(`Back to the schools.`)}</a></p>`;
-  return layout({ title: 'Thanks for your review', description: 'Your review was sent.', pathName: 'review/thanks/', depth: 2, current: null, hero, body: '', showStreet: 'parked', noindex: true });
+  const body = `<section class="section rv-more" id="rv-more" data-review="${link('review/', 2)}" hidden></section>
+${rvNames()}`;
+  return layout({ title: 'Thanks for your review', description: 'Your review was sent.', pathName: 'review/thanks/', depth: 2, current: null, hero, body, showStreet: 'parked', noindex: true });
 }
 
 // Review form handler. Emails the review with a ready-to-paste entry for data/reviews.json.

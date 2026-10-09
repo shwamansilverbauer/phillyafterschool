@@ -569,6 +569,121 @@
     if (signedHint()) MK.load().then(paintAll);
   })();
 
+  // ----- asking for a review -----
+  // The person a review should come from is someone whose child goes to the program, and the rosters on this device
+  // say which programs those might be. So the asking is worked out here, in the browser, and nothing about it is
+  // sent anywhere. This device remembers (pas-rv) the day it first saw each program on a roster, which programs
+  // have been reviewed from here, which ones never to ask about, and when it last asked.
+  var RV = (function () {
+    var WAIT = { now: 14, next: 45, again: 30 };   // days on a current week, days on an upcoming one, days between asks
+    var day = function () { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); };
+    var apart = function (a, b) { return Math.round((Date.parse(b + 'T12:00:00Z') - Date.parse(a + 'T12:00:00Z')) / 86400000); };
+    var okDay = function (v) { return typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v); };
+    var okId = function (v) { return typeof v === 'string' && /^[a-z0-9-]{1,60}$/.test(v); };
+    var load = function () {
+      var x = parse('pas-rv'), out = { s: {}, d: {}, n: {}, t: '' };
+      if (x && typeof x === 'object') {
+        ['s', 'd', 'n'].forEach(function (k) { if (x[k] && typeof x[k] === 'object') Object.keys(x[k]).slice(0, 80).forEach(function (id) { if (okId(id) && okDay(x[k][id])) out[k][id] = x[k][id]; }); });
+        if (okDay(x.t)) out.t = x.t;
+      }
+      return out;
+    };
+    var save = function (x) { store('pas-rv', JSON.stringify(x)); };
+    // every program on a roster on this device: the school it was picked for, and whether it is on a current week
+    var onRosters = function () {
+      var raw = parse('pas-rosters'), by = {}, order = [];
+      var add = function (e, board, withSchool) {
+        if (typeof e !== 'string') return;
+        var key = entryKey(e).split('.'), id = key[0];
+        if (!okId(id)) return;
+        if (!by[id]) { by[id] = { id: id, school: '', now: false }; order.push(id); }
+        if (withSchool && okId(key[1]) && !by[id].school) by[id].school = key[1];
+        if (board === 'now') by[id].now = true;
+      };
+      if (raw && Array.isArray(raw.kids)) raw.kids.slice(0, 6).forEach(function (k) {
+        ['now', 'next'].forEach(function (b) {
+          var bd = k && k[b]; if (!bd || typeof bd !== 'object') return;
+          if (bd.days && typeof bd.days === 'object') Object.keys(bd.days).forEach(function (d) { if (Array.isArray(bd.days[d])) bd.days[d].forEach(function (e) { add(e, b, true); }); });
+          if (bd.wk && typeof bd.wk === 'object') Object.keys(bd.wk).forEach(function (d) { if (Array.isArray(bd.wk[d])) bd.wk[d].forEach(function (e) { add(e, b, false); }); });
+        });
+      });
+      return order.map(function (id) { return by[id]; });
+    };
+    var api = {
+      // What could be reviewed from here; the day each program was first seen is noted as it goes.
+      // extra: programs on a week kept in the account, which may not be on this device ([{ id, school, now }]).
+      list: function (extra) {
+        var st = load(), today = day(), items = onRosters(), changed = false;
+        (extra || []).forEach(function (x) {
+          if (!x || !okId(x.id)) return;
+          var hit = items.filter(function (i) { return i.id === x.id; })[0];
+          if (!hit) items.push({ id: x.id, school: okId(x.school) ? x.school : '', now: !!x.now }); else if (x.now) hit.now = true;
+        });
+        items.forEach(function (i) { if (!st.s[i.id]) { st.s[i.id] = today; changed = true; } i.since = st.s[i.id]; i.done = st.d[i.id] || ''; i.never = !!st.n[i.id]; });
+        if (changed) save(st);
+        return items;
+      },
+      // the one to ask about today, if any
+      due: function (extra) {
+        var st = load(), today = day();
+        if (st.t && apart(st.t, today) < WAIT.again) return null;
+        return api.list(extra).filter(function (i) { return !i.done && !i.never && apart(i.since, today) >= (i.now ? WAIT.now : WAIT.next); })[0] || null;
+      },
+      later: function () { var st = load(); st.t = day(); save(st); },
+      never: function (id) { var st = load(); if (okId(id)) st.n[id] = day(); st.t = day(); save(st); },
+      done: function (id) { var st = load(); if (okId(id)) st.d[id] = day(); st.t = day(); save(st); },
+      href: function (base, i) { return base + '?program=' + encodeURIComponent(i.id) + (i.school ? '&school=' + encodeURIComponent(i.school) : ''); },
+      // Draws the question into a box, when there is one to ask. names: { id: name }. base: where the review form is.
+      // ?rv=now on the page's address shows it straight away, for looking at it.
+      mount: function (box, names, place, base, extra) {
+        if (!box || !names) return false;
+        var open = api.list(extra).filter(function (i) { return !i.done && !i.never && names[i.id]; });
+        var it = query().rv === 'now' ? open[0] : api.due(extra);
+        if (!it || !names[it.id]) return false;
+        var name = names[it.id];
+        var say = function (action) { track({ event: 'pas_review_nudge', nudge_action: action, program_id: it.id, nudge_place: place || '' }); };
+        box.textContent = '';
+        box.appendChild(el('h2', null, 'Has your family been to ' + name + '?'));
+        box.appendChild(el('p', null, 'It’s on your week. If your child has been going for a while, a short review helps the next family choose. It takes about two minutes, and every review is read before it’s posted.'));
+        var acts = el('div', 'actions'), go = el('a', 'btn primary', 'Write a review'), later = el('button', 'btn', 'Not yet'), never = el('button', 'clear', 'Don’t ask about this one');
+        go.href = api.href(base, it); later.type = 'button'; never.type = 'button';
+        var close = function (text) { box.textContent = ''; var p = el('p', 'hint', text); p.setAttribute('role', 'status'); box.appendChild(p); };
+        go.addEventListener('click', function () { say('open'); });
+        later.addEventListener('click', function () { api.later(); say('later'); close('No problem. We’ll leave it for a month.'); });
+        never.addEventListener('click', function () { api.never(it.id); say('never'); close('Done. We won’t ask about ' + name + ' again.'); });
+        acts.appendChild(go); acts.appendChild(later); acts.appendChild(never); box.appendChild(acts);
+        box.hidden = false; say('shown');
+        return true;
+      }
+    };
+    return api;
+  })();
+  window.pasReview = RV;
+  var rvNames = function () { try { return JSON.parse(document.getElementById('rv-names').textContent) || {}; } catch (e) { return null; } };
+  // on Build your week: the question itself
+  var rvBox = document.getElementById('rv-nudge');
+  if (rvBox) RV.mount(rvBox, rvNames(), rvBox.getAttribute('data-rv-place'), rvBox.getAttribute('data-review') || '');
+  // on a program's page: say so when it is on this device's week, or when a review has been sent from here
+  var rvHere = document.querySelector('[data-rv-program]');
+  if (rvHere) (function () {
+    var id = rvHere.getAttribute('data-rv-program'), it = RV.list().filter(function (i) { return i.id === id; })[0], note = rvHere.querySelector('.rv-yours'), btn = rvHere.querySelector('a[data-track="review"]');
+    if (!it || !note) return;
+    if (it.done) { var when = ''; try { when = new Date(it.done + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }); } catch (e) { when = ''; } note.textContent = 'You sent a review of this program from this device' + (when ? ' on ' + when : '') + '. It appears here once it has been read. Thank you.'; note.hidden = false; return; }
+    note.textContent = 'This one is on your week. If your child has been going for a while, yours is the review the next family is looking for.';
+    note.hidden = false; if (btn) { btn.className = 'btn primary'; if (it.school && btn.href.indexOf('school=') < 0) btn.href = btn.href + '&school=' + encodeURIComponent(it.school); }
+  })();
+  // after a review is sent: the other programs on the week
+  var rvMore = document.getElementById('rv-more');
+  if (rvMore) (function () {
+    var names = rvNames() || {}, left = RV.list().filter(function (i) { return !i.done && !i.never && names[i.id]; });
+    if (!left.length) return;
+    rvMore.appendChild(el('h2', null, left.length === 1 ? 'One more on your week' : 'The others on your week'));
+    rvMore.appendChild(el('p', null, 'Has your family been to ' + (left.length === 1 ? 'this one' : 'any of these') + ' too?'));
+    var row = el('p', 'rv-chips');
+    left.slice(0, 8).forEach(function (i) { var a = el('a', 'pc-chip', names[i.id]); a.href = RV.href(rvMore.getAttribute('data-review') || '', i); row.appendChild(a); });
+    rvMore.appendChild(row); rvMore.hidden = false;
+  })();
+
   // ----- review form: arrive with the program and school already chosen -----
   var review = document.querySelector('#review-form');
   if (review) {
@@ -577,8 +692,23 @@
       var sel = review.querySelector('[name="' + name + '"]');
       if (qs[name] && all(sel, 'option').some(function (o) { return o.value === qs[name]; })) sel.value = qs[name];
     });
+    // no school in the link: start on the school saved on this device
+    var rSchool = review.querySelector('[name="school"]'), rMine = mySchool();
+    if (!qs.school && rMine && all(rSchool, 'option').some(function (o) { return o.value === rMine.id; })) rSchool.value = rMine.id;
+    // signed in: the first name and email address are already known, so they are filled in (and can be changed)
+    var rApi = review.getAttribute('data-api');
+    if (rApi && store('pas-in') === '1' && window.fetch) {
+      window.fetch(rApi + '?action=me', { credentials: 'same-origin', headers: { 'X-PAS': '1' } }).then(function (r) { return r.json(); }).then(function (d) {
+        if (!d || !d.ok || !d.user) return;
+        var n = review.querySelector('[name="name"]'), m = review.querySelector('[name="email"]');
+        if (n && !n.value && d.user.first) n.value = d.user.first;
+        if (m && !m.value && d.user.email) m.value = d.user.email;
+        if (!qs.school && !rMine && d.user.school && all(rSchool, 'option').some(function (o) { return o.value === d.user.school; })) rSchool.value = d.user.school;
+      }).then(null, function () { /* they can type them */ });
+    }
     review.addEventListener('submit', function () {
       var s = review.querySelector('input[name="stars"]:checked');
+      RV.done(review.querySelector('[name="program"]').value);   // this device won't ask about it again
       track({ event: 'pas_review_submit', program_id: review.querySelector('[name="program"]').value, school: review.querySelector('[name="school"]').value, stars: s ? s.value : '' });
     });
   }

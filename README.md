@@ -441,6 +441,42 @@ ready-made entry at the bottom of the email. To publish one, paste that entry in
 `data/reviews.json` (inside the square brackets, entries separated by commas) and commit.
 To remove a review, delete its entry. Cards show the average and the reviews for each program.
 
+### Asking for reviews
+
+The site asks the people most likely to have something to say: parents with a program on their week. All of it is
+worked out in the browser (`RV` in `site.js`, also `window.pasReview`), from the rosters on the device, and nothing
+about it is sent anywhere.
+
+- **What the device remembers** (`pas-rv` in the browser): the day it first saw each program on a roster (`s`), the
+  programs reviewed from this device (`d`), the ones never to ask about (`n`), and the day it last asked (`t`).
+- **When it asks.** A program is asked about once it has been on a current week for 14 days, or on an upcoming week
+  for 45 (it may not have started). One program at a time, and after any answer ("Write a review" sent, "Not yet",
+  "Don't ask about this one") nothing is asked for 30 days. The numbers are `WAIT` at the top of `RV`.
+- **Where.** On Build your week (`#rv-nudge`, under the roster) and on My profile, under the card. The
+  profile also counts programs on weeks kept in the account. Adding `?rv=now` to either address shows the question
+  straight away, to look at it.
+- **Quieter places.** My profile's card has a "Reviews" row with a link for each program on their weeks. A program's
+  own page says "This one is on your week" above its review button, or, once a review has been sent from that
+  device, that it was sent. The thank-you page after a review lists the other programs on the week.
+- **Less typing.** The form starts on the school saved on the device, and for someone signed in it fills in their
+  first name and email address (one request to the accounts service, `me`).
+- **Program managers** get "Ask your families for a review" under a claimed program on `/managers/`: the link to
+  the form with their program chosen, and a short message to paste. The wording asks them to send it to every
+  family. Camps are left out, because the form reviews programs only.
+- **Counting.** `pas_review_nudge` goes to the data layer with `nudge_action` (shown, open, later, never),
+  `program_id` and `nudge_place` (week or profile). The profile loads no analytics, so only Build your week is
+  counted.
+
+## What stays free
+
+Decisions that later features have to respect:
+
+- Parents never pay for anything. The one thing that could reopen this is the cost of sending reminder emails
+  growing out of hand.
+- A free program's listing stays free, including claiming it and keeping it up to date.
+- The plan is that more parents using the site is what makes it worth a program manager's while. Paid placement
+  (clearly marked advertising) is a possibility for later, only once there is a real use for it.
+
 ## The menu
 
 The header has four groups that open (Programs, Search by, Build a schedule, Suggest; the first item under
@@ -1044,7 +1080,7 @@ one GA4 event tag per event below, and Clarity. The GA4 and Clarity IDs live in 
 
 Set `gtmId` to load Google Tag Manager on every page. The site pushes these events to the data layer:
 `pas_filter` (filter_type, filter_value, school), `pas_outbound` (link_type of register or website,
-program_id, school; school is empty on a program's own page), `pas_suggest_submit` (suggest_kind, school), `pas_support_click`, `pas_review_submit` (program_id,
+program_id, school; school is empty on a program's own page), `pas_suggest_submit` (suggest_kind, school), `pas_support_click`, `pas_review_nudge` (nudge_action, program_id, nudge_place), `pas_review_submit` (program_id,
 school, stars), `pas_board_add` (program_id, school, day, board, children) and `pas_board_share` (method, board).
 `pas_school_pick` (school, covered) fires when someone picks a school in the finder, and `pas_school_request` (school)
 when they ask for one that isn't covered. `pas_program_pick` (program_id, method) fires when someone picks a program
