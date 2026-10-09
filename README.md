@@ -938,6 +938,27 @@ The things a family has to remember that aren't on the district calendar: pictur
   week has something other than the every-week things (`special`). Someone who turns it on by Tuesday still gets
   that week's. The entry carries `lines` (day by day), which the email template lists, and `text` as a fallback.
 
+## My profile and the account page
+
+Once someone is signed in there are two pages, drawn by the same code in `groups.js` (`drawProfile()`), which is told
+which page it is on by `data-view` on `#account`. Every panel is built either way and `put(panel, page)` shows it on
+its own page.
+
+- **`/profile/` ("My profile", `profilePage()`)** is what a person has saved and what they hear about: About you
+  (name, school, grades, neighborhood), Emails and texts (the Sunday email and a phone number), What's new, Places
+  you follow, Favorites, and Your plans (weeks, summer, days off, My kids' calendar). News nobody has seen sits
+  near the top; once seen it moves to the foot of the page. Someone who manages a listing gets a "Your listings"
+  panel here too. The header button for a signed-in visitor is "My profile".
+- **`/account/`** is the account itself: who is signed in, sharing and groups, invitations, listings, the support
+  ask, signing out and deleting. Signed out, it is still where people log in.
+- **Where a sign-in lands.** Signing in on `/account/` or `/register/` with nowhere else to go lands on the
+  profile, after the "Finish your account" step for a new account. Arriving already signed in, each page stays
+  put. `next=profile` is accepted like the other destinations.
+- **Old links keep working.** A link to a part that lives on the other page is sent across: `/account/#following`
+  goes to `/profile/#following`, and `/account/#profile` (the old Sunday-email link) to `/profile/#emails`. The
+  lists are `PARTS` and `MOVED` at the top of the account code.
+- Neither page loads analytics or recordings, and both are kept out of search.
+
 ## The way in for program managers
 
 The strip above the menu (signed-out visitors) carries "Run a program or camp? Claim your listing" on the left and

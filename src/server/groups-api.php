@@ -843,7 +843,7 @@ switch ($method . ' ' . $action) {
     $email = strtolower(str($in, 'email', 150));
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) fail('email', 'That email address doesn’t look right.');
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|join|summer|daysoff|calendar|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80})$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80})$~', $next)) $next = 'account';
     if (too_many('mail:' . h($email), 3, 900) || too_many('mail:' . h($email), 8, 86400) || too_many('ip:' . who(), 10, 900) || too_many('ip:' . who(), 40, 86400)) {
       fail('slow', 'That’s a lot of sign-in emails. Use the newest one, or wait 15 minutes and try again.', 429);
     }
@@ -890,7 +890,7 @@ switch ($method . ' ' . $action) {
     if (too_many('try:' . who(), 30, 900)) fail('slow', 'Too many tries. Wait 15 minutes and try again.', 429);
     note('try:' . who());
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|join|summer|daysoff|calendar|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80})$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80})$~', $next)) $next = 'account';
     $g = google_email(str($in, 'credential', 4200));
     sign_in($g['email'], 'google', $next, $g['first'], $g['last']);
   }

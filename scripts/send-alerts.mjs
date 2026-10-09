@@ -93,7 +93,7 @@ export function eventFor(person, due, feed) {
   const names = followed.length > 3 ? `${followed.slice(0, 2).join(', ')} and ${followed.length - 2} more` : followed.length > 1 ? `${followed.slice(0, -1).join(', ')} and ${followed[followed.length - 1]}` : followed[0];
   const whose = school ? ` for ${school.name} families` : everySchool ? '' : schoolNames ? ` for ${schoolNames}` : followed.length === 1 ? ` at ${followed[0]}` : followed.length ? ' at the programs you asked about' : '';
   const reason = onlyAdded ? 'you asked to be told when this school was added'
-    : onlyWeek && weekNames.length ? `you turned on “This week at ${weekNames.join(' and ')}” in your account`
+    : onlyWeek && weekNames.length ? `you turned on “This week at ${weekNames.join(' and ')}” in your profile`
     : [school ? `you asked for ${school.name} dates` : everySchool ? 'you asked for dates for every school' : schoolNames ? `you asked for ${schoolNames} dates` : '', followed.length ? `you asked to hear about ${names}` : '', weekNames.length && due.items.some(a => a.kind === 'week') ? `you turned on “This week at ${weekNames.join(' and ')}”` : ''].filter(Boolean).join(' and ') || 'you asked for dates';
   const first = due.items[0];
   const lead = first.kind === 'week' ? first.title + (first.first ? ': ' + first.first : '') : first.kind === 'added' ? first.title : first.kind === 'soon' ? `Tomorrow: ${first.title}` : first.kind === 'today' ? `Today: ${first.title}` : first.kind === 'dayoff' ? `No school ${shortDay(first.date)} (${first.title.replace(/^No school: /, '')})` : first.kind === 'update' ? `${first.title}: an update` : first.kind === 'camp' ? `${first.title.replace(/: camp on a day off$/, '')} camp, ${shortDay(first.date)}` : `${shortDay(first.date)}: ${first.title}`;
@@ -133,7 +133,7 @@ export function eventFor(person, due, feed) {
     school_url: school ? `${feed.site}/${school.id}/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates` : `${feed.site}/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates`,
     dates: due.items.map(a => ({ when: a.when, title: a.title, text: a.text, lines: a.lines || [], url: a.url, button: a.button, kind: a.kind })),
     stops: stops.map(({ name, url }) => ({ name, url })),
-    manage: `${feed.site}/account/#following`,
+    manage: `${feed.site}/profile/#following`,
   };
 }
 

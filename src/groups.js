@@ -363,18 +363,32 @@
   if (account) {
     var aq = query();
     var registering = account.getAttribute('data-mode') === 'register';   // the page at /register/
+    // One script draws two pages once someone is signed in. /profile/ is what they have saved and what they hear
+    // about: themselves, emails and texts, what they follow, favorites and plans. /account/ is the account itself:
+    // sharing, invitations, listings, signing out. A part's old address (/account/#following) is sent to its new page.
+    var view = account.getAttribute('data-view') === 'profile' ? 'profile' : 'account';
+    var PARTS = { profile: ['you', 'emails', 'texts', 'new', 'following', 'favorites', 'plans'], account: ['sharing', 'listings', 'sign-out'] };
+    var MOVED = { profile: 'emails', school: 'you' };   // names a part has had
+    var fresh = false;   // someone signed in on this visit, rather than arriving signed in
+    // a link followed while the page is already open (the address changes, the page doesn't load again)
+    window.addEventListener('hashchange', function () {
+      var h = /^#[a-z-]{2,20}$/.test(location.hash) ? location.hash.slice(1) : ''; if (MOVED[h]) h = MOVED[h];
+      var other = view === 'profile' ? 'account' : 'profile';
+      if (h && signedInHint() && PARTS[view].indexOf(h) < 0 && PARTS[other].indexOf(h) > -1) location.replace(page(other + '/') + '#' + h);
+    });
     // The old address for creating an account was /account/?new=1. It still works: it goes to the real page.
     if (aq.new && !registering && !signedInHint()) { location.replace(page('register/') + (/^(board|summer|daysoff|calendar)$/.test(aq.next || '') ? '?next=' + aq.next : '')); return; }
     if (aq.groups) set('pas-groups', '1');   // while groups are a pilot, this is the way in for someone who wasn't invited to one
     var ainfo = {}; try { ainfo = JSON.parse(document.getElementById('groups-data').textContent); } catch (e) { /* older page */ }
     var groupsOn = host.getAttribute('data-pilot') !== '1' || get('pas-groups') === '1';
-    var wantNext = /^(board|summer|daysoff|calendar)$/.test(aq.next || '') ? aq.next : 'account';
+    var wantNext = /^(board|summer|daysoff|calendar|profile)$/.test(aq.next || '') ? aq.next : view === 'profile' ? 'profile' : 'account';
     var goNext = function (next) {
       if (next === 'join') { location.href = page('join/'); return true; }
       if (next === 'board') { location.href = page('board/') + '?back=1'; return true; }
       if (next === 'summer') { location.href = page('summer-schedule/') + '#plan'; return true; }
       if (next === 'daysoff') { location.href = page('days-off/') + '#plan'; return true; }
       if (next === 'calendar') { location.href = page('calendar/'); return true; }
+      if (next === 'profile') { if (view === 'profile') return false; location.href = page('profile/'); return true; }
       if (next === 'managers' || next === 'directors') { location.href = page('managers/'); return true; }
       var fm = /^[fv]:(p|c|s):([a-z0-9-]+)$/.exec(next || '');   // signed in from a Follow or Save button: back to that page
       if (fm) { location.href = markHref(fm[1] + ':' + fm[2]) + '#by-email'; return true; }
@@ -393,7 +407,7 @@
       theirs.appendChild(el('b', null, 'Program manager')); theirs.appendChild(el('span', null, 'Claim your listing, or add your program'));
       who.appendChild(mine); who.appendChild(theirs); account.appendChild(who);
       var box = el('div', 'panel'); account.appendChild(box);
-      signInBox(box, wantNext, function (d) { if (wantNext !== 'account' && d.user.ready) goNext(wantNext); else drawProfile(d); }, 'One step for both: if you’re new, this makes your account. No password. With email, we send a 6-digit code and you type it here.');
+      signInBox(box, wantNext, function (d) { fresh = true; if (wantNext !== 'account' && d.user.ready && goNext(wantNext)) return; drawProfile(d); }, 'One step for both: if you’re new, this makes your account. No password. With email, we send a 6-digit code and you type it here.');
       var sh = box.querySelector('h3');
       if (sh) sh.textContent = registering ? 'Create your account' : 'Log in, or create an account';
       var have = el('div', 'panel g-callout');
@@ -403,9 +417,18 @@
       account.appendChild(have);
     };
     var drawProfile = function (d) {
-      if (registering) { location.replace(page('account/') + (wantNext !== 'account' ? '?next=' + wantNext : '')); return; }   // signed in: the profile lives at /account/
-      account.textContent = '';
+      if (registering) { location.replace(wantNext === 'account' ? page('profile/') : page('account/') + '?next=' + wantNext); return; }   // signed in: on to the profile, or to where they were headed
       var me = d.user, groups = d.groups || [];
+      // someone who has just signed in on the account page lands on their profile: that is where their things are
+      if (fresh && view === 'account' && me.ready && wantNext === 'account') { location.replace(page('profile/')); return; }
+      // a link to a part that lives on the other page
+      var hashPart = /^#[a-z-]{2,20}$/.test(location.hash) ? location.hash.slice(1) : '';
+      if (MOVED[hashPart]) hashPart = MOVED[hashPart];
+      if (hashPart && me.ready && PARTS[view].indexOf(hashPart) < 0) {
+        var other = view === 'profile' ? 'account' : 'profile';
+        if (PARTS[other].indexOf(hashPart) > -1) { location.replace(page(other + '/') + '#' + hashPart); return; }
+      }
+      account.textContent = '';
       if (!me.ready) {   // a new account: first and last name, then the rest
         var fin = el('section', 'panel');
         fin.appendChild(el('h2', null, 'Finish your account'));
@@ -440,7 +463,7 @@
             Object.keys(r.user).forEach(function (k) { me[k] = r.user[k]; });
             if (me.school) adoptSchool(me.school, (ainfo.schools || []).filter(function (x) { return x.id === me.school; }).map(function (x) { return x.name; })[0] || '');
             listOnce(me);
-            if (wantNext !== 'account') { goNext(wantNext); return; }
+            if (wantNext !== 'account' && goNext(wantNext)) return;
             drawProfile(d);
           });
         });
@@ -453,17 +476,32 @@
       var jump = el('nav', 'jump'); jump.setAttribute('data-jump', ''); jump.setAttribute('aria-label', 'On this page'); jump.hidden = true;
       account.appendChild(jump);
       var part = function (box, id, label) { box.id = id; box.setAttribute('data-jump-to', label); return box; };
-      // who you are
-      var who = part(el('section', 'panel'), 'you', 'You');
+      var put = function (panel, where) { if (where === view) account.appendChild(panel); };   // each panel is built either way and shown on its own page
+      // the account page: who is signed in, and the way to the profile
+      var who = el('section', 'panel acct-top');
       who.appendChild(el('h2', null, 'Your account'));
-      var line = el('p', null, 'Signed in as '); line.appendChild(el('b', null, me.email)); who.appendChild(line);
+      var line = el('p', null, 'Signed in as '); line.appendChild(el('b', null, me.email)); line.appendChild(document.createTextNode('.')); who.appendChild(line);
+      who.appendChild(el('p', null, 'Your name, school, emails, what you follow and your plans are on your profile.'));
+      var toProf = el('a', 'btn primary', 'Go to my profile'); toProf.href = page('profile/'); var tpw = el('div', 'actions'); tpw.appendChild(toProf); who.appendChild(tpw);
+      put(who, 'account');
+      // the profile page: about you
+      var you = part(el('section', 'panel'), 'you', 'About you');
+      you.appendChild(el('h2', null, me.first ? 'Hi, ' + me.first : 'About you'));
+      var line2 = el('p', null, 'Signed in as '); line2.appendChild(el('b', null, me.email)); line2.appendChild(document.createTextNode('. '));
+      var toAcct = el('a', null, 'Sharing, listings and signing out are on your account page'); toAcct.href = page('account/'); line2.appendChild(toAcct); line2.appendChild(document.createTextNode('.'));
+      you.appendChild(line2);
+      put(you, 'profile');
+      // emails and texts: the Sunday email and a number for texts
+      var mail = part(el('section', 'panel'), 'emails', 'Emails and texts');
+      mail.appendChild(el('h2', null, 'Emails and texts'));
+      mail.appendChild(el('p', null, 'Sign-up dates come by email for whatever you follow, below. These two are extra, and both are off until you turn them on.'));
       var nameForm = el('form', 'g-form'), nf0 = nameFields('acct-', me);
       var nameSave = el('button', 'btn', 'Save'); nameSave.type = 'submit';
       var nameNote = el('span', 'hint'); nameNote.setAttribute('aria-live', 'polite');
       var nameActs = el('div', 'actions'); nameActs.appendChild(nameSave); nameActs.appendChild(nameNote);
       nameForm.appendChild(nf0.box); nameForm.appendChild(nameActs);
-      who.appendChild(nameForm);
-      who.appendChild(el('p', 'hint', 'Anyone you share a week with or invite to a group sees your name on the invitation, and a group’s creator sees it when you join.'));
+      you.appendChild(nameForm);
+      you.appendChild(el('p', 'hint', 'Anyone you share a week with or invite to a group sees your name on the invitation, and a group’s creator sees it when you join.'));
       nameForm.addEventListener('submit', function (e) {
         e.preventDefault();
         saveNames(me, nf0.first.value, nf0.last.value).then(function (r) { nameNote.textContent = r.ok ? 'Saved.' : r.message; if (r.ok) { nf0.first.value = r.first; nf0.last.value = r.last; } });
@@ -473,7 +511,7 @@
       var phoneDrop = btn('clear', 'Remove my number'); phoneDrop.hidden = !me.phone;
       var phoneNote = el('span', 'hint'); phoneNote.setAttribute('aria-live', 'polite');
       var phoneActs = el('div', 'actions'); phoneActs.appendChild(phoneSave); phoneActs.appendChild(phoneDrop); phoneActs.appendChild(phoneNote);
-      part(phoneForm, 'texts', 'Texts');
+      phoneForm.id = 'texts';
       phoneForm.appendChild(el('h3', null, 'Texts')); phoneForm.appendChild(pf.box); phoneForm.appendChild(phoneActs);
       var savePhone = function (number, yes) {
         phoneNote.textContent = 'Saving…';
@@ -485,8 +523,8 @@
       };
       phoneForm.addEventListener('submit', function (e) { e.preventDefault(); savePhone(pf.phone.value, pf.yes.checked); });
       phoneDrop.addEventListener('click', function () { savePhone('', false); });
-      who.appendChild(phoneForm);
-      account.appendChild(who);
+      // (the Sunday email's tick box goes in above this, further down, once the school is known)
+      mail.appendChild(phoneForm);
       // what's new on the site, for someone who has been before
       var NEWS = ainfo.news || [];
       if (NEWS.length) {
@@ -503,9 +541,10 @@
           li.appendChild(body); nul.appendChild(li);
         });
         newsBox.appendChild(nul);
-        account.appendChild(newsBox);
-        set('pas-news', NEWS[0].date);   // seen: the dot on "Your account" goes
-        var dot = document.querySelector('.nav-cta .news-dot'); if (dot) dot.hidden = true;
+        if (view === 'profile') {
+          set('pas-news', NEWS[0].date);   // seen: the dot on "My profile" goes
+          var dot = document.querySelector('.nav-cta .news-dot'); if (dot) dot.hidden = true;
+        }
       }
       // what you follow (its dates come by email) and your favorites (kept here, nothing emailed)
       var MK = window.pasMarks;
@@ -549,12 +588,13 @@
           fill(favBox, named.favs, 'No favorites yet. Tap “Save to favorites” on a program’s or camp’s page.', 'Remove', function (x) { return MK.fav(x.k, false); }, true);
         };
         MK.load().then(function () { drawMarks(); paintWeek(); });
-        account.appendChild(fol);
       }
-      // what is kept in the profile: a school, and any weeks
-      var prof = part(el('section', 'panel'), 'profile', 'School and grades');
-      prof.appendChild(el('h2', null, 'Kept in your profile'));
-      prof.appendChild(el('p', null, 'Your school, your children’s grades and your child’s week can live in your profile, so they’re there when you sign in on another phone or computer. Nothing goes in unless you put it there.'));
+      // your school, grades and neighborhood go with "About you"; the plans you keep get a panel of their own
+      you.appendChild(el('h3', null, 'Your school and grades'));
+      you.appendChild(el('p', 'hint', 'Kept in your profile, so every list starts in the right place on any device you sign in on. Nothing goes in unless you put it there.'));
+      var prof = part(el('section', 'panel'), 'plans', 'Your plans');
+      prof.appendChild(el('h2', null, 'Your plans'));
+      prof.appendChild(el('p', null, 'A week, a summer and a days-off plan can live in your profile, so they’re there when you sign in on another phone or computer.'));
       var schoolRow = el('form', 'g-row');
       var sl = el('label', null, 'Your school'); sl.htmlFor = 'prof-school';
       var ss = el('select'); ss.id = 'prof-school';
@@ -562,7 +602,7 @@
       (ainfo.schools || []).forEach(function (sc) { var o = el('option', null, sc.name); o.value = sc.id; ss.appendChild(o); });
       var sn = el('span', 'hint'); sn.setAttribute('aria-live', 'polite');
       schoolRow.appendChild(sl); schoolRow.appendChild(ss); schoolRow.appendChild(sn);
-      prof.appendChild(schoolRow);
+      you.appendChild(schoolRow);
       var schoolName = function (id) { var f = (ainfo.schools || []).filter(function (x) { return x.id === id; })[0]; return f ? f.name : ''; };
       // "This week at your school": a Sunday email about the week ahead, off until it is ticked here
       var wkRow = el('label', 'g-check g-week'), wk = el('input'), wkText = el('span'), wkNote = el('p', 'hint');
@@ -585,8 +625,8 @@
           paintWeek(); if (typeof drawMarks === 'function') drawMarks();
         });
       });
-      var devNote = el('p', 'hint'); prof.appendChild(devNote);
-      prof.appendChild(wkRow); prof.appendChild(wkNote);
+      var devNote = el('p', 'hint'); you.appendChild(devNote);
+      mail.insertBefore(wkNote, phoneForm); mail.insertBefore(wkRow, wkNote);
       var paintSchool = function (kept) {
         ss.value = kept || '';
         devNote.textContent = '';
@@ -634,7 +674,7 @@
       var paintGrades = function (list) { keptGrades = list || []; gradeBtns.forEach(function (x) { x[1].setAttribute('aria-pressed', String(keptGrades.indexOf(x[0]) > -1)); }); };
       gradeRow.appendChild(gradeRail); gradeRow.appendChild(gradeNote);
       gradeRow.appendChild(el('span', 'hint', 'Tap each grade you have a child in. We keep the grades only, not which child is in which.'));
-      if ((ainfo.grades || []).length) prof.appendChild(gradeRow);
+      if ((ainfo.grades || []).length) you.appendChild(gradeRow);
       if ((ainfo.hoods || []).length) {
         var hoodRow = el('form', 'g-row');
         var hl = el('label', null, 'Your neighborhood'); hl.htmlFor = 'prof-hood';
@@ -646,9 +686,9 @@
         hs.addEventListener('change', function () { hn.textContent = 'Saving…'; call('hood_save', { hood: hs.value }).then(function (r) { hn.textContent = r.ok ? (r.hood ? 'Kept.' : 'Taken out of your profile.') : r.message; if (r.ok) { me.hood = r.hood; noteRole(me); } }); });
         hoodRow.addEventListener('submit', function (e) { e.preventDefault(); });
         hoodRow.appendChild(hl); hoodRow.appendChild(hs); hoodRow.appendChild(hn);
-        prof.appendChild(hoodRow);
+        you.appendChild(hoodRow);
       }
-      var weeksHead = part(el('h3', null, 'Weeks'), 'plans', 'Your plans'); prof.appendChild(weeksHead);
+      var weeksHead = el('h3', null, 'Weeks'); prof.appendChild(weeksHead);
       var weeksBox = el('div'); prof.appendChild(weeksBox);
       var toBoard = el('p', 'hint', 'To keep a week here, or put one on this device, open '); var tb = el('a', null, 'Build your week'); tb.href = page('board/') + '?back=1'; toBoard.appendChild(tb); toBoard.appendChild(document.createTextNode(' and look for “Keep and share this week”.'));
       prof.appendChild(toBoard);
@@ -706,7 +746,14 @@
         });
       };
       paintSchool(me.school || ''); paintGrades(me.grades || []); paintWeek(); loadProfile();
-      account.appendChild(prof);
+      // the profile page, in order: you, emails and texts, what's new, following and favorites, plans
+      // news nobody has seen yet goes near the top; once seen, it settles at the foot of the page
+      var freshNews = NEWS.length && NEWS.some(function (n) { return n.date > seenNews; });
+      put(mail, 'profile');
+      if (freshNews) put(newsBox, 'profile');
+      if (MK) put(fol, 'profile');
+      put(prof, 'profile');
+      if (NEWS.length && !freshNews) put(newsBox, 'profile');
       // sharing: weeks shared with one person, and groups
       var mine = part(el('section', 'panel'), 'sharing', 'Sharing');
       mine.appendChild(el('h2', null, groupsOn ? 'Sharing and groups' : 'Sharing'));
@@ -723,7 +770,7 @@
         list.appendChild(li);
       });
       mine.appendChild(list);
-      account.appendChild(mine);
+      put(mine, 'account');
       if (groups.some(function (g) { return !g.solo; })) groupsOn = true;
       // an invitation: the code goes here
       var join = el('section', 'panel g-callout');
@@ -741,7 +788,7 @@
         sset('pas-join', tidyCode(ji.value)); location.href = page('join/');
       });
       join.appendChild(jf);
-      account.appendChild(join);
+      put(join, 'account');
       // make a group (while groups are a pilot, only for people who have been let in to it)
       var make = el('section', 'panel'); make.hidden = !groupsOn;
       make.appendChild(el('h2', null, 'Start a group and invite people'));
@@ -776,18 +823,24 @@
           });
         });
       });
-      account.appendChild(make);
+      put(make, 'account');
       // the site's one ask
       var help = el('section', 'panel g-support');
       var dir = part(el('section', 'panel'), 'listings', me.claims ? 'Your listings' : 'For programs');
       dir.appendChild(el('h2', null, me.claims ? 'Your listings' : 'Run a program or camp?'));
       dir.appendChild(el('p', null, me.claims ? 'This account has claimed ' + (me.claims === 1 ? 'a listing' : me.claims + ' listings') + '. Send changes or give one up from the program managers page.' : 'This same account can claim your program’s listing, if your email address is at its website. Then you can send changes as its manager.'));
       var dl = el('a', 'btn', me.claims ? 'Manage your listings' : 'Claim your listing'); dl.href = page('managers/'); dir.appendChild(dl);
-      account.appendChild(dir);
+      put(dir, 'account');
+      if (me.claims && view === 'profile') {   // someone who manages a listing sees the way to it on their profile too
+        var mgr = el('section', 'panel'); mgr.appendChild(el('h2', null, 'Your listings'));
+        mgr.appendChild(el('p', null, 'This account has claimed ' + (me.claims === 1 ? 'a listing' : me.claims + ' listings') + '.'));
+        var ml = el('a', 'btn', 'Manage your listings'); ml.href = page('managers/'); mgr.appendChild(ml);
+        account.insertBefore(mgr, mail);
+      }
       help.appendChild(el('h2', null, 'Help the site keep going'));
       help.appendChild(el('p', null, 'Philly After School is free and run by one parent. If it saved you an evening of searching, you can chip in toward what it costs to run.'));
       var ha = el('a', 'btn', 'Buy me a coffee'); ha.href = page('support/'); help.appendChild(ha);
-      account.appendChild(help);
+      put(help, 'account');
       // leaving
       var out = part(el('section', 'panel'), 'sign-out', 'Sign out');
       out.appendChild(el('h2', null, 'Signing out'));
@@ -799,11 +852,11 @@
       so.addEventListener('click', function () { call('logout', {}).then(function () { set('pas-in', null); drawSignedOut(); }); });
       sa.addEventListener('click', function () { call('logout_all', {}).then(function () { set('pas-in', null); drawSignedOut(); }); });
       twoTap(del, 'Tap again to delete everything', function () { (window.pasMarks ? window.pasMarks.clear().then(null, function () { /* the unsubscribe link still works */ }) : Promise.resolve()).then(function () { return call('delete_account', {}); }).then(function (r) { if (r.ok) { set('pas-in', null); set('pas-role', null); set('pas-kl-role', null); unlinkAll(); drawSignedOut('Your account and everything you shared are deleted.'); } }); });
-      account.appendChild(out);
+      put(out, 'account');
       if (window.pasJump) window.pasJump();
       // arriving on a link to one part of the page: the page was empty when the browser looked for it, so go there now
-      var want = /^#[a-z-]{2,20}$/.test(location.hash) ? document.getElementById(location.hash.slice(1)) : null;
-      if (want && want.hasAttribute('data-jump-to') && want.scrollIntoView) want.scrollIntoView();
+      var want = hashPart ? document.getElementById(hashPart) : null;
+      if (want && want.scrollIntoView) want.scrollIntoView();
     };
     // Arriving from the email: the token is after the #, so it never reaches a server log. Use it once and take it out of the address.
     var tok = /(?:^#|&)t=([A-Za-z0-9_-]{20,80})/.exec(location.hash);
@@ -812,7 +865,7 @@
       account.appendChild(el('p', 'g-status', 'Signing you in…'));
       call('login_finish', { token: tok[1] }).then(function (d) {
         if (!d.ok) { drawSignedOut(d.message); return; }
-        set('pas-in', '1');
+        set('pas-in', '1'); fresh = true;
         if (!goNext(d.next)) drawProfile(d);
       });
     } else {
@@ -2095,7 +2148,7 @@
         keep.appendChild(el('p', 'hint', schoolName(profile.school) + ' is kept in your profile as your school.'));
       }
       var gp = el('p', 'hint', profile && profile.grades && profile.grades.length ? 'Your children’s grades in your profile: ' + profile.grades.map(gradeWord).join(', ') + '. ' : 'Keep your children’s grades in your profile and lists of programs start on them. ');
-      var ga = el('a', null, profile && profile.grades && profile.grades.length ? 'Change' : 'Add grades'); ga.href = page('account/'); gp.appendChild(ga);
+      var ga = el('a', null, profile && profile.grades && profile.grades.length ? 'Change' : 'Add grades'); ga.href = page('profile/') + '#you'; gp.appendChild(ga);
       keep.appendChild(gp);
       share.appendChild(keep);
 

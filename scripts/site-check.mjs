@@ -50,7 +50,7 @@ const fail = (name, detail, fix = '') => results.push({ ok: false, name, detail,
 
 // ----- the pages -----
 async function pages() {
-  const fixed = ['', 'schools/', 'programs/', 'schedules/', 'days-off/', 'summer-camps/', 'summer-schedule/', 'weekends/', 'alerts/', 'account/', 'calendar/'];
+  const fixed = ['', 'schools/', 'programs/', 'schedules/', 'days-off/', 'summer-camps/', 'summer-schedule/', 'weekends/', 'alerts/', 'account/', 'profile/', 'calendar/'];
   const map = await get(`${SITE}/sitemap.xml`);
   const locs = [...map.text.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].replace(cfg.siteUrl, SITE));
   if (map.status !== 200 || locs.length < 100) fail('Sitemap', map.status !== 200 ? `sitemap.xml ${map.why || 'answered ' + map.status}` : `sitemap.xml lists only ${locs.length} pages`, 'Run the "Build and publish" job again from the Actions tab.');
