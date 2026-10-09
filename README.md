@@ -923,6 +923,10 @@ The things a family has to remember that aren't on the district calendar: pictur
   next, day by day, from `schoolWeek()`: district days off, the last day of school, the school's dates, the weekly
   things (skipped on a day off) and sign-up dates at the programs that serve the school. From Saturday it shows the
   coming week. The nightly rebuild keeps it current.
+- **Kept small on purpose.** Only what runs itself is promised: district days off and sign-up dates. A school's
+  own dates appear when a parent sends one in and it is approved; nobody keeps a school's calendar by hand. Reading
+  schools' Google calendars automatically was looked at and dropped: Google marks those feeds off-limits to
+  automated readers.
 - **Sending one in.** "Know a date that's missing?" under the section posts to `suggest/send.php` as "A date at a
   school" with what and when. It arrives in the site's inbox like any suggestion. To publish it, add it to
   `data/school-dates.json`.
@@ -933,6 +937,13 @@ The things a family has to remember that aren't on the district calendar: pictur
   off. The feed has one `week` entry per school per week, sent the Sunday before (`sendOn`) and only when the
   week has something other than the every-week things (`special`). Someone who turns it on by Tuesday still gets
   that week's. The entry carries `lines` (day by day), which the email template lists, and `text` as a fallback.
+
+## The way in for program managers
+
+The strip above the menu (signed-out visitors) carries "Run a program or camp? Claim your listing" on the left and
+"Log in" on the right. The account and register pages open with two cards, "Parent or caregiver" (this page) and
+"Program manager", which goes to `/managers/`: that page is where a manager's account is made, by claiming a
+listing, and where a program that isn't listed yet is sent in.
 
 ## Links down a long page
 

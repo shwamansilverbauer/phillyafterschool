@@ -555,11 +555,13 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <link rel="stylesheet" href="${link('assets/site.css', depth)}${CSS_V}">${jsonLd ? '\n<script type="application/ld+json">' + JSON.stringify(jsonLd).replace(/</g, '\\u003c') + '</script>' : ''}`;
   // Edit mode (see /edit/) loads a second script. This tells site.js where to find it and where edits are sent.
   const editCfg = { js: link('assets/edit.js', depth) + EDIT_V, send: PREVIEW ? '' : link('edit/send.php', depth), home: link('edit/', depth), contact: cfg.contactEmail || '' };
-  // The strip above the menu holds "Log in" for someone who isn't signed in. The menu's own button is "Create a free
+  // The strip above the menu holds "Log in" for someone who isn't signed in, and, on its other side, the way in for
+  // the people who run a program: "Claim your listing". The menu's own button is "Create a free
   // account" for them and "Your account" once this browser has signed in. Which shows is decided before the page
   // paints, from a flag the account pages keep in this browser (no request is made).
   const topbar = GROUPS ? `<div class="band topstrip when-out${theme ? ' ' + theme : ''}"><div class="topbar"><div class="in">
-    <span>Already have an account?</span><a href="${link('account/', depth)}">Log in</a>
+    <span class="top-claim"><span class="top-wide">Run a program or camp?</span><span class="top-narrow">Run a program?</span> <a href="${link('managers/', depth)}">Claim your listing</a></span>
+    <span class="top-login"><span class="top-wide">Already have an account?</span> <a href="${link('account/', depth)}">Log in</a></span>
   </div></div></div>
 ` : '';
   const page = `${quiet ? '' : gtmBody}<script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -1705,7 +1707,7 @@ function schoolWeekSection(s) {
   };
   return `<section class="section this-week" id="this-week">
     <h2>${T(`This week at {school}`, { school: s.shortName })}</h2>
-    <p>${T(`Days off, the school’s own dates and sign-ups at the programs that serve it, a week at a time. School dates come from parents and the school’s calendar; go by what the school sends home.`)}</p>
+    <p>${T(`Days off and sign-ups at the programs that serve it, a week at a time. A school’s own dates show here only when a parent sends one in, so go by what the school sends home.`)}</p>
     <div class="wk-cards">
       ${show(weeks[0], weekday(TODAY) === 6 || weekday(TODAY) === 0 ? T(`This coming week`) : T(`This week`))}
       ${show(weeks[1], T(`The week after`))}

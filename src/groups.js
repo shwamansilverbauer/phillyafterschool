@@ -385,6 +385,13 @@
     var drawSignedOut = function (msg) {
       account.textContent = '';
       if (msg) { var p = el('p', 'g-status bad', msg); account.appendChild(p); }
+      // two kinds of account start here: a parent's, on this page, and a program manager's, on the page where listings are claimed
+      var who = el('div', 'acct-who'); who.setAttribute('role', 'group'); who.setAttribute('aria-label', 'Who is the account for?');
+      var mine = el('div', 'acct-who-on'); mine.setAttribute('aria-current', 'true');
+      mine.appendChild(el('b', null, 'Parent or caregiver')); mine.appendChild(el('span', null, registering ? 'Create your account below' : 'Log in or create an account below'));
+      var theirs = el('a', 'acct-who-go'); theirs.href = page('managers/');
+      theirs.appendChild(el('b', null, 'Program manager')); theirs.appendChild(el('span', null, 'Claim your listing, or add your program'));
+      who.appendChild(mine); who.appendChild(theirs); account.appendChild(who);
       var box = el('div', 'panel'); account.appendChild(box);
       signInBox(box, wantNext, function (d) { if (wantNext !== 'account' && d.user.ready) goNext(wantNext); else drawProfile(d); }, 'One step for both: if you’re new, this makes your account. No password. With email, we send a 6-digit code and you type it here.');
       var sh = box.querySelector('h3');
