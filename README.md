@@ -269,6 +269,15 @@ analytics or recordings.
   (off by default). Each entry has a fixed id, so opening a newer copy updates the old entries in most calendar apps.
 - **When a date changes.** A file is a copy. At each download the page keeps, in the browser (`pas-year-file`), what
   the file held; on later visits it lists what is new, moved, changed or gone since, with "Download it again".
+- **Your own dates.** "Add your own dates" at the top takes picture day, pretzel day, a form that's due: what it is,
+  the day, just that day or every week on that weekday, and who it's for (everyone, or any of the children; a child
+  can be named on the spot). "Add several at once" reads a typed or pasted list, one per line, each starting with a
+  date (`10/14`, `Oct 14`, `2026-10-14`) or a weekday (`Wednesdays`, `every Monday`); lines it can't read stay in
+  the box. They are kept with the rosters in the browser (`own` in `pas-rosters`: `{ id, t, d, r, w }`), never sent
+  to the server and not part of a profile, so they are on that device only. A single day shows in the month list
+  and the month picture; a weekly one joins that child's "Every school week" card and repeats in the calendar file
+  to the last day of school, skipping days off. "Dates you added yourself" in the file's options turns them off.
+  A date of your own is enough for the calendar to appear, with no other plan.
 - **Pictures.** "School weeks" on one card, and a calendar for each month with something on it: days off in yellow
   with a bar for each child, camp weeks as bars across the row, and a flag on a sign-up date. Title (`yearTitle`) and
   photo work as on the other cards, and stay on the device.
@@ -589,9 +598,9 @@ The pieces:
   `camps` list on the person's Klaviyo profile, and `signup_place` is `camp`. Followers get that camp's `dates` and
   `updates` and nothing else: in `data/camps.json` a camp can carry
   `"dates": [{ "date": "2027-01-15", "label": "Summer 2027 registration opens at 10am" }]` (shown on its page with
-  "Add to calendar", and emailed the Sunday before) and `"updates": [{ "date": "2026-12-08", "text": "Summer 2027 is
-  posted: nine weeks from June 21, $395 a week." }]` (emailed on the first Sunday on or after its date, exactly like a
-  program's updates). The monthly check writes both when a camp posts its new summer, so the email trails the camp's own
+  "Add to calendar", and emailed as a program's sign-up date is: see "When each email goes" below) and
+  `"updates": [{ "date": "2026-12-08", "text": "Summer 2027 is posted: nine weeks from June 21, $395 a week." }]`
+  (emailed the morning after its date, exactly like a program's updates). The monthly check writes both when a camp posts its new summer, so the email trails the camp's own
   announcement by up to a few weeks, and the box says so. `pas_alert_signup` carries the `camp_id`.
 - **Waiting for a school.** The form on a not-yet-covered school's page appends that school's id from the city list to
   `waiting_schools` on the profile. When the school is added, give its record in `data/schools.json` an
@@ -599,20 +608,31 @@ The pieces:
   the next two), and nothing else: someone who only asked about a school, a program or a camp is never sent every
   school's dates. An `added` more than two days old sends nothing, so set it on the day you publish.
 - **The feed.** The build writes `data/alerts.json`: every upcoming `register.dates` entry and every district day off, each
-  with `sendOn`, the day it is announced. That is the last send day (`alerts.sendDay`, 0 for Sunday) that still leaves
-  the notice in `alerts.lead` (1 day for a sign-up date, 10 for a day off). So adding a date to a program's
-  `register.dates` is all it takes to get it emailed. The feed also has an entry for each program's own day-off camp (sent
+  with `sendOn`, the day it is announced. So adding a date to a program's `register.dates` is all it takes to get it
+  emailed.
+- **When each email goes.** A sign-up date is news, and spots go fast, so it does not wait for the weekend. Give the
+  entry a `posted` day, the day it went into the data:
+  `{ "date": "2026-11-10", "label": "Winter sign-ups open at 9am", "posted": "2026-10-20" }`. Followers are emailed
+  the morning after `posted` (kind `register`), whatever day of the week that is, and again the day before the date
+  (kind `soon`, id ending `-eve`, "Tomorrow: ..."). Someone who starts following in between gets the date in their
+  welcome email and then the reminder; one email never carries both. An entry with no `posted` keeps the older
+  timing, the last send day (`alerts.sendDay`, 0 for Sunday) at least `alerts.lead.register` days ahead, and the
+  build prints a note naming the programs whose dates lack it. Don't set `posted` to today on a date that has been
+  in the data for a while: everyone following would get it as news tomorrow. A day off is not news, so it stays in
+  the weekly round-up: the last send day that still leaves `alerts.lead.dayoff` days (10). The email can only be as
+  fast as the data: a date reaches followers the morning after it is merged, so a date a program posts between
+  monthly checks waits for the next check, or for the program's manager to send it in.
+- **Other entries.** The feed also has an entry for each program's own day-off camp (sent
   only to that program's followers, and skipped for anyone whose school email already lists the camp) and for each
   item in a program's optional `updates` list: `"updates": [{ "date": "2026-11-04", "text": "Fridays are full for the winter session." }]`.
-  An update goes out on the first send day on or after its date, to the program's followers only, and is dropped two
-  days after that. So an update merged later than its send day is never sent: give it a date a few days ahead, or
-  change the date when you merge. The monthly check dates its notes a week out for that reason.
+  An update goes out the morning after its date, to the program's followers only, and is dropped two days after
+  that. So an update merged more than three days after its date is never sent: date it the day you merge.
 - **The daily job.** `.github/workflows/alerts.yml` is started every hour, because GitHub runs scheduled jobs late,
   sometimes by hours. Only a run that lands between 6:30 and 10:30 in the morning, Philadelphia time, does anything:
   it builds the site and runs `scripts/send-alerts.mjs`. A run started by hand sends at any hour.
   It reads the list from Klaviyo and records one "School dates" event for each person who is due an email. Someone who
-  just joined gets one "welcome" email the next morning with every date already announced; after that they get the
-  weekly one. A missed morning is made up on either of the next two, and Klaviyo ignores a repeat of an event it already
+  just joined gets one "welcome" email the next morning with every date already announced; after that they get each
+  later one on its own day. A missed morning is made up on either of the next two, and Klaviyo ignores a repeat of an event it already
   has, so nobody gets the same email twice. The job never prints an email address, because its log is public.
 - **The flow.** In Klaviyo, the flow "School dates email" is triggered by that event and sends the template in `email/`.
   It only fires for events that carry the right `token`, and only for people on the list.
@@ -820,8 +840,15 @@ card on a program's or camp's page, and as a wide box on a school page, the home
   someone taps the button in the email on another device: they land back on the listing, already following.
 - **A new account** is then asked, in the box, for a first and last name and (both optional) a school and a
   neighborhood (`POST basics`). The account page's "Finish your account" step asks the same. The neighborhood list
-  is every neighborhood the site names (`accountHoods()`), plus "Somewhere else". There is no phone number field:
-  texting needs its own consent wording, so it waits until there is something to consent to.
+  is every neighborhood the site names (`accountHoods()`), plus "Somewhere else".
+- **A phone number for texts** is optional, there and under "Texts" on the account page. It is kept only with the
+  box ticked (never pre-ticked) beside wording that says what the texts are, that they haven't started, that rates
+  may apply and that STOP ends them. The server keeps the number (US numbers, stored as `+1...`), when the yes was
+  given (`phone_ok`) and which wording it was given to (`phone_terms`, from `PHONE_TERMS` in `groups-api.php`: change
+  that constant whenever the wording changes). `POST phone_save` sets or clears it; "Remove my number" clears it.
+  The number is not sent to Klaviyo or to analytics, and **no texts are sent yet**: before any are, SMS has to be
+  set up in Klaviyo (a sending number and its registration), the consent wording and Terms read by a lawyer, and a
+  step added that passes consenting numbers across. `/edit/stats/` counts how many people have agreed.
 - **Where it is kept.** Tables `follows` and `favs` in the accounts database, keyed `p:<program>`, `c:<camp>` or
   `s:<school>` (`s:all` is every school). `GET marks` paints the buttons; `POST follow` and `POST fav` change them.
 - **The emails** are still sent from Klaviyo by `scripts/send-alerts.mjs`, which reads each address's `programs`,
@@ -835,8 +862,20 @@ card on a program's or camp's page, and as a wide box on a school page, the home
 - **Counts.** `follow`, `fav` and `hood_saved` in the tally; tiles on `/edit/stats/`. The analytics event for a
   follow is still `pas_alert_signup`; a favorite is `pas_favorite` (action, listing, place).
 
+The box says when the emails come and no longer links to the privacy page; that link is on the account pages and in
+the footer.
+
 The form for a school that isn't covered yet ("tell me when it's added") is unchanged: a first name and an email,
 no account.
+
+## Links down a long page
+
+A long page gets a strip of links that stays under the menu bar. Put `${jumpNav()}` where the strip should sit and
+give each part an `id` and a `data-jump-to="Short label"`; `window.pasJump()` in `site.js` fills the strip, leaving
+out parts that are hidden or empty, and pages that fill themselves in later call it again. It is on the account page
+(built in `groups.js`, where `part(box, id, label)` marks each panel, and a link such as `/account/#favorites` lands
+on its part once the page has drawn), My kids' calendar, the days-off page, the summer schedule and the privacy
+page. With fewer than two parts showing, the strip stays hidden.
 
 ## What's new
 

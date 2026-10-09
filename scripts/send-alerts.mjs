@@ -53,16 +53,18 @@ export function dueFor(person, feed, today) {
   const wanted = feed.alerts.filter(a => (a.expires || a.date) >= today && (bySchool(a) || byProgram(a) || byCamp(a) || byWaiting(a)));
   const got = new Set(wanted.map(a => a.id));
   const ahead = wanted.filter(a => !(a.within && got.has(a.within)));   // a day-off entry already names the camp
+  // A sign-up date has two entries: the announcement and a reminder the day before ("-eve"). One email never carries both.
+  const once = items => items.filter(a => !(a.kind === 'soon' && items.some(b => b.id + '-eve' === a.id)));
   const welcomeDay = isoAdd(person.joined, 1);
   const out = [];
   if (today >= welcomeDay && today <= isoAdd(welcomeDay, CATCH_UP)) {
-    const items = ahead.filter(a => a.sendOn <= welcomeDay);
+    const items = once(ahead.filter(a => a.sendOn <= welcomeDay));
     if (items.length) out.push({ kind: 'welcome', id: 'welcome', items });
   }
   for (let n = CATCH_UP; n >= 0; n--) {
     const day = isoAdd(today, -n);
     if (day <= welcomeDay) continue;
-    const items = ahead.filter(a => a.sendOn === day);
+    const items = once(ahead.filter(a => a.sendOn === day));
     if (items.length) out.push({ kind: 'weekly', id: 'weekly-' + day, items });
   }
   return out;
@@ -84,7 +86,7 @@ export function eventFor(person, due, feed) {
   const reason = onlyAdded ? 'you asked to be told when this school was added'
     : [school ? `you asked for ${school.name} dates` : everySchool ? 'you asked for dates for every school' : schoolNames ? `you asked for ${schoolNames} dates` : '', followed.length ? `you asked to hear about ${names}` : ''].filter(Boolean).join(' and ') || 'you asked for dates';
   const first = due.items[0];
-  const lead = first.kind === 'added' ? first.title : first.kind === 'dayoff' ? `No school ${shortDay(first.date)} (${first.title.replace(/^No school: /, '')})` : first.kind === 'update' ? `${first.title}: an update` : first.kind === 'camp' ? `${first.title.replace(/: camp on a day off$/, '')} camp, ${shortDay(first.date)}` : `${shortDay(first.date)}: ${first.title}`;
+  const lead = first.kind === 'added' ? first.title : first.kind === 'soon' ? `Tomorrow: ${first.title}` : first.kind === 'dayoff' ? `No school ${shortDay(first.date)} (${first.title.replace(/^No school: /, '')})` : first.kind === 'update' ? `${first.title}: an update` : first.kind === 'camp' ? `${first.title.replace(/: camp on a day off$/, '')} camp, ${shortDay(first.date)}` : `${shortDay(first.date)}: ${first.title}`;
   const more = due.items.length - 1;
   const subject = due.kind === 'welcome'
     ? `You’re on the list. Here’s what’s coming up${school ? ' for ' + school.name : followed.length === 1 && !mine.length ? ' at ' + followed[0] : ''}`
@@ -95,11 +97,11 @@ export function eventFor(person, due, feed) {
     kind: due.kind,
     subject,
     preview: due.kind === 'welcome' ? `${due.items.length} date${due.items.length > 1 ? 's' : ''} already on the calendar.` : due.items.map(line).join(' · ').slice(0, 160),
-    heading: onlyAdded ? 'Your school is here' : due.kind === 'welcome' ? 'You’re on the list' : 'Dates coming up',
+    heading: onlyAdded ? 'Your school is here' : due.kind === 'welcome' ? 'You’re on the list' : due.items.every(a => a.kind === 'soon') ? 'Tomorrow' : due.items.every(a => a.kind === 'register' || a.kind === 'update') ? 'Just posted' : 'Dates coming up',
     intro: onlyAdded ? 'The school you were waiting for has its own page now.'
       : due.kind === 'welcome'
-      ? `Here is what’s already on the calendar${whose}. After this you’ll hear from us on ${feed.sendDay} mornings, and only when there’s something new.`
-      : `Here’s what’s coming up${whose}.`,
+      ? `Here is what’s already on the calendar${whose}. After this you’ll hear from us the morning after a sign-up date is posted, the day before it, and on ${feed.sendDay} mornings ahead of a day off.`
+      : due.items.every(a => a.kind === 'soon') ? `A reminder: this is tomorrow${whose}.` : due.items.every(a => a.kind === 'register' || a.kind === 'update') ? `Just posted${whose}.${due.items.every(a => a.kind === 'register' && isoAdd(a.sendOn, 1) < a.date) ? ' We’ll remind you the day before.' : ''}` : `Here’s what’s coming up${whose}.`,
     reason,
     school: school ? school.id : everySchool ? 'all' : '',
     programs: person.programs || [],

@@ -1,6 +1,13 @@
 [
   {
     "date": "2026-10-09",
+    "title": "Your own dates, and faster emails",
+    "text": "Add picture day, pretzel day or a form that’s due to My kids’ calendar, for one child or everyone. And a sign-up date you follow is now emailed the morning after it’s posted, with a reminder the day before.",
+    "href": "calendar/#year-own",
+    "link": "Add your own dates"
+  },
+  {
+    "date": "2026-10-09",
     "title": "Follow and favorites",
     "text": "Follow a program, a camp or your school and its dates come by email. Save a listing as a favorite to find it again. Both are listed on this page.",
     "href": "programs/",

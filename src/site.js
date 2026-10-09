@@ -27,6 +27,20 @@
   }
   function all(root, sel) { return [].slice.call(root.querySelectorAll(sel)); }
 
+  // ----- jump links: on a long page, a strip that stays under the menu bar with a link to each part. A part is any
+  // element with an id and a data-jump-to label; parts that are hidden or still empty are left out. Pages that fill
+  // themselves in later call window.pasJump() again. -----
+  window.pasJump = function () {
+    all(document, 'nav[data-jump]').forEach(function (nav) {
+      var parts = all(document, '[data-jump-to][id]').filter(function (t) { return !t.closest('[hidden]') && /\S/.test(t.textContent); });
+      nav.textContent = '';
+      nav.hidden = parts.length < 2;
+      parts.forEach(function (t) { var a = el('a', null, t.getAttribute('data-jump-to')); a.href = '#' + t.id; nav.appendChild(a); });
+    });
+  };
+  window.pasJump();
+  window.addEventListener('load', window.pasJump);
+
   // Events for Google Tag Manager. Harmless when GTM is not installed.
   function track(data) { (window.dataLayer = window.dataLayer || []).push(data); }
 
@@ -260,7 +274,7 @@
           ? 'Almost there. Check your inbox for a confirmation email and tap the button in it.'
           : camp ? 'Done, ' + first + '. You’ll hear when ' + name + ' posts next summer or names a sign-up day. We read each camp’s site about once a month, so keep an eye on a camp that fills fast.'
           : follow ? 'Done, ' + first + '. You’ll hear when ' + name + ' posts a date. If it already has some posted, they reach you tomorrow morning.'
-          : 'You’re on the list' + (name ? ' for ' + name : '') + ', ' + first + '. Dates already on the calendar reach you tomorrow morning. After that, it’s one email a week at most.', 'good');
+          : 'You’re on the list' + (name ? ' for ' + name : '') + ', ' + first + '. Dates already on the calendar reach you tomorrow morning. After that you hear the morning after a sign-up date is posted, the day before it, and ahead of each day off.', 'good');
         track({ event: 'pas_alert_signup', school: school, program_id: follow && !camp ? follow.value : '', camp_id: camp ? camp.value : '', place: place });
         if (follow) hit((camp ? 'c:' : 'p:') + follow.value, 'email');
       }).catch(function () {
@@ -385,9 +399,9 @@
       if (pick) pick.addEventListener('change', function () { say(''); paint(); });
       var followed = function () {
         var k = key(), kind = k.charAt(0);
-        say(kind === 's' ? 'You’re following ' + name() + '. One email on a Sunday morning, and only in a week with a date coming up.'
+        say(kind === 's' ? 'You’re following ' + name() + '. Sign-up dates come the morning after they’re posted, and days off in a Sunday round-up.'
           : kind === 'c' ? 'You’re following ' + name() + '. You’ll hear when it posts next summer or names a sign-up day.'
-          : 'You’re following ' + name() + '. You’ll hear when it posts a date.', 'good');
+          : 'You’re following ' + name() + '. You’ll hear the morning after it posts a date, and again the day before.', 'good');
         track({ event: 'pas_alert_signup', school: kind === 's' ? k.slice(2) : '', program_id: kind === 'p' ? k.slice(2) : '', camp_id: kind === 'c' ? k.slice(2) : '', place: place });
         if (kind !== 's') hit(k, 'email');
         basics();
@@ -407,11 +421,16 @@
         var dev = mySchool(), fixedSchool = !pick && fixed.charAt(0) === 's' ? fixed.slice(2) : '';
         var school = field('fb-school-' + place, 'Your school (optional)', select('Not listed, or rather not say', L.schools || {}, u.school || fixedSchool || (pick && pick.value !== 'all' ? pick.value : '') || (dev ? dev.id : '')));
         var hood = field('fb-hood-' + place, 'Your neighborhood (optional)', select('Rather not say', L.hoods || {}, u.hood || ''));
+        var tel = document.createElement('input'); tel.type = 'tel'; tel.autocomplete = 'tel-national'; tel.inputMode = 'tel'; tel.maxLength = 20; tel.placeholder = '215-555-0123';
+        field('fb-phone-' + place, 'Mobile number for texts (optional)', tel).parentNode.className = 'field wide';
+        var yes = document.createElement('label'); yes.className = 'follow-check'; var yb = document.createElement('input'); yb.type = 'checkbox'; yb.id = 'fb-texts-' + place;
+        var yt = document.createElement('span'); yt.textContent = 'Yes, text me when something I follow posts a sign-up date. Texts haven’t started yet; when they do, expect a few a month at most. Message and data rates may apply. Reply STOP to end them at any time.';
+        yes.appendChild(yb); yes.appendChild(yt); f.appendChild(yes);
         var b = document.createElement('button'); b.type = 'submit'; b.className = 'btn primary'; b.textContent = 'Save'; f.appendChild(b);
         var note = document.createElement('p'); note.className = 'hint'; note.textContent = 'Your name shows to someone you share a week with. Your school and neighborhood only set where lists start, and which news reaches you.'; f.appendChild(note);
         f.addEventListener('submit', function (e) {
           e.preventDefault(); b.disabled = true;
-          MK.api('basics', { first: first.value, last: last.value, school: school.value, hood: hood.value }).then(function (r) {
+          MK.api('basics', { first: first.value, last: last.value, school: school.value, hood: hood.value, phone: tel.value, texts: yb.checked }).then(function (r) {
             b.disabled = false;
             if (!r.ok) { note.textContent = r.message; note.className = 'hint bad'; return; }
             MK.state.user = r.user; more.hidden = true; more.textContent = '';
@@ -882,6 +901,19 @@
     });
     return { y: s.y, w: w, age: /^\d{1,2}$/.test(String(s.age || '')) ? String(s.age) : '' };
   }
+  // Dates a parent adds themselves (picture day, pretzel day, a form that's due). Kept on this device only:
+  // { id, t: what, d: the day (or the first one), r: 'w' when it repeats every week, w: the children it is for (none = everyone) }.
+  function cleanOwn(list) {
+    var seen = {}, out = [];
+    (Array.isArray(list) ? list : []).forEach(function (o) {
+      if (!o || typeof o !== 'object' || out.length >= 200) return;
+      var id = String(o.id || ''), t = String(o.t == null ? '' : o.t).replace(/\s+/g, ' ').replace(/^ | $/g, '').slice(0, 60), d = String(o.d || '');
+      if (!/^[a-z0-9]{4,14}$/.test(id) || seen[id] || !t || !/^\d{4}-\d{2}-\d{2}$/.test(d)) return;
+      seen[id] = 1;
+      out.push({ id: id, t: t, d: d, r: o.r === 'w' ? 'w' : '', w: (Array.isArray(o.w) ? o.w : []).map(function (n) { return cleanName(n).split(' ')[0].slice(0, 20); }).filter(Boolean).slice(0, 6) });
+    });
+    return out;
+  }
   function newKid(name) { return { name: cleanName(name), now: emptyBoard(), next: emptyBoard(), teacher: '', cardNote: '', off: {}, offNote: '', prices: {}, groups: [], sum: null }; }
   function possessive(name) { return name + '’s'; }
   // A pick is "program.school", optionally followed by "~" and a class or short note.
@@ -902,6 +934,7 @@
       rosters.sumTitle = cleanName(raw.sumTitle);
       rosters.offTitle = cleanName(raw.offTitle);
       rosters.yearTitle = cleanName(raw.yearTitle);
+      rosters.own = cleanOwn(raw.own);
       rosters.offProf = raw.offProf && typeof raw.offProf.u === 'number' ? { u: raw.offProf.u } : null;   // set while the days off are kept in a profile
       rosters.sumProf = raw.sumProf && typeof raw.sumProf.u === 'number' ? { u: raw.sumProf.u } : null;   // set while the summer is kept in a profile
       if (typeof raw.kid === 'number' && raw.kid % 1 === 0 && raw.kid >= 0 && raw.kid < rosters.kids.length) rosters.kid = raw.kid;
@@ -911,7 +944,7 @@
       var name = (old.now && old.now.name) || (old.next && old.next.name) || '';
       var kid = newKid(String(name).replace(/[’']s (week|board|roster)$/i, ''));
       kid.now = cleanBoard(old.now); kid.next = cleanBoard(old.next);
-      rosters = { kid: 0, active: old.active === 'now' ? 'now' : 'next', kids: [kid] };
+      rosters = { kid: 0, active: old.active === 'now' ? 'now' : 'next', kids: [kid], own: [] };
     }
     return rosters;
   }
@@ -2830,6 +2863,15 @@
     var has = function (o) { return Object.keys(o).length > 0; };
     var model = null, photo = null, page = '', statusEl = $y('year-status');
     var say = function (t) { statusEl.textContent = t || ''; };
+    // ----- dates of your own -----
+    var sameName = function (a, b) { return !!a && !!b && String(a).toLowerCase() === String(b).toLowerCase(); };
+    var ownLive = function () {   // what still matters: a single day that hasn't passed, or a weekly one while school is in
+      return (loadRosters().own || []).filter(function (o) { return o.r === 'w' ? (!yd.lastDay || yd.lastDay >= today0) : o.d >= today0; });
+    };
+    var ownFor = function (o, k) { return !o.w.length || o.w.some(function (n) { return sameName(n, k.name); }); };
+    var ownWho = function (o) { return o.w.length ? o.w.join(' and ') : ''; };
+    var ownWeekly = function (k) { return model.own.filter(function (o) { return o.r === 'w' && (k ? ownFor(o, k) : !o.w.length); }); };
+    var ownDayId = function (o) { return ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][utc(o.d).getUTCDay()]; };
 
     // ----- what there is: each kind of plan comes from the profile when it is kept there, otherwise from this device -----
     var build = function (profile) {
@@ -2856,11 +2898,25 @@
       blank = 0;
       ((profile && profile.weeks) || []).forEach(function (w) { var b = boardOf(w); if (!b) return; var k = at(w.name, w.name ? 0 : blank++); k.week = b; k.weekSrc = 'profile'; });
       kids.forEach(function (k) { if (k.week || !k.dev) return; var b = boardOf(k.dev); if (b) { k.week = b; k.weekSrc = 'device'; } });
-      kids = kids.filter(function (k) { return k.week || has(k.off) || has(k.sum); });
+      var own = ownLive();
+      kids = kids.filter(function (k) { return k.week || has(k.off) || has(k.sum) || own.some(function (o) { return o.w.some(function (n) { return sameName(n, k.name); }); }); });
       if (kids.some(function (k) { return k.weekSrc === 'device'; })) src.week = 'device'; else if (kids.some(function (k) { return k.week; })) src.week = 'profile';
       kids.forEach(function (k, i) { k.label = k.name || (kids.length > 1 ? 'Child ' + (i + 1) : ''); k.key = (k.name || 'child' + (i + 1)).toLowerCase().replace(/[^a-z0-9]+/g, '-'); });
-      return { kids: kids, src: src };
+      return { kids: kids, src: src, own: own };
     };
+    // every day of the week that has something: the after-school picks, then anything of your own that repeats
+    var allWeekLines = function (k, shortNames) {
+      var lines = k.week ? weekLines(k, shortNames) : [], by = {};
+      lines.forEach(function (l) { by[l.id] = l; });
+      ownWeekly(k).forEach(function (o) {
+        var id = ownDayId(o), day = DAYS.concat(WKDAYS).filter(function (x) { return x[0] === id; })[0];
+        if (!by[id]) { by[id] = { id: id, day: shortNames ? day[2] : day[1], names: [] }; lines.push(by[id]); }
+        by[id].names.push(o.t);
+      });
+      var order = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+      return lines.sort(function (a, b) { return order.indexOf(a.id) - order.indexOf(b.id); });
+    };
+    var hasWeekCard = function (k) { return !!k.week || ownWeekly(k).length > 0; };
     // a week's picks as names: [{ day: 'Monday', names: ['Chess club (beginners)'] }]
     var weekLines = function (k, shortNames) {
       var out = [];
@@ -2890,13 +2946,15 @@
       offDays.forEach(function (d) { out.push({ t: 'off', d: d.d, day: d }); });
       sumWeeks.forEach(function (wk) { if (model.kids.some(function (k) { return k.sum[wk.d]; })) out.push({ t: 'week', d: wk.d, wk: wk, i: weekIndex(wk.d) }); });
       signups().forEach(function (s) { out.push({ t: 'reg', d: s.date, s: s }); });
+      model.own.forEach(function (o) { if (o.r !== 'w') out.push({ t: 'own', d: o.d, o: o }); });
       if (yd.lastDay && yd.lastDay >= today0) out.push({ t: 'mark', d: yd.lastDay, title: 'Last day of school' });
-      var order = { mark: 0, off: 1, reg: 2, week: 3 };
+      var order = { mark: 0, off: 1, own: 2, reg: 3, week: 4 };
       return out.sort(function (a, b) { return a.d < b.d ? -1 : a.d > b.d ? 1 : order[a.t] - order[b.t]; });
     };
 
     // ----- the calendar file -----
-    var optBox = { off: $y('year-o-off'), sum: $y('year-o-sum'), guide: $y('year-o-guide'), signup: $y('year-o-signup'), week: $y('year-o-week') };
+    var optBox = { off: $y('year-o-off'), sum: $y('year-o-sum'), guide: $y('year-o-guide'), signup: $y('year-o-signup'), week: $y('year-o-week'), own: $y('year-o-own') };
+    Object.keys(optBox).forEach(function (k) { if (!optBox[k]) delete optBox[k]; });
     var readOpts = function () { var o = {}; Object.keys(optBox).forEach(function (k) { o[k] = !!optBox[k].checked; }); return o; };
     var WD = { mon: ['MO', 1], tue: ['TU', 2], wed: ['WE', 3], thu: ['TH', 4], fri: ['FR', 5], sat: ['SA', 6], sun: ['SU', 0] };
     var events = function (o) {
@@ -2922,6 +2980,15 @@
           out.push({ uid: 'year-week-' + k.key + '-' + line.id, start: start, days: 1, title: lead + line.names.join(' + '), text: 'After school, every ' + line.day + ' that school is open.',
             rule: 'FREQ=WEEKLY;BYDAY=' + wd[0] + ';UNTIL=' + yd.lastDay.replace(/-/g, '') + 'T235959Z', skip: offDays.filter(function (d) { return utc(d.d).getUTCDay() === wd[1] && d.d >= start; }).map(function (d) { return d.d; }) });
         });
+      });
+      if (o.own) model.own.forEach(function (x) {
+        var lead = ownWho(x) ? ownWho(x) + ': ' : '';
+        if (x.r !== 'w') { out.push({ uid: 'year-own-' + x.id, start: x.d, days: 1, title: lead + x.t, text: '' }); return; }
+        var wd = WD[ownDayId(x)], start = x.d > today0 ? x.d : today0;
+        while (utc(start).getUTCDay() !== wd[1]) start = isoOf(utc(start, 1));
+        if (yd.lastDay && start > yd.lastDay) return;
+        out.push({ uid: 'year-own-' + x.id, start: start, days: 1, title: lead + x.t, text: 'Every week while school is in.',
+          rule: 'FREQ=WEEKLY;BYDAY=' + wd[0] + (yd.lastDay ? ';UNTIL=' + yd.lastDay.replace(/-/g, '') + 'T235959Z' : ''), skip: offDays.filter(function (d) { return utc(d.d).getUTCDay() === wd[1] && d.d >= start; }).map(function (d) { return d.d; }) });
       });
       if (o.signup) signups().forEach(function (s) {
         var who = many ? s.who.map(function (i) { return model.kids[i].label; }).filter(Boolean).join(', ') : '';
@@ -2978,28 +3045,154 @@
       return c;
     };
     var drawCard = function () { /* set below, once the canvas is ready */ };
+    // ----- adding dates of your own: one at a time, or a list typed or pasted in -----
+    var lastProfile = null, ownSel = [];   // ownSel: the first names a new date is for; none means everyone
+    var refresh = function () { model = build(lastProfile); draw(); };
+    var ownBox = $y('year-own'), ownStatus = $y('own-status');
+    var ownSay = function (t) { if (ownStatus) ownStatus.textContent = t || ''; };
+    var dayWord = function (o) { return DAYS.concat(WKDAYS).filter(function (x) { return x[0] === ownDayId(o); })[0][1]; };
+    var ownNames = function () {   // every child with a name, from this device and from the profile
+      var out = [];
+      var add = function (n) { n = first(n); if (n && !out.some(function (x) { return sameName(x, n); })) out.push(n); };
+      loadRosters().kids.forEach(function (k) { add(k.name); });
+      if (model) model.kids.forEach(function (k) { add(k.name); });
+      (loadRosters().own || []).forEach(function (o) { o.w.forEach(add); });
+      return out.slice(0, MAX_KIDS);
+    };
+    var ownCheck = function (t, d, rep) {   // '' when it can go in, otherwise what is wrong with it
+      t = String(t || '').replace(/\s+/g, ' ').replace(/^ | $/g, '');
+      if (!t) return 'Say what it is, like “Picture day”.';
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(d) || isNaN(utc(d).getTime())) return 'Pick the day.';
+      if (rep !== 'w' && d < today0) return 'That day has already passed.';
+      if (rep === 'w' && yd.lastDay && (d > yd.lastDay || yd.lastDay < today0)) return 'School is out by then, so there are no weeks left for it to repeat in.';
+      if ((loadRosters().own || []).length >= 200) return 'That’s as many as this page can keep. Remove some first.';
+      return '';
+    };
+    var ownPut = function (t, d, rep) {
+      var r = loadRosters(), id = '';
+      do { id = Math.random().toString(36).replace(/[^a-z0-9]/g, '').slice(1, 9); } while (id.length < 4 || (r.own || []).some(function (o) { return o.id === id; }));
+      r.own = cleanOwn((r.own || []).filter(function (o) { return o.r === 'w' || o.d >= today0; }).concat([{ id: id, t: t, d: d, r: rep === 'w' ? 'w' : '', w: ownSel.slice() }]));
+    };
+    // "10/14 Picture day", "Oct 14: picture day", "2026-10-14 picture day", "Wednesdays pretzel day", "every Wed pretzel day"
+    var ownLine = function (line) {
+      var m, y0 = +today0.slice(0, 4), iso = '', rep = '', rest = '';
+      var mk = function (y, mo, da) { var d = new Date(Date.UTC(y, mo - 1, da, 12)); return d.getUTCMonth() === mo - 1 && d.getUTCDate() === da ? isoOf(d) : ''; };
+      var soon = function (mo, da) { var a = mk(y0, mo, da); return a && a >= today0 ? a : mk(y0 + 1, mo, da); };   // no year given: the next time that date comes round
+      line = String(line).replace(/^[\s\-*•·]+/, '').replace(/\s+/g, ' ');
+      if ((m = /^(\d{4})-(\d{1,2})-(\d{1,2})\b[\s:,\-–—]*(.*)$/.exec(line))) { iso = mk(+m[1], +m[2], +m[3]); rest = m[4]; }
+      else if ((m = /^(\d{1,2})\/(\d{1,2})(?:\/(\d{2}|\d{4}))?(?![\d\/])[\s:,\-–—]*(.*)$/.exec(line))) { iso = m[3] ? mk(m[3].length === 2 ? 2000 + +m[3] : +m[3], +m[1], +m[2]) : soon(+m[1], +m[2]); rest = m[4]; }
+      else if ((m = /^(?:(?:mon|tue|tues|wed|thu|thur|thurs|fri|sat|sun)[a-z]*\.?,? )?(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.? (\d{1,2})(?:st|nd|rd|th)?(?:,? (\d{4}))?(?!\d)[\s:,\-–—]*(.*)$/i.exec(line))) {
+        var mo = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'].indexOf(m[1].toLowerCase().slice(0, 3)) + 1;
+        iso = m[3] ? mk(+m[3], mo, +m[2]) : soon(mo, +m[2]); rest = m[4];
+      } else if ((m = /^(?:every |each )?(mon|tue|wed|thu|fri|sat|sun)[a-z]*\.?[\s:,\-–—]+(.*)$/i.exec(line))) {
+        var want = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].indexOf(m[1].toLowerCase()), d = today0;
+        while (utc(d).getUTCDay() !== want) d = isoOf(utc(d, 1));
+        iso = d; rep = 'w'; rest = m[2];
+      }
+      rest = String(rest || '').replace(/\s+/g, ' ').replace(/^ | $/g, '').slice(0, 60);
+      return iso && rest ? { t: rest, d: iso, r: rep } : null;
+    };
+    var drawOwn = function () {
+      if (!ownBox) return;
+      var whoBox = $y('own-who'), listEl = $y('own-list'), names = ownNames();
+      ownSel = ownSel.filter(function (n) { return names.some(function (x) { return sameName(x, n); }); });
+      whoBox.textContent = '';
+      var pick = function (label, on, tap) { var b = el('button', 'kid', label); b.type = 'button'; b.setAttribute('aria-pressed', String(on)); b.addEventListener('click', tap); whoBox.appendChild(b); };
+      pick('Everyone', !ownSel.length, function () { ownSel = []; drawOwn(); });
+      names.forEach(function (n) {
+        var on = ownSel.some(function (x) { return sameName(x, n); });
+        pick(n, on, function () { ownSel = on ? ownSel.filter(function (x) { return !sameName(x, n); }) : ownSel.concat([n]); if (ownSel.length === names.length && names.length > 1) ownSel = []; drawOwn(); });
+      });
+      if (names.length < MAX_KIDS) {
+        var more = el('button', 'clear', names.length ? 'Add another child' : 'Add a child’s name'); more.type = 'button';
+        more.addEventListener('click', function () {
+          var row = el('span', 'own-name'), inp = el('input'), ok = el('button', 'btn', 'Add');
+          inp.type = 'text'; inp.maxLength = 20; inp.id = 'own-kid'; inp.setAttribute('aria-label', 'Child’s first name'); inp.placeholder = 'First name'; inp.autocomplete = 'off'; ok.type = 'button';
+          var go = function () {
+            var n = first(cleanName(inp.value));
+            if (!n) { inp.focus(); return; }
+            var r = loadRosters();
+            if (!r.kids.some(function (k) { return sameName(first(k.name), n); })) {
+              var spare = r.kids.filter(function (k) { return !k.name && !countPicks(k.now) && !countPicks(k.next) && !has(k.off || {}) && !(k.sum && has(k.sum.w || {})); })[0];
+              if (spare) spare.name = n; else if (r.kids.length < MAX_KIDS) r.kids.push(newKid(n));
+              saveRosters();
+            }
+            ownSel = [n]; ownSay(''); refresh();
+          };
+          ok.addEventListener('click', go);
+          inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); go(); } });
+          row.appendChild(inp); row.appendChild(ok); whoBox.replaceChild(row, more); inp.focus();
+        });
+        whoBox.appendChild(more);
+      }
+      // what's already in
+      listEl.textContent = '';
+      var live = ownLive().slice().sort(function (a, b) { return a.r !== b.r ? (a.r === 'w' ? -1 : 1) : a.r === 'w' ? ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].indexOf(ownDayId(a)) - ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].indexOf(ownDayId(b)) : a.d < b.d ? -1 : a.d > b.d ? 1 : 0; });
+      listEl.hidden = !live.length;
+      live.forEach(function (o) {
+        var li = el('li');
+        li.appendChild(el('b', null, o.t));
+        li.appendChild(el('span', 'hint', (o.r === 'w' ? 'Every ' + dayWord(o) : longDay(o.d)) + ' · ' + (ownWho(o) || 'Everyone')));
+        var rm = el('button', 'clear', 'Remove'); rm.type = 'button'; rm.setAttribute('aria-label', 'Remove ' + o.t);
+        rm.addEventListener('click', function () { var r = loadRosters(); r.own = (r.own || []).filter(function (x) { return x.id !== o.id; }); saveRosters(); ownSay('Removed: ' + o.t + '.'); refresh(); });
+        li.appendChild(rm); listEl.appendChild(li);
+      });
+    };
+    if (ownBox) {
+      var ownWhat = $y('own-what'), ownWhen = $y('own-when'), ownRep = $y('own-rep'), ownLines = $y('own-lines');
+      ownWhen.min = today0;
+      $y('own-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var t = ownWhat.value, d = ownWhen.value, rep = ownRep.value, bad = ownCheck(t, d, rep);
+        if (bad) { ownSay(bad); (/day\.$|passed|School/.test(bad) ? ownWhen : ownWhat).focus(); return; }
+        ownPut(t, d, rep); saveRosters();
+        var made = loadRosters().own.slice(-1)[0];
+        ownSay('Added: ' + made.t + ', ' + (rep === 'w' ? 'every ' + dayWord(made) : longDay(d)) + (ownSel.length ? ', for ' + ownSel.join(' and ') : '') + '. Add the next one, or scroll down to see it in the calendar.');
+        ownWhat.value = ''; refresh(); ownWhat.focus();
+      });
+      $y('own-lines-add').addEventListener('click', function () {
+        var left = [], n = 0;
+        ownLines.value.split(/\r?\n/).forEach(function (raw) {
+          if (!/\S/.test(raw)) return;
+          var x = ownLine(raw);
+          if (!x || ownCheck(x.t, x.d, x.r)) { left.push(raw); return; }
+          ownPut(x.t, x.d, x.r); n++;
+        });
+        if (n) saveRosters();
+        ownLines.value = left.join('\n');
+        ownSay((n ? 'Added ' + n + (n === 1 ? ' date' : ' dates') + (ownSel.length ? ' for ' + ownSel.join(' and ') : '') + '. ' : '') + (left.length ? (left.length === 1 ? 'One line' : left.length + ' lines') + ' couldn’t be read and ' + (left.length === 1 ? 'is' : 'are') + ' still in the box. Start each with a date like 10/14 or Oct 14, or a weekday like Wednesdays.' : n ? '' : 'Type or paste a line for each date first.'));
+        if (n) refresh();
+      });
+    }
     var draw = function () {
       var m = model, srcEl = $y('year-src');
       srcEl.textContent = '';
       srcEl.appendChild(srcLine('After-school week', m.src.week, yd.board, 'nothing yet.', 'Build a week'));
       srcEl.appendChild(srcLine('Days off', m.src.off, yd.offPage + '#plan', 'nothing planned yet.', 'Plan the days off'));
       if (S) srcEl.appendChild(srcLine('Summer', m.src.sum, yd.sumPage + '#plan', 'nothing planned yet.', 'Plan the summer'));
-      var none = !m.kids.length, empty = $y('year-empty');
+      drawOwn();
+      var none = !m.kids.length && !m.own.length, empty = $y('year-empty');
       empty.hidden = !none; $y('year-full').hidden = none; empty.textContent = '';
-      if (none) { empty.appendChild(el('p', null, 'Nothing is planned yet, so there’s no calendar to show. Start with any of the three above and come back: it fills in by itself.')); $y('year-changed').hidden = true; return; }
+      if (none) { empty.appendChild(el('p', null, 'Nothing is planned yet, so there’s no calendar to show. Start with any of the three above, or add a date of your own, and it fills in by itself.')); $y('year-changed').hidden = true; if (window.pasJump) window.pasJump(); return; }
       // every school week
       var wkBox = $y('year-week'); wkBox.textContent = '';
-      var withWeek = m.kids.filter(function (k) { return k.week; });
-      if (withWeek.length) {
+      var withWeek = m.kids.filter(hasWeekCard), family = m.kids.length ? [] : ownWeekly(null);
+      if (withWeek.length || family.length) {
         wkBox.appendChild(el('h3', null, 'Every school week'));
         var grid = el('div', 'year-weeks');
         withWeek.forEach(function (k) {
           var card = el('div', 'year-wk');
-          card.appendChild(el('h4', null, (k.label ? possessive(k.label) + ' week' : 'The week') + (k.week.which === 'next' ? ' (upcoming roster)' : '')));
+          card.appendChild(el('h4', null, (k.label ? possessive(k.label) + ' week' : 'The week') + (k.week && k.week.which === 'next' ? ' (upcoming roster)' : '')));
           var dl = el('dl');
-          weekLines(k).forEach(function (line) { dl.appendChild(el('dt', null, line.day)); dl.appendChild(el('dd', null, line.names.join(', '))); });
+          allWeekLines(k).forEach(function (line) { dl.appendChild(el('dt', null, line.day)); dl.appendChild(el('dd', null, line.names.join(', '))); });
           card.appendChild(dl); grid.appendChild(card);
         });
+        if (family.length) {   // nobody is named yet: the repeating dates stand by themselves
+          var fam = el('div', 'year-wk'), fdl = el('dl');
+          fam.appendChild(el('h4', null, 'Every week'));
+          family.forEach(function (o) { fdl.appendChild(el('dt', null, DAYS.concat(WKDAYS).filter(function (x) { return x[0] === ownDayId(o); })[0][1])); fdl.appendChild(el('dd', null, o.t)); });
+          fam.appendChild(fdl); grid.appendChild(fam);
+        }
         wkBox.appendChild(grid);
       }
       // the dates, month by month
@@ -3021,11 +3214,17 @@
           when.appendChild(el('b', null, longDay(it.d))); when.appendChild(el('span', 'hint', 'Sign-ups'));
           var a = el('a', null, it.s.name); a.href = it.s.href; what.appendChild(a); what.appendChild(document.createTextNode(': ' + it.s.label + '.'));
           if (m.kids.length > 1) what.appendChild(el('span', 'hint', ' For ' + it.s.who.map(function (i) { return m.kids[i].label; }).join(', ') + '.'));
+        } else if (it.t === 'own') {
+          when.appendChild(el('b', null, longDay(it.d))); when.appendChild(el('span', 'hint', 'Yours'));
+          var mineKids = m.kids.filter(function (k) { return it.o.w.length && ownFor(it.o, k); });
+          if (mineKids.length && m.kids.length > 1) mineKids.forEach(function (k) { what.appendChild(chip(k, it.o.t, 'own', '')); });
+          else what.appendChild(el('span', 'year-chip own', (ownWho(it.o) && m.kids.length > 1 ? ownWho(it.o) + ': ' : '') + it.o.t));
         } else { when.appendChild(el('b', null, longDay(it.d))); what.appendChild(document.createTextNode(it.title)); }
         li.appendChild(when); li.appendChild(what); ul.appendChild(li);
       });
       drawChanged();
       drawCard();
+      if (window.pasJump) window.pasJump();
     };
     Object.keys(optBox).forEach(function (k) { optBox[k].addEventListener('change', function () { say(''); }); });
     $y('year-dl').addEventListener('click', download);
@@ -3091,17 +3290,17 @@
       var top = 290, bottom = H - FOOT - 28, X = 48, WIDE = 984, g = 8;
       if (which === 'week') {
         // a block for each child: their name, then a line for each day that has something
-        var withWeek = kids.filter(function (k) { return k.week; }), gapB = 14, share = (bottom - top - gapB * (withWeek.length - 1)) / withWeek.length, yAt = top;
+        var withWeek = kids.filter(hasWeekCard), gapB = 14, share = (bottom - top - gapB * (withWeek.length - 1)) / withWeek.length, yAt = top;
         var HEADH = withWeek.length > 3 ? 40 : 54;
-        var want = withWeek.map(function (k) { return HEADH + weekLines(k).length * 64 + 18; });
+        var want = withWeek.map(function (k) { return HEADH + allWeekLines(k).length * 64 + 18; });
         var roomy = want.reduce(function (a, b) { return a + b; }, 0) + gapB * (withWeek.length - 1) <= bottom - top;   // everything fits at full size
         withWeek.forEach(function (k, bn) {
-          var blockH = roomy ? want[bn] : share, y = yAt, lines = weekLines(k), ink = INKS[kids.indexOf(k) % 6];
+          var blockH = roomy ? want[bn] : share, y = yAt, lines = allWeekLines(k), ink = INKS[kids.indexOf(k) % 6];
           yAt += blockH + gapB;
           ctx.fillStyle = '#FFFFFF'; rbox(ctx, X, y, WIDE, blockH, 18); ctx.fill();
           ctx.fillStyle = ink[1]; rbox(ctx, X, y, 14, blockH, 7); ctx.fill();
           ctx.fillStyle = NAVY; ctx.font = '800 ' + (HEADH > 50 ? 32 : 26) + 'px ' + DISPLAY;
-          ctx.fillText(fitText(ctx, (k.label ? possessive(k.label) + ' week' : 'The week') + (k.week.which === 'next' ? ' (upcoming)' : ''), WIDE - 60), X + 34, y + HEADH - 12);
+          ctx.fillText(fitText(ctx, (k.label ? possessive(k.label) + ' week' : 'The week') + (k.week && k.week.which === 'next' ? ' (upcoming)' : ''), WIDE - 60), X + 34, y + HEADH - 12);
           var rowH = Math.min(64, (blockH - HEADH - 14) / Math.max(lines.length, 1)), fs = Math.max(15, Math.min(27, Math.floor(rowH * 0.5)));
           lines.forEach(function (line, ln) {
             var ry = y + HEADH + ln * rowH;
@@ -3117,6 +3316,7 @@
         for (var wk = 0; wk < 6; wk++) { var mon = utc(isoOf(start), wk * 7), any = false; for (var q = 0; q < 5; q++) if (utc(isoOf(mon), q).getUTCMonth() === which.m) any = true; if (any) rows.push(mon); }
         var HEAD = 44, cellW = (WIDE - g * 4) / 5, rH = Math.min(214, (bottom - top - HEAD - g * (rows.length - 1)) / rows.length);
         var regs = {}; signups().forEach(function (s) { (regs[s.date] = regs[s.date] || []).push(s); });
+        var ownBy = {}; model.own.forEach(function (o) { if (o.r !== 'w') (ownBy[o.d] = ownBy[o.d] || []).push(o); });
         ctx.font = '800 24px ' + DISPLAY; ctx.fillStyle = '#1F3A60'; ctx.textAlign = 'center';
         ['MON', 'TUE', 'WED', 'THU', 'FRI'].forEach(function (d, c) { ctx.fillText(d, X + c * (cellW + g) + cellW / 2, top + 28); });
         ctx.textAlign = 'left';
@@ -3129,11 +3329,16 @@
             ctx.fillStyle = off ? '#2A2100' : inMonth ? (camp.length ? NAVY : '#3A5578') : '#7C93B1'; ctx.font = '800 26px ' + DISPLAY;
             ctx.fillText(String(dt.getUTCDate()), x + 12, y + 32);
             if (!inMonth || dt.getUTCDate() === 1) { ctx.font = '700 18px ' + BODY; ctx.fillText(MONTHS[dt.getUTCMonth()].slice(0, 3), x + 12 + (dt.getUTCDate() > 9 ? 38 : 22), y + 31); }
-            var foot = flag || last ? 30 : 0;
-            if (foot) {
-              ctx.fillStyle = NAVY; rbox(ctx, x + 8, y + rH - 34, cellW - 16, 26, 8); ctx.fill();
-              ctx.fillStyle = '#FFFFFF'; ctx.font = '700 15px ' + BODY; ctx.fillText(fitText(ctx, last && !flag ? 'Last day of school' : 'Sign-ups: ' + flag.name, cellW - 30), x + 15, y + rH - 16);
-            }
+            // flags at the foot of the day: a sign-up date or the last day of school, then up to two dates of your own
+            var feet = [];
+            if (flag) feet.push(['Sign-ups: ' + flag.name, NAVY]); else if (last) feet.push(['Last day of school', NAVY]);
+            (ownBy[iso] || []).slice(0, 2).forEach(function (o) { feet.push([(many && ownWho(o) ? ownWho(o) + ': ' : '') + o.t, '#0E7C86']); });
+            var foot = feet.length * 30;
+            feet.forEach(function (ft, fn) {
+              var fy = y + rH - 34 - (feet.length - 1 - fn) * 30;
+              ctx.fillStyle = ft[1]; rbox(ctx, x + 8, fy, cellW - 16, 26, 8); ctx.fill();
+              ctx.fillStyle = '#FFFFFF'; ctx.font = '700 15px ' + BODY; ctx.fillText(fitText(ctx, ft[0], cellW - 30), x + 15, fy + 18);
+            });
             if (!off) continue;
             ctx.fillStyle = '#4A3B00'; ctx.font = '700 17px ' + BODY; ctx.fillText(fitText(ctx, off.name, cellW - 22), x + 12, y + 56);
             var bars = kids.map(function (k, n) { return { n: n, v: k.off[iso] }; }).filter(function (b) { return b.v; });
@@ -3165,7 +3370,7 @@
       yearSharer.stale();
     };
     var yearSharer = pictureSharer(canvas);
-    var pageList = function () { return (model.kids.some(function (k) { return k.week; }) ? [['week', 'School weeks', 'week']] : []).concat(monthsWith().map(function (o) { return [o.k, MONTHS[o.m], o]; })); };
+    var pageList = function () { return (model.kids.some(hasWeekCard) ? [['week', 'School weeks', 'week']] : []).concat(monthsWith().map(function (o) { return [o.k, MONTHS[o.m], o]; })); };
     var current = function () { var list = pageList(), hit = null; list.forEach(function (p) { if (p[0] === page) hit = p; }); return hit || list[0]; };
     var slug = function () { return (cardTitle().toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'our-year'); };
     var fileName = function (p) { return slug() + '-' + (p[0] === 'week' ? 'school-weeks' : p[1].toLowerCase() + '-' + p[2].y) + '.png'; };
@@ -3229,7 +3434,13 @@
     } else if (cardBox) cardBox.hidden = true;
 
     // groups.js calls this once it knows who is signed in. `profile` is null when the profile couldn't be read.
-    window.pasYear = { show: function (profile) { model = build(profile); draw(); } };
+    var landed = false;
+    window.pasYear = { show: function (profile) {
+      lastProfile = profile; refresh();
+      // a link to one part of the page (the account page's "Add your own dates") lands there once the page has drawn
+      if (!landed && /^#year-[a-z]+$/.test(location.hash)) { var t = $y(location.hash.slice(1)); if (t && !t.closest('[hidden]') && t.scrollIntoView) t.scrollIntoView(); }
+      landed = true;
+    } };
   })();
 
   // ----- filters: one engine for every page that lists programs (school, A to Z, type, neighborhood) -----

@@ -107,7 +107,7 @@ function db(): PDO {
     // Added after the first version: first and last name, and whether the account has been added to the email list.
     $cols = array();
     foreach ($db->query('PRAGMA table_info(users)') as $c) $cols[] = $c['name'];
-    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''", 'origin' => "TEXT NOT NULL DEFAULT ''", 'hood' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
+    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''", 'origin' => "TEXT NOT NULL DEFAULT ''", 'hood' => "TEXT NOT NULL DEFAULT ''", 'phone' => "TEXT NOT NULL DEFAULT ''", 'phone_ok' => 'INTEGER NOT NULL DEFAULT 0', 'phone_terms' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
       if (!in_array($col, $cols, true)) $db->exec('ALTER TABLE users ADD COLUMN ' . $col . ' ' . $type);
     }
     // A group made by "share this week with one person" is marked, so joining it skips the question about whose week to add.
@@ -274,14 +274,14 @@ function current_user(): ?array {
   $done = true;
   $sid = isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s']) ? $_COOKIE['pas_s'] : '';
   if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return null;
-  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school, u.grades, u.origin, u.hood FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
+  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school, u.grades, u.origin, u.hood, u.phone, u.phone_ok FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
   if (!$s) return null;
   if ($s['seen'] < now() - 86400) {   // once a day, push the 30 days out again
     $exp = now() + SESSION_DAYS * 86400;
     q('UPDATE sessions SET seen = ?, expires = ? WHERE id = ?', array(now(), $exp, $s['sid']));
     set_session_cookie($sid, $exp);
   }
-  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'school' => (string) $s['school'], 'grades' => (string) $s['grades'], 'origin' => (string) $s['origin'], 'hood' => (string) $s['hood'], 'sid' => (int) $s['sid']);
+  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'school' => (string) $s['school'], 'grades' => (string) $s['grades'], 'origin' => (string) $s['origin'], 'hood' => (string) $s['hood'], 'phone' => (string) $s['phone'], 'phone_ok' => (int) $s['phone_ok'], 'sid' => (int) $s['sid']);
   return $user;
 }
 function need_user(): array {
@@ -370,6 +370,30 @@ function school_names(): array {
 function hoods(): array {
   global $CFG;
   return isset($CFG['hoods']) && is_array($CFG['hoods']) ? $CFG['hoods'] : array();
+}
+
+// ---------- a phone number for texts ----------
+// Kept only with a yes to the wording shown beside the box (PHONE_TERMS names which wording), and only as a US
+// number. It is never sent anywhere from here: texts are not being sent yet.
+const PHONE_TERMS = 'texts-2026-10';
+function phone_clean(string $v): string {
+  $d = preg_replace('~\D+~', '', $v);
+  if (strlen($d) === 11 && $d[0] === '1') $d = substr($d, 1);
+  return strlen($d) === 10 && $d[0] >= '2' && $d[3] >= '2' ? '+1' . $d : '';
+}
+function phone_show(string $e164): string {
+  return preg_match('~^\+1(\d{3})(\d{3})(\d{4})$~', $e164, $m) ? '(' . $m[1] . ') ' . $m[2] . '-' . $m[3] : '';
+}
+// Saves a number with consent, or clears it. Returns an error message, or '' when done.
+function phone_set(int $uid, string $raw, bool $consent, bool $had): string {
+  $raw = trim($raw);
+  if ($raw === '') { q("UPDATE users SET phone = '', phone_ok = 0, phone_terms = '' WHERE id = ?", array($uid)); return ''; }
+  $p = phone_clean($raw);
+  if ($p === '') return 'That doesn’t look like a US mobile number. Use ten digits, like 215-555-0123.';
+  if (!$consent) return 'Tick the box to say yes to texts, or leave the number out.';
+  q('UPDATE users SET phone = ?, phone_ok = ?, phone_terms = ? WHERE id = ?', array($p, now(), PHONE_TERMS, $uid));
+  if (!$had) bump('phone_saved');
+  return '';
 }
 
 // ---------- following and favorites ----------
@@ -606,7 +630,7 @@ function ready(array $u): bool { return $u['first'] !== '' && $u['last'] !== '';
 function me_out(array $u): array {
   $claims = isset($u['id']) ? (int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) : 0;
   return array('email' => $u['email'], 'first' => $u['first'], 'last' => $u['last'], 'ready' => ready($u), 'listed' => (bool) $u['listed'],
-    'school' => isset($u['school']) ? (string) $u['school'] : '', 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0,
+    'school' => isset($u['school']) ? (string) $u['school'] : '', 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'phone' => isset($u['phone']) && !empty($u['phone_ok']) ? phone_show((string) $u['phone']) : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0,
     'claims' => $claims, 'role' => role_of($u, $claims));
 }
 // Parent or program manager? A manager is an account that holds a claim (approved or waiting), or one that was made on
@@ -683,12 +707,12 @@ function tell_owner(string $subject, string $text): void {
 }
 // Signs this browser in as the account with this address, making the account if it is new.
 function sign_in(string $email, string $via, string $next, string $first = '', string $last = ''): void {
-  $user = row('SELECT id, email, name, first, last, listed, school, grades, origin, hood FROM users WHERE email = ?', array($email));
+  $user = row('SELECT id, email, name, first, last, listed, school, grades, origin, hood, phone, phone_ok FROM users WHERE email = ?', array($email));
   $new = false;
   if (!$user) {
     $origin = preg_match('~^(managers|directors)$~', $next) ? 'managers' : 'parents';   // which door they came in by
     q('INSERT INTO users (email, created, via, origin) VALUES (?, ?, ?, ?)', array($email, now(), $via, $origin));
-    $user = array('id' => (int) db()->lastInsertId(), 'email' => $email, 'name' => '', 'first' => '', 'last' => '', 'listed' => 0, 'school' => '', 'grades' => '', 'origin' => $origin, 'hood' => '');
+    $user = array('id' => (int) db()->lastInsertId(), 'email' => $email, 'name' => '', 'first' => '', 'last' => '', 'listed' => 0, 'school' => '', 'grades' => '', 'origin' => $origin, 'hood' => '', 'phone' => '', 'phone_ok' => 0);
     $new = true;
     bump('account');
     bump($origin === 'managers' ? 'account_manager' : 'account_parent');
@@ -875,12 +899,23 @@ switch ($method . ' ' . $action) {
     if ($school !== '' && !in_array($school, schools(), true)) $school = '';
     $hood = str($in, 'hood', 60);
     if ($hood !== '' && !isset(hoods()[$hood])) $hood = '';
+    $phone = str($in, 'phone', 30);   // checked first: a number that can't be kept stops the whole step, so nothing is half saved
+    if (trim($phone) !== '') { $bad = phone_set($u['id'], $phone, !empty($in['texts']), $u['phone'] !== ''); if ($bad !== '') fail('phone', $bad); }
     if ($school !== '' && $u['school'] === '') bump('school_saved');
     if ($hood !== '' && $u['hood'] === '') bump('hood_saved');
     q('UPDATE users SET first = ?, last = ?, name = ?, school = CASE WHEN ? != \'\' THEN ? ELSE school END, hood = CASE WHEN ? != \'\' THEN ? ELSE hood END WHERE id = ?', array($first, $last, $first . ' ' . $last, $school, $school, $hood, $hood, $u['id']));
-    $fresh = row('SELECT id, email, name, first, last, listed, school, grades, origin, hood FROM users WHERE id = ?', array($u['id']));
+    $fresh = row('SELECT id, email, name, first, last, listed, school, grades, origin, hood, phone, phone_ok FROM users WHERE id = ?', array($u['id']));
     $fresh['id'] = (int) $fresh['id'];
     out(array('ok' => true, 'first' => $first, 'last' => $last, 'user' => me_out($fresh)));
+  }
+
+  // A mobile number for texts, with a yes to them; an empty number takes it away.
+  case 'POST phone_save': {
+    $u = need_user();
+    $bad = phone_set($u['id'], str($in, 'phone', 30), !empty($in['texts']), $u['phone'] !== '');
+    if ($bad !== '') fail('phone', $bad);
+    $p = row('SELECT phone, phone_ok FROM users WHERE id = ?', array($u['id']));
+    out(array('ok' => true, 'phone' => (int) $p['phone_ok'] ? phone_show((string) $p['phone']) : ''));
   }
 
   case 'POST hood_save': {
