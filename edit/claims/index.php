@@ -40,7 +40,8 @@ $csrf = hash_hmac('sha256', 'claims-form', edit_key());
 $said = isset($_GET['said']) && is_string($_GET['said']) ? substr($_GET['said'], 0, 200) : '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
-$pending = array(); $claims = array(); $declined = array(); $edits = array(); $photosNew = array(); $photosLive = array();
+$pending = array(); $claims = array(); $declined = array(); $edits = array(); $photosNew = array(); $photosLive = array(); $extrasNew = array(); $extrasLive = array(); $premium = array();
+$PREMIUM = "preview";
 $photoFile = function ($id) { return dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/photos/' . (int) $id . '.jpg'; };
 if ($have) {
   try {
@@ -91,15 +92,25 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
   }
   if ($ok && in_array($do, array('photo_ok', 'photo_no'), true)) {
     try {
-      $st = $db->prepare('SELECT p.id, p.listing, p.status, u.email, u.first FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.id = ?'); $st->execute(array($id)); $x = $st->fetch();
+      $st = $db->prepare('SELECT p.*, u.email, u.first FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.id = ?'); $st->execute(array($id)); $x = $st->fetch();
       if ($x) {
         $n = $name($x['listing']);
         if ($do === 'photo_ok') {
-          $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE listing = ? AND status = 'ok' AND id != ?")->execute(array(time(), $x['listing'], $id));   // one photo a listing
+          // one photo a listing, and one logo; a premium listing keeps the photos it already has, up to six
+          $kind = isset($x['kind']) ? $x['kind'] : 'photo';
+          $isPrem = false; try { $pq = $db->prepare('SELECT 1 FROM premium WHERE listing = ?'); $pq->execute(array($x['listing'])); $isPrem = $PREMIUM !== 'off' && (bool) $pq->fetchColumn(); } catch (Exception $e) { $isPrem = false; }
+          if ($isPrem && $kind === 'photo') {
+            $keep = $db->prepare("SELECT id FROM photos WHERE listing = ? AND kind = 'photo' AND status = 'ok' AND id != ? ORDER BY id DESC"); $keep->execute(array($x['listing'], $id));
+            foreach (array_slice($keep->fetchAll(PDO::FETCH_COLUMN), 5) as $old) { $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), (int) $old)); @unlink($photoFile((int) $old)); }
+          } else {
+            try { $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE listing = ? AND kind = ? AND status = 'ok' AND id != ?")->execute(array(time(), $x['listing'], $kind, $id)); }
+            catch (Exception $e) { $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE listing = ? AND status = 'ok' AND id != ?")->execute(array(time(), $x['listing'], $id)); }
+          }
           $db->prepare("UPDATE photos SET status = 'ok', decided = ? WHERE id = ?")->execute(array(time(), $id));
-          tell($x['email'], 'Your photo for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",
+          $seen = $isPrem && $PREMIUM === 'preview' ? ' For now only you can see it there, while premium listings are being tried out.' : '';
+          tell($x['email'], 'Your ' . $kind . ' for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",
 
-The photo you sent for “" . $n . '” is on the listing now. You can replace or remove it here:' . "
+The " . $kind . " you sent for “" . $n . '” is on the listing now.' . $seen . ' You can replace or remove it here:' . "
 " . $SITE_URL . '/managers/');
           $msg = 'Published, and they’ve been told.';
         } else {
@@ -114,6 +125,50 @@ We " . ($was === 'ok' ? 'have taken down' : 'weren’t able to use') . ' the pho
       }
     } catch (Exception $e) { /* a database from before photos: nothing to do */ }
   }
+  // Premium: which listings are, and what their managers wrote.
+  if ($ok && $PREMIUM !== 'off' && in_array($do, array('premium_on', 'premium_off'), true)) {
+    try {
+      $st = $db->prepare("SELECT c.listing, u.email, u.first FROM claims c JOIN users u ON u.id = c.user_id WHERE c.id = ? AND c.status = 'ok'"); $st->execute(array($id)); $c = $st->fetch();
+      if ($c) {
+        $n = $name($c['listing']);
+        if ($do === 'premium_on') {
+          $db->prepare('INSERT OR IGNORE INTO premium (listing, since) VALUES (?, ?)')->execute(array($c['listing'], time()));
+          tell($c['email'], $n . ' now has a premium listing', 'Hi ' . $c['first'] . ",
+
+“" . $n . '” on ' . $SITE . ' now has the premium tools: up to six photos and a logo, a section in your own words, an offer or event line, a button parents can use to send you a question, fuller numbers, and a flyer and badge to share.' . ($PREMIUM === 'preview' ? ' We’re still trying these out, so for now what you add shows on your listing only to you.' : '') . ' You’ll find them under your listing here:' . "
+" . $SITE_URL . '/managers/');
+          $msg = 'It’s premium now, and its manager has been told.';
+        } else {
+          $db->prepare('DELETE FROM premium WHERE listing = ?')->execute(array($c['listing']));
+          $msg = 'Premium is off for that listing. What its manager added is kept, and hidden.';
+        }
+      }
+    } catch (Exception $e) { $msg = 'That didn’t go through: the database isn’t ready for premium yet. Open the site once and try again.'; }
+  }
+  if ($ok && $PREMIUM !== 'off' && in_array($do, array('extra_ok', 'extra_no'), true)) {
+    try {
+      $st = $db->prepare('SELECT e.id, e.listing, e.kind, e.status, u.email, u.first FROM extras e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.id = ?'); $st->execute(array($id)); $x = $st->fetch();
+      if ($x) {
+        $n = $name($x['listing']); $what = $x['kind'] === 'offer' ? 'offer line' : 'section in your own words';
+        if ($do === 'extra_ok') {
+          $db->prepare("DELETE FROM extras WHERE listing = ? AND kind = ? AND status = 'ok' AND id != ?")->execute(array($x['listing'], $x['kind'], $id));   // the newer one takes its place
+          $db->prepare("UPDATE extras SET status = 'ok', decided = ? WHERE id = ?")->execute(array(time(), $id));
+          tell($x['email'], 'Your ' . $what . ' for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",
+
+The " . $what . ' you wrote for “' . $n . '” is on the listing now.' . ($PREMIUM === 'preview' ? ' For now only you can see it there, while premium listings are being tried out.' : '') . ' You can change it or take it down here:' . "
+" . $SITE_URL . '/managers/');
+          $msg = 'Published, and they’ve been told.';
+        } else {
+          $was = $x['status'];
+          $db->prepare("UPDATE extras SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), $id));
+          tell($x['email'], 'About the ' . $what . ' for ' . $n, 'Hi ' . $x['first'] . ",
+
+We " . ($was === 'ok' ? 'have taken down' : 'weren’t able to publish') . ' the ' . $what . ' you wrote for “' . $n . '”. It should describe the program in plain words, with no prices that differ from the listing and no claims about other programs. You’re welcome to send another, or reply to this email with any questions.');
+          $msg = $was === 'ok' ? 'Taken down, and they’ve been told.' : 'Declined, and they’ve been told.';
+        }
+      }
+    } catch (Exception $e) { /* a database from before premium: nothing to do */ }
+  }
   header('Location: ./?said=' . rawurlencode($msg), true, 303);
   exit;
 }
@@ -122,8 +177,15 @@ if ($have) {
   foreach ($all as $c) { if ($c['status'] === 'pending') $pending[] = $c; elseif ($c['status'] === 'ok') $claims[] = $c; else $declined[] = $c; }
   $edits = $db->query("SELECT e.id, e.listing, e.body, e.link, e.created, u.email, u.first, u.last FROM edits e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.status = 'new' ORDER BY e.id")->fetchAll();
   try {
-    foreach ($db->query("SELECT p.id, p.listing, p.alt, p.status, p.created, u.email, u.first, u.last FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.status != 'declined' AND c.status = 'ok' ORDER BY p.id") as $x) { if (!is_file($photoFile($x['id']))) continue; if ($x['status'] === 'new') $photosNew[] = $x; else $photosLive[] = $x; }
+    foreach ($db->query("SELECT p.*, u.email, u.first, u.last FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.status != 'declined' AND c.status = 'ok' ORDER BY p.id") as $x) { if (!is_file($photoFile($x['id']))) continue; if ($x['status'] === 'new') $photosNew[] = $x; else $photosLive[] = $x; }
   } catch (Exception $e) { /* a database from before photos */ }
+  if ($PREMIUM !== 'off') try {
+    foreach ($db->query('SELECT listing, since FROM premium') as $x) $premium[$x['listing']] = (int) $x['since'];
+    $today = (new DateTime('now', new DateTimeZone('America/New_York')))->format('Y-m-d');
+    foreach ($db->query("SELECT e.id, e.listing, e.kind, e.body, e.until, e.status, e.created, u.email, u.first, u.last FROM extras e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.status != 'declined' AND c.status = 'ok' ORDER BY e.id") as $x) {
+      if ($x['status'] === 'new') $extrasNew[] = $x; elseif ($x['kind'] !== 'offer' || $x['until'] >= $today) $extrasLive[] = $x;
+    }
+  } catch (Exception $e) { /* a database from before premium: it is made the next time anyone opens the site */ }
 }
 ?>
 <!doctype html>
@@ -152,7 +214,7 @@ if ($have) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../../assets/site.css?v=0743e7f0">
+<link rel="stylesheet" href="../../assets/site.css?v=d72d3615">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -202,7 +264,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
   <h2>Photos waiting for you (<?php echo count($photosNew); ?>)</h2>
   <?php if (!$photosNew) { ?><p class="hint">None waiting. A photo shows on a listing only after you publish it here.</p><?php } ?>
   <?php foreach ($photosNew as $x) { ?><div class="panel">
-    <h3><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?></h3>
+    <h3><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?><?php if (isset($x["kind"]) && $x["kind"] === 'logo') { ?> <span class="hint">Logo</span><?php } ?></h3>
     <p class="hint">From <?php echo htmlspecialchars($x["first"] . " " . $x["last"], ENT_QUOTES, 'UTF-8'); ?> &lt;<?php echo htmlspecialchars($x["email"], ENT_QUOTES, 'UTF-8'); ?>&gt;, <?php echo htmlspecialchars($day($x["created"]), ENT_QUOTES, 'UTF-8'); ?>. They ticked that they have the right to use it and permission from the families of any children shown.</p>
     <p><img class="review-photo" src="./?photo=<?php echo (int) $x["id"]; ?>" alt=""></p>
     <p>Described as: <b><?php echo htmlspecialchars($x["alt"], ENT_QUOTES, 'UTF-8'); ?></b></p>
@@ -211,10 +273,26 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
   <?php if ($photosLive) { ?><h2>Photos on the site (<?php echo count($photosLive); ?>)</h2>
   <div class="review-grid"><?php foreach ($photosLive as $x) { ?><div class="panel"><p><img class="review-photo" src="./?photo=<?php echo (int) $x["id"]; ?>" alt=""></p><p><b><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?></b><br><span class="hint"><?php echo htmlspecialchars($x["alt"], ENT_QUOTES, 'UTF-8'); ?></span></p><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $x["id"]; ?>"><button class="btn" type="submit" name="do" value="photo_no">Take it down</button></form></div><?php } ?></div><?php } ?>
 
+  <h2>Words and offer lines waiting for you (<?php echo count($extrasNew); ?>)</h2>
+  <?php if (!$extrasNew) { ?><p class="hint">None waiting. What a manager writes for a premium listing shows only after you publish it here.</p><?php } ?>
+  <?php foreach ($extrasNew as $x) { ?><div class="panel">
+    <h3><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?> <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line' : 'In their own words'; ?></span></h3>
+    <p class="hint">From <?php echo htmlspecialchars($x["first"] . " " . $x["last"], ENT_QUOTES, 'UTF-8'); ?> &lt;<?php echo htmlspecialchars($x["email"], ENT_QUOTES, 'UTF-8'); ?>&gt;, <?php echo htmlspecialchars($day($x["created"]), ENT_QUOTES, 'UTF-8'); ?><?php if ($x["kind"] === 'offer') { ?>. To show until <?php echo htmlspecialchars($x["until"], ENT_QUOTES, 'UTF-8'); ?><?php } ?></p>
+    <pre class="edit-ask"><?php echo htmlspecialchars($x["body"], ENT_QUOTES, 'UTF-8'); ?></pre>
+    <form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $x["id"]; ?>"><button class="btn primary" type="submit" name="do" value="extra_ok">Publish it</button><button class="btn" type="submit" name="do" value="extra_no">Decline</button></form>
+  </div><?php } ?>
+  <?php if ($extrasLive) { ?><h2>Words and offer lines on the site (<?php echo count($extrasLive); ?>)</h2>
+  <?php foreach ($extrasLive as $x) { ?><div class="panel">
+    <h3><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?> <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line, until ' . htmlspecialchars($x["until"], ENT_QUOTES, 'UTF-8') : 'In their own words'; ?></span></h3>
+    <pre class="edit-ask"><?php echo htmlspecialchars($x["body"], ENT_QUOTES, 'UTF-8'); ?></pre>
+    <form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $x["id"]; ?>"><button class="btn" type="submit" name="do" value="extra_no">Take it down</button></form>
+  </div><?php } ?><?php } ?>
+
   <h2>Claimed listings (<?php echo count($claims); ?>)</h2>
   <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>
-  <div class="stat-scroll"><table class="stat-table"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th><th scope="col"></th></tr></thead><tbody>
-  <?php foreach ($claims as $c) { ?><tr><th scope="row"><?php echo htmlspecialchars($name($c["listing"]), ENT_QUOTES, 'UTF-8'); ?></th><td><?php echo htmlspecialchars($c["first"] . " " . $c["last"], ENT_QUOTES, 'UTF-8'); ?><br><span class="hint"><?php echo htmlspecialchars($c["email"], ENT_QUOTES, 'UTF-8'); ?></span></td><td><?php echo htmlspecialchars($day($c["created"]), ENT_QUOTES, 'UTF-8'); ?></td><td><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn" type="submit" name="do" value="claim_remove">Take the claim away</button></form></td></tr><?php } ?>
+  <p class="hint">Premium is being tried out: when you make a listing premium, its manager gets the premium tools, and what they add shows on the listing only to them (after you approve it). Nobody else sees it until premium is switched on for the site.</p>
+  <div class="stat-scroll"><table class="stat-table wrap"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th><th scope="col">Premium</th><th scope="col"></th></tr></thead><tbody>
+  <?php foreach ($claims as $c) { ?><tr><th scope="row"><?php echo htmlspecialchars($name($c["listing"]), ENT_QUOTES, 'UTF-8'); ?></th><td><?php echo htmlspecialchars($c["first"] . " " . $c["last"], ENT_QUOTES, 'UTF-8'); ?><br><span class="hint"><?php echo htmlspecialchars($c["email"], ENT_QUOTES, 'UTF-8'); ?></span></td><td><?php echo htmlspecialchars($day($c["created"]), ENT_QUOTES, 'UTF-8'); ?></td><td><?php if (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since <?php echo htmlspecialchars($day($premium[$c["listing"]]), ENT_QUOTES, 'UTF-8'); ?></span><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn" type="submit" name="do" value="premium_off">Turn off</button></form><?php } else { ?><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn" type="submit" name="do" value="premium_on">Make it premium</button></form><?php } ?></td><td><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn" type="submit" name="do" value="claim_remove">Take the claim away</button></form></td></tr><?php } ?>
   </tbody></table></div>
   <?php } ?>
   <?php if ($declined) { ?><h2>Declined or taken away (<?php echo count($declined); ?>)</h2>
@@ -283,7 +361,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../../assets/site.js?v=78614548" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
+<script src="../../assets/site.js?v=42118751" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
 
 </body>
 </html>

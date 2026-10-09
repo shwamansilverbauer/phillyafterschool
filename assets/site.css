@@ -1570,3 +1570,53 @@ html.signed .year-out{display:none}
 /* a claimed listing: the link a program sends its families */
 .claim-ask{border-top:1px solid var(--line);padding-top:12px;margin-top:6px;display:flex;flex-direction:column;gap:8px;align-self:stretch}
 .claim-ask input{font:inherit;font-size:.95rem;width:100%;max-width:560px;min-height:44px;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+
+/* ----- premium listings: what a program adds to its own page ----- */
+.pm{display:contents}
+.pm-note{margin:0;border:2px dashed var(--yellow);border-radius:12px;padding:10px 14px;background:var(--warn);color:var(--warn-ink);font-weight:700;max-width:860px}
+.pm-offer{margin:0 0 14px;background:var(--warn);color:var(--warn-ink);border-left:6px solid var(--yellow);border-radius:10px;padding:11px 16px;font-size:1.05rem;max-width:760px}
+.pm-offer b,.pm-offer-line b{font-family:var(--display);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;margin-right:4px}
+.pm-offer-line{margin:0;background:var(--warn);color:var(--warn-ink);border-radius:9px;padding:7px 12px;font-size:.95rem}
+.pm-by{display:flex;align-items:center;gap:12px;margin:0;color:var(--muted);font-size:.95rem}
+.pm-logo{width:64px;height:64px;object-fit:contain;border-radius:12px;border:1px solid var(--line);background:#FFFFFF;flex:none}
+.pm-text{margin:0;white-space:pre-line;max-width:68ch;font-size:1.06rem}
+.pm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;max-width:980px}
+.pm-grid figure{margin:0;border-radius:14px;overflow:hidden;background:var(--cell-off)}
+.pm-grid img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.pm-ask > .btn{align-self:flex-start;cursor:pointer;font:inherit;font-weight:700}
+.pm-ask-form{max-width:560px;display:flex;flex-direction:column;gap:14px}
+.pm-ask-form[hidden]{display:none}
+.pm-ask-form input,.pm-ask-form textarea{font:inherit;width:100%;padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}
+.pm-ask-form .hint{margin:0}
+.pm-sent{margin:0;background:var(--green-bg);color:var(--green-ink);border-radius:12px;padding:12px 16px;font-weight:700;max-width:560px}
+/* the tools a premium listing's manager gets */
+.claim-premium{align-self:stretch;border:2px solid var(--yellow);border-radius:16px;background:var(--surface);padding:16px 18px;display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.claim .pm-title{margin:0;font-size:1.15rem}
+.pm-part{border-top:1px solid var(--line);padding-top:12px;margin-top:8px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.pm-part h5{margin:0;font-family:var(--display);font-stretch:112%;font-size:1rem}
+.pm-part .hint,.pm-part .claim-status{margin:0}
+.pm-photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;align-self:stretch;max-width:720px}
+.pm-photo{margin:0;display:flex;flex-direction:column;align-items:flex-start;gap:5px}
+.pm-photo img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;background:var(--cell-off)}
+.pm-photo.logo img{aspect-ratio:1/1;object-fit:contain;background:#FFFFFF;border:1px solid var(--line);max-width:150px}
+.pm-form{align-self:stretch;max-width:640px;gap:8px;border-top:0;margin-top:0;padding-top:0}
+.pm-form label{font-weight:700;display:block;margin:6px 0 0}
+.pm-form label.check{font-weight:400;display:flex}
+.pm-form textarea,.pm-form input[type=text],.pm-form input[type=date]{font:inherit;width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.pm-form input[type=date]{max-width:220px}
+.pm-label{margin:6px 0 0;font-weight:700}
+.pm-months{font-size:.95rem}
+.pm-part .stat-scroll{align-self:stretch;max-width:720px}
+.pm-schools{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 10px}
+.pm-schools li{border:1.5px solid var(--line);border-radius:999px;padding:3px 12px;font-size:.95rem}
+.pm-schools span{color:var(--muted)}
+.pm-flyer{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.pm-flyer[hidden]{display:none}
+.pm-flyer-pic{display:block;width:100%;max-width:340px;height:auto;border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 18px rgba(7,21,39,.12)}
+.pm-badge img{display:block;max-width:100%;height:auto}
+.pm-code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.85rem;width:100%;max-width:640px;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical}
+/* a one-line box in a manager's form is one line tall (these forms are columns, where a flex basis becomes a height) */
+.g-form.claim-edit input[type],.g-form.claim-photo input[type=text],.g-form.pm-form input[type=text]{flex:none}
+.pm-part .claim-nums{align-self:stretch;max-width:560px}
+.stat-table.wrap th,.stat-table.wrap td{white-space:normal;text-align:left;vertical-align:top}
+.stat-table.wrap .actions{margin-top:6px}

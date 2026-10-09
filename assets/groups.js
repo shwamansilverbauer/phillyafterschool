@@ -1050,19 +1050,21 @@
 
     // Shrinks a chosen picture in the browser and hands back a JPEG, so the original file (and whatever is tucked
     // inside it, such as where it was taken) never leaves the device.
-    var shrink = function (file, done) {
+    var shrink = function (file, done, logo) {
       var url = (window.URL || window.webkitURL).createObjectURL(file), img = new Image();
       img.onload = function () {
         var tryAt = function (side, quality) {
           var k = Math.min(1, side / Math.max(img.naturalWidth, img.naturalHeight));
           var c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
-          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          var cx = c.getContext('2d'); cx.fillStyle = '#FFFFFF'; cx.fillRect(0, 0, c.width, c.height);   // white behind a see-through logo
+          cx.drawImage(img, 0, 0, c.width, c.height);
           return { data: c.toDataURL('image/jpeg', quality), w: c.width, h: c.height };
         };
-        var out = tryAt(1600, 0.86);
+        var out = tryAt(logo ? 800 : 1600, logo ? 0.92 : 0.86);
         if (out.data.length > 1900000) out = tryAt(1280, 0.8);
         (window.URL || window.webkitURL).revokeObjectURL(url);
-        if (out.w < 400 || out.h < 300) { done(null, 'That photo is too small. Use one at least 400 pixels wide.'); return; }
+        if (logo && (out.w < 160 || out.h < 160)) { done(null, 'That logo is too small. Use one at least 160 pixels across.'); return; }
+        if (!logo && (out.w < 400 || out.h < 300)) { done(null, 'That photo is too small. Use one at least 400 pixels wide.'); return; }
         if (out.data.length > 2100000) { done(null, 'That photo is too big to send. Try a different one.'); return; }
         done(out);
       };
@@ -1200,6 +1202,8 @@
           });
           item.appendChild(ul);
         }
+        // a premium listing has its own tools: photos, a logo, its own words, an offer line, fuller numbers, a flyer and a badge
+        if (c.premium) { premiumTools(item, c, view.href); return dropBtn(item, c); }
         // the photo: a paid extra, so the form is there only when photos are switched on
         if (claimsBox.getAttribute('data-photos') !== '1') return dropBtn(item, c);
         var pf = el('form', 'g-form claim-photo');
@@ -1253,6 +1257,207 @@
         item.appendChild(pf);
       }
       return dropBtn(item, c);
+    };
+    // ----- a premium listing's tools -----
+    var premiumTools = function (item, c, listingUrl) {
+      var P = c.premium, box = el('div', 'claim-premium'), key = c.listing, slug = key.replace(/[^a-z0-9]+/g, '-');
+      var head = el('h4', 'pm-title', 'Premium listing'); box.appendChild(head);
+      box.appendChild(el('p', 'hint', P.mode === 'preview'
+        ? 'These are being tried out. Until premium listings open to everyone, what you add shows on your listing only to you, while you’re signed in. A person looks at each thing before it shows.'
+        : 'What you add here shows on your listing once a person has looked at it.'));
+      var after = function (okText) { return function (r) { if (!r.ok) { said = r.message; saidBad = true; } else { said = okText; saidBad = false; cClaims = r.claims || cClaims; } render(); }; };
+      var sub = function (title, hint) { var d = el('div', 'pm-part'); d.appendChild(el('h5', null, title)); if (hint) d.appendChild(el('p', 'hint', hint)); box.appendChild(d); return d; };
+      var src = function (id) { return API + '?action=photo&l=' + encodeURIComponent(key) + '&id=' + id; };
+      // --- photos and the logo: the same form, twice
+      var pictures = function (kind, part, list, room) {
+        var isLogo = kind === 'logo';
+        if (list.length) {
+          var grid = el('div', 'pm-photos');
+          list.forEach(function (ph) {
+            var fig = el('figure', 'pm-photo' + (isLogo ? ' logo' : '')), im = el('img'); im.alt = ph.alt; im.src = src(ph.id);
+            fig.appendChild(im);
+            fig.appendChild(el('span', 'claim-status ' + (ph.status === 'ok' ? 'ok' : 'pending'), ph.status === 'ok' ? 'On your listing' : 'Waiting to be approved'));
+            var rm = btn('clear', 'Remove'); rm.setAttribute('aria-label', 'Remove this ' + kind + ': ' + ph.alt);
+            twoTap(rm, 'Tap again to remove it', function () { call('photo_drop', { listing: key, id: ph.id }).then(after('That ' + kind + ' is off ' + c.name + '.')); });
+            fig.appendChild(rm); grid.appendChild(fig);
+          });
+          part.appendChild(grid);
+        }
+        if (!room) { part.appendChild(el('p', 'hint', 'That’s all ' + P.max + '. Remove one to add another.')); return; }
+        var f = el('form', 'g-form claim-photo pm-form'), id = (isLogo ? 'pl-' : 'pp-') + slug;
+        var pick = field(f, id, isLogo ? (list.length ? 'Choose a different logo' : 'Choose your logo') : (list.length ? 'Add another photo' : 'Choose a photo'), 'input', { type: 'file', accept: 'image/jpeg,image/png,image/webp,image/*' });
+        var prev = el('img', 'claim-photo-now'); prev.alt = ''; prev.hidden = true; f.appendChild(prev);
+        var alt = field(f, id + '-alt', 'Describe it in a few words', 'input', { type: 'text', maxLength: 160, placeholder: isLogo ? 'The ' + c.name + ' logo' : 'Children building a robot at a workbench' });
+        var okRow = el('label', 'check'), ok = el('input'); ok.type = 'checkbox'; okRow.appendChild(ok);
+        okRow.appendChild(document.createTextNode(isLogo ? ' This is our logo, and I have the right to use it.' : ' I have the right to use this photo, and permission from the families of any children in it.'));
+        f.appendChild(okRow);
+        var st = el('p', 'g-status'); st.setAttribute('aria-live', 'polite'); f.appendChild(st);
+        var acts = el('div', 'actions'), go = el('button', 'btn primary', isLogo ? 'Send the logo' : 'Send the photo'); go.type = 'submit'; acts.appendChild(go); f.appendChild(acts);
+        var ready = null;
+        pick.addEventListener('change', function () {
+          ready = null; prev.hidden = true; st.textContent = ''; st.className = 'g-status';
+          if (!pick.files || !pick.files[0]) return;
+          st.textContent = 'Getting it ready…';
+          shrink(pick.files[0], function (out, err) { if (!out) { st.textContent = err; st.className = 'g-status bad'; return; } ready = out; prev.src = out.data; prev.hidden = false; st.textContent = ''; }, isLogo);
+        });
+        f.addEventListener('submit', function (e) {
+          e.preventDefault();
+          if (!ready) { st.textContent = 'Choose a ' + kind + ' first.'; st.className = 'g-status bad'; return; }
+          if (alt.value.replace(/\s+/g, ' ').replace(/^ | $/g, '').length < 8) { st.textContent = 'Describe it in a few words, for people who can’t see it.'; st.className = 'g-status bad'; return; }
+          if (!ok.checked) { st.textContent = 'Tick the box to say you have the right to use it.'; st.className = 'g-status bad'; return; }
+          go.disabled = true; st.className = 'g-status'; st.textContent = 'Sending…';
+          call('photo_add', { listing: key, kind: kind, alt: alt.value, permission: true, data: ready.data.slice(ready.data.indexOf(',') + 1) }).then(function (r) {
+            go.disabled = false;
+            if (!r.ok) { st.textContent = r.message; st.className = 'g-status bad'; return; }
+            pushStep(kind + '_sent');
+            after((isLogo ? 'Logo' : 'Photo') + ' sent. It goes on ' + c.name + ' once a person has looked at it, and we’ll email you.')(r);
+          });
+        });
+        part.appendChild(f);
+      };
+      var shots = P.photos.filter(function (x) { return x.kind === 'photo'; }), logos = P.photos.filter(function (x) { return x.kind === 'logo'; });
+      pictures('photo', sub('Photos (' + shots.length + ' of ' + P.max + ')', 'Your space, an activity, the room at pickup. The newest one sits at the top of your listing and the rest make a gallery. Each is shrunk on your device before it’s sent.'), shots, shots.length < P.max);
+      pictures('logo', sub('Your logo', 'Shown beside what you write about your program.'), logos.slice(0, 2), true);
+      // --- in their own words, and the offer line: text that waits for a look
+      var texts = function (kind, part, t, make) {
+        if (t.live) part.appendChild(el('p', 'claim-status ok', 'On your listing' + (kind === 'offer' && t.liveUntil ? ' until ' + when2(t.liveUntil) : '')));
+        if (t['new']) part.appendChild(el('p', 'claim-status pending', t.live ? 'A newer version is waiting to be approved' : 'Waiting to be approved'));
+        if (t.declined && !t['new']) part.appendChild(el('p', 'claim-status declined', 'The last one you sent wasn’t published. We emailed you about it.'));
+        var f = el('form', 'g-form pm-form'), inputs = make(f, t);
+        var st = el('p', 'g-status'); st.setAttribute('aria-live', 'polite'); f.appendChild(st);
+        var acts = el('div', 'actions'), go = el('button', 'btn primary', t.live || t['new'] ? 'Send the new version' : 'Send it for a look'); go.type = 'submit'; acts.appendChild(go);
+        if (t.live || t['new']) { var rm = btn('btn', 'Take it off my listing'); twoTap(rm, 'Tap again to take it off', function () { call('extra_drop', { listing: key, kind: kind }).then(after(kind === 'offer' ? 'The offer line is off ' + c.name + '.' : 'Your words are off ' + c.name + '.')); }); acts.appendChild(rm); }
+        f.appendChild(acts);
+        f.addEventListener('submit', function (e) {
+          e.preventDefault(); go.disabled = true; st.className = 'g-status'; st.textContent = 'Sending…';
+          call('extra_save', { listing: key, kind: kind, body: inputs.body.value, until: inputs.until ? inputs.until.value : '' }).then(function (r) {
+            go.disabled = false;
+            if (!r.ok) { st.textContent = r.message; st.className = 'g-status bad'; return; }
+            pushStep(kind + '_sent');
+            after('Sent. It shows on ' + c.name + ' once a person has looked at it, and we’ll email you.')(r);
+          });
+        });
+        part.appendChild(f);
+      };
+      var when2 = function (iso) { var d = new Date(iso + 'T12:00:00Z'); return isNaN(d) ? iso : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }); };
+      texts('words', sub('In your own words', 'What a day looks like, who runs it, what makes it yours. It appears on your listing marked as written by you. Plain text, up to 900 characters.'), P.texts.words, function (f, t) {
+        var ta = field(f, 'pw-' + slug, 'About ' + c.name, 'textarea', { rows: 7, maxLength: 900, placeholder: 'We’ve run after-school at the corner of 4th and Pine since 2009. Afternoons start with a snack and homework help, then…' });
+        ta.value = t['new'] || t.live || '';
+        var left = el('span', 'hint'); var count = function () { left.textContent = (900 - ta.value.length) + ' characters left'; }; ta.addEventListener('input', count); count(); f.appendChild(left);
+        return { body: ta };
+      });
+      texts('offer', sub('An offer or event line', 'One line near the top of your listing: an open house, a trial class, a sibling discount, financial aid. It comes down by itself after the last day you pick.'), P.texts.offer, function (f, t) {
+        var inp = field(f, 'po-' + slug, 'The line', 'input', { type: 'text', maxLength: 140, placeholder: 'Open house on November 12 at 6 pm. Come see the space.' });
+        inp.value = t['new'] || t.live || '';
+        var until = field(f, 'pu-' + slug, 'Show it until', 'input', { type: 'date' });
+        var d0 = new Date(), iso = function (d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); };
+        until.min = iso(d0); until.max = iso(new Date(d0.getTime() + 90 * 86400000)); until.value = t.newUntil || (t.liveUntil >= iso(d0) ? t.liveUntil : '') || '';
+        return { body: inp, until: until };
+      });
+      // --- questions
+      sub('Questions from parents', 'Your listing has an “Ask a question” button. A parent’s question comes by email to ' + (cMe ? cMe.email : 'you') + (P.mode === 'preview' ? ' (for now only you can see the button)' : '') + ', and to anyone else who holds this listing. Reply to that email to answer them. We pass it along and don’t keep a copy.');
+      // --- fuller numbers
+      var M = P.more, nums = sub('More numbers', 'Month by month for as long as we’ve counted, up to a year. Numbers only: nothing about who.');
+      var tiles = el('div', 'claim-nums');
+      [[M.follows, 'person follows it for sign-up emails', 'people follow it for sign-up emails'], [M.favs, 'family saved it as a favorite', 'families saved it as a favorite']].forEach(function (t) {
+        var tile = el('div', 'claim-num'); tile.appendChild(el('b', null, String(t[0]))); tile.appendChild(el('span', null, t[0] === 1 ? t[1] : t[2])); tiles.appendChild(tile);
+      });
+      nums.appendChild(tiles);
+      if (M.months.length) {
+        var wrap = el('div', 'stat-scroll'), tb = el('table', 'stat-table pm-months'), thead = el('thead'), hr = el('tr'), body = el('tbody');
+        [['Month'], ['Opened'], ['Sign-up clicks'], ['Website clicks'], ['Put on a plan'], ['Asked for emails'], ['Questions']].forEach(function (h, i) { var th = el('th', null, h[0]); th.scope = 'col'; hr.appendChild(th); });
+        thead.appendChild(hr); tb.appendChild(thead);
+        M.months.slice().reverse().forEach(function (m) {
+          var tr = el('tr'), th = el('th', null, new Date(m.m + '-15T12:00:00Z').toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })); th.scope = 'row'; tr.appendChild(th);
+          ['view', 'signup', 'site', 'plan', 'email', 'ask'].forEach(function (k) { tr.appendChild(el('td', null, String(m[k] || 0))); });
+          body.appendChild(tr);
+        });
+        tb.appendChild(body); wrap.appendChild(tb); nums.appendChild(wrap);
+      } else nums.appendChild(el('p', 'hint', 'Nothing counted yet.'));
+      if (M.schools.length) {
+        nums.appendChild(el('p', 'pm-label', 'Schools saved by the people who opened your listing, last three months'));
+        var ul = el('ul', 'pm-schools');
+        M.schools.forEach(function (x) { var li = el('li'); li.appendChild(el('b', null, x.name)); li.appendChild(el('span', null, ' ' + x.n + (x.n === 1 ? ' visit' : ' visits'))); ul.appendChild(li); });
+        nums.appendChild(ul);
+        nums.appendChild(el('p', 'hint', 'Only visits from a browser that has a school saved are counted here, so this is a share of the whole.'));
+      }
+      // --- the kit: a flyer with a code to scan, and a badge for their own website
+      var kit = sub('A flyer and a badge', 'Ways to send your families to your listing.');
+      var pageUrl = ''; try { pageUrl = new URL(listingUrl, location.href).href.split('#')[0].split('?')[0]; } catch (e) { pageUrl = ''; }
+      var flyAct = el('div', 'actions'), flyBtn = btn('btn', 'Make the flyer'), flySay = el('span', 'hint'); flySay.setAttribute('aria-live', 'polite');
+      var flyBox = el('div', 'pm-flyer'); flyBox.hidden = true;
+      flyAct.appendChild(flyBtn); flyAct.appendChild(flySay); kit.appendChild(flyAct); kit.appendChild(flyBox);
+      flyBtn.addEventListener('click', function () {
+        flySay.textContent = 'Drawing it…';
+        var draw = function () {
+          var rows = window.pasQR ? window.pasQR(pageUrl + '?utm_source=flyer&utm_medium=qr') : null;
+          if (!rows) { flySay.textContent = 'The flyer couldn’t be drawn here.'; return; }
+          var cv = flyer(c.name, pageUrl, rows);
+          flyBox.textContent = ''; cv.className = 'pm-flyer-pic'; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', 'A flyer for ' + c.name + ' with a code to scan');
+          flyBox.appendChild(cv);
+          var acts = el('div', 'actions'), save = btn('btn primary', 'Save the flyer');
+          save.addEventListener('click', function () {
+            cv.toBlob(function (blob) { var a = el('a'); a.href = URL.createObjectURL(blob); a.download = slug.replace(/^[pc]-/, '') + '-flyer.png'; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000); flySay.textContent = 'Saved. It prints on one letter-size page.'; }, 'image/png');
+          });
+          acts.appendChild(save); flyBox.appendChild(acts);
+          flyBox.hidden = false; flySay.textContent = 'Scanning the code opens your listing.';
+        };
+        if (window.pasQR) { draw(); return; }
+        var sc = document.createElement('script'); sc.src = claimsBox.getAttribute('data-qr') || ''; sc.onload = draw; sc.onerror = function () { flySay.textContent = 'The flyer couldn’t be loaded. Check your connection and try again.'; };
+        document.head.appendChild(sc);
+      });
+      var badgeSrc = ''; try { badgeSrc = new URL(page('badge.svg'), location.href).href; } catch (e) { badgeSrc = ''; }
+      if (pageUrl && badgeSrc) {
+        var bRow = el('div', 'pm-badge'), bImg = el('img'); bImg.src = badgeSrc; bImg.alt = 'Find us on Philly After School'; bImg.width = 240; bImg.height = 72; bRow.appendChild(bImg);
+        var snippet = '<a href="' + pageUrl + '?utm_source=badge&utm_medium=referral"><img src="' + badgeSrc + '" alt="Find us on Philly After School" width="240" height="72"></a>';
+        var code = el('textarea', 'pm-code'); code.readOnly = true; code.rows = 4; code.value = snippet; code.setAttribute('aria-label', 'Code for the badge'); code.addEventListener('focus', function () { code.select(); });
+        var bAct = el('div', 'actions'), bCopy = btn('btn', 'Copy the code'), bSay = el('span', 'hint'); bSay.setAttribute('aria-live', 'polite');
+        bCopy.addEventListener('click', function () {
+          var no = function () { code.focus(); code.select(); bSay.textContent = 'Couldn’t copy here. The code is selected: copy it from the box.'; };
+          if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(snippet).then(function () { bSay.textContent = 'Copied. Paste it into your website where you want the badge.'; }, no); else no();
+        });
+        bAct.appendChild(bCopy); bAct.appendChild(bSay);
+        kit.appendChild(el('p', 'pm-label', 'A badge for your website'));
+        kit.appendChild(bRow); kit.appendChild(code); kit.appendChild(bAct);
+      }
+      item.appendChild(box);
+    };
+    // The flyer: one letter-size page with the program's name and a code that opens its listing.
+    var flyer = function (name, url, rows) {
+      var W = 1275, H = 1650, cv = document.createElement('canvas'), x = cv.getContext('2d');
+      cv.width = W; cv.height = H;
+      var DISPLAY = '"Archivo","Arial Black","Helvetica Neue",Arial,sans-serif', BODY = '"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif', NAVY = '#0B2140', YELLOW = '#F3C613';
+      var fit = function (text, font, size, max, min) { do { x.font = font.replace('SIZE', size); size -= 4; } while (x.measureText(text).width > max && size > min); return x.font; };
+      var wrap = function (text, max) { var words = text.split(' '), lines = [], line = ''; words.forEach(function (w) { var t = line ? line + ' ' + w : w; if (x.measureText(t).width > max && line) { lines.push(line); line = w; } else line = t; }); if (line) lines.push(line); return lines; };
+      x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, W, H);
+      var sky = x.createLinearGradient(0, 0, 0, 250); sky.addColorStop(0, '#96C9FF'); sky.addColorStop(1, '#C3E1FF');
+      x.fillStyle = sky; x.fillRect(0, 0, W, 250);
+      // the bus and the site's name
+      x.fillStyle = YELLOW; x.beginPath(); if (x.roundRect) x.roundRect(90, 92, 84, 44, 12); else x.rect(90, 92, 84, 44); x.fill();
+      x.fillStyle = NAVY; x.beginPath(); x.arc(112, 142, 11, 0, 7); x.fill(); x.beginPath(); x.arc(154, 142, 11, 0, 7); x.fill();
+      x.textBaseline = 'alphabetic'; x.textAlign = 'left'; x.font = '800 52px ' + DISPLAY; x.fillText('Philly After School', 200, 138);
+      x.font = '400 30px ' + BODY; x.fillStyle = '#1F3A60'; x.fillText('After-school programs in Philadelphia, by the school your child goes to', 92, 205);
+      // the ask
+      x.textAlign = 'center'; x.fillStyle = '#1F3A60'; x.font = '700 44px ' + BODY; x.fillText('Find us on Philly After School', W / 2, 345);
+      x.fillStyle = NAVY; fit(name, '850 SIZEpx ' + DISPLAY, 104, W - 180, 52);
+      var nameLines = wrap(name, W - 180).slice(0, 2), ny = 450;
+      nameLines.forEach(function (l, i) { x.fillText(l, W / 2, ny + i * 100); });
+      var top = ny + (nameLines.length - 1) * 100 + 60;
+      // the code, on white with room around it
+      var n = rows.length, side = Math.min(700, H - top - 430), cell = Math.floor(side / (n + 8)), size = cell * n, qx = Math.round((W - size) / 2), qy = top + cell * 4;
+      x.fillStyle = '#FFFFFF'; x.fillRect(qx - cell * 4, qy - cell * 4, size + cell * 8, size + cell * 8);
+      x.strokeStyle = YELLOW; x.lineWidth = 10; x.strokeRect(qx - cell * 4, qy - cell * 4, size + cell * 8, size + cell * 8);
+      x.fillStyle = '#000000';
+      for (var r = 0; r < n; r++) for (var c2 = 0; c2 < n; c2++) if (rows[r].charAt(c2) === '1') x.fillRect(qx + c2 * cell, qy + r * cell, cell, cell);
+      var under = qy + size + cell * 4 + 78;
+      x.fillStyle = NAVY; x.font = '800 46px ' + DISPLAY; x.fillText('Point your phone’s camera here', W / 2, under);
+      x.fillStyle = '#1F3A60'; x.font = '400 34px ' + BODY;
+      wrap('See our hours, cost and pickup, when sign-ups open, and what other parents say.', W - 260).forEach(function (l, i) { x.fillText(l, W / 2, under + 60 + i * 46); });
+      // the address, for anyone typing it
+      x.fillStyle = '#0A3566'; x.fillRect(0, H - 150, W, 150);
+      x.fillStyle = '#FFFFFF'; fit(url.replace(/^https?:\/\//, ''), '700 SIZEpx ' + BODY, 38, W - 160, 22); x.fillText(url.replace(/^https?:\/\//, ''), W / 2, H - 82);
+      x.fillStyle = '#CFE3FB'; x.font = '400 26px ' + BODY; x.fillText('Free for families', W / 2, H - 38);
+      return cv;
     };
     var dropBtn = function (item, c) {
       if (c.status !== 'declined') {

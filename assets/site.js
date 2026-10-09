@@ -107,7 +107,7 @@
   var hitApi = (function () { var t = document.querySelector('script[data-api]'); return t ? t.getAttribute('data-api') : ''; })();
   function hit(listing, kind) {
     if (!hitApi || !window.fetch || !listing || navigator.webdriver || store('pas-edit') === '1') return;   // not a script driving a browser, and not the owner editing
-    try { window.fetch(hitApi + '?action=hit', { method: 'POST', credentials: 'same-origin', keepalive: true, headers: { 'Content-Type': 'application/json', 'X-PAS': '1' }, body: JSON.stringify({ l: listing, k: kind }) }).catch(function () { /* counting never gets in the way */ }); } catch (e) { /* nor here */ }
+    try { window.fetch(hitApi + '?action=hit', { method: 'POST', credentials: 'same-origin', keepalive: true, headers: { 'Content-Type': 'application/json', 'X-PAS': '1' }, body: JSON.stringify(kind === 'view' && mySchool() ? { l: listing, k: kind, s: mySchool().id } : { l: listing, k: kind }) }).catch(function () { /* counting never gets in the way */ }); } catch (e) { /* nor here */ }
   }
   (function () {
     var p = document.querySelector('[data-program-page]'), c = document.querySelector('[data-camp-page]');
@@ -159,8 +159,109 @@
         img.onload = function () { slot.hidden = false; };
         slot.appendChild(img);
       });
+      // Premium listings, once they are open to everyone: an offer line on each one's card, and the rest on its own page.
+      Object.keys(d.offers || {}).forEach(function (k) {
+        var card = document.getElementById(k.slice(2));
+        if (!card || !/^(ARTICLE)$/.test(card.tagName) || card.querySelector('.pm-offer-line')) return;
+        var line = el('p', 'pm-offer-line'); line.appendChild(el('b', null, 'From the program')); line.appendChild(document.createTextNode(' ' + d.offers[k]));
+        var before = card.querySelector('.actions'); if (before && before.parentNode === card) card.insertBefore(line, before); else card.appendChild(line);
+      });
+      if (window.pasPremium) window.pasPremium(d.premium || []);
     }, function () { /* offline: no marks */ });
   }
+
+  // ----- a premium listing: what its own page adds -----
+  // The program's photos, what it wrote about itself (marked as theirs), an offer or event line, and a button to send
+  // it a question. All of it comes from the accounts service, after the site's owner has approved it. While premium
+  // is being tried out ("preview") the service answers only for someone signed in who manages the listing, so
+  // nobody else is even asked. ?premium=demo shows a made-up sample.
+  var pmBox = document.getElementById('premium');
+  if (pmBox && window.fetch) (function () {
+    var key = pmBox.getAttribute('data-pm-key'), name = pmBox.getAttribute('data-pm-name') || 'this program', api = pmBox.getAttribute('data-api'), mode = pmBox.getAttribute('data-premium');
+    var photoUrl = function (ph) { return ph.src || api + '?action=photo&l=' + encodeURIComponent(key) + '&id=' + ph.v; };
+    var show = function (d, demo) {
+      pmBox.textContent = '';
+      if (demo || d.preview) pmBox.appendChild(el('p', 'pm-note', demo ? 'A sample of a premium listing. Nothing in it is real, and nothing is sent.' : 'Only you can see this part of your listing for now, because you manage it. It opens to everyone when premium listings do.'));
+      // the offer or event line, near the top of the details
+      var offerEl = document.querySelector('[data-pm-offer]');
+      if (d.offer && offerEl) { offerEl.textContent = ''; offerEl.appendChild(el('b', null, 'From the program')); offerEl.appendChild(document.createTextNode(' ' + d.offer.t)); offerEl.hidden = false; }
+      // the photo at the top, when the page hasn't already been given one
+      var slot = document.querySelector('[data-photo]'), photos = d.photos || [];
+      if (slot && !slot.querySelector('img') && photos[0]) { var top = document.createElement('img'); top.alt = photos[0].alt || ''; top.decoding = 'async'; top.src = photoUrl(photos[0]); top.onload = function () { slot.hidden = false; }; slot.appendChild(top); }
+      // in their own words
+      if (d.words) {
+        var w = el('section', 'section pm-words'); w.id = 'own-words';
+        w.appendChild(el('h2', null, 'In their own words'));
+        var by = el('p', 'pm-by');
+        if (d.logo) { var lg = document.createElement('img'); lg.className = 'pm-logo'; lg.alt = ''; lg.src = d.logoSrc || api + '?action=photo&l=' + encodeURIComponent(key) + '&id=' + d.logo; by.appendChild(lg); }
+        by.appendChild(el('span', null, 'Written by ' + name + ', not by us.'));
+        w.appendChild(by);
+        String(d.words).split(/\n{2,}/).forEach(function (para) { if (para.replace(/\s+/g, '')) w.appendChild(el('p', 'pm-text', para)); });
+        pmBox.appendChild(w);
+      }
+      // the rest of the photos
+      if (photos.length > 1) {
+        var g = el('section', 'section pm-gallery'); g.id = 'photos';
+        g.appendChild(el('h2', null, 'Photos'));
+        var grid = el('div', 'pm-grid');
+        photos.slice(1).forEach(function (ph) { var fig = el('figure'), im = document.createElement('img'); im.alt = ph.alt || ''; im.decoding = 'async'; im.src = photoUrl(ph); fig.appendChild(im); grid.appendChild(fig); });
+        g.appendChild(grid);
+        g.appendChild(el('p', 'hint', 'Photos sent by ' + name + '.'));
+        pmBox.appendChild(g);
+      }
+      // a question for the program
+      if (d.ask) {
+        var a = el('section', 'section pm-ask'); a.id = 'ask';
+        a.appendChild(el('h2', null, 'Ask ' + name + ' a question'));
+        a.appendChild(el('p', null, 'Not sure about pickup, a waitlist or what to bring? Your question goes straight to the people who run it, and they answer you by email.'));
+        var open = el('button', 'btn', 'Ask a question'); open.type = 'button';
+        var f = el('form', 'form pm-ask-form'); f.hidden = true; f.noValidate = true;
+        var fld = function (id, label, tag, attrs) { var wrap = el('div', 'field'), l = el('label', null, label), i = document.createElement(tag); l.htmlFor = id; i.id = id; Object.keys(attrs).forEach(function (k) { i[k] = attrs[k]; }); wrap.appendChild(l); wrap.appendChild(i); f.appendChild(wrap); return i; };
+        var qn = fld('pm-q-name', 'Your first name', 'input', { type: 'text', maxLength: 40, autocomplete: 'given-name' });
+        var qe = fld('pm-q-email', 'Your email', 'input', { type: 'email', maxLength: 150, autocomplete: 'email' });
+        var qt = fld('pm-q-text', 'Your question', 'textarea', { maxLength: 1000, rows: 4 });
+        var hp = el('div', 'hp'); hp.setAttribute('aria-hidden', 'true'); hp.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden';
+        var hpIn = document.createElement('input'); hpIn.type = 'text'; hpIn.tabIndex = -1; hpIn.autocomplete = 'off'; hpIn.setAttribute('aria-label', 'Leave this blank'); hp.appendChild(hpIn); f.appendChild(hp);
+        f.appendChild(el('p', 'hint', 'Your first name, email address and question are sent to the people who run ' + name + ', so they can answer you. We pass it along and don’t keep a copy. Please don’t include your child’s full name.'));
+        var st = el('p', 'hint'); st.setAttribute('aria-live', 'polite'); f.appendChild(st);
+        var send = el('button', 'btn primary', 'Send my question'); send.type = 'submit'; var sw = el('div'); sw.appendChild(send); f.appendChild(sw);
+        open.addEventListener('click', function () {
+          open.hidden = true; f.hidden = false; qn.focus();
+          if (!demo && store('pas-in') === '1') window.fetch(api + '?action=me', { credentials: 'same-origin', headers: { 'X-PAS': '1' } }).then(function (r) { return r.json(); }).then(function (m) { if (m && m.ok && m.user) { if (!qn.value) qn.value = m.user.first || ''; if (!qe.value) qe.value = m.user.email || ''; } }).then(null, function () { /* they can type them */ });
+        });
+        f.addEventListener('submit', function (e) {
+          e.preventDefault();
+          if (demo) { st.textContent = 'This is a sample, so nothing was sent.'; return; }
+          send.disabled = true; st.textContent = 'Sending…';
+          window.fetch(api + '?action=ask', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'X-PAS': '1' }, body: JSON.stringify({ listing: key, name: qn.value, email: qe.value, text: qt.value, company: hpIn.value }) })
+            .then(function (r) { return r.json(); }, function () { return { ok: false, message: 'Couldn’t reach the site. Check your connection and try again.' }; })
+            .then(function (r) {
+              send.disabled = false;
+              if (!r || !r.ok) { st.textContent = (r && r.message) || 'Something went wrong on our side. Please try again.'; return; }
+              track({ event: 'pas_ask', program_id: key.slice(2), listing_kind: key.charAt(0) === 'c' ? 'camp' : 'program' });
+              var done = el('p', 'pm-sent', 'Sent. ' + name + ' will answer you at ' + qe.value + '.'); done.setAttribute('role', 'status');
+              a.replaceChild(done, f);
+            });
+        });
+        a.appendChild(open); a.appendChild(f);
+        pmBox.appendChild(a);
+      }
+      pmBox.hidden = false;
+    };
+    var get = function () {
+      window.fetch(api + '?action=extras&l=' + encodeURIComponent(key), { credentials: 'same-origin' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) { if (d && d.ok && d.premium) show(d, false); }).then(null, function () { /* offline: the listing reads the same without it */ });
+    };
+    if (query().premium === 'demo') {
+      var block = function (fill, label) { return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520"><rect width="800" height="520" fill="' + fill + '"/><text x="400" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="700" fill="#0B2140">' + label + '</text></svg>'); };
+      show({ offer: { t: 'Open house on November 12 at 6 pm. Come see the space and meet the staff.' }, logo: 1, logoSrc: block('#F3C613', 'Logo'),
+        words: 'This is where the program describes itself: what an afternoon looks like, who the staff are, and what makes it theirs.\n\nIt is always marked as written by the program, and a person reads it before it shows.',
+        photos: [{ src: block('#C3E1FF', 'Sample photo 1'), alt: 'A sample photo' }, { src: block('#DAEDFE', 'Sample photo 2'), alt: 'A sample photo' }, { src: block('#FFF4C2', 'Sample photo 3'), alt: 'A sample photo' }, { src: block('#D6F3D2', 'Sample photo 4'), alt: 'A sample photo' }], ask: true }, true);
+      return;
+    }
+    if (!api) return;
+    if (mode === 'preview') { if (store('pas-in') === '1') get(); }
+    else window.pasPremium = function (keys) { if (keys.indexOf(key) > -1) get(); };
+  })();
 
   // ----- filter rows that scroll sideways: show that there is more, and give an arrow to press -----
   all(document, '.rail').forEach(function (rail) {
