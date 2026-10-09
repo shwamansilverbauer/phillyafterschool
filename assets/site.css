@@ -1421,3 +1421,40 @@ html.signed .year-out{display:none}
 .g-marks h3{margin-top:8px}
 .g-marks .g-list li{align-items:baseline}
 .g-marks .g-add{font-size:.92rem}
+.g-phone{display:flex;flex-direction:column;gap:8px;max-width:560px}
+.g-phone input[type="tel"],.follow-basics input[type="tel"]{font:inherit;font-size:1.05rem;min-height:50px;padding:12px 16px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);width:100%;max-width:300px}
+.g-check,.follow-check{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;color:var(--muted);line-height:1.45}
+.g-check input,.follow-check input{flex:none;width:20px;height:20px;margin-top:2px}
+.follow-basics .field.wide,.follow-check{grid-column:1/-1}
+
+/* ---------- jump links: a strip under the menu bar on the long pages ---------- */
+.jump{position:sticky;top:var(--bar-h,64px);z-index:30;display:flex;gap:8px;overflow-x:auto;padding:10px 0;margin:0 0 -18px;background:var(--bg);box-shadow:0 1px 0 var(--line);scrollbar-width:none}
+.jump::-webkit-scrollbar{display:none}
+.jump a{flex:none;font-weight:700;font-size:.95rem;text-decoration:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:7px 14px;white-space:nowrap}
+.jump a:hover,.jump a:focus-visible{border-color:var(--link);color:var(--link)}
+.sum .jump{background:var(--surface);margin:0}
+.sum .jump a{background:var(--bg)}
+.g-page > .jump,.prose > .jump{margin:0}
+.g-page > .jump{max-width:860px}
+:root [data-jump-to][id]{scroll-margin-top:68px}   /* room for the strip; the menu bar is already allowed for on html */
+@media print{.jump{display:none!important}}
+
+/* ---------- my kids' calendar: dates you add yourself ---------- */
+.year-own{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.year-own h3{margin:0}
+.own-form{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.1fr) minmax(0,1.3fr);gap:14px;align-items:end}
+.own-form .own-who-field,.own-form .actions{grid-column:1/-1}
+.own-form .field{gap:6px}
+.own-form .field input[type="text"],.own-form .field input[type="date"],.own-form .field select{font:inherit;font-size:1.02rem;width:100%;min-height:50px;padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background-color:var(--surface);color:var(--ink)}
+.own-form .field input[type="date"]:focus{outline:3px solid var(--yellow);outline-offset:1px;border-color:var(--link)}
+.own-who{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center}
+.own-who .kid{font-size:.95rem;padding:8px 16px}
+.own-name{display:inline-flex;gap:8px;align-items:center}
+.own-name input{font:inherit;min-height:44px;padding:8px 12px;border:1.5px solid var(--line);border-radius:12px;width:10rem;background:var(--surface);color:var(--ink)}
+.own-many summary{cursor:pointer;font-weight:700;color:var(--link)}
+.own-many > * + *{margin-top:10px}
+.own-many textarea{display:block;font:inherit;width:100%;min-height:120px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);line-height:1.5}
+.own-list li{padding:9px 0}
+.year-chip.own{background:var(--sky-bg);color:var(--sky-ink)}
+@media (max-width:640px){.own-form{grid-template-columns:minmax(0,1fr)}}
+@media print{.year-own{display:none!important}}

@@ -1,5 +1,5 @@
 {
-  "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to people who asked for their school's dates.",
+  "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted and again the day before; days off go in the weekly round-up.",
   "generated": "2026-10-09",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
@@ -691,9 +691,6 @@
     },
     {
       "id": "reg-mister-johns-music-2026-11-02",
-      "kind": "register",
-      "date": "2026-11-02",
-      "sendOn": "2026-11-01",
       "schools": [
         "nebinger",
         "meredith",
@@ -704,11 +701,35 @@
       "programs": [
         "mister-johns-music"
       ],
-      "when": "Monday, November 2",
       "title": "Mister John’s Music",
-      "text": "Winter/Spring session goes on sale to new students.",
       "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2026-11-02",
+      "sendOn": "2026-10-02",
+      "when": "Monday, November 2",
+      "text": "Winter/Spring session goes on sale to new students."
+    },
+    {
+      "id": "reg-mister-johns-music-2026-11-02-eve",
+      "schools": [
+        "nebinger",
+        "meredith",
+        "coppin",
+        "vare-washington",
+        "mccall"
+      ],
+      "programs": [
+        "mister-johns-music"
+      ],
+      "title": "Mister John’s Music",
+      "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "soon",
+      "date": "2026-11-02",
+      "sendOn": "2026-11-01",
+      "when": "Tomorrow, Monday, November 2",
+      "text": "Winter/Spring session goes on sale to new students."
     },
     {
       "id": "camp-arden-drama-school-2026-11-03",
@@ -1235,9 +1256,6 @@
     },
     {
       "id": "reg-fleisher-art-memorial-2026-11-28",
-      "kind": "register",
-      "date": "2026-11-28",
-      "sendOn": "2026-11-22",
       "schools": [
         "nebinger",
         "meredith",
@@ -1248,17 +1266,38 @@
       "programs": [
         "fleisher-art-memorial"
       ],
-      "when": "Saturday, November 28",
       "title": "Fleisher Art Memorial",
-      "text": "Winter term public registration expected to open.",
       "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2026-11-28",
+      "sendOn": "2026-10-02",
+      "when": "Saturday, November 28",
+      "text": "Winter term public registration expected to open."
+    },
+    {
+      "id": "reg-fleisher-art-memorial-2026-11-28-eve",
+      "schools": [
+        "nebinger",
+        "meredith",
+        "coppin",
+        "vare-washington",
+        "mccall"
+      ],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "title": "Fleisher Art Memorial",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "soon",
+      "date": "2026-11-28",
+      "sendOn": "2026-11-27",
+      "when": "Tomorrow, Saturday, November 28",
+      "text": "Winter term public registration expected to open."
     },
     {
       "id": "reg-butchers-sew-shop-2026-11-30",
-      "kind": "register",
-      "date": "2026-11-30",
-      "sendOn": "2026-11-29",
       "schools": [
         "nebinger",
         "meredith",
@@ -1268,17 +1307,37 @@
       "programs": [
         "butchers-sew-shop"
       ],
-      "when": "Monday, November 30",
       "title": "Butcher’s Sew Shop Junior",
-      "text": "Last day of early-bird pricing for Winter and Spring sessions.",
       "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2026-11-30",
+      "sendOn": "2026-10-02",
+      "when": "Monday, November 30",
+      "text": "Last day of early-bird pricing for Winter and Spring sessions."
+    },
+    {
+      "id": "reg-butchers-sew-shop-2026-11-30-eve",
+      "schools": [
+        "nebinger",
+        "meredith",
+        "coppin",
+        "mccall"
+      ],
+      "programs": [
+        "butchers-sew-shop"
+      ],
+      "title": "Butcher’s Sew Shop Junior",
+      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "soon",
+      "date": "2026-11-30",
+      "sendOn": "2026-11-29",
+      "when": "Tomorrow, Monday, November 30",
+      "text": "Last day of early-bird pricing for Winter and Spring sessions."
     },
     {
       "id": "reg-philly-art-center-qv-2026-12-07",
-      "kind": "register",
-      "date": "2026-12-07",
-      "sendOn": "2026-12-06",
       "schools": [
         "nebinger",
         "meredith",
@@ -1289,11 +1348,35 @@
       "programs": [
         "philly-art-center-qv"
       ],
-      "when": "Monday, December 7",
       "title": "Philly Art Center, Queen Village",
-      "text": "Last day to change a Winter/Spring registration.",
       "url": "https://phillyafterschool.org/programs/philly-art-center-qv/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2026-12-07",
+      "sendOn": "2026-10-02",
+      "when": "Monday, December 7",
+      "text": "Last day to change a Winter/Spring registration."
+    },
+    {
+      "id": "reg-philly-art-center-qv-2026-12-07-eve",
+      "schools": [
+        "nebinger",
+        "meredith",
+        "coppin",
+        "vare-washington",
+        "mccall"
+      ],
+      "programs": [
+        "philly-art-center-qv"
+      ],
+      "title": "Philly Art Center, Queen Village",
+      "url": "https://phillyafterschool.org/programs/philly-art-center-qv/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "soon",
+      "date": "2026-12-07",
+      "sendOn": "2026-12-06",
+      "when": "Tomorrow, Monday, December 7",
+      "text": "Last day to change a Winter/Spring registration."
     },
     {
       "id": "camp-arden-drama-school-2026-12-23",

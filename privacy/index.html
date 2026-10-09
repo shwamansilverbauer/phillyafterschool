@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=5e17840f">
+<link rel="stylesheet" href="../assets/site.css?v=1406c9ac">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -48,7 +48,8 @@
 </div>
 <main class="wrap">
 <div class="prose">
-  <h2><span data-copy="f7dd5c66e9">The short version</span></h2>
+  <nav class="jump" data-jump aria-label="On this page" hidden></nav>
+  <h2 id="short" data-jump-to="In short"><span data-copy="f7dd5c66e9">The short version</span></h2>
   <ul>
     <li><span data-copy="667094bdc1">There are no ads, and nothing you send is sold. An account is optional: it is for following a program’s dates, keeping favorites, keeping your school or a plan in a profile, and sharing a week with someone.</span></li>
     <li><span data-copy="3b888bbdc0">Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us unless you sign in and choose to keep one in your profile or share one.</span></li>
@@ -57,18 +58,19 @@
     <li><span data-copy="664e73ba2e">If you ask to be emailed when a school is added, the same three things are kept by Klaviyo: your first name, your email address and which school you’re waiting for. It also adds you to our email list for occasional news about the site.</span></li>
     <li><span data-copy="f844260e06">We use Google Analytics and Microsoft Clarity to see how the site is used, so we can fix what’s confusing.</span></li>
   </ul>
-  <h2 id="rosters"><span data-copy="63e8b54c61">Rosters and children’s names</span></h2>
+  <h2 id="rosters" data-jump-to="Rosters"><span data-copy="63e8b54c61">Rosters and children’s names</span></h2>
   <ul>
     <li><span data-copy="5c228fe5c0">A roster lives in the browser you made it in. Clearing your browser’s site data deletes it.</span></li>
     <li><span data-copy="1f41fda416">A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us unless you sign in and choose to keep the summer in your profile. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.</span></li>
     <li><span data-copy="b7dac40b19">If you save a school as yours, that choice is kept in your own browser too. Our visit counts record that a school was saved, not who saved it.</span></li>
     <li><span data-copy="1253e5b11d">A child’s name is optional. If you add one, it stays on your device unless you keep or share that week through an account.</span></li>
+    <li><span data-copy="40afaccc40">Dates you add yourself to “My kids’ calendar”, like picture day or a form that’s due, are kept in your browser and nowhere else. They are not sent to us and are not part of your profile, so they don’t appear on your other devices.</span></li>
     <li><span data-copy="72d228d3ed">A week can no longer be shared as a link. A link showed the week to anyone who had it and could not be taken back, so links made before October 2026 have stopped opening.</span></li>
     <li><span data-copy="2d3a826155">If one of those older links is opened, the site still removes the name from the page address before any analytics loads. The roster page is set to be hidden in session recordings.</span></li>
     <li><span data-copy="82b70f14b8">Making a card happens on your own device. What you do with the picture is up to you.</span></li>
     <li><span data-copy="2e3b852749">If you add a photo to a week card, the card is made in your own browser. The photo is not uploaded, not saved, and gone when you close the page.</span></li>
   </ul>
-  <h2 id="groups"><span data-copy="069e85c867">Accounts, profiles and sharing</span></h2>
+  <h2 id="groups" data-jump-to="Accounts"><span data-copy="069e85c867">Accounts, profiles and sharing</span></h2>
   <p><span data-copy="ea76bf36e5">An account is optional. It lets you keep your school and a child’s week in a profile, share a week with one person, and join a share group of a few families who know each other. These are the only parts of the site that keep anything about a child on our server, and only when you choose to use them.</span></p>
   <ul>
     <li><span data-copy="ec48d4711a">An account is an email address and your first and last name. The email signs you in and tells you when someone opens a week you shared or joins a group you made. Other members never see it.</span></li>
@@ -95,7 +97,7 @@
     <li><span data-copy="35a4be5cea">A safety copy of the accounts database is made each day and kept for 14 days, in case something breaks, and our web host keeps its own backups. So what you delete is gone from the site straight away, and leaves those copies as they are replaced, usually within a month.</span></li>
     <li><span data-copy="4620ae226c">Accounts are for parents, caregivers, teachers and the people who run programs. Children should not make one, and the site never asks a child for an email address: building a week and making a card work without an account.</span></li>
   </ul>
-  <h2 id="managers"><span data-copy="de5ce68b78">If you manage a program and claim its listing</span></h2>
+  <h2 id="managers" data-jump-to="Program managers"><span data-copy="de5ce68b78">If you manage a program and claim its listing</span></h2>
   <ul>
     <li><span data-copy="3905d8d8ab">Claiming uses the same account. We check one thing: that the email address you signed in with is at the listing’s own website address. We keep which listing you claimed, when, and whether the claim stands.</span></li>
     <li><span data-copy="db601ebc70">The public sees a “Claimed” mark on the listing and nothing about you. Your name and email address are seen only by the person who runs this site.</span></li>
@@ -105,7 +107,7 @@
     <li><span data-copy="4a55bb4633">You can give up a claim at any time, and deleting your account removes your claims and the changes you proposed.</span></li>
     <li><span data-copy="7d5d4993dc">The page where you claim a listing loads Google Analytics and Microsoft Clarity to count visits. The part where you sign in and manage claims is hidden in session recordings.</span></li>
   </ul>
-  <h2 id="forms"><span data-copy="7f8f847dc5">Suggestions, corrections and reviews</span></h2>
+  <h2 id="forms" data-jump-to="Forms and reviews"><span data-copy="7f8f847dc5">Suggestions, corrections and reviews</span></h2>
   <ul>
     <li><span data-copy="6cc5cdc188">What you type into a form is emailed to the site’s inbox, and a backup copy is kept on our web host in case the email goes missing.</span></li>
     <li><span data-copy="94f7d60f5b">Your email address is used only to reply to you or to confirm something. It is never published.</span></li>
@@ -113,32 +115,34 @@
     <li><span data-copy="73569b8eed">Asking for a school to be covered sends only the school’s name.</span></li>
     <li><span data-copy="b9fb0bfae2">Please don’t include children’s names or other people’s personal details in what you send.</span></li>
   </ul>
-  <h2 id="map"><span data-copy="f9dda5e549">Distances and the map</span></h2>
+  <h2 id="map" data-jump-to="The map"><span data-copy="f9dda5e549">Distances and the map</span></h2>
   <ul>
     <li><span data-copy="a81063878a">“From where I am” asks your browser for your location. It is used on your device to work out distances, it is not sent to us, and it is not kept.</span></li>
     <li><span data-copy="5320f4f2ab">The map stays off until you tap “Show the map”. Its pictures then come from OpenStreetMap’s servers, which see your internet address and which part of the city you looked at, as any website you visit does.</span> <a href="https://osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener"><span data-copy="be62daa255">OpenStreetMap’s privacy policy</span></a>.</li>
     <li><span data-copy="f8bbcf6d58">Distances are measured in a straight line from street addresses, so a walk is usually a little longer.</span></li>
   </ul>
-  <h2 id="email"><span data-copy="d4819c397f">Dates by email</span></h2>
+  <h2 id="email" data-jump-to="Emails and texts"><span data-copy="d4819c397f">Dates by email</span></h2>
   <ul>
     <li><span data-copy="bfa195ba5e">Following a program, a camp or a school uses a free account. Your account keeps the list of what you follow. Your browser sends two things to Klaviyo, the email service we use: your email address (with your first name, if your account has one) and what you follow. They are stored there.</span></li>
     <li><span data-copy="89e3f216a1">You hear only about what you follow. Stop following from the listing’s page or from your account page and those emails stop; deleting your account stops them all.</span></li>
+    <li><span data-copy="f88db0f4c1">A sign-up date is emailed the morning after it is posted on this site, with a reminder the day before. Days off come in a weekly round-up. We can only pass on a date once the program has posted it and it has reached this site.</span></li>
     <li><span data-copy="505b35a201">A favorite is different. It is kept in your account and nowhere else: it isn’t sent to Klaviyo, and it sends no email.</span></li>
+    <li><span data-copy="2f37bba10a">A phone number is optional. If you add one and tick the box agreeing to texts, we keep the number, the day you agreed and the wording you agreed to, in your account. It is for texts about what you follow and nothing else. Texts have not started yet; until they do, the number is not passed to any texting service. You can remove it on your account page at any time, and a text will always say how to stop them. Message and data rates may apply.</span></li>
     <li><span data-copy="10bf823f58">Asking to be told when a school is added still takes only a first name and an email address, with no account.</span></li>
     <li><span data-copy="0f1b0b26a2">It never asks for a child’s name, grade or anything else about your family, and your roster is not sent with it.</span></li>
     <li><span data-copy="02b0e18b5d">Like most email services, Klaviyo records whether an email was opened and which links were clicked, and it may estimate a general location from your internet connection.</span></li>
-    <li><span data-copy="1e3d45d7f9">Your name and address are used for these date emails and nothing else. They are not shared with the programs listed here, and they are not sold.</span></li>
+    <li><span data-copy="1e3d45d7f9">Your name and address are used for these date emails and nothing else. They are not shared with the programs listed here, and they are not sold.</span> <span data-copy="77b9ae4735">The same goes for a phone number.</span></li>
     <li><span data-copy="3c33892438">Every email has an unsubscribe link, and using it stops the emails. To have your name and address deleted altogether, email us.</span></li>
     <li><span data-copy="02b6a17db4">Klaviyo handles that data under its own terms:</span> <a href="https://www.klaviyo.com/legal/privacy-notice" target="_blank" rel="noopener"><span data-copy="a1f21c2fb6">Klaviyo’s privacy notice</span></a>.</li>
   </ul>
-  <h2 id="counts"><span data-copy="13514871d2">Counts for each listing</span></h2>
+  <h2 id="counts" data-jump-to="Counts"><span data-copy="13514871d2">Counts for each listing</span></h2>
   <ul>
     <li><span data-copy="45ed82b34e">We keep a count, for each listing and each day, of how many times its page was opened, how many times its sign-up and website links were followed, how many times it was put on a plan, and how many people asked for its emails.</span></li>
     <li><span data-copy="679564089a">It is a number and nothing else. No cookie is set, and nothing says who you are, which child a plan was for, or what else you looked at.</span></li>
     <li><span data-copy="05cd22fdf7">To stop a count being run up, the server keeps a scrambled form of the internet address behind each count for up to two days. It can’t be turned back into the address and isn’t tied to what was counted.</span></li>
     <li><span data-copy="19c20a17d0">The people who run a listing they have claimed can see that listing’s numbers. Nobody else can, apart from us.</span></li>
   </ul>
-  <h2 id="analytics"><span data-copy="77a09c8b1d">Analytics and recordings</span></h2>
+  <h2 id="analytics" data-jump-to="Analytics"><span data-copy="77a09c8b1d">Analytics and recordings</span></h2>
   <ul>
     <li><span data-copy="44d34909fd">Google Analytics records which pages are visited and which buttons, filters and searches are used, along with general details such as device type and approximate location. That includes the words typed into the program search box.</span></li>
     <li><span data-copy="c4da07c2ab">Microsoft Clarity records how pages are used, including heatmaps and replays of scrolling and clicking, to help us improve the site. We have set it to hide form fields and the roster page.</span></li>
@@ -146,12 +150,12 @@
     <li><span data-copy="6f46e689e8">You can block both with your browser’s privacy settings or a content blocker, and the site will still work.</span></li>
     <li><span data-copy="abba3c955f">Like every website, our host keeps standard server logs, which include IP addresses.</span></li>
   </ul>
-  <h2 id="elsewhere"><span data-copy="bf541a9940">Links to other sites</span></h2>
+  <h2 id="elsewhere" data-jump-to="Other sites"><span data-copy="bf541a9940">Links to other sites</span></h2>
   <p><span data-copy="79d870e145">Program websites, registration pages, calendars and Venmo are run by other organizations and have their own privacy practices.</span></p>
   <p><span data-copy="d6a9374e67" data-tpl="Links to a program’s own site carry a short tag saying the visit came from {site}, and from which school’s page. The tag says nothing about you." data-vars="{&quot;site&quot;:&quot;Philly After School&quot;}">Links to a program’s own site carry a short tag saying the visit came from Philly After School, and from which school’s page. The tag says nothing about you.</span></p>
-  <h2 id="children"><span data-copy="dcf75191c5">Children</span></h2>
+  <h2 id="children" data-jump-to="Children"><span data-copy="dcf75191c5">Children</span></h2>
   <p><span data-copy="5677caacfb">This site is written for parents and caregivers. It is not meant to be used by children, and we do not knowingly collect information from them.</span></p>
-  <h2 id="remove"><span data-copy="e9d0974c5f">Seeing or removing what you sent</span></h2>
+  <h2 id="remove" data-jump-to="Removing things"><span data-copy="e9d0974c5f">Seeing or removing what you sent</span></h2>
   <p><span data-copy="39a1146667">To have a review taken down, your email address removed from the date emails, or a suggestion and your contact details deleted, email</span> <a href="mailto:contact@phillyafterschool.org">contact@phillyafterschool.org</a><span data-copy="30beaab727">. Say what you sent and roughly when, and it will be removed.</span></p>
   <p class="hint"><span data-copy="b149e0bbf0" data-tpl="Last updated {date}. If this page changes in a way that matters, the date changes with it." data-vars="{&quot;date&quot;:&quot;October 9, 2026&quot;}">Last updated October 9, 2026. If this page changes in a way that matters, the date changes with it.</span></p>
 </div>
@@ -215,7 +219,7 @@
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=5839292e" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=bef20263" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 
 </body>
 </html>

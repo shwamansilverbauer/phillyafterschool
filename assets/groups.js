@@ -328,6 +328,18 @@
         relationships: { list: { data: { type: 'list', id: KL_LIST } } } } })
     }).then(function (r) { if (r.status >= 200 && r.status < 300) { me.listed = true; call('listed', {}); if (window.pasClaimNames) noteRole(me, window.pasClaimNames()); } }, function () { /* blocked or offline: it is tried again at the next sign-in */ });
   }
+  // A mobile number for texts is optional, and is only kept with a yes to this exact wording (the server notes which).
+  var TEXTS_YES = 'Yes, text me when something I follow posts a sign-up date. Texts haven’t started yet; when they do, expect a few a month at most. Message and data rates may apply. Reply STOP to end them at any time.';
+  function phoneFields(prefix, value) {
+    var wrap = el('div', 'g-phone');
+    var f = el('div', 'field'), l = el('label', null, 'Mobile number for texts (optional)'), i = el('input');
+    l.htmlFor = prefix + 'phone'; i.id = prefix + 'phone'; i.type = 'tel'; i.autocomplete = 'tel-national'; i.inputMode = 'tel'; i.maxLength = 20; i.placeholder = '215-555-0123'; i.value = value || '';
+    f.appendChild(l); f.appendChild(i); wrap.appendChild(f);
+    var yes = el('label', 'g-check'), box = el('input'); box.type = 'checkbox'; box.id = prefix + 'texts'; box.checked = !!value;
+    yes.appendChild(box); yes.appendChild(el('span', null, TEXTS_YES));
+    wrap.appendChild(yes);
+    return { box: wrap, phone: i, yes: box };
+  }
   // Listing pages fetch this script only when someone taps Follow or Save while signed out (see src/site.js).
   window.pasAccount = { signIn: signInBox, added: listOnce };
   function saveNames(me, first, last) {
@@ -406,6 +418,8 @@
         var newSchool = pickOf('new-school', 'Your school (optional)', 'Not listed, or rather not say', ainfo.schools, me.school || (devSchool ? devSchool.id : ''));
         var newHood = pickOf('new-hood', 'Your neighborhood (optional)', 'Rather not say', ainfo.hoods, me.hood || '');
         ff.appendChild(el('p', 'hint', 'Your school and neighborhood set where lists start, and which news reaches you.'));
+        var newPhone = phoneFields('new-', '');
+        ff.appendChild(newPhone.box);
         ff.appendChild(el('p', 'hint', 'Anyone you share a week with or invite to a group sees your name on the invitation, and a group’s creator sees it when you join. ' + LIST_NOTE));
         var fs = el('p', 'g-status'); fs.setAttribute('aria-live', 'polite'); ff.appendChild(fs);
         var fa = el('div', 'actions'), fb = el('button', 'btn primary', 'Finish'); fb.type = 'submit';
@@ -413,7 +427,7 @@
         fa.appendChild(fb); fa.appendChild(fo); ff.appendChild(fa);
         ff.addEventListener('submit', function (e) {
           e.preventDefault(); fb.disabled = true;
-          call('basics', { first: fn.first.value, last: fn.last.value, school: newSchool.value, hood: newHood.value }).then(function (r) {
+          call('basics', { first: fn.first.value, last: fn.last.value, school: newSchool.value, hood: newHood.value, phone: newPhone.phone.value, texts: newPhone.yes.checked }).then(function (r) {
             fb.disabled = false;
             if (!r.ok) { fs.textContent = r.message; fs.className = 'g-status bad'; return; }
             Object.keys(r.user).forEach(function (k) { me[k] = r.user[k]; });
@@ -428,8 +442,12 @@
         return;
       }
       listOnce(me);
+      // a strip of links to each part of the page: there is a lot on it
+      var jump = el('nav', 'jump'); jump.setAttribute('data-jump', ''); jump.setAttribute('aria-label', 'On this page'); jump.hidden = true;
+      account.appendChild(jump);
+      var part = function (box, id, label) { box.id = id; box.setAttribute('data-jump-to', label); return box; };
       // who you are
-      var who = el('section', 'panel');
+      var who = part(el('section', 'panel'), 'you', 'You');
       who.appendChild(el('h2', null, 'Your account'));
       var line = el('p', null, 'Signed in as '); line.appendChild(el('b', null, me.email)); who.appendChild(line);
       var nameForm = el('form', 'g-form'), nf0 = nameFields('acct-', me);
@@ -443,12 +461,30 @@
         e.preventDefault();
         saveNames(me, nf0.first.value, nf0.last.value).then(function (r) { nameNote.textContent = r.ok ? 'Saved.' : r.message; if (r.ok) { nf0.first.value = r.first; nf0.last.value = r.last; } });
       });
+      var phoneForm = el('form', 'g-form'), pf = phoneFields('acct-', me.phone || '');
+      var phoneSave = el('button', 'btn', 'Save'); phoneSave.type = 'submit';
+      var phoneDrop = btn('clear', 'Remove my number'); phoneDrop.hidden = !me.phone;
+      var phoneNote = el('span', 'hint'); phoneNote.setAttribute('aria-live', 'polite');
+      var phoneActs = el('div', 'actions'); phoneActs.appendChild(phoneSave); phoneActs.appendChild(phoneDrop); phoneActs.appendChild(phoneNote);
+      part(phoneForm, 'texts', 'Texts');
+      phoneForm.appendChild(el('h3', null, 'Texts')); phoneForm.appendChild(pf.box); phoneForm.appendChild(phoneActs);
+      var savePhone = function (number, yes) {
+        phoneNote.textContent = 'Saving…';
+        call('phone_save', { phone: number, texts: yes }).then(function (r) {
+          if (!r.ok) { phoneNote.textContent = r.message; return; }
+          me.phone = r.phone; pf.phone.value = r.phone; pf.yes.checked = !!r.phone; phoneDrop.hidden = !r.phone;
+          phoneNote.textContent = r.phone ? 'Saved. We’ll only use it for the texts described above.' : 'Your number is gone from your account.';
+        });
+      };
+      phoneForm.addEventListener('submit', function (e) { e.preventDefault(); savePhone(pf.phone.value, pf.yes.checked); });
+      phoneDrop.addEventListener('click', function () { savePhone('', false); });
+      who.appendChild(phoneForm);
       account.appendChild(who);
       // what's new on the site, for someone who has been before
       var NEWS = ainfo.news || [];
       if (NEWS.length) {
         var seenNews = get('pas-news') || '';
-        var newsBox = el('section', 'panel g-news');
+        var newsBox = part(el('section', 'panel g-news'), 'new', 'What’s new');
         newsBox.appendChild(el('h2', null, 'What’s new'));
         var nul = el('ul', 'g-list');
         NEWS.slice(0, 5).forEach(function (n) {
@@ -467,11 +503,11 @@
       // what you follow (its dates come by email) and your favorites (kept here, nothing emailed)
       var MK = window.pasMarks;
       if (MK) {
-        var fol = el('section', 'panel g-marks');
+        var fol = part(el('section', 'panel g-marks'), 'following', 'Following');
         fol.appendChild(el('h2', null, 'Places you follow'));
-        fol.appendChild(el('p', null, 'When one of these posts a sign-up date, a deadline or a day off, it’s in your Sunday email. Follow a program, a camp or a school from its own page.'));
+        fol.appendChild(el('p', null, 'When one of these posts a sign-up date or a deadline, you get an email the next morning and a reminder the day before. Days off come in a Sunday round-up. Follow a program, a camp or a school from its own page.'));
         var folBox = el('div'); fol.appendChild(folBox);
-        fol.appendChild(el('h3', null, 'Favorites'));
+        fol.appendChild(part(el('h3', null, 'Favorites'), 'favorites', 'Favorites'));
         fol.appendChild(el('p', 'hint', 'Saved so you can find them again. A favorite sends no email.'));
         var favBox = el('div'); fol.appendChild(favBox);
         var marksNote = el('p', 'g-status'); marksNote.setAttribute('aria-live', 'polite'); fol.appendChild(marksNote);
@@ -500,7 +536,7 @@
         account.appendChild(fol);
       }
       // what is kept in the profile: a school, and any weeks
-      var prof = el('section', 'panel');
+      var prof = part(el('section', 'panel'), 'profile', 'School and grades');
       prof.appendChild(el('h2', null, 'Kept in your profile'));
       prof.appendChild(el('p', null, 'Your school, your children’s grades and your child’s week can live in your profile, so they’re there when you sign in on another phone or computer. Nothing goes in unless you put it there.'));
       var schoolRow = el('form', 'g-row');
@@ -568,7 +604,7 @@
         hoodRow.appendChild(hl); hoodRow.appendChild(hs); hoodRow.appendChild(hn);
         prof.appendChild(hoodRow);
       }
-      var weeksHead = el('h3', null, 'Weeks'); prof.appendChild(weeksHead);
+      var weeksHead = part(el('h3', null, 'Weeks'), 'plans', 'Your plans'); prof.appendChild(weeksHead);
       var weeksBox = el('div'); prof.appendChild(weeksBox);
       var toBoard = el('p', 'hint', 'To keep a week here, or put one on this device, open '); var tb = el('a', null, 'Build your week'); tb.href = page('board/') + '?back=1'; toBoard.appendChild(tb); toBoard.appendChild(document.createTextNode(' and look for “Keep and share this week”.'));
       prof.appendChild(toBoard);
@@ -628,7 +664,7 @@
       paintSchool(me.school || ''); paintGrades(me.grades || []); loadProfile();
       account.appendChild(prof);
       // sharing: weeks shared with one person, and groups
-      var mine = el('section', 'panel');
+      var mine = part(el('section', 'panel'), 'sharing', 'Sharing');
       mine.appendChild(el('h2', null, groupsOn ? 'Sharing and groups' : 'Sharing'));
       var noneYet = el('p', 'hint', groupsOn ? 'You’re not sharing a week with anyone yet, and you’re not in any groups.' : 'You’re not sharing a week with anyone yet. You can share one with one person, like a grandparent or sitter, from Build your week.');
       if (!groups.length) mine.appendChild(noneYet);
@@ -699,7 +735,7 @@
       account.appendChild(make);
       // the site's one ask
       var help = el('section', 'panel g-support');
-      var dir = el('section', 'panel');
+      var dir = part(el('section', 'panel'), 'listings', me.claims ? 'Your listings' : 'For programs');
       dir.appendChild(el('h2', null, me.claims ? 'Your listings' : 'Run a program or camp?'));
       dir.appendChild(el('p', null, me.claims ? 'This account has claimed ' + (me.claims === 1 ? 'a listing' : me.claims + ' listings') + '. Send changes or give one up from the program managers page.' : 'This same account can claim your program’s listing, if your email address is at its website. Then you can send changes as its manager.'));
       var dl = el('a', 'btn', me.claims ? 'Manage your listings' : 'Claim your listing'); dl.href = page('managers/'); dir.appendChild(dl);
@@ -709,7 +745,7 @@
       var ha = el('a', 'btn', 'Buy me a coffee'); ha.href = page('support/'); help.appendChild(ha);
       account.appendChild(help);
       // leaving
-      var out = el('section', 'panel');
+      var out = part(el('section', 'panel'), 'sign-out', 'Sign out');
       out.appendChild(el('h2', null, 'Signing out'));
       var acts = el('div', 'actions');
       var so = btn('btn', 'Sign out'), sa = btn('btn', 'Sign out on every device'), del = btn('clear', 'Delete my account');
@@ -720,6 +756,10 @@
       sa.addEventListener('click', function () { call('logout_all', {}).then(function () { set('pas-in', null); drawSignedOut(); }); });
       twoTap(del, 'Tap again to delete everything', function () { (window.pasMarks ? window.pasMarks.clear().then(null, function () { /* the unsubscribe link still works */ }) : Promise.resolve()).then(function () { return call('delete_account', {}); }).then(function (r) { if (r.ok) { set('pas-in', null); set('pas-role', null); set('pas-kl-role', null); unlinkAll(); drawSignedOut('Your account and everything you shared are deleted.'); } }); });
       account.appendChild(out);
+      if (window.pasJump) window.pasJump();
+      // arriving on a link to one part of the page: the page was empty when the browser looked for it, so go there now
+      var want = /^#[a-z-]{2,20}$/.test(location.hash) ? document.getElementById(location.hash.slice(1)) : null;
+      if (want && want.hasAttribute('data-jump-to') && want.scrollIntoView) want.scrollIntoView();
     };
     // Arriving from the email: the token is after the #, so it never reaches a server log. Use it once and take it out of the address.
     var tok = /(?:^#|&)t=([A-Za-z0-9_-]{20,80})/.exec(location.hash);

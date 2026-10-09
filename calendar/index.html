@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=5e17840f">
+<link rel="stylesheet" href="../assets/site.css?v=1406c9ac">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -55,6 +55,7 @@
       <li><span data-copy="384520f256">Every day school is closed, with where each child will be.</span></li>
       <li><span data-copy="a212d56011">The summer, week by week.</span></li>
       <li><span data-copy="4562d3e280">Sign-up openings and deadlines for the programs and camps you chose.</span></li>
+      <li><span data-copy="259c60de89">Your own dates: picture day, pretzel day, a form that’s due.</span></li>
       <li><span data-copy="e7c486bfe5">A calendar picture for each month, and a file that puts it all in your phone’s calendar.</span></li>
     </ul>
     <div class="actions"><a class="btn primary big" href="../register/?next=calendar"><span data-copy="65e5b31cc6">Create a free account</span></a><a class="btn big" href="../account/?next=calendar"><span data-copy="f7c400ed69">Log in</span></a></div>
@@ -64,11 +65,34 @@
   <p class="hint when-in" id="year-wait"><span data-copy="808737672b">Getting your calendar…</span></p>
   <section class="section sum year needs-js-block" id="year" hidden>
     <h2 id="year-h"><span data-copy="109448d45c">The year</span></h2>
+    <nav class="jump" data-jump aria-label="On this page" hidden></nav>
     <ul class="year-src" id="year-src"></ul>
+    <div class="year-own" id="year-own" data-jump-to="Your own dates">
+      <h3><span data-copy="9dc1f228e8">Add your own dates</span></h3>
+      <p><span data-copy="52dbc7cffc">Picture day, pretzel day, a form that’s due, a half day: anything you need to remember, for one child or for everyone. They show up in the calendar below, in the pictures and in the file for your phone.</span></p>
+      <form class="own-form" id="own-form">
+        <div class="field own-what"><label for="own-what"><span data-copy="97211a8888">What</span></label><input id="own-what" type="text" maxlength="60" list="own-ideas" placeholder="Picture day" autocomplete="off"></div>
+        <datalist id="own-ideas"><option value="Picture day"><option value="Pretzel day"><option value="Early dismissal"><option value="Form due"><option value="Field trip"><option value="Library day"><option value="Gym day"><option value="Show and tell"><option value="Bring a snack"><option value="Dress-down day"><option value="Concert"><option value="Parent conference"></datalist>
+        <div class="field"><label for="own-when"><span data-copy="769bb19e61">When</span></label><input id="own-when" type="date"></div>
+        <div class="field"><label for="own-rep"><span data-copy="bd88489720">How often</span></label><select id="own-rep"><option value="">Just that day</option><option value="w">Every week on that day</option></select></div>
+        <div class="field own-who-field"><span class="g-label" id="own-who-label"><span data-copy="ab772c4da0">Who it’s for</span></span><div class="own-who" id="own-who" role="group" aria-labelledby="own-who-label"></div></div>
+        <div class="actions"><button type="submit" class="btn primary">Add it</button></div>
+      </form>
+      <details class="own-many">
+        <summary><span data-copy="1b995e4f5d">Add several at once</span></summary>
+        <p class="hint"><span data-copy="4a2dd00d19">Type or paste one on each line, starting with the date or the weekday. They go to whoever is picked under “Who it’s for”.</span></p>
+        <label class="vh" for="own-lines"><span data-copy="2e81b307fb">Dates, one on each line</span></label>
+        <textarea id="own-lines" rows="5" placeholder="10/14 Picture day&#10;Oct 20 Photo forms due&#10;Wednesdays Pretzel day"></textarea>
+        <div class="actions"><button type="button" class="btn" id="own-lines-add">Add these</button></div>
+      </details>
+      <p class="hint" id="own-status" aria-live="polite"></p>
+      <ul class="g-list own-list" id="own-list" hidden></ul>
+      <p class="hint"><span data-copy="b4db80b87b">A weekly one repeats until the last day of school and skips the days school is closed. Your own dates are kept on this device only: they aren’t sent to us, so add them on the phone or computer you’ll look at.</span></p>
+    </div>
     <div class="flag year-changed" id="year-changed" hidden></div>
     <div id="year-empty" hidden></div>
     <div id="year-full">
-      <div class="year-file">
+      <div class="year-file" id="year-file" data-jump-to="Phone calendar">
         <h3><span data-copy="51f6a27090">Put it in your phone’s calendar</span></h3>
         <p><span data-copy="a89f71ba3f">One file with everything ticked below. Open it and your calendar app adds the entries. It’s a copy: if a date changes later, this page will say so, and you download it again.</span></p>
         <fieldset class="year-opts" id="year-opts">
@@ -78,13 +102,14 @@
           <label><input type="checkbox" id="year-o-guide"> <span data-copy="70e7f1bf95">Camps still showing last summer’s weeks, as a guide</span></label>
           <label><input type="checkbox" id="year-o-signup" checked> <span data-copy="fd241c6103">Sign-up dates</span></label>
           <label><input type="checkbox" id="year-o-week"> <span data-copy="00c5347c68">The after-school week, repeating every school week</span></label>
+          <label><input type="checkbox" id="year-o-own" checked> <span data-copy="e70625a046">Dates you added yourself</span></label>
         </fieldset>
         <div class="actions"><button type="button" class="btn primary" id="year-dl">Download the calendar file</button><button type="button" class="btn" id="year-print">Print this page</button></div>
         <p class="hint" id="year-status" aria-live="polite"></p>
       </div>
-      <div id="year-week"></div>
-      <div id="year-agenda"></div>
-      <div class="card-maker sumcard" id="year-card" hidden>
+      <div id="year-week" data-jump-to="School week"></div>
+      <div id="year-agenda" data-jump-to="Month by month"></div>
+      <div class="card-maker sumcard" id="year-card" data-jump-to="Pictures" hidden>
         <h3><span data-copy="2bc6b5e359">Make it a picture</span></h3>
         <p><span data-copy="2c04ce6cc7">A calendar for each month, to print for the fridge or send to family. It’s made here in your browser.</span></p>
         <div class="card-grid">
@@ -176,7 +201,7 @@
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=5839292e" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
-<script src="../assets/groups.js?v=9e9269e1"></script>
+<script src="../assets/site.js?v=bef20263" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/groups.js?v=3eba4c3e"></script>
 </body>
 </html>
