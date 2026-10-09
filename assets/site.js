@@ -307,7 +307,7 @@
     });
   });
 
-  // ----- a dot on "Your account" when the site has news this device hasn't seen (the account page lists it) -----
+  // ----- a dot on "My profile" when the site has news this device hasn't seen (the profile page lists it) -----
   (function () {
     var a = document.querySelector('.nav-cta[data-news]'), dot = a ? a.querySelector('.news-dot') : null;
     if (!dot || store('pas-in') !== '1') return;
@@ -402,7 +402,7 @@
     raw.split('&').forEach(function (p) { var i = p.indexOf('='); if (i > 0) { try { got[p.slice(0, i)] = decodeURIComponent(p.slice(i + 1)); } catch (e) { /* not ours */ } } });
     try { history.replaceState(null, '', location.pathname); } catch (e) { /* the address stays as it was */ }
     var c = /^[a-f0-9]{32}$/.test(got.c || '') ? got.c : '', k = /^(p|c|s|w):[a-z0-9-]{1,80}$/.test(got.k || '') ? got.k : '';
-    var account = (stopEl.getAttribute('data-root') || '') + 'account/' + (stopEl.getAttribute('data-index') || '') + '#following';
+    var account = (stopEl.getAttribute('data-root') || '') + 'profile/' + (stopEl.getAttribute('data-index') || '') + '#following';
     var btn = function (cls, text, go) { var b = el('button', cls, text); b.type = 'button'; b.addEventListener('click', function () { go(b); }); return b; };
     var paint = function (parts) { box.textContent = ''; parts.forEach(function (x) { if (x) box.appendChild(x); }); };
     var signIn = function () { var a = el('a', 'btn', 'Sign in to choose what you follow'); a.href = account; var w = el('div', 'actions'); w.appendChild(a); return w; };
@@ -415,10 +415,10 @@
     var done = function (d, name, was) {
       var acts = el('div', 'actions');
       acts.appendChild(btn('btn', 'Undo', function (b) { b.disabled = true; MK.api('stop', { c: c, k: k, 'do': 'undo', follow: was }).then(function (r) { if (!r.ok) return failed(r); paint([el('h2', null, 'Undone. Emails about ' + name + ' will keep coming.'), still(r.left.filter(function (x) { return x.k !== k; }))]); }); }));
-      paint([el('h2', null, k.charAt(0) === 'w' ? 'Done. “' + name + '” is off.' : 'Done. No more emails about ' + name + '.'), el('p', null, k.charAt(0) === 'w' ? 'The Sunday email is off. You can turn it back on in your account.' : k.charAt(0) === 's' ? 'You won’t get this school’s dates or its days off.' : 'That includes its dates that would have reached you through a school you follow.'), still(d.left), acts]);
+      paint([el('h2', null, k.charAt(0) === 'w' ? 'Done. “' + name + '” is off.' : 'Done. No more emails about ' + name + '.'), el('p', null, k.charAt(0) === 'w' ? 'The Sunday email is off. You can turn it back on in your profile.' : k.charAt(0) === 's' ? 'You won’t get this school’s dates or its days off.' : 'That includes its dates that would have reached you through a school you follow.'), still(d.left), acts]);
       MK.load();   // if this browser is signed in, the email list is told straight away
     };
-    if (!c || !k) { paint([el('h2', null, 'This link is missing something'), el('p', null, 'It may have been cut off on its way from the email. You can stop following from your account page instead.'), signIn()]); return; }
+    if (!c || !k) { paint([el('h2', null, 'This link is missing something'), el('p', null, 'It may have been cut off on its way from the email. You can stop following from your profile instead.'), signIn()]); return; }
     ask('look', k).then(function (d) {
       if (!d.ok) return failed(d);
       var name = d.name;
@@ -531,7 +531,7 @@
           b.disabled = false;
           if (!d.ok) { if (d.http === 401) { MK.state.user = null; try { window.localStorage.removeItem('pas-in'); } catch (e) { /* storage blocked */ } open(what); return; } say(d.message, 'bad'); return; }
           paintAll();
-          if (what === 'fav') { say(on ? name() + ' is in your favorites. Find it on your account page.' : 'Taken out of your favorites.', on ? 'good' : ''); track({ event: 'pas_favorite', action: on ? 'save' : 'remove', listing: k, place: place }); }
+          if (what === 'fav') { say(on ? name() + ' is in your favorites. Find it on your profile.' : 'Taken out of your favorites.', on ? 'good' : ''); track({ event: 'pas_favorite', action: on ? 'save' : 'remove', listing: k, place: place }); }
           else if (on) followed();
           else say('Stopped. No more emails about ' + name() + '.');
         });
@@ -547,7 +547,7 @@
               paintAll();
               var k = key(), did = (what === 'fav' ? MK.state.favs : MK.state.follows).indexOf(k) > -1;
               if (!did) { act(what); return; }
-              if (what === 'fav') { say(name() + ' is in your favorites. Find it on your account page.', 'good'); track({ event: 'pas_favorite', action: 'save', listing: k, place: place }); basics(); }
+              if (what === 'fav') { say(name() + ' is in your favorites. Find it on your profile.', 'good'); track({ event: 'pas_favorite', action: 'save', listing: k, place: place }); basics(); }
               else followed();
             });
           }, what === 'fav' ? 'Favorites are kept in a free account. No password: we email you a 6-digit code, and you type it here.' : 'Sign in, and you’re following. If you’re new, this makes your free account. No password: we email you a 6-digit code, and you type it here.');

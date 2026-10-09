@@ -1509,3 +1509,4 @@ html.signed .year-out{display:none}
 .topbar .top-claim a{background:var(--yellow);color:var(--yellow-ink);border-radius:999px;padding:3px 12px;border-bottom:0}
 .topbar .top-claim a:hover,.topbar .top-claim a:focus-visible{background:#FFD83A}
 @media (max-width:360px){.top-narrow{display:none!important}.topbar .in{gap:6px 10px}}
+.g-page .panel > a.btn{align-self:flex-start}
