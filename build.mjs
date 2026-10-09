@@ -1837,7 +1837,8 @@ function termsPage() {
   ${cfg.termsLive === true ? '' : `<p class="flag"><b>Draft for review.</b> This page is only in the preview. It is not on the live site, and it has not been checked by a lawyer.</p>`}
   <h2>${T(`What this site is`)}</h2>
   <ul>
-    <li>${T(`{site} is a free directory. It gathers what after-school programs, weekend classes and camps in Philadelphia say about themselves on their own websites, and arranges it by school and neighborhood.`, { site: cfg.siteName })}</li>
+    <li>${T(`{site} is a free directory. It gathers what after-school programs, weekend classes and camps in Philadelphia say about themselves on their own websites, and arranges it by school and neighborhood.`, { site: cfg.siteName })}</li>${cfg.termsOperator ? `
+    <li>${T(`{site} is run by {who}, a Pennsylvania limited liability company. “We” and “us” in these terms mean {who}.`, { site: cfg.siteName, who })}</li>` : ''}
     <li>${T(`We don’t run any of the programs listed, and we aren’t a child care provider, a school, a booking service or an agent for any program.`)}</li>
     <li>${T(`A listing is not a recommendation. We don’t inspect programs, check licences or insurance, run background checks on staff, or verify that a program is safe or right for your child.`)}</li>
     <li>${T(`Hours, prices, dates, pickup routes and openings change, and what’s here can be out of date or wrong. Confirm everything with the program before you enroll, pay or rely on a pickup.`)}</li>

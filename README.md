@@ -119,7 +119,7 @@ address and sends them straight to Klaviyo with the browser key, onto the same l
 
 `termsPage()` in `build.mjs` writes `/terms/`, linked from the footer and from the account page, because
 `"termsLive": true` is set in `site.config.json`. Set it to `false` and the page goes back to being a draft that is
-built into the preview copy only. `termsOperator` names who runs the site in the liability line (the site's name if
+built into the preview copy only. `termsOperator` names who runs the site, in a line under "What this site is" and in the liability line (the site's name if
 unset), and `termsUpdated` sets the date shown: change it when the terms change in a way that matters.
 
 ## Where things are: distances and the map
