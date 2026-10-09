@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="72" viewBox="0 0 240 72" role="img" aria-label="Find us on Philly After School">
+  <rect width="240" height="72" rx="14" fill="#0A3566"/>
+  <rect x="16" y="22" width="40" height="21" rx="6" fill="#F3C613"/>
+  <circle cx="26" cy="46" r="5.5" fill="#F3C613"/><circle cx="26" cy="46" r="2.4" fill="#0A3566"/>
+  <circle cx="46" cy="46" r="5.5" fill="#F3C613"/><circle cx="46" cy="46" r="2.4" fill="#0A3566"/>
+  <text x="68" y="29" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#CFE3FB">Find us on</text>
+  <text x="68" y="50" font-family="Arial, Helvetica, sans-serif" font-size="17.5" font-weight="700" fill="#FFFFFF">Philly After School</text>
+</svg>

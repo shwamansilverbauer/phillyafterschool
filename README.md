@@ -467,6 +467,57 @@ about it is sent anywhere.
   `program_id` and `nudge_place` (week or profile). The profile loads no analytics, so only Build your week is
   counted.
 
+## Premium listings
+
+Built, and kept out of sight until there is a way to pay for one. A premium listing adds, on top of everything a
+claimed listing already has: up to six photos and a logo, a section in the program's own words, an offer or event
+line, a button parents use to send the program a question, fuller numbers, and a flyer and website badge. It never
+changes where a listing appears in a list, and it has no say over reviews.
+
+- **The switch.** `"groups": { "premium": ... }` in `site.config.json`: leave it out (or `false`) and nothing premium
+  exists anywhere; `"preview"` and the tools work, but what a program adds shows on its listing only to the people
+  who hold that listing, signed in; `true` (or `"on"`) and everyone sees it. `PAS_PREMIUM=preview|on` overrides it
+  for a test build. The site runs on `"preview"`.
+- **Which listings are premium** is a row in the `premium` table. For now the owner sets it by hand on
+  `/edit/claims/` ("Make it premium" beside each claimed listing); a payment would set the same row later. Turning
+  it off hides what was added and keeps it. By the rule under "What stays free", a free program can simply be made
+  premium at no charge.
+- **Everything waits for a person.** Photos, the logo, the words and the offer line each go to `/edit/claims/` to
+  be published or declined, and the manager is emailed either way. In `"preview"` those emails say that only they
+  can see it for now.
+- **Photos.** The `photos` table gained a `kind` (`photo` or `logo`). A premium listing keeps up to
+  `PREMIUM_PHOTOS` approved photos: the newest sits at the top of the listing, the rest make the gallery. The older
+  single-photo extra (`"groups": { "photos": true }`) still works on its own. `GET photo` serves one photo by `id`;
+  a waiting photo only to the people who hold the listing.
+- **Words and offers** are rows in `extras` (`kind` `words` or `offer`, `status` new, ok or declined). Words are
+  plain text, 40 to `WORDS_MAX` characters. An offer is one line of up to `OFFER_MAX` characters with a last day,
+  no more than `OFFER_DAYS` ahead, after which it stops showing by itself.
+- **Questions.** `POST ask` emails the question to everyone who holds the listing, with the parent's address as the
+  reply-to. Nothing is stored except a count (`ask` in `hits`, and in the daily tally). A hidden box catches
+  scripts, and there are limits per internet address, per email address and per listing a day.
+- **Fuller numbers** (`stats_more()`): each month for up to a year, how many accounts follow and have saved the
+  listing, and which schools its visitors had saved (`hits_school`: listing, school, month, a number). The school
+  goes along with a page view only when the browser has one saved, and is only kept while premium isn't off.
+- **The flyer and the badge.** The flyer is drawn in the manager's browser (`flyer()` in `groups.js`): one
+  letter-size picture with a QR code to the listing. The code comes from `src/qr.js`, a small encoder written for
+  this (byte mode, level M, versions 1 to 10), loaded only when a flyer is asked for. `scripts/qr-check.py` checks it
+  against the Python `qrcode` library, grid for grid, and by reading the codes back; run it after any change. The badge is `src/static/badge.svg` and a
+  line of HTML to paste. Both links carry `utm_source` (`flyer` or `badge`).
+- **On the listing** (`premiumSlot()` in `build.mjs`, drawn by `site.js`): the offer line near the top, "In their
+  own words" with the logo and a line saying the program wrote it, "Photos", and "Ask a question". The page asks the
+  accounts service (`GET extras`) only when it needs to: in `"preview"`, only for a signed-in visitor; when on, only
+  if the public list of claimed listings names it. School pages show the offer line on the program's card. Add
+  `?premium=demo` to any program's or camp's address to see a made-up sample.
+- **Still to do before it opens:** taking payment, a page that sells it (`/managers/` still says paid extras are
+  planned for later), and a lawyer's read of the terms for paid listings.
+
+### An advertising page (an idea, not built)
+
+A separate page of paid placements, so programs have a way to be found by families who don't know them yet, without
+any listing or search result being reordered. Everything on it would be labeled as paid ("Sponsored"), and nothing
+paid would appear anywhere else. The word matters: the site says its listings are not endorsements, so a paid
+placement is advertising, not an endorsement.
+
 ## What stays free
 
 Decisions that later features have to respect:

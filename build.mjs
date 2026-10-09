@@ -1296,6 +1296,7 @@ ${p.clubs.map(c => `      <article class="club">
     <p class="hint">${T(`Prices, hours and pickup routes change during the year. Confirm with the provider before you enroll.`)}</p>
     ${listingTools('p:' + p.id, fullName(p), D, 'program')}
   </section>
+  ${premiumSlot('p:' + p.id, fullName(p), D)}
   ${clubsHtml}
   ${ALERTS && GROUPS ? '' : alertsBox(D, { program: p, place: 'program', title: T(`Tell me when sign-ups open`), lede: T(`One email when {program} posts a sign-up date, a deadline or a day-off camp. Just this program. For every program at your school, sign up on your school’s page.`, { program: fullName(p) }) })}
   ${camp ? `<section class="section" id="schools">
@@ -2146,7 +2147,9 @@ function privacyPage() {
     <li>${T(`Claiming uses the same account. We check one thing: that the email address you signed in with is at the listing’s own website address. We keep which listing you claimed, when, and whether the claim stands.`)}</li>
     <li>${T(`The public sees a “Claimed” mark on the listing and nothing about you. Your name and email address are seen only by the person who runs this site.`)}</li>
     <li>${T(`Changes you propose are kept with your claim and emailed to the site’s inbox. They are checked and published by a person, and you are told by email when that happens.`)}</li>
-${GROUPS.photos ? `    <li>${T(`A photo you send for your listing is shrunk in your browser before it leaves your device, kept on our web host, and shown on the listing only after a person approves it. You can replace or remove it at any time. Send only a photo you have the right to use, with permission from the families of any children in it.`)}</li>` : ''}
+${GROUPS.photos || GROUPS.premium !== 'off' ? `    <li>${T(`A photo you send for your listing is shrunk in your browser before it leaves your device, kept on our web host, and shown on the listing only after a person approves it. You can replace or remove it at any time. Send only a photo you have the right to use, with permission from the families of any children in it.`)}</li>` : ''}${GROUPS.premium !== 'off' ? `
+    <li>${T(`A premium listing can also carry a logo, a section in your own words and an offer or event line. Each is kept on our web host with your claim, read by a person before it shows, and marked on the listing as coming from the program. You can change or remove any of them at any time.`)}</li>
+    <li>${T(`A question a parent sends from your listing comes to the email address on your account, and to anyone else who holds the listing, with the parent’s address to reply to. We pass it along and don’t keep a copy.`)}</li>` : ''}
     <li>${T(`If you say whether there’s space, the listing shows “Spots open”, “Waitlist” or “Full” and the day you said it. It goes up at once, without anyone checking it, and comes down after 30 days unless you set it again.`)}</li>
     <li>${T(`You can give up a claim at any time, and deleting your account removes your claims and the changes you proposed.`)}</li>
     <li>${T(`The page where you claim a listing loads Google Analytics and Microsoft Clarity to count visits. The part where you sign in and manage claims is hidden in session recordings.`)}</li>
@@ -2160,7 +2163,8 @@ ${GROUPS.photos ? `    <li>${T(`A photo you send for your listing is shrunk in y
     <li>${T(`If you are signed in, the review form fills in your first name and email address from your account so you don’t have to type them. You can change either before you send it.`)}</li>` : ''}
     <li>${T(`Asking for a school to be covered sends only the school’s name.`)}</li>
     <li>${T(`A date you send in for a school’s page (picture day, a half day) is read by a person before it is published. What is published is the date and what it is, marked “from a parent”: never your name or email.`)}</li>
-    <li>${T(`Please don’t include children’s names or other people’s personal details in what you send.`)}</li>
+    <li>${T(`Please don’t include children’s names or other people’s personal details in what you send.`)}</li>${GROUPS && GROUPS.premium !== 'off' ? `
+    <li>${T(`Some listings have an “Ask a question” button. What you type there, with your first name and email address, is emailed to the people who run that program so they can answer you. We pass it along and don’t keep a copy. We do count that a question was asked.`)}</li>` : ''}
   </ul>
   <h2 id="map" data-jump-to="The map">${T(`Distances and the map`)}</h2>
   <ul>
@@ -2189,7 +2193,8 @@ ${GROUPS.photos ? `    <li>${T(`A photo you send for your listing is shrunk in y
   </ul>
   ` : ''}${GROUPS ? `<h2 id="counts" data-jump-to="Counts">${T(`Counts for each listing`)}</h2>
   <ul>
-    <li>${T(`We keep a count, for each listing and each day, of how many times its page was opened, how many times its sign-up and website links were followed, how many times it was put on a plan, and how many people asked for its emails.`)}</li>
+    <li>${T(`We keep a count, for each listing and each day, of how many times its page was opened, how many times its sign-up and website links were followed, how many times it was put on a plan, and how many people asked for its emails.`)}</li>${GROUPS.premium !== 'off' ? `
+    <li>${T(`If your browser has a school saved when you open a listing’s page, we also add one to a monthly count for that school, so the people who run the listing can see which schools’ families are looking. What is kept is which school is saved and a number: nothing about who you are.`)}</li>` : ''}
     <li>${T(`It is a number and nothing else. No cookie is set, and nothing says who you are, which child a plan was for, or what else you looked at.`)}</li>
     <li>${T(`To stop a count being run up, the server keeps a scrambled form of the internet address behind each count for up to two days. It can’t be turned back into the address and isn’t tied to what was counted.`)}</li>
     <li>${T(`The people who run a listing they have claimed can see that listing’s numbers. Nobody else can, apart from us.`)}</li>
@@ -2763,7 +2768,10 @@ ${cards}
 // ---------- share groups (accounts, class codes) ----------
 // "groups" in site.config.json turns them on. While "pilot" is true nothing links to them: the pages exist at
 // /account/ and /groups/, and the block on the roster page only shows in a browser that has visited one of them.
-const GROUPS = cfg.groups && cfg.contactEmail ? { photos: cfg.groups.photos === true || process.env.PAS_PHOTOS === '1', pilot: cfg.groups.pilot !== false, klaviyoList: cfg.groups.klaviyoList || '', google: /^[0-9a-z-]+\.apps\.googleusercontent\.com$/.test(cfg.groups.googleClientId || '') ? cfg.groups.googleClientId : '' } : null;
+// Premium listings: "off" (nothing anywhere), "preview" (only the people who hold a premium listing see its premium
+// side, so it can be set up before it is public) or "on". PAS_PREMIUM overrides the setting for a test build.
+const premiumMode = v => v === true || v === 'on' ? 'on' : v === 'preview' ? 'preview' : 'off';
+const GROUPS = cfg.groups && cfg.contactEmail ? { premium: premiumMode(process.env.PAS_PREMIUM || cfg.groups.premium), photos: cfg.groups.photos === true || process.env.PAS_PHOTOS === '1', pilot: cfg.groups.pilot !== false, klaviyoList: cfg.groups.klaviyoList || '', google: /^[0-9a-z-]+\.apps\.googleusercontent\.com$/.test(cfg.groups.googleClientId || '') ? cfg.groups.googleClientId : '' } : null;
 const groupsAttrs = depth => `data-groups data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}" data-api="${PREVIEW ? '' : link('groups/api.php', depth)}"${GROUPS.klaviyoList && ALERTS?.klaviyoKey ? ` data-kl-key="${esc(ALERTS.klaviyoKey)}" data-kl-list="${esc(GROUPS.klaviyoList)}"` : ''}${ALERTS ? ` data-dates-key="${esc(ALERTS.klaviyoKey)}" data-dates-list="${esc(ALERTS.listId)}"` : ''}${GROUPS.google && !PREVIEW ? ` data-google="${esc(GROUPS.google)}"` : ''} data-pilot="${GROUPS.pilot ? 1 : 0}"${YEAR_PAGE && !PREVIEW ? ' data-year="1"' : ''}`;
 // ---------- directors: which listings can be claimed, and how ----------
 // Someone who runs a program claims its listing by signing in with an email address at the listing's own website
@@ -2780,7 +2788,10 @@ const claimListings = () => Object.fromEntries([
 ]);
 // Under a listing: suggest an update (anyone), and claim it (whoever runs it).
 const listingTools = (key, name, depth, noun) => `<p class="listing-tools"><a class="btn" href="${link('suggest/', depth)}?kind=correction&amp;fix=${encodeURIComponent(key)}&amp;program=${encodeURIComponent(name)}">${T(`Suggest an update`)}</a>${GROUPS ? ` <span class="hint">${noun === 'camp' ? T(`Run this camp?`) : T(`Run this program?`)} <a href="${link('managers/', depth)}?l=${encodeURIComponent(key)}">${T(`Claim this listing`)}</a></span>` : ''}</p>`;
-const photoSlot = key => GROUPS && !PREVIEW ? `<figure class="listing-photo" data-photo="${esc(key)}" hidden></figure>` : '';
+const photoSlot = key => GROUPS && !PREVIEW ? `${GROUPS.premium !== 'off' ? '<p class="pm-offer" data-pm-offer hidden></p>\n    ' : ''}<figure class="listing-photo" data-photo="${esc(key)}" hidden></figure>` : '';
+// Where a premium listing's own page puts what the program added: its own words, more photos, a button for questions.
+// Empty until site.js asks the accounts service; nothing at all while premium is off.
+const premiumSlot = (key, name, depth) => GROUPS && !PREVIEW && GROUPS.premium !== 'off' ? `<div id="premium" class="pm" data-premium="${GROUPS.premium}" data-pm-key="${esc(key)}" data-pm-name="${esc(name)}" data-api="${link('groups/api.php', depth)}" hidden></div>` : '';
 // "Spots open", "Waitlist" or "Full", as the listing's own manager last said it. Empty until the page asks the server.
 const spaceSlot = (key, depth) => GROUPS && !PREVIEW ? `<span class="space-mark" data-space="${esc(key)}" data-api="${link('groups/api.php', depth)}" hidden></span>` : '';
 const claimedMark = (key, depth) => GROUPS && !PREVIEW ? `<span class="claimed-mark" data-claimed="${esc(key)}" data-api="${link('groups/api.php', depth)}" hidden><b>${T(`Claimed`)}</b> ${T(`by the people who run it`)}</span>` : '';
@@ -2928,7 +2939,7 @@ function directorsPage() {
     <p class="lede">${T(`Find your program below and claim it with your work email. Then keep its dates, costs and hours up to date yourself. It’s free, and it takes a couple of minutes.`)}</p>`;
   const body = `<div ${groupsAttrs(1)} style="display:contents">
   <noscript><p class="ask">${T(`Claiming a listing needs JavaScript turned on.`)}</p></noscript>
-  <div class="g-page" id="claims" data-clarity-mask="true"${GROUPS.photos ? ' data-photos="1"' : ''}></div>
+  <div class="g-page" id="claims" data-clarity-mask="true"${GROUPS.photos ? ' data-photos="1"' : ''}${GROUPS.premium !== 'off' ? ` data-qr="${link('assets/qr.js', 1)}${stamp('src/qr.js')}"` : ''}></div>
   <script type="application/json" id="claims-data">${JSON.stringify(Object.entries(L).map(([k, v]) => [k, v.n, v.d, v.m === 'match' ? 1 : 0])).replace(/</g, '\\u003c')}</script>
   <section class="section" id="why">
     <h2>${T(`What claiming gets you`)}</h2>
@@ -2998,7 +3009,7 @@ Link: ${e('$x["link"]')}<?php } ?></pre>
   <h2>Photos waiting for you (<?php echo count($photosNew); ?>)</h2>
   <?php if (!$photosNew) { ?><p class="hint">None waiting. A photo shows on a listing only after you publish it here.</p><?php } ?>
   <?php foreach ($photosNew as $x) { ?><div class="panel">
-    <h3>${e('$name($x["listing"])')}</h3>
+    <h3>${e('$name($x["listing"])')}<?php if (isset($x["kind"]) && $x["kind"] === 'logo') { ?> <span class="hint">Logo</span><?php } ?></h3>
     <p class="hint">From ${e('$x["first"] . " " . $x["last"]')} &lt;${e('$x["email"]')}&gt;, ${e('$day($x["created"])')}. They ticked that they have the right to use it and permission from the families of any children shown.</p>
     <p><img class="review-photo" src="./?photo=<?php echo (int) $x["id"]; ?>" alt=""></p>
     <p>Described as: <b>${e('$x["alt"]')}</b></p>
@@ -3007,10 +3018,26 @@ Link: ${e('$x["link"]')}<?php } ?></pre>
   <?php if ($photosLive) { ?><h2>Photos on the site (<?php echo count($photosLive); ?>)</h2>
   <div class="review-grid"><?php foreach ($photosLive as $x) { ?><div class="panel"><p><img class="review-photo" src="./?photo=<?php echo (int) $x["id"]; ?>" alt=""></p><p><b>${e('$name($x["listing"])')}</b><br><span class="hint">${e('$x["alt"]')}</span></p>${form('$x["id"]', act('photo_no', 'Take it down'))}</div><?php } ?></div><?php } ?>
 
-  <h2>Claimed listings (<?php echo count($claims); ?>)</h2>
-  <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>
-  <div class="stat-scroll"><table class="stat-table"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th><th scope="col"></th></tr></thead><tbody>
-  <?php foreach ($claims as $c) { ?><tr><th scope="row">${e('$name($c["listing"])')}</th><td>${e('$c["first"] . " " . $c["last"]')}<br><span class="hint">${e('$c["email"]')}</span></td><td>${e('$day($c["created"])')}</td><td>${form('$c["id"]', act('claim_remove', 'Take the claim away'))}</td></tr><?php } ?>
+${GROUPS.premium !== 'off' ? `  <h2>Words and offer lines waiting for you (<?php echo count($extrasNew); ?>)</h2>
+  <?php if (!$extrasNew) { ?><p class="hint">None waiting. What a manager writes for a premium listing shows only after you publish it here.</p><?php } ?>
+  <?php foreach ($extrasNew as $x) { ?><div class="panel">
+    <h3>${e('$name($x["listing"])')} <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line' : 'In their own words'; ?></span></h3>
+    <p class="hint">From ${e('$x["first"] . " " . $x["last"]')} &lt;${e('$x["email"]')}&gt;, ${e('$day($x["created"])')}<?php if ($x["kind"] === 'offer') { ?>. To show until ${e('$x["until"]')}<?php } ?></p>
+    <pre class="edit-ask">${e('$x["body"]')}</pre>
+    ${form('$x["id"]', act('extra_ok', 'Publish it', 'btn primary') + act('extra_no', 'Decline'))}
+  </div><?php } ?>
+  <?php if ($extrasLive) { ?><h2>Words and offer lines on the site (<?php echo count($extrasLive); ?>)</h2>
+  <?php foreach ($extrasLive as $x) { ?><div class="panel">
+    <h3>${e('$name($x["listing"])')} <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line, until ' . htmlspecialchars($x["until"], ENT_QUOTES, 'UTF-8') : 'In their own words'; ?></span></h3>
+    <pre class="edit-ask">${e('$x["body"]')}</pre>
+    ${form('$x["id"]', act('extra_no', 'Take it down'))}
+  </div><?php } ?><?php } ?>
+
+` : ''}  <h2>Claimed listings (<?php echo count($claims); ?>)</h2>
+  <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>${GROUPS.premium !== 'off' ? `
+  <p class="hint">${GROUPS.premium === 'preview' ? 'Premium is being tried out: when you make a listing premium, its manager gets the premium tools, and what they add shows on the listing only to them (after you approve it). Nobody else sees it until premium is switched on for the site.' : 'Premium is on: a premium listing’s photos, own words, offer line and question button show to everyone, after you approve what the manager sends.'}</p>` : ''}
+  <div class="stat-scroll"><table class="stat-table wrap"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th>${GROUPS.premium !== 'off' ? '<th scope="col">Premium</th>' : ''}<th scope="col"></th></tr></thead><tbody>
+  <?php foreach ($claims as $c) { ?><tr><th scope="row">${e('$name($c["listing"])')}</th><td>${e('$c["first"] . " " . $c["last"]')}<br><span class="hint">${e('$c["email"]')}</span></td><td>${e('$day($c["created"])')}</td>${GROUPS.premium !== 'off' ? `<td><?php if (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since ${e('$day($premium[$c["listing"]])')}</span>${form('$c["id"]', act('premium_off', 'Turn off'))}<?php } else { ?>${form('$c["id"]', act('premium_on', 'Make it premium'))}<?php } ?></td>` : ''}<td>${form('$c["id"]', act('claim_remove', 'Take the claim away'))}</td></tr><?php } ?>
   </tbody></table></div>
   <?php } ?>
   <?php if ($declined) { ?><h2>Declined or taken away (<?php echo count($declined); ?>)</h2>
@@ -3034,7 +3061,8 @@ $csrf = hash_hmac('sha256', 'claims-form', edit_key());
 $said = isset($_GET['said']) && is_string($_GET['said']) ? substr($_GET['said'], 0, 200) : '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
-$pending = array(); $claims = array(); $declined = array(); $edits = array(); $photosNew = array(); $photosLive = array();
+$pending = array(); $claims = array(); $declined = array(); $edits = array(); $photosNew = array(); $photosLive = array(); $extrasNew = array(); $extrasLive = array(); $premium = array();
+$PREMIUM = ${JSON.stringify(GROUPS.premium)};
 $photoFile = function ($id) { return dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/photos/' . (int) $id . '.jpg'; };
 if ($have) {
   try {
@@ -3085,13 +3113,23 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
   }
   if ($ok && in_array($do, array('photo_ok', 'photo_no'), true)) {
     try {
-      $st = $db->prepare('SELECT p.id, p.listing, p.status, u.email, u.first FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.id = ?'); $st->execute(array($id)); $x = $st->fetch();
+      $st = $db->prepare('SELECT p.*, u.email, u.first FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.id = ?'); $st->execute(array($id)); $x = $st->fetch();
       if ($x) {
         $n = $name($x['listing']);
         if ($do === 'photo_ok') {
-          $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE listing = ? AND status = 'ok' AND id != ?")->execute(array(time(), $x['listing'], $id));   // one photo a listing
+          // one photo a listing, and one logo; a premium listing keeps the photos it already has, up to six
+          $kind = isset($x['kind']) ? $x['kind'] : 'photo';
+          $isPrem = false; try { $pq = $db->prepare('SELECT 1 FROM premium WHERE listing = ?'); $pq->execute(array($x['listing'])); $isPrem = $PREMIUM !== 'off' && (bool) $pq->fetchColumn(); } catch (Exception $e) { $isPrem = false; }
+          if ($isPrem && $kind === 'photo') {
+            $keep = $db->prepare("SELECT id FROM photos WHERE listing = ? AND kind = 'photo' AND status = 'ok' AND id != ? ORDER BY id DESC"); $keep->execute(array($x['listing'], $id));
+            foreach (array_slice($keep->fetchAll(PDO::FETCH_COLUMN), 5) as $old) { $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), (int) $old)); @unlink($photoFile((int) $old)); }
+          } else {
+            try { $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE listing = ? AND kind = ? AND status = 'ok' AND id != ?")->execute(array(time(), $x['listing'], $kind, $id)); }
+            catch (Exception $e) { $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE listing = ? AND status = 'ok' AND id != ?")->execute(array(time(), $x['listing'], $id)); }
+          }
           $db->prepare("UPDATE photos SET status = 'ok', decided = ? WHERE id = ?")->execute(array(time(), $id));
-          tell($x['email'], 'Your photo for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",\n\nThe photo you sent for “" . $n . '” is on the listing now. You can replace or remove it here:' . "\n" . $SITE_URL . '/managers/');
+          $seen = $isPrem && $PREMIUM === 'preview' ? ' For now only you can see it there, while premium listings are being tried out.' : '';
+          tell($x['email'], 'Your ' . $kind . ' for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",\n\nThe " . $kind . " you sent for “" . $n . '” is on the listing now.' . $seen . ' You can replace or remove it here:' . "\n" . $SITE_URL . '/managers/');
           $msg = 'Published, and they’ve been told.';
         } else {
           $was = $x['status'];
@@ -3103,6 +3141,42 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     } catch (Exception $e) { /* a database from before photos: nothing to do */ }
   }
+  // Premium: which listings are, and what their managers wrote.
+  if ($ok && $PREMIUM !== 'off' && in_array($do, array('premium_on', 'premium_off'), true)) {
+    try {
+      $st = $db->prepare("SELECT c.listing, u.email, u.first FROM claims c JOIN users u ON u.id = c.user_id WHERE c.id = ? AND c.status = 'ok'"); $st->execute(array($id)); $c = $st->fetch();
+      if ($c) {
+        $n = $name($c['listing']);
+        if ($do === 'premium_on') {
+          $db->prepare('INSERT OR IGNORE INTO premium (listing, since) VALUES (?, ?)')->execute(array($c['listing'], time()));
+          tell($c['email'], $n . ' now has a premium listing', 'Hi ' . $c['first'] . ",\n\n“" . $n . '” on ' . $SITE . ' now has the premium tools: up to six photos and a logo, a section in your own words, an offer or event line, a button parents can use to send you a question, fuller numbers, and a flyer and badge to share.' . ($PREMIUM === 'preview' ? ' We’re still trying these out, so for now what you add shows on your listing only to you.' : '') . ' You’ll find them under your listing here:' . "\n" . $SITE_URL . '/managers/');
+          $msg = 'It’s premium now, and its manager has been told.';
+        } else {
+          $db->prepare('DELETE FROM premium WHERE listing = ?')->execute(array($c['listing']));
+          $msg = 'Premium is off for that listing. What its manager added is kept, and hidden.';
+        }
+      }
+    } catch (Exception $e) { $msg = 'That didn’t go through: the database isn’t ready for premium yet. Open the site once and try again.'; }
+  }
+  if ($ok && $PREMIUM !== 'off' && in_array($do, array('extra_ok', 'extra_no'), true)) {
+    try {
+      $st = $db->prepare('SELECT e.id, e.listing, e.kind, e.status, u.email, u.first FROM extras e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.id = ?'); $st->execute(array($id)); $x = $st->fetch();
+      if ($x) {
+        $n = $name($x['listing']); $what = $x['kind'] === 'offer' ? 'offer line' : 'section in your own words';
+        if ($do === 'extra_ok') {
+          $db->prepare("DELETE FROM extras WHERE listing = ? AND kind = ? AND status = 'ok' AND id != ?")->execute(array($x['listing'], $x['kind'], $id));   // the newer one takes its place
+          $db->prepare("UPDATE extras SET status = 'ok', decided = ? WHERE id = ?")->execute(array(time(), $id));
+          tell($x['email'], 'Your ' . $what . ' for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",\n\nThe " . $what . ' you wrote for “' . $n . '” is on the listing now.' . ($PREMIUM === 'preview' ? ' For now only you can see it there, while premium listings are being tried out.' : '') . ' You can change it or take it down here:' . "\n" . $SITE_URL . '/managers/');
+          $msg = 'Published, and they’ve been told.';
+        } else {
+          $was = $x['status'];
+          $db->prepare("UPDATE extras SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), $id));
+          tell($x['email'], 'About the ' . $what . ' for ' . $n, 'Hi ' . $x['first'] . ",\n\nWe " . ($was === 'ok' ? 'have taken down' : 'weren’t able to publish') . ' the ' . $what . ' you wrote for “' . $n . '”. It should describe the program in plain words, with no prices that differ from the listing and no claims about other programs. You’re welcome to send another, or reply to this email with any questions.');
+          $msg = $was === 'ok' ? 'Taken down, and they’ve been told.' : 'Declined, and they’ve been told.';
+        }
+      }
+    } catch (Exception $e) { /* a database from before premium: nothing to do */ }
+  }
   header('Location: ./?said=' . rawurlencode($msg), true, 303);
   exit;
 }
@@ -3111,8 +3185,15 @@ if ($have) {
   foreach ($all as $c) { if ($c['status'] === 'pending') $pending[] = $c; elseif ($c['status'] === 'ok') $claims[] = $c; else $declined[] = $c; }
   $edits = $db->query("SELECT e.id, e.listing, e.body, e.link, e.created, u.email, u.first, u.last FROM edits e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.status = 'new' ORDER BY e.id")->fetchAll();
   try {
-    foreach ($db->query("SELECT p.id, p.listing, p.alt, p.status, p.created, u.email, u.first, u.last FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.status != 'declined' AND c.status = 'ok' ORDER BY p.id") as $x) { if (!is_file($photoFile($x['id']))) continue; if ($x['status'] === 'new') $photosNew[] = $x; else $photosLive[] = $x; }
+    foreach ($db->query("SELECT p.*, u.email, u.first, u.last FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.status != 'declined' AND c.status = 'ok' ORDER BY p.id") as $x) { if (!is_file($photoFile($x['id']))) continue; if ($x['status'] === 'new') $photosNew[] = $x; else $photosLive[] = $x; }
   } catch (Exception $e) { /* a database from before photos */ }
+  if ($PREMIUM !== 'off') try {
+    foreach ($db->query('SELECT listing, since FROM premium') as $x) $premium[$x['listing']] = (int) $x['since'];
+    $today = (new DateTime('now', new DateTimeZone('America/New_York')))->format('Y-m-d');
+    foreach ($db->query("SELECT e.id, e.listing, e.kind, e.body, e.until, e.status, e.created, u.email, u.first, u.last FROM extras e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.status != 'declined' AND c.status = 'ok' ORDER BY e.id") as $x) {
+      if ($x['status'] === 'new') $extrasNew[] = $x; elseif ($x['kind'] !== 'offer' || $x['until'] >= $today) $extrasLive[] = $x;
+    }
+  } catch (Exception $e) { /* a database from before premium: it is made the next time anyone opens the site */ }
 }
 ?>
 ${page}`;
@@ -3157,7 +3238,7 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])) });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])) });
   const src = fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8');
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   return src.replace(`'/*CONFIG*/'`, () => `'` + conf.replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`);
@@ -3652,7 +3733,7 @@ $topListings = array(); $hitsSince = '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'hood_saved' => 'Neighborhoods kept', 'phone_saved' => 'Phone numbers added for texts', 'follow' => 'Follows started', 'stop_one' => 'Listings stopped from an email', 'stop_all' => 'Everything stopped from an email', 'fav' => 'Favorites saved', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'email_changed' => 'Email addresses changed', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
+$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'hood_saved' => 'Neighborhoods kept', 'phone_saved' => 'Phone numbers added for texts', 'follow' => 'Follows started', 'stop_one' => 'Listings stopped from an email', 'stop_all' => 'Everything stopped from an email', 'fav' => 'Favorites saved', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'email_changed' => 'Email addresses changed', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers', 'extra_sent' => 'Words and offer lines sent by program managers', 'ask' => 'Questions sent to programs');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -4288,6 +4369,7 @@ function campPage(c) {
     <p class="hint">${T(`Dates, prices and openings change, and many camps fill early. Confirm with the camp before you plan around a week.`)}</p>
     ${listingTools('c:' + c.id, c.name, D, 'camp')}
   </section>
+  ${premiumSlot('c:' + c.id, c.name, D)}
   ${ALERTS && GROUPS ? '' : c.season && c.season < year
     ? alertsBox(D, { camp: c, place: 'camp', title: T(`Tell me when it posts summer {year}`, { year }), lede: T(`One email when {camp} posts its {year} dates and prices, and one before sign-ups open if it names a day. Just this camp.`, { camp: c.name, year }) })
     : alertsBox(D, { camp: c, place: 'camp', title: T(`Tell me when something changes`), lede: T(`One email before sign-ups open at {camp}, if it names a day, and one when its dates or prices change. Just this camp.`, { camp: c.name }) })}
@@ -4473,6 +4555,7 @@ const notFound = notFoundPage();   // always rendered, so its copy is known to t
 write('assets/site.css', fs.readFileSync(path.join(ROOT, 'src/site.css')));
 write('assets/site.js', fs.readFileSync(path.join(ROOT, 'src/site.js')));
 write('assets/edit.js', fs.readFileSync(path.join(ROOT, 'src/edit.js')));
+if (GROUPS && GROUPS.premium !== 'off') write('assets/qr.js', fs.readFileSync(path.join(ROOT, 'src/qr.js')));   // draws the code on a premium listing's flyer; loaded only when one is asked for
 if (GROUPS) {
   write('assets/groups.js', fs.readFileSync(path.join(ROOT, 'src/groups.js')));
   write('account/index.html', accountPage());

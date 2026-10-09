@@ -50,7 +50,11 @@ const MAX_WEEKS = 6;        // children's weeks one profile can hold
 const MAX_CLAIMS = 12;      // listings one account can claim
 const MAX_CLAIMANTS = 5;    // accounts that can hold a claim on one listing
 const SPACE_DAYS = 30;      // how long "spots open", "waitlist" or "full" stays up before the manager has to say it again
-const HIT_KINDS = array('view', 'site', 'signup', 'email', 'plan');   // what is counted for a listing, a number a day
+const HIT_KINDS = array('view', 'site', 'signup', 'email', 'plan', 'ask');   // what is counted for a listing, a number a day ("ask" only by the server, when a question is sent)
+const PREMIUM_PHOTOS = 6;   // photos a premium listing can show
+const WORDS_MAX = 900;      // "in their own words", in characters
+const OFFER_MAX = 140;      // the offer or event line
+const OFFER_DAYS = 90;      // the furthest ahead an offer's last day can be
 const HITS_AN_HOUR = 240;   // counts taken from one internet address in an hour before the rest are dropped
 const BACKUP_DAYS = 14;      // how many daily copies of the database are kept
 const PHOTO_BYTES = 1600000; // the biggest listing photo accepted, after the browser has shrunk it
@@ -138,6 +142,15 @@ function db(): PDO {
     $db->exec('CREATE INDEX IF NOT EXISTS claims_listing ON claims (listing, status)');
     $db->exec("CREATE TABLE IF NOT EXISTS photos (id INTEGER PRIMARY KEY, claim_id INTEGER NOT NULL REFERENCES claims(id) ON DELETE CASCADE, listing TEXT NOT NULL, alt TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'new', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0)");
     $db->exec('CREATE INDEX IF NOT EXISTS photos_listing ON photos (listing, status)');
+    // Premium listings. Which listings are premium (set by the owner on the review page, later by a payment), what
+    // their managers wrote for them (their own words, an offer line: each waits for the owner before it shows), and
+    // how many page views came from a browser with each school saved (a number a month, nothing about who).
+    $pcols = array(); foreach ($db->query('PRAGMA table_info(photos)') as $c) $pcols[] = $c['name'];
+    if (!in_array('kind', $pcols, true)) $db->exec("ALTER TABLE photos ADD COLUMN kind TEXT NOT NULL DEFAULT 'photo'");
+    $db->exec('CREATE TABLE IF NOT EXISTS premium (listing TEXT PRIMARY KEY, since INTEGER NOT NULL)');
+    $db->exec("CREATE TABLE IF NOT EXISTS extras (id INTEGER PRIMARY KEY, claim_id INTEGER NOT NULL REFERENCES claims(id) ON DELETE CASCADE, listing TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL, until TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'new', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0)");
+    $db->exec('CREATE INDEX IF NOT EXISTS extras_listing ON extras (listing, kind, status)');
+    $db->exec('CREATE TABLE IF NOT EXISTS hits_school (listing TEXT NOT NULL, school TEXT NOT NULL, month TEXT NOT NULL, n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (listing, school, month))');
     if (!$hadTally) {   // start the daily counts from what is already here
       $day = "strftime('%Y-%m-%d', created, 'unixepoch', '-4 hours')";
       $db->exec("INSERT OR IGNORE INTO tally (k, day, n) SELECT 'account', $day, COUNT(*) FROM users GROUP BY 2");
@@ -170,6 +183,8 @@ function tidy(): void {
   q('DELETE FROM throttle WHERE t < ?', array($t - 2 * 86400));
   q('DELETE FROM grp WHERE expires < ?', array($t));
   q('DELETE FROM hits WHERE day < ?', array((new DateTime('-400 days', new DateTimeZone('America/New_York')))->format('Y-m-d')));
+  q('DELETE FROM hits_school WHERE month < ?', array((new DateTime('-400 days', new DateTimeZone('America/New_York')))->format('Y-m')));
+  q("DELETE FROM extras WHERE kind = 'offer' AND until != '' AND until < ?", array((new DateTime('-30 days', new DateTimeZone('America/New_York')))->format('Y-m-d')));   // offers long past their last day
   // Photo files whose record has gone (a deleted account, a replaced or declined photo).
   $dir = data_dir() . '/photos';
   if (is_dir($dir)) foreach ((array) @scandir($dir) as $f) {
@@ -295,7 +310,7 @@ function need_user(): array {
 }
 
 // ---------- email ----------
-function send_mail(string $to, string $subject, string $text, string $html): bool {
+function send_mail(string $to, string $subject, string $text, string $html, string $replyTo = ''): bool {
   global $CFG;
   $boundary = 'pas' . bin2hex(random_bytes(8));
   $headers = array(
@@ -305,6 +320,7 @@ function send_mail(string $to, string $subject, string $text, string $html): boo
     'Auto-Submitted: auto-generated',
     'X-Auto-Response-Suppress: All',
   );
+  if ($replyTo !== '' && filter_var($replyTo, FILTER_VALIDATE_EMAIL) && !preg_match('/[\r\n]/', $replyTo)) $headers[] = 'Reply-To: ' . $replyTo;
   $body = "--$boundary\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n" . chunk_split(base64_encode($text))
     . "--$boundary\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n" . chunk_split(base64_encode($html))
     . "--$boundary--\r\n";
@@ -709,17 +725,101 @@ function stats_of(string $key): array {
   $since = (string) val('SELECT MIN(day) FROM hits');   // the day counting began, for every listing alike
   return array('now' => $now, 'prev' => $prev, 'views' => array_values($views), 'from' => $from, 'since' => $since, 'full' => $since !== '' && $since <= $before);
 }
+// ---------- premium listings ----------
+// A switch for the whole site (site.config.json, "groups": { "premium": ... }): "off", nothing anywhere; "preview",
+// premium content shows only to the people who hold the listing, so it can be set up and looked at before anyone
+// else sees it; "on", everyone sees it. Which listings are premium is a row in the premium table.
+function premium_mode(): string {
+  global $CFG;
+  $m = isset($CFG['premium']) ? (string) $CFG['premium'] : 'off';
+  return in_array($m, array('preview', 'on'), true) ? $m : 'off';
+}
+function is_premium(string $key): bool {
+  return premium_mode() !== 'off' && (bool) val('SELECT 1 FROM premium WHERE listing = ?', array($key));
+}
+function holds(?array $u, string $key): bool {
+  return $u !== null && (bool) val("SELECT 1 FROM claims WHERE user_id = ? AND listing = ? AND status = 'ok'", array($u['id'], $key));
+}
+// May this visitor see the listing's premium content?
+function premium_shows(string $key, ?array $u): bool {
+  if (!is_premium($key)) return false;
+  return premium_mode() === 'on' || holds($u, $key);
+}
+// A listing's photo is public when photos are switched on for everyone, or the listing is premium and premium is open.
+function photos_public(string $key): bool {
+  global $CFG;
+  return !empty($CFG['photos']) || (premium_mode() === 'on' && is_premium($key));
+}
+// Approved photos, newest first: the first is the one at the top of the listing, the rest make the gallery.
+function photos_of(string $key, string $kind = 'photo'): array {
+  $out = array();
+  foreach (q("SELECT p.id, p.alt FROM photos p JOIN claims c ON c.id = p.claim_id WHERE p.listing = ? AND p.kind = ? AND p.status = 'ok' AND c.status = 'ok' ORDER BY p.id DESC LIMIT " . PREMIUM_PHOTOS, array($key, $kind)) as $r) {
+    if (is_file(photo_file((int) $r['id']))) $out[] = array('v' => (int) $r['id'], 'alt' => $r['alt']);
+  }
+  return $out;
+}
+// What a manager wrote and the owner approved: the newest of its kind, and for an offer only until its last day.
+function extra_live(string $key, string $kind): ?array {
+  $r = row("SELECT e.id, e.body, e.until FROM extras e JOIN claims c ON c.id = e.claim_id WHERE e.listing = ? AND e.kind = ? AND e.status = 'ok' AND c.status = 'ok' ORDER BY e.id DESC LIMIT 1", array($key, $kind));
+  if (!$r) return null;
+  if ($kind === 'offer' && ($r['until'] === '' || $r['until'] < today_ny())) return null;
+  return $r;
+}
+// Everything premium a listing's page shows.
+function extras_out(string $key): array {
+  $photos = photos_of($key);
+  $logo = photos_of($key, 'logo');
+  $words = extra_live($key, 'words'); $offer = extra_live($key, 'offer');
+  return array('photos' => $photos, 'logo' => $logo ? $logo[0]['v'] : 0, 'words' => $words ? $words['body'] : '',
+    'offer' => $offer ? array('t' => $offer['body'], 'until' => $offer['until']) : null,
+    'ask' => (bool) val("SELECT 1 FROM claims WHERE listing = ? AND status = 'ok'", array($key)));
+}
+// The fuller numbers a premium listing's manager gets: month by month, who follows and saved it, and which schools
+// the visitors had saved. Numbers only.
+function stats_more(string $key): array {
+  $tz = new DateTimeZone('America/New_York');
+  $months = array();
+  for ($i = 11; $i >= 0; $i--) { $m = (new DateTime('first day of -' . $i . ' months', $tz))->format('Y-m'); $months[$m] = array('m' => $m); foreach (HIT_KINDS as $k) $months[$m][$k] = 0; }
+  $first = array_keys($months)[0];
+  foreach (q('SELECT substr(day, 1, 7) AS m, k, SUM(n) AS n FROM hits WHERE listing = ? AND day >= ? GROUP BY 1, 2', array($key, $first . '-01')) as $r) {
+    if (isset($months[$r['m']]) && isset($months[$r['m']][$r['k']])) $months[$r['m']][$r['k']] = (int) $r['n'];
+  }
+  $months = array_values(array_filter($months, function ($m) { foreach (HIT_KINDS as $k) if ($m[$k]) return true; return false; }));
+  $names = school_names(); $schools = array();
+  foreach (q('SELECT school, SUM(n) AS n FROM hits_school WHERE listing = ? AND month >= ? GROUP BY school ORDER BY n DESC, school LIMIT 8', array($key, (new DateTime('first day of -2 months', $tz))->format('Y-m'))) as $r) {
+    if (isset($names[$r['school']])) $schools[] = array('name' => $names[$r['school']], 'n' => (int) $r['n']);
+  }
+  return array('months' => $months, 'schools' => $schools,
+    'follows' => (int) val('SELECT COUNT(*) FROM follows WHERE k = ? AND live = 1', array($key)),
+    'favs' => (int) val('SELECT COUNT(*) FROM favs WHERE k = ?', array($key)));
+}
+// What a manager sees of their listing's premium side: every photo they or a colleague sent, and each text, live and waiting.
+function premium_out(string $key): array {
+  $photos = array();
+  foreach (q("SELECT p.id, p.kind, p.status, p.alt FROM photos p JOIN claims c ON c.id = p.claim_id WHERE p.listing = ? AND p.status != 'declined' AND c.status = 'ok' ORDER BY p.id DESC", array($key)) as $r) {
+    if (is_file(photo_file((int) $r['id']))) $photos[] = array('id' => (int) $r['id'], 'kind' => $r['kind'], 'status' => $r['status'], 'alt' => $r['alt']);
+  }
+  $texts = array();
+  foreach (array('words', 'offer') as $kind) {
+    $live = extra_live($key, $kind);
+    $new = row("SELECT e.body, e.until FROM extras e JOIN claims c ON c.id = e.claim_id WHERE e.listing = ? AND e.kind = ? AND e.status = 'new' AND c.status = 'ok' ORDER BY e.id DESC LIMIT 1", array($key, $kind));
+    $last = row("SELECT e.status FROM extras e JOIN claims c ON c.id = e.claim_id WHERE e.listing = ? AND e.kind = ? AND c.status = 'ok' ORDER BY e.id DESC LIMIT 1", array($key, $kind));
+    $texts[$kind] = array('live' => $live ? $live['body'] : '', 'liveUntil' => $live ? $live['until'] : '', 'new' => $new ? $new['body'] : '', 'newUntil' => $new ? $new['until'] : '', 'declined' => $last && $last['status'] === 'declined');
+  }
+  return array('mode' => premium_mode(), 'photos' => $photos, 'max' => PREMIUM_PHOTOS, 'texts' => $texts, 'more' => stats_more($key));
+}
 function claim_out(array $c): array {
   $l = listings();
   $edits = array();
   foreach (q('SELECT id, body, link, status, created FROM edits WHERE claim_id = ? ORDER BY id DESC LIMIT 20', array($c['id'])) as $e) {
     $edits[] = array('id' => (int) $e['id'], 'body' => $e['body'], 'link' => $e['link'], 'status' => $e['status'], 'created' => (int) $e['created']);
   }
-  $ph = row("SELECT id, status, alt FROM photos WHERE claim_id = ? AND status != 'declined' ORDER BY id DESC LIMIT 1", array($c['id']));
+  $ph = row("SELECT id, status, alt FROM photos WHERE claim_id = ? AND kind = 'photo' AND status != 'declined' ORDER BY id DESC LIMIT 1", array($c['id']));
   $live = photo_live($c['listing']);
   return array('listing' => $c['listing'], 'name' => isset($l[$c['listing']]) ? $l[$c['listing']]['n'] : 'A listing no longer on the site', 'status' => $c['status'], 'gone' => !isset($l[$c['listing']]), 'edits' => $edits,
     'photo' => $ph ? array('status' => $ph['status'], 'alt' => $ph['alt']) : null, 'photoLive' => $live ? (int) $live['id'] : 0, 'space' => space_of($c['listing']),
-    'stats' => $c['status'] === 'ok' && isset($l[$c['listing']]) ? stats_of($c['listing']) : null);
+    'stats' => $c['status'] === 'ok' && isset($l[$c['listing']]) ? stats_of($c['listing']) : null,
+    'premium' => $c['status'] === 'ok' && isset($l[$c['listing']]) && is_premium($c['listing']) ? premium_out($c['listing']) : null);
 }
 // What a listing's manager last said about space, while it is fresh and someone still holds the claim.
 function space_of(string $key): ?array {
@@ -728,7 +828,7 @@ function space_of(string $key): ?array {
 }
 // The photo a listing shows: the newest approved one whose claim still stands.
 function photo_live(string $key): ?array {
-  return row("SELECT p.id, p.alt FROM photos p JOIN claims c ON c.id = p.claim_id WHERE p.listing = ? AND p.status = 'ok' AND c.status = 'ok' ORDER BY p.id DESC LIMIT 1", array($key));
+  return row("SELECT p.id, p.alt FROM photos p JOIN claims c ON c.id = p.claim_id WHERE p.listing = ? AND p.kind = 'photo' AND p.status = 'ok' AND c.status = 'ok' ORDER BY p.id DESC LIMIT 1", array($key));
 }
 function photo_file(int $id): string { return data_dir() . '/photos/' . $id . '.jpg'; }
 function my_claims(int $uid): array {
@@ -818,13 +918,16 @@ switch ($method . ' ' . $action) {
   case 'POST hit': {
     $key = str($in, 'l', 90); $k = str($in, 'k', 12);
     $l = listings();
-    if (!isset($l[$key]) || !in_array($k, HIT_KINDS, true)) out(array('ok' => true));
+    if (!isset($l[$key]) || !in_array($k, HIT_KINDS, true) || $k === 'ask') out(array('ok' => true));   // "ask" is counted by the server when a question is sent
     $w = 'hit:' . who();
     if (too_many($w, HITS_AN_HOUR, 3600)) out(array('ok' => true));
     note($w);
     $u = current_user();
     if ($u && val("SELECT 1 FROM claims WHERE user_id = ? AND listing = ? AND status = 'ok'", array($u['id'], $key))) out(array('ok' => true));
     q('INSERT INTO hits (listing, k, day, n) VALUES (?, ?, ?, 1) ON CONFLICT(listing, k, day) DO UPDATE SET n = n + 1', array($key, $k, today_ny()));
+    // a page view from a browser with a school saved: one more for that school this month (for the listing's manager, as a number)
+    $sch = str($in, 's', 60);
+    if ($k === 'view' && $sch !== '' && premium_mode() !== 'off' && in_array($sch, schools(), true)) q('INSERT INTO hits_school (listing, school, month, n) VALUES (?, ?, ?, 1) ON CONFLICT(listing, school, month) DO UPDATE SET n = n + 1', array($key, $sch, substr(today_ny(), 0, 7)));
     out(array('ok' => true));
   }
 
@@ -1136,42 +1239,149 @@ switch ($method . ' ' . $action) {
   case 'GET claimed': {
     $keys = array(); $photos = array();
     foreach (q("SELECT DISTINCT listing FROM claims WHERE status = 'ok'") as $r) $keys[] = $r['listing'];
-    foreach ($keys as $k) { $ph = photo_live($k); if ($ph && is_file(photo_file((int) $ph['id']))) $photos[$k] = array('v' => (int) $ph['id'], 'alt' => $ph['alt']); }
+    foreach ($keys as $k) { if (!photos_public($k)) continue; $ph = photo_live($k); if ($ph && is_file(photo_file((int) $ph['id']))) $photos[$k] = array('v' => (int) $ph['id'], 'alt' => $ph['alt']); }
     $space = array();
     foreach ($keys as $k) { $sp = space_of($k); if ($sp) $space[$k] = $sp; }
-    out(array('ok' => true, 'claimed' => $keys, 'photos' => (object) $photos, 'space' => (object) $space));
+    // premium listings and their offer lines, once premium is open to everyone
+    $prem = array(); $offers = array();
+    if (premium_mode() === 'on') foreach ($keys as $k) {
+      if (!is_premium($k)) continue;
+      $prem[] = $k;
+      $of = extra_live($k, 'offer'); if ($of) $offers[$k] = $of['body'];
+    }
+    out(array('ok' => true, 'claimed' => $keys, 'photos' => (object) $photos, 'space' => (object) $space, 'premium' => $prem, 'offers' => (object) $offers));
   }
 
   // The approved photo for a listing. Public: it is what the listing page shows.
   case 'GET photo': {
-    $ph = photo_live(isset($_GET['l']) && is_string($_GET['l']) ? substr($_GET['l'], 0, 90) : '');
+    $key = isset($_GET['l']) && is_string($_GET['l']) ? substr($_GET['l'], 0, 90) : '';
+    $want = isset($_GET['id']) && is_string($_GET['id']) && ctype_digit($_GET['id']) ? (int) $_GET['id'] : 0;
+    $u = current_user(); $mine = holds($u, $key);
+    if ($want) {
+      // one photo by its number: an approved one for anyone who may see the listing's photos, a waiting one only for the people who hold the listing
+      $ph = row("SELECT p.id, p.status FROM photos p JOIN claims c ON c.id = p.claim_id WHERE p.id = ? AND p.listing = ? AND p.status != 'declined' AND c.status = 'ok'", array($want, $key));
+      if ($ph && !$mine && ($ph['status'] !== 'ok' || !(photos_public($key) || premium_shows($key, $u)))) $ph = null;
+    } else {
+      $ph = photos_public($key) || $mine ? photo_live($key) : null;
+    }
     $file = $ph ? photo_file((int) $ph['id']) : '';
     if (!$ph || !is_file($file)) { http_response_code(404); exit; }
     header('Content-Type: image/jpeg');
-    header('Cache-Control: public, max-age=604800');   // the page asks for it by version, so a new photo has a new address
+    header('Cache-Control: ' . (photos_public($key) && !$mine ? 'public' : 'private') . ', max-age=604800');   // the page asks for it by version, so a new photo has a new address
     header('Content-Length: ' . filesize($file));
     header_remove('X-Robots-Tag');
     readfile($file);
     exit;
   }
 
+  // What a premium listing's page shows: its photos, its logo, what the program wrote, its offer line, and whether
+  // a question can be sent. Nothing for a listing that isn't premium, or while premium is still being tried out and
+  // the visitor isn't one of the people who hold the listing.
+  case 'GET extras': {
+    $key = isset($_GET['l']) && is_string($_GET['l']) ? substr($_GET['l'], 0, 90) : '';
+    $l = listings();
+    if (!isset($l[$key]) || !premium_shows($key, current_user())) out(array('ok' => true, 'premium' => false));
+    out(array('ok' => true, 'premium' => true, 'preview' => premium_mode() === 'preview') + extras_out($key));
+  }
+
+  // A parent's question, sent on to the people who run the program. It is not kept: the site passes it along, with
+  // the parent's address as the one to reply to, and counts that a question was asked.
+  case 'POST ask': {
+    $key = str($in, 'listing', 90);
+    $l = listings();
+    $u = current_user();
+    if (!isset($l[$key]) || !premium_shows($key, $u)) fail('off', 'Questions can’t be sent to this listing.', 403);
+    if (str($in, 'company', 80) !== '') out(array('ok' => true));   // a box people can't see, filled in: a script
+    $name = person_name(str($in, 'name', 60), 40);
+    $email = strtolower(str($in, 'email', 150));
+    $text = isset($in['text']) && is_string($in['text']) ? trim(mb_substr(preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/u', ' ', $in['text']) ?? '', 0, 1000, 'UTF-8')) : '';
+    if ($name === '') fail('name', 'Add your first name, so they know who is asking.');
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) fail('email', 'That email address doesn’t look right. It’s where they’ll answer you.');
+    if (mb_strlen($text, 'UTF-8') < 10) fail('text', 'Write your question in a sentence or two.');
+    if (too_many('ask:' . who(), 4, 86400) || too_many('askm:' . h($email), 6, 86400) || too_many('askl:' . $key, 40, 86400)) fail('slow', 'That’s a lot of questions for one day. Try again tomorrow, or use the program’s own website.', 429);
+    note('ask:' . who()); note('askm:' . h($email)); note('askl:' . $key);
+    $to = array();
+    foreach (q("SELECT u.email FROM claims c JOIN users u ON u.id = c.user_id WHERE c.listing = ? AND c.status = 'ok' ORDER BY c.id LIMIT " . MAX_CLAIMANTS, array($key)) as $r) $to[] = $r['email'];
+    if (!$to) fail('off', 'Questions can’t be sent to this listing right now.', 403);
+    $n = $l[$key]['n'];
+    $body = $name . ' asked a question on your ' . $CFG['siteName'] . ' listing for “' . $n . "”:\n\n" . $text . "\n\nReply to this email to answer them at " . $email . ".\n\nThis came from the “Ask a question” button on your listing. " . $CFG['siteName'] . ' passed it along and did not keep a copy.';
+    $html = email_html('A question about ' . $n, '<p style="margin:0 0 10px"><b>' . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') . '</b> asked on your listing:</p><p style="margin:0;white-space:pre-line;border-left:4px solid #F3C613;padding-left:12px">' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</p><p style="margin:14px 0 0">Reply to this email to answer them at ' . htmlspecialchars($email, ENT_QUOTES, 'UTF-8') . '.</p>', '', '',
+      'This came from the “Ask a question” button on your listing. ' . $CFG['siteName'] . ' passed it along and did not keep a copy.');
+    $sent = 0;
+    foreach ($to as $addr) if (send_mail($addr, 'A question about ' . $n . ' from a parent', $body, $html, $email)) $sent++;
+    if (!$sent) fail('mail', 'Your question could not be sent. Please try again in a minute.', 502);
+    if (!holds($u, $key)) q('INSERT INTO hits (listing, k, day, n) VALUES (?, ?, ?, 1) ON CONFLICT(listing, k, day) DO UPDATE SET n = n + 1', array($key, 'ask', today_ny()));
+    bump('ask');
+    out(array('ok' => true));
+  }
+
+  // A manager writes a premium listing's own words, or its offer line. It waits for the owner before it shows.
+  case 'POST extra_save': {
+    $u = need_user();
+    $key = str($in, 'listing', 90);
+    $c = row("SELECT id FROM claims WHERE user_id = ? AND listing = ? AND status = 'ok'", array($u['id'], $key));
+    if (!$c) fail('claim', 'You can add this once your claim on this listing stands.', 403);
+    if (!is_premium($key)) fail('off', 'This is part of a premium listing.', 403);
+    $kind = str($in, 'kind', 10);
+    if (!in_array($kind, array('words', 'offer'), true)) fail('kind', 'That isn’t something a listing has.');
+    $raw = isset($in['body']) && is_string($in['body']) ? $in['body'] : '';
+    $raw = preg_replace('/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]+/u', ' ', str_replace("\r", '', $raw)) ?? '';
+    $until = '';
+    if ($kind === 'words') {
+      $body = trim(preg_replace("/\n{3,}/", "\n\n", preg_replace('/[ \t]+/u', ' ', $raw) ?? '') ?? '');
+      if (mb_strlen($body, 'UTF-8') > WORDS_MAX) fail('long', 'That’s longer than ' . WORDS_MAX . ' characters. Trim it a little.');
+      if (mb_strlen($body, 'UTF-8') < 40) fail('short', 'Write a few sentences: what a day looks like, who runs it, what makes it yours.');
+    } else {
+      $body = trim(preg_replace('/\s+/u', ' ', $raw) ?? '');
+      if (mb_strlen($body, 'UTF-8') > OFFER_MAX) fail('long', 'Keep it to one line, ' . OFFER_MAX . ' characters at most.');
+      if (mb_strlen($body, 'UTF-8') < 8) fail('short', 'Say what it is, like “Open house on November 12, 6 pm”.');
+      $until = str($in, 'until', 10);
+      $d = DateTime::createFromFormat('!Y-m-d', $until, new DateTimeZone('America/New_York'));
+      if (!$d || $d->format('Y-m-d') !== $until) fail('until', 'Pick the last day it should show.');
+      if ($until < today_ny()) fail('until', 'That day has already passed.');
+      if ($until > (new DateTime('+' . OFFER_DAYS . ' days', new DateTimeZone('America/New_York')))->format('Y-m-d')) fail('until', 'Pick a day within the next ' . OFFER_DAYS . ' days. You can post it again after that.');
+    }
+    if (too_many('extra:' . $u['id'], 12, 86400)) fail('slow', 'That’s a lot of changes for one day. Try again tomorrow.', 429);
+    note('extra:' . $u['id']);
+    q("DELETE FROM extras WHERE listing = ? AND kind = ? AND status IN ('new', 'declined')", array($key, $kind));   // a newer one replaces one still waiting
+    q('INSERT INTO extras (claim_id, listing, kind, body, until, created) VALUES (?, ?, ?, ?, ?, ?)', array($c['id'], $key, $kind, $body, $until, now()));
+    bump('extra_sent');
+    $l = listings(); $name = isset($l[$key]) ? $l[$key]['n'] : $key;
+    tell_owner(($kind === 'words' ? 'Words to approve: ' : 'An offer line to approve: ') . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '”, wrote this for its listing' . ($kind === 'offer' ? ', to show until ' . $until : '') . ":\n\n" . $body . "\n\nIt is not on the site. Publish or decline it on the review page.");
+    out(array('ok' => true, 'claims' => my_claims($u['id'])));
+  }
+
+  // The manager takes their own words, or the offer line, off the listing (the one showing and any still waiting).
+  case 'POST extra_drop': {
+    $u = need_user();
+    $key = str($in, 'listing', 90);
+    $kind = str($in, 'kind', 10);
+    if (holds($u, $key) && in_array($kind, array('words', 'offer'), true)) q('DELETE FROM extras WHERE listing = ? AND kind = ?', array($key, $kind));
+    out(array('ok' => true, 'claims' => my_claims($u['id'])));
+  }
+
   // A director sends one photo for a listing they hold. It waits for the owner; nothing shows until it is approved.
   case 'POST photo_add': {
     $u = need_user();
-    if (empty($CFG['photos'])) fail('off', 'Photos on listings aren’t available yet.', 403);   // a paid extra, switched on in site.config.json
     $key = str($in, 'listing', 90);
+    $prem = is_premium($key);
+    if (empty($CFG['photos']) && !$prem) fail('off', 'Photos on listings aren’t available yet.', 403);   // a paid extra: switched on for everyone in site.config.json, or part of a premium listing
+    $kind = str($in, 'kind', 10) === 'logo' ? 'logo' : 'photo';
+    if ($kind === 'logo' && !$prem) fail('off', 'A logo is part of a premium listing.', 403);
     $c = row("SELECT id FROM claims WHERE user_id = ? AND listing = ? AND status = 'ok'", array($u['id'], $key));
     if (!$c) fail('claim', 'You can add a photo once your claim on this listing stands.', 403);
+    if ($prem && $kind === 'photo' && (int) val("SELECT COUNT(*) FROM photos p JOIN claims c ON c.id = p.claim_id WHERE p.listing = ? AND p.kind = 'photo' AND p.status != 'declined' AND c.status = 'ok'", array($key)) >= PREMIUM_PHOTOS) fail('full', 'That’s the most photos one listing can have (' . PREMIUM_PHOTOS . '). Remove one first.');
     if (empty($in['permission'])) fail('permission', 'Tick the box to say you have the right to use this photo.');
     $alt = str($in, 'alt', 160);
     if (mb_strlen($alt, 'UTF-8') < 8) fail('alt', 'Describe the photo in a few words, for people who can’t see it.');
-    if (too_many('photo:' . $u['id'], 6, 86400)) fail('slow', 'That’s a lot of photos for one day. Try again tomorrow.', 429);
+    if (too_many('photo:' . $u['id'], $prem ? 20 : 6, 86400)) fail('slow', 'That’s a lot of photos for one day. Try again tomorrow.', 429);
     $b64 = isset($in['data']) && is_string($in['data']) ? $in['data'] : '';
     $bin = strlen($b64) > 20 ? base64_decode($b64, true) : false;
     if ($bin === false || strlen($bin) < 2000) fail('photo', 'That photo didn’t come through. Try choosing it again.');
     if (strlen($bin) > PHOTO_BYTES) fail('photo', 'That photo is too big. Try a smaller one.');
     $info = @getimagesizefromstring($bin);
-    if (!$info || $info[2] !== IMAGETYPE_JPEG || $info[0] < 400 || $info[1] < 300 || $info[0] > 2400 || $info[1] > 2400) fail('photo', 'That doesn’t look like a photo we can use. Try a different one, at least 400 pixels wide.');
+    $minW = $kind === 'logo' ? 160 : 400; $minH = $kind === 'logo' ? 160 : 300;
+    if (!$info || $info[2] !== IMAGETYPE_JPEG || $info[0] < $minW || $info[1] < $minH || $info[0] > 2400 || $info[1] > 2400) fail('photo', $kind === 'logo' ? 'That doesn’t look like a logo we can use. Try a bigger one, at least 160 pixels across.' : 'That doesn’t look like a photo we can use. Try a different one, at least 400 pixels wide.');
     if (function_exists('imagecreatefromstring')) {   // draw it again, so nothing rides along inside the file
       $img = @imagecreatefromstring($bin);
       if (!$img) fail('photo', 'That photo couldn’t be read. Try a different one.');
@@ -1180,26 +1390,32 @@ switch ($method . ' ' . $action) {
     note('photo:' . $u['id']);
     $dir = data_dir() . '/photos';
     if (!is_dir($dir) && !@mkdir($dir, 0700, true) && !is_dir($dir)) fail('storage', 'Photos are not available right now.', 503);
-    foreach (q("SELECT id FROM photos WHERE claim_id = ? AND status = 'new'", array($c['id'])) as $old) @unlink(photo_file((int) $old['id']));   // a newer photo replaces one still waiting
-    q("DELETE FROM photos WHERE claim_id = ? AND status = 'new'", array($c['id']));
-    q('INSERT INTO photos (claim_id, listing, alt, created) VALUES (?, ?, ?, ?)', array($c['id'], $key, $alt, now()));
+    if (!$prem || $kind === 'logo') {   // one photo, or one logo: a newer one replaces one still waiting. A premium listing's photos add up instead.
+      foreach (q("SELECT id FROM photos WHERE claim_id = ? AND kind = ? AND status = 'new'", array($c['id'], $kind)) as $old) @unlink(photo_file((int) $old['id']));
+      q("DELETE FROM photos WHERE claim_id = ? AND kind = ? AND status = 'new'", array($c['id'], $kind));
+    }
+    q('INSERT INTO photos (claim_id, listing, alt, kind, created) VALUES (?, ?, ?, ?, ?)', array($c['id'], $key, $alt, $kind, now()));
     $id = (int) db()->lastInsertId();
     if (@file_put_contents(photo_file($id), $bin, LOCK_EX) === false) { q('DELETE FROM photos WHERE id = ?', array($id)); fail('storage', 'The photo could not be saved. Please try again.', 503); }
     @chmod(photo_file($id), 0600);
     bump('photo_sent');
     $l = listings();
     $name = isset($l[$key]) ? $l[$key]['n'] : $key;
-    tell_owner('A photo to approve: ' . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '”, sent a photo for it.' . "\n\nThey describe it as: " . $alt . "\n\nThey ticked that they have the right to use it and permission from the families of any children shown. It is not on the site. Look at it and publish or decline it on the review page.");
+    tell_owner(($kind === 'logo' ? 'A logo to approve: ' : 'A photo to approve: ') . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '”, sent a ' . $kind . ' for it.' . "\n\nThey describe it as: " . $alt . "\n\nThey ticked that they have the right to use it and permission from the families of any children shown. It is not on the site. Look at it and publish or decline it on the review page.");
     out(array('ok' => true, 'claims' => my_claims($u['id'])));
   }
 
   // The director takes their photo off the listing (a waiting one, or the one that is showing).
   case 'POST photo_drop': {
     $u = need_user();
-    $c = row("SELECT id FROM claims WHERE user_id = ? AND listing = ?", array($u['id'], str($in, 'listing', 90)));
-    if ($c) {
-      foreach (q('SELECT id FROM photos WHERE claim_id = ?', array($c['id'])) as $old) @unlink(photo_file((int) $old['id']));
-      q('DELETE FROM photos WHERE claim_id = ?', array($c['id']));
+    $key = str($in, 'listing', 90);
+    $c = row("SELECT id FROM claims WHERE user_id = ? AND listing = ?", array($u['id'], $key));
+    $one = isset($in['id']) && is_int($in['id']) ? $in['id'] : 0;
+    if ($c && $one) {   // one photo of a premium listing: anyone who holds the listing can take it off
+      if (holds($u, $key) && val('SELECT 1 FROM photos WHERE id = ? AND listing = ?', array($one, $key))) { @unlink(photo_file($one)); q('DELETE FROM photos WHERE id = ? AND listing = ?', array($one, $key)); }
+    } elseif ($c) {
+      foreach (q("SELECT id FROM photos WHERE claim_id = ? AND kind = 'photo'", array($c['id'])) as $old) @unlink(photo_file((int) $old['id']));
+      q("DELETE FROM photos WHERE claim_id = ? AND kind = 'photo'", array($c['id']));
     }
     out(array('ok' => true, 'claims' => my_claims($u['id'])));
   }
