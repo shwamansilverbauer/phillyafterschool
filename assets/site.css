@@ -1428,16 +1428,23 @@ html.signed .year-out{display:none}
 .follow-basics .field.wide,.follow-check{grid-column:1/-1}
 
 /* ---------- jump links: a strip under the menu bar on the long pages ---------- */
-.jump{position:sticky;top:var(--bar-h,64px);z-index:30;display:flex;gap:8px;overflow-x:auto;padding:10px 0;margin:0 0 -18px;background:var(--bg);box-shadow:0 1px 0 var(--line);scrollbar-width:none}
+.jump-wrap{position:sticky;top:var(--bar-h,64px);z-index:30;margin:0 0 -18px;background:var(--bg);box-shadow:0 1px 0 var(--line);--jump-bg:var(--bg)}
+.jump{display:flex;gap:8px;overflow-x:auto;padding:10px 0;scrollbar-width:none}
 .jump::-webkit-scrollbar{display:none}
 .jump a{flex:none;font-weight:700;font-size:.95rem;text-decoration:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:7px 14px;white-space:nowrap}
 .jump a:hover,.jump a:focus-visible{border-color:var(--link);color:var(--link)}
-.sum .jump{background:var(--surface);margin:0}
+.sum .jump-wrap{background:var(--surface);margin:0;--jump-bg:var(--surface)}
 .sum .jump a{background:var(--bg)}
-.g-page > .jump,.prose > .jump{margin:0}
-.g-page > .jump{max-width:860px}
+.g-page > .jump-wrap,.prose > .jump-wrap{margin:0}
+.g-page > .jump-wrap{max-width:860px}
+.jump-wrap::before,.jump-wrap::after{content:"";position:absolute;top:0;bottom:1px;width:72px;pointer-events:none;z-index:1;opacity:0;transition:opacity .15s}
+.jump-wrap::before{left:0;background:linear-gradient(270deg,transparent,var(--jump-bg) 55%)}
+.jump-wrap::after{right:0;background:linear-gradient(90deg,transparent,var(--jump-bg) 55%)}
+.jump-wrap.more-left::before,.jump-wrap.more-right::after{opacity:1}
+.jump-wrap .rail-go.prev{left:0}
+.jump-wrap .rail-go.fwd{right:0}
 :root [data-jump-to][id]{scroll-margin-top:68px}   /* room for the strip; the menu bar is already allowed for on html */
-@media print{.jump{display:none!important}}
+@media print{.jump-wrap,.jump{display:none!important}}
 
 /* ---------- my kids' calendar: dates you add yourself ---------- */
 .year-own{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
@@ -1458,3 +1465,8 @@ html.signed .year-out{display:none}
 .year-chip.own{background:var(--sky-bg);color:var(--sky-ink)}
 @media (max-width:640px){.own-form{grid-template-columns:minmax(0,1fr)}}
 @media print{.year-own{display:none!important}}
+
+/* ---------- stopping emails about one listing ---------- */
+.stop-box{max-width:640px;gap:14px}
+.stop-box h2{margin:0}
+.stop-box .clear{align-self:flex-start}

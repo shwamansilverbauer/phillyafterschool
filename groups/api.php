@@ -107,7 +107,7 @@ function db(): PDO {
     // Added after the first version: first and last name, and whether the account has been added to the email list.
     $cols = array();
     foreach ($db->query('PRAGMA table_info(users)') as $c) $cols[] = $c['name'];
-    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''", 'origin' => "TEXT NOT NULL DEFAULT ''", 'hood' => "TEXT NOT NULL DEFAULT ''", 'phone' => "TEXT NOT NULL DEFAULT ''", 'phone_ok' => 'INTEGER NOT NULL DEFAULT 0', 'phone_terms' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
+    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''", 'origin' => "TEXT NOT NULL DEFAULT ''", 'hood' => "TEXT NOT NULL DEFAULT ''", 'stop_code' => "TEXT NOT NULL DEFAULT ''", 'phone' => "TEXT NOT NULL DEFAULT ''", 'phone_ok' => 'INTEGER NOT NULL DEFAULT 0', 'phone_terms' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
       if (!in_array($col, $cols, true)) $db->exec('ALTER TABLE users ADD COLUMN ' . $col . ' ' . $type);
     }
     // A group made by "share this week with one person" is marked, so joining it skips the question about whose week to add.
@@ -126,6 +126,10 @@ function db(): PDO {
     // favorite (kept for quick access, no emails). Keys are "p:<program>", "c:<camp>" or "s:<school>". A follow that
     // has been turned off stays as a row with live = 0 until the browser confirms the email list has dropped it too.
     $db->exec('CREATE TABLE IF NOT EXISTS follows (user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, k TEXT NOT NULL, live INTEGER NOT NULL DEFAULT 1, synced INTEGER NOT NULL DEFAULT 0, created INTEGER NOT NULL, PRIMARY KEY (user_id, k))');
+    // What has been stopped, kept apart from the accounts so it outlasts them: a scrambled entry for each follow that
+    // was turned off (a hash of the account's stop code and the listing). The job that sends the emails reads the
+    // list and leaves those out, whether or not the email service was ever told.
+    $db->exec('CREATE TABLE IF NOT EXISTS stops (h TEXT PRIMARY KEY, created INTEGER NOT NULL)');
     $db->exec('CREATE TABLE IF NOT EXISTS favs (user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, k TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY (user_id, k))');
     $db->exec('CREATE TABLE IF NOT EXISTS daysoffs (user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, year INTEGER NOT NULL, json TEXT NOT NULL, updated INTEGER NOT NULL)');
     // Directors: a claim on a listing ("p:<program id>" or "c:<camp id>") and the changes a director has proposed for it.
@@ -406,14 +410,39 @@ function mark_name(string $k, bool $schoolsToo): ?string {
   $l = listings();
   return isset($l[$k]) ? preg_replace('~ \\(summer camp\\)$~', '', (string) $l[$k]['n']) : null;   // the list says what kind it is beside the name
 }
+// Each account has a stop code: a random word that goes on its email-list profile and into the "stop emails about
+// this" links of the emails it is sent. Holding it lets someone stop one of that account's follows without signing
+// in, and nothing else.
+function stop_code(int $uid): string {
+  $c = (string) val('SELECT stop_code FROM users WHERE id = ?', array($uid));
+  if (!preg_match('~^[a-f0-9]{32}$~', $c)) { $c = bin2hex(random_bytes(16)); q('UPDATE users SET stop_code = ? WHERE id = ?', array($c, $uid)); }
+  return $c;
+}
+function stop_hash(string $code, string $k): string { return hash('sha256', $code . '|' . $k); }
+function stop_mark(int $uid, string $k, bool $stopped): void {
+  $h = stop_hash(stop_code($uid), $k);
+  if ($stopped) q('INSERT OR IGNORE INTO stops (h, created) VALUES (?, ?)', array($h, now())); else q('DELETE FROM stops WHERE h = ?', array($h));
+}
+// The list has three kinds of entry: "<key>" (that follow was turned off), "mute|<key>" (stopped from an email:
+// nothing about that listing, even by way of a school the account follows) and "*" (everything stopped).
+function muted(int $uid, string $k): bool { return (bool) row('SELECT 1 AS x FROM stops WHERE h = ?', array(stop_hash(stop_code($uid), 'mute|' . $k))); }
 function follow_on(int $uid, string $k): bool {
   if (mark_name($k, true) === null) return false;
+  stop_mark($uid, $k, false); stop_mark($uid, 'mute|' . $k, false); stop_mark($uid, '*', false);
   $had = row('SELECT live FROM follows WHERE user_id = ? AND k = ?', array($uid, $k));
   if ($had && (int) $had['live'] === 1) return true;
   if ((int) val('SELECT COUNT(*) FROM follows WHERE user_id = ? AND live = 1', array($uid)) >= MAX_FOLLOWS) return false;
   q('INSERT INTO follows (user_id, k, live, synced, created) VALUES (?, ?, 1, 0, ?) ON CONFLICT(user_id, k) DO UPDATE SET live = 1, synced = 0', array($uid, $k, now()));
   bump('follow');
   return true;
+}
+function follow_off(int $uid, string $k): void {
+  q('UPDATE follows SET live = 0, synced = 0 WHERE user_id = ? AND k = ?', array($uid, $k));
+  stop_mark($uid, $k, true);
+}
+function follow_off_all(int $uid): void {
+  foreach (q('SELECT k FROM follows WHERE user_id = ?', array($uid)) as $r) stop_mark($uid, $r['k'], true);
+  q('UPDATE follows SET live = 0, synced = 0 WHERE user_id = ? AND live = 1', array($uid));
 }
 function fav_on(int $uid, string $k): bool {
   if (mark_name($k, false) === null) return false;
@@ -431,7 +460,12 @@ function marks_out(int $uid): array {
     if ((int) $r['synced'] === 0) $sync[] = array('k' => $r['k'], 'on' => (int) $r['live'] === 1 && $n !== null);
   }
   foreach (q('SELECT k FROM favs WHERE user_id = ? ORDER BY created, k', array($uid)) as $r) { $n = mark_name($r['k'], false); if ($n !== null) $favs[] = array('k' => $r['k'], 'n' => $n); }
-  return array('follows' => $follows, 'favs' => $favs, 'sync' => $sync);
+  // listings stopped from an email that aren't followed: they are muted, and the account page offers to allow them again
+  $mutes = array(); $live = array(); foreach ($follows as $f) $live[$f['k']] = 1;
+  $code = stop_code($uid); $have = array();
+  foreach (q('SELECT h FROM stops') as $r) $have[$r['h']] = 1;
+  if ($have) foreach (listings() as $k => $l) if (!isset($live[$k]) && isset($have[stop_hash($code, 'mute|' . $k)])) $mutes[] = array('k' => $k, 'n' => preg_replace('~ \\(summer camp\\)$~', '', (string) $l['n']));
+  return array('follows' => $follows, 'favs' => $favs, 'sync' => $sync, 'stop' => $code, 'muted' => $mutes);
 }
 function clean_week($w): string {
   $known = programs();
@@ -942,8 +976,51 @@ switch ($method . ' ' . $action) {
     if (!empty($in['on'])) {
       if (!follow_on($u['id'], $k)) fail('full', 'That’s the most one account can follow (' . MAX_FOLLOWS . '). Stop following something first.');
     } else {
-      q('UPDATE follows SET live = 0, synced = 0 WHERE user_id = ? AND k = ?', array($u['id'], $k));
+      follow_off($u['id'], $k);
     }
+    out(array('ok' => true) + marks_out($u['id']));
+  }
+
+  // ----- stopping from an email, with no sign-in -----
+  // What the job that sends the emails leaves out: see the "stops" table. Public, and it says nothing by itself.
+  case 'GET stopped': {
+    $list = array();
+    foreach (q('SELECT h FROM stops ORDER BY created DESC LIMIT 20000') as $r) $list[] = $r['h'];
+    out(array('ok' => true, 'list' => $list));
+  }
+
+  // The link in an email carries the account's stop code and one thing it follows. "look" says what that is, so the
+  // page can ask before doing anything (mail scanners open links); "stop" turns it off, or everything; "undo" puts
+  // one back. None of them says whose account it is.
+  case 'POST stop': {
+    if (too_many('stop:' . who(), 40, 900)) fail('slow', 'Too many tries. Wait a few minutes and try again.', 429);
+    note('stop:' . who());
+    $c = str($in, 'c', 40); $k = str($in, 'k', 90); $do = str($in, 'do', 10);
+    $row = preg_match('~^[a-f0-9]{32}$~', $c) ? row('SELECT id FROM users WHERE stop_code = ?', array($c)) : null;
+    if (!$row) fail('gone', 'That link doesn’t work any more. Sign in to choose what you follow.', 404);
+    $uid = (int) $row['id'];
+    $all = $k === '*';
+    $name = $all ? '' : mark_name($k, true);
+    if (!$all && $name === null) fail('key', 'That isn’t something on the site to follow.', 404);
+    if ($do === 'stop') {
+      if ($all) { follow_off_all($uid); stop_mark($uid, '*', true); } else { follow_off($uid, $k); stop_mark($uid, 'mute|' . $k, true); }
+      bump($all ? 'stop_all' : 'stop_one');
+    } elseif ($do === 'undo' && !$all) {
+      stop_mark($uid, 'mute|' . $k, false);
+      if (!empty($in['follow'])) follow_on($uid, $k);   // it was being followed before the stop
+    } elseif ($do !== 'look') fail('bad', 'That request was not understood.');
+    $left = array();
+    foreach (q('SELECT k FROM follows WHERE user_id = ? AND live = 1 ORDER BY created, k', array($uid)) as $r) { $n = mark_name($r['k'], true); if ($n !== null) $left[] = array('k' => $r['k'], 'n' => $n); }
+    $on = false; foreach ($left as $x) if ($x['k'] === $k) $on = true;
+    out(array('ok' => true, 'name' => $all ? '' : $name, 'on' => $on, 'muted' => !$all && muted($uid, $k), 'left' => $left));
+  }
+
+  // From the account page: let a listing that was stopped from an email be heard about again.
+  case 'POST unmute': {
+    $u = need_user();
+    $k = str($in, 'key', 90);
+    if (mark_name($k, false) === null) fail('key', 'That isn’t a listing on the site.');
+    stop_mark($u['id'], 'mute|' . $k, false);
     out(array('ok' => true) + marks_out($u['id']));
   }
 
@@ -963,7 +1040,7 @@ switch ($method . ' ' . $action) {
   // Turns every follow off, for an account about to be deleted: the browser then tells the email list.
   case 'POST follow_clear': {
     $u = need_user();
-    q('UPDATE follows SET live = 0, synced = 0 WHERE user_id = ? AND live = 1', array($u['id']));
+    follow_off_all($u['id']);
     out(array('ok' => true) + marks_out($u['id']));
   }
 
@@ -989,6 +1066,7 @@ switch ($method . ' ' . $action) {
   // Deletes the account, every child's week it shared, and every group it made (for everyone in them).
   case 'POST delete_account': {
     $u = need_user();
+    follow_off_all($u['id']); stop_mark($u['id'], '*', true);   // the emails stop even if the email list was never told
     q('DELETE FROM users WHERE id = ?', array($u['id']));   // memberships, children, saved weeks, sessions and owned groups go with it
     bump('account_deleted');
     set_session_cookie('', now() - 3600);
