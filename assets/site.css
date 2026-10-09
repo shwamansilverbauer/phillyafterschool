@@ -1620,3 +1620,10 @@ html.signed .year-out{display:none}
 .pm-part .claim-nums{align-self:stretch;max-width:560px}
 .stat-table.wrap th,.stat-table.wrap td{white-space:normal;text-align:left;vertical-align:top}
 .stat-table.wrap .actions{margin-top:6px}
+
+/* notifications on this device, on the account page */
+.g-push{border-top:1px solid var(--line);padding-top:14px;margin-top:6px;display:flex;flex-direction:column;gap:10px}
+.g-push h3,.g-push p{margin:0}
+.g-push-body{display:flex;flex-direction:column;gap:10px}
+.g-push-steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:4px}
+.g-push .clear{margin-left:4px}

@@ -368,7 +368,7 @@
     // /account/ is where everything is changed: name, email address, phone, school and grades, emails, follows, kept
     // plans, sharing, signing out. A link to a part that lives on the other page (/profile/#following) is sent there.
     var view = account.getAttribute('data-view') === 'profile' ? 'profile' : 'account';
-    var PARTS = { profile: ['card', 'new'], account: ['you', 'email', 'texts', 'school', 'emails', 'following', 'favorites', 'plans', 'sharing', 'listings', 'sign-out'] };
+    var PARTS = { profile: ['card', 'new'], account: ['you', 'email', 'texts', 'school', 'emails', 'push', 'following', 'favorites', 'plans', 'sharing', 'listings', 'sign-out'] };
     var MOVED = { profile: 'you' };   // names a part has had
     var fresh = false;   // someone signed in on this visit, rather than arriving signed in
     // a link followed while the page is already open (the address changes, the page doesn't load again)
@@ -571,9 +571,9 @@
       sch.appendChild(el('h2', null, 'Your school and kids'));
       put(sch, 'account');
       // the Sunday email (its tick box goes in further down, once the school is known)
-      var mail = part(el('section', 'panel'), 'emails', 'Emails');
-      mail.appendChild(el('h2', null, 'Emails'));
-      mail.appendChild(el('p', null, 'Sign-up dates come by email for whatever you follow, below. The Sunday email is extra, and it’s off until you turn it on.'));
+      var mail = part(el('section', 'panel'), 'emails', 'Emails and notifications');
+      mail.appendChild(el('h2', null, 'Emails and notifications'));
+      mail.appendChild(el('p', null, 'Sign-up dates come by email for whatever you follow, below. The Sunday email and notifications on your phone are extra, and both are off until you turn them on.'));
       put(mail, 'account');
       // what's new on the site, for someone who has been before
       var NEWS = ainfo.news || [];
@@ -677,6 +677,108 @@
       });
       var devNote = el('p', 'hint'); sch.appendChild(devNote);
       mail.appendChild(wkRow); mail.appendChild(wkNote);
+      // ----- notifications on this phone or computer: the same dates as the emails, with no app to install -----
+      var pushBox = el('div', 'g-push'); pushBox.id = 'push';
+      pushBox.appendChild(el('h3', null, 'Notifications on this device'));
+      pushBox.appendChild(el('p', 'hint', 'The same sign-up dates as the emails, as a notification on this phone or computer: the morning after a date is posted, the day before, and that morning. There’s no app to install, and it’s free.'));
+      var pushBody = el('div', 'g-push-body'), pushNote = el('p', 'hint'); pushNote.setAttribute('aria-live', 'polite');
+      pushBox.appendChild(pushBody); pushBox.appendChild(pushNote);
+      mail.appendChild(pushBox);
+      var swUrl = page('sw.js');
+      var canPush = !!API && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+      var isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+      var toBytes = function (b64u) { var t = String(b64u).replace(/-/g, '+').replace(/_/g, '/'); while (t.length % 4) t += '='; var raw = window.atob(t), out = new Uint8Array(raw.length); for (var i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i); return out; };
+      var thisSub = function () { return navigator.serviceWorker.getRegistration(swUrl).then(function (reg) { return reg ? reg.pushManager.getSubscription() : null; }); };
+      var pushSay = function (t) { pushNote.textContent = t || ''; };
+      var took = function (r) { if (r && r.push) me.push = r.push; };
+      var drawPush = function () {
+        pushBody.textContent = '';
+        var P = me.push || { devices: 0, only: false };
+        var row = function () { var d = el('div', 'actions'); pushBody.appendChild(d); return d; };
+        // "instead of the emails", once any device has them
+        var modeRow = function () {
+          if (!P.devices) return;
+          var lab = el('label', 'g-check g-push-only'), box = el('input'); box.type = 'checkbox'; box.id = 'push-only'; box.checked = !!P.only;
+          lab.appendChild(box); lab.appendChild(el('span', null, 'Send me notifications instead of the date emails.'));
+          pushBody.appendChild(lab);
+          pushBody.appendChild(el('p', 'hint', 'With this ticked, sign-up dates and days off come as notifications only. If notifications stop reaching your devices, the emails start again by themselves.'));
+          box.addEventListener('change', function () {
+            box.disabled = true; pushSay('Saving…');
+            call('push_mode', { only: box.checked }).then(function (r) { box.disabled = false; if (!r.ok) { box.checked = !box.checked; pushSay(r.message); return; } took(r); pushSay(r.push.only ? 'Done. Date emails stop from tomorrow morning; notifications carry them.' : 'Done. You’ll get the emails as well.'); });
+          });
+        };
+        var others = function (here) {
+          var n = P.devices - (here ? 1 : 0);
+          if (n < 1) return;
+          var p = el('p', 'hint', (here ? 'Also on ' : 'On ') + n + (here ? ' other' : '') + (n === 1 ? ' device' : ' devices') + ' signed in to this account. ');
+          var all = btn('clear', 'Turn them off everywhere');
+          twoTap(all, 'Tap again to turn them all off', function () {
+            (canPush ? thisSub().then(function (sub) { return sub ? sub.unsubscribe() : null; }).then(null, function () { return null; }) : Promise.resolve()).then(function () { return call('push_off', { all: true }); }).then(function (r) { took(r); pushSay(r.ok ? 'Notifications are off on every device.' : r.message); drawPush(); });
+          });
+          p.appendChild(all); pushBody.appendChild(p);
+        };
+        if (!canPush) {
+          if (isIos && !standalone) {
+            pushBody.appendChild(el('p', null, 'On an iPhone or iPad, notifications work once Philly After School is on your Home Screen:'));
+            var ol = el('ol', 'g-push-steps');
+            ['In Safari, tap the Share button (the square with an arrow).', 'Choose “Add to Home Screen”, then “Add”.', 'Open Philly After School from your Home Screen and log in there.', 'Come back to Account, and turn notifications on here.'].forEach(function (t) { ol.appendChild(el('li', null, t)); });
+            pushBody.appendChild(ol);
+          } else pushBody.appendChild(el('p', 'hint', API ? 'This browser can’t show notifications from a website. The emails still work, or try this page in Chrome, Edge, Firefox or Safari.' : 'Notifications don’t work in this preview copy of the site.'));
+          others(false); modeRow(); return;
+        }
+        if (window.Notification.permission === 'denied') {
+          pushBody.appendChild(el('p', 'g-status bad', 'Notifications from this site are blocked in this browser’s settings. Allow them there, then come back to this page.'));
+          others(false); modeRow(); return;
+        }
+        thisSub().then(null, function () { return null; }).then(function (sub) {
+          pushBody.textContent = '';
+          var acts = row();
+          if (sub) {
+            pushBody.insertBefore(el('p', 'g-status good g-push-on', 'On for this device.'), acts);
+            var test = btn('btn', 'Send me a test'), off = btn('btn', 'Turn off on this device');
+            test.addEventListener('click', function () { test.disabled = true; pushSay('Sending…'); call('push_test', {}).then(function (r) { test.disabled = false; took(r); pushSay(r.ok ? 'Sent. It should arrive in a few seconds.' : r.message); }); });
+            off.addEventListener('click', function () {
+              off.disabled = true; var ep = sub.endpoint;
+              sub.unsubscribe().then(null, function () { return false; }).then(function () { return call('push_off', { endpoint: ep }); }).then(function (r) { took(r); pushSay(r.ok ? 'Off for this device.' : r.message); drawPush(); });
+            });
+            acts.appendChild(test); acts.appendChild(off);
+            // this device has them but the account doesn't know (a new sign-in on the same browser): tell it
+            if (!P.devices) { var j0 = sub.toJSON(); call('push_on', { endpoint: sub.endpoint, p256dh: j0.keys.p256dh, auth: j0.keys.auth }).then(function (r) { if (r.ok) { took(r); drawPush(); } }); }
+          } else {
+            var on = btn('btn primary', 'Turn on notifications on this device');
+            on.addEventListener('click', function () {
+              on.disabled = true; pushSay('Your browser will ask if that’s OK.');
+              var fail = function (why) { on.disabled = false; pushSay(why || 'That didn’t work on this device. The emails still do.'); };
+              var answered = false;
+              var asked = function (perm) {
+                if (answered) return; answered = true;   // some browsers both call back and return a promise
+                if (perm !== 'granted') { fail(perm === 'denied' ? 'Notifications are blocked for this site. You can allow them in your browser’s settings.' : 'No problem. Nothing was turned on.'); if (perm === 'denied') drawPush(); return; }
+                pushSay('Turning them on…');
+                call('push_key').then(function (k) {
+                  if (!k.ok) { fail(k.message); return; }
+                  var key = toBytes(k.key);
+                  var subscribe = function (reg) { return reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key }); };
+                  return navigator.serviceWorker.register(swUrl).then(function () { return navigator.serviceWorker.ready; }).then(function (reg) {
+                    // an address made for another site's key (an old copy of this one): let it go and ask again
+                    return subscribe(reg).then(null, function () { return reg.pushManager.getSubscription().then(function (old) { return old ? old.unsubscribe() : null; }).then(function () { return subscribe(reg); }); });
+                  }).then(function (sub2) {
+                    var j = sub2.toJSON();
+                    return call('push_on', { endpoint: sub2.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth }).then(function (r) {
+                      if (!r.ok) { sub2.unsubscribe().then(null, function () { return null; }); fail(r.message); return; }
+                      took(r); pushSay('On. Tap “Send me a test” to see one arrive.'); drawPush();
+                    });
+                  });
+                }).then(null, function () { fail(); });
+              };
+              try { var p0 = window.Notification.requestPermission(asked); if (p0 && p0.then) p0.then(asked, function () { fail(); }); } catch (e) { fail(); }
+            });
+            acts.appendChild(on);
+          }
+          others(!!sub); modeRow();
+        });
+      };
+      drawPush();
       var paintSchool = function (kept) {
         ss.value = kept || '';
         devNote.textContent = '';
@@ -864,6 +966,7 @@
         // emails and texts
         var bits = [follows.length ? 'Sign-up dates for the ' + (follows.length === 1 ? 'one thing' : follows.length + ' things') + ' you follow' : 'No date emails yet'];
         bits.push(weekOn() ? 'Sunday email on, for ' + sName : 'Sunday email off');
+        if (me.push && me.push.devices) bits.push('Notifications on ' + (me.push.devices === 1 ? 'one device' : me.push.devices + ' devices') + (me.push.only ? ', instead of the date emails' : ''));
         bits.push(me.phone ? 'Texts to the number ending ' + String(me.phone).replace(/\D/g, '').slice(-4) : 'No number for texts');
         row('Emails and texts', function (dd) { var ul = el('ul', 'pc-list'); bits.forEach(function (b) { ul.appendChild(el('li', null, b)); }); dd.appendChild(ul); }, 'Change', page('account/') + '#emails');
         if (groups.length) {
