@@ -479,7 +479,7 @@ own key.
   (`GET push_key`), and gives the address and its two keys to the server (`push_on`, table `push_subs`). "Send me a
   test" sends one (`push_test`). One account can have `PUSH_SUBS` devices.
 - **iPhones.** Safari only delivers notifications to a site that has been added to the Home Screen, which is what
-  `manifest.webmanifest` is for (`display: standalone`). On an iPhone in Safari the page shows the four steps
+  `manifest.json` is for (`display: standalone`). On an iPhone in Safari the page shows the four steps
   instead of the button. The Home Screen copy keeps its own sign-in, so the parent logs in there once.
 - **What is sent.** `push_run()` in the server reads the same feed the emails are worked out from
   (`data/alerts.json`, written by the build) and, for each account with a device, works out what is due today from

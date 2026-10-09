@@ -548,7 +548,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <link rel="icon" href="${link('favicon.svg', depth)}" type="image/svg+xml">
 <link rel="icon" href="${link('favicon.png', depth)}" type="image/png" sizes="48x48">
 <link rel="apple-touch-icon" href="${link('apple-touch-icon.png', depth)}">${GROUPS && !PREVIEW ? `
-<link rel="manifest" href="${link('manifest.webmanifest', depth)}">` : ''}
+<link rel="manifest" href="${link('manifest.json', depth)}">` : ''}
 <meta name="theme-color" content="#96C9FF">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -4563,7 +4563,7 @@ write('assets/edit.js', fs.readFileSync(path.join(ROOT, 'src/edit.js')));
 // an iPhone asks for before it will deliver them.
 if (GROUPS && !PREVIEW) {
   write('sw.js', fs.readFileSync(path.join(ROOT, 'src/sw.js')));
-  write('manifest.webmanifest', JSON.stringify({ name: cfg.siteName, short_name: cfg.siteName.length > 12 ? cfg.siteName.replace(/^Philly /, '') : cfg.siteName, description: 'After-school programs in Philadelphia, sorted by the school your child goes to.',
+  write('manifest.json', JSON.stringify({ name: cfg.siteName, short_name: cfg.siteName.length > 12 ? cfg.siteName.replace(/^Philly /, '') : cfg.siteName, description: 'After-school programs in Philadelphia, sorted by the school your child goes to.',
     start_url: '/?utm_source=homescreen&utm_medium=app', scope: '/', display: 'standalone', background_color: '#96C9FF', theme_color: '#96C9FF',
     icons: [{ src: '/icon-192.png', sizes: '192x192', type: 'image/png' }, { src: '/icon-512.png', sizes: '512x512', type: 'image/png' }] }, null, 2) + '\n');
 }
