@@ -530,7 +530,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
     return `<details class="menu${here ? ' here' : ''}"><summary>${label}${label === 'Build a schedule' ? '<span class="count" data-board-count hidden></span>' : ''}</summary><ul>${items.map(([to, text]) => `<li><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
   }).join('') + `<a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
-    ? `<a class="nav-cta when-out" href="${link('register/', depth)}">Create a free account</a><a class="nav-cta when-in" href="${link('profile/', depth)}"${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}>My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>`
+    ? `<a class="when-in nav-acct" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}>Account</a><a class="nav-cta when-out" href="${link('register/', depth)}">Create a free account</a><a class="nav-cta when-in" href="${link('profile/', depth)}"${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}>My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>`
     : `<a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`}`;
   const head = `${first}${fragment || quiet ? '' : roleHead + gtmHead + '\n'}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
@@ -1156,7 +1156,7 @@ function stopPage() {
   const body = `<div ${groupsAttrs(D)} data-stop-page style="display:contents">
   <noscript><p class="ask">${T(`This page needs JavaScript turned on. You can also sign in and stop following from your profile.`)}</p></noscript>
   <section class="panel stop-box needs-js-block" id="stop-box" aria-live="polite"><p class="hint">${T(`One moment…`)}</p></section>
-  <p class="hint">${T(`To see or change everything you follow,`)} <a href="${link('profile/', D)}#following">${T(`sign in to your profile`)}</a>. ${T(`The Unsubscribe link at the foot of any email stops every email from us, including news about the site.`)}</p>
+  <p class="hint">${T(`To see or change everything you follow,`)} <a href="${link('account/', D)}#following">${T(`sign in to your account`)}</a>. ${T(`The Unsubscribe link at the foot of any email stops every email from us, including news about the site.`)}</p>
 </div>`;
   return layout({ title: 'Stop emails about one thing', description: `Stop ${cfg.siteName} emails about one program, camp or school.`, pathName: alertsPath + 'stop/', depth: D, current: null, hero, body, noindex: true, quiet: true });
 }
@@ -1713,7 +1713,7 @@ function schoolWeekSection(s) {
       ${show(weeks[0], weekday(TODAY) === 6 || weekday(TODAY) === 0 ? T(`This coming week`) : T(`This week`))}
       ${show(weeks[1], T(`The week after`))}
     </div>
-    ${GROUPS && ALERTS ? `<p class="wk-mail"><b>${T(`Want this on Sunday mornings?`)}</b> ${T(`It’s an email you turn on in your profile, and it only comes in weeks with something out of the ordinary.`)} <a href="${link('profile/', 1)}#emails">${T(`Turn it on`)}</a></p>` : ''}
+    ${GROUPS && ALERTS ? `<p class="wk-mail"><b>${T(`Want this on Sunday mornings?`)}</b> ${T(`It’s an email you turn on in your account, and it only comes in weeks with something out of the ordinary.`)} <a href="${link('account/', 1)}#emails">${T(`Turn it on`)}</a></p>` : ''}
     ${cfg.contactEmail ? `<details class="wk-add">
       <summary>${T(`Know a date that’s missing?`)}</summary>
       <form class="wk-form" method="post" action="${link('suggest/send.php', 1)}" data-clarity-mask="true">
@@ -2115,7 +2115,8 @@ function privacyPage() {
   ${GROUPS ? `<h2 id="groups" data-jump-to="Accounts">${T(`Accounts, profiles and sharing`)}</h2>
   <p>${T(`An account is optional. It lets you keep your school and a child’s week in a profile, share a week with one person, and join a share group of a few families who know each other. These are the only parts of the site that keep anything about a child on our server, and only when you choose to use them.`)}</p>
   <ul>
-    <li>${T(`An account is an email address and your first and last name. The email signs you in and tells you when someone opens a week you shared or joins a group you made. Other members never see it.`)}</li>${GROUPS.google ? `
+    <li>${T(`An account is an email address and your first and last name. The email signs you in and tells you when someone opens a week you shared or joins a group you made. Other members never see it.`)}</li>
+    <li>${T(`You can change the email address on your account, from your account page. We send a code to the new address to check that it’s yours. Once you type it in, you sign in with the new address, what you follow moves to it on the email list, a short note goes to the old address, and your other devices are signed out. The old address is no longer on your account, but it stays on our email list until it is unsubscribed: use the Unsubscribe link in any email, or ask us and we’ll remove it.`)}</li>${GROUPS.google ? `
     <li>${T(`You can sign in with Google instead of an emailed code. Google’s button is loaded on the pages where you sign in, so Google can see that someone opened that page. If you use it, Google tells us your name and email address. We ask for nothing else and never see your Google password.`)}</li>` : ''}
     <li>${T(`If you keep your school in your profile, we store which school. If you keep your children’s grades, we store the grades and nothing about which child is in which. If you keep a week in your profile, we store the child’s first name, the programs on their current and upcoming weeks, and the school each program was picked under, so the week can be put back on another device. Notes you type are not stored.`)}</li>
     <li>${T(`If you keep a summer schedule in your profile, we store each child’s first name as you typed it and the camps picked for each week, so the summer is there on your other devices. Ages, the calendar’s title and photos are not stored. A summer in your profile can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The summer schedule section is hidden in session recordings, and analytics is told only that a summer was kept, never what is in it.`)}</li>
@@ -2167,12 +2168,12 @@ ${GROUPS.photos ? `    <li>${T(`A photo you send for your listing is shrunk in y
   ${ALERTS ? `<h2 id="email" data-jump-to="Emails and texts">${T(`Dates by email`)}</h2>
   <ul>
     ${GROUPS ? `<li>${T(`Following a program, a camp or a school uses a free account. Your account keeps the list of what you follow. Your browser sends two things to Klaviyo, the email service we use: your email address (with your first name, if your account has one) and what you follow. They are stored there.`)}</li>
-    <li>${T(`You hear only about what you follow. Stop following from the listing’s page or from your profile page and those emails stop; deleting your account stops them all.`)}</li>
+    <li>${T(`You hear only about what you follow. Stop following from the listing’s page or from your account page and those emails stop; deleting your account stops them all.`)}</li>
     <li>${T(`A sign-up date is emailed the morning after it is posted on this site, with reminders the day before and on the morning itself. Days off come in a weekly round-up. We can only pass on a date once the program has posted it and it has reached this site.`)}</li>
     <li>${T(`Every date email has a link for each listing in it, “Stop emails about …”. It stops that one listing without signing in, including its dates that would have reached you through a school you follow, and you can undo it on the spot or from your account page.`)}</li>
     <li>${T(`That link works because it carries a random code that belongs to your account. The code is kept with your account and on your email-list profile, and it can do one thing: stop emails. It can’t open your account or show anything in it, and the page it opens never says whose it is.`)}</li>
     <li>${T(`So that a stop always holds, we keep a list of what has been stopped in a scrambled form that can’t be read back into a person or a listing without that code. The entry for a deleted account stays on that list, so its emails stay stopped.`)}</li>
-    <li>${T(`“This week at your school” is an email you turn on in your profile, for the school kept there. It is off until you tick it. It works like following: which school it is for is kept in your account and on your email-list profile, and you can turn it off there or from the link in any of those emails.`)}</li>
+    <li>${T(`“This week at your school” is an email you turn on in your account, for the school kept there. It is off until you tick it. It works like following: which school it is for is kept in your account and on your email-list profile, and you can turn it off there or from the link in any of those emails.`)}</li>
     <li>${T(`A favorite is different. It is kept in your account and nowhere else: it isn’t sent to Klaviyo, and it sends no email.`)}</li>
     <li>${T(`A phone number is optional. If you add one and tick the box agreeing to texts, we keep the number, the day you agreed and the wording you agreed to, in your account. It is for texts about what you follow and nothing else. Texts have not started yet; until they do, the number is not passed to any texting service. You can remove it on your account page at any time, and a text will always say how to stop them. Message and data rates may apply.`)}</li>
     <li>${T(`Asking to be told when a school is added still takes only a first name and an email address, with no account.`)}</li>` : `<li>${T(`The sign-up form sends three things: your first name, your email address and the school or program you chose. They go from your browser to Klaviyo, the email service we use, and are stored there.`)}</li>
@@ -2795,7 +2796,7 @@ function accountPage(register = false) {
     <p class="lede">${GROUPS && daysOff ? T(`Keep every plan you build, the school week, the days off and the summer, and see them together in one private calendar for the whole year. It takes about a minute, and there’s no password to remember.`) : T(`Save your school, your kids’ grades and your week, and share a week with the people who need it. It takes about a minute, and there’s no password to remember.`)}</p>`
     : `    <h1><span class="when-out">${T(`Log in to your account`)}</span><span class="when-in">${T(`Your account`)}</span></h1>
     <p class="lede when-out">${T(`Your school, your plans and your kids’ calendar for the year, on any device. There’s no password to remember.`)} ${T(`New here?`)} <a href="${link('register/', 1)}">${T(`Create a free account`)}</a></p>
-    <p class="lede when-in">${T(`Sharing, invitations, your listings and signing out. What you’ve saved and what you follow are on your profile.`)}</p>`;
+    <p class="lede when-in">${T(`This is where you change things: your name, email address and phone number, your school and grades, what you’re emailed about, what you follow, and who you share with.`)}</p>`;
   const art = `<svg viewBox="0 0 520 300" aria-hidden="true" focusable="false">
   <defs><g id="acct-week"><rect width="120" height="152" rx="11" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/><path d="M0 11a11 11 0 0 1 11-11h98a11 11 0 0 1 11 11v17H0z" fill="#0F4D90"/><text x="11" y="19" font-size="11" font-weight="800" fill="#FFFFFF" font-family="Archivo, Arial, sans-serif">Sam’s week</text><circle cx="17" cy="44" r="7.5" fill="#E3EEFA"/><text x="17" y="47.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">M</text><rect x="31" y="38" width="62" height="12" rx="6" fill="#1F7A3A"/><circle cx="17" cy="65" r="7.5" fill="#E3EEFA"/><text x="17" y="68.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">T</text><rect x="31" y="59" width="48" height="12" rx="6" fill="#B4237A"/><circle cx="17" cy="86" r="7.5" fill="#E3EEFA"/><text x="17" y="89.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">W</text><rect x="31" y="80" width="70" height="12" rx="6" fill="#0E7C86"/><circle cx="17" cy="107" r="7.5" fill="#E3EEFA"/><text x="17" y="110.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">T</text><rect x="31" y="101" width="40" height="12" rx="6" fill="#6B3FA0"/><circle cx="17" cy="128" r="7.5" fill="#E3EEFA"/><text x="17" y="131.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">F</text><rect x="31" y="122" width="56" height="12" rx="6" fill="#C2410C"/></g></defs>
   <rect x="238" y="20" width="250" height="186" rx="13" class="art-frame"/>
@@ -2843,18 +2844,18 @@ function accountPage(register = false) {
 </div>`;
   return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to keep your week, days-off and summer plans, and see the whole year in one private calendar.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: !register, scripts: groupsScript(1) });
 }
-// "My profile": what a signed-in person has saved and what they hear about. The page is a shell; groups.js fills it
+// "My profile": a snapshot of the account on one card (nothing is changed here; that is the account page). The page is a shell; groups.js fills it
 // (the same script as the account page, told which page it is on by data-view). Signed out, it shows the log-in form.
 function profilePage() {
   const hero = `    <h1><span class="when-out">${T(`Log in to see your profile`)}</span><span class="when-in">${T(`My profile`)}</span></h1>
     <p class="lede when-out">${T(`Your school, what you follow, your favorites and your plans, on any device. There’s no password to remember.`)} ${T(`New here?`)} <a href="${link('register/', 1)}">${T(`Create a free account`)}</a></p>
-    <p class="lede when-in">${T(`What you’ve told us, what you follow and what you’ve saved, in one place. Change any of it here.`)}</p>`;
+    <p class="lede when-in">${T(`Everything in your account, on one card. To change any of it, go to your account.`)}</p>`;
   const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`Your profile needs JavaScript turned on.`)}</p></noscript>
   <div class="g-page" id="account" data-view="profile"></div>
   <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })), hoods: accountHoods(), news: NEWS.slice(0, 5) }).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: 'My profile', description: `Your ${cfg.siteName} profile: your school, what you follow, your favorites and your plans.`, pathName: 'profile/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
+  return layout({ title: 'My profile', description: `Your ${cfg.siteName} profile: you, your kids, your school, what you follow, your favorites and your plans, on one card.`, pathName: 'profile/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
 }
 // A page whose address changed: send the visitor on, keeping anything after the address (?l=, ?q=).
 const movedPage = (to, depth) => `<!doctype html>
@@ -3642,7 +3643,7 @@ $topListings = array(); $hitsSince = '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'hood_saved' => 'Neighborhoods kept', 'phone_saved' => 'Phone numbers added for texts', 'follow' => 'Follows started', 'stop_one' => 'Listings stopped from an email', 'stop_all' => 'Everything stopped from an email', 'fav' => 'Favorites saved', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
+$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'hood_saved' => 'Neighborhoods kept', 'phone_saved' => 'Phone numbers added for texts', 'follow' => 'Follows started', 'stop_one' => 'Listings stopped from an email', 'stop_all' => 'Everything stopped from an email', 'fav' => 'Favorites saved', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'email_changed' => 'Email addresses changed', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -4043,12 +4044,13 @@ function calendarPage() {
     <ul class="year-src" id="year-src"></ul>
     <div class="year-own" id="year-own" data-jump-to="Your own dates">
       <h3>${T(`Add your own dates`)}</h3>
-      <p>${T(`Picture day, pretzel day, a form that’s due, a half day: anything you need to remember, for one child or for everyone. They show up in the calendar below, in the pictures and in the file for your phone.`)}</p>
+      <p>${T(`Picture day, pretzel day, a form that’s due, a half day: anything you need to remember, for one child or for everyone. They show up in the calendar below, in the pictures and in the file for your phone. Something that happens every week needs only the day of the week.`)}</p>
       <form class="own-form" id="own-form">
         <div class="field own-what"><label for="own-what">${T(`What`)}</label><input id="own-what" type="text" maxlength="60" list="own-ideas" placeholder="Picture day" autocomplete="off"></div>
         <datalist id="own-ideas">${['Picture day', 'Pretzel day', 'Early dismissal', 'Form due', 'Field trip', 'Library day', 'Gym day', 'Show and tell', 'Bring a snack', 'Dress-down day', 'Concert', 'Parent conference'].map(x => `<option value="${esc(x)}">`).join('')}</datalist>
-        <div class="field"><label for="own-when">${T(`When`)}</label><input id="own-when" type="date"></div>
-        <div class="field"><label for="own-rep">${T(`How often`)}</label><select id="own-rep"><option value="">Just that day</option><option value="w">Every week on that day</option></select></div>
+        <div class="field"><label for="own-rep">${T(`How often`)}</label><select id="own-rep"><option value="">One day</option><option value="w">Every week</option></select></div>
+        <div class="field" id="own-when-field"><label for="own-when">${T(`When`)}</label><input id="own-when" type="date"></div>
+        <div class="field" id="own-dow-field" hidden><label for="own-dow">${T(`Which day`)}</label><select id="own-dow">${[['mon', 'Mondays'], ['tue', 'Tuesdays'], ['wed', 'Wednesdays'], ['thu', 'Thursdays'], ['fri', 'Fridays'], ['sat', 'Saturdays'], ['sun', 'Sundays']].map(([v, n]) => `<option value="${v}">${n}</option>`).join('')}</select></div>
         <div class="field own-who-field"><span class="g-label" id="own-who-label">${T(`Who it’s for`)}</span><div class="own-who" id="own-who" role="group" aria-labelledby="own-who-label"></div></div>
         <div class="actions"><button type="submit" class="btn primary">Add it</button></div>
       </form>
@@ -4093,6 +4095,7 @@ function calendarPage() {
               <label for="year-title">${T(`Title`)}</label>
               <input id="year-title" type="text" maxlength="40" placeholder="Our year" autocomplete="off">
             </div>
+            <label class="g-check" id="year-pic-own-row" hidden><input type="checkbox" id="year-pic-own" checked> <span>${T(`Show the dates I added, on every month they fall in`)}</span></label>
             <div class="field">
               <label for="year-photo">${T(`A photo (optional)`)}</label>
               <input id="year-photo" type="file" accept="image/*">

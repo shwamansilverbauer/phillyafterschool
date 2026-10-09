@@ -270,16 +270,18 @@ analytics or recordings.
 - **When a date changes.** A file is a copy. At each download the page keeps, in the browser (`pas-year-file`), what
   the file held; on later visits it lists what is new, moved, changed or gone since, with "Download it again".
 - **Your own dates.** "Add your own dates" at the top takes picture day, pretzel day, a form that's due: what it is,
-  the day, just that day or every week on that weekday, and who it's for (everyone, or any of the children; a child
+  how often (one day, which asks for a date, or every week, which asks only for a day of the week), and who it's for (everyone, or any of the children; a child
   can be named on the spot). "Add several at once" reads a typed or pasted list, one per line, each starting with a
   date (`10/14`, `Oct 14`, `2026-10-14`) or a weekday (`Wednesdays`, `every Monday`); lines it can't read stay in
   the box. They are kept with the rosters in the browser (`own` in `pas-rosters`: `{ id, t, d, r, w }`), never sent
   to the server and not part of a profile, so they are on that device only. A single day shows in the month list
-  and the month picture; a weekly one joins that child's "Every school week" card and repeats in the calendar file
-  to the last day of school, skipping days off. "Dates you added yourself" in the file's options turns them off.
+  and the month picture; a weekly one joins that child's "Every school week" card, repeats in the calendar file
+  to the last day of school, skipping days off, and is drawn on every school day it falls on in the month pictures. "Dates you added yourself" in the file's options turns them off.
   A date of your own is enough for the calendar to appear, with no other plan.
 - **Pictures.** "School weeks" on one card, and a calendar for each month with something on it: days off in yellow
-  with a bar for each child, camp weeks as bars across the row, and a flag on a sign-up date. Title (`yearTitle`) and
+  with a bar for each child, camp weeks as bars across the row, a flag on a sign-up date, and a teal flag for each
+  date of your own (two to a day, then "+ 2 more"). "Show the dates I added" beside the pictures turns the teal
+  flags off; the choice is kept on the device (`pas-year-pic-own`). Title (`yearTitle`) and
   photo work as on the other cards, and stay on the device.
 
 ## Weekend classes
@@ -689,7 +691,7 @@ These are the only parts of the site that store anything about a child on the se
   no request: elements carry the class `when-out` or `when-in`.
 - **Creating an account and logging in.** Two addresses share one form. `/register/` is the landing page for
   creating an account: what an account gives you (with a drawing of a week on a phone and a laptop) beside the
-  form. `/account/` is where you log in and, signed in, your profile; someone already signed in who opens
+  form. `/account/` is where you log in and, signed in, where you change what is in the account; someone already signed in who opens
   `/register/` is sent there. `?next=board` on either sends them back to Build your week afterwards. The old
   address `/account/?new=1` forwards to `/register/`. `/register/` loads analytics (see Privacy below); `/account/` does not.
 - **Build your week.** The card comes first. Once someone shares, saves, copies or prints a card, a box asks
@@ -944,19 +946,37 @@ Once someone is signed in there are two pages, drawn by the same code in `groups
 which page it is on by `data-view` on `#account`. Every panel is built either way and `put(panel, page)` shows it on
 its own page.
 
-- **`/profile/` ("My profile", `profilePage()`)** is what a person has saved and what they hear about: About you
-  (name, school, grades, neighborhood), Emails and texts (the Sunday email and a phone number), What's new, Places
-  you follow, Favorites, and Your plans (weeks, summer, days off, My kids' calendar). News nobody has seen sits
-  near the top; once seen it moves to the foot of the page. Someone who manages a listing gets a "Your listings"
-  panel here too. The header button for a signed-in visitor is "My profile".
-- **`/account/`** is the account itself: who is signed in, sharing and groups, invitations, listings, the support
-  ask, signing out and deleting. Signed out, it is still where people log in.
+- **`/profile/` ("My profile", `profilePage()`) is a snapshot.** One card (`#card`, `paintCard()`): name, email
+  address and whether the account is a parent's or a program manager's, then a row each for Kids (how many, and
+  their first names), Grades, School, Neighborhood, Following, Favorites, Schedules (weeks, summer and days-off plans
+  kept in the account), Calendars (My kids' calendar, and how many dates of their own are on this device), Emails
+  and texts, and, when there are any, Sharing and Listings. Nothing on it can be typed into: each row has a link to
+  the part of the account page where it is changed, and the card's button is "Edit my account". "What's new" sits
+  under the card.
+- **Where the kids' names come from.** No list of children is kept. The card collects first names from the plans
+  kept in the account (weeks, summer, days off) and from the rosters on this device. Grades are stored without
+  saying which child is in which, so the card shows them as their own row.
+- **`/account/` is where everything is changed.** Your details (name, email address, mobile number), School and
+  kids (school, grades, neighborhood), Emails (the Sunday email), Places you follow and Favorites, Kept plans,
+  Sharing and groups, invitations, listings, the support ask, signing out and deleting. Signed out, it is still
+  where people log in.
+- **Getting there.** Signed in, the menu has "Account" beside the "My profile" button; in the phone menu the two are
+  the first things listed. The footer has both as well.
+- **Changing the email address.** "Change my email address" under Your details asks for the new address
+  (`email_start`), which is sent a 6-digit code, and then for the code (`email_finish`). Until the code is typed
+  nothing changes. Then the account's address is replaced, every other device is signed out, a note goes to the old
+  address (without naming the new one), and every follow is marked as not yet told to the email list, so the
+  browser tells Klaviyo about them under the new address and takes them off the old one (`MK.moved()` in
+  `site.js`). The code can't be used to sign in. An address that already has an account is refused, but only after
+  the code has shown the address belongs to the person asking. An account that holds a claimed listing can't change
+  its address here, because the claim rests on it. The old address stays a subscriber in Klaviyo with nothing
+  followed; remove it there by hand if someone asks.
 - **Where a sign-in lands.** Signing in on `/account/` or `/register/` with nowhere else to go lands on the
   profile, after the "Finish your account" step for a new account. Arriving already signed in, each page stays
   put. `next=profile` is accepted like the other destinations.
-- **Old links keep working.** A link to a part that lives on the other page is sent across: `/account/#following`
-  goes to `/profile/#following`, and `/account/#profile` (the old Sunday-email link) to `/profile/#emails`. The
-  lists are `PARTS` and `MOVED` at the top of the account code.
+- **Links to parts.** A link to a part that lives on the other page is sent across: `/profile/#following` (which
+  earlier emails used) goes to `/account/#following`, `/profile/#emails` to `/account/#emails`. The lists are
+  `PARTS` and `MOVED` at the top of the account code. Date emails now link to `/account/#following`.
 - Neither page loads analytics or recordings, and both are kept out of search.
 
 ## The way in for program managers

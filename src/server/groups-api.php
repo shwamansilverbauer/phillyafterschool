@@ -873,7 +873,7 @@ switch ($method . ' ' . $action) {
       if (!$login || $login['used'] || $login['expires'] < now()) { note('try:' . who()); fail('expired', 'That sign-in link has been used or has run out. Ask for a new one.', 410); }
     } else {
       $login = row('SELECT * FROM logins WHERE req_hash = ?', array(h($req)));
-      if (!$login || $login['used'] || $login['expires'] < now()) fail('expired', 'That code has been used or has run out. Ask for a new sign-in email.', 410);
+      if (!$login || $login['used'] || $login['expires'] < now() || strpos((string) $login['next'], 'move:') === 0) fail('expired', 'That code has been used or has run out. Ask for a new sign-in email.', 410);
       if ((int) $login['tries'] >= 5) fail('expired', 'Too many wrong codes. Ask for a new sign-in email.', 410);
       if (!hash_equals($login['code_hash'], h($req . ':' . $code))) {
         q('UPDATE logins SET tries = tries + 1 WHERE id = ?', array($login['id']));
@@ -893,6 +893,62 @@ switch ($method . ' ' . $action) {
     if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80})$~', $next)) $next = 'account';
     $g = google_email(str($in, 'credential', 4200));
     sign_in($g['email'], 'google', $next, $g['first'], $g['last']);
+  }
+
+  // Moving the account to a different email address. A code goes to the new address, and typing it on the account
+  // page proves the address is theirs. An account that holds a listing can't: the listing was claimed with its address.
+  case 'POST email_start': {
+    $u = need_user();
+    $email = strtolower(str($in, 'email', 150));
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) fail('email', 'That email address doesn’t look right.');
+    if ($email === strtolower($u['email'])) fail('same', 'That’s the address this account already uses.');
+    if ((int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) > 0) fail('claims', 'This account manages a listing, and the listing was claimed with this address. Write to us and we’ll move it for you.');
+    if (too_many('mail:' . h($email), 3, 900) || too_many('mail:' . h($email), 8, 86400) || too_many('move:' . $u['id'], 4, 900) || too_many('move:' . $u['id'], 10, 86400) || too_many('ip:' . who(), 10, 900) || too_many('ip:' . who(), 40, 86400)) {
+      fail('slow', 'That’s a lot of codes. Use the newest one, or wait 15 minutes and try again.', 429);
+    }
+    note('mail:' . h($email)); note('move:' . $u['id']); note('ip:' . who());
+    $req = b64(random_bytes(18));
+    $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+    q('DELETE FROM logins WHERE next = ? AND used = 0', array('move:' . $u['id']));   // only the newest code works
+    // the link half of a sign-in is never sent for this: its token is thrown away, so only the code can finish it
+    q('INSERT INTO logins (email, token_hash, req_hash, code_hash, next, expires) VALUES (?, ?, ?, ?, ?, ?)', array($email, h(b64(random_bytes(32))), h($req), h($req . ':' . $code), 'move:' . $u['id'], now() + LINK_MINUTES * 60));
+    $shown = substr($code, 0, 3) . ' ' . substr($code, 3);
+    $text = "Use this address for your " . $CFG['siteName'] . " account\n\nSomeone signed in to a " . $CFG['siteName'] . " account asked to use this email address for it. If that was you, type this code into the account page: $shown\n\nIt works once and stops working after " . LINK_MINUTES . " minutes. If it wasn't you, ignore this: nothing changes without the code.\n";
+    $html = email_html('Use this address for your account', '<p style="margin:0 0 10px">Someone signed in to a ' . htmlspecialchars($CFG['siteName'], ENT_QUOTES, 'UTF-8') . ' account asked to use this email address for it. If that was you, type this code into the account page:</p><p style="margin:0;font-size:28px;font-weight:bold;letter-spacing:2px">' . $shown . '</p>', '', '',
+      'It works once and stops working after ' . LINK_MINUTES . ' minutes. If it wasn’t you, ignore this: nothing changes without the code.');
+    if (!send_mail($email, 'Your code to change your ' . $CFG['siteName'] . ' email address', $text, $html)) fail('mail', 'The email could not be sent. Please try again in a minute.', 502);
+    out(array('ok' => true, 'req' => $req, 'minutes' => LINK_MINUTES));
+  }
+
+  case 'POST email_finish': {
+    $u = need_user();
+    $req = str($in, 'req', 60);
+    $code = preg_replace('/\D/', '', str($in, 'code', 12)) ?? '';
+    if (too_many('try:' . who(), 30, 900)) fail('slow', 'Too many tries. Wait 15 minutes, then ask for a new code.', 429);
+    $login = row('SELECT * FROM logins WHERE req_hash = ?', array(h($req)));
+    if (!$login || $login['used'] || $login['expires'] < now() || $login['next'] !== 'move:' . $u['id']) fail('expired', 'That code has been used or has run out. Ask for a new one.', 410);
+    if ((int) $login['tries'] >= 5) fail('expired', 'Too many wrong codes. Ask for a new one.', 410);
+    if (!hash_equals($login['code_hash'], h($req . ':' . $code))) {
+      q('UPDATE logins SET tries = tries + 1 WHERE id = ?', array($login['id']));
+      note('try:' . who());
+      fail('code', 'That code isn’t right. Check the newest email and try again.');
+    }
+    q('UPDATE logins SET used = 1 WHERE id = ?', array($login['id']));
+    $new = (string) $login['email']; $old = (string) $u['email'];
+    // said only now, to someone who has shown the address is theirs
+    if (row('SELECT 1 AS x FROM users WHERE email = ?', array($new))) fail('taken', 'That address already has an account of its own. Sign in with it instead, or delete that account first and then change this one.', 409);
+    if ((int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) > 0) fail('claims', 'This account manages a listing, and the listing was claimed with this address. Write to us and we’ll move it for you.');
+    q('UPDATE users SET email = ?, listed = 0 WHERE id = ?', array($new, $u['id']));
+    q('UPDATE follows SET synced = 0 WHERE user_id = ? AND live = 1', array($u['id']));   // the email list is told again, under the new address
+    q('DELETE FROM sessions WHERE user_id = ? AND id != ?', array($u['id'], $u['sid']));   // every other device signs in again
+    bump('email_changed');
+    $text = "The email address on your " . $CFG['siteName'] . " account was changed.\n\nIt now signs in with a different address, and this one is no longer on it. If you did this, there's nothing to do.\n\nIf you didn't, write to " . $CFG['from'] . " straight away.\n";
+    $html = email_html('Your account’s email address was changed', '<p style="margin:0 0 6px">Your ' . htmlspecialchars($CFG['siteName'], ENT_QUOTES, 'UTF-8') . ' account now signs in with a different address, and this one is no longer on it. If you did this, there’s nothing to do.</p>', '', '',
+      'If you didn’t, write to ' . $CFG['from'] . ' straight away.');
+    send_mail($old, 'Your ' . $CFG['siteName'] . ' email address was changed', $text, $html);   // a courtesy: the change stands whether or not this arrives
+    $fresh = row('SELECT id, email, name, first, last, listed, school, grades, origin, hood, phone, phone_ok FROM users WHERE id = ?', array($u['id']));
+    $fresh['id'] = (int) $fresh['id'];
+    out(array('ok' => true, 'old' => $old, 'user' => me_out($fresh)));
   }
 
   case 'GET me': {

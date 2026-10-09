@@ -133,7 +133,7 @@ export function eventFor(person, due, feed) {
     school_url: school ? `${feed.site}/${school.id}/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates` : `${feed.site}/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates`,
     dates: due.items.map(a => ({ when: a.when, title: a.title, text: a.text, lines: a.lines || [], url: a.url, button: a.button, kind: a.kind })),
     stops: stops.map(({ name, url }) => ({ name, url })),
-    manage: `${feed.site}/profile/#following`,
+    manage: `${feed.site}/account/#following`,
   };
 }
 

@@ -1453,7 +1453,7 @@ html.signed .year-out{display:none}
 .year-own{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
 .year-own h3{margin:0}
 .own-form{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.1fr) minmax(0,1.3fr);gap:14px;align-items:end}
-.own-form .own-who-field,.own-form .actions{grid-column:1/-1}
+.own-form .own-who-field,.own-form .actions{grid-area:auto;grid-column:1/-1}
 .own-form .field{gap:6px}
 .own-form .field input[type="text"],.own-form .field input[type="date"],.own-form .field select{font:inherit;font-size:1.02rem;width:100%;min-height:50px;padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background-color:var(--surface);color:var(--ink)}
 .own-form .field input[type="date"]:focus{outline:3px solid var(--yellow);outline-offset:1px;border-color:var(--link)}
@@ -1510,3 +1510,46 @@ html.signed .year-out{display:none}
 .topbar .top-claim a:hover,.topbar .top-claim a:focus-visible{background:#FFD83A}
 @media (max-width:360px){.top-narrow{display:none!important}.topbar .in{gap:6px 10px}}
 .g-page .panel > a.btn{align-self:flex-start}
+
+/* "Account" beside "My profile" in the menu, for someone signed in */
+.nav a.nav-acct{font-weight:700}
+
+/* My profile: a snapshot of the account on one card */
+.g-page .prof-card{padding:0;overflow:hidden;gap:0}
+.pc-head{display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;padding:22px 24px;background:var(--sky-bg);color:var(--ink)}
+.pc-mark{flex:none;width:64px;height:64px;border-radius:50%;background:var(--yellow);color:var(--yellow-ink);display:grid;place-items:center;font-family:var(--display);font-weight:850;font-size:1.5rem;letter-spacing:.02em;box-shadow:0 0 0 4px var(--surface)}
+.pc-who{flex:1 1 220px;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.pc-who h2{margin:0;font-size:1.7rem;line-height:1.1;overflow-wrap:anywhere}
+.pc-mail{margin:0;font-size:.98rem;overflow-wrap:anywhere}
+.pc-who .pill{background:var(--surface);color:var(--ink)}
+.g-page .prof-card a.pc-edit{flex:none}
+.pc-rows{margin:0;padding:4px 24px 0;display:flex;flex-direction:column}
+.pc-row{display:grid;grid-template-columns:150px minmax(0,1fr) auto;gap:6px 16px;align-items:baseline;padding:14px 0;border-top:1px solid var(--line)}
+.pc-row:first-child{border-top:0}
+.pc-row dt{font-family:var(--display);font-weight:800;font-size:.95rem;letter-spacing:.02em;color:var(--muted)}
+.pc-row dd{margin:0;min-width:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;font-size:1.05rem;overflow-wrap:anywhere}
+.pc-row dd > a{font-weight:700}
+.pc-n{font-family:var(--display);font-weight:850;font-size:1.25rem;line-height:1}
+.pc-chips{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.pc-chip{display:inline-block;border:1.5px solid var(--line);border-radius:999px;padding:3px 12px;font-size:.95rem;font-weight:700;text-decoration:none;background:var(--surface);color:var(--ink)}
+.pc-chip:hover,.pc-chip:focus-visible{border-color:var(--link);color:var(--link)}
+.pc-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;flex:1 1 100%}
+.pc-list li{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.pc-list a{font-weight:700}
+.pc-go{font-size:.92rem;font-weight:700;white-space:nowrap}
+.pc-foot{margin:0;padding:14px 24px 20px;border-top:1px solid var(--line)}
+@media (max-width:620px){
+  .pc-head{padding:18px 16px}
+  .pc-rows{padding:2px 16px 0}
+  .pc-foot{padding:12px 16px 18px}
+  .pc-row{grid-template-columns:minmax(0,1fr) auto}
+  .pc-row dt{grid-column:1}
+  .pc-row .pc-go{grid-column:2;grid-row:1}
+  .pc-row dd{grid-column:1/-1}
+  .g-page .prof-card a.pc-edit{width:100%;text-align:center}
+}
+/* in the phone menu, someone signed in finds their own two pages first */
+@media (max-width:1099px){
+  .js .nav.open > a.nav-cta.when-in{order:-2;margin:0 0 6px}
+  .js .nav.open > a.nav-acct{order:-1;text-align:center;border:2px solid #0B2140;border-radius:999px;margin-bottom:8px;padding:8px 12px}
+}

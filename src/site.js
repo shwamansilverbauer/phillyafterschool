@@ -340,11 +340,11 @@
       }).then(function (r) { if (r.status < 200 || r.status > 299) throw new Error('status ' + r.status); return r; });
     }
     // One change, told to the email list: on (join the dates list, add the listing) or off (take the listing away).
-    function tell(ch) {
+    function tell(ch, oldEmail) {
       var u = state.user, prop = PROP[ch.k.charAt(0)], patch = {};
       if (!u || !KEY || !LIST || !prop) return Promise.reject(new Error('nothing to tell'));
       patch[prop] = ch.k.slice(2);
-      if (!ch.on) return klaviyo('profiles', { data: { type: 'profile', attributes: { email: u.email }, meta: { patch_properties: { unappend: patch } } } });
+      if (!ch.on) return klaviyo('profiles', { data: { type: 'profile', attributes: { email: oldEmail || u.email }, meta: { patch_properties: { unappend: patch } } } });
       var who = { email: u.email, properties: { follows_from_account: true }, subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } } };
       if (state.stop) who.properties.stop_code = state.stop;   // lets the emails carry a "stop emails about this" link
       if (u.first) who.first_name = u.first;
@@ -386,6 +386,14 @@
       follow: function (k, on) { return api('follow', { key: k, on: !!on }).then(take); },
       fav: function (k, on) { return api('fav', { key: k, on: !!on }).then(take); },
       unmute: function (k) { return api('unmute', { key: k }).then(take); },
+      // The account now uses a different email address. The server has marked every follow as untold, so loading
+      // tells the email list about them under the new address; then each is taken off the old one.
+      moved: function (oldEmail) {
+        store('pas-kl-stop', '');
+        return api('marks').then(take).then(function () {
+          return state.follows.reduce(function (p, k) { return p.then(function () { return tell({ k: k, on: false }, oldEmail).then(null, function () { /* the old address can still unsubscribe itself */ }); }); }, Promise.resolve());
+        });
+      },
       clear: function () { return api('follow_clear', {}).then(function (d) { if (d && d.ok && d.sync) return sync(d.sync); }); }
     };
   })();
@@ -402,7 +410,7 @@
     raw.split('&').forEach(function (p) { var i = p.indexOf('='); if (i > 0) { try { got[p.slice(0, i)] = decodeURIComponent(p.slice(i + 1)); } catch (e) { /* not ours */ } } });
     try { history.replaceState(null, '', location.pathname); } catch (e) { /* the address stays as it was */ }
     var c = /^[a-f0-9]{32}$/.test(got.c || '') ? got.c : '', k = /^(p|c|s|w):[a-z0-9-]{1,80}$/.test(got.k || '') ? got.k : '';
-    var account = (stopEl.getAttribute('data-root') || '') + 'profile/' + (stopEl.getAttribute('data-index') || '') + '#following';
+    var account = (stopEl.getAttribute('data-root') || '') + 'account/' + (stopEl.getAttribute('data-index') || '') + '#following';
     var btn = function (cls, text, go) { var b = el('button', cls, text); b.type = 'button'; b.addEventListener('click', function () { go(b); }); return b; };
     var paint = function (parts) { box.textContent = ''; parts.forEach(function (x) { if (x) box.appendChild(x); }); };
     var signIn = function () { var a = el('a', 'btn', 'Sign in to choose what you follow'); a.href = account; var w = el('div', 'actions'); w.appendChild(a); return w; };
@@ -2984,10 +2992,10 @@
       return { kids: kids, src: src, own: own };
     };
     // every day of the week that has something: the after-school picks, then anything of your own that repeats
-    var allWeekLines = function (k, shortNames) {
+    var allWeekLines = function (k, shortNames, noOwn) {
       var lines = k.week ? weekLines(k, shortNames) : [], by = {};
       lines.forEach(function (l) { by[l.id] = l; });
-      ownWeekly(k).forEach(function (o) {
+      (noOwn ? [] : ownWeekly(k)).forEach(function (o) {
         var id = ownDayId(o), day = DAYS.concat(WKDAYS).filter(function (x) { return x[0] === id; })[0];
         if (!by[id]) { by[id] = { id: id, day: shortNames ? day[2] : day[1], names: [] }; lines.push(by[id]); }
         by[id].names.push(o.t);
@@ -3218,12 +3226,17 @@
       });
     };
     if (ownBox) {
-      var ownWhat = $y('own-what'), ownWhen = $y('own-when'), ownRep = $y('own-rep'), ownLines = $y('own-lines');
+      var ownWhat = $y('own-what'), ownWhen = $y('own-when'), ownRep = $y('own-rep'), ownDow = $y('own-dow'), ownLines = $y('own-lines');
       ownWhen.min = today0;
+      // "One day" asks for a date; "Every week" asks only which day of the week
+      var ownMode = function () { var w = ownRep.value === 'w' && !!ownDow; $y('own-when-field').hidden = w; if (ownDow) $y('own-dow-field').hidden = !w; };
+      var nextOn = function (id) { var want = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].indexOf(id), d = today0; if (want < 0) return ''; while (utc(d).getUTCDay() !== want) d = isoOf(utc(d, 1)); return d; };
+      if (ownDow) { ownRep.addEventListener('change', ownMode); ownMode(); }
       $y('own-form').addEventListener('submit', function (e) {
         e.preventDefault();
-        var t = ownWhat.value, d = ownWhen.value, rep = ownRep.value, bad = ownCheck(t, d, rep);
-        if (bad) { ownSay(bad); (/day\.$|passed|School/.test(bad) ? ownWhen : ownWhat).focus(); return; }
+        var weekly = ownRep.value === 'w' && !!ownDow;
+        var t = ownWhat.value, rep = ownRep.value, d = weekly ? nextOn(ownDow.value) : ownWhen.value, bad = ownCheck(t, d, rep);
+        if (bad) { ownSay(bad); (/day\.$|passed|School/.test(bad) ? (weekly ? ownDow : ownWhen) : ownWhat).focus(); return; }
         ownPut(t, d, rep); saveRosters();
         var made = loadRosters().own.slice(-1)[0];
         ownSay('Added: ' + made.t + ', ' + (rep === 'w' ? 'every ' + dayWord(made) : longDay(d)) + (ownSel.length ? ', for ' + ownSel.join(' and ') : '') + '. Add the next one, or scroll down to see it in the calendar.');
@@ -3321,9 +3334,21 @@
     };
     var rosters0 = loadRosters();
     var cardTitle = function () { return cleanName(rosters0.yearTitle) || defaultTitle(); };
+    // The pictures can leave out the dates you added yourself (a tick box beside them, kept on this device).
+    var picOwnBox = $y('year-pic-own'), picOwnRow = $y('year-pic-own-row');
+    var picOwn = function () { return !picOwnBox || picOwnBox.checked; };
+    if (picOwnBox) picOwnBox.checked = store('pas-year-pic-own') !== '0';
+    // a weekly date of your own, on the school days it falls on: from now (or its first day) to the last day of school
+    var ownFrom = function (o) { return o.d > today0 ? o.d : today0; };
+    var weeklyOn = function (o, iso) { return ownDayId(o) === ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][utc(iso).getUTCDay()] && iso >= ownFrom(o) && (!yd.lastDay || iso <= yd.lastDay) && !offBy[iso]; };
     var monthsWith = function () {
       var seen = {}, out = [];
-      agenda().forEach(function (it) { var keys = [it.d.slice(0, 7)]; if (it.t === 'week') keys.push(isoOf(utc(it.d, 4)).slice(0, 7)); keys.forEach(function (k) { if (!seen[k]) { seen[k] = 1; out.push({ k: k, y: +k.slice(0, 4), m: +k.slice(5) - 1 }); } }); });
+      var add = function (k) { if (!seen[k]) { seen[k] = 1; out.push({ k: k, y: +k.slice(0, 4), m: +k.slice(5) - 1 }); } };
+      agenda().forEach(function (it) { if (it.t === 'own' && !picOwn()) return; add(it.d.slice(0, 7)); if (it.t === 'week') add(isoOf(utc(it.d, 4)).slice(0, 7)); });
+      if (picOwn() && yd.lastDay) model.own.forEach(function (o) {   // every month a weekly one still has a school day in
+        if (o.r !== 'w' || ['sat', 'sun'].indexOf(ownDayId(o)) > -1) return;
+        for (var d = ownFrom(o), n = 0; d <= yd.lastDay && n < 400; d = isoOf(utc(d, 1)), n++) if (weeklyOn(o, d)) add(d.slice(0, 7));
+      });
       return out.sort(function (a, b) { return a.k < b.k ? -1 : 1; });
     };
     var paint = function (which) {
@@ -3369,12 +3394,12 @@
       var top = 290, bottom = H - FOOT - 28, X = 48, WIDE = 984, g = 8;
       if (which === 'week') {
         // a block for each child: their name, then a line for each day that has something
-        var withWeek = kids.filter(hasWeekCard), gapB = 14, share = (bottom - top - gapB * (withWeek.length - 1)) / withWeek.length, yAt = top;
+        var noOwn = !picOwn(), withWeek = kids.filter(noOwn ? function (k) { return !!k.week; } : hasWeekCard), gapB = 14, share = (bottom - top - gapB * (withWeek.length - 1)) / withWeek.length, yAt = top;
         var HEADH = withWeek.length > 3 ? 40 : 54;
-        var want = withWeek.map(function (k) { return HEADH + allWeekLines(k).length * 64 + 18; });
+        var want = withWeek.map(function (k) { return HEADH + allWeekLines(k, false, noOwn).length * 64 + 18; });
         var roomy = want.reduce(function (a, b) { return a + b; }, 0) + gapB * (withWeek.length - 1) <= bottom - top;   // everything fits at full size
         withWeek.forEach(function (k, bn) {
-          var blockH = roomy ? want[bn] : share, y = yAt, lines = allWeekLines(k), ink = INKS[kids.indexOf(k) % 6];
+          var blockH = roomy ? want[bn] : share, y = yAt, lines = allWeekLines(k, false, noOwn), ink = INKS[kids.indexOf(k) % 6];
           yAt += blockH + gapB;
           ctx.fillStyle = '#FFFFFF'; rbox(ctx, X, y, WIDE, blockH, 18); ctx.fill();
           ctx.fillStyle = ink[1]; rbox(ctx, X, y, 14, blockH, 7); ctx.fill();
@@ -3395,7 +3420,9 @@
         for (var wk = 0; wk < 6; wk++) { var mon = utc(isoOf(start), wk * 7), any = false; for (var q = 0; q < 5; q++) if (utc(isoOf(mon), q).getUTCMonth() === which.m) any = true; if (any) rows.push(mon); }
         var HEAD = 44, cellW = (WIDE - g * 4) / 5, rH = Math.min(214, (bottom - top - HEAD - g * (rows.length - 1)) / rows.length);
         var regs = {}; signups().forEach(function (s) { (regs[s.date] = regs[s.date] || []).push(s); });
-        var ownBy = {}; model.own.forEach(function (o) { if (o.r !== 'w') (ownBy[o.d] = ownBy[o.d] || []).push(o); });
+        var ownBy = {}, ownEvery = [];
+        if (picOwn()) model.own.forEach(function (o) { if (o.r !== 'w') (ownBy[o.d] = ownBy[o.d] || []).push(o); else ownEvery.push(o); });
+        var ownOn = function (iso) { return (ownBy[iso] || []).concat(ownEvery.filter(function (o) { return weeklyOn(o, iso); })); };
         ctx.font = '800 24px ' + DISPLAY; ctx.fillStyle = '#1F3A60'; ctx.textAlign = 'center';
         ['MON', 'TUE', 'WED', 'THU', 'FRI'].forEach(function (d, c) { ctx.fillText(d, X + c * (cellW + g) + cellW / 2, top + 28); });
         ctx.textAlign = 'left';
@@ -3411,7 +3438,8 @@
             // flags at the foot of the day: a sign-up date or the last day of school, then up to two dates of your own
             var feet = [];
             if (flag) feet.push(['Sign-ups: ' + flag.name, NAVY]); else if (last) feet.push(['Last day of school', NAVY]);
-            (ownBy[iso] || []).slice(0, 2).forEach(function (o) { feet.push([(many && ownWho(o) ? ownWho(o) + ': ' : '') + o.t, '#0E7C86']); });
+            var mine = ownOn(iso);   // one-day dates first, then the ones that come every week
+            mine.slice(0, 2).forEach(function (o, on) { feet.push([on === 1 && mine.length > 2 ? '+ ' + (mine.length - 1) + ' more' : (many && ownWho(o) ? ownWho(o) + ': ' : '') + o.t, '#0E7C86']); });
             var foot = feet.length * 30;
             feet.forEach(function (ft, fn) {
               var fy = y + rH - 34 - (feet.length - 1 - fn) * 30;
@@ -3449,7 +3477,7 @@
       yearSharer.stale();
     };
     var yearSharer = pictureSharer(canvas);
-    var pageList = function () { return (model.kids.some(hasWeekCard) ? [['week', 'School weeks', 'week']] : []).concat(monthsWith().map(function (o) { return [o.k, MONTHS[o.m], o]; })); };
+    var pageList = function () { return (model.kids.some(picOwn() ? hasWeekCard : function (k) { return !!k.week; }) ? [['week', 'School weeks', 'week']] : []).concat(monthsWith().map(function (o) { return [o.k, MONTHS[o.m], o]; })); };
     var current = function () { var list = pageList(), hit = null; list.forEach(function (p) { if (p[0] === page) hit = p; }); return hit || list[0]; };
     var slug = function () { return (cardTitle().toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'our-year'); };
     var fileName = function (p) { return slug() + '-' + (p[0] === 'week' ? 'school-weeks' : p[1].toLowerCase() + '-' + p[2].y) + '.png'; };
@@ -3459,6 +3487,7 @@
         cardBox.hidden = !list.length;
         if (!list.length) return;
         titleBox.placeholder = defaultTitle();
+        if (picOwnRow) picOwnRow.hidden = !model.own.length;
         if (document.activeElement !== titleBox) titleBox.value = rosters0.yearTitle || '';
         pagesEl.textContent = '';
         list.forEach(function (p) {
@@ -3470,6 +3499,7 @@
       };
       var fileOf = function (p, done) { paint(p[2]); canvas.toBlob(function (blob) { done(blob, fileName(p)); }, 'image/png'); };
       var saveBlob = function (blob, name) { var a = el('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000); };
+      if (picOwnBox) picOwnBox.addEventListener('change', function () { store('pas-year-pic-own', picOwnBox.checked ? '1' : '0'); cardStatus.textContent = picOwnBox.checked ? 'Your own dates are on the pictures.' : 'Your own dates are left off the pictures.'; drawCard(); });
       titleBox.addEventListener('input', function () { rosters0.yearTitle = titleBox.value.slice(0, 40); store('pas-rosters', JSON.stringify(rosters0)); paint(current()[2]); });
       photoBox.addEventListener('change', function () {
         var file = photoBox.files && photoBox.files[0];

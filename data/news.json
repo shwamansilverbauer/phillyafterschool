@@ -1,22 +1,22 @@
 [
   {
     "date": "2026-10-09",
-    "title": "My profile",
-    "text": "Everything you’ve saved has its own page now: your school and grades, emails and texts, what you follow, your favorites and your plans. Sharing and signing out stay on your account page.",
+    "title": "My profile, and your account",
+    "text": "My profile is one card now: you, your kids, your school, what you follow, your favorites, your schedules and calendars. To change any of it, go to your account. You can change the email address you sign in with there, too.",
     "href": "account/",
-    "link": "Your account page"
+    "link": "Go to your account"
   },
   {
     "date": "2026-10-09",
     "title": "This week at your school",
-    "text": "Each school’s page now shows the week ahead: days off and sign-ups. You can get it by email on Sunday mornings: keep your school in your profile and turn it on under Emails and texts.",
-    "href": "profile/#emails",
+    "text": "Each school’s page now shows the week ahead: days off and sign-ups. You can get it by email on Sunday mornings: keep your school in your account and turn it on under Emails.",
+    "href": "account/#emails",
     "link": "Turn on the Sunday email"
   },
   {
     "date": "2026-10-09",
     "title": "Your own dates, and faster emails",
-    "text": "Add picture day, pretzel day or a form that’s due to My kids’ calendar, for one child or everyone. And a sign-up date you follow is now emailed the morning after it’s posted, then the day before and that morning, each with a link to stop that one listing.",
+    "text": "Add picture day, pretzel day or a form that’s due to My kids’ calendar, for one child or everyone. Something weekly takes just a day of the week (every Wednesday), and your own dates can go on the month pictures. A sign-up date you follow is emailed the morning after it’s posted, then the day before and that morning, each with a link to stop that one listing.",
     "href": "calendar/#year-own",
     "link": "Add your own dates"
   },
