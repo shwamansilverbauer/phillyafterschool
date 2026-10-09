@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=9b589dda">
+<link rel="stylesheet" href="../assets/site.css?v=5aeb829f">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -36,7 +36,7 @@
   <div class="in bar">
     <a class="brand" href="../"><span class="bus-mark"></span>Philly After School</a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true"></span>Menu</button>
-    <nav class="nav" id="site-nav" aria-label="Site"><details class="menu"><summary>Programs</summary><ul><li><a href="../programs/">After-school programs</a></li><li><a href="../weekends/">Weekend classes</a></li><li><a href="../days-off/">Day-camp programs</a></li><li><a href="../summer-camps/">Summer camps</a></li></ul></details><details class="menu"><summary>Search by</summary><ul><li><a href="../schools/">School</a></li><li><a href="../neighborhoods/">Neighborhood</a></li><li><a href="../types/">Program type</a></li><li><a href="../programs/#by-day">Day of week</a></li></ul></details><details class="menu here"><summary>Build a schedule<span class="count" data-board-count hidden></span></summary><ul><li><a href="../schedules/">All the planners</a></li><li><a href="../board/">After-school schedule</a></li><li><a href="../days-off/#plan">Day-camp schedule</a></li><li><a href="../summer-schedule/">Summer schedule</a></li><li><a href="../calendar/" aria-current="page">My kids’ calendar</a></li></ul></details><details class="menu"><summary>Suggest</summary><ul><li><a href="../suggest/">A program</a></li><li><a href="../suggest/?kind=camp">A camp</a></li><li><a href="../suggest/?kind=correction">An update to a listing</a></li><li><a href="../ideas/">A feature</a></li><li><a href="../schools/request/">A school</a></li></ul></details><a href="../about/">About</a><a class="nav-cta when-out" href="../register/">Create a free account</a><a class="nav-cta when-in" href="../profile/" data-news="2026-10-09">My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a></nav>
+    <nav class="nav" id="site-nav" aria-label="Site"><details class="menu"><summary>Programs</summary><ul><li><a href="../programs/">After-school programs</a></li><li><a href="../weekends/">Weekend classes</a></li><li><a href="../days-off/">Day-camp programs</a></li><li><a href="../summer-camps/">Summer camps</a></li></ul></details><details class="menu"><summary>Search by</summary><ul><li><a href="../schools/">School</a></li><li><a href="../neighborhoods/">Neighborhood</a></li><li><a href="../types/">Program type</a></li><li><a href="../programs/#by-day">Day of week</a></li></ul></details><details class="menu here"><summary>Build a schedule<span class="count" data-board-count hidden></span></summary><ul><li><a href="../schedules/">All the planners</a></li><li><a href="../board/">After-school schedule</a></li><li><a href="../days-off/#plan">Day-camp schedule</a></li><li><a href="../summer-schedule/">Summer schedule</a></li><li><a href="../calendar/" aria-current="page">My kids’ calendar</a></li></ul></details><details class="menu"><summary>Suggest</summary><ul><li><a href="../suggest/">A program</a></li><li><a href="../suggest/?kind=camp">A camp</a></li><li><a href="../suggest/?kind=correction">An update to a listing</a></li><li><a href="../ideas/">A feature</a></li><li><a href="../schools/request/">A school</a></li></ul></details><a href="../about/">About</a><a class="when-in nav-acct" href="../account/">Account</a><a class="nav-cta when-out" href="../register/">Create a free account</a><a class="nav-cta when-in" href="../profile/" data-news="2026-10-09">My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a></nav>
   </div>
 </header>
 <div class="band pagehead">
@@ -70,12 +70,13 @@
     <ul class="year-src" id="year-src"></ul>
     <div class="year-own" id="year-own" data-jump-to="Your own dates">
       <h3><span data-copy="9dc1f228e8">Add your own dates</span></h3>
-      <p><span data-copy="52dbc7cffc">Picture day, pretzel day, a form that’s due, a half day: anything you need to remember, for one child or for everyone. They show up in the calendar below, in the pictures and in the file for your phone.</span></p>
+      <p><span data-copy="0d42ee85c5">Picture day, pretzel day, a form that’s due, a half day: anything you need to remember, for one child or for everyone. They show up in the calendar below, in the pictures and in the file for your phone. Something that happens every week needs only the day of the week.</span></p>
       <form class="own-form" id="own-form">
         <div class="field own-what"><label for="own-what"><span data-copy="97211a8888">What</span></label><input id="own-what" type="text" maxlength="60" list="own-ideas" placeholder="Picture day" autocomplete="off"></div>
         <datalist id="own-ideas"><option value="Picture day"><option value="Pretzel day"><option value="Early dismissal"><option value="Form due"><option value="Field trip"><option value="Library day"><option value="Gym day"><option value="Show and tell"><option value="Bring a snack"><option value="Dress-down day"><option value="Concert"><option value="Parent conference"></datalist>
-        <div class="field"><label for="own-when"><span data-copy="769bb19e61">When</span></label><input id="own-when" type="date"></div>
-        <div class="field"><label for="own-rep"><span data-copy="bd88489720">How often</span></label><select id="own-rep"><option value="">Just that day</option><option value="w">Every week on that day</option></select></div>
+        <div class="field"><label for="own-rep"><span data-copy="bd88489720">How often</span></label><select id="own-rep"><option value="">One day</option><option value="w">Every week</option></select></div>
+        <div class="field" id="own-when-field"><label for="own-when"><span data-copy="769bb19e61">When</span></label><input id="own-when" type="date"></div>
+        <div class="field" id="own-dow-field" hidden><label for="own-dow"><span data-copy="905471c963">Which day</span></label><select id="own-dow"><option value="mon">Mondays</option><option value="tue">Tuesdays</option><option value="wed">Wednesdays</option><option value="thu">Thursdays</option><option value="fri">Fridays</option><option value="sat">Saturdays</option><option value="sun">Sundays</option></select></div>
         <div class="field own-who-field"><span class="g-label" id="own-who-label"><span data-copy="ab772c4da0">Who it’s for</span></span><div class="own-who" id="own-who" role="group" aria-labelledby="own-who-label"></div></div>
         <div class="actions"><button type="submit" class="btn primary">Add it</button></div>
       </form>
@@ -120,6 +121,7 @@
               <label for="year-title"><span data-copy="768e0c1c69">Title</span></label>
               <input id="year-title" type="text" maxlength="40" placeholder="Our year" autocomplete="off">
             </div>
+            <label class="g-check" id="year-pic-own-row" hidden><input type="checkbox" id="year-pic-own" checked> <span><span data-copy="991cf872b0">Show the dates I added, on every month they fall in</span></span></label>
             <div class="field">
               <label for="year-photo"><span data-copy="43381a8514">A photo (optional)</span></label>
               <input id="year-photo" type="file" accept="image/*">
@@ -203,7 +205,7 @@
     <p>Built by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=b1416363" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
-<script src="../assets/groups.js?v=92cea880"></script>
+<script src="../assets/site.js?v=06a38e3a" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/groups.js?v=471aa37a"></script>
 </body>
 </html>
