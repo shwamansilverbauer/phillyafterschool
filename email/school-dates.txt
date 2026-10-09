@@ -10,9 +10,11 @@
 These dates come from each program's own site and the School District of Philadelphia calendar. Dates move, so check with the program before you plan around one.
 
 You're getting this because {{ event.reason|default:"you asked for dates" }} at phillyafterschool.org.
-Wrong school? Sign up again with this address: https://phillyafterschool.org/alerts/
+{% if event.stops %}{% for s in event.stops %}Stop emails about {{ s.name }}: {{ s.url|safe }}
+{% endfor %}See everything you follow: {{ event.manage|safe }}
+{% else %}Wrong school? Sign up again with this address: https://phillyafterschool.org/alerts/
 To stop hearing about one program, reply to this email.
-Unsubscribe: {% unsubscribe_link %}
+{% endif %}Unsubscribe from every Philly After School email: {% unsubscribe_link %}
 
 Philly After School is an independent community project. Not affiliated with the School District of Philadelphia.
 {{ organization.full_address|default:"[[POSTAL_ADDRESS]]" }}

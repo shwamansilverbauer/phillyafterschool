@@ -17,6 +17,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -30,7 +31,7 @@ const API = (process.env.KLAVIYO_API || 'https://a.klaviyo.com').replace(/\/$/, 
 const REVISION = '2026-07-15';
 const ZONE = 'America/New_York';
 const CATCH_UP = 2;   // a missed morning is made up on either of the next two
-const WINDOW = ['06:30', '10:30'];   // Philadelphia time. The job is started every hour because GitHub runs scheduled jobs late, sometimes by hours; only a run that lands in the morning sends.
+const WINDOW = ['07:50', '11:50'];   // Philadelphia time. The job is started every hour because GitHub runs scheduled jobs late, sometimes by hours; only a run that lands in the morning sends.
 
 const isoAdd = (iso, n) => new Date(Date.parse(iso + 'T12:00:00Z') + n * 864e5).toISOString().slice(0, 10);
 const localDay = when => new Intl.DateTimeFormat('en-CA', { timeZone: ZONE, year: 'numeric', month: '2-digit', day: '2-digit' }).format(when);
@@ -50,11 +51,16 @@ export function dueFor(person, feed, today) {
   const byProgram = a => (a.programs || []).some(id => follows.includes(id));
   const byCamp = a => (a.camps || []).some(id => camps.includes(id));
   const byWaiting = a => (a.waiting || []).some(id => waiting.includes(id));
-  const wanted = feed.alerts.filter(a => (a.expires || a.date) >= today && (bySchool(a) || byProgram(a) || byCamp(a) || byWaiting(a)));
+  // A listing someone stopped from an email is muted: nothing about it reaches them, even by way of a school they follow.
+  const muted = person.muted || [];
+  const isMuted = a => (a.programs || []).some(id => muted.includes('p:' + id)) || (a.camps || []).some(id => muted.includes('c:' + id));
+  const wanted = feed.alerts.filter(a => (a.expires || a.date) >= today && !isMuted(a) && (bySchool(a) || byProgram(a) || byCamp(a) || byWaiting(a)));
   const got = new Set(wanted.map(a => a.id));
   const ahead = wanted.filter(a => !(a.within && got.has(a.within)));   // a day-off entry already names the camp
-  // A sign-up date has two entries: the announcement and a reminder the day before ("-eve"). One email never carries both.
-  const once = items => items.filter(a => !(a.kind === 'soon' && items.some(b => b.id + '-eve' === a.id)));
+  // A sign-up date has up to three entries: the news, a reminder the day before ("-eve") and one on the day ("-day").
+  // One email never carries two of them: the earliest kind that is due stands for the date.
+  const stage = a => a.kind === 'soon' ? 1 : a.kind === 'today' ? 2 : 0, baseOf = a => a.id.replace(/-(eve|day)$/, '');
+  const once = items => items.filter(a => !items.some(b => b !== a && baseOf(b) === baseOf(a) && stage(b) < stage(a)));
   const welcomeDay = isoAdd(person.joined, 1);
   const out = [];
   if (today >= welcomeDay && today <= isoAdd(welcomeDay, CATCH_UP)) {
@@ -86,22 +92,33 @@ export function eventFor(person, due, feed) {
   const reason = onlyAdded ? 'you asked to be told when this school was added'
     : [school ? `you asked for ${school.name} dates` : everySchool ? 'you asked for dates for every school' : schoolNames ? `you asked for ${schoolNames} dates` : '', followed.length ? `you asked to hear about ${names}` : ''].filter(Boolean).join(' and ') || 'you asked for dates';
   const first = due.items[0];
-  const lead = first.kind === 'added' ? first.title : first.kind === 'soon' ? `Tomorrow: ${first.title}` : first.kind === 'dayoff' ? `No school ${shortDay(first.date)} (${first.title.replace(/^No school: /, '')})` : first.kind === 'update' ? `${first.title}: an update` : first.kind === 'camp' ? `${first.title.replace(/: camp on a day off$/, '')} camp, ${shortDay(first.date)}` : `${shortDay(first.date)}: ${first.title}`;
+  const lead = first.kind === 'added' ? first.title : first.kind === 'soon' ? `Tomorrow: ${first.title}` : first.kind === 'today' ? `Today: ${first.title}` : first.kind === 'dayoff' ? `No school ${shortDay(first.date)} (${first.title.replace(/^No school: /, '')})` : first.kind === 'update' ? `${first.title}: an update` : first.kind === 'camp' ? `${first.title.replace(/: camp on a day off$/, '')} camp, ${shortDay(first.date)}` : `${shortDay(first.date)}: ${first.title}`;
   const more = due.items.length - 1;
   const subject = due.kind === 'welcome'
     ? `You’re on the list. Here’s what’s coming up${school ? ' for ' + school.name : followed.length === 1 && !mine.length ? ' at ' + followed[0] : ''}`
     : lead + (more ? `, plus ${more} more date${more > 1 ? 's' : ''}` : '');
   const line = a => a.kind === 'dayoff' || a.kind === 'camp' ? a.title : `${a.title}: ${a.text.replace(/\.$/, '')}`;
+  // One link for each listing in this email, and for each school followed that put something in it: it stops that
+  // one, and nothing else. Only an address whose follows are kept by an account has a code for the links.
+  const stops = [];
+  if (person.stopCode) {
+    const add = (key, name) => { if (name && stops.length < 8 && !stops.some(x => x.key === key)) stops.push({ key, name, url: `${feed.site}/alerts/stop/#c=${person.stopCode}&k=${key}` }); };
+    for (const a of due.items) {
+      for (const id of a.programs || []) add('p:' + id, (feed.programs || []).find(p => p.id === id)?.name);
+      for (const id of a.camps || []) add('c:' + id, (feed.camps || []).find(c => c.id === id)?.name);
+      for (const id of mine) if (id === 'all' ? a.schools.length : a.schools.includes('*') || a.schools.includes(id)) add('s:' + id, id === 'all' ? 'every school' : feed.schools.find(x => x.id === id)?.name);
+    }
+  }
   return {
     token: TOKEN,
     kind: due.kind,
     subject,
     preview: due.kind === 'welcome' ? `${due.items.length} date${due.items.length > 1 ? 's' : ''} already on the calendar.` : due.items.map(line).join(' · ').slice(0, 160),
-    heading: onlyAdded ? 'Your school is here' : due.kind === 'welcome' ? 'You’re on the list' : due.items.every(a => a.kind === 'soon') ? 'Tomorrow' : due.items.every(a => a.kind === 'register' || a.kind === 'update') ? 'Just posted' : 'Dates coming up',
+    heading: onlyAdded ? 'Your school is here' : due.kind === 'welcome' ? 'You’re on the list' : due.items.every(a => a.kind === 'today') ? 'Today' : due.items.every(a => a.kind === 'soon') ? 'Tomorrow' : due.items.every(a => a.kind === 'soon' || a.kind === 'today') ? 'Today and tomorrow' : due.items.every(a => a.kind === 'register' || a.kind === 'update') ? 'Just posted' : 'Dates coming up',
     intro: onlyAdded ? 'The school you were waiting for has its own page now.'
       : due.kind === 'welcome'
-      ? `Here is what’s already on the calendar${whose}. After this you’ll hear from us the morning after a sign-up date is posted, the day before it, and on ${feed.sendDay} mornings ahead of a day off.`
-      : due.items.every(a => a.kind === 'soon') ? `A reminder: this is tomorrow${whose}.` : due.items.every(a => a.kind === 'register' || a.kind === 'update') ? `Just posted${whose}.${due.items.every(a => a.kind === 'register' && isoAdd(a.sendOn, 1) < a.date) ? ' We’ll remind you the day before.' : ''}` : `Here’s what’s coming up${whose}.`,
+      ? `Here is what’s already on the calendar${whose}. After this you’ll hear from us the morning after a sign-up date is posted, then the day before and the morning of, and on ${feed.sendDay} mornings ahead of a day off.`
+      : due.items.every(a => a.kind === 'today') ? `It’s today${whose}.` : due.items.every(a => a.kind === 'soon') ? `A reminder: this is tomorrow${whose}.` : due.items.every(a => a.kind === 'soon' || a.kind === 'today') ? `Reminders${whose}.` : due.items.every(a => a.kind === 'register' || a.kind === 'update') ? `Just posted${whose}.${due.items.every(a => a.kind === 'register' && isoAdd(a.sendOn, 1) < a.date) ? ' We’ll remind you the day before and that morning.' : ''}` : `Here’s what’s coming up${whose}.`,
     reason,
     school: school ? school.id : everySchool ? 'all' : '',
     programs: person.programs || [],
@@ -109,7 +126,45 @@ export function eventFor(person, due, feed) {
     school_name: school ? school.name : '',
     school_url: school ? `${feed.site}/${school.id}/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates` : `${feed.site}/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates`,
     dates: due.items.map(a => ({ when: a.when, title: a.title, text: a.text, url: a.url, button: a.button, kind: a.kind })),
+    stops: stops.map(({ name, url }) => ({ name, url })),
+    manage: `${feed.site}/account/#following`,
   };
+}
+
+// ----- what people have stopped -----
+// The site keeps the last word on what someone has stopped following: a tap on "Stop emails about ..." in an email
+// lands there, with no sign-in, and Klaviyo may not have been told. The site publishes a list of scrambled entries
+// (a hash of the person's own stop code and the listing), which means nothing to anyone without the code. The code
+// is on the person's Klaviyo profile, so this script can tell which of their follows to leave out.
+const stopHash = (code, key) => createHash('sha256').update(code + '|' + key).digest('hex');
+// Three kinds of entry: "<key>" (that follow was turned off), "mute|<key>" (stopped from an email: nothing about
+// that listing, even by way of a school) and "*" (everything).
+export function withoutStopped(person, stopped, feed) {
+  if (!person.stopCode || !stopped || !stopped.size) return person;
+  const has = key => stopped.has(stopHash(person.stopCode, key));
+  if (has('*')) return { ...person, school: '', schools: [], programs: [], camps: [], muted: [] };
+  const off = key => has(key) || has('mute|' + key);
+  return { ...person,
+    school: person.school && off('s:' + person.school) ? '' : person.school,
+    schools: (person.schools || []).filter(id => !off('s:' + id)),
+    programs: (person.programs || []).filter(id => !off('p:' + id)),
+    camps: (person.camps || []).filter(id => !off('c:' + id)),
+    muted: [...(feed?.programs || []).map(x => 'p:' + x.id), ...(feed?.camps || []).map(x => 'c:' + x.id)].filter(key => has('mute|' + key)) };
+}
+async function stoppedList(site) {
+  const url = (process.env.PAS_SITE_API || site + '/groups/api.php') + '?action=stopped';
+  for (let attempt = 1; ; attempt++) {
+    try {
+      const r = await fetch(url, { headers: { 'X-PAS': '1', accept: 'application/json' } });
+      if (!r.ok) throw new Error('the site answered ' + r.status);
+      const d = await r.json();
+      if (!d || d.ok !== true || !Array.isArray(d.list)) throw new Error('the answer was not a list');
+      return new Set(d.list.filter(h => typeof h === 'string' && /^[a-f0-9]{64}$/.test(h)));
+    } catch (err) {
+      if (attempt >= 3) throw new Error(`Couldn’t read the list of stopped follows from the site (${err.message}). Nothing was sent, so nobody is emailed about something they stopped; the next run tries again.`);
+      await new Promise(done => setTimeout(done, attempt * 3000));
+    }
+  }
 }
 
 // ----- Klaviyo -----
@@ -140,10 +195,11 @@ async function subscribers(listId) {
       // An address whose follows are kept by an account hears about exactly what the account follows, even when that is
       // nothing: it is never treated as "added some other way".
       const managed = a.properties?.follows_from_account === true;
+      const stopCode = /^[a-f0-9]{32}$/.test(String(a.properties?.stop_code || '')) ? String(a.properties.stop_code) : '';
       // Someone who only asked about a program, a camp or a school that isn't covered yet hears about that and nothing
       // else. An address with none of these was added some other way: send it everything.
       const narrow = programs.length || camps.length || waiting.length || followedSchools.length || managed;
-      people.push({ id: p.id, email: a.email, school: /^[a-z0-9-]+$/.test(school) ? school : narrow ? '' : 'all', schools: followedSchools, programs, camps, waiting, joined: localDay(new Date(a.joined_group_at || Date.now())) });
+      people.push({ id: p.id, email: a.email, school: /^[a-z0-9-]+$/.test(school) ? school : narrow ? '' : 'all', schools: followedSchools, programs, camps, waiting, stopCode, joined: localDay(new Date(a.joined_group_at || Date.now())) });
     }
     url = page.links?.next || null;
     if (url && API !== 'https://a.klaviyo.com') url = url.replace('https://a.klaviyo.com', API);
@@ -165,7 +221,11 @@ async function main() {
   const clock = new Intl.DateTimeFormat('en-GB', { timeZone: ZONE, hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
   if (!DRY && !flag('--any-time') && (clock < WINDOW[0] || clock >= WINDOW[1])) return console.log(`It is ${clock} in Philadelphia. Emails only go out between ${WINDOW[0]} and ${WINDOW[1]}, so nothing was sent.`);
 
-  const people = await subscribers(cfg.alerts.listId);
+  const listed = await subscribers(cfg.alerts.listId);
+  const stopped = cfg.groups ? await stoppedList(feed.site) : new Set();
+  const people = listed.map(p => withoutStopped(p, stopped, feed));
+  const fewer = people.filter((p, i) => (p.muted || []).length || p.programs.length + p.camps.length + p.schools.length + (p.school ? 1 : 0) < listed[i].programs.length + listed[i].camps.length + listed[i].schools.length + (listed[i].school ? 1 : 0)).length;
+  console.log(`${stopped.size} stopped follow(s) on the site’s list; ${fewer} subscriber(s) have something left out because of it.`);
   const bySchool = {};
   for (const p of people) bySchool[p.school || 'no school'] = (bySchool[p.school || 'no school'] || 0) + 1;
   console.log(`${people.length} subscriber(s): ${Object.entries(bySchool).map(([k, n]) => `${k} ${n}`).join(', ') || 'none yet'}. ${people.filter(p => p.programs.length).length} follow at least one program, ${people.filter(p => p.camps.length).length} at least one camp, ${people.filter(p => p.waiting.length).length} are waiting for a school.`);

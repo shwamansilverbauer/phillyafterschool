@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { streetAddresses, addressKey } from './scripts/addresses.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
@@ -925,29 +926,61 @@ const LEAD = { register: 1, dayoff: 10, ...(ALERTS?.lead || {}) };   // least no
 const longDay = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' });
 // A date is announced on the last send day that still leaves `lead` days of notice, so there is one email a week at most.
 const sendOn = (iso, lead) => { let d = isoAdd(iso, -lead); while (weekday(d) !== SEND_DAY) d = isoAdd(d, -1); return d; };
-// A sign-up date is news: it is emailed the morning after it is posted here ("posted" on the entry, the day it went
-// into the data), whatever day of the week that is, and again the day before as a reminder. An entry with no
-// "posted" day keeps the older timing: the send day before the date. Notes ("updates") go out the next morning too.
-// Days off are not news, so they stay in the weekly round-up.
+// ----- when did each date reach the site? -----
+// A sign-up date is news, so the email about it goes out the morning after the date first appeared here. "Here" is
+// read from the repository's own history: the day of the first commit on the main line whose copy of the data file
+// holds that entry. Nobody has to write the day down, and a pull request merged a week after it was opened counts
+// from the merge. An entry can still carry "posted": "YYYY-MM-DD" to say otherwise. Where the history can't be read
+// (a shallow copy, as on the publishing job) the older timing is used: the send day before the date.
+const phillyDay = when => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(when));
+const firstSeen = (() => {
+  if (process.env.PAS_NO_HISTORY) return null;
+  try {
+    const git = a => execFileSync('git', a, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 256e6 });
+    if (git(['rev-parse', '--is-shallow-repository']).trim() !== 'false') return null;
+    const seen = {};
+    const files = [
+      ['data/programs.json', d => (Array.isArray(d) ? d : []).flatMap(x => [...(x?.register?.dates || []).map(e => `p:${x.id}:${e?.date}`), ...(x?.updates || []).map(e => `pu:${x.id}:${e?.date}`)])],
+      ['data/camps.json', d => (d?.camps || []).flatMap(x => [...(x?.dates || []).map(e => `c:${x.id}:${e?.date}`), ...(x?.updates || []).map(e => `cu:${x.id}:${e?.date}`)])],
+    ];
+    for (const [file, keys] of files) {
+      const log = git(['log', '--first-parent', '-n', '500', '--format=%H %cI', '--', file]).trim().split('\n').filter(Boolean).reverse();   // oldest first
+      for (const line of log) {
+        const [sha, when] = line.split(' ');
+        let data; try { data = JSON.parse(git(['show', `${sha}:${file}`])); } catch { continue; }
+        for (const k of keys(data)) if (!seen[k]) seen[k] = phillyDay(when);
+      }
+    }
+    return seen;
+  } catch { return null; }
+})();
+// The day an entry was posted here: what it says, else what the history says, else (history readable, entry not in
+// it yet: a change that hasn't been committed) today. Undefined when there is no way to know.
+const postedOn = (key, d) => d.posted || (firstSeen ? firstSeen[`${key}:${d.date}`] || TODAY : undefined);
 const dayAfter = iso => isoAdd(iso, 1);
-const signupItems = (base, d, label) => {
-  const told = d.posted && d.posted < d.date ? dayAfter(d.posted) : sendOn(d.date, LEAD.register);
+// Each sign-up date makes up to three entries: the news (the morning after it was posted), a reminder the day
+// before ("-eve") and one on the morning itself ("-day"). A reminder is left out when the news would already
+// land on that day. Days off are not news, so they stay in the weekly round-up.
+const signupItems = (base, key, d, label) => {
+  const posted = postedOn(key, d);
+  const told = posted ? dayAfter(posted) : sendOn(d.date, LEAD.register);
   const eve = isoAdd(d.date, -1);
+  const text = label + '.';
   return [
-    { ...base, id: `${base.id}-${d.date}`, kind: 'register', date: d.date, sendOn: told, when: longDay(d.date), text: label + '.' },
-    ...(eve > told ? [{ ...base, id: `${base.id}-${d.date}-eve`, kind: 'soon', date: d.date, sendOn: eve, when: 'Tomorrow, ' + longDay(d.date), text: label + '.' }] : []),
+    { ...base, id: `${base.id}-${d.date}`, kind: 'register', date: d.date, sendOn: told, when: longDay(d.date), text },
+    ...(eve > told ? [{ ...base, id: `${base.id}-${d.date}-eve`, kind: 'soon', date: d.date, sendOn: eve, expires: eve, when: 'Tomorrow, ' + longDay(d.date), text }] : []),
+    ...(d.date > told ? [{ ...base, id: `${base.id}-${d.date}-day`, kind: 'today', date: d.date, sendOn: d.date, when: 'Today, ' + longDay(d.date), text }] : []),
   ];
 };
+// A note ("updates") goes out the morning after it reached the site, and is dropped two days after that.
+const noteDays = (key, u) => { const told = dayAfter(postedOn(key, u) || u.date); return { sendOn: told, expires: isoAdd(told, CATCH_UP_DAYS) }; };
+const CATCH_UP_DAYS = 2;
 const mailUrl = (rel, hash = '') => `${cfg.siteUrl}/${rel}?utm_source=klaviyo&utm_medium=email&utm_campaign=dates${hash}`;
-{
-  const bare = [...programs.flatMap(p => (p.register?.dates || []).filter(d => d.date >= TODAY && !d.posted).map(() => p.id)), ];
-  if (bare.length) console.log(`Note: ${bare.length} sign-up date(s) have no "posted" day (${[...new Set(bare)].join(', ')}), so followers hear on the Sunday before instead of the morning after it was added. Add "posted": the day the date went into the data.`);
-}
 const alertItems = [
   ...programs.flatMap(p => upcomingDates(p).flatMap(d => signupItems({
     id: `reg-${p.id}`, schools: schools.filter(s => p.schools[s.id]).map(s => s.id), programs: [p.id],
     title: p.name, url: mailUrl(programPath(p)), button: 'See the listing',
-  }, d, d.label.trim().replace(/\.$/, '')))),
+  }, `p:${p.id}`, d, d.label.trim().replace(/\.$/, '')))),
   // A program's own camp days go only to the people following that program. Anyone who also gets the day-off
   // entry for the same day (it lists every camp) is not told twice: "within" names the entry that covers it.
   ...offDays.filter(d => d.date >= TODAY).flatMap(d => campsOn(d).map(p => {
@@ -961,7 +994,7 @@ const alertItems = [
   })),
   // Notes from a program's "updates" list go out the morning after they are added, to its followers.
   ...programs.flatMap(p => (p.updates || []).map(u => ({
-    id: `news-${p.id}-${u.date}`, kind: 'update', date: u.date, sendOn: dayAfter(u.date), expires: isoAdd(u.date, 3), schools: [], programs: [p.id],
+    id: `news-${p.id}-${u.date}`, kind: 'update', date: u.date, ...noteDays(`pu:${p.id}`, u), schools: [], programs: [p.id],
     when: 'Update', title: p.name, text: u.text.trim(), url: mailUrl(programPath(p)), button: 'See the listing',
   }))).filter(a => a.expires >= TODAY),
   ...offDays.filter(d => d.date >= TODAY).map(d => {
@@ -980,9 +1013,9 @@ const alertItems = [
 const lateAlertItems = () => [
   ...summerCamps.flatMap(c => (c.dates || []).filter(d => d.date >= TODAY).flatMap(d => signupItems({
     id: `campreg-${c.id}`, schools: [], programs: [], camps: [c.id], title: c.name, url: mailUrl(campPath(c)), button: 'See the camp',
-  }, d, d.label.trim().replace(/\.$/, '')))),
+  }, `c:${c.id}`, d, d.label.trim().replace(/\.$/, '')))),
   ...summerCamps.flatMap(c => (c.updates || []).map(u => ({
-    id: `campnews-${c.id}-${u.date}`, kind: 'update', date: u.date, sendOn: dayAfter(u.date), expires: isoAdd(u.date, 3), schools: [], programs: [], camps: [c.id],
+    id: `campnews-${c.id}-${u.date}`, kind: 'update', date: u.date, ...noteDays(`cu:${c.id}`, u), schools: [], programs: [], camps: [c.id],
     when: 'Update', title: c.name, text: u.text.trim(), url: mailUrl(campPath(c)), button: 'See the camp',
   }))).filter(a => a.expires >= TODAY),
   ...schools.filter(s => s.added).map(s => {
@@ -996,7 +1029,7 @@ const lateAlertItems = () => [
   }).filter(a => a.expires >= TODAY),
 ];
 const alertsFeed = () => ({
-  about: `Dated reminders for ${cfg.siteName}. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted and again the day before; days off go in the weekly round-up.`,
+  about: `Dated reminders for ${cfg.siteName}. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.`,
   generated: TODAY, site: cfg.siteUrl, metric: ALERTS?.metric || 'School dates', sendDay: SEND_DAY_NAME,
   schools: schools.map(s => ({ id: s.id, name: s.shortName })),
   programs: programs.map(p => ({ id: p.id, name: fullName(p) })),
@@ -1064,12 +1097,26 @@ const followBox = (depth, { key = '', name = '', place, title, lede, hint = '', 
 </div>`;
 // Wherever a sign-up form for dates used to sit: the follow box when accounts are on, the plain form when they aren't.
 const datesBox = (depth, o) => ALERTS && GROUPS ? followBox(depth, o) : alertsBox(depth, o.old);
+// Where "Stop emails about ..." in an email lands. The link carries the account's stop code and one thing it follows,
+// after the #, so neither reaches a server log. The page asks before it does anything, then stops that one follow.
+function stopPage() {
+  const D = 2;
+  const hero = `    <h1>${T(`Stop emails about one thing`)}</h1>
+    <p class="lede">${T(`You only hear about what you follow. Stop one and the rest carry on.`)}</p>`;
+  const body = `<div ${groupsAttrs(D)} data-stop-page style="display:contents">
+  <noscript><p class="ask">${T(`This page needs JavaScript turned on. You can also sign in and stop following from your account page.`)}</p></noscript>
+  <section class="panel stop-box needs-js-block" id="stop-box" aria-live="polite"><p class="hint">${T(`One moment…`)}</p></section>
+  <p class="hint">${T(`To see or change everything you follow,`)} <a href="${link('account/', D)}#following">${T(`sign in to your account`)}</a>. ${T(`The Unsubscribe link at the foot of any email stops every email from us, including news about the site.`)}</p>
+</div>`;
+  return layout({ title: 'Stop emails about one thing', description: `Stop ${cfg.siteName} emails about one program, camp or school.`, pathName: alertsPath + 'stop/', depth: D, current: null, hero, body, noindex: true, quiet: true });
+}
+
 function alertsPage() {
   const hero = `    <h1>${T(`The dates, before they sneak up on you`)}</h1>
     <p class="lede">${T(`Sign-up openings, deadlines and days off for your school, by email. Sign-up dates come the morning after they’re posted here, and days off in a {day} round-up.`, { day: SEND_DAY_NAME })}</p>`;
   const soon = alertItems.filter(a => a.date >= TODAY).slice(0, 6);
   const body = `<div class="suggest">
-  ${datesBox(1, { pick: true, place: 'page', title: T(`Which school?`), lede: T(`Pick your school and follow it. If you’re new, signing in takes a minute: an email address and a 6-digit code.`), hint: T(`Sign-up dates reach you the morning after they’re posted here, with a reminder the day before. Days off come in a {day} round-up.`, { day: SEND_DAY_NAME }), old: { place: 'page', title: T(`Where should they go?`), lede: T(`Pick your school, then leave your first name and an email address. That’s the whole form.`) } })}
+  ${datesBox(1, { pick: true, place: 'page', title: T(`Which school?`), lede: T(`Pick your school and follow it. If you’re new, signing in takes a minute: an email address and a 6-digit code.`), hint: T(`Sign-up dates reach you the morning after they’re posted here, then again the day before and at about 8 that morning. Days off come in a {day} round-up.`, { day: SEND_DAY_NAME }), old: { place: 'page', title: T(`Where should they go?`), lede: T(`Pick your school, then leave your first name and an email address. That’s the whole form.`) } })}
   <aside class="next">
     <h2>${T(`What you’ll get`)}</h2>
     <ul class="rules ticks">
@@ -1194,7 +1241,7 @@ ${p.clubs.map(c => `      <article class="club">
       <dl>${rows}</dl>
       ${p.note ? `<p class="flag">${esc(p.note)}</p>` : ''}
       <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(outUrl(p.website, { type: 'website', program: p }))}" target="_blank" rel="noopener">Website</a>${camp ? (p.daysOff ? `<a class="btn" href="${link(offPath, D)}#${esc(p.id)}">${T(`See its camp days`)}</a>` : '') + (p.weekend ? `<a class="btn" href="${link(weekendPath, D)}#${esc(p.id)}">${T(`See its weekend classes`)}</a>` : '') : `<a class="btn needs-js" href="${link('board/', D)}?add=${esc(p.id)}">${T(`Add to your week`)}</a>`}</div>
-      ${ALERTS && GROUPS ? followBox(D, { key: 'p:' + p.id, name: fullName(p), place: 'program', fav: true, h: 'h3', title: T(`Tell me when sign-ups open`), lede: T(`One email when {program} posts a sign-up date, a deadline or a day-off camp.`, { program: fullName(p) }), hint: T(`An email the morning after it posts a date here, and a reminder the day before sign-ups open.`) }) : ''}
+      ${ALERTS && GROUPS ? followBox(D, { key: 'p:' + p.id, name: fullName(p), place: 'program', fav: true, h: 'h3', title: T(`Tell me when sign-ups open`), lede: T(`One email when {program} posts a sign-up date, a deadline or a day-off camp.`, { program: fullName(p) }), hint: T(`An email the morning after it posts a date here, then reminders the day before and at about 8 on the morning sign-ups open.`) }) : ''}
     </article>
     <p class="hint">${T(`Prices, hours and pickup routes change during the year. Confirm with the provider before you enroll.`)}</p>
     ${listingTools('p:' + p.id, fullName(p), D, 'program')}
@@ -1631,7 +1678,7 @@ ${groups}
   </div>
   <p class="ask roll-ask needs-js-block"><span>${T(`Can’t decide? Let a theme pick for you.`)}</span> <a class="btn" href="${link('board/', 1)}?roll=${esc(s.id)}">${T(`Roll a themed week for {school}`, { school: s.shortName })}</a></p>
   <p class="ask">${T(`Know a program that serves {school} and isn’t here?`, { school: s.shortName })} <a href="${link('suggest/', 1)}">${T(`Add it to the list.`)}</a></p>
-  ${datesBox(1, { key: 's:' + s.id, name: s.shortName, place: 'school', cls: 'wide', title: T(`Get {school} dates by email`, { school: s.shortName }), lede: T(`Sign-up openings and deadlines for these programs, and a heads-up before each day off.`), hint: T(`Sign-up dates reach you the morning after they’re posted here, with a reminder the day before. Days off come in a {day} round-up.`, { day: SEND_DAY_NAME }), old: { school: s, place: 'school', title: T(`Get {school} dates by email`, { school: s.shortName }), lede: T(`Sign-up openings and deadlines for these programs, and a heads-up before each day off.`) } })}
+  ${datesBox(1, { key: 's:' + s.id, name: s.shortName, place: 'school', cls: 'wide', title: T(`Get {school} dates by email`, { school: s.shortName }), lede: T(`Sign-up openings and deadlines for these programs, and a heads-up before each day off.`), hint: T(`Sign-up dates reach you the morning after they’re posted here, then again the day before and at about 8 that morning. Days off come in a {day} round-up.`, { day: SEND_DAY_NAME }), old: { school: s, place: 'school', title: T(`Get {school} dates by email`, { school: s.shortName }), lede: T(`Sign-up openings and deadlines for these programs, and a heads-up before each day off.`) } })}
   ${s.checkedNoPickup?.length ? `<section class="notes">
     <h2>${T(`Checked, and not listing {school} pickup`, { school: s.shortName })}</h2>
     <ul>${s.checkedNoPickup.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
@@ -1743,7 +1790,7 @@ ${more.length ? `<section class="section" id="more">
   <div class="chips-row">${covered.slice(0, 12).map(s => `<a class="btn" href="${link(s.id + '/', 0)}">${esc(s.shortName)}</a>`).join('')}<a class="btn quiet" href="${link('schools/', 0)}">${covered.length > 12 ? `All ${covered.length} schools` : T(`All schools`)}</a></div>
   <p>${T(`Schools are added one at a time, because every pickup list has to be checked. Search for yours above and ask for it: the ones parents ask for most go first.`)}</p>
 </section>
-${datesBox(0, { pick: true, place: 'home', cls: 'wide', title: T(`Get the dates by email`), lede: T(`Sign-up openings, deadlines and days off for your school, so none of them sneaks up on you.`), hint: T(`Sign-up dates reach you the morning after they’re posted here, with a reminder the day before. Days off come in a {day} round-up.`, { day: SEND_DAY_NAME }), old: { place: 'home', title: T(`Get the dates by email`), lede: T(`Sign-up openings, deadlines and days off for your school, so none of them sneaks up on you.`) } })}
+${datesBox(0, { pick: true, place: 'home', cls: 'wide', title: T(`Get the dates by email`), lede: T(`Sign-up openings, deadlines and days off for your school, so none of them sneaks up on you.`), hint: T(`Sign-up dates reach you the morning after they’re posted here, then again the day before and at about 8 that morning. Days off come in a {day} round-up.`, { day: SEND_DAY_NAME }), old: { place: 'home', title: T(`Get the dates by email`), lede: T(`Sign-up openings, deadlines and days off for your school, so none of them sneaks up on you.`) } })}
 <section class="section">
   <h2>${T(`How programs are sorted`)}</h2>
   <div class="kinds">
@@ -2030,7 +2077,10 @@ ${GROUPS.photos ? `    <li>${T(`A photo you send for your listing is shrunk in y
   <ul>
     ${GROUPS ? `<li>${T(`Following a program, a camp or a school uses a free account. Your account keeps the list of what you follow. Your browser sends two things to Klaviyo, the email service we use: your email address (with your first name, if your account has one) and what you follow. They are stored there.`)}</li>
     <li>${T(`You hear only about what you follow. Stop following from the listing’s page or from your account page and those emails stop; deleting your account stops them all.`)}</li>
-    <li>${T(`A sign-up date is emailed the morning after it is posted on this site, with a reminder the day before. Days off come in a weekly round-up. We can only pass on a date once the program has posted it and it has reached this site.`)}</li>
+    <li>${T(`A sign-up date is emailed the morning after it is posted on this site, with reminders the day before and on the morning itself. Days off come in a weekly round-up. We can only pass on a date once the program has posted it and it has reached this site.`)}</li>
+    <li>${T(`Every date email has a link for each listing in it, “Stop emails about …”. It stops that one listing without signing in, including its dates that would have reached you through a school you follow, and you can undo it on the spot or from your account page.`)}</li>
+    <li>${T(`That link works because it carries a random code that belongs to your account. The code is kept with your account and on your email-list profile, and it can do one thing: stop emails. It can’t open your account or show anything in it, and the page it opens never says whose it is.`)}</li>
+    <li>${T(`So that a stop always holds, we keep a list of what has been stopped in a scrambled form that can’t be read back into a person or a listing without that code. The entry for a deleted account stays on that list, so its emails stay stopped.`)}</li>
     <li>${T(`A favorite is different. It is kept in your account and nowhere else: it isn’t sent to Klaviyo, and it sends no email.`)}</li>
     <li>${T(`A phone number is optional. If you add one and tick the box agreeing to texts, we keep the number, the day you agreed and the wording you agreed to, in your account. It is for texts about what you follow and nothing else. Texts have not started yet; until they do, the number is not passed to any texting service. You can remove it on your account page at any time, and a text will always say how to stop them. Message and data rates may apply.`)}</li>
     <li>${T(`Asking to be told when a school is added still takes only a first name and an email address, with no account.`)}</li>` : `<li>${T(`The sign-up form sends three things: your first name, your email address and the school or program you chose. They go from your browser to Klaviyo, the email service we use, and are stored there.`)}</li>
@@ -2585,7 +2635,7 @@ ${offDays.map(d => { const n = campsOn(d).length; return `    <li data-until="${
   </ul>
   <p class="src">Calendar: <a href="${esc(daysOff.source.url)}" target="_blank" rel="noopener">${esc(daysOff.source.label)}</a></p>
 </section>
-${datesBox(D, { pick: true, place: 'days_off', cls: 'wide', title: T(`Get a heads-up before each day off`), lede: T(`An email at least {n} days ahead, with the listed programs running a camp that day.`, { n: LEAD.dayoff }), hint: T(`Sign-up dates reach you the morning after they’re posted here, with a reminder the day before. Days off come in a {day} round-up.`, { day: SEND_DAY_NAME }), old: { place: 'days_off', title: T(`Get a heads-up before each day off`), lede: T(`An email at least {n} days ahead, with the listed programs running a camp that day.`, { n: LEAD.dayoff }) } })}
+${datesBox(D, { pick: true, place: 'days_off', cls: 'wide', title: T(`Get a heads-up before each day off`), lede: T(`An email at least {n} days ahead, with the listed programs running a camp that day.`, { n: LEAD.dayoff }), hint: T(`Sign-up dates reach you the morning after they’re posted here, then again the day before and at about 8 that morning. Days off come in a {day} round-up.`, { day: SEND_DAY_NAME }), old: { place: 'days_off', title: T(`Get a heads-up before each day off`), lede: T(`An email at least {n} days ahead, with the listed programs running a camp that day.`, { n: LEAD.dayoff }) } })}
 <section class="section" id="who" data-jump-to="Who runs camps">
   <h2>${T(`Who runs something when school is closed`)}</h2>
   <p>${T(`{n} listed programs say they run camps or full days on days off. {m} of them had no dates on their site when we checked, so ask which days they cover.`, { n: campPrograms.length, m: noDates.length })}</p>
@@ -3486,7 +3536,7 @@ $topListings = array(); $hitsSince = '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'hood_saved' => 'Neighborhoods kept', 'phone_saved' => 'Phone numbers added for texts', 'follow' => 'Follows started', 'fav' => 'Favorites saved', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
+$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'hood_saved' => 'Neighborhoods kept', 'phone_saved' => 'Phone numbers added for texts', 'follow' => 'Follows started', 'stop_one' => 'Listings stopped from an email', 'stop_all' => 'Everything stopped from an email', 'fav' => 'Favorites saved', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -4114,8 +4164,8 @@ function campPage(c) {
       ${c.note ? `<p class="flag">${esc(c.note)}</p>` : ''}
       <div class="actions"><a class="btn primary" data-track="camp" href="${esc(outUrl(c.registerUrl || c.website, { type: 'camp' }))}" target="_blank" rel="noopener">${c.registerUrl ? T(`Find or book a spot`) : T(`The camp’s website`)}</a>${c.registerUrl ? `<a class="btn" data-track="website" href="${esc(outUrl(c.website, { type: 'camp' }))}" target="_blank" rel="noopener">${T(`The camp’s website`)}</a>` : ''}<a class="btn needs-js" href="${link(summerPath, D)}?add=${esc(c.id)}">${T(`Add to your summer`)}</a>${prog ? `<a class="btn" href="${link(programPath(prog), D)}">${T(`Its school-year listing`)}</a>` : ''}</div>
       ${ALERTS && GROUPS ? (c.season && c.season < year
-        ? followBox(D, { key: 'c:' + c.id, name: c.name, place: 'camp', fav: true, h: 'h3', title: T(`Tell me when it posts summer {year}`, { year }), lede: T(`One email when {camp} posts its {year} dates and prices, and one before sign-ups open if it names a day.`, { camp: c.name, year }), hint: T(`An email the morning after we see it, and a reminder the day before sign-ups open. We read each camp’s site again about once a month, so the first one can come a few weeks after the camp’s own announcement. If a camp fills fast, watch its site too.`) })
-        : followBox(D, { key: 'c:' + c.id, name: c.name, place: 'camp', fav: true, h: 'h3', title: T(`Tell me when something changes`), lede: T(`One email before sign-ups open at {camp}, if it names a day, and one when its dates or prices change.`, { camp: c.name }), hint: T(`An email the morning after we see it, and a reminder the day before sign-ups open. We read each camp’s site again about once a month, so the first one can come a few weeks after the camp’s own announcement. If a camp fills fast, watch its site too.`) })) : ''}
+        ? followBox(D, { key: 'c:' + c.id, name: c.name, place: 'camp', fav: true, h: 'h3', title: T(`Tell me when it posts summer {year}`, { year }), lede: T(`One email when {camp} posts its {year} dates and prices, and one before sign-ups open if it names a day.`, { camp: c.name, year }), hint: T(`An email the morning after we see it, then reminders the day before and at about 8 on the morning sign-ups open. We read each camp’s site again about once a month, so the first one can come a few weeks after the camp’s own announcement. If a camp fills fast, watch its site too.`) })
+        : followBox(D, { key: 'c:' + c.id, name: c.name, place: 'camp', fav: true, h: 'h3', title: T(`Tell me when something changes`), lede: T(`One email before sign-ups open at {camp}, if it names a day, and one when its dates or prices change.`, { camp: c.name }), hint: T(`An email the morning after we see it, then reminders the day before and at about 8 on the morning sign-ups open. We read each camp’s site again about once a month, so the first one can come a few weeks after the camp’s own announcement. If a camp fills fast, watch its site too.`) })) : ''}
     </article>
     <p class="hint">${T(`Dates, prices and openings change, and many camps fill early. Confirm with the camp before you plan around a week.`)}</p>
     ${listingTools('c:' + c.id, c.name, D, 'camp')}
@@ -4295,6 +4345,7 @@ if (summerCamps.length) write(summerPath + 'index.html', summerSchedulePage());
 if (YEAR_PAGE) write(yearPath + 'index.html', calendarPage());
 if (weekendPrograms.length) write(weekendPath + 'index.html', weekendPage());
 if (ALERTS) write(alertsPath + 'index.html', alertsPage());
+if (ALERTS && GROUPS) write(alertsPath + 'stop/index.html', stopPage());
 write('review/index.html', reviewPage());
 write('review/thanks/index.html', reviewThanksPage());
 if (GATED) write('edit/index.php', editIndexPhp()); else write('edit/index.html', editPage());

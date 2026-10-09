@@ -32,10 +32,33 @@
   // themselves in later call window.pasJump() again. -----
   window.pasJump = function () {
     all(document, 'nav[data-jump]').forEach(function (nav) {
+      // the strip scrolls sideways when it doesn't fit: an arrow and a fade at each end say there is more, as on the filters
+      var wrap = nav.parentNode;
+      if (!/(^| )jump-wrap( |$)/.test(wrap.className)) {
+        wrap = el('div', 'jump-wrap'); nav.parentNode.insertBefore(wrap, nav); wrap.appendChild(nav);
+        var mk = function (cls, label, dir) {
+          var b = el('button', 'rail-go ' + cls); b.type = 'button'; b.hidden = true; b.setAttribute('aria-label', label);
+          b.addEventListener('click', function () {
+            var by = Math.max(120, Math.round(nav.clientWidth * 0.7)) * dir, calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (nav.scrollBy) nav.scrollBy({ left: by, behavior: calm ? 'auto' : 'smooth' }); else nav.scrollLeft += by;
+          });
+          wrap.appendChild(b); return b;
+        };
+        var prev = mk('prev', 'Show earlier parts of this page', -1), fwd = mk('fwd', 'Show more parts of this page', 1);
+        nav.pasEnds = function () {
+          var left = nav.scrollLeft > 4, right = nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 4;
+          prev.hidden = !left; fwd.hidden = !right;
+          wrap.className = 'jump-wrap' + (left ? ' more-left' : '') + (right ? ' more-right' : '');
+        };
+        nav.addEventListener('scroll', nav.pasEnds, { passive: true });
+        window.addEventListener('resize', nav.pasEnds);
+        if (window.ResizeObserver) new window.ResizeObserver(nav.pasEnds).observe(nav);
+      }
       var parts = all(document, '[data-jump-to][id]').filter(function (t) { return !t.closest('[hidden]') && /\S/.test(t.textContent); });
       nav.textContent = '';
-      nav.hidden = parts.length < 2;
+      nav.hidden = parts.length < 2; wrap.hidden = nav.hidden;
       parts.forEach(function (t) { var a = el('a', null, t.getAttribute('data-jump-to')); a.href = '#' + t.id; nav.appendChild(a); });
+      nav.pasEnds(); window.setTimeout(nav.pasEnds, 400);
     });
   };
   window.pasJump();
@@ -323,6 +346,7 @@
       patch[prop] = ch.k.slice(2);
       if (!ch.on) return klaviyo('profiles', { data: { type: 'profile', attributes: { email: u.email }, meta: { patch_properties: { unappend: patch } } } });
       var who = { email: u.email, properties: { follows_from_account: true }, subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } } };
+      if (state.stop) who.properties.stop_code = state.stop;   // lets the emails carry a "stop emails about this" link
       if (u.first) who.first_name = u.first;
       return klaviyo('subscriptions', { data: { type: 'subscription',
         attributes: { custom_source: 'phillyafterschool.org follow', profile: { data: { type: 'profile', attributes: who } } },
@@ -344,10 +368,16 @@
       if ('user' in d) state.user = d.user || null;
       state.follows = (d.follows || []).map(function (x) { return x.k; });
       state.favs = (d.favs || []).map(function (x) { return x.k; });
-      state.named = { follows: d.follows || [], favs: d.favs || [] };
+      state.named = { follows: d.follows || [], favs: d.favs || [], muted: d.muted || [] };
       if (d.lists) state.lists = d.lists;
+      state.stop = d.stop || '';
       state.loaded = true;
       if (state.user) sync(d.sync);
+      // someone who followed before the emails had stop links: put their stop code on the email list once
+      if (state.user && state.stop && KEY && state.follows.length && !(d.sync || []).length && store('pas-kl-stop') !== state.stop) {
+        var code = state.stop;
+        klaviyo('profiles', { data: { type: 'profile', attributes: { email: state.user.email, properties: { stop_code: code } } } }).then(function () { store('pas-kl-stop', code); }, function () { /* next visit */ });
+      }
       return d;
     }
     return {
@@ -355,10 +385,59 @@
       load: function () { return api('marks').then(take); },
       follow: function (k, on) { return api('follow', { key: k, on: !!on }).then(take); },
       fav: function (k, on) { return api('fav', { key: k, on: !!on }).then(take); },
+      unmute: function (k) { return api('unmute', { key: k }).then(take); },
       clear: function () { return api('follow_clear', {}).then(function (d) { if (d && d.ok && d.sync) return sync(d.sync); }); }
     };
   })();
   window.pasMarks = MK;
+
+  // ----- "Stop emails about ..." from an email: one follow turned off, with no sign-in. The link's code and listing
+  // come after the #, and are taken out of the address as soon as they are read. -----
+  var stopEl = document.querySelector('[data-stop-page]');
+  if (stopEl && MK) (function run() {
+    if (!run.heard) { run.heard = true; window.addEventListener('hashchange', function () { if (/[#&]c=/.test(location.hash)) run(); }); }   // a second link opened in the same tab
+    var box = document.getElementById('stop-box');
+    box.textContent = ''; box.appendChild(el('p', 'hint', 'One moment…'));
+    var raw = (location.hash || '').replace(/^#/, '') || (location.search || '').replace(/^\?/, ''), got = {};
+    raw.split('&').forEach(function (p) { var i = p.indexOf('='); if (i > 0) { try { got[p.slice(0, i)] = decodeURIComponent(p.slice(i + 1)); } catch (e) { /* not ours */ } } });
+    try { history.replaceState(null, '', location.pathname); } catch (e) { /* the address stays as it was */ }
+    var c = /^[a-f0-9]{32}$/.test(got.c || '') ? got.c : '', k = /^(p|c|s):[a-z0-9-]{1,80}$/.test(got.k || '') ? got.k : '';
+    var account = (stopEl.getAttribute('data-root') || '') + 'account/' + (stopEl.getAttribute('data-index') || '') + '#following';
+    var btn = function (cls, text, go) { var b = el('button', cls, text); b.type = 'button'; b.addEventListener('click', function () { go(b); }); return b; };
+    var paint = function (parts) { box.textContent = ''; parts.forEach(function (x) { if (x) box.appendChild(x); }); };
+    var signIn = function () { var a = el('a', 'btn', 'Sign in to choose what you follow'); a.href = account; var w = el('div', 'actions'); w.appendChild(a); return w; };
+    var still = function (left) {
+      if (!left.length) return el('p', 'hint', 'You aren’t following anything else, so no more date emails will come.');
+      return el('p', 'hint', 'You still follow ' + (left.length > 4 ? left.slice(0, 3).map(function (x) { return x.n; }).join(', ') + ' and ' + (left.length - 3) + ' more' : left.map(function (x) { return x.n; }).join(', ')) + '.');
+    };
+    var ask = function (action, key) { return MK.api('stop', { c: c, k: key, 'do': action }); };
+    var failed = function (d) { paint([el('h2', null, 'That didn’t work'), el('p', null, d.message || 'Something went wrong. Please try again.'), signIn()]); };
+    var done = function (d, name, was) {
+      var acts = el('div', 'actions');
+      acts.appendChild(btn('btn', 'Undo', function (b) { b.disabled = true; MK.api('stop', { c: c, k: k, 'do': 'undo', follow: was }).then(function (r) { if (!r.ok) return failed(r); paint([el('h2', null, 'Undone. Emails about ' + name + ' will keep coming.'), still(r.left.filter(function (x) { return x.k !== k; }))]); }); }));
+      paint([el('h2', null, 'Done. No more emails about ' + name + '.'), el('p', null, k.charAt(0) === 's' ? 'You won’t get this school’s dates or its days off.' : 'That includes its dates that would have reached you through a school you follow.'), still(d.left), acts]);
+      MK.load();   // if this browser is signed in, the email list is told straight away
+    };
+    if (!c || !k) { paint([el('h2', null, 'This link is missing something'), el('p', null, 'It may have been cut off on its way from the email. You can stop following from your account page instead.'), signIn()]); return; }
+    ask('look', k).then(function (d) {
+      if (!d.ok) return failed(d);
+      var name = d.name;
+      if (d.muted && !d.on) { paint([el('h2', null, 'Emails about ' + name + ' are already stopped'), still(d.left), signIn()]); return; }
+      var acts = el('div', 'actions');
+      acts.appendChild(btn('btn primary', 'Stop these emails', function (b) { b.disabled = true; ask('stop', k).then(function (r) { if (!r.ok) return failed(r); done(r, name, d.on); }); }));
+      var keep = el('a', 'btn', 'Keep them'); keep.href = stopEl.getAttribute('data-root') || './'; acts.appendChild(keep);
+      var parts = [el('h2', null, 'Stop emails about ' + name + '?'), el('p', null, 'You’ll stop getting its sign-up dates and reminders. Anything else you follow stays as it is.'), acts];
+      if (d.left.length > 1) {
+        var armed = false;
+        parts.push(btn('clear', 'Stop every date email instead', function (b) {
+          if (!armed) { armed = true; b.textContent = 'Stop all ' + d.left.length + ' of them? Tap again'; window.setTimeout(function () { armed = false; b.textContent = 'Stop every date email instead'; }, 5000); return; }
+          b.disabled = true;
+          ask('stop', '*').then(function (r) { if (!r.ok) return failed(r); paint([el('h2', null, 'Done. No more date emails.'), el('p', null, 'You’re not following anything now. Your account and your plans are untouched, and you can follow again from any listing.')]); MK.load(); });
+        }));
+      }
+      paint(parts);
+    });
+  })();
 
   (function () {
     var boxes = all(document, '[data-follow]');

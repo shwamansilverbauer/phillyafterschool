@@ -50,9 +50,11 @@
           <td align="center" style="padding:18px 20px 8px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#4D607A;">
             You’re getting this because {{ event.reason|default:"you asked for dates" }} at phillyafterschool.org.
             <br>
-            Wrong school? <a href="https://phillyafterschool.org/alerts/" style="color:#4D607A;">Sign up again</a> with this address and pick the right one. To stop hearing about one program, reply to this email.
-            <br>
-            {% unsubscribe 'Unsubscribe' %}
+            {% if event.stops %}{% for s in event.stops %}<a href="{{ s.url }}" style="color:#1763B8;font-weight:700;">Stop emails about {{ s.name }}</a><br>
+            {% endfor %}<a href="{{ event.manage }}" style="color:#4D607A;">See everything you follow</a>
+            {% else %}Wrong school? <a href="https://phillyafterschool.org/alerts/" style="color:#4D607A;">Sign up again</a> with this address and pick the right one. To stop hearing about one program, reply to this email.
+            {% endif %}<br>
+            {% unsubscribe 'Unsubscribe from every Philly After School email' %}
             <br><br>
             Philly After School is an independent community project. Not affiliated with the School District of Philadelphia.
             <br>

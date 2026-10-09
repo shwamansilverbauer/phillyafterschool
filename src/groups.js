@@ -505,15 +505,16 @@
       if (MK) {
         var fol = part(el('section', 'panel g-marks'), 'following', 'Following');
         fol.appendChild(el('h2', null, 'Places you follow'));
-        fol.appendChild(el('p', null, 'When one of these posts a sign-up date or a deadline, you get an email the next morning and a reminder the day before. Days off come in a Sunday round-up. Follow a program, a camp or a school from its own page.'));
+        fol.appendChild(el('p', null, 'When one of these posts a sign-up date or a deadline, you get an email the next morning, then reminders the day before and at about 8 that morning. Every email has a link to stop that one listing. Days off come in a Sunday round-up. Follow a program, a camp or a school from its own page.'));
         var folBox = el('div'); fol.appendChild(folBox);
+        var mutedBox = el('div'); fol.appendChild(mutedBox);
         fol.appendChild(part(el('h3', null, 'Favorites'), 'favorites', 'Favorites'));
         fol.appendChild(el('p', 'hint', 'Saved so you can find them again. A favorite sends no email.'));
         var favBox = el('div'); fol.appendChild(favBox);
         var marksNote = el('p', 'g-status'); marksNote.setAttribute('aria-live', 'polite'); fol.appendChild(marksNote);
         var kindWord = { p: 'Program', c: 'Summer camp', s: 'School' };
         var drawMarks = function () {
-          var named = MK.state.named || { follows: [], favs: [] };
+          var named = MK.state.named || { follows: [], favs: [], muted: [] };
           var fill = function (box, items, empty, removeLabel, remove, addToWeek) {
             box.textContent = '';
             if (!items.length) { box.appendChild(el('p', 'hint', empty)); return; }
@@ -530,6 +531,14 @@
             box.appendChild(ul);
           };
           fill(folBox, named.follows, 'You aren’t following anything yet.', 'Stop following', function (x) { return MK.follow(x.k, false); });
+          // listings stopped from an email: nothing about them is sent, even by way of a school that is followed
+          mutedBox.textContent = '';
+          if ((named.muted || []).length) {
+            mutedBox.appendChild(el('h3', null, 'Stopped from an email'));
+            mutedBox.appendChild(el('p', 'hint', 'You asked not to hear about these, so their dates are left out even when they serve a school you follow.'));
+            var mb = el('div'); mutedBox.appendChild(mb);
+            fill(mb, named.muted, '', 'Allow emails again', function (x) { return MK.unmute(x.k); });
+          }
           fill(favBox, named.favs, 'No favorites yet. Tap “Save to favorites” on a program’s or camp’s page.', 'Remove', function (x) { return MK.fav(x.k, false); }, true);
         };
         MK.load().then(drawMarks);

@@ -1,14 +1,15 @@
 # Every morning: work out which subscribers are due a "dates" email and tell Klaviyo.
 # Most mornings there is nothing to send and the job ends in a few seconds.
 # It is started every hour because GitHub runs scheduled jobs late, sometimes by hours. Only a run that lands
-# between 6:30 and 10:30 in the morning, Philadelphia time, does anything; the rest stop at the first step.
+# between 7:50 and 11:50 in the morning, Philadelphia time, does anything; the rest stop at the first step. The
+# first one is due at 7:55, so emails go out at about 8.
 # Nothing sends twice: Klaviyo keeps only the first copy of each email.
 # It needs two repository secrets, KLAVIYO_API_KEY and ALERTS_TOKEN, and does nothing without them.
 name: Send date emails
 
 on:
   schedule:
-    - cron: '7 * * * *'
+    - cron: '55 * * * *'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -35,10 +36,13 @@ jobs:
         run: |
           now=$(TZ=America/New_York date +%H%M)
           echo "It is $now in Philadelphia."
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || { [ "$((10#$now))" -ge 630 ] && [ "$((10#$now))" -lt 1030 ]; }; then echo "go=yes" >> "$GITHUB_OUTPUT"; else echo "Outside 6:30 to 10:30, so there is nothing to do."; fi
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || { [ "$((10#$now))" -ge 750 ] && [ "$((10#$now))" -lt 1150 ]; }; then echo "go=yes" >> "$GITHUB_OUTPUT"; else echo "Outside 7:50 to 11:50, so there is nothing to do."; fi
 
+      # The whole history, not just the latest commit: the build reads it to see when each date was posted.
       - uses: actions/checkout@v4
         if: steps.clock.outputs.go == 'yes'
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         if: steps.clock.outputs.go == 'yes'

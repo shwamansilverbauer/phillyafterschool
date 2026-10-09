@@ -610,25 +610,37 @@ The pieces:
 - **The feed.** The build writes `data/alerts.json`: every upcoming `register.dates` entry and every district day off, each
   with `sendOn`, the day it is announced. So adding a date to a program's `register.dates` is all it takes to get it
   emailed.
-- **When each email goes.** A sign-up date is news, and spots go fast, so it does not wait for the weekend. Give the
-  entry a `posted` day, the day it went into the data:
-  `{ "date": "2026-11-10", "label": "Winter sign-ups open at 9am", "posted": "2026-10-20" }`. Followers are emailed
-  the morning after `posted` (kind `register`), whatever day of the week that is, and again the day before the date
-  (kind `soon`, id ending `-eve`, "Tomorrow: ..."). Someone who starts following in between gets the date in their
-  welcome email and then the reminder; one email never carries both. An entry with no `posted` keeps the older
-  timing, the last send day (`alerts.sendDay`, 0 for Sunday) at least `alerts.lead.register` days ahead, and the
-  build prints a note naming the programs whose dates lack it. Don't set `posted` to today on a date that has been
-  in the data for a while: everyone following would get it as news tomorrow. A day off is not news, so it stays in
-  the weekly round-up: the last send day that still leaves `alerts.lead.dayoff` days (10). The email can only be as
-  fast as the data: a date reaches followers the morning after it is merged, so a date a program posts between
-  monthly checks waits for the next check, or for the program's manager to send it in.
+- **When each email goes.** A sign-up date is news, and spots go fast, so it does not wait for the weekend. Each
+  date makes up to three entries in the feed: the news (kind `register`), sent the morning after the date was
+  posted here; a reminder the day before (kind `soon`, id ending `-eve`, "Tomorrow: ..."); and one on the morning
+  itself (kind `today`, id ending `-day`, "Today: ..."). A reminder is left out when the news would land on that
+  same day, one email never carries two entries for the same date, and a "tomorrow" reminder that missed its
+  morning is not sent late. Someone who starts following in between gets the date in their welcome email and
+  then the reminders.
+- **"Posted" is read from the repository's history.** The build looks at every commit on the main line that
+  touched `data/programs.json` or `data/camps.json` and notes the day each date (and each note in `updates`)
+  first appeared (`firstSeen` in `build.mjs`), in Philadelphia time. So a date from the monthly check is announced
+  the morning after its pull request is merged, however long the pull request sat, and nobody writes the day
+  down. An entry can still say `"posted": "YYYY-MM-DD"` to override it. Changing a date's day makes it a new date,
+  announced again; changing only its label does not. This needs the whole history, so `alerts.yml` checks out
+  with `fetch-depth: 0`. A shallow copy (the publishing job) can't tell, and falls back to the older timing, the
+  last send day (`alerts.sendDay`, 0 for Sunday) at least `alerts.lead.register` days ahead; that only affects
+  the `sendOn` shown in the published `data/alerts.json`, which nothing reads. `PAS_NO_HISTORY=1` forces the
+  fallback.
+- **Days off** are not news, so they stay in the weekly round-up: the last send day that still leaves
+  `alerts.lead.dayoff` days (10).
+- **How fast.** The email can only be as fast as the data: a date reaches followers the morning after it is
+  merged, so a date a program posts between monthly checks waits for the next check, or for the program's manager
+  to send it in.
 - **Other entries.** The feed also has an entry for each program's own day-off camp (sent
   only to that program's followers, and skipped for anyone whose school email already lists the camp) and for each
   item in a program's optional `updates` list: `"updates": [{ "date": "2026-11-04", "text": "Fridays are full for the winter session." }]`.
-  An update goes out the morning after its date, to the program's followers only, and is dropped two days after
-  that. So an update merged more than three days after its date is never sent: date it the day you merge.
+  An update goes out the morning after it reaches the main line (read from the history, as above), to the
+  program's followers only, and is dropped two days after that. Its `date` is a label: it doesn't decide when
+  the note is sent.
 - **The daily job.** `.github/workflows/alerts.yml` is started every hour, because GitHub runs scheduled jobs late,
-  sometimes by hours. Only a run that lands between 6:30 and 10:30 in the morning, Philadelphia time, does anything:
+  sometimes by hours. Only a run that lands between 7:50 and 11:50 in the morning, Philadelphia time, does anything
+  (the first is due at 7:55, so emails go out at about 8, later when GitHub is running behind):
   it builds the site and runs `scripts/send-alerts.mjs`. A run started by hand sends at any hour.
   It reads the list from Klaviyo and records one "School dates" event for each person who is due an email. Someone who
   just joined gets one "welcome" email the next morning with every date already announced; after that they get each
@@ -862,6 +874,30 @@ card on a program's or camp's page, and as a wide box on a school page, the home
 - **Counts.** `follow`, `fav` and `hood_saved` in the tally; tiles on `/edit/stats/`. The analytics event for a
   follow is still `pas_alert_signup`; a favorite is `pas_favorite` (action, listing, place).
 
+**Stopping one listing from an email.** Every date email ends with "Stop emails about X" for each listing in it and
+each school that brought it, and "See everything you follow".
+
+- The link is `/alerts/stop/#c=<stop code>&k=<key>` (`stopPage()`; the script is in `site.js`). The code and key
+  are after the `#`, so they never reach a server log, and the page takes them out of the address at once. It
+  asks before doing anything (mail scanners open links), then `POST stop` turns that one off, with Undo and a
+  two-tap "Stop every date email instead". No sign-in, and the page never says whose account it is.
+- **The stop code** is a random word per account (`users.stop_code`). The browser puts it on the Klaviyo profile
+  as `stop_code` when it tells Klaviyo about a follow; `send-alerts.mjs` reads it there and builds the links
+  (`stops` and `manage` on the event; the template in `email/` loops over them). An address with no account has
+  no code, so its emails keep the old wording.
+- **The stopped list.** The server keeps a table, `stops`, of hashes: `sha256(code|key)` when a follow is turned
+  off anywhere, `sha256(code|mute|key)` when a listing is stopped from an email, and `sha256(code|*)` when
+  everything is stopped or the account is deleted. `GET stopped` publishes the hashes, which mean nothing without
+  the code. Before working out who is due what, the send job fetches that list and drops what it finds
+  (`withoutStopped()`), so a stop holds even if Klaviyo was never told, which it can't be from a browser that
+  isn't signed in. If the list can't be fetched the job fails without sending, and the next hourly run tries
+  again. The owner's own browser still tells Klaviyo (`unappend`) the next time they visit signed in.
+- **Muted.** Stopping from an email mutes the listing: nothing about it is sent to that person, even when it
+  serves a school they follow. Unfollowing on the site only drops the direct follow. The account page lists muted
+  listings under "Stopped from an email" with "Allow emails again" (`POST unmute`); following the listing again
+  also clears it.
+- Tally keys `stop_one` and `stop_all` count the stops.
+
 The box says when the emails come and no longer links to the privacy page; that link is on the account pages and in
 the footer.
 
@@ -872,7 +908,9 @@ no account.
 
 A long page gets a strip of links that stays under the menu bar. Put `${jumpNav()}` where the strip should sit and
 give each part an `id` and a `data-jump-to="Short label"`; `window.pasJump()` in `site.js` fills the strip, leaving
-out parts that are hidden or empty, and pages that fill themselves in later call it again. It is on the account page
+out parts that are hidden or empty, and pages that fill themselves in later call it again. When the strip is wider
+than the screen it scrolls sideways, with an arrow and a fade at whichever end has more (the same cue as the
+filter rows). It is on the account page
 (built in `groups.js`, where `part(box, id, label)` marks each panel, and a link such as `/account/#favorites` lands
 on its part once the page has drawn), My kids' calendar, the days-off page, the summer schedule and the privacy
 page. With fewer than two parts showing, the strip stays hidden.
