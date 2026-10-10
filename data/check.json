@@ -1,10 +1,10 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 103,
+    "pages": 108,
     "pagesNeedingABrowser": 2,
     "pagesNeedingAPerson": 2,
-    "links": 88,
+    "links": 89,
     "pickupLinks": 52,
     "pickupOnAStoredList": 45,
     "pickupFromAThirdPartyList": 4,
@@ -865,6 +865,12 @@
       "school": "nebinger",
       "relation": "nearby",
       "checked": "2026-10-07"
+    },
+    {
+      "program": "philadelphia-dance-academy",
+      "school": "mccall",
+      "relation": "nearby",
+      "checked": "2026-10-09"
     }
   ],
   "pages": [
@@ -1323,6 +1329,46 @@
       "how": "fetch",
       "programs": [
         "school-of-philadelphia-ballet"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://philadelphiadanceacademy.com/calendar/",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-dance-academy"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://philadelphiadanceacademy.com/class-schedule-old-city/",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-dance-academy"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://philadelphiadanceacademy.com/frequently-asked-questions/",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-dance-academy"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://philadelphiadanceacademy.com/registration/",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-dance-academy"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://philadelphiadanceacademy.com/tuition/",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-dance-academy"
       ],
       "lists": []
     },

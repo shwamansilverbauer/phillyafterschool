@@ -5187,5 +5187,84 @@
       ],
       "checked": "2026-10-07"
     }
+  },
+  {
+    "id": "philadelphia-dance-academy",
+    "name": "The Philadelphia Dance Academy",
+    "what": "Ballet-centred dance classes for ages 2 through the teens in Old City",
+    "types": [
+      "movement"
+    ],
+    "offers": [
+      "Dance Together",
+      "Creative Movement",
+      "Pre-Ballet",
+      "Ballet",
+      "Contemporary Dance",
+      "Theater Dance"
+    ],
+    "keywords": [
+      "dance",
+      "ballet",
+      "pre-ballet",
+      "creative movement",
+      "contemporary",
+      "theater dance",
+      "Nutcracker",
+      "Old City",
+      "PDA"
+    ],
+    "address": "219 Cuthbert St, 3rd floor",
+    "neighborhoods": [
+      "Old City"
+    ],
+    "grades": "PK-8",
+    "gradeNote": "Classes go by age: from 2 with a caregiver, Pre-Ballet at 4 to 6, Ballet 1 from 6, and on through the teens",
+    "hours": "The school’s public pages don’t give class days and times. They’re in its registration portal, so look there or ask the school.",
+    "cost": "$475 for each of two installments (due August 15 and January 15) for one class a week of 45 minutes to an hour; more for more hours. $30 registration fee a family each year.",
+    "rate": {
+      "per": "term",
+      "flat": 475,
+      "extra": "One of the two 2026–27 installments for one class a week of 45 minutes to an hour."
+    },
+    "price": "paid",
+    "phone": "215-922-2422",
+    "email": "",
+    "website": "https://philadelphiadanceacademy.com/class-schedule-old-city/",
+    "register": {
+      "how": "online",
+      "url": "https://philadelphiadanceacademy.com/registration/",
+      "label": "Register",
+      "note": "New families fill in a registration form, which enrolls the child in the classes they pick. Dancers with experience are asked to contact the school for a placement first.",
+      "nextTerm": "The 2026–27 school year started September 14. New students can join during the year when a class has room, with tuition prorated, until February 15 for most classes and March 1 for Creative Movement and Dance Together. Enrollment for a school year opens May 15."
+    },
+    "note": "We couldn’t read the class times, so we can’t say which classes fall right after school. The school’s pages don’t mention pickup from any school. It also has a studio in Ardmore, which isn’t listed here.",
+    "sources": [
+      {
+        "label": "The Philadelphia Dance Academy Old City classes",
+        "url": "https://philadelphiadanceacademy.com/class-schedule-old-city/"
+      },
+      {
+        "label": "The Philadelphia Dance Academy tuition",
+        "url": "https://philadelphiadanceacademy.com/tuition/"
+      },
+      {
+        "label": "The Philadelphia Dance Academy questions and answers",
+        "url": "https://philadelphiadanceacademy.com/frequently-asked-questions/"
+      },
+      {
+        "label": "The Philadelphia Dance Academy calendar",
+        "url": "https://philadelphiadanceacademy.com/calendar/"
+      }
+    ],
+    "lastVerified": "2026-10-09",
+    "schools": {
+      "mccall": {
+        "relation": "nearby",
+        "distance": "about a 15-minute walk north-east of McCall",
+        "note": "The school’s pages don’t mention pickup from any school.",
+        "checked": "2026-10-09"
+      }
+    }
   }
 ]

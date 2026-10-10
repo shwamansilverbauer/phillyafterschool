@@ -510,12 +510,13 @@
     var raw = (location.hash || '').replace(/^#/, '') || (location.search || '').replace(/^\?/, ''), got = {};
     raw.split('&').forEach(function (p) { var i = p.indexOf('='); if (i > 0) { try { got[p.slice(0, i)] = decodeURIComponent(p.slice(i + 1)); } catch (e) { /* not ours */ } } });
     try { history.replaceState(null, '', location.pathname); } catch (e) { /* the address stays as it was */ }
-    var c = /^[a-f0-9]{32}$/.test(got.c || '') ? got.c : '', k = /^(p|c|s|w):[a-z0-9-]{1,80}$/.test(got.k || '') ? got.k : '';
+    var c = /^[a-f0-9]{32}$/.test(got.c || '') ? got.c : '', k = /^(p|c|s|w):[a-z0-9-]{1,80}$/.test(got.k || '') || got.k === 'm:listing' ? got.k : '';
     var account = (stopEl.getAttribute('data-root') || '') + 'account/' + (stopEl.getAttribute('data-index') || '') + '#following';
     var btn = function (cls, text, go) { var b = el('button', cls, text); b.type = 'button'; b.addEventListener('click', function () { go(b); }); return b; };
     var paint = function (parts) { box.textContent = ''; parts.forEach(function (x) { if (x) box.appendChild(x); }); };
     var signIn = function () { var a = el('a', 'btn', 'Sign in to choose what you follow'); a.href = account; var w = el('div', 'actions'); w.appendChild(a); return w; };
     var still = function (left) {
+      if (k === 'm:listing') return null;
       if (!left.length) return el('p', 'hint', 'You aren’t following anything else, so no more date emails will come.');
       return el('p', 'hint', 'You still follow ' + (left.length > 4 ? left.slice(0, 3).map(function (x) { return x.n; }).join(', ') + ' and ' + (left.length - 3) + ' more' : left.map(function (x) { return x.n; }).join(', ')) + '.');
     };
@@ -524,7 +525,7 @@
     var done = function (d, name, was) {
       var acts = el('div', 'actions');
       acts.appendChild(btn('btn', 'Undo', function (b) { b.disabled = true; MK.api('stop', { c: c, k: k, 'do': 'undo', follow: was }).then(function (r) { if (!r.ok) return failed(r); paint([el('h2', null, 'Undone. Emails about ' + name + ' will keep coming.'), still(r.left.filter(function (x) { return x.k !== k; }))]); }); }));
-      paint([el('h2', null, k.charAt(0) === 'w' ? 'Done. “' + name + '” is off.' : 'Done. No more emails about ' + name + '.'), el('p', null, k.charAt(0) === 'w' ? 'The Sunday email is off. You can turn it back on in your profile.' : k.charAt(0) === 's' ? 'You won’t get this school’s dates or its days off.' : 'That includes its dates that would have reached you through a school you follow.'), still(d.left), acts]);
+      paint([el('h2', null, k.charAt(0) === 'w' ? 'Done. “' + name + '” is off.' : 'Done. No more emails about ' + name + '.'), el('p', null, k.charAt(0) === 'w' ? 'The Sunday email is off. You can turn it back on in your profile.' : k.charAt(0) === 's' ? 'You won’t get this school’s dates or its days off.' : k === 'm:listing' ? 'The monthly numbers and the notes about new reviews and followers have stopped. Emails about your claim and about things you send in still come. You can turn these back on on the managers page.' : 'That includes its dates that would have reached you through a school you follow.'), still(d.left), acts]);
       MK.load();   // if this browser is signed in, the email list is told straight away
     };
     if (!c || !k) { paint([el('h2', null, 'This link is missing something'), el('p', null, 'It may have been cut off on its way from the email. You can stop following from your profile instead.'), signIn()]); return; }
@@ -535,7 +536,7 @@
       var acts = el('div', 'actions');
       acts.appendChild(btn('btn primary', 'Stop these emails', function (b) { b.disabled = true; ask('stop', k).then(function (r) { if (!r.ok) return failed(r); done(r, name, d.on); }); }));
       var keep = el('a', 'btn', 'Keep them'); keep.href = stopEl.getAttribute('data-root') || './'; acts.appendChild(keep);
-      var parts = [el('h2', null, k.charAt(0) === 'w' ? 'Stop “' + name + '”?' : 'Stop emails about ' + name + '?'), el('p', null, k.charAt(0) === 'w' ? 'The Sunday email about the week ahead will stop. Anything else you follow stays as it is.' : 'You’ll stop getting its sign-up dates and reminders. Anything else you follow stays as it is.'), acts];
+      var parts = [el('h2', null, k.charAt(0) === 'w' ? 'Stop “' + name + '”?' : 'Stop emails about ' + name + '?'), el('p', null, k.charAt(0) === 'w' ? 'The Sunday email about the week ahead will stop. Anything else you follow stays as it is.' : k === 'm:listing' ? 'These are the monthly numbers and the notes about new reviews and new followers. Your listing and your claim stay as they are.' : 'You’ll stop getting its sign-up dates and reminders. Anything else you follow stays as it is.'), acts];
       if (d.left.length > 1) {
         var armed = false;
         parts.push(btn('clear', 'Stop every date email instead', function (b) {

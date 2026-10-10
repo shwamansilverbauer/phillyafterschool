@@ -1136,7 +1136,7 @@
     var wanted = byKey[cq.l] ? cq.l : (byKey[sget('pas-claim')] ? sget('pas-claim') : '');   // the listing someone has said they want
     if (byKey[cq.l]) sset('pas-claim', cq.l);   // kept through signing in
     var findText = (cq.q || '').replace(/\+/g, ' ').slice(0, 80);
-    var cMe = null, cDomain = '', cClaims = [], cState = 'checking';   // checking | out | name | in
+    var cMe = null, cDomain = '', cClaims = [], cMail = true, cState = 'checking';   // checking | out | name | in
     var said = '', saidBad = false;
     var PERSONAL = /^(gmail|googlemail|yahoo|hotmail|outlook|live|msn|aol|icloud|me|comcast|verizon|proton|protonmail)\.(com|net|me)$/;
     var when = function (t) { try { return new Date(t * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); } catch (e) { return ''; } };
@@ -1178,7 +1178,7 @@
     var reload = function () {
       return call('claims').then(function (d) {
         if (!d.ok) { if (d.http === 401) { cMe = null; cState = 'out'; said = 'Please sign in again.'; saidBad = true; } else { said = d.message; saidBad = true; } return; }
-        cDomain = d.domain; cClaims = d.claims || [];
+        cDomain = d.domain; cClaims = d.claims || []; cMail = d.mail !== false;
         tellRole();
       });
     };
@@ -1610,6 +1610,21 @@
           var mine = el('section', 'panel');
           mine.appendChild(el('h2', null, cClaims.length === 1 ? 'Your listing' : 'Your listings'));
           cClaims.forEach(function (c) { mine.appendChild(claimItem(c)); });
+          if (cClaims.some(function (c) { return c.status === 'ok' && !c.gone; })) {
+            // the emails about their own listing: on unless they say otherwise
+            var mailRow = el('p', 'claim-mail'), mailLab = el('label', 'g-check'), mailBox = document.createElement('input'), mailNote = el('span', 'hint');
+            mailBox.type = 'checkbox'; mailBox.id = 'claim-mail'; mailBox.checked = cMail; mailNote.setAttribute('aria-live', 'polite');
+            mailLab.appendChild(mailBox); mailLab.appendChild(document.createTextNode(' Email me about my listing: its numbers once a month, new reviews, and new followers'));
+            mailBox.addEventListener('change', function () {
+              var want = mailBox.checked; mailBox.disabled = true;
+              call('mgr_mail', { on: want }).then(function (r) {
+                mailBox.disabled = false;
+                if (!r.ok) { mailBox.checked = !want; mailNote.textContent = ' ' + (r.message || 'That didn’t save. Try again.'); return; }
+                cMail = want; mailNote.textContent = want ? ' On.' : ' Off. Emails about your claim and what you send in still come.';
+              });
+            });
+            mailRow.appendChild(mailLab); mailRow.appendChild(mailNote); mine.appendChild(mailRow);
+          }
           claimsBox.appendChild(mine);
         }
       }
