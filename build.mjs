@@ -773,7 +773,7 @@ const schoolRow = (s, depth) => {
   <h3>${esc(s.name)}</h3>
   <span class="hood">${esc(s.neighborhood)}, grades ${esc(gradeSpan(s))}</span>
   <span class="tally">${t.onsite ? `<span class="pill onsite">${t.onsite} at school</span>` : ''}${t.pickup ? `<span class="pill pickup">${t.pickup} pick up</span>` : ''}${t.nearby ? `<span class="pill nearby">${t.nearby} nearby</span>` : ''}</span>
-  <span class="bell"><b>${esc(clock(s))}</b><span>${T(`dismissal`)}</span></span>
+  <span class="bell">${s.dismissal ? `<b>${esc(clock(s))}</b><span>${T(`dismissal`)}</span>` : `<b>Ask</b><span>${T(`dismissal not posted`)}</span>`}</span>
 </a>`;
 };
 // What the filters read on every listed program, whether it is drawn as a card or a row.
@@ -1237,7 +1237,7 @@ function programPage(p) {
   const schoolRows = served.map(s => {
     const l = p.schools[s.id];
     const line = l.relation === 'onsite' ? `Runs at ${s.shortName}, so there’s no travel after the bell.`
-      : l.relation === 'pickup' ? `Picks up from ${s.shortName} at dismissal, which is ${s.dismissal}.`
+      : l.relation === 'pickup' ? (s.dismissal ? `Picks up from ${s.shortName} at dismissal, which is ${s.dismissal}.` : `Picks up from ${s.shortName} at dismissal. The school doesn’t post the time.`)
       : `We couldn’t find a pickup from ${s.shortName}, so your child would need to get there.`;
     const extra = [l.address ? `${s.shortName} children go to ${l.address}.` : '', l.distance ? l.distance.charAt(0).toUpperCase() + l.distance.slice(1) + '.' : ''].filter(Boolean).join(' ');
     const links = [
@@ -1427,7 +1427,7 @@ ${schoolClubs.map(({ s, p, clubs }) => `    <li data-school="${esc(s.id)}"><b><a
 // ---------- pages ----------
 const forSchool = s => programs.filter(p => p.schools[s.id]);
 const tally = s => Object.fromEntries(Object.keys(REL).map(k => [k, forSchool(s).filter(p => p.schools[s.id].relation === k).length]));
-const clock = s => s.dismissal.replace(/\s*[ap]m$/i, '');
+const clock = s => s.dismissal ? s.dismissal.replace(/\s*[ap]m$/i, '') : '';   // a school that doesn't post its dismissal time has none here
 const gradeSpan = s => { const g = expandGrades(s.grades); const nm = x => x === 'PK' ? 'Pre-K' : x === 'K' ? 'K' : x; return `${nm(g[0])} to ${nm(g[g.length - 1])}`; };
 
 // ---------- the school finder: every district and charter school in the city ----------
@@ -1746,10 +1746,10 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
   </div>
 </section>`).join('\n');
   const hero = `    <p class="where">After-school programs and aftercare for ${esc(s.name)}, ${esc(s.address.split(',')[0])}</p>
-    <h1>${T(`It’s {time} at {school}. Now what?`, { time: clock(s), school: s.shortName })}</h1>
+    <h1>${s.dismissal ? T(`It’s {time} at {school}. Now what?`, { time: clock(s), school: s.shortName }) : T(`School’s out at {school}. Now what?`, { school: s.shortName })}</h1>
     <p class="lede">${T(`Every after-school program we could find that runs at the school, picks children up from {school}, or sits within a short walk. Pick a grade to see what your child can join.`, { school: s.shortName })}</p>
     <div class="facts">
-      <span>Dismissal <b>${esc(s.dismissal)}</b>${s.dismissalNote ? ` (${esc(s.dismissalNote)})` : ''}</span>
+      <span>Dismissal <b>${esc(s.dismissal || 'not posted by the school')}</b>${s.dismissalNote ? ` (${esc(s.dismissalNote)})` : ''}</span>
       <span>School office <b><a href="${telHref(s.phone)}">${esc(s.phone)}</a></b></span>
       ${schoolHoods(s).length ? `<span>Neighborhood <b>${hoodLinks(schoolHoods(s), 1)}</b></span>` : ''}
       <span>Reviewed <b>${longDate(s.lastReviewed)}</b></span>
@@ -3047,9 +3047,16 @@ ${GROUPS.premium !== 'off' ? `  <h2>Words and offer lines waiting for you (<?php
   <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>${GROUPS.premium !== 'off' ? `
   <p class="hint">${GROUPS.premium === 'preview' ? 'Premium is being tried out: when you make a listing premium, its manager gets the premium tools, and what they add shows on the listing only to them (after you approve it). Nobody else sees it until premium is switched on for the site.' : 'Premium is on: a premium listing’s photos, own words, offer line and question button show to everyone, after you approve what the manager sends.'}</p>` : ''}
   <div class="stat-scroll"><table class="stat-table wrap"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th>${GROUPS.premium !== 'off' ? '<th scope="col">Premium</th>' : ''}<th scope="col"></th></tr></thead><tbody>
-  <?php foreach ($claims as $c) { ?><tr><th scope="row">${e('$name($c["listing"])')}</th><td>${e('$c["first"] . " " . $c["last"]')}<br><span class="hint">${e('$c["email"]')}</span></td><td>${e('$day($c["created"])')}</td>${GROUPS.premium !== 'off' ? `<td><?php if (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since ${e('$day($premium[$c["listing"]])')}</span>${form('$c["id"]', act('premium_off', 'Turn off'))}<?php } else { ?>${form('$c["id"]', act('premium_on', 'Make it premium'))}<?php } ?></td>` : ''}<td>${form('$c["id"]', act('claim_remove', 'Take the claim away'))}</td></tr><?php } ?>
+  <?php foreach ($claims as $c) { ?><tr><th scope="row">${e('$name($c["listing"])')}</th><td>${e('$c["first"] . " " . $c["last"]')}<br><span class="hint">${e('$c["email"]')}<?php if (isset($c["domain"]) && $c["domain"] === 'by hand') { ?> · given by hand<?php } ?></span></td><td>${e('$day($c["created"])')}</td>${GROUPS.premium !== 'off' ? `<td><?php if (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since ${e('$day($premium[$c["listing"]])')}</span>${form('$c["id"]', act('premium_off', 'Turn off'))}<?php } else { ?>${form('$c["id"]', act('premium_on', 'Make it premium'))}<?php } ?></td>` : ''}<td>${form('$c["id"]', act('claim_remove', 'Take the claim away'))}</td></tr><?php } ?>
   </tbody></table></div>
   <?php } ?>
+  <h2 id="grant">Give a listing to an account by hand</h2>
+  <p class="hint">For someone you know runs a program whose email address isn’t at the program’s website (a Gmail address, say). They need a free account on the site first, with their name on it. The listing then shows as claimed, and they’re emailed.</p>
+  <form method="post" action="./" class="g-form grant-form"><input type="hidden" name="csrf" value="${e('$csrf')}">
+    <label for="grant-email">Their account’s email address</label><input id="grant-email" type="email" name="email" required autocomplete="off" maxlength="150">
+    <label for="grant-listing">The listing</label><select id="grant-listing" name="listing" required><option value="">Choose a listing</option><?php foreach ($NAMES_AZ as $k => $n) { ?><option value="${e('$k')}">${e('$n')}</option><?php } ?></select>
+    <div class="actions">${act('claim_grant', 'Give them the listing', 'btn primary')}</div>
+  </form>
   <?php if ($declined) { ?><h2>Declined or taken away (<?php echo count($declined); ?>)</h2>
   <ul><?php foreach ($declined as $c) { ?><li>${e('$name($c["listing"])')}: ${e('$c["first"] . " " . $c["last"]')} &lt;${e('$c["email"]')}&gt; ${form('$c["id"]', act('claim_ok', 'Let it stand after all'))}</li><?php } ?></ul><?php } ?>
 <?php } ?>
@@ -3066,6 +3073,7 @@ $SITE_URL = ${JSON.stringify(cfg.siteUrl)};
 $FROM = ${JSON.stringify(cfg.contactEmail)};
 $NAMES = json_decode('${names}', true);
 $name = function ($key) use ($NAMES) { return isset($NAMES[$key]) ? $NAMES[$key] : $key . ' (no longer on the site)'; };
+$NAMES_AZ = $NAMES; asort($NAMES_AZ, SORT_NATURAL | SORT_FLAG_CASE);
 $day = function ($t) { $d = new DateTime('@' . (int) $t); $d->setTimezone(new DateTimeZone('America/New_York')); return $d->format('M j, Y'); };
 $csrf = hash_hmac('sha256', 'claims-form', edit_key());
 $said = isset($_GET['said']) && is_string($_GET['said']) ? substr($_GET['said'], 0, 200) : '';
@@ -3101,6 +3109,27 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
   $do = isset($_POST['do']) && is_string($_POST['do']) ? $_POST['do'] : '';
   $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
   $msg = 'That didn’t go through. Try again.';
+  // Give a listing to an account by hand: for someone the owner knows runs it, whose address isn't at its website.
+  if ($ok && $do === 'claim_grant') {
+    $email = strtolower(trim(isset($_POST['email']) && is_string($_POST['email']) ? substr($_POST['email'], 0, 150) : ''));
+    $key = isset($_POST['listing']) && is_string($_POST['listing']) ? $_POST['listing'] : '';
+    $st = $db->prepare('SELECT id, email, first, last FROM users WHERE email = ?'); $st->execute(array($email)); $u = $st->fetch();
+    if (!isset($NAMES[$key])) $msg = 'Pick a listing from the list.';
+    elseif (!$u) $msg = 'No account uses that address. Ask them to create a free account on the site first, then do this again.';
+    elseif ($u['first'] === '' || $u['last'] === '') $msg = 'That account has no name on it yet. Ask them to finish signing up, then do this again.';
+    else {
+      $st = $db->prepare('SELECT id, status FROM claims WHERE user_id = ? AND listing = ?'); $st->execute(array($u['id'], $key)); $c = $st->fetch();
+      if ($c && $c['status'] === 'ok') $msg = 'They already hold that listing.';
+      else {
+        if ($c) $db->prepare("UPDATE claims SET status = 'ok', domain = 'by hand', decided = ? WHERE id = ?")->execute(array(time(), $c['id']));
+        else $db->prepare("INSERT INTO claims (user_id, listing, status, domain, created, decided) VALUES (?, ?, 'ok', 'by hand', ?, ?)")->execute(array($u['id'], $key, time(), time()));
+        try { $db->prepare('UPDATE users SET told = 2 WHERE id = ?')->execute(array($u['id'])); } catch (Exception $e) { /* a database from before that column */ }
+        $n = $name($key);
+        tell($u['email'], 'You now manage ' . $n . ' on ' . $SITE, 'Hi ' . $u['first'] . ",\\n\\nWe’ve given your account the listing “" . $n . '” on ' . $SITE . '. It now shows as claimed. Sign in with this email address to send changes to it, say whether there’s space and see its numbers:' . "\\n" . $SITE_URL . '/managers/');
+        $msg = 'Done. ' . $u['first'] . ' ' . $u['last'] . ' now holds ' . $n . ', and they’ve been told.';
+      }
+    }
+  }
   if ($ok && in_array($do, array('claim_ok', 'claim_no', 'claim_remove'), true)) {
     $st = $db->prepare('SELECT c.id, c.listing, c.status, u.email, u.first FROM claims c JOIN users u ON u.id = c.user_id WHERE c.id = ?'); $st->execute(array($id)); $c = $st->fetch();
     if ($c) {

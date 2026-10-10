@@ -357,7 +357,7 @@ Fields worth knowing:
 
 ## Add a school
 
-1. Add a record to `data/schools.json` (copy Nebinger's and change it). The `id` becomes the URL: `"meredith"` gives `/meredith/`. `aliases` lists the other names providers use for the school ("Jackson" for Coppin, "Vare Washington" without the hyphen), so the build can tell whether a provider's pickup list names it. Optional fields: `dismissalNote` (staggered dismissal times), `checkedNoPickup` (providers checked that don't serve the school) and `alsoListed` (programs the school names that haven't been confirmed yet).
+1. Add a record to `data/schools.json` (copy Nebinger's and change it). The `id` becomes the URL: `"meredith"` gives `/meredith/`. Leave `dismissal` out when the school doesn't post one (the page then says so and tells families to ask); `dismissalNote` still shows. `aliases` lists the other names providers use for the school ("Jackson" for Coppin, "Vare Washington" without the hyphen), so the build can tell whether a provider's pickup list names it. Optional fields: `dismissalNote` (staggered dismissal times), `checkedNoPickup` (providers checked that don't serve the school) and `alsoListed` (programs the school names that haven't been confirmed yet).
 2. In `data/programs.json`, add that school's `id` under `schools` for every program that serves it. Most providers are already there; they just need the new tag.
 3. Add records for programs that are new (the school's own clubs and on-site care).
 4. Give the school record `"added": "YYYY-MM-DD"` with the day it goes live. Parents who asked on the school's old
@@ -1158,6 +1158,15 @@ Each new account sends one email to the site's contact address (`tell_owner()` a
 `users.told` records which email went (0 none, 1 parent, 2 manager), so each is sent once. Accounts that existed
 before this was added were marked as told. The emails hold nothing about a child, and the privacy page says they
 are sent.
+
+## Giving a listing by hand
+
+A claim normally needs an email address at the listing's own website. For someone the owner knows runs a program
+whose address isn't there (a studio that uses Gmail), `/edit/claims/` has "Give a listing to an account by hand":
+the account's email address and a listing. The account has to exist already and have a name on it. The claim is
+stored like any other, with `domain` set to `by hand` (the list of claimed listings says so), the person is
+emailed, and from then on everything a manager can do works for it, including being made premium. Nothing on the
+public site can do this: the form is behind the edit sign-in and its own token.
 
 ## Links down a long page
 

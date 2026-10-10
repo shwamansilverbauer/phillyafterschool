@@ -1438,6 +1438,9 @@ html.signed .year-out{display:none}
 .g-check,.follow-check{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;color:var(--muted);line-height:1.45}
 .g-check input,.follow-check input{flex:none;width:20px;height:20px;margin-top:2px}
 .claim-mail{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+.grant-form{display:flex;flex-direction:column;gap:8px;max-width:520px;margin-bottom:28px}
+.grant-form input,.grant-form select{flex:none;width:100%;font:inherit;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);min-height:44px}
+.grant-form label{font-weight:700;margin-top:6px}
 .follow-basics .field.wide,.follow-check{grid-column:1/-1}
 
 /* ---------- jump links: a strip under the menu bar on the long pages ---------- */
