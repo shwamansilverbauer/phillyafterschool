@@ -243,6 +243,17 @@
           }
         ],
         "checked": "2026-10-06"
+      },
+      "kirkbride": {
+        "relation": "onsite",
+        "note": "Kirkbride’s page lists Girls on the Run among its clubs and sports, with no days and no school year. Confirm the team is running this season.",
+        "sources": [
+          {
+            "label": "Kirkbride School",
+            "url": "https://kirkbride.philasd.org/"
+          }
+        ],
+        "checked": "2026-10-10"
       }
     }
   },
@@ -922,6 +933,12 @@
       "mccall": {
         "relation": "pickup",
         "checked": "2026-10-06"
+      },
+      "columbus-charter": {
+        "relation": "nearby",
+        "distance": "about a 10-minute walk east of the school",
+        "note": "Zhang Sah’s pickup list names “CCS”, which may mean this school. We couldn’t confirm that, so ask before you count on pickup.",
+        "checked": "2026-10-10"
       }
     },
     "pickupLists": [
@@ -1111,6 +1128,19 @@
       "mccall": {
         "relation": "pickup",
         "checked": "2026-10-06"
+      },
+      "kirkbride": {
+        "relation": "pickup",
+        "address": "Bok, 1901 S 9th St",
+        "note": "Kirkbride children go to InMovement’s Bok location, not Queen Village. Its page also lists a Pre-K pickup from Kirkbride (“Mini MOVE”) on Monday to Thursday, 3:00 to 5:00 pm, at $40.66 a day.",
+        "checked": "2026-10-10"
+      },
+      "southwark": {
+        "relation": "pickup",
+        "address": "Bok, 1901 S 9th St",
+        "distance": "in the Bok building, across Mifflin St from Southwark",
+        "note": "Southwark children go to InMovement’s Bok location, not Queen Village. Its page also lists a Pre-K pickup from Southwark (“Mini MOVE”) on Monday to Thursday, 3:00 to 5:00 pm, at $40.66 a day.",
+        "checked": "2026-10-10"
       }
     },
     "pickupLists": [
@@ -1125,7 +1155,7 @@
         "where": "Bok, 1901 S 9th St",
         "text": "Fanny Jackson Coppin, Southwark School, Eliza B. Kirkbride",
         "url": "https://phillyinmovement.com/move-after-school/",
-        "read": "2026-10-06",
+        "read": "2026-10-10",
         "how": "fetch"
       }
     ],
@@ -1333,6 +1363,11 @@
       "mccall": {
         "relation": "pickup",
         "checked": "2026-10-06"
+      },
+      "southwark": {
+        "relation": "pickup",
+        "note": "Southwark is on the Queen Village pickup list, and on Southwark’s own list of programs that pick up. The studio is more than a mile north, so ask how children get there.",
+        "checked": "2026-10-10"
       }
     },
     "pickupLists": [
@@ -1586,6 +1621,17 @@
         "relation": "pickup",
         "note": "Butcher’s picks up from McCall on Tuesdays and Thursdays only.",
         "checked": "2026-10-06"
+      },
+      "southwark": {
+        "relation": "pickup",
+        "note": "Pickup from Southwark is on Mondays, Wednesdays and Fridays only.",
+        "checked": "2026-10-10"
+      },
+      "columbus-charter": {
+        "relation": "nearby",
+        "distance": "about a 4-minute walk from the school",
+        "note": "The school isn’t on Butcher’s pickup list.",
+        "checked": "2026-10-10"
       }
     },
     "pickupLists": [
@@ -1711,6 +1757,12 @@
       },
       "mccall": {
         "relation": "pickup",
+        "checked": "2026-10-06"
+      },
+      "columbus-charter": {
+        "relation": "pickup",
+        "distance": "its 904 S 9th St studio is around the corner",
+        "note": "Mister John’s pickup list names “CCCS”.",
         "checked": "2026-10-06"
       }
     },
@@ -2196,6 +2248,20 @@
           }
         ],
         "checked": "2026-10-06"
+      },
+      "columbus-charter": {
+        "relation": "pickup",
+        "address": "1001 Christian St (Bella Vista)",
+        "distance": "a block west of the school on Christian St",
+        "registerUrl": "https://www.hisawyer.com/coco-academy/schedules?location_id%5B%5D=154921&widget_tags=afterschool+winter+spring+2027",
+        "note": "CoCo’s Bella Vista page names Christopher Columbus Charter School on its pickup list: staff collect children at dismissal and walk them to 1001 Christian St.",
+        "sources": [
+          {
+            "label": "CoCo Academy Bella Vista after school",
+            "url": "https://www.cocoacademyphl.com/afterschool-bellavista"
+          }
+        ],
+        "checked": "2026-10-05"
       }
     },
     "rate": {
@@ -2404,6 +2470,18 @@
         "distance": "about a mile southwest of Vare-Washington",
         "note": "Ask how pickup from Vare-Washington works and whether it runs every day.",
         "checked": "2026-10-06"
+      },
+      "kirkbride": {
+        "relation": "pickup",
+        "distance": "about a 10-minute walk south of Kirkbride",
+        "note": "Beehive’s 2026–27 list for Bok names Kirkbride, Monday to Friday.",
+        "checked": "2026-10-06"
+      },
+      "southwark": {
+        "relation": "pickup",
+        "distance": "in the Bok building, across Mifflin St from Southwark",
+        "note": "Beehive’s 2026–27 list for Bok names Southwark, Monday to Friday. Southwark’s own page names Beehive too.",
+        "checked": "2026-10-10"
       }
     },
     "pickupLists": [
@@ -2504,6 +2582,18 @@
         "distance": "about a 15-minute walk south of Nebinger",
         "note": "Nebinger isn’t on Dandelion’s pickup list. Its page invites families at other South Philly schools to get in touch.",
         "checked": "2026-10-07"
+      },
+      "kirkbride": {
+        "relation": "pickup",
+        "distance": "about a 5-minute walk from Kirkbride",
+        "note": "Dandelion lists free pickup from Kirkbride Monday to Friday.",
+        "checked": "2026-10-07"
+      },
+      "southwark": {
+        "relation": "pickup",
+        "distance": "about a 10-minute walk north of Southwark",
+        "note": "Dandelion lists free pickup from Southwark on Mondays, Thursdays and Fridays.",
+        "checked": "2026-10-10"
       }
     },
     "pickupLists": [
@@ -2803,6 +2893,17 @@
           }
         ],
         "checked": "2026-10-05"
+      },
+      "kirkbride": {
+        "relation": "nearby",
+        "distance": "about a 12-minute walk west of Kirkbride",
+        "note": "The City’s listing doesn’t mention pickup from Kirkbride.",
+        "checked": "2026-10-10"
+      },
+      "columbus-charter": {
+        "relation": "nearby",
+        "distance": "about a 12-minute walk south-west of the school",
+        "checked": "2026-10-10"
       }
     }
   },
@@ -2881,6 +2982,11 @@
           }
         ],
         "checked": "2026-10-05"
+      },
+      "columbus-charter": {
+        "relation": "nearby",
+        "distance": "about a 6-minute walk west of the school",
+        "checked": "2026-10-10"
       }
     }
   },
@@ -2957,6 +3063,11 @@
         "relation": "nearby",
         "distance": "about two blocks from McCall",
         "checked": "2026-10-06"
+      },
+      "columbus-charter": {
+        "relation": "nearby",
+        "distance": "about a 12-minute walk north-east of the school",
+        "checked": "2026-10-10"
       }
     }
   },
@@ -3019,6 +3130,11 @@
         "relation": "nearby",
         "distance": "five blocks west of Meredith on Fitzwater St",
         "checked": "2026-10-05"
+      },
+      "columbus-charter": {
+        "relation": "nearby",
+        "distance": "about a 4-minute walk from the school",
+        "checked": "2026-10-10"
       }
     }
   },
@@ -3085,6 +3201,16 @@
       "vare-washington": {
         "relation": "nearby",
         "checked": "2026-10-06"
+      },
+      "kirkbride": {
+        "relation": "nearby",
+        "distance": "about a 13-minute walk north of Kirkbride",
+        "checked": "2026-10-10"
+      },
+      "columbus-charter": {
+        "relation": "nearby",
+        "distance": "about a 3-minute walk south on 9th St",
+        "checked": "2026-10-10"
       }
     }
   },
@@ -3145,6 +3271,17 @@
         "relation": "nearby",
         "distance": "about five blocks from Vare-Washington",
         "checked": "2026-10-06"
+      },
+      "kirkbride": {
+        "relation": "nearby",
+        "distance": "about a 13-minute walk north of Kirkbride",
+        "note": "Kirkbride names Santore Library among its partners.",
+        "checked": "2026-10-10"
+      },
+      "columbus-charter": {
+        "relation": "nearby",
+        "distance": "about a 5-minute walk east of the school",
+        "checked": "2026-10-10"
       }
     }
   },
@@ -3263,6 +3400,12 @@
         "relation": "nearby",
         "distance": "about half a mile from McCall",
         "checked": "2026-10-06"
+      },
+      "kirkbride": {
+        "relation": "nearby",
+        "distance": "about a 16-minute walk north of Kirkbride",
+        "note": "Kirkbride names Fleisher among its partners.",
+        "checked": "2026-10-10"
       }
     },
     "weekend": {
@@ -5266,5 +5409,556 @@
         "checked": "2026-10-09"
       }
     }
+  },
+  {
+    "id": "sunrise-kirkbride",
+    "name": "Sunrise of Philadelphia at Kirkbride",
+    "what": "Free after-school program in the school building: art, STEM, literacy and homework help",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "free",
+      "Sunrise",
+      "STEM",
+      "art",
+      "literacy",
+      "homework help",
+      "childcare"
+    ],
+    "address": "",
+    "grades": "K-8",
+    "gradeNote": "For Kirkbride students",
+    "hours": "After school on every school day. Sunrise doesn’t post Kirkbride’s times; its sample day ends with pickup from 5:00 to 5:30 pm.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Grades K–5 must attend at least 4 days a week, and grades 6–8 at least 3.",
+    "cost": "Free, per Sunrise.",
+    "price": "free",
+    "phone": "215-459-5572",
+    "email": "Info@sunriseofphila.org",
+    "website": "https://www.sunriseofphila.org/school-year",
+    "register": {
+      "how": "online",
+      "url": "https://www.sunriseofphila.org/services-8",
+      "note": "Sunrise’s site says 2026–27 enrollment is open all year. Use its K–8 application and choose Kirkbride."
+    },
+    "note": "Sunrise says start and end times differ from site to site, so ask for Kirkbride’s. It lists no before care here. Programs run through June 8.",
+    "sources": [
+      {
+        "label": "Sunrise of Philadelphia: school year programs",
+        "url": "https://www.sunriseofphila.org/school-year"
+      },
+      {
+        "label": "Sunrise enrollment and program sites",
+        "url": "https://www.sunriseofphila.org/services-8"
+      },
+      {
+        "label": "Kirkbride School",
+        "url": "https://kirkbride.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-10-10",
+    "schools": {
+      "kirkbride": {
+        "relation": "onsite",
+        "checked": "2026-10-10"
+      }
+    }
+  },
+  {
+    "id": "kirkbride-clubs",
+    "name": "Kirkbride clubs and teams",
+    "what": "Clubs and teams the school lists: Vetri Cooking, Chess, Scrabble, Yearbook, Student Stitches, Special Olympics, girls volleyball and string lessons.",
+    "types": [
+      "clubs",
+      "games",
+      "movement",
+      "music"
+    ],
+    "keywords": [
+      "clubs",
+      "sports",
+      "cooking",
+      "Vetri",
+      "chess",
+      "Scrabble",
+      "yearbook",
+      "volleyball",
+      "strings",
+      "violin",
+      "Special Olympics",
+      "peer mediation"
+    ],
+    "address": "",
+    "grades": "K-8",
+    "gradeNote": "Varies by club",
+    "hours": "By club. Days and times not published",
+    "cost": "Not published",
+    "phone": "215-400-7980",
+    "email": "",
+    "website": "https://kirkbride.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office who runs each club. Sports need a physical form signed by a doctor."
+    },
+    "note": "The school’s page names these clubs without days, times or a school year. Treat the list as a starting point and confirm each one with the school.",
+    "sources": [
+      {
+        "label": "Kirkbride School",
+        "url": "https://kirkbride.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-10-10",
+    "schools": {
+      "kirkbride": {
+        "relation": "onsite",
+        "checked": "2026-10-10"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Vetri Cooking Club",
+        "tags": [
+          "cooking"
+        ]
+      },
+      {
+        "name": "Chess Club",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Scrabble Club",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Yearbook Club"
+      },
+      {
+        "name": "Student Stitches"
+      },
+      {
+        "name": "Peer Mediation Training"
+      },
+      {
+        "name": "Special Olympics",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Girls Volleyball",
+        "tags": [
+          "movement",
+          "volleyball"
+        ]
+      },
+      {
+        "name": "String instrument lessons",
+        "days": [
+          "mon"
+        ],
+        "grades": "5-8",
+        "note": "With the school’s music teacher. The page doesn’t say whether lessons are during or after school.",
+        "tags": [
+          "music",
+          "orchestra"
+        ]
+      }
+    ],
+    "offers": [
+      "Vetri Cooking Club",
+      "Chess Club",
+      "Scrabble Club",
+      "Yearbook Club",
+      "Student Stitches",
+      "Peer Mediation Training",
+      "Special Olympics",
+      "Girls Volleyball",
+      "String instrument lessons"
+    ],
+    "offerDays": {
+      "String instrument lessons": [
+        "mon"
+      ]
+    }
+  },
+  {
+    "id": "sunrise-southwark",
+    "name": "Sunrise of Philadelphia at Southwark",
+    "what": "Free before and after school care in the school building, at one of the City’s Extended Day, Extended Year schools",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "before care",
+      "morning care",
+      "free",
+      "Sunrise",
+      "city",
+      "EDEY",
+      "extended day",
+      "STEM",
+      "art",
+      "homework help",
+      "childcare"
+    ],
+    "address": "",
+    "grades": "K-8",
+    "gradeNote": "For Southwark students",
+    "hours": "Before and after school on every school day. This year’s times aren’t posted; the City’s 2024 pages for these schools gave 7:30 am to 6:00 pm.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Grades K–5 must attend at least 4 days a week, and grades 6–8 at least 3.",
+    "daysOff": {
+      "summary": "Sunrise marks Southwark as a site with “mini break” programs, and the City’s program includes free winter-break and spring-break camps for students at the school. Dates are announced during the year.",
+      "url": "https://www.phila.gov/programs/extended-day-extended-year/",
+      "dates": [],
+      "sources": [
+        {
+          "label": "City of Philadelphia: Extended Day, Extended Year",
+          "url": "https://www.phila.gov/programs/extended-day-extended-year/"
+        },
+        {
+          "label": "Sunrise of Philadelphia: school year programs",
+          "url": "https://www.sunriseofphila.org/school-year"
+        }
+      ]
+    },
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-910-2528",
+    "email": "Info@sunriseofphila.org",
+    "website": "https://www.sunriseofphila.org/school-year",
+    "register": {
+      "how": "online",
+      "url": "https://www.sunriseofphila.org/services-8",
+      "note": "Sunrise’s site says 2026–27 enrollment is open. Use its K–8 application and choose Southwark. The City’s page for its own program says registration is closed, so ask the school office if you’re sent there."
+    },
+    "note": "The hours come from the City’s 2024 pages, and nothing newer gives this year’s. Confirm them with Sunrise or the school office. Programs run through June 8.",
+    "sources": [
+      {
+        "label": "Sunrise of Philadelphia: school year programs",
+        "url": "https://www.sunriseofphila.org/school-year"
+      },
+      {
+        "label": "Sunrise enrollment and program sites",
+        "url": "https://www.sunriseofphila.org/services-8"
+      },
+      {
+        "label": "Southwark School",
+        "url": "https://southwark.philasd.org/"
+      },
+      {
+        "label": "City of Philadelphia: Extended Day, Extended Year",
+        "url": "https://www.phila.gov/programs/extended-day-extended-year/"
+      },
+      {
+        "label": "City notice on extended school days (September 2024)",
+        "url": "https://www.phila.gov/2024-09-11-extended-school-days-mean-great-opportunities-for-families/"
+      }
+    ],
+    "lastVerified": "2026-10-10",
+    "schools": {
+      "southwark": {
+        "relation": "onsite",
+        "checked": "2026-10-10"
+      }
+    }
+  },
+  {
+    "id": "southwark-clubs",
+    "name": "Southwark clubs and teams",
+    "what": "Clubs and teams the school lists: Art, Robotics, Drones, Garden and E-Sports clubs, Scrabble, culture clubs, Girl Scouts, and soccer, volleyball, basketball and running.",
+    "types": [
+      "clubs",
+      "art",
+      "stem",
+      "games",
+      "movement",
+      "music",
+      "academics",
+      "nature"
+    ],
+    "keywords": [
+      "clubs",
+      "sports",
+      "art",
+      "robotics",
+      "drones",
+      "garden",
+      "e-sports",
+      "Scrabble",
+      "Girl Scouts",
+      "homework",
+      "Mural Arts",
+      "Settlement Music",
+      "soccer",
+      "volleyball",
+      "basketball",
+      "flag football",
+      "running",
+      "Students Run Philly Style",
+      "Puentes de Salud"
+    ],
+    "address": "",
+    "grades": "K-8",
+    "gradeNote": "Varies by club",
+    "hours": "By club. Days and times not published. Intramural sports are before school.",
+    "cost": "Not published",
+    "phone": "215-400-8280",
+    "email": "",
+    "website": "https://southwark.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office who runs each club. Sports need a physical form signed by a doctor."
+    },
+    "note": "The school’s page names these clubs and teams without days, times or a school year. Treat the list as a starting point and confirm each one with the school.",
+    "sources": [
+      {
+        "label": "Southwark School",
+        "url": "https://southwark.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-10-10",
+    "schools": {
+      "southwark": {
+        "relation": "onsite",
+        "checked": "2026-10-10"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Mural Arts",
+        "tags": [
+          "art",
+          "painting"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "stem",
+          "nature",
+          "gardening"
+        ]
+      },
+      {
+        "name": "Robotics Club",
+        "tags": [
+          "stem",
+          "robotics"
+        ]
+      },
+      {
+        "name": "Drones Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "E-Sports Club",
+        "tags": [
+          "stem",
+          "games"
+        ]
+      },
+      {
+        "name": "Scrabble Club",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Homework Clubs",
+        "tags": [
+          "academics",
+          "homework help"
+        ]
+      },
+      {
+        "name": "Settlement Music Program",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Burmese Culture Club"
+      },
+      {
+        "name": "Indonesian Culture Club"
+      },
+      {
+        "name": "Girl Scouts"
+      },
+      {
+        "name": "Puentes de Salud: Puentes Hacia el Futuro"
+      },
+      {
+        "name": "Students Run Philly Style",
+        "tags": [
+          "movement",
+          "running"
+        ]
+      },
+      {
+        "name": "Philadelphia Youth Basketball",
+        "grades": "5-8",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Volleyball",
+        "note": "Girls and boys.",
+        "tags": [
+          "movement",
+          "volleyball"
+        ]
+      },
+      {
+        "name": "Flag Football",
+        "grades": "6-8",
+        "note": "Girls, in the district’s Middle Grades Conference.",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Elementary intramural sports",
+        "grades": "3-5",
+        "note": "Before school.",
+        "tags": [
+          "movement"
+        ]
+      }
+    ],
+    "offers": [
+      "Art Club",
+      "Mural Arts",
+      "Garden Club",
+      "Robotics Club",
+      "Drones Club",
+      "E-Sports Club",
+      "Scrabble Club",
+      "Homework Clubs",
+      "Settlement Music Program",
+      "Burmese Culture Club",
+      "Indonesian Culture Club",
+      "Girl Scouts",
+      "Puentes de Salud: Puentes Hacia el Futuro",
+      "Students Run Philly Style",
+      "Philadelphia Youth Basketball",
+      "Soccer",
+      "Volleyball",
+      "Flag Football",
+      "Elementary intramural sports"
+    ]
+  },
+  {
+    "id": "east-passyunk-rec",
+    "name": "East Passyunk Community Center",
+    "what": "City rec center that Southwark names for after-school pickup",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "aftercare",
+      "low cost",
+      "gymnastics",
+      "tumbling"
+    ],
+    "address": "1025 Mifflin St",
+    "neighborhoods": [
+      "East Passyunk"
+    ],
+    "grades": "1-6",
+    "gradeNote": "City rec after-school programs are for ages 6–12",
+    "hours": "Not confirmed for this year. City rec programs typically run 3:00–6:00 pm on weekdays.",
+    "cost": "Not published",
+    "phone": "",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "contact",
+      "note": "Stop by the center or look it up in the City’s finder for its phone number. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "We couldn’t read the City’s page for this center, so the hours and price aren’t confirmed. The pickup comes from Southwark’s own list.",
+    "sources": [
+      {
+        "label": "Southwark School",
+        "url": "https://southwark.philasd.org/"
+      },
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-10-10",
+    "schools": {
+      "southwark": {
+        "relation": "pickup",
+        "distance": "about a 3-minute walk west on Mifflin St",
+        "note": "Named on Southwark’s own list of programs that pick up. Confirm with the center that it runs this year.",
+        "sources": [
+          {
+            "label": "Southwark School",
+            "url": "https://southwark.philasd.org/"
+          }
+        ],
+        "checked": "2026-10-10"
+      }
+    },
+    "pickupLists": [
+      {
+        "where": "Southwark School’s list of programs that pick up",
+        "text": "East Passyunk Rec Center, Beehive, Butcher Sew Shop, Dandelion Project, Philly Art Center, Philly InMovement",
+        "url": "https://southwark.philasd.org/",
+        "read": "2026-10-10",
+        "how": "fetch",
+        "by": "school"
+      }
+    ]
   }
 ]

@@ -1,14 +1,14 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 108,
+    "pages": 111,
     "pagesNeedingABrowser": 2,
     "pagesNeedingAPerson": 2,
-    "links": 89,
-    "pickupLinks": 52,
-    "pickupOnAStoredList": 45,
+    "links": 117,
+    "pickupLinks": 63,
+    "pickupOnAStoredList": 55,
     "pickupFromAThirdPartyList": 4,
-    "pickupOnItsOwnSource": 3,
+    "pickupOnItsOwnSource": 4,
     "pickupWithNothingBehindIt": 0,
     "pickupNotOnTheProvidersList": 1,
     "oldestCheck": "2026-10-05"
@@ -21,6 +21,19 @@
       "checked": "2026-10-05",
       "basis": "own-source",
       "notOnProviderList": true
+    },
+    {
+      "program": "coco-academy",
+      "school": "columbus-charter",
+      "relation": "pickup",
+      "checked": "2026-10-05",
+      "basis": "list",
+      "list": {
+        "where": "Bella Vista, 1001 Christian St",
+        "read": "2026-10-05",
+        "how": "person",
+        "by": "provider"
+      }
     },
     {
       "program": "coco-academy",
@@ -197,6 +210,19 @@
     {
       "program": "beehive-at-bok",
       "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "Beehive @ Bok, 2026-2027",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "beehive-at-bok",
+      "school": "kirkbride",
       "relation": "pickup",
       "checked": "2026-10-06",
       "basis": "list",
@@ -392,6 +418,18 @@
       "school": "vare-washington",
       "relation": "nearby",
       "checked": "2026-10-06"
+    },
+    {
+      "program": "mister-johns-music",
+      "school": "columbus-charter",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
     },
     {
       "program": "mister-johns-music",
@@ -601,7 +639,7 @@
       "basis": "list",
       "list": {
         "where": "Bok, 1901 S 9th St",
-        "read": "2026-10-06",
+        "read": "2026-10-10",
         "how": "fetch",
         "by": "provider"
       }
@@ -838,6 +876,18 @@
     },
     {
       "program": "dandelion-after-school",
+      "school": "kirkbride",
+      "relation": "pickup",
+      "checked": "2026-10-07",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-07",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "dandelion-after-school",
       "school": "nebinger",
       "relation": "nearby",
       "checked": "2026-10-07"
@@ -871,21 +921,194 @@
       "school": "mccall",
       "relation": "nearby",
       "checked": "2026-10-09"
+    },
+    {
+      "program": "beehive-at-bok",
+      "school": "southwark",
+      "relation": "pickup",
+      "checked": "2026-10-10",
+      "basis": "list",
+      "list": {
+        "where": "Beehive @ Bok, 2026-2027",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "butchers-sew-shop",
+      "school": "columbus-charter",
+      "relation": "nearby",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "butchers-sew-shop",
+      "school": "southwark",
+      "relation": "pickup",
+      "checked": "2026-10-10",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "columbus-square-rec",
+      "school": "columbus-charter",
+      "relation": "nearby",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "columbus-square-rec",
+      "school": "kirkbride",
+      "relation": "nearby",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "dandelion-after-school",
+      "school": "southwark",
+      "relation": "pickup",
+      "checked": "2026-10-10",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-07",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "east-passyunk-rec",
+      "school": "southwark",
+      "relation": "pickup",
+      "checked": "2026-10-10",
+      "basis": "own-source"
+    },
+    {
+      "program": "fleisher-art-memorial",
+      "school": "kirkbride",
+      "relation": "nearby",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "free-library-leap",
+      "school": "columbus-charter",
+      "relation": "nearby",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "free-library-leap",
+      "school": "kirkbride",
+      "relation": "nearby",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "kirkbride",
+      "relation": "onsite",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "hawthorne-cultural-center",
+      "school": "columbus-charter",
+      "relation": "nearby",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "kirkbride-clubs",
+      "school": "kirkbride",
+      "relation": "onsite",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "mighty-writers-el-futuro",
+      "school": "columbus-charter",
+      "relation": "nearby",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "mighty-writers-el-futuro",
+      "school": "kirkbride",
+      "relation": "nearby",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "palumbo-rec",
+      "school": "columbus-charter",
+      "relation": "nearby",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "philly-art-center-qv",
+      "school": "southwark",
+      "relation": "pickup",
+      "checked": "2026-10-10",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village Pickup Schools",
+        "read": "2026-10-06",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-inmovement",
+      "school": "kirkbride",
+      "relation": "pickup",
+      "checked": "2026-10-10",
+      "basis": "list",
+      "list": {
+        "where": "Bok, 1901 S 9th St",
+        "read": "2026-10-10",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-inmovement",
+      "school": "southwark",
+      "relation": "pickup",
+      "checked": "2026-10-10",
+      "basis": "list",
+      "list": {
+        "where": "Bok, 1901 S 9th St",
+        "read": "2026-10-10",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "southwark-clubs",
+      "school": "southwark",
+      "relation": "onsite",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "starr-garden-rec",
+      "school": "columbus-charter",
+      "relation": "nearby",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "sunrise-kirkbride",
+      "school": "kirkbride",
+      "relation": "onsite",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "sunrise-southwark",
+      "school": "southwark",
+      "relation": "onsite",
+      "checked": "2026-10-10"
+    },
+    {
+      "program": "zhang-sah",
+      "school": "columbus-charter",
+      "relation": "nearby",
+      "checked": "2026-10-10"
     }
   ],
   "pages": [
-    {
-      "url": "https://nebinger.philasd.org/#ourschool",
-      "how": "fetch",
-      "programs": [
-        "imagine-that-philly",
-        "nebinger-clubs",
-        "girls-on-the-run",
-        "nebinger-arts-partners",
-        "zhang-sah"
-      ],
-      "lists": []
-    },
     {
       "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/",
       "how": "fetch",
@@ -894,7 +1117,8 @@
         "columbus-square-rec",
         "hawthorne-cultural-center",
         "starr-garden-rec",
-        "palumbo-rec"
+        "palumbo-rec",
+        "east-passyunk-rec"
       ],
       "lists": []
     },
@@ -907,7 +1131,20 @@
         "columbus-square-rec",
         "hawthorne-cultural-center",
         "starr-garden-rec",
-        "palumbo-rec"
+        "palumbo-rec",
+        "east-passyunk-rec"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://nebinger.philasd.org/#ourschool",
+      "how": "fetch",
+      "programs": [
+        "imagine-that-philly",
+        "nebinger-clubs",
+        "girls-on-the-run",
+        "nebinger-arts-partners",
+        "zhang-sah"
       ],
       "lists": []
     },
@@ -923,11 +1160,69 @@
       "lists": []
     },
     {
+      "url": "https://kirkbride.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "girls-on-the-run",
+        "sunrise-kirkbride",
+        "kirkbride-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://southwark.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "sunrise-southwark",
+        "southwark-clubs",
+        "east-passyunk-rec"
+      ],
+      "lists": [
+        {
+          "program": "east-passyunk-rec",
+          "where": "Southwark School’s list of programs that pick up",
+          "text": "East Passyunk Rec Center, Beehive, Butcher Sew Shop, Dandelion Project, Philly Art Center, Philly InMovement",
+          "read": "2026-10-10",
+          "how": "fetch",
+          "by": "school"
+        }
+      ]
+    },
+    {
+      "url": "https://www.sunriseofphila.org/school-year",
+      "how": "fetch",
+      "programs": [
+        "sunrise-mccall",
+        "sunrise-kirkbride",
+        "sunrise-southwark"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.sunriseofphila.org/services-8",
+      "how": "fetch",
+      "programs": [
+        "sunrise-mccall",
+        "sunrise-kirkbride",
+        "sunrise-southwark"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://mccall.philasd.org/students/",
       "how": "fetch",
       "programs": [
         "girls-on-the-run",
         "mccall-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/programs/extended-day-extended-year/",
+      "how": "fetch",
+      "programs": [
+        "vare-washington-edey",
+        "sunrise-southwark"
       ],
       "lists": []
     },
@@ -1456,7 +1751,7 @@
           "program": "philly-inmovement",
           "where": "Bok, 1901 S 9th St",
           "text": "Fanny Jackson Coppin, Southwark School, Eliza B. Kirkbride",
-          "read": "2026-10-06",
+          "read": "2026-10-10",
           "how": "fetch",
           "by": "provider"
         }
@@ -1742,6 +2037,14 @@
       "lists": []
     },
     {
+      "url": "https://www.phila.gov/2024-09-11-extended-school-days-mean-great-opportunities-for-families/",
+      "how": "fetch",
+      "programs": [
+        "sunrise-southwark"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.phila.gov/2026-03-06-seats-filling-fast-for-spring-break-camp-at-extended-day-extended-year-schools/",
       "how": "fetch",
       "programs": [
@@ -1751,14 +2054,6 @@
     },
     {
       "url": "https://www.phila.gov/media/20240924172821/EDEY-One-pager-Vare.pdf",
-      "how": "fetch",
-      "programs": [
-        "vare-washington-edey"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://www.phila.gov/programs/extended-day-extended-year/",
       "how": "fetch",
       "programs": [
         "vare-washington-edey"
@@ -1815,22 +2110,6 @@
     },
     {
       "url": "https://www.sunriseofphila.org/program-sites",
-      "how": "fetch",
-      "programs": [
-        "sunrise-mccall"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://www.sunriseofphila.org/school-year",
-      "how": "fetch",
-      "programs": [
-        "sunrise-mccall"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://www.sunriseofphila.org/services-8",
       "how": "fetch",
       "programs": [
         "sunrise-mccall"

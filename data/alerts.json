@@ -24,6 +24,18 @@
     {
       "id": "mccall",
       "name": "McCall"
+    },
+    {
+      "id": "kirkbride",
+      "name": "Kirkbride"
+    },
+    {
+      "id": "southwark",
+      "name": "Southwark"
+    },
+    {
+      "id": "columbus-charter",
+      "name": "Columbus Charter"
     }
   ],
   "programs": [
@@ -242,6 +254,26 @@
     {
       "id": "philadelphia-dance-academy",
       "name": "The Philadelphia Dance Academy"
+    },
+    {
+      "id": "sunrise-kirkbride",
+      "name": "Sunrise of Philadelphia at Kirkbride"
+    },
+    {
+      "id": "kirkbride-clubs",
+      "name": "Kirkbride clubs and teams"
+    },
+    {
+      "id": "sunrise-southwark",
+      "name": "Sunrise of Philadelphia at Southwark"
+    },
+    {
+      "id": "southwark-clubs",
+      "name": "Southwark clubs and teams"
+    },
+    {
+      "id": "east-passyunk-rec",
+      "name": "East Passyunk Community Center"
     }
   ],
   "camps": [
@@ -424,6 +456,57 @@
   ],
   "alerts": [
     {
+      "id": "added-columbus-charter",
+      "kind": "added",
+      "date": "2026-10-10",
+      "sendOn": "2026-10-10",
+      "expires": "2026-10-12",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "christopher-columbus-charter-school"
+      ],
+      "when": "New",
+      "title": "Columbus Charter now has a page",
+      "text": "You asked to be told. 10 programs are listed for Columbus Charter so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/columbus-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-kirkbride",
+      "kind": "added",
+      "date": "2026-10-10",
+      "sendOn": "2026-10-10",
+      "expires": "2026-10-12",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "eliza-b-kirkbride-school"
+      ],
+      "when": "New",
+      "title": "Kirkbride now has a page",
+      "text": "You asked to be told. 10 programs are listed for Kirkbride so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/kirkbride/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-southwark",
+      "kind": "added",
+      "date": "2026-10-10",
+      "sendOn": "2026-10-10",
+      "expires": "2026-10-12",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "southwark-school"
+      ],
+      "when": "New",
+      "title": "Southwark now has a page",
+      "text": "You asked to be told. 8 programs are listed for Southwark so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/southwark/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
       "id": "camp-arden-drama-school-2026-10-12",
       "kind": "camp",
       "date": "2026-10-12",
@@ -583,6 +666,30 @@
       "button": "See who’s open"
     },
     {
+      "id": "week-columbus-charter-2026-10-12",
+      "kind": "week",
+      "date": "2026-10-16",
+      "sendOn": "2026-10-11",
+      "expires": "2026-10-14",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "columbus-charter"
+      ],
+      "when": "Week of October 12",
+      "title": "This week at Columbus Charter",
+      "text": "Monday: No school: Indigenous Peoples’ Day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Indigenous Peoples’ Day"
+        }
+      ],
+      "first": "Monday: no school, Indigenous Peoples’ Day",
+      "url": "https://phillyafterschool.org/columbus-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Columbus Charter’s week"
+    },
+    {
       "id": "week-coppin-2026-10-12",
       "kind": "week",
       "date": "2026-10-16",
@@ -605,6 +712,30 @@
       "first": "Monday: no school, Indigenous Peoples’ Day",
       "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Coppin’s week"
+    },
+    {
+      "id": "week-kirkbride-2026-10-12",
+      "kind": "week",
+      "date": "2026-10-16",
+      "sendOn": "2026-10-11",
+      "expires": "2026-10-14",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "kirkbride"
+      ],
+      "when": "Week of October 12",
+      "title": "This week at Kirkbride",
+      "text": "Monday: No school: Indigenous Peoples’ Day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Indigenous Peoples’ Day"
+        }
+      ],
+      "first": "Monday: no school, Indigenous Peoples’ Day",
+      "url": "https://phillyafterschool.org/kirkbride/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Kirkbride’s week"
     },
     {
       "id": "week-mccall-2026-10-12",
@@ -683,6 +814,30 @@
       "button": "See Nebinger’s week"
     },
     {
+      "id": "week-southwark-2026-10-12",
+      "kind": "week",
+      "date": "2026-10-16",
+      "sendOn": "2026-10-11",
+      "expires": "2026-10-14",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "southwark"
+      ],
+      "when": "Week of October 12",
+      "title": "This week at Southwark",
+      "text": "Monday: No school: Indigenous Peoples’ Day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Indigenous Peoples’ Day"
+        }
+      ],
+      "first": "Monday: no school, Indigenous Peoples’ Day",
+      "url": "https://phillyafterschool.org/southwark/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Southwark’s week"
+    },
+    {
       "id": "week-vare-washington-2026-10-12",
       "kind": "week",
       "date": "2026-10-16",
@@ -713,7 +868,8 @@
         "meredith",
         "coppin",
         "vare-washington",
-        "mccall"
+        "mccall",
+        "columbus-charter"
       ],
       "programs": [
         "mister-johns-music"
@@ -734,7 +890,8 @@
         "meredith",
         "coppin",
         "vare-washington",
-        "mccall"
+        "mccall",
+        "columbus-charter"
       ],
       "programs": [
         "mister-johns-music"
@@ -1278,7 +1435,8 @@
         "meredith",
         "coppin",
         "vare-washington",
-        "mccall"
+        "mccall",
+        "kirkbride"
       ],
       "programs": [
         "fleisher-art-memorial"
@@ -1299,7 +1457,8 @@
         "meredith",
         "coppin",
         "vare-washington",
-        "mccall"
+        "mccall",
+        "kirkbride"
       ],
       "programs": [
         "fleisher-art-memorial"
@@ -1320,7 +1479,8 @@
         "meredith",
         "coppin",
         "vare-washington",
-        "mccall"
+        "mccall",
+        "kirkbride"
       ],
       "programs": [
         "fleisher-art-memorial"
@@ -1341,7 +1501,9 @@
         "nebinger",
         "meredith",
         "coppin",
-        "mccall"
+        "mccall",
+        "southwark",
+        "columbus-charter"
       ],
       "programs": [
         "butchers-sew-shop"
@@ -1361,7 +1523,9 @@
         "nebinger",
         "meredith",
         "coppin",
-        "mccall"
+        "mccall",
+        "southwark",
+        "columbus-charter"
       ],
       "programs": [
         "butchers-sew-shop"
@@ -1382,7 +1546,8 @@
         "meredith",
         "coppin",
         "vare-washington",
-        "mccall"
+        "mccall",
+        "southwark"
       ],
       "programs": [
         "philly-art-center-qv"
@@ -1403,7 +1568,8 @@
         "meredith",
         "coppin",
         "vare-washington",
-        "mccall"
+        "mccall",
+        "southwark"
       ],
       "programs": [
         "philly-art-center-qv"

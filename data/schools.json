@@ -168,5 +168,100 @@
       "Christian Street YMCA (1724 Christian St). Serves Stanton, ICS and Marian Anderson.",
       "Imagine That Philly. Runs inside Coppin and Nebinger only."
     ]
+  },
+  {
+    "id": "kirkbride",
+    "name": "Eliza B. Kirkbride School",
+    "shortName": "Kirkbride",
+    "aliases": [
+      "Kirkbride"
+    ],
+    "address": "1501 S 7th St, Philadelphia, PA 19147",
+    "neighborhood": "Passyunk Square / Dickinson Narrows",
+    "grades": "PK-8",
+    "dismissal": "3:39 pm",
+    "dismissalNote": "the school’s page gives the school day as 9:00 to 3:39 and doesn’t say for which year",
+    "phone": "215-400-7980",
+    "website": "https://kirkbride.philasd.org/",
+    "lastReviewed": "2026-10-10",
+    "added": "2026-10-10",
+    "notes": [
+      "Kirkbride has a free after-school program in the building, run by Sunrise of Philadelphia. Sunrise lists no before care at Kirkbride.",
+      "Three outside programs name Kirkbride on their own pickup lists: Beehive at Bok, Philly InMovement’s Bok location and Dandelion After School. For Pre-K, Philly InMovement lists a pickup on Monday to Thursday.",
+      "The school’s page names its clubs and teams but not their days or times, so ask the office."
+    ],
+    "checkedNoPickup": [
+      "Philly Art Center, Queen Village. Its 2026–27 list is McCall, Meredith, Nebinger, Coppin, Southwark, Vare-Washington and Independence Charter.",
+      "Butcher’s Sew Shop Junior. Meredith, Coppin, Nebinger, McCall (Tuesdays and Thursdays) and Southwark (Mondays, Wednesdays and Fridays).",
+      "Mister John’s Music. Its list is CCCS, Coppin, ICS, Marian Anderson, Meredith, McCall, Nebinger, Stanton and Vare-Washington.",
+      "CoCo Academy. Its Bella Vista list is Christopher Columbus Charter, Coppin, ICS, Marian Anderson, Nebinger and Stanton; its Queen Village list is McCall, Meredith, Vare-Washington, St. Mary’s and St. Peter’s.",
+      "Makom Community. Picks up from Greenfield, Childs, ICS, Marian Anderson, Stanton, The Philadelphia School, Wild Seeds and Vare-Washington.",
+      "Settlement Music School. Escorts from Meredith, Nebinger and McCall only."
+    ]
+  },
+  {
+    "id": "southwark",
+    "name": "Southwark School",
+    "shortName": "Southwark",
+    "aliases": [
+      "Southwark"
+    ],
+    "address": "1835 S 9th St, Philadelphia, PA 19148",
+    "neighborhood": "East Passyunk",
+    "grades": "PK-8",
+    "dismissal": "3:39 pm",
+    "dismissalNote": "12:30 pm on early-dismissal days, per the school’s page",
+    "phone": "215-400-8280",
+    "website": "https://southwark.philasd.org/",
+    "lastReviewed": "2026-10-10",
+    "added": "2026-10-10",
+    "notes": [
+      "Southwark has free before and after school care in the building. The school names Sunrise of Philadelphia as its partner, and it is one of the City’s Extended Day, Extended Year schools.",
+      "The school’s own page names six outside programs that pick up: East Passyunk Rec Center, Beehive, Butcher’s Sew Shop, the Dandelion Project, Philly Art Center and Philly InMovement.",
+      "Beehive and Philly InMovement’s Bok location are in the Bok building, across Mifflin St from the school.",
+      "The school lists clubs and teams without days or times. It says intramural sports are before school."
+    ],
+    "checkedNoPickup": [
+      "Mister John’s Music. Its list is CCCS, Coppin, ICS, Marian Anderson, Meredith, McCall, Nebinger, Stanton and Vare-Washington.",
+      "CoCo Academy. Its Bella Vista list is Christopher Columbus Charter, Coppin, ICS, Marian Anderson, Nebinger and Stanton; its Queen Village list is McCall, Meredith, Vare-Washington, St. Mary’s and St. Peter’s.",
+      "Makom Community. Picks up from Greenfield, Childs, ICS, Marian Anderson, Stanton, The Philadelphia School, Wild Seeds and Vare-Washington.",
+      "Zhang Sah (530 Bainbridge St). Its list is Meredith, Jackson (now Coppin), “CCS”, Nebinger, McCall, ICS, St. Mary, St. Peter’s and Vare-Washington.",
+      "Kids on 12th (1112 Chestnut St), K–5. Picks up from ICS, McCall, Greenfield, Russell Byers, Coppin and FACTS only.",
+      "Settlement Music School. Escorts from Meredith, Nebinger and McCall only."
+    ]
+  },
+  {
+    "id": "columbus-charter",
+    "name": "Christopher Columbus Charter School",
+    "shortName": "Columbus Charter",
+    "aliases": [
+      "Christopher Columbus Charter",
+      "Christopher Columbus",
+      "CCCS",
+      "Columbus Charter"
+    ],
+    "address": "916 Christian St, Philadelphia, PA 19147",
+    "neighborhood": "Bella Vista",
+    "grades": "K-4",
+    "dismissalNote": "its handbook says children can’t be collected early after 3:00 pm",
+    "phone": "215-925-7400",
+    "website": "https://columbuscharter.org/",
+    "lastReviewed": "2026-10-10",
+    "added": "2026-10-10",
+    "notes": [
+      "This page is for the school’s North building at 916 Christian St, kindergarten to 4th grade. Grades 5–8 are in the South building at 1242 S 13th St, which isn’t covered yet.",
+      "The school doesn’t post a dismissal time. Ask the office when the day ends before you plan a pickup.",
+      "The school’s 2026–27 handbook says before care is available before 8:00 am at this building, for a charge. It doesn’t mention after care, and the school posts no list of clubs.",
+      "Two outside programs name the school on their own pickup lists: CoCo Academy, a block away, and Mister John’s Music, around the corner on 9th St."
+    ],
+    "checkedNoPickup": [
+      "Philly Art Center, Queen Village. Its 2026–27 list is McCall, Meredith, Nebinger, Coppin, Southwark, Vare-Washington and Independence Charter.",
+      "Philly InMovement. Its Queen Village studio picks up from Meredith, Nebinger, McCall and ICS (Wednesdays); its Bok site from Coppin, Southwark and Kirkbride.",
+      "Settlement Music School. Escorts from Meredith, Nebinger and McCall only.",
+      "Old Pine Community Center. Picks up from McCall, Meredith, Nebinger and St. Peter’s only.",
+      "Makom Community. Picks up from Greenfield, Childs, ICS, Marian Anderson, Stanton, The Philadelphia School, Wild Seeds and Vare-Washington.",
+      "Kids on 12th (1112 Chestnut St), K–5. Picks up from ICS, McCall, Greenfield, Russell Byers, Coppin and FACTS only.",
+      "Christian Street YMCA (1724 Christian St). Serves Stanton, ICS and Marian Anderson."
+    ]
   }
 ]
