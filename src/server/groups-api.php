@@ -117,6 +117,9 @@ function db(): PDO {
     foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''", 'origin' => "TEXT NOT NULL DEFAULT ''", 'hood' => "TEXT NOT NULL DEFAULT ''", 'stop_code' => "TEXT NOT NULL DEFAULT ''", 'phone' => "TEXT NOT NULL DEFAULT ''", 'phone_ok' => 'INTEGER NOT NULL DEFAULT 0', 'phone_terms' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
       if (!in_array($col, $cols, true)) $db->exec('ALTER TABLE users ADD COLUMN ' . $col . ' ' . $type);
     }
+    // Whether the owner has had the "new account" email for this account: 0 not yet, 1 as a parent, 2 as a program
+    // manager. Accounts that were here before the email existed are marked as told, so it starts with new ones.
+    if (!in_array('told', $cols, true)) { $db->exec('ALTER TABLE users ADD COLUMN told INTEGER NOT NULL DEFAULT 0'); $db->exec('UPDATE users SET told = 1'); }
     // A group made by "share this week with one person" is marked, so joining it skips the question about whose week to add.
     $gcols = array();
     foreach ($db->query('PRAGMA table_info(grp)') as $c) $gcols[] = $c['name'];
@@ -1034,10 +1037,36 @@ function my_claims(int $uid): array {
   foreach (q("SELECT id, listing, status FROM claims WHERE user_id = ? ORDER BY id", array($uid)) as $c) $out[] = claim_out($c);
   return $out;
 }
-function tell_owner(string $subject, string $text): void {
+function tell_owner(string $subject, string $text, string $where = 'claims'): void {
   global $CFG;
   if (empty($CFG['from'])) return;
-  send_mail($CFG['from'], '[' . $CFG['siteName'] . '] ' . $subject, $text, email_html($subject, '<p style="margin:0;white-space:pre-line">' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</p>', 'Open the review page', $CFG['siteUrl'] . '/edit/claims/', 'You get this because you run ' . $CFG['siteName'] . '.'));
+  send_mail($CFG['from'], '[' . $CFG['siteName'] . '] ' . $subject, $text, email_html($subject, '<p style="margin:0;white-space:pre-line">' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</p>', $where === 'stats' ? 'See the numbers' : 'Open the review page', $CFG['siteUrl'] . ($where === 'stats' ? '/edit/stats/' : '/edit/claims/'), 'You get this because you run ' . $CFG['siteName'] . '.'));
+}
+// ---------- a new account: an email to the owner ----------
+// One email for each new account, to the site's own address. A parent's goes out when the account first has a name
+// (straight away with Google, after the name step with an emailed code). A program manager's goes out with their
+// first claim, so it can name the listing. An account that stops before either is picked up by signup_catchup().
+// The email holds the adult's email address and name, and a listing's name. Nothing about a child is in it.
+function signup_note(int $uid, string $kind, string $listing = '', string $more = '', string $flag = ''): void {
+  $u = row('SELECT email, first, last FROM users WHERE id = ?', array($uid));
+  if (!$u) return;
+  $name = trim($u['first'] . ' ' . $u['last']);
+  $text = 'Email: ' . $u['email'] . "\nName: " . ($name !== '' ? $name : 'not added yet');
+  if ($kind === 'manager') $text .= "\nListing: " . ($listing !== '' ? $listing : 'none claimed yet');
+  q('UPDATE users SET told = ? WHERE id = ?', array($kind === 'manager' ? 2 : 1, $uid));
+  tell_owner(($kind === 'manager' ? 'New Program Manager Signup' : 'New Parent Account Signup') . ($name !== '' ? ': ' . $name : '') . ($flag !== '' ? ' (' . $flag . ')' : ''), $text . ($more !== '' ? "\n\n" . $more : ''), $kind === 'manager' ? 'claims' : 'stats');
+}
+// An account has just been given a name. A parent's email goes now; one made on the managers' page waits for its claim.
+function signup_named(int $uid): void {
+  $u = row('SELECT told, origin FROM users WHERE id = ?', array($uid));
+  if (!$u || (int) $u['told'] !== 0 || $u['origin'] === 'managers') return;
+  signup_note($uid, 'parent');
+}
+// Accounts nobody has been told about an hour after they were made: no name yet, or a manager with no claim yet.
+function signup_catchup(int $age = 3600): int {
+  $n = 0;
+  foreach (q('SELECT id, origin FROM users WHERE told = 0 AND created < ? ORDER BY id LIMIT 20', array(now() - $age)) as $r) { signup_note((int) $r['id'], $r['origin'] === 'managers' ? 'manager' : 'parent'); $n++; }
+  return $n;
 }
 // Signs this browser in as the account with this address, making the account if it is new.
 function sign_in(string $email, string $via, string $next, string $first = '', string $last = ''): void {
@@ -1054,6 +1083,7 @@ function sign_in(string $email, string $via, string $next, string $first = '', s
   if ($user['first'] === '' && $user['last'] === '' && $first !== '' && $last !== '') {   // Google already knows their name
     q('UPDATE users SET first = ?, last = ?, name = ? WHERE id = ?', array($first, $last, $first . ' ' . $last, $user['id']));
     $user['first'] = $first; $user['last'] = $last; $user['name'] = $first . ' ' . $last;
+    signup_named((int) $user['id']);
   }
   $sid = b64(random_bytes(32));
   $exp = now() + SESSION_DAYS * 86400;
@@ -1279,6 +1309,7 @@ switch ($method . ' ' . $action) {
     $last = person_name(str($in, 'last', 60), 40);
     if ($first === '' || $last === '') fail('name', 'Add your first and last name.');
     q('UPDATE users SET first = ?, last = ?, name = ? WHERE id = ?', array($first, $last, $first . ' ' . $last, $u['id']));
+    signup_named((int) $u['id']);
     out(array('ok' => true, 'first' => $first, 'last' => $last));
   }
 
@@ -1297,6 +1328,7 @@ switch ($method . ' ' . $action) {
     if ($school !== '' && $u['school'] === '') bump('school_saved');
     if ($hood !== '' && $u['hood'] === '') bump('hood_saved');
     q('UPDATE users SET first = ?, last = ?, name = ?, school = CASE WHEN ? != \'\' THEN ? ELSE school END, hood = CASE WHEN ? != \'\' THEN ? ELSE hood END WHERE id = ?', array($first, $last, $first . ' ' . $last, $school, $school, $hood, $hood, $u['id']));
+    signup_named((int) $u['id']);
     $fresh = row('SELECT id, email, name, first, last, listed, school, grades, origin, hood, phone, phone_ok FROM users WHERE id = ?', array($u['id']));
     $fresh['id'] = (int) $fresh['id'];
     out(array('ok' => true, 'first' => $first, 'last' => $last, 'user' => me_out($fresh)));
@@ -1557,7 +1589,8 @@ switch ($method . ' ' . $action) {
       meta_set('push_ran', (string) now());
     } elseif (!$test && too_many('pushdry:' . who(), 20, 3600)) out(array('ok' => true, 'ran' => false, 'why' => 'asked too often'));
     else note('pushdry:' . who());
-    out(array('ok' => true, 'ran' => !$dry, 'dry' => $dry) + push_run($today, $dry));
+    $told = $dry ? 0 : signup_catchup($test && isset($in['told_age']) ? (int) $in['told_age'] : 3600);
+    out(array('ok' => true, 'ran' => !$dry, 'dry' => $dry, 'told' => $told) + push_run($today, $dry));
   }
 
   // A parent's question, sent on to the people who run the program. It is not kept: the site passes it along, with
@@ -1722,11 +1755,15 @@ switch ($method . ' ' . $action) {
     if ((int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) >= MAX_CLAIMS) fail('limit', 'One account can claim up to ' . MAX_CLAIMS . ' listings. Write to us if you run more.');
     if ((int) val("SELECT COUNT(*) FROM claims WHERE listing = ? AND status != 'declined'", array($key)) >= MAX_CLAIMANTS) fail('limit', 'This listing already has ' . MAX_CLAIMANTS . ' people on it. Ask a colleague to give up theirs, or write to us.');
     note('claim:' . $u['id']);
+    $firstClaim = (int) val('SELECT told FROM users WHERE id = ?', array($u['id'])) !== 2 && !(int) val('SELECT COUNT(*) FROM claims WHERE user_id = ?', array($u['id']));
     $status = $l[$key]['m'] === 'match' ? 'ok' : 'pending';
     q('INSERT INTO claims (user_id, listing, status, domain, created, decided) VALUES (?, ?, ?, ?, ?, ?)', array($u['id'], $key, $status, $have, now(), $status === 'ok' ? now() : 0));
     bump($status === 'ok' ? 'claim' : 'claim_pending');
     $who = $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>';
-    if ($status === 'ok') tell_owner('Listing claimed: ' . $l[$key]['n'], $who . ' claimed “' . $l[$key]['n'] . '”.' . "\n\nTheir email address is at " . $have . ', the same address as the listing’s website, so the claim stands without you. You can take it away on the review page.');
+    if ($firstClaim) signup_note((int) $u['id'], 'manager', $l[$key]['n'], $status === 'ok'
+      ? 'Their email address is at ' . $have . ', the same address as the listing’s website, so the claim stands without you. You can take it away on the review page.'
+      : 'Their email address is at ' . $have . ', which matches the listing’s website, but that address is shared by many people (a city, school district, university or booking site), so the claim waits for you. Approve or decline it on the review page.', $status === 'ok' ? '' : 'claim needs your yes');
+    elseif ($status === 'ok') tell_owner('Listing claimed: ' . $l[$key]['n'], $who . ' claimed “' . $l[$key]['n'] . '”.' . "\n\nTheir email address is at " . $have . ', the same address as the listing’s website, so the claim stands without you. You can take it away on the review page.');
     else tell_owner('A claim needs your yes: ' . $l[$key]['n'], $who . ' asked to claim “' . $l[$key]['n'] . '”.' . "\n\nTheir email address is at " . $have . ', which matches the listing’s website, but that address is shared by many people (a city, school district, university or booking site), so it waits for you. Approve or decline it on the review page.');
     out(array('ok' => true, 'status' => $status, 'claims' => my_claims($u['id'])));
   }

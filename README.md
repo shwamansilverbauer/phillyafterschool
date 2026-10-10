@@ -1118,6 +1118,24 @@ The strip above the menu (signed-out visitors) carries "Run a program or camp? C
 "Program manager", which goes to `/managers/`: that page is where a manager's account is made, by claiming a
 listing, and where a program that isn't listed yet is sent in.
 
+## An email to you for each new account
+
+Each new account sends one email to the site's contact address (`tell_owner()` and `signup_note()` in
+`src/server/groups-api.php`):
+
+- **New Parent Account Signup**: the email address and name. It goes when the account first has a name: at once
+  with Google, after the name step with an emailed code.
+- **New Program Manager Signup**: the email address, name and the listing's name. It goes with the account's first
+  claim, in place of the plain "Listing claimed" email, and says whether the claim stands or waits for your yes
+  (then the subject ends "(claim needs your yes)"). A parent who later claims a listing gets this one as well.
+- An account that stops before the name step, or a manager who never claims, is picked up by the morning job
+  (`signup_catchup()`, run from `push_run`) once it is an hour old: the email then says "Name: not added yet" or
+  "Listing: none claimed yet".
+
+`users.told` records which email went (0 none, 1 parent, 2 manager), so each is sent once. Accounts that existed
+before this was added were marked as told. The emails hold nothing about a child, and the privacy page says they
+are sent.
+
 ## Links down a long page
 
 A long page gets a strip of links that stays under the menu bar. Put `${jumpNav()}` where the strip should sit and
