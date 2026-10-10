@@ -1753,7 +1753,7 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
   </div>
 </section>`).join('\n');
   const hero = `    <p class="where">After-school programs and aftercare for ${esc(s.name)}, ${esc(s.address.split(',')[0])}</p>
-    <h1>${s.dismissal ? T(`It’s {time} at {school}. Now what?`, { time: clock(s), school: s.shortName }) : T(`School’s out at {school}. Now what?`, { school: s.shortName })}</h1>
+    <h1>${s.dismissal ? T(`It’s {time} at {school}. What now?`, { time: clock(s), school: s.shortName }) : T(`School’s out at {school}. What now?`, { school: s.shortName })}</h1>
     <p class="lede">${T(`Every after-school program we could find that runs at the school, picks children up from {school}, or sits within a short walk. Pick a grade to see what your child can join.`, { school: s.shortName })}</p>
     <div class="facts">
       <span>Dismissal <b>${esc(s.dismissal || 'not posted by the school')}</b>${s.dismissalNote ? ` (${esc(s.dismissalNote)})` : ''}</span>
@@ -2755,7 +2755,7 @@ function daysOffPage() {
 </article>`;
   }).join('\n');
   const hero = `    <p class="where"><a href="${link('all-programs/', D)}">${T(`All programs`)}</a></p>
-    <h1>${T(`School’s closed. Now what?`)}</h1>
+    <h1>${T(`School’s closed. What now?`)}</h1>
     <p class="lede">${T(`Every day district schools are closed this year, who runs a camp on each, and a plan you can build for each child.`)}</p>
     <div class="facts">
       <span>School year <b>${esc(daysOff.schoolYear)}</b></span>
