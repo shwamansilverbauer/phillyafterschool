@@ -683,7 +683,7 @@ if (daysOff) {
   for (const p of campPrograms) { const odd = p.daysOff.dates.filter(x => x >= TODAY && !closed.has(x)); if (odd.length) console.log(`Note: ${p.name} lists a camp on ${odd.join(', ')}, which isn't a district day off in data/days-off.json.`); }
 }
 // The next day off, for the line on the home page and each school's page. The script picks the first one still ahead.
-const nextOff = (depth, list) => !offDays.length ? '' : `<p class="nextoff"><b data-next-off="${esc(JSON.stringify(offDays.slice(0, 12).map(d => ({ u: d.until, w: d.end ? `${shortDate(d.date)} to ${shortDate(d.end)}` : dayDate(d.date), n: d.name, c: campsOn(d, list).length }))))}" hidden></b> <a href="${link(offPath, depth)}">${T(`Days off this year, and who’s open`)}</a></p>`;
+const nextOff = (depth, list) => !offDays.length ? '' : `<p class="nextoff"><b data-next-off="${esc(JSON.stringify(offDays.slice(0, 12).map(d => ({ u: d.until, w: d.end ? `${shortDate(d.date)} to ${shortDate(d.end)}` : dayDate(d.date), n: d.name, c: campsOn(d, list).length, p: link(dayPath(d), depth) }))))}" hidden></b> <a data-next-off-day hidden>${T(`Who’s open that day`)}</a> <a href="${link(offPath, depth)}">${T(`Days off this year, and who’s open`)}</a></p>`;
 const ymd = iso => iso.replace(/-/g, '');
 const nextDay = iso => new Date(Date.parse(iso + 'T12:00:00Z') + 86400000).toISOString().slice(0, 10);
 const shortDate = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
@@ -2637,6 +2637,87 @@ exit;
 }
 
 // ---------- days off: when district schools are closed, and who runs something ----------
+// ---------- a page for each day, or break, that school is closed ----------
+// One page per entry on the district's calendar that is still to come: who has posted a camp for it, who runs camps
+// on days off but hasn't posted this one, and the way to the planner. People look these up by name and date
+// ("Election Day camp"), so each gets its own address. A day nobody has posted a camp for is kept out of the index;
+// once a day has passed its address is sent to the days-off page (.htaccess).
+const dayLabel = d => d.name.replace(/\brecess\b/i, 'break');   // the calendar says "recess"; parents say "break"
+const daySlug = d => `${hoodSlug(dayLabel(d))}-${d.date}`;   // "election-day-2026-11-03", "winter-break-2026-12-23"
+const dayPath = d => `${offPath}${daySlug(d)}/`;
+const fullDay = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const monthDay = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' });
+function dayOffPage(d) {
+  const D = 2;
+  const one = d.dates.length === 1;
+  const open = campsOn(d), rest = campPrograms.filter(p => !open.includes(p));
+  const label = dayLabel(d), year = d.date.slice(0, 4);
+  const when = d.end ? `${monthDay(d.date)} to ${monthDay(d.end)}` : fullDay(d.date);
+  const i = offDays.indexOf(d), prev = offDays[i - 1], next = offDays[i + 1];
+  const short = x => x.end ? `${shortDate(x.date)} – ${shortDate(x.end)}` : dayDate(x.date);
+  const cards = open.map(p => {
+    const mine = p.daysOff.dates.filter(x => d.dates.includes(x));
+    const served = servedBy(p);
+    return `<article class="prog offprog" id="${esc(p.id)}">
+  <div class="top"><h3><a href="${link(programPath(p), D)}">${esc(fullName(p))}</a></h3><p class="tags">${p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p></div>
+  <dl><dt>What it runs</dt><dd>${esc(p.daysOff.summary)}</dd>
+  ${one ? '' : `<dt>Days it has posted</dt><dd>${esc(mine.map(shortDate).join(', '))}${mine.length < d.dates.length ? `, ${mine.length} of the ${d.dates.length} weekdays` : ', every weekday of the break'}.</dd>`}
+  ${programAddress(p) ? `<dt>Where</dt><dd>${esc(programAddress(p))}</dd>` : ''}
+  ${served.length ? `<dt>On school days</dt><dd>${esc(servedSummary(p))}.</dd>` : ''}</dl>
+  <div class="actions"><a class="btn primary" data-track="camp" href="${esc(outUrl(p.daysOff.url, { type: 'camp', program: p }))}" target="_blank" rel="noopener">Camp details</a><a class="btn" href="${link(programPath(p), D)}">Full listing</a></div>
+  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks(p.daysOff.sources, p)}</p>
+</article>`;
+  }).join('\n');
+  const hero = `    <p class="where"><a href="${link(offPath, D)}">${T(`Days off from school`)}</a></p>
+    <h1>${one ? T(`{name}, {when}: camps for the day off`, { name: label, when }) : T(`{name}, {when}: camps for the break`, { name: label, when })}</h1>
+    <p class="lede">${one ? T(`Philadelphia’s district schools are closed on {when}.`, { when }) : T(`Philadelphia’s district schools are closed from {when}.`, { when })} ${open.length ? (open.length === 1 ? T(`One program listed here has posted a camp for it.`) : T(`{n} programs listed here have posted a camp for it.`, { n: open.length })) : T(`No program listed here has posted a camp for it yet.`)}</p>
+    <div class="facts">
+      <span>School year <b>${esc(daysOff.schoolYear)}</b></span>
+      <span>Calendar checked <b>${longDate(daysOff.checked)}</b></span>
+      ${one ? '' : `<span><b>${d.dates.length}</b> weekdays off</span>`}
+      <span><b>${open.length}</b> ${open.length === 1 ? 'camp' : 'camps'} posted</span>
+    </div>`;
+  const body = `<div style="display:contents">
+${d.note ? `<p class="flag">${esc(d.note)}</p>` : ''}
+<section class="section" id="open">
+  <h2>${open.length ? (one ? T(`Open that day`) : T(`Open during the break`)) : T(`Nothing posted yet`)}</h2>
+  ${open.length ? `<p>${T(`A program is listed here only when its own website names this date. Spots fill, so check with the program before you count on one.`)}</p>
+${cards}` : `<p>${T(`None of the programs here that run camps on days off had this date on its website when we checked. Some post their dates a few weeks ahead, so ask the ones below.`)}</p>`}
+  <div class="actions"><a class="btn primary needs-js" href="${link(offPath, D)}#d-${d.dates[0]}">${one ? T(`Plan this day for each child`) : T(`Plan the break for each child`)}</a><a class="btn" href="${link(offPath, D)}">${T(`All days off this year`)}</a></div>
+</section>
+${rest.length ? `<section class="section" id="ask">
+  <h2>${T(`Run camps on days off, with this one not posted`)}</h2>
+  <p>${T(`These programs run camps on some days school is closed. Their sites didn’t list this date when we checked, so ask.`)}</p>
+  <ul class="plain day-rest">
+${rest.map(p => `    <li><a href="${link(programPath(p), D)}">${esc(fullName(p))}</a>${programHoods(p).length ? ` <span class="hint">${esc(programHoods(p).join(', '))}</span>` : ''}</li>`).join('\n')}
+  </ul>
+</section>` : ''}
+<section class="notes">
+  <h2>${T(`Before you book`)}</h2>
+  <ul>
+    <li>${T(`These are the School District of Philadelphia’s dates. Charter and private schools set their own calendars, so check yours.`)}</li>
+    <li>${T(`Hours, prices and ages are on each program’s own page. Confirm with the program before you count on a spot.`)}</li>${ALERTS ? `
+    <li>${T(`Want a heads-up before each day off?`)} <a href="${link(alertsPath, D)}">${T(`Get them by email.`)}</a></li>` : ''}
+  </ul>
+  <p class="day-nav">${prev ? `<a href="${link(dayPath(prev), D)}">← ${esc(short(prev))}: ${esc(dayLabel(prev))}</a>` : ''}${prev && next ? ' ' : ''}${next ? `<a href="${link(dayPath(next), D)}">${esc(short(next))}: ${esc(dayLabel(next))} →</a>` : ''}</p>
+  <p class="src">Calendar: <a href="${esc(daysOff.source.url)}" target="_blank" rel="noopener">${esc(daysOff.source.label)}</a></p>
+</section>
+</div>`;
+  const generic = /professional development|conferences/i.test(d.name);
+  const title = d.end ? `${label} camps in Philadelphia, ${shortDate(d.date)} to ${shortDate(d.end)}` : generic ? `No school ${monthDay(d.date)}, ${year}: day camps in Philadelphia` : `${label} ${year}: day camps in Philadelphia (${shortDate(d.date)})`;
+  const description = open.length
+    ? `${open.length} day ${open.length === 1 ? 'camp' : 'camps'} listed for ${label}, ${when}, ${year}, when Philadelphia district schools are closed: what each runs, where it is and how to sign up.`
+    : `Philadelphia district schools are closed for ${label}, ${when}, ${year}. No listed program has posted a camp for it yet; see which ones run camps on days off.`;
+  const url = `${cfg.siteUrl}/${dayPath(d)}`;
+  return layout({
+    title, description, pathName: dayPath(d), depth: D, current: offPath, hero, body, showStreet: 'dayoff', noindex: !open.length,
+    jsonLd: { '@context': 'https://schema.org', '@graph': [
+      { '@type': 'ItemList', name: `${label}: day camps`, itemListElement: open.map((p, n) => ({ '@type': 'ListItem', position: n + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
+      { '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Days off from school', `${cfg.siteUrl}/${offPath}`], [label, url]].map(([name, item], n) => ({ '@type': 'ListItem', position: n + 1, name, item })) },
+    ] },
+  });
+}
+
 function daysOffPage() {
   const D = 1;
   const noDates = campPrograms.filter(p => !p.daysOff.dates.some(x => x >= TODAY));
@@ -2743,7 +2824,7 @@ ${chartRows}
   <h2>${T(`Days off still to come`)}</h2>
   <p>${T(`These are the School District of Philadelphia’s dates. A program is counted only when its own site lists that date.`)}</p>
   <ul class="plain off-dates">
-${offDays.map(d => { const n = campsOn(d).length; return `    <li data-until="${d.until}"><b>${d.end ? `${shortDate(d.date)} – ${shortDate(d.end)}` : dayDate(d.date)}</b> <span>${esc(d.name)}</span> <span class="pill ${n ? 'onsite' : 'nearby'}">${n ? `${n} ${n === 1 ? 'camp' : 'camps'} posted` : 'None posted yet'}</span>${d.note ? ` <span class="hint">${esc(d.note)}</span>` : ''}</li>`; }).join('\n')}
+${offDays.map(d => { const n = campsOn(d).length; return `    <li data-until="${d.until}"><a href="${link(dayPath(d), D)}"><b>${d.end ? `${shortDate(d.date)} – ${shortDate(d.end)}` : dayDate(d.date)}</b> <span>${esc(d.name)}</span></a> <span class="pill ${n ? 'onsite' : 'nearby'}">${n ? `${n} ${n === 1 ? 'camp' : 'camps'} posted` : 'None posted yet'}</span>${d.note ? ` <span class="hint">${esc(d.note)}</span>` : ''}</li>`; }).join('\n')}
   </ul>
   <p class="src">Calendar: <a href="${esc(daysOff.source.url)}" target="_blank" rel="noopener">${esc(daysOff.source.label)}</a></p>
 </section>
@@ -3188,7 +3269,7 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $n = $name($c['listing']);
         if ($do === 'premium_on') {
           $db->prepare('INSERT OR IGNORE INTO premium (listing, since) VALUES (?, ?)')->execute(array($c['listing'], time()));
-          tell($c['email'], $n . ' now has a premium listing', 'Hi ' . $c['first'] . ",\n\n“" . $n . '” on ' . $SITE . ' now has the premium tools: up to six photos and a logo, a section in your own words, an offer or event line, a button parents can use to send you a question, fuller numbers, and a flyer and badge to share.' . ($PREMIUM === 'preview' ? ' We’re still trying these out, so for now what you add shows on your listing only to you.' : '') . ' You’ll find them under your listing here:' . "\n" . $SITE_URL . '/managers/');
+          tell($c['email'], $n . ' now has a premium listing', 'Hi ' . $c['first'] . ",\n\n“" . $n . '” on ' . $SITE . ' now has the premium tools: up to six photos and a logo, a section in your own words, an offer or event line, a button parents can use to send you a question, fuller numbers, and a flyer to print.' . ($PREMIUM === 'preview' ? ' We’re still trying these out, so for now what you add shows on your listing only to you.' : '') . ' You’ll find them under your listing here:' . "\n" . $SITE_URL . '/managers/');
           $msg = 'It’s premium now, and its manager has been told.';
         } else {
           $db->prepare('DELETE FROM premium WHERE listing = ?')->execute(array($c['listing']));
@@ -4674,6 +4755,7 @@ write('board/index.html', boardPage());
 write(schedulesPath + 'index.html', schedulesPage());
 write(allPath + 'index.html', allProgramsPage());
 if (daysOff) write(offPath + 'index.html', daysOffPage());
+if (daysOff) for (const d of offDays) write(dayPath(d) + 'index.html', dayOffPage(d));
 if (summerCamps.length) write(campsPath + 'index.html', summerCampsPage());
 for (const c of summerCamps) write(campPath(c) + 'index.html', campPage(c));
 if (summerCamps.length) write(summerPath + 'index.html', summerSchedulePage());
@@ -4734,15 +4816,36 @@ if (!PREVIEW) {
   if (loose.length) console.log(`Note: ${loose.length} pickup link(s) rest on no stored list and no source of their own: ${loose.map(r => `${r.program} → ${r.school}`).join(', ')}.`);
   if (off.length) console.log(`Note: ${off.length} pickup link(s) are not on the provider's own list as last read: ${off.map(r => `${r.program} → ${r.school}`).join(', ')}.`);
   write('data/alerts.json', JSON.stringify(alertsFeed(), null, 2));   // read by scripts/send-alerts.mjs once a day
-  const latest = programs.map(p => p.lastVerified).sort().pop();
-  const urls = [['', latest], ['schools/', latest], ...schools.map(s => [s.id + '/', latest]), ['types/', latest], ...liveTypes().map(t => [`types/${t.id}/`, latest]), ['all-programs/', latest], ['programs/', latest], ...programs.map(p => [programPath(p), p.lastVerified]), ['neighborhoods/', latest], ...hoods.map(h => [hoodPath(h), latest]),
-    ...[...(daysOff ? [offPath] : []), ...(summerCamps.length ? [campsPath, summerPath, ...summerCamps.map(campPath)] : []), ...(SCHOOL_PAGES ? uncoveredIndexed().map(uncoveredPath) : []), ...(weekendPrograms.length ? [weekendPath] : []), ...(ALERTS ? [alertsPath] : []), schedulesPath, 'board/', 'suggest/', ...(GROUPS ? ['managers/'] : []), 'ideas/', 'review/', 'about/', 'contact/', 'privacy/', ...(cfg.termsLive === true ? ['terms/'] : []), 'support/'].map(u => [u, latest])];
-  write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`);
+  // The sitemap. Each page's date is the newest date in the data it is built from (a listing's last check, a school's
+  // review, the calendar's check), not the day of the build: a date that moves every night teaches a search engine
+  // to ignore it. Pages whose words live in this file, with no date of their own, carry none.
+  const newest = (...xs) => xs.flat(Infinity).filter(x => /^\d{4}-\d{2}-\d{2}$/.test(x || '')).sort().pop() || '';
+  const progDate = p => newest(p.lastVerified, Object.values(p.schools).map(l => l.checked), p.weekend?.checked, reviewsFor(p.id).map(r => r.date));
+  const listDate = list => newest(list.map(progDate));
+  const schoolDate = s => newest(s.lastReviewed, s.added, listDate(forSchool(s)));
+  const campsDate = newest(summerCamps.map(c => c.checked));
+  const offDate = d => newest(daysOff?.checked, listDate(d ? campsOn(d) : campPrograms));
+  const everything = newest(listDate(programs), schools.map(schoolDate), campsDate, daysOff?.checked, NEWS.map(n => n.date));
+  const nearDate = x => { const n = nearbyFor(x); return newest(listDate([...n.after, ...n.weekend].map(y => y[0])), n.camps.map(y => y[0].checked)); };
+  const urls = [['', everything], ['schools/', newest(schools.map(schoolDate))], ...schools.map(s => [s.id + '/', schoolDate(s)]),
+    ['types/', listDate(citywide)], ...liveTypes().map(t => [`types/${t.id}/`, listDate(citywide.filter(p => p.types.includes(t.id)))]),
+    ['all-programs/', everything], ['programs/', listDate(citywide)], ...programs.map(p => [programPath(p), progDate(p)]),
+    ['neighborhoods/', listDate(programs)], ...hoods.map(h => [hoodPath(h), newest(listDate(h.programs), h.schools.map(schoolDate))]),
+    ...(daysOff ? [[offPath, offDate()], ...offDays.filter(d => campsOn(d).length).map(d => [dayPath(d), offDate(d)])] : []),
+    ...(summerCamps.length ? [[campsPath, campsDate], [summerPath, campsDate], ...summerCamps.map(c => [campPath(c), c.checked])] : []),
+    ...(SCHOOL_PAGES ? uncoveredIndexed().map(x => [uncoveredPath(x), nearDate(x)]) : []),
+    ...(weekendPrograms.length ? [[weekendPath, listDate(weekendPrograms)]] : []),
+    ['privacy/', newest(cfg.privacyUpdated)],
+    ...[...(ALERTS ? [alertsPath] : []), schedulesPath, 'board/', 'suggest/', ...(GROUPS ? ['managers/'] : []), 'ideas/', 'review/', 'about/', 'contact/', ...(cfg.termsLive === true ? ['terms/'] : []), 'support/'].map(u => [u, ''])];
+  write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc>${d ? `<lastmod>${d}</lastmod>` : ''}</url>`).join('\n')}\n</urlset>\n`);
+  // IndexNow: the key file a search engine reads to check that a "these pages changed" note really came from this site.
+  if (/^[a-f0-9]{32}$/.test(cfg.indexNowKey || '')) write(`${cfg.indexNowKey}.txt`, cfg.indexNowKey);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
   const bare = cfg.siteUrl.replace(/^https?:\/\//, '');
   // Other addresses that should land on this one (see "Changing the site's address" in the README).
   const formerHosts = (cfg.formerHosts || []).filter(h => /^[a-z0-9.-]+\.[a-z]{2,}$/.test(h) && h !== bare && h !== 'www.' + bare);
-  write('.htaccess', `ErrorDocument 404 /404.html\nAddType text/calendar .ics\nDirectoryIndex index.html index.php\n\n# One address for the site: www goes to the bare domain.\n<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.${bare.replace(/\./g, '\\.')}$ [NC]\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n${formerHosts.length ? `# The site's other addresses all lead here, page for page (the certificate check on each is left alone).\nRewriteCond %{HTTP_HOST} ^(www\\.)?(${formerHosts.map(h => h.replace(/\./g, '\\.')).join('|')})$ [NC]\nRewriteCond %{REQUEST_URI} !^/\\.well-known/\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n` : ''}${cardQr ? `# The short addresses in the QR codes on the week card and the day-camp card.\nRewriteRule ^w/?$ ${cardQr.goesTo} [NC,R=302,L]\n${cardQr.dayoff ? `RewriteRule ^d/?$ ${cardQr.dayoff.goesTo} [NC,R=302,L]\n` : ''}` : ''}${movedSchools.length ? `# A school that has been added: its old "not covered yet" address goes to its page.\n${movedSchools.map(([from, to]) => `RewriteRule ^schools/${from}/?$ /${to}/ [R=301,L]\n`).join('')}` : ''}</IfModule>\n`);
+  const goneDays = (daysOff?.days || []).filter(d => (d.end || d.date) < TODAY).map(daySlug);
+  write('.htaccess', `ErrorDocument 404 /404.html\nAddType text/calendar .ics\nDirectoryIndex index.html index.php\n\n# One address for the site: www goes to the bare domain.\n<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.${bare.replace(/\./g, '\\.')}$ [NC]\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n${formerHosts.length ? `# The site's other addresses all lead here, page for page (the certificate check on each is left alone).\nRewriteCond %{HTTP_HOST} ^(www\\.)?(${formerHosts.map(h => h.replace(/\./g, '\\.')).join('|')})$ [NC]\nRewriteCond %{REQUEST_URI} !^/\\.well-known/\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n` : ''}${cardQr ? `# The short addresses in the QR codes on the week card and the day-camp card.\nRewriteRule ^w/?$ ${cardQr.goesTo} [NC,R=302,L]\n${cardQr.dayoff ? `RewriteRule ^d/?$ ${cardQr.dayoff.goesTo} [NC,R=302,L]\n` : ''}` : ''}${movedSchools.length ? `# A school that has been added: its old "not covered yet" address goes to its page.\n${movedSchools.map(([from, to]) => `RewriteRule ^schools/${from}/?$ /${to}/ [R=301,L]\n`).join('')}` : ''}${goneDays.length ? `# A day off that has passed: its own page leads to the list of days still to come.\n${goneDays.map(x => `RewriteRule ^${offPath}${x}/?$ /${offPath} [R=301,L]\n`).join('')}` : ''}</IfModule>\n`);
 }
 // Edits in data/copy.json are matched to sentences by a fingerprint of the original wording.
 // If the original was reworded or removed in this file, the edit no longer applies: say so, but still build.

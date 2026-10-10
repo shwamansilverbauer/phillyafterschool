@@ -1,6 +1,13 @@
 [
   {
     "date": "2026-10-10",
+    "title": "A page for every day off",
+    "text": "Each day school is closed now has its own page with the camps that have posted that date, what they run and where they are. Open one from the days-off list, or from the next day off shown on the home page and on each school’s page.",
+    "href": "days-off/",
+    "link": "See the days off"
+  },
+  {
+    "date": "2026-10-10",
     "title": "Three more schools: Kirkbride, Southwark and Columbus Charter",
     "text": "Each has its own page now: what runs in the building, which programs pick up at dismissal, and what’s a short walk away. Columbus Charter is the first charter school here; its page covers the kindergarten to 4th grade building on Christian St.",
     "href": "schools/",

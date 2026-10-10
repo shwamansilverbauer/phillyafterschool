@@ -29,6 +29,10 @@ jobs:
       - name: Build (stops here if the data has a problem)
         run: node build.mjs
 
+      # Kept for the last step: what the live site's sitemap said before this publish.
+      - name: Note what the live sitemap says now
+        run: curl -fsS -m 20 -o before-sitemap.xml "$(node -p "require('./site.config.json').siteUrl")/sitemap.xml" || echo "The live sitemap could not be read. That only means no pages are reported as changed this time."
+
       - name: Publish dist/ to the live branch
         env:
           REMOTE: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
@@ -50,3 +54,7 @@ jobs:
             git commit --quiet -m "Publish site from ${GITHUB_SHA::7}"
             git push --quiet origin live
           fi
+
+      # Bing and the search engines that share its index: here are the pages that changed. Never fails the job.
+      - name: Tell search engines which pages changed
+        run: node scripts/indexnow.mjs before-sitemap.xml dist/sitemap.xml || true

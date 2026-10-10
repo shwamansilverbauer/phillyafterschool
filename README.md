@@ -515,7 +515,7 @@ own key.
 
 Built, and kept out of sight until there is a way to pay for one. A premium listing adds, on top of everything a
 claimed listing already has: up to six photos and a logo, a section in the program's own words, an offer or event
-line, a button parents use to send the program a question, fuller numbers, and a flyer and website badge. It never
+line, a button parents use to send the program a question, fuller numbers, and a flyer. It never
 changes where a listing appears in a list, and it has no say over reviews.
 
 - **The switch.** `"groups": { "premium": ... }` in `site.config.json`: leave it out (or `false`) and nothing premium
@@ -542,11 +542,12 @@ changes where a listing appears in a list, and it has no say over reviews.
 - **Fuller numbers** (`stats_more()`): each month for up to a year, how many accounts follow and have saved the
   listing, and which schools its visitors had saved (`hits_school`: listing, school, month, a number). The school
   goes along with a page view only when the browser has one saved, and is only kept while premium isn't off.
-- **The flyer and the badge.** The flyer is drawn in the manager's browser (`flyer()` in `groups.js`): one
+- **The flyer.** It is drawn in the manager's browser (`flyer()` in `groups.js`): one
   letter-size picture with a QR code to the listing. The code comes from `src/qr.js`, a small encoder written for
   this (byte mode, level M, versions 1 to 10), loaded only when a flyer is asked for. `scripts/qr-check.py` checks it
-  against the Python `qrcode` library, grid for grid, and by reading the codes back; run it after any change. The badge is `src/static/badge.svg` and a
-  line of HTML to paste. Both links carry `utm_source` (`flyer` or `badge`).
+  against the Python `qrcode` library, grid for grid, and by reading the codes back; run it after any change. The
+  flyer's link carries `utm_source=flyer`. (The website badge used to be here; it now comes with every claimed
+  listing, see "Being found by search engines".)
 - **On the listing** (`premiumSlot()` in `build.mjs`, drawn by `site.js`): the offer line near the top, "In their
   own words" with the logo and a line saying the program wrote it, "Photos", and "Ask a question". The page asks the
   accounts service (`GET extras`) only when it needs to: in `"preview"`, only for a signed-in visitor; when on, only
@@ -1231,6 +1232,36 @@ of the menu lead: one block each for the week (`/board/`), days off (`/days-off/
 (`/summer-schedule/`) and My kids' calendar (`/calendar/`, or the sign-up page for someone signed out). The
 counts on it (days off still to come, weeks of summer, camps) are worked out at build time. The small pictures
 are drawn in the build; none shows a real plan.
+
+## Being found by search engines
+
+Four things, all built by `build.mjs` unless it says otherwise.
+
+- **A page for each day off still ahead** (`dayOffPage()`), at `/days-off/<name>-<date>/`, such as
+  `/days-off/election-day-2026-11-03/`. It lists the camps whose own sites name that day, then the programs that
+  run days-off camps but haven't posted this one, and links to the day before and after. The title is what a
+  parent would type ("Election Day 2026: day camps in Philadelphia"). A day with no camp posted yet is built but
+  marked `noindex` and left out of the sitemap, so search engines aren't handed an empty page; it joins the
+  sitemap by itself the first night a camp is posted for it. The days list on `/days-off/` and the next-day-off
+  strip link to these pages. Once a day has passed its page is no longer built, and `.htaccess` sends its old
+  address to `/days-off/` for good.
+- **Dates in the sitemap that mean something.** Each address's `lastmod` is the newest real date behind that page:
+  when a listing was last checked, a link last confirmed, a review published, a school added, a camp checked. A
+  list page takes the newest date among what it lists. Pages that are only words (about, terms and the like)
+  carry no date, and the privacy page carries `privacyUpdated` from `site.config.json`. Nothing is stamped "today"
+  just because the site was rebuilt, since search engines stop trusting dates that always say today.
+- **IndexNow** (`scripts/indexnow.mjs`, run as the last step of the publish job). Before publishing, the job saves
+  the sitemap the live site is serving; after, the script compares it with the new one and sends Bing (and the
+  search engines that share IndexNow) only the addresses that are new or whose date moved. `indexNowKey` in
+  `site.config.json` is not a secret: the build writes it to a file of the same name at the site's root, which is
+  how the search engine checks the note came from this site. If the key is taken out, nothing is sent. The step
+  can't fail a publish. To see what would be sent without sending: `node scripts/indexnow.mjs old.xml
+  dist/sitemap.xml --dry`. Google doesn't take IndexNow; it reads the sitemap.
+- **A badge for every claimed listing** (the managers page, in `groups.js`). Any manager with a confirmed claim
+  gets a small picture (`src/static/badge.svg`) and a line of HTML to paste into their own website, or a plain
+  text link if their site can't take a picture. It links straight to their listing with nothing added to the
+  address, so each one is a clean link to this site from a local program's own site. It is free and has nothing
+  to do with premium.
 
 ## Analytics
 `analytics/gtm-import-ga4-clarity.json` imports into the GTM container (Admin > Import Container, "Merge"). It adds a Google tag,
