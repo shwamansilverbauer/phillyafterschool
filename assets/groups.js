@@ -1267,6 +1267,28 @@
           askActs.appendChild(askLink); askActs.appendChild(askText); askActs.appendChild(askSay);
           askBox.appendChild(askIn); askBox.appendChild(askActs);
           if (askUrl) item.appendChild(askBox);
+          // a badge for their own website: it links to the listing, so families on their site find its dates and reviews here
+          var bPage = '', bSrc = '';
+          try { bPage = new URL(view.href, location.href).href.split('#')[0].split('?')[0]; bSrc = new URL(page('badge.svg'), location.href).href; } catch (e) { bPage = ''; }
+          if (bPage && bSrc) {
+            var bBox = el('div', 'claim-ask claim-badge');
+            bBox.appendChild(el('h4', null, 'Put a badge on your website'));
+            bBox.appendChild(el('p', 'hint', 'It links to your listing here, so families already on your site can find your dates, your reviews and whether you have space. It’s free with every claimed listing.'));
+            var bRow = el('div', 'pm-badge'), bImg = el('img'); bImg.src = bSrc; bImg.alt = 'Find us on Philly After School'; bImg.width = 240; bImg.height = 72; bRow.appendChild(bImg);
+            var snippet = '<a href="' + bPage + '"><img src="' + bSrc + '" alt="' + c.name.replace(/[<>"&]/g, '') + ' on Philly After School" width="240" height="72"></a>';
+            var plain = '<a href="' + bPage + '">' + c.name.replace(/[<>&]/g, '') + ' on Philly After School</a>';
+            var code = el('textarea', 'pm-code'); code.readOnly = true; code.rows = 4; code.value = snippet; code.setAttribute('aria-label', 'Code for the badge'); code.addEventListener('focus', function () { code.select(); });
+            var bAct = el('div', 'actions'), bCopy = btn('btn', 'Copy the badge code'), bText = btn('btn', 'Copy a plain link instead'), bSay = el('span', 'hint'); bSay.setAttribute('aria-live', 'polite');
+            var bPut = function (text, done) {
+              var no = function () { code.value = text; code.focus(); code.select(); bSay.textContent = 'Couldn’t copy here. The code is selected: copy it from the box.'; };
+              if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { bSay.textContent = done; }, no); else no();
+            };
+            bCopy.addEventListener('click', function () { code.value = snippet; bPut(snippet, 'Copied. Paste it into your website where you want the badge.'); });
+            bText.addEventListener('click', function () { code.value = plain; bPut(plain, 'Copied. Paste it into your website: it shows as a line of text that links to your listing.'); });
+            bAct.appendChild(bCopy); bAct.appendChild(bText); bAct.appendChild(bSay);
+            bBox.appendChild(bRow); bBox.appendChild(code); bBox.appendChild(bAct);
+            item.appendChild(bBox);
+          }
         }
         // a change: dates, cost, hours, anything else
         var form = el('form', 'g-form claim-edit');
@@ -1305,7 +1327,7 @@
           });
           item.appendChild(ul);
         }
-        // a premium listing has its own tools: photos, a logo, its own words, an offer line, fuller numbers, a flyer and a badge
+        // a premium listing has its own tools: photos, a logo, its own words, an offer line, fuller numbers, and a flyer
         if (c.premium) { premiumTools(item, c, view.href); return dropBtn(item, c); }
         // the photo: a paid extra, so the form is there only when photos are switched on
         if (claimsBox.getAttribute('data-photos') !== '1') return dropBtn(item, c);
@@ -1484,8 +1506,8 @@
         nums.appendChild(ul);
         nums.appendChild(el('p', 'hint', 'Only visits from a browser that has a school saved are counted here, so this is a share of the whole.'));
       }
-      // --- the kit: a flyer with a code to scan, and a badge for their own website
-      var kit = sub('A flyer and a badge', 'Ways to send your families to your listing.');
+      // --- a flyer with a code to scan (the badge for their website comes with every claimed listing)
+      var kit = sub('A flyer', 'A page to print or post that sends families to your listing.');
       var pageUrl = ''; try { pageUrl = new URL(listingUrl, location.href).href.split('#')[0].split('?')[0]; } catch (e) { pageUrl = ''; }
       var flyAct = el('div', 'actions'), flyBtn = btn('btn', 'Make the flyer'), flySay = el('span', 'hint'); flySay.setAttribute('aria-live', 'polite');
       var flyBox = el('div', 'pm-flyer'); flyBox.hidden = true;
@@ -1509,20 +1531,6 @@
         var sc = document.createElement('script'); sc.src = claimsBox.getAttribute('data-qr') || ''; sc.onload = draw; sc.onerror = function () { flySay.textContent = 'The flyer couldn’t be loaded. Check your connection and try again.'; };
         document.head.appendChild(sc);
       });
-      var badgeSrc = ''; try { badgeSrc = new URL(page('badge.svg'), location.href).href; } catch (e) { badgeSrc = ''; }
-      if (pageUrl && badgeSrc) {
-        var bRow = el('div', 'pm-badge'), bImg = el('img'); bImg.src = badgeSrc; bImg.alt = 'Find us on Philly After School'; bImg.width = 240; bImg.height = 72; bRow.appendChild(bImg);
-        var snippet = '<a href="' + pageUrl + '?utm_source=badge&utm_medium=referral"><img src="' + badgeSrc + '" alt="Find us on Philly After School" width="240" height="72"></a>';
-        var code = el('textarea', 'pm-code'); code.readOnly = true; code.rows = 4; code.value = snippet; code.setAttribute('aria-label', 'Code for the badge'); code.addEventListener('focus', function () { code.select(); });
-        var bAct = el('div', 'actions'), bCopy = btn('btn', 'Copy the code'), bSay = el('span', 'hint'); bSay.setAttribute('aria-live', 'polite');
-        bCopy.addEventListener('click', function () {
-          var no = function () { code.focus(); code.select(); bSay.textContent = 'Couldn’t copy here. The code is selected: copy it from the box.'; };
-          if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(snippet).then(function () { bSay.textContent = 'Copied. Paste it into your website where you want the badge.'; }, no); else no();
-        });
-        bAct.appendChild(bCopy); bAct.appendChild(bSay);
-        kit.appendChild(el('p', 'pm-label', 'A badge for your website'));
-        kit.appendChild(bRow); kit.appendChild(code); kit.appendChild(bAct);
-      }
       item.appendChild(box);
     };
     // The flyer: one letter-size page with the program's name and a code that opens its listing.

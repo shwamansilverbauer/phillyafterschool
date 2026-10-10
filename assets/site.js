@@ -919,6 +919,8 @@
       if (!next) return;
       b.textContent = 'Next day off: ' + next.w + ' (' + next.n + ').' + (next.c ? ' ' + next.c + (next.c === 1 ? ' listed program has' : ' listed programs have') + ' a camp posted.' : '');
       b.hidden = false;
+      var day = b.parentNode.querySelector('[data-next-off-day]');   // that day's own page: who has a camp
+      if (day && next.p) { day.href = next.p; day.hidden = false; }
     });
   })();
 

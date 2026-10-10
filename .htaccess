@@ -23,4 +23,6 @@ RewriteRule ^schools/george-w-nebinger-school/?$ /nebinger/ [R=301,L]
 RewriteRule ^schools/southwark-school/?$ /southwark/ [R=301,L]
 RewriteRule ^schools/vare-washington-school/?$ /vare-washington/ [R=301,L]
 RewriteRule ^schools/william-m-meredith-school/?$ /meredith/ [R=301,L]
+# A day off that has passed: its own page leads to the list of days still to come.
+RewriteRule ^days-off/staff-professional-development-2026-10-09/?$ /days-off/ [R=301,L]
 </IfModule>
