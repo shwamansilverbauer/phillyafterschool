@@ -13,6 +13,7 @@ PAS_JSON
 , true);
 $EDIT_USER = "Silverbauer";
 $EDIT_HASH = '$2y$10$YM3U3P.TEB3.lr00uXCsbeNQW852A2Xdg/Rwbro4BIJULUT7bHiz2';
+$EDIT_ADMINS = json_decode('["contact@phillyafterschool.org","contact@schoolsoutwhatnow.com"]', true);
 header('Cache-Control: no-store, private');
 header('X-Robots-Tag: noindex');
 function edit_key() {
@@ -33,7 +34,32 @@ function edit_key() {
 function edit_token($exp) {
   return $exp . '.' . hash_hmac('sha256', (string) $exp, edit_key());
 }
+// An account on the site whose address is on the admins list (site.config.json) opens these pages too: the same
+// sign-in every account uses (a code by email, or Google), checked here against the accounts database. It gives the
+// address, or '' when the visitor isn't signed in to such an account.
+function edit_admin() {
+  global $EDIT_ADMINS;
+  static $who = null;
+  if ($who !== null) return $who;
+  $who = '';
+  if (!is_array($EDIT_ADMINS) || !$EDIT_ADMINS) return $who;
+  $sid = (isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s'])) ? $_COOKIE['pas_s'] : '';
+  if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return $who;
+  $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
+  if (!is_file($file)) return $who;
+  try {
+    $db = new PDO('sqlite:' . $file);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $db->exec('PRAGMA busy_timeout=3000');
+    $st = $db->prepare('SELECT u.email FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?');
+    $st->execute(array(hash('sha256', $sid), time()));
+    $email = strtolower(trim((string) $st->fetchColumn()));
+    if ($email !== '' && in_array($email, $EDIT_ADMINS, true)) $who = $email;
+  } catch (Exception $e) { $who = ''; }
+  return $who;
+}
 function edit_signed_in() {
+  if (edit_admin() !== '') return true;
   if (!isset($_COOKIE['pas_edit']) || !is_string($_COOKIE['pas_edit'])) return false;
   $parts = explode('.', $_COOKIE['pas_edit'], 2);
   if (count($parts) !== 2 || !ctype_digit($parts[0]) || (int) $parts[0] < time()) return false;

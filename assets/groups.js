@@ -976,6 +976,7 @@
           row('Sharing', say(sb.join(', ').replace(/^o/, 'O')), 'Open', page('account/') + '#sharing');
         }
         if (me.claims) row('Listings', say(me.claims === 1 ? 'One listing claimed' : me.claims + ' listings claimed'), 'Manage', page('managers/'));
+        if (me.admin) row('Site admin', say('Numbers, claims and the site’s wording'), 'Open', page('account/') + '#admin');
         // reviews: the programs on their weeks (here or kept in the account) that they could tell other parents about
         var RVW = window.pasReview, progNames = ainfo.programs || {};
         if (RVW) {
@@ -1080,6 +1081,17 @@
         });
       });
       put(make, 'account');
+      // a site admin's way in to the owner's pages (the pages check the account themselves; this is only the door)
+      if (me.admin) {
+        var adm = part(el('section', 'panel g-admin'), 'admin', 'Site admin');
+        adm.appendChild(el('h2', null, 'Site admin'));
+        adm.appendChild(el('p', null, 'This account runs the site. These pages open while you’re signed in here, with no second password.'));
+        var admA = el('div', 'actions');
+        [['Site numbers', 'edit/stats/'], ['Claims and proposed changes', 'edit/claims/'], ['Edit the site’s wording', 'edit/']].forEach(function (x, i) { var a = el('a', i ? 'btn' : 'btn primary', x[0]); a.href = page(x[1]); admA.appendChild(a); });
+        adm.appendChild(admA);
+        adm.appendChild(el('p', 'hint', 'Anyone who can read this address’s inbox can sign in as you, so keep 2-step verification on for it.'));
+        put(adm, 'account');
+      }
       // the site's one ask
       var help = el('section', 'panel g-support');
       var dir = part(el('section', 'panel'), 'listings', me.claims ? 'Your listings' : 'For programs');
