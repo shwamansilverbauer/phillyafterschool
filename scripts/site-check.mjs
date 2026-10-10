@@ -105,6 +105,12 @@ async function accounts() {
   pass('Accounts', 'the database answers and can be written to');
   if (h.backupAgeDays < 0 || h.backupAgeDays > BACKUP_DAYS) fail('Database copies', h.backup ? `the newest copy is from ${h.backup}` : 'no copy has been made', 'The daily copy in phillyafterschool-data/backups has stopped. Check that folder can be written to and the disk is not full.');
   else pass('Database copies', `newest ${h.backup}, ${h.backupsKept} kept`);
+  // The site's own mail: only looked at when Postmark is switched on in site.config.json.
+  if (cfg.mail && cfg.mail.postmark === true && h.mail) {
+    if (h.mail.via !== 'postmark') fail('Email', 'Postmark is switched on, but its key is not on the server (or is not a key)', 'Emails are still going out through the host, which stops at 100 a day. Put the Server API token in phillyafterschool-postmark.key next to the public folder; see "Sending email" in the README.');
+    else if (h.mail.last && h.mail.last !== 'ok') fail('Email', `Postmark refused the last email (${h.mail.last})`, 'The site fell back to the host’s own mail, which stops at 100 a day. In Postmark, check the account is approved, the sending domain is verified and the token is the current one. e10 is a wrong token, e412 an account still waiting for approval, e400 or e401 a sender that is not verified.');
+    else pass('Email', 'going out through Postmark');
+  }
 }
 
 // ----- the forms answer (nothing is sent) -----

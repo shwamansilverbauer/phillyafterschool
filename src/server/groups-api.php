@@ -327,8 +327,11 @@ function need_user(): array {
 }
 
 // ---------- email ----------
+/*MAILER*/
 function send_mail(string $to, string $subject, string $text, string $html, string $replyTo = ''): bool {
   global $CFG;
+  $pm = pas_postmark($CFG['siteName'], $CFG['from'], $to, $subject, $text, $html, $replyTo);
+  if ($pm >= 0) return $pm === 1;
   $boundary = 'pas' . bin2hex(random_bytes(8));
   $headers = array(
     'From: ' . $CFG['siteName'] . ' <' . $CFG['from'] . '>',
@@ -342,8 +345,10 @@ function send_mail(string $to, string $subject, string $text, string $html, stri
     . "--$boundary\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n" . chunk_split(base64_encode($html))
     . "--$boundary--\r\n";
   $subj = '=?UTF-8?B?' . base64_encode($subject) . '?=';
-  if (@mail($to, $subj, $body, implode("\r\n", $headers), '-f' . $CFG['from'])) return true;
-  return (bool) @mail($to, $subj, $body, implode("\r\n", $headers));   // some hosts refuse a set sender; try without
+  $ok = @mail($to, $subj, $body, implode("\r\n", $headers), '-f' . $CFG['from'])
+    || @mail($to, $subj, $body, implode("\r\n", $headers));   // some hosts refuse a set sender; try without
+  pas_mail_note('host', $ok ? 'ok' : 'failed');
+  return (bool) $ok;
 }
 function email_html(string $heading, string $lines, string $button, string $url, string $foot, string $footHtml = ''): string {
   global $CFG;
@@ -1296,7 +1301,7 @@ switch ($method . ' ' . $action) {
     catch (Exception $e) { $ok = false; }
     $last = last_backup();
     $age = $last === '' ? -1 : (int) round((strtotime(today_ny()) - strtotime($last)) / 86400);
-    out(array('ok' => $ok, 'database' => $ok, 'day' => today_ny(), 'backup' => $last, 'backupAgeDays' => $age, 'backupsKept' => count(glob(backup_dir() . '/groups-*.sqlite') ?: array())), $ok ? 200 : 503);
+    out(array('ok' => $ok, 'database' => $ok, 'day' => today_ny(), 'backup' => $last, 'backupAgeDays' => $age, 'backupsKept' => count(glob(backup_dir() . '/groups-*.sqlite') ?: array()), 'mail' => pas_mail_state()), $ok ? 200 : 503);
   }
 
   // ----- signing in -----

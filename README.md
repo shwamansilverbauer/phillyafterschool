@@ -1234,6 +1234,41 @@ of the menu lead: one block each for the week (`/board/`), days off (`/days-off/
 counts on it (days off still to come, weeks of summer, camps) are worked out at build time. The small pictures
 are drawn in the build; none shows a real plan.
 
+## Sending email
+
+The site's own emails (sign-in codes, invitations, notices to managers and to you, and what the forms send to the
+inbox) go out one of two ways. News and the "a school was added" emails are Klaviyo's and are not part of this.
+
+- **The host's own mail** (PHP `mail()`), which is how it starts. Hostinger stops this at 100 emails in any 24 hours
+  and 10 a minute, on every plan, and the messages are not signed for the domain.
+- **Postmark**, once two things are true: `"mail": { "postmark": true }` is in `site.config.json`, and the key is on
+  the server. Both are needed, so a key alone changes nothing and the privacy page only names Postmark once it is
+  switched on.
+
+To switch it on:
+
+1. In Postmark, make the account and a server, and verify the sending domain (it gives two DNS records to add at
+   Hostinger: a DKIM record and a Return-Path CNAME). The sender is `contactEmail`.
+2. On the host, next to the public folder (the same place as `phillyafterschool-edit.key`), make a file named
+   `phillyafterschool-postmark.key` holding only the server's "Server API token". **Never put the token in this
+   repository, in an issue or in a chat.** The file's name is in `.gitignore`.
+3. Set `"mail": { "postmark": true }`, change `privacyUpdated`, and publish.
+4. Open `groups/api.php?action=health`: `"mail":{"via":"postmark"}` means the key was found. After the first email,
+   `"last":"ok"` means Postmark took it.
+
+How it behaves (`mailerPhp()` in `build.mjs`, used by `groups-api.php` and by each form's handler):
+
+- Each email is offered to Postmark first. If Postmark can't be reached, or refuses for a reason on our side (an
+  account not yet approved, a wrong token, an unverified sender), the email goes by the host's mail instead, so a
+  problem there never locks anyone out. If Postmark says the address itself is switched off (it bounced before, or
+  the person marked our mail as spam), the email is not sent another way.
+- Open and click tracking are off for every message.
+- `phillyafterschool-mail.json`, next to the public folder, holds the day's counts (by Postmark, by the host,
+  failed) and Postmark's last answer. Numbers and a code only: no address, no subject.
+- The hourly check reads the health answer and opens its issue if Postmark is switched on but the key is missing,
+  or if Postmark refused the last email.
+- To go back to the host's mail, delete the key file or set `postmark` to `false`.
+
 ## Site admins
 
 `admins` in `site.config.json` is a list of email addresses. An account on the site with one of those addresses is a
