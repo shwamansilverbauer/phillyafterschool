@@ -1337,6 +1337,15 @@ html.signed .year-out{display:none}
 .plan-points li::before{content:"";position:absolute;left:3px;top:.34em;width:11px;height:6px;border-left:2.5px solid var(--tc);border-bottom:2.5px solid var(--tc);transform:rotate(-45deg)}
 .plan-go{margin-top:auto!important;padding-top:6px}
 @media (max-width:760px){.plans{grid-template-columns:minmax(0,1fr)}.plan-card{padding:16px 16px 18px}}
+/* all programs: the same blocks as the planners page, one for each kind of program */
+.kind-card .kicker{font-size:.95rem}
+.kind-n{font-family:var(--display);font-weight:800;font-size:1.25rem;color:var(--ink)}
+.kind-go{display:flex;flex-wrap:wrap;gap:8px}
+.kind-go .btn{font-size:.98rem}
+#kinds .hint{margin-top:14px}
+.facts a{text-decoration:none}
+.facts a:hover span{text-decoration:underline}
+.more-all{margin-top:16px}
 
 /* ---------- the managers' page: a picture of a claimed listing, numbered to match what claiming gets you ---------- */
 .claim-show{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:34px;align-items:start;margin-top:8px}

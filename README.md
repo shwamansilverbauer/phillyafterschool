@@ -575,6 +575,7 @@ Decisions that later features have to respect:
 ## The menu
 
 The header has four groups that open (Programs, Search by, Build a schedule, Suggest; the first item under
+Programs is `/all-programs/`, the page that sorts every listing by kind, and the first under
 Build a schedule is `/schedules/`, the page that introduces all the planners), then About and the
 "Help the site keep going" button, which goes to the support page. The groups are defined in `layout()` in
 `build.mjs` as a list of labels and links. Each is a `<details>` element, so it opens without scripts; the
@@ -1158,6 +1159,20 @@ and `me` returns it as `role`. Four places use it:
   are on the dates list with `school`, `programs` or `camps`.
 
 It is a word for counting: no name, address or listing goes to analytics with it. The privacy page says so.
+
+## All programs, by kind
+
+`/all-programs/` (`allProgramsPage()` in `build.mjs`) is the first item of the Programs menu and where the footer's
+"Programs" heading leads. It has one block for each kind of listing, in the order of a family's calendar:
+after-school programs (`/programs/`), weekend classes (`/weekends/`), day-camp programs (`/days-off/`) and summer
+camps (`/summer-camps/`). Each block shows a count worked out at build time (the same number its own list shows),
+a few facts (Saturdays and Sundays, days off still to come and the next one, weeks of summer) and buttons to the
+list and its planner. Below the blocks are the after-school types, and schools, neighborhoods and grades.
+
+It is a way in, not a ranking: no listing is named on it, so nothing is put ahead of anything else. A block is
+left out when its kind has nothing listed. Each of the four lists has an "All programs" link above its heading
+that leads back here, and `/programs/` is now called "After-school programs, A to Z" wherever it is linked, so
+the two aren't confused.
 
 ## The planners in one place
 

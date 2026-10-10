@@ -1,6 +1,13 @@
 [
   {
     "date": "2026-10-09",
+    "title": "Every kind of program, on one page",
+    "text": "After school, weekend classes, camps on days off and summer camps each have their own list. A new page puts the four side by side, with how many of each there are, so you can start from the part of the year you’re filling.",
+    "href": "all-programs/",
+    "link": "See all programs"
+  },
+  {
+    "date": "2026-10-09",
     "title": "Notifications on your phone, with no app",
     "text": "Sign-up dates can now come as a notification on your phone or computer, as well as or instead of the emails. Turn it on in your account. On an iPhone, add Philly After School to your Home Screen first; the page shows how.",
     "href": "account/#push",
