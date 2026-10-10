@@ -1437,6 +1437,7 @@ html.signed .year-out{display:none}
 .g-phone input[type="tel"],.follow-basics input[type="tel"]{font:inherit;font-size:1.05rem;min-height:50px;padding:12px 16px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);width:100%;max-width:300px}
 .g-check,.follow-check{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;color:var(--muted);line-height:1.45}
 .g-check input,.follow-check input{flex:none;width:20px;height:20px;margin-top:2px}
+.claim-mail{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line)}
 .follow-basics .field.wide,.follow-check{grid-column:1/-1}
 
 /* ---------- jump links: a strip under the menu bar on the long pages ---------- */

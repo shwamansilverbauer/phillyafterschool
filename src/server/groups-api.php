@@ -119,6 +119,8 @@ function db(): PDO {
     }
     // Whether the owner has had the "new account" email for this account: 0 not yet, 1 as a parent, 2 as a program
     // manager. Accounts that were here before the email existed are marked as told, so it starts with new ones.
+    // Emails about a manager's own listing (the month's numbers, new reviews, new followers) can be turned off.
+    if (!in_array('mgr_mail', $cols, true)) $db->exec('ALTER TABLE users ADD COLUMN mgr_mail INTEGER NOT NULL DEFAULT 1');
     if (!in_array('told', $cols, true)) { $db->exec('ALTER TABLE users ADD COLUMN told INTEGER NOT NULL DEFAULT 0'); $db->exec('UPDATE users SET told = 1'); }
     // A group made by "share this week with one person" is marked, so joining it skips the question about whose week to add.
     $gcols = array();
@@ -343,7 +345,7 @@ function send_mail(string $to, string $subject, string $text, string $html, stri
   if (@mail($to, $subj, $body, implode("\r\n", $headers), '-f' . $CFG['from'])) return true;
   return (bool) @mail($to, $subj, $body, implode("\r\n", $headers));   // some hosts refuse a set sender; try without
 }
-function email_html(string $heading, string $lines, string $button, string $url, string $foot): string {
+function email_html(string $heading, string $lines, string $button, string $url, string $foot, string $footHtml = ''): string {
   global $CFG;
   $e = function ($v) { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); };
   return '<!doctype html><html lang="en"><body style="margin:0;background:#F4F8FD;font-family:Arial,Helvetica,sans-serif;color:#0B2140">'
@@ -353,7 +355,7 @@ function email_html(string $heading, string $lines, string $button, string $url,
     . '<tr><td style="padding:24px"><h1 style="margin:0 0 12px;font-size:22px;line-height:1.25">' . $e($heading) . '</h1>'
     . '<div style="font-size:16px;line-height:1.5">' . $lines . '</div>'
     . ($button !== '' ? '<p style="margin:22px 0"><a href="' . $e($url) . '" style="display:inline-block;background:#0B2140;color:#FFFFFF;font-weight:bold;text-decoration:none;border-radius:999px;padding:13px 26px;font-size:16px">' . $e($button) . '</a></p>' : '')
-    . '<p style="margin:18px 0 0;font-size:13px;line-height:1.5;color:#4D607A">' . $e($foot) . '</p>'
+    . '<p style="margin:18px 0 0;font-size:13px;line-height:1.5;color:#4D607A">' . $e($foot) . $footHtml . '</p>'
     . '</td></tr></table></td></tr></table></body></html>';
 }
 
@@ -1042,6 +1044,126 @@ function tell_owner(string $subject, string $text, string $where = 'claims'): vo
   if (empty($CFG['from'])) return;
   send_mail($CFG['from'], '[' . $CFG['siteName'] . '] ' . $subject, $text, email_html($subject, '<p style="margin:0;white-space:pre-line">' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</p>', $where === 'stats' ? 'See the numbers' : 'Open the review page', $CFG['siteUrl'] . ($where === 'stats' ? '/edit/stats/' : '/edit/claims/'), 'You get this because you run ' . $CFG['siteName'] . '.'));
 }
+// ---------- emails to the people who run a listing ----------
+// Three kinds, each to every account that holds a standing claim and hasn't turned them off (users.mgr_mail):
+//   the listing's numbers, once a month; a note when a review of the listing is published; and, at most once a week,
+//   a note saying how many more families started following it. All three are sent by the morning run (push_run),
+//   never because of something a visitor did, and each carries a link that stops them without signing in.
+// They hold numbers, never who: no parent's name, address or school is in any of them.
+const MGR_FRESH_DAYS = 14;   // a claim this new isn't sent the monthly email yet: there is nothing to report
+function listing_url(string $key): string { global $CFG; return $CFG['siteUrl'] . ($key[0] === 'c' ? '/summer-camps/' : '/programs/') . substr($key, 2) . '/'; }
+function listing_plain(string $key): string { $l = listings(); return isset($l[$key]) ? preg_replace('~ \\(summer camp\\)$~', '', (string) $l[$key]['n']) : ''; }
+// Everyone to write to: account id => its address, first name, and each listing it holds with the day the claim stood.
+function mgr_holders(): array {
+  $out = array(); $l = listings();
+  foreach (q("SELECT c.user_id, c.listing, c.created, c.decided, u.email, u.first FROM claims c JOIN users u ON u.id = c.user_id WHERE c.status = 'ok' AND u.mgr_mail = 1 ORDER BY c.user_id, c.id") as $r) {
+    if (!isset($l[$r['listing']])) continue;
+    $uid = (int) $r['user_id'];
+    if (!isset($out[$uid])) $out[$uid] = array('email' => $r['email'], 'first' => $r['first'], 'keys' => array());
+    $out[$uid]['keys'][$r['listing']] = max((int) $r['created'], (int) $r['decided']);
+  }
+  return $out;
+}
+function mgr_send(int $uid, string $to, string $subject, string $text, string $html, string $button, string $url): bool {
+  global $CFG;
+  $stop = $CFG['siteUrl'] . '/alerts/stop/#c=' . stop_code($uid) . '&k=m:listing';
+  $why = 'You get this because you manage a listing on ' . $CFG['siteName'] . '.';
+  $text .= "\n\n" . $button . ': ' . $url . "\n\n" . $why . ' To stop the emails about your listing: ' . $stop;
+  return send_mail($to, $subject, $text, email_html($subject, $html, $button, $url, $why, ' <a href="' . htmlspecialchars($stop, ENT_QUOTES, 'UTF-8') . '" style="color:#4D607A">Stop the emails about your listing</a>'));
+}
+// The one thing a manager is nudged to do, most useful first.
+function mgr_prompt(string $key): array {
+  global $CFG;
+  $l = listings(); $x = isset($l[$key]) ? $l[$key] : array(); $page = $CFG['siteUrl'] . '/managers/';
+  if (!space_of($key)) {
+    $had = (bool) val('SELECT 1 FROM space WHERE listing = ?', array($key));
+    return array(($had ? 'Your answer about space has run out, so parents no longer see one.' : 'Parents can see on your listing whether you have room.') . ' Say whether there are spots, a waitlist or no room. It takes one tap and stays up for ' . SPACE_DAYS . ' days.', 'Say if there’s space', $page);
+  }
+  if ($key[0] === 'p' && empty($x['u'])) return array('No sign-up date is posted on your listing. Families who follow it are reminded the day before a date and that morning, so send in your next one.', 'Send in a date', $page);
+  if ($key[0] === 'p' && empty($x['r'])) return array('Your listing has no reviews yet. The managers page has a link, and a message you can copy, to send to your families.', 'Ask for a review', $page);
+  return array('Something new this term? Propose a change to your listing and it goes up once it has been checked.', 'Update your listing', $page);
+}
+function mgr_plural(int $n, string $one, string $many): string { return number_format($n) . ' ' . ($n === 1 ? $one : $many); }
+// The month's numbers, in a sentence or two for one listing.
+function mgr_numbers(string $key): string {
+  $st = stats_of($key); $n = $st['now']; $p = $st['prev'];
+  $s = 'Its page was opened ' . mgr_plural($n['view'], 'time', 'times') . ' in the last 30 days' . ($st['full'] ? ' (' . number_format($p['view']) . ' in the 30 before)' : '') . '.';
+  $bits = array();
+  if ($n['signup']) $bits[] = mgr_plural($n['signup'], 'click', 'clicks') . ' to sign up';
+  if ($n['site']) $bits[] = mgr_plural($n['site'], 'click', 'clicks') . ' to your website';
+  if ($n['plan']) $bits[] = 'put on a family’s plan ' . mgr_plural($n['plan'], 'time', 'times');
+  if ($n['email']) $bits[] = mgr_plural($n['email'], 'person', 'people') . ' asked for its emails';
+  if ($n['ask']) $bits[] = mgr_plural($n['ask'], 'question', 'questions') . ' sent to you';
+  return $s . ($bits ? ' Also: ' . implode(', ', $bits) . '.' : '');
+}
+// The morning run. $today is a New York date; $opts lets the tests stand in for the calendar and the review counts.
+function mgr_run(string $today, array $opts = array()): array {
+  $sent = array('month' => 0, 'review' => 0, 'follow' => 0);
+  $e = function ($v) { return htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8'); };
+  $l = listings();
+  $fresh = isset($opts['fresh']) ? (int) $opts['fresh'] : MGR_FRESH_DAYS;
+  $month = substr($today, 0, 7);
+  $week = (new DateTime($today, new DateTimeZone('America/New_York')))->format('o-\\WW');
+  // The first time this ever runs it only notes where things stand, so nobody gets a backlog.
+  $firstRun = meta_get('mgr_month') === '';
+  $counts = array();
+  foreach ($l as $k => $x) if (!empty($x['r'])) $counts[$k] = (int) $x['r'];
+  if (isset($opts['rv']) && is_array($opts['rv'])) foreach ($opts['rv'] as $k => $v) if (isset($l[$k])) $counts[$k] = (int) $v;
+  $seen = json_decode(meta_get('mgr_rv') ?: '{}', true); if (!is_array($seen)) $seen = array();
+  if ($firstRun) { meta_set('mgr_month', $month); meta_set('mgr_week', $week); meta_set('mgr_rv', json_encode((object) $counts)); return $sent; }
+  $people = mgr_holders();
+
+  // 1. A review of their listing was published.
+  $newRv = array();
+  foreach ($counts as $k => $n) if ($n > (isset($seen[$k]) ? (int) $seen[$k] : 0)) $newRv[$k] = $n - (isset($seen[$k]) ? (int) $seen[$k] : 0);
+  if ($counts != $seen) meta_set('mgr_rv', json_encode((object) $counts));
+  foreach ($people as $uid => $p) foreach ($p['keys'] as $k => $since) {
+    if (!isset($newRv[$k]) || $sent['review'] >= 200) continue;
+    $name = listing_plain($k); $many = $newRv[$k] > 1;
+    $line = ($many ? $newRv[$k] . ' new reviews of ' : 'A new review of ') . $name . ($many ? ' were' : ' was') . ' published on ' . $GLOBALS['CFG']['siteName'] . '.';
+    $more = 'Reviews are read before they go up, and the people who run a listing have no say over them. If one gets a fact wrong, reply to this email.';
+    if (mgr_send($uid, $p['email'], ($many ? 'New reviews of ' : 'A new review of ') . $name, $line . "\n\n" . $more, '<p style="margin:0 0 12px">' . $e($line) . '</p><p style="margin:0">' . $e($more) . '</p>', $many ? 'Read the reviews' : 'Read the review', listing_url($k) . '#reviews')) { $sent['review']++; bump('mgr_review'); }
+  }
+
+  // 2. The month's numbers, the first morning of a new month.
+  $monthly = meta_get('mgr_month') !== $month;
+  if ($monthly) {
+    meta_set('mgr_month', $month);
+    foreach ($people as $uid => $p) {
+      if ($sent['month'] >= 300) break;
+      $keys = array(); foreach ($p['keys'] as $k => $since) if ($since <= now() - $fresh * 86400) $keys[] = $k;
+      if (!$keys) continue;
+      $text = ($p['first'] !== '' ? 'Hi ' . $p['first'] . ",\n\n" : '') . 'Here is how ' . (count($keys) === 1 ? 'your listing' : 'your listings') . ' did on ' . $GLOBALS['CFG']['siteName'] . ".\n";
+      $html = ($p['first'] !== '' ? '<p style="margin:0 0 12px">Hi ' . $e($p['first']) . ',</p>' : '') . '<p style="margin:0 0 12px">Here is how ' . (count($keys) === 1 ? 'your listing' : 'your listings') . ' did on ' . $e($GLOBALS['CFG']['siteName']) . '.</p>';
+      foreach ($keys as $k) { $nums = mgr_numbers($k); $text .= "\n" . listing_plain($k) . "\n" . $nums . "\n"; $html .= '<p style="margin:0 0 12px"><b>' . $e(listing_plain($k)) . '</b><br>' . $e($nums) . '</p>'; }
+      $pr = mgr_prompt($keys[0]);
+      $text .= "\nOne thing to do" . (count($keys) > 1 ? ' for ' . listing_plain($keys[0]) : '') . ': ' . $pr[0];
+      $html .= '<p style="margin:16px 0 0;padding:12px 14px;background:#FFF6CC;border-radius:10px"><b>One thing to do' . (count($keys) > 1 ? ' for ' . $e(listing_plain($keys[0])) : '') . '.</b> ' . $e($pr[0]) . '</p>';
+      $subject = 'Your ' . (count($keys) === 1 ? 'listing' : 'listings') . ' this month: ' . listing_plain($keys[0]) . (count($keys) > 1 ? ' and ' . (count($keys) - 1) . ' more' : '');
+      if (mgr_send($uid, $p['email'], $subject, $text, $html, $pr[1], $pr[2])) { $sent['month']++; bump('mgr_month'); }
+    }
+  }
+
+  // 3. More families following, at most once a week, and not on the morning the month's numbers went.
+  if (meta_get('mgr_week') !== $week) {
+    meta_set('mgr_week', $week);
+    if (!$monthly) foreach ($people as $uid => $p) {
+      if ($sent['follow'] >= 300) break;
+      $lines = array(); $first = '';
+      foreach ($p['keys'] as $k => $since) {
+        // families, not the listing's own managers
+        $n = (int) val("SELECT COUNT(*) FROM follows f WHERE f.k = ? AND f.live = 1 AND f.created > ? AND NOT EXISTS (SELECT 1 FROM claims c WHERE c.user_id = f.user_id AND c.listing = f.k AND c.status = 'ok')", array($k, now() - 7 * 86400));
+        if ($n > 0) { $lines[] = mgr_plural($n, 'more family', 'more families') . ' started following ' . listing_plain($k) . ' this week.'; if ($first === '') $first = $k; }
+      }
+      if (!$lines) continue;
+      $more = 'They hear about its sign-up dates by email or as a notification on their phone, so it’s worth keeping the dates on your listing current.';
+      $html = ''; foreach ($lines as $x) $html .= '<p style="margin:0 0 12px">' . $e($x) . '</p>';
+      if (mgr_send($uid, $p['email'], 'New followers for ' . listing_plain($first), implode("\n", $lines) . "\n\n" . $more, $html . '<p style="margin:0">' . $e($more) . '</p>', 'Open your listing’s tools', $GLOBALS['CFG']['siteUrl'] . '/managers/')) { $sent['follow']++; bump('mgr_follow'); }
+    }
+  }
+  return $sent;
+}
+
 // ---------- a new account: an email to the owner ----------
 // One email for each new account, to the site's own address. A parent's goes out when the account first has a name
 // (straight away with Google, after the name step with an emailed code). A program manager's goes out with their
@@ -1393,6 +1515,13 @@ switch ($method . ' ' . $action) {
     $row = preg_match('~^[a-f0-9]{32}$~', $c) ? row('SELECT id FROM users WHERE stop_code = ?', array($c)) : null;
     if (!$row) fail('gone', 'That link doesn’t work any more. Sign in to choose what you follow.', 404);
     $uid = (int) $row['id'];
+    if ($k === 'm:listing') {   // the emails a manager gets about their own listing: one switch on the account
+      if ($do === 'stop') { q('UPDATE users SET mgr_mail = 0 WHERE id = ?', array($uid)); bump('mgr_stop'); }
+      elseif ($do === 'undo') q('UPDATE users SET mgr_mail = 1 WHERE id = ?', array($uid));
+      elseif ($do !== 'look') fail('bad', 'That request was not understood.');
+      $on = (bool) val('SELECT mgr_mail FROM users WHERE id = ?', array($uid));
+      out(array('ok' => true, 'name' => 'your listing', 'on' => $on, 'muted' => !$on, 'left' => array()));
+    }
     $all = $k === '*';
     $name = $all ? '' : mark_name($k, true);
     if (!$all && $name === null) fail('key', 'That isn’t something on the site to follow.', 404);
@@ -1590,7 +1719,8 @@ switch ($method . ' ' . $action) {
     } elseif (!$test && too_many('pushdry:' . who(), 20, 3600)) out(array('ok' => true, 'ran' => false, 'why' => 'asked too often'));
     else note('pushdry:' . who());
     $told = $dry ? 0 : signup_catchup($test && isset($in['told_age']) ? (int) $in['told_age'] : 3600);
-    out(array('ok' => true, 'ran' => !$dry, 'dry' => $dry, 'told' => $told) + push_run($today, $dry));
+    $mgr = $dry ? 0 : array_sum(mgr_run($test && preg_match('/^\\d{4}-\\d{2}-\\d{2}$/', str($in, 'mgr_day', 10)) ? str($in, 'mgr_day', 10) : today_ny(), $test ? array_filter(array('fresh' => isset($in['mgr_fresh']) ? (int) $in['mgr_fresh'] : null, 'rv' => isset($in['mgr_rv']) && is_array($in['mgr_rv']) ? $in['mgr_rv'] : null), function ($v) { return $v !== null; }) : array()));
+    out(array('ok' => true, 'ran' => !$dry, 'dry' => $dry, 'told' => $told, 'mgr' => $mgr) + push_run($today, $dry));
   }
 
   // A parent's question, sent on to the people who run the program. It is not kept: the site passes it along, with
@@ -1731,7 +1861,16 @@ switch ($method . ' ' . $action) {
 
   case 'GET claims': {
     $u = need_user();
-    out(array('ok' => true, 'domain' => email_domain($u['email']), 'claims' => my_claims($u['id'])));
+    out(array('ok' => true, 'domain' => email_domain($u['email']), 'claims' => my_claims($u['id']), 'mail' => (bool) val('SELECT mgr_mail FROM users WHERE id = ?', array($u['id']))));
+  }
+
+  // The emails about a manager's own listing: the month's numbers, new reviews, new followers. On unless turned off.
+  case 'POST mgr_mail': {
+    $u = need_user();
+    $on = !empty($in['on']);
+    q('UPDATE users SET mgr_mail = ? WHERE id = ?', array($on ? 1 : 0, $u['id']));
+    if (!$on) bump('mgr_stop');
+    out(array('ok' => true, 'mail' => $on));
   }
 
   // Claim a listing. The account's email address has to be at the listing's own website address. Where that address is

@@ -1118,6 +1118,29 @@ The strip above the menu (signed-out visitors) carries "Run a program or camp? C
 "Program manager", which goes to `/managers/`: that page is where a manager's account is made, by claiming a
 listing, and where a program that isn't listed yet is sent in.
 
+## Emails to program managers about their listing
+
+An account that holds a standing claim is emailed about its listing (`mgr_run()` in `src/server/groups-api.php`).
+All three are sent by the morning job (`push_run`), never because of something a visitor did:
+
+- **The month's numbers**, the first morning of each month: how many times the listing was opened in the last 30
+  days (and the 30 before, once counting has run that long), clicks to sign up and to the website, times it was put
+  on a plan, people who asked for its emails. Then one thing to do (`mgr_prompt()`), the first that applies: say
+  whether there's space (never said, or the answer ran out), send in a sign-up date (none still to come), ask
+  families for a review (none published), or propose an update. A claim less than `MGR_FRESH_DAYS` old is skipped.
+- **A review was published.** The build hands the server each program's count of published reviews (`r` in the
+  listings it passes, beside `u`, "has a sign-up date still to come"). When a count goes up, the listing's managers
+  are told, with a link to the reviews. It says they have no say over reviews.
+- **New followers**, at most once a week: how many more families started following the listing in the last seven
+  days. A number, never who, and the listing's own managers aren't counted. It is skipped on the morning the
+  month's numbers go.
+
+The first time the job runs after this was added it only records where things stand (`mgr_month`, `mgr_week` and
+`mgr_rv` in the `meta` table), so nobody gets a backlog. Each email ends with "Stop the emails about your listing",
+which opens `/alerts/stop/` with the account's stop code and `k=m:listing`: the page asks first, then turns off
+`users.mgr_mail`. The same switch is a tick box under "Your listings" on `/managers/`. Emails about a claim, and
+about things a manager sent in (changes, photos), are not affected by it. `/edit/stats/` counts each kind sent.
+
 ## An email to you for each new account
 
 Each new account sends one email to the site's contact address (`tell_owner()` and `signup_note()` in
