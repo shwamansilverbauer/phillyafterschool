@@ -30,6 +30,7 @@ Fill in `site.config.json`:
 - `siteUrl`: the domain you treat as the main one. Redirect the other domain to it at your host.
 - `builtBy`: the name, link and short bio shown in the footer, on the home page and on About.
 - `gtmId`: optional, e.g. `GTM-XXXXXXX`.
+- `admins`: optional, a list of email addresses whose accounts open `/edit/` and its pages (see "Site admins").
 - `editLogin`: optional, `{ "user": "...", "passwordHash": "..." }`. Puts a sign-in on `/edit/`. The hash is a bcrypt hash, never the
   password itself. To change the password, make a new hash with `php -r 'echo password_hash("new password", PASSWORD_BCRYPT);'`
   and replace `passwordHash`. Changing it signs everyone out.
@@ -1232,6 +1233,23 @@ of the menu lead: one block each for the week (`/board/`), days off (`/days-off/
 (`/summer-schedule/`) and My kids' calendar (`/calendar/`, or the sign-up page for someone signed out). The
 counts on it (days off still to come, weeks of summer, camps) are worked out at build time. The small pictures
 are drawn in the build; none shows a real plan.
+
+## Site admins
+
+`admins` in `site.config.json` is a list of email addresses. An account on the site with one of those addresses is a
+site admin: while it is signed in (by the emailed code or by Google, like any account), `/edit/`, `/edit/stats/` and
+`/edit/claims/` open with no second password, and its account page has a "Site admin" section with the three links.
+The username and password in `editLogin` keep working by themselves.
+
+- The pages do the checking, not the browser: `edit_admin()` in `editAuthPhp()` (`build.mjs`) looks the session
+  cookie up in the accounts database and compares the account's address with the list. The account page only
+  shows the door (`admin: true` in what `groups/api.php?action=me` tells that account, and nobody else).
+- To add or remove an admin, change the list and publish. Removing an address closes the pages for it at once.
+  Signing out of the account closes them on that device; "Sign out on every device" closes them everywhere.
+- An admin account is only as safe as its inbox, since a sign-in code sent there is all it takes. Keep 2-step
+  verification on for those mailboxes. A code allows five wrong tries, and tries are capped per visitor.
+- Admin accounts are ordinary accounts in every other way, so they are counted in the site numbers like any other.
+- The preview has no sign-in and no admin way in.
 
 ## Being found by search engines
 

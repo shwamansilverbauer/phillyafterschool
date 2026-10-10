@@ -6,6 +6,7 @@
   "calendarIdHost": "phillyafterschool.org",
   "schoolYear": "2026–27",
   "contactEmail": "contact@phillyafterschool.org",
+  "admins": ["contact@phillyafterschool.org", "contact@schoolsoutwhatnow.com"],
   "supportUrl": "https://venmo.com/u/shwamanjosh",
   "supportLabel": "Buy me a coffee on Venmo",
   "supportHandle": "@shwamanjosh",

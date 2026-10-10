@@ -344,6 +344,9 @@ reviews.forEach((r, i) => {
 for (const [id, e] of Object.entries(copyEdits)) {
   if (!e || typeof e.now !== 'string' || !e.now.trim()) errors.push(`data/copy.json: entry "${id}" needs a "now" with the new wording`);
 }
+// Accounts that open the owner's pages (/edit/, the numbers, the claims) by signing in to the site like anyone else.
+const ADMINS = [...new Set((Array.isArray(cfg.admins) ? cfg.admins : []).map(a => String(a).trim().toLowerCase()))];
+if (cfg.admins !== undefined && (!Array.isArray(cfg.admins) || ADMINS.some(a => !/^[^@\s"'<>\\]+@[^@\s"'<>\\]+\.[a-z]{2,}$/.test(a)))) errors.push('site.config.json: admins must be a list of email addresses');
 if (cfg.editLogin && (!cfg.editLogin.user || !/^\$2[aby]\$\d\d\$[.\/A-Za-z0-9]{53}$/.test(cfg.editLogin.passwordHash || ''))) {
   errors.push('site.config.json: editLogin needs a user and a passwordHash (a bcrypt hash, never the password itself)');
 }
@@ -3358,7 +3361,7 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])) });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])) });
   const src = fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8');
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   return src.replace(`'/*CONFIG*/'`, () => `'` + conf.replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`);
@@ -3699,6 +3702,7 @@ const GATED = !!cfg.editLogin && !PREVIEW;
 function editAuthPhp() {
   return `$EDIT_USER = ${JSON.stringify(cfg.editLogin.user)};
 $EDIT_HASH = '${cfg.editLogin.passwordHash}';
+$EDIT_ADMINS = json_decode('${JSON.stringify(GROUPS ? ADMINS : [])}', true);
 header('Cache-Control: no-store, private');
 header('X-Robots-Tag: noindex');
 function edit_key() {
@@ -3719,7 +3723,32 @@ function edit_key() {
 function edit_token($exp) {
   return $exp . '.' . hash_hmac('sha256', (string) $exp, edit_key());
 }
+// An account on the site whose address is on the admins list (site.config.json) opens these pages too: the same
+// sign-in every account uses (a code by email, or Google), checked here against the accounts database. It gives the
+// address, or '' when the visitor isn't signed in to such an account.
+function edit_admin() {
+  global $EDIT_ADMINS;
+  static $who = null;
+  if ($who !== null) return $who;
+  $who = '';
+  if (!is_array($EDIT_ADMINS) || !$EDIT_ADMINS) return $who;
+  $sid = (isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s'])) ? $_COOKIE['pas_s'] : '';
+  if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return $who;
+  $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
+  if (!is_file($file)) return $who;
+  try {
+    $db = new PDO('sqlite:' . $file);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $db->exec('PRAGMA busy_timeout=3000');
+    $st = $db->prepare('SELECT u.email FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?');
+    $st->execute(array(hash('sha256', $sid), time()));
+    $email = strtolower(trim((string) $st->fetchColumn()));
+    if ($email !== '' && in_array($email, $EDIT_ADMINS, true)) $who = $email;
+  } catch (Exception $e) { $who = ''; }
+  return $who;
+}
 function edit_signed_in() {
+  if (edit_admin() !== '') return true;
   if (!isset($_COOKIE['pas_edit']) || !is_string($_COOKIE['pas_edit'])) return false;
   $parts = explode('.', $_COOKIE['pas_edit'], 2);
   if (count($parts) !== 2 || !ctype_digit($parts[0]) || (int) $parts[0] < time()) return false;
@@ -3743,7 +3772,8 @@ function editSignInPage() {
       <input id="e-pass" name="pass" type="password" maxlength="200" autocomplete="current-password" required>
     </div>
     <div><button class="btn primary big" type="submit">Sign in</button></div>
-  </form>
+  </form>${GROUPS && ADMINS.length ? `
+  <p class="hint" id="edit-admin-way">Site admins: <a href="../account/">sign in to your account</a> with your admin address, then come back to this page.</p>` : ''}
 </div>`;
   return layout({ title: 'Sign in', description: 'Sign in to edit the words on this site.', pathName: 'edit/', depth: 1, current: null, hero, body, noindex: true });
 }
@@ -3761,7 +3791,7 @@ function edit_cookie($value, $exp) {
 $error = '';
 if (isset($_GET['out'])) {
   edit_cookie('', time() - 3600);
-  header('Location: ./', true, 303);
+  header('Location: ' . (edit_admin() !== '' ? '../account/#sign-out' : './'), true, 303);   // an admin account signs out where every account does
   exit;
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -3947,7 +3977,7 @@ function editPage() {
     <p id="edit-state-text">Turn it on and a bar appears at the bottom of every page.</p>
     <div class="actions"><button type="button" class="btn primary big needs-js" id="edit-start">Start editing</button><button type="button" class="btn needs-js" id="edit-stop" hidden>Stop editing</button></div>
     <noscript><p>Editing needs JavaScript turned on.</p></noscript>
-  </div>${GATED ? '\n  <p class="hint">You’re signed in on this device for 30 days. <a href="?out=1">Sign out</a></p>' : ''}${GATED && GROUPS ? '\n  <p><a class="btn" href="stats/">Site numbers: accounts, shared weeks and groups</a> <a class="btn" href="claims/">Claims and proposed changes</a></p>' : ''}
+  </div>${GATED ? `\n  <?php if (edit_admin() !== '') { ?><p class="hint" id="edit-admin">You’re here through your account, <?php echo htmlspecialchars(edit_admin(), ENT_QUOTES, 'UTF-8'); ?>, which is a site admin. <a href="../account/#sign-out">Sign out of your account</a> to close these pages.</p><?php } else { ?><p class="hint">You’re signed in on this device for 30 days. <a href="?out=1">Sign out</a></p><?php } ?>` : ''}${GATED && GROUPS ? '\n  <p><a class="btn" href="stats/">Site numbers: accounts, shared weeks and groups</a> <a class="btn" href="claims/">Claims and proposed changes</a></p>' : ''}
   <h2>How it works</h2>
   <ol>
     <li>Click any text with a dotted outline and type. Text you’ve changed turns yellow.</li>

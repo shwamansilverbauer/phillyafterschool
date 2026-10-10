@@ -700,7 +700,15 @@ function me_out(array $u): array {
   $claims = isset($u['id']) ? (int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) : 0;
   return array('email' => $u['email'], 'first' => $u['first'], 'last' => $u['last'], 'ready' => ready($u), 'listed' => (bool) $u['listed'],
     'school' => isset($u['school']) ? (string) $u['school'] : '', 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'phone' => isset($u['phone']) && !empty($u['phone_ok']) ? phone_show((string) $u['phone']) : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0,
-    'claims' => $claims, 'role' => role_of($u, $claims), 'push' => isset($u['id']) ? push_state((int) $u['id']) : array('devices' => 0, 'only' => false));
+    'claims' => $claims, 'role' => role_of($u, $claims), 'push' => isset($u['id']) ? push_state((int) $u['id']) : array('devices' => 0, 'only' => false))
+    + (is_admin($u) ? array('admin' => true) : array());   // only an admin's own account is ever told so
+}
+// A site admin: an account whose address is on the admins list in site.config.json. It opens the owner's pages under
+// /edit/ (which check the same thing themselves); here it only lets the account page show the way in.
+function is_admin(array $u): bool {
+  global $CFG;
+  $list = isset($CFG['admins']) && is_array($CFG['admins']) ? $CFG['admins'] : array();
+  return $list && isset($u['email']) && in_array(strtolower((string) $u['email']), $list, true);
 }
 // Parent or program manager? A manager is an account that holds a claim (approved or waiting), or one that was made on
 // the managers' page. Everyone else is a parent. It is a label for counting and for the email list, never shown publicly.
