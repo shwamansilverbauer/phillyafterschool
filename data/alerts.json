@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-10-09",
+  "generated": "2026-10-10",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -419,117 +419,6 @@
     }
   ],
   "alerts": [
-    {
-      "id": "camp-butchers-sew-shop-2026-10-09",
-      "kind": "camp",
-      "date": "2026-10-09",
-      "sendOn": "2026-09-27",
-      "schools": [],
-      "programs": [
-        "butchers-sew-shop"
-      ],
-      "within": "off-2026-10-09",
-      "when": "Friday, October 9",
-      "title": "Butcher’s Sew Shop Junior: camp on a day off",
-      "text": "School is closed (Staff professional development). Butcher’s Sew Shop Junior has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-mister-johns-music-2026-10-09",
-      "kind": "camp",
-      "date": "2026-10-09",
-      "sendOn": "2026-09-27",
-      "schools": [],
-      "programs": [
-        "mister-johns-music"
-      ],
-      "within": "off-2026-10-09",
-      "when": "Friday, October 9",
-      "title": "Mister John’s Music: camp on a day off",
-      "text": "School is closed (Staff professional development). Mister John’s Music has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-movemakers-2026-10-09",
-      "kind": "camp",
-      "date": "2026-10-09",
-      "sendOn": "2026-09-27",
-      "schools": [],
-      "programs": [
-        "movemakers"
-      ],
-      "within": "off-2026-10-09",
-      "when": "Friday, October 9",
-      "title": "MoveMakers Philly: camp on a day off",
-      "text": "School is closed (Staff professional development). MoveMakers Philly has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/movemakers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-old-pine-2026-10-09",
-      "kind": "camp",
-      "date": "2026-10-09",
-      "sendOn": "2026-09-27",
-      "schools": [],
-      "programs": [
-        "old-pine"
-      ],
-      "within": "off-2026-10-09",
-      "when": "Friday, October 9",
-      "title": "Old Pine Community Center: camp on a day off",
-      "text": "School is closed (Staff professional development). Old Pine Community Center has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-philly-inmovement-2026-10-09",
-      "kind": "camp",
-      "date": "2026-10-09",
-      "sendOn": "2026-09-27",
-      "schools": [],
-      "programs": [
-        "philly-inmovement"
-      ],
-      "within": "off-2026-10-09",
-      "when": "Friday, October 9",
-      "title": "Philly InMovement: MOVE After School: camp on a day off",
-      "text": "School is closed (Staff professional development). Philly InMovement: MOVE After School has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/philly-inmovement/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-playarts-day-camps-2026-10-09",
-      "kind": "camp",
-      "date": "2026-10-09",
-      "sendOn": "2026-09-27",
-      "schools": [],
-      "programs": [
-        "playarts-day-camps"
-      ],
-      "within": "off-2026-10-09",
-      "when": "Friday, October 9",
-      "title": "PlayArts day camps: camp on a day off",
-      "text": "School is closed (Staff professional development). PlayArts day camps has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "off-2026-10-09",
-      "kind": "dayoff",
-      "date": "2026-10-09",
-      "sendOn": "2026-09-27",
-      "schools": [
-        "*"
-      ],
-      "programs": [],
-      "when": "Friday, October 9",
-      "title": "No school: Staff professional development",
-      "text": "6 listed programs have posted a camp: Butcher’s Sew Shop Junior, Mister John’s Music, MoveMakers Philly, Old Pine Community Center, Philly InMovement: MOVE After School and PlayArts day camps.",
-      "url": "https://phillyafterschool.org/days-off/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#d-2026-10-09",
-      "button": "See who’s open"
-    },
     {
       "id": "camp-arden-drama-school-2026-10-12",
       "kind": "camp",
