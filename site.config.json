@@ -22,7 +22,8 @@
     "user": "Silverbauer",
     "passwordHash": "$2y$10$YM3U3P.TEB3.lr00uXCsbeNQW852A2Xdg/Rwbro4BIJULUT7bHiz2"
   },
-  "privacyUpdated": "2026-10-09",
+  "privacyUpdated": "2026-10-10",
+  "mail": { "postmark": true },
   "indexNowKey": "3a981b7516d126f1620f04d4cd69e645",
   "termsLive": true,
   "termsOperator": "Schools Out Now What LLC",
