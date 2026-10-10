@@ -653,7 +653,7 @@ ${body}
 ${scripts}`;
   if (fragment) return head + '\n' + page;
   return `<!doctype html>
-<html lang="en">
+<html lang="en"${GATE ? ' data-gate="1"' : ''}>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -758,6 +758,10 @@ const fullName = p => {
 // A school's neighborhood comes from its "neighborhood" text ("Queen Village / Bella Vista" counts as both).
 // A program's comes from its "neighborhoods" list; one that runs inside a school takes that school's.
 const hoodSlug = n => n.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+// Each day off has its own page (dayOffPage, further down); its address is made here because the emails link to it too.
+const dayLabel = d => d.name.replace(/\brecess\b/i, 'break');   // the calendar says "recess"; parents say "break"
+const daySlug = d => `${hoodSlug(dayLabel(d))}-${d.date}`;   // "election-day-2026-11-03", "winter-break-2026-12-23"
+const dayPath = d => `${offPath}${daySlug(d)}/`;
 const schoolHoods = s => String(s.neighborhood || '').split('/').map(x => x.trim()).filter(Boolean);
 const programHoods = p => p.neighborhoods?.length ? p.neighborhoods
   : [...new Set(schools.filter(s => p.schools[s.id]?.relation === 'onsite').flatMap(schoolHoods))];
@@ -1050,7 +1054,7 @@ const alertItems = [
       id: `off-${d.date}`, kind: 'dayoff', date: d.date, sendOn: sendOn(d.date, LEAD.dayoff), schools: ['*'], programs: [],
       when: d.end ? `${longDay(d.date)} to ${longDay(d.end)}` : longDay(d.date), title: `No school: ${d.name}`,
       text: camps.length ? `${camps.length === 1 ? 'One listed program has' : camps.length + ' listed programs have'} posted a camp: ${listNames(camps.map(p => p.name))}.` : 'No listed program has posted a camp for it yet.',
-      url: mailUrl(offPath, `#d-${d.date}`), button: camps.length ? 'See who’s open' : 'See the day',
+      url: mailUrl(dayPath(d)), button: camps.length ? 'See who’s open' : 'See the day',   // the day's own page, which anyone can read; the planner needs an account
     };
   }),
 ].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
@@ -2108,8 +2112,8 @@ function privacyPage() {
   ${jumpNav()}
   <h2 id="short" data-jump-to="In short">${T(`The short version`)}</h2>
   <ul>
-    <li>${GROUPS ? T(`There are no ads, and nothing you send is sold. An account is optional: it is for following a program’s dates, keeping favorites, keeping your school or a plan in a profile, and sharing a week with someone.`) : T(`There are no accounts and no ads, and nothing you send is sold.`)}</li>
-    <li>${GROUPS ? T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us unless you sign in and choose to keep one in your profile or share one.`) : T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us.`)}</li>
+    <li>${GATE ? T(`There are no ads, and nothing you send is sold. Looking things up needs no account. The planners (the week, the days off, the summer and the calendar) need a free one, and an account is also for following a program’s dates, keeping favorites, keeping your school or a plan in a profile, and sharing a week with someone.`) : GROUPS ? T(`There are no ads, and nothing you send is sold. An account is optional: it is for following a program’s dates, keeping favorites, keeping your school or a plan in a profile, and sharing a week with someone.`) : T(`There are no accounts and no ads, and nothing you send is sold.`)}</li>
+    <li>${GATE ? T(`Your rosters, including any child’s name you type, are saved in your own browser. Signing in to plan does not send them to us: they stay there unless you choose to keep one in your profile or share one.`) : GROUPS ? T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us unless you sign in and choose to keep one in your profile or share one.`) : T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us.`)}</li>
     <li>${T(`If you send a suggestion or a review, it arrives as an email to the person who runs the site.`)}</li>
     ${ALERTS ? `<li>${GROUPS ? T(`If you follow a program, a camp or a school, the list of what you follow is kept in your account, and your email address and that list are kept by Klaviyo, the service that sends the emails.`) : T(`If you ask for dates by email, your first name, your email address and the school or program you picked are kept by Klaviyo, the service that sends the emails.`)}</li>
     <li>${T(`If you ask to be emailed when a school is added, the same three things are kept by Klaviyo: your first name, your email address and which school you’re waiting for. It also adds you to our email list for occasional news about the site.`)}</li>` : ''}
@@ -2118,7 +2122,7 @@ function privacyPage() {
   <h2 id="rosters" data-jump-to="Rosters">${T(`Rosters and children’s names`)}</h2>
   <ul>
     <li>${T(`A roster lives in the browser you made it in. Clearing your browser’s site data deletes it.`)}</li>
-    <li>${(GROUPS ? T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us unless you sign in and choose to keep the summer in your profile. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`) : T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`))}</li>
+    <li>${(GATE ? T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us unless you choose to keep the summer in your profile. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`) : GROUPS ? T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us unless you sign in and choose to keep the summer in your profile. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`) : T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`))}</li>
     <li>${T(`If you save a school as yours, that choice is kept in your own browser too. Our visit counts record that a school was saved, not who saved it.`)}</li>
     <li>${T(`A child’s name is optional. If you add one, it stays on your device unless you keep or share that week through an account.`)}</li>${GROUPS ? `
     <li>${T(`Dates you add yourself to “My kids’ calendar”, like picture day or a form that’s due, are kept in your browser and nowhere else. They are not sent to us and are not part of your profile, so they don’t appear on your other devices.`)}</li>` : ''}
@@ -2128,7 +2132,7 @@ function privacyPage() {
     <li>${T(`If you add a photo to a week card, the card is made in your own browser. The photo is not uploaded, not saved, and gone when you close the page.`)}</li>
   </ul>
   ${GROUPS ? `<h2 id="groups" data-jump-to="Accounts">${T(`Accounts, profiles and sharing`)}</h2>
-  <p>${T(`An account is optional. It lets you keep your school and a child’s week in a profile, share a week with one person, and join a share group of a few families who know each other. These are the only parts of the site that keep anything about a child on our server, and only when you choose to use them.`)}</p>
+  <p>${GATE ? T(`An account is free. The lists and listings are open to everyone; the planners need you to sign in. An account also lets you keep your school and a child’s week in a profile, share a week with one person, and join a share group of a few families who know each other. Those are the only parts of the site that keep anything about a child on our server, and only when you choose to use them: making a plan while signed in keeps it in your browser.`) : T(`An account is optional. It lets you keep your school and a child’s week in a profile, share a week with one person, and join a share group of a few families who know each other. These are the only parts of the site that keep anything about a child on our server, and only when you choose to use them.`)}</p>
   <ul>
     <li>${T(`An account is an email address and your first and last name. The email signs you in and tells you when someone opens a week you shared or joins a group you made. Other members never see it.`)}</li>
     <li>${T(`When an account is made, the person who runs this site gets an email with the account’s name and email address, and, for a program manager, the listing they claimed. Nothing about a child is in that email.`)}</li>
@@ -2155,7 +2159,7 @@ ${POSTMARK ? `    <li>${T(`The emails the site itself sends, such as sign-in cod
 ` : ''}    <li>${T(`We keep a daily count of how many accounts, shared weeks and groups were made, to see whether this is used. The counts hold no names, addresses or weeks.`)}</li>
     <li>${T(`You can take a week out of your profile or out of a group, stop sharing, leave a group, or delete your account from the site at any time, and it is removed straight away. A group’s creator can remove anyone. Every shared week and group is deleted two weeks after the last day of school.`)}</li>
     <li>${T(`A safety copy of the accounts database is made each day and kept for 14 days, in case something breaks, and our web host keeps its own backups. So what you delete is gone from the site straight away, and leaves those copies as they are replaced, usually within a month.`)}</li>
-    <li>${T(`Accounts are for parents, caregivers, teachers and the people who run programs. Children should not make one, and the site never asks a child for an email address: building a week and making a card work without an account.`)}</li>
+    <li>${GATE ? T(`Accounts are for parents, caregivers, teachers and the people who run programs. Children should not make one. The planners are for the adult who signs in, and a child’s name on a plan is optional.`) : T(`Accounts are for parents, caregivers, teachers and the people who run programs. Children should not make one, and the site never asks a child for an email address: building a week and making a card work without an account.`)}</li>
   </ul>
   <h2 id="managers" data-jump-to="Program managers">${T(`If you manage a program and claim its listing`)}</h2>
   <ul>
@@ -2654,9 +2658,6 @@ exit;
 // on days off but hasn't posted this one, and the way to the planner. People look these up by name and date
 // ("Election Day camp"), so each gets its own address. A day nobody has posted a camp for is kept out of the index;
 // once a day has passed its address is sent to the days-off page (.htaccess).
-const dayLabel = d => d.name.replace(/\brecess\b/i, 'break');   // the calendar says "recess"; parents say "break"
-const daySlug = d => `${hoodSlug(dayLabel(d))}-${d.date}`;   // "election-day-2026-11-03", "winter-break-2026-12-23"
-const dayPath = d => `${offPath}${daySlug(d)}/`;
 const fullDay = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' });
 const monthDay = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' });
 function dayOffPage(d) {
@@ -2774,13 +2775,22 @@ function daysOffPage() {
 ${jumpNav()}
 <section class="section sum offsum needs-js-block" id="plan" data-jump-to="Your plan" data-off-plan data-clarity-mask="true">
   <h2>${T(`Your days off`)}</h2>
-  <p>${T(`Choose where each child will be on each day school is closed. Your picks are saved on this device and nowhere else.`)}</p>
+  ${planAsk(D, 'daysoff', T(`Plan the days off with a free account`), T(`The planner is for parents with an account. Make one and you can choose where each child will be on every day school is closed, as a list or on a calendar. The lists of who’s open, below, are here for everyone.`))}
+  <div${gateIn} style="display:contents">
+  <p>${GATE ? T(`Choose where each child will be on each day school is closed. Your picks are saved on this device, and in your profile if you keep the plan there.`) : T(`Choose where each child will be on each day school is closed. Your picks are saved on this device and nowhere else.`)}</p>
   <div class="sum-kids"><div class="kids" id="off-kids" role="group" aria-label="Which child"></div><button type="button" class="clear" id="off-kid-add">Add a sibling</button><button type="button" class="clear" id="off-kid-drop" hidden>Remove this child</button></div>
   <div class="sum-top off-top">
     <div class="field sum-name"><label for="off-name">${T(`First name (optional)`)}</label>
       <input id="off-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${T(`Stays on this device.`)}</span></div>
     <div class="sum-tally"><div class="sum-strip" id="off-strip" aria-hidden="true"></div><p id="off-count" aria-live="polite"></p><p class="hint" id="off-open"></p></div>
   </div>
+  <div class="year-view-head off-view-head">
+    <h3 id="off-view-h">${T(`Day by day`)}</h3>
+    <div class="tabs view-switch" id="off-views" role="group" aria-label="How to show the days">
+      <button type="button" class="tab vs" data-view="list" aria-pressed="true">List</button><button type="button" class="tab vs" data-view="cal" aria-pressed="false">Calendar</button>
+    </div>
+  </div>
+  <div class="year-cal off-month" id="off-month" hidden></div>
   <ol class="sum-weeks off-days" id="off-days"></ol>
   <div class="actions sum-tools" id="off-tools" hidden><button type="button" class="btn primary" id="off-share-text" hidden>Share the plan</button><button type="button" class="btn" id="off-cal">Add to calendar</button><button type="button" class="btn" id="off-copy">Copy the plan as text</button><button type="button" class="btn" id="off-print-list">Print the list</button><button type="button" class="clear" id="off-clear">Clear the plan</button></div>
   <p class="hint" id="off-status" aria-live="polite"></p>
@@ -2813,12 +2823,13 @@ ${jumpNav()}
       <div class="card-preview"><canvas id="off-canvas" width="1080" height="1350" role="img" aria-label="Preview of the days-off calendar"></canvas></div>
     </div>
   </div>
+  </div>
   <script type="application/json" id="off-data">${JSON.stringify(planData).replace(/</g, '\\u003c')}</script>
 </section>
 <section class="section sum-chart-section" id="chart" data-jump-to="Who’s open">
   <h2>${T(`Who’s open each day off`)}</h2>
-  <p>${T(`Each column is a day district schools are closed. A filled box means the program’s own site lists a camp that day. The chart scrolls sideways.`)} <span class="needs-js">${T(`Tap a box to put that day in your plan.`)}</span></p>
-  <p class="sum-key"><span><i class="k exact"></i>${T(`Camp posted`)}</span><span class="needs-js"><i class="k picked"></i>${T(`In your plan`)}</span></p>
+  <p>${T(`Each column is a day district schools are closed. A filled box means the program’s own site lists a camp that day. The chart scrolls sideways.`)} <span class="needs-js${GATE ? ' when-in' : ''}">${T(`Tap a box to put that day in your plan.`)}</span></p>
+  <p class="sum-key"><span><i class="k exact"></i>${T(`Camp posted`)}</span><span class="needs-js${GATE ? ' when-in' : ''}"><i class="k picked"></i>${T(`In your plan`)}</span></p>
   <p class="hint" id="off-chart-note" aria-live="polite"></p>
   ${dated.length ? `<div class="sum-chart-wrap" role="region" aria-label="Who’s open each day off" tabindex="0">
     <table class="sum-chart off-chart">
@@ -2875,6 +2886,24 @@ ${cards}
 // side, so it can be set up before it is public) or "on". PAS_PREMIUM overrides the setting for a test build.
 const premiumMode = v => v === true || v === 'on' ? 'on' : v === 'preview' ? 'preview' : 'off';
 const GROUPS = cfg.groups && cfg.contactEmail ? { premium: premiumMode(process.env.PAS_PREMIUM || cfg.groups.premium), photos: cfg.groups.photos === true || process.env.PAS_PHOTOS === '1', pilot: cfg.groups.pilot !== false, klaviyoList: cfg.groups.klaviyoList || '', google: /^[0-9a-z-]+\.apps\.googleusercontent\.com$/.test(cfg.groups.googleClientId || '') ? cfg.groups.googleClientId : '' } : null;
+// Every planner (the week, the days off, the summer, the calendar) needs a free account. Signed out, a short ask stands
+// where the planner would be; the pages themselves stay public. "plannersNeedAccount": false under "groups" in
+// site.config.json opens them again. The preview has no accounts to sign in to, so nothing is closed there.
+const GATE = !!GROUPS && !PREVIEW && cfg.groups.plannersNeedAccount !== false;
+const gateIn = GATE ? ' class="when-in"' : '';
+function planAsk(depth, next, heading, say) {
+  if (!GATE) return '';
+  return `<div class="acct-ask when-out" data-acct-ask>
+    <h3>${heading}</h3>
+    <p>${say}</p>
+    <ul class="rules ticks">
+      <li>${T(`It’s free, and there’s no password: we email you a code, or you use Google.`)}</li>
+      <li>${T(`Your plans are there on your phone and your computer, and line up in one private calendar.`)}</li>
+      <li>${T(`Started one on this device already? It’s still here. Log in and carry on.`)}</li>
+    </ul>
+    <div class="actions"><a class="btn primary big" href="${link('register/', depth)}?next=${next}">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', depth)}?next=${next}">${T(`Log in`)}</a></div>
+  </div>`;
+}
 const groupsAttrs = depth => `data-groups data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}" data-api="${PREVIEW ? '' : link('groups/api.php', depth)}"${GROUPS.klaviyoList && ALERTS?.klaviyoKey ? ` data-kl-key="${esc(ALERTS.klaviyoKey)}" data-kl-list="${esc(GROUPS.klaviyoList)}"` : ''}${ALERTS ? ` data-dates-key="${esc(ALERTS.klaviyoKey)}" data-dates-list="${esc(ALERTS.listId)}"` : ''}${GROUPS.google && !PREVIEW ? ` data-google="${esc(GROUPS.google)}"` : ''} data-pilot="${GROUPS.pilot ? 1 : 0}"${YEAR_PAGE && !PREVIEW ? ' data-year="1"' : ''}`;
 // ---------- directors: which listings can be claimed, and how ----------
 // Someone who runs a program claims its listing by signing in with an email address at the listing's own website
@@ -3402,13 +3431,17 @@ function boardPage() {
   const schoolLinks = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<a class="btn" href="${link(s.id + '/', 1)}">${esc(s.shortName)}</a>`).join('');
   const hero = `    <h1>${T(`Build your week`)}</h1>
     <p class="lede">${T(`Monday might be martial arts and Thursday the rec center. Plan the term that’s coming, keep a second roster for what your child is doing now, and send either to your partner, a sitter, or the group chat. More than one child? Each gets their own.`)}</p>`;
-  const body = `<div data-board-page data-clarity-mask="true" style="display:contents">
+  const body = `${GATE ? `<section class="section sum when-out" id="board-ask">
+  ${planAsk(1, 'board', T(`Build your week with a free account`), T(`The week builder is for parents with an account. Make one and you can put programs on each day, keep a roster for each child, and send the week to a partner or a sitter.`))}
+</section>
+` : ''}<div data-board-page data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`The roster needs JavaScript turned on.`)}</p></noscript>
   <div class="panel" id="board-retired" data-edit-reveal="Shown when someone opens an old link to a week:" hidden>
     <h2>${T(`That link doesn’t open a week any more`)}</h2>
     <p>${T(`Weeks used to be shared as a link that anyone could open. They aren’t now. Ask the person who sent it to share the week with your email address instead: you’ll get an invitation, and it will open once you sign in.`)}</p>
     <div class="actions"><button type="button" class="btn" id="board-retired-ok">OK</button></div>
   </div>
+  <div${gateIn} style="display:contents">
   <section class="section">
     <div class="kid-bar" id="kid-bar">
       <div class="kids" id="kid-tabs" role="group" aria-label="Which child" hidden></div>
@@ -3523,6 +3556,7 @@ function boardPage() {
   </section>
   ${rvNames()}
   ${GROUPS ? `<section class="section group-share" id="group-share" ${groupsAttrs(1)} hidden></section>` : ''}
+  </div>
   <script type="application/json" id="pas-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;
   return layout({ title: 'Build your week', description: `Put together a Monday to Friday after-school roster for each child from ${cfg.siteName} listings and turn it into a card to share.`, pathName: 'board/', depth: 1, current: 'board/', hero, body,
@@ -4307,7 +4341,7 @@ function schedulesPage() {
       cta: `<span class="when-out">${btn(link('register/', D) + '?next=calendar', T(`Create a free account`), 'year_register')}</span><span class="when-in">${btn(link(yearPath, D), T(`Open my kids’ calendar`), 'year')}</span>` }) : '',
   ].filter(Boolean);
   const hero = `    <h1>${T(`Build a schedule`)}</h1>
-    <p class="lede">${T(`Three planners, one for each part of a family’s year: the school week, the days school is closed, and the summer. All three are free and work without an account.`)}</p>`;
+    <p class="lede">${GATE ? T(`Three planners, one for each part of a family’s year: the school week, the days school is closed, and the summer. All three are free: you sign in with a free account to use them.`) : T(`Three planners, one for each part of a family’s year: the school week, the days school is closed, and the summer. All three are free and work without an account.`)}</p>`;
   const body = `<section class="section" id="planners">
   <div class="plans">
     ${cards.join('\n    ')}
@@ -4318,7 +4352,7 @@ function schedulesPage() {
   <ul>
     <li>${T(`Nothing to put on a plan yet?`)} <a href="${link('schools/', D)}">${T(`Find your school`)}</a> ${T(`to see what works with it, or`)} <a href="${link('programs/', D)}">${T(`look through every program`)}</a>.</li>
     <li>${T(`A plan stays on the phone or computer you made it on. Nothing about your child is sent to us.`)}</li>${GROUPS ? `
-    <li>${T(`With a free account you can keep each plan in your profile, so it’s on every device you sign in on.`)} <a class="when-out" href="${link('register/', D)}">${T(`Create a free account`)}</a></li>` : ''}
+    <li>${GATE ? T(`The planners need a free account. Signed in, you can also keep each plan in your profile, so it’s on every device you sign in on.`) : T(`With a free account you can keep each plan in your profile, so it’s on every device you sign in on.`)} <a class="when-out" href="${link('register/', D)}">${T(`Create a free account`)}</a></li>` : ''}
     <li>${T(`Days, hours and prices come from each program’s own website. Check with the program before you count on a spot.`)}</li>
   </ul>
 </section>`;
@@ -4355,83 +4389,103 @@ function calendarPage() {
     </ul>
     <div class="actions"><a class="btn primary big" href="${link('register/', D)}?next=calendar">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=calendar">${T(`Log in`)}</a></div>
     <p class="hint">${T(`It’s private. There is no link to your calendar and no way to share it from here: a picture or a file you save is yours to send.`)}</p>
-    <p class="hint">${T(`Planning doesn’t need an account:`)} <a href="${link('board/', D)}">${T(`build a week`)}</a>, <a href="${link(offPath, D)}#plan">${T(`plan the days off`)}</a>${P ? `, <a href="${link(summerPath, D)}">${T(`plan the summer`)}</a>` : ''}.</p>
+    <p class="hint">${GATE ? T(`The same account opens the planners:`) : T(`Planning doesn’t need an account:`)} <a href="${link('board/', D)}">${T(`build a week`)}</a>, <a href="${link(offPath, D)}#plan">${T(`plan the days off`)}</a>${P ? `, <a href="${link(summerPath, D)}">${T(`plan the summer`)}</a>` : ''}.</p>
   </section>
   <p class="hint when-in" id="year-wait">${T(`Getting your calendar…`)}</p>
   <section class="section sum year needs-js-block" id="year" hidden>
     <h2 id="year-h">${T(`The year`)}</h2>
     ${jumpNav()}
-    <ul class="year-src" id="year-src"></ul>
-    <div class="year-own" id="year-own" data-jump-to="Your own dates">
-      <h3>${T(`Add your own dates`)}</h3>
-      <p>${T(`Picture day, pretzel day, a form that’s due, a half day: anything you need to remember, for one child or for everyone. They show up in the calendar below, in the pictures and in the file for your phone. Something that happens every week needs only the day of the week.`)}</p>
-      <form class="own-form" id="own-form">
-        <div class="field own-what"><label for="own-what">${T(`What`)}</label><input id="own-what" type="text" maxlength="60" list="own-ideas" placeholder="Picture day" autocomplete="off"></div>
-        <datalist id="own-ideas">${['Picture day', 'Pretzel day', 'Early dismissal', 'Form due', 'Field trip', 'Library day', 'Gym day', 'Show and tell', 'Bring a snack', 'Dress-down day', 'Concert', 'Parent conference'].map(x => `<option value="${esc(x)}">`).join('')}</datalist>
-        <div class="field"><label for="own-rep">${T(`How often`)}</label><select id="own-rep"><option value="">One day</option><option value="w">Every week</option></select></div>
-        <div class="field" id="own-when-field"><label for="own-when">${T(`When`)}</label><input id="own-when" type="date"></div>
-        <div class="field" id="own-dow-field" hidden><label for="own-dow">${T(`Which day`)}</label><select id="own-dow">${[['mon', 'Mondays'], ['tue', 'Tuesdays'], ['wed', 'Wednesdays'], ['thu', 'Thursdays'], ['fri', 'Fridays'], ['sat', 'Saturdays'], ['sun', 'Sundays']].map(([v, n]) => `<option value="${v}">${n}</option>`).join('')}</select></div>
-        <div class="field own-who-field"><span class="g-label" id="own-who-label">${T(`Who it’s for`)}</span><div class="own-who" id="own-who" role="group" aria-labelledby="own-who-label"></div></div>
-        <div class="actions"><button type="submit" class="btn primary">Add it</button></div>
-      </form>
-      <details class="own-many">
-        <summary>${T(`Add several at once`)}</summary>
-        <p class="hint">${T(`Type or paste one on each line, starting with the date or the weekday. They go to whoever is picked under “Who it’s for”.`)}</p>
-        <label class="vh" for="own-lines">${T(`Dates, one on each line`)}</label>
-        <textarea id="own-lines" rows="5" placeholder="10/14 Picture day&#10;Oct 20 Photo forms due&#10;Wednesdays Pretzel day"></textarea>
-        <div class="actions"><button type="button" class="btn" id="own-lines-add">Add these</button></div>
-      </details>
-      <p class="hint" id="own-status" aria-live="polite"></p>
-      <ul class="g-list own-list" id="own-list" hidden></ul>
-      <p class="hint">${T(`A weekly one repeats until the last day of school and skips the days school is closed. Your own dates are kept on this device only: they aren’t sent to us, so add them on the phone or computer you’ll look at.`)}</p>
+    <div class="year-step" id="year-add" data-jump-to="Add it">
+      <p class="step-head"><b aria-hidden="true">1</b><span>${T(`Add it`)}</span></p>
+      <p class="step-say">${T(`Your calendar fills in from your planners, and from any dates you add here yourself.`)}</p>
+      <ul class="year-src" id="year-src"></ul>
+    <div class="year-own" id="year-own">
+    <h3>${T(`Add your own dates`)}</h3>
+    <p>${T(`Picture day, pretzel day, a form that’s due, a half day: anything you need to remember, for one child or for everyone. They show up in the calendar below, in the pictures and in the file for your phone. Something that happens every week needs only the day of the week.`)}</p>
+    <form class="own-form" id="own-form">
+      <div class="field own-what"><label for="own-what">${T(`What`)}</label><input id="own-what" type="text" maxlength="60" list="own-ideas" placeholder="Picture day" autocomplete="off"></div>
+      <datalist id="own-ideas">${['Picture day', 'Pretzel day', 'Early dismissal', 'Form due', 'Field trip', 'Library day', 'Gym day', 'Show and tell', 'Bring a snack', 'Dress-down day', 'Concert', 'Parent conference'].map(x => `<option value="${esc(x)}">`).join('')}</datalist>
+      <div class="field"><label for="own-rep">${T(`How often`)}</label><select id="own-rep"><option value="">One day</option><option value="w">Every week</option></select></div>
+      <div class="field" id="own-when-field"><label for="own-when">${T(`When`)}</label><input id="own-when" type="date"></div>
+      <div class="field" id="own-dow-field" hidden><label for="own-dow">${T(`Which day`)}</label><select id="own-dow">${[['mon', 'Mondays'], ['tue', 'Tuesdays'], ['wed', 'Wednesdays'], ['thu', 'Thursdays'], ['fri', 'Fridays'], ['sat', 'Saturdays'], ['sun', 'Sundays']].map(([v, n]) => `<option value="${v}">${n}</option>`).join('')}</select></div>
+      <div class="field own-who-field"><span class="g-label" id="own-who-label">${T(`Who it’s for`)}</span><div class="own-who" id="own-who" role="group" aria-labelledby="own-who-label"></div></div>
+      <div class="actions"><button type="submit" class="btn primary">Add it</button></div>
+    </form>
+    <details class="own-many">
+      <summary>${T(`Add several at once`)}</summary>
+      <p class="hint">${T(`Type or paste one on each line, starting with the date or the weekday. They go to whoever is picked under “Who it’s for”.`)}</p>
+      <label class="vh" for="own-lines">${T(`Dates, one on each line`)}</label>
+      <textarea id="own-lines" rows="5" placeholder="10/14 Picture day&#10;Oct 20 Photo forms due&#10;Wednesdays Pretzel day"></textarea>
+      <div class="actions"><button type="button" class="btn" id="own-lines-add">Add these</button></div>
+    </details>
+    <p class="hint" id="own-status" aria-live="polite"></p>
+    <ul class="g-list own-list" id="own-list" hidden></ul>
+    <p class="hint">${T(`A weekly one repeats until the last day of school and skips the days school is closed. Your own dates are kept on this device only: they aren’t sent to us, so add them on the phone or computer you’ll look at.`)}</p>
+  </div>
     </div>
     <div class="flag year-changed" id="year-changed" hidden></div>
     <div id="year-empty" hidden></div>
     <div id="year-full">
-      <div class="year-file" id="year-file" data-jump-to="Phone calendar">
-        <h3>${T(`Put it in your phone’s calendar`)}</h3>
-        <p>${T(`One file with everything ticked below. Open it and your calendar app adds the entries. It’s a copy: if a date changes later, this page will say so, and you download it again.`)}</p>
-        <fieldset class="year-opts" id="year-opts">
-          <legend class="vh">${T(`What goes in the file`)}</legend>
-          <label><input type="checkbox" id="year-o-off" checked> ${T(`Days off, with each child’s plan`)}</label>
-          <label><input type="checkbox" id="year-o-sum" checked> ${T(`Summer camp weeks`)}</label>
-          <label><input type="checkbox" id="year-o-guide"> ${T(`Camps still showing last summer’s weeks, as a guide`)}</label>
-          <label><input type="checkbox" id="year-o-signup" checked> ${T(`Sign-up dates`)}</label>
-          <label><input type="checkbox" id="year-o-week"> ${T(`The after-school week, repeating every school week`)}</label>
-          <label><input type="checkbox" id="year-o-own" checked> ${T(`Dates you added yourself`)}</label>
-        </fieldset>
-        <div class="actions"><button type="button" class="btn primary" id="year-dl">Download the calendar file</button><button type="button" class="btn" id="year-print">Print this page</button></div>
-        <p class="hint" id="year-status" aria-live="polite"></p>
-      </div>
-      <div id="year-week" data-jump-to="School week"></div>
-      <div id="year-agenda" data-jump-to="Month by month"></div>
-      <div class="card-maker sumcard" id="year-card" data-jump-to="Pictures" hidden>
-        <h3>${T(`Make it a picture`)}</h3>
-        <p>${T(`A calendar for each month, to print for the fridge or send to family. It’s made here in your browser.`)}</p>
-        <div class="card-grid">
-          <div class="card-fields">
-            <div class="sum-pages" id="year-pages" role="group" aria-label="Which calendar"></div>
-            <div class="field">
-              <label for="year-title">${T(`Title`)}</label>
-              <input id="year-title" type="text" maxlength="40" placeholder="Our year" autocomplete="off">
-            </div>
-            <label class="g-check" id="year-pic-own-row" hidden><input type="checkbox" id="year-pic-own" checked> <span>${T(`Show the dates I added, on every month they fall in`)}</span></label>
-            <div class="field">
-              <label for="year-photo">${T(`A photo (optional)`)}</label>
-              <input id="year-photo" type="file" accept="image/*">
-              <span class="hint">${T(`The photo never leaves this device. The calendar is made here in your browser, nothing is uploaded, and the photo isn’t saved.`)}</span>
-              <button type="button" class="clear" id="year-photo-clear" hidden>Remove the photo</button>
-            </div>
-            <div class="actions">
-              <button type="button" class="btn primary" id="year-pic-share" hidden>Share the calendar</button>
-              <button type="button" class="btn" id="year-pic-copy" hidden>Copy picture</button>
-              <button type="button" class="btn" id="year-pic-save">Save as image</button>
-              <button type="button" class="btn" id="year-pic-all">Save all of them</button>
-              <button type="button" class="btn" id="year-pic-print">Print</button>
-            </div>
-            <p class="hint" id="year-card-status" aria-live="polite"></p>
+      <div class="year-step" id="year-view" data-jump-to="View it">
+        <p class="step-head"><b aria-hidden="true">2</b><span>${T(`View it`)}</span></p>
+        <div class="year-view-head">
+          <h3 id="year-view-h">${T(`Your plan`)}</h3>
+          <div class="tabs view-switch" id="year-views" role="group" aria-label="How to show the plan">
+            <button type="button" class="tab vs" data-view="cal" aria-pressed="true">Calendar</button><button type="button" class="tab vs" data-view="list" aria-pressed="false">List</button>
           </div>
-          <div class="card-preview"><canvas id="year-canvas" width="1080" height="1350" role="img" aria-label="Preview of the calendar"></canvas></div>
+        </div>
+        <div id="year-week"></div>
+        <div class="year-cal" id="year-cal"></div>
+        <div id="year-agenda" hidden></div>
+      </div>
+      <div class="year-step" id="year-share" data-jump-to="Share it" hidden>
+        <p class="step-head"><b aria-hidden="true">3</b><span>${T(`Share it`)}</span></p>
+      <div class="card-maker sumcard" id="year-card" hidden>
+          <h3>${T(`Make it a picture`)}</h3>
+          <p>${T(`A calendar for each month, to print for the fridge or send to family. It’s made here in your browser.`)}</p>
+          <div class="card-grid">
+            <div class="card-fields">
+              <div class="sum-pages" id="year-pages" role="group" aria-label="Which calendar"></div>
+              <div class="field">
+                <label for="year-title">${T(`Title`)}</label>
+                <input id="year-title" type="text" maxlength="40" placeholder="Our year" autocomplete="off">
+              </div>
+              <label class="g-check" id="year-pic-own-row" hidden><input type="checkbox" id="year-pic-own" checked> <span>${T(`Show the dates I added, on every month they fall in`)}</span></label>
+              <div class="field">
+                <label for="year-photo">${T(`A photo (optional)`)}</label>
+                <input id="year-photo" type="file" accept="image/*">
+                <span class="hint">${T(`The photo never leaves this device. The calendar is made here in your browser, nothing is uploaded, and the photo isn’t saved.`)}</span>
+                <button type="button" class="clear" id="year-photo-clear" hidden>Remove the photo</button>
+              </div>
+              <div class="actions">
+                <button type="button" class="btn primary" id="year-pic-share" hidden>Share the calendar</button>
+                <button type="button" class="btn" id="year-pic-copy" hidden>Copy picture</button>
+                <button type="button" class="btn" id="year-pic-save">Save as image</button>
+                <button type="button" class="btn" id="year-pic-all">Save all of them</button>
+                <button type="button" class="btn" id="year-pic-print">Print</button>
+              </div>
+              <p class="hint" id="year-card-status" aria-live="polite"></p>
+            </div>
+            <div class="card-preview"><canvas id="year-canvas" width="1080" height="1350" role="img" aria-label="Preview of the calendar"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <div class="year-step" id="year-pencil" data-jump-to="Pencil it in">
+        <p class="step-head"><b aria-hidden="true">4</b><span>${T(`Pencil it in`)}</span></p>
+      <div class="year-file" id="year-file">
+          <h3>${T(`Add it to your calendar`)}</h3>
+          <p>${T(`One file with everything ticked below, for the calendar on your phone or computer. Open it and your calendar app adds the entries. It’s a copy: if a date changes later, this page will say so, and you download it again.`)}</p>
+          <fieldset class="year-opts" id="year-opts">
+            <legend class="vh">${T(`What goes in the file`)}</legend>
+            <label><input type="checkbox" id="year-o-off" checked> ${T(`Days off, with each child’s plan`)}</label>
+            <label><input type="checkbox" id="year-o-sum" checked> ${T(`Summer camp weeks`)}</label>
+            <label><input type="checkbox" id="year-o-guide"> ${T(`Camps still showing last summer’s weeks, as a guide`)}</label>
+            <label><input type="checkbox" id="year-o-signup" checked> ${T(`Sign-up dates`)}</label>
+            <label><input type="checkbox" id="year-o-week"> ${T(`The after-school week, repeating every school week`)}</label>
+            <label><input type="checkbox" id="year-o-own" checked> ${T(`Dates you added yourself`)}</label>
+          </fieldset>
+          <div class="actions"><button type="button" class="btn primary" id="year-dl">Download the calendar file</button><button type="button" class="btn" id="year-print">Print this page</button></div>
+          <p class="hint" id="year-status" aria-live="polite"></p>
         </div>
       </div>
     </div>
@@ -4474,7 +4528,9 @@ ${guide ? `<section class="section">
 ${jumpNav()}
 <section class="section sum needs-js-block" id="plan" data-jump-to="Your summer" data-summer data-clarity-mask="true">
   <h2>${T(`Your summer`)}</h2>
-  <p>${T(`Add a camp to each week, for one child or for each of them. Your picks are saved on this device and nowhere else.`)}</p>
+  ${planAsk(D, 'summer', T(`Plan the summer with a free account`), T(`The planner is for parents with an account. Make one and you can add a camp to each week, for one child or for each of them. The chart of when each camp runs, below, is here for everyone.`))}
+  <div${gateIn} style="display:contents">
+  <p>${GATE ? T(`Add a camp to each week, for one child or for each of them. Your picks are saved on this device, and in your profile if you keep the summer there.`) : T(`Add a camp to each week, for one child or for each of them. Your picks are saved on this device and nowhere else.`)}</p>
   <div class="sum-kids"><div class="kids" id="sum-kids" role="group" aria-label="Which child"></div><button type="button" class="clear" id="sum-kid-add">Add a sibling</button><button type="button" class="clear" id="sum-kid-drop" hidden>Remove this child</button></div>
   <div class="sum-top">
     <div class="field sum-name"><label for="sum-name">${T(`First name (optional)`)}</label>
@@ -4515,12 +4571,13 @@ ${jumpNav()}
       <div class="card-preview"><canvas id="sum-canvas" width="1080" height="1350" role="img" aria-label="Preview of the summer calendar"></canvas></div>
     </div>
   </div>
+  </div>
   <script type="application/json" id="summer-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </section>
 <section class="section sum-chart-section" id="chart" data-jump-to="When camps run">
   <h2>${T(`When each camp runs`)}</h2>
-  <p>${T(`Each column is a week, named by its Monday. A filled box means the camp listed that week. The chart scrolls sideways and down.`)} <span class="needs-js">${T(`Tap a box to add that week to your summer.`)}</span></p>
-  <p class="sum-key"><span><i class="k exact"></i>${T(`{year} dates`, { year })}</span><span><i class="k"></i>${T(`{year} dates, as a guide`, { year: base })}</span><span class="needs-js"><i class="k picked"></i>${T(`In your summer`)}</span></p>
+  <p>${T(`Each column is a week, named by its Monday. A filled box means the camp listed that week. The chart scrolls sideways and down.`)} <span class="needs-js${GATE ? ' when-in' : ''}">${T(`Tap a box to add that week to your summer.`)}</span></p>
+  <p class="sum-key"><span><i class="k exact"></i>${T(`{year} dates`, { year })}</span><span><i class="k"></i>${T(`{year} dates, as a guide`, { year: base })}</span><span class="needs-js${GATE ? ' when-in' : ''}"><i class="k picked"></i>${T(`In your summer`)}</span></p>
   <p class="hint" id="sum-chart-note" aria-live="polite"></p>
   <div class="sum-chart-wrap" role="region" aria-label="When each camp runs" tabindex="0">
     <table class="sum-chart">

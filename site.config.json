@@ -41,6 +41,7 @@
   },
   "groups": {
     "pilot": false,
+    "plannersNeedAccount": true,
     "premium": "preview",
     "klaviyoList": "Wib7TV",
     "googleClientId": "420915102949-7gfu5o00gn6oionaijid2jak6om38rda.apps.googleusercontent.com"

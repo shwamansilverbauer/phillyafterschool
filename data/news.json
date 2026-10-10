@@ -1,6 +1,13 @@
 [
   {
     "date": "2026-10-10",
+    "title": "Your plan, as a calendar",
+    "text": "My kids’ calendar now opens as a month you can tap through, with each day off, camp week and date of your own on its day; the list is one tap away. The days-off planner has a calendar view too. The planners now ask you to sign in with a free account, and a plan you already made on this device is still there when you do. Finish planning a month and you may meet a dragon.",
+    "href": "calendar/",
+    "link": "Open my kids’ calendar"
+  },
+  {
+    "date": "2026-10-10",
     "title": "A page for every day off",
     "text": "Each day school is closed now has its own page with the camps that have posted that date, what they run and where they are. Open one from the days-off list, or from the next day off shown on the home page and on each school’s page.",
     "href": "days-off/",

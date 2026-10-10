@@ -260,7 +260,7 @@ analytics or recordings.
 - **Where the plans come from.** Each kind of plan comes from the profile when it is kept there, otherwise from this
   device: the days-off plan and the summer as a whole, the after-school week child by child. Children are matched by
   first name. The top of the page says which is which and links to the planner to change it or keep it. The individual
-  planners stay free and work without an account; only this combined view asks for one.
+  planners ask for an account too (see "The planners need an account").
 - **What is on it.** "Every school week" (each child's current roster, or the upcoming one when the current is empty),
   then month by month: every day school is closed with each child's plan (or a link to plan it), camp weeks, the
   last day of school, and every upcoming sign-up date (`register.dates`, and a camp's `dates`) of a program or camp a
@@ -680,7 +680,7 @@ level M with no border, and save each row as a string of 1s and 0s).
 
 ## Rosters
 
-`/board/` ("Build your week" in the menu) lets a visitor collect programs by weekday with "Add to roster"
+`/board/` ("Build your week" in the menu) lets a signed-in parent collect programs by weekday with "Add to roster"
 on any card. Each child has two rosters, Current and Upcoming, so a family can share what they do now and
 plan the next term. A family with more than one child adds a roster per child (up to six) and picks whose
 roster a program goes on. Rosters are stored in the visitor's own browser. Nothing about them reaches the
@@ -820,7 +820,8 @@ listing links to the school's own sheet for those.
 
 ## Accounts, profiles and sharing
 
-An account is optional. It lets a parent keep their school and a child's week in a profile (so they are there on
+Looking things up needs no account; the planners need one (see "The planners need an account"). An account
+also lets a parent keep their school and a child's week in a profile (so they are there on
 another device), share a week with one person, and, while it is a pilot, join a share group of a few families.
 These are the only parts of the site that store anything about a child on the server.
 
@@ -908,7 +909,7 @@ These are the only parts of the site that store anything about a child on the se
   with `role: manager` when someone signs in there. The "What claiming gets you" section shows an example
   listing (`claimDemo()` in `build.mjs`): an invented program, drawn from the same parts a real listing uses, with
   numbers that match the list beside it (`CLAIM_GETS`). Change a benefit there and the picture's numbers follow. There are no student accounts, on purpose:
-  the site never asks a child for an email address, and the week builder and card work without an account.
+  the site never asks a child for an email address. The planners are for the adult who signs in.
 - **Where.** `src/server/groups-api.php` is the whole server side; the build copies it to `groups/api.php` with
   its settings (site name, address, sender, the date shared weeks expire, the Google client ID). It keeps one
   SQLite file and a key in a folder named `phillyafterschool-data`, next to (not inside) the public folder on
@@ -1231,6 +1232,55 @@ It is a way in, not a ranking: no listing is named on it, so nothing is put ahea
 left out when its kind has nothing listed. Each of the four lists has an "All programs" link above its heading
 that leads back here, and `/programs/` is now called "After-school programs, A to Z" wherever it is linked, so
 the two aren't confused.
+
+## The planners need an account
+
+Every planner (the week on `/board/`, the days-off planner on `/days-off/`, `/summer-schedule/` and `/calendar/`)
+needs a signed-in account. The pages stay public and in search: signed out, an ask stands where the planner would
+be ("Plan the days off with a free account", with Create a free account and Log in), and the lists around it (who's
+open each day off, when each camp runs) are there for everyone.
+
+- **The switch.** `GATE` in `build.mjs`: on when accounts are on, off in the preview (which has no accounts to sign
+  in to). `"plannersNeedAccount": false` under `groups` in `site.config.json` opens the planners again. When it is
+  on, `<html>` carries `data-gate="1"`, the planner's markup is wrapped in `.when-in` and the ask (`planAsk()`) is
+  `.when-out`: the same two classes the menu uses, driven by the `signed` class on `<html>`.
+- **In the scripts** (`site.js`): `mayPlan()` says whether this visitor may plan. Signed out, "Add to roster" on a
+  school page opens a small ask instead of the days; the boxes in the two charts are not buttons; nothing is added
+  on arrival from "Add Saturday to your week".
+- **Coming back.** A link that meant to add something (`board/?add=`, `?wk=`, `?roll=`, a day named by an email as
+  `days-off/#d-2026-11-03`, or "Add to roster" on a school page) is kept for that tab in `sessionStorage`
+  (`pas-want`) and picked up when the visitor lands back on the planner signed in. Someone who made the account in
+  order to start a week lands at the top of the builder; someone who already has a week lands on "keep and share".
+- **What it does not change.** A plan still lives in the browser (`pas-rosters`) unless its owner keeps it in their
+  profile or shares it, so signing in to plan sends nothing about a child. A plan made on a device before this
+  is still there once its owner signs in. This is a front door, not a lock: the check is in the browser.
+
+## The plan as a calendar
+
+- **My kids' calendar** is laid out in four numbered steps: 1 Add it (where the plans come from, and "Add your own
+  dates"), 2 View it, 3 Share it (the pictures), 4 Pencil it in (the calendar file). "View it" shows the plan as a
+  **calendar** (the default) or a **list**, with the choice kept on the device (`pas-year-view`). The calendar is
+  one month at a time: a day off is yellow with where each child will be or "Not planned", a camp week runs Monday
+  to Friday, sign-up dates and your own dates sit on their days, and a weekly date of your own is on every school
+  day it falls on. A tap on a day lists it underneath with the same links as the list. Printing prints the list.
+- **The days-off planner** opens as a list, with a Calendar switch beside it (`pas-off-view`). In the calendar the
+  picked day's row sits under the month, so choosing works as it does in the list.
+- Both use `calMonthView()` in `site.js`. On a phone the labels in the squares become coloured bars.
+
+## The dragon
+
+When a change fills the last open day of a part of a plan, a dragon flies across the screen with "You did it! … You
+are on fireeee!" (`cheer()` in `site.js`, drawn in SVG, moved by CSS):
+
+- the last day off of a month ("November is planned."), or of the whole year ("You planned the whole year.");
+- a camp on the last open week of the summer ("You planned the whole summer.");
+- something on all five school days of a week ("You planned the whole week."), on the builder or from "Add to
+  roster" on a school page.
+
+It comes once for each of those on a visit, takes no taps, leaves by itself after about seven seconds or on Escape,
+and the planner's status line says the same words for a screen reader. For someone whose device asks for less
+motion it stands still at the foot of the screen with a Close button. Opening a page, or a plan put back from a
+profile, brings no dragon. Analytics gets `pas_cheer` with which kind, and nothing else.
 
 ## The planners in one place
 

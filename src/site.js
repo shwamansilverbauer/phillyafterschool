@@ -27,6 +27,33 @@
   }
   function all(root, sel) { return [].slice.call(root.querySelectorAll(sel)); }
 
+  // ----- the planners need a free account, when the page says so (data-gate on <html>; build.mjs decides). Signed
+  // out, each planner page shows an ask where the planner would be. A link that meant to add something ("Add to
+  // your week", a day named by an email) is remembered for this tab and picked up when the visitor is back, signed in.
+  var GATED = document.documentElement.getAttribute('data-gate') === '1';
+  function mayPlan() { return !GATED || store('pas-in') === '1'; }
+  function wantLater(path, q, h) { try { window.sessionStorage.setItem('pas-want', JSON.stringify({ p: path, q: q || '', h: h || '' })); } catch (e) { /* storage blocked */ } }
+  (function () {
+    if (!GATED || !document.querySelector('[data-acct-ask]')) return;
+    var here = location.pathname;
+    if (!mayPlan()) {
+      var q = location.search, h = /^#d-\d{4}-\d{2}-\d{2}$/.test(location.hash) ? location.hash : '';
+      if ((/^\?[A-Za-z0-9=&%._~:-]{1,200}$/.test(q) && /[?&](add|wk|roll)=/.test(q)) || h) wantLater(here, /[?&](add|wk|roll)=/.test(q) ? q : '', h);
+      if (h) {   // the day they asked for is inside the planner: show them the ask that stands in its place
+        var ask = document.getElementById('plan');
+        if (ask && ask.scrollIntoView) window.setTimeout(function () { ask.scrollIntoView(); }, 0);
+      }
+      return;
+    }
+    var want = null;
+    try { want = JSON.parse(window.sessionStorage.getItem('pas-want') || 'null'); window.sessionStorage.removeItem('pas-want'); } catch (e) { want = null; }
+    if (!want || want.p !== here || typeof want.q !== 'string' || typeof want.h !== 'string') return;
+    if (want.q && !/^\?[A-Za-z0-9=&%._~:-]{1,200}$/.test(want.q)) return;
+    if (want.h && !/^#d-\d{4}-\d{2}-\d{2}$/.test(want.h)) return;
+    if (want.q && !/[?&](add|wk|roll)=/.test(location.search)) { location.replace(here + want.q + want.h); return; }
+    if (want.h && want.h !== location.hash) { try { history.replaceState(null, '', here + location.search + want.h); } catch (e) { location.hash = want.h; } }
+  })();
+
   // ----- jump links: on a long page, a strip that stays under the menu bar with a link to each part. A part is any
   // element with an id and a data-jump-to label; parts that are hidden or still empty are left out. Pages that fill
   // themselves in later call window.pasJump() again. -----
@@ -54,7 +81,8 @@
         window.addEventListener('resize', nav.pasEnds);
         if (window.ResizeObserver) new window.ResizeObserver(nav.pasEnds).observe(nav);
       }
-      var parts = all(document, '[data-jump-to][id]').filter(function (t) { return !t.closest('[hidden]') && /\S/.test(t.textContent); });
+      var signedNow = /(^|\s)signed(\s|$)/.test(document.documentElement.className);
+      var parts = all(document, '[data-jump-to][id]').filter(function (t) { return !t.closest('[hidden]') && !t.closest(signedNow ? '.when-out' : '.when-in') && /\S/.test(t.textContent); });
       nav.textContent = '';
       nav.hidden = parts.length < 2; wrap.hidden = nav.hidden;
       parts.forEach(function (t) { var a = el('a', null, t.getAttribute('data-jump-to')); a.href = '#' + t.id; nav.appendChild(a); });
@@ -1287,6 +1315,91 @@
   updateCount();
 
 
+  // ----- a dragon flies across the screen when the last open day in a part of a plan is filled in: a month of days off,
+  // every day off, the whole summer, all five days of a week. Once for each on a visit; it gets out of the way by
+  // itself (or with Escape), takes no taps, and stands still for anyone who has asked for less motion. -----
+  var DRAGON = '<svg viewBox="0 0 280 170" aria-hidden="true" focusable="false">'
+    + '<g class="dr-flame"><path d="M206 78c22-18 50-12 70 2-20 10-46 22-70 6z" fill="#FF7A1A"/><path d="M208 80c16-10 34-8 48 0-14 6-32 12-48 4z" fill="#FFD23F"/><circle cx="262" cy="64" r="3.5" fill="#FF7A1A"/><circle cx="272" cy="96" r="2.5" fill="#FFD23F"/><circle cx="250" cy="104" r="3" fill="#FF7A1A"/></g>'
+    + '<path d="M62 112c-22 6-40 0-50-16 8 4 16 4 22 0-10-6-14-16-12-28 10 14 26 24 46 26z" fill="#2C8444"/><path d="M12 96l-10-12 16 2z" fill="#1F6B36"/>'
+    + '<g class="dr-wing dr-wing-b"><path d="M100 86C92 50 64 24 22 24c12 10 16 22 16 36 10-6 20-2 24 10 10-6 20 0 24 10 6 0 11 2 14 6z" fill="#1F6B36"/></g>'
+    + '<ellipse cx="106" cy="108" rx="52" ry="32" fill="#2C8444"/><path d="M66 118c10 20 66 22 86 2-14 8-62 10-86-2z" fill="#F3C613"/>'
+    + '<path d="M84 80l8-14 8 12 8-14 8 13 8-13 6 14z" fill="#1F6B36"/>'
+    + '<path d="M138 92c6-22 20-36 40-38l8 30c-14 2-24 12-28 26z" fill="#2C8444"/>'
+    + '<path d="M168 44l-4-20 16 14z" fill="#F3C613"/><path d="M186 42l4-20 10 18z" fill="#F3C613"/>'
+    + '<ellipse cx="186" cy="62" rx="26" ry="22" fill="#2C8444"/><path d="M190 60h26c8 0 12 6 12 12s-4 12-12 12h-30z" fill="#3E9E57"/>'
+    + '<circle cx="182" cy="56" r="8" fill="#FFFFFF"/><circle cx="184" cy="57" r="4" fill="#0B2140"/><circle cx="185.500" cy="55.500" r="1.500" fill="#FFFFFF"/>'
+    + '<circle cx="219" cy="67" r="2" fill="#0B2140"/><path d="M196 76q10 6 22 2" fill="none" stroke="#0B2140" stroke-width="2.500" stroke-linecap="round"/>'
+    + '<g class="dr-wing"><path d="M112 90C110 52 88 18 40 4c12 16 14 30 10 44 10-2 18 4 22 14 10-4 18 2 22 12 8 0 14 6 18 16z" fill="#3E9E57"/><path d="M112 90C102 56 80 28 40 4M112 90C98 70 74 52 50 48M112 90c-10-14-24-24-40-28" fill="none" stroke="#1F6B36" stroke-width="2.500" stroke-linecap="round"/></g>'
+    + '<path d="M84 134c-2 10 0 16 6 18h12c0-6-4-8-6-8l2-10zM122 136c-2 10 0 14 6 16h12c0-6-4-8-6-8l2-9z" fill="#1F6B36"/>'
+    + '</svg>';
+  var cheered = {};
+  function cheer(kind, key, line) {
+    if (cheered[key] || !document.body) return;
+    cheered[key] = 1;
+    track({ event: 'pas_cheer', what: kind });
+    var old = document.querySelector('.cheer'); if (old && old.parentNode) old.parentNode.removeChild(old);
+    var calm = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    var box = el('div', 'cheer' + (calm ? ' calm' : '')), train = el('div', 'cheer-train'), bob = el('div', 'cheer-bob'), say = el('div', 'cheer-say'), art = el('div', 'cheer-dragon');
+    box.setAttribute('role', 'status');
+    say.appendChild(el('b', null, 'You did it!')); say.appendChild(el('span', null, line)); say.appendChild(el('em', null, 'You are on fireeee!'));
+    art.innerHTML = DRAGON;
+    bob.appendChild(say); bob.appendChild(art); train.appendChild(bob); box.appendChild(train);
+    var gone = false;
+    var done = function () { if (gone) return; gone = true; if (box.parentNode) box.parentNode.removeChild(box); document.removeEventListener('keydown', esc); };
+    var esc = function (e) { if (e.key === 'Escape') done(); };
+    document.addEventListener('keydown', esc);
+    if (calm) { var x = el('button', 'cheer-x', 'Close'); x.type = 'button'; x.addEventListener('click', done); say.appendChild(x); }
+    document.body.appendChild(box);
+    window.setTimeout(done, calm ? 9000 : 7400);
+  }
+  window.pasCheer = cheer;
+
+  // ----- a month of squares, for My kids' calendar and the days-off planner -----
+  // box is emptied and gets the month's name between two arrows, then the grid. o: month ('YYYY-MM'), months (the ones
+  // the arrows move through), today, caption, marks(iso) -> [{ cls, text, ink }], off(iso), onMonth(month), onDay(iso).
+  // A day with something on it is a button; the page that asked says which one is picked with calPick().
+  function calFullDay(iso) { return new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' }); }
+  function calPick(box, iso) { all(box, '.cal-day').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-d') === iso)); }); }
+  function calMonthView(box, o) {
+    var NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    box.textContent = '';
+    var y = +o.month.slice(0, 4), mo = +o.month.slice(5) - 1, at = o.months.indexOf(o.month), title = NAMES[mo] + ' ' + y;
+    var head = el('div', 'cal-head'), prev = el('button', 'btn cal-nav', '‹'), next = el('button', 'btn cal-nav', '›'), h = el('h4', 'cal-title', title);
+    prev.type = next.type = 'button'; prev.setAttribute('aria-label', 'The month before'); next.setAttribute('aria-label', 'The month after');
+    prev.disabled = at <= 0; next.disabled = at < 0 || at >= o.months.length - 1;
+    h.setAttribute('aria-live', 'polite');
+    var go = function (n) { return function () {   // the page redraws the month; the keyboard stays on the arrow that was pressed, or the other one at either end
+      o.onMonth(o.months[at + n]);
+      var navs = all(box, '.cal-nav'), b = navs[n < 0 ? 0 : 1]; if (b && b.disabled) b = navs[n < 0 ? 1 : 0]; if (b) b.focus();
+    }; };
+    prev.addEventListener('click', go(-1)); next.addEventListener('click', go(1));
+    head.appendChild(prev); head.appendChild(h); head.appendChild(next); box.appendChild(head);
+    var table = el('table', 'cal-grid'), cap = el('caption', 'vh', title + ', ' + o.caption), thead = el('thead'), hr = el('tr'), tbody = el('tbody');
+    [['Sunday', 'Sun'], ['Monday', 'Mon'], ['Tuesday', 'Tue'], ['Wednesday', 'Wed'], ['Thursday', 'Thu'], ['Friday', 'Fri'], ['Saturday', 'Sat']].forEach(function (d) { var th = el('th'); th.scope = 'col'; var ab = el('abbr', null, d[1]); ab.title = d[0]; th.appendChild(ab); hr.appendChild(th); });
+    thead.appendChild(hr); table.appendChild(cap); table.appendChild(thead);
+    var lead = new Date(Date.UTC(y, mo, 1, 12)).getUTCDay(), days = new Date(Date.UTC(y, mo + 1, 0, 12)).getUTCDate(), tr = el('tr');
+    for (var i = 0; i < lead; i++) tr.appendChild(el('td', 'cal-pad'));
+    for (var d = 1; d <= days; d++) {
+      var iso = o.month + '-' + ('0' + d).slice(-2), marks = o.marks(iso), td = el('td');
+      td.className = (iso < o.today ? 'cal-past ' : '') + (iso === o.today ? 'cal-today ' : '') + (o.off(iso) ? 'cal-off' : '');
+      if (marks.length) {
+        var btn = el('button', 'cal-day'); btn.type = 'button'; btn.setAttribute('data-d', iso); btn.setAttribute('aria-pressed', 'false');
+        btn.setAttribute('aria-label', calFullDay(iso) + ': ' + marks.map(function (x) { return x.text; }).join('; '));
+        btn.appendChild(el('span', 'cal-n', String(d)));
+        var ms = el('span', 'cal-marks');
+        marks.slice(0, marks.length > 4 ? 3 : 4).forEach(function (x) { var sp = el('span', 'cal-m ' + x.cls, x.text); if (x.ink) sp.style.setProperty('--mk', x.ink[1]); ms.appendChild(sp); });
+        if (marks.length > 4) ms.appendChild(el('span', 'cal-more', '+ ' + (marks.length - 3) + ' more'));
+        btn.appendChild(ms);
+        btn.addEventListener('click', (function (iso2) { return function () { o.onDay(iso2); }; })(iso));
+        td.appendChild(btn);
+      } else td.appendChild(el('span', 'cal-n', String(d)));
+      tr.appendChild(td);
+      if ((lead + d) % 7 === 0 && d < days) { tbody.appendChild(tr); tr = el('tr'); }
+    }
+    while (tr.children.length < 7) tr.appendChild(el('td', 'cal-pad'));
+    tbody.appendChild(tr); table.appendChild(tbody); box.appendChild(table);
+  }
+
   // ----- days off: for each day school is closed, where each child will be. Kept with the rosters, on this device. -----
   var planEl = document.querySelector('[data-off-plan]');
   if (planEl) (function () {
@@ -1311,14 +1424,55 @@
     var say = function (t) { statusEl.textContent = t || ''; };
     var ev = function (action, more) { var o = { event: 'pas_dayoff', action: action, days_planned: plannedOf(kid()).length, children: r.kids.length }; if (more) Object.keys(more).forEach(function (x) { o[x] = more[x]; }); track(o); };
     var openDay = '';
+    // the days as a list (how the page opens) or as a calendar, a month at a time; the choice is kept on this device
+    var monthBox = $o('#off-month'), viewBtns = all(planEl, '#off-views .vs');
+    var offView = monthBox && store('pas-off-view') === 'cal' ? 'cal' : 'list', offMonth = '', offDay = '';
+    var dayAt = function (iso) { for (var i = 0; i < days.length; i++) if (days[i].d === iso) return days[i]; return null; };
+    var offMonths = function () {
+      var out = [];
+      if (!days.length) return out;
+      for (var y = +days[0].d.slice(0, 4), m = +days[0].d.slice(5, 7), last = days[days.length - 1].d.slice(0, 7), g = 0; g < 24; g++) {
+        var mk = y + '-' + ('0' + m).slice(-2);
+        if (mk > last) break;
+        out.push(mk);
+        if (++m > 12) { m = 1; y++; }
+      }
+      return out;
+    };
+    var firstIn = function (mk) { var inMonth = days.filter(function (d) { return d.d.slice(0, 7) === mk; }); return (inMonth.filter(function (d) { return !pickOf(kid(), d); })[0] || inMonth[0] || { d: '' }).d; };
+    viewBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        offView = b.getAttribute('data-view') === 'cal' && monthBox ? 'cal' : 'list'; store('pas-off-view', offView); openDay = '';
+        track({ event: 'pas_dayoff', action: 'view_' + offView, children: r.kids.length });
+        draw();
+      });
+    });
+    // The last open day of a month, or of the whole year, brings the dragon.
+    var monthName = function (mk) { return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][+mk.slice(5) - 1]; };
+    var doneNow = function (k) { var o = { all: days.length > 0, m: {} }; days.forEach(function (d) { var mk = d.d.slice(0, 7); if (!(mk in o.m)) o.m[mk] = true; if (!pickOf(k, d)) { o.m[mk] = false; o.all = false; } }); return o; };
+    var cheerOff = function (was) {
+      var me = kid(), now = doneNow(me), line = '';
+      if (now.all && !was.all) {
+        var others = r.kids.filter(function (k) { return k !== me && plannedOf(k).length > 0 && !doneNow(k).all; });
+        line = others.length && me.name ? 'You planned ' + possessive(me.name) + ' whole year.' : 'You planned the whole year.';
+        cheer('days_off_year', 'off-year-' + r.kid, line);
+      } else {
+        var fresh = Object.keys(now.m).filter(function (mk) { return now.m[mk] && !was.m[mk]; }).sort();
+        if (!fresh.length) return;
+        line = fresh.length === 1 ? monthName(fresh[0]) + ' is planned.' : fresh.length === 2 ? monthName(fresh[0]) + ' and ' + monthName(fresh[1]) + ' are planned.' : fresh.length + ' more months are planned.';
+        cheer('days_off_month', 'off-' + r.kid + '-' + fresh.join(), line);
+      }
+      if (line) say('You did it! ' + line + ' You are on fireeee!');
+    };
     // One place a day: picking the same one again takes it off, picking another replaces it.
     var set = function (d, val, how) {
-      var me = kid(), was = pickOf(me, d), p = od.programs[val];
+      var me = kid(), was = pickOf(me, d), p = od.programs[val], done0 = doneNow(me);
       if (val && val !== was) { me.off[d.d] = val; track({ event: 'pas_dayoff_pick', program_id: val, day: d.d, method: how }); if (val !== HOME) hit('p:' + val, 'plan'); }
       else { delete me.off[d.d]; val = ''; }
       saveRosters();
       say(val ? label(val) + ' is on ' + d.label + '.' + (p && !posted(val, d) ? (p.n ? ' It hasn’t posted that date, so ask if it’s open.' : ' It hasn’t posted any dates, so ask if it’s open.') : '') : label(was) + ' is off ' + d.label + '.');
       draw();
+      if (val) cheerOff(done0);
     };
     // The other days of the same break this pick could cover: days with nothing on them yet, and for a program only the dates it posted.
     var restOfBreak = function (d, v) { return days.filter(function (x) { return x.b === d.b && x.d !== d.d && !pickOf(kid(), x) && (v === HOME || x.camps.indexOf(v) > -1); }); };
@@ -1351,16 +1505,45 @@
           same = el('p', 'sum-same'); same.appendChild(el('span', 'hint', 'Going to the same places? '));
           others.forEach(function (k) {
             var b = el('button', 'clear', 'Copy ' + possessive(kidLabel(k, r.kids.indexOf(k))) + ' days'); b.type = 'button';
-            b.addEventListener('click', function () { plannedOf(k).forEach(function (d) { me.off[d.d] = k.off[d.d]; }); saveRosters(); ev('copy_sibling'); say('Copied. Change any day that’s different.'); draw(); });
+            b.addEventListener('click', function () { var done0 = doneNow(me); plannedOf(k).forEach(function (d) { me.off[d.d] = k.off[d.d]; }); saveRosters(); ev('copy_sibling'); say('Copied. Change any day that’s different.'); draw(); cheerOff(done0); });
             same.appendChild(b);
           });
           daysEl.parentNode.insertBefore(same, daysEl);
         }
       }
+      // the calendar, when that's the view: this child's month, then the one day that is picked, as a row to choose on
+      viewBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === offView)); });
+      if (monthBox) {
+        monthBox.hidden = offView !== 'cal';
+        daysEl.classList.toggle('cal-mode', offView === 'cal');
+        if (offView === 'cal' && days.length) {
+          var months = offMonths();
+          if (openDay && dayAt(openDay)) { offDay = openDay; offMonth = openDay.slice(0, 7); }
+          if (months.indexOf(offMonth) < 0) offMonth = ((days.filter(function (d) { return !pickOf(me, d); })[0] || days[0]).d).slice(0, 7);
+          if (!offDay || offDay.slice(0, 7) !== offMonth || !dayAt(offDay)) offDay = firstIn(offMonth);
+          var ink = ['#DAEDFE', '#1763B8'];
+          calMonthView(monthBox, {
+            month: offMonth, months: months, today: today0, caption: 'days off' + (me.name ? ' for ' + me.name : ''),
+            off: function (iso) { return !!dayAt(iso); },
+            marks: function (iso) {
+              var d = dayAt(iso); if (!d) return [];
+              var v = pickOf(me, d);
+              return [{ cls: 'm-off', text: d.name }, v ? { cls: 'm-kid' + (posted(v, d) ? '' : ' m-ask'), text: v === HOME ? 'At home' : label(v), ink: ink } : { cls: 'm-kid m-todo', text: 'Not planned', ink: ink }];
+            },
+            onMonth: function (mk) { offMonth = mk; offDay = firstIn(mk); openDay = ''; draw(); },
+            onDay: function (iso) { offDay = iso; openDay = pickOf(kid(), dayAt(iso)) ? '' : iso; draw(); var row = document.getElementById('d-' + iso); if (row && row.scrollIntoView) row.scrollIntoView({ block: 'nearest' }); }
+          });
+          calPick(monthBox, offDay);
+          var key = el('p', 'cal-key');
+          [['k-off', 'No school'], ['k-kid', 'Where ' + (me.name || (many ? kidLabel(me, r.kid) : 'your child')) + ' will be'], ['k-todo', 'Not planned yet']].forEach(function (x) { var sw = el('span', 'cal-sw'); sw.appendChild(el('i', x[0])); sw.appendChild(document.createTextNode(x[1])); key.appendChild(sw); });
+          monthBox.appendChild(key);
+          monthBox.appendChild(el('p', 'hint', days.some(function (d) { return d.d.slice(0, 7) === offMonth; }) ? 'Tap a yellow day to choose where ' + (me.name || 'your child') + ' will be.' : 'School is open every weekday this month.'));
+        }
+      }
       days.forEach(function (d) {
         var v = pickOf(me, d), p = od.programs[v];
         stripEl.appendChild(el('i', v ? 'on' : ''));
-        var li = el('li', 'sum-week' + (v ? ' has' : '')); li.id = 'd-' + d.d;
+        var li = el('li', 'sum-week' + (v ? ' has' : '') + (offView === 'cal' && d.d !== offDay ? ' cal-hide' : '')); li.id = 'd-' + d.d;
         var when = el('div', 'sum-when'); when.appendChild(el('b', null, d.label)); when.appendChild(el('span', 'hint', d.name));
         li.appendChild(when);
         var box = el('div', 'sum-picks');
@@ -1375,7 +1558,7 @@
           var rest = restOfBreak(d, v);
           if (rest.length) {
             var fill = el('button', 'clear', 'Same for ' + (rest.length === 1 ? 'the other day' : 'the other ' + rest.length + ' days') + ' of ' + d.name.replace(/^(\S)/, function (c) { return c.toLowerCase(); })); fill.type = 'button';
-            fill.addEventListener('click', function () { rest.forEach(function (o) { me.off[o.d] = v; }); saveRosters(); ev('fill_break', { days: rest.length }); say('Done: ' + label(v) + ' is on ' + (rest.length + 1) + ' days of ' + d.name + '.'); draw(); });
+            fill.addEventListener('click', function () { var done0 = doneNow(me); rest.forEach(function (o) { me.off[o.d] = v; }); saveRosters(); ev('fill_break', { days: rest.length }); say('Done: ' + label(v) + ' is on ' + (rest.length + 1) + ' days of ' + d.name + '.'); draw(); cheerOff(done0); });
             box.appendChild(fill);
           }
         } else box.appendChild(el('span', 'sum-none', d.camps.length ? (d.camps.length === 1 ? '1 camp posted' : d.camps.length + ' camps posted') : 'No camp posted yet'));
@@ -1414,7 +1597,7 @@
         all(chart, '[data-w]').forEach(function (c) { if (od.days[+c.getAttribute('data-w')].d < today0) c.hidden = true; });
         all(chart, 'tbody tr').forEach(function (tr) {
           var id = tr.getAttribute('data-camp'), p = od.programs[id];
-          all(tr, 'td.on').forEach(function (td) {
+          if (mayPlan()) all(tr, 'td.on').forEach(function (td) {
             var d = od.days[+td.getAttribute('data-w')], b = td.querySelector('button'), inPlan = pickOf(me, d) === id;
             if (!b) {
               b = el('button'); b.type = 'button';
@@ -1760,17 +1943,23 @@
       shared: function () { return shared; },
       save: function () { store('pas-rosters', JSON.stringify(rosters)); },
       emptyBoard: emptyBoard, newKid: newKid, maxKids: MAX_KIDS,
-      redraw: function () { render(); }   // after the share-groups script changes a roster (a week put back from a profile)
+      redraw: function () { weekFull.key = ''; render(); }   // after the share-groups script changes a roster (a week put back from a profile): no dragon for that
     };
     var syncRoller = null;   // set further down, by the themed-week section
     var savedNote = function () { return storageOk ? 'Saved on this device.' : 'Your browser is blocking saved data, so this roster will be gone when you close the page. Make a card to keep a copy.'; };
 
+    var weekFull = { key: '', on: true };   // was this child's roster full the last time it was drawn?
     var render = function () {
       var r = loadRosters();
       var which = shared ? shared.which : r.active;
       var kid = shared ? null : r.kids[r.kid];
       var name = shared ? shared.name : kid.name;
       var b = shared ? shared.board : kid[which];
+      if (!shared) {   // something on all five school days, made so by a change here, brings the dragon
+        var fullKey = r.kid + '|' + which, fullNow = DAYS.every(function (day) { return b.days[day[0]].length > 0; });
+        if (weekFull.key === fullKey && !weekFull.on && fullNow) cheer('week', 'week-' + fullKey, 'You planned the whole week.');
+        weekFull = { key: fullKey, on: fullNow };
+      }
       var total = 0;
       week.textContent = '';
       DAYS.forEach(function (day) {
@@ -2310,11 +2499,11 @@
       });
       // Arriving from a program's page ("Add to your week"): open that program here, ready for its days.
       var asked = query();
-      if (asked.wk && data.weekend && data.weekend[asked.wk] && !shared) {   // from the weekend classes page: "Add Saturday to your week"
+      if (asked.wk && data.weekend && data.weekend[asked.wk] && !shared && mayPlan()) {   // from the weekend classes page: "Add Saturday to your week"
         if (window.history && history.replaceState) { try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* file preview */ } }
         window.setTimeout(function () { addWeekend(asked.wk, asked.day === 'sun' ? 'sun' : 'sat', 'weekend_page'); if (wkBox && wkBox.scrollIntoView) wkBox.scrollIntoView({ block: 'center' }); }, 0);
       }
-      if (asked.add && data.programs[asked.add] && !shared) {
+      if (asked.add && data.programs[asked.add] && !shared && mayPlan()) {
         if (window.history && history.replaceState) { try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* file preview */ } }
         window.setTimeout(function () { pickAdd(asked.add, asked.school || '', 'program_page'); if (adder.scrollIntoView) adder.scrollIntoView({ block: 'center' }); }, 0);
       }
@@ -2753,8 +2942,17 @@
     var costOf = function (k) { var t = 0; sd.weeks.forEach(function (w, i) { picksOf(k, i).forEach(function (id) { t += sd.camps[id].p || 0; }); }); return t; };
     var ev = function (action, more) { var o = { event: 'pas_summer', action: action, weeks_covered: covered(), children: r.kids.length }; if (more) Object.keys(more).forEach(function (x) { o[x] = more[x]; }); track(o); };
     var openWeek = -1;
+    // Every week of the summer with a camp on it brings the dragon.
+    var cheerSum = function (was) {
+      var full = sd.weeks.length > 0 && covered() === sd.weeks.length;
+      if (!full || was) return;
+      var me = kid(), others = r.kids.filter(function (k) { return k !== me && coveredOf(k) > 0 && coveredOf(k) < sd.weeks.length; });
+      var line = others.length && me.name ? 'You planned ' + possessive(me.name) + ' whole summer.' : 'You planned the whole summer.';
+      cheer('summer', 'sum-' + r.kid, line);
+      say('You did it! ' + line + ' You are on fireeee!');
+    };
     var toggle = function (id, i, how) {
-      var s = plan(), d = sd.weeks[i].d, list = s.w[d] || [], at = list.indexOf(id), c = sd.camps[id];
+      var s = plan(), d = sd.weeks[i].d, list = s.w[d] || [], at = list.indexOf(id), c = sd.camps[id], full0 = sd.weeks.length > 0 && covered() === sd.weeks.length;
       if (at > -1) list.splice(at, 1);
       else {
         if (list.length >= 6) { say('That week already has six camps. Take one off first.'); return; }
@@ -2766,6 +2964,7 @@
       if (at < 0) hit('c:' + id, 'plan');
       say(at > -1 ? c.n + ' is off ' + sd.weeks[i].label + '.' : c.n + ' is on ' + sd.weeks[i].label + '.' + (c.w.indexOf(i) < 0 ? (c.w.length ? ' It didn’t list that week, so check with the camp.' : ' It hasn’t listed dates, so check with the camp.') : !c.x ? ' That’s the week it ran in ' + c.y + '.' : ''));
       draw();
+      if (at < 0) cheerSum(full0);
     };
     var option = function (id, i) {
       var c = sd.camps[id], b = el('button', 'sum-opt');
@@ -2854,8 +3053,8 @@
       // the chart: which boxes are in this child's summer, and which camps suit their age
       if (chart) all(chart, 'tbody tr').forEach(function (tr) {
         var id = tr.getAttribute('data-camp'), c = sd.camps[id];
-        tr.hidden = !!c && !fitsAge(c);
-        all(tr, 'td.on').forEach(function (td) {
+        tr.hidden = mayPlan() && !!c && !fitsAge(c);
+        if (mayPlan()) all(tr, 'td.on').forEach(function (td) {
           var i = +td.getAttribute('data-w'), b = td.querySelector('button'), inPlan = picks(i).indexOf(id) > -1;
           if (!b) {
             b = el('button'); b.type = 'button';
@@ -3490,6 +3689,113 @@
         if (n) refresh();
       });
     }
+    // one line of the plan: when, and what. The list is made of these, and so is a day picked on the calendar.
+    var itemRow = function (it) {
+      var m = model;
+      var li = el('li', 'y-' + it.t), when = el('div', 'year-when'), what = el('div', 'year-what');
+      if (it.t === 'off') {
+        when.appendChild(el('b', null, longDay(it.d))); when.appendChild(el('span', 'hint', 'No school: ' + it.day.name));
+        var open = 0;
+        m.kids.forEach(function (k) { var v = k.off[it.d]; if (v) what.appendChild(chip(k, offLabel(v) + (postedOff(v, it.d) ? '' : ' (date not posted, ask)'), postedOff(v, it.d) ? '' : 'ask', v !== HOME ? yd.programs[v].href : '')); else open++; });
+        if (open) { var plan = el('a', 'year-todo', open === m.kids.length ? 'Nothing planned. Plan this day' : 'Plan it for the ' + (open === 1 ? 'other child' : 'others')); plan.href = yd.offPage + '#d-' + it.d; what.appendChild(plan); }
+      } else if (it.t === 'week') {
+        when.appendChild(el('b', null, it.wk.label)); when.appendChild(el('span', 'hint', 'Summer'));
+        m.kids.forEach(function (k) { (k.sum[it.d] || []).forEach(function (id) { var c = S.camps[id], note = c.w.indexOf(it.i) < 0 ? ' (not a week it listed, ask)' : c.x ? '' : ' (' + c.y + ' dates, as a guide)'; what.appendChild(chip(k, c.n + note, note ? 'ask' : '', c.href)); }); });
+      } else if (it.t === 'reg') {
+        when.appendChild(el('b', null, longDay(it.d))); when.appendChild(el('span', 'hint', 'Sign-ups'));
+        var a = el('a', null, it.s.name); a.href = it.s.href; what.appendChild(a); what.appendChild(document.createTextNode(': ' + it.s.label + '.'));
+        if (m.kids.length > 1) what.appendChild(el('span', 'hint', ' For ' + it.s.who.map(function (i) { return m.kids[i].label; }).join(', ') + '.'));
+      } else if (it.t === 'own') {
+        when.appendChild(el('b', null, longDay(it.d))); when.appendChild(el('span', 'hint', 'Yours'));
+        var mineKids = m.kids.filter(function (k) { return it.o.w.length && ownFor(it.o, k); });
+        if (mineKids.length && m.kids.length > 1) mineKids.forEach(function (k) { what.appendChild(chip(k, it.o.t, 'own', '')); });
+        else what.appendChild(el('span', 'year-chip own', (ownWho(it.o) && m.kids.length > 1 ? ownWho(it.o) + ': ' : '') + it.o.t));
+      } else { when.appendChild(el('b', null, longDay(it.d))); what.appendChild(document.createTextNode(it.title)); }
+      li.appendChild(when); li.appendChild(what);
+      return li;
+    };
+    // ----- the plan as a calendar: one month at a time. Tap a day and what's on it is listed underneath. -----
+    var calBox = $y('year-cal'), viewBtns = all(yearEl, '#year-views .vs');
+    var view = store('pas-year-view') === 'list' ? 'list' : 'cal', calMonth = '', calDay = '', calBy = {}, calMonths = [];
+    var showView = function () {
+      if (!calBox) view = 'list';
+      viewBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === view)); });
+      if (calBox) calBox.hidden = view !== 'cal';
+      $y('year-agenda').hidden = view === 'cal';
+    };
+    viewBtns.forEach(function (b) {
+      b.addEventListener('click', function () { view = b.getAttribute('data-view') === 'list' ? 'list' : 'cal'; store('pas-year-view', view); showView(); if (window.pasJump) window.pasJump(); });
+    });
+    var kidInk = function (k) { return INKS[Math.max(0, model.kids.indexOf(k)) % 6]; };
+    // what a day's square shows: short labels, one for each thing on it
+    var dayMarks = function (iso) {
+      var out = [], many = model.kids.length > 1;
+      var kidMark = function (k, text, cls) { out.push({ cls: 'm-kid' + (cls ? ' ' + cls : ''), text: (many ? k.label + ': ' : '') + text, ink: kidInk(k) }); };
+      (calBy[iso] || []).forEach(function (it) {
+        if (it.t === 'off') {
+          out.push({ cls: 'm-off', text: 'No school' });
+          model.kids.forEach(function (k) { var v = k.off[iso]; if (v) kidMark(k, shortOff(v), postedOff(v, iso) ? '' : 'm-ask'); else kidMark(k, 'Not planned', 'm-todo'); });
+        } else if (it.t === 'week') {
+          model.kids.forEach(function (k) { (k.sum[it.d] || []).forEach(function (id) { kidMark(k, S.camps[id].n, ''); }); });
+        } else if (it.t === 'reg') out.push({ cls: 'm-reg', text: 'Sign-ups: ' + it.s.name });
+        else if (it.t === 'own') out.push({ cls: 'm-own', text: (ownWho(it.o) && many ? ownWho(it.o) + ': ' : '') + it.o.t });
+        else out.push({ cls: 'm-mark', text: it.title });
+      });
+      return out;
+    };
+    var fullDay = calFullDay;
+    var drawCalDay = function () {
+      var box = $y('year-cal-day');
+      if (!box) return;
+      box.textContent = '';
+      calPick(calBox, calDay);
+      var list = calBy[calDay] || [];
+      if (!calDay || !list.length) { box.appendChild(el('p', 'hint', Object.keys(calBy).some(function (d) { return d.slice(0, 7) === calMonth; }) ? 'Tap a day to see what’s on it.' : 'Nothing is on the calendar this month.')); return; }
+      box.appendChild(el('h4', null, fullDay(calDay)));
+      var ul = el('ul', 'year-list');
+      list.forEach(function (it) { ul.appendChild(itemRow(it)); });
+      box.appendChild(ul);
+    };
+    var drawCalMonth = function () {
+      calMonthView(calBox, {
+        month: calMonth, months: calMonths, today: today0, caption: 'your plan', marks: dayMarks, off: function (iso) { return !!offBy[iso]; },
+        onMonth: function (mk) { calMonth = mk; calDay = firstDayIn(mk); drawCalMonth(); },
+        onDay: function (iso) { calDay = iso; drawCalDay(); }
+      });
+      // what the colours mean
+      var key = el('p', 'cal-key');
+      var sw = function (cls, text, ink) { var x = el('span', 'cal-sw'), dot = el('i', cls); if (ink) dot.style.setProperty('--mk', ink[1]); x.appendChild(dot); x.appendChild(document.createTextNode(text)); key.appendChild(x); };
+      sw('k-off', 'No school');
+      if (model.kids.length > 1) model.kids.forEach(function (k) { sw('k-kid', k.label, kidInk(k)); }); else if (model.kids.length) sw('k-kid', 'Where they’ll be', kidInk(model.kids[0]));
+      sw('k-reg', 'Sign-ups'); sw('k-own', 'Yours');
+      calBox.appendChild(key);
+      var detail = el('div', 'cal-detail'); detail.id = 'year-cal-day'; detail.setAttribute('aria-live', 'polite'); calBox.appendChild(detail);
+      drawCalDay();
+    };
+    var firstDayIn = function (mk) { return Object.keys(calBy).filter(function (d) { return d.slice(0, 7) === mk && d >= today0; }).sort()[0] || ''; };
+    var drawCal = function (items) {
+      showView();
+      if (!calBox) return;
+      calBy = {};
+      var put = function (d, x) { (calBy[d] = calBy[d] || []).push(x); };
+      items.forEach(function (it) { if (it.t === 'week') { for (var n = 0; n < 5; n++) put(isoOf(utc(it.d, n)), it); } else put(it.d, it); });
+      if (yd.lastDay) model.own.forEach(function (o) {   // a date of your own that comes every week: on each school day it falls on
+        if (o.r !== 'w') return;
+        for (var d = ownFrom(o), n = 0; d <= yd.lastDay && n < 400; d = isoOf(utc(d, 1)), n++) if (weeklyOn(o, d)) put(d, { t: 'own', d: d, o: o });
+      });
+      var keys = Object.keys(calBy).sort(), last = keys.length ? keys[keys.length - 1].slice(0, 7) : today0.slice(0, 7);
+      calMonths = [];
+      for (var cy = +today0.slice(0, 4), cm = +today0.slice(5, 7), g = 0; g < 36; g++) {
+        var mk = cy + '-' + ('0' + cm).slice(-2);
+        if (mk > last) break;
+        calMonths.push(mk);
+        if (++cm > 12) { cm = 1; cy++; }
+      }
+      if (!calMonths.length) calMonths = [today0.slice(0, 7)];
+      if (calMonths.indexOf(calMonth) < 0) { var soon = keys.filter(function (d) { return d >= today0; })[0]; calMonth = soon ? soon.slice(0, 7) : calMonths[0]; calDay = ''; }
+      if (!calDay || calDay.slice(0, 7) !== calMonth || !calBy[calDay]) calDay = firstDayIn(calMonth);
+      drawCalMonth();
+    };
     var draw = function () {
       var m = model, srcEl = $y('year-src');
       srcEl.textContent = '';
@@ -3521,33 +3827,15 @@
         }
         wkBox.appendChild(grid);
       }
-      // the dates, month by month
+      // the dates, month by month: once as a list, once as a calendar
       var agBox = $y('year-agenda'); agBox.textContent = '';
-      var month = '', ul = null;
-      agenda().forEach(function (it) {
+      var items = agenda(), month = '', ul = null;
+      items.forEach(function (it) {
         var mk = it.d.slice(0, 7);
         if (mk !== month) { month = mk; agBox.appendChild(el('h3', null, MONTHS[+mk.slice(5) - 1] + ' ' + mk.slice(0, 4))); ul = el('ul', 'year-list'); agBox.appendChild(ul); }
-        var li = el('li', 'y-' + it.t), when = el('div', 'year-when'), what = el('div', 'year-what');
-        if (it.t === 'off') {
-          when.appendChild(el('b', null, longDay(it.d))); when.appendChild(el('span', 'hint', 'No school: ' + it.day.name));
-          var open = 0;
-          m.kids.forEach(function (k) { var v = k.off[it.d]; if (v) what.appendChild(chip(k, offLabel(v) + (postedOff(v, it.d) ? '' : ' (date not posted, ask)'), postedOff(v, it.d) ? '' : 'ask', v !== HOME ? yd.programs[v].href : '')); else open++; });
-          if (open) { var plan = el('a', 'year-todo', open === m.kids.length ? 'Nothing planned. Plan this day' : 'Plan it for the ' + (open === 1 ? 'other child' : 'others')); plan.href = yd.offPage + '#d-' + it.d; what.appendChild(plan); }
-        } else if (it.t === 'week') {
-          when.appendChild(el('b', null, it.wk.label)); when.appendChild(el('span', 'hint', 'Summer'));
-          m.kids.forEach(function (k) { (k.sum[it.d] || []).forEach(function (id) { var c = S.camps[id], note = c.w.indexOf(it.i) < 0 ? ' (not a week it listed, ask)' : c.x ? '' : ' (' + c.y + ' dates, as a guide)'; what.appendChild(chip(k, c.n + note, note ? 'ask' : '', c.href)); }); });
-        } else if (it.t === 'reg') {
-          when.appendChild(el('b', null, longDay(it.d))); when.appendChild(el('span', 'hint', 'Sign-ups'));
-          var a = el('a', null, it.s.name); a.href = it.s.href; what.appendChild(a); what.appendChild(document.createTextNode(': ' + it.s.label + '.'));
-          if (m.kids.length > 1) what.appendChild(el('span', 'hint', ' For ' + it.s.who.map(function (i) { return m.kids[i].label; }).join(', ') + '.'));
-        } else if (it.t === 'own') {
-          when.appendChild(el('b', null, longDay(it.d))); when.appendChild(el('span', 'hint', 'Yours'));
-          var mineKids = m.kids.filter(function (k) { return it.o.w.length && ownFor(it.o, k); });
-          if (mineKids.length && m.kids.length > 1) mineKids.forEach(function (k) { what.appendChild(chip(k, it.o.t, 'own', '')); });
-          else what.appendChild(el('span', 'year-chip own', (ownWho(it.o) && m.kids.length > 1 ? ownWho(it.o) + ': ' : '') + it.o.t));
-        } else { when.appendChild(el('b', null, longDay(it.d))); what.appendChild(document.createTextNode(it.title)); }
-        li.appendChild(when); li.appendChild(what); ul.appendChild(li);
+        ul.appendChild(itemRow(it));
       });
+      drawCal(items);
       drawChanged();
       drawCard();
       if (window.pasJump) window.pasJump();
@@ -3719,6 +4007,7 @@
       drawCard = function () {
         var list = pageList();
         cardBox.hidden = !list.length;
+        if ($y('year-share')) $y('year-share').hidden = cardBox.hidden;
         if (!list.length) return;
         titleBox.placeholder = defaultTitle();
         if (picOwnRow) picOwnRow.hidden = !model.own.length;
@@ -4187,6 +4476,7 @@
         }
       }
       var whose = r.kids.length > 1 ? possessive(kidLabel(kid, r.kid)) : kid.name ? possessive(kid.name) : 'your';
+      if (!mayPlan()) { toggle.textContent = 'Add to roster'; toggle.className = 'btn needs-js'; return; }
       toggle.textContent = on.length
         ? 'On ' + whose + ' ' + (r.active === 'next' ? 'upcoming' : 'current') + ' roster: ' + on.join(', ') + (mixed ? ' (different classes)' : cls ? ' (' + cls + ')' : '')
         : r.kids.length > 1 ? 'Add to ' + whose + ' roster' : 'Add to roster';
@@ -4194,6 +4484,24 @@
     };
     refreshers.push(show);
     toggle.addEventListener('click', function () {
+      if (!mayPlan()) {   // the week builder needs an account: say so here, and remember what they meant to add
+        var ask = card.querySelector('.acct-mini');
+        if (!ask) {
+          var boardLink = panel.querySelector('a[href*="board/"]'), bh = boardLink ? boardLink.getAttribute('href') : '../board/';
+          var root = bh.replace(/board\/.*$/, ''), index = /index\.html$/.test(bh) ? 'index.html' : '';
+          ask = el('div', 'acct-mini');
+          ask.appendChild(el('p', null, 'Building a week needs a free account. There’s no password: we email you a code, or you use Google.'));
+          var acts = el('div', 'actions'), mk = el('a', 'btn primary', 'Create a free account'), li = el('a', 'btn', 'Log in');
+          mk.href = root + 'register/' + index + '?next=board'; li.href = root + 'account/' + index + '?next=board';
+          var later = function () { try { wantLater(new URL(root + 'board/' + index, location.href).pathname, '?add=' + encodeURIComponent(card.id) + '&school=' + encodeURIComponent(school)); } catch (e) { /* an old browser: they land on the builder without it */ } };
+          mk.addEventListener('click', later); li.addEventListener('click', later);
+          acts.appendChild(mk); acts.appendChild(li); ask.appendChild(acts);
+          panel.parentNode.insertBefore(ask, panel);
+          track({ event: 'pas_account_ask', place: 'add_to_roster' });
+        } else ask.hidden = !ask.hidden;
+        toggle.setAttribute('aria-expanded', String(!ask.hidden));
+        return;
+      }
       panel.hidden = !panel.hidden;
       toggle.setAttribute('aria-expanded', String(!panel.hidden));
     });
@@ -4226,6 +4534,7 @@
         return;
       }
       var day = target.getAttribute('data-day'), i = findEntry(b.days[day], key);
+      var full0 = DAYS.every(function (d) { return b.days[d[0]].length > 0; });
       if (i > -1) b.days[day].splice(i, 1);
       else {
         var cls = currentClass(b);
@@ -4235,6 +4544,7 @@
       }
       saveRosters();
       show();
+      if (!full0 && DAYS.every(function (d) { return b.days[d[0]].length > 0; })) cheer('week', 'week-' + r.kid + '|' + r.active, 'You planned the whole week.');
     });
     show();
   });

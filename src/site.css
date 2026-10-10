@@ -1270,6 +1270,47 @@ ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 @media (max-width:640px){.off-chart{min-width:1420px}}
 .year-out{background:var(--surface);border:2px solid var(--yellow);border-radius:18px;padding:22px 24px;gap:12px}
 html.signed .year-out{display:none}
+/* every planner needs an account: signed out, this ask stands where the planner would be */
+.acct-ask{display:flex;flex-direction:column;gap:12px;max-width:44rem}
+.acct-ask h3{margin:0;font-size:1.3rem}
+.acct-ask p{margin:0}
+.acct-ask .rules{margin:0}
+#board-ask{margin-bottom:8px}
+.acct-mini{flex-basis:100%;background:var(--warn);color:var(--warn-ink);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.acct-mini[hidden]{display:none}
+.acct-mini p{margin:0}
+.acct-ask .actions,.acct-mini .actions{justify-content:flex-start}
+@media print{.acct-ask,.acct-mini{display:none!important}}
+/* the dragon: it flies in from the left, hangs in the middle long enough to read, and leaves to the right */
+.cheer{position:fixed;left:0;right:0;top:16vh;z-index:400;pointer-events:none;overflow:visible}
+.cheer-train{display:inline-block;will-change:transform;animation:cheer-fly 7.2s cubic-bezier(.3,.1,.7,.9) both}
+.cheer-bob{display:flex;align-items:center;gap:4px;animation:cheer-bob 1.6s ease-in-out infinite}
+.cheer-say{position:relative;display:flex;flex-direction:column;gap:2px;background:#FFFFFF;color:#0B2140;border:3px solid #F3C613;border-radius:18px;padding:14px 20px;max-width:min(22rem,78vw);box-shadow:0 10px 30px rgba(11,33,64,.28);font-size:1.05rem;line-height:1.3}
+.cheer-say::after{content:"";position:absolute;right:-13px;top:50%;margin-top:-10px;border:10px solid transparent;border-left-color:#F3C613;border-right-width:0}
+.cheer-say b{font-family:var(--display);font-stretch:112%;font-weight:850;font-size:1.5rem;line-height:1.1}
+.cheer-say em{font-style:normal;font-family:var(--display);font-stretch:112%;font-weight:850;font-size:1.15rem;color:#CC3000}
+.cheer-dragon{width:230px;flex:none;filter:drop-shadow(0 8px 10px rgba(11,33,64,.25))}
+.cheer-dragon svg{display:block;width:100%;height:auto;overflow:visible}
+.dr-wing{transform-box:fill-box;transform-origin:92% 96%;animation:cheer-flap .42s ease-in-out infinite alternate}
+.dr-wing-b{animation-delay:-.21s}
+.dr-flame{transform-box:fill-box;transform-origin:0 50%;animation:cheer-flame .22s ease-in-out infinite alternate}
+@keyframes cheer-fly{0%{transform:translateX(-105%)}26%{transform:translateX(calc(50vw - 56%))}74%{transform:translateX(calc(50vw - 44%))}100%{transform:translateX(102vw)}}
+@keyframes cheer-bob{0%,100%{transform:translateY(-8px) rotate(-2deg)}50%{transform:translateY(10px) rotate(2deg)}}
+@keyframes cheer-flap{from{transform:rotate(14deg) scaleY(1)}to{transform:rotate(-22deg) scaleY(.82)}}
+@keyframes cheer-flame{from{transform:scale(.82,.9);opacity:.85}to{transform:scale(1.18,1.06);opacity:1}}
+@media (max-width:640px){
+  .cheer{top:12vh}
+  .cheer-bob{flex-direction:column-reverse;gap:10px}
+  .cheer-say{max-width:84vw;text-align:center;align-items:center}
+  .cheer-say::after{right:auto;left:50%;top:-13px;margin:0 0 0 -10px;border:10px solid transparent;border-bottom-color:#F3C613;border-top-width:0}
+  .cheer-dragon{width:170px}
+}
+/* less motion asked for: the dragon stands still at the foot of the screen, with a way to close it */
+.cheer.calm{top:auto;bottom:18px;display:flex;justify-content:center;pointer-events:auto}
+.cheer.calm .cheer-train,.cheer.calm .cheer-bob,.cheer.calm .dr-wing,.cheer.calm .dr-flame{animation:none}
+.cheer.calm .cheer-dragon{width:130px}
+.cheer-x{align-self:flex-start;margin-top:6px;font:inherit;font-size:.9rem;background:none;border:0;padding:4px 0;color:#1763B8;text-decoration:underline;cursor:pointer}
+@media print{.cheer{display:none!important}}
 .year-out[hidden],.year[hidden],#year-wait[hidden]{display:none}
 .year-src{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
 .year-src li{color:var(--muted)}
@@ -1307,6 +1348,83 @@ html.signed .year-out{display:none}
 .year-link{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:6px 0 2px}
 @media (max-width:640px){.year-list li{grid-template-columns:minmax(0,1fr)}.year-out{padding:18px 16px}}
 @media print{.year-file,.year-src a,.year-todo,.year-changed button{display:none!important}body:not(.print-card) #year-card{display:none!important}}
+/* My kids' calendar in four steps (add it, view it, share it, pencil it in), each under a numbered heading */
+.year-step{display:flex;flex-direction:column;gap:14px;min-width:0}
+.year-step[hidden]{display:none}
+.year-step + .year-step,#year-full > .year-step:first-child,.year-changed + #year-empty + #year-full{margin-top:6px}
+#year-full{display:flex;flex-direction:column;gap:26px}
+#year-full[hidden]{display:none}
+.step-head{display:flex;align-items:center;gap:12px;margin:0;padding-top:18px;border-top:3px solid var(--yellow);font-family:var(--display);font-stretch:112%;font-weight:800;font-size:1.5rem;line-height:1.1;color:var(--ink)}
+.step-head b{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--ink);color:var(--bg);font-size:1.05rem;flex:none}
+#year-add .step-head{border-top:0;padding-top:0}
+.step-say{margin:0;color:var(--muted)}
+.year-view-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px}
+.year-view-head h3{margin:0}
+.view-switch{align-self:center}
+/* the plan as a calendar: a month of squares, each with a short label for what's on that day */
+.year-cal{display:flex;flex-direction:column;gap:12px;min-width:0}
+.year-cal[hidden]{display:none}
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.cal-head h4{margin:0;font-size:1.25rem;text-align:center;flex:1}
+.cal-nav{font:inherit;font-weight:800;font-size:1.3rem;line-height:1;min-width:46px;min-height:44px;padding:6px 14px;background:var(--surface);cursor:pointer}
+.cal-nav[disabled]{opacity:.35;cursor:default}
+.cal-grid{width:100%;border-collapse:separate;border-spacing:4px;table-layout:fixed}
+.cal-grid th{font-size:.82rem;font-weight:700;color:var(--muted);text-align:center;padding:2px 0}
+.cal-grid abbr{text-decoration:none}
+.cal-grid td{vertical-align:top;height:104px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:0;overflow:hidden}
+.cal-grid td.cal-pad{background:transparent;border-color:transparent}
+.cal-grid td.cal-off{background:#FFF1B8;border-color:#E2B300}
+.cal-grid td.cal-past{opacity:.5}
+.cal-grid td.cal-today{border:2px solid var(--ink)}
+.cal-n{display:block;font-weight:700;font-size:.9rem;padding:5px 7px 2px;color:var(--ink)}
+.cal-off .cal-n{color:#2A2100}
+.cal-day{display:flex;flex-direction:column;align-items:stretch;width:100%;height:100%;min-height:102px;font:inherit;text-align:left;background:transparent;border:0;padding:0;cursor:pointer;color:inherit}
+.cal-day[aria-pressed="true"]{box-shadow:inset 0 0 0 3px var(--link)}
+.cal-day:focus-visible{outline:3px solid var(--link);outline-offset:-3px}
+.cal-marks{display:flex;flex-direction:column;gap:3px;padding:0 4px 5px;min-width:0}
+.cal-m{display:block;font-size:.74rem;line-height:1.25;font-weight:700;color:#0B2140;background:#E4ECF6;border-left:4px solid #4D607A;border-radius:5px;padding:2px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-m.m-off{background:#F3C613;border-color:#B88A00;color:#2A2100}
+.cal-m.m-kid{background:#FFFFFF;border-left:5px solid var(--mk,#1763B8)}
+.cal-m.m-todo{background:#FFFFFF;border:1.5px dashed #5C4700;color:#5C4700;font-weight:400}
+.cal-m.m-ask{border-left-style:dotted}
+.cal-m.m-reg{background:#FFFFFF;border-color:#CC3000}
+.cal-m.m-own{background:#DAEDFE;border-color:#0F4D90}
+.cal-m.m-mark{background:#0B2140;border-color:#0B2140;color:#FFFFFF}
+.cal-more{font-size:.72rem;color:var(--muted);padding-left:5px}
+.cal-off .cal-more{color:#5C4700}
+.cal-key{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0;font-size:.86rem;color:var(--muted)}
+.cal-sw{display:inline-flex;align-items:center;gap:6px}
+.cal-sw i{width:14px;height:14px;border-radius:4px;border-left:4px solid #4D607A;background:#E4ECF6;flex:none}
+.cal-sw i.k-off{background:#F3C613;border-color:#B88A00}
+.cal-sw i.k-kid{background:#FFFFFF;border-left:5px solid var(--mk,#1763B8);box-shadow:0 0 0 1px var(--line)}
+.cal-sw i.k-reg{background:#FFFFFF;border-color:#CC3000;box-shadow:0 0 0 1px var(--line)}
+.cal-sw i.k-own{background:#DAEDFE;border-color:#0F4D90}
+.cal-detail{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.cal-detail h4{margin:0;font-size:1.08rem}
+.cal-detail .year-list li:first-child{border-top:0}
+.cal-detail li:not(.y-week) .year-when b{display:none}
+.year-chip b{white-space:nowrap}
+@media (max-width:760px){
+  .cal-grid{border-spacing:2px}
+  .cal-grid td{height:58px;border-radius:8px}
+  .cal-day{min-height:56px}
+  .cal-n{font-size:.82rem;padding:4px 5px 1px}
+  .cal-marks{gap:2px;padding:0 3px 3px}
+  .cal-m{font-size:0;line-height:0;height:6px;padding:0;border-left-width:0;border-radius:3px}
+  .cal-m.m-kid{background:var(--mk,#1763B8)!important}
+  .cal-m.m-todo{height:6px;border:1px dashed #5C4700!important;background:transparent!important}
+  .cal-m.m-reg{background:#CC3000}
+  .cal-m.m-own{background:#0F4D90}
+  .cal-m.m-off{background:#B88A00}
+  .cal-more{display:none}
+  .step-head{font-size:1.3rem}
+}
+@media print{#year-views,.year-cal{display:none!important}#year-agenda{display:block!important}}
+/* the days-off planner can show the same month of squares; the day that is picked sits under it as a row to choose on */
+.off-view-head{margin-top:6px}
+@media screen{.off-days.cal-mode > li.cal-hide{display:none}.off-days.cal-mode{margin-top:0}.off-days.cal-mode > li{border-top:0;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px 16px}}
+.cal-sw i.k-todo{background:#FFFFFF;border:1.5px dashed #5C4700}
+@media print{#off-views,#off-month{display:none!important}}
 .claim-stats{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;margin:6px 0}
 .claim-stats h4{margin:0}
 .claim-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:10px}
