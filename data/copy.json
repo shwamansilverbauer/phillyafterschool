@@ -1,11 +1,11 @@
 {
     "4b844d0798": {
         "was": "Find your school or a program",
-        "now": "Find a school or a program"
+        "now": "Search by school or program"
     },
     "9f6c7e2886": {
         "was": "Every district and charter school in the city is in here. If yours isn’t covered yet, you can ask for it.",
-        "now": "Every district and charter school in the city is in here. If yours isn’t covered yet, ask for it to be next!"
+        "now": "Help us build this community resource school by school! If you don’t see your Philly public school or charter school above, submit a request to let us know you’re interested."
     },
     "3a62dafeaf": {
         "was": "Music, art, sports, plain old aftercare.",
@@ -18,5 +18,13 @@
     "a82882c04a": {
         "was": "Josh Silverbauer is a parent of two, with one in the Nebinger catchment. Navigating after-school programs was chaos for him, so he figured it was chaos for everyone else too. His wife Rachael told him to stop complaining and build something. So he built this.",
         "now": "Josh Silverbauer is a parent of two, with one enrolled in Nebinger. Navigating after-school programs was chaos for him, so he figured it was chaos for everyone else too. His wife Rachael told him to stop complaining and build something. So he built this."
+    },
+    "721ce1406c": {
+        "was": "School’s out. Now what?",
+        "now": "School’s out. What now?"
+    },
+    "b4ea78edb2": {
+        "was": "Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.",
+        "now": "After-school programs are supposed to keep your kids busy, not you. Find, compare, and plan out weekly activities without it feeling like another full-time job."
     }
 }
