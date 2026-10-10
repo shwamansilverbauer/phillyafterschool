@@ -2800,7 +2800,9 @@
     };
     if (asked.group || asked.back) {
       try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* file preview */ }
-      window.setTimeout(function () { if (share.scrollIntoView) share.scrollIntoView({ block: 'start' }); }, 80);
+      // back from signing in: on to "keep and share", unless there is no week yet (someone who made the account in order to start one)
+      var anyWeek = board.rosters().kids.some(function (k) { return weekCount(k.now) + weekCount(k.next) > 0; });
+      if (asked.group || anyWeek) window.setTimeout(function () { if (share.scrollIntoView) share.scrollIntoView({ block: 'start' }); }, 80);
     }
     shownFor = shownKey();
     draw();
