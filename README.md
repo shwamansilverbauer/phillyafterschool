@@ -648,6 +648,12 @@ white-on-deep-blue. Dark mode has its own set just below, where the band is deep
 scene is switched off (`--sun`). The week card (`drawCard` in `src/site.js`) and the link-preview picture
 (`src/static/share.png`, 1200 by 630) use the same sky and footer, so change them together.
 
+**What a shared link shows.** A link to the site that is texted or posted shows the picture, a title and a line of
+text. The picture's headline and its one line are part of the picture, so when the home page's headline changes the
+picture has to be drawn again. The line of text under it (`og:description`) on the home page is the home page's
+lede as it reads today, copy edits included (`shareText` in `layout()`, filled by `copyNow()`); every other page
+uses its search description. The description search engines read is separate and is not changed by copy edits.
+
 **A saved school.** A school page has "Save as my school". The choice is kept in the visitor's browser
 (`pas-my-school`), with no account. After that the home page shows a shortcut to the school, the citywide
 lists (A to Z, types, neighborhoods) open narrowed to programs that work for it with an "Any school" button

@@ -81,6 +81,9 @@ function T(original, vars) {
   const shown = vars ? now.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m)) : now;
   return `<span data-copy="${id}"${vars ? ` data-tpl="${esc(now)}" data-vars="${esc(JSON.stringify(vars))}"` : ''}>${esc(shown)}</span>`;
 }
+// The same sentence as plain text, with any approved edit applied: for places that can't hold a span, such as the
+// description a link preview shows.
+const copyNow = original => (typeof copyEdits[copyId(original)]?.now === 'string' ? copyEdits[copyId(original)].now : original);
 // A short fingerprint of each asset, added to its URL. When the file changes, the URL changes,
 // so browsers and the host's CDN fetch the new one instead of a cached copy.
 const stamp = f => PREVIEW ? '' : '?v=' + createHash('sha1').update(fs.readFileSync(path.join(ROOT, f))).digest('hex').slice(0, 8);
@@ -515,7 +518,7 @@ function street(animate) {
   return `<svg class="street${animate ? ' go' : ''}" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${sky}${run(-10, sx)}${school}${run(sx + sw, 2010)}<rect class="st" x="0" y="${G}" width="2000" height="12"/><g class="bus"><g transform="translate(968,${G - 22})">${bus}</g></g></svg>`;
 }
 
-function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false, first = '', theme = '', shareImage = null, quiet = false }) {
+function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false, first = '', theme = '', shareImage = null, shareText = '', quiet = false }) {
   const canonical = cfg.siteUrl + '/' + pathName;
   // Search results show roughly 60 characters of a title and 155 of a description. The site name is added
   // to a title only when it fits; a long description is cut at a word.
@@ -539,7 +542,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${esc(canonical)}">${noindex ? '\n<meta name="robots" content="noindex">' : ''}
 <meta property="og:title" content="${esc(fullTitle)}">
-<meta property="og:description" content="${esc(description)}">
+<meta property="og:description" content="${esc(shareText || description)}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${esc(canonical)}">
 <meta property="og:site_name" content="${esc(cfg.siteName)}">
@@ -1811,8 +1814,9 @@ ${groups}
 
 function homePage() {
   const covered = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName));
+  const LEDE = `Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.`;
   const hero = `    <h1>${T(`School’s out. Now what?`)}</h1>
-    <p class="lede">${T(`Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.`)}</p>
+    <p class="lede">${T(LEDE)}</p>
     ${finderBox(0, `Find your school or a program`, true)}`;
   const ICON = {
     school: 'M12 2 2 8v2h20V8zM4.5 11.5v6h3v-6zm6 0v6h3v-6zm6 0v6h3v-6zM2 19v3h20v-3z',
@@ -1909,6 +1913,7 @@ ${cfg.builtBy ? `<section class="section" id="who">
 </section>` : ''}`;
   return layout({
     title: cfg.siteName, pathName: '', depth: 0, current: null, hero, body, fragment: PREVIEW, showStreet: 'go', roomy: true,
+    shareText: copyNow(LEDE),   // what a texted or posted link says under the picture: the lede, as it reads today
     description: 'After-school programs and aftercare in Philadelphia, school by school: what runs at the school, who picks up at dismissal, hours, cost and how to register.',
     jsonLd: { '@context': 'https://schema.org', '@graph': [
       { '@type': 'WebSite', '@id': cfg.siteUrl + '/#website', name: cfg.siteName, url: cfg.siteUrl + '/', description: cfg.tagline, publisher: { '@id': cfg.siteUrl + '/#org' } },
