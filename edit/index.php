@@ -216,7 +216,7 @@ if (!edit_signed_in()) {
         <li><a href="../ideas/"><span data-copy="29c269f6e8">Request a feature</span></a></li>
         <li><a href="../privacy/"><span data-copy="cf01481f62">Privacy</span></a></li>
         <li><a href="../terms/"><span data-copy="8a069ed1c6">Terms of use</span></a></li>
-        <li><a href="../support/"><span data-copy="fd1482eac6">Buy me a coffee</span></a></li>
+        <li><a href="../support/"><span data-copy="f6308fefdc">Help the site keep going</span></a></li>
       </ul>
     </div>
   </nav>
@@ -333,7 +333,7 @@ if (!edit_signed_in()) {
     <li><a href="../review/thanks/">Thank-you page after a review</a></li>
     <li><a href="../about/">About</a></li>
     <li><a href="../privacy/">Privacy</a></li>
-    <li><a href="../support/">Buy me a coffee</a></li>
+    <li><a href="../support/">Help the site keep going</a></li>
     <li><a href="../404.html">Page not found</a></li>
   </ul>
   <h2>What can’t be edited here</h2>
@@ -394,7 +394,7 @@ if (!edit_signed_in()) {
         <li><a href="../ideas/"><span data-copy="29c269f6e8">Request a feature</span></a></li>
         <li><a href="../privacy/"><span data-copy="cf01481f62">Privacy</span></a></li>
         <li><a href="../terms/"><span data-copy="8a069ed1c6">Terms of use</span></a></li>
-        <li><a href="../support/"><span data-copy="fd1482eac6">Buy me a coffee</span></a></li>
+        <li><a href="../support/"><span data-copy="f6308fefdc">Help the site keep going</span></a></li>
       </ul>
     </div>
   </nav>

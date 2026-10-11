@@ -1100,8 +1100,8 @@
       var dl = el('a', 'btn', me.claims ? 'Manage your listings' : 'Claim your listing'); dl.href = page('managers/'); dir.appendChild(dl);
       put(dir, 'account');
       help.appendChild(el('h2', null, 'Help the site keep going'));
-      help.appendChild(el('p', null, 'Philly After School is free and run by one parent. If it saved you an evening of searching, you can chip in toward what it costs to run.'));
-      var ha = el('a', 'btn', 'Buy me a coffee'); ha.href = page('support/'); help.appendChild(ha);
+      help.appendChild(el('p', null, 'Philly After School is free for families, but it isn’t free to run. If it saved you an evening of searching, you can chip in toward what it costs to keep it going.'));
+      var ha = el('a', 'btn', 'See how to chip in'); ha.href = page('support/'); help.appendChild(ha);
       put(help, 'account');
       // leaving
       var out = part(el('section', 'panel'), 'sign-out', 'Sign out');
