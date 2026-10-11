@@ -2816,6 +2816,7 @@
   if (pmBox) {
     var PRICE = { month: pmBox.getAttribute('data-month'), year: pmBox.getAttribute('data-year') };
     var PAY = { month: pmBox.getAttribute('data-pay-month') || '', year: pmBox.getAttribute('data-pay-year') || '' };
+    var TESTPAY = /\/test_/.test(PAY.month + ' ' + PAY.year);   // links from Stripe's sandbox: the page says so, so nobody thinks they have paid
     var PLAN = { month: 'Monthly', year: 'Yearly' }, COST = { month: '$' + PRICE.month + ' a month', year: '$' + PRICE.year + ' a year' };
     var pmMe = null, pmClaims = [], pmState = 'checking', pmSaid = '', pmBad = false, pmChange = {};
     var pmDay = function (t) { try { return new Date(t * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric' }); } catch (e) { return ''; } };
@@ -2870,7 +2871,7 @@
       var row = el('div', 'actions'); row.appendChild(go);
       if (now) { var no = el('button', 'btn', 'Keep ' + PLAN[now].toLowerCase()); no.type = 'button'; no.addEventListener('click', function () { delete pmChange[c.listing]; pmDraw(); }); row.appendChild(no); }
       form.appendChild(row);
-      if (!now) form.appendChild(el('p', 'hint', PAY.year ? 'Next you pay on Stripe’s secure page. Your listing becomes premium once the payment is in, usually within a day.' : 'Nothing is charged today. We’ll email you before premium starts and before anything is charged.'));
+      if (!now) form.appendChild(el('p', 'hint', PAY.year ? (TESTPAY ? 'Payments are being tested: the next step is Stripe’s practice checkout, and no real payment is taken.' : 'Next you pay on Stripe’s secure page. Your listing becomes premium once the payment is in, usually within a day.') : 'Nothing is charged today. We’ll email you before premium starts and before anything is charged.'));
       form.addEventListener('submit', function (e) {
         e.preventDefault();
         var plan = (form.querySelector('input:checked') || {}).value || 'year';
@@ -2889,7 +2890,7 @@
       if (pmPaid) {
         var ty = el('div', 'g-status good pm-thanks'); ty.setAttribute('role', 'status');
         ty.appendChild(el('b', null, 'Thank you!'));
-        ty.appendChild(document.createTextNode(' Stripe is emailing you a receipt. We’ll switch your listing to premium within a day and email you when it’s on.'));
+        ty.appendChild(document.createTextNode(/^cs_test_/.test(pmSess) ? ' That was a practice payment, so no money moved. A real one would be confirmed here the same way.' : ' Stripe is emailing you a receipt. We’ll switch your listing to premium within a day and email you when it’s on.'));
         pmBox.appendChild(ty);
       }
       if (pmState === 'checking') { pmBox.appendChild(el('p', 'hint', 'One moment…')); return; }
@@ -2924,10 +2925,10 @@
           item.appendChild(el('p', null, 'Signed up' + (pmDay(c.asked.t) ? ' on ' + pmDay(c.asked.t) : '') + ': ' + PLAN[plan].toLowerCase() + ', ' + COST[plan] + '.'));
           var row2 = el('p', 'actions');
           if (payUrl(plan, c.listing)) {
-            var pay = el('a', 'btn primary', 'Pay on Stripe'); pay.href = payUrl(plan, c.listing); pay.rel = 'noopener';
+            var pay = el('a', 'btn primary', TESTPAY ? 'Pay on Stripe (test)' : 'Pay on Stripe'); pay.href = payUrl(plan, c.listing); pay.rel = 'noopener';
             pay.addEventListener('click', function () { pmStep('to_payment', plan); pmSale('begin_checkout', plan, '', /\/test_/.test(PAY[plan])); });
             row2.appendChild(pay);
-            item.appendChild(el('p', 'hint', pmPaid ? 'If you’ve just paid, there’s nothing more to do.' : 'Paid already? Your listing becomes premium once we see the payment, usually within a day. We’ll email you.'));
+            item.appendChild(el('p', 'hint', TESTPAY ? 'Payments are being tested: this goes to Stripe’s practice checkout, and no real payment is taken.' : pmPaid ? 'If you’ve just paid, there’s nothing more to do.' : 'Paid already? Your listing becomes premium once we see the payment, usually within a day. We’ll email you.'));
           } else item.appendChild(el('p', 'hint', 'Nothing is charged yet. We’ll email you before premium starts and before anything is charged.'));
           var ch = el('button', 'btn', 'Change the plan'); ch.type = 'button'; ch.addEventListener('click', function () { pmChange[c.listing] = true; pmSaid = ''; pmDraw(); }); row2.appendChild(ch);
           item.appendChild(row2);
