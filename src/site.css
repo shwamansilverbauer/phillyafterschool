@@ -1236,7 +1236,7 @@ ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .sum-key .k{width:18px;height:18px;border-radius:5px;background:var(--sky-bg);border:1.5px solid var(--link)}
 .sum-key .k.exact{background:var(--green-bg);border-color:var(--green-ink)}
 .sum-key .k.picked{background:var(--cell-on);border-color:var(--cell-on)}
-.sum-chart-wrap{overflow:auto;max-height:min(76vh,760px);border:1px solid var(--line);border-radius:14px;background:var(--surface);-webkit-overflow-scrolling:touch}
+.sum-chart-wrap{position:relative;overflow:auto;max-height:min(76vh,760px);border:1px solid var(--line);border-radius:14px;background:var(--surface);-webkit-overflow-scrolling:touch}
 .sum-chart-wrap:focus-visible{outline:3px solid var(--link);outline-offset:2px}
 .sum-chart{border-collapse:separate;border-spacing:0;width:100%;min-width:820px;font-size:.92rem}
 .sum-chart th,.sum-chart td{border-bottom:1px solid var(--line);padding:0}
@@ -1279,7 +1279,58 @@ html.signed .year-out{display:none}
 .acct-mini{flex-basis:100%;background:var(--warn);color:var(--warn-ink);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;margin-top:6px}
 .acct-mini[hidden]{display:none}
 .acct-mini p{margin:0}
-.acct-ask .actions,.acct-mini .actions{justify-content:flex-start}
+.acct-ask .actions,.acct-mini .actions{justify-content:flex-start;align-self:flex-start;grid-area:auto}
+/* an example of what the planner makes, beside the ask: a made-up family's plan, marked "Example" */
+.acct-ask.has-ex{max-width:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);grid-template-areas:"say ex" "do ex";gap:14px 28px;align-items:start}
+.acct-ask.has-ex.ex-wide{grid-template-columns:minmax(0,1fr);grid-template-areas:"say" "ex" "do"}
+.acct-ask.ex-wide .acct-ask-say{max-width:44rem}
+.acct-ask-say{grid-area:say;display:flex;flex-direction:column;gap:12px}
+.acct-ask-do{grid-area:do;display:flex;flex-direction:column;gap:12px}
+.acct-ask.has-ex > .ex{grid-area:ex}
+.ex{margin:0;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0;box-shadow:0 6px 18px rgba(11,33,64,.08)}
+.ex figcaption{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.ex figcaption b{font-family:var(--display);font-stretch:112%;font-size:1.08rem}
+.ex-tag{background:var(--yellow);color:var(--yellow-ink);font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:3px 10px}
+.ex-kids{display:inline-flex;gap:4px;margin-left:auto}
+.ex-kids i{font-style:normal;font-size:.82rem;font-weight:700;border:1.5px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--muted);background:var(--surface)}
+.ex-kids i.on{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink)}
+.ex-days{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.ex-days li{display:flex;flex-direction:column;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 7px;min-width:0}
+.ex-days li > b{font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.ex-chip{display:flex;flex-direction:column;gap:1px;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--tc,#1763B8);border-radius:9px;padding:6px 8px;font-weight:700;font-size:.88rem;line-height:1.25;min-width:0;overflow-wrap:break-word}
+.ex-chip small{font-weight:400;font-size:.76rem;color:var(--muted)}
+.ex-chip.todo{border:1.5px dashed var(--muted);color:var(--muted);font-weight:400}
+.ex-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.ex-list li{display:grid;grid-template-columns:minmax(0,9.5rem) minmax(0,1fr);gap:6px 14px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.ex-list li:first-child{border-top:0}
+.ex-list li > .ex-chip + .ex-chip{grid-column:2}
+.ex-when{display:flex;flex-direction:column;min-width:0}
+.ex-when b{font-family:var(--display);font-stretch:112%;font-size:.95rem}
+.ex-when small{font-size:.78rem;color:var(--muted)}
+.ex-foot{margin:0;font-size:.86rem;color:var(--muted)}
+.ex-cal .cal-grid{border-spacing:3px}
+.ex-cal .cal-grid td{height:66px}
+.ex-day{display:flex;flex-direction:column;min-height:64px}
+.ex-cal .cal-m{font-size:.66rem;padding:1px 4px}
+.ex-cal .cal-n{font-size:.78rem;padding:3px 5px 1px}
+.year-out .ex{max-width:46rem}
+@media (max-width:900px){
+  .acct-ask.has-ex{grid-template-columns:minmax(0,1fr);grid-template-areas:"say" "ex" "do"}
+}
+@media (max-width:640px){
+  .ex{padding:12px}
+  .ex-days{grid-template-columns:minmax(0,1fr)}
+  .ex-days li{flex-direction:row;flex-wrap:wrap;align-items:center;padding:7px 8px}
+  .ex-days li > b{width:2.6rem;flex:none}
+  .ex-days .ex-chip{flex:1 1 9rem}
+  .ex-list li{grid-template-columns:minmax(0,1fr)}
+  .ex-list li > .ex-chip + .ex-chip{grid-column:1}
+  .ex-cal .cal-grid td{height:44px}
+  .ex-day{min-height:42px}
+}
+@media (max-width:760px){
+  .ex-cal .cal-m{font-size:0;line-height:0;padding:0}
+}
 @media print{.acct-ask,.acct-mini{display:none!important}}
 /* the dragon: it flies in from the left, hangs in the middle long enough to read, and leaves to the right */
 .cheer{position:fixed;left:0;right:0;top:16vh;z-index:400;pointer-events:none;overflow:visible}

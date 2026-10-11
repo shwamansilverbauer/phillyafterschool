@@ -1244,6 +1244,12 @@ open each day off, when each camp runs) are there for everyone.
   in to). `"plannersNeedAccount": false` under `groups` in `site.config.json` opens the planners again. When it is
   on, `<html>` carries `data-gate="1"`, the planner's markup is wrapped in `.when-in` and the ask (`planAsk()`) is
   `.when-out`: the same two classes the menu uses, driven by the `signed` class on `<html>`.
+- **An example beside each ask** (`planExample()` in `build.mjs`): what that planner makes, so there is a reason
+  to sign up. The week builder shows a made-up child's week, the days-off planner the next four days off with a
+  plan on each, the summer planner five weeks of camps, and My kids' calendar a month of squares (the one of the
+  next three months with the most days off). Each is marked "Example" and nothing in it can be pressed. The dates
+  are real and rebuilt nightly; the programs and camps are invented ("Chess club", "Art camp") on purpose, because
+  a real listing shown there would be singled out over the others. On a phone the buttons sit right under it.
 - **In the scripts** (`site.js`): `mayPlan()` says whether this visitor may plan. Signed out, "Add to roster" on a
   school page opens a small ask instead of the days; the boxes in the two charts are not buttons; nothing is added
   on arrival from "Add Saturday to your week".
