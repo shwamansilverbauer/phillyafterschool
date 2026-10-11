@@ -15,7 +15,10 @@
   "builtBy": {
     "name": "Josh Silverbauer",
     "url": "https://joshsilverbauer.com",
-    "bio": "Josh Silverbauer is a parent of two, with one in the Nebinger catchment. Navigating after-school programs was chaos for him, so he figured it was chaos for everyone else too. His wife Rachael told him to stop complaining and build something. So he built this."
+    "bio": "Josh Silverbauer is a parent of two, with one enrolled in Nebinger. Navigating after-school programs was chaos for him, so he figured it was chaos for everyone else too. His wife Rachael told him to stop complaining and build something. So he built this site. He then showed Rachael and she said “Brilliant! But the copy sucks,” so he said stop complaining and write something, so she wrote this site."
+  },
+  "writtenBy": {
+    "name": "Rachael Silverbauer"
   },
   "repo": "shwamansilverbauer/phillyafterschool",
   "editLogin": {

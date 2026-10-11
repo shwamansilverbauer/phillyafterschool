@@ -593,7 +593,7 @@ ${body}
     <div class="foot-brand">
       <a class="brand" href="${link('', depth)}"><span class="bus-mark"></span>${esc(cfg.siteName)}</a>
       <p>${T(`After-school programs in Philadelphia, sorted by the school your child goes to.`)}</p>
-      ${cfg.supportUrl ? `<p class="foot-support"><span>${T(`Free, and run by one parent.`)}</span> <a class="btn foot-cta" href="${link('support/', depth)}">Help the site keep going</a></p>` : ''}
+      ${cfg.supportUrl ? `<p class="foot-support"><span>${T(`Created and run by the Silverbauers.`)}</span> <a class="btn foot-cta" href="${link('support/', depth)}">Help the site keep going</a></p>` : ''}
     </div>
     <div>
       <h2><a href="${link('schools/', depth)}">${T(`Schools`)}</a></h2>
@@ -647,6 +647,7 @@ ${body}
     <p>${T(`{site} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.`, { site: cfg.siteName })}</p>
     ${cfg.contactEmail ? `<p>${T(`Questions?`)} <a href="mailto:${esc(cfg.contactEmail)}">${esc(cfg.contactEmail)}</a> ${T(`or`)} <a href="${link('contact/', depth)}">${T(`send a message`)}</a>.</p>` : ''}
     ${cfg.builtBy ? `<p>Built by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
+    ${cfg.writtenBy ? `<p>Written by ${esc(cfg.writtenBy.name)}.</p>` : ''}
   </div>
 </div></footer>
 <script src="${link('assets/site.js', depth)}${JS_V}" data-edit="${esc(JSON.stringify(editCfg))}"${GROUPS && !PREVIEW ? ` data-api="${link('groups/api.php', depth)}"` : ''}></script>
@@ -1817,7 +1818,6 @@ ${groups}
 }
 
 function homePage() {
-  const covered = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName));
   const LEDE = `Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.`;
   const hero = `    <h1>${T(`School’s out. Now what?`)}</h1>
     <p class="lede">${T(LEDE)}</p>
@@ -1893,11 +1893,6 @@ ${more.length ? `<section class="section" id="more">
   </div>
   <p class="more-all"><a class="btn" href="${link('all-programs/', 0)}">${T(`See every kind of program`)}</a></p>
 </section>` : ''}
-<section class="section" id="schools">
-  <h2>${T(`Schools covered so far`)}</h2>
-  <div class="chips-row">${covered.slice(0, 12).map(s => `<a class="btn" href="${link(s.id + '/', 0)}">${esc(s.shortName)}</a>`).join('')}<a class="btn quiet" href="${link('schools/', 0)}">${covered.length > 12 ? `All ${covered.length} schools` : T(`All schools`)}</a></div>
-  <p>${T(`Schools are added one at a time, because every pickup list has to be checked. Search for yours above and ask for it: the ones parents ask for most go first.`)}</p>
-</section>
 ${datesBox(0, { pick: true, place: 'home', cls: 'wide', title: T(`Get the dates by email`), lede: T(`Sign-up openings, deadlines and days off for your school, so none of them sneaks up on you.`), hint: T(`Sign-up dates reach you the morning after they’re posted here, then again the day before and at about 8 that morning. Days off come in a {day} round-up.`, { day: SEND_DAY_NAME }), old: { place: 'home', title: T(`Get the dates by email`), lede: T(`Sign-up openings, deadlines and days off for your school, so none of them sneaks up on you.`) } })}
 <section class="section">
   <h2>${T(`How programs are sorted`)}</h2>

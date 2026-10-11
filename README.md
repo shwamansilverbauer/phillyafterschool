@@ -29,6 +29,7 @@ Fill in `site.config.json`:
 - `supportLabel` and `supportHandle`: the button text on the "Buy me a coffee" page, and the handle shown under it for people who'd rather search in the app.
 - `siteUrl`: the domain you treat as the main one. Redirect the other domain to it at your host.
 - `builtBy`: the name, link and short bio shown in the footer, on the home page and on About.
+- `writtenBy`: optional. A name for a "Written by" line under "Built by" in the footer. It carries no link.
 - `gtmId`: optional, e.g. `GTM-XXXXXXX`.
 - `admins`: optional, a list of email addresses whose accounts open `/edit/` and its pages (see "Site admins").
 - `editLogin`: optional, `{ "user": "...", "passwordHash": "..." }`. Puts a sign-in on `/edit/`. The hash is a bcrypt hash, never the
