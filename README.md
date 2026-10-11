@@ -558,6 +558,16 @@ changes where a listing appears in a list, and it has no say over reviews.
     `p_coco-academy`; never a name or an email address) so the payment in Stripe can be matched to the listing.
     Nothing tells the site a payment came in: the owner sees it in Stripe and presses "Make it premium". Without the
     links the page says nothing is charged yet. The build warns if links are set while premium is still "preview".
+  - **Coming back from Stripe, and counting the sale.** Each Payment Link is set (in Stripe, under "After the
+    payment") to send the payer to `https://phillyafterschool.org/premium/?paid=year&session_id={CHECKOUT_SESSION_ID}`
+    (`paid=month` on the monthly link; Stripe fills in the id). The page thanks them, pushes a Google Analytics
+    `purchase` event to the data layer (`transaction_id` is Stripe's checkout id, `value` and `items` are the plan
+    and its price, `pas_test` is true for a sandbox checkout) plus `pas_premium` with step `paid`, and then takes
+    `paid` and `session_id` off the address. A checkout id is counted once a browser (`pas-paid-seen`), and an
+    address with no well-formed Stripe id reports nothing, so typing `?paid=year` by hand can't invent a sale.
+    Pressing "Pay on Stripe" pushes `begin_checkout`. None of these carry the listing or the person. The address
+    proves nothing about payment, so it never turns premium on. Nothing can be measured on Stripe's own checkout
+    page; in Google Analytics, list `stripe.com` under unwanted referrals so the visit isn't credited to Stripe.
 - **Which listings are premium** is a row in the `premium` table. For now the owner sets it by hand on
   `/edit/claims/` ("Make it premium" beside each claimed listing); a payment would set the same row later. Turning
   it off hides what was added and keeps it. By the rule under "What stays free", a free program can simply be made
