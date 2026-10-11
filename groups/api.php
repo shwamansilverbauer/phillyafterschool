@@ -156,6 +156,9 @@ function db(): PDO {
     $pcols = array(); foreach ($db->query('PRAGMA table_info(photos)') as $c) $pcols[] = $c['name'];
     if (!in_array('kind', $pcols, true)) $db->exec("ALTER TABLE photos ADD COLUMN kind TEXT NOT NULL DEFAULT 'photo'");
     $db->exec('CREATE TABLE IF NOT EXISTS premium (listing TEXT PRIMARY KEY, since INTEGER NOT NULL)');
+    // A manager's sign-up for premium: which plan, and when. One for each claim, gone with the claim or the account.
+    // It turns nothing on and charges nothing: the owner makes the listing premium on the review page.
+    $db->exec('CREATE TABLE IF NOT EXISTS premium_asks (claim_id INTEGER PRIMARY KEY REFERENCES claims(id) ON DELETE CASCADE, listing TEXT NOT NULL, plan TEXT NOT NULL, created INTEGER NOT NULL)');
     // Notifications on a phone or computer (web push). A device that asked for them (the address its browser's
     // notification service gave it, and the two keys that let a message be sealed for it alone), which dates each
     // account has already been told about, and a few values the server keeps for itself (its own signing key).
@@ -1084,7 +1087,8 @@ function claim_out(array $c): array {
   }
   $ph = row("SELECT id, status, alt FROM photos WHERE claim_id = ? AND kind = 'photo' AND status != 'declined' ORDER BY id DESC LIMIT 1", array($c['id']));
   $live = photo_live($c['listing']);
-  return array('listing' => $c['listing'], 'name' => isset($l[$c['listing']]) ? $l[$c['listing']]['n'] : 'A listing no longer on the site', 'status' => $c['status'], 'gone' => !isset($l[$c['listing']]), 'edits' => $edits,
+  $asked = premium_mode() !== 'off' ? row('SELECT plan, created FROM premium_asks WHERE claim_id = ?', array($c['id'])) : null;
+  return array('listing' => $c['listing'], 'asked' => $asked ? array('plan' => $asked['plan'], 't' => (int) $asked['created']) : null, 'name' => isset($l[$c['listing']]) ? $l[$c['listing']]['n'] : 'A listing no longer on the site', 'status' => $c['status'], 'gone' => !isset($l[$c['listing']]), 'edits' => $edits,
     'photo' => $ph ? array('status' => $ph['status'], 'alt' => $ph['alt']) : null, 'photoLive' => $live ? (int) $live['id'] : 0, 'space' => space_of($c['listing']),
     'stats' => $c['status'] === 'ok' && isset($l[$c['listing']]) ? stats_of($c['listing']) : null,
     'premium' => $c['status'] === 'ok' && isset($l[$c['listing']]) && is_premium($c['listing']) ? premium_out($c['listing']) : null);
@@ -1975,6 +1979,32 @@ switch ($method . ' ' . $action) {
   case 'POST claim_drop': {
     $u = need_user();
     q("DELETE FROM claims WHERE user_id = ? AND listing = ? AND status != 'declined'", array($u['id'], str($in, 'listing', 90)));   // a declined claim stays, so it can't simply be asked for again
+    out(array('ok' => true, 'claims' => my_claims($u['id'])));
+  }
+
+  // A manager signs a listing up for premium, on a monthly or a yearly plan. Nothing is charged here and nothing
+  // changes on the listing: the plan is kept with the claim and the owner is told, and the owner makes the listing
+  // premium on the review page (once the payment has come in, when payments are taken). Picking the same plan
+  // again does nothing; picking the other one changes it and tells the owner again.
+  case 'POST premium_ask': {
+    $u = need_user();
+    if (premium_mode() === 'off') fail('off', 'Premium listings aren’t available yet.', 403);
+    $key = str($in, 'listing', 90);
+    $l = listings();
+    if (!isset($l[$key])) fail('listing', 'That listing isn’t on the site any more.', 404);
+    $c = row("SELECT id FROM claims WHERE user_id = ? AND listing = ? AND status = 'ok'", array($u['id'], $key));
+    if (!$c) fail('claim', 'Premium is added to a listing you’ve claimed. Claim this one first.', 403);
+    $plan = str($in, 'plan', 8);
+    if (!in_array($plan, array('month', 'year'), true)) fail('plan', 'Pick monthly or yearly.');
+    $had = row('SELECT plan FROM premium_asks WHERE claim_id = ?', array($c['id']));
+    if (!is_premium($key) && (!$had || $had['plan'] !== $plan)) {
+      if (too_many('pmask:' . $u['id'], 8, 86400)) fail('slow', 'That’s a lot of changes for one day. Try again tomorrow.', 429);
+      note('pmask:' . $u['id']);
+      q('INSERT INTO premium_asks (claim_id, listing, plan, created) VALUES (?, ?, ?, ?) ON CONFLICT(claim_id) DO UPDATE SET plan = excluded.plan, created = excluded.created', array($c['id'], $key, $plan, now()));
+      bump('premium_ask');
+      $how = $plan === 'year' ? 'yearly' : 'monthly';
+      tell_owner('A premium sign-up needs your yes: ' . $l[$key]['n'] . ' (' . $how . ')', $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '> ' . ($had ? 'changed the plan for' : 'signed up') . ' “' . $l[$key]['n'] . '”' . ($had ? ' to ' : ' for a premium listing, ') . $how . '.' . "\n\nNothing was charged on the site and nothing has changed on the listing. When their payment has come in, or you’re ready to let them try it, make the listing premium on the review page. They’re emailed when you do.");
+    }
     out(array('ok' => true, 'claims' => my_claims($u['id'])));
   }
 

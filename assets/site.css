@@ -1811,3 +1811,35 @@ html.signed .year-out{display:none}
 .g-push-body{display:flex;flex-direction:column;gap:10px}
 .g-push-steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:4px}
 .g-push .clear{margin-left:4px}
+
+/* ----- the premium sign-up page (/premium/) ----- */
+.pm-gets{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:none}
+.pm-gets li{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.pm-gets li>span{color:var(--muted);line-height:1.45}
+.pm-plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:44rem}
+.pm-plan{position:relative;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:22px 22px 20px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.pm-plan.best{border-color:var(--yellow)}
+.pm-plan h3{margin:0;font-size:1.1rem}
+.pm-flag{position:absolute;top:-13px;left:18px;margin:0;background:var(--yellow);color:var(--yellow-ink);font-weight:700;font-size:.82rem;border-radius:999px;padding:3px 12px}
+.pm-price{margin:0;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.pm-price b{font-size:2.3rem;line-height:1.1;letter-spacing:-.01em}
+.pm-price span,.pm-plan-note{color:var(--muted)}
+.pm-plan-note{margin:0}
+.pm-founding{background:var(--sky-bg);color:var(--sky-ink);border-radius:14px;padding:14px 18px;max-width:44rem}
+#premium-signup{display:flex;flex-direction:column;gap:14px;max-width:44rem}
+#premium-signup>p{margin:0}
+.pm-mine{display:flex;flex-direction:column;gap:14px}
+.pm-item h3{margin:0}
+.pm-item p{margin:0}
+.pm-pick{display:flex;flex-direction:column;gap:12px}
+.pm-pick fieldset{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;min-width:0}
+.pm-pick legend{padding:0;margin-bottom:8px;font-weight:700}
+.pm-opt{display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:14px;padding:12px 16px;cursor:pointer}
+.pm-opt:has(input:checked){border-color:var(--btn);background:var(--sky-bg)}
+.pm-opt input{flex:none;width:20px;height:20px;margin:0;accent-color:var(--btn)}
+.pm-opt span{margin-left:auto;color:var(--muted);text-align:right}
+.pm-opt:has(input:checked) span{color:var(--sky-ink)}
+@media (max-width:760px){
+  .pm-gets,.pm-plans{grid-template-columns:minmax(0,1fr)}
+  .pm-price b{font-size:2rem}
+}

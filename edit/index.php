@@ -127,7 +127,7 @@ if (!edit_signed_in()) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=232b367e">
+<link rel="stylesheet" href="../assets/site.css?v=48821747">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -265,7 +265,7 @@ if (!edit_signed_in()) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=232b367e">
+<link rel="stylesheet" href="../assets/site.css?v=48821747">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -334,6 +334,7 @@ if (!edit_signed_in()) {
     <li><a href="../about/">About</a></li>
     <li><a href="../privacy/">Privacy</a></li>
     <li><a href="../support/">Help the site keep going</a></li>
+    <li><a href="../premium/">Premium listings (not linked from the site yet)</a></li>
     <li><a href="../404.html">Page not found</a></li>
   </ul>
   <h2>What can’t be edited here</h2>
