@@ -884,6 +884,11 @@ function filterBar({ list, depth, school = null, show = {}, near = false, search
       <input id="prog-search" type="search" placeholder="${esc(placeholder)}" autocomplete="off">
       <p class="hint search-more" id="search-more" aria-live="polite" hidden></p>
     </div>` : ''}
+    <div class="ftog">
+      <button type="button" class="ftog-btn" id="filters-toggle" aria-expanded="false"><svg class="ftog-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h9M18 6h3M3 12h3M12 12h9M3 18h11M20 18h1" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="15" cy="6" r="2.6" fill="currentColor"/><circle cx="9" cy="12" r="2.6" fill="currentColor"/><circle cx="17" cy="18" r="2.6" fill="currentColor"/></svg><span>Filters</span><span class="quick-n" id="filters-n" hidden></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <p class="ftog-hint" id="filters-hint"></p>
+      <div class="ftog-chips" id="filters-chips" role="group" aria-label="Filters in use" hidden></div>
+    </div>
     ${typeRow}${relRow}${hoodRow}${costRow}${dayRow}${near ? nearRow(depth, school) : ''}
   </div>
   ${near ? nearMap(depth) : ''}

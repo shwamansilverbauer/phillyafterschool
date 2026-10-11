@@ -4113,6 +4113,35 @@
     var qbar = document.getElementById('quickbar'), quick = null;
     if (qbar) quick = { bar: qbar, search: document.getElementById('quick-search'), go: document.getElementById('quick-filters'), n: document.getElementById('quick-n'), count: document.getElementById('quick-count'), clear: document.getElementById('quick-clear'), status: qbar.querySelector('.quick-status') };
     var afterFilter = null;   // the map redraws when the filters change
+    // ----- the filters start folded away behind one button -----
+    // They are many rows, and a lot to meet before the list itself. The button says what is inside, counts the
+    // filters in use, and while it is shut each filter in use sits beside it as a chip that takes it off again, so
+    // a list is never narrowed out of sight. Opening it lasts for the visit.
+    var tog = document.getElementById('filters-toggle'), togN = document.getElementById('filters-n'), togHint = document.getElementById('filters-hint'), chips = document.getElementById('filters-chips'), pickerEl = document.querySelector('.picker');
+    var isOpen = function () { return /(^| )open( |$)/.test(fbar.className); };
+    var setOpen = function (open, from) {
+      [fbar, pickerEl].forEach(function (x) { if (x) x.className = x.className.replace(/(^| )open(?= |$)/g, '').replace(/^ +| +$/g, '') + (open ? ' open' : ''); });
+      if (tog) tog.setAttribute('aria-expanded', String(open));
+      if (chips) chips.hidden = open || !chips.firstChild;
+      try { if (open) window.sessionStorage.setItem('pas-filters-open', '1'); else window.sessionStorage.removeItem('pas-filters-open'); } catch (e) { /* private window */ }
+      if (!open) return;
+      var ev; try { ev = new Event('resize'); } catch (e) { ev = document.createEvent('Event'); ev.initEvent('resize', true, true); }
+      window.dispatchEvent(ev);   // the rows that scroll sideways measure themselves now that they can be seen
+      if (from) track({ event: 'pas_filter_open', school: fSchool, from: from });
+    };
+    if (!tog) setOpen(true);
+    else {
+      var inside = [];
+      if (document.getElementById('grade-ALL')) inside.push('grade');
+      all(fbar, '.frow:not(.nearbar) .flabel').forEach(function (l) { inside.push(l.textContent.toLowerCase()); });
+      var hasMap = !!document.getElementById('map-toggle'), hasNear = !!document.getElementById('near-me');
+      if (togHint) togHint.textContent = (inside.length ? 'Narrow this list by ' + (inside.length > 1 ? inside.slice(0, -1).join(', ') + ' or ' + inside[inside.length - 1] : inside[0]) + '.' : '')
+        + (hasNear ? ' Sort it by distance' + (hasMap ? ', or see it on a map.' : '.') : hasMap ? ' Or see it on a map.' : '');
+      var wasOpen = false; try { wasOpen = window.sessionStorage.getItem('pas-filters-open') === '1'; } catch (e) { wasOpen = false; }
+      var aimed = location.hash.length > 1 ? document.getElementById(location.hash.slice(1)) : null;   // a link straight to one row, such as "Day of week" in the menu
+      if (wasOpen || (aimed && (fbar.contains(aimed) || (pickerEl && pickerEl.contains(aimed))))) { setOpen(true); if (aimed && aimed.scrollIntoView && !wasOpen) aimed.scrollIntoView(); }
+      tog.addEventListener('click', function () { setOpen(!isOpen(), 'bar'); });
+    }
     // ----- nearest first, and the map -----
     // Each listing carries the points it is at (data-ll). Distances are worked out here, in the browser, from a saved
     // school or from where the person is; neither is sent anywhere. The map library and its pictures load only once
@@ -4280,8 +4309,30 @@
       var noun = fbar.getAttribute('data-noun') || 'program', nouns = fbar.getAttribute('data-nouns') || 'programs';   // the summer camp page counts camps
       count.textContent = total ? total + ' ' + (total === 1 ? noun : nouns) + (filtered ? what : fSchool ? ' for all grades' : '') : 'No ' + nouns + what + '. Try fewer filters.';
       clear.hidden = !filtered;
+      var live = FILTERS.filter(function (f) { return state[f] !== 'ALL'; }).length;
+      if (togN) { togN.textContent = live; togN.hidden = !live; }
+      if (tog) tog.setAttribute('aria-label', 'Filters' + (live ? ', ' + live + ' in use' : ''));
+      if (chips) {   // each filter in use, as a chip that takes it off
+        chips.textContent = '';
+        FILTERS.forEach(function (f) {
+          if (state[f] === 'ALL') return;
+          var fb = findBtn(f, state[f]), named = fb ? fb.getAttribute('data-label') || '' : '';
+          var label = f === 'grade' ? (state.grade === 'MINE' ? (myGrades.length === 1 ? 'My kid’s grade' : 'My kids’ grades') : state.grade === 'PK' ? 'Pre-K' : state.grade === 'K' ? 'Kindergarten' : 'Grade ' + state.grade)
+            : f === 'day' ? DAY_FULL[state.day] + 's' : f === 'school' ? 'Works for ' + named : named || state[f];
+          var chip = el('button', 'fchip', label);
+          chip.type = 'button'; chip.setAttribute('data-chip', f); chip.setAttribute('aria-label', 'Remove the filter: ' + label);
+          chip.addEventListener('click', function () {
+            state[f] = 'ALL';
+            if (f === 'grade') store('pas-grade', 'ALL');
+            apply();
+            if (tog && tog.focus) tog.focus();
+            track({ event: 'pas_filter', filter_type: NAMES[f], filter_value: 'ALL', school: fSchool });
+          });
+          chips.appendChild(chip);
+        });
+        chips.hidden = isOpen() || !chips.firstChild;
+      }
       if (quick) {   // the slim bar says the same thing in less room
-        var live = FILTERS.filter(function (f) { return state[f] !== 'ALL'; }).length;
         quick.n.textContent = live; quick.n.hidden = !live;
         quick.count.textContent = filtered ? count.textContent : '';
         quick.clear.hidden = !filtered;
@@ -4358,6 +4409,7 @@
       window.addEventListener('resize', onMove);
       placeBar();
       quick.go.addEventListener('click', function () {
+        if (!isOpen()) setOpen(true);
         var y = window.pageYOffset + fbar.getBoundingClientRect().top - under() - 14;
         if (window.scrollTo) { try { window.scrollTo({ top: y, behavior: calm() ? 'auto' : 'smooth' }); } catch (e) { window.scrollTo(0, y); } }
         var firstBtn = fbar.querySelector('button');

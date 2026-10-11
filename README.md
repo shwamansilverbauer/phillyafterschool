@@ -388,6 +388,17 @@ The top of a program's page says which schools it works for as colored labels (`
 
 On a program's own page, a row of "The details" longer than about a hundred characters shows its first two lines with a "More" link (`fold()` in `build.mjs`). It is a `<details>` element holding the whole text, so it opens without JavaScript and nothing is left out of the page.
 
+**The filters start shut.** They run to six rows plus the grade row, which is a lot to meet before the list, so
+`filterBar()` writes one dark "Filters" button (`#filters-toggle`) under the search box and `site.js` keeps the rows
+and the grade row hidden until it is pressed (the class `open` on `.fbar` and `.picker`; without JavaScript there are
+no filters at all, as before). Beside the button a line says what is inside, built from the rows that page has
+("Narrow this list by grade, type, pickup or cost. Or see it on a map."), and a yellow number counts the filters in
+use. While it is shut, each filter in use is a chip beside the button (`.fchip`) that takes that filter off when
+pressed: a remembered grade, a saved school and a filter in the page's address all narrow the list on arrival, and
+the chips are what stops that from happening out of sight. The count line and "Clear filters" always show. Opening
+it is remembered for the visit (`sessionStorage`, `pas-filters-open`), a link to one row (`#by-day`) opens it, and so
+does the slim bar's "Filters" button.
+
 The filters and the grade row scroll away with the page. Once they are out of sight, a slim bar is fixed under
 the menu bar (`#quickbar`, written by `filterBar()`): a search box that filters the list as you type and keeps
 the main search box in step, a "Filters" button that goes back up to the filters and shows how many are on, and
