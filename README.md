@@ -558,6 +558,10 @@ changes where a listing appears in a list, and it has no say over reviews.
     `p_coco-academy`; never a name or an email address) so the payment in Stripe can be matched to the listing.
     Nothing tells the site a payment came in: the owner sees it in Stripe and presses "Make it premium". Without the
     links the page says nothing is charged yet. The build warns if links are set while premium is still "preview".
+  - **Sandbox links.** Links made in Stripe's sandbox start `https://buy.stripe.com/test_`. While those are the
+    ones in the settings, the page says so: the button reads "Pay on Stripe (test)", a line says no real payment is
+    taken, and the thank-you after a `cs_test_` checkout says no money moved. Swapping in the live links removes all
+    of that. `PAS_PM_PAY=off` makes a test build with no links; `PAS_PM_PAY="monthly,yearly"` one with other links.
   - **Coming back from Stripe, and counting the sale.** Each Payment Link is set (in Stripe, under "After the
     payment") to send the payer to `https://phillyafterschool.org/premium/?paid=year&session_id={CHECKOUT_SESSION_ID}`
     (`paid=month` on the monthly link; Stripe fills in the id). The page thanks them, pushes a Google Analytics

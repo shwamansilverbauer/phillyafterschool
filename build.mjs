@@ -2904,7 +2904,7 @@ const PM_PRICE = (() => {
 })();
 const PM_PAY = (() => {
   const env = (process.env.PAS_PM_PAY || '').split(',');   // a test build: "monthly link,yearly link"
-  const p = env.length === 2 ? { month: env[0], year: env[1] } : (cfg.groups && cfg.groups.premiumPay) || {};
+  const p = process.env.PAS_PM_PAY === 'off' ? {} : env.length === 2 ? { month: env[0], year: env[1] } : (cfg.groups && cfg.groups.premiumPay) || {};   // "off": a test build with no links
   const ok = u => /^https:\/\/(buy|book)\.stripe\.com\/[A-Za-z0-9_\/-]{6,120}$/.test(u || '');
   if ((p.month || p.year) && !(ok(p.month) && ok(p.year))) { console.error('\n' + 'site.config.json: groups.premiumPay needs two Stripe Payment Links, "month" and "year", each starting https://buy.stripe.com/' + '\n'); process.exit(1); }
   if (ok(p.month) && ok(p.year) && GROUPS && GROUPS.premium === 'preview') console.warn('\nNote: premium is set to "preview" and has payment links: a program would be paying for extras that only it can see. Switch premium to "on" before sharing the sign-up page.');
