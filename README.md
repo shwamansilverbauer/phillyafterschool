@@ -26,7 +26,7 @@ Fill in `site.config.json`:
 
 - `contactEmail`: where corrections go. Until it's set, the site says a contact address is coming.
 - `supportUrl`: where the Support button goes (currently a Venmo profile). If it's empty, the Support page says contributions are being set up.
-- `supportLabel` and `supportHandle`: the button text on the "Buy me a coffee" page, and the handle shown under it for people who'd rather search in the app.
+- `supportLabel` and `supportHandle`: the button text on the "Help the site keep going" page (`/support/`), and the handle shown under it for people who'd rather search in the app.
 - `siteUrl`: the domain you treat as the main one. Redirect the other domain to it at your host.
 - `builtBy`: the name, link and short bio shown in the footer, on the home page and on About.
 - `writtenBy`: optional. A name for a "Written by" line under "Built by" in the footer. It carries no link.

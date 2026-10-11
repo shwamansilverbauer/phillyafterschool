@@ -638,7 +638,7 @@ ${body}
         <li><a href="${link('ideas/', depth)}">${T(`Request a feature`)}</a></li>
         <li><a href="${link('privacy/', depth)}">${T(`Privacy`)}</a></li>${TERMS ? `
         <li><a href="${link('terms/', depth)}">${T(`Terms of use`)}</a></li>` : ''}
-        <li><a href="${link('support/', depth)}">${T(`Buy me a coffee`)}</a></li>
+        <li><a href="${link('support/', depth)}">${T(`Help the site keep going`)}</a></li>
       </ul>
     </div>
   </nav>
@@ -1904,7 +1904,7 @@ ${datesBox(0, { pick: true, place: 'home', cls: 'wide', title: T(`Get the dates 
 </section>
 <section class="section">
   <h2>${T(`Every listing is dated and sourced`)}</h2>
-  <p>${T(`Every listing links to where the information came from and shows the day it was last checked. Nobody pays to be listed. If it saved you an evening of open tabs,`)} <a href="${link('support/', 0)}">${T(`buy me a coffee.`)}</a></p>
+  <p>${T(`Every listing links to where the information came from and shows the day it was last checked. Nobody pays to be listed. If it saved you an evening of open tabs,`)} <a href="${link('support/', 0)}">${T(`help the site keep going.`)}</a></p>
 </section>
 ${cfg.builtBy ? `<section class="section" id="who">
   <h2>${T(`Who built this`)}</h2>
@@ -2240,21 +2240,22 @@ ${GROUPS.photos || GROUPS.premium !== 'off' ? `    <li>${T(`A photo you send for
 function supportPage() {
   const who = cfg.builtBy ? cfg.builtBy.name.split(' ')[0] : '';
   const give = cfg.supportUrl
-    ? `<p class="actions"><a class="btn primary big" data-track="support" href="${esc(cfg.supportUrl)}" target="_blank" rel="noopener">${esc(cfg.supportLabel || 'Buy me a coffee')}</a></p>
+    ? `<p class="actions"><a class="btn primary big" data-track="support" href="${esc(cfg.supportUrl)}" target="_blank" rel="noopener">${esc(cfg.supportLabel || 'Chip in')}</a></p>
   ${cfg.supportHandle ? `<p class="hint">Or search for <b>${esc(cfg.supportHandle)}</b> in the Venmo app.</p>` : ''}`
-    : `<div class="panel"><h3>${T(`The coffee link is being set up`)}</h3><p>${T(`Check back soon.`)}</p></div>`;
-  const hero = `    <h1>${T(`Buy me a coffee`)}</h1>
-    <p class="lede">${T(`I’m {name}. I built this because sorting out after-school care for my own kid was chaos. If it saved you an evening of open tabs, a coffee is a nice way to say so.`, { name: who })}</p>`;
+    : `<div class="panel"><h3>${T(`The link for chipping in is being set up`)}</h3><p>${T(`Check back soon.`)}</p></div>`;
+  const hero = `    <h1>${T(`Help the site keep going`)}</h1>
+    <p class="lede">${T(`{site} is free for families, and it will stay that way. It isn’t free to run. If it saved you an evening of open tabs, you can chip in toward what it costs to keep it going and growing.`, { site: cfg.siteName })}</p>`;
   const body = `<div class="prose">
   ${give}
   <ul>
-    <li>${T(`It goes to me, the person who built and updates this, for the hours spent checking listings and adding schools.`)}</li>
-    <li>${T(`It’s a thank-you, not a charitable donation, so it isn’t tax-deductible.`)}</li>
+    <li>${T(`It goes toward what the site costs to run: web hosting, the service that sends sign-in codes and date reminders, and the hours spent checking listings and adding schools.`)}</li>
+    ${who && cfg.supportUrl ? `<li>${T(`For now it goes by Venmo to {name}, who built the site and pays its bills.`, { name: who })}</li>` : ''}
+    <li>${T(`It’s a contribution to a small family-run project, not a charitable donation, so it isn’t tax-deductible.`)}</li>
     <li>${T(`It buys nothing on the site. Listings are free for every provider, and nobody pays to be listed or to be listed higher.`)}</li>
-    <li>${T(`Not a coffee person? A correction or a missing program helps just as much.`)} <a href="${link('suggest/', 1)}">${T(`Send one here.`)}</a></li>
+    <li>${T(`Can’t chip in? A correction or a missing program helps just as much.`)} <a href="${link('suggest/', 1)}">${T(`Send one here.`)}</a></li>
   </ul>
 </div>`;
-  return layout({ title: 'Buy me a coffee', description: `Say thanks to the person who built and maintains ${cfg.siteName}.`, pathName: 'support/', depth: 1, current: 'support/', hero, body, showStreet: 'parked' });
+  return layout({ title: 'Help the site keep going', description: `${cfg.siteName} is free for families but not free to run. Here is how to chip in, and where the money goes.`, pathName: 'support/', depth: 1, current: 'support/', hero, body, showStreet: 'parked' });
 }
 
 function aboutPage() {
@@ -4140,7 +4141,7 @@ ${page}`;
 function editPage() {
   const pages = [['', 'Home'], ['schools/', 'Schools'], ['schools/request/', 'A school that isn’t covered yet'], ...schools.map(s => [s.id + '/', `${s.shortName} page`]), ['types/', 'Program types'], [`types/${liveTypes()[0].id}/`, `A type page (${liveTypes()[0].label})`], ['all-programs/', 'All programs, by kind'], ['programs/', 'After-school programs, A to Z'], ['neighborhoods/', 'Neighborhoods'], [hoodPath(hoods[0]), `A neighborhood page (${hoods[0].name})`], [programPath(programs[0]), `A program page (${programs[0].name})`],
     ['board/', 'Build your week'], ['suggest/', 'Suggest a program'], ['suggest/thanks/', 'Thank-you page after a suggestion'], ['ideas/', 'Request a feature'], ['ideas/thanks/', 'Thank-you page after an idea'], ['review/', 'Write a review'], ['review/thanks/', 'Thank-you page after a review'],
-    ['about/', 'About'], ['privacy/', 'Privacy'], ['support/', 'Buy me a coffee'], ...(PREVIEW ? [] : [['404.html', 'Page not found']])];
+    ['about/', 'About'], ['privacy/', 'Privacy'], ['support/', 'Help the site keep going'], ...(PREVIEW ? [] : [['404.html', 'Page not found']])];
   const hero = `    <h1>Edit the words on this site</h1>
     <p class="lede">Turn on editing, then click a sentence on any page and type. Nothing changes for visitors until your edits are sent and approved.</p>`;
   const body = `<div class="prose" data-edit-page>
