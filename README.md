@@ -91,7 +91,10 @@ two daily jobs (the build, and the date emails) last ran, and last passed, insid
 When a check fails it opens an issue titled "Site check: something needs a look", assigned to the repository's owner,
 which GitHub emails. The issue says what failed and what to do. While something keeps failing the same issue is
 updated, with no new email each hour, and it closes itself when everything passes. Each address is tried three times
-before it counts as a failure. Run it yourself any time: Actions > Check the site > Run workflow, or locally
+before it counts as a failure. If the web host turns GitHub's servers away (a 403 or 429 on the home page, which its
+bot protection does now and then while the site is up for everyone else), the check waits and asks again for about
+two minutes, and if it is still refused says so once, with "open the site on your phone" as the thing to do, instead
+of listing every page as broken. Run it yourself any time: Actions > Check the site > Run workflow, or locally
 `node scripts/site-check.mjs`.
 
 Two limits. GitHub's scheduler is often hours late and sometimes skips a run, so this is a daily safety net more

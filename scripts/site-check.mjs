@@ -48,6 +48,26 @@ const results = [];
 const pass = (name, detail = '') => results.push({ ok: true, name, detail });
 const fail = (name, detail, fix = '') => results.push({ ok: false, name, detail, fix });
 
+// ----- is the host letting this checker in at all? -----
+// The web host's front door sometimes turns GitHub's servers away for a while (a 403 or 429 on every address) although
+// the site is up for everyone else. So ask for the home page first, wait and ask again a few times, and if it still
+// refuses say that once, plainly, instead of listing every page as broken.
+async function door() {
+  if (LOCAL) return true;
+  const tries = args.includes('--quick') ? 1 : 4;
+  for (let n = 1; n <= tries; n++) {
+    let status = 0;
+    try {
+      const r = await fetch(`${SITE}/`, { headers: { 'user-agent': 'phillyafterschool-site-check' }, redirect: 'manual', signal: AbortSignal.timeout(20000) });
+      status = r.status; await r.text();
+    } catch (e) { return true; }   // no answer at all is a different problem: the checks below report it
+    if (status !== 403 && status !== 429) return true;
+    if (n < tries) await sleep(45000);
+  }
+  fail('The host turned the checker away', `Every try from GitHub${tries > 1 ? ', over about two minutes,' : ''} got a refusal (403 or 429) from the web host, so the pages could not be checked`, 'Open the site on your phone. If it loads, nothing is wrong: the host was blocking GitHub’s address for a while, and this closes itself on the next check that gets through. If it does not load for you either, check Hostinger.');
+  return false;
+}
+
 // ----- the pages -----
 async function pages() {
   const fixed = ['', 'schools/', 'programs/', 'schedules/', 'days-off/', 'summer-camps/', 'summer-schedule/', 'weekends/', 'alerts/', 'account/', 'profile/', 'calendar/'];
@@ -159,11 +179,13 @@ async function jobs() {
   }
 }
 
-await pages();
-await others();
-await fresh();
-await accounts();
-await forms();
+if (await door()) {
+  await pages();
+  await others();
+  await fresh();
+  await accounts();
+  await forms();
+}
 await certificate();
 await jobs();
 
