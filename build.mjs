@@ -2165,6 +2165,7 @@ ${POSTMARK ? `    <li>${T(`The emails the site itself sends, such as sign-in cod
     <li>${T(`Changes you propose are kept with your claim and emailed to the site’s inbox. They are checked and published by a person, and you are told by email when that happens.`)}</li>
 ${GROUPS.photos || GROUPS.premium !== 'off' ? `    <li>${T(`A photo you send for your listing is shrunk in your browser before it leaves your device, kept on our web host, and shown on the listing only after a person approves it. You can replace or remove it at any time. Send only a photo you have the right to use, with permission from the families of any children in it.`)}</li>` : ''}${GROUPS.premium !== 'off' ? `
     <li>${T(`A premium listing can also carry a logo, a section in your own words and an offer or event line. Each is kept on our web host with your claim, read by a person before it shows, and marked on the listing as coming from the program. You can change or remove any of them at any time.`)}</li>
+    <li>${T(`If you sign a listing up for premium, we keep which plan you picked and the day you picked it, with your claim. It goes when the claim or the account does.`)}</li>
     <li>${T(`A question a parent sends from your listing comes to the email address on your account, and to anyone else who holds the listing, with the parent’s address to reply to. We pass it along and don’t keep a copy.`)}</li>` : ''}
     <li>${T(`If you say whether there’s space, the listing shows “Spots open”, “Waitlist” or “Full” and the day you said it. It goes up at once, without anyone checking it, and comes down after 30 days unless you set it again.`)}</li>
     <li>${T(`You can give up a claim at any time, and deleting your account removes your claims and the changes you proposed.`)}</li>
@@ -2882,6 +2883,25 @@ ${cards}
 // side, so it can be set up before it is public) or "on". PAS_PREMIUM overrides the setting for a test build.
 const premiumMode = v => v === true || v === 'on' ? 'on' : v === 'preview' ? 'preview' : 'off';
 const GROUPS = cfg.groups && cfg.contactEmail ? { premium: premiumMode(process.env.PAS_PREMIUM || cfg.groups.premium), photos: cfg.groups.photos === true || process.env.PAS_PHOTOS === '1', pilot: cfg.groups.pilot !== false, klaviyoList: cfg.groups.klaviyoList || '', google: /^[0-9a-z-]+\.apps\.googleusercontent\.com$/.test(cfg.groups.googleClientId || '') ? cfg.groups.googleClientId : '' } : null;
+// What a premium listing costs, and where it is paid for. The prices are whole dollars: "month" and "year" are what
+// is charged now, "laterMonth" and "laterYear" the regular price a founding price gives way to (leave them out and
+// nothing is said about a later price). "premiumPay" holds two Stripe Payment Links, made in Stripe by the owner: a
+// link is a public address, not a key. Until both are there, signing up charges nothing and only tells the owner.
+const PM_PRICE = (() => {
+  const p = cfg.groups && cfg.groups.premiumPrice;
+  if (!GROUPS || GROUPS.premium === 'off' || !p) return null;
+  const whole = n => Number.isInteger(n) && n > 0 && n < 10000;
+  if (!whole(p.month) || !whole(p.year) || (p.laterMonth !== undefined && !whole(p.laterMonth)) || (p.laterYear !== undefined && !whole(p.laterYear))) { console.error('\n' + 'site.config.json: groups.premiumPrice needs "month" and "year" in whole dollars ("laterMonth" and "laterYear" are optional)' + '\n'); process.exit(1); }
+  return { month: p.month, year: p.year, laterMonth: p.laterMonth || 0, laterYear: p.laterYear || 0 };
+})();
+const PM_PAY = (() => {
+  const env = (process.env.PAS_PM_PAY || '').split(',');   // a test build: "monthly link,yearly link"
+  const p = env.length === 2 ? { month: env[0], year: env[1] } : (cfg.groups && cfg.groups.premiumPay) || {};
+  const ok = u => /^https:\/\/(buy|book)\.stripe\.com\/[A-Za-z0-9_\/-]{6,120}$/.test(u || '');
+  if ((p.month || p.year) && !(ok(p.month) && ok(p.year))) { console.error('\n' + 'site.config.json: groups.premiumPay needs two Stripe Payment Links, "month" and "year", each starting https://buy.stripe.com/' + '\n'); process.exit(1); }
+  if (ok(p.month) && ok(p.year) && GROUPS && GROUPS.premium === 'preview') console.warn('\nNote: premium is set to "preview" and has payment links: a program would be paying for extras that only it can see. Switch premium to "on" before sharing the sign-up page.');
+  return ok(p.month) && ok(p.year) ? { month: p.month, year: p.year } : null;
+})();
 // Every planner (the week, the days off, the summer, the calendar) needs a free account. Signed out, a short ask stands
 // where the planner would be; the pages themselves stay public. "plannersNeedAccount": false under "groups" in
 // site.config.json opens them again. The preview has no accounts to sign in to, so nothing is closed there.
@@ -3167,6 +3187,64 @@ function directorsPage() {
   return layout({ title: 'For program managers: find and claim your listing', description: `Run an after-school program or camp in Philadelphia? Find your ${cfg.siteName} listing, claim it with your work email, and keep its dates, costs and hours up to date. Free.`, pathName: 'managers/', depth: 1, current: null, hero, body, scripts: groupsScript(1) });
 }
 
+// The page where a program signs a claimed listing up for premium. Not linked from anywhere and kept out of search
+// engines and the sitemap for now: it is reached by its address (/premium/). The words and prices are here; the box
+// that knows who is signed in and which listings they hold is drawn by groups.js.
+function premiumPage() {
+  const D = 1, P = PM_PRICE, money = n => '$' + n;
+  const free = Math.round((12 * P.month - P.year) / P.month);   // months a year's plan saves
+  const gets = [
+    [T(`Photos and your logo`), T(`Up to six photos and a logo, at the top of your listing.`)],
+    [T(`A section in your own words`), T(`Say what makes your program yours, the way you’d say it to a parent on a tour.`)],
+    [T(`An offer or event line`), T(`An open house, a trial class, early-bird pricing. It shows near the top until the date you set.`)],
+    [T(`A button for questions`), T(`Parents send a question from your listing and it lands in your inbox, with their address to reply to.`)],
+    [T(`Fuller numbers`), T(`Month by month: how often your listing was opened, how many families follow it or saved it, and which schools they come from. Numbers only, never who.`)],
+    [T(`A flyer to print`), T(`With a code that opens your listing, for the front desk or the school fair.`)],
+  ];
+  const card = (plan, name, price, per, note, pick) => `<div class="pm-plan${pick ? ' best' : ''}" data-plan="${plan}">
+      ${pick ? `<p class="pm-flag">${T(`Best value`)}</p>` : ''}
+      <h3>${name}</h3>
+      <p class="pm-price"><b>${money(price)}</b> <span>${per}</span></p>
+      <p class="pm-plan-note">${note}</p>
+    </div>`;
+  const hero = `    <h1>${T(`Premium listings`)}</h1>
+    <p class="lede">${T(`Your listing on {site} is free, and it stays free. Premium adds your photos, your words and your offers to it, and shows you what families do with it.`, { site: cfg.siteName })}</p>`;
+  const body = `<div ${groupsAttrs(D)} style="display:contents">
+  <section class="section" id="what">
+    <h2>${T(`What premium adds`)}</h2>
+    <ul class="pm-gets">
+      ${gets.map(([h, p]) => `<li><b>${h}</b><span>${p}</span></li>`).join('\n      ')}
+    </ul>
+  </section>
+  <section class="section" id="price">
+    <h2>${T(`What it costs`)}</h2>
+    <div class="pm-plans">
+    ${card('year', T(`Yearly`), P.year, T(`a year`), free > 1 ? T(`{n} months free, compared with paying by the month.`, { n: ['', '', 'Two', 'Three', 'Four'][free] || String(free) }) : free === 1 ? T(`One month free, compared with paying by the month.`) : T(`One payment for the year.`), free > 0)}
+    ${card('month', T(`Monthly`), P.month, T(`a month`), T(`Pay as you go.`), false)}
+    </div>
+    ${P.laterMonth && P.laterYear ? `<p class="pm-founding">${T(`This is the founding price, for the first programs to sign up. It stays yours for as long as you stay signed up. Later, premium will cost {m} a month or {y} a year.`, { m: money(P.laterMonth), y: money(P.laterYear) })}</p>` : ''}
+    <p>${T(`Run a free program, a school club or a rec center?`)} <a href="${link('contact/', D)}">${T(`Write to us before you sign up.`)}</a></p>
+  </section>
+  <section class="section" id="signup">
+    <h2>${T(`Sign up`)}</h2>
+    <noscript><p class="ask">${T(`Signing up needs JavaScript turned on.`)}</p></noscript>
+    <div class="g-page" id="premium-signup" data-clarity-mask="true" data-month="${P.month}" data-year="${P.year}"${PM_PAY ? ` data-pay-month="${esc(PM_PAY.month)}" data-pay-year="${esc(PM_PAY.year)}"` : ''}></div>
+  </section>
+  <section class="section" id="not">
+    <h2>${T(`What premium doesn’t do`)}</h2>
+    <ul>
+      <li>${T(`It doesn’t move you up. Listings are never ordered by who pays, and premium doesn’t change where yours appears.`)}</li>
+      <li>${T(`It doesn’t replace your free listing. Claiming it, sending corrections and saying whether you have space all stay free, with or without premium.`)}</li>
+      <li>${T(`It never costs families anything. Parents don’t pay for any part of this site.`)}</li>
+      <li>${T(`Nothing you add goes up unread. A person looks at each photo, section and offer line before it shows on your listing.`)}</li>
+      <li>${T(`It doesn’t lock you in. You can stop at any time: write to us and we’ll end it.`)}</li>
+    </ul>
+    <p><a href="${link('privacy/', D)}#managers">${T(`What we keep about a claim and a premium listing is on the privacy page.`)}</a></p>
+  </section>
+</div>`;
+  return layout({ title: 'Premium listings for programs and camps', description: `Add photos, your own words, offers and fuller numbers to your ${cfg.siteName} listing.`, pathName: 'premium/', depth: D, current: null, hero, body, noindex: true, scripts: groupsScript(D) });
+}
+
 // The owner's review page for claims and the changes directors propose, behind the same sign-in as the edit page.
 function editClaimsPhp() {
   const hero = `    <h1>Claims and proposed changes</h1>
@@ -3229,7 +3307,7 @@ ${GROUPS.premium !== 'off' ? `  <h2>Words and offer lines waiting for you (<?php
   <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>${GROUPS.premium !== 'off' ? `
   <p class="hint">${GROUPS.premium === 'preview' ? 'Premium is being tried out: when you make a listing premium, its manager gets the premium tools, and what they add shows on the listing only to them (after you approve it). Nobody else sees it until premium is switched on for the site.' : 'Premium is on: a premium listing’s photos, own words, offer line and question button show to everyone, after you approve what the manager sends.'}</p>` : ''}
   <div class="stat-scroll"><table class="stat-table wrap"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th>${GROUPS.premium !== 'off' ? '<th scope="col">Premium</th>' : ''}<th scope="col"></th></tr></thead><tbody>
-  <?php foreach ($claims as $c) { ?><tr><th scope="row">${e('$name($c["listing"])')}</th><td>${e('$c["first"] . " " . $c["last"]')}<br><span class="hint">${e('$c["email"]')}<?php if (isset($c["domain"]) && $c["domain"] === 'by hand') { ?> · given by hand<?php } ?></span></td><td>${e('$day($c["created"])')}</td>${GROUPS.premium !== 'off' ? `<td><?php if (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since ${e('$day($premium[$c["listing"]])')}</span>${form('$c["id"]', act('premium_off', 'Turn off'))}<?php } else { ?>${form('$c["id"]', act('premium_on', 'Make it premium'))}<?php } ?></td>` : ''}<td>${form('$c["id"]', act('claim_remove', 'Take the claim away'))}</td></tr><?php } ?>
+  <?php foreach ($claims as $c) { ?><tr><th scope="row">${e('$name($c["listing"])')}</th><td>${e('$c["first"] . " " . $c["last"]')}<br><span class="hint">${e('$c["email"]')}<?php if (isset($c["domain"]) && $c["domain"] === 'by hand') { ?> · given by hand<?php } ?></span></td><td>${e('$day($c["created"])')}</td>${GROUPS.premium !== 'off' ? `<td><?php if (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since ${e('$day($premium[$c["listing"]])')}</span>${form('$c["id"]', act('premium_off', 'Turn off'))}<?php } else { ?><?php if (isset($asks[(int) $c["id"]])) { ?><b>Signed up: <?php echo $asks[(int) $c["id"]]["plan"] === 'year' ? 'yearly' : 'monthly'; ?></b><br><span class="hint">${e('$day($asks[(int) $c["id"]]["created"])')}</span><?php } ?>${form('$c["id"]', act('premium_on', 'Make it premium'))}<?php } ?></td>` : ''}<td>${form('$c["id"]', act('claim_remove', 'Take the claim away'))}</td></tr><?php } ?>
   </tbody></table></div>
   <?php } ?>
   <h2 id="grant">Give a listing to an account by hand</h2>
@@ -3262,7 +3340,7 @@ $csrf = hash_hmac('sha256', 'claims-form', edit_key());
 $said = isset($_GET['said']) && is_string($_GET['said']) ? substr($_GET['said'], 0, 200) : '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
-$pending = array(); $claims = array(); $declined = array(); $edits = array(); $photosNew = array(); $photosLive = array(); $extrasNew = array(); $extrasLive = array(); $premium = array();
+$pending = array(); $claims = array(); $declined = array(); $edits = array(); $photosNew = array(); $photosLive = array(); $extrasNew = array(); $extrasLive = array(); $premium = array(); $asks = array();
 $PREMIUM = ${JSON.stringify(GROUPS.premium)};
 $photoFile = function ($id) { return dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/photos/' . (int) $id . '.jpg'; };
 if ($have) {
@@ -3412,6 +3490,7 @@ if ($have) {
   } catch (Exception $e) { /* a database from before photos */ }
   if ($PREMIUM !== 'off') try {
     foreach ($db->query('SELECT listing, since FROM premium') as $x) $premium[$x['listing']] = (int) $x['since'];
+    try { foreach ($db->query('SELECT claim_id, plan, created FROM premium_asks') as $x) $asks[(int) $x['claim_id']] = $x; } catch (Exception $e) { /* a database from before sign-ups */ }
     $today = (new DateTime('now', new DateTimeZone('America/New_York')))->format('Y-m-d');
     foreach ($db->query("SELECT e.id, e.listing, e.kind, e.body, e.until, e.status, e.created, u.email, u.first, u.last FROM extras e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.status != 'declined' AND c.status = 'ok' ORDER BY e.id") as $x) {
       if ($x['status'] === 'new') $extrasNew[] = $x; elseif ($x['kind'] !== 'offer' || $x['until'] >= $today) $extrasLive[] = $x;
@@ -4056,7 +4135,7 @@ $topListings = array(); $hitsSince = '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'mgr_month' => 'Monthly emails to managers', 'mgr_review' => 'New-review emails to managers', 'mgr_follow' => 'New-follower emails to managers', 'mgr_stop' => 'Managers who turned those emails off', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'hood_saved' => 'Neighborhoods kept', 'phone_saved' => 'Phone numbers added for texts', 'follow' => 'Follows started', 'stop_one' => 'Listings stopped from an email', 'stop_all' => 'Everything stopped from an email', 'fav' => 'Favorites saved', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'email_changed' => 'Email addresses changed', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers', 'push_on' => 'Devices that turned notifications on', 'push_sent' => 'Notifications delivered', 'extra_sent' => 'Words and offer lines sent by program managers', 'ask' => 'Questions sent to programs');
+$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'mgr_month' => 'Monthly emails to managers', 'mgr_review' => 'New-review emails to managers', 'mgr_follow' => 'New-follower emails to managers', 'mgr_stop' => 'Managers who turned those emails off', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'hood_saved' => 'Neighborhoods kept', 'phone_saved' => 'Phone numbers added for texts', 'follow' => 'Follows started', 'stop_one' => 'Listings stopped from an email', 'stop_all' => 'Everything stopped from an email', 'fav' => 'Favorites saved', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'email_changed' => 'Email addresses changed', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'premium_ask' => 'Premium sign-ups', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers', 'push_on' => 'Devices that turned notifications on', 'push_sent' => 'Notifications delivered', 'extra_sent' => 'Words and offer lines sent by program managers', 'ask' => 'Questions sent to programs');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -4141,7 +4220,7 @@ ${page}`;
 function editPage() {
   const pages = [['', 'Home'], ['schools/', 'Schools'], ['schools/request/', 'A school that isn’t covered yet'], ...schools.map(s => [s.id + '/', `${s.shortName} page`]), ['types/', 'Program types'], [`types/${liveTypes()[0].id}/`, `A type page (${liveTypes()[0].label})`], ['all-programs/', 'All programs, by kind'], ['programs/', 'After-school programs, A to Z'], ['neighborhoods/', 'Neighborhoods'], [hoodPath(hoods[0]), `A neighborhood page (${hoods[0].name})`], [programPath(programs[0]), `A program page (${programs[0].name})`],
     ['board/', 'Build your week'], ['suggest/', 'Suggest a program'], ['suggest/thanks/', 'Thank-you page after a suggestion'], ['ideas/', 'Request a feature'], ['ideas/thanks/', 'Thank-you page after an idea'], ['review/', 'Write a review'], ['review/thanks/', 'Thank-you page after a review'],
-    ['about/', 'About'], ['privacy/', 'Privacy'], ['support/', 'Help the site keep going'], ...(PREVIEW ? [] : [['404.html', 'Page not found']])];
+    ['about/', 'About'], ['privacy/', 'Privacy'], ['support/', 'Help the site keep going'], ...(PM_PRICE && !PREVIEW ? [['premium/', 'Premium listings (not linked from the site yet)']] : []), ...(PREVIEW ? [] : [['404.html', 'Page not found']])];
   const hero = `    <h1>Edit the words on this site</h1>
     <p class="lede">Turn on editing, then click a sentence on any page and type. Nothing changes for visitors until your edits are sent and approved.</p>`;
   const body = `<div class="prose" data-edit-page>
@@ -5018,6 +5097,7 @@ if (GROUPS) {
   write('groups/index.html', groupPage());
   write('join/index.html', joinPage());
   write('managers/index.html', directorsPage());
+  if (PM_PRICE && !PREVIEW) write('premium/index.html', premiumPage());   // unlisted: no link to it, no sitemap line
   write('directors/index.html', movedPage('managers/', 1));   // the page's first address
   if (!PREVIEW) write('groups/api.php', groupsApiPhp());
 }

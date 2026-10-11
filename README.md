@@ -527,6 +527,26 @@ changes where a listing appears in a list, and it has no say over reviews.
   exists anywhere; `"preview"` and the tools work, but what a program adds shows on its listing only to the people
   who hold that listing, signed in; `true` (or `"on"`) and everyone sees it. `PAS_PREMIUM=preview|on` overrides it
   for a test build. The site runs on `"preview"`.
+- **The sign-up page** (`premiumPage()` in `build.mjs`, at `/premium/`) is where a manager signs a claimed listing
+  up. It is **unlisted**: nothing on the site links to it, it carries `noindex`, and it is left out of the sitemap, so
+  it is reached only by its address. It is built whenever premium isn't off and `"groups": { "premiumPrice": ... }`
+  is set. To list it later, link to it (the managers page and the claimed-listing box are the natural places), add
+  it to the sitemap list and drop `noindex`.
+  - **Prices** are `"premiumPrice": { "month": 19, "year": 190, "laterMonth": 29, "laterYear": 290 }`, whole dollars.
+    The two "later" numbers are the regular price the founding price gives way to; leave them out and the founding
+    paragraph goes. The page promises that a founding price is kept while the program stays signed up.
+  - **Signing up charges nothing on the site.** The box (drawn by `groups.js`, `#premium-signup`) asks a signed-in
+    manager to pick monthly or yearly for each listing whose claim stands. `premium_ask` keeps the plan with the
+    claim (table `premium_asks`, one row a claim, gone with the claim or the account) and emails the owner
+    ("A premium sign-up needs your yes: ..."). `/edit/claims/` shows "Signed up: yearly" beside the listing, next to
+    "Make it premium". Picking the same plan again does nothing; picking the other changes it and tells the owner.
+  - **Paying** is by two Stripe Payment Links the owner makes in Stripe, one monthly and one yearly, set as
+    `"premiumPay": { "month": "https://buy.stripe.com/...", "year": "https://buy.stripe.com/..." }`. A link is a
+    public address, not a key: no Stripe key is ever in this repo. With both set, a signed-up listing shows "Pay on
+    Stripe", and the link carries `client_reference_id` (the listing's key with `:` turned into `_`, such as
+    `p_coco-academy`; never a name or an email address) so the payment in Stripe can be matched to the listing.
+    Nothing tells the site a payment came in: the owner sees it in Stripe and presses "Make it premium". Without the
+    links the page says nothing is charged yet. The build warns if links are set while premium is still "preview".
 - **Which listings are premium** is a row in the `premium` table. For now the owner sets it by hand on
   `/edit/claims/` ("Make it premium" beside each claimed listing); a payment would set the same row later. Turning
   it off hides what was added and keeps it. By the rule under "What stays free", a free program can simply be made

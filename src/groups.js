@@ -2808,4 +2808,104 @@
     draw();
     if (signedInHint()) refresh();
   }
+  // ----- the premium sign-up page (/premium/): pick a plan for a listing you hold -----
+  // Signing up charges nothing here. It keeps the plan with the claim and tells the site's owner, who makes the
+  // listing premium. When the page carries payment links, the next step is paying on Stripe's own page; the link
+  // takes along which listing it is for (never who), so the payment can be matched to it.
+  var pmBox = document.getElementById('premium-signup');
+  if (pmBox) {
+    var PRICE = { month: pmBox.getAttribute('data-month'), year: pmBox.getAttribute('data-year') };
+    var PAY = { month: pmBox.getAttribute('data-pay-month') || '', year: pmBox.getAttribute('data-pay-year') || '' };
+    var PLAN = { month: 'Monthly', year: 'Yearly' }, COST = { month: '$' + PRICE.month + ' a month', year: '$' + PRICE.year + ' a year' };
+    var pmMe = null, pmClaims = [], pmState = 'checking', pmSaid = '', pmBad = false, pmChange = {};
+    var pmDay = function (t) { try { return new Date(t * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric' }); } catch (e) { return ''; } };
+    var pmStep = function (step, plan) { (window.dataLayer = window.dataLayer || []).push({ event: 'pas_premium', step: step, plan: plan || '' }); };
+    var payUrl = function (plan, key) { return PAY[plan] ? PAY[plan] + (PAY[plan].indexOf('?') < 0 ? '?' : '&') + 'client_reference_id=' + encodeURIComponent(key.replace(/[^A-Za-z0-9_-]/g, '_')) : ''; };
+    var pmLoad = function () {
+      return call('claims').then(function (d) {
+        if (!d.ok) { if (d.http === 401) { pmMe = null; pmState = 'out'; set('pas-in', null); } else { pmSaid = d.message; pmBad = true; pmState = 'in'; } return; }
+        pmClaims = d.claims || []; pmState = 'in';
+      });
+    };
+    var pmPicker = function (item, c, now) {
+      var form = el('form', 'pm-pick'), fs = el('fieldset'), id = 'pm-' + c.listing.replace(/[^a-z0-9]+/g, '-');
+      fs.appendChild(el('legend', null, now ? 'Change the plan for ' + c.name : 'Pick a plan for ' + c.name));
+      ['year', 'month'].forEach(function (p) {
+        var l = el('label', 'pm-opt'), r = el('input'); r.type = 'radio'; r.name = id; r.value = p; r.checked = now ? p !== now : p === 'year';
+        l.appendChild(r); l.appendChild(el('b', null, PLAN[p])); l.appendChild(el('span', null, COST[p])); fs.appendChild(l);
+      });
+      form.appendChild(fs);
+      var go = el('button', 'btn primary', now ? 'Change the plan' : 'Sign up for premium'); go.type = 'submit';
+      var row = el('div', 'actions'); row.appendChild(go);
+      if (now) { var no = el('button', 'btn', 'Keep ' + PLAN[now].toLowerCase()); no.type = 'button'; no.addEventListener('click', function () { delete pmChange[c.listing]; pmDraw(); }); row.appendChild(no); }
+      form.appendChild(row);
+      if (!now) form.appendChild(el('p', 'hint', PAY.year ? 'Next you pay on Stripe’s secure page. Your listing becomes premium once the payment is in, usually within a day.' : 'Nothing is charged today. We’ll email you before premium starts and before anything is charged.'));
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var plan = (form.querySelector('input:checked') || {}).value || 'year';
+        go.disabled = true;
+        call('premium_ask', { listing: c.listing, plan: plan }).then(function (r) {
+          go.disabled = false;
+          if (!r.ok) { pmSaid = r.message; pmBad = true; }
+          else { pmClaims = r.claims || pmClaims; delete pmChange[c.listing]; pmSaid = c.name + ' is signed up for premium, ' + PLAN[plan].toLowerCase() + '.'; pmBad = false; pmStep(now ? 'plan_changed' : 'signed_up', plan); }
+          pmDraw();
+        });
+      });
+      item.appendChild(form);
+    };
+    var pmDraw = function () {
+      pmBox.textContent = '';
+      if (pmState === 'checking') { pmBox.appendChild(el('p', 'hint', 'One moment…')); return; }
+      if (pmSaid) { var st = el('p', 'g-status ' + (pmBad ? 'bad' : 'good'), pmSaid); st.setAttribute('role', 'status'); pmBox.appendChild(st); }
+      var toClaim = function (text, label) {
+        var p = el('p', null, text + ' '); var a = el('a', 'btn', label); a.href = page('managers/');
+        var row = el('p', 'actions'); row.appendChild(a); pmBox.appendChild(p); pmBox.appendChild(row);
+      };
+      if (pmState === 'out') {
+        var sbox = el('div', 'panel'); pmBox.appendChild(sbox);
+        signInBox(sbox, 'managers', function (d) { pmMe = d.user; pmState = 'checking'; pmDraw(); pmLoad().then(pmDraw); }, 'Sign in with the work email you claimed your listing with. No password. We send a 6-digit code and you type it here.');
+        var h = sbox.querySelector('h3'); if (h) h.textContent = 'Sign in to sign up';
+        var first = el('p', 'hint', 'Haven’t claimed your listing yet? '); var fl = el('a', null, 'Claim it first'); fl.href = page('managers/'); first.appendChild(fl); first.appendChild(document.createTextNode('. It’s free and takes a couple of minutes.'));
+        pmBox.appendChild(first);
+        return;
+      }
+      var mine = pmClaims.filter(function (c) { return c.status === 'ok' && !c.gone; });
+      var waiting = pmClaims.filter(function (c) { return c.status === 'pending' && !c.gone; });
+      if (!mine.length) {
+        if (waiting.length) toClaim('Your claim on ' + waiting[0].name + ' is waiting for our yes. You can sign it up for premium as soon as the claim stands.', 'See your claim');
+        else toClaim('Premium is added to a listing you’ve claimed, and this account hasn’t claimed one yet. Claiming is free and takes a couple of minutes.', 'Claim your listing');
+        return;
+      }
+      var list = el('div', 'pm-mine');
+      mine.forEach(function (c) {
+        var item = el('div', 'panel pm-item'); item.appendChild(el('h3', null, c.name));
+        if (c.premium) {
+          item.appendChild(el('p', null, 'This listing is premium.'));
+          var a = el('a', 'btn', 'Open its premium tools'); a.href = page('managers/'); var row = el('p', 'actions'); row.appendChild(a); item.appendChild(row);
+        } else if (c.asked && !pmChange[c.listing]) {
+          var plan = c.asked.plan === 'month' ? 'month' : 'year';
+          item.appendChild(el('p', null, 'Signed up' + (pmDay(c.asked.t) ? ' on ' + pmDay(c.asked.t) : '') + ': ' + PLAN[plan].toLowerCase() + ', ' + COST[plan] + '.'));
+          var row2 = el('p', 'actions');
+          if (payUrl(plan, c.listing)) {
+            var pay = el('a', 'btn primary', 'Pay on Stripe'); pay.href = payUrl(plan, c.listing); pay.rel = 'noopener';
+            pay.addEventListener('click', function () { pmStep('to_payment', plan); });
+            row2.appendChild(pay);
+            item.appendChild(el('p', 'hint', 'Paid already? Your listing becomes premium once we see the payment, usually within a day. We’ll email you.'));
+          } else item.appendChild(el('p', 'hint', 'Nothing is charged yet. We’ll email you before premium starts and before anything is charged.'));
+          var ch = el('button', 'btn', 'Change the plan'); ch.type = 'button'; ch.addEventListener('click', function () { pmChange[c.listing] = true; pmSaid = ''; pmDraw(); }); row2.appendChild(ch);
+          item.appendChild(row2);
+        } else pmPicker(item, c, c.asked ? (c.asked.plan === 'month' ? 'month' : 'year') : '');
+        list.appendChild(item);
+      });
+      pmBox.appendChild(list);
+      if (waiting.length) pmBox.appendChild(el('p', 'hint', 'Your claim on ' + waiting.map(function (c) { return c.name; }).join(', ') + ' is still waiting for our yes.'));
+    };
+    pmDraw();
+    if (!API) { pmState = 'out'; pmDraw(); }
+    else if (signedInHint()) call('me').then(function (d) {
+      if (!d.ok || !d.user) { pmState = 'out'; if (d.ok) set('pas-in', null); pmDraw(); return; }
+      pmMe = d.user; set('pas-in', '1'); pmLoad().then(pmDraw);
+    });
+    else { pmState = 'out'; pmDraw(); }
+  }
 })();

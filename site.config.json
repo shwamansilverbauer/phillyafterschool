@@ -25,7 +25,7 @@
     "user": "Silverbauer",
     "passwordHash": "$2y$10$YM3U3P.TEB3.lr00uXCsbeNQW852A2Xdg/Rwbro4BIJULUT7bHiz2"
   },
-  "privacyUpdated": "2026-10-10",
+  "privacyUpdated": "2026-10-11",
   "mail": { "postmark": true },
   "indexNowKey": "3a981b7516d126f1620f04d4cd69e645",
   "termsLive": true,
@@ -46,6 +46,7 @@
     "pilot": false,
     "plannersNeedAccount": true,
     "premium": "preview",
+    "premiumPrice": { "month": 19, "year": 190, "laterMonth": 29, "laterYear": 290 },
     "klaviyoList": "Wib7TV",
     "googleClientId": "420915102949-7gfu5o00gn6oionaijid2jak6om38rda.apps.googleusercontent.com"
   }
