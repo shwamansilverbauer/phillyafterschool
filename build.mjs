@@ -848,7 +848,7 @@ const programRow = (p, depth) => {
   <h3>${esc(p.name)}</h3>
   <span class="what">${esc(p.what)}</span>
   <span class="tally">${typeTags(p)}</span>
-  <span class="tally">${served.map(s => `<span class="pill ${p.schools[s.id].relation}">${esc(REL[p.schools[s.id].relation].pill.replace('{s}', s.shortName))}</span>`).join('')}<span class="hint">Grades ${esc(gradeText(p))}</span></span>
+  <span class="tally">${servedPills(p)}<span class="hint">Grades ${esc(gradeText(p))}</span></span>
 </a>`;
 };
 
@@ -1211,10 +1211,12 @@ const servedSummary = p => {
   const t = parts.join('; ');
   return t.charAt(0).toUpperCase() + t.slice(1);
 };
-// The same summary as colored labels, for the top of a program's page: pickup in yellow, on-site in green, nearby in blue.
+// The same summary as colored labels, for the top of a program's page and its row in a citywide list: pickup in
+// yellow, on-site in green, nearby in blue. One label for each kind, naming every school, so a program that picks up
+// from five schools shows one label, not five.
 const servedPills = p => {
   const names = k => servedBy(p).filter(s => p.schools[s.id].relation === k).map(s => s.shortName);
-  return [['onsite', 'Runs at '], ['pickup', 'Picks up from '], ['nearby', 'Near ']].filter(([k]) => names(k).length).map(([k, lead]) => `<span class="pill ${k} wrap">${esc(lead + listNames(names(k)))}</span>`).join(' ');
+  return [['onsite', 'Runs at '], ['pickup', 'Picks up from '], ['nearby', 'Near ']].filter(([k]) => names(k).length).map(([k, lead]) => `<span class="pill ${k} multi">${esc(lead + listNames(names(k)))}</span>`).join(' ');
 };
 const programAddress = p => {
   if (p.address) return p.address;
@@ -4817,7 +4819,7 @@ function campPage(c) {
   // the camps closest to this one, for someone still looking
   const here = coordsOf(c.address);
   const near = here.length ? summerCamps.filter(x => x.id !== c.id && coordsOf(x.address).length).map(x => [x, Math.min(...here.flatMap(a => coordsOf(x.address).map(b => milesApart(a, b))))]).sort((a, b) => a[1] - b[1]).slice(0, 4) : [];
-  const hero = `    <p class="where"><a href="${link(campsPath, D)}">${T(`Summer camps`)}</a>${areas.length ? ` <span class="served">${areas.map(a => `<span class="pill nearby wrap">${esc(a)}</span>`).join(' ')}</span>` : ''}</p>
+  const hero = `    <p class="where"><a href="${link(campsPath, D)}">${T(`Summer camps`)}</a>${areas.length ? ` <span class="served">${areas.map(a => `<span class="pill nearby multi">${esc(a)}</span>`).join(' ')}</span>` : ''}</p>
     <h1>${esc(c.name)}</h1>
     <p class="lede">${esc(c.what)}</p>
     <div class="facts">
