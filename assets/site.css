@@ -73,7 +73,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .hero{padding-block:clamp(28px,6vw,64px) clamp(28px,5vw,52px);display:flex;flex-direction:column;gap:18px}
 .hero .lede{color:var(--hero-muted);font-size:clamp(1.05rem,2.2vw,1.25rem);max-width:60ch}
 .hero .where{color:var(--hero-muted);font-size:1rem}
-.pill.wrap{white-space:normal;border-radius:14px;line-height:1.35;padding:4px 12px}
+.pill.multi{white-space:normal;border-radius:14px;line-height:1.35;padding:4px 12px}   /* a label long enough to run onto a second line */
 .hero .where .served{display:inline-flex;flex-wrap:wrap;gap:6px;vertical-align:middle;margin-left:8px}
 .hero .where .pill{font-size:.92rem}
 @media (max-width:640px){.hero .where .served{display:flex;margin:8px 0 0}}
