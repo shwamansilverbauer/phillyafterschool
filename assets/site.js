@@ -1297,7 +1297,7 @@
     }
     return rosters;
   }
-  function saveRosters() { store('pas-rosters', JSON.stringify(rosters)); updateCount(); if (window.pasBoard && window.pasBoard.onSave) window.pasBoard.onSave(); if (window.pasSummer && window.pasSummer.onSave) window.pasSummer.onSave(); if (window.pasDaysOff && window.pasDaysOff.onSave) window.pasDaysOff.onSave(); }
+  function saveRosters() { store('pas-rosters', JSON.stringify(rosters)); if (window.pasBoard && window.pasBoard.onSave) window.pasBoard.onSave(); if (window.pasSummer && window.pasSummer.onSave) window.pasSummer.onSave(); if (window.pasDaysOff && window.pasDaysOff.onSave) window.pasDaysOff.onSave(); }
   function activeKid() { var r = loadRosters(); return r.kids[r.kid]; }
   function activeBoard() { var r = loadRosters(); return r.kids[r.kid][r.active]; }
   function kidLabel(k, i) { return k.name || 'Child ' + (i + 1); }
@@ -1307,12 +1307,6 @@
     WKDAYS.forEach(function (day) { ((b.wk && b.wk[day[0]]) || []).forEach(function (k) { seen['wk:' + entryKey(k)] = 1; }); });
     return Object.keys(seen).length;
   }
-  function updateCount() {
-    var n = 0;
-    loadRosters().kids.forEach(function (k) { n += countPicks(k.now) + countPicks(k.next); });
-    all(document, '[data-board-count]').forEach(function (c) { c.textContent = n ? String(n) : ''; c.hidden = !n; });
-  }
-  updateCount();
 
 
   // ----- a dragon flies across the screen when the last open day in a part of a plan is filled in: a month of days off,

@@ -260,7 +260,6 @@ button.btn{cursor:pointer;font-family:inherit}
 .next li::before{content:counter(n);font-family:var(--display);font-weight:800;width:34px;height:34px;border-radius:50%;background:var(--yellow);color:var(--yellow-ink);display:flex;align-items:center;justify-content:center}
 
 /* ---------- add to board, reviews, calendar links on cards ---------- */
-.nav .count{display:inline-block;margin-left:6px;min-width:22px;padding:0 6px;border-radius:999px;background:var(--cta);color:var(--cta-ink);font-size:.8rem;font-weight:700;text-align:center}
 .needs-js{display:none}
 .js .needs-js{display:inline-block}
 .btn.on{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink)}
@@ -620,7 +619,6 @@ button.btn{cursor:pointer;font-family:inherit}
 .menu[open] summary::after{transform:translateY(2px) rotate(225deg)}
 .menu summary:hover,.menu.here summary,.menu[open] summary{border-bottom-color:var(--hero-accent)}
 .menu summary:focus-visible{outline:2px solid var(--hero-ink);outline-offset:4px;border-radius:4px}
-.menu summary .count{margin-left:0}
 .menu ul{list-style:none;margin:0;padding:8px;position:absolute;left:-12px;top:calc(100% + 10px);z-index:40;min-width:236px;background:#FFFFFF;border-radius:14px;box-shadow:0 14px 34px rgba(7,21,39,.3);display:flex;flex-direction:column;gap:2px}
 .menu:last-of-type ul{left:auto;right:-12px}
 .nav .menu ul a{display:block;padding:10px 12px;border-radius:9px;border:0;color:#0B2140;font-weight:700;text-decoration:none}
@@ -647,7 +645,6 @@ button.btn{cursor:pointer;font-family:inherit}
   .js .nav.open .menu{position:static}
   .js .nav.open .menu summary{color:#4D607A;font-size:.86rem;font-weight:700;border:0;padding:10px 12px 2px;cursor:default}
   .js .nav.open .menu summary::after{display:none}
-  .js .nav.open .menu summary .count{display:none}
   .js .nav.open .menu ul,.js .nav.open .menu:last-of-type ul{position:static;box-shadow:none;padding:0;min-width:0;background:none}
   .js .nav.open > a{display:block;color:#0B2140;font-weight:700;border:0;padding:10px 12px;border-radius:9px}
   .js .nav.open > a:hover{background:#DAEDFE}
