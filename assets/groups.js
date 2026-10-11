@@ -2820,6 +2820,37 @@
     var pmMe = null, pmClaims = [], pmState = 'checking', pmSaid = '', pmBad = false, pmChange = {};
     var pmDay = function (t) { try { return new Date(t * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric' }); } catch (e) { return ''; } };
     var pmStep = function (step, plan) { (window.dataLayer = window.dataLayer || []).push({ event: 'pas_premium', step: step, plan: plan || '' }); };
+    // What analytics is told about money, in the shape Google Analytics expects for a sale: the plan and its price,
+    // never the listing or the person.
+    var sale = function (plan, id) {
+      var price = Number(PRICE[plan]) || 0, o = { value: price, currency: 'USD', items: [{ item_id: 'premium_' + plan, item_name: 'Premium listing (' + PLAN[plan].toLowerCase() + ')', price: price, quantity: 1 }] };
+      if (id) o.transaction_id = id;
+      return o;
+    };
+    var pmSale = function (event, plan, id, test) {
+      var dl = (window.dataLayer = window.dataLayer || []);
+      dl.push({ ecommerce: null });
+      dl.push({ event: event, ecommerce: sale(plan, id), pas_test: !!test });
+    };
+    // ----- back from paying -----
+    // Stripe sends the payer back here with ?paid=year (or month) and its own id for the checkout. The page thanks
+    // them and tells analytics once, by that id, that a sale was made. Nothing here turns premium on: the address
+    // proves nothing, so the owner still matches the payment in Stripe.
+    var pq = query(), pmPaid = pq.paid ? (pq.paid === 'year' || pq.paid === 'month' ? pq.paid : 'any') : '';
+    var pmSess = /^cs_(test|live)_[A-Za-z0-9]{8,200}$/.test(pq.session_id || '') ? pq.session_id : '';
+    if (pmPaid) {
+      var seen = []; try { seen = JSON.parse(window.localStorage.getItem('pas-paid-seen') || '[]') || []; } catch (e) { seen = []; }
+      var fresh = pmSess ? seen.indexOf(pmSess) < 0 : false;
+      if (fresh) {
+        try { window.localStorage.setItem('pas-paid-seen', JSON.stringify(seen.concat(pmSess).slice(-12))); } catch (e) { /* private window: it may count twice on a reload */ }
+        pmStep('paid', pmPaid === 'any' ? '' : pmPaid);
+        if (pmPaid !== 'any') pmSale('purchase', pmPaid, pmSess, /^cs_test_/.test(pmSess));
+      }
+      if (window.history && history.replaceState) {   // so a reload or a shared address doesn't say "paid" again
+        var keep = location.search.replace(/^\?/, '').split('&').filter(function (x) { return x && !/^(paid|session_id)=/.test(x); });
+        try { history.replaceState(null, '', location.pathname + (keep.length ? '?' + keep.join('&') : '') + '#signup'); } catch (e) { /* file preview */ }
+      }
+    }
     var payUrl = function (plan, key) { return PAY[plan] ? PAY[plan] + (PAY[plan].indexOf('?') < 0 ? '?' : '&') + 'client_reference_id=' + encodeURIComponent(key.replace(/[^A-Za-z0-9_-]/g, '_')) : ''; };
     var pmLoad = function () {
       return call('claims').then(function (d) {
@@ -2855,6 +2886,12 @@
     };
     var pmDraw = function () {
       pmBox.textContent = '';
+      if (pmPaid) {
+        var ty = el('div', 'g-status good pm-thanks'); ty.setAttribute('role', 'status');
+        ty.appendChild(el('b', null, 'Thank you!'));
+        ty.appendChild(document.createTextNode(' Stripe is emailing you a receipt. We’ll switch your listing to premium within a day and email you when it’s on.'));
+        pmBox.appendChild(ty);
+      }
       if (pmState === 'checking') { pmBox.appendChild(el('p', 'hint', 'One moment…')); return; }
       if (pmSaid) { var st = el('p', 'g-status ' + (pmBad ? 'bad' : 'good'), pmSaid); st.setAttribute('role', 'status'); pmBox.appendChild(st); }
       var toClaim = function (text, label) {
@@ -2888,9 +2925,9 @@
           var row2 = el('p', 'actions');
           if (payUrl(plan, c.listing)) {
             var pay = el('a', 'btn primary', 'Pay on Stripe'); pay.href = payUrl(plan, c.listing); pay.rel = 'noopener';
-            pay.addEventListener('click', function () { pmStep('to_payment', plan); });
+            pay.addEventListener('click', function () { pmStep('to_payment', plan); pmSale('begin_checkout', plan, '', /\/test_/.test(PAY[plan])); });
             row2.appendChild(pay);
-            item.appendChild(el('p', 'hint', 'Paid already? Your listing becomes premium once we see the payment, usually within a day. We’ll email you.'));
+            item.appendChild(el('p', 'hint', pmPaid ? 'If you’ve just paid, there’s nothing more to do.' : 'Paid already? Your listing becomes premium once we see the payment, usually within a day. We’ll email you.'));
           } else item.appendChild(el('p', 'hint', 'Nothing is charged yet. We’ll email you before premium starts and before anything is charged.'));
           var ch = el('button', 'btn', 'Change the plan'); ch.type = 'button'; ch.addEventListener('click', function () { pmChange[c.listing] = true; pmSaid = ''; pmDraw(); }); row2.appendChild(ch);
           item.appendChild(row2);

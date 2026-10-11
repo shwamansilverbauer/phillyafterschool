@@ -1858,6 +1858,8 @@ html.signed .year-out{display:none}
 .pm-founding{background:var(--sky-bg);color:var(--sky-ink);border-radius:14px;padding:14px 18px;max-width:44rem}
 #premium-signup{display:flex;flex-direction:column;gap:14px;max-width:44rem}
 #premium-signup>p{margin:0}
+.pm-thanks{font-weight:400}
+.pm-thanks b{font-weight:700}
 .pm-mine{display:flex;flex-direction:column;gap:14px}
 .pm-item h3{margin:0}
 .pm-item p{margin:0}
