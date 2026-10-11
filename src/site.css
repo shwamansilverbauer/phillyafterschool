@@ -1813,9 +1813,23 @@ html.signed .year-out{display:none}
 .g-push .clear{margin-left:4px}
 
 /* ----- the premium sign-up page (/premium/) ----- */
-.pm-gets{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:none}
-.pm-gets li{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:4px;min-width:0}
-.pm-gets li>span{color:var(--muted);line-height:1.45}
+.pm-demo .pm-offer-line{font-size:.9rem;line-height:1.4}
+.pmd-words{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.pmd-h{margin:0;font-family:var(--display);font-stretch:112%;font-weight:800;font-size:1.05rem;display:flex;align-items:center}
+.pm-demo .pm-by{font-size:.84rem;gap:10px}
+.pmd-logo{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:#FFFFFF;flex:none;overflow:hidden;line-height:0}
+.pmd-logo svg{width:100%;height:100%;display:block}
+.pmd-text{margin:0;font-size:.93rem;line-height:1.45}
+.pmd-thumbs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;line-height:0}
+.pmd-thumbs svg{display:block;width:100%;height:auto;border-radius:10px}
+.pm-demo .demo-actions{align-items:center}
+.pmd-months{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;height:76px}
+.pmd-months span{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;min-width:0;font-size:.72rem;color:var(--muted)}
+.pmd-months i{display:block;width:100%;background:var(--link);border-radius:4px 4px 0 0;flex:none}
+.pm-demo .pm-schools li{font-size:.8rem;padding:2px 10px}
+.pmd-flyer{display:flex;align-items:center;gap:12px;margin:10px 0 0;font-size:.86rem;color:var(--muted)}
+.pmd-flyer svg{width:46px;height:auto;flex:none;border:1px solid var(--line);border-radius:5px}
+.pmd-flyer span{display:flex;align-items:center;flex-wrap:wrap}
 .pm-plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:44rem}
 .pm-plan{position:relative;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:22px 22px 20px;display:flex;flex-direction:column;gap:6px;min-width:0}
 .pm-plan.best{border-color:var(--yellow)}
@@ -1840,6 +1854,6 @@ html.signed .year-out{display:none}
 .pm-opt span{margin-left:auto;color:var(--muted);text-align:right}
 .pm-opt:has(input:checked) span{color:var(--sky-ink)}
 @media (max-width:760px){
-  .pm-gets,.pm-plans{grid-template-columns:minmax(0,1fr)}
+  .pm-plans{grid-template-columns:minmax(0,1fr)}
   .pm-price b{font-size:2rem}
 }

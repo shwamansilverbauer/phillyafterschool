@@ -3193,14 +3193,57 @@ function directorsPage() {
 function premiumPage() {
   const D = 1, P = PM_PRICE, money = n => '$' + n;
   const free = Math.round((12 * P.month - P.year) / P.month);   // months a year's plan saves
+  // In the order the picture shows them: each has a numbered dot there and in the list beside it.
   const gets = [
-    [T(`Photos and your logo`), T(`Up to six photos and a logo, at the top of your listing.`)],
-    [T(`A section in your own words`), T(`Say what makes your program yours, the way you’d say it to a parent on a tour.`)],
-    [T(`An offer or event line`), T(`An open house, a trial class, early-bird pricing. It shows near the top until the date you set.`)],
-    [T(`A button for questions`), T(`Parents send a question from your listing and it lands in your inbox, with their address to reply to.`)],
-    [T(`Fuller numbers`), T(`Month by month: how often your listing was opened, how many families follow it or saved it, and which schools they come from. Numbers only, never who.`)],
-    [T(`A flyer to print`), T(`With a code that opens your listing, for the front desk or the school fair.`)],
+    ['photos', T(`Photos and your logo`), T(`Up to six photos and a logo, at the top of your listing.`)],
+    ['offer', T(`An offer or event line`), T(`An open house, a trial class, early-bird pricing. It shows near the top until the date you set.`)],
+    ['words', T(`A section in your own words`), T(`Say what makes your program yours, the way you’d say it to a parent on a tour.`)],
+    ['ask', T(`A button for questions`), T(`Parents send a question from your listing and it lands in your inbox, with their address to reply to.`)],
+    ['numbers', T(`Fuller numbers`), T(`Month by month: how often your listing was opened, how many families follow it or saved it, and which schools they come from. Numbers only, never who.`)],
+    ['flyer', T(`A flyer to print`), T(`With a code that opens your listing, for the front desk or the school fair.`)],
   ];
+  const at = Object.fromEntries(gets.map(([k], i) => [k, `<i class="demo-n" aria-hidden="true">${i + 1}</i>`]));
+  // A picture of a premium listing, built from the parts a real one uses. The program is invented, and says so.
+  const art = (inner, bg) => `<svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="120" height="90" fill="${bg}"/>${inner}</svg>`;
+  const room = `<svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="400" height="120" fill="#F6E7C8"/><rect y="86" width="400" height="34" fill="#D9B98A"/><rect x="26" y="20" width="74" height="52" rx="4" fill="#FFFFFF" stroke="#B88A00" stroke-width="3"/><path d="M36 62l16-20 12 13 9-8 17 15z" fill="#2C8444"/><circle cx="84" cy="34" r="6" fill="#F3C613"/><rect x="120" y="14" width="56" height="66" rx="4" fill="#FFFFFF" stroke="#B4237A" stroke-width="3"/><circle cx="148" cy="42" r="15" fill="#B4237A"/><circle cx="148" cy="42" r="7" fill="#F3C613"/><rect x="214" y="60" width="150" height="10" rx="3" fill="#8A5A2B"/><rect x="226" y="70" width="8" height="34" fill="#8A5A2B"/><rect x="344" y="70" width="8" height="34" fill="#8A5A2B"/><rect x="236" y="36" width="22" height="24" rx="4" fill="#1763B8"/><rect x="266" y="42" width="18" height="18" rx="4" fill="#C2410C"/><rect x="292" y="32" width="20" height="28" rx="4" fill="#2C8444"/><path d="M322 60V30M318 30h8" stroke="#0B2140" stroke-width="3" stroke-linecap="round"/><path d="M332 60V26M328 26h8" stroke="#6B3FA0" stroke-width="3" stroke-linecap="round"/></svg>`;
+  const thumbs = [
+    art('<rect x="30" y="14" width="60" height="62" rx="3" fill="#FFFFFF" stroke="#0F4D90" stroke-width="3"/><circle cx="50" cy="38" r="9" fill="#F3C613"/><path d="M36 68l14-16 10 9 9-12 15 19z" fill="#1763B8"/>', '#DAEDFE'),
+    art('<rect y="62" width="120" height="28" fill="#D9B98A"/><path d="M22 62c-2-16 4-26 14-26s16 10 14 26z" fill="#C2410C"/><path d="M58 62c-3-22 3-36 12-36s15 14 12 36z" fill="#2C8444"/><path d="M90 62c-1-10 2-16 8-16s9 6 8 16z" fill="#6B3FA0"/><rect x="30" y="32" width="12" height="5" rx="2" fill="#8A2C06"/><rect x="64" y="22" width="12" height="5" rx="2" fill="#1F5A22"/>', '#FFF4C2'),
+    art('<rect x="18" y="18" width="38" height="52" rx="3" fill="#FFFFFF"/><path d="M26 58l8-24 8 14 6-8 4 18z" fill="#B4237A"/><rect x="64" y="18" width="38" height="52" rx="3" fill="#FFFFFF"/><circle cx="83" cy="40" r="11" fill="#2C8444"/><rect x="72" y="56" width="22" height="5" rx="2" fill="#0B2140"/>', '#D6F3D2'),
+  ];
+  const months = [['May', 34], ['Jun', 52], ['Jul', 41], ['Aug', 88], ['Sep', 100], ['Oct', 71]];
+  const qr = '<svg viewBox="0 0 54 70" focusable="false"><rect width="54" height="70" fill="#FFFFFF"/><rect x="6" y="6" width="42" height="6" rx="2" fill="#0B2140"/><rect x="6" y="15" width="30" height="3" rx="1.5" fill="#9DB2CC"/>' + [[0, 0], [1, 0], [3, 0], [5, 0], [0, 1], [2, 1], [4, 1], [5, 1], [1, 2], [2, 2], [5, 2], [0, 3], [3, 3], [4, 3], [0, 4], [1, 4], [3, 4], [5, 4], [2, 5], [4, 5], [5, 5]].map(([x, y]) => `<rect x="${12 + x * 5}" y="${24 + y * 5}" width="5" height="5" fill="#0B2140"/>`).join('') + '<rect x="14" y="60" width="26" height="4" rx="2" fill="#F3C613"/></svg>';
+  const demo = `<figure class="claim-demo pm-demo">
+      <div class="demo-page" aria-hidden="true">
+        <div class="demo-bar"><i></i><i></i><i></i><span>${esc(cfg.siteUrl.replace(/^https?:\/\//, ''))}/programs/your-program/</span></div>
+        <div class="demo-hero">
+          <p class="demo-name">${T(`Maple Street Arts Club`)}</p>
+          <p class="demo-what">${T(`Painting, clay and printmaking after school, with pickup from two schools`)}</p>
+          <p class="demo-chips"><span>${T(`Art`)}</span><span>${T(`Grades`)} <b>K ${T(`to`)} 5</b></span><span class="claimed-mark"><b>${T(`Claimed`)}</b> ${T(`by the people who run it`)}</span></p>
+        </div>
+        <div class="demo-body">
+          <div class="demo-photo">${at.photos}${room}</div>
+          <p class="pm-offer-line"><b>${T(`From the program`)}</b> ${T(`Open house on November 12 at 6 pm. Come see the studio and meet the teachers.`)}${at.offer}</p>
+          <div class="pmd-words">
+            <p class="pmd-h">${T(`In their own words`)}${at.words}</p>
+            <p class="pm-by"><span class="pmd-logo">${art('<circle cx="60" cy="45" r="30" fill="#B4237A"/><path d="M44 58l10-26 6 16 6-16 10 26" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>', '#FFFFFF')}</span><span>${T(`Written by Maple Street Arts Club, not by us.`)}</span></p>
+            <p class="pmd-text">${T(`We keep groups small, so every kid gets their hands in the clay. Most afternoons end with something to carry home.`)}</p>
+          </div>
+          <div class="pmd-thumbs">${thumbs.join('')}</div>
+          <p class="demo-actions"><span class="btn primary">${T(`Sign up`)}</span><span class="btn">${T(`Ask a question`)}</span>${at.ask}</p>
+        </div>
+      </div>
+      <div class="demo-stats" aria-hidden="true">
+        <p class="demo-only">${T(`Only you see this`)}${at.numbers}</p>
+        <div class="claim-stats">
+          <h4>${T(`Your listing, month by month`)}</h4>
+          <div class="pmd-months">${months.map(([m, h]) => `<span><i style="height:${Math.round(h * 0.54)}px"></i>${m}</span>`).join('')}</div>
+          <ul class="pm-schools"><li>Elm Street School <span>38</span></li><li>Parkside Elementary <span>21</span></li><li>Riverview Charter <span>12</span></li></ul>
+        </div>
+        <p class="pmd-flyer">${qr}<span>${T(`A flyer with your listing’s code, ready to print`)}${at.flyer}</span></p>
+      </div>
+      <figcaption>${T(`An example of a premium listing. The program, its schools and its numbers are made up.`)}</figcaption>
+    </figure>`;
   const card = (plan, name, price, per, note, pick) => `<div class="pm-plan${pick ? ' best' : ''}" data-plan="${plan}">
       ${pick ? `<p class="pm-flag">${T(`Best value`)}</p>` : ''}
       <h3>${name}</h3>
@@ -3210,12 +3253,6 @@ function premiumPage() {
   const hero = `    <h1>${T(`Premium listings`)}</h1>
     <p class="lede">${T(`Your listing on {site} is free, and it stays free. Premium adds your photos, your words and your offers to it, and shows you what families do with it.`, { site: cfg.siteName })}</p>`;
   const body = `<div ${groupsAttrs(D)} style="display:contents">
-  <section class="section" id="what">
-    <h2>${T(`What premium adds`)}</h2>
-    <ul class="pm-gets">
-      ${gets.map(([h, p]) => `<li><b>${h}</b><span>${p}</span></li>`).join('\n      ')}
-    </ul>
-  </section>
   <section class="section" id="price">
     <h2>${T(`What it costs`)}</h2>
     <div class="pm-plans">
@@ -3223,7 +3260,17 @@ function premiumPage() {
     ${card('month', T(`Monthly`), P.month, T(`a month`), T(`Pay as you go.`), false)}
     </div>
     ${P.laterMonth && P.laterYear ? `<p class="pm-founding">${T(`This is the founding price, for the first programs to sign up. It stays yours for as long as you stay signed up. Later, premium will cost {m} a month or {y} a year.`, { m: money(P.laterMonth), y: money(P.laterYear) })}</p>` : ''}
+    <p class="actions"><a class="btn primary" href="#signup" data-track="premium_to_signup">${T(`Sign up your listing`)}</a></p>
     <p>${T(`Run a free program, a school club or a rec center?`)} <a href="${link('contact/', D)}">${T(`Write to us before you sign up.`)}</a></p>
+  </section>
+  <section class="section" id="what">
+    <h2>${T(`What premium adds`)}</h2>
+    <div class="claim-show">
+      ${demo}
+      <ol class="benefits">
+${gets.map(([, h, p], i) => `        <li><i class="demo-n" aria-hidden="true">${i + 1}</i><b>${h}</b> ${p}</li>`).join('\n')}
+      </ol>
+    </div>
   </section>
   <section class="section" id="signup">
     <h2>${T(`Sign up`)}</h2>
