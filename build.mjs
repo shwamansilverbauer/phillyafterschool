@@ -536,7 +536,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
     return `<details class="menu${here ? ' here' : ''}"><summary>${label}</summary><ul>${items.map(([to, text]) => `<li><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
   }).join('') + `<a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
-    ? `<a class="when-in nav-acct" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}>Account</a><a class="nav-cta when-out" href="${link('register/', depth)}">Create a free account</a><a class="nav-cta when-in" href="${link('profile/', depth)}"${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}>My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>`
+    ? `${daysOff ? `<a class="when-in nav-todo" href="${link('to-do/', depth)}"${pathName === 'to-do/' ? ' aria-current="page"' : ''}>To do</a>` : ''}<a class="when-in nav-acct" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}>Account</a><a class="nav-cta when-out" href="${link('register/', depth)}">Create a free account</a><a class="nav-cta when-in" href="${link('profile/', depth)}"${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}>My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>`
     : `<a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`}`;
   const head = `${first}${fragment || quiet ? '' : roleHead + gtmHead + '\n'}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
@@ -4581,6 +4581,48 @@ function schedulesPage() {
   return layout({ title: 'Build a schedule: the week, days off and summer', description: `Free planners for Philadelphia families: build the after-school week, plan the days school is closed, and line up summer camps week by week.`, pathName: schedulesPath, depth: D, current: schedulesPath, hero, body });
 }
 
+// "To do": what a signed-in parent still has to sign up for. A shell with the days off and the listings' names in it
+// and nothing about anyone; site.js fills it from the days-off plan in the profile, or the one on this device. Like
+// the calendar it is kept out of search and loads no analytics or recordings.
+function todoPage() {
+  const D = 1;
+  const data = {
+    year: +String(daysOff.schoolYear).slice(0, 4), offPage: link(offPath, D), calPage: link(yearPath, D),
+    offDays: offDays.flatMap(d => d.dates.filter(x => x >= TODAY).map(x => ({ d: x, name: d.name }))),
+    programs: Object.fromEntries(programs.filter(p => p.daysOff).map(p => [p.id, { n: p.name, href: link(programPath(p), D), go: outUrl(p.daysOff.url, { type: 'camp', program: p }), off: p.daysOff.dates.filter(x => x >= TODAY) }])),
+  };
+  const hero = `    <h1><span class="when-out">${T(`Log in to see your to-do list`)}</span><span class="when-in">${T(`To do`)}</span></h1>
+    <p class="lede when-out">${T(`The camp days you’ve planned and haven’t signed up for yet, in one list. It’s part of a free account.`)}</p>
+    <p class="lede when-in">${T(`What’s left to sign up for. Putting a camp on your plan doesn’t sign your child up, so every camp day you’ve planned waits here until you tick it off.`)}</p>`;
+  const body = `<div ${groupsAttrs(D)} data-clarity-mask="true" style="display:contents">
+  <noscript><p class="ask">${T(`The to-do list needs JavaScript turned on.`)}</p></noscript>
+  <section class="section when-out" id="todo-out">
+    <h2>${T(`A list of what’s left to sign up for`)}</h2>
+    <p>${T(`Plan the days school is closed, and each camp day you pick lands on a to-do list with a link to that camp’s own sign-up page. Tick it off once you’ve signed up.`)}</p>
+    <div class="actions"><a class="btn primary big" href="${link('register/', D)}?next=todo">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=todo">${T(`Log in`)}</a></div>
+  </section>
+  <p class="hint when-in" id="todo-wait">${T(`Getting your list…`)}</p>
+  <section class="section sum todo-sec needs-js-block" id="todo-page" hidden>
+    <h2>${T(`Camps to sign up for`)}</h2>
+    <p class="hint" id="todo-src"></p>
+    <div id="todo-list"></div>
+    <p class="hint" id="todo-status" aria-live="polite"></p>
+    <div class="actions todo-more"><a class="btn" href="${link(offPath, D)}#plan">${T(`Plan the days off`)}</a><a class="btn" href="${link(yearPath, D)}">${T(`My kids’ calendar`)}</a></div>
+  </section>
+  <section class="notes when-in">
+    <h2>${T(`How this list works`)}</h2>
+    <ul>
+      <li>${T(`It’s made from your days-off plan: every day you’ve put a camp on, for every child. A day at home needs no sign-up, so it isn’t here.`)}</li>
+      <li>${T(`A tick is your own note. We can’t see whether you registered, and the camp isn’t told anything.`)}</li>
+      <li>${T(`Ticks are kept with the plan: on this device, and in your profile if you keep the plan there, so they follow you to another phone or computer.`)}</li>
+      <li>${T(`Change the camp on a day and its tick is cleared, because it’s a new sign-up.`)}</li>
+    </ul>
+  </section>
+  <script type="application/json" id="todo-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
+</div>`;
+  return layout({ title: 'To do: camps to sign up for', description: `Your ${cfg.siteName} to-do list: the camp days you’ve planned and haven’t signed up for yet.`, pathName: 'to-do/', depth: D, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(D) });
+}
+
 function calendarPage() {
   const D = 1, P = summerCamps.length ? summerPlan : null;
   const shortHours = c => String(c.hours || '').split(/\. /)[0].replace(/\.$/, '');
@@ -5156,6 +5198,7 @@ if (summerCamps.length) write(campsPath + 'index.html', summerCampsPage());
 for (const c of summerCamps) write(campPath(c) + 'index.html', campPage(c));
 if (summerCamps.length) write(summerPath + 'index.html', summerSchedulePage());
 if (YEAR_PAGE) write(yearPath + 'index.html', calendarPage());
+if (YEAR_PAGE) write('to-do/index.html', todoPage());
 if (weekendPrograms.length) write(weekendPath + 'index.html', weekendPage());
 if (ALERTS) write(alertsPath + 'index.html', alertsPage());
 if (ALERTS && GROUPS) write(alertsPath + 'stop/index.html', stopPage());

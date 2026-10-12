@@ -667,9 +667,14 @@ Putting a camp on a day off is a plan, not a registration, so each camp day in a
   camp day not yet ticked, for every child, grouped by camp, each with a tick box, a link to the camp's own page and
   "Tick all" when there are several. Days with no plan are counted in one line under it, and ticked days sit in a
   closed "Signed up: N days" list where a tick can be taken back. A line in the plan's tally links to it.
+- **The To do page** (`/to-do/`, `todoPage()`) is the list by itself, and the menu has a "To do" link to it for
+  anyone signed in (`a.nav-todo`, beside "Account"). Like the calendar it is a shell with nothing about anyone in it,
+  kept out of search, with no analytics or recordings; `groups.js` hands the profile to `window.pasTodo.show()`. It
+  reads the days-off plan from the profile when one is kept there and from the device otherwise, counts the days with
+  no plan, and signing in from it (`?next=todo`) comes back to it.
 - **My kids' calendar** has the same list as step 3, "To do" (`#year-todo`), and shows the check marks on its calendar
-  and list. A tick made there goes wherever the days-off plan lives: onto the device, or to the profile through
-  `window.pasYear.keep()` (which `groups.js` sets to `daysoff_save`).
+  and list. That step and the To do page draw the list with one function, `signupTodo()`, and save a tick with
+  `tickSignup()`: wherever the days-off plan lives, onto the device or to the profile through `daysoff_save`.
 - **Analytics** hears `pas_dayoff` with action `signed_up` or `signed_up_undo`, how (`day_list`, `todo`, `todo_all`)
   and how many days: never the child, the camp or the date. The copied text and the calendar file say "signed up" or
   "still to sign up" for each camp day.
