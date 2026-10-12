@@ -1156,6 +1156,12 @@ function mgr_run(string $today, array $opts = array()): array {
       $pr = mgr_prompt($keys[0]);
       $text .= "\nOne thing to do" . (count($keys) > 1 ? ' for ' . listing_plain($keys[0]) : '') . ': ' . $pr[0];
       $html .= '<p style="margin:16px 0 0;padding:12px 14px;background:#FFF6CC;border-radius:10px"><b>One thing to do' . (count($keys) > 1 ? ' for ' . $e(listing_plain($keys[0])) : '') . '.</b> ' . $e($pr[0]) . '</p>';
+      // one quiet line about premium, for an account that has none, once the sign-up page is open to everyone
+      $anyPremium = false; foreach ($keys as $k) if (is_premium($k)) $anyPremium = true;
+      if (!empty($GLOBALS['CFG']['premiumPage']) && !$anyPremium) {
+        $text .= "\n\nWant more on your listing? A premium listing adds photos, your own words, an offer line and month-by-month numbers: " . $GLOBALS['CFG']['siteUrl'] . '/premium/';
+        $html .= '<p style="margin:14px 0 0;font-size:14px;color:#4D607A">Want more on your listing? <a href="' . $e($GLOBALS['CFG']['siteUrl'] . '/premium/') . '" style="color:#1763B8">A premium listing</a> adds photos, your own words, an offer line and month-by-month numbers.</p>';
+      }
       $subject = 'Your ' . (count($keys) === 1 ? 'listing' : 'listings') . ' this month: ' . listing_plain($keys[0]) . (count($keys) > 1 ? ' and ' . (count($keys) - 1) . ' more' : '');
       if (mgr_send($uid, $p['email'], $subject, $text, $html, $pr[1], $pr[2])) { $sent['month']++; bump('mgr_month'); }
     }

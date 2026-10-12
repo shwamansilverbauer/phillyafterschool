@@ -537,12 +537,19 @@ changes where a listing appears in a list, and it has no say over reviews.
 - **The switch.** `"groups": { "premium": ... }` in `site.config.json`: leave it out (or `false`) and nothing premium
   exists anywhere; `"preview"` and the tools work, but what a program adds shows on its listing only to the people
   who hold that listing, signed in; `true` (or `"on"`) and everyone sees it. `PAS_PREMIUM=preview|on` overrides it
-  for a test build. The site runs on `"preview"`.
+  for a test build. The site runs on `"on"`.
 - **The sign-up page** (`premiumPage()` in `build.mjs`, at `/premium/`) is where a manager signs a claimed listing
-  up. It is **unlisted**: nothing on the site links to it, it carries `noindex`, and it is left out of the sitemap, so
-  it is reached only by its address. It is built whenever premium isn't off and `"groups": { "premiumPrice": ... }`
-  is set. To list it later, link to it (the managers page and the claimed-listing box are the natural places), add
-  it to the sitemap list and drop `noindex`.
+  up. It is built whenever premium isn't off and `"groups": { "premiumPrice": ... }` is set. While premium is
+  `"preview"` it is **unlisted**: nothing links to it, it carries `noindex`, and it is left out of the sitemap. Once
+  premium is `"on"` (`PM_LISTED` in `build.mjs`) it is in the sitemap, open to search engines, and pointed to from
+  three places, all of them for people who run a program and none on a page a parent uses:
+  - **In each claimed listing's box on the managers page** (`premiumTease()` in `groups.js`), where the premium
+    tools would be: one dashed box that leads with the listing's own number of visits when there are at least 20,
+    lists the six things premium adds, and gives the price. "Not now" puts it away for 30 days (`pas-pm-later` in
+    the browser) and leaves a one-line link. A listing that has signed up sees where to finish; a premium listing
+    sees its tools instead. Nothing pops up, and nothing is repeated elsewhere on the page.
+  - **One sentence on the managers page**, in the list under "How claiming works", for people who haven't claimed.
+  - **One line at the end of the monthly numbers email**, only for an account with no premium listing.
   - **Prices** are `"premiumPrice": { "month": 19, "year": 190, "laterMonth": 29, "laterYear": 290 }`, whole dollars.
     The two "later" numbers are the regular price the founding price gives way to; leave them out and the founding
     paragraph goes. The page promises that a founding price is kept while the program stays signed up.

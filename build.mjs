@@ -2902,6 +2902,9 @@ const PM_PRICE = (() => {
   if (!whole(p.month) || !whole(p.year) || (p.laterMonth !== undefined && !whole(p.laterMonth)) || (p.laterYear !== undefined && !whole(p.laterYear))) { console.error('\n' + 'site.config.json: groups.premiumPrice needs "month" and "year" in whole dollars ("laterMonth" and "laterYear" are optional)' + '\n'); process.exit(1); }
   return { month: p.month, year: p.year, laterMonth: p.laterMonth || 0, laterYear: p.laterYear || 0 };
 })();
+// The premium sign-up page is listed (linked from the managers page, in the sitemap, open to search engines) once
+// premium is on for everyone. While premium is only being tried out ("preview"), it is reached by its address alone.
+const PM_LISTED = !!PM_PRICE && GROUPS.premium === 'on' && !PREVIEW;
 const PM_PAY = (() => {
   const env = (process.env.PAS_PM_PAY || '').split(',');   // a test build: "monthly link,yearly link"
   const p = process.env.PAS_PM_PAY === 'off' ? {} : env.length === 2 ? { month: env[0], year: env[1] } : (cfg.groups && cfg.groups.premiumPay) || {};   // "off": a test build with no links
@@ -3159,7 +3162,7 @@ function directorsPage() {
     <p class="lede">${T(`Find your program below and claim it with your work email. Then keep its dates, costs and hours up to date yourself. It’s free, and it takes a couple of minutes.`)}</p>`;
   const body = `<div ${groupsAttrs(1)} style="display:contents">
   <noscript><p class="ask">${T(`Claiming a listing needs JavaScript turned on.`)}</p></noscript>
-  <div class="g-page" id="claims" data-clarity-mask="true"${GROUPS.photos ? ' data-photos="1"' : ''}${GROUPS.premium !== 'off' ? ` data-qr="${link('assets/qr.js', 1)}${stamp('src/qr.js')}"` : ''}></div>
+  <div class="g-page" id="claims" data-clarity-mask="true"${GROUPS.photos ? ' data-photos="1"' : ''}${GROUPS.premium !== 'off' ? ` data-qr="${link('assets/qr.js', 1)}${stamp('src/qr.js')}"` : ''}${PM_LISTED ? ` data-pm-from="${PM_PRICE.month}"` : ''}></div>
   <script type="application/json" id="claims-data">${JSON.stringify(Object.entries(L).map(([k, v]) => [k, v.n, v.d, v.m === 'match' ? 1 : 0])).replace(/</g, '\\u003c')}</script>
   <section class="section" id="why">
     <h2>${T(`What claiming gets you`)}</h2>
@@ -3186,7 +3189,7 @@ function directorsPage() {
       <li>${T(`Parents see a “Claimed” mark on the listing. Your name and email address are never shown.`)}</li>
       <li>${T(`A claim doesn’t change what the listing says by itself. Changes you send are looked at by a person, then published.`)}</li>${GROUPS.photos ? `
       <li>${T(`Only send a photo you have the right to use, with permission from the families of any children in it.`)}</li>` : ''}
-      <li>${T(`Listings are free and stay free. Nobody pays to be listed or to be ranked higher.`)}${GROUPS.photos ? '' : ' ' + T(`Paid extras, such as a photo at the top of your listing, are planned for later.`)}</li>
+      <li>${T(`Listings are free and stay free. Nobody pays to be listed or to be ranked higher.`)}${PM_LISTED ? ` ${T(`Want more on yours?`)} <a href="${link('premium/', 1)}" data-track="premium_from_managers">${T(`A premium listing adds photos, your own words and offers.`)}</a>` : GROUPS.photos ? '' : ' ' + T(`Paid extras, such as a photo at the top of your listing, are planned for later.`)}</li>
       <li>${T(`Not on the site yet?`)} <a href="${link('suggest/', 1)}">${T(`Suggest your program`)}</a> ${T(`or`)} <a href="${link('suggest/', 1)}?kind=camp">${T(`your camp`)}</a>${T(`, with its website, and claim it once it’s up.`)}</li>
     </ul>
     <p><a href="${link('privacy/', 1)}#managers">${T(`What we keep about a claim is on the privacy page.`)}</a></p>
@@ -3195,9 +3198,10 @@ function directorsPage() {
   return layout({ title: 'For program managers: find and claim your listing', description: `Run an after-school program or camp in Philadelphia? Find your ${cfg.siteName} listing, claim it with your work email, and keep its dates, costs and hours up to date. Free.`, pathName: 'managers/', depth: 1, current: null, hero, body, scripts: groupsScript(1) });
 }
 
-// The page where a program signs a claimed listing up for premium. Not linked from anywhere and kept out of search
-// engines and the sitemap for now: it is reached by its address (/premium/). The words and prices are here; the box
-// that knows who is signed in and which listings they hold is drawn by groups.js.
+// The page where a program signs a claimed listing up for premium (/premium/). While premium is in "preview" it is
+// not linked from anywhere and is kept out of search engines and the sitemap; once premium is on (PM_LISTED) the
+// managers page points to it. The words and prices are here; the box that knows who is signed in and which
+// listings they hold is drawn by groups.js.
 function premiumPage() {
   const D = 1, P = PM_PRICE, money = n => '$' + n;
   const free = Math.round((12 * P.month - P.year) / P.month);   // months a year's plan saves
@@ -3297,7 +3301,7 @@ ${gets.map(([, h, p], i) => `        <li><i class="demo-n" aria-hidden="true">${
     <p><a href="${link('privacy/', D)}#managers">${T(`What we keep about a claim and a premium listing is on the privacy page.`)}</a></p>
   </section>
 </div>`;
-  return layout({ title: 'Premium listings for programs and camps', description: `Add photos, your own words, offers and fuller numbers to your ${cfg.siteName} listing.`, pathName: 'premium/', depth: D, current: null, hero, body, noindex: true, scripts: groupsScript(D) });
+  return layout({ title: 'Premium listings for programs and camps', description: `Add photos, your own words, offers and fuller numbers to your ${cfg.siteName} listing.`, pathName: 'premium/', depth: D, current: null, hero, body, noindex: !PM_LISTED, scripts: groupsScript(D) });
 }
 
 // The owner's review page for claims and the changes directors propose, behind the same sign-in as the edit page.
@@ -3595,7 +3599,7 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])) });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])) });
   const src = fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8');
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   if (!src.includes('/*MAILER*/')) throw new Error('src/server/groups-api.php has lost its /*MAILER*/ marker');
@@ -4275,7 +4279,7 @@ ${page}`;
 function editPage() {
   const pages = [['', 'Home'], ['schools/', 'Schools'], ['schools/request/', 'A school that isn’t covered yet'], ...schools.map(s => [s.id + '/', `${s.shortName} page`]), ['types/', 'Program types'], [`types/${liveTypes()[0].id}/`, `A type page (${liveTypes()[0].label})`], ['all-programs/', 'All programs, by kind'], ['programs/', 'After-school programs, A to Z'], ['neighborhoods/', 'Neighborhoods'], [hoodPath(hoods[0]), `A neighborhood page (${hoods[0].name})`], [programPath(programs[0]), `A program page (${programs[0].name})`],
     ['board/', 'Build your week'], ['suggest/', 'Suggest a program'], ['suggest/thanks/', 'Thank-you page after a suggestion'], ['ideas/', 'Request a feature'], ['ideas/thanks/', 'Thank-you page after an idea'], ['review/', 'Write a review'], ['review/thanks/', 'Thank-you page after a review'],
-    ['about/', 'About'], ['privacy/', 'Privacy'], ['support/', 'Help the site keep going'], ...(PM_PRICE && !PREVIEW ? [['premium/', 'Premium listings (not linked from the site yet)']] : []), ...(PREVIEW ? [] : [['404.html', 'Page not found']])];
+    ['about/', 'About'], ['privacy/', 'Privacy'], ['support/', 'Help the site keep going'], ...(PM_PRICE && !PREVIEW ? [['premium/', PM_LISTED ? 'Premium listings' : 'Premium listings (not linked from the site yet)']] : []), ...(PREVIEW ? [] : [['404.html', 'Page not found']])];
   const hero = `    <h1>Edit the words on this site</h1>
     <p class="lede">Turn on editing, then click a sentence on any page and type. Nothing changes for visitors until your edits are sent and approved.</p>`;
   const body = `<div class="prose" data-edit-page>
@@ -5152,7 +5156,7 @@ if (GROUPS) {
   write('groups/index.html', groupPage());
   write('join/index.html', joinPage());
   write('managers/index.html', directorsPage());
-  if (PM_PRICE && !PREVIEW) write('premium/index.html', premiumPage());   // unlisted: no link to it, no sitemap line
+  if (PM_PRICE && !PREVIEW) write('premium/index.html', premiumPage());
   write('directors/index.html', movedPage('managers/', 1));   // the page's first address
   if (!PREVIEW) write('groups/api.php', groupsApiPhp());
 }
@@ -5199,7 +5203,7 @@ if (!PREVIEW) {
     ...(SCHOOL_PAGES ? uncoveredIndexed().map(x => [uncoveredPath(x), nearDate(x)]) : []),
     ...(weekendPrograms.length ? [[weekendPath, listDate(weekendPrograms)]] : []),
     ['privacy/', newest(cfg.privacyUpdated)],
-    ...[...(ALERTS ? [alertsPath] : []), schedulesPath, 'board/', 'suggest/', ...(GROUPS ? ['managers/'] : []), 'ideas/', 'review/', 'about/', 'contact/', ...(cfg.termsLive === true ? ['terms/'] : []), 'support/'].map(u => [u, ''])];
+    ...[...(ALERTS ? [alertsPath] : []), schedulesPath, 'board/', 'suggest/', ...(GROUPS ? ['managers/'] : []), ...(PM_LISTED ? ['premium/'] : []), 'ideas/', 'review/', 'about/', 'contact/', ...(cfg.termsLive === true ? ['terms/'] : []), 'support/'].map(u => [u, ''])];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc>${d ? `<lastmod>${d}</lastmod>` : ''}</url>`).join('\n')}\n</urlset>\n`);
   // IndexNow: the key file a search engine reads to check that a "these pages changed" note really came from this site.
   if (/^[a-f0-9]{32}$/.test(cfg.indexNowKey || '')) write(`${cfg.indexNowKey}.txt`, cfg.indexNowKey);
