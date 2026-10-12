@@ -1400,12 +1400,17 @@ How it behaves (`mailerPhp()` in `build.mjs`, used by `groups-api.php` and by ea
 
 `admins` in `site.config.json` is a list of email addresses. An account on the site with one of those addresses is a
 site admin: while it is signed in (by the emailed code or by Google, like any account), `/edit/`, `/edit/stats/` and
-`/edit/claims/` open with no second password, and its account page has a "Site admin" section with the three links.
-The username and password in `editLogin` keep working by themselves.
+`/edit/claims/` open with no second password, and the menu at the top of every page gains an **Admin** group with
+the three links (Site numbers, Claims and changes, Edit the site's wording). The account and profile pages say
+nothing about admin: those are the person's own. The username and password in `editLogin` keep working by themselves.
 
 - The pages do the checking, not the browser: `edit_admin()` in `editAuthPhp()` (`build.mjs`) looks the session
-  cookie up in the accounts database and compares the account's address with the list. The account page only
-  shows the door (`admin: true` in what `groups/api.php?action=me` tells that account, and nobody else).
+  cookie up in the accounts database and compares the account's address with the list. The menu only shows the
+  door: `groups/api.php` tells that account, and nobody else, `admin: true`; `groups.js` notes it in the browser
+  (`pas-admin`, cleared on signing out) and `site.js` builds the Admin group from that note (`adminNav()`). The
+  group is built in the browser and never written into a page, so no other visitor's page carries those
+  addresses. A stale note shows the group and opens nothing.
+- `/edit/claims/` also links to the hidden test listings.
 - To add or remove an admin, change the list and publish. Removing an address closes the pages for it at once.
   Signing out of the account closes them on that device; "Sign out on every device" closes them everywhere.
 - An admin account is only as safe as its inbox, since a sign-in code sent there is all it takes. Keep 2-step

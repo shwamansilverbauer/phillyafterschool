@@ -952,6 +952,33 @@
     });
   })();
 
+  // ----- the Admin menu: one more group in the menu, only in a browser where a site admin is signed in -----
+  // It is built here and not written into the page, so nobody else's page carries the owner pages' addresses. The
+  // account pages note that an admin signed in (pas-admin, see groups.js); this only draws the door. The pages
+  // behind it check the account themselves, so a stale note opens nothing.
+  var adminNav = function (on) {
+    var nav = document.querySelector('#site-nav'), old = document.getElementById('admin-menu'), html = document.documentElement;
+    html.className = html.className.replace(/(^|\s)has-admin(?!\S)/g, '') + (on && nav ? ' has-admin' : '');   // the bar closes up a little to make room
+    if (old && !on) { old.parentNode.removeChild(old); return null; }
+    if (!on || old || !nav) return old || null;
+    var brand = document.querySelector('a.brand'), root = brand ? brand.getAttribute('href').replace(/index\.html$/, '') : './';
+    if (root === './') root = '';
+    var m = document.createElement('details'), sm = document.createElement('summary'), ul = document.createElement('ul');
+    m.className = 'menu admin-menu' + (/\/edit\//.test(location.pathname) ? ' here' : ''); m.id = 'admin-menu';
+    sm.textContent = 'Admin'; m.appendChild(sm);
+    [['Site numbers', 'edit/stats/'], ['Claims and changes', 'edit/claims/'], ['Edit the site’s wording', 'edit/']].forEach(function (x) {
+      var li = document.createElement('li'), a = document.createElement('a');
+      a.textContent = x[0]; a.href = root + x[1];
+      if (location.pathname.replace(/index\.html$/, '').slice(-x[1].length - 1) === '/' + x[1]) a.setAttribute('aria-current', 'page');
+      li.appendChild(a); ul.appendChild(li);
+    });
+    m.appendChild(ul);
+    var before = nav.querySelector('.nav-acct') || nav.querySelector('.nav-cta');
+    if (before) nav.insertBefore(m, before); else nav.appendChild(m);
+    return m;
+  };
+  adminNav(store('pas-admin') === '1' && store('pas-in') === '1');
+
   // ----- the menu. Wide screens: the logo on the left, groups on the right, one open at a time.
   // Narrow screens: a Menu button that opens every group in one panel. A tap elsewhere or Escape closes either. -----
   var menus = all(document, 'details.menu');
@@ -966,11 +993,18 @@
   };
   if (menuBtn) menuBtn.addEventListener('click', function () { setPanel(!panelOpen()); });
   if (narrow.addEventListener) narrow.addEventListener('change', function () { setPanel(false); });
-  menus.forEach(function (m) {
+  var wireMenu = function (m) {
     m.addEventListener('toggle', function () { if (m.open && !panelOpen()) menus.forEach(function (o) { if (o !== m) o.open = false; }); });
     var sm = m.querySelector('summary');
     if (sm) sm.addEventListener('click', function (e) { if (panelOpen()) e.preventDefault(); });   // in the panel the groups stay open
-  });
+  };
+  menus.forEach(wireMenu);
+  // an admin who signs in or out on this page gets or loses the Admin group without a reload
+  window.pasAdminNav = function (on) {
+    var had = document.getElementById('admin-menu'), m = adminNav(!!on);
+    if (on && m && !had) { menus.push(m); wireMenu(m); if (panelOpen()) m.open = true; }
+    if (!on && had) menus = menus.filter(function (x) { return x !== had; });
+  };
   document.addEventListener('click', function (e) {
     if (panelOpen()) { if (!siteNav.contains(e.target) && !menuBtn.contains(e.target)) setPanel(false); return; }
     menus.forEach(function (m) { if (m.open && !m.contains(e.target)) m.open = false; });

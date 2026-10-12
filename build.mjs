@@ -3379,7 +3379,8 @@ ${GROUPS.premium !== 'off' ? `  <h2>Words and offer lines waiting for you (<?php
     ${form('$x["id"]', act('extra_no', 'Take it down'))}
   </div><?php } ?><?php } ?>
 
-` : ''}  <h2>Claimed listings (<?php echo count($claims); ?>)</h2>
+` : ''}  <h2>Claimed listings (<?php echo count($claims); ?>)</h2>${testListings.length ? `
+  <p class="hint" id="test-listings">Your test listings, hidden from the rest of the site: ${testListings.map(p => `<a href="../../programs/${esc(p.id)}/">${esc(p.name)}</a> (claimed with an address at ${esc(p.claimDomain)}${p.premium === true ? ', always premium' : ''})`).join(' and ')}.</p>` : ''}
   <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>${GROUPS.premium !== 'off' ? `
   <p class="hint">${GROUPS.premium === 'preview' ? 'Premium is being tried out: when you make a listing premium, its manager gets the premium tools, and what they add shows on the listing only to them (after you approve it). Nobody else sees it until premium is switched on for the site.' : 'Premium is on: a premium listing’s photos, own words, offer line and question button show to everyone, after you approve what the manager sends.'}</p>` : ''}
   <div class="stat-scroll"><table class="stat-table wrap"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th>${GROUPS.premium !== 'off' ? '<th scope="col">Premium</th>' : ''}<th scope="col"></th></tr></thead><tbody>
@@ -4306,7 +4307,7 @@ function editPage() {
     <p id="edit-state-text">Turn it on and a bar appears at the bottom of every page.</p>
     <div class="actions"><button type="button" class="btn primary big needs-js" id="edit-start">Start editing</button><button type="button" class="btn needs-js" id="edit-stop" hidden>Stop editing</button></div>
     <noscript><p>Editing needs JavaScript turned on.</p></noscript>
-  </div>${GATED ? `\n  <?php if (edit_admin() !== '') { ?><p class="hint" id="edit-admin">You’re here through your account, <?php echo htmlspecialchars(edit_admin(), ENT_QUOTES, 'UTF-8'); ?>, which is a site admin. <a href="../account/#sign-out">Sign out of your account</a> to close these pages.</p><?php } else { ?><p class="hint">You’re signed in on this device for 30 days. <a href="?out=1">Sign out</a></p><?php } ?>` : ''}${GATED && GROUPS ? '\n  <p><a class="btn" href="stats/">Site numbers: accounts, shared weeks and groups</a> <a class="btn" href="claims/">Claims and proposed changes</a></p>' : ''}
+  </div>${GATED ? `\n  <?php if (edit_admin() !== '') { ?><p class="hint" id="edit-admin">You’re here through your account, <?php echo htmlspecialchars(edit_admin(), ENT_QUOTES, 'UTF-8'); ?>, which is a site admin. <a href="../account/#sign-out">Sign out of your account</a> to close these pages. Anyone who can read that address’s inbox can sign in as you, so keep 2-step verification on for it.</p><?php } else { ?><p class="hint">You’re signed in on this device for 30 days. <a href="?out=1">Sign out</a></p><?php } ?>` : ''}${GATED && GROUPS ? '\n  <p><a class="btn" href="stats/">Site numbers: accounts, shared weeks and groups</a> <a class="btn" href="claims/">Claims and proposed changes</a></p>' : ''}
   <h2>How it works</h2>
   <ol>
     <li>Click any text with a dotted outline and type. Text you’ve changed turns yellow.</li>
