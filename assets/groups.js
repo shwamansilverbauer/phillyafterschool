@@ -1143,7 +1143,8 @@
     var LIST = [];
     try { LIST = JSON.parse(document.getElementById('claims-data').textContent) || []; } catch (e) { LIST = []; }
     var byKey = {};
-    LIST.forEach(function (l) { byKey[l[0]] = { key: l[0], name: l[1], domain: l[2], match: l[3] === 1 }; });
+    LIST.forEach(function (l) { byKey[l[0]] = { key: l[0], name: l[1], domain: l[2], match: l[3] === 1, hidden: l[4] === 1 }; });   // hidden: the owner's test listings, offered by address but never found by name
+    var LISTED = LIST.filter(function (l) { return l[4] !== 1; }).length;
     var cq = query();
     var wanted = byKey[cq.l] ? cq.l : (byKey[sget('pas-claim')] ? sget('pas-claim') : '');   // the listing someone has said they want
     if (byKey[cq.l]) sset('pas-claim', cq.l);   // kept through signing in
@@ -1722,7 +1723,7 @@
         results.textContent = '';
         var pool = LIST.map(function (l) { return byKey[l[0]]; }).filter(function (l) { return !held[l.key]; });
         var hits = text.length < 2 ? (wanted && byKey[wanted] && !held[wanted] ? [byKey[wanted]] : (cState === 'in' && cDomain ? pool.filter(function (l) { return l.domain === cDomain; }) : []))
-          : pool.filter(function (l) { return l.name.toLowerCase().indexOf(text) > -1; });
+          : pool.filter(function (l) { return !l.hidden && l.name.toLowerCase().indexOf(text) > -1; });
         hits.slice(0, 8).forEach(function (l) {
           var li3 = el('li');
           li3.appendChild(el('b', null, l.name));
@@ -1779,7 +1780,7 @@
           results.insertBefore(allLi, results.firstChild);
         }
         note.textContent = text.length < 2
-          ? (hits.length ? '' : (cState === 'in' ? 'No listing has a website at ' + (cDomain || 'your address') + '. Search by name to check, or suggest your program below.' : 'Every program and summer camp on the site is here: ' + LIST.length + ' listings.'))
+          ? (hits.length ? '' : (cState === 'in' ? 'No listing has a website at ' + (cDomain || 'your address') + '. Search by name to check, or suggest your program below.' : 'Every program and summer camp on the site is here: ' + LISTED + ' listings.'))
           : (hits.length ? (hits.length > 8 ? 'Showing the first 8. Keep typing to narrow it.' : '') : 'Nothing by that name is listed yet.');
       };
       si.addEventListener('input', show);
