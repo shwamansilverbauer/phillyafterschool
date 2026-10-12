@@ -2142,7 +2142,7 @@ function privacyPage() {
     <li>${T(`You can sign in with Google instead of an emailed code. Google’s button is loaded on the pages where you sign in, so Google can see that someone opened that page. If you use it, Google tells us your name and email address. We ask for nothing else and never see your Google password.`)}</li>` : ''}
     <li>${T(`If you keep your school in your profile, we store which school. If you keep your children’s grades, we store the grades and nothing about which child is in which. If you keep a week in your profile, we store the child’s first name, the programs on their current and upcoming weeks, and the school each program was picked under, so the week can be put back on another device. Notes you type are not stored.`)}</li>
     <li>${T(`If you keep a summer schedule in your profile, we store each child’s first name as you typed it and the camps picked for each week, so the summer is there on your other devices. Ages, the calendar’s title and photos are not stored. A summer in your profile can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The summer schedule section is hidden in session recordings, and analytics is told only that a summer was kept, never what is in it.`)}</li>
-    <li>${T(`If you keep a days-off plan in your profile, we store each child’s first name as you typed it and the place picked for each day school is closed. The calendar’s title and photos are not stored. The plan can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The planner is hidden in session recordings, and analytics is never told what is in a plan you keep.`)}</li>
+    <li>${T(`If you keep a days-off plan in your profile, we store each child’s first name as you typed it, the place picked for each day school is closed, and which of those days you ticked as signed up. The calendar’s title and photos are not stored. The plan can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The planner is hidden in session recordings, and analytics is never told what is in a plan you keep.`)}</li>
     <li>${T(`“My kids’ calendar” is drawn in your browser, for you alone, from the plans on your device and the ones in your profile. Opening it stores nothing new and sends nothing about your plans. It has no link of its own, so nobody else can open it. A picture or calendar file you save is a copy on your device that we never receive. So it can tell you when a date changes, the page remembers what your last file held, on your device only. Google Analytics and Microsoft Clarity are not loaded on it.`)}</li>
     <li>${T(`Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.`)}</li>
     <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
@@ -2771,7 +2771,7 @@ function daysOffPage() {
     </div>`;
   const planData = {
     year: +String(daysOff.schoolYear).slice(0, 4), schoolYear: daysOff.schoolYear,
-    programs: Object.fromEntries(campPrograms.map(p => [p.id, { name: p.name, url: p.daysOff.url, href: link(programPath(p), D), color: TYPE[p.types[0]].color, hood: programHoods(p).join(', '), n: p.daysOff.dates.filter(x => x >= TODAY).length }])),
+    programs: Object.fromEntries(campPrograms.map(p => [p.id, { name: p.name, url: p.daysOff.url, go: outUrl(p.daysOff.url, { type: 'camp', program: p }), href: link(programPath(p), D), color: TYPE[p.types[0]].color, hood: programHoods(p).join(', '), n: p.daysOff.dates.filter(x => x >= TODAY).length }])),
     site: cfg.siteUrl, qr: cardQr?.dayoff && cardQr.dayoff.text.toLowerCase().startsWith(cfg.siteUrl.toLowerCase() + '/') ? cardQr.dayoff.rows : null,
     days: days.map(({ note, ...x }) => x),
     page: `${cfg.siteUrl}/${offPath}`,
@@ -2787,7 +2787,7 @@ ${jumpNav()}
   <div class="sum-top off-top">
     <div class="field sum-name"><label for="off-name">${T(`First name (optional)`)}</label>
       <input id="off-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${T(`Stays on this device.`)}</span></div>
-    <div class="sum-tally"><div class="sum-strip" id="off-strip" aria-hidden="true"></div><p id="off-count" aria-live="polite"></p><p class="hint" id="off-open"></p></div>
+    <div class="sum-tally"><div class="sum-strip" id="off-strip" aria-hidden="true"></div><p id="off-count" aria-live="polite"></p><p class="hint" id="off-open"></p><p class="off-todo-line" id="off-todo-line" aria-live="polite"></p></div>
   </div>
   <div class="year-view-head off-view-head">
     <h3 id="off-view-h">${T(`Day by day`)}</h3>
@@ -2830,6 +2830,11 @@ ${jumpNav()}
   </div>
   </div>
   <script type="application/json" id="off-data">${JSON.stringify(planData).replace(/</g, '\\u003c')}</script>
+</section>
+<section class="section sum todo-sec needs-js-block${GATE ? ' when-in' : ''}" id="to-do" data-jump-to="To do" data-clarity-mask="true">
+  <h2>${T(`To do: sign up`)}</h2>
+  <p>${T(`Putting a camp on your plan doesn’t sign your child up: each camp takes sign-ups on its own site. Every camp day in your plan is listed here until you tick it off, and a day you’ve ticked turns green on the plan.`)}</p>
+  <div id="off-todo"></div>
 </section>
 <section class="section sum-chart-section" id="chart" data-jump-to="Who’s open">
   <h2>${T(`Who’s open each day off`)}</h2>
@@ -4584,7 +4589,7 @@ function calendarPage() {
     board: link('board/', D), offPage: link(offPath, D), sumPage: link(summerPath, D),
     offDays: offDays.flatMap((d, bi) => d.dates.filter(x => x >= TODAY).map(x => ({ d: x, name: d.name, b: bi }))),
     // every listing a week or a day off can name: its name, its page, the sign-up dates it has posted, and the days off it posted a camp for
-    programs: Object.fromEntries(programs.map(p => [p.id, { n: p.name, href: link(programPath(p), D), dates: upcomingDates(p).map(d => ({ date: d.date, label: d.label })), ...(p.daysOff ? { off: p.daysOff.dates.filter(x => x >= TODAY), url: p.daysOff.url } : {}) }])),
+    programs: Object.fromEntries(programs.map(p => [p.id, { n: p.name, href: link(programPath(p), D), dates: upcomingDates(p).map(d => ({ date: d.date, label: d.label })), ...(p.daysOff ? { off: p.daysOff.dates.filter(x => x >= TODAY), url: p.daysOff.url, go: outUrl(p.daysOff.url, { type: 'camp', program: p }) } : {}) }])),
     summer: P ? {
       year: summerYear, weeks: P.weeks.map(w => ({ d: w, label: P.label(w) })),
       camps: Object.fromEntries(P.camps.map(({ c, on, exact }) => [c.id, { n: c.name, w: on, x: exact ? 1 : 0, y: c.season || 0, h: shortHours(c), href: link(campPath(c), D), dates: (c.dates || []).filter(d => d.date >= TODAY).map(d => ({ date: d.date, label: d.label })) }])),
@@ -4656,8 +4661,13 @@ function calendarPage() {
         <div class="year-cal" id="year-cal"></div>
         <div id="year-agenda" hidden></div>
       </div>
+      <div class="year-step" id="year-todo" data-jump-to="To do">
+        <p class="step-head"><b aria-hidden="true">3</b><span>${T(`To do`)}</span></p>
+        <p>${T(`Putting a camp on a day off doesn’t sign your child up: each camp takes sign-ups on its own site. Tick a day once you’ve signed up, and it shows with a check mark on the calendar.`)}</p>
+        <div id="year-todo-list"></div>
+      </div>
       <div class="year-step" id="year-share" data-jump-to="Share it" hidden>
-        <p class="step-head"><b aria-hidden="true">3</b><span>${T(`Share it`)}</span></p>
+        <p class="step-head"><b aria-hidden="true">4</b><span>${T(`Share it`)}</span></p>
       <div class="card-maker sumcard" id="year-card" hidden>
           <h3>${T(`Make it a picture`)}</h3>
           <p>${T(`A calendar for each month, to print for the fridge or send to family. It’s made here in your browser.`)}</p>
@@ -4689,7 +4699,7 @@ function calendarPage() {
         </div>
       </div>
       <div class="year-step" id="year-pencil" data-jump-to="Pencil it in">
-        <p class="step-head"><b aria-hidden="true">4</b><span>${T(`Pencil it in`)}</span></p>
+        <p class="step-head"><b aria-hidden="true">5</b><span>${T(`Pencil it in`)}</span></p>
       <div class="year-file" id="year-file">
           <h3>${T(`Add it to your calendar`)}</h3>
           <p>${T(`One file with everything ticked below, for the calendar on your phone or computer. Open it and your calendar app adds the entries. It’s a copy: if a date changes later, this page will say so, and you download it again.`)}</p>

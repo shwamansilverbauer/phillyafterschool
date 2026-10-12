@@ -650,6 +650,31 @@ Build a schedule is `/schedules/`, the page that introduces all the planners), t
 script only closes the others. From 1100px wide the logo sits on the left and the menu on the right, on one
 line; below that a Menu button opens every group in a single panel. "Day of week" lands on the A to Z page at its Day filter, which always shows there.
 
+## Signed up, or still to: ticks on the days-off plan and the to-do list
+
+Putting a camp on a day off is a plan, not a registration, so each camp day in a plan carries a tick box.
+
+- **The tick is the parent's own mark.** The site can't know whether anyone registered. It is kept with the plan: on
+  the device as `offOk` beside `off` in each child of `pas-rosters` (`{ "2026-11-03": 1 }`, cleaned by `cleanOk()`
+  so only a day with a program on it can hold one), and, when the plan is kept in a profile, as `ok` (a sorted list of
+  days) beside `d` in each child of the `daysoffs` row. `clean_daysoff()` drops a tick for a day that is at home, not
+  in the plan, or repeated. Changing or removing a day's pick removes its tick.
+- **On the days-off planner** (`site.js`, the `[data-off-plan]` block): each camp day in the list has a "Signed up?"
+  box (`#ok-DATE`); the chip is yellow until it is ticked and green after, and a day at home is blue with no box. In
+  the calendar view a signed-up day is green with a check mark and one still to sign up for is pale yellow with an
+  outline; the day's spoken label says "signed up" or "still to sign up", so colour is never the only signal.
+- **The to-do list is a section of its own** (`#to-do`, "To do" in the strip of links, drawn by `drawTodo()`): every
+  camp day not yet ticked, for every child, grouped by camp, each with a tick box, a link to the camp's own page and
+  "Tick all" when there are several. Days with no plan are counted in one line under it, and ticked days sit in a
+  closed "Signed up: N days" list where a tick can be taken back. A line in the plan's tally links to it.
+- **My kids' calendar** has the same list as step 3, "To do" (`#year-todo`), and shows the check marks on its calendar
+  and list. A tick made there goes wherever the days-off plan lives: onto the device, or to the profile through
+  `window.pasYear.keep()` (which `groups.js` sets to `daysoff_save`).
+- **Analytics** hears `pas_dayoff` with action `signed_up` or `signed_up_undo`, how (`day_list`, `todo`, `todo_all`)
+  and how many days: never the child, the camp or the date. The copied text and the calendar file say "signed up" or
+  "still to sign up" for each camp day.
+- The summer planner doesn't have ticks yet.
+
 ## Days of the week, days off, and a saved school
 
 **Days.** A program's `days` show on its card and page. On a roster, a card placed on a day the listing doesn't

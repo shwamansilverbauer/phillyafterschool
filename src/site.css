@@ -1457,6 +1457,38 @@ html.signed .year-out{display:none}
 .cal-m.m-kid{background:#FFFFFF;border-left:5px solid var(--mk,#1763B8)}
 .cal-m.m-todo{background:#FFFFFF;border:1.5px dashed #5C4700;color:#5C4700;font-weight:400}
 .cal-m.m-ask{border-left-style:dotted}
+.cal-m.m-ok{background:#D6F3D2;color:#14401F}
+.cal-m.m-need{background:#FFF4C2;color:#3D2F00;box-shadow:inset 0 0 0 1.5px #B88A00}
+#off-todo,#year-todo-list{display:flex;flex-direction:column;gap:12px;min-width:0}
+.cal-sw i.k-ok{background:#D6F3D2;border-left:5px solid #2C8444}
+.cal-sw i.k-need{background:#FFF4C2;border-left:5px solid #B88A00}
+/* signed up, or still to: a tick box beside each camp day in a plan, and the to-do list made of the ones not ticked */
+.sum-ok{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.95rem;min-height:40px;padding:4px 12px 4px 8px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer}
+.sum-ok input{width:20px;height:20px;margin:0;accent-color:#2C8444;flex:none}
+.sum-ok.on{background:var(--green-bg);color:var(--green-ink);border-color:transparent}
+.sum-ok .hint{font-weight:400}
+.off-days .sum-chip.need{background:var(--warn);color:var(--warn-ink)}
+.off-days .sum-chip.home{background:var(--sky-bg);color:var(--sky-ink)}
+.off-days .sum-chip.ok{background:var(--green-bg);color:var(--green-ink)}
+.off-todo-line{margin:0;font-weight:700}
+.off-todo-line:empty{display:none}
+.todo-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.todo-item{background:var(--bg);border:1px solid var(--line);border-left:6px solid #B88A00;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.todo-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.todo-head b{font-family:var(--display);font-stretch:112%;font-size:1.1rem}
+.todo-who{font-weight:700}
+.todo-days{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.todo-days li{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px}
+.todo-ask{font-size:.9rem;color:var(--warn-ink);background:var(--warn);border-radius:8px;padding:2px 8px}
+.todo-clear{margin:0;font-weight:700;color:var(--green-ink);background:var(--green-bg);border-radius:12px;padding:10px 14px;align-self:flex-start}
+.todo-done summary{cursor:pointer;font-weight:700;padding:6px 0}
+.todo-done .todo-days{margin-top:8px}
+.todo-open{margin:0}
+.todo-sec .actions,.year-step .todo-item .actions{align-self:flex-start;align-items:center}
+.year-chip.ok{background:var(--green-bg);color:var(--green-ink)}
+.year-chip.need{background:var(--warn);color:var(--warn-ink)}
+.year-need{font-size:.82rem;opacity:.9;font-weight:400}
+@media print{.sum-ok input{display:none}.todo-item .actions{display:none!important}}
 .cal-m.m-reg{background:#FFFFFF;border-color:#CC3000}
 .cal-m.m-own{background:#DAEDFE;border-color:#0F4D90}
 .cal-m.m-mark{background:#0B2140;border-color:#0B2140;color:#FFFFFF}
