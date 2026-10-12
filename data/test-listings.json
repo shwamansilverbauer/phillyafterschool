@@ -1,0 +1,79 @@
+[
+  {
+    "id": "test-listing-premium",
+    "name": "Test Listing (Premium)",
+    "what": "A hidden page for trying out a premium listing. It isn’t in any list, search or sitemap",
+    "types": [
+      "art"
+    ],
+    "address": "1 Example Street",
+    "grades": "K-5",
+    "hours": "Monday to Thursday, dismissal to 6 pm",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu"
+    ],
+    "cost": "$95 a week (made up)",
+    "price": "paid",
+    "website": "https://phillyafterschool.org/",
+    "noUtm": true,
+    "register": {
+      "how": "online",
+      "url": "https://phillyafterschool.org/"
+    },
+    "sources": [
+      {
+        "label": "This is a test listing",
+        "url": "https://phillyafterschool.org/"
+      }
+    ],
+    "lastVerified": "2026-10-12",
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "checked": "2026-10-12"
+      }
+    },
+    "claimDomain": "phillyafterschool.org",
+    "premium": true
+  },
+  {
+    "id": "test-listing-free",
+    "name": "Test Listing (Free)",
+    "what": "A hidden page for trying out a claimed listing without premium. It isn’t in any list, search or sitemap",
+    "types": [
+      "music"
+    ],
+    "address": "2 Example Street",
+    "grades": "K-8",
+    "hours": "Tuesday and Thursday, 3:30 to 5 pm",
+    "days": [
+      "tue",
+      "thu"
+    ],
+    "cost": "Free (made up)",
+    "price": "free",
+    "website": "https://phillyafterschool.org/",
+    "noUtm": true,
+    "register": {
+      "how": "online",
+      "url": "https://phillyafterschool.org/"
+    },
+    "sources": [
+      {
+        "label": "This is a test listing",
+        "url": "https://phillyafterschool.org/"
+      }
+    ],
+    "lastVerified": "2026-10-12",
+    "schools": {
+      "nebinger": {
+        "relation": "pickup",
+        "checked": "2026-10-12"
+      }
+    },
+    "claimDomain": "joshsilverbauer.com"
+  }
+]

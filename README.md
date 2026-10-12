@@ -579,6 +579,15 @@ changes where a listing appears in a list, and it has no say over reviews.
     Pressing "Pay on Stripe" pushes `begin_checkout`. None of these carry the listing or the person. The address
     proves nothing about payment, so it never turns premium on. Nothing can be measured on Stripe's own checkout
     page; in Google Analytics, list `stripe.com` under unwanted referrals so the visit isn't credited to Stripe.
+- **Test listings** (`data/test-listings.json`) are two hidden pages for the site's owner to see the manager's side
+  on: `/programs/test-listing-premium/` and `/programs/test-listing-free/`. Each is an ordinary program record plus
+  `claimDomain` (the email domain that may claim it; the claim stands at once) and, on the first, `"premium": true`,
+  which makes it premium with no payment and no switch (`premiumAlways` in the server's settings; the review page
+  shows "always: a test listing"). They are never added to the programs list, so no list, count, search, filter,
+  sitemap, alert or data file has them; their pages carry `noindex` and nothing links to them. On the managers page
+  a search by name doesn't find them, but signing in with an address at the claim domain offers the listing, the
+  way it does for any listing at your own address. A school under `schools` only shapes how the test page reads.
+  What is added to the premium one still goes through the review page before it shows.
 - **Which listings are premium** is a row in the `premium` table. For now the owner sets it by hand on
   `/edit/claims/` ("Make it premium" beside each claimed listing); a payment would set the same row later. Turning
   it off hides what was added and keeps it. By the rule under "What stays free", a free program can simply be made

@@ -954,7 +954,10 @@ function premium_mode(): string {
   return in_array($m, array('preview', 'on'), true) ? $m : 'off';
 }
 function is_premium(string $key): bool {
-  return premium_mode() !== 'off' && (bool) val('SELECT 1 FROM premium WHERE listing = ?', array($key));
+  global $CFG;
+  if (premium_mode() === 'off') return false;
+  if (!empty($CFG['premiumAlways']) && in_array($key, (array) $CFG['premiumAlways'], true)) return true;   // the owner's test listing: premium without a payment
+  return (bool) val('SELECT 1 FROM premium WHERE listing = ?', array($key));
 }
 function holds(?array $u, string $key): bool {
   return $u !== null && (bool) val("SELECT 1 FROM claims WHERE user_id = ? AND listing = ? AND status = 'ok'", array($u['id'], $key));

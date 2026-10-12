@@ -1357,7 +1357,7 @@ ${schoolRows}
   return layout({
     title: programTitle(p),
     description: camp ? `${fullName(p)}: ${p.what}. ${p.daysOff ? 'Day camps on days Philadelphia schools are closed' : 'Weekend classes for kids'}: dates, hours, grades and how to register.` : `${fullName(p)}: ${p.what}. ${servedSummary(p)}. Grades, hours, cost, registration and parent reviews.`,
-    pathName: programPath(p), depth: D, current: null, hero, body,
+    pathName: programPath(p), depth: D, current: null, hero, body, ...(p.hidden ? { noindex: true } : {}),
     jsonLd: { '@context': 'https://schema.org', '@graph': [thing, crumbs] },
   });
 }
@@ -3005,7 +3005,24 @@ const CLAIM_SHARED = ['philasd.org', 'coursestorm.com', 'jumbula.com', 'hisawyer
 const baseDomain = u => { const parts = bareHost(u).replace(/:\d+$/, '').toLowerCase().split('.').filter(Boolean); return parts.length >= 2 ? parts.slice(-2).join('.') : parts.join('.'); };
 // "pa.us" or "co.uk" is not one organisation's address: a website under one of those is checked by a person too.
 const claimMode = (domain, always) => !domain || always || /\.(gov|edu)$/.test(domain) || /^(co|com|org|net|gov|edu|ac|k12|pa|nj|ny|de|md)\.[a-z]{2}$/.test(domain) || CLAIM_SHARED.includes(domain) ? 'manual' : 'match';
+// Test listings (data/test-listings.json): pages for the site's owner to try the manager's side on, without touching
+// a real program. Each is a program record with two extras: "claimDomain", the email domain that may claim it (the
+// claim then stands at once, like any other whose address matches), and "premium": true to make it premium without
+// a payment. A school under "schools" makes the test page read like a real program's; the school's page ignores it. They are kept out of the programs list altogether, so no list, count, search, filter, sitemap, alert or
+// data file ever sees them: each has only its own page at /programs/<id>/ (marked noindex, linked from nowhere) and
+// its place among the listings that can be claimed. On the managers page a name search doesn't find them; signing
+// in with an address at the claim domain offers them, as it does for any listing at your own address.
+const testListings = (fs.existsSync(path.join(ROOT, 'data/test-listings.json')) && GROUPS && !PREVIEW ? readJson('data/test-listings.json') : []).map(p => {
+  const at = `data/test-listings.json, "${p.id || p.name}"`;
+  const stop = m => { console.error(`\n${at}: ${m}\n`); process.exit(1); };
+  if (!/^[a-z0-9-]+$/.test(p.id || '') || programs.some(x => x.id === p.id)) stop('id must be lowercase letters, numbers and dashes, and not the id of a real program');
+  if (!/^[a-z0-9-]+\.[a-z]{2,}$/.test(p.claimDomain || '')) stop('claimDomain must be an email domain, such as example.org');
+  for (const f of ['name', 'what', 'hours', 'cost', 'lastVerified', 'register']) if (!p[f]) stop(`missing ${f}`);
+  for (const [sid, l] of Object.entries(p.schools || {})) if (!schools.some(s => s.id === sid) || !['onsite', 'pickup', 'nearby'].includes(l?.relation)) stop(`schools: "${sid}" must be a school on the site, with a relation of onsite, pickup or nearby`);
+  return { ...p, hidden: true, schools: p.schools || {}, _grades: expandGrades(p.grades), _cls: {} };   // a school here only shapes the test page: the school's own page never lists it
+});
 const claimListings = () => Object.fromEntries([
+  ...testListings.map(p => ['p:' + p.id, { n: p.name, d: p.claimDomain, m: 'match', h: 1 }]),
   ...programs.map(p => ['p:' + p.id, { n: fullName(p), d: baseDomain(p.website), m: claimMode(baseDomain(p.website), !!p.clubs), ...(reviewsFor(p.id).length ? { r: reviewsFor(p.id).length } : {}), ...(upcomingDates(p).length ? { u: 1 } : {}) }]),   // r: published reviews, u: a sign-up date still to come (for the emails to its managers)
   ...summerCamps.map(c => ['c:' + c.id, { n: c.name + ' (summer camp)', d: baseDomain(c.website), m: claimMode(baseDomain(c.website)) }]),
 ]);
@@ -3163,7 +3180,7 @@ function directorsPage() {
   const body = `<div ${groupsAttrs(1)} style="display:contents">
   <noscript><p class="ask">${T(`Claiming a listing needs JavaScript turned on.`)}</p></noscript>
   <div class="g-page" id="claims" data-clarity-mask="true"${GROUPS.photos ? ' data-photos="1"' : ''}${GROUPS.premium !== 'off' ? ` data-qr="${link('assets/qr.js', 1)}${stamp('src/qr.js')}"` : ''}${PM_LISTED ? ` data-pm-from="${PM_PRICE.month}"` : ''}></div>
-  <script type="application/json" id="claims-data">${JSON.stringify(Object.entries(L).map(([k, v]) => [k, v.n, v.d, v.m === 'match' ? 1 : 0])).replace(/</g, '\\u003c')}</script>
+  <script type="application/json" id="claims-data">${JSON.stringify(Object.entries(L).map(([k, v]) => [k, v.n, v.d, v.m === 'match' ? 1 : 0, ...(v.h ? [1] : [])])).replace(/</g, '\\u003c')}</script>
   <section class="section" id="why">
     <h2>${T(`What claiming gets you`)}</h2>
     <p>${T(`Your listing is already on the site, and parents are already reading it. Claim it and it becomes yours to keep right.`)}</p>
@@ -3366,7 +3383,7 @@ ${GROUPS.premium !== 'off' ? `  <h2>Words and offer lines waiting for you (<?php
   <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>${GROUPS.premium !== 'off' ? `
   <p class="hint">${GROUPS.premium === 'preview' ? 'Premium is being tried out: when you make a listing premium, its manager gets the premium tools, and what they add shows on the listing only to them (after you approve it). Nobody else sees it until premium is switched on for the site.' : 'Premium is on: a premium listing’s photos, own words, offer line and question button show to everyone, after you approve what the manager sends.'}</p>` : ''}
   <div class="stat-scroll"><table class="stat-table wrap"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th>${GROUPS.premium !== 'off' ? '<th scope="col">Premium</th>' : ''}<th scope="col"></th></tr></thead><tbody>
-  <?php foreach ($claims as $c) { ?><tr><th scope="row">${e('$name($c["listing"])')}</th><td>${e('$c["first"] . " " . $c["last"]')}<br><span class="hint">${e('$c["email"]')}<?php if (isset($c["domain"]) && $c["domain"] === 'by hand') { ?> · given by hand<?php } ?></span></td><td>${e('$day($c["created"])')}</td>${GROUPS.premium !== 'off' ? `<td><?php if (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since ${e('$day($premium[$c["listing"]])')}</span>${form('$c["id"]', act('premium_off', 'Turn off'))}<?php } else { ?><?php if (isset($asks[(int) $c["id"]])) { ?><b>Signed up: <?php echo $asks[(int) $c["id"]]["plan"] === 'year' ? 'yearly' : 'monthly'; ?></b><br><span class="hint">${e('$day($asks[(int) $c["id"]]["created"])')}</span><?php } ?>${form('$c["id"]', act('premium_on', 'Make it premium'))}<?php } ?></td>` : ''}<td>${form('$c["id"]', act('claim_remove', 'Take the claim away'))}</td></tr><?php } ?>
+  <?php foreach ($claims as $c) { ?><tr><th scope="row">${e('$name($c["listing"])')}</th><td>${e('$c["first"] . " " . $c["last"]')}<br><span class="hint">${e('$c["email"]')}<?php if (isset($c["domain"]) && $c["domain"] === 'by hand') { ?> · given by hand<?php } ?></span></td><td>${e('$day($c["created"])')}</td>${GROUPS.premium !== 'off' ? `<td><?php if (in_array($c["listing"], $ALWAYS, true)) { ?><b>Premium</b><br><span class="hint">always: a test listing</span><?php } elseif (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since ${e('$day($premium[$c["listing"]])')}</span>${form('$c["id"]', act('premium_off', 'Turn off'))}<?php } else { ?><?php if (isset($asks[(int) $c["id"]])) { ?><b>Signed up: <?php echo $asks[(int) $c["id"]]["plan"] === 'year' ? 'yearly' : 'monthly'; ?></b><br><span class="hint">${e('$day($asks[(int) $c["id"]]["created"])')}</span><?php } ?>${form('$c["id"]', act('premium_on', 'Make it premium'))}<?php } ?></td>` : ''}<td>${form('$c["id"]', act('claim_remove', 'Take the claim away'))}</td></tr><?php } ?>
   </tbody></table></div>
   <?php } ?>
   <h2 id="grant">Give a listing to an account by hand</h2>
@@ -3401,6 +3418,7 @@ $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sql
 $have = is_file($file);
 $pending = array(); $claims = array(); $declined = array(); $edits = array(); $photosNew = array(); $photosLive = array(); $extrasNew = array(); $extrasLive = array(); $premium = array(); $asks = array();
 $PREMIUM = ${JSON.stringify(GROUPS.premium)};
+$ALWAYS = array(${testListings.filter(p => p.premium === true).map(p => JSON.stringify('p:' + p.id)).join(', ')});   // test listings that are premium without a payment
 $photoFile = function ($id) { return dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/photos/' . (int) $id . '.jpg'; };
 if ($have) {
   try {
@@ -3479,7 +3497,7 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($do === 'photo_ok') {
           // one photo a listing, and one logo; a premium listing keeps the photos it already has, up to six
           $kind = isset($x['kind']) ? $x['kind'] : 'photo';
-          $isPrem = false; try { $pq = $db->prepare('SELECT 1 FROM premium WHERE listing = ?'); $pq->execute(array($x['listing'])); $isPrem = $PREMIUM !== 'off' && (bool) $pq->fetchColumn(); } catch (Exception $e) { $isPrem = false; }
+          $isPrem = false; try { $pq = $db->prepare('SELECT 1 FROM premium WHERE listing = ?'); $pq->execute(array($x['listing'])); $isPrem = $PREMIUM !== 'off' && ((bool) $pq->fetchColumn() || in_array($x['listing'], $ALWAYS, true)); } catch (Exception $e) { $isPrem = false; }
           if ($isPrem && $kind === 'photo') {
             $keep = $db->prepare("SELECT id FROM photos WHERE listing = ? AND kind = 'photo' AND status = 'ok' AND id != ? ORDER BY id DESC"); $keep->execute(array($x['listing'], $id));
             foreach (array_slice($keep->fetchAll(PDO::FETCH_COLUMN), 5) as $old) { $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), (int) $old)); @unlink($photoFile((int) $old)); }
@@ -3599,7 +3617,7 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])) });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])) });
   const src = fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8');
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   if (!src.includes('/*MAILER*/')) throw new Error('src/server/groups-api.php has lost its /*MAILER*/ marker');
@@ -5105,6 +5123,7 @@ write('types/index.html', typesPage());
 for (const t of liveTypes()) write(`types/${t.id}/index.html`, typePage(t));
 write('programs/index.html', programsPage());
 for (const p of programs) write(`${programPath(p)}index.html`, programPage(p));
+for (const p of testListings) write(`${programPath(p)}index.html`, programPage(p));   // hidden: its own page and nothing else
 write('neighborhoods/index.html', neighborhoodsPage());
 for (const h of hoods) write(`${hoodPath(h)}index.html`, neighborhoodPage(h));
 write('support/index.html', supportPage());
