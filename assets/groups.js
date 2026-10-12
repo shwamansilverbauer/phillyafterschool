@@ -1341,6 +1341,7 @@
         }
         // a premium listing has its own tools: photos, a logo, its own words, an offer line, fuller numbers, and a flyer
         if (c.premium) { premiumTools(item, c, view.href); return dropBtn(item, c); }
+        premiumTease(item, c);
         // the photo: a paid extra, so the form is there only when photos are switched on
         if (claimsBox.getAttribute('data-photos') !== '1') return dropBtn(item, c);
         var pf = el('form', 'g-form claim-photo');
@@ -1394,6 +1395,43 @@
         item.appendChild(pf);
       }
       return dropBtn(item, c);
+    };
+    // ----- a listing that isn't premium: what premium would add, in the place its tools would be -----
+    // One calm box a listing, shown only once the premium page is open to everyone. It leads with the listing's own
+    // number, lists what would be added, and can be put away for a month ("Not now"), which leaves one small link.
+    var PM_FROM = claimsBox.getAttribute('data-pm-from') || '';
+    var premiumTease = function (item, c) {
+      if (!PM_FROM) return;
+      var url = page('premium/'), put = {}; try { put = JSON.parse(get('pas-pm-later') || '{}') || {}; } catch (e) { put = {}; }
+      var away = !c.asked && put[c.listing] && Date.now() - put[c.listing] < 30 * 86400000;
+      if (away) {
+        var quiet = el('p', 'hint pm-tease-quiet', 'More for this listing: '); var ql = el('a', null, 'a premium listing'); ql.href = url;
+        ql.addEventListener('click', function () { pushStep('premium_link'); });
+        quiet.appendChild(ql); quiet.appendChild(document.createTextNode('.')); item.appendChild(quiet);
+        return;
+      }
+      var box = el('div', 'pm-tease'), head = el('h4', null, 'Premium listing ');
+      head.appendChild(el('span', 'pm-tease-tag', c.asked ? 'Signed up' : 'Not on yet')); box.appendChild(head);
+      var n = c.stats && c.stats.now ? c.stats.now.view || 0 : 0, young = c.stats && (!c.stats.since || c.stats.since > c.stats.from);
+      box.appendChild(el('p', null, c.asked
+        ? 'You signed this listing up, ' + (c.asked.plan === 'month' ? 'monthly' : 'yearly') + '. The premium page has the next step.'
+        : n >= 20 ? 'Your listing was opened ' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' times ' + (young ? 'so far' : 'in the last 30 days') + '. Premium gives those families more to go on:'
+          : 'Premium gives the families who open your listing more to go on:'));
+      if (!c.asked) {
+        var ul = el('ul', 'pm-locks');
+        ['Up to six photos and your logo', 'A section in your own words', 'An offer or event line', 'A button parents use to send you a question', 'Month-by-month numbers, and the schools families come from', 'A flyer to print'].forEach(function (x) { ul.appendChild(el('li', null, x)); });
+        box.appendChild(ul);
+      }
+      var row = el('div', 'actions'), go = el('a', 'btn primary', c.asked ? 'Open the premium page' : 'See what premium adds'); go.href = url;
+      go.addEventListener('click', function () { pushStep('premium_see'); });
+      row.appendChild(go);
+      if (!c.asked) {
+        row.appendChild(el('span', 'hint', 'From $' + PM_FROM + ' a month.'));
+        var later = btn('linklike', 'Not now');
+        later.addEventListener('click', function () { put[c.listing] = Date.now(); set('pas-pm-later', JSON.stringify(put)); pushStep('premium_later'); render(); });
+        row.appendChild(later);
+      }
+      box.appendChild(row); item.appendChild(box);
     };
     // ----- a premium listing's tools -----
     var premiumTools = function (item, c, listingUrl) {

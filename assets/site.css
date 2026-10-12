@@ -1828,6 +1828,16 @@ html.signed .year-out{display:none}
 .g-push-steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:4px}
 .g-push .clear{margin-left:4px}
 
+/* ----- what premium would add, in a claimed listing's box on the managers page ----- */
+.pm-tease{align-self:stretch;border:2px dashed var(--yellow);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.pm-tease h4{margin:0;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pm-tease p{margin:0}
+.pm-tease-tag{font-family:inherit;font-size:.78rem;font-weight:700;background:var(--warn);color:var(--warn-ink);border-radius:999px;padding:2px 10px}
+.pm-locks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 20px;color:var(--muted)}
+.pm-locks li{padding-left:24px;line-height:1.4;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='3' y='7' width='10' height='7.5' rx='1.6' fill='%237A8CA6'/%3E%3Cpath d='M5.2 7V5a2.8 2.8 0 0 1 5.6 0v2' fill='none' stroke='%237A8CA6' stroke-width='1.7'/%3E%3C/svg%3E") no-repeat 0 .2em/15px 15px}
+.pm-tease .actions{align-items:center;gap:10px 14px}
+.pm-tease-quiet{margin:8px 0 0}
+@media (max-width:760px){.pm-locks{grid-template-columns:minmax(0,1fr)}}
 /* ----- the premium sign-up page (/premium/) ----- */
 .pm-demo .pm-offer-line{font-size:.9rem;line-height:1.4}
 .pmd-words{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:12px}

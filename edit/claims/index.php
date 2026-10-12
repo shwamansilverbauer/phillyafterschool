@@ -121,7 +121,7 @@ $said = isset($_GET['said']) && is_string($_GET['said']) ? substr($_GET['said'],
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $pending = array(); $claims = array(); $declined = array(); $edits = array(); $photosNew = array(); $photosLive = array(); $extrasNew = array(); $extrasLive = array(); $premium = array(); $asks = array();
-$PREMIUM = "preview";
+$PREMIUM = "on";
 $photoFile = function ($id) { return dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/photos/' . (int) $id . '.jpg'; };
 if ($have) {
   try {
@@ -318,7 +318,7 @@ if ($have) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../../assets/site.css?v=df3536ef">
+<link rel="stylesheet" href="../../assets/site.css?v=331e0f3f">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -394,7 +394,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
 
   <h2>Claimed listings (<?php echo count($claims); ?>)</h2>
   <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>
-  <p class="hint">Premium is being tried out: when you make a listing premium, its manager gets the premium tools, and what they add shows on the listing only to them (after you approve it). Nobody else sees it until premium is switched on for the site.</p>
+  <p class="hint">Premium is on: a premium listing’s photos, own words, offer line and question button show to everyone, after you approve what the manager sends.</p>
   <div class="stat-scroll"><table class="stat-table wrap"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th><th scope="col">Premium</th><th scope="col"></th></tr></thead><tbody>
   <?php foreach ($claims as $c) { ?><tr><th scope="row"><?php echo htmlspecialchars($name($c["listing"]), ENT_QUOTES, 'UTF-8'); ?></th><td><?php echo htmlspecialchars($c["first"] . " " . $c["last"], ENT_QUOTES, 'UTF-8'); ?><br><span class="hint"><?php echo htmlspecialchars($c["email"], ENT_QUOTES, 'UTF-8'); ?><?php if (isset($c["domain"]) && $c["domain"] === 'by hand') { ?> · given by hand<?php } ?></span></td><td><?php echo htmlspecialchars($day($c["created"]), ENT_QUOTES, 'UTF-8'); ?></td><td><?php if (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since <?php echo htmlspecialchars($day($premium[$c["listing"]]), ENT_QUOTES, 'UTF-8'); ?></span><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn" type="submit" name="do" value="premium_off">Turn off</button></form><?php } else { ?><?php if (isset($asks[(int) $c["id"]])) { ?><b>Signed up: <?php echo $asks[(int) $c["id"]]["plan"] === 'year' ? 'yearly' : 'monthly'; ?></b><br><span class="hint"><?php echo htmlspecialchars($day($asks[(int) $c["id"]]["created"]), ENT_QUOTES, 'UTF-8'); ?></span><?php } ?><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn" type="submit" name="do" value="premium_on">Make it premium</button></form><?php } ?></td><td><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn" type="submit" name="do" value="claim_remove">Take the claim away</button></form></td></tr><?php } ?>
   </tbody></table></div>
