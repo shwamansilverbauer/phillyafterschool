@@ -1303,13 +1303,46 @@
     ],
     "daysNote": "Choose 1 to 5 days a week.",
     "daysOff": {
-      "summary": "Full-day vacation camps when public schools are closed, 9 am to 3 pm, for ages 5–12, registered separately. Extra care runs 8:15 to 9 am and 3 to 5:30 pm.",
+      "summary": "Full-day vacation camps when public schools are closed, 9 am to 3 pm, for ages 5–12, $98 a day, each day registered separately. Extra care runs 8:15 to 9 am and 3 to 5:30 pm.",
       "url": "https://phillyartcenter.com/vacation-camps-1",
-      "dates": [],
+      "dates": [
+        "2026-10-12",
+        "2026-11-03",
+        "2026-11-11",
+        "2026-11-16",
+        "2026-11-25",
+        "2026-12-21",
+        "2026-12-22",
+        "2026-12-23",
+        "2026-12-24",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30",
+        "2026-12-31",
+        "2027-01-15",
+        "2027-01-18",
+        "2027-01-29",
+        "2027-02-12",
+        "2027-02-15",
+        "2027-03-10",
+        "2027-03-22",
+        "2027-03-23",
+        "2027-03-24",
+        "2027-03-25",
+        "2027-03-26",
+        "2027-03-29",
+        "2027-04-16",
+        "2027-05-17",
+        "2027-05-18"
+      ],
       "sources": [
         {
           "label": "Philly Art Center vacation camps",
           "url": "https://phillyartcenter.com/vacation-camps-1"
+        },
+        {
+          "label": "Philly Art Center registration: full-day vacation camps, Queen Village",
+          "url": "https://phillyartcenter.captyn.com/find?department=clu8qqr6y008w93r8jn074ir6&filter=2&program=clur1wu8b03tv13yv63r0u2w1&location=clu8gptof0aahxkl2mj3v7mxl"
         }
       ]
     },

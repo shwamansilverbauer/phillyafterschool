@@ -659,7 +659,13 @@ function clean_daysoff($s): ?array {
       if (!is_string($day) || !preg_match('/^(' . $year . '|' . ($year + 1) . ')-\d{2}-\d{2}$/', $day) || !is_string($id)) continue;
       if ($id === 'home' || isset($known[$id])) $d[$day] = $id;
     }
-    $kids[] = array('name' => first_name(str($k, 'name', 40)), 'd' => (object) $d);
+    // the days the parent ticked "signed up": only days that have a program on them
+    $ok = array();
+    foreach (isset($k['ok']) && is_array($k['ok']) ? array_slice($k['ok'], 0, 120) : array() as $day) {
+      if (is_string($day) && isset($d[$day]) && $d[$day] !== 'home' && !in_array($day, $ok, true)) $ok[] = $day;
+    }
+    sort($ok);
+    $kids[] = array('name' => first_name(str($k, 'name', 40)), 'd' => (object) $d, 'ok' => $ok);
   }
   return $kids ? array($year, json_encode(array('kids' => $kids))) : null;
 }
@@ -669,7 +675,8 @@ function daysoff_out(int $uid): ?array {
   $d = json_decode($s['json'], true);
   $kids = array();
   foreach (is_array($d) && isset($d['kids']) && is_array($d['kids']) ? $d['kids'] : array() as $k) {
-    $kids[] = array('name' => isset($k['name']) ? (string) $k['name'] : '', 'd' => (object) (isset($k['d']) && is_array($k['d']) ? $k['d'] : array()));   // an empty plan stays an object, not a list
+    $kids[] = array('name' => isset($k['name']) ? (string) $k['name'] : '', 'd' => (object) (isset($k['d']) && is_array($k['d']) ? $k['d'] : array()),   // an empty plan stays an object, not a list
+      'ok' => array_values(array_filter(isset($k['ok']) && is_array($k['ok']) ? $k['ok'] : array(), 'is_string')));
   }
   return array('y' => (int) $s['year'], 'kids' => $kids, 'updated' => (int) $s['updated']);
 }

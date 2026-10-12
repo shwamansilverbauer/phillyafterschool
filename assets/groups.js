@@ -2568,19 +2568,21 @@
       box: offBox, plan: daysOff, field: 'daysoff', flag: 'offProf', next: 'daysoff', event: 'pas_dayoff', more: hasYear ? yearLink : null,
       n: { it: 'this plan', It: 'This plan', a: 'a days-off plan', the: 'the plan', your: 'your days off', word: 'plan' },
       has: function () { return daysOff.rosters().kids.some(function (k) { return Object.keys(offPicks(k)).length > 0; }); },
-      body: function () { return { y: daysOff.year, kids: daysOff.rosters().kids.map(function (k) { return { name: firstWord(k.name), d: offPicks(k) }; }) }; },
+      // the days ticked "signed up": only days that have a program on them, in date order
+      body: function () { return { y: daysOff.year, kids: daysOff.rosters().kids.map(function (k) { var d = offPicks(k); return { name: firstWord(k.name), d: d, ok: Object.keys(d).filter(function (day) { return d[day] !== 'home' && k.offOk && k.offOk[day]; }).sort() }; }) }; },
       apply: function (copy) {
         // Only the days still to come are replaced: a day that has gone by keeps whatever this device had.
-        var wipe = function (k) { daysOff.days.forEach(function (day) { if (k.off) delete k.off[day]; }); };
+        var wipe = function (k) { daysOff.days.forEach(function (day) { if (k.off) delete k.off[day]; if (k.offOk) delete k.offOk[day]; }); };
         matchKids(daysOff, copy, function (k, sk) {
           if (!k.off) k.off = {};
+          if (!k.offOk) k.offOk = {};
           wipe(k);
-          daysOff.days.forEach(function (day) { var v = sk.d && sk.d[day]; if (v === 'home' || (typeof v === 'string' && daysOff.programs[v])) k.off[day] = v; });
+          daysOff.days.forEach(function (day) { var v = sk.d && sk.d[day]; if (v === 'home' || (typeof v === 'string' && daysOff.programs[v])) { k.off[day] = v; if (v !== 'home' && Array.isArray(sk.ok) && sk.ok.indexOf(day) > -1) k.offOk[day] = 1; } });
         }, wipe);
       },
       line: daysOffLine,
       empty: 'Choose a plan for a day, and you can keep your days off in your profile.',
-      gets: 'Your profile gets each child’s first name and where they’ll be on each day off. The calendar’s title and photos stay on this device.'
+      gets: 'Your profile gets each child’s first name, where they’ll be on each day off, and which days you’ve ticked as signed up. The calendar’s title and photos stay on this device.'
     });
   }
 
@@ -2600,6 +2602,8 @@
         call('profile').then(function (p) {
           if (yWait) yWait.hidden = true;
           yearBox.hidden = false;
+          // ticking a camp day "signed up" on the calendar, when the days-off plan is the one kept in the profile
+          window.pasYear.keep = function (daysoff, then) { call('daysoff_save', { daysoff: daysoff }).then(then); };
           window.pasYear.show(p.ok ? p : null);
           if (!p.ok) { var warn = el('p', 'g-status bad', 'Couldn’t reach your profile just now, so this shows only what’s on this device. Reload to try again.'); yearBox.insertBefore(warn, yearBox.firstChild.nextSibling); }
         });

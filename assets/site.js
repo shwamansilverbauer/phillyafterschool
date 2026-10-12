@@ -1279,6 +1279,12 @@
   // A roster kept in the signed-in person's profile remembers which one: { id: its id there, u: when the two last matched }.
   function cleanProf(p) { return p && typeof p.id === 'number' && p.id > 0 ? { id: p.id, u: typeof p.u === 'number' ? p.u : 0 } : null; }
   // A child's summer is { y: 2027, w: { "2027-06-07": [camp ids] }, age: "7" }: camps by the Monday of each week.
+  // The days off a parent has marked "signed up": only days that have a program on them.
+  function cleanOk(o, off) {
+    var out = {};
+    if (o && typeof o === 'object') Object.keys(o).slice(0, 120).forEach(function (d) { if (o[d] && off[d] && off[d] !== 'home') out[d] = 1; });
+    return out;
+  }
   function cleanSum(s) {
     if (!s || typeof s !== 'object' || typeof s.y !== 'number') return null;
     var w = {};
@@ -1301,7 +1307,7 @@
     });
     return out;
   }
-  function newKid(name) { return { name: cleanName(name), now: emptyBoard(), next: emptyBoard(), teacher: '', cardNote: '', off: {}, offNote: '', prices: {}, groups: [], sum: null }; }
+  function newKid(name) { return { name: cleanName(name), now: emptyBoard(), next: emptyBoard(), teacher: '', cardNote: '', off: {}, offOk: {}, offNote: '', prices: {}, groups: [], sum: null }; }
   function possessive(name) { return name + '’s'; }
   // A pick is "program.school", optionally followed by "~" and a class or short note.
   function entryKey(e) { var i = e.indexOf('~'); return i < 0 ? e : e.slice(0, i); }
@@ -1316,7 +1322,8 @@
     if (raw && Array.isArray(raw.kids) && raw.kids.length) {
       rosters = { kid: 0, active: raw.active === 'now' ? 'now' : 'next', wk: !!raw.wk, kids: raw.kids.slice(0, MAX_KIDS).map(function (k) {
         k = k && typeof k === 'object' ? k : {};
-        return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next), teacher: cleanName(k.teacher), cardNote: String(k.cardNote == null ? '' : k.cardNote).slice(0, 110), off: cleanOff(k.off), offNote: String(k.offNote == null ? '' : k.offNote).slice(0, 110), prices: cleanPrices(k.prices), groups: cleanLinks(k.groups), prof: cleanProf(k.prof), sum: cleanSum(k.sum) };
+        var off0 = cleanOff(k.off);
+        return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next), teacher: cleanName(k.teacher), cardNote: String(k.cardNote == null ? '' : k.cardNote).slice(0, 110), off: off0, offOk: cleanOk(k.offOk, off0), offNote: String(k.offNote == null ? '' : k.offNote).slice(0, 110), prices: cleanPrices(k.prices), groups: cleanLinks(k.groups), prof: cleanProf(k.prof), sum: cleanSum(k.sum) };
       }) };
       rosters.sumTitle = cleanName(raw.sumTitle);
       rosters.offTitle = cleanName(raw.offTitle);
@@ -1416,7 +1423,7 @@
       td.className = (iso < o.today ? 'cal-past ' : '') + (iso === o.today ? 'cal-today ' : '') + (o.off(iso) ? 'cal-off' : '');
       if (marks.length) {
         var btn = el('button', 'cal-day'); btn.type = 'button'; btn.setAttribute('data-d', iso); btn.setAttribute('aria-pressed', 'false');
-        btn.setAttribute('aria-label', calFullDay(iso) + ': ' + marks.map(function (x) { return x.text; }).join('; '));
+        btn.setAttribute('aria-label', calFullDay(iso) + ': ' + marks.map(function (x) { return x.say || x.text; }).join('; '));
         btn.appendChild(el('span', 'cal-n', String(d)));
         var ms = el('span', 'cal-marks');
         marks.slice(0, marks.length > 4 ? 3 : 4).forEach(function (x) { var sp = el('span', 'cal-m ' + x.cls, x.text); if (x.ink) sp.style.setProperty('--mk', x.ink[1]); ms.appendChild(sp); });
@@ -1453,9 +1460,26 @@
     var plannedOf = function (k) { return days.filter(function (d) { return pickOf(k, d); }); };
     var planners = function () { return r.kids.map(function (k, i) { return { k: k, i: i, name: k.name || (r.kids.length > 1 ? 'Child ' + (i + 1) : '') }; }).filter(function (x) { return plannedOf(x.k).length > 0; }); };
     var posted = function (v, d) { return v === HOME || d.camps.indexOf(v) > -1; };
+    // Putting a camp on a day isn't signing up for it. A parent ticks a day once they have, and the page keeps the list
+    // of what is left: a mark of their own, kept with the plan, that the site has no way to check.
+    var okOf = function (k, d) { var v = pickOf(k, d); return !!v && v !== HOME && !!(k.offOk && k.offOk[d.d]); };
+    var needOf = function (k, d) { var v = pickOf(k, d); return !!v && v !== HOME && !okOf(k, d); };
+    var todoBox = document.getElementById('off-todo'), todoLine = $o('#off-todo-line'), todoOpen = false;
     var say = function (t) { statusEl.textContent = t || ''; };
     var ev = function (action, more) { var o = { event: 'pas_dayoff', action: action, days_planned: plannedOf(kid()).length, children: r.kids.length }; if (more) Object.keys(more).forEach(function (x) { o[x] = more[x]; }); track(o); };
     var openDay = '';
+    var setOk = function (k, list, on, how, focusId) {
+      if (!k.offOk) k.offOk = {};
+      list.forEach(function (d) { if (on) k.offOk[d.d] = 1; else delete k.offOk[d.d]; });
+      saveRosters();
+      ev(on ? 'signed_up' : 'signed_up_undo', { method: how, days: list.length });
+      if (list.length === 1) say(on ? 'Marked: signed up for ' + label(pickOf(k, list[0])) + ' on ' + list[0].label + '.' : list[0].label + ' is back on your to-do list.');
+      else say(on ? 'Marked: signed up for ' + list.length + ' days.' : '');
+      draw();
+      var f = focusId && document.getElementById(focusId);   // the page was redrawn: put the keyboard back where it was, or on what is next
+      if (!f && todoBox && /^todo-/.test(focusId || '')) f = todoBox.querySelector('input[type=checkbox], a, summary');
+      if (f && f.focus) f.focus();
+    };
     // the days as a list (how the page opens) or as a calendar, a month at a time; the choice is kept on this device
     var monthBox = $o('#off-month'), viewBtns = all(planEl, '#off-views .vs');
     var offView = monthBox && store('pas-off-view') === 'cal' ? 'cal' : 'list', offMonth = '', offDay = '';
@@ -1501,6 +1525,7 @@
       var me = kid(), was = pickOf(me, d), p = od.programs[val], done0 = doneNow(me);
       if (val && val !== was) { me.off[d.d] = val; track({ event: 'pas_dayoff_pick', program_id: val, day: d.d, method: how }); if (val !== HOME) hit('p:' + val, 'plan'); }
       else { delete me.off[d.d]; val = ''; }
+      if (me.offOk) delete me.offOk[d.d];   // a different place, or none: whatever was signed up for is no longer the plan
       saveRosters();
       say(val ? label(val) + ' is on ' + d.label + '.' + (p && !posted(val, d) ? (p.n ? ' It hasn’t posted that date, so ask if it’s open.' : ' It hasn’t posted any dates, so ask if it’s open.') : '') : label(was) + ' is off ' + d.label + '.');
       draw();
@@ -1516,6 +1541,77 @@
       return b;
     };
     var drawCard = function () { /* set below, once the canvas is ready */ };
+    // ----- the to-do list: every camp day in the plan that hasn't been ticked "signed up", for every child, by place -----
+    var drawTodo = function () {
+      var who = planners(), many = r.kids.length > 1, groups = [], by = {}, done = [], open = 0;
+      who.forEach(function (x) {
+        days.forEach(function (d) {
+          var v = pickOf(x.k, d);
+          if (!v) { open++; return; }
+          if (v === HOME) return;
+          if (okOf(x.k, d)) { done.push({ x: x, d: d, v: v }); return; }
+          var key = x.i + ':' + v;
+          if (!by[key]) { by[key] = { x: x, v: v, days: [] }; groups.push(by[key]); }
+          by[key].days.push(d);
+        });
+      });
+      var left = groups.reduce(function (n, g) { return n + g.days.length; }, 0);
+      if (todoLine) {
+        todoLine.textContent = '';
+        if (left || done.length) {
+          todoLine.appendChild(document.createTextNode(left ? left + (left === 1 ? ' camp day' : ' camp days') + ' still to sign up for. ' : 'Signed up for every camp day in the plan. '));
+          var tl = el('a', null, left ? 'See your to-do list' : 'See the list'); tl.href = '#to-do'; todoLine.appendChild(tl);
+        }
+      }
+      if (!todoBox) return;
+      todoBox.textContent = '';
+      var forWho = function (x) { return many ? (x.name || kidLabel(x.k, x.i)) : ''; };
+      var dayBox = function (x, d, v, checked, id) {
+        var lab = el('label', 'sum-ok' + (checked ? ' on' : '')), cb = el('input'); cb.type = 'checkbox'; cb.checked = checked; cb.id = id;
+        lab.appendChild(cb); lab.appendChild(document.createTextNode(' ')); lab.appendChild(el('b', null, d.label)); lab.appendChild(el('span', 'hint', ' ' + d.name));
+        cb.addEventListener('change', function () { setOk(x.k, [d], cb.checked, 'todo', id); });
+        return lab;
+      };
+      if (!left && !done.length) todoBox.appendChild(el('p', 'hint', 'Nothing to sign up for yet. Put a camp on a day off in your plan, above, and it lands here until you tick it off.'));
+      else if (!left) todoBox.appendChild(el('p', 'todo-clear', 'You’re signed up for every camp day in your plan.'));
+      if (left) {
+        var ul = el('ul', 'todo-list');
+        groups.forEach(function (g) {
+          var p = od.programs[g.v], li = el('li', 'todo-item'), head = el('div', 'todo-head'), a = el('a', null, p.name); a.href = p.href;
+          var hb = el('b'); hb.appendChild(a); head.appendChild(hb);
+          if (forWho(g.x)) head.appendChild(el('span', 'todo-who', 'for ' + forWho(g.x)));
+          head.appendChild(el('span', 'hint', g.days.length === 1 ? '1 day' : g.days.length + ' days'));
+          li.appendChild(head);
+          var dl = el('ul', 'todo-days');
+          g.days.forEach(function (d) {
+            var row = el('li'); row.appendChild(dayBox(g.x, d, g.v, false, 'todo-' + g.x.i + '-' + d.d));
+            if (!posted(g.v, d)) row.appendChild(el('span', 'todo-ask', p.n ? 'It hasn’t posted this date. Ask if it’s open.' : 'It hasn’t posted any dates. Ask if it’s open.'));
+            dl.appendChild(row);
+          });
+          li.appendChild(dl);
+          var acts = el('div', 'actions'), go = el('a', 'btn primary', 'Go to its sign-up page'); go.href = p.go || p.url; go.target = '_blank'; go.rel = 'noopener'; go.setAttribute('data-track', 'camp');
+          acts.appendChild(go);
+          if (g.days.length > 1) { var allB = el('button', 'clear', 'Tick all ' + g.days.length); allB.type = 'button'; allB.addEventListener('click', function () { setOk(g.x.k, g.days, true, 'todo_all', 'todo-none'); }); acts.appendChild(allB); }
+          li.appendChild(acts); ul.appendChild(li);
+        });
+        todoBox.appendChild(ul);
+      }
+      if (open) {
+        var op = el('p', 'hint todo-open', open + (open === 1 ? ' day off has' : ' days off have') + ' no plan yet. '), ol = el('a', null, 'Choose a plan for ' + (open === 1 ? 'it' : 'them')); ol.href = '#plan';
+        op.appendChild(ol); op.appendChild(document.createTextNode('.')); todoBox.appendChild(op);
+      }
+      if (done.length) {
+        var dd = el('details', 'todo-done'), sm = el('summary', null, 'Signed up: ' + done.length + (done.length === 1 ? ' day' : ' days')), dul = el('ul', 'todo-days');
+        if (todoOpen) dd.open = true;
+        dd.addEventListener('toggle', function () { todoOpen = dd.open; });
+        done.forEach(function (it) {
+          var row = el('li'); row.appendChild(dayBox(it.x, it.d, it.v, true, 'todo-' + it.x.i + '-' + it.d.d));
+          row.appendChild(el('span', 'hint', label(it.v) + (forWho(it.x) ? ', for ' + forWho(it.x) : '')));
+          dul.appendChild(row);
+        });
+        dd.appendChild(sm); dd.appendChild(dul); todoBox.appendChild(dd);
+      }
+    };
     var draw = function () {
       var me = kid(), mine = plannedOf(me), many = r.kids.length > 1;
       kidsRow.textContent = ''; kidsRow.hidden = !many;
@@ -1560,14 +1656,15 @@
             marks: function (iso) {
               var d = dayAt(iso); if (!d) return [];
               var v = pickOf(me, d);
-              return [{ cls: 'm-off', text: d.name }, v ? { cls: 'm-kid' + (posted(v, d) ? '' : ' m-ask'), text: v === HOME ? 'At home' : label(v), ink: ink } : { cls: 'm-kid m-todo', text: 'Not planned', ink: ink }];
+              var ok = okOf(me, d), need = needOf(me, d);
+              return [{ cls: 'm-off', text: d.name }, v ? { cls: 'm-kid' + (posted(v, d) ? '' : ' m-ask') + (ok ? ' m-ok' : need ? ' m-need' : ''), text: v === HOME ? 'At home' : (ok ? '✓ ' : '') + label(v), say: v === HOME ? '' : label(v) + (ok ? ', signed up' : ', still to sign up'), ink: ok ? ['#D6F3D2', '#2C8444'] : need ? ['#FFEFA2', '#B88A00'] : ink } : { cls: 'm-kid m-todo', text: 'Not planned', ink: ink }];
             },
             onMonth: function (mk) { offMonth = mk; offDay = firstIn(mk); openDay = ''; draw(); },
             onDay: function (iso) { offDay = iso; openDay = pickOf(kid(), dayAt(iso)) ? '' : iso; draw(); var row = document.getElementById('d-' + iso); if (row && row.scrollIntoView) row.scrollIntoView({ block: 'nearest' }); }
           });
           calPick(monthBox, offDay);
           var key = el('p', 'cal-key');
-          [['k-off', 'No school'], ['k-kid', 'Where ' + (me.name || (many ? kidLabel(me, r.kid) : 'your child')) + ' will be'], ['k-todo', 'Not planned yet']].forEach(function (x) { var sw = el('span', 'cal-sw'); sw.appendChild(el('i', x[0])); sw.appendChild(document.createTextNode(x[1])); key.appendChild(sw); });
+          [['k-off', 'No school'], ['k-ok', '✓ Signed up'], ['k-need', 'Still to sign up'], ['k-kid', 'At home'], ['k-todo', 'Not planned yet']].forEach(function (x) { var sw = el('span', 'cal-sw'); sw.appendChild(el('i', x[0])); sw.appendChild(document.createTextNode(x[1])); key.appendChild(sw); });
           monthBox.appendChild(key);
           monthBox.appendChild(el('p', 'hint', days.some(function (d) { return d.d.slice(0, 7) === offMonth; }) ? 'Tap a yellow day to choose where ' + (me.name || 'your child') + ' will be.' : 'School is open every weekday this month.'));
         }
@@ -1580,13 +1677,21 @@
         li.appendChild(when);
         var box = el('div', 'sum-picks');
         if (v) {
-          var chip = el('span', 'sum-chip' + (posted(v, d) ? '' : ' ask'));
+          var isOk = okOf(me, d);
+          var chip = el('span', 'sum-chip' + (posted(v, d) ? '' : ' ask') + (v === HOME ? ' home' : isOk ? ' ok' : ' need'));
           if (p) { var a = el('a', null, p.name); a.href = p.href; chip.appendChild(a); } else chip.appendChild(el('b', null, label(v)));
           var bits = p ? (posted(v, d) ? 'Camp posted for this day' : p.n ? 'hasn’t posted this date' : 'no dates posted') : '';
           if (bits) chip.appendChild(el('small', null, bits));
           var x = el('button', 'sum-x', '×'); x.type = 'button'; x.setAttribute('aria-label', 'Take ' + label(v) + ' off ' + d.label);
           x.addEventListener('click', function () { set(d, v, 'day_list'); });
           chip.appendChild(x); box.appendChild(chip);
+          if (v !== HOME) {   // signed up yet?
+            var okL = el('label', 'sum-ok' + (isOk ? ' on' : '')), okB = el('input'); okB.type = 'checkbox'; okB.checked = isOk; okB.id = 'ok-' + d.d;
+            okB.setAttribute('aria-label', 'Signed up for ' + label(v) + ' on ' + d.label);
+            okL.appendChild(okB); okL.appendChild(document.createTextNode(isOk ? ' Signed up' : ' Signed up?'));
+            okB.addEventListener('change', function () { setOk(me, [d], okB.checked, 'day_list', 'ok-' + d.d); });
+            box.appendChild(okL);
+          }
           var rest = restOfBreak(d, v);
           if (rest.length) {
             var fill = el('button', 'clear', 'Same for ' + (rest.length === 1 ? 'the other day' : 'the other ' + rest.length + ' days') + ' of ' + d.name.replace(/^(\S)/, function (c) { return c.toLowerCase(); })); fill.type = 'button';
@@ -1624,6 +1729,7 @@
       var open = days.filter(function (d) { return d.camps.length; }).length;
       openEl.textContent = open ? 'Camps are posted for ' + open + ' of those days so far. Programs post a few months at a time.' : 'No camps are posted yet. Programs post a few months at a time.';
       toolsEl.hidden = !planners().length;
+      drawTodo();
       // the chart: which boxes are in this child's plan; a day that has gone by loses its column
       if (chart) {
         all(chart, '[data-w]').forEach(function (c) { if (od.days[+c.getAttribute('data-w')].d < today0) c.hidden = true; });
@@ -1666,7 +1772,7 @@
       who.forEach(function (x, n) {
         if (n) lines.push('');
         lines.push((x.name ? possessive(x.name) + ' days off, ' : 'Days off, ') + od.schoolYear);
-        plannedOf(x.k).forEach(function (d) { var v = pickOf(x.k, d); lines.push(d.label + ' (' + d.name + '): ' + label(v) + (posted(v, d) ? '' : ' (date not posted, ask)')); });
+        plannedOf(x.k).forEach(function (d) { var v = pickOf(x.k, d); lines.push(d.label + ' (' + d.name + '): ' + label(v) + (posted(v, d) ? '' : ' (date not posted, ask)') + (v === HOME ? '' : okOf(x.k, d) ? ' (signed up)' : ' (still to sign up)')); });
       });
       lines.push('Made at ' + od.page);
       return lines.join('\n');
@@ -1688,7 +1794,7 @@
         plannedOf(x.k).forEach(function (d) {
           var v = pickOf(x.k, d), p = od.programs[v];
           events.push({ uid: 'dayoff-' + x.i + '-' + d.d, start: d.d, days: 1, title: (x.name ? x.name + ': ' : '') + label(v) + ' (no school)',
-            text: ['No school: ' + d.name + '.', p && !posted(v, d) ? 'The program hasn’t posted this date. Ask if it’s open.' : ''].filter(Boolean).join('\n'), url: p ? p.url : od.page });
+            text: ['No school: ' + d.name + '.', p && !posted(v, d) ? 'The program hasn’t posted this date. Ask if it’s open.' : '', p ? (okOf(x.k, d) ? 'Signed up.' : 'Still to sign up.') : ''].filter(Boolean).join('\n'), url: p ? p.url : od.page });
         });
       });
       if (!events.length) { say('Choose a plan for a day first.'); return; }
@@ -1701,7 +1807,7 @@
     clearBtn.addEventListener('click', function () {
       if (!sure) { sure = true; clearBtn.textContent = 'Clear every day' + (r.kids.length > 1 ? ' for ' + kidLabel(kid(), r.kid) : '') + '? Tap again'; window.setTimeout(function () { sure = false; clearBtn.textContent = 'Clear the plan'; }, 5000); return; }
       sure = false; clearBtn.textContent = 'Clear the plan';
-      kid().off = {}; saveRosters(); openDay = ''; draw(); say('Cleared.'); ev('clear');
+      kid().off = {}; kid().offOk = {}; saveRosters(); openDay = ''; draw(); say('Cleared.'); ev('clear');
     });
 
     // ----- the calendar picture: every day off on one card, or a card for each month, with every child on it -----
@@ -3431,7 +3537,7 @@
       var at = function (name, nth) {   // the child with this first name, or the nth one nobody has named; made if new
         var w = first(name), hit = null, blanks = 0;
         kids.forEach(function (k) { if (hit) return; if (w) { if (k.name.toLowerCase() === w.toLowerCase()) hit = k; } else if (!k.name && blanks++ === nth) hit = k; });
-        if (!hit) { hit = { name: w, week: null, off: {}, sum: {} }; kids.push(hit); }
+        if (!hit) { hit = { name: w, week: null, off: {}, ok: {}, sum: {} }; kids.push(hit); }
         return hit;
       };
       var offOf = function (o) { var out = {}; offDays.forEach(function (d) { var v = o && o[d.d]; if (typeof v === 'string' && offLabel(v)) out[d.d] = v; }); return out; };
@@ -3440,10 +3546,11 @@
         var pick = function (b) { b = cleanBoard(b); return countPicks(b) ? b : null; }, a = pick(k.now), z = pick(k.next);
         return a ? { b: a, which: 'now' } : z ? { b: z, which: 'next' } : null;
       };
-      r.kids.forEach(function (k) { kids.push({ name: first(k.name), week: null, off: {}, sum: {}, dev: k }); });
+      r.kids.forEach(function (k) { kids.push({ name: first(k.name), week: null, off: {}, ok: {}, sum: {}, dev: k }); });
+      var okFor = function (off, ticked) { var out = {}; Object.keys(off).forEach(function (d) { if (off[d] !== HOME && ticked(d)) out[d] = 1; }); return out; };   // the days ticked "signed up"
       var po = profile && profile.daysoff && profile.daysoff.y === yd.year ? profile.daysoff : null;
-      if (po) { src.off = 'profile'; blank = 0; po.kids.forEach(function (pk) { at(pk.name, pk.name ? 0 : blank++).off = offOf(pk.d); }); }
-      else kids.forEach(function (k) { k.off = offOf(k.dev.off); if (has(k.off)) src.off = 'device'; });
+      if (po) { src.off = 'profile'; blank = 0; po.kids.forEach(function (pk) { var k = at(pk.name, pk.name ? 0 : blank++); k.off = offOf(pk.d); k.ok = okFor(k.off, function (d) { return Array.isArray(pk.ok) && pk.ok.indexOf(d) > -1; }); k.pk = pk; }); }
+      else kids.forEach(function (k) { k.off = offOf(k.dev.off); k.ok = okFor(k.off, function (d) { return !!(k.dev.offOk && k.dev.offOk[d]); }); if (has(k.off)) src.off = 'device'; });
       var ps = S && profile && profile.summer && profile.summer.y === S.year ? profile.summer : null;
       if (ps) { src.sum = 'profile'; blank = 0; ps.kids.forEach(function (pk) { at(pk.name, pk.name ? 0 : blank++).sum = sumOf(pk.w); }); }
       else if (S) kids.forEach(function (k) { if (!k.dev) return; k.sum = sumOf(k.dev.sum && k.dev.sum.y === S.year ? k.dev.sum.w : null); if (has(k.sum)) src.sum = 'device'; });
@@ -3728,7 +3835,12 @@
       if (it.t === 'off') {
         when.appendChild(el('b', null, longDay(it.d))); when.appendChild(el('span', 'hint', 'No school: ' + it.day.name));
         var open = 0;
-        m.kids.forEach(function (k) { var v = k.off[it.d]; if (v) what.appendChild(chip(k, offLabel(v) + (postedOff(v, it.d) ? '' : ' (date not posted, ask)'), postedOff(v, it.d) ? '' : 'ask', v !== HOME ? yd.programs[v].href : '')); else open++; });
+        m.kids.forEach(function (k) {
+          var v = k.off[it.d]; if (!v) { open++; return; }
+          var ok = !!k.ok[it.d], c = chip(k, (ok ? '✓ ' : '') + offLabel(v) + (postedOff(v, it.d) ? '' : ' (date not posted, ask)'), ok ? 'ok' : !postedOff(v, it.d) ? 'ask' : v !== HOME ? 'need' : '', v !== HOME ? yd.programs[v].href : '');
+          if (v !== HOME) c.appendChild(el('small', 'year-need', ok ? ' signed up' : ' still to sign up'));
+          what.appendChild(c);
+        });
         if (open) { var plan = el('a', 'year-todo', open === m.kids.length ? 'Nothing planned. Plan this day' : 'Plan it for the ' + (open === 1 ? 'other child' : 'others')); plan.href = yd.offPage + '#d-' + it.d; what.appendChild(plan); }
       } else if (it.t === 'week') {
         when.appendChild(el('b', null, it.wk.label)); when.appendChild(el('span', 'hint', 'Summer'));
@@ -3766,7 +3878,7 @@
       (calBy[iso] || []).forEach(function (it) {
         if (it.t === 'off') {
           out.push({ cls: 'm-off', text: 'No school' });
-          model.kids.forEach(function (k) { var v = k.off[iso]; if (v) kidMark(k, shortOff(v), postedOff(v, iso) ? '' : 'm-ask'); else kidMark(k, 'Not planned', 'm-todo'); });
+          model.kids.forEach(function (k) { var v = k.off[iso]; if (v) kidMark(k, (k.ok[iso] ? '✓ ' : '') + shortOff(v), (postedOff(v, iso) ? '' : 'm-ask') + (v === HOME ? '' : k.ok[iso] ? ' m-ok' : ' m-need')); else kidMark(k, 'Not planned', 'm-todo'); });
         } else if (it.t === 'week') {
           model.kids.forEach(function (k) { (k.sum[it.d] || []).forEach(function (id) { kidMark(k, S.camps[id].n, ''); }); });
         } else if (it.t === 'reg') out.push({ cls: 'm-reg', text: 'Sign-ups: ' + it.s.name });
@@ -3828,6 +3940,79 @@
       if (!calDay || calDay.slice(0, 7) !== calMonth || !calBy[calDay]) calDay = firstDayIn(calMonth);
       drawCalMonth();
     };
+    // ----- to do: the camp days in the plan nobody has ticked "signed up" yet. A tick is the parent's own mark: it is
+    // kept with the days-off plan, on this device or in the profile, wherever that plan is. -----
+    var todoShut = true;
+    var tick = function (k, list, on, focusId) {
+      var after = function () { track({ event: 'pas_year', action: on ? 'signed_up' : 'signed_up_undo', days: list.length }); refresh(); var f = document.getElementById(focusId) || $y('year-todo-list').querySelector('input[type=checkbox], a, summary'); if (f && f.focus) f.focus(); };
+      if (model.src.off === 'profile' && k.pk && lastProfile && lastProfile.daysoff && window.pasYear.keep) {
+        var was = (k.pk.ok || []).slice(), now = was.filter(function (d) { return !list.some(function (x) { return x === d; }); });
+        if (on) list.forEach(function (d) { now.push(d); });
+        k.pk.ok = now.sort();
+        say('Saving…');
+        window.pasYear.keep({ y: lastProfile.daysoff.y, kids: lastProfile.daysoff.kids.map(function (x) { return { name: x.name, d: x.d, ok: x.ok || [] }; }) }, function (r) {
+          if (r && r.ok && r.daysoff) { lastProfile.daysoff = r.daysoff; say(''); } else { k.pk.ok = was; say((r && r.message) || 'That didn’t save. Try again.'); }
+          after();
+        });
+        return;
+      }
+      if (!k.dev) return;
+      if (!k.dev.offOk) k.dev.offOk = {};
+      list.forEach(function (d) { if (on) k.dev.offOk[d] = 1; else delete k.dev.offOk[d]; });
+      saveRosters(); after();
+    };
+    var drawTodo = function () {
+      var step = $y('year-todo'), box = $y('year-todo-list'); if (!step || !box) return;
+      var m = model, many = m.kids.length > 1, groups = [], by = {}, done = [];
+      m.kids.forEach(function (k, i) {
+        offDays.forEach(function (d) {
+          var v = k.off[d.d]; if (!v || v === HOME) return;
+          if (k.ok[d.d]) { done.push({ k: k, i: i, d: d, v: v }); return; }
+          var key = i + ':' + v; if (!by[key]) { by[key] = { k: k, i: i, v: v, days: [] }; groups.push(by[key]); }
+          by[key].days.push(d);
+        });
+      });
+      var left = groups.reduce(function (n, g) { return n + g.days.length; }, 0);
+      step.hidden = false; box.textContent = '';
+      if (!left && !done.length) {   // the step stays, so the numbers down the page don't skip one
+        var none = el('p', 'hint', 'Nothing to sign up for yet. Put a camp on a day off in '), nl = el('a', null, 'your days-off plan'); nl.href = yd.offPage + '#plan';
+        none.appendChild(nl); none.appendChild(document.createTextNode(' and it lands here until you tick it off.')); box.appendChild(none);
+        return;
+      }
+      var canTick = function (k) { return m.src.off === 'profile' ? !!(k.pk && window.pasYear.keep) : !!k.dev; };
+      var dayBox = function (k, i, d, checked) {
+        var id = 'ytodo-' + i + '-' + d.d, lab = el('label', 'sum-ok' + (checked ? ' on' : '')), cb = el('input'); cb.type = 'checkbox'; cb.checked = checked; cb.id = id; cb.disabled = !canTick(k);
+        lab.appendChild(cb); lab.appendChild(document.createTextNode(' ')); lab.appendChild(el('b', null, longDay(d.d))); lab.appendChild(el('span', 'hint', ' ' + d.name));
+        cb.addEventListener('change', function () { tick(k, [d.d], cb.checked, id); });
+        return lab;
+      };
+      if (!left) box.appendChild(el('p', 'todo-clear', 'You’re signed up for every camp day in your plan.'));
+      else {
+        var ul = el('ul', 'todo-list');
+        groups.forEach(function (g) {
+          var p = yd.programs[g.v], li = el('li', 'todo-item'), head = el('div', 'todo-head'), a = el('a', null, p.n), hb = el('b'); a.href = p.href; hb.appendChild(a); head.appendChild(hb);
+          if (many && g.k.label) head.appendChild(el('span', 'todo-who', 'for ' + g.k.label));
+          head.appendChild(el('span', 'hint', g.days.length === 1 ? '1 day' : g.days.length + ' days'));
+          li.appendChild(head);
+          var dl = el('ul', 'todo-days');
+          g.days.forEach(function (d) { var row = el('li'); row.appendChild(dayBox(g.k, g.i, d, false)); if (!postedOff(g.v, d.d)) row.appendChild(el('span', 'todo-ask', 'It hasn’t posted this date. Ask if it’s open.')); dl.appendChild(row); });
+          li.appendChild(dl);
+          var acts = el('div', 'actions');
+          if (p.go || p.url) { var go = el('a', 'btn primary', 'Go to its sign-up page'); go.href = p.go || p.url; go.target = '_blank'; go.rel = 'noopener'; go.setAttribute('data-track', 'camp'); acts.appendChild(go); }
+          if (g.days.length > 1 && canTick(g.k)) { var allB = el('button', 'clear', 'Tick all ' + g.days.length); allB.type = 'button'; allB.addEventListener('click', function () { tick(g.k, g.days.map(function (d) { return d.d; }), true, 'ytodo-none'); }); acts.appendChild(allB); }
+          if (acts.childNodes.length) li.appendChild(acts);
+          ul.appendChild(li);
+        });
+        box.appendChild(ul);
+      }
+      if (done.length) {
+        var dd = el('details', 'todo-done'), dul = el('ul', 'todo-days');
+        dd.open = !todoShut; dd.addEventListener('toggle', function () { todoShut = !dd.open; });
+        dd.appendChild(el('summary', null, 'Signed up: ' + done.length + (done.length === 1 ? ' day' : ' days')));
+        done.forEach(function (it) { var row = el('li'); row.appendChild(dayBox(it.k, it.i, it.d, true)); row.appendChild(el('span', 'hint', offLabel(it.v) + (many && it.k.label ? ', for ' + it.k.label : ''))); dul.appendChild(row); });
+        dd.appendChild(dul); box.appendChild(dd);
+      }
+    };
     var draw = function () {
       var m = model, srcEl = $y('year-src');
       srcEl.textContent = '';
@@ -3838,6 +4023,7 @@
       var none = !m.kids.length && !m.own.length, empty = $y('year-empty');
       empty.hidden = !none; $y('year-full').hidden = none; empty.textContent = '';
       if (none) { empty.appendChild(el('p', null, 'Nothing is planned yet, so there’s no calendar to show. Start with any of the three above, or add a date of your own, and it fills in by itself.')); $y('year-changed').hidden = true; if (window.pasJump) window.pasJump(); return; }
+      drawTodo();
       // every school week
       var wkBox = $y('year-week'); wkBox.textContent = '';
       var withWeek = m.kids.filter(hasWeekCard), family = m.kids.length ? [] : ownWeekly(null);
