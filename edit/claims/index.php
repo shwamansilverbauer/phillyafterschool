@@ -319,7 +319,7 @@ if ($have) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../../assets/site.css?v=331e0f3f">
+<link rel="stylesheet" href="../../assets/site.css?v=57859186">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -394,6 +394,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
   </div><?php } ?><?php } ?>
 
   <h2>Claimed listings (<?php echo count($claims); ?>)</h2>
+  <p class="hint" id="test-listings">Your test listings, hidden from the rest of the site: <a href="../../programs/test-listing-premium/">Test Listing (Premium)</a> (claimed with an address at phillyafterschool.org, always premium) and <a href="../../programs/test-listing-free/">Test Listing (Free)</a> (claimed with an address at joshsilverbauer.com).</p>
   <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>
   <p class="hint">Premium is on: a premium listing’s photos, own words, offer line and question button show to everyone, after you approve what the manager sends.</p>
   <div class="stat-scroll"><table class="stat-table wrap"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th><th scope="col">Premium</th><th scope="col"></th></tr></thead><tbody>
@@ -475,7 +476,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
     <p>Written by Rachael Silverbauer.</p>
   </div>
 </div></footer>
-<script src="../../assets/site.js?v=1ffea696" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
+<script src="../../assets/site.js?v=aabf5a90" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
 
 </body>
 </html>

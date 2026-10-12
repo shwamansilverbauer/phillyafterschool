@@ -684,6 +684,12 @@ button.btn{cursor:pointer;font-family:inherit}
   .menu summary{gap:8px}
   .nav a.nav-cta{padding:7px 18px;margin-left:4px}
 }
+/* with the Admin group there is one more thing in the bar: keep it on one line, and the name unbroken */
+.brand{white-space:nowrap}
+@media (min-width:1100px) and (max-width:1239px){
+  .has-admin .nav{gap:6px 14px}
+  .has-admin .nav a.nav-cta{padding:7px 14px;margin-left:0}
+}
 
 /* ----- dates by email ----- */
 .panel.alerts{gap:12px;max-width:820px;scroll-margin-top:24px}

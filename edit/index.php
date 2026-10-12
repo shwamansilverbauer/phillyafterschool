@@ -127,7 +127,7 @@ if (!edit_signed_in()) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=331e0f3f">
+<link rel="stylesheet" href="../assets/site.css?v=57859186">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -228,7 +228,7 @@ if (!edit_signed_in()) {
     <p>Written by Rachael Silverbauer.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=1ffea696" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=aabf5a90" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 
 </body>
 </html>
@@ -265,7 +265,7 @@ if (!edit_signed_in()) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=331e0f3f">
+<link rel="stylesheet" href="../assets/site.css?v=57859186">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -295,7 +295,7 @@ if (!edit_signed_in()) {
     <div class="actions"><button type="button" class="btn primary big needs-js" id="edit-start">Start editing</button><button type="button" class="btn needs-js" id="edit-stop" hidden>Stop editing</button></div>
     <noscript><p>Editing needs JavaScript turned on.</p></noscript>
   </div>
-  <?php if (edit_admin() !== '') { ?><p class="hint" id="edit-admin">You’re here through your account, <?php echo htmlspecialchars(edit_admin(), ENT_QUOTES, 'UTF-8'); ?>, which is a site admin. <a href="../account/#sign-out">Sign out of your account</a> to close these pages.</p><?php } else { ?><p class="hint">You’re signed in on this device for 30 days. <a href="?out=1">Sign out</a></p><?php } ?>
+  <?php if (edit_admin() !== '') { ?><p class="hint" id="edit-admin">You’re here through your account, <?php echo htmlspecialchars(edit_admin(), ENT_QUOTES, 'UTF-8'); ?>, which is a site admin. <a href="../account/#sign-out">Sign out of your account</a> to close these pages. Anyone who can read that address’s inbox can sign in as you, so keep 2-step verification on for it.</p><?php } else { ?><p class="hint">You’re signed in on this device for 30 days. <a href="?out=1">Sign out</a></p><?php } ?>
   <p><a class="btn" href="stats/">Site numbers: accounts, shared weeks and groups</a> <a class="btn" href="claims/">Claims and proposed changes</a></p>
   <h2>How it works</h2>
   <ol>
@@ -407,7 +407,7 @@ if (!edit_signed_in()) {
     <p>Written by Rachael Silverbauer.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=1ffea696" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=aabf5a90" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 
 </body>
 </html>
