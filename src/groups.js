@@ -51,6 +51,61 @@
     if (window.pasAdminNav) window.pasAdminNav(!!is);
   }
   function page(path) { return ROOT + path + INDEX; }
+  // ----- tabs -----
+  // The profile, the account page and the page where a manager looks after their listings share one strip of tabs, so
+  // the three read as one place and none of them is a long scroll. A tab whose part is on the page in view switches in
+  // place; the others are links to the page that has them. (sessionStorage "pas-tabs" = "all" shows every part at once:
+  // the tests use it, and so can anyone who would rather have the one long page.)
+  var ACCT_TABS = [['profile', 'Profile', 'profile/', ''], ['you', 'Details', 'account/', ''], ['school', 'School & kids', 'account/', '#school'], ['emails', 'Emails & following', 'account/', '#emails'], ['plans', 'Plans & sharing', 'account/', '#plans'], ['listings', 'Listings', 'managers/', '']];
+  function tabsAll() { return sget('pas-tabs') === 'all'; }
+  function acctStrip(box, active, hasListings, here, pick) {
+    var nav = el('nav', 'jump acct-tabs'), links = {}; nav.setAttribute('aria-label', 'Your account');
+    ACCT_TABS.forEach(function (t) {
+      if (t[0] === 'listings' && !hasListings) return;
+      var a = el('a', null, t[1]); a.href = page(t[2]) + t[3]; a.setAttribute('data-tab-go', t[0]);
+      if (t[2] === here && pick) a.addEventListener('click', function (e) { if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return; e.preventDefault(); pick(t[0]); });
+      links[t[0]] = a; nav.appendChild(a);
+    });
+    box.appendChild(nav);
+    var wrap = window.pasRail ? window.pasRail(nav, 'Show earlier tabs', 'Show more tabs') : nav;
+    wrap.className += ' tabs-wrap';
+    nav.pasMark = function (id) {
+      Object.keys(links).forEach(function (k) { if (k === id) links[k].setAttribute('aria-current', 'page'); else links[k].removeAttribute('aria-current'); });
+      var a = links[id];   // on a phone the strip scrolls sideways: bring the open tab into it
+      if (a && (a.offsetLeft < nav.scrollLeft || a.offsetLeft + a.offsetWidth > nav.scrollLeft + nav.clientWidth)) nav.scrollLeft = Math.max(0, a.offsetLeft - 48);
+      if (nav.pasEnds) { nav.pasEnds(); window.setTimeout(nav.pasEnds, 400); }
+    };
+    nav.pasMark(active);
+    return nav;
+  }
+  // A small set of tabs inside one box: tabs is a list of [id, label, panel]. Arrow keys move between them.
+  var tabsetN = 0;
+  function tabset(name, tabs, open, onPick) {
+    var wrap = el('div', 'tabset'), bar = el('div', 'tabs-bar'), allOn = tabsAll(), btns = [], n = ++tabsetN;
+    bar.setAttribute('role', 'tablist'); bar.setAttribute('aria-label', name);
+    if (!tabs.some(function (t) { return t[0] === open; })) open = tabs[0][0];
+    var show = function (id, focus) {
+      tabs.forEach(function (t, i) {
+        var on = t[0] === id;
+        btns[i].setAttribute('aria-selected', String(on)); btns[i].tabIndex = on ? 0 : -1;
+        t[2].className = t[2].className.replace(/ tab-off/g, '') + (on || allOn ? '' : ' tab-off');
+        if (on && focus) btns[i].focus();
+      });
+    };
+    tabs.forEach(function (t, i) {
+      var b = btn('tab', t[1]); b.setAttribute('role', 'tab'); b.id = 'tab-' + n + '-' + t[0]; b.setAttribute('data-tab-go', t[0]);
+      t[2].className = (t[2].className ? t[2].className + ' ' : '') + 'tab-panel'; t[2].setAttribute('role', 'tabpanel'); t[2].setAttribute('aria-labelledby', b.id); t[2].setAttribute('data-tab', t[0]);
+      b.addEventListener('click', function () { show(t[0]); if (onPick) onPick(t[0]); });
+      b.addEventListener('keydown', function (e) {
+        var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return;
+        e.preventDefault(); var to = tabs[(i + d + tabs.length) % tabs.length][0]; show(to, true); if (onPick) onPick(to);
+      });
+      btns.push(b); bar.appendChild(b);
+    });
+    wrap.appendChild(bar); tabs.forEach(function (t) { wrap.appendChild(t[2]); });
+    show(open);
+    return wrap;
+  }
   function signedInHint() { return get('pas-in') === '1'; }
   function query() {
     var out = {};
@@ -378,12 +433,16 @@
     var view = account.getAttribute('data-view') === 'profile' ? 'profile' : 'account';
     var PARTS = { profile: ['card', 'new'], account: ['you', 'email', 'texts', 'school', 'emails', 'push', 'following', 'favorites', 'plans', 'sharing', 'listings', 'sign-out'] };
     var MOVED = { profile: 'you' };   // names a part has had
+    // the account page is tabs: which tab each part of it is on
+    var TAB_OF = { you: 'you', email: 'you', texts: 'you', listings: 'you', 'sign-out': 'you', school: 'school', emails: 'emails', push: 'emails', following: 'emails', favorites: 'emails', plans: 'plans', sharing: 'plans' };
+    var onHash = null;   // set once the signed-in page is drawn
     var fresh = false;   // someone signed in on this visit, rather than arriving signed in
     // a link followed while the page is already open (the address changes, the page doesn't load again)
     window.addEventListener('hashchange', function () {
       var h = /^#[a-z-]{2,20}$/.test(location.hash) ? location.hash.slice(1) : ''; if (MOVED[h]) h = MOVED[h];
       var other = view === 'profile' ? 'account' : 'profile';
-      if (h && signedInHint() && PARTS[view].indexOf(h) < 0 && PARTS[other].indexOf(h) > -1) location.replace(page(other + '/') + '#' + h);
+      if (h && signedInHint() && PARTS[view].indexOf(h) < 0 && PARTS[other].indexOf(h) > -1) { location.replace(page(other + '/') + '#' + h); return; }
+      if (onHash) onHash(h);
     });
     // The old address for creating an account was /account/?new=1. It still works: it goes to the real page.
     if (aq.new && !registering && !signedInHint()) { location.replace(page('register/') + (/^(board|summer|daysoff|calendar)$/.test(aq.next || '') ? '?next=' + aq.next : '')); return; }
@@ -481,19 +540,30 @@
         return;
       }
       listOnce(me);
-      // a strip of links to each part of the page: there is a lot on it
-      var jump = el('nav', 'jump'); jump.setAttribute('data-jump', ''); jump.setAttribute('aria-label', 'On this page'); jump.hidden = true;
-      if (view === 'account') account.appendChild(jump);   // the account page is long; the profile is one card
-      var part = function (box, id, label) { box.id = id; box.setAttribute('data-jump-to', label); return box; };
-      var put = function (panel, where) { if (where === view) account.appendChild(panel); };   // each panel is built either way and shown on its own page
-      // the account page starts with who is signed in, and the way back to the snapshot
-      var who = el('section', 'panel acct-top');
-      who.appendChild(el('h2', null, 'Your account'));
-      var line = el('p', null, 'Signed in as '), whoMail = el('b', null, me.email); line.appendChild(whoMail); line.appendChild(document.createTextNode('. This is where you change what’s in your account. Your profile shows it all on one card.')); who.appendChild(line);
-      var toProf = el('a', 'btn', 'See my profile'); toProf.href = page('profile/'); var tpw = el('div', 'actions'); tpw.appendChild(toProf); who.appendChild(tpw);
+      if (hashPart === 'listings' && me.claims) { location.replace(page('managers/')); return; }   // a manager's listings have a page of their own
+      // The tabs. One strip runs across the profile, this page and the listings page; here it switches between the
+      // parts of the account, so nobody has to scroll through all of them to find one.
+      var tabNow = 'you';
+      var showTab = function (id, byHand) {
+        tabNow = id; var allOn = tabsAll();
+        Array.prototype.forEach.call(account.children, function (c) { var t = c.getAttribute('data-tab'); if (t) c.className = c.className.replace(/ tab-off/g, '') + (allOn || t === id ? '' : ' tab-off'); });
+        strip.pasMark(id);
+        if (!byHand) return;
+        try { history.replaceState(null, '', location.pathname + location.search + (id === 'you' ? '' : '#' + id)); } catch (e) { /* the tab still opens */ }
+        // the strip stays under the menu bar while the page scrolls: a new tab starts from its top
+        var top = account.getBoundingClientRect().top + window.pageYOffset - 84;
+        if (window.pageYOffset > top) window.scrollTo(0, Math.max(0, top));
+      };
+      var strip = acctStrip(account, view === 'profile' ? 'profile' : 'you', !!me.claims, view + '/', view === 'account' ? function (id) { showTab(id, true); } : null);
+      var part = function (box, id) { box.id = id; return box; };
+      var put = function (panel, where, tab) { if (tab) panel.setAttribute('data-tab', tab); if (where === view) account.appendChild(panel); };   // each panel is built either way and shown on its own page
+      // the account page starts with who is signed in, and a way out that is always in reach
+      var who = el('p', 'acct-top', 'Signed in as '), whoMail = el('b', null, me.email), quickOut = btn('linklike', 'Sign out');
+      who.appendChild(whoMail); who.appendChild(document.createTextNode('. ')); who.appendChild(quickOut);
+      quickOut.addEventListener('click', function () { call('logout', {}).then(function () { set('pas-in', null); drawSignedOut(); }); });
       put(who, 'account');
       // your details: name, email address, mobile number
-      var you = part(el('section', 'panel'), 'you', 'Your details');
+      var you = part(el('section', 'panel'), 'you');
       you.appendChild(el('h2', null, 'Your details'));
       var nameForm = el('form', 'g-form'), nf0 = nameFields('acct-', me);
       var nameSave = el('button', 'btn', 'Save'); nameSave.type = 'submit';
@@ -573,25 +643,26 @@
       phoneForm.addEventListener('submit', function (e) { e.preventDefault(); savePhone(pf.phone.value, pf.yes.checked); });
       phoneDrop.addEventListener('click', function () { savePhone('', false); });
       you.appendChild(phoneForm);
-      put(you, 'account');
+      put(you, 'account', 'you');
       // your school, your children's grades and your neighborhood
-      var sch = part(el('section', 'panel'), 'school', 'School and kids');
+      var sch = part(el('section', 'panel'), 'school');
       sch.appendChild(el('h2', null, 'Your school and kids'));
-      put(sch, 'account');
+      put(sch, 'account', 'school');
       // the Sunday email (its tick box goes in further down, once the school is known)
-      var mail = part(el('section', 'panel'), 'emails', 'Emails and notifications');
+      var mail = part(el('section', 'panel'), 'emails');
       mail.appendChild(el('h2', null, 'Emails and notifications'));
       mail.appendChild(el('p', null, 'Sign-up dates come by email for whatever you follow, below. The Sunday email and notifications on your phone are extra, and both are off until you turn them on.'));
-      put(mail, 'account');
+      put(mail, 'account', 'emails');
       // what's new on the site, for someone who has been before
       var NEWS = ainfo.news || [];
       if (NEWS.length) {
         var seenNews = get('pas-news') || '';
-        var newsBox = part(el('section', 'panel g-news'), 'new', 'What’s new');
+        var newsBox = part(el('section', 'panel g-news'), 'new');
         newsBox.appendChild(el('h2', null, 'What’s new'));
         var nul = el('ul', 'g-list');
-        NEWS.slice(0, 5).forEach(function (n) {
+        NEWS.slice(0, 5).forEach(function (n, ni) {
           var li = el('li', n.date > seenNews ? 'fresh' : '');
+          if (ni > 1 && !tabsAll()) li.hidden = true;   // the two newest show; the rest are one tap away
           var when = ''; try { when = new Date(n.date + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }); } catch (e) { when = n.date; }
           var top = el('p', 'news-top'); top.appendChild(el('b', null, n.title)); top.appendChild(el('span', 'hint', ' ' + when)); li.appendChild(top);
           var body = el('p', null, n.text + ' ');
@@ -599,6 +670,11 @@
           li.appendChild(body); nul.appendChild(li);
         });
         newsBox.appendChild(nul);
+        var older = Math.min(NEWS.length, 5) - 2;
+        if (older > 0 && !tabsAll()) {
+          var moreNews = btn('btn', older === 1 ? 'Show 1 older' : 'Show ' + older + ' older'), mnRow = el('div', 'actions'); mnRow.appendChild(moreNews); newsBox.appendChild(mnRow);
+          moreNews.addEventListener('click', function () { Array.prototype.forEach.call(nul.children, function (li) { li.hidden = false; }); mnRow.hidden = true; var f = nul.children[2] && nul.children[2].querySelector('a'); if (f) f.focus(); });
+        }
         if (view === 'profile') {
           set('pas-news', NEWS[0].date);   // seen: the dot on "My profile" goes
           var dot = document.querySelector('.nav-cta .news-dot'); if (dot) dot.hidden = true;
@@ -607,12 +683,12 @@
       // what you follow (its dates come by email) and your favorites (kept here, nothing emailed)
       var MK = window.pasMarks;
       if (MK) {
-        var fol = part(el('section', 'panel g-marks'), 'following', 'Following');
+        var fol = part(el('section', 'panel g-marks'), 'following');
         fol.appendChild(el('h2', null, 'Places you follow'));
         fol.appendChild(el('p', null, 'When one of these posts a sign-up date or a deadline, you get an email the next morning, then reminders the day before and at about 8 that morning. Every email has a link to stop that one listing. Days off come in a Sunday round-up. Follow a program, a camp or a school from its own page.'));
         var folBox = el('div'); fol.appendChild(folBox);
         var mutedBox = el('div'); fol.appendChild(mutedBox);
-        fol.appendChild(part(el('h3', null, 'Favorites'), 'favorites', 'Favorites'));
+        fol.appendChild(part(el('h3', null, 'Favorites'), 'favorites'));
         fol.appendChild(el('p', 'hint', 'Saved so you can find them again. A favorite sends no email.'));
         var favBox = el('div'); fol.appendChild(favBox);
         var marksNote = el('p', 'g-status'); marksNote.setAttribute('aria-live', 'polite'); fol.appendChild(marksNote);
@@ -646,11 +722,11 @@
           fill(favBox, named.favs, 'No favorites yet. Tap “Save to favorites” on a program’s or camp’s page.', 'Remove', function (x) { return MK.fav(x.k, false); }, true);
         };
         MK.load().then(function () { drawMarks(); paintWeek(); paintCard(); });
-        put(fol, 'account');
+        put(fol, 'account', 'emails');
       }
       // the plans kept in the account get a panel of their own
       sch.appendChild(el('p', 'hint', 'Kept in your profile, so every list starts in the right place on any device you sign in on. Nothing goes in unless you put it there.'));
-      var prof = part(el('section', 'panel'), 'plans', 'Kept plans');
+      var prof = part(el('section', 'panel'), 'plans');
       prof.appendChild(el('h2', null, 'Plans you’ve kept'));
       prof.appendChild(el('p', null, 'A week, a summer and a days-off plan can live in your profile, so they’re there when you sign in on another phone or computer.'));
       var schoolRow = el('form', 'g-row');
@@ -1014,12 +1090,12 @@
         });
       };
       paintSchool(me.school || ''); paintGrades(me.grades || []); paintWeek(); loadProfile();
-      put(prof, 'account');
+      put(prof, 'account', 'plans');
       // the profile page: the card, then what's new on the site
       paintCard(); put(card, 'profile'); put(rvCard, 'profile');
       if (NEWS.length) put(newsBox, 'profile');
       // sharing: weeks shared with one person, and groups
-      var mine = part(el('section', 'panel'), 'sharing', 'Sharing');
+      var mine = part(el('section', 'panel'), 'sharing');
       mine.appendChild(el('h2', null, groupsOn ? 'Sharing and groups' : 'Sharing'));
       var noneYet = el('p', 'hint', groupsOn ? 'You’re not sharing a week with anyone yet, and you’re not in any groups.' : 'You’re not sharing a week with anyone yet. You can share one with one person, like a grandparent or sitter, from Build your week.');
       if (!groups.length) mine.appendChild(noneYet);
@@ -1034,7 +1110,7 @@
         list.appendChild(li);
       });
       mine.appendChild(list);
-      put(mine, 'account');
+      put(mine, 'account', 'plans');
       if (groups.some(function (g) { return !g.solo; })) groupsOn = true;
       // an invitation: the code goes here
       var join = el('section', 'panel g-callout');
@@ -1052,7 +1128,7 @@
         sset('pas-join', tidyCode(ji.value)); location.href = page('join/');
       });
       join.appendChild(jf);
-      put(join, 'account');
+      put(join, 'account', 'plans');
       // make a group (while groups are a pilot, only for people who have been let in to it)
       var make = el('section', 'panel'); make.hidden = !groupsOn;
       make.appendChild(el('h2', null, 'Start a group and invite people'));
@@ -1087,20 +1163,20 @@
           });
         });
       });
-      put(make, 'account');
+      put(make, 'account', 'plans');
       // the site's one ask
       var help = el('section', 'panel g-support');
-      var dir = part(el('section', 'panel'), 'listings', me.claims ? 'Your listings' : 'For programs');
+      var dir = part(el('section', 'panel'), 'listings');
       dir.appendChild(el('h2', null, me.claims ? 'Your listings' : 'Run a program or camp?'));
       dir.appendChild(el('p', null, me.claims ? 'This account has claimed ' + (me.claims === 1 ? 'a listing' : me.claims + ' listings') + '. Send changes or give one up from the program managers page.' : 'This same account can claim your program’s listing, if your email address is at its website. Then you can send changes as its manager.'));
       var dl = el('a', 'btn', me.claims ? 'Manage your listings' : 'Claim your listing'); dl.href = page('managers/'); dir.appendChild(dl);
-      put(dir, 'account');
+      if (!me.claims) put(dir, 'account', 'you');   // a manager has the Listings tab instead
       help.appendChild(el('h2', null, 'Help the site keep going'));
       help.appendChild(el('p', null, 'Philly After School is free for families, but it isn’t free to run. If it saved you an evening of searching, you can chip in toward what it costs to keep it going.'));
       var ha = el('a', 'btn', 'See how to chip in'); ha.href = page('support/'); help.appendChild(ha);
-      put(help, 'account');
+      put(help, 'account', 'you');
       // leaving
-      var out = part(el('section', 'panel'), 'sign-out', 'Sign out');
+      var out = part(el('section', 'panel'), 'sign-out');
       out.appendChild(el('h2', null, 'Signing out'));
       var acts = el('div', 'actions');
       var so = btn('btn', 'Sign out'), sa = btn('btn', 'Sign out on every device'), del = btn('clear', 'Delete my account');
@@ -1110,11 +1186,18 @@
       so.addEventListener('click', function () { call('logout', {}).then(function () { set('pas-in', null); drawSignedOut(); }); });
       sa.addEventListener('click', function () { call('logout_all', {}).then(function () { set('pas-in', null); drawSignedOut(); }); });
       twoTap(del, 'Tap again to delete everything', function () { (window.pasMarks ? window.pasMarks.clear().then(null, function () { /* the unsubscribe link still works */ }) : Promise.resolve()).then(function () { return call('delete_account', {}); }).then(function (r) { if (r.ok) { set('pas-in', null); set('pas-role', null); set('pas-kl-role', null); unlinkAll(); drawSignedOut('Your account and everything you shared are deleted.'); } }); });
-      put(out, 'account');
-      if (window.pasJump) window.pasJump();
-      // arriving on a link to one part of the page: the page was empty when the browser looked for it, so go there now
-      var want = hashPart ? document.getElementById(hashPart) : null;
-      if (want && want.scrollIntoView) want.scrollIntoView();
+      put(out, 'account', 'you');
+      // Arriving on a link to one part of the account: open the tab it is on. A part further down its tab is scrolled
+      // to as well (the page was empty when the browser looked for it).
+      var openPart = function (h) {
+        if (view !== 'account' || !TAB_OF[h]) return;
+        showTab(TAB_OF[h]);
+        var want = h !== TAB_OF[h] ? document.getElementById(h) : null;
+        if (want && want.scrollIntoView) want.scrollIntoView();
+      };
+      if (view === 'account') { showTab('you'); openPart(hashPart); }
+      else { var wantP = hashPart ? document.getElementById(hashPart) : null; if (wantP && wantP.scrollIntoView) wantP.scrollIntoView(); }
+      onHash = openPart;
     };
     // Arriving from the email: the token is after the #, so it never reaches a server log. Use it once and take it out of the address.
     var tok = /(?:^#|&)t=([A-Za-z0-9_-]{20,80})/.exec(location.hash);
@@ -1209,7 +1292,8 @@
     // one listing the account holds: its status, a change to send, a photo
     var claimItem = function (c) {
       var item = el('div', 'claim');
-      item.appendChild(el('h3', null, c.name));
+      var nameH = el('h3', null, c.name); item.appendChild(nameH);
+      if (c.premium && c.status === 'ok' && !c.gone) { nameH.appendChild(document.createTextNode(' ')); nameH.appendChild(el('span', 'pm-tease-tag pm-on', 'Premium')); }
       item.appendChild(el('p', 'claim-status ' + c.status, STATUS[c.status] || c.status));
       if (c.status === 'pending') item.appendChild(el('p', 'hint', 'This listing’s website is one many people share, so a person checks the claim. You’ll get an email either way.'));
       if (c.status === 'declined') item.appendChild(el('p', 'hint', 'We couldn’t confirm this one. Reply to the email we sent if that looks wrong.'));
@@ -1217,6 +1301,15 @@
       if (c.status === 'ok' && !c.gone) {
         var view = el('a', 'btn', 'See the listing');
         view.href = c.listing.charAt(0) === 'p' ? page('programs/' + c.listing.slice(2) + '/') : page('summer-camps/' + c.listing.slice(2) + '/');
+        // The listing's tools are on tabs, so the box is one screen and not six. Each tab is a plain box that the
+        // parts below are put into; a tab with nothing in it is left out.
+        var T = { over: el('div'), update: el('div'), photos: el('div'), words: el('div'), word: el('div'), premium: el('div') };
+        var finish = function () {
+          var tabs = [['over', 'Overview'], ['update', 'Update'], ['photos', c.premium ? 'Photos & logo' : 'Photo'], ['words', 'Words & offer'], ['word', 'Spread the word'], ['premium', 'Premium']]
+            .filter(function (t) { return T[t[0]].firstChild; }).map(function (t) { return [t[0], t[1], T[t[0]]]; });
+          item.appendChild(tabset(c.name, tabs, tabOf[c.listing], function (id) { tabOf[c.listing] = id; pushStep('tab_' + id); }));
+          return dropBtn(item, c);
+        };
         // your listing this month: how often it was opened, followed, planned and asked about. Numbers, never people.
         if (c.stats) {
           var st = c.stats, stBox = el('div', 'claim-stats'), day0 = function (iso) { var d = new Date(iso + 'T12:00:00Z'); return isNaN(d) ? '' : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }); };
@@ -1237,7 +1330,7 @@
           st.views.forEach(function (v, i) { var r = document.createElementNS(ns, 'rect'), h = v ? Math.max(3, Math.round(v / max * 40)) : 1; r.setAttribute('x', String(i * 10 + 1)); r.setAttribute('y', String(44 - h)); r.setAttribute('width', '8'); r.setAttribute('height', String(h)); r.setAttribute('rx', '2'); if (!v) r.setAttribute('class', 'nil'); svg.appendChild(r); });
           stBox.appendChild(svg);
           stBox.appendChild(el('p', 'hint', 'Opened, day by day, ' + day0(st.from) + ' to today.' + (st.since ? ' Counting began ' + day0(st.since) + '.' : ' Counting has just begun.') + ' These are numbers only: nothing about who visited. Your own visits while you’re signed in aren’t counted.'));
-          item.appendChild(stBox);
+          T.over.appendChild(stBox);
         }
         // is there space: one of three words, on the listing straight away, and off again after a month
         var spBox = el('div', 'claim-space');
@@ -1256,7 +1349,7 @@
           spRow.appendChild(b);
         });
         spBox.appendChild(spRow); spBox.appendChild(spSay);
-        item.appendChild(spBox);
+        T.over.appendChild(spBox);
         // asking their own families for a review: a link that opens the form with the program already chosen
         if (c.listing.charAt(0) === 'p') {
           var askBox = el('div', 'claim-ask');
@@ -1275,7 +1368,7 @@
           askText.addEventListener('click', function () { copyIt(askMsg, 'Message copied. Paste it into an email or a text to your families.'); });
           askActs.appendChild(askLink); askActs.appendChild(askText); askActs.appendChild(askSay);
           askBox.appendChild(askIn); askBox.appendChild(askActs);
-          if (askUrl) item.appendChild(askBox);
+          if (askUrl) T.word.appendChild(askBox);
           // a badge for their own website: it links to the listing, so families on their site find its dates and reviews here
           var bPage = '', bSrc = '';
           try { bPage = new URL(view.href, location.href).href.split('#')[0].split('?')[0]; bSrc = new URL(page('badge.svg'), location.href).href; } catch (e) { bPage = ''; }
@@ -1296,7 +1389,7 @@
             bText.addEventListener('click', function () { code.value = plain; bPut(plain, 'Copied. Paste it into your website: it shows as a line of text that links to your listing.'); });
             bAct.appendChild(bCopy); bAct.appendChild(bText); bAct.appendChild(bSay);
             bBox.appendChild(bRow); bBox.appendChild(code); bBox.appendChild(bAct);
-            item.appendChild(bBox);
+            T.word.appendChild(bBox);
           }
         }
         // a change: dates, cost, hours, anything else
@@ -1311,7 +1404,8 @@
         form.appendChild(el('p', 'hint', 'A person reads this and updates the listing, usually within a few days. You’ll get an email when it’s published.'));
         var fs2 = el('p', 'g-status'); fs2.setAttribute('aria-live', 'polite'); form.appendChild(fs2);
         var sb = el('button', 'btn primary', 'Send the update'); sb.type = 'submit';
-        var fa2 = el('div', 'actions'); fa2.appendChild(sb); fa2.appendChild(view); form.appendChild(fa2);
+        var fa2 = el('div', 'actions'); fa2.appendChild(sb); form.appendChild(fa2);
+        var seeRow = el('div', 'actions claim-see'); seeRow.appendChild(view); item.appendChild(seeRow);
         form.addEventListener('submit', function (e) {
           e.preventDefault();
           var parts = [['Dates', fd.value], ['Cost', fc.value], ['Days and hours', fh.value], ['Other', fo.value]].filter(function (x) { return x[1].replace(/\s+/g, '') !== ''; });
@@ -1325,7 +1419,7 @@
             cClaims = r.claims || []; render();
           });
         });
-        item.appendChild(form);
+        T.update.appendChild(form);
         if (c.edits && c.edits.length) {
           var ul = el('ul', 'g-list claim-edits');
           c.edits.forEach(function (x) {
@@ -1334,13 +1428,13 @@
             li2.appendChild(el('span', 'claim-body', x.body.length > 260 ? x.body.slice(0, 260) + '…' : x.body));
             ul.appendChild(li2);
           });
-          item.appendChild(ul);
+          T.update.appendChild(el('h4', null, 'What you’ve sent')); T.update.appendChild(ul);
         }
         // a premium listing has its own tools: photos, a logo, its own words, an offer line, fuller numbers, and a flyer
-        if (c.premium) { premiumTools(item, c, view.href); return dropBtn(item, c); }
-        premiumTease(item, c);
+        if (c.premium) { premiumTools(T, c, view.href); return finish(); }
+        premiumTease(T.premium, c);
         // the photo: a paid extra, so the form is there only when photos are switched on
-        if (claimsBox.getAttribute('data-photos') !== '1') return dropBtn(item, c);
+        if (claimsBox.getAttribute('data-photos') !== '1') return finish();
         var pf = el('form', 'g-form claim-photo');
         pf.appendChild(el('h4', null, 'Your photo'));
         if (c.photoLive) {
@@ -1389,24 +1483,19 @@
             cClaims = r.claims || []; render();
           });
         });
-        item.appendChild(pf);
+        T.photos.appendChild(pf);
+        return finish();
       }
       return dropBtn(item, c);
     };
-    // ----- a listing that isn't premium: what premium would add, in the place its tools would be -----
-    // One calm box a listing, shown only once the premium page is open to everyone. It leads with the listing's own
-    // number, lists what would be added, and can be put away for a month ("Not now"), which leaves one small link.
+    // ----- a listing that isn't premium: what premium would add, on a tab of its own -----
+    // Shown only once the premium page is open to everyone. The tab is always there and never in the way, so there is
+    // nothing to dismiss: it leads with the listing's own number and lists what would be added.
     var PM_FROM = claimsBox.getAttribute('data-pm-from') || '';
-    var premiumTease = function (item, c) {
+    var tabOf = {};   // the tab open in each listing's box, kept while the page redraws
+    var premiumTease = function (panel, c) {
       if (!PM_FROM) return;
-      var url = page('premium/'), put = {}; try { put = JSON.parse(get('pas-pm-later') || '{}') || {}; } catch (e) { put = {}; }
-      var away = !c.asked && put[c.listing] && Date.now() - put[c.listing] < 30 * 86400000;
-      if (away) {
-        var quiet = el('p', 'hint pm-tease-quiet', 'More for this listing: '); var ql = el('a', null, 'a premium listing'); ql.href = url;
-        ql.addEventListener('click', function () { pushStep('premium_link'); });
-        quiet.appendChild(ql); quiet.appendChild(document.createTextNode('.')); item.appendChild(quiet);
-        return;
-      }
+      var url = page('premium/');
       var box = el('div', 'pm-tease'), head = el('h4', null, 'Premium listing ');
       head.appendChild(el('span', 'pm-tease-tag', c.asked ? 'Signed up' : 'Not on yet')); box.appendChild(head);
       var n = c.stats && c.stats.now ? c.stats.now.view || 0 : 0, young = c.stats && (!c.stats.since || c.stats.since > c.stats.from);
@@ -1422,23 +1511,23 @@
       var row = el('div', 'actions'), go = el('a', 'btn primary', c.asked ? 'Open the premium page' : 'See what premium adds'); go.href = url;
       go.addEventListener('click', function () { pushStep('premium_see'); });
       row.appendChild(go);
-      if (!c.asked) {
-        row.appendChild(el('span', 'hint', 'From $' + PM_FROM + ' a month.'));
-        var later = btn('linklike', 'Not now');
-        later.addEventListener('click', function () { put[c.listing] = Date.now(); set('pas-pm-later', JSON.stringify(put)); pushStep('premium_later'); render(); });
-        row.appendChild(later);
-      }
-      box.appendChild(row); item.appendChild(box);
+      if (!c.asked) row.appendChild(el('span', 'hint', 'From $' + PM_FROM + ' a month.'));
+      box.appendChild(row); panel.appendChild(box);
     };
     // ----- a premium listing's tools -----
-    var premiumTools = function (item, c, listingUrl) {
-      var P = c.premium, box = el('div', 'claim-premium'), key = c.listing, slug = key.replace(/[^a-z0-9]+/g, '-');
-      var head = el('h4', 'pm-title', 'Premium listing'); box.appendChild(head);
-      box.appendChild(el('p', 'hint', P.mode === 'preview'
-        ? 'These are being tried out. Until premium listings open to everyone, what you add shows on your listing only to you, while you’re signed in. A person looks at each thing before it shows.'
-        : 'What you add here shows on your listing once a person has looked at it.'));
+    var premiumTools = function (T, c, listingUrl) {
+      var P = c.premium, key = c.listing, slug = key.replace(/[^a-z0-9]+/g, '-');
+      // each tab gets one premium box; the two where things are added say who sees them and when
+      var boxes = {}, boxIn = function (where) {
+        if (boxes[where]) return boxes[where];
+        var b = boxes[where] = el('div', 'claim-premium'); T[where].appendChild(b);
+        if (where === 'photos' || where === 'words') b.appendChild(el('p', 'hint pm-how', P.mode === 'preview'
+          ? 'These are being tried out. Until premium listings open to everyone, what you add shows on your listing only to you, while you’re signed in. A person looks at each thing before it shows.'
+          : 'What you add here shows on your listing once a person has looked at it.'));
+        return b;
+      };
       var after = function (okText) { return function (r) { if (!r.ok) { said = r.message; saidBad = true; } else { said = okText; saidBad = false; cClaims = r.claims || cClaims; } render(); }; };
-      var sub = function (title, hint) { var d = el('div', 'pm-part'); d.appendChild(el('h5', null, title)); if (hint) d.appendChild(el('p', 'hint', hint)); box.appendChild(d); return d; };
+      var sub = function (where, title, hint) { var d = el('div', 'pm-part'); d.appendChild(el('h5', null, title)); if (hint) d.appendChild(el('p', 'hint', hint)); boxIn(where).appendChild(d); return d; };
       var src = function (id) { return API + '?action=photo&l=' + encodeURIComponent(key) + '&id=' + id; };
       // --- photos and the logo: the same form, twice
       var pictures = function (kind, part, list, room) {
@@ -1488,8 +1577,8 @@
         part.appendChild(f);
       };
       var shots = P.photos.filter(function (x) { return x.kind === 'photo'; }), logos = P.photos.filter(function (x) { return x.kind === 'logo'; });
-      pictures('photo', sub('Photos (' + shots.length + ' of ' + P.max + ')', 'Your space, an activity, the room at pickup. The newest one sits at the top of your listing and the rest make a gallery. Each is shrunk on your device before it’s sent.'), shots, shots.length < P.max);
-      pictures('logo', sub('Your logo', 'Shown beside what you write about your program.'), logos.slice(0, 2), true);
+      pictures('photo', sub('photos', 'Photos (' + shots.length + ' of ' + P.max + ')', 'Your space, an activity, the room at pickup. The newest one sits at the top of your listing and the rest make a gallery. Each is shrunk on your device before it’s sent.'), shots, shots.length < P.max);
+      pictures('logo', sub('photos', 'Your logo', 'Shown beside what you write about your program.'), logos.slice(0, 2), true);
       // --- in their own words, and the offer line: text that waits for a look
       var texts = function (kind, part, t, make) {
         if (t.live) part.appendChild(el('p', 'claim-status ok', 'On your listing' + (kind === 'offer' && t.liveUntil ? ' until ' + when2(t.liveUntil) : '')));
@@ -1512,13 +1601,13 @@
         part.appendChild(f);
       };
       var when2 = function (iso) { var d = new Date(iso + 'T12:00:00Z'); return isNaN(d) ? iso : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }); };
-      texts('words', sub('In your own words', 'What a day looks like, who runs it, what makes it yours. It appears on your listing marked as written by you. Plain text, up to 900 characters.'), P.texts.words, function (f, t) {
+      texts('words', sub('words', 'In your own words', 'What a day looks like, who runs it, what makes it yours. It appears on your listing marked as written by you. Plain text, up to 900 characters.'), P.texts.words, function (f, t) {
         var ta = field(f, 'pw-' + slug, 'About ' + c.name, 'textarea', { rows: 7, maxLength: 900, placeholder: 'We’ve run after-school at the corner of 4th and Pine since 2009. Afternoons start with a snack and homework help, then…' });
         ta.value = t['new'] || t.live || '';
         var left = el('span', 'hint'); var count = function () { left.textContent = (900 - ta.value.length) + ' characters left'; }; ta.addEventListener('input', count); count(); f.appendChild(left);
         return { body: ta };
       });
-      texts('offer', sub('An offer or event line', 'One line near the top of your listing: an open house, a trial class, a sibling discount, financial aid. It comes down by itself after the last day you pick.'), P.texts.offer, function (f, t) {
+      texts('offer', sub('words', 'An offer or event line', 'One line near the top of your listing: an open house, a trial class, a sibling discount, financial aid. It comes down by itself after the last day you pick.'), P.texts.offer, function (f, t) {
         var inp = field(f, 'po-' + slug, 'The line', 'input', { type: 'text', maxLength: 140, placeholder: 'Open house on November 12 at 6 pm. Come see the space.' });
         inp.value = t['new'] || t.live || '';
         var until = field(f, 'pu-' + slug, 'Show it until', 'input', { type: 'date' });
@@ -1527,9 +1616,9 @@
         return { body: inp, until: until };
       });
       // --- questions
-      sub('Questions from parents', 'Your listing has an “Ask a question” button. A parent’s question comes by email to ' + (cMe ? cMe.email : 'you') + (P.mode === 'preview' ? ' (for now only you can see the button)' : '') + ', and to anyone else who holds this listing. Reply to that email to answer them. We pass it along and don’t keep a copy.');
+      sub('words', 'Questions from parents', 'Your listing has an “Ask a question” button. A parent’s question comes by email to ' + (cMe ? cMe.email : 'you') + (P.mode === 'preview' ? ' (for now only you can see the button)' : '') + ', and to anyone else who holds this listing. Reply to that email to answer them. We pass it along and don’t keep a copy.');
       // --- fuller numbers
-      var M = P.more, nums = sub('More numbers', 'Month by month for as long as we’ve counted, up to a year. Numbers only: nothing about who.');
+      var M = P.more, nums = sub('over', 'More numbers', 'Month by month for as long as we’ve counted, up to a year. Numbers only: nothing about who.');
       var tiles = el('div', 'claim-nums');
       [[M.follows, 'person follows it for sign-up emails', 'people follow it for sign-up emails'], [M.favs, 'family saved it as a favorite', 'families saved it as a favorite']].forEach(function (t) {
         var tile = el('div', 'claim-num'); tile.appendChild(el('b', null, String(t[0]))); tile.appendChild(el('span', null, t[0] === 1 ? t[1] : t[2])); tiles.appendChild(tile);
@@ -1554,7 +1643,7 @@
         nums.appendChild(el('p', 'hint', 'Only visits from a browser that has a school saved are counted here, so this is a share of the whole.'));
       }
       // --- a flyer with a code to scan (the badge for their website comes with every claimed listing)
-      var kit = sub('A flyer', 'A page to print or post that sends families to your listing.');
+      var kit = sub('word', 'A flyer', 'A page to print or post that sends families to your listing.');
       var pageUrl = ''; try { pageUrl = new URL(listingUrl, location.href).href.split('#')[0].split('?')[0]; } catch (e) { pageUrl = ''; }
       var flyAct = el('div', 'actions'), flyBtn = btn('btn', 'Make the flyer'), flySay = el('span', 'hint'); flySay.setAttribute('aria-live', 'polite');
       var flyBox = el('div', 'pm-flyer'); flyBox.hidden = true;
@@ -1578,7 +1667,6 @@
         var sc = document.createElement('script'); sc.src = claimsBox.getAttribute('data-qr') || ''; sc.onload = draw; sc.onerror = function () { flySay.textContent = 'The flyer couldn’t be loaded. Check your connection and try again.'; };
         document.head.appendChild(sc);
       });
-      item.appendChild(box);
     };
     // The flyer: one letter-size page with the program's name and a code that opens its listing.
     var flyer = function (name, url, rows) {
@@ -1628,10 +1716,27 @@
       return item;
     };
 
+    // Someone who already holds a listing came to look after it, not to be told why to claim one: the page's heading
+    // says so, the strip of account tabs is across the top, and the sections about claiming are folded away.
+    var heroH = document.querySelector('.hero h1'), heroP = document.querySelector('.hero .lede'), heroWas = heroH && heroP ? [heroH.innerHTML, heroP.innerHTML] : null;
+    var aboutOpen = false, addOpen = false;
     var render = function (keepFocus) {
       claimsBox.textContent = '';
       var held = {};
       cClaims.forEach(function (c) { held[c.listing] = c; });
+      var holder = cState === 'in' && cClaims.length > 0;
+      claimsBox.className = claimsBox.className.replace(/ (holds|about-open)/g, '') + (holder ? ' holds' + (aboutOpen || tabsAll() ? ' about-open' : '') : '');
+      if (heroWas && get('pas-edit') !== '1') {   // (the owner editing the site's wording sees the page's own words)
+        if (holder) { heroH.textContent = cClaims.length === 1 ? 'Your listing' : 'Your listings'; heroP.textContent = 'Keep the dates, costs and hours right, say whether there’s space, and see how many families are finding you.'; }
+        else if (heroH.innerHTML !== heroWas[0]) { heroH.innerHTML = heroWas[0]; heroP.innerHTML = heroWas[1]; }
+      }
+      if (holder) {
+        acctStrip(claimsBox, 'listings', true, 'managers/', null);
+        var top = el('p', 'acct-top', 'Signed in as '), topOut = btn('linklike', 'Sign out');
+        top.appendChild(el('b', null, cMe.email)); top.appendChild(document.createTextNode('. ')); top.appendChild(topOut);
+        topOut.addEventListener('click', function () { call('logout', {}).then(function () { set('pas-in', null); cMe = null; cClaims = []; cDomain = ''; cState = 'out'; said = ''; render(); }); });
+        claimsBox.appendChild(top);
+      }
       if (said) { var sp = el('p', 'g-status ' + (saidBad ? 'bad' : 'good'), said); sp.setAttribute('role', 'status'); claimsBox.appendChild(sp); }
 
       if (cState === 'name') {   // a new account: a name first, so we know who is claiming
@@ -1652,7 +1757,7 @@
       }
 
       if (cState === 'in') {
-        var who = el('section', 'panel');
+        var who = el('section', 'panel'); who.id = 'claim-who';
         var wp = el('p', null, 'Signed in as '); wp.appendChild(el('b', null, cMe.email)); wp.appendChild(document.createTextNode('. '));
         if (PERSONAL.test(cDomain)) wp.appendChild(document.createTextNode('That’s a personal address, so it can’t claim a listing. Sign out and sign in with your work email: the one at your program’s website address.'));
         else { wp.appendChild(document.createTextNode('You can claim listings whose website is at ')); wp.appendChild(el('b', null, cDomain || 'your address')); wp.appendChild(document.createTextNode('.')); }
@@ -1660,10 +1765,10 @@
         var wa = el('div', 'actions');
         var acct = el('a', 'btn', 'Your account'); acct.href = page('account/'); wa.appendChild(acct);
         var so = btn('btn', 'Sign out'); so.addEventListener('click', function () { call('logout', {}).then(function () { set('pas-in', null); cMe = null; cClaims = []; cDomain = ''; cState = 'out'; said = ''; render(); }); }); wa.appendChild(so);
-        who.appendChild(wa); claimsBox.appendChild(who);
+        who.appendChild(wa); if (!holder) claimsBox.appendChild(who);
         if (cClaims.length) {
           var mine = el('section', 'panel');
-          mine.appendChild(el('h2', null, cClaims.length === 1 ? 'Your listing' : 'Your listings'));
+          if (get('pas-edit') === '1' || !heroWas) mine.appendChild(el('h2', null, cClaims.length === 1 ? 'Your listing' : 'Your listings'));   // otherwise the page's own heading says it
           cClaims.forEach(function (c) { mine.appendChild(claimItem(c)); });
           if (cClaims.some(function (c) { return c.status === 'ok' && !c.gone; })) {
             // the emails about their own listing: on unless they say otherwise
@@ -1695,6 +1800,7 @@
       // find a listing
       var add = el('section', 'panel'); add.id = 'claim-search';
       add.appendChild(el('h2', null, cState === 'in' && cClaims.length ? 'Claim another listing' : 'Find your listing'));
+      if (holder) add.appendChild(el('p', 'hint', PERSONAL.test(cDomain) ? 'You’re signed in with a personal address, which can’t claim a listing.' : 'You can claim listings whose website is at ' + (cDomain || 'your address') + '.'));
       var sl = el('label', null, 'Search by name'); sl.htmlFor = 'claim-find';
       var si = el('input'); si.id = 'claim-find'; si.type = 'search'; si.autocomplete = 'off'; si.placeholder = 'Start typing your program’s name'; si.value = findText;
       var results = el('ul', 'g-list claim-results');
@@ -1795,7 +1901,24 @@
         });
         have.appendChild(hl); add.appendChild(have);
       }
-      claimsBox.appendChild(add);
+      if (holder) {
+        // Folded away until asked for, unless there is something in it to see: another listing at the same website, or a search under way.
+        var more = LIST.some(function (l) { var x = byKey[l[0]]; return x && !held[x.key] && !!cDomain && x.domain === cDomain; });
+        var showAdd = addOpen || more || !!findText || tabsAll();
+        var fold = el('div', 'actions claim-more');
+        if (!showAdd) {
+          var openAdd = btn('btn', 'Claim another listing');
+          openAdd.addEventListener('click', function () { addOpen = true; render(true); });
+          fold.appendChild(openAdd);
+        }
+        if (!aboutOpen && !tabsAll()) {
+          var openAbout = btn('btn', 'How claiming works');
+          openAbout.addEventListener('click', function () { aboutOpen = true; render(); var why = document.getElementById('why'); if (why && why.scrollIntoView) why.scrollIntoView(); });
+          fold.appendChild(openAbout);
+        }
+        if (showAdd) claimsBox.appendChild(add);
+        if (fold.firstChild) claimsBox.appendChild(fold);
+      } else claimsBox.appendChild(add);
       if (keepFocus) { var again = document.getElementById('claim-find'); if (again) again.focus(); }
     };
 

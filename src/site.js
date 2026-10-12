@@ -57,30 +57,34 @@
   // ----- jump links: on a long page, a strip that stays under the menu bar with a link to each part. A part is any
   // element with an id and a data-jump-to label; parts that are hidden or still empty are left out. Pages that fill
   // themselves in later call window.pasJump() again. -----
+  // A strip that scrolls sideways when it doesn't fit: an arrow and a fade at each end say there is more, as on the
+  // filters. Used by the jump links here and by the tabs on the account pages.
+  window.pasRail = function (nav, earlier, later) {
+    var wrap = nav.parentNode;
+    if (/(^| )jump-wrap( |$)/.test(wrap.className)) return wrap;
+    wrap = el('div', 'jump-wrap'); nav.parentNode.insertBefore(wrap, nav); wrap.appendChild(nav);
+    var mk = function (cls, label, dir) {
+      var b = el('button', 'rail-go ' + cls); b.type = 'button'; b.hidden = true; b.setAttribute('aria-label', label);
+      b.addEventListener('click', function () {
+        var by = Math.max(120, Math.round(nav.clientWidth * 0.7)) * dir, calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (nav.scrollBy) nav.scrollBy({ left: by, behavior: calm ? 'auto' : 'smooth' }); else nav.scrollLeft += by;
+      });
+      wrap.appendChild(b); return b;
+    };
+    var prev = mk('prev', earlier || 'Show earlier parts of this page', -1), fwd = mk('fwd', later || 'Show more parts of this page', 1);
+    nav.pasEnds = function () {
+      var left = nav.scrollLeft > 4, right = nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 4;
+      prev.hidden = !left; fwd.hidden = !right;
+      wrap.className = wrap.className.replace(/ more-(left|right)/g, '') + (left ? ' more-left' : '') + (right ? ' more-right' : '');
+    };
+    nav.addEventListener('scroll', nav.pasEnds, { passive: true });
+    window.addEventListener('resize', nav.pasEnds);
+    if (window.ResizeObserver) new window.ResizeObserver(nav.pasEnds).observe(nav);
+    return wrap;
+  };
   window.pasJump = function () {
     all(document, 'nav[data-jump]').forEach(function (nav) {
-      // the strip scrolls sideways when it doesn't fit: an arrow and a fade at each end say there is more, as on the filters
-      var wrap = nav.parentNode;
-      if (!/(^| )jump-wrap( |$)/.test(wrap.className)) {
-        wrap = el('div', 'jump-wrap'); nav.parentNode.insertBefore(wrap, nav); wrap.appendChild(nav);
-        var mk = function (cls, label, dir) {
-          var b = el('button', 'rail-go ' + cls); b.type = 'button'; b.hidden = true; b.setAttribute('aria-label', label);
-          b.addEventListener('click', function () {
-            var by = Math.max(120, Math.round(nav.clientWidth * 0.7)) * dir, calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (nav.scrollBy) nav.scrollBy({ left: by, behavior: calm ? 'auto' : 'smooth' }); else nav.scrollLeft += by;
-          });
-          wrap.appendChild(b); return b;
-        };
-        var prev = mk('prev', 'Show earlier parts of this page', -1), fwd = mk('fwd', 'Show more parts of this page', 1);
-        nav.pasEnds = function () {
-          var left = nav.scrollLeft > 4, right = nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 4;
-          prev.hidden = !left; fwd.hidden = !right;
-          wrap.className = 'jump-wrap' + (left ? ' more-left' : '') + (right ? ' more-right' : '');
-        };
-        nav.addEventListener('scroll', nav.pasEnds, { passive: true });
-        window.addEventListener('resize', nav.pasEnds);
-        if (window.ResizeObserver) new window.ResizeObserver(nav.pasEnds).observe(nav);
-      }
+      var wrap = window.pasRail(nav);
       var signedNow = /(^|\s)signed(\s|$)/.test(document.documentElement.className);
       var parts = all(document, '[data-jump-to][id]').filter(function (t) { return !t.closest('[hidden]') && !t.closest(signedNow ? '.when-out' : '.when-in') && /\S/.test(t.textContent); });
       nav.textContent = '';

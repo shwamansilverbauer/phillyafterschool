@@ -543,11 +543,12 @@ changes where a listing appears in a list, and it has no say over reviews.
   `"preview"` it is **unlisted**: nothing links to it, it carries `noindex`, and it is left out of the sitemap. Once
   premium is `"on"` (`PM_LISTED` in `build.mjs`) it is in the sitemap, open to search engines, and pointed to from
   three places, all of them for people who run a program and none on a page a parent uses:
-  - **In each claimed listing's box on the managers page** (`premiumTease()` in `groups.js`), where the premium
-    tools would be: one dashed box that leads with the listing's own number of visits when there are at least 20,
-    lists the six things premium adds, and gives the price. "Not now" puts it away for 30 days (`pas-pm-later` in
-    the browser) and leaves a one-line link. A listing that has signed up sees where to finish; a premium listing
-    sees its tools instead. Nothing pops up, and nothing is repeated elsewhere on the page.
+  - **In each claimed listing's box on the managers page** (`premiumTease()` in `groups.js`), on a tab of its own
+    called "Premium", after the listing's own tabs: one dashed box that leads with the listing's own number of
+    visits when there are at least 20, lists the six things premium adds, and gives the price. The tab is always
+    there and never in the way, so there is nothing to dismiss. A listing that has signed up sees where to finish;
+    a premium listing has no such tab and sees its tools on the other tabs instead. Nothing pops up, and nothing is
+    repeated elsewhere on the page.
   - **One sentence on the managers page**, in the list under "How claiming works", for people who haven't claimed.
   - **One line at the end of the monthly numbers email**, only for an account with no premium listing.
   - **Prices** are `"premiumPrice": { "month": 19, "year": 190, "laterMonth": 29, "laterYear": 290 }`, whole dollars.
@@ -1146,6 +1147,34 @@ The things a family has to remember that aren't on the district calendar: pictur
   week has something other than the every-week things (`special`). Someone who turns it on by Tuesday still gets
   that week's. The entry carries `lines` (day by day), which the email template lists, and `text` as a fallback.
 
+## Tabs on the profile, the account and the listings page
+
+None of the three signed-in pages is a long scroll. The code is in `groups.js`.
+
+- **One strip across all three** (`acctStrip()`, `nav.jump.acct-tabs`): Profile · Details · School & kids ·
+  Emails & following · Plans & sharing, and Listings for an account that holds a listing. A tab whose part is on the
+  page in view switches in place; the others are links to the page that has them (`/profile/`, `/account/#school`,
+  `/managers/`), so the three pages read as one place. It stays under the menu bar, and scrolls sideways on a phone
+  with the open tab brought into view (`window.pasRail()` in `site.js`, shared with the jump links).
+- **On the account page** each panel is put on a tab with `put(panel, 'account', tab)`, and `TAB_OF` says which tab
+  every linkable part is on, so `/account/#following`, `#favorites`, `#sign-out` and the rest open the right tab
+  and scroll to the part. Choosing a tab puts it in the address (`#school`, `#emails`, `#plans`; Details is the
+  plain address), so a reload or the Back button keeps it. "Signed in as …" and "Sign out" sit above every tab.
+  A manager's account has the Listings tab in place of the "Run a program or camp?" box, and an old link to
+  `/account/#listings` goes to the managers page.
+- **On the managers page**, someone who already holds a listing gets a page about the listing: the heading becomes
+  "Your listing", the strip is across the top, and each listing's box has its own small set of tabs (`tabset()`,
+  a real `tablist` with arrow keys): Overview (the numbers, "Is there space", and a premium listing's fuller
+  numbers), Update (the form and what has been sent), Spread the word (the review link, the badge, a premium
+  listing's flyer), then either Photos & logo and Words & offer for a premium listing or the Premium tab for one
+  that isn't. The open tab is kept while the box redraws (`tabOf`). "Claim another listing" and "How claiming works"
+  are two buttons under the box that open the search and the sections about claiming; the search opens by itself
+  when another listing has a website at the same address. Someone signed in with nothing claimed sees the page as
+  before. Opening a tab is counted as a `pas_claim` step (`tab_update` and so on), with nothing about the listing.
+- **On the profile**, "What's new" shows the two newest items and a button for the rest.
+- **Every part at once.** `sessionStorage` `pas-tabs` = `all` shows every tab's parts on one page. The browser tests
+  that were written before the tabs start that way; `tabs.js` tests the tabs themselves.
+
 ## My profile and the account page
 
 Once someone is signed in there are two pages, drawn by the same code in `groups.js` (`drawProfile()`), which is told
@@ -1248,10 +1277,8 @@ A long page gets a strip of links that stays under the menu bar. Put `${jumpNav(
 give each part an `id` and a `data-jump-to="Short label"`; `window.pasJump()` in `site.js` fills the strip, leaving
 out parts that are hidden or empty, and pages that fill themselves in later call it again. When the strip is wider
 than the screen it scrolls sideways, with an arrow and a fade at whichever end has more (the same cue as the
-filter rows). It is on the account page
-(built in `groups.js`, where `part(box, id, label)` marks each panel, and a link such as `/account/#favorites` lands
-on its part once the page has drawn), My kids' calendar, the days-off page, the summer schedule and the privacy
-page. With fewer than two parts showing, the strip stays hidden.
+filter rows). It is on My kids' calendar, the days-off page, the summer schedule and the privacy
+page. (The account page used to have one; it has tabs now.) With fewer than two parts showing, the strip stays hidden.
 
 ## What's new
 

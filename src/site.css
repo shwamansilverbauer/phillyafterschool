@@ -1650,6 +1650,35 @@ html.signed .year-out{display:none}
 .jump-wrap::before{left:0;background:linear-gradient(270deg,transparent,var(--jump-bg) 55%)}
 .jump-wrap::after{right:0;background:linear-gradient(90deg,transparent,var(--jump-bg) 55%)}
 .jump-wrap.more-left::before,.jump-wrap.more-right::after{opacity:1}
+/* tabs: the strip across the profile, the account and the listings page, and the small sets inside a listing's box */
+.jump.acct-tabs{gap:6px;padding:10px 0 0}
+.jump.acct-tabs a{border:0;border-radius:12px 12px 0 0;background:none;color:var(--muted);padding:10px 16px 11px;border-bottom:3px solid transparent;font-size:1rem}
+.jump.acct-tabs a:hover,.jump.acct-tabs a:focus-visible{color:var(--link);background:var(--surface)}
+.jump.acct-tabs a[aria-current]{color:var(--ink);background:var(--surface);border-bottom-color:var(--yellow)}
+.tabs-wrap{box-shadow:0 2px 0 var(--line)}
+.tab-off{display:none!important}
+:root #account [data-tab],:root #account [data-tab] [id]{scroll-margin-top:72px}   /* room for the strip of tabs, as for the jump links */
+.acct-top{margin:0;color:var(--muted)}
+.acct-top b{color:var(--ink)}
+.g-list li[hidden]{display:none}
+.tabset{align-self:stretch;display:flex;flex-direction:column;gap:14px;margin-top:6px;min-width:0}
+.tabs-bar{display:flex;flex-wrap:wrap;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:5px}
+.tabs-bar .tab{font:inherit;font-weight:700;font-size:.95rem;color:var(--ink);background:none;border:0;border-radius:10px;padding:8px 14px;min-height:40px;cursor:pointer}
+.tabs-bar .tab:hover{background:var(--surface)}
+.tabs-bar .tab[aria-selected=true]:hover{background:var(--blue)}
+.tabs-bar .tab[aria-selected=true]{background:var(--blue);color:#FFFFFF}
+.tab-panel{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0}
+.tab-panel > .claim-space:first-child,.tab-panel > .claim-ask:first-child,.tab-panel > .claim-photo:first-child{border-top:0;padding-top:0;margin-top:0}
+.tab-panel > :first-child{margin-top:0}
+.tab-panel > .claim-edit:first-child > h4:first-child{margin-top:0}
+.claim-premium > .pm-part:first-child{border-top:0;padding-top:0;margin-top:0}
+.claim-premium > .pm-how{margin:0}
+.tab-panel > .claim-premium:not(:first-child){margin-top:14px}
+.claim-see{margin:2px 0 0}
+.pm-tease-tag.pm-on{background:var(--yellow);color:#2A2100;vertical-align:middle}
+.claim-more{gap:10px;justify-content:flex-start;align-self:flex-start}
+#claims.holds:not(.about-open) ~ section{display:none}
+@media (max-width:560px){.jump.acct-tabs a{padding:9px 12px 10px;font-size:.95rem}.tabs-bar .tab{padding:8px 11px}}
 .jump-wrap .rail-go.prev{left:0}
 .jump-wrap .rail-go.fwd{right:0}
 :root [data-jump-to][id]{scroll-margin-top:68px}   /* room for the strip; the menu bar is already allowed for on html */
