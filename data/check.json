@@ -2,7 +2,7 @@
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
     "pages": 112,
-    "pagesNeedingABrowser": 2,
+    "pagesNeedingABrowser": 4,
     "pagesNeedingAPerson": 2,
     "links": 117,
     "pickupLinks": 63,
@@ -1677,7 +1677,8 @@
     },
     {
       "url": "https://phillyartcenter.captyn.com/find?department=clu8qqr6y008w93r8jn074ir6&filter=2&program=clur1wu8b03tv13yv63r0u2w1&location=clu8gptof0aahxkl2mj3v7mxl",
-      "how": "fetch",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns only the word Captyn. In a browser the list shows ten results at first and loads the rest as the page is scrolled, so scroll to the end before counting dates.",
       "programs": [
         "philly-art-center-qv"
       ],
@@ -1685,7 +1686,8 @@
     },
     {
       "url": "https://phillyartcenter.captyn.com/find?department=clu8qqzk2009293r866a7j7wg&filter=4&program=clv479vep03ki7to5es3tmyjr&program=clwtkcaoi00kmsudp98n0ecv5&day=Monday&day=Tuesday&day=Wednesday&day=Thursday&day=Friday&location=clu8gptof0aahxkl2mj3v7mxl&tag=clv494qhk032olgi2d9i70vw6&tag=clv494xs6032plgi2z23yr0a8",
-      "how": "fetch",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns only the word Captyn. In a browser the list shows ten results at first and loads the rest as the page is scrolled, so scroll to the end before counting dates.",
       "programs": [
         "philly-art-center-qv"
       ],

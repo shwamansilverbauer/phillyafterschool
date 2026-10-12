@@ -445,17 +445,18 @@
       if (onHash) onHash(h);
     });
     // The old address for creating an account was /account/?new=1. It still works: it goes to the real page.
-    if (aq.new && !registering && !signedInHint()) { location.replace(page('register/') + (/^(board|summer|daysoff|calendar)$/.test(aq.next || '') ? '?next=' + aq.next : '')); return; }
+    if (aq.new && !registering && !signedInHint()) { location.replace(page('register/') + (/^(board|summer|daysoff|calendar|todo)$/.test(aq.next || '') ? '?next=' + aq.next : '')); return; }
     if (aq.groups) set('pas-groups', '1');   // while groups are a pilot, this is the way in for someone who wasn't invited to one
     var ainfo = {}; try { ainfo = JSON.parse(document.getElementById('groups-data').textContent); } catch (e) { /* older page */ }
     var groupsOn = host.getAttribute('data-pilot') !== '1' || get('pas-groups') === '1';
-    var wantNext = /^(board|summer|daysoff|calendar|profile)$/.test(aq.next || '') ? aq.next : view === 'profile' ? 'profile' : 'account';
+    var wantNext = /^(board|summer|daysoff|calendar|todo|profile)$/.test(aq.next || '') ? aq.next : view === 'profile' ? 'profile' : 'account';
     var goNext = function (next) {
       if (next === 'join') { location.href = page('join/'); return true; }
       if (next === 'board') { location.href = page('board/') + '?back=1'; return true; }
       if (next === 'summer') { location.href = page('summer-schedule/') + '#plan'; return true; }
       if (next === 'daysoff') { location.href = page('days-off/') + '#plan'; return true; }
       if (next === 'calendar') { location.href = page('calendar/'); return true; }
+      if (next === 'todo') { location.href = page('to-do/'); return true; }
       if (next === 'profile') { if (view === 'profile') return false; location.href = page('profile/'); return true; }
       if (next === 'managers' || next === 'directors') { location.href = page('managers/'); return true; }
       var fm = /^[fv]:(p|c|s):([a-z0-9-]+)$/.exec(next || '');   // signed in from a Follow or Save button: back to that page
@@ -2609,6 +2610,25 @@
         });
       });
     }
+  }
+
+  // =====================================================================================================
+  // The To do page: filled in only for someone who is signed in. Like the calendar, it gets the profile and hands it to
+  // site.js, with the way to save a tick when the days-off plan is the one kept in the profile.
+  // =====================================================================================================
+  var todoBox = document.getElementById('todo-page');
+  if (todoBox && window.pasTodo && API && signedInHint()) {
+    var tWait = document.getElementById('todo-wait');
+    call('me').then(function (d) {
+      if (!d.ok || !d.user) { set('pas-in', null); if (tWait) tWait.hidden = true; return; }
+      set('pas-in', '1');
+      call('profile').then(function (p) {
+        if (tWait) tWait.hidden = true;
+        todoBox.hidden = false;
+        window.pasTodo.show(p.ok ? p : null, function (daysoff, then) { call('daysoff_save', { daysoff: daysoff }).then(then); });
+        if (!p.ok) todoBox.insertBefore(el('p', 'g-status bad', 'Couldn’t reach your profile just now, so this shows only what’s on this device. Reload to try again.'), todoBox.firstChild.nextSibling);
+      });
+    });
   }
 
   // =====================================================================================================
