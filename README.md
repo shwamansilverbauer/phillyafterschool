@@ -211,7 +211,8 @@ Only what a camp's own site says goes in. To update a camp: open `check.url` the
 fields, set `season` to the summer the page now describes, set `checked` to today, and fix `check` if the page moved.
 The build writes the whole worklist into `data/check.json` under `camps`, oldest summer first.
 
-**The summer schedule** (`/summer-schedule/`) is built from the same file. It lays out the coming summer as weeks,
+**The summer schedule** (`/summer-schedule/`, the planner) and **the weeks chart** (`/summer-camps/weeks/`, "When
+each camp runs", for everyone; `summerWeeksPage()`) are built from the same file. They lay out the coming summer as weeks,
 Monday to Friday, from the week of the district's last day (`lastDay` in `data/days-off.json`) to the week before
 Labor Day, and works out which of those weeks each camp runs:
 
@@ -714,11 +715,13 @@ tour of the planner with one button, "Create a free account" (`planShow()`), so 
 ### Who's open, as the planner's third view
 
 The chart of which program has posted a camp for each day off ("Who's open each day off") is the days-off planner's
-third view, beside List and Calendar (`#off-views`, `data-view="chart"`, remembered in `pas-off-view`). The page is
-built with the chart in its own section (`#chart`), which is how someone signed out sees it; for someone signed in,
-`site.js` moves the chart (`#off-chart-block`) into the planner (`#off-chart-slot`) and hides the section, so it is
-no longer lost further down the page. Tapping a box still puts that day in the plan. The page no longer lists the
-programs with "No dates posted yet" under the chart; they are still in "Who runs camps".
+third view, beside List and Calendar (`#off-views`, `data-view="chart"`, remembered in `pas-off-view`). The planner
+page carries the chart in a `.when-in` section (`#chart`) that `site.js` moves (`#off-chart-block`) into the planner
+(`#off-chart-slot`) and hides; signed out, the chart isn't on the planner page at all. For everyone it is on the
+day-camps page (`/day-camps/`, see "Days off" below), drawn as a picture: a box is `td.on::before` until the planner
+puts a button in it (`.sum-chart td.on:has(button)::before` hides the drawing). The summer chart works the same way
+(`#sum-chart-block`, `#sum-chart-slot`, and `/summer-camps/weeks/` for everyone). `daysOffBits()` in `build.mjs`
+builds the days-off chart for both pages (`where` = `'page'` or `'plan'`).
 
 The summer schedule works the same way (`#sum-views`, remembered in `pas-sum-view`): List, Calendar and Who's open.
 The Calendar is a month at a time (`#sum-month`), with each child's camp on all five weekdays of its week or "Not
@@ -746,7 +749,11 @@ schedules change and the data can be behind. The add-to-roster day buttons for t
 A "Day" filter row appears on a listing page by itself once at least two programs in that list run on some
 weekdays only; with fewer it would filter nothing, so it stays hidden.
 
-**Days off.** `/days-off/` ("Day-camp programs" in the menu and footer) lists the days School District of Philadelphia students are off, from
+**Days off.** Two pages. `/day-camps/` ("Day-camp programs" in the menu and footer; `dayCampsPage()`) is the public
+one: who's open each day off, the days themselves, who runs camps, and the notes. `/days-off/` ("Day-camp schedule";
+`daysOffPage()`) is the planner alone: the tour when signed out, the plan when signed in, with a button to the
+day-camps page under it. The day pages (`/days-off/<day>/`) and the program pages link to `/day-camps/`; everything
+that means "plan" links to `/days-off/`. They list the days School District of Philadelphia students are off, from
 `data/days-off.json` (`schoolYear`, `source`, `checked`, `lastDay`, and `days`: each with a `date`, a `name`,
 and an `end` for a break). It shows which programs' `daysOff.dates` include each date, the district's list of days,
 and every program with `daysOff`. Past days drop off at build time and are hidden by the page between
@@ -1404,7 +1411,7 @@ It is a word for counting: no name, address or listing goes to analytics with it
 
 `/all-programs/` (`allProgramsPage()` in `build.mjs`) is the first item of the Programs menu and where the footer's
 "Programs" heading leads. It has one block for each kind of listing, in the order of a family's calendar:
-after-school programs (`/programs/`), weekend classes (`/weekends/`), day-camp programs (`/days-off/`) and summer
+after-school programs (`/programs/`), weekend classes (`/weekends/`), day-camp programs (`/day-camps/`) and summer
 camps (`/summer-camps/`). Each block shows a count worked out at build time (the same number its own list shows),
 a few facts (Saturdays and Sundays, days off still to come and the next one, weeks of summer) and buttons to the
 list and its planner. Below the blocks are the after-school types, and schools, neighborhoods and grades.
@@ -1430,7 +1437,10 @@ there for everyone.
   comes back to that planner. Then: a heading and a strip of tabs, one for each way of looking at the plan (List,
   Calendar, Who's open on the days-off and summer pages; The week, What it costs, Share it on the week; Calendar,
   List, To do on My kids' calendar), each showing a made-up example; six things the planner does; three steps; and
-  a dark band with the button again. The To do page has a short one with a single example. There is no "Log in"
+  a dark band with the button again. The strip is labelled "See it as" and each example ends with a "Next: …"
+  button, so the tabs read as something to press (`.view-switch` draws every choice as a button, in the planners
+  too). The reference content that used to sit under the planners (the charts, the days, the listings) is on
+  `/day-camps/` and `/summer-camps/weeks/`, so a planner page signed out is the tour and nothing else. The To do page has a short one with a single example. There is no "Log in"
   button in it: that is at the top of every page, and on these pages it and the menu's button carry `?next=` (the
   layout's `next`), so logging in comes back to the planner. `site.js` swaps the examples (`[data-pshow]`); without
   it they all show, one under the other. Analytics hears `pas_plan_tour` (planner, view) and `pas_plan_cta` (place,

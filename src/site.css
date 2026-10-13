@@ -1256,7 +1256,7 @@ ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .sum-chart td{height:46px;min-width:44px;padding:5px 2px}
 .sum-chart td.on::before,.sum-chart td.on button{content:"";display:block;width:100%;height:34px;border-radius:7px;background:var(--sky-bg);border:1.5px solid var(--link);box-sizing:border-box}
 .sum-chart td.on.exact::before,.sum-chart td.on.exact button{background:var(--green-bg);border-color:var(--green-ink)}
-.js .sum-chart td.on::before{display:none}
+.sum-chart td.on:has(button)::before{display:none}   /* signed in, the planner puts a button in the box */
 .sum-chart td.on button{cursor:pointer;padding:0;position:relative}
 .sum-chart td.on button:hover{filter:brightness(.94)}
 .sum-chart td.on.picked button{background:var(--cell-on);border-color:var(--cell-on)}
@@ -1348,8 +1348,20 @@ html:not(.signed) .sum.gated{background:none;border:0;border-radius:0;padding:0}
 .pshow-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 24px;padding:24px 26px 18px;background:linear-gradient(180deg,#E6F2FF,var(--surface));border-bottom:1px solid var(--line)}
 .pshow-eye{margin:0 0 6px;font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--link)}
 .pshow h2{margin:0;font-size:clamp(1.5rem,3.6vw,2.15rem);line-height:1.08;max-width:20ch;text-wrap:balance}
-.pshow-tabs{align-self:flex-end;background:var(--bg)}
-html:not(.js) .pshow-tabs{display:none}
+.pshow-switch{display:flex;flex-direction:column;align-items:flex-start;gap:6px;align-self:flex-end}
+.pshow-switch-label{font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pshow-tabs{background:var(--bg)}
+html:not(.js) .pshow-switch{display:none}
+.pshow-nextp{margin:4px 0 0}
+.btn.pshow-next{font-size:.95rem;padding:8px 16px;cursor:pointer;background:var(--surface)}
+.btn.pshow-next:hover{background:var(--sky-bg)}
+html:not(.js) .pshow-nextp{display:none}
+/* the view switch, here and in the planners: each choice looks like a button, and the open one is filled in */
+.view-switch{gap:5px;padding:5px}
+.view-switch .vs{border:1.5px solid var(--line);background:var(--surface);cursor:pointer}
+.view-switch .vs:hover{border-color:var(--link);background:var(--sky-bg)}
+.view-switch .vs[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#FFFFFF}
+.view-switch .vs:focus-visible{outline:3px solid var(--yellow);outline-offset:1px}
 .pshow-panel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.2fr);gap:20px 30px;align-items:center;padding:24px 26px 28px;min-width:0}
 .pshow-panel[hidden]{display:none}
 html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
@@ -1432,7 +1444,7 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 @media (max-width:640px){
   .pshow{gap:24px}
   .pshow-head{padding:18px 16px 14px}
-  .pshow-tabs{align-self:flex-start}
+  .pshow-switch{align-self:flex-start}
   .pshow-panel{padding:16px 16px 20px}
   .pshow-feats,.pshow-steps{grid-template-columns:minmax(0,1fr)}
   .pshow-end{padding:22px 20px}
