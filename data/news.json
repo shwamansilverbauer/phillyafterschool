@@ -1,6 +1,13 @@
 [
   {
     "date": "2026-10-13",
+    "title": "Classes and camps go by age",
+    "text": "Weekend classes, day camps and summer camps now filter by your child’s age, and after-school programs keep going by grade. Ages you keep on your account page, or give a child on the summer planner, become “My kids” on those lists.",
+    "href": "account/#school",
+    "link": "Keep your children’s ages"
+  },
+  {
+    "date": "2026-10-13",
     "title": "Plans now save to your profile",
     "text": "When you’re signed in, your week, your days-off plan and your summer are now kept in your profile on their own, so they’re on your phone and your computer with nothing to press. Each planner has a “Take it out of my profile” link if you’d rather one stayed on a single device. The summer schedule also has a calendar view now.",
     "href": "privacy/#groups",

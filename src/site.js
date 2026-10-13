@@ -96,6 +96,27 @@
   window.pasJump();
   window.addEventListener('load', window.pasJump);
 
+  // ----- a page that is two views of itself (the day-camps page: the programs, or the days): buttons in a
+  // [data-views] strip, a [data-pane] apiece. The address's #hash names a view, so a link can open the page on
+  // either; without this script both show, one under the other. -----
+  all(document, '[data-views]').forEach(function (sw) {
+    var btns = all(sw, '[data-view]'), panes = all(document, '[data-pane]'), first = sw.getAttribute('data-views') || '';
+    var names = panes.map(function (p) { return p.getAttribute('data-pane'); });
+    var set = function (v, quiet) {
+      if (names.indexOf(v) < 0) v = first;
+      btns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === v)); });
+      panes.forEach(function (p) { p.hidden = p.getAttribute('data-pane') !== v; });
+      if (quiet) return;
+      try { history.replaceState(null, '', location.pathname + location.search + (v === first ? '' : '#' + v)); } catch (e) { /* file preview */ }
+      track({ event: 'pas_page_view', view: v });
+      var ev; try { ev = new Event('resize'); } catch (e) { ev = document.createEvent('Event'); ev.initEvent('resize', true, true); }
+      window.dispatchEvent(ev);   // the rows that scroll sideways measure themselves once they can be seen
+    };
+    btns.forEach(function (b) { b.addEventListener('click', function () { set(b.getAttribute('data-view')); if (sw.scrollIntoView && sw.getBoundingClientRect().top < 0) sw.scrollIntoView(); }); });
+    set((location.hash || '').slice(1), true);
+    window.addEventListener('hashchange', function () { var h = (location.hash || '').slice(1); if (names.indexOf(h) > -1) set(h, true); });
+  });
+
   // Events for Google Tag Manager. Harmless when GTM is not installed.
   function track(data) { (window.dataLayer = window.dataLayer || []).push(data); }
 
@@ -4472,10 +4493,22 @@
       mineBtn.appendChild(el('span', 'n', myGrades.join(', ')));
       gradeAll.parentNode.insertBefore(mineBtn, gradeAll.nextSibling);
     }
+    var myAges = [];
+    try { myAges = (JSON.parse(store('pas-my-ages') || '[]') || []).filter(function (a) { return typeof a === 'string' && !!document.getElementById('age-' + a) && a !== 'ALL'; }).slice(0, 10); } catch (e) { myAges = []; }
+    var ageAll = document.getElementById('age-ALL');
+    if (myAges.length && ageAll) {
+      var mineA = el('button', 'gbtn mine');
+      mineA.type = 'button'; mineA.id = 'age-MINE';
+      mineA.setAttribute('data-f', 'age'); mineA.setAttribute('data-v', 'MINE'); mineA.setAttribute('aria-pressed', 'false');
+      mineA.setAttribute('aria-label', (myAges.length === 1 ? 'My child’s age: ' : 'My children’s ages: ') + myAges.join(', '));
+      mineA.appendChild(el('span', 'g', myAges.length === 1 ? 'My kid' : 'My kids'));
+      mineA.appendChild(el('span', 'n', myAges.map(function (a) { return a === '14' ? '14+' : a; }).join(', ')));
+      ageAll.parentNode.insertBefore(mineA, ageAll.nextSibling);
+    }
     var fbtns = all(document, '[data-f]');
     var count = document.querySelector('#count'), clear = document.querySelector('#clear');
     var search = document.querySelector('#prog-search'), noMatch = document.querySelector('[data-nomatch]'), searchMore = document.querySelector('#search-more');
-    var FILTERS = ['kind', 'type', 'grade', 'rel', 'hood', 'cost', 'day', 'school'];
+    var FILTERS = ['kind', 'type', 'grade', 'age', 'rel', 'hood', 'cost', 'day', 'school'];
     // Once the filters have scrolled off the top, a slim bar takes their place: a search box, and a button back to them.
     var qbar = document.getElementById('quickbar'), quick = null;
     if (qbar) quick = { bar: qbar, search: document.getElementById('quick-search'), go: document.getElementById('quick-filters'), n: document.getElementById('quick-n'), count: document.getElementById('quick-count'), clear: document.getElementById('quick-clear'), status: qbar.querySelector('.quick-status') };
@@ -4500,6 +4533,7 @@
     else {
       var inside = [];
       if (document.getElementById('grade-ALL')) inside.push('grade');
+      if (document.getElementById('age-ALL')) inside.push('age');
       all(fbar, '.frow:not(.nearbar) .flabel').forEach(function (l) { inside.push(l.textContent.toLowerCase()); });
       var hasMap = !!document.getElementById('map-toggle'), hasNear = !!document.getElementById('near-me');
       if (togHint) togHint.textContent = (inside.length ? 'Narrow this list by ' + (inside.length > 1 ? inside.slice(0, -1).join(', ') + ' or ' + inside[inside.length - 1] : inside[0]) + '.' : '')
@@ -4618,7 +4652,7 @@
       afterFilter = function () { if (drawMap) drawMap(); };
       if (here) order();
     })();
-    var blank = function () { return { kind: 'ALL', type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL', day: 'ALL', school: 'ALL' }; };
+    var blank = function () { return { kind: 'ALL', type: 'ALL', grade: 'ALL', age: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL', day: 'ALL', school: 'ALL' }; };
     var state = blank();
     var terms = [];
     var findBtn = function (f, v) { for (var i = 0; i < fbtns.length; i++) if (fbtns[i].getAttribute('data-f') === f && fbtns[i].getAttribute('data-v') === v) return fbtns[i]; return null; };
@@ -4627,15 +4661,18 @@
     FILTERS.forEach(function (f) { if (q0[f] && findBtn(f, q0[f])) state[f] = q0[f]; });
     if (mineF && !q0.school) state.school = mineF.id;   // "school=all" in the address keeps the wide view
     if (!q0.grade) { var savedGrade = store('pas-grade'); if (savedGrade && findBtn('grade', savedGrade)) state.grade = savedGrade; }
+    if (!q0.age) { var savedAge = store('pas-age'); if (savedAge && findBtn('age', savedAge)) state.age = savedAge; }
     var gradeName = function (g) { return g === 'PK' ? 'Pre-K' : g === 'K' ? 'kindergarten' : 'grade ' + g; };
     var gradeLabel = function (g) { return g !== 'MINE' ? gradeName(g) : myGrades.length === 1 ? gradeName(myGrades[0]) : myGrades.map(function (x) { return x === 'PK' ? 'Pre-K' : x; }).join(' or '); };
     var gradeFits = function (it) { return state.grade === 'MINE' ? myGrades.some(function (g) { return inList(it, 'data-grades', g); }) : inList(it, 'data-grades', state.grade); };
+    var ageFits = function (it) { return state.age === 'MINE' ? myAges.some(function (a) { return inList(it, 'data-ages', a); }) : inList(it, 'data-ages', state.age); };
+    var ageName = function (a) { return a === 'MINE' ? (myAges.length === 1 ? 'age ' + myAges[0] : 'ages ' + myAges.join(' or ')) : a === '14' ? 'ages 14 and up' : 'age ' + a; };
     var inList = function (el, attr, v) { return (' ' + (el.getAttribute(attr) || '') + ' ').indexOf(' ' + v + ' ') > -1; };
     var apply = function () {
       var total = 0, hiddenHits = 0;
       items.forEach(function (it) {
-        var gs = it.getAttribute('data-grades') || '*';
-        var ok = (state.grade === 'ALL' || gs === '*' || gradeFits(it))
+        var gs = it.getAttribute('data-grades') || '*', ages = it.getAttribute('data-ages') || '*', byAge = (it.getAttribute('data-kinds') || 'after') !== 'after';   // after school goes by grade; classes and camps by age
+        var ok = (byAge ? (state.age === 'ALL' || ages === '*' || ageFits(it)) : (state.grade === 'ALL' || gs === '*' || gradeFits(it)))
           && (state.kind === 'ALL' || inList(it, 'data-kinds', state.kind))
           && (state.type === 'ALL' || inList(it, 'data-types', state.type))
           && (state.rel === 'ALL' || it.getAttribute('data-rel') === state.rel)
@@ -4672,8 +4709,8 @@
         if (b) bits.push(f === 'hood' ? 'in ' + b.getAttribute('data-label') : f === 'cost' || f === 'kind' ? b.getAttribute('data-label').toLowerCase() : f === 'day' ? 'on ' + DAY_FULL[state.day] + 's' : f === 'school' ? 'works for ' + b.getAttribute('data-label') : b.getAttribute('data-label'));
       });
       if (terms.length) bits.push('matching “' + search.value.trim() + '”');
-      var what = (state.grade === 'ALL' ? '' : ' for ' + gradeLabel(state.grade)) + (bits.length ? ' (' + bits.join(', ') + ')' : '');
-      var filtered = state.grade !== 'ALL' || bits.length > 0;
+      var what = (state.grade === 'ALL' ? '' : ' for ' + gradeLabel(state.grade)) + (state.age === 'ALL' ? '' : (state.grade === 'ALL' ? ' for ' : ' and ') + ageName(state.age)) + (bits.length ? ' (' + bits.join(', ') + ')' : '');
+      var filtered = state.grade !== 'ALL' || state.age !== 'ALL' || bits.length > 0;
       var noun = fbar.getAttribute('data-noun') || 'program', nouns = fbar.getAttribute('data-nouns') || 'programs';   // the summer camp page counts camps
       count.textContent = total ? total + ' ' + (total === 1 ? noun : nouns) + (filtered ? what : fSchool ? ' for all grades' : '') : 'No ' + nouns + what + '. Try fewer filters.';
       clear.hidden = !filtered;
@@ -4686,12 +4723,14 @@
           if (state[f] === 'ALL') return;
           var fb = findBtn(f, state[f]), named = fb ? fb.getAttribute('data-label') || '' : '';
           var label = f === 'grade' ? (state.grade === 'MINE' ? (myGrades.length === 1 ? 'My kid’s grade' : 'My kids’ grades') : state.grade === 'PK' ? 'Pre-K' : state.grade === 'K' ? 'Kindergarten' : 'Grade ' + state.grade)
+            : f === 'age' ? (state.age === 'MINE' ? (myAges.length === 1 ? 'My kid’s age' : 'My kids’ ages') : state.age === '14' ? 'Ages 14+' : 'Age ' + state.age)
             : f === 'day' ? DAY_FULL[state.day] + 's' : f === 'school' ? 'Works for ' + named : named || state[f];
           var chip = el('button', 'fchip', label);
           chip.type = 'button'; chip.setAttribute('data-chip', f); chip.setAttribute('aria-label', 'Remove the filter: ' + label);
           chip.addEventListener('click', function () {
             state[f] = 'ALL';
             if (f === 'grade') store('pas-grade', 'ALL');
+            if (f === 'age') store('pas-age', 'ALL');
             apply();
             if (tog && tog.focus) tog.focus();
             track({ event: 'pas_filter', filter_type: NAMES[f], filter_value: 'ALL', school: fSchool });
@@ -4732,13 +4771,14 @@
       }
       return total;
     };
-    var NAMES = { kind: 'kind', type: 'program_type', rel: 'relation', hood: 'neighborhood', grade: 'grade', cost: 'cost', day: 'day', school: 'school' };
+    var NAMES = { kind: 'kind', type: 'program_type', rel: 'relation', hood: 'neighborhood', grade: 'grade', age: 'age', cost: 'cost', day: 'day', school: 'school' };
     fbtns.forEach(function (b) {
       if (b.tagName !== 'BUTTON') return;
       b.addEventListener('click', function () {
         var f = b.getAttribute('data-f'), v = b.getAttribute('data-v');
         state[f] = v;
         if (f === 'grade') store('pas-grade', v);
+        if (f === 'age') store('pas-age', v);
         apply();
         track({ event: 'pas_filter', filter_type: NAMES[f], filter_value: v, school: fSchool });
       });
@@ -4746,7 +4786,7 @@
     clear.addEventListener('click', function () {
       state = blank();
       terms = []; if (search) search.value = '';
-      store('pas-grade', 'ALL');
+      store('pas-grade', 'ALL'); store('pas-age', 'ALL');
       apply();
     });
     if (search) {

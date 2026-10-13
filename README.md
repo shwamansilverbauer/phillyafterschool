@@ -795,9 +795,14 @@ A "Day" filter row appears on a listing page by itself once at least two program
 weekdays only; with fewer it would filter nothing, so it stays hidden.
 
 **Days off.** Two pages. `/day-camps/` ("Day-camp programs" in the menu and footer; `dayCampsPage()`) is the public
-one: who's open each day off, the days themselves, who runs camps, and the notes. `/days-off/` ("Day-camp schedule";
-`daysOffPage()`) is the planner alone: the tour when signed out, the plan when signed in, with a button to the
-day-camps page under it. The day pages (`/days-off/<day>/`) and the program pages link to `/day-camps/`; everything
+one. It leads with the programs that run something on days off, with the filters (age, type, area and cost; never
+the saved school or "nearest to a school", since a child from any school can go and the neighborhood is what
+matters), and the district's days are a second view of the same page: a Programs · The days switch under the hero
+(`[data-views]` and `[data-pane]` in `site.js`; `#days` in a link opens the page on the days). The "Who's open each
+day off" chart and the "Get a heads-up before each day off" box are not on it any more; both are still built
+(`daysOffBits().chartSection`, which the planner uses as its third view, and `headsUpBox()`) for wherever they go
+next. `/days-off/` ("Day-camp schedule"; `daysOffPage()`) is the planner alone: the tour when signed out, the plan
+when signed in, with a button to the day-camps page under it. The day pages (`/days-off/<day>/`) and the program pages link to `/day-camps/`; everything
 that means "plan" links to `/days-off/`. They list the days School District of Philadelphia students are off, from
 `data/days-off.json` (`schoolYear`, `source`, `checked`, `lastDay`, and `days`: each with a `date`, a `name`,
 and an `end` for a break). It shows which programs' `daysOff.dates` include each date, the district's list of days,
@@ -860,6 +865,21 @@ text. The picture's headline and its one line are part of the picture, so when t
 picture has to be drawn again. The line of text under it (`og:description`) on the home page is the home page's
 lede as it reads today, copy edits included (`shareText` in `layout()`, filled by `copyNow()`); every other page
 uses its search description. The description search engines read is separate and is not changed by copy edits.
+
+**Ages, not grades, for classes and camps.** After-school programs go by grade (the grade rail in `.picker`). Weekend
+classes, day camps and summer camps go by age instead: an age rail (3 to 13, then 14+; `AGES` in `build.mjs`) in the
+same strip, with a count apiece. Each row carries both `data-grades` and `data-ages` (a camp's from its `ageMin` and
+`ageMax`, a class's or a day-camp program's from its grades: pre-K is 4 and 5, K is 5 and 6, grade n is n+5 and n+6;
+`gradesToAges()` and `shapeFor()`), and `site.js` judges an after-school row by the grade picked and any other row by
+the age picked, so a mixed page (a type, a neighborhood, by day) shows both rails, each labeled. The age picked is
+remembered (`pas-age`) and sits in the address (`?age=7`) like the grade.
+
+**Ages in the profile.** The account page's "School and kids" panel asks for the children's ages under their grades
+(the same kind of row: tap each age; only the ages are kept, not which child). They are saved with the account
+(`ages` on `users`, `ages_save`), copied to the device by the account pages (`pas-my-ages`, `adoptAges()` in
+`groups.js`), and become a "My kid(s)" button on the age rail that the lists start on, the way grades do. An age a
+parent gives a child on the summer planner is added to the profile's ages when the summer is kept (`after` in the
+summer `keepPlan` config; `ages_save` with `add`), so there is one place the site knows a child's age.
 
 **A saved school.** A school page has "Save as my school", and it is the most noticeable thing in the hero: a
 wide panel under the lede (`.mine` in `schoolPage()`, with a bookmark, "Make Nebinger your school", a line on
@@ -1485,8 +1505,10 @@ there for everyone.
   a product page. Under the page's heading is the one thing to press, "Create a free account" (`heroCta()`), which
   comes back to that planner. Then: a heading and a strip of tabs, one for each way of looking at the plan (List,
   Calendar, Who's open on the days-off and summer pages; The week, Budget planning, Share it on the week; Calendar,
-  List, To do on My kids' calendar), each showing a made-up example; six things the planner does; three steps; and
-  a dark band with the button again. The strip is labelled "See it as" and each example ends with a "Next: …"
+  List, To do on My kids' calendar), each showing a made-up example; three things the planner does, each a picture-and-text row (a small
+  drawing, `miniArt()`, on alternating sides, a headline and one line, in the kinds' colors); the three steps as one
+  line (1 Create a free account → 2 Make your plan → 3 Take it with you); and a dark band with the button again.
+  Three rows and one line each, rather than six cards with sentences, so the page can be taken in at a glance. The strip is labelled "See it as" and each example ends with a "Next: …"
   button, so the tabs read as something to press (`.view-switch` draws every choice as a button, in the planners
   too). The reference content that used to sit under the planners (the charts, the days, the listings) is on
   `/day-camps/` and `/summer-camps/weeks/`, so a planner page signed out is the tour and nothing else. The To do page has a short one with a single example. There is no "Log in"

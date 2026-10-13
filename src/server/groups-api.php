@@ -114,7 +114,7 @@ function db(): PDO {
     // Added after the first version: first and last name, and whether the account has been added to the email list.
     $cols = array();
     foreach ($db->query('PRAGMA table_info(users)') as $c) $cols[] = $c['name'];
-    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''", 'origin' => "TEXT NOT NULL DEFAULT ''", 'hood' => "TEXT NOT NULL DEFAULT ''", 'stop_code' => "TEXT NOT NULL DEFAULT ''", 'phone' => "TEXT NOT NULL DEFAULT ''", 'phone_ok' => 'INTEGER NOT NULL DEFAULT 0', 'phone_terms' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
+    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''", 'ages' => "TEXT NOT NULL DEFAULT ''", 'origin' => "TEXT NOT NULL DEFAULT ''", 'hood' => "TEXT NOT NULL DEFAULT ''", 'stop_code' => "TEXT NOT NULL DEFAULT ''", 'phone' => "TEXT NOT NULL DEFAULT ''", 'phone_ok' => 'INTEGER NOT NULL DEFAULT 0', 'phone_terms' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
       if (!in_array($col, $cols, true)) $db->exec('ALTER TABLE users ADD COLUMN ' . $col . ' ' . $type);
     }
     // Whether the owner has had the "new account" email for this account: 0 not yet, 1 as a parent, 2 as a program
@@ -313,14 +313,14 @@ function current_user(): ?array {
   $done = true;
   $sid = isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s']) ? $_COOKIE['pas_s'] : '';
   if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return null;
-  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school, u.grades, u.origin, u.hood, u.phone, u.phone_ok FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
+  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school, u.grades, u.ages, u.origin, u.hood, u.phone, u.phone_ok FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
   if (!$s) return null;
   if ($s['seen'] < now() - 86400) {   // once a day, push the 30 days out again
     $exp = now() + SESSION_DAYS * 86400;
     q('UPDATE sessions SET seen = ?, expires = ? WHERE id = ?', array(now(), $exp, $s['sid']));
     set_session_cookie($sid, $exp);
   }
-  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'school' => (string) $s['school'], 'grades' => (string) $s['grades'], 'origin' => (string) $s['origin'], 'hood' => (string) $s['hood'], 'phone' => (string) $s['phone'], 'phone_ok' => (int) $s['phone_ok'], 'sid' => (int) $s['sid']);
+  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'school' => (string) $s['school'], 'grades' => (string) $s['grades'], 'ages' => isset($s['ages']) ? (string) $s['ages'] : '', 'origin' => (string) $s['origin'], 'hood' => (string) $s['hood'], 'phone' => (string) $s['phone'], 'phone_ok' => (int) $s['phone_ok'], 'sid' => (int) $s['sid']);
   return $user;
 }
 function need_user(): array {
@@ -631,7 +631,7 @@ function daysoff_out(int $uid): ?array {
 function profile_out(array $u): array {
   $weeks = array();
   foreach (q('SELECT * FROM weeks WHERE user_id = ? ORDER BY id', array($u['id'])) as $w) $weeks[] = week_out($w);
-  return array('school' => $u['school'], 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => $weeks, 'summer' => summer_out((int) $u['id']), 'daysoff' => daysoff_out((int) $u['id'])) + marks_out((int) $u['id']);
+  return array('school' => $u['school'], 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'ages' => grade_list(isset($u['ages']) ? (string) $u['ages'] : ''), 'weeks' => $weeks, 'summer' => summer_out((int) $u['id']), 'daysoff' => daysoff_out((int) $u['id'])) + marks_out((int) $u['id']);
 }
 function kid_out(array $k, bool $mine): array {
   return array('id' => (int) $k['id'], 'name' => $k['name'], 'now' => json_decode($k['now_json'], true), 'next' => json_decode($k['next_json'], true), 'mine' => $mine);
@@ -714,7 +714,7 @@ function ready(array $u): bool { return $u['first'] !== '' && $u['last'] !== '';
 function me_out(array $u): array {
   $claims = isset($u['id']) ? (int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) : 0;
   return array('email' => $u['email'], 'first' => $u['first'], 'last' => $u['last'], 'ready' => ready($u), 'listed' => (bool) $u['listed'],
-    'school' => isset($u['school']) ? (string) $u['school'] : '', 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'phone' => isset($u['phone']) && !empty($u['phone_ok']) ? phone_show((string) $u['phone']) : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0,
+    'school' => isset($u['school']) ? (string) $u['school'] : '', 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'phone' => isset($u['phone']) && !empty($u['phone_ok']) ? phone_show((string) $u['phone']) : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'ages' => grade_list(isset($u['ages']) ? (string) $u['ages'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0,
     'claims' => $claims, 'role' => role_of($u, $claims), 'push' => isset($u['id']) ? push_state((int) $u['id']) : array('devices' => 0, 'only' => false))
     + (is_admin($u) ? array('admin' => true) : array());   // only an admin's own account is ever told so
 }
@@ -1225,12 +1225,12 @@ function signup_catchup(int $age = 3600): int {
 }
 // Signs this browser in as the account with this address, making the account if it is new.
 function sign_in(string $email, string $via, string $next, string $first = '', string $last = ''): void {
-  $user = row('SELECT id, email, name, first, last, listed, school, grades, origin, hood, phone, phone_ok FROM users WHERE email = ?', array($email));
+  $user = row('SELECT id, email, name, first, last, listed, school, grades, ages, origin, hood, phone, phone_ok FROM users WHERE email = ?', array($email));
   $new = false;
   if (!$user) {
     $origin = preg_match('~^(managers|directors)$~', $next) ? 'managers' : 'parents';   // which door they came in by
     q('INSERT INTO users (email, created, via, origin) VALUES (?, ?, ?, ?)', array($email, now(), $via, $origin));
-    $user = array('id' => (int) db()->lastInsertId(), 'email' => $email, 'name' => '', 'first' => '', 'last' => '', 'listed' => 0, 'school' => '', 'grades' => '', 'origin' => $origin, 'hood' => '', 'phone' => '', 'phone_ok' => 0);
+    $user = array('id' => (int) db()->lastInsertId(), 'email' => $email, 'name' => '', 'first' => '', 'last' => '', 'listed' => 0, 'school' => '', 'grades' => '', 'ages' => '', 'origin' => $origin, 'hood' => '', 'phone' => '', 'phone_ok' => 0);
     $new = true;
     bump('account');
     bump($origin === 'managers' ? 'account_manager' : 'account_parent');
@@ -1432,7 +1432,7 @@ switch ($method . ' ' . $action) {
     $html = email_html('Your account’s email address was changed', '<p style="margin:0 0 6px">Your ' . htmlspecialchars($CFG['siteName'], ENT_QUOTES, 'UTF-8') . ' account now signs in with a different address, and this one is no longer on it. If you did this, there’s nothing to do.</p>', '', '',
       'If you didn’t, write to ' . $CFG['from'] . ' straight away.');
     send_mail($old, 'Your ' . $CFG['siteName'] . ' email address was changed', $text, $html);   // a courtesy: the change stands whether or not this arrives
-    $fresh = row('SELECT id, email, name, first, last, listed, school, grades, origin, hood, phone, phone_ok FROM users WHERE id = ?', array($u['id']));
+    $fresh = row('SELECT id, email, name, first, last, listed, school, grades, ages, origin, hood, phone, phone_ok FROM users WHERE id = ?', array($u['id']));
     $fresh['id'] = (int) $fresh['id'];
     out(array('ok' => true, 'old' => $old, 'user' => me_out($fresh)));
   }
@@ -1484,7 +1484,7 @@ switch ($method . ' ' . $action) {
     if ($hood !== '' && $u['hood'] === '') bump('hood_saved');
     q('UPDATE users SET first = ?, last = ?, name = ?, school = CASE WHEN ? != \'\' THEN ? ELSE school END, hood = CASE WHEN ? != \'\' THEN ? ELSE hood END WHERE id = ?', array($first, $last, $first . ' ' . $last, $school, $school, $hood, $hood, $u['id']));
     signup_named((int) $u['id']);
-    $fresh = row('SELECT id, email, name, first, last, listed, school, grades, origin, hood, phone, phone_ok FROM users WHERE id = ?', array($u['id']));
+    $fresh = row('SELECT id, email, name, first, last, listed, school, grades, ages, origin, hood, phone, phone_ok FROM users WHERE id = ?', array($u['id']));
     $fresh['id'] = (int) $fresh['id'];
     out(array('ok' => true, 'first' => $first, 'last' => $last, 'user' => me_out($fresh)));
   }
@@ -2036,6 +2036,20 @@ switch ($method . ' ' . $action) {
     if ($keep && $u['grades'] === '') bump('grades_saved');
     q('UPDATE users SET grades = ? WHERE id = ?', array(implode(',', $keep), $u['id']));
     out(array('ok' => true, 'grades' => $keep));
+  }
+
+  // How old their children are, so the lists of classes and camps can start there. Only the ages: not which child.
+  // "add" keeps the ages already there and adds to them (the summer planner sends a child's age that way).
+  case 'POST ages_save': {
+    $u = need_user();
+    $all = isset($CFG['ages']) && is_array($CFG['ages']) ? $CFG['ages'] : array();
+    $asked = isset($in['ages']) && is_array($in['ages']) ? array_map('strval', $in['ages']) : array();
+    if (!empty($in['add'])) $asked = array_merge(grade_list(isset($u['ages']) ? (string) $u['ages'] : ''), $asked);
+    $keep = array();
+    foreach ($all as $a) { if (in_array((string) $a, $asked, true)) $keep[] = (string) $a; }   // the site's own steps, and nothing else
+    if ($keep && (!isset($u['ages']) || $u['ages'] === '')) bump('ages_saved');
+    q('UPDATE users SET ages = ? WHERE id = ?', array(implode(',', $keep), $u['id']));
+    out(array('ok' => true, 'ages' => $keep));
   }
 
   // Keep one child's week with the account, or update one that is already there.

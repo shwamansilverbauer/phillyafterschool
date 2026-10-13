@@ -24,6 +24,13 @@ const summerCamps = campsFile?.camps || [];
 const cardQr = fs.existsSync(path.join(ROOT, 'data/card-qr.json')) ? readJson('data/card-qr.json') : null;
 
 const GRADES = ['PK', 'K', '1', '2', '3', '4', '5', '6', '7', '8'];
+// Ages, for weekend classes, day camps and summer camps, which go by age rather than grade: 3 to 13, then "14+".
+const AGES = ['3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'];
+const AGE_TOP = 14;
+const ageStep = n => String(Math.min(AGE_TOP, Math.max(3, Math.round(n))));
+// The ages a grade range covers: pre-K is 4 and 5, kindergarten 5 and 6, grade n is n+5 and n+6.
+const gradesToAges = g => g === null ? null : [...new Set(g.flatMap(x => { const a = x === 'PK' ? 4 : x === 'K' ? 5 : Number(x) + 5; return [ageStep(a), ageStep(a + 1)]; }))].sort((a, b) => a - b);
+const agesBetween = (lo, hi) => { const out = []; for (let a = Math.max(3, Math.floor(lo)); a <= Math.min(AGE_TOP, hi); a++) out.push(String(a)); if (hi >= AGE_TOP && !out.includes(String(AGE_TOP))) out.push(String(AGE_TOP)); return out; };
 const WEEK = ['mon', 'tue', 'wed', 'thu', 'fri'];
 const DAY_NAME = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' };
 const REL = {
@@ -856,7 +863,7 @@ const clubDays = c => { const d = c.days, i = d.map(x => WEEK.indexOf(x)); const
 const clubBrief = c => { const bits = [clubGrades(c).replace(/^G/, 'g').replace(/^A/, 'a').replace(/^K/, 'k'), c.days ? clubDays(c) : ''].filter(Boolean); return c.name + (bits.length ? ` (${bits.join(', ')})` : ''); };
 const clubsByType = p => Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, clubs: clubsOfType(p, t.id).map(c => c.name) }]).filter(([, v]) => v.clubs.length));
 const citywide = programs.filter(p => !schoolRun(p) && !campOnly(p));
-const itemAttrs = (p, extra = [], school = null) => `data-item data-kinds="${p._kind || 'after'}" data-grades="${p._grades === null ? '*' : p._grades.join(' ')}" data-types="${p.types.join(' ')}" data-hoods="${programHoods(p).map(hoodSlug).join(' ')}" data-cost="${costKinds(p, school).join(' ')}" data-days="${p.days ? p.days.join(' ') : '*'}" data-schools="${schools.filter(x => p.schools[x.id]).map(x => x.id).join(' ')}"${placesOf(p, school).length ? ` data-ll="${placesOf(p, school).map(x => x.join(',')).join(';')}"` : ''} data-search="${esc(haystack(p, extra))}"`;
+const itemAttrs = (p, extra = [], school = null) => `data-item data-kinds="${p._kind || 'after'}" data-grades="${p._grades === null ? '*' : p._grades.join(' ')}" data-ages="${p._ages === undefined ? (gradesToAges(p._grades) || ['*']).join(' ') : p._ages === null ? '*' : p._ages.join(' ')}" data-types="${p.types.join(' ')}" data-hoods="${programHoods(p).map(hoodSlug).join(' ')}" data-cost="${costKinds(p, school).join(' ')}" data-days="${p.days ? p.days.join(' ') : '*'}" data-schools="${schools.filter(x => p.schools[x.id]).map(x => x.id).join(' ')}"${placesOf(p, school).length ? ` data-ll="${placesOf(p, school).map(x => x.join(',')).join(';')}"` : ''} data-search="${esc(haystack(p, extra))}"`;
 const typeTags = (p, school = null) => p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')
   + (!costKinds(p, school).includes('free') ? '' : `<span class="tag free">${school ? (costKinds(p, school).includes('paid') ? 'Free option' : 'Free') : freeOnlyFor(p).length ? `Free for ${esc(listNames(freeOnlyFor(p)))}` : p.price === 'both' ? 'Free option' : 'Free'}</span>`);
 const programRow = (p, depth) => {
@@ -883,9 +890,10 @@ function offBreaks(p) {   // "Election Day · Winter break (3 of 5 days) · +2 m
 }
 // What the filter bar sees for a listing shown as one kind: the grades, days and neighborhoods that kind goes by.
 // A weekend row filters by its Saturday or Sunday; day-camp and summer rows sit under no weekday.
-const shapeFor = (kind, x) => kind === 'weekend' ? { ...x, _kind: kind, ...(x.weekend._grades !== undefined ? { _grades: x.weekend._grades } : {}), days: x.weekend.days }
-  : kind === 'off' ? { ...x, _kind: kind, days: ['none'] }
-  : kind === 'summer' ? { ...x, _kind: kind, days: ['none'] }
+const campAgeList = c => c.ageMin || c.ageMax ? agesBetween(c.ageMin || 3, c.ageMax || AGE_TOP) : gradesToAges(c._grades === undefined ? null : c._grades);
+const shapeFor = (kind, x) => kind === 'weekend' ? { ...x, _kind: kind, ...(x.weekend._grades !== undefined ? { _grades: x.weekend._grades } : {}), _ages: gradesToAges(x.weekend._grades !== undefined ? x.weekend._grades : x._grades), days: x.weekend.days }
+  : kind === 'off' ? { ...x, _kind: kind, _ages: gradesToAges(x._grades), days: ['none'] }
+  : kind === 'summer' ? { ...x, _kind: kind, _ages: campAgeList(x), days: ['none'] }
   : { ...x, _kind: kind };
 function listRow(kind, x, depth, shaped = null) {
   const tags = x.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('');
@@ -933,7 +941,7 @@ const nearRow = (depth, here) => !Object.keys(GEO).length ? '' : `<div class="fr
 const nearMap = depth => !Object.keys(GEO).length ? '' : `<p class="hint near-status" id="near-status" aria-live="polite"></p>
   <div class="mapwrap" id="near-map" hidden><div class="mapbox" id="near-mapbox" role="region" aria-label="Map of the places in this list"></div><p class="hint">${T(`Places are put on the map from their street address. The map’s pictures come from OpenStreetMap.`)} <a href="${link('privacy/', depth)}#map">${T(`What that means for your privacy.`)}</a></p></div>`;
 function filterBar({ list, depth, school = null, show = {}, near = false, searchLabel, placeholder = 'Its name, or try drums, art, chess…' }) {
-  const on = { q: true, type: true, grade: true, hood: true, cost: true, ...show };
+  const on = { q: true, type: true, grade: true, age: false, hood: true, cost: true, ...show };
   const btn = (f, v, label, n, cls = 'tbtn', extra = '') => `<button type="button" class="${cls}" id="${f}-${v}" data-f="${f}" data-v="${v}" data-label="${esc(label)}" aria-pressed="${v === 'ALL'}"${extra}>${esc(label)}${n === null ? '' : ` (${n})`}</button>`;
   const KIND_LABEL = { after: 'After school', weekend: 'Weekends', off: 'Day camps', summer: 'Summer' };
   const kindsHere = Object.keys(KIND_LABEL).map(k => [k, list.filter(p => (p._kind || 'after') === k).length]).filter(([, n]) => n);
@@ -949,10 +957,18 @@ function filterBar({ list, depth, school = null, show = {}, near = false, search
   const dayN = d => list.filter(p => p.days ? p.days.includes(d) : !/^s/.test(d)).length;   // no days published: a weekday program
   const weekendDays = ['sat', 'sun'].filter(d => list.some(p => p.days && p.days.includes(d)));
   const dayRow = on.day === true || (on.day !== false && list.filter(pickyDays).length > 1) ? `<div class="frow" id="by-day"><span class="flabel">Day</span><div class="rail" role="group" aria-label="Day of the week">${btn('day', 'ALL', 'Any day', null)}${[...WEEK, ...weekendDays].map(d => btn('day', d, DAY_NAME[d].slice(0, 3), dayN(d))).join('')}${list.some(p => !p.days) ? `<span class="hint rail-note">Programs that don’t publish their days show under every day.</span>` : ''}</div></div>` : '';
+  const byGrade = on.age ? list.filter(p => (p._kind || 'after') === 'after') : list;   // on a mixed page the grade rail counts the after-school rows
   const gradeBtns = on.grade ? [['ALL', 'All']].concat(GRADES.map(g => [g, g])).map(([g, label]) => {
-    const n = list.filter(p => (!school || p.schools[school.id].relation !== 'nearby') && (g === 'ALL' || p._grades === null || p._grades.includes(g))).length;
+    const n = byGrade.filter(p => (!school || p.schools[school.id].relation !== 'nearby') && (g === 'ALL' || p._grades === null || p._grades.includes(g))).length;
     return `<button type="button" class="gbtn" id="grade-${g}" data-f="grade" data-v="${g}" aria-pressed="${g === 'ALL'}" aria-label="${g === 'ALL' ? 'All grades' : g === 'PK' ? 'Pre-K' : g === 'K' ? 'Kindergarten' : 'Grade ' + g}, ${n} ${school ? 'on-site or pickup programs' : 'programs'}"><span class="g">${label}</span><span class="n">${n}</span></button>`;
   }).join('') : '';
+  // The age rail counts the rows that go by age: weekend classes, day camps and summer camps. Grades are for after school.
+  const byAge = list.filter(p => p._kind && p._kind !== 'after');
+  const ageBtns = on.age ? [['ALL', 'All']].concat(AGES.map(a => [a, a === String(AGE_TOP) ? `${AGE_TOP}+` : a])).map(([a, label]) => {
+    const n = (byAge.length ? byAge : list).filter(p => a === 'ALL' || p._ages === null || p._ages === undefined || p._ages.includes(a)).length;
+    return `<button type="button" class="gbtn" id="age-${a}" data-f="age" data-v="${a}" aria-pressed="${a === 'ALL'}" aria-label="${a === 'ALL' ? 'All ages' : a === String(AGE_TOP) ? `Age ${AGE_TOP} and up` : 'Age ' + a}, ${n} listings"><span class="g">${label}</span><span class="n">${n}</span></button>`;
+  }).join('') : '';
+  const both = on.grade && on.age;
   return `<div class="fbar needs-js-block" data-filters${school ? ` data-school="${esc(school.id)}"` : ''}>
     ${on.q ? `<div class="finder">
       <label for="prog-search">${T(searchLabel || `Looking for a particular program?`)}</label>
@@ -967,8 +983,9 @@ function filterBar({ list, depth, school = null, show = {}, near = false, search
     ${kindRow}${typeRow}${relRow}${hoodRow}${costRow}${dayRow}${near ? nearRow(depth, school) : ''}
   </div>
   ${near ? nearMap(depth) : ''}
-  <section class="picker" aria-label="Filter by grade">
-    ${on.grade ? `<div class="rail" role="group" aria-label="Grade">${gradeBtns}</div>` : ''}
+  <section class="picker" aria-label="${both ? 'Filter by grade or age' : on.age ? 'Filter by age' : 'Filter by grade'}">
+    ${on.grade ? `${both ? `<p class="pick-h">${T(`Grade, for after school`)}</p>` : ''}<div class="rail" role="group" aria-label="Grade">${gradeBtns}</div>` : ''}
+    ${on.age ? `${both ? `<p class="pick-h">${T(`Age, for weekend classes and camps`)}</p>` : ''}<div class="rail" role="group" aria-label="Age">${ageBtns}</div>` : ''}
     <div class="status"><span id="count" aria-live="polite"></span><button type="button" class="clear" id="clear" hidden>Clear filters</button></div>
   </section>
   <div class="quickbar" id="quickbar" hidden>
@@ -1418,7 +1435,7 @@ ${p.clubs.map(c => `      <article class="club">
   const firstOff = o ? o.dates.filter(x => x >= TODAY).sort()[0] : '';
   const offSection = !o ? '' : kindSection('off', `<article class="prog solo">
       <dl><dt>${T(`Camps`)}</dt><dd>${fold(esc(o.summary || ''))}</dd>${offList ? `<dt>${T(`Days posted`)}</dt><dd>${offList}</dd>` : `<dt>${T(`Days posted`)}</dt><dd>${T(`None yet for the days still to come. This page changes when it posts them.`)}</dd>`}<dt>${T(`Where`)}</dt><dd>${esc(address)}</dd></dl>
-      <div class="actions"><a class="btn primary needs-js" href="${link(offPath, D)}${firstOff ? '#d-' + firstOff : ''}">${firstOff ? T(`Add it to your days off`) : T(`Plan the days off`)}</a><a class="btn" data-track="daysoff" href="${esc(outUrl(o.url || p.website, { type: 'website', program: p }))}" target="_blank" rel="noopener">${T(`Camp details and sign-up`)}</a><a class="btn" href="${link(dayCampsPath, D)}#chart">${T(`Who else is open`)}</a></div>
+      <div class="actions"><a class="btn primary needs-js" href="${link(offPath, D)}${firstOff ? '#d-' + firstOff : ''}">${firstOff ? T(`Add it to your days off`) : T(`Plan the days off`)}</a><a class="btn" data-track="daysoff" href="${esc(outUrl(o.url || p.website, { type: 'website', program: p }))}" target="_blank" rel="noopener">${T(`Camp details and sign-up`)}</a><a class="btn" href="${link(dayCampsPath, D)}">${T(`Who else is open`)}</a></div>
     </article>
     <p class="hint">${T(`Day-camp dates come from the program’s own site and change as it posts them. Confirm before you count on a day.`)}</p>`);
   const summerSection = !tied ? '' : kindSection('summer', summerBlock(tied, D, true));
@@ -1558,7 +1575,7 @@ function typePage(t) {
     <h1>${esc(t.label)}</h1>
     <p class="lede">${T(`Everything on this site in this group, whatever part of the year it fills. Pick a kind, a grade or a neighborhood to narrow it down.`)}</p>
     <p class="runs"><span class="runs-h">${T(`Here`)}</span> ${kindsHere.map(k => `<a class="pill kind kind-${k}" href="#list-${k}">${esc(KIND_NAME[k])} (${byKind[k].length})</a>`).join(' ')}</p>`;
-  const body = `${filterBar({ list: shapedAll(byKind), depth: D, show: { type: false } }).replace('data-filters', 'data-filters data-noun="listing" data-nouns="listings"')}
+  const body = `${filterBar({ list: shapedAll(byKind), depth: D, show: { type: false, age: true } }).replace('data-filters', 'data-filters data-noun="listing" data-nouns="listings"')}
 ${noMatch(D)}
 ${kindSections(byKind, D)}
 ${schoolClubs.length ? `<section class="section school-clubs" data-school-clubs>
@@ -1601,7 +1618,7 @@ function byDayPage() {
     <div class="facts">
       ${[...WEEK, 'sat', 'sun'].map(d => `<span><a href="?day=${d}">${DAY_NAME[d].slice(0, 3)}</a> <b>${onDay(d)}</b></span>`).join('\n      ')}
     </div>`;
-  const body = `${filterBar({ list: shapedAll(byKind), depth: D, show: { day: true } }).replace('data-filters', 'data-filters data-noun="listing" data-nouns="listings"')}
+  const body = `${filterBar({ list: shapedAll(byKind), depth: D, show: { day: true, age: true } }).replace('data-filters', 'data-filters data-noun="listing" data-nouns="listings"')}
 ${noMatch(D)}
 ${kindSections(byKind, D, { lead: { after: T(`A program that doesn’t publish its days shows under every weekday.`), weekend: T(`Weekend classes go by where they are. Any child can sign up, whichever school they go to.`) } })}
 <section class="section">
@@ -2170,7 +2187,7 @@ function neighborhoodPage(h) {
 ${h.schools.map(s => schoolRow(s, D)).join('\n')}
   </div>` : `<p class="ask">${T(`No school in {name} is on the site yet.`, { name: h.name })} <a href="${link('schools/request/', D)}">${T(`Ask for yours.`)}</a></p>`}
 </section>
-${total > 3 ? filterBar({ list: shapedAll(byKind), depth: D, show: { hood: false, q: false } }).replace('data-filters', 'data-filters data-noun="listing" data-nouns="listings"') : ''}
+${total > 3 ? filterBar({ list: shapedAll(byKind), depth: D, show: { hood: false, q: false, age: true } }).replace('data-filters', 'data-filters data-noun="listing" data-nouns="listings"') : ''}
 ${noMatch(D)}
 ${kindSections({ after: based, weekend: wkHere, off: offHere, summer: sumHere }, D, { lead: {
     after: T(`Based in {name}. Each one shows the schools it serves; open it for hours, cost and how to register.`, { name: h.name }),
@@ -2321,8 +2338,8 @@ function privacyPage() {
     <li>${T(`When an account is made, the person who runs this site gets an email with the account’s name and email address, and, for a program manager, the listing they claimed. Nothing about a child is in that email.`)}</li>
     <li>${T(`You can change the email address on your account, from your account page. We send a code to the new address to check that it’s yours. Once you type it in, you sign in with the new address, what you follow moves to it on the email list, a short note goes to the old address, and your other devices are signed out. The old address is no longer on your account, but it stays on our email list until it is unsubscribed: use the Unsubscribe link in any email, or ask us and we’ll remove it.`)}</li>${GROUPS.google ? `
     <li>${T(`You can sign in with Google instead of an emailed code. Google’s button is loaded on the pages where you sign in, so Google can see that someone opened that page. If you use it, Google tells us your name and email address. We ask for nothing else and never see your Google password.`)}</li>` : ''}
-    <li>${T(`If you keep your school in your profile, we store which school. If you keep your children’s grades, we store the grades and nothing about which child is in which. For a week in your profile, we store the child’s first name, the programs on their current and upcoming weeks, and the school each program was picked under, so the week can be put back on another device. Notes you type are not stored.`)}</li>
-    <li>${T(`For a summer schedule in your profile, we store each child’s first name as you typed it and the camps picked for each week, so the summer is there on your other devices. Ages, the calendar’s title and photos are not stored. A summer in your profile can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The summer schedule section is hidden in session recordings, and analytics is told only that a summer was kept, never what is in it.`)}</li>
+    <li>${T(`If you keep your school in your profile, we store which school. If you keep your children’s grades or ages, we store the grades and ages and nothing about which child is which. An age you give a child on the summer planner is kept with your profile’s ages the same way. For a week in your profile, we store the child’s first name, the programs on their current and upcoming weeks, and the school each program was picked under, so the week can be put back on another device. Notes you type are not stored.`)}</li>
+    <li>${T(`For a summer schedule in your profile, we store each child’s first name as you typed it and the camps picked for each week, so the summer is there on your other devices. The calendar’s title and photos are not stored. A summer in your profile can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The summer schedule section is hidden in session recordings, and analytics is told only that a summer was kept, never what is in it.`)}</li>
     <li>${T(`For a days-off plan in your profile, we store each child’s first name as you typed it, the place picked for each day school is closed, and which of those days you ticked as signed up. The calendar’s title and photos are not stored. The plan can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The planner is hidden in session recordings, and analytics is never told what is in a plan.`)}</li>
     <li>${T(`“My kids’ calendar” is drawn in your browser, for you alone, from the plans on your device and the ones in your profile. Opening it stores nothing new and sends nothing about your plans. It has no link of its own, so nobody else can open it. A picture or calendar file you save is a copy on your device that we never receive. So it can tell you when a date changes, the page remembers what your last file held, on your device only. Google Analytics and Microsoft Clarity are not loaded on it.`)}</li>
     <li>${T(`Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.`)}</li>
@@ -2957,33 +2974,39 @@ const offFacts = () => `<div class="facts">
       <span><b>${campPrograms.length}</b> programs run something</span>
     </div>`;
 // /day-camps/: who's open each day off, the days themselves, and who runs camps. The page people find from search.
+// The "Get a heads-up before each day off" box: the follow box for the days-off round-up (or the plain sign-up form
+// before accounts). Not on the day-camps page any more; kept for wherever it goes next.
+const headsUpBox = D => datesBox(D, { pick: true, place: 'days_off', cls: 'wide', title: T(`Get a heads-up before each day off`), lede: T(`An email at least {n} days ahead, with the listed programs running a camp that day.`, { n: LEAD.dayoff }), hint: T(`Sign-up dates reach you the morning after they’re posted here, then again the day before and at about 8 that morning. Days off come in a {day} round-up.`, { day: SEND_DAY_NAME }), old: { place: 'days_off', title: T(`Get a heads-up before each day off`), lede: T(`An email at least {n} days ahead, with the listed programs running a camp that day.`, { n: LEAD.dayoff }) } });
+// /day-camps/: the programs that run something on days off, first, with the filters; the district's days as a second
+// view of the same page. The "Who's open each day off" chart (daysOffBits().chartSection) and the heads-up box
+// (headsUpBox) are built elsewhere for the planner and for wherever they go next.
 function dayCampsPage() {
   const D = 1;
-  const { noDates, chartSection, cards } = daysOffBits(D, 'page');
+  const { noDates, cards } = daysOffBits(D, 'page');
   const hero = `    <p class="where"><a href="${link('all-programs/', D)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
     <h1>${T(`School’s closed. What now?`)}</h1>
-    <p class="lede">${T(`Every day district schools are closed this year, and who runs a camp on each.`)}</p>${heroGo(D, link(offPath, D), T(`Plan the days off`))}
+    <p class="lede">${T(`Who runs a camp or a full day when district schools are closed, by neighborhood, and every day off this year.`)}</p>${heroGo(D, link(offPath, D), T(`Plan the days off`))}
     ${offFacts()}`;
   const body = `<div style="display:contents">
-${jumpNav()}
-${chartSection}
-<section class="section" id="days" data-jump-to="The days">
+<div class="tabs view-switch page-views" id="off-page-views" role="group" aria-label="Programs or days" data-views="who">
+  <button type="button" class="tab vs" data-view="who" aria-pressed="true">${T(`Programs`)}</button><button type="button" class="tab vs" data-view="days" aria-pressed="false">${T(`The days`)}</button>
+</div>
+<section class="section" id="who" data-pane="who">
+  <h2>${T(`Who runs something when school is closed`)}</h2>
+  <p>${T(`{n} listed programs say they run camps or full days on days off. Children from any school can go, so start from your part of the city. {m} of them had no dates on their site when we checked, so ask which days they cover.`, { n: campPrograms.length, m: noDates.length })}</p>
+  ${filterBar({ list: campPrograms.map(p => shapeFor('off', p)), depth: D, show: { grade: false, age: true, day: false }, searchLabel: `Looking for a particular program?`, placeholder: 'A name or a neighborhood, or try art, chess…' }).replace('data-filters', 'data-filters data-noschool')}
+  ${noMatch(D)}
+  <div class="schools" data-group>
+${cards}
+  </div>
+</section>
+<section class="section" id="days" data-pane="days">
   <h2>${T(`Days off still to come`)}</h2>
   <p>${T(`These are the School District of Philadelphia’s dates. A program is counted only when its own site lists that date.`)}</p>
   <ul class="plain off-dates">
 ${offDays.map(d => { const n = campsOn(d).length; return `    <li data-until="${d.until}"><a href="${link(dayPath(d), D)}"><b>${d.end ? `${shortDate(d.date)} – ${shortDate(d.end)}` : dayDate(d.date)}</b> <span>${esc(d.name)}</span></a> <span class="pill ${n ? 'onsite' : 'nearby'}">${n ? `${n} ${n === 1 ? 'camp' : 'camps'} posted` : 'None posted yet'}</span>${d.note ? ` <span class="hint">${esc(d.note)}</span>` : ''}</li>`; }).join('\n')}
   </ul>
   <p class="src">Calendar: <a href="${esc(daysOff.source.url)}" target="_blank" rel="noopener">${esc(daysOff.source.label)}</a></p>
-</section>
-${datesBox(D, { pick: true, place: 'days_off', cls: 'wide', title: T(`Get a heads-up before each day off`), lede: T(`An email at least {n} days ahead, with the listed programs running a camp that day.`, { n: LEAD.dayoff }), hint: T(`Sign-up dates reach you the morning after they’re posted here, then again the day before and at about 8 that morning. Days off come in a {day} round-up.`, { day: SEND_DAY_NAME }), old: { place: 'days_off', title: T(`Get a heads-up before each day off`), lede: T(`An email at least {n} days ahead, with the listed programs running a camp that day.`, { n: LEAD.dayoff }) } })}
-<section class="section" id="who" data-jump-to="Who runs camps">
-  <h2>${T(`Who runs something when school is closed`)}</h2>
-  <p>${T(`{n} listed programs say they run camps or full days on days off. {m} of them had no dates on their site when we checked, so ask which days they cover.`, { n: campPrograms.length, m: noDates.length })}</p>
-  ${filterBar({ list: campPrograms, depth: D, show: { grade: false, day: false }, near: true, searchLabel: `Looking for a particular program?`, placeholder: 'A name or a neighborhood, or try art, chess…' })}
-  ${noMatch(D)}
-  <div class="schools" data-group>
-${cards}
-  </div>
 </section>
 <section class="section" id="plan-it">
   <h2>${T(`Plan each day off`)}</h2>
@@ -3003,7 +3026,7 @@ ${cards}
 </div>`;
   return layout({
     title: `Day camps for days off school in Philadelphia`,
-    description: `Every day School District of Philadelphia schools are closed in ${daysOff.schoolYear}, and the after-school programs that run a camp or full-day care on those days.`,
+    description: `The after-school programs that run a camp or full-day care when School District of Philadelphia schools are closed in ${daysOff.schoolYear}, by neighborhood and age, and every day off this year.`,
     pathName: dayCampsPath, depth: D, current: dayCampsPath, hero, body, showStreet: 'dayoff',
     shareImage: { file: 'share-days-off.png', alt: `${cfg.siteName} day-off programs: a park on a morning with no school, a kite going up and a school bus parked` },
     jsonLd: { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Day-camp programs', `${cfg.siteUrl}/${dayCampsPath}`]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) },
@@ -3208,6 +3231,28 @@ const SHOW_ICON = {
   out: '<path d="M10 5H6.5A1.5 1.5 0 0 0 5 6.5v11A1.5 1.5 0 0 0 6.5 19h11a1.5 1.5 0 0 0 1.5-1.5V14M14 4h6v6M20 4l-8.5 8.5"/>',
 };
 const showIcon = k => `<span class="pshow-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">${SHOW_ICON[k]}</svg></span>`;
+// The small picture beside each feature row of the tour: a simple drawing, not a screenshot, so a row reads at a
+// glance. Drawn in the site's own colors; the accent is the row's --pc.
+const MINI = {
+  kids: `<rect x="14" y="14" width="56" height="22" rx="11" fill="var(--pc)"/><text x="42" y="30" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Sam</text><rect x="78" y="14" width="56" height="22" rx="11" fill="#E4EBF4"/><text x="106" y="30" text-anchor="middle" font-size="13" font-weight="700" fill="#0B2140">Rae</text>
+    ${[0, 1, 2, 3, 4].map(i => `<rect x="${14 + i * 36}" y="50" width="30" height="56" rx="7" fill="#E4EBF4"/><rect x="${14 + i * 36}" y="${[62, 50, 70, 50, 58][i]}" width="30" height="${[44, 56, 36, 56, 48][i]}" rx="7" fill="${['var(--pc)', '#F3C613', 'var(--pc)', '#2C8444', '#F3C613'][i]}" opacity=".9"/>`).join('')}`,
+  card: `<rect x="60" y="6" width="80" height="112" rx="12" fill="#0B2140"/><rect x="66" y="14" width="68" height="96" rx="8" fill="#fff"/><rect x="74" y="22" width="40" height="8" rx="4" fill="#0B2140"/>
+    ${[0, 1, 2, 3, 4].map(i => `<rect x="74" y="${38 + i * 14}" width="12" height="8" rx="2" fill="#9AB0CC"/><rect x="90" y="${38 + i * 14}" width="${[36, 28, 36, 22, 30][i]}" height="8" rx="4" fill="${['var(--pc)', '#F3C613', 'var(--pc)', '#2C8444', '#F3C613'][i]}"/>`).join('')}
+    <path d="M24 60 h22 m-8 -8 l8 8 -8 8" fill="none" stroke="var(--pc)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`,
+  devices: `<rect x="10" y="22" width="112" height="70" rx="8" fill="#0B2140"/><rect x="16" y="28" width="100" height="58" rx="4" fill="#fff"/><rect x="0" y="92" width="132" height="8" rx="4" fill="#0B2140"/>
+    ${[0, 1, 2, 3, 4].map(i => `<rect x="${24 + i * 17}" y="${[48, 40, 54, 40, 46][i]}" width="13" height="${[30, 38, 24, 38, 32][i]}" rx="4" fill="${['var(--pc)', '#F3C613', 'var(--pc)', '#2C8444', '#F3C613'][i]}"/>`).join('')}
+    <rect x="146" y="10" width="46" height="100" rx="10" fill="#0B2140"/><rect x="151" y="18" width="36" height="84" rx="6" fill="#fff"/>
+    ${[0, 1, 2, 3, 4].map(i => `<rect x="${156 + i * 5.4}" y="${[60, 52, 66, 52, 58][i]}" width="4" height="${[34, 42, 28, 42, 36][i]}" rx="2" fill="${['var(--pc)', '#F3C613', 'var(--pc)', '#2C8444', '#F3C613'][i]}"/>`).join('')}`,
+  tick: `${[0, 1, 2].map(i => `<rect x="14" y="${12 + i * 36}" width="172" height="28" rx="8" fill="${i < 2 ? '#D6F3D2' : '#E4EBF4'}"/><rect x="22" y="${18 + i * 36}" width="16" height="16" rx="4" fill="${i < 2 ? '#2C8444' : '#fff'}" stroke="${i < 2 ? '#2C8444' : '#9AB0CC'}" stroke-width="2"/>${i < 2 ? `<path d="M25 ${26 + i * 36} l4 4 7 -8" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>` : ''}<rect x="48" y="${22 + i * 36}" width="${[70, 54, 80][i]}" height="8" rx="4" fill="${i < 2 ? '#1F5A22' : '#0B2140'}"/><rect x="${[126, 110, 136][i]}" y="${22 + i * 36}" width="40" height="8" rx="4" fill="${i < 2 ? '#8CC68A' : 'var(--pc)'}"/>`).join('')}`,
+  cal: `<rect x="20" y="10" width="160" height="104" rx="10" fill="#fff" stroke="#9AB0CC" stroke-width="2"/><rect x="20" y="10" width="160" height="20" rx="10" fill="#0B2140"/><rect x="20" y="22" width="160" height="8" fill="#0B2140"/>
+    ${[...Array(28)].map((_, i) => { const c = i % 7, r = Math.floor(i / 7); const on = [3, 4, 10, 17, 18, 19].includes(i); return `<rect x="${28 + c * 21}" y="${36 + r * 19}" width="17" height="15" rx="3" fill="${on ? 'var(--pc)' : '#E4EBF4'}"/>`; }).join('')}`,
+  chart: `${[0, 1, 2].map(r => `<rect x="14" y="${18 + r * 32}" width="40" height="10" rx="5" fill="#0B2140"/>${[...Array(7)].map((_, c) => `<rect x="${62 + c * 18}" y="${14 + r * 32}" width="14" height="18" rx="3" fill="${[[1, 1, 1, 0, 1, 1, 1], [0, 1, 1, 0, 1, 0, 0], [1, 0, 1, 0, 1, 1, 1]][r][c] ? 'var(--pc)' : '#E4EBF4'}"/>`).join('')}`).join('')}<rect x="113" y="6" width="20" height="104" rx="5" fill="none" stroke="#F3C613" stroke-width="3"/>`,
+  bell: `<rect x="14" y="30" width="172" height="60" rx="12" fill="#fff" stroke="#9AB0CC" stroke-width="2"/><rect x="26" y="42" width="40" height="36" rx="8" fill="var(--pc)"/><text x="46" y="57" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">NOV</text><text x="46" y="72" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">3</text><rect x="78" y="46" width="76" height="9" rx="4" fill="#0B2140"/><rect x="78" y="62" width="52" height="8" rx="4" fill="#9AB0CC"/><circle cx="168" cy="48" r="12" fill="#F3C613"/><path d="M164 52 h8 m-4 -10 a3 3 0 0 1 3 3 v4 h-6 v-4 a3 3 0 0 1 3 -3z" fill="none" stroke="#5C4700" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`,
+  cost: `<rect x="40" y="8" width="120" height="108" rx="8" fill="#fff" stroke="#9AB0CC" stroke-width="2"/>${[0, 1, 2].map(i => `<rect x="52" y="${22 + i * 18}" width="${[48, 36, 56][i]}" height="8" rx="4" fill="#9AB0CC"/><rect x="118" y="${22 + i * 18}" width="30" height="8" rx="4" fill="#0B2140"/>`).join('')}<rect x="52" y="78" width="96" height="2" fill="#9AB0CC"/><rect x="52" y="88" width="44" height="12" rx="4" fill="#0B2140"/><rect x="108" y="86" width="40" height="16" rx="6" fill="var(--pc)"/>`,
+  lock: `<rect x="62" y="52" width="76" height="58" rx="12" fill="var(--pc)"/><path d="M78 52 v-14 a22 22 0 0 1 44 0 v14" fill="none" stroke="#0B2140" stroke-width="8" stroke-linecap="round"/><circle cx="100" cy="78" r="8" fill="#fff"/><rect x="97" y="80" width="6" height="14" rx="3" fill="#fff"/>`,
+  out: `<rect x="14" y="28" width="120" height="64" rx="12" fill="#fff" stroke="#9AB0CC" stroke-width="2"/><rect x="26" y="42" width="60" height="9" rx="4" fill="#0B2140"/><rect x="26" y="60" width="44" height="8" rx="4" fill="#9AB0CC"/><rect x="100" y="52" width="24" height="24" rx="12" fill="var(--pc)"/><path d="M110 60 l6 4 -6 4" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M140 60 h30 m-10 -10 l10 10 -10 10" fill="none" stroke="var(--pc)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`,
+};
+const miniArt = k => `<span class="pshow-mini" aria-hidden="true"><svg viewBox="0 0 200 120" focusable="false">${MINI[k] || MINI.kids}</svg></span>`;
 // The one thing to press, under a planner page's heading, for someone signed out.
 const heroCta = (depth, next) => GATE ? `
     <p class="hero-cta when-out"><a class="btn primary big" href="${link('register/', depth)}?next=${next}" data-plan-cta="hero">${T(`Create a free account`)}</a><span>${T(`Free, with no password to remember: we email you a code, or you use Google.`)}</span></p>` : '';
@@ -3314,48 +3359,37 @@ function showExample(kind) {
 function planShow(kind, depth) {
   if (!GATE) return '';
   const offLeft = offDays.reduce((n, d) => n + d.dates.filter(x => x >= TODAY).length, 0);
-  const device = ['devices', T(`On your phone and your computer`), T(`Signed in, your plan is kept in your profile, so it’s there on every device.`)];
+  const device = ['devices', T(`On your phone and your computer`), T(`Signed in, your plan is in your profile, so it’s there on every device.`)];
   const S = {
     week: { next: 'board', eye: T(`The week builder`), h: T(`See the whole week before it starts`),
       views: [['week', T(`The week`), planExample('week'), T(`Put a program on each afternoon, with its hours and when to pick up. Each child gets a week of their own.`)],
         ['cost', T(`Budget planning`), showExample('week-cost'), T(`The week adds itself up from each program’s published prices, so you see the half-year before you sign up for anything.`)],
         ['share', T(`Share it`), showExample('week-share'), T(`Turn the week into one picture for the group chat or the fridge, or share it with one person who signs in to see it.`)]],
-      feats: [['kids', T(`A week for each child`), T(`Each child has their own week, and a second one for the term that’s coming.`)],
-        ['dice', T(`A themed week to start from`), T(`Not sure where to begin? Roll a themed week and swap out what doesn’t fit.`)],
-        ['coins', T(`What the week adds up to`), T(`An estimate for half a school year, from the prices each program publishes.`)],
-        ['picture', T(`A card to text or print`), T(`One picture with each day’s programs and pickup times, made right on your phone.`)],
-        ['share', T(`Shared with one person`), T(`A grandparent, a sitter or a co-parent signs in and always sees the current week.`)], device],
+      feats: [['kids', T(`A week for each child`), T(`Each child has their own week, and one for the term that’s coming.`)],
+        ['card', T(`A card to text or print`), T(`One picture with each day’s programs and pickup times, made on your phone.`)], device],
       steps: [T(`Pick your school, then add a program to each afternoon.`), T(`Send it to whoever does pickup, or stick it on the fridge.`)] },
     off: { next: 'daysoff', eye: offLeft ? T(`{n} days off still to come this year`, { n: offLeft }) : T(`The day-camp planner`), h: T(`Every day school is closed, covered`),
       views: [['list', 'List', showExample('off-list'), T(`Every day off in order. Choose a camp or a day at home for each child, and tick a day once you’ve signed up.`)],
         ['cal', 'Calendar', showExample('off-cal'), T(`The same plan on a month of squares, so a break with no plan yet stands out before it sneaks up on you.`)],
         ['chart', 'Who’s open', showExample('off-chart'), T(`One chart of which programs have posted a camp for each day off. Tap a box and that day is in your plan.`)]],
-      feats: [['tick', T(`Signed up? Tick it off`), T(`Planning a camp isn’t registering for it. Each camp day waits on a to-do list, with a link to the camp’s own sign-up page, until you tick it.`)],
-        ['kids', T(`A plan for each child`), T(`Different camps for different kids, or copy one child’s days to the next.`)],
-        ['list', T(`A whole break in one tap`), T(`Pick a camp for the first day of a break and use it for the rest of that break.`)],
-        ['picture', T(`A calendar for the fridge`), T(`One picture of every day off, or one for each month, to print or send to a sitter.`)],
-        ['cal', T(`In your phone’s calendar`), T(`One file puts every planned day into the calendar you already use.`)], device],
+      feats: [['tick', T(`Signed up? Tick it off`), T(`Each camp day waits on a to-do list, with a link to the camp’s sign-up page, until you tick it.`)],
+        ['cal', T(`A calendar for the fridge`), T(`One picture of every day off, to print or send to a sitter.`)], device],
       steps: [T(`Choose where each child will be on each day off.`), T(`Tick off each camp as you sign up, and print the calendar.`)] },
     sum: { next: 'summer', eye: T(`{n} weeks of summer`, { n: summerCamps.length ? summerPlan.weeks.length : 0 }), h: T(`The whole summer on one page`),
       views: [['list', 'List', planExample('sum'), T(`Every week from the last day of school to Labor Day. Add a camp to each one, and the plan adds up what the summer costs.`)],
         ['cal', 'Calendar', summerCamps.length ? showExample('sum-cal') : '', T(`Month by month, with each camp on the days it runs and the open weeks easy to spot.`)],
         ['chart', 'Who’s open', summerCamps.length ? showExample('sum-chart') : '', T(`Which camps run which weeks, on one chart. Tap a box and that week is in your summer.`)]],
       feats: [['chart', T(`See the gaps`), T(`A week with nothing on it stands out, in June rather than the Friday before.`)],
-        ['kids', T(`A summer for each child`), T(`Set an age and the camps narrow to the ones that take it. Siblings can copy each other’s weeks.`)],
-        ['coins', T(`What the summer adds up to`), T(`A running total from the weekly prices the camps post.`)],
-        ['picture', T(`A calendar picture`), T(`The whole summer on one card, or a card for each month, to print or send to family.`)],
-        ['cal', T(`In your phone’s calendar`), T(`Each camp week becomes a Monday-to-Friday entry in the calendar you already use.`)], device],
+        ['kids', T(`A summer for each child`), T(`Set an age and the camps narrow to the ones that take it.`)],
+        ['cost', T(`What the summer adds up to`), T(`A running total from the weekly prices the camps post.`)]],
       steps: [T(`Add a camp to each week, for one child or for each of them.`), T(`Print the summer, or put the weeks in your phone’s calendar.`)] },
     year: { next: 'calendar', eye: 'My kids’ calendar', h: T(`The week, the days off and the summer, in one place`),
       views: [['cal', 'Calendar', planExample('year'), T(`A month at a time: days off, camp weeks, sign-up dates and the dates you add yourself.`)],
         ['list', 'List', showExample('year-list'), T(`Or the same year as a list in date order, to read from the top down.`)],
         ['todo', 'To do', showExample('todo'), T(`Every camp day you’ve planned and haven’t signed up for yet, with a link to each camp’s own sign-up page.`)]],
       feats: [['bell', T(`Sign-up dates, lined up`), T(`Openings and deadlines for the programs and camps on your plans, on the days they happen.`)],
-        ['plus', T(`Your own dates`), T(`Picture day, pretzel day, a form that’s due: add them and they sit beside everything else.`)],
-        ['tick', T(`A to-do list`), T(`What’s left to sign up for, ticked off as you go.`)],
-        ['picture', T(`A picture of any month`), T(`To print for the fridge or send to family.`)],
-        ['cal', T(`One file for your phone`), T(`Everything in the calendar you already use, and a new file whenever a date changes.`)],
-        ['lock', T(`Private`), T(`There’s no link to your calendar and no way to share it from here. Only you can open it.`)]],
+        ['cal', T(`Your own dates too`), T(`Picture day, a form that’s due: add them and they sit beside everything else.`)],
+        ['lock', T(`Private`), T(`No link and no sharing. Only you can open it.`)]],
       steps: [T(`Build a week, plan the days off, plan the summer: any or all.`), T(`Open one calendar and see the whole year.`)] },
     todo: { next: 'todo', eye: 'To do', h: T(`What’s left to sign up for, in one list`),
       views: [['todo', 'To do', showExample('todo'), T(`Plan the days school is closed, and each camp day you pick lands here with a link to that camp’s own sign-up page. Tick it off once you’ve signed up.`)]],
@@ -3376,16 +3410,16 @@ function planShow(kind, depth) {
         ${fig}
       </div>`; }).join('\n      ')}
     </div>
-    <ul class="pshow-feats">
-      ${S.feats.map(([ic, h, p]) => `<li>${showIcon(ic)}<div><b>${h}</b><span>${p}</span></div></li>`).join('\n      ')}
+    <ul class="pshow-rows">
+      ${S.feats.map(([ic, h, p], i) => `<li class="pshow-row${i % 2 ? ' flip' : ''}" style="--pc:${['#1763B8', '#6B3FA0', '#2C8444'][i % 3]}">${miniArt(ic)}<div><b>${h}</b><span>${p}</span></div></li>`).join('\n      ')}
     </ul>
     <ol class="pshow-steps">
-      <li><b>${T(`Create a free account`)}</b><span>${T(`No password: we email you a code, or you use Google.`)}</span></li>
-      <li><b>${T(`Make your plan`)}</b><span>${S.steps[0]}</span></li>
-      <li><b>${T(`Take it with you`)}</b><span>${S.steps[1]}</span></li>
+      <li><b>${T(`Create a free account`)}</b></li>
+      <li><b>${T(`Make your plan`)}</b></li>
+      <li><b>${T(`Take it with you`)}</b></li>
     </ol>
     <div class="pshow-end">
-      <div><b>${T(`It’s free for parents.`)}</b><span>${T(`Started a plan on this phone or computer before? It’s still here: log in at the top of the page.`)}</span></div>
+      <div><b>${T(`It’s free for parents.`)}</b><span>${T(`No password: we email you a code, or you use Google.`)} ${T(`Started a plan on this phone or computer before? Log in at the top of the page.`)}</span></div>
       ${go('end')}
     </div>
   </div>`;
@@ -3489,7 +3523,7 @@ function accountPage(register = false) {
     </ul>
     <p><a href="${link('privacy/', 1)}#groups">${T(`The full details are on the privacy page.`)}</a></p>
   </section>
-  <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })), hoods: accountHoods(), news: NEWS.slice(0, 5) }).replace(/</g, '\\u003c')}</script>
+  <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, ages: AGES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })), hoods: accountHoods(), news: NEWS.slice(0, 5) }).replace(/</g, '\\u003c')}</script>
 </div>`;
   return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to keep your week, days-off and summer plans, and see the whole year in one private calendar.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: !register, scripts: groupsScript(1) });
 }
@@ -3502,7 +3536,7 @@ function profilePage() {
   const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`Your profile needs JavaScript turned on.`)}</p></noscript>
   <div class="g-page" id="account" data-view="profile"></div>
-  <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })), hoods: accountHoods(), news: NEWS.slice(0, 5), programs: Object.fromEntries(programs.map(p => [p.id, p.name])) }).replace(/</g, '\\u003c')}</script>
+  <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, ages: AGES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })), hoods: accountHoods(), news: NEWS.slice(0, 5), programs: Object.fromEntries(programs.map(p => [p.id, p.name])) }).replace(/</g, '\\u003c')}</script>
 </div>`;
   return layout({ title: 'My profile', description: `Your ${cfg.siteName} profile: you, your kids, your school, what you follow, your favorites and your plans, on one card.`, pathName: 'profile/', depth: 1, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(1) });
 }
@@ -4013,7 +4047,7 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])) });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])) });
   const src = fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8');
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   if (!src.includes('/*MAILER*/')) throw new Error('src/server/groups-api.php has lost its /*MAILER*/ marker');
@@ -4608,7 +4642,7 @@ $topListings = array(); $hitsSince = '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'mgr_month' => 'Monthly emails to managers', 'mgr_review' => 'New-review emails to managers', 'mgr_follow' => 'New-follower emails to managers', 'mgr_stop' => 'Managers who turned those emails off', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'hood_saved' => 'Neighborhoods kept', 'phone_saved' => 'Phone numbers added for texts', 'follow' => 'Follows started', 'stop_one' => 'Listings stopped from an email', 'stop_all' => 'Everything stopped from an email', 'fav' => 'Favorites saved', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'email_changed' => 'Email addresses changed', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'premium_ask' => 'Premium sign-ups', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers', 'push_on' => 'Devices that turned notifications on', 'push_sent' => 'Notifications delivered', 'extra_sent' => 'Words and offer lines sent by program managers', 'ask' => 'Questions sent to programs');
+$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'mgr_month' => 'Monthly emails to managers', 'mgr_review' => 'New-review emails to managers', 'mgr_follow' => 'New-follower emails to managers', 'mgr_stop' => 'Managers who turned those emails off', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'ages_saved' => 'Ages kept', 'hood_saved' => 'Neighborhoods kept', 'phone_saved' => 'Phone numbers added for texts', 'follow' => 'Follows started', 'stop_one' => 'Listings stopped from an email', 'stop_all' => 'Everything stopped from an email', 'fav' => 'Favorites saved', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'email_changed' => 'Email addresses changed', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'premium_ask' => 'Premium sign-ups', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers', 'push_on' => 'Devices that turned notifications on', 'push_sent' => 'Notifications delivered', 'extra_sent' => 'Words and offer lines sent by program managers', 'ask' => 'Questions sent to programs');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -5456,7 +5490,7 @@ function summerCampsPage() {
   const body = `<section class="section">
   <p class="flag camp-guide"><b>${T(`Most of what’s here is from summer {year}, shown as a guide.`, { year: base })}</b> ${T(`Camps usually post next summer between December and March. Each listing changes to {year} when its camp posts dates and prices, and says so on its card.`, { year: next })}${ALERTS ? ' ' + T(`Waiting on one camp? Its page has a box to be emailed when it posts.`) : ''}</p>
 </section>
-${filterBar({ list: shaped, depth: D, near: true, searchLabel: `Looking for a particular camp?`, placeholder: 'Its name, or try art, tennis, Mount Airy…' }).replace('data-filters', 'data-filters data-noun="camp" data-nouns="camps"')}
+${filterBar({ list: shaped, depth: D, show: { grade: false, age: true }, near: true, searchLabel: `Looking for a particular camp?`, placeholder: 'Its name, or try art, tennis, Mount Airy…' }).replace('data-filters', 'data-filters data-noun="camp" data-nouns="camps"')}
 <p class="hint">${T(`Grades here are worked out from each camp’s ages, so check the ages on the camp’s page. Each camp has its own page with everything it posts.`)}</p>
 ${noMatch(D)}
 <section class="section" data-group>
@@ -5506,7 +5540,7 @@ function weekendPage() {
       <span><b>${weekendPrograms.filter(p => p.weekend.days.includes('sun')).length}</b> on Sundays too</span>
       <span><b>${new Set(weekendPrograms.flatMap(programHoods)).size}</b> neighborhoods</span>
     </div>`;
-  const body = `${filterBar({ list: weekendPrograms.map(shape), depth: D, show: { cost: false, day: false }, near: true, searchLabel: `Looking for a particular class?`, placeholder: 'A name or a neighborhood, or try piano, acting…' }).replace('data-filters', 'data-filters data-noschool')}
+  const body = `${filterBar({ list: weekendPrograms.map(shape), depth: D, show: { grade: false, age: true, cost: false, day: false }, near: true, searchLabel: `Looking for a particular class?`, placeholder: 'A name or a neighborhood, or try piano, acting…' }).replace('data-filters', 'data-filters data-noschool')}
 <p class="hint">${T(`A weekend class has no school pickup, so this list goes by where the class is. Any child can sign up, whichever school they go to.`)}</p>
 ${noMatch(D)}
 <section class="section" data-group>
