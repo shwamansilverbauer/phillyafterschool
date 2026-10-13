@@ -549,11 +549,22 @@ button.btn{cursor:pointer;font-family:inherit}
 .weekstrip li.on{background:var(--sky-bg);color:var(--sky-ink);outline:1.5px solid var(--link);outline-offset:-1.5px}
 .weekstrip li.on.exact{background:var(--green-bg);color:var(--green-ink);outline-color:var(--green-ink)}
 .offprog:target{outline:3px solid var(--yellow);outline-offset:2px}
-.mine-row{align-items:center;flex-wrap:wrap;gap:8px 14px;margin-top:4px}
-.savebtn{font:inherit;font-weight:700;font-size:.98rem;padding:9px 16px;border-radius:999px;border:2px solid var(--hero-accent);background:transparent;color:var(--hero-ink);cursor:pointer}
-.savebtn:hover{background:rgba(255,255,255,.3)}
-.savebtn[aria-pressed="true"]{background:var(--yellow);border-color:var(--hero-accent);color:var(--yellow-ink)}
-.mine-row .hint{color:var(--hero-muted)}
+.mine{align-items:center;flex-wrap:wrap;gap:10px 18px;margin:6px 0 2px;padding:16px 20px;border-radius:20px;background:rgba(255,255,255,.58);border:2px solid var(--hero-accent);max-width:760px}
+.mine.on{background:var(--yellow);border-color:var(--yellow)}
+.mine-ic{flex:none;width:44px;height:44px;border-radius:50%;background:var(--hero-accent);display:inline-flex;align-items:center;justify-content:center}
+.mine-ic svg{width:24px;height:24px;fill:#fff}
+.mine.on .mine-ic{background:var(--yellow-ink)}
+.mine-say{flex:1 1 220px;min-width:0;display:flex;flex-direction:column;gap:2px}
+.mine-h{margin:0;font-weight:800;font-size:1.15rem;color:var(--hero-ink)}
+.mine .hint{color:var(--hero-muted);margin:0}
+.mine.on .hint,.mine.on .mine-h{color:var(--yellow-ink)}
+.mine.on .mine-say .hint{display:none}
+.mine-note{flex-basis:100%}
+.mine-note:empty{display:none}
+.savebtn{font:inherit;font-weight:700;font-size:1.05rem;padding:12px 24px;border-radius:999px;border:2px solid var(--hero-accent);background:var(--hero-accent);color:#fff;cursor:pointer;box-shadow:0 6px 16px rgba(11,33,64,.22)}
+.savebtn:hover{filter:brightness(1.15)}
+.savebtn[aria-pressed="true"]{background:#fff;border-color:var(--yellow-ink);color:var(--yellow-ink);box-shadow:none}
+.savebtn[aria-pressed="true"]::before{content:"✓ "}
 .find .mine{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 6px;color:var(--hero-muted);font-weight:700}
 .find .mine .btn{background:var(--cta);border-color:var(--cta);color:var(--cta-ink)}
 

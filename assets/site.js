@@ -944,7 +944,7 @@
     try { var m = JSON.parse(store('pas-my-school') || 'null'); return m && /^[a-z0-9-]+$/.test(m.id || '') && typeof m.name === 'string' ? { id: m.id, name: m.name.slice(0, 60) } : null; } catch (e) { return null; }
   }
   // ----- the days a program runs: null when it doesn't say, otherwise whether that day is one of them -----
-  var DAY_FULL = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday' };
+  var DAY_FULL = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' };
   function daysFor(days, offerDays, cls) { return (cls && offerDays && offerDays[cls]) || days || null; }
   function sayDays(list) {
     var n = list.map(function (d) { return DAY_FULL[d]; });
@@ -4475,7 +4475,7 @@
     var fbtns = all(document, '[data-f]');
     var count = document.querySelector('#count'), clear = document.querySelector('#clear');
     var search = document.querySelector('#prog-search'), noMatch = document.querySelector('[data-nomatch]'), searchMore = document.querySelector('#search-more');
-    var FILTERS = ['type', 'grade', 'rel', 'hood', 'cost', 'day', 'school'];
+    var FILTERS = ['kind', 'type', 'grade', 'rel', 'hood', 'cost', 'day', 'school'];
     // Once the filters have scrolled off the top, a slim bar takes their place: a search box, and a button back to them.
     var qbar = document.getElementById('quickbar'), quick = null;
     if (qbar) quick = { bar: qbar, search: document.getElementById('quick-search'), go: document.getElementById('quick-filters'), n: document.getElementById('quick-n'), count: document.getElementById('quick-count'), clear: document.getElementById('quick-clear'), status: qbar.querySelector('.quick-status') };
@@ -4618,7 +4618,7 @@
       afterFilter = function () { if (drawMap) drawMap(); };
       if (here) order();
     })();
-    var blank = function () { return { type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL', day: 'ALL', school: 'ALL' }; };
+    var blank = function () { return { kind: 'ALL', type: 'ALL', grade: 'ALL', rel: 'ALL', hood: 'ALL', cost: 'ALL', day: 'ALL', school: 'ALL' }; };
     var state = blank();
     var terms = [];
     var findBtn = function (f, v) { for (var i = 0; i < fbtns.length; i++) if (fbtns[i].getAttribute('data-f') === f && fbtns[i].getAttribute('data-v') === v) return fbtns[i]; return null; };
@@ -4636,11 +4636,12 @@
       items.forEach(function (it) {
         var gs = it.getAttribute('data-grades') || '*';
         var ok = (state.grade === 'ALL' || gs === '*' || gradeFits(it))
+          && (state.kind === 'ALL' || inList(it, 'data-kinds', state.kind))
           && (state.type === 'ALL' || inList(it, 'data-types', state.type))
           && (state.rel === 'ALL' || it.getAttribute('data-rel') === state.rel)
           && (state.hood === 'ALL' || inList(it, 'data-hoods', state.hood))
           && (state.cost === 'ALL' || inList(it, 'data-cost', state.cost))
-          && (state.day === 'ALL' || (it.getAttribute('data-days') || '*') === '*' || inList(it, 'data-days', state.day))
+          && (state.day === 'ALL' || ((it.getAttribute('data-days') || '*') === '*' && !/^s/.test(state.day)) || inList(it, 'data-days', state.day))   // days not published: a weekday program
           && (state.school === 'ALL' || inList(it, 'data-schools', state.school));
         if (terms.length) {
           var hay = it.getAttribute('data-search') || '', hit = terms.every(function (w) { return w.test(hay); });
@@ -4666,9 +4667,9 @@
       });
       if (afterFilter) afterFilter();
       var bits = [];
-      ['school', 'type', 'rel', 'hood', 'cost', 'day'].forEach(function (f) {
+      ['kind', 'school', 'type', 'rel', 'hood', 'cost', 'day'].forEach(function (f) {
         var b = state[f] !== 'ALL' ? findBtn(f, state[f]) : null;
-        if (b) bits.push(f === 'hood' ? 'in ' + b.getAttribute('data-label') : f === 'cost' ? b.getAttribute('data-label').toLowerCase() : f === 'day' ? 'on ' + DAY_FULL[state.day] + 's' : f === 'school' ? 'works for ' + b.getAttribute('data-label') : b.getAttribute('data-label'));
+        if (b) bits.push(f === 'hood' ? 'in ' + b.getAttribute('data-label') : f === 'cost' || f === 'kind' ? b.getAttribute('data-label').toLowerCase() : f === 'day' ? 'on ' + DAY_FULL[state.day] + 's' : f === 'school' ? 'works for ' + b.getAttribute('data-label') : b.getAttribute('data-label'));
       });
       if (terms.length) bits.push('matching “' + search.value.trim() + '”');
       var what = (state.grade === 'ALL' ? '' : ' for ' + gradeLabel(state.grade)) + (bits.length ? ' (' + bits.join(', ') + ')' : '');
@@ -4731,7 +4732,7 @@
       }
       return total;
     };
-    var NAMES = { type: 'program_type', rel: 'relation', hood: 'neighborhood', grade: 'grade', cost: 'cost', day: 'day', school: 'school' };
+    var NAMES = { kind: 'kind', type: 'program_type', rel: 'relation', hood: 'neighborhood', grade: 'grade', cost: 'cost', day: 'day', school: 'school' };
     fbtns.forEach(function (b) {
       if (b.tagName !== 'BUTTON') return;
       b.addEventListener('click', function () {
@@ -4812,11 +4813,14 @@
   store('pas-school', school);
   all(document, '[data-my-school]').forEach(function (btn) {
     var id = btn.getAttribute('data-my-school'), name = btn.getAttribute('data-name'), note = document.querySelector('[data-my-school-note]');
+    var panel = btn.closest ? btn.closest('[data-mine]') : null, head = panel ? panel.querySelector('[data-mine-h]') : null, offHead = head ? head.textContent : '';
     var paint = function () {
       var m = mySchool(), on = !!m && m.id === id;
       btn.setAttribute('aria-pressed', String(on));
       btn.textContent = on ? 'Saved as your school' : m ? 'Make ' + name + ' your school' : 'Save as my school';
       if (note) note.textContent = on ? 'Saved on this device. The home page, lists and your roster now start from ' + name + '. Tap again to undo.' : '';
+      if (panel) panel.className = panel.className.replace(/ on\b/g, '') + (on ? ' on' : '');
+      if (head) head.textContent = on ? head.getAttribute('data-on') || offHead : offHead;
     };
     btn.addEventListener('click', function () {
       var m = mySchool();

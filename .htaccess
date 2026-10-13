@@ -26,19 +26,47 @@ RewriteRule ^schools/william-m-meredith-school/?$ /meredith/ [R=301,L]
 # A day off that has passed: its own page leads to the list of days still to come.
 RewriteRule ^days-off/staff-professional-development-2026-10-09/?$ /days-off/ [R=301,L]
 RewriteRule ^days-off/indigenous-peoples-day-2026-10-12/?$ /days-off/ [R=301,L]
-# A summer camp tied to a program is on the program's page, under Summer.
+# A summer camp tied to a program is on the program's page, under Summer (a query string, such as an email's tags, stays ahead of the #).
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/philly-art-center/?$ /programs/philly-art-center-qv/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/philly-art-center/?$ /programs/philly-art-center-qv/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/fleisher-art-memorial-camp/?$ /programs/fleisher-art-memorial/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/fleisher-art-memorial-camp/?$ /programs/fleisher-art-memorial/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/mister-johns-music-camp/?$ /programs/mister-johns-music/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/mister-johns-music-camp/?$ /programs/mister-johns-music/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/music-theatre-philly-camp/?$ /programs/music-theatre-philly/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/music-theatre-philly-camp/?$ /programs/music-theatre-philly/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/movemakers-camp/?$ /programs/movemakers/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/movemakers-camp/?$ /programs/movemakers/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/queen-and-rook-camp/?$ /programs/queen-and-rook/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/queen-and-rook-camp/?$ /programs/queen-and-rook/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/butchers-sew-shop-camp/?$ /programs/butchers-sew-shop/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/butchers-sew-shop-camp/?$ /programs/butchers-sew-shop/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/arden-summer-camp/?$ /programs/arden-drama-school/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/arden-summer-camp/?$ /programs/arden-drama-school/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/philadelphia-dance-academy/?$ /programs/philadelphia-dance-academy/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/philadelphia-dance-academy/?$ /programs/philadelphia-dance-academy/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/sawubona-summer-camp/?$ /programs/sawubona-creativity-project/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/sawubona-summer-camp/?$ /programs/sawubona-creativity-project/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/dandelion-summer-camp/?$ /programs/dandelion-after-school/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/dandelion-summer-camp/?$ /programs/dandelion-after-school/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/skate-the-foundry-camp/?$ /programs/skate-the-foundry/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/skate-the-foundry-camp/?$ /programs/skate-the-foundry/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/philly-rock-gym-camps/?$ /programs/philly-rock-gym-day-camps/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/philly-rock-gym-camps/?$ /programs/philly-rock-gym-day-camps/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/coco-academy-summer-camp/?$ /programs/coco-academy/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/coco-academy-summer-camp/?$ /programs/coco-academy/#summer [NE,R=301,L]
 </IfModule>
