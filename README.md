@@ -690,7 +690,7 @@ Putting a camp on a day off is a plan, not a registration, so each camp day in a
 
 The planners need an account (`plannersNeedAccount`), and a plan made by someone signed in is kept in their profile
 without asking: there is no "Keep it in my profile" button to find. Signed out, the planner's place is taken by the
-"create a free account" box (`planAsk()`), so the prompt to make one is the first thing a visitor sees.
+tour of the planner with one button, "Create a free account" (`planShow()`), so that is the first thing a visitor sees.
 
 - **Summer and days off** (`keepPlan()` in `groups.js`): once the profile has loaded, a plan on this device and none
   in the profile is sent (`auto()`); one in the profile and none here is put on this device. The box under the plan
@@ -1417,20 +1417,29 @@ the two aren't confused.
 ## The planners need an account
 
 Every planner (the week on `/board/`, the days-off planner on `/days-off/`, `/summer-schedule/` and `/calendar/`)
-needs a signed-in account. The pages stay public and in search: signed out, an ask stands where the planner would
-be ("Plan the days off with a free account", with Create a free account and Log in), and the lists around it (who's
-open each day off, when each camp runs) are there for everyone.
+needs a signed-in account. The pages stay public and in search: signed out, a tour of the planner stands where the
+planner would be (see "The tour" below), and the lists around it (who's open each day off, when each camp runs) are
+there for everyone.
 
 - **The switch.** `GATE` in `build.mjs`: on when accounts are on, off in the preview (which has no accounts to sign
   in to). `"plannersNeedAccount": false` under `groups` in `site.config.json` opens the planners again. When it is
-  on, `<html>` carries `data-gate="1"`, the planner's markup is wrapped in `.when-in` and the ask (`planAsk()`) is
+  on, `<html>` carries `data-gate="1"`, the planner's markup is wrapped in `.when-in` and the tour (`planShow()`) is
   `.when-out`: the same two classes the menu uses, driven by the `signed` class on `<html>`.
-- **An example beside each ask** (`planExample()` in `build.mjs`): what that planner makes, so there is a reason
-  to sign up. The week builder shows a made-up child's week, the days-off planner the next four days off with a
-  plan on each, the summer planner five weeks of camps, and My kids' calendar a month of squares (the one of the
-  next three months with the most days off). Each is marked "Example" and nothing in it can be pressed. The dates
-  are real and rebuilt nightly; the programs and camps are invented ("Chess club", "Art camp") on purpose, because
-  a real listing shown there would be singled out over the others. On a phone the buttons sit right under it.
+- **The tour** (`planShow(kind, depth)` in `build.mjs`, styled as `.pshow`): the signed-out planner pages read like
+  a product page. Under the page's heading is the one thing to press, "Create a free account" (`heroCta()`), which
+  comes back to that planner. Then: a heading and a strip of tabs, one for each way of looking at the plan (List,
+  Calendar, Who's open on the days-off and summer pages; The week, What it costs, Share it on the week; Calendar,
+  List, To do on My kids' calendar), each showing a made-up example; six things the planner does; three steps; and
+  a dark band with the button again. The To do page has a short one with a single example. There is no "Log in"
+  button in it: that is at the top of every page, and on these pages it and the menu's button carry `?next=` (the
+  layout's `next`), so logging in comes back to the planner. `site.js` swaps the examples (`[data-pshow]`); without
+  it they all show, one under the other. Analytics hears `pas_plan_tour` (planner, view) and `pas_plan_cta` (place,
+  next), nothing about the visitor.
+- **The examples** (`planExample()` and `showExample()`): each is marked "Example" and nothing in it can be pressed.
+  The dates are real and rebuilt nightly (the next days off, the summer's weeks); the programs and camps are
+  invented ("Chess club", "Art camp") on purpose, because a real listing shown there would be singled out over the
+  others. The three summer examples show the same made-up summer, so they agree with each other. To change what a
+  tour says, edit the `S` table in `planShow()`: every line there must be something the planner really does.
 - **In the scripts** (`site.js`): `mayPlan()` says whether this visitor may plan. Signed out, "Add to roster" on a
   school page opens a small ask instead of the days; the boxes in the two charts are not buttons; nothing is added
   on arrival from "Add Saturday to your week".

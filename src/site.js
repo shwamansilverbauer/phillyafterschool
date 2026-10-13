@@ -99,6 +99,26 @@
   // Events for Google Tag Manager. Harmless when GTM is not installed.
   function track(data) { (window.dataLayer = window.dataLayer || []).push(data); }
 
+  // ----- the tour a signed-out visitor sees where a planner would be: an example of each view, a tab apiece. Without
+  // this script every example shows, one under the other. Analytics hears which view was opened, and a press of
+  // "Create a free account" with where on the page it was; nothing about the visitor. -----
+  all(document, '[data-pshow]').forEach(function (box) {
+    var tabs = all(box, '.pshow-tabs .vs'), panels = all(box, '.pshow-panel'), kind = box.getAttribute('data-pshow');
+    var show = function (id, byHand) {
+      panels.forEach(function (p) { p.hidden = p.getAttribute('data-pv') !== id; });
+      tabs.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-pv') === id)); });
+      if (byHand) track({ event: 'pas_plan_tour', planner: kind, view: id });
+    };
+    if (tabs.length > 1) {
+      tabs.forEach(function (b) { b.addEventListener('click', function () { show(b.getAttribute('data-pv'), true); }); });
+      show(tabs[0].getAttribute('data-pv'));
+    }
+  });
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[data-plan-cta]') : null;
+    if (a) track({ event: 'pas_plan_cta', place: a.getAttribute('data-plan-cta'), next: (/[?&]next=([a-z]+)/.exec(a.getAttribute('href') || '') || [])[1] || '' });
+  });
+
   // ----- edit mode: switched on from /edit/, it loads a second script that makes the site's copy editable -----
   var editCfg = null;
   try { editCfg = JSON.parse(document.currentScript.getAttribute('data-edit')); } catch (e) { /* no edit mode on this page */ }

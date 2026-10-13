@@ -518,7 +518,7 @@ function street(animate) {
   return `<svg class="street${animate ? ' go' : ''}" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${sky}${run(-10, sx)}${school}${run(sx + sw, 2010)}<rect class="st" x="0" y="${G}" width="2000" height="12"/><g class="bus"><g transform="translate(968,${G - 22})">${bus}</g></g></svg>`;
 }
 
-function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false, first = '', theme = '', shareImage = null, shareText = '', quiet = false }) {
+function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false, first = '', theme = '', shareImage = null, shareText = '', quiet = false, next = '' }) {
   const canonical = cfg.siteUrl + '/' + pathName;
   // Search results show roughly 60 characters of a title and 155 of a description. The site name is added
   // to a title only when it fits; a long description is cut at a word.
@@ -536,7 +536,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
     return `<details class="menu${here ? ' here' : ''}"><summary>${label}</summary><ul>${items.map(([to, text]) => `<li><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
   }).join('') + `<a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
-    ? `${daysOff ? `<a class="when-in nav-todo" href="${link('to-do/', depth)}"${pathName === 'to-do/' ? ' aria-current="page"' : ''}>To do</a>` : ''}<a class="when-in nav-acct" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}>Account</a><a class="nav-cta when-out" href="${link('register/', depth)}">Create a free account</a><a class="nav-cta when-in" href="${link('profile/', depth)}"${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}>My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>`
+    ? `${daysOff ? `<a class="when-in nav-todo" href="${link('to-do/', depth)}"${pathName === 'to-do/' ? ' aria-current="page"' : ''}>To do</a>` : ''}<a class="when-in nav-acct" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}>Account</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('profile/', depth)}"${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}>My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>`
     : `<a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`}`;
   const head = `${first}${fragment || quiet ? '' : roleHead + gtmHead + '\n'}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
@@ -569,7 +569,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   // paints, from a flag the account pages keep in this browser (no request is made).
   const topbar = GROUPS ? `<div class="band topstrip when-out${theme ? ' ' + theme : ''}"><div class="topbar"><div class="in">
     <span class="top-claim"><span class="top-wide">Run a program or camp?</span><span class="top-narrow">Run a program?</span> <a href="${link('managers/', depth)}">Claim your listing</a></span>
-    <span class="top-login"><span class="top-wide">Already have an account?</span> <a href="${link('account/', depth)}">Log in</a></span>
+    <span class="top-login"><span class="top-wide">Already have an account?</span> <a href="${link('account/', depth)}${next ? '?next=' + next : ''}">Log in</a></span>
   </div></div></div>
 ` : '';
   const page = `${quiet ? '' : gtmBody}<script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -2778,7 +2778,7 @@ function daysOffPage() {
   }).join('\n');
   const hero = `    <p class="where"><a href="${link('all-programs/', D)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
     <h1>${T(`School’s closed. What now?`)}</h1>
-    <p class="lede">${T(`Every day district schools are closed this year, who runs a camp on each, and a plan you can build for each child.`)}</p>
+    <p class="lede">${T(`Every day district schools are closed this year, who runs a camp on each, and a plan you can build for each child.`)}</p>${heroCta(D, 'daysoff')}
     <div class="facts">
       <span>School year <b>${esc(daysOff.schoolYear)}</b></span>
       <span>Calendar checked <b>${longDate(daysOff.checked)}</b></span>
@@ -2794,9 +2794,9 @@ function daysOffPage() {
   };
   const body = `<div style="display:contents">
 ${jumpNav()}
-<section class="section sum offsum needs-js-block" id="plan" data-jump-to="Your plan" data-off-plan data-clarity-mask="true">
-  <h2>${T(`Your days off`)}</h2>
-  ${planAsk(D, 'daysoff', T(`Plan the days off with a free account`), T(`The planner is for parents with an account. Make one and you can choose where each child will be on every day school is closed, as a list or on a calendar. The lists of who’s open, below, are here for everyone.`), planExample('off'))}
+<section class="section sum offsum needs-js-block${GATE ? ' gated' : ''}" id="plan" data-jump-to="Your plan" data-off-plan data-clarity-mask="true">
+  <h2${gateIn}>${T(`Your days off`)}</h2>
+  ${planShow('off', D)}
   <div${gateIn} style="display:contents">
   <p>${GATE ? T(`Choose where each child will be on each day school is closed. Your picks are saved on this device and in your profile, so they’re there on your other devices.`) : T(`Choose where each child will be on each day school is closed. Your picks are saved on this device and nowhere else.`)}</p>
   <div class="sum-kids"><div class="kids" id="off-kids" role="group" aria-label="Which child"></div><button type="button" class="clear" id="off-kid-add">Add a sibling</button><button type="button" class="clear" id="off-kid-drop" hidden>Remove this child</button></div>
@@ -2894,7 +2894,7 @@ ${cards}
   return layout({
     title: `Day camps for days off school in Philadelphia`,
     description: `Every day School District of Philadelphia schools are closed in ${daysOff.schoolYear}, and the after-school programs that run a camp or full-day care on those days.`,
-    pathName: offPath, depth: D, current: offPath, hero, body, showStreet: 'dayoff', scripts: GROUPS ? groupsScript(D) : '',
+    pathName: offPath, depth: D, current: offPath, hero, body, next: GATE ? 'daysoff' : '', showStreet: 'dayoff', scripts: GROUPS ? groupsScript(D) : '',
     shareImage: { file: 'share-days-off.png', alt: `${cfg.siteName} day-off programs: a park on a morning with no school, a kite going up and a school bus parked` },
     jsonLd: { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Day-camp programs', `${cfg.siteUrl}/${offPath}`]].map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) },
   });
@@ -2993,21 +2993,207 @@ function planExample(kind) {
       <p class="ex-foot">${T(`Days off, camp weeks, sign-up dates and your own dates on one calendar, month by month.`)}</p>
     </figure>`;
 }
-function planAsk(depth, next, heading, say, example, wide) {
+// ---------- the planners, for someone who hasn't signed in: a tour of what each one does ----------
+// Where a planner would be, a signed-out visitor gets a page about it, the way a product page shows a product: one
+// made-up example for each way of looking at the plan (a tab apiece), what it does, three steps, and one thing to
+// press, "Create a free account". There is no "Log in" button here: it is at the top of every page, and on these
+// pages it comes back to the planner (the layout's `next`). Everything shown is invented and marked "Example".
+const SHOW_ICON = {
+  kids: '<circle cx="8" cy="8" r="3"/><circle cx="17" cy="9.5" r="2.5"/><path d="M2.5 20c.5-4 2.6-6 5.5-6s5 2 5.5 6M15.2 20c.2-2.8 1.3-4.3 2.8-4.3 1.7 0 2.9 1.5 3.3 4.3"/>',
+  tick: '<rect x="3" y="3" width="18" height="18" rx="4.5"/><path d="M7.5 12.5l3 3 6-6.5"/>',
+  devices: '<rect x="2.5" y="5" width="13" height="9.5" rx="1.5"/><path d="M1 18h14"/><rect x="16.5" y="8" width="6" height="11.5" rx="1.5"/>',
+  picture: '<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="M4 18l5.5-5 3.5 3 3-2.5 4 4"/>',
+  cal: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/>',
+  coins: '<circle cx="12" cy="12" r="9"/><path d="M14.8 9.2c-.5-.9-1.5-1.4-2.8-1.4-1.7 0-2.9.8-2.9 2.1 0 3 5.9 1.3 5.9 4.3 0 1.3-1.3 2.1-3 2.1-1.4 0-2.5-.6-3-1.5M12 6v1.8M12 16.3V18"/>',
+  lock: '<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
+  share: '<path d="M12 15V4M8 7.5l4-4 4 4M5 12v6.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V12"/>',
+  chart: '<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 10h18M3 15h18M9 4v16M15 4v16"/>',
+  bell: '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15zM10 20.5a2 2 0 0 0 4 0"/>',
+  list: '<path d="M8.5 6.5H21M8.5 12H21M8.5 17.5H21"/><circle cx="4" cy="6.5" r="1.2"/><circle cx="4" cy="12" r="1.2"/><circle cx="4" cy="17.5" r="1.2"/>',
+  dice: '<rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="8.5" cy="8.5" r="1.1"/><circle cx="15.5" cy="8.5" r="1.1"/><circle cx="12" cy="12" r="1.1"/><circle cx="8.5" cy="15.5" r="1.1"/><circle cx="15.5" cy="15.5" r="1.1"/>',
+  plus: '<circle cx="12" cy="12" r="9"/><path d="M12 7.5v9M7.5 12h9"/>',
+  out: '<path d="M10 5H6.5A1.5 1.5 0 0 0 5 6.5v11A1.5 1.5 0 0 0 6.5 19h11a1.5 1.5 0 0 0 1.5-1.5V14M14 4h6v6M20 4l-8.5 8.5"/>',
+};
+const showIcon = k => `<span class="pshow-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">${SHOW_ICON[k]}</svg></span>`;
+// The one thing to press, under a planner page's heading, for someone signed out.
+const heroCta = (depth, next) => GATE ? `
+    <p class="hero-cta when-out"><a class="btn primary big" href="${link('register/', depth)}?next=${next}" data-plan-cta="hero">${T(`Create a free account`)}</a><span>${T(`Free, with no password to remember: we email you a code, or you use Google.`)}</span></p>` : '';
+// More made-up examples, for the views the short ones above don't cover.
+function showExample(kind) {
+  const tag = `<span class="ex-tag">${T(`Example`)}</span>`;
+  const kids = `<span class="ex-kids" aria-hidden="true"><i class="on">Sam</i><i>Rae</i></span>`;
+  const chip = (text, color, small, cls) => `<span class="ex-chip${cls ? ' ' + cls : ''}" style="--tc:${color}">${esc(text)}${small ? `<small>${esc(small)}</small>` : ''}</span>`;
+  const ahead = offDays.flatMap(d => d.dates.map(x => ({ d: x, name: dayLabel(d) }))).filter(x => x.d >= TODAY);
+  const month = ({ mk, marks, off, label, foot }) => {
+    const y = +mk.slice(0, 4), mo = +mk.slice(5) - 1, lead = new Date(Date.UTC(y, mo, 1, 12)).getUTCDay(), n = new Date(Date.UTC(y, mo + 1, 0, 12)).getUTCDate();
+    const iso = d => `${mk}-${String(d).padStart(2, '0')}`;
+    let cells = Array.from({ length: lead }, () => '<td class="cal-pad"></td>');
+    for (let d = 1; d <= n; d++) { const m = marks(iso(d), new Date(Date.UTC(y, mo, d, 12)).getUTCDay()); cells.push(`<td${off(iso(d)) ? ' class="cal-off"' : ''}><div class="ex-day"><span class="cal-n">${d}</span>${m.length ? `<span class="cal-marks">${m.map(([c, t, ink]) => `<span class="cal-m ${c}"${ink ? ` style="--mk:${ink}"` : ''}>${esc(t)}</span>`).join('')}</span>` : ''}</div></td>`); }
+    while (cells.length % 7) cells.push('<td class="cal-pad"></td>');
+    const rows = []; for (let i = 0; i < cells.length; i += 7) rows.push(`<tr>${cells.slice(i, i + 7).join('')}</tr>`);
+    return `<figure class="ex ex-cal" aria-label="${esc(label)}">
+      <figcaption>${tag}<b>${MONTH_NAMES[mo]} ${y}</b>${kids}</figcaption>
+      <table class="cal-grid"><thead><tr>${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => `<th scope="col">${d}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>
+      <p class="ex-foot">${foot}</p>
+    </figure>`;
+  };
+  const chart = ({ label, title, first, cols, rows, picked, foot }) => `<figure class="ex ex-chart" aria-label="${esc(label)}">
+      <figcaption>${tag}<b>${title}</b>${kids}</figcaption>
+      <div class="ex-chart-in"><table><thead><tr><th scope="col">${first}</th>${cols.map(([a, b]) => `<th scope="col"><span>${esc(a)}</span><b>${esc(b)}</b></th>`).join('')}</tr></thead>
+      <tbody>${rows.map(([name, sub, on], r) => `<tr><th scope="row">${esc(name)}<small>${esc(sub)}</small></th>${cols.map((_, c) => { const p = picked.some(([a, b]) => a === r && b === c); return on.includes(c) ? `<td class="on${p ? ' picked' : ''}"><i></i></td>` : '<td></td>'; }).join('')}</tr>`).join('')}</tbody></table></div>
+      <p class="ex-foot">${foot}</p>
+    </figure>`;
+  const monDay = iso => { const d = utcDay(iso); return [MONTH_NAMES[d.getUTCMonth()].slice(0, 3), String(d.getUTCDate())]; };
+  if (kind === 'off-list') {
+    const next = offDays.filter(d => (d.end || d.date) >= TODAY).slice(0, 4);
+    const picks = [chip('Day camp at the art studio', '#2C8444', '✓ Signed up', 'ok'), chip('At home or with family', EX.home), chip('Soccer day camp', '#B88A00', 'Still to sign up', 'need'), `<span class="ex-chip todo">${T(`Not planned yet`)}</span>`];
+    return `<figure class="ex ex-rows" aria-label="An example of a days-off plan, as a list">
+      <figcaption>${tag}<b>${T(`Sam’s days off`)}</b>${kids}</figcaption>
+      <ol class="ex-list">${next.map((d, i) => `<li><span class="ex-when"><b>${d.end ? `${shortDate(d.date)} – ${shortDate(d.end)}` : dayDate(d.date)}</b><small>${esc(dayLabel(d))}</small></span>${picks[i]}</li>`).join('')}</ol>
+      <p class="ex-foot">${T(`Every day school is closed this year is on the list, with who has posted a camp for each.`)}</p>
+    </figure>`;
+  }
+  if (kind === 'off-cal') {
+    const count = {}; ahead.forEach(x => { count[x.d.slice(0, 7)] = (count[x.d.slice(0, 7)] || 0) + 1; });
+    const mk = Object.keys(count).sort().slice(0, 3).sort((a, b) => count[b] - count[a] || a.localeCompare(b))[0] || TODAY.slice(0, 7);
+    const off = new Set(offDays.flatMap(d => d.dates).filter(x => x.slice(0, 7) === mk)), order = [...off].sort();
+    const state = [['m-kid m-ok', '✓ Art camp', '#2C8444'], ['m-kid m-need', 'Soccer camp', '#B88A00'], ['m-kid', 'At home', '#1763B8'], ['m-kid m-todo', 'Not planned', '#1763B8']];
+    return month({ mk, off: x => off.has(x), label: 'An example of a days-off plan, on a calendar', foot: T(`Green is signed up, yellow is still to sign up for, and a dashed day has no plan yet.`),
+      marks: x => off.has(x) ? [['m-off', 'No school'], state[order.indexOf(x) % 4]] : [] });
+  }
+  if (kind === 'off-chart') {
+    const cols = ahead.slice(0, 6).map(x => monDay(x.d));
+    return chart({ label: 'An example of the chart of who is open on each day off', title: T(`Who’s open each day off`), first: 'Program', cols, picked: [[0, 0], [1, 2]],
+      rows: [['Art studio day camp', 'Ages 5–12', [0, 1, 2, 4]], ['Soccer day camp', 'Ages 6–13', [0, 2, 3, 5]], ['Chess and games camp', 'Ages 6–12', [1, 3, 4]], ['Rec center day camp', 'Free', [0, 1, 2, 3, 4, 5]]].map(r => [r[0], r[1], r[2].filter(c => c < cols.length)]),
+      foot: T(`A filled box means the program has posted a camp for that day. A dark one is in the plan.`) });
+  }
+  if (kind === 'sum-cal') {
+    const P = summerPlan, mk = `${summerYear}-07`, names = { 1: ['Art camp', EX.art], 2: ['Nature camp', EX.nature], 4: ['Soccer camp', EX.sport], 5: ['Theater camp', EX.music], 6: ['Art camp', EX.art] }, weekOf = {};   // the same summer as the list and the chart
+    P.weeks.forEach((w, i) => { for (let n = 0; n < 5; n++) { const d = utcDay(w); d.setUTCDate(d.getUTCDate() + n); weekOf[d.toISOString().slice(0, 10)] = i; } });
+    return month({ mk, off: () => false, label: 'An example of a summer plan, on a calendar', foot: T(`Each camp sits on the days it runs, so an open week is easy to spot.`),
+      marks: x => { if (weekOf[x] === undefined) return []; const c = names[weekOf[x]]; return c ? [['m-kid', c[0], c[1]]] : [['m-kid m-todo', 'Not planned', '#1763B8']]; } });
+  }
+  if (kind === 'sum-chart') {
+    const P = summerPlan, cols = P.weeks.slice(0, 8).map(monDay);
+    return chart({ label: 'An example of the chart of when each camp runs', title: T(`When each camp runs`), first: 'Camp', cols, picked: [[0, 1], [1, 2], [2, 4], [3, 4], [4, 5], [0, 6]],
+      rows: [['Art camp', 'Ages 5–12 · $320 a week', [1, 2, 3, 4, 5, 6]], ['Nature camp', 'Ages 6–11 · $290 a week', [0, 1, 2, 3]], ['Soccer camp', 'Ages 6–13 · $275 a week', [2, 3, 4, 5, 6, 7]], ['Coding camp', 'Ages 8–14 · mornings', [3, 4, 5]], ['Theater camp', 'Ages 7–13 · $340 a week', [4, 5, 6, 7]]].map(r => [r[0], r[1], r[2].filter(c => c < cols.length)]),
+      foot: T(`Each column is a week, named by its Monday. A dark box is in the plan.`) });
+  }
+  if (kind === 'week-cost') {
+    const rows = [['Chess club', 'Monday and Thursday · $18 a class', 648], ['Soccer', 'Tuesday · $15 a week', 270], ['Art studio', 'Wednesday · $28 a class', 504], ['Piano lesson', 'Thursday · $40 a lesson', 720], ['Aftercare at school', 'Friday · $35 a day', 630]];
+    return `<figure class="ex ex-cost" aria-label="An example of what a week adds up to">
+      <figcaption>${tag}<b>${T(`What Sam’s week comes to`)}</b>${kids}</figcaption>
+      <ul class="ex-cost-list">${rows.map(([n, s, v]) => `<li><span>${esc(n)}<small>${esc(s)}</small></span><b>$${v}</b></li>`).join('')}<li class="total"><span>${T(`Half a school year`)}<small>${T(`18 weeks of school`)}</small></span><b>About $${rows.reduce((t, r) => t + r[2], 0).toLocaleString('en-US')}</b></li></ul>
+      <p class="ex-foot">${T(`An estimate from each program’s published prices. It leaves out fees, discounts and financial aid.`)}</p>
+    </figure>`;
+  }
+  if (kind === 'week-share') {
+    const days = [['Mon', 'Chess club', EX.chess], ['Tue', 'Soccer', EX.sport], ['Wed', 'Art studio', EX.art], ['Thu', 'Chess club + Piano', EX.music], ['Fri', 'Aftercare at school', EX.care]];
+    return `<figure class="ex ex-share" aria-label="An example of a week made into a picture to send">
+      <figcaption>${tag}<b>${T(`One picture to send`)}</b></figcaption>
+      <div class="ex-share-in">
+        <div class="ex-card" aria-hidden="true"><span class="ex-card-brand"><i></i>Philly After School</span><b>Sam’s week</b>${days.map(([d, n, c]) => `<span class="ex-card-row" style="--tc:${c}"><i>${d}</i>${esc(n)}</span>`).join('')}</div>
+        <ul class="ex-ways"><li>${T(`Text it to a sitter or the group chat`)}</li><li>${T(`Print it for the fridge or a teacher`)}</li><li>${T(`Or share the week itself with one person, who signs in and always sees the latest`)}</li></ul>
+      </div>
+    </figure>`;
+  }
+  if (kind === 'year-list') {
+    const add = n => { const d = utcDay(TODAY); d.setUTCDate(d.getUTCDate() + n); while (d.getUTCDay() === 0 || d.getUTCDay() === 6) d.setUTCDate(d.getUTCDate() + 1); return d.toISOString().slice(0, 10); };
+    const rows = [...ahead.slice(0, 2).map((x, i) => [x.d, 'No school · ' + x.name, i ? chip('Sam: Soccer day camp', '#B88A00', 'Still to sign up', 'need') : chip('Sam: Day camp at the art studio', '#2C8444', '✓ Signed up', 'ok')]),
+      [add(6), 'A date you added', chip('Picture day', '#0F4D90')], [add(13), 'Sign-ups', chip('Chess club: winter sign-ups open', '#CC3000')]].sort((a, b) => a[0].localeCompare(b[0]));
+    return `<figure class="ex ex-rows" aria-label="An example of My kids’ calendar, as a list">
+      <figcaption>${tag}<b>${T(`Coming up`)}</b>${kids}</figcaption>
+      <ol class="ex-list">${rows.map(([d, s, c]) => `<li><span class="ex-when"><b>${dayDate(d)}</b><small>${esc(s)}</small></span>${c}</li>`).join('')}</ol>
+      <p class="ex-foot">${T(`The whole year in date order, from this week to Labor Day.`)}</p>
+    </figure>`;
+  }
+  // the to-do list
+  const d = ahead.slice(0, 3).map(x => dayDate(x.d));
+  return `<figure class="ex ex-todo" aria-label="An example of the to-do list of camps to sign up for">
+      <figcaption>${tag}<b>${T(`Camps to sign up for`)}</b>${kids}</figcaption>
+      <ul class="ex-todo-list">
+        <li><span class="ex-todo-name"><b>Day camp at the art studio</b><small>for Sam · 2 days</small></span><span class="ex-box">${esc(d[0] || 'Tue, Nov 3')}</span><span class="ex-box">${esc(d[1] || 'Wed, Nov 11')}</span><span class="ex-go">${T(`Go to its sign-up page`)}</span></li>
+        <li><span class="ex-todo-name"><b>Soccer day camp</b><small>for Rae · 1 day</small></span><span class="ex-box on">${esc(d[2] || 'Mon, Nov 16')}</span><span class="ex-done">${T(`Signed up`)}</span></li>
+      </ul>
+      <p class="ex-foot">${T(`Putting a camp on your plan doesn’t sign your child up. Each camp day waits here until you tick it.`)}</p>
+    </figure>`;
+}
+function planShow(kind, depth) {
   if (!GATE) return '';
-  return `<div class="acct-ask when-out${example ? ' has-ex' : ''}${wide ? ' ex-wide' : ''}" data-acct-ask>
-    <div class="acct-ask-say">
-    <h3>${heading}</h3>
-    <p>${say}</p>
+  const offLeft = offDays.reduce((n, d) => n + d.dates.filter(x => x >= TODAY).length, 0);
+  const device = ['devices', T(`On your phone and your computer`), T(`Signed in, your plan is kept in your profile, so it’s there on every device.`)];
+  const S = {
+    week: { next: 'board', eye: T(`The week builder`), h: T(`See the whole week before it starts`),
+      views: [['week', T(`The week`), planExample('week'), T(`Put a program on each afternoon, with its hours and when to pick up. Each child gets a week of their own.`)],
+        ['cost', T(`What it costs`), showExample('week-cost'), T(`The week adds itself up from each program’s published prices, so you see the half-year before you sign up for anything.`)],
+        ['share', T(`Share it`), showExample('week-share'), T(`Turn the week into one picture for the group chat or the fridge, or share it with one person who signs in to see it.`)]],
+      feats: [['kids', T(`A week for each child`), T(`Each child has their own week, and a second one for the term that’s coming.`)],
+        ['dice', T(`A themed week to start from`), T(`Not sure where to begin? Roll a themed week and swap out what doesn’t fit.`)],
+        ['coins', T(`What the week adds up to`), T(`An estimate for half a school year, from the prices each program publishes.`)],
+        ['picture', T(`A card to text or print`), T(`One picture with each day’s programs and pickup times, made right on your phone.`)],
+        ['share', T(`Shared with one person`), T(`A grandparent, a sitter or a co-parent signs in and always sees the current week.`)], device],
+      steps: [T(`Pick your school, then add a program to each afternoon.`), T(`Send it to whoever does pickup, or stick it on the fridge.`)] },
+    off: { next: 'daysoff', eye: offLeft ? T(`{n} days off still to come this year`, { n: offLeft }) : T(`The day-camp planner`), h: T(`Every day school is closed, covered`),
+      views: [['list', 'List', showExample('off-list'), T(`Every day off in order. Choose a camp or a day at home for each child, and tick a day once you’ve signed up.`)],
+        ['cal', 'Calendar', showExample('off-cal'), T(`The same plan on a month of squares, so a break with no plan yet stands out before it sneaks up on you.`)],
+        ['chart', 'Who’s open', showExample('off-chart'), T(`One chart of which programs have posted a camp for each day off. Tap a box and that day is in your plan.`)]],
+      feats: [['tick', T(`Signed up? Tick it off`), T(`Planning a camp isn’t registering for it. Each camp day waits on a to-do list, with a link to the camp’s own sign-up page, until you tick it.`)],
+        ['kids', T(`A plan for each child`), T(`Different camps for different kids, or copy one child’s days to the next.`)],
+        ['list', T(`A whole break in one tap`), T(`Pick a camp for the first day of a break and use it for the rest of that break.`)],
+        ['picture', T(`A calendar for the fridge`), T(`One picture of every day off, or one for each month, to print or send to a sitter.`)],
+        ['cal', T(`In your phone’s calendar`), T(`One file puts every planned day into the calendar you already use.`)], device],
+      steps: [T(`Choose where each child will be on each day off.`), T(`Tick off each camp as you sign up, and print the calendar.`)] },
+    sum: { next: 'summer', eye: T(`{n} weeks of summer`, { n: summerCamps.length ? summerPlan.weeks.length : 0 }), h: T(`The whole summer on one page`),
+      views: [['list', 'List', planExample('sum'), T(`Every week from the last day of school to Labor Day. Add a camp to each one, and the plan adds up what the summer costs.`)],
+        ['cal', 'Calendar', summerCamps.length ? showExample('sum-cal') : '', T(`Month by month, with each camp on the days it runs and the open weeks easy to spot.`)],
+        ['chart', 'Who’s open', summerCamps.length ? showExample('sum-chart') : '', T(`Which camps run which weeks, on one chart. Tap a box and that week is in your summer.`)]],
+      feats: [['chart', T(`See the gaps`), T(`A week with nothing on it stands out, in June rather than the Friday before.`)],
+        ['kids', T(`A summer for each child`), T(`Set an age and the camps narrow to the ones that take it. Siblings can copy each other’s weeks.`)],
+        ['coins', T(`What the summer adds up to`), T(`A running total from the weekly prices the camps post.`)],
+        ['picture', T(`A calendar picture`), T(`The whole summer on one card, or a card for each month, to print or send to family.`)],
+        ['cal', T(`In your phone’s calendar`), T(`Each camp week becomes a Monday-to-Friday entry in the calendar you already use.`)], device],
+      steps: [T(`Add a camp to each week, for one child or for each of them.`), T(`Print the summer, or put the weeks in your phone’s calendar.`)] },
+    year: { next: 'calendar', eye: 'My kids’ calendar', h: T(`The week, the days off and the summer, in one place`),
+      views: [['cal', 'Calendar', planExample('year'), T(`A month at a time: days off, camp weeks, sign-up dates and the dates you add yourself.`)],
+        ['list', 'List', showExample('year-list'), T(`Or the same year as a list in date order, to read from the top down.`)],
+        ['todo', 'To do', showExample('todo'), T(`Every camp day you’ve planned and haven’t signed up for yet, with a link to each camp’s own sign-up page.`)]],
+      feats: [['bell', T(`Sign-up dates, lined up`), T(`Openings and deadlines for the programs and camps on your plans, on the days they happen.`)],
+        ['plus', T(`Your own dates`), T(`Picture day, pretzel day, a form that’s due: add them and they sit beside everything else.`)],
+        ['tick', T(`A to-do list`), T(`What’s left to sign up for, ticked off as you go.`)],
+        ['picture', T(`A picture of any month`), T(`To print for the fridge or send to family.`)],
+        ['cal', T(`One file for your phone`), T(`Everything in the calendar you already use, and a new file whenever a date changes.`)],
+        ['lock', T(`Private`), T(`There’s no link to your calendar and no way to share it from here. Only you can open it.`)]],
+      steps: [T(`Build a week, plan the days off, plan the summer: any or all.`), T(`Open one calendar and see the whole year.`)] },
+    todo: { next: 'todo', eye: 'To do', h: T(`What’s left to sign up for, in one list`),
+      views: [['todo', 'To do', showExample('todo'), T(`Plan the days school is closed, and each camp day you pick lands here with a link to that camp’s own sign-up page. Tick it off once you’ve signed up.`)]],
+      feats: [['tick', T(`Tick it off`), T(`A day leaves the list when you tick it, and turns green on your plan.`)],
+        ['out', T(`Straight to the sign-up page`), T(`Each camp has a link to the page where it takes sign-ups.`)], device],
+      steps: [T(`Plan the days off: pick a camp for each day you need one.`), T(`Sign up at each camp, and tick it off here.`)] },
+  }[kind];
+  const go = where => `<a class="btn big ${where === 'end' ? 'pshow-go' : 'primary'}" href="${link('register/', depth)}?next=${S.next}" data-plan-cta="${where}">${T(`Create a free account`)}</a>`;
+  const views = S.views.filter(v => v[2]);
+  return `<div class="pshow when-out" data-acct-ask data-pshow="${kind}">
+    <div class="pshow-tour">
+      <div class="pshow-head">
+        <div><p class="pshow-eye">${S.eye}</p><h2>${S.h}</h2></div>
+        ${views.length > 1 ? `<div class="tabs view-switch pshow-tabs" role="group" aria-label="Ways to look at it">${views.map(([id, label], i) => `<button type="button" class="tab vs" data-pv="${id}" aria-pressed="${i ? 'false' : 'true'}">${label}</button>`).join('')}</div>` : ''}
+      </div>
+      ${views.map(([id, label, fig, say]) => `<div class="pshow-panel" data-pv="${id}">
+        <div class="pshow-say"><b>${label}</b><p>${say}</p></div>
+        ${fig}
+      </div>`).join('\n      ')}
     </div>
-    ${example || ''}
-    <div class="acct-ask-do">
-    <div class="actions"><a class="btn primary big" href="${link('register/', depth)}?next=${next}">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', depth)}?next=${next}">${T(`Log in`)}</a></div>
-    <ul class="rules ticks">
-      <li>${T(`It’s free, and there’s no password: we email you a code, or you use Google.`)}</li>
-      <li>${T(`Your plans are there on your phone and your computer, and line up in one private calendar.`)}</li>
-      <li>${T(`Started one on this device already? It’s still here. Log in and carry on.`)}</li>
+    <ul class="pshow-feats">
+      ${S.feats.map(([ic, h, p]) => `<li>${showIcon(ic)}<div><b>${h}</b><span>${p}</span></div></li>`).join('\n      ')}
     </ul>
+    <ol class="pshow-steps">
+      <li><b>${T(`Create a free account`)}</b><span>${T(`No password: we email you a code, or you use Google.`)}</span></li>
+      <li><b>${T(`Make your plan`)}</b><span>${S.steps[0]}</span></li>
+      <li><b>${T(`Take it with you`)}</b><span>${S.steps[1]}</span></li>
+    </ol>
+    <div class="pshow-end">
+      <div><b>${T(`It’s free for parents.`)}</b><span>${T(`Started a plan on this phone or computer before? It’s still here: log in at the top of the page.`)}</span></div>
+      ${go('end')}
     </div>
   </div>`;
 }
@@ -3663,9 +3849,9 @@ function boardPage() {
   };
   const schoolLinks = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<a class="btn" href="${link(s.id + '/', 1)}">${esc(s.shortName)}</a>`).join('');
   const hero = `    <h1>${T(`Build your week`)}</h1>
-    <p class="lede">${T(`Monday might be martial arts and Thursday the rec center. Plan the term that’s coming, keep a second roster for what your child is doing now, and send either to your partner, a sitter, or the group chat. More than one child? Each gets their own.`)}</p>`;
-  const body = `${GATE ? `<section class="section sum when-out" id="board-ask">
-  ${planAsk(1, 'board', T(`Build your week with a free account`), T(`The week builder is for parents with an account. Make one and you can put programs on each day, keep a roster for each child, and send the week to a partner or a sitter.`), planExample('week'), true)}
+    <p class="lede">${T(`Monday might be martial arts and Thursday the rec center. Plan the term that’s coming, keep a second roster for what your child is doing now, and send either to your partner, a sitter, or the group chat. More than one child? Each gets their own.`)}</p>${heroCta(1, 'board')}`;
+  const body = `${GATE ? `<section class="section when-out" id="board-ask">
+  ${planShow('week', 1)}
 </section>
 ` : ''}<div data-board-page data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`The roster needs JavaScript turned on.`)}</p></noscript>
@@ -3792,7 +3978,7 @@ function boardPage() {
   </div>
   <script type="application/json" id="pas-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: 'Build your week', description: `Put together a Monday to Friday after-school roster for each child from ${cfg.siteName} listings and turn it into a card to share.`, pathName: 'board/', depth: 1, current: 'board/', hero, body,
+  return layout({ title: 'Build your week', description: `Put together a Monday to Friday after-school roster for each child from ${cfg.siteName} listings and turn it into a card to share.`, pathName: 'board/', depth: 1, current: 'board/', hero, body, next: GATE ? 'board' : '',
     // An old shared-roster link carries a child's first name after the #. Those links are retired, but one may still be
     // opened. This runs before any analytics loads: it notes that one arrived and takes it out of the address.
     scripts: GROUPS ? groupsScript(1) : '',
@@ -4585,7 +4771,7 @@ function schedulesPage() {
   <h2>${T(`How the planners work`)}</h2>
   <ul>
     <li>${T(`Nothing to put on a plan yet?`)} <a href="${link('schools/', D)}">${T(`Find your school`)}</a> ${T(`to see what works with it, or`)} <a href="${link('programs/', D)}">${T(`look through every program`)}</a>.</li>
-    <li>${T(`A plan stays on the phone or computer you made it on. Nothing about your child is sent to us.`)}</li>${GROUPS ? `
+    ${GATE ? '' : `<li>${T(`A plan stays on the phone or computer you made it on. Nothing about your child is sent to us.`)}</li>`}${GROUPS ? `
     <li>${GATE ? T(`The planners need a free account. Signed in, each plan is kept in your profile, so it’s on every device you sign in on.`) : T(`With a free account you can keep each plan in your profile, so it’s on every device you sign in on.`)} <a class="when-out" href="${link('register/', D)}">${T(`Create a free account`)}</a></li>` : ''}
     <li>${T(`Days, hours and prices come from each program’s own website. Check with the program before you count on a spot.`)}</li>
   </ul>
@@ -4603,15 +4789,15 @@ function todoPage() {
     offDays: offDays.flatMap(d => d.dates.filter(x => x >= TODAY).map(x => ({ d: x, name: d.name }))),
     programs: Object.fromEntries(programs.filter(p => p.daysOff).map(p => [p.id, { n: p.name, href: link(programPath(p), D), go: outUrl(p.daysOff.url, { type: 'camp', program: p }), off: p.daysOff.dates.filter(x => x >= TODAY) }])),
   };
-  const hero = `    <h1><span class="when-out">${T(`Log in to see your to-do list`)}</span><span class="when-in">${T(`To do`)}</span></h1>
-    <p class="lede when-out">${T(`The camp days you’ve planned and haven’t signed up for yet, in one list. It’s part of a free account.`)}</p>
+  const hero = `    <h1><span class="when-out">${T(`A to-do list for camp sign-ups`)}</span><span class="when-in">${T(`To do`)}</span></h1>
+    <p class="lede when-out">${T(`The camp days you’ve planned and haven’t signed up for yet, in one list. It’s part of a free account.`)}</p>${heroCta(D, 'todo')}
     <p class="lede when-in">${T(`What’s left to sign up for. Putting a camp on your plan doesn’t sign your child up, so every camp day you’ve planned waits here until you tick it off.`)}</p>`;
   const body = `<div ${groupsAttrs(D)} data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`The to-do list needs JavaScript turned on.`)}</p></noscript>
   <section class="section when-out" id="todo-out">
-    <h2>${T(`A list of what’s left to sign up for`)}</h2>
+    ${GATE ? planShow('todo', D) : `<h2>${T(`A list of what’s left to sign up for`)}</h2>
     <p>${T(`Plan the days school is closed, and each camp day you pick lands on a to-do list with a link to that camp’s own sign-up page. Tick it off once you’ve signed up.`)}</p>
-    <div class="actions"><a class="btn primary big" href="${link('register/', D)}?next=todo">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=todo">${T(`Log in`)}</a></div>
+    <div class="actions"><a class="btn primary big" href="${link('register/', D)}?next=todo">${T(`Create a free account`)}</a></div>`}
   </section>
   <p class="hint when-in" id="todo-wait">${T(`Getting your list…`)}</p>
   <section class="section sum todo-sec needs-js-block" id="todo-page" hidden>
@@ -4632,7 +4818,7 @@ function todoPage() {
   </section>
   <script type="application/json" id="todo-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: 'To do: camps to sign up for', description: `Your ${cfg.siteName} to-do list: the camp days you’ve planned and haven’t signed up for yet.`, pathName: 'to-do/', depth: D, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(D) });
+  return layout({ title: 'To do: camps to sign up for', description: `Your ${cfg.siteName} to-do list: the camp days you’ve planned and haven’t signed up for yet.`, pathName: 'to-do/', depth: D, current: null, hero, body, next: 'todo', noindex: true, quiet: true, scripts: groupsScript(D) });
 }
 
 function calendarPage() {
@@ -4650,22 +4836,14 @@ function calendarPage() {
     } : null,
   };
   const hero = `    <h1>${T(`My kids’ calendar`)}</h1>
-    <p class="lede">${T(`Everything you’ve planned for the school year and the summer, in one place: the after-school week, every day off, camp weeks and sign-up dates. Only you can see it.`)}</p>`;
+    <p class="lede">${T(`Everything you’ve planned for the school year and the summer, in one place: the after-school week, every day off, camp weeks and sign-up dates. Only you can see it.`)}</p>${heroCta(D, 'calendar')}`;
   const body = `<div ${groupsAttrs(D)} data-year-page data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`The calendar needs JavaScript turned on.`)}</p></noscript>
   <section class="section year-out" id="year-out">
-    <h2>${T(`The whole year, lined up`)}</h2>
+    ${GATE ? planShow('year', D) : `<h2>${T(`The whole year, lined up`)}</h2>
     <p>${T(`Sign in and what you’ve planned comes together on one page, on any device.`)}</p>
     ${planExample('year')}
-    <div class="actions"><a class="btn primary big" href="${link('register/', D)}?next=calendar">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=calendar">${T(`Log in`)}</a></div>
-    <ul class="rules ticks">
-      <li>${T(`Every day school is closed, with where each child will be.`)}</li>
-      <li>${T(`The summer, week by week.`)}</li>
-      <li>${T(`Sign-up openings and deadlines for the programs and camps you chose.`)}</li>
-      <li>${T(`Your own dates: picture day, pretzel day, a form that’s due.`)}</li>
-      <li>${T(`A calendar picture for each month, and a file that puts it all in your phone’s calendar.`)}</li>
-    </ul>
-    <p class="hint">${T(`It’s private. There is no link to your calendar and no way to share it from here: a picture or a file you save is yours to send.`)}</p>
+    <div class="actions"><a class="btn primary big" href="${link('register/', D)}?next=calendar">${T(`Create a free account`)}</a></div>`}
     <p class="hint">${GATE ? T(`The same account opens the planners:`) : T(`Planning doesn’t need an account:`)} <a href="${link('board/', D)}">${T(`build a week`)}</a>, <a href="${link(offPath, D)}#plan">${T(`plan the days off`)}</a>${P ? `, <a href="${link(summerPath, D)}">${T(`plan the summer`)}</a>` : ''}.</p>
   </section>
   <p class="hint when-in" id="year-wait">${T(`Getting your calendar…`)}</p>
@@ -4776,7 +4954,7 @@ function calendarPage() {
 </div>`;
   return layout({
     title: 'My kids’ calendar', description: `A private calendar of everything you’ve planned on ${cfg.siteName}: the after-school week, days off, summer camps and sign-up dates.`,
-    pathName: yearPath, depth: D, current: null, hero, body, noindex: true, quiet: true, scripts: groupsScript(D),
+    pathName: yearPath, depth: D, current: null, hero, body, next: 'calendar', noindex: true, quiet: true, scripts: groupsScript(D),
   });
 }
 function summerSchedulePage() {
@@ -4797,7 +4975,7 @@ function summerSchedulePage() {
     camps: Object.fromEntries(P.camps.map(({ c, on, exact }) => [c.id, { n: c.name, w: on, y: c.season || 0, x: exact ? 1 : 0, p: typeof c.weekly === 'number' ? c.weekly : null, h: shortHours(c), a: [c.ageMin || 0, c.ageMax || 99], hood: (c.neighborhoods || []).join(', ') }])),
   };
   const hero = `    <h1>${T(`Plan your summer, week by week`)}</h1>
-    <p class="lede">${T(`{n} weeks between the last day of school and Labor Day. See which camps run each week, and line up your own summer.`, { n: P.weeks.length })}</p>
+    <p class="lede">${T(`{n} weeks between the last day of school and Labor Day. See which camps run each week, and line up your own summer.`, { n: P.weeks.length })}</p>${heroCta(D, 'summer')}
     <div class="facts">
       <span>Summer <b>${year}</b></span>
       <span><b>${P.weeks.length}</b> weeks</span>
@@ -4808,9 +4986,9 @@ ${guide ? `<section class="section">
   <p class="flag camp-guide"><b>${T(`Most of these dates are from summer {year}, shown as a guide.`, { year: base })}</b> ${T(`A camp that hasn’t posted {next} yet is shown on the weeks it ran last summer, moved to the same week of the calendar. Camps usually post between December and March, and each one switches to its real dates when it does.`, { next: year })}</p>
 </section>` : ''}
 ${jumpNav()}
-<section class="section sum needs-js-block" id="plan" data-jump-to="Your summer" data-summer data-clarity-mask="true">
-  <h2>${T(`Your summer`)}</h2>
-  ${planAsk(D, 'summer', T(`Plan the summer with a free account`), T(`The planner is for parents with an account. Make one and you can add a camp to each week, for one child or for each of them, as a list or on a calendar. The chart of when each camp runs, below, is here for everyone.`), planExample('sum'))}
+<section class="section sum needs-js-block${GATE ? ' gated' : ''}" id="plan" data-jump-to="Your summer" data-summer data-clarity-mask="true">
+  <h2${gateIn}>${T(`Your summer`)}</h2>
+  ${planShow('sum', D)}
   <div${gateIn} style="display:contents">
   <p>${GATE ? T(`Add a camp to each week, for one child or for each of them. Your picks are saved on this device and in your profile, so they’re there on your other devices.`) : T(`Add a camp to each week, for one child or for each of them. Your picks are saved on this device and nowhere else.`)}</p>
   <div class="sum-kids"><div class="kids" id="sum-kids" role="group" aria-label="Which child"></div><button type="button" class="clear" id="sum-kid-add">Add a sibling</button><button type="button" class="clear" id="sum-kid-drop" hidden>Remove this child</button></div>
@@ -4891,7 +5069,7 @@ ${chartRows}
   return layout({
     title: `Summer ${year} camp schedule for Philadelphia, week by week`,
     description: `Plan summer ${year} in Philadelphia week by week: see which of ${P.dated.length} city day camps run each of the ${P.weeks.length} weeks between the last day of school and Labor Day.`,
-    pathName: summerPath, depth: D, current: null, hero, body, showStreet: 'summer', scripts: GROUPS ? groupsScript(D) : '',
+    pathName: summerPath, depth: D, current: null, hero, body, next: GATE ? 'summer' : '', showStreet: 'summer', scripts: GROUPS ? groupsScript(D) : '',
   });
 }
 // ---------- a page per summer camp ----------
