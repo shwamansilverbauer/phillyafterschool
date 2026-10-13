@@ -449,8 +449,22 @@ Every page that lists programs (a school, a neighborhood, a type, the A to Z lis
 search, program type, free or paid, neighborhood and grade. Filters also live in the page address
 (`/programs/?type=music&grade=3`), which is how the home page links into them.
 
-`/types/` and `/types/<type>/` are built from each program's `types`. The type names, colors and icons are the
+**Search by, across every kind.** A type page (`/types/<type>/`), a neighborhood page and the by-day page carry
+everything on the site that fits, whatever part of the year it fills: after-school programs, weekend classes,
+day camps and summer camps, each kind in its own section (`kindSections()`: a heading with a count, the same
+rows as that kind's own list) under one filter bar. The bar gets a **Kind** row (All kinds · After school ·
+Weekends · Day camps · Summer; `data-kinds` on each row, `kind` in the filter state and the address,
+`?kind=weekend`) and the **Day** row runs to Saturday and Sunday once a list has weekend rows. A weekend row
+filters by the days its class meets; a program that doesn't publish its days shows under every weekday and under
+no weekend day; day-camp and summer rows sit under no day at all (`shapeFor()` in `build.mjs` is what the filter
+bar sees for each kind). A listing that fills two parts of the year is in two sections, once each, and the count
+says "listings" rather than "programs". `/types/` and the type counts are built from every listing's `types`, so a
+type that only a summer camp or a weekend class has still gets a page. The type names, colors and icons are the
 `TYPES` list at the top of `build.mjs`.
+
+`/by-day/` ("What runs on which day") is the menu's "Search by: Day of week": the after-school programs and the
+weekend classes together, with the day row Monday to Sunday and a count for each day in the hero. Day camps run
+on dates and summer camps by the week, so it points at their lists instead.
 
 The search box on the home page looks through `data/all-schools.json`: every district and charter school in
 Philadelphia with any grade from K to 8, taken from the City's "Schools" open dataset. Schools with a record in
@@ -462,8 +476,10 @@ City updates its list (about once a year).
 ## Neighborhood pages
 
 `/neighborhoods/` lists every neighborhood that has a school or a program, and each one gets a page at
-`/neighborhoods/<name>/` (for example `/neighborhoods/bella-vista/`) showing the schools there, the programs
-based there, and programs from elsewhere that pick up from a school there. They are built from each school's
+`/neighborhoods/<name>/` (for example `/neighborhoods/bella-vista/`) showing the schools there, then every kind
+of listing in sections with a Kind filter: the after-school programs based there, the weekend classes there (and
+a section of the ones close by, in that part of the city), the day-camp programs based there, the summer camps
+with a site there, and programs from elsewhere that pick up from a school there. They are built from each school's
 `neighborhood` text (use " / " between two names for a school on a border) and each program's `neighborhoods`
 list. A new neighborhood name anywhere in the data creates its page; spell names the same way each time.
 
@@ -845,10 +861,14 @@ picture has to be drawn again. The line of text under it (`og:description`) on t
 lede as it reads today, copy edits included (`shareText` in `layout()`, filled by `copyNow()`); every other page
 uses its search description. The description search engines read is separate and is not changed by copy edits.
 
-**A saved school.** A school page has "Save as my school". The choice is kept in the visitor's browser
-(`pas-my-school`), with no account. After that the home page shows a shortcut to the school, the citywide
-lists (A to Z, types, neighborhoods) open narrowed to programs that work for it with an "Any school" button
-beside it, and the roster's "Add a program" assumes it.
+**A saved school.** A school page has "Save as my school", and it is the most noticeable thing in the hero: a
+wide panel under the lede (`.mine` in `schoolPage()`, with a bookmark, "Make Nebinger your school", a line on
+what it does and a filled button), ahead of the facts, because so much of the site starts from it. Saved, the
+panel turns yellow and says "Nebinger is your school" with "✓ Saved as your school" and "Tap again to undo"; on
+another school's page the button offers the switch ("Make Meredith your school"). The choice is kept in the
+visitor's browser (`pas-my-school`), with no account. After that the home page shows a shortcut to the school,
+the citywide lists (A to Z, types, neighborhoods) open narrowed to programs that work for it with an "Any
+school" button beside it, and the roster's "Add a program" assumes it.
 
 **What a roster costs.** The roster page adds up a child's roster from each program's `rate` and the number of
 days it is on: "About $1,720 to $2,230 for a semester", a monthly figure, and a line per program showing the
