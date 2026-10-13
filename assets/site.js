@@ -111,6 +111,10 @@
     };
     if (tabs.length > 1) {
       tabs.forEach(function (b) { b.addEventListener('click', function () { show(b.getAttribute('data-pv'), true); }); });
+      all(box, '.pshow-next').forEach(function (b) { b.addEventListener('click', function () {   // "Next: Calendar", under each example
+        var id = b.getAttribute('data-pv-next'); show(id, true);
+        var tab = tabs.filter(function (t) { return t.getAttribute('data-pv') === id; })[0]; if (tab && tab.focus) tab.focus();
+      }); });
       show(tabs[0].getAttribute('data-pv'));
     }
   });
