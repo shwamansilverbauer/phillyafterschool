@@ -4564,7 +4564,8 @@ function schedulesPage() {
       text: T(`The weeks between the last day of school and Labor Day, and which of {n} camps run in each one.`, { n: summerCamps.length }),
       points: [T(`See on one chart which camps run each week`), T(`Line up a camp for every week, child by child, and see what it adds up to`), T(`Make it a calendar picture, or put the weeks in your phone’s calendar`)],
       cta: btn(link(summerPath, D), T(`Plan your summer`), 'summer') }) : '',
-    YEAR_PAGE ? card({ k: 'year', artKey: 'year', id: 'year', color: '#6B3FA0', kicker: T(`With a free account`), name: T(`My kids’ calendar`),
+    YEAR_PAGE ? card({ k: 'year', artKey: 'year', id: 'year', color: '#6B3FA0', kicker: T(`With a free account`), name: 'My kids’ calendar',   // the page's name, as the menu has it: its heading there has words of its own
+     
       text: T(`The three plans above, added up: the school week, every day off, the camp weeks and the sign-up dates, in date order for the whole year.`),
       points: [T(`One calendar file for your phone, which you can bring up to date later`), T(`Room for your own dates: picture day, pretzel day, a form that’s due`), T(`A picture of any month to send or print`), T(`Private: it has no link, and only you can open it`)],
       cta: `<span class="when-out">${btn(link('register/', D) + '?next=calendar', T(`Create a free account`), 'year_register')}</span><span class="when-in">${btn(link(yearPath, D), T(`Open my kids’ calendar`), 'year')}</span>` }) : '',
@@ -4614,7 +4615,7 @@ function todoPage() {
     <p class="hint" id="todo-src"></p>
     <div id="todo-list"></div>
     <p class="hint" id="todo-status" aria-live="polite"></p>
-    <div class="actions todo-more"><a class="btn" href="${link(offPath, D)}#plan">${T(`Plan the days off`)}</a><a class="btn" href="${link(yearPath, D)}">${T(`My kids’ calendar`)}</a></div>
+    <div class="actions todo-more"><a class="btn" href="${link(offPath, D)}#plan">${T(`Plan the days off`)}</a><a class="btn" href="${link(yearPath, D)}">My kids’ calendar</a></div>
   </section>
   <section class="notes when-in">
     <h2>${T(`How this list works`)}</h2>
