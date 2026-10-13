@@ -3164,7 +3164,7 @@ function planShow(kind, depth) {
   const S = {
     week: { next: 'board', eye: T(`The week builder`), h: T(`See the whole week before it starts`),
       views: [['week', T(`The week`), planExample('week'), T(`Put a program on each afternoon, with its hours and when to pick up. Each child gets a week of their own.`)],
-        ['cost', T(`What it costs`), showExample('week-cost'), T(`The week adds itself up from each program’s published prices, so you see the half-year before you sign up for anything.`)],
+        ['cost', T(`Budget planning`), showExample('week-cost'), T(`The week adds itself up from each program’s published prices, so you see the half-year before you sign up for anything.`)],
         ['share', T(`Share it`), showExample('week-share'), T(`Turn the week into one picture for the group chat or the fridge, or share it with one person who signs in to see it.`)]],
       feats: [['kids', T(`A week for each child`), T(`Each child has their own week, and a second one for the term that’s coming.`)],
         ['dice', T(`A themed week to start from`), T(`Not sure where to begin? Roll a themed week and swap out what doesn’t fit.`)],

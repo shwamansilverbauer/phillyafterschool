@@ -1435,7 +1435,7 @@ there for everyone.
 - **The tour** (`planShow(kind, depth)` in `build.mjs`, styled as `.pshow`): the signed-out planner pages read like
   a product page. Under the page's heading is the one thing to press, "Create a free account" (`heroCta()`), which
   comes back to that planner. Then: a heading and a strip of tabs, one for each way of looking at the plan (List,
-  Calendar, Who's open on the days-off and summer pages; The week, What it costs, Share it on the week; Calendar,
+  Calendar, Who's open on the days-off and summer pages; The week, Budget planning, Share it on the week; Calendar,
   List, To do on My kids' calendar), each showing a made-up example; six things the planner does; three steps; and
   a dark band with the button again. The strip is labelled "See it as" and each example ends with a "Next: …"
   button, so the tabs read as something to press (`.view-switch` draws every choice as a button, in the planners
