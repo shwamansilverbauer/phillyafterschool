@@ -695,6 +695,14 @@ built with the chart in its own section (`#chart`), which is how someone signed 
 no longer lost further down the page. Tapping a box still puts that day in the plan. The page no longer lists the
 programs with "No dates posted yet" under the chart; they are still in "Who runs camps".
 
+The summer schedule works the same way (`#sum-views`, remembered in `pas-sum-view`): List, Calendar and Who's open.
+The Calendar is a month at a time (`#sum-month`), with each child's camp on all five weekdays of its week or "Not
+planned"; a tap on any day picks that week, whose row sits under the month so choosing works as it does in the list.
+A month that only gets the tail of a week (the first days of September) has no page of its own. Who's open is the
+"When each camp runs" chart (`#sum-chart-block`), moved into `#sum-chart-slot` for someone signed in, so there is
+nothing to scroll down for. A link in from a camp (`?add=ID`) opens that view without changing the one that is kept.
+"Print the list" prints the weeks (or days) whichever view is showing.
+
 ### The next day off, on the home page
 
 The home page's note about the next day off is a bar along the bottom of the screen (`nextOffBar()`, `#offbar`):
@@ -1419,6 +1427,7 @@ open each day off, when each camp runs) are there for everyone.
   day it falls on. A tap on a day lists it underneath with the same links as the list. Printing prints the list.
 - **The days-off planner** opens as a list, with a Calendar switch beside it (`pas-off-view`). In the calendar the
   picked day's row sits under the month, so choosing works as it does in the list.
+- **The summer schedule** has the same switch (`pas-sum-view`); there the pick is a whole week.
 - Both use `calMonthView()` in `site.js`. On a phone the labels in the squares become coloured bars.
 
 ## The dragon

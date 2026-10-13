@@ -1194,7 +1194,7 @@ ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .sum-tally #sum-count,.sum-tally #off-count{font-weight:700}
 .off-top{grid-template-columns:minmax(0,220px) minmax(0,1fr)}
 @media (max-width:860px){.off-top{grid-template-columns:minmax(0,1fr)}}
-.off-days .sum-week{scroll-margin-top:84px}
+.sum-weeks .sum-week{scroll-margin-top:84px}
 .off-days .sum-picks .clear{font-size:.9rem}
 .off-chart{min-width:1240px}
 .off-chart thead th[hidden],.off-chart td[hidden]{display:none}
@@ -1417,6 +1417,9 @@ html.signed .year-out{display:none}
 .year-view-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px}
 .year-view-head h3{margin:0}
 .view-switch{align-self:center}
+.view-switch .vs{white-space:nowrap}
+@media (max-width:480px){.view-switch .vs{padding:9px 13px;font-size:.95rem}}
+@media (max-width:360px){.view-switch{gap:2px}.view-switch .vs{padding:9px 9px;font-size:.9rem}}
 /* the plan as a calendar: a month of squares, each with a short label for what's on that day */
 .year-cal{display:flex;flex-direction:column;gap:12px;min-width:0}
 .year-cal[hidden]{display:none}
@@ -1510,9 +1513,9 @@ html.signed .year-out{display:none}
 @media print{#year-views,.year-cal{display:none!important}#year-agenda{display:block!important}}
 /* the days-off planner can show the same month of squares; the day that is picked sits under it as a row to choose on */
 .off-view-head{margin-top:6px}
-@media screen{.off-days.cal-mode > li.cal-hide{display:none}.off-days.cal-mode{margin-top:0}.off-days.cal-mode > li{border-top:0;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px 16px}}
+@media screen{.sum-weeks.cal-mode > li.cal-hide{display:none}.sum-weeks.cal-mode{margin-top:0}.sum-weeks.cal-mode > li{border-top:0;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px 16px}}
 .cal-sw i.k-todo{background:#FFFFFF;border:1.5px dashed #5C4700}
-@media print{#off-views,#off-month{display:none!important}}
+@media print{#off-views,#off-month,#sum-views,#sum-month{display:none!important}}
 .claim-stats{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;margin:6px 0}
 .claim-stats h4{margin:0}
 .claim-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:10px}

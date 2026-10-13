@@ -4810,7 +4810,7 @@ ${guide ? `<section class="section">
 ${jumpNav()}
 <section class="section sum needs-js-block" id="plan" data-jump-to="Your summer" data-summer data-clarity-mask="true">
   <h2>${T(`Your summer`)}</h2>
-  ${planAsk(D, 'summer', T(`Plan the summer with a free account`), T(`The planner is for parents with an account. Make one and you can add a camp to each week, for one child or for each of them. The chart of when each camp runs, below, is here for everyone.`), planExample('sum'))}
+  ${planAsk(D, 'summer', T(`Plan the summer with a free account`), T(`The planner is for parents with an account. Make one and you can add a camp to each week, for one child or for each of them, as a list or on a calendar. The chart of when each camp runs, below, is here for everyone.`), planExample('sum'))}
   <div${gateIn} style="display:contents">
   <p>${GATE ? T(`Add a camp to each week, for one child or for each of them. Your picks are saved on this device, and in your profile if you keep the summer there.`) : T(`Add a camp to each week, for one child or for each of them. Your picks are saved on this device and nowhere else.`)}</p>
   <div class="sum-kids"><div class="kids" id="sum-kids" role="group" aria-label="Which child"></div><button type="button" class="clear" id="sum-kid-add">Add a sibling</button><button type="button" class="clear" id="sum-kid-drop" hidden>Remove this child</button></div>
@@ -4821,6 +4821,14 @@ ${jumpNav()}
       <select id="sum-age"><option value="">Any age</option>${Array.from({ length: 15 }, (_, i) => `<option value="${i + 3}">${i + 3}</option>`).join('')}</select></div>
     <div class="sum-tally"><div class="sum-strip" id="sum-strip" aria-hidden="true"></div><p id="sum-count" aria-live="polite"></p><p class="hint" id="sum-cost"></p></div>
   </div>
+  <div class="year-view-head off-view-head">
+    <h3 id="sum-view-h">${T(`Week by week`)}</h3>
+    <div class="tabs view-switch" id="sum-views" role="group" aria-label="How to show the weeks">
+      <button type="button" class="tab vs" data-view="list" aria-pressed="true">List</button><button type="button" class="tab vs" data-view="cal" aria-pressed="false">Calendar</button><button type="button" class="tab vs" data-view="chart" aria-pressed="false">Who’s open</button>
+    </div>
+  </div>
+  <div class="year-cal off-month" id="sum-month" hidden></div>
+  <div class="off-chart-slot" id="sum-chart-slot" hidden></div>
   <ol class="sum-weeks" id="sum-weeks"></ol>
   <div class="actions sum-tools" id="sum-tools" hidden><button type="button" class="btn primary" id="sum-share" hidden>Share the plan</button><button type="button" class="btn" id="sum-cal">Add to calendar</button><button type="button" class="btn" id="sum-copy">Copy the plan as text</button><button type="button" class="btn" id="sum-print">Print the list</button><button type="button" class="clear" id="sum-clear">Clear the plan</button></div>
   <p class="hint" id="sum-status" aria-live="polite"></p>
@@ -4858,6 +4866,7 @@ ${jumpNav()}
 </section>
 <section class="section sum-chart-section" id="chart" data-jump-to="When camps run">
   <h2>${T(`When each camp runs`)}</h2>
+  <div class="off-chart-block" id="sum-chart-block">
   <p>${T(`Each column is a week, named by its Monday. A filled box means the camp listed that week. The chart scrolls sideways and down.`)} <span class="needs-js${GATE ? ' when-in' : ''}">${T(`Tap a box to add that week to your summer.`)}</span></p>
   <p class="sum-key"><span><i class="k exact"></i>${T(`{year} dates`, { year })}</span><span><i class="k"></i>${T(`{year} dates, as a guide`, { year: base })}</span><span class="needs-js${GATE ? ' when-in' : ''}"><i class="k picked"></i>${T(`In your summer`)}</span></p>
   <p class="hint" id="sum-chart-note" aria-live="polite"></p>
@@ -4870,8 +4879,9 @@ ${chartRows}
     </table>
   </div>
   ${P.undated.length ? `<h3 class="sub">${T(`No dates listed yet`)}</h3>
-  <p>${T(`These camps haven’t put dates we can chart on their sites. You can still add one to any week above, then check with the camp.`)}</p>
+  <p>${T(`These camps haven’t put dates we can chart on their sites. You can still add one to any week in the list, then check with the camp.`)}</p>
   <ul class="plain cols">${P.undated.map(({ c }) => `<li><a href="${link(campPath(c), D)}">${esc(c.name)}</a></li>`).join('')}</ul>` : ''}
+  </div>
 </section>
 <section class="section">
   <p><a class="btn" href="${link(campsPath, D)}">${T(`Every camp, with ages, hours and prices`)}</a></p>
