@@ -1,7 +1,6 @@
 /* Layout: a sky-blue band with navy type carries the header and each page's headline (it is the afternoon,
    so the sky is a daytime one); on the home page it ends in a block of rowhouses with a school, a yellow bus
    and the sun between two roofs. Below it, one left-aligned working column. The footer is the deep blue.
-   In dark mode the band is the deep blue too, with white type, and the sun is down.
    Colors come from the City of Philadelphia's own palette: Ben Franklin blues, Bell Yellow, Kelly Drive green. */
 :root{
   --bg:#F5F8FC; --surface:#FFFFFF; --ink:#0B2140; --muted:#4D607A; --line:#D3DEEC;
@@ -19,32 +18,9 @@
   --display:"Archivo","Arial Black","Helvetica Neue",Arial,sans-serif;
   --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#071527; --surface:#0E2038; --ink:#E9F1FB; --muted:#9DB2CC; --line:#1E3350;
-  --blue:#0F4D90; --link:#7DB8FF; --btn:#2176D2; --btn-ink:#FFFFFF;
-  --yellow:#F3C613; --yellow-ink:#2A2100;
-  --green-bg:#143D1B; --green-ink:#B9F2B1; --sky-bg:#12345C; --sky-ink:#BFDDFF;
-  --warn:#3F3407; --warn-ink:#FFE98A; --red:#FF6A45; --cell-off:#182C47; --cell-on:#2176D2; --star:#F3C613;
-  --hero:#0A2F5C; --hero-low:#0A2F5C; --hero-2:#061E3D; --hero-ink:#FFFFFF; --hero-muted:#B9D4F5;
-  --hero-accent:#F3C613; --hero-chip:#061E3D; --hero-field:transparent; --topbar:rgba(0,0,0,.2);
-  --cta:#F3C613; --cta-ink:#2A2100; --cta-hover:#FFD83A;
-  --foot:#061E3D; --foot-ink:#FFFFFF; --foot-muted:#B9D4F5;
-  --house-1:#124A8A; --house-2:#17599F; --house-3:#1E6BBB; --house-trim:#061E3D; --school:#6FA9E6; --school-win:#F3C613;
-  --street:#061E3D; --scene-line:#CFE3FB; --scene-drop:#EAF4FF; --cloud-1:.3; --cloud-2:.18; --sun:0; --note:#F3C613;
-  color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#071527; --surface:#0E2038; --ink:#E9F1FB; --muted:#9DB2CC; --line:#1E3350;
-  --blue:#0F4D90; --link:#7DB8FF; --btn:#2176D2; --btn-ink:#FFFFFF;
-  --yellow:#F3C613; --yellow-ink:#2A2100;
-  --green-bg:#143D1B; --green-ink:#B9F2B1; --sky-bg:#12345C; --sky-ink:#BFDDFF;
-  --warn:#3F3407; --warn-ink:#FFE98A; --red:#FF6A45; --cell-off:#182C47; --cell-on:#2176D2; --star:#F3C613;
-  --hero:#0A2F5C; --hero-low:#0A2F5C; --hero-2:#061E3D; --hero-ink:#FFFFFF; --hero-muted:#B9D4F5;
-  --hero-accent:#F3C613; --hero-chip:#061E3D; --hero-field:transparent; --topbar:rgba(0,0,0,.2);
-  --cta:#F3C613; --cta-ink:#2A2100; --cta-hover:#FFD83A;
-  --foot:#061E3D; --foot-ink:#FFFFFF; --foot-muted:#B9D4F5;
-  --house-1:#124A8A; --house-2:#17599F; --house-3:#1E6BBB; --house-trim:#061E3D; --school:#6FA9E6; --school-win:#F3C613;
-  --street:#061E3D; --scene-line:#CFE3FB; --scene-drop:#EAF4FF; --cloud-1:.3; --cloud-2:.18; --sun:0; --note:#F3C613;
-  color-scheme:dark}
+/* One look, day or night. The site doesn't follow a device's dark setting: its colours, calendars and pictures are
+   drawn for a light page. "only light" also tells browsers that darken pages by themselves to leave this one alone. */
+:root{color-scheme:only light}
 
 *,*::before,*::after{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -134,8 +110,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .school .bell{grid-column:2;grid-row:1 / span 3;text-align:right;display:flex;flex-direction:column;line-height:1.1}
 .school .bell b{font-family:var(--display);font-stretch:112%;font-weight:850;font-size:clamp(1.8rem,5vw,2.6rem);font-variant-numeric:tabular-nums;color:var(--blue)}
 .school .bell span{color:var(--muted);font-size:.9rem}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .school .bell b{color:var(--link)}}
-:root[data-theme="dark"] .school .bell b{color:var(--link)}
 @media (max-width:560px){.school{grid-template-columns:minmax(0,1fr)}.school .bell{grid-column:1;grid-row:auto;text-align:left;flex-direction:row;align-items:baseline;gap:8px}}
 .ask{border:2px dashed var(--line);border-radius:16px;padding:18px 22px;color:var(--muted)}
 .kinds{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}

@@ -555,6 +555,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <link rel="icon" href="${link('favicon.png', depth)}" type="image/png" sizes="48x48">
 <link rel="apple-touch-icon" href="${link('apple-touch-icon.png', depth)}">${GROUPS && !PREVIEW ? `
 <link rel="manifest" href="${link('manifest.json', depth)}">` : ''}
+<meta name="color-scheme" content="only light">
 <meta name="theme-color" content="#96C9FF">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

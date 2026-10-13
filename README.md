@@ -740,8 +740,9 @@ page can name its own with `shareImage` in `layout()`.
 **Colours.** Every colour is a named value at the top of `src/site.css`. The band at the top of each page is a
 daytime sky (`--hero` fading to `--hero-low`) with navy type (`--hero-ink`, `--hero-muted`); the header button
 is `--cta`; the footer keeps the deep blue (`--foot`). Navy on the sky measures 9:1 or better, above the old
-white-on-deep-blue. Dark mode has its own set just below, where the band is deep blue and the sun in the home
-scene is switched off (`--sun`). The week card (`drawCard` in `src/site.js`) and the link-preview picture
+white-on-deep-blue. There is no dark mode: the site looks the same whatever the device is set to
+(`color-scheme: only light` in the CSS and a matching `<meta>` in every page), because the calendars, the plan
+colours and the pictures are drawn for a light page. The week card (`drawCard` in `src/site.js`) and the link-preview picture
 (`src/static/share.png`, 1200 by 630) use the same sky and footer, so change them together.
 
 **What a shared link shows.** A link to the site that is texted or posted shows the picture, a title and a line of
