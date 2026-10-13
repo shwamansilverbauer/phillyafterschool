@@ -869,6 +869,54 @@ const programRow = (p, depth) => {
 </a>`;
 };
 
+// ---------- one row for every list ----------
+// The four lists (after-school, weekend classes, day camps, summer camps) show each listing the same way: its name, one
+// line about it, its kind of program, and the few facts a parent sorts by. The whole row is the link to the listing's
+// own page, which is where everything else lives; there is nothing else to press. `kind` says which facts: after-school
+// rows carry the schools and grades, weekend rows the days, day-camp rows the days off posted (by break), summer rows
+// the ages, the weeks and which summer the dates are from. `x` is the program (or camp), `shaped` what the filter bar
+// should see when that differs (weekend grades, a camp's areas).
+const WK_DAY = { sat: 'Saturdays', sun: 'Sundays' };
+function offBreaks(p) {   // "Election Day · Winter break (3 of 5 days) · +2 more": the days off a program has posted, by break
+  const got = offDays.map(d => { const left = d.dates.filter(x => x >= TODAY), on = left.filter(x => p.daysOff.dates.includes(x)); return on.length ? (on.length === left.length ? dayLabel(d) : `${dayLabel(d)} (${on.length} of ${left.length} days)`) : ''; }).filter(Boolean);
+  return got;
+}
+function listRow(kind, x, depth, shaped = null) {
+  const tags = x.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('');
+  const hoods = kind === 'summer' ? (x.neighborhoods || []) : programHoods(x);
+  const hood = hoods.length ? `<span class="pill hood">${esc(listNames(hoods))}</span>` : '';
+  let href, line, facts, extra = [];
+  if (kind === 'after') {
+    href = link(programPath(x), depth); line = x.what;
+    facts = `${servedPills(x)}${hood}<span class="hint">Grades ${esc(gradeText(x))}</span>`;
+    extra = [...servedBy(x).map(s => s.shortName), ...hoods];
+  } else if (kind === 'weekend') {
+    const w = x.weekend, weekday = Object.keys(x.schools || {}).length && x.scope !== 'weekend';
+    href = link(programPath(x), depth) + '#weekend'; line = weekday && w.summary ? w.summary : x.what;
+    facts = `${w.days.map(d => `<span class="pill wkday">${WK_DAY[d]}</span>`).join('')}${hood}`;
+    extra = [...hoods, ...w.days.map(d => WEEKEND_DAY[d])];
+  } else if (kind === 'off') {
+    const breaks = offBreaks(x), shown = breaks.slice(0, 3), more = breaks.length - shown.length;
+    href = link(programPath(x), depth) + '#days-off'; line = x.daysOff.summary || x.what;
+    facts = `${hood}<span class="dates">${breaks.length ? esc(shown.join(' · ')) + (more ? ` <b>+${more} more</b>` : '') : T(`No dates posted yet`)}</span>`;
+    extra = [...hoods, ...breaks];
+  } else {
+    const on = (summerPlan.camps.find(c => c.c.id === x.id) || { on: [] }).on.length;
+    href = link(campPath(x), depth); line = x.what;
+    facts = `${seasonPill(x)}${spaceSlot('c:' + x.id, depth)}${campAges(x) ? `<span>${esc(campAges(x))}</span>` : ''}${x._grades ? `<span class="hint">Grades ${esc(gradeText(x))}</span>` : ''}${campWeeksShort(x) ? `<span class="dates">${esc(campWeeksShort(x))}${on ? ` <b>${on} ${on === 1 ? 'week' : 'weeks'}</b>` : ''}</span>` : `<span class="dates">${T(`No dates posted yet`)}</span>`}${hood}`;
+    extra = [x.ages || '', x.address || '', ...hoods];
+  }
+  return `<a class="prow row-${kind}" id="${esc(x.id)}" href="${href}" ${itemAttrs(shaped || x, extra)}>
+  <h3>${esc(kind === 'summer' ? x.name : fullName(x))}</h3>
+  <span class="what">${esc(line)}</span>
+  <span class="tally">${tags}</span>
+  <span class="tally facts">${facts}</span>
+</a>`;
+}
+// The way into the planner that goes with a list, under its heading: everyone sees it.
+const heroGo = (depth, href, label, more = '') => `
+    <p class="hero-go"><a class="btn primary big" href="${href}">${label}</a>${more}</p>`;
+
 // One filter bar for every page that lists programs: search, program type, free or paid, neighborhood, and (on a school
 // page) how the program gets your child. The grade row sits in a strip that stays on screen while you scroll.
 // Filters also read from the page address (?type=music&grade=3), which is how the home page links into them.
@@ -1383,12 +1431,12 @@ function programsPage() {
   const list = [...citywide].sort((a, b) => a.name.localeCompare(b.name));
   const hero = `    <p class="where"><a href="${link('all-programs/', 1)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
     <h1>${T(`Every program, A to Z`)}</h1>
-    <p class="lede">${T(`All {n} after-school programs on this site, across every school. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.`, { n: list.length })}</p>`;
+    <p class="lede">${T(`All {n} after-school programs on this site, across every school. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.`, { n: list.length })}</p>${heroGo(1, link('board/', 1), T(`Plan your week`))}`;
   const body = `${filterBar({ list, depth: 1, show: { day: true }, near: true, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
 ${noMatch(1)}
 <section class="section" data-group>
   <div class="schools">
-${list.map(p => programRow(p, 1)).join('\n')}
+${list.map(p => listRow('after', p, 1)).join('\n')}
   </div>
 </section>
 <section class="section">
@@ -2766,19 +2814,7 @@ function daysOffBits(D, where) {
   <th scope="row"><a href="${where === 'page' ? '' : link(dayCampsPath, D)}#${esc(p.id)}">${esc(p.name)}</a><small>${esc([programHoods(p).join(', '), `${p.daysOff.dates.filter(x => x >= TODAY).length} posted`].filter(Boolean).join(' · '))}</small></th>
   ${days.map((x, i) => x.camps.includes(p.id) ? `<td class="on exact" data-w="${i}"><span class="vh">Open</span></td>` : `<td data-w="${i}"></td>`).join('')}
 </tr>`).join('\n');
-  const cards = campPrograms.map(p => {
-    const dates = p.daysOff.dates.filter(x => x >= TODAY);
-    const served = servedBy(p);
-    return `<article class="prog offprog" id="${esc(p.id)}">
-  <div class="top"><h3><a href="${link(programPath(p), D)}">${esc(fullName(p))}</a></h3><p class="tags">${p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p></div>
-  <dl><dt>What it runs</dt><dd>${esc(p.daysOff.summary)}</dd>
-  <dt>Dates posted</dt><dd${dates.length ? ` data-day-list="${esc(JSON.stringify(dates.map(x => [x, shortDate(x)])))}"` : ''}>${dates.length ? esc(dates.map(shortDate).join(', ')) + '.' : 'None on its site when we checked. Ask which days it covers.'}</dd>
-  ${programAddress(p) ? `<dt>Where</dt><dd>${esc(programAddress(p))}</dd>` : ''}
-  ${served.length ? `<dt>On school days</dt><dd>${esc(servedSummary(p))}.</dd>` : ''}</dl>
-  <div class="actions"><a class="btn primary" data-track="camp" href="${esc(outUrl(p.daysOff.url, { type: 'camp', program: p }))}" target="_blank" rel="noopener">Camp details</a><a class="btn" href="${link(programPath(p), D)}">Full listing</a></div>
-  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks(p.daysOff.sources, p)}</p>
-</article>`;
-  }).join('\n');
+  const cards = campPrograms.map(p => listRow('off', p, D)).join('\n');   // one row each, like every other list
   const chartSection = `<section class="section sum-chart-section${where === 'page' ? '' : ' when-in'}" id="chart" data-jump-to="Who’s open">
   <h2>${T(`Who’s open each day off`)}</h2>
   <div class="off-chart-block" id="off-chart-block">
@@ -2810,7 +2846,7 @@ function dayCampsPage() {
   const { noDates, chartSection, cards } = daysOffBits(D, 'page');
   const hero = `    <p class="where"><a href="${link('all-programs/', D)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
     <h1>${T(`School’s closed. What now?`)}</h1>
-    <p class="lede">${T(`Every day district schools are closed this year, and who runs a camp on each.`)}</p>
+    <p class="lede">${T(`Every day district schools are closed this year, and who runs a camp on each.`)}</p>${heroGo(D, link(offPath, D), T(`Plan the days off`))}
     ${offFacts()}`;
   const body = `<div style="display:contents">
 ${jumpNav()}
@@ -2827,7 +2863,9 @@ ${datesBox(D, { pick: true, place: 'days_off', cls: 'wide', title: T(`Get a head
 <section class="section" id="who" data-jump-to="Who runs camps">
   <h2>${T(`Who runs something when school is closed`)}</h2>
   <p>${T(`{n} listed programs say they run camps or full days on days off. {m} of them had no dates on their site when we checked, so ask which days they cover.`, { n: campPrograms.length, m: noDates.length })}</p>
-  <div class="list">
+  ${filterBar({ list: campPrograms, depth: D, show: { grade: false, day: false }, near: true, searchLabel: `Looking for a particular program?`, placeholder: 'A name or a neighborhood, or try art, chess…' })}
+  ${noMatch(D)}
+  <div class="schools" data-group>
 ${cards}
   </div>
 </section>
@@ -5251,19 +5289,12 @@ function summerCampsPage() {
   const list = [...summerCamps].sort((a, b) => a.name.localeCompare(b.name));
   const shaped = list.map(c => ({ ...c, neighborhoods: campAreas(c) }));   // what the filter bar sees
   const ahead = list.filter(c => c.season > base).length;
-  // On the list each camp is a short card: what it is, the handful of facts people sort by, and the way to its own page.
-  const cards = list.map((c, i) => {
-    const facts = [campAges(c), campWeeksShort(c), campHoursShort(c), campPrice(c), (c.neighborhoods || []).join(', ')].filter(Boolean);
-    return `<article class="campcard offprog" id="${esc(c.id)}" ${itemAttrs(shaped[i], [c.ages || '', c.address || '', ...(c.neighborhoods || [])])}>
-  <div class="top"><h3><a href="${link(campPath(c), D)}">${esc(c.name)}</a></h3><p class="what">${esc(c.what)}</p><p class="tags">${c.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p></div>
-  <p class="camp-facts">${seasonPill(c)} ${spaceSlot('c:' + c.id, D)}${facts.map(f => `<span>${esc(f)}</span>`).join('')}</p>
-  <div class="actions"><a class="btn primary" href="${link(campPath(c), D)}">${T(`Full details`)}</a><a class="btn needs-js" href="${link(summerPath, D)}?add=${esc(c.id)}">Add to your summer</a></div>
-</article>`;
-  }).join('\n');
+  // On the list each camp is one row: what it is and the handful of facts people sort by. Its own page has the rest.
+  const cards = list.map((c, i) => listRow('summer', c, D, shaped[i])).join('\n');
   const todo = campsFile.todo || [];
   const hero = `    <p class="where"><a href="${link('all-programs/', D)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
     <h1>${T(`Summer camps in Philadelphia`)}</h1>
-    <p class="lede">${T(`Day camps inside the city, with the ages, weeks, hours and prices each camp posts on its own site.`)}</p>
+    <p class="lede">${T(`Day camps inside the city, with the ages, weeks, hours and prices each camp posts on its own site.`)}</p>${heroGo(D, link(summerPath, D), T(`Plan your summer`), ` <a class="btn big" href="${link(weeksPath, D)}">${T(`Which camps run each week`)}</a>`)}
     <div class="facts">
       <span><b>${list.length}</b> camps</span>
       <span><b>${ahead}</b> already showing ${next}</span>
@@ -5271,13 +5302,12 @@ function summerCampsPage() {
     </div>`;
   const body = `<section class="section">
   <p class="flag camp-guide"><b>${T(`Most of what’s here is from summer {year}, shown as a guide.`, { year: base })}</b> ${T(`Camps usually post next summer between December and March. Each listing changes to {year} when its camp posts dates and prices, and says so on its card.`, { year: next })}${ALERTS ? ' ' + T(`Waiting on one camp? Its page has a box to be emailed when it posts.`) : ''}</p>
-  <p><a class="btn primary" href="${link(summerPath, D)}">${T(`Plan your summer, week by week`)}</a> <a class="btn" href="${link(weeksPath, D)}">${T(`Which camps run each week`)}</a></p>
 </section>
 ${filterBar({ list: shaped, depth: D, near: true, searchLabel: `Looking for a particular camp?`, placeholder: 'Its name, or try art, tennis, Mount Airy…' }).replace('data-filters', 'data-filters data-noun="camp" data-nouns="camps"')}
 <p class="hint">${T(`Grades here are worked out from each camp’s ages, so check the ages on the camp’s page. Each camp has its own page with everything it posts.`)}</p>
 ${noMatch(D)}
 <section class="section" data-group>
-  <div class="list camplist">
+  <div class="schools">
 ${cards}
   </div>
 </section>
@@ -5315,47 +5345,31 @@ const weekendRow = (p, depth) => `<a class="prow" href="${link(weekendPath, dept
 function weekendPage() {
   const D = 1;
   const shape = p => ({ ...p, ...(p.weekend._grades !== undefined ? { _grades: p.weekend._grades } : {}), neighborhoods: weekendAreas(p) });   // what the filter bar sees
-  const card = p => {
-    const w = p.weekend, hoodsHere = programHoods(p);
-    const rows = [['What runs', w.summary], ['Term', w.term], ['Cost', w.cost], ['Where', programAddress(p) + (hoodsHere.length && !/\(/.test(programAddress(p)) ? ` (${hoodsHere.join(', ')})` : '')]]
-      .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
-    const wp = shape(p);   // the weekend classes can take other grades than the weekday program
-    return `<article class="prog offprog" id="${esc(p.id)}" ${itemAttrs(wp, [...hoodsHere, ...w.days.map(d => WEEKEND_DAY[d])])} data-wk="${w.days.join(' ')}">
-  <div class="top"><h3><a href="${link(programPath(p), D)}">${esc(fullName(p))}</a></h3><p class="tags">${p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p><p>${hoodsHere.map(n => `<span class="pill hood">${esc(n)}</span>`).join(' ')} ${w.days.map(d => `<span class="pill nearby">${WEEKEND_DAY[d]}</span>`).join(' ')} ${spaceSlot('p:' + p.id, D)} <span class="hint">Grades ${esc(gradeText(wp))}</span></p></div>
-  <dl>${rows}</dl>
-  ${w.note ? `<p class="flag">${esc(w.note)}</p>` : ''}
-  <div class="actions"><a class="btn primary" data-track="weekend" href="${esc(outUrl(w.url, { type: 'weekend', program: p }))}" target="_blank" rel="noopener">Class details</a><a class="btn" href="${link(programPath(p), D)}">Full listing</a>${w.days.map(d => `<a class="btn needs-js" href="${link('board/', D)}?wk=${esc(p.id)}&amp;day=${d}">Add ${WEEKEND_DAY[d]} to your week</a>`).join('')}</div>
-  <p class="src">Checked ${longDate(w.checked || p.lastVerified)}. Sources: ${sourceLinks(w.sources, p)}</p>
-</article>`;
-  };
-  const areas = weekendByArea();
   const hero = `    <p class="where"><a href="${link('all-programs/', D)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
     <h1>${T(`Saturday and Sunday classes`)}</h1>
-    <p class="lede">${T(`Weekend classes for kids, by part of the city: what runs, which term, and what it costs.`)}</p>
+    <p class="lede">${T(`Weekend classes for kids across the city: what runs, on which day, and where. Open one for its term, times and cost.`)}</p>${heroGo(D, link('board/', D), T(`Plan your week`))}
     <div class="facts">
       <span><b>${weekendPrograms.length}</b> places with weekend classes</span>
       <span><b>${weekendPrograms.filter(p => p.weekend.days.includes('sun')).length}</b> on Sundays too</span>
       <span><b>${new Set(weekendPrograms.flatMap(programHoods)).size}</b> neighborhoods</span>
     </div>`;
-  const body = `${filterBar({ list: weekendPrograms.map(shape), depth: D, show: { cost: false, day: false }, near: true, searchLabel: `Looking for a particular class?`, placeholder: 'A name or a neighborhood, or try piano, acting…' }).replace('data-filters', 'data-filters data-noschool data-noun="place" data-nouns="places"')}
+  const body = `${filterBar({ list: weekendPrograms.map(shape), depth: D, show: { cost: false, day: false }, near: true, searchLabel: `Looking for a particular class?`, placeholder: 'A name or a neighborhood, or try piano, acting…' }).replace('data-filters', 'data-filters data-noschool')}
 <p class="hint">${T(`A weekend class has no school pickup, so this list goes by where the class is. Any child can sign up, whichever school they go to.`)}</p>
 ${noMatch(D)}
-${areas.map(([a, list]) => `<section class="section" data-group>
-  <h2>${esc(a)}</h2>
-  <div class="list">
-${list.map(card).join('\n')}
+<section class="section" data-group>
+  <div class="schools">
+${weekendPrograms.map(p => listRow('weekend', p, D, shape(p))).join('\n')}
   </div>
-</section>`).join('\n')}
+</section>
 <section class="section">
   <p>${T(`This covers the programs already on this site, plus weekend-only places from a first sweep of the city. It isn’t every class in Philadelphia, and some listed programs run weekend classes that their sites don’t spell out by day, so ask.`)} ${T(`Know a weekend class that should be here?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
   <p class="hint">${T(`Weekend terms start and fill on their own dates, so check with the provider before you count on a class.`)}</p>
 </section>`;
-  const ordered = areas.flatMap(([, l]) => l);
   return layout({
     title: 'Weekend classes for kids in Philadelphia, by neighborhood',
-    description: `Saturday and Sunday classes for kids at ${weekendPrograms.length} places in Philadelphia, by part of the city: music, theater, art, dance, skating, soccer and science, with terms, times and cost.`,
+    description: `Saturday and Sunday classes for kids at ${weekendPrograms.length} places in Philadelphia: music, theater, art, dance, skating, soccer and science, with the day, the neighborhood, and each one’s term, times and cost.`,
     pathName: weekendPath, depth: D, current: null, hero, body, showStreet: 'weekend',
-    jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: ordered.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
+    jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: weekendPrograms.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
   });
 }
 

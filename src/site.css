@@ -2059,3 +2059,15 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
   .pm-plans{grid-template-columns:minmax(0,1fr)}
   .pm-price b{font-size:2rem}
 }
+/* ---------- one row for every list: the facts line, and the way into the planner under a list's heading ---------- */
+.hero-go{margin:4px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.hero .hero-go .btn.primary{color:var(--btn-ink);box-shadow:0 6px 16px rgba(11,33,64,.18)}
+.hero .hero-go .btn{color:var(--link)}
+.hero .hero-go .btn.primary{color:var(--btn-ink)}
+.prow .facts{row-gap:8px}
+.prow .facts > span{white-space:normal}
+.pill.wkday{background:#F0DDF7;color:#4A2A72}
+.prow .dates{font-size:.9rem;color:var(--ink)}
+.prow .dates b{font-weight:700;color:var(--link);white-space:nowrap}
+.prow .space-mark{display:inline-block}
+.prow h3{margin:0}
