@@ -1365,7 +1365,7 @@ ${schoolRows}
 
 function programsPage() {
   const list = [...citywide].sort((a, b) => a.name.localeCompare(b.name));
-  const hero = `    <p class="where"><a href="${link('all-programs/', 1)}">${T(`All programs`)}</a></p>
+  const hero = `    <p class="where"><a href="${link('all-programs/', 1)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
     <h1>${T(`Every program, A to Z`)}</h1>
     <p class="lede">${T(`All {n} after-school programs on this site, across every school. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.`, { n: list.length })}</p>`;
   const body = `${filterBar({ list, depth: 1, show: { day: true }, near: true, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
@@ -2761,7 +2761,7 @@ function daysOffPage() {
   <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks(p.daysOff.sources, p)}</p>
 </article>`;
   }).join('\n');
-  const hero = `    <p class="where"><a href="${link('all-programs/', D)}">${T(`All programs`)}</a></p>
+  const hero = `    <p class="where"><a href="${link('all-programs/', D)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
     <h1>${T(`School’s closed. What now?`)}</h1>
     <p class="lede">${T(`Every day district schools are closed this year, who runs a camp on each, and a plan you can build for each child.`)}</p>
     <div class="facts">
@@ -4968,7 +4968,7 @@ function summerCampsPage() {
 </article>`;
   }).join('\n');
   const todo = campsFile.todo || [];
-  const hero = `    <p class="where"><a href="${link('all-programs/', D)}">${T(`All programs`)}</a></p>
+  const hero = `    <p class="where"><a href="${link('all-programs/', D)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
     <h1>${T(`Summer camps in Philadelphia`)}</h1>
     <p class="lede">${T(`Day camps inside the city, with the ages, weeks, hours and prices each camp posts on its own site.`)}</p>
     <div class="facts">
@@ -5036,7 +5036,7 @@ function weekendPage() {
 </article>`;
   };
   const areas = weekendByArea();
-  const hero = `    <p class="where"><a href="${link('all-programs/', D)}">${T(`All programs`)}</a></p>
+  const hero = `    <p class="where"><a href="${link('all-programs/', D)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
     <h1>${T(`Saturday and Sunday classes`)}</h1>
     <p class="lede">${T(`Weekend classes for kids, by part of the city: what runs, which term, and what it costs.`)}</p>
     <div class="facts">
