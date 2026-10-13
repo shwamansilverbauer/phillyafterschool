@@ -328,6 +328,14 @@
     if (list.length) { set('pas-my-grades', now); if (was !== now) set('pas-grade', 'MINE'); }
     else { set('pas-my-grades', null); if (get('pas-grade') === 'MINE') set('pas-grade', 'ALL'); }
   }
+  // The ages kept in a profile, the same way: the lists of classes and camps read them from this browser.
+  function adoptAges(list) {
+    list = Array.isArray(list) ? list.filter(function (a) { return typeof a === 'string'; }) : [];
+    var was = get('pas-my-ages') || '[]', now = JSON.stringify(list);
+    if (list.length) { set('pas-my-ages', now); if (was !== now) set('pas-age', 'MINE'); }
+    else { set('pas-my-ages', null); if (get('pas-age') === 'MINE') set('pas-age', 'ALL'); }
+  }
+  function ageWord(a) { return a === '14' ? '14 and up' : a; }
   function gradeWord(g) { return g === 'PK' ? 'Pre-K' : g; }
   function shortDate(t) { var d = new Date(t * 1000); return isNaN(d) ? '' : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
   function weekCount(b) {
@@ -913,6 +921,29 @@
       gradeRow.appendChild(gradeRail); gradeRow.appendChild(gradeNote);
       gradeRow.appendChild(el('span', 'hint', 'Tap each grade you have a child in. We keep the grades only, not which child is in which.'));
       if ((ainfo.grades || []).length) sch.appendChild(gradeRow);
+      // their ages, the same way: weekend classes, day camps and summer camps go by age
+      var ageRow = el('div', 'g-grades g-ages');
+      var al0 = el('span', 'g-label', 'Your children’s ages'); al0.id = 'prof-ages-label'; ageRow.appendChild(al0);
+      var ageRail = el('div', 'g-grade-rail'); ageRail.setAttribute('role', 'group'); ageRail.setAttribute('aria-labelledby', 'prof-ages-label');
+      var ageNote = el('span', 'hint'); ageNote.setAttribute('aria-live', 'polite');
+      var keptAges = [], ageBtns = [];
+      (ainfo.ages || []).forEach(function (a) {
+        var b = btn('gbtn', ''); b.appendChild(el('span', 'g', a === '14' ? '14+' : a)); b.setAttribute('aria-pressed', 'false'); b.setAttribute('aria-label', a === '14' ? 'Age 14 and up' : 'Age ' + a);
+        b.addEventListener('click', function () {
+          var want = keptAges.indexOf(a) > -1 ? keptAges.filter(function (x) { return x !== a; }) : keptAges.concat([a]);
+          ageNote.textContent = 'Saving…';
+          call('ages_save', { ages: want }).then(function (r) {
+            if (!r.ok) { ageNote.textContent = r.message; return; }
+            adoptAges(r.ages); paintAges(r.ages);
+            ageNote.textContent = r.ages.length ? 'Kept. Weekend classes, day camps and summer camps now start on “My kid' + (r.ages.length === 1 ? '' : 's') + '”: the ones that take ' + (r.ages.length === 1 ? 'age ' : 'ages ') + r.ages.map(ageWord).join(' or ') + '.' : 'No ages kept.';
+          });
+        });
+        ageBtns.push([a, b]); ageRail.appendChild(b);
+      });
+      var paintAges = function (list) { keptAges = list || []; ageBtns.forEach(function (x) { x[1].setAttribute('aria-pressed', String(keptAges.indexOf(x[0]) > -1)); }); };
+      ageRow.appendChild(ageRail); ageRow.appendChild(ageNote);
+      ageRow.appendChild(el('span', 'hint', 'Tap each age. An age you give a child on the summer planner is kept here too. We keep the ages only, not which child is which.'));
+      if ((ainfo.ages || []).length) sch.appendChild(ageRow);
       if ((ainfo.hoods || []).length) {
         var hoodRow = el('form', 'g-row');
         var hl = el('label', null, 'Your neighborhood'); hl.htmlFor = 'prof-hood';
@@ -1023,6 +1054,8 @@
         var kids = kidNames(p), grades = p.grades || [];
         row('Kids', kids.length ? function (dd) { dd.appendChild(el('b', 'pc-n', String(kids.length))); dd.appendChild(el('span', null, listWords(kids))); } : say('No names yet. A child’s first name comes from the plans you make.', true), kids.length ? '' : 'Make a plan', page('schedules/'));
         row('Grades', grades.length ? say(listWords(grades.map(gradeName))) : say('None kept', true), grades.length ? 'Change' : 'Add', page('account/') + '#school');
+        var ages = p.ages || [];
+        row('Ages', ages.length ? say(listWords(ages.map(ageWord))) : say('None kept', true), ages.length ? 'Change' : 'Add', page('account/') + '#school');
         var sName = schoolName(me.school || '');
         row('School', sName ? function (dd) { var a = el('a', null, sName); a.href = page(me.school + '/'); dd.appendChild(a); } : say('None kept', true), sName ? 'Change' : 'Add', page('account/') + '#school');
         var hName = ((ainfo.hoods || []).filter(function (x) { return x.id === me.hood; })[0] || {}).name || '';
@@ -1086,12 +1119,12 @@
       var loadProfile = function () {
         call('profile').then(function (p) {
           if (!p.ok) return;
-          adoptSchool(p.school, schoolName(p.school)); adoptGrades(p.grades);
-          paintSchool(p.school); paintGrades(p.grades || []); paintWeeks(p.weeks || []); paintSummer(p.summer || null); paintDaysOff(p.daysoff || null);
+          adoptSchool(p.school, schoolName(p.school)); adoptGrades(p.grades); adoptAges(p.ages);
+          paintSchool(p.school); paintGrades(p.grades || []); paintAges(p.ages || []); paintWeeks(p.weeks || []); paintSummer(p.summer || null); paintDaysOff(p.daysoff || null);
           lastP = p; paintCard();
         });
       };
-      paintSchool(me.school || ''); paintGrades(me.grades || []); paintWeek(); loadProfile();
+      paintSchool(me.school || ''); paintGrades(me.grades || []); paintAges(me.ages || []); paintWeek(); loadProfile();
       put(prof, 'account', 'plans');
       // the profile page: the card, then what's new on the site
       paintCard(); put(card, 'profile'); put(rvCard, 'profile');
@@ -1941,7 +1974,7 @@
       if (r && Array.isArray(r.kids)) { r.kids.forEach(function (k) { delete k.groups; delete k.prof; delete k.profOff; }); delete r.sumProf; delete r.offProf; delete r.sumProfOff; delete r.offProfOff; window.localStorage.setItem('pas-rosters', JSON.stringify(r)); }
     } catch (e) { /* nothing saved */ }
     set('pas-prof-school', null);
-    adoptGrades([]);
+    adoptGrades([]); adoptAges([]);
   }
   // A week taken out of the profile: this device's copy stays, it stops being sent, and it is marked (profOff) so it
   // doesn't keep itself again.
@@ -2471,6 +2504,7 @@
         if (d.http === 401) { me = null; note = 'Sign in again to keep ' + n.your + ' up to date in your profile.'; bad = true; draw(); return; }
         if (!d.ok) { failed = true; note = d.message || 'That didn’t save. Try again.'; bad = true; draw(); return; }
         failed = false; sent = text; kept = d[K.field]; ros()[K.flag] = { u: kept.updated }; delete ros()[OFF]; plan.save();
+        if (K.after) K.after();
         if (then) then();
         if (JSON.stringify(K.body()) !== sent) plan.onSave();   // changed again while that was on its way
       });
@@ -2592,8 +2626,16 @@
       }, function (k) { if (k.sum && k.sum.y === summer.year) k.sum.w = {}; });
     },
     line: summerLine,
+    // the ages given here go to the profile's ages (not which child), so the lists of classes and camps can start there
+    after: function () {
+      var ages = [];   // the profile's steps are 3 to 13, then 14 and up
+      summer.rosters().kids.forEach(function (k) { var a = k.sum && k.sum.age !== undefined && k.sum.age !== '' && isFinite(Number(k.sum.age)) ? Math.min(14, Math.max(3, Math.round(Number(k.sum.age)))) : null; if (a && ages.indexOf(String(a)) < 0) ages.push(String(a)); });
+      var had = []; try { had = JSON.parse(get('pas-my-ages') || '[]') || []; } catch (e) { had = []; }
+      if (!ages.length || ages.every(function (a) { return had.indexOf(a) > -1; })) return;
+      call('ages_save', { ages: ages, add: 1 }).then(function (r) { if (r.ok) adoptAges(r.ages); });
+    },
     empty: 'Add a camp to a week and your summer is kept in your profile, so it’s there on your other devices.',
-    gets: 'Your profile gets each child’s first name and their camps by week. Ages, the calendar’s title and photos stay on this device.'
+    gets: 'Your profile gets each child’s first name, their camps by week and their ages. The calendar’s title and photos stay on this device.'
   });
 
   var offBox = document.getElementById('off-profile');
@@ -2761,7 +2803,7 @@
     // What the profile holds, compared with this device: a newer copy there replaces the one here.
     var reconcile = function (p) {
       profile = p;
-      adoptSchool(p.school, schoolName(p.school)); adoptGrades(p.grades);
+      adoptSchool(p.school, schoolName(p.school)); adoptGrades(p.grades); adoptAges(p.ages);
       var changed = false;
       board.rosters().kids.forEach(function (k) {
         if (!k.prof) return;
@@ -3065,7 +3107,7 @@
         if (changed) board.save();
         if (!me) { draw(); return; }
         call('profile').then(function (p) {
-          if (p.ok) reconcile({ school: p.school || '', grades: p.grades || [], weeks: p.weeks || [] });
+          if (p.ok) reconcile({ school: p.school || '', grades: p.grades || [], ages: p.ages || [], weeks: p.weeks || [] });
           draw();
           syncNow();
           autoKeep();
