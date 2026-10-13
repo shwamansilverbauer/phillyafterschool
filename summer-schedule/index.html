@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=3e61f739">
+<link rel="stylesheet" href="../assets/site.css?v=c103e3b5">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -65,7 +65,7 @@
   <div class="acct-ask when-out has-ex" data-acct-ask>
     <div class="acct-ask-say">
     <h3><span data-copy="da707f9855">Plan the summer with a free account</span></h3>
-    <p><span data-copy="b397bcea72">The planner is for parents with an account. Make one and you can add a camp to each week, for one child or for each of them. The chart of when each camp runs, below, is here for everyone.</span></p>
+    <p><span data-copy="def6569c30">The planner is for parents with an account. Make one and you can add a camp to each week, for one child or for each of them, as a list or on a calendar. The chart of when each camp runs, below, is here for everyone.</span></p>
     </div>
     <figure class="ex ex-rows" aria-label="An example of a summer plan">
       <figcaption><span class="ex-tag"><span data-copy="0f01ed56a1">Example</span></span><b><span data-copy="77d8595bc9">Sam’s summer</span></b><span class="ex-kids" aria-hidden="true"><i class="on">Sam</i><i>Rae</i></span></figcaption>
@@ -91,6 +91,14 @@
       <select id="sum-age"><option value="">Any age</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option></select></div>
     <div class="sum-tally"><div class="sum-strip" id="sum-strip" aria-hidden="true"></div><p id="sum-count" aria-live="polite"></p><p class="hint" id="sum-cost"></p></div>
   </div>
+  <div class="year-view-head off-view-head">
+    <h3 id="sum-view-h"><span data-copy="c44edd8ef9">Week by week</span></h3>
+    <div class="tabs view-switch" id="sum-views" role="group" aria-label="How to show the weeks">
+      <button type="button" class="tab vs" data-view="list" aria-pressed="true">List</button><button type="button" class="tab vs" data-view="cal" aria-pressed="false">Calendar</button><button type="button" class="tab vs" data-view="chart" aria-pressed="false">Who’s open</button>
+    </div>
+  </div>
+  <div class="year-cal off-month" id="sum-month" hidden></div>
+  <div class="off-chart-slot" id="sum-chart-slot" hidden></div>
   <ol class="sum-weeks" id="sum-weeks"></ol>
   <div class="actions sum-tools" id="sum-tools" hidden><button type="button" class="btn primary" id="sum-share" hidden>Share the plan</button><button type="button" class="btn" id="sum-cal">Add to calendar</button><button type="button" class="btn" id="sum-copy">Copy the plan as text</button><button type="button" class="btn" id="sum-print">Print the list</button><button type="button" class="clear" id="sum-clear">Clear the plan</button></div>
   <p class="hint" id="sum-status" aria-live="polite"></p>
@@ -128,6 +136,7 @@
 </section>
 <section class="section sum-chart-section" id="chart" data-jump-to="When camps run">
   <h2><span data-copy="f87a087dc7">When each camp runs</span></h2>
+  <div class="off-chart-block" id="sum-chart-block">
   <p><span data-copy="cf5610a79d">Each column is a week, named by its Monday. A filled box means the camp listed that week. The chart scrolls sideways and down.</span> <span class="needs-js when-in"><span data-copy="e615da79f1">Tap a box to add that week to your summer.</span></span></p>
   <p class="sum-key"><span><i class="k exact"></i><span data-copy="b387b496c0" data-tpl="{year} dates" data-vars="{&quot;year&quot;:2027}">2027 dates</span></span><span><i class="k"></i><span data-copy="3303fccc81" data-tpl="{year} dates, as a guide" data-vars="{&quot;year&quot;:2026}">2026 dates, as a guide</span></span><span class="needs-js when-in"><i class="k picked"></i><span data-copy="f1473f7521">In your summer</span></span></p>
   <p class="hint" id="sum-chart-note" aria-live="polite"></p>
@@ -271,8 +280,9 @@
     </table>
   </div>
   <h3 class="sub"><span data-copy="c5a4c226c5">No dates listed yet</span></h3>
-  <p><span data-copy="219ba40bfa">These camps haven’t put dates we can chart on their sites. You can still add one to any week above, then check with the camp.</span></p>
+  <p><span data-copy="0ee69f223b">These camps haven’t put dates we can chart on their sites. You can still add one to any week in the list, then check with the camp.</span></p>
   <ul class="plain cols"><li><a href="../summer-camps/lavner-tech-camp-upenn/">Camp Tech Revolution at UPenn (Lavner)</a></li><li><a href="../summer-camps/flipout-camp/">FlipOut Productions</a></li><li><a href="../summer-camps/ymca-day-camps/">Greater Philadelphia YMCA day camps</a></li><li><a href="../summer-camps/nlarts-summer-camp/">NLArts summer art camp</a></li><li><a href="../summer-camps/parks-and-rec-camps/">Philadelphia Parks &amp; Recreation day camps</a></li><li><a href="../summer-camps/philly-rock-gym-camps/">Philadelphia Rock Gym summer camps</a></li><li><a href="../summer-camps/circus-arts-camp/">Philadelphia School of Circus Arts</a></li><li><a href="../summer-camps/queen-and-rook-camp/">Queen &amp; Rook Game Cafe</a></li><li><a href="../summer-camps/school-of-rock-philadelphia/">School of Rock Philadelphia</a></li><li><a href="../summer-camps/philadelphia-dance-academy/">The Philadelphia Dance Academy</a></li><li><a href="../summer-camps/work-to-ride-camp/">Work to Ride at Chamounix Equestrian Center</a></li></ul>
+  </div>
 </section>
 <section class="section">
   <p><a class="btn" href="../summer-camps/"><span data-copy="0930275c37">Every camp, with ages, hours and prices</span></a></p>
@@ -342,7 +352,7 @@
     <p>Written by Rachael Silverbauer.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=98f6d355" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=ff807e47" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 <script src="../assets/groups.js?v=0b861159"></script>
 </body>
 </html>

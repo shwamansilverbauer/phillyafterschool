@@ -1894,7 +1894,14 @@
       say('Saved days-off.ics with ' + events.length + (events.length === 1 ? ' day' : ' days') + '. Open the file to add them to your calendar.');
       track({ event: 'pas_board_share', method: 'calendar', board: 'day_camp' });
     });
-    $o('#off-print-list').addEventListener('click', function () { ev('print'); window.print(); });
+    $o('#off-print-list').addEventListener('click', function () {
+      ev('print');
+      if (offView === 'chart') {   // "Print the list" means the days, whatever is showing: the chart comes back afterwards
+        var back = function () { window.removeEventListener('afterprint', back); offView = 'chart'; draw(); };
+        offView = 'list'; draw(); window.addEventListener('afterprint', back);
+      }
+      window.print();
+    });
     var clearBtn = $o('#off-clear'), sure = false;
     clearBtn.addEventListener('click', function () {
       if (!sure) { sure = true; clearBtn.textContent = 'Clear every day' + (r.kids.length > 1 ? ' for ' + kidLabel(kid(), r.kid) : '') + '? Tap again'; window.setTimeout(function () { sure = false; clearBtn.textContent = 'Clear the plan'; }, 5000); return; }
@@ -3172,6 +3179,29 @@
     var costOf = function (k) { var t = 0; sd.weeks.forEach(function (w, i) { picksOf(k, i).forEach(function (id) { t += sd.camps[id].p || 0; }); }); return t; };
     var ev = function (action, more) { var o = { event: 'pas_summer', action: action, weeks_covered: covered(), children: r.kids.length }; if (more) Object.keys(more).forEach(function (x) { o[x] = more[x]; }); track(o); };
     var openWeek = -1;
+    // The weeks as a list (how the page opens), on a calendar a month at a time, or as the chart of when each camp runs.
+    // Signed in, that chart is moved here from its own section further down, which then goes, so nobody has to scroll
+    // for it (signed out, that section is where it stays). The choice is kept on this device.
+    var n0 = new Date(), today0 = n0.getFullYear() + '-' + ('0' + (n0.getMonth() + 1)).slice(-2) + '-' + ('0' + n0.getDate()).slice(-2);
+    var monthBox = $s('#sum-month'), viewBtns = all(sumEl, '#sum-views .vs');
+    var chartSlot = $s('#sum-chart-slot'), chartBlock = document.getElementById('sum-chart-block'), chartSec = document.getElementById('chart');
+    var chartIn = !!(chartSlot && chartBlock && chartSec && mayPlan());
+    if (chartIn) { chartSlot.appendChild(chartBlock); chartSec.hidden = true; if (window.pasJump) window.pasJump(); }
+    viewBtns.forEach(function (b) { if (b.getAttribute('data-view') === 'chart' && !chartIn) b.hidden = true; });
+    var isoDay = function (iso, n) { var d = new Date(iso + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+    // which week each weekday of the summer belongs to, and the months to page through (one that only gets the tail of a week is left out)
+    var weekOfDay = {}, inMonth = {};
+    sd.weeks.forEach(function (wk, i) { for (var n = 0; n < 5; n++) { var iso = isoDay(wk.d, n); weekOfDay[iso] = i; inMonth[iso.slice(0, 7)] = (inMonth[iso.slice(0, 7)] || 0) + 1; } });
+    var calMonths = Object.keys(inMonth).sort().filter(function (mk) { return inMonth[mk] >= 5; });
+    var weeksIn = function (mk) { var out = []; sd.weeks.forEach(function (wk, i) { for (var n = 0; n < 5; n++) if (isoDay(wk.d, n).slice(0, 7) === mk) { out.push(i); return; } }); return out; };
+    var kept = store('pas-sum-view');
+    var view = kept === 'cal' && monthBox ? 'cal' : kept === 'chart' && chartIn ? 'chart' : 'list', calMonth = '', calWeek = -1;
+    var setView = function (want, quiet) {
+      view = want === 'cal' && monthBox ? 'cal' : want === 'chart' && chartIn ? 'chart' : 'list'; openWeek = -1;
+      if (!quiet) { store('pas-sum-view', view); ev('view_' + view); }   // quiet: the page chose the view (a link in from a camp), so it isn't kept
+      draw();
+    };
+    viewBtns.forEach(function (b) { b.addEventListener('click', function () { setView(b.getAttribute('data-view')); }); });
     // Every week of the summer with a camp on it brings the dragon.
     var cheerSum = function (was) {
       var full = sd.weeks.length > 0 && covered() === sd.weeks.length;
@@ -3234,10 +3264,48 @@
           weeksEl.parentNode.insertBefore(same, weeksEl);
         }
       }
+      // which view: the chart instead of the weeks, or this child's month with the one week that is picked as a row to choose on
+      viewBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === view)); });
+      if (chartSlot) chartSlot.hidden = view !== 'chart';
+      weeksEl.hidden = view === 'chart';
+      if (monthBox) {
+        monthBox.hidden = view !== 'cal';
+        weeksEl.classList.toggle('cal-mode', view === 'cal');
+        if (view === 'cal' && calMonths.length) {
+          var firstIn = function (mk) { var inM = weeksIn(mk), open = inM.filter(function (i) { return !picks(i).length; }); return open.length ? open[0] : inM.length ? inM[0] : -1; };
+          if (calMonths.indexOf(calMonth) < 0) {
+            var todo = sd.weeks.filter(function (wk, i) { return !picks(i).length; })[0] || sd.weeks[0];
+            calMonth = calMonths.indexOf(todo.d.slice(0, 7)) > -1 ? todo.d.slice(0, 7) : calMonths[0];
+          }
+          if (openWeek > -1 && weeksIn(calMonth).indexOf(openWeek) > -1) calWeek = openWeek;
+          if (calWeek < 0 || weeksIn(calMonth).indexOf(calWeek) < 0) calWeek = firstIn(calMonth);
+          var ink = ['#DAEDFE', '#1763B8'];
+          calMonthView(monthBox, {
+            month: calMonth, months: calMonths, today: today0, caption: 'summer camp weeks' + (me.name ? ' for ' + me.name : ''),
+            off: function () { return false; },
+            marks: function (iso) {
+              var i = weekOfDay[iso]; if (i === undefined) return [];
+              var got = picks(i);
+              return got.length ? got.map(function (id) { var c = sd.camps[id]; return { cls: 'm-kid' + (c.w.indexOf(i) < 0 ? ' m-ask' : ''), text: c.n, ink: ink }; }) : [{ cls: 'm-kid m-todo', text: 'Not planned', ink: ink }];
+            },
+            onMonth: function (mk) { calMonth = mk; calWeek = firstIn(mk); openWeek = -1; draw(); },
+            onDay: function (iso) {
+              calWeek = weekOfDay[iso]; openWeek = picks(calWeek).length ? -1 : calWeek; draw();
+              var again = monthBox.querySelector('.cal-day[data-d="' + iso + '"]'); if (again && again.focus) again.focus();   // the month was redrawn: the keyboard stays on the day
+              var row = document.getElementById('w-' + sd.weeks[calWeek].d); if (row && row.scrollIntoView) row.scrollIntoView({ block: 'nearest' });
+            }
+          });
+          all(monthBox, '.cal-day').forEach(function (b) { b.setAttribute('aria-pressed', String(weekOfDay[b.getAttribute('data-d')] === calWeek)); });   // the whole week is the pick
+          var key = el('p', 'cal-key');
+          [['k-kid', 'Camp picked'], ['k-todo', 'Not planned yet']].forEach(function (x) { var sw = el('span', 'cal-sw'); sw.appendChild(el('i', x[0])); sw.appendChild(document.createTextNode(x[1])); key.appendChild(sw); });
+          monthBox.appendChild(key);
+          monthBox.appendChild(el('p', 'hint', 'Tap a week to choose a camp for ' + (me.name || 'your child') + '.'));
+        }
+      }
       sd.weeks.forEach(function (wk, i) {
         var mine = picks(i);
         var cell = el('i', mine.length ? 'on' : ''); stripEl.appendChild(cell);
-        var li = el('li', 'sum-week' + (mine.length ? ' has' : ''));
+        var li = el('li', 'sum-week' + (mine.length ? ' has' : '') + (view === 'cal' && i !== calWeek ? ' cal-hide' : '')); li.id = 'w-' + wk.d;
         var when = el('div', 'sum-when'); when.appendChild(el('b', null, wk.label));
         if (wk.note) when.appendChild(el('span', 'hint', wk.note));
         li.appendChild(when);
@@ -3358,7 +3426,14 @@
       say('Saved summer-' + sd.year + '.ics with ' + events.length + (events.length === 1 ? ' camp week' : ' camp weeks') + '. Open the file to add them to your calendar.');
       ev('calendar', { events: events.length });
     });
-    $s('#sum-print').addEventListener('click', function () { ev('print'); window.print(); });
+    $s('#sum-print').addEventListener('click', function () {
+      ev('print');
+      if (view === 'chart') {   // "Print the list" means the weeks, whatever is showing: the chart comes back afterwards
+        var back = function () { window.removeEventListener('afterprint', back); view = 'chart'; draw(); };
+        view = 'list'; draw(); window.addEventListener('afterprint', back);
+      }
+      window.print();
+    });
     var clearBtn = $s('#sum-clear'), sure = false;
     clearBtn.addEventListener('click', function () {
       if (!sure) { sure = true; clearBtn.textContent = 'Clear every week' + (r.kids.length > 1 ? ' for ' + kidLabel(kid(), r.kid) : '') + '? Tap again'; window.setTimeout(function () { sure = false; clearBtn.textContent = 'Clear the plan'; }, 5000); return; }
@@ -3581,7 +3656,8 @@
         if (row.hidden) { plan().age = ''; draw(); }
         row.classList.add('ask');
         if (chartNote) { chartNote.setAttribute('data-ask', '1'); chartNote.textContent = 'Tap the weeks you want for ' + c0.n + '.'; }
-        window.setTimeout(function () { var wrap = document.getElementById('chart'); if (wrap && wrap.scrollIntoView) wrap.scrollIntoView(); if (row.scrollIntoView) row.scrollIntoView({ block: 'center' }); }, 0);
+        if (chartIn && view !== 'chart') setView('chart', true);   // signed in, the chart is one of the planner's views
+        window.setTimeout(function () { var wrap = chartIn ? chartSlot : document.getElementById('chart'); if (wrap && wrap.scrollIntoView) wrap.scrollIntoView(); if (row.scrollIntoView) row.scrollIntoView({ block: 'center' }); }, 0);
       } else say(c0.n + ' hasn’t listed dates we can chart. Add it to any week with “Add a camp”, under the camps that haven’t listed dates.');
     }
   })();
