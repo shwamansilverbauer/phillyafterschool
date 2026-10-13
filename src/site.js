@@ -954,6 +954,23 @@
       var day = b.parentNode.querySelector('[data-next-off-day]');   // that day's own page: who has a camp
       if (day && next.p) { day.href = next.p; day.hidden = false; }
     });
+    // the bar along the bottom of the home page: the next day off still ahead, until it is closed in this browser
+    var bar = document.getElementById('offbar');
+    if (bar) {
+      var days; try { days = JSON.parse(bar.getAttribute('data-offbar')); } catch (e) { days = []; }
+      var nx = null; days.forEach(function (d) { if (!nx && d.u >= today) nx = d; });
+      if (nx && store('pas-offbar') !== nx.s) {
+        var go = bar.querySelector('.offbar-go'), room = function () { document.body.style.paddingBottom = bar.hidden ? '' : bar.offsetHeight + 'px'; };
+        bar.querySelector('.offbar-q').textContent = nx.q;
+        go.textContent = nx.g; go.href = nx.p;
+        bar.hidden = false; room();
+        window.addEventListener('resize', room);
+        bar.querySelector('.offbar-x').addEventListener('click', function () {
+          store('pas-offbar', nx.s); bar.hidden = true; room();
+          track({ event: 'pas_offbar', action: 'close', day: nx.s });
+        });
+      }
+    }
   })();
 
   // ----- the Admin menu: one more group in the menu, only in a browser where a site admin is signed in -----
@@ -1591,7 +1608,7 @@
     // of what is left: a mark of their own, kept with the plan, that the site has no way to check.
     var okOf = function (k, d) { var v = pickOf(k, d); return !!v && v !== HOME && !!(k.offOk && k.offOk[d.d]); };
     var needOf = function (k, d) { var v = pickOf(k, d); return !!v && v !== HOME && !okOf(k, d); };
-    var todoBox = document.getElementById('off-todo'), todoLine = $o('#off-todo-line'), todoOpen = false;
+    var todoLine = $o('#off-todo-line');
     var say = function (t) { statusEl.textContent = t || ''; };
     var ev = function (action, more) { var o = { event: 'pas_dayoff', action: action, days_planned: plannedOf(kid()).length, children: r.kids.length }; if (more) Object.keys(more).forEach(function (x) { o[x] = more[x]; }); track(o); };
     var openDay = '';
@@ -1603,13 +1620,19 @@
       if (list.length === 1) say(on ? 'Marked: signed up for ' + label(pickOf(k, list[0])) + ' on ' + list[0].label + '.' : list[0].label + ' is back on your to-do list.');
       else say(on ? 'Marked: signed up for ' + list.length + ' days.' : '');
       draw();
-      var f = focusId && document.getElementById(focusId);   // the page was redrawn: put the keyboard back where it was, or on what is next
-      if (!f && todoBox && /^todo-/.test(focusId || '')) f = todoBox.querySelector('input[type=checkbox], a, summary');
+      var f = focusId && document.getElementById(focusId);   // the page was redrawn: put the keyboard back where it was
       if (f && f.focus) f.focus();
     };
     // the days as a list (how the page opens) or as a calendar, a month at a time; the choice is kept on this device
     var monthBox = $o('#off-month'), viewBtns = all(planEl, '#off-views .vs');
-    var offView = monthBox && store('pas-off-view') === 'cal' ? 'cal' : 'list', offMonth = '', offDay = '';
+    // Signed in, "Who's open each day off" is the planner's third view, so it isn't lost further down the page. The
+    // chart itself is moved here from its own section, which then goes (signed out, that section is where it stays).
+    var chartSlot = $o('#off-chart-slot'), chartBlock = document.getElementById('off-chart-block'), chartSec = document.getElementById('chart');
+    var chartIn = !!(chartSlot && chartBlock && chartSec && mayPlan());
+    if (chartIn) { chartSlot.appendChild(chartBlock); chartSec.hidden = true; if (window.pasJump) window.pasJump(); }
+    viewBtns.forEach(function (b) { if (b.getAttribute('data-view') === 'chart' && !chartIn) b.hidden = true; });
+    var kept = store('pas-off-view');
+    var offView = kept === 'cal' && monthBox ? 'cal' : kept === 'chart' && chartIn ? 'chart' : 'list', offMonth = '', offDay = '';
     var dayAt = function (iso) { for (var i = 0; i < days.length; i++) if (days[i].d === iso) return days[i]; return null; };
     var offMonths = function () {
       var out = [];
@@ -1625,7 +1648,8 @@
     var firstIn = function (mk) { var inMonth = days.filter(function (d) { return d.d.slice(0, 7) === mk; }); return (inMonth.filter(function (d) { return !pickOf(kid(), d); })[0] || inMonth[0] || { d: '' }).d; };
     viewBtns.forEach(function (b) {
       b.addEventListener('click', function () {
-        offView = b.getAttribute('data-view') === 'cal' && monthBox ? 'cal' : 'list'; store('pas-off-view', offView); openDay = '';
+        var want = b.getAttribute('data-view');
+        offView = want === 'cal' && monthBox ? 'cal' : want === 'chart' && chartIn ? 'chart' : 'list'; store('pas-off-view', offView); openDay = '';
         track({ event: 'pas_dayoff', action: 'view_' + offView, children: r.kids.length });
         draw();
       });
@@ -1668,76 +1692,15 @@
       return b;
     };
     var drawCard = function () { /* set below, once the canvas is ready */ };
-    // ----- the to-do list: every camp day in the plan that hasn't been ticked "signed up", for every child, by place -----
+    // ----- what is left to sign up for, as one line in the tally: the list itself is the To do page -----
     var drawTodo = function () {
-      var who = planners(), many = r.kids.length > 1, groups = [], by = {}, done = [], open = 0;
-      who.forEach(function (x) {
-        days.forEach(function (d) {
-          var v = pickOf(x.k, d);
-          if (!v) { open++; return; }
-          if (v === HOME) return;
-          if (okOf(x.k, d)) { done.push({ x: x, d: d, v: v }); return; }
-          var key = x.i + ':' + v;
-          if (!by[key]) { by[key] = { x: x, v: v, days: [] }; groups.push(by[key]); }
-          by[key].days.push(d);
-        });
-      });
-      var left = groups.reduce(function (n, g) { return n + g.days.length; }, 0);
-      if (todoLine) {
-        todoLine.textContent = '';
-        if (left || done.length) {
-          todoLine.appendChild(document.createTextNode(left ? left + (left === 1 ? ' camp day' : ' camp days') + ' still to sign up for. ' : 'Signed up for every camp day in the plan. '));
-          var tl = el('a', null, left ? 'See your to-do list' : 'See the list'); tl.href = '#to-do'; todoLine.appendChild(tl);
-        }
-      }
-      if (!todoBox) return;
-      todoBox.textContent = '';
-      var forWho = function (x) { return many ? (x.name || kidLabel(x.k, x.i)) : ''; };
-      var dayBox = function (x, d, v, checked, id) {
-        var lab = el('label', 'sum-ok' + (checked ? ' on' : '')), cb = el('input'); cb.type = 'checkbox'; cb.checked = checked; cb.id = id;
-        lab.appendChild(cb); lab.appendChild(document.createTextNode(' ')); lab.appendChild(el('b', null, d.label)); lab.appendChild(el('span', 'hint', ' ' + d.name));
-        cb.addEventListener('change', function () { setOk(x.k, [d], cb.checked, 'todo', id); });
-        return lab;
-      };
-      if (!left && !done.length) todoBox.appendChild(el('p', 'hint', 'Nothing to sign up for yet. Put a camp on a day off in your plan, above, and it lands here until you tick it off.'));
-      else if (!left) todoBox.appendChild(el('p', 'todo-clear', 'You’re signed up for every camp day in your plan.'));
-      if (left) {
-        var ul = el('ul', 'todo-list');
-        groups.forEach(function (g) {
-          var p = od.programs[g.v], li = el('li', 'todo-item'), head = el('div', 'todo-head'), a = el('a', null, p.name); a.href = p.href;
-          var hb = el('b'); hb.appendChild(a); head.appendChild(hb);
-          if (forWho(g.x)) head.appendChild(el('span', 'todo-who', 'for ' + forWho(g.x)));
-          head.appendChild(el('span', 'hint', g.days.length === 1 ? '1 day' : g.days.length + ' days'));
-          li.appendChild(head);
-          var dl = el('ul', 'todo-days');
-          g.days.forEach(function (d) {
-            var row = el('li'); row.appendChild(dayBox(g.x, d, g.v, false, 'todo-' + g.x.i + '-' + d.d));
-            if (!posted(g.v, d)) row.appendChild(el('span', 'todo-ask', p.n ? 'It hasn’t posted this date. Ask if it’s open.' : 'It hasn’t posted any dates. Ask if it’s open.'));
-            dl.appendChild(row);
-          });
-          li.appendChild(dl);
-          var acts = el('div', 'actions'), go = el('a', 'btn primary', 'Go to its sign-up page'); go.href = p.go || p.url; go.target = '_blank'; go.rel = 'noopener'; go.setAttribute('data-track', 'camp');
-          acts.appendChild(go);
-          if (g.days.length > 1) { var allB = el('button', 'clear', 'Tick all ' + g.days.length); allB.type = 'button'; allB.addEventListener('click', function () { setOk(g.x.k, g.days, true, 'todo_all', 'todo-none'); }); acts.appendChild(allB); }
-          li.appendChild(acts); ul.appendChild(li);
-        });
-        todoBox.appendChild(ul);
-      }
-      if (open) {
-        var op = el('p', 'hint todo-open', open + (open === 1 ? ' day off has' : ' days off have') + ' no plan yet. '), ol = el('a', null, 'Choose a plan for ' + (open === 1 ? 'it' : 'them')); ol.href = '#plan';
-        op.appendChild(ol); op.appendChild(document.createTextNode('.')); todoBox.appendChild(op);
-      }
-      if (done.length) {
-        var dd = el('details', 'todo-done'), sm = el('summary', null, 'Signed up: ' + done.length + (done.length === 1 ? ' day' : ' days')), dul = el('ul', 'todo-days');
-        if (todoOpen) dd.open = true;
-        dd.addEventListener('toggle', function () { todoOpen = dd.open; });
-        done.forEach(function (it) {
-          var row = el('li'); row.appendChild(dayBox(it.x, it.d, it.v, true, 'todo-' + it.x.i + '-' + it.d.d));
-          row.appendChild(el('span', 'hint', label(it.v) + (forWho(it.x) ? ', for ' + forWho(it.x) : '')));
-          dul.appendChild(row);
-        });
-        dd.appendChild(sm); dd.appendChild(dul); todoBox.appendChild(dd);
-      }
+      if (!todoLine) return;
+      var left = 0, done = 0;
+      planners().forEach(function (x) { days.forEach(function (d) { if (needOf(x.k, d)) left++; else if (okOf(x.k, d)) done++; }); });
+      todoLine.textContent = '';
+      if (!left && !done) return;
+      todoLine.appendChild(document.createTextNode(left ? left + (left === 1 ? ' camp day' : ' camp days') + ' still to sign up for. ' : 'Signed up for every camp day in the plan. '));
+      if (od.todo) { var tl = el('a', null, left ? 'See your to-do list' : 'See the list'); tl.href = od.todo; todoLine.appendChild(tl); }
     };
     var draw = function () {
       var me = kid(), mine = plannedOf(me), many = r.kids.length > 1;
@@ -1768,6 +1731,8 @@
       }
       // the calendar, when that's the view: this child's month, then the one day that is picked, as a row to choose on
       viewBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === offView)); });
+      if (chartSlot) chartSlot.hidden = offView !== 'chart';
+      daysEl.hidden = offView === 'chart';
       if (monthBox) {
         monthBox.hidden = offView !== 'cal';
         daysEl.classList.toggle('cal-mode', offView === 'cal');

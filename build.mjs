@@ -692,6 +692,17 @@ if (daysOff) {
 }
 // The next day off, for the line on the home page and each school's page. The script picks the first one still ahead.
 const nextOff = (depth, list) => !offDays.length ? '' : `<p class="nextoff"><b data-next-off="${esc(JSON.stringify(offDays.slice(0, 12).map(d => ({ u: d.until, w: d.end ? `${shortDate(d.date)} to ${shortDate(d.end)}` : dayDate(d.date), n: d.name, c: campsOn(d, list).length, p: link(dayPath(d), depth) }))))}" hidden></b> <a data-next-off-day hidden>${T(`Who’s open that day`)}</a> <a href="${link(offPath, depth)}">${T(`Days off this year, and who’s open`)}</a></p>`;
+// On the home page the next day off is a bar that stays along the bottom of the screen until it is closed: a question
+// ("Do you know where your kids will be on Election Day?") and a way to that day's page. The words for each day off
+// are made here; the script picks the first one still ahead and remembers, in this browser, which one was closed.
+const ordinal = n => n + (n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'][n % 10]);
+const ordDate = iso => `${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][+iso.slice(5, 7) - 1]} ${ordinal(+iso.slice(8, 10))}`;
+const offSpan = d => !d.end || d.end === d.date ? ordDate(d.date) : d.end.slice(0, 7) === d.date.slice(0, 7) ? `${ordDate(d.date)} to ${ordinal(+d.end.slice(8, 10))}` : `${ordDate(d.date)} to ${ordDate(d.end)}`;
+const lowerSeason = n => n.replace(/^(Winter|Spring|Summer|Fall|Staff|Report)\b/, w => w.toLowerCase());
+const offAsk = d => /recess|break/i.test(d.name) ? `over ${lowerSeason(d.name)}` : /development|conference/i.test(d.name) ? `when school’s closed for ${lowerSeason(d.name)}` : `on ${d.name}`;
+const nextOffBar = depth => !offDays.length ? '' : `<aside class="offbar" id="offbar" aria-label="The next day school is closed" data-offbar="${esc(JSON.stringify(offDays.slice(0, 12).map(d => ({ u: d.until, s: d.date, q: `Do you know where your kids will be ${offAsk(d)}?`, g: `Get coverage for ${offSpan(d)}`, p: link(dayPath(d), depth) }))))}" hidden>
+  <div class="in offbar-in"><p><span class="offbar-q"></span> <a class="offbar-go" data-track="offbar"></a></p><button type="button" class="offbar-x" aria-label="Close this note"><span aria-hidden="true">×</span></button></div>
+</aside>`;
 const ymd = iso => iso.replace(/-/g, '');
 const nextDay = iso => new Date(Date.parse(iso + 'T12:00:00Z') + 86400000).toISOString().slice(0, 10);
 const shortDate = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
@@ -1850,7 +1861,7 @@ function homePage() {
     daysOff ? [link(offPath, 0), T(`Day camps`), T(`{n} programs run camps on the days school is closed, with a planner for the year.`, { n: campPrograms.length }), '#B88A00'] : null,
     summerCamps.length ? [link(campsPath, 0), T(`Summer camps`), T(`{n} day camps in the city, with ages, hours and prices, and a schedule to plan the summer week by week.`, { n: summerCamps.length }), '#2C8444'] : null,
   ].filter(Boolean);
-  const body = `${nextOff(0)}
+  const body = `${nextOffBar(0)}
 <section class="section" id="start">
   <div class="starts">
     <div class="start">
@@ -2773,7 +2784,7 @@ function daysOffPage() {
   const planData = {
     year: +String(daysOff.schoolYear).slice(0, 4), schoolYear: daysOff.schoolYear,
     programs: Object.fromEntries(campPrograms.map(p => [p.id, { name: p.name, url: p.daysOff.url, go: outUrl(p.daysOff.url, { type: 'camp', program: p }), href: link(programPath(p), D), color: TYPE[p.types[0]].color, hood: programHoods(p).join(', '), n: p.daysOff.dates.filter(x => x >= TODAY).length }])),
-    site: cfg.siteUrl, qr: cardQr?.dayoff && cardQr.dayoff.text.toLowerCase().startsWith(cfg.siteUrl.toLowerCase() + '/') ? cardQr.dayoff.rows : null,
+    todo: YEAR_PAGE ? link('to-do/', D) : '', site: cfg.siteUrl, qr: cardQr?.dayoff && cardQr.dayoff.text.toLowerCase().startsWith(cfg.siteUrl.toLowerCase() + '/') ? cardQr.dayoff.rows : null,
     days: days.map(({ note, ...x }) => x),
     page: `${cfg.siteUrl}/${offPath}`,
   };
@@ -2793,10 +2804,11 @@ ${jumpNav()}
   <div class="year-view-head off-view-head">
     <h3 id="off-view-h">${T(`Day by day`)}</h3>
     <div class="tabs view-switch" id="off-views" role="group" aria-label="How to show the days">
-      <button type="button" class="tab vs" data-view="list" aria-pressed="true">List</button><button type="button" class="tab vs" data-view="cal" aria-pressed="false">Calendar</button>
+      <button type="button" class="tab vs" data-view="list" aria-pressed="true">List</button><button type="button" class="tab vs" data-view="cal" aria-pressed="false">Calendar</button><button type="button" class="tab vs" data-view="chart" aria-pressed="false">Who’s open</button>
     </div>
   </div>
   <div class="year-cal off-month" id="off-month" hidden></div>
+  <div class="off-chart-slot" id="off-chart-slot" hidden></div>
   <ol class="sum-weeks off-days" id="off-days"></ol>
   <div class="actions sum-tools" id="off-tools" hidden><button type="button" class="btn primary" id="off-share-text" hidden>Share the plan</button><button type="button" class="btn" id="off-cal">Add to calendar</button><button type="button" class="btn" id="off-copy">Copy the plan as text</button><button type="button" class="btn" id="off-print-list">Print the list</button><button type="button" class="clear" id="off-clear">Clear the plan</button></div>
   <p class="hint" id="off-status" aria-live="polite"></p>
@@ -2832,13 +2844,9 @@ ${jumpNav()}
   </div>
   <script type="application/json" id="off-data">${JSON.stringify(planData).replace(/</g, '\\u003c')}</script>
 </section>
-<section class="section sum todo-sec needs-js-block${GATE ? ' when-in' : ''}" id="to-do" data-jump-to="To do" data-clarity-mask="true">
-  <h2>${T(`To do: sign up`)}</h2>
-  <p>${T(`Putting a camp on your plan doesn’t sign your child up: each camp takes sign-ups on its own site. Every camp day in your plan is listed here until you tick it off, and a day you’ve ticked turns green on the plan.`)}</p>
-  <div id="off-todo"></div>
-</section>
 <section class="section sum-chart-section" id="chart" data-jump-to="Who’s open">
   <h2>${T(`Who’s open each day off`)}</h2>
+  <div class="off-chart-block" id="off-chart-block">
   <p>${T(`Each column is a day district schools are closed. A filled box means the program’s own site lists a camp that day. The chart scrolls sideways.`)} <span class="needs-js${GATE ? ' when-in' : ''}">${T(`Tap a box to put that day in your plan.`)}</span></p>
   <p class="sum-key"><span><i class="k exact"></i>${T(`Camp posted`)}</span><span class="needs-js${GATE ? ' when-in' : ''}"><i class="k picked"></i>${T(`In your plan`)}</span></p>
   <p class="hint" id="off-chart-note" aria-live="polite"></p>
@@ -2850,9 +2858,7 @@ ${chartRows}
       </tbody>
     </table>
   </div>` : `<p class="hint">${T(`No listed program has posted a camp date yet.`)}</p>`}
-  ${noDates.length ? `<h3 class="sub">${T(`No dates posted yet`)}</h3>
-  <p>${T(`These programs say they run on days off but had no dates on their sites when we checked. You can still put one on any day above, then ask whether it’s open.`)}</p>
-  <ul class="plain cols">${noDates.map(p => `<li><a href="#${esc(p.id)}">${esc(p.name)}</a></li>`).join('')}</ul>` : ''}
+  </div>
 </section>
 <section class="section" id="days" data-jump-to="The days">
   <h2>${T(`Days off still to come`)}</h2>

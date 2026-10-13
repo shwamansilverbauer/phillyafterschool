@@ -663,10 +663,9 @@ Putting a camp on a day off is a plan, not a registration, so each camp day in a
   box (`#ok-DATE`); the chip is yellow until it is ticked and green after, and a day at home is blue with no box. In
   the calendar view a signed-up day is green with a check mark and one still to sign up for is pale yellow with an
   outline; the day's spoken label says "signed up" or "still to sign up", so colour is never the only signal.
-- **The to-do list is a section of its own** (`#to-do`, "To do" in the strip of links, drawn by `drawTodo()`): every
-  camp day not yet ticked, for every child, grouped by camp, each with a tick box, a link to the camp's own page and
-  "Tick all" when there are several. Days with no plan are counted in one line under it, and ticked days sit in a
-  closed "Signed up: N days" list where a tick can be taken back. A line in the plan's tally links to it.
+- **The planner doesn't hold the list itself.** A line in its tally (`#off-todo-line`) says how many camp days are
+  still to sign up for and links to the To do page. (For a day the days-off page had the list as a section of its
+  own; it went once the menu had "To do".)
 - **The To do page** (`/to-do/`, `todoPage()`) is the list by itself, and the menu has a "To do" link to it for
   anyone signed in (`a.nav-todo`, beside "Account"). Like the calendar it is a shell with nothing about anyone in it,
   kept out of search, with no analytics or recordings; `groups.js` hands the profile to `window.pasTodo.show()`. It
@@ -679,6 +678,25 @@ Putting a camp on a day off is a plan, not a registration, so each camp day in a
   and how many days: never the child, the camp or the date. The copied text and the calendar file say "signed up" or
   "still to sign up" for each camp day.
 - The summer planner doesn't have ticks yet.
+
+### Who's open, as the planner's third view
+
+The chart of which program has posted a camp for each day off ("Who's open each day off") is the days-off planner's
+third view, beside List and Calendar (`#off-views`, `data-view="chart"`, remembered in `pas-off-view`). The page is
+built with the chart in its own section (`#chart`), which is how someone signed out sees it; for someone signed in,
+`site.js` moves the chart (`#off-chart-block`) into the planner (`#off-chart-slot`) and hides the section, so it is
+no longer lost further down the page. Tapping a box still puts that day in the plan. The page no longer lists the
+programs with "No dates posted yet" under the chart; they are still in "Who runs camps".
+
+### The next day off, on the home page
+
+The home page's note about the next day off is a bar along the bottom of the screen (`nextOffBar()`, `#offbar`):
+"Do you know where your kids will be on Election Day?" and a button, "Get coverage for Nov 3rd", to that day's page.
+The words are made in the build for the next twelve days off: "on" a holiday, "over" a recess or break, "when
+school's closed for" conferences or staff development, with the date or the span of dates. The script shows the
+first one still ahead and leaves room for the bar under the page. The X closes it and remembers which day off was
+closed (`pas-offbar` in this browser), so it comes back for the next one. School pages and the week builder keep
+the older line in the page (`nextOff()`).
 
 ## Days of the week, days off, and a saved school
 
