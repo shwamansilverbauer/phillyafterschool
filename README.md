@@ -59,6 +59,13 @@ If the data has a problem, step 2 stops and the live site stays as it was. The "
 
 To put the site on a different host, run `node build.mjs` and upload the contents of `dist/`.
 
+## Building for another day (tests only)
+
+`PAS_TODAY=2026-10-12 node build.mjs` builds the site as if today were that day, and says so as it runs. It exists
+for the browser tests that are written around particular dates (which day off is next, what "this week" holds): they
+run against a copy built for one fixed day, with the browser's clock set to the same day, so they don't start
+failing when the calendar moves on. Never publish a copy built this way; the publishing job doesn't set it.
+
 ## Rebuilt every night
 
 `.github/workflows/publish.yml` also runs once a night. Nothing in the data changes, but the pages do: a day off that

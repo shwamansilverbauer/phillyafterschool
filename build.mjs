@@ -669,7 +669,11 @@ ${page}
 }
 
 // ---------- calendar files for registration dates ----------
-const TODAY = new Date().toISOString().slice(0, 10);
+// Today, as the pages know it. PAS_TODAY=2026-10-12 builds the site as if it were another day: that is for the
+// browser tests that are written around particular dates, and never for a build that is published.
+const PINNED_DAY = /^\d{4}-\d{2}-\d{2}$/.test(process.env.PAS_TODAY || '') ? process.env.PAS_TODAY : '';
+if (PINNED_DAY) console.log(`Note: building as if today were ${PINNED_DAY} (PAS_TODAY). Don't publish this copy.`);
+const TODAY = PINNED_DAY || new Date().toISOString().slice(0, 10);
 // ----- days of the week, and days off -----
 const daysText = days => !days ? '' : days.length === 5 ? 'Monday to Friday' : listNames(days.map(d => DAY_NAME[d]));
 const daysLine = p => [daysText(p.days), p.daysNote].filter(Boolean).join('. ');
