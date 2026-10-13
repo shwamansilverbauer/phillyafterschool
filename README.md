@@ -233,13 +233,13 @@ Labor Day, and works out which of those weeks each camp runs:
   age: "7" }`. "Add a sibling" adds a child; a first name is optional and typed on the page. A child with an
   after-school roster can only be removed on the week builder, where share groups are told. A summer stays in the
   browser unless its owner keeps it in their profile (next point). It is never part of a share group.
-- **Kept in a profile.** Signed in, a parent can press "Keep this summer in my profile" (`#sum-profile`, drawn by
-  `groups.js`, which the page loads). The server then holds one summer per account (table `summers`): the year, and
-  for each child a first name and camp ids by week. Ages, the calendar's title and photos never leave the device.
-  While it is kept (`sumProf` in `pas-rosters`), changes are sent a moment after they're made (`summer_save`); a
-  newer copy in the profile replaces the one on the device at the next visit. Another device is told what the profile
-  holds and can put it there, or replace it with its own, each on a second tap when something would be lost.
-  `summer_delete` takes it out; deleting the account deletes it. No action shares a summer or reads someone else's.
+- **Kept in a profile, by itself.** Signed in, the summer keeps itself in the parent's profile with nothing to press
+  (`#sum-profile`, drawn by `groups.js`, which the page loads; see "Plans keep themselves" below). The server holds
+  one summer per account (table `summers`): the year, and for each child a first name and camp ids by week. Ages, the
+  calendar's title and photos never leave the device. While it is kept (`sumProf` in `pas-rosters`), changes are sent
+  a moment after they're made (`summer_save`); a newer copy in the profile replaces the one on the device at the next
+  visit. `summer_delete` ("Take it out of my profile") takes it out; deleting the account deletes it. No action
+  shares a summer or reads someone else's.
   Signing in from the box goes to `/account/?next=summer` (or `/register/`) and comes back.
 - **Add to calendar** saves `summer-2027.ics`, made in the browser: one Monday-to-Friday entry per camp week, titled
   with the child's name and the camp. The day-camp plan has the same button (`days-off.ics`, one entry per planned
@@ -686,6 +686,31 @@ Putting a camp on a day off is a plan, not a registration, so each camp day in a
   "still to sign up" for each camp day.
 - The summer planner doesn't have ticks yet.
 
+### Plans keep themselves
+
+The planners need an account (`plannersNeedAccount`), and a plan made by someone signed in is kept in their profile
+without asking: there is no "Keep it in my profile" button to find. Signed out, the planner's place is taken by the
+"create a free account" box (`planAsk()`), so the prompt to make one is the first thing a visitor sees.
+
+- **Summer and days off** (`keepPlan()` in `groups.js`): once the profile has loaded, a plan on this device and none
+  in the profile is sent (`auto()`); one in the profile and none here is put on this device. The box under the plan
+  says "This summer is kept in your profile" with a "Take it out of my profile" link.
+- **The week** (`autoKeep()` and `keepWeek()` in the Build your week part of `groups.js`): each child's week is its
+  own row in the profile, told apart by first name, so a week is sent once it has a first name and a program. A week
+  the profile has and this device doesn't is put on this device. Removing a child on the page deletes their week
+  from the profile too (`onKidGone`), or it would come straight back.
+- **What is still the parent's choice.** (1) The profile and this device both hold a plan that were never tied
+  together (a plan made on this device before the planners needed an account, say): neither is sent or replaced
+  until they pick, and replacing takes a second tap. For weeks that means a child here with the same first name as a
+  week in the profile. (2) A plan they took out of the profile stays out: the device remembers (`sumProfOff`,
+  `offProfOff` on `pas-rosters`, `profOff` on a child) and shows "only on this device" with a button to keep it
+  again. A plan removed from the profile on another device, or on the profile page, is marked the same way on the
+  devices that still have a copy, so they don't put it back.
+- **What the pages say.** The privacy page, the terms' "Children's information", the sign-up page and each planner's
+  intro say plans are kept in the profile while signed in. If this is ever made a choice again, those are the places
+  to change (`privacyUpdated` and `termsUpdated` in `site.config.json` are the dates shown).
+- Tests: `auto.js` (weeks), `sumprof.js` (summer, both choices), `todo.js` (days off), `g6.js`, `wk2.js`.
+
 ### Who's open, as the planner's third view
 
 The chart of which program has posted a camp for each day off ("Who's open each day off") is the days-off planner's
@@ -757,7 +782,7 @@ of `roll`, `again` or `undo`).
   pictures: every day off on one card, or a calendar for each month with the days off in yellow and a bar for each
   child. The title can be typed over (`offTitle`); a photo is drawn in the browser and never saved or uploaded. The
   card keeps its QR code, `/d`, which `.htaccess` sends to the page tagged `utm_source=dayoff_card`.
-- **Kept in a profile.** Signed in, "Keep this plan in my profile" (`#off-profile`) stores one plan per account
+- **Kept in a profile, by itself.** Signed in, the plan keeps itself (`#off-profile`), one per account
   (table `daysoffs`): the school year, and for each child a first name and the pick for each day. `keepPlan()` in
   `groups.js` runs this box and the summer one from the same code; the server actions are `daysoff_save` and
   `daysoff_delete`, and `profile` returns it as `daysoff`. It is never shared and no other action reads it.
@@ -975,12 +1000,12 @@ These are the only parts of the site that store anything about a child on the se
   can't be fetched. The server asks Google whether the token is real, then checks it was issued to this site and
   that the address is one Google runs (Gmail or a Workspace domain); anything else is sent to the email code. A
   new account needs a first and last name before it can do anything; Google supplies them.
-- **Profile.** "Keep this week in my profile" on Build your week stores the child's first name and, for the
+- **Profile.** Signed in, a week on Build your week keeps itself once it has a first name and a program (see
+  "Plans keep themselves" below). The profile stores the child's first name and, for the
   current and upcoming weeks, each pick as `program.school` (plus a class the program lists). Free-text notes,
   the teacher's name, the card note, prices and day-off plans stay on the device. The roster remembers the
   profile week it belongs to (`prof: { id, u }`); changes go up by themselves, and a device that finds a newer
-  copy in the profile takes it, keeping its own notes for the same program. "Put it on this device" rebuilds a
-  kept week on a new device. A kept school is also that device's saved school, and saving a different school
+  copy in the profile takes it, keeping its own notes for the same program. A kept week the device doesn't have is rebuilt there by itself. A kept school is also that device's saved school, and saving a different school
   on a school's page updates the profile (only for someone signed in who keeps one there).
 - **Grades.** On the account page a parent taps the grades their children are in. Only the grades are stored
   (`users.grades`, for example `K,3`), not which child is in which. The account pages copy them to the browser

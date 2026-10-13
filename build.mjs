@@ -2070,7 +2070,7 @@ function termsPage() {
   </ul>
   <h2>${T(`Children’s information`)}</h2>
   <ul>
-    <li>${T(`The site works without telling us anything about a child. If you choose to keep a week or a summer in your profile, or share a week, you decide what first name to use, and you can use a nickname or an initial.`)}</li>
+    <li>${T(`Looking things up works without telling us anything about a child. A plan you make while signed in is kept in your profile, and you can share a week: you decide what first name to use, and you can use a nickname or an initial.`)}</li>
     <li>${T(`Only add a child you are the parent or guardian of, or have that person’s permission to add.`)}</li>
     <li>${T(`What we store, and how to delete it, is on the privacy page.`)} <a href="${link('privacy/', 1)}">${T(`Read the privacy page.`)}</a></li>
   </ul>
@@ -2131,7 +2131,7 @@ function privacyPage() {
   <h2 id="short" data-jump-to="In short">${T(`The short version`)}</h2>
   <ul>
     <li>${GATE ? T(`There are no ads, and nothing you send is sold. Looking things up needs no account. The planners (the week, the days off, the summer and the calendar) need a free one, and an account is also for following a program’s dates, keeping favorites, keeping your school or a plan in a profile, and sharing a week with someone.`) : GROUPS ? T(`There are no ads, and nothing you send is sold. An account is optional: it is for following a program’s dates, keeping favorites, keeping your school or a plan in a profile, and sharing a week with someone.`) : T(`There are no accounts and no ads, and nothing you send is sold.`)}</li>
-    <li>${GATE ? T(`Your rosters, including any child’s name you type, are saved in your own browser. Signing in to plan does not send them to us: they stay there unless you choose to keep one in your profile or share one.`) : GROUPS ? T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us unless you sign in and choose to keep one in your profile or share one.`) : T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us.`)}</li>
+    <li>${GATE ? T(`Your rosters, including any child’s name you type, are saved in your own browser. While you are signed in, a week that has a first name and a program on it is also kept in your profile, so it is there on your other devices. You can take it out of your profile, and it then stays in your browser only. Nobody else sees a week unless you share it.`) : GROUPS ? T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us unless you sign in and choose to keep one in your profile or share one.`) : T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us.`)}</li>
     <li>${T(`If you send a suggestion or a review, it arrives as an email to the person who runs the site.`)}</li>
     ${ALERTS ? `<li>${GROUPS ? T(`If you follow a program, a camp or a school, the list of what you follow is kept in your account, and your email address and that list are kept by Klaviyo, the service that sends the emails.`) : T(`If you ask for dates by email, your first name, your email address and the school or program you picked are kept by Klaviyo, the service that sends the emails.`)}</li>
     <li>${T(`If you ask to be emailed when a school is added, the same three things are kept by Klaviyo: your first name, your email address and which school you’re waiting for. It also adds you to our email list for occasional news about the site.`)}</li>` : ''}
@@ -2140,9 +2140,9 @@ function privacyPage() {
   <h2 id="rosters" data-jump-to="Rosters">${T(`Rosters and children’s names`)}</h2>
   <ul>
     <li>${T(`A roster lives in the browser you made it in. Clearing your browser’s site data deletes it.`)}</li>
-    <li>${(GATE ? T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us unless you choose to keep the summer in your profile. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`) : GROUPS ? T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us unless you sign in and choose to keep the summer in your profile. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`) : T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`))}</li>
+    <li>${(GATE ? T(`A summer schedule and a days-off plan are kept the same way: your picks, and any first name you type, are saved in your browser and, while you are signed in, in your profile. You can take either out of your profile, and it then stays in your browser only. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`) : GROUPS ? T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us unless you sign in and choose to keep the summer in your profile. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`) : T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`))}</li>
     <li>${T(`If you save a school as yours, that choice is kept in your own browser too. Our visit counts record that a school was saved, not who saved it.`)}</li>
-    <li>${T(`A child’s name is optional. If you add one, it stays on your device unless you keep or share that week through an account.`)}</li>${GROUPS ? `
+    <li>${T(`A child’s name is optional, and a nickname or an initial works. A week with no name on it stays on your device. A name you do add is kept in your profile with the plan it is on, and goes with a week you share.`)}</li>${GROUPS ? `
     <li>${T(`Dates you add yourself to “My kids’ calendar”, like picture day or a form that’s due, are kept in your browser and nowhere else. They are not sent to us and are not part of your profile, so they don’t appear on your other devices.`)}</li>` : ''}
     <li>${T(`A week can no longer be shared as a link. A link showed the week to anyone who had it and could not be taken back, so links made before October 2026 have stopped opening.`)}</li>
     <li>${T(`If one of those older links is opened, the site still removes the name from the page address before any analytics loads. The roster page is set to be hidden in session recordings.`)}</li>
@@ -2150,15 +2150,15 @@ function privacyPage() {
     <li>${T(`If you add a photo to a week card, the card is made in your own browser. The photo is not uploaded, not saved, and gone when you close the page.`)}</li>
   </ul>
   ${GROUPS ? `<h2 id="groups" data-jump-to="Accounts">${T(`Accounts, profiles and sharing`)}</h2>
-  <p>${GATE ? T(`An account is free. The lists and listings are open to everyone; the planners need you to sign in. An account also lets you keep your school and a child’s week in a profile, share a week with one person, and join a share group of a few families who know each other. Those are the only parts of the site that keep anything about a child on our server, and only when you choose to use them: making a plan while signed in keeps it in your browser.`) : T(`An account is optional. It lets you keep your school and a child’s week in a profile, share a week with one person, and join a share group of a few families who know each other. These are the only parts of the site that keep anything about a child on our server, and only when you choose to use them.`)}</p>
+  <p>${GATE ? T(`An account is free. The lists and listings are open to everyone; the planners need you to sign in. The plans you make while signed in (a child’s week, the days off, the summer) are kept in your profile, so they are on every device you sign in on, and you can take any of them out. An account also lets you keep your school in your profile, share a week with one person, and join a share group of a few families who know each other. Your profile, a shared week and a group are the only parts of the site that keep anything about a child on our server.`) : T(`An account is optional. It lets you keep your school and a child’s week in a profile, share a week with one person, and join a share group of a few families who know each other. These are the only parts of the site that keep anything about a child on our server, and only when you choose to use them.`)}</p>
   <ul>
     <li>${T(`An account is an email address and your first and last name. The email signs you in and tells you when someone opens a week you shared or joins a group you made. Other members never see it.`)}</li>
     <li>${T(`When an account is made, the person who runs this site gets an email with the account’s name and email address, and, for a program manager, the listing they claimed. Nothing about a child is in that email.`)}</li>
     <li>${T(`You can change the email address on your account, from your account page. We send a code to the new address to check that it’s yours. Once you type it in, you sign in with the new address, what you follow moves to it on the email list, a short note goes to the old address, and your other devices are signed out. The old address is no longer on your account, but it stays on our email list until it is unsubscribed: use the Unsubscribe link in any email, or ask us and we’ll remove it.`)}</li>${GROUPS.google ? `
     <li>${T(`You can sign in with Google instead of an emailed code. Google’s button is loaded on the pages where you sign in, so Google can see that someone opened that page. If you use it, Google tells us your name and email address. We ask for nothing else and never see your Google password.`)}</li>` : ''}
-    <li>${T(`If you keep your school in your profile, we store which school. If you keep your children’s grades, we store the grades and nothing about which child is in which. If you keep a week in your profile, we store the child’s first name, the programs on their current and upcoming weeks, and the school each program was picked under, so the week can be put back on another device. Notes you type are not stored.`)}</li>
-    <li>${T(`If you keep a summer schedule in your profile, we store each child’s first name as you typed it and the camps picked for each week, so the summer is there on your other devices. Ages, the calendar’s title and photos are not stored. A summer in your profile can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The summer schedule section is hidden in session recordings, and analytics is told only that a summer was kept, never what is in it.`)}</li>
-    <li>${T(`If you keep a days-off plan in your profile, we store each child’s first name as you typed it, the place picked for each day school is closed, and which of those days you ticked as signed up. The calendar’s title and photos are not stored. The plan can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The planner is hidden in session recordings, and analytics is never told what is in a plan you keep.`)}</li>
+    <li>${T(`If you keep your school in your profile, we store which school. If you keep your children’s grades, we store the grades and nothing about which child is in which. For a week in your profile, we store the child’s first name, the programs on their current and upcoming weeks, and the school each program was picked under, so the week can be put back on another device. Notes you type are not stored.`)}</li>
+    <li>${T(`For a summer schedule in your profile, we store each child’s first name as you typed it and the camps picked for each week, so the summer is there on your other devices. Ages, the calendar’s title and photos are not stored. A summer in your profile can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The summer schedule section is hidden in session recordings, and analytics is told only that a summer was kept, never what is in it.`)}</li>
+    <li>${T(`For a days-off plan in your profile, we store each child’s first name as you typed it, the place picked for each day school is closed, and which of those days you ticked as signed up. The calendar’s title and photos are not stored. The plan can’t be shared with anyone, and it is deleted when you take it out of your profile or delete your account. The planner is hidden in session recordings, and analytics is never told what is in a plan.`)}</li>
     <li>${T(`“My kids’ calendar” is drawn in your browser, for you alone, from the plans on your device and the ones in your profile. Opening it stores nothing new and sends nothing about your plans. It has no link of its own, so nobody else can open it. A picture or calendar file you save is a copy on your device that we never receive. So it can tell you when a date changes, the page remembers what your last file held, on your device only. Google Analytics and Microsoft Clarity are not loaded on it.`)}</li>
     <li>${T(`Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.`)}</li>
     <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
@@ -2798,11 +2798,11 @@ ${jumpNav()}
   <h2>${T(`Your days off`)}</h2>
   ${planAsk(D, 'daysoff', T(`Plan the days off with a free account`), T(`The planner is for parents with an account. Make one and you can choose where each child will be on every day school is closed, as a list or on a calendar. The lists of who’s open, below, are here for everyone.`), planExample('off'))}
   <div${gateIn} style="display:contents">
-  <p>${GATE ? T(`Choose where each child will be on each day school is closed. Your picks are saved on this device, and in your profile if you keep the plan there.`) : T(`Choose where each child will be on each day school is closed. Your picks are saved on this device and nowhere else.`)}</p>
+  <p>${GATE ? T(`Choose where each child will be on each day school is closed. Your picks are saved on this device and in your profile, so they’re there on your other devices.`) : T(`Choose where each child will be on each day school is closed. Your picks are saved on this device and nowhere else.`)}</p>
   <div class="sum-kids"><div class="kids" id="off-kids" role="group" aria-label="Which child"></div><button type="button" class="clear" id="off-kid-add">Add a sibling</button><button type="button" class="clear" id="off-kid-drop" hidden>Remove this child</button></div>
   <div class="sum-top off-top">
     <div class="field sum-name"><label for="off-name">${T(`First name (optional)`)}</label>
-      <input id="off-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${T(`Stays on this device.`)}</span></div>
+      <input id="off-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${GATE ? T(`Kept with the plan in your profile. A nickname or an initial is fine.`) : T(`Stays on this device.`)}</span></div>
     <div class="sum-tally"><div class="sum-strip" id="off-strip" aria-hidden="true"></div><p id="off-count" aria-live="polite"></p><p class="hint" id="off-open"></p><p class="off-todo-line" id="off-todo-line" aria-live="polite"></p></div>
   </div>
   <div class="year-view-head off-view-head">
@@ -3096,7 +3096,7 @@ function accountPage(register = false) {
         <li><b>${T(`Share a week with one person.`)}</b> ${T(`A grandparent or a sitter signs in to see it, and you can take it back.`)}</li>${GROUPS.pilot ? '' : `
         <li><b>${T(`Share with a small group.`)}</b> ${T(`A few families you invite by email see each other’s weeks. Nobody else can find the group or ask to join.`)}</li>`}
       </ul>
-      <p class="hint">${T(`It’s free. Nothing goes into your profile unless you put it there, and you can delete the account whenever you like.`)}</p>${cfg.termsLive === true ? `
+      <p class="hint">${T(`It’s free. The plans you make are kept in your profile, so they’re on your phone and your computer, and you can delete the account whenever you like.`)}</p>${cfg.termsLive === true ? `
       <p class="hint">${T(`Making an account means you agree to the`)} <a href="${link('terms/', 1)}">${T(`terms of use`)}</a>.</p>` : ''}
       <p class="hint">${T(`Run a program or camp?`)} <a href="${link('managers/', 1)}">${T(`Claim your listing`)}</a>${T(`. It’s the same account.`)}</p>
     </section>
@@ -3104,7 +3104,7 @@ function accountPage(register = false) {
   <section class="notes">
     <h2>${T(`What an account keeps, and who sees it`)}</h2>
     <ul>
-      <li>${T(`Nothing goes into your profile unless you put it there: a school, or a child’s first name and the programs on their week. No last names, addresses, notes or photos.`)}</li>
+      <li>${T(`Your profile keeps the plans you make: a child’s first name with their week, days off and summer, and your school. No last names, addresses, notes or photos.`)}</li>
       <li>${T(`A shared week opens only for the email address you sent it to, once that person has signed in. It can’t be searched for, and its link shows nothing to anyone else.`)}</li>
       <li>${T(`You can take a week back, stop sharing, or delete your account at any time. Shared weeks delete themselves when the school year ends.`)}</li>
     </ul>
@@ -3681,7 +3681,7 @@ function boardPage() {
       <div class="field">
         <label for="board-name">${T(`Child’s name`)}</label>
         <input id="board-name" type="text" maxlength="40" placeholder="Sam" autocomplete="off">
-        <span class="hint">${T(`Optional. It shows on the roster you share.`)}</span>
+        <span class="hint">${GATE ? T(`A first name, a nickname or an initial. It shows on the roster you share, and it’s how your profile tells one child’s week from another’s.`) : T(`Optional. It shows on the roster you share.`)}</span>
       </div>
       <div class="actions"><button type="button" class="btn" id="kid-add">Add another child</button><button type="button" class="clear" id="kid-remove" hidden>Remove this child</button></div>
     </div>
@@ -4586,7 +4586,7 @@ function schedulesPage() {
   <ul>
     <li>${T(`Nothing to put on a plan yet?`)} <a href="${link('schools/', D)}">${T(`Find your school`)}</a> ${T(`to see what works with it, or`)} <a href="${link('programs/', D)}">${T(`look through every program`)}</a>.</li>
     <li>${T(`A plan stays on the phone or computer you made it on. Nothing about your child is sent to us.`)}</li>${GROUPS ? `
-    <li>${GATE ? T(`The planners need a free account. Signed in, you can also keep each plan in your profile, so it’s on every device you sign in on.`) : T(`With a free account you can keep each plan in your profile, so it’s on every device you sign in on.`)} <a class="when-out" href="${link('register/', D)}">${T(`Create a free account`)}</a></li>` : ''}
+    <li>${GATE ? T(`The planners need a free account. Signed in, each plan is kept in your profile, so it’s on every device you sign in on.`) : T(`With a free account you can keep each plan in your profile, so it’s on every device you sign in on.`)} <a class="when-out" href="${link('register/', D)}">${T(`Create a free account`)}</a></li>` : ''}
     <li>${T(`Days, hours and prices come from each program’s own website. Check with the program before you count on a spot.`)}</li>
   </ul>
 </section>`;
@@ -4626,7 +4626,7 @@ function todoPage() {
     <ul>
       <li>${T(`It’s made from your days-off plan: every day you’ve put a camp on, for every child. A day at home needs no sign-up, so it isn’t here.`)}</li>
       <li>${T(`A tick is your own note. We can’t see whether you registered, and the camp isn’t told anything.`)}</li>
-      <li>${T(`Ticks are kept with the plan: on this device, and in your profile if you keep the plan there, so they follow you to another phone or computer.`)}</li>
+      <li>${T(`Ticks are kept with the plan, on this device and in your profile, so they follow you to another phone or computer.`)}</li>
       <li>${T(`Change the camp on a day and its tick is cleared, because it’s a new sign-up.`)}</li>
     </ul>
   </section>
@@ -4812,11 +4812,11 @@ ${jumpNav()}
   <h2>${T(`Your summer`)}</h2>
   ${planAsk(D, 'summer', T(`Plan the summer with a free account`), T(`The planner is for parents with an account. Make one and you can add a camp to each week, for one child or for each of them, as a list or on a calendar. The chart of when each camp runs, below, is here for everyone.`), planExample('sum'))}
   <div${gateIn} style="display:contents">
-  <p>${GATE ? T(`Add a camp to each week, for one child or for each of them. Your picks are saved on this device, and in your profile if you keep the summer there.`) : T(`Add a camp to each week, for one child or for each of them. Your picks are saved on this device and nowhere else.`)}</p>
+  <p>${GATE ? T(`Add a camp to each week, for one child or for each of them. Your picks are saved on this device and in your profile, so they’re there on your other devices.`) : T(`Add a camp to each week, for one child or for each of them. Your picks are saved on this device and nowhere else.`)}</p>
   <div class="sum-kids"><div class="kids" id="sum-kids" role="group" aria-label="Which child"></div><button type="button" class="clear" id="sum-kid-add">Add a sibling</button><button type="button" class="clear" id="sum-kid-drop" hidden>Remove this child</button></div>
   <div class="sum-top">
     <div class="field sum-name"><label for="sum-name">${T(`First name (optional)`)}</label>
-      <input id="sum-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${T(`Stays on this device.`)}</span></div>
+      <input id="sum-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${GATE ? T(`Kept with the plan in your profile. A nickname or an initial is fine.`) : T(`Stays on this device.`)}</span></div>
     <div class="field sum-age"><label for="sum-age">${T(`Age this summer (optional)`)}</label>
       <select id="sum-age"><option value="">Any age</option>${Array.from({ length: 15 }, (_, i) => `<option value="${i + 3}">${i + 3}</option>`).join('')}</select></div>
     <div class="sum-tally"><div class="sum-strip" id="sum-strip" aria-hidden="true"></div><p id="sum-count" aria-live="polite"></p><p class="hint" id="sum-cost"></p></div>
