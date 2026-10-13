@@ -381,10 +381,39 @@ Fields worth knowing:
 ## Program pages
 
 Every program gets its own page at `/programs/<id>/` (for example `/programs/zhang-sah/`), built from the
-same record as its cards: the details, each school it serves, and its reviews. `/programs/` lists them all
-A to Z. Both are in the sitemap, and each program page carries structured data (name, address, phone, and
-the star rating once there are reviews) for search engines. Nothing extra to maintain: add or edit a
-program in `data/programs.json` and its page follows.
+same record as its cards. `/programs/` lists them all A to Z. Both are in the sitemap, and each program page
+carries structured data (name, address, phone, and the star rating once there are reviews) for search engines.
+Nothing extra to maintain: add or edit a program in `data/programs.json` and its page follows.
+
+**One section for each part of the year.** A program's page has a section for everything it runs, in the order
+of a family's calendar: After school (the weekday details, the grade strip, the schools it serves), Weekends
+(what runs, on which day, the term and the cost, from `weekend`), Day camps (the summary and the days it has
+posted, break by break, from `daysOff`) and Summer (the summer camp tied to it, see below). Each section has the
+same shape: the details in a card, then a filled button that puts it on the parent's plan for that part of the
+year ("Add to your week" → the week builder; "Add Saturday to your week" → the week builder's weekend;
+"Add it to your days off" → the days-off planner, opened on the first day it has posted; "Add to your summer"
+→ the summer planner) and plain buttons for the provider's own sign-up and website. The hero says what it runs
+as a row of colored pills (`runsStrip()`, one color per kind, the same colors as the All programs page) and the
+sticky strip under the menu bar (`jumpNav()`) jumps between the sections, Schools and Reviews. The sections are
+`kindSection()` in `programPage()`; the "Tell me when sign-ups open" box, "Suggest an update" and the claim link
+sit under the sections.
+
+**A summer camp tied to a program is that program's Summer section.** A camp in `data/camps.json` with a
+`program` (the program's id) has no page of its own any more: its details, week strip, "Add to your summer"
+button and its own follow box ("Tell me when it posts summer 2027", key `c:<camp>`) are the program page's
+`#summer` section, built by `summerBlock()`, which `campPage()` also uses for camps with no program. Everywhere
+a camp is linked (the camps list, the weeks chart, the summer planner, the calendar, the emails) `campLink()`
+points a tied camp at `/programs/<id>/#summer`. The camp's old address, `/summer-camps/<camp>/`, keeps a small
+page that sends people on (`campMovedPage()`: a meta refresh, a canonical link to the program page, and
+`noindex`), and `.htaccess` sends it there with a 301 first wherever Apache runs. Tied camps are left out of the
+sitemap. Untie a camp (remove `program`) and it gets its page back.
+
+**One row for every list.** The A to Z list, the weekend list, the day-camp list and the summer camps list are
+rows of the same shape, `listRow(kind, …)`: the name, a line about it, its categories, then the facts that
+matter for that part of the year (the schools and grades after school; Saturdays or Sundays for a weekend class;
+the breaks a day-camp program has posted, "Winter break (3 of 5 days) · +2 more"; the weeks, ages and grades for
+a summer camp). Nothing on a row is a button: the row is the way to the listing's page, and every list opens
+with the way into its planner (`heroGo()`). The old cards with buttons on them are gone from the lists.
 
 ## Finding programs: filters, types and the school finder
 

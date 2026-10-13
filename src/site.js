@@ -3190,7 +3190,7 @@
     } catch (e) { /* nothing to carry over */ }
     var kid = function () { return r.kids[r.kid]; };
     var plan = function () { return sumOf(kid()); };
-    var campHref = function (id) { return sd.campUrl ? sd.campUrl.replace('CAMP-ID', id) : sd.campsPage + '#' + id; };   // each camp's own page
+    var campHref = function (id) { return sd.camps[id] && sd.camps[id].u ? sd.camps[id].u : sd.campUrl ? sd.campUrl.replace('CAMP-ID', id) : sd.campsPage + '#' + id; };   // each camp's own page, or its program's page
     var say = function (t) { statusEl.textContent = t || ''; };
     var picksOf = function (k, i) { return sumOf(k).w[sd.weeks[i].d] || []; };
     var picks = function (i) { return picksOf(kid(), i); };
