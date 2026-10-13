@@ -121,9 +121,10 @@
     });
   }
 
-  function call(action, body, extra) {
+  function call(action, body, extra, leaving) {
     if (!API) return Promise.resolve({ ok: false, http: 0, message: 'Groups don’t work in this preview copy of the site.' });
     var opts = { credentials: 'same-origin', headers: { 'X-PAS': '1' } };
+    if (leaving) opts.keepalive = true;   // sent as the page is left: the browser finishes it anyway
     if (body) { opts.method = 'POST'; opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
     return window.fetch(API + '?action=' + action + (extra || ''), opts).then(function (r) {
       return r.json().then(function (d) {
@@ -726,7 +727,7 @@
         put(fol, 'account', 'emails');
       }
       // the plans kept in the account get a panel of their own
-      sch.appendChild(el('p', 'hint', 'Kept in your profile, so every list starts in the right place on any device you sign in on. Nothing goes in unless you put it there.'));
+      sch.appendChild(el('p', 'hint', 'Kept in your profile, so every list starts in the right place on any device you sign in on.'));
       var prof = part(el('section', 'panel'), 'plans');
       prof.appendChild(el('h2', null, 'Plans you’ve kept'));
       prof.appendChild(el('p', null, 'A week, a summer and a days-off plan can live in your profile, so they’re there when you sign in on another phone or computer.'));
@@ -927,11 +928,11 @@
       }
       var weeksHead = el('h3', null, 'Weeks'); prof.appendChild(weeksHead);
       var weeksBox = el('div'); prof.appendChild(weeksBox);
-      var toBoard = el('p', 'hint', 'To keep a week here, or put one on this device, open '); var tb = el('a', null, 'Build your week'); tb.href = page('board/') + '?back=1'; toBoard.appendChild(tb); toBoard.appendChild(document.createTextNode(' and look for “Keep and share this week”.'));
+      var toBoard = el('p', 'hint', 'A week you make on '); var tb = el('a', null, 'Build your week'); tb.href = page('board/') + '?back=1'; toBoard.appendChild(tb); toBoard.appendChild(document.createTextNode(' is kept here once it has a first name and a program. Open it there to change it.'));
       prof.appendChild(toBoard);
       var paintWeeks = function (weeks) {
         weeksBox.textContent = '';
-        if (!weeks.length) { weeksBox.appendChild(el('p', 'hint', 'No weeks kept yet.')); return; }
+        if (!weeks.length) { weeksBox.appendChild(el('p', 'hint', 'No weeks here yet.')); return; }
         var ul = el('ul', 'g-list');
         weeks.forEach(function (w) {
           var li = el('li');
@@ -950,7 +951,7 @@
       var paintSummer = function (sm) {
         summerBox.textContent = '';
         var open = el('a', null, 'the summer schedule'); open.href = page('summer-schedule/') + '#plan';
-        if (!sm) { var none = el('p', 'hint', 'No summer kept yet. To keep one here, open '); none.appendChild(open); none.appendChild(document.createTextNode(' and look for “Keep it in your profile”.')); summerBox.appendChild(none); return; }
+        if (!sm) { var none = el('p', 'hint', 'No summer here yet. Plan one on '); none.appendChild(open); none.appendChild(document.createTextNode(' and it’s kept here.')); summerBox.appendChild(none); return; }
         var ul = el('ul', 'g-list'), li = el('li');
         li.appendChild(el('b', null, 'Summer ' + sm.y));
         li.appendChild(el('span', 'hint', summerLine(sm) + ' · last changed ' + shortDate(sm.updated)));
@@ -966,7 +967,7 @@
       var paintDaysOff = function (dp) {
         offBox2.textContent = '';
         var open = el('a', null, 'the days-off page'); open.href = page('days-off/') + '#plan';
-        if (!dp) { var none = el('p', 'hint', 'No days-off plan kept yet. To keep one here, open '); none.appendChild(open); none.appendChild(document.createTextNode(' and look for “Keep it in your profile”.')); offBox2.appendChild(none); return; }
+        if (!dp) { var none = el('p', 'hint', 'No days-off plan here yet. Make one on '); none.appendChild(open); none.appendChild(document.createTextNode(' and it’s kept here.')); offBox2.appendChild(none); return; }
         var ul = el('ul', 'g-list'), li = el('li');
         li.appendChild(el('b', null, 'School year ' + dp.y + '–' + String(dp.y + 1).slice(2)));
         li.appendChild(el('span', 'hint', daysOffLine(dp) + ' · last changed ' + shortDate(dp.updated)));
@@ -1937,16 +1938,17 @@
   function unlinkAll() {
     try {
       var r = JSON.parse(window.localStorage.getItem('pas-rosters') || 'null');
-      if (r && Array.isArray(r.kids)) { r.kids.forEach(function (k) { delete k.groups; delete k.prof; }); delete r.sumProf; delete r.offProf; window.localStorage.setItem('pas-rosters', JSON.stringify(r)); }
+      if (r && Array.isArray(r.kids)) { r.kids.forEach(function (k) { delete k.groups; delete k.prof; delete k.profOff; }); delete r.sumProf; delete r.offProf; delete r.sumProfOff; delete r.offProfOff; window.localStorage.setItem('pas-rosters', JSON.stringify(r)); }
     } catch (e) { /* nothing saved */ }
     set('pas-prof-school', null);
     adoptGrades([]);
   }
-  // A week taken out of the profile: this device's copy stays, it just stops being sent.
+  // A week taken out of the profile: this device's copy stays, it stops being sent, and it is marked (profOff) so it
+  // doesn't keep itself again.
   function unkeep(weekId) {
     try {
       var r = JSON.parse(window.localStorage.getItem('pas-rosters') || 'null');
-      if (r && Array.isArray(r.kids)) { r.kids.forEach(function (k) { if (k.prof && k.prof.id === weekId) delete k.prof; }); window.localStorage.setItem('pas-rosters', JSON.stringify(r)); }
+      if (r && Array.isArray(r.kids)) { r.kids.forEach(function (k) { if (k.prof && k.prof.id === weekId) { delete k.prof; k.profOff = 1; } }); window.localStorage.setItem('pas-rosters', JSON.stringify(r)); }
     } catch (e) { /* nothing saved */ }
   }
 
@@ -2407,11 +2409,13 @@
     });
   }
 
-  // A summer or a days-off plan taken out of the profile: this device's copy stays, it just stops being sent.
+  // A summer or a days-off plan taken out of the profile: this device's copy stays, and it stops being sent. Plans
+  // keep themselves in the profile of whoever is signed in, so the device also remembers that this one was taken out
+  // (flag + 'Off'), or the next change would put it straight back.
   function unkeepPlan(flag) {
     try {
       var r = JSON.parse(window.localStorage.getItem('pas-rosters') || 'null');
-      if (r && r[flag]) { delete r[flag]; window.localStorage.setItem('pas-rosters', JSON.stringify(r)); }
+      if (r) { delete r[flag]; r[flag + 'Off'] = 1; window.localStorage.setItem('pas-rosters', JSON.stringify(r)); }
     } catch (e) { /* nothing saved */ }
   }
   function unkeepSummer() { unkeepPlan('sumProf'); }
@@ -2427,9 +2431,12 @@
   }
 
   // =====================================================================================================
-  // On the summer schedule and the days-off page: keeping the plan in a profile. It is the account holder's own copy,
-  // for their other devices. Nothing here shares it with anyone. What leaves the device: each child's first name and
-  // their picks (camps by week, or a place for each day off).
+  // On the summer schedule and the days-off page: the plan of someone who is signed in keeps itself in their profile,
+  // with nothing to press. It is the account holder's own copy, for their other devices. Nothing here shares it with
+  // anyone. What leaves the device: each child's first name and their picks (camps by week, or a place for each day
+  // off). There is a choice in two cases only: the profile and this device both hold a plan that were never tied
+  // together (which one wins is theirs to say), and a plan they took out of the profile (it stays out until they put
+  // it back).
   // =====================================================================================================
   // The profile's copy, put onto this device: children are matched by first name, then a child with no name yet, then
   // added. `put` writes one child's picks; `clear` empties a child the profile's copy doesn't have.
@@ -2452,22 +2459,34 @@
   // event (the analytics event), n (the words for it), has(), body(), apply(copy), line(copy), empty and gets (two hints).
   function keepPlan(K) {
     var box = K.box, plan = K.plan, n = K.n;
-    var me = null, kept = null, loaded = false, note = '', bad = false, timer = null, sent = '';
+    var me = null, kept = null, loaded = false, note = '', bad = false, timer = null, sent = '', sending = '', busy = false, failed = false;
+    var OFF = K.flag + 'Off';   // set on this device while the plan is taken out of the profile
     var ros = function () { return plan.rosters(); };
     var tell = function (action) { var o = { event: K.event, action: action }; plan.track(o); };
     var push = function (then) {
       var body = K.body(), text = JSON.stringify(body), data = {}; data[K.field] = body;
-      call(K.field + '_save', data).then(function (d) {
+      busy = true; sending = text;
+      call(K.field + '_save', data, '', true).then(function (d) {   // finished even if the page is left while it is on its way
+        busy = false;
         if (d.http === 401) { me = null; note = 'Sign in again to keep ' + n.your + ' up to date in your profile.'; bad = true; draw(); return; }
-        if (!d.ok) { note = d.message || 'That didn’t save. Try again.'; bad = true; draw(); return; }
-        sent = text; kept = d[K.field]; ros()[K.flag] = { u: kept.updated }; plan.save();
+        if (!d.ok) { failed = true; note = d.message || 'That didn’t save. Try again.'; bad = true; draw(); return; }
+        failed = false; sent = text; kept = d[K.field]; ros()[K.flag] = { u: kept.updated }; delete ros()[OFF]; plan.save();
         if (then) then();
+        if (JSON.stringify(K.body()) !== sent) plan.onSave();   // changed again while that was on its way
       });
     };
-    var apply = function (copy) { K.apply(copy); ros()[K.flag] = { u: copy.updated }; sent = JSON.stringify(K.body()); plan.save(); plan.redraw(); };
+    var apply = function (copy) { K.apply(copy); ros()[K.flag] = { u: copy.updated }; delete ros()[OFF]; sent = JSON.stringify(K.body()); plan.save(); plan.redraw(); };
+    // Signed in, the plan keeps itself. A plan here and none in the profile is sent; one in the profile and none here
+    // is put on this device. Both, never tied together, is left for the parent to choose between.
+    var auto = function () {
+      if (!me || !loaded || busy || failed || ros()[K.flag] || ros()[OFF]) return;
+      var there = kept && kept.y === plan.year ? kept : null;
+      if (there && !K.has()) { apply(there); tell('profile_put'); draw(); }
+      else if (!there && K.has()) push(function () { if (bad) { note = ''; bad = false; } tell('profile_keep'); draw(); });
+    };
     var draw = function () {
       box.textContent = ''; box.hidden = false;
-      box.appendChild(el('h3', null, 'Keep it in your profile'));
+      box.appendChild(el('h3', null, 'In your profile'));
       if (note) box.appendChild(el('p', 'g-status' + (bad ? ' bad' : ''), note));
       if (!me) {
         box.appendChild(el('p', null, 'With a free account, ' + n.it + ' is there on your phone and your computer. It stays yours: there’s no sharing it from here.'));
@@ -2482,9 +2501,9 @@
       var linked = !!ros()[K.flag], there = kept && kept.y === plan.year ? kept : null;
       var acts = el('div', 'actions');
       if (linked) {
-        box.appendChild(el('p', null, n.It + ' is kept in your profile. Changes you make here are saved there, and show up on your other devices.'));
+        box.appendChild(el('p', null, n.It + ' is kept in your profile. Changes you make here save themselves, and show up on your other devices.'));
         var stop = btn('clear', 'Take it out of my profile');
-        twoTap(stop, 'Tap again to take it out', function () { call(K.field + '_delete', {}).then(function (d) { if (!d.ok) return; kept = null; ros()[K.flag] = null; plan.save(); note = 'Taken out of your profile. It’s still on this device.'; bad = false; tell('profile_stop'); draw(); }); });
+        twoTap(stop, 'Tap again to take it out', function () { call(K.field + '_delete', {}).then(function (d) { if (!d.ok) return; kept = null; ros()[K.flag] = null; ros()[OFF] = 1; plan.save(); note = 'Taken out of your profile. It’s still on this device.'; bad = false; tell('profile_stop'); draw(); }); });
         acts.appendChild(stop);
       } else if (there) {
         box.appendChild(el('p', null, 'Your profile already has ' + n.a + ': ' + K.line(there) + '.'));
@@ -2497,11 +2516,13 @@
           twoTap(mine, 'It replaces the one in your profile. Tap again', function () { push(function () { note = 'Kept. Your profile now has ' + n.it + '.'; bad = false; tell('profile_keep'); draw(); }); });
           acts.appendChild(mine);
         }
-      } else if (K.has()) {
-        box.appendChild(el('p', null, 'Keep ' + n.it + ' with your account, so it’s there on your other devices. It stays yours: there’s no sharing it from here.'));
-        var keep = btn('btn primary', 'Keep ' + n.it + ' in my profile');
-        keep.addEventListener('click', function () { keep.disabled = true; push(function () { note = 'Kept. Changes you make here are saved to your profile.'; bad = false; tell('profile_keep'); draw(); }); });
+      } else if (K.has() && (ros()[OFF] || failed)) {
+        box.appendChild(el('p', null, ros()[OFF] ? n.It + ' is only on this device. Keep it with your account and it’s there on your other devices. It stays yours: there’s no sharing it from here.' : n.It + ' hasn’t reached your profile yet.'));
+        var keep = btn('btn primary', ros()[OFF] ? 'Keep ' + n.it + ' in my profile' : 'Try again');
+        keep.addEventListener('click', function () { keep.disabled = true; failed = false; push(function () { note = 'Kept. Changes you make here save themselves to your profile.'; bad = false; tell('profile_keep'); draw(); }); });
         acts.appendChild(keep);
+      } else if (K.has()) {
+        box.appendChild(el('p', 'hint', 'Saving ' + n.it + ' to your profile…'));
       } else {
         box.appendChild(el('p', 'hint', K.empty));
       }
@@ -2512,12 +2533,26 @@
     // Every change on the page lands here. A kept plan is sent a moment later; otherwise the box just keeps up.
     var was = '';
     plan.onSave = function () {
-      var key = (me ? 1 : 0) + '|' + (ros()[K.flag] ? 1 : 0) + '|' + (K.has() ? 1 : 0);
+      auto();
+      var key = (me ? 1 : 0) + '|' + (ros()[K.flag] ? 1 : 0) + '|' + (K.has() ? 1 : 0) + '|' + (ros()[OFF] ? 1 : 0);
       if (key !== was) { was = key; if (note && !bad) note = ''; draw(); }
       if (!me || !ros()[K.flag]) return;
       if (timer) window.clearTimeout(timer);
       timer = window.setTimeout(function () { timer = null; if (ros()[K.flag] && JSON.stringify(K.body()) !== sent) push(); }, 1500);
     };
+    // A change still waiting to go when the page is left goes now, so the next page (the To do list, My kids' calendar,
+    // another device) has it.
+    var flush = function () {
+      if (timer) { window.clearTimeout(timer); timer = null; }
+      if (!me || !loaded || !(ros()[K.flag] || busy)) return;   // kept, or on its way to being
+      var data = {}; data[K.field] = K.body();
+      var text = JSON.stringify(data[K.field]);
+      if (text === (busy ? sending : sent)) return;
+      sent = sending = text;
+      call(K.field + '_save', data, '', true);
+    };
+    window.addEventListener('pagehide', flush);
+    document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') flush(); });
     draw();
     if (signedInHint()) call('me').then(function (d) {
       if (!d.ok || !d.user) { if (d.ok) set('pas-in', null); return; }
@@ -2527,7 +2562,7 @@
         if (!p.ok) { note = 'Couldn’t reach your profile just now.'; bad = true; draw(); return; }
         kept = p[K.field] || null;
         var link = ros()[K.flag];
-        if (link && !kept) { ros()[K.flag] = null; plan.save(); }                                  // taken out of the profile somewhere else
+        if (link && !kept) { ros()[K.flag] = null; ros()[OFF] = 1; plan.save(); }                   // taken out of the profile somewhere else: it stays out here too
         else if (link && kept.y === plan.year && kept.updated > link.u) apply(kept);             // changed on another device since
         else if (link) { sent = ''; if (JSON.stringify(K.body()) !== JSON.stringify({ y: kept.y, kids: kept.kids })) push(); }   // changed here while signed out or offline
         was = ''; plan.onSave();
@@ -2557,7 +2592,7 @@
       }, function (k) { if (k.sum && k.sum.y === summer.year) k.sum.w = {}; });
     },
     line: summerLine,
-    empty: 'Add a camp to a week, and you can keep the summer in your profile.',
+    empty: 'Add a camp to a week and your summer is kept in your profile, so it’s there on your other devices.',
     gets: 'Your profile gets each child’s first name and their camps by week. Ages, the calendar’s title and photos stay on this device.'
   });
 
@@ -2582,7 +2617,7 @@
         }, wipe);
       },
       line: daysOffLine,
-      empty: 'Choose a plan for a day, and you can keep your days off in your profile.',
+      empty: 'Choose a plan for a day and your days off are kept in your profile, so they’re there on your other devices.',
       gets: 'Your profile gets each child’s first name, where they’ll be on each day off, and which days you’ve ticked as signed up. The calendar’s title and photos stay on this device.'
     });
   }
@@ -2651,7 +2686,7 @@
 
     // ----- keeping shared and kept weeks current -----
     var timer = null, lastSent = '';
-    var syncNow = function () {
+    var syncNow = function (leaving) {
       timer = null;
       if (!signedInHint()) return;
       var kids = [], weeks = [];
@@ -2662,14 +2697,14 @@
       if (!kids.length && !weeks.length) return;
       var body = JSON.stringify([kids, weeks]);
       if (body === lastSent) return;
-      call('sync', { kids: kids, weeks: weeks }).then(function (d) {
+      call('sync', { kids: kids, weeks: weeks }, '', leaving === true).then(function (d) {
         if (d.http === 401) { notice = 'Sign in again to keep your profile and shared weeks up to date.'; me = null; draw(); return; }
         if (!d.ok) return;
         lastSent = body;
         var touched = false, redraw = false;
         (d.weeks || []).forEach(function (w) { board.rosters().kids.forEach(function (k) { if (k.prof && k.prof.id === w.id) { k.prof.u = w.updated; touched = true; } }); });
         if (d.weeksGone && d.weeksGone.length) {
-          board.rosters().kids.forEach(function (k) { if (k.prof && d.weeksGone.indexOf(k.prof.id) > -1) { k.prof = null; touched = true; redraw = true; } });
+          board.rosters().kids.forEach(function (k) { if (k.prof && d.weeksGone.indexOf(k.prof.id) > -1) { k.prof = null; k.profOff = 1; touched = true; redraw = true; } });   // taken out somewhere else: it stays out here too
         }
         if (d.gone && d.gone.length) {
           board.rosters().kids.forEach(function (k) { if (Array.isArray(k.groups)) k.groups = k.groups.filter(function (l) { return d.gone.indexOf(l.k) < 0; }); });
@@ -2680,9 +2715,17 @@
         if (redraw) draw();
       });
     };
-    board.onSave = function () { if (timer) window.clearTimeout(timer); timer = window.setTimeout(syncNow, 1500); drawTop(); };
-    // Removing a child from this device stops sharing their week. A copy kept in the profile stays there.
-    board.onKidGone = function (kid) { links(kid).forEach(function (l) { if (l.s) call('group_delete', { group: l.g }); else call('kid_delete', { kid: l.k }); }); };
+    board.onSave = function () { if (timer) window.clearTimeout(timer); timer = window.setTimeout(function () { syncNow(); autoKeep(); }, 1500); drawTop(); };
+    // A change still waiting to go when the page is left goes now, so the next page or device has it.
+    var flushWeek = function () { if (!timer) return; window.clearTimeout(timer); syncNow(true); };
+    window.addEventListener('pagehide', flushWeek);
+    document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') flushWeek(); });
+    // Removing a child from this device stops sharing their week, and takes it out of the profile too: a week left
+    // there would be put straight back on this device.
+    board.onKidGone = function (kid) {
+      links(kid).forEach(function (l) { if (l.s) call('group_delete', { group: l.g }); else call('kid_delete', { kid: l.k }); });
+      if (kid.prof) { var gone = kid.prof.id; call('week_delete', { week: gone }); if (profile) profile.weeks = (profile.weeks || []).filter(function (w) { return w.id !== gone; }); }
+    };
     // The roster page redraws on every keystroke; this block only needs to when the child, their name or the view changes.
     var shownFor = '';
     var shownKey = function () { var k = board.kid(); return board.rosters().kid + '|' + firstWord(k.name) + '|' + (weekCount(k.now) + weekCount(k.next) > 0); };
@@ -2723,7 +2766,7 @@
       board.rosters().kids.forEach(function (k) {
         if (!k.prof) return;
         var w = (p.weeks || []).filter(function (x) { return x.id === k.prof.id; })[0];
-        if (!w) { k.prof = null; changed = true; return; }
+        if (!w) { k.prof = null; k.profOff = 1; changed = true; return; }   // taken out of the profile somewhere else: it stays out here too
         if (w.updated > k.prof.u) { applyWeek(k, w); changed = true; }
       });
       if (changed) { board.save(); board.redraw(); }
@@ -2731,6 +2774,51 @@
     var elsewhere = function () {   // weeks in the profile that no roster on this device is tied to
       var here = board.rosters().kids.filter(function (k) { return k.prof; }).map(function (k) { return k.prof.id; });
       return ((profile && profile.weeks) || []).filter(function (w) { return here.indexOf(w.id) < 0; });
+    };
+
+    // Signed in, a week keeps itself in the profile, with nothing to press: once the child has a first name (weeks in
+    // a profile are told apart by it) and a program. A week the profile has and this device doesn't is put on this
+    // device. Two things are left for the parent: a week they took out of the profile (profOff), and a child here and
+    // a week there with the same first name that were never tied together, where which one wins is theirs to say.
+    var sameName = function (a, b) { return !!a && String(a).toLowerCase() === String(b || '').toLowerCase(); };
+    var hasWeek = function (k) { return weekCount(k.now) + weekCount(k.next) > 0; };
+    var clashes = function (k) { return !k.prof && elsewhere().some(function (w) { return sameName(firstWord(k.name), w.name); }); };
+    var keeping = [], keepFail = [];   // children whose week is on its way to the profile, and the ones it didn't work for
+    var keepWeek = function (k, then) {
+      var name = firstWord(k.name);
+      if (!name || keeping.indexOf(k) > -1) return;
+      keeping.push(k);
+      call('week_save', { week: { name: name, now: toFull(k.now), next: toFull(k.next) } }, '', true).then(function (d) {   // finished even if the page is left while it is on its way
+        keeping.splice(keeping.indexOf(k), 1);
+        if (board.rosters().kids.indexOf(k) < 0) { if (d.ok) call('week_delete', { week: d.week.id }); return; }   // removed while it was on its way
+        if (!d.ok) { if (keepFail.indexOf(k) < 0) keepFail.push(k); if (then) then(d); draw(); return; }
+        if (keepFail.indexOf(k) > -1) keepFail.splice(keepFail.indexOf(k), 1);
+        k.prof = { id: d.week.id, u: d.week.updated }; delete k.profOff; board.save();
+        if (profile) profile.weeks = (profile.weeks || []).concat([d.week]);
+        board.track({ event: 'pas_group_share', method: 'profile' });
+        if (then) then(d);
+        draw(); syncNow();   // anything changed while it was on its way goes with the next sync
+      });
+    };
+    var autoKeep = function () {
+      if (!me || !me.ready || !profile) return;
+      var r = board.rosters(), put = false;
+      // A week here that the profile already has, same first name and same programs, is the same week (it was sent
+      // just as the page was left, say): they are tied together rather than asked about.
+      var sameWeek = function (a, b) { a = a || {}; b = b || {}; return Object.keys(a).concat(Object.keys(b)).every(function (d) { return (a[d] || []).join('|') === (b[d] || []).join('|'); }); };
+      elsewhere().forEach(function (w) {
+        var twin = r.kids.filter(function (k) { return !k.prof && !k.profOff && keeping.indexOf(k) < 0 && sameName(firstWord(k.name), w.name) && sameWeek(toFull(k.now), w.now) && sameWeek(toFull(k.next), w.next); })[0];
+        if (twin) { twin.prof = { id: w.id, u: w.updated }; put = true; }
+      });
+      elsewhere().forEach(function (w) {
+        if (r.kids.some(function (k) { return !k.prof && sameName(firstWord(k.name), w.name) && (hasWeek(k) || k.profOff); })) return;   // theirs to choose
+        var at = -1;
+        r.kids.forEach(function (k, i) { if (at < 0 && !k.prof && !k.profOff && !hasWeek(k) && (!k.name || sameName(firstWord(k.name), w.name)) && keeping.indexOf(k) < 0) at = i; });   // an untouched roster first
+        if (at < 0) { if (r.kids.length >= board.maxKids) return; r.kids.push(board.newKid(w.name)); at = r.kids.length - 1; }
+        applyWeek(r.kids[at], w); put = true;
+      });
+      if (put) { board.save(); board.redraw(); draw(); }
+      r.kids.forEach(function (k) { if (!k.prof && !k.profOff && hasWeek(k) && firstWord(k.name) && !clashes(k) && keepFail.indexOf(k) < 0) keepWeek(k); });
     };
 
     // Someone sent here from the join page to build a week sees the way back at the top, where they are working.
@@ -2786,27 +2874,28 @@
           var id = kid.prof.id;
           call('week_delete', { week: id }).then(function (d) {
             if (!d.ok && d.http !== 401) { notice = d.message; draw(); return; }
-            kid.prof = null; board.save(); if (profile) profile.weeks = (profile.weeks || []).filter(function (w) { return w.id !== id; }); notice = ''; draw();
+            kid.prof = null; kid.profOff = 1; board.save(); if (profile) profile.weeks = (profile.weeks || []).filter(function (w) { return w.id !== id; }); notice = ''; draw();
           });
         });
         keep.appendChild(drop);
-      } else {
-        keep.appendChild(el('p', null, 'Keep ' + who + ' in your profile and it’s there when you sign in on another phone or computer. Notes you typed stay on this device.'));
-        var kb = btn('btn primary', 'Keep ' + who + ' in my profile');
+      } else if (!picks && !kid.profOff) {
+        keep.appendChild(el('p', 'hint', 'Add a program and ' + who + ' is kept in your profile, so it’s there when you sign in on another phone or computer.'));
+      } else if (!name) {
+        keep.appendChild(el('p', null, kid.profOff ? 'This week is only on this device. Add your child’s first name at the top of the page to keep it in your profile.' : 'Add your child’s first name at the top of the page and this week is kept in your profile, so it’s there on your other devices. Weeks in a profile are told apart by first name; a nickname or an initial is fine.'));
+      } else if (kid.profOff || clashes(kid) || keepFail.indexOf(kid) > -1) {
+        // out of the profile because they took it out, because the profile already has a week under this name, or because saving it didn't work
+        keep.appendChild(el('p', null, kid.profOff ? name + '’s week is only on this device. Keep it in your profile and it’s there when you sign in on another phone or computer. Notes you typed stay on this device.'
+          : clashes(kid) ? 'Your profile already has a week for ' + name + ', from another device. Put that one on this device, below, or keep this device’s as well.'
+          : name + '’s week hasn’t reached your profile yet.'));
+        var kb = btn('btn primary', keepFail.indexOf(kid) > -1 && !kid.profOff && !clashes(kid) ? 'Try again' : 'Keep ' + who + ' in my profile');
         var ks = el('span', 'hint'); ks.setAttribute('aria-live', 'polite');
         kb.addEventListener('click', function () {
-          if (!name) { ks.textContent = 'Add your child’s first name at the top of the page first, so you can tell weeks apart.'; return; }
           kb.disabled = true;
-          call('week_save', { week: { name: name, now: toFull(kid.now), next: toFull(kid.next) } }).then(function (d) {
-            kb.disabled = false;
-            if (!d.ok) { ks.textContent = d.message; return; }
-            kid.prof = { id: d.week.id, u: d.week.updated }; board.save();
-            if (profile) profile.weeks = (profile.weeks || []).concat([d.week]);
-            board.track({ event: 'pas_group_share', method: 'profile' });
-            draw();
-          });
+          keepWeek(kid, function (d) { if (!d.ok) notice = d.message || 'That didn’t save. Try again.'; else notice = ''; });
         });
         var ka = el('div', 'actions'); ka.appendChild(kb); ka.appendChild(ks); keep.appendChild(ka);
+      } else {
+        keep.appendChild(el('p', 'hint', 'Saving ' + who + ' to your profile…'));
       }
       var others = elsewhere();
       if (others.length) {
@@ -2816,14 +2905,16 @@
           li.appendChild(el('b', null, w.name + '’s week'));
           li.appendChild(el('span', 'hint', 'In your profile, not on this device. Last changed ' + shortDate(w.updated) + '.'));
           var put = btn('clear', 'Put it on this device');
-          put.addEventListener('click', function () {
+          var twin = board.rosters().kids.filter(function (k) { return !k.prof && sameName(firstWord(k.name), w.name) && hasWeek(k); })[0];   // the child of the same name here: the profile's week replaces theirs
+          (twin ? function (go) { twoTap(put, 'It replaces ' + w.name + '’s week on this device. Tap again', go); } : function (go) { put.addEventListener('click', go); })(function () {
             var r = board.rosters(), at = -1;
-            r.kids.forEach(function (k, i) { if (at < 0 && !k.prof && !k.name && !weekCount(k.now) && !weekCount(k.next)) at = i; });   // an untouched roster first
+            r.kids.forEach(function (k, i) { if (at < 0 && !k.prof && sameName(firstWord(k.name), w.name)) at = i; });
+            r.kids.forEach(function (k, i) { if (at < 0 && !k.prof && !k.name && !weekCount(k.now) && !weekCount(k.next)) at = i; });   // or an untouched roster
             if (at < 0) {
               if (r.kids.length >= board.maxKids) { notice = 'This device already has ' + board.maxKids + ' rosters. Remove one first.'; draw(); return; }
               r.kids.push(board.newKid(w.name)); at = r.kids.length - 1;
             }
-            applyWeek(r.kids[at], w); r.kid = at;
+            applyWeek(r.kids[at], w); delete r.kids[at].profOff; r.kid = at;
             board.save(); notice = ''; board.redraw(); draw();
           });
           li.appendChild(put); ol.appendChild(li);
@@ -2977,6 +3068,7 @@
           if (p.ok) reconcile({ school: p.school || '', grades: p.grades || [], weeks: p.weeks || [] });
           draw();
           syncNow();
+          autoKeep();
         });
       });
     };

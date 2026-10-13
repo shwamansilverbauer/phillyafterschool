@@ -3860,7 +3860,7 @@
     // ----- the page -----
     var srcLine = function (label, state, href, empty, build2) {
       var li = el('li'); li.appendChild(el('b', null, label + ': '));
-      var a = el('a', null, state === 'none' ? build2 : state === 'device' ? 'Keep it in your profile' : 'Change it'); a.href = href;
+      var a = el('a', null, state === 'none' ? build2 : state === 'device' ? 'Open it to keep it in your profile' : 'Change it'); a.href = href;
       li.appendChild(document.createTextNode(state === 'profile' ? 'from your profile. ' : state === 'device' ? 'on this device only, so it won’t be here on your other devices. ' : empty + ' '));
       li.appendChild(a);
       return li;
