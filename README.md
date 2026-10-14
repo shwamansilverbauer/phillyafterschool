@@ -183,8 +183,9 @@ page, its card on school pages, weekend cards and camp cards. This is free and s
 
 ## Summer camps
 
-Summer camps are their own list, in `data/camps.json`. `/summer-camps/` lists them as short cards (ages, dates,
-hours, weekly price, neighborhood), and each camp has its own page at `/summer-camps/ID/` (`campPage()`) with
+Summer camps are their own list, in `data/camps.json`. `/summer-camps/` lists them as rows (name, a line, the
+weeks, ages, grades, neighborhood), and a camp with no `program` has its own page at `/summer-camps/ID/`
+(`campPage()`; a camp tied to a program is that program's Summer section, see "Program pages") with
 everything it posts, the weeks it runs, the camps closest to it, and the tools to suggest an update or claim it. Nothing in the file is tied
 to a school or to the after-school pages. The file has:
 
@@ -304,11 +305,12 @@ page: `{ "summary": "...", "days": ["sat"], "term": "Fall 2026: ...", "cost": ".
 "sources": [...], "check": { "url", "how", "look", "notes" }, "checked": "YYYY-MM-DD" }`. A place that only runs on
 weekends (or only weekends and day camps) leaves `schools` as `{}`, like a day-camp-only listing.
 
-Weekend classes go by where they are, not by school. `/weekends/` groups and filters them by part of the city (the
-`CAMP_AREAS` list the summer camps use, worked out from each listing's `neighborhoods`), each card names its
-neighborhood, and a parent's saved school never narrows the list. Each neighborhood page has a "Weekend classes in"
-section: the places in that neighborhood, then the rest of that part of the city. A neighborhood that isn't in
-`CAMP_AREAS` falls under "Elsewhere in the city", so add new ones there.
+Weekend classes go by where they are, not by school. `/weekends/` is one A to Z list of rows (name, a line, the
+days, the neighborhood; `listRow('weekend', …)`), filtered by age, type and part of the city (the `CAMP_AREAS` list
+the summer camps use, worked out from each listing's `neighborhoods`), and a parent's saved school never narrows
+it. Each neighborhood page has a "Weekend classes" section: the places in that neighborhood, then a section of the
+rest of that part of the city. A neighborhood that isn't in `CAMP_AREAS` falls under "Elsewhere in the city", so
+add new ones there.
 
 Optional `"times": { "sat": "9:30 am to 12:30 pm", "sun": "..." }` gives the short time shown in the week builder
 and on the card when a parent has typed nothing of their own.
@@ -320,8 +322,8 @@ weekday program. Take the field off once its weekday classes have been checked a
 **Weekends in Build your week.** The board has an "Add Saturday and Sunday" button under the weekdays. Weekend picks
 are kept beside the weekdays, not in them (`board.wk = { sat: [], sun: [] }`, each entry a program id, or
 `id~what the parent typed`), so pickup, the cost estimate and the week roller never see them. A weekend pick has no
-school and no pickup label. Each class card on `/weekends/` has an "Add Saturday to your week" button
-(`board/?wk=ID&day=sat`). The card is one image for the whole week: with weekend picks it grows by one row,
+school and no pickup label. The Weekends section of a program's page has an "Add Saturday to your week" button
+(`board/?wk=ID&day=sat`; one per day it runs). The card is one image for the whole week: with weekend picks it grows by one row,
 Saturday and Sunday side by side under Friday; without them it is the same card as before. In a profile or a
 shared week the weekend travels as two more days, `sat` and `sun`, holding program ids only: the server drops
 what a parent typed, and any program that has no class on that day. Weeks saved before this open unchanged.
@@ -381,7 +383,10 @@ Fields worth knowing:
 ## Program pages
 
 Every program gets its own page at `/programs/<id>/` (for example `/programs/zhang-sah/`), built from the
-same record as its cards. `/programs/` lists them all A to Z. Both are in the sitemap, and each program page
+same record as its cards. `/programs/` lists them all, in a section per kind of program (each under the first of
+its `types`, A to Z inside; `programsPage()`), with a strip under the menu bar (`jumpNav()`) that jumps between
+the sections and stays under the slim search bar as the page scrolls; the type, neighborhood and by-day pages have
+the same strip over their kind sections. Both are in the sitemap, and each program page
 carries structured data (name, address, phone, and the star rating once there are reviews) for search engines.
 Nothing extra to maintain: add or edit a program in `data/programs.json` and its page follows.
 
@@ -764,9 +769,9 @@ tour of the planner with one button, "Create a free account" (`planShow()`), so 
 The chart of which program has posted a camp for each day off ("Who's open each day off") is the days-off planner's
 third view, beside List and Calendar (`#off-views`, `data-view="chart"`, remembered in `pas-off-view`). The planner
 page carries the chart in a `.when-in` section (`#chart`) that `site.js` moves (`#off-chart-block`) into the planner
-(`#off-chart-slot`) and hides; signed out, the chart isn't on the planner page at all. For everyone it is on the
-day-camps page (`/day-camps/`, see "Days off" below), drawn as a picture: a box is `td.on::before` until the planner
-puts a button in it (`.sum-chart td.on:has(button)::before` hides the drawing). The summer chart works the same way
+(`#off-chart-slot`) and hides; signed out, the chart isn't on the planner page at all, and it is not on the
+day-camps page any more either; `daysOffBits().chartSection` still builds it for wherever it goes next. A box is
+`td.on::before` until the planner puts a button in it (`.sum-chart td.on:has(button)::before` hides the drawing). The summer chart works the same way
 (`#sum-chart-block`, `#sum-chart-slot`, and `/summer-camps/weeks/` for everyone). `daysOffBits()` in `build.mjs`
 builds the days-off chart for both pages (`where` = `'page'` or `'plan'`).
 
@@ -919,8 +924,14 @@ plan the next term. A family with more than one child adds a roster per child (u
 roster a program goes on. Rosters are stored in the visitor's own browser. Nothing about them reaches the
 server unless a signed-in parent keeps a week in their profile or shares it (see "Accounts, profiles and
 sharing"). A week can no longer be shared as a link.
-Each pick is drawn as a card in its program type's color. "Make it a card" draws the week as one picture
-(for a text, a printout or a teacher), with an optional photo that is read on the device and never uploaded.
+Each pick is drawn as a card in its program type's color. The page is three views of the same week, switched
+beside its heading (`#board-views`, the same `[data-views]` / `[data-pane]` switch the day-camps page uses, with
+`#cost` or `#card` in the address opening on that view): **The week** (the adder, the themed-week roller and the
+grid), **Budget planning** ("What this roster costs") and **Make it a card**, which draws the week as one picture
+(for a text, a printout or a teacher), with an optional photo that is read on the device and never uploaded. A
+view's tab shows only once its section has something to show (no budget or card before a program is on the
+week), "Share this schedule" under the grid opens the card view, and "Keep and share this week" sits under all
+three. On a phone the tabs read Week · Budget · Card.
 The page address and the analytics event names still say "board" so older links and reports keep working.
 
 Finding one program by name works in three places. The roster page has an "Add a program" search: pick a
@@ -1496,8 +1507,8 @@ the two aren't confused.
 
 Every planner (the week on `/board/`, the days-off planner on `/days-off/`, `/summer-schedule/` and `/calendar/`)
 needs a signed-in account. The pages stay public and in search: signed out, a tour of the planner stands where the
-planner would be (see "The tour" below), and the lists around it (who's open each day off, when each camp runs) are
-there for everyone.
+planner would be (see "The tour" below), and the lists are there for everyone on their own pages (`/day-camps/`,
+`/summer-camps/weeks/`).
 
 - **The switch.** `GATE` in `build.mjs`: on when accounts are on, off in the preview (which has no accounts to sign
   in to). `"plannersNeedAccount": false` under `groups` in `site.config.json` opens the planners again. When it is

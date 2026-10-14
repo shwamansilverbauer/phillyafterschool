@@ -1509,25 +1509,31 @@ ${schoolRows}
   });
 }
 
+// The after-school list: one section per kind of program (each listing under the first of its types), A to Z
+// inside each, with a strip under the menu bar that jumps between the sections. The filters narrow the lot.
 function programsPage() {
   const list = [...citywide].sort((a, b) => a.name.localeCompare(b.name));
+  const byType = TYPES.map(t => [t, list.filter(p => p.types[0] === t.id)]).filter(([, l]) => l.length);
   const hero = `    <p class="where"><a href="${link('all-programs/', 1)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
-    <h1>${T(`Every program, A to Z`)}</h1>
-    <p class="lede">${T(`All {n} after-school programs on this site, across every school. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.`, { n: list.length })}</p>${heroGo(1, link('board/', 1), T(`Plan your week`))}`;
-  const body = `${filterBar({ list, depth: 1, show: { day: true }, near: true, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
+    <h1>${T(`After-school programs`)}</h1>
+    <p class="lede">${T(`All {n} after-school programs on this site, across every school, sorted by what they are. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.`, { n: list.length })}</p>${heroGo(1, link('board/', 1), T(`Plan your week`))}
+    <p class="runs"><span class="runs-h">${T(`Here`)}</span> ${byType.map(([t, l]) => `<a class="pill kind" style="--kc:${t.color}" href="#type-list-${t.id}">${esc(t.label)} (${l.length})</a>`).join(' ')}</p>`;
+  const body = `${jumpNav()}
+${filterBar({ list, depth: 1, show: { day: true }, near: true, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
 ${noMatch(1)}
-<section class="section" data-group>
+${byType.map(([t, l]) => `<section class="section kind-list" id="type-list-${t.id}" data-group data-jump-to="${esc(t.label)}" style="--kc:${t.color}">
+  <h2 class="kind-h"><span class="kind-dot" aria-hidden="true"></span>${esc(t.label)} <span class="n-wrap">(<span class="n">${l.length}</span>)</span></h2>
   <div class="schools">
-${list.map(p => listRow('after', p, 1)).join('\n')}
+${l.map(p => listRow('after', p, 1)).join('\n')}
   </div>
-</section>
+</section>`).join('\n')}
 <section class="section">
-  <p>${T(`Clubs a school runs for its own students aren’t in this list. They’re on that school’s page.`)}</p>
+  <p>${T(`A program is listed under the first of its types; its other types are on its row. Clubs a school runs for its own students aren’t in this list. They’re on that school’s page.`)}</p>
   <p>${T(`To see only what works with your child’s school,`)} <a href="${link('schools/', 1)}">${T(`start from your school.`)}</a> ${T(`Or see what’s close to home:`)} <a href="${link('neighborhoods/', 1)}">${T(`browse by neighborhood.`)}</a></p>
 </section>`;
   return layout({
-    title: 'All after-school programs, A to Z',
-    description: `All ${citywide.length} after-school programs listed on ${cfg.siteName}: filter by type, grade and neighborhood, with hours, cost, pickup and reviews.`,
+    title: 'All after-school programs in Philadelphia, by type',
+    description: `All ${citywide.length} after-school programs listed on ${cfg.siteName}, sorted by what they are: aftercare, music, art, sports and more, with hours, cost, pickup and reviews.`,
     pathName: 'programs/', depth: 1, current: null, hero, body,
     jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: list.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
   });
@@ -1575,7 +1581,8 @@ function typePage(t) {
     <h1>${esc(t.label)}</h1>
     <p class="lede">${T(`Everything on this site in this group, whatever part of the year it fills. Pick a kind, a grade or a neighborhood to narrow it down.`)}</p>
     <p class="runs"><span class="runs-h">${T(`Here`)}</span> ${kindsHere.map(k => `<a class="pill kind kind-${k}" href="#list-${k}">${esc(KIND_NAME[k])} (${byKind[k].length})</a>`).join(' ')}</p>`;
-  const body = `${filterBar({ list: shapedAll(byKind), depth: D, show: { type: false, age: true } }).replace('data-filters', 'data-filters data-noun="listing" data-nouns="listings"')}
+  const body = `${jumpNav()}
+${filterBar({ list: shapedAll(byKind), depth: D, show: { type: false, age: true } }).replace('data-filters', 'data-filters data-noun="listing" data-nouns="listings"')}
 ${noMatch(D)}
 ${kindSections(byKind, D)}
 ${schoolClubs.length ? `<section class="section school-clubs" data-school-clubs>
@@ -1618,7 +1625,8 @@ function byDayPage() {
     <div class="facts">
       ${[...WEEK, 'sat', 'sun'].map(d => `<span><a href="?day=${d}">${DAY_NAME[d].slice(0, 3)}</a> <b>${onDay(d)}</b></span>`).join('\n      ')}
     </div>`;
-  const body = `${filterBar({ list: shapedAll(byKind), depth: D, show: { day: true, age: true } }).replace('data-filters', 'data-filters data-noun="listing" data-nouns="listings"')}
+  const body = `${jumpNav()}
+${filterBar({ list: shapedAll(byKind), depth: D, show: { day: true, age: true } }).replace('data-filters', 'data-filters data-noun="listing" data-nouns="listings"')}
 ${noMatch(D)}
 ${kindSections(byKind, D, { lead: { after: T(`A program that doesn’t publish its days shows under every weekday.`), weekend: T(`Weekend classes go by where they are. Any child can sign up, whichever school they go to.`) } })}
 <section class="section">
@@ -2181,7 +2189,8 @@ function neighborhoodPage(h) {
       <span><b>${based.length}</b> ${based.length === 1 ? 'program' : 'programs'} based here</span>
       ${comes.length ? `<span><b>${comes.length}</b> more that pick up</span>` : ''}
     </div>`;
-  const body = `<section class="section">
+  const body = `${jumpNav()}
+<section class="section" id="schools-here" data-jump-to="Schools">
   <h2>${T(`Schools in {name}`, { name: h.name })}</h2>
   ${h.schools.length ? `<div class="schools">
 ${h.schools.map(s => schoolRow(s, D)).join('\n')}
@@ -4102,7 +4111,13 @@ function boardPage() {
       <button type="button" class="tab" data-board="next" aria-pressed="true">Upcoming</button>
       <button type="button" class="tab" data-board="now" aria-pressed="false">Current</button>
     </div>
-    <h2 id="board-title">Your upcoming week</h2>
+    <div class="year-view-head board-view-head">
+      <h2 id="board-title">Your upcoming week</h2>
+      <div class="tabs view-switch board-views needs-js-block" id="board-views" role="group" aria-label="How to see this week" data-views="week">
+        <button type="button" class="tab vs" data-view="week" aria-pressed="true"><span class="vs-long">${T(`The week`)}</span><span class="vs-short" aria-hidden="true">${T(`Week`)}</span></button><button type="button" class="tab vs" data-view="cost" aria-pressed="false"><span class="vs-long">${T(`Budget planning`)}</span><span class="vs-short" aria-hidden="true">${T(`Budget`)}</span></button><button type="button" class="tab vs" data-view="card" aria-pressed="false"><span class="vs-long">${T(`Make it a card`)}</span><span class="vs-short" aria-hidden="true">${T(`Card`)}</span></button>
+      </div>
+    </div>
+    <div data-pane="week" style="display:contents">
     <div class="adder needs-js-block" id="board-adder">
       <div class="adder-find">
         <label for="add-search">${T(`Add a program`)}</label>
@@ -4152,8 +4167,10 @@ function boardPage() {
     <button type="button" class="clear" id="board-promote" hidden>The new term has started: make this the current roster</button>
     <p class="hint" id="board-status" aria-live="polite"></p>
     <div class="board-tools" id="board-tools" hidden><button type="button" class="clear" id="board-clear">Clear this roster</button></div>
+    </div>
   </section>
   <section class="section rv-nudge" id="rv-nudge" data-rv-place="week" data-review="${link('review/', 1)}" aria-live="polite" hidden></section>
+  <div data-pane="cost" style="display:contents">
   <section class="section costbox" id="board-cost" hidden>
     <h2>${T(`What this roster costs`)}</h2>
     <p class="cost-total" id="cost-total"></p>
@@ -4162,8 +4179,8 @@ function boardPage() {
     <p class="cost-family" id="cost-family" hidden></p>
     <p class="hint">${T(`An estimate from each program’s published prices, for half a school year: 18 weeks of school, or five monthly bills. It leaves out registration fees, deposits, materials, sibling discounts, subsidies and financial aid. If you know what you’ll pay, add it to any line; it stays on this device. Confirm the price with each program before you budget on it.`)}</p>
   </section>
-  ${nextOff(1).replace(T(`Days off this year, and who’s open`), T(`Plan the days off too`))}
-  ${ALERTS ? `<p class="hint alerts-line">${T(`Want next term’s sign-up dates before they open?`)} <a href="${link(alertsPath, 1)}">${T(`Get the dates by email.`)}</a></p>` : ''}
+  </div>
+  <div data-pane="card" style="display:contents">
   <section class="section card-maker" id="card-maker" hidden>
     <h2 tabindex="-1">${T(`Make it a card`)}</h2>
     <p>${T(`One picture of the week to text, print, or hand to your child’s teacher, so they know where your child goes each day and who they are.`)}</p>
@@ -4200,8 +4217,11 @@ function boardPage() {
       <div class="card-preview"><canvas id="card-canvas" width="1080" height="1350" role="img" aria-label="Preview of the week card"></canvas></div>
     </div>
   </section>
+  </div>
   ${rvNames()}
   ${GROUPS ? `<section class="section group-share" id="group-share" ${groupsAttrs(1)} hidden></section>` : ''}
+  ${nextOff(1).replace(T(`Days off this year, and who’s open`), T(`Plan the days off too`))}
+  ${ALERTS ? `<p class="hint alerts-line">${T(`Want next term’s sign-up dates before they open?`)} <a href="${link(alertsPath, 1)}">${T(`Get the dates by email.`)}</a></p>` : ''}
   </div>
   <script type="application/json" id="pas-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;

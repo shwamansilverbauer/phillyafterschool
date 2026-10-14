@@ -2108,3 +2108,10 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 /* ---------- a page with two views of itself (day camps: programs, or the days), and the age rail beside the grade rail ---------- */
 .page-views{align-self:flex-start}
 .pick-h{margin:0 0 -4px;font-size:.88rem;font-weight:700;color:var(--muted)}
+[data-pane][hidden]{display:none!important}
+.board-view-head{margin-top:6px}
+.board-view-head h2{margin:0}
+.board-views{min-width:0;max-width:100%;overflow-x:auto;scrollbar-width:none;flex:0 1 auto}
+.board-views::-webkit-scrollbar{display:none}
+.vs-short{display:none}
+@media (max-width:640px){.board-views .vs{padding-inline:14px}.board-views .vs-long{display:none}.board-views .vs-short{display:inline}}
