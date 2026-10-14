@@ -246,8 +246,12 @@ Labor Day, and works out which of those weeks each camp runs:
 - **Add to calendar** saves `summer-2027.ics`, made in the browser: one Monday-to-Friday entry per camp week, titled
   with the child's name and the camp. The day-camp plan has the same button (`days-off.ics`, one entry per planned
   day). `saveCalendar()` in `site.js` writes both.
-- **Make it a calendar** draws the plan as a picture, like the week card: the whole summer on one card (a row a week,
-  a column a child), or a card for each month (Monday to Friday, a bar for each child's camp). The title defaults to
+- **Make it a calendar** is the planner's fourth view, there once any child has a week planned (the button stays
+  hidden until then, and it is never the view the page opens on). It draws the plan as a picture, like the week
+  card: the whole summer on one card (a row a week, a column a child), or a card for each month (Monday to Friday, a
+  bar for each child's camp). While it shows, the weeks, the tools row and the profile box are out of the way
+  (`.card-view` on the planner) so the picture comes straight under the strip. The days-off planner has the same
+  view. The title defaults to
   the children's names ("Sam and Rae's summer") and can be typed over (`sumTitle`, kept in the browser). A photo can
   go in the corner; it is drawn in the browser and never saved or uploaded. The pictures can be saved one at a time
   or all at once, shared, copied or printed.
@@ -393,7 +397,8 @@ by-day pages have the same strip over their kind sections.
 navigation wherever you are on it: `.pagenav` holds a list page's jump links and, on the day-camps page, the
 Programs · The days switch above them (the jump links are the visible view's, refreshed on a switch); a planner's
 heading row with its view switch (`.year-view-head`: the week builder's The week · Budget planning · Make it a
-card, the summer and days-off planners' List · Calendar · Who's open, the calendar's views) sticks the same way.
+card · Keep & share, the summer and days-off planners' List · Month · Who's open · Make it a calendar, the
+calendar's views) sticks the same way.
 The slim search bar on a list pushes the strip down by its own height while it shows. Both are in the sitemap, and each program page
 carries structured data (name, address, phone, and the star rating once there are reviews) for search engines.
 Nothing extra to maintain: add or edit a program in `data/programs.json` and its page follows.
@@ -729,7 +734,7 @@ Putting a camp on a day off is a plan, not a registration, so each camp day in a
   in the plan, or repeated. Changing or removing a day's pick removes its tick.
 - **On the days-off planner** (`site.js`, the `[data-off-plan]` block): each camp day in the list has a "Signed up?"
   box (`#ok-DATE`); the chip is yellow until it is ticked and green after, and a day at home is blue with no box. In
-  the calendar view a signed-up day is green with a check mark and one still to sign up for is pale yellow with an
+  the Month view a signed-up day is green with a check mark and one still to sign up for is pale yellow with an
   outline; the day's spoken label says "signed up" or "still to sign up", so colour is never the only signal.
 - **The planner doesn't hold the list itself.** A line in its tally (`#off-todo-line`) says how many camp days are
   still to sign up for and links to the To do page. (For a day the days-off page had the list as a section of its
@@ -739,9 +744,10 @@ Putting a camp on a day off is a plan, not a registration, so each camp day in a
   kept out of search, with no analytics or recordings; `groups.js` hands the profile to `window.pasTodo.show()`. It
   reads the days-off plan from the profile when one is kept there and from the device otherwise, counts the days with
   no plan, and signing in from it (`?next=todo`) comes back to it.
-- **My kids' calendar** has the same list as step 3, "To do" (`#year-todo`), and shows the check marks on its calendar
-  and list. That step and the To do page draw the list with one function, `signupTodo()`, and save a tick with
-  `tickSignup()`: wherever the days-off plan lives, onto the device or to the profile through `daysoff_save`.
+- **My kids' calendar** has no list of its own (the To do page is in the menu, and a second copy only cluttered the
+  calendar), but shows the check marks on its calendar and list. The To do page draws the list with `signupTodo()`
+  and saves a tick with `tickSignup()`: wherever the days-off plan lives, onto the device or to the profile through
+  `daysoff_save`.
 - **Analytics** hears `pas_dayoff` with action `signed_up` or `signed_up_undo`, how (`day_list`, `todo`, `todo_all`)
   and how many days: never the child, the camp or the date. The copied text and the calendar file say "signed up" or
   "still to sign up" for each camp day.
@@ -783,8 +789,8 @@ day-camps page any more either; `daysOffBits().chartSection` still builds it for
 (`#sum-chart-block`, `#sum-chart-slot`, and `/summer-camps/weeks/` for everyone). `daysOffBits()` in `build.mjs`
 builds the days-off chart for both pages (`where` = `'page'` or `'plan'`).
 
-The summer schedule works the same way (`#sum-views`, remembered in `pas-sum-view`): List, Calendar and Who's open.
-The Calendar is a month at a time (`#sum-month`), with each child's camp on all five weekdays of its week or "Not
+The summer schedule works the same way (`#sum-views`, remembered in `pas-sum-view`): List, Month, Who's open and
+Make it a calendar. Month is a month at a time (`#sum-month`), with each child's camp on all five weekdays of its week or "Not
 planned"; a tap on any day picks that week, whose row sits under the month so choosing works as it does in the list.
 A month that only gets the tail of a week (the first days of September) has no page of its own. Who's open is the
 "When each camp runs" chart (`#sum-chart-block`), moved into `#sum-chart-slot` for someone signed in, so there is
@@ -932,14 +938,17 @@ plan the next term. A family with more than one child adds a roster per child (u
 roster a program goes on. Rosters are stored in the visitor's own browser. Nothing about them reaches the
 server unless a signed-in parent keeps a week in their profile or shares it (see "Accounts, profiles and
 sharing"). A week can no longer be shared as a link.
-Each pick is drawn as a card in its program type's color. The page is three views of the same week, switched
+Each pick is drawn as a card in its program type's color. The page is four views of the same week, switched
 beside its heading (`#board-views`, the same `[data-views]` / `[data-pane]` switch the day-camps page uses, with
-`#cost` or `#card` in the address opening on that view): **The week** (the adder, the themed-week roller and the
-grid), **Budget planning** ("What this roster costs") and **Make it a card**, which draws the week as one picture
-(for a text, a printout or a teacher), with an optional photo that is read on the device and never uploaded. A
-view's tab shows only once its section has something to show (no budget or card before a program is on the
-week), "Share this schedule" under the grid opens the card view, and "Keep and share this week" sits under all
-three. On a phone the tabs read Week · Budget · Card.
+`#cost`, `#card` or `#keep` in the address opening on that view): **The week** (the adder, the themed-week roller
+and the grid), **Budget planning** ("What this roster costs"), **Make it a card**, which draws the week as one
+picture (for a text, a printout or a teacher), with an optional photo that is read on the device and never
+uploaded, and **Keep & share** (the `#group-share` box: keep the week in a profile, share it with one person or a
+group). A view's tab shows only once its section has something to show (no budget or card before a program is on
+the week; Keep & share once the account is known), "Share this schedule" under the grid opens the card view, and
+the "Save or share this week" link after a card goes out opens Keep & share (`data-go-view`). The heading row with
+the tabs stays under the menu bar in every view (the panes sit inside the same section as the row). On a phone the
+tabs read Week · Budget · Card · Share.
 The page address and the analytics event names still say "board" so older links and reports keep working.
 
 Finding one program by name works in three places. The roster page has an "Add a program" search: pick a
@@ -1088,8 +1097,8 @@ These are the only parts of the site that store anything about a child on the se
   `/register/` is sent there. `?next=board` on either sends them back to Build your week afterwards. The old
   address `/account/?new=1` forwards to `/register/`. `/register/` loads analytics (see Privacy below); `/account/` does not.
 - **Build your week.** The card comes first. Once someone shares, saves, copies or prints a card, a box asks
-  whether they want to keep the week too, and points at the block under the card maker: "Save this week, or share
-  it" for someone signed out (Create a free account, Log in), "Keep and share this week" for someone signed in.
+  whether they want to keep the week too, and opens the Keep & share view: "Save this week, or share it" for
+  someone signed out (Create a free account, Log in), "Keep and share this week" for someone signed in.
 - **Signing in.** Google's button first, then a 6-digit code by email (no password). Set `"googleClientId"` under
   `groups` to the OAuth client ID from Google Cloud (a public value; there is no secret) to offer Google. The
   button is Google's own, so its script loads on every page that shows the sign-in form; it is left out inside
@@ -1525,8 +1534,8 @@ planner would be (see "The tour" below), and the lists are there for everyone on
 - **The tour** (`planShow(kind, depth)` in `build.mjs`, styled as `.pshow`): the signed-out planner pages read like
   a product page. Under the page's heading is the one thing to press, "Create a free account" (`heroCta()`), which
   comes back to that planner. Then: a heading and a strip of tabs, one for each way of looking at the plan (List,
-  Calendar, Who's open on the days-off and summer pages; The week, Budget planning, Share it on the week; Calendar,
-  List, To do on My kids' calendar), each showing a made-up example; three things the planner does, each a picture-and-text row (a small
+  Month, Who's open on the days-off and summer pages; The week, Budget planning, Share it on the week; Calendar,
+  List on My kids' calendar), each showing a made-up example; three things the planner does, each a picture-and-text row (a small
   drawing, `miniArt()`, on alternating sides, a headline and one line, in the kinds' colors); the three steps as one
   line (1 Create a free account → 2 Make your plan → 3 Take it with you); and a dark band with the button again.
   Three rows and one line each, rather than six cards with sentences, so the page can be taken in at a glance. The strip is labelled "See it as" and each example ends with a "Next: …"
@@ -1694,17 +1703,18 @@ Set `gtmId` to load Google Tag Manager on every page. Every page view and event 
   covered, `pas_school_save` (school) when they save a school as theirs, `pas_school_notify` (school).
   `pas_program_pick` (program_id, method): method is `home_search`, `roster_search`, or `program_page`.
 - **Moving around a page.** `pas_page_view` (view) fires when someone switches a page's view by hand: the roster's
-  `week`, `cost` and `card`, or the day-camps page's `who` and `days`. It doesn't fire for the view a page opens on.
-  (The planners' List, Calendar and Chart switches are their own and send nothing.) `pas_menu_group` (group, open) is
-  a section of the phone menu opened or closed. `pas_offbar` (action, day) is the next-day-off bar closed.
+  `week`, `cost`, `card` and `keep`, or the day-camps page's `who` and `days`. It doesn't fire for the view a page opens
+  on. (The planners' List, Month, Who's open and Make it a calendar switches report through `pas_summer` and
+  `pas_dayoff` instead, as `action: view_list`, `view_cal`, `view_chart` or `view_card`.) `pas_menu_group` (group, open)
+  is a section of the phone menu opened or closed. `pas_offbar` (action, day) is the next-day-off bar closed.
 - **Leaving the site.** `pas_outbound` (link_type, program_id, school): link_type is `register`, `website`, `calendar`,
   `review` or `camp`; school is empty on a program's own page. `pas_support_click`.
 - **Planning.** `pas_board_add` (program_id, school, day, method, board, children) and `pas_board_share` (method,
   board): methods include `image_save`, `image_share` and `print`; `cta_click` is the "Share this schedule" button
   under the week, which leads to the card, a click rather than a share. `pas_theme_week` (theme, school, method).
   `pas_dayoff_pick` (program_id, day, method), `pas_dayoff` (action, days_planned, children), `pas_summer` (action,
-  weeks_covered, children), `pas_todo` and `pas_year` (action, days: a camp ticked as signed up, on the to-do list or
-  the year calendar), `pas_group_share` (method), `pas_cheer` (what: a milestone celebrated once).
+  weeks_covered, children), `pas_todo` (action, days: a camp day ticked as signed up on the To do page),
+  `pas_group_share` (method), `pas_cheer` (what: a milestone celebrated once).
 - **Accounts and asking.** `pas_signup` (step, method, role, account), `pas_plan_tour` (planner, view: a signed-out
   visitor flipping through a planner's tour), `pas_plan_cta` (place, next), `pas_account_ask` (place), `pas_favorite`
   (action, listing, place), `pas_alert_signup` (school, program_id, camp_id, place): the address is never sent to

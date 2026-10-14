@@ -1970,7 +1970,7 @@
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "parentFolderId": "1",
-        "notes": "A section of the phone menu opened (open: true) or closed. \"group\" is the section’s name."
+        "notes": "A section of the phone menu opened (open: true) or closed. \"group\" is the section\u2019s name."
       },
       {
         "accountId": "0",
@@ -2051,7 +2051,7 @@
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "parentFolderId": "1",
-        "notes": "The \"has your family been to…?\" box: shown, review, not_yet, never, for one program."
+        "notes": "The \"has your family been to\u2026?\" box: shown, review, not_yet, never, for one program."
       },
       {
         "accountId": "0",
@@ -2117,7 +2117,7 @@
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "parentFolderId": "1",
-        "notes": "A signed-out visitor flipping through a planner’s tour by hand."
+        "notes": "A signed-out visitor flipping through a planner\u2019s tour by hand."
       },
       {
         "accountId": "0",
@@ -2417,7 +2417,7 @@
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "parentFolderId": "1",
-        "notes": "The next-day-off bar at the foot of the page closed, with that day’s date."
+        "notes": "The next-day-off bar at the foot of the page closed, with that day\u2019s date."
       },
       {
         "accountId": "0",
@@ -2484,72 +2484,6 @@
         "tagFiringOption": "ONCE_PER_EVENT",
         "parentFolderId": "1",
         "notes": "A day-off camp ticked as signed up (or unticked) on the to-do list; days is how many are ticked."
-      },
-      {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "39",
-        "name": "GA4 - Event - pas_year",
-        "type": "gaawe",
-        "parameter": [
-          {
-            "type": "BOOLEAN",
-            "key": "sendEcommerceData",
-            "value": "false"
-          },
-          {
-            "type": "TEMPLATE",
-            "key": "eventName",
-            "value": "pas_year"
-          },
-          {
-            "type": "TEMPLATE",
-            "key": "measurementIdOverride",
-            "value": "{{GA4 Measurement ID}}"
-          },
-          {
-            "type": "LIST",
-            "key": "eventSettingsTable",
-            "list": [
-              {
-                "type": "MAP",
-                "map": [
-                  {
-                    "type": "TEMPLATE",
-                    "key": "parameter",
-                    "value": "action"
-                  },
-                  {
-                    "type": "TEMPLATE",
-                    "key": "parameterValue",
-                    "value": "{{DLV - action}}"
-                  }
-                ]
-              },
-              {
-                "type": "MAP",
-                "map": [
-                  {
-                    "type": "TEMPLATE",
-                    "key": "parameter",
-                    "value": "days"
-                  },
-                  {
-                    "type": "TEMPLATE",
-                    "key": "parameterValue",
-                    "value": "{{DLV - days}}"
-                  }
-                ]
-              }
-            ]
-          }
-        ],
-        "firingTriggerId": [
-          "37"
-        ],
-        "tagFiringOption": "ONCE_PER_EVENT",
-        "parentFolderId": "1",
-        "notes": "The same tick on the year calendar."
       },
       {
         "accountId": "0",
@@ -3592,31 +3526,6 @@
       {
         "accountId": "0",
         "containerId": "0",
-        "triggerId": "37",
-        "name": "CE - pas_year",
-        "type": "CUSTOM_EVENT",
-        "customEventFilter": [
-          {
-            "type": "EQUALS",
-            "parameter": [
-              {
-                "type": "TEMPLATE",
-                "key": "arg0",
-                "value": "{{_event}}"
-              },
-              {
-                "type": "TEMPLATE",
-                "key": "arg1",
-                "value": "pas_year"
-              }
-            ]
-          }
-        ],
-        "parentFolderId": "1"
-      },
-      {
-        "accountId": "0",
-        "containerId": "0",
         "triggerId": "38",
         "name": "CE - pas_premium",
         "type": "CUSTOM_EVENT",
@@ -3774,7 +3683,7 @@
         "name": "Page URL - no fragment",
         "type": "jsm",
         "parentFolderId": "1",
-        "notes": "The page address without anything after #. Shared roster links carry a child’s first name there.",
+        "notes": "The page address without anything after #. Shared roster links carry a child\u2019s first name there.",
         "parameter": [
           {
             "type": "TEMPLATE",

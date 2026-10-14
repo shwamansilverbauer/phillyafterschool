@@ -123,9 +123,13 @@
       var ev; try { ev = new Event('resize'); } catch (e) { ev = document.createEvent('Event'); ev.initEvent('resize', true, true); }
       window.dispatchEvent(ev);   // the rows that scroll sideways measure themselves once they can be seen
     };
-    btns.forEach(function (b) { b.addEventListener('click', function () { set(b.getAttribute('data-view')); if (sw.scrollIntoView && sw.getBoundingClientRect().top < 0) sw.scrollIntoView(); }); });
-    if (window.MutationObserver) panes.forEach(function (p) { new window.MutationObserver(sync).observe(p, { attributes: true, attributeFilter: ['hidden'], childList: true, subtree: false }); });
-    window.pasPageView = function (v) { set(v); };   // for a button elsewhere on the page that means "open that view"
+    var up = function () { if (sw.scrollIntoView && sw.getBoundingClientRect().top < 0) sw.scrollIntoView(); };   // the strip back in sight, so the new view starts at its top
+    btns.forEach(function (b) { b.addEventListener('click', function () { set(b.getAttribute('data-view')); up(); }); });
+    // a pane's box appears when the page has something for it (the keep-and-share box once the account is known), so
+    // the tabs follow every hidden/shown change under the panes, not only the panes' own
+    if (window.MutationObserver) panes.forEach(function (p) { new window.MutationObserver(sync).observe(p, { attributes: true, attributeFilter: ['hidden'], childList: true, subtree: true }); });
+    window.pasPageView = function (v, scroll) { set(v); if (scroll) up(); };   // for a button elsewhere on the page that means "open that view"
+    all(document, '[data-go-view]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); set(a.getAttribute('data-go-view')); up(); }); });
     sync(); set((location.hash || '').slice(1), true); sync();
     window.addEventListener('hashchange', function () { var h = (location.hash || '').slice(1); if (names.indexOf(h) > -1) set(h, true); });
   });
@@ -1693,6 +1697,9 @@
     viewBtns.forEach(function (b) { if (b.getAttribute('data-view') === 'chart' && !chartIn) b.hidden = true; });
     var kept = store('pas-off-view');
     var offView = kept === 'cal' && monthBox ? 'cal' : kept === 'chart' && chartIn ? 'chart' : 'list', offMonth = '', offDay = '';
+    // "Make it a calendar" is the planner's fourth view once any child has a day planned: the picture to print or
+    // send. It is never the view the page opens on, so it isn't kept.
+    var canCard = function () { return !!(cardBox && canvas && canvas.getContext && canvas.toBlob) && planners().length > 0; };
     var dayAt = function (iso) { for (var i = 0; i < days.length; i++) if (days[i].d === iso) return days[i]; return null; };
     var offMonths = function () {
       var out = [];
@@ -1709,7 +1716,7 @@
     viewBtns.forEach(function (b) {
       b.addEventListener('click', function () {
         var want = b.getAttribute('data-view');
-        offView = want === 'cal' && monthBox ? 'cal' : want === 'chart' && chartIn ? 'chart' : 'list'; store('pas-off-view', offView); openDay = '';
+        offView = want === 'cal' && monthBox ? 'cal' : want === 'chart' && chartIn ? 'chart' : want === 'card' && canCard() ? 'card' : 'list'; if (offView !== 'card') store('pas-off-view', offView); openDay = '';
         track({ event: 'pas_dayoff', action: 'view_' + offView, children: r.kids.length });
         draw();
       });
@@ -1777,7 +1784,7 @@
       daysEl.textContent = ''; stripEl.textContent = '';
       // a sibling's days, to start from
       var same = planEl.querySelector('.sum-same'); if (same) same.parentNode.removeChild(same);
-      if (many && !mine.length) {
+      if (many && !mine.length && offView !== 'card') {
         var others = r.kids.filter(function (k) { return k !== me && plannedOf(k).length > 0; });
         if (others.length) {
           same = el('p', 'sum-same'); same.appendChild(el('span', 'hint', 'Going to the same places? '));
@@ -1789,10 +1796,13 @@
           daysEl.parentNode.insertBefore(same, daysEl);
         }
       }
-      // the calendar, when that's the view: this child's month, then the one day that is picked, as a row to choose on
-      viewBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === offView)); });
+      // the calendar, when that's the view: this child's month, then the one day that is picked, as a row to choose on;
+      // or the picture of the days off
+      if (offView === 'card' && !canCard()) offView = 'list';
+      planEl.classList.toggle('card-view', offView === 'card');   // the picture comes straight under the strip: the profile box waits
+      viewBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === offView)); if (b.getAttribute('data-view') === 'card') b.hidden = !canCard(); });
       if (chartSlot) chartSlot.hidden = offView !== 'chart';
-      daysEl.hidden = offView === 'chart';
+      daysEl.hidden = offView === 'chart' || offView === 'card';
       if (monthBox) {
         monthBox.hidden = offView !== 'cal';
         daysEl.classList.toggle('cal-mode', offView === 'cal');
@@ -1880,7 +1890,7 @@
       countEl.textContent = mine.length ? whose + mine.length + ' of ' + days.length + ' planned.' : whose + 'Nothing planned yet. ' + days.length + (days.length === 1 ? ' day off is' : ' days off are') + ' still to come this year.';
       var open = days.filter(function (d) { return d.camps.length; }).length;
       openEl.textContent = open ? 'Camps are posted for ' + open + ' of those days so far. Programs post a few months at a time.' : 'No camps are posted yet. Programs post a few months at a time.';
-      toolsEl.hidden = !planners().length;
+      toolsEl.hidden = !planners().length || offView === 'card';
       drawTodo();
       // the chart: which boxes are in this child's plan; a day that has gone by loses its column
       if (chart) {
@@ -2111,7 +2121,7 @@
     var fileName = function (p) { return slug() + (p[0] === 'all' ? '' : '-' + p[1].toLowerCase()) + '.png'; };
     if (cardBox && canvas && canvas.getContext && canvas.toBlob) {
       drawCard = function () {
-        var any = planners().length > 0;
+        var any = planners().length > 0 && offView === 'card';
         cardBox.hidden = !any;
         if (!any) return;
         titleBox.placeholder = defaultTitle();
@@ -3257,9 +3267,12 @@
     var weeksIn = function (mk) { var out = []; sd.weeks.forEach(function (wk, i) { for (var n = 0; n < 5; n++) if (isoDay(wk.d, n).slice(0, 7) === mk) { out.push(i); return; } }); return out; };
     var kept = store('pas-sum-view');
     var view = kept === 'cal' && monthBox ? 'cal' : kept === 'chart' && chartIn ? 'chart' : 'list', calMonth = '', calWeek = -1;
+    // "Make it a calendar" is the planner's fourth view once any child has a week planned: the picture to print or
+    // send. It is never the view the page opens on, so it isn't kept.
+    var canCard = function () { return !!(cardBox && canvas && canvas.getContext && canvas.toBlob) && planners().length > 0; };
     var setView = function (want, quiet) {
-      view = want === 'cal' && monthBox ? 'cal' : want === 'chart' && chartIn ? 'chart' : 'list'; openWeek = -1;
-      if (!quiet) { store('pas-sum-view', view); ev('view_' + view); }   // quiet: the page chose the view (a link in from a camp), so it isn't kept
+      view = want === 'cal' && monthBox ? 'cal' : want === 'chart' && chartIn ? 'chart' : want === 'card' && canCard() ? 'card' : 'list'; openWeek = -1;
+      if (!quiet) { if (view !== 'card') store('pas-sum-view', view); ev('view_' + view); }   // quiet: the page chose the view (a link in from a camp), so it isn't kept
       draw();
     };
     viewBtns.forEach(function (b) { b.addEventListener('click', function () { setView(b.getAttribute('data-view')); }); });
@@ -3313,7 +3326,7 @@
       weeksEl.textContent = ''; stripEl.textContent = '';
       // a sibling's weeks, to start from
       var same = sumEl.querySelector('.sum-same'); if (same) same.parentNode.removeChild(same);
-      if (many && !n) {
+      if (many && !n && view !== 'card') {
         var others = r.kids.filter(function (k) { return k !== me && coveredOf(k) > 0; });
         if (others.length) {
           same = el('p', 'sum-same'); same.appendChild(el('span', 'hint', 'Going to the same camps? '));
@@ -3325,10 +3338,13 @@
           weeksEl.parentNode.insertBefore(same, weeksEl);
         }
       }
-      // which view: the chart instead of the weeks, or this child's month with the one week that is picked as a row to choose on
-      viewBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === view)); });
+      // which view: the chart instead of the weeks, this child's month with the one week that is picked as a row to
+      // choose on, or the picture of the summer
+      if (view === 'card' && !canCard()) view = 'list';
+      sumEl.classList.toggle('card-view', view === 'card');   // the picture comes straight under the strip: the profile box waits
+      viewBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === view)); if (b.getAttribute('data-view') === 'card') b.hidden = !canCard(); });
       if (chartSlot) chartSlot.hidden = view !== 'chart';
-      weeksEl.hidden = view === 'chart';
+      weeksEl.hidden = view === 'chart' || view === 'card';
       if (monthBox) {
         monthBox.hidden = view !== 'cal';
         weeksEl.classList.toggle('cal-mode', view === 'cal');
@@ -3408,7 +3424,7 @@
       countEl.textContent = n ? whose + n + ' of ' + sd.weeks.length + (n === 1 ? ' weeks has a camp.' : ' weeks have a camp.') : whose + 'No weeks filled in yet. ' + sd.weeks.length + ' to go.';
       var everyone = 0; r.kids.forEach(function (k) { everyone += costOf(k); });
       costEl.textContent = booked ? (total ? 'About $' + total.toLocaleString('en-US') + ' at the weekly prices the camps posted' : booked - unpriced ? 'Free, by the prices the camps posted' : '') + (unpriced ? (total || booked - unpriced ? ', not counting ' : '') + (unpriced === 1 ? '1 camp-week' : unpriced + ' camp-weeks') + ' with no weekly price posted' : '') + '.' + (many && everyone > total ? ' All children: about $' + everyone.toLocaleString('en-US') + '.' : '') + ' Before-care, after-care and sibling prices aren’t counted.' : '';
-      toolsEl.hidden = !planners().length;
+      toolsEl.hidden = !planners().length || view === 'card';
       // the chart: which boxes are in this child's summer, and which camps suit their age
       if (chart) all(chart, 'tbody tr').forEach(function (tr) {
         var id = tr.getAttribute('data-camp'), c = sd.camps[id];
@@ -3638,7 +3654,7 @@
     var fileName = function (p) { return slug() + (p[0] === 'all' ? '' : '-' + p[1].toLowerCase()) + '.png'; };
     if (cardBox && canvas && canvas.getContext && canvas.toBlob) {
       drawCard = function () {
-        var any = planners().length > 0;
+        var any = planners().length > 0 && view === 'card';
         cardBox.hidden = !any;
         if (!any) return;
         titleBox.placeholder = defaultTitle();
@@ -4169,30 +4185,7 @@
       if (!calDay || calDay.slice(0, 7) !== calMonth || !calBy[calDay]) calDay = firstDayIn(calMonth);
       drawCalMonth();
     };
-    // ----- to do: the camp days in the plan nobody has ticked "signed up" yet. A tick is the parent's own mark: it is
-    // kept with the days-off plan, on this device or in the profile, wherever that plan is. -----
-    var todoShut = true;
-    var tick = function (k, list, on, focusId) {
-      var inProfile = model.src.off === 'profile' && lastProfile && lastProfile.daysoff;
-      if (inProfile) say('Saving…');
-      tickSignup(k, list, on, inProfile ? lastProfile.daysoff : null, window.pasYear.keep, function (saved, problem) {
-        if (saved) lastProfile.daysoff = saved;
-        say(problem);
-        track({ event: 'pas_year', action: on ? 'signed_up' : 'signed_up_undo', days: list.length });
-        refresh();
-        var f = document.getElementById(focusId) || $y('year-todo-list').querySelector('input[type=checkbox], a, summary'); if (f && f.focus) f.focus();
-      });
-    };
-    var drawTodo = function () {
-      var step = $y('year-todo'), box = $y('year-todo-list'); if (!step || !box) return;
-      step.hidden = false;   // the step stays even when there is nothing on it, so the numbers down the page don't skip one
-      signupTodo(box, {
-        kids: model.kids, days: offDays, day: longDay, id: 'ytodo-', plan: yd.offPage + '#plan', open: !todoShut, onToggle: function (o) { todoShut = !o; },
-        program: function (v) { var p = yd.programs[v]; return { name: p.n, href: p.href, go: p.go || p.url }; },
-        posted: postedOff, tick: tick,
-        can: function (k) { return model.src.off === 'profile' ? !!(k.pk && window.pasYear.keep) : !!k.dev; }
-      });
-    };
+    // The camp days still to sign up for are the To do page's; a tick made there shows here as a check mark.
     var draw = function () {
       var m = model, srcEl = $y('year-src');
       srcEl.textContent = '';
@@ -4203,7 +4196,6 @@
       var none = !m.kids.length && !m.own.length, empty = $y('year-empty');
       empty.hidden = !none; $y('year-full').hidden = none; empty.textContent = '';
       if (none) { empty.appendChild(el('p', null, 'Nothing is planned yet, so there’s no calendar to show. Start with any of the three above, or add a date of your own, and it fills in by itself.')); $y('year-changed').hidden = true; if (window.pasJump) window.pasJump(); return; }
-      drawTodo();
       // every school week
       var wkBox = $y('year-week'); wkBox.textContent = '';
       var withWeek = m.kids.filter(hasWeekCard), family = m.kids.length ? [] : ownWeekly(null);

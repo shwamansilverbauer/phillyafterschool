@@ -3082,8 +3082,8 @@ ${jumpNav()}
   </div>
   <div class="year-view-head off-view-head">
     <h3 id="off-view-h">${T(`Day by day`)}</h3>
-    <div class="tabs view-switch" id="off-views" role="group" aria-label="How to show the days">
-      <button type="button" class="tab vs" data-view="list" aria-pressed="true">List</button><button type="button" class="tab vs" data-view="cal" aria-pressed="false">Calendar</button><button type="button" class="tab vs" data-view="chart" aria-pressed="false">Who’s open</button>
+    <div class="tabs view-switch board-views" id="off-views" role="group" aria-label="How to show the days">
+      <button type="button" class="tab vs" data-view="list" aria-pressed="true">List</button><button type="button" class="tab vs" data-view="cal" aria-pressed="false">Month</button><button type="button" class="tab vs" data-view="chart" aria-pressed="false">Who’s open</button><button type="button" class="tab vs" data-view="card" aria-pressed="false" hidden><span class="vs-long">Make it a calendar</span><span class="vs-short" aria-hidden="true">Picture</span></button>
     </div>
   </div>
   <div class="year-cal off-month" id="off-month" hidden></div>
@@ -3391,14 +3391,14 @@ function planShow(kind, depth) {
       steps: [T(`Pick your school, then add a program to each afternoon.`), T(`Send it to whoever does pickup, or stick it on the fridge.`)] },
     off: { next: 'daysoff', eye: offLeft ? T(`{n} days off still to come this year`, { n: offLeft }) : T(`The day-camp planner`), h: T(`Every day school is closed, covered`),
       views: [['list', 'List', showExample('off-list'), T(`Every day off in order. Choose a camp or a day at home for each child, and tick a day once you’ve signed up.`)],
-        ['cal', 'Calendar', showExample('off-cal'), T(`The same plan on a month of squares, so a break with no plan yet stands out before it sneaks up on you.`)],
+        ['cal', 'Month', showExample('off-cal'), T(`The same plan on a month of squares, so a break with no plan yet stands out before it sneaks up on you.`)],
         ['chart', 'Who’s open', showExample('off-chart'), T(`One chart of which programs have posted a camp for each day off. Tap a box and that day is in your plan.`)]],
       feats: [['tick', T(`Signed up? Tick it off`), T(`Each camp day waits on a to-do list, with a link to the camp’s sign-up page, until you tick it.`)],
         ['cal', T(`A calendar for the fridge`), T(`One picture of every day off, to print or send to a sitter.`)], device],
       steps: [T(`Choose where each child will be on each day off.`), T(`Tick off each camp as you sign up, and print the calendar.`)] },
     sum: { next: 'summer', eye: T(`{n} weeks of summer`, { n: summerCamps.length ? summerPlan.weeks.length : 0 }), h: T(`The whole summer on one page`),
       views: [['list', 'List', planExample('sum'), T(`Every week from the last day of school to Labor Day. Add a camp to each one, and the plan adds up what the summer costs.`)],
-        ['cal', 'Calendar', summerCamps.length ? showExample('sum-cal') : '', T(`Month by month, with each camp on the days it runs and the open weeks easy to spot.`)],
+        ['cal', 'Month', summerCamps.length ? showExample('sum-cal') : '', T(`Month by month, with each camp on the days it runs and the open weeks easy to spot.`)],
         ['chart', 'Who’s open', summerCamps.length ? showExample('sum-chart') : '', T(`Which camps run which weeks, on one chart. Tap a box and that week is in your summer.`)]],
       feats: [['chart', T(`See the gaps`), T(`A week with nothing on it stands out, in June rather than the Friday before.`)],
         ['kids', T(`A summer for each child`), T(`Set an age and the camps narrow to the ones that take it.`)],
@@ -3406,8 +3406,7 @@ function planShow(kind, depth) {
       steps: [T(`Add a camp to each week, for one child or for each of them.`), T(`Print the summer, or put the weeks in your phone’s calendar.`)] },
     year: { next: 'calendar', eye: 'My kids’ calendar', h: T(`The week, the days off and the summer, in one place`),
       views: [['cal', 'Calendar', planExample('year'), T(`A month at a time: days off, camp weeks, sign-up dates and the dates you add yourself.`)],
-        ['list', 'List', showExample('year-list'), T(`Or the same year as a list in date order, to read from the top down.`)],
-        ['todo', 'To do', showExample('todo'), T(`Every camp day you’ve planned and haven’t signed up for yet, with a link to each camp’s own sign-up page.`)]],
+        ['list', 'List', showExample('year-list'), T(`Or the same year as a list in date order, to read from the top down.`)]],
       feats: [['bell', T(`Sign-up dates, lined up`), T(`Openings and deadlines for the programs and camps on your plans, on the days they happen.`)],
         ['cal', T(`Your own dates too`), T(`Picture day, a form that’s due: add them and they sit beside everything else.`)],
         ['lock', T(`Private`), T(`No link and no sharing. Only you can open it.`)]],
@@ -4126,7 +4125,7 @@ function boardPage() {
     <div class="year-view-head board-view-head">
       <h2 id="board-title">Your upcoming week</h2>
       <div class="tabs view-switch board-views needs-js-block" id="board-views" role="group" aria-label="How to see this week" data-views="week">
-        <button type="button" class="tab vs" data-view="week" aria-pressed="true"><span class="vs-long">${T(`The week`)}</span><span class="vs-short" aria-hidden="true">${T(`Week`)}</span></button><button type="button" class="tab vs" data-view="cost" aria-pressed="false"><span class="vs-long">${T(`Budget planning`)}</span><span class="vs-short" aria-hidden="true">${T(`Budget`)}</span></button><button type="button" class="tab vs" data-view="card" aria-pressed="false"><span class="vs-long">${T(`Make it a card`)}</span><span class="vs-short" aria-hidden="true">${T(`Card`)}</span></button>
+        <button type="button" class="tab vs" data-view="week" aria-pressed="true"><span class="vs-long">${T(`The week`)}</span><span class="vs-short" aria-hidden="true">${T(`Week`)}</span></button><button type="button" class="tab vs" data-view="cost" aria-pressed="false"><span class="vs-long">${T(`Budget planning`)}</span><span class="vs-short" aria-hidden="true">${T(`Budget`)}</span></button><button type="button" class="tab vs" data-view="card" aria-pressed="false"><span class="vs-long">${T(`Make it a card`)}</span><span class="vs-short" aria-hidden="true">${T(`Card`)}</span></button>${GROUPS ? `<button type="button" class="tab vs" data-view="keep" aria-pressed="false"><span class="vs-long">${T(`Keep & share`)}</span><span class="vs-short" aria-hidden="true">${T(`Share`)}</span></button>` : ''}
       </div>
     </div>
     <div data-pane="week" style="display:contents">
@@ -4221,17 +4220,19 @@ function boardPage() {
         ${GROUPS ? `<div class="card-next" id="card-next" data-edit-reveal="Shown once someone has shared, saved, copied or printed a card:" hidden>
           <b>${T(`Want to keep this week too?`)}</b>
           <span>${T(`Save it to a free account so it’s on your phone and your computer, or share it with someone who signs in to see it.`)}</span>
-          <a class="btn primary" href="#group-share">${T(`Save or share this week`)}</a>
+          <a class="btn primary" href="#keep" data-go-view="keep">${T(`Save or share this week`)}</a>
         </div>` : ''}
       </div>
       <div class="card-preview"><canvas id="card-canvas" width="1080" height="1350" role="img" aria-label="Preview of the week card"></canvas></div>
     </div>
   </section>
   </div>
+  ${GROUPS ? `<div data-pane="keep" style="display:contents">
+  <section class="section group-share" id="group-share" ${groupsAttrs(1)} hidden></section>
+  </div>` : ''}
   <section class="section rv-nudge" id="rv-nudge" data-rv-place="week" data-review="${link('review/', 1)}" aria-live="polite" hidden></section>
   </section>
   ${rvNames()}
-  ${GROUPS ? `<section class="section group-share" id="group-share" ${groupsAttrs(1)} hidden></section>` : ''}
   ${nextOff(1).replace(T(`Days off this year, and who’s open`), T(`Plan the days off too`))}
   ${ALERTS ? `<p class="hint alerts-line">${T(`Want next term’s sign-up dates before they open?`)} <a href="${link(alertsPath, 1)}">${T(`Get the dates by email.`)}</a></p>` : ''}
   </div>
@@ -5153,13 +5154,8 @@ function calendarPage() {
         <div class="year-cal" id="year-cal"></div>
         <div id="year-agenda" hidden></div>
       </div>
-      <div class="year-step" id="year-todo" data-jump-to="To do">
-        <p class="step-head"><b aria-hidden="true">3</b><span>${T(`To do`)}</span></p>
-        <p>${T(`Putting a camp on a day off doesn’t sign your child up: each camp takes sign-ups on its own site. Tick a day once you’ve signed up, and it shows with a check mark on the calendar.`)}</p>
-        <div id="year-todo-list"></div>
-      </div>
       <div class="year-step" id="year-share" data-jump-to="Share it" hidden>
-        <p class="step-head"><b aria-hidden="true">4</b><span>${T(`Share it`)}</span></p>
+        <p class="step-head"><b aria-hidden="true">3</b><span>${T(`Share it`)}</span></p>
       <div class="card-maker sumcard" id="year-card" hidden>
           <h3>${T(`Make it a picture`)}</h3>
           <p>${T(`A calendar for each month, to print for the fridge or send to family. It’s made here in your browser.`)}</p>
@@ -5191,7 +5187,7 @@ function calendarPage() {
         </div>
       </div>
       <div class="year-step" id="year-pencil" data-jump-to="Pencil it in">
-        <p class="step-head"><b aria-hidden="true">5</b><span>${T(`Pencil it in`)}</span></p>
+        <p class="step-head"><b aria-hidden="true">4</b><span>${T(`Pencil it in`)}</span></p>
       <div class="year-file" id="year-file">
           <h3>${T(`Add it to your calendar`)}</h3>
           <p>${T(`One file with everything ticked below, for the calendar on your phone or computer. Open it and your calendar app adds the entries. It’s a copy: if a date changes later, this page will say so, and you download it again.`)}</p>
@@ -5261,8 +5257,8 @@ ${jumpNav()}
   </div>
   <div class="year-view-head off-view-head">
     <h3 id="sum-view-h">${T(`Week by week`)}</h3>
-    <div class="tabs view-switch" id="sum-views" role="group" aria-label="How to show the weeks">
-      <button type="button" class="tab vs" data-view="list" aria-pressed="true">List</button><button type="button" class="tab vs" data-view="cal" aria-pressed="false">Calendar</button><button type="button" class="tab vs" data-view="chart" aria-pressed="false">Who’s open</button>
+    <div class="tabs view-switch board-views" id="sum-views" role="group" aria-label="How to show the weeks">
+      <button type="button" class="tab vs" data-view="list" aria-pressed="true">List</button><button type="button" class="tab vs" data-view="cal" aria-pressed="false">Month</button><button type="button" class="tab vs" data-view="chart" aria-pressed="false">Who’s open</button><button type="button" class="tab vs" data-view="card" aria-pressed="false" hidden><span class="vs-long">Make it a calendar</span><span class="vs-short" aria-hidden="true">Picture</span></button>
     </div>
   </div>
   <div class="year-cal off-month" id="sum-month" hidden></div>
