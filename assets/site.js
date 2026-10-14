@@ -102,8 +102,18 @@
   all(document, '[data-views]').forEach(function (sw) {
     var btns = all(sw, '[data-view]'), panes = all(document, '[data-pane]'), first = sw.getAttribute('data-views') || '';
     var names = panes.map(function (p) { return p.getAttribute('data-pane'); });
+    var current = first;
+    // a view whose pane has nothing to show yet (the week builder's budget before a program is on it) has no tab
+    var has = function (name) { var p = panes.filter(function (x) { return x.getAttribute('data-pane') === name; })[0]; return !!p && all(p, ':scope > *').some(function (c) { return !c.hidden && c.tagName !== 'SCRIPT'; }); };
+    var sync = function () {
+      var shown = 0;
+      btns.forEach(function (b) { var ok = b.getAttribute('data-view') === first || has(b.getAttribute('data-view')); b.hidden = !ok; if (ok) shown++; });
+      sw.hidden = shown < 2;
+      if (current !== first && !has(current)) set(first, true);
+    };
     var set = function (v, quiet) {
-      if (names.indexOf(v) < 0) v = first;
+      if (names.indexOf(v) < 0 || (v !== first && !has(v))) v = first;
+      current = v;
       btns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === v)); });
       panes.forEach(function (p) { p.hidden = p.getAttribute('data-pane') !== v; });
       if (quiet) return;
@@ -113,7 +123,9 @@
       window.dispatchEvent(ev);   // the rows that scroll sideways measure themselves once they can be seen
     };
     btns.forEach(function (b) { b.addEventListener('click', function () { set(b.getAttribute('data-view')); if (sw.scrollIntoView && sw.getBoundingClientRect().top < 0) sw.scrollIntoView(); }); });
-    set((location.hash || '').slice(1), true);
+    if (window.MutationObserver) panes.forEach(function (p) { new window.MutationObserver(sync).observe(p, { attributes: true, attributeFilter: ['hidden'], childList: true, subtree: false }); });
+    window.pasPageView = function (v) { set(v); };   // for a button elsewhere on the page that means "open that view"
+    sync(); set((location.hash || '').slice(1), true); sync();
     window.addEventListener('hashchange', function () { var h = (location.hash || '').slice(1); if (names.indexOf(h) > -1) set(h, true); });
   });
 
@@ -3160,6 +3172,7 @@
       var shareCtaBtn = $('#share-cta-btn');
       if (shareCtaBtn) shareCtaBtn.addEventListener('click', function () {
         var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (window.pasPageView) window.pasPageView('card');   // the card is a view of the week builder
         maker.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
         maker.classList.add('flash');
         setTimeout(function () { maker.classList.remove('flash'); }, 2200);
@@ -4812,6 +4825,9 @@
         var past = filtersEnd.getBoundingClientRect().bottom < top + 2;                       // the filters are out of sight above
         var inList = !footer || footer.getBoundingClientRect().top > top + 180;                // and the list is still on screen
         quick.bar.hidden = !(document.activeElement === quick.search || (past && inList));   // never pulled away from someone typing in it
+        // a page with a jump strip keeps it in view under the slim bar: the strip moves down by the bar's height
+        var jw = document.querySelector('.jump-wrap');
+        if (jw) jw.style.top = quick.bar.hidden ? '' : 'calc(var(--bar-h, 64px) + ' + quick.bar.offsetHeight + 'px)';
       };
       var waiting = false;
       var onMove = function () { if (waiting) return; waiting = true; (window.requestAnimationFrame || window.setTimeout)(function () { waiting = false; placeBar(); }, 16); };
