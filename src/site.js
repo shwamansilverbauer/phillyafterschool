@@ -1051,24 +1051,26 @@
   var menuBtn = document.querySelector('.menu-btn'), siteNav = document.querySelector('#site-nav');
   var narrow = window.matchMedia ? window.matchMedia('(max-width: 1099px)') : { matches: false };
   var panelOpen = function () { return !!siteNav && siteNav.className.indexOf('open') > -1; };
+  // The panel on a phone: each group is a row that opens on a tap, and only the group this page is in starts open,
+  // so the panel is a short list of sections rather than every link at once.
   var setPanel = function (open) {
     if (!siteNav || !menuBtn) return;
     siteNav.className = 'nav' + (open ? ' open' : '');
     menuBtn.setAttribute('aria-expanded', String(open));
-    menus.forEach(function (m) { m.open = open; });
+    menus.forEach(function (m) { m.open = open && /(^| )here( |$)/.test(m.className); });
   };
   if (menuBtn) menuBtn.addEventListener('click', function () { setPanel(!panelOpen()); });
   if (narrow.addEventListener) narrow.addEventListener('change', function () { setPanel(false); });
   var wireMenu = function (m) {
     m.addEventListener('toggle', function () { if (m.open && !panelOpen()) menus.forEach(function (o) { if (o !== m) o.open = false; }); });
     var sm = m.querySelector('summary');
-    if (sm) sm.addEventListener('click', function (e) { if (panelOpen()) e.preventDefault(); });   // in the panel the groups stay open
+    if (sm) sm.addEventListener('click', function () { if (panelOpen()) track({ event: 'pas_menu_group', group: sm.textContent, open: !m.open }); });
   };
   menus.forEach(wireMenu);
   // an admin who signs in or out on this page gets or loses the Admin group without a reload
   window.pasAdminNav = function (on) {
     var had = document.getElementById('admin-menu'), m = adminNav(!!on);
-    if (on && m && !had) { menus.push(m); wireMenu(m); if (panelOpen()) m.open = true; }
+    if (on && m && !had) { menus.push(m); wireMenu(m); }
     if (!on && had) menus = menus.filter(function (x) { return x !== had; });
   };
   document.addEventListener('click', function (e) {

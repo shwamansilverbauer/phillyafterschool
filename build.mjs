@@ -537,7 +537,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
     ['Programs', [['all-programs/', 'All programs'], ['programs/', 'After-school programs'], ...(programs.some(p => p.weekend) ? [['weekends/', 'Weekend classes']] : []), ...(daysOff ? [[dayCampsPath, 'Day-camp programs']] : []), ...(summerCamps.length ? [['summer-camps/', 'Summer camps']] : [])]],
     ['Search by', [['schools/', 'School'], ['neighborhoods/', 'Neighborhood'], ['types/', 'Program type'], ['by-day/', 'Day of week']]],
     ['Build a schedule', [['schedules/', 'All the planners'], ['board/', 'After-school schedule'], ...(daysOff ? [[offPath, 'Day-camp schedule']] : []), ...(summerCamps.length ? [['summer-schedule/', 'Summer schedule']] : []), ...(GROUPS && daysOff ? [['calendar/', 'My kids’ calendar']] : [])]],
-    ['Suggest', [['suggest/', 'A program'], ['suggest/?kind=camp', 'A camp'], ['suggest/?kind=correction', 'An update to a listing'], ['ideas/', 'A feature'], ['schools/request/', 'A school']]],
+    ['Suggest', [['suggest/', 'A program or a camp'], ['suggest/?kind=correction', 'An update to a listing'], ['ideas/', 'A feature'], ['schools/request/', 'A school']]],
   ];
   const nav = menus.map(([label, items]) => {
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));

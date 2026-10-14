@@ -701,7 +701,9 @@ Build a schedule is `/schedules/`, the page that introduces all the planners), t
 "Help the site keep going" button, which goes to the support page. The groups are defined in `layout()` in
 `build.mjs` as a list of labels and links. Each is a `<details>` element, so it opens without scripts; the
 script only closes the others. From 1100px wide the logo sits on the left and the menu on the right, on one
-line; below that a Menu button opens every group in a single panel. "Day of week" lands on the A to Z page at its Day filter, which always shows there.
+line; below that a Menu button opens a panel where each group is a big row that opens on a tap (only the
+group the current page is in starts open), then About and the button, so a phone sees five lines rather than
+every link at once. "Day of week" goes to `/by-day/`.
 
 ## Signed up, or still to: ticks on the days-off plan and the to-do list
 
