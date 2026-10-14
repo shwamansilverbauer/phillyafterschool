@@ -1677,28 +1677,47 @@ Four things, all built by `build.mjs` unless it says otherwise.
   to do with premium.
 
 ## Analytics
-`analytics/gtm-import-ga4-clarity.json` imports into the GTM container (Admin > Import Container, "Merge"). It adds a Google tag,
-one GA4 event tag per event below, and Clarity. The GA4 and Clarity IDs live in the "GA4 Measurement ID" and
-"Clarity Project ID" variables.
+`analytics/gtm-import-ga4-clarity.json` imports into the GTM container (Admin > Import Container, "Merge", overwrite
+conflicting). It adds a Google tag, one GA4 event tag per event below, and Clarity. The GA4 and Clarity IDs live in the
+"GA4 Measurement ID" and "Clarity Project ID" variables. Every event's parameters are `DLV - <name>` data layer
+variables, so a new parameter means a new variable and a row on that event's tag. Clarity gets every `pas_` event by
+name through one trigger (`CE - any pas_ event`), so a new event needs nothing on the Clarity side.
 
+Set `gtmId` to load Google Tag Manager on every page. Every page view and event carries `visitor_role` and `signed_in`
+(see "Parents and program managers, told apart"). The site pushes these events to the data layer:
 
-Set `gtmId` to load Google Tag Manager on every page. The site pushes these events to the data layer:
-`pas_filter` (filter_type, filter_value, school), `pas_outbound` (link_type of register or website,
-program_id, school; school is empty on a program's own page), `pas_suggest_submit` (suggest_kind, school), `pas_support_click`, `pas_review_nudge` (nudge_action, program_id, nudge_place), `pas_review_submit` (program_id,
-school, stars), `pas_board_add` (program_id, school, day, board, children) and `pas_board_share` (method, board).
-`pas_school_pick` (school, covered) fires when someone picks a school in the finder, and `pas_school_request` (school)
-when they ask for one that isn't covered. `pas_program_pick` (program_id, method) fires when someone picks a program
-by name: method is `home_search`, `roster_search`, or `program_page` (the "Add to your week" button). `pas_school_save` (school)
-fires when someone saves a school as theirs. `pas_alert_signup` (school, program_id, place) fires when someone signs up for dates by email or follows a program; the address is never sent to analytics. `pas_filter` reports filter_type as `grade`, `program_type`, `relation`,
-`neighborhood`, `cost`, `day` or `school`. `pas_board_share` methods include `image_save`, `image_share` and `print`. The method `cta_click` is the "Share this schedule" button under the week, which leads down to the card; it is a click, not a share.
-`pas_theme_week` (theme, school, method) fires when someone rolls a themed week on the roster page.
-`pas_outbound` also fires with link_type `calendar`, `review` and `camp` (a day-off camp link). `pas_search` (search_term, results,
-school) fires when someone pauses typing in a school page's search box; searches with zero results
-show what parents want that isn't listed.
-`pas_signup` (step, method, role, account), `pas_claim` (step), `pas_dayoff` (action, days_planned, children),
-`pas_summer` (action, weeks_covered, children), `pas_near` (from), `pas_map_open`, `pas_filter_open` (school) and
-`pas_school_notify` (school) each have a tag in the import file too. Every page view and event also carries
-`visitor_role` and `signed_in` (see "Parents and program managers, told apart").
+- **Finding things.** `pas_filter` (filter_type, filter_value, school): filter_type is `kind`, `program_type`, `grade`,
+  `age`, `relation`, `neighborhood`, `cost`, `day` or `school`. `pas_filter_open` (school, from). `pas_search`
+  (search_term, results, school) fires when someone pauses typing in a school page's search box; searches with zero
+  results show what parents want that isn't listed. `pas_near` (from) and `pas_map_open`. `pas_school_pick` (school,
+  covered) when someone picks a school in the finder, `pas_school_request` (school) when they ask for one that isn't
+  covered, `pas_school_save` (school) when they save a school as theirs, `pas_school_notify` (school).
+  `pas_program_pick` (program_id, method): method is `home_search`, `roster_search`, or `program_page`.
+- **Moving around a page.** `pas_page_view` (view) fires when someone switches a page's view by hand: the roster's
+  `week`, `cost` and `card`, or the day-camps page's `who` and `days`. It doesn't fire for the view a page opens on.
+  (The planners' List, Calendar and Chart switches are their own and send nothing.) `pas_menu_group` (group, open) is
+  a section of the phone menu opened or closed. `pas_offbar` (action, day) is the next-day-off bar closed.
+- **Leaving the site.** `pas_outbound` (link_type, program_id, school): link_type is `register`, `website`, `calendar`,
+  `review` or `camp`; school is empty on a program's own page. `pas_support_click`.
+- **Planning.** `pas_board_add` (program_id, school, day, method, board, children) and `pas_board_share` (method,
+  board): methods include `image_save`, `image_share` and `print`; `cta_click` is the "Share this schedule" button
+  under the week, which leads to the card, a click rather than a share. `pas_theme_week` (theme, school, method).
+  `pas_dayoff_pick` (program_id, day, method), `pas_dayoff` (action, days_planned, children), `pas_summer` (action,
+  weeks_covered, children), `pas_todo` and `pas_year` (action, days: a camp ticked as signed up, on the to-do list or
+  the year calendar), `pas_group_share` (method), `pas_cheer` (what: a milestone celebrated once).
+- **Accounts and asking.** `pas_signup` (step, method, role, account), `pas_plan_tour` (planner, view: a signed-out
+  visitor flipping through a planner's tour), `pas_plan_cta` (place, next), `pas_account_ask` (place), `pas_favorite`
+  (action, listing, place), `pas_alert_signup` (school, program_id, camp_id, place): the address is never sent to
+  analytics. `pas_ask` (program_id, listing_kind): a question sent through a listing, never the question or who asked.
+- **Reviews.** `pas_review_nudge` (nudge_action, program_id, nudge_place) and `pas_review_submit` (program_id, school,
+  stars). `pas_suggest_submit` (suggest_kind, school).
+- **Managers only.** `pas_claim` (step), `pas_premium` (step, plan), and the sale as GA4 ecommerce: `begin_checkout`
+  and `purchase` with an `ecommerce` object; a Stripe test-mode checkout is marked `pas_test: true` and the tags skip it.
+- `pas_role` (pas_role, pas_signed_in) is a state push, not a GA4 event: it updates the two variables above the first
+  time a device learns which kind of account signed in.
+
+Nothing pushed names a child, a parent, a camp someone's child is going to, or a listing where the rules say not to
+(see "Privacy"). Listing counts are numbers only.
 
 ## Keeping it current
 

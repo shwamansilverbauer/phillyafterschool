@@ -408,6 +408,7 @@
       "phone": "215-972-2054",
       "website": "https://www.pafa.org/family-programs/summer-art-camp",
       "price": "paid",
+      "program": "pafa-saturday-art",
       "sources": [
         {
           "label": "PAFA summer art camp",
@@ -444,6 +445,7 @@
       "phone": "215-965-4015",
       "website": "https://moore.edu/academics/youth-education/young-artists-workshop/summer-2026-youth-courses",
       "price": "paid",
+      "program": "moore-young-artists-workshop",
       "sources": [
         {
           "label": "Moore College of Art & Design youth courses",
@@ -556,6 +558,7 @@
       "website": "https://walnutstreettheatre.coursestorm.com/category/camp-walnut-2026",
       "price": "paid",
       "note": "We read one division’s page. Ages, and the dates and prices of the other divisions, weren’t readable, and some divisions need an audition.",
+      "program": "walnut-street-theatre-school",
       "sources": [
         {
           "label": "Camp Walnut at Walnut Street Theatre",
@@ -593,6 +596,7 @@
       "website": "https://macguffintf.com/camps/",
       "registerUrl": "https://www.hisawyer.com/macguffin-theatre/schedules?schedule_id=camps",
       "signup": "Sign-ups for the 2026 camps began December 1, 2025.",
+      "program": "macguffin-theatre",
       "sources": [
         {
           "label": "MacGuffin Theatre & Film Company",
@@ -661,6 +665,7 @@
       "website": "https://philadelphiaballet.org/school/summer-programs/philadelphia-summer-childrens-programs/",
       "price": "paid",
       "signup": "Sign-ups for 2026 opened January 1.",
+      "program": "school-of-philadelphia-ballet",
       "sources": [
         {
           "label": "School of Philadelphia Ballet dance camps",
@@ -695,6 +700,7 @@
       ],
       "website": "https://www.wissskating.com/product/get-the-edge-summer-figure-skating-camp/",
       "price": "paid",
+      "program": "wissahickon-skating-club",
       "sources": [
         {
           "label": "Wissahickon Skating Club figure skating camp",
@@ -1338,6 +1344,7 @@
       ],
       "website": "https://zazzphilly.com/summer-camp/",
       "price": "paid",
+      "program": "zazz-dance",
       "sources": [
         {
           "label": "ZAZZ Dance & Drama",

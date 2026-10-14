@@ -1,6 +1,6 @@
 {
   "exportFormatVersion": 2,
-  "exportTime": "2026-10-06 16:20:52",
+  "exportTime": "2026-10-14 01:49:48",
   "containerVersion": {
     "path": "accounts/0/containers/0/versions/0",
     "accountId": "0",
@@ -426,6 +426,21 @@
                     "type": "TEMPLATE",
                     "key": "parameterValue",
                     "value": "{{DLV - children}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "method"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - method}}"
                   }
                 ]
               }
@@ -960,6 +975,21 @@
                     "type": "TEMPLATE",
                     "key": "parameterValue",
                     "value": "{{DLV - day}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "method"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - method}}"
                   }
                 ]
               }
@@ -1670,6 +1700,21 @@
                     "value": "{{DLV - school}}"
                   }
                 ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "from"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - from}}"
+                  }
+                ]
               }
             ]
           }
@@ -1809,6 +1854,838 @@
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "29",
+        "name": "GA4 - Event - pas_page_view",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_page_view"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "view"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - view}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "27"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "A view switch on a page that has them: the roster (week, cost, card) or day camps (who, days). Fires on a tap, not on load."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "30",
+        "name": "GA4 - Event - pas_menu_group",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_menu_group"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "group"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - group}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "open"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - open}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "28"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "A section of the phone menu opened (open: true) or closed. \"group\" is the section’s name."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "31",
+        "name": "GA4 - Event - pas_review_nudge",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_review_nudge"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "nudge_action"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - nudge_action}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "program_id"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - program_id}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "nudge_place"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - nudge_place}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "29"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "The \"has your family been to…?\" box: shown, review, not_yet, never, for one program."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "32",
+        "name": "GA4 - Event - pas_plan_tour",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_plan_tour"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "planner"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - planner}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "view"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - view}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "30"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "A signed-out visitor flipping through a planner’s tour by hand."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "33",
+        "name": "GA4 - Event - pas_plan_cta",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_plan_cta"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "place"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - place}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "next"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - next}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "31"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "A \"Create a free account\" button on a planner page, and where on the page it was."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "34",
+        "name": "GA4 - Event - pas_account_ask",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_account_ask"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "place"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - place}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "32"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "A signed-out visitor was asked to make an account to go on, and where."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "35",
+        "name": "GA4 - Event - pas_ask",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_ask"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "program_id"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - program_id}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "listing_kind"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - listing_kind}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "33"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "A question sent to a program or camp through its listing. Never the question or who asked."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "36",
+        "name": "GA4 - Event - pas_cheer",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_cheer"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "what"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - what}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "34"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "A small celebration shown once per milestone (what: the milestone)."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "37",
+        "name": "GA4 - Event - pas_offbar",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_offbar"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "action"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - action}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "day"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - day}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "35"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "The next-day-off bar at the foot of the page closed, with that day’s date."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "38",
+        "name": "GA4 - Event - pas_todo",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_todo"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "action"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - action}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "days"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - days}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "36"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "A day-off camp ticked as signed up (or unticked) on the to-do list; days is how many are ticked."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "39",
+        "name": "GA4 - Event - pas_year",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_year"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "action"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - action}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "days"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - days}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "37"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "The same tick on the year calendar."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "40",
+        "name": "GA4 - Event - pas_premium",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_premium"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "step"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - step}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "plan"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - plan}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "38"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "A manager moving through the premium page (step; plan is year or month). Managers only; parents never see it."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "41",
+        "name": "GA4 - Event - begin_checkout",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "true"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "getEcommerceDataFrom",
+            "value": "dataLayer"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "begin_checkout"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          }
+        ],
+        "firingTriggerId": [
+          "39"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "A manager going to Stripe to pay for a premium plan. Skipped for Stripe test-mode links (pas_test)."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "42",
+        "name": "GA4 - Event - purchase",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "true"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "getEcommerceDataFrom",
+            "value": "dataLayer"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "purchase"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          }
+        ],
+        "firingTriggerId": [
+          "40"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "A premium plan paid for, read from the ecommerce object the page pushes when Stripe sends the manager back. Skipped when the checkout was Stripe test mode (pas_test)."
       }
     ],
     "trigger": [
@@ -2461,6 +3338,400 @@
           }
         ],
         "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "27",
+        "name": "CE - pas_page_view",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_page_view"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "28",
+        "name": "CE - pas_menu_group",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_menu_group"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "29",
+        "name": "CE - pas_review_nudge",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_review_nudge"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "30",
+        "name": "CE - pas_plan_tour",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_plan_tour"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "31",
+        "name": "CE - pas_plan_cta",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_plan_cta"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "32",
+        "name": "CE - pas_account_ask",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_account_ask"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "33",
+        "name": "CE - pas_ask",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_ask"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "34",
+        "name": "CE - pas_cheer",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_cheer"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "35",
+        "name": "CE - pas_offbar",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_offbar"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "36",
+        "name": "CE - pas_todo",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_todo"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "37",
+        "name": "CE - pas_year",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_year"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "38",
+        "name": "CE - pas_premium",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_premium"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "39",
+        "name": "CE - begin_checkout",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "begin_checkout"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{DLV - pas_test}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              },
+              {
+                "type": "BOOLEAN",
+                "key": "negate",
+                "value": "true"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "40",
+        "name": "CE - purchase",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "purchase"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{DLV - pas_test}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              },
+              {
+                "type": "BOOLEAN",
+                "key": "negate",
+                "value": "true"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
       }
     ],
     "variable": [
@@ -2503,7 +3774,7 @@
         "name": "Page URL - no fragment",
         "type": "jsm",
         "parentFolderId": "1",
-        "notes": "The page address without anything after #. Shared roster links carry a child\u2019s first name there.",
+        "notes": "The page address without anything after #. Shared roster links carry a child’s first name there.",
         "parameter": [
           {
             "type": "TEMPLATE",
@@ -3183,6 +4454,306 @@
             "type": "TEMPLATE",
             "key": "name",
             "value": "camp_id"
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "31",
+        "name": "DLV - view",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "view"
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "32",
+        "name": "DLV - group",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "group"
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "33",
+        "name": "DLV - open",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "open"
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "34",
+        "name": "DLV - nudge_action",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "nudge_action"
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "35",
+        "name": "DLV - nudge_place",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "nudge_place"
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "36",
+        "name": "DLV - planner",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "planner"
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "37",
+        "name": "DLV - next",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "next"
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "38",
+        "name": "DLV - listing_kind",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "listing_kind"
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "39",
+        "name": "DLV - what",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "what"
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "40",
+        "name": "DLV - days",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "days"
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "41",
+        "name": "DLV - plan",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "plan"
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "42",
+        "name": "DLV - pas_test",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "pas_test"
           }
         ],
         "parentFolderId": "1"

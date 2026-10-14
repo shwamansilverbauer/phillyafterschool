@@ -4180,8 +4180,6 @@ function boardPage() {
     <p class="hint" id="board-status" aria-live="polite"></p>
     <div class="board-tools" id="board-tools" hidden><button type="button" class="clear" id="board-clear">Clear this roster</button></div>
     </div>
-  </section>
-  <section class="section rv-nudge" id="rv-nudge" data-rv-place="week" data-review="${link('review/', 1)}" aria-live="polite" hidden></section>
   <div data-pane="cost" style="display:contents">
   <section class="section costbox" id="board-cost" hidden>
     <h2>${T(`What this roster costs`)}</h2>
@@ -4230,6 +4228,8 @@ function boardPage() {
     </div>
   </section>
   </div>
+  <section class="section rv-nudge" id="rv-nudge" data-rv-place="week" data-review="${link('review/', 1)}" aria-live="polite" hidden></section>
+  </section>
   ${rvNames()}
   ${GROUPS ? `<section class="section group-share" id="group-share" ${groupsAttrs(1)} hidden></section>` : ''}
   ${nextOff(1).replace(T(`Days off this year, and who’s open`), T(`Plan the days off too`))}
