@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=9bdf48d2">
+<link rel="stylesheet" href="../assets/site.css?v=1f93e086">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -57,7 +57,7 @@
     <div class="pshow-tour">
       <div class="pshow-head">
         <div><p class="pshow-eye">My kids’ calendar</p><h2><span data-copy="ccee7d0831">The week, the days off and the summer, in one place</span></h2></div>
-        <div class="pshow-switch"><span class="pshow-switch-label"><span data-copy="c361ac4de5">See it as</span></span><div class="tabs view-switch pshow-tabs" role="group" aria-label="Ways to look at it"><button type="button" class="tab vs" data-pv="cal" aria-pressed="true">Calendar</button><button type="button" class="tab vs" data-pv="list" aria-pressed="false">List</button><button type="button" class="tab vs" data-pv="todo" aria-pressed="false">To do</button></div></div>
+        <div class="pshow-switch"><span class="pshow-switch-label"><span data-copy="c361ac4de5">See it as</span></span><div class="tabs view-switch pshow-tabs" role="group" aria-label="Ways to look at it"><button type="button" class="tab vs" data-pv="cal" aria-pressed="true">Calendar</button><button type="button" class="tab vs" data-pv="list" aria-pressed="false">List</button></div></div>
       </div>
       <div class="pshow-panel" data-pv="cal">
         <div class="pshow-say"><b>Calendar</b><p><span data-copy="c432e49f70">A month at a time: days off, camp weeks, sign-up dates and the dates you add yourself.</span></p><p class="pshow-nextp"><button type="button" class="btn pshow-next" data-pv-next="list">Next: List <span aria-hidden="true">→</span></button></p></div>
@@ -68,22 +68,11 @@
     </figure>
       </div>
       <div class="pshow-panel" data-pv="list">
-        <div class="pshow-say"><b>List</b><p><span data-copy="5475c1fc92">Or the same year as a list in date order, to read from the top down.</span></p><p class="pshow-nextp"><button type="button" class="btn pshow-next" data-pv-next="todo">Next: To do <span aria-hidden="true">→</span></button></p></div>
+        <div class="pshow-say"><b>List</b><p><span data-copy="5475c1fc92">Or the same year as a list in date order, to read from the top down.</span></p><p class="pshow-nextp"><button type="button" class="btn pshow-next" data-pv-next="cal">Back to Calendar <span aria-hidden="true">→</span></button></p></div>
         <figure class="ex ex-rows" aria-label="An example of My kids’ calendar, as a list">
       <figcaption><span class="ex-tag"><span data-copy="0f01ed56a1">Example</span></span><b><span data-copy="f582e20e72">Coming up</span></b><span class="ex-kids" aria-hidden="true"><i class="on">Sam</i><i>Rae</i></span></figcaption>
       <ol class="ex-list"><li><span class="ex-when"><b>Tue, Oct 20</b><small>A date you added</small></span><span class="ex-chip" style="--tc:#0F4D90">Picture day</span></li><li><span class="ex-when"><b>Tue, Oct 27</b><small>Sign-ups</small></span><span class="ex-chip" style="--tc:#CC3000">Chess club: winter sign-ups open</span></li><li><span class="ex-when"><b>Tue, Nov 3</b><small>No school · Election Day</small></span><span class="ex-chip ok" style="--tc:#2C8444">Sam: Day camp at the art studio<small>✓ Signed up</small></span></li><li><span class="ex-when"><b>Wed, Nov 11</b><small>No school · Veterans Day</small></span><span class="ex-chip need" style="--tc:#B88A00">Sam: Soccer day camp<small>Still to sign up</small></span></li></ol>
       <p class="ex-foot"><span data-copy="1d5afcb49d">The whole year in date order, from this week to Labor Day.</span></p>
-    </figure>
-      </div>
-      <div class="pshow-panel" data-pv="todo">
-        <div class="pshow-say"><b>To do</b><p><span data-copy="d0a7e26ebb">Every camp day you’ve planned and haven’t signed up for yet, with a link to each camp’s own sign-up page.</span></p><p class="pshow-nextp"><button type="button" class="btn pshow-next" data-pv-next="cal">Back to Calendar <span aria-hidden="true">→</span></button></p></div>
-        <figure class="ex ex-todo" aria-label="An example of the to-do list of camps to sign up for">
-      <figcaption><span class="ex-tag"><span data-copy="0f01ed56a1">Example</span></span><b><span data-copy="9877f1d8e3">Camps to sign up for</span></b><span class="ex-kids" aria-hidden="true"><i class="on">Sam</i><i>Rae</i></span></figcaption>
-      <ul class="ex-todo-list">
-        <li><span class="ex-todo-name"><b>Day camp at the art studio</b><small>for Sam · 2 days</small></span><span class="ex-box">Tue, Nov 3</span><span class="ex-box">Wed, Nov 11</span><span class="ex-go"><span data-copy="765a98f2ff">Go to its sign-up page</span></span></li>
-        <li><span class="ex-todo-name"><b>Soccer day camp</b><small>for Rae · 1 day</small></span><span class="ex-box on">Mon, Nov 16</span><span class="ex-done"><span data-copy="37395c227d">Signed up</span></span></li>
-      </ul>
-      <p class="ex-foot"><span data-copy="e69c85aa2d">Putting a camp on your plan doesn’t sign your child up. Each camp day waits here until you tick it.</span></p>
     </figure>
       </div>
     </div>
@@ -152,13 +141,8 @@
         <div class="year-cal" id="year-cal"></div>
         <div id="year-agenda" hidden></div>
       </div>
-      <div class="year-step" id="year-todo" data-jump-to="To do">
-        <p class="step-head"><b aria-hidden="true">3</b><span><span data-copy="8665aed362">To do</span></span></p>
-        <p><span data-copy="9cb1126a1c">Putting a camp on a day off doesn’t sign your child up: each camp takes sign-ups on its own site. Tick a day once you’ve signed up, and it shows with a check mark on the calendar.</span></p>
-        <div id="year-todo-list"></div>
-      </div>
       <div class="year-step" id="year-share" data-jump-to="Share it" hidden>
-        <p class="step-head"><b aria-hidden="true">4</b><span><span data-copy="5c41f87a30">Share it</span></span></p>
+        <p class="step-head"><b aria-hidden="true">3</b><span><span data-copy="5c41f87a30">Share it</span></span></p>
       <div class="card-maker sumcard" id="year-card" hidden>
           <h3><span data-copy="2bc6b5e359">Make it a picture</span></h3>
           <p><span data-copy="2c04ce6cc7">A calendar for each month, to print for the fridge or send to family. It’s made here in your browser.</span></p>
@@ -190,7 +174,7 @@
         </div>
       </div>
       <div class="year-step" id="year-pencil" data-jump-to="Pencil it in">
-        <p class="step-head"><b aria-hidden="true">5</b><span><span data-copy="a69abc716e">Pencil it in</span></span></p>
+        <p class="step-head"><b aria-hidden="true">4</b><span><span data-copy="a69abc716e">Pencil it in</span></span></p>
       <div class="year-file" id="year-file">
           <h3><span data-copy="6c60d61caa">Add it to your calendar</span></h3>
           <p><span data-copy="ec12bceffe">One file with everything ticked below, for the calendar on your phone or computer. Open it and your calendar app adds the entries. It’s a copy: if a date changes later, this page will say so, and you download it again.</span></p>
@@ -274,7 +258,7 @@
     <p>Written by Rachael Silverbauer.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=350a6731" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=65d3fd84" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 <script src="../assets/groups.js?v=988ee0df"></script>
 </body>
 </html>
