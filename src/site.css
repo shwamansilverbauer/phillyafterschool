@@ -592,7 +592,7 @@ button.btn{cursor:pointer;font-family:inherit}
 .dayscene .sc{fill:#FFF6D6}
 .dayscene .sct{fill:#0A3566}
 .dayscene .shade{fill:#C7D6E8}
-.dayscene .by{fill:#F3C613;stroke:#0B2140;stroke-width:1.2}
+.dayscene .by{fill:var(--yellow)}
 .dayscene .zz{fill:#0B2140;font-family:var(--display);font-weight:800}
 .dayscene .frame{fill:none;stroke:#0A3566;stroke-width:3.5;stroke-linejoin:round;stroke-linecap:round}
 .dayscene .rope{fill:none;stroke:#0A3566;stroke-width:1.4}
