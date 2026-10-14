@@ -2115,3 +2115,13 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .board-views::-webkit-scrollbar{display:none}
 .vs-short{display:none}
 @media (max-width:640px){.board-views .vs{padding-inline:14px}.board-views .vs-long{display:none}.board-views .vs-short{display:inline}}
+/* ---------- the strip that stays under the menu bar: a page's view switch, its jump links, or both; and a planner's heading with its views ---------- */
+.pagenav{position:sticky;top:var(--bar-h,64px);z-index:30;background:var(--bg);display:flex;flex-direction:column;gap:2px;padding:8px 0 0;margin:0 0 -16px;box-shadow:0 1px 0 var(--line)}
+.pagenav .view-switch{align-self:flex-start;margin-bottom:6px}
+.pagenav .jump-wrap{position:relative;top:auto;margin:0;box-shadow:none;background:none}
+.pagenav .jump-wrap[hidden]{display:none}
+.pagenav .jump{padding:4px 0 10px}
+.pagenav:has(.view-switch) .jump{padding-top:0}
+.year-view-head{position:sticky;top:var(--bar-h,64px);z-index:29;background:var(--surface);padding:8px 0;margin-block:-8px}
+.board-view-head{background:var(--bg);box-shadow:0 1px 0 var(--line)}
+@media (max-width:640px){.year-view-head{padding:6px 0}}

@@ -116,6 +116,7 @@
       current = v;
       btns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === v)); });
       panes.forEach(function (p) { p.hidden = p.getAttribute('data-pane') !== v; });
+      if (window.pasJump) window.pasJump();   // the jump links are the visible view's
       if (quiet) return;
       try { history.replaceState(null, '', location.pathname + location.search + (v === first ? '' : '#' + v)); } catch (e) { /* file preview */ }
       track({ event: 'pas_page_view', view: v });
@@ -4826,7 +4827,7 @@
         var inList = !footer || footer.getBoundingClientRect().top > top + 180;                // and the list is still on screen
         quick.bar.hidden = !(document.activeElement === quick.search || (past && inList));   // never pulled away from someone typing in it
         // a page with a jump strip keeps it in view under the slim bar: the strip moves down by the bar's height
-        var jw = document.querySelector('.jump-wrap');
+        var jw = document.querySelector('.pagenav') || document.querySelector('.jump-wrap');
         if (jw) jw.style.top = quick.bar.hidden ? '' : 'calc(var(--bar-h, 64px) + ' + quick.bar.offsetHeight + 'px)';
       };
       var waiting = false;

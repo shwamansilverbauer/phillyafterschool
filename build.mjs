@@ -1454,7 +1454,7 @@ ${p.clubs.map(c => `      <article class="club">
       ${spaceSlot('p:' + p.id, D)}
     </div>`;
   const body = `<div data-program-page="${esc(p.id)}" style="display:contents">
-  ${jumpNav()}
+  ${pageNav(jumpNav())}
   ${afterSection}
   ${clubsHtml}
   ${weekendSection}
@@ -1513,20 +1513,15 @@ ${schoolRows}
 // inside each, with a strip under the menu bar that jumps between the sections. The filters narrow the lot.
 function programsPage() {
   const list = [...citywide].sort((a, b) => a.name.localeCompare(b.name));
-  const byType = TYPES.map(t => [t, list.filter(p => p.types[0] === t.id)]).filter(([, l]) => l.length);
+  const { pills, sections } = typeSections('after', list, 1);
   const hero = `    <p class="where"><a href="${link('all-programs/', 1)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
     <h1>${T(`After-school programs`)}</h1>
     <p class="lede">${T(`All {n} after-school programs on this site, across every school, sorted by what they are. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.`, { n: list.length })}</p>${heroGo(1, link('board/', 1), T(`Plan your week`))}
-    <p class="runs"><span class="runs-h">${T(`Here`)}</span> ${byType.map(([t, l]) => `<a class="pill kind" style="--kc:${t.color}" href="#type-list-${t.id}">${esc(t.label)} (${l.length})</a>`).join(' ')}</p>`;
-  const body = `${jumpNav()}
+    ${pills}`;
+  const body = `${pageNav(jumpNav())}
 ${filterBar({ list, depth: 1, show: { day: true }, near: true, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
 ${noMatch(1)}
-${byType.map(([t, l]) => `<section class="section kind-list" id="type-list-${t.id}" data-group data-jump-to="${esc(t.label)}" style="--kc:${t.color}">
-  <h2 class="kind-h"><span class="kind-dot" aria-hidden="true"></span>${esc(t.label)} <span class="n-wrap">(<span class="n">${l.length}</span>)</span></h2>
-  <div class="schools">
-${l.map(p => listRow('after', p, 1)).join('\n')}
-  </div>
-</section>`).join('\n')}
+${sections}
 <section class="section">
   <p>${T(`A program is listed under the first of its types; its other types are on its row. Clubs a school runs for its own students aren’t in this list. They’re on that school’s page.`)}</p>
   <p>${T(`To see only what works with your child’s school,`)} <a href="${link('schools/', 1)}">${T(`start from your school.`)}</a> ${T(`Or see what’s close to home:`)} <a href="${link('neighborhoods/', 1)}">${T(`browse by neighborhood.`)}</a></p>
@@ -1560,6 +1555,23 @@ ${byKind[k].map(x => listRow(k, x, depth)).join('\n')}
   </div>
 </section>`).join('\n');
 const shapedAll = byKind => KINDS.flatMap(k => (byKind[k] || []).map(x => shapeFor(k, x)));
+// A list in sections by kind of program: each listing under the first of its types, A to Z inside, in the order
+// of the TYPES list. The hero gets a pill per section ("Here: Aftercare (10) · Music (2) …") and the page a strip
+// that jumps between them. `shape` is what the filter bar reads for a row, when it isn't the listing itself.
+const typeSections = (kind, list, depth, shape = null) => {
+  const byType = TYPES.map(t => [t, list.filter(x => x.types[0] === t.id)]).filter(([, l]) => l.length);
+  return {
+    pills: `<p class="runs"><span class="runs-h">${T(`Here`)}</span> ${byType.map(([t, l]) => `<a class="pill kind" style="--kc:${t.color}" href="#type-list-${t.id}">${esc(t.label)} (${l.length})</a>`).join(' ')}</p>`,
+    sections: byType.map(([t, l]) => `<section class="section kind-list" id="type-list-${t.id}" data-group data-jump-to="${esc(t.label)}" style="--kc:${t.color}">
+  <h2 class="kind-h"><span class="kind-dot" aria-hidden="true"></span>${esc(t.label)} <span class="n-wrap">(<span class="n">${l.length}</span>)</span></h2>
+  <div class="schools">
+${l.map(x => listRow(kind, x, depth, shape ? shape(x) : null)).join('\n')}
+  </div>
+</section>`).join('\n'),
+  };
+};
+// The strip that stays under the menu bar on a long page: a page's view switch, its jump links, or both.
+const pageNav = (...parts) => `<div class="pagenav">${parts.filter(Boolean).join('\n')}</div>`;
 function typesPage() {
   const hero = `    <h1>${T(`Programs by what they do`)}</h1>
     <p class="lede">${T(`Pick the kind of thing you’re after. Each list has the after-school programs, weekend classes, day camps and summer camps in that group, and can be narrowed by kind, grade and neighborhood.`)}</p>`;
@@ -1581,7 +1593,7 @@ function typePage(t) {
     <h1>${esc(t.label)}</h1>
     <p class="lede">${T(`Everything on this site in this group, whatever part of the year it fills. Pick a kind, a grade or a neighborhood to narrow it down.`)}</p>
     <p class="runs"><span class="runs-h">${T(`Here`)}</span> ${kindsHere.map(k => `<a class="pill kind kind-${k}" href="#list-${k}">${esc(KIND_NAME[k])} (${byKind[k].length})</a>`).join(' ')}</p>`;
-  const body = `${jumpNav()}
+  const body = `${pageNav(jumpNav())}
 ${filterBar({ list: shapedAll(byKind), depth: D, show: { type: false, age: true } }).replace('data-filters', 'data-filters data-noun="listing" data-nouns="listings"')}
 ${noMatch(D)}
 ${kindSections(byKind, D)}
@@ -1625,7 +1637,7 @@ function byDayPage() {
     <div class="facts">
       ${[...WEEK, 'sat', 'sun'].map(d => `<span><a href="?day=${d}">${DAY_NAME[d].slice(0, 3)}</a> <b>${onDay(d)}</b></span>`).join('\n      ')}
     </div>`;
-  const body = `${jumpNav()}
+  const body = `${pageNav(jumpNav())}
 ${filterBar({ list: shapedAll(byKind), depth: D, show: { day: true, age: true } }).replace('data-filters', 'data-filters data-noun="listing" data-nouns="listings"')}
 ${noMatch(D)}
 ${kindSections(byKind, D, { lead: { after: T(`A program that doesn’t publish its days shows under every weekday.`), weekend: T(`Weekend classes go by where they are. Any child can sign up, whichever school they go to.`) } })}
@@ -2189,7 +2201,7 @@ function neighborhoodPage(h) {
       <span><b>${based.length}</b> ${based.length === 1 ? 'program' : 'programs'} based here</span>
       ${comes.length ? `<span><b>${comes.length}</b> more that pick up</span>` : ''}
     </div>`;
-  const body = `${jumpNav()}
+  const body = `${pageNav(jumpNav())}
 <section class="section" id="schools-here" data-jump-to="Schools">
   <h2>${T(`Schools in {name}`, { name: h.name })}</h2>
   ${h.schools.length ? `<div class="schools">
@@ -2991,23 +3003,23 @@ const headsUpBox = D => datesBox(D, { pick: true, place: 'days_off', cls: 'wide'
 // (headsUpBox) are built elsewhere for the planner and for wherever they go next.
 function dayCampsPage() {
   const D = 1;
-  const { noDates, cards } = daysOffBits(D, 'page');
+  const { noDates } = daysOffBits(D, 'page');
+  const dc = typeSections('off', campPrograms, D);
   const hero = `    <p class="where"><a href="${link('all-programs/', D)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
     <h1>${T(`School’s closed. What now?`)}</h1>
     <p class="lede">${T(`Who runs a camp or a full day when district schools are closed, by neighborhood, and every day off this year.`)}</p>${heroGo(D, link(offPath, D), T(`Plan the days off`))}
-    ${offFacts()}`;
+    ${offFacts()}
+    ${dc.pills}`;
   const body = `<div style="display:contents">
-<div class="tabs view-switch page-views" id="off-page-views" role="group" aria-label="Programs or days" data-views="who">
+${pageNav(`<div class="tabs view-switch page-views" id="off-page-views" role="group" aria-label="Programs or days" data-views="who">
   <button type="button" class="tab vs" data-view="who" aria-pressed="true">${T(`Programs`)}</button><button type="button" class="tab vs" data-view="days" aria-pressed="false">${T(`The days`)}</button>
-</div>
+</div>`, jumpNav())}
 <section class="section" id="who" data-pane="who">
   <h2>${T(`Who runs something when school is closed`)}</h2>
   <p>${T(`{n} listed programs say they run camps or full days on days off. Children from any school can go, so start from your part of the city. {m} of them had no dates on their site when we checked, so ask which days they cover.`, { n: campPrograms.length, m: noDates.length })}</p>
   ${filterBar({ list: campPrograms.map(p => shapeFor('off', p)), depth: D, show: { grade: false, age: true, day: false }, searchLabel: `Looking for a particular program?`, placeholder: 'A name or a neighborhood, or try art, chess…' }).replace('data-filters', 'data-filters data-noschool')}
   ${noMatch(D)}
-  <div class="schools" data-group>
-${cards}
-  </div>
+  ${dc.sections}
 </section>
 <section class="section" id="days" data-pane="days">
   <h2>${T(`Days off still to come`)}</h2>
@@ -5444,7 +5456,7 @@ function campPage(c) {
       ${spaceSlot('c:' + c.id, D)}
     </div>`;
   const body = `<div data-camp-page="${esc(c.id)}" style="display:contents">
-  ${jumpNav()}
+  ${pageNav(jumpNav())}
   ${kindSection('summer', summerBlock(c, D))}
   <section class="section">
     ${ALERTS && GROUPS ? '' : c.season && c.season < year
@@ -5494,10 +5506,11 @@ function summerCampsPage() {
   const D = 1;
   const base = campsFile.season, next = base + 1;
   const list = [...summerCamps].sort((a, b) => a.name.localeCompare(b.name));
-  const shaped = list.map(c => ({ ...shapeFor('summer', c), neighborhoods: campAreas(c) }));   // what the filter bar sees: parts of the city
+  const shapeCamp = c => ({ ...shapeFor('summer', c), neighborhoods: campAreas(c) });   // what the filter bar sees: parts of the city
+  const shaped = list.map(shapeCamp);
   const ahead = list.filter(c => c.season > base).length;
   // On the list each camp is one row: what it is and the handful of facts people sort by. Its own page has the rest.
-  const cards = list.map((c, i) => listRow('summer', c, D, shaped[i])).join('\n');
+  const sc = typeSections('summer', list, D, shapeCamp);
   const todo = campsFile.todo || [];
   const hero = `    <p class="where"><a href="${link('all-programs/', D)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
     <h1>${T(`Summer camps in Philadelphia`)}</h1>
@@ -5506,18 +5519,16 @@ function summerCampsPage() {
       <span><b>${list.length}</b> camps</span>
       <span><b>${ahead}</b> already showing ${next}</span>
       <span>Checked <b>${longDate(campsFile.checked)}</b></span>
-    </div>`;
-  const body = `<section class="section">
+    </div>
+    ${sc.pills}`;
+  const body = `${pageNav(jumpNav())}
+<section class="section">
   <p class="flag camp-guide"><b>${T(`Most of what’s here is from summer {year}, shown as a guide.`, { year: base })}</b> ${T(`Camps usually post next summer between December and March. Each listing changes to {year} when its camp posts dates and prices, and says so on its card.`, { year: next })}${ALERTS ? ' ' + T(`Waiting on one camp? Its page has a box to be emailed when it posts.`) : ''}</p>
 </section>
 ${filterBar({ list: shaped, depth: D, show: { grade: false, age: true }, near: true, searchLabel: `Looking for a particular camp?`, placeholder: 'Its name, or try art, tennis, Mount Airy…' }).replace('data-filters', 'data-filters data-noun="camp" data-nouns="camps"')}
 <p class="hint">${T(`Grades here are worked out from each camp’s ages, so check the ages on the camp’s page. Each camp has its own page with everything it posts.`)}</p>
 ${noMatch(D)}
-<section class="section" data-group>
-  <div class="schools">
-${cards}
-  </div>
-</section>
+${sc.sections}
 ${todo.length ? `<section class="section">
   <h2>${T(`Camps we haven’t been able to read yet`)}</h2>
   <p>${T(`These run day camps in the city too. Their details go up once we’ve read them on the camp’s own site.`)}</p>
@@ -5552,6 +5563,7 @@ const weekendRow = (p, depth) => `<a class="prow" href="${link(weekendPath, dept
 function weekendPage() {
   const D = 1;
   const shape = p => ({ ...shapeFor('weekend', p), neighborhoods: weekendAreas(p) });   // what the filter bar sees: parts of the city, not neighborhoods
+  const wk = typeSections('weekend', weekendPrograms, D, shape);
   const hero = `    <p class="where"><a href="${link('all-programs/', D)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
     <h1>${T(`Saturday and Sunday classes`)}</h1>
     <p class="lede">${T(`Weekend classes for kids across the city: what runs, on which day, and where. Open one for its term, times and cost.`)}</p>${heroGo(D, link('board/', D), T(`Plan your week`))}
@@ -5559,15 +5571,13 @@ function weekendPage() {
       <span><b>${weekendPrograms.length}</b> places with weekend classes</span>
       <span><b>${weekendPrograms.filter(p => p.weekend.days.includes('sun')).length}</b> on Sundays too</span>
       <span><b>${new Set(weekendPrograms.flatMap(programHoods)).size}</b> neighborhoods</span>
-    </div>`;
-  const body = `${filterBar({ list: weekendPrograms.map(shape), depth: D, show: { grade: false, age: true, cost: false, day: false }, near: true, searchLabel: `Looking for a particular class?`, placeholder: 'A name or a neighborhood, or try piano, acting…' }).replace('data-filters', 'data-filters data-noschool')}
+    </div>
+    ${wk.pills}`;
+  const body = `${pageNav(jumpNav())}
+${filterBar({ list: weekendPrograms.map(shape), depth: D, show: { grade: false, age: true, cost: false, day: false }, near: true, searchLabel: `Looking for a particular class?`, placeholder: 'A name or a neighborhood, or try piano, acting…' }).replace('data-filters', 'data-filters data-noschool')}
 <p class="hint">${T(`A weekend class has no school pickup, so this list goes by where the class is. Any child can sign up, whichever school they go to.`)}</p>
 ${noMatch(D)}
-<section class="section" data-group>
-  <div class="schools">
-${weekendPrograms.map(p => listRow('weekend', p, D, shape(p))).join('\n')}
-  </div>
-</section>
+${wk.sections}
 <section class="section">
   <p>${T(`This covers the programs already on this site, plus weekend-only places from a first sweep of the city. It isn’t every class in Philadelphia, and some listed programs run weekend classes that their sites don’t spell out by day, so ask.`)} ${T(`Know a weekend class that should be here?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
   <p class="hint">${T(`Weekend terms start and fill on their own dates, so check with the provider before you count on a class.`)}</p>

@@ -384,9 +384,17 @@ Fields worth knowing:
 
 Every program gets its own page at `/programs/<id>/` (for example `/programs/zhang-sah/`), built from the
 same record as its cards. `/programs/` lists them all, in a section per kind of program (each under the first of
-its `types`, A to Z inside; `programsPage()`), with a strip under the menu bar (`jumpNav()`) that jumps between
-the sections and stays under the slim search bar as the page scrolls; the type, neighborhood and by-day pages have
-the same strip over their kind sections. Both are in the sitemap, and each program page
+its `types`, A to Z inside; `typeSections()` in `build.mjs`, which the weekend, day-camp and summer lists use too),
+with the hero naming each section as a colored pill and a strip under the menu bar (`pageNav(jumpNav())`) that
+jumps between the sections and stays under the slim search bar as the page scrolls; the type, neighborhood and
+by-day pages have the same strip over their kind sections.
+
+**What stays under the menu bar.** Anything that switches between views of a page is sticky, so it is the page's
+navigation wherever you are on it: `.pagenav` holds a list page's jump links and, on the day-camps page, the
+Programs · The days switch above them (the jump links are the visible view's, refreshed on a switch); a planner's
+heading row with its view switch (`.year-view-head`: the week builder's The week · Budget planning · Make it a
+card, the summer and days-off planners' List · Calendar · Who's open, the calendar's views) sticks the same way.
+The slim search bar on a list pushes the strip down by its own height while it shows. Both are in the sitemap, and each program page
 carries structured data (name, address, phone, and the star rating once there are reviews) for search engines.
 Nothing extra to maintain: add or edit a program in `data/programs.json` and its page follows.
 
