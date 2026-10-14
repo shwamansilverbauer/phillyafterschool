@@ -656,20 +656,21 @@ button.btn{cursor:pointer;font-family:inherit}
   .js .nav{display:none}
   .js .nav.open{display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:2px;position:absolute;left:12px;right:12px;top:calc(100% - 4px);z-index:50;background:#FFFFFF;border-radius:16px;padding:12px;box-shadow:0 16px 40px rgba(7,21,39,.34);max-height:calc(100vh - 96px);overflow:auto}
   .js .nav.open .menu{position:static}
-  .js .nav.open .menu summary{color:#4D607A;font-size:.86rem;font-weight:700;border:0;padding:10px 12px 2px;cursor:default}
-  .js .nav.open .menu summary::after{display:none}
-  .js .nav.open .menu ul,.js .nav.open .menu:last-of-type ul{position:static;box-shadow:none;padding:0;min-width:0;background:none}
-  .js .nav.open > a{display:block;color:#0B2140;font-weight:700;border:0;padding:10px 12px;border-radius:9px}
+  .js .nav.open .menu summary{display:flex;align-items:center;justify-content:space-between;color:#0B2140;font-family:var(--display);font-stretch:112%;font-size:1.2rem;font-weight:800;border:0;border-bottom:1px solid var(--line);padding:13px 12px;border-radius:0;cursor:pointer}
+  .js .nav.open .menu summary::after{display:block;width:9px;height:9px;margin-right:4px;transform:translateY(-2px) rotate(45deg)}
+  .js .nav.open .menu[open] summary::after{transform:translateY(2px) rotate(225deg)}
+  .js .nav.open .menu.here summary{color:var(--link)}
+  .js .nav.open .menu:last-of-type summary{border-bottom:0}
+  .js .nav.open .menu ul,.js .nav.open .menu:last-of-type ul{position:static;box-shadow:none;padding:4px 0 10px 10px;min-width:0;background:none;border-bottom:1px solid var(--line)}
+  .js .nav.open > a{display:block;color:#0B2140;font-family:var(--display);font-stretch:112%;font-size:1.2rem;font-weight:800;border:0;border-bottom:1px solid var(--line);padding:13px 12px;border-radius:0}
   .js .nav.open > a:hover{background:#DAEDFE}
-  .js .nav.open > a.nav-cta{background:var(--yellow);color:var(--yellow-ink);text-align:center;border-radius:999px;margin-top:8px}
+  .js .nav.open > a.nav-cta{background:var(--yellow);color:var(--yellow-ink);text-align:center;border-radius:999px;margin-top:12px;border-bottom:0;font-size:1.05rem;font-family:inherit;font-stretch:normal;font-weight:700}
   /* without scripts the groups simply wrap under the logo */
   .menu{position:static}
   .menu ul,.menu:last-of-type ul{left:12px;right:12px;top:calc(100% - 6px);min-width:0}
 }
 @media (max-width:1099px){
-  .js .nav.open .menu ul a{padding:8px 12px}
-  .js .nav.open > a{padding:8px 12px}
-  .js .nav.open .menu summary{padding-top:8px}
+  .js .nav.open .menu ul a{padding:9px 12px;font-size:1rem}
 }
 
 /* ---------- the day-camp schedule: picks as ticket stubs, and its own card ---------- */
