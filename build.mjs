@@ -2901,7 +2901,7 @@ function dayOffPage(d) {
   ${one ? '' : `<dt>Days it has posted</dt><dd>${esc(mine.map(shortDate).join(', '))}${mine.length < d.dates.length ? `, ${mine.length} of the ${d.dates.length} weekdays` : ', every weekday of the break'}.</dd>`}
   ${programAddress(p) ? `<dt>Where</dt><dd>${esc(programAddress(p))}</dd>` : ''}
   ${served.length ? `<dt>On school days</dt><dd>${esc(servedSummary(p))}.</dd>` : ''}</dl>
-  <div class="actions"><a class="btn primary" data-track="camp" href="${esc(outUrl(p.daysOff.url, { type: 'camp', program: p }))}" target="_blank" rel="noopener">Camp details</a><a class="btn" href="${link(programPath(p), D)}">Full listing</a></div>
+  <div class="actions"><a class="btn primary needs-js" href="${link(offPath, D)}?add=${esc(p.id)}#d-${mine.sort()[0] || d.dates[0]}">${one ? T(`Add it to your plan for {day}`, { day: shortDate(d.date) }) : T(`Add it to your plan for the break`)}</a><a class="btn" href="${link(programPath(p), D)}">Full listing</a><a class="btn" data-track="camp" href="${esc(outUrl(p.daysOff.url, { type: 'camp', program: p }))}" target="_blank" rel="noopener">Camp details</a></div>
   <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks(p.daysOff.sources, p)}</p>
 </article>`;
   }).join('\n');

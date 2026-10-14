@@ -864,7 +864,11 @@ of `roll`, `again` or `undo`).
   (table `daysoffs`): the school year, and for each child a first name and the pick for each day. `keepPlan()` in
   `groups.js` runs this box and the summer one from the same code; the server actions are `daysoff_save` and
   `daysoff_delete`, and `profile` returns it as `daysoff`. It is never shared and no other action reads it.
-- An email's "See who's open" button links to `days-off/#d-2026-11-03`, which opens that day's choices.
+- An email's "See who's open" button links to `days-off/#d-2026-11-03`, which opens that day's choices. A day-off
+  page's "Add it to your plan for Nov 3" links to `days-off/?add=<program>#d-2026-11-03`: signed in, the planner
+  puts that program on that day for the child in view at once (method `day_page`), tidies the address so a reload
+  doesn't repeat it, and the day's row then offers the rest of the break as usual; signed out, the ask keeps the
+  request (`pas-want`) and the add happens when they come back from the sign-up.
 - Each pick fires `pas_dayoff_pick` (program_id, day, method). Other actions fire `pas_dayoff` with an `action`
   (copy_sibling, fill_break, sibling_add, copy, share, print, clear, profile_keep, profile_put, profile_stop); saving,
   sharing or printing a picture and saving the calendar file fire `pas_board_share` with board `day_camp`.
@@ -1660,8 +1664,9 @@ nothing about admin: those are the person's own. The username and password in `e
 Four things, all built by `build.mjs` unless it says otherwise.
 
 - **A page for each day off still ahead** (`dayOffPage()`), at `/days-off/<name>-<date>/`, such as
-  `/days-off/election-day-2026-11-03/`. It lists the camps whose own sites name that day, then the programs that
-  run days-off camps but haven't posted this one, and links to the day before and after. The title is what a
+  `/days-off/election-day-2026-11-03/`. It lists the camps whose own sites name that day (each card: "Add it to
+  your plan for Nov 3" first, then "Full listing", then the camp's own page, so the way onward stays on the site),
+  then the programs that run days-off camps but haven't posted this one, and links to the day before and after. The title is what a
   parent would type ("Election Day 2026: day camps in Philadelphia"). A day with no camp posted yet is built but
   marked `noindex` and left out of the sitemap, so search engines aren't handed an empty page; it joins the
   sitemap by itself the first night a camp is posted for it. The days list on `/days-off/` and the next-day-off

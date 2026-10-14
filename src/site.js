@@ -2193,9 +2193,18 @@
       save: function () { store('pas-rosters', JSON.stringify(r)); },
       redraw: function () { openDay = ''; draw(); }
     };
-    // An email's "See who's open" button names the day: open it.
+    // An email's "See who's open" button names the day: open it. A day-off page's "Add it to your plan for …" names
+    // the day and the program (?add=): that program goes on that day for the child in view, and the address is
+    // tidied so a reload doesn't add it again.
     var asked = /^#d-(\d{4}-\d{2}-\d{2})$/.exec(location.hash || '');
     if (asked && byDate[asked[1]]) openDay = asked[1];
+    var qAdd = query().add;
+    if (asked && byDate[asked[1]] && qAdd && od.programs[qAdd] && mayPlan()) {   // signed out, the ask keeps the request for after the sign-up
+      var dAsk = byDate[asked[1]];
+      try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* file preview */ }
+      if (pickOf(kid(), dAsk) === qAdd) say(label(qAdd) + ' is already on ' + dAsk.label + '.');
+      else { openDay = ''; set(dAsk, qAdd, 'day_page'); }
+    }
     draw();
     if (openDay) window.setTimeout(function () { var row = document.getElementById('d-' + openDay); if (row && row.scrollIntoView) row.scrollIntoView({ block: 'start' }); }, 0);
     if (!storageOk) say('This browser is blocking saved data, so your plan won’t be here when you come back. Copy or print it before you leave.');
