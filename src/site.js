@@ -1118,6 +1118,25 @@
   // Support button
   var give = document.querySelector('a[data-track="support"]');
   if (give) give.addEventListener('click', function () { track({ event: 'pas_support_click' }); });
+  // Back from paying on Stripe (?thanks=1&session_id=cs_…, set on the Payment Link): a thank-you at the top of the
+  // page, one pas_support_thanks per checkout id for the counts, and the address tidied. Nothing about the amount
+  // or the person is in the address, and a made-up id shows the thanks but is not counted.
+  var thanksBox = document.getElementById('support-thanks');
+  if (thanksBox) (function () {
+    var q = query(); if (!q.thanks) return;
+    var sess = /^cs_(test|live)_[A-Za-z0-9]{8,200}$/.test(q.session_id || '') ? q.session_id : '';
+    thanksBox.hidden = false;
+    try { history.replaceState(null, '', location.pathname); } catch (e) { /* file preview */ }
+    if (sess) {
+      var seen = []; try { seen = JSON.parse(window.localStorage.getItem('pas-paid-seen') || '[]') || []; } catch (e) { seen = []; }
+      if (seen.indexOf(sess) < 0) {
+        try { window.localStorage.setItem('pas-paid-seen', JSON.stringify(seen.concat(sess).slice(-12))); } catch (e) { /* private window */ }
+        track({ event: 'pas_support_thanks', pas_test: /^cs_test_/.test(sess) });
+      }
+    }
+    if (thanksBox.scrollIntoView) thanksBox.scrollIntoView({ block: 'center' });
+    var h = thanksBox.querySelector('h3'); if (h) { h.setAttribute('tabindex', '-1'); try { h.focus({ preventScroll: true }); } catch (e) { /* older browsers */ } }
+  })();
 
   // Registration dates that have passed since the site was last built are hidden.
   var d = new Date();

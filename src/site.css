@@ -2132,3 +2132,7 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .sure-q{font-weight:700}
 .sure .btn.sure-yes{background:var(--red);border-color:var(--red);color:#FFFFFF}
 .sure .btn.sure-yes:hover{filter:brightness(.92)}
+
+.support-thanks{border:2px solid var(--green-ink);background:var(--green-bg)}
+.support-thanks[hidden]{display:none}
+.support-thanks h3:focus{outline:none}

@@ -2474,6 +2474,10 @@ function supportPage() {
   const hero = `    <h1>${T(`Help the site keep going`)}</h1>
     <p class="lede">${T(`{site} is free for families, and it will stay that way. It isn’t free to run. If it saved you an evening of open tabs, you can chip in toward what it costs to keep it going and growing.`, { site: cfg.siteName })}</p>`;
   const body = `<div class="prose">
+  <div class="panel support-thanks" id="support-thanks" data-edit-reveal="Shown when someone comes back from paying:" hidden>
+    <h3>${T(`Thank you`)}</h3>
+    <p>${T(`Your contribution went through, and a receipt is on its way to the email you gave. It goes straight to keeping the site running. Thank you for helping it keep going.`)}</p>
+  </div>
   ${give}
   <ul>
     <li>${T(`It goes toward what the site costs to run: web hosting, the service that sends sign-in codes and date reminders, and the hours spent checking listings and adding schools.`)}</li>

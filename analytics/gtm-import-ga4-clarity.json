@@ -2620,6 +2620,36 @@
         "tagFiringOption": "ONCE_PER_EVENT",
         "parentFolderId": "1",
         "notes": "A premium plan paid for, read from the ecommerce object the page pushes when Stripe sends the manager back. Skipped when the checkout was Stripe test mode (pas_test)."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "43",
+        "name": "GA4 - Event - pas_support_thanks",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_support_thanks"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          }
+        ],
+        "firingTriggerId": [
+          "41"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "Someone back on the Support page from paying a contribution on Stripe, once per checkout. The amount is not known to the page. Skipped for a Stripe test-mode checkout (pas_test)."
       }
     ],
     "trigger": [
@@ -3614,6 +3644,53 @@
                 "type": "TEMPLATE",
                 "key": "arg1",
                 "value": "purchase"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{DLV - pas_test}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "true"
+              },
+              {
+                "type": "BOOLEAN",
+                "key": "negate",
+                "value": "true"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "41",
+        "name": "CE - pas_support_thanks",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_support_thanks"
               }
             ]
           }
