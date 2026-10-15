@@ -2127,3 +2127,8 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .year-view-head{position:sticky;top:var(--bar-h,64px);z-index:29;background:var(--surface);padding:8px 0;margin-block:-8px}
 .board-view-head{background:var(--bg);box-shadow:0 1px 0 var(--line)}
 @media (max-width:640px){.year-view-head{padding:6px 0}}
+/* "Remove this child?" asked in place: the question, a real Remove button and Keep, where the link was */
+.sure{display:inline-flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 14px;border:1.5px solid var(--red);border-radius:14px;background:var(--surface)}
+.sure-q{font-weight:700}
+.sure .btn.sure-yes{background:var(--red);border-color:var(--red);color:#FFFFFF}
+.sure .btn.sure-yes:hover{filter:brightness(.92)}

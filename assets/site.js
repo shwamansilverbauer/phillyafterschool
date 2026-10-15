@@ -26,6 +26,21 @@
     return e;
   }
   function all(root, sel) { return [].slice.call(root.querySelectorAll(sel)); }
+  // Taking a child off a planner asks first, in place: the button gives way to the question and two real buttons,
+  // which stay until one is pressed (a redraw of the page does not take them away). A button whose label turned
+  // into "tap again" was too easy to read as a notice and walk away from. Returns a function that closes the ask.
+  function askSure(btn, question, yesLabel, onYes, onClose) {
+    var box = el('span', 'sure'); box.setAttribute('role', 'group');
+    box.appendChild(el('span', 'sure-q', question));
+    var yes = el('button', 'btn sure-yes', yesLabel), no = el('button', 'clear', 'Keep'); yes.type = 'button'; no.type = 'button';
+    var done = function () { if (box.parentNode) box.parentNode.removeChild(box); btn.hidden = false; if (onClose) onClose(); };
+    yes.addEventListener('click', function () { done(); onYes(); });
+    no.addEventListener('click', function () { done(); try { btn.focus(); } catch (e) { /* fine */ } });
+    box.appendChild(yes); box.appendChild(no);
+    btn.hidden = true; btn.parentNode.insertBefore(box, btn.nextSibling);
+    try { yes.focus(); } catch (e) { /* fine */ }
+    return done;
+  }
 
   // ----- the planners need a free account, when the page says so (data-gate on <html>; build.mjs decides). Signed
   // out, each planner page shows an ask where the planner would be. A link that meant to add something ("Add to
@@ -1658,6 +1673,7 @@
     var daysEl = $o('#off-days'), stripEl = $o('#off-strip'), countEl = $o('#off-count'), openEl = $o('#off-open');
     var toolsEl = $o('#off-tools'), statusEl = $o('#off-status'), nameBox = $o('#off-name');
     var kidsRow = $o('#off-kids'), kidAdd = $o('#off-kid-add'), kidDrop = $o('#off-kid-drop');
+    var dropSure = null, dropSureFor = -1;   // the open "remove this child?" ask, if any
     var chart = document.querySelector('.off-chart'), chartNote = document.getElementById('off-chart-note');
     var HOME = 'home';
     var ids = Object.keys(od.programs).sort(function (a, b) { return od.programs[a].name.localeCompare(od.programs[b].name); });
@@ -1779,7 +1795,8 @@
       });
       kidAdd.hidden = r.kids.length >= MAX_KIDS;
       var bare = !countPicks(me.now) && !countPicks(me.next) && !(me.sum && Object.keys(me.sum.w || {}).length) && !(me.groups || []).length && !me.prof;
-      kidDrop.hidden = !many || !bare;   // a child with an after-school roster is removed on the roster page, where share groups are told
+      if (dropSure && (dropSureFor !== r.kid || !many || !bare)) dropSure();   // the question was about another child
+      kidDrop.hidden = !many || !bare || !!dropSure;   // a child with an after-school roster is removed on the roster page, where share groups are told
       if (document.activeElement !== nameBox) nameBox.value = me.name || '';
       daysEl.textContent = ''; stripEl.textContent = '';
       // a sibling's days, to start from
@@ -1921,12 +1938,13 @@
       ev('sibling_add'); say('Added. Type a first name if you’d like it on the calendar.'); draw();
       if (nameBox.focus) nameBox.focus();
     });
-    var dropSure = false;
     kidDrop.addEventListener('click', function () {
-      if (r.kids.length < 2) return;
-      if (!dropSure) { dropSure = true; kidDrop.textContent = 'Remove ' + kidLabel(kid(), r.kid) + ' and their days off? Tap again'; window.setTimeout(function () { dropSure = false; kidDrop.textContent = 'Remove this child'; }, 5000); return; }
-      dropSure = false; kidDrop.textContent = 'Remove this child';
-      r.kids.splice(r.kid, 1); r.kid = Math.max(0, r.kid - 1); saveRosters(); openDay = ''; say('Removed.'); draw();
+      if (r.kids.length < 2 || dropSure) return;
+      dropSureFor = r.kid;
+      dropSure = askSure(kidDrop, 'Remove ' + kidLabel(kid(), r.kid) + ' and their days off?', 'Yes, remove', function () {
+        if (r.kids.length < 2) return;
+        r.kids.splice(r.kid, 1); r.kid = Math.max(0, r.kid - 1); saveRosters(); openDay = ''; say('Removed.'); draw();
+      }, function () { dropSure = null; dropSureFor = -1; });
     });
     // ----- the plan as text, and as a calendar file -----
     var asText = function () {
@@ -2379,9 +2397,9 @@
         kidTabs.appendChild(chip);
       });
       kidAdd.hidden = r.kids.length >= MAX_KIDS;
-      kidRemove.hidden = r.kids.length < 2;
+      if (kidSure && (kidSureFor !== r.kid || r.kids.length < 2)) kidSure();   // the question was about another child
+      kidRemove.hidden = r.kids.length < 2 || !!kidSure;
       kidRemove.textContent = 'Remove ' + (kid.name ? possessive(kid.name) + ' rosters' : 'this child');
-      kidRemove.removeAttribute('data-armed');
       title.textContent = (kid.name ? possessive(kid.name) : 'Your') + (which === 'next' ? ' upcoming week' : ' current week');
       emptyText.textContent = which === 'next'
         ? 'Search for a program above and pick its days. Or open a school’s page and choose “Add to roster” on any program.'
@@ -2514,17 +2532,18 @@
       saveRosters(); say('New roster added. Give it a name, then search for programs to add.'); render();
       nameInput.value = ''; nameInput.focus();
     });
+    var kidSure = null, kidSureFor = -1;
     kidRemove.addEventListener('click', function () {
-      if (!kidRemove.getAttribute('data-armed')) {   // two taps, because it deletes both of that child's rosters
-        kidRemove.setAttribute('data-armed', '1');
-        kidRemove.textContent = 'Tap again to remove both of their rosters';
-        return;
-      }
-      var r = loadRosters();
-      if (r.kids.length < 2) return;
-      if (window.pasBoard && window.pasBoard.onKidGone) window.pasBoard.onKidGone(r.kids[r.kid]);   // take their week out of any share group too
-      r.kids.splice(r.kid, 1); r.kid = Math.max(0, r.kid - 1);
-      saveRosters(); say('Removed.'); render();
+      var r0 = loadRosters(), k0 = r0.kids[r0.kid];
+      if (r0.kids.length < 2 || kidSure) return;
+      kidSureFor = r0.kid;
+      kidSure = askSure(kidRemove, 'Remove ' + kidLabel(k0, r0.kid) + ' and both of their rosters?', 'Yes, remove', function () {
+        var r = loadRosters();
+        if (r.kids.length < 2) return;
+        if (window.pasBoard && window.pasBoard.onKidGone) window.pasBoard.onKidGone(r.kids[r.kid]);   // take their week out of any share group too
+        r.kids.splice(r.kid, 1); r.kid = Math.max(0, r.kid - 1);
+        saveRosters(); say('Removed.'); render();
+      }, function () { kidSure = null; kidSureFor = -1; });
     });
     var cardNext = $('#card-next');
     var track_share = function (method) {
@@ -3222,6 +3241,7 @@
     var weeksEl = $s('#sum-weeks'), stripEl = $s('#sum-strip'), countEl = $s('#sum-count'), costEl = $s('#sum-cost');
     var toolsEl = $s('#sum-tools'), statusEl = $s('#sum-status'), ageBox = $s('#sum-age'), nameBox = $s('#sum-name');
     var kidsRow = $s('#sum-kids'), kidAdd = $s('#sum-kid-add'), kidDrop = $s('#sum-kid-drop');
+    var dropSure = null, dropSureFor = -1;   // the open "remove this child?" ask, if any
     var chart = document.querySelector('.sum-chart'), chartNote = document.getElementById('sum-chart-note');
     var ids = Object.keys(sd.camps).sort(function (a, b) { return sd.camps[a].n.localeCompare(sd.camps[b].n); });
     var r = loadRosters();
@@ -3329,7 +3349,8 @@
       });
       kidAdd.hidden = r.kids.length >= MAX_KIDS;
       var bare = !countPicks(me.now) && !countPicks(me.next) && !Object.keys(me.off || {}).length && !(me.groups || []).length && !me.prof;
-      kidDrop.hidden = !many || !bare;   // a child with an after-school roster is removed on the roster page, where share groups are told
+      if (dropSure && (dropSureFor !== r.kid || !many || !bare)) dropSure();   // the question was about another child
+      kidDrop.hidden = !many || !bare || !!dropSure;   // a child with an after-school roster is removed on the roster page, where share groups are told
       if (document.activeElement !== nameBox) nameBox.value = me.name || '';
       ageBox.value = plan().age || '';
       weeksEl.textContent = ''; stripEl.textContent = '';
@@ -3461,12 +3482,13 @@
       ev('sibling_add'); say('Added. Type a first name if you’d like it on the calendar.'); draw();
       if (nameBox.focus) nameBox.focus();
     });
-    var dropSure = false;
     kidDrop.addEventListener('click', function () {
-      if (r.kids.length < 2) return;
-      if (!dropSure) { dropSure = true; kidDrop.textContent = 'Remove ' + kidLabel(kid(), r.kid) + ' and their summer? Tap again'; window.setTimeout(function () { dropSure = false; kidDrop.textContent = 'Remove this child'; }, 5000); return; }
-      dropSure = false; kidDrop.textContent = 'Remove this child';
-      r.kids.splice(r.kid, 1); r.kid = Math.max(0, r.kid - 1); saveRosters(); openWeek = -1; say('Removed.'); draw();
+      if (r.kids.length < 2 || dropSure) return;
+      dropSureFor = r.kid;
+      dropSure = askSure(kidDrop, 'Remove ' + kidLabel(kid(), r.kid) + ' and their summer?', 'Yes, remove', function () {
+        if (r.kids.length < 2) return;
+        r.kids.splice(r.kid, 1); r.kid = Math.max(0, r.kid - 1); saveRosters(); openWeek = -1; say('Removed.'); draw();
+      }, function () { dropSure = null; dropSureFor = -1; });
     });
     ageBox.addEventListener('change', function () { plan().age = ageBox.value; saveRosters(); openWeek = -1; draw(); ev('age'); });
     // ----- the plan as text, and as a calendar file -----
