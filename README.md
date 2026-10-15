@@ -939,7 +939,11 @@ level M with no border, and save each row as a string of 1s and 0s).
 `/board/` ("Build your week" in the menu) lets a signed-in parent collect programs by weekday with "Add to roster"
 on any card. Each child has two rosters, Current and Upcoming, so a family can share what they do now and
 plan the next term. A family with more than one child adds a roster per child (up to six) and picks whose
-roster a program goes on. Rosters are stored in the visitor's own browser. Nothing about them reaches the
+roster a program goes on. "Remove this child" asks first, in place (`askSure()` in `site.js`): the link gives way
+to "Remove Rae and both of their rosters?" with a real "Yes, remove" button and "Keep", and the question stays
+through a redraw until one is pressed. (It used to turn the link's text into "Tap again…", which a parent on a
+phone read as a notice and walked away from.) The days-off and summer planners ask the same way, and a child
+removed anywhere has their profile week deleted too. Rosters are stored in the visitor's own browser. Nothing about them reaches the
 server unless a signed-in parent keeps a week in their profile or shares it (see "Accounts, profiles and
 sharing"). A week can no longer be shared as a link.
 Each pick is drawn as a card in its program type's color. The page is four views of the same week, switched
