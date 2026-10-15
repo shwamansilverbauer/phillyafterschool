@@ -2454,7 +2454,7 @@ ${GROUPS.photos || GROUPS.premium !== 'off' ? `    <li>${T(`A photo you send for
     <li>${T(`Like every website, our host keeps standard server logs, which include IP addresses.`)}</li>
   </ul>
   <h2 id="elsewhere" data-jump-to="Other sites">${T(`Links to other sites`)}</h2>
-  <p>${T(`Program websites, registration pages, calendars and Venmo are run by other organizations and have their own privacy practices.`)}</p>
+  <p>${T(`Program websites, registration pages, calendars and Stripe’s checkout pages are run by other organizations and have their own privacy practices.`)}</p>
   <p>${T(`Links to a program’s own site carry a short tag saying the visit came from {site}, and from which school’s page. The tag says nothing about you.`, { site: cfg.siteName })}</p>
   <h2 id="children" data-jump-to="Children">${T(`Children`)}</h2>
   <p>${T(`This site is written for parents and caregivers. It is not meant to be used by children, and we do not knowingly collect information from them.`)}</p>
@@ -2468,20 +2468,21 @@ ${GROUPS.photos || GROUPS.premium !== 'off' ? `    <li>${T(`A photo you send for
 function supportPage() {
   const who = cfg.builtBy ? cfg.builtBy.name.split(' ')[0] : '';
   const give = cfg.supportUrl
-    ? `<p class="actions"><a class="btn primary big" data-track="support" href="${esc(cfg.supportUrl)}" target="_blank" rel="noopener">${esc(cfg.supportLabel || 'Chip in')}</a></p>
-  ${cfg.supportHandle ? `<p class="hint">Or search for <b>${esc(cfg.supportHandle)}</b> in the Venmo app.</p>` : ''}`
+    ? `<p class="actions"><a class="btn primary big" data-track="support" href="${esc(cfg.supportUrl)}" target="_blank" rel="noopener">${esc(cfg.supportLabel || 'Chip in')}</a>${cfg.supportMonthlyUrl ? `<a class="btn big" data-track="support" data-support="monthly" href="${esc(cfg.supportMonthlyUrl)}" target="_blank" rel="noopener">${esc(cfg.supportMonthlyLabel || 'Chip in monthly')}</a>` : ''}</p>
+  <p class="hint">${T(`Any amount. It opens a Stripe checkout page, which takes cards, Apple Pay and Google Pay, and sends you a receipt.`)}</p>`
     : `<div class="panel"><h3>${T(`The link for chipping in is being set up`)}</h3><p>${T(`Check back soon.`)}</p></div>`;
   const hero = `    <h1>${T(`Help the site keep going`)}</h1>
     <p class="lede">${T(`{site} is free for families, and it will stay that way. It isn’t free to run. If it saved you an evening of open tabs, you can chip in toward what it costs to keep it going and growing.`, { site: cfg.siteName })}</p>`;
   const body = `<div class="prose">
   <div class="panel support-thanks" id="support-thanks" data-edit-reveal="Shown when someone comes back from paying:" hidden>
     <h3>${T(`Thank you`)}</h3>
-    <p>${T(`Your contribution went through, and a receipt is on its way to the email you gave. It goes straight to keeping the site running. Thank you for helping it keep going.`)}</p>
+    <p data-thanks="1">${T(`Your contribution went through, and a receipt is on its way to the email you gave. It goes straight to keeping the site running. Thank you for helping it keep going.`)}</p>
+    <p data-thanks="2" hidden>${T(`Your monthly contribution is set up, and a receipt is on its way to the email you gave; one comes each month it goes through. It goes straight to keeping the site running. To change or stop it, email {email} any time. Thank you for helping it keep going.`, { email: cfg.contactEmail || '' })}</p>
   </div>
   ${give}
   <ul>
     <li>${T(`It goes toward what the site costs to run: web hosting, the service that sends sign-in codes and date reminders, and the hours spent checking listings and adding schools.`)}</li>
-    ${who && cfg.supportUrl ? `<li>${T(`For now it goes by Venmo to {name}, who built the site and pays its bills.`, { name: who })}</li>` : ''}
+    ${cfg.supportUrl ? `<li>${T(`It goes through Stripe to {operator}, the small company the Silverbauers set up to run the site and pay its bills.`, { operator: cfg.termsOperator || 'the site' })}</li>` : ''}
     <li>${T(`It’s a contribution to a small family-run project, not a charitable donation, so it isn’t tax-deductible.`)}</li>
     <li>${T(`It buys nothing on the site. Listings are free for every provider, and nobody pays to be listed or to be listed higher.`)}</li>
     <li>${T(`Can’t chip in? A correction or a missing program helps just as much.`)} <a href="${link('suggest/', 1)}">${T(`Send one here.`)}</a></li>

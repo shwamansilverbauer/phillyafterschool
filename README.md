@@ -25,8 +25,7 @@ programs with a grade filter. Everything is generated from two data files.
 Fill in `site.config.json`:
 
 - `contactEmail`: where corrections go. Until it's set, the site says a contact address is coming.
-- `supportUrl`: where the Support button goes (currently a Venmo profile; a Stripe Payment Link next). If it's empty, the Support page says contributions are being set up. Coming back from Stripe: set the Payment Link's "after payment" redirect to `https://phillyafterschool.org/support/?thanks=1&session_id={CHECKOUT_SESSION_ID}` and the page shows a thank-you panel (`#support-thanks`), counts the checkout once (`pas_support_thanks`, same `pas-paid-seen` list the premium page uses) and takes the query off the address.
-- `supportLabel` and `supportHandle`: the button text on the "Help the site keep going" page (`/support/`), and the handle shown under it for people who'd rather search in the app.
+- `supportUrl` and `supportMonthlyUrl`: the two Stripe Payment Links on the Support page (pay what you want once; a monthly amount), with `supportLabel` and `supportMonthlyLabel` as the button text. Only the public `buy.stripe.com` addresses go here, never a key. If `supportUrl` is empty, the Support page says contributions are being set up. Coming back from Stripe: each link's "after payment" redirect is `https://phillyafterschool.org/support/?thanks=1&session_id={CHECKOUT_SESSION_ID}` (the one-time link) or `?thanks=2&…` (the monthly link); the page shows the matching thank-you (`#support-thanks`), counts the checkout once (`pas_support_thanks` with `plan` once or month, the same `pas-paid-seen` list the premium page uses) and takes the query off the address.
 - `siteUrl`: the domain you treat as the main one. Redirect the other domain to it at your host.
 - `builtBy`: the name, link and short bio shown in the footer, on the home page and on About.
 - `writtenBy`: optional. A name for a "Written by" line under "Built by" in the footer. It carries no link.
@@ -1717,8 +1716,8 @@ Set `gtmId` to load Google Tag Manager on every page. Every page view and event 
   `pas_dayoff` instead, as `action: view_list`, `view_cal`, `view_chart` or `view_card`.) `pas_menu_group` (group, open)
   is a section of the phone menu opened or closed. `pas_offbar` (action, day) is the next-day-off bar closed.
 - **Leaving the site.** `pas_outbound` (link_type, program_id, school): link_type is `register`, `website`, `calendar`,
-  `review` or `camp`; school is empty on a program's own page. `pas_support_click` (the Support page's button), and
-  `pas_support_thanks` once per checkout when someone comes back from paying a contribution on Stripe
+  `review` or `camp`; school is empty on a program's own page. `pas_support_click` (plan: once or month, which of the
+  Support page's two buttons), and `pas_support_thanks` (plan) once per checkout when someone comes back from paying a contribution on Stripe
   (`/support/?thanks=1&session_id={CHECKOUT_SESSION_ID}` on the Payment Link; `pas_test` marks a test-mode checkout
   and the tag skips it). The amount never reaches the page or analytics.
 - **Planning.** `pas_board_add` (program_id, school, day, method, board, children) and `pas_board_share` (method,

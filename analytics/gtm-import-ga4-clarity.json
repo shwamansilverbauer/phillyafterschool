@@ -684,6 +684,27 @@
             "type": "TEMPLATE",
             "key": "measurementIdOverride",
             "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "plan"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - plan}}"
+                  }
+                ]
+              }
+            ]
           }
         ],
         "firingTriggerId": [
@@ -2642,6 +2663,27 @@
             "type": "TEMPLATE",
             "key": "measurementIdOverride",
             "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "plan"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - plan}}"
+                  }
+                ]
+              }
+            ]
           }
         ],
         "firingTriggerId": [

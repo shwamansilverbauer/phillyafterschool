@@ -7,9 +7,10 @@
   "schoolYear": "2026–27",
   "contactEmail": "contact@phillyafterschool.org",
   "admins": ["contact@phillyafterschool.org", "contact@schoolsoutwhatnow.com"],
-  "supportUrl": "https://venmo.com/u/shwamanjosh",
-  "supportLabel": "Chip in on Venmo",
-  "supportHandle": "@shwamanjosh",
+  "supportUrl": "https://buy.stripe.com/3cI14o5Y2g2C1eedJ09R603",
+  "supportLabel": "Chip in once",
+  "supportMonthlyUrl": "https://buy.stripe.com/5kQ5kEeuydUucWW34m9R604",
+  "supportMonthlyLabel": "Chip in monthly",
   "supportTaxDeductible": false,
   "gtmId": "GTM-MKNWQ3BC",
   "builtBy": {

@@ -1116,8 +1116,7 @@
   });
 
   // Support button
-  var give = document.querySelector('a[data-track="support"]');
-  if (give) give.addEventListener('click', function () { track({ event: 'pas_support_click' }); });
+  all(document, 'a[data-track="support"]').forEach(function (give) { give.addEventListener('click', function () { track({ event: 'pas_support_click', plan: give.getAttribute('data-support') === 'monthly' ? 'month' : 'once' }); }); });
   // Back from paying on Stripe (?thanks=1&session_id=cs_…, set on the Payment Link): a thank-you at the top of the
   // page, one pas_support_thanks per checkout id for the counts, and the address tidied. Nothing about the amount
   // or the person is in the address, and a made-up id shows the thanks but is not counted.
@@ -1125,13 +1124,15 @@
   if (thanksBox) (function () {
     var q = query(); if (!q.thanks) return;
     var sess = /^cs_(test|live)_[A-Za-z0-9]{8,200}$/.test(q.session_id || '') ? q.session_id : '';
+    var plan = q.thanks === '2' ? 'month' : 'once';   // thanks=2 is the monthly link's return address
+    all(thanksBox, '[data-thanks]').forEach(function (p) { p.hidden = p.getAttribute('data-thanks') !== (plan === 'month' ? '2' : '1'); });
     thanksBox.hidden = false;
     try { history.replaceState(null, '', location.pathname); } catch (e) { /* file preview */ }
     if (sess) {
       var seen = []; try { seen = JSON.parse(window.localStorage.getItem('pas-paid-seen') || '[]') || []; } catch (e) { seen = []; }
       if (seen.indexOf(sess) < 0) {
         try { window.localStorage.setItem('pas-paid-seen', JSON.stringify(seen.concat(sess).slice(-12))); } catch (e) { /* private window */ }
-        track({ event: 'pas_support_thanks', pas_test: /^cs_test_/.test(sess) });
+        track({ event: 'pas_support_thanks', plan: plan, pas_test: /^cs_test_/.test(sess) });
       }
     }
     if (thanksBox.scrollIntoView) thanksBox.scrollIntoView({ block: 'center' });
