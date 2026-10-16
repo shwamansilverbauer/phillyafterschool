@@ -628,6 +628,7 @@
       "website": "https://www.flipoutproductions.com/summercamp",
       "signup": "Sign-ups for 2026 opened January 1.",
       "note": "Dates and prices weren’t readable when we checked, so ask the gym.",
+      "program": "flipout-productions",
       "sources": [
         {
           "label": "FlipOut Productions",
@@ -813,6 +814,7 @@
       "phone": "215-830-1940",
       "website": "https://www.phieldhouse.com/youth/summer-camp/",
       "price": "paid",
+      "program": "phield-house",
       "sources": [
         {
           "label": "C.E.O. Camp at Phield House",
@@ -852,6 +854,7 @@
       "website": "https://awbury.org/summer-camp/",
       "price": "paid",
       "signup": "Registration for summer 2027 opens February 1, 2027 at 9 am, and a week earlier for family members. The page gives the 2027 season as June 14 to August 20.",
+      "program": "awbury-arboretum",
       "sources": [
         {
           "label": "Awbury Adventures at Awbury Arboretum",
@@ -892,6 +895,7 @@
       "price": "paid",
       "signup": "Registration for 2027 wasn’t open yet when we checked.",
       "note": "The dates are for 2027, but the prices may still be last summer’s.",
+      "program": "schuylkill-center",
       "sources": [
         {
           "label": "Camp Schuylkill at the Schuylkill Center",
@@ -965,6 +969,7 @@
       "website": "https://phillycircus.com/camp/",
       "price": "paid",
       "note": "The week-by-week dates weren’t readable when we checked.",
+      "program": "philadelphia-school-of-circus-arts",
       "sources": [
         {
           "label": "Philadelphia School of Circus Arts",
@@ -1115,6 +1120,7 @@
       "website": "https://www.tpschool.org/tps-experience/camptps",
       "price": "paid",
       "note": "The price is a range across many camps; the low end may be a shorter or particular camp.",
+      "program": "the-philadelphia-school",
       "sources": [
         {
           "label": "Camp TPS at The Philadelphia School",
@@ -1267,6 +1273,7 @@
       "website": "https://www.nlarts.org/summer-art-camp",
       "price": "paid",
       "note": "Summer 2026 sold out and its waitlist closed. Session dates sit behind headings we didn’t open.",
+      "program": "nlarts",
       "sources": [
         {
           "label": "NLArts summer art camp",
