@@ -1,7 +1,7 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 135,
+    "pages": 157,
     "pagesNeedingABrowser": 4,
     "pagesNeedingAPerson": 2,
     "links": 117,
@@ -1235,6 +1235,14 @@
       "lists": []
     },
     {
+      "url": "https://app.iclasspro.com/portal/phillycircus/camps/12?sortBy=name",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-school-of-circus-arts"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://app.jackrabbitclass.com/regv2.asp?id=552627",
       "how": "fetch",
       "programs": [
@@ -1259,10 +1267,26 @@
       "lists": []
     },
     {
+      "url": "https://awbury.org/school-day-off-camps/",
+      "how": "fetch",
+      "programs": [
+        "awbury-arboretum"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://blue-chip-flag-south-philadelphia.sportngin.com/register/form/571361594",
       "how": "fetch",
       "programs": [
         "blue-chip-flag-south-philadelphia"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://bondsports.co/activity/programs/CO_ED-youth-OTHER/1321",
+      "how": "fetch",
+      "programs": [
+        "elite-sports-factory"
       ],
       "lists": []
     },
@@ -1315,6 +1339,14 @@
       "lists": []
     },
     {
+      "url": "https://campscui.active.com/orgs/PhieldHouse?orglink=camps-registration",
+      "how": "fetch",
+      "programs": [
+        "phield-house"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100573",
       "how": "fetch",
       "programs": [
@@ -1343,6 +1375,22 @@
       "how": "fetch",
       "programs": [
         "meredith-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://elitesportsfactory.com/childcare",
+      "how": "fetch",
+      "programs": [
+        "elite-sports-factory"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://elitesportsfactory.com/schools-out-camp",
+      "how": "fetch",
+      "programs": [
+        "elite-sports-factory"
       ],
       "lists": []
     },
@@ -1612,6 +1660,22 @@
       "lists": []
     },
     {
+      "url": "https://movementgyms.com/callowhill",
+      "how": "fetch",
+      "programs": [
+        "movement-callowhill"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://movementgyms.com/callowhill/climbing/youth-programs/camps/",
+      "how": "fetch",
+      "programs": [
+        "movement-callowhill"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://oldpinecommunitycenter.org/afterschool/",
       "how": "fetch",
       "programs": [
@@ -1783,6 +1847,14 @@
       "lists": []
     },
     {
+      "url": "https://phillycircus.com/kids-day-off-camp/",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-school-of-circus-arts"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://phillyfamily.com/after-school-programs/",
       "how": "fetch",
       "programs": [
@@ -1840,6 +1912,22 @@
       "lists": []
     },
     {
+      "url": "https://phillyyouthbasketball.leagueapps.com/classes/5096846-2026-27-sy-pyb-school-closure-holiday-clinics-grades-k-9",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-youth-basketball"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://portal.movementgyms.com/callowhill/programs/winter-break-camp",
+      "how": "fetch",
+      "programs": [
+        "movement-callowhill"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://reg137.imperisoft.com/Fleisher/Search/Registration.aspx",
       "how": "fetch",
       "programs": [
@@ -1852,6 +1940,22 @@
       "how": "fetch",
       "programs": [
         "zhang-sah"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://schuylkillcenter.org/day-off-camps/",
+      "how": "fetch",
+      "programs": [
+        "schuylkill-center"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://secure.lglforms.com/form_engine/s/hj6M5wuOpPinLZyA3e6dkQ",
+      "how": "fetch",
+      "programs": [
+        "awbury-arboretum"
       ],
       "lists": []
     },
@@ -2013,6 +2117,14 @@
       "lists": []
     },
     {
+      "url": "https://www.flipoutproductions.com/day-camp",
+      "how": "fetch",
+      "programs": [
+        "flipout-productions"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.flips4kidz.com/",
       "how": "fetch",
       "programs": [
@@ -2151,10 +2263,34 @@
       "lists": []
     },
     {
+      "url": "https://www.nlarts.org/purchase-day-camps",
+      "how": "fetch",
+      "programs": [
+        "nlarts"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.nlarts.org/schools-out-day-camp",
+      "how": "fetch",
+      "programs": [
+        "nlarts"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.pafa.org/education/center-art-education/youth-family/saturday-studio-art-classes",
       "how": "fetch",
       "programs": [
         "pafa-saturday-art"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phieldhouse.com/youth/vacation-day-camp/",
+      "how": "fetch",
+      "programs": [
+        "phield-house"
       ],
       "lists": []
     },
@@ -2263,6 +2399,14 @@
       "lists": []
     },
     {
+      "url": "https://www.phillyyouthbasketball.org/pybholidayclinics",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-youth-basketball"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.playartsphilly.com/day-camps",
       "how": "fetch",
       "programs": [
@@ -2291,6 +2435,14 @@
       "how": "fetch",
       "programs": [
         "sawubona-creativity-project"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.schuylkillcenter.org/education/day-off-camps/",
+      "how": "fetch",
+      "programs": [
+        "schuylkill-center"
       ],
       "lists": []
     },
@@ -2339,6 +2491,30 @@
       "how": "fetch",
       "programs": [
         "rock-school-for-dance"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.tpschool.org/tps-experience/camptps",
+      "how": "fetch",
+      "programs": [
+        "the-philadelphia-school"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.tpschool.org/tps-experience/camptps/spring-break-camp",
+      "how": "fetch",
+      "programs": [
+        "the-philadelphia-school"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.tpschool.org/tps-experience/camptps/winter-break-camp",
+      "how": "fetch",
+      "programs": [
+        "the-philadelphia-school"
       ],
       "lists": []
     },

@@ -64,6 +64,9 @@ RewriteCond %{QUERY_STRING} ^(.+)$
 RewriteRule ^summer-camps/macguffin-camps/?$ /programs/macguffin-theatre/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/macguffin-camps/?$ /programs/macguffin-theatre/#summer [NE,R=301,L]
 RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/flipout-camp/?$ /programs/flipout-productions/?%1#summer [NE,QSD,R=301,L]
+RewriteRule ^summer-camps/flipout-camp/?$ /programs/flipout-productions/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
 RewriteRule ^summer-camps/philadelphia-ballet-camps/?$ /programs/school-of-philadelphia-ballet/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/philadelphia-ballet-camps/?$ /programs/school-of-philadelphia-ballet/#summer [NE,R=301,L]
 RewriteCond %{QUERY_STRING} ^(.+)$
@@ -72,6 +75,24 @@ RewriteRule ^summer-camps/wissahickon-figure-skating/?$ /programs/wissahickon-sk
 RewriteCond %{QUERY_STRING} ^(.+)$
 RewriteRule ^summer-camps/philadelphia-dance-academy/?$ /programs/philadelphia-dance-academy/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/philadelphia-dance-academy/?$ /programs/philadelphia-dance-academy/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/ceo-camp-phield-house/?$ /programs/phield-house/?%1#summer [NE,QSD,R=301,L]
+RewriteRule ^summer-camps/ceo-camp-phield-house/?$ /programs/phield-house/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/awbury-adventures/?$ /programs/awbury-arboretum/?%1#summer [NE,QSD,R=301,L]
+RewriteRule ^summer-camps/awbury-adventures/?$ /programs/awbury-arboretum/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/camp-schuylkill/?$ /programs/schuylkill-center/?%1#summer [NE,QSD,R=301,L]
+RewriteRule ^summer-camps/camp-schuylkill/?$ /programs/schuylkill-center/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/circus-arts-camp/?$ /programs/philadelphia-school-of-circus-arts/?%1#summer [NE,QSD,R=301,L]
+RewriteRule ^summer-camps/circus-arts-camp/?$ /programs/philadelphia-school-of-circus-arts/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/camp-tps/?$ /programs/the-philadelphia-school/?%1#summer [NE,QSD,R=301,L]
+RewriteRule ^summer-camps/camp-tps/?$ /programs/the-philadelphia-school/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/nlarts-summer-camp/?$ /programs/nlarts/?%1#summer [NE,QSD,R=301,L]
+RewriteRule ^summer-camps/nlarts-summer-camp/?$ /programs/nlarts/#summer [NE,R=301,L]
 RewriteCond %{QUERY_STRING} ^(.+)$
 RewriteRule ^summer-camps/zazz-summer-camp/?$ /programs/zazz-dance/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/zazz-summer-camp/?$ /programs/zazz-dance/#summer [NE,R=301,L]
