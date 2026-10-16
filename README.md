@@ -320,7 +320,9 @@ and on the card when a parent has typed nothing of their own.
 
 A place found in a sweep for weekend classes, where nothing else about it has been read, carries
 `"scope": "weekend"`. Its page then says only its weekend classes have been read, instead of saying it has no
-weekday program. Take the field off once its weekday classes have been checked against the schools.
+weekday program. Take the field off once its weekday classes have been checked against the schools. The same
+goes for a place found for its day-off camps alone: `"scope": "dayoff"` makes the page say only its camps on
+days off have been read.
 
 **Weekends in Build your week.** The board has an "Add Saturday and Sunday" button under the weekdays. Weekend picks
 are kept beside the weekdays, not in them (`board.wk = { sat: [], sun: [] }`, each entry a program id, or

@@ -1467,7 +1467,7 @@ ${p.clubs.map(c => `      <article class="club">
   ${premiumSlot('p:' + p.id, fullName(p), D)}
   ${camp ? `<section class="section" id="schools" data-jump-to="Schools">
     <h2>${p.daysOff && p.weekend ? T(`Listed for its day camps and weekend classes`) : p.weekend ? T(`Listed for its weekend classes`) : T(`Listed for its day camps`)}</h2>
-    <p>${p.scope === 'weekend' ? T(`We’ve only read up on its weekend classes so far, so it isn’t on any school’s page.`) : T(`We couldn’t find a weekday after-school program here, so it isn’t on any school’s page.`)} ${p.daysOff ? T(`It runs camps on days school is closed, and children from any school can go.`) + ' ' : ''}${p.weekend ? T(`It runs classes on weekends.`) : ''}</p>
+    <p>${p.scope === 'weekend' ? T(`We’ve only read up on its weekend classes so far, so it isn’t on any school’s page.`) : p.scope === 'dayoff' ? T(`We’ve only read up on its camps on days off so far, so it isn’t on any school’s page.`) : T(`We couldn’t find a weekday after-school program here, so it isn’t on any school’s page.`)} ${p.daysOff ? T(`It runs camps on days school is closed, and children from any school can go.`) + ' ' : ''}${p.weekend ? T(`It runs classes on weekends.`) : ''}</p>
     <p>${T(`Does it run something after school that we missed?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
   </section>` : `<section class="section" id="schools" data-jump-to="Schools">
     <h2>${T(`Which schools it works for`)}</h2>
@@ -4904,7 +4904,7 @@ const weekendPath = 'weekends/';
 // "Elsewhere in the city"; a camp with no neighborhood (it runs all over) shows under every area.
 const CAMP_AREAS = [
   ['Center City and nearby', ['Center City', 'Rittenhouse', 'Washington Square West', 'Logan Square', 'Old City', 'Penn’s Landing', 'Fitler Square', 'Callowhill', 'Fairmount', 'Society Hill']],
-  ['South Philly', ['Queen Village', 'Bella Vista', 'Passyunk Square', 'East Passyunk', 'Pennsport', 'Dickinson Narrows', 'Hawthorne', 'Graduate Hospital', 'South Philadelphia']],
+  ['South Philly', ['Queen Village', 'Bella Vista', 'Passyunk Square', 'East Passyunk', 'Pennsport', 'Dickinson Narrows', 'Hawthorne', 'Graduate Hospital', 'Whitman', 'Lower Moyamensing', 'Point Breeze', 'Newbold', 'Girard Estate', 'Packer Park', 'Grays Ferry', 'South Philadelphia']],
   ['Kensington, Fishtown and North', ['South Kensington', 'Kensington', 'Fishtown', 'Northern Liberties', 'Fairhill', 'Port Richmond', 'North Philadelphia']],
   ['Northwest', ['Mount Airy', 'Germantown', 'Chestnut Hill', 'Roxborough', 'Manayunk', 'East Falls']],
   ['West Philly', ['Cobbs Creek', 'West Fairmount Park', 'University City', 'West Philadelphia']],
