@@ -274,6 +274,54 @@
     {
       "id": "east-passyunk-rec",
       "name": "East Passyunk Community Center"
+    },
+    {
+      "id": "philadelphia-martial-arts-academy",
+      "name": "Philadelphia Martial Arts Academy"
+    },
+    {
+      "id": "fitness-alive-south-philly",
+      "name": "Fitness Alive: swim lessons in South Philly"
+    },
+    {
+      "id": "christian-street-ymca",
+      "name": "Christian Street YMCA"
+    },
+    {
+      "id": "hudson-table-philadelphia",
+      "name": "Hudson Table"
+    },
+    {
+      "id": "rizzo-rink",
+      "name": "Rizzo Rink"
+    },
+    {
+      "id": "flips-4-kidz",
+      "name": "Flips 4 Kidz"
+    },
+    {
+      "id": "equilibrium-dance-academy",
+      "name": "Equilibrium Dance Academy"
+    },
+    {
+      "id": "blue-chip-flag-south-philadelphia",
+      "name": "Blue Chip Flag football, South Philadelphia"
+    },
+    {
+      "id": "kumon-south-philadelphia",
+      "name": "Kumon Math & Reading Center of South Philadelphia"
+    },
+    {
+      "id": "pennsport-school-of-dance",
+      "name": "Pennsport School of Dance"
+    },
+    {
+      "id": "philly-pack",
+      "name": "Philly PACK"
+    },
+    {
+      "id": "magic-gardens-family-jams",
+      "name": "Philadelphia’s Magic Gardens: Family Jams"
     }
   ],
   "camps": [
@@ -739,6 +787,22 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-hudson-table-philadelphia-2026-11-11",
+      "kind": "camp",
+      "date": "2026-11-11",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "hudson-table-philadelphia"
+      ],
+      "within": "off-2026-11-11",
+      "when": "Wednesday, November 11",
+      "title": "Hudson Table: camp on a day off",
+      "text": "School is closed (Veterans Day). Hudson Table has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/hudson-table-philadelphia/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "camp-makom-community-2026-11-11",
       "kind": "camp",
       "date": "2026-11-11",
@@ -861,7 +925,7 @@
       "programs": [],
       "when": "Wednesday, November 11",
       "title": "No school: Veterans Day",
-      "text": "10 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center, Philly Art Center, Queen Village, Philly InMovement: MOVE After School and PlayArts day camps.",
+      "text": "11 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Hudson Table, Makom Community, Mister John’s Music, MoveMakers Philly, Old Pine Community Center, Philly Art Center, Queen Village, Philly InMovement: MOVE After School and PlayArts day camps.",
       "url": "https://phillyafterschool.org/days-off/veterans-day-2026-11-11/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },

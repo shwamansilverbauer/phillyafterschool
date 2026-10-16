@@ -5993,5 +5993,855 @@
         "by": "school"
       }
     ]
+  },
+  {
+    "id": "philadelphia-martial-arts-academy",
+    "name": "Philadelphia Martial Arts Academy",
+    "what": "Karate for ages 4 to 12 on Jackson Street, with Saturday morning classes",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "karate",
+      "martial arts",
+      "Little Dragons",
+      "Saturday",
+      "Whitman",
+      "Jackson Street"
+    ],
+    "address": "38 Jackson St",
+    "neighborhoods": [
+      "Whitman"
+    ],
+    "grades": "PK-6",
+    "gradeNote": "Ages 4–12",
+    "hours": "Saturday mornings: 10 to 10:30 for ages 4–6, then 10:30 to noon for ages 7–12. Weekday classes run between 4:30 and 7 pm, Monday to Thursday.",
+    "cost": "$129 a month for two to three classes a week, plus $50 to register once. The uniform is free, and the first class is a free trial.",
+    "price": "paid",
+    "phone": "215-980-6520",
+    "email": "info@philadelphiamartialartsacademy.com",
+    "website": "https://www.philadelphiamartialartsacademy.com/",
+    "register": {
+      "how": "online",
+      "url": "https://www.philadelphiamartialartsacademy.com/free-trial",
+      "label": "Book a free first class",
+      "note": "Book the free first class on its site, then join month to month."
+    },
+    "note": "Month to month, with no long-term contract and family discounts. Suite 2A is up the stairs from the Jackson Street door.",
+    "sources": [
+      {
+        "label": "Philadelphia Martial Arts Academy",
+        "url": "https://www.philadelphiamartialartsacademy.com/"
+      }
+    ],
+    "lastVerified": "2026-10-16",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Saturday karate: Little Dragons for ages 4–6 at 10, then Youth Martial Arts for ages 7–12 at 10:30 (beginner) and 11:15 (advanced). Classes are 30 and 45 minutes.",
+      "days": [
+        "sat"
+      ],
+      "grades": "PK-6",
+      "term": "Month to month, with no term dates.",
+      "times": {
+        "sat": "10 am to noon"
+      },
+      "cost": "$129 a month, plus $50 to register. The first class is free.",
+      "url": "https://www.philadelphiamartialartsacademy.com/",
+      "check": {
+        "url": "https://www.philadelphiamartialartsacademy.com/",
+        "how": "fetch",
+        "look": "The Class Schedule block on the home page lists each class with its days and times, including the three Saturday classes, and the pricing block gives the $129 and $50.",
+        "notes": "The separate schedule page could not be read; the home page carries the same schedule."
+      },
+      "sources": [
+        {
+          "label": "Philadelphia Martial Arts Academy",
+          "url": "https://www.philadelphiamartialartsacademy.com/"
+        }
+      ],
+      "checked": "2026-10-16"
+    }
+  },
+  {
+    "id": "fitness-alive-south-philly",
+    "name": "Fitness Alive: swim lessons in South Philly",
+    "what": "Swim lessons for ages 3 and up in the pool at 714 Reed Street, on weekends and weekdays",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "swim",
+      "swimming",
+      "swim lessons",
+      "pool",
+      "learn to swim",
+      "Saturday",
+      "Sunday",
+      "Passyunk Square"
+    ],
+    "address": "714 Reed St",
+    "neighborhoods": [
+      "Passyunk Square"
+    ],
+    "grades": "PK-8",
+    "gradeNote": "Age 3 through the teens",
+    "hours": "At the South Philly pool, lessons run Saturday 10 am to 3 pm, Sunday 9 am to 2 pm, and Monday to Thursday from 9:30 or 10 am into the evening. Closed Fridays.",
+    "cost": "For the 13-week fall session: $780 for private lessons, $650 a swimmer for semi-private, $585 a swimmer for a group of three, $520 for a Swim Skills class. Paid monthly.",
+    "price": "paid",
+    "phone": "267-702-6043",
+    "email": "",
+    "website": "https://fitnessalivephilly.com/",
+    "register": {
+      "how": "online",
+      "url": "https://fitnessalivephilly.com/current-session",
+      "label": "See the session",
+      "note": "Fall 2026 registration is closed, with a waitlist. Drop-in lessons can be booked one at a time."
+    },
+    "note": "Weekly lessons keep the same day and time all session. Semi-private and group swimmers sign up with their own partners. It also has a Center City pool at 1425 Arch Street.",
+    "sources": [
+      {
+        "label": "Fitness Alive locations",
+        "url": "https://fitnessalivephilly.com/locations"
+      },
+      {
+        "label": "Fitness Alive fall session",
+        "url": "https://fitnessalivephilly.com/current-session"
+      }
+    ],
+    "lastVerified": "2026-10-16",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Weekly swim lessons on Saturday and Sunday in the pool inside Fitness Works on Reed Street: private, semi-private (bring a partner), groups of three, and Swim Skills classes, from age 3.",
+      "days": [
+        "sat",
+        "sun"
+      ],
+      "grades": "PK-8",
+      "term": "Fall 2026: September 8 to December 14, with no lessons November 23–29. Registration is closed, with a waitlist; the next session is announced on its site.",
+      "times": {
+        "sat": "10 am to 3 pm",
+        "sun": "9 am to 2 pm"
+      },
+      "cost": "$585 to $780 a swimmer for the 13-week session, paid monthly. A Swim Skills class is $520.",
+      "url": "https://fitnessalivephilly.com/current-session",
+      "check": {
+        "url": "https://fitnessalivephilly.com/locations",
+        "how": "fetch",
+        "look": "The locations page gives each pool’s lesson hours by day. The current-session page gives the dates, the prices and whether registration is open.",
+        "notes": "South Philly hours “may vary slightly” with instructor availability."
+      },
+      "sources": [
+        {
+          "label": "Fitness Alive locations",
+          "url": "https://fitnessalivephilly.com/locations"
+        },
+        {
+          "label": "Fitness Alive fall session",
+          "url": "https://fitnessalivephilly.com/current-session"
+        }
+      ],
+      "checked": "2026-10-16"
+    }
+  },
+  {
+    "id": "christian-street-ymca",
+    "name": "Christian Street YMCA",
+    "what": "The Y on Christian Street, with an indoor pool and gym, and full-day care for kindergarten to 6th grade on school holidays",
+    "types": [
+      "daycamp",
+      "movement"
+    ],
+    "keywords": [
+      "YMCA",
+      "Y",
+      "swim",
+      "pool",
+      "gym",
+      "school holiday",
+      "full day",
+      "childcare",
+      "Graduate Hospital"
+    ],
+    "address": "1724 Christian St",
+    "neighborhoods": [
+      "Graduate Hospital"
+    ],
+    "grades": "K-6",
+    "gradeNote": "Kindergarten to 6th grade for the full-day care",
+    "hours": "Full Day School Age Care runs 7 am to 6 pm on school holidays. The branch is open 5 am to 9 pm on weekdays and 7 am to 6 pm on weekends.",
+    "daysOff": {
+      "summary": "Full Day School Age Care, 7 am to 6 pm, for kindergarten through 6th grade on days school is closed, with the day split into 45-minute blocks of arts, sports, group games, science and clubs. The Y’s page lists no dates or prices for this school year, so ask the branch which days it will run.",
+      "url": "https://www.philaymca.org/node/405987",
+      "dates": [],
+      "sources": [
+        {
+          "label": "Greater Philadelphia YMCA: Full Day School Age Care",
+          "url": "https://www.philaymca.org/node/405987"
+        }
+      ]
+    },
+    "cost": "Not posted for the full-day care. Ask the branch.",
+    "price": "paid",
+    "phone": "215-735-5800",
+    "email": "",
+    "website": "https://www.philaymca.org/node/51",
+    "register": {
+      "how": "phone",
+      "note": "Call the branch, or use the Y’s child care contact form, to ask about days and sign-up."
+    },
+    "note": "Members get up to two hours of KidZone child watch. The Y’s swim-lesson pages don’t say which branches and days lessons meet, so ask the branch about those too.",
+    "sources": [
+      {
+        "label": "Christian Street YMCA",
+        "url": "https://www.philaymca.org/node/51"
+      },
+      {
+        "label": "Greater Philadelphia YMCA: Full Day School Age Care",
+        "url": "https://www.philaymca.org/node/405987"
+      }
+    ],
+    "lastVerified": "2026-10-16",
+    "scope": "dayoff",
+    "schools": {}
+  },
+  {
+    "id": "hudson-table-philadelphia",
+    "name": "Hudson Table",
+    "what": "A cooking studio in Northern Liberties that runs drop-off kids’ cooking classes on some school days off",
+    "types": [
+      "art"
+    ],
+    "keywords": [
+      "cooking",
+      "baking",
+      "pasta",
+      "kitchen",
+      "chef",
+      "drop-off",
+      "Northern Liberties"
+    ],
+    "address": "1001 N 2nd St",
+    "neighborhoods": [
+      "Northern Liberties"
+    ],
+    "grades": "3-8",
+    "gradeNote": "Ages 8–14 for the day-off class; some classes take ages 6–12",
+    "hours": "Nothing listed for weekday afternoons. The Veterans Day class runs 10 am to 1 pm.",
+    "daysOff": {
+      "summary": "Drop-off cooking classes, posted a few weeks ahead, on some days off. On Veterans Day (November 11) it’s a creative pasta intensive for ages 8–14, 10 am to 1 pm, $95.",
+      "url": "https://hudsontable.com/philadelphia/kids-classes/",
+      "dates": [
+        "2026-11-11"
+      ],
+      "sources": [
+        {
+          "label": "Hudson Table kids classes",
+          "url": "https://hudsontable.com/philadelphia/kids-classes/"
+        }
+      ]
+    },
+    "cost": "$95 for the Veterans Day class. Other kids’ classes are $80 to $90.",
+    "price": "paid",
+    "phone": "",
+    "email": "",
+    "website": "https://hudsontable.com/philadelphia/kids-classes/",
+    "register": {
+      "how": "online",
+      "url": "https://hudsontable.com/philadelphia/kids-classes/",
+      "label": "See classes",
+      "note": "Each class has its own sign-up on the kids classes page."
+    },
+    "note": "The kids page also lists a Sunday afternoon cookie-decorating class on October 25 (ages 6–12, $80) and parent-and-child classes for ages 2–4 on weekday mornings. It runs summer camps too.",
+    "sources": [
+      {
+        "label": "Hudson Table kids classes",
+        "url": "https://hudsontable.com/philadelphia/kids-classes/"
+      }
+    ],
+    "lastVerified": "2026-10-16",
+    "schools": {}
+  },
+  {
+    "id": "rizzo-rink",
+    "name": "Rizzo Rink",
+    "what": "The city’s indoor ice rink on Front Street in Pennsport: free public skating on Sunday afternoons in season, and skating lessons",
+    "types": [
+      "movement",
+      "rec-center"
+    ],
+    "keywords": [
+      "ice skating",
+      "skating",
+      "rink",
+      "learn to skate",
+      "Pennsport",
+      "Sunday",
+      "free",
+      "Parks & Rec"
+    ],
+    "address": "1001 S Front St",
+    "neighborhoods": [
+      "Pennsport"
+    ],
+    "grades": "PK-8",
+    "gradeNote": "Any age; public skating is for everyone",
+    "hours": "Public skating, from the city’s January 2026 post: Sunday 1 to 2:15 and 2:45 to 4, Tuesday and Thursday 4 to 5:15, Friday 6:30 to 7:45.",
+    "cost": "Public skating is free during set hours. Skate rental is $3 to $5.",
+    "price": "both",
+    "phone": "",
+    "email": "",
+    "website": "https://www.phila.gov/2026-01-09-ice-ice-baby-public-skating-hours/",
+    "register": {
+      "how": "none",
+      "note": "No sign-up for public skating. Ask at the rink about lessons."
+    },
+    "note": "The hours here are from the city’s post for last season; the city posts new hours when the rinks open for this one.",
+    "sources": [
+      {
+        "label": "Philadelphia Parks & Recreation: public skating hours",
+        "url": "https://www.phila.gov/2026-01-09-ice-ice-baby-public-skating-hours/"
+      }
+    ],
+    "lastVerified": "2026-10-16",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Free public skating on Sunday afternoons when the rink is open for the season, 1 to 2:15 and 2:45 to 4 by last season’s hours. The rink also gives skating lessons; ask there for days and cost.",
+      "days": [
+        "sun"
+      ],
+      "grades": "PK-8",
+      "term": "Hours are from the city’s January 2026 post for the 2025–26 season. The city posts this season’s hours when the rink opens.",
+      "times": {
+        "sun": "1 to 4 pm"
+      },
+      "cost": "Free. Skate rental $3 to $5.",
+      "url": "https://www.phila.gov/2026-01-09-ice-ice-baby-public-skating-hours/",
+      "check": {
+        "url": "https://www.phila.gov/2026-01-09-ice-ice-baby-public-skating-hours/",
+        "how": "fetch",
+        "look": "The post lists each city rink with its public-skating days and times and says admission is free during set hours.",
+        "notes": "A new post appears each season (the 2024–25 one gave Saturday sessions instead of Sunday), so search phila.gov for the latest before trusting the days."
+      },
+      "sources": [
+        {
+          "label": "Philadelphia Parks & Recreation: public skating hours",
+          "url": "https://www.phila.gov/2026-01-09-ice-ice-baby-public-skating-hours/"
+        }
+      ],
+      "checked": "2026-10-16"
+    }
+  },
+  {
+    "id": "flips-4-kidz",
+    "name": "Flips 4 Kidz",
+    "what": "Gymnastics for ages 4 to 12 inside East Passyunk Community Center, with three Saturday classes",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "gymnastics",
+      "tumbling",
+      "East Passyunk",
+      "Saturday",
+      "rec center"
+    ],
+    "address": "1025 Mifflin St",
+    "neighborhoods": [
+      "East Passyunk"
+    ],
+    "grades": "K-6",
+    "gradeNote": "Ages 5–12 on Saturdays; weekday classes start at 4",
+    "hours": "Saturday 11 am to 2:20 pm, in three one-hour classes by age. Weekday classes run 5 to 7:10 pm, Tuesday to Friday.",
+    "cost": "$270 a class for the session.",
+    "price": "paid",
+    "phone": "",
+    "email": "",
+    "website": "https://www.flips4kidz.com/",
+    "register": {
+      "how": "online",
+      "url": "https://www.flips4kidz.com/book-online",
+      "label": "Book a session",
+      "note": "Each session is booked on its page."
+    },
+    "note": "Weekday sessions skip October 29 and November 3, with a makeup class.",
+    "sources": [
+      {
+        "label": "Flips 4 Kidz sessions",
+        "url": "https://www.flips4kidz.com/book-online"
+      }
+    ],
+    "lastVerified": "2026-10-16",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Saturday gymnastics at East Passyunk Community Center: ages 5–6 at 11, then ages 7–12 at 12:10 and again at 1:20. Each class is an hour.",
+      "days": [
+        "sat"
+      ],
+      "grades": "K-6",
+      "term": "Fall 2 session: Saturdays October 24 to December 19, 2026.",
+      "times": {
+        "sat": "11 am to 2:20 pm"
+      },
+      "cost": "$270 for the session.",
+      "url": "https://www.flips4kidz.com/book-online",
+      "check": {
+        "url": "https://www.flips4kidz.com/book-online",
+        "how": "fetch",
+        "look": "Each session block gives its day, dates, time, age group and the $270.",
+        "notes": "Sessions are named Fall 2, Winter and so on; look for the next one once this ends."
+      },
+      "sources": [
+        {
+          "label": "Flips 4 Kidz sessions",
+          "url": "https://www.flips4kidz.com/book-online"
+        }
+      ],
+      "checked": "2026-10-16"
+    }
+  },
+  {
+    "id": "equilibrium-dance-academy",
+    "name": "Equilibrium Dance Academy",
+    "what": "A dance studio on South Broad with ballet, tap, jazz, hip hop and acro from age 3, including Saturday classes",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "dance",
+      "ballet",
+      "tap",
+      "jazz",
+      "hip hop",
+      "acro",
+      "South Broad",
+      "Saturday"
+    ],
+    "address": "1802 S Broad St",
+    "neighborhoods": [
+      "Newbold"
+    ],
+    "grades": "PK-4",
+    "gradeNote": "Ages 3–5 and 7–9 on Saturdays; weekday classes go up to age 12 and the teens",
+    "hours": "Saturday 10 am to 1 pm. Weekday classes run 4:30 to about 8:30 pm, Monday to Thursday, at two studios on South Broad.",
+    "cost": "A yearly tuition paid in ten monthly payments, September to June, plus a one-time registration fee. The amounts aren’t posted.",
+    "price": "paid",
+    "phone": "",
+    "email": "",
+    "website": "https://www.equilibriumdanceacademy.com/",
+    "register": {
+      "how": "online",
+      "url": "https://www.equilibriumdanceacademy.com/classes",
+      "label": "See the schedule and register",
+      "note": "Registration for the 2026–27 season is open on its classes page."
+    },
+    "note": "Registration is for the full season, which began September 14, 2026. Some classes are nearly full. The second studio is at 1711 S Broad Street, with its door on Castle Avenue.",
+    "sources": [
+      {
+        "label": "Equilibrium Dance Academy classes",
+        "url": "https://www.equilibriumdanceacademy.com/classes"
+      }
+    ],
+    "lastVerified": "2026-10-16",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Saturday classes at 1802 South Broad: Ballet/Tap for ages 3–5 at 10, Jazz/Tap for ages 7–9 at 11, and Jazz Level 1/2 at noon.",
+      "days": [
+        "sat"
+      ],
+      "grades": "PK-4",
+      "term": "2026–27 season, from September 14 to June. Registration is open.",
+      "times": {
+        "sat": "10 am to 1 pm"
+      },
+      "cost": "Monthly tuition, September to June. Amounts not posted.",
+      "url": "https://www.equilibriumdanceacademy.com/classes",
+      "check": {
+        "url": "https://www.equilibriumdanceacademy.com/classes",
+        "how": "fetch",
+        "look": "The Saturday block of the class schedule lists the three classes with ages and spots left.",
+        "notes": "Classes are at two addresses; the Saturday ones are at 1802."
+      },
+      "sources": [
+        {
+          "label": "Equilibrium Dance Academy classes",
+          "url": "https://www.equilibriumdanceacademy.com/classes"
+        }
+      ],
+      "checked": "2026-10-16"
+    }
+  },
+  {
+    "id": "blue-chip-flag-south-philadelphia",
+    "name": "Blue Chip Flag football, South Philadelphia",
+    "what": "A Sunday no-contact flag football league for ages 3 to 17 on the fields at South 10th Street, with a fall and a spring season",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "flag football",
+      "football",
+      "league",
+      "team",
+      "Sunday",
+      "Packer Park",
+      "girls"
+    ],
+    "address": "2926 S 10th St",
+    "neighborhoods": [
+      "Packer Park"
+    ],
+    "grades": "PK-8",
+    "gradeNote": "Ages 3–17 in two-year divisions, plus an all-girls division from age 7",
+    "hours": "Sunday games, an hour each.",
+    "cost": "$89 for ages 3–6, $125 for the co-ed divisions from age 7, $109 for the all-girls divisions. Payment plans at checkout.",
+    "price": "paid",
+    "phone": "",
+    "email": "",
+    "website": "https://www.bluechipyouthsports.com/south-philadelphia-registrations/",
+    "register": {
+      "how": "online",
+      "url": "https://blue-chip-flag-south-philadelphia.sportngin.com/register/form/571361594",
+      "label": "Register for spring",
+      "note": "Spring 2027 registration closes March 15, 2027. Fall 2026 registration closed August 15."
+    },
+    "note": "A league, not a class: a season of Sunday games. Refunds run until a few days before each season.",
+    "sources": [
+      {
+        "label": "Blue Chip Flag South Philadelphia",
+        "url": "https://www.bluechipyouthsports.com/south-philadelphia-registrations/"
+      }
+    ],
+    "lastVerified": "2026-10-16",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Sunday flag football with no contact, in divisions by age from 3–4 up to 15–17, co-ed or all-girls. Fall runs September 13 to October 25, 2026 and spring April 11 to May 23, 2027.",
+      "days": [
+        "sun"
+      ],
+      "grades": "PK-8",
+      "term": "Fall 2026: September 13 to October 25 (registration closed). Spring 2027: April 11 to May 23; register by March 15.",
+      "cost": "$89 for ages 3–6, $125 for ages 7 and up ($109 all-girls).",
+      "url": "https://www.bluechipyouthsports.com/south-philadelphia-registrations/",
+      "check": {
+        "url": "https://www.bluechipyouthsports.com/south-philadelphia-registrations/",
+        "how": "fetch",
+        "look": "The page gives each season’s dates and deadline, the divisions by age and the prices.",
+        "notes": "The sign-up forms are on sportngin.com, one per season."
+      },
+      "sources": [
+        {
+          "label": "Blue Chip Flag South Philadelphia",
+          "url": "https://www.bluechipyouthsports.com/south-philadelphia-registrations/"
+        }
+      ],
+      "checked": "2026-10-16"
+    }
+  },
+  {
+    "id": "kumon-south-philadelphia",
+    "name": "Kumon Math & Reading Center of South Philadelphia",
+    "what": "Kumon’s worksheet-based math and reading program on South Broad, with Saturday morning sessions",
+    "types": [
+      "academics"
+    ],
+    "keywords": [
+      "Kumon",
+      "math",
+      "reading",
+      "tutoring",
+      "homework",
+      "South Broad",
+      "Saturday"
+    ],
+    "address": "2112 S Broad St",
+    "neighborhoods": [
+      "South Philadelphia"
+    ],
+    "grades": "PK-8",
+    "gradeNote": "From kindergarten readiness up",
+    "hours": "Saturday 9 am to noon; Tuesday and Wednesday 3:30 to 7:30 pm; Friday 3:30 to 6:30 pm.",
+    "cost": "Not posted; fees are given at the center.",
+    "price": "paid",
+    "phone": "215-614-5992",
+    "email": "",
+    "website": "https://www.kumon.com/south-philadelphia",
+    "register": {
+      "how": "online",
+      "url": "https://www.kumon.com/south-philadelphia",
+      "label": "Book a free assessment",
+      "note": "Start with the free assessment, booked on its page or by phone."
+    },
+    "note": "Suite 202. Math runs from counting to calculus and reading from pre-reading to comprehension, each child at their own level.",
+    "sources": [
+      {
+        "label": "Kumon of South Philadelphia",
+        "url": "https://www.kumon.com/south-philadelphia"
+      }
+    ],
+    "lastVerified": "2026-10-16",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Saturday morning sessions at the center, 9 to noon, for Kumon’s math and reading worksheets, which start at kindergarten readiness. Begin with a free assessment.",
+      "days": [
+        "sat"
+      ],
+      "grades": "PK-8",
+      "term": "Year-round.",
+      "times": {
+        "sat": "9 am to noon"
+      },
+      "cost": "Not posted.",
+      "url": "https://www.kumon.com/south-philadelphia",
+      "check": {
+        "url": "https://www.kumon.com/south-philadelphia",
+        "how": "fetch",
+        "look": "The center page lists class hours by day and the free assessment.",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "label": "Kumon of South Philadelphia",
+          "url": "https://www.kumon.com/south-philadelphia"
+        }
+      ],
+      "checked": "2026-10-16"
+    }
+  },
+  {
+    "id": "pennsport-school-of-dance",
+    "name": "Pennsport School of Dance",
+    "what": "A neighborhood dance school on South 3rd Street: tap, jazz, ballet, hip hop, modern and gymnastics from age 3, with Saturday classes for the youngest",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "dance",
+      "tap",
+      "jazz",
+      "ballet",
+      "hip hop",
+      "modern",
+      "gymnastics",
+      "Pennsport",
+      "Whitman",
+      "Saturday"
+    ],
+    "address": "2036 S 3rd St",
+    "neighborhoods": [
+      "Whitman"
+    ],
+    "grades": "PK-K",
+    "gradeNote": "Ages 3, 4 and 5 on Saturdays; ages 6 to 16 and up on weekdays",
+    "hours": "Saturday 10 am to 1 pm for ages 3–5. Classes for ages 6 and up run weekdays 4:45 to 8:45 pm.",
+    "cost": "$14 a class a week for one or two classes ($13 for three, $12 for four or more), due monthly, plus $20 to register the first child and $10 each after. Costumes and recital fees are extra.",
+    "price": "paid",
+    "phone": "",
+    "email": "",
+    "website": "https://pennsportschoolofdance.com/class-schedule/",
+    "register": {
+      "how": "contact",
+      "note": "Registration for the season was in person at the studio in late August; ask the school about joining now."
+    },
+    "note": "The 2026–27 schedule is marked tentative.",
+    "sources": [
+      {
+        "label": "Pennsport School of Dance class schedule",
+        "url": "https://pennsportschoolofdance.com/class-schedule/"
+      },
+      {
+        "label": "Pennsport School of Dance registration and tuition",
+        "url": "https://pennsportschoolofdance.com/registration-tuition/"
+      }
+    ],
+    "lastVerified": "2026-10-16",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Introduction to Dance on Saturdays by age: 3-year-olds at 10, 4-year-olds at 11, 5-year-olds at noon. School-age classes meet on weekday afternoons and evenings.",
+      "days": [
+        "sat"
+      ],
+      "grades": "PK-K",
+      "term": "2026–27 season. The schedule is marked tentative.",
+      "times": {
+        "sat": "10 am to 1 pm"
+      },
+      "cost": "$14 a class a week, plus $20 to register.",
+      "url": "https://pennsportschoolofdance.com/class-schedule/",
+      "check": {
+        "url": "https://pennsportschoolofdance.com/class-schedule/",
+        "how": "fetch",
+        "look": "The Saturday rows of the class schedule give the three Introduction to Dance classes by age; the tuition page gives the per-class rates.",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "label": "Pennsport School of Dance class schedule",
+          "url": "https://pennsportschoolofdance.com/class-schedule/"
+        },
+        {
+          "label": "Pennsport School of Dance registration and tuition",
+          "url": "https://pennsportschoolofdance.com/registration-tuition/"
+        }
+      ],
+      "checked": "2026-10-16"
+    }
+  },
+  {
+    "id": "philly-pack",
+    "name": "Philly PACK",
+    "what": "A theatre and dance school for kids at Federal and Moyamensing: creative movement on Saturdays for ages 3–5, and K–8 classes on weekday afternoons",
+    "types": [
+      "theater",
+      "movement"
+    ],
+    "keywords": [
+      "theatre",
+      "theater",
+      "drama",
+      "dance",
+      "ballet",
+      "jazz",
+      "improv",
+      "comedy",
+      "creative movement",
+      "stage combat",
+      "design",
+      "Pennsport",
+      "Saturday"
+    ],
+    "address": "233 Federal St",
+    "neighborhoods": [
+      "Pennsport"
+    ],
+    "grades": "PK-K",
+    "gradeNote": "Ages 3–5 on Saturdays; K to 8th grade on weekdays, with high school programs too",
+    "hours": "Saturday 11 am to 12:45 pm for ages 3–5. Weekday classes run 4:30 to 7:30 pm.",
+    "cost": "$400 for a 45-minute Saturday class over 12 weeks; $500 for a one-hour weekday class. Payment plans and financial aid by email.",
+    "price": "paid",
+    "phone": "215-703-8617",
+    "email": "",
+    "website": "https://www.phillypack.org/",
+    "register": {
+      "how": "online",
+      "url": "https://www.phillypack.org/registration/",
+      "label": "Register",
+      "note": "Sign up on its registration page."
+    },
+    "note": "The fall session began August 31, 2026 and ends with a K–8 production weekend on December 5–6. No class Thanksgiving week.",
+    "sources": [
+      {
+        "label": "Philly PACK classes",
+        "url": "https://phillypack.org/classes"
+      }
+    ],
+    "lastVerified": "2026-10-16",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "Creative Movement on Saturdays: ages 3–4 at 11, ages 4–5 at noon, 45 minutes each, over 12 weeks ending with a showcase on November 21.",
+      "days": [
+        "sat"
+      ],
+      "grades": "PK-K",
+      "term": "Fall 2026: from August 31 through Saturday, November 21.",
+      "times": {
+        "sat": "11 am to 12:45 pm"
+      },
+      "cost": "$400 for the 12-week session.",
+      "url": "https://phillypack.org/classes",
+      "check": {
+        "url": "https://phillypack.org/classes",
+        "how": "fetch",
+        "look": "The classes page lists Creative Movement 1 and 2 with their Saturday times and ages, and the tuition scale by class length.",
+        "notes": "The page also keeps an older Spring 2026 grid; read the current session’s list."
+      },
+      "sources": [
+        {
+          "label": "Philly PACK classes",
+          "url": "https://phillypack.org/classes"
+        }
+      ],
+      "checked": "2026-10-16"
+    }
+  },
+  {
+    "id": "magic-gardens-family-jams",
+    "name": "Philadelphia’s Magic Gardens: Family Jams",
+    "what": "Drop-in family art-making at the mosaic museum on South Street, on the second Sunday of each month",
+    "types": [
+      "art"
+    ],
+    "keywords": [
+      "art",
+      "mosaic",
+      "museum",
+      "family",
+      "South Street",
+      "Sunday",
+      "printing"
+    ],
+    "address": "1020 South St",
+    "neighborhoods": [
+      "Bella Vista"
+    ],
+    "grades": "PK-8",
+    "gradeNote": "No age range given; it’s for families",
+    "hours": "Second Sunday of the month, noon to 4 pm.",
+    "cost": "Free with museum admission, which is by timed ticket.",
+    "price": "paid",
+    "phone": "",
+    "email": "",
+    "website": "https://www.phillymagicgardens.org/events/peco-family-jams/",
+    "register": {
+      "how": "online",
+      "url": "https://www.phillymagicgardens.org/events/events-calendar/",
+      "label": "Buy admission",
+      "note": "No sign-up for the program itself, but you need admission tickets, which often sell out."
+    },
+    "note": "The next one listed is November 8, 2026: foam plate block printing.",
+    "sources": [
+      {
+        "label": "PECO Family Jams",
+        "url": "https://www.phillymagicgardens.org/events/peco-family-jams/"
+      }
+    ],
+    "lastVerified": "2026-10-16",
+    "scope": "weekend",
+    "schools": {},
+    "weekend": {
+      "summary": "A drop-in art project for families inside the museum, noon to 4 on the second Sunday of the month, free once you’ve paid admission. Next up: November 8, foam plate block printing.",
+      "days": [
+        "sun"
+      ],
+      "grades": "PK-8",
+      "term": "Second Sunday of each month. The next listed is November 8, 2026.",
+      "times": {
+        "sun": "noon to 4 pm"
+      },
+      "cost": "Free with admission.",
+      "url": "https://www.phillymagicgardens.org/events/peco-family-jams/",
+      "check": {
+        "url": "https://www.phillymagicgardens.org/events/peco-family-jams/",
+        "how": "fetch",
+        "look": "The Family Jams page gives the second-Sunday rule, the noon-to-4 hours and the next date.",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "label": "PECO Family Jams",
+          "url": "https://www.phillymagicgardens.org/events/peco-family-jams/"
+        }
+      ],
+      "checked": "2026-10-16"
+    }
   }
 ]

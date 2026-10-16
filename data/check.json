@@ -1,7 +1,7 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 112,
+    "pages": 135,
     "pagesNeedingABrowser": 4,
     "pagesNeedingAPerson": 2,
     "links": 117,
@@ -1259,6 +1259,14 @@
       "lists": []
     },
     {
+      "url": "https://blue-chip-flag-south-philadelphia.sportngin.com/register/form/571361594",
+      "how": "fetch",
+      "programs": [
+        "blue-chip-flag-south-philadelphia"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://bookeo.com/beehivecommunity?type=41574EYC3LN19B4B8067C5",
       "how": "fetch",
       "programs": [
@@ -1347,6 +1355,30 @@
       "lists": []
     },
     {
+      "url": "https://fitnessalivephilly.com/",
+      "how": "fetch",
+      "programs": [
+        "fitness-alive-south-philly"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://fitnessalivephilly.com/current-session",
+      "how": "fetch",
+      "programs": [
+        "fitness-alive-south-philly"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://fitnessalivephilly.com/locations",
+      "how": "fetch",
+      "programs": [
+        "fitness-alive-south-philly"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://fleisher.org/children-and-youth-programs-2/",
       "how": "fetch",
       "programs": [
@@ -1375,6 +1407,14 @@
       "how": "fetch",
       "programs": [
         "fleisher-art-memorial"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://hudsontable.com/philadelphia/kids-classes/",
+      "how": "fetch",
+      "programs": [
+        "hudson-table-philadelphia"
       ],
       "lists": []
     },
@@ -1620,6 +1660,22 @@
       "lists": []
     },
     {
+      "url": "https://pennsportschoolofdance.com/class-schedule/",
+      "how": "fetch",
+      "programs": [
+        "pennsport-school-of-dance"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://pennsportschoolofdance.com/registration-tuition/",
+      "how": "fetch",
+      "programs": [
+        "pennsport-school-of-dance"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://philadelphiaballet.org/school/childrens-programs/",
       "how": "fetch",
       "programs": [
@@ -1776,6 +1832,14 @@
       "lists": []
     },
     {
+      "url": "https://phillypack.org/classes",
+      "how": "fetch",
+      "programs": [
+        "philly-pack"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://reg137.imperisoft.com/Fleisher/Search/Registration.aspx",
       "how": "fetch",
       "programs": [
@@ -1882,6 +1946,14 @@
       "lists": []
     },
     {
+      "url": "https://www.bluechipyouthsports.com/south-philadelphia-registrations/",
+      "how": "fetch",
+      "programs": [
+        "blue-chip-flag-south-philadelphia"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.cocoacademyphl.com/afterschool-bellavista",
       "how": "person",
       "why": "A plain fetch got HTTP 429 on 2026-10-06 and the browser extension is not allowed on the site. Josh pastes the page text.",
@@ -1921,6 +1993,38 @@
       "how": "fetch",
       "programs": [
         "coco-academy"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.equilibriumdanceacademy.com/",
+      "how": "fetch",
+      "programs": [
+        "equilibrium-dance-academy"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.equilibriumdanceacademy.com/classes",
+      "how": "fetch",
+      "programs": [
+        "equilibrium-dance-academy"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.flips4kidz.com/",
+      "how": "fetch",
+      "programs": [
+        "flips-4-kidz"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.flips4kidz.com/book-online",
+      "how": "fetch",
+      "programs": [
+        "flips-4-kidz"
       ],
       "lists": []
     },
@@ -1970,6 +2074,14 @@
       "how": "fetch",
       "programs": [
         "koresh-school-of-dance"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.kumon.com/south-philadelphia",
+      "how": "fetch",
+      "programs": [
+        "kumon-south-philadelphia"
       ],
       "lists": []
     },
@@ -2055,6 +2167,14 @@
       "lists": []
     },
     {
+      "url": "https://www.phila.gov/2026-01-09-ice-ice-baby-public-skating-hours/",
+      "how": "fetch",
+      "programs": [
+        "rizzo-rink"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.phila.gov/2026-03-06-seats-filling-fast-for-spring-break-camp-at-extended-day-extended-year-schools/",
       "how": "fetch",
       "programs": [
@@ -2071,10 +2191,74 @@
       "lists": []
     },
     {
+      "url": "https://www.philadelphiamartialartsacademy.com/",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-martial-arts-academy"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.philadelphiamartialartsacademy.com/free-trial",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-martial-arts-academy"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.philamuseum.org/events/art-kids-classes-7-8",
       "how": "fetch",
       "programs": [
         "philadelphia-museum-of-art-kids"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.philaymca.org/node/405987",
+      "how": "fetch",
+      "programs": [
+        "christian-street-ymca"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.philaymca.org/node/51",
+      "how": "fetch",
+      "programs": [
+        "christian-street-ymca"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phillymagicgardens.org/events/events-calendar/",
+      "how": "fetch",
+      "programs": [
+        "magic-gardens-family-jams"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phillymagicgardens.org/events/peco-family-jams/",
+      "how": "fetch",
+      "programs": [
+        "magic-gardens-family-jams"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phillypack.org/",
+      "how": "fetch",
+      "programs": [
+        "philly-pack"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phillypack.org/registration/",
+      "how": "fetch",
+      "programs": [
+        "philly-pack"
       ],
       "lists": []
     },
@@ -2385,6 +2569,96 @@
       "how": "fetch",
       "look": "The fall session block lists each series on one line with its ages, day, time and price.",
       "notes": "The site calls itself ZAZZ by Philly Dance Fitness."
+    },
+    {
+      "program": "blue-chip-flag-south-philadelphia",
+      "term": "Fall 2026: September 13 to October 25 (registration closed). Spring 2027: April 11 to May 23; register by March 15.",
+      "checked": "2026-10-16",
+      "url": "https://www.bluechipyouthsports.com/south-philadelphia-registrations/",
+      "how": "fetch",
+      "look": "The page gives each season’s dates and deadline, the divisions by age and the prices.",
+      "notes": "The sign-up forms are on sportngin.com, one per season."
+    },
+    {
+      "program": "equilibrium-dance-academy",
+      "term": "2026–27 season, from September 14 to June. Registration is open.",
+      "checked": "2026-10-16",
+      "url": "https://www.equilibriumdanceacademy.com/classes",
+      "how": "fetch",
+      "look": "The Saturday block of the class schedule lists the three classes with ages and spots left.",
+      "notes": "Classes are at two addresses; the Saturday ones are at 1802."
+    },
+    {
+      "program": "fitness-alive-south-philly",
+      "term": "Fall 2026: September 8 to December 14, with no lessons November 23–29. Registration is closed, with a waitlist; the next session is announced on its site.",
+      "checked": "2026-10-16",
+      "url": "https://fitnessalivephilly.com/locations",
+      "how": "fetch",
+      "look": "The locations page gives each pool’s lesson hours by day. The current-session page gives the dates, the prices and whether registration is open.",
+      "notes": "South Philly hours “may vary slightly” with instructor availability."
+    },
+    {
+      "program": "flips-4-kidz",
+      "term": "Fall 2 session: Saturdays October 24 to December 19, 2026.",
+      "checked": "2026-10-16",
+      "url": "https://www.flips4kidz.com/book-online",
+      "how": "fetch",
+      "look": "Each session block gives its day, dates, time, age group and the $270.",
+      "notes": "Sessions are named Fall 2, Winter and so on; look for the next one once this ends."
+    },
+    {
+      "program": "kumon-south-philadelphia",
+      "term": "Year-round.",
+      "checked": "2026-10-16",
+      "url": "https://www.kumon.com/south-philadelphia",
+      "how": "fetch",
+      "look": "The center page lists class hours by day and the free assessment.",
+      "notes": ""
+    },
+    {
+      "program": "magic-gardens-family-jams",
+      "term": "Second Sunday of each month. The next listed is November 8, 2026.",
+      "checked": "2026-10-16",
+      "url": "https://www.phillymagicgardens.org/events/peco-family-jams/",
+      "how": "fetch",
+      "look": "The Family Jams page gives the second-Sunday rule, the noon-to-4 hours and the next date.",
+      "notes": ""
+    },
+    {
+      "program": "pennsport-school-of-dance",
+      "term": "2026–27 season. The schedule is marked tentative.",
+      "checked": "2026-10-16",
+      "url": "https://pennsportschoolofdance.com/class-schedule/",
+      "how": "fetch",
+      "look": "The Saturday rows of the class schedule give the three Introduction to Dance classes by age; the tuition page gives the per-class rates.",
+      "notes": ""
+    },
+    {
+      "program": "philadelphia-martial-arts-academy",
+      "term": "Month to month, with no term dates.",
+      "checked": "2026-10-16",
+      "url": "https://www.philadelphiamartialartsacademy.com/",
+      "how": "fetch",
+      "look": "The Class Schedule block on the home page lists each class with its days and times, including the three Saturday classes, and the pricing block gives the $129 and $50.",
+      "notes": "The separate schedule page could not be read; the home page carries the same schedule."
+    },
+    {
+      "program": "philly-pack",
+      "term": "Fall 2026: from August 31 through Saturday, November 21.",
+      "checked": "2026-10-16",
+      "url": "https://phillypack.org/classes",
+      "how": "fetch",
+      "look": "The classes page lists Creative Movement 1 and 2 with their Saturday times and ages, and the tuition scale by class length.",
+      "notes": "The page also keeps an older Spring 2026 grid; read the current session’s list."
+    },
+    {
+      "program": "rizzo-rink",
+      "term": "Hours are from the city’s January 2026 post for the 2025–26 season. The city posts this season’s hours when the rink opens.",
+      "checked": "2026-10-16",
+      "url": "https://www.phila.gov/2026-01-09-ice-ice-baby-public-skating-hours/",
+      "how": "fetch",
+      "look": "The post lists each city rink with its public-skating days and times and says admission is free during set hours.",
+      "notes": "A new post appears each season (the 2024–25 one gave Saturday sessions instead of Sunday), so search phila.gov for the latest before trusting the days."
     }
   ],
   "camps": {
