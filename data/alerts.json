@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-10-16",
+  "generated": "2026-10-17",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -841,6 +841,226 @@
       "text": "15 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, NLArts, Old Pine Community Center, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, Skate The Foundry and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/election-day-2026-11-03/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "week-columbus-charter-2026-11-02",
+      "kind": "week",
+      "date": "2026-11-06",
+      "sendOn": "2026-11-01",
+      "expires": "2026-11-04",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "columbus-charter"
+      ],
+      "when": "Week of November 2",
+      "title": "This week at Columbus Charter",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students. Tuesday: No school: Election Day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students"
+        },
+        {
+          "when": "Tuesday",
+          "what": "No school: Election Day"
+        }
+      ],
+      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Tuesday: no school, Election Day",
+      "url": "https://phillyafterschool.org/columbus-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Columbus Charter’s week"
+    },
+    {
+      "id": "week-coppin-2026-11-02",
+      "kind": "week",
+      "date": "2026-11-06",
+      "sendOn": "2026-11-01",
+      "expires": "2026-11-04",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "coppin"
+      ],
+      "when": "Week of November 2",
+      "title": "This week at Coppin",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students. Tuesday: No school: Election Day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students"
+        },
+        {
+          "when": "Tuesday",
+          "what": "No school: Election Day"
+        }
+      ],
+      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Tuesday: no school, Election Day",
+      "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Coppin’s week"
+    },
+    {
+      "id": "week-kirkbride-2026-11-02",
+      "kind": "week",
+      "date": "2026-11-06",
+      "sendOn": "2026-11-01",
+      "expires": "2026-11-04",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "kirkbride"
+      ],
+      "when": "Week of November 2",
+      "title": "This week at Kirkbride",
+      "text": "Tuesday: No school: Election Day.",
+      "lines": [
+        {
+          "when": "Tuesday",
+          "what": "No school: Election Day"
+        }
+      ],
+      "first": "Tuesday: no school, Election Day",
+      "url": "https://phillyafterschool.org/kirkbride/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Kirkbride’s week"
+    },
+    {
+      "id": "week-mccall-2026-11-02",
+      "kind": "week",
+      "date": "2026-11-06",
+      "sendOn": "2026-11-01",
+      "expires": "2026-11-04",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mccall"
+      ],
+      "when": "Week of November 2",
+      "title": "This week at McCall",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students. Tuesday: No school: Election Day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students"
+        },
+        {
+          "when": "Tuesday",
+          "what": "No school: Election Day"
+        }
+      ],
+      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Tuesday: no school, Election Day",
+      "url": "https://phillyafterschool.org/mccall/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See McCall’s week"
+    },
+    {
+      "id": "week-meredith-2026-11-02",
+      "kind": "week",
+      "date": "2026-11-06",
+      "sendOn": "2026-11-01",
+      "expires": "2026-11-04",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "meredith"
+      ],
+      "when": "Week of November 2",
+      "title": "This week at Meredith",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students. Tuesday: No school: Election Day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students"
+        },
+        {
+          "when": "Tuesday",
+          "what": "No school: Election Day"
+        }
+      ],
+      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Tuesday: no school, Election Day",
+      "url": "https://phillyafterschool.org/meredith/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Meredith’s week"
+    },
+    {
+      "id": "week-nebinger-2026-11-02",
+      "kind": "week",
+      "date": "2026-11-06",
+      "sendOn": "2026-11-01",
+      "expires": "2026-11-04",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "nebinger"
+      ],
+      "when": "Week of November 2",
+      "title": "This week at Nebinger",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students. Tuesday: No school: Election Day. Wednesday: Pretzel day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students"
+        },
+        {
+          "when": "Tuesday",
+          "what": "No school: Election Day"
+        },
+        {
+          "when": "Wednesday",
+          "what": "Pretzel day"
+        }
+      ],
+      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Tuesday: no school, Election Day",
+      "url": "https://phillyafterschool.org/nebinger/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Nebinger’s week"
+    },
+    {
+      "id": "week-southwark-2026-11-02",
+      "kind": "week",
+      "date": "2026-11-06",
+      "sendOn": "2026-11-01",
+      "expires": "2026-11-04",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "southwark"
+      ],
+      "when": "Week of November 2",
+      "title": "This week at Southwark",
+      "text": "Tuesday: No school: Election Day.",
+      "lines": [
+        {
+          "when": "Tuesday",
+          "what": "No school: Election Day"
+        }
+      ],
+      "first": "Tuesday: no school, Election Day",
+      "url": "https://phillyafterschool.org/southwark/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Southwark’s week"
+    },
+    {
+      "id": "week-vare-washington-2026-11-02",
+      "kind": "week",
+      "date": "2026-11-06",
+      "sendOn": "2026-11-01",
+      "expires": "2026-11-04",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "vare-washington"
+      ],
+      "when": "Week of November 2",
+      "title": "This week at Vare-Washington",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students. Tuesday: No school: Election Day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students"
+        },
+        {
+          "when": "Tuesday",
+          "what": "No school: Election Day"
+        }
+      ],
+      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Tuesday: no school, Election Day",
+      "url": "https://phillyafterschool.org/vare-washington/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Vare-Washington’s week"
     },
     {
       "id": "camp-arden-drama-school-2026-11-11",
