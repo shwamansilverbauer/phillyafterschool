@@ -1,0 +1,25 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:skilladelphia-2026-11-02@phillyafterschool.org
+DTSTAMP:20261019T120000Z
+DTSTART;VALUE=DATE:20261102
+DTEND;VALUE=DATE:20261103
+SUMMARY:Skilladelphia: Fall II session starts
+DESCRIPTION:https://skilladelphia.campbrainregistration.com/
+ ?returnUrl=%252FLanding&utm_source=phillyafterschool.org&utm
+ _medium=referral&utm_campaign=directory&utm_content=calendar
+ \n\nFrom Philly After School: https://phillyafterschool.org/
+URL:https://skilladelphia.campbrainregistration.com/?returnU
+ rl=%252FLanding
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Skilladelphia: Fall II session starts
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

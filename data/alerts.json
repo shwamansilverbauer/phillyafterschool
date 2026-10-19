@@ -592,6 +592,44 @@
       "text": "Winter/Spring session goes on sale to new students."
     },
     {
+      "id": "reg-skilladelphia-2026-11-02",
+      "schools": [
+        "nebinger",
+        "meredith",
+        "mccall"
+      ],
+      "programs": [
+        "skilladelphia"
+      ],
+      "title": "Skilladelphia",
+      "url": "https://phillyafterschool.org/programs/skilladelphia/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2026-11-02",
+      "sendOn": "2026-11-01",
+      "when": "Monday, November 2",
+      "text": "Fall II session starts."
+    },
+    {
+      "id": "reg-skilladelphia-2026-11-02-day",
+      "schools": [
+        "nebinger",
+        "meredith",
+        "mccall"
+      ],
+      "programs": [
+        "skilladelphia"
+      ],
+      "title": "Skilladelphia",
+      "url": "https://phillyafterschool.org/programs/skilladelphia/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2026-11-02",
+      "sendOn": "2026-11-02",
+      "when": "Today, Monday, November 2",
+      "text": "Fall II session starts."
+    },
+    {
       "id": "camp-arden-drama-school-2026-11-03",
       "kind": "camp",
       "date": "2026-11-03",
@@ -939,18 +977,18 @@
       ],
       "when": "Week of November 2",
       "title": "This week at McCall",
-      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students. Tuesday: No school: Election Day.",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Sign-ups, Skilladelphia: Fall II session starts. Tuesday: No school: Election Day.",
       "lines": [
         {
           "when": "Monday",
-          "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students"
+          "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Sign-ups, Skilladelphia: Fall II session starts"
         },
         {
           "when": "Tuesday",
           "what": "No school: Election Day"
         }
       ],
-      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Tuesday: no school, Election Day",
+      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Monday: Sign-ups, Skilladelphia: Fall II session starts",
       "url": "https://phillyafterschool.org/mccall/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See McCall’s week"
     },
@@ -967,18 +1005,18 @@
       ],
       "when": "Week of November 2",
       "title": "This week at Meredith",
-      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students. Tuesday: No school: Election Day.",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Sign-ups, Skilladelphia: Fall II session starts. Tuesday: No school: Election Day.",
       "lines": [
         {
           "when": "Monday",
-          "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students"
+          "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Sign-ups, Skilladelphia: Fall II session starts"
         },
         {
           "when": "Tuesday",
           "what": "No school: Election Day"
         }
       ],
-      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Tuesday: no school, Election Day",
+      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Monday: Sign-ups, Skilladelphia: Fall II session starts",
       "url": "https://phillyafterschool.org/meredith/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Meredith’s week"
     },
@@ -995,11 +1033,11 @@
       ],
       "when": "Week of November 2",
       "title": "This week at Nebinger",
-      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students. Tuesday: No school: Election Day. Wednesday: Pretzel day.",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Sign-ups, Skilladelphia: Fall II session starts. Tuesday: No school: Election Day. Wednesday: Pretzel day.",
       "lines": [
         {
           "when": "Monday",
-          "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students"
+          "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Sign-ups, Skilladelphia: Fall II session starts"
         },
         {
           "when": "Tuesday",
@@ -1010,7 +1048,7 @@
           "what": "Pretzel day"
         }
       ],
-      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Tuesday: no school, Election Day",
+      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Monday: Sign-ups, Skilladelphia: Fall II session starts",
       "url": "https://phillyafterschool.org/nebinger/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Nebinger’s week"
     },
