@@ -1,34 +1,90 @@
 {
-    "4b844d0798": {
-        "was": "Find your school or a program",
-        "now": "Search by school or program"
-    },
-    "9f6c7e2886": {
-        "was": "Every district and charter school in the city is in here. If yours isn’t covered yet, you can ask for it.",
-        "now": "Help us build this community resource school by school! If you don’t see your Philly public school or charter school above, submit a request to let us know you’re interested."
-    },
-    "3a62dafeaf": {
-        "was": "Music, art, sports, plain old aftercare.",
-        "now": "Music, art, sports, games & more!"
-    },
-    "721ce1406c": {
-        "was": "School’s out. Now what?",
-        "now": "School’s out. What now?"
-    },
-    "b4ea78edb2": {
-        "was": "Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.",
-        "now": "After-school programs are supposed to keep your kids busy, not you. Find, compare, and plan out weekly activities without it feeling like another full-time job."
-    },
-    "04b3cb45ce": {
-        "was": "My kids’ calendar",
-        "now": "You're the fam with the plan."
-    },
-    "b441742617": {
-        "was": "Everything you’ve planned for the school year and the summer, in one place: the after-school week, every day off, camp weeks and sign-up dates. Only you can see it.",
-        "now": "Gone are the days of tracking after-school, days off, and summer camps in a bajillion different spreadsheets. Below are the days you've planned out for the whole year, all in one place, accessible only to you and users approved by you."
-    },
-    "7f9b6db0a1": {
-        "was": "Hours, cost, pickup and how to register, from each program’s own website",
-        "now": "Hours, cost, pickup and how to register, from each program’s website"
-    }
+  "4b844d0798": {
+    "was": "Find your school or a program",
+    "now": "Search by school or program"
+  },
+  "9f6c7e2886": {
+    "was": "Every district and charter school in the city is in here. If yours isn’t covered yet, you can ask for it.",
+    "now": "Help us build this community resource school by school! If you don’t see your Philly public school or charter school above, submit a request to let us know you’re interested."
+  },
+  "3a62dafeaf": {
+    "was": "Music, art, sports, plain old aftercare.",
+    "now": "Music, art, sports, games & more!"
+  },
+  "721ce1406c": {
+    "was": "School’s out. Now what?",
+    "now": "School’s out. What now?"
+  },
+  "b4ea78edb2": {
+    "was": "Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.",
+    "now": "After-school programs are supposed to keep your kids busy, not you. Find, compare, and plan out weekly activities without it feeling like another full-time job."
+  },
+  "04b3cb45ce": {
+    "was": "My kids’ calendar",
+    "now": "You're the fam with the plan."
+  },
+  "b441742617": {
+    "was": "Everything you’ve planned for the school year and the summer, in one place: the after-school week, every day off, camp weeks and sign-up dates. Only you can see it.",
+    "now": "Gone are the days of tracking after-school, days off, and summer camps in a bajillion different spreadsheets. Below are the days you've planned out for the whole year, all in one place, accessible only to you and users approved by you."
+  },
+  "7f9b6db0a1": {
+    "was": "Hours, cost, pickup and how to register, from each program’s own website",
+    "now": "Hours, cost, pickup and how to register, from each program’s website"
+  },
+  "d634af0382": {
+    "was": "Create your free account",
+    "now": "After school's cooler with a free account"
+  },
+  "367962819d": {
+    "was": "Keep every plan you build, the school week, the days off and the summer, and see them together in one private calendar for the whole year. It takes about a minute, and there’s no password to remember.",
+    "now": "Knowledge is power, yes, but wait till you channel that power into one private calendar with your plans for the whole year. (Lightning bolts!) It takes about a minute, and you don’t even have to remember a password."
+  },
+  "191885e234": {
+    "was": "What an account gives you",
+    "now": "Family admin, streamlined."
+  },
+  "733d535919": {
+    "was": "What an account keeps, and who sees it",
+    "now": "You make the plans. You decide who sees them."
+  },
+  "7e0b221398": {
+    "was": "“My kids’ calendar” puts the school week, every day off, the camp weeks and each sign-up date in date order. Only you can open it.",
+    "now": "Keep track of aftercare, days off, weekends, and summer camps. No spreadsheets required."
+  },
+  "f704f50512": {
+    "was": "See the whole year in one calendar.",
+    "now": "Plan the whole year in one place."
+  },
+  "f892383e6e": {
+    "was": "Put it on your phone.",
+    "now": "Check it on your phone (or fridge)."
+  },
+  "79cc69953b": {
+    "was": "One calendar file for the year that you can bring up to date, and a picture of any month for the fridge.",
+    "now": "Grab a calendar file for your phone, or print it out each month."
+  },
+  "384f921908": {
+    "was": "Follow and save.",
+    "now": "Never miss a sign-up."
+  },
+  "d29abae63f": {
+    "was": "Follow a program, a camp or your school and its sign-up dates come by email. Save favorites to find them again.",
+    "now": "Follow your school and favorite programs, and we'll remind you when sign-ups open."
+  },
+  "d3a0950676": {
+    "was": "Share a week with one person.",
+    "now": "Share a week with a sitter or grandparent."
+  },
+  "4523317b1d": {
+    "was": "A grandparent or a sitter signs in to see it, and you can take it back.",
+    "now": "You can stop sharing at any time."
+  },
+  "31599229ab": {
+    "was": "Share with a small group.",
+    "now": "Compare schedules with friends."
+  },
+  "b7da72d2a0": {
+    "was": "A few families you invite by email see each other’s weeks. Nobody else can find the group or ask to join.",
+    "now": "Shared schedules are invite-only. Nobody else can find the group or ask to join."
+  }
 }
