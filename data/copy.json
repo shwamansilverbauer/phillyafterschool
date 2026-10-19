@@ -86,5 +86,65 @@
   "b7da72d2a0": {
     "was": "A few families you invite by email see each other’s weeks. Nobody else can find the group or ask to join.",
     "now": "Shared schedules are invite-only. Nobody else can find the group or ask to join."
+  },
+  "6ff93ce468": {
+    "was": "Run a program or camp? Claim your listing.",
+    "now": "Claim your listing and help us get with the program."
+  },
+  "b4cef1b42e": {
+    "was": "Find your program below and claim it with your work email. Then keep its dates, costs and hours up to date yourself. It’s free, and it takes a couple of minutes.",
+    "now": "Find your program below and claim it with your work email. This lets you keep your offerings, costs, hours, and other info up to date so parents can trust what they see. It’s free and takes only a few minutes."
+  },
+  "237e65d7ff": {
+    "was": "What claiming gets you",
+    "now": "Claim the eternal love of Philly parents."
+  },
+  "6c6a68b6bd": {
+    "was": "Your listing is already on the site, and parents are already reading it. Claim it and it becomes yours to keep right.",
+    "now": "We've done our best to check everything listed here, but you know your program best. When you claim your listing, everybody wins. You get fewer confused emails, parents get accurate info, and kids get the heck out of the house."
+  },
+  "769128eff3": {
+    "was": "Keep your dates current.",
+    "now": "Keep your info current."
+  },
+  "fe74e3dcea": {
+    "was": "Post sign-up openings, deadlines, term dates and camp days as soon as you set them, instead of waiting for us to find them.",
+    "now": "Post dates, hours, pricing, and deadlines as soon as you set them. We answer to you instead of what we can find on your website."
+  },
+  "0624398afc": {
+    "was": "Say whether there’s space.",
+    "now": "Room for one more?"
+  },
+  "2a7ed3b1a9": {
+    "was": "Mark your listing “Spots open”, “Waitlist” or “Full”. It shows to parents straight away, with the date.",
+    "now": "Mark your listing “Spots open,” “Waitlist,” or “Full” next to every date offered."
+  },
+  "4e889a80a4": {
+    "was": "See your numbers.",
+    "now": "Track your numbers."
+  },
+  "ef53688255": {
+    "was": "How many times your listing was opened this month, how many clicks went on to your sign-up page and website, and how many families put you on a plan.",
+    "now": "See how many times your listing was opened, how many clicks went on to your sign-up page, and how many families put you on their plan."
+  },
+  "59d55500b1": {
+    "was": "Show parents it’s kept up.",
+    "now": "Easier than a blue checkmark."
+  },
+  "6cef4c3b17": {
+    "was": "A “Claimed” mark tells them the listing is looked after by the people who run it.",
+    "now": "A “Claimed” mark tells parents the listing is looked after by the people who run it."
+  },
+  "5a343478c1": {
+    "was": "It has to be an address at your program’s own website: if the listing’s website is example.org, an address ending in @example.org. That is how we know you speak for it. If the addresses match, the claim stands straight away.",
+    "now": "Addresses linked to the program’s own website (e.g., if the listing’s website is example.org, an address ending in @example.org) grants you instant verification. To claim a listing with an address that isn’t at the program’s website, email contact@phillyafterschool.org from an address the program uses, and we’ll check and hand it to your account."
+  },
+  "028587cbea": {
+    "was": "Send changes when something moves.",
+    "now": "Keep us updated."
+  },
+  "0e10b31324": {
+    "was": "New dates, a new price, new hours. We read each one and update the listing, usually within a few days.",
+    "now": "New dates, new price, new hours? The \"update\" tab in your listing lets you notify a real person when program info changes. We review all submitted forms and update listings, usually within a few days."
   }
 }

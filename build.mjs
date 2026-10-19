@@ -3618,10 +3618,8 @@ const CLAIM_GETS = () => [
   ['dates', T(`Keep your dates current.`), T(`Post sign-up openings, deadlines, term dates and camp days as soon as you set them, instead of waiting for us to find them.`)],
   ['space', T(`Say whether there’s space.`), T(`Mark your listing “Spots open”, “Waitlist” or “Full”. It shows to parents straight away, with the date.`)],
   ['numbers', T(`See your numbers.`), T(`How many times your listing was opened this month, how many clicks went on to your sign-up page and website, and how many families put you on a plan.`)],
-  ['costs', T(`Fix your costs and hours.`), T(`When a price or a pickup time changes, send it once and the listing follows.`)],
   ...(GROUPS.photos ? [['photo', T(`Add a photo.`), T(`One picture of your space or an activity at the top of your listing.`)]] : []),
   ['claimed', T(`Show parents it’s kept up.`), T(`A “Claimed” mark tells them the listing is looked after by the people who run it.`)],
-  ['word', T(`Your word stays put.`), T(`What you tell us isn’t overwritten by what your website says. When our check finds the two disagreeing, you get an email asking which is right, and nothing changes until you answer.`)],
 ];
 const claimBenefits = () => `<ol class="benefits">
 ${CLAIM_GETS().map(([, name, text], i) => `      <li><i class="demo-n" aria-hidden="true">${i + 1}</i><b>${name}</b> ${text}</li>`).join('\n')}
@@ -3644,12 +3642,12 @@ function claimDemo() {
           ${photo}
           <div class="strip">${GRADES.map(g => `<i class="cell${['K', '1', '2', '3', '4', '5'].includes(String(g)) ? ' on' : ''}">${g}</i>`).join('')}</div>
           <dl>
-            <dt>${T(`Hours`)}</dt><dd>${T(`Monday to Thursday, dismissal to 6 pm`)}${at.costs}</dd>
+            <dt>${T(`Hours`)}</dt><dd>${T(`Monday to Thursday, dismissal to 6 pm`)}</dd>
             <dt>${T(`Cost`)}</dt><dd>${T(`$95 a week, with a sibling discount`)}</dd>
             <dt>${T(`Dates`)}</dt><dd><b>${T(`Winter term sign-up opens November 12`)}</b>${at.dates}<br><span class="demo-link">${T(`Add to calendar`)}</span></dd>
           </dl>
           <p class="demo-actions"><span class="btn primary">${T(`Sign up`)}</span><span class="btn">${T(`Website`)}</span></p>
-          <p class="demo-src">${T(`Checked October 6. Some of it came from the program itself.`)}${at.word}</p>
+          <p class="demo-src">${T(`Checked October 6.`)}</p>
         </div>
       </div>
       <div class="demo-stats" aria-hidden="true">
