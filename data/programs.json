@@ -7378,5 +7378,144 @@
     "lastVerified": "2026-10-16",
     "scope": "dayoff",
     "schools": {}
+  },
+  {
+    "id": "skilladelphia",
+    "name": "Skilladelphia",
+    "what": "After-school basketball and lacrosse clinics for girls and non-binary players ages 6–14, Monday to Thursday, with pickup from Meredith, McCall and Nebinger",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "basketball",
+      "hoops",
+      "lacrosse",
+      "girls",
+      "sports",
+      "athletic",
+      "clinics",
+      "fitness",
+      "Old Pine",
+      "Society Hill"
+    ],
+    "address": "401 Lombard St",
+    "neighborhoods": [
+      "Society Hill"
+    ],
+    "grades": "1-8",
+    "gradeNote": "Ages 6–14; girls and non-binary players",
+    "hours": "3:30 to 5:30 pm, Monday to Thursday, with a healthy snack.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu"
+    ],
+    "daysNote": "Fit Fun on Mondays, basketball on Tuesdays and Thursdays, lacrosse on Wednesdays. Sign up for one day or several.",
+    "pickupBy": "5:30 pm",
+    "cost": "$40 a clinic, with discounts for more days: a sample term of seven weeks is $280 for one day a week, $500 for two and $700 for three.",
+    "rate": {
+      "per": "day",
+      "eachDay": 40,
+      "extra": "Packages of two or three days a week cost less per clinic."
+    },
+    "price": "paid",
+    "phone": "",
+    "email": "admin@skilladelphia.org",
+    "website": "https://www.skilladelphia.org/programs",
+    "register": {
+      "how": "online",
+      "url": "https://skilladelphia.campbrainregistration.com/?returnUrl=%252FLanding",
+      "label": "Register",
+      "note": "Sign-up is on its CampBrain site; you make an account first. Questions go to admin@skilladelphia.org."
+    },
+    "note": "Its site says clinics are at Old Pine Community Center unless otherwise specified; the program told us in October 2026 that the after-school clinics run at The Neighborhub, and that caregivers can drop children off from other schools. Confirm the location when you sign up. It also runs Wednesday evening scrimmages for ages 9–14 ($15 a session), summer camps and clinics, and Monday evening lacrosse at Penn Park in summer.",
+    "sources": [
+      {
+        "label": "Skilladelphia programs",
+        "url": "https://www.skilladelphia.org/programs"
+      },
+      {
+        "label": "Skilladelphia registration",
+        "url": "https://www.skilladelphia.org/register"
+      }
+    ],
+    "lastVerified": "2026-10-19",
+    "schools": {
+      "meredith": {
+        "relation": "pickup",
+        "address": "401 Lombard St (Old Pine Community Center)",
+        "registerUrl": "https://skilladelphia.campbrainregistration.com/?returnUrl=%252FLanding",
+        "note": "Named on Skilladelphia’s programs page as a pickup school for the after-school clinics.",
+        "sources": [
+          {
+            "label": "Skilladelphia programs",
+            "url": "https://www.skilladelphia.org/programs"
+          }
+        ],
+        "checked": "2026-10-19"
+      },
+      "mccall": {
+        "relation": "pickup",
+        "address": "401 Lombard St (Old Pine Community Center)",
+        "registerUrl": "https://skilladelphia.campbrainregistration.com/?returnUrl=%252FLanding",
+        "note": "Named on Skilladelphia’s programs page as a pickup school for the after-school clinics.",
+        "sources": [
+          {
+            "label": "Skilladelphia programs",
+            "url": "https://www.skilladelphia.org/programs"
+          }
+        ],
+        "checked": "2026-10-19"
+      },
+      "nebinger": {
+        "relation": "pickup",
+        "address": "401 Lombard St (Old Pine Community Center)",
+        "registerUrl": "https://skilladelphia.campbrainregistration.com/?returnUrl=%252FLanding",
+        "note": "Named on Skilladelphia’s programs page as a pickup school for the after-school clinics.",
+        "sources": [
+          {
+            "label": "Skilladelphia programs",
+            "url": "https://www.skilladelphia.org/programs"
+          }
+        ],
+        "checked": "2026-10-19"
+      }
+    },
+    "pickupLists": [
+      {
+        "text": "Meredith, McCall, Nebinger, and St. Peter’s",
+        "url": "https://www.skilladelphia.org/programs",
+        "read": "2026-10-19",
+        "how": "browser",
+        "note": "Under “Monday through Thursday After School Clinics” and “Wednesday After School Clinics” on the programs page. The site asks automated readers to stay out, so it was read in a browser."
+      }
+    ],
+    "weekend": {
+      "summary": "Fall Sundays with Coach Val at Old Pine: Bitty Ballers (ages 6–9) at 3:30, All Ballers (6–14) at 5, Super Hoopers (9–14) at 6:30, September through October. Clinics are 85 minutes, with 25 minutes of open shootaround.",
+      "days": [
+        "sun"
+      ],
+      "grades": "1-8",
+      "term": "Fall: September through October, seven clinics. A summer Sunday series ran July 12 to August 16. Check its page for the next series.",
+      "times": {
+        "sun": "3:30, 5 and 6:30 pm"
+      },
+      "cost": "$120 for seven clinics.",
+      "url": "https://www.skilladelphia.org/programs",
+      "check": {
+        "url": "https://www.skilladelphia.org/programs",
+        "how": "browser",
+        "look": "Open the “Sundays With Val” section under Basketball Programs; it lists each session’s time, ages, dates and price.",
+        "notes": "The site asks automated readers to stay out, so read it in a browser."
+      },
+      "sources": [
+        {
+          "label": "Skilladelphia programs",
+          "url": "https://www.skilladelphia.org/programs"
+        }
+      ],
+      "checked": "2026-10-19"
+    }
   }
 ]
