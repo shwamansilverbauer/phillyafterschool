@@ -11,7 +11,8 @@
  *   5. GA4 Admin > Check GA4 (authorize when asked). Read the Result columns and the Log tab. Then > Apply.
  *
  * What each tab controls, and what Include = N means there:
- *   Dimensions, Metrics   create what is missing. N = leave that row out (nothing is ever archived).
+ *   Dimensions, Metrics   create what is missing. N = leave that row out (nothing is ever archived). GA4 registers a
+ *                         parameter name as a dimension or a metric, never both; the script reports the clash.
  *   Key events            Y = make it a key event; N = take it off the key-event list (no data is lost).
  *   Event rules           Y = make the rule on the web stream; N = delete the rule (events already made stay).
  *   Settings              a blank Value leaves that setting as it is; a filled one is compared and applied.
@@ -124,12 +125,14 @@ function doDims_(ctx, mode, runAt) {
   var tab = 'dims', s = sheet_(TABS[tab]), out = [];
   var rows = s.getDataRange().getValues().slice(1);
   var existing = listAll_(function (args) { return AnalyticsAdmin.Properties.CustomDimensions.list(ctx.parent, args); }, 'customDimensions');
-  var byKey = {}, byDisplay = {}, counts = {};
+  var byKey = {}, byDisplay = {}, counts = {}, metricOf = {};
   existing.forEach(function (cd) {
     byKey[cd.parameterName + '|' + cd.scope] = cd;
     byDisplay[String(cd.displayName || '').trim().toLowerCase()] = cd;
     counts[cd.scope] = (counts[cd.scope] || 0) + 1;
   });
+  listAll_(function (args) { return AnalyticsAdmin.Properties.CustomMetrics.list(ctx.parent, args); }, 'customMetrics')
+    .forEach(function (m) { metricOf[m.parameterName] = m; });
   rows.forEach(function (r, i) {
     var line = i + 2, name = String(r[0] || '').trim(), scope = String(r[1] || 'EVENT').trim().toUpperCase(), param = String(r[2] || '').trim();
     var desc = String(r[3] || '').trim().slice(0, 150), include = yes_(r[4]);
@@ -142,6 +145,7 @@ function doDims_(ctx, mode, runAt) {
     if (name.length > 82) { put('failed', 'display name is over 82 characters'); return; }
     var have = byKey[param + '|' + scope];
     if (have) { put('exists', have.displayName === name ? '' : 'registered as “' + have.displayName + '” (left as is)'); return; }
+    if (scope === 'EVENT' && metricOf[param]) { put('conflict', '“' + param + '” is already the custom metric “' + metricOf[param].displayName + '”; GA4 registers a parameter as a dimension or a metric, not both'); return; }
     var clash = byDisplay[name.toLowerCase()];
     if (clash) { put('conflict', 'display name already used by parameter “' + clash.parameterName + '”: rename it in GA4 or change this display name'); return; }
     if ((counts[scope] || 0) >= LIMITS.dims[scope]) { put('failed', 'property already has ' + counts[scope] + ' ' + scope.toLowerCase() + '-scoped dimensions (limit ' + LIMITS.dims[scope] + ')'); return; }
@@ -161,8 +165,11 @@ function doMetrics_(ctx, mode, runAt) {
   var tab = 'metrics', s = sheet_(TABS[tab]), out = [];
   var rows = s.getDataRange().getValues().slice(1);
   var existing = listAll_(function (args) { return AnalyticsAdmin.Properties.CustomMetrics.list(ctx.parent, args); }, 'customMetrics');
-  var byParam = {}, byDisplay = {}, count = existing.length;
+  var byParam = {}, byDisplay = {}, count = existing.length, dimOf = {};
   existing.forEach(function (m) { byParam[m.parameterName] = m; byDisplay[String(m.displayName || '').trim().toLowerCase()] = m; });
+  // GA4 keeps one registry of parameter names across custom dimensions and metrics: a parameter is one or the other.
+  listAll_(function (args) { return AnalyticsAdmin.Properties.CustomDimensions.list(ctx.parent, args); }, 'customDimensions')
+    .forEach(function (d) { if (d.scope === 'EVENT') dimOf[d.parameterName] = d; });
   rows.forEach(function (r, i) {
     var line = i + 2, name = String(r[0] || '').trim(), param = String(r[1] || '').trim(), unit = String(r[2] || 'STANDARD').trim().toUpperCase();
     var desc = String(r[3] || '').trim().slice(0, 150), include = yes_(r[4]);
@@ -173,6 +180,7 @@ function doMetrics_(ctx, mode, runAt) {
     if (!/^[A-Za-z][A-Za-z0-9_]{0,39}$/.test(param)) { put('failed', 'parameter name must be letters, digits and underscores, up to 40 characters'); return; }
     var have = byParam[param];
     if (have) { put('exists', (have.displayName === name ? '' : 'registered as “' + have.displayName + '”') + (have.measurementUnit === unit ? '' : ' unit ' + have.measurementUnit) + ' (left as is)'); return; }
+    if (dimOf[param]) { put('conflict', '“' + param + '” is already the custom dimension “' + dimOf[param].displayName + '”; GA4 registers a parameter as a dimension or a metric, not both. For a metric, send the number under a second parameter name in Tag Manager and register that one here.'); return; }
     var clash = byDisplay[name.toLowerCase()];
     if (clash) { put('conflict', 'display name already used by parameter “' + clash.parameterName + '”'); return; }
     if (count >= LIMITS.metrics) { put('failed', 'property already has ' + count + ' custom metrics (limit ' + LIMITS.metrics + ')'); return; }
