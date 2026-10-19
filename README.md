@@ -1719,6 +1719,14 @@ conflicting). It adds a Google tag, one GA4 event tag per event below, and Clari
 variables, so a new parameter means a new variable and a row on that event's tag. Clarity gets every `pas_` event by
 name through one trigger (`CE - any pas_ event`), so a new event needs nothing on the Clarity side.
 
+The GA4 property's own setup lives in a Google Sheet, "Philly After School GA4 Admin", with `analytics/ga4_admin.gs`
+bound to it as an Apps Script (Extensions > Apps Script, plus the Google Analytics Admin API service, v1alpha). Its
+tabs are the custom dimensions (one per parameter below), custom metrics, key events, "create event" rules
+(`account_created`, `manager_account_created`, `listing_claimed`, `register_click`), property and stream settings
+(retention, Google signals, enhanced measurement, data redaction), annotations and audiences. "Check GA4" reports
+what differs; "Apply" makes GA4 match the sheet. It only ever adds dimensions, metrics, annotations and audiences;
+key events and rules marked N are removed. A new parameter is a row on the Dimensions tab and an Apply.
+
 Set `gtmId` to load Google Tag Manager on every page. Every page view and event carries `visitor_role` and `signed_in`
 (see "Parents and program managers, told apart"). The site pushes these events to the data layer:
 
