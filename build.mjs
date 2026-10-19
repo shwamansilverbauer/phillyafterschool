@@ -3623,6 +3623,7 @@ const CLAIM_GETS = () => [
   ['costs', T(`Fix your costs and hours.`), T(`When a price or a pickup time changes, send it once and the listing follows.`)],
   ...(GROUPS.photos ? [['photo', T(`Add a photo.`), T(`One picture of your space or an activity at the top of your listing.`)]] : []),
   ['claimed', T(`Show parents it’s kept up.`), T(`A “Claimed” mark tells them the listing is looked after by the people who run it.`)],
+  ['word', T(`Your word stays put.`), T(`What you tell us isn’t overwritten by what your website says. When our check finds the two disagreeing, you get an email asking which is right, and nothing changes until you answer.`)],
 ];
 const claimBenefits = () => `<ol class="benefits">
 ${CLAIM_GETS().map(([, name, text], i) => `      <li><i class="demo-n" aria-hidden="true">${i + 1}</i><b>${name}</b> ${text}</li>`).join('\n')}
@@ -3650,6 +3651,7 @@ function claimDemo() {
             <dt>${T(`Dates`)}</dt><dd><b>${T(`Winter term sign-up opens November 12`)}</b>${at.dates}<br><span class="demo-link">${T(`Add to calendar`)}</span></dd>
           </dl>
           <p class="demo-actions"><span class="btn primary">${T(`Sign up`)}</span><span class="btn">${T(`Website`)}</span></p>
+          <p class="demo-src">${T(`Checked October 6. Some of it came from the program itself.`)}${at.word}</p>
         </div>
       </div>
       <div class="demo-stats" aria-hidden="true">

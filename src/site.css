@@ -1721,6 +1721,7 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .demo-body dd{margin:0}
 .demo-link{color:var(--link);text-decoration:underline;font-size:.88rem}
 .demo-actions{margin:0;display:flex;gap:8px;flex-wrap:wrap}
+.demo-src{margin:10px 0 0;font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .demo-actions .btn{pointer-events:none;font-size:.9rem;padding:7px 16px}
 .demo-stats{width:86%;align-self:flex-end;margin-top:-18px;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px 14px;box-shadow:0 14px 34px rgba(11,33,64,.16);position:relative}
 .demo-only{margin:0 0 8px;font-size:.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center}
