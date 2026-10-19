@@ -7396,6 +7396,7 @@
       "clinics",
       "fitness",
       "Old Pine",
+      "Neighborhub",
       "Society Hill"
     ],
     "address": "401 Lombard St",
@@ -7404,7 +7405,7 @@
     ],
     "grades": "1-8",
     "gradeNote": "Ages 6–14; girls and non-binary players",
-    "hours": "3:30 to 5:30 pm, Monday to Thursday, with a healthy snack.",
+    "hours": "3:30 to 5:30 pm, Monday to Thursday, at The Neighborhub (Old Pine Community Center), with a healthy snack.",
     "days": [
       "mon",
       "tue",
@@ -7427,9 +7428,16 @@
       "how": "online",
       "url": "https://skilladelphia.campbrainregistration.com/?returnUrl=%252FLanding",
       "label": "Register",
-      "note": "Sign-up is on its CampBrain site; you make an account first. Questions go to admin@skilladelphia.org."
+      "note": "Sign-up is on its CampBrain site; you make an account first. Questions go to admin@skilladelphia.org.",
+      "nextTerm": "Fall II starts November 2, 2026, and registration is open now. Families can join any time there is space, with the fee pro-rated for the sessions left.",
+      "dates": [
+        {
+          "date": "2026-11-02",
+          "label": "Fall II session starts"
+        }
+      ]
     },
-    "note": "Its site says clinics are at Old Pine Community Center unless otherwise specified; the program told us in October 2026 that the after-school clinics run at The Neighborhub, and that caregivers can drop children off from other schools. Confirm the location when you sign up. It also runs Wednesday evening scrimmages for ages 9–14 ($15 a session), summer camps and clinics, and Monday evening lacrosse at Penn Park in summer.",
+    "note": "Old Pine Community Center now goes by The Neighborhub, the program told us in October 2026, so its site may still say either name. It also runs Wednesday evening scrimmages for ages 9–14 ($15 a session), summer camps and clinics, and Monday evening lacrosse at Penn Park in summer. Caregivers can also drop children off from other schools, the program says.",
     "sources": [
       {
         "label": "Skilladelphia programs",
@@ -7444,7 +7452,7 @@
     "schools": {
       "meredith": {
         "relation": "pickup",
-        "address": "401 Lombard St (Old Pine Community Center)",
+        "address": "401 Lombard St (The Neighborhub, Old Pine Community Center)",
         "registerUrl": "https://skilladelphia.campbrainregistration.com/?returnUrl=%252FLanding",
         "note": "Named on Skilladelphia’s programs page as a pickup school for the after-school clinics.",
         "sources": [
@@ -7457,7 +7465,7 @@
       },
       "mccall": {
         "relation": "pickup",
-        "address": "401 Lombard St (Old Pine Community Center)",
+        "address": "401 Lombard St (The Neighborhub, Old Pine Community Center)",
         "registerUrl": "https://skilladelphia.campbrainregistration.com/?returnUrl=%252FLanding",
         "note": "Named on Skilladelphia’s programs page as a pickup school for the after-school clinics.",
         "sources": [
@@ -7470,7 +7478,7 @@
       },
       "nebinger": {
         "relation": "pickup",
-        "address": "401 Lombard St (Old Pine Community Center)",
+        "address": "401 Lombard St (The Neighborhub, Old Pine Community Center)",
         "registerUrl": "https://skilladelphia.campbrainregistration.com/?returnUrl=%252FLanding",
         "note": "Named on Skilladelphia’s programs page as a pickup school for the after-school clinics.",
         "sources": [
