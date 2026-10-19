@@ -1177,7 +1177,7 @@ function mgr_numbers(string $key): string {
 }
 // The morning run. $today is a New York date; $opts lets the tests stand in for the calendar and the review counts.
 function mgr_run(string $today, array $opts = array()): array {
-  $sent = array('month' => 0, 'review' => 0, 'follow' => 0);
+  $sent = array('month' => 0, 'review' => 0, 'follow' => 0, 'ask' => 0);
   $e = function ($v) { return htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8'); };
   $l = listings();
   $fresh = isset($opts['fresh']) ? (int) $opts['fresh'] : MGR_FRESH_DAYS;
@@ -1246,6 +1246,31 @@ function mgr_run(string $today, array $opts = array()): array {
       if (mgr_send($uid, $p['email'], 'New followers for ' . listing_plain($first), implode("\n", $lines) . "\n\n" . $more, $html . '<p style="margin:0">' . $e($more) . '</p>', 'Open your listing’s tools', $GLOBALS['CFG']['siteUrl'] . '/managers/')) { $sent['follow']++; bump('mgr_follow'); }
     }
   }
+
+  // 4. A question only the people who run the listing can settle: the build hands each listing its open questions
+  // ("a": what a check found the site and the listing disagreeing on, or something the program told us that has gone
+  // unconfirmed for months). Each question goes once, to everyone holding the listing that morning, and is then
+  // remembered by its id in meta "mgr_asked". The answer comes back as a reply or a proposed change; nothing here
+  // changes the listing.
+  $askOf = isset($opts['asks']) && is_array($opts['asks']) ? $opts['asks'] : array();
+  foreach ($l as $k => $x) if (!empty($x['a']) && is_array($x['a']) && !isset($askOf[$k])) $askOf[$k] = $x['a'];
+  $asked = json_decode(meta_get('mgr_asked') ?: '{}', true); if (!is_array($asked)) $asked = array();
+  $askedNow = array();
+  foreach ($people as $uid => $p) foreach ($p['keys'] as $k => $since) {
+    if (empty($askOf[$k]) || !is_array($askOf[$k]) || $sent['ask'] >= 200) continue;
+    $name = listing_plain($k);
+    foreach ($askOf[$k] as $a) {
+      if (!is_array($a) || !isset($a['id'], $a['q']) || !is_string($a['id']) || !is_string($a['q']) || $a['q'] === '') continue;
+      $aid = $k . '|' . $a['id'];
+      if (isset($asked[$aid])) continue;
+      $q = mb_substr($a['q'], 0, 600);
+      $line = ($p['first'] !== '' ? 'Hi ' . $p['first'] . ",\n\n" : '') . 'A question about ' . $name . ' on ' . $GLOBALS['CFG']['siteName'] . ":\n\n" . $q;
+      $more = 'Reply to this email, or open your listing’s tools and propose a change, and the listing is updated once it has been checked. Nothing on it changes until you answer.';
+      $html = ($p['first'] !== '' ? '<p style="margin:0 0 12px">Hi ' . $e($p['first']) . ',</p>' : '') . '<p style="margin:0 0 12px">A question about <b>' . $e($name) . '</b> on ' . $e($GLOBALS['CFG']['siteName']) . ':</p><p style="margin:0 0 12px;padding:12px 14px;background:#FFF6CC;border-radius:10px">' . $e($q) . '</p><p style="margin:0">' . $e($more) . '</p>';
+      if (mgr_send($uid, $p['email'], 'A question about ' . $name, $line . "\n\n" . $more, $html, 'Open your listing’s tools', $GLOBALS['CFG']['siteUrl'] . '/managers/')) { $sent['ask']++; bump('mgr_ask'); $askedNow[$aid] = $today; }
+    }
+  }
+  if ($askedNow) meta_set('mgr_asked', json_encode((object) ($asked + $askedNow)));
   return $sent;
 }
 
@@ -1804,7 +1829,7 @@ switch ($method . ' ' . $action) {
     } elseif (!$test && too_many('pushdry:' . who(), 20, 3600)) out(array('ok' => true, 'ran' => false, 'why' => 'asked too often'));
     else note('pushdry:' . who());
     $told = $dry ? 0 : signup_catchup($test && isset($in['told_age']) ? (int) $in['told_age'] : 3600);
-    $mgr = $dry ? 0 : array_sum(mgr_run($test && preg_match('/^\\d{4}-\\d{2}-\\d{2}$/', str($in, 'mgr_day', 10)) ? str($in, 'mgr_day', 10) : today_ny(), $test ? array_filter(array('fresh' => isset($in['mgr_fresh']) ? (int) $in['mgr_fresh'] : null, 'rv' => isset($in['mgr_rv']) && is_array($in['mgr_rv']) ? $in['mgr_rv'] : null), function ($v) { return $v !== null; }) : array()));
+    $mgr = $dry ? 0 : array_sum(mgr_run($test && preg_match('/^\\d{4}-\\d{2}-\\d{2}$/', str($in, 'mgr_day', 10)) ? str($in, 'mgr_day', 10) : today_ny(), $test ? array_filter(array('fresh' => isset($in['mgr_fresh']) ? (int) $in['mgr_fresh'] : null, 'rv' => isset($in['mgr_rv']) && is_array($in['mgr_rv']) ? $in['mgr_rv'] : null, 'asks' => isset($in['mgr_asks']) && is_array($in['mgr_asks']) ? $in['mgr_asks'] : null), function ($v) { return $v !== null; }) : array()));
     out(array('ok' => true, 'ran' => !$dry, 'dry' => $dry, 'told' => $told, 'mgr' => $mgr) + push_run($today, $dry));
   }
 
