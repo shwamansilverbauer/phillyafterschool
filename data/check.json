@@ -1,12 +1,12 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 157,
+    "pages": 160,
     "pagesNeedingABrowser": 4,
-    "pagesNeedingAPerson": 2,
-    "links": 117,
-    "pickupLinks": 63,
-    "pickupOnAStoredList": 55,
+    "pagesNeedingAPerson": 4,
+    "links": 120,
+    "pickupLinks": 66,
+    "pickupOnAStoredList": 58,
     "pickupFromAThirdPartyList": 4,
     "pickupOnItsOwnSource": 4,
     "pickupWithNothingBehindIt": 0,
@@ -1106,6 +1106,42 @@
       "school": "columbus-charter",
       "relation": "nearby",
       "checked": "2026-10-10"
+    },
+    {
+      "program": "skilladelphia",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-10-19",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-19",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "skilladelphia",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-10-19",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-19",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "skilladelphia",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-10-19",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-19",
+        "how": "browser",
+        "by": "provider"
+      }
     }
   ],
   "pages": [
@@ -1976,6 +2012,14 @@
       ]
     },
     {
+      "url": "https://skilladelphia.campbrainregistration.com/?returnUrl=%252FLanding",
+      "how": "fetch",
+      "programs": [
+        "skilladelphia"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://starfinderfoundation.org/programs/middle-school-programs/",
       "how": "fetch",
       "programs": [
@@ -2455,6 +2499,32 @@
       "lists": []
     },
     {
+      "url": "https://www.skilladelphia.org/programs",
+      "how": "person",
+      "why": "The site blocks automated reading.",
+      "programs": [
+        "skilladelphia"
+      ],
+      "lists": [
+        {
+          "program": "skilladelphia",
+          "text": "Meredith, McCall, Nebinger, and St. Peter’s",
+          "read": "2026-10-19",
+          "how": "browser",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://www.skilladelphia.org/register",
+      "how": "person",
+      "why": "The site blocks automated reading.",
+      "programs": [
+        "skilladelphia"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.sunriseofphila.org/program-sites",
       "how": "fetch",
       "programs": [
@@ -2835,6 +2905,15 @@
       "how": "fetch",
       "look": "The post lists each city rink with its public-skating days and times and says admission is free during set hours.",
       "notes": "A new post appears each season (the 2024–25 one gave Saturday sessions instead of Sunday), so search phila.gov for the latest before trusting the days."
+    },
+    {
+      "program": "skilladelphia",
+      "term": "Fall: September through October, seven clinics. A summer Sunday series ran July 12 to August 16. Check its page for the next series.",
+      "checked": "2026-10-19",
+      "url": "https://www.skilladelphia.org/programs",
+      "how": "browser",
+      "look": "Open the “Sundays With Val” section under Basketball Programs; it lists each session’s time, ages, dates and price.",
+      "notes": "The site asks automated readers to stay out, so read it in a browser."
     }
   ],
   "camps": {
