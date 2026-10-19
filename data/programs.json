@@ -7524,6 +7524,21 @@
         }
       ],
       "checked": "2026-10-19"
-    }
+    },
+    "told": [
+      {
+        "on": "2026-10-19",
+        "by": "program manager",
+        "how": "an email through the site’s suggestion form, then a reply to our questions",
+        "fields": [
+          "hours",
+          "note",
+          "register.nextTerm",
+          "register.dates",
+          "schools.*.address"
+        ],
+        "says": "Old Pine Community Center and The Neighborhub are the same building after a rebrand, at 401 Lombard St; Fall II starts November 2, 2026, registration is open, and families can join whenever there is space, with the fee pro-rated."
+      }
+    ]
   }
 ]

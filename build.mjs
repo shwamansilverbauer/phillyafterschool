@@ -185,6 +185,27 @@ for (const p of programs) {
     if (p.register?.how === 'online' && !isUrl(l.registerUrl || p.register.url)) errors.push(`${at}: online registration needs a URL`);
   }
   if (['phone', 'school'].includes(p.register?.how) && !p.phone) errors.push(`${at}: register by phone needs a phone number`);
+  // What the program itself told us, as opposed to what its site says: the fields it covers are its word, and a check
+  // leaves them alone (see "Keeping it current"). A question for the program's managers ("asks") goes out by email once.
+  if (p.told !== undefined) {
+    if (!Array.isArray(p.told) || !p.told.length) errors.push(`${at}: told must be a list`);
+    else for (const t of p.told) {
+      if (!t || !/^\d{4}-\d{2}-\d{2}$/.test(t.on || '')) errors.push(`${at}: each told entry needs "on", the date (YYYY-MM-DD)`);
+      if (!['program manager', 'provider', 'school'].includes(t?.by)) errors.push(`${at}: a told entry's "by" must be program manager, provider or school`);
+      if (typeof t?.how !== 'string' || !t.how.trim()) errors.push(`${at}: a told entry needs "how" (an email through the suggestion form, a change proposed from the claim, …)`);
+      if (!Array.isArray(t?.fields) || !t.fields.length || t.fields.some(f => typeof f !== 'string' || !f.trim())) errors.push(`${at}: a told entry needs "fields", the fields it covers`);
+      if (typeof t?.says !== 'string' || !t.says.trim()) errors.push(`${at}: a told entry needs "says", what was said, in a sentence`);
+    }
+  }
+  if (p.asks !== undefined) {
+    if (!Array.isArray(p.asks)) errors.push(`${at}: asks must be a list`);
+    else for (const a of p.asks) {
+      if (!a || typeof a.id !== 'string' || !/^[a-z0-9-]{3,60}$/.test(a.id)) errors.push(`${at}: each ask needs an "id" of letters, digits and dashes`);
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(a?.on || '')) errors.push(`${at}: each ask needs "on", the date it was raised (YYYY-MM-DD)`);
+      if (typeof a?.question !== 'string' || !a.question.trim() || a.question.length > 600) errors.push(`${at}: each ask needs a "question" of up to 600 characters`);
+    }
+    if (new Set((p.asks || []).map(a => a?.id)).size !== (p.asks || []).length) errors.push(`${at}: ask ids must be different from one another`);
+  }
   // The provider's pickup lists, kept as they were last read, so the next check is a comparison and not fresh research.
   if (p.pickupLists !== undefined) {
     if (!Array.isArray(p.pickupLists) || !p.pickupLists.length) errors.push(`${at}: pickupLists must be a list`);
@@ -251,6 +272,13 @@ function checkList() {
     // Weekend classes: one row per listing with a "weekend" block, oldest check first, each with the quickest way to read it again.
     weekend: programs.filter(p => p.weekend).map(p => ({ program: p.id, term: p.weekend.term || '', checked: p.weekend.checked || p.lastVerified, ...(p.weekend.check || { url: p.weekend.url, how: 'fetch', look: '' }) }))
       .sort((a, b) => a.checked.localeCompare(b.checked) || a.program.localeCompare(b.program)),
+    // What programs told us themselves: those fields are the program's word, and a check never changes them from the site.
+    // "stale" means it is older than TOLD_DAYS with nothing newer covering the same fields: the morning job asks the
+    // program's managers to confirm it; a listing with no manager is for the owner to ask.
+    told: programs.filter(p => p.told).flatMap(p => p.told.map(t => ({ program: p.id, name: fullName(p), on: t.on, by: t.by, how: t.how, fields: t.fields, says: t.says, daysAgo: daysSince(t.on), stale: staleTold(p).includes(t) })))
+      .sort((a, b) => a.on.localeCompare(b.on) || a.program.localeCompare(b.program)),
+    // Open questions for programs' managers, each emailed once by the morning job to whoever holds the listing.
+    asks: programs.filter(p => asksFor(p).length).map(p => ({ program: p.id, name: fullName(p), asks: asksFor(p) })),
     // Summer camps: the camps still showing an older summer come first, then the oldest checks. "todo" is the camps not read yet.
     camps: campsFile ? {
       season: campsFile.season,
@@ -1484,7 +1512,7 @@ ${schoolRows}
     <p class="actions"><a class="btn" href="${reviewUrl}" data-track="review">${revs.length ? T(`Write a review`) : T(`Write the first review`)}</a></p>
     <p class="hint">${T(`Reviews are first-hand notes from parents and caregivers. Each one is read before it’s posted.`)}</p>
   </section>
-  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks(p.sources, p)}${tied ? ` Summer: ${sourceLinks(tied.sources, tied)}` : ''}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
+  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks(p.sources, p)}${tied ? ` Summer: ${sourceLinks(tied.sources, tied)}` : ''}${p.told ? ` ${T(`Some of this came from the program itself, on {date}.`, { date: longDate([...p.told].sort((a, b) => a.on.localeCompare(b.on)).pop().on) })}` : ''}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
 </div>`;
   const url = `${cfg.siteUrl}/${programPath(p)}`;
   const thing = {
@@ -3475,9 +3503,21 @@ const testListings = (fs.existsSync(path.join(ROOT, 'data/test-listings.json')) 
   for (const [sid, l] of Object.entries(p.schools || {})) if (!schools.some(s => s.id === sid) || !['onsite', 'pickup', 'nearby'].includes(l?.relation)) stop(`schools: "${sid}" must be a school on the site, with a relation of onsite, pickup or nearby`);
   return { ...p, hidden: true, schools: p.schools || {}, _grades: expandGrades(p.grades), _cls: {} };   // a school here only shapes the test page: the school's own page never lists it
 });
+// What a program told us itself ("told" on the listing) is its word, not its site's, and it goes stale: after TOLD_DAYS
+// the morning job asks the listing's managers, once, whether it still holds. A later told entry covering the same
+// fields counts as the answer. "asks" on a listing are questions a check raised (the site says one thing, the program
+// said another); each goes to the managers once too. A listing nobody has claimed gets neither email: the monthly
+// check's report carries those for the site's owner.
+const TOLD_DAYS = 120;
+const daysSince = iso => Math.floor((new Date(TODAY + 'T12:00:00Z') - new Date(iso + 'T12:00:00Z')) / 86400000);
+const staleTold = p => (p.told || []).filter(t => daysSince(t.on) >= TOLD_DAYS && !(p.told || []).some(u => u.on > t.on && t.fields.every(f => u.fields.includes(f))));
+const asksFor = p => [
+  ...(p.asks || []).map(a => ({ id: a.id, q: a.question })),
+  ...staleTold(p).map(t => ({ id: 'told-' + t.on, q: `On ${longDate(t.on)} you told us: “${t.says}” Is that still right? If anything has changed, reply to this email or propose a change from your listing’s tools, and the listing will be updated.` })),
+];
 const claimListings = () => Object.fromEntries([
   ...testListings.map(p => ['p:' + p.id, { n: p.name, d: p.claimDomain, m: 'match', h: 1 }]),
-  ...programs.map(p => ['p:' + p.id, { n: fullName(p), d: baseDomain(p.website), m: claimMode(baseDomain(p.website), !!p.clubs), ...(reviewsFor(p.id).length ? { r: reviewsFor(p.id).length } : {}), ...(upcomingDates(p).length ? { u: 1 } : {}) }]),   // r: published reviews, u: a sign-up date still to come (for the emails to its managers)
+  ...programs.map(p => ['p:' + p.id, { n: fullName(p), d: baseDomain(p.website), m: claimMode(baseDomain(p.website), !!p.clubs), ...(reviewsFor(p.id).length ? { r: reviewsFor(p.id).length } : {}), ...(upcomingDates(p).length ? { u: 1 } : {}), ...(asksFor(p).length ? { a: asksFor(p) } : {}) }]),   // r:published reviews, u: a sign-up date still to come (for the emails to its managers)
   ...summerCamps.map(c => ['c:' + c.id, { n: c.name + ' (summer camp)', d: baseDomain(c.website), m: claimMode(baseDomain(c.website)) }]),
 ]);
 // Under a listing: suggest an update (anyone), and claim it (whoever runs it).
@@ -4680,7 +4720,7 @@ $topListings = array(); $hitsSince = '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
 $have = is_file($file);
 $tiles = array(); $bySchool = array(); $days = array(); $ever = array();
-$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'mgr_month' => 'Monthly emails to managers', 'mgr_review' => 'New-review emails to managers', 'mgr_follow' => 'New-follower emails to managers', 'mgr_stop' => 'Managers who turned those emails off', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'ages_saved' => 'Ages kept', 'hood_saved' => 'Neighborhoods kept', 'phone_saved' => 'Phone numbers added for texts', 'follow' => 'Follows started', 'stop_one' => 'Listings stopped from an email', 'stop_all' => 'Everything stopped from an email', 'fav' => 'Favorites saved', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'email_changed' => 'Email addresses changed', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'premium_ask' => 'Premium sign-ups', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers', 'push_on' => 'Devices that turned notifications on', 'push_sent' => 'Notifications delivered', 'extra_sent' => 'Words and offer lines sent by program managers', 'ask' => 'Questions sent to programs');
+$cols = array('account' => 'New accounts', 'account_parent' => 'New accounts: parents', 'account_manager' => 'New accounts: program managers', 'mgr_month' => 'Monthly emails to managers', 'mgr_review' => 'New-review emails to managers', 'mgr_follow' => 'New-follower emails to managers', 'mgr_ask' => 'Questions emailed to managers about their listing', 'mgr_stop' => 'Managers who turned those emails off', 'signin_email' => 'Sign-ins by email', 'signin_google' => 'Sign-ins with Google', 'week_saved' => 'Weeks kept', 'summer_saved' => 'Summers kept', 'daysoff_saved' => 'Days-off plans kept', 'school_saved' => 'Schools kept', 'grades_saved' => 'Grades kept', 'ages_saved' => 'Ages kept', 'hood_saved' => 'Neighborhoods kept', 'phone_saved' => 'Phone numbers added for texts', 'follow' => 'Follows started', 'stop_one' => 'Listings stopped from an email', 'stop_all' => 'Everything stopped from an email', 'fav' => 'Favorites saved', 'share' => 'Weeks shared with one person', 'group' => 'Groups started', 'invite' => 'Invitations', 'join' => 'Invitations accepted', 'account_deleted' => 'Accounts deleted', 'email_changed' => 'Email addresses changed', 'claim' => 'Listings claimed', 'space_set' => 'Times a manager said whether there’s space', 'claim_pending' => 'Claims sent for approval', 'claim_mismatch' => 'Claims refused: address didn’t match', 'premium_ask' => 'Premium sign-ups', 'edit_proposed' => 'Changes proposed by program managers', 'photo_sent' => 'Photos sent by program managers', 'push_on' => 'Devices that turned notifications on', 'push_sent' => 'Notifications delivered', 'extra_sent' => 'Words and offer lines sent by program managers', 'ask' => 'Questions sent to programs');
 if ($have) {
   try {
     $db = new PDO('sqlite:' . $file);
@@ -5782,6 +5822,8 @@ if (!PREVIEW) {
   const loose = check.links.filter(r => r.basis === 'none'), off = check.links.filter(r => r.notOnProviderList && r.basis !== 'none');
   if (loose.length) console.log(`Note: ${loose.length} pickup link(s) rest on no stored list and no source of their own: ${loose.map(r => `${r.program} → ${r.school}`).join(', ')}.`);
   if (off.length) console.log(`Note: ${off.length} pickup link(s) are not on the provider's own list as last read: ${off.map(r => `${r.program} → ${r.school}`).join(', ')}.`);
+  const stale = check.told.filter(t => t.stale);
+  if (stale.length) console.log(`Note: ${stale.length} thing(s) a program told us are more than ${TOLD_DAYS} days old: ${stale.map(t => `${t.program} (${t.fields.join(', ')}, ${t.on})`).join('; ')}. The morning job asks the listing's managers to confirm; a listing nobody has claimed needs the owner to ask.`);
   write('data/alerts.json', JSON.stringify(alertsFeed(), null, 2));   // read by scripts/send-alerts.mjs once a day
   // The sitemap. Each page's date is the newest date in the data it is built from (a listing's last check, a school's
   // review, the calendar's check), not the day of the build: a date that moves every night teaches a search engine

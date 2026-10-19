@@ -374,6 +374,17 @@ Fields worth knowing:
     the day the listing's own details (hours, price, registration) were last checked.
 - `pickupLists`: the provider's pickup lists as they were last read, one entry per list the provider publishes. See
   "Keeping it current".
+- `told`: what the program itself told us, as opposed to what its site says. A list of
+  `{ "on": "YYYY-MM-DD", "by": "program manager" | "provider" | "school", "how": "an email through the suggestion form", "fields": ["hours", "register.nextTerm"], "says": "…in a sentence" }`.
+  The fields named are the program's word: a check never changes them back to what the site says, and when the site
+  disagrees it raises the difference instead (see "Keeping it current"). The program's page says "Some of this came
+  from the program itself, on <date>". After 120 days (`TOLD_DAYS`) an entry is stale: the morning job asks the
+  listing's managers, once, whether it still holds, and a newer `told` entry covering the same fields is the answer.
+  Add an entry whenever a fact is written in from a message rather than a page; never delete one, add a newer one.
+- `asks`: open questions for the program's managers, each `{ "id": "a-short-id", "on": "YYYY-MM-DD", "question": "…" }`
+  (up to 600 characters). The monthly check writes one when a provider's site and the listing disagree on a field
+  the program told us; the morning job emails it once to whoever holds the listing (see "Emails to program managers").
+  Remove an ask once it is settled. A listing nobody has claimed gets no email: those are for the owner, in the check's report.
 
 ## Add a school
 
@@ -1441,6 +1452,12 @@ All three are sent by the morning job (`push_run`), never because of something a
 - **New followers**, at most once a week: how many more families started following the listing in the last seven
   days. A number, never who, and the listing's own managers aren't counted. It is skipped on the morning the
   month's numbers go.
+- **A question about the listing.** The build hands the server each listing's open questions (`a`): a listing's
+  `asks` (a check found the site and the listing disagreeing on something the program told us) and any `told` entry
+  older than 120 days with nothing newer covering it. Each goes once, by its id, to everyone holding the listing that
+  morning (`mgr_asked` in `meta` remembers), with the question in a yellow box and "Reply to this email, or open your
+  listing's tools and propose a change". Nothing on the listing changes until the answer is in and checked; the
+  managers page is where a change is proposed.
 
 The first time the job runs after this was added it only records where things stand (`mgr_month`, `mgr_week` and
 `mgr_rv` in the `meta` table), so nobody gets a backlog. Each email ends with "Stop the emails about your listing",
@@ -1783,6 +1800,14 @@ How a check uses it:
 4. If a page that used to read fine returns something implausible (an earlier school year, a much shorter list than
    the stored one), add it to `data/reading.json` rather than trusting it.
 5. Set `lastVerified` only on listings whose own details were re-read, and `checked` only on links confirmed.
+6. **What the program told us wins over its site.** `check.json` has `told`: every field a program gave us itself
+   (by email, or as a change proposed from its claim), with the date. A check does not change those fields from the
+   site. When the site says something different, it adds an `asks` entry on the listing with the two versions as a
+   question ("Your website says the clinics are at Old Pine Community Center; on October 19 you told us The
+   Neighborhub. Which should the listing say?") and lists it under "Needs your decision". The morning job emails
+   the question once to the listing's managers; their answer comes back as a reply or a proposed change. A `told`
+   entry marked `stale` (older than 120 days) gets the same treatment automatically; an unclaimed listing's stale
+   entries are for the owner to chase.
 
 Review the report and merge the changes you agree with. Busy times: March to May (next year's registration opens)
 and late August (rec centers post their listings).
