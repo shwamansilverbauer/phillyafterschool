@@ -211,7 +211,7 @@
     "website": "https://www.gotrphiladelphia.org/",
     "register": {
       "how": "online",
-      "url": "https://www.gotrphiladelphia.org/program-registration",
+      "url": "https://www.gotrphiladelphia.org/programs",
       "note": "Registration opens by season.",
       "nextTerm": "The Fall 2026 season started the week of September 14 and ends with a 5K on December 6. Spring 2027 dates are not posted yet."
     },
@@ -239,7 +239,7 @@
         "sources": [
           {
             "label": "McCall sports and clubs",
-            "url": "https://mccall.philasd.org/students/"
+            "url": "https://mccall.philasd.org/"
           }
         ],
         "checked": "2026-10-06"
@@ -284,7 +284,7 @@
     "price": "free",
     "phone": "215-400-8110",
     "email": "",
-    "website": "https://www.nebingerpta.org/s-projects-side-by-side",
+    "website": "https://www.nebingerpta.org/projects",
     "register": {
       "how": "school",
       "note": "Ask the school office which of these take sign-ups."
@@ -297,7 +297,7 @@
       },
       {
         "label": "Nebinger PTA programs",
-        "url": "https://www.nebingerpta.org/s-projects-side-by-side"
+        "url": "https://www.nebingerpta.org/projects"
       }
     ],
     "lastVerified": "2026-10-05",
@@ -1097,7 +1097,7 @@
     "website": "https://phillyinmovement.com/move-after-school/",
     "register": {
       "how": "online",
-      "url": "https://app.iclasspro.com/portal/inmovement",
+      "url": "https://portal.iclasspro.com/inmovement",
       "note": "Enrollment for 2026–27 opened in May.",
       "nextTerm": "There is no mid-year term: enrollment covers the full school year, with a waitlist for days that are full. Enrollment for 2026–27 opened May 7, 2026. The date for 2027–28 is not posted yet."
     },
@@ -2008,7 +2008,7 @@
     "hours": "Nothing on weekday afternoons. Day camps run 9 am to 5 pm, and weekly classes meet on Saturdays.",
     "daysOff": {
       "summary": "Play-in-a-Day for grades K–5: the group makes up and performs its own play, 9 am to 5 pm (9 to 4 on December 31). One-day musical theatre workshops for grades 6–8 run 9:30 am to 4:30 pm on the same days through December 29. Financial aid is available.",
-      "url": "https://ardentheatre.org/play-in-a-day",
+      "url": "https://ardentheatre.org/arden-drama-school/",
       "dates": [
         "2026-10-12",
         "2026-11-03",
@@ -2021,7 +2021,7 @@
       "sources": [
         {
           "label": "Arden Play-in-a-Day",
-          "url": "https://ardentheatre.org/play-in-a-day"
+          "url": "https://ardentheatre.org/arden-drama-school/"
         }
       ]
     },
@@ -2031,7 +2031,7 @@
     "website": "https://ardentheatre.org/arden-drama-school",
     "register": {
       "how": "online",
-      "url": "https://ardentheatre.org/play-in-a-day",
+      "url": "https://ardentheatre.org/arden-drama-school/",
       "label": "See dates",
       "note": "Each camp day has its own booking link on Arden’s page."
     },
@@ -2043,7 +2043,7 @@
       },
       {
         "label": "Arden Play-in-a-Day",
-        "url": "https://ardentheatre.org/play-in-a-day"
+        "url": "https://ardentheatre.org/arden-drama-school/"
       }
     ],
     "lastVerified": "2026-10-07",
@@ -3385,11 +3385,15 @@
       "url": "https://reg137.imperisoft.com/Fleisher/Search/Registration.aspx",
       "label": "Register for classes",
       "note": "Teen Lounge needs no registration. Fall 2026 class registration closed September 12.",
-      "nextTerm": "Winter term: public registration opens one week after the fall term ends on November 21. Enrolled students get a two-week priority window first. Winter dates are not posted yet.",
+      "nextTerm": "Winter 2027 term (January 9 to March 6, Saturdays): enrolled students register November 14 to 21, new students November 24 to January 4.",
       "dates": [
         {
-          "date": "2026-11-28",
-          "label": "Winter term public registration expected to open"
+          "date": "2026-11-14",
+          "label": "Winter term registration opens for enrolled students"
+        },
+        {
+          "date": "2026-11-24",
+          "label": "Winter term registration opens for new students"
         }
       ]
     },
@@ -3405,10 +3409,14 @@
       },
       {
         "label": "Fall 2026 term",
-        "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/fall-2026/"
+        "url": "https://fleisher.org/children-and-youth-programs-2/young-artists-program-spring-2026/fall-2026/"
+      },
+      {
+        "label": "Winter 2027 term",
+        "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/winter-2027/"
       }
     ],
-    "lastVerified": "2026-10-05",
+    "lastVerified": "2026-10-19",
     "schools": {
       "nebinger": {
         "relation": "nearby",
@@ -3447,23 +3455,27 @@
         "sat"
       ],
       "grades": "K-8",
-      "term": "Fall 2026: Saturday classes run September 19 to November 21",
+      "term": "Fall 2026: Saturday classes run September 19 to November 21. Winter 2027: January 9 to March 6.",
       "cost": "A $65 base fee, with the option to pay more, up to $130.",
-      "note": "Class times weren’t readable, and fall sign-up closed September 12. Ask about openings or the next term.",
-      "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/fall-2026/",
+      "note": "Class times are on the embedded schedule. Fall sign-up closed September 12; winter sign-up opens November 24 for new students (November 14 for enrolled ones).",
+      "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/winter-2027/",
       "sources": [
         {
-          "label": "Fleisher children and youth programs, fall 2026",
-          "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/fall-2026/"
+          "label": "Fleisher Young Artist Program, fall 2026",
+          "url": "https://fleisher.org/children-and-youth-programs-2/young-artists-program-spring-2026/fall-2026/"
+        },
+        {
+          "label": "Fleisher Young Artist Program, winter 2027",
+          "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/winter-2027/"
         }
       ],
       "check": {
-        "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/fall-2026/",
+        "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/winter-2027/",
         "how": "browser",
         "look": "Dates sit in the intro text. The Saturday class grid is an embedded schedule and a “Fall listings” link to the registration system.",
-        "notes": "The page address has the term in it, so the next term is a new page."
+        "notes": "Each term is its own page under Children and Youth Education, so the next term is a new address."
       },
-      "checked": "2026-10-07"
+      "checked": "2026-10-19"
     }
   },
   {
@@ -3836,8 +3848,8 @@
         "url": "https://www.sunriseofphila.org/program-sites"
       },
       {
-        "label": "McCall School handbook, 2025–26",
-        "url": "https://mccall.philasd.org/wp-content/uploads/sites/484/2025/08/McCall-School-Handbook-25-26.pdf"
+        "label": "McCall Parent & Student Handbook",
+        "url": "https://docs.google.com/document/d/1ZaNrbFZBNa2CoxBA5hJWXRvNxv6Uk3ZWmd17ubIxL9A/edit?usp=sharing"
       }
     ],
     "lastVerified": "2026-10-06",
@@ -3889,7 +3901,7 @@
     "cost": "Not published",
     "phone": "215-400-7840",
     "email": "",
-    "website": "https://mccall.philasd.org/students/",
+    "website": "https://mccall.philasd.org/",
     "register": {
       "how": "school",
       "note": "Ask the club’s coach or coordinator through the school. The school says spots may be limited."
@@ -3898,7 +3910,7 @@
     "sources": [
       {
         "label": "McCall sports and clubs",
-        "url": "https://mccall.philasd.org/students/"
+        "url": "https://mccall.philasd.org/"
       }
     ],
     "lastVerified": "2026-10-06",
@@ -4964,10 +4976,10 @@
     "price": "paid",
     "phone": "215-204-1512",
     "email": "",
-    "website": "https://boyer.temple.edu/musicprep/CMSP",
+    "website": "https://boyer.temple.edu/community/temple-music-prep/programs/community-music-scholars-program",
     "register": {
       "how": "online",
-      "url": "https://boyer.temple.edu/musicprep/CMSP",
+      "url": "https://boyer.temple.edu/community/temple-music-prep/programs/community-music-scholars-program",
       "label": "How to apply",
       "note": "The upper division takes a free application and a video audition. The String Project and the Brass & Wind Project need no audition."
     },
@@ -4975,7 +4987,7 @@
     "sources": [
       {
         "label": "Temple Music Prep Community Music Scholars Program",
-        "url": "https://boyer.temple.edu/musicprep/CMSP"
+        "url": "https://boyer.temple.edu/community/temple-music-prep/programs/community-music-scholars-program"
       }
     ],
     "lastVerified": "2026-10-07",
@@ -4992,9 +5004,9 @@
         "sat": "mornings"
       },
       "cost": "$240 for the year for individual lessons or $180 for group lessons. Theory is free and ensembles add $40. More help is available with proof of need.",
-      "url": "https://boyer.temple.edu/musicprep/CMSP",
+      "url": "https://boyer.temple.edu/community/temple-music-prep/programs/community-music-scholars-program",
       "check": {
-        "url": "https://boyer.temple.edu/musicprep/CMSP",
+        "url": "https://boyer.temple.edu/community/temple-music-prep/programs/community-music-scholars-program",
         "how": "fetch",
         "look": "The day, building, start dates and fees are in the program description and the sections for each division.",
         "notes": "Class times are not on the page. Temple Music Prep’s Center City class list loads by script and has not been read."
@@ -5002,7 +5014,7 @@
       "sources": [
         {
           "label": "Temple Music Prep Community Music Scholars Program",
-          "url": "https://boyer.temple.edu/musicprep/CMSP"
+          "url": "https://boyer.temple.edu/community/temple-music-prep/programs/community-music-scholars-program"
         }
       ],
       "checked": "2026-10-07"
@@ -5035,7 +5047,7 @@
     "price": "paid",
     "phone": "215-247-1759",
     "email": "",
-    "website": "https://wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
+    "website": "https://www.wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
     "register": {
       "how": "online",
       "url": "https://www.wissskating.com/index.php/membership/about-mywsconnect-com/",
@@ -5046,7 +5058,7 @@
     "sources": [
       {
         "label": "Wissahickon Skating Club 2026–27 season",
-        "url": "https://wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/"
+        "url": "https://www.wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/"
       }
     ],
     "lastVerified": "2026-10-07",
@@ -5066,9 +5078,9 @@
       },
       "cost": "$215 for an eight-week series.",
       "note": "The club’s home page said the rink was closed for repairs when we checked, so call before you go.",
-      "url": "https://wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
+      "url": "https://www.wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
       "check": {
-        "url": "https://wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
+        "url": "https://www.wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
         "how": "fetch",
         "look": "The season page lists the Saturday 11:45 am group lesson series and the Sunday hockey lessons with their dates and the $215 fee.",
         "notes": "Ages and levels are on a separate group-lessons page. Check the home page for a closure notice."
@@ -5076,7 +5088,7 @@
       "sources": [
         {
           "label": "Wissahickon Skating Club 2026–27 season",
-          "url": "https://wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/"
+          "url": "https://www.wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/"
         }
       ],
       "checked": "2026-10-07"
@@ -5248,17 +5260,17 @@
     "price": "free",
     "phone": "215-448-1200",
     "email": "",
-    "website": "https://fi.edu/pacts",
+    "website": "https://fi.edu/en/science-education/youth-and-community-programs/pacts",
     "register": {
       "how": "online",
-      "url": "https://fi.edu/pacts",
+      "url": "https://fi.edu/en/science-education/youth-and-community-programs/pacts",
       "label": "How to apply",
       "note": "Entry is by application, through the link on the museum’s page."
     },
     "sources": [
       {
         "label": "The Franklin Institute PACTS",
-        "url": "https://fi.edu/pacts"
+        "url": "https://fi.edu/en/science-education/youth-and-community-programs/pacts"
       }
     ],
     "lastVerified": "2026-10-07",
@@ -5275,9 +5287,9 @@
         "sat": "mornings, twice a month"
       },
       "cost": "Free.",
-      "url": "https://fi.edu/pacts",
+      "url": "https://fi.edu/en/science-education/youth-and-community-programs/pacts",
       "check": {
-        "url": "https://fi.edu/pacts",
+        "url": "https://fi.edu/en/science-education/youth-and-community-programs/pacts",
         "how": "fetch",
         "look": "The program description gives the grades, the twice-monthly Saturday mornings and that it is free.",
         "notes": "No dates, clock times or application deadline on the page."
@@ -5285,7 +5297,7 @@
       "sources": [
         {
           "label": "The Franklin Institute PACTS",
-          "url": "https://fi.edu/pacts"
+          "url": "https://fi.edu/en/science-education/youth-and-community-programs/pacts"
         }
       ],
       "checked": "2026-10-07"
@@ -6174,12 +6186,12 @@
     "hours": "Full Day School Age Care runs 7 am to 6 pm on school holidays. The branch is open 5 am to 9 pm on weekdays and 7 am to 6 pm on weekends.",
     "daysOff": {
       "summary": "Full Day School Age Care, 7 am to 6 pm, for kindergarten through 6th grade on days school is closed, with the day split into 45-minute blocks of arts, sports, group games, science and clubs. The Y’s page lists no dates or prices for this school year, so ask the branch which days it will run.",
-      "url": "https://www.philaymca.org/node/405987",
+      "url": "https://www.philaymca.org/child-care/school-age-care-programs/full-day-school-age-care/",
       "dates": [],
       "sources": [
         {
           "label": "Greater Philadelphia YMCA: Full Day School Age Care",
-          "url": "https://www.philaymca.org/node/405987"
+          "url": "https://www.philaymca.org/child-care/school-age-care-programs/full-day-school-age-care/"
         }
       ]
     },
@@ -6187,7 +6199,7 @@
     "price": "paid",
     "phone": "215-735-5800",
     "email": "",
-    "website": "https://www.philaymca.org/node/51",
+    "website": "https://www.philaymca.org/locations/christian-street-ymca/",
     "register": {
       "how": "phone",
       "note": "Call the branch, or use the Y’s child care contact form, to ask about days and sign-up."
@@ -6196,11 +6208,11 @@
     "sources": [
       {
         "label": "Christian Street YMCA",
-        "url": "https://www.philaymca.org/node/51"
+        "url": "https://www.philaymca.org/locations/christian-street-ymca/"
       },
       {
         "label": "Greater Philadelphia YMCA: Full Day School Age Care",
-        "url": "https://www.philaymca.org/node/405987"
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/full-day-school-age-care/"
       }
     ],
     "lastVerified": "2026-10-16",
@@ -6740,7 +6752,7 @@
     "sources": [
       {
         "label": "Philly PACK classes",
-        "url": "https://phillypack.org/classes"
+        "url": "https://www.phillypack.org/schedule/"
       }
     ],
     "lastVerified": "2026-10-16",
@@ -6757,9 +6769,9 @@
         "sat": "11 am to 12:45 pm"
       },
       "cost": "$400 for the 12-week session.",
-      "url": "https://phillypack.org/classes",
+      "url": "https://www.phillypack.org/schedule/",
       "check": {
-        "url": "https://phillypack.org/classes",
+        "url": "https://www.phillypack.org/schedule/",
         "how": "fetch",
         "look": "The classes page lists Creative Movement 1 and 2 with their Saturday times and ages, and the tuition scale by class length.",
         "notes": "The page also keeps an older Spring 2026 grid; read the current session’s list."
@@ -6767,7 +6779,7 @@
       "sources": [
         {
           "label": "Philly PACK classes",
-          "url": "https://phillypack.org/classes"
+          "url": "https://www.phillypack.org/schedule/"
         }
       ],
       "checked": "2026-10-16"
@@ -6945,7 +6957,7 @@
     "website": "https://phillycircus.com/kids-day-off-camp/",
     "register": {
       "how": "online",
-      "url": "https://app.iclasspro.com/portal/phillycircus/camps/12?sortBy=name",
+      "url": "https://portal.iclasspro.com/phillycircus/camps/12?sortBy=name",
       "label": "See camp days",
       "note": "Each day is booked on its iClassPro camp page."
     },

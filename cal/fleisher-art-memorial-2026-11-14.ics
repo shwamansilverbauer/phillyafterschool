@@ -1,0 +1,27 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:fleisher-art-memorial-2026-11-14@phillyafterschool.org
+DTSTAMP:20261019T120000Z
+DTSTART;VALUE=DATE:20261114
+DTEND;VALUE=DATE:20261115
+SUMMARY:Fleisher Art Memorial: Winter term registration open
+ s for enrolled students
+DESCRIPTION:https://reg137.imperisoft.com/Fleisher/Search/Re
+ gistration.aspx?utm_source=phillyafterschool.org&utm_medium=
+ referral&utm_campaign=directory&utm_content=calendar\n\nFrom
+  Philly After School: https://phillyafterschool.org/
+URL:https://reg137.imperisoft.com/Fleisher/Search/Registrati
+ on.aspx
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Fleisher Art Memorial: Winter term registration 
+ opens for enrolled students
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

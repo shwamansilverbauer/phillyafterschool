@@ -1,7 +1,7 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 160,
+    "pages": 161,
     "pagesNeedingABrowser": 4,
     "pagesNeedingAPerson": 4,
     "links": 120,
@@ -1245,7 +1245,7 @@
       "lists": []
     },
     {
-      "url": "https://mccall.philasd.org/students/",
+      "url": "https://mccall.philasd.org/",
       "how": "fetch",
       "programs": [
         "girls-on-the-run",
@@ -1259,22 +1259,6 @@
       "programs": [
         "vare-washington-edey",
         "sunrise-southwark"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://app.iclasspro.com/portal/inmovement",
-      "how": "fetch",
-      "programs": [
-        "philly-inmovement"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://app.iclasspro.com/portal/phillycircus/camps/12?sortBy=name",
-      "how": "fetch",
-      "programs": [
-        "philadelphia-school-of-circus-arts"
       ],
       "lists": []
     },
@@ -1295,7 +1279,7 @@
       "lists": []
     },
     {
-      "url": "https://ardentheatre.org/play-in-a-day",
+      "url": "https://ardentheatre.org/arden-drama-school/",
       "how": "fetch",
       "programs": [
         "arden-drama-school"
@@ -1335,7 +1319,7 @@
       "lists": []
     },
     {
-      "url": "https://boyer.temple.edu/musicprep/CMSP",
+      "url": "https://boyer.temple.edu/community/temple-music-prep/programs/community-music-scholars-program",
       "how": "fetch",
       "programs": [
         "temple-music-prep-cmsp"
@@ -1407,6 +1391,14 @@
       "lists": []
     },
     {
+      "url": "https://docs.google.com/document/d/1ZaNrbFZBNa2CoxBA5hJWXRvNxv6Uk3ZWmd17ubIxL9A/edit?usp=sharing",
+      "how": "fetch",
+      "programs": [
+        "sunrise-mccall"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://docs.google.com/spreadsheets/d/1FGIV9bDa2OKzL1VZ5hgBb2JCFId4H3OI5_sPFBze_SY/edit?gid=0#gid=0",
       "how": "fetch",
       "programs": [
@@ -1431,7 +1423,7 @@
       "lists": []
     },
     {
-      "url": "https://fi.edu/pacts",
+      "url": "https://fi.edu/en/science-education/youth-and-community-programs/pacts",
       "how": "fetch",
       "programs": [
         "franklin-institute-pacts"
@@ -1471,7 +1463,15 @@
       "lists": []
     },
     {
-      "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/fall-2026/",
+      "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/winter-2027/",
+      "how": "fetch",
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://fleisher.org/children-and-youth-programs-2/young-artists-program-spring-2026/fall-2026/",
       "how": "fetch",
       "programs": [
         "fleisher-art-memorial"
@@ -1628,14 +1628,6 @@
       "how": "fetch",
       "programs": [
         "makom-community"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://mccall.philasd.org/wp-content/uploads/sites/484/2025/08/McCall-School-Handbook-25-26.pdf",
-      "how": "fetch",
-      "programs": [
-        "sunrise-mccall"
       ],
       "lists": []
     },
@@ -1940,18 +1932,26 @@
       "lists": []
     },
     {
-      "url": "https://phillypack.org/classes",
-      "how": "fetch",
-      "programs": [
-        "philly-pack"
-      ],
-      "lists": []
-    },
-    {
       "url": "https://phillyyouthbasketball.leagueapps.com/classes/5096846-2026-27-sy-pyb-school-closure-holiday-clinics-grades-k-9",
       "how": "fetch",
       "programs": [
         "philadelphia-youth-basketball"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://portal.iclasspro.com/inmovement",
+      "how": "fetch",
+      "programs": [
+        "philly-inmovement"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://portal.iclasspro.com/phillycircus/camps/12?sortBy=name",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-school-of-circus-arts"
       ],
       "lists": []
     },
@@ -2048,14 +2048,6 @@
       "how": "fetch",
       "programs": [
         "walnut-street-theatre-school"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
-      "how": "fetch",
-      "programs": [
-        "wissahickon-skating-club"
       ],
       "lists": []
     },
@@ -2193,7 +2185,7 @@
       "lists": []
     },
     {
-      "url": "https://www.gotrphiladelphia.org/program-registration",
+      "url": "https://www.gotrphiladelphia.org/programs",
       "how": "fetch",
       "programs": [
         "girls-on-the-run"
@@ -2299,7 +2291,7 @@
       "lists": []
     },
     {
-      "url": "https://www.nebingerpta.org/s-projects-side-by-side",
+      "url": "https://www.nebingerpta.org/projects",
       "how": "fetch",
       "programs": [
         "nebinger-arts-partners"
@@ -2395,7 +2387,7 @@
       "lists": []
     },
     {
-      "url": "https://www.philaymca.org/node/405987",
+      "url": "https://www.philaymca.org/child-care/school-age-care-programs/full-day-school-age-care/",
       "how": "fetch",
       "programs": [
         "christian-street-ymca"
@@ -2403,7 +2395,7 @@
       "lists": []
     },
     {
-      "url": "https://www.philaymca.org/node/51",
+      "url": "https://www.philaymca.org/locations/christian-street-ymca/",
       "how": "fetch",
       "programs": [
         "christian-street-ymca"
@@ -2436,6 +2428,14 @@
     },
     {
       "url": "https://www.phillypack.org/registration/",
+      "how": "fetch",
+      "programs": [
+        "philly-pack"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phillypack.org/schedule/",
       "how": "fetch",
       "programs": [
         "philly-pack"
@@ -2597,6 +2597,14 @@
       "lists": []
     },
     {
+      "url": "https://www.wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
+      "how": "fetch",
+      "programs": [
+        "wissahickon-skating-club"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://zazzphilly.com/early-childhood/",
       "how": "fetch",
       "programs": [
@@ -2640,19 +2648,10 @@
       "look": "Classes are grouped by grade band under the eight-week and mini-semester headings, each with a “Saturdays” line and its own registration link."
     },
     {
-      "program": "fleisher-art-memorial",
-      "term": "Fall 2026: Saturday classes run September 19 to November 21",
-      "checked": "2026-10-07",
-      "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/fall-2026/",
-      "how": "browser",
-      "look": "Dates sit in the intro text. The Saturday class grid is an embedded schedule and a “Fall listings” link to the registration system.",
-      "notes": "The page address has the term in it, so the next term is a new page."
-    },
-    {
       "program": "franklin-institute-pacts",
       "term": "During the school year, twice a month. The page gives no dates.",
       "checked": "2026-10-07",
-      "url": "https://fi.edu/pacts",
+      "url": "https://fi.edu/en/science-education/youth-and-community-programs/pacts",
       "how": "fetch",
       "look": "The program description gives the grades, the twice-monthly Saturday mornings and that it is free.",
       "notes": "No dates, clock times or application deadline on the page."
@@ -2784,7 +2783,7 @@
       "program": "temple-music-prep-cmsp",
       "term": "2026–27: September to May. The upper division began September 12, the String and Brass & Wind Projects September 19.",
       "checked": "2026-10-07",
-      "url": "https://boyer.temple.edu/musicprep/CMSP",
+      "url": "https://boyer.temple.edu/community/temple-music-prep/programs/community-music-scholars-program",
       "how": "fetch",
       "look": "The day, building, start dates and fees are in the program description and the sections for each division.",
       "notes": "Class times are not on the page. Temple Music Prep’s Center City class list loads by script and has not been read."
@@ -2802,7 +2801,7 @@
       "program": "wissahickon-skating-club",
       "term": "Fall series I ran September to early November 2026; series II runs early November to mid-January; a winter series runs late January to March 2027.",
       "checked": "2026-10-07",
-      "url": "https://wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
+      "url": "https://www.wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
       "how": "fetch",
       "look": "The season page lists the Saturday 11:45 am group lesson series and the Sunday hockey lessons with their dates and the $215 fee.",
       "notes": "Ages and levels are on a separate group-lessons page. Check the home page for a closure notice."
@@ -2892,7 +2891,7 @@
       "program": "philly-pack",
       "term": "Fall 2026: from August 31 through Saturday, November 21.",
       "checked": "2026-10-16",
-      "url": "https://phillypack.org/classes",
+      "url": "https://www.phillypack.org/schedule/",
       "how": "fetch",
       "look": "The classes page lists Creative Movement 1 and 2 with their Saturday times and ages, and the tuition scale by class length.",
       "notes": "The page also keeps an older Spring 2026 grid; read the current session’s list."
@@ -2905,6 +2904,15 @@
       "how": "fetch",
       "look": "The post lists each city rink with its public-skating days and times and says admission is free during set hours.",
       "notes": "A new post appears each season (the 2024–25 one gave Saturday sessions instead of Sunday), so search phila.gov for the latest before trusting the days."
+    },
+    {
+      "program": "fleisher-art-memorial",
+      "term": "Fall 2026: Saturday classes run September 19 to November 21. Winter 2027: January 9 to March 6.",
+      "checked": "2026-10-19",
+      "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/winter-2027/",
+      "how": "browser",
+      "look": "Dates sit in the intro text. The Saturday class grid is an embedded schedule and a “Fall listings” link to the registration system.",
+      "notes": "Each term is its own page under Children and Youth Education, so the next term is a new address."
     },
     {
       "program": "skilladelphia",
@@ -3042,7 +3050,7 @@
         "name": "The Clay Studio",
         "season": 2026,
         "checked": "2026-10-07",
-        "url": "https://theclaystudio.org/camp-policies",
+        "url": "https://www.theclaystudio.org/camp-policies",
         "how": "browser",
         "look": "Dates, hours and add-on fees are in the camp policies page. Camp weeks and tuition sit in the booking listing at public.theclaystudio.org/public/3/camps, which needs a browser.",
         "signup": "The 2026 early-bird discount ran January 2 to February 15."
@@ -3073,7 +3081,7 @@
         "name": "Fleisher Art Memorial",
         "season": 2026,
         "checked": "2026-10-07",
-        "url": "https://fleisher.org/take-a-class/summer-workshops-for-children-and-youth/",
+        "url": "https://fleisher.org/children-and-youth-programs-2/",
         "how": "fetch",
         "look": "Session dates are listed week by week and prices appear as member and non-member rates per age group in the page body.",
         "notes": "The street address is not on the camp page; it is Fleisher’s own building.",
@@ -3165,7 +3173,7 @@
         "name": "Music Theatre Philly",
         "season": 2026,
         "checked": "2026-10-07",
-        "url": "https://www.musictheatrephilly.com/summer-camps",
+        "url": "https://www.musictheatrephilly.com/1-6-camps",
         "how": "fetch",
         "look": "A week-by-week list gives dates, theme, grades and price, each with its own Sawyer register link.",
         "notes": "Hours, care fees and discounts sit on /about-camps and the Pre-K weeks on /summer-camps-pre-k."
@@ -3185,7 +3193,7 @@
         "name": "PAFA summer art camp",
         "season": 2026,
         "checked": "2026-10-07",
-        "url": "https://www.pafa.org/family-programs/summer-art-camp",
+        "url": "https://www.pafa.org/education/center-for-art-education/youth-and-family/summer-art-camps",
         "how": "fetch",
         "look": "Dates, hours, price and discounts are in the body of the family-programs summer art camp page. Sign-up is on CourseStorm.",
         "notes": "pafa.org/camp is a stale page still showing summer 2024. Use the family-programs address."
@@ -3326,7 +3334,7 @@
         "name": "Wissahickon Skating Club figure skating camp",
         "season": 2026,
         "checked": "2026-10-07",
-        "url": "https://www.wissskating.com/product/get-the-edge-summer-figure-skating-camp/",
+        "url": "https://www.wissskating.com/index.php/new-figure-skating-schedules-general-info-2026/get-the-edge-summer-figure-skating-camp-save-the-date/",
         "how": "fetch",
         "look": "Dates, hours and prices are in the body text of the camp’s product page.",
         "notes": "Older copies of this camp are still up on the club’s calendar. The club’s hockey camp page still showed 2024 dates on this check."
@@ -3357,7 +3365,7 @@
         "name": "Greater Philadelphia YMCA day camps",
         "season": 2026,
         "checked": "2026-10-07",
-        "url": "https://www.philaymca.org/node/260",
+        "url": "https://www.philaymca.org/camps/summer-day-camp/",
         "how": "browser",
         "look": "The summer day camp page lists every branch and a Camp Finder. Week dates and member and non-member rates are most likely in the registration portal or the linked Camp Handbook PDF.",
         "notes": "Each branch has its own page, on the pattern philaymca.org/camp/roxborough.",

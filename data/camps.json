@@ -64,19 +64,19 @@
       "neighborhoods": [
         "Bella Vista"
       ],
-      "website": "https://fleisher.org/take-a-class/summer-workshops-for-children-and-youth/",
+      "website": "https://fleisher.org/children-and-youth-programs-2/",
       "price": "paid",
       "signup": "Sign-ups for 2026 opened January 12.",
       "program": "fleisher-art-memorial",
       "sources": [
         {
           "label": "Fleisher Art Memorial",
-          "url": "https://fleisher.org/take-a-class/summer-workshops-for-children-and-youth/"
+          "url": "https://fleisher.org/children-and-youth-programs-2/"
         }
       ],
       "checked": "2026-10-07",
       "check": {
-        "url": "https://fleisher.org/take-a-class/summer-workshops-for-children-and-youth/",
+        "url": "https://fleisher.org/children-and-youth-programs-2/",
         "how": "fetch",
         "look": "Session dates are listed week by week and prices appear as member and non-member rates per age group in the page body.",
         "notes": "The street address is not on the camp page; it is Fleisher’s own building."
@@ -144,18 +144,18 @@
         "Rittenhouse"
       ],
       "phone": "445-223-2683",
-      "website": "https://www.musictheatrephilly.com/summer-camps",
+      "website": "https://www.musictheatrephilly.com/1-6-camps",
       "price": "paid",
       "program": "music-theatre-philly",
       "sources": [
         {
           "label": "Music Theatre Philly",
-          "url": "https://www.musictheatrephilly.com/summer-camps"
+          "url": "https://www.musictheatrephilly.com/1-6-camps"
         }
       ],
       "checked": "2026-10-07",
       "check": {
-        "url": "https://www.musictheatrephilly.com/summer-camps",
+        "url": "https://www.musictheatrephilly.com/1-6-camps",
         "how": "fetch",
         "look": "A week-by-week list gives dates, theme, grades and price, each with its own Sawyer register link.",
         "notes": "Hours, care fees and discounts sit on /about-camps and the Pre-K weeks on /summer-camps-pre-k."
@@ -366,7 +366,7 @@
         "South Kensington"
       ],
       "phone": "215-925-3453",
-      "website": "https://theclaystudio.org/camp-policies",
+      "website": "https://www.theclaystudio.org/camp-policies",
       "registerUrl": "https://public.theclaystudio.org/public/3/camps",
       "price": "paid",
       "signup": "The 2026 early-bird discount ran January 2 to February 15.",
@@ -374,12 +374,12 @@
       "sources": [
         {
           "label": "The Clay Studio",
-          "url": "https://theclaystudio.org/camp-policies"
+          "url": "https://www.theclaystudio.org/camp-policies"
         }
       ],
       "checked": "2026-10-07",
       "check": {
-        "url": "https://theclaystudio.org/camp-policies",
+        "url": "https://www.theclaystudio.org/camp-policies",
         "how": "browser",
         "look": "Dates, hours and add-on fees are in the camp policies page. Camp weeks and tuition sit in the booking listing at public.theclaystudio.org/public/3/camps, which needs a browser."
       }
@@ -406,18 +406,18 @@
         "Center City"
       ],
       "phone": "215-972-2054",
-      "website": "https://www.pafa.org/family-programs/summer-art-camp",
+      "website": "https://www.pafa.org/education/center-for-art-education/youth-and-family/summer-art-camps",
       "price": "paid",
       "program": "pafa-saturday-art",
       "sources": [
         {
           "label": "PAFA summer art camp",
-          "url": "https://www.pafa.org/family-programs/summer-art-camp"
+          "url": "https://www.pafa.org/education/center-for-art-education/youth-and-family/summer-art-camps"
         }
       ],
       "checked": "2026-10-07",
       "check": {
-        "url": "https://www.pafa.org/family-programs/summer-art-camp",
+        "url": "https://www.pafa.org/education/center-for-art-education/youth-and-family/summer-art-camps",
         "how": "fetch",
         "look": "Dates, hours, price and discounts are in the body of the family-programs summer art camp page. Sign-up is on CourseStorm.",
         "notes": "pafa.org/camp is a stale page still showing summer 2024. Use the family-programs address."
@@ -443,13 +443,13 @@
         "Logan Square"
       ],
       "phone": "215-965-4015",
-      "website": "https://moore.edu/academics/youth-education/young-artists-workshop/summer-2026-youth-courses",
+      "website": "https://moore.edu/academics/youth-education/young-artists-workshop/",
       "price": "paid",
       "program": "moore-young-artists-workshop",
       "sources": [
         {
           "label": "Moore College of Art & Design youth courses",
-          "url": "https://moore.edu/academics/youth-education/young-artists-workshop/summer-2026-youth-courses"
+          "url": "https://moore.edu/academics/youth-education/young-artists-workshop/"
         }
       ],
       "checked": "2026-10-07",
@@ -716,18 +716,18 @@
       "neighborhoods": [
         "Chestnut Hill"
       ],
-      "website": "https://www.wissskating.com/product/get-the-edge-summer-figure-skating-camp/",
+      "website": "https://www.wissskating.com/index.php/new-figure-skating-schedules-general-info-2026/get-the-edge-summer-figure-skating-camp-save-the-date/",
       "price": "paid",
       "program": "wissahickon-skating-club",
       "sources": [
         {
           "label": "Wissahickon Skating Club figure skating camp",
-          "url": "https://www.wissskating.com/product/get-the-edge-summer-figure-skating-camp/"
+          "url": "https://www.wissskating.com/index.php/new-figure-skating-schedules-general-info-2026/get-the-edge-summer-figure-skating-camp-save-the-date/"
         }
       ],
       "checked": "2026-10-07",
       "check": {
-        "url": "https://www.wissskating.com/product/get-the-edge-summer-figure-skating-camp/",
+        "url": "https://www.wissskating.com/index.php/new-figure-skating-schedules-general-info-2026/get-the-edge-summer-figure-skating-camp-save-the-date/",
         "how": "fetch",
         "look": "Dates, hours and prices are in the body text of the camp’s product page.",
         "notes": "Older copies of this camp are still up on the club’s calendar. The club’s hockey camp page still showed 2024 dates on this check."
@@ -1171,18 +1171,18 @@
         "Roxborough"
       ],
       "phone": "215-220-9199",
-      "website": "https://www.philaymca.org/node/260",
+      "website": "https://www.philaymca.org/camps/summer-day-camp/",
       "signup": "For 2026, sign-ups opened January 7 for family members, January 14 for members and January 21 for everyone.",
       "note": "We read the Roxborough branch’s page. Other city branches, and all prices, weren’t readable.",
       "sources": [
         {
           "label": "Greater Philadelphia YMCA day camps",
-          "url": "https://www.philaymca.org/node/260"
+          "url": "https://www.philaymca.org/camps/summer-day-camp/"
         }
       ],
       "checked": "2026-10-07",
       "check": {
-        "url": "https://www.philaymca.org/node/260",
+        "url": "https://www.philaymca.org/camps/summer-day-camp/",
         "how": "browser",
         "look": "The summer day camp page lists every branch and a Camp Finder. Week dates and member and non-member rates are most likely in the registration portal or the linked Camp Handbook PDF.",
         "notes": "Each branch has its own page, on the pattern philaymca.org/camp/roxborough."

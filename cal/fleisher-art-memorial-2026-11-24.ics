@@ -4,12 +4,12 @@ PRODID:-//Philly After School//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
-UID:fleisher-art-memorial-2026-11-28@phillyafterschool.org
+UID:fleisher-art-memorial-2026-11-24@phillyafterschool.org
 DTSTAMP:20261019T120000Z
-DTSTART;VALUE=DATE:20261128
-DTEND;VALUE=DATE:20261129
-SUMMARY:Fleisher Art Memorial: Winter term public registrati
- on expected to open
+DTSTART;VALUE=DATE:20261124
+DTEND;VALUE=DATE:20261125
+SUMMARY:Fleisher Art Memorial: Winter term registration open
+ s for new students
 DESCRIPTION:https://reg137.imperisoft.com/Fleisher/Search/Re
  gistration.aspx?utm_source=phillyafterschool.org&utm_medium=
  referral&utm_campaign=directory&utm_content=calendar\n\nFrom
@@ -19,8 +19,8 @@ URL:https://reg137.imperisoft.com/Fleisher/Search/Registrati
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Fleisher Art Memorial: Winter term public regist
- ration expected to open
+DESCRIPTION:Fleisher Art Memorial: Winter term registration 
+ opens for new students
 TRIGGER:PT9H
 END:VALARM
 END:VEVENT
