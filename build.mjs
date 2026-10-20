@@ -4904,7 +4904,9 @@ function editPage() {
     ${pages.map(([to, label]) => `<li><a href="${link(to, 1)}">${esc(label)}</a></li>`).join('\n    ')}
   </ul>
   <h2>Emails</h2>
-  <p><a href="${link('edit/emails/', 1)}">The site’s own emails</a>: sign-in codes, invitations, the notes to program managers. Each is shown once with made-up names, and its sentences edit like a page’s.</p>
+  <p><a href="${link('edit/emails/', 1)}">The site’s own emails</a>: sign-in codes, invitations, the notes to program managers. Each is shown once with made-up names, and its sentences edit like a page’s.</p>${GATED ? `
+  <h2>Listings</h2>
+  <p><a href="${link('edit/queue/', 1)}">The weekly run’s queue</a>: suggestions, updates and proposed changes that need a program’s website read, sent as a batch to the scheduled research run, which answers with a pull request.</p>` : ''}
   <h2>What can’t be edited here</h2>
   <ul>
     <li>Program details: names, descriptions, hours and costs come from the listings data. Send fixes for those through <a href="${link('suggest/', 1)}">the suggestion form</a>.</li>
@@ -4922,13 +4924,76 @@ function editPhp() {
   const overrides = Object.fromEntries(Object.entries(copyEdits).filter(([id]) => copyRegistry.has(id)));
   const nowdoc = o => "json_decode(<<<'PAS_JSON'\n" + JSON.stringify(o) + "\nPAS_JSON\n, true)";
   const src = fs.readFileSync(path.join(ROOT, 'src/server/edit-send.php'), 'utf8');
-  for (const m of ['/*MAILER*/', '/*CONFIG*/', '/*AUTH*/']) if (!src.includes(m)) throw new Error('src/server/edit-send.php has lost its ' + m + ' marker');
+  for (const m of ['/*MAILER*/', '/*CONFIG*/', '/*AUTH*/', '/*GH*/']) if (!src.includes(m)) throw new Error('src/server/edit-send.php has lost its ' + m + ' marker');
   const config = `$TO = ${JSON.stringify(cfg.contactEmail)};
 $SITE = ${JSON.stringify(cfg.siteName)};
 $REPO = ${JSON.stringify(cfg.repo || '')};
 $ORIGINAL = ${nowdoc(original)};
 $OVERRIDES = ${nowdoc(overrides)};`;
-  return src.replace('/*MAILER*/', () => mailerPhp()).replace('/*CONFIG*/', () => config).replace('/*AUTH*/', () => (GATED ? editAuthPhp() : ''));
+  return src.replace('/*MAILER*/', () => mailerPhp()).replace('/*CONFIG*/', () => config).replace('/*AUTH*/', () => (GATED ? editAuthPhp() : '')).replace('/*GH*/', () => ghPhp());
+}
+const ghPhp = () => fs.readFileSync(path.join(ROOT, 'src/server/gh.php'), 'utf8');
+
+// ---------- the weekly run's queue: what came in through the site, sent to the scheduled research run as one batch ----------
+function editQueuePhp() {
+  const src = fs.readFileSync(path.join(ROOT, 'src/server/edit-queue.php'), 'utf8');
+  for (const m of ['/*MAILER*/', '/*CONFIG*/', '/*AUTH*/', '/*GH*/']) if (!src.includes(m)) throw new Error('src/server/edit-queue.php has lost its ' + m + ' marker');
+  const names = JSON.stringify(Object.fromEntries(Object.entries(claimListings()).map(([k, v]) => [k, v.n]))).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  const schoolNames = JSON.stringify(Object.fromEntries(schools.map(s => [s.id, s.name]))).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  const config = `$TO = ${JSON.stringify(cfg.contactEmail)};
+$SITE = ${JSON.stringify(cfg.siteName)};
+$SITE_URL = ${JSON.stringify(cfg.siteUrl)};
+$REPO = ${JSON.stringify(cfg.repo || '')};
+$NAMES = json_decode('${names}', true);
+$SCHOOL_NAMES = json_decode('${schoolNames}', true);`;
+  const logic = src.replace('/*MAILER*/', () => mailerPhp()).replace('/*CONFIG*/', () => config).replace('/*AUTH*/', () => editAuthPhp()).replace('/*GH*/', () => ghPhp());
+  const e = v => `<?php echo htmlspecialchars(${v}, ENT_QUOTES, 'UTF-8'); ?>`;
+  const item = (x, open) => `<div class="panel q-item">
+    <h3>${open ? `<label><input type="checkbox" name="ids[]" value="${e(`${x}["id"]`)}" checked> ` : ''}<?php echo htmlspecialchars(${x}["program"] !== '' ? ${x}["program"] : $KIND[${x}["kind"]], ENT_QUOTES, 'UTF-8'); ?>${open ? '</label>' : ''} <span class="hint">${e(`$KIND[${x}["kind"]]`)}<?php if (${x}["kind"] === 'proposal') { ?> · ${e(`${x}["listing"]`)}<?php } ?></span></h3>
+    <p class="hint">${e(`ny(${x}["when"])`)}<?php if (isset(${x}["school"]) && ${x}["school"] !== '') { ?> · school: ${e(`${x}["school"]`)}<?php } ?><?php if (isset(${x}["pickup"]) && ${x}["pickup"] !== '') { ?> · picks up: ${e(`${x}["pickup"]`)}<?php } ?><?php if (isset(${x}["campType"]) && ${x}["campType"] !== '') { ?> · ${e(`${x}["campType"]`)}<?php } ?><?php if (isset(${x}["sentBy"]) && ${x}["sentBy"] !== '') { ?> · sent by: ${e(`${x}["sentBy"]`)}<?php } ?><?php if (isset(${x}["listing"]) && ${x}["listing"] !== '' && ${x}["kind"] !== 'proposal') { ?> · listing: ${e(`${x}["listing"]`)}<?php } ?><?php if (!$open && isset(${x}["sent"])) { ?> · sent in batch ${e(`${x}["sent"]`)}<?php if (!empty(${x}["rush"])) { ?> (rush)<?php } ?><?php } ?></p>
+    <?php if (${x}["website"] !== '') { ?><p>Website: <a href="${e(`${x}["website"]`)}" rel="noopener nofollow" target="_blank">${e(`${x}["website"]`)}</a></p><?php } ?>
+    <?php if (${x}["details"] !== '') { ?><pre class="edit-ask">${e(`${x}["details"]`)}</pre><?php } ?>
+    ${open ? `<div class="actions"><button class="btn" type="submit" name="do" value="drop:${e(`${x}["id"]`)}">Not for the run</button></div>` : `<form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="${e('$csrf')}"><input type="hidden" name="id" value="${e(`${x}["id"]`)}"><button class="btn" type="submit" name="do" value="drop">Done, take it off</button></form>`}
+  </div>`;
+  const hero = `    <h1>The weekly run’s queue</h1>
+    <p class="lede">What came in through the site and needs a program’s website read: suggestions, updates, changes managers proposed, your own notes. Send a batch and the scheduled run checks each one against the provider’s own site and opens a pull request.</p>`;
+  const body = `<div class="prose stats" data-queue-page>
+<?php if ($said !== '') { ?><p class="flag">${e('$said')}</p><?php } ?>
+  <h2>Waiting (<?php echo count($open); ?>)</h2>
+  <?php if (!$open) { ?><p class="hint">Nothing waiting. Suggestions from the forms, updates sent from a listing’s page, and changes the people who run a listing propose all land here.</p><?php } else { ?>
+  <p class="hint">Each item is shown as it will be sent: names, email addresses and phone numbers are already taken out, and only ticked items go. Untick anything that shouldn’t reach the repository, which is public.</p>
+  <form method="post" action="./" id="q-send"><input type="hidden" name="csrf" value="${e('$csrf')}">
+  <?php foreach ($open as $x) { ?>${item('$x', true)}<?php } ?>
+    <div class="panel"><label><input type="checkbox" name="rush" value="1"> <b>Rush:</b> email me a reminder to press Run now, so this goes out within the hour instead of on the run’s next morning</label>
+    <div class="actions"><button class="btn primary" type="submit" name="do" value="send">Send the ticked items to the weekly run</button></div></div>
+  </form>
+  <?php } ?>
+
+  <h2>Add a note for the run</h2>
+  <p class="hint">Anything you want checked that didn’t come through a form: “Is Shot Tower’s fall term still $45?”, “Look for the new Mighty Writers pickup list.” A note is an item like the others.</p>
+  <form method="post" action="./" class="q-note"><input type="hidden" name="csrf" value="${e('$csrf')}">
+    <label for="q-note">The note</label><textarea id="q-note" name="text" rows="3" maxlength="2000" required></textarea>
+    <div class="actions"><button class="btn" type="submit" name="do" value="note">Add it to the queue</button></div>
+  </form>
+
+  <h2>Schools people asked for</h2>
+  <?php if (!$schools) { ?><p class="hint">None in the last <?php echo $KEEP_DAYS; ?> days.</p><?php } else { ?>
+  <p class="hint">Counted from the “ask for your school” page and the suggestion form. Adding a school is yours to do; the run only hears the demand, with every batch.</p>
+  <ul><?php foreach ($schools as $s) { ?><li>${e('$s["school"]')}: <?php echo (int) $s["n"]; ?> (last ${e('ny($s["last"])')})</li><?php } ?></ul>
+  <?php } ?>
+
+  <h2>Sent to the run</h2>
+  <?php if (!$batches) { ?><p class="hint">Nothing sent yet.</p><?php } else { ?>
+  <p class="hint">Each batch is a commit on the repository’s <code>queue</code> branch, and the run opens a pull request named for it. “Run now” is on the scheduled task in the Claude app.</p>
+  <ul><?php foreach ($batches as $b) { ?><li>${e('ny($b["when"])')}: <?php echo (int) $b["n"]; ?> item<?php echo (int) $b["n"] === 1 ? '' : 's'; ?><?php if (!empty($b["rush"])) { ?>, rush<?php } ?> · batch <code>${e('$b["id"]')}</code><?php if ($REPO !== '') { ?> · <a href="https://github.com/${e('$REPO')}/pulls?q=head%3Aweekly-${e('$b["id"]')}" rel="noopener" target="_blank">its pull request</a><?php } ?></li><?php } ?></ul>
+  <?php } ?>
+  <?php if ($sent) { ?><details><summary>Items already sent (<?php echo count($sent); ?>)</summary>
+  <?php foreach ($sent as $x) { ?>${item('$x', false)}<?php } ?>
+  </details><?php } ?>
+  <p><a class="btn" href="../">Back to editing</a> <a class="btn" href="../claims/">Claims and proposed changes</a></p>
+</div>`;
+  const page = layout({ title: 'The weekly run’s queue', description: 'What is waiting for the weekly research run.', pathName: 'edit/queue/', depth: 2, current: null, hero, body, noindex: true, quiet: true });
+  return logic + '\n' + page;
 }
 
 // ---------- summer camps: one page, built from data/camps.json ----------
@@ -5770,6 +5835,7 @@ write('review/thanks/index.html', reviewThanksPage());
 if (GATED) write('edit/index.php', editIndexPhp()); else write('edit/index.html', editPage());
 if (GATED && GROUPS) write('edit/stats/index.php', editStatsPhp());
 if (GATED && GROUPS) write('edit/claims/index.php', editClaimsPhp());
+if (GATED) write('edit/queue/index.php', editQueuePhp());
 const notFound = notFoundPage();   // always rendered, so its copy is known to the editor
 write('assets/site.css', fs.readFileSync(path.join(ROOT, 'src/site.css')));
 write('assets/site.js', fs.readFileSync(path.join(ROOT, 'src/site.js')));

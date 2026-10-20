@@ -1858,3 +1858,36 @@ How a check uses it:
 
 Review the report and merge the changes you agree with. Busy times: March to May (next year's registration opens)
 and late August (rec centers post their listings).
+
+### Two scheduled runs
+
+Two scheduled tasks in the owner's Claude app do the research. Neither one pushes to `main` or to `live`, and neither
+touches `data/reviews.json`, `data/copy.json`, `data/news.json`, `data/school-dates.json`, `data/all-schools.json`,
+`data/card-qr.json`, `scripts/`, `email/`, `.github/`, `src/`, `build.mjs` or the settings that run the emails,
+accounts and terms. Each ends in a pull request for the owner to merge.
+
+- **The monthly check** (the first of the month) re-reads every listing, weekend block and summer camp against the
+  provider's own site, using the worklist above, and the district calendar.
+- **The weekly run** works a queue instead: what came in through the site that needs a program's website read and
+  judged. `/edit/queue/` (behind the edit sign-in) lists it: suggestions of programs and camps and updates to
+  listings from the suggestion form (read from the log the form keeps next to the public folder), changes the
+  people who run a listing have proposed (status `new` in the accounts database), and notes the owner types on
+  the page. Feature ideas, contact messages and dates for a school are not research and don't appear. Each item is
+  shown as it will be sent, with email addresses and phone numbers already taken out; the sender's name is never
+  included. Ticking the items and choosing "Send" writes `data/queue.json` as one commit on the repository's
+  `queue` branch (through the same key file publishing uses, never on `main`, so nothing deploys), with the batch's
+  id, the items, and a count of the schools people have asked for (from the "ask for your school" page and the
+  form). The weekly run reads that file, checks each item against the provider's own site under the monthly
+  check's rules, runs `node scripts/linkcheck.mjs` for dead and moved links, and opens a pull request named
+  `weekly-<batch>`; a batch that already has its branch is not worked twice. **Rush:** ticking it emails the owner
+  a one-line reminder to press "Run now" on the task in the Claude app, so the pull request follows within the hour
+  instead of on the run's next morning. The page keeps what was sent (in `phillyafterschool-queue.json` next to the
+  public folder) and links each batch to its pull request; "Done, take it off" and "Not for the run" hide items.
+  The monthly check leaves queued items to the weekly run. The repository is public, so the owner unticks anything
+  that shouldn't be in it before sending.
+
+`scripts/linkcheck.mjs` sweeps every outside address in the data files (programs, camps, schools, the district
+calendar): status code and final address only, six at a time, honoring `robots.txt` (a page closed to `*`,
+ClaudeBot, Claude-Web, anthropic-ai or GPTBot is reported as not checked, never fetched). `--list` only prints the
+addresses and where each is used. It writes `linkcheck.json` (ignored by git) and prints what didn't answer 200 and
+what moved.

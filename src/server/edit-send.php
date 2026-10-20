@@ -1,6 +1,6 @@
 <?php
-// Receives copy edits made in edit mode. Generated into edit/send.php by build.mjs, which fills in the three marked
-// lines below (the mailer, the config, the sign-in check); edit this file, not the copy in dist/.
+// Receives copy edits made in edit mode. Generated into edit/send.php by build.mjs, which fills in the four marked
+// lines below (the mailer, the config, the sign-in check, the GitHub helpers from gh.php); edit this file, not the copy in dist/.
 //
 //   POST {edits, name, note}                      emails the changes with a complete data/copy.json (the old way)
 //   POST {action: "publish", edits, name}         writes data/copy.json to the repository on GitHub; the publish
@@ -28,43 +28,14 @@ function tidy($v, $max) {
 }
 function signed_in_here() { return function_exists('edit_signed_in') ? edit_signed_in() : true; }
 
-// ----- GitHub -----
-function gh_token() {
-  static $t = null;
-  if ($t !== null) return $t;
-  $raw = @file_get_contents(dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-github.key');
-  $raw = is_string($raw) ? trim($raw) : '';
-  $t = preg_match('/^(github_pat_[A-Za-z0-9_]{20,}|ghp_[A-Za-z0-9]{20,})$/', $raw) ? $raw : '';
-  return $t;
-}
-function gh_base() {
-  if (PHP_SAPI === 'cli-server' && getenv('PAS_TEST_GITHUB')) return rtrim((string) getenv('PAS_TEST_GITHUB'), '/');   // the local test server only
-  return 'https://api.github.com';
-}
-function gh_ready() { global $REPO; return $REPO !== '' && gh_token() !== '' && function_exists('curl_init'); }
-// One call to the API. Gives array(status code, decoded answer or null).
-function gh($method, $path, $body = null) {
-  $ch = curl_init(gh_base() . $path);
-  $headers = array('Accept: application/vnd.github+json', 'Authorization: Bearer ' . gh_token(), 'X-GitHub-Api-Version: 2022-11-28', 'User-Agent: phillyafterschool-edit');
-  $opts = array(CURLOPT_CUSTOMREQUEST => $method, CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 6, CURLOPT_TIMEOUT => 20);
-  if ($body !== null) { $headers[] = 'Content-Type: application/json'; $opts[CURLOPT_POSTFIELDS] = json_encode($body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); }
-  $opts[CURLOPT_HTTPHEADER] = $headers;
-  curl_setopt_array($ch, $opts);
-  $raw = curl_exec($ch);
-  $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-  curl_close($ch);
-  return array($code, is_string($raw) ? json_decode($raw, true) : null);
-}
+/*GH*/
 // The copy file as the repository holds it now: its entries and the sha a write must quote.
 function gh_copy_file($ref) {
-  global $REPO;
-  list($code, $r) = gh('GET', '/repos/' . $REPO . '/contents/data/copy.json?ref=' . rawurlencode($ref));
-  if ($code === 404) return array(array(), '');
-  if ($code !== 200 || !is_array($r) || !isset($r['content'])) return null;
-  $text = base64_decode(str_replace("\n", '', (string) $r['content']));
-  $entries = json_decode((string) $text, true);
+  $f = gh_file('data/copy.json', $ref);
+  if ($f === null) return null;
+  $entries = $f[0] === '' ? array() : json_decode($f[0], true);
   if (!is_array($entries)) $entries = array();
-  return array($entries, isset($r['sha']) ? (string) $r['sha'] : '');
+  return array($entries, $f[1]);
 }
 function copy_json($entries) {
   if (!count($entries)) return "{}\n";
@@ -73,26 +44,10 @@ function copy_json($entries) {
   return preg_replace_callback('/^(?: {4})+/m', function ($m) { return str_repeat('  ', (int) (strlen($m[0]) / 4)); }, $json) . "\n";
 }
 function gh_write_copy($entries, $sha, $message) {
-  global $REPO;
-  $body = array('message' => $message, 'content' => base64_encode(copy_json($entries)), 'branch' => 'main');
-  if ($sha !== '') $body['sha'] = $sha;
-  list($code, $r) = gh('PUT', '/repos/' . $REPO . '/contents/data/copy.json', $body);
-  if (($code === 200 || $code === 201) && is_array($r) && isset($r['commit']['sha'])) return array(true, substr((string) $r['commit']['sha'], 0, 7), isset($r['commit']['html_url']) ? (string) $r['commit']['html_url'] : '');
-  if ($code === 409) return array(false, 'Someone else published at the same moment. Open the review again and publish once more.', '');
-  if ($code === 401 || $code === 403) return array(false, 'The publishing key was refused by GitHub. Check the key file on the server.', '');
-  return array(false, 'GitHub did not take the change (HTTP ' . $code . ').', '');
+  return gh_put('data/copy.json', copy_json($entries), $sha, $message, 'main');
 }
 // At most 30 publishes an hour, so a loop in a browser can’t fill the repository’s history.
-function publish_allowed() {
-  $file = dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-publish.json';
-  $d = json_decode((string) @file_get_contents($file), true);
-  $hour = gmdate('Y-m-d-H');
-  if (!is_array($d) || !isset($d['hour']) || $d['hour'] !== $hour) $d = array('hour' => $hour, 'n' => 0);
-  if ($d['n'] >= 30) return false;
-  $d['n']++;
-  @file_put_contents($file, json_encode($d), LOCK_EX);
-  return true;
-}
+function publish_allowed() { return gh_allowed('publish', 30); }
 function note($line) {
   $log = dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-copy-edits.log';
   @file_put_contents($log, date('c') . ' ' . $line . "\n", FILE_APPEND | LOCK_EX);
