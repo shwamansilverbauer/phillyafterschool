@@ -130,7 +130,7 @@ if (!edit_signed_in()) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=28e1869f">
+<link rel="stylesheet" href="../assets/site.css?v=ff9f2b00">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -231,7 +231,7 @@ if (!edit_signed_in()) {
     <p>Written by Rachael Silverbauer.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=7f774420" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=452c9f98" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=eba8ada9&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 
 </body>
 </html>
@@ -271,7 +271,7 @@ if (!edit_signed_in()) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=28e1869f">
+<link rel="stylesheet" href="../assets/site.css?v=ff9f2b00">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -289,7 +289,7 @@ if (!edit_signed_in()) {
 <div class="band pagehead">
   <div class="in hero">
     <h1>Edit the words on this site</h1>
-    <p class="lede">Turn on editing, then click a sentence on any page and type. Nothing changes for visitors until your edits are sent and approved.</p>
+    <p class="lede">Turn on editing, then click a sentence on any page and type. Nothing changes for visitors until you publish.</p>
   </div>
   
 </div>
@@ -305,11 +305,17 @@ if (!edit_signed_in()) {
   <p><a class="btn" href="stats/">Site numbers: accounts, shared weeks and groups</a> <a class="btn" href="claims/">Claims and proposed changes</a></p>
   <h2>How it works</h2>
   <ol>
-    <li>Click any text with a dotted outline and type. Text you’ve changed turns yellow.</li>
-    <li>Move between pages with the menu or the list below. Your edits are kept in this browser as you go, so stay on the same phone or computer until you’ve sent them.</li>
-    <li>Choose “Review and send” in the bar at the bottom. You’ll see each change next to the original and can undo any of them.</li>
-    <li>Sending emails the changes to be approved. They appear on the site once they’re published.</li>
+    <li>Click any text with a dotted outline and type. Text you’ve changed turns yellow. To take a sentence off the page, click it and choose “Remove this sentence” in the bar.</li>
+    <li>Move between pages with the menu or the list below. Your edits are kept in this browser as you go, so stay on the same phone or computer until you’ve published them.</li>
+    <li>Choose “Review and publish” in the bar at the bottom. You’ll see each change next to the original, can untick any to leave it out, and can undo any of them.</li>
+    <li>Publishing puts the ticked changes on the site within a few minutes. Every publish is kept as a version below, so a change can be taken back.</li>
   </ol>
+  <section id="pub">
+    <h2>Published versions</h2>
+    <p id="pub-msg" class="needs-js">Reading the published versions…</p>
+    <ol id="pub-list" class="pub-list"></ol>
+    <div id="pub-removed" hidden><h3>Sentences taken off the page</h3><ul></ul></div>
+  </section>
   <h2>Pages</h2>
   <ul>
     <li><a href="../">Home</a></li>
@@ -414,7 +420,7 @@ if (!edit_signed_in()) {
     <p>Written by Rachael Silverbauer.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=7f774420" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=29a85f54&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=452c9f98" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=eba8ada9&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 
 </body>
 </html>
