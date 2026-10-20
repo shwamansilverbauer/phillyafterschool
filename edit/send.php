@@ -1,6 +1,6 @@
 <?php
-// Receives copy edits made in edit mode. Generated into edit/send.php by build.mjs, which fills in the three marked
-// lines below (the mailer, the config, the sign-in check); edit this file, not the copy in dist/.
+// Receives copy edits made in edit mode. Generated into edit/send.php by build.mjs, which fills in the four marked
+// lines below (the mailer, the config, the sign-in check, the GitHub helpers from gh.php); edit this file, not the copy in dist/.
 //
 //   POST {edits, name, note}                      emails the changes with a complete data/copy.json (the old way)
 //   POST {action: "publish", edits, name}         writes data/copy.json to the repository on GitHub; the publish
@@ -144,7 +144,9 @@ function tidy($v, $max) {
 }
 function signed_in_here() { return function_exists('edit_signed_in') ? edit_signed_in() : true; }
 
-// ----- GitHub -----
+// ----- GitHub, through the key file next to the public folder -----
+// Shared by edit/send.php (publishing copy) and edit/queue/ (sending work to the weekly run). build.mjs pastes this in
+// at each file's /*GH*/ marker; $REPO ("owner/name") comes from the config pasted in before it.
 function gh_token() {
   static $t = null;
   if ($t !== null) return $t;
@@ -171,16 +173,57 @@ function gh($method, $path, $body = null) {
   curl_close($ch);
   return array($code, is_string($raw) ? json_decode($raw, true) : null);
 }
+// A file as the repository holds it on a branch: array(text, sha); array('', '') when it isn't there; null on an error.
+function gh_file($path, $ref) {
+  global $REPO;
+  list($code, $r) = gh('GET', '/repos/' . $REPO . '/contents/' . $path . '?ref=' . rawurlencode($ref));
+  if ($code === 404) return array('', '');
+  if ($code !== 200 || !is_array($r) || !isset($r['content'])) return null;
+  return array((string) base64_decode(str_replace("\n", '', (string) $r['content'])), isset($r['sha']) ? (string) $r['sha'] : '');
+}
+// Writes a file on a branch as one commit. Gives array(true, short sha, commit url) or array(false, what went wrong, '').
+function gh_put($path, $text, $sha, $message, $branch) {
+  global $REPO;
+  $body = array('message' => $message, 'content' => base64_encode($text), 'branch' => $branch);
+  if ($sha !== '') $body['sha'] = $sha;
+  list($code, $r) = gh('PUT', '/repos/' . $REPO . '/contents/' . $path, $body);
+  if (($code === 200 || $code === 201) && is_array($r) && isset($r['commit']['sha'])) return array(true, substr((string) $r['commit']['sha'], 0, 7), isset($r['commit']['html_url']) ? (string) $r['commit']['html_url'] : '');
+  if ($code === 409) return array(false, 'Someone else wrote to the repository at the same moment. Try once more.', '');
+  if ($code === 401 || $code === 403) return array(false, 'The publishing key was refused by GitHub. Check the key file on the server.', '');
+  return array(false, 'GitHub did not take the change (HTTP ' . $code . ').', '');
+}
+// Makes sure a branch exists, starting it from another when it doesn't. Gives '' when it is there, or what went wrong.
+function gh_branch($branch, $from) {
+  global $REPO;
+  list($code, $r) = gh('GET', '/repos/' . $REPO . '/git/ref/heads/' . rawurlencode($branch));
+  if ($code === 200) return '';
+  if ($code !== 404) return 'GitHub could not be read (HTTP ' . $code . ').';
+  list($code, $r) = gh('GET', '/repos/' . $REPO . '/git/ref/heads/' . rawurlencode($from));
+  if ($code !== 200 || !is_array($r) || !isset($r['object']['sha'])) return 'The ' . $from . ' branch could not be read (HTTP ' . $code . ').';
+  list($code, $r) = gh('POST', '/repos/' . $REPO . '/git/refs', array('ref' => 'refs/heads/' . $branch, 'sha' => (string) $r['object']['sha']));
+  if ($code === 201 || $code === 422) return '';   // 422: made by someone else a moment ago
+  if ($code === 401 || $code === 403) return 'The publishing key was refused by GitHub. Check the key file on the server.';
+  return 'GitHub would not start the ' . $branch . ' branch (HTTP ' . $code . ').';
+}
+// A simple per-hour cap on writes from a page, so a loop in a browser can't fill the repository's history.
+function gh_allowed($what, $max) {
+  $file = dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-' . $what . '.json';
+  $d = json_decode((string) @file_get_contents($file), true);
+  $hour = gmdate('Y-m-d-H');
+  if (!is_array($d) || !isset($d['hour']) || $d['hour'] !== $hour) $d = array('hour' => $hour, 'n' => 0);
+  if ($d['n'] >= $max) return false;
+  $d['n']++;
+  @file_put_contents($file, json_encode($d), LOCK_EX);
+  return true;
+}
+
 // The copy file as the repository holds it now: its entries and the sha a write must quote.
 function gh_copy_file($ref) {
-  global $REPO;
-  list($code, $r) = gh('GET', '/repos/' . $REPO . '/contents/data/copy.json?ref=' . rawurlencode($ref));
-  if ($code === 404) return array(array(), '');
-  if ($code !== 200 || !is_array($r) || !isset($r['content'])) return null;
-  $text = base64_decode(str_replace("\n", '', (string) $r['content']));
-  $entries = json_decode((string) $text, true);
+  $f = gh_file('data/copy.json', $ref);
+  if ($f === null) return null;
+  $entries = $f[0] === '' ? array() : json_decode($f[0], true);
   if (!is_array($entries)) $entries = array();
-  return array($entries, isset($r['sha']) ? (string) $r['sha'] : '');
+  return array($entries, $f[1]);
 }
 function copy_json($entries) {
   if (!count($entries)) return "{}\n";
@@ -189,26 +232,10 @@ function copy_json($entries) {
   return preg_replace_callback('/^(?: {4})+/m', function ($m) { return str_repeat('  ', (int) (strlen($m[0]) / 4)); }, $json) . "\n";
 }
 function gh_write_copy($entries, $sha, $message) {
-  global $REPO;
-  $body = array('message' => $message, 'content' => base64_encode(copy_json($entries)), 'branch' => 'main');
-  if ($sha !== '') $body['sha'] = $sha;
-  list($code, $r) = gh('PUT', '/repos/' . $REPO . '/contents/data/copy.json', $body);
-  if (($code === 200 || $code === 201) && is_array($r) && isset($r['commit']['sha'])) return array(true, substr((string) $r['commit']['sha'], 0, 7), isset($r['commit']['html_url']) ? (string) $r['commit']['html_url'] : '');
-  if ($code === 409) return array(false, 'Someone else published at the same moment. Open the review again and publish once more.', '');
-  if ($code === 401 || $code === 403) return array(false, 'The publishing key was refused by GitHub. Check the key file on the server.', '');
-  return array(false, 'GitHub did not take the change (HTTP ' . $code . ').', '');
+  return gh_put('data/copy.json', copy_json($entries), $sha, $message, 'main');
 }
 // At most 30 publishes an hour, so a loop in a browser can’t fill the repository’s history.
-function publish_allowed() {
-  $file = dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-publish.json';
-  $d = json_decode((string) @file_get_contents($file), true);
-  $hour = gmdate('Y-m-d-H');
-  if (!is_array($d) || !isset($d['hour']) || $d['hour'] !== $hour) $d = array('hour' => $hour, 'n' => 0);
-  if ($d['n'] >= 30) return false;
-  $d['n']++;
-  @file_put_contents($file, json_encode($d), LOCK_EX);
-  return true;
-}
+function publish_allowed() { return gh_allowed('publish', 30); }
 function note($line) {
   $log = dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-copy-edits.log';
   @file_put_contents($log, date('c') . ' ' . $line . "\n", FILE_APPEND | LOCK_EX);

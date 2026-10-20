@@ -1788,6 +1788,8 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .grant-form{display:flex;flex-direction:column;gap:8px;max-width:520px;margin-bottom:28px}
 .grant-form input,.grant-form select{flex:none;width:100%;font:inherit;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);min-height:44px}
 .grant-form label{font-weight:700;margin-top:6px}
+.q-item h3 label{cursor:pointer}.q-item h3 input{width:20px;height:20px;vertical-align:-3px;margin-right:4px}.q-item .actions{margin-top:8px}
+.q-note{display:flex;flex-direction:column;gap:8px;max-width:640px;margin-bottom:28px}.q-note textarea{font:inherit;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);resize:vertical}.q-note label{font-weight:700}
 .follow-basics .field.wide,.follow-check{grid-column:1/-1}
 
 /* ---------- jump links: a strip under the menu bar on the long pages ---------- */
