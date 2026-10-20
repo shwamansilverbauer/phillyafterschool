@@ -385,6 +385,8 @@ function pas_postmark($fromName, $from, $to, $subject, $text, $html = '', $reply
 
 function send_mail(string $to, string $subject, string $text, string $html, string $replyTo = ''): bool {
   global $CFG;
+  // A sentence taken out at /edit/emails/ leaves a gap in the plain-text version: close it.
+  $text = preg_replace(array('/^[ \t]+/m', '/\n{3,}/'), array('', "\n\n"), $text);
   $pm = pas_postmark($CFG['siteName'], $CFG['from'], $to, $subject, $text, $html, $replyTo);
   if ($pm >= 0) return $pm === 1;
   $boundary = 'pas' . bin2hex(random_bytes(8));
@@ -404,6 +406,20 @@ function send_mail(string $to, string $subject, string $text, string $html, stri
     || @mail($to, $subj, $body, implode("\r\n", $headers));   // some hosts refuse a set sender; try without
   pas_mail_note('host', $ok ? 'ok' : 'failed');
   return (bool) $ok;
+}
+// Email wording that can be edited at /edit/emails/: the build fills each '…' in from data/copy.json. {words}
+// are filled in here, and a sentence someone has taken off the page is '' (so t() of it adds nothing).
+function t(string $s, array $v = array()): string {
+  if ($s === '' || !$v) return $s;
+  $m = array();
+  foreach ($v as $k => $x) $m['{' . $k . '}'] = (string) $x;
+  return strtr($s, $m);
+}
+// Paragraphs for the HTML side of an email: one <p> per sentence, escaped, empties skipped.
+function paras(array $lines, string $last = 'margin:0'): string {
+  $out = ''; $lines = array_values(array_filter($lines, function ($x) { return $x !== ''; }));
+  foreach ($lines as $i => $x) $out .= '<p style="' . ($i === count($lines) - 1 ? $last : 'margin:0 0 12px') . '">' . htmlspecialchars($x, ENT_QUOTES, 'UTF-8') . '</p>';
+  return $out;
 }
 function email_html(string $heading, string $lines, string $button, string $url, string $foot, string $footHtml = ''): string {
   global $CFG;
@@ -711,27 +727,32 @@ function send_invite(array $u, array $g, string $gname, string $to): bool {
   $code = code_open($g['code_enc']);
   $url = $CFG['siteUrl'] . '/join/#' . $code;
   $from = $u['name'] . ' (' . $u['email'] . ')';
-  $e = function ($v) { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); };
+  $v = array('site' => $CFG['siteName'], 'name' => $u['name'], 'from' => $from, 'group' => $gname, 'email' => $to, 'code' => $code);
+  $codeHtml = '<b style="font-family:monospace;font-size:18px">' . htmlspecialchars($code, ENT_QUOTES, 'UTF-8') . '</b>';
   if (!empty($g['solo'])) {   // one week, shared with this person: they only look
-    $text = "$from shared \"$gname\" with you on " . $CFG['siteName'] . ": the after-school programs their child goes to each day.\n\n"
-      . "To see it, open this link and sign in with this email address ($to):\n$url\n\nIf it asks for a code: $code\n\n"
-      . "It only opens for this address, and it shows a first name and programs. If you don't know " . $u['name'] . ", ignore this email.\n";
-    $html = email_html($u['name'] . ' shared “' . $gname . '” with you',
-      '<p style="margin:0 0 10px">' . $e($from) . ' shared the after-school programs their child goes to each day.</p>'
-      . '<p style="margin:0">Sign in with this email address (' . $e($to) . '). If it asks for a code: <b style="font-family:monospace;font-size:18px">' . $e($code) . '</b></p>',
-      'See the week', $url,
-      'It only opens for this address, and it shows a first name and programs. If you don’t know ' . $u['name'] . ', ignore this email.');
-    return send_mail($to, $u['name'] . ' shared “' . $gname . '” with you on ' . $CFG['siteName'], $text, $html);
+    /*EMAIL A week shared with one person*/
+    $what = t('{from} shared “{group}” with you on {site}: the after-school programs their child goes to each day.', $v);
+    $how = t('To see it, open this link and sign in with this email address ({email}):', $v);
+    $ifCode = t('If it asks for a code:', $v);
+    $only = t('It only opens for this address, and it shows a first name and programs. If you don’t know {name}, ignore this email.', $v);
+    $text = $what . "\n\n" . $how . "\n$url\n\n" . $ifCode . " $code\n\n" . $only . "\n";
+    $html = email_html(t('{name} shared “{group}” with you', $v),
+      paras(array(t('{from} shared the after-school programs their child goes to each day.', $v)), 'margin:0 0 10px')
+      . '<p style="margin:0">' . htmlspecialchars(t('Sign in with this email address ({email}).', $v) . ' ' . $ifCode, ENT_QUOTES, 'UTF-8') . ' ' . $codeHtml . '</p>',
+      t('See the week', $v), $url, $only);
+    return send_mail($to, t('{name} shared “{group}” with you on {site}', $v), $text, $html);
   }
-  $text = "$from invited you to the group \"$gname\" on " . $CFG['siteName'] . ", to share your children's after-school weeks with each other.\n\n"
-    . "To join, open this link and sign in with this email address ($to):\n$url\n\nIf it asks for a code: $code\n\n"
-    . "Only invited addresses can join, and a group shows first names and programs only. If you don't know " . $u['name'] . ", ignore this email: nothing happens unless you join.\n";
-  $html = email_html($u['name'] . ' invited you to “' . $gname . '”',
-    '<p style="margin:0 0 10px">' . $e($from) . ' invited you to a private group, to share your children’s after-school weeks with each other.</p>'
-    . '<p style="margin:0">Sign in with this email address (' . $e($to) . '). If it asks for a code: <b style="font-family:monospace;font-size:18px">' . $e($code) . '</b></p>',
-    'Join the group', $url,
-    'Only invited addresses can join, and a group shows first names and programs only. If you don’t know ' . $u['name'] . ', ignore this email: nothing happens unless you join.');
-  return send_mail($to, $u['name'] . ' invited you to “' . $gname . '” on ' . $CFG['siteName'], $text, $html);
+  /*EMAIL An invitation to a group*/
+  $what = t('{from} invited you to the group “{group}” on {site}, to share your children’s after-school weeks with each other.', $v);
+  $how = t('To join, open this link and sign in with this email address ({email}):', $v);
+  $ifCode = t('If it asks for a code:', $v);
+  $only = t('Only invited addresses can join, and a group shows first names and programs only. If you don’t know {name}, ignore this email: nothing happens unless you join.', $v);
+  $text = $what . "\n\n" . $how . "\n$url\n\n" . $ifCode . " $code\n\n" . $only . "\n";
+  $html = email_html(t('{name} invited you to “{group}”', $v),
+    paras(array(t('{from} invited you to a private group, to share your children’s after-school weeks with each other.', $v)), 'margin:0 0 10px')
+    . '<p style="margin:0">' . htmlspecialchars(t('Sign in with this email address ({email}).', $v) . ' ' . $ifCode, ENT_QUOTES, 'UTF-8') . ' ' . $codeHtml . '</p>',
+    t('Join the group', $v), $url, $only);
+  return send_mail($to, t('{name} invited you to “{group}” on {site}', $v), $text, $html);
 }
 // Put one address on a group's list and email it. Returns 'sent', 'held' (on the list, email not sent), 'full' or 'self'.
 function invite_one(array $u, array $g, string $gid, string $e): string {
@@ -1146,34 +1167,42 @@ function mgr_holders(): array {
 function mgr_send(int $uid, string $to, string $subject, string $text, string $html, string $button, string $url): bool {
   global $CFG;
   $stop = $CFG['siteUrl'] . '/alerts/stop/#c=' . stop_code($uid) . '&k=m:listing';
-  $why = 'You get this because you manage a listing on ' . $CFG['siteName'] . '.';
-  $text .= "\n\n" . $button . ': ' . $url . "\n\n" . $why . ' To stop the emails about your listing: ' . $stop;
-  return send_mail($to, $subject, $text, email_html($subject, $html, $button, $url, $why, ' <a href="' . htmlspecialchars($stop, ENT_QUOTES, 'UTF-8') . '" style="color:#4D607A">Stop the emails about your listing</a>'));
+  $v = array('site' => $CFG['siteName']);
+  /*EMAIL The last lines of every email to the people who run a listing*/
+  $why = t('You get this because you manage a listing on {site}.', $v);
+  $howStop = t('To stop the emails about your listing:', $v);
+  $stopLink = t('Stop the emails about your listing', $v);
+  $text .= "\n\n" . $button . ': ' . $url . "\n\n" . $why . ' ' . $howStop . ' ' . $stop;
+  return send_mail($to, $subject, $text, email_html($subject, $html, $button, $url, $why, ' <a href="' . htmlspecialchars($stop, ENT_QUOTES, 'UTF-8') . '" style="color:#4D607A">' . htmlspecialchars($stopLink, ENT_QUOTES, 'UTF-8') . '</a>'));
 }
 // The one thing a manager is nudged to do, most useful first.
+/*EMAIL Your listing this month (to the people who run a listing)*/
 function mgr_prompt(string $key): array {
   global $CFG;
   $l = listings(); $x = isset($l[$key]) ? $l[$key] : array(); $page = $CFG['siteUrl'] . '/managers/';
+  $v = array('site' => $CFG['siteName'], 'days' => SPACE_DAYS);
   if (!space_of($key)) {
     $had = (bool) val('SELECT 1 FROM space WHERE listing = ?', array($key));
-    return array(($had ? 'Your answer about space has run out, so parents no longer see one.' : 'Parents can see on your listing whether you have room.') . ' Say whether there are spots, a waitlist or no room. It takes one tap and stays up for ' . SPACE_DAYS . ' days.', 'Say if there’s space', $page);
+    $first = $had ? t('Your answer about space has run out, so parents no longer see one.', $v) : t('Parents can see on your listing whether you have room.', $v);
+    return array($first . ' ' . t('Say whether there are spots, a waitlist or no room. It takes one tap and stays up for {days} days.', $v), t('Say if there’s space', $v), $page);
   }
-  if ($key[0] === 'p' && empty($x['u'])) return array('No sign-up date is posted on your listing. Families who follow it are reminded the day before a date and that morning, so send in your next one.', 'Send in a date', $page);
-  if ($key[0] === 'p' && empty($x['r'])) return array('Your listing has no reviews yet. The managers page has a link, and a message you can copy, to send to your families.', 'Ask for a review', $page);
-  return array('Something new this term? Propose a change to your listing and it goes up once it has been checked.', 'Update your listing', $page);
+  if ($key[0] === 'p' && empty($x['u'])) return array(t('No sign-up date is posted on your listing. Families who follow it are reminded the day before a date and that morning, so send in your next one.', $v), t('Send in a date', $v), $page);
+  if ($key[0] === 'p' && empty($x['r'])) return array(t('Your listing has no reviews yet. The managers page has a link, and a message you can copy, to send to your families.', $v), t('Ask for a review', $v), $page);
+  return array(t('Something new this term? Propose a change to your listing and it goes up once it has been checked.', $v), t('Update your listing', $v), $page);
 }
 function mgr_plural(int $n, string $one, string $many): string { return number_format($n) . ' ' . ($n === 1 ? $one : $many); }
-// The month's numbers, in a sentence or two for one listing.
+// The month's numbers, in a sentence or two for one listing. The counts come in with their unit ("3 clicks").
 function mgr_numbers(string $key): string {
   $st = stats_of($key); $n = $st['now']; $p = $st['prev'];
-  $s = 'Its page was opened ' . mgr_plural($n['view'], 'time', 'times') . ' in the last 30 days' . ($st['full'] ? ' (' . number_format($p['view']) . ' in the 30 before)' : '') . '.';
+  $v = array('times' => mgr_plural($n['view'], 'time', 'times'), 'before' => number_format($p['view']));
+  $s = $st['full'] ? t('Its page was opened {times} in the last 30 days ({before} in the 30 before).', $v) : t('Its page was opened {times} in the last 30 days.', $v);
   $bits = array();
-  if ($n['signup']) $bits[] = mgr_plural($n['signup'], 'click', 'clicks') . ' to sign up';
-  if ($n['site']) $bits[] = mgr_plural($n['site'], 'click', 'clicks') . ' to your website';
-  if ($n['plan']) $bits[] = 'put on a family’s plan ' . mgr_plural($n['plan'], 'time', 'times');
-  if ($n['email']) $bits[] = mgr_plural($n['email'], 'person', 'people') . ' asked for its emails';
-  if ($n['ask']) $bits[] = mgr_plural($n['ask'], 'question', 'questions') . ' sent to you';
-  return $s . ($bits ? ' Also: ' . implode(', ', $bits) . '.' : '');
+  if ($n['signup']) $bits[] = t('{n} to sign up', array('n' => mgr_plural($n['signup'], 'click', 'clicks')));
+  if ($n['site']) $bits[] = t('{n} to your website', array('n' => mgr_plural($n['site'], 'click', 'clicks')));
+  if ($n['plan']) $bits[] = t('put on a family’s plan {n}', array('n' => mgr_plural($n['plan'], 'time', 'times')));
+  if ($n['email']) $bits[] = t('{n} asked for its emails', array('n' => mgr_plural($n['email'], 'person', 'people')));
+  if ($n['ask']) $bits[] = t('{n} sent to you', array('n' => mgr_plural($n['ask'], 'question', 'questions')));
+  return $s . ($bits ? ' ' . t('Also:', $v) . ' ' . implode(', ', $bits) . '.' : '');
 }
 // The morning run. $today is a New York date; $opts lets the tests stand in for the calendar and the review counts.
 function mgr_run(string $today, array $opts = array()): array {
@@ -1199,9 +1228,13 @@ function mgr_run(string $today, array $opts = array()): array {
   foreach ($people as $uid => $p) foreach ($p['keys'] as $k => $since) {
     if (!isset($newRv[$k]) || $sent['review'] >= 200) continue;
     $name = listing_plain($k); $many = $newRv[$k] > 1;
-    $line = ($many ? $newRv[$k] . ' new reviews of ' : 'A new review of ') . $name . ($many ? ' were' : ' was') . ' published on ' . $GLOBALS['CFG']['siteName'] . '.';
-    $more = 'Reviews are read before they go up, and the people who run a listing have no say over them. If one gets a fact wrong, reply to this email.';
-    if (mgr_send($uid, $p['email'], ($many ? 'New reviews of ' : 'A new review of ') . $name, $line . "\n\n" . $more, '<p style="margin:0 0 12px">' . $e($line) . '</p><p style="margin:0">' . $e($more) . '</p>', $many ? 'Read the reviews' : 'Read the review', listing_url($k) . '#reviews')) { $sent['review']++; bump('mgr_review'); }
+    $v = array('site' => $GLOBALS['CFG']['siteName'], 'listing' => $name, 'n' => $newRv[$k]);
+    /*EMAIL A new review of your listing (to the people who run a listing)*/
+    $line = $many ? t('{n} new reviews of {listing} were published on {site}.', $v) : t('A new review of {listing} was published on {site}.', $v);
+    $more = t('Reviews are read before they go up, and the people who run a listing have no say over them. If one gets a fact wrong, reply to this email.', $v);
+    $subject = $many ? t('New reviews of {listing}', $v) : t('A new review of {listing}', $v);
+    $button = $many ? t('Read the reviews', $v) : t('Read the review', $v);
+    if (mgr_send($uid, $p['email'], $subject, $line . "\n\n" . $more, paras(array($line), 'margin:0 0 12px') . paras(array($more)), $button, listing_url($k) . '#reviews')) { $sent['review']++; bump('mgr_review'); }
   }
 
   // 2. The month's numbers, the first morning of a new month.
@@ -1212,19 +1245,25 @@ function mgr_run(string $today, array $opts = array()): array {
       if ($sent['month'] >= 300) break;
       $keys = array(); foreach ($p['keys'] as $k => $since) if ($since <= now() - $fresh * 86400) $keys[] = $k;
       if (!$keys) continue;
-      $text = ($p['first'] !== '' ? 'Hi ' . $p['first'] . ",\n\n" : '') . 'Here is how ' . (count($keys) === 1 ? 'your listing' : 'your listings') . ' did on ' . $GLOBALS['CFG']['siteName'] . ".\n";
-      $html = ($p['first'] !== '' ? '<p style="margin:0 0 12px">Hi ' . $e($p['first']) . ',</p>' : '') . '<p style="margin:0 0 12px">Here is how ' . (count($keys) === 1 ? 'your listing' : 'your listings') . ' did on ' . $e($GLOBALS['CFG']['siteName']) . '.</p>';
+      $v = array('site' => $GLOBALS['CFG']['siteName'], 'first' => $p['first'], 'listing' => listing_plain($keys[0]), 'more' => count($keys) - 1);
+      /*EMAIL Your listing this month (to the people who run a listing)*/
+      $hi = $p['first'] !== '' ? t('Hi {first},', $v) : '';
+      $intro = count($keys) === 1 ? t('Here is how your listing did on {site}.', $v) : t('Here is how your listings did on {site}.', $v);
+      $text = ($hi !== '' ? $hi . "\n\n" : '') . $intro . "\n";
+      $html = paras(array($hi, $intro), 'margin:0 0 12px');
       foreach ($keys as $k) { $nums = mgr_numbers($k); $text .= "\n" . listing_plain($k) . "\n" . $nums . "\n"; $html .= '<p style="margin:0 0 12px"><b>' . $e(listing_plain($k)) . '</b><br>' . $e($nums) . '</p>'; }
       $pr = mgr_prompt($keys[0]);
-      $text .= "\nOne thing to do" . (count($keys) > 1 ? ' for ' . listing_plain($keys[0]) : '') . ': ' . $pr[0];
-      $html .= '<p style="margin:16px 0 0;padding:12px 14px;background:#FFF6CC;border-radius:10px"><b>One thing to do' . (count($keys) > 1 ? ' for ' . $e(listing_plain($keys[0])) : '') . '.</b> ' . $e($pr[0]) . '</p>';
+      $todo = count($keys) > 1 ? t('One thing to do for {listing}:', $v) : t('One thing to do:', $v);
+      $text .= "\n" . $todo . ' ' . $pr[0];
+      $html .= '<p style="margin:16px 0 0;padding:12px 14px;background:#FFF6CC;border-radius:10px"><b>' . $e(rtrim($todo, ':') . '.') . '</b> ' . $e($pr[0]) . '</p>';
       // one quiet line about premium, for an account that has none, once the sign-up page is open to everyone
       $anyPremium = false; foreach ($keys as $k) if (is_premium($k)) $anyPremium = true;
       if (!empty($GLOBALS['CFG']['premiumPage']) && !$anyPremium) {
-        $text .= "\n\nWant more on your listing? A premium listing adds photos, your own words, an offer line and month-by-month numbers: " . $GLOBALS['CFG']['siteUrl'] . '/premium/';
-        $html .= '<p style="margin:14px 0 0;font-size:14px;color:#4D607A">Want more on your listing? <a href="' . $e($GLOBALS['CFG']['siteUrl'] . '/premium/') . '" style="color:#1763B8">A premium listing</a> adds photos, your own words, an offer line and month-by-month numbers.</p>';
+        $want = t('Want more on your listing?', $v); $prem = t('A premium listing', $v); $adds = t('adds photos, your own words, an offer line and month-by-month numbers.', $v);
+        $text .= "\n\n" . $want . ' ' . $prem . ' ' . rtrim($adds, '.') . ': ' . $GLOBALS['CFG']['siteUrl'] . '/premium/';
+        $html .= '<p style="margin:14px 0 0;font-size:14px;color:#4D607A">' . $e($want) . ' <a href="' . $e($GLOBALS['CFG']['siteUrl'] . '/premium/') . '" style="color:#1763B8">' . $e($prem) . '</a> ' . $e($adds) . '</p>';
       }
-      $subject = 'Your ' . (count($keys) === 1 ? 'listing' : 'listings') . ' this month: ' . listing_plain($keys[0]) . (count($keys) > 1 ? ' and ' . (count($keys) - 1) . ' more' : '');
+      $subject = count($keys) === 1 ? t('Your listing this month: {listing}', $v) : t('Your listings this month: {listing} and {more} more', $v);
       if (mgr_send($uid, $p['email'], $subject, $text, $html, $pr[1], $pr[2])) { $sent['month']++; bump('mgr_month'); }
     }
   }
@@ -1238,12 +1277,13 @@ function mgr_run(string $today, array $opts = array()): array {
       foreach ($p['keys'] as $k => $since) {
         // families, not the listing's own managers
         $n = (int) val("SELECT COUNT(*) FROM follows f WHERE f.k = ? AND f.live = 1 AND f.created > ? AND NOT EXISTS (SELECT 1 FROM claims c WHERE c.user_id = f.user_id AND c.listing = f.k AND c.status = 'ok')", array($k, now() - 7 * 86400));
-        if ($n > 0) { $lines[] = mgr_plural($n, 'more family', 'more families') . ' started following ' . listing_plain($k) . ' this week.'; if ($first === '') $first = $k; }
+        /*EMAIL New followers (to the people who run a listing)*/
+        if ($n > 0) { $lines[] = t('{n} started following {listing} this week.', array('n' => mgr_plural($n, 'more family', 'more families'), 'listing' => listing_plain($k))); if ($first === '') $first = $k; }
       }
       if (!$lines) continue;
-      $more = 'They hear about its sign-up dates by email or as a notification on their phone, so it’s worth keeping the dates on your listing current.';
-      $html = ''; foreach ($lines as $x) $html .= '<p style="margin:0 0 12px">' . $e($x) . '</p>';
-      if (mgr_send($uid, $p['email'], 'New followers for ' . listing_plain($first), implode("\n", $lines) . "\n\n" . $more, $html . '<p style="margin:0">' . $e($more) . '</p>', 'Open your listing’s tools', $GLOBALS['CFG']['siteUrl'] . '/managers/')) { $sent['follow']++; bump('mgr_follow'); }
+      $v = array('site' => $GLOBALS['CFG']['siteName'], 'listing' => listing_plain($first));
+      $more = t('They hear about its sign-up dates by email or as a notification on their phone, so it’s worth keeping the dates on your listing current.', $v);
+      if (mgr_send($uid, $p['email'], t('New followers for {listing}', $v), implode("\n", $lines) . "\n\n" . $more, paras($lines, 'margin:0 0 12px') . paras(array($more)), t('Open your listing’s tools', $v), $GLOBALS['CFG']['siteUrl'] . '/managers/')) { $sent['follow']++; bump('mgr_follow'); }
     }
   }
 
@@ -1264,10 +1304,14 @@ function mgr_run(string $today, array $opts = array()): array {
       $aid = $k . '|' . $a['id'];
       if (isset($asked[$aid])) continue;
       $q = mb_substr($a['q'], 0, 600);
-      $line = ($p['first'] !== '' ? 'Hi ' . $p['first'] . ",\n\n" : '') . 'A question about ' . $name . ' on ' . $GLOBALS['CFG']['siteName'] . ":\n\n" . $q;
-      $more = 'Reply to this email, or open your listing’s tools and propose a change, and the listing is updated once it has been checked. Nothing on it changes until you answer.';
-      $html = ($p['first'] !== '' ? '<p style="margin:0 0 12px">Hi ' . $e($p['first']) . ',</p>' : '') . '<p style="margin:0 0 12px">A question about <b>' . $e($name) . '</b> on ' . $e($GLOBALS['CFG']['siteName']) . ':</p><p style="margin:0 0 12px;padding:12px 14px;background:#FFF6CC;border-radius:10px">' . $e($q) . '</p><p style="margin:0">' . $e($more) . '</p>';
-      if (mgr_send($uid, $p['email'], 'A question about ' . $name, $line . "\n\n" . $more, $html, 'Open your listing’s tools', $GLOBALS['CFG']['siteUrl'] . '/managers/')) { $sent['ask']++; bump('mgr_ask'); $askedNow[$aid] = $today; }
+      $v = array('site' => $GLOBALS['CFG']['siteName'], 'first' => $p['first'], 'listing' => $name);
+      /*EMAIL A question only you can settle (to the people who run a listing)*/
+      $hi = $p['first'] !== '' ? t('Hi {first},', $v) : '';
+      $about = t('A question about {listing} on {site}:', $v);
+      $line = ($hi !== '' ? $hi . "\n\n" : '') . $about . "\n\n" . $q;
+      $more = t('Reply to this email, or open your listing’s tools and propose a change, and the listing is updated once it has been checked. Nothing on it changes until you answer.', $v);
+      $html = paras(array($hi, str_replace($e($name), '<b>' . $e($name) . '</b>', $e($about))), 'margin:0 0 12px') . '<p style="margin:0 0 12px;padding:12px 14px;background:#FFF6CC;border-radius:10px">' . $e($q) . '</p>' . paras(array($more));
+      if (mgr_send($uid, $p['email'], t('A question about {listing}', $v), $line . "\n\n" . $more, $html, t('Open your listing’s tools', $v), $GLOBALS['CFG']['siteUrl'] . '/managers/')) { $sent['ask']++; bump('mgr_ask'); $askedNow[$aid] = $today; }
     }
   }
   if ($askedNow) meta_set('mgr_asked', json_encode((object) ($asked + $askedNow)));
@@ -1418,10 +1462,16 @@ switch ($method . ' ' . $action) {
     q('INSERT INTO logins (email, token_hash, req_hash, code_hash, next, expires) VALUES (?, ?, ?, ?, ?, ?)', array($email, h($token), h($req), h($req . ':' . $code), $next, now() + LINK_MINUTES * 60));
     $url = $CFG['siteUrl'] . '/account/#t=' . $token;
     $shown = substr($code, 0, 3) . ' ' . substr($code, 3);
-    $text = "Sign in to " . $CFG['siteName'] . "\n\nOpen this link on the device you want to sign in on:\n$url\n\nOr type this code into the page that asked for it: $shown\n\nBoth work once and stop working after " . LINK_MINUTES . " minutes. If you didn't ask for this, ignore it: nobody can sign in without this email.\n";
-    $html = email_html('Sign in to ' . $CFG['siteName'], '<p style="margin:0 0 6px">Tap the button on the device you want to sign in on.</p>', 'Sign in', $url,
-      'Or type this code into the page that asked for it: ' . $shown . '. Both work once and stop working after ' . LINK_MINUTES . ' minutes. If you didn’t ask for this, ignore it: nobody can sign in without this email.');
-    if (!send_mail($email, 'Your sign-in link for ' . $CFG['siteName'], $text, $html)) fail('mail', 'The sign-in email could not be sent. Please try again in a minute.', 502);
+    /*EMAIL Sign-in link and code*/
+    $v = array('site' => $CFG['siteName'], 'code' => $shown, 'minutes' => LINK_MINUTES);
+    $heading = t('Sign in to {site}', $v);
+    $open = t('Open this link on the device you want to sign in on:', $v);
+    $tap = t('Tap the button on the device you want to sign in on.', $v);
+    $orCode = t('Or type this code into the page that asked for it: {code}', $v);
+    $once = t('Both work once and stop working after {minutes} minutes. If you didn’t ask for this, ignore it: nobody can sign in without this email.', $v);
+    $text = $heading . "\n\n" . $open . "\n$url\n\n" . $orCode . "\n\n" . $once . "\n";
+    $html = email_html($heading, paras(array($tap), 'margin:0 0 6px'), t('Sign in', $v), $url, trim(($orCode === '' ? '' : rtrim($orCode, '.') . '. ') . $once));
+    if (!send_mail($email, t('Your sign-in link for {site}', $v), $text, $html)) fail('mail', 'The sign-in email could not be sent. Please try again in a minute.', 502);
     out(array('ok' => true, 'req' => $req, 'minutes' => LINK_MINUTES));
   }
 
@@ -1476,10 +1526,14 @@ switch ($method . ' ' . $action) {
     // the link half of a sign-in is never sent for this: its token is thrown away, so only the code can finish it
     q('INSERT INTO logins (email, token_hash, req_hash, code_hash, next, expires) VALUES (?, ?, ?, ?, ?, ?)', array($email, h(b64(random_bytes(32))), h($req), h($req . ':' . $code), 'move:' . $u['id'], now() + LINK_MINUTES * 60));
     $shown = substr($code, 0, 3) . ' ' . substr($code, 3);
-    $text = "Use this address for your " . $CFG['siteName'] . " account\n\nSomeone signed in to a " . $CFG['siteName'] . " account asked to use this email address for it. If that was you, type this code into the account page: $shown\n\nIt works once and stops working after " . LINK_MINUTES . " minutes. If it wasn't you, ignore this: nothing changes without the code.\n";
-    $html = email_html('Use this address for your account', '<p style="margin:0 0 10px">Someone signed in to a ' . htmlspecialchars($CFG['siteName'], ENT_QUOTES, 'UTF-8') . ' account asked to use this email address for it. If that was you, type this code into the account page:</p><p style="margin:0;font-size:28px;font-weight:bold;letter-spacing:2px">' . $shown . '</p>', '', '',
-      'It works once and stops working after ' . LINK_MINUTES . ' minutes. If it wasn’t you, ignore this: nothing changes without the code.');
-    if (!send_mail($email, 'Your code to change your ' . $CFG['siteName'] . ' email address', $text, $html)) fail('mail', 'The email could not be sent. Please try again in a minute.', 502);
+    /*EMAIL Code to change the account’s email address*/
+    $v = array('site' => $CFG['siteName'], 'code' => $shown, 'minutes' => LINK_MINUTES);
+    $heading = t('Use this address for your {site} account', $v);
+    $asked = t('Someone signed in to a {site} account asked to use this email address for it. If that was you, type this code into the account page:', $v);
+    $once = t('It works once and stops working after {minutes} minutes. If it wasn’t you, ignore this: nothing changes without the code.', $v);
+    $text = $heading . "\n\n" . $asked . " $shown\n\n" . $once . "\n";
+    $html = email_html(t('Use this address for your account', $v), paras(array($asked), 'margin:0 0 10px') . '<p style="margin:0;font-size:28px;font-weight:bold;letter-spacing:2px">' . $shown . '</p>', '', '', $once);
+    if (!send_mail($email, t('Your code to change your {site} email address', $v), $text, $html)) fail('mail', 'The email could not be sent. Please try again in a minute.', 502);
     out(array('ok' => true, 'req' => $req, 'minutes' => LINK_MINUTES));
   }
 
@@ -1505,10 +1559,14 @@ switch ($method . ' ' . $action) {
     q('UPDATE follows SET synced = 0 WHERE user_id = ? AND live = 1', array($u['id']));   // the email list is told again, under the new address
     q('DELETE FROM sessions WHERE user_id = ? AND id != ?', array($u['id'], $u['sid']));   // every other device signs in again
     bump('email_changed');
-    $text = "The email address on your " . $CFG['siteName'] . " account was changed.\n\nIt now signs in with a different address, and this one is no longer on it. If you did this, there's nothing to do.\n\nIf you didn't, write to " . $CFG['from'] . " straight away.\n";
-    $html = email_html('Your account’s email address was changed', '<p style="margin:0 0 6px">Your ' . htmlspecialchars($CFG['siteName'], ENT_QUOTES, 'UTF-8') . ' account now signs in with a different address, and this one is no longer on it. If you did this, there’s nothing to do.</p>', '', '',
-      'If you didn’t, write to ' . $CFG['from'] . ' straight away.');
-    send_mail($old, 'Your ' . $CFG['siteName'] . ' email address was changed', $text, $html);   // a courtesy: the change stands whether or not this arrives
+    /*EMAIL Notice to the old address when the email address changes*/
+    $v = array('site' => $CFG['siteName'], 'contact' => $CFG['from']);
+    $changed = t('The email address on your {site} account was changed.', $v);
+    $now = t('Your {site} account now signs in with a different address, and this one is no longer on it. If you did this, there’s nothing to do.', $v);
+    $ifNot = t('If you didn’t, write to {contact} straight away.', $v);
+    $text = $changed . "\n\n" . $now . "\n\n" . $ifNot . "\n";
+    $html = email_html(t('Your account’s email address was changed', $v), paras(array($now), 'margin:0 0 6px'), '', '', $ifNot);
+    send_mail($old, t('Your {site} email address was changed', $v), $text, $html);   // a courtesy: the change stands whether or not this arrives
     $fresh = row('SELECT id, email, name, first, last, listed, school, grades, ages, origin, hood, phone, phone_ok FROM users WHERE id = ?', array($u['id']));
     $fresh['id'] = (int) $fresh['id'];
     out(array('ok' => true, 'old' => $old, 'user' => me_out($fresh)));
@@ -1853,11 +1911,17 @@ switch ($method . ' ' . $action) {
     foreach (q("SELECT u.email FROM claims c JOIN users u ON u.id = c.user_id WHERE c.listing = ? AND c.status = 'ok' ORDER BY c.id LIMIT " . MAX_CLAIMANTS, array($key)) as $r) $to[] = $r['email'];
     if (!$to) fail('off', 'Questions can’t be sent to this listing right now.', 403);
     $n = $l[$key]['n'];
-    $body = $name . ' asked a question on your ' . $CFG['siteName'] . ' listing for “' . $n . "”:\n\n" . $text . "\n\nReply to this email to answer them at " . $email . ".\n\nThis came from the “Ask a question” button on your listing. " . $CFG['siteName'] . ' passed it along and did not keep a copy.';
-    $html = email_html('A question about ' . $n, '<p style="margin:0 0 10px"><b>' . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') . '</b> asked on your listing:</p><p style="margin:0;white-space:pre-line;border-left:4px solid #F3C613;padding-left:12px">' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</p><p style="margin:14px 0 0">Reply to this email to answer them at ' . htmlspecialchars($email, ENT_QUOTES, 'UTF-8') . '.</p>', '', '',
-      'This came from the “Ask a question” button on your listing. ' . $CFG['siteName'] . ' passed it along and did not keep a copy.');
+    $e = function ($x) { return htmlspecialchars((string) $x, ENT_QUOTES, 'UTF-8'); };
+    $v = array('site' => $CFG['siteName'], 'name' => $name, 'listing' => $n, 'email' => $email);
+    /*EMAIL A parent’s question (to the people who run a listing)*/
+    $asked = t('{name} asked a question on your {site} listing for “{listing}”:', $v);
+    $askedHtml = str_replace($e($name), '<b>' . $e($name) . '</b>', $e(t('{name} asked on your listing:', $v)));
+    $reply = t('Reply to this email to answer them at {email}.', $v);
+    $came = t('This came from the “Ask a question” button on your listing. {site} passed it along and did not keep a copy.', $v);
+    $body = $asked . "\n\n" . $text . "\n\n" . $reply . "\n\n" . $came;
+    $html = email_html(t('A question about {listing}', $v), '<p style="margin:0 0 10px">' . $askedHtml . '</p><p style="margin:0;white-space:pre-line;border-left:4px solid #F3C613;padding-left:12px">' . $e($text) . '</p>' . paras(array($reply), 'margin:14px 0 0'), '', '', $came);
     $sent = 0;
-    foreach ($to as $addr) if (send_mail($addr, 'A question about ' . $n . ' from a parent', $body, $html, $email)) $sent++;
+    foreach ($to as $addr) if (send_mail($addr, t('A question about {listing} from a parent', $v), $body, $html, $email)) $sent++;
     if (!$sent) fail('mail', 'Your question could not be sent. Please try again in a minute.', 502);
     if (!holds($u, $key)) q('INSERT INTO hits (listing, k, day, n) VALUES (?, ?, ?, 1) ON CONFLICT(listing, k, day) DO UPDATE SET n = n + 1', array($key, 'ask', today_ny()));
     bump('ask');
@@ -2292,10 +2356,11 @@ switch ($method . ' ' . $action) {
       note('ask:' . $g['id']);
       $owner = row('SELECT email FROM users WHERE id = ?', array($g['owner_id']));
       $url = $CFG['siteUrl'] . '/groups/?g=' . $g['id'];
-      $who = $u['name'] . ($viewer ? ' (viewing only)' : '');
-      if ($owner) send_mail($owner['email'], $u['name'] . ' joined ' . $g['name'],
-        "$who joined your group \"" . $g['name'] . "\" on " . $CFG['siteName'] . ", from the address you invited (" . $u['email'] . ").\n\nIf that isn't who you expected, remove them here:\n$url\n",
-        email_html($u['name'] . ' joined ' . $g['name'], '<p style="margin:0">' . htmlspecialchars($who, ENT_QUOTES, 'UTF-8') . ' joined your group from the address you invited (' . htmlspecialchars($u['email'], ENT_QUOTES, 'UTF-8') . '). If that isn’t who you expected, you can remove them.</p>', 'Open the group', $url, 'You’re getting this because you made this group on ' . $CFG['siteName'] . '.'));
+      /*EMAIL Someone joined your group (to the group’s owner)*/
+      $v = array('site' => $CFG['siteName'], 'name' => $u['name'] . ($viewer ? ' ' . t('(viewing only)') : ''), 'group' => $g['name'], 'email' => $u['email']);
+      if ($owner) send_mail($owner['email'], t('{name} joined {group}', $v),
+        t('{name} joined your group “{group}” on {site}, from the address you invited ({email}).', $v) . "\n\n" . t('If that isn’t who you expected, remove them here:', $v) . "\n$url\n",
+        email_html(t('{name} joined {group}', $v), paras(array(t('{name} joined your group from the address you invited ({email}). If that isn’t who you expected, you can remove them.', $v))), t('Open the group', $v), $url, t('You’re getting this because you made this group on {site}.', $v)));
     }
     out(array('ok' => true, 'id' => $g['id'], 'name' => $g['name'], 'status' => $m['status'], 'kid' => $kidId, 'solo' => (bool) $g['solo']));
   }
@@ -2430,8 +2495,10 @@ switch ($method . ' ' . $action) {
       if ($x['status'] !== 'approved') {
         q('UPDATE members SET status = ? WHERE id = ?', array('approved', $mid));
         $url = $CFG['siteUrl'] . '/groups/?g=' . $gid;
-        send_mail($x['email'], 'You’re in: ' . $g['name'], "You've been approved to see \"" . $g['name'] . "\" on " . $CFG['siteName'] . ".\n\n$url\n",
-          email_html('You’re in: ' . $g['name'], '<p style="margin:0">You’ve been approved. You can see the group’s weeks now.</p>', 'Open the group', $url, 'You’re getting this because you asked to join this group on ' . $CFG['siteName'] . '.'));
+        /*EMAIL You’re in (a group approved you)*/
+        $v = array('site' => $CFG['siteName'], 'group' => $g['name']);
+        send_mail($x['email'], t('You’re in: {group}', $v), t('You’ve been approved to see “{group}” on {site}.', $v) . "\n\n$url\n",
+          email_html(t('You’re in: {group}', $v), paras(array(t('You’ve been approved. You can see the group’s weeks now.', $v))), t('Open the group', $v), $url, t('You’re getting this because you asked to join this group on {site}.', $v)));
       }
     } else {
       q('DELETE FROM members WHERE id = ?', array($mid));   // declining or removing takes their children's weeks with it

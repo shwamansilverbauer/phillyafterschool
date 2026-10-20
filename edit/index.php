@@ -350,6 +350,8 @@ if (!edit_signed_in()) {
     <li><a href="../premium/">Premium listings</a></li>
     <li><a href="../404.html">Page not found</a></li>
   </ul>
+  <h2>Emails</h2>
+  <p><a href="../edit/emails/">The site’s own emails</a>: sign-in codes, invitations, the notes to program managers. Each is shown once with made-up names, and its sentences edit like a page’s.</p>
   <h2>What can’t be edited here</h2>
   <ul>
     <li>Program details: names, descriptions, hours and costs come from the listings data. Send fixes for those through <a href="../suggest/">the suggestion form</a>.</li>
