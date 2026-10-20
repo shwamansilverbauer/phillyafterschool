@@ -5865,6 +5865,8 @@ if (GROUPS) {
   if (GATED) write('edit/emails/index.php', editEmailsPhp()); else write('edit/emails/index.html', editEmailsPage());
 }
 for (const f of fs.readdirSync(path.join(ROOT, 'src/static'))) write(f, fs.readFileSync(path.join(ROOT, 'src/static', f)));
+// pictures the welcome emails (email/welcome/, sent from the email list) load from the site
+if (fs.existsSync(path.join(ROOT, 'email/img'))) for (const f of fs.readdirSync(path.join(ROOT, 'email/img'))) if (/\.(png|jpg)$/.test(f)) write('email/img/' + f, fs.readFileSync(path.join(ROOT, 'email/img', f)));
 if (!PREVIEW) for (const f of fs.readdirSync(path.join(ROOT, 'src/vendor/leaflet'))) write('assets/leaflet/' + f, fs.readFileSync(path.join(ROOT, 'src/vendor/leaflet', f)));   // the map library, served from this site so no other one is asked for it   // icons and the share image, served from the top level
 if (!PREVIEW) {
   write('404.html', notFound);
