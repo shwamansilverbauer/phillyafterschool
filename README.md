@@ -1729,6 +1729,10 @@ key events and rules marked N are removed. A new parameter is a row on the Dimen
 parameter name as a dimension or a metric, never both, so the Metrics tab's rows stay off while their parameters are
 dimensions; a metric needs its own parameter name from Tag Manager.
 
+Klaviyo's own site script (`static.klaviyo.com/onsite/js/<public key>/klaviyo.js`, keyed by `alerts.klaviyoKey`) loads on
+exactly the pages Tag Manager does and never on the quiet ones, so a visit from a Klaviyo email is tied to its profile
+and "Active on Site" works; the privacy page says so. It sends no events of its own.
+
 Set `gtmId` to load Google Tag Manager on every page. Every page view and event carries `visitor_role` and `signed_in`
 (see "Parents and program managers, told apart"). The site pushes these events to the data layer:
 
