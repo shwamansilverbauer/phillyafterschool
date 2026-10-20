@@ -4135,10 +4135,35 @@ function groupPage() {
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
   const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])) });
-  const src = fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8');
+  const src = phpCopy(fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8'));
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   if (!src.includes('/*MAILER*/')) throw new Error('src/server/groups-api.php has lost its /*MAILER*/ marker');
   return src.replace('/*MAILER*/', () => mailerPhp()).replace(`'/*CONFIG*/'`, () => `'` + conf.replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`);
+}
+// The wording of the emails the server sends is written in src/server/groups-api.php as __T("…"), with {words} filled
+// in at send time by its t() helper. The build turns each into a PHP string with any edit from data/copy.json applied
+// (an emptied sentence becomes ''), and registers it like a page sentence, so it can be edited at /edit/emails/.
+// A /*EMAIL Name*/ comment before each email names it; the sentences that follow belong to it, in order.
+const EMAILS = [];   // [{ name, sentences: [original, …] }] in source order
+function phpCopy(src) {
+  EMAILS.length = 0;
+  const marks = [...src.matchAll(/\/\*EMAIL ([^*]+?)\*\//g)].map(m => ({ at: m.index, name: m[1].trim() }));
+  const emailAt = pos => { let e = null; for (const m of marks) if (m.at < pos) e = m; return e; };
+  const byName = new Map();
+  const quote = t => `'` + String(t).replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`;
+  let n = 0;
+  const out = src.replace(/__T\("((?:[^"\\]|\\.)*)"\)/g, (m, lit, at) => {
+    n++;
+    const original = JSON.parse('"' + lit + '"');
+    const id = copyId(original);
+    copyRegistry.set(id, original);
+    const mark = emailAt(at);
+    if (mark) { if (!byName.has(mark.name)) { byName.set(mark.name, []); EMAILS.push({ name: mark.name, sentences: byName.get(mark.name) }); } byName.get(mark.name).push(original); }
+    return quote(isRemoved(id) ? '' : (typeof copyEdits[id]?.now === 'string' ? copyEdits[id].now : original));
+  });
+  const left = (out.match(/__T\(/g) || []).length;
+  if (left) throw new Error('src/server/groups-api.php: ' + left + ' __T( call(s) could not be read (a sentence must be one double-quoted string with no raw double quotes inside)');
+  return out;
 }
 
 function boardPage() {
@@ -4824,6 +4849,30 @@ $sum = function ($key, $span) use (&$days, &$ever) {
 ${page}`;
 }
 
+// The site's own emails, each rendered once with sample values so their sentences can be edited like a page's.
+// Sentences come from __T("…") in src/server/groups-api.php (see phpCopy); {words} show the sample here and are
+// filled in for real when an email is sent.
+const EMAIL_SAMPLE = { site: cfg.siteName, code: '123 456', minutes: '20', name: 'Sam Rivera', from: 'Sam Rivera (sam@example.com)', first: 'Sam', email: 'you@example.com', contact: cfg.contactEmail || 'contact@example.com', times: '120 times', before: '96', address: 'you@example.com', newAddress: 'new@example.com', group: 'Tuesday crew', listing: 'Maple Street Arts Club', program: 'Maple Street Arts Club', count: '3', n: '3', question: 'Is the Thursday clinic still 3:30 to 5:30?', days: '7', numbers: 'Opened 120 times, 14 clicks to your sign-up page, on 9 plans.', todo: 'Mark whether there’s space.', more: '1', school: 'Nebinger' };
+function editEmailsPage() {
+  const hero = `    <h1>The site’s emails</h1>
+    <p class="lede">Every email the site sends itself, with made-up names and numbers in place of the real ones. Turn on editing at <a href="../">the edit page</a>, then click a sentence here and type; words in curly braces are filled in when an email goes out.</p>`;
+  const body = `<div class="prose" data-emails-page>
+  ${EMAILS.length ? EMAILS.map(e => `<section class="panel email-sample"><h2>${esc(e.name)}</h2>
+${e.sentences.map(t => `    <p>${T(t, EMAIL_SAMPLE)}</p>`).join('\n')}
+  </section>`).join('\n  ') : '<p>No emails are wired up for editing yet.</p>'}
+  <p class="hint">Klaviyo’s emails (the dates digest, the welcome series) are edited in Klaviyo, not here.</p>
+</div>`;
+  return layout({ title: 'The site’s emails', description: 'Edit the wording of the emails the site sends.', pathName: 'edit/emails/', depth: 2, current: null, hero, body, noindex: true, quiet: true });
+}
+function editEmailsPhp() {
+  return `<?php
+// The emails page, behind the edit sign-in. Generated by build.mjs; edit it there.
+${editAuthPhp()}
+if (!edit_signed_in()) { header('Location: ../', true, 303); exit; }
+?>
+${editEmailsPage()}`;
+}
+
 function editPage() {
   const pages = [['', 'Home'], ['schools/', 'Schools'], ['schools/request/', 'A school that isn’t covered yet'], ...schools.map(s => [s.id + '/', `${s.shortName} page`]), ['types/', 'Program types'], [`types/${liveTypes()[0].id}/`, `A type page (${liveTypes()[0].label})`], ['by-day/', 'By day of the week'], ['all-programs/', 'All programs, by kind'], ['programs/', 'After-school programs, A to Z'], ['neighborhoods/', 'Neighborhoods'], [hoodPath(hoods[0]), `A neighborhood page (${hoods[0].name})`], [programPath(programs[0]), `A program page (${programs[0].name})`],
     ['board/', 'Build your week'], ['suggest/', 'Suggest a program'], ['suggest/thanks/', 'Thank-you page after a suggestion'], ['ideas/', 'Request a feature'], ['ideas/thanks/', 'Thank-you page after an idea'], ['review/', 'Write a review'], ['review/thanks/', 'Thank-you page after a review'],
@@ -4854,6 +4903,8 @@ function editPage() {
   <ul>
     ${pages.map(([to, label]) => `<li><a href="${link(to, 1)}">${esc(label)}</a></li>`).join('\n    ')}
   </ul>
+  <h2>Emails</h2>
+  <p><a href="${link('edit/emails/', 1)}">The site’s own emails</a>: sign-in codes, invitations, the notes to program managers. Each is shown once with made-up names, and its sentences edit like a page’s.</p>
   <h2>What can’t be edited here</h2>
   <ul>
     <li>Program details: names, descriptions, hours and costs come from the listings data. Send fixes for those through <a href="${link('suggest/', 1)}">the suggestion form</a>.</li>
@@ -5744,6 +5795,8 @@ if (GROUPS) {
   if (PM_PRICE && !PREVIEW) write('premium/index.html', premiumPage());
   write('directors/index.html', movedPage('managers/', 1));   // the page's first address
   if (!PREVIEW) write('groups/api.php', groupsApiPhp());
+  else phpCopy(fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8'));   // the preview still lists the emails
+  if (GATED) write('edit/emails/index.php', editEmailsPhp()); else write('edit/emails/index.html', editEmailsPage());
 }
 for (const f of fs.readdirSync(path.join(ROOT, 'src/static'))) write(f, fs.readFileSync(path.join(ROOT, 'src/static', f)));
 if (!PREVIEW) for (const f of fs.readdirSync(path.join(ROOT, 'src/vendor/leaflet'))) write('assets/leaflet/' + f, fs.readFileSync(path.join(ROOT, 'src/vendor/leaflet', f)));   // the map library, served from this site so no other one is asked for it   // icons and the share image, served from the top level

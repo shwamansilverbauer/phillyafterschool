@@ -547,6 +547,22 @@ in it goes too (a benefit on the register or managers page, say; the example lis
 Words in curly braces, like `{school}`, are filled in per page. If a sentence is later reworded in
 `build.mjs`, its entry stops matching; the build prints a note and carries on.
 
+### The emails
+
+The emails the site sends itself (sign-in link and code, the invitations to a group, "someone joined", the monthly
+numbers and the other notes to the people who run a listing, a parent's question passed on) are edited the same way.
+`/edit/emails/` is linked from the edit page and needs the same sign-in; it shows every email once, with made-up
+names and numbers in place of the real ones, and each sentence edits like any other. Words in curly braces, such as
+`{site}`, `{code}`, `{listing}` or `{first}`, are filled in when an email goes out, so they stay in the sentence. A
+removed sentence is left out of the email, and a gap it would leave in the plain-text version is closed.
+
+In `src/server/groups-api.php` each such sentence is written as `__T("…")` (one double-quoted string, no raw double
+quotes inside; typographic ones are fine) and passed through `t()`, which fills the braces; a `/*EMAIL Name*/` comment
+before an email names it on the page, and the same name used twice joins the sentences under one heading. The build
+(`phpCopy()` in `build.mjs`) replaces each `__T("…")` with the published wording, or `''` for a removed sentence, and
+stops if any is left unread. The unit words in the monthly numbers ("3 clicks", "2 more families") are not editable;
+the sentences around them are. The emails to the site's own address are not on the page.
+
 Not editable this way: program and school details (they come from the data files), menu labels, and text
 the scripts write as you click (filter counts, the roster).
 
