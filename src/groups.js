@@ -170,7 +170,7 @@
     if (noteRole.asking === asking) return;   // already on its way from this page
     noteRole.asking = asking;
     var props = { role: u.role, home_school: u.school || '', neighborhood: u.hood || '' };
-    if (names !== null) props.claimed_listings = listings;
+    if (names !== null) { props.claimed_listings = listings; props.holds_listing = listings.length > 0; }   // a plain yes/no an email flow can start from
     window.fetch('https://a.klaviyo.com/client/profiles?company_id=' + encodeURIComponent(KL_KEY), {
       method: 'POST',
       headers: { 'content-type': 'application/vnd.api+json', revision: '2026-07-15' },
