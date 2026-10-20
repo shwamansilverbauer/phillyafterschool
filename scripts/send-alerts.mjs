@@ -184,8 +184,9 @@ async function stoppedList(site) {
       if (!d || d.ok !== true || !Array.isArray(d.list)) throw new Error('the answer was not a list');
       return new Set(d.list.filter(h => typeof h === 'string' && /^[a-f0-9]{64}$/.test(h)));
     } catch (err) {
-      if (attempt >= 3) throw new Error(`Couldn’t read the list of stopped follows from the site (${err.message}). Nothing was sent, so nobody is emailed about something they stopped; the next run tries again.`);
-      await new Promise(done => setTimeout(done, attempt * 3000));
+      // a blip at the host is not a reason to skip a morning: keep asking for a couple of minutes before giving up
+      if (attempt >= 6) throw new Error(`Couldn’t read the list of stopped follows from the site (${err.message}). Nothing was sent, so nobody is emailed about something they stopped; the next run tries again.`);
+      await new Promise(done => setTimeout(done, attempt * 5000));
     }
   }
 }

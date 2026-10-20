@@ -8,8 +8,8 @@
 //   node scripts/site-check.mjs --report report.md      also write the findings to a file
 //   node scripts/site-check.mjs --quick                 ask each address once instead of three times
 //
-// It only reads: pages, the sitemap, two small data files, the accounts service's "health" answer and the public
-// record of this repository's scheduled jobs. It never signs in, never sends a form and never prints an address.
+// It only reads: pages, the sitemap, two small data files, the accounts service's "health" answer, the public
+// record of this repository's scheduled jobs and the home page on its live branch. It never signs in, never sends a form and never prints an address.
 import fs from 'node:fs';
 import path from 'node:path';
 import tls from 'node:tls';
@@ -163,6 +163,31 @@ function certificate() {
   });
 }
 
+// ----- did the host pick up the last publish? -----
+// The publish job puts the built site on the live branch and the host is meant to pull it within a minute or two.
+// When that stops (it has), everything else still passes while the site quietly serves an old version. So compare
+// the home page the host serves with the one on the live branch, once the branch is old enough to have been pulled.
+const DEPLOY_MINUTES = 20;
+async function deployed() {
+  if (LOCAL) return;
+  const gh = { accept: 'application/vnd.github+json', ...(TOKEN ? { authorization: `Bearer ${TOKEN}` } : {}) };
+  const commits = await get(`https://api.github.com/repos/${REPO}/commits?sha=live&per_page=1`, { headers: gh });
+  let when = '';
+  try { when = JSON.parse(commits.text)[0].commit.committer.date; } catch { /* handled below */ }
+  if (!when) return pass('Deploy', 'the live branch could not be read this time');   // GitHub's own hiccup is not the site's
+  const minutes = Math.floor((Date.now() - Date.parse(when)) / 6e4);
+  if (minutes < DEPLOY_MINUTES) return pass('Deploy', `the live branch changed ${minutes} minute${minutes === 1 ? '' : 's'} ago; checked next hour`);
+  const file = await get(`https://api.github.com/repos/${REPO}/contents/index.html?ref=live`, { headers: gh });
+  let branch = '';
+  try { branch = Buffer.from(JSON.parse(file.text).content.replace(/\n/g, ''), 'base64').toString('utf8'); } catch { /* handled below */ }
+  if (!branch) return pass('Deploy', 'the live branch could not be read this time');
+  const served = await get(`${SITE}/?check=${Date.now()}`);
+  if (served.status !== 200) return;   // the front door check has already said the site is not answering
+  const squash = t => t.replace(/\s+/g, ' ').trim();
+  if (squash(served.text) === squash(branch)) pass('Deploy', `the site matches the live branch (last published ${minutes < 120 ? minutes + ' minutes' : Math.floor(minutes / 60) + ' hours'} ago)`);
+  else fail('Deploy', `the site is serving an older version than the live branch, which changed ${minutes < 120 ? minutes + ' minutes' : Math.floor(minutes / 60) + ' hours'} ago`, 'The host has not pulled the live branch, so changes that were published are not showing. In Hostinger, open the website, then Git, and press Deploy; then check that automatic deployment is still switched on.');
+}
+
 // ----- the scheduled jobs: the build that publishes the site, and the one that sends the date emails -----
 async function jobs() {
   if (LOCAL) return;
@@ -187,6 +212,7 @@ if (await door()) {
   await forms();
 }
 await certificate();
+await deployed();
 await jobs();
 
 const failed = results.filter(r => !r.ok);
