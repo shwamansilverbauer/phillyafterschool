@@ -133,11 +133,11 @@
   },
   "6cef4c3b17": {
     "was": "A “Claimed” mark tells them the listing is looked after by the people who run it.",
-    "now": "A “Claimed” mark tells parents the listing is looked after by the people who run it."
+    "now": "A “Claimed” mark lets parents know the listing is verified by the people who run it."
   },
   "5a343478c1": {
     "was": "It has to be an address at your program’s own website: if the listing’s website is example.org, an address ending in @example.org. That is how we know you speak for it. If the addresses match, the claim stands straight away.",
-    "now": "Addresses linked to the program’s own website (e.g., if the listing’s website is example.org, an address ending in @example.org) grants you instant verification. To claim a listing with an address that isn’t at the program’s website, email contact@phillyafterschool.org from an address the program uses, and we’ll check and hand it to your account."
+    "now": "If it matches your program’s website (you@example.org for example.org), you’ll be verified instantly. Using a different address? Email contact@phillyafterschool.org from it. Once we verify it's listed on your program’s website, we’ll get you set up."
   },
   "028587cbea": {
     "was": "Send changes when something moves.",
@@ -145,6 +145,54 @@
   },
   "0e10b31324": {
     "was": "New dates, a new price, new hours. We read each one and update the listing, usually within a few days.",
-    "now": "New dates, new price, new hours? The \"update\" tab in your listing lets you notify a real person when program info changes. We review all submitted forms and update listings, usually within a few days."
+    "now": "New dates, new price, new hours? The \"update\" tab in your listing lets you notify a real person when program info changes. We review all submitted updates before publishing them, usually within a few days."
+  },
+  "ee9ab1a21f": {
+    "was": "How claiming works",
+    "now": "How it works"
+  },
+  "1d92e2bf83": {
+    "was": "A personal address (Gmail, Yahoo and so on) can’t claim a listing, even if it’s the one printed on your flyer. We have no way to tell it apart from anyone else’s.",
+    "now": ""
+  },
+  "301c1fb7c9": {
+    "was": "“Continue with Google” works if your work email is a Google account at your program’s address. A personal Gmail account will sign you in, but it can’t claim anything.",
+    "now": ""
+  },
+  "df57559f10": {
+    "was": "Some listings sit on a website many people share: a city rec center, a school’s clubs, a program inside a university. Those claims wait for us to say yes, and we may write to ask a question first.",
+    "now": ""
+  },
+  "83f5e887bb": {
+    "was": "Parents see a “Claimed” mark on the listing. Your name and email address are never shown.",
+    "now": ""
+  },
+  "eeda369117": {
+    "was": "A claim doesn’t change what the listing says by itself. Changes you send are looked at by a person, then published.",
+    "now": ""
+  },
+  "114d2e3383": {
+    "was": "Not on the site yet?",
+    "now": ""
+  },
+  "bcb356b14f": {
+    "was": "your camp",
+    "now": ""
+  },
+  "cb59876413": {
+    "was": "Suggest your program",
+    "now": ""
+  },
+  "1758356db2": {
+    "was": "or",
+    "now": ""
+  },
+  "bf7c4a20c3": {
+    "was": ", with its website, and claim it once it’s up.",
+    "now": ""
+  },
+  "4b51271158": {
+    "was": "Created and run by the Silverbauers.",
+    "now": "Created and run by South Philly parents, the Silverbauers."
   }
 }
