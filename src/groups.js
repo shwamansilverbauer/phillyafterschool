@@ -165,7 +165,7 @@
     var was = {}; try { was = JSON.parse(get('pas-kl-role') || '{}') || {}; } catch (e) { was = {}; }
     var names = listings ? listings.join(' | ') : null;
     var place = (u.school || '') + '/' + (u.hood || '');   // where they are: which school they kept, and their neighborhood
-    if (was.m === mark && was.r === u.role && (was.p || '/') === place && (names === null || was.l === names)) return;
+    if (was.m === mark && was.r === u.role && (was.p || '/') === place && (names === null || was.l === names) && was.v === 2) return;   // v: told once more after holds_listing was added
     var asking = mark + '|' + u.role + '|' + place + '|' + names;
     if (noteRole.asking === asking) return;   // already on its way from this page
     noteRole.asking = asking;
@@ -176,7 +176,7 @@
       headers: { 'content-type': 'application/vnd.api+json', revision: '2026-07-15' },
       body: JSON.stringify({ data: { type: 'profile', attributes: { email: u.email, properties: props } } })
     }).then(function (r) {
-      if (r.status >= 200 && r.status < 300) set('pas-kl-role', JSON.stringify({ m: mark, r: u.role, p: place, l: names === null ? (was.m === mark ? was.l : undefined) : names }));
+      if (r.status >= 200 && r.status < 300) set('pas-kl-role', JSON.stringify({ m: mark, r: u.role, p: place, l: names === null ? (was.m === mark ? was.l : undefined) : names, v: 2 }));
     }, function () { /* blocked or offline: tried again another time */ });
   }
   function signInBox(box, next, done, lede) {
