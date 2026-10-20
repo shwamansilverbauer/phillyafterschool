@@ -515,18 +515,35 @@ list. A new neighborhood name anywhere in the data creates its page; spell names
 
 ## Editing the site's wording
 
-Headlines, intros, section text, form labels and footer text can be edited on the site itself.
+Headlines, intros, section text, form labels and footer text can be edited on the site itself, and published from
+there.
 
-1. Open `/edit/`, sign in (when `editLogin` is set), and choose "Start editing". The page isn't linked from anywhere and is
-   hidden from search engines. A sign-in lasts 30 days on that device, and edits can only be sent while signed in.
-   Eight wrong tries from one address lock the form for 15 minutes.
-2. Click any outlined text on any page and type. Edits are kept in that browser only.
-3. "Review and send" emails the changes to `contactEmail`. The email lists each change and ends with a
-   complete `data/copy.json`.
-4. To publish, replace the contents of `data/copy.json` with that text and commit. To reject one change,
-   delete its entry first. To go back to the original wording everywhere, set the file to `{}`.
+1. Open `/edit/`, sign in (when `editLogin` is set, or with a site admin's account), and choose "Start editing". The
+   page isn't linked from anywhere and is hidden from search engines. A sign-in lasts 30 days on that device, and
+   edits can only be published or sent while signed in. Eight wrong tries from one address lock the form for 15 minutes.
+2. Click any outlined text on any page and type. To take a sentence off the page, click it and choose "Remove this
+   sentence" in the bar; it shows struck through until it is published. Edits are kept in that browser only.
+3. "Review and publish" lists each change beside the original, with a tick per change. "Publish" writes the ticked
+   changes to `data/copy.json` in the repository on GitHub as one commit named for the count and the person, and the
+   publish Action builds and deploys as for any push, so the site changes within a few minutes. The build stops on a
+   bad file, so nothing broken reaches the site. A record of each publish is also emailed to `contactEmail`.
+   "Send by email instead" is the older path: the email lists the changes and ends with a complete `data/copy.json`
+   to paste in and commit.
+4. `/edit/` lists the published versions (the commits that touched `data/copy.json`), newest first, each with
+   "Restore this version". A restore is a new commit with that version's file, so nothing is ever lost, and the
+   sentences currently taken off the page are listed there with "Put it back".
 
-Each entry is keyed by a fingerprint of the original sentence and holds `was` (the original) and `now`.
+Publishing needs one thing on the host: a file named `phillyafterschool-github.key` next to the public folder (the
+same place as `phillyafterschool-postmark.key`) holding a fine-grained GitHub token for this one repository with
+*Contents: read and write* (and the metadata read that comes with it) and nothing else. **Never put the token in this
+repository, in an issue or in a chat.** The file's name is in `.gitignore`. Without it, the edit page says publishing
+isn't set up and the email path still works. The handler is `src/server/edit-send.php` (built into `edit/send.php`);
+it merges the changes over the file as GitHub holds it at that moment, not over the build's copy, so two publishes in
+a row before a deploy don't lose each other, and it allows thirty publishes an hour.
+
+Each entry in `data/copy.json` is keyed by a fingerprint of the original sentence and holds `was` (the original) and
+`now`. An empty `now` takes the sentence off the page, and a list item, paragraph or heading left with nothing else
+in it goes too (a benefit on the register or managers page, say; the example listing's callout numbers follow).
 Words in curly braces, like `{school}`, are filled in per page. If a sentence is later reworded in
 `build.mjs`, its entry stops matching; the build prints a note and carries on.
 

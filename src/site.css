@@ -2137,3 +2137,7 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .support-thanks{border:2px solid var(--green-ink);background:var(--green-bg)}
 .support-thanks[hidden]{display:none}
 .support-thanks h3:focus{outline:none}
+
+.pub-list{display:flex;flex-direction:column;gap:8px;padding-left:1.2em}
+.pub-list b{font-weight:700}
+#pub-removed ul{padding-left:1.2em}

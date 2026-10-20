@@ -202,12 +202,13 @@
     startBtn.addEventListener('click', function () {
       store('pas-edit', '1');
       if (store('pas-edit') !== '1') { stateText.textContent = 'This browser is blocking saved data, so editing can’t carry from page to page. Try a regular (not private) window.'; return; }
-      loadEditor(); showState();
+      location.reload();   // the editor is already on this page for the versions list; a fresh load starts it in editing mode
     });
     stopBtn.addEventListener('click', function () { store('pas-edit', '0'); location.reload(); });
     var signOut = editPage.querySelector('a[href="?out=1"]');
     if (signOut) signOut.addEventListener('click', function () { store('pas-edit', '0'); });   // signing out also switches editing off
     showState();
+    loadEditor();   // on this page the editor also lists the published versions, whether or not editing is on
   }
 
   // ----- counting for "your listing this month": one more for a listing each time its page is opened, a link on it is

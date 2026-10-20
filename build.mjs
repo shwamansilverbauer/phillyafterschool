@@ -81,9 +81,14 @@ const typeIcon = (t, size = 18) => `<svg class="ticon" width="${size}" height="$
 const copyEdits = fs.existsSync(path.join(ROOT, 'data/copy.json')) ? readJson('data/copy.json') : {};
 const copyRegistry = new Map();
 const copyId = text => createHash('sha1').update(text).digest('hex').slice(0, 10);
+// An entry whose "now" is empty takes the sentence off the page: T() leaves a marker, and write() drops a list item,
+// paragraph or heading that holds nothing else (so a benefit can be removed from a list in edit mode).
+const REMOVED = '<!--pas-rm-->';
+const isRemoved = id => typeof copyEdits[id]?.now === 'string' && copyEdits[id].now === '';
 function T(original, vars) {
   const id = copyId(original);
   copyRegistry.set(id, original);
+  if (isRemoved(id)) return REMOVED;
   const now = typeof copyEdits[id]?.now === 'string' ? copyEdits[id].now : original;
   const shown = vars ? now.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m)) : now;
   return `<span data-copy="${id}"${vars ? ` data-tpl="${esc(now)}" data-vars="${esc(JSON.stringify(vars))}"` : ''}>${esc(shown)}</span>`;
@@ -91,6 +96,16 @@ function T(original, vars) {
 // The same sentence as plain text, with any approved edit applied: for places that can't hold a span, such as the
 // description a link preview shows.
 const copyNow = original => (typeof copyEdits[copyId(original)]?.now === 'string' ? copyEdits[copyId(original)].now : original);
+// Drops the elements an emptied sentence left behind: a list item, paragraph or heading whose only content is the
+// marker, whitespace, empty <b>/<strong>, or elements hidden from readers (a callout number). Then the markers go.
+const EMPTYISH = String.raw`(?:\s|<!--pas-rm-->|<(?:b|strong|em|i)>(?:\s|<!--pas-rm-->)*</(?:b|strong|em|i)>|<i\b[^>]*aria-hidden="true"[^>]*>[^<]*</i>|<br\s*/?>)*`;
+const DROP_RE = new RegExp(String.raw`<(li|p|h[1-6]|dt|dd)\b[^>]*>` + EMPTYISH + String.raw`</\1>\s*`, 'g');
+function dropEmpty(html) {
+  if (!html.includes(REMOVED)) return html;
+  let out = html;
+  for (let i = 0; i < 3; i++) { const next = out.replace(DROP_RE, m => (m.includes(REMOVED) ? '' : m)); if (next === out) break; out = next; }
+  return out.replace(/<(b|strong)>\s*<!--pas-rm-->\s*<\/\1>\s*/g, '').replace(/<!--pas-rm-->/g, '');
+}
 // A short fingerprint of each asset, added to its URL. When the file changes, the URL changes,
 // so browsers and the host's CDN fetch the new one instead of a cached copy.
 const stamp = f => PREVIEW ? '' : '?v=' + createHash('sha1').update(fs.readFileSync(path.join(ROOT, f))).digest('hex').slice(0, 8);
@@ -380,7 +395,7 @@ reviews.forEach((r, i) => {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(r.date || '')) errors.push(`${at}: date must be YYYY-MM-DD`);
 });
 for (const [id, e] of Object.entries(copyEdits)) {
-  if (!e || typeof e.now !== 'string' || !e.now.trim()) errors.push(`data/copy.json: entry "${id}" needs a "now" with the new wording`);
+  if (!e || typeof e.now !== 'string') errors.push(`data/copy.json: entry "${id}" needs a "now" with the new wording (an empty one takes the sentence off the page)`);
 }
 // Accounts that open the owner's pages (/edit/, the numbers, the claims) by signing in to the site like anyone else.
 const ADMINS = [...new Set((Array.isArray(cfg.admins) ? cfg.admins : []).map(a => String(a).trim().toLowerCase()))];
@@ -3622,7 +3637,8 @@ const movedPage = (to, depth) => `<!doctype html>
 
 // ---------- for the people who manage a program: find a listing and claim it ----------
 // What claiming gets you, in the order the example listing beside it is numbered.
-const CLAIM_GETS = () => [
+const CLAIM_GETS = () => CLAIM_GETS_ALL().filter(([, name, text]) => !(name === REMOVED && text === REMOVED));
+const CLAIM_GETS_ALL = () => [
   ['dates', T(`Keep your dates current.`), T(`Post sign-up openings, deadlines, term dates and camp days as soon as you set them, instead of waiting for us to find them.`)],
   ['space', T(`Say whether there’s space.`), T(`Mark your listing “Spots open”, “Waitlist” or “Full”. It shows to parents straight away, with the date.`)],
   ['numbers', T(`See your numbers.`), T(`How many times your listing was opened this month, how many clicks went on to your sign-up page and website, and how many families put you on a plan.`)],
@@ -4813,7 +4829,7 @@ function editPage() {
     ['board/', 'Build your week'], ['suggest/', 'Suggest a program'], ['suggest/thanks/', 'Thank-you page after a suggestion'], ['ideas/', 'Request a feature'], ['ideas/thanks/', 'Thank-you page after an idea'], ['review/', 'Write a review'], ['review/thanks/', 'Thank-you page after a review'],
     ['about/', 'About'], ['privacy/', 'Privacy'], ['support/', 'Help the site keep going'], ...(PM_PRICE && !PREVIEW ? [['premium/', PM_LISTED ? 'Premium listings' : 'Premium listings (not linked from the site yet)']] : []), ...(PREVIEW ? [] : [['404.html', 'Page not found']])];
   const hero = `    <h1>Edit the words on this site</h1>
-    <p class="lede">Turn on editing, then click a sentence on any page and type. Nothing changes for visitors until your edits are sent and approved.</p>`;
+    <p class="lede">Turn on editing, then click a sentence on any page and type. Nothing changes for visitors until you publish.</p>`;
   const body = `<div class="prose" data-edit-page>
   <div class="panel">
     <h2 id="edit-state">Editing is off</h2>
@@ -4823,11 +4839,17 @@ function editPage() {
   </div>${GATED ? `\n  <?php if (edit_admin() !== '') { ?><p class="hint" id="edit-admin">You’re here through your account, <?php echo htmlspecialchars(edit_admin(), ENT_QUOTES, 'UTF-8'); ?>, which is a site admin. <a href="../account/#sign-out">Sign out of your account</a> to close these pages. Anyone who can read that address’s inbox can sign in as you, so keep 2-step verification on for it.</p><?php } else { ?><p class="hint">You’re signed in on this device for 30 days. <a href="?out=1">Sign out</a></p><?php } ?>` : ''}${GATED && GROUPS ? '\n  <p><a class="btn" href="stats/">Site numbers: accounts, shared weeks and groups</a> <a class="btn" href="claims/">Claims and proposed changes</a></p>' : ''}
   <h2>How it works</h2>
   <ol>
-    <li>Click any text with a dotted outline and type. Text you’ve changed turns yellow.</li>
-    <li>Move between pages with the menu or the list below. Your edits are kept in this browser as you go, so stay on the same phone or computer until you’ve sent them.</li>
-    <li>Choose “Review and send” in the bar at the bottom. You’ll see each change next to the original and can undo any of them.</li>
-    <li>Sending emails the changes to be approved. They appear on the site once they’re published.</li>
+    <li>Click any text with a dotted outline and type. Text you’ve changed turns yellow. To take a sentence off the page, click it and choose “Remove this sentence” in the bar.</li>
+    <li>Move between pages with the menu or the list below. Your edits are kept in this browser as you go, so stay on the same phone or computer until you’ve published them.</li>
+    <li>Choose “Review and publish” in the bar at the bottom. You’ll see each change next to the original, can untick any to leave it out, and can undo any of them.</li>
+    <li>Publishing puts the ticked changes on the site within a few minutes. Every publish is kept as a version below, so a change can be taken back.</li>
   </ol>
+  <section id="pub"${GATED ? '' : ' hidden'}>
+    <h2>Published versions</h2>
+    <p id="pub-msg" class="needs-js">Reading the published versions…</p>
+    <ol id="pub-list" class="pub-list"></ol>
+    <div id="pub-removed" hidden><h3>Sentences taken off the page</h3><ul></ul></div>
+  </section>
   <h2>Pages</h2>
   <ul>
     ${pages.map(([to, label]) => `<li><a href="${link(to, 1)}">${esc(label)}</a></li>`).join('\n    ')}
@@ -4842,103 +4864,20 @@ function editPage() {
   return layout({ title: 'Edit the copy', description: 'Edit the words on this site.', pathName: 'edit/', depth: 1, current: null, hero, body, noindex: true });
 }
 
-// Receives edits as JSON, emails a readable list plus a complete data/copy.json to paste in.
-// Nothing is published from here: the site only changes when copy.json is committed.
+// Receives edits as JSON: emails them, or publishes data/copy.json to the repository (src/server/edit-send.php has the
+// handler; the build fills in the mailer, the config and the sign-in check).
 function editPhp() {
   const original = Object.fromEntries(copyRegistry);
   const overrides = Object.fromEntries(Object.entries(copyEdits).filter(([id]) => copyRegistry.has(id)));
   const nowdoc = o => "json_decode(<<<'PAS_JSON'\n" + JSON.stringify(o) + "\nPAS_JSON\n, true)";
-  return `<?php
-// Receives copy edits made in edit mode. Generated by build.mjs; edit it there.
-${mailerPhp()}
-$TO = ${JSON.stringify(cfg.contactEmail)};
+  const src = fs.readFileSync(path.join(ROOT, 'src/server/edit-send.php'), 'utf8');
+  for (const m of ['/*MAILER*/', '/*CONFIG*/', '/*AUTH*/']) if (!src.includes(m)) throw new Error('src/server/edit-send.php has lost its ' + m + ' marker');
+  const config = `$TO = ${JSON.stringify(cfg.contactEmail)};
 $SITE = ${JSON.stringify(cfg.siteName)};
 $REPO = ${JSON.stringify(cfg.repo || '')};
 $ORIGINAL = ${nowdoc(original)};
-$OVERRIDES = ${nowdoc(overrides)};
-${GATED ? editAuthPhp() : ''}
-function out($ok, $msg, $code) {
-  http_response_code($code);
-  header('Content-Type: application/json; charset=utf-8');
-  echo json_encode(array('ok' => $ok, 'message' => $msg));
-  exit;
-}
-function tidy($v, $max) {
-  if (!is_string($v)) return '';
-  $v = strip_tags(str_replace(chr(0), '', $v));
-  $v = trim(preg_replace('/\\s+/u', ' ', $v));
-  return function_exists('mb_substr') ? mb_substr($v, 0, $max, 'UTF-8') : substr($v, 0, $max);
-}
-
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-  out(false, 'Use the editor on the site.', 405);
-}
-${GATED ? `if (!edit_signed_in()) {
-  out(false, 'You are signed out.', 401);
-}
-` : ''}$in = json_decode(file_get_contents('php://input'), true);
-if (!is_array($in) || !isset($in['edits']) || !is_array($in['edits'])) {
-  out(false, 'There was nothing to send.', 400);
-}
-// A hidden field people never fill in. If it has a value, a bot did it: act as if it worked.
-if (isset($in['company']) && $in['company'] !== '') {
-  out(true, 'Sent.', 200);
-}
-
-$name = tidy(isset($in['name']) ? $in['name'] : '', 60);
-$note = tidy(isset($in['note']) ? $in['note'] : '', 1000);
-$merged = is_array($OVERRIDES) ? $OVERRIDES : array();
-$lines = array();
-$n = 0;
-foreach (array_slice($in['edits'], 0, 300) as $e) {
-  if (!is_array($e) || !isset($e['id']) || !is_string($e['id']) || !isset($ORIGINAL[$e['id']])) continue;
-  $id = $e['id'];
-  $now = tidy(isset($e['now']) ? $e['now'] : '', 800);
-  $shown = isset($merged[$id]['now']) ? $merged[$id]['now'] : $ORIGINAL[$id];
-  if ($now === '' || $now === $shown) continue;
-  $page = tidy(isset($e['page']) ? $e['page'] : '', 120);
-  $n++;
-  $line = "$n." . ($page !== '' ? " On $page" : '') . "\\n   Was: $shown\\n   Now: $now\\n";
-  if (preg_match_all('/\\{\\w+\\}/', $ORIGINAL[$id], $m)) {
-    foreach (array_unique($m[0]) as $token) {
-      if (strpos($now, $token) === false) $line .= "   CHECK: the original has $token, which is filled in for each page. The new wording leaves it out.\\n";
-    }
-  }
-  $lines[] = $line;
-  if ($now === $ORIGINAL[$id]) unset($merged[$id]);
-  else $merged[$id] = array('was' => $ORIGINAL[$id], 'now' => $now);
-}
-if ($n === 0) {
-  out(false, 'Those changes are already on the site, or this page is out of date. Refresh the page and check.', 400);
-}
-
-$json = count($merged) ? json_encode($merged, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : '{}';
-$body = "Copy edits" . ($name !== '' ? " from $name" : '') . ": $n " . ($n === 1 ? 'change' : 'changes') . ".\\n\\n"
-  . ($note !== '' ? "Note: $note\\n\\n" : '')
-  . implode("\\n", $lines)
-  . "\\nTo publish all of them, replace everything in data/copy.json with the text between the two lines below, then commit.\\n"
-  . ($REPO !== '' ? "https://github.com/$REPO/edit/main/data/copy.json\\n" : '')
-  . "It already includes edits approved earlier. To leave one out, delete its entry before you paste.\\n\\n"
-  . "-----8<----- copy.json starts on the next line\\n"
-  . $json . "\\n"
-  . "-----8<----- copy.json ended on the line above\\n";
-
-$subject = "[$SITE] Copy edits" . ($name !== '' ? " from $name" : '') . " ($n)";
-$headers = array(
-  'From: ' . $SITE . ' <' . $TO . '>',
-  'MIME-Version: 1.0',
-  'Content-Type: text/plain; charset=UTF-8',
-  'Content-Transfer-Encoding: base64',
-);
-$sent = pas_postmark($SITE, $TO, $TO, $subject, $body) === 1 || @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', chunk_split(base64_encode($body)), implode("\\r\\n", $headers));
-$log = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-copy-edits.log';
-@file_put_contents($log, date('c') . ($sent ? ' (emailed)' : ' (EMAIL FAILED)') . "\\n" . $body . "----\\n", FILE_APPEND | LOCK_EX);
-
-if (!$sent) {
-  out(false, 'The email did not go out.', 500);
-}
-out(true, 'Sent.', 200);
-`;
+$OVERRIDES = ${nowdoc(overrides)};`;
+  return src.replace('/*MAILER*/', () => mailerPhp()).replace('/*CONFIG*/', () => config).replace('/*AUTH*/', () => (GATED ? editAuthPhp() : ''));
 }
 
 // ---------- summer camps: one page, built from data/camps.json ----------
@@ -5738,7 +5677,7 @@ function notFoundPage() {
 
 // ---------- write ----------
 fs.rmSync(OUT, { recursive: true, force: true });
-const write = (rel, content) => { const f = path.join(OUT, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, content); };
+const write = (rel, content) => { const f = path.join(OUT, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, /\.(html|php)$/.test(rel) && typeof content === 'string' ? dropEmpty(content) : content); };
 write('index.html', homePage());
 for (const s of schools) write(`${s.id}/index.html`, schoolPage(s));
 write('schools/index.html', schoolsPage());
