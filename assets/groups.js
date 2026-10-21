@@ -159,6 +159,7 @@
       if (window.dataLayer) window.dataLayer.push({ event: 'pas_role', pas_role: u.role, pas_signed_in: 'yes' });
       if (typeof window.clarity === 'function') window.clarity('set', 'role', u.role);
     }
+    if (typeof u.premium === 'boolean') set('pas-premium', u.premium ? '1' : null);   // the menu's button for a manager: premium, or their listings once every one is premium
     if (!KL_KEY || !u.email || !u.listed) return;
     var mark = 0, i;
     for (i = 0; i < u.email.length; i++) mark = (mark * 31 + u.email.charCodeAt(i)) % 9973;   // tells two accounts on one device apart without keeping the address

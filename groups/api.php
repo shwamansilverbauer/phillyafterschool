@@ -787,9 +787,13 @@ function my_groups(int $uid): array {
 function ready(array $u): bool { return $u['first'] !== '' && $u['last'] !== ''; }
 function me_out(array $u): array {
   $claims = isset($u['id']) ? (int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) : 0;
+  // whether every listing the account holds is premium already (the menu's button then stops asking)
+  $held = isset($u['id']) ? q("SELECT listing FROM claims WHERE user_id = ? AND status = 'ok'", array($u['id']))->fetchAll() : array();
+  $allPremium = count($held) > 0;
+  foreach ($held as $h) if (!is_premium((string) $h['listing'])) $allPremium = false;
   return array('email' => $u['email'], 'first' => $u['first'], 'last' => $u['last'], 'ready' => ready($u), 'listed' => (bool) $u['listed'],
     'school' => isset($u['school']) ? (string) $u['school'] : '', 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'phone' => isset($u['phone']) && !empty($u['phone_ok']) ? phone_show((string) $u['phone']) : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'ages' => grade_list(isset($u['ages']) ? (string) $u['ages'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) : 0,
-    'claims' => $claims, 'role' => role_of($u, $claims), 'push' => isset($u['id']) ? push_state((int) $u['id']) : array('devices' => 0, 'only' => false))
+    'claims' => $claims, 'role' => role_of($u, $claims), 'premium' => $allPremium, 'push' => isset($u['id']) ? push_state((int) $u['id']) : array('devices' => 0, 'only' => false))
     + (is_admin($u) ? array('admin' => true) : array());   // only an admin's own account is ever told so
 }
 // A site admin: an account whose address is on the admins list in site.config.json. It opens the owner's pages under
