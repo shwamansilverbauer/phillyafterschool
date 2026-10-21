@@ -546,6 +546,11 @@
       "name": "CoCo Academy"
     }
   ],
+  "added": {
+    "heading": "Your school is here",
+    "intro": "The school you were waiting for has its own page now.",
+    "reason": "you asked to be told when this school was added"
+  },
   "alerts": [
     {
       "id": "reg-mister-johns-music-2026-11-02",

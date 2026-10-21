@@ -142,7 +142,7 @@ if (!edit_signed_in()) {
   <div class="in bar">
     <a class="brand" href="../"><span class="bus-mark"></span>Philly After School</a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true"></span>Menu</button>
-    <nav class="nav" id="site-nav" aria-label="Site"><details class="menu"><summary>Programs</summary><ul><li><a href="../all-programs/">All programs</a></li><li><a href="../programs/">After-school programs</a></li><li><a href="../weekends/">Weekend classes</a></li><li><a href="../day-camps/">Day-camp programs</a></li><li><a href="../summer-camps/">Summer camps</a></li></ul></details><details class="menu"><summary>Search by</summary><ul><li><a href="../schools/">School</a></li><li><a href="../neighborhoods/">Neighborhood</a></li><li><a href="../types/">Program type</a></li><li><a href="../by-day/">Day of week</a></li></ul></details><details class="menu"><summary>Build a schedule</summary><ul><li><a href="../schedules/">All the planners</a></li><li><a href="../board/">After-school schedule</a></li><li><a href="../days-off/">Day-camp schedule</a></li><li><a href="../summer-schedule/">Summer schedule</a></li><li><a href="../calendar/">My kids’ calendar</a></li></ul></details><details class="menu"><summary>Suggest</summary><ul><li><a href="../suggest/">A program or a camp</a></li><li><a href="../suggest/?kind=correction">An update to a listing</a></li><li><a href="../ideas/">A feature</a></li><li><a href="../schools/request/">A school</a></li></ul></details><a href="../about/">About</a><a class="when-in nav-todo" href="../to-do/">To do</a><a class="when-in nav-acct" href="../account/">Account</a><a class="nav-cta when-out" href="../register/">Create a free account</a><a class="nav-cta when-in" href="../profile/" data-news="2026-10-13">My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a></nav>
+    <nav class="nav" id="site-nav" aria-label="Site"><details class="menu"><summary>Programs</summary><ul><li><a href="../all-programs/">All programs</a></li><li><a href="../programs/">After-school programs</a></li><li><a href="../weekends/">Weekend classes</a></li><li><a href="../day-camps/">Day-camp programs</a></li><li><a href="../summer-camps/">Summer camps</a></li></ul></details><details class="menu"><summary>Search by</summary><ul><li><a href="../schools/">School</a></li><li><a href="../neighborhoods/">Neighborhood</a></li><li><a href="../types/">Program type</a></li><li><a href="../by-day/">Day of week</a></li></ul></details><details class="menu"><summary>Build a schedule</summary><ul><li><a href="../schedules/">All the planners</a></li><li><a href="../board/">After-school schedule</a></li><li><a href="../days-off/">Day-camp schedule</a></li><li><a href="../summer-schedule/">Summer schedule</a></li><li><a href="../calendar/">My kids’ calendar</a></li></ul></details><details class="menu"><summary>Suggest</summary><ul><li><a href="../suggest/">A program or a camp</a></li><li><a href="../suggest/?kind=correction">An update to a listing</a></li><li><a href="../ideas/">A feature</a></li><li><a href="../schools/request/">A school</a></li></ul></details><a href="../about/">About</a><a class="when-in nav-todo" href="../to-do/">To do</a><a class="when-in nav-acct" href="../account/">Account</a><a class="nav-cta when-out" href="../register/">Create a free account</a><a class="nav-cta when-in" href="../profile/" data-news="2026-10-20">My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a></nav>
   </div>
 </header>
 <div class="band pagehead">
@@ -173,8 +173,8 @@ if (!edit_signed_in()) {
   <nav class="foot-cols" aria-label="Footer">
     <div class="foot-brand">
       <a class="brand" href="../"><span class="bus-mark"></span>Philly After School</a>
-      <p><span data-copy="2ded0fc514">After-school programs in Philadelphia, sorted by your kid's school and schedule.</span></p>
-      <p class="foot-support"><span><span data-copy="4b51271158">Created and run by South Philly parents, the Silverbauers.</span></span> <a class="btn foot-cta" href="../support/">Help the site keep going</a></p>
+      <p><span data-copy="2ded0fc514" data-was="After-school programs in Philadelphia, sorted by the school your child goes to.">After-school programs in Philadelphia, sorted by your kid's school and schedule.</span></p>
+      <p class="foot-support"><span><span data-copy="4b51271158" data-was="Created and run by the Silverbauers.">Created and run by South Philly parents, the Silverbauers.</span></span> <a class="btn foot-cta" href="../support/">Help the site keep going</a></p>
     </div>
     <div>
       <h2><a href="../schools/"><span data-copy="06c76a46e4">Schools</span></a></h2>
@@ -231,7 +231,7 @@ if (!edit_signed_in()) {
     <p>Written by Rachael Silverbauer.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=c8c0ee57" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=eba8ada9&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=c8c0ee57" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=49c057ca&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 
 </body>
 </html>
@@ -283,7 +283,7 @@ if (!edit_signed_in()) {
   <div class="in bar">
     <a class="brand" href="../"><span class="bus-mark"></span>Philly After School</a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true"></span>Menu</button>
-    <nav class="nav" id="site-nav" aria-label="Site"><details class="menu"><summary>Programs</summary><ul><li><a href="../all-programs/">All programs</a></li><li><a href="../programs/">After-school programs</a></li><li><a href="../weekends/">Weekend classes</a></li><li><a href="../day-camps/">Day-camp programs</a></li><li><a href="../summer-camps/">Summer camps</a></li></ul></details><details class="menu"><summary>Search by</summary><ul><li><a href="../schools/">School</a></li><li><a href="../neighborhoods/">Neighborhood</a></li><li><a href="../types/">Program type</a></li><li><a href="../by-day/">Day of week</a></li></ul></details><details class="menu"><summary>Build a schedule</summary><ul><li><a href="../schedules/">All the planners</a></li><li><a href="../board/">After-school schedule</a></li><li><a href="../days-off/">Day-camp schedule</a></li><li><a href="../summer-schedule/">Summer schedule</a></li><li><a href="../calendar/">My kids’ calendar</a></li></ul></details><details class="menu"><summary>Suggest</summary><ul><li><a href="../suggest/">A program or a camp</a></li><li><a href="../suggest/?kind=correction">An update to a listing</a></li><li><a href="../ideas/">A feature</a></li><li><a href="../schools/request/">A school</a></li></ul></details><a href="../about/">About</a><a class="when-in nav-todo" href="../to-do/">To do</a><a class="when-in nav-acct" href="../account/">Account</a><a class="nav-cta when-out" href="../register/">Create a free account</a><a class="nav-cta when-in" href="../profile/" data-news="2026-10-13">My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a></nav>
+    <nav class="nav" id="site-nav" aria-label="Site"><details class="menu"><summary>Programs</summary><ul><li><a href="../all-programs/">All programs</a></li><li><a href="../programs/">After-school programs</a></li><li><a href="../weekends/">Weekend classes</a></li><li><a href="../day-camps/">Day-camp programs</a></li><li><a href="../summer-camps/">Summer camps</a></li></ul></details><details class="menu"><summary>Search by</summary><ul><li><a href="../schools/">School</a></li><li><a href="../neighborhoods/">Neighborhood</a></li><li><a href="../types/">Program type</a></li><li><a href="../by-day/">Day of week</a></li></ul></details><details class="menu"><summary>Build a schedule</summary><ul><li><a href="../schedules/">All the planners</a></li><li><a href="../board/">After-school schedule</a></li><li><a href="../days-off/">Day-camp schedule</a></li><li><a href="../summer-schedule/">Summer schedule</a></li><li><a href="../calendar/">My kids’ calendar</a></li></ul></details><details class="menu"><summary>Suggest</summary><ul><li><a href="../suggest/">A program or a camp</a></li><li><a href="../suggest/?kind=correction">An update to a listing</a></li><li><a href="../ideas/">A feature</a></li><li><a href="../schools/request/">A school</a></li></ul></details><a href="../about/">About</a><a class="when-in nav-todo" href="../to-do/">To do</a><a class="when-in nav-acct" href="../account/">Account</a><a class="nav-cta when-out" href="../register/">Create a free account</a><a class="nav-cta when-in" href="../profile/" data-news="2026-10-20">My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a></nav>
   </div>
 </header>
 <div class="band pagehead">
@@ -308,6 +308,7 @@ if (!edit_signed_in()) {
     <li>Click any text with a dotted outline and type. Text you’ve changed turns yellow. To take a sentence off the page, click it and choose “Remove this sentence” in the bar.</li>
     <li>Move between pages with the menu or the list below. Your edits are kept in this browser as you go, so stay on the same phone or computer until you’ve published them.</li>
     <li>Choose “Review and publish” in the bar at the bottom. You’ll see each change next to the original, can untick any to leave it out, and can undo any of them.</li>
+    <li>“Show what’s changed” in the bar outlines in red every sentence that has been reworded from the site’s original wording, so you can edit around someone else’s changes. Click one and the bar says who reworded it, when, and what it said; “Put the original wording back” makes that a change of yours.</li>
     <li>Publishing puts the ticked changes on the site within a few minutes. Every publish is kept as a version below, so a change can be taken back.</li>
   </ol>
   <section id="pub">
@@ -366,8 +367,8 @@ if (!edit_signed_in()) {
   <nav class="foot-cols" aria-label="Footer">
     <div class="foot-brand">
       <a class="brand" href="../"><span class="bus-mark"></span>Philly After School</a>
-      <p><span data-copy="2ded0fc514">After-school programs in Philadelphia, sorted by your kid's school and schedule.</span></p>
-      <p class="foot-support"><span><span data-copy="4b51271158">Created and run by South Philly parents, the Silverbauers.</span></span> <a class="btn foot-cta" href="../support/">Help the site keep going</a></p>
+      <p><span data-copy="2ded0fc514" data-was="After-school programs in Philadelphia, sorted by the school your child goes to.">After-school programs in Philadelphia, sorted by your kid's school and schedule.</span></p>
+      <p class="foot-support"><span><span data-copy="4b51271158" data-was="Created and run by the Silverbauers.">Created and run by South Philly parents, the Silverbauers.</span></span> <a class="btn foot-cta" href="../support/">Help the site keep going</a></p>
     </div>
     <div>
       <h2><a href="../schools/"><span data-copy="06c76a46e4">Schools</span></a></h2>
@@ -424,7 +425,7 @@ if (!edit_signed_in()) {
     <p>Written by Rachael Silverbauer.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=c8c0ee57" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=eba8ada9&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=c8c0ee57" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=49c057ca&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 
 </body>
 </html>
