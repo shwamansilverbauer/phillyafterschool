@@ -231,7 +231,7 @@ if (!edit_signed_in()) {
     <p>Written by Rachael Silverbauer.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=452c9f98" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=eba8ada9&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=c8c0ee57" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=eba8ada9&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 
 </body>
 </html>
@@ -424,7 +424,7 @@ if (!edit_signed_in()) {
     <p>Written by Rachael Silverbauer.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=452c9f98" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=eba8ada9&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=c8c0ee57" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=eba8ada9&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 
 </body>
 </html>

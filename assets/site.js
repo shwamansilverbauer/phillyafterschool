@@ -1282,56 +1282,66 @@
         $('req-meta').textContent = row[2] + (row[3] ? ' · grades ' + row[3] : '') + (row[4] ? ' · ' + row[4] + ' school' : '') + '. We haven’t checked which programs pick up here.';
         document.title = row[1] + ' | Philly After School';
       }
-      var btn = $('req-btn'), status = $('req-status');
-      var asked = [];
-      try { asked = JSON.parse(store('pas-requested') || '[]') || []; } catch (e) { asked = []; }
-      var done = function (msg) { btn.disabled = true; btn.textContent = 'Asked. Thank you.'; status.textContent = msg; };
-      btn.textContent = 'Ask for ' + row[1];
-      $('req-panel').hidden = false;
-      if (asked.indexOf(slug) > -1) done('You’ve already asked for this one. It’s counted.');
-      btn.addEventListener('click', function () {
-        track({ event: 'pas_school_request', school: slug });
-        var finish = function () { asked.push(slug); store('pas-requested', JSON.stringify(asked.slice(-50))); done('Counted. Schools with the most requests get covered first.'); };
-        var send = reqPage.getAttribute('data-send');
-        if (!send || !window.fetch) { finish(); return; }
-        btn.disabled = true; status.textContent = 'Sending…';
-        window.fetch(send, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ s: slug, company: '' }) })
-          .then(function (r) { return r.json(); })
-          .then(function (j) { if (j && j.ok) finish(); else { btn.disabled = false; status.textContent = 'That didn’t go through. Please try again.'; } },
-            function () { btn.disabled = false; status.textContent = 'That didn’t go through. Please try again.'; });
-      });
-      // "Email me when it's added": first name, email and which school go straight to Klaviyo, like the dates sign-up.
-      // The school is kept on the address as one of its "waiting_schools", so the people waiting on a school can be
-      // found, and written to, when it gets its page. Asking by email counts as asking for the school, too.
-      var nf = $('req-notify');
-      if (nf) {
-        var nStatus = $('req-notify-status'), nBtn = nf.querySelector('button[type="submit"]'), nRow = nf.querySelector('.alerts-row');
-        var nSay = function (msg, kind) { nStatus.textContent = msg; nStatus.className = 'alerts-status' + (kind ? ' ' + kind : ''); };
-        $('req-notify-title').textContent = 'Get an email when ' + row[1] + ' is added';
-        nf.addEventListener('submit', function (e) {
-          e.preventDefault();
-          var email = nf.elements.email.value.trim(), first = nf.elements.first_name.value.replace(/\s+/g, ' ').trim().slice(0, 60);
-          if (nf.elements.company && nf.elements.company.value) return;   // only a script fills the hidden field
-          if (!first) { nSay('Add your first name so we know what to call you.', 'bad'); nf.elements.first_name.focus(); return; }
-          if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { nSay('That email address doesn’t look right. Check it and try again.', 'bad'); nf.elements.email.focus(); return; }
-          if (nf.getAttribute('data-preview')) { nSay('This is the preview, so nothing was sent. Sign-ups work on the live site.'); return; }
-          nBtn.disabled = true; nSay('Sending…');
-          var kl = function (path, body) {
-            return window.fetch('https://a.klaviyo.com/client/' + path + '?company_id=' + encodeURIComponent(nf.getAttribute('data-key')), {
-              method: 'POST', headers: { 'content-type': 'application/vnd.api+json', revision: '2026-07-15' }, body: JSON.stringify(body)
-            }).then(function (r) { if (r.status < 200 || r.status > 299) throw new Error('status ' + r.status); return r; });
-          };
-          kl('subscriptions', { data: { type: 'subscription',
-            attributes: { custom_source: 'phillyafterschool.org school_request', profile: { data: { type: 'profile', attributes: { email: email, first_name: first, properties: { signup_place: 'school_request', waiting_school_name: row[1] }, subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } } } } } },
-            relationships: { list: { data: { type: 'list', id: nf.getAttribute('data-list') } } } } })
-            .then(function () { return kl('profiles', { data: { type: 'profile', attributes: { email: email }, meta: { patch_properties: { append: { waiting_schools: slug } } } } }); })
-            .then(function () {
-              nRow.hidden = true;
-              nSay(nf.getAttribute('data-confirm') ? 'Almost there. Check your inbox for a confirmation email and tap the button in it.' : 'Done, ' + first + '. You’ll get an email when ' + row[1] + ' has its page.', 'good');
-              track({ event: 'pas_school_notify', school: slug });
-              if (asked.indexOf(slug) < 0 && !btn.disabled) btn.click();   // and count the request
-            }, function () { nBtn.disabled = false; nSay('That didn’t go through. Please try again in a minute.', 'bad'); });
+      // Asking uses a free account: one ask per family, and the school's page is announced to them by email. Signed
+      // in, the button asks straight away; signed out, it opens the sign-in in place (src/groups.js, fetched on
+      // demand), and signing in with next = "a:<school>" counts the ask on the server as part of signing in.
+      var btn = $('req-btn'), status = $('req-status'), panel = $('req-panel'), signin = $('req-signin');
+      var preview = panel.getAttribute('data-preview') === '1';
+      if (!fixed) { $('req-heading').textContent = 'Want ' + row[1] + ' added?'; btn.textContent = 'Ask for ' + row[1]; }
+      panel.hidden = false;
+      var say = function (msg) { status.textContent = msg; };
+      var families = function (n) { return n === 1 ? 'One family has asked so far.' : n + ' families have asked so far.'; };
+      var done = function (n) { btn.disabled = true; btn.textContent = 'Asked. Thank you.'; signin.hidden = true; signin.textContent = ''; say('Counted. You’ll get one email when ' + row[1] + ' has its page. ' + families(n)); };
+      // The email list is told which school this address is waiting for, with the address the account uses, so the
+      // "it's here" email can find them. Nothing else about the person goes with it.
+      var waitFor = function (u) {
+        if (!u || !u.email || !panel.getAttribute('data-kl-key') || !panel.getAttribute('data-kl-list') || !window.fetch) return;
+        var kl = function (path, body) {
+          return window.fetch('https://a.klaviyo.com/client/' + path + '?company_id=' + encodeURIComponent(panel.getAttribute('data-kl-key')), {
+            method: 'POST', headers: { 'content-type': 'application/vnd.api+json', revision: '2026-07-15' }, body: JSON.stringify(body)
+          });
+        };
+        var attrs = { email: u.email, properties: { signup_place: 'school_request', waiting_school_name: row[1], has_account: true } };
+        if (u.first) attrs.first_name = u.first;
+        if (u.last) attrs.last_name = u.last;
+        kl('subscriptions', { data: { type: 'subscription', attributes: { custom_source: 'phillyafterschool.org school_request', profile: { data: { type: 'profile', attributes: attrs } } }, relationships: { list: { data: { type: 'list', id: panel.getAttribute('data-kl-list') } } } } })
+          .then(function () { return kl('profiles', { data: { type: 'profile', attributes: { email: u.email }, meta: { patch_properties: { append: { waiting_schools: slug } } } } }); })
+          .then(function () { track({ event: 'pas_school_notify', school: slug }); }, function () { /* tried again the next time they ask */ });
+      };
+      var ask = function () {
+        btn.disabled = true; say('Sending…');
+        MK.api('school_ask', { s: slug }).then(function (r) {
+          if (!r.ok) { btn.disabled = false; say(r.message || 'That didn’t go through. Please try again.'); return; }
+          if (r.new) { track({ event: 'pas_school_request', school: slug }); waitFor(MK.state.user); }
+          done(r.count);
         });
+      };
+      var openSignIn = function () {
+        say(''); signin.hidden = false; signin.textContent = 'Loading…';
+        var go = function (A) {
+          if (!A) { signin.hidden = true; say('The sign-in couldn’t load. Check your connection and try again.'); return; }
+          signin.textContent = '';
+          A.signIn(signin, 'a:' + slug, function (d) {   // signing in counted the ask
+            if (d && d.user) { MK.state.user = d.user; if (d.asked && d.asked.new) { track({ event: 'pas_school_request', school: slug }); waitFor(d.user); } }
+            done(d && d.asked ? d.asked.count : 1);
+          }, 'Sign in, and ' + row[1] + ' is asked for. If you’re new, this makes your free account. No password: we email you a 6-digit code, and you type it here.');
+          var first = signin.querySelector('input'); if (first) first.focus();
+        };
+        if (window.pasAccount) { go(window.pasAccount); return; }
+        var src = panel.getAttribute('data-accounts');
+        if (!src) { go(null); return; }
+        var t = document.createElement('script'); t.src = src;
+        t.onload = function () { go(window.pasAccount || null); };
+        t.onerror = function () { go(null); };
+        document.body.appendChild(t);
+      };
+      btn.addEventListener('click', function () {
+        if (preview || !MK) { say('This is the preview, so nothing was sent. Asking works on the live site.'); return; }
+        if (store('pas-in') === '1') { MK.load().then(function () { if (MK.state.user) ask(); else openSignIn(); }); } else openSignIn();
+      });
+      // Already asked from this account: say so, and show the count.
+      if (MK && !preview && store('pas-in') === '1') {
+        MK.api('school_ask&s=' + encodeURIComponent(slug)).then(function (r) { if (r.ok && r.asked) done(r.count); else if (r.ok && r.count) say(families(r.count)); });
       }
       if (fixed) return;
       if (row[7] && row[8] <= 2 && d.covered[row[7]]) {   // close enough that the same programs may reach both
