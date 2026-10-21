@@ -4549,32 +4549,80 @@ function edit_key() {
 function edit_token($exp) {
   return $exp . '.' . hash_hmac('sha256', (string) $exp, edit_key());
 }
-// An account on the site whose address is on the admins list (site.config.json) opens these pages too: the same
-// sign-in every account uses (a code by email, or Google), checked here against the accounts database. It gives the
+// The accounts database (the same file the groups API keeps), or null when there isn't one yet. With $create, the
+// two tables these pages add are made: the editors an admin lets in by their account, and the notes left on sentences.
+function edit_db($create = false) {
+  static $db = null, $made = false;
+  if ($db === null) {
+    $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
+    if (!is_file($file)) return null;
+    try {
+      $db = new PDO('sqlite:' . $file);
+      $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $db->exec('PRAGMA busy_timeout=3000');
+    } catch (Exception $e) { $db = null; return null; }
+  }
+  if ($create && !$made) {
+    $made = true;
+    try {
+      $db->exec("CREATE TABLE IF NOT EXISTS editors (email TEXT PRIMARY KEY, name TEXT NOT NULL, added INTEGER NOT NULL, added_by TEXT NOT NULL DEFAULT '')");
+      $db->exec("CREATE TABLE IF NOT EXISTS copy_notes (id INTEGER PRIMARY KEY AUTOINCREMENT, copy_id TEXT NOT NULL, page TEXT NOT NULL DEFAULT '', sentence TEXT NOT NULL DEFAULT '', note TEXT NOT NULL, by_name TEXT NOT NULL DEFAULT '', by_email TEXT NOT NULL DEFAULT '', for_email TEXT NOT NULL DEFAULT '', created INTEGER NOT NULL, sent INTEGER NOT NULL DEFAULT 0, done INTEGER NOT NULL DEFAULT 0, done_by TEXT NOT NULL DEFAULT '', done_how TEXT NOT NULL DEFAULT '')");
+    } catch (Exception $e) { /* read-only database: notes stay off */ }
+  }
+  return $db;
+}
+// The account the visitor is signed in to on the site (a code by email, or Google), as the accounts database has it:
+// its address and first name, or null.
+function edit_account() {
+  static $acct = false;
+  if ($acct !== false) return $acct;
+  $acct = null;
+  $sid = (isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s'])) ? $_COOKIE['pas_s'] : '';
+  if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return $acct;
+  $db = edit_db();
+  if ($db === null) return $acct;
+  try {
+    $st = $db->prepare('SELECT u.email, u.first, u.name FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?');
+    $st->execute(array(hash('sha256', $sid), time()));
+    $row = $st->fetch(PDO::FETCH_ASSOC);
+    if (!$row) return $acct;
+    $email = strtolower(trim((string) $row['email']));
+    if ($email === '') return $acct;
+    $first = trim((string) $row['first']);
+    if ($first === '') $first = trim(strtok((string) $row['name'], ' '));
+    $acct = array('email' => $email, 'name' => $first);
+  } catch (Exception $e) { $acct = null; }
+  return $acct;
+}
+// An account on the site whose address is on the admins list (site.config.json) opens these pages too. It gives the
 // address, or '' when the visitor isn't signed in to such an account.
 function edit_admin() {
   global $EDIT_ADMINS;
-  static $who = null;
-  if ($who !== null) return $who;
-  $who = '';
-  if (!is_array($EDIT_ADMINS) || !$EDIT_ADMINS) return $who;
-  $sid = (isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s'])) ? $_COOKIE['pas_s'] : '';
-  if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return $who;
-  $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
-  if (!is_file($file)) return $who;
+  if (!is_array($EDIT_ADMINS) || !$EDIT_ADMINS) return '';
+  $a = edit_account();
+  return $a !== null && in_array($a['email'], $EDIT_ADMINS, true) ? $a['email'] : '';
+}
+// An account an admin has let in as an editor (the editors table, kept from the edit page): its name and address,
+// or null. Editors open the same pages the edit password does.
+function edit_editor() {
+  static $who = false;
+  if ($who !== false) return $who;
+  $who = null;
+  $a = edit_account();
+  if ($a === null) return $who;
+  $db = edit_db();
+  if ($db === null) return $who;
   try {
-    $db = new PDO('sqlite:' . $file);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $db->exec('PRAGMA busy_timeout=3000');
-    $st = $db->prepare('SELECT u.email FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?');
-    $st->execute(array(hash('sha256', $sid), time()));
-    $email = strtolower(trim((string) $st->fetchColumn()));
-    if ($email !== '' && in_array($email, $EDIT_ADMINS, true)) $who = $email;
-  } catch (Exception $e) { $who = ''; }
+    $st = $db->prepare('SELECT name, email FROM editors WHERE email = ?');
+    $st->execute(array($a['email']));
+    $row = $st->fetch(PDO::FETCH_ASSOC);
+    if ($row) $who = array('name' => (string) $row['name'], 'email' => (string) $row['email']);
+  } catch (Exception $e) { $who = null; }   // no editors table yet
   return $who;
 }
 function edit_signed_in() {
   if (edit_admin() !== '') return true;
+  if (edit_editor() !== null) return true;
   if (!isset($_COOKIE['pas_edit']) || !is_string($_COOKIE['pas_edit'])) return false;
   $parts = explode('.', $_COOKIE['pas_edit'], 2);
   if (count($parts) !== 2 || !ctype_digit($parts[0]) || (int) $parts[0] < time()) return false;
@@ -4827,15 +4875,29 @@ function editPage() {
     <p id="edit-state-text">Turn it on and a bar appears at the bottom of every page.</p>
     <div class="actions"><button type="button" class="btn primary big needs-js" id="edit-start">Start editing</button><button type="button" class="btn needs-js" id="edit-stop" hidden>Stop editing</button></div>
     <noscript><p>Editing needs JavaScript turned on.</p></noscript>
-  </div>${GATED ? `\n  <?php if (edit_admin() !== '') { ?><p class="hint" id="edit-admin">You’re here through your account, <?php echo htmlspecialchars(edit_admin(), ENT_QUOTES, 'UTF-8'); ?>, which is a site admin. <a href="../account/#sign-out">Sign out of your account</a> to close these pages. Anyone who can read that address’s inbox can sign in as you, so keep 2-step verification on for it.</p><?php } else { ?><p class="hint">You’re signed in on this device for 30 days. <a href="?out=1">Sign out</a></p><?php } ?>` : ''}${GATED && GROUPS ? '\n  <p><a class="btn" href="stats/">Site numbers: accounts, shared weeks and groups</a> <a class="btn" href="claims/">Claims and proposed changes</a></p>' : ''}
+  </div>${GATED ? `\n  <?php if (edit_admin() !== '') { ?><p class="hint" id="edit-admin">You’re here through your account, <?php echo htmlspecialchars(edit_admin(), ENT_QUOTES, 'UTF-8'); ?>, which is a site admin. <a href="../account/#sign-out">Sign out of your account</a> to close these pages. Anyone who can read that address’s inbox can sign in as you, so keep 2-step verification on for it.</p><?php } elseif (edit_editor() !== null) { ?><p class="hint" id="edit-editor">You’re here through your account, <?php echo htmlspecialchars(edit_editor()['email'], ENT_QUOTES, 'UTF-8'); ?>, which is on the editors list as <?php echo htmlspecialchars(edit_editor()['name'], ENT_QUOTES, 'UTF-8'); ?>. <a href="../account/#sign-out">Sign out of your account</a> to close these pages.</p><?php } else { ?><p class="hint">You’re signed in on this device for 30 days. <a href="?out=1">Sign out</a></p><?php } ?>` : ''}${GATED && GROUPS ? '\n  <p><a class="btn" href="stats/">Site numbers: accounts, shared weeks and groups</a> <a class="btn" href="claims/">Claims and proposed changes</a></p>' : ''}
   <h2>How it works</h2>
   <ol>
     <li>Click any text with a dotted outline and type. Text you’ve changed turns yellow. To take a sentence off the page, click it and choose “Remove this sentence” in the bar.</li>
     <li>Move between pages with the menu or the list below. Your edits are kept in this browser as you go, so stay on the same phone or computer until you’ve published them.</li>
     <li>Choose “Review and publish” in the bar at the bottom. You’ll see each change next to the original, can untick any to leave it out, and can undo any of them.</li>
     <li>“Show what’s changed” in the bar outlines in red every sentence that has been reworded from the site’s original wording, so you can edit around someone else’s changes. Click one and the bar says who reworded it, when, and what it said; “Put the original wording back” makes that a change of yours.</li>
+    <li>“Leave a note” in the bar pins a note to the sentence you clicked, for one of the editors or for anyone. Sentences with a note are outlined in blue; click one to read it. A note is done when a change to that sentence is published, or with the Done button. “Send” emails an editor every note for them that hasn’t gone out yet.</li>
     <li>Publishing puts the ticked changes on the site within a few minutes. Every publish is kept as a version below, so a change can be taken back.</li>
   </ol>
+  <section id="notes"${GATED ? '' : ' hidden'}>
+    <h2>Notes on the wording</h2>
+    <p id="notes-msg" class="needs-js">Reading the notes…</p>
+    <ol id="notes-list" class="notes-list"></ol>
+    <div id="notes-send" class="actions"></div>
+    <details id="notes-done" hidden><summary>Done in the last 30 days</summary><ol class="notes-list"></ol></details>${GATED ? `
+    <?php if (edit_admin() !== '') { ?><div id="editors">
+      <h3>Editors</h3>
+      <p>People who can open these pages by signing in to the site with their own account, and who notes can be left for.</p>
+      <ul id="editors-list"></ul>
+      <form id="editors-add" class="q-note"><label>Email<input type="email" name="email" required maxlength="120" autocomplete="off"></label><label>Name<input type="text" name="name" required maxlength="40" autocomplete="off"></label><div><button type="submit" class="btn">Add editor</button> <span id="editors-msg"></span></div></form>
+    </div><?php } ?>` : ''}
+  </section>
   <section id="pub"${GATED ? '' : ' hidden'}>
     <h2>Published versions</h2>
     <p id="pub-msg" class="needs-js">Reading the published versions…</p>
@@ -4870,6 +4932,7 @@ function editPhp() {
   for (const m of ['/*MAILER*/', '/*CONFIG*/', '/*AUTH*/', '/*GH*/']) if (!src.includes(m)) throw new Error('src/server/edit-send.php has lost its ' + m + ' marker');
   const config = `$TO = ${JSON.stringify(cfg.contactEmail)};
 $SITE = ${JSON.stringify(cfg.siteName)};
+$SITE_URL = ${JSON.stringify(cfg.siteUrl)};
 $REPO = ${JSON.stringify(cfg.repo || '')};
 $ORIGINAL = ${nowdoc(original)};
 $OVERRIDES = ${nowdoc(overrides)};`;

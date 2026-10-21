@@ -7,6 +7,11 @@
 //                                                 Action then builds and deploys it, so the site changes within minutes
 //   GET  ?action=versions                         the last published versions, and the sentences taken off the page
 //   GET  ?action=changes                          who reworded each sentence and when (the page carries only the original)
+//   GET  ?action=notes                            the notes left on sentences, the editors, and who is asking
+//   POST {action: "note", id, page, sentence, note, for, name}   leaves a note on a sentence, for an editor or anyone
+//   POST {action: "note_done", nid, name}         marks a note done; {action: "note_drop", nid} deletes one (admins)
+//   POST {action: "notes_send", for}              emails an editor every note for them not sent yet
+//   POST {action: "editor_add", email, name}      lets an account in as an editor (admins); {action: "editor_drop", email}
 //   POST {action: "restore", sha}                 puts a published version back, as a new commit
 //
 // Publishing needs a token in a file next to the public folder, phillyafterschool-github.key: a fine-grained GitHub
@@ -63,7 +68,7 @@ function record_email($subject, $body) {
 $action = '';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   $action = isset($_GET['action']) && is_string($_GET['action']) ? $_GET['action'] : '';
-  if ($action !== 'versions' && $action !== 'changes') out(false, 'Use the editor on the site.', 405);
+  if ($action !== 'versions' && $action !== 'changes' && $action !== 'notes') out(false, 'Use the editor on the site.', 405);
   $in = array();
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $in = json_decode(file_get_contents('php://input'), true);
@@ -73,6 +78,128 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   out(false, 'Use the editor on the site.', 405);
 }
 if (!signed_in_here()) out(false, 'You are signed out.', 401);
+
+// ----- notes on sentences: left for an editor (or anyone), listed in the editor and on the edit page, emailed on
+// request, and closed by a Done button or by publishing a change to that sentence. Needs the accounts database. -----
+function me_here() {
+  // who is asking: an admin account, an editor's account, or the edit password (then only the typed name is known)
+  $a = function_exists('edit_account') ? edit_account() : null;
+  $admin = function_exists('edit_admin') ? edit_admin() : '';
+  $ed = function_exists('edit_editor') ? edit_editor() : null;
+  return array('email' => $a ? $a['email'] : '', 'name' => $ed ? $ed['name'] : ($a ? $a['name'] : ''), 'admin' => $admin !== '');
+}
+function notes_db() {
+  if (!function_exists('edit_db')) return null;
+  return edit_db(true);
+}
+function editors_list($db, $withEmail) {
+  $out = array();
+  try {
+    foreach ($db->query('SELECT name, email FROM editors ORDER BY name') as $r) {
+      $e = array('name' => $r['name'], 'key' => substr(hash('sha256', $r['email']), 0, 12));   // the key stands for the address in the editor
+      if ($withEmail) $e['email'] = $r['email'];   // admins see the address
+      $out[] = $e;
+    }
+  } catch (Exception $e) { /* no table yet */ }
+  return $out;
+}
+function note_row($r, $editors) {
+  $for = '';
+  foreach ($editors as $e) if ($e['email'] === $r['for_email']) $for = $e['name'];
+  return array('id' => (int) $r['id'], 'copy' => $r['copy_id'], 'page' => $r['page'], 'sentence' => $r['sentence'], 'note' => $r['note'], 'by' => $r['by_name'],
+    'for' => $for, 'forKey' => $r['for_email'] === '' ? '' : substr(hash('sha256', $r['for_email']), 0, 12), 'created' => gmdate('c', (int) $r['created']),
+    'sent' => (int) $r['sent'] > 0, 'done' => (int) $r['done'] > 0, 'doneBy' => $r['done_by'], 'doneHow' => $r['done_how']);
+}
+function page_label($page) { return $page === '/' ? 'the home page' : $page; }
+if ($action === 'notes' || $action === 'note' || $action === 'note_done' || $action === 'note_drop' || $action === 'notes_send' || $action === 'editor_add' || $action === 'editor_drop') {
+  $db = notes_db();
+  if ($db === null) out(false, 'Notes need the accounts database, which isn’t set up here.', 503);
+  $me = me_here();
+  $editors = editors_list($db, true);
+  if ($action === 'notes') {
+    $rows = array();
+    try {
+      foreach ($db->query('SELECT * FROM copy_notes WHERE done = 0 OR done > ' . (time() - 30 * 86400) . ' ORDER BY done, created DESC LIMIT 200') as $r) $rows[] = note_row($r, $editors);
+    } catch (Exception $e) { /* read-only database */ }
+    out(true, '', 200, array('notes' => $rows, 'editors' => editors_list($db, $me['admin']), 'me' => $me));
+  }
+  if ($action === 'editor_add' || $action === 'editor_drop') {
+    if (!$me['admin']) out(false, 'Only a site admin can change who edits.', 403);
+    $email = strtolower(tidy(isset($in['email']) ? $in['email'] : '', 120));
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) out(false, 'That doesn’t look like an email address.', 400);
+    if ($action === 'editor_drop') {
+      $st = $db->prepare('DELETE FROM editors WHERE email = ?'); $st->execute(array($email));
+      out(true, 'Removed.', 200, array('editors' => editors_list($db, true)));
+    }
+    $name = tidy(isset($in['name']) ? $in['name'] : '', 40);
+    if ($name === '') out(false, 'Give the editor a name.', 400);
+    if (count($editors) >= 10) out(false, 'That is enough editors.', 400);
+    $st = $db->prepare('INSERT INTO editors (email, name, added, added_by) VALUES (?, ?, ?, ?) ON CONFLICT(email) DO UPDATE SET name = excluded.name');
+    $st->execute(array($email, $name, time(), $me['email']));
+    note("editor added by " . ($me['email'] !== '' ? 'an admin' : 'the password'));
+    out(true, $name . ' can edit by signing in to the site with that address.', 200, array('editors' => editors_list($db, true)));
+  }
+  if ($action === 'note') {
+    $id = isset($in['id']) && is_string($in['id']) ? $in['id'] : '';
+    if (!isset($ORIGINAL[$id])) out(false, 'That sentence isn’t on the site.', 400);
+    $text = tidy(isset($in['note']) ? $in['note'] : '', 600);
+    if ($text === '') out(false, 'The note is empty.', 400);
+    $page = isset($in['page']) && is_string($in['page']) && preg_match('#^/[a-z0-9/_.-]{0,160}$#', $in['page']) ? $in['page'] : '/';
+    $sentence = tidy(isset($in['sentence']) ? $in['sentence'] : '', 300);
+    $name = tidy(isset($in['name']) ? $in['name'] : '', 40);
+    if ($name === '') $name = $me['name'] !== '' ? $me['name'] : ($me['admin'] ? 'the site admin' : 'an editor');
+    $forKey = tidy(isset($in['for']) ? $in['for'] : '', 12);
+    $for = '';
+    foreach ($editors as $e) if ($forKey !== '' && substr(hash('sha256', $e['email']), 0, 12) === $forKey) $for = $e['email'];
+    $open = (int) $db->query('SELECT COUNT(*) FROM copy_notes WHERE done = 0')->fetchColumn();
+    if ($open >= 300) out(false, 'There are a lot of open notes. Finish some first.', 400);
+    $st = $db->prepare('INSERT INTO copy_notes (copy_id, page, sentence, note, by_name, by_email, for_email, created) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+    $st->execute(array($id, $page, $sentence, $text, $name, $me['email'], $for, time()));
+    $row = $db->query('SELECT * FROM copy_notes WHERE id = ' . (int) $db->lastInsertId())->fetch(PDO::FETCH_ASSOC);
+    out(true, 'Saved.', 200, array('note' => note_row($row, $editors)));
+  }
+  if ($action === 'note_done' || $action === 'note_drop') {
+    $nid = isset($in['nid']) && is_numeric($in['nid']) ? (int) $in['nid'] : 0;
+    if ($action === 'note_drop') {
+      if (!$me['admin']) out(false, 'Only a site admin can delete a note; mark it done instead.', 403);
+      $st = $db->prepare('DELETE FROM copy_notes WHERE id = ?'); $st->execute(array($nid));
+      out(true, 'Deleted.', 200);
+    }
+    $name = tidy(isset($in['name']) ? $in['name'] : '', 40);
+    if ($name === '') $name = $me['name'];
+    $st = $db->prepare('UPDATE copy_notes SET done = ?, done_by = ?, done_how = ? WHERE id = ? AND done = 0');
+    $st->execute(array(time(), $name, 'done', $nid));
+    out(true, 'Done.', 200);
+  }
+  if ($action === 'notes_send') {
+    $forKey = tidy(isset($in['for']) ? $in['for'] : '', 12);
+    $to = null;
+    foreach ($editors as $e) if (substr(hash('sha256', $e['email']), 0, 12) === $forKey) $to = $e;
+    if ($to === null) out(false, 'Pick who the notes are for.', 400);
+    $rows = array();
+    $st = $db->prepare('SELECT * FROM copy_notes WHERE for_email = ? AND done = 0 AND sent = 0 ORDER BY created');
+    $st->execute(array($to['email']));
+    foreach ($st as $r) $rows[] = $r;
+    if (!$rows) out(false, 'Nothing new to send: every note for ' . $to['name'] . ' has been sent already.', 400);
+    if (!gh_allowed('notes-sends', 10)) out(false, 'That is enough emails for one hour. Try again later.', 429);
+    $from = $rows[0]['by_name'];
+    $n = count($rows);
+    $lines = array();
+    foreach ($rows as $i => $r) {
+      $lines[] = ($i + 1) . '. On ' . page_label($r['page']) . ($r['sentence'] !== '' ? ': “' . $r['sentence'] . '”' : '') . "\n   " . $r['note'] . ($r['by_name'] !== $from ? ' (' . $r['by_name'] . ')' : '') . "\n   " . $SITE_URL . $r['page'] . '#note=' . $r['copy_id'];
+    }
+    $subject = "[$SITE] " . ($n === 1 ? 'A note' : "$n notes") . ' on the wording' . ($from !== '' ? " from $from" : '');
+    $body = "Hi " . $to['name'] . ",\n\n" . ($from !== '' ? $from : 'Someone') . ' left ' . ($n === 1 ? 'a note' : "$n notes") . " on the site’s wording for you.\n\n" . implode("\n\n", $lines)
+      . "\n\nEach link opens the page with editing on and the sentence outlined in blue (sign in to the site with this address first). Click the sentence to read the note; it is marked done when you publish a change to it, or with the Done button.\n\n$SITE\n$SITE_URL/edit/\n";
+    $headers = array('From: ' . $SITE . ' <' . $TO . '>', 'Reply-To: ' . $TO, 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8', 'Content-Transfer-Encoding: base64');
+    $sent = pas_postmark($SITE, $TO, $to['email'], $subject, $body, '', $TO) === 1 || @mail($to['email'], '=?UTF-8?B?' . base64_encode($subject) . '?=', chunk_split(base64_encode($body)), implode("\r\n", $headers));
+    if (!$sent) out(false, 'The email didn’t go out. Try again in a minute.', 502);
+    $ids = array_map(function ($r) { return (int) $r['id']; }, $rows);
+    $db->exec('UPDATE copy_notes SET sent = ' . time() . ' WHERE id IN (' . implode(',', $ids) . ')');
+    note("notes sent: $n");
+    out(true, ($n === 1 ? 'One note' : "$n notes") . ' emailed to ' . $to['name'] . '.', 200, array('n' => $n));
+  }
+}
 
 // ----- changes: who reworded each sentence, and when, for the editor's "Show what's changed" (the page itself only
 // carries the original wording; names stay behind the sign-in) -----
@@ -139,6 +266,7 @@ if ($publishing) {
   $merged = is_array($OVERRIDES) ? $OVERRIDES : array();
 }
 $lines = array();
+$touched = array();
 $n = 0;
 foreach (array_slice($in['edits'], 0, 300) as $e) {
   if (!is_array($e) || !isset($e['id']) || !is_string($e['id']) || !isset($ORIGINAL[$e['id']])) continue;
@@ -150,6 +278,7 @@ foreach (array_slice($in['edits'], 0, 300) as $e) {
   if ($remove && $shown === '') continue;
   $page = tidy(isset($e['page']) ? $e['page'] : '', 120);
   $n++;
+  $touched[] = $id;
   $line = "$n." . ($page !== '' ? " On $page" : '') . "\n   Was: " . ($shown === '' ? '(off the page)' : $shown) . "\n   Now: " . ($remove ? '(taken off the page)' : $now) . "\n";
   if (!$remove && preg_match_all('/\{\w+\}/', $ORIGINAL[$id], $m)) {
     foreach (array_unique($m[0]) as $token) {
@@ -173,6 +302,10 @@ if ($publishing) {
   list($ok, $what, $url) = gh_write_copy($merged, $sha, $message);
   if (!$ok) { note('publish failed: ' . $what); out(false, $what, 502); }
   note("published $count as $what" . ($name !== '' ? " by $name" : ''));
+  $ndb = notes_db();
+  if ($ndb !== null && $touched) {
+    try { $ndb->exec("UPDATE copy_notes SET done = " . time() . ", done_by = " . $ndb->quote($name) . ", done_how = 'published' WHERE done = 0 AND copy_id IN (" . implode(',', array_map(array($ndb, 'quote'), $touched)) . ")"); } catch (Exception $e) { /* notes stay open */ }
+  }
   record_email("[$SITE] Copy published" . ($name !== '' ? " by $name" : '') . " ($n)", "Published to the site as commit $what" . ($url !== '' ? "\n$url" : '') . "\n\n" . implode("\n", $lines));
   out(true, "Published $count. The site updates in a few minutes.", 200, array('commit' => $what, 'url' => $url, 'n' => $n));
 }

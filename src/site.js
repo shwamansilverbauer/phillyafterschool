@@ -188,7 +188,7 @@
     s.src = editCfg.js;
     document.body.appendChild(s);
   }
-  if (store('pas-edit') === '1') loadEditor();
+  if (store('pas-edit') === '1' || /^#note=[a-f0-9]{10}$/.test(location.hash)) loadEditor();   // a link from a notes email: the editor turns editing on if the visitor may edit
   var editPage = document.querySelector('[data-edit-page]');
   if (editPage) {
     var startBtn = editPage.querySelector('#edit-start'), stopBtn = editPage.querySelector('#edit-stop');

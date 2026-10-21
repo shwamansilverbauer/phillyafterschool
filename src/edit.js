@@ -34,8 +34,99 @@
   var editing = get('pas-edit') === '1';
   var editPage = document.querySelector('[data-edit-page]');
 
+  // ----- notes on sentences: kept on the server (edit/send.php), for the editors -----
+  var notesData = null;   // { notes, editors, me } once read
+  function askNotes(cb) {
+    if (!cfg.send || !window.fetch) return cb(null);
+    window.fetch(cfg.send + '?action=notes', { credentials: 'same-origin' }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { notesData = j && j.ok ? j : null; cb(notesData); }).catch(function () { cb(null); });
+  }
+  function noteSay(n) {   // one note as a line of text
+    return n.by + (n.for ? ', for ' + n.for : '') + ' (' + when(n.created) + '): ' + n.note;
+  }
+  function myName() {
+    var n = get('pas-edit-name') || '';
+    if (!n && notesData && notesData.me && notesData.me.name) n = notesData.me.name;
+    return n;
+  }
+  function pageOf(n) { return n.page === '/' ? 'the home page' : n.page; }
+  function noteLink(n) { return (cfg.home || '/edit/').replace(/edit\/$/, '').replace(/\/$/, '') + n.page + '#note=' + n.copy; }
+
+  // A link from a notes email opens the page with editing on, when the visitor may edit.
+  if (!editing && /^#note=[a-f0-9]{10}$/.test(location.hash) && !editPage) {
+    askNotes(function (j) {
+      if (!j) return;
+      set('pas-edit', '1');
+      if (get('pas-edit') === '1') location.reload();
+    });
+  }
+
   // ----- the published versions, on the edit page -----
   if (editPage && cfg.send && window.fetch) {
+    var notesBox = editPage.querySelector('#notes');
+    if (notesBox) {
+      var nList = notesBox.querySelector('#notes-list'), nMsg = notesBox.querySelector('#notes-msg'), nSend = notesBox.querySelector('#notes-send'), nDone = notesBox.querySelector('#notes-done');
+      var edBox = notesBox.querySelector('#editors'), edList = edBox && edBox.querySelector('#editors-list'), edForm = edBox && edBox.querySelector('#editors-add'), edMsg = edBox && edBox.querySelector('#editors-msg');
+      var drawNotes = function () {
+        var j = notesData, open = j.notes.filter(function (n) { return !n.done; }), done = j.notes.filter(function (n) { return n.done; });
+        nList.textContent = ''; nSend.textContent = '';
+        nMsg.textContent = open.length ? '' : 'No open notes. Turn on editing, click a sentence and choose “Leave a note” to leave one.';
+        var item = function (n, isDone) {
+          var li = el('li');
+          var a = el('a', null, 'On ' + pageOf(n)); a.href = noteLink(n); a.className = 'n-where';
+          li.appendChild(a);
+          if (n.sentence) { li.appendChild(document.createTextNode(' ')); li.appendChild(el('q', null, n.sentence)); }
+          li.appendChild(el('span', 'n-text', n.note));
+          li.appendChild(el('span', 'n-where', n.by + (n.for ? ' → ' + n.for : '') + ', ' + when(n.created) + (isDone ? ' · done' + (n.doneBy ? ' by ' + n.doneBy : '') + (n.doneHow === 'published' ? ' (published)' : '') : n.sent ? ' · emailed' : n.for ? ' · not emailed yet' : '')));
+          if (!isDone) {
+            var d = el('button', 'pas-link', 'Done'); d.type = 'button';
+            d.addEventListener('click', function () { d.disabled = true; post({ action: 'note_done', nid: n.id, name: myName() }).then(function () { n.done = true; n.doneBy = myName(); drawNotes(); }); });
+            li.appendChild(document.createTextNode(' ')); li.appendChild(d);
+            if (j.me && j.me.admin) {
+              var x = el('button', 'pas-link', 'Delete'); x.type = 'button';
+              x.addEventListener('click', function () { x.disabled = true; post({ action: 'note_drop', nid: n.id }).then(function () { j.notes = j.notes.filter(function (o) { return o !== n; }); drawNotes(); }); });
+              li.appendChild(document.createTextNode(' ')); li.appendChild(x);
+            }
+          }
+          return li;
+        };
+        open.forEach(function (n) { nList.appendChild(item(n, false)); });
+        nDone.hidden = !done.length; var dl = nDone.querySelector('ol'); dl.textContent = ''; done.forEach(function (n) { dl.appendChild(item(n, true)); });
+        // one send button per editor with notes not emailed yet
+        j.editors.forEach(function (e) {
+          var key = e.key || (e.email ? null : ''), mine = open.filter(function (n) { return n.for === e.name && !n.sent; });
+          if (!mine.length) return;
+          var b = el('button', 'btn', 'Email ' + mine.length + (mine.length === 1 ? ' note' : ' notes') + ' to ' + e.name); b.type = 'button';
+          b.addEventListener('click', function () {
+            b.disabled = true;
+            post({ action: 'notes_send', for: mine[0].forKey }).then(function (res) { nMsg.textContent = res.message; if (res.ok) mine.forEach(function (n) { n.sent = true; }); drawNotes(); });
+          });
+          nSend.appendChild(b);
+        });
+      };
+      var drawEditors = function () {
+        if (!edList) return;
+        edList.textContent = '';
+        notesData.editors.forEach(function (e) {
+          var li = el('li', null, e.name + (e.email ? ' · ' + e.email : ''));
+          var x = el('button', 'pas-link', 'Remove'); x.type = 'button';
+          x.addEventListener('click', function () { x.disabled = true; post({ action: 'editor_drop', email: e.email }).then(function (res) { if (res.ok) { notesData.editors = res.data.editors; drawEditors(); } }); });
+          li.appendChild(document.createTextNode(' ')); li.appendChild(x); edList.appendChild(li);
+        });
+        if (!notesData.editors.length) edList.appendChild(el('li', null, 'Nobody yet. Add someone by the address they use to sign in to the site.'));
+      };
+      if (edForm) edForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var email = edForm.email.value.trim(), name = edForm.name.value.trim();
+        if (!email || !name) return;
+        edMsg.textContent = 'Adding…';
+        post({ action: 'editor_add', email: email, name: name }).then(function (res) { edMsg.textContent = res.message; if (res.ok) { notesData.editors = res.data.editors; edForm.reset(); drawEditors(); } });
+      });
+      askNotes(function (j) {
+        if (!j) { nMsg.textContent = 'The notes could not be read.'; return; }
+        drawNotes(); drawEditors();
+      });
+    }
     var box = editPage.querySelector('#pub');
     if (box) {
       var pubList = box.querySelector('#pub-list'), pubMsg = box.querySelector('#pub-msg'), rmList = box.querySelector('#pub-removed');
@@ -107,8 +198,8 @@
   // ----- styles -----
   var css = el('style');
   css.textContent = [
-    'body.pas-editing{padding-bottom:112px}',
-    '.pas-editing .offbar{bottom:112px}',   // the next-day-off bar sits above the editing bar instead of on it
+    'body.pas-editing{padding-bottom:var(--pas-bar,112px)}',
+    '.pas-editing .offbar{bottom:var(--pas-bar,112px)}',   // the next-day-off bar sits above the editing bar instead of on it
     '.pas-editing [data-copy][contenteditable]{outline:1.5px dashed color-mix(in srgb,currentColor 55%,transparent);outline-offset:3px;border-radius:3px;cursor:text}',
     '.pas-editing [data-copy][contenteditable]:hover{background:color-mix(in srgb,#F3C613 30%,transparent)}',
     '.pas-editing [data-copy][contenteditable]:focus{outline:3px solid #F3C613;background:color-mix(in srgb,#F3C613 22%,transparent)}',
@@ -116,6 +207,10 @@
     '.pas-show [data-copy][data-was]{outline:2px solid #D8232A;outline-offset:3px;background:color-mix(in srgb,#D8232A 10%,transparent)}',
     '.pas-show [data-copy][data-was]:hover{background:color-mix(in srgb,#D8232A 18%,transparent)}',
     '.pas-bar q{quotes:"“" "”";font-style:italic}',
+    // a sentence with a note on it, for the editors
+    '.pas-editing [data-copy].pas-noted{outline:2px solid #1F6FD6;outline-offset:3px;box-shadow:0 0 0 6px color-mix(in srgb,#1F6FD6 16%,transparent)}',
+    '.pas-editing [data-copy].pas-noted:focus{outline-color:#1F6FD6}',
+    '.pas-panel select{font:inherit;font-weight:400;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}',
     '.pas-editing [data-copy].pas-changed,.pas-editing [data-copy].pas-changed:hover,.pas-editing [data-copy].pas-changed:focus{background:#F3C613;color:#2A2100}',
     '.pas-editing [data-copy].pas-removed,.pas-editing [data-copy].pas-removed:hover,.pas-editing [data-copy].pas-removed:focus{background:#FBE0E0;color:#6B1F1F;text-decoration:line-through}',
     '.pas-editing .pas-revealed[hidden]{display:block!important}',
@@ -185,11 +280,14 @@
   var originalBtn = el('button', 'pas-btn quiet', 'Put the original wording back');
   originalBtn.type = 'button'; originalBtn.hidden = true; originalBtn.id = 'pas-original';
   var showBtn = el('button', 'pas-btn quiet'); showBtn.type = 'button'; showBtn.id = 'pas-show';
+  var noteBtn = el('button', 'pas-btn quiet', 'Leave a note'); noteBtn.type = 'button'; noteBtn.id = 'pas-note'; noteBtn.hidden = true;
+  var noteDoneBtn = el('button', 'pas-btn quiet', 'Done with this note'); noteDoneBtn.type = 'button'; noteDoneBtn.id = 'pas-note-done'; noteDoneBtn.hidden = true;
+  var sendBox = el('span');   // "Email N notes to …", one per editor with notes waiting
   var pagesLink = el('a', 'pas-link', 'All pages');
   pagesLink.href = cfg.home || '#';
   var stopBtn = el('button', 'pas-link', 'Stop editing');
   stopBtn.type = 'button';
-  actions.appendChild(removeBtn); actions.appendChild(originalBtn); actions.appendChild(reviewBtn); actions.appendChild(showBtn); actions.appendChild(pagesLink); actions.appendChild(stopBtn);
+  actions.appendChild(removeBtn); actions.appendChild(originalBtn); actions.appendChild(noteBtn); actions.appendChild(noteDoneBtn); actions.appendChild(reviewBtn); actions.appendChild(showBtn); actions.appendChild(sendBox); actions.appendChild(pagesLink); actions.appendChild(stopBtn);
   bar.appendChild(status); bar.appendChild(actions);
   document.body.appendChild(bar);
 
@@ -223,6 +321,34 @@
   show(showing);
   showBtn.addEventListener('click', function () { show(!showing); hint = ''; refresh(); });
 
+  // ----- notes left on this page's sentences -----
+  var openNotes = function (id) { return notesData ? notesData.notes.filter(function (n) { return !n.done && n.copy === id; }) : []; };
+  function paintNotes() {
+    var here = {};
+    nodes.forEach(function (n) { var id = n.getAttribute('data-copy'); if (openNotes(id).length) here[id] = true; n.classList.toggle('pas-noted', !!here[id]); });
+    sendBox.textContent = '';
+    if (!notesData) return;
+    notesData.editors.forEach(function (e) {
+      var waiting = notesData.notes.filter(function (n) { return !n.done && !n.sent && n.for === e.name; });
+      if (!waiting.length) return;
+      var b = el('button', 'pas-link', 'Email ' + waiting.length + (waiting.length === 1 ? ' note' : ' notes') + ' to ' + e.name); b.type = 'button'; b.className = 'pas-link pas-send';
+      b.addEventListener('click', function () {
+        b.disabled = true;
+        post({ action: 'notes_send', for: waiting[0].forKey }).then(function (res) { if (res.ok) waiting.forEach(function (n) { n.sent = true; }); hint = res.message; paintNotes(); refresh(); });
+      });
+      sendBox.appendChild(b);
+    });
+  }
+  var notedHere = function () { var ids = {}; nodes.forEach(function (n) { var id = n.getAttribute('data-copy'); if (openNotes(id).length) ids[id] = true; }); return Object.keys(ids).length; };
+  askNotes(function () {
+    paintNotes(); refresh();
+    var m = /^#note=([a-f0-9]{10})$/.exec(location.hash);
+    if (m) {
+      var target = document.querySelector('[data-copy="' + m[1] + '"]');
+      if (target) { target.scrollIntoView({ block: 'center' }); try { target.focus(); } catch (e) { /* not focusable yet */ } }
+    }
+  });
+
   var hint = '';
   var current = null;   // the sentence last clicked, which "Remove this sentence" acts on
   function published() {
@@ -230,6 +356,10 @@
     try { p = JSON.parse(get('pas-published') || 'null'); } catch (e) { p = null; }
     if (!p || Date.now() - p.at > 10 * 60 * 1000) return '';
     return 'Published ' + plural(p.n) + ' at ' + when(new Date(p.at).toISOString()) + '. The site updates in a few minutes. ';
+  }
+  function fit() {   // the page and the next-day-off bar make room for however tall the bar is
+    var h = bar.offsetHeight;
+    if (h) document.documentElement.style.setProperty('--pas-bar', (h + 8) + 'px');
   }
   function refresh() {
     var ids = Object.keys(edits), unsent = ids.filter(function (id) { return !edits[id].sent; }).length;
@@ -245,14 +375,38 @@
     } else if (showing && !hint && !current) {
       status.appendChild(document.createTextNode(rewordedCount ? ' ' + rewordedCount + (rewordedCount === 1 ? ' sentence' : ' sentences') + ' on this page ' + (rewordedCount === 1 ? 'was' : 'were') + ' reworded from the original: outlined in red. Click one to see what it said.' : ' Nothing on this page has been reworded.'));
     }
+    var mine = current ? openNotes(current.getAttribute('data-copy')) : [];
+    if (mine.length && !hint) {
+      status.appendChild(document.createTextNode((status.textContent ? ' ' : '') + (mine.length === 1 ? 'Note from ' : mine.length + ' notes. ') + mine.map(noteSay).join(' · ')));
+    } else if (!current && !hint && notesData) {
+      var nn = notedHere();
+      if (nn) status.appendChild(document.createTextNode(' ' + nn + (nn === 1 ? ' sentence on this page has a note' : ' sentences on this page have notes') + ': outlined in blue.'));
+    }
     if (current) {
       var id = current.getAttribute('data-copy'), gone = edits[id] && edits[id].remove;
       removeBtn.hidden = false;
       removeBtn.textContent = gone ? 'Put this sentence back' : 'Remove this sentence';
       originalBtn.hidden = was === null;
       originalBtn.textContent = edits[id] && !gone && edits[id].now === was ? 'Keep the reworded version' : 'Put the original wording back';
-    } else { removeBtn.hidden = true; originalBtn.hidden = true; }
+      noteBtn.hidden = !notesData;
+      noteDoneBtn.hidden = !mine.length;
+    } else { removeBtn.hidden = true; originalBtn.hidden = true; noteBtn.hidden = true; noteDoneBtn.hidden = true; }
+    fit();
   }
+  window.addEventListener('resize', fit);
+  noteDoneBtn.addEventListener('click', function () {
+    if (!current) return;
+    var mine = openNotes(current.getAttribute('data-copy'));
+    if (!mine.length) return;
+    var n = mine[0];
+    noteDoneBtn.disabled = true;
+    post({ action: 'note_done', nid: n.id, name: myName() }).then(function (res) {
+      noteDoneBtn.disabled = false;
+      if (res.ok) { n.done = true; hint = 'Marked done.'; } else hint = res.message;
+      paintNotes(); refresh();
+    });
+  });
+  noteBtn.addEventListener('click', function () { if (current) openNotePanel(current); });
   refresh();
   stopBtn.addEventListener('click', function () { set('pas-edit', '0'); location.reload(); });
   removeBtn.addEventListener('click', function () {
@@ -328,8 +482,52 @@
     refresh();
   }, true);
 
-  // ----- review, publish or send -----
+  // ----- leaving a note on a sentence -----
   var veil = null;
+  function openNotePanel(node) {
+    var id = node.getAttribute('data-copy');
+    veil = el('div', 'pas-veil');
+    var panel = el('div', 'pas-panel');
+    panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'true'); panel.setAttribute('aria-labelledby', 'pas-note-title'); panel.tabIndex = -1;
+    var title = el('h2', null, 'Leave a note'); title.id = 'pas-note-title';
+    var on = el('p', 'pas-muted'); on.appendChild(document.createTextNode('On ')); on.appendChild(el('q', null, clean(node.textContent)));
+    var text = el('textarea'); text.maxLength = 600; text.id = 'pas-note-text';
+    var textLabel = el('label', null, 'The note'); textLabel.appendChild(text);
+    var who = el('select'); who.id = 'pas-note-for';
+    var anyone = el('option', null, 'Anyone who edits'); anyone.value = ''; who.appendChild(anyone);
+    (notesData ? notesData.editors : []).forEach(function (e) { var o = el('option', null, e.name); o.value = e.key || ''; who.appendChild(o); });
+    if (who.options.length > 1) who.selectedIndex = 1;
+    var whoLabel = el('label', null, 'For'); whoLabel.appendChild(who);
+    var nameBox = el('input'); nameBox.type = 'text'; nameBox.maxLength = 40; nameBox.value = myName(); nameBox.id = 'pas-note-name';
+    var nameLabel = el('label', null, 'From'); nameLabel.appendChild(nameBox);
+    var saveBtn = el('button', 'pas-btn', 'Save the note'); saveBtn.type = 'button'; saveBtn.id = 'pas-note-save';
+    var back = el('button', 'pas-link', 'Cancel'); back.type = 'button';
+    var row = el('div', 'pas-row'); row.appendChild(saveBtn); row.appendChild(back);
+    var msg = el('p', 'pas-msg'); msg.setAttribute('aria-live', 'polite');
+    var close = function () { if (!veil) return; document.body.removeChild(veil); veil = null; noteBtn.focus(); };
+    back.addEventListener('click', close);
+    saveBtn.addEventListener('click', function () {
+      var t = clean(text.value);
+      if (!t) { msg.textContent = 'Write the note first.'; text.focus(); return; }
+      if (nameBox.value.trim()) set('pas-edit-name', nameBox.value.trim());
+      saveBtn.disabled = true; msg.textContent = 'Saving…';
+      post({ action: 'note', id: id, page: location.pathname, sentence: clean(node.textContent).slice(0, 300), note: t, for: who.value, name: nameBox.value.trim() }).then(function (res) {
+        saveBtn.disabled = false;
+        if (!res.ok) { msg.textContent = res.message || 'That didn’t work.'; return; }
+        notesData.notes.unshift(res.data.note);
+        var forName = res.data.note.for;
+        hint = 'Note saved.' + (forName ? ' It goes to ' + forName + ' when you choose “Email notes to ' + forName + '” in the bar.' : '');
+        close(); paintNotes(); refresh();
+      }).catch(function () { saveBtn.disabled = false; msg.textContent = 'That didn’t work.'; });
+    });
+    panel.appendChild(title); panel.appendChild(on); panel.appendChild(textLabel); panel.appendChild(whoLabel); panel.appendChild(nameLabel); panel.appendChild(row); panel.appendChild(msg);
+    veil.appendChild(panel);
+    veil.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    document.body.appendChild(veil);
+    text.focus();
+  }
+
+  // ----- review, publish or send -----
   function asText(name, note) {
     var lines = ['Copy edits' + (name ? ' from ' + name : '') + ': ' + plural(Object.keys(edits).length) + '.', ''];
     if (note) lines.push('Note: ' + note, '');

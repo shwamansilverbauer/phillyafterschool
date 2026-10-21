@@ -543,6 +543,17 @@ there.
    a publish records in `data/copy.json` as `by` and `on`). Clicking one shows what it said; "Put the original wording
    back" makes that a change of the current editor's, and publishing it drops the entry. The toggle is remembered
    per browser, so one person can edit with it on and another without.
+6. Notes for each other. "Leave a note" in the bar pins a note to the clicked sentence, for one of the editors or
+   for anyone; sentences with an open note are outlined in blue, clicking one shows the note, and "Done with this
+   note" closes it. Publishing a change to a sentence closes its notes too (`done_how = published`). "Email N notes to
+   <name>" (in the bar and on `/edit/`) sends that editor every note for them not emailed yet, in one email with a
+   link per note (`<page>#note=<id>`): opening such a link while signed in to the site as that editor turns editing
+   on and lands on the sentence. Notes live in the accounts database (`copy_notes`), never in the repository, and
+   are only readable behind the edit sign-in; at most 10 note emails an hour.
+7. Editors. A site admin (an account on `admins`) can let someone in by the address they sign in to the site with,
+   on `/edit/` under "Editors" (the `editors` table; at most 10). That account then opens every page behind the edit
+   sign-in without the password, is named as "for" in notes, and gets the note emails. Removing them closes the pages
+   to that account again. Admins alone add or remove editors and delete notes; an editor marks notes done.
 
 Publishing needs one thing on the host: a file named `phillyafterschool-github.key` next to the public folder (the
 same place as `phillyafterschool-postmark.key`) holding a fine-grained GitHub token for this one repository with
