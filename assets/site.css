@@ -1199,8 +1199,8 @@ ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .sum-profile .actions{align-self:flex-start}
 .sum-same{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;margin:0}
 .sumcard{border-top:1px solid var(--line);padding-top:20px;margin-top:8px;display:flex;flex-direction:column;gap:12px}
-.card-view .sum-profile{display:none}
-.card-view .sumcard{border-top:0;padding-top:0;margin-top:0}
+.card-view .sumcard{border-top:0;padding-top:0;margin-top:0}   /* on Share/Save the picture follows the tools and the profile box */
+.share-empty[hidden]{display:none}
 .sumcard[hidden]{display:none}
 .sum-pages{display:flex;flex-wrap:wrap;gap:8px}
 .sum-pages .kid{font-size:.95rem;padding:8px 16px}
@@ -1548,6 +1548,9 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .step-say{margin:0;color:var(--muted)}
 .year-view-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px}
 .year-view-head h3{margin:0}
+.vs-pick{display:inline-flex;align-items:center;gap:6px;margin-left:auto;font-family:var(--display);font-weight:800;font-size:1rem;color:var(--yellow-ink);background:var(--yellow);border-radius:999px;padding:5px 12px 5px 14px;transform:rotate(-3deg);transform-origin:left center}
+.vs-pick svg{width:30px;height:16px;display:block;flex:none}
+@media (max-width:700px){.vs-pick{margin-left:0;transform:none}.vs-pick svg{transform:rotate(45deg)}}
 .view-switch{align-self:center}
 .view-switch .vs{white-space:nowrap}
 @media (max-width:480px){.view-switch .vs{padding:9px 13px;font-size:.95rem}}
@@ -1756,6 +1759,8 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .follow .btn[data-fav-btn]::before{content:"\2606";margin-right:7px;font-size:1.05em;line-height:1}
 .follow .btn.saved::before{content:"\2605";color:var(--star)}
 .follow-pick{max-width:360px}
+.follow-which{margin:0;font-size:.95rem;color:var(--sky-ink)}
+.follow-first{padding-top:8px;margin-top:14px}
 .follow-status{margin:0;font-weight:600}
 .follow-status:empty{display:none}
 .follow-status.good{color:var(--green-ink)}
@@ -2119,7 +2124,7 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .board-views{min-width:0;max-width:100%;overflow-x:auto;scrollbar-width:none;flex:0 1 auto}
 .board-views::-webkit-scrollbar{display:none}
 .vs-short{display:none}
-@media (max-width:640px){.board-views .vs{padding-inline:14px}.board-views .vs-long{display:none}.board-views .vs-short{display:inline}}
+@media (max-width:640px){.board-views .vs{padding-inline:12px}.board-views .vs-long{display:none}.board-views .vs-short{display:inline}}
 /* ---------- the strip that stays under the menu bar: a page's view switch, its jump links, or both; and a planner's heading with its views ---------- */
 .pagenav{position:sticky;top:var(--bar-h,64px);z-index:30;background:var(--bg);display:flex;flex-direction:column;gap:2px;padding:8px 0 0;margin:0 0 -16px;box-shadow:0 1px 0 var(--line)}
 .pagenav .view-switch{align-self:flex-start;margin-bottom:6px}
