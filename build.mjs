@@ -2075,7 +2075,7 @@ function homePage() {
       <div class="start-list">
         ${go(link('schools/', 0), T(`Find your school`), T(`Every program that’s there, picks up or is nearby`), 'school')}
         ${go(link(schedulesPath, 0), T(`Build a schedule`), T(`The school week, days off and the summer`), 'week')}
-        ${GROUPS ? `<span class="when-out" style="display:contents">${go(link('register/', 0), T(`Create a free account`), T(`Keep every plan, and get the whole year in one calendar`), 'person')}</span><span class="when-in" style="display:contents">${go(link('account/', 0), T(`Your account`), T(`Your plans, your kids’ calendar and who you share with`), 'person')}</span>` : ''}
+        ${GROUPS ? `<span class="when-out" style="display:contents">${go(link('register/', 0), T(`Create a free account`), T(`Keep every plan, and get the whole year in one calendar`), 'person')}</span>` : ''}
       </div>
     </div>
     <div class="start managers">
@@ -2083,8 +2083,7 @@ function homePage() {
       <p>${T(`Run an after-school program, a weekend class or a camp? Make sure parents see it right.`)}</p>
       <div class="start-list">
         ${GROUPS ? go(link('managers/', 0), T(`Claim your listing`), T(`Keep its dates, costs and hours current yourself`), 'claim') : ''}
-        ${go(link('suggest/', 0), T(`Add a program`), T(`Not listed yet? Send its name and website`), 'plus')}
-        ${go(link('suggest/', 0) + '?kind=camp', T(`Add a camp`), T(`Summer camps and camps on days off`), 'tent')}
+        ${go(link('suggest/', 0), T(`Add a program or camp`), T(`Not listed yet? Send its name and website`), 'plus')}
       </div>
     </div>
   </div>
