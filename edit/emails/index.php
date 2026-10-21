@@ -23,32 +23,80 @@ function edit_key() {
 function edit_token($exp) {
   return $exp . '.' . hash_hmac('sha256', (string) $exp, edit_key());
 }
-// An account on the site whose address is on the admins list (site.config.json) opens these pages too: the same
-// sign-in every account uses (a code by email, or Google), checked here against the accounts database. It gives the
+// The accounts database (the same file the groups API keeps), or null when there isn't one yet. With $create, the
+// two tables these pages add are made: the editors an admin lets in by their account, and the notes left on sentences.
+function edit_db($create = false) {
+  static $db = null, $made = false;
+  if ($db === null) {
+    $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
+    if (!is_file($file)) return null;
+    try {
+      $db = new PDO('sqlite:' . $file);
+      $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $db->exec('PRAGMA busy_timeout=3000');
+    } catch (Exception $e) { $db = null; return null; }
+  }
+  if ($create && !$made) {
+    $made = true;
+    try {
+      $db->exec("CREATE TABLE IF NOT EXISTS editors (email TEXT PRIMARY KEY, name TEXT NOT NULL, added INTEGER NOT NULL, added_by TEXT NOT NULL DEFAULT '')");
+      $db->exec("CREATE TABLE IF NOT EXISTS copy_notes (id INTEGER PRIMARY KEY AUTOINCREMENT, copy_id TEXT NOT NULL, page TEXT NOT NULL DEFAULT '', sentence TEXT NOT NULL DEFAULT '', note TEXT NOT NULL, by_name TEXT NOT NULL DEFAULT '', by_email TEXT NOT NULL DEFAULT '', for_email TEXT NOT NULL DEFAULT '', created INTEGER NOT NULL, sent INTEGER NOT NULL DEFAULT 0, done INTEGER NOT NULL DEFAULT 0, done_by TEXT NOT NULL DEFAULT '', done_how TEXT NOT NULL DEFAULT '')");
+    } catch (Exception $e) { /* read-only database: notes stay off */ }
+  }
+  return $db;
+}
+// The account the visitor is signed in to on the site (a code by email, or Google), as the accounts database has it:
+// its address and first name, or null.
+function edit_account() {
+  static $acct = false;
+  if ($acct !== false) return $acct;
+  $acct = null;
+  $sid = (isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s'])) ? $_COOKIE['pas_s'] : '';
+  if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return $acct;
+  $db = edit_db();
+  if ($db === null) return $acct;
+  try {
+    $st = $db->prepare('SELECT u.email, u.first, u.name FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?');
+    $st->execute(array(hash('sha256', $sid), time()));
+    $row = $st->fetch(PDO::FETCH_ASSOC);
+    if (!$row) return $acct;
+    $email = strtolower(trim((string) $row['email']));
+    if ($email === '') return $acct;
+    $first = trim((string) $row['first']);
+    if ($first === '') $first = trim(strtok((string) $row['name'], ' '));
+    $acct = array('email' => $email, 'name' => $first);
+  } catch (Exception $e) { $acct = null; }
+  return $acct;
+}
+// An account on the site whose address is on the admins list (site.config.json) opens these pages too. It gives the
 // address, or '' when the visitor isn't signed in to such an account.
 function edit_admin() {
   global $EDIT_ADMINS;
-  static $who = null;
-  if ($who !== null) return $who;
-  $who = '';
-  if (!is_array($EDIT_ADMINS) || !$EDIT_ADMINS) return $who;
-  $sid = (isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s'])) ? $_COOKIE['pas_s'] : '';
-  if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return $who;
-  $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
-  if (!is_file($file)) return $who;
+  if (!is_array($EDIT_ADMINS) || !$EDIT_ADMINS) return '';
+  $a = edit_account();
+  return $a !== null && in_array($a['email'], $EDIT_ADMINS, true) ? $a['email'] : '';
+}
+// An account an admin has let in as an editor (the editors table, kept from the edit page): its name and address,
+// or null. Editors open the same pages the edit password does.
+function edit_editor() {
+  static $who = false;
+  if ($who !== false) return $who;
+  $who = null;
+  $a = edit_account();
+  if ($a === null) return $who;
+  $db = edit_db();
+  if ($db === null) return $who;
   try {
-    $db = new PDO('sqlite:' . $file);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $db->exec('PRAGMA busy_timeout=3000');
-    $st = $db->prepare('SELECT u.email FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?');
-    $st->execute(array(hash('sha256', $sid), time()));
-    $email = strtolower(trim((string) $st->fetchColumn()));
-    if ($email !== '' && in_array($email, $EDIT_ADMINS, true)) $who = $email;
-  } catch (Exception $e) { $who = ''; }
+    $st = $db->prepare('SELECT name, email FROM editors WHERE email = ?');
+    $st->execute(array($a['email']));
+    $row = $st->fetch(PDO::FETCH_ASSOC);
+    if ($row) $who = array('name' => (string) $row['name'], 'email' => (string) $row['email']);
+  } catch (Exception $e) { $who = null; }   // no editors table yet
   return $who;
 }
 function edit_signed_in() {
   if (edit_admin() !== '') return true;
+  if (edit_editor() !== null) return true;
   if (!isset($_COOKIE['pas_edit']) || !is_string($_COOKIE['pas_edit'])) return false;
   $parts = explode('.', $_COOKIE['pas_edit'], 2);
   if (count($parts) !== 2 || !ctype_digit($parts[0]) || (int) $parts[0] < time()) return false;
@@ -85,7 +133,7 @@ if (!edit_signed_in()) { header('Location: ../', true, 303); exit; }
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../../assets/site.css?v=706e3fce">
+<link rel="stylesheet" href="../../assets/site.css?v=86195e47">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1')document.documentElement.className+=' signed'}catch(e){}</script>
@@ -310,7 +358,7 @@ if (!edit_signed_in()) { header('Location: ../', true, 303); exit; }
     <p>Written by Rachael Silverbauer.</p>
   </div>
 </div></footer>
-<script src="../../assets/site.js?v=c8c0ee57" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=49c057ca&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
+<script src="../../assets/site.js?v=381b40f4" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
 
 </body>
 </html>
