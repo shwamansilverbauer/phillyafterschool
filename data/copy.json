@@ -591,7 +591,7 @@
   },
   "d34fd34411": {
     "was": "One place to see what’s possible after the last bell",
-    "now": "After School has never been so cool.",
+    "now": "After-School has never been so cool.",
     "on": "2026-10-21",
     "by": "Josh"
   },
@@ -646,6 +646,30 @@
   "ae826cd301": {
     "was": "Roll a themed week",
     "now": "Not sure where to start? Roll a themed week!",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "59ba164e7a": {
+    "was": "Programs by what they do",
+    "now": "Programs by category",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "4dea32064b": {
+    "was": "What runs on which day",
+    "now": "Programs by day of week",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "5b2fc57ac3": {
+    "was": "How listings are checked",
+    "now": "We made this because we needed it",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "eb164ad365": {
+    "was": "Each listing comes from the provider’s own public pages, the school’s site, or city program data. The sources are linked on every card.",
+    "now": "Josh & Rachael Silverbauer are parents of two in Philadelphia.",
     "on": "2026-10-21",
     "by": "Josh"
   }
