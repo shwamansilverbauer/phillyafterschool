@@ -246,6 +246,7 @@
     window.fetch(marks[0].getAttribute('data-api') + '?action=claimed', { credentials: 'omit' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
       if (!d || !d.ok || !d.claimed) return;
       marks.forEach(function (m) { if (m.hasAttribute('data-claimed') && d.claimed.indexOf(m.getAttribute('data-claimed')) > -1) m.hidden = false; });
+      all(document, '[data-claim-cta]').forEach(function (b) { if (d.claimed.indexOf(b.getAttribute('data-claim-cta')) > -1) b.classList.add('is-claimed'); });   // the claim box says it is claimed
       // "Is there space?", as the listing's manager last said it, with the day they said it.
       var SPACE = { open: 'Spots open', waitlist: 'Waitlist', full: 'Full' };
       all(document, '[data-space]').forEach(function (m) {
