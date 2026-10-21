@@ -6,6 +6,7 @@
 //   POST {action: "publish", edits, name}         writes data/copy.json to the repository on GitHub; the publish
 //                                                 Action then builds and deploys it, so the site changes within minutes
 //   GET  ?action=versions                         the last published versions, and the sentences taken off the page
+//   GET  ?action=changes                          who reworded each sentence and when (the page carries only the original)
 //   POST {action: "restore", sha}                 puts a published version back, as a new commit
 //
 // Publishing needs a token in a file next to the public folder, phillyafterschool-github.key: a fine-grained GitHub
@@ -62,7 +63,7 @@ function record_email($subject, $body) {
 $action = '';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   $action = isset($_GET['action']) && is_string($_GET['action']) ? $_GET['action'] : '';
-  if ($action !== 'versions') out(false, 'Use the editor on the site.', 405);
+  if ($action !== 'versions' && $action !== 'changes') out(false, 'Use the editor on the site.', 405);
   $in = array();
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $in = json_decode(file_get_contents('php://input'), true);
@@ -72,6 +73,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   out(false, 'Use the editor on the site.', 405);
 }
 if (!signed_in_here()) out(false, 'You are signed out.', 401);
+
+// ----- changes: who reworded each sentence, and when, for the editor's "Show what's changed" (the page itself only
+// carries the original wording; names stay behind the sign-in) -----
+if ($action === 'changes') {
+  $who = array();
+  foreach ((is_array($OVERRIDES) ? $OVERRIDES : array()) as $id => $e) {
+    if (!is_array($e) || !isset($ORIGINAL[$id])) continue;
+    $who[$id] = array('by' => isset($e['by']) && is_string($e['by']) ? $e['by'] : '', 'on' => isset($e['on']) && is_string($e['on']) ? $e['on'] : '');
+  }
+  out(true, '', 200, array('changes' => $who));
+}
 
 // ----- versions: what has been published, and what is off the page -----
 if ($action === 'versions') {
@@ -146,7 +158,11 @@ foreach (array_slice($in['edits'], 0, 300) as $e) {
   }
   $lines[] = $line;
   if (!$remove && $now === $ORIGINAL[$id]) unset($merged[$id]);
-  else $merged[$id] = array('was' => $ORIGINAL[$id], 'now' => $now);
+  else {
+    // Who changed it and when, for the editor's "Show what's changed". The name is whatever was typed in the review panel.
+    $merged[$id] = array('was' => $ORIGINAL[$id], 'now' => $now, 'on' => gmdate('Y-m-d'));
+    if ($name !== '') $merged[$id]['by'] = $name;
+  }
 }
 if ($n === 0) out(false, 'Those changes are already on the site, or this page is out of date. Refresh the page and check.', 400);
 $count = "$n " . ($n === 1 ? 'change' : 'changes');

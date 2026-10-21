@@ -538,6 +538,11 @@ there.
 4. `/edit/` lists the published versions (the commits that touched `data/copy.json`), newest first, each with
    "Restore this version". A restore is a new commit with that version's file, so nothing is ever lost, and the
    sentences currently taken off the page are listed there with "Put it back".
+5. "Show what's changed" in the bar outlines in red every sentence reworded from the site's original wording (the
+   page carries the original as `data-was`; `?action=changes` on `edit/send.php` says who reworded it and when, which
+   a publish records in `data/copy.json` as `by` and `on`). Clicking one shows what it said; "Put the original wording
+   back" makes that a change of the current editor's, and publishing it drops the entry. The toggle is remembered
+   per browser, so one person can edit with it on and another without.
 
 Publishing needs one thing on the host: a file named `phillyafterschool-github.key` next to the public folder (the
 same place as `phillyafterschool-postmark.key`) holding a fine-grained GitHub token for this one repository with
@@ -568,6 +573,13 @@ before an email names it on the page, and the same name used twice joins the sen
 (`phpCopy()` in `build.mjs`) replaces each `__T("…")` with the published wording, or `''` for a removed sentence, and
 stops if any is left unread. The unit words in the monthly numbers ("3 clicks", "2 more families") are not editable;
 the sentences around them are. The emails to the site's own address are not on the page.
+
+One email the site words but doesn't send itself is there too: "Your school is here", the one to people who asked
+for a school once it has a page. Its heading, intro and reason line, and the item's title, text and button, go
+through `emailCopy()` in `build.mjs` (the sentences are listed under `SITE_EMAILS`, after the server's). The item's
+wording is filled in per school and lands in `data/alerts.json` as the alert; the heading, intro and reason travel
+in the feed as `added`, and `scripts/send-alerts.mjs` uses them as they are (its own words stand in for a feed that
+predates this).
 
 Not editable this way: program and school details (they come from the data files), menu labels, and text
 the scripts write as you click (filter counts, the roster).

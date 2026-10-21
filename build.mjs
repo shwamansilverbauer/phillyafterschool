@@ -91,11 +91,27 @@ function T(original, vars) {
   if (isRemoved(id)) return REMOVED;
   const now = typeof copyEdits[id]?.now === 'string' ? copyEdits[id].now : original;
   const shown = vars ? now.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m)) : now;
-  return `<span data-copy="${id}"${vars ? ` data-tpl="${esc(now)}" data-vars="${esc(JSON.stringify(vars))}"` : ''}>${esc(shown)}</span>`;
+  // A sentence someone reworded carries the original too, so edit mode can show what it said (the editor's
+  // "Show what’s changed"). Who changed it stays out of the page: edit mode asks the server for that.
+  const was = now !== original ? ` data-was="${esc(original)}"` : '';
+  return `<span data-copy="${id}"${was}${vars ? ` data-tpl="${esc(now)}" data-vars="${esc(JSON.stringify(vars))}"` : ''}>${esc(shown)}</span>`;
 }
 // The same sentence as plain text, with any approved edit applied: for places that can't hold a span, such as the
 // description a link preview shows.
 const copyNow = original => (typeof copyEdits[copyId(original)]?.now === 'string' ? copyEdits[copyId(original)].now : original);
+// A sentence of an email the build words itself (the school-added email goes out through Klaviyo from the alerts
+// feed): registered like a page sentence and listed at /edit/emails/ under the email's name, with any edit applied
+// and {words} filled in from vars. An emptied sentence is ''.
+const SITE_EMAILS = [];   // [{ name, sentences: [original, …] }], shown after the server's emails
+function emailCopy(name, original, vars) {
+  const id = copyId(original);
+  copyRegistry.set(id, original);
+  let e = SITE_EMAILS.find(x => x.name === name);
+  if (!e) { e = { name, sentences: [] }; SITE_EMAILS.push(e); }
+  if (!e.sentences.includes(original)) e.sentences.push(original);
+  const now = isRemoved(id) ? '' : copyNow(original);
+  return vars ? now.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m)) : now;
+}
 // Drops the elements an emptied sentence left behind: a list item, paragraph or heading whose only content is the
 // marker, whitespace, empty <b>/<strong>, or elements hidden from readers (a callout number). Then the markers go.
 const EMPTYISH = String.raw`(?:\s|<!--pas-rm-->|<(?:b|strong|em|i)>(?:\s|<!--pas-rm-->)*</(?:b|strong|em|i)>|<i\b[^>]*aria-hidden="true"[^>]*>[^<]*</i>|<br\s*/?>)*`;
@@ -1177,6 +1193,17 @@ const CATCH_UP_DAYS = 2;
 const mailUrl = (rel, hash = '') => `${cfg.siteUrl}/${rel}?utm_source=klaviyo&utm_medium=email&utm_campaign=dates${hash}`;
 // A camp's page in an email: its program's page, under Summer, when it is tied to one.
 const mailLink = c => { const p = c.program && programs.find(x => x.id === c.program); return p ? mailUrl(programPath(p), '#summer') : mailUrl(campPath(c)); };
+// The email to people who asked for a school, once it has a page (scripts/send-alerts.mjs composes it from the feed):
+// its heading, intro and the line that says why it came, plus the item's title, text and button below. Worded here so
+// they can be edited at /edit/emails/; the feed carries the current wording.
+const ADDED_EMAIL = 'Your school is here (to people who asked for a school, sent through Klaviyo)';
+const addedEmail = {
+  heading: emailCopy(ADDED_EMAIL, 'Your school is here'),
+  intro: emailCopy(ADDED_EMAIL, 'The school you were waiting for has its own page now.'),
+  reason: emailCopy(ADDED_EMAIL, 'you asked to be told when this school was added'),
+};
+const ADDED_ITEM = { title: '{school} now has a page', text: 'You asked to be told. {programs} listed for {school} so far: the ones at the school, the ones that pick up from it and the ones close by.', button: 'See the page' };
+for (const t of Object.values(ADDED_ITEM)) emailCopy(ADDED_EMAIL, t);   // listed for editing even before any school has been added
 const alertItems = [
   ...programs.flatMap(p => upcomingDates(p).flatMap(d => signupItems({
     id: `reg-${p.id}`, schools: schools.filter(s => p.schools[s.id]).map(s => s.id), programs: [p.id],
@@ -1231,21 +1258,23 @@ const lateAlertItems = () => [
     when: 'Update', title: c.name, text: u.text.trim(), url: mailLink(c), button: 'See the camp',
   }))).filter(a => a.expires >= TODAY),
   ...schools.filter(s => s.added).map(s => {
-    const n = forSchool(s).length;
+    const n = forSchool(s).length, v = { school: s.shortName, programs: n === 1 ? 'One program is' : n + ' programs are' };
     return {
       id: `added-${s.id}`, kind: 'added', date: s.added, sendOn: s.added, expires: isoAdd(s.added, 2), schools: [], programs: [],
       waiting: finderData.schools.filter(r => r[5] === s.id).map(r => r[0]),
-      when: 'New', title: `${s.shortName} now has a page`, text: `You asked to be told. ${n === 1 ? 'One program is' : n + ' programs are'} listed for ${s.shortName} so far: the ones at the school, the ones that pick up from it and the ones close by.`,
-      url: mailUrl(`${s.id}/`), button: 'See the page',
+      when: 'New', title: emailCopy(ADDED_EMAIL, ADDED_ITEM.title, v), text: emailCopy(ADDED_EMAIL, ADDED_ITEM.text, v),
+      url: mailUrl(`${s.id}/`), button: emailCopy(ADDED_EMAIL, ADDED_ITEM.button, v),
     };
   }).filter(a => a.expires >= TODAY),
 ];
+
 const alertsFeed = () => ({
   about: `Dated reminders for ${cfg.siteName}. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.`,
   generated: TODAY, site: cfg.siteUrl, metric: ALERTS?.metric || 'School dates', sendDay: SEND_DAY_NAME,
   schools: schools.map(s => ({ id: s.id, name: s.shortName })),
   programs: programs.map(p => ({ id: p.id, name: fullName(p) })),
   camps: summerCamps.map(c => ({ id: c.id, name: c.name })),
+  added: addedEmail,
   alerts: [...alertItems, ...lateAlertItems()].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id)),
 });
 // The sign-up box. With a school or a program it asks for a first name and an email; without either it also asks which school.
@@ -4765,15 +4794,15 @@ ${page}`;
 // The site's own emails, each rendered once with sample values so their sentences can be edited like a page's.
 // Sentences come from __T("…") in src/server/groups-api.php (see phpCopy); {words} show the sample here and are
 // filled in for real when an email is sent.
-const EMAIL_SAMPLE = { site: cfg.siteName, code: '123 456', minutes: '20', name: 'Sam Rivera', from: 'Sam Rivera (sam@example.com)', first: 'Sam', email: 'you@example.com', contact: cfg.contactEmail || 'contact@example.com', times: '120 times', before: '96', address: 'you@example.com', newAddress: 'new@example.com', group: 'Tuesday crew', listing: 'Maple Street Arts Club', program: 'Maple Street Arts Club', count: '3', n: '3', question: 'Is the Thursday clinic still 3:30 to 5:30?', days: '7', numbers: 'Opened 120 times, 14 clicks to your sign-up page, on 9 plans.', todo: 'Mark whether there’s space.', more: '1', school: 'Nebinger' };
+const EMAIL_SAMPLE = { site: cfg.siteName, code: '123 456', minutes: '20', name: 'Sam Rivera', from: 'Sam Rivera (sam@example.com)', first: 'Sam', email: 'you@example.com', contact: cfg.contactEmail || 'contact@example.com', times: '120 times', before: '96', address: 'you@example.com', newAddress: 'new@example.com', group: 'Tuesday crew', listing: 'Maple Street Arts Club', program: 'Maple Street Arts Club', count: '3', n: '3', question: 'Is the Thursday clinic still 3:30 to 5:30?', days: '7', numbers: 'Opened 120 times, 14 clicks to your sign-up page, on 9 plans.', todo: 'Mark whether there’s space.', more: '1', school: 'Nebinger', programs: '3 programs are' };
 function editEmailsPage() {
   const hero = `    <h1>The site’s emails</h1>
     <p class="lede">Every email the site sends itself, with made-up names and numbers in place of the real ones. Turn on editing at <a href="../">the edit page</a>, then click a sentence here and type; words in curly braces are filled in when an email goes out.</p>`;
   const body = `<div class="prose" data-emails-page>
-  ${EMAILS.length ? EMAILS.map(e => `<section class="panel email-sample"><h2>${esc(e.name)}</h2>
+  ${[...EMAILS, ...SITE_EMAILS].length ? [...EMAILS, ...SITE_EMAILS].map(e => `<section class="panel email-sample"><h2>${esc(e.name)}</h2>
 ${e.sentences.map(t => `    <p>${T(t, EMAIL_SAMPLE)}</p>`).join('\n')}
   </section>`).join('\n  ') : '<p>No emails are wired up for editing yet.</p>'}
-  <p class="hint">Klaviyo’s emails (the dates digest, the welcome series) are edited in Klaviyo, not here.</p>
+  <p class="hint">Klaviyo’s other emails (the dates digest, the welcome series) are edited in Klaviyo, not here.</p>
 </div>`;
   return layout({ title: 'The site’s emails', description: 'Edit the wording of the emails the site sends.', pathName: 'edit/emails/', depth: 2, current: null, hero, body, noindex: true, quiet: true });
 }
@@ -4804,6 +4833,7 @@ function editPage() {
     <li>Click any text with a dotted outline and type. Text you’ve changed turns yellow. To take a sentence off the page, click it and choose “Remove this sentence” in the bar.</li>
     <li>Move between pages with the menu or the list below. Your edits are kept in this browser as you go, so stay on the same phone or computer until you’ve published them.</li>
     <li>Choose “Review and publish” in the bar at the bottom. You’ll see each change next to the original, can untick any to leave it out, and can undo any of them.</li>
+    <li>“Show what’s changed” in the bar outlines in red every sentence that has been reworded from the site’s original wording, so you can edit around someone else’s changes. Click one and the bar says who reworded it, when, and what it said; “Put the original wording back” makes that a change of yours.</li>
     <li>Publishing puts the ticked changes on the site within a few minutes. Every publish is kept as a version below, so a change can be taken back.</li>
   </ol>
   <section id="pub"${GATED ? '' : ' hidden'}>

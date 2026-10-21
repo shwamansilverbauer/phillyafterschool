@@ -107,18 +107,22 @@
   // ----- styles -----
   var css = el('style');
   css.textContent = [
-    'body.pas-editing{padding-bottom:96px}',
-    '.pas-editing .offbar{bottom:96px}',   // the next-day-off bar sits above the editing bar instead of on it
+    'body.pas-editing{padding-bottom:112px}',
+    '.pas-editing .offbar{bottom:112px}',   // the next-day-off bar sits above the editing bar instead of on it
     '.pas-editing [data-copy][contenteditable]{outline:1.5px dashed color-mix(in srgb,currentColor 55%,transparent);outline-offset:3px;border-radius:3px;cursor:text}',
     '.pas-editing [data-copy][contenteditable]:hover{background:color-mix(in srgb,#F3C613 30%,transparent)}',
     '.pas-editing [data-copy][contenteditable]:focus{outline:3px solid #F3C613;background:color-mix(in srgb,#F3C613 22%,transparent)}',
+    // "Show what's changed": sentences reworded from the original are outlined in red (an edit in progress stays yellow)
+    '.pas-show [data-copy][data-was]{outline:2px solid #D8232A;outline-offset:3px;background:color-mix(in srgb,#D8232A 10%,transparent)}',
+    '.pas-show [data-copy][data-was]:hover{background:color-mix(in srgb,#D8232A 18%,transparent)}',
+    '.pas-bar q{quotes:"“" "”";font-style:italic}',
     '.pas-editing [data-copy].pas-changed,.pas-editing [data-copy].pas-changed:hover,.pas-editing [data-copy].pas-changed:focus{background:#F3C613;color:#2A2100}',
     '.pas-editing [data-copy].pas-removed,.pas-editing [data-copy].pas-removed:hover,.pas-editing [data-copy].pas-removed:focus{background:#FBE0E0;color:#6B1F1F;text-decoration:line-through}',
     '.pas-editing .pas-revealed[hidden]{display:block!important}',
     '.pas-editing .panel.pas-revealed[hidden]{display:flex!important}',
     '.pas-editing .pas-revealed::before{content:attr(data-edit-reveal);display:block;font-size:.85rem;font-weight:700;margin-bottom:6px}',
     '.pas-editing .pas-revealed .actions{pointer-events:none;opacity:.5}',
-    '.pas-bar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:#0B2140;color:#FFFFFF;border-top:4px solid #F3C613;padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-content:space-between;font-family:var(--body);font-size:1rem;line-height:1.4}',
+    '.pas-bar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:#0B2140;color:#FFFFFF;border-top:4px solid #F3C613;padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px;align-items:flex-start;font-family:var(--body);font-size:1rem;line-height:1.4}',   // the status always sits above the buttons, so a shorter message never moves a button out from under a click
     '.pas-bar-actions{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}',
     '.pas-btn{font:inherit;font-weight:700;border-radius:999px;padding:9px 18px;border:2px solid #F3C613;background:#F3C613;color:#2A2100;cursor:pointer}',
     '.pas-btn.quiet{background:transparent;border-color:var(--line);color:var(--ink)}',
@@ -178,13 +182,46 @@
   reviewBtn.type = 'button';
   var removeBtn = el('button', 'pas-btn quiet', 'Remove this sentence');
   removeBtn.type = 'button'; removeBtn.hidden = true; removeBtn.id = 'pas-remove';
+  var originalBtn = el('button', 'pas-btn quiet', 'Put the original wording back');
+  originalBtn.type = 'button'; originalBtn.hidden = true; originalBtn.id = 'pas-original';
+  var showBtn = el('button', 'pas-btn quiet'); showBtn.type = 'button'; showBtn.id = 'pas-show';
   var pagesLink = el('a', 'pas-link', 'All pages');
   pagesLink.href = cfg.home || '#';
   var stopBtn = el('button', 'pas-link', 'Stop editing');
   stopBtn.type = 'button';
-  actions.appendChild(removeBtn); actions.appendChild(reviewBtn); actions.appendChild(pagesLink); actions.appendChild(stopBtn);
+  actions.appendChild(removeBtn); actions.appendChild(originalBtn); actions.appendChild(reviewBtn); actions.appendChild(showBtn); actions.appendChild(pagesLink); actions.appendChild(stopBtn);
   bar.appendChild(status); bar.appendChild(actions);
   document.body.appendChild(bar);
+
+  // ----- "Show what's changed": every sentence reworded from the site's original wording, in red -----
+  // The page carries the original (data-was); who reworded it and when comes from the server, behind the sign-in.
+  var showing = get('pas-edit-show') === '1';
+  var who = null;   // id -> { by, on }
+  var reworded = {};
+  nodes.forEach(function (n) { if (n.hasAttribute('data-was')) reworded[n.getAttribute('data-copy')] = true; });
+  var rewordedCount = Object.keys(reworded).length;
+  function day(ymd) {
+    var d = new Date(ymd + 'T12:00:00');
+    return isNaN(d) ? ymd : d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
+  function credit(id) {
+    var w = who && who[id];
+    return (w && w.by ? w.by + ' reworded this' : 'This was reworded') + (w && w.on ? ' on ' + day(w.on) : '') + '.';
+  }
+  function askWho() {
+    if (who || !cfg.send || !window.fetch) return;
+    window.fetch(cfg.send + '?action=changes', { credentials: 'same-origin' }).then(function (r) { return r.json(); })
+      .then(function (j) { who = (j && j.ok && j.changes) || {}; refresh(); }).catch(function () { who = {}; });
+  }
+  function show(on) {
+    showing = on; set('pas-edit-show', on ? '1' : '0');
+    document.body.classList.toggle('pas-show', on);
+    showBtn.textContent = on ? 'Hide what’s changed' : 'Show what’s changed';
+    showBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if (on) askWho();
+  }
+  show(showing);
+  showBtn.addEventListener('click', function () { show(!showing); hint = ''; refresh(); });
 
   var hint = '';
   var current = null;   // the sentence last clicked, which "Remove this sentence" acts on
@@ -196,15 +233,25 @@
   }
   function refresh() {
     var ids = Object.keys(edits), unsent = ids.filter(function (id) { return !edits[id].sent; }).length;
-    status.textContent = hint || published() + (!ids.length ? 'Editing is on. Click any outlined text and type.'
+    var was = current && showing && current.hasAttribute('data-was') ? current.getAttribute('data-was') : null;
+    status.textContent = hint || published() + (!ids.length ? (was === null ? 'Editing is on. Click any outlined text and type.' : '')
       : unsent ? plural(unsent) + ' not published yet.'
       : plural(ids.length) + ' sent by email, waiting to be published.');
     reviewBtn.disabled = !ids.length;
+    if (was !== null) {
+      // what the sentence said before it was reworded, and who did it
+      status.appendChild(document.createTextNode(' ' + credit(current.getAttribute('data-copy')) + ' It said: '));
+      status.appendChild(el('q', null, was));
+    } else if (showing && !hint && !current) {
+      status.appendChild(document.createTextNode(rewordedCount ? ' ' + rewordedCount + (rewordedCount === 1 ? ' sentence' : ' sentences') + ' on this page ' + (rewordedCount === 1 ? 'was' : 'were') + ' reworded from the original: outlined in red. Click one to see what it said.' : ' Nothing on this page has been reworded.'));
+    }
     if (current) {
       var id = current.getAttribute('data-copy'), gone = edits[id] && edits[id].remove;
       removeBtn.hidden = false;
       removeBtn.textContent = gone ? 'Put this sentence back' : 'Remove this sentence';
-    } else removeBtn.hidden = true;
+      originalBtn.hidden = was === null;
+      originalBtn.textContent = edits[id] && !gone && edits[id].now === was ? 'Keep the reworded version' : 'Put the original wording back';
+    } else { removeBtn.hidden = true; originalBtn.hidden = true; }
   }
   refresh();
   stopBtn.addEventListener('click', function () { set('pas-edit', '0'); location.reload(); });
@@ -216,6 +263,17 @@
     save();
     nodes.forEach(function (o) { if (o.getAttribute('data-copy') === id) paint(o); });
     hint = edits[id] ? 'Marked to be taken off the page. It goes when you publish.' : '';
+    refresh();
+  });
+
+  originalBtn.addEventListener('click', function () {
+    if (!current || !current.hasAttribute('data-was')) return;
+    var id = current.getAttribute('data-copy'), orig = current.getAttribute('data-was');
+    if (edits[id] && !edits[id].remove && edits[id].now === orig) delete edits[id];
+    else edits[id] = { was: built[id], now: orig, page: where };
+    save();
+    nodes.forEach(function (o) { if (o.getAttribute('data-copy') === id) paint(o); });
+    hint = edits[id] ? 'The original wording is back on the page here. It goes on the site when you publish.' : '';
     refresh();
   });
 

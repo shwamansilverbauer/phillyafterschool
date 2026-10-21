@@ -92,7 +92,10 @@ export function eventFor(person, due, feed) {
   const weekNames = (person.weeks || []).map(id => feed.schools.find(x => x.id === id)?.name).filter(Boolean);
   const names = followed.length > 3 ? `${followed.slice(0, 2).join(', ')} and ${followed.length - 2} more` : followed.length > 1 ? `${followed.slice(0, -1).join(', ')} and ${followed[followed.length - 1]}` : followed[0];
   const whose = school ? ` for ${school.name} families` : everySchool ? '' : schoolNames ? ` for ${schoolNames}` : followed.length === 1 ? ` at ${followed[0]}` : followed.length ? ' at the programs you asked about' : '';
-  const reason = onlyAdded ? 'you asked to be told when this school was added'
+  // The school-added email's wording comes from the feed (it is edited at /edit/emails/); the words here stand in
+  // for a feed that predates that.
+  const added = { heading: 'Your school is here', intro: 'The school you were waiting for has its own page now.', reason: 'you asked to be told when this school was added', ...(feed.added || {}) };
+  const reason = onlyAdded ? added.reason
     : onlyWeek && weekNames.length ? `you turned on “This week at ${weekNames.join(' and ')}” in your profile`
     : [school ? `you asked for ${school.name} dates` : everySchool ? 'you asked for dates for every school' : schoolNames ? `you asked for ${schoolNames} dates` : '', followed.length ? `you asked to hear about ${names}` : '', weekNames.length && due.items.some(a => a.kind === 'week') ? `you turned on “This week at ${weekNames.join(' and ')}”` : ''].filter(Boolean).join(' and ') || 'you asked for dates';
   const first = due.items[0];
@@ -119,8 +122,8 @@ export function eventFor(person, due, feed) {
     kind: due.kind,
     subject,
     preview: due.kind === 'welcome' ? `${due.items.length} date${due.items.length > 1 ? 's' : ''} already on the calendar.` : due.items.map(line).join(' · ').slice(0, 160),
-    heading: onlyAdded ? 'Your school is here' : onlyWeek ? (due.items.length === 1 ? first.title : 'This week at your schools') : due.kind === 'welcome' ? 'You’re on the list' : due.items.every(a => a.kind === 'today') ? 'Today' : due.items.every(a => a.kind === 'soon') ? 'Tomorrow' : due.items.every(a => a.kind === 'soon' || a.kind === 'today') ? 'Today and tomorrow' : due.items.every(a => a.kind === 'register' || a.kind === 'update') ? 'Just posted' : 'Dates coming up',
-    intro: onlyAdded ? 'The school you were waiting for has its own page now.'
+    heading: onlyAdded ? added.heading : onlyWeek ? (due.items.length === 1 ? first.title : 'This week at your schools') : due.kind === 'welcome' ? 'You’re on the list' : due.items.every(a => a.kind === 'today') ? 'Today' : due.items.every(a => a.kind === 'soon') ? 'Tomorrow' : due.items.every(a => a.kind === 'soon' || a.kind === 'today') ? 'Today and tomorrow' : due.items.every(a => a.kind === 'register' || a.kind === 'update') ? 'Just posted' : 'Dates coming up',
+    intro: onlyAdded ? added.intro
       : onlyWeek ? 'Here’s the week ahead: days off, the school’s own dates and sign-ups at the programs that serve it.'
       : due.kind === 'welcome'
       ? `Here is what’s already on the calendar${whose}. After this you’ll hear from us the morning after a sign-up date is posted, then the day before and the morning of, and on ${feed.sendDay} mornings ahead of a day off.`
