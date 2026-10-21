@@ -309,26 +309,26 @@
   },
   "93c7200926": {
     "was": "Every program that’s there, picks up or is nearby",
-    "now": "Every program that’s there, picks up, or is nearby",
-    "on": "2026-10-20",
+    "now": "See aftercare programs offered on-site or nearby.",
+    "on": "2026-10-21",
     "by": "the mrs."
   },
   "e24b715bf6": {
     "was": "The school week, days off and the summer",
-    "now": "The school week, days off, and the summer",
-    "on": "2026-10-20",
+    "now": "Plan weekdays, days off, and summer in one place",
+    "on": "2026-10-21",
     "by": "the mrs."
   },
   "a79a2ac220": {
     "was": "Keep its dates, costs and hours current yourself",
-    "now": "Keep its dates, costs, and hours current yourself",
-    "on": "2026-10-20",
+    "now": "Verify program info and make sure it's up to date.",
+    "on": "2026-10-21",
     "by": "the mrs."
   },
   "0bda3e6531": {
     "was": "Run an after-school program, a weekend class or a camp? Make sure parents see it right.",
-    "now": "Run an after-school program, a weekend class, or a camp? Make sure parents get the right info.",
-    "on": "2026-10-20",
+    "now": "Run an after-school program, weekend class, or camp? Help parents stay informed and on top of things.",
+    "on": "2026-10-21",
     "by": "the mrs."
   },
   "ccee7d0831": {
@@ -891,9 +891,9 @@
   },
   "c44909adfd": {
     "was": "Listings are free and stay free. Nobody pays to be listed or to be ranked higher.",
-    "now": "You get a ton more features with premium! Find out more!",
+    "now": "Premium listings get top billing and let you customize with photos, your own words, and special offers. Basic listing are always free.",
     "on": "2026-10-21",
-    "by": "Josh"
+    "by": "the mrs."
   },
   "c729af8fcf": {
     "was": "A premium listing adds photos, your own words and offers.",
@@ -1002,5 +1002,23 @@
     "now": "",
     "on": "2026-10-21",
     "by": "Josh"
+  },
+  "0ee995ea56": {
+    "was": "Your plans, your kids’ calendar and who you share with",
+    "now": "Manage your profile, favorites, and sharing.",
+    "on": "2026-10-21",
+    "by": "the mrs."
+  },
+  "5a85ffc912": {
+    "was": "See what works with your child’s school, then put the week together.",
+    "now": "Find options near your kid's school, and build a schedule that actually works with yours.",
+    "on": "2026-10-21",
+    "by": "the mrs."
+  },
+  "5f3a66b696": {
+    "was": "Not listed yet? Send its name and website",
+    "now": "Want in? Let's get you added to the site.",
+    "on": "2026-10-21",
+    "by": "the mrs."
   }
 }
