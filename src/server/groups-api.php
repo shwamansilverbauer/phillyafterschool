@@ -142,6 +142,7 @@ function db(): PDO {
     // was turned off (a hash of the account's stop code and the listing). The job that sends the emails reads the
     // list and leaves those out, whether or not the email service was ever told.
     $db->exec('CREATE TABLE IF NOT EXISTS stops (h TEXT PRIMARY KEY, created INTEGER NOT NULL)');
+    $db->exec('CREATE TABLE IF NOT EXISTS school_asks (user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, school TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY (user_id, school))');
     $db->exec('CREATE TABLE IF NOT EXISTS favs (user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, k TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY (user_id, k))');
     $db->exec('CREATE TABLE IF NOT EXISTS daysoffs (user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, year INTEGER NOT NULL, json TEXT NOT NULL, updated INTEGER NOT NULL)');
     // Directors: a claim on a listing ("p:<program id>" or "c:<camp id>") and the changes a director has proposed for it.
@@ -1087,6 +1088,28 @@ function my_claims(int $uid): array {
   foreach (q("SELECT id, listing, status FROM claims WHERE user_id = ? ORDER BY id", array($uid)) as $c) $out[] = claim_out($c);
   return $out;
 }
+// ---------- asking for a school that isn't covered yet ----------
+// One ask per account per school, so a count means families, not taps. The school must be one of the city's schools
+// without a page ($CFG['citySchools'], id => name, from data/all-schools.json). A new ask is logged (the queue page
+// counts the log) and emailed to the owner with the count so far. Gives array(new?, count).
+function school_ask_on(int $uid, string $id): array {
+  global $CFG;
+  $names = isset($CFG['citySchools']) && is_array($CFG['citySchools']) ? $CFG['citySchools'] : array();
+  if (!isset($names[$id])) fail('school', 'That school isn’t one we can add yet.', 404);
+  $had = (bool) val('SELECT 1 FROM school_asks WHERE user_id = ? AND school = ?', array($uid, $id));
+  if (!$had) {
+    if (too_many('schoolask:' . $uid, 20, 86400)) fail('slow', 'That’s a lot of schools for one day. Try again tomorrow.', 429);
+    note('schoolask:' . $uid);
+    q('INSERT OR IGNORE INTO school_asks (user_id, school, created) VALUES (?, ?, ?)', array($uid, $id, now()));
+    bump('school_ask');
+  }
+  $count = (int) val('SELECT COUNT(*) FROM school_asks WHERE school = ?', array($id));
+  if (!$had) {
+    @file_put_contents(dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-school-requests.log', date('c') . "\t" . $id . "\t" . $names[$id] . "\n", FILE_APPEND | LOCK_EX);
+    tell_owner('School request: ' . $names[$id], "A parent asked for this school to be added:\n\n" . $names[$id] . "\n\nFamilies asking for it so far: " . $count . "\n", 'queue');
+  }
+  return array(!$had, $count);
+}
 function tell_owner(string $subject, string $text, string $where = 'claims'): void {
   global $CFG;
   if (empty($CFG['from'])) return;
@@ -1317,7 +1340,10 @@ function sign_in(string $email, string $via, string $next, string $first = '', s
   $user['id'] = (int) $user['id'];
   // Signing in from a Follow or Save button: do what was asked, whichever device the sign-in finished on.
   if (preg_match('~^([fv]):((?:p|c|s):[a-z0-9-]{1,80})$~', $next, $m)) { if ($m[1] === 'f') follow_on($user['id'], $m[2]); else fav_on($user['id'], $m[2]); }
-  out(array('ok' => true, 'next' => $next, 'new' => $new, 'user' => me_out($user), 'groups' => my_groups($user['id'])));
+  // Signing in from "Ask for this school": the ask is counted as part of signing in.
+  $asked = null;
+  if (preg_match('~^a:([a-z0-9-]{1,80})$~', $next, $m)) { $r = school_ask_on($user['id'], $m[1]); $asked = array('school' => $m[1], 'new' => $r[0], 'count' => $r[1]); }
+  out(array('ok' => true, 'next' => $next, 'new' => $new, 'user' => me_out($user), 'groups' => my_groups($user['id']), 'asked' => $asked));
 }
 function http_get(string $url): string {
   if (function_exists('curl_init')) {
@@ -1398,7 +1424,7 @@ switch ($method . ' ' . $action) {
     $email = strtolower(str($in, 'email', 150));
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) fail('email', 'That email address doesn’t look right.');
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|todo|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80})$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|todo|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80}|a:[a-z0-9-]{1,80})$~', $next)) $next = 'account';
     if (too_many('mail:' . h($email), 3, 900) || too_many('mail:' . h($email), 8, 86400) || too_many('ip:' . who(), 10, 900) || too_many('ip:' . who(), 40, 86400)) {
       fail('slow', 'That’s a lot of sign-in emails. Use the newest one, or wait 15 minutes and try again.', 429);
     }
@@ -1451,7 +1477,7 @@ switch ($method . ' ' . $action) {
     if (too_many('try:' . who(), 30, 900)) fail('slow', 'Too many tries. Wait 15 minutes and try again.', 429);
     note('try:' . who());
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|todo|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80})$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|todo|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80}|a:[a-z0-9-]{1,80})$~', $next)) $next = 'account';
     $g = google_email(str($in, 'credential', 4200));
     sign_in($g['email'], 'google', $next, $g['first'], $g['last']);
   }
@@ -1524,6 +1550,22 @@ switch ($method . ' ' . $action) {
     $u = current_user();
     if (!$u) out(array('ok' => true, 'user' => null));
     out(array('ok' => true, 'user' => me_out($u), 'groups' => my_groups($u['id'])));
+  }
+
+  // Asking for a school that isn't covered yet needs an account, so each family counts once and can be told when the
+  // school gets its page. GET says whether this account has asked and how many have; POST asks.
+  case 'GET school_ask': {
+    $u = current_user();
+    $id = isset($_GET['s']) && is_string($_GET['s']) && preg_match('/^[a-z0-9-]{1,80}$/', $_GET['s']) ? $_GET['s'] : '';
+    if ($id === '') fail('school', 'Which school?');
+    out(array('ok' => true, 'asked' => $u ? (bool) val('SELECT 1 FROM school_asks WHERE user_id = ? AND school = ?', array($u['id'], $id)) : false, 'count' => (int) val('SELECT COUNT(*) FROM school_asks WHERE school = ?', array($id))));
+  }
+  case 'POST school_ask': {
+    $u = need_user();
+    $id = str($in, 's', 80);
+    if (!preg_match('/^[a-z0-9-]{1,80}$/', $id)) fail('school', 'Which school?');
+    $r = school_ask_on($u['id'], $id);
+    out(array('ok' => true, 'new' => $r[0], 'count' => $r[1]));
   }
 
   case 'POST logout': {

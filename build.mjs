@@ -1779,6 +1779,23 @@ const nearbyFor = x => {
     camps: nearTo(at, summerCamps, c => coordsOf(c.address), 2).slice(0, 8),
   };
 };
+// "Ask for this school", for a school with no page yet. Asking uses a free account (one ask per family, and the
+// school's page is announced to them by email), so the panel carries the accounts attributes and the sign-in is drawn
+// in place by src/groups.js when someone signed out presses the button. x is the school, or null on the shared page,
+// where the script fills the name in.
+function askPanel(D, x) {
+  const name = x ? esc(x.name) : '';
+  return `<div class="panel" id="req-panel" ${groupsAttrs(D)} data-accounts="${link('assets/groups.js', D)}${GROUPS_V}"${PREVIEW ? ' data-preview="1"' : ''} data-clarity-mask="true"${x ? '' : ' hidden'}>
+    <h2 id="req-heading">${x ? T(`Want {school} added?`, { school: x.name }) : T(`Want this school added?`)}</h2>
+    <p>${T(`Each school takes real checking, so the ones families ask for most go first. Asking uses a free account: each family counts once, and you get one email when the school has its page.`)}</p>
+    <div class="actions needs-js-block"><button type="button" class="btn primary big" id="req-btn">${x ? `Ask for ${name}` : 'Ask for this school'}</button></div>
+    <div class="follow-signin" id="req-signin" hidden></div>
+    <p class="hint" id="req-status" aria-live="polite"></p>
+    <p class="hint">${T(`No password: we email you a 6-digit code. Making an account adds you to our email list, for occasional news about the site; every email has an unsubscribe link.`)} <a href="${link('privacy/', D)}#email">${T(`How we handle your email.`)}</a></p>
+    <noscript><p class="hint">${T(`Asking needs JavaScript.`)}</p></noscript>
+    <p>${T(`Know which programs pick up from this school?`)} <a href="${link('suggest/', D)}?kind=school${x ? `&amp;newschool=${encodeURIComponent(x.name)}` : ''}">${T(`Tell us, and it gets covered faster.`)}</a></p>
+  </div>`;
+}
 function uncoveredSchoolPage(x) {
   const D = 2, row = finderData.schools.find(y => y[0] === x.id), near = nearbyFor(x);
   const total = near.after.length + near.weekend.length + near.camps.length;
@@ -1792,35 +1809,9 @@ function uncoveredSchoolPage(x) {
       ${near.weekend.length + near.camps.length ? `<span><b>${near.weekend.length + near.camps.length}</b> weekend classes and camps within two</span>` : ''}
       ${closest ? `<span>Closest covered school: <a href="${link(closest.id + '/', D)}">${esc(closest.name)}</a>, ${closest.miles} ${closest.miles === 1 ? 'mile' : 'miles'}</span>` : ''}
     </div>`;
-  const body = `<div data-request-page data-slug="${esc(x.id)}" data-send="${link('schools/request/', D)}send.php" data-root="${link('', D).replace(/index\.html$/, '')}" data-index="" data-src="${link('data/school-finder.json', D)}" style="display:contents">
+  const body = `<div data-request-page data-slug="${esc(x.id)}" data-root="${link('', D).replace(/index\.html$/, '')}" data-index="" data-src="${link('data/school-finder.json', D)}" style="display:contents">
   <section class="section">
-  <div class="panel" id="req-panel">
-    <h2>${T(`Want {school} added?`, { school: x.name })}</h2>
-    <p>${T(`Each school takes real checking, so the ones parents ask for most go first. One tap adds your vote.`)}</p>
-    <div class="actions needs-js-block"><button type="button" class="btn primary big" id="req-btn">Ask for ${esc(x.name)}</button></div>
-    <p class="hint" id="req-status" aria-live="polite"></p>
-    ${ALERTS ? `<form class="alerts-form req-notify needs-js-block" id="req-notify" data-key="${esc(ALERTS.klaviyoKey)}" data-list="${esc(ALERTS.listId)}"${ALERTS.doubleOptIn ? ' data-confirm="1"' : ''} data-clarity-mask="true" novalidate>
-      <h3 id="req-notify-title">Get an email when ${esc(x.name)} is added</h3>
-      <div class="alerts-row">
-        <div class="field">
-          <label for="req-name">${T(`Your first name`)}</label>
-          <input id="req-name" name="first_name" type="text" maxlength="60" autocomplete="given-name" required>
-        </div>
-        <div class="field">
-          <label for="req-email">${T(`Your email`)}</label>
-          <input id="req-email" name="email" type="email" maxlength="150" autocomplete="email" inputmode="email" required>
-        </div>
-        <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
-          <label for="req-company">Leave this blank</label>
-          <input id="req-company" name="company" type="text" tabindex="-1" autocomplete="off">
-        </div>
-        <button class="btn primary big" type="submit">${T(`Email me when it’s added`)}</button>
-      </div>
-      <p class="hint">${T(`One email when this school gets its page. It also adds you to our email list, for occasional news about the site. Every email has an unsubscribe link.`)} <a href="${link('privacy/', D)}#email">${T(`How we handle your email.`)}</a></p>
-      <p class="alerts-status" id="req-notify-status" aria-live="polite"></p>
-    </form>` : ''}
-    <p>${T(`Know which programs pick up from this school?`)} <a href="${link('suggest/', D)}?kind=school&amp;newschool=${encodeURIComponent(x.name)}">${T(`Tell us, and it gets covered faster.`)}</a></p>
-  </div>
+  ${askPanel(D, x)}
   </section>
   <section class="section">
     <h2>${T(`After-school programs within a mile`)}</h2>
@@ -1870,33 +1861,8 @@ function schoolRequestPage() {
   const hero = `    <p class="where"><a href="${link('schools/', D)}">${T(`All schools`)}</a></p>
     <h1 id="req-title">${T(`This school isn’t covered yet`)}</h1>
     <p class="lede" id="req-meta">${T(`Search for your school to see whether it has a page.`)}</p>`;
-  const body = `<div class="prose" data-request-page data-send="${PREVIEW ? '' : 'send.php'}" data-root="${link('', D).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}"${PREVIEW ? '' : ` data-src="${link('data/school-finder.json', D)}"`}>
-  <div class="panel" id="req-panel" hidden>
-    <h2>${T(`Want it added?`)}</h2>
-    <p>${T(`Each school takes real checking, so the ones parents ask for most go first. One tap adds your vote.`)}</p>
-    <div class="actions"><button type="button" class="btn primary big" id="req-btn">Ask for this school</button></div>
-    <p class="hint" id="req-status" aria-live="polite"></p>
-    ${ALERTS ? `<form class="alerts-form req-notify" id="req-notify" data-key="${esc(ALERTS.klaviyoKey)}" data-list="${esc(ALERTS.listId)}"${ALERTS.doubleOptIn ? ' data-confirm="1"' : ''}${PREVIEW ? ' data-preview="1"' : ''} data-clarity-mask="true" novalidate>
-      <h3 id="req-notify-title">${T(`Get an email when it’s added`)}</h3>
-      <div class="alerts-row">
-        <div class="field">
-          <label for="req-name">${T(`Your first name`)}</label>
-          <input id="req-name" name="first_name" type="text" maxlength="60" autocomplete="given-name" required>
-        </div>
-        <div class="field">
-          <label for="req-email">${T(`Your email`)}</label>
-          <input id="req-email" name="email" type="email" maxlength="150" autocomplete="email" inputmode="email" required>
-        </div>
-        <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
-          <label for="req-company">Leave this blank</label>
-          <input id="req-company" name="company" type="text" tabindex="-1" autocomplete="off">
-        </div>
-        <button class="btn primary big" type="submit">${T(`Email me when it’s added`)}</button>
-      </div>
-      <p class="hint">${T(`One email when this school gets its page. It also adds you to our email list, for occasional news about the site. Every email has an unsubscribe link.`)} <a href="${link('privacy/', D)}#email">${T(`How we handle your email.`)}</a></p>
-      <p class="alerts-status" id="req-notify-status" aria-live="polite"></p>
-    </form>` : ''}
-  </div>
+  const body = `<div class="prose" data-request-page data-root="${link('', D).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}"${PREVIEW ? '' : ` data-src="${link('data/school-finder.json', D)}"`}>
+  ${askPanel(D, null)}
   <div class="panel" id="req-near" hidden>
     <h2>${T(`In the meantime`)}</h2>
     <p id="req-near-text"></p>
@@ -1912,68 +1878,15 @@ function schoolRequestPage() {
   return layout({ title: 'Ask for a school', description: 'Ask for your school to be added.', pathName: 'schools/request/', depth: D, current: null, hero, body, noindex: true });
 }
 
-// Receives "ask for this school". Emails the request and keeps a log, so demand can be counted.
+// The old "ask for this school" address. Asking now goes through the accounts service (school_ask), so each family
+// counts once; a page cached from before gets a plain answer here.
 function schoolRequestPhp() {
-  const names = Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`]));
   return `<?php
-// Receives a request for a school that isn't covered yet. Generated by build.mjs; edit it there.
-${mailerPhp()}
-$TO = ${JSON.stringify(cfg.contactEmail)};
-$SITE = ${JSON.stringify(cfg.siteName)};
-$SCHOOLS = json_decode(<<<'PAS_JSON'
-${JSON.stringify(names)}
-PAS_JSON
-, true);
+// Generated by build.mjs; edit it there. Asking for a school moved to groups/api.php?action=school_ask.
 header('Cache-Control: no-store');
-function out($ok, $msg, $code) {
-  http_response_code($code);
-  header('Content-Type: application/json; charset=utf-8');
-  echo json_encode(array('ok' => $ok, 'message' => $msg));
-  exit;
-}
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-  out(false, 'Use the button on the site.', 405);
-}
-$in = json_decode(file_get_contents('php://input'), true);
-$id = (is_array($in) && isset($in['s']) && is_string($in['s'])) ? $in['s'] : '';
-if (is_array($in) && isset($in['company']) && $in['company'] !== '') {
-  out(true, 'Thanks.', 200);
-}
-if (!isset($SCHOOLS[$id])) {
-  out(false, 'We could not find that school.', 400);
-}
-// At most 12 requests an hour from one address, so nobody can flood the inbox.
-$dir = dirname($_SERVER['DOCUMENT_ROOT']);
-$file = $dir . '/phillyafterschool-request-limits.json';
-$who = substr(hash('sha256', isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : ''), 0, 16);
-$seen = @json_decode((string) @file_get_contents($file), true);
-if (!is_array($seen)) $seen = array();
-$recent = array();
-foreach ($seen as $k => $times) {
-  if (!is_array($times)) continue;
-  $keep = array();
-  foreach ($times as $t) { if (is_int($t) && $t > time() - 3600) $keep[] = $t; }
-  if ($keep) $recent[$k] = $keep;
-}
-if (isset($recent[$who]) && count($recent[$who]) >= 12) {
-  out(true, 'Thanks.', 200);
-}
-$recent[$who][] = time();
-@file_put_contents($file, json_encode($recent), LOCK_EX);
-
-$name = $SCHOOLS[$id];
-$log = $dir . '/phillyafterschool-school-requests.log';
-$saved = @file_put_contents($log, date('c') . "\\t" . $id . "\\t" . $name . "\\n", FILE_APPEND | LOCK_EX);
-$count = 0;
-$lines = @file($log);
-if (is_array($lines)) { foreach ($lines as $line) { $parts = explode("\\t", $line); if (isset($parts[1]) && $parts[1] === $id) $count++; } }
-$body = "A parent asked for this school to be added:\\n\\n$name\\n\\nRequests for it so far: " . max(1, $count) . "\\n";
-$headers = array('From: ' . $SITE . ' <' . $TO . '>', 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8');
-$sent = pas_postmark($SITE, $TO, $TO, "[$SITE] School request: $name", $body) === 1 || @mail($TO, '=?UTF-8?B?' . base64_encode("[$SITE] School request: $name") . '?=', $body, implode("\\r\\n", $headers));
-if (!$sent && $saved === false) {
-  out(false, 'That did not go through. Please try again later.', 500);
-}
-out(true, 'Thanks.', 200);
+http_response_code(410);
+header('Content-Type: application/json; charset=utf-8');
+echo json_encode(array('ok' => false, 'message' => 'Asking for a school now uses a free account. Reload the school’s page and press the button again.'));
 `;
 }
 
@@ -2387,7 +2300,7 @@ function privacyPage() {
     <li>${GATE ? T(`Your rosters, including any child’s name you type, are saved in your own browser. While you are signed in, a week that has a first name and a program on it is also kept in your profile, so it is there on your other devices. You can take it out of your profile, and it then stays in your browser only. Nobody else sees a week unless you share it.`) : GROUPS ? T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us unless you sign in and choose to keep one in your profile or share one.`) : T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us.`)}</li>
     <li>${T(`If you send a suggestion or a review, it arrives as an email to the person who runs the site.`)}</li>
     ${ALERTS ? `<li>${GROUPS ? T(`If you follow a program, a camp or a school, the list of what you follow is kept in your account, and your email address and that list are kept by Klaviyo, the service that sends the emails.`) : T(`If you ask for dates by email, your first name, your email address and the school or program you picked are kept by Klaviyo, the service that sends the emails.`)}</li>
-    <li>${T(`If you ask to be emailed when a school is added, the same three things are kept by Klaviyo: your first name, your email address and which school you’re waiting for. It also adds you to our email list for occasional news about the site.`)}</li>` : ''}
+    <li>${GROUPS ? T(`If you ask for a school that isn’t covered yet, that uses your account: which school you asked for is kept with it, so each family counts once. Klaviyo keeps your email address, your name if you’ve given it, and which school you’re waiting for, so you can be told when it has its page.`) : T(`If you ask to be emailed when a school is added, the same three things are kept by Klaviyo: your first name, your email address and which school you’re waiting for. It also adds you to our email list for occasional news about the site.`)}</li>` : ''}
     <li>${T(`We use Google Analytics and Microsoft Clarity to see how the site is used, so we can fix what’s confusing.`)}</li>
   </ul>
   <h2 id="rosters" data-jump-to="Rosters">${T(`Rosters and children’s names`)}</h2>
@@ -4134,7 +4047,7 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])) });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])), citySchools: Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])) });
   const src = phpCopy(fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8'));
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   if (!src.includes('/*MAILER*/')) throw new Error('src/server/groups-api.php has lost its /*MAILER*/ marker');

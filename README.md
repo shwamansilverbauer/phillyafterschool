@@ -120,11 +120,17 @@ program picks up from the school, because nobody has checked. A page with fewer 
 schools page links to all of them. `/schools/request/?s=ID`, the old address, forwards to the school's page, and with
 no school chosen it is still the search box. The preview copy has no school pages and keeps the one shared page.
 
-On a school's page, "Ask for this school" counts a vote. Under it, "Email me when it's added" takes a first name and an email
-address and sends them straight to Klaviyo with the browser key, onto the same list as the dates emails, with
-`signup_place: school_request`, `waiting_school_name` (the latest school asked for) and the school's id appended to
-`waiting_schools`. Nothing sends the "it's here" email yet: when a school goes live, build a Klaviyo segment where
-`waiting_schools` contains its id and write to it.
+On a school's page, "Ask for this school" needs a free account, so each family counts once however many times the
+button is pressed and scripts can't inflate a count. Signed in, the button asks straight away (`POST
+groups/api.php?action=school_ask`, one row per account and school in `school_asks`); signed out, it opens the site's
+sign-in in place (`src/groups.js`, fetched on demand), and signing in with `next = a:<school-id>` counts the ask as part
+of signing in, the way a Follow button's `f:` does. A new ask is logged to `phillyafterschool-school-requests.log`
+(which `/edit/queue/` counts), emailed to the owner with the number of families so far, and the browser tells
+Klaviyo with the account's address: `signup_place: school_request`, `waiting_school_name`, and the school's id appended
+to `waiting_schools`. When the school is added with `"added": "YYYY-MM-DD"` in `data/schools.json`, the morning job
+emails everyone waiting for it, once ("you asked to be told when this school was added"). The old address,
+`schools/request/send.php`, answers 410. `GET …?action=school_ask&s=<id>` says whether this account asked and how many
+have; the page shows the count.
 
 ## Terms of use
 
