@@ -1735,7 +1735,7 @@
       if (f && f.focus) f.focus();
     };
     // the days as a list (how the page opens) or as a calendar, a month at a time; the choice is kept on this device
-    var monthBox = $o('#off-month'), viewBtns = all(planEl, '#off-views .vs');
+    var monthBox = $o('#off-month'), viewBtns = all(planEl, '#off-views .vs'), shareEmpty = $o('#off-share-empty');
     // Signed in, "Who's open each day off" is the planner's third view, so it isn't lost further down the page. The
     // chart itself is moved here from its own section, which then goes (signed out, that section is where it stays).
     var chartSlot = $o('#off-chart-slot'), chartBlock = document.getElementById('off-chart-block'), chartSec = document.getElementById('chart');
@@ -1763,7 +1763,7 @@
     viewBtns.forEach(function (b) {
       b.addEventListener('click', function () {
         var want = b.getAttribute('data-view');
-        offView = want === 'cal' && monthBox ? 'cal' : want === 'chart' && chartIn ? 'chart' : want === 'card' && canCard() ? 'card' : 'list'; if (offView !== 'card') store('pas-off-view', offView); openDay = '';
+        offView = want === 'cal' && monthBox ? 'cal' : want === 'chart' && chartIn ? 'chart' : want === 'card' ? 'card' : 'list'; if (offView !== 'card') store('pas-off-view', offView); openDay = '';
         track({ event: 'pas_dayoff', action: 'view_' + offView, children: r.kids.length });
         draw();
       });
@@ -1846,9 +1846,10 @@
       }
       // the calendar, when that's the view: this child's month, then the one day that is picked, as a row to choose on;
       // or the picture of the days off
-      if (offView === 'card' && !canCard()) offView = 'list';
-      planEl.classList.toggle('card-view', offView === 'card');   // the picture comes straight under the strip: the profile box waits
-      viewBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === offView)); if (b.getAttribute('data-view') === 'card') b.hidden = !canCard(); });
+      // Share/Save (the "card" view): the sharing tools, the profile box and the picture, and nothing to pick on
+      planEl.classList.toggle('card-view', offView === 'card');
+      viewBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === offView)); });
+      if (shareEmpty) shareEmpty.hidden = !(offView === 'card' && !planners().length);
       if (chartSlot) chartSlot.hidden = offView !== 'chart';
       daysEl.hidden = offView === 'chart' || offView === 'card';
       if (monthBox) {
@@ -1938,7 +1939,7 @@
       countEl.textContent = mine.length ? whose + mine.length + ' of ' + days.length + ' planned.' : whose + 'Nothing planned yet. ' + days.length + (days.length === 1 ? ' day off is' : ' days off are') + ' still to come this year.';
       var open = days.filter(function (d) { return d.camps.length; }).length;
       openEl.textContent = open ? 'Camps are posted for ' + open + ' of those days so far. Programs post a few months at a time.' : 'No camps are posted yet. Programs post a few months at a time.';
-      toolsEl.hidden = !planners().length || offView === 'card';
+      toolsEl.hidden = !planners().length || offView !== 'card';   // the tools live on Share/Save
       drawTodo();
       // the chart: which boxes are in this child's plan; a day that has gone by loses its column
       if (chart) {
@@ -2015,8 +2016,8 @@
     });
     $o('#off-print-list').addEventListener('click', function () {
       ev('print');
-      if (offView === 'chart') {   // "Print the list" means the days, whatever is showing: the chart comes back afterwards
-        var back = function () { window.removeEventListener('afterprint', back); offView = 'chart'; draw(); };
+      if (offView !== 'list') {   // "Print the list" means the days, whatever is showing: the view comes back afterwards
+        var was = offView, back = function () { window.removeEventListener('afterprint', back); offView = was; draw(); };
         offView = 'list'; draw(); window.addEventListener('afterprint', back);
       }
       window.print();
@@ -3314,7 +3315,7 @@
     // Signed in, that chart is moved here from its own section further down, which then goes, so nobody has to scroll
     // for it (signed out, that section is where it stays). The choice is kept on this device.
     var n0 = new Date(), today0 = n0.getFullYear() + '-' + ('0' + (n0.getMonth() + 1)).slice(-2) + '-' + ('0' + n0.getDate()).slice(-2);
-    var monthBox = $s('#sum-month'), viewBtns = all(sumEl, '#sum-views .vs');
+    var monthBox = $s('#sum-month'), viewBtns = all(sumEl, '#sum-views .vs'), shareEmpty = $s('#sum-share-empty');
     var chartSlot = $s('#sum-chart-slot'), chartBlock = document.getElementById('sum-chart-block'), chartSec = document.getElementById('chart');
     var chartIn = !!(chartSlot && chartBlock && chartSec && mayPlan());
     if (chartIn) { chartSlot.appendChild(chartBlock); chartSec.hidden = true; if (window.pasJump) window.pasJump(); }
@@ -3331,7 +3332,7 @@
     // send. It is never the view the page opens on, so it isn't kept.
     var canCard = function () { return !!(cardBox && canvas && canvas.getContext && canvas.toBlob) && planners().length > 0; };
     var setView = function (want, quiet) {
-      view = want === 'cal' && monthBox ? 'cal' : want === 'chart' && chartIn ? 'chart' : want === 'card' && canCard() ? 'card' : 'list'; openWeek = -1;
+      view = want === 'cal' && monthBox ? 'cal' : want === 'chart' && chartIn ? 'chart' : want === 'card' ? 'card' : 'list'; openWeek = -1;
       if (!quiet) { if (view !== 'card') store('pas-sum-view', view); ev('view_' + view); }   // quiet: the page chose the view (a link in from a camp), so it isn't kept
       draw();
     };
@@ -3401,9 +3402,10 @@
       }
       // which view: the chart instead of the weeks, this child's month with the one week that is picked as a row to
       // choose on, or the picture of the summer
-      if (view === 'card' && !canCard()) view = 'list';
-      sumEl.classList.toggle('card-view', view === 'card');   // the picture comes straight under the strip: the profile box waits
-      viewBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === view)); if (b.getAttribute('data-view') === 'card') b.hidden = !canCard(); });
+      // Share/Save (the "card" view): the sharing tools, the profile box and the picture, and nothing to pick on
+      sumEl.classList.toggle('card-view', view === 'card');
+      viewBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === view)); });
+      if (shareEmpty) shareEmpty.hidden = !(view === 'card' && !planners().length);
       if (chartSlot) chartSlot.hidden = view !== 'chart';
       weeksEl.hidden = view === 'chart' || view === 'card';
       if (monthBox) {
@@ -3485,7 +3487,7 @@
       countEl.textContent = n ? whose + n + ' of ' + sd.weeks.length + (n === 1 ? ' weeks has a camp.' : ' weeks have a camp.') : whose + 'No weeks filled in yet. ' + sd.weeks.length + ' to go.';
       var everyone = 0; r.kids.forEach(function (k) { everyone += costOf(k); });
       costEl.textContent = booked ? (total ? 'About $' + total.toLocaleString('en-US') + ' at the weekly prices the camps posted' : booked - unpriced ? 'Free, by the prices the camps posted' : '') + (unpriced ? (total || booked - unpriced ? ', not counting ' : '') + (unpriced === 1 ? '1 camp-week' : unpriced + ' camp-weeks') + ' with no weekly price posted' : '') + '.' + (many && everyone > total ? ' All children: about $' + everyone.toLocaleString('en-US') + '.' : '') + ' Before-care, after-care and sibling prices aren’t counted.' : '';
-      toolsEl.hidden = !planners().length || view === 'card';
+      toolsEl.hidden = !planners().length || view !== 'card';   // the tools live on Share/Save
       // the chart: which boxes are in this child's summer, and which camps suit their age
       if (chart) all(chart, 'tbody tr').forEach(function (tr) {
         var id = tr.getAttribute('data-camp'), c = sd.camps[id];
@@ -3567,8 +3569,8 @@
     });
     $s('#sum-print').addEventListener('click', function () {
       ev('print');
-      if (view === 'chart') {   // "Print the list" means the weeks, whatever is showing: the chart comes back afterwards
-        var back = function () { window.removeEventListener('afterprint', back); view = 'chart'; draw(); };
+      if (view !== 'list') {   // "Print the list" means the weeks, whatever is showing: the view comes back afterwards
+        var was = view, back = function () { window.removeEventListener('afterprint', back); view = was; draw(); };
         view = 'list'; draw(); window.addEventListener('afterprint', back);
       }
       window.print();

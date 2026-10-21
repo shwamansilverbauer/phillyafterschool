@@ -251,11 +251,12 @@ Labor Day, and works out which of those weeks each camp runs:
 - **Add to calendar** saves `summer-2027.ics`, made in the browser: one Monday-to-Friday entry per camp week, titled
   with the child's name and the camp. The day-camp plan has the same button (`days-off.ics`, one entry per planned
   day). `saveCalendar()` in `site.js` writes both.
-- **Make it a calendar** is the planner's fourth view, there once any child has a week planned (the button stays
-  hidden until then, and it is never the view the page opens on). It draws the plan as a picture, like the week
-  card: the whole summer on one card (a row a week, a column a child), or a card for each month (Monday to Friday, a
-  bar for each child's camp). While it shows, the weeks, the tools row and the profile box are out of the way
-  (`.card-view` on the planner) so the picture comes straight under the strip. The days-off planner has the same
+- **Share/Save** is the planner's fourth view (`data-view="card"`; it is never the view the page opens on, and
+  before anything is planned it only says what it is for, `#sum-share-empty`). It holds the tools row (share the
+  plan, add to calendar, copy, print, clear), the profile box, and **Make it a calendar**: the plan drawn as a
+  picture, like the week card: the whole summer on one card (a row a week, a column a child), or a card for each
+  month (Monday to Friday, a bar for each child's camp). The tools row shows on this view only; the weeks are out of
+  the way (`.card-view` on the planner). The days-off planner has the same
   view. The title defaults to
   the children's names ("Sam and Rae's summer") and can be typed over (`sumTitle`, kept in the browser). A photo can
   go in the corner; it is drawn in the browser and never saved or uploaded. The pictures can be saved one at a time
@@ -415,8 +416,8 @@ by-day pages have the same strip over their kind sections.
 navigation wherever you are on it: `.pagenav` holds a list page's jump links and, on the day-camps page, the
 Programs · The days switch above them (the jump links are the visible view's, refreshed on a switch); a planner's
 heading row with its view switch (`.year-view-head`: the week builder's The week · Budget planning · Make it a
-card · Keep & share, the summer and days-off planners' List · Month · Who's open · Make it a calendar, the
-calendar's views) sticks the same way.
+card · Keep & share, the summer and days-off planners' List · Calendar · Grid · Share/Save with their "Pick your
+visual mode!" tag (`.vs-pick`), the calendar's views) sticks the same way.
 The slim search bar on a list pushes the strip down by its own height while it shows. Both are in the sitemap, and each program page
 carries structured data (name, address, phone, and the star rating once there are reviews) for search engines.
 Nothing extra to maintain: add or edit a program in `data/programs.json` and its page follows.
@@ -431,8 +432,9 @@ year ("Add to your week" → the week builder; "Add Saturday to your week" → t
 → the summer planner) and plain buttons for the provider's own sign-up and website. The hero says what it runs
 as a row of colored pills (`runsStrip()`, one color per kind, the same colors as the All programs page) and the
 sticky strip under the menu bar (`jumpNav()`) jumps between the sections, Schools and Reviews. The sections are
-`kindSection()` in `programPage()`; the "Tell me when sign-ups open" box, "Suggest an update" and the claim link
-sit under the sections.
+`kindSection()` in `programPage()`; the follow box ("Follow it, or save it for later", `#follow`, `.follow-first`)
+sits first, right under the strip, since following and favorites are what a parent does most on the page;
+"Suggest an update" and the claim link sit under the sections.
 
 **A summer camp tied to a program is that program's Summer section.** A camp in `data/camps.json` with a
 `program` (the program's id) has no page of its own any more: its details, week strip, "Add to your summer"
@@ -852,10 +854,10 @@ tour of the planner with one button, "Create a free account" (`planShow()`), so 
   to change (`privacyUpdated` and `termsUpdated` in `site.config.json` are the dates shown).
 - Tests: `auto.js` (weeks), `sumprof.js` (summer, both choices), `todo.js` (days off), `g6.js`, `wk2.js`.
 
-### Who's open, as the planner's third view
+### Who's open, as the planner's third view ("Grid")
 
 The chart of which program has posted a camp for each day off ("Who's open each day off") is the days-off planner's
-third view, beside List and Calendar (`#off-views`, `data-view="chart"`, remembered in `pas-off-view`). The planner
+third view, Grid, beside List and Calendar (`#off-views`, `data-view="chart"`, remembered in `pas-off-view`). The planner
 page carries the chart in a `.when-in` section (`#chart`) that `site.js` moves (`#off-chart-block`) into the planner
 (`#off-chart-slot`) and hides; signed out, the chart isn't on the planner page at all, and it is not on the
 day-camps page any more either; `daysOffBits().chartSection` still builds it for wherever it goes next. A box is
@@ -863,10 +865,10 @@ day-camps page any more either; `daysOffBits().chartSection` still builds it for
 (`#sum-chart-block`, `#sum-chart-slot`, and `/summer-camps/weeks/` for everyone). `daysOffBits()` in `build.mjs`
 builds the days-off chart for both pages (`where` = `'page'` or `'plan'`).
 
-The summer schedule works the same way (`#sum-views`, remembered in `pas-sum-view`): List, Month, Who's open and
-Make it a calendar. Month is a month at a time (`#sum-month`), with each child's camp on all five weekdays of its week or "Not
+The summer schedule works the same way (`#sum-views`, remembered in `pas-sum-view`): List, Calendar, Grid and
+Share/Save. Calendar is a month at a time (`#sum-month`), with each child's camp on all five weekdays of its week or "Not
 planned"; a tap on any day picks that week, whose row sits under the month so choosing works as it does in the list.
-A month that only gets the tail of a week (the first days of September) has no page of its own. Who's open is the
+A month that only gets the tail of a week (the first days of September) has no page of its own. Grid is the
 "When each camp runs" chart (`#sum-chart-block`), moved into `#sum-chart-slot` for someone signed in, so there is
 nothing to scroll down for. A link in from a camp (`?add=ID`) opens that view without changing the one that is kept.
 "Print the list" prints the weeks (or days) whichever view is showing.
@@ -1331,9 +1333,10 @@ database does not move: both addresses are served from the same folder.
 ## Follow and favorites
 
 Dates by email now run on accounts. A **follow** means the listing's or school's dates are emailed; a **favorite**
-keeps a listing in the account and emails nothing. `followBox()` in `build.mjs` draws the box: inside the details
-card on a program's or camp's page, and as a wide box on a school page, the home page, the days-off page and
-`/alerts/` (those last three with a school picker). Without accounts (`groups` unset) the old sign-up form,
+keeps a listing in the account and emails nothing. `followBox()` in `build.mjs` draws the box: at the top of a
+program's page and inside the details card on a camp's page, with a line under the two buttons saying which is
+which ("Follow means emails when it posts a date. Save to favorites means no emails…", `.follow-which`), and as a
+wide box on a school page, the home page, the days-off page and `/alerts/` (those last three with a school picker). Without accounts (`groups` unset) the old sign-up form,
 `alertsBox()`, is used instead.
 
 - **Signed out.** Tapping Follow or Save fetches `assets/groups.js` (listing pages don't carry it otherwise) and
@@ -1622,7 +1625,7 @@ planner would be (see "The tour" below), and the lists are there for everyone on
 - **The tour** (`planShow(kind, depth)` in `build.mjs`, styled as `.pshow`): the signed-out planner pages read like
   a product page. Under the page's heading is the one thing to press, "Create a free account" (`heroCta()`), which
   comes back to that planner. Then: a heading and a strip of tabs, one for each way of looking at the plan (List,
-  Month, Who's open on the days-off and summer pages; The week, Budget planning, Share it on the week; Calendar,
+  Calendar, Grid on the days-off and summer pages; The week, Budget planning, Share it on the week; Calendar,
   List on My kids' calendar), each showing a made-up example; three things the planner does, each a picture-and-text row (a small
   drawing, `miniArt()`, on alternating sides, a headline and one line, in the kinds' colors); the three steps as one
   line (1 Create a free account → 2 Make your plan → 3 Take it with you); and a dark band with the button again.
