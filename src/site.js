@@ -1078,6 +1078,19 @@
     return m;
   };
   adminNav(store('pas-admin') === '1' && store('pas-in') === '1');
+  // A program manager's menu button is about their listing: premium while a listing they hold isn't, their listings
+  // once every one is. (The device learns the role and the premium state from the accounts script at each sign-in.)
+  (function () {
+    var cta = document.querySelector('.nav-cta.when-in');
+    if (!cta || store('pas-in') !== '1' || store('pas-role') !== 'manager') return;
+    var brand = document.querySelector('a.brand'), root = brand ? brand.getAttribute('href').replace(/index\.html$/, '') : './';
+    if (root === './') root = '';
+    var premium = store('pas-premium') === '1' || !cta.hasAttribute('data-pm');   // no premium page yet: the button goes to their listings
+    cta.textContent = premium ? 'Your listings' : 'Go premium';
+    cta.href = root + (premium ? 'managers/' : 'premium/');
+    cta.classList.add('nav-cta-mgr');
+    cta.removeAttribute('data-news');
+  })();
 
   // ----- the menu. Wide screens: the logo on the left, groups on the right, one open at a time.
   // Narrow screens: a Menu button that opens every group in one panel. A tap elsewhere or Escape closes either. -----

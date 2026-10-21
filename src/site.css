@@ -348,6 +348,8 @@ button.btn{cursor:pointer;font-family:inherit}
 .foot-cols ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
 .foot-cols li a{color:var(--foot-muted);text-decoration:none}
 .foot-cols a:hover{color:var(--foot-ink);text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:2px;text-underline-offset:4px}
+.foot-managers{margin-top:clamp(28px,4vw,44px);padding:16px 20px;border:1.5px solid color-mix(in srgb,var(--foot-muted) 40%,transparent);border-radius:14px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px}
+.foot-managers p{margin:0;color:var(--foot-muted)}.foot-managers b{color:var(--foot-ink)}
 .foot-fine{margin-top:clamp(36px,5vw,56px);padding-top:24px;border-top:1px solid color-mix(in srgb,var(--foot-muted) 28%,transparent);display:flex;flex-direction:column;gap:8px;font-size:.88rem}
 .section[id],.prose h2[id]{scroll-margin-top:24px}
 
@@ -936,6 +938,7 @@ html.signed .when-out{display:none!important}
 /* the footer's support ask */
 .foot-support{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin-top:4px}
 .foot-cta{background:transparent;border:1.5px solid var(--foot-ink);color:var(--foot-ink);text-decoration:none;font-weight:700;border-radius:999px;padding:8px 16px}
+.nav a.nav-cta.nav-cta-mgr{background:var(--yellow);color:var(--yellow-ink)}.nav a.nav-cta.nav-cta-mgr:hover{background:#E0B400}
 .foot-cta:hover{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink)}
 /* after a card has gone out: keep the week? */
 .card-next{display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:2px solid var(--yellow);border-radius:16px;padding:16px 18px;background:var(--surface)}

@@ -609,7 +609,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
     return `<details class="menu${here ? ' here' : ''}"><summary>${label}</summary><ul>${items.map(([to, text]) => `<li><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
   }).join('') + `<a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
-    ? `${daysOff ? `<a class="when-in nav-todo" href="${link('to-do/', depth)}"${pathName === 'to-do/' ? ' aria-current="page"' : ''}>To do</a>` : ''}<a class="when-in nav-acct" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}>Account</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('profile/', depth)}"${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}>My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>`
+    ? `${daysOff ? `<a class="when-in nav-todo" href="${link('to-do/', depth)}"${pathName === 'to-do/' ? ' aria-current="page"' : ''}>To do</a>` : ''}<a class="when-in nav-acct" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}>Account</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('profile/', depth)}"${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}${PM_LISTED ? ' data-pm="1"' : ''}>My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>`
     : `<a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`}`;
   const head = `${first}${fragment || quiet ? '' : roleHead + gtmHead + '\n' + klaviyoHead}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
@@ -715,7 +715,11 @@ ${body}
         <li><a href="${link('support/', depth)}">${T(`Help the site keep going`)}</a></li>
       </ul>
     </div>
-  </nav>
+  </nav>${GROUPS ? `
+  <div class="foot-managers">
+    <p><b>${T(`Run a program or camp?`)}</b> ${T(`Claim your listing, free, and keep its dates, costs and hours right yourself.`)}</p>
+    <a class="btn foot-cta" href="${link('managers/', depth)}">${T(`For program managers`)}</a>
+  </div>` : ''}
   <div class="foot-fine">
     <p>${T(`Listings come from each provider’s public pages and are not endorsements. Prices, hours and pickup routes change, so confirm with the provider before you enroll.`)}</p>
     <p>${T(`{site} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.`, { site: cfg.siteName })}</p>

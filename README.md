@@ -700,6 +700,10 @@ changes where a listing appears in a list, and it has no say over reviews.
     repeated elsewhere on the page.
   - **A panel on the managers page** (`#premium-cta`, after "What claiming gets you"): what premium adds in one
     sentence, "See what premium adds" and the price, for people who haven't claimed yet.
+  - **The menu's button, for a manager.** Signed in as a program manager (the device keeps `pas-role`, and now
+    `pas-premium` from `me.premium`: whether every listing the account holds is premium), `site.js` turns the
+    menu's "My profile" button into a yellow "Go premium" that opens `/premium/`, or "Your listings" (the managers
+    page) once every listing they hold is premium, or while the premium page isn't listed. Parents see no change.
   - **One sentence on the managers page**, in the list under "How claiming works", for people who haven't claimed.
   - **One line at the end of the monthly numbers email**, only for an account with no premium listing.
   - **Prices** are `"premiumPrice": { "month": 19, "year": 190, "laterMonth": 29, "laterYear": 290 }`, whole dollars.
@@ -1503,7 +1507,9 @@ its own page.
 The strip above the menu (signed-out visitors) carries "Run a program or camp? Claim your listing" on the left and
 "Log in" on the right. The account and register pages open with two cards, "Parent or caregiver" (this page) and
 "Program manager", which goes to `/managers/`: that page is where a manager's account is made, by claiming a
-listing, and where a program that isn't listed yet is sent in.
+listing, and where a program that isn't listed yet is sent in. The footer ends with a band for them too
+(`.foot-managers`: "Run a program or camp?" and a "For program managers" button), above the fine print, besides
+the link in the About column; and every listing ends with the claim box (`listingTools()`).
 
 ## Emails to program managers about their listing
 
