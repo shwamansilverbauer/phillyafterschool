@@ -363,9 +363,9 @@
   },
   "4adfdc18c7": {
     "was": "The three plans above, added up: the school week, every day off, the camp weeks and the sign-up dates, in date order for the whole year.",
-    "now": "The three plans above, added up: the school week, every day off, the camp weeks, and the sign-up dates, in date order for the whole year.",
-    "on": "2026-10-20",
-    "by": "the mrs."
+    "now": "The three plans above displayed for the whole year.",
+    "on": "2026-10-21",
+    "by": "Josh"
   },
   "6058b0c1c4": {
     "was": "That link doesn’t open a week any more",
@@ -396,5 +396,257 @@
     "now": "",
     "on": "2026-10-20",
     "by": "Rachael"
+  },
+  "dfc0f09555": {
+    "was": "All {n} after-school programs on this site, across every school, sorted by what they are. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.",
+    "now": "Find after-school programs across different school sorted by category! Narrow them by type, grade or neighborhood. Click the listing for its hours, cost and how to register.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "f962aaaf9d": {
+    "was": "Weekend classes for kids across the city: what runs, on which day, and where. Open one for its term, times and cost.",
+    "now": "What classes are available on the weekend. Filter by day, neighborhood and category! Open a listing for its term, times and cost.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "4703b569d5": {
+    "was": "Who runs a camp or a full day when district schools are closed, by neighborhood, and every day off this year.",
+    "now": "When school is out for a holiday, find who runs a camp or a full day. Filter by category, neighborhood, and find a class for every day.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "1340bb3f65": {
+    "was": "Day camps inside the city, with the ages, weeks, hours and prices each camp posts on its own site.",
+    "now": "Day camps in Philly, with the ages, weeks, hours and prices of each camp. Filter by category, age, cost and day.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "0ff368cd6f": {
+    "was": "Weekday afternoons once the bell rings: aftercare, music, art, sports, chess and more.",
+    "now": "Weekday afternoons: music, art, sports, chess and more.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "ec8bceb5f8": {
+    "was": "See what’s at your child’s school, what picks up from it and what’s nearby",
+    "now": "See what picks up from your child’s school and what’s nearby",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "1ebc5e8730": {
+    "was": "See all {n}, A to Z",
+    "now": "See all programs",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "4b4006d63b": {
+    "was": "Saturday and Sunday classes: music, dance, art, skating, science. There’s no school pickup, so any child can sign up.",
+    "now": "Saturday/Sunday classes: music, dance, art, science and more!",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "cc8a03bb87": {
+    "was": "{sat} run on Saturdays, {sun} on Sundays",
+    "now": "Filter by saturday or sunday",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "5d34cf21a4": {
+    "was": "Sorted by part of the city, so you can start close to home",
+    "now": "Sorted by part of the city, and a map filter so you can start close to home",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "126664c498": {
+    "was": "Ages, weeks, hours and prices, from each camp’s own website",
+    "now": "Ages, weeks, hours and prices",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "5d03839326": {
+    "was": "Camps usually post next summer between December and March",
+    "now": "Follow programs and get notified as information updates",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "ac4714bc99": {
+    "was": "Narrow the list by type, grade, neighborhood or day of the week",
+    "now": "Filter by type, grade, neighborhood or day of the week",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "5cb71601bc": {
+    "was": "Camps on the days district schools are closed: holidays, staff days, winter and spring break.",
+    "now": "Camps on the days schools are closed: holidays, staff days, winter and spring break.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "fabcc02131": {
+    "was": "Day camps inside the city for the {n} weeks between the last day of school and Labor Day.",
+    "now": "Camps inside the city for the {n} weeks between the last day of school and Labor Day.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "ddee5c32ac": {
+    "was": "Pick your child’s school to see every program that runs in the building, picks up at dismissal or is close enough to walk to.",
+    "now": "Pick your child’s school to see the programs that run onsite, pick up there or are nearby",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "8c6b37a4ff": {
+    "was": "Start from where you live. Each neighborhood lists the schools there, the after-school programs, weekend classes, day camps and summer camps based there, and the programs that come to pick up.",
+    "now": "Start from your neighborhood. Each one lists what schools are there, the after-school programs, weekend classes, day camps and summer camps based there, and the programs that come to pick up at their local schools.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "052be6cfea": {
+    "was": "Pick the kind of thing you’re after. Each list has the after-school programs, weekend classes, day camps and summer camps in that group, and can be narrowed by kind, grade and neighborhood.",
+    "now": "Pick the category you'd like to filter by or select a program type that your kid is interested in.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "9aed8d052c": {
+    "was": "Weekday after-school programs and Saturday and Sunday classes, together. Pick a day to see what runs then, and a grade to see what your child can join.",
+    "now": "Pick a day to see what programs run",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "943b54f7fa": {
+    "was": "Three planners, one for each part of a family’s year: the school week, the days school is closed, and the summer. All three are free: you sign in with a free account to use them.",
+    "now": "Plan your entire year with the planners below. These resources are completely free with an account.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "c616db0c7e": {
+    "was": "See what the week comes to, from each program’s published prices",
+    "now": "See your weekly expected budget based on the programs you select",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "1eecb9c6f0": {
+    "was": "Turn it into one picture to text, print, or hand to a teacher",
+    "now": "Turn it into a picture to text, print, or hand to a teacher",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "bd618a0f69": {
+    "was": "Add programs day by day, or roll a themed week to start from",
+    "now": "Add programs or roll a themed week to start from",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "8f3a8f4582": {
+    "was": "Put a program on each afternoon and see the whole week in one place. More than one child? Each gets their own.",
+    "now": "Put a program on each afternoon and see the whole week. Siblings? No prob! You can plan both in one place.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "e702195686": {
+    "was": "Every day district schools are closed this year, and the {n} programs that run a camp on them.",
+    "now": "Every day schools are closed this year, and the programs that run on them.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "8300c7278e": {
+    "was": "The weeks between the last day of school and Labor Day, and which of {n} camps run in each one.",
+    "now": "The weeks between the last day of school and Labor Day, and which camps run in each one.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "f4287b44cd": {
+    "was": "Line up a camp for every week, child by child, and see what it adds up to",
+    "now": "Pick programs and see what it adds up to",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "65dcbaa593": {
+    "was": "Make it a calendar picture, or put the weeks in your phone’s calendar",
+    "now": "Make it a calendar picture, or download for your phone",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "566de751c5": {
+    "was": "One calendar file for your phone, which you can bring up to date later",
+    "now": "One calendar file for your phone",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "fc1e4fd40e": {
+    "was": "Room for your own dates: picture day, pretzel day, a form that’s due",
+    "now": "Room for your own dates: picture day, pretzel day, etc.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "756fe30e51": {
+    "was": "The planners need a free account. Signed in, each plan is kept in your profile, so it’s on every device you sign in on.",
+    "now": "The planners need a free account. Signed in, each plan is kept in your profile.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "b8b650bf6a": {
+    "was": "Monday might be martial arts and Thursday the rec center. Plan the term that’s coming, keep a second roster for what your child is doing now, and send either to your partner, a sitter, or the group chat. More than one child? Each gets their own.",
+    "now": "Monday might be martial arts and Thursday the rec center. Whatever it is, you can plan it out below! When your done, save it, send it to your partner, a sitter, or a group chat.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "d34fd34411": {
+    "was": "One place to see what’s possible after the last bell",
+    "now": "After School has never been so cool.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "55f8e70fe1": {
+    "was": "Choose where each child will be on every day school is closed, see who’s open on each, and tick off each camp as you sign up.",
+    "now": "Plan where each child will be on every day school is closed.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "2c9a96711f": {
+    "was": "Choose where each child will be on each day school is closed. Your picks are saved on this device and in your profile, so they’re there on your other devices.",
+    "now": "Plan where each child will be on each day school is closed. Your picks are saved on this device and in your profile. Pick from List, Calendar, or Grid Mode.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "1e0e10baa0": {
+    "was": "Kept with the plan in your profile. A nickname or an initial is fine.",
+    "now": "Kept with the plan in your profile.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "cf3f7d3d6c": {
+    "was": "First name (optional)",
+    "now": "Kid first name (optional)",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "fa141c259e": {
+    "was": "Each column is a day district schools are closed. A filled box means the program’s own site lists a camp that day. The chart scrolls sideways.",
+    "now": "Each column is a day schools are closed. A box means the program’s site lists a camp that day.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "b511eb903f": {
+    "was": "Every day off this year, and who runs camps",
+    "now": "See All Programs",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "2aa3a370f7": {
+    "was": "Dates come from each program’s own website. Check with the program before you count on a spot.",
+    "now": "*Check with the program before you count on a spot.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "1c38cce747": {
+    "was": "One picture of every day off, or a calendar for each month, to print for the fridge or send to a sitter. Every child with a day planned is on it.",
+    "now": "One picture of every day off, or a calendar for each month, to print for the fridge or send to a sitter.",
+    "on": "2026-10-21",
+    "by": "Josh"
+  },
+  "ae826cd301": {
+    "was": "Roll a themed week",
+    "now": "Not sure where to start? Roll a themed week!",
+    "on": "2026-10-21",
+    "by": "Josh"
   }
 }
