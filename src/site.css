@@ -1067,6 +1067,19 @@ ul.cols li{break-inside:avoid;padding:3px 0}
 /* ---------- listings: suggest an update, claim it; and the directors page ---------- */
 .listing-tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:14px 0 0}
 .camp .listing-tools{grid-column:1 / -1;margin-top:4px}
+/* the claim box at the end of a listing */
+.claim-cta{flex-direction:column;align-items:stretch;gap:12px;background:var(--bg);border:1.5px solid var(--line);border-radius:16px;padding:16px 18px;margin-top:18px}
+.claim-cta-say{display:flex;flex-direction:column;gap:4px}
+.claim-cta-h{display:block;font-family:var(--display);font-size:1.15rem;line-height:1.2}
+.claim-cta p{margin:0}
+.claim-cta .actions{margin:0}
+.claim-cta .when-claimed,.claim-cta.is-claimed .when-free{display:none}
+.claim-cta.is-claimed .when-claimed{display:block}
+.claim-cta.is-claimed b.when-claimed{display:block}
+/* the premium panel on the managers page */
+.pm-cta-box{background:var(--warn);border:1.5px solid var(--yellow);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.pm-cta-say{display:flex;flex-direction:column;gap:6px}.pm-cta-say h2{font-size:1.3rem}.pm-cta-say p{margin:0}
+.pm-cta .actions{margin:0;align-items:center}
 .space-mark{display:inline-flex;align-items:baseline;gap:4px;font-size:.84rem;border-radius:999px;padding:3px 12px;white-space:nowrap;background:var(--cell-off);color:var(--ink)}
 .space-mark[hidden]{display:none}
 .space-mark b{font-weight:700}

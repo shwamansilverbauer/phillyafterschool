@@ -433,8 +433,10 @@ year ("Add to your week" → the week builder; "Add Saturday to your week" → t
 as a row of colored pills (`runsStrip()`, one color per kind, the same colors as the All programs page) and the
 sticky strip under the menu bar (`jumpNav()`) jumps between the sections, Schools and Reviews. The sections are
 `kindSection()` in `programPage()`; the follow box ("Follow it, or save it for later", `#follow`, `.follow-first`)
-sits first, right under the strip, since following and favorites are what a parent does most on the page;
-"Suggest an update" and the claim link sit under the sections.
+sits first, right under the strip, since following and favorites are what a parent does most on the page; the
+claim box (`listingTools()`: "Run this program?", a "Claim this listing" button and "Suggest an update") sits
+under the sections, and once `site.js` learns the listing is claimed (`?action=claimed`) it says "Claimed by the
+people who run it" and keeps the update link (`.claim-cta.is-claimed`).
 
 **A summer camp tied to a program is that program's Summer section.** A camp in `data/camps.json` with a
 `program` (the program's id) has no page of its own any more: its details, week strip, "Add to your summer"
@@ -689,13 +691,15 @@ changes where a listing appears in a list, and it has no say over reviews.
   up. It is built whenever premium isn't off and `"groups": { "premiumPrice": ... }` is set. While premium is
   `"preview"` it is **unlisted**: nothing links to it, it carries `noindex`, and it is left out of the sitemap. Once
   premium is `"on"` (`PM_LISTED` in `build.mjs`) it is in the sitemap, open to search engines, and pointed to from
-  three places, all of them for people who run a program and none on a page a parent uses:
+  four places, all of them for people who run a program and none on a page a parent uses:
   - **In each claimed listing's box on the managers page** (`premiumTease()` in `groups.js`), on a tab of its own
     called "Premium", after the listing's own tabs: one dashed box that leads with the listing's own number of
     visits when there are at least 20, lists the six things premium adds, and gives the price. The tab is always
     there and never in the way, so there is nothing to dismiss. A listing that has signed up sees where to finish;
     a premium listing has no such tab and sees its tools on the other tabs instead. Nothing pops up, and nothing is
     repeated elsewhere on the page.
+  - **A panel on the managers page** (`#premium-cta`, after "What claiming gets you"): what premium adds in one
+    sentence, "See what premium adds" and the price, for people who haven't claimed yet.
   - **One sentence on the managers page**, in the list under "How claiming works", for people who haven't claimed.
   - **One line at the end of the monthly numbers email**, only for an account with no premium listing.
   - **Prices** are `"premiumPrice": { "month": 19, "year": 190, "laterMonth": 29, "laterYear": 290 }`, whole dollars.

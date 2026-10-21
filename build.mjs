@@ -3491,7 +3491,16 @@ const claimListings = () => Object.fromEntries([
   ...summerCamps.map(c => ['c:' + c.id, { n: c.name + ' (summer camp)', d: baseDomain(c.website), m: claimMode(baseDomain(c.website)) }]),
 ]);
 // Under a listing: suggest an update (anyone), and claim it (whoever runs it).
-const listingTools = (key, name, depth, noun) => `<p class="listing-tools"><a class="btn" href="${link('suggest/', depth)}?kind=correction&amp;fix=${encodeURIComponent(key)}&amp;program=${encodeURIComponent(name)}">${T(`Suggest an update`)}</a>${GROUPS ? ` <span class="hint">${noun === 'camp' ? T(`Run this camp?`) : T(`Run this program?`)} <a href="${link('managers/', depth)}?l=${encodeURIComponent(key)}">${T(`Claim this listing`)}</a></span>` : ''}</p>`;
+// The box at the end of a listing for the people who run it: claim it (free, with a work email), or suggest an
+// update. Once the site says the listing is claimed (site.js asks), the box says so instead and keeps the update link.
+const listingTools = (key, name, depth, noun) => GROUPS ? `<div class="listing-tools claim-cta" data-claim-cta="${esc(key)}">
+      <div class="claim-cta-say">
+        <b class="claim-cta-h when-free">${noun === 'camp' ? T(`Run this camp?`) : T(`Run this program?`)}</b><b class="claim-cta-h when-claimed">${T(`Claimed by the people who run it`)}</b>
+        <p class="when-free">${T(`Claim this listing, free, with your work email: keep its dates, costs and hours right yourself, say whether there’s space, and get its numbers each month.`)}</p>
+        <p class="when-claimed">${T(`Updates come from them. Spotted something off?`)} ${T(`Also run it?`)} <a href="${link('managers/', depth)}?l=${encodeURIComponent(key)}">${T(`Claim it with your work email too.`)}</a></p>
+      </div>
+      <p class="actions"><a class="btn primary claim-btn when-free" href="${link('managers/', depth)}?l=${encodeURIComponent(key)}">${T(`Claim this listing`)}</a><a class="btn suggest-btn" href="${link('suggest/', depth)}?kind=correction&amp;fix=${encodeURIComponent(key)}&amp;program=${encodeURIComponent(name)}">${T(`Suggest an update`)}</a></p>
+    </div>` : `<p class="listing-tools"><a class="btn suggest-btn" href="${link('suggest/', depth)}?kind=correction&amp;fix=${encodeURIComponent(key)}&amp;program=${encodeURIComponent(name)}">${T(`Suggest an update`)}</a></p>`;
 const photoSlot = key => GROUPS && !PREVIEW ? `${GROUPS.premium !== 'off' ? '<p class="pm-offer" data-pm-offer hidden></p>\n    ' : ''}<figure class="listing-photo" data-photo="${esc(key)}" hidden></figure>` : '';
 // Where a premium listing's own page puts what the program added: its own words, more photos, a button for questions.
 // Empty until site.js asks the accounts service; nothing at all while premium is off.
@@ -3651,7 +3660,16 @@ function directorsPage() {
       ${claimDemo()}
       ${claimBenefits()}
     </div>
-  </section>
+  </section>${PM_LISTED ? `
+  <section class="section pm-cta" id="premium-cta">
+    <div class="pm-cta-box">
+      <div class="pm-cta-say">
+        <h2>${T(`Want more on your listing?`)}</h2>
+        <p>${T(`A premium listing adds photos and your logo, a section in your own words, an offer or event line, a button parents use to send you a question, and month-by-month numbers. The listing itself stays free; premium is the extras.`)}</p>
+      </div>
+      <p class="actions"><a class="btn primary" href="${link('premium/', 1)}" data-track="premium_cta_managers">${T(`See what premium adds`)}</a><span class="hint">${T(`From {price} a month. Claim your listing first; premium is added to it.`, { price: '$' + PM_PRICE.month })}</span></p>
+    </div>
+  </section>` : ''}
   <section class="section">
     <h2>${T(`How claiming works`)}</h2>
     <ol class="steps">
