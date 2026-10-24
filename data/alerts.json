@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-10-23",
+  "generated": "2026-10-24",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -1379,6 +1379,222 @@
       "text": "16 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Hudson Table, Makom Community, Mister John’s Music, MoveMakers Philly, NLArts, Old Pine Community Center, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/veterans-day-2026-11-11/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "week-columbus-charter-2026-11-09",
+      "kind": "week",
+      "date": "2026-11-13",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-11",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "columbus-charter"
+      ],
+      "when": "Week of November 9",
+      "title": "This week at Columbus Charter",
+      "text": "Wednesday: No school: Veterans Day.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Veterans Day"
+        }
+      ],
+      "first": "Wednesday: no school, Veterans Day",
+      "url": "https://phillyafterschool.org/columbus-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Columbus Charter’s week"
+    },
+    {
+      "id": "week-coppin-2026-11-09",
+      "kind": "week",
+      "date": "2026-11-13",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-11",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "coppin"
+      ],
+      "when": "Week of November 9",
+      "title": "This week at Coppin",
+      "text": "Wednesday: No school: Veterans Day. Saturday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Veterans Day"
+        },
+        {
+          "when": "Saturday",
+          "what": "Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students"
+        }
+      ],
+      "first": "Wednesday: no school, Veterans Day; Saturday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students",
+      "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Coppin’s week"
+    },
+    {
+      "id": "week-kirkbride-2026-11-09",
+      "kind": "week",
+      "date": "2026-11-13",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-11",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "kirkbride"
+      ],
+      "when": "Week of November 9",
+      "title": "This week at Kirkbride",
+      "text": "Wednesday: No school: Veterans Day. Saturday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Veterans Day"
+        },
+        {
+          "when": "Saturday",
+          "what": "Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students"
+        }
+      ],
+      "first": "Wednesday: no school, Veterans Day; Saturday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students",
+      "url": "https://phillyafterschool.org/kirkbride/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Kirkbride’s week"
+    },
+    {
+      "id": "week-mccall-2026-11-09",
+      "kind": "week",
+      "date": "2026-11-13",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-11",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mccall"
+      ],
+      "when": "Week of November 9",
+      "title": "This week at McCall",
+      "text": "Wednesday: No school: Veterans Day. Saturday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Veterans Day"
+        },
+        {
+          "when": "Saturday",
+          "what": "Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students"
+        }
+      ],
+      "first": "Wednesday: no school, Veterans Day; Saturday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students",
+      "url": "https://phillyafterschool.org/mccall/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See McCall’s week"
+    },
+    {
+      "id": "week-meredith-2026-11-09",
+      "kind": "week",
+      "date": "2026-11-13",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-11",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "meredith"
+      ],
+      "when": "Week of November 9",
+      "title": "This week at Meredith",
+      "text": "Wednesday: No school: Veterans Day. Saturday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Veterans Day"
+        },
+        {
+          "when": "Saturday",
+          "what": "Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students"
+        }
+      ],
+      "first": "Wednesday: no school, Veterans Day; Saturday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students",
+      "url": "https://phillyafterschool.org/meredith/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Meredith’s week"
+    },
+    {
+      "id": "week-nebinger-2026-11-09",
+      "kind": "week",
+      "date": "2026-11-13",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-11",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "nebinger"
+      ],
+      "when": "Week of November 9",
+      "title": "This week at Nebinger",
+      "text": "Wednesday: No school: Veterans Day. Saturday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Veterans Day"
+        },
+        {
+          "when": "Saturday",
+          "what": "Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students"
+        }
+      ],
+      "first": "Wednesday: no school, Veterans Day; Saturday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students",
+      "url": "https://phillyafterschool.org/nebinger/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Nebinger’s week"
+    },
+    {
+      "id": "week-southwark-2026-11-09",
+      "kind": "week",
+      "date": "2026-11-13",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-11",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "southwark"
+      ],
+      "when": "Week of November 9",
+      "title": "This week at Southwark",
+      "text": "Wednesday: No school: Veterans Day.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Veterans Day"
+        }
+      ],
+      "first": "Wednesday: no school, Veterans Day",
+      "url": "https://phillyafterschool.org/southwark/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Southwark’s week"
+    },
+    {
+      "id": "week-vare-washington-2026-11-09",
+      "kind": "week",
+      "date": "2026-11-13",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-11",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "vare-washington"
+      ],
+      "when": "Week of November 9",
+      "title": "This week at Vare-Washington",
+      "text": "Wednesday: No school: Veterans Day. Saturday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Veterans Day"
+        },
+        {
+          "when": "Saturday",
+          "what": "Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students"
+        }
+      ],
+      "first": "Wednesday: no school, Veterans Day; Saturday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students",
+      "url": "https://phillyafterschool.org/vare-washington/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Vare-Washington’s week"
     },
     {
       "id": "reg-fleisher-art-memorial-2026-11-14",
