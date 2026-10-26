@@ -1,9 +1,9 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 165,
+    "pages": 164,
     "pagesNeedingABrowser": 4,
-    "pagesNeedingAPerson": 4,
+    "pagesNeedingAPerson": 5,
     "links": 125,
     "pickupLinks": 70,
     "pickupOnAStoredList": 61,
@@ -431,78 +431,6 @@
       "school": "vare-washington",
       "relation": "nearby",
       "checked": "2026-10-06"
-    },
-    {
-      "program": "mister-johns-music",
-      "school": "columbus-charter",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "mister-johns-music",
-      "school": "coppin",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "mister-johns-music",
-      "school": "mccall",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "mister-johns-music",
-      "school": "meredith",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "mister-johns-music",
-      "school": "nebinger",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "mister-johns-music",
-      "school": "vare-washington",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
     },
     {
       "program": "movemakers",
@@ -1145,13 +1073,6 @@
       }
     },
     {
-      "program": "christian-street-ymca",
-      "school": "stanton",
-      "relation": "pickup",
-      "checked": "2026-10-25",
-      "basis": "own-source"
-    },
-    {
       "program": "makom-community",
       "school": "stanton",
       "relation": "pickup",
@@ -1159,18 +1080,6 @@
       "basis": "list",
       "list": {
         "where": "2401 Washington Avenue",
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "mister-johns-music",
-      "school": "stanton",
-      "relation": "pickup",
-      "checked": "2026-10-25",
-      "basis": "list",
-      "list": {
         "read": "2026-10-06",
         "how": "fetch",
         "by": "provider"
@@ -1193,6 +1102,97 @@
       "school": "vare-washington",
       "relation": "onsite",
       "checked": "2026-10-25"
+    },
+    {
+      "program": "christian-street-ymca",
+      "school": "stanton",
+      "relation": "pickup",
+      "checked": "2026-10-26",
+      "basis": "own-source"
+    },
+    {
+      "program": "mister-johns-music",
+      "school": "columbus-charter",
+      "relation": "pickup",
+      "checked": "2026-10-26",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-26",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "mister-johns-music",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-26",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-26",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "mister-johns-music",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-10-26",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-26",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "mister-johns-music",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-10-26",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-26",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "mister-johns-music",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-10-26",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-26",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "mister-johns-music",
+      "school": "stanton",
+      "relation": "pickup",
+      "checked": "2026-10-26",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-26",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "mister-johns-music",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-10-26",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-26",
+        "how": "fetch",
+        "by": "provider"
+      }
     }
   ],
   "pages": [
@@ -1768,19 +1768,11 @@
         {
           "program": "mister-johns-music",
           "text": "CCCS, Fanny Jackson Coppin, Independence Charter School, Marian Anderson, Meredith, McCall, Nebinger, Stanton (M/W/R only) and Vare-Washington",
-          "read": "2026-10-06",
+          "read": "2026-10-26",
           "how": "fetch",
           "by": "provider"
         }
       ]
-    },
-    {
-      "url": "https://misterjohnsmusic.com/kids-group/",
-      "how": "fetch",
-      "programs": [
-        "mister-johns-music"
-      ],
-      "lists": []
     },
     {
       "url": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/",
@@ -2314,7 +2306,8 @@
     },
     {
       "url": "https://www.kumon.com/south-philadelphia",
-      "how": "fetch",
+      "how": "person",
+      "why": "On 2026-10-26 the center page answered HTTP 403 to the link sweep and was refused to a second automated reader, though it had read fine by plain fetch on 2026-10-16; the whole kumon.com site refused the same day.",
       "programs": [
         "kumon-south-philadelphia"
       ],
@@ -2474,7 +2467,7 @@
       "lists": []
     },
     {
-      "url": "https://www.philaymca.org/child-care/school-age-care-programs/full-day-school-age-care/",
+      "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
       "how": "fetch",
       "programs": [
         "christian-street-ymca"
@@ -2482,7 +2475,7 @@
       "lists": []
     },
     {
-      "url": "https://www.philaymca.org/child-care/school-age-care/before-and-after-school",
+      "url": "https://www.philaymca.org/child-care/school-age-care-programs/full-day-school-age-care/",
       "how": "fetch",
       "programs": [
         "christian-street-ymca"
@@ -3517,7 +3510,7 @@
       },
       {
         "name": "Ed Snider Youth Hockey & Education camps",
-        "url": "https://sniderhockey.org/hockey-programs",
+        "url": "https://sniderhockey.org/hockey/",
         "why": "Read in a browser on 2026-10-07: the hockey page has a Summer Camps tab, but its dates, ages, cost and rinks weren’t in the page text."
       },
       {
