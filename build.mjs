@@ -385,6 +385,9 @@ for (const p of programs) {
       if (!isUrl(o.url)) errors.push(`${at}: daysOff.url must be an https URL`);
       if (!Array.isArray(o.dates) || o.dates.some(d => !isIso(d))) errors.push(`${at}: daysOff.dates must be a list of YYYY-MM-DD dates (an empty list when none are posted)`);
       if (!o.sources?.length || o.sources.some(x => !isUrl(x.url) || !x.label)) errors.push(`${at}: daysOff needs at least one source with a label and an https URL`);
+      for (const k of ['hours', 'cost']) if (o[k] !== undefined && (typeof o[k] !== 'string' || !o[k].trim())) errors.push(`${at}: daysOff.${k} must be a short line of text when given`);
+      for (const k of ['ageMin', 'ageMax']) if (o[k] !== undefined && (!Number.isInteger(o[k]) || o[k] < 2 || o[k] > 19)) errors.push(`${at}: daysOff.${k} must be a whole number of years when given`);
+      if (o.ageMin && o.ageMax && o.ageMin > o.ageMax) errors.push(`${at}: daysOff.ageMin is above ageMax`);
     }
   }
 }
@@ -841,7 +844,8 @@ const registerText = p => {
 const datesHtml = (p, depth) => upcomingDates(p).map(d => `<span class="cal" data-date="${d.date}"><b>${shortDate(d.date)}:</b> ${esc(d.label)}. ${PREVIEW ? '' : `<a href="${link('cal/' + p.id + '-' + d.date + '.ics', depth)}" data-track="calendar">Add to calendar</a> `}<a href="${esc(gcalUrl(p, d))}" target="_blank" rel="noopener" data-track="calendar">${PREVIEW ? 'Add to Google Calendar' : 'Google Calendar'}</a></span>`).join('');
 const average = revs => revs.reduce((a, x) => a + x.stars, 0) / revs.length;
 const reviewItems = revs => revs.map(x => `<li><span class="stars" role="img" aria-label="${x.stars} out of 5 stars">${stars(x.stars)}</span><p>${esc(x.comment)}</p><span class="by">${esc(x.name)}, ${esc(schoolShort(x.school))} parent, ${monthYear(x.date)}</span></li>`).join('');
-const sourceLinks = (list, p = null, school = null) => { const own = p ? ownHosts(p) : null; return list.map(s => `<a href="${esc(own?.has(bareHost(s.url)) ? outUrl(s.url, { type: 'source', school, program: p }) : s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join(''); };
+// A source named by both the listing and one of its school entries is linked once.
+const sourceLinks = (list, p = null, school = null) => { const own = p ? ownHosts(p) : null; const seen = new Set(); return list.filter(s => !seen.has(s.url) && seen.add(s.url)).map(s => `<a href="${esc(own?.has(bareHost(s.url)) ? outUrl(s.url, { type: 'source', school, program: p }) : s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join(''); };
 const programPath = p => `programs/${p.id}/`;
 // "School clubs and teams" means nothing away from its school's page, so on its own it carries the school's name.
 const fullName = p => {
@@ -962,7 +966,7 @@ function offBreaks(p) {   // "Election Day · Winter break (3 of 5 days) · +2 m
 // A weekend row filters by its Saturday or Sunday; day-camp and summer rows sit under no weekday.
 const campAgeList = c => c.ageMin || c.ageMax ? agesBetween(c.ageMin || 3, c.ageMax || AGE_TOP) : gradesToAges(c._grades === undefined ? null : c._grades);
 const shapeFor = (kind, x) => kind === 'weekend' ? { ...x, _kind: kind, ...(x.weekend._grades !== undefined ? { _grades: x.weekend._grades } : {}), _ages: gradesToAges(x.weekend._grades !== undefined ? x.weekend._grades : x._grades), days: x.weekend.days }
-  : kind === 'off' ? { ...x, _kind: kind, _ages: gradesToAges(x._grades), days: ['none'] }
+  : kind === 'off' ? { ...x, _kind: kind, _ages: x.daysOff && (x.daysOff.ageMin || x.daysOff.ageMax) ? agesBetween(x.daysOff.ageMin || 3, x.daysOff.ageMax || AGE_TOP) : gradesToAges(x._grades), days: ['none'] }
   : kind === 'summer' ? { ...x, _kind: kind, _ages: campAgeList(x), days: ['none'] }
   : { ...x, _kind: kind };
 function listRow(kind, x, depth, shaped = null) {
@@ -1519,7 +1523,7 @@ ${p.clubs.map(c => `      <article class="club">
   const firstOff = o ? o.dates.filter(x => x >= TODAY).sort()[0] : '';
   const offSection = !o ? '' : kindSection('off', `<article class="prog solo">
       <dl><dt>${T(`Camps`)}</dt><dd>${fold(esc(o.summary || ''))}</dd>${offList ? `<dt>${T(`Days posted`)}</dt><dd>${offList}</dd>` : `<dt>${T(`Days posted`)}</dt><dd>${T(`None yet for the days still to come. This page changes when it posts them.`)}</dd>`}<dt>${T(`Where`)}</dt><dd>${esc(address)}</dd></dl>
-      <div class="actions"><a class="btn primary needs-js" href="${link(offPath, D)}${firstOff ? '#d-' + firstOff : ''}">${firstOff ? T(`Add it to your days off`) : T(`Plan the days off`)}</a><a class="btn" data-track="daysoff" href="${esc(outUrl(o.url || p.website, { type: 'website', program: p }))}" target="_blank" rel="noopener">${T(`Camp details and sign-up`)}</a><a class="btn" href="${link(dayCampsPath, D)}">${T(`Who else is open`)}</a></div>
+      <div class="actions"><a class="btn primary needs-js" href="${link(offPath, D)}${firstOff ? '#d-' + firstOff : ''}">${firstOff ? T(`Save it to your days off`) : T(`Plan the days off`)}</a><a class="btn" data-track="daysoff" href="${esc(outUrl(o.url || p.website, { type: 'website', program: p }))}" target="_blank" rel="noopener">${T(`Camp details and sign-up`)}</a><a class="btn" href="${link(dayCampsPath, D)}">${T(`Who else is open`)}</a></div>
     </article>
     <p class="hint">${T(`Day-camp dates come from the program’s own site and change as it posts them. Confirm before you count on a day.`)}</p>`);
   const summerSection = !tied ? '' : kindSection('summer', summerBlock(tied, D, true));
@@ -1975,18 +1979,18 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
 </section>`).join('\n');
   const hero = `    <p class="where">After-school programs and aftercare for ${esc(s.name)}, ${esc(s.address.split(',')[0])}</p>
     <h1>${s.dismissal ? T(`It’s {time} at {school}. What now?`, { time: clock(s), school: s.shortName }) : T(`School’s out at {school}. What now?`, { school: s.shortName })}</h1>
-    <p class="lede">${T(`Every after-school program we could find that runs at the school, picks children up from {school}, or sits within a short walk. Pick a grade to see what your child can join.`, { school: s.shortName })}</p>
+    <p class="lede">${T(`Every after-school program we could find that runs at the school, picks children up from it, or sits within a short walk. Pick a grade to see what your child can join.`)}</p>
     <div class="mine needs-js-block" data-mine>
       <span class="mine-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 2h12a1 1 0 0 1 1 1v19l-7-4-7 4V3a1 1 0 0 1 1-1z"/></svg></span>
       <div class="mine-say">
-        <p class="mine-h" data-mine-h data-on="${esc(T(`{school} is your school`, { school: s.shortName }).replace(/<[^>]+>/g, ''))}">${T(`Make {school} your school`, { school: s.shortName })}</p>
-        <p class="hint">${T(`One tap. The home page, every list and your week then start from {school}.`, { school: s.shortName })}</p>
+        <p class="mine-h" data-mine-h data-on="${esc(T(`{school} is your school`, { school: s.shortName }).replace(/<[^>]+>/g, ''))}">${T(`Make this your school`)}</p>
+        <p class="hint">${T(`One tap. The home page, every list and your week then start here.`)}</p>
       </div>
       <button type="button" class="savebtn" data-my-school="${esc(s.id)}" data-name="${esc(s.shortName)}" aria-pressed="false">Save as my school</button>
       <p class="hint mine-note" data-my-school-note aria-live="polite"></p>
     </div>
     <div class="facts">
-      <span>Dismissal <b>${esc(s.dismissal || 'not posted by the school')}</b>${s.dismissalNote ? ` (${esc(s.dismissalNote)})` : ''}</span>
+      ${!s.dismissal || s.dismissalNote ? `<span>Dismissal <b>${esc(s.dismissal || 'not posted by the school')}</b>${s.dismissalNote ? ` (${esc(s.dismissalNote)})` : ''}</span>` : ''}
       <span>School office <b><a href="${telHref(s.phone)}">${esc(s.phone)}</a></b></span>
       ${schoolHoods(s).length ? `<span>Neighborhood <b>${hoodLinks(schoolHoods(s), 1)}</b></span>` : ''}
       <span>Reviewed <b>${longDate(s.lastReviewed)}</b></span>
@@ -2896,33 +2900,34 @@ function dayOffPage(d) {
   const when = d.end ? `${monthDay(d.date)} to ${monthDay(d.end)}` : fullDay(d.date);
   const i = offDays.indexOf(d), prev = offDays[i - 1], next = offDays[i + 1];
   const short = x => x.end ? `${shortDate(x.date)} – ${shortDate(x.end)}` : dayDate(x.date);
-  const cards = open.map(p => {
+  const shaped = open.map(p => shapeFor('off', p));
+  const cards = open.map((p, i) => {
     const mine = p.daysOff.dates.filter(x => d.dates.includes(x));
-    const served = servedBy(p);
-    return `<article class="prog offprog" id="${esc(p.id)}">
+    const served = servedBy(p), o = p.daysOff;
+    const ages = o.ageMin && o.ageMax ? `${o.ageMin}–${o.ageMax}` : o.ageMin ? `${o.ageMin} and up` : o.ageMax ? `up to ${o.ageMax}` : '';
+    return `<article class="prog offprog" id="${esc(p.id)}" ${itemAttrs(shaped[i], [...programHoods(p), ...served.map(s => s.shortName)])}>
   <div class="top"><h3><a href="${link(programPath(p), D)}">${esc(fullName(p))}</a></h3><p class="tags">${p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')}</p></div>
-  <dl><dt>What it runs</dt><dd>${esc(p.daysOff.summary)}</dd>
+  <dl>${o.hours ? `<dt>Hours</dt><dd>${esc(o.hours)}</dd>` : ''}
+  ${o.cost ? `<dt>Cost</dt><dd>${esc(o.cost)}</dd>` : ''}
+  ${ages ? `<dt>Ages</dt><dd>${esc(ages)}</dd>` : ''}
+  <dt>What it runs</dt><dd>${esc(p.daysOff.summary)}</dd>
   ${one ? '' : `<dt>Days it has posted</dt><dd>${esc(mine.map(shortDate).join(', '))}${mine.length < d.dates.length ? `, ${mine.length} of the ${d.dates.length} weekdays` : ', every weekday of the break'}.</dd>`}
   ${programAddress(p) ? `<dt>Where</dt><dd>${esc(programAddress(p))}</dd>` : ''}
   ${served.length ? `<dt>On school days</dt><dd>${esc(servedSummary(p))}.</dd>` : ''}</dl>
-  <div class="actions"><a class="btn primary needs-js" href="${link(offPath, D)}?add=${esc(p.id)}#d-${mine.sort()[0] || d.dates[0]}">${one ? T(`Add it to your plan for {day}`, { day: shortDate(d.date) }) : T(`Add it to your plan for the break`)}</a><a class="btn" href="${link(programPath(p), D)}">Full listing</a><a class="btn" data-track="camp" href="${esc(outUrl(p.daysOff.url, { type: 'camp', program: p }))}" target="_blank" rel="noopener">Camp details</a></div>
+  <div class="actions"><a class="btn primary needs-js" href="${link(offPath, D)}?add=${esc(p.id)}#d-${mine.sort()[0] || d.dates[0]}">${one ? T(`Save to your plan for {day}`, { day: shortDate(d.date) }) : T(`Save to your plan for the break`)}</a><a class="btn" data-track="camp" href="${esc(outUrl(p.daysOff.url, { type: 'camp', program: p }))}" target="_blank" rel="noopener">${T(`Sign up on the camp’s site`)}</a><a class="btn quiet" href="${link(programPath(p), D)}">${T(`Full listing`)}</a></div>
   <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks(p.daysOff.sources, p)}</p>
 </article>`;
   }).join('\n');
   const hero = `    <p class="where"><a href="${link(dayCampsPath, D)}">${T(`Days off from school`)}</a></p>
-    <h1>${one ? T(`{name}, {when}: camps for the day off`, { name: label, when }) : T(`{name}, {when}: camps for the break`, { name: label, when })}</h1>
+    <h1>${one ? T(`{name}: camps for the day off`, { name: label }) : T(`{name}: camps for the break`, { name: label })}</h1>
     <p class="lede">${one ? T(`Philadelphia’s district schools are closed on {when}.`, { when }) : T(`Philadelphia’s district schools are closed from {when}.`, { when })} ${open.length ? (open.length === 1 ? T(`One program listed here has posted a camp for it.`) : T(`{n} programs listed here have posted a camp for it.`, { n: open.length })) : T(`No program listed here has posted a camp for it yet.`)}</p>
-    <div class="facts">
-      <span>School year <b>${esc(daysOff.schoolYear)}</b></span>
-      <span>Calendar checked <b>${longDate(daysOff.checked)}</b></span>
-      ${one ? '' : `<span><b>${d.dates.length}</b> weekdays off</span>`}
-      <span><b>${open.length}</b> ${open.length === 1 ? 'camp' : 'camps'} posted</span>
-    </div>`;
+    ${one ? '' : `<div class="facts"><span><b>${d.dates.length}</b> weekdays off</span></div>`}`;
   const body = `<div style="display:contents">
 ${d.note ? `<p class="flag">${esc(d.note)}</p>` : ''}
 <section class="section" id="open">
   <h2>${open.length ? (one ? T(`Open that day`) : T(`Open during the break`)) : T(`Nothing posted yet`)}</h2>
   ${open.length ? `<p>${T(`A program is listed here only when its own website names this date. Spots fill, so check with the program before you count on one.`)}</p>
+${open.length > 2 ? filterBar({ list: shaped, depth: D, show: { grade: false, age: true, day: false, cost: false }, searchLabel: `Looking for a particular camp?`, placeholder: 'A name or a neighborhood, or try art, sports…' }).replace('data-filters', 'data-filters data-noschool data-noun="camp" data-nouns="camps"') + noMatch(D) : ''}
 ${cards}` : `<p>${T(`None of the programs here that run camps on days off had this date on its website when we checked. Some post their dates a few weeks ahead, so ask the ones below.`)}</p>`}
   <div class="actions"><a class="btn primary needs-js" href="${link(offPath, D)}#d-${d.dates[0]}">${one ? T(`Plan this day for each child`) : T(`Plan the break for each child`)}</a><a class="btn" href="${link(dayCampsPath, D)}#days">${T(`All days off this year`)}</a></div>
 </section>
@@ -2941,7 +2946,7 @@ ${rest.map(p => `    <li><a href="${link(programPath(p), D)}">${esc(fullName(p))
     <li>${T(`Want a heads-up before each day off?`)} <a href="${link(alertsPath, D)}">${T(`Get them by email.`)}</a></li>` : ''}
   </ul>
   <p class="day-nav">${prev ? `<a href="${link(dayPath(prev), D)}">← ${esc(short(prev))}: ${esc(dayLabel(prev))}</a>` : ''}${prev && next ? ' ' : ''}${next ? `<a href="${link(dayPath(next), D)}">${esc(short(next))}: ${esc(dayLabel(next))} →</a>` : ''}</p>
-  <p class="src">Calendar: <a href="${esc(daysOff.source.url)}" target="_blank" rel="noopener">${esc(daysOff.source.label)}</a></p>
+  <p class="src">Calendar: <a href="${esc(daysOff.source.url)}" target="_blank" rel="noopener">${esc(daysOff.source.label)}</a>, ${esc(daysOff.schoolYear)}, checked ${longDate(daysOff.checked)}.</p>
 </section>
 </div>`;
   const generic = /professional development|conferences/i.test(d.name);

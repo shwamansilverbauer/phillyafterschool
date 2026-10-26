@@ -361,7 +361,7 @@ Fields worth knowing:
 - `days`: optional list of the weekdays the program runs, from `"mon"`, `"tue"`, `"wed"`, `"thu"`, `"fri"`. Shown on the card as "Monday to Friday" or the named days. Leave it out when the provider doesn't say; the program then shows under every day.
 - `daysNote`: optional sentence shown after the days, like `"Choose 1 to 5 days a week."`
 - `offerDays`: optional, for class-based programs: which class meets on which days, like `{ "Choir": ["tue", "thu"] }`. Each name must be in `offers`. A roster warns when a class is put on a day it doesn't meet.
-- `daysOff`: optional. What the program runs when district schools are closed: `{ "summary": "...", "url": "https://…", "dates": ["2026-11-03"], "sources": [{ "label": "…", "url": "https://…" }] }`. `dates` holds only the dates the provider itself posts (an empty list when it posts none). Puts the program on the "Days off from school" page.
+- `daysOff`: optional. What the program runs when district schools are closed: `{ "summary": "...", "url": "https://…", "dates": ["2026-11-03"], "sources": [{ "label": "…", "url": "https://…" }] }`. `dates` holds only the dates the provider itself posts (an empty list when it posts none). Puts the program on the "Days off from school" page. Optional, each only when the provider's page states it: `hours` ("9 am to 3 pm; aftercare to 6 pm"), `cost` ("$90 a day"), `ageMin` and `ageMax` (whole years). A day's page shows hours, cost and ages as rows of their own above the summary, and its age filter goes by `ageMin`/`ageMax` when they are there (the program's grades otherwise).
 - `pickupBy`: optional. The latest time a child can be collected, like `"6:00 pm"`. Shown on the card and on rosters. Leave it out when the provider doesn't publish an end time.
 - `register.how`: `online` (needs `url`), `phone`, `contact`, `school` or `none`. `register.note` is shown next to it.
 - `register.nextTerm`: optional. When sign-ups open for the next term, semester or school year, in a sentence with dates. Leave it out when the provider doesn't say.
@@ -1761,9 +1761,12 @@ nothing about admin: those are the person's own. The username and password in `e
 Four things, all built by `build.mjs` unless it says otherwise.
 
 - **A page for each day off still ahead** (`dayOffPage()`), at `/days-off/<name>-<date>/`, such as
-  `/days-off/election-day-2026-11-03/`. It lists the camps whose own sites name that day (each card: "Add it to
-  your plan for Nov 3" first, then "Full listing", then the camp's own page, so the way onward stays on the site),
-  then the programs that run days-off camps but haven't posted this one, and links to the day before and after. The title is what a
+  `/days-off/election-day-2026-11-03/`. Its heading names the day once and the lede gives the date, with the
+  calendar's check date in the fine print at the end. It lists the camps whose own sites name that day (each card:
+  hours, cost and ages as rows when the camp posts them, then the summary; "Save to your plan for Nov 3" first,
+  then "Sign up on the camp's site", then "Full listing"), with the same search box and age, type and area filters
+  as the list pages once more than two camps are posted (`filterBar()` + `itemAttrs()` on each card), then the
+  programs that run days-off camps but haven't posted this one, and links to the day before and after. The title is what a
   parent would type ("Election Day 2026: day camps in Philadelphia"). A day with no camp posted yet is built but
   marked `noindex` and left out of the sitemap, so search engines aren't handed an empty page; it joins the
   sitemap by itself the first night a camp is posted for it. The days list on `/days-off/` and the next-day-off

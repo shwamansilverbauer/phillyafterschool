@@ -117,9 +117,9 @@
     "dismissal": "2:54 pm",
     "phone": "215-400-8120",
     "website": "https://vare.philasd.org/",
-    "lastReviewed": "2026-10-06",
+    "lastReviewed": "2026-10-25",
     "notes": [
-      "Vare-Washington has free before and after school care in the building, through the City’s Extended Day, Extended Year program. The City’s page says registration is closed for now, so ask the school office about openings.",
+      "Vare-Washington has free before and after school care in the building, through the City’s Extended Day, Extended Year program. The school’s 2026–27 page links an online registration form and names the site director, Ms. Lisa Washington of Greater Philadelphia Community Alliance, 267-401-5488.",
       "Dismissal is 2:54 pm, earlier than at most schools nearby. Most outside programs start at 3:30, so ask each one when its staff collect.",
       "For grades 6–8, Zhang Sah takes children through 8th grade and Queen & Rook through age 16. Ask the other programs about older children. Fleisher is about half a mile away for children old enough to walk."
     ],
@@ -134,10 +134,53 @@
       "Imagine That Philly. Runs inside Coppin and Nebinger only."
     ],
     "alsoListed": {
-      "title": "Also on the school’s own clubs page",
-      "intro": "The school’s clubs page, last updated in January 2025, describes this program. We haven’t confirmed it for 2026–27.",
+      "title": "Also on the school’s own after-school page",
+      "intro": "The school’s 2026–27 after-school page describes this program and lists other options nearby.",
       "items": [
-        "The Rock School for Dance Education (1101 S Broad St), grades 2–4. The school’s page says the Rock School collects students at 3 pm, class runs to 4:15 pm, families pick up at the Rock School, and it costs $90 a month."
+        "The Rock School for Dance Education (1101 S Broad St), grades 2–4. The school’s page says the Rock School collects students at 3 pm, class runs to 4:15 pm, and families pick up at the Rock School. For more, the page says to reach out to Dr. Barnes at the school.",
+        "Other aftercare options in South Philly, as the page lists them: Zhang Sah, Philly Art Center, Mister John’s Music, Sunshine Camp, The Rock School, CoCo Academy, Code Ninjas, InMovement, Queen and Rook, YCCA, Settlement Music, Beehive at Bok, The Dandelion Project, Action Karate (winter and spring break camps), Old Pine Community Center and Tiny Towne Academy (Pre-K families only). The page doesn’t say which of these pick up from the school; the ones whose own pages name Vare-Washington are listed above."
+      ]
+    }
+  },
+  {
+    "id": "stanton",
+    "name": "Edwin M. Stanton School",
+    "shortName": "Stanton",
+    "aliases": [
+      "Stanton",
+      "E.M. Stanton",
+      "Edwin Stanton",
+      "Stanton Elementary"
+    ],
+    "address": "901 S 17th St, Philadelphia, PA 19146",
+    "neighborhood": "Graduate Hospital",
+    "grades": "K-8",
+    "dismissal": "3:39 pm",
+    "dismissalNote": "the school’s page gives dismissal as 3:30–3:39 and admission as 8:55–9:00",
+    "phone": "215-400-7960",
+    "website": "https://emstanton.philasd.org/",
+    "lastReviewed": "2026-10-25",
+    "added": "2026-10-25",
+    "notes": [
+      "Stanton has free before and after school care in the building, run by Sunrise of Philadelphia. Enrollment is open all year on Sunrise’s site.",
+      "The Christian Street YMCA is a short walk west on Christian St, and the Y’s before-and-after-school page lists that branch as serving Stanton, with care from 7 am and until 6 pm.",
+      "Beehive’s 2026–27 after-care list for its Rittenhouse site named Stanton when we read it on October 6. Beehive’s site doesn’t give that location’s address or hours, so ask Beehive directly.",
+      "The school’s partners page also names Marian Anderson Recreation Center (740 S 17th St), Mighty Writers and a homework club at Grace and Peace Community Church, without saying what each offers or when. Ask the office."
+    ],
+    "checkedNoPickup": [
+      "Zhang Sah. Its pickup list covers Meredith, Jackson, Christopher Columbus Charter, Nebinger, McCall, ICS, St. Mary, St. Peter’s and Vare-Washington, not Stanton.",
+      "Old Pine Community Center. Picks up from McCall, Meredith, Nebinger and St. Peter’s only.",
+      "Settlement Music School. Escorts from Meredith, Nebinger and McCall only, though the school’s page says more than 80 students take part in Settlement’s orchestra program at Stanton.",
+      "Philly Art Center. Its Queen Village after-school pickup list does not include Stanton.",
+      "Mighty Writers. No South Philadelphia location near the school; its closest, El Futuro at 1025 S 9th St, is about a mile east."
+    ],
+    "alsoListed": {
+      "title": "Also on the school’s own site",
+      "intro": "The school’s home page names these activities, without saying when they meet or whether they run after school. Ask the office.",
+      "items": [
+        "Arts, music and dance: Dance Club, African Drum Club, Rock Band, Running Club, Orchestra, Chorus, and a poetry program through Writing Matters. The page says Bainbridge House has provided African drum and dance programming for more than 25 years.",
+        "Sports: flag football, track and volleyball, with a doctor-signed physical form required. Intramurals for grades K–5, and the Middle Grades Conference for grades 6–8.",
+        "A robotics team, which the page says competed in the 2024 World Championships."
       ]
     }
   },

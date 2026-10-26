@@ -788,7 +788,10 @@
           "label": "Zhang Sah camps",
           "url": "https://zhangsah.org/camps/"
         }
-      ]
+      ],
+      "hours": "8 am to 4 pm, extended day to 6 pm",
+      "ageMin": 4,
+      "ageMax": 12
     },
     "pickupBy": "6:00 pm",
     "cost": "Tuition not published. Takes CCIS subsidy and offers sibling discounts.",
@@ -987,7 +990,10 @@
           "label": "Philly InMovement vacation camps",
           "url": "https://phillyinmovement.com/vacation-camps/"
         }
-      ]
+      ],
+      "hours": "9 am to 3:30 pm",
+      "cost": "$97.32 a day",
+      "ageMin": 3
     },
     "pickupBy": "6:30 pm",
     "cost": "$51.52 per day, with add-ons of $6–$16 for advanced classes. $180 deposit per weekday enrolled.",
@@ -1249,7 +1255,11 @@
           "label": "Philly Art Center registration: full-day vacation camps, Queen Village",
           "url": "https://phillyartcenter.captyn.com/find?department=clu8qqr6y008w93r8jn074ir6&filter=2&program=clur1wu8b03tv13yv63r0u2w1&location=clu8gptof0aahxkl2mj3v7mxl"
         }
-      ]
+      ],
+      "hours": "9 am to 3 pm; extra care 8:15 to 9 am and 3 to 5:30 pm",
+      "cost": "$98 a day",
+      "ageMin": 5,
+      "ageMax": 12
     },
     "pickupBy": "6:00 pm",
     "cost": "Not shown on the public page. Paid by season: 50% deposit, then two 25% installments. 5% sibling discount.",
@@ -1384,7 +1394,8 @@
           "label": "Old Pine afterschool",
           "url": "https://oldpinecommunitycenter.org/afterschool/"
         }
-      ]
+      ],
+      "hours": "8:30 am to 6 pm"
     },
     "pickupBy": "6:00 pm",
     "cost": "$600 per month, or $40 a day. Financial aid and tuition subsidies available.",
@@ -1504,7 +1515,11 @@
           "label": "Butcher’s Sew Shop Junior vacation camps",
           "url": "https://butcher-s-sew-shop-junior.jumbula.com/vacation-camps"
         }
-      ]
+      ],
+      "hours": "9 am to 3 pm; afternoon care 3 to 5 pm",
+      "cost": "$99 a day, afternoon care $20",
+      "ageMin": 5,
+      "ageMax": 11
     },
     "pickupBy": "5:45 pm (6:00 pm for the Friday teen class)",
     "cost": "Fall session: $741–$912 per weekday slot, plus a materials fee",
@@ -1641,7 +1656,11 @@
           "label": "Mister John’s Music day camps",
           "url": "https://misterjohnsmusic.com/day-camps/"
         }
-      ]
+      ],
+      "hours": "9 am to 3 pm",
+      "cost": "$90 a day",
+      "ageMin": 5,
+      "ageMax": 10
     },
     "cost": "Fall (16 weeks): class $460, pickup $105, aftercare $400. Winter/Spring (22 weeks): $635, $145, $550.",
     "rate": {
@@ -1673,6 +1692,10 @@
       {
         "label": "Kids group classes 2026–27",
         "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/"
+      },
+      {
+        "label": "Mister John’s Music: kids group classes",
+        "url": "https://misterjohnsmusic.com/kids-group/"
       }
     ],
     "lastVerified": "2026-10-06",
@@ -1702,6 +1725,18 @@
         "distance": "its 904 S 9th St studio is around the corner",
         "note": "Mister John’s pickup list names “CCCS”.",
         "checked": "2026-10-06"
+      },
+      "stanton": {
+        "relation": "pickup",
+        "distance": "about a mile east, in Bella Vista",
+        "note": "Mister John’s 2026–27 pickup list names Stanton on Mondays, Wednesdays and Thursdays only, with pickup run in partnership with CoCo Academy.",
+        "sources": [
+          {
+            "label": "Mister John’s Music: kids group classes",
+            "url": "https://misterjohnsmusic.com/kids-group/"
+          }
+        ],
+        "checked": "2026-10-25"
       }
     },
     "pickupLists": [
@@ -1928,7 +1963,10 @@
           "label": "Arden Play-in-a-Day",
           "url": "https://ardentheatre.org/arden-drama-school/"
         }
-      ]
+      ],
+      "hours": "9 am to 5 pm (grades 6–8: 9:30 am to 4:30 pm)",
+      "ageMin": 5,
+      "ageMax": 14
     },
     "cost": "Not on the pages we could read. Each date’s price shows on Arden’s booking page.",
     "phone": "215-922-1122",
@@ -2091,7 +2129,10 @@
           "label": "CoCo Academy vacation camps",
           "url": "https://www.cocoacademyphl.com/vacationcamps"
         }
-      ]
+      ],
+      "hours": "9 am to 3 pm, to 6 pm on regular after-school days",
+      "ageMin": 5,
+      "ageMax": 14
     },
     "pickupBy": "6:00 pm",
     "cost": "Winter and spring 2027, both locations: $1,008 per weekday for the 21-week term (Mondays, Thursdays, Fridays) or $1,056 for 22 weeks (Tuesdays, Wednesdays). That is $48 a week for each day, pickup included, with a three-installment plan. $25 late fee after 6 pm. Fall 2026 prices are on CoCo’s booking page.",
@@ -2200,6 +2241,20 @@
           }
         ],
         "checked": "2026-10-05"
+      },
+      "stanton": {
+        "relation": "pickup",
+        "address": "1001 Christian St (Bella Vista)",
+        "distance": "about three-quarters of a mile east along Christian St",
+        "registerUrl": "https://www.hisawyer.com/coco-academy/schedules?location_id%5B%5D=154921&widget_tags=afterschool+winter+spring+2027",
+        "note": "CoCo’s Bella Vista page listed Stanton pickup when we read it on October 5: staff collect children at dismissal and walk them to 1001 Christian St.",
+        "sources": [
+          {
+            "label": "CoCo Academy Bella Vista after school",
+            "url": "https://www.cocoacademyphl.com/afterschool-bellavista"
+          }
+        ],
+        "checked": "2026-10-05"
       }
     },
     "rate": {
@@ -2269,7 +2324,10 @@
           "label": "Queen & Rook youth programs",
           "url": "https://www.queenandrookcafe.com/youth-programs/"
         }
-      ]
+      ],
+      "hours": "9 am to 3 pm, drop-off from 8:30; aftercare 3 to 6 pm",
+      "ageMin": 6,
+      "ageMax": 14
     },
     "pickupBy": "6:00 pm",
     "cost": "Not published. Need-based scholarships available.",
@@ -2553,7 +2611,9 @@
           "label": "Dandelion spring break camp",
           "url": "https://www.thedandelionproject.us/spring-break-camp"
         }
-      ]
+      ],
+      "hours": "9 am to 3 pm",
+      "cost": "$260 to $400 for the week, sliding scale"
     }
   },
   {
@@ -2607,7 +2667,9 @@
           "label": "Range of Motion after-school and school closing camps",
           "url": "https://www.movemakersphilly.com/range-of-motion-after-school-programming.html"
         }
-      ]
+      ],
+      "hours": "8:30 am to 3:30 pm, to 6 pm for $25 more",
+      "cost": "$69 a day"
     },
     "cost": "2025–26 rates, per month: $369 for 1 day a week, $399 for 2, $449 for 3, $489 for 4, $529 for 5, plus $100 registration",
     "rate": {
@@ -2727,7 +2789,8 @@
           "label": "Kids on 12th after school",
           "url": "https://ko12.org/after-school-pick-up-philadelphia"
         }
-      ]
+      ],
+      "hours": "8:30 am to 6 pm (drop-ins to 3 pm)"
     },
     "pickupBy": "6:00 pm",
     "cost": "Monthly rates start at $120",
@@ -3277,7 +3340,10 @@
           "label": "Fleisher day-off camps",
           "url": "https://fleisher.org/day-off-camps/"
         }
-      ]
+      ],
+      "hours": "Drop-off 8:30 to 9:30 am, to 3:30 pm; After Camp Club to 5:30 pm",
+      "ageMin": 5,
+      "ageMax": 11
     },
     "pickupBy": "6:00 pm (Teen Lounge)",
     "cost": "Teen Lounge is free. Weekday classes: $95 base fee per term. Saturday classes: $65 base fee. Help available if cost is a barrier.",
@@ -3439,7 +3505,10 @@
           "label": "Makom School’s Out Camp",
           "url": "https://makomcommunity.org/schools-out-camp/"
         }
-      ]
+      ],
+      "hours": "8:30 am to 6 pm",
+      "cost": "$90 a day ($100 in the last week before)",
+      "ageMin": 4
     },
     "cost": "K–5, per month: $280 for Fridays only, $553 for 2 days, $623 for 3, $741 for 4, $857 for 5, plus a $200 family enrollment fee. Tuition assistance available.",
     "rate": {
@@ -3503,6 +3572,19 @@
           }
         ],
         "checked": "2026-10-06"
+      },
+      "stanton": {
+        "relation": "pickup",
+        "address": "2401 Washington Ave",
+        "distance": "about half a mile southwest, at 24th and Washington",
+        "note": "Makom’s page lists Stanton Elementary School among its pickup schools. It needs at least four children from a school, and groups from more than a mile away travel by SEPTA bus with a Makom educator.",
+        "sources": [
+          {
+            "label": "Makom afterschool enrichment",
+            "url": "https://makomcommunity.org/afterschool-enrichment/"
+          }
+        ],
+        "checked": "2026-10-25"
       }
     },
     "pickupLists": [
@@ -3547,10 +3629,14 @@
     ],
     "pickupBy": "6:00 pm",
     "daysOff": {
-      "summary": "The City’s program includes free winter-break and spring-break camps for students at the school. Dates are announced during the year.",
+      "summary": "The school says its Extended Day, Extended Year program includes a winter break camp, a spring break camp and six weeks of summer camp, free for students at the school. Dates are announced during the year.",
       "url": "https://www.phila.gov/programs/extended-day-extended-year/",
       "dates": [],
       "sources": [
+        {
+          "label": "Vare-Washington: before and after care",
+          "url": "https://web.vwtigers.com/before-and-aftercare-at-vw/"
+        },
         {
           "label": "City of Philadelphia: Extended Day, Extended Year",
           "url": "https://www.phila.gov/programs/extended-day-extended-year/"
@@ -3559,19 +3645,25 @@
           "label": "City notice on spring break camp (March 2026)",
           "url": "https://www.phila.gov/2026-03-06-seats-filling-fast-for-spring-break-camp-at-extended-day-extended-year-schools/"
         }
-      ]
+      ],
+      "cost": "Free for students at the school"
     },
     "cost": "Free",
     "price": "free",
-    "phone": "215-336-5505",
-    "email": "info@gpca-phila.org",
+    "phone": "267-401-5488",
+    "email": "LisaWashington@gpca-phila.org",
     "website": "https://www.phila.gov/programs/extended-day-extended-year/",
     "register": {
-      "how": "school",
-      "note": "Enrollment packets come from the school’s main office. The City’s page currently says registration is closed and to check back, so ask the office about openings or a waitlist."
+      "how": "online",
+      "url": "https://form.jotform.com/262154951033048",
+      "note": "The school’s page links an online registration form for 2026–27. The site director is Ms. Lisa Washington of Greater Philadelphia Community Alliance (GPCA)."
     },
-    "note": "The City’s March 2026 notice names Greater Philadelphia Community Alliance (GPCA, 215-336-5505) as the provider at Vare-Washington; nothing newer confirms it for 2026–27. The hours come from a 2024 sheet. Confirm both with the school office.",
+    "note": "The school’s own page for 2026–27 names Greater Philadelphia Community Alliance (GPCA) as the provider, with Ms. Lisa Washington as site director, and says the program includes before and after school care, enrichment, and winter, spring and summer camps. The hours come from the City’s 2024 sheet; confirm them with her.",
     "sources": [
+      {
+        "label": "Vare-Washington: before and after care",
+        "url": "https://web.vwtigers.com/before-and-aftercare-at-vw/"
+      },
       {
         "label": "City of Philadelphia: Extended Day, Extended Year",
         "url": "https://www.phila.gov/programs/extended-day-extended-year/"
@@ -3585,24 +3677,25 @@
         "url": "https://www.gpca-phila.org/prek-8"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-10-25",
     "schools": {
       "vare-washington": {
         "relation": "onsite",
-        "checked": "2026-10-06"
+        "checked": "2026-10-25"
       }
     }
   },
   {
     "id": "vare-washington-clubs",
     "name": "School clubs and teams",
-    "what": "Chess Club, Soccer Club, Students Run Philly Style, Girls Basketball, Concert Choir and Science Olympiad. The school’s page also names K-Pop Club, Girl Scouts, Boys Basketball and a Spelling Bee Club as coming.",
+    "what": "Art Club, Girl Scouts, Book Club, Rock Reach dance, Running and Track, Flag Football, Spelling Bee, Junior Film Society, Chess, Choir, Pickleball, Soccer, Students Run Philly Style, and monthly Rainbow, KAT and GSA clubs, as the school lists them for 2026–27.",
     "types": [
       "clubs",
+      "art",
       "games",
       "movement",
       "music",
-      "stem"
+      "academics"
     ],
     "keywords": [
       "clubs",
@@ -3610,84 +3703,267 @@
       "chess",
       "soccer",
       "running",
-      "basketball",
+      "track",
+      "flag football",
+      "pickleball",
       "choir",
-      "science olympiad",
-      "girl scouts"
+      "art",
+      "book club",
+      "reading",
+      "film",
+      "dance",
+      "spelling bee",
+      "girl scouts",
+      "scouts"
     ],
     "address": "",
     "grades": null,
     "gradeNote": "Varies by club",
-    "hours": "The clubs with times listed met 3:00 to 4:00 pm, one or two afternoons a week",
+    "hours": "Most clubs meet 3:00 to 4:00 pm one or two afternoons a week; Flag Football and Pickleball run to 4:30, Rock Reach to 6:00 pm, and Choir meets Wednesday mornings",
     "cost": "Not published",
     "phone": "215-400-8120",
     "email": "",
-    "website": "https://vare.philasd.org/after-school-clubs/",
+    "website": "https://web.vwtigers.com/before-and-aftercare-at-vw/",
     "register": {
       "how": "school",
-      "note": "Sign-ups go through the school office or the club’s teacher."
+      "note": "Through each club’s teacher, usually with a permission slip; Girl Scouts troops register at gsep.org."
     },
-    "note": "The school’s clubs page was last updated in January 2025, so this is last year’s list. Ask the office what is running in 2026–27. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "note": "The school’s 2026–27 list, with the days, times and grades it gives. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
     "sources": [
       {
-        "label": "Vare-Washington after-school clubs",
-        "url": "https://vare.philasd.org/after-school-clubs/"
-      },
-      {
-        "label": "Vare-Washington extra-curricular activities",
-        "url": "https://vare.philasd.org/extra-curricular-activities/"
+        "label": "Vare-Washington: after school activities 2026–27",
+        "url": "https://web.vwtigers.com/before-and-aftercare-at-vw/"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-10-25",
     "schools": {
       "vare-washington": {
         "relation": "onsite",
-        "checked": "2026-10-06"
+        "checked": "2026-10-25"
       }
     },
     "clubs": [
       {
+        "name": "Art Club",
+        "what": "Create, explore and paint with the art teacher.",
+        "days": [
+          "wed",
+          "thu"
+        ],
+        "grades": "K-8",
+        "note": "Grades K–4 on Wednesdays, 5–8 on Thursdays. Send the student’s name, grade, teacher and a phone number to Ms. Stowman, kstowman@philasd.org.",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Girl Scouts",
+        "what": "Five troops meet at the school: badges, adventures and helping the community.",
+        "days": [
+          "mon"
+        ],
+        "time": "3:00–4:00 pm",
+        "grades": "K-8",
+        "note": "Troops 00958 (K–1), 9395 (2–3), 91051 (4–5) and 93070 (6–8) meet Mondays; register at gsep.org. Troop 09920 (K–3) meets the last Saturday of the month at Dickinson Square Park and the first Wednesday at the school at 4 pm; text 267-254-9954.",
+        "tags": [
+          "scouts"
+        ]
+      },
+      {
+        "name": "VW Book Club",
+        "what": "For students who love to read.",
+        "days": [
+          "tue",
+          "thu"
+        ],
+        "grades": "K-5",
+        "note": "Grades K–2 on Thursdays with Ms. O’Leary, 3–5 on Tuesdays with Ms. Pinkerton. Permission slips in room 204 or 304.",
+        "tags": [
+          "reading"
+        ]
+      },
+      {
+        "name": "Rock Reach",
+        "what": "Free dance lessons and enrichment at The Rock School, with chaperoned transportation from school and dinner.",
+        "days": [
+          "tue",
+          "thu"
+        ],
+        "time": "to 6:00 pm",
+        "grades": "1-2",
+        "note": "Pick-up is 6:00 pm at The Rock School, Broad and Washington. To claim a spot, email Dr. Barnes, aldbarnes@philasd.org.",
+        "tags": [
+          "dance",
+          "movement"
+        ]
+      },
+      {
+        "name": "Running and Track Club",
+        "what": "Fitness, fun and learning to run fast.",
+        "days": [
+          "wed"
+        ],
+        "time": "3:00–4:00 pm",
+        "grades": "3-5",
+        "note": "Run by Mr. Gallagher; permission slips in room 310.",
+        "tags": [
+          "running",
+          "movement",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Coed Flag Football",
+        "what": "The school’s first flag football club.",
+        "days": [
+          "wed",
+          "thu"
+        ],
+        "time": "3:15–4:30 pm",
+        "grades": "3-5",
+        "note": "Students must be able to walk home after practice. Permission slips from Mr. O.",
+        "tags": [
+          "football",
+          "movement",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Spelling Bee Club",
+        "what": "Spelling, vocabulary and practice for the school bee in January.",
+        "days": [
+          "mon"
+        ],
+        "time": "3:00–4:00 pm",
+        "grades": "3-8",
+        "note": "Permission slips in room 202.",
+        "tags": [
+          "academics",
+          "spelling"
+        ]
+      },
+      {
+        "name": "VW Junior Film Society",
+        "what": "A weekly journey through the history of film, from 1888 on.",
+        "days": [
+          "thu"
+        ],
+        "time": "3:00–4:00 pm",
+        "grades": "3-8",
+        "when": "From October 1",
+        "note": "Room 307. Permission slips from Mr. Mann or Mr. Paul.",
+        "tags": [
+          "film"
+        ]
+      },
+      {
         "name": "Chess Club",
+        "what": "Playing or learning to play; all abilities welcome.",
+        "days": [
+          "thu"
+        ],
+        "time": "3:00–4:00 pm",
+        "grades": "4-8",
+        "note": "Run by Mr. Gallagher; permission slips in room 310.",
         "tags": [
           "games",
           "chess"
         ]
       },
       {
-        "name": "Soccer Club",
-        "tags": [
-          "movement",
-          "soccer",
-          "outdoors"
-        ]
-      },
-      {
-        "name": "Students Run Philly Style",
-        "tags": [
-          "movement",
-          "running",
-          "outdoors"
-        ]
-      },
-      {
-        "name": "Girls Basketball",
-        "tags": [
-          "movement",
-          "basketball"
-        ]
-      },
-      {
-        "name": "Concert Choir",
+        "name": "Choir",
+        "what": "The school choir, with the music teacher.",
+        "days": [
+          "wed"
+        ],
+        "time": "8:15–8:45 am, before school",
+        "grades": "4-8",
+        "note": "Students let their teacher know and show up; run by Ms. Karst.",
+        "roster": false,
         "tags": [
           "music",
           "choir"
         ]
       },
       {
-        "name": "Science Olympiad",
+        "name": "VW Pickleball Club",
+        "what": "Friendly games in the gym; no experience needed.",
+        "days": [
+          "fri"
+        ],
+        "time": "3:00–4:30 pm",
+        "grades": "5-8",
+        "note": "Signed permission slips to Ms. Eldine (room 208A) or Ms. Snyder.",
         "tags": [
-          "stem",
-          "science"
+          "pickleball",
+          "movement"
+        ]
+      },
+      {
+        "name": "Soccer Club",
+        "what": "Fundamentals and games on Sacks Field.",
+        "days": [
+          "wed"
+        ],
+        "time": "3:00–4:00 pm",
+        "grades": "6-8",
+        "note": "Contact Ms. Beck.",
+        "tags": [
+          "soccer",
+          "movement",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Students Run Philly Style",
+        "what": "Endurance, goals and exploring the city on the run.",
+        "days": [
+          "mon",
+          "thu"
+        ],
+        "time": "3:00–4:00 pm",
+        "grades": "6-8",
+        "note": "Led by Ms. Simons; meets in room 305.",
+        "tags": [
+          "running",
+          "movement",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rainbow Club",
+        "what": "A welcoming space about kindness, respect and celebrating all kinds of families and people, with the Free Library joining from November.",
+        "grades": "2-5",
+        "when": "First Thursday of each month",
+        "note": "Led by Mx. Bex and Counselor Carr; questions to bblackman@philasd.org.",
+        "roster": false,
+        "tags": [
+          "community"
+        ]
+      },
+      {
+        "name": "KAT Club (Kids Against Trash)",
+        "what": "A schoolyard and sidewalk clean-up with Girl Scouts Troop 09920.",
+        "when": "First Wednesday of each month, 4 pm",
+        "gradeNote": "All grades",
+        "note": "Text Kristina Joseph, 267-254-9954.",
+        "roster": false,
+        "tags": [
+          "outdoors",
+          "community"
+        ]
+      },
+      {
+        "name": "Middle School GSA",
+        "what": "The Gender-Sexuality Alliance, open to all students in grades 6–8.",
+        "days": [
+          "mon"
+        ],
+        "time": "3:00–4:00 pm",
+        "grades": "6-8",
+        "note": "Meets in the middle school library.",
+        "tags": [
+          "community"
         ]
       }
     ]
@@ -3754,6 +4030,70 @@
       "mccall": {
         "relation": "onsite",
         "checked": "2026-10-06"
+      }
+    }
+  },
+  {
+    "id": "sunrise-stanton",
+    "name": "Sunrise of Philadelphia at Stanton",
+    "what": "Free before and after school program in the school building: art, STEM, literacy, homework help and social-emotional learning",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "before care",
+      "morning care",
+      "free",
+      "Sunrise",
+      "STEM",
+      "art",
+      "homework help",
+      "childcare"
+    ],
+    "address": "",
+    "grades": "K-8",
+    "gradeNote": "For Stanton students",
+    "hours": "After school until pickup between 5:00 and 5:30 pm, per Sunrise’s sample day, plus before care in the morning. Sunrise says start and end times differ from site to site, so confirm Stanton’s.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Grades K–5 must attend at least 4 days a week, and grades 6–8 at least 3.",
+    "pickupBy": "5:30 pm",
+    "cost": "Free. Sunrise says its after-school programs are free at every site, and the school’s page says the before- and after-school care is free.",
+    "price": "free",
+    "phone": "267-334-9822",
+    "email": "Info@sunriseofphila.org",
+    "website": "https://www.sunriseofphila.org/school-year",
+    "register": {
+      "how": "online",
+      "url": "https://www.sunriseofphila.org/services-8",
+      "note": "Sunrise’s site says enrollment is open all year. Use its K–8 application and choose Stanton."
+    },
+    "note": "The phone number is the site director’s, Devynn Robinson, as Sunrise lists it. Sunrise gives the site’s address as 1700 Christian St; the school sits at 17th and Christian. The school’s page says the program serves more than 60 students. Programs run through June 8.",
+    "sources": [
+      {
+        "label": "Sunrise of Philadelphia: school year programs",
+        "url": "https://www.sunriseofphila.org/school-year"
+      },
+      {
+        "label": "Sunrise program sites",
+        "url": "https://www.sunriseofphila.org/program-sites"
+      },
+      {
+        "label": "Edwin M. Stanton School",
+        "url": "https://emstanton.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-10-25",
+    "schools": {
+      "stanton": {
+        "relation": "onsite",
+        "checked": "2026-10-25"
       }
     }
   },
@@ -4029,7 +4369,11 @@
           "label": "Sawubona Creativity Project",
           "url": "https://www.sawubonacreativityproject.org/campinformationandschedules"
         }
-      ]
+      ],
+      "hours": "8:30 am to 5:30 pm",
+      "cost": "$60 (its 2025–26 price)",
+      "ageMin": 4,
+      "ageMax": 12
     },
     "cost": "$60 a day for a full-day camp (its 2025–26 price)",
     "price": "paid",
@@ -4101,7 +4445,11 @@
           "label": "PlayArts day camps",
           "url": "https://www.playartsphilly.com/day-camps"
         }
-      ]
+      ],
+      "hours": "9 am to 3 pm, or to 6 pm",
+      "cost": "$80 a day to 3 pm, $110 to 6 pm",
+      "ageMin": 5,
+      "ageMax": 10
     },
     "cost": "$80 a day to 3 pm or $110 to 6 pm. A package of all 16 full-day camps to 6 pm is $1,120 for the year.",
     "price": "paid",
@@ -4157,7 +4505,11 @@
           "label": "Philadelphia Rock Gym youth camps",
           "url": "https://philarockgym.com/youth-camps/"
         }
-      ]
+      ],
+      "hours": "9 am to 3 pm, or 9 am to noon",
+      "cost": "$99 full day, $60.50 half day",
+      "ageMin": 6,
+      "ageMax": 15
     },
     "cost": "$99 a full day or $60.50 a half day. Early and late care is $20 an hour.",
     "price": "paid",
@@ -4213,7 +4565,9 @@
           "label": "Skate The Foundry camps",
           "url": "https://www.skatethefoundry.com/camp/"
         }
-      ]
+      ],
+      "ageMin": 7,
+      "ageMax": 13
     },
     "cost": "The day-camp price is in its booking system, not on the page.",
     "phone": "215-954-0750",
@@ -5526,7 +5880,8 @@
           "label": "Sunrise of Philadelphia: school year programs",
           "url": "https://www.sunriseofphila.org/school-year"
         }
-      ]
+      ],
+      "cost": "Free for students at the school"
     },
     "cost": "Free",
     "price": "free",
@@ -5981,8 +6336,9 @@
   {
     "id": "christian-street-ymca",
     "name": "Christian Street YMCA",
-    "what": "The Y on Christian Street, with an indoor pool and gym, and full-day care for kindergarten to 6th grade on school holidays",
+    "what": "The Y on Christian Street: before and after school care for kindergarten to 6th grade, an indoor pool and gym, and full-day care on school holidays",
     "types": [
+      "aftercare",
       "daycamp",
       "movement"
     ],
@@ -5995,15 +6351,19 @@
       "school holiday",
       "full day",
       "childcare",
-      "Graduate Hospital"
+      "Graduate Hospital",
+      "aftercare",
+      "before care",
+      "morning care",
+      "ELRC"
     ],
     "address": "1724 Christian St",
     "neighborhoods": [
       "Graduate Hospital"
     ],
     "grades": "K-6",
-    "gradeNote": "Kindergarten to 6th grade for the full-day care",
-    "hours": "Full Day School Age Care runs 7 am to 6 pm on school holidays. The branch is open 5 am to 9 pm on weekdays and 7 am to 6 pm on weekends.",
+    "gradeNote": "Kindergarten to 6th grade for the before and after school care and the full-day care",
+    "hours": "Before school from 7:00 am to the start of the school day, and after school from the end of the school day to 6:00 pm, per the Y’s before-and-after-school page. Full Day School Age Care runs 7 am to 6 pm on school holidays. The branch is open 5 am to 9 pm on weekdays and 7 am to 6 pm on weekends.",
     "daysOff": {
       "summary": "Full Day School Age Care, 7 am to 6 pm, for kindergarten through 6th grade on days school is closed, with the day split into 45-minute blocks of arts, sports, group games, science and clubs. The Y’s page lists no dates or prices for this school year, so ask the branch which days it will run.",
       "url": "https://www.philaymca.org/child-care/school-age-care-programs/full-day-school-age-care/",
@@ -6013,31 +6373,59 @@
           "label": "Greater Philadelphia YMCA: Full Day School Age Care",
           "url": "https://www.philaymca.org/child-care/school-age-care-programs/full-day-school-age-care/"
         }
-      ]
+      ],
+      "hours": "7 am to 6 pm",
+      "ageMin": 5,
+      "ageMax": 12
     },
-    "cost": "Not posted for the full-day care. Ask the branch.",
+    "cost": "Not posted. The Y signs you up for a child care package covering the whole school year plus registration fees, accepts ELRC (child care subsidy) funding, and has financial assistance you apply for before registering.",
     "price": "paid",
     "phone": "215-735-5800",
     "email": "",
     "website": "https://www.philaymca.org/locations/christian-street-ymca/",
     "register": {
-      "how": "phone",
-      "note": "Call the branch, or use the Y’s child care contact form, to ask about days and sign-up."
+      "how": "online",
+      "url": "https://gpy.my.site.com/s/login/",
+      "note": "The Y’s page says registration for 2026–27 is open through your Y account online. Call 215-965-4316 to register with a sibling discount, or ask the branch."
     },
-    "note": "Members get up to two hours of KidZone child watch. The Y’s swim-lesson pages don’t say which branches and days lessons meet, so ask the branch about those too.",
+    "note": "The Y’s before-and-after-school page says its before care runs only at this branch, and doesn’t say how children get here from school, so ask the branch. Members get up to two hours of KidZone child watch. The Y’s swim-lesson pages don’t say which branches and days lessons meet, so ask the branch about those too.",
     "sources": [
       {
         "label": "Christian Street YMCA",
         "url": "https://www.philaymca.org/locations/christian-street-ymca/"
       },
       {
+        "label": "Greater Philadelphia YMCA: Before & After School Enrichment",
+        "url": "https://www.philaymca.org/child-care/school-age-care/before-and-after-school"
+      },
+      {
         "label": "Greater Philadelphia YMCA: Full Day School Age Care",
         "url": "https://www.philaymca.org/child-care/school-age-care-programs/full-day-school-age-care/"
       }
     ],
-    "lastVerified": "2026-10-16",
-    "scope": "dayoff",
-    "schools": {}
+    "lastVerified": "2026-10-25",
+    "schools": {
+      "stanton": {
+        "relation": "pickup",
+        "distance": "a short walk west on Christian St",
+        "note": "The Y’s before-and-after-school page lists its Christian Street branch as serving Edwin Stanton Elementary School, along with Independence Charter and Marian Anderson, for kindergarten to 6th grade.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Before & After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care/before-and-after-school"
+          }
+        ],
+        "checked": "2026-10-25"
+      }
+    },
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm"
   },
   {
     "id": "hudson-table-philadelphia",
@@ -6073,7 +6461,11 @@
           "label": "Hudson Table kids classes",
           "url": "https://hudsontable.com/philadelphia/kids-classes/"
         }
-      ]
+      ],
+      "hours": "10 am to 1 pm (Veterans Day)",
+      "cost": "$95",
+      "ageMin": 8,
+      "ageMax": 14
     },
     "cost": "$95 for the Veterans Day class. Other kids’ classes are $80 to $90.",
     "price": "paid",
@@ -6768,7 +7160,9 @@
           "label": "Philadelphia School of Circus Arts: Kids Day Off Camp",
           "url": "https://phillycircus.com/kids-day-off-camp/"
         }
-      ]
+      ],
+      "hours": "9 am to 3 pm; aftercare to 6 or 7 pm",
+      "cost": "$99 a day; aftercare $35 to 6 pm, $15 more to 7"
     },
     "cost": "$99 a day. Aftercare 3 to 6 pm $35; 6 to 7 pm $15.",
     "price": "paid",
@@ -6851,7 +7245,11 @@
           "label": "Schuylkill Center day-off camps",
           "url": "https://www.schuylkillcenter.org/education/day-off-camps/"
         }
-      ]
+      ],
+      "hours": "8 am to 3 pm; aftercare 3 to 6 pm",
+      "cost": "$80 a day for members, $90 for others; aftercare $20",
+      "ageMin": 5,
+      "ageMax": 12
     },
     "cost": "$80 a day for members, $90 for non-members. Aftercare $20.",
     "price": "paid",
@@ -6907,7 +7305,9 @@
           "label": "FlipOut Productions day camp",
           "url": "https://www.flipoutproductions.com/day-camp"
         }
-      ]
+      ],
+      "hours": "9 am to 2:50 pm; extended care 3 to 5 pm",
+      "ageMin": 4
     },
     "cost": "Not posted; ask.",
     "price": "paid",
@@ -6995,7 +7395,10 @@
           "label": "Elite Sports Factory: childcare",
           "url": "https://elitesportsfactory.com/childcare"
         }
-      ]
+      ],
+      "hours": "9 am to 3 pm, with half-day options",
+      "ageMin": 5,
+      "ageMax": 15
     },
     "cost": "On its sign-up page.",
     "price": "paid",
@@ -7067,7 +7470,11 @@
           "label": "Movement Callowhill youth camps",
           "url": "https://movementgyms.com/callowhill/climbing/youth-programs/camps/"
         }
-      ]
+      ],
+      "hours": "9 am to 3 pm",
+      "cost": "$125 a day; $600 for spring break week",
+      "ageMin": 6,
+      "ageMax": 13
     },
     "cost": "$125 a day; the spring break week is $600.",
     "price": "paid",
@@ -7145,7 +7552,9 @@
           "label": "Camp TPS spring break camp",
           "url": "https://www.tpschool.org/tps-experience/camptps/spring-break-camp"
         }
-      ]
+      ],
+      "hours": "9 am to 4 pm",
+      "cost": "$200 to $450 a week, by camp"
     },
     "cost": "$200 to $450 a week for winter break, depending on the camp. Spring break prices come with its catalog.",
     "price": "paid",
@@ -7222,7 +7631,11 @@
           "label": "NLArts School’s Out day camps",
           "url": "https://www.nlarts.org/schools-out-day-camp"
         }
-      ]
+      ],
+      "hours": "9 am to 3:30 pm, or to 5:30 pm",
+      "cost": "$60 to 3:30, $75 to 5:30; second sibling $50 or $65",
+      "ageMin": 5,
+      "ageMax": 11
     },
     "cost": "$60 a day to 3:30 or $75 to 5:30; second sibling $50 or $65. Winter break package $200 or $250.",
     "price": "paid",
@@ -7294,7 +7707,8 @@
           "label": "PYB School Closure Holiday Clinics",
           "url": "https://www.phillyyouthbasketball.org/pybholidayclinics"
         }
-      ]
+      ],
+      "hours": "8 am to 4 pm, free late pick-up to 4:30"
     },
     "cost": "On its sign-up page. PYB has a scholarship page.",
     "price": "paid",
@@ -7363,7 +7777,9 @@
           "label": "Awbury day-off camp registration",
           "url": "https://secure.lglforms.com/form_engine/s/hj6M5wuOpPinLZyA3e6dkQ"
         }
-      ]
+      ],
+      "hours": "8:30 am to 3:30 pm",
+      "cost": "$75 a day for members, $85 for others; $22 scholarship rate"
     },
     "cost": "$75 a day for members, $85 for non-members; $22 with a scholarship.",
     "price": "paid",
