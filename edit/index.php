@@ -392,6 +392,7 @@ if (!edit_signed_in()) {
     <li><a href="../meredith/">Meredith page</a></li>
     <li><a href="../coppin/">Coppin page</a></li>
     <li><a href="../vare-washington/">Vare-Washington page</a></li>
+    <li><a href="../stanton/">Stanton page</a></li>
     <li><a href="../mccall/">McCall page</a></li>
     <li><a href="../kirkbride/">Kirkbride page</a></li>
     <li><a href="../southwark/">Southwark page</a></li>

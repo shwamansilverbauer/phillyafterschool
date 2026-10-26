@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-10-25",
+  "generated": "2026-10-26",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -20,6 +20,10 @@
     {
       "id": "vare-washington",
       "name": "Vare-Washington"
+    },
+    {
+      "id": "stanton",
+      "name": "Stanton"
     },
     {
       "id": "mccall",
@@ -174,6 +178,10 @@
     {
       "id": "sunrise-mccall",
       "name": "Sunrise of Philadelphia at McCall"
+    },
+    {
+      "id": "sunrise-stanton",
+      "name": "Sunrise of Philadelphia at Stanton"
     },
     {
       "id": "mccall-clubs",
@@ -553,12 +561,30 @@
   },
   "alerts": [
     {
+      "id": "added-stanton",
+      "kind": "added",
+      "date": "2026-10-25",
+      "sendOn": "2026-10-25",
+      "expires": "2026-10-27",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "edwin-m-stanton-school"
+      ],
+      "when": "New",
+      "title": "Stanton now has a page",
+      "text": "You asked to be told. 5 programs are listed for Stanton so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/stanton/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
       "id": "reg-mister-johns-music-2026-11-02",
       "schools": [
         "nebinger",
         "meredith",
         "coppin",
         "vare-washington",
+        "stanton",
         "mccall",
         "columbus-charter"
       ],
@@ -581,6 +607,7 @@
         "meredith",
         "coppin",
         "vare-washington",
+        "stanton",
         "mccall",
         "columbus-charter"
       ],
@@ -1082,6 +1109,34 @@
       "button": "See Southwark’s week"
     },
     {
+      "id": "week-stanton-2026-11-02",
+      "kind": "week",
+      "date": "2026-11-06",
+      "sendOn": "2026-11-01",
+      "expires": "2026-11-04",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "stanton"
+      ],
+      "when": "Week of November 2",
+      "title": "This week at Stanton",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students. Tuesday: No school: Election Day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students"
+        },
+        {
+          "when": "Tuesday",
+          "what": "No school: Election Day"
+        }
+      ],
+      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Tuesday: no school, Election Day",
+      "url": "https://phillyafterschool.org/stanton/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Stanton’s week"
+    },
+    {
       "id": "week-vare-washington-2026-11-02",
       "kind": "week",
       "date": "2026-11-06",
@@ -1567,6 +1622,30 @@
       "first": "Wednesday: no school, Veterans Day",
       "url": "https://phillyafterschool.org/southwark/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Southwark’s week"
+    },
+    {
+      "id": "week-stanton-2026-11-09",
+      "kind": "week",
+      "date": "2026-11-13",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-11",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "stanton"
+      ],
+      "when": "Week of November 9",
+      "title": "This week at Stanton",
+      "text": "Wednesday: No school: Veterans Day.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Veterans Day"
+        }
+      ],
+      "first": "Wednesday: no school, Veterans Day",
+      "url": "https://phillyafterschool.org/stanton/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Stanton’s week"
     },
     {
       "id": "week-vare-washington-2026-11-09",
