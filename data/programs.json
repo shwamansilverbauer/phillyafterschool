@@ -1692,39 +1692,35 @@
       {
         "label": "Kids group classes 2026–27",
         "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/"
-      },
-      {
-        "label": "Mister John’s Music: kids group classes",
-        "url": "https://misterjohnsmusic.com/kids-group/"
       }
     ],
     "lastVerified": "2026-10-06",
     "schools": {
       "nebinger": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-10-26"
       },
       "meredith": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-10-26"
       },
       "coppin": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-10-26"
       },
       "vare-washington": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-10-26"
       },
       "mccall": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-10-26"
       },
       "columbus-charter": {
         "relation": "pickup",
         "distance": "its 904 S 9th St studio is around the corner",
         "note": "Mister John’s pickup list names “CCCS”.",
-        "checked": "2026-10-06"
+        "checked": "2026-10-26"
       },
       "stanton": {
         "relation": "pickup",
@@ -1732,18 +1728,18 @@
         "note": "Mister John’s 2026–27 pickup list names Stanton on Mondays, Wednesdays and Thursdays only, with pickup run in partnership with CoCo Academy.",
         "sources": [
           {
-            "label": "Mister John’s Music: kids group classes",
-            "url": "https://misterjohnsmusic.com/kids-group/"
+            "label": "Mister John’s Music: kids group classes 2026–27",
+            "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/"
           }
         ],
-        "checked": "2026-10-25"
+        "checked": "2026-10-26"
       }
     },
     "pickupLists": [
       {
         "text": "CCCS, Fanny Jackson Coppin, Independence Charter School, Marian Anderson, Meredith, McCall, Nebinger, Stanton (M/W/R only) and Vare-Washington",
         "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
-        "read": "2026-10-06",
+        "read": "2026-10-26",
         "how": "fetch"
       }
     ],
@@ -6396,7 +6392,7 @@
       },
       {
         "label": "Greater Philadelphia YMCA: Before & After School Enrichment",
-        "url": "https://www.philaymca.org/child-care/school-age-care/before-and-after-school"
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/"
       },
       {
         "label": "Greater Philadelphia YMCA: Full Day School Age Care",
@@ -6412,10 +6408,10 @@
         "sources": [
           {
             "label": "Greater Philadelphia YMCA: Before & After School Enrichment",
-            "url": "https://www.philaymca.org/child-care/school-age-care/before-and-after-school"
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/"
           }
         ],
-        "checked": "2026-10-25"
+        "checked": "2026-10-26"
       }
     },
     "days": [

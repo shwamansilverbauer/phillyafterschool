@@ -48,6 +48,18 @@
     "seen": "2026-10-06"
   },
   {
+    "match": "kumon.com/south-philadelphia",
+    "how": "person",
+    "why": "On 2026-10-26 the center page answered HTTP 403 to the link sweep and was refused to a second automated reader, though it had read fine by plain fetch on 2026-10-16; the whole kumon.com site refused the same day.",
+    "seen": "2026-10-26"
+  },
+  {
+    "match": "ucartsleague.org",
+    "how": "person",
+    "why": "The site’s robots.txt disallows automated reading (seen 2026-10-26), and the link sweep could not resolve its address that day.",
+    "seen": "2026-10-26"
+  },
+  {
     "match": "hisawyer.com/the-dandelion-project",
     "how": "person",
     "why": "On 2026-10-07 the browser extension was not allowed on the booking page and a plain fetch was refused, so its dates, ages and hours were not read.",
