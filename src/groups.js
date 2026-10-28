@@ -2624,6 +2624,7 @@
         var w = {};
         summer.weeks.forEach(function (d) { var ids = ((sk.w && sk.w[d]) || []).filter(function (id) { return typeof id === 'string' && summer.camps[id]; }).slice(0, 6); if (ids.length) w[d] = ids; });
         k.sum = { y: summer.year, w: w, age: (k.sum && k.sum.age) || '' };
+        if (k.sumWhat) Object.keys(k.sumWhat).forEach(function (d) { if (!(w[d] || []).some(function (id) { return /^(home|away|other)$/.test(id); })) delete k.sumWhat[d]; });   // words written in for a week that no longer has a plan of their own
       }, function (k) { if (k.sum && k.sum.y === summer.year) k.sum.w = {}; });
     },
     line: summerLine,
@@ -2636,19 +2637,21 @@
       call('ages_save', { ages: ages, add: 1 }).then(function (r) { if (r.ok) adoptAges(r.ages); });
     },
     empty: 'Add a camp to a week and your summer is kept in your profile, so it’s there on your other devices.',
-    gets: 'Your profile gets each child’s first name, their camps by week and their ages. The calendar’s title and photos stay on this device.'
+    gets: 'Your profile gets each child’s first name, their camps by week and their ages. Anything you write in for a week, the calendar’s title and photos stay on this device.'
   });
 
   var offBox = document.getElementById('off-profile');
   var daysOff = window.pasDaysOff;   // set by site.js on the days-off page
   if (offBox && daysOff && API) {
-    var offPicks = function (k) { var d = {}; daysOff.days.forEach(function (day) { var v = k.off && k.off[day]; if (v === 'home' || (v && daysOff.programs[v])) d[day] = v; }); return d; };
+    // "home", "away" and "other" stand for a day with no listed camp; what a parent wrote in for such a day stays on this device
+    var OWN_DAY = /^(home|away|other)$/;
+    var offPicks = function (k) { var d = {}; daysOff.days.forEach(function (day) { var v = k.off && k.off[day]; if (OWN_DAY.test(v) || (v && daysOff.programs[v])) d[day] = v; }); return d; };
     keepPlan({
       box: offBox, plan: daysOff, field: 'daysoff', flag: 'offProf', next: 'daysoff', event: 'pas_dayoff', more: hasYear ? yearLink : null,
       n: { it: 'this plan', It: 'This plan', a: 'a days-off plan', the: 'the plan', your: 'your days off', word: 'plan' },
       has: function () { return daysOff.rosters().kids.some(function (k) { return Object.keys(offPicks(k)).length > 0; }); },
       // the days ticked "signed up": only days that have a program on them, in date order
-      body: function () { return { y: daysOff.year, kids: daysOff.rosters().kids.map(function (k) { var d = offPicks(k); return { name: firstWord(k.name), d: d, ok: Object.keys(d).filter(function (day) { return d[day] !== 'home' && k.offOk && k.offOk[day]; }).sort() }; }) }; },
+      body: function () { return { y: daysOff.year, kids: daysOff.rosters().kids.map(function (k) { var d = offPicks(k); return { name: firstWord(k.name), d: d, ok: Object.keys(d).filter(function (day) { return !OWN_DAY.test(d[day]) && k.offOk && k.offOk[day]; }).sort() }; }) }; },
       apply: function (copy) {
         // Only the days still to come are replaced: a day that has gone by keeps whatever this device had.
         var wipe = function (k) { daysOff.days.forEach(function (day) { if (k.off) delete k.off[day]; if (k.offOk) delete k.offOk[day]; }); };
@@ -2656,12 +2659,13 @@
           if (!k.off) k.off = {};
           if (!k.offOk) k.offOk = {};
           wipe(k);
-          daysOff.days.forEach(function (day) { var v = sk.d && sk.d[day]; if (v === 'home' || (typeof v === 'string' && daysOff.programs[v])) { k.off[day] = v; if (v !== 'home' && Array.isArray(sk.ok) && sk.ok.indexOf(day) > -1) k.offOk[day] = 1; } });
+          daysOff.days.forEach(function (day) { var v = sk.d && sk.d[day]; if (OWN_DAY.test(v) || (typeof v === 'string' && daysOff.programs[v])) { k.off[day] = v; if (!OWN_DAY.test(v) && Array.isArray(sk.ok) && sk.ok.indexOf(day) > -1) k.offOk[day] = 1; } });
+          if (k.offWhat) Object.keys(k.offWhat).forEach(function (day) { if (!OWN_DAY.test(k.off[day])) delete k.offWhat[day]; });   // words written in for a day that is now a camp day, or nothing
         }, wipe);
       },
       line: daysOffLine,
       empty: 'Choose a plan for a day and your days off are kept in your profile, so they’re there on your other devices.',
-      gets: 'Your profile gets each child’s first name, where they’ll be on each day off, and which days you’ve ticked as signed up. The calendar’s title and photos stay on this device.'
+      gets: 'Your profile gets each child’s first name, where they’ll be on each day off, and which days you’ve ticked as signed up. Anything you write in for a day, each child’s age, the calendar’s title and photos stay on this device.'
     });
   }
 

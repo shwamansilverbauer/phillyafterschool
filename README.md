@@ -935,9 +935,23 @@ of `roll`, `again` or `undo`).
 
 - "Your days off" (`[data-off-plan]`) has a row for every weekday still to come that school is closed. For each, a
   family chooses one place for each child: a program that posted a camp for that date, another listed program (marked
-  "ask", because it hasn't posted the date), or at home. On a break, one tap repeats a pick on the other days of the
+  "ask", because it hasn't posted the date), or a plan of their own. On a break, one tap repeats a pick on the other days of the
   break the program posted. Picks are saved with the rosters in the browser, per child (`off` on each child:
-  `{ "2026-11-03": "program-id" }`, or `"home"`). Siblings, first names and "copy Sam's days" work as on the summer page.
+  `{ "2026-11-03": "program-id" }`, or `"home"`, `"away"` or `"other"`). Siblings, first names and "copy Sam's days" work as on the summer page.
+- **Not a camp day?** The chooser opens with that row, above the camps, so nobody hunts for it: "At home or with
+  family", "Away or out of town", and a write-in ("Nana's", "the shore", a camp that isn't listed here) with "Use
+  that". The three are `home`, `away` and `other` in the plan and go to the profile like a program id
+  (`clean_daysoff()` and `clean_summer()` take them); what was written in is kept on the device only, by date
+  (`offWhat` on the child, `sumWhat` for summer weeks, 40 characters, `cleanWhat()`), and shows wherever the pick
+  does on that device: the row, the calendar, the pictures, the calendar file, the text, the to-do count (an own
+  day is never "to sign up for") and My kids' calendar (when the child is on this device too). Another device
+  shows the plain label ("Another plan"). The summer planner's weeks offer the same row, and an own week
+  counts as planned but never as booked or priced.
+- **Age.** "Age (optional)" beside the first name (`#off-age`, the same select as the summer planner's) narrows
+  the chooser to the camps that take that age, with the others under "N camps posted for this day don't list
+  age 7" and the grid's rows hidden the same way; each camp's span comes from `daysOff.ageMin`/`ageMax`, else
+  its grades as ages (`a` in `off-data`; none means any age). The age is the child's (`age` on the child), shared
+  with the summer planner, and stays on the device.
 - "Who's open each day off" is a chart of every program against every day, filled where the program's own site lists
   the date. It reads without JavaScript; with it, a tap puts that day in the plan (tap again to take it off).
 - The plan leaves the page as a calendar file for every child (`days-off.ics`), as text, as a printed list, or as
@@ -1021,7 +1035,14 @@ level M with no border, and save each row as a string of 1s and 0s).
 ## Rosters
 
 `/board/` ("Build your week" in the menu) lets a signed-in parent collect programs by weekday with "Add to roster"
-on any card. Each child has two rosters, Current and Upcoming, so a family can share what they do now and
+on any card, or from the page itself: a big search box ("Add a program": a name, or a word like music, chess, a
+neighborhood or a school, all of which are in each program's `q`) and **Browse** beside it (`#explore`), for
+anyone who doesn't know what to type: every after-school program, narrowed by type chips, the school it's at or
+picks up from, its neighborhood and "Free only", each row with "Add" (which opens the same day picker as a search
+hit, `pickAdd(id, school, 'explore')`) and "Details". Twelve rows at a time, "Show more" for the rest; the school a
+parent already chose is the starting filter. Each narrowing fires `pas_explore` with what was narrowed, never a
+name. The Monday-to-Friday cards sit right under the search; "Roll a themed week" is below them, closed unless a
+school's page sent someone here to roll. Each child has two rosters, Current and Upcoming, so a family can share what they do now and
 plan the next term. A family with more than one child adds a roster per child (up to six) and picks whose
 roster a program goes on. "Remove this child" asks first, in place (`askSure()` in `site.js`): the link gives way
 to "Remove Rae and both of their rosters?" with a real "Yes, remove" button and "Keep", and the question stays
@@ -1032,8 +1053,8 @@ server unless a signed-in parent keeps a week in their profile or shares it (see
 sharing"). A week can no longer be shared as a link.
 Each pick is drawn as a card in its program type's color. The page is four views of the same week, switched
 beside its heading (`#board-views`, the same `[data-views]` / `[data-pane]` switch the day-camps page uses, with
-`#cost`, `#card` or `#keep` in the address opening on that view): **The week** (the adder, the themed-week roller
-and the grid), **Budget planning** ("What this roster costs"), **Make it a card**, which draws the week as one
+`#cost`, `#card` or `#keep` in the address opening on that view): **The week** (the adder, the grid, then the
+themed-week roller), **Budget planning** ("What this roster costs"), **Make it a card**, which draws the week as one
 picture (for a text, a printout or a teacher), with an optional photo that is read on the device and never
 uploaded, and **Keep & share** (the `#group-share` box: keep the week in a profile, share it with one person or a
 group). A view's tab shows only once its section has something to show (no budget or card before a program is on

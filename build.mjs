@@ -3069,9 +3069,11 @@ function daysOffPage() {
   const hero = `    <h1>${T(`Plan the days off`)}</h1>
     <p class="lede">${T(`Choose where each child will be on every day school is closed, see who’s open on each, and tick off each camp as you sign up.`)}</p>${heroCta(D, 'daysoff')}
     ${offFacts()}`;
+  // the ages a camp takes on days off: what its page posts for them, else its grades as ages; none when it posts neither
+  const offAges = p => { const o = p.daysOff; if (o.ageMin || o.ageMax) return [o.ageMin || 3, o.ageMax || AGE_TOP]; const l = gradesToAges(p._grades); return l && l.length ? [+l[0], +l[l.length - 1]] : null; };
   const planData = {
     year: +String(daysOff.schoolYear).slice(0, 4), schoolYear: daysOff.schoolYear,
-    programs: Object.fromEntries(campPrograms.map(p => [p.id, { name: p.name, url: p.daysOff.url, go: outUrl(p.daysOff.url, { type: 'camp', program: p }), href: link(programPath(p), D), color: TYPE[p.types[0]].color, hood: programHoods(p).join(', '), n: p.daysOff.dates.filter(x => x >= TODAY).length }])),
+    programs: Object.fromEntries(campPrograms.map(p => [p.id, { name: p.name, url: p.daysOff.url, go: outUrl(p.daysOff.url, { type: 'camp', program: p }), href: link(programPath(p), D), color: TYPE[p.types[0]].color, hood: programHoods(p).join(', '), a: offAges(p), n: p.daysOff.dates.filter(x => x >= TODAY).length }])),
     todo: YEAR_PAGE ? link('to-do/', D) : '', site: cfg.siteUrl, qr: cardQr?.dayoff && cardQr.dayoff.text.toLowerCase().startsWith(cfg.siteUrl.toLowerCase() + '/') ? cardQr.dayoff.rows : null,
     days: days.map(({ note, ...x }) => x),
     page: `${cfg.siteUrl}/${offPath}`,
@@ -3087,6 +3089,8 @@ ${jumpNav()}
   <div class="sum-top off-top">
     <div class="field sum-name"><label for="off-name">${T(`First name (optional)`)}</label>
       <input id="off-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${GATE ? T(`Kept with the plan in your profile. A nickname or an initial is fine.`) : T(`Stays on this device.`)}</span></div>
+    <div class="field sum-age"><label for="off-age">${T(`Age (optional)`)}</label>
+      <select id="off-age"><option value="">Any age</option>${Array.from({ length: 15 }, (_, i) => `<option value="${i + 3}">${i + 3}</option>`).join('')}</select><span class="hint">${T(`Shows the camps that take that age. Stays on this device.`)}</span></div>
     <div class="sum-tally"><div class="sum-strip" id="off-strip" aria-hidden="true"></div><p id="off-count" aria-live="polite"></p><p class="hint" id="off-open"></p><p class="off-todo-line" id="off-todo-line" aria-live="polite"></p></div>
   </div>
   <div class="year-view-head off-view-head">
@@ -4155,9 +4159,11 @@ function boardPage() {
     programs: Object.fromEntries(programs.filter(p => !campOnly(p)).map(p => [p.id, {
       name: p.name, hours: p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [], type: p.types[0], no: order.indexOf(p.id) + 1,
       days: p.days || null, offerDays: p.offerDays || null, rate: p.rate || null, types: p.types, grades: p._grades, kw: (p.keywords || []).map(k => k.toLowerCase()), cls: p._cls || null,
-      path: link(programPath(p), 1), q: [p.name, ...(p.offers || []), ...(p.keywords || []), ...p.types.map(t => TYPE[t].label)].join(' ').toLowerCase(),
+      path: link(programPath(p), 1), q: [p.name, ...(p.offers || []), ...(p.keywords || []), ...p.types.map(t => TYPE[t].label), ...programHoods(p), ...schools.filter(s => p.schools[s.id]).map(s => s.shortName)].join(' ').toLowerCase(),
+      hoods: programHoods(p), free: p.price === 'free',
       schools: Object.fromEntries(Object.entries(p.schools).map(([sid, l]) => [sid, { rel: l.relation, where: l.address || p.address || '', free: (l.price || p.price) === 'free' }])),
     }])),
+    hoods: [...new Set(programs.filter(p => !campOnly(p)).flatMap(programHoods))].sort(),
   };
   const schoolLinks = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<a class="btn" href="${link(s.id + '/', 1)}">${esc(s.shortName)}</a>`).join('');
   const hero = `    <h1>${T(`Build your week`)}</h1>
@@ -4195,14 +4201,43 @@ function boardPage() {
     </div>
     <div data-pane="week" style="display:contents">
     <div class="adder needs-js-block" id="board-adder">
-      <div class="adder-find">
+      <div class="adder-find adder-big">
         <label for="add-search">${T(`Add a program`)}</label>
-        <input id="add-search" type="search" role="combobox" aria-expanded="false" aria-controls="add-list" aria-autocomplete="list" placeholder="Start typing a program’s name" autocomplete="off">
+        <span class="hint">${T(`Search by name, or by what it is: music, chess, soccer, a neighborhood, your school.`)}</span>
+        <div class="adder-box">
+          <svg class="adder-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M10.5 3.5a7 7 0 1 1 0 14 7 7 0 0 1 0-14zM15.8 15.8 21 21"/></svg>
+          <input id="add-search" type="search" role="combobox" aria-expanded="false" aria-controls="add-list" aria-autocomplete="list" placeholder="A name, or “music”, “chess”, “Bella Vista”…" autocomplete="off">
+          <button type="button" class="btn adder-browse" id="explore-toggle" aria-expanded="false" aria-controls="explore">${T(`Browse`)}</button>
+        </div>
         <ul id="add-list" class="finder-list" role="listbox" aria-label="Programs" hidden></ul>
+      </div>
+      <div class="explore" id="explore" hidden>
+        <div class="explore-head"><b>${T(`Not sure what to search for? Browse by what it is.`)}</b><button type="button" class="clear" id="explore-close">Close</button></div>
+        <div class="explore-types" id="explore-types" role="group" aria-label="Type">
+          <button type="button" class="xt" data-type="" aria-pressed="true">${T(`Everything`)}</button>
+          ${TYPES.filter(t => programs.some(p => !campOnly(p) && p.types.includes(t.id))).map(t => `<button type="button" class="xt" data-type="${t.id}" aria-pressed="false" style="--tc:${t.color}"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="${t.icon}"/></svg>${esc(t.label)}</button>`).join('')}
+        </div>
+        <div class="explore-row">
+          <div class="field"><label for="explore-school">${T(`At or picking up from`)}</label>
+            <select id="explore-school"><option value="">Any school</option>${[...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<option value="${esc(s.id)}">${esc(s.shortName)}</option>`).join('')}</select></div>
+          <div class="field"><label for="explore-hood">${T(`Neighborhood`)}</label>
+            <select id="explore-hood"><option value="">Anywhere</option></select></div>
+          <label class="explore-free"><input type="checkbox" id="explore-free"> ${T(`Free only`)}</label>
+        </div>
+        <p class="hint" id="explore-count" aria-live="polite"></p>
+        <ul class="explore-list" id="explore-list"></ul>
+        <div class="actions"><button type="button" class="clear" id="explore-more" hidden>Show more</button></div>
       </div>
       <div class="panel add-panel" id="add-panel" hidden></div>
       <p class="hint" id="add-status" aria-live="polite"></p>
     </div>
+    <div class="panel" id="board-empty" hidden>
+      <p id="board-empty-text">Search for a program above and pick its days. Or open a school’s page and choose “Add to roster” on any program.</p>
+      <div class="actions">${schoolLinks}</div>
+    </div>
+    <p class="hint" id="board-hint" hidden>${T(`Drag a card by its colored top to move it to another day, or use the day buttons on the card.`)}</p>
+    <div class="week" id="week"></div>
+    <div class="wkend" id="wkend" hidden></div>
     <details class="roller needs-js-block" id="roller">
       <summary><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="${DICE}"/></svg><span class="roller-head"><b>${T(`Roll a themed week`)}</b><span>${T(`Pick a school and a theme, and we’ll fill Monday to Friday.`)}</span></span></summary>
       <div class="roller-body">
@@ -4225,13 +4260,6 @@ function boardPage() {
         <p class="hint">${T(`A themed week is a starting point, picked at random from what’s listed for that school. Check days, ages and open spots with each program before you plan around it.`)}</p>
       </div>
     </details>
-    <div class="panel" id="board-empty" hidden>
-      <p id="board-empty-text">Search for a program above and pick its days. Or open a school’s page and choose “Add to roster” on any program.</p>
-      <div class="actions">${schoolLinks}</div>
-    </div>
-    <p class="hint" id="board-hint" hidden>${T(`Drag a card by its colored top to move it to another day, or use the day buttons on the card.`)}</p>
-    <div class="week" id="week"></div>
-    <div class="wkend" id="wkend" hidden></div>
     <div class="share-cta" id="share-cta" hidden>
       <canvas id="share-thumb" width="216" height="270" aria-hidden="true"></canvas>
       <div class="share-cta-text">
