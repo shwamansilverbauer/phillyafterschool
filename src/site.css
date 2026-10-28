@@ -771,8 +771,14 @@ button.btn{cursor:pointer;font-family:inherit}
 
 /* ---------- roster: roll a themed week ---------- */
 .js .roller{display:block}
-.roller{max-width:860px;border:2px solid var(--line);border-radius:18px;background:var(--surface)}
+/* Roll a themed week: the adder's second tab (its summary styles stay for the old details box the editor's preview may still show) */
+.roller{max-width:860px;display:flex;flex-direction:column;gap:12px}
 .roller[hidden]{display:none}
+.roller > .hint{margin:0}
+.fill-tabs{margin-bottom:2px}
+.fill-tabs .tab{display:inline-flex;align-items:center;gap:8px}
+.fill-tabs .tab svg{flex:none;color:var(--link)}
+.fill-tabs .tab[aria-pressed="true"] svg{color:inherit}
 .roller summary{display:flex;align-items:center;gap:14px;padding:14px 20px;cursor:pointer;list-style:none;border-radius:16px}
 .roller summary::-webkit-details-marker{display:none}
 .roller summary svg{flex:none;color:var(--link);transition:transform .25s}
@@ -782,7 +788,7 @@ button.btn{cursor:pointer;font-family:inherit}
 .roller-head{display:flex;flex-direction:column;gap:2px;min-width:0}
 .roller-head b{font-family:var(--display);font-size:1.2rem}
 .roller-head > span{color:var(--muted);font-size:.95rem}
-.roller-body{display:flex;flex-direction:column;gap:16px;padding:6px 20px 20px}
+.roller-body{display:flex;flex-direction:column;gap:16px}
 .roller-themes{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
 .theme{font:inherit;text-align:left;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;border:2px solid var(--line);border-left:8px solid var(--tc);background:var(--bg);color:var(--ink);cursor:pointer}
 .theme svg{flex:none;color:var(--tc)}

@@ -1041,8 +1041,9 @@ anyone who doesn't know what to type: every after-school program, narrowed by ty
 picks up from, its neighborhood and "Free only", each row with "Add" (which opens the same day picker as a search
 hit, `pickAdd(id, school, 'explore')`) and "Details". Twelve rows at a time, "Show more" for the rest; the school a
 parent already chose is the starting filter. Each narrowing fires `pas_explore` with what was narrowed, never a
-name. The Monday-to-Friday cards sit right under the search; "Roll a themed week" is below them, closed unless a
-school's page sent someone here to roll. Each child has two rosters, Current and Upcoming, so a family can share what they do now and
+name. "Roll a week" is the adder's second tab (`#fill-tabs`, `data-fill-pane`): the same spot, the other way
+to fill a week, so the two aren't mistaken for one thing; a school's page's "Roll a themed week" link lands on
+that tab, and a program picked from anywhere lands on Add a program. The Monday-to-Friday cards sit right under. Each child has two rosters, Current and Upcoming, so a family can share what they do now and
 plan the next term. A family with more than one child adds a roster per child (up to six) and picks whose
 roster a program goes on. "Remove this child" asks first, in place (`askSure()` in `site.js`): the link gives way
 to "Remove Rae and both of their rosters?" with a real "Yes, remove" button and "Keep", and the question stays
@@ -1053,8 +1054,8 @@ server unless a signed-in parent keeps a week in their profile or shares it (see
 sharing"). A week can no longer be shared as a link.
 Each pick is drawn as a card in its program type's color. The page is four views of the same week, switched
 beside its heading (`#board-views`, the same `[data-views]` / `[data-pane]` switch the day-camps page uses, with
-`#cost`, `#card` or `#keep` in the address opening on that view): **The week** (the adder, the grid, then the
-themed-week roller), **Budget planning** ("What this roster costs"), **Make it a card**, which draws the week as one
+`#cost`, `#card` or `#keep` in the address opening on that view): **The week** (the adder with its Add a program
+and Roll a week tabs, then the grid), **Budget planning** ("What this roster costs"), **Make it a card**, which draws the week as one
 picture (for a text, a printout or a teacher), with an optional photo that is read on the device and never
 uploaded, and **Keep & share** (the `#group-share` box: keep the week in a profile, share it with one person or a
 group). A view's tab shows only once its section has something to show (no budget or card before a program is on

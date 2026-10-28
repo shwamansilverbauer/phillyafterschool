@@ -2494,7 +2494,7 @@
       kidRemove.textContent = 'Remove ' + (kid.name ? possessive(kid.name) + ' rosters' : 'this child');
       title.textContent = (kid.name ? possessive(kid.name) : 'Your') + (which === 'next' ? ' upcoming week' : ' current week');
       emptyText.textContent = which === 'next'
-        ? 'Search for a program above and pick its days, or tap Browse to look through them by type, school or neighborhood. Not sure? Roll a themed week below.'
+        ? 'Search for a program above and pick its days, or tap Browse to look through them by type, school or neighborhood. Not sure? Switch to “Roll a themed week”.'
         : 'Nothing on the current roster yet. Search for a program above, or tap Browse, and pick its days.';
       if (document.activeElement !== nameInput) nameInput.value = kid.name;
       if (maker) {
@@ -2773,6 +2773,18 @@
 
     // ----- add a program without leaving the page: search by name, say which school, pick the days -----
     var adder = $('#board-adder'), addInput = $('#add-search'), addList = $('#add-list'), addPanel = $('#add-panel'), addStatus = $('#add-status');
+    var fillTabs = $('#fill-tabs'), fill = 'add';
+    var setFill = function (which, how) {
+      fill = which === 'roll' ? 'roll' : 'add';
+      all(fillTabs, '.tab').forEach(function (t) { t.setAttribute('aria-pressed', String(t.getAttribute('data-fill') === fill)); });
+      all(adder, '[data-fill-pane]').forEach(function (p) { p.hidden = p.getAttribute('data-fill-pane') !== fill; });
+      if (how) track({ event: 'pas_board_fill', which: fill, method: how });
+    };
+    if (fillTabs) fillTabs.addEventListener('click', function (e) {
+      var t = e.target.closest ? e.target.closest('.tab[data-fill]') : null; if (!t) return;
+      setFill(t.getAttribute('data-fill'), 'tab');
+      var f = fill === 'roll' ? $('#roll-school') : addInput; if (f && f.focus) f.focus();
+    });
     var adding = null;   // the program being added: { id, school }
     var addShown = [], addActive = -1;
     var schoolsOf = function (prog) { return Object.keys(prog.schools).filter(function (id) { return data.schools[id]; }); };
@@ -2839,6 +2851,7 @@
       var prog = data.programs[id];
       if (!prog) return;
       adding = { id: id, school: schoolId && prog.schools[schoolId] && data.schools[schoolId] ? schoolId : guessSchool(prog) };
+      if (fillTabs && fill !== 'add') setFill('add');   // a program picked from elsewhere lands on the Add tab
       addInput.value = ''; closeAdd(); addStatus.textContent = '';
       drawAdd();
       track({ event: 'pas_program_pick', program_id: id, method: how });
@@ -3113,13 +3126,13 @@
       if (startSchool) rollSchool.value = startSchool;
       drawThemes();
       syncRoller = function (total) {
-        roller.hidden = !!shared;
-        if (!rollerSeen) { rollerSeen = true; roller.open = !!data.schools[rollAsk]; }   // open when a school's page sent someone here to roll; a click away otherwise
+        if (fillTabs) fillTabs.hidden = !!shared;
+        if (!rollerSeen) { rollerSeen = true; if (data.schools[rollAsk]) setFill('roll'); }   // on the roll tab when a school's page sent someone here to roll; a tap away otherwise
         if (rolled && !sameSpot()) { rolled = null; rollAfter.hidden = true; rollStatus.textContent = ''; disarm(); }
       };
       if (data.schools[rollAsk] && !shared) {
         if (window.history && history.replaceState) { try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* file preview */ } }
-        window.setTimeout(function () { if (roller.scrollIntoView) roller.scrollIntoView({ block: 'center' }); }, 0);
+        window.setTimeout(function () { if (adder.scrollIntoView) adder.scrollIntoView({ block: 'start' }); }, 0);
       }
     }
 

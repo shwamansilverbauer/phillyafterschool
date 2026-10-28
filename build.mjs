@@ -4201,8 +4201,13 @@ function boardPage() {
     </div>
     <div data-pane="week" style="display:contents">
     <div class="adder needs-js-block" id="board-adder">
+      <div class="tabs fill-tabs" id="fill-tabs" role="group" aria-label="How to fill the week">
+        <button type="button" class="tab" data-fill="add" aria-pressed="true">${T(`Add a program`)}</button>
+        <button type="button" class="tab" data-fill="roll" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="${DICE}"/></svg>${T(`Roll a week`)}</button>
+      </div>
+      <div data-fill-pane="add" style="display:contents">
       <div class="adder-find adder-big">
-        <label for="add-search">${T(`Add a program`)}</label>
+        <label for="add-search" class="vh">${T(`Add a program`)}</label>
         <span class="hint">${T(`Search by name, or by what it is: music, chess, soccer, a neighborhood, your school.`)}</span>
         <div class="adder-box">
           <svg class="adder-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M10.5 3.5a7 7 0 1 1 0 14 7 7 0 0 1 0-14zM15.8 15.8 21 21"/></svg>
@@ -4230,6 +4235,29 @@ function boardPage() {
       </div>
       <div class="panel add-panel" id="add-panel" hidden></div>
       <p class="hint" id="add-status" aria-live="polite"></p>
+      </div>
+      <div class="roller" id="roller" data-fill-pane="roll" hidden>
+        <p class="hint">${T(`Pick a school and a theme, and we’ll fill Monday to Friday.`)}</p>
+        <div class="roller-body">
+          <div class="pair">
+            <div class="field">
+              <label for="roll-school">${T(`School`)}</label>
+              <select id="roll-school"><option value="">Choose a school</option>${[...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<option value="${esc(s.id)}">${esc(s.shortName)}</option>`).join('')}</select>
+            </div>
+            <div class="field">
+              <label for="roll-grade">${T(`Grade`)}</label>
+              <select id="roll-grade"><option value="">Any grade</option>${GRADES.map(g => `<option value="${g}">${g === 'PK' ? 'Pre-K' : g === 'K' ? 'Kindergarten' : 'Grade ' + g}</option>`).join('')}</select>
+              <span class="hint">${T(`Optional. It skips programs that don’t take that grade.`)}</span>
+            </div>
+          </div>
+          <div class="roller-themes" id="roll-themes" role="group" aria-label="Theme">
+            ${THEMES.map(t => `<button type="button" class="theme" data-theme="${t.id}" style="--tc:${t.color || TYPE[t.types[0]].color}" disabled><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="${t.icon || TYPE[t.types[0]].icon}"/></svg><span><b>${T(t.name)}</b><span>${T(t.blurb)}</span><span class="theme-n" data-n></span></span></button>`).join('\n            ')}
+          </div>
+          <p class="roller-status" id="roll-status" aria-live="polite"></p>
+          <div class="actions" id="roll-after" hidden><button type="button" class="btn" id="roll-again">Roll again</button><button type="button" class="clear" id="roll-undo">Put back what I had</button></div>
+          <p class="hint">${T(`A themed week is a starting point, picked at random from what’s listed for that school. Check days, ages and open spots with each program before you plan around it.`)}</p>
+        </div>
+      </div>
     </div>
     <div class="panel" id="board-empty" hidden>
       <p id="board-empty-text">Search for a program above and pick its days. Or open a school’s page and choose “Add to roster” on any program.</p>
@@ -4238,28 +4266,6 @@ function boardPage() {
     <p class="hint" id="board-hint" hidden>${T(`Drag a card by its colored top to move it to another day, or use the day buttons on the card.`)}</p>
     <div class="week" id="week"></div>
     <div class="wkend" id="wkend" hidden></div>
-    <details class="roller needs-js-block" id="roller">
-      <summary><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="${DICE}"/></svg><span class="roller-head"><b>${T(`Roll a themed week`)}</b><span>${T(`Pick a school and a theme, and we’ll fill Monday to Friday.`)}</span></span></summary>
-      <div class="roller-body">
-        <div class="pair">
-          <div class="field">
-            <label for="roll-school">${T(`School`)}</label>
-            <select id="roll-school"><option value="">Choose a school</option>${[...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<option value="${esc(s.id)}">${esc(s.shortName)}</option>`).join('')}</select>
-          </div>
-          <div class="field">
-            <label for="roll-grade">${T(`Grade`)}</label>
-            <select id="roll-grade"><option value="">Any grade</option>${GRADES.map(g => `<option value="${g}">${g === 'PK' ? 'Pre-K' : g === 'K' ? 'Kindergarten' : 'Grade ' + g}</option>`).join('')}</select>
-            <span class="hint">${T(`Optional. It skips programs that don’t take that grade.`)}</span>
-          </div>
-        </div>
-        <div class="roller-themes" id="roll-themes" role="group" aria-label="Theme">
-          ${THEMES.map(t => `<button type="button" class="theme" data-theme="${t.id}" style="--tc:${t.color || TYPE[t.types[0]].color}" disabled><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="${t.icon || TYPE[t.types[0]].icon}"/></svg><span><b>${T(t.name)}</b><span>${T(t.blurb)}</span><span class="theme-n" data-n></span></span></button>`).join('\n          ')}
-        </div>
-        <p class="roller-status" id="roll-status" aria-live="polite"></p>
-        <div class="actions" id="roll-after" hidden><button type="button" class="btn" id="roll-again">Roll again</button><button type="button" class="clear" id="roll-undo">Put back what I had</button></div>
-        <p class="hint">${T(`A themed week is a starting point, picked at random from what’s listed for that school. Check days, ages and open spots with each program before you plan around it.`)}</p>
-      </div>
-    </details>
     <div class="share-cta" id="share-cta" hidden>
       <canvas id="share-thumb" width="216" height="270" aria-hidden="true"></canvas>
       <div class="share-cta-text">
