@@ -631,6 +631,8 @@ function week_out(array $w): array {
 function grade_list(string $kept): array { return $kept === '' ? array() : explode(',', $kept); }
 // A summer for the profile: the year, and for each child a first name and the camps picked for each week (the week's
 // Monday). Only camps the site lists, only dates in that year. No ages, no titles, no photos: those stay on the device.
+// A day off or a summer week with no listed camp: at home, away, or a plan of the parent's own (its words stay on their device).
+const OWN_PLANS = array('home', 'away', 'other');
 function clean_summer($s): ?array {
   global $CFG;
   if (!is_array($s)) return null;
@@ -644,7 +646,7 @@ function clean_summer($s): ?array {
     foreach (isset($k['w']) && is_array($k['w']) ? array_slice($k['w'], 0, 20, true) : array() as $d => $ids) {
       if (!is_string($d) || !preg_match('/^' . $year . '-\d{2}-\d{2}$/', $d) || !is_array($ids)) continue;
       $keep = array();
-      foreach (array_slice($ids, 0, 6) as $id) { if (is_string($id) && in_array($id, $known, true) && !in_array($id, $keep, true)) $keep[] = $id; }
+      foreach (array_slice($ids, 0, 6) as $id) { if (is_string($id) && (in_array($id, $known, true) || in_array($id, OWN_PLANS, true)) && !in_array($id, $keep, true)) $keep[] = $id; }
       if ($keep) $w[$d] = $keep;
     }
     $kids[] = array('name' => first_name(str($k, 'name', 40)), 'w' => (object) $w);
@@ -674,12 +676,12 @@ function clean_daysoff($s): ?array {
     $d = array();
     foreach (isset($k['d']) && is_array($k['d']) ? array_slice($k['d'], 0, 120, true) : array() as $day => $id) {
       if (!is_string($day) || !preg_match('/^(' . $year . '|' . ($year + 1) . ')-\d{2}-\d{2}$/', $day) || !is_string($id)) continue;
-      if ($id === 'home' || isset($known[$id])) $d[$day] = $id;
+      if (in_array($id, OWN_PLANS, true) || isset($known[$id])) $d[$day] = $id;
     }
     // the days the parent ticked "signed up": only days that have a program on them
     $ok = array();
     foreach (isset($k['ok']) && is_array($k['ok']) ? array_slice($k['ok'], 0, 120) : array() as $day) {
-      if (is_string($day) && isset($d[$day]) && $d[$day] !== 'home' && !in_array($day, $ok, true)) $ok[] = $day;
+      if (is_string($day) && isset($d[$day]) && !in_array($d[$day], OWN_PLANS, true) && !in_array($day, $ok, true)) $ok[] = $day;
     }
     sort($ok);
     $kids[] = array('name' => first_name(str($k, 'name', 40)), 'd' => (object) $d, 'ok' => $ok);

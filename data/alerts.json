@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-10-27",
+  "generated": "2026-10-28",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -560,23 +560,6 @@
     "reason": "you asked to be told when this school was added"
   },
   "alerts": [
-    {
-      "id": "added-stanton",
-      "kind": "added",
-      "date": "2026-10-25",
-      "sendOn": "2026-10-25",
-      "expires": "2026-10-27",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "edwin-m-stanton-school"
-      ],
-      "when": "New",
-      "title": "Stanton now has a page",
-      "text": "You asked to be told. 5 programs are listed for Stanton so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/stanton/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
     {
       "id": "reg-mister-johns-music-2026-11-02",
       "schools": [

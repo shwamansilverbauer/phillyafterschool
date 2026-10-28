@@ -1398,7 +1398,19 @@
   }
   function weekendCount(b) { return b && b.wk ? b.wk.sat.length + b.wk.sun.length : 0; }
   function cleanName(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').replace(/^ | $/g, '').slice(0, 40); }
-  // A day-off plan is { "2026-10-09": "program-id" } ("home" for a day at home); own prices are { "program.school": { a: 120, per: "month" } }.
+  // A day off, or a week of the summer, can be somewhere other than a listed camp: at home, away, or whatever a parent
+  // writes in. These three stand in for a program id in a plan and go to the profile like one. What a parent writes
+  // in ("Nana’s", "the shore") is kept with the plan on this device only, by date (offWhat and sumWhat).
+  var OWN = { home: 'At home or with family', away: 'Away or out of town', other: 'Another plan' };
+  var OWN_SHORT = { home: 'At home', away: 'Away', other: 'Another plan' };
+  function isOwn(v) { return typeof v === 'string' && Object.prototype.hasOwnProperty.call(OWN, v); }
+  function cleanWhat(o) {
+    var out = {};
+    if (o && typeof o === 'object') Object.keys(o).slice(0, 140).forEach(function (d) { if (/^\d{4}-\d{2}-\d{2}$/.test(d)) { var t = cleanName(o[d]); if (t) out[d] = t; } });
+    return out;
+  }
+  function cleanAge(a) { return /^\d{1,2}$/.test(String(a == null ? '' : a)) ? String(a) : ''; }
+  // A day-off plan is { "2026-10-09": "program-id" } ("home", "away" or "other" for a day with no listed camp); own prices are { "program.school": { a: 120, per: "month" } }.
   function cleanOff(o) {
     var out = {};
     if (o && typeof o === 'object') Object.keys(o).slice(0, 120).forEach(function (d) { if (/^\d{4}-\d{2}-\d{2}$/.test(d) && typeof o[d] === 'string' && /^[a-z0-9-]{1,60}$/.test(o[d])) out[d] = o[d]; });
@@ -1423,7 +1435,7 @@
   // The days off a parent has marked "signed up": only days that have a program on them.
   function cleanOk(o, off) {
     var out = {};
-    if (o && typeof o === 'object') Object.keys(o).slice(0, 120).forEach(function (d) { if (o[d] && off[d] && off[d] !== 'home') out[d] = 1; });
+    if (o && typeof o === 'object') Object.keys(o).slice(0, 120).forEach(function (d) { if (o[d] && off[d] && !isOwn(off[d])) out[d] = 1; });
     return out;
   }
   function cleanSum(s) {
@@ -1433,7 +1445,7 @@
       var a = Array.isArray(s.w[d]) ? s.w[d].filter(function (x, i, l) { return typeof x === 'string' && /^[a-z0-9-]{1,60}$/.test(x) && l.indexOf(x) === i; }).slice(0, 6) : [];
       if (/^\d{4}-\d{2}-\d{2}$/.test(d) && a.length) w[d] = a;
     });
-    return { y: s.y, w: w, age: /^\d{1,2}$/.test(String(s.age || '')) ? String(s.age) : '' };
+    return { y: s.y, w: w, age: cleanAge(s.age) };
   }
   // Dates a parent adds themselves (picture day, pretzel day, a form that's due). Kept on this device only:
   // { id, t: what, d: the day (or the first one), r: 'w' when it repeats every week, w: the children it is for (none = everyone) }.
@@ -1448,7 +1460,7 @@
     });
     return out;
   }
-  function newKid(name) { return { name: cleanName(name), now: emptyBoard(), next: emptyBoard(), teacher: '', cardNote: '', off: {}, offOk: {}, offNote: '', prices: {}, groups: [], sum: null }; }
+  function newKid(name) { return { name: cleanName(name), now: emptyBoard(), next: emptyBoard(), teacher: '', cardNote: '', off: {}, offOk: {}, offWhat: {}, sumWhat: {}, age: '', offNote: '', prices: {}, groups: [], sum: null }; }
   function possessive(name) { return name + '’s'; }
   // A pick is "program.school", optionally followed by "~" and a class or short note.
   function entryKey(e) { var i = e.indexOf('~'); return i < 0 ? e : e.slice(0, i); }
@@ -1464,7 +1476,7 @@
       rosters = { kid: 0, active: raw.active === 'now' ? 'now' : 'next', wk: !!raw.wk, kids: raw.kids.slice(0, MAX_KIDS).map(function (k) {
         k = k && typeof k === 'object' ? k : {};
         var off0 = cleanOff(k.off);
-        return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next), teacher: cleanName(k.teacher), cardNote: String(k.cardNote == null ? '' : k.cardNote).slice(0, 110), off: off0, offOk: cleanOk(k.offOk, off0), offNote: String(k.offNote == null ? '' : k.offNote).slice(0, 110), prices: cleanPrices(k.prices), groups: cleanLinks(k.groups), prof: cleanProf(k.prof), sum: cleanSum(k.sum) };
+        return { name: cleanName(k.name), now: cleanBoard(k.now), next: cleanBoard(k.next), teacher: cleanName(k.teacher), cardNote: String(k.cardNote == null ? '' : k.cardNote).slice(0, 110), off: off0, offOk: cleanOk(k.offOk, off0), offWhat: cleanWhat(k.offWhat), sumWhat: cleanWhat(k.sumWhat), age: cleanAge(k.age), offNote: String(k.offNote == null ? '' : k.offNote).slice(0, 110), prices: cleanPrices(k.prices), groups: cleanLinks(k.groups), prof: cleanProf(k.prof), sum: cleanSum(k.sum) };
       }) };
       rosters.sumTitle = cleanName(raw.sumTitle);
       rosters.offTitle = cleanName(raw.offTitle);
@@ -1591,7 +1603,7 @@
       o.days.forEach(function (d) {
         var v = k.off[d.d];
         if (!v) { if (any) open++; return; }
-        if (v === 'home') return;
+        if (isOwn(v)) return;
         if (k.ok[d.d]) { done.push({ k: k, i: i, d: d, v: v }); return; }
         var key = i + ':' + v; if (!by[key]) { by[key] = { k: k, i: i, v: v, days: [] }; groups.push(by[key]); }
         by[key].days.push(d);
@@ -1669,8 +1681,8 @@
     var dayWords = function (iso) { return new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' }); };
     var build = function () {
       var po = profile && profile.daysoff && profile.daysoff.y === td.year ? profile.daysoff : null;
-      var offOf = function (o) { var out = {}; days.forEach(function (d) { var v = o && o[d.d]; if (v === 'home' || (typeof v === 'string' && td.programs[v])) out[d.d] = v; }); return out; };
-      var okOf = function (off, ticked) { var out = {}; Object.keys(off).forEach(function (d) { if (off[d] !== 'home' && ticked(d)) out[d] = 1; }); return out; };
+      var offOf = function (o) { var out = {}; days.forEach(function (d) { var v = o && o[d.d]; if (isOwn(v) || (typeof v === 'string' && td.programs[v])) out[d.d] = v; }); return out; };
+      var okOf = function (off, ticked) { var out = {}; Object.keys(off).forEach(function (d) { if (!isOwn(off[d]) && ticked(d)) out[d] = 1; }); return out; };
       var kids = po
         ? po.kids.map(function (pk) { var off = offOf(pk.d); return { name: cleanName(pk.name).split(' ')[0], off: off, ok: okOf(off, function (d) { return Array.isArray(pk.ok) && pk.ok.indexOf(d) > -1; }), pk: pk }; })
         : loadRosters().kids.map(function (k) { var off = offOf(k.off); return { name: cleanName(k.name).split(' ')[0], off: off, ok: okOf(off, function (d) { return !!(k.offOk && k.offOk[d]); }), dev: k }; });
@@ -1716,23 +1728,28 @@
     od.days.forEach(function (d, i) { d.i = i; });
     var days = od.days.filter(function (d) { return d.d >= today0; });   // a day that has gone by since the site was built drops out
     var daysEl = $o('#off-days'), stripEl = $o('#off-strip'), countEl = $o('#off-count'), openEl = $o('#off-open');
-    var toolsEl = $o('#off-tools'), statusEl = $o('#off-status'), nameBox = $o('#off-name');
+    var toolsEl = $o('#off-tools'), statusEl = $o('#off-status'), nameBox = $o('#off-name'), ageBox = $o('#off-age');
     var kidsRow = $o('#off-kids'), kidAdd = $o('#off-kid-add'), kidDrop = $o('#off-kid-drop');
     var dropSure = null, dropSureFor = -1;   // the open "remove this child?" ask, if any
     var chart = document.querySelector('.off-chart'), chartNote = document.getElementById('off-chart-note');
-    var HOME = 'home';
+    var HOME = 'home', OTHER = 'other';
     var ids = Object.keys(od.programs).sort(function (a, b) { return od.programs[a].name.localeCompare(od.programs[b].name); });
     var r = loadRosters();
     var kid = function () { return r.kids[r.kid]; };
-    var label = function (v) { return v === HOME ? 'At home or with family' : od.programs[v] ? od.programs[v].name : ''; };
-    var pickOf = function (k, d) { var v = k.off[d.d]; return v && label(v) ? v : ''; };
+    // What a day's pick is called: a camp's name, or for a day at home, away or with a plan of the parent's own, the
+    // words they wrote in for that day on this device, else the plain label.
+    var whatOf = function (k, d) { return (d && k && k.offWhat && k.offWhat[d.d]) || ''; };
+    var label = function (v, d, k) { return isOwn(v) ? whatOf(k || kid(), d) || OWN[v] : od.programs[v] ? od.programs[v].name : ''; };
+    var pickOf = function (k, d) { var v = k.off[d.d]; return v && (isOwn(v) || od.programs[v]) ? v : ''; };
+    // Does a camp take this child's age? With no age set, or a camp that posts no ages or grades, yes. 14 means 14 and up.
+    var fitsAge = function (k, id) { var age = k.age, a = od.programs[id] && od.programs[id].a; return !age || !a || (+age >= a[0] && (+age <= a[1] || a[1] >= 14)); };
     var plannedOf = function (k) { return days.filter(function (d) { return pickOf(k, d); }); };
     var planners = function () { return r.kids.map(function (k, i) { return { k: k, i: i, name: k.name || (r.kids.length > 1 ? 'Child ' + (i + 1) : '') }; }).filter(function (x) { return plannedOf(x.k).length > 0; }); };
-    var posted = function (v, d) { return v === HOME || d.camps.indexOf(v) > -1; };
+    var posted = function (v, d) { return isOwn(v) || d.camps.indexOf(v) > -1; };
     // Putting a camp on a day isn't signing up for it. A parent ticks a day once they have, and the page keeps the list
     // of what is left: a mark of their own, kept with the plan, that the site has no way to check.
-    var okOf = function (k, d) { var v = pickOf(k, d); return !!v && v !== HOME && !!(k.offOk && k.offOk[d.d]); };
-    var needOf = function (k, d) { var v = pickOf(k, d); return !!v && v !== HOME && !okOf(k, d); };
+    var okOf = function (k, d) { var v = pickOf(k, d); return !!v && !isOwn(v) && !!(k.offOk && k.offOk[d.d]); };
+    var needOf = function (k, d) { var v = pickOf(k, d); return !!v && !isOwn(v) && !okOf(k, d); };
     var todoLine = $o('#off-todo-line');
     var say = function (t) { statusEl.textContent = t || ''; };
     var ev = function (action, more) { var o = { event: 'pas_dayoff', action: action, days_planned: plannedOf(kid()).length, children: r.kids.length }; if (more) Object.keys(more).forEach(function (x) { o[x] = more[x]; }); track(o); };
@@ -1742,7 +1759,7 @@
       list.forEach(function (d) { if (on) k.offOk[d.d] = 1; else delete k.offOk[d.d]; });
       saveRosters();
       ev(on ? 'signed_up' : 'signed_up_undo', { method: how, days: list.length });
-      if (list.length === 1) say(on ? 'Marked: signed up for ' + label(pickOf(k, list[0])) + ' on ' + list[0].label + '.' : list[0].label + ' is back on your to-do list.');
+      if (list.length === 1) say(on ? 'Marked: signed up for ' + label(pickOf(k, list[0]), list[0], k) + ' on ' + list[0].label + '.' : list[0].label + ' is back on your to-do list.');
       else say(on ? 'Marked: signed up for ' + list.length + ' days.' : '');
       draw();
       var f = focusId && document.getElementById(focusId);   // the page was redrawn: put the keyboard back where it was
@@ -1800,21 +1817,24 @@
       if (line) say('You did it! ' + line + ' You are on fireeee!');
     };
     // One place a day: picking the same one again takes it off, picking another replaces it.
-    var set = function (d, val, how) {
+    var set = function (d, val, how, what) {
       var me = kid(), was = pickOf(me, d), p = od.programs[val], done0 = doneNow(me);
-      if (val && val !== was) { me.off[d.d] = val; track({ event: 'pas_dayoff_pick', program_id: val, day: d.d, method: how }); if (val !== HOME) hit('p:' + val, 'plan'); }
+      if (!me.offWhat) me.offWhat = {};
+      if (val && (val !== was || (isOwn(val) && what !== undefined))) { me.off[d.d] = val; track({ event: 'pas_dayoff_pick', program_id: val, day: d.d, method: how }); if (!isOwn(val)) hit('p:' + val, 'plan'); }
       else { delete me.off[d.d]; val = ''; }
+      if (isOwn(val) && what !== undefined) { if (cleanName(what)) me.offWhat[d.d] = cleanName(what); else delete me.offWhat[d.d]; }   // the words stay on this device
+      else if (!isOwn(val)) delete me.offWhat[d.d];
       if (me.offOk) delete me.offOk[d.d];   // a different place, or none: whatever was signed up for is no longer the plan
       saveRosters();
-      say(val ? label(val) + ' is on ' + d.label + '.' + (p && !posted(val, d) ? (p.n ? ' It hasn’t posted that date, so ask if it’s open.' : ' It hasn’t posted any dates, so ask if it’s open.') : '') : label(was) + ' is off ' + d.label + '.');
+      say(val ? label(val, d) + ' is on ' + d.label + '.' + (p && !posted(val, d) ? (p.n ? ' It hasn’t posted that date, so ask if it’s open.' : ' It hasn’t posted any dates, so ask if it’s open.') : '') : label(was) + ' is off ' + d.label + '.');
       draw();
       if (val) cheerOff(done0);
     };
     // The other days of the same break this pick could cover: days with nothing on them yet, and for a program only the dates it posted.
-    var restOfBreak = function (d, v) { return days.filter(function (x) { return x.b === d.b && x.d !== d.d && !pickOf(kid(), x) && (v === HOME || x.camps.indexOf(v) > -1); }); };
+    var restOfBreak = function (d, v) { return days.filter(function (x) { return x.b === d.b && x.d !== d.d && !pickOf(kid(), x) && (isOwn(v) || x.camps.indexOf(v) > -1); }); };
     var option = function (v, d, small) {
-      var b = el('button', 'sum-opt'); b.type = 'button';
-      b.appendChild(el('b', null, label(v)));
+      var b = el('button', 'sum-opt' + (isOwn(v) ? ' own' : '')); b.type = 'button';
+      b.appendChild(el('b', null, isOwn(v) ? OWN[v] : label(v, d)));
       if (small) b.appendChild(el('small', null, small));
       b.addEventListener('click', function () { openDay = ''; set(d, v, 'day_list'); });
       return b;
@@ -1852,7 +1872,7 @@
           same = el('p', 'sum-same'); same.appendChild(el('span', 'hint', 'Going to the same places? '));
           others.forEach(function (k) {
             var b = el('button', 'clear', 'Copy ' + possessive(kidLabel(k, r.kids.indexOf(k))) + ' days'); b.type = 'button';
-            b.addEventListener('click', function () { var done0 = doneNow(me); plannedOf(k).forEach(function (d) { me.off[d.d] = k.off[d.d]; }); saveRosters(); ev('copy_sibling'); say('Copied. Change any day that’s different.'); draw(); cheerOff(done0); });
+            b.addEventListener('click', function () { var done0 = doneNow(me); if (!me.offWhat) me.offWhat = {}; plannedOf(k).forEach(function (d) { me.off[d.d] = k.off[d.d]; var w = whatOf(k, d); if (w) me.offWhat[d.d] = w; else delete me.offWhat[d.d]; }); saveRosters(); ev('copy_sibling'); say('Copied. Change any day that’s different.'); draw(); cheerOff(done0); });
             same.appendChild(b);
           });
           daysEl.parentNode.insertBefore(same, daysEl);
@@ -1882,7 +1902,7 @@
               var d = dayAt(iso); if (!d) return [];
               var v = pickOf(me, d);
               var ok = okOf(me, d), need = needOf(me, d);
-              return [{ cls: 'm-off', text: d.name }, v ? { cls: 'm-kid' + (posted(v, d) ? '' : ' m-ask') + (ok ? ' m-ok' : need ? ' m-need' : ''), text: v === HOME ? 'At home' : (ok ? '✓ ' : '') + label(v), say: v === HOME ? '' : label(v) + (ok ? ', signed up' : ', still to sign up'), ink: ok ? ['#D6F3D2', '#2C8444'] : need ? ['#FFEFA2', '#B88A00'] : ink } : { cls: 'm-kid m-todo', text: 'Not planned', ink: ink }];
+              return [{ cls: 'm-off', text: d.name }, v ? { cls: 'm-kid' + (posted(v, d) ? '' : ' m-ask') + (ok ? ' m-ok' : need ? ' m-need' : ''), text: isOwn(v) ? whatOf(me, d) || OWN_SHORT[v] : (ok ? '✓ ' : '') + label(v), say: isOwn(v) ? '' : label(v) + (ok ? ', signed up' : ', still to sign up'), ink: ok ? ['#D6F3D2', '#2C8444'] : need ? ['#FFEFA2', '#B88A00'] : ink } : { cls: 'm-kid m-todo', text: 'Not planned', ink: ink }];
             },
             onMonth: function (mk) { offMonth = mk; offDay = firstIn(mk); openDay = ''; draw(); },
             onDay: function (iso) { offDay = iso; openDay = pickOf(kid(), dayAt(iso)) ? '' : iso; draw(); var row = document.getElementById('d-' + iso); if (row && row.scrollIntoView) row.scrollIntoView({ block: 'nearest' }); }
@@ -1903,16 +1923,16 @@
         var box = el('div', 'sum-picks');
         if (v) {
           var isOk = okOf(me, d);
-          var chip = el('span', 'sum-chip' + (posted(v, d) ? '' : ' ask') + (v === HOME ? ' home' : isOk ? ' ok' : ' need'));
-          if (p) { var a = el('a', null, p.name); a.href = p.href; chip.appendChild(a); } else chip.appendChild(el('b', null, label(v)));
-          var bits = p ? (posted(v, d) ? 'Camp posted for this day' : p.n ? 'hasn’t posted this date' : 'no dates posted') : '';
+          var chip = el('span', 'sum-chip' + (posted(v, d) ? '' : ' ask') + (isOwn(v) ? ' home' : isOk ? ' ok' : ' need'));
+          if (p) { var a = el('a', null, p.name); a.href = p.href; chip.appendChild(a); } else chip.appendChild(el('b', null, label(v, d)));
+          var bits = p ? (posted(v, d) ? 'Camp posted for this day' : p.n ? 'hasn’t posted this date' : 'no dates posted') : v === OTHER && whatOf(me, d) ? 'written in' : '';
           if (bits) chip.appendChild(el('small', null, bits));
-          var x = el('button', 'sum-x', '×'); x.type = 'button'; x.setAttribute('aria-label', 'Take ' + label(v) + ' off ' + d.label);
+          var x = el('button', 'sum-x', '×'); x.type = 'button'; x.setAttribute('aria-label', 'Take ' + label(v, d) + ' off ' + d.label);
           x.addEventListener('click', function () { set(d, v, 'day_list'); });
           chip.appendChild(x); box.appendChild(chip);
-          if (v !== HOME) {   // signed up yet?
+          if (!isOwn(v)) {   // signed up yet?
             var okL = el('label', 'sum-ok' + (isOk ? ' on' : '')), okB = el('input'); okB.type = 'checkbox'; okB.checked = isOk; okB.id = 'ok-' + d.d;
-            okB.setAttribute('aria-label', 'Signed up for ' + label(v) + ' on ' + d.label);
+            okB.setAttribute('aria-label', 'Signed up for ' + label(v, d) + ' on ' + d.label);
             okL.appendChild(okB); okL.appendChild(document.createTextNode(isOk ? ' Signed up' : ' Signed up?'));
             okB.addEventListener('change', function () { setOk(me, [d], okB.checked, 'day_list', 'ok-' + d.d); });
             box.appendChild(okL);
@@ -1920,7 +1940,7 @@
           var rest = restOfBreak(d, v);
           if (rest.length) {
             var fill = el('button', 'clear', 'Same for ' + (rest.length === 1 ? 'the other day' : 'the other ' + rest.length + ' days') + ' of ' + d.name.replace(/^(\S)/, function (c) { return c.toLowerCase(); })); fill.type = 'button';
-            fill.addEventListener('click', function () { var done0 = doneNow(me); rest.forEach(function (o) { me.off[o.d] = v; }); saveRosters(); ev('fill_break', { days: rest.length }); say('Done: ' + label(v) + ' is on ' + (rest.length + 1) + ' days of ' + d.name + '.'); draw(); cheerOff(done0); });
+            fill.addEventListener('click', function () { var done0 = doneNow(me); var w = whatOf(me, d); if (!me.offWhat) me.offWhat = {}; rest.forEach(function (o) { me.off[o.d] = v; if (w) me.offWhat[o.d] = w; else delete me.offWhat[o.d]; }); saveRosters(); ev('fill_break', { days: rest.length }); say('Done: ' + label(v, d) + ' is on ' + (rest.length + 1) + ' days of ' + d.name + '.'); draw(); cheerOff(done0); });
             box.appendChild(fill);
           }
         } else box.appendChild(el('span', 'sum-none', d.camps.length ? (d.camps.length === 1 ? '1 camp posted' : d.camps.length + ' camps posted') : 'No camp posted yet'));
@@ -1932,13 +1952,36 @@
         li.appendChild(add);
         if (openDay === d.d) {
           var ch = el('div', 'sum-choose');
-          var runs = ids.filter(function (id) { return id !== v && d.camps.indexOf(id) > -1; });
-          var quiet = ids.filter(function (id) { return id !== v && d.camps.indexOf(id) < 0; });
-          ch.appendChild(el('p', 'sum-choose-h', d.camps.length ? (d.camps.length === 1 ? '1 program has posted a camp for this day' : d.camps.length + ' programs have posted a camp for this day') : 'No listed program has posted a camp for this day yet'));
+          // Not a camp day? At home, away, or whatever the parent writes in: first, so nobody hunts for it among the camps.
+          var ownBox = el('div', 'sum-own');
+          ownBox.appendChild(el('p', 'sum-choose-h', 'Not a camp day?'));
+          var og = el('div', 'sum-opts own-opts');
+          if (v !== HOME) og.appendChild(option(HOME, d, 'No camp that day'));
+          if (v !== 'away') og.appendChild(option('away', d, 'A trip, or out of town'));
+          var wi = el('div', 'sum-writein'), wiLab = el('label', null, v === OTHER ? 'Or change what you wrote in' : 'Or write in your own plan'); wiLab.htmlFor = 'own-' + d.d;
+          var wiRow = el('div', 'sum-writein-row'), inp = el('input'), go = el('button', 'btn', v === OTHER ? 'Change it' : 'Use that');
+          inp.type = 'text'; inp.id = 'own-' + d.d; inp.maxLength = 40; inp.placeholder = 'Nana’s, the shore, a camp that isn’t listed here'; inp.autocomplete = 'off'; inp.value = v === OTHER ? whatOf(me, d) : '';
+          go.type = 'button';
+          go.addEventListener('click', function () { var t = cleanName(inp.value); if (!t) { inp.focus(); return; } openDay = ''; set(d, OTHER, 'day_list', t); });
+          inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); go.click(); } });
+          wiRow.appendChild(inp); wiRow.appendChild(go);
+          wi.appendChild(wiLab); wi.appendChild(wiRow); wi.appendChild(el('span', 'hint', 'What you write stays on this device.'));
+          og.appendChild(wi); ownBox.appendChild(og); ch.appendChild(ownBox);
+          // the camps, for this child's age when one is set
+          var age = me.age, fits = function (id) { return fitsAge(me, id); };
+          var runs = ids.filter(function (id) { return id !== v && d.camps.indexOf(id) > -1 && fits(id); });
+          var tooOld = ids.filter(function (id) { return id !== v && d.camps.indexOf(id) > -1 && !fits(id); });
+          var quiet = ids.filter(function (id) { return id !== v && d.camps.indexOf(id) < 0 && fits(id); });
+          ch.appendChild(el('p', 'sum-choose-h', (d.camps.length ? (d.camps.length === 1 ? '1 program has posted a camp for this day' : d.camps.length + ' programs have posted a camp for this day') : 'No listed program has posted a camp for this day yet') + (age && d.camps.length ? (tooOld.length ? ', ' + (runs.length + (v && d.camps.indexOf(v) > -1 && fits(v) ? 1 : 0)) + ' for age ' + age : ', all for age ' + age) : '')));
           var grid = el('div', 'sum-opts');
           runs.forEach(function (id) { grid.appendChild(option(id, d, [od.programs[id].hood, 'Camp posted'].filter(Boolean).join(' · '))); });
-          if (v !== HOME) grid.appendChild(option(HOME, d, 'No camp that day'));
           ch.appendChild(grid);
+          if (tooOld.length) {
+            var mo = el('details', 'sum-more');
+            mo.appendChild(el('summary', null, tooOld.length + (tooOld.length === 1 ? ' camp posted for this day doesn’t' : ' camps posted for this day don’t') + ' list age ' + age));
+            var g3 = el('div', 'sum-opts'); tooOld.forEach(function (id) { var a = od.programs[id].a; g3.appendChild(option(id, d, [od.programs[id].hood, a ? 'Ages ' + a[0] + '–' + a[1] : ''].filter(Boolean).join(' · '))); }); mo.appendChild(g3);
+            ch.appendChild(mo);
+          }
           if (quiet.length) {
             var more = el('details', 'sum-more');
             more.appendChild(el('summary', null, quiet.length + (quiet.length === 1 ? ' program that hasn’t' : ' programs that haven’t') + ' posted this date'));
@@ -1960,6 +2003,7 @@
         all(chart, '[data-w]').forEach(function (c) { if (od.days[+c.getAttribute('data-w')].d < today0) c.hidden = true; });
         all(chart, 'tbody tr').forEach(function (tr) {
           var id = tr.getAttribute('data-camp'), p = od.programs[id];
+          tr.hidden = mayPlan() && !!p && !fitsAge(me, id);   // a camp that doesn't take this child's age leaves the grid
           if (mayPlan()) all(tr, 'td.on').forEach(function (td) {
             var d = od.days[+td.getAttribute('data-w')], b = td.querySelector('button'), inPlan = pickOf(me, d) === id;
             if (!b) {
@@ -1973,11 +2017,13 @@
           });
         });
       }
-      if (chartNote) chartNote.textContent = many ? 'Taps go on ' + possessive(kidLabel(me, r.kid)) + ' days off.' : '';
+      if (chartNote) chartNote.textContent = [many ? 'Taps go on ' + possessive(kidLabel(me, r.kid)) + ' days off.' : '', me.age ? 'Showing camps that take age ' + me.age + '.' : ''].filter(Boolean).join(' ');
+      if (ageBox && document.activeElement !== ageBox) ageBox.value = me.age || '';
       drawCard();
     };
     // ----- children -----
     nameBox.addEventListener('input', function () { kid().name = cleanName(nameBox.value); saveRosters(); draw(); });
+    if (ageBox) ageBox.addEventListener('change', function () { kid().age = cleanAge(ageBox.value); saveRosters(); openDay = ''; draw(); ev('age'); });
     kidAdd.addEventListener('click', function () {
       if (r.kids.length >= MAX_KIDS) return;
       r.kids.push(newKid('')); r.kid = r.kids.length - 1; saveRosters(); openDay = '';
@@ -1998,7 +2044,7 @@
       who.forEach(function (x, n) {
         if (n) lines.push('');
         lines.push((x.name ? possessive(x.name) + ' days off, ' : 'Days off, ') + od.schoolYear);
-        plannedOf(x.k).forEach(function (d) { var v = pickOf(x.k, d); lines.push(d.label + ' (' + d.name + '): ' + label(v) + (posted(v, d) ? '' : ' (date not posted, ask)') + (v === HOME ? '' : okOf(x.k, d) ? ' (signed up)' : ' (still to sign up)')); });
+        plannedOf(x.k).forEach(function (d) { var v = pickOf(x.k, d); lines.push(d.label + ' (' + d.name + '): ' + label(v, d, x.k) + (posted(v, d) ? '' : ' (date not posted, ask)') + (isOwn(v) ? '' : okOf(x.k, d) ? ' (signed up)' : ' (still to sign up)')); });
       });
       lines.push('Made at ' + od.page);
       return lines.join('\n');
@@ -2019,7 +2065,7 @@
       planners().forEach(function (x) {
         plannedOf(x.k).forEach(function (d) {
           var v = pickOf(x.k, d), p = od.programs[v];
-          events.push({ uid: 'dayoff-' + x.i + '-' + d.d, start: d.d, days: 1, title: (x.name ? x.name + ': ' : '') + label(v) + ' (no school)',
+          events.push({ uid: 'dayoff-' + x.i + '-' + d.d, start: d.d, days: 1, title: (x.name ? x.name + ': ' : '') + label(v, d, x.k) + ' (no school)',
             text: ['No school: ' + d.name + '.', p && !posted(v, d) ? 'The program hasn’t posted this date. Ask if it’s open.' : '', p ? (okOf(x.k, d) ? 'Signed up.' : 'Still to sign up.') : ''].filter(Boolean).join('\n'), url: p ? p.url : od.page });
         });
       });
@@ -2040,7 +2086,7 @@
     clearBtn.addEventListener('click', function () {
       if (!sure) { sure = true; clearBtn.textContent = 'Clear every day' + (r.kids.length > 1 ? ' for ' + kidLabel(kid(), r.kid) : '') + '? Tap again'; window.setTimeout(function () { sure = false; clearBtn.textContent = 'Clear the plan'; }, 5000); return; }
       sure = false; clearBtn.textContent = 'Clear the plan';
-      kid().off = {}; kid().offOk = {}; saveRosters(); openDay = ''; draw(); say('Cleared.'); ev('clear');
+      kid().off = {}; kid().offOk = {}; kid().offWhat = {}; saveRosters(); openDay = ''; draw(); say('Cleared.'); ev('clear');
     });
 
     // ----- the calendar picture: every day off on one card, or a card for each month, with every child on it -----
@@ -2061,7 +2107,7 @@
     var shortDay = function (iso) { var d = utc(iso); return MONTHS[d.getUTCMonth()].slice(0, 3) + ' ' + d.getUTCDate(); };
     var fitText = function (ctx, text, max) { if (ctx.measureText(text).width <= max) return text; while (text.length > 1 && ctx.measureText(text + '…').width > max) text = text.slice(0, -1); return text.replace(/\s+$/, '') + '…'; };
     var rbox = function (ctx, x, y, w, h, rad) { rad = Math.min(rad, h / 2, w / 2); ctx.beginPath(); ctx.moveTo(x + rad, y); ctx.arcTo(x + w, y, x + w, y + h, rad); ctx.arcTo(x + w, y + h, x, y + h, rad); ctx.arcTo(x, y + h, x, y, rad); ctx.arcTo(x, y, x + w, y, rad); ctx.closePath(); };
-    var shortLabel = function (v) { return v === HOME ? 'At home' : label(v); };
+    var shortLabel = function (v, d, k) { return isOwn(v) ? whatOf(k || kid(), d) || OWN_SHORT[v] : label(v); };
     var defaultTitle = function () {
       var named = planners().filter(function (x) { return x.k.name; }).map(function (x) { return x.k.name; });
       if (named.length && named.length === planners().length && named.length <= 3) return (named.length === 1 ? possessive(named[0]) : named.length === 2 ? named[0] + ' and ' + possessive(named[1]) : named[0] + ', ' + named[1] + ' and ' + possessive(named[2])) + ' days off';
@@ -2125,7 +2171,7 @@
           ctx.fillText(fitText(ctx, a === z ? utc(a).toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' }) + ', ' + shortDay(a) : shortDay(a) + ' – ' + shortDay(z), TAB - 20), X + TAB / 2, y + rowH / 2 + fs * 0.36); ctx.textAlign = 'left';
           who.forEach(function (x, c) {
             var cxl = X + TAB + 14 + c * colW, mine = [];
-            g.days.forEach(function (d) { var v = pickOf(x.k, d); if (v && mine.indexOf(shortLabel(v)) < 0) mine.push(shortLabel(v)); });
+            g.days.forEach(function (d) { var v = pickOf(x.k, d), t = shortLabel(v, d, x.k); if (v && mine.indexOf(t) < 0) mine.push(t); });
             ctx.fillStyle = INKS[c % 6][1]; rbox(ctx, cxl, y + 7, 8, rowH - 14, 4); ctx.fill();
             if (!mine.length) { ctx.fillStyle = '#9DB2CC'; ctx.font = '400 ' + (fs - 3) + 'px ' + BODY; ctx.fillText(who.length > 2 ? 'open' : fitText(ctx, g.name, colW - 34), cxl + 20, y + rowH / 2 + fs * 0.32); return; }
             ctx.fillStyle = NAVY; ctx.font = '750 ' + (who.length > 2 ? fs - 4 : fs - 1) + 'px ' + DISPLAY;
@@ -2150,14 +2196,14 @@
             if (!inMonth || dt.getUTCDate() === 1) { ctx.font = '700 18px ' + BODY; ctx.fillText(MONTHS[dt.getUTCMonth()].slice(0, 3), x + 12 + (dt.getUTCDate() > 9 ? 38 : 22), y + 31); }
             if (!off) continue;
             ctx.fillStyle = '#4A3B00'; ctx.font = '700 17px ' + BODY; ctx.fillText(fitText(ctx, off.name, cellW - 22), x + 12, y + 56);
-            var bars = who.map(function (w, wn) { return { n: wn, v: pickOf(w.k, off) }; }).filter(function (b) { return b.v; });
+            var bars = who.map(function (w, wn) { return { n: wn, k: w.k, v: pickOf(w.k, off) }; }).filter(function (b) { return b.v; });
             if (!bars.length) { ctx.fillStyle = '#6B5800'; ctx.font = '400 18px ' + BODY; ctx.fillText('nothing yet', x + 12, y + 84); continue; }
             var room = rH - 72, bh = Math.min(38, (room - 4 * (bars.length - 1)) / bars.length), fsz = Math.max(13, Math.min(19, Math.floor(bh * 0.52)));
             bars.forEach(function (b, bn) {
               var by = y + 66 + bn * (bh + 4), ink = INKS[b.n % 6];
               ctx.fillStyle = '#FFFFFF'; rbox(ctx, x + 8, by, cellW - 16, bh, 9); ctx.fill();
               ctx.fillStyle = ink[1]; rbox(ctx, x + 8, by, 9, bh, 4); ctx.fill();
-              var fz = fsz, lab = shortLabel(b.v);
+              var fz = fsz, lab = shortLabel(b.v, off, b.k);
               do { ctx.font = '750 ' + fz + 'px ' + DISPLAY; fz--; } while (ctx.measureText(lab).width > cellW - 44 && fz >= 13);   // shrink a long name before cutting it
               ctx.fillStyle = NAVY;
               ctx.fillText(fitText(ctx, lab, cellW - 44), x + 26, by + bh / 2 + fsz * 0.36);
@@ -2448,14 +2494,15 @@
       kidRemove.textContent = 'Remove ' + (kid.name ? possessive(kid.name) + ' rosters' : 'this child');
       title.textContent = (kid.name ? possessive(kid.name) : 'Your') + (which === 'next' ? ' upcoming week' : ' current week');
       emptyText.textContent = which === 'next'
-        ? 'Search for a program above and pick its days. Or open a school’s page and choose “Add to roster” on any program.'
-        : 'Nothing on the current roster yet. Search for a program above and pick its days.';
+        ? 'Search for a program above and pick its days, or tap Browse to look through them by type, school or neighborhood. Not sure? Roll a themed week below.'
+        : 'Nothing on the current roster yet. Search for a program above, or tap Browse, and pick its days.';
       if (document.activeElement !== nameInput) nameInput.value = kid.name;
       if (maker) {
         if (document.activeElement !== teacherBox) teacherBox.value = kid.teacher || '';
         if (document.activeElement !== noteBox) noteBox.value = kid.cardNote || '';
         drawCard();
       }
+      if (window.pasExploreRedraw) window.pasExploreRedraw();   // the "On this week" marks in the Browse list
     };
 
     // ----- the weekend: an optional Saturday and Sunday under the five school days -----
@@ -2878,6 +2925,70 @@
         var same = addPanel.querySelector('[data-day="' + day + '"]');
         if (same) same.focus();
       });
+      // ----- Browse: for someone who doesn't know what to type. Every after-school program, narrowed by what it is, which
+      // school it serves, its neighborhood and whether it's free; "Add" opens the same day picker as a search hit. -----
+      var explore = $('#explore'), exToggle = $('#explore-toggle'), exClose = $('#explore-close'), exTypes = $('#explore-types'), exSchool = $('#explore-school'), exHood = $('#explore-hood'), exFree = $('#explore-free'), exCount = $('#explore-count'), exList = $('#explore-list'), exMore = $('#explore-more');
+      if (explore && exToggle) {
+        var exState = { type: '', school: '', hood: '', free: false, shown: 12 };
+        (data.hoods || []).forEach(function (h) { var o = el('option', null, h); o.value = h; exHood.appendChild(o); });
+        var exHits = function () {
+          return Object.keys(data.programs).filter(function (id) {
+            var p = data.programs[id];
+            if (exState.type && p.types.indexOf(exState.type) < 0) return false;
+            if (exState.school && !p.schools[exState.school]) return false;
+            if (exState.hood && (p.hoods || []).indexOf(exState.hood) < 0) return false;
+            if (exState.free && !(p.free || (exState.school && p.schools[exState.school].free))) return false;
+            return true;
+          }).sort(function (a, b) { return data.programs[a].name.localeCompare(data.programs[b].name); });
+        };
+        var drawExplore = function () {
+          if (explore.hidden) return;
+          var hits = exHits(), b = activeBoard(), sid = exState.school;
+          all(exTypes, '.xt').forEach(function (x) { x.setAttribute('aria-pressed', String(x.getAttribute('data-type') === exState.type)); });
+          exList.textContent = '';
+          hits.slice(0, exState.shown).forEach(function (id) {
+            var p = data.programs[id], li = el('li', 'explore-item'), main = el('div', 'explore-main'), t = data.types[p.type];
+            var name = el('b', null, p.name);
+            var meta = [t ? t.label : '', (p.hoods || []).slice(0, 2).join(', ')].filter(Boolean).join(' · ');
+            var where = sid && p.schools[sid] ? (data.rels[p.schools[sid].rel] || '').replace('{s}', data.schools[sid].name) : schoolsOf(p).slice(0, 3).map(function (x) { return data.schools[x].name; }).join(', ') + (schoolsOf(p).length > 3 ? ' and ' + (schoolsOf(p).length - 3) + ' more' : '');
+            main.appendChild(name);
+            main.appendChild(el('span', 'finder-meta', meta + (where ? ' · ' + where : '')));
+            if (p.free || (sid && p.schools[sid] && p.schools[sid].free)) main.appendChild(el('span', 'pill onsite', 'Free'));
+            var on = DAYS.filter(function (d) { return b.days[d[0]].some(function (e) { return entryKey(e).split('.')[0] === id; }); }).map(function (d) { return d[2]; });
+            if (on.length) main.appendChild(el('span', 'pill pickup', 'On this week: ' + on.join(', ')));
+            li.appendChild(main);
+            var acts = el('div', 'explore-acts'), add = el('button', 'btn', 'Add'), more = el('a', null, 'Details');
+            add.type = 'button'; add.setAttribute('aria-label', 'Add ' + p.name);
+            add.addEventListener('click', function () { pickAdd(id, sid, 'explore'); if (addPanel.scrollIntoView) addPanel.scrollIntoView({ block: 'center' }); });
+            more.href = p.path;
+            acts.appendChild(add); acts.appendChild(more); li.appendChild(acts);
+            exList.appendChild(li);
+          });
+          exCount.textContent = hits.length ? [hits.length, exState.free ? 'free' : '', exState.type && data.types[exState.type] ? data.types[exState.type].label.toLowerCase() : '', hits.length === 1 ? 'program' : 'programs', sid ? 'at or picking up from ' + data.schools[sid].name : '', exState.hood ? 'in ' + exState.hood : ''].filter(Boolean).join(' ') + '.' : 'Nothing matches that mix. Loosen one of the choices.';
+          exMore.hidden = hits.length <= exState.shown;
+          if (!exMore.hidden) exMore.textContent = 'Show ' + Math.min(12, hits.length - exState.shown) + ' more';
+        };
+        var openExplore = function (open) {
+          explore.hidden = !open; exToggle.setAttribute('aria-expanded', String(open));
+          if (open) { closeAdd(); exState.shown = 12; drawExplore(); track({ event: 'pas_explore', action: 'open' }); var f = exTypes.querySelector('.xt'); if (f && f.focus) f.focus(); }
+          else exToggle.focus();
+        };
+        exToggle.addEventListener('click', function () { openExplore(explore.hidden); });
+        exClose.addEventListener('click', function () { openExplore(false); });
+        exTypes.addEventListener('click', function (e) {
+          var t = e.target.closest ? e.target.closest('.xt') : null; if (!t) return;
+          exState.type = t.getAttribute('data-type'); exState.shown = 12; drawExplore();
+          track({ event: 'pas_explore', action: 'type', type: exState.type || 'all' });
+        });
+        exSchool.addEventListener('change', function () { exState.school = data.schools[exSchool.value] ? exSchool.value : ''; exState.shown = 12; drawExplore(); track({ event: 'pas_explore', action: 'school', school: exState.school || 'any' }); });
+        exHood.addEventListener('change', function () { exState.hood = exHood.value; exState.shown = 12; drawExplore(); track({ event: 'pas_explore', action: 'neighborhood' }); });
+        exFree.addEventListener('change', function () { exState.free = exFree.checked; exState.shown = 12; drawExplore(); track({ event: 'pas_explore', action: 'free', on: exFree.checked ? 1 : 0 }); });
+        exMore.addEventListener('click', function () { exState.shown += 12; drawExplore(); });
+        // a school already chosen for this child starts the browsing there
+        var mine0 = mySchool();
+        if (mine0 && data.schools[mine0.id]) { exSchool.value = mine0.id; exState.school = mine0.id; }
+        window.pasExploreRedraw = drawExplore;
+      }
       // Arriving from a program's page ("Add to your week"): open that program here, ready for its days.
       var asked = query();
       if (asked.wk && data.weekend && data.weekend[asked.wk] && !shared && mayPlan()) {   // from the weekend classes page: "Add Saturday to your week"
@@ -3003,7 +3114,7 @@
       drawThemes();
       syncRoller = function (total) {
         roller.hidden = !!shared;
-        if (!rollerSeen) { rollerSeen = true; roller.open = total === 0 || !!data.schools[rollAsk]; }   // open on an empty week; a click away otherwise
+        if (!rollerSeen) { rollerSeen = true; roller.open = !!data.schools[rollAsk]; }   // open when a school's page sent someone here to roll; a click away otherwise
         if (rolled && !sameSpot()) { rolled = null; rollAfter.hidden = true; rollStatus.textContent = ''; disarm(); }
       };
       if (data.schools[rollAsk] && !shared) {
@@ -3290,7 +3401,12 @@
     var dropSure = null, dropSureFor = -1;   // the open "remove this child?" ask, if any
     var chart = document.querySelector('.sum-chart'), chartNote = document.getElementById('sum-chart-note');
     var ids = Object.keys(sd.camps).sort(function (a, b) { return sd.camps[a].n.localeCompare(sd.camps[b].n); });
+    // A week at home, away or with a plan of the parent's own goes on the week like a camp. Each stands in as a camp
+    // with no dates, hours or price; what the parent wrote in for the week is on this device (sumWhat, by Monday).
+    Object.keys(OWN).forEach(function (t) { sd.camps[t] = { n: OWN[t], w: [], y: 0, x: 1, p: null, h: '', a: [0, 99], hood: '', own: true }; });
     var r = loadRosters();
+    var weekWhat = function (k, i) { return (k && k.sumWhat && k.sumWhat[sd.weeks[i].d]) || ''; };
+    var nameOf = function (id, i, k) { var c = sd.camps[id]; return c.own ? weekWhat(k || kid(), i) || c.n : c.n; };
     // Each child's summer is { y: the summer, w: { "2027-06-07": [camp ids] }, age: "7" }. One made for another summer starts over.
     var sumOf = function (k) {
       if (!k.sum || k.sum.y !== sd.year) k.sum = { y: sd.year, w: {}, age: (k.sum && k.sum.age) || '' };
@@ -3316,7 +3432,8 @@
     var say = function (t) { statusEl.textContent = t || ''; };
     var picksOf = function (k, i) { return sumOf(k).w[sd.weeks[i].d] || []; };
     var picks = function (i) { return picksOf(kid(), i); };
-    var fitsAge = function (c) { var age = plan().age; if (!age) return true; var a = +age; return a >= Math.floor(c.a[0]) && a <= c.a[1]; };
+    var ageOf = function (k) { return k.age || sumOf(k).age || ''; };
+    var fitsAge = function (c) { var age = ageOf(kid()); if (!age || c.own) return true; var a = +age; return a >= Math.floor(c.a[0]) && a <= c.a[1]; };
     var price = function (c) { return c.p === 0 ? 'Free' : c.p ? '$' + c.p + ' a week' : ''; };
     var dates = function (c) { return !c.w.length ? 'No dates listed' : c.x ? sd.year + ' dates' : c.y + ' dates, as a guide'; };
     var coveredOf = function (k) { return sd.weeks.filter(function (w, i) { return picksOf(k, i).length; }).length; };
@@ -3360,17 +3477,21 @@
       cheer('summer', 'sum-' + r.kid, line);
       say('You did it! ' + line + ' You are on fireeee!');
     };
-    var toggle = function (id, i, how) {
+    var toggle = function (id, i, how, what) {
       var s = plan(), d = sd.weeks[i].d, list = s.w[d] || [], at = list.indexOf(id), c = sd.camps[id], full0 = sd.weeks.length > 0 && covered() === sd.weeks.length;
-      if (at > -1) list.splice(at, 1);
-      else {
+      var me = kid(); if (!me.sumWhat) me.sumWhat = {};
+      if (at > -1 && !(c.own && what !== undefined)) list.splice(at, 1);
+      else if (at < 0) {
         if (list.length >= 6) { say('That week already has six camps. Take one off first.'); return; }
         list.push(id);
       }
+      if (c.own) { if (at > -1 && what === undefined) { if (!list.some(function (x) { return sd.camps[x].own; })) delete me.sumWhat[d]; } else if (what !== undefined) { if (cleanName(what)) me.sumWhat[d] = cleanName(what); else delete me.sumWhat[d]; } }
+      var name = nameOf(id, i);
       if (list.length) s.w[d] = list; else delete s.w[d];
       saveRosters();
-      ev(at > -1 ? 'remove' : 'add', { camp_id: id, week: i + 1, method: how });
-      if (at < 0) hit('c:' + id, 'plan');
+      ev(at > -1 && !(c.own && what !== undefined) ? 'remove' : 'add', { camp_id: id, week: i + 1, method: how });
+      if (at < 0 && !c.own) hit('c:' + id, 'plan');
+      if (c.own) { say(at > -1 && what === undefined ? name + ' is off ' + sd.weeks[i].label + '.' : name + ' is on ' + sd.weeks[i].label + '.'); draw(); if (at < 0) cheerSum(full0); return; }
       say(at > -1 ? c.n + ' is off ' + sd.weeks[i].label + '.' : c.n + ' is on ' + sd.weeks[i].label + '.' + (c.w.indexOf(i) < 0 ? (c.w.length ? ' It didn’t list that week, so check with the camp.' : ' It hasn’t listed dates, so check with the camp.') : !c.x ? ' That’s the week it ran in ' + c.y + '.' : ''));
       draw();
       if (at < 0) cheerSum(full0);
@@ -3398,7 +3519,7 @@
       if (dropSure && (dropSureFor !== r.kid || !many || !bare)) dropSure();   // the question was about another child
       kidDrop.hidden = !many || !bare || !!dropSure;   // a child with an after-school roster is removed on the roster page, where share groups are told
       if (document.activeElement !== nameBox) nameBox.value = me.name || '';
-      ageBox.value = plan().age || '';
+      if (document.activeElement !== ageBox) ageBox.value = ageOf(me);
       weeksEl.textContent = ''; stripEl.textContent = '';
       // a sibling's weeks, to start from
       var same = sumEl.querySelector('.sum-same'); if (same) same.parentNode.removeChild(same);
@@ -3408,7 +3529,7 @@
           same = el('p', 'sum-same'); same.appendChild(el('span', 'hint', 'Going to the same camps? '));
           others.forEach(function (k) {
             var b = el('button', 'clear', 'Copy ' + possessive(kidLabel(k, r.kids.indexOf(k))) + ' weeks'); b.type = 'button';
-            b.addEventListener('click', function () { var w = {}; Object.keys(sumOf(k).w).forEach(function (d) { w[d] = sumOf(k).w[d].slice(); }); plan().w = w; saveRosters(); ev('copy_sibling'); say('Copied. Change any week that’s different.'); draw(); });
+            b.addEventListener('click', function () { var w = {}, what = {}; Object.keys(sumOf(k).w).forEach(function (d) { w[d] = sumOf(k).w[d].slice(); if (k.sumWhat && k.sumWhat[d]) what[d] = k.sumWhat[d]; }); plan().w = w; me.sumWhat = what; saveRosters(); ev('copy_sibling'); say('Copied. Change any week that’s different.'); draw(); });
             same.appendChild(b);
           });
           weeksEl.parentNode.insertBefore(same, weeksEl);
@@ -3440,7 +3561,7 @@
             marks: function (iso) {
               var i = weekOfDay[iso]; if (i === undefined) return [];
               var got = picks(i);
-              return got.length ? got.map(function (id) { var c = sd.camps[id]; return { cls: 'm-kid' + (c.w.indexOf(i) < 0 ? ' m-ask' : ''), text: c.n, ink: ink }; }) : [{ cls: 'm-kid m-todo', text: 'Not planned', ink: ink }];
+              return got.length ? got.map(function (id) { var c = sd.camps[id]; return { cls: 'm-kid' + (!c.own && c.w.indexOf(i) < 0 ? ' m-ask' : ''), text: nameOf(id, i, me), ink: ink }; }) : [{ cls: 'm-kid m-todo', text: 'Not planned', ink: ink }];
             },
             onMonth: function (mk) { calMonth = mk; calWeek = firstIn(mk); openWeek = -1; draw(); },
             onDay: function (iso) {
@@ -3465,14 +3586,15 @@
         li.appendChild(when);
         var box = el('div', 'sum-picks');
         mine.forEach(function (id) {
-          var c = sd.camps[id], chip = el('span', 'sum-chip' + (c.w.indexOf(i) < 0 ? ' ask' : ''));
-          var a = el('a', null, c.n); a.href = campHref(id); chip.appendChild(a);
-          var bits = [c.h, price(c), c.w.indexOf(i) < 0 ? (c.w.length ? 'not a week it listed' : 'no dates listed') : c.x ? '' : 'ran this week in ' + c.y].filter(Boolean).join(' · ');
+          var c = sd.camps[id], chip = el('span', 'sum-chip' + (c.own ? ' home' : c.w.indexOf(i) < 0 ? ' ask' : ''));
+          if (c.own) chip.appendChild(el('b', null, nameOf(id, i, me)));
+          else { var a = el('a', null, c.n); a.href = campHref(id); chip.appendChild(a); }
+          var bits = c.own ? (id === 'other' && weekWhat(me, i) ? 'written in' : '') : [c.h, price(c), c.w.indexOf(i) < 0 ? (c.w.length ? 'not a week it listed' : 'no dates listed') : c.x ? '' : 'ran this week in ' + c.y].filter(Boolean).join(' · ');
           if (bits) chip.appendChild(el('small', null, bits));
-          var x = el('button', 'sum-x', '×'); x.type = 'button'; x.setAttribute('aria-label', 'Take ' + c.n + ' off ' + wk.label);
+          var x = el('button', 'sum-x', '×'); x.type = 'button'; x.setAttribute('aria-label', 'Take ' + nameOf(id, i, me) + ' off ' + wk.label);
           x.addEventListener('click', function () { toggle(id, i, 'week_list'); });
           chip.appendChild(x); box.appendChild(chip);
-          booked++; if (c.p === null) unpriced++; else total += c.p;
+          if (!c.own) { booked++; if (c.p === null) unpriced++; else total += c.p; }
         });
         if (!mine.length) box.appendChild(el('span', 'sum-none', 'Nothing yet'));
         li.appendChild(box);
@@ -3481,7 +3603,24 @@
         add.addEventListener('click', function () { openWeek = openWeek === i ? -1 : i; draw(); var o = weeksEl.querySelector('.sum-choose'); if (o && o.scrollIntoView) o.scrollIntoView({ block: 'nearest' }); });
         li.appendChild(add);
         if (openWeek === i) {
-          var age = plan().age, ch = el('div', 'sum-choose');
+          var age = ageOf(me), ch = el('div', 'sum-choose');
+          // Not a camp week? At home, away, or whatever the parent writes in: first, so nobody hunts for it among the camps.
+          var ownBox = el('div', 'sum-own');
+          ownBox.appendChild(el('p', 'sum-choose-h', 'Not a camp week?'));
+          var og = el('div', 'sum-opts own-opts');
+          var ownOpt = function (t, small) { var b = el('button', 'sum-opt own'); b.type = 'button'; b.appendChild(el('b', null, OWN[t])); b.appendChild(el('small', null, small)); b.addEventListener('click', function () { openWeek = -1; toggle(t, i, 'week_list'); }); return b; };
+          if (mine.indexOf('home') < 0) og.appendChild(ownOpt('home', 'No camp that week'));
+          if (mine.indexOf('away') < 0) og.appendChild(ownOpt('away', 'A trip, or out of town'));
+          var hasOther = mine.indexOf('other') > -1;
+          var wi = el('div', 'sum-writein'), wiLab = el('label', null, hasOther ? 'Or change what you wrote in' : 'Or write in your own plan'); wiLab.htmlFor = 'own-' + wk.d;
+          var wiRow = el('div', 'sum-writein-row'), inp = el('input'), go = el('button', 'btn', hasOther ? 'Change it' : 'Use that');
+          inp.type = 'text'; inp.id = 'own-' + wk.d; inp.maxLength = 40; inp.placeholder = 'Nana’s, the shore, a camp that isn’t listed here'; inp.autocomplete = 'off'; inp.value = hasOther ? weekWhat(me, i) : '';
+          go.type = 'button';
+          go.addEventListener('click', function () { var t = cleanName(inp.value); if (!t) { inp.focus(); return; } openWeek = -1; toggle('other', i, 'week_list', t); });
+          inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); go.click(); } });
+          wiRow.appendChild(inp); wiRow.appendChild(go);
+          wi.appendChild(wiLab); wi.appendChild(wiRow); wi.appendChild(el('span', 'hint', 'What you write stays on this device.'));
+          og.appendChild(wi); ownBox.appendChild(og); ch.appendChild(ownBox);
           var open = ids.filter(function (id) { return mine.indexOf(id) < 0 && fitsAge(sd.camps[id]); });
           var runs = open.filter(function (id) { return sd.camps[id].w.indexOf(i) > -1; });
           var undated = open.filter(function (id) { return !sd.camps[id].w.length; });
@@ -3518,7 +3657,7 @@
           td.classList.toggle('picked', inPlan);
         });
       });
-      if (chartNote && !chartNote.getAttribute('data-ask')) chartNote.textContent = [many ? 'Taps add to ' + possessive(kidLabel(me, r.kid)) + ' summer.' : '', plan().age ? 'Showing camps that take age ' + plan().age + '.' : ''].filter(Boolean).join(' ');
+      if (chartNote && !chartNote.getAttribute('data-ask')) chartNote.textContent = [many ? 'Taps add to ' + possessive(kidLabel(me, r.kid)) + ' summer.' : '', ageOf(me) ? 'Showing camps that take age ' + ageOf(me) + '.' : ''].filter(Boolean).join(' ');
       drawCard();
     };
     // ----- children -----
@@ -3537,7 +3676,7 @@
         r.kids.splice(r.kid, 1); r.kid = Math.max(0, r.kid - 1); saveRosters(); openWeek = -1; say('Removed.'); draw();
       }, function () { dropSure = null; dropSureFor = -1; });
     });
-    ageBox.addEventListener('change', function () { plan().age = ageBox.value; saveRosters(); openWeek = -1; draw(); ev('age'); });
+    ageBox.addEventListener('change', function () { kid().age = cleanAge(ageBox.value); plan().age = kid().age; saveRosters(); openWeek = -1; draw(); ev('age'); });
     // ----- the plan as text, and as a calendar file -----
     var asText = function () {
       var who = planners(), lines = [], total = 0;
@@ -3545,7 +3684,7 @@
         if (n) lines.push('');
         lines.push((x.name ? possessive(x.name) + ' summer ' : 'Summer ') + sd.year);
         sd.weeks.forEach(function (wk, i) {
-          var mine = picksOf(x.k, i).map(function (id) { var c = sd.camps[id]; if (c.p) total += c.p; return c.n + ([c.h, price(c)].filter(Boolean).length ? ' (' + [c.h, price(c)].filter(Boolean).join(', ') + ')' : ''); });
+          var mine = picksOf(x.k, i).map(function (id) { var c = sd.camps[id]; if (c.p) total += c.p; return nameOf(id, i, x.k) + ([c.h, price(c)].filter(Boolean).length ? ' (' + [c.h, price(c)].filter(Boolean).join(', ') + ')' : ''); });
           lines.push(wk.label + ': ' + (mine.length ? mine.join(' + ') : 'nothing yet'));
         });
       });
@@ -3571,8 +3710,8 @@
         sd.weeks.forEach(function (wk, i) {
           picksOf(x.k, i).forEach(function (id) {
             var c = sd.camps[id];
-            events.push({ uid: 'summer-' + sd.year + '-' + x.i + '-' + wk.d + '-' + id, start: wk.d, days: 5, title: (x.name ? x.name + ': ' : '') + c.n,
-              text: [c.h, price(c), c.hood, c.w.indexOf(i) < 0 ? 'The camp hasn’t listed this week. Check with the camp.' : c.x ? '' : 'This is the week it ran in ' + c.y + '. Check the ' + sd.year + ' dates with the camp.'].filter(Boolean).join('\n'), url: new URL(campHref(id), location.href).href });
+            events.push({ uid: 'summer-' + sd.year + '-' + x.i + '-' + wk.d + '-' + id, start: wk.d, days: 5, title: (x.name ? x.name + ': ' : '') + nameOf(id, i, x.k),
+              text: c.own ? '' : [c.h, price(c), c.hood, c.w.indexOf(i) < 0 ? 'The camp hasn’t listed this week. Check with the camp.' : c.x ? '' : 'This is the week it ran in ' + c.y + '. Check the ' + sd.year + ' dates with the camp.'].filter(Boolean).join('\n'), url: c.own ? sd.page : new URL(campHref(id), location.href).href });
           });
         });
       });
@@ -3593,7 +3732,7 @@
     clearBtn.addEventListener('click', function () {
       if (!sure) { sure = true; clearBtn.textContent = 'Clear every week' + (r.kids.length > 1 ? ' for ' + kidLabel(kid(), r.kid) : '') + '? Tap again'; window.setTimeout(function () { sure = false; clearBtn.textContent = 'Clear the plan'; }, 5000); return; }
       sure = false; clearBtn.textContent = 'Clear the plan';
-      plan().w = {}; saveRosters(); openWeek = -1; draw(); say('Cleared.'); ev('clear');
+      plan().w = {}; kid().sumWhat = {}; saveRosters(); openWeek = -1; draw(); say('Cleared.'); ev('clear');
     });
 
     // ----- the calendar picture: the whole summer on one card, or a card for each month, with every child on it -----
@@ -3627,7 +3766,7 @@
       return 'Our summer';
     };
     var cardTitle = function () { return cleanName(r.sumTitle) || defaultTitle(); };
-    var names = function (k, i) { return picksOf(k, i).map(function (id) { return sd.camps[id].n; }); };
+    var names = function (k, i) { return picksOf(k, i).map(function (id) { return nameOf(id, i, k); }); };
     var paint = function (which) {
       var ctx = canvas.getContext('2d'), W = 1080, H = 1350, FOOT = 150, who = planners(), many = who.length > 1;
       ctx.clearRect(0, 0, W, H);
@@ -3824,7 +3963,6 @@
     var yd = JSON.parse(document.getElementById('year-data').textContent);
     var $y = function (id) { return document.getElementById(id); };
     var now0 = new Date(), today0 = now0.getFullYear() + '-' + ('0' + (now0.getMonth() + 1)).slice(-2) + '-' + ('0' + now0.getDate()).slice(-2);
-    var HOME = 'home';
     var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     var DISPLAY = '"Archivo", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
     var NAVY = '#0B2140', YELLOW = '#F3C613';
@@ -3837,10 +3975,16 @@
     var offDays = yd.offDays.filter(function (d) { return d.d >= today0; }), offBy = {};
     offDays.forEach(function (d) { offBy[d.d] = d; });
     var S = yd.summer, sumWeeks = S ? S.weeks.filter(function (w) { return utc(w.d, 4) >= utc(today0); }) : [];
+    // a week at home, away or with a plan of the parent's own stands in as a camp with no dates; its written-in words are on this device
+    if (S) Object.keys(OWN).forEach(function (t) { S.camps[t] = { n: OWN[t], w: [], y: 0, x: 1, h: '', href: '', own: true }; });
+    var sumName = function (id, k, d) { var c = S.camps[id]; return c.own ? (k && k.dev && k.dev.sumWhat && k.dev.sumWhat[d]) || c.n : c.n; };
     var weekIndex = function (d) { for (var i = 0; i < S.weeks.length; i++) if (S.weeks[i].d === d) return i; return -1; };
-    var offLabel = function (v) { return v === HOME ? 'At home or with family' : yd.programs[v] && yd.programs[v].off ? yd.programs[v].n : ''; };
-    var shortOff = function (v) { return v === HOME ? 'At home' : offLabel(v); };
-    var postedOff = function (v, d) { return v === HOME || (yd.programs[v].off || []).indexOf(d) > -1; };
+    // A day at home, away or with a plan of the parent's own: the words written in for it are on this device, so they
+    // show when this child is also on this device (k.dev), whichever copy the plan itself came from.
+    var whatOff = function (k, d) { return (k && k.dev && k.dev.offWhat && k.dev.offWhat[d]) || ''; };
+    var offLabel = function (v, k, d) { return isOwn(v) ? whatOff(k, d) || OWN[v] : yd.programs[v] && yd.programs[v].off ? yd.programs[v].n : ''; };
+    var shortOff = function (v, k, d) { return isOwn(v) ? whatOff(k, d) || OWN_SHORT[v] : offLabel(v); };
+    var postedOff = function (v, d) { return isOwn(v) || (yd.programs[v].off || []).indexOf(d) > -1; };
     var has = function (o) { return Object.keys(o).length > 0; };
     var model = null, photo = null, page = '', statusEl = $y('year-status');
     var say = function (t) { statusEl.textContent = t || ''; };
@@ -3870,7 +4014,7 @@
         return a ? { b: a, which: 'now' } : z ? { b: z, which: 'next' } : null;
       };
       r.kids.forEach(function (k) { kids.push({ name: first(k.name), week: null, off: {}, ok: {}, sum: {}, dev: k }); });
-      var okFor = function (off, ticked) { var out = {}; Object.keys(off).forEach(function (d) { if (off[d] !== HOME && ticked(d)) out[d] = 1; }); return out; };   // the days ticked "signed up"
+      var okFor = function (off, ticked) { var out = {}; Object.keys(off).forEach(function (d) { if (!isOwn(off[d]) && ticked(d)) out[d] = 1; }); return out; };   // the days ticked "signed up"
       var po = profile && profile.daysoff && profile.daysoff.y === yd.year ? profile.daysoff : null;
       if (po) { src.off = 'profile'; blank = 0; po.kids.forEach(function (pk) { var k = at(pk.name, pk.name ? 0 : blank++); k.off = offOf(pk.d); k.ok = okFor(k.off, function (d) { return Array.isArray(pk.ok) && pk.ok.indexOf(d) > -1; }); k.pk = pk; }); }
       else kids.forEach(function (k) { k.off = offOf(k.dev.off); k.ok = okFor(k.off, function (d) { return !!(k.dev.offOk && k.dev.offOk[d]); }); if (has(k.off)) src.off = 'device'; });
@@ -3913,7 +4057,7 @@
       var add = function (kind, id, i) { var key = kind + ':' + id; if (!seen[key]) seen[key] = { kind: kind, id: id, who: [] }; if (seen[key].who.indexOf(i) < 0) seen[key].who.push(i); };
       model.kids.forEach(function (k, i) {
         if (k.week) { DAYS.forEach(function (day) { k.week.b.days[day[0]].forEach(function (e) { add('p', entryKey(e).split('.')[0], i); }); }); WKDAYS.forEach(function (day) { ((k.week.b.wk && k.week.b.wk[day[0]]) || []).forEach(function (e) { add('p', entryKey(e), i); }); }); }
-        Object.keys(k.off).forEach(function (d) { if (k.off[d] !== HOME) add('p', k.off[d], i); });
+        Object.keys(k.off).forEach(function (d) { if (!isOwn(k.off[d])) add('p', k.off[d], i); });
         Object.keys(k.sum).forEach(function (d) { k.sum[d].forEach(function (id) { add('c', id, i); }); });
       });
       Object.keys(seen).forEach(function (key) {
@@ -3945,14 +4089,14 @@
         var lead = k.label ? k.label + ': ' : '';
         if (o.off) Object.keys(k.off).sort().forEach(function (d) {
           var v = k.off[d], p = yd.programs[v];
-          out.push({ uid: 'year-off-' + k.key + '-' + d, start: d, days: 1, title: lead + offLabel(v) + ' (no school)', text: ['No school: ' + offBy[d].name + '.', p && !postedOff(v, d) ? 'The program hasn’t posted this date. Ask if it’s open.' : ''].filter(Boolean).join('\n'), url: p ? p.url : yd.site + '/days-off/' });
+          out.push({ uid: 'year-off-' + k.key + '-' + d, start: d, days: 1, title: lead + offLabel(v, k, d) + ' (no school)', text: ['No school: ' + offBy[d].name + '.', p && !postedOff(v, d) ? 'The program hasn’t posted this date. Ask if it’s open.' : ''].filter(Boolean).join('\n'), url: p ? p.url : yd.site + '/days-off/' });
         });
         if (o.sum) Object.keys(k.sum).sort().forEach(function (d) {
           var i = weekIndex(d);
           k.sum[d].forEach(function (id) {
             var c = S.camps[id];
             if (!c.x && !o.guide) return;   // last summer's weeks are a guide, not a date: left out unless asked for
-            out.push({ uid: 'year-sum-' + k.key + '-' + d + '-' + id, start: d, days: 5, title: lead + c.n + (c.x ? '' : ' (' + c.y + ' dates, as a guide)'), text: [c.h, c.w.indexOf(i) < 0 ? 'The camp hasn’t listed this week. Check with the camp.' : c.x ? '' : 'This is the week it ran in ' + c.y + '. Check the ' + S.year + ' dates with the camp.'].filter(Boolean).join('\n'), url: new URL(c.href, location.href).href });
+            out.push({ uid: 'year-sum-' + k.key + '-' + d + '-' + id, start: d, days: 5, title: lead + sumName(id, k, d) + (c.x ? '' : ' (' + c.y + ' dates, as a guide)'), text: c.own ? '' : [c.h, c.w.indexOf(i) < 0 ? 'The camp hasn’t listed this week. Check with the camp.' : c.x ? '' : 'This is the week it ran in ' + c.y + '. Check the ' + S.year + ' dates with the camp.'].filter(Boolean).join('\n'), url: new URL(c.href, location.href).href });
           });
         });
         if (o.week && k.week && yd.lastDay && yd.lastDay >= today0) weekLines(k).forEach(function (line) {
@@ -4160,14 +4304,14 @@
         var open = 0;
         m.kids.forEach(function (k) {
           var v = k.off[it.d]; if (!v) { open++; return; }
-          var ok = !!k.ok[it.d], c = chip(k, (ok ? '✓ ' : '') + offLabel(v) + (postedOff(v, it.d) ? '' : ' (date not posted, ask)'), ok ? 'ok' : !postedOff(v, it.d) ? 'ask' : v !== HOME ? 'need' : '', v !== HOME ? yd.programs[v].href : '');
-          if (v !== HOME) c.appendChild(el('small', 'year-need', ok ? ' signed up' : ' still to sign up'));
+          var ok = !!k.ok[it.d], c = chip(k, (ok ? '✓ ' : '') + offLabel(v, k, it.d) + (postedOff(v, it.d) ? '' : ' (date not posted, ask)'), ok ? 'ok' : !postedOff(v, it.d) ? 'ask' : !isOwn(v) ? 'need' : '', !isOwn(v) ? yd.programs[v].href : '');
+          if (!isOwn(v)) c.appendChild(el('small', 'year-need', ok ? ' signed up' : ' still to sign up'));
           what.appendChild(c);
         });
         if (open) { var plan = el('a', 'year-todo', open === m.kids.length ? 'Nothing planned. Plan this day' : 'Plan it for the ' + (open === 1 ? 'other child' : 'others')); plan.href = yd.offPage + '#d-' + it.d; what.appendChild(plan); }
       } else if (it.t === 'week') {
         when.appendChild(el('b', null, it.wk.label)); when.appendChild(el('span', 'hint', 'Summer'));
-        m.kids.forEach(function (k) { (k.sum[it.d] || []).forEach(function (id) { var c = S.camps[id], note = c.w.indexOf(it.i) < 0 ? ' (not a week it listed, ask)' : c.x ? '' : ' (' + c.y + ' dates, as a guide)'; what.appendChild(chip(k, c.n + note, note ? 'ask' : '', c.href)); }); });
+        m.kids.forEach(function (k) { (k.sum[it.d] || []).forEach(function (id) { var c = S.camps[id], note = c.own ? '' : c.w.indexOf(it.i) < 0 ? ' (not a week it listed, ask)' : c.x ? '' : ' (' + c.y + ' dates, as a guide)'; what.appendChild(chip(k, sumName(id, k, it.d) + note, note ? 'ask' : '', c.href)); }); });
       } else if (it.t === 'reg') {
         when.appendChild(el('b', null, longDay(it.d))); when.appendChild(el('span', 'hint', 'Sign-ups'));
         var a = el('a', null, it.s.name); a.href = it.s.href; what.appendChild(a); what.appendChild(document.createTextNode(': ' + it.s.label + '.'));
@@ -4201,9 +4345,9 @@
       (calBy[iso] || []).forEach(function (it) {
         if (it.t === 'off') {
           out.push({ cls: 'm-off', text: 'No school' });
-          model.kids.forEach(function (k) { var v = k.off[iso]; if (v) kidMark(k, (k.ok[iso] ? '✓ ' : '') + shortOff(v), (postedOff(v, iso) ? '' : 'm-ask') + (v === HOME ? '' : k.ok[iso] ? ' m-ok' : ' m-need')); else kidMark(k, 'Not planned', 'm-todo'); });
+          model.kids.forEach(function (k) { var v = k.off[iso]; if (v) kidMark(k, (k.ok[iso] ? '✓ ' : '') + shortOff(v, k, iso), (postedOff(v, iso) ? '' : 'm-ask') + (isOwn(v) ? '' : k.ok[iso] ? ' m-ok' : ' m-need')); else kidMark(k, 'Not planned', 'm-todo'); });
         } else if (it.t === 'week') {
-          model.kids.forEach(function (k) { (k.sum[it.d] || []).forEach(function (id) { kidMark(k, S.camps[id].n, ''); }); });
+          model.kids.forEach(function (k) { (k.sum[it.d] || []).forEach(function (id) { kidMark(k, sumName(id, k, it.d), ''); }); });
         } else if (it.t === 'reg') out.push({ cls: 'm-reg', text: 'Sign-ups: ' + it.s.name });
         else if (it.t === 'own') out.push({ cls: 'm-own', text: (ownWho(it.o) && many ? ownWho(it.o) + ': ' : '') + it.o.t });
         else out.push({ cls: 'm-mark', text: it.title });
@@ -4438,11 +4582,11 @@
             });
             if (!off) continue;
             ctx.fillStyle = '#4A3B00'; ctx.font = '700 17px ' + BODY; ctx.fillText(fitText(ctx, off.name, cellW - 22), x + 12, y + 56);
-            var bars = kids.map(function (k, n) { return { n: n, v: k.off[iso] }; }).filter(function (b) { return b.v; });
+            var bars = kids.map(function (k, n) { return { n: n, k: k, v: k.off[iso] }; }).filter(function (b) { return b.v; });
             if (!bars.length) { ctx.fillStyle = '#6B5800'; ctx.font = '400 18px ' + BODY; ctx.fillText('nothing yet', x + 12, y + 84); continue; }
             var room = rH - 72 - foot, bh = Math.min(38, (room - 4 * (bars.length - 1)) / bars.length), fsz = Math.max(12, Math.min(19, Math.floor(bh * 0.52)));
             bars.forEach(function (b, bn) {
-              var by = y + 66 + bn * (bh + 4), fz = fsz, lab = shortOff(b.v);
+              var by = y + 66 + bn * (bh + 4), fz = fsz, lab = shortOff(b.v, b.k, iso);
               ctx.fillStyle = '#FFFFFF'; rbox(ctx, x + 8, by, cellW - 16, bh, 9); ctx.fill();
               ctx.fillStyle = INKS[b.n % 6][1]; rbox(ctx, x + 8, by, 9, bh, 4); ctx.fill();
               do { ctx.font = '750 ' + fz + 'px ' + DISPLAY; fz--; } while (ctx.measureText(lab).width > cellW - 44 && fz >= 12);
@@ -4456,7 +4600,7 @@
               ctx.fillStyle = ink[0]; rbox(ctx, X + 10, by, WIDE - 20, bh2, 12); ctx.fill();
               ctx.fillStyle = ink[1]; rbox(ctx, X + 10, by, 12, bh2, 6); ctx.fill();
               ctx.fillStyle = NAVY; ctx.font = '750 ' + fs2 + 'px ' + DISPLAY;
-              ctx.fillText(fitText(ctx, (many && b.k.label ? b.k.label + ': ' : '') + b.ids.map(function (id) { return S.camps[id].n; }).join(' + ') + (guide ? '  ·  last summer’s week, as a guide' : ''), WIDE - 64), X + 36, by + bh2 / 2 + fs2 * 0.36);
+              ctx.fillText(fitText(ctx, (many && b.k.label ? b.k.label + ': ' : '') + b.ids.map(function (id) { return sumName(id, b.k, monIso); }).join(' + ') + (guide ? '  ·  last summer’s week, as a guide' : ''), WIDE - 64), X + 36, by + bh2 / 2 + fs2 * 0.36);
             });
           }
         });
