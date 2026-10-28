@@ -2069,7 +2069,7 @@
 
       // current or upcoming
       var tabs = el('div', 'tabs'); tabs.setAttribute('role', 'group'); tabs.setAttribute('aria-label', 'Current or upcoming');
-      [['now', 'Current'], ['next', 'Upcoming']].forEach(function (t) {
+      [['now', 'Current session'], ['next', 'Upcoming session']].forEach(function (t) {
         var b = btn('tab', t[1]); b.setAttribute('aria-pressed', String(which === t[0]));
         b.addEventListener('click', function () { which = t[0]; draw.picked = true; draw(d); });
         tabs.appendChild(b);
