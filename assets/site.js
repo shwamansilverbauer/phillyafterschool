@@ -1744,6 +1744,23 @@
     // Does a camp take this child's age? With no age set, or a camp that posts no ages or grades, yes. 14 means 14 and up.
     var fitsAge = function (k, id) { var age = k.age, a = od.programs[id] && od.programs[id].a; return !age || !a || (+age >= a[0] && (+age <= a[1] || a[1] >= 14)); };
     var plannedOf = function (k) { return days.filter(function (d) { return pickOf(k, d); }); };
+    // The child's own programs: a day off that falls on a weekday the child already goes somewhere, and that
+    // somewhere runs a camp that day, is the obvious pick. The roster is the current session's, or the upcoming one
+    // when the current is empty (the rule My kids' calendar uses). Nothing is filled in by itself: each is a tap.
+    var WEEKDAY = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+    var weekdayOf = function (iso) { return WEEKDAY[new Date(iso + 'T12:00:00Z').getUTCDay()]; };
+    var rosterOf = function (k) { var has = function (b) { return b && b.days && countPicks(b) ? b : null; }; return has(k.now) || has(k.next); };
+    var ownFor = function (k, d) {   // programs on the child's roster that weekday that run camps on days off, the ones that posted this date first
+      var b = rosterOf(k); if (!b) return [];
+      var ids = [], seen = {};
+      (b.days[weekdayOf(d.d)] || []).forEach(function (e) { var id = entryKey(e).split('.')[0]; if (od.programs[id] && !seen[id]) { seen[id] = 1; ids.push(id); } });
+      return ids.sort(function (x, y) { return (d.camps.indexOf(y) > -1 ? 1 : 0) - (d.camps.indexOf(x) > -1 ? 1 : 0); });
+    };
+    var dayName = function (d) { return DAYS.filter(function (x) { return x[0] === weekdayOf(d.d); }).map(function (x) { return x[1]; })[0] || ''; };
+    // the days with nothing on them yet where one of the child's own programs posted a camp that takes the child's age
+    var fillable = function (k) { return days.filter(function (d) { return !pickOf(k, d) && ownFor(k, d).some(function (id) { return d.camps.indexOf(id) > -1 && fitsAge(k, id); }); }); };
+    var fillPick = function (k, d) { return ownFor(k, d).filter(function (id) { return d.camps.indexOf(id) > -1 && fitsAge(k, id); })[0]; };
+    var filled = null;   // the last one-tap fill: { kid, days: [[iso, id]] }, so it can be put back
     var planners = function () { return r.kids.map(function (k, i) { return { k: k, i: i, name: k.name || (r.kids.length > 1 ? 'Child ' + (i + 1) : '') }; }).filter(function (x) { return plannedOf(x.k).length > 0; }); };
     var posted = function (v, d) { return isOwn(v) || d.camps.indexOf(v) > -1; };
     // Putting a camp on a day isn't signing up for it. A parent ticks a day once they have, and the page keeps the list
@@ -1878,6 +1895,38 @@
           daysEl.parentNode.insertBefore(same, daysEl);
         }
       }
+      // days off that fall on a weekday this child already goes somewhere that posted a camp: one tap fills them all
+      var sg = planEl.querySelector('.sum-sugg'); if (sg) { sg.parentNode.removeChild(sg); sg = null; }
+      if (offView !== 'card' && offView !== 'chart') {
+        var fill = fillable(me), who = me.name || (many ? kidLabel(me, r.kid) : 'your child');
+        if (fill.length) {
+          var progs = []; fill.forEach(function (d) { var n = od.programs[fillPick(me, d)].name; if (progs.indexOf(n) < 0) progs.push(n); });
+          var where = progs.length === 1 ? progs[0] : progs.length === 2 ? progs[0] + ' or ' + progs[1] : progs.slice(0, -1).join(', ') + ' or ' + progs[progs.length - 1];
+          sg = el('div', 'sum-sugg');
+          sg.appendChild(el('p', null, fill.length + ' of ' + possessive(who) + ' days off ' + (fill.length === 1 ? 'falls on a day ' : 'fall on days ') + who + ' already goes to ' + where + ', and ' + (progs.length === 1 ? 'it has' : 'they have') + ' a camp posted.'));
+          var fb = el('button', 'btn', fill.length === 1 ? 'Fill that day' : 'Fill those ' + fill.length + ' days'); fb.type = 'button';
+          fb.addEventListener('click', function () {
+            var done0 = doneNow(me); if (!me.offWhat) me.offWhat = {};
+            filled = { kid: r.kid, days: fill.map(function (d) { return [d.d, fillPick(me, d)]; }) };
+            filled.days.forEach(function (x) { me.off[x[0]] = x[1]; delete me.offWhat[x[0]]; if (me.offOk) delete me.offOk[x[0]]; });
+            saveRosters(); ev('own_fill', { days: filled.days.length });
+            say('Done: ' + filled.days.length + (filled.days.length === 1 ? ' day' : ' days') + ' filled from ' + possessive(who) + ' week. Each camp is still its own sign-up.');
+            draw(); cheerOff(done0);
+          });
+          sg.appendChild(fb);
+          sg.appendChild(el('span', 'hint', 'A camp day is its own sign-up, at the camp’s own hours and price.'));
+        } else if (filled && filled.kid === r.kid && filled.days.some(function (x) { return me.off[x[0]] === x[1]; })) {
+          sg = el('div', 'sum-sugg done');
+          sg.appendChild(el('p', null, 'Filled ' + filled.days.length + (filled.days.length === 1 ? ' day' : ' days') + ' from ' + possessive(who) + ' week.'));
+          var ub = el('button', 'clear', 'Put them back'); ub.type = 'button';
+          ub.addEventListener('click', function () {
+            filled.days.forEach(function (x) { if (me.off[x[0]] === x[1]) { delete me.off[x[0]]; if (me.offOk) delete me.offOk[x[0]]; } });
+            filled = null; saveRosters(); ev('own_fill_undo'); say('Put back.'); draw();
+          });
+          sg.appendChild(ub);
+        }
+        if (sg) daysEl.parentNode.insertBefore(sg, daysEl);
+      }
       // the calendar, when that's the view: this child's month, then the one day that is picked, as a row to choose on;
       // or the picture of the days off
       // Share/Save (the "card" view): the sharing tools, the profile box and the picture, and nothing to pick on
@@ -1943,7 +1992,15 @@
             fill.addEventListener('click', function () { var done0 = doneNow(me); var w = whatOf(me, d); if (!me.offWhat) me.offWhat = {}; rest.forEach(function (o) { me.off[o.d] = v; if (w) me.offWhat[o.d] = w; else delete me.offWhat[o.d]; }); saveRosters(); ev('fill_break', { days: rest.length }); say('Done: ' + label(v, d) + ' is on ' + (rest.length + 1) + ' days of ' + d.name + '.'); draw(); cheerOff(done0); });
             box.appendChild(fill);
           }
-        } else box.appendChild(el('span', 'sum-none', d.camps.length ? (d.camps.length === 1 ? '1 camp posted' : d.camps.length + ' camps posted') : 'No camp posted yet'));
+        } else {
+          box.appendChild(el('span', 'sum-none', d.camps.length ? (d.camps.length === 1 ? '1 camp posted' : d.camps.length + ' camps posted') : 'No camp posted yet'));
+          var sid = fillPick(me, d);
+          if (sid) {   // the child's own program that weekday has a camp this day: one tap
+            var sb = el('button', 'clear sum-mine-pick', 'Use ' + od.programs[sid].name + ', ' + possessive(me.name || 'your child') + ' ' + dayName(d) + ' program'); sb.type = 'button';
+            sb.addEventListener('click', function () { openDay = ''; set(d, sid, 'own_week'); });
+            box.appendChild(sb);
+          }
+        }
         li.appendChild(box);
         var add = el('button', 'btn sum-add', v ? 'Change' : 'Choose'); add.type = 'button';
         add.setAttribute('aria-expanded', openDay === d.d ? 'true' : 'false');
@@ -1952,7 +2009,19 @@
         li.appendChild(add);
         if (openDay === d.d) {
           var ch = el('div', 'sum-choose');
-          // Not a camp day? At home, away, or whatever the parent writes in: first, so nobody hunts for it among the camps.
+          // where the child already goes that weekday, when it runs camps on days off: first of all
+          var mineIds = ownFor(me, d).filter(function (id) { return id !== v; });
+          if (mineIds.length) {
+            var mb = el('div', 'sum-own sum-mine');
+            mb.appendChild(el('p', 'sum-choose-h', possessive(me.name || 'Your child') + ' ' + dayName(d) + ' program' + (mineIds.length > 1 ? 's' : '')));
+            var mg = el('div', 'sum-opts');
+            mineIds.forEach(function (id) {
+              var mp = od.programs[id], isPosted = d.camps.indexOf(id) > -1;
+              mg.appendChild(option(id, d, [isPosted ? 'Camp posted' : mp.n ? 'hasn’t posted this date, ask' : 'no dates posted, ask', mp.h, mp.c, !fitsAge(me, id) && mp.a ? 'ages ' + mp.a[0] + '–' + mp.a[1] + ' by its page' : ''].filter(Boolean).join(' · ')));
+            });
+            mb.appendChild(mg); ch.appendChild(mb);
+          }
+          // Not a camp day? At home, away, or whatever the parent writes in: next, so nobody hunts for it among the camps.
           var ownBox = el('div', 'sum-own');
           ownBox.appendChild(el('p', 'sum-choose-h', 'Not a camp day?'));
           var og = el('div', 'sum-opts own-opts');
@@ -1969,10 +2038,11 @@
           og.appendChild(wi); ownBox.appendChild(og); ch.appendChild(ownBox);
           // the camps, for this child's age when one is set
           var age = me.age, fits = function (id) { return fitsAge(me, id); };
-          var runs = ids.filter(function (id) { return id !== v && d.camps.indexOf(id) > -1 && fits(id); });
-          var tooOld = ids.filter(function (id) { return id !== v && d.camps.indexOf(id) > -1 && !fits(id); });
-          var quiet = ids.filter(function (id) { return id !== v && d.camps.indexOf(id) < 0 && fits(id); });
-          ch.appendChild(el('p', 'sum-choose-h', (d.camps.length ? (d.camps.length === 1 ? '1 program has posted a camp for this day' : d.camps.length + ' programs have posted a camp for this day') : 'No listed program has posted a camp for this day yet') + (age && d.camps.length ? (tooOld.length ? ', ' + (runs.length + (v && d.camps.indexOf(v) > -1 && fits(v) ? 1 : 0)) + ' for age ' + age : ', all for age ' + age) : '')));
+          var rest = ids.filter(function (id) { return id !== v && mineIds.indexOf(id) < 0; });   // the child's own programs are shown above
+          var runs = rest.filter(function (id) { return d.camps.indexOf(id) > -1 && fits(id); });
+          var tooOld = rest.filter(function (id) { return d.camps.indexOf(id) > -1 && !fits(id); });
+          var quiet = rest.filter(function (id) { return d.camps.indexOf(id) < 0 && fits(id); });
+          ch.appendChild(el('p', 'sum-choose-h', (d.camps.length ? (d.camps.length === 1 ? '1 program has posted a camp for this day' : d.camps.length + ' programs have posted a camp for this day') : 'No listed program has posted a camp for this day yet') + (age && d.camps.length ? (tooOld.length ? ', ' + (runs.length + mineIds.filter(function (id) { return d.camps.indexOf(id) > -1 && fits(id); }).length + (v && d.camps.indexOf(v) > -1 && fits(v) ? 1 : 0)) + ' for age ' + age : ', all for age ' + age) : '')));
           var grid = el('div', 'sum-opts');
           runs.forEach(function (id) { grid.appendChild(option(id, d, [od.programs[id].hood, 'Camp posted'].filter(Boolean).join(' · '))); });
           ch.appendChild(grid);
@@ -2503,6 +2573,29 @@
         drawCard();
       }
       if (window.pasExploreRedraw) window.pasExploreRedraw();   // the "On this week" marks in the Browse list
+      personalOff();
+    };
+    // The "Next day off" line names this child's own program when it has a camp posted for that day: a Tuesday off,
+    // and the child goes to Mister John's on Tuesdays, which posted a camp. Otherwise the line stays as it is.
+    var personalOff = function () {
+      var b = document.querySelector('.nextoff [data-next-off]'); if (!b || !data.offAhead || shared) return;
+      if (!b.getAttribute('data-plain')) b.setAttribute('data-plain', b.textContent);
+      var plain = b.getAttribute('data-plain'); if (!plain) return;
+      var today = new Date(), iso0 = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+      var next = null; data.offAhead.forEach(function (d) { if (!next && d.u >= iso0) next = d; });
+      var kid = activeKid(), board = countPicks(kid.now) ? kid.now : countPicks(kid.next) ? kid.next : null;
+      if (!next || !board) { b.textContent = plain; return; }
+      var WD = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'], found = {}, order = [];
+      next.dates.forEach(function (iso) {
+        var wd = WD[new Date(iso + 'T12:00:00Z').getUTCDay()];
+        (board.days[wd] || []).forEach(function (e) { var id = entryKey(e).split('.')[0]; if (data.programs[id] && next.camps.indexOf(id) > -1) { if (!found[id]) { found[id] = { days: [] }; order.push(id); } if (found[id].days.indexOf(wd) < 0) found[id].days.push(wd); } });
+      });
+      if (!order.length) { b.textContent = plain; return; }
+      var who = possessive(kid.name || 'your child');
+      var dayWord = function (wd) { return DAYS.filter(function (x) { return x[0] === wd; })[0][1] + 's'; };
+      var parts = order.slice(0, 2).map(function (id) { return data.programs[id].name + ', on ' + who + ' ' + found[id].days.map(dayWord).join(' and '); });
+      var others = next.camps.length - order.length;
+      b.textContent = plain.replace(/\s*\d+ listed programs? (has|have) a camp posted\.$/, '') + ' ' + parts.join(' and ') + (order.length === 1 ? ', has' : ', have') + ' a camp posted.' + (others > 0 ? ' ' + others + (others === 1 ? ' other program has' : ' other programs have') + ' one too.' : '');
     };
 
     // ----- the weekend: an optional Saturday and Sunday under the five school days -----
