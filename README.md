@@ -947,6 +947,18 @@ of `roll`, `again` or `undo`).
   day is never "to sign up for") and My kids' calendar (when the child is on this device too). Another device
   shows the plain label ("Another plan"). The summer planner's weeks offer the same row, and an own week
   counts as planned but never as booked or priced.
+- **The child's own programs.** A day off that falls on a weekday the child already goes somewhere, when that
+  somewhere runs camps on days off, is the obvious pick, so the planner says so instead of waiting to be asked
+  (`ownFor()`, `fillable()`): the roster is the current session's, or the upcoming one when the current is empty
+  (the rule My kids' calendar uses), matched by the weekday of the date. Where it posted a camp for that date, the
+  day's row offers it in one tap ("Use Mister John's Music, Sam's Tuesday program", `.sum-mine-pick`, method
+  `own_week`), the chooser opens with it under "Sam's Tuesday program" (`.sum-mine`, with the camp's hours and
+  cost from `daysOff.hours`/`cost`, and "hasn't posted this date, ask" when it hasn't), and a banner above the
+  list (`.sum-sugg`) counts the days it could fill and fills them in one tap (`own_fill`, with "Put them back",
+  `own_fill_undo`). Nothing is filled by itself, each filled day is still "to sign up", and a camp whose posted
+  ages don't take the child's age is left out of the one-tap fill but still shown with its ages. On Build your
+  week, the "Next day off" line names the child's own program when it has a camp posted for that day
+  (`personalOff()`, from `offAhead` in the page's data) and counts the others.
 - **Age.** "Age (optional)" beside the first name (`#off-age`, the same select as the summer planner's) narrows
   the chooser to the camps that take that age, with the others under "N camps posted for this day don't list
   age 7" and the grid's rows hidden the same way; each camp's span comes from `daysOff.ageMin`/`ageMax`, else

@@ -3073,7 +3073,7 @@ function daysOffPage() {
   const offAges = p => { const o = p.daysOff; if (o.ageMin || o.ageMax) return [o.ageMin || 3, o.ageMax || AGE_TOP]; const l = gradesToAges(p._grades); return l && l.length ? [+l[0], +l[l.length - 1]] : null; };
   const planData = {
     year: +String(daysOff.schoolYear).slice(0, 4), schoolYear: daysOff.schoolYear,
-    programs: Object.fromEntries(campPrograms.map(p => [p.id, { name: p.name, url: p.daysOff.url, go: outUrl(p.daysOff.url, { type: 'camp', program: p }), href: link(programPath(p), D), color: TYPE[p.types[0]].color, hood: programHoods(p).join(', '), a: offAges(p), n: p.daysOff.dates.filter(x => x >= TODAY).length }])),
+    programs: Object.fromEntries(campPrograms.map(p => [p.id, { name: p.name, url: p.daysOff.url, go: outUrl(p.daysOff.url, { type: 'camp', program: p }), href: link(programPath(p), D), color: TYPE[p.types[0]].color, hood: programHoods(p).join(', '), a: offAges(p), h: p.daysOff.hours || '', c: p.daysOff.cost || '', n: p.daysOff.dates.filter(x => x >= TODAY).length }])),
     todo: YEAR_PAGE ? link('to-do/', D) : '', site: cfg.siteUrl, qr: cardQr?.dayoff && cardQr.dayoff.text.toLowerCase().startsWith(cfg.siteUrl.toLowerCase() + '/') ? cardQr.dayoff.rows : null,
     days: days.map(({ note, ...x }) => x),
     page: `${cfg.siteUrl}/${offPath}`,
@@ -4164,6 +4164,8 @@ function boardPage() {
       schools: Object.fromEntries(Object.entries(p.schools).map(([sid, l]) => [sid, { rel: l.relation, where: l.address || p.address || '', free: (l.price || p.price) === 'free' }])),
     }])),
     hoods: [...new Set(programs.filter(p => !campOnly(p)).flatMap(programHoods))].sort(),
+    // the days off ahead, with which programs posted a camp, so the "next day off" line can name the child's own
+    offAhead: offDays.slice(0, 12).map(d => ({ u: d.until, dates: d.dates, camps: campsOn(d).map(p => p.id) })),
   };
   const schoolLinks = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<a class="btn" href="${link(s.id + '/', 1)}">${esc(s.shortName)}</a>`).join('');
   const hero = `    <h1>${T(`Build your week`)}</h1>
