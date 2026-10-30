@@ -114,7 +114,7 @@ function db(): PDO {
     // Added after the first version: first and last name, and whether the account has been added to the email list.
     $cols = array();
     foreach ($db->query('PRAGMA table_info(users)') as $c) $cols[] = $c['name'];
-    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''", 'ages' => "TEXT NOT NULL DEFAULT ''", 'origin' => "TEXT NOT NULL DEFAULT ''", 'hood' => "TEXT NOT NULL DEFAULT ''", 'stop_code' => "TEXT NOT NULL DEFAULT ''", 'phone' => "TEXT NOT NULL DEFAULT ''", 'phone_ok' => 'INTEGER NOT NULL DEFAULT 0', 'phone_terms' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
+    foreach (array('first' => "TEXT NOT NULL DEFAULT ''", 'last' => "TEXT NOT NULL DEFAULT ''", 'listed' => 'INTEGER NOT NULL DEFAULT 0', 'school' => "TEXT NOT NULL DEFAULT ''", 'via' => "TEXT NOT NULL DEFAULT 'email'", 'grades' => "TEXT NOT NULL DEFAULT ''", 'ages' => "TEXT NOT NULL DEFAULT ''", 'kids' => "TEXT NOT NULL DEFAULT ''", 'origin' => "TEXT NOT NULL DEFAULT ''", 'hood' => "TEXT NOT NULL DEFAULT ''", 'stop_code' => "TEXT NOT NULL DEFAULT ''", 'phone' => "TEXT NOT NULL DEFAULT ''", 'phone_ok' => 'INTEGER NOT NULL DEFAULT 0', 'phone_terms' => "TEXT NOT NULL DEFAULT ''") as $col => $type) {
       if (!in_array($col, $cols, true)) $db->exec('ALTER TABLE users ADD COLUMN ' . $col . ' ' . $type);
     }
     // Whether the owner has had the "new account" email for this account: 0 not yet, 1 as a parent, 2 as a program
@@ -314,14 +314,14 @@ function current_user(): ?array {
   $done = true;
   $sid = isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s']) ? $_COOKIE['pas_s'] : '';
   if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return null;
-  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school, u.grades, u.ages, u.origin, u.hood, u.phone, u.phone_ok FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
+  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school, u.grades, u.ages, u.kids, u.origin, u.hood, u.phone, u.phone_ok FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
   if (!$s) return null;
   if ($s['seen'] < now() - 86400) {   // once a day, push the 30 days out again
     $exp = now() + SESSION_DAYS * 86400;
     q('UPDATE sessions SET seen = ?, expires = ? WHERE id = ?', array(now(), $exp, $s['sid']));
     set_session_cookie($sid, $exp);
   }
-  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'school' => (string) $s['school'], 'grades' => (string) $s['grades'], 'ages' => isset($s['ages']) ? (string) $s['ages'] : '', 'origin' => (string) $s['origin'], 'hood' => (string) $s['hood'], 'phone' => (string) $s['phone'], 'phone_ok' => (int) $s['phone_ok'], 'sid' => (int) $s['sid']);
+  $user = array('id' => (int) $s['id'], 'email' => $s['email'], 'name' => $s['name'], 'first' => $s['first'], 'last' => $s['last'], 'listed' => (int) $s['listed'], 'school' => (string) $s['school'], 'grades' => (string) $s['grades'], 'ages' => isset($s['ages']) ? (string) $s['ages'] : '', 'kids' => isset($s['kids']) ? (string) $s['kids'] : '', 'origin' => (string) $s['origin'], 'hood' => (string) $s['hood'], 'phone' => (string) $s['phone'], 'phone_ok' => (int) $s['phone_ok'], 'sid' => (int) $s['sid']);
   return $user;
 }
 function need_user(): array {
@@ -629,6 +629,13 @@ function week_out(array $w): array {
   return array('id' => (int) $w['id'], 'name' => $w['name'], 'now' => json_decode($w['now_json'], true), 'next' => json_decode($w['next_json'], true), 'updated' => (int) $w['updated']);
 }
 function grade_list(string $kept): array { return $kept === '' ? array() : explode(',', $kept); }
+// The children kept on the profile: each a first name, and the grade and age they're in when given. Up to 8.
+function kids_list(array $u): array {
+  $raw = isset($u['kids']) && $u['kids'] !== '' ? json_decode((string) $u['kids'], true) : null;
+  $out = array();
+  if (is_array($raw)) foreach ($raw as $k) { if (is_array($k) && isset($k['n']) && $k['n'] !== '') $out[] = array('n' => (string) $k['n'], 'g' => isset($k['g']) ? (string) $k['g'] : '', 'a' => isset($k['a']) ? (string) $k['a'] : ''); }
+  return $out;
+}
 // A summer for the profile: the year, and for each child a first name and the camps picked for each week (the week's
 // Monday). Only camps the site lists, only dates in that year. No ages, no titles, no photos: those stay on the device.
 // A day off or a summer week with no listed camp: at home, away, or a plan of the parent's own (its words stay on their device).
@@ -702,7 +709,7 @@ function daysoff_out(int $uid): ?array {
 function profile_out(array $u): array {
   $weeks = array();
   foreach (q('SELECT * FROM weeks WHERE user_id = ? ORDER BY id', array($u['id'])) as $w) $weeks[] = week_out($w);
-  return array('school' => $u['school'], 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'ages' => grade_list(isset($u['ages']) ? (string) $u['ages'] : ''), 'weeks' => $weeks, 'summer' => summer_out((int) $u['id']), 'daysoff' => daysoff_out((int) $u['id'])) + marks_out((int) $u['id']);
+  return array('school' => $u['school'], 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'ages' => grade_list(isset($u['ages']) ? (string) $u['ages'] : ''), 'kids' => kids_list($u), 'weeks' => $weeks, 'summer' => summer_out((int) $u['id']), 'daysoff' => daysoff_out((int) $u['id'])) + marks_out((int) $u['id']);
 }
 function kid_out(array $k, bool $mine): array {
   return array('id' => (int) $k['id'], 'name' => $k['name'], 'now' => json_decode($k['now_json'], true), 'next' => json_decode($k['next_json'], true), 'mine' => $mine);
@@ -2239,6 +2246,32 @@ switch ($method . ' ' . $action) {
     if ($keep && (!isset($u['ages']) || $u['ages'] === '')) bump('ages_saved');
     q('UPDATE users SET ages = ? WHERE id = ?', array(implode(',', $keep), $u['id']));
     out(array('ok' => true, 'ages' => $keep));
+  }
+
+  // The children on the profile: first names, each with a grade and an age when given. The whole list comes each
+  // time. A grade or age given here joins the grades and ages kept for the lists, so those start in the right place.
+  case 'POST kids_save': {
+    $u = need_user();
+    $allG = isset($CFG['grades']) && is_array($CFG['grades']) ? array_map('strval', $CFG['grades']) : array();
+    $allA = isset($CFG['ages']) && is_array($CFG['ages']) ? array_map('strval', $CFG['ages']) : array();
+    $asked = isset($in['kids']) && is_array($in['kids']) ? $in['kids'] : array();
+    $keep = array(); $seen = array();
+    foreach ($asked as $k) {
+      if (!is_array($k)) continue;
+      $n = first_name(str($k, 'n', 40));
+      if ($n === '' || isset($seen[mb_strtolower($n, 'UTF-8')])) continue;
+      $g = isset($k['g']) ? (string) $k['g'] : ''; $a = isset($k['a']) ? (string) $k['a'] : '';
+      $keep[] = array('n' => $n, 'g' => in_array($g, $allG, true) ? $g : '', 'a' => in_array($a, $allA, true) ? $a : '');
+      $seen[mb_strtolower($n, 'UTF-8')] = true;
+      if (count($keep) >= 8) break;
+    }
+    $grades = grade_list((string) $u['grades']); $ages = grade_list(isset($u['ages']) ? (string) $u['ages'] : '');
+    foreach ($keep as $k) { if ($k['g'] !== '') $grades[] = $k['g']; if ($k['a'] !== '') $ages[] = $k['a']; }
+    $gKeep = array(); foreach ($allG as $g) { if (in_array($g, $grades, true)) $gKeep[] = $g; }
+    $aKeep = array(); foreach ($allA as $a) { if (in_array($a, $ages, true)) $aKeep[] = $a; }
+    if ($keep && (!isset($u['kids']) || $u['kids'] === '')) bump('kids_saved');
+    q('UPDATE users SET kids = ?, grades = ?, ages = ? WHERE id = ?', array($keep ? json_encode($keep) : '', implode(',', $gKeep), implode(',', $aKeep), $u['id']));
+    out(array('ok' => true, 'kids' => $keep, 'grades' => $gKeep, 'ages' => $aKeep));
   }
 
   // Keep one child's week with the account, or update one that is already there.
