@@ -1108,10 +1108,25 @@
   };
   if (menuBtn) menuBtn.addEventListener('click', function () { setPanel(!panelOpen()); });
   if (narrow.addEventListener) narrow.addEventListener('change', function () { setPanel(false); });
+  // Wide screens with a mouse: a group opens on hover (and on focus, for the keyboard), and its label is the link to
+  // the whole list (data-top), whose own row in the list is hidden there. Phones, and anything without hover: a tap
+  // on the label opens the list, with the whole list as its first row.
+  var hoverable = window.matchMedia ? window.matchMedia('(hover: hover) and (pointer: fine)') : { matches: false };
+  var wide = function () { return !narrow.matches && hoverable.matches; };
+  if (hoverable.matches) document.documentElement.className += ' hoverable';
   var wireMenu = function (m) {
     m.addEventListener('toggle', function () { if (m.open && !panelOpen()) menus.forEach(function (o) { if (o !== m) o.open = false; }); });
-    var sm = m.querySelector('summary');
-    if (sm) sm.addEventListener('click', function () { if (panelOpen()) track({ event: 'pas_menu_group', group: sm.textContent, open: !m.open }); });
+    var sm = m.querySelector('summary'), top = m.getAttribute('data-top'), leaving = null;
+    if (sm) sm.addEventListener('click', function (e) {
+      if (panelOpen()) { track({ event: 'pas_menu_group', group: sm.textContent, open: !m.open }); return; }
+      if (top && wide()) { e.preventDefault(); location.href = top; }
+    });
+    if (top) {
+      m.addEventListener('mouseenter', function () { if (!wide()) return; if (leaving) { window.clearTimeout(leaving); leaving = null; } menus.forEach(function (o) { if (o !== m) o.open = false; }); m.open = true; });
+      m.addEventListener('mouseleave', function () { if (!wide()) return; leaving = window.setTimeout(function () { leaving = null; m.open = false; }, 220); });
+      m.addEventListener('focusin', function () { if (wide()) m.open = true; });
+      m.addEventListener('focusout', function (e) { if (wide() && !(e.relatedTarget && m.contains(e.relatedTarget))) m.open = false; });
+    }
   };
   menus.forEach(wireMenu);
   // an admin who signs in or out on this page gets or loses the Admin group without a reload
