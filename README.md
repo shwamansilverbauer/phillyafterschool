@@ -458,13 +458,15 @@ with the way into its planner (`heroGo()`). The old cards with buttons on them a
 ## Finding programs: filters, types and the school finder
 
 The home page says each thing once: the hero (headline, one line, the school-or-program search, with the finder's
-"no match: tell us about it" line as the one way to ask for a school), then "When do you need coverage?", four
+"no match: tell us about it" line as the one way to ask for a school, and without the "Your school" shortcut the
+finder shows elsewhere: `data-no-mine`), then two "Start here" boxes, one for parents
+(build a schedule, then create an account signed out or the to-do list signed in, so the box always has two rows)
+and one for program managers (claim a listing, add a program or camp), then "When do you need coverage?", four
 tiles (After school → `/programs/`, Days off → `/day-camps/`, Weekends → `/weekends/`, Summer → `/summer-camps/`),
-then two "Start here" boxes, one for parents (build a schedule, create an account) and one for program managers
-(claim a listing, add a program or camp), then "What's your kid into?" (the type chips only), then "Get reminders"
-(one line and a button to `/alerts/`, signed out only), then the three explainers (how programs are sorted, every
-listing is dated and sourced, who built this). Each box has a picture of who it is for (a grown-up with a child, a
-person with a clipboard), drawn in `WHO` in `homePage()`.
+then "What's your kid into?" (the type chips), then "Get reminders" (one line and a button to `/alerts/`, signed out
+only). The explainers (how programs are sorted, every listing is dated and sourced, who built this) are on the
+About page. Each box has a picture of who it is for (a grown-up with a child, a person with a clipboard), drawn in
+`WHO` in `homePage()`.
 
 The top of a program's page says which schools it works for as colored labels (`servedPills()`): yellow for pickup, green for on-site, blue for nearby, the same colors as on the cards.
 
@@ -803,12 +805,13 @@ Decisions that later features have to respect:
 ## The menu
 
 The header has two groups that open (Programs, whose first item is `/all-programs/`, the page that sorts every
-listing by kind, and Planners, whose first is `/schedules/`, the page that introduces all the planners), then
-Suggest and About as plain links, and the account button (the "Help the site keep going" button before accounts).
+listing by kind, and Schedule Builder, whose first is `/schedules/`, the page that introduces all the planners),
+then Suggestion Box and About as plain links, and the account button (the "Help the site keep going" button before
+accounts).
 The groups are defined in `layout()` in `build.mjs` as a list of labels, a top link and items. Each is a
 `<details>` element, so it opens without scripts. On a wide screen with a mouse (`hover: hover`, from 1100px) the
 script opens a group on hover or keyboard focus and makes its label the link to the top page (`data-top`), so the
-"All programs" / "All the planners" row is hidden there (`.menu-all`); on a phone, or anything without hover, a tap
+"All programs" / "Build a schedule" row is hidden there (`.menu-all`); on a phone, or anything without hover, a tap
 opens the group and that row is its first. The school, neighborhood, type and day-of-week pages live in the footer. From 1100px wide the logo sits on the left and the menu on the right, on one
 line; below that a Menu button opens a panel where each group is a big row that opens on a tap (only the
 group the current page is in starts open), then About and the button, so a phone sees five lines rather than
@@ -829,13 +832,14 @@ Putting a camp on a day off is a plan, not a registration, so each camp day in a
   outline; the day's spoken label says "signed up" or "still to sign up", so colour is never the only signal.
 - **The planner doesn't hold the list itself.** A line in its tally (`#off-todo-line`) says how many camp days are
   still to sign up for and links to the To do page. (For a day the days-off page had the list as a section of its
-  own; it went once the menu had "To do".)
-- **The To do page** (`/to-do/`, `todoPage()`) is the list by itself, and the menu has a "To do" link to it for
-  anyone signed in (`a.nav-todo`, beside "Account"). Like the calendar it is a shell with nothing about anyone in it,
+  own; it went once the menu had "To do"; the menu link went in turn when the list became part of the profile.)
+- **The To do page** (`/to-do/`, `todoPage()`) is the list by itself. The ways to it: a "To do" row on the profile
+  card (`todoLeft()` in `groups.js` counts the camp days from today on that are a program and not ticked), and, for
+  anyone signed in, the second row of the home page's Parents box. Like the calendar it is a shell with nothing about anyone in it,
   kept out of search, with no analytics or recordings; `groups.js` hands the profile to `window.pasTodo.show()`. It
   reads the days-off plan from the profile when one is kept there and from the device otherwise, counts the days with
   no plan, and signing in from it (`?next=todo`) comes back to it.
-- **My kids' calendar** has no list of its own (the To do page is in the menu, and a second copy only cluttered the
+- **My kids' calendar** has no list of its own (the To do page is a row of the profile, and a second copy only cluttered the
   calendar), but shows the check marks on its calendar and list. The To do page draws the list with `signupTodo()`
   and saves a tick with `tickSignup()`: wherever the days-off plan lives, onto the device or to the profile through
   `daysoff_save`.

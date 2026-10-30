@@ -600,19 +600,19 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   // to a title only when it fits; a long description is cut at a word.
   const fullTitle = pathName === '' ? (PREVIEW ? cfg.siteName : `${cfg.siteName}: ${cfg.tagline}`) : `${title} | ${cfg.siteName}`.length <= 65 ? `${title} | ${cfg.siteName}` : title;
   if (description.length > 158) description = description.slice(0, 157).replace(/\s+\S*$/, '').replace(/[,;:.]$/, '') + '…';
-  // The menu: Programs and Planners, each a <details> group (so it works without scripts) whose first item is the
-  // whole list; on a wide screen the script opens a group on hover and sends the label itself to that list, and the
-  // first item is hidden there. Then Suggest and About as plain links, and the account button.
+  // The menu: Programs and Schedule Builder, each a <details> group (so it works without scripts) whose first item is
+  // the whole list; on a wide screen the script opens a group on hover and sends the label itself to that list, and the
+  // first item is hidden there. Then Suggestion Box and About as plain links, and the account button.
   const navHref = to => { const p = to.split(/[#?]/)[0]; return link(p, depth) + to.slice(p.length); };   // a link may carry ?kind= or #part
   const menus = [
     ['Programs', 'all-programs/', [['all-programs/', 'All programs'], ['programs/', 'After-school programs'], ...(programs.some(p => p.weekend) ? [['weekends/', 'Weekend classes']] : []), ...(daysOff ? [[dayCampsPath, 'Day-camp programs']] : []), ...(summerCamps.length ? [['summer-camps/', 'Summer camps']] : [])]],
-    ['Planners', 'schedules/', [['schedules/', 'All the planners'], ['board/', 'After-school schedule'], ...(daysOff ? [[offPath, 'Day-camp schedule']] : []), ...(summerCamps.length ? [['summer-schedule/', 'Summer schedule']] : []), ...(GROUPS && daysOff ? [['calendar/', 'My kids’ calendar']] : [])]],
+    ['Schedule Builder', 'schedules/', [['schedules/', 'Build a schedule'], ['board/', 'After-school schedule'], ...(daysOff ? [[offPath, 'Day-camp schedule']] : []), ...(summerCamps.length ? [['summer-schedule/', 'Summer schedule']] : []), ...(GROUPS && daysOff ? [['calendar/', 'My kids’ calendar']] : [])]],
   ];
   const nav = menus.map(([label, top, items]) => {
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
     return `<details class="menu${here ? ' here' : ''}" data-top="${navHref(top)}"><summary>${label}</summary><ul>${items.map(([to, text]) => `<li${to === top ? ' class="menu-all"' : ''}><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
-  }).join('') + `<a href="${link('suggest/', depth)}"${pathName.startsWith('suggest/') || pathName.startsWith('ideas/') || pathName.startsWith('schools/request/') ? ' aria-current="page"' : ''}>Suggest</a><a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
-    ? `${daysOff ? `<a class="when-in nav-todo" href="${link('to-do/', depth)}"${pathName === 'to-do/' ? ' aria-current="page"' : ''}>To do</a>` : ''}<a class="when-in nav-acct" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}>Account</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('profile/', depth)}"${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}${PM_LISTED ? ' data-pm="1"' : ''}>My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>`
+  }).join('') + `<a href="${link('suggest/', depth)}"${pathName.startsWith('suggest/') || pathName.startsWith('ideas/') || pathName.startsWith('schools/request/') ? ' aria-current="page"' : ''}>Suggestion Box</a><a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
+    ? `<a class="when-in nav-acct" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}>Account</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('profile/', depth)}"${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}${PM_LISTED ? ' data-pm="1"' : ''}>My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>`
     : `<a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`}`;
   const head = `${first}${fragment || quiet ? '' : roleHead + gtmHead + '\n' + klaviyoHead}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
@@ -709,7 +709,7 @@ ${body}
       <h2><a href="${link('about/', depth)}">${T(`About`)}</a></h2>
       <ul>
         <li><a href="${link('about/', depth)}">${T(`About this site`)}</a></li>
-        <li><a href="${link('about/', depth)}#how">${T(`How listings are checked`)}</a></li>
+        <li><a href="${link('about/', depth)}#sources">${T(`Every listing is dated and sourced`)}</a></li>
         <li><a href="${link('about/', depth)}#corrections">${T(`Send a correction`)}</a></li>
         <li><a href="${link('contact/', depth)}">${T(`Contact us`)}</a></li>${GROUPS ? `
         <li><a href="${link('managers/', depth)}">${T(`For program managers`)}</a></li>` : ''}
@@ -1771,7 +1771,7 @@ const finderData = (() => {
   const progRows = [...programs].sort((a, b) => fullName(a).localeCompare(fullName(b))).map(p => [p.id, fullName(p), TYPE[p.types[0]].label, servedSummary(p)]);
   return { schools: rows, covered: Object.fromEntries(schools.map(s => [s.id, s.shortName])), programs: progRows };
 })();
-const finderBox = (depth, label, withPrograms = false, { hint = true } = {}) => `<div class="find" data-finder${withPrograms ? ' data-programs' : ''}${PREVIEW ? '' : ' data-school-pages'} data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}"${PREVIEW ? '' : ` data-src="${link('data/school-finder.json', depth)}"`}>
+const finderBox = (depth, label, withPrograms = false, { hint = true, mine = true } = {}) => `<div class="find" data-finder${withPrograms ? ' data-programs' : ''}${mine ? '' : ' data-no-mine'}${PREVIEW ? '' : ' data-school-pages'} data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}"${PREVIEW ? '' : ` data-src="${link('data/school-finder.json', depth)}"`}>
       <label for="find-school">${T(label || `Find your school`)}</label>
       <input id="find-school" type="search" role="combobox" aria-expanded="false" aria-controls="finder-list" aria-autocomplete="list" placeholder="${withPrograms ? 'Start typing a school or program name' : 'Start typing a school name'}" autocomplete="off">
       <ul id="finder-list" class="finder-list" role="listbox" aria-label="${withPrograms ? 'Schools and programs' : 'Schools'}" hidden></ul>
@@ -2050,7 +2050,7 @@ function homePage() {
   const LEDE = `Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.`;
   const hero = `    <h1>${T(`School’s out. Now what?`)}</h1>
     <p class="lede">${T(LEDE)}</p>
-    ${finderBox(0, `Find your school or a program`, true, { hint: false })}`;
+    ${finderBox(0, `Find your school or a program`, true, { hint: false, mine: false })}`;
   const ICON = {
     school: 'M12 2 2 8v2h20V8zM4.5 11.5v6h3v-6zm6 0v6h3v-6zm6 0v6h3v-6zM2 19v3h20v-3z',
     week: 'M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zM5 9.5h14V19H5zm2 2.5v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2z',
@@ -2058,6 +2058,7 @@ function homePage() {
     claim: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.4 14.2-4-4 1.6-1.6 2.4 2.4 5.2-5.2 1.6 1.6z',
     plus: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4z',
     tent: 'M12 3 1.5 20h21zm0 7 2.6 8H9.4z',
+    tick: 'M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm1 2v14h14V5zm5.6 10.6-3.3-3.3 1.4-1.4 1.9 1.9 4.7-4.7 1.4 1.4z',
   };
   // Who each box is for: a grown-up with a child, and someone holding a clipboard.
   const WHO = {
@@ -2074,12 +2075,6 @@ function homePage() {
     summerCamps.length ? [link(campsPath, 0), T(`Summer`), T(`{n} day camps, with a planner for the summer week by week.`, { n: summerCamps.length }), '#2C8444', 'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM11 1h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8L7 8.4zm11.4 11.4 1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4 7 15.6l1.4 1.4-2.8 2.8zM15.6 7l2.8-2.8 1.4 1.4L17 8.4z'] : null,
   ].filter(Boolean);
   const body = `${nextOffBar(0)}
-<section class="section" id="when">
-  <h2>${T(`When do you need coverage?`)}</h2>
-  <div class="whens">
-    ${when.map(([href, name, text, color, icon]) => `<a class="when-card" href="${href}" style="--tc:${color}"><span class="when-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path fill="currentColor" d="${icon}"/></svg></span><h3>${name}</h3><p>${text}</p></a>`).join('\n    ')}
-  </div>
-</section>
 <section class="section" id="start">
   <div class="starts">
     <div class="start">
@@ -2088,6 +2083,7 @@ function homePage() {
       <div class="start-list">
         ${go(link(schedulesPath, 0), T(`Build a schedule`), T(`The school week, days off and the summer`), 'week')}
         ${GROUPS ? `<span class="when-out" style="display:contents">${go(link('register/', 0), T(`Create a free account`), T(`Keep every plan, and get the whole year in one calendar`), 'person')}</span>` : ''}
+        ${GROUPS && daysOff ? `<span class="when-in" style="display:contents">${go(link('to-do/', 0), T(`To-do list`), T(`The camp days you’ve planned and haven’t signed up for yet`), 'tick')}</span>` : ''}
       </div>
     </div>
     <div class="start managers">
@@ -2098,6 +2094,12 @@ function homePage() {
         ${go(link('suggest/', 0), T(`Add a program or camp`), T(`Not listed yet? Send its name and website`), 'plus')}
       </div>
     </div>
+  </div>
+</section>
+<section class="section" id="when">
+  <h2>${T(`When do you need coverage?`)}</h2>
+  <div class="whens">
+    ${when.map(([href, name, text, color, icon]) => `<a class="when-card" href="${href}" style="--tc:${color}"><span class="when-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path fill="currentColor" d="${icon}"/></svg></span><h3>${name}</h3><p>${text}</p></a>`).join('\n    ')}
   </div>
 </section>
 <section class="section" id="browse">
@@ -2111,22 +2113,7 @@ ${ALERTS ? `<section class="section when-out" id="remind">
     <a class="btn primary" href="${link(alertsPath, 0)}">${T(`Turn them on`)}</a>
   </div>
 </section>` : ''}
-<section class="section">
-  <h2>${T(`How programs are sorted`)}</h2>
-  <div class="kinds">
-    <div><span class="pill onsite">${T(`At the school`)}</span><p>${T(`Runs in the school building or on its grounds. No travel.`)}</p></div>
-    <div><span class="pill pickup">${T(`Picks up`)}</span><p>${T(`Staff collect children at dismissal and walk or drive them to the program.`)}</p></div>
-    <div><span class="pill nearby">${T(`Nearby`)}</span><p>${T(`Close to the school, with no pickup we could find. A fit for older children or a second stop.`)}</p></div>
-  </div>
-</section>
-<section class="section">
-  <h2>${T(`Every listing is dated and sourced`)}</h2>
-  <p>${T(`Every listing links to where the information came from and shows the day it was last checked. Nobody pays to be listed. If it saved you an evening of open tabs,`)} <a href="${link('support/', 0)}">${T(`help the site keep going.`)}</a></p>
-</section>
-${cfg.builtBy ? `<section class="section" id="who">
-  <h2>${T(`Who built this`)}</h2>
-  <p>${T(cfg.builtBy.bio)}</p>
-</section>` : ''}`;
+`;
   return layout({
     title: cfg.siteName, pathName: '', depth: 0, current: null, hero, body, fragment: PREVIEW, showStreet: 'go', roomy: true,
     shareText: copyNow(LEDE),   // what a texted or posted link says under the picture: the lede, as it reads today
@@ -2501,6 +2488,14 @@ function aboutPage() {
     <li>${T(`Prices, hours, openings and pickup routes change during the year. Confirm with the provider before you enroll.`)}</li>
     <li>${T(`{site} is independent. It is not affiliated with the School District of Philadelphia or any provider.`, { site: cfg.siteName })}</li>
   </ul>
+  <h2 id="sorted">${T(`How programs are sorted`)}</h2>
+  <div class="kinds">
+    <div><span class="pill onsite">${T(`At the school`)}</span><p>${T(`Runs in the school building or on its grounds. No travel.`)}</p></div>
+    <div><span class="pill pickup">${T(`Picks up`)}</span><p>${T(`Staff collect children at dismissal and walk or drive them to the program.`)}</p></div>
+    <div><span class="pill nearby">${T(`Nearby`)}</span><p>${T(`Close to the school, with no pickup we could find. A fit for older children or a second stop.`)}</p></div>
+  </div>
+  <h2 id="sources">${T(`Every listing is dated and sourced`)}</h2>
+  <p>${T(`Every listing links to where the information came from and shows the day it was last checked. Nobody pays to be listed. If it saved you an evening of open tabs,`)} <a href="${link('support/', 1)}">${T(`help the site keep going.`)}</a></p>
   <h2 id="corrections">${T(`Corrections, new programs and new schools`)}</h2>
   <p>${T(`Parents and providers know these programs best. If something is wrong or missing, or you want your school added,`)} <a href="${link('suggest/', 1)}">${T(`use the form`)}</a>. ${mail}.</p>
   <p>${T(`It helps to include the program, the school, what changed, and a link to where it’s published.`)}</p>

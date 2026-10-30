@@ -115,6 +115,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .kinds{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
 .kinds div{display:flex;flex-direction:column;gap:8px;min-width:0;align-items:flex-start}
 .kinds p{color:var(--muted)}
+.prose .kinds{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:0 0 10px}
+.prose .kinds p{margin:0}
 
 /* ---------- filter bar on a school page ---------- */
 .picker{display:none}
@@ -1993,7 +1995,7 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .g-page .panel > a.btn{align-self:flex-start}
 
 /* "Account" beside "My profile" in the menu, for someone signed in */
-.nav a.nav-acct,.nav a.nav-todo{font-weight:700}
+.nav a.nav-acct{font-weight:700}
 .todo-more{margin-top:6px}
 
 /* My profile: a snapshot of the account on one card */
@@ -2033,7 +2035,6 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 /* in the phone menu, someone signed in finds their own two pages first */
 @media (max-width:1099px){
   .js .nav.open > a.nav-cta.when-in{order:-2;margin:0 0 6px}
-  .js .nav.open > a.nav-todo{order:-1;text-align:center;border:2px solid #0B2140;border-radius:999px;margin-bottom:8px;padding:8px 12px}
   .js .nav.open > a.nav-acct{order:-1;text-align:center;border:2px solid #0B2140;border-radius:999px;margin-bottom:8px;padding:8px 12px}
 }
 
