@@ -461,7 +461,9 @@ The home page says each thing once: the hero (headline, one line, the school-or-
 "no match: tell us about it" line as the one way to ask for a school, and without the "Your school" shortcut the
 finder shows elsewhere: `data-no-mine`), then two "Start here" boxes, one for parents
 (build a schedule, then create an account signed out or the to-do list signed in, so the box always has two rows)
-and one for program managers (claim a listing, add a program or camp), then "When do you need coverage?", four
+and one for program managers (claim a listing, add a program or camp; a parent who is signed in doesn't see it:
+the inline script adds `html.parent` when the device holds `pas-in` and `pas-role` = parent, and the Parents box
+takes the row with its two rows side by side), then "When do you need coverage?", four
 tiles (After school → `/programs/`, Days off → `/day-camps/`, Weekends → `/weekends/`, Summer → `/summer-camps/`),
 then "What's your kid into?" (the type chips), then "Get reminders" (one line and a button to `/alerts/`, signed out
 only), then "the story" (`#story`: a few lines on who made the site and why, with "Read the story" to `/about/` and
@@ -1251,8 +1253,16 @@ These are the only parts of the site that store anything about a child on the se
   profile week it belongs to (`prof: { id, u }`); changes go up by themselves, and a device that finds a newer
   copy in the profile takes it, keeping its own notes for the same program. A kept week the device doesn't have is rebuilt there by itself. A kept school is also that device's saved school, and saving a different school
   on a school's page updates the profile (only for someone signed in who keeps one there).
+- **Kids.** The profile card's Kids row lists the children kept on the profile (`users.kids`, JSON: first name,
+  grade and age, up to 8, `kids_save` with the whole list each time) and, after them, names that come only from
+  plans, each with "Add to profile". "Add a kid" opens a small form on the row (first name, grade, age; the grade
+  and age are optional and join the grades and ages below). Adding one also starts a roster for them on the
+  device (`seedKids()` in `groups.js`: a roster nobody has named yet takes the name, otherwise a new one), and the
+  planners do the same from the profile at each sign-in, so a child added on one device is on every planner on
+  the next. Removing a kid from the list leaves their plans alone. A grade or age given with a kid is the one
+  place the profile ties a grade or age to a name; the grade and age rows below stay as they were.
 - **Grades.** On the account page a parent taps the grades their children are in. Only the grades are stored
-  (`users.grades`, for example `K,3`), not which child is in which. The account pages copy them to the browser
+  (`users.grades`, for example `K,3`), not which child is in which (unless a kid is added with a grade, above). The account pages copy them to the browser
   (`pas-my-grades`), and every list with a grade row then gets a "My kids" choice next to "All" that shows
   programs taking any of those grades; it becomes the starting grade when grades are first kept or changed.
   With exactly one grade kept, the themed-week roller starts on it.
@@ -1485,10 +1495,12 @@ The things a family has to remember that aren't on the district calendar: pictur
 
 None of the three signed-in pages is a long scroll. The code is in `groups.js`.
 
-- **One strip across all three** (`acctStrip()`, `nav.jump.acct-tabs`): Profile · Details · School & kids ·
-  Emails & following · Plans & sharing, and Listings for an account that holds a listing. A tab whose part is on the
-  page in view switches in place; the others are links to the page that has them (`/profile/`, `/account/#school`,
-  `/managers/`), so the three pages read as one place. It stays under the menu bar, and scrolls sideways on a phone
+- **One strip across all four** (`acctStrip()`, `nav.jump.acct-tabs`): To do · Profile · Details · School & kids ·
+  Emails & following · Plans & sharing, and Listings for an account that holds a listing. To do comes first and
+  wears the call-to-action color (`a.tab-cta`), with a count of the camp days still to sign up for once the
+  profile is read (`nav.pasTodo(n)`, from `todoLeft()`); it is a link to `/to-do/`, which draws the same strip
+  above its list. A tab whose part is on the page in view switches in place; the others are links to the page that
+  has them (`/profile/`, `/account/#school`, `/managers/`), so the pages read as one place. It stays under the menu bar, and scrolls sideways on a phone
   with the open tab brought into view (`window.pasRail()` in `site.js`, shared with the jump links).
 - **On the account page** each panel is put on a tab with `put(panel, 'account', tab)`, and `TAB_OF` says which tab
   every linkable part is on, so `/account/#following`, `#favorites`, `#sign-out` and the rest open the right tab
