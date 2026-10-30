@@ -457,9 +457,14 @@ with the way into its planner (`heroGo()`). The old cards with buttons on them a
 
 ## Finding programs: filters, types and the school finder
 
-The home page opens with two "Start here" boxes, one for parents (find your school, build a schedule, create an
-account) and one for program managers (claim a listing, add a program, add a camp), then a "More than weekday
-afternoons" section that points at weekend classes, day camps and summer camps. Each box has a picture of who it is for (a grown-up with a child, a person with a clipboard), drawn in `WHO` in `homePage()`.
+The home page says each thing once: the hero (headline, one line, the school-or-program search, with the finder's
+"no match: tell us about it" line as the one way to ask for a school), then "When do you need coverage?", four
+tiles (After school → `/programs/`, Days off → `/day-camps/`, Weekends → `/weekends/`, Summer → `/summer-camps/`),
+then two "Start here" boxes, one for parents (build a schedule, create an account) and one for program managers
+(claim a listing, add a program or camp), then "What's your kid into?" (the type chips only), then "Get reminders"
+(one line and a button to `/alerts/`, signed out only), then the three explainers (how programs are sorted, every
+listing is dated and sourced, who built this). Each box has a picture of who it is for (a grown-up with a child, a
+person with a clipboard), drawn in `WHO` in `homePage()`.
 
 The top of a program's page says which schools it works for as colored labels (`servedPills()`): yellow for pickup, green for on-site, blue for nearby, the same colors as on the cards.
 
@@ -502,7 +507,7 @@ says "listings" rather than "programs". `/types/` and the type counts are built 
 type that only a summer camp or a weekend class has still gets a page. The type names, colors and icons are the
 `TYPES` list at the top of `build.mjs`.
 
-`/by-day/` ("What runs on which day") is the menu's "Search by: Day of week": the after-school programs and the
+`/by-day/` ("What runs on which day") is the footer's "Programs by day of week": the after-school programs and the
 weekend classes together, with the day row Monday to Sunday and a count for each day in the hero. Day camps run
 on dates and summer camps by the week, so it points at their lists instead.
 
@@ -797,12 +802,14 @@ Decisions that later features have to respect:
 
 ## The menu
 
-The header has four groups that open (Programs, Search by, Build a schedule, Suggest; the first item under
-Programs is `/all-programs/`, the page that sorts every listing by kind, and the first under
-Build a schedule is `/schedules/`, the page that introduces all the planners), then About and the
-"Help the site keep going" button, which goes to the support page. The groups are defined in `layout()` in
-`build.mjs` as a list of labels and links. Each is a `<details>` element, so it opens without scripts; the
-script only closes the others. From 1100px wide the logo sits on the left and the menu on the right, on one
+The header has two groups that open (Programs, whose first item is `/all-programs/`, the page that sorts every
+listing by kind, and Planners, whose first is `/schedules/`, the page that introduces all the planners), then
+Suggest and About as plain links, and the account button (the "Help the site keep going" button before accounts).
+The groups are defined in `layout()` in `build.mjs` as a list of labels, a top link and items. Each is a
+`<details>` element, so it opens without scripts. On a wide screen with a mouse (`hover: hover`, from 1100px) the
+script opens a group on hover or keyboard focus and makes its label the link to the top page (`data-top`), so the
+"All programs" / "All the planners" row is hidden there (`.menu-all`); on a phone, or anything without hover, a tap
+opens the group and that row is its first. The school, neighborhood, type and day-of-week pages live in the footer. From 1100px wide the logo sits on the left and the menu on the right, on one
 line; below that a Menu button opens a panel where each group is a big row that opens on a tap (only the
 group the current page is in starts open), then About and the button, so a phone sees five lines rather than
 every link at once. "Day of week" goes to `/by-day/`.

@@ -600,18 +600,18 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   // to a title only when it fits; a long description is cut at a word.
   const fullTitle = pathName === '' ? (PREVIEW ? cfg.siteName : `${cfg.siteName}: ${cfg.tagline}`) : `${title} | ${cfg.siteName}`.length <= 65 ? `${title} | ${cfg.siteName}` : title;
   if (description.length > 158) description = description.slice(0, 157).replace(/\s+\S*$/, '').replace(/[,;:.]$/, '') + '…';
-  // The menu: four groups that open, then About and the support button. Each group is a <details>, so it works without scripts.
+  // The menu: Programs and Planners, each a <details> group (so it works without scripts) whose first item is the
+  // whole list; on a wide screen the script opens a group on hover and sends the label itself to that list, and the
+  // first item is hidden there. Then Suggest and About as plain links, and the account button.
   const navHref = to => { const p = to.split(/[#?]/)[0]; return link(p, depth) + to.slice(p.length); };   // a link may carry ?kind= or #part
   const menus = [
-    ['Programs', [['all-programs/', 'All programs'], ['programs/', 'After-school programs'], ...(programs.some(p => p.weekend) ? [['weekends/', 'Weekend classes']] : []), ...(daysOff ? [[dayCampsPath, 'Day-camp programs']] : []), ...(summerCamps.length ? [['summer-camps/', 'Summer camps']] : [])]],
-    ['Search by', [['schools/', 'School'], ['neighborhoods/', 'Neighborhood'], ['types/', 'Program type'], ['by-day/', 'Day of week']]],
-    ['Build a schedule', [['schedules/', 'All the planners'], ['board/', 'After-school schedule'], ...(daysOff ? [[offPath, 'Day-camp schedule']] : []), ...(summerCamps.length ? [['summer-schedule/', 'Summer schedule']] : []), ...(GROUPS && daysOff ? [['calendar/', 'My kids’ calendar']] : [])]],
-    ['Suggest', [['suggest/', 'A program or a camp'], ['suggest/?kind=correction', 'An update to a listing'], ['ideas/', 'A feature'], ['schools/request/', 'A school']]],
+    ['Programs', 'all-programs/', [['all-programs/', 'All programs'], ['programs/', 'After-school programs'], ...(programs.some(p => p.weekend) ? [['weekends/', 'Weekend classes']] : []), ...(daysOff ? [[dayCampsPath, 'Day-camp programs']] : []), ...(summerCamps.length ? [['summer-camps/', 'Summer camps']] : [])]],
+    ['Planners', 'schedules/', [['schedules/', 'All the planners'], ['board/', 'After-school schedule'], ...(daysOff ? [[offPath, 'Day-camp schedule']] : []), ...(summerCamps.length ? [['summer-schedule/', 'Summer schedule']] : []), ...(GROUPS && daysOff ? [['calendar/', 'My kids’ calendar']] : [])]],
   ];
-  const nav = menus.map(([label, items]) => {
+  const nav = menus.map(([label, top, items]) => {
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
-    return `<details class="menu${here ? ' here' : ''}"><summary>${label}</summary><ul>${items.map(([to, text]) => `<li><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
-  }).join('') + `<a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
+    return `<details class="menu${here ? ' here' : ''}" data-top="${navHref(top)}"><summary>${label}</summary><ul>${items.map(([to, text]) => `<li${to === top ? ' class="menu-all"' : ''}><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
+  }).join('') + `<a href="${link('suggest/', depth)}"${pathName.startsWith('suggest/') || pathName.startsWith('ideas/') || pathName.startsWith('schools/request/') ? ' aria-current="page"' : ''}>Suggest</a><a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
     ? `${daysOff ? `<a class="when-in nav-todo" href="${link('to-do/', depth)}"${pathName === 'to-do/' ? ' aria-current="page"' : ''}>To do</a>` : ''}<a class="when-in nav-acct" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}>Account</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('profile/', depth)}"${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}${PM_LISTED ? ' data-pm="1"' : ''}>My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>`
     : `<a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`}`;
   const head = `${first}${fragment || quiet ? '' : roleHead + gtmHead + '\n' + klaviyoHead}<title>${esc(fullTitle)}</title>
@@ -687,6 +687,7 @@ ${body}
         <li><a href="${link('programs/', depth)}">${T(`After-school programs, A to Z`)}</a></li>
         <li><a href="${link('types/', depth)}">${T(`Programs by type`)}</a></li>
         <li><a href="${link('neighborhoods/', depth)}">${T(`Programs by neighborhood`)}</a></li>
+        <li><a href="${link('by-day/', depth)}">${T(`Programs by day of week`)}</a></li>
         ${programs.some(p => p.weekend) ? `<li><a href="${link('weekends/', depth)}">${T(`Weekend classes`)}</a></li>` : ''}
         ${daysOff ? `<li><a href="${link(dayCampsPath, depth)}">${T(`Day-camp programs`)}</a></li>` : ''}
         ${summerCamps.length ? `<li><a href="${link('summer-camps/', depth)}">${T(`Summer camps`)}</a></li>` : ''}
@@ -1770,11 +1771,11 @@ const finderData = (() => {
   const progRows = [...programs].sort((a, b) => fullName(a).localeCompare(fullName(b))).map(p => [p.id, fullName(p), TYPE[p.types[0]].label, servedSummary(p)]);
   return { schools: rows, covered: Object.fromEntries(schools.map(s => [s.id, s.shortName])), programs: progRows };
 })();
-const finderBox = (depth, label, withPrograms = false) => `<div class="find" data-finder${withPrograms ? ' data-programs' : ''}${PREVIEW ? '' : ' data-school-pages'} data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}"${PREVIEW ? '' : ` data-src="${link('data/school-finder.json', depth)}"`}>
+const finderBox = (depth, label, withPrograms = false, { hint = true } = {}) => `<div class="find" data-finder${withPrograms ? ' data-programs' : ''}${PREVIEW ? '' : ' data-school-pages'} data-root="${link('', depth) === './' ? '' : link('', depth).replace(/index\.html$/, '')}" data-index="${PREVIEW ? 'index.html' : ''}"${PREVIEW ? '' : ` data-src="${link('data/school-finder.json', depth)}"`}>
       <label for="find-school">${T(label || `Find your school`)}</label>
       <input id="find-school" type="search" role="combobox" aria-expanded="false" aria-controls="finder-list" aria-autocomplete="list" placeholder="${withPrograms ? 'Start typing a school or program name' : 'Start typing a school name'}" autocomplete="off">
       <ul id="finder-list" class="finder-list" role="listbox" aria-label="${withPrograms ? 'Schools and programs' : 'Schools'}" hidden></ul>
-      <p class="hint">${T(`Every district and charter school in the city is in here. If yours isn’t covered yet, you can ask for it.`)} <noscript><a href="${link('schools/', depth)}">See the schools covered so far.</a></noscript></p>
+      ${hint ? `<p class="hint">${T(`Every district and charter school in the city is in here. If yours isn’t covered yet, you can ask for it.`)} <noscript><a href="${link('schools/', depth)}">See the schools covered so far.</a></noscript></p>` : `<noscript><p class="hint"><a href="${link('schools/', depth)}">See the schools covered so far.</a></p></noscript>`}
       ${PREVIEW ? `<script type="application/json" id="finder-data">${JSON.stringify(finderData).replace(/</g, '\\u003c')}</script>` : ''}
     </div>`;
 
@@ -2049,7 +2050,7 @@ function homePage() {
   const LEDE = `Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.`;
   const hero = `    <h1>${T(`School’s out. Now what?`)}</h1>
     <p class="lede">${T(LEDE)}</p>
-    ${finderBox(0, `Find your school or a program`, true)}`;
+    ${finderBox(0, `Find your school or a program`, true, { hint: false })}`;
   const ICON = {
     school: 'M12 2 2 8v2h20V8zM4.5 11.5v6h3v-6zm6 0v6h3v-6zm6 0v6h3v-6zM2 19v3h20v-3z',
     week: 'M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zM5 9.5h14V19H5zm2 2.5v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2z',
@@ -2065,19 +2066,26 @@ function homePage() {
   };
   const who = k => `<span class="start-who" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false">${WHO[k]}</svg></span>`;
   const go = (href, label, hint, icon) => `<a class="start-go" href="${href}"><span class="start-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="${ICON[icon]}"/></svg></span><span><b>${label}</b>${hint ? `<small>${hint}</small>` : ''}</span></a>`;
-  const more = [
-    weekendPrograms.length ? [link(weekendPath, 0), T(`Weekend classes`), T(`Saturday and Sunday classes at {n} places: music, dance, art, skating, science.`, { n: weekendPrograms.length }), '#6B3FA0'] : null,
-    daysOff ? [link(dayCampsPath, 0), T(`Day camps`), T(`{n} programs run camps on the days school is closed, with a planner for the year.`, { n: campPrograms.length }), '#B88A00'] : null,
-    summerCamps.length ? [link(campsPath, 0), T(`Summer camps`), T(`{n} day camps in the city, with ages, hours and prices, and a schedule to plan the summer week by week.`, { n: summerCamps.length }), '#2C8444'] : null,
+  // When do you need coverage? One tile for each part of a family's calendar, each to that kind's own list.
+  const when = [
+    [link('programs/', 0), T(`After school`), T(`{n} programs: at the school, picking up at dismissal, or close by.`, { n: citywide.length }), '#1763B8', 'M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zM5 9.5h14V19H5zm2 2.5v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2z'],
+    daysOff ? [link(dayCampsPath, 0), T(`Days off`), T(`{n} programs run camps on the days school is closed.`, { n: campPrograms.length }), '#B88A00', 'M12 3 1.5 20h21zm0 7 2.6 8H9.4z'] : null,
+    weekendPrograms.length ? [link(weekendPath, 0), T(`Weekends`), T(`Saturday and Sunday classes at {n} places.`, { n: weekendPrograms.length }), '#6B3FA0', 'M12 2 9.5 8.5 2.5 9.3l5.2 4.8L6.2 21 12 17.4l5.8 3.6-1.5-6.9 5.2-4.8-7-.8z'] : null,
+    summerCamps.length ? [link(campsPath, 0), T(`Summer`), T(`{n} day camps, with a planner for the summer week by week.`, { n: summerCamps.length }), '#2C8444', 'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM11 1h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8L7 8.4zm11.4 11.4 1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4 7 15.6l1.4 1.4-2.8 2.8zM15.6 7l2.8-2.8 1.4 1.4L17 8.4z'] : null,
   ].filter(Boolean);
   const body = `${nextOffBar(0)}
+<section class="section" id="when">
+  <h2>${T(`When do you need coverage?`)}</h2>
+  <div class="whens">
+    ${when.map(([href, name, text, color, icon]) => `<a class="when-card" href="${href}" style="--tc:${color}"><span class="when-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path fill="currentColor" d="${icon}"/></svg></span><h3>${name}</h3><p>${text}</p></a>`).join('\n    ')}
+  </div>
+</section>
 <section class="section" id="start">
   <div class="starts">
     <div class="start">
       <div class="start-head">${who('parent')}<div><p class="kicker">${T(`Start here`)}</p> <h2>${T(`Parents`)}</h2></div></div>
-      <p>${T(`See what works with your child’s school, then put the week together.`)}</p>
+      <p>${T(`Found what works with your child’s school? Put the year together.`)}</p>
       <div class="start-list">
-        ${go(link('schools/', 0), T(`Find your school`), T(`Every program that’s there, picks up or is nearby`), 'school')}
         ${go(link(schedulesPath, 0), T(`Build a schedule`), T(`The school week, days off and the summer`), 'week')}
         ${GROUPS ? `<span class="when-out" style="display:contents">${go(link('register/', 0), T(`Create a free account`), T(`Keep every plan, and get the whole year in one calendar`), 'person')}</span>` : ''}
       </div>
@@ -2093,34 +2101,16 @@ function homePage() {
   </div>
 </section>
 <section class="section" id="browse">
-  <h2>${T(`Or start somewhere else`)}</h2>
-  <div class="ways">
-    <div class="way">
-      <h3>${T(`By program type`)}</h3>
-      <p>${T(`Music, art, sports, plain old aftercare.`)}</p>
-      <div class="chips-row">${typeChips(0)}</div>
-    </div>
-    <div class="way">
-      <h3>${T(`By neighborhood`)}</h3>
-      <p>${T(`What’s based near home, and who comes to pick up.`)}</p>
-      <div class="chips-row">${hoods.slice(0, 6).map(h => `<a class="btn" href="${link(hoodPath(h), 0)}">${esc(h.name)}</a>`).join('')}<a class="btn quiet" href="${link('neighborhoods/', 0)}">${T(`All neighborhoods`)}</a></div>
-    </div>
-    <div class="way">
-      <h3>${T(`By grade`)}</h3>
-      <p>${T(`Everything that takes your child’s grade.`)}</p>
-      <div class="grade-links">${GRADES.map(g => `<a class="gbtn" href="${link('programs/', 0)}?grade=${g}" aria-label="${g === 'PK' ? 'Pre-K' : g === 'K' ? 'Kindergarten' : 'Grade ' + g}"><span class="g">${g}</span></a>`).join('')}</div>
-    </div>
-  </div>
+  <h2>${T(`What’s your kid into?`)}</h2>
+  <p>${T(`Music, art, sports, plain old aftercare.`)}</p>
+  <div class="chips-row">${typeChips(0)}</div>
 </section>
-${more.length ? `<section class="section" id="more">
-  <h2>${T(`More than weekday afternoons`)}</h2>
-  <p>${T(`After school is where this started. The same listings now cover the rest of a family’s calendar.`)}</p>
-  <div class="mores">
-    ${more.map(([href, name, text, color]) => `<a class="more-card" href="${href}" style="--tc:${color}"><h3>${name}</h3><p>${text}</p><span class="more-go">${T(`Have a look`)}</span></a>`).join('\n    ')}
+${ALERTS ? `<section class="section when-out" id="remind">
+  <div class="remind">
+    <div class="remind-say"><h2>${T(`Get reminders`)}</h2><p>${T(`A heads-up before days off and when sign-ups open.`)}</p></div>
+    <a class="btn primary" href="${link(alertsPath, 0)}">${T(`Turn them on`)}</a>
   </div>
-  <p class="more-all"><a class="btn" href="${link('all-programs/', 0)}">${T(`See every kind of program`)}</a></p>
 </section>` : ''}
-${datesBox(0, { pick: true, place: 'home', cls: 'wide', title: T(`Get the dates by email`), lede: T(`Sign-up openings, deadlines and days off for your school, so none of them sneaks up on you.`), hint: T(`Sign-up dates reach you the morning after they’re posted here, then again the day before and at about 8 that morning. Days off come in a {day} round-up.`, { day: SEND_DAY_NAME }), old: { place: 'home', title: T(`Get the dates by email`), lede: T(`Sign-up openings, deadlines and days off for your school, so none of them sneaks up on you.`) } })}
 <section class="section">
   <h2>${T(`How programs are sorted`)}</h2>
   <div class="kinds">

@@ -465,9 +465,7 @@ button.btn{cursor:pointer;font-family:inherit}
 .daycol{transition:border-color .12s,background .12s}
 .daycol.drop{border-color:var(--link);border-style:dashed;background:var(--sky-bg)}
 
-/* ---------- home page: the three ways in, wider and each its own color ---------- */
-#browse{margin-inline:calc(50% - min(640px, 50vw - 20px))}
-#browse > h2{margin-inline:calc((min(1280px, 100vw - 40px) - min(1000px, 100vw - 40px)) / 2)}
+/* ---------- the ways in (all programs page), each its own color ---------- */
 .ways{grid-template-columns:minmax(0,1fr);gap:18px}
 @media (min-width:900px){.ways{grid-template-columns:minmax(0,1.5fr) minmax(0,1.1fr) minmax(0,1fr)}}
 .way{border:0;padding:26px 28px;gap:14px}
@@ -668,6 +666,7 @@ button.btn{cursor:pointer;font-family:inherit}
 .menu summary:focus-visible{outline:2px solid var(--hero-ink);outline-offset:4px;border-radius:4px}
 .menu ul{list-style:none;margin:0;padding:8px;position:absolute;left:-12px;top:calc(100% + 10px);z-index:40;min-width:236px;background:#FFFFFF;border-radius:14px;box-shadow:0 14px 34px rgba(7,21,39,.3);display:flex;flex-direction:column;gap:2px}
 .menu:last-of-type ul{left:auto;right:-12px}
+@media (min-width:1100px){.js.hoverable .menu .menu-all{display:none}}   /* the label is that link on a wide screen with a mouse */
 .nav .menu ul a{display:block;padding:10px 12px;border-radius:9px;border:0;color:#0B2140;font-weight:700;text-decoration:none}
 .nav .menu ul a:hover,.nav .menu ul a[aria-current="page"]{background:#DAEDFE;border:0}
 .nav a.nav-cta{background:var(--cta);color:var(--cta-ink);border:0;border-radius:999px;padding:7px 16px;font-weight:700}
@@ -1193,11 +1192,21 @@ ul.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .start-go span{display:flex;flex-direction:column;gap:2px;min-width:0}
 .start-go b{font-family:var(--display);font-stretch:112%;font-weight:750;font-size:1.08rem}
 .start-go small{font-size:.92rem;color:var(--muted)}
-.mores{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:6px}
-.more-card{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--tc);border-radius:16px;padding:20px 22px}
-.more-card:hover{border-color:var(--tc)}
-.more-card p{color:var(--muted)}
-.more-go{margin-top:auto;font-weight:700;color:var(--link);text-decoration:underline;text-underline-offset:3px}
+/* When do you need coverage? Four tiles, one per part of the calendar, each a link to that kind's list */
+.whens{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:6px}
+.when-card{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-top:7px solid var(--tc);border-radius:16px;padding:18px 20px 20px;min-width:0}
+.when-card:hover{border-color:var(--tc)}
+.when-card h3{font-size:1.25rem}
+.when-card p{color:var(--muted);font-size:.95rem}
+.when-ic{display:inline-flex;width:38px;height:38px;border-radius:10px;background:color-mix(in srgb,var(--tc) 14%,var(--surface));color:var(--tc);align-items:center;justify-content:center}
+.when-ic svg{width:24px;height:24px}
+@media (max-width:620px){.whens{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.when-card{padding:14px 14px 16px}.when-card h3{font-size:1.1rem}.when-card p{font-size:.9rem}}
+/* Get reminders: one short ask, signed out only */
+.remind{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:22px 26px}
+.remind-say{display:flex;flex-direction:column;gap:4px;flex:1 1 320px}
+.remind-say h2{font-size:1.45rem}
+.remind-say p{color:var(--muted)}
+.remind .btn{flex:none}
 
 /* ---------- contact: the "other ways" list (a plain list inside a column that numbers its steps) ---------- */
 .next ul.other-ways{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
