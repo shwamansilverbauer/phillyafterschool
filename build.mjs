@@ -2113,6 +2113,13 @@ ${ALERTS ? `<section class="section when-out" id="remind">
     <a class="btn primary" href="${link(alertsPath, 0)}">${T(`Turn them on`)}</a>
   </div>
 </section>` : ''}
+<section class="section" id="story">
+  <div class="story">
+    <h2>${T(`Built by two Philly parents, kept up by the community`)}</h2>
+    <p>${T(`We made this because we needed it: planning after school was chaos, and the answers were scattered across a dozen websites. It’s independent and community-driven, and every correction, missing program and new school someone sends makes it better for the next family.`)}</p>
+    <div class="story-go"><a class="btn primary" href="${link('about/', 0)}">${T(`Read the story`)}</a><a class="btn" href="${link('suggest/', 0)}">${T(`Help us make it better`)}</a></div>
+  </div>
+</section>
 `;
   return layout({
     title: cfg.siteName, pathName: '', depth: 0, current: null, hero, body, fragment: PREVIEW, showStreet: 'go', roomy: true,

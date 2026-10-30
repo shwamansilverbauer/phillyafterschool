@@ -464,7 +464,8 @@ finder shows elsewhere: `data-no-mine`), then two "Start here" boxes, one for pa
 and one for program managers (claim a listing, add a program or camp), then "When do you need coverage?", four
 tiles (After school → `/programs/`, Days off → `/day-camps/`, Weekends → `/weekends/`, Summer → `/summer-camps/`),
 then "What's your kid into?" (the type chips), then "Get reminders" (one line and a button to `/alerts/`, signed out
-only). The explainers (how programs are sorted, every listing is dated and sourced, who built this) are on the
+only), then "the story" (`#story`: a few lines on who made the site and why, with "Read the story" to `/about/` and
+"Help us make it better" to `/suggest/`). The explainers (how programs are sorted, every listing is dated and sourced, who built this) are on the
 About page. Each box has a picture of who it is for (a grown-up with a child, a person with a clipboard), drawn in
 `WHO` in `homePage()`.
 
