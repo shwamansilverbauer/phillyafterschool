@@ -1082,6 +1082,9 @@
             var a = el('a', null, 'My kids’ calendar'); a.href = page('calendar/'); dd.appendChild(a);
             dd.appendChild(el('span', 'hint', ownN ? ownN + (ownN === 1 ? ' date' : ' dates') + ' of your own on this device' : 'No dates of your own on this device yet'));
           }, 'Open', page('calendar/'));
+          // the to-do list: camp days planned and not yet signed up for
+          var left = todoLeft(p.daysoff);
+          row('To do', left ? say(left + (left === 1 ? ' camp day' : ' camp days') + ' to sign up for') : say('Nothing waiting. A camp day you plan sits on the list until you tick it off.', true), 'Open', page('to-do/'));
         }
         // emails and texts
         var bits = [follows.length ? 'Sign-up dates for the ' + (follows.length === 1 ? 'one thing' : follows.length + ' things') + ' you follow' : 'No date emails yet'];
@@ -2459,6 +2462,15 @@
     return bits.join(', ') || 'Nothing on it yet';
   }
   // "Sam: 6 days, Rae: 2 days" for a days-off plan kept in a profile.
+  // Camp days still to sign up for: the days-off plan's picks from today on that are a program (not a place) and not
+  // ticked. From the profile's plan when one is kept there, like the To do page, and otherwise from this device's.
+  function todoLeft(p) {
+    var n0 = new Date(), today = n0.getFullYear() + '-' + ('0' + (n0.getMonth() + 1)).slice(-2) + '-' + ('0' + n0.getDate()).slice(-2), n = 0;
+    var count = function (picks, ticked) { Object.keys(picks || {}).forEach(function (day) { var v = picks[day]; if (day >= today && typeof v === 'string' && v && !/^(home|away|other)$/.test(v) && !ticked(day)) n++; }); };
+    if (p && p.kids) p.kids.forEach(function (k) { count(k.d, function (day) { return (k.ok || []).indexOf(day) > -1; }); });
+    else ((readRosters() || {}).kids || []).forEach(function (k) { count(k.off, function (day) { return !!(k.offOk && k.offOk[day]); }); });
+    return n;
+  }
   function daysOffLine(p) {
     var bits = (p.kids || []).map(function (k, i) { var n = Object.keys(k.d || {}).length; return (k.name || 'Child ' + (i + 1)) + ': ' + n + (n === 1 ? ' day' : ' days'); });
     return bits.join(', ') || 'Nothing on it yet';

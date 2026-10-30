@@ -1073,7 +1073,7 @@
       li.appendChild(a); ul.appendChild(li);
     });
     m.appendChild(ul);
-    var before = nav.querySelector('.nav-todo') || nav.querySelector('.nav-acct') || nav.querySelector('.nav-cta');   // the groups first, then a signed-in person's own links
+    var before = nav.querySelector('.nav-acct') || nav.querySelector('.nav-cta');   // the groups first, then a signed-in person's own links
     if (before) nav.insertBefore(m, before); else nav.appendChild(m);
     return m;
   };
@@ -1219,7 +1219,7 @@
     var data = null, shown = [], active = -1;
     var withPrograms = box.hasAttribute('data-programs');
     var saved = mySchool();
-    if (saved && !document.querySelector('[data-request-page]')) {   // a shortcut to the school saved on this device
+    if (saved && !box.hasAttribute('data-no-mine') && !document.querySelector('[data-request-page]')) {   // a shortcut to the school saved on this device (not on the home page, which is kept bare)
       var mine = el('p', 'mine');
       mine.appendChild(el('span', null, 'Your school'));
       var go = el('a', 'btn', saved.name);
