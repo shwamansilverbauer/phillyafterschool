@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-10-30",
+  "generated": "2026-10-31",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -89,7 +89,7 @@
     },
     {
       "id": "old-pine",
-      "name": "Old Pine Community Center"
+      "name": "The NeighborHub"
     },
     {
       "id": "butchers-sew-shop",
@@ -799,8 +799,8 @@
       ],
       "within": "off-2026-11-03",
       "when": "Tuesday, November 3",
-      "title": "Old Pine Community Center: camp on a day off",
-      "text": "School is closed (Election Day). Old Pine Community Center has posted a camp.",
+      "title": "The NeighborHub: camp on a day off",
+      "text": "School is closed (Election Day). The NeighborHub has posted a camp.",
       "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
@@ -895,7 +895,7 @@
       "programs": [],
       "when": "Tuesday, November 3",
       "title": "No school: Election Day",
-      "text": "15 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, NLArts, Old Pine Community Center, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, Skate The Foundry and The Schuylkill Center for Environmental Education.",
+      "text": "15 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, NLArts, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, Skate The Foundry, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/election-day-2026-11-03/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -1318,8 +1318,8 @@
       ],
       "within": "off-2026-11-11",
       "when": "Wednesday, November 11",
-      "title": "Old Pine Community Center: camp on a day off",
-      "text": "School is closed (Veterans Day). Old Pine Community Center has posted a camp.",
+      "title": "The NeighborHub: camp on a day off",
+      "text": "School is closed (Veterans Day). The NeighborHub has posted a camp.",
       "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
@@ -1414,7 +1414,7 @@
       "programs": [],
       "when": "Wednesday, November 11",
       "title": "No school: Veterans Day",
-      "text": "16 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Hudson Table, Makom Community, Mister John’s Music, MoveMakers Philly, NLArts, Old Pine Community Center, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps and The Schuylkill Center for Environmental Education.",
+      "text": "16 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Hudson Table, Makom Community, Mister John’s Music, MoveMakers Philly, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/veterans-day-2026-11-11/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -1816,8 +1816,8 @@
       ],
       "within": "off-2026-11-16",
       "when": "Monday, November 16",
-      "title": "Old Pine Community Center: camp on a day off",
-      "text": "School is closed (Report card conferences). Old Pine Community Center has posted a camp.",
+      "title": "The NeighborHub: camp on a day off",
+      "text": "School is closed (Report card conferences). The NeighborHub has posted a camp.",
       "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
@@ -1896,9 +1896,229 @@
       "programs": [],
       "when": "Monday, November 16",
       "title": "No school: Report card conferences",
-      "text": "10 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Makom Community, MoveMakers Philly, NLArts, Old Pine Community Center, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps and The Schuylkill Center for Environmental Education.",
+      "text": "10 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Makom Community, MoveMakers Philly, NLArts, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/report-card-conferences-2026-11-16/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "week-columbus-charter-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "columbus-charter"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Columbus Charter",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/columbus-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Columbus Charter’s week"
+    },
+    {
+      "id": "week-coppin-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "coppin"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Coppin",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Coppin’s week"
+    },
+    {
+      "id": "week-kirkbride-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "kirkbride"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Kirkbride",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/kirkbride/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Kirkbride’s week"
+    },
+    {
+      "id": "week-mccall-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mccall"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at McCall",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/mccall/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See McCall’s week"
+    },
+    {
+      "id": "week-meredith-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "meredith"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Meredith",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/meredith/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Meredith’s week"
+    },
+    {
+      "id": "week-nebinger-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "nebinger"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Nebinger",
+      "text": "Monday: No school: Report card conferences. Wednesday: Pretzel day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        },
+        {
+          "when": "Wednesday",
+          "what": "Pretzel day"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/nebinger/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Nebinger’s week"
+    },
+    {
+      "id": "week-southwark-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "southwark"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Southwark",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/southwark/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Southwark’s week"
+    },
+    {
+      "id": "week-stanton-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "stanton"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Stanton",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/stanton/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Stanton’s week"
+    },
+    {
+      "id": "week-vare-washington-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "vare-washington"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Vare-Washington",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/vare-washington/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Vare-Washington’s week"
     },
     {
       "id": "reg-fleisher-art-memorial-2026-11-24",
@@ -2042,8 +2262,8 @@
       ],
       "within": "off-2026-11-25",
       "when": "Wednesday, November 25",
-      "title": "Old Pine Community Center: camp on a day off",
-      "text": "School is closed (Staff professional development). Old Pine Community Center has posted a camp.",
+      "title": "The NeighborHub: camp on a day off",
+      "text": "School is closed (Staff professional development). The NeighborHub has posted a camp.",
       "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
@@ -2074,7 +2294,7 @@
       "programs": [],
       "when": "Wednesday, November 25",
       "title": "No school: Staff professional development",
-      "text": "6 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, MoveMakers Philly, NLArts, Old Pine Community Center and Philly Art Center, Queen Village.",
+      "text": "6 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
       "url": "https://phillyafterschool.org/days-off/staff-professional-development-2026-11-25/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -2288,8 +2508,8 @@
       ],
       "within": "off-2026-12-23",
       "when": "Wednesday, December 23 to Wednesday, December 30",
-      "title": "Old Pine Community Center: camp on a day off",
-      "text": "School is closed (Winter recess). Old Pine Community Center has posted a camp for Dec 23, Dec 28, Dec 29 and Dec 30.",
+      "title": "The NeighborHub: camp on a day off",
+      "text": "School is closed (Winter recess). The NeighborHub has posted a camp for Dec 23, Dec 28, Dec 29 and Dec 30.",
       "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
@@ -2352,7 +2572,7 @@
       "programs": [],
       "when": "Wednesday, December 23 to Friday, January 1",
       "title": "No school: Winter recess",
-      "text": "9 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Movement Callowhill, NLArts, Old Pine Community Center, Philadelphia Youth Basketball and Philly Art Center, Queen Village.",
+      "text": "9 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The NeighborHub.",
       "url": "https://phillyafterschool.org/days-off/winter-break-2026-12-23/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -2415,8 +2635,8 @@
       ],
       "within": "off-2027-01-15",
       "when": "Friday, January 15",
-      "title": "Old Pine Community Center: camp on a day off",
-      "text": "School is closed (Staff professional development). Old Pine Community Center has posted a camp.",
+      "title": "The NeighborHub: camp on a day off",
+      "text": "School is closed (Staff professional development). The NeighborHub has posted a camp.",
       "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
@@ -2479,7 +2699,7 @@
       "programs": [],
       "when": "Friday, January 15",
       "title": "No school: Staff professional development",
-      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Makom Community, Old Pine Community Center, Philly Art Center, Queen Village, PlayArts day camps and The Schuylkill Center for Environmental Education.",
+      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/staff-professional-development-2027-01-15/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -2637,8 +2857,8 @@
       ],
       "within": "off-2027-01-29",
       "when": "Friday, January 29",
-      "title": "Old Pine Community Center: camp on a day off",
-      "text": "School is closed (Report card conferences). Old Pine Community Center has posted a camp.",
+      "title": "The NeighborHub: camp on a day off",
+      "text": "School is closed (Report card conferences). The NeighborHub has posted a camp.",
       "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
@@ -2701,7 +2921,7 @@
       "programs": [],
       "when": "Friday, January 29",
       "title": "No school: Report card conferences",
-      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Makom Community, Old Pine Community Center, Philly Art Center, Queen Village, PlayArts day camps and The Schuylkill Center for Environmental Education.",
+      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/report-card-conferences-2027-01-29/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -2764,8 +2984,8 @@
       ],
       "within": "off-2027-02-12",
       "when": "Friday, February 12",
-      "title": "Old Pine Community Center: camp on a day off",
-      "text": "School is closed (Staff professional development). Old Pine Community Center has posted a camp.",
+      "title": "The NeighborHub: camp on a day off",
+      "text": "School is closed (Staff professional development). The NeighborHub has posted a camp.",
       "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
@@ -2828,7 +3048,7 @@
       "programs": [],
       "when": "Friday, February 12",
       "title": "No school: Staff professional development",
-      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Makom Community, Old Pine Community Center, Philly Art Center, Queen Village, PlayArts day camps and The Schuylkill Center for Environmental Education.",
+      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/staff-professional-development-2027-02-12/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -3050,8 +3270,8 @@
       ],
       "within": "off-2027-03-10",
       "when": "Wednesday, March 10",
-      "title": "Old Pine Community Center: camp on a day off",
-      "text": "School is closed (Eid al-Fitr). Old Pine Community Center has posted a camp.",
+      "title": "The NeighborHub: camp on a day off",
+      "text": "School is closed (Eid al-Fitr). The NeighborHub has posted a camp.",
       "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
@@ -3114,7 +3334,7 @@
       "programs": [],
       "when": "Wednesday, March 10",
       "title": "No school: Eid al-Fitr",
-      "text": "8 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Old Pine Community Center, Philly Art Center, Queen Village, PlayArts day camps and The Schuylkill Center for Environmental Education.",
+      "text": "8 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/eid-al-fitr-2027-03-10/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -3209,8 +3429,8 @@
       ],
       "within": "off-2027-03-22",
       "when": "Monday, March 22 to Friday, March 26",
-      "title": "Old Pine Community Center: camp on a day off",
-      "text": "School is closed (Spring recess and Good Friday). Old Pine Community Center has posted a camp.",
+      "title": "The NeighborHub: camp on a day off",
+      "text": "School is closed (Spring recess and Good Friday). The NeighborHub has posted a camp.",
       "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
@@ -3289,7 +3509,7 @@
       "programs": [],
       "when": "Monday, March 22 to Friday, March 26",
       "title": "No school: Spring recess and Good Friday",
-      "text": "10 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Makom Community, Movement Callowhill, Old Pine Community Center, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "text": "10 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/spring-break-and-good-friday-2027-03-22/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -3336,8 +3556,8 @@
       ],
       "within": "off-2027-03-29",
       "when": "Monday, March 29",
-      "title": "Old Pine Community Center: camp on a day off",
-      "text": "School is closed (Staff professional development). Old Pine Community Center has posted a camp.",
+      "title": "The NeighborHub: camp on a day off",
+      "text": "School is closed (Staff professional development). The NeighborHub has posted a camp.",
       "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
@@ -3400,7 +3620,7 @@
       "programs": [],
       "when": "Monday, March 29",
       "title": "No school: Staff professional development",
-      "text": "6 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Old Pine Community Center, Philly Art Center, Queen Village, PlayArts day camps and The Schuylkill Center for Environmental Education.",
+      "text": "6 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/staff-professional-development-2027-03-29/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -3463,8 +3683,8 @@
       ],
       "within": "off-2027-04-16",
       "when": "Friday, April 16",
-      "title": "Old Pine Community Center: camp on a day off",
-      "text": "School is closed (Report card conferences). Old Pine Community Center has posted a camp.",
+      "title": "The NeighborHub: camp on a day off",
+      "text": "School is closed (Report card conferences). The NeighborHub has posted a camp.",
       "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
@@ -3527,7 +3747,7 @@
       "programs": [],
       "when": "Friday, April 16",
       "title": "No school: Report card conferences",
-      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Old Pine Community Center, Philly Art Center, Queen Village, PlayArts day camps and The Schuylkill Center for Environmental Education.",
+      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/report-card-conferences-2027-04-16/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -3622,8 +3842,8 @@
       ],
       "within": "off-2027-05-17",
       "when": "Monday, May 17",
-      "title": "Old Pine Community Center: camp on a day off",
-      "text": "School is closed (Eid al-Adha). Old Pine Community Center has posted a camp.",
+      "title": "The NeighborHub: camp on a day off",
+      "text": "School is closed (Eid al-Adha). The NeighborHub has posted a camp.",
       "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
@@ -3686,7 +3906,7 @@
       "programs": [],
       "when": "Monday, May 17",
       "title": "No school: Eid al-Adha",
-      "text": "9 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Makom Community, Old Pine Community Center, Philly Art Center, Queen Village, PlayArts day camps and The Schuylkill Center for Environmental Education.",
+      "text": "9 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/eid-al-adha-2027-05-17/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -3781,8 +4001,8 @@
       ],
       "within": "off-2027-05-18",
       "when": "Tuesday, May 18",
-      "title": "Old Pine Community Center: camp on a day off",
-      "text": "School is closed (Election Day). Old Pine Community Center has posted a camp.",
+      "title": "The NeighborHub: camp on a day off",
+      "text": "School is closed (Election Day). The NeighborHub has posted a camp.",
       "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
@@ -3845,7 +4065,7 @@
       "programs": [],
       "when": "Tuesday, May 18",
       "title": "No school: Election Day",
-      "text": "9 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Makom Community, Old Pine Community Center, Philly Art Center, Queen Village, PlayArts day camps and The Schuylkill Center for Environmental Education.",
+      "text": "9 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/election-day-2027-05-18/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },

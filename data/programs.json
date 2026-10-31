@@ -1425,7 +1425,7 @@
   },
   {
     "id": "old-pine",
-    "name": "Old Pine Community Center",
+    "name": "The NeighborHub",
     "what": "Traditional aftercare: homework help, snack, gym and recreation",
     "types": [
       "aftercare"
@@ -1435,7 +1435,10 @@
       "homework",
       "gym",
       "recreation",
-      "childcare"
+      "childcare",
+      "Old Pine Community Center",
+      "Old Pine",
+      "OPCC"
     ],
     "address": "401 Lombard St",
     "neighborhoods": [
@@ -1482,11 +1485,11 @@
       ],
       "sources": [
         {
-          "label": "Old Pine registration: school closures",
+          "label": "NeighborHub registration: school closures",
           "url": "https://opcc.jumbula.com/"
         },
         {
-          "label": "Old Pine afterschool",
+          "label": "The NeighborHub afterschool (formerly Old Pine)",
           "url": "https://oldpinecommunitycenter.org/afterschool/"
         }
       ],
@@ -1509,10 +1512,10 @@
       "note": "First-time families: email the program for help registering.",
       "nextTerm": "Registration for 2026–27 stays open through the school year (it opened March 2, 2026). No date is posted yet for 2027–28."
     },
-    "note": "Last year’s monthly option reached capacity. Register early.",
+    "note": "Formerly Old Pine Community Center; its website now says it is The NeighborHub. Last year’s monthly option reached capacity. Register early.",
     "sources": [
       {
-        "label": "Old Pine afterschool",
+        "label": "The NeighborHub afterschool (formerly Old Pine)",
         "url": "https://oldpinecommunitycenter.org/afterschool/"
       },
       {
@@ -1520,7 +1523,7 @@
         "url": "https://opcc.jumbula.com/Afterschool20262027/RegularSchoolDaysMonthlyRate"
       },
       {
-        "label": "Old Pine registration: daily rate",
+        "label": "NeighborHub registration: daily rate",
         "url": "https://opcc.jumbula.com/Afterschool20262027/RegularSchoolDaysDailyRate"
       }
     ],
