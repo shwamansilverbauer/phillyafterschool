@@ -668,7 +668,7 @@ ${body}
 <footer class="foot"><div class="in">
   <nav class="foot-cols" aria-label="Footer">
     <div class="foot-brand">
-      <a class="brand" href="${link('', depth)}">${esc(cfg.siteName)}</a>
+      <a class="brand" href="${link('', depth)}"><img class="logo" src="${link('logo-text.png', depth)}${stamp('src/static/logo-text.png')}" alt="${esc(cfg.siteName)}" width="417" height="150"></a>
       <p>${T(`After-school programs in Philadelphia, sorted by the school your child goes to.`)}</p>
       ${cfg.supportUrl ? `<p class="foot-support"><span>${T(`Created and run by the Silverbauers.`)}</span> <a class="btn foot-cta" href="${link('support/', depth)}">Help the site keep going</a></p>` : ''}
     </div>

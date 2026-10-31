@@ -42,7 +42,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .brand{display:inline-flex;align-items:center;text-decoration:none}
 .brand .logo{display:block;height:60px;width:auto}
 @media (max-width:1099px){.brand .logo{height:42px}}
-.foot .brand{font-family:var(--display);font-stretch:112%;font-weight:800;font-size:1.2rem;color:var(--foot-ink)}
+.foot .brand .logo{height:46px}
 .nav{display:flex;flex-wrap:wrap;gap:4px 22px;font-size:1rem}
 .nav a{color:var(--hero-ink);text-decoration:none;padding-block:4px;border-bottom:3px solid transparent}
 .nav a:hover,.nav a[aria-current="page"]{border-bottom-color:var(--hero-accent)}
