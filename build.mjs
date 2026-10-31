@@ -605,8 +605,8 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   // first item is hidden there. Then Suggestion Box and About as plain links, and the account button.
   const navHref = to => { const p = to.split(/[#?]/)[0]; return link(p, depth) + to.slice(p.length); };   // a link may carry ?kind= or #part
   const menus = [
-    ['Programs', 'all-programs/', [['all-programs/', 'All programs'], ['programs/', 'After-school programs'], ...(programs.some(p => p.weekend) ? [['weekends/', 'Weekend classes']] : []), ...(daysOff ? [[dayCampsPath, 'Day-camp programs']] : []), ...(summerCamps.length ? [['summer-camps/', 'Summer camps']] : [])]],
-    ['Schedule Builder', 'schedules/', [['schedules/', 'Build a schedule'], ['board/', 'After-school schedule'], ...(daysOff ? [[offPath, 'Day-camp schedule']] : []), ...(summerCamps.length ? [['summer-schedule/', 'Summer schedule']] : []), ...(GROUPS && daysOff ? [['calendar/', 'My kids’ calendar']] : [])]],
+    ['Programs', 'all-programs/', [['all-programs/', 'All programs'], ['programs/', 'After-school'], ...(programs.some(p => p.weekend) ? [['weekends/', 'Weekend Activities']] : []), ...(daysOff ? [[dayCampsPath, 'Day Camps']] : []), ...(summerCamps.length ? [['summer-camps/', 'Summer Camps']] : [])]],
+    ['Schedule Builder', 'schedules/', [['schedules/', 'Build a schedule'], ['board/', 'After-school'], ...(daysOff ? [[offPath, 'Days off']] : []), ...(summerCamps.length ? [['summer-schedule/', 'Summer']] : []), ...(GROUPS && daysOff ? [['calendar/', 'Our Calendar']] : [])]],
   ];
   const nav = menus.map(([label, top, items]) => {
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
@@ -632,7 +632,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <link rel="apple-touch-icon" href="${link('apple-touch-icon.png', depth)}">${GROUPS && !PREVIEW ? `
 <link rel="manifest" href="${link('manifest.json', depth)}">` : ''}
 <meta name="color-scheme" content="only light">
-<meta name="theme-color" content="#96C9FF">
+<meta name="theme-color" content="#0B2140">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
@@ -651,7 +651,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   const page = `${quiet ? '' : gtmBody}<script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
 ${topbar}<header class="band sitebar${theme ? ' ' + theme : ''}">
   <div class="in bar">
-    <a class="brand" href="${link('', depth)}"><span class="bus-mark"></span>${esc(cfg.siteName)}</a>
+    <a class="brand" href="${link('', depth)}"><img class="logo" src="${link('logo.png', depth)}${stamp('src/static/logo.png')}" alt="${esc(cfg.siteName)}" width="500" height="168"></a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true"></span>Menu</button>
     <nav class="nav" id="site-nav" aria-label="Site">${nav}</nav>
   </div>
@@ -668,66 +668,50 @@ ${body}
 <footer class="foot"><div class="in">
   <nav class="foot-cols" aria-label="Footer">
     <div class="foot-brand">
-      <a class="brand" href="${link('', depth)}"><span class="bus-mark"></span>${esc(cfg.siteName)}</a>
+      <a class="brand" href="${link('', depth)}"><img class="logo" src="${link('logo.png', depth)}${stamp('src/static/logo.png')}" alt="${esc(cfg.siteName)}" width="500" height="168"></a>
       <p>${T(`After-school programs in Philadelphia, sorted by the school your child goes to.`)}</p>
       ${cfg.supportUrl ? `<p class="foot-support"><span>${T(`Created and run by the Silverbauers.`)}</span> <a class="btn foot-cta" href="${link('support/', depth)}">Help the site keep going</a></p>` : ''}
     </div>
     <div>
-      <h2><a href="${link('schools/', depth)}">${T(`Schools`)}</a></h2>
-      <ul>
-        <li><a href="${link('schools/', depth)}">${T(`All schools`)}</a></li>
-        <li><a href="${link('neighborhoods/', depth)}">${T(`By neighborhood`)}</a></li>
-        <li><a href="${link('schools/request/', depth)}">${T(`Ask for your school`)}</a></li>
-      </ul>
-    </div>
-    <div>
       <h2><a href="${link('all-programs/', depth)}">${T(`Programs`)}</a></h2>
       <ul>
-        <li><a href="${link('all-programs/', depth)}">${T(`All programs`)}</a></li>
-        <li><a href="${link('programs/', depth)}">${T(`After-school programs, A to Z`)}</a></li>
-        <li><a href="${link('types/', depth)}">${T(`Programs by type`)}</a></li>
-        <li><a href="${link('neighborhoods/', depth)}">${T(`Programs by neighborhood`)}</a></li>
-        <li><a href="${link('by-day/', depth)}">${T(`Programs by day of week`)}</a></li>
-        ${programs.some(p => p.weekend) ? `<li><a href="${link('weekends/', depth)}">${T(`Weekend classes`)}</a></li>` : ''}
-        ${daysOff ? `<li><a href="${link(dayCampsPath, depth)}">${T(`Day-camp programs`)}</a></li>` : ''}
+        <li><a href="${link('programs/', depth)}">${T(`After-school`)}</a></li>
+        ${programs.some(p => p.weekend) ? `<li><a href="${link('weekends/', depth)}">${T(`Weekend activities`)}</a></li>` : ''}
+        ${daysOff ? `<li><a href="${link(dayCampsPath, depth)}">${T(`Day camps`)}</a></li>` : ''}
         ${summerCamps.length ? `<li><a href="${link('summer-camps/', depth)}">${T(`Summer camps`)}</a></li>` : ''}
-        <li><a href="${link('suggest/', depth)}">${T(`Suggest a program`)}</a></li>
-        <li><a href="${link('review/', depth)}">${T(`Write a review`)}</a></li>
+        <li><a href="${link('schools/', depth)}">${T(`By school`)}</a></li>
+        <li><a href="${link('neighborhoods/', depth)}">${T(`By neighborhood`)}</a></li>
+        <li><a href="${link('types/', depth)}">${T(`By type`)}</a></li>
+        <li><a href="${link('by-day/', depth)}">${T(`By day of week`)}</a></li>
       </ul>
     </div>
     <div>
-      <h2><a href="${link('schedules/', depth)}">${T(`Your family`)}</a></h2>
+      <h2><a href="${link('schedules/', depth)}">${T(`Schedule Builder`)}</a></h2>
       <ul>
-        <li><a href="${link('board/', depth)}">${T(`After-school schedule`)}</a></li>
-        ${daysOff ? `<li><a href="${link(offPath, depth)}">${T(`Day-camp schedule`)}</a></li>` : ''}
-        ${ALERTS ? `<li><a href="${link(alertsPath, depth)}">${T(`Dates by email`)}</a></li>` : ''}
-        ${GROUPS ? `<li><a href="${link('profile/', depth)}">${T(`My profile`)}</a></li>
-        <li><a href="${link('account/', depth)}">${T(`Your account`)}</a></li>` : ''}
+        <li><a href="${link('board/', depth)}">${T(`After-school`)}</a></li>
+        ${daysOff ? `<li><a href="${link(offPath, depth)}">${T(`Days off`)}</a></li>` : ''}
+        ${summerCamps.length ? `<li><a href="${link('summer-schedule/', depth)}">${T(`Summer`)}</a></li>` : ''}
+        ${GROUPS && daysOff ? `<li><a href="${link('calendar/', depth)}">${T(`Our calendar`)}</a></li>` : ''}
+        ${ALERTS ? `<li><a href="${link(alertsPath, depth)}">${T(`Reminders by email`)}</a></li>` : ''}
+        ${GROUPS ? `<li><a href="${link('profile/', depth)}">${T(`My profile`)}</a></li>` : ''}
       </ul>
     </div>
     <div>
       <h2><a href="${link('about/', depth)}">${T(`About`)}</a></h2>
       <ul>
-        <li><a href="${link('about/', depth)}">${T(`About this site`)}</a></li>
-        <li><a href="${link('about/', depth)}#sources">${T(`Every listing is dated and sourced`)}</a></li>
-        <li><a href="${link('about/', depth)}#corrections">${T(`Send a correction`)}</a></li>
-        <li><a href="${link('contact/', depth)}">${T(`Contact us`)}</a></li>${GROUPS ? `
+        <li><a href="${link('about/', depth)}">${T(`The story`)}</a></li>
+        <li><a href="${link('suggest/', depth)}">${T(`Suggestion Box`)}</a></li>
+        <li><a href="${link('review/', depth)}">${T(`Write a review`)}</a></li>${GROUPS ? `
         <li><a href="${link('managers/', depth)}">${T(`For program managers`)}</a></li>` : ''}
-        <li><a href="${link('ideas/', depth)}">${T(`Request a feature`)}</a></li>
+        <li><a href="${link('contact/', depth)}">${T(`Contact`)}</a></li>
         <li><a href="${link('privacy/', depth)}">${T(`Privacy`)}</a></li>${TERMS ? `
         <li><a href="${link('terms/', depth)}">${T(`Terms of use`)}</a></li>` : ''}
-        <li><a href="${link('support/', depth)}">${T(`Help the site keep going`)}</a></li>
       </ul>
     </div>
-  </nav>${GROUPS ? `
-  <div class="foot-managers">
-    <p><b>${T(`Run a program or camp?`)}</b> ${T(`Claim your listing, free, and keep its dates, costs and hours right yourself.`)}</p>
-    <a class="btn foot-cta" href="${link('managers/', depth)}">${T(`For program managers`)}</a>
-  </div>` : ''}
+  </nav>
   <div class="foot-fine">
     <p>${T(`Listings come from each provider’s public pages and are not endorsements. Prices, hours and pickup routes change, so confirm with the provider before you enroll.`)}</p>
     <p>${T(`{site} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.`, { site: cfg.siteName })}</p>
-    ${cfg.contactEmail ? `<p>${T(`Questions?`)} <a href="mailto:${esc(cfg.contactEmail)}">${esc(cfg.contactEmail)}</a> ${T(`or`)} <a href="${link('contact/', depth)}">${T(`send a message`)}</a>.</p>` : ''}
     ${cfg.builtBy ? `<p>Built by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
     ${cfg.writtenBy ? `<p>Written by ${esc(cfg.writtenBy.name)}.</p>` : ''}
   </div>

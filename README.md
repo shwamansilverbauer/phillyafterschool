@@ -815,10 +815,18 @@ The groups are defined in `layout()` in `build.mjs` as a list of labels, a top l
 `<details>` element, so it opens without scripts. On a wide screen with a mouse (`hover: hover`, from 1100px) the
 script opens a group on hover or keyboard focus and makes its label the link to the top page (`data-top`), so the
 "All programs" / "Build a schedule" row is hidden there (`.menu-all`); on a phone, or anything without hover, a tap
-opens the group and that row is its first. The school, neighborhood, type and day-of-week pages live in the footer. From 1100px wide the logo sits on the left and the menu on the right, on one
-line; below that a Menu button opens a panel where each group is a big row that opens on a tap (only the
-group the current page is in starts open), then About and the button, so a phone sees five lines rather than
-every link at once. "Day of week" goes to `/by-day/`.
+opens the group and that row is its first. The items are After-school, Weekend Activities, Day Camps and Summer
+Camps under Programs; After-school, Days off, Summer and Our Calendar under Schedule Builder. The school,
+neighborhood, type and day-of-week pages live in the footer. The header is navy (`.sitebar`) with white type, the
+yellow for what is current or pressed, and the logo (`src/static/logo.png`, the PHILLY / AFTER SCHOOL bulb, served as
+`/logo.png`) on the left; from 1100px wide the menu sits on the right on the same line; below that a Menu button
+opens a white panel where each group is a big row that opens on a tap (only the group the current page is in starts
+open), then Suggestion Box, About and the button, so a phone sees five lines rather than every link at once.
+
+The footer (`.foot`) is the sitemap, kept short: the logo, one line and the "Help the site keep going" button, then
+three columns: Programs (the four kinds, then by school, by neighborhood, by type, by day of week), Schedule Builder
+(the three planners, the calendar, reminders by email, My profile) and About (the story, Suggestion Box, Write a
+review, For program managers, Contact, Privacy, Terms), then the fine print with "Built by" and "Written by".
 
 ## Signed up, or still to: ticks on the days-off plan and the to-do list
 
@@ -1119,7 +1127,7 @@ card has a "Suggest an update" button that opens the form on that listing (`?kin
 `/contact/` is a plain form (name, email, topic, message) that posts to `contact/send.php`. Like the suggestion
 form it emails `contactEmail`, sets Reply-To to the sender, appends a copy to
 `phillyafterschool-suggestions.log`, and has a hidden field for bots; it also takes at most five messages an hour
-from one address. The footer shows `contactEmail` and links to the page.
+from one address. The footer's About column links to the page.
 
 ## Dates by email
 
@@ -1542,7 +1550,7 @@ its own page.
   Sharing and groups, invitations, listings, the support ask, signing out and deleting. Signed out, it is still
   where people log in.
 - **Getting there.** Signed in, the menu has "Account" beside the "My profile" button; in the phone menu the two are
-  the first things listed. The footer has both as well.
+  the first things listed. The footer's Schedule Builder column has "My profile" as well.
 - **Changing the email address.** "Change my email address" under Your details asks for the new address
   (`email_start`), which is sent a 6-digit code, and then for the code (`email_finish`). Until the code is typed
   nothing changes. Then the account's address is replaced, every other device is signed out, a note goes to the old
@@ -1565,9 +1573,8 @@ its own page.
 The strip above the menu (signed-out visitors) carries "Run a program or camp? Claim your listing" on the left and
 "Log in" on the right. The account and register pages open with two cards, "Parent or caregiver" (this page) and
 "Program manager", which goes to `/managers/`: that page is where a manager's account is made, by claiming a
-listing, and where a program that isn't listed yet is sent in. The footer ends with a band for them too
-(`.foot-managers`: "Run a program or camp?" and a "For program managers" button), above the fine print, besides
-the link in the About column; and every listing ends with the claim box (`listingTools()`).
+listing, and where a program that isn't listed yet is sent in. The footer's About column links to the managers
+page, and every listing ends with the claim box (`listingTools()`).
 
 ## Emails to program managers about their listing
 

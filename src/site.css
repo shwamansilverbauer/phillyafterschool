@@ -39,10 +39,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .band{background:var(--hero);color:var(--hero-ink);overflow:hidden}
 .in{max-width:1040px;margin:0 auto;padding-inline:20px}
 .bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 24px;padding-block:18px}
-.brand{font-family:var(--display);font-stretch:112%;font-weight:800;font-size:1.15rem;color:var(--hero-ink);text-decoration:none;display:inline-flex;align-items:center;gap:10px}
-.bus-mark{position:relative;display:inline-block;width:26px;height:14px;border-radius:4px 6px 3px 3px;background:var(--yellow)}
-.bus-mark::before,.bus-mark::after{content:"";position:absolute;bottom:-4px;width:7px;height:7px;border-radius:50%;background:var(--hero-ink)}
-.bus-mark::before{left:3px}.bus-mark::after{right:3px}
+.brand{display:inline-flex;align-items:center;text-decoration:none}
+.brand .logo{display:block;height:60px;width:auto}
+@media (max-width:1099px){.brand .logo{height:42px}}
+.foot .brand .logo{height:50px}
 .nav{display:flex;flex-wrap:wrap;gap:4px 22px;font-size:1rem}
 .nav a{color:var(--hero-ink);text-decoration:none;padding-block:4px;border-bottom:3px solid transparent}
 .nav a:hover,.nav a[aria-current="page"]{border-bottom-color:var(--hero-accent)}
@@ -344,14 +344,12 @@ button.btn{cursor:pointer;font-family:inherit}
 .foot .in{padding-block:clamp(40px,6vw,64px) 40px;gap:0}
 .foot-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 24px}
 .foot-brand{grid-column:1 / -1;display:flex;flex-direction:column;gap:12px;max-width:34ch}
-@media (min-width:860px){.foot-cols{grid-template-columns:minmax(0,1.7fr) repeat(4,minmax(0,1fr));gap:32px}.foot-brand{grid-column:auto}}
+@media (min-width:860px){.foot-cols{grid-template-columns:minmax(0,1.6fr) repeat(3,minmax(0,1fr));gap:32px}.foot-brand{grid-column:auto}}
 .foot-cols h2{font-size:1rem;font-stretch:112%;font-weight:800;letter-spacing:0;margin-bottom:12px}
 .foot-cols h2 a{color:var(--foot-ink);text-decoration:none}
 .foot-cols ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
 .foot-cols li a{color:var(--foot-muted);text-decoration:none}
 .foot-cols a:hover{color:var(--foot-ink);text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:2px;text-underline-offset:4px}
-.foot-managers{margin-top:clamp(28px,4vw,44px);padding:16px 20px;border:1.5px solid color-mix(in srgb,var(--foot-muted) 40%,transparent);border-radius:14px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px}
-.foot-managers p{margin:0;color:var(--foot-muted)}.foot-managers b{color:var(--foot-ink)}
 .foot-fine{margin-top:clamp(36px,5vw,56px);padding-top:24px;border-top:1px solid color-mix(in srgb,var(--foot-muted) 28%,transparent);display:flex;flex-direction:column;gap:8px;font-size:.88rem}
 .section[id],.prose h2[id]{scroll-margin-top:24px}
 
@@ -810,7 +808,7 @@ button.btn{cursor:pointer;font-family:inherit}
 
 /* ---------- share groups: sign-in, the account page, a group's page, the block on the roster page ---------- */
 .g-page{display:flex;flex-direction:column;gap:22px}
-.g-page .panel{gap:12px;max-width:860px}
+.g-page .panel{gap:12px;max-width:960px}
 .g-page .section{display:flex;flex-direction:column;gap:14px}
 .signin{display:flex;flex-direction:column;gap:10px;max-width:560px}
 .signin h3{font-size:1.2rem}
@@ -1006,14 +1004,26 @@ html.signed .when-out{display:none!important}
 /* the menu bar stays at the top of the screen as the page scrolls; the "Log in" strip above it and the page's
    headline below it scroll away. --bar-h is the bar's height, kept up to date by site.js, so things that stick
    under it (the search-and-filters bar, the next-day-off box) and links that jump down the page clear it. */
-.sitebar{position:sticky;top:0;z-index:40;box-shadow:0 1px 0 rgba(0,0,0,.14)}
+.sitebar{position:sticky;top:0;z-index:40;background:#0B2140;color:#FFFFFF;box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.sitebar .nav a,.sitebar .menu summary{color:#FFFFFF}
+.sitebar .nav a:hover,.sitebar .nav a[aria-current="page"],.sitebar .menu summary:hover,.sitebar .menu.here summary,.sitebar .menu[open] summary{border-bottom-color:var(--yellow)}
+.sitebar .menu summary:focus-visible{outline-color:var(--yellow)}
+.sitebar :focus-visible{outline-color:var(--yellow)}
+.sitebar .nav a.nav-cta{background:var(--yellow);color:var(--yellow-ink)}
+.sitebar .nav a.nav-cta:hover,.sitebar .nav a.nav-cta[aria-current="page"]{background:#FFD83A}
+.sitebar .menu-btn{border-color:#FFFFFF;color:#FFFFFF}
+.topstrip .topbar{background:#071A36}
+.topstrip .topbar a{color:#FFFFFF}
+.topstrip .topbar a:hover{border-bottom-color:var(--yellow)}
+.topstrip .topbar span{color:rgba(255,255,255,.8)}
+@media print{.sitebar{background:#FFFFFF}}
 .pagehead{z-index:1;background:linear-gradient(180deg,var(--hero),var(--hero-low))}
 .band :focus-visible{outline-color:var(--hero-accent)}
 .topstrip{z-index:1}
 html{scroll-padding-top:calc(var(--bar-h,64px) + 12px)}
-.sitebar .bar{padding-block:12px}
+.sitebar .bar{padding-block:10px}
 @media (max-width:1099px){
-  .sitebar .bar{padding-block:9px}
+  .sitebar .bar{padding-block:8px}
   .js .nav.open{max-height:calc(100vh - var(--bar-h,64px) - 20px);max-height:calc(100dvh - var(--bar-h,64px) - 20px);overflow-y:auto;overscroll-behavior:contain}
 }
 @media print{.sitebar{position:static;box-shadow:none}}
@@ -1902,14 +1912,14 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .sum .jump-wrap{background:var(--surface);margin:0;--jump-bg:var(--surface)}
 .sum .jump a{background:var(--bg)}
 .g-page > .jump-wrap,.prose > .jump-wrap{margin:0}
-.g-page > .jump-wrap{max-width:860px}
+.g-page > .jump-wrap{max-width:960px}
 .jump-wrap::before,.jump-wrap::after{content:"";position:absolute;top:0;bottom:1px;width:72px;pointer-events:none;z-index:1;opacity:0;transition:opacity .15s}
 .jump-wrap::before{left:0;background:linear-gradient(270deg,transparent,var(--jump-bg) 55%)}
 .jump-wrap::after{right:0;background:linear-gradient(90deg,transparent,var(--jump-bg) 55%)}
 .jump-wrap.more-left::before,.jump-wrap.more-right::after{opacity:1}
 /* tabs: the strip across the profile, the account and the listings page, and the small sets inside a listing's box */
-.jump.acct-tabs{gap:6px;padding:10px 0 0}
-.jump.acct-tabs a{border:0;border-radius:12px 12px 0 0;background:none;color:var(--muted);padding:10px 16px 11px;border-bottom:3px solid transparent;font-size:1rem}
+.jump.acct-tabs{gap:3px;padding:10px 0 0}
+.jump.acct-tabs a{border:0;border-radius:12px 12px 0 0;background:none;color:var(--muted);padding:10px 14px 11px;border-bottom:3px solid transparent;font-size:1rem}
 .jump.acct-tabs a:hover,.jump.acct-tabs a:focus-visible{color:var(--link);background:var(--surface)}
 .jump.acct-tabs a[aria-current]{color:var(--ink);background:var(--surface);border-bottom-color:var(--yellow)}
 /* the To do tab: the one thing on the strip that asks for something, so it wears the call-to-action color */
@@ -2054,7 +2064,7 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 }
 
 /* "Has your family been to ...?": asked on Build your week and on the profile, when a program has been on a week a while */
-.rv-nudge{border:2px solid var(--yellow);border-radius:16px;background:var(--surface);padding:18px 20px;display:flex;flex-direction:column;gap:10px;max-width:860px}
+.rv-nudge{border:2px solid var(--yellow);border-radius:16px;background:var(--surface);padding:18px 20px;display:flex;flex-direction:column;gap:10px;max-width:960px}
 .rv-nudge h2{margin:0;font-size:1.3rem}
 .rv-nudge p{margin:0}
 .rv-nudge .actions{grid-area:auto;align-items:center;align-self:flex-start;gap:8px 14px}
@@ -2080,7 +2090,7 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 
 /* ----- premium listings: what a program adds to its own page ----- */
 .pm{display:contents}
-.pm-note{margin:0;border:2px dashed var(--yellow);border-radius:12px;padding:10px 14px;background:var(--warn);color:var(--warn-ink);font-weight:700;max-width:860px}
+.pm-note{margin:0;border:2px dashed var(--yellow);border-radius:12px;padding:10px 14px;background:var(--warn);color:var(--warn-ink);font-weight:700;max-width:960px}
 .pm-offer{margin:0 0 14px;background:var(--warn);color:var(--warn-ink);border-left:6px solid var(--yellow);border-radius:10px;padding:11px 16px;font-size:1.05rem;max-width:760px}
 .pm-offer b,.pm-offer-line b{font-family:var(--display);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;margin-right:4px}
 .pm-offer-line{margin:0;background:var(--warn);color:var(--warn-ink);border-radius:9px;padding:7px 12px;font-size:.95rem}
