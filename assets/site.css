@@ -1004,7 +1004,7 @@ html.signed .when-out{display:none!important}
 /* the menu bar stays at the top of the screen as the page scrolls; the "Log in" strip above it and the page's
    headline below it scroll away. --bar-h is the bar's height, kept up to date by site.js, so things that stick
    under it (the search-and-filters bar, the next-day-off box) and links that jump down the page clear it. */
-.sitebar{position:sticky;top:0;z-index:40;background:#0F4D90;color:#FFFFFF;box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.sitebar{position:sticky;top:0;z-index:40;background:#0A3566;color:#FFFFFF;box-shadow:0 1px 0 rgba(0,0,0,.25)}
 .sitebar .nav a,.sitebar .menu summary{color:#FFFFFF}
 .sitebar .nav a:hover,.sitebar .nav a[aria-current="page"],.sitebar .menu summary:hover,.sitebar .menu.here summary,.sitebar .menu[open] summary{border-bottom-color:var(--yellow)}
 .sitebar .menu summary:focus-visible{outline-color:var(--yellow)}
@@ -1012,7 +1012,7 @@ html.signed .when-out{display:none!important}
 .sitebar .nav a.nav-cta{background:var(--yellow);color:var(--yellow-ink)}
 .sitebar .nav a.nav-cta:hover,.sitebar .nav a.nav-cta[aria-current="page"]{background:#FFD83A}
 .sitebar .menu-btn{border-color:#FFFFFF;color:#FFFFFF}
-.topstrip .topbar{background:#0A3566}
+.topstrip .topbar{background:#0F4D90}
 .topstrip .topbar a{color:#FFFFFF}
 .topstrip .topbar a:hover{border-bottom-color:var(--yellow)}
 .topstrip .topbar span{color:rgba(255,255,255,.8)}
