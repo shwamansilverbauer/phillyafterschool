@@ -632,7 +632,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <link rel="apple-touch-icon" href="${link('apple-touch-icon.png', depth)}">${GROUPS && !PREVIEW ? `
 <link rel="manifest" href="${link('manifest.json', depth)}">` : ''}
 <meta name="color-scheme" content="only light">
-<meta name="theme-color" content="#0F4D90">
+<meta name="theme-color" content="#0A3566">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">

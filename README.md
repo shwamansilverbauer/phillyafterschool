@@ -817,8 +817,8 @@ script opens a group on hover or keyboard focus and makes its label the link to 
 "All programs" / "Build a schedule" row is hidden there (`.menu-all`); on a phone, or anything without hover, a tap
 opens the group and that row is its first. The items are After-school, Weekend Activities, Day Camps and Summer
 Camps under Programs; After-school, Days off, Summer and Our Calendar under Schedule Builder. The school,
-neighborhood, type and day-of-week pages live in the footer. The header is royal blue (`.sitebar`, #0F4D90, the
-strip above it in the footer's navy) with white type, the yellow for what is current or pressed, and the logo
+neighborhood, type and day-of-week pages live in the footer. The header is the footer's navy (`.sitebar`, #0A3566,
+with the strip above it in royal blue, #0F4D90) with white type, the yellow for what is current or pressed, and the logo
 (`src/static/logo.png`, the PHILLY / AFTER SCHOOL bulb, served as `/logo.png`) on the left; from 1100px wide the menu sits on the right on the same line; below that a Menu button
 opens a white panel where each group is a big row that opens on a tap (only the group the current page is in starts
 open), then Suggestion Box, About and the button, so a phone sees five lines rather than every link at once.
