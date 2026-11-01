@@ -999,6 +999,11 @@ html.signed .when-out{display:none!important}
 .acct-head .hero{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
 .acct-hero-text{display:flex;flex-direction:column;gap:18px;min-width:0}
 .acct-hero-text .hero-fine{font-size:1rem}
+.acct-hero-art{margin-top:6px}
+.acct-hero-art svg{display:block;width:100%;height:auto;max-width:520px}
+html.signed .acct-hero-art{display:none}
+html.signed.form-up .acct-hero-art{display:block}
+.acct-invite{margin:0}
 .acct-hero-form{min-width:0}
 .acct-hero-form:empty{display:none}
 .acct-hero-form .g-page{gap:12px}
@@ -1011,6 +1016,8 @@ html.signed .when-out{display:none!important}
 .acct-main:empty{display:none}
 .acct-why{display:flex;flex-direction:column;gap:30px;min-width:0}
 .acct-why > h2{font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 -12px}
+.acct-why > .acct-why-lede{margin:-14px 0 -8px;color:var(--muted);max-width:60ch}
+.acct-row-text > .demo-n{margin:0 0 8px}
 .acct-group{display:flex;flex-direction:column;gap:18px}
 .acct-group-h{font-size:1.6rem}
 .acct-row{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:center;background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:18px}
@@ -1997,7 +2004,7 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .claim-see{margin:2px 0 0}
 .pm-tease-tag.pm-on{background:var(--yellow);color:#2A2100;vertical-align:middle}
 .claim-more{gap:10px;justify-content:flex-start;align-self:flex-start}
-#claims.holds:not(.about-open) ~ section{display:none}
+#claims.holds:not(.about-open) ~ section,.acct-main:has(> #claims.holds:not(.about-open)) ~ section{display:none}
 @media (max-width:560px){.jump.acct-tabs a{padding:9px 12px 10px;font-size:.95rem}.tabs-bar .tab{padding:8px 11px}}
 .jump-wrap .rail-go.prev{left:0}
 .jump-wrap .rail-go.fwd{right:0}
