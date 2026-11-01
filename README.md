@@ -408,9 +408,9 @@ Fields worth knowing:
 Every program gets its own page at `/programs/<id>/` (for example `/programs/zhang-sah/`), built from the
 same record as its cards. `/programs/` lists them all, in a section per kind of program (each under the first of
 its `types`, A to Z inside; `typeSections()` in `build.mjs`, which the weekend, day-camp and summer lists use too),
-with the hero naming each section as a colored pill and a strip under the menu bar (`pageNav(jumpNav())`) that
-jumps between the sections and stays under the slim search bar as the page scrolls; the type, neighborhood and
-by-day pages have the same strip over their kind sections.
+with no strip of section links over them: the Type row of the filters holds the same categories (the type,
+weekend, day-camp and summer lists are the same; the neighborhood and by-day pages keep a strip, `pageNav(jumpNav())`,
+over their kind sections).
 
 **What stays under the menu bar.** Anything that switches between views of a page is sticky, so it is the page's
 navigation wherever you are on it: `.pagenav` holds a list page's jump links and, on the day-camps page, the
@@ -476,7 +476,8 @@ The top of a program's page says which schools it works for as colored labels (`
 On a program's own page, a row of "The details" longer than about a hundred characters shows its first two lines with a "More" link (`fold()` in `build.mjs`). It is a `<details>` element holding the whole text, so it opens without JavaScript and nothing is left out of the page.
 
 **The filters start shut.** They run to six rows plus the grade row, which is a lot to meet before the list, so
-`filterBar()` writes one dark "Filters" button (`#filters-toggle`) under the search box and `site.js` keeps the rows
+`filterBar()` writes one dark "Filters" button (`#filters-toggle`) on the left of the search box (`.fbar-top`: the
+button and its line, then the search box to their right; on a phone the box drops under them) and `site.js` keeps the rows
 and the grade row hidden until it is pressed (the class `open` on `.fbar` and `.picker`; without JavaScript there are
 no filters at all, as before). Beside the button a line says what is inside, built from the rows that page has
 ("Narrow this list by grade, type, pickup or cost. Or see it on a map."), and a yellow number counts the filters in
@@ -982,6 +983,10 @@ of `roll`, `again` or `undo`).
   ages don't take the child's age is left out of the one-tap fill but still shown with its ages. On Build your
   week, the "Next day off" line names the child's own program when it has a camp posted for that day
   (`personalOff()`, from `offAhead` in the page's data) and counts the others.
+- **Kids.** The pills for switching between children (and "Add a sibling") stay in view; the first name and age
+  fold away under a "Name and age" line (`details.kids-edit`, the same on the summer planner and, as "Child's
+  name", on Build your week), opening by itself for a child who has no name yet. The tally of what is planned and
+  what is left (`.sum-tally.main-tally`) is the first thing in the main section, under the view switch.
 - **Age.** "Age (optional)" beside the first name (`#off-age`, the same select as the summer planner's) narrows
   the chooser to the camps that take that age, with the others under "N camps posted for this day don't list
   age 7" and the grid's rows hidden the same way; each camp's span comes from `daysOff.ageMin`/`ageMax`, else
@@ -1016,7 +1021,8 @@ it. The way to the planner (and, for summer, the weeks chart) is a line at the f
 `.plan-line`), so nothing pulls a reader off the page before they have looked. The after-school page's drawing is the street with `showStreet: 'out'` (`street('out')`): school's out, five
 kids come through the door one at a time, hop along the sidewalk to the bus door and climb in, and the bus leaves;
 it plays once, and not at all for someone who asked for reduced motion. The overview pages (`/all-programs/`,
-`/schedules/`) are cards with an icon, a kicker, a heading, a line and buttons; no bullet lists and no program
+`/schedules/`) are cards with an icon, a kicker, a heading, a line and a button (All programs: one each, to the
+kind's own list); no bullet lists and no program
 counts (the days-off card keeps "N days off still to come", and the summer card its weeks). Counts of programs
 stay off the home page's tiles and type chips too; a filter bar's counts and a list section's "(N)" are the live
 numbers of what is on the page, and stay.
@@ -1742,9 +1748,10 @@ planner would be (see "The tour" below), and the lists are there for everyone on
 
 ## The plan as a calendar
 
-- **My kids' calendar** is laid out in four numbered steps: 1 Add it (where the plans come from, and "Add your own
-  dates"), 2 View it, 3 Share it (the pictures), 4 Pencil it in (the calendar file). "View it" shows the plan as a
-  **calendar** (the default) or a **list**, with the choice kept on the device (`pas-year-view`). The calendar is
+- **My kids' calendar** is tabs, like the planners (`#year-views`, panes `[data-year-pane]`): **Calendar** (the
+  default) and **List** show the plan, **Add dates** holds where the plans come from and "Add your own dates", and
+  **Share/Save** the pictures and the calendar file. The Calendar/List choice is kept on the device
+  (`pas-year-view`); `?tab=own` or `#share` opens a tab; with nothing planned the page opens on Add dates. The calendar is
   one month at a time: a day off is yellow with where each child will be or "Not planned", a camp week runs Monday
   to Friday, sign-up dates and your own dates sit on their days, and a weekly date of your own is on every school
   day it falls on. A tap on a day lists it underneath with the same links as the list. Printing prints the list.

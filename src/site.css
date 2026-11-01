@@ -371,7 +371,10 @@ button.btn{cursor:pointer;font-family:inherit}
 
 /* ---------- shared filters: type, pickup, area, cost rows; the grade strip stays on screen ---------- */
 .fbar{flex-direction:column;gap:12px;margin-bottom:-16px}
-.fbar .finder{margin-bottom:4px}
+.fbar-top{display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px 28px}
+.fbar-top .ftog{flex:1 1 360px}
+.fbar-top .finder{flex:0 1 440px;margin:0}
+@media (max-width:760px){.fbar-top .finder{flex-basis:100%}}
 .frow{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;min-width:0}
 .ftog{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
 .ftog-btn{font:inherit;font-weight:700;font-size:1.05rem;display:inline-flex;align-items:center;gap:10px;padding:12px 18px 12px 20px;border-radius:999px;border:0;background:var(--cta);color:var(--cta-ink);cursor:pointer;flex:none}
@@ -1281,8 +1284,19 @@ html.parent .starts{grid-template-columns:minmax(0,1fr)}
 .js .sum.needs-js-block{display:flex;flex-direction:column}
 .sum-kids{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
 .sum-kids .kids[hidden]{display:none}
-.sum-top{display:grid;grid-template-columns:minmax(0,220px) minmax(0,190px) minmax(0,1fr);gap:16px 24px;align-items:start}
-@media (max-width:860px){.sum-top{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.sum-tally{grid-column:1 / -1}}
+.sum-top{display:grid;grid-template-columns:minmax(0,260px) minmax(0,190px);gap:16px 24px;align-items:start}
+/* a child's name and age, folded away under the pills: planning is what the page is for */
+.kids-edit{border:1.5px solid var(--line);border-radius:14px;background:var(--surface);padding:0 16px}
+.kids-edit > summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:12px 0;font-weight:700;color:var(--link)}
+.kids-edit > summary::-webkit-details-marker{display:none}
+.kids-edit > summary::before{content:"";width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);margin:0 4px 0 2px;transition:transform .15s}
+.kids-edit[open] > summary::before{transform:rotate(45deg)}
+.kids-edit > summary:focus-visible{outline:2px solid var(--link);outline-offset:2px;border-radius:8px}
+.kids-edit > .sum-top,.kids-edit > .field{padding-bottom:16px}
+.kids-edit > .actions{padding-bottom:14px}
+.kids-edit > .actions:empty{display:none}
+/* what is planned and what is left: the first thing in the main section */
+.main-tally{border:1.5px solid var(--line);border-left:6px solid var(--yellow);border-radius:14px;background:var(--surface);padding:14px 18px;margin-top:-4px}
 @media (max-width:460px){.sum-top{grid-template-columns:minmax(0,1fr)}}
 .sum-top .field{gap:6px}
 .sum-top .field label{font-size:.95rem}
@@ -1301,7 +1315,7 @@ html.parent .starts{grid-template-columns:minmax(0,1fr)}
 .sum-pages .kid{font-size:.95rem;padding:8px 16px}
 .sum-tally{display:flex;flex-direction:column;gap:5px;min-width:0}
 .sum-tally #sum-count,.sum-tally #off-count{font-weight:700}
-.off-top{grid-template-columns:minmax(0,220px) minmax(0,150px) minmax(0,1fr)}
+.off-top{grid-template-columns:minmax(0,260px) minmax(0,150px)}
 @media (max-width:860px){.off-top{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
 @media (max-width:460px){.off-top{grid-template-columns:minmax(0,1fr)}}
 .sum-weeks .sum-week{scroll-margin-top:84px}

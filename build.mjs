@@ -1037,15 +1037,17 @@ function filterBar({ list, depth, school = null, show = {}, near = false, search
   }).join('') : '';
   const both = on.grade && on.age;
   return `<div class="fbar needs-js-block" data-filters${school ? ` data-school="${esc(school.id)}"` : ''}>
+    <div class="fbar-top">
+    <div class="ftog">
+      <button type="button" class="ftog-btn" id="filters-toggle" aria-expanded="false"><svg class="ftog-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h9M18 6h3M3 12h3M12 12h9M3 18h11M20 18h1" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="15" cy="6" r="2.6" fill="currentColor"/><circle cx="9" cy="12" r="2.6" fill="currentColor"/><circle cx="17" cy="18" r="2.6" fill="currentColor"/></svg><span>Filters</span><span class="quick-n" id="filters-n" hidden></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <p class="ftog-hint" id="filters-hint"></p>
+      <div class="ftog-chips" id="filters-chips" role="group" aria-label="Filters in use" hidden></div>
+    </div>
     ${on.q ? `<div class="finder">
       <label for="prog-search">${T(searchLabel || `Looking for a particular program?`)}</label>
       <input id="prog-search" type="search" placeholder="${esc(placeholder)}" autocomplete="off">
       <p class="hint search-more" id="search-more" aria-live="polite" hidden></p>
     </div>` : ''}
-    <div class="ftog">
-      <button type="button" class="ftog-btn" id="filters-toggle" aria-expanded="false"><svg class="ftog-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h9M18 6h3M3 12h3M12 12h9M3 18h11M20 18h1" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="15" cy="6" r="2.6" fill="currentColor"/><circle cx="9" cy="12" r="2.6" fill="currentColor"/><circle cx="17" cy="18" r="2.6" fill="currentColor"/></svg><span>Filters</span><span class="quick-n" id="filters-n" hidden></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <p class="ftog-hint" id="filters-hint"></p>
-      <div class="ftog-chips" id="filters-chips" role="group" aria-label="Filters in use" hidden></div>
     </div>
     ${kindRow}${typeRow}${relRow}${hoodRow}${costRow}${dayRow}${near ? nearRow(depth, school) : ''}
   </div>
@@ -1599,8 +1601,7 @@ function programsPage() {
   const { sections } = typeSections('after', list, 1);
   const hero = `    <h1>${T(`After-school programs`)}</h1>
     <p class="lede">${T(`All {n} after-school programs on this site, across every school, sorted by what they are. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.`, { n: list.length })}</p>`;
-  const body = `${pageNav(jumpNav())}
-${filterBar({ list, depth: 1, show: { day: true }, near: true, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
+  const body = `${filterBar({ list, depth: 1, show: { day: true }, near: true, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
 ${noMatch(1)}
 ${sections}
 ${planLine(T(`Found one? Put it on the week and see how the afternoons line up.`), [[link('board/', 1), T(`Build your week`)]])}
@@ -1674,8 +1675,7 @@ function typePage(t) {
   const hero = `    <p class="where"><a href="${link('types/', D)}">${T(`All types`)}</a></p>
     <h1>${esc(t.label)}</h1>
     <p class="lede">${T(`Everything on this site in this group, whatever part of the year it fills. Pick a kind, a grade or a neighborhood to narrow it down.`)}</p>`;
-  const body = `${pageNav(jumpNav())}
-${filterBar({ list: shapedAll(byKind), depth: D, show: { type: false, age: true } }).replace('data-filters', 'data-filters data-noun="listing" data-nouns="listings"')}
+  const body = `${filterBar({ list: shapedAll(byKind), depth: D, show: { type: false, age: true } }).replace('data-filters', 'data-filters data-noun="listing" data-nouns="listings"')}
 ${noMatch(D)}
 ${kindSections(byKind, D)}
 ${schoolClubs.length ? `<section class="section school-clubs" data-school-clubs>
@@ -2999,7 +2999,7 @@ function dayCampsPage() {
   const body = `<div style="display:contents">
 ${pageNav(`<div class="tabs view-switch page-views" id="off-page-views" role="group" aria-label="Programs or days" data-views="who">
   <button type="button" class="tab vs" data-view="who" aria-pressed="true">${T(`Programs`)}</button><button type="button" class="tab vs" data-view="days" aria-pressed="false">${T(`The days`)}</button>
-</div>`, jumpNav())}
+</div>`)}
 <section class="section" id="who" data-pane="who">
   <h2>${T(`Who runs something when school is closed`)}</h2>
   <p>${T(`{n} listed programs say they run camps or full days on days off. Children from any school can go, so start from your part of the city. {m} of them had no dates on their site when we checked, so ask which days they cover.`, { n: campPrograms.length, m: noDates.length })}</p>
@@ -3064,13 +3064,15 @@ ${jumpNav()}
   <div${gateIn} style="display:contents">
   <p>${GATE ? T(`Choose where each child will be on each day school is closed. Your picks are saved on this device and in your profile, so they’re there on your other devices.`) : T(`Choose where each child will be on each day school is closed. Your picks are saved on this device and nowhere else.`)}</p>
   <div class="sum-kids"><div class="kids" id="off-kids" role="group" aria-label="Which child"></div><button type="button" class="clear" id="off-kid-add">Add a sibling</button><button type="button" class="clear" id="off-kid-drop" hidden>Remove this child</button></div>
-  <div class="sum-top off-top">
-    <div class="field sum-name"><label for="off-name">${T(`First name (optional)`)}</label>
-      <input id="off-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${GATE ? T(`Kept with the plan in your profile. A nickname or an initial is fine.`) : T(`Stays on this device.`)}</span></div>
-    <div class="field sum-age"><label for="off-age">${T(`Age (optional)`)}</label>
-      <select id="off-age"><option value="">Any age</option>${Array.from({ length: 15 }, (_, i) => `<option value="${i + 3}">${i + 3}</option>`).join('')}</select><span class="hint">${T(`Shows the camps that take that age. Stays on this device.`)}</span></div>
-    <div class="sum-tally"><div class="sum-strip" id="off-strip" aria-hidden="true"></div><p id="off-count" aria-live="polite"></p><p class="hint" id="off-open"></p><p class="off-todo-line" id="off-todo-line" aria-live="polite"></p></div>
-  </div>
+  <details class="kids-edit" id="off-kid-edit">
+    <summary>${T(`Name and age`)}</summary>
+    <div class="sum-top off-top">
+      <div class="field sum-name"><label for="off-name">${T(`First name (optional)`)}</label>
+        <input id="off-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${GATE ? T(`Kept with the plan in your profile. A nickname or an initial is fine.`) : T(`Stays on this device.`)}</span></div>
+      <div class="field sum-age"><label for="off-age">${T(`Age (optional)`)}</label>
+        <select id="off-age"><option value="">Any age</option>${Array.from({ length: 15 }, (_, i) => `<option value="${i + 3}">${i + 3}</option>`).join('')}</select><span class="hint">${T(`Shows the camps that take that age. Stays on this device.`)}</span></div>
+    </div>
+  </details>
   <div class="year-view-head off-view-head">
     <h3 id="off-view-h">${T(`Day by day`)}</h3>
     <span class="vs-pick" aria-hidden="true">${T(`Pick your visual mode!`)}<svg viewBox="0 0 48 24" focusable="false"><path d="M2 4c10 0 18 4 26 12l6 6M34 14v8h-8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -3078,6 +3080,7 @@ ${jumpNav()}
       <button type="button" class="tab vs" data-view="list" aria-pressed="true">${T(`List`)}</button><button type="button" class="tab vs" data-view="cal" aria-pressed="false">${T(`Calendar`)}</button><button type="button" class="tab vs" data-view="chart" aria-pressed="false">${T(`Grid`)}</button><button type="button" class="tab vs" data-view="card" aria-pressed="false"><span class="vs-long">${T(`Share/Save`)}</span><span class="vs-short" aria-hidden="true">${T(`Share`)}</span></button>
     </div>
   </div>
+  <div class="sum-tally main-tally"><div class="sum-strip" id="off-strip" aria-hidden="true"></div><p id="off-count" aria-live="polite"></p><p class="hint" id="off-open"></p><p class="off-todo-line" id="off-todo-line" aria-live="polite"></p></div>
   <div class="year-cal off-month" id="off-month" hidden></div>
   <div class="off-chart-slot" id="off-chart-slot" hidden></div>
   <ol class="sum-weeks off-days" id="off-days"></ol>
@@ -4152,13 +4155,16 @@ function boardPage() {
   <div${gateIn} style="display:contents">
   <section class="section">
     <div class="kid-bar" id="kid-bar">
-      <div class="kids" id="kid-tabs" role="group" aria-label="Which child" hidden></div>
-      <div class="field">
-        <label for="board-name">${T(`Child’s name`)}</label>
-        <input id="board-name" type="text" maxlength="40" placeholder="Sam" autocomplete="off">
-        <span class="hint">${GATE ? T(`A first name, a nickname or an initial. It shows on the roster you share, and it’s how your profile tells one child’s week from another’s.`) : T(`Optional. It shows on the roster you share.`)}</span>
-      </div>
-      <div class="actions"><button type="button" class="btn" id="kid-add">Add another child</button><button type="button" class="clear" id="kid-remove" hidden>Remove this child</button></div>
+      <div class="sum-kids"><div class="kids" id="kid-tabs" role="group" aria-label="Which child" hidden></div><button type="button" class="clear" id="kid-add">Add another child</button></div>
+      <details class="kids-edit" id="kid-edit">
+        <summary>${T(`Child’s name`)}</summary>
+        <div class="field">
+          <label for="board-name">${T(`Child’s name`)}</label>
+          <input id="board-name" type="text" maxlength="40" placeholder="Sam" autocomplete="off">
+          <span class="hint">${GATE ? T(`A first name, a nickname or an initial. It shows on the roster you share, and it’s how your profile tells one child’s week from another’s.`) : T(`Optional. It shows on the roster you share.`)}</span>
+        </div>
+        <div class="actions"><button type="button" class="clear" id="kid-remove" hidden>Remove this child</button></div>
+      </details>
     </div>
     <div class="tabs" id="board-tabs" role="group" aria-label="Current or upcoming roster">
       <button type="button" class="tab" data-board="next" aria-pressed="true">Upcoming session</button>
@@ -5257,14 +5263,27 @@ function calendarPage() {
   <p class="hint when-in" id="year-wait">${T(`Getting your calendar…`)}</p>
   <section class="section sum year needs-js-block" id="year" hidden>
     <h2 id="year-h">${T(`The year`)}</h2>
-    ${jumpNav()}
-    <div class="year-step" id="year-add" data-jump-to="Add it">
-      <p class="step-head"><b aria-hidden="true">1</b><span>${T(`Add it`)}</span></p>
+    <div class="flag year-changed" id="year-changed" hidden></div>
+    <div class="year-view-head off-view-head">
+      <h3 id="year-view-h">${T(`Your plan`)}</h3>
+      <div class="tabs view-switch board-views" id="year-views" role="group" aria-label="How to show the plan">
+        <button type="button" class="tab vs" data-view="cal" aria-pressed="true">${T(`Calendar`)}</button><button type="button" class="tab vs" data-view="list" aria-pressed="false">${T(`List`)}</button><button type="button" class="tab vs" data-view="own" aria-pressed="false">${T(`Add dates`)}</button><button type="button" class="tab vs" data-view="share" aria-pressed="false">${T(`Share/Save`)}</button>
+      </div>
+    </div>
+    <div data-year-pane="view">
+      <div id="year-empty" hidden></div>
+      <div id="year-full">
+        <div id="year-week"></div>
+        <div class="year-cal" id="year-cal"></div>
+        <div id="year-agenda" hidden></div>
+      </div>
+    </div>
+    <div data-year-pane="own" hidden>
       <p class="step-say">${T(`Your calendar fills in from your planners, and from any dates you add here yourself.`)}</p>
       <ul class="year-src" id="year-src"></ul>
     <div class="year-own" id="year-own">
     <h3>${T(`Add your own dates`)}</h3>
-    <p>${T(`Picture day, pretzel day, a form that’s due, a half day: anything you need to remember, for one child or for everyone. They show up in the calendar below, in the pictures and in the file for your phone. Something that happens every week needs only the day of the week.`)}</p>
+    <p>${T(`Picture day, pretzel day, a form that’s due, a half day: anything you need to remember, for one child or for everyone. They show up on the calendar, in the pictures and in the file for your phone. Something that happens every week needs only the day of the week.`)}</p>
     <form class="own-form" id="own-form">
       <div class="field own-what"><label for="own-what">${T(`What`)}</label><input id="own-what" type="text" maxlength="60" list="own-ideas" placeholder="Picture day" autocomplete="off"></div>
       <datalist id="own-ideas">${['Picture day', 'Pretzel day', 'Early dismissal', 'Form due', 'Field trip', 'Library day', 'Gym day', 'Show and tell', 'Bring a snack', 'Dress-down day', 'Concert', 'Parent conference'].map(x => `<option value="${esc(x)}">`).join('')}</datalist>
@@ -5286,23 +5305,9 @@ function calendarPage() {
     <p class="hint">${T(`A weekly one repeats until the last day of school and skips the days school is closed. Your own dates are kept on this device only: they aren’t sent to us, so add them on the phone or computer you’ll look at.`)}</p>
   </div>
     </div>
-    <div class="flag year-changed" id="year-changed" hidden></div>
-    <div id="year-empty" hidden></div>
-    <div id="year-full">
-      <div class="year-step" id="year-view" data-jump-to="View it">
-        <p class="step-head"><b aria-hidden="true">2</b><span>${T(`View it`)}</span></p>
-        <div class="year-view-head">
-          <h3 id="year-view-h">${T(`Your plan`)}</h3>
-          <div class="tabs view-switch" id="year-views" role="group" aria-label="How to show the plan">
-            <button type="button" class="tab vs" data-view="cal" aria-pressed="true">Calendar</button><button type="button" class="tab vs" data-view="list" aria-pressed="false">List</button>
-          </div>
-        </div>
-        <div id="year-week"></div>
-        <div class="year-cal" id="year-cal"></div>
-        <div id="year-agenda" hidden></div>
-      </div>
-      <div class="year-step" id="year-share" data-jump-to="Share it" hidden>
-        <p class="step-head"><b aria-hidden="true">3</b><span>${T(`Share it`)}</span></p>
+    <div data-year-pane="share" hidden>
+      <div id="year-full-share">
+      <div class="year-step" id="year-share" hidden>
       <div class="card-maker sumcard" id="year-card" hidden>
           <h3>${T(`Make it a picture`)}</h3>
           <p>${T(`A calendar for each month, to print for the fridge or send to family. It’s made here in your browser.`)}</p>
@@ -5333,8 +5338,7 @@ function calendarPage() {
           </div>
         </div>
       </div>
-      <div class="year-step" id="year-pencil" data-jump-to="Pencil it in">
-        <p class="step-head"><b aria-hidden="true">4</b><span>${T(`Pencil it in`)}</span></p>
+      <div class="year-step" id="year-pencil">
       <div class="year-file" id="year-file">
           <h3>${T(`Add it to your calendar`)}</h3>
           <p>${T(`One file with everything ticked below, for the calendar on your phone or computer. Open it and your calendar app adds the entries. It’s a copy: if a date changes later, this page will say so, and you download it again.`)}</p>
@@ -5350,6 +5354,7 @@ function calendarPage() {
           <div class="actions"><button type="button" class="btn primary" id="year-dl">Download the calendar file</button><button type="button" class="btn" id="year-print">Print this page</button></div>
           <p class="hint" id="year-status" aria-live="polite"></p>
         </div>
+      </div>
       </div>
     </div>
   </section>
@@ -5395,13 +5400,15 @@ ${jumpNav()}
   <div${gateIn} style="display:contents">
   <p>${GATE ? T(`Add a camp to each week, for one child or for each of them. Your picks are saved on this device and in your profile, so they’re there on your other devices.`) : T(`Add a camp to each week, for one child or for each of them. Your picks are saved on this device and nowhere else.`)}</p>
   <div class="sum-kids"><div class="kids" id="sum-kids" role="group" aria-label="Which child"></div><button type="button" class="clear" id="sum-kid-add">Add a sibling</button><button type="button" class="clear" id="sum-kid-drop" hidden>Remove this child</button></div>
-  <div class="sum-top">
-    <div class="field sum-name"><label for="sum-name">${T(`First name (optional)`)}</label>
-      <input id="sum-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${GATE ? T(`Kept with the plan in your profile. A nickname or an initial is fine.`) : T(`Stays on this device.`)}</span></div>
-    <div class="field sum-age"><label for="sum-age">${T(`Age this summer (optional)`)}</label>
-      <select id="sum-age"><option value="">Any age</option>${Array.from({ length: 15 }, (_, i) => `<option value="${i + 3}">${i + 3}</option>`).join('')}</select></div>
-    <div class="sum-tally"><div class="sum-strip" id="sum-strip" aria-hidden="true"></div><p id="sum-count" aria-live="polite"></p><p class="hint" id="sum-cost"></p></div>
-  </div>
+  <details class="kids-edit" id="sum-kid-edit">
+    <summary>${T(`Name and age`)}</summary>
+    <div class="sum-top">
+      <div class="field sum-name"><label for="sum-name">${T(`First name (optional)`)}</label>
+        <input id="sum-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${GATE ? T(`Kept with the plan in your profile. A nickname or an initial is fine.`) : T(`Stays on this device.`)}</span></div>
+      <div class="field sum-age"><label for="sum-age">${T(`Age this summer (optional)`)}</label>
+        <select id="sum-age"><option value="">Any age</option>${Array.from({ length: 15 }, (_, i) => `<option value="${i + 3}">${i + 3}</option>`).join('')}</select></div>
+    </div>
+  </details>
   <div class="year-view-head off-view-head">
     <h3 id="sum-view-h">${T(`Week by week`)}</h3>
     <span class="vs-pick" aria-hidden="true">${T(`Pick your visual mode!`)}<svg viewBox="0 0 48 24" focusable="false"><path d="M2 4c10 0 18 4 26 12l6 6M34 14v8h-8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -5409,6 +5416,7 @@ ${jumpNav()}
       <button type="button" class="tab vs" data-view="list" aria-pressed="true">${T(`List`)}</button><button type="button" class="tab vs" data-view="cal" aria-pressed="false">${T(`Calendar`)}</button><button type="button" class="tab vs" data-view="chart" aria-pressed="false">${T(`Grid`)}</button><button type="button" class="tab vs" data-view="card" aria-pressed="false"><span class="vs-long">${T(`Share/Save`)}</span><span class="vs-short" aria-hidden="true">${T(`Share`)}</span></button>
     </div>
   </div>
+  <div class="sum-tally main-tally"><div class="sum-strip" id="sum-strip" aria-hidden="true"></div><p id="sum-count" aria-live="polite"></p><p class="hint" id="sum-cost"></p></div>
   <div class="year-cal off-month" id="sum-month" hidden></div>
   <div class="off-chart-slot" id="sum-chart-slot" hidden></div>
   <ol class="sum-weeks" id="sum-weeks"></ol>
@@ -5659,8 +5667,7 @@ function summerCampsPage() {
   const todo = campsFile.todo || [];
   const hero = `    <h1>${T(`Summer camps in Philadelphia`)}</h1>
     <p class="lede">${T(`Day camps inside the city, with the ages, weeks, hours and prices each camp posts on its own site.`)}</p>`;
-  const body = `${pageNav(jumpNav())}
-<section class="section">
+  const body = `<section class="section">
   <p class="flag camp-guide"><b>${T(`Most of what’s here is from summer {year}, shown as a guide.`, { year: base })}</b> ${T(`Camps usually post next summer between December and March. Each listing changes to {year} when its camp posts dates and prices, and says so on its card.`, { year: next })}${ALERTS ? ' ' + T(`Waiting on one camp? Its page has a box to be emailed when it posts.`) : ''}</p>
 </section>
 ${filterBar({ list: shaped, depth: D, show: { grade: false, age: true }, near: true, searchLabel: `Looking for a particular camp?`, placeholder: 'Its name, or try art, tennis, Mount Airy…' }).replace('data-filters', 'data-filters data-noun="camp" data-nouns="camps"')}
@@ -5705,8 +5712,7 @@ function weekendPage() {
   const wk = typeSections('weekend', weekendPrograms, D, shape);
   const hero = `    <h1>${T(`Saturday and Sunday classes`)}</h1>
     <p class="lede">${T(`Weekend classes for kids across the city: what runs, on which day, and where. Open one for its term, times and cost.`)}</p>`;
-  const body = `${pageNav(jumpNav())}
-${filterBar({ list: weekendPrograms.map(shape), depth: D, show: { grade: false, age: true, cost: false, day: false }, near: true, searchLabel: `Looking for a particular class?`, placeholder: 'A name or a neighborhood, or try piano, acting…' }).replace('data-filters', 'data-filters data-noschool')}
+  const body = `${filterBar({ list: weekendPrograms.map(shape), depth: D, show: { grade: false, age: true, cost: false, day: false }, near: true, searchLabel: `Looking for a particular class?`, placeholder: 'A name or a neighborhood, or try piano, acting…' }).replace('data-filters', 'data-filters data-noschool')}
 <p class="hint">${T(`A weekend class has no school pickup, so this list goes by where the class is. Any child can sign up, whichever school they go to.`)}</p>
 ${noMatch(D)}
 ${wk.sections}
@@ -5748,16 +5754,16 @@ function allProgramsPage() {
   const kinds = [
     { k: 'bell', id: 'after-school', color: '#1763B8', kicker: T(`Monday to Friday`), name: T(`After-school programs`), ld: 'programs/',
       text: T(`Weekday afternoons once the bell rings: aftercare, music, art, sports, chess and more.`),
-      go: [[link('programs/', D), T(`See all {n}, A to Z`, { n: citywide.length })], [link('schools/', D), T(`Start from your school`)], [link('board/', D), T(`Build your week`)]] },
+      go: [[link('programs/', D), T(`See all {n}, A to Z`, { n: citywide.length })]] },
     weekendPrograms.length ? { k: 'star', id: 'weekends', color: '#6B3FA0', kicker: T(`Saturdays and Sundays`), name: T(`Weekend classes`), ld: weekendPath,
       text: T(`Saturday and Sunday classes: music, dance, art, skating, science. There’s no school pickup, so any child can sign up.`),
       go: [[link(weekendPath, D), T(`See weekend classes`)]] } : null,
     daysOff ? { k: 'tent', id: 'day-camps', color: '#B88A00', kicker: daysLeft ? T(`{n} days off still to come`, { n: daysLeft }) : T(`Days school is closed`), name: T(`Day-camp programs`), ld: dayCampsPath,
       text: `${T(`Camps on the days district schools are closed: holidays, staff days, winter and spring break.`)}${nextDay ? ' ' + T(`Next one: {name}, {date}.`, { name: esc(nextDay.name), date: longDate(nextDay.x) }) : ''}`,
-      go: [[link(dayCampsPath, D), T(`See day-camp programs`)], [link(offPath, D), T(`Plan the days off`)]] } : null,
+      go: [[link(dayCampsPath, D), T(`See day-camp programs`)]] } : null,
     summerCamps.length ? { k: 'sun', id: 'summer-camps', color: '#2C8444', kicker: T(`{n} weeks of summer`, { n: weeks }), name: T(`Summer camps`), ld: campsPath,
       text: T(`Day camps inside the city for the {n} weeks between the last day of school and Labor Day.`, { n: weeks }),
-      go: [[link(campsPath, D), T(`See summer camps`)], [link(summerPath, D), T(`Plan your summer`)]] } : null,
+      go: [[link(campsPath, D), T(`See summer camps`)]] } : null,
   ].filter(Boolean);
   const hero = `    <h1>${T(`All programs`)}</h1>
     <p class="lede">${T(`Everything listed on this site, sorted by the kind of program it is. Pick the part of the year you’re filling, then narrow it down from there.`)}</p>`;
