@@ -825,7 +825,8 @@ opens a white panel where each group is a big row that opens on a tap (only the 
 open), then Suggestion Box, About and the button, so a phone sees five lines rather than every link at once.
 
 The footer (`.foot`) is the sitemap, kept short: the wordmark (`src/static/logo-text.png`, the logo without the
-bulb), one line and the "Help the site keep going" button, then
+bulb; the pictures the planners make carry the same wordmark on a navy tab at their top left, `drawMark()` in
+`site.js`), one line and the "Help the site keep going" button, then
 three columns: Programs (the four kinds, then by school, by neighborhood, by type, by day of week), Schedule Builder
 (the three planners, the calendar, reminders by email, My profile) and About (the story, Suggestion Box, Write a
 review, For program managers, Contact, Privacy, Terms), then the fine print with "Built by" and "Written by".
