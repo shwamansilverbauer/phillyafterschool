@@ -3509,14 +3509,23 @@ const accountHoods = () => [...new Set([...hoods.map(h => h.name), ...CAMP_AREAS
 const NEWS = (fs.existsSync(path.join(ROOT, 'data/news.json')) ? readJson('data/news.json') : []).filter(n => /^\d{4}-\d{2}-\d{2}$/.test(n.date || '') && n.title && n.text).sort((a, b) => b.date.localeCompare(a.date));
 const groupsScript = depth => `<script src="${link('assets/groups.js', depth)}${GROUPS_V}"></script>`;
 function accountPage(register = false) {
-  // Two addresses, one form. /register/ is the page that makes the case for an account: what you get on one side, the
-  // form on the other. /account/ is where you log in and, once signed in, your profile; both of its headings are in
-  // the page and the right one shows before it paints. Someone already signed in who opens /register/ is sent on.
+  // Two addresses. /register/ makes the case for an account: the two kinds of account and the form sit in the first
+  // screen, beside the heading, and what an account gives you follows below as a row of pictures. /account/ is where
+  // you log in (the form moves up beside the heading while you are signed out) and, once signed in, your account;
+  // both of its headings are in the page and the right one shows before it paints. Someone already signed in who
+  // opens /register/ is sent on.
   const hero = register ? `    <h1>${T(`Create your free account`)}</h1>
-    <p class="lede">${GROUPS && daysOff ? T(`Keep every plan you build, the school week, the days off and the summer, and see them together in one private calendar for the whole year. It takes about a minute, and there’s no password to remember.`) : T(`Save your school, your kids’ grades and your week, and share a week with the people who need it. It takes about a minute, and there’s no password to remember.`)}</p>`
+    <p class="lede">${GROUPS && daysOff ? T(`Keep every plan you build, the school week, the days off and the summer, and see them together in one private calendar for the whole year. It takes about a minute, and there’s no password to remember.`) : T(`Save your school, your kids’ grades and your week, and share a week with a grandparent or a sitter. It takes about a minute, and there’s no password to remember.`)}</p>
+    <p class="lede hero-fine">${T(`Already have an account?`)} <a href="${link('account/', 1)}">${T(`Log in`)}</a></p>`
     : `    <h1><span class="when-out">${T(`Log in to your account`)}</span><span class="when-in">${T(`Your account`)}</span></h1>
     <p class="lede when-out">${T(`Your school, your plans and your kids’ calendar for the year, on any device. There’s no password to remember.`)} ${T(`New here?`)} <a href="${link('register/', 1)}">${T(`Create a free account`)}</a></p>
     <p class="lede when-in">${T(`This is where you change things: your name, email address and phone number, your school and grades, what you’re emailed about, what you follow, and who you share with.`)}</p>`;
+  const page = `<div class="g-page" id="account"${register ? ' data-mode="register" data-clarity-mask="true"' : ''}></div>`;
+  // the heading on the left, the form on the right: on /register/ the form starts there; on /account/ it moves up while signed out
+  const heroGrid = `    <div class="acct-hero-text">
+${hero}
+    </div>
+    <div class="acct-hero-form" data-clarity-mask="true">${register ? page : ''}</div>`;
   const art = `<svg viewBox="0 0 520 300" aria-hidden="true" focusable="false">
   <defs><g id="acct-week"><rect width="120" height="152" rx="11" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/><path d="M0 11a11 11 0 0 1 11-11h98a11 11 0 0 1 11 11v17H0z" fill="#0F4D90"/><text x="11" y="19" font-size="11" font-weight="800" fill="#FFFFFF" font-family="Archivo, Arial, sans-serif">Sam’s week</text><circle cx="17" cy="44" r="7.5" fill="#E3EEFA"/><text x="17" y="47.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">M</text><rect x="31" y="38" width="62" height="12" rx="6" fill="#1F7A3A"/><circle cx="17" cy="65" r="7.5" fill="#E3EEFA"/><text x="17" y="68.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">T</text><rect x="31" y="59" width="48" height="12" rx="6" fill="#B4237A"/><circle cx="17" cy="86" r="7.5" fill="#E3EEFA"/><text x="17" y="89.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">W</text><rect x="31" y="80" width="70" height="12" rx="6" fill="#0E7C86"/><circle cx="17" cy="107" r="7.5" fill="#E3EEFA"/><text x="17" y="110.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">T</text><rect x="31" y="101" width="40" height="12" rx="6" fill="#6B3FA0"/><circle cx="17" cy="128" r="7.5" fill="#E3EEFA"/><text x="17" y="131.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">F</text><rect x="31" y="122" width="56" height="12" rx="6" fill="#C2410C"/></g></defs>
   <rect x="238" y="20" width="250" height="186" rx="13" class="art-frame"/>
@@ -3530,28 +3539,83 @@ function accountPage(register = false) {
   <path d="M128 58C140 22 212 16 240 54" fill="none" stroke="#0F4D90" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round"/>
   <circle cx="184" cy="29" r="17" fill="#F3C613"/><path d="M176 29.5l5.5 5.5 10-11" fill="none" stroke="#2A2100" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`;
+  // the pictures beside each row: a week card, as on the one above, drawn by hand so each picture has its own
+  const F = 'font-family="Archivo, Arial, sans-serif"';
+  const DAYS = [['M', '#1F7A3A', 62], ['T', '#B4237A', 48], ['W', '#0E7C86', 70], ['T', '#6B3FA0', 40], ['F', '#C2410C', 56]];
+  const weekCard = (x, y, label, days = DAYS, w = 120) => `<g transform="translate(${x} ${y})"><rect width="${w}" height="152" rx="11" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/><path d="M0 11a11 11 0 0 1 11-11h${w - 22}a11 11 0 0 1 11 11v17H0z" fill="#0F4D90"/><text x="11" y="19" font-size="11" font-weight="800" fill="#FFFFFF" ${F}>${label}</text>${days.map(([d, c, len], i) => `<circle cx="17" cy="${44 + i * 21}" r="7.5" fill="#E3EEFA"/><text x="17" y="${47.4 + i * 21}" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" ${F}>${d}</text><rect x="31" y="${38 + i * 21}" width="${Math.min(len, w - 42)}" height="12" rx="6" fill="${c}"/>`).join('')}</g>`;
+  const chip = (x, y, w, text, yellow = false) => `<rect x="${x}" y="${y}" width="${w}" height="26" rx="13" fill="${yellow ? '#F3C613' : '#E3EEFA'}"/><text x="${x + w / 2}" y="${y + 17.5}" text-anchor="middle" font-size="11" font-weight="800" fill="${yellow ? '#2A2100' : '#0B2140'}" ${F}>${text}</text>`;
+  const svg = inner => `<svg viewBox="0 0 400 260" aria-hidden="true" focusable="false">${inner}</svg>`;
+  // a month on the fridge door, held by a magnet, and the same month on a phone
+  const artFridge = svg(`
+  <rect x="38" y="18" width="150" height="226" rx="16" class="art-frame"/><path d="M38 100h150" stroke="#0B2140" stroke-width="3"/>
+  <rect x="166" y="40" width="7" height="34" rx="3.5" fill="#0B2140"/><rect x="166" y="124" width="7" height="60" rx="3.5" fill="#0B2140"/>
+  <rect x="62" y="118" width="98" height="104" rx="6" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/>
+  <text x="70" y="134" font-size="9" font-weight="800" fill="#0B2140" ${F}>November</text>
+  ${[0, 1, 2, 3, 4].map(r => [0, 1, 2, 3, 4, 5, 6].map(c => `<rect x="${70 + c * 12}" y="${141 + r * 14}" width="10" height="10" rx="2" fill="${(r === 1 && c === 3) || (r === 3 && c === 4) ? '#F3C613' : (r === 2 && c === 1) ? '#0F4D90' : '#E3EEFA'}"/>`).join('')).join('')}
+  <circle cx="111" cy="118" r="9" fill="#F3C613" stroke="#0B2140" stroke-width="2"/>
+  <rect x="236" y="36" width="126" height="208" rx="20" class="art-frame"/><rect x="284" y="46" width="30" height="5" rx="2.5" fill="#0B2140"/>
+  <text x="252" y="76" font-size="11" font-weight="800" fill="#0B2140" ${F}>November</text>
+  ${[0, 1, 2, 3, 4].map(r => [0, 1, 2, 3, 4, 5, 6].map(c => `<rect x="${252 + c * 14}" y="${86 + r * 16}" width="12" height="12" rx="2.5" fill="${(r === 1 && c === 3) || (r === 3 && c === 4) ? '#F3C613' : (r === 2 && c === 1) ? '#0F4D90' : '#E3EEFA'}"/>`).join('')).join('')}
+  <rect x="252" y="176" width="98" height="9" rx="4.5" class="art-line"/><rect x="252" y="194" width="72" height="9" rx="4.5" class="art-line"/><rect x="252" y="212" width="86" height="9" rx="4.5" class="art-line"/>`);
+  // an email with the sign-up date, and the school it is for
+  const artRemind = svg(`
+  <rect x="70" y="70" width="260" height="160" rx="16" class="art-frame"/>
+  <path d="M70 86l130 92 130-92" fill="none" stroke="#0B2140" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="104" y="20" width="192" height="96" rx="12" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/>
+  <text x="120" y="46" font-size="12" font-weight="800" fill="#0B2140" ${F}>Sign-ups open Monday</text>
+  <rect x="120" y="58" width="120" height="8" rx="4" class="art-line"/><rect x="120" y="74" width="92" height="8" rx="4" class="art-line"/>
+  ${chip(248, 62, 36, 'Nov 3', true)}
+  ${chip(96, 196, 92, 'Nebinger', true)}${chip(196, 196, 110, 'Chess Club')}
+  <circle cx="330" cy="70" r="20" fill="#F3C613"/><path d="M330 58a8 8 0 0 0-8 8v6l-3 4h22l-3-4v-6a8 8 0 0 0-8-8zm-4 20a4 4 0 0 0 8 0z" fill="#2A2100"/>`);
+  // one week, on two phones: yours and the person you share it with
+  const artShare = svg(`
+  <rect x="34" y="40" width="130" height="206" rx="20" class="art-frame"/><rect x="84" y="50" width="30" height="5" rx="2.5" fill="#0B2140"/>
+  ${weekCard(44, 66, 'Sam’s week', DAYS, 110)}
+  <rect x="236" y="40" width="130" height="206" rx="20" class="art-frame"/><rect x="286" y="50" width="30" height="5" rx="2.5" fill="#0B2140"/>
+  ${weekCard(246, 66, 'Sam’s week', DAYS, 110)}
+  <path d="M170 136h56" stroke="#0F4D90" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 7"/><path d="M216 128l12 8-12 8" fill="none" stroke="#0F4D90" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  ${chip(250, 10, 100, 'Grandma', true)}${chip(50, 10, 68, 'You')}`);
+  // three families' weeks side by side
+  const artGroup = svg(`
+  <rect x="24" y="34" width="352" height="200" rx="16" class="art-frame"/>
+  ${weekCard(46, 60, 'Sam', [['M', '#1F7A3A', 50], ['T', '#B4237A', 36], ['W', '#0E7C86', 56], ['T', '#6B3FA0', 30], ['F', '#C2410C', 44]], 98)}
+  ${weekCard(151, 60, 'Rae', [['M', '#1F7A3A', 50], ['T', '#0E7C86', 44], ['W', '#0E7C86', 56], ['T', '#C2410C', 38], ['F', '#6B3FA0', 30]], 98)}
+  ${weekCard(256, 60, 'Zoe', [['M', '#B4237A', 40], ['T', '#B4237A', 36], ['W', '#1F7A3A', 52], ['T', '#6B3FA0', 30], ['F', '#C2410C', 44]], 98)}
+  ${chip(148, 220, 104, 'Invite only', true)}`);
+  const row = (art, head, text) => `<div class="acct-row"><div class="acct-row-art">${art}</div><div class="acct-row-text"><h3>${head}</h3><p>${text}</p></div></div>`;
+  const plan = GROUPS && daysOff ? [
+    row(`<div class="acct-art">${art}</div>`, T(`See the whole year in one calendar.`), T(`“My kids’ calendar” puts the school week, every day off, the camp weeks and each sign-up date in date order. Only you can open it.`)),
+    row(artFridge, T(`Put it on your phone.`), T(`One calendar file for the year that you can bring up to date, and a picture of any month for the fridge.`)),
+  ] : [row(`<div class="acct-art">${art}</div>`, T(`Keep your week.`), T(`Build it on your phone tonight, find it on your laptop tomorrow.`))];
+  const miss = [
+    ALERTS ? row(artRemind, T(`Follow and save.`), T(`Follow a program, a camp or your school and its sign-up dates come by email. Save favorites to find them again.`)) : '',
+    row(artShare, T(`Share a week with one person.`), T(`A grandparent or a sitter signs in to see it, and you can take it back.`)),
+    GROUPS.pilot ? '' : row(artGroup, T(`Share with a small group.`), T(`A few families you invite by email see each other’s weeks. Nobody else can find the group or ask to join.`)),
+  ].filter(Boolean);
   const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
-  <noscript><p class="ask">${T(`Accounts need JavaScript turned on.`)}</p></noscript>
-  <div class="acct-grid">
-    <div class="g-page" id="account"${register ? ' data-mode="register" data-clarity-mask="true"' : ''}></div>
-    <section class="acct-why when-out" aria-labelledby="acct-why-h">
-      <div class="acct-art">${art}</div>
-      <h2 id="acct-why-h">${T(`What an account gives you`)}</h2>
-      <ul class="acct-points">
-        ${GROUPS && daysOff ? `<li><b>${T(`See the whole year in one calendar.`)}</b> ${T(`“My kids’ calendar” puts the school week, every day off, the camp weeks and each sign-up date in date order. Only you can open it.`)}</li>
-        <li><b>${T(`Put it on your phone.`)}</b> ${T(`One calendar file for the year that you can bring up to date, and a picture of any month for the fridge.`)}</li>` : `<li><b>${T(`Keep your week.`)}</b> ${T(`Build it on your phone tonight, find it on your laptop tomorrow.`)}</li>`}
-        ${ALERTS ? `<li><b>${T(`Follow and save.`)}</b> ${T(`Follow a program, a camp or your school and its sign-up dates come by email. Save favorites to find them again.`)}</li>` : ''}
-        <li><b>${T(`Share a week with one person.`)}</b> ${T(`A grandparent or a sitter signs in to see it, and you can take it back.`)}</li>${GROUPS.pilot ? '' : `
-        <li><b>${T(`Share with a small group.`)}</b> ${T(`A few families you invite by email see each other’s weeks. Nobody else can find the group or ask to join.`)}</li>`}
-      </ul>
-      <p class="hint">${T(`It’s free. The plans you make are kept in your profile, so they’re on your phone and your computer, and you can delete the account whenever you like.`)}</p>${cfg.termsLive === true ? `
-      <p class="hint">${T(`Making an account means you agree to the`)} <a href="${link('terms/', 1)}">${T(`terms of use`)}</a>.</p>` : ''}
-      <p class="hint">${T(`Run a program or camp?`)} <a href="${link('managers/', 1)}">${T(`Claim your listing`)}</a>${T(`. It’s the same account.`)}</p>
-    </section>
-  </div>
+  <noscript><p class="ask">${T(`Accounts need JavaScript turned on.`)}</p></noscript>${register ? '' : `
+  <div class="acct-main">${page}</div>`}
+  <section class="acct-why when-out" aria-labelledby="acct-why-h">
+    <h2 id="acct-why-h">${T(`What an account gives you`)}</h2>
+    <div class="acct-group">
+      <h2 class="acct-group-h">${T(`Plan the whole year`)}</h2>
+      ${plan.join('\n      ')}
+    </div>
+    <div class="acct-group">
+      <h2 class="acct-group-h">${T(`Never miss a thing`)}</h2>
+      ${miss.join('\n      ')}
+    </div>
+  </section>
+  <section class="acct-close when-out">
+    <h2>${T(`Create a free account`)}</h2>
+    <p>${T(`It’s free. The plans you make are kept in your profile, so they’re on your phone and your computer, and you can delete the account whenever you like.`)}</p>
+    <p class="actions"><a class="btn primary big" href="${register ? '#account' : link('register/', 1)}">${register ? T(`Create your account`) : T(`Create a free account`)}</a></p>${cfg.termsLive === true ? `
+    <p class="hint">${T(`Making an account means you agree to the`)} <a href="${link('terms/', 1)}">${T(`terms of use`)}</a>.</p>` : ''}
+    <p class="hint">${T(`Run a program or camp?`)} <a href="${link('managers/', 1)}">${T(`Claim your listing`)}</a>${T(`. It’s the same account.`)}</p>
+  </section>
   <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, ages: AGES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })), hoods: accountHoods(), news: NEWS.slice(0, 5) }).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to keep your week, days-off and summer plans, and see the whole year in one private calendar.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: !register, scripts: groupsScript(1) });
+  return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to keep your week, days-off and summer plans, and see the whole year in one private calendar.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero: heroGrid, body, noindex: true, quiet: !register, theme: 'acct-head', scripts: groupsScript(1) });
 }
 // "My profile": a snapshot of the account on one card (nothing is changed here; that is the account page). The page is a shell; groups.js fills it
 // (the same script as the account page, told which page it is on by data-view). Signed out, it shows the log-in form.
@@ -3738,40 +3802,53 @@ function premiumPage() {
       </div>
       <figcaption>${T(`An example of a premium listing. The program, its schools and its numbers are made up.`)}</figcaption>
     </figure>`;
-  const card = (plan, name, price, per, note, pick) => `<div class="pm-plan${pick ? ' best' : ''}" data-plan="${plan}">
+  // The two plans, each with its own button to the sign-up box (which starts on that plan).
+  const card = (plan, name, price, per, note, pick, small) => `<div class="pm-plan${pick ? ' best' : ''}${small ? ' small' : ''}" data-plan="${plan}">
       ${pick ? `<p class="pm-flag">${T(`Best value`)}</p>` : ''}
       <h3>${name}</h3>
       <p class="pm-price"><b>${money(price)}</b> <span>${per}</span></p>
       <p class="pm-plan-note">${note}</p>
+      <p class="actions"><a class="btn${pick ? ' primary' : ''}" href="?plan=${plan}#signup" data-track="premium_to_signup">${plan === 'year' ? T(`Sign up yearly`) : T(`Sign up monthly`)}</a></p>
     </div>`;
+  const plans = small => `<div class="pm-plans${small ? ' small' : ''}">
+    ${card('year', T(`Yearly`), P.year, T(`a year`), free > 1 ? T(`{n} months free, compared with paying by the month.`, { n: ['', '', 'Two', 'Three', 'Four'][free] || String(free) }) : free === 1 ? T(`One month free, compared with paying by the month.`) : T(`One payment for the year.`), free > 0, small)}
+    ${card('month', T(`Monthly`), P.month, T(`a month`), T(`Pay as you go.`), false, small)}
+    </div>`;
+  const ICON = {
+    photos: 'M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 2v10h14V7zm3 2a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-2 7 3.5-4 2.5 3 2-2.5 3 3.5z',
+    offer: 'M3 10v4a1 1 0 0 0 1 1h2l6 4V5L6 9H4a1 1 0 0 0-1 1zm12-1.5v7a3.5 3.5 0 0 0 0-7zm0-4v2a7.5 7.5 0 0 1 0 11v2a9.5 9.5 0 0 0 0-15z',
+    words: 'M6 5h5v6H8v1a2 2 0 0 0 2 2v2a4 4 0 0 1-4-4zm8 0h5v6h-3v1a2 2 0 0 0 2 2v2a4 4 0 0 1-4-4z',
+    ask: 'M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-7l-5 4v-4H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm1 2v8h5v2.5l3-2.5h6V6zm6.2 1.5c1.7 0 2.8 1 2.8 2.3 0 1-.6 1.5-1.2 1.9-.5.3-.6.5-.6.9h-2c0-1 .4-1.6 1.1-2 .5-.3.7-.5.7-.8 0-.3-.3-.6-.8-.6s-.9.3-1 .8l-1.9-.4c.3-1.3 1.4-2.1 2.9-2.1zM11.2 13h2v2h-2z',
+    numbers: 'M4 19V9h3v10zm6.5 0V5h3v14zm6.5 0v-7h3v7zM3 20h18v1H3z',
+    flyer: 'M4 3h10l6 6v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm1 2v16h13V10h-5V5zm2 8h3v3H7zm5 0h3v3h-3zm-5 4h3v2H7zm5 0h3v2h-3z',
+  };
   const hero = `    <h1>${T(`Premium listings`)}</h1>
-    <p class="lede">${T(`Your listing on {site} is free, and it stays free. Premium adds your photos, your words and your offers to it, and shows you what families do with it.`, { site: cfg.siteName })}</p>`;
-  const body = `<div ${groupsAttrs(D)} style="display:contents">
-  <section class="section" id="price">
-    <h2>${T(`What it costs`)}</h2>
-    <div class="pm-plans">
-    ${card('year', T(`Yearly`), P.year, T(`a year`), free > 1 ? T(`{n} months free, compared with paying by the month.`, { n: ['', '', 'Two', 'Three', 'Four'][free] || String(free) }) : free === 1 ? T(`One month free, compared with paying by the month.`) : T(`One payment for the year.`), free > 0)}
-    ${card('month', T(`Monthly`), P.month, T(`a month`), T(`Pay as you go.`), false)}
-    </div>
+    <p class="lede">${T(`Your listing on {site} is free, and it stays free. Premium adds your photos, your words and your offers to it, and shows you what families do with it.`, { site: cfg.siteName })}</p>
+    ${plans(false)}
     ${P.laterMonth && P.laterYear ? `<p class="pm-founding">${T(`This is the founding price, for the first programs to sign up. It stays yours for as long as you stay signed up. Later, premium will cost {m} a month or {y} a year.`, { m: money(P.laterMonth), y: money(P.laterYear) })}</p>` : ''}
-    <p class="actions"><a class="btn primary" href="#signup" data-track="premium_to_signup">${T(`Sign up your listing`)}</a></p>
-    <p>${T(`Run a free program, a school club or a rec center?`)} <a href="${link('contact/', D)}">${T(`Write to us before you sign up.`)}</a></p>
-  </section>
-  <section class="section" id="what">
+    <p class="hero-fine">${T(`Run a free program, a school club or a rec center?`)} <a href="${link('contact/', D)}">${T(`Write to us before you sign up.`)}</a></p>`;
+  const body = `<div ${groupsAttrs(D)} style="display:contents">
+${pageNav(jumpNav(), `<a class="btn primary pagenav-go" href="#signup">${T(`Sign up`)}</a>`)}
+  <section class="section" id="what" data-jump-to="What you get">
     <h2>${T(`What premium adds`)}</h2>
-    <div class="claim-show">
-      ${demo}
-      <ol class="benefits">
-${gets.map(([, h, p], i) => `        <li><i class="demo-n" aria-hidden="true">${i + 1}</i><b>${h}</b> ${p}</li>`).join('\n')}
-      </ol>
+    <div class="pm-gets">
+${gets.map(([k, h, p], i) => `      <div class="pm-get"><span class="pm-get-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path fill="currentColor" d="${ICON[k]}"/></svg></span><i class="demo-n" aria-hidden="true">${i + 1}</i><h3>${h}</h3><p>${p}</p></div>`).join('\n')}
     </div>
   </section>
-  <section class="section" id="signup">
-    <h2>${T(`Sign up`)}</h2>
-    <noscript><p class="ask">${T(`Signing up needs JavaScript turned on.`)}</p></noscript>
-    <div class="g-page" id="premium-signup" data-clarity-mask="true" data-month="${P.month}" data-year="${P.year}"${PM_PAY ? ` data-pay-month="${esc(PM_PAY.month)}" data-pay-year="${esc(PM_PAY.year)}"` : ''}></div>
+  <section class="section" id="see" data-jump-to="See it">
+    <h2>${T(`See it on a listing`)}</h2>
+    <p>${T(`The numbers on the picture match the list above.`)}</p>
+    ${demo}
   </section>
-  <section class="section" id="not">
+  <section class="section" id="how" data-jump-to="How it works">
+    <h2>${T(`How it works`)}</h2>
+    <ol class="pm-steps">
+      <li><i class="demo-n" aria-hidden="true">1</i><div><b>${T(`Claim your listing.`)}</b> ${T(`It’s free, with your work email, and it takes a couple of minutes.`)} <a href="${link('managers/', D)}">${T(`Claim it here.`)}</a></div></li>
+      <li><i class="demo-n" aria-hidden="true">2</i><div><b>${T(`Sign in below with that email.`)}</b> ${T(`No password: we send a 6-digit code and you type it in.`)}</div></li>
+      <li><i class="demo-n" aria-hidden="true">3</i><div><b>${T(`Pick yearly or monthly and pay by card.`)}</b> ${T(`Payment is on Stripe’s secure page. Your listing becomes premium once the payment is in, usually within a day, and we email you when it’s on.`)}</div></li>
+    </ol>
+  </section>
+  <section class="section" id="not" data-jump-to="What it doesn’t do">
     <h2>${T(`What premium doesn’t do`)}</h2>
     <ul>
       <li>${T(`It doesn’t move you up. Listings are never ordered by who pays, and premium doesn’t change where yours appears.`)}</li>
@@ -3781,6 +3858,12 @@ ${gets.map(([, h, p], i) => `        <li><i class="demo-n" aria-hidden="true">${
       <li>${T(`It doesn’t lock you in. You can stop at any time: write to us and we’ll end it.`)}</li>
     </ul>
     <p><a href="${link('privacy/', D)}#managers">${T(`What we keep about a claim and a premium listing is on the privacy page.`)}</a></p>
+  </section>
+  <section class="section pm-close" id="signup">
+    <h2>${T(`Sign up`)}</h2>
+    ${plans(true)}
+    <noscript><p class="ask">${T(`Signing up needs JavaScript turned on.`)}</p></noscript>
+    <div class="g-page" id="premium-signup" data-clarity-mask="true" data-month="${P.month}" data-year="${P.year}"${PM_PAY ? ` data-pay-month="${esc(PM_PAY.month)}" data-pay-year="${esc(PM_PAY.year)}"` : ''}></div>
   </section>
 </div>`;
   return layout({ title: 'Premium listings for programs and camps', description: `Add photos, your own words, offers and fuller numbers to your ${cfg.siteName} listing.`, pathName: 'premium/', depth: D, current: null, hero, body, noindex: !PM_LISTED, scripts: groupsScript(D) });

@@ -483,16 +483,23 @@
       if (m) { location.href = page('groups/') + '?g=' + m[1]; return true; }
       return false;
     };
+    // Signed out, the form sits beside the heading, in the first screen: on /register/ it starts there; on /account/ it
+    // moves up from the page while nobody is signed in and back down once someone is.
+    var heroSlot = document.querySelector('.acct-hero-form'), homeSlot = account.parentNode;
+    var seat = function (out) { var to = out && heroSlot ? heroSlot : homeSlot; if (to && account.parentNode !== to) to.appendChild(account); };
     var drawSignedOut = function (msg) {
+      seat(true);
       account.textContent = '';
       if (msg) { var p = el('p', 'g-status bad', msg); account.appendChild(p); }
-      // two kinds of account start here: a parent's, on this page, and a program manager's, on the page where listings are claimed
-      var who = el('div', 'acct-who'); who.setAttribute('role', 'group'); who.setAttribute('aria-label', 'Who is the account for?');
-      var mine = el('div', 'acct-who-on'); mine.setAttribute('aria-current', 'true');
-      mine.appendChild(el('b', null, 'Parent or caregiver')); mine.appendChild(el('span', null, registering ? 'Create your account below' : 'Log in or create an account below'));
-      var theirs = el('a', 'acct-who-go'); theirs.href = page('managers/');
-      theirs.appendChild(el('b', null, 'Program manager')); theirs.appendChild(el('span', null, 'Claim your listing, or add your program'));
-      who.appendChild(mine); who.appendChild(theirs); account.appendChild(who);
+      // two kinds of account start on the sign-up page: a parent's, here, and a program manager's, on the page where listings are claimed
+      if (registering) {
+        var who = el('div', 'acct-who'); who.setAttribute('role', 'group'); who.setAttribute('aria-label', 'Who is the account for?');
+        var mine = el('div', 'acct-who-on'); mine.setAttribute('aria-current', 'true');
+        mine.appendChild(el('b', null, 'Parent or caregiver')); mine.appendChild(el('span', null, 'Create your account below'));
+        var theirs = el('a', 'acct-who-go'); theirs.href = page('managers/');
+        theirs.appendChild(el('b', null, 'Program manager')); theirs.appendChild(el('span', null, 'Claim your listing, or add your program'));
+        who.appendChild(mine); who.appendChild(theirs); account.appendChild(who);
+      }
       var box = el('div', 'panel'); account.appendChild(box);
       signInBox(box, wantNext, function (d) { fresh = true; if (wantNext !== 'account' && d.user.ready && goNext(wantNext)) return; drawProfile(d); }, 'One step for both: if you’re new, this makes your account. No password. With email, we send a 6-digit code and you type it here.');
       var sh = box.querySelector('h3');
@@ -505,6 +512,7 @@
     };
     var drawProfile = function (d) {
       if (registering) { location.replace(wantNext === 'account' ? page('profile/') : page('account/') + '?next=' + wantNext); return; }   // signed in: on to the profile, or to where they were headed
+      seat(false);
       var me = d.user, groups = d.groups || [];
       // someone who has just signed in on the account page lands on their profile: that is where their things are
       if (fresh && view === 'account' && me.ready && wantNext === 'account') { location.replace(page('profile/')); return; }
@@ -3291,11 +3299,12 @@
         pmClaims = d.claims || []; pmState = 'in';
       });
     };
+    var pmWant = query().plan === 'month' ? 'month' : 'year';   // the plan whose button brought them here
     var pmPicker = function (item, c, now) {
       var form = el('form', 'pm-pick'), fs = el('fieldset'), id = 'pm-' + c.listing.replace(/[^a-z0-9]+/g, '-');
       fs.appendChild(el('legend', null, now ? 'Change the plan for ' + c.name : 'Pick a plan for ' + c.name));
       ['year', 'month'].forEach(function (p) {
-        var l = el('label', 'pm-opt'), r = el('input'); r.type = 'radio'; r.name = id; r.value = p; r.checked = now ? p !== now : p === 'year';
+        var l = el('label', 'pm-opt'), r = el('input'); r.type = 'radio'; r.name = id; r.value = p; r.checked = now ? p !== now : p === pmWant;
         l.appendChild(r); l.appendChild(el('b', null, PLAN[p])); l.appendChild(el('span', null, COST[p])); fs.appendChild(l);
       });
       form.appendChild(fs);

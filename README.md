@@ -717,6 +717,12 @@ changes where a listing appears in a list, and it has no say over reviews.
     page) once every listing they hold is premium, or while the premium page isn't listed. Parents see no change.
   - **One sentence on the managers page**, in the list under "How claiming works", for people who haven't claimed.
   - **One line at the end of the monthly numbers email**, only for an account with no premium listing.
+  - **The page itself** is laid out like a product page: the two prices sit in the hero, each with its own
+    "Sign up yearly" / "Sign up monthly" button (`?plan=year#signup`, `?plan=month#signup`, which the picker at the
+    foot starts on), then a sticky strip of links to each part with a "Sign up" button at its right (`pageNav()` with
+    a `.pagenav-go`), then "What premium adds" as six numbered cards (`.pm-gets`), the example listing whose dots match
+    the cards, "How it works" in three steps (`.pm-steps`), what it doesn't do, and a closing part (`#signup`) with
+    the prices again beside the sign-in box. No testimonials, nothing invented.
   - **Prices** are `"premiumPrice": { "month": 19, "year": 190, "laterMonth": 29, "laterYear": 290 }`, whole dollars.
     The two "later" numbers are the regular price the founding price gives way to; leave them out and the founding
     paragraph goes. The page promises that a founding price is kept while the program stays signed up.
@@ -1258,10 +1264,14 @@ These are the only parts of the site that store anything about a child on the se
   in), a strip above the menu offers "Log in" to anyone signed out, and the support ask ("Help the site keep
   going") moves to the footer and the account page. Which version shows is decided from a flag in the browser, with
   no request: elements carry the class `when-out` or `when-in`.
-- **Creating an account and logging in.** Two addresses share one form. `/register/` is the landing page for
-  creating an account: what an account gives you (with a drawing of a week on a phone and a laptop) beside the
-  form. `/account/` is where you log in and, signed in, where you change what is in the account; someone already signed in who opens
-  `/register/` is sent there. `?next=board` on either sends them back to Build your week afterwards. The old
+- **Creating an account and logging in.** Two addresses share one form. `/register/` is the sign-up page: the
+  two kinds of account (parent here, program manager on the managers page) and the form sit in the first screen,
+  beside the heading (`.acct-hero-form` in the hero), and what an account gives you follows below as rows of
+  pictures in two groups, "Plan the whole year" and "Never miss a thing" (`.acct-row`, one drawing each), with a
+  closing "Create a free account" band that scrolls back to the form. `/account/` is where you log in: while nobody
+  is signed in the form moves up beside the heading (`seat()` in `groups.js`) with a "New here?" link to
+  `/register/`, and the same rows follow; signed in, the form moves back down and the page is where you change what
+  is in the account. Someone already signed in who opens `/register/` is sent on. `?next=board` on either sends them back to Build your week afterwards. The old
   address `/account/?new=1` forwards to `/register/`. `/register/` loads analytics (see Privacy below); `/account/` does not.
 - **Build your week.** The card comes first. Once someone shares, saves, copies or prints a card, a box asks
   whether they want to keep the week too, and opens the Keep & share view: "Save this week, or share it" for
