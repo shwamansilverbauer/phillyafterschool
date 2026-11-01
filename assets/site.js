@@ -26,6 +26,24 @@
     return e;
   }
   function all(root, sel) { return [].slice.call(root.querySelectorAll(sel)); }
+  // The wordmark for the pictures the planners make: the lettering of the logo (/logo-text.png) on a navy tab at the
+  // top left, where the bus and the name used to be. It is fetched once, from wherever the header's logo is served;
+  // a picture drawn before it has arrived is drawn again once it has (again: the card's own redraw).
+  var MARK = (function () {
+    var logo = document.querySelector('a.brand img.logo'), src = logo ? logo.getAttribute('src').replace(/logo(-text)?\.png.*$/, 'logo-text.png') : '';
+    if (!src) return null;
+    var im = new Image(); im.src = src; return im;
+  })();
+  function drawMark(ctx, x, y, h, again) {
+    var ready = !!(MARK && MARK.complete && MARK.naturalWidth), pad = 12;
+    var w = ready ? Math.round(MARK.naturalWidth * h / MARK.naturalHeight) : Math.round(h * 2.78), bw = w + pad * 2, bh = h + pad * 2, rad = 14;
+    ctx.save();
+    ctx.fillStyle = '#0A3566';
+    ctx.beginPath(); ctx.moveTo(x + rad, y); ctx.arcTo(x + bw, y, x + bw, y + bh, rad); ctx.arcTo(x + bw, y + bh, x, y + bh, rad); ctx.arcTo(x, y + bh, x, y, rad); ctx.arcTo(x, y, x + bw, y, rad); ctx.closePath(); ctx.fill();
+    if (ready) ctx.drawImage(MARK, x + pad, y + pad, w, h);
+    else if (MARK && again && !MARK.pasAgain) { MARK.pasAgain = true; MARK.addEventListener('load', function () { MARK.pasAgain = false; again(); }, { once: true }); }
+    ctx.restore();
+  }
   // Taking a child off a planner asks first, in place: the button gives way to the question and two real buttons,
   // which stay until one is pressed (a redraw of the page does not take them away). A button whose label turned
   // into "tap again" was too easy to read as a notice and walk away from. Returns a function that closes the ask.
@@ -2207,10 +2225,8 @@
       ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
       ctx.fillStyle = '#0A3566'; ctx.fillRect(0, H - FOOT, W, FOOT);
       // brand
-      ctx.fillStyle = YELLOW; rbox(ctx, 56, 58, 54, 28, 8); ctx.fill();
-      ctx.fillStyle = NAVY; ctx.beginPath(); ctx.arc(70, 90, 7, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(98, 90, 7, 0, 7); ctx.fill();
+      drawMark(ctx, 56, 44, 44, drawCard);
       ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
-      ctx.font = '800 32px ' + DISPLAY; ctx.fillText('Philly After School', 126, 86);
       // top right: the photo, or a kite
       var cx = 928, cy = 158, rad = 100;
       if (photo) {
@@ -3353,10 +3369,8 @@
       ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
       ctx.fillStyle = '#0A3566'; ctx.fillRect(0, H - FOOT, W, FOOT);
       // brand
-      ctx.fillStyle = '#F3C613'; box(ctx, 56, 58, 54, 28, 8); ctx.fill();
-      ctx.fillStyle = '#0B2140'; ctx.beginPath(); ctx.arc(70, 90, 7, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(98, 90, 7, 0, 7); ctx.fill();
+      drawMark(ctx, 56, 44, 44, drawCard);
       ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
-      ctx.font = '800 32px ' + DISPLAY; ctx.fillText('Philly After School', 126, 86);
       // photo
       var hasPhoto = !!photo, textMax = hasPhoto ? 720 : 968;
       if (hasPhoto) {
@@ -3898,10 +3912,8 @@
       ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
       ctx.fillStyle = '#0A3566'; ctx.fillRect(0, H - FOOT, W, FOOT);
       // brand
-      ctx.fillStyle = YELLOW; rbox(ctx, 56, 58, 54, 28, 8); ctx.fill();
-      ctx.fillStyle = NAVY; ctx.beginPath(); ctx.arc(70, 90, 7, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(98, 90, 7, 0, 7); ctx.fill();
+      drawMark(ctx, 56, 44, 44, drawCard);
       ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
-      ctx.font = '800 32px ' + DISPLAY; ctx.fillText('Philly After School', 126, 86);
       // top right: the photo, or the sun
       var cx = 928, cy = 158, rad = 100;
       if (photo) {
@@ -4625,10 +4637,8 @@
       var sky = ctx.createLinearGradient(0, 0, 0, H - FOOT); sky.addColorStop(0, '#96C9FF'); sky.addColorStop(1, '#C3E1FF');
       ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
       ctx.fillStyle = '#0A3566'; ctx.fillRect(0, H - FOOT, W, FOOT);
-      ctx.fillStyle = YELLOW; rbox(ctx, 56, 58, 54, 28, 8); ctx.fill();
-      ctx.fillStyle = NAVY; ctx.beginPath(); ctx.arc(70, 90, 7, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(98, 90, 7, 0, 7); ctx.fill();
+      drawMark(ctx, 56, 44, 44, drawCard);
       ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
-      ctx.font = '800 32px ' + DISPLAY; ctx.fillText('Philly After School', 126, 86);
       // top right: the photo, or the sun
       var cx = 928, cy = 158, rad = 100;
       if (photo) {
