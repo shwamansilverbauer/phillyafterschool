@@ -486,7 +486,10 @@
     // Signed out, the form sits beside the heading, in the first screen: on /register/ it starts there; on /account/ it
     // moves up from the page while nobody is signed in and back down once someone is.
     var heroSlot = document.querySelector('.acct-hero-form'), homeSlot = account.parentNode;
-    var seat = function (out) { var to = out && heroSlot ? heroSlot : homeSlot; if (to && account.parentNode !== to) to.appendChild(account); };
+    var seat = function (out) {
+      var to = out && heroSlot ? heroSlot : homeSlot; if (to && account.parentNode !== to) to.appendChild(account);
+      document.documentElement.classList.toggle('signed', !out); document.documentElement.classList.toggle('form-up', out);   // the page's headings and the picture follow
+    };
     var drawSignedOut = function (msg) {
       seat(true);
       account.textContent = '';
@@ -504,10 +507,8 @@
       signInBox(box, wantNext, function (d) { fresh = true; if (wantNext !== 'account' && d.user.ready && goNext(wantNext)) return; drawProfile(d); }, 'One step for both: if you’re new, this makes your account. No password. With email, we send a 6-digit code and you type it here.');
       var sh = box.querySelector('h3');
       if (sh) sh.textContent = registering ? 'Create your account' : 'Log in, or create an account';
-      var have = el('div', 'panel g-callout');
-      have.appendChild(el('h2', null, 'Did someone send you an invitation?'));
-      have.appendChild(el('p', null, 'Tap the link in the email. Or start here: it walks you through the code and signing in with the address the invitation was sent to.'));
-      var hj = el('a', 'btn', 'Open my invitation'); hj.href = page('join/'); have.appendChild(hj);
+      // an invitation to a group or a shared week comes with its own link; this is the quiet way in for someone who lost it
+      var have = el('p', 'hint acct-invite', 'Did someone send you an invitation? '); var hj = el('a', null, 'Open it here'); hj.href = page('join/'); have.appendChild(hj); have.appendChild(document.createTextNode('.'));
       account.appendChild(have);
     };
     var drawProfile = function (d) {
@@ -1177,6 +1178,7 @@
           if (grp) sb.push(grp === 1 ? 'one group' : grp + ' groups');
           row('Sharing', say(sb.join(', ').replace(/^o/, 'O')), 'Open', page('account/') + '#sharing');
         }
+        row('Invitations', say('Did someone invite you to a group, or share a week with you? Open the invitation with the code from the email.', true), 'Open', page('join/'));
         if (me.claims) row('Listings', say(me.claims === 1 ? 'One listing claimed' : me.claims + ' listings claimed'), 'Manage', page('managers/'));
         // reviews: the programs on their weeks (here or kept in the account) that they could tell other parents about
         var RVW = window.pasReview, progNames = ainfo.programs || {};
@@ -1840,11 +1842,17 @@
     // says so, the strip of account tabs is across the top, and the sections about claiming are folded away.
     var heroH = document.querySelector('.hero h1'), heroP = document.querySelector('.hero .lede'), heroWas = heroH && heroP ? [heroH.innerHTML, heroP.innerHTML] : null;
     var aboutOpen = false, addOpen = false;
+    var cHero = document.querySelector('.acct-hero-form'), cHome = document.querySelector('.acct-main');
+    var seatClaims = function (up) {   // up: beside the heading; down: the page, where a listing's tools have room
+      var to = up ? cHero : cHome; if (to && claimsBox.parentNode !== to) to.appendChild(claimsBox);
+      document.documentElement.classList.toggle('form-up', up);
+    };
     var render = function (keepFocus) {
       claimsBox.textContent = '';
       var held = {};
       cClaims.forEach(function (c) { held[c.listing] = c; });
       var holder = cState === 'in' && cClaims.length > 0;
+      seatClaims(!holder && !(cState === 'out' && !cMe && signedInHint()));   // while a signed-in person is still being looked up, stay down: their listings may be about to show
       claimsBox.className = claimsBox.className.replace(/ (holds|about-open)/g, '') + (holder ? ' holds' + (aboutOpen || tabsAll() ? ' about-open' : '') : '');
       if (heroWas && get('pas-edit') !== '1') {   // (the owner editing the site's wording sees the page's own words)
         if (holder) { heroH.textContent = cClaims.length === 1 ? 'Your listing' : 'Your listings'; heroP.textContent = 'Keep the dates, costs and hours right, say whether there’s space, and see how many families are finding you.'; }

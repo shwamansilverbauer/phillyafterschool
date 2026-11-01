@@ -580,7 +580,8 @@ a row before a deploy don't lose each other, and it allows thirty publishes an h
 
 Each entry in `data/copy.json` is keyed by a fingerprint of the original sentence and holds `was` (the original) and
 `now`. An empty `now` takes the sentence off the page, and a list item, paragraph or heading left with nothing else
-in it goes too (a benefit on the register or managers page, say; the example listing's callout numbers follow).
+in it goes too, links whose words were all removed included (a benefit on the register or managers page, say; the
+example listing's callout numbers follow).
 Words in curly braces, like `{school}`, are filled in per page. If a sentence is later reworded in
 `build.mjs`, its entry stops matching; the build prints a note and carries on.
 
@@ -1268,10 +1269,13 @@ These are the only parts of the site that store anything about a child on the se
   two kinds of account (parent here, program manager on the managers page) and the form sit in the first screen,
   beside the heading (`.acct-hero-form` in the hero), and what an account gives you follows below as rows of
   pictures in two groups, "Plan the whole year" and "Never miss a thing" (`.acct-row`, one drawing each), with a
-  closing "Create a free account" band that scrolls back to the form. `/account/` is where you log in: while nobody
-  is signed in the form moves up beside the heading (`seat()` in `groups.js`) with a "New here?" link to
+  closing "Create a free account" band that scrolls back to the form. Under the heading sits a drawing of the school
+  year on one ribbon (`artYearRibbon()`), hidden once someone is signed in. `/account/` is where you log in: while
+  nobody is signed in the form moves up beside the heading (`seat()` in `groups.js`) with a "New here?" link to
   `/register/`, and the same rows follow; signed in, the form moves back down and the page is where you change what
-  is in the account. Someone already signed in who opens `/register/` is sent on. `?next=board` on either sends them back to Build your week afterwards. The old
+  is in the account. Someone already signed in who opens `/register/` is sent on. An invitation to a group or a
+  shared week is a side path, not part of signing up: under the form there is one quiet line, "Did someone send you
+  an invitation? Open it here" (to `/join/`), and the profile card has an "Invitations" row with the same way in. `?next=board` on either sends them back to Build your week afterwards. The old
   address `/account/?new=1` forwards to `/register/`. `/register/` loads analytics (see Privacy below); `/account/` does not.
 - **Build your week.** The card comes first. Once someone shares, saves, copies or prints a card, a box asks
   whether they want to keep the week too, and opens the Keep & share view: "Save this week, or share it" for
@@ -1352,9 +1356,14 @@ These are the only parts of the site that store anything about a child on the se
   remove theirs; giving up the claim or deleting the account removes it.
   `/managers/` loads analytics with the tool masked in recordings; its events are `pas_claim` with a `step`
   (`picked`, `claimed`, `waiting`, `address_mismatch`, `refused`, `change_sent`, `photo_sent`) and `pas_signup`
-  with `role: manager` when someone signs in there. The "What claiming gets you" section shows an example
-  listing (`claimDemo()` in `build.mjs`): an invented program, drawn from the same parts a real listing uses, with
-  numbers that match the list beside it (`CLAIM_GETS`). Change a benefit there and the picture's numbers follow. There are no student accounts, on purpose:
+  with `role: manager` when someone signs in there. The page is laid out like the sign-up page: the heading, a
+  drawing and the "Find your listing" search share the first screen (`.acct-hero-form`); "What claiming gets you"
+  follows as rows of drawings in two groups, "Keep it right" and "See it working", one drawing a benefit
+  (`ART_CLAIM` in `build.mjs`, in the order of `CLAIM_GETS`) and each numbered; then "See it on a listing", an
+  example listing (`claimDemo()`): an invented program, drawn from the same parts a real listing uses, with numbers
+  that match the rows above it. Change a benefit there and the picture's numbers follow. Signed in with a claim,
+  the search moves down the page (`seatClaims()` in `groups.js`) and the listing's own tools take its place; the
+  explanatory sections fold away as before. A closing band leads back to the search. There are no student accounts, on purpose:
   the site never asks a child for an email address. The planners are for the adult who signs in.
 - **Where.** `src/server/groups-api.php` is the whole server side; the build copies it to `groups/api.php` with
   its settings (site name, address, sender, the date shared weeks expire, the Google client ID). It keeps one
@@ -1600,9 +1609,10 @@ its own page.
 ## The way in for program managers
 
 The strip above the menu (signed-out visitors) carries "Run a program or camp? Claim your listing" on the left and
-"Log in" on the right. The account and register pages open with two cards, "Parent or caregiver" (this page) and
+"Log in" on the right. The sign-up page opens with two cards, "Parent or caregiver" (this page) and
 "Program manager", which goes to `/managers/`: that page is where a manager's account is made, by claiming a
-listing, and where a program that isn't listed yet is sent in. The footer's About column links to the managers
+listing, and where a program that isn't listed yet is sent in. (The log-in page has no cards: it is the one form,
+and the closing band says a manager's account is the same account.) The footer's About column links to the managers
 page, and every listing ends with the claim box (`listingTools()`).
 
 ## Emails to program managers about their listing

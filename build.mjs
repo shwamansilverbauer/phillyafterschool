@@ -114,7 +114,7 @@ function emailCopy(name, original, vars) {
 }
 // Drops the elements an emptied sentence left behind: a list item, paragraph or heading whose only content is the
 // marker, whitespace, empty <b>/<strong>, or elements hidden from readers (a callout number). Then the markers go.
-const EMPTYISH = String.raw`(?:\s|<!--pas-rm-->|<(?:b|strong|em|i)>(?:\s|<!--pas-rm-->)*</(?:b|strong|em|i)>|<i\b[^>]*aria-hidden="true"[^>]*>[^<]*</i>|<br\s*/?>)*`;
+const EMPTYISH = String.raw`(?:\s|<!--pas-rm-->|<(?:b|strong|em|i)>(?:\s|<!--pas-rm-->)*</(?:b|strong|em|i)>|<a\b[^>]*>(?:\s|<!--pas-rm-->)*</a>|<i\b[^>]*aria-hidden="true"[^>]*>[^<]*</i>|<br\s*/?>)*`;
 const DROP_RE = new RegExp(String.raw`<(li|p|h[1-6]|dt|dd)\b[^>]*>` + EMPTYISH + String.raw`</\1>\s*`, 'g');
 function dropEmpty(html) {
   if (!html.includes(REMOVED)) return html;
@@ -3508,6 +3508,68 @@ const accountHoods = () => [...new Set([...hoods.map(h => h.name), ...CAMP_AREAS
 // What's new, for the account page: data/news.json, newest first. Each entry is { date, title, text, href?, link? }.
 const NEWS = (fs.existsSync(path.join(ROOT, 'data/news.json')) ? readJson('data/news.json') : []).filter(n => /^\d{4}-\d{2}-\d{2}$/.test(n.date || '') && n.title && n.text).sort((a, b) => b.date.localeCompare(a.date));
 const groupsScript = depth => `<script src="${link('assets/groups.js', depth)}${GROUPS_V}"></script>`;
+// ---------- small drawings for the account and managers pages, in the site's colors ----------
+const ART_F = 'font-family="Archivo, Arial, sans-serif"';
+const ART_DAYS = [['M', '#1F7A3A', 62], ['T', '#B4237A', 48], ['W', '#0E7C86', 70], ['T', '#6B3FA0', 40], ['F', '#C2410C', 56]];
+// a week card, like the one in the account drawing
+const artWeek = (x, y, label, days = ART_DAYS, w = 120) => `<g transform="translate(${x} ${y})"><rect width="${w}" height="152" rx="11" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/><path d="M0 11a11 11 0 0 1 11-11h${w - 22}a11 11 0 0 1 11 11v17H0z" fill="#0F4D90"/><text x="11" y="19" font-size="11" font-weight="800" fill="#FFFFFF" ${ART_F}>${label}</text>${days.map(([d, c, len], i) => `<circle cx="17" cy="${44 + i * 21}" r="7.5" fill="#E3EEFA"/><text x="17" y="${47.4 + i * 21}" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" ${ART_F}>${d}</text><rect x="31" y="${38 + i * 21}" width="${Math.min(len, w - 42)}" height="12" rx="6" fill="${c}"/>`).join('')}</g>`;
+// a pill with a word in it: yellow, or a color of its own
+const artChip = (x, y, w, text, fill = false, ink = null) => `<rect x="${x}" y="${y}" width="${w}" height="26" rx="13" fill="${fill === true ? '#F3C613' : fill || '#E3EEFA'}"/><text x="${x + w / 2}" y="${y + 17.5}" text-anchor="middle" font-size="11" font-weight="800" fill="${ink || (fill === true ? '#2A2100' : '#0B2140')}" ${ART_F}>${text}</text>`;
+const artBox = (inner, w = 400, h = 260) => `<svg viewBox="0 0 ${w} ${h}" aria-hidden="true" focusable="false">${inner}</svg>`;
+// a kid with a backpack, as on the after-school page's street
+const artKid = (x, y, [skin, shirt, pack], k = 2.2) => `<g transform="translate(${x} ${y}) scale(${k})"><rect x="-9" y="-13" width="5" height="8" rx="2" fill="${pack}"/><rect x="-5.5" y="-14" width="11" height="12" rx="3.5" fill="${shirt}"/><circle cx="0" cy="-18.5" r="4.6" fill="${skin}"/><rect x="-4.5" y="-3" width="3.4" height="4" rx="1" fill="#0B2140"/><rect x="1.1" y="-3" width="3.4" height="4" rx="1" fill="#0B2140"/></g>`;
+const ART_KIDS = [['#F2C9A5', '#6B3FA0', '#F3C613'], ['#8D5524', '#2C8444', '#CC3000'], ['#E0AC69', '#CC3000', '#1763B8']];
+// the sign-up page's own picture: the whole school year on one ribbon, school weeks, days off and camp weeks, and the kids it is for
+const artYearRibbon = () => {
+  const OFF = { 2: [22, 8], 3: [18, 14], 4: [2, 8], 5: [12, 8], 7: [6, 12], 8: [26, 6] };   // where a yellow day off sits in a month, and how wide
+  const months = 'SONDJFMAMJJA'.split('').map((m, i) => { const x = 34 + i * 38; const school = i < 10; return `<rect x="${x}" y="40" width="34" height="44" rx="5" fill="${school ? '#1F7A3A' : '#1763B8'}"/>${i === 9 ? `<rect x="${x + 22}" y="40" width="12" height="44" rx="5" fill="#1763B8"/><rect x="${x + 22}" y="40" width="6" height="44" fill="#1763B8"/>` : ''}${OFF[i] ? `<rect x="${x + OFF[i][0]}" y="40" width="${OFF[i][1]}" height="44" fill="#F3C613"/>` : ''}<text x="${x + 17}" y="100" text-anchor="middle" font-size="10" font-weight="800" fill="#0B2140" ${ART_F}>${m}</text>`; }).join('');
+  return artBox(`<rect x="20" y="28" width="480" height="84" rx="14" class="art-frame"/>${months}
+  ${artChip(34, 124, 66, 'School', '#DDF3E4', '#0F5132')}${artChip(108, 124, 72, 'Days off', true)}${artChip(188, 124, 56, 'Camp', '#DCEBFB', '#0B3D7A')}
+  <rect x="20" y="202" width="480" height="8" rx="4" fill="#0B2140"/>
+  ${ART_KIDS.map((k, i) => artKid(286 + i * 56, 203, k, 2.8)).join('')}
+  <circle cx="472" cy="168" r="20" fill="#F3C613"/><path d="M462.5 168.5l6.5 6.5 12-13" fill="none" stroke="#2A2100" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>`, 520, 230);
+};
+// a pencil, for the drawings about keeping a listing right
+const artPencil = (x, y, deg = 40) => `<g transform="translate(${x} ${y}) rotate(${deg})"><rect x="-10" y="-52" width="20" height="74" rx="4" fill="#F3C613" stroke="#0B2140" stroke-width="3"/><rect x="-10" y="-52" width="20" height="16" rx="4" fill="#0F4D90" stroke="#0B2140" stroke-width="3"/><path d="M-10 22l10 24 10-24z" fill="#F2C9A5" stroke="#0B2140" stroke-width="3" stroke-linejoin="round"/></g>`;
+// the managers page's own picture: a listing kept right by the people who run it
+const artListingKept = () => artBox(`<rect x="30" y="26" width="400" height="184" rx="18" class="art-frame"/>
+  <rect x="54" y="50" width="190" height="16" rx="8" fill="#0B2140"/><rect x="54" y="78" width="260" height="9" rx="4.5" class="art-line"/>
+  ${artChip(54, 102, 40, 'Art')}${artChip(102, 102, 90, 'Grades K to 5')}${artChip(200, 102, 150, 'Spots open · Nov 1', '#DDF3E4', '#0F5132')}
+  <text x="54" y="152" font-size="11" font-weight="800" fill="#0B2140" ${ART_F}>Dates</text><text x="106" y="152" font-size="12" fill="#1F3A60" ${ART_F}>Sign-ups open</text>${artChip(206, 135, 70, 'Nov 12', true)}
+  <text x="54" y="184" font-size="11" font-weight="800" fill="#0B2140" ${ART_F}>Hours</text><rect x="106" y="175" width="150" height="9" rx="4.5" class="art-line"/>
+  <rect x="300" y="166" width="100" height="26" rx="13" fill="#DDF3E4"/><circle cx="315" cy="179" r="8" fill="#1F7A3A"/><path d="M311 179.5l2.8 2.8 5.4-5.6" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><text x="328" y="183.5" font-size="11" font-weight="800" fill="#0F5132" ${ART_F}>Claimed</text>
+  ${artPencil(468, 150)}`, 520, 230);
+// what claiming gets you, one drawing each, in the order of CLAIM_GETS
+const ART_CLAIM = {
+  dates: () => artBox(`<rect x="40" y="34" width="320" height="192" rx="16" class="art-frame"/>
+  <rect x="62" y="56" width="150" height="14" rx="7" fill="#0B2140"/><rect x="62" y="82" width="210" height="9" rx="4.5" class="art-line"/>
+  <text x="62" y="124" font-size="11" font-weight="800" fill="#0B2140" ${ART_F}>Dates</text><text x="112" y="124" font-size="12" fill="#1F3A60" ${ART_F}>Sign-ups open</text>${artChip(212, 107, 70, 'Nov 12', true)}
+  <text x="62" y="156" font-size="11" font-weight="800" fill="#0B2140" ${ART_F}>Hours</text><rect x="112" y="147" width="140" height="9" rx="4.5" class="art-line"/>
+  <text x="62" y="188" font-size="11" font-weight="800" fill="#0B2140" ${ART_F}>Cost</text><rect x="112" y="179" width="90" height="9" rx="4.5" class="art-line"/>
+  ${artPencil(318, 170)}`),
+  space: () => artBox(`<rect x="60" y="40" width="280" height="180" rx="16" class="art-frame"/>
+  <text x="84" y="72" font-size="12" font-weight="800" fill="#0B2140" ${ART_F}>Is there room?</text>
+  <rect x="82" y="86" width="120" height="30" rx="15" fill="#DDF3E4" stroke="#1F7A3A" stroke-width="2.5"/><text x="142" y="105.5" text-anchor="middle" font-size="12" font-weight="800" fill="#0F5132" ${ART_F}>Spots open</text>
+  <rect x="82" y="128" width="120" height="30" rx="15" fill="#FBEFC2"/><text x="142" y="147.5" text-anchor="middle" font-size="12" font-weight="800" fill="#5C4800" ${ART_F}>Waitlist</text>
+  <rect x="82" y="170" width="120" height="30" rx="15" fill="#E7ECF2"/><text x="142" y="189.5" text-anchor="middle" font-size="12" font-weight="800" fill="#4B5563" ${ART_F}>Full</text>
+  <circle cx="262" cy="101" r="18" fill="#F3C613"/><path d="M253.5 101.5l6 6 11-12" fill="none" stroke="#2A2100" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="222" y="152" font-size="10" fill="#1F3A60" ${ART_F}>as of Nov 1</text>`),
+  numbers: () => artBox(`<rect x="40" y="30" width="320" height="200" rx="16" class="art-frame"/>
+  <text x="62" y="58" font-size="10" font-weight="800" fill="#1F3A60" letter-spacing=".08em" ${ART_F}>ONLY YOU SEE THIS</text>
+  ${[[62, '412', 'times opened'], [164, '57', 'to sign up'], [258, '23', 'on a plan']].map(([x, n, l]) => `<text x="${x}" y="100" font-size="28" font-weight="800" fill="#0B2140" ${ART_F}>${n}</text><text x="${x}" y="118" font-size="10" fill="#1F3A60" ${ART_F}>${l}</text>`).join('')}
+  ${[3, 5, 4, 7, 6, 2, 1, 6, 8, 9, 7, 10, 4, 3, 8, 11, 9, 12, 10, 5, 4, 9, 13, 12, 14, 11, 6, 5, 12, 15].map((v, i) => `<rect x="${62 + i * 9.4}" y="${206 - Math.round(v / 15 * 60)}" width="7" height="${Math.round(v / 15 * 60)}" rx="2" fill="#0F4D90"/>`).join('')}`),
+  photo: () => artBox(`<rect x="50" y="36" width="300" height="188" rx="16" class="art-frame"/>
+  <rect x="64" y="50" width="272" height="160" rx="8" fill="#F6E7C8"/><rect x="64" y="160" width="272" height="50" fill="#D9B98A"/>
+  <circle cx="290" cy="90" r="18" fill="#F3C613"/><path d="M64 170c40-40 70-50 110-20s60 10 90-20 50-10 72 0v80H64z" fill="#2C8444"/>
+  ${artChip(78, 62, 46, 'Photo')}`),
+  claimed: () => artBox(`<rect x="40" y="50" width="320" height="160" rx="16" class="art-frame"/>
+  <rect x="62" y="72" width="170" height="14" rx="7" fill="#0B2140"/><rect x="62" y="98" width="230" height="9" rx="4.5" class="art-line"/>
+  ${artChip(62, 122, 40, 'Art')}${artChip(110, 122, 90, 'Grades K to 5')}
+  <rect x="62" y="162" width="236" height="30" rx="15" fill="#DDF3E4"/><circle cx="80" cy="177" r="9" fill="#1F7A3A"/><path d="M75.5 177.5l3 3 6-6" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><text x="96" y="181.5" font-size="12" font-weight="800" fill="#0F5132" ${ART_F}>Claimed by the people who run it</text>`),
+};
+// a row of the "what you get" list: a drawing beside a heading and a sentence, numbered when a picture below matches
+const artRow = (art, head, text, n = 0) => `<div class="acct-row"><div class="acct-row-art">${art}</div><div class="acct-row-text">${n ? `<i class="demo-n" aria-hidden="true">${n}</i>` : ''}<h3>${head}</h3><p>${text}</p></div></div>`;
+
 function accountPage(register = false) {
   // Two addresses. /register/ makes the case for an account: the two kinds of account and the form sit in the first
   // screen, beside the heading, and what an account gives you follows below as a row of pictures. /account/ is where
@@ -3516,10 +3578,12 @@ function accountPage(register = false) {
   // opens /register/ is sent on.
   const hero = register ? `    <h1>${T(`Create your free account`)}</h1>
     <p class="lede">${GROUPS && daysOff ? T(`Keep every plan you build, the school week, the days off and the summer, and see them together in one private calendar for the whole year. It takes about a minute, and there’s no password to remember.`) : T(`Save your school, your kids’ grades and your week, and share a week with a grandparent or a sitter. It takes about a minute, and there’s no password to remember.`)}</p>
-    <p class="lede hero-fine">${T(`Already have an account?`)} <a href="${link('account/', 1)}">${T(`Log in`)}</a></p>`
+    <p class="lede hero-fine">${T(`Already have an account?`)} <a href="${link('account/', 1)}">${T(`Log in`)}</a></p>
+    <div class="acct-hero-art">${artYearRibbon()}</div>`
     : `    <h1><span class="when-out">${T(`Log in to your account`)}</span><span class="when-in">${T(`Your account`)}</span></h1>
     <p class="lede when-out">${T(`Your school, your plans and your kids’ calendar for the year, on any device. There’s no password to remember.`)} ${T(`New here?`)} <a href="${link('register/', 1)}">${T(`Create a free account`)}</a></p>
-    <p class="lede when-in">${T(`This is where you change things: your name, email address and phone number, your school and grades, what you’re emailed about, what you follow, and who you share with.`)}</p>`;
+    <p class="lede when-in">${T(`This is where you change things: your name, email address and phone number, your school and grades, what you’re emailed about, what you follow, and who you share with.`)}</p>
+    <div class="acct-hero-art">${artYearRibbon()}</div>`;
   const page = `<div class="g-page" id="account"${register ? ' data-mode="register" data-clarity-mask="true"' : ''}></div>`;
   // the heading on the left, the form on the right: on /register/ the form starts there; on /account/ it moves up while signed out
   const heroGrid = `    <div class="acct-hero-text">
@@ -3539,58 +3603,51 @@ ${hero}
   <path d="M128 58C140 22 212 16 240 54" fill="none" stroke="#0F4D90" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round"/>
   <circle cx="184" cy="29" r="17" fill="#F3C613"/><path d="M176 29.5l5.5 5.5 10-11" fill="none" stroke="#2A2100" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`;
-  // the pictures beside each row: a week card, as on the one above, drawn by hand so each picture has its own
-  const F = 'font-family="Archivo, Arial, sans-serif"';
-  const DAYS = [['M', '#1F7A3A', 62], ['T', '#B4237A', 48], ['W', '#0E7C86', 70], ['T', '#6B3FA0', 40], ['F', '#C2410C', 56]];
-  const weekCard = (x, y, label, days = DAYS, w = 120) => `<g transform="translate(${x} ${y})"><rect width="${w}" height="152" rx="11" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/><path d="M0 11a11 11 0 0 1 11-11h${w - 22}a11 11 0 0 1 11 11v17H0z" fill="#0F4D90"/><text x="11" y="19" font-size="11" font-weight="800" fill="#FFFFFF" ${F}>${label}</text>${days.map(([d, c, len], i) => `<circle cx="17" cy="${44 + i * 21}" r="7.5" fill="#E3EEFA"/><text x="17" y="${47.4 + i * 21}" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" ${F}>${d}</text><rect x="31" y="${38 + i * 21}" width="${Math.min(len, w - 42)}" height="12" rx="6" fill="${c}"/>`).join('')}</g>`;
-  const chip = (x, y, w, text, yellow = false) => `<rect x="${x}" y="${y}" width="${w}" height="26" rx="13" fill="${yellow ? '#F3C613' : '#E3EEFA'}"/><text x="${x + w / 2}" y="${y + 17.5}" text-anchor="middle" font-size="11" font-weight="800" fill="${yellow ? '#2A2100' : '#0B2140'}" ${F}>${text}</text>`;
-  const svg = inner => `<svg viewBox="0 0 400 260" aria-hidden="true" focusable="false">${inner}</svg>`;
   // a month on the fridge door, held by a magnet, and the same month on a phone
-  const artFridge = svg(`
+  const artFridge = artBox(`
   <rect x="38" y="18" width="150" height="226" rx="16" class="art-frame"/><path d="M38 100h150" stroke="#0B2140" stroke-width="3"/>
   <rect x="166" y="40" width="7" height="34" rx="3.5" fill="#0B2140"/><rect x="166" y="124" width="7" height="60" rx="3.5" fill="#0B2140"/>
   <rect x="62" y="118" width="98" height="104" rx="6" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/>
-  <text x="70" y="134" font-size="9" font-weight="800" fill="#0B2140" ${F}>November</text>
+  <text x="70" y="134" font-size="9" font-weight="800" fill="#0B2140" ${ART_F}>November</text>
   ${[0, 1, 2, 3, 4].map(r => [0, 1, 2, 3, 4, 5, 6].map(c => `<rect x="${70 + c * 12}" y="${141 + r * 14}" width="10" height="10" rx="2" fill="${(r === 1 && c === 3) || (r === 3 && c === 4) ? '#F3C613' : (r === 2 && c === 1) ? '#0F4D90' : '#E3EEFA'}"/>`).join('')).join('')}
   <circle cx="111" cy="118" r="9" fill="#F3C613" stroke="#0B2140" stroke-width="2"/>
   <rect x="236" y="36" width="126" height="208" rx="20" class="art-frame"/><rect x="284" y="46" width="30" height="5" rx="2.5" fill="#0B2140"/>
-  <text x="252" y="76" font-size="11" font-weight="800" fill="#0B2140" ${F}>November</text>
+  <text x="252" y="76" font-size="11" font-weight="800" fill="#0B2140" ${ART_F}>November</text>
   ${[0, 1, 2, 3, 4].map(r => [0, 1, 2, 3, 4, 5, 6].map(c => `<rect x="${252 + c * 14}" y="${86 + r * 16}" width="12" height="12" rx="2.5" fill="${(r === 1 && c === 3) || (r === 3 && c === 4) ? '#F3C613' : (r === 2 && c === 1) ? '#0F4D90' : '#E3EEFA'}"/>`).join('')).join('')}
   <rect x="252" y="176" width="98" height="9" rx="4.5" class="art-line"/><rect x="252" y="194" width="72" height="9" rx="4.5" class="art-line"/><rect x="252" y="212" width="86" height="9" rx="4.5" class="art-line"/>`);
   // an email with the sign-up date, and the school it is for
-  const artRemind = svg(`
+  const artRemind = artBox(`
   <rect x="70" y="70" width="260" height="160" rx="16" class="art-frame"/>
   <path d="M70 86l130 92 130-92" fill="none" stroke="#0B2140" stroke-width="3" stroke-linejoin="round"/>
   <rect x="104" y="20" width="192" height="96" rx="12" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/>
-  <text x="120" y="46" font-size="12" font-weight="800" fill="#0B2140" ${F}>Sign-ups open Monday</text>
+  <text x="120" y="46" font-size="12" font-weight="800" fill="#0B2140" ${ART_F}>Sign-ups open Monday</text>
   <rect x="120" y="58" width="120" height="8" rx="4" class="art-line"/><rect x="120" y="74" width="92" height="8" rx="4" class="art-line"/>
-  ${chip(248, 62, 36, 'Nov 3', true)}
-  ${chip(96, 196, 92, 'Nebinger', true)}${chip(196, 196, 110, 'Chess Club')}
+  ${artChip(248, 62, 36, 'Nov 3', true)}
+  ${artChip(96, 196, 92, 'Nebinger', true)}${artChip(196, 196, 110, 'Chess Club')}
   <circle cx="330" cy="70" r="20" fill="#F3C613"/><path d="M330 58a8 8 0 0 0-8 8v6l-3 4h22l-3-4v-6a8 8 0 0 0-8-8zm-4 20a4 4 0 0 0 8 0z" fill="#2A2100"/>`);
   // one week, on two phones: yours and the person you share it with
-  const artShare = svg(`
+  const artShare = artBox(`
   <rect x="34" y="40" width="130" height="206" rx="20" class="art-frame"/><rect x="84" y="50" width="30" height="5" rx="2.5" fill="#0B2140"/>
-  ${weekCard(44, 66, 'Sam’s week', DAYS, 110)}
+  ${artWeek(44, 66, 'Sam’s week', ART_DAYS, 110)}
   <rect x="236" y="40" width="130" height="206" rx="20" class="art-frame"/><rect x="286" y="50" width="30" height="5" rx="2.5" fill="#0B2140"/>
-  ${weekCard(246, 66, 'Sam’s week', DAYS, 110)}
+  ${artWeek(246, 66, 'Sam’s week', ART_DAYS, 110)}
   <path d="M170 136h56" stroke="#0F4D90" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 7"/><path d="M216 128l12 8-12 8" fill="none" stroke="#0F4D90" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  ${chip(250, 10, 100, 'Grandma', true)}${chip(50, 10, 68, 'You')}`);
+  ${artChip(250, 10, 100, 'Grandma', true)}${artChip(50, 10, 68, 'You')}`);
   // three families' weeks side by side
-  const artGroup = svg(`
+  const artGroup = artBox(`
   <rect x="24" y="34" width="352" height="200" rx="16" class="art-frame"/>
-  ${weekCard(46, 60, 'Sam', [['M', '#1F7A3A', 50], ['T', '#B4237A', 36], ['W', '#0E7C86', 56], ['T', '#6B3FA0', 30], ['F', '#C2410C', 44]], 98)}
-  ${weekCard(151, 60, 'Rae', [['M', '#1F7A3A', 50], ['T', '#0E7C86', 44], ['W', '#0E7C86', 56], ['T', '#C2410C', 38], ['F', '#6B3FA0', 30]], 98)}
-  ${weekCard(256, 60, 'Zoe', [['M', '#B4237A', 40], ['T', '#B4237A', 36], ['W', '#1F7A3A', 52], ['T', '#6B3FA0', 30], ['F', '#C2410C', 44]], 98)}
-  ${chip(148, 220, 104, 'Invite only', true)}`);
-  const row = (art, head, text) => `<div class="acct-row"><div class="acct-row-art">${art}</div><div class="acct-row-text"><h3>${head}</h3><p>${text}</p></div></div>`;
+  ${artWeek(46, 60, 'Sam', [['M', '#1F7A3A', 50], ['T', '#B4237A', 36], ['W', '#0E7C86', 56], ['T', '#6B3FA0', 30], ['F', '#C2410C', 44]], 98)}
+  ${artWeek(151, 60, 'Rae', [['M', '#1F7A3A', 50], ['T', '#0E7C86', 44], ['W', '#0E7C86', 56], ['T', '#C2410C', 38], ['F', '#6B3FA0', 30]], 98)}
+  ${artWeek(256, 60, 'Zoe', [['M', '#B4237A', 40], ['T', '#B4237A', 36], ['W', '#1F7A3A', 52], ['T', '#6B3FA0', 30], ['F', '#C2410C', 44]], 98)}
+  ${artChip(148, 220, 104, 'Invite only', true)}`);
   const plan = GROUPS && daysOff ? [
-    row(`<div class="acct-art">${art}</div>`, T(`See the whole year in one calendar.`), T(`“My kids’ calendar” puts the school week, every day off, the camp weeks and each sign-up date in date order. Only you can open it.`)),
-    row(artFridge, T(`Put it on your phone.`), T(`One calendar file for the year that you can bring up to date, and a picture of any month for the fridge.`)),
-  ] : [row(`<div class="acct-art">${art}</div>`, T(`Keep your week.`), T(`Build it on your phone tonight, find it on your laptop tomorrow.`))];
+    artRow(`<div class="acct-art">${art}</div>`, T(`See the whole year in one calendar.`), T(`“My kids’ calendar” puts the school week, every day off, the camp weeks and each sign-up date in date order. Only you can open it.`)),
+    artRow(artFridge, T(`Put it on your phone.`), T(`One calendar file for the year that you can bring up to date, and a picture of any month for the fridge.`)),
+  ] : [artRow(`<div class="acct-art">${art}</div>`, T(`Keep your week.`), T(`Build it on your phone tonight, find it on your laptop tomorrow.`))];
   const miss = [
-    ALERTS ? row(artRemind, T(`Follow and save.`), T(`Follow a program, a camp or your school and its sign-up dates come by email. Save favorites to find them again.`)) : '',
-    row(artShare, T(`Share a week with one person.`), T(`A grandparent or a sitter signs in to see it, and you can take it back.`)),
-    GROUPS.pilot ? '' : row(artGroup, T(`Share with a small group.`), T(`A few families you invite by email see each other’s weeks. Nobody else can find the group or ask to join.`)),
+    ALERTS ? artRow(artRemind, T(`Follow and save.`), T(`Follow a program, a camp or your school and its sign-up dates come by email. Save favorites to find them again.`)) : '',
+    artRow(artShare, T(`Share a week with one person.`), T(`A grandparent or a sitter signs in to see it, and you can take it back.`)),
+    GROUPS.pilot ? '' : artRow(artGroup, T(`Share with a small group.`), T(`A few families you invite by email see each other’s weeks. Nobody else can find the group or ask to join.`)),
   ].filter(Boolean);
   const body = `<div ${groupsAttrs(1)} data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`Accounts need JavaScript turned on.`)}</p></noscript>${register ? '' : `
@@ -3649,9 +3706,6 @@ const CLAIM_GETS_ALL = () => [
   ...(GROUPS.photos ? [['photo', T(`Add a photo.`), T(`One picture of your space or an activity at the top of your listing.`)]] : []),
   ['claimed', T(`Show parents it’s kept up.`), T(`A “Claimed” mark tells them the listing is looked after by the people who run it.`)],
 ];
-const claimBenefits = () => `<ol class="benefits">
-${CLAIM_GETS().map(([, name, text], i) => `      <li><i class="demo-n" aria-hidden="true">${i + 1}</i><b>${name}</b> ${text}</li>`).join('\n')}
-    </ol>`;
 // A picture of a claimed listing, built from the same parts a real one uses. The program is invented, and says so.
 function claimDemo() {
   const at = Object.fromEntries(CLAIM_GETS().map(([k], i) => [k, `<i class="demo-n" aria-hidden="true">${i + 1}</i>`]));
@@ -3695,19 +3749,41 @@ function claimDemo() {
 }
 function directorsPage() {
   const L = claimListings();
+  // The page where a program claims its listing. Like the sign-up page: the heading and the search sit in the first
+  // screen, what claiming gets you follows as rows of drawings (numbered like the example listing under them), then
+  // premium, how it works, good to know, and a closing band back to the search. Signed in with a listing, the
+  // search moves down the page and the listing's own tools take its place (groups.js).
   const hero = `    <h1>${T(`Run a program or camp? Claim your listing.`)}</h1>
-    <p class="lede">${T(`Find your program below and claim it with your work email. Then keep its dates, costs and hours up to date yourself. It’s free, and it takes a couple of minutes.`)}</p>`;
+    <p class="lede">${T(`Find your program below and claim it with your work email. Then keep its dates, costs and hours up to date yourself. It’s free, and it takes a couple of minutes.`)}</p>
+    <div class="acct-hero-art">${artListingKept()}</div>`;
+  const page = `<div class="g-page" id="claims" data-clarity-mask="true"${GROUPS.photos ? ' data-photos="1"' : ''}${GROUPS.premium !== 'off' ? ` data-qr="${link('assets/qr.js', 1)}${stamp('src/qr.js')}"` : ''}${PM_LISTED ? ` data-pm-from="${PM_PRICE.month}"` : ''}></div>`;
+  const heroGrid = `    <div class="acct-hero-text">
+${hero}
+    </div>
+    <div class="acct-hero-form" data-clarity-mask="true">${page}</div>`;
+  const gets = CLAIM_GETS();
+  const rows = gets.map(([k, name, text], i) => artRow(ART_CLAIM[k](), name, text, i + 1));
+  const keep = rows.filter((r, i) => ['dates', 'space', 'photo'].includes(gets[i][0])), see = rows.filter((r, i) => ['numbers', 'claimed'].includes(gets[i][0]));
   const body = `<div ${groupsAttrs(1)} style="display:contents">
   <noscript><p class="ask">${T(`Claiming a listing needs JavaScript turned on.`)}</p></noscript>
-  <div class="g-page" id="claims" data-clarity-mask="true"${GROUPS.photos ? ' data-photos="1"' : ''}${GROUPS.premium !== 'off' ? ` data-qr="${link('assets/qr.js', 1)}${stamp('src/qr.js')}"` : ''}${PM_LISTED ? ` data-pm-from="${PM_PRICE.month}"` : ''}></div>
+  <div class="acct-main"></div>
   <script type="application/json" id="claims-data">${JSON.stringify(Object.entries(L).map(([k, v]) => [k, v.n, v.d, v.m === 'match' ? 1 : 0, ...(v.h ? [1] : [])])).replace(/</g, '\\u003c')}</script>
-  <section class="section" id="why">
-    <h2>${T(`What claiming gets you`)}</h2>
-    <p>${T(`Your listing is already on the site, and parents are already reading it. Claim it and it becomes yours to keep right.`)}</p>
-    <div class="claim-show">
-      ${claimDemo()}
-      ${claimBenefits()}
+  <section class="acct-why" id="why" aria-labelledby="why-h">
+    <h2 id="why-h">${T(`What claiming gets you`)}</h2>
+    <p class="acct-why-lede">${T(`Your listing is already on the site, and parents are already reading it. Claim it and it becomes yours to keep right.`)}</p>
+    <div class="acct-group">
+      <h2 class="acct-group-h">${T(`Keep it right`)}</h2>
+      ${keep.join('\n      ')}
     </div>
+    <div class="acct-group">
+      <h2 class="acct-group-h">${T(`See it working`)}</h2>
+      ${see.join('\n      ')}
+    </div>
+  </section>
+  <section class="section" id="see">
+    <h2>${T(`See it on a listing`)}</h2>
+    <p>${T(`The numbers on the picture match the list above.`)}</p>
+    ${claimDemo()}
   </section>${PM_LISTED ? `
   <section class="section pm-cta" id="premium-cta">
     <div class="pm-cta-box">
@@ -3738,10 +3814,15 @@ function directorsPage() {
       <li>${T(`Listings are free and stay free. Nobody pays to be listed or to be ranked higher.`)}${PM_LISTED ? ` ${T(`Want more on yours?`)} <a href="${link('premium/', 1)}" data-track="premium_from_managers">${T(`A premium listing adds photos, your own words and offers.`)}</a>` : GROUPS.photos ? '' : ' ' + T(`Paid extras, such as a photo at the top of your listing, are planned for later.`)}</li>
       <li>${T(`Not on the site yet?`)} <a href="${link('suggest/', 1)}">${T(`Suggest your program`)}</a> ${T(`or`)} <a href="${link('suggest/', 1)}?kind=camp">${T(`your camp`)}</a>${T(`, with its website, and claim it once it’s up.`)}</li>
     </ul>
-    <p><a href="${link('privacy/', 1)}#managers">${T(`What we keep about a claim is on the privacy page.`)}</a></p>
+  </section>
+  <section class="acct-close">
+    <h2>${T(`Claim your listing`)}</h2>
+    <p>${T(`It’s free, it takes a couple of minutes, and the listing stays yours to keep right.`)}</p>
+    <p class="actions"><a class="btn primary big" href="#claims">${T(`Find your listing`)}</a></p>
+    <p class="hint"><a href="${link('privacy/', 1)}#managers">${T(`What we keep about a claim is on the privacy page.`)}</a></p>
   </section>
 </div>`;
-  return layout({ title: 'For program managers: find and claim your listing', description: `Run an after-school program or camp in Philadelphia? Find your ${cfg.siteName} listing, claim it with your work email, and keep its dates, costs and hours up to date. Free.`, pathName: 'managers/', depth: 1, current: null, hero, body, scripts: groupsScript(1) });
+  return layout({ title: 'For program managers: find and claim your listing', description: `Run an after-school program or camp in Philadelphia? Find your ${cfg.siteName} listing, claim it with your work email, and keep its dates, costs and hours up to date. Free.`, pathName: 'managers/', depth: 1, current: null, theme: 'acct-head', hero: heroGrid, body, scripts: groupsScript(1) });
 }
 
 // The page where a program signs a claimed listing up for premium (/premium/). While premium is in "preview" it is
