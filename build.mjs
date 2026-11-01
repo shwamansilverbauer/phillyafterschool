@@ -992,6 +992,11 @@ function listRow(kind, x, depth, shaped = null) {
 // The way into the planner that goes with a list, under its heading: everyone sees it.
 const heroGo = (depth, href, label, more = '') => `
     <p class="hero-go"><a class="btn primary big" href="${href}">${label}</a>${more}</p>`;
+// At the foot of a list: where to put what was found. One line and a button or two, so the hero stays bare.
+const planLine = (text, gos) => `<section class="section plan-line">
+  <p>${text}</p>
+  <p class="actions">${gos.map(([href, label], i) => `<a class="btn${i ? '' : ' primary'}" href="${href}">${label}</a>`).join('')}</p>
+</section>`;
 
 // One filter bar for every page that lists programs: search, program type, free or paid, neighborhood, and (on a school
 // page) how the program gets your child. The grade row sits in a strip that stays on screen while you scroll.
@@ -1598,6 +1603,7 @@ function programsPage() {
 ${filterBar({ list, depth: 1, show: { day: true }, near: true, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
 ${noMatch(1)}
 ${sections}
+${planLine(T(`Found one? Put it on the week and see how the afternoons line up.`), [[link('board/', 1), T(`Build your week`)]])}
 <section class="section">
   <p>${T(`A program is listed under the first of its types; its other types are on its row. Clubs a school runs for its own students aren’t in this list. They’re on that school’s page.`)}</p>
   <p>${T(`To see only what works with your child’s school,`)} <a href="${link('schools/', 1)}">${T(`start from your school.`)}</a> ${T(`Or see what’s close to home:`)} <a href="${link('neighborhoods/', 1)}">${T(`browse by neighborhood.`)}</a></p>
@@ -3000,6 +3006,7 @@ ${pageNav(`<div class="tabs view-switch page-views" id="off-page-views" role="gr
   ${filterBar({ list: campPrograms.map(p => shapeFor('off', p)), depth: D, show: { grade: false, age: true, day: false }, searchLabel: `Looking for a particular program?`, placeholder: 'A name or a neighborhood, or try art, chess…' }).replace('data-filters', 'data-filters data-noschool')}
   ${noMatch(D)}
   ${dc.sections}
+  ${planLine(T(`Pick a camp, or a day at home, for every day off this year.`), [[link(offPath, D), T(`Plan the days off`)]])}
 </section>
 <section class="section" id="days" data-pane="days">
   <h2>${T(`Days off still to come`)}</h2>
@@ -5660,6 +5667,7 @@ ${filterBar({ list: shaped, depth: D, show: { grade: false, age: true }, near: t
 <p class="hint">${T(`Grades here are worked out from each camp’s ages, so check the ages on the camp’s page. Each camp has its own page with everything it posts.`)}</p>
 ${noMatch(D)}
 ${sc.sections}
+${planLine(T(`Line up a camp for every week of the summer, or see which camps run in each week first.`), [[link(summerPath, D), T(`Plan your summer`)], [link(weeksPath, D), T(`Which camps run each week`)]])}
 ${todo.length ? `<section class="section">
   <h2>${T(`Camps we haven’t been able to read yet`)}</h2>
   <p>${T(`These run day camps in the city too. Their details go up once we’ve read them on the camp’s own site.`)}</p>
@@ -5702,6 +5710,7 @@ ${filterBar({ list: weekendPrograms.map(shape), depth: D, show: { grade: false, 
 <p class="hint">${T(`A weekend class has no school pickup, so this list goes by where the class is. Any child can sign up, whichever school they go to.`)}</p>
 ${noMatch(D)}
 ${wk.sections}
+${planLine(T(`A weekend class goes on the week too, next to the weekday afternoons.`), [[link('board/', D), T(`Build your week`)]])}
 <section class="section">
   <p>${T(`This covers the programs already on this site, plus weekend-only places from a first sweep of the city. It isn’t every class in Philadelphia, and some listed programs run weekend classes that their sites don’t spell out by day, so ask.`)} ${T(`Know a weekend class that should be here?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
   <p class="hint">${T(`Weekend terms start and fill on their own dates, so check with the provider before you count on a class.`)}</p>

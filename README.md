@@ -1012,7 +1012,8 @@ page can name its own with `shareImage` in `layout()`.
 
 The four kind pages (`/programs/`, `/weekends/`, `/day-camps/`, `/summer-camps/`) keep their hero to the title, the
 line and the drawing: no back link, button, facts or pill row, since the filters and the jump strip sit right under
-it. The after-school page's drawing is the street with `showStreet: 'out'` (`street('out')`): school's out, five
+it. The way to the planner (and, for summer, the weeks chart) is a line at the foot of the list (`planLine()`,
+`.plan-line`), so nothing pulls a reader off the page before they have looked. The after-school page's drawing is the street with `showStreet: 'out'` (`street('out')`): school's out, five
 kids come through the door one at a time, hop along the sidewalk to the bus door and climb in, and the bus leaves;
 it plays once, and not at all for someone who asked for reduced motion. The overview pages (`/all-programs/`,
 `/schedules/`) are cards with an icon, a kicker, a heading, a line and buttons; no bullet lists and no program
