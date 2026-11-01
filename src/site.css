@@ -86,9 +86,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .street .cloud.c1{opacity:var(--cloud-1)}
 .street .cloud.c2{opacity:var(--cloud-2)}
 .street .bus{transform:translateX(150px)}
+.street .kid{opacity:0}   /* school's out: the kids show only while the scene plays */
 @media (prefers-reduced-motion: no-preference){
   .street.go .bus{animation:drive 4.5s cubic-bezier(.45,0,.2,1) .5s both}
   @keyframes drive{from{transform:translateX(0)}to{transform:translateX(150px)}}
+  /* school's out: each kid comes through the door, hops along the sidewalk to the bus door and climbs in; then the bus goes */
+  .street.out .kid{animation:kid-run 2.3s cubic-bezier(.35,0,.3,1) var(--d) both}
+  .street.out .kid .hop{animation:kid-hop .3s ease-in-out var(--d) 8 alternate}
+  .street.out .bus{animation:leave 3.2s cubic-bezier(.55,0,.7,.6) 5.4s both}
+  @keyframes kid-run{0%{transform:translateX(0);opacity:0}7%{opacity:1}88%{opacity:1}100%{transform:translateX(218px);opacity:0}}
+  @keyframes kid-hop{from{transform:translateY(0)}to{transform:translateY(-4px)}}
+  @keyframes leave{from{transform:translateX(150px)}to{transform:translateX(1200px)}}
 }
 
 /* ---------- page body ---------- */

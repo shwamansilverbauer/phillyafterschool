@@ -565,7 +565,7 @@ function summerScene() {
   return `<svg class="street summerscene" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${clouds}${sun}${far}<path class="grass" d="M0,${G - 6} Q500,${G - 18} 1000,${G - 5} T2000,${G - 9} V140 H0Z"/>${trees}${tents}${flag}<path class="grass2" d="M0,${G + 3} Q520,${G - 3} 1000,${G + 1} T2000,${G} V140 H0Z"/>${spray}${kids}</svg>`;
 }
 
-function street(animate) {
+function street(mode) {   // 'go': the bus drives in; 'parked': still; 'out': school's out, the kids board and the bus leaves
   let seed = 11;
   const rnd = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
   const G = 128; // ground line
@@ -591,7 +591,10 @@ function street(animate) {
   for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; rays += `<line x1="${(ux + Math.cos(a) * 26).toFixed(1)}" y1="${(uy + Math.sin(a) * 26).toFixed(1)}" x2="${(ux + Math.cos(a) * 33).toFixed(1)}" y2="${(uy + Math.sin(a) * 33).toFixed(1)}"/>`; }
   const cloud = (px, py, k, sc) => `<g class="cloud c${k}" transform="translate(${px},${py}) scale(${sc})"><ellipse cx="0" cy="0" rx="22" ry="8"/><ellipse cx="-12" cy="-6" rx="11" ry="8"/><ellipse cx="8" cy="-8" rx="13" ry="10"/></g>`;
   const sky = `<g class="sky"><g class="sunwrap"><g class="rays" style="transform-origin:${ux}px ${uy}px">${rays}</g><circle class="sun" cx="${ux}" cy="${uy}" r="21"/></g><g class="drift d1">${cloud(1128, 20, 1, .85)}${cloud(590, 22, 1, 1)}${cloud(1700, 18, 1, .9)}</g><g class="drift d2">${cloud(1380, 26, 2, .7)}${cloud(330, 24, 2, .75)}${cloud(1900, 30, 2, .7)}</g></g>`;
-  return `<svg class="street${animate ? ' go' : ''}" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${sky}${run(-10, sx)}${school}${run(sx + sw, 2010)}<rect class="st" x="0" y="${G}" width="2000" height="12"/><g class="bus"><g transform="translate(968,${G - 22})">${bus}</g></g></svg>`;
+  // school's out: five kids come through the door one by one, hop along the sidewalk to the bus door and climb in
+  const KID = [['#F2C9A5', '#6B3FA0', '#F3C613'], ['#8D5524', '#2C8444', '#CC3000'], ['#E0AC69', '#CC3000', '#1763B8'], ['#5C3A21', '#1763B8', '#6B3FA0'], ['#C68642', '#C8541E', '#2C8444']];
+  const kids = mode === 'out' ? `<g transform="translate(${sx + 72},${G}) scale(1.25)">${KID.map(([skin, shirt, pack], i) => `<g class="kid" style="--d:${(0.5 + i * 0.75).toFixed(2)}s"><g class="hop"><rect class="kp" x="-9" y="-13" width="5" height="8" rx="2" fill="${pack}"/><rect x="-5.5" y="-14" width="11" height="12" rx="3.5" fill="${shirt}"/><circle cx="0" cy="-18.5" r="4.6" fill="${skin}"/><rect x="-4.5" y="-3" width="3.4" height="4" rx="1" fill="#0B2140"/><rect x="1.1" y="-3" width="3.4" height="4" rx="1" fill="#0B2140"/></g></g>`).join('')}</g>` : '';
+  return `<svg class="street${mode === 'go' ? ' go' : mode === 'out' ? ' out' : ''}" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${sky}${run(-10, sx)}${school}${run(sx + sw, 2010)}<rect class="st" x="0" y="${G}" width="2000" height="12"/>${kids}<g class="bus"><g transform="translate(968,${G - 22})">${bus}</g></g></svg>`;
 }
 
 function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false, first = '', theme = '', shareImage = null, shareText = '', quiet = false, next = '' }) {
@@ -660,7 +663,7 @@ ${topbar}<header class="band sitebar${theme ? ' ' + theme : ''}">
   <div class="in hero">
 ${hero}
   </div>
-  ${showStreet === 'dayoff' ? dayScene() : showStreet === 'weekend' ? weekendScene() : showStreet === 'summer' ? summerScene() : showStreet ? street(showStreet === 'go') : ''}
+  ${showStreet === 'dayoff' ? dayScene() : showStreet === 'weekend' ? weekendScene() : showStreet === 'summer' ? summerScene() : showStreet ? street(showStreet) : ''}
 </div>
 <main class="wrap${roomy ? ' roomy' : ''}">
 ${body}
@@ -1588,11 +1591,9 @@ ${schoolRows}
 // inside each, with a strip under the menu bar that jumps between the sections. The filters narrow the lot.
 function programsPage() {
   const list = [...citywide].sort((a, b) => a.name.localeCompare(b.name));
-  const { pills, sections } = typeSections('after', list, 1);
-  const hero = `    <p class="where"><a href="${link('all-programs/', 1)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
-    <h1>${T(`After-school programs`)}</h1>
-    <p class="lede">${T(`All {n} after-school programs on this site, across every school, sorted by what they are. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.`, { n: list.length })}</p>${heroGo(1, link('board/', 1), T(`Plan your week`))}
-    ${pills}`;
+  const { sections } = typeSections('after', list, 1);
+  const hero = `    <h1>${T(`After-school programs`)}</h1>
+    <p class="lede">${T(`All {n} after-school programs on this site, across every school, sorted by what they are. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.`, { n: list.length })}</p>`;
   const body = `${pageNav(jumpNav())}
 ${filterBar({ list, depth: 1, show: { day: true }, near: true, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
 ${noMatch(1)}
@@ -1604,7 +1605,7 @@ ${sections}
   return layout({
     title: 'All after-school programs in Philadelphia, by type',
     description: `All ${citywide.length} after-school programs listed on ${cfg.siteName}, sorted by what they are: aftercare, music, art, sports and more, with hours, cost, pickup and reviews.`,
-    pathName: 'programs/', depth: 1, current: null, hero, body,
+    pathName: 'programs/', depth: 1, current: null, hero, body, showStreet: 'out',
     jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: list.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
   });
 }
@@ -1619,7 +1620,7 @@ const KIND_LIST = () => ({ after: 'programs/', weekend: weekendPath, off: dayCam
 const ofKind = k => k === 'after' ? [...citywide].sort((a, b) => a.name.localeCompare(b.name)) : k === 'weekend' ? weekendPrograms : k === 'off' ? campPrograms : [...summerCamps].sort((a, b) => a.name.localeCompare(b.name));
 const typeCount = t => new Set(KINDS.flatMap(k => ofKind(k).filter(p => p.types.includes(t.id)).map(p => p.id))).size;   // distinct listings, over every kind
 const liveTypes = () => TYPES.filter(t => typeCount(t));
-const typeChips = (depth, skip) => liveTypes().filter(t => t.id !== skip).map(t => `<a class="tchip" style="--tc:${t.color}" href="${link('types/' + t.id + '/', depth)}">${typeIcon(t)}<span>${esc(t.label)}</span><b>${typeCount(t)}</b></a>`).join('');
+const typeChips = (depth, skip) => liveTypes().filter(t => t.id !== skip).map(t => `<a class="tchip" style="--tc:${t.color}" href="${link('types/' + t.id + '/', depth)}">${typeIcon(t)}<span>${esc(t.label)}</span></a>`).join('');
 // The sections of a mixed list: one per kind that has anything, each with a heading, a count and its rows. The rows
 // are the same ones the kind's own list uses, so a listing that fills two parts of the year is in two sections.
 const kindSections = (byKind, depth, { h = 'h2', lead = {} } = {}) => KINDS.filter(k => byKind[k]?.length).map(k => `<section class="section kind-list kind-${k}" id="list-${k}" data-group data-jump-to="${KIND_NAME[k]}">
@@ -1666,8 +1667,7 @@ function typePage(t) {
   const schoolClubs = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).flatMap(s => forSchool(s).filter(p => p.clubs && p.schools[s.id].relation === 'onsite').map(p => ({ s, p, clubs: clubsOfType(p, t.id) })).filter(x => x.clubs.length));
   const hero = `    <p class="where"><a href="${link('types/', D)}">${T(`All types`)}</a></p>
     <h1>${esc(t.label)}</h1>
-    <p class="lede">${T(`Everything on this site in this group, whatever part of the year it fills. Pick a kind, a grade or a neighborhood to narrow it down.`)}</p>
-    <p class="runs"><span class="runs-h">${T(`Here`)}</span> ${kindsHere.map(k => `<a class="pill kind kind-${k}" href="#list-${k}">${esc(KIND_NAME[k])} (${byKind[k].length})</a>`).join(' ')}</p>`;
+    <p class="lede">${T(`Everything on this site in this group, whatever part of the year it fills. Pick a kind, a grade or a neighborhood to narrow it down.`)}</p>`;
   const body = `${pageNav(jumpNav())}
 ${filterBar({ list: shapedAll(byKind), depth: D, show: { type: false, age: true } }).replace('data-filters', 'data-filters data-noun="listing" data-nouns="listings"')}
 ${noMatch(D)}
@@ -1708,7 +1708,6 @@ function byDayPage() {
   const onDay = d => d === 'sat' || d === 'sun' ? byKind.weekend.filter(p => p.weekend.days.includes(d)).length : byKind.after.filter(p => !p.days || p.days.includes(d)).length;
   const hero = `    <h1>${T(`What runs on which day`)}</h1>
     <p class="lede">${T(`Weekday after-school programs and Saturday and Sunday classes, together. Pick a day to see what runs then, and a grade to see what your child can join.`)}</p>
-    <p class="runs"><span class="runs-h">${T(`Here`)}</span> <a class="pill kind kind-after" href="#list-after">${esc(KIND_NAME.after)} (${byKind.after.length})</a> <a class="pill kind kind-weekend" href="#list-weekend">${esc(KIND_NAME.weekend)} (${byKind.weekend.length})</a></p>
     <div class="facts">
       ${[...WEEK, 'sat', 'sun'].map(d => `<span><a href="?day=${d}">${DAY_NAME[d].slice(0, 3)}</a> <b>${onDay(d)}</b></span>`).join('\n      ')}
     </div>`;
@@ -2053,10 +2052,10 @@ function homePage() {
   const go = (href, label, hint, icon) => `<a class="start-go" href="${href}"><span class="start-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="${ICON[icon]}"/></svg></span><span><b>${label}</b>${hint ? `<small>${hint}</small>` : ''}</span></a>`;
   // When do you need coverage? One tile for each part of a family's calendar, each to that kind's own list.
   const when = [
-    [link('programs/', 0), T(`After school`), T(`{n} programs: at the school, picking up at dismissal, or close by.`, { n: citywide.length }), '#1763B8', 'M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zM5 9.5h14V19H5zm2 2.5v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2z'],
-    daysOff ? [link(dayCampsPath, 0), T(`Days off`), T(`{n} programs run camps on the days school is closed.`, { n: campPrograms.length }), '#B88A00', 'M12 3 1.5 20h21zm0 7 2.6 8H9.4z'] : null,
-    weekendPrograms.length ? [link(weekendPath, 0), T(`Weekends`), T(`Saturday and Sunday classes at {n} places.`, { n: weekendPrograms.length }), '#6B3FA0', 'M12 2 9.5 8.5 2.5 9.3l5.2 4.8L6.2 21 12 17.4l5.8 3.6-1.5-6.9 5.2-4.8-7-.8z'] : null,
-    summerCamps.length ? [link(campsPath, 0), T(`Summer`), T(`{n} day camps, with a planner for the summer week by week.`, { n: summerCamps.length }), '#2C8444', 'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM11 1h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8L7 8.4zm11.4 11.4 1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4 7 15.6l1.4 1.4-2.8 2.8zM15.6 7l2.8-2.8 1.4 1.4L17 8.4z'] : null,
+    [link('programs/', 0), T(`After school`), T(`At the school, picking up at dismissal, or close by.`), '#1763B8', 'M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zM5 9.5h14V19H5zm2 2.5v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2z'],
+    daysOff ? [link(dayCampsPath, 0), T(`Days off`), T(`Camps on the days school is closed.`), '#B88A00', 'M12 3 1.5 20h21zm0 7 2.6 8H9.4z'] : null,
+    weekendPrograms.length ? [link(weekendPath, 0), T(`Weekends`), T(`Saturday and Sunday classes across the city.`), '#6B3FA0', 'M12 2 9.5 8.5 2.5 9.3l5.2 4.8L6.2 21 12 17.4l5.8 3.6-1.5-6.9 5.2-4.8-7-.8z'] : null,
+    summerCamps.length ? [link(campsPath, 0), T(`Summer`), T(`Day camps, with a planner for the summer week by week.`), '#2C8444', 'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM11 1h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8L7 8.4zm11.4 11.4 1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4 7 15.6l1.4 1.4-2.8 2.8zM15.6 7l2.8-2.8 1.4 1.4L17 8.4z'] : null,
   ].filter(Boolean);
   const body = `${nextOffBar(0)}
 <section class="section" id="start">
@@ -2165,7 +2164,6 @@ function neighborhoodPage(h) {
   const hero = `    <p class="where"><a href="${link('neighborhoods/', D)}">${T(`All neighborhoods`)}</a></p>
     <h1>${T(`{name}: after school, weekends and camps`, { name: h.name })}</h1>
     <p class="lede">${T(`The schools in {name}, and everything listed here or coming to pick up: after-school programs, weekend classes, day camps and summer camps.`, { name: h.name })}</p>
-    <p class="runs"><span class="runs-h">${T(`Here`)}</span> ${kindsHere.map(k => `<a class="pill kind kind-${k}" href="#list-${k}">${esc(KIND_NAME[k])} (${byKind[k].length})</a>`).join(' ')}</p>
     <div class="facts">
       ${h.schools.length ? `<span><b>${h.schools.length}</b> ${h.schools.length === 1 ? 'school' : 'schools'}</span>` : ''}
       <span><b>${based.length}</b> ${based.length === 1 ? 'program' : 'programs'} based here</span>
@@ -2990,11 +2988,8 @@ function dayCampsPage() {
   const D = 1;
   const { noDates } = daysOffBits(D, 'page');
   const dc = typeSections('off', campPrograms, D);
-  const hero = `    <p class="where"><a href="${link('all-programs/', D)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
-    <h1>${T(`School’s closed. What now?`)}</h1>
-    <p class="lede">${T(`Who runs a camp or a full day when district schools are closed, by neighborhood, and every day off this year.`)}</p>${heroGo(D, link(offPath, D), T(`Plan the days off`))}
-    ${offFacts()}
-    ${dc.pills}`;
+  const hero = `    <h1>${T(`School’s closed. What now?`)}</h1>
+    <p class="lede">${T(`Who runs a camp or a full day when district schools are closed, by neighborhood, and every day off this year.`)}</p>`;
   const body = `<div style="display:contents">
 ${pageNav(`<div class="tabs view-switch page-views" id="off-page-views" role="group" aria-label="Programs or days" data-views="who">
   <button type="button" class="tab vs" data-view="who" aria-pressed="true">${T(`Programs`)}</button><button type="button" class="tab vs" data-view="days" aria-pressed="false">${T(`The days`)}</button>
@@ -3544,15 +3539,6 @@ function accountPage(register = false) {
       <p class="hint">${T(`Run a program or camp?`)} <a href="${link('managers/', 1)}">${T(`Claim your listing`)}</a>${T(`. It’s the same account.`)}</p>
     </section>
   </div>
-  <section class="notes">
-    <h2>${T(`What an account keeps, and who sees it`)}</h2>
-    <ul>
-      <li>${T(`Your profile keeps the plans you make: a child’s first name with their week, days off and summer, and your school. No last names, addresses, notes or photos.`)}</li>
-      <li>${T(`A shared week opens only for the email address you sent it to, once that person has signed in. It can’t be searched for, and its link shows nothing to anyone else.`)}</li>
-      <li>${T(`You can take a week back, stop sharing, or delete your account at any time. Shared weeks delete themselves when the school year ends.`)}</li>
-    </ul>
-    <p><a href="${link('privacy/', 1)}#groups">${T(`The full details are on the privacy page.`)}</a></p>
-  </section>
   <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, ages: AGES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })), hoods: accountHoods(), news: NEWS.slice(0, 5) }).replace(/</g, '\\u003c')}</script>
 </div>`;
   return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to keep your week, days-off and summer plans, and see the whole year in one private calendar.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero, body, noindex: true, quiet: !register, scripts: groupsScript(1) });
@@ -5153,7 +5139,6 @@ function schedulesPage() {
       ${art(artKey)}
       <div class="plan-head">${icon(k)}<div><p class="kicker">${kicker}</p><h2>${name}</h2></div></div>
       <p>${text}</p>
-      <ul class="plan-points">${points.map(x => `<li>${x}</li>`).join('')}</ul>
       <p class="plan-go">${cta}</p>
     </article>`;
   const btn = (href, label, what) => `<a class="btn primary" href="${href}">${label}</a>`;
@@ -5665,15 +5650,8 @@ function summerCampsPage() {
   // On the list each camp is one row: what it is and the handful of facts people sort by. Its own page has the rest.
   const sc = typeSections('summer', list, D, shapeCamp);
   const todo = campsFile.todo || [];
-  const hero = `    <p class="where"><a href="${link('all-programs/', D)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
-    <h1>${T(`Summer camps in Philadelphia`)}</h1>
-    <p class="lede">${T(`Day camps inside the city, with the ages, weeks, hours and prices each camp posts on its own site.`)}</p>${heroGo(D, link(summerPath, D), T(`Plan your summer`), ` <a class="btn big" href="${link(weeksPath, D)}">${T(`Which camps run each week`)}</a>`)}
-    <div class="facts">
-      <span><b>${list.length}</b> camps</span>
-      <span><b>${ahead}</b> already showing ${next}</span>
-      <span>Checked <b>${longDate(campsFile.checked)}</b></span>
-    </div>
-    ${sc.pills}`;
+  const hero = `    <h1>${T(`Summer camps in Philadelphia`)}</h1>
+    <p class="lede">${T(`Day camps inside the city, with the ages, weeks, hours and prices each camp posts on its own site.`)}</p>`;
   const body = `${pageNav(jumpNav())}
 <section class="section">
   <p class="flag camp-guide"><b>${T(`Most of what’s here is from summer {year}, shown as a guide.`, { year: base })}</b> ${T(`Camps usually post next summer between December and March. Each listing changes to {year} when its camp posts dates and prices, and says so on its card.`, { year: next })}${ALERTS ? ' ' + T(`Waiting on one camp? Its page has a box to be emailed when it posts.`) : ''}</p>
@@ -5717,15 +5695,8 @@ function weekendPage() {
   const D = 1;
   const shape = p => ({ ...shapeFor('weekend', p), neighborhoods: weekendAreas(p) });   // what the filter bar sees: parts of the city, not neighborhoods
   const wk = typeSections('weekend', weekendPrograms, D, shape);
-  const hero = `    <p class="where"><a href="${link('all-programs/', D)}"><span aria-hidden="true">←</span> ${T(`Back to all programs`)}</a></p>
-    <h1>${T(`Saturday and Sunday classes`)}</h1>
-    <p class="lede">${T(`Weekend classes for kids across the city: what runs, on which day, and where. Open one for its term, times and cost.`)}</p>${heroGo(D, link('board/', D), T(`Plan your week`))}
-    <div class="facts">
-      <span><b>${weekendPrograms.length}</b> places with weekend classes</span>
-      <span><b>${weekendPrograms.filter(p => p.weekend.days.includes('sun')).length}</b> on Sundays too</span>
-      <span><b>${new Set(weekendPrograms.flatMap(programHoods)).size}</b> neighborhoods</span>
-    </div>
-    ${wk.pills}`;
+  const hero = `    <h1>${T(`Saturday and Sunday classes`)}</h1>
+    <p class="lede">${T(`Weekend classes for kids across the city: what runs, on which day, and where. Open one for its term, times and cost.`)}</p>`;
   const body = `${pageNav(jumpNav())}
 ${filterBar({ list: weekendPrograms.map(shape), depth: D, show: { grade: false, age: true, cost: false, day: false }, near: true, searchLabel: `Looking for a particular class?`, placeholder: 'A name or a neighborhood, or try piano, acting…' }).replace('data-filters', 'data-filters data-noschool')}
 <p class="hint">${T(`A weekend class has no school pickup, so this list goes by where the class is. Any child can sign up, whichever school they go to.`)}</p>
@@ -5757,44 +5728,34 @@ function allProgramsPage() {
     sun: 'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM11 1h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.800L7 8.400zm11.400 11.400 1.400-1.400 2.800 2.800-1.400 1.400zM4.200 18.400 7 15.600l1.400 1.400-2.800 2.800zM15.600 7l2.800-2.800 1.400 1.400L17 8.400z',
   };
   const icon = k => `<span class="plan-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="${ICON[k]}"/></svg></span>`;
-  const card = ({ k, id, color, n, noun, name, text, points, go }) => `<article class="plan-card kind-card" id="${id}" data-kind="${id}" data-n="${n}" style="--tc:${color}">
-      <div class="plan-head">${icon(k)}<div><p class="kicker"><b class="kind-n">${n}</b> ${noun}</p><h2>${name}</h2></div></div>
+  const card = ({ k, id, color, kicker, name, text, go }) => `<article class="plan-card kind-card" id="${id}" data-kind="${id}" style="--tc:${color}">
+      <div class="plan-head">${icon(k)}<div><p class="kicker">${kicker}</p><h2>${name}</h2></div></div>
       <p>${text}</p>
-      <ul class="plan-points">${points.filter(Boolean).map(x => `<li>${x}</li>`).join('')}</ul>
       <p class="plan-go kind-go">${go.filter(Boolean).map(([href, label], i) => `<a class="btn${i ? '' : ' primary'}" href="${href}">${label}</a>`).join('')}</p>
     </article>`;
-  const sat = weekendPrograms.filter(p => p.weekend.days.includes('sat')).length, sun = weekendPrograms.filter(p => p.weekend.days.includes('sun')).length;
   const daysLeft = offDays.reduce((n, d) => n + d.dates.filter(x => x >= TODAY).length, 0);
   const nextDay = offDays.flatMap(d => d.dates.filter(x => x >= TODAY).map(x => ({ x, name: d.name }))).sort((a, b) => a.x.localeCompare(b.x))[0];
   const weeks = summerCamps.length ? summerPlan.weeks.length : 0;
   const kinds = [
-    { k: 'bell', id: 'after-school', color: '#1763B8', n: citywide.length, noun: T(`programs`), name: T(`After-school programs`), ld: 'programs/',
+    { k: 'bell', id: 'after-school', color: '#1763B8', kicker: T(`Monday to Friday`), name: T(`After-school programs`), ld: 'programs/',
       text: T(`Weekday afternoons once the bell rings: aftercare, music, art, sports, chess and more.`),
-      points: [T(`See what’s at your child’s school, what picks up from it and what’s nearby`), T(`Narrow the list by type, grade, neighborhood or day of the week`), T(`Hours, cost, pickup and how to register, from each program’s own website`)],
       go: [[link('programs/', D), T(`See all {n}, A to Z`, { n: citywide.length })], [link('schools/', D), T(`Start from your school`)], [link('board/', D), T(`Build your week`)]] },
-    weekendPrograms.length ? { k: 'star', id: 'weekends', color: '#6B3FA0', n: weekendPrograms.length, noun: T(`places`), name: T(`Weekend classes`), ld: weekendPath,
+    weekendPrograms.length ? { k: 'star', id: 'weekends', color: '#6B3FA0', kicker: T(`Saturdays and Sundays`), name: T(`Weekend classes`), ld: weekendPath,
       text: T(`Saturday and Sunday classes: music, dance, art, skating, science. There’s no school pickup, so any child can sign up.`),
-      points: [T(`{sat} run on Saturdays, {sun} on Sundays`, { sat, sun }), T(`The term, the times and the cost of each`), T(`Sorted by part of the city, so you can start close to home`)],
       go: [[link(weekendPath, D), T(`See weekend classes`)]] } : null,
-    daysOff ? { k: 'tent', id: 'day-camps', color: '#B88A00', n: campPrograms.length, noun: T(`programs`), name: T(`Day-camp programs`), ld: dayCampsPath,
-      text: T(`Camps on the days district schools are closed: holidays, staff days, winter and spring break.`),
-      points: [daysLeft ? T(`{n} days off still to come this school year`, { n: daysLeft }) : '', nextDay ? T(`Next one: {name}, {date}`, { name: esc(nextDay.name), date: longDate(nextDay.x) }) : '', T(`See who’s open on each day, break by break`)],
+    daysOff ? { k: 'tent', id: 'day-camps', color: '#B88A00', kicker: daysLeft ? T(`{n} days off still to come`, { n: daysLeft }) : T(`Days school is closed`), name: T(`Day-camp programs`), ld: dayCampsPath,
+      text: `${T(`Camps on the days district schools are closed: holidays, staff days, winter and spring break.`)}${nextDay ? ' ' + T(`Next one: {name}, {date}.`, { name: esc(nextDay.name), date: longDate(nextDay.x) }) : ''}`,
       go: [[link(dayCampsPath, D), T(`See day-camp programs`)], [link(offPath, D), T(`Plan the days off`)]] } : null,
-    summerCamps.length ? { k: 'sun', id: 'summer-camps', color: '#2C8444', n: summerCamps.length, noun: T(`camps`), name: T(`Summer camps`), ld: campsPath,
+    summerCamps.length ? { k: 'sun', id: 'summer-camps', color: '#2C8444', kicker: T(`{n} weeks of summer`, { n: weeks }), name: T(`Summer camps`), ld: campsPath,
       text: T(`Day camps inside the city for the {n} weeks between the last day of school and Labor Day.`, { n: weeks }),
-      points: [T(`Ages, weeks, hours and prices, from each camp’s own website`), T(`One chart of which camps run in each week`), T(`Camps usually post next summer between December and March`)],
       go: [[link(campsPath, D), T(`See summer camps`)], [link(summerPath, D), T(`Plan your summer`)]] } : null,
   ].filter(Boolean);
   const hero = `    <h1>${T(`All programs`)}</h1>
-    <p class="lede">${T(`Everything listed on this site, sorted by the kind of program it is. Pick the part of the year you’re filling, then narrow it down from there.`)}</p>
-    <div class="facts">
-      ${kinds.map(x => `<a href="#${x.id}"><span><b>${x.n}</b> ${x.id === 'after-school' ? 'after school' : x.id === 'weekends' ? 'on weekends' : x.id === 'day-camps' ? 'with day camps' : 'summer camps'}</span></a>`).join('\n      ')}
-    </div>`;
+    <p class="lede">${T(`Everything listed on this site, sorted by the kind of program it is. Pick the part of the year you’re filling, then narrow it down from there.`)}</p>`;
   const body = `<section class="section" id="kinds">
   <div class="plans">
     ${kinds.map(card).join('\n    ')}
   </div>
-  <p class="hint">${T(`A place can be in more than one group: one that runs weekday afternoons, Saturday classes and camps on days off is counted in each.`)}</p>
 </section>
 <section class="section" id="types">
   <h2>${T(`After-school programs, by what they do`)}</h2>

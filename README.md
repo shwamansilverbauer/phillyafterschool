@@ -1010,6 +1010,16 @@ The page uses the same blue band as the rest of the site, with its own drawing, 
 school shut, the bus asleep, a swing and a kite going up. Its share picture is `src/static/share-days-off.png`; any
 page can name its own with `shareImage` in `layout()`.
 
+The four kind pages (`/programs/`, `/weekends/`, `/day-camps/`, `/summer-camps/`) keep their hero to the title, the
+line and the drawing: no back link, button, facts or pill row, since the filters and the jump strip sit right under
+it. The after-school page's drawing is the street with `showStreet: 'out'` (`street('out')`): school's out, five
+kids come through the door one at a time, hop along the sidewalk to the bus door and climb in, and the bus leaves;
+it plays once, and not at all for someone who asked for reduced motion. The overview pages (`/all-programs/`,
+`/schedules/`) are cards with an icon, a kicker, a heading, a line and buttons; no bullet lists and no program
+counts (the days-off card keeps "N days off still to come", and the summer card its weeks). Counts of programs
+stay off the home page's tiles and type chips too; a filter bar's counts and a list section's "(N)" are the live
+numbers of what is on the page, and stay.
+
 **Colours.** Every colour is a named value at the top of `src/site.css`. The band at the top of each page is a
 daytime sky (`--hero` fading to `--hero-low`) with navy type (`--hero-ink`, `--hero-muted`); the header button
 is `--cta`; the footer keeps the deep blue (`--foot`). Navy on the sky measures 9:1 or better, above the old
