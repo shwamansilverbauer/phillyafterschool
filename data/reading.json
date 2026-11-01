@@ -64,5 +64,65 @@
     "how": "person",
     "why": "On 2026-10-07 the browser extension was not allowed on the booking page and a plain fetch was refused, so its dates, ages and hours were not read.",
     "seen": "2026-10-07"
+  },
+  {
+    "match": "bookeo.com/beehivecommunity",
+    "how": "person",
+    "why": "Bookeo's booking pages say automated access violates its terms and blocked the address for an hour on 2026-11-01, so Beehive's semester and full-day prices and dates are read by a person.",
+    "seen": "2026-11-01"
+  },
+  {
+    "match": "libwww.freelibrary.org/programs/leap",
+    "how": "person",
+    "why": "A plain fetch answered HTTP 403 twice on 2026-11-01, so the page must not be read with a workaround; Josh checks it.",
+    "seen": "2026-11-01"
+  },
+  {
+    "match": "hisawyer.com/sawubona-creativity-project",
+    "how": "person",
+    "why": "Sawubona’s Register button opens its Sawyer camp calendar, which answered HTTP 403 with a Cloudflare challenge to a plain fetch on 2026-11-01, so its camp dates were not read.",
+    "seen": "2026-11-01"
+  },
+  {
+    "match": "portal.iclasspro.com/phillycircus",
+    "how": "browser",
+    "why": "A JavaScript app: a plain fetch returns only 'Customer Portal Loading…', so the Kid’s Day Off Camp dates on the circus school’s sign-up page were not read.",
+    "seen": "2026-11-01"
+  },
+  {
+    "match": "campscui.active.com/orgs/PhieldHouse",
+    "how": "browser",
+    "why": "A JavaScript app: a plain fetch is redirected to an Active.com loader that returns no text, so Phield House’s vacation-day dates and prices were not read.",
+    "seen": "2026-11-01"
+  },
+  {
+    "match": "phillyyouthbasketball.leagueapps.com",
+    "how": "browser",
+    "why": "A JavaScript app: a plain fetch returns only 'LeagueApps Member Portal', so PYB’s clinic prices were not read.",
+    "seen": "2026-11-01"
+  },
+  {
+    "match": "bondsports.co/activity/programs",
+    "how": "browser",
+    "why": "A JavaScript app: a plain fetch returns only 'Bond Sports Loading...', so Elite Sports Factory’s camp prices were not read.",
+    "seen": "2026-11-01"
+  },
+  {
+    "match": "portal.movementgyms.com/callowhill/programs",
+    "how": "browser",
+    "why": "The portal’s text comes through a plain fetch but the session calendar is a JavaScript widget, so the exact camp dates on the Callowhill camp pages were not read.",
+    "seen": "2026-11-01"
+  },
+  {
+    "match": "starfinder.recdesk.com",
+    "how": "browser",
+    "why": "A JavaScript app: a plain fetch of a program page redirects to an empty program list.",
+    "seen": "2026-11-01"
+  },
+  {
+    "match": "coraservices.org",
+    "how": "person",
+    "why": "The site answered HTTP 403 with a “confirm you are human” check to a headless browser on 2026-11-01.",
+    "seen": "2026-11-01"
   }
 ]
