@@ -1895,6 +1895,7 @@
       if (dropSure && (dropSureFor !== r.kid || !many || !bare)) dropSure();   // the question was about another child
       kidDrop.hidden = !many || !bare || !!dropSure;   // a child with an after-school roster is removed on the roster page, where share groups are told
       if (document.activeElement !== nameBox) nameBox.value = me.name || '';
+      if (!me.name && $o('#off-kid-edit')) $o('#off-kid-edit').open = true;
       daysEl.textContent = ''; stripEl.textContent = '';
       // a sibling's days, to start from
       var same = planEl.querySelector('.sum-same'); if (same) same.parentNode.removeChild(same);
@@ -2582,6 +2583,7 @@
         ? 'Search for a program above and pick its days, or tap Browse to look through them by type, school or neighborhood. Not sure? Switch to “Roll a themed week”.'
         : 'Nothing on the current roster yet. Search for a program above, or tap Browse, and pick its days.';
       if (document.activeElement !== nameInput) nameInput.value = kid.name;
+      if (!kid.name && $('#kid-edit')) $('#kid-edit').open = true;
       if (maker) {
         if (document.activeElement !== teacherBox) teacherBox.value = kid.teacher || '';
         if (document.activeElement !== noteBox) noteBox.value = kid.cardNote || '';
@@ -2731,7 +2733,7 @@
       if (r.kids.length >= MAX_KIDS) return;
       r.kids.push(newKid('')); r.kid = r.kids.length - 1; r.active = 'next';
       saveRosters(); say('New roster added. Give it a name, then search for programs to add.'); render();
-      nameInput.value = ''; nameInput.focus();
+      nameInput.value = ''; if ($('#kid-edit')) $('#kid-edit').open = true; nameInput.focus();
     });
     var kidSure = null, kidSureFor = -1;
     kidRemove.addEventListener('click', function () {
@@ -3640,6 +3642,7 @@
       if (dropSure && (dropSureFor !== r.kid || !many || !bare)) dropSure();   // the question was about another child
       kidDrop.hidden = !many || !bare || !!dropSure;   // a child with an after-school roster is removed on the roster page, where share groups are told
       if (document.activeElement !== nameBox) nameBox.value = me.name || '';
+      if (!me.name && $s('#sum-kid-edit')) $s('#sum-kid-edit').open = true;
       if (document.activeElement !== ageBox) ageBox.value = ageOf(me);
       weeksEl.textContent = ''; stripEl.textContent = '';
       // a sibling's weeks, to start from
@@ -4447,16 +4450,21 @@
       return li;
     };
     // ----- the plan as a calendar: one month at a time. Tap a day and what's on it is listed underneath. -----
-    var calBox = $y('year-cal'), viewBtns = all(yearEl, '#year-views .vs');
-    var view = store('pas-year-view') === 'list' ? 'list' : 'cal', calMonth = '', calDay = '', calBy = {}, calMonths = [];
+    // The page is tabs, like the planners: Calendar and List show the plan; Add dates and Share/Save are panes of their own.
+    var calBox = $y('year-cal'), viewBtns = all(yearEl, '#year-views .vs'), panes = all(yearEl, '[data-year-pane]');
+    var VIEWS = ['cal', 'list', 'own', 'share'], asked = (query().tab || location.hash.replace('#', '')), stored = store('pas-year-view');
+    var view = VIEWS.indexOf(asked) > -1 ? asked : stored === 'list' ? 'list' : 'cal', calMonth = '', calDay = '', calBy = {}, calMonths = [];
     var showView = function () {
-      if (!calBox) view = 'list';
+      if (!calBox && view === 'cal') view = 'list';
       viewBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === view)); });
+      var pane = view === 'own' || view === 'share' ? view : 'view', allOn = false;
+      try { allOn = window.sessionStorage.getItem('pas-tabs') === 'all'; } catch (e) { /* no storage */ }   // the account pages' "show every tab" switch, for the tests
+      panes.forEach(function (p) { p.hidden = !allOn && p.getAttribute('data-year-pane') !== pane; });
       if (calBox) calBox.hidden = view !== 'cal';
-      $y('year-agenda').hidden = view === 'cal';
+      $y('year-agenda').hidden = view !== 'list';
     };
     viewBtns.forEach(function (b) {
-      b.addEventListener('click', function () { view = b.getAttribute('data-view') === 'list' ? 'list' : 'cal'; store('pas-year-view', view); showView(); if (window.pasJump) window.pasJump(); });
+      b.addEventListener('click', function () { view = b.getAttribute('data-view'); if (view === 'cal' || view === 'list') store('pas-year-view', view); showView(); });
     });
     var kidInk = function (k) { return INKS[Math.max(0, model.kids.indexOf(k)) % 6]; };
     // what a day's square shows: short labels, one for each thing on it
@@ -4537,8 +4545,13 @@
       if (S) srcEl.appendChild(srcLine('Summer', m.src.sum, yd.sumPage + '#plan', 'nothing planned yet.', 'Plan the summer'));
       drawOwn();
       var none = !m.kids.length && !m.own.length, empty = $y('year-empty');
-      empty.hidden = !none; $y('year-full').hidden = none; empty.textContent = '';
-      if (none) { empty.appendChild(el('p', null, 'Nothing is planned yet, so there’s no calendar to show. Start with any of the three above, or add a date of your own, and it fills in by itself.')); $y('year-changed').hidden = true; if (window.pasJump) window.pasJump(); return; }
+      empty.hidden = !none; $y('year-full').hidden = none; if ($y('year-full-share')) $y('year-full-share').hidden = none; empty.textContent = '';
+      if (none) {   // nothing to draw: the page opens on Add dates, with the empty note on the Calendar tab for anyone who looks
+        empty.appendChild(el('p', null, 'Nothing is planned yet, so there’s no calendar to show. Start with any of the three planners, or add a date of your own here, and it fills in by itself.'));
+        $y('year-changed').hidden = true;
+        if (view === 'cal' || view === 'list') view = 'own';
+        showView(); return;
+      }
       // every school week
       var wkBox = $y('year-week'); wkBox.textContent = '';
       var withWeek = m.kids.filter(hasWeekCard), family = m.kids.length ? [] : ownWeekly(null);

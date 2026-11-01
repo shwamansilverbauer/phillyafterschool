@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=0ab32749">
+<link rel="stylesheet" href="../assets/site.css?v=0bed1da4">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
@@ -117,13 +117,15 @@
   <div class="when-in" style="display:contents">
   <p><span data-copy="2c9a96711f" data-was="Choose where each child will be on each day school is closed. Your picks are saved on this device and in your profile, so they’re there on your other devices.">Plan where each child will be on each day school is closed. Your picks are saved on this device and in your profile. Pick from List, Calendar, or Grid Mode.</span></p>
   <div class="sum-kids"><div class="kids" id="off-kids" role="group" aria-label="Which child"></div><button type="button" class="clear" id="off-kid-add">Add a sibling</button><button type="button" class="clear" id="off-kid-drop" hidden>Remove this child</button></div>
-  <div class="sum-top off-top">
-    <div class="field sum-name"><label for="off-name"><span data-copy="cf3f7d3d6c" data-was="First name (optional)">Kid first name (optional)</span></label>
-      <input id="off-name" type="text" maxlength="40" autocomplete="off"><span class="hint"><span data-copy="1e0e10baa0" data-was="Kept with the plan in your profile. A nickname or an initial is fine.">Kept with the plan in your profile.</span></span></div>
-    <div class="field sum-age"><label for="off-age"><span data-copy="5741e56a54">Age (optional)</span></label>
-      <select id="off-age"><option value="">Any age</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option></select><span class="hint"><span data-copy="b378c7f722">Shows the camps that take that age. Stays on this device.</span></span></div>
-    <div class="sum-tally"><div class="sum-strip" id="off-strip" aria-hidden="true"></div><p id="off-count" aria-live="polite"></p><p class="hint" id="off-open"></p><p class="off-todo-line" id="off-todo-line" aria-live="polite"></p></div>
-  </div>
+  <details class="kids-edit" id="off-kid-edit">
+    <summary><span data-copy="badb140090">Name and age</span></summary>
+    <div class="sum-top off-top">
+      <div class="field sum-name"><label for="off-name"><span data-copy="cf3f7d3d6c" data-was="First name (optional)">Kid first name (optional)</span></label>
+        <input id="off-name" type="text" maxlength="40" autocomplete="off"><span class="hint"><span data-copy="1e0e10baa0" data-was="Kept with the plan in your profile. A nickname or an initial is fine.">Kept with the plan in your profile.</span></span></div>
+      <div class="field sum-age"><label for="off-age"><span data-copy="5741e56a54">Age (optional)</span></label>
+        <select id="off-age"><option value="">Any age</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option></select><span class="hint"><span data-copy="b378c7f722">Shows the camps that take that age. Stays on this device.</span></span></div>
+    </div>
+  </details>
   <div class="year-view-head off-view-head">
     <h3 id="off-view-h"><span data-copy="23154df2fb">Day by day</span></h3>
     <span class="vs-pick" aria-hidden="true"><span data-copy="effd273d9b">Pick your visual mode!</span><svg viewBox="0 0 48 24" focusable="false"><path d="M2 4c10 0 18 4 26 12l6 6M34 14v8h-8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -131,6 +133,7 @@
       <button type="button" class="tab vs" data-view="list" aria-pressed="true"><span data-copy="a1fffaaafb">List</span></button><button type="button" class="tab vs" data-view="cal" aria-pressed="false"><span data-copy="adab5090ac">Calendar</span></button><button type="button" class="tab vs" data-view="chart" aria-pressed="false"><span data-copy="701c483f81">Grid</span></button><button type="button" class="tab vs" data-view="card" aria-pressed="false"><span class="vs-long"><span data-copy="b2aea9acf3">Share/Save</span></span><span class="vs-short" aria-hidden="true"><span data-copy="09ca55ca52">Share</span></span></button>
     </div>
   </div>
+  <div class="sum-tally main-tally"><div class="sum-strip" id="off-strip" aria-hidden="true"></div><p id="off-count" aria-live="polite"></p><p class="hint" id="off-open"></p><p class="off-todo-line" id="off-todo-line" aria-live="polite"></p></div>
   <div class="year-cal off-month" id="off-month" hidden></div>
   <div class="off-chart-slot" id="off-chart-slot" hidden></div>
   <ol class="sum-weeks off-days" id="off-days"></ol>
@@ -318,7 +321,7 @@
     <p>Written by Rachael Silverbauer.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=46f26acd" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=f8e69f89" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 <script src="../assets/groups.js?v=3c92c5bb"></script>
 </body>
 </html>

@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=0ab32749">
+<link rel="stylesheet" href="../assets/site.css?v=0bed1da4">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
@@ -97,14 +97,27 @@
   <p class="hint when-in" id="year-wait"><span data-copy="808737672b">Getting your calendar…</span></p>
   <section class="section sum year needs-js-block" id="year" hidden>
     <h2 id="year-h"><span data-copy="109448d45c">The year</span></h2>
-    <nav class="jump" data-jump aria-label="On this page" hidden></nav>
-    <div class="year-step" id="year-add" data-jump-to="Add it">
-      <p class="step-head"><b aria-hidden="true">1</b><span><span data-copy="90c75b6d90">Add it</span></span></p>
+    <div class="flag year-changed" id="year-changed" hidden></div>
+    <div class="year-view-head off-view-head">
+      <h3 id="year-view-h"><span data-copy="b96ddaab20">Your plan</span></h3>
+      <div class="tabs view-switch board-views" id="year-views" role="group" aria-label="How to show the plan">
+        <button type="button" class="tab vs" data-view="cal" aria-pressed="true"><span data-copy="adab5090ac">Calendar</span></button><button type="button" class="tab vs" data-view="list" aria-pressed="false"><span data-copy="a1fffaaafb">List</span></button><button type="button" class="tab vs" data-view="own" aria-pressed="false"><span data-copy="b3eaf85d46">Add dates</span></button><button type="button" class="tab vs" data-view="share" aria-pressed="false"><span data-copy="b2aea9acf3">Share/Save</span></button>
+      </div>
+    </div>
+    <div data-year-pane="view">
+      <div id="year-empty" hidden></div>
+      <div id="year-full">
+        <div id="year-week"></div>
+        <div class="year-cal" id="year-cal"></div>
+        <div id="year-agenda" hidden></div>
+      </div>
+    </div>
+    <div data-year-pane="own" hidden>
       <p class="step-say"><span data-copy="34099240ab">Your calendar fills in from your planners, and from any dates you add here yourself.</span></p>
       <ul class="year-src" id="year-src"></ul>
     <div class="year-own" id="year-own">
     <h3><span data-copy="9dc1f228e8">Add your own dates</span></h3>
-    <p><span data-copy="0d42ee85c5">Picture day, pretzel day, a form that’s due, a half day: anything you need to remember, for one child or for everyone. They show up in the calendar below, in the pictures and in the file for your phone. Something that happens every week needs only the day of the week.</span></p>
+    <p><span data-copy="d816dc98e9">Picture day, pretzel day, a form that’s due, a half day: anything you need to remember, for one child or for everyone. They show up on the calendar, in the pictures and in the file for your phone. Something that happens every week needs only the day of the week.</span></p>
     <form class="own-form" id="own-form">
       <div class="field own-what"><label for="own-what"><span data-copy="97211a8888">What</span></label><input id="own-what" type="text" maxlength="60" list="own-ideas" placeholder="Picture day" autocomplete="off"></div>
       <datalist id="own-ideas"><option value="Picture day"><option value="Pretzel day"><option value="Early dismissal"><option value="Form due"><option value="Field trip"><option value="Library day"><option value="Gym day"><option value="Show and tell"><option value="Bring a snack"><option value="Dress-down day"><option value="Concert"><option value="Parent conference"></datalist>
@@ -126,23 +139,9 @@
     <p class="hint"><span data-copy="b4db80b87b">A weekly one repeats until the last day of school and skips the days school is closed. Your own dates are kept on this device only: they aren’t sent to us, so add them on the phone or computer you’ll look at.</span></p>
   </div>
     </div>
-    <div class="flag year-changed" id="year-changed" hidden></div>
-    <div id="year-empty" hidden></div>
-    <div id="year-full">
-      <div class="year-step" id="year-view" data-jump-to="View it">
-        <p class="step-head"><b aria-hidden="true">2</b><span><span data-copy="81ae07a7ca">View it</span></span></p>
-        <div class="year-view-head">
-          <h3 id="year-view-h"><span data-copy="b96ddaab20">Your plan</span></h3>
-          <div class="tabs view-switch" id="year-views" role="group" aria-label="How to show the plan">
-            <button type="button" class="tab vs" data-view="cal" aria-pressed="true">Calendar</button><button type="button" class="tab vs" data-view="list" aria-pressed="false">List</button>
-          </div>
-        </div>
-        <div id="year-week"></div>
-        <div class="year-cal" id="year-cal"></div>
-        <div id="year-agenda" hidden></div>
-      </div>
-      <div class="year-step" id="year-share" data-jump-to="Share it" hidden>
-        <p class="step-head"><b aria-hidden="true">3</b><span><span data-copy="5c41f87a30">Share it</span></span></p>
+    <div data-year-pane="share" hidden>
+      <div id="year-full-share">
+      <div class="year-step" id="year-share" hidden>
       <div class="card-maker sumcard" id="year-card" hidden>
           <h3><span data-copy="2bc6b5e359" data-was="Make it a picture">Your cheat sheet</span></h3>
           <p><span data-copy="2c04ce6cc7" data-was="A calendar for each month, to print for the fridge or send to family. It’s made here in your browser.">After school is better with friends. Share your cheat sheet and sync up plans.</span></p>
@@ -173,8 +172,7 @@
           </div>
         </div>
       </div>
-      <div class="year-step" id="year-pencil" data-jump-to="Pencil it in">
-        <p class="step-head"><b aria-hidden="true">4</b><span><span data-copy="a69abc716e">Pencil it in</span></span></p>
+      <div class="year-step" id="year-pencil">
       <div class="year-file" id="year-file">
           <h3><span data-copy="6c60d61caa">Add it to your calendar</span></h3>
           <p><span data-copy="ec12bceffe">One file with everything ticked below, for the calendar on your phone or computer. Open it and your calendar app adds the entries. It’s a copy: if a date changes later, this page will say so, and you download it again.</span></p>
@@ -190,6 +188,7 @@
           <div class="actions"><button type="button" class="btn primary" id="year-dl">Download the calendar file</button><button type="button" class="btn" id="year-print">Print this page</button></div>
           <p class="hint" id="year-status" aria-live="polite"></p>
         </div>
+      </div>
       </div>
     </div>
   </section>
@@ -247,7 +246,7 @@
     <p>Written by Rachael Silverbauer.</p>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=46f26acd" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=f8e69f89" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 <script src="../assets/groups.js?v=3c92c5bb"></script>
 </body>
 </html>
