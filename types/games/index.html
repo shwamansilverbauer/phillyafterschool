@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<link rel="stylesheet" href="../../assets/site.css?v=82c1cd10">
+<link rel="stylesheet" href="../../assets/site.css?v=1a53a7bd">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"ItemList","name":"Games programs, classes and camps","itemListElement":[{"@type":"ListItem","position":1,"name":"Queen & Rook Game Cafe","url":"https://phillyafterschool.org/programs/queen-and-rook/"}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Philly After School","item":"https://phillyafterschool.org/"},{"@type":"ListItem","position":2,"name":"Program types","item":"https://phillyafterschool.org/types/"},{"@type":"ListItem","position":3,"name":"Games","item":"https://phillyafterschool.org/types/games/"}]}]}</script>
 </head>
 <body>
@@ -56,15 +56,15 @@
 <main class="wrap">
 <div class="fbar needs-js-block" data-filters data-noun="listing" data-nouns="listings">
     <div class="fbar-top">
-    <div class="ftog">
-      <button type="button" class="ftog-btn" id="filters-toggle" aria-expanded="false"><svg class="ftog-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h9M18 6h3M3 12h3M12 12h9M3 18h11M20 18h1" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="15" cy="6" r="2.6" fill="currentColor"/><circle cx="9" cy="12" r="2.6" fill="currentColor"/><circle cx="17" cy="18" r="2.6" fill="currentColor"/></svg><span>Filters</span><span class="quick-n" id="filters-n" hidden></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <p class="ftog-hint" id="filters-hint"></p>
-      <div class="ftog-chips" id="filters-chips" role="group" aria-label="Filters in use" hidden></div>
-    </div>
     <div class="finder">
       <label for="prog-search"><span data-copy="82909c56bf">Looking for a particular program?</span></label>
       <input id="prog-search" type="search" placeholder="Its name, or try drums, art, chess…" autocomplete="off">
       <p class="hint search-more" id="search-more" aria-live="polite" hidden></p>
+    </div>
+    <div class="ftog">
+      <button type="button" class="ftog-btn" id="filters-toggle" aria-expanded="false"><svg class="ftog-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h9M18 6h3M3 12h3M12 12h9M3 18h11M20 18h1" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="15" cy="6" r="2.6" fill="currentColor"/><circle cx="9" cy="12" r="2.6" fill="currentColor"/><circle cx="17" cy="18" r="2.6" fill="currentColor"/></svg><span>Filters</span><span class="quick-n" id="filters-n" hidden></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <p class="ftog-hint" id="filters-hint"></p>
+      <div class="ftog-chips" id="filters-chips" role="group" aria-label="Filters in use" hidden></div>
     </div>
     </div>
     <div class="frow" id="by-kind"><span class="flabel">Kind</span><div class="rail" role="group" aria-label="Kind of program"><button type="button" class="tbtn" id="kind-ALL" data-f="kind" data-v="ALL" data-label="All kinds" aria-pressed="true">All kinds</button><button type="button" class="tbtn kind-after" id="kind-after" data-f="kind" data-v="after" data-label="After school" aria-pressed="false">After school (1)</button><button type="button" class="tbtn kind-off" id="kind-off" data-f="kind" data-v="off" data-label="Day camps" aria-pressed="false">Day camps (1)</button><button type="button" class="tbtn kind-summer" id="kind-summer" data-f="kind" data-v="summer" data-label="Summer" aria-pressed="false">Summer (1)</button></div></div><div class="frow" id="by-day"><span class="flabel">Day</span><div class="rail" role="group" aria-label="Day of the week"><button type="button" class="tbtn" id="day-ALL" data-f="day" data-v="ALL" data-label="Any day" aria-pressed="true">Any day</button><button type="button" class="tbtn" id="day-mon" data-f="day" data-v="mon" data-label="Mon" aria-pressed="false">Mon (1)</button><button type="button" class="tbtn" id="day-tue" data-f="day" data-v="tue" data-label="Tue" aria-pressed="false">Tue (1)</button><button type="button" class="tbtn" id="day-wed" data-f="day" data-v="wed" data-label="Wed" aria-pressed="false">Wed (1)</button><button type="button" class="tbtn" id="day-thu" data-f="day" data-v="thu" data-label="Thu" aria-pressed="false">Thu (1)</button><button type="button" class="tbtn" id="day-fri" data-f="day" data-v="fri" data-label="Fri" aria-pressed="false">Fri (1)</button></div></div>
@@ -78,8 +78,8 @@
   <div class="quickbar" id="quickbar" hidden>
     <div class="in">
       <div class="quick-row">
-        <input id="quick-search" type="search" aria-label="&lt;span data-copy=&quot;82909c56bf&quot;&gt;Looking for a particular program?&lt;/span&gt;" placeholder="Search this list" autocomplete="off">
         <button type="button" class="btn" id="quick-filters">Filters<span class="quick-n" id="quick-n" hidden></span></button>
+        <input id="quick-search" type="search" aria-label="&lt;span data-copy=&quot;82909c56bf&quot;&gt;Looking for a particular program?&lt;/span&gt;" placeholder="Search this list" autocomplete="off">
       </div>
       <p class="quick-status"><span id="quick-count"></span> <button type="button" class="clear" id="quick-clear" hidden>Clear</button></p>
     </div>
