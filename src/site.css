@@ -335,13 +335,22 @@ button.btn{cursor:pointer;font-family:inherit}
 .served.onsite::before{background:#1F7A3A}
 .served.pickup::before{background:var(--yellow);box-shadow:inset 0 0 0 1.5px #B8900A}
 .served.nearby::before{background:var(--sky-ink)}
-/* a listing's snapshot: the general facts, one labeled line each, under the hero */
-.snapshot{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px;align-items:start;font-size:1rem}
-.snapshot .mini{background:var(--surface);grid-template-columns:5.2rem minmax(0,1fr)}
-.snapshot .mini-v{font-size:.98rem}
-.snapshot .mini-v b{font-weight:700}
-.snapshot .mini-live:not(:has(.space-mark:not([hidden]),.claimed-mark:not([hidden]))){display:none}
-.snapshot .mini-v .hint{font-size:.9rem}
+/* a listing's spotlight: one block under the hero, the general facts as callouts with an icon each */
+.spot{background:var(--surface);border:1.5px solid var(--line);border-left:6px solid var(--yellow);border-radius:18px;padding:22px 26px 10px;display:flex;flex-direction:column;gap:14px}
+.spot-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.spot-head h2{margin:0;font-size:1.45rem}
+.spot-head p{margin:0;color:var(--muted)}
+.spot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:0 28px;margin:0}
+.spot-item{display:grid;grid-template-columns:38px minmax(0,1fr);gap:2px 12px;align-items:start;padding:14px 0;border-top:1px solid var(--line)}
+.spot-ic{grid-row:span 2;width:38px;height:38px;border-radius:11px;background:var(--sky-bg);color:var(--sky-ink);display:flex;align-items:center;justify-content:center}
+.spot-ic svg{width:22px;height:22px;fill:currentColor}
+.spot-item dt{font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);line-height:1.4;align-self:end}
+.spot-item dd{margin:0;font-size:1rem;line-height:1.35;color:var(--ink)}
+.spot-item dd .hint{display:block;font-size:.9rem}
+.spot-item dd .served{padding-left:15px}
+.spot-item dd .served + .served{margin-top:4px}
+.spot-live:not(:has(.space-mark:not([hidden]),.claimed-mark:not([hidden]))){display:none}
+@media (max-width:560px){.spot{padding:18px 18px 6px}.spot-grid{gap:0}}
 /* which schools it works for: one row a school, how it serves it and when */
 .serve-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .serve-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,.9fr);gap:4px 16px;align-items:baseline;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 16px}

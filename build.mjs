@@ -1452,6 +1452,29 @@ const offDatesHtml = (p, depth) => {
   const shown = items.slice(0, 4), rest = items.slice(4);
   return `<ul class="off-breaks">${shown.join('')}</ul>${rest.length ? `<details class="off-more"><summary>${rest.length === 1 ? T(`1 more break`) : T(`{n} more breaks`, { n: rest.length })}</summary><ul class="off-breaks">${rest.join('')}</ul></details>` : ''}`;
 };
+// A listing's spotlight: one block under the hero with the general facts as callouts, an icon each, so they read
+// as one thing rather than a scatter of chips. `spotItem()` leaves out an empty fact; a live one (spots, the Claimed
+// mark) is drawn hidden and shows once the page learns it.
+const SPOT_ICON = {
+  type: 'M3 11V4a1 1 0 0 1 1-1h7l10 10-8 8L3 11zm4-4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z',
+  where: 'M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7zm0 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6z',
+  schools: 'M3 20V9l9-5 9 5v11h-6v-5H9v5H3zm4-7h2V9H7v4zm8 0h2V9h-2v4z',
+  grades: 'M12 3 1 8l11 5 9-4.1V17h2V8L12 3zm-7 9.5V17c0 1.7 3.1 3 7 3s7-1.3 7-3v-4.5l-7 3.2-7-3.2z',
+  pickup: 'M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-1 3h2v5.6l3.5 2-1 1.7L11 13.5V7z',
+  reviews: 'M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6L2.5 9.4l6.6-.8L12 2.5z',
+  spots: 'M4 6h16a1 1 0 0 1 1 1v3a2 2 0 0 0 0 4v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a2 2 0 0 0 0-4V7a1 1 0 0 1 1-1zm6 2v8h2V8h-2z',
+  listing: 'M12 2l2.4 2.1 3.2-.3.9 3.1 2.8 1.6-1.3 2.9 1.3 2.9-2.8 1.6-.9 3.1-3.2-.3L12 22l-2.4-2.1-3.2.3-.9-3.1-2.8-1.6 1.3-2.9-1.3-2.9 2.8-1.6.9-3.1 3.2.3L12 2zm-1.2 13.2 6-6-1.4-1.4-4.6 4.6-2.2-2.2-1.4 1.4 3.6 3.6z',
+  checked: 'M7 2h2v2h6V2h2v2h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3V2zm-2 7v10h14V9H5zm5.8 8.2-3.3-3.3 1.4-1.4 1.9 1.9 4.3-4.3 1.4 1.4-5.7 5.7z',
+};
+const spotItem = (icon, label, value, cls = '') => value ? `<div class="spot-item${cls ? ' ' + cls : ''}"><span class="spot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="${SPOT_ICON[icon]}"/></svg></span><dt>${label}</dt><dd>${value}</dd></div>` : '';
+const spotlight = (title, items) => `<section class="section" id="snapshot" data-jump-to="Spotlight">
+    <div class="spot">
+      <div class="spot-head"><h2>${title}</h2><p>${T(`The basics, at a glance.`)}</p></div>
+      <dl class="spot-grid">
+        ${items.filter(Boolean).join('\n        ')}
+      </dl>
+    </div>
+  </section>`;
 function programPage(p) {
   const D = 2;
   const served = servedBy(p);
@@ -1536,20 +1559,17 @@ ${p.clubs.map(c => `      <article class="club">
   // The snapshot: the general facts, one labeled line each, so they can be read at a glance
   const typeLine = p.types.map(t => typeCount(TYPE[t]) && !schoolRun(p) ? `<a href="${link('types/' + t + '/', D)}">${esc(TYPE[t].label)}</a>` : esc(TYPE[t].label)).join(', ');
   const hoodLine = programHoods(p).length ? (programHoods(p).every(hoodHas) ? hoodLinks(programHoods(p), D) : esc(programHoods(p).join(', '))) : '';
-  const snapshot = `<section class="section snapshot-section" id="snapshot" data-jump-to="Snapshot">
-    <h2>${T(`Program snapshot`)}</h2>
-    <div class="snapshot">
-      ${mini('Type', typeLine)}
-      ${mini('Where', [esc(address), hoodLine ? `<span class="hint">${hoodLine}</span>` : ''].filter(Boolean).join(' '))}
-      ${camp ? '' : mini('Schools', servedLines(p))}
-      ${mini('Grades', esc(gradeText(p)))}
-      ${mini('Pick up by', esc(p.pickupBy || ''))}
-      ${mini('Reviews', revs.length ? `<b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'review' : 'reviews'}` : '')}
-      ${mini('Spots', spaceSlot('p:' + p.id, D), 'mini-live')}
-      ${mini('Listing', claimedMark('p:' + p.id, D), 'mini-live')}
-      ${mini('Checked', longDate(p.lastVerified))}
-    </div>
-  </section>`;
+  const snapshot = spotlight(T(`Program spotlight`), [
+    spotItem('type', 'Type', typeLine),
+    spotItem('where', 'Where', [esc(address), hoodLine ? `<span class="hint">${hoodLine}</span>` : ''].filter(Boolean).join(' ')),
+    camp ? '' : spotItem('schools', 'Schools', servedLines(p)),
+    spotItem('grades', 'Grades', esc(gradeText(p))),
+    spotItem('pickup', 'Pick up by', esc(p.pickupBy || '')),
+    spotItem('reviews', 'Reviews', revs.length ? `<b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'review' : 'reviews'}` : ''),
+    spotItem('spots', 'Spots', spaceSlot('p:' + p.id, D), 'spot-live'),
+    spotItem('listing', 'Listing', claimedMark('p:' + p.id, D), 'spot-live'),
+    spotItem('checked', 'Checked', longDate(p.lastVerified)),
+  ]);
   const body = `<div data-program-page="${esc(p.id)}" style="display:contents">
   ${pageNav(jumpNav())}
   ${snapshot}
@@ -5793,19 +5813,16 @@ function campPage(c) {
     <h1>${esc(c.name)}</h1>
     <p class="lede">${esc(c.what)}</p>
     ${runsStrip(['summer'])}`;
-  const snapshot = `<section class="section snapshot-section" id="snapshot" data-jump-to="Snapshot">
-    <h2>${T(`Camp snapshot`)}</h2>
-    <div class="snapshot">
-      ${mini('Type', c.types.map(t => esc(TYPE[t].label)).join(', '))}
-      ${mini('Where', [c.address ? esc(c.address) : '', areas.length ? `<span class="hint">${esc(listNames(areas))}</span>` : ''].filter(Boolean).join(' '))}
-      ${mini('Ages', campAges(c) ? esc(campAges(c)) : '')}
-      ${mini('Price', campPrice(c) ? esc(campPrice(c)) : '')}
-      ${mini('Dates', c.season ? (c.season >= year ? `Summer <b>${c.season}</b> details` : `<b>${c.season}</b> details, as a guide`) : T(`No dates yet`))}
-      ${mini('Spots', spaceSlot('c:' + c.id, D), 'mini-live')}
-      ${mini('Listing', claimedMark('c:' + c.id, D), 'mini-live')}
-      ${mini('Checked', longDate(c.checked))}
-    </div>
-  </section>`;
+  const snapshot = spotlight(T(`Camp spotlight`), [
+    spotItem('type', 'Type', c.types.map(t => esc(TYPE[t].label)).join(', ')),
+    spotItem('where', 'Where', [c.address ? esc(c.address) : '', areas.length ? `<span class="hint">${esc(listNames(areas))}</span>` : ''].filter(Boolean).join(' ')),
+    spotItem('grades', 'Ages', campAges(c) ? esc(campAges(c)) : ''),
+    spotItem('spots', 'Price', campPrice(c) ? esc(campPrice(c)) : ''),
+    spotItem('checked', 'Dates', c.season ? (c.season >= year ? `Summer <b>${c.season}</b> details` : `<b>${c.season}</b> details, as a guide`) : T(`No dates yet`)),
+    spotItem('spots', 'Spots', spaceSlot('c:' + c.id, D), 'spot-live'),
+    spotItem('listing', 'Listing', claimedMark('c:' + c.id, D), 'spot-live'),
+    spotItem('checked', 'Checked', longDate(c.checked)),
+  ]);
   const body = `<div data-camp-page="${esc(c.id)}" style="display:contents">
   ${pageNav(jumpNav())}
   ${snapshot}

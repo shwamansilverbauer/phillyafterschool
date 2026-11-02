@@ -431,14 +431,17 @@ year ("Add to your week" → the week builder; "Add Saturday to your week" → t
 "Add it to your days off" → the days-off planner, opened on the first day it has posted; "Add to your summer"
 → the summer planner) and plain buttons for the provider's own sign-up and website. The hero is only the name,
 the line and what it runs, as a row of colored pills (`runsStrip()`, one color per kind, the same colors as the
-All programs page). Everything else general sits right under it as the **snapshot** (`#snapshot`, "Program
-snapshot": one labeled line each for the type, where it is (address and neighborhood), the schools it serves with
-a colored dot for the kind of tie, grades, pick-up time, reviews, spots, the Claimed mark and the date checked;
-the `mini()` cards the list rows use, so the page reads the way the lists do). A camp of its own (`campPage()`)
-has the same shape: a bare hero, a "Camp snapshot", then its Follow box. The sticky strip under the menu bar
-(`jumpNav()`) jumps between the snapshot, the sections, Schools and Reviews. The sections are `kindSection()` in
+All programs page). Everything else general sits right under it as one block, the **spotlight** (`#snapshot`,
+`spotlight()`, "Program spotlight — The basics, at a glance."): a card with a yellow left edge (`.spot`) holding
+a grid of callouts (`spotItem()`, `.spot-item`), each an icon in a sky square (`SPOT_ICON`), a small uppercase
+label and the value — the type, where it is (address, neighborhood under it), the schools it serves with a
+colored dot for the kind of tie, grades, pick-up time, reviews, spots, the Claimed mark and the date checked.
+Spots and Claimed (`.spot-live`) stay hidden until `site.js` fills them, so the grid never shows an empty
+callout. A camp of its own (`campPage()`) has the same shape: a bare hero, a "Camp spotlight" (type, where,
+ages, price, dates, checked), then its Follow box. The sticky strip under the menu bar (`jumpNav()`) jumps
+between the spotlight, the sections, Schools and Reviews. The sections are `kindSection()` in
 `programPage()`; the follow box ("Follow it, or save it for later", `#follow`, `.follow-first`) sits under the
-snapshot, since following and favorites are what a parent does most on the page (the Summer section no longer
+spotlight, since following and favorites are what a parent does most on the page (the Summer section no longer
 has a box of its own; "summer" is one of the parts the page's box can follow, see "Follow and favorites"); the
 claim box (`listingTools()`: "Run this program?", a "Claim this listing" button and "Suggest an update") sits
 under the sections, and once `site.js` learns the listing is claimed (`?action=claimed`) it says "Claimed by the
@@ -1059,7 +1062,10 @@ is `--cta`; the footer keeps the deep blue (`--foot`). Navy on the sky measures 
 white-on-deep-blue. There is no dark mode: the site looks the same whatever the device is set to
 (`color-scheme: only light` in the CSS and a matching `<meta>` in every page), because the calendars, the plan
 colours and the pictures are drawn for a light page. The week card (`drawCard` in `src/site.js`) and the link-preview picture
-(`src/static/share.png`, 1200 by 630) use the same sky and footer, so change them together. The favicon and the
+(`src/static/share.png`, 1200 by 630) use the same sky and footer, so change them together. Both link-preview
+pictures (`share.png` and `share-days-off.png`) open with the logo on a white sticker, since the logo's light
+blue and yellow would sink into the sky or the yellow page; they are screenshots drawn by two small Playwright
+scripts, and are drawn again whenever the logo or the home page's headline changes. The favicon and the
 app icons (`src/static/favicon.svg`, `favicon.png`, `favicon.ico`, `apple-touch-icon.png`, `icon-192.png`,
 `icon-512.png`) are the logo's bulb on a navy square, cut out of `logo.png`; to change them, replace the six files.
 
@@ -1463,7 +1469,7 @@ database does not move: both addresses are served from the same folder.
 ## Follow and favorites
 
 Dates by email now run on accounts. A **follow** means the listing's or school's dates are emailed; a **favorite**
-keeps a listing in the account and emails nothing. `followBox()` in `build.mjs` draws the box: under the snapshot
+keeps a listing in the account and emails nothing. `followBox()` in `build.mjs` draws the box: under the spotlight
 on a program's page and on a camp's page, with a line under the two buttons saying which is
 which ("Follow means emails when it posts a date. Save to favorites means no emails…", `.follow-which`), and as a
 wide box on a school page, the home page, the days-off page and `/alerts/` (those last three with a school picker). Without accounts (`groups` unset) the old sign-up form,
