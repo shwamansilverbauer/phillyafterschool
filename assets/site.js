@@ -5233,6 +5233,14 @@
     if (pressedGrade && pressedGrade.scrollIntoView && state.grade !== 'ALL') pressedGrade.scrollIntoView({ block: 'nearest', inline: 'center' });
   }
 
+  // ----- a picture that pops in once it is on screen (the About page's makers) -----
+  all(document, '[data-pop]').forEach(function (g) {
+    var show = function () { g.setAttribute('class', (g.getAttribute('class') || '').replace(/\bin\b/, '').trim() + ' in'); };
+    if (!('IntersectionObserver' in window)) { show(); return; }
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { show(); io.disconnect(); } }); }, { threshold: 0.4 });
+    io.observe(g.ownerSVGElement || g);
+  });
+
   // ----- school page: add to roster -----
   var page = document.querySelector('[data-school-page]');
   if (!page) return;

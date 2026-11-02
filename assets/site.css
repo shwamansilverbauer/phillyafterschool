@@ -1032,6 +1032,11 @@ html.signed.form-up .acct-hero-art{display:block}
 .acct-row-text .kinds p{margin:0;flex:1 1 16rem}
 /* the About page: the same rows, read as a story */
 .about-rows{display:flex;flex-direction:column;gap:22px}
+/* the two who made it pop in from the bottom right once the row is on screen */
+.js .pop{opacity:0;transform:translate(60px,90px) scale(.9);transform-box:fill-box;transform-origin:100% 100%}
+.js .pop.in{animation:pop-in .8s cubic-bezier(.2,.9,.25,1.15) both}
+@keyframes pop-in{from{opacity:0;transform:translate(60px,90px) scale(.9)}60%{opacity:1}to{opacity:1;transform:translate(0,0) scale(1)}}
+@media (prefers-reduced-motion:reduce){.js .pop{opacity:1;transform:none}.js .pop.in{animation:none}}
 .about-row h2{font-size:1.45rem}
 @media (min-width:760px){
   .acct-row{grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:32px;padding:22px 28px}
