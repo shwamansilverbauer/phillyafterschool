@@ -492,7 +492,10 @@ does the slim bar's "Filters" button.
 The filters and the grade row scroll away with the page. Once they are out of sight, a slim bar is fixed under
 the menu bar (`#quickbar`, written by `filterBar()`): a "Filters" button on the left, where the main one is, that
 goes back up to the filters and shows how many are on, then a search box that filters the list as you type and
-keeps the main search box in step, and a line saying what is showing with a Clear link. It goes away again at the footer.
+keeps the main search box in step, and a line saying what is showing with a Clear link. It goes away again at the
+footer. While someone is typing in it the bar stays whatever they scroll, until they scroll back up past the
+filters: then it goes rather than sit stuck over the page (what they typed is in the main box already, and the
+cursor moves there if that box is on screen).
 
 A filter row that is wider than the screen scrolls sideways. `site.js` wraps each `.rail` so it gets a fade at
 the edge that has more and a round arrow button that moves it along; both disappear when there is nothing further

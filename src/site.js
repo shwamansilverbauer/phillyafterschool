@@ -5183,7 +5183,17 @@
         var top = under();
         var past = filtersEnd.getBoundingClientRect().bottom < top + 2;                       // the filters are out of sight above
         var inList = !footer || footer.getBoundingClientRect().top > top + 180;                // and the list is still on screen
-        quick.bar.hidden = !(document.activeElement === quick.search || (past && inList));   // never pulled away from someone typing in it
+        var typing = document.activeElement === quick.search;
+        // Never pulled away from someone typing in it, unless they have scrolled back up past the filters: then the bar
+        // goes rather than sit stuck over the page. What they typed is in the real search box already; if that box is
+        // on screen their cursor moves to it, otherwise it just lets go.
+        if (typing && !past) {
+          var sr = search ? search.getBoundingClientRect() : null;
+          if (sr && sr.top >= top && sr.bottom <= window.innerHeight) { try { search.focus({ preventScroll: true }); } catch (e) { search.focus(); } }
+          else quick.search.blur();
+          typing = false;
+        }
+        quick.bar.hidden = !(typing || (past && inList));
         // a page with a jump strip keeps it in view under the slim bar: the strip moves down by the bar's height
         var jw = document.querySelector('.pagenav') || document.querySelector('.jump-wrap');
         if (jw) jw.style.top = quick.bar.hidden ? '' : 'calc(var(--bar-h, 64px) + ' + quick.bar.offsetHeight + 'px)';
