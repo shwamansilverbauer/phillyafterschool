@@ -1068,6 +1068,11 @@ blue and yellow would sink into the sky or the yellow page; they are screenshots
 scripts, and are drawn again whenever the logo or the home page's headline changes. The favicon and the
 app icons (`src/static/favicon.svg`, `favicon.png`, `favicon.ico`, `apple-touch-icon.png`, `icon-192.png`,
 `icon-512.png`) are the logo's bulb on a navy square, cut out of `logo.png`; to change them, replace the six files.
+The branding kit's bulb marks live in `src/static/bulb.png` (the yellow bulb) and `bulb-line.png` (the outline one,
+yellow line and light-blue brain): `bulb(depth, cls)` in `build.mjs` draws the yellow one on the "Nothing matches
+that" note under a filtered list (`.ask-bulb`) and at the top of the 404 page's hero (`.hero-bulb`); the outline one
+signs the footer's fine print (`.foot-bulb`, next to "Built by"). The kit's palette is the site's own five colours
+(`--link`, `--yellow`, `--hero`, `--ink`, `--bg`), so nothing in the CSS had to change for it.
 
 **What a shared link shows.** A link to the site that is texted or posted shows the picture, a title and a line of
 text. The picture's headline and its one line are part of the picture, so when the home page's headline changes the

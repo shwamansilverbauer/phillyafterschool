@@ -713,10 +713,13 @@ ${body}
     </div>
   </nav>
   <div class="foot-fine">
+    <img class="foot-bulb" src="${link('bulb-line.png', depth)}${stamp('src/static/bulb-line.png')}" alt="" width="130" height="160">
+    <div class="foot-fine-text">
     <p>${T(`Listings come from each provider’s public pages and are not endorsements. Prices, hours and pickup routes change, so confirm with the provider before you enroll.`)}</p>
     <p>${T(`{site} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.`, { site: cfg.siteName })}</p>
     ${cfg.builtBy ? `<p>Built by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
     ${cfg.writtenBy ? `<p>Written by ${esc(cfg.writtenBy.name)}.</p>` : ''}
+    </div>
   </div>
 </div></footer>
 <script src="${link('assets/site.js', depth)}${JS_V}" data-edit="${esc(JSON.stringify(editCfg))}"${GROUPS && !PREVIEW ? ` data-api="${link('groups/api.php', depth)}"` : ''}></script>
@@ -1072,7 +1075,8 @@ function filterBar({ list, depth, school = null, show = {}, near = false, search
     </div>
   </div>`;
 }
-const noMatch = depth => `<p class="ask" id="no-match" data-nomatch data-edit-reveal="Shown when the filters find nothing:" hidden>${T(`Nothing matches that. Know a program that should be listed?`)} <a href="${link('suggest/', depth)}">${T(`Tell us about it.`)}</a></p>`;
+const bulb = (depth, cls) => `<img class="${cls}" src="${link('bulb.png', depth)}${stamp('src/static/bulb.png')}" alt="" width="329" height="400">`;
+const noMatch = depth => `<p class="ask" id="no-match" data-nomatch data-edit-reveal="Shown when the filters find nothing:" hidden>${bulb(depth, 'ask-bulb')}<span>${T(`Nothing matches that. Know a program that should be listed?`)} <a href="${link('suggest/', depth)}">${T(`Tell us about it.`)}</a></span></p>`;
 
 // ---------- program card ----------
 function card(p, school) {
@@ -6032,7 +6036,8 @@ function allProgramsPage() {
 }
 
 function notFoundPage() {
-  const hero = `    <h1>${T(`This jawn isn’t here`)}</h1>
+  const hero = `    ${bulb(-1, 'hero-bulb')}
+    <h1>${T(`This jawn isn’t here`)}</h1>
     <p class="lede">${T(`The link may be old, or the page moved.`)} <a href="/">${T(`Start from the list of schools.`)}</a></p>`;
   return layout({ title: 'Page not found', description: 'Page not found.', pathName: '404.html', depth: -1, current: null, hero, body: '', showStreet: 'parked', noindex: true });
 }
