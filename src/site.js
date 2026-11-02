@@ -4942,8 +4942,13 @@
         items.forEach(function (it) {
           var pill = it.querySelector('.mi-pill'), m = ref && !here ? milesTo(it) : Infinity;
           it._mi = ref ? milesTo(it) : Infinity;
-          if (m === Infinity) { if (pill) pill.parentNode.removeChild(pill); return; }
-          if (!pill) { pill = el('span', 'pill mi-pill'); var home = it.querySelector('.tally') || it.querySelector('.top'); if (home) home.appendChild(pill); }
+          if (m === Infinity) { if (pill) { var box = pill.closest ? pill.closest('.mini-mi') : null; (box || pill).parentNode.removeChild(box || pill); } return; }
+          if (!pill) {
+            pill = el('span', 'pill mi-pill');
+            var side = it.querySelector('.prow-side'), home = it.querySelector('.tally') || it.querySelector('.top');
+            if (side) { var mi = el('span', 'mini mini-mi'); mi.appendChild(el('span', 'mini-l', 'From you')); var mv = el('span', 'mini-v'); mv.appendChild(pill); mi.appendChild(mv); side.insertBefore(mi, side.firstChild); }
+            else if (home) home.appendChild(pill);
+          }
           pill.textContent = short(m);
         });
         if (here) return;   // a school's page keeps its own order: on-site, pickup, nearby

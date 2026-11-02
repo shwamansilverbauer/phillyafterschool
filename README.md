@@ -449,11 +449,14 @@ page that sends people on (`campMovedPage()`: a meta refresh, a canonical link t
 sitemap. Untie a camp (remove `program`) and it gets its page back.
 
 **One row for every list.** The A to Z list, the weekend list, the day-camp list and the summer camps list are
-rows of the same shape, `listRow(kind, …)`: the name, a line about it, its categories, then the facts that
-matter for that part of the year (the schools and grades after school; Saturdays or Sundays for a weekend class;
-the breaks a day-camp program has posted, "Winter break (3 of 5 days) · +2 more"; the weeks, ages and grades for
-a summer camp). Nothing on a row is a button: the row is the way to the listing's page, and every list opens
-with the way into its planner (`heroGo()`). The old cards with buttons on them are gone from the lists.
+rows of the same shape, `listRow(kind, …)`: the name and a line about it on the left, and on the right a stack
+of small labeled cards (`mini()`: Type, Schools, Area, Grades, Days, Dates…) with the facts that matter for that
+part of the year (the schools and grades after school; Saturdays or Sundays for a weekend class; the breaks a
+day-camp program has posted, "Winter break (3 of 5 days) · +2 more"; the weeks, ages and grades for a summer
+camp). The cards are quiet on purpose, plain words with a colored dot for the kind of school tie
+(`servedLines()`), so the name is what the eye lands on; on a phone they stack under the line. The distance
+label, when someone sorts by distance, is a "From you" card. Nothing on a row is a button: the row is the way
+to the listing's page, and every list opens with the way into its planner (`heroGo()`).
 
 ## Finding programs: filters, types and the school finder
 

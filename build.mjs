@@ -928,13 +928,18 @@ const citywide = programs.filter(p => !schoolRun(p) && !campOnly(p));
 const itemAttrs = (p, extra = [], school = null) => `data-item data-kinds="${p._kind || 'after'}" data-grades="${p._grades === null ? '*' : p._grades.join(' ')}" data-ages="${p._ages === undefined ? (gradesToAges(p._grades) || ['*']).join(' ') : p._ages === null ? '*' : p._ages.join(' ')}" data-types="${p.types.join(' ')}" data-hoods="${programHoods(p).map(hoodSlug).join(' ')}" data-cost="${costKinds(p, school).join(' ')}" data-days="${p.days ? p.days.join(' ') : '*'}" data-schools="${schools.filter(x => p.schools[x.id]).map(x => x.id).join(' ')}"${placesOf(p, school).length ? ` data-ll="${placesOf(p, school).map(x => x.join(',')).join(';')}"` : ''} data-search="${esc(haystack(p, extra))}"`;
 const typeTags = (p, school = null) => p.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('')
   + (!costKinds(p, school).includes('free') ? '' : `<span class="tag free">${school ? (costKinds(p, school).includes('paid') ? 'Free option' : 'Free') : freeOnlyFor(p).length ? `Free for ${esc(listNames(freeOnlyFor(p)))}` : p.price === 'both' ? 'Free option' : 'Free'}</span>`);
+// A row's facts, as small labeled cards beside the name and the line, so the name is what the eye lands on.
+const mini = (label, value, cls = '') => value ? `<span class="mini${cls ? ' ' + cls : ''}"><span class="mini-l">${label}</span><span class="mini-v">${value}</span></span>` : '';
+// "Runs at Nebinger and Coppin" / "Picks up from Coppin and McCall": one line a kind, a colored dot each, plain words
+const servedLines = p => {
+  const names = k => servedBy(p).filter(s => p.schools[s.id].relation === k).map(s => s.shortName);
+  return [['onsite', 'Runs at '], ['pickup', 'Picks up from '], ['nearby', 'Near ']].filter(([k]) => names(k).length).map(([k, lead]) => `<span class="served ${k}">${esc(lead + listNames(names(k)))}</span>`).join('');
+};
 const programRow = (p, depth) => {
-  const served = schools.filter(s => p.schools[s.id]);
-  return `<a class="prow" href="${link(programPath(p), depth)}" ${itemAttrs(p, [...served.map(s => s.shortName), ...programHoods(p)])}>
-  <h3>${esc(p.name)}</h3>
-  <span class="what">${esc(p.what)}</span>
-  <span class="tally">${typeTags(p)}</span>
-  <span class="tally">${servedPills(p)}<span class="hint">Grades ${esc(gradeText(p))}</span></span>
+  const served = schools.filter(s => p.schools[s.id]), hoods = programHoods(p);
+  return `<a class="prow row-after" href="${link(programPath(p), depth)}" ${itemAttrs(p, [...served.map(s => s.shortName), ...hoods])}>
+  <span class="prow-main"><h3>${esc(p.name)}</h3><span class="what">${esc(p.what)}</span></span>
+  <span class="prow-side">${mini('Type', typeTags(p))}${mini('Schools', servedLines(p))}${mini('Area', esc(listNames(hoods)))}${mini('Grades', esc(gradeText(p)))}</span>
 </a>`;
 };
 
@@ -960,33 +965,33 @@ const shapeFor = (kind, x) => kind === 'weekend' ? { ...x, _kind: kind, ...(x.we
 function listRow(kind, x, depth, shaped = null) {
   const tags = x.types.map(t => `<span class="tag" style="--tc:${TYPE[t].color}">${esc(TYPE[t].label)}</span>`).join('');
   const hoods = kind === 'summer' ? (x.neighborhoods || []) : programHoods(x);
-  const hood = hoods.length ? `<span class="pill hood">${esc(listNames(hoods))}</span>` : '';
-  let href, line, facts, extra = [];
+  const area = mini('Area', esc(listNames(hoods)));
+  let href, line, side, extra = [];
   if (kind === 'after') {
     href = link(programPath(x), depth); line = x.what;
-    facts = `${servedPills(x)}${hood}<span class="hint">Grades ${esc(gradeText(x))}</span>`;
+    side = `${mini('Type', tags)}${mini('Schools', servedLines(x))}${area}${mini('Grades', esc(gradeText(x)))}`;
     extra = [...servedBy(x).map(s => s.shortName), ...hoods];
   } else if (kind === 'weekend') {
     const w = x.weekend, weekday = Object.keys(x.schools || {}).length && x.scope !== 'weekend';
     href = link(programPath(x), depth) + '#weekend'; line = weekday && w.summary ? w.summary : x.what;
-    facts = `${w.days.map(d => `<span class="pill wkday">${WK_DAY[d]}</span>`).join('')}${hood}`;
+    side = `${mini('Type', tags)}${mini('Days', w.days.map(d => `<span class="wkday">${WK_DAY[d]}</span>`).join(' '))}${area}`;
     extra = [...hoods, ...w.days.map(d => WEEKEND_DAY[d])];
   } else if (kind === 'off') {
     const breaks = offBreaks(x), shown = breaks.slice(0, 3), more = breaks.length - shown.length;
     href = link(programPath(x), depth) + '#days-off'; line = x.daysOff.summary || x.what;
-    facts = `${hood}<span class="dates">${breaks.length ? esc(shown.join(' · ')) + (more ? ` <b>+${more} more</b>` : '') : T(`No dates posted yet`)}</span>`;
+    side = `${mini('Type', tags)}${area}${mini('Days off', `<span class="dates">${breaks.length ? esc(shown.join(' · ')) + (more ? ` <b>+${more} more</b>` : '') : T(`No dates posted yet`)}</span>`)}`;
     extra = [...hoods, ...breaks];
   } else {
     const on = (summerPlan.camps.find(c => c.c.id === x.id) || { on: [] }).on.length;
     href = campLink(x, depth); line = x.what;
-    facts = `${seasonPill(x)}${spaceSlot('c:' + x.id, depth)}${campAges(x) ? `<span>${esc(campAges(x))}</span>` : ''}${x._grades ? `<span class="hint">Grades ${esc(gradeText(x))}</span>` : ''}${campWeeksShort(x) ? `<span class="dates">${esc(campWeeksShort(x))}${on ? ` <b>${on} ${on === 1 ? 'week' : 'weeks'}</b>` : ''}</span>` : `<span class="dates">${T(`No dates posted yet`)}</span>`}${hood}`;
+    const when = `${seasonPill(x)}${campWeeksShort(x) ? ` <span class="dates">${esc(campWeeksShort(x))}${on ? ` <b>${on} ${on === 1 ? 'week' : 'weeks'}</b>` : ''}</span>` : ''}${spaceSlot('c:' + x.id, depth)}`;
+    const who = [campAges(x) ? esc(campAges(x)) : '', x._grades ? `Grades ${esc(gradeText(x))}` : ''].filter(Boolean).join(' · ');
+    side = `${mini('Type', tags)}${mini('Dates', when)}${mini('Ages', who)}${area}`;
     extra = [x.ages || '', x.address || '', ...hoods];
   }
   return `<a class="prow row-${kind}" id="${esc(x.id)}" href="${href}" ${itemAttrs({ ...(shaped || shapeFor(kind, x)), _kind: kind }, extra)}>
-  <h3>${esc(kind === 'summer' ? x.name : fullName(x))}</h3>
-  <span class="what">${esc(line)}</span>
-  <span class="tally">${tags}</span>
-  <span class="tally facts">${facts}</span>
+  <span class="prow-main"><h3>${esc(kind === 'summer' ? x.name : fullName(x))}</h3><span class="what">${esc(line)}</span></span>
+  <span class="prow-side">${side}</span>
 </a>`;
 }
 // The way into the planner that goes with a list, under its heading: everyone sees it.
