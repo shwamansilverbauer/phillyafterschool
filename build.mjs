@@ -2512,9 +2512,49 @@ function aboutPage() {
   <rect x="58" y="64" width="240" height="9" rx="4.5" class="art-line"/><rect x="58" y="84" width="280" height="9" rx="4.5" class="art-line"/><rect x="58" y="104" width="200" height="9" rx="4.5" class="art-line"/>
   ${artChip(58, 136, 128, 'Dana · Nebinger')}${artChip(194, 136, 100, 'Read first', '#D6F3D2', '#1F5A22')}
   <circle cx="330" cy="149" r="14" fill="#F3C613"/><path d="M323.5 149.5l4.5 4.5 9-9" fill="none" stroke="#2A2100" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`);
+  // the two who made it, drawn in the site's style, in front of a school
+  const artMakers = artBox(`<rect width="400" height="260" rx="14" fill="#C3E1FF"/>
+  <circle cx="330" cy="54" r="18" fill="#F3C613"/><path d="M330 28v-8M330 88v-8M304 54h-8M364 54h-8M312 36l-6-6M354 78l-6-6M348 36l6-6M312 72l-6 6" stroke="#F3C613" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="70" cy="50" rx="26" ry="11" fill="#FFFFFF"/><ellipse cx="86" cy="44" rx="18" ry="10" fill="#FFFFFF"/>
+  <rect x="0" y="118" width="70" height="90" fill="#1763B8"/><rect x="60" y="100" width="52" height="108" fill="#0F4D90"/><rect x="300" y="110" width="60" height="98" fill="#0F4D90"/><rect x="350" y="124" width="50" height="84" fill="#1763B8"/>
+  ${[[12, 132], [40, 132], [12, 160], [40, 160], [74, 116], [94, 116], [74, 144], [94, 144], [314, 126], [338, 126], [314, 154], [338, 154], [364, 140], [384, 140], [364, 168], [384, 168]].map(([x, y]) => `<rect x="${x}" y="${y}" width="12" height="14" rx="1" fill="${(x + y) % 3 ? '#0B2140' : '#F3C613'}"/>`).join('')}
+  <rect x="112" y="98" width="180" height="110" fill="#FFFFFF"/><rect x="172" y="80" width="60" height="22" fill="#FFFFFF"/><path d="M168 82h68l-34-18z" fill="#FFFFFF"/>
+  <rect x="200" y="46" width="3" height="20" fill="#0B2140"/><path d="M203 46h18l-5 5 5 5h-18z" fill="#F3C613"/>
+  ${[0, 1, 2, 3].map(c => [0, 1].map(r => `<rect x="${126 + c * 40}" y="${112 + r * 32}" width="22" height="22" rx="2" fill="#7DB8F5"/>`).join('')).join('')}
+  <rect x="190" y="176" width="24" height="32" rx="2" fill="#0B2140"/>
+  <rect x="0" y="206" width="400" height="54" fill="#D5E2F2"/><rect x="0" y="206" width="400" height="4" fill="#0B2140"/>
+  <!-- Rachael -->
+  <path d="M128 148c-3-26 8-40 25-40s28 14 25 40c3 14 6 28 8 44c-6 6-14 8-20 4l-2-12l-6 14c-8 2-16 0-20-6l-4-10l-6 12c-6 0-10-4-10-8c2-16 6-28 10-38z" fill="#3B2A20"/>
+  <path d="M126 258l6-66h42l6 66z" fill="#FFF3F7"/>
+  ${[[138, 212, -30, '#E86FA6'], [160, 222, 25, '#8DB33A'], [176, 206, -20, '#8DB33A'], [146, 236, 15, '#8DB33A'], [170, 244, -35, '#E86FA6'], [156, 200, 40, '#E86FA6']].map(([x, y, d, c]) => `<ellipse cx="${x}" cy="${y}" rx="8" ry="3.4" fill="${c}" transform="rotate(${d} ${x} ${y})"/>`).join('')}
+  <path d="M132 194c6-4 10-8 10-8h-10zM174 194c-6-4-10-8-10-8h10z" fill="#F4B6CF"/>
+  <rect x="144" y="166" width="18" height="28" rx="6" fill="#E8B894"/>
+  <ellipse cx="153" cy="140" rx="22" ry="26" fill="#E8B894"/>
+  <path d="M131 140c0-20 9-30 22-30s22 10 22 30c-4-10-8-14-14-14c-3 0-5 2-8 2s-5-2-8-2c-6 0-10 4-14 14z" fill="#3B2A20"/>
+  <path d="M131 146v22M175 146v22" stroke="#C9A227" stroke-width="2" stroke-linecap="round"/>
+  <path d="M142 136q4-3 8 0M156 136q4-3 8 0" fill="none" stroke="#3B2A20" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="146" cy="142" rx="2.4" ry="3" fill="#2B1B14"/><ellipse cx="160" cy="142" rx="2.4" ry="3" fill="#2B1B14"/>
+  <path d="M143 152q10 10 20 0" fill="none" stroke="#9A3B3B" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M141 194q12 12 24 0" fill="none" stroke="#C9A227" stroke-width="1.6"/><circle cx="153" cy="201" r="3" fill="#C9A227"/>
+  <!-- Josh -->
+  <path d="M226 258l6-70h78l6 70z" fill="#FFFFFF"/>
+  ${[[244, 206], [262, 220], [284, 204], [300, 226], [252, 240], [276, 248], [294, 244], [240, 226]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="5" ry="2.2" fill="#6B8E23" transform="rotate(-30 ${x} ${y})"/>`).join('')}
+  ${[[256, 204], [288, 220], [270, 234], [246, 250], [302, 246]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="2.6" fill="#1763B8"/><circle cx="${x}" cy="${y}" r="1" fill="#FFFFFF"/>`).join('')}
+  <path d="M258 188l13 16 13-16" fill="none" stroke="#9FB6D1" stroke-width="2"/>
+  <rect x="262" y="160" width="18" height="30" rx="6" fill="#F6D5B5"/>
+  <ellipse cx="271" cy="136" rx="22" ry="26" fill="#F6D5B5"/>
+  <path d="M249 128c0 6 1 12 2 16c-3-2-5-6-5-12zM293 128c0 6-1 12-2 16c3-2 5-6 5-12z" fill="#D08A3E"/>
+  <path d="M250 140c0 20 8 30 21 30s21-10 21-30c-4 12-11 18-21 18s-17-6-21-18z" fill="#C8742B"/>
+  <path d="M261 149q10 5 20 0" fill="none" stroke="#B8651F" stroke-width="3" stroke-linecap="round"/>
+  <path d="M263 155q8 6 16 0" fill="none" stroke="#7A2E22" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M260 130q4-3 8 0M274 130q4-3 8 0" fill="none" stroke="#A8712C" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="264" cy="137" rx="2.4" ry="3" fill="#4A6B8A"/><ellipse cx="278" cy="137" rx="2.4" ry="3" fill="#4A6B8A"/>
+  <path d="M247 120c0-16 10-26 24-26s24 10 24 26z" fill="#C9B48A"/>
+  <path d="M245 118h52c3 0 5 2 4 4l-2 5c-14 3-42 3-56 0l-2-5c-1-2 1-4 4-4z" fill="#B09A6C"/>
+  <path d="M252 112c5-9 11-13 19-13" fill="none" stroke="#B09A6C" stroke-width="1.5"/>`);
   const row = (id, art, head, inner) => `<section class="acct-row about-row" id="${id}" aria-labelledby="${id}-h"><div class="acct-row-art">${art}</div><div class="acct-row-text"><h2 id="${id}-h">${head}</h2>${inner}</div></section>`;
   const body = `<div class="about-rows">
-  ${row('how', artTabs, T(`How listings are checked`), cfg.builtBy ? `<p>${T(cfg.builtBy.bio)}</p>` : `<p>${T(`Each listing comes from the provider’s own public pages, the school’s site, or city program data. The sources are linked on every card.`)}</p>`)}
+  ${row('how', artMakers, T(`How listings are checked`), cfg.builtBy ? `<p>${T(cfg.builtBy.bio)}</p>` : `<p>${T(`Each listing comes from the provider’s own public pages, the school’s site, or city program data. The sources are linked on every card.`)}</p>`)}
   ${row('what', artFor, T(`What this site can’t promise`), `<ul>
     <li>${T(`A listing is not an endorsement, and nobody pays to appear here.`)}</li>
     <li>${T(`Prices, hours, openings and pickup routes change during the year. Confirm with the provider before you enroll.`)}</li>
