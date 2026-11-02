@@ -169,9 +169,9 @@ if (!edit_signed_in()) {
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Philly After School: a row of Philadelphia rowhouses, a school and a yellow school bus">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="../favicon.svg" type="image/svg+xml">
-<link rel="icon" href="../favicon.png" type="image/png" sizes="48x48">
-<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="icon" href="../favicon.svg?v=835699aa" type="image/svg+xml">
+<link rel="icon" href="../favicon.png?v=471d76f3" type="image/png" sizes="48x48">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png?v=899ce95f">
 <link rel="manifest" href="../manifest.json">
 <meta name="color-scheme" content="only light">
 <meta name="theme-color" content="#0A3566">
@@ -299,9 +299,9 @@ if (!edit_signed_in()) {
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Philly After School: a row of Philadelphia rowhouses, a school and a yellow school bus">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="../favicon.svg" type="image/svg+xml">
-<link rel="icon" href="../favicon.png" type="image/png" sizes="48x48">
-<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="icon" href="../favicon.svg?v=835699aa" type="image/svg+xml">
+<link rel="icon" href="../favicon.png?v=471d76f3" type="image/png" sizes="48x48">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png?v=899ce95f">
 <link rel="manifest" href="../manifest.json">
 <meta name="color-scheme" content="only light">
 <meta name="theme-color" content="#0A3566">
