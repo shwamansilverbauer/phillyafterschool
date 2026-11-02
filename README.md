@@ -471,7 +471,10 @@ only), then "the story" (`#story`: a few lines on who made the site and why, wit
 About page, which reads like a blog: six rows (`aboutPage()`), each a heading and its words on one side and a
 drawing on the other, sides alternating (why it exists, what it is for, how programs are sorted, dated and
 sourced, how to help, reviews), with the ids `#how`, `#what`, `#sorted`, `#sources`, `#corrections`, `#reviews`.
-The first row's drawing is the two who made it, as cartoons in front of a school (`artMakers` in `aboutPage()`). Each box has a picture of who it is for (a grown-up with a child, a person with a clipboard), drawn in
+The first row's picture is the two who made it: their photo with the background cut away (`src/static/about-us.webp`,
+served at `/about-us.webp`), popping in from the bottom right of a drawn school scene once the row is on screen
+(`artMakers` in `aboutPage()`; `[data-pop]` in `site.js` adds `in` when it scrolls into view, and the animation
+is off under reduced motion). To change the photo, replace that file with another cut-out, about 720px wide. Each box has a picture of who it is for (a grown-up with a child, a person with a clipboard), drawn in
 `WHO` in `homePage()`.
 
 The top of a program's page says which schools it works for as colored labels (`servedPills()`): yellow for pickup, green for on-site, blue for nearby, the same colors as on the cards.
