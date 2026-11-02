@@ -468,7 +468,9 @@ tiles (After school → `/programs/`, Days off → `/day-camps/`, Weekends → `
 then "What's your kid into?" (the type chips), then "Get reminders" (one line and a button to `/alerts/`, signed out
 only), then "the story" (`#story`: a few lines on who made the site and why, with "Read the story" to `/about/` and
 "Help us make it better" to `/suggest/`). The explainers (how programs are sorted, every listing is dated and sourced, who built this) are on the
-About page. Each box has a picture of who it is for (a grown-up with a child, a person with a clipboard), drawn in
+About page, which reads like a blog: six rows (`aboutPage()`), each a heading and its words on one side and a
+drawing on the other, sides alternating (why it exists, what it is for, how programs are sorted, dated and
+sourced, how to help, reviews), with the ids `#how`, `#what`, `#sorted`, `#sources`, `#corrections`, `#reviews`. Each box has a picture of who it is for (a grown-up with a child, a person with a clipboard), drawn in
 `WHO` in `homePage()`.
 
 The top of a program's page says which schools it works for as colored labels (`servedPills()`): yellow for pickup, green for on-site, blue for nearby, the same colors as on the cards.
@@ -476,8 +478,8 @@ The top of a program's page says which schools it works for as colored labels (`
 On a program's own page, a row of "The details" longer than about a hundred characters shows its first two lines with a "More" link (`fold()` in `build.mjs`). It is a `<details>` element holding the whole text, so it opens without JavaScript and nothing is left out of the page.
 
 **The filters start shut.** They run to six rows plus the grade row, which is a lot to meet before the list, so
-`filterBar()` writes one dark "Filters" button (`#filters-toggle`) on the left of the search box (`.fbar-top`: the
-button and its line, then the search box to their right; on a phone the box drops under them) and `site.js` keeps the rows
+`filterBar()` writes the search box first, full width, and under it one dark "Filters" button (`#filters-toggle`)
+with its line (`.fbar-top`), and `site.js` keeps the rows
 and the grade row hidden until it is pressed (the class `open` on `.fbar` and `.picker`; without JavaScript there are
 no filters at all, as before). Beside the button a line says what is inside, built from the rows that page has
 ("Narrow this list by grade, type, pickup or cost. Or see it on a map."), and a yellow number counts the filters in
@@ -488,9 +490,9 @@ it is remembered for the visit (`sessionStorage`, `pas-filters-open`), a link to
 does the slim bar's "Filters" button.
 
 The filters and the grade row scroll away with the page. Once they are out of sight, a slim bar is fixed under
-the menu bar (`#quickbar`, written by `filterBar()`): a search box that filters the list as you type and keeps
-the main search box in step, a "Filters" button that goes back up to the filters and shows how many are on, and
-a line saying what is showing with a Clear link. It goes away again at the footer.
+the menu bar (`#quickbar`, written by `filterBar()`): a "Filters" button on the left, where the main one is, that
+goes back up to the filters and shows how many are on, then a search box that filters the list as you type and
+keeps the main search box in step, and a line saying what is showing with a Clear link. It goes away again at the footer.
 
 A filter row that is wider than the screen scrolls sideways. `site.js` wraps each `.rail` so it gets a fade at
 the edge that has more and a round arrow button that moves it along; both disappear when there is nothing further

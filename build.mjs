@@ -1038,16 +1038,16 @@ function filterBar({ list, depth, school = null, show = {}, near = false, search
   const both = on.grade && on.age;
   return `<div class="fbar needs-js-block" data-filters${school ? ` data-school="${esc(school.id)}"` : ''}>
     <div class="fbar-top">
-    <div class="ftog">
-      <button type="button" class="ftog-btn" id="filters-toggle" aria-expanded="false"><svg class="ftog-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h9M18 6h3M3 12h3M12 12h9M3 18h11M20 18h1" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="15" cy="6" r="2.6" fill="currentColor"/><circle cx="9" cy="12" r="2.6" fill="currentColor"/><circle cx="17" cy="18" r="2.6" fill="currentColor"/></svg><span>Filters</span><span class="quick-n" id="filters-n" hidden></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <p class="ftog-hint" id="filters-hint"></p>
-      <div class="ftog-chips" id="filters-chips" role="group" aria-label="Filters in use" hidden></div>
-    </div>
     ${on.q ? `<div class="finder">
       <label for="prog-search">${T(searchLabel || `Looking for a particular program?`)}</label>
       <input id="prog-search" type="search" placeholder="${esc(placeholder)}" autocomplete="off">
       <p class="hint search-more" id="search-more" aria-live="polite" hidden></p>
     </div>` : ''}
+    <div class="ftog">
+      <button type="button" class="ftog-btn" id="filters-toggle" aria-expanded="false"><svg class="ftog-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h9M18 6h3M3 12h3M12 12h9M3 18h11M20 18h1" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="15" cy="6" r="2.6" fill="currentColor"/><circle cx="9" cy="12" r="2.6" fill="currentColor"/><circle cx="17" cy="18" r="2.6" fill="currentColor"/></svg><span>Filters</span><span class="quick-n" id="filters-n" hidden></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <p class="ftog-hint" id="filters-hint"></p>
+      <div class="ftog-chips" id="filters-chips" role="group" aria-label="Filters in use" hidden></div>
+    </div>
     </div>
     ${kindRow}${typeRow}${relRow}${hoodRow}${costRow}${dayRow}${near ? nearRow(depth, school) : ''}
   </div>
@@ -1060,8 +1060,8 @@ function filterBar({ list, depth, school = null, show = {}, near = false, search
   <div class="quickbar" id="quickbar" hidden>
     <div class="in">
       <div class="quick-row">
-        ${on.q ? `<input id="quick-search" type="search" aria-label="${esc(T(searchLabel || `Looking for a particular program?`))}" placeholder="Search this list" autocomplete="off">` : ''}
         <button type="button" class="btn" id="quick-filters">Filters<span class="quick-n" id="quick-n" hidden></span></button>
+        ${on.q ? `<input id="quick-search" type="search" aria-label="${esc(T(searchLabel || `Looking for a particular program?`))}" placeholder="Search this list" autocomplete="off">` : ''}
       </div>
       <p class="quick-status"><span id="quick-count"></span> <button type="button" class="clear" id="quick-clear" hidden>Clear</button></p>
     </div>
@@ -2467,41 +2467,72 @@ function supportPage() {
 }
 
 function aboutPage() {
+  // The story of the site, told like a blog: a row a section, words on one side and a drawing on the other, sides
+  // alternating. Six rows: why it exists, what it is for, how programs are sorted, where listings come from, how to
+  // help, and reviews. (The sentence keys are the page's original wording; what shows is whatever the editors made of them.)
   const mail = cfg.contactEmail ? `Email <a href="mailto:${esc(cfg.contactEmail)}">${esc(cfg.contactEmail)}</a>` : 'A contact address is being set up. Check back soon';
   const hero = `    <h1>${T(`One place to see what’s possible after the last bell`)}</h1>
     <p class="lede">${T(`Finding after-school care means checking a dozen websites to learn who picks up from your school, for which grades, until when. {site} puts that on one page per school.`, { site: cfg.siteName })}</p>`;
-  const body = `<div class="prose">
-  <h2 id="how">${T(`How listings are checked`)}</h2>
-  <ul>
-    <li>${T(`Each listing comes from the provider’s own public pages, the school’s site, or city program data. The sources are linked on every card.`)}</li>
-    <li>${T(`Every card shows the date it was last checked. When a detail could not be confirmed, the card says so in a yellow note.`)}</li>
-    <li>${T(`A program is marked “picks up” only when a source names the school. Otherwise it is listed as nearby.`)}</li>
-  </ul>
-  <h2>${T(`What this site can’t promise`)}</h2>
-  <ul>
+  // an evening of open tabs
+  const artTabs = artBox(`<rect x="60" y="40" width="280" height="170" rx="12" class="art-frame"/><rect x="72" y="52" width="256" height="146" rx="6" fill="#F3F8FE"/>
+  ${Array.from({ length: 10 }, (_, i) => `<rect x="${76 + i * 25}" y="56" width="22" height="13" rx="3" fill="${i === 3 ? '#FFFFFF' : i % 2 ? '#C9DAEE' : '#D5E2F2'}"/>${i === 3 ? `<rect x="${76 + i * 25}" y="56" width="22" height="3" rx="1.5" fill="#F3C613"/>` : ''}`).join('')}
+  <rect x="76" y="74" width="248" height="120" rx="4" fill="#FFFFFF"/><rect x="90" y="88" width="120" height="11" rx="5.5" fill="#0B2140"/>
+  ${[108, 126, 144, 162].map((y, i) => `<rect x="90" y="${y}" width="${[200, 170, 190, 120][i]}" height="8" rx="4" class="art-line"/>`).join('')}
+  <path d="M30 214h340a8 8 0 0 1-8 14H38a8 8 0 0 1-8-14z" fill="#0B2140"/>
+  <rect x="350" y="166" width="30" height="36" rx="5" fill="#F3C613" stroke="#0B2140" stroke-width="3"/><path d="M380 176h6a8 8 0 0 1 0 16h-6" fill="none" stroke="#0B2140" stroke-width="3"/>`);
+  // a listing, and the kids it is for
+  const artFor = artBox(`<rect x="40" y="24" width="320" height="150" rx="16" class="art-frame"/>
+  <rect x="62" y="46" width="170" height="14" rx="7" fill="#0B2140"/><rect x="62" y="72" width="240" height="9" rx="4.5" class="art-line"/>
+  ${artChip(62, 96, 40, 'Art')}${artChip(110, 96, 90, 'Grades K to 5')}${artChip(208, 96, 128, 'Picks up · Nebinger', true)}
+  <rect x="62" y="136" width="120" height="9" rx="4.5" class="art-line"/><rect x="190" y="136" width="90" height="9" rx="4.5" class="art-line"/>
+  <rect x="20" y="236" width="360" height="8" rx="4" fill="#0B2140"/>
+  ${ART_KIDS.map((k, i) => artKid(150 + i * 50, 237, k, 2.6)).join('')}`);
+  // at the school, picked up, or nearby
+  const artSorted = artBox(`<path d="M30 118l60-38 60 38z" fill="#0F4D90"/><rect x="40" y="116" width="100" height="84" rx="6" class="art-frame"/><rect x="80" y="166" width="20" height="34" rx="3" fill="#0B2140"/>
+  <rect x="88" y="62" width="3" height="22" fill="#0B2140"/><path d="M91 62h20l-5 6 5 6H91z" fill="#F3C613"/>
+  ${artChip(44, 126, 92, 'At the school', '#D6F3D2', '#1F5A22')}
+  <path d="M140 184c40 0 50-110 100-110" fill="none" stroke="#0F4D90" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round"/>
+  <rect x="240" y="40" width="130" height="68" rx="10" class="art-frame"/>${artChip(262, 61, 86, 'Picks up', true)}
+  <rect x="250" y="150" width="120" height="62" rx="10" class="art-frame"/>${artChip(276, 168, 68, 'Nearby', '#DAEDFE', '#0F4D90')}
+  <rect x="20" y="226" width="360" height="8" rx="4" fill="#0B2140"/>`);
+  // dated, and sourced
+  const artSourced = artBox(`<rect x="40" y="36" width="320" height="188" rx="16" class="art-frame"/>
+  <rect x="62" y="58" width="160" height="14" rx="7" fill="#0B2140"/><rect x="62" y="84" width="230" height="9" rx="4.5" class="art-line"/><rect x="62" y="102" width="180" height="9" rx="4.5" class="art-line"/>
+  <text x="62" y="146" font-size="11" font-weight="800" fill="#0B2140" ${ART_F}>Source</text><text x="112" y="146" font-size="12" fill="#0F4D90" text-decoration="underline" ${ART_F}>the program’s own website</text><path d="M296 136l8 8m0-8v8h-8" fill="none" stroke="#0F4D90" stroke-width="2"/>
+  ${artChip(62, 170, 118, 'Checked Oct 6', true)}
+  <rect x="254" y="150" width="80" height="60" rx="8" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/><rect x="254" y="150" width="80" height="16" rx="8" fill="#0F4D90"/><rect x="254" y="158" width="80" height="8" fill="#0F4D90"/>
+  ${[0, 1, 2].map(r => [0, 1, 2, 3].map(c => `<rect x="${262 + c * 17}" y="${174 + r * 11}" width="12" height="8" rx="2" fill="${r === 1 && c === 2 ? '#F3C613' : '#E3EEFA'}"/>`).join('')).join('')}`);
+  // the suggestion box
+  const artSuggest = artBox(`<rect x="110" y="110" width="180" height="116" rx="12" class="art-frame"/><rect x="146" y="124" width="108" height="8" rx="4" fill="#0B2140"/>
+  ${artChip(140, 172, 120, 'Suggestion Box', true)}
+  <g transform="translate(200 86) rotate(-18)"><rect x="-44" y="-26" width="88" height="54" rx="6" fill="#FFFFFF" stroke="#0B2140" stroke-width="3"/><path d="M-44 -20l44 28 44-28" fill="none" stroke="#0B2140" stroke-width="3" stroke-linejoin="round"/></g>
+  <rect x="20" y="236" width="360" height="8" rx="4" fill="#0B2140"/>`);
+  // a note from a parent, read before it is posted
+  const artReview = artBox(`<path d="M44 40h312a14 14 0 0 1 14 14v124a14 14 0 0 1-14 14H120l-40 36v-36H44a14 14 0 0 1-14-14V54a14 14 0 0 1 14-14z" class="art-frame"/>
+  <rect x="58" y="64" width="240" height="9" rx="4.5" class="art-line"/><rect x="58" y="84" width="280" height="9" rx="4.5" class="art-line"/><rect x="58" y="104" width="200" height="9" rx="4.5" class="art-line"/>
+  ${artChip(58, 136, 128, 'Dana · Nebinger')}${artChip(194, 136, 100, 'Read first', '#D6F3D2', '#1F5A22')}
+  <circle cx="330" cy="149" r="14" fill="#F3C613"/><path d="M323.5 149.5l4.5 4.5 9-9" fill="none" stroke="#2A2100" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`);
+  const row = (id, art, head, inner) => `<section class="acct-row about-row" id="${id}" aria-labelledby="${id}-h"><div class="acct-row-art">${art}</div><div class="acct-row-text"><h2 id="${id}-h">${head}</h2>${inner}</div></section>`;
+  const body = `<div class="about-rows">
+  ${row('how', artTabs, T(`How listings are checked`), cfg.builtBy ? `<p>${T(cfg.builtBy.bio)}</p>` : `<p>${T(`Each listing comes from the provider’s own public pages, the school’s site, or city program data. The sources are linked on every card.`)}</p>`)}
+  ${row('what', artFor, T(`What this site can’t promise`), `<ul>
     <li>${T(`A listing is not an endorsement, and nobody pays to appear here.`)}</li>
     <li>${T(`Prices, hours, openings and pickup routes change during the year. Confirm with the provider before you enroll.`)}</li>
     <li>${T(`{site} is independent. It is not affiliated with the School District of Philadelphia or any provider.`, { site: cfg.siteName })}</li>
-  </ul>
-  <h2 id="sorted">${T(`How programs are sorted`)}</h2>
-  <div class="kinds">
+  </ul>`)}
+  ${row('sorted', artSorted, T(`How programs are sorted`), `<div class="kinds">
     <div><span class="pill onsite">${T(`At the school`)}</span><p>${T(`Runs in the school building or on its grounds. No travel.`)}</p></div>
     <div><span class="pill pickup">${T(`Picks up`)}</span><p>${T(`Staff collect children at dismissal and walk or drive them to the program.`)}</p></div>
     <div><span class="pill nearby">${T(`Nearby`)}</span><p>${T(`Close to the school, with no pickup we could find. A fit for older children or a second stop.`)}</p></div>
-  </div>
-  <h2 id="sources">${T(`Every listing is dated and sourced`)}</h2>
-  <p>${T(`Every listing links to where the information came from and shows the day it was last checked. Nobody pays to be listed. If it saved you an evening of open tabs,`)} <a href="${link('support/', 1)}">${T(`help the site keep going.`)}</a></p>
-  <h2 id="corrections">${T(`Corrections, new programs and new schools`)}</h2>
-  <p>${T(`Parents and providers know these programs best. If something is wrong or missing, or you want your school added,`)} <a href="${link('suggest/', 1)}">${T(`use the form`)}</a>. ${mail}.</p>
-  <p>${T(`It helps to include the program, the school, what changed, and a link to where it’s published.`)}</p>
-  <h2 id="reviews">${T(`Reviews`)}</h2>
-  <ul>
+  </div>`)}
+  ${row('sources', artSourced, T(`Every listing is dated and sourced`), `<p>${T(`Every listing links to where the information came from and shows the day it was last checked. Nobody pays to be listed. If it saved you an evening of open tabs,`)} <a href="${link('support/', 1)}">${T(`help the site keep going.`)}</a></p>`)}
+  ${row('corrections', artSuggest, T(`Corrections, new programs and new schools`), `<p>${T(`Parents and providers know these programs best. If something is wrong or missing, or you want your school added,`)} <a href="${link('suggest/', 1)}">${T(`use the form`)}</a>. ${mail}.</p>
+  <p>${T(`It helps to include the program, the school, what changed, and a link to where it’s published.`)}</p>`)}
+  ${row('reviews', artReview, T(`Reviews`), `<ul>
     <li>${T(`Reviews are first-hand notes from parents and caregivers. Each one is read before it’s posted and shows the reviewer’s first name and school.`)}</li>
     <li>${T(`We don’t post reviews that name children or individual staff, or reviews a program writes about itself.`)}</li>
     <li>${T(`Nobody pays to have a review posted or removed. A provider who thinks a review is wrong can use the form above or the contact address.`)}</li>
-  </ul>
-  ${cfg.builtBy ? `<h2 id="who">${T(`Who built this`)}</h2>
-  <p>${T(cfg.builtBy.bio)}</p>` : ''}
+  </ul>`)}
 </div>`;
   return layout({ title: 'About', description: `How ${cfg.siteName} gathers and checks after-school listings, and how to send a correction.`, pathName: 'about/', depth: 1, current: 'about/', hero, body, showStreet: 'parked' });
 }
