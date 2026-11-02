@@ -630,9 +630,9 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="${esc(shareImage ? shareImage.alt : `${cfg.siteName}: a row of Philadelphia rowhouses, a school and a yellow school bus`)}">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="${link('favicon.svg', depth)}" type="image/svg+xml">
-<link rel="icon" href="${link('favicon.png', depth)}" type="image/png" sizes="48x48">
-<link rel="apple-touch-icon" href="${link('apple-touch-icon.png', depth)}">${GROUPS && !PREVIEW ? `
+<link rel="icon" href="${link('favicon.svg', depth)}${stamp('src/static/favicon.svg')}" type="image/svg+xml">
+<link rel="icon" href="${link('favicon.png', depth)}${stamp('src/static/favicon.png')}" type="image/png" sizes="48x48">
+<link rel="apple-touch-icon" href="${link('apple-touch-icon.png', depth)}${stamp('src/static/apple-touch-icon.png')}">${GROUPS && !PREVIEW ? `
 <link rel="manifest" href="${link('manifest.json', depth)}">` : ''}
 <meta name="color-scheme" content="only light">
 <meta name="theme-color" content="#0A3566">
@@ -6076,7 +6076,7 @@ if (GROUPS && !PREVIEW) {
   write('sw.js', fs.readFileSync(path.join(ROOT, 'src/sw.js')));
   write('manifest.json', JSON.stringify({ name: cfg.siteName, short_name: cfg.siteName.length > 12 ? cfg.siteName.replace(/^Philly /, '') : cfg.siteName, description: 'After-school programs in Philadelphia, sorted by the school your child goes to.',
     start_url: '/?utm_source=homescreen&utm_medium=app', scope: '/', display: 'standalone', background_color: '#96C9FF', theme_color: '#96C9FF',
-    icons: [{ src: '/icon-192.png', sizes: '192x192', type: 'image/png' }, { src: '/icon-512.png', sizes: '512x512', type: 'image/png' }] }, null, 2) + '\n');
+    icons: [{ src: '/icon-192.png' + stamp('src/static/icon-192.png'), sizes: '192x192', type: 'image/png' }, { src: '/icon-512.png' + stamp('src/static/icon-512.png'), sizes: '512x512', type: 'image/png' }] }, null, 2) + '\n');
 }
 if (GROUPS && GROUPS.premium !== 'off') write('assets/qr.js', fs.readFileSync(path.join(ROOT, 'src/qr.js')));   // draws the code on a premium listing's flyer; loaded only when one is asked for
 if (GROUPS) {
