@@ -404,7 +404,13 @@ button.btn{cursor:pointer;font-family:inherit}
 .foot-cols ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
 .foot-cols li a{color:var(--foot-muted);text-decoration:none}
 .foot-cols a:hover{color:var(--foot-ink);text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:2px;text-underline-offset:4px}
-.foot-fine{margin-top:clamp(36px,5vw,56px);padding-top:24px;border-top:1px solid color-mix(in srgb,var(--foot-muted) 28%,transparent);display:flex;flex-direction:column;gap:8px;font-size:.88rem}
+.foot-fine{margin-top:clamp(36px,5vw,56px);padding-top:24px;border-top:1px solid color-mix(in srgb,var(--foot-muted) 28%,transparent);display:flex;gap:22px;align-items:flex-start;font-size:.88rem}
+.foot-bulb{flex:none;height:64px;width:auto;margin-top:2px}
+.foot-fine-text{display:flex;flex-direction:column;gap:8px}
+/* the kit's bulb marks: the outline one signs the footer; the yellow one sits on empty states and the 404 page */
+.ask:has(> .ask-bulb){display:flex;gap:18px;align-items:center}
+.ask-bulb{flex:none;height:64px;width:auto}
+.hero-bulb{display:block;align-self:flex-start;height:clamp(96px,14vw,136px);width:auto;margin-bottom:4px}
 .section[id],.prose h2[id]{scroll-margin-top:24px}
 
 /* ---------- neighborhoods ---------- */
