@@ -730,7 +730,8 @@
             items.forEach(function (x) {
               var li = el('li'), a = el('a', null, x.n); a.href = markHref(x.k);
               var b0 = el('b'); b0.appendChild(a); li.appendChild(b0);
-              li.appendChild(el('span', 'hint', kindWord[x.k.charAt(0)] || ''));
+              var KW = { after: 'after-school sign-ups', weekend: 'weekend classes', off: 'day camps', summer: 'summer camp' };
+              li.appendChild(el('span', 'hint', (kindWord[x.k.charAt(0)] || '') + (x.kinds && x.kinds.length ? ' · ' + x.kinds.map(function (k) { return KW[k] || k; }).join(', ') + ' only' : '')));
               if (addToWeek && x.k.charAt(0) === 'p') { var aw = el('a', 'g-add', 'Add to your week'); aw.href = page('board/') + '?add=' + encodeURIComponent(x.k.slice(2)); li.appendChild(aw); }
               var rm = btn('clear', removeLabel);
               rm.addEventListener('click', function () { rm.disabled = true; remove(x).then(function (r) { if (r && r.ok === false) { marksNote.textContent = r.message; rm.disabled = false; return; } marksNote.textContent = ''; drawMarks(); }); });
@@ -2010,14 +2011,12 @@
           results.insertBefore(allLi, results.firstChild);
         }
         note.textContent = text.length < 2
-          ? (hits.length ? '' : (cState === 'in' ? 'No listing has a website at ' + (cDomain || 'your address') + '. Search by name to check, or suggest your program below.' : 'Every program and summer camp on the site is here: ' + LISTED + ' listings.'))
-          : (hits.length ? (hits.length > 8 ? 'Showing the first 8. Keep typing to narrow it.' : '') : 'Nothing by that name is listed yet.');
+          ? (hits.length || cState !== 'in' ? '' : 'No listing has a website at ' + (cDomain || 'your address') + '. Search by name to check, or suggest your program.')
+          : (hits.length ? (hits.length > 8 ? 'Showing the first 8. Keep typing to narrow it.' : '') : 'Listing not here? ');
+        if (text.length >= 2 && !hits.length) { var sg = el('a', null, 'Suggest your program or camp'); sg.href = page('suggest/'); note.appendChild(sg); note.appendChild(document.createTextNode(', with its website, and claim it once it’s up.')); }
       };
       si.addEventListener('input', show);
       show();
-      var miss = el('p', 'hint', 'Not on the site yet? ');
-      var sg = el('a', null, 'Suggest your program or camp'); sg.href = page('suggest/'); miss.appendChild(sg); miss.appendChild(document.createTextNode(', with its website, and claim it once it’s up.'));
-      add.appendChild(miss);
       if (cState === 'out' && !wanted) {
         var have = el('p', 'hint', 'Already claimed yours? ');
         var hl = btn('linklike', 'Sign in');
@@ -2636,13 +2635,18 @@
     // Signed in, the plan keeps itself. A plan here and none in the profile is sent; one in the profile and none here
     // is put on this device. Both, never tied together, is left for the parent to choose between.
     var auto = function () {
-      if (!me || !loaded || busy || failed || ros()[K.flag] || ros()[OFF]) return;
+      if (!me || !loaded || busy || failed || ros()[K.flag] || ros()[OFF]) return;   // (OFF clears itself the next time the plan is changed here: see saveRosters in site.js)
       var there = kept && kept.y === plan.year ? kept : null;
       if (there && !K.has()) { apply(there); tell('profile_put'); draw(); }
       else if (!there && K.has()) push(function () { if (bad) { note = ''; bad = false; } tell('profile_keep'); draw(); });
     };
     var draw = function () {
-      box.textContent = ''; box.hidden = false;
+      // The plan keeps itself, so the box stays out of the way: it shows only when there is something to decide (a
+      // plan here and a different one in the profile) or something to try again.
+      var linked0 = !!ros()[K.flag], there0 = kept && kept.y === plan.year ? kept : null;
+      var needs = !!me && loaded && ((there0 && !linked0 && K.has()) || (failed && K.has()) || (bad && !!note));
+      box.textContent = ''; box.hidden = !needs;
+      if (!needs) return;
       box.appendChild(el('h3', null, 'In your profile'));
       if (note) box.appendChild(el('p', 'g-status' + (bad ? ' bad' : ''), note));
       if (!me) {
@@ -2992,7 +2996,7 @@
         applyWeek(r.kids[at], w); put = true;
       });
       if (put) { board.save(); board.redraw(); draw(); }
-      r.kids.forEach(function (k) { if (!k.prof && !k.profOff && hasWeek(k) && firstWord(k.name) && !clashes(k) && keepFail.indexOf(k) < 0) keepWeek(k); });
+      r.kids.forEach(function (k) { if (!k.prof && !k.profOff && hasWeek(k) && firstWord(k.name) && !clashes(k) && keepFail.indexOf(k) < 0) keepWeek(k); });   // (profOff clears itself the next time the week is changed here)
     };
 
     // Someone sent here from the join page to build a week sees the way back at the top, where they are working.
@@ -3039,75 +3043,48 @@
       }
 
       // ----- 1. the profile -----
-      var keep = el('div', 'g-part');
-      keep.appendChild(el('h3', null, 'In your profile'));
-      if (kid.prof) {
-        keep.appendChild(el('p', null, (name || 'This week') + (name ? '’s week' : '') + ' is kept in your profile. Changes you make here save themselves, and it’s there when you sign in on another device.'));
-        var drop = btn('clear', 'Take it out of my profile');
-        twoTap(drop, 'Tap again: it stays on this device only', function () {
-          var id = kid.prof.id;
-          call('week_delete', { week: id }).then(function (d) {
-            if (!d.ok && d.http !== 401) { notice = d.message; draw(); return; }
-            kid.prof = null; kid.profOff = 1; board.save(); if (profile) profile.weeks = (profile.weeks || []).filter(function (w) { return w.id !== id; }); notice = ''; draw();
-          });
-        });
-        keep.appendChild(drop);
-      } else if (!picks && !kid.profOff) {
-        keep.appendChild(el('p', 'hint', 'Add a program and ' + who + ' is kept in your profile, so it’s there when you sign in on another phone or computer.'));
-      } else if (!name) {
-        keep.appendChild(el('p', null, kid.profOff ? 'This week is only on this device. Add your child’s first name at the top of the page to keep it in your profile.' : 'Add your child’s first name at the top of the page and this week is kept in your profile, so it’s there on your other devices. Weeks in a profile are told apart by first name; a nickname or an initial is fine.'));
-      } else if (kid.profOff || clashes(kid) || keepFail.indexOf(kid) > -1) {
-        // out of the profile because they took it out, because the profile already has a week under this name, or because saving it didn't work
-        keep.appendChild(el('p', null, kid.profOff ? name + '’s week is only on this device. Keep it in your profile and it’s there when you sign in on another phone or computer. Notes you typed stay on this device.'
-          : clashes(kid) ? 'Your profile already has a week for ' + name + ', from another device. Put that one on this device, below, or keep this device’s as well.'
-          : name + '’s week hasn’t reached your profile yet.'));
-        var kb = btn('btn primary', keepFail.indexOf(kid) > -1 && !kid.profOff && !clashes(kid) ? 'Try again' : 'Keep ' + who + ' in my profile');
-        var ks = el('span', 'hint'); ks.setAttribute('aria-live', 'polite');
-        kb.addEventListener('click', function () {
-          kb.disabled = true;
-          keepWeek(kid, function (d) { if (!d.ok) notice = d.message || 'That didn’t save. Try again.'; else notice = ''; });
-        });
-        var ka = el('div', 'actions'); ka.appendChild(kb); ka.appendChild(ks); keep.appendChild(ka);
-      } else {
-        keep.appendChild(el('p', 'hint', 'Saving ' + who + ' to your profile…'));
-      }
+      // The week keeps itself in the profile, so nothing is said about it here unless there is something to sort out:
+      // a week in the profile under the same name from another device, a save that didn't work, or a week in the
+      // profile that this device doesn't have.
       var others = elsewhere();
-      if (others.length) {
-        var ol = el('ul', 'g-list');
-        others.forEach(function (w) {
-          var li = el('li');
-          li.appendChild(el('b', null, w.name + '’s week'));
-          li.appendChild(el('span', 'hint', 'In your profile, not on this device. Last changed ' + shortDate(w.updated) + '.'));
-          var put = btn('clear', 'Put it on this device');
-          var twin = board.rosters().kids.filter(function (k) { return !k.prof && sameName(firstWord(k.name), w.name) && hasWeek(k); })[0];   // the child of the same name here: the profile's week replaces theirs
-          (twin ? function (go) { twoTap(put, 'It replaces ' + w.name + '’s week on this device. Tap again', go); } : function (go) { put.addEventListener('click', go); })(function () {
-            var r = board.rosters(), at = -1;
-            r.kids.forEach(function (k, i) { if (at < 0 && !k.prof && sameName(firstWord(k.name), w.name)) at = i; });
-            r.kids.forEach(function (k, i) { if (at < 0 && !k.prof && !k.name && !weekCount(k.now) && !weekCount(k.next)) at = i; });   // or an untouched roster
-            if (at < 0) {
-              if (r.kids.length >= board.maxKids) { notice = 'This device already has ' + board.maxKids + ' rosters. Remove one first.'; draw(); return; }
-              r.kids.push(board.newKid(w.name)); at = r.kids.length - 1;
-            }
-            applyWeek(r.kids[at], w); delete r.kids[at].profOff; r.kid = at;
-            board.save(); notice = ''; board.redraw(); draw();
+      if (name && (clashes(kid) || keepFail.indexOf(kid) > -1) || others.length) {
+        var keep = el('div', 'g-part');
+        keep.appendChild(el('h3', null, 'In your profile'));
+        if (name && (clashes(kid) || keepFail.indexOf(kid) > -1)) {
+          keep.appendChild(el('p', null, clashes(kid) ? 'Your profile already has a week for ' + name + ', from another device. Put that one on this device, below, or keep this device’s as well.'
+            : name + '’s week hasn’t reached your profile yet.'));
+          var kb = btn('btn primary', keepFail.indexOf(kid) > -1 && !clashes(kid) ? 'Try again' : 'Keep ' + who + ' in my profile');
+          kb.addEventListener('click', function () {
+            kb.disabled = true;
+            keepWeek(kid, function (d) { if (!d.ok) notice = d.message || 'That didn’t save. Try again.'; else notice = ''; });
           });
-          li.appendChild(put); ol.appendChild(li);
-        });
-        keep.appendChild(ol);
+          var ka = el('div', 'actions'); ka.appendChild(kb); keep.appendChild(ka);
+        }
+        if (others.length) {
+          var ol = el('ul', 'g-list');
+          others.forEach(function (w) {
+            var li = el('li');
+            li.appendChild(el('b', null, w.name + '’s week'));
+            li.appendChild(el('span', 'hint', 'In your profile, not on this device. Last changed ' + shortDate(w.updated) + '.'));
+            var put = btn('clear', 'Put it on this device');
+            var twin = board.rosters().kids.filter(function (k) { return !k.prof && sameName(firstWord(k.name), w.name) && hasWeek(k); })[0];   // the child of the same name here: the profile's week replaces theirs
+            (twin ? function (go) { twoTap(put, 'It replaces ' + w.name + '’s week on this device. Tap again', go); } : function (go) { put.addEventListener('click', go); })(function () {
+              var r = board.rosters(), at = -1;
+              r.kids.forEach(function (k, i) { if (at < 0 && !k.prof && sameName(firstWord(k.name), w.name)) at = i; });
+              r.kids.forEach(function (k, i) { if (at < 0 && !k.prof && !k.name && !weekCount(k.now) && !weekCount(k.next)) at = i; });   // or an untouched roster
+              if (at < 0) {
+                if (r.kids.length >= board.maxKids) { notice = 'This device already has ' + board.maxKids + ' rosters. Remove one first.'; draw(); return; }
+                r.kids.push(board.newKid(w.name)); at = r.kids.length - 1;
+              }
+              applyWeek(r.kids[at], w); delete r.kids[at].profOff; r.kid = at;
+              board.save(); notice = ''; board.redraw(); draw();
+            });
+            li.appendChild(put); ol.appendChild(li);
+          });
+          keep.appendChild(ol);
+        }
+        share.appendChild(keep);
       }
-      var mySchool = deviceSchool();
-      if (mySchool && profile && !profile.school && schoolName(mySchool.id)) {
-        var sp = el('p', 'hint', mySchool.name + ' is saved as your school on this device. ');
-        var sk = btn('clear', 'Keep it in my profile too');
-        sk.addEventListener('click', function () { call('school_save', { school: mySchool.id }).then(function (d) { if (d.ok) { profile.school = d.school; adoptSchool(d.school, schoolName(d.school)); board.track({ event: 'pas_group_share', method: 'profile_school' }); draw(); } }); });
-        sp.appendChild(sk); keep.appendChild(sp);
-      } else if (profile && profile.school && schoolName(profile.school)) {
-        keep.appendChild(el('p', 'hint', schoolName(profile.school) + ' is kept in your profile as your school.'));
-      }
-      var gp = el('p', 'hint', profile && profile.grades && profile.grades.length ? 'Your children’s grades in your profile: ' + profile.grades.map(gradeWord).join(', ') + '. ' : 'Keep your children’s grades in your profile and lists of programs start on them. ');
-      var ga = el('a', null, profile && profile.grades && profile.grades.length ? 'Change' : 'Add grades'); ga.href = page('profile/') + '#you'; gp.appendChild(ga);
-      keep.appendChild(gp);
-      share.appendChild(keep);
 
       // ----- 2. one person -----
       var one = el('div', 'g-part');

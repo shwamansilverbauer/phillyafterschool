@@ -613,7 +613,8 @@
     return {
       state: state, api: api, sync: sync,
       load: function () { return api('marks').then(take); },
-      follow: function (k, on) { return api('follow', { key: k, on: !!on }).then(take); },
+      follow: function (k, on, kinds) { var body = { key: k, on: !!on }; if (on && kinds && kinds.length) body.kinds = kinds; return api('follow', body).then(take); },
+      kindsOf: function (k) { var f = (state.named && state.named.follows || []).filter(function (x) { return x.k === k; })[0]; return f && f.kinds ? f.kinds : null; },
       fav: function (k, on) { return api('fav', { key: k, on: !!on }).then(take); },
       unmute: function (k) { return api('unmute', { key: k }).then(take); },
       // The account now uses a different email address. The server has marked every follow as untold, so loading
@@ -699,6 +700,11 @@
       var fb = box.querySelector('[data-follow-btn]'), vb = box.querySelector('[data-fav-btn]');
       var status = box.querySelector('[data-follow-status]'), signin = box.querySelector('[data-follow-signin]'), more = box.querySelector('[data-follow-more]');
       var followLabel = fb.textContent, favLabel = vb ? vb.textContent : '';
+      // A listing with more than one part (after school, day camps, a summer camp…) asks which parts to follow. The
+      // summer camp is a listing of its own, so "summer" follows (or stops following) that one alongside.
+      var KINDS = (box.getAttribute('data-follow-kinds') || '').split('|').filter(Boolean).map(function (x) { var i = x.indexOf(':'); return { id: x.slice(0, i), label: x.slice(i + 1) }; });
+      var campKey = box.getAttribute('data-camp') || '';
+      var kindWords = function (ids) { return ids.map(function (id) { var k = KINDS.filter(function (x) { return x.id === id; })[0]; return k ? k.label.toLowerCase() : id; }); };
       var key = function () { return pick ? 's:' + pick.value : fixed; };
       var name = function () { return pick ? (pick.options[pick.selectedIndex].getAttribute('data-name') || '') : (box.getAttribute('data-name') || ''); };
       var say = function (msg, kind) { status.textContent = msg || ''; status.className = 'follow-status' + (kind ? ' ' + kind : ''); };
@@ -706,7 +712,8 @@
       if (pick && saved && all(pick, 'option').some(function (o) { return o.value === saved.id; })) pick.value = saved.id;
       var paint = function () {
         var on = MK.state.follows.indexOf(key()) > -1;
-        fb.textContent = on ? 'Following' : followLabel;
+        var narrowed = on && KINDS.length ? MK.kindsOf(key()) : null;
+        fb.textContent = on ? (narrowed ? 'Following: ' + kindWords(narrowed).join(', ') : 'Following') : followLabel;
         fb.className = 'btn ' + (on ? 'following' : 'primary');
         fb.setAttribute('aria-pressed', String(on));
         fb.title = on ? 'Tap to stop following' : '';
@@ -715,11 +722,12 @@
       };
       painters.push(paint);
       if (pick) pick.addEventListener('change', function () { say(''); paint(); });
-      var followed = function () {
-        var k = key(), kind = k.charAt(0);
+      var followed = function (kinds) {
+        var k = key(), kind = k.charAt(0), parts = kinds ? kindWords(kinds) : [];
+        var which = parts.length ? ' for ' + (parts.length > 1 ? parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1] : parts[0]) : '';
         say(kind === 's' ? 'You’re following ' + name() + '. Sign-up dates come the morning after they’re posted, and days off in a Sunday round-up.'
           : kind === 'c' ? 'You’re following ' + name() + '. You’ll hear when it posts next summer or names a sign-up day.'
-          : 'You’re following ' + name() + '. You’ll hear the morning after it posts a date, and again the day before.', 'good');
+          : 'You’re following ' + name() + which + '. You’ll hear the morning after it posts a date, and again the day before.', 'good');
         track({ event: 'pas_alert_signup', school: kind === 's' ? k.slice(2) : '', program_id: kind === 'p' ? k.slice(2) : '', camp_id: kind === 'c' ? k.slice(2) : '', place: place });
         if (kind !== 's') hit(k, 'email');
         basics();
@@ -760,15 +768,59 @@
         });
         more.appendChild(f);
       };
+      var picking = null;   // the parts picker, while it is open
+      var askKinds = function () {
+        if (!more) return;
+        more.textContent = ''; more.hidden = false;
+        var f = document.createElement('form'); f.className = 'follow-kinds';
+        var h = document.createElement('p'); h.className = 'follow-basics-h'; h.textContent = 'Which parts of ' + name() + ' do you want to hear about?'; f.appendChild(h);
+        var was = MK.kindsOf(key());
+        var boxes = KINDS.map(function (kd) {
+          var l = document.createElement('label'); l.className = 'follow-check';
+          var c = document.createElement('input'); c.type = 'checkbox'; c.value = kd.id; c.checked = !was || was.indexOf(kd.id) > -1;
+          var t = document.createElement('span'); t.textContent = kd.label;
+          l.appendChild(c); l.appendChild(t); f.appendChild(l); return c;
+        });
+        var acts = document.createElement('div'); acts.className = 'actions';
+        var go = document.createElement('button'); go.type = 'submit'; go.className = 'btn primary'; go.textContent = 'Follow'; acts.appendChild(go);
+        var no = document.createElement('button'); no.type = 'button'; no.className = 'btn'; no.textContent = 'Cancel'; no.addEventListener('click', function () { more.hidden = true; more.textContent = ''; picking = null; }); acts.appendChild(no);
+        f.appendChild(acts);
+        var note = document.createElement('p'); note.className = 'hint'; note.textContent = 'Tick everything to hear about all of it.'; f.appendChild(note);
+        f.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var chosen = boxes.filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
+          if (!chosen.length) { note.textContent = 'Tick at least one.'; note.className = 'hint bad'; return; }
+          go.disabled = true;
+          doFollow(chosen.length === KINDS.length ? null : chosen, function () { go.disabled = false; more.hidden = true; more.textContent = ''; picking = null; });
+        });
+        more.appendChild(f); picking = f;
+        var first = f.querySelector('input'); if (first) first.focus();
+      };
+      // following with the parts chosen; "summer" follows the summer camp's own listing too, and leaving it out stops that
+      var doFollow = function (kinds, then) {
+        var k = key();
+        fb.disabled = true;
+        MK.follow(k, true, kinds).then(function (d) {
+          fb.disabled = false;
+          if (!d.ok) { if (then) then(); if (d.http === 401) { MK.state.user = null; try { window.localStorage.removeItem('pas-in'); } catch (e) { /* storage blocked */ } open('follow'); return; } say(d.message, 'bad'); return; }
+          var wantCamp = !!campKey && (!kinds || kinds.indexOf('summer') > -1), hasCamp = !!campKey && MK.state.follows.indexOf(campKey) > -1;
+          var next = wantCamp !== hasCamp ? MK.follow(campKey, wantCamp) : Promise.resolve(d);
+          next.then(function () { paintAll(); if (then) then(); followed(kinds); });
+        });
+      };
       var act = function (what) {
         if (box.getAttribute('data-preview')) { say('This is the preview, so nothing was saved. Following works on the live site.'); return; }
         var k = key();
         if (!MK.state.user) { open(what); return; }
         var list = what === 'fav' ? MK.state.favs : MK.state.follows, on = list.indexOf(k) < 0, b = what === 'fav' ? vb : fb;
+        if (what === 'follow' && on && KINDS.length) { if (picking) { more.hidden = true; more.textContent = ''; picking = null; } else askKinds(); return; }
+        if (what === 'follow' && picking) { more.hidden = true; more.textContent = ''; picking = null; }
         b.disabled = true;
         MK[what](k, on).then(function (d) {
           b.disabled = false;
           if (!d.ok) { if (d.http === 401) { MK.state.user = null; try { window.localStorage.removeItem('pas-in'); } catch (e) { /* storage blocked */ } open(what); return; } say(d.message, 'bad'); return; }
+          // stopping a program stops its summer camp's listing too, when it was followed along with it
+          if (what === 'follow' && !on && campKey && MK.state.follows.indexOf(campKey) > -1) { MK.follow(campKey, false).then(paintAll); }
           paintAll();
           if (what === 'fav') { say(on ? name() + ' is in your favorites. Find it on your profile.' : 'Taken out of your favorites.', on ? 'good' : ''); track({ event: 'pas_favorite', action: on ? 'save' : 'remove', listing: k, place: place }); }
           else if (on) followed();
@@ -786,6 +838,7 @@
               paintAll();
               var k = key(), did = (what === 'fav' ? MK.state.favs : MK.state.follows).indexOf(k) > -1;
               if (!did) { act(what); return; }
+              if (what === 'follow' && KINDS.length && MK.state.user && MK.state.user.ready) { followed(null); askKinds(); return; }   // following everything so far; the parts can be narrowed here (a new account is asked its name first instead)
               if (what === 'fav') { say(name() + ' is in your favorites. Find it on your profile.', 'good'); track({ event: 'pas_favorite', action: 'save', listing: k, place: place }); basics(); }
               else followed();
             });
@@ -1528,7 +1581,11 @@
     }
     return rosters;
   }
-  function saveRosters() { store('pas-rosters', JSON.stringify(rosters)); if (window.pasBoard && window.pasBoard.onSave) window.pasBoard.onSave(); if (window.pasSummer && window.pasSummer.onSave) window.pasSummer.onSave(); if (window.pasDaysOff && window.pasDaysOff.onSave) window.pasDaysOff.onSave(); }
+  function saveRosters() {
+    // A change made here is the parent's say: a plan they had taken out of their profile goes back to keeping itself.
+    var kk = rosters.kids && rosters.kids[rosters.kid]; if (kk && kk.profOff) delete kk.profOff;
+    delete rosters.sumProfOff; delete rosters.offProfOff;
+    store('pas-rosters', JSON.stringify(rosters)); if (window.pasBoard && window.pasBoard.onSave) window.pasBoard.onSave(); if (window.pasSummer && window.pasSummer.onSave) window.pasSummer.onSave(); if (window.pasDaysOff && window.pasDaysOff.onSave) window.pasDaysOff.onSave(); }
   function activeKid() { var r = loadRosters(); return r.kids[r.kid]; }
   function activeBoard() { var r = loadRosters(); return r.kids[r.kid][r.active]; }
   function kidLabel(k, i) { return k.name || 'Child ' + (i + 1); }

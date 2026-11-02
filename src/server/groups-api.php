@@ -138,6 +138,10 @@ function db(): PDO {
     // favorite (kept for quick access, no emails). Keys are "p:<program>", "c:<camp>" or "s:<school>". A follow that
     // has been turned off stays as a row with live = 0 until the browser confirms the email list has dropped it too.
     $db->exec('CREATE TABLE IF NOT EXISTS follows (user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, k TEXT NOT NULL, live INTEGER NOT NULL DEFAULT 1, synced INTEGER NOT NULL DEFAULT 0, created INTEGER NOT NULL, PRIMARY KEY (user_id, k))');
+    // Which parts of a program a follow is for ("after,off": its after-school dates and its day camps, not its summer
+    // camp), as a sorted list; empty for everything. The mail job learns it from a scrambled entry in the stops list.
+    $fcols = array(); foreach ($db->query('PRAGMA table_info(follows)') as $c) $fcols[] = $c['name'];
+    if (!in_array('kinds', $fcols, true)) $db->exec("ALTER TABLE follows ADD COLUMN kinds TEXT NOT NULL DEFAULT ''");
     // What has been stopped, kept apart from the accounts so it outlasts them: a scrambled entry for each follow that
     // was turned off (a hash of the account's stop code and the listing). The job that sends the emails reads the
     // list and leaves those out, whether or not the email service was ever told.
@@ -486,18 +490,37 @@ function stop_mark(int $uid, string $k, bool $stopped): void {
 // The list has three kinds of entry: "<key>" (that follow was turned off), "mute|<key>" (stopped from an email:
 // nothing about that listing, even by way of a school the account follows) and "*" (everything stopped).
 function muted(int $uid, string $k): bool { return (bool) row('SELECT 1 AS x FROM stops WHERE h = ?', array(stop_hash(stop_code($uid), 'mute|' . $k))); }
-function follow_on(int $uid, string $k): bool {
+const FOLLOW_KINDS = array('after', 'weekend', 'off', 'summer');
+// The parts of a program a follow is for, as the page sent them: a sorted list of known words, or '' for everything.
+function follow_kinds($raw): string {
+  if (!is_array($raw)) return '';
+  $got = array(); foreach ($raw as $x) if (is_string($x) && in_array($x, FOLLOW_KINDS, true) && !in_array($x, $got, true)) $got[] = $x;
+  sort($got, SORT_STRING);
+  return count($got) === 0 || count($got) === count(FOLLOW_KINDS) ? '' : implode(',', $got);
+}
+// The scrambled entry that tells the mail job which parts a follow is for, kept in the stops list beside the stops.
+function only_mark(int $uid, string $k, string $was, string $now): void {
+  if ($was !== '' && $was !== $now) stop_mark($uid, 'only|' . $k . '|' . $was, false);
+  if ($now !== '') stop_mark($uid, 'only|' . $k . '|' . $now, true);
+}
+function follow_on(int $uid, string $k, string $kinds = ''): bool {
   if (mark_name($k, true) === null) return false;
   stop_mark($uid, $k, false); stop_mark($uid, 'mute|' . $k, false); stop_mark($uid, '*', false);
-  $had = row('SELECT live FROM follows WHERE user_id = ? AND k = ?', array($uid, $k));
-  if ($had && (int) $had['live'] === 1) return true;
+  $had = row('SELECT live, kinds FROM follows WHERE user_id = ? AND k = ?', array($uid, $k));
+  if ($had && (int) $had['live'] === 1) {
+    if ((string) $had['kinds'] !== $kinds) { q('UPDATE follows SET kinds = ? WHERE user_id = ? AND k = ?', array($kinds, $uid, $k)); only_mark($uid, $k, (string) $had['kinds'], $kinds); }
+    return true;
+  }
   if ((int) val('SELECT COUNT(*) FROM follows WHERE user_id = ? AND live = 1', array($uid)) >= MAX_FOLLOWS) return false;
-  q('INSERT INTO follows (user_id, k, live, synced, created) VALUES (?, ?, 1, 0, ?) ON CONFLICT(user_id, k) DO UPDATE SET live = 1, synced = 0', array($uid, $k, now()));
+  q('INSERT INTO follows (user_id, k, live, synced, created, kinds) VALUES (?, ?, 1, 0, ?, ?) ON CONFLICT(user_id, k) DO UPDATE SET live = 1, synced = 0, kinds = excluded.kinds', array($uid, $k, now(), $kinds));
+  only_mark($uid, $k, $had ? (string) $had['kinds'] : '', $kinds);
   bump('follow');
   return true;
 }
 function follow_off(int $uid, string $k): void {
-  q('UPDATE follows SET live = 0, synced = 0 WHERE user_id = ? AND k = ?', array($uid, $k));
+  $had = row('SELECT kinds FROM follows WHERE user_id = ? AND k = ?', array($uid, $k));
+  q("UPDATE follows SET live = 0, synced = 0, kinds = '' WHERE user_id = ? AND k = ?", array($uid, $k));
+  if ($had && (string) $had['kinds'] !== '') only_mark($uid, $k, (string) $had['kinds'], '');
   stop_mark($uid, $k, true);
 }
 function follow_off_all(int $uid): void {
@@ -514,9 +537,9 @@ function fav_on(int $uid, string $k): bool {
 // Everything a page needs to paint its Follow and Save buttons, and what the email list has yet to be told.
 function marks_out(int $uid): array {
   $follows = array(); $sync = array(); $favs = array();
-  foreach (q('SELECT k, live, synced FROM follows WHERE user_id = ? ORDER BY created, k', array($uid)) as $r) {
+  foreach (q('SELECT k, live, synced, kinds FROM follows WHERE user_id = ? ORDER BY created, k', array($uid)) as $r) {
     $n = mark_name($r['k'], true);
-    if ((int) $r['live'] === 1 && $n !== null) $follows[] = array('k' => $r['k'], 'n' => $n);
+    if ((int) $r['live'] === 1 && $n !== null) $follows[] = array('k' => $r['k'], 'n' => $n, 'kinds' => (string) $r['kinds'] === '' ? null : explode(',', (string) $r['kinds']));
     if ((int) $r['synced'] === 0) $sync[] = array('k' => $r['k'], 'on' => (int) $r['live'] === 1 && $n !== null);
   }
   foreach (q('SELECT k FROM favs WHERE user_id = ? ORDER BY created, k', array($uid)) as $r) { $n = mark_name($r['k'], false); if ($n !== null) $favs[] = array('k' => $r['k'], 'n' => $n); }
@@ -1658,7 +1681,7 @@ switch ($method . ' ' . $action) {
     $k = str($in, 'key', 90);
     if (mark_name($k, true) === null) fail('key', 'That isn’t something on the site to follow.');
     if (!empty($in['on'])) {
-      if (!follow_on($u['id'], $k)) fail('full', 'That’s the most one account can follow (' . MAX_FOLLOWS . '). Stop following something first.');
+      if (!follow_on($u['id'], $k, follow_kinds(isset($in['kinds']) ? $in['kinds'] : null))) fail('full', 'That’s the most one account can follow (' . MAX_FOLLOWS . '). Stop following something first.');
     } else {
       follow_off($u['id'], $k);
     }

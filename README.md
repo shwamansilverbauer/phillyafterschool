@@ -429,11 +429,17 @@ posted, break by break, from `daysOff`) and Summer (the summer camp tied to it, 
 same shape: the details in a card, then a filled button that puts it on the parent's plan for that part of the
 year ("Add to your week" → the week builder; "Add Saturday to your week" → the week builder's weekend;
 "Add it to your days off" → the days-off planner, opened on the first day it has posted; "Add to your summer"
-→ the summer planner) and plain buttons for the provider's own sign-up and website. The hero says what it runs
-as a row of colored pills (`runsStrip()`, one color per kind, the same colors as the All programs page) and the
-sticky strip under the menu bar (`jumpNav()`) jumps between the sections, Schools and Reviews. The sections are
-`kindSection()` in `programPage()`; the follow box ("Follow it, or save it for later", `#follow`, `.follow-first`)
-sits first, right under the strip, since following and favorites are what a parent does most on the page; the
+→ the summer planner) and plain buttons for the provider's own sign-up and website. The hero is only the name,
+the line and what it runs, as a row of colored pills (`runsStrip()`, one color per kind, the same colors as the
+All programs page). Everything else general sits right under it as the **snapshot** (`#snapshot`, "Program
+snapshot": one labeled line each for the type, where it is (address and neighborhood), the schools it serves with
+a colored dot for the kind of tie, grades, pick-up time, reviews, spots, the Claimed mark and the date checked;
+the `mini()` cards the list rows use, so the page reads the way the lists do). A camp of its own (`campPage()`)
+has the same shape: a bare hero, a "Camp snapshot", then its Follow box. The sticky strip under the menu bar
+(`jumpNav()`) jumps between the snapshot, the sections, Schools and Reviews. The sections are `kindSection()` in
+`programPage()`; the follow box ("Follow it, or save it for later", `#follow`, `.follow-first`) sits under the
+snapshot, since following and favorites are what a parent does most on the page (the Summer section no longer
+has a box of its own; "summer" is one of the parts the page's box can follow, see "Follow and favorites"); the
 claim box (`listingTools()`: "Run this program?", a "Claim this listing" button and "Suggest an update") sits
 under the sections, and once `site.js` learns the listing is claimed (`?action=claimed`) it says "Claimed by the
 people who run it" and keeps the update link (`.claim-cta.is-claimed`).
@@ -882,23 +888,25 @@ Putting a camp on a day off is a plan, not a registration, so each camp day in a
 ### Plans keep themselves
 
 The planners need an account (`plannersNeedAccount`), and a plan made by someone signed in is kept in their profile
-without asking: there is no "Keep it in my profile" button to find. Signed out, the planner's place is taken by the
+without asking: there is no "Keep it in my profile" button to find, and no box saying it was kept. Signed out, the planner's place is taken by the
 tour of the planner with one button, "Create a free account" (`planShow()`), so that is the first thing a visitor sees.
 
 - **Summer and days off** (`keepPlan()` in `groups.js`): once the profile has loaded, a plan on this device and none
-  in the profile is sent (`auto()`); one in the profile and none here is put on this device. The box under the plan
-  says "This summer is kept in your profile" with a "Take it out of my profile" link.
+  in the profile is sent (`auto()`); one in the profile and none here is put on this device. Nothing on the page
+  says so: the "In your profile" box (`#sum-profile`, `#off-profile`) stays hidden unless there is something to
+  decide or retry (below). Taking a plan out of the profile is done on the account page's Plans tab.
 - **The week** (`autoKeep()` and `keepWeek()` in the Build your week part of `groups.js`): each child's week is its
   own row in the profile, told apart by first name, so a week is sent once it has a first name and a program. A week
   the profile has and this device doesn't is put on this device. Removing a child on the page deletes their week
   from the profile too (`onKidGone`), or it would come straight back.
-- **What is still the parent's choice.** (1) The profile and this device both hold a plan that were never tied
+- **What is still the parent's choice.** The profile and this device both hold a plan that were never tied
   together (a plan made on this device before the planners needed an account, say): neither is sent or replaced
   until they pick, and replacing takes a second tap. For weeks that means a child here with the same first name as a
-  week in the profile. (2) A plan they took out of the profile stays out: the device remembers (`sumProfOff`,
-  `offProfOff` on `pas-rosters`, `profOff` on a child) and shows "only on this device" with a button to keep it
-  again. A plan removed from the profile on another device, or on the profile page, is marked the same way on the
-  devices that still have a copy, so they don't put it back.
+  week in the profile. Only then does the "In your profile" box show (and after a save that didn't work, with "Try
+  again"); the week builder's version sits in its sharing panel and also lists a week the profile has that this
+  device doesn't, with "Put it on this device". A plan taken out of the profile (`sumProfOff`, `offProfOff` on
+  `pas-rosters`, `profOff` on a child) no longer stays out: a device that still has it keeps it again the next time
+  the planner is opened, because plans save themselves. To drop one for good, clear it on the device too.
 - **What the pages say.** The privacy page, the terms' "Children's information", the sign-up page and each planner's
   intro say plans are kept in the profile while signed in. If this is ever made a choice again, those are the places
   to change (`privacyUpdated` and `termsUpdated` in `site.config.json` are the dates shown).
@@ -1051,7 +1059,9 @@ is `--cta`; the footer keeps the deep blue (`--foot`). Navy on the sky measures 
 white-on-deep-blue. There is no dark mode: the site looks the same whatever the device is set to
 (`color-scheme: only light` in the CSS and a matching `<meta>` in every page), because the calendars, the plan
 colours and the pictures are drawn for a light page. The week card (`drawCard` in `src/site.js`) and the link-preview picture
-(`src/static/share.png`, 1200 by 630) use the same sky and footer, so change them together.
+(`src/static/share.png`, 1200 by 630) use the same sky and footer, so change them together. The favicon and the
+app icons (`src/static/favicon.svg`, `favicon.png`, `favicon.ico`, `apple-touch-icon.png`, `icon-192.png`,
+`icon-512.png`) are the logo's bulb on a navy square, cut out of `logo.png`; to change them, replace the six files.
 
 **What a shared link shows.** A link to the site that is texted or posted shows the picture, a title and a line of
 text. The picture's headline and its one line are part of the picture, so when the home page's headline changes the
@@ -1453,12 +1463,24 @@ database does not move: both addresses are served from the same folder.
 ## Follow and favorites
 
 Dates by email now run on accounts. A **follow** means the listing's or school's dates are emailed; a **favorite**
-keeps a listing in the account and emails nothing. `followBox()` in `build.mjs` draws the box: at the top of a
-program's page and inside the details card on a camp's page, with a line under the two buttons saying which is
+keeps a listing in the account and emails nothing. `followBox()` in `build.mjs` draws the box: under the snapshot
+on a program's page and on a camp's page, with a line under the two buttons saying which is
 which ("Follow means emails when it posts a date. Save to favorites means no emails…", `.follow-which`), and as a
 wide box on a school page, the home page, the days-off page and `/alerts/` (those last three with a school picker). Without accounts (`groups` unset) the old sign-up form,
 `alertsBox()`, is used instead.
 
+- **Which parts.** A program with more than one part (after school, day camps, weekend classes, a summer camp)
+  asks which of them to follow: pressing Follow while signed in opens a short list of ticked boxes in the box
+  (`.follow-kinds`; the parts come from `partsOf()` as `data-follow-kinds`), and the follow is kept with those
+  parts (`follows.kinds`, a sorted list; empty for everything, which is also what signing in from the button
+  gives). "Summer camp" is the camp's own listing (`data-camp`), so ticking it follows `c:<camp>` alongside and
+  unticking it, or stopping the program, stops that too. The button then reads "Following: day camps, summer
+  camp" and the account page's list says "day camps, summer camp only". The mail job learns the parts the same
+  way it learns stops: the site keeps one scrambled entry per narrowed follow in the stops list
+  (`only|p:<id>|off,summer`, hashed with the account's stop code), each entry in `data/alerts.json` carries the
+  part it is about (`part`: a program's sign-up dates and notes belong to its main part, a camp day to the days
+  off) and `withoutStopped()` in `scripts/send-alerts.mjs` tries each way of choosing some of the program's parts
+  to read the entry back (`person.only`), which `dueFor()` then honors. A listing with one part asks nothing.
 - **Signed out.** Tapping Follow or Save fetches `assets/groups.js` (listing pages don't carry it otherwise) and
   shows its sign-in form in the box. The sign-in is started with `next` set to `f:<key>` or `v:<key>`, and the
   server does the follow or the save itself when the sign-in finishes (`sign_in()`), so it also works when
