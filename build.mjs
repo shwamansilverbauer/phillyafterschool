@@ -2513,7 +2513,7 @@ function aboutPage() {
   ${artChip(58, 136, 128, 'Dana · Nebinger')}${artChip(194, 136, 100, 'Read first', '#D6F3D2', '#1F5A22')}
   <circle cx="330" cy="149" r="14" fill="#F3C613"/><path d="M323.5 149.5l4.5 4.5 9-9" fill="none" stroke="#2A2100" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`);
   // the two who made it: the photo of them, cut out, popping in from the bottom right of a drawn school scene
-  const artMakers = artBox(`<defs><clipPath id="makers-clip"><rect width="400" height="260" rx="14"/></clipPath><linearGradient id="makers-fade" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#000"/><stop offset=".14" stop-color="#fff"/></linearGradient><mask id="makers-mask"><rect x="186" y="0" width="214" height="260" fill="url(#makers-fade)"/></mask></defs>
+  const artMakers = artBox(`<defs><clipPath id="makers-clip"><rect width="400" height="260" rx="14"/></clipPath><linearGradient id="makers-fade" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#000"/><stop offset=".04" stop-color="#fff"/></linearGradient><mask id="makers-mask"><rect x="186" y="0" width="214" height="260" fill="url(#makers-fade)"/></mask></defs>
   <g clip-path="url(#makers-clip)">
   <rect width="400" height="260" fill="#C3E1FF"/>
   <circle cx="262" cy="46" r="16" fill="#F3C613"/><path d="M262 24v-7M262 68v-7M240 46h-7M284 46h-7M246 30l-5-5M278 62l-5-5M278 30l5-5M246 62l-5 5" stroke="#F3C613" stroke-width="3" stroke-linecap="round"/>
