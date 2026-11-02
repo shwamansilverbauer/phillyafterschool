@@ -45,335 +45,636 @@
   "programs": [
     {
       "id": "imagine-that-philly",
-      "name": "Imagine That Philly"
+      "name": "Imagine That Philly",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "nebinger-clubs",
-      "name": "School clubs and teams at Nebinger"
+      "name": "School clubs and teams at Nebinger",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "girls-on-the-run",
-      "name": "Girls on the Run"
+      "name": "Girls on the Run",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "nebinger-arts-partners",
-      "name": "Arts partners and Science Olympiad at Nebinger"
+      "name": "Arts partners and Science Olympiad at Nebinger",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "meredith-clubs",
-      "name": "Meredith after-school clubs"
+      "name": "Meredith after-school clubs",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "coppin-clubs",
-      "name": "School clubs and ensembles at Coppin"
+      "name": "School clubs and ensembles at Coppin",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "zhang-sah",
-      "name": "Zhang Sah"
+      "name": "Zhang Sah",
+      "parts": [
+        "after",
+        "off"
+      ]
     },
     {
       "id": "shot-tower-rec",
-      "name": "Shot Tower Recreation Center"
+      "name": "Shot Tower Recreation Center",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "philly-inmovement",
-      "name": "Philly InMovement: MOVE After School"
+      "name": "Philly InMovement: MOVE After School",
+      "parts": [
+        "after",
+        "weekend",
+        "off"
+      ]
     },
     {
       "id": "settlement-kaleidoscope-plus",
-      "name": "Settlement Music School: Kaleidoscope Plus"
+      "name": "Settlement Music School: Kaleidoscope Plus",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "philly-art-center-qv",
-      "name": "Philly Art Center, Queen Village"
+      "name": "Philly Art Center, Queen Village",
+      "parts": [
+        "after",
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "old-pine",
-      "name": "The NeighborHub"
+      "name": "The NeighborHub",
+      "parts": [
+        "after",
+        "off"
+      ]
     },
     {
       "id": "butchers-sew-shop",
-      "name": "Butcher’s Sew Shop Junior"
+      "name": "Butcher’s Sew Shop Junior",
+      "parts": [
+        "after",
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "mister-johns-music",
-      "name": "Mister John’s Music"
+      "name": "Mister John’s Music",
+      "parts": [
+        "after",
+        "weekend",
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "music-theatre-philly",
-      "name": "Music Theatre Philly"
+      "name": "Music Theatre Philly",
+      "parts": [
+        "after",
+        "weekend",
+        "summer"
+      ]
     },
     {
       "id": "arden-drama-school",
-      "name": "Arden Drama School"
+      "name": "Arden Drama School",
+      "parts": [
+        "weekend",
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "walnut-street-theatre-school",
-      "name": "Walnut Street Theatre School"
+      "name": "Walnut Street Theatre School",
+      "parts": [
+        "weekend",
+        "summer"
+      ]
     },
     {
       "id": "coco-academy",
-      "name": "CoCo Academy"
+      "name": "CoCo Academy",
+      "parts": [
+        "after",
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "queen-and-rook",
-      "name": "Queen & Rook Game Cafe"
+      "name": "Queen & Rook Game Cafe",
+      "parts": [
+        "after",
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "beehive-at-bok",
-      "name": "Beehive at Bok"
+      "name": "Beehive at Bok",
+      "parts": [
+        "after",
+        "off"
+      ]
     },
     {
       "id": "dandelion-after-school",
-      "name": "Dandelion After School"
+      "name": "Dandelion After School",
+      "parts": [
+        "after",
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "movemakers",
-      "name": "MoveMakers Philly"
+      "name": "MoveMakers Philly",
+      "parts": [
+        "after",
+        "weekend",
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "kids-on-12th",
-      "name": "Kids on 12th"
+      "name": "Kids on 12th",
+      "parts": [
+        "after",
+        "off"
+      ]
     },
     {
       "id": "columbus-square-rec",
-      "name": "Columbus Square Recreation Center"
+      "name": "Columbus Square Recreation Center",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "hawthorne-cultural-center",
-      "name": "Hawthorne Cultural Center"
+      "name": "Hawthorne Cultural Center",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "starr-garden-rec",
-      "name": "Starr Garden Recreation Center"
+      "name": "Starr Garden Recreation Center",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "palumbo-rec",
-      "name": "Palumbo Recreation Center"
+      "name": "Palumbo Recreation Center",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "mighty-writers-el-futuro",
-      "name": "Mighty Writers El Futuro"
+      "name": "Mighty Writers El Futuro",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "free-library-leap",
-      "name": "Free Library LEAP"
+      "name": "Free Library LEAP",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "fleisher-art-memorial",
-      "name": "Fleisher Art Memorial"
+      "name": "Fleisher Art Memorial",
+      "parts": [
+        "after",
+        "weekend",
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "makom-community",
-      "name": "Makom Community"
+      "name": "Makom Community",
+      "parts": [
+        "after",
+        "off"
+      ]
     },
     {
       "id": "vare-washington-edey",
-      "name": "Extended Day, Extended Year at Vare-Washington"
+      "name": "Extended Day, Extended Year at Vare-Washington",
+      "parts": [
+        "after",
+        "off"
+      ]
     },
     {
       "id": "vare-washington-clubs",
-      "name": "School clubs and teams at Vare-Washington"
+      "name": "School clubs and teams at Vare-Washington",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "sunrise-mccall",
-      "name": "Sunrise of Philadelphia at McCall"
+      "name": "Sunrise of Philadelphia at McCall",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "sunrise-stanton",
-      "name": "Sunrise of Philadelphia at Stanton"
+      "name": "Sunrise of Philadelphia at Stanton",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "mccall-clubs",
-      "name": "McCall clubs and teams"
+      "name": "McCall clubs and teams",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "sawubona-creativity-project",
-      "name": "Sawubona Creativity Project"
+      "name": "Sawubona Creativity Project",
+      "parts": [
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "playarts-day-camps",
-      "name": "PlayArts day camps"
+      "name": "PlayArts day camps",
+      "parts": [
+        "off"
+      ]
     },
     {
       "id": "philly-rock-gym-day-camps",
-      "name": "Philadelphia Rock Gym"
+      "name": "Philadelphia Rock Gym",
+      "parts": [
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "skate-the-foundry",
-      "name": "Skate The Foundry"
+      "name": "Skate The Foundry",
+      "parts": [
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "pafa-saturday-art",
-      "name": "PAFA Saturday Studio Art"
+      "name": "PAFA Saturday Studio Art",
+      "parts": [
+        "weekend",
+        "summer"
+      ]
     },
     {
       "id": "moore-young-artists-workshop",
-      "name": "Moore Young Artists Workshop"
+      "name": "Moore Young Artists Workshop",
+      "parts": [
+        "weekend",
+        "summer"
+      ]
     },
     {
       "id": "philadelphia-museum-of-art-kids",
-      "name": "Philadelphia Museum of Art: Art Kids Classes"
+      "name": "Philadelphia Museum of Art: Art Kids Classes",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "made-institute-sunday-sewing",
-      "name": "MADE Institute: Sunday Sewing"
+      "name": "MADE Institute: Sunday Sewing",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "rock-school-for-dance",
-      "name": "The Rock School for Dance Education"
+      "name": "The Rock School for Dance Education",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "koresh-school-of-dance",
-      "name": "Koresh School of Dance"
+      "name": "Koresh School of Dance",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "school-of-philadelphia-ballet",
-      "name": "School of Philadelphia Ballet"
+      "name": "School of Philadelphia Ballet",
+      "parts": [
+        "weekend",
+        "summer"
+      ]
     },
     {
       "id": "zazz-dance",
-      "name": "ZAZZ"
+      "name": "ZAZZ",
+      "parts": [
+        "weekend",
+        "summer"
+      ]
     },
     {
       "id": "temple-music-prep-cmsp",
-      "name": "Temple Music Prep: Community Music Scholars"
+      "name": "Temple Music Prep: Community Music Scholars",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "wissahickon-skating-club",
-      "name": "Wissahickon Skating Club"
+      "name": "Wissahickon Skating Club",
+      "parts": [
+        "weekend",
+        "summer"
+      ]
     },
     {
       "id": "penn-ice-rink",
-      "name": "Penn Ice Rink"
+      "name": "Penn Ice Rink",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "starfinder-saturday-soccer",
-      "name": "Starfinder: Saturday soccer"
+      "name": "Starfinder: Saturday soccer",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "franklin-institute-pacts",
-      "name": "The Franklin Institute: PACTS"
+      "name": "The Franklin Institute: PACTS",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "macguffin-theatre",
-      "name": "MacGuffin Theatre & Film Company"
+      "name": "MacGuffin Theatre & Film Company",
+      "parts": [
+        "weekend",
+        "summer"
+      ]
     },
     {
       "id": "philadelphia-dance-academy",
-      "name": "The Philadelphia Dance Academy"
+      "name": "The Philadelphia Dance Academy",
+      "parts": [
+        "after",
+        "summer"
+      ]
     },
     {
       "id": "sunrise-kirkbride",
-      "name": "Sunrise of Philadelphia at Kirkbride"
+      "name": "Sunrise of Philadelphia at Kirkbride",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "kirkbride-clubs",
-      "name": "Kirkbride clubs and teams"
+      "name": "Kirkbride clubs and teams",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "sunrise-southwark",
-      "name": "Sunrise of Philadelphia at Southwark"
+      "name": "Sunrise of Philadelphia at Southwark",
+      "parts": [
+        "after",
+        "off"
+      ]
     },
     {
       "id": "southwark-clubs",
-      "name": "Southwark clubs and teams"
+      "name": "Southwark clubs and teams",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "east-passyunk-rec",
-      "name": "East Passyunk Community Center"
+      "name": "East Passyunk Community Center",
+      "parts": [
+        "after"
+      ]
     },
     {
       "id": "philadelphia-martial-arts-academy",
-      "name": "Philadelphia Martial Arts Academy"
+      "name": "Philadelphia Martial Arts Academy",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "fitness-alive-south-philly",
-      "name": "Fitness Alive: swim lessons in South Philly"
+      "name": "Fitness Alive: swim lessons in South Philly",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "christian-street-ymca",
-      "name": "Christian Street YMCA"
+      "name": "Christian Street YMCA",
+      "parts": [
+        "after",
+        "off"
+      ]
     },
     {
       "id": "hudson-table-philadelphia",
-      "name": "Hudson Table"
+      "name": "Hudson Table",
+      "parts": [
+        "off"
+      ]
     },
     {
       "id": "rizzo-rink",
-      "name": "Rizzo Rink"
+      "name": "Rizzo Rink",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "flips-4-kidz",
-      "name": "Flips 4 Kidz"
+      "name": "Flips 4 Kidz",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "equilibrium-dance-academy",
-      "name": "Equilibrium Dance Academy"
+      "name": "Equilibrium Dance Academy",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "blue-chip-flag-south-philadelphia",
-      "name": "Blue Chip Flag football, South Philadelphia"
+      "name": "Blue Chip Flag football, South Philadelphia",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "kumon-south-philadelphia",
-      "name": "Kumon Math & Reading Center of South Philadelphia"
+      "name": "Kumon Math & Reading Center of South Philadelphia",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "pennsport-school-of-dance",
-      "name": "Pennsport School of Dance"
+      "name": "Pennsport School of Dance",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "philly-pack",
-      "name": "Philly PACK"
+      "name": "Philly PACK",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "magic-gardens-family-jams",
-      "name": "Philadelphia’s Magic Gardens: Family Jams"
+      "name": "Philadelphia’s Magic Gardens: Family Jams",
+      "parts": [
+        "weekend"
+      ]
     },
     {
       "id": "phield-house",
-      "name": "Phield House"
+      "name": "Phield House",
+      "parts": [
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "philadelphia-school-of-circus-arts",
-      "name": "Philadelphia School of Circus Arts"
+      "name": "Philadelphia School of Circus Arts",
+      "parts": [
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "schuylkill-center",
-      "name": "The Schuylkill Center for Environmental Education"
+      "name": "The Schuylkill Center for Environmental Education",
+      "parts": [
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "flipout-productions",
-      "name": "FlipOut Productions"
+      "name": "FlipOut Productions",
+      "parts": [
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "elite-sports-factory",
-      "name": "Elite Sports Factory"
+      "name": "Elite Sports Factory",
+      "parts": [
+        "off"
+      ]
     },
     {
       "id": "movement-callowhill",
-      "name": "Movement Callowhill"
+      "name": "Movement Callowhill",
+      "parts": [
+        "off"
+      ]
     },
     {
       "id": "the-philadelphia-school",
-      "name": "Camp TPS at The Philadelphia School"
+      "name": "Camp TPS at The Philadelphia School",
+      "parts": [
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "nlarts",
-      "name": "NLArts"
+      "name": "NLArts",
+      "parts": [
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "philadelphia-youth-basketball",
-      "name": "Philadelphia Youth Basketball"
+      "name": "Philadelphia Youth Basketball",
+      "parts": [
+        "off"
+      ]
     },
     {
       "id": "awbury-arboretum",
-      "name": "Awbury Arboretum"
+      "name": "Awbury Arboretum",
+      "parts": [
+        "off",
+        "summer"
+      ]
     },
     {
       "id": "skilladelphia",
-      "name": "Skilladelphia"
+      "name": "Skilladelphia",
+      "parts": [
+        "after",
+        "weekend"
+      ]
     }
   ],
   "camps": [
@@ -574,6 +875,7 @@
       "programs": [
         "mister-johns-music"
       ],
+      "part": "after",
       "title": "Mister John’s Music",
       "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing",
@@ -597,6 +899,7 @@
       "programs": [
         "mister-johns-music"
       ],
+      "part": "after",
       "title": "Mister John’s Music",
       "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing",
@@ -616,6 +919,7 @@
       "programs": [
         "skilladelphia"
       ],
+      "part": "after",
       "title": "Skilladelphia",
       "url": "https://phillyafterschool.org/programs/skilladelphia/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing",
@@ -635,6 +939,7 @@
       "programs": [
         "skilladelphia"
       ],
+      "part": "after",
       "title": "Skilladelphia",
       "url": "https://phillyafterschool.org/programs/skilladelphia/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing",
@@ -647,6 +952,7 @@
     {
       "id": "camp-arden-drama-school-2026-11-03",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-03",
       "sendOn": "2026-10-18",
       "schools": [],
@@ -663,6 +969,7 @@
     {
       "id": "camp-awbury-arboretum-2026-11-03",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-03",
       "sendOn": "2026-10-18",
       "schools": [],
@@ -679,6 +986,7 @@
     {
       "id": "camp-butchers-sew-shop-2026-11-03",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-03",
       "sendOn": "2026-10-18",
       "schools": [],
@@ -695,6 +1003,7 @@
     {
       "id": "camp-elite-sports-factory-2026-11-03",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-03",
       "sendOn": "2026-10-18",
       "schools": [],
@@ -711,6 +1020,7 @@
     {
       "id": "camp-fleisher-art-memorial-2026-11-03",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-03",
       "sendOn": "2026-10-18",
       "schools": [],
@@ -727,6 +1037,7 @@
     {
       "id": "camp-makom-community-2026-11-03",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-03",
       "sendOn": "2026-10-18",
       "schools": [],
@@ -743,6 +1054,7 @@
     {
       "id": "camp-mister-johns-music-2026-11-03",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-03",
       "sendOn": "2026-10-18",
       "schools": [],
@@ -759,6 +1071,7 @@
     {
       "id": "camp-movemakers-2026-11-03",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-03",
       "sendOn": "2026-10-18",
       "schools": [],
@@ -775,6 +1088,7 @@
     {
       "id": "camp-nlarts-2026-11-03",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-03",
       "sendOn": "2026-10-18",
       "schools": [],
@@ -791,6 +1105,7 @@
     {
       "id": "camp-old-pine-2026-11-03",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-03",
       "sendOn": "2026-10-18",
       "schools": [],
@@ -807,6 +1122,7 @@
     {
       "id": "camp-philly-art-center-qv-2026-11-03",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-03",
       "sendOn": "2026-10-18",
       "schools": [],
@@ -823,6 +1139,7 @@
     {
       "id": "camp-philly-inmovement-2026-11-03",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-03",
       "sendOn": "2026-10-18",
       "schools": [],
@@ -839,6 +1156,7 @@
     {
       "id": "camp-playarts-day-camps-2026-11-03",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-03",
       "sendOn": "2026-10-18",
       "schools": [],
@@ -855,6 +1173,7 @@
     {
       "id": "camp-schuylkill-center-2026-11-03",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-03",
       "sendOn": "2026-10-18",
       "schools": [],
@@ -871,6 +1190,7 @@
     {
       "id": "camp-skate-the-foundry-2026-11-03",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-03",
       "sendOn": "2026-10-18",
       "schools": [],
@@ -1150,6 +1470,7 @@
     {
       "id": "camp-arden-drama-school-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1166,6 +1487,7 @@
     {
       "id": "camp-awbury-arboretum-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1182,6 +1504,7 @@
     {
       "id": "camp-butchers-sew-shop-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1198,6 +1521,7 @@
     {
       "id": "camp-elite-sports-factory-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1214,6 +1538,7 @@
     {
       "id": "camp-fleisher-art-memorial-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1230,6 +1555,7 @@
     {
       "id": "camp-hudson-table-philadelphia-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1246,6 +1572,7 @@
     {
       "id": "camp-makom-community-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1262,6 +1589,7 @@
     {
       "id": "camp-mister-johns-music-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1278,6 +1606,7 @@
     {
       "id": "camp-movemakers-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1294,6 +1623,7 @@
     {
       "id": "camp-nlarts-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1310,6 +1640,7 @@
     {
       "id": "camp-old-pine-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1326,6 +1657,7 @@
     {
       "id": "camp-philadelphia-youth-basketball-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1342,6 +1674,7 @@
     {
       "id": "camp-philly-art-center-qv-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1358,6 +1691,7 @@
     {
       "id": "camp-philly-inmovement-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1374,6 +1708,7 @@
     {
       "id": "camp-playarts-day-camps-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1390,6 +1725,7 @@
     {
       "id": "camp-schuylkill-center-2026-11-11",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-11",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1671,6 +2007,7 @@
       "programs": [
         "fleisher-art-memorial"
       ],
+      "part": "after",
       "title": "Fleisher Art Memorial",
       "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing",
@@ -1693,6 +2030,7 @@
       "programs": [
         "fleisher-art-memorial"
       ],
+      "part": "after",
       "title": "Fleisher Art Memorial",
       "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing",
@@ -1715,6 +2053,7 @@
       "programs": [
         "fleisher-art-memorial"
       ],
+      "part": "after",
       "title": "Fleisher Art Memorial",
       "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing",
@@ -1728,6 +2067,7 @@
     {
       "id": "camp-butchers-sew-shop-2026-11-16",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-16",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1744,6 +2084,7 @@
     {
       "id": "camp-elite-sports-factory-2026-11-16",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-16",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1760,6 +2101,7 @@
     {
       "id": "camp-makom-community-2026-11-16",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-16",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1776,6 +2118,7 @@
     {
       "id": "camp-movemakers-2026-11-16",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-16",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1792,6 +2135,7 @@
     {
       "id": "camp-nlarts-2026-11-16",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-16",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1808,6 +2152,7 @@
     {
       "id": "camp-old-pine-2026-11-16",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-16",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1824,6 +2169,7 @@
     {
       "id": "camp-philly-art-center-qv-2026-11-16",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-16",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1840,6 +2186,7 @@
     {
       "id": "camp-philly-inmovement-2026-11-16",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-16",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1856,6 +2203,7 @@
     {
       "id": "camp-playarts-day-camps-2026-11-16",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-16",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -1872,6 +2220,7 @@
     {
       "id": "camp-schuylkill-center-2026-11-16",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-16",
       "sendOn": "2026-11-01",
       "schools": [],
@@ -2133,6 +2482,7 @@
       "programs": [
         "fleisher-art-memorial"
       ],
+      "part": "after",
       "title": "Fleisher Art Memorial",
       "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing",
@@ -2155,6 +2505,7 @@
       "programs": [
         "fleisher-art-memorial"
       ],
+      "part": "after",
       "title": "Fleisher Art Memorial",
       "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing",
@@ -2177,6 +2528,7 @@
       "programs": [
         "fleisher-art-memorial"
       ],
+      "part": "after",
       "title": "Fleisher Art Memorial",
       "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing",
@@ -2190,6 +2542,7 @@
     {
       "id": "camp-butchers-sew-shop-2026-11-25",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-25",
       "sendOn": "2026-11-15",
       "schools": [],
@@ -2206,6 +2559,7 @@
     {
       "id": "camp-elite-sports-factory-2026-11-25",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-25",
       "sendOn": "2026-11-15",
       "schools": [],
@@ -2222,6 +2576,7 @@
     {
       "id": "camp-movemakers-2026-11-25",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-25",
       "sendOn": "2026-11-15",
       "schools": [],
@@ -2238,6 +2593,7 @@
     {
       "id": "camp-nlarts-2026-11-25",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-25",
       "sendOn": "2026-11-15",
       "schools": [],
@@ -2254,6 +2610,7 @@
     {
       "id": "camp-old-pine-2026-11-25",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-25",
       "sendOn": "2026-11-15",
       "schools": [],
@@ -2270,6 +2627,7 @@
     {
       "id": "camp-philly-art-center-qv-2026-11-25",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-25",
       "sendOn": "2026-11-15",
       "schools": [],
@@ -2301,6 +2659,7 @@
     {
       "id": "camp-elite-sports-factory-2026-11-26",
       "kind": "camp",
+      "part": "off",
       "date": "2026-11-26",
       "sendOn": "2026-11-15",
       "schools": [],
@@ -2342,6 +2701,7 @@
       "programs": [
         "butchers-sew-shop"
       ],
+      "part": "after",
       "title": "Butcher’s Sew Shop Junior",
       "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing",
@@ -2364,6 +2724,7 @@
       "programs": [
         "butchers-sew-shop"
       ],
+      "part": "after",
       "title": "Butcher’s Sew Shop Junior",
       "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing",
@@ -2386,6 +2747,7 @@
       "programs": [
         "philly-art-center-qv"
       ],
+      "part": "after",
       "title": "Philly Art Center, Queen Village",
       "url": "https://phillyafterschool.org/programs/philly-art-center-qv/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing",
@@ -2408,6 +2770,7 @@
       "programs": [
         "philly-art-center-qv"
       ],
+      "part": "after",
       "title": "Philly Art Center, Queen Village",
       "url": "https://phillyafterschool.org/programs/philly-art-center-qv/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing",
@@ -2420,6 +2783,7 @@
     {
       "id": "camp-arden-drama-school-2026-12-23",
       "kind": "camp",
+      "part": "off",
       "date": "2026-12-23",
       "sendOn": "2026-12-13",
       "schools": [],
@@ -2436,6 +2800,7 @@
     {
       "id": "camp-butchers-sew-shop-2026-12-23",
       "kind": "camp",
+      "part": "off",
       "date": "2026-12-23",
       "sendOn": "2026-12-13",
       "schools": [],
@@ -2452,6 +2817,7 @@
     {
       "id": "camp-elite-sports-factory-2026-12-23",
       "kind": "camp",
+      "part": "off",
       "date": "2026-12-23",
       "sendOn": "2026-12-13",
       "schools": [],
@@ -2468,6 +2834,7 @@
     {
       "id": "camp-movement-callowhill-2026-12-23",
       "kind": "camp",
+      "part": "off",
       "date": "2026-12-23",
       "sendOn": "2026-12-13",
       "schools": [],
@@ -2484,6 +2851,7 @@
     {
       "id": "camp-nlarts-2026-12-23",
       "kind": "camp",
+      "part": "off",
       "date": "2026-12-23",
       "sendOn": "2026-12-13",
       "schools": [],
@@ -2500,6 +2868,7 @@
     {
       "id": "camp-old-pine-2026-12-23",
       "kind": "camp",
+      "part": "off",
       "date": "2026-12-23",
       "sendOn": "2026-12-13",
       "schools": [],
@@ -2516,6 +2885,7 @@
     {
       "id": "camp-philadelphia-youth-basketball-2026-12-23",
       "kind": "camp",
+      "part": "off",
       "date": "2026-12-23",
       "sendOn": "2026-12-13",
       "schools": [],
@@ -2532,6 +2902,7 @@
     {
       "id": "camp-philly-art-center-qv-2026-12-23",
       "kind": "camp",
+      "part": "off",
       "date": "2026-12-23",
       "sendOn": "2026-12-13",
       "schools": [],
@@ -2548,6 +2919,7 @@
     {
       "id": "camp-the-philadelphia-school-2026-12-23",
       "kind": "camp",
+      "part": "off",
       "date": "2026-12-23",
       "sendOn": "2026-12-13",
       "schools": [],
@@ -2579,6 +2951,7 @@
     {
       "id": "camp-butchers-sew-shop-2027-01-15",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-15",
       "sendOn": "2027-01-03",
       "schools": [],
@@ -2595,6 +2968,7 @@
     {
       "id": "camp-elite-sports-factory-2027-01-15",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-15",
       "sendOn": "2027-01-03",
       "schools": [],
@@ -2611,6 +2985,7 @@
     {
       "id": "camp-makom-community-2027-01-15",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-15",
       "sendOn": "2027-01-03",
       "schools": [],
@@ -2627,6 +3002,7 @@
     {
       "id": "camp-old-pine-2027-01-15",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-15",
       "sendOn": "2027-01-03",
       "schools": [],
@@ -2643,6 +3019,7 @@
     {
       "id": "camp-philly-art-center-qv-2027-01-15",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-15",
       "sendOn": "2027-01-03",
       "schools": [],
@@ -2659,6 +3036,7 @@
     {
       "id": "camp-playarts-day-camps-2027-01-15",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-15",
       "sendOn": "2027-01-03",
       "schools": [],
@@ -2675,6 +3053,7 @@
     {
       "id": "camp-schuylkill-center-2027-01-15",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-15",
       "sendOn": "2027-01-03",
       "schools": [],
@@ -2706,6 +3085,7 @@
     {
       "id": "camp-butchers-sew-shop-2027-01-18",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-18",
       "sendOn": "2027-01-03",
       "schools": [],
@@ -2722,6 +3102,7 @@
     {
       "id": "camp-elite-sports-factory-2027-01-18",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-18",
       "sendOn": "2027-01-03",
       "schools": [],
@@ -2738,6 +3119,7 @@
     {
       "id": "camp-philadelphia-youth-basketball-2027-01-18",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-18",
       "sendOn": "2027-01-03",
       "schools": [],
@@ -2754,6 +3136,7 @@
     {
       "id": "camp-philly-art-center-qv-2027-01-18",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-18",
       "sendOn": "2027-01-03",
       "schools": [],
@@ -2770,6 +3153,7 @@
     {
       "id": "camp-schuylkill-center-2027-01-18",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-18",
       "sendOn": "2027-01-03",
       "schools": [],
@@ -2801,6 +3185,7 @@
     {
       "id": "camp-butchers-sew-shop-2027-01-29",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-29",
       "sendOn": "2027-01-17",
       "schools": [],
@@ -2817,6 +3202,7 @@
     {
       "id": "camp-elite-sports-factory-2027-01-29",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-29",
       "sendOn": "2027-01-17",
       "schools": [],
@@ -2833,6 +3219,7 @@
     {
       "id": "camp-makom-community-2027-01-29",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-29",
       "sendOn": "2027-01-17",
       "schools": [],
@@ -2849,6 +3236,7 @@
     {
       "id": "camp-old-pine-2027-01-29",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-29",
       "sendOn": "2027-01-17",
       "schools": [],
@@ -2865,6 +3253,7 @@
     {
       "id": "camp-philly-art-center-qv-2027-01-29",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-29",
       "sendOn": "2027-01-17",
       "schools": [],
@@ -2881,6 +3270,7 @@
     {
       "id": "camp-playarts-day-camps-2027-01-29",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-29",
       "sendOn": "2027-01-17",
       "schools": [],
@@ -2897,6 +3287,7 @@
     {
       "id": "camp-schuylkill-center-2027-01-29",
       "kind": "camp",
+      "part": "off",
       "date": "2027-01-29",
       "sendOn": "2027-01-17",
       "schools": [],
@@ -2928,6 +3319,7 @@
     {
       "id": "camp-butchers-sew-shop-2027-02-12",
       "kind": "camp",
+      "part": "off",
       "date": "2027-02-12",
       "sendOn": "2027-01-31",
       "schools": [],
@@ -2944,6 +3336,7 @@
     {
       "id": "camp-elite-sports-factory-2027-02-12",
       "kind": "camp",
+      "part": "off",
       "date": "2027-02-12",
       "sendOn": "2027-01-31",
       "schools": [],
@@ -2960,6 +3353,7 @@
     {
       "id": "camp-makom-community-2027-02-12",
       "kind": "camp",
+      "part": "off",
       "date": "2027-02-12",
       "sendOn": "2027-01-31",
       "schools": [],
@@ -2976,6 +3370,7 @@
     {
       "id": "camp-old-pine-2027-02-12",
       "kind": "camp",
+      "part": "off",
       "date": "2027-02-12",
       "sendOn": "2027-01-31",
       "schools": [],
@@ -2992,6 +3387,7 @@
     {
       "id": "camp-philly-art-center-qv-2027-02-12",
       "kind": "camp",
+      "part": "off",
       "date": "2027-02-12",
       "sendOn": "2027-01-31",
       "schools": [],
@@ -3008,6 +3404,7 @@
     {
       "id": "camp-playarts-day-camps-2027-02-12",
       "kind": "camp",
+      "part": "off",
       "date": "2027-02-12",
       "sendOn": "2027-01-31",
       "schools": [],
@@ -3024,6 +3421,7 @@
     {
       "id": "camp-schuylkill-center-2027-02-12",
       "kind": "camp",
+      "part": "off",
       "date": "2027-02-12",
       "sendOn": "2027-01-31",
       "schools": [],
@@ -3055,6 +3453,7 @@
     {
       "id": "camp-awbury-arboretum-2027-02-15",
       "kind": "camp",
+      "part": "off",
       "date": "2027-02-15",
       "sendOn": "2027-01-31",
       "schools": [],
@@ -3071,6 +3470,7 @@
     {
       "id": "camp-butchers-sew-shop-2027-02-15",
       "kind": "camp",
+      "part": "off",
       "date": "2027-02-15",
       "sendOn": "2027-01-31",
       "schools": [],
@@ -3087,6 +3487,7 @@
     {
       "id": "camp-elite-sports-factory-2027-02-15",
       "kind": "camp",
+      "part": "off",
       "date": "2027-02-15",
       "sendOn": "2027-01-31",
       "schools": [],
@@ -3103,6 +3504,7 @@
     {
       "id": "camp-fleisher-art-memorial-2027-02-15",
       "kind": "camp",
+      "part": "off",
       "date": "2027-02-15",
       "sendOn": "2027-01-31",
       "schools": [],
@@ -3119,6 +3521,7 @@
     {
       "id": "camp-philadelphia-youth-basketball-2027-02-15",
       "kind": "camp",
+      "part": "off",
       "date": "2027-02-15",
       "sendOn": "2027-01-31",
       "schools": [],
@@ -3135,6 +3538,7 @@
     {
       "id": "camp-philly-art-center-qv-2027-02-15",
       "kind": "camp",
+      "part": "off",
       "date": "2027-02-15",
       "sendOn": "2027-01-31",
       "schools": [],
@@ -3151,6 +3555,7 @@
     {
       "id": "camp-playarts-day-camps-2027-02-15",
       "kind": "camp",
+      "part": "off",
       "date": "2027-02-15",
       "sendOn": "2027-01-31",
       "schools": [],
@@ -3167,6 +3572,7 @@
     {
       "id": "camp-schuylkill-center-2027-02-15",
       "kind": "camp",
+      "part": "off",
       "date": "2027-02-15",
       "sendOn": "2027-01-31",
       "schools": [],
@@ -3198,6 +3604,7 @@
     {
       "id": "camp-awbury-arboretum-2027-03-10",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-10",
       "sendOn": "2027-02-28",
       "schools": [],
@@ -3214,6 +3621,7 @@
     {
       "id": "camp-butchers-sew-shop-2027-03-10",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-10",
       "sendOn": "2027-02-28",
       "schools": [],
@@ -3230,6 +3638,7 @@
     {
       "id": "camp-fleisher-art-memorial-2027-03-10",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-10",
       "sendOn": "2027-02-28",
       "schools": [],
@@ -3246,6 +3655,7 @@
     {
       "id": "camp-makom-community-2027-03-10",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-10",
       "sendOn": "2027-02-28",
       "schools": [],
@@ -3262,6 +3672,7 @@
     {
       "id": "camp-old-pine-2027-03-10",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-10",
       "sendOn": "2027-02-28",
       "schools": [],
@@ -3278,6 +3689,7 @@
     {
       "id": "camp-philly-art-center-qv-2027-03-10",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-10",
       "sendOn": "2027-02-28",
       "schools": [],
@@ -3294,6 +3706,7 @@
     {
       "id": "camp-playarts-day-camps-2027-03-10",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-10",
       "sendOn": "2027-02-28",
       "schools": [],
@@ -3310,6 +3723,7 @@
     {
       "id": "camp-schuylkill-center-2027-03-10",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-10",
       "sendOn": "2027-02-28",
       "schools": [],
@@ -3341,6 +3755,7 @@
     {
       "id": "camp-butchers-sew-shop-2027-03-22",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-22",
       "sendOn": "2027-03-07",
       "schools": [],
@@ -3357,6 +3772,7 @@
     {
       "id": "camp-elite-sports-factory-2027-03-22",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-22",
       "sendOn": "2027-03-07",
       "schools": [],
@@ -3373,6 +3789,7 @@
     {
       "id": "camp-fleisher-art-memorial-2027-03-22",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-22",
       "sendOn": "2027-03-07",
       "schools": [],
@@ -3389,6 +3806,7 @@
     {
       "id": "camp-makom-community-2027-03-22",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-22",
       "sendOn": "2027-03-07",
       "schools": [],
@@ -3405,6 +3823,7 @@
     {
       "id": "camp-movement-callowhill-2027-03-22",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-22",
       "sendOn": "2027-03-07",
       "schools": [],
@@ -3421,6 +3840,7 @@
     {
       "id": "camp-old-pine-2027-03-22",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-22",
       "sendOn": "2027-03-07",
       "schools": [],
@@ -3437,6 +3857,7 @@
     {
       "id": "camp-philadelphia-youth-basketball-2027-03-22",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-22",
       "sendOn": "2027-03-07",
       "schools": [],
@@ -3453,6 +3874,7 @@
     {
       "id": "camp-philly-art-center-qv-2027-03-22",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-22",
       "sendOn": "2027-03-07",
       "schools": [],
@@ -3469,6 +3891,7 @@
     {
       "id": "camp-schuylkill-center-2027-03-22",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-22",
       "sendOn": "2027-03-07",
       "schools": [],
@@ -3485,6 +3908,7 @@
     {
       "id": "camp-the-philadelphia-school-2027-03-22",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-22",
       "sendOn": "2027-03-07",
       "schools": [],
@@ -3516,6 +3940,7 @@
     {
       "id": "camp-butchers-sew-shop-2027-03-29",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-29",
       "sendOn": "2027-03-14",
       "schools": [],
@@ -3532,6 +3957,7 @@
     {
       "id": "camp-elite-sports-factory-2027-03-29",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-29",
       "sendOn": "2027-03-14",
       "schools": [],
@@ -3548,6 +3974,7 @@
     {
       "id": "camp-old-pine-2027-03-29",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-29",
       "sendOn": "2027-03-14",
       "schools": [],
@@ -3564,6 +3991,7 @@
     {
       "id": "camp-philly-art-center-qv-2027-03-29",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-29",
       "sendOn": "2027-03-14",
       "schools": [],
@@ -3580,6 +4008,7 @@
     {
       "id": "camp-playarts-day-camps-2027-03-29",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-29",
       "sendOn": "2027-03-14",
       "schools": [],
@@ -3596,6 +4025,7 @@
     {
       "id": "camp-schuylkill-center-2027-03-29",
       "kind": "camp",
+      "part": "off",
       "date": "2027-03-29",
       "sendOn": "2027-03-14",
       "schools": [],
@@ -3627,6 +4057,7 @@
     {
       "id": "camp-butchers-sew-shop-2027-04-16",
       "kind": "camp",
+      "part": "off",
       "date": "2027-04-16",
       "sendOn": "2027-04-04",
       "schools": [],
@@ -3643,6 +4074,7 @@
     {
       "id": "camp-elite-sports-factory-2027-04-16",
       "kind": "camp",
+      "part": "off",
       "date": "2027-04-16",
       "sendOn": "2027-04-04",
       "schools": [],
@@ -3659,6 +4091,7 @@
     {
       "id": "camp-fleisher-art-memorial-2027-04-16",
       "kind": "camp",
+      "part": "off",
       "date": "2027-04-16",
       "sendOn": "2027-04-04",
       "schools": [],
@@ -3675,6 +4108,7 @@
     {
       "id": "camp-old-pine-2027-04-16",
       "kind": "camp",
+      "part": "off",
       "date": "2027-04-16",
       "sendOn": "2027-04-04",
       "schools": [],
@@ -3691,6 +4125,7 @@
     {
       "id": "camp-philly-art-center-qv-2027-04-16",
       "kind": "camp",
+      "part": "off",
       "date": "2027-04-16",
       "sendOn": "2027-04-04",
       "schools": [],
@@ -3707,6 +4142,7 @@
     {
       "id": "camp-playarts-day-camps-2027-04-16",
       "kind": "camp",
+      "part": "off",
       "date": "2027-04-16",
       "sendOn": "2027-04-04",
       "schools": [],
@@ -3723,6 +4159,7 @@
     {
       "id": "camp-schuylkill-center-2027-04-16",
       "kind": "camp",
+      "part": "off",
       "date": "2027-04-16",
       "sendOn": "2027-04-04",
       "schools": [],
@@ -3754,6 +4191,7 @@
     {
       "id": "camp-awbury-arboretum-2027-05-17",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-17",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -3770,6 +4208,7 @@
     {
       "id": "camp-butchers-sew-shop-2027-05-17",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-17",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -3786,6 +4225,7 @@
     {
       "id": "camp-elite-sports-factory-2027-05-17",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-17",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -3802,6 +4242,7 @@
     {
       "id": "camp-fleisher-art-memorial-2027-05-17",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-17",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -3818,6 +4259,7 @@
     {
       "id": "camp-makom-community-2027-05-17",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-17",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -3834,6 +4276,7 @@
     {
       "id": "camp-old-pine-2027-05-17",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-17",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -3850,6 +4293,7 @@
     {
       "id": "camp-philly-art-center-qv-2027-05-17",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-17",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -3866,6 +4310,7 @@
     {
       "id": "camp-playarts-day-camps-2027-05-17",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-17",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -3882,6 +4327,7 @@
     {
       "id": "camp-schuylkill-center-2027-05-17",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-17",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -3913,6 +4359,7 @@
     {
       "id": "camp-awbury-arboretum-2027-05-18",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-18",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -3929,6 +4376,7 @@
     {
       "id": "camp-butchers-sew-shop-2027-05-18",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-18",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -3945,6 +4393,7 @@
     {
       "id": "camp-elite-sports-factory-2027-05-18",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-18",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -3961,6 +4410,7 @@
     {
       "id": "camp-fleisher-art-memorial-2027-05-18",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-18",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -3977,6 +4427,7 @@
     {
       "id": "camp-makom-community-2027-05-18",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-18",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -3993,6 +4444,7 @@
     {
       "id": "camp-old-pine-2027-05-18",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-18",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -4009,6 +4461,7 @@
     {
       "id": "camp-philly-art-center-qv-2027-05-18",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-18",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -4025,6 +4478,7 @@
     {
       "id": "camp-playarts-day-camps-2027-05-18",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-18",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -4041,6 +4495,7 @@
     {
       "id": "camp-schuylkill-center-2027-05-18",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-18",
       "sendOn": "2027-05-02",
       "schools": [],
@@ -4072,6 +4527,7 @@
     {
       "id": "camp-elite-sports-factory-2027-05-31",
       "kind": "camp",
+      "part": "off",
       "date": "2027-05-31",
       "sendOn": "2027-05-16",
       "schools": [],
