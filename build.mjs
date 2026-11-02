@@ -2512,22 +2512,8 @@ function aboutPage() {
   <rect x="58" y="64" width="240" height="9" rx="4.5" class="art-line"/><rect x="58" y="84" width="280" height="9" rx="4.5" class="art-line"/><rect x="58" y="104" width="200" height="9" rx="4.5" class="art-line"/>
   ${artChip(58, 136, 128, 'Dana · Nebinger')}${artChip(194, 136, 100, 'Read first', '#D6F3D2', '#1F5A22')}
   <circle cx="330" cy="149" r="14" fill="#F3C613"/><path d="M323.5 149.5l4.5 4.5 9-9" fill="none" stroke="#2A2100" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`);
-  // the two who made it: the photo of them, cut out, popping in from the bottom right of a drawn school scene
-  const artMakers = artBox(`<defs><clipPath id="makers-clip"><rect width="400" height="260" rx="14"/></clipPath><linearGradient id="makers-fade" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#000"/><stop offset=".04" stop-color="#fff"/></linearGradient><mask id="makers-mask"><rect x="186" y="0" width="214" height="260" fill="url(#makers-fade)"/></mask></defs>
-  <g clip-path="url(#makers-clip)">
-  <rect width="400" height="260" fill="#C3E1FF"/>
-  <circle cx="262" cy="46" r="16" fill="#F3C613"/><path d="M262 24v-7M262 68v-7M240 46h-7M284 46h-7M246 30l-5-5M278 62l-5-5M278 30l5-5M246 62l-5 5" stroke="#F3C613" stroke-width="3" stroke-linecap="round"/>
-  <ellipse cx="56" cy="48" rx="26" ry="11" fill="#FFFFFF"/><ellipse cx="72" cy="42" rx="18" ry="10" fill="#FFFFFF"/>
-  <rect x="0" y="118" width="40" height="90" fill="#1763B8"/><rect x="30" y="104" width="40" height="104" fill="#0F4D90"/><rect x="236" y="110" width="60" height="98" fill="#0F4D90"/><rect x="286" y="124" width="60" height="84" fill="#1763B8"/><rect x="340" y="112" width="60" height="96" fill="#0F4D90"/>
-  ${[[8, 132], [8, 160], [40, 118], [40, 146], [40, 174], [250, 126], [274, 126], [250, 154], [274, 154], [300, 140], [324, 140], [300, 168], [324, 168], [354, 126], [378, 126], [354, 154], [378, 154]].map(([x, y]) => `<rect x="${x}" y="${y}" width="12" height="14" rx="1" fill="${(x + y) % 3 ? '#0B2140' : '#F3C613'}"/>`).join('')}
-  <rect x="58" y="98" width="180" height="110" fill="#FFFFFF"/><rect x="118" y="80" width="60" height="22" fill="#FFFFFF"/><path d="M114 82h68l-34-18z" fill="#FFFFFF"/>
-  <rect x="146" y="46" width="3" height="20" fill="#0B2140"/><path d="M149 46h18l-5 5 5 5h-18z" fill="#F3C613"/>
-  ${[0, 1, 2, 3].map(c => [0, 1].map(r => `<rect x="${72 + c * 40}" y="${112 + r * 32}" width="22" height="22" rx="2" fill="#7DB8F5"/>`).join('')).join('')}
-  <rect x="136" y="176" width="24" height="32" rx="2" fill="#0B2140"/>
-  <rect x="0" y="206" width="400" height="54" fill="#D5E2F2"/><rect x="0" y="206" width="400" height="4" fill="#0B2140"/>
-  ${ART_KIDS.map((k, i) => artKid(40 + i * 44, 207, k, 2.4)).join('')}
-  <g class="pop" data-pop mask="url(#makers-mask)"><image href="${link('about-us.webp', 1)}${stamp('src/static/about-us.webp')}" x="186" y="6" width="214" height="254" preserveAspectRatio="xMaxYMax meet"/></g>
-  </g>`);
+  // the two who made it: their photo, as it is
+  const artMakers = `<img class="about-photo" src="${link('about-us.jpg', 1)}${stamp('src/static/about-us.jpg')}" alt="Josh and Rachael Silverbauer" width="1000" height="750" loading="lazy">`;
   const row = (id, art, head, inner) => `<section class="acct-row about-row" id="${id}" aria-labelledby="${id}-h"><div class="acct-row-art">${art}</div><div class="acct-row-text"><h2 id="${id}-h">${head}</h2>${inner}</div></section>`;
   const body = `<div class="about-rows">
   ${row('how', artMakers, T(`How listings are checked`), cfg.builtBy ? `<p>${T(cfg.builtBy.bio)}</p>` : `<p>${T(`Each listing comes from the provider’s own public pages, the school’s site, or city program data. The sources are linked on every card.`)}</p>`)}
