@@ -1056,6 +1056,16 @@ counts (the days-off card keeps "N days off still to come", and the summer card 
 stay off the home page's tiles and type chips too; a filter bar's counts and a list section's "(N)" are the live
 numbers of what is on the page, and stay.
 
+**Type.** Four faces, all from Google Fonts (one `<link>` in `layout()`): page titles (`h1`) are **Luckiest Guy**, heavy
+painted capitals (`--title`; the text is set in capitals by CSS, so a title keeps its own casing in the HTML and in
+search results), the small line over a title (`.hero .where`, the breadcrumb or the school's one-line description)
+is **Schoolbell**, a thin print hand (`--hand`), section headings, cards and buttons stay in **Archivo** (`--display`),
+and body text in **Atkinson Hyperlegible** (`--body`). The first two stand in for the branding kit's Kapsalon and
+Hangyaboly, which are not licensed for the web (Kapsalon is sold by Hanoded; Hangyaboly is free for personal use
+only): to swap the real ones in later, self-host them and change `--title` and `--hand`. The week card and the
+planners' pictures (`drawCard` in `src/site.js`) still draw in Archivo. The two link-preview pictures are drawn with
+the page title's face, so they are redrawn whenever it changes.
+
 **Colours.** Every colour is a named value at the top of `src/site.css`. The band at the top of each page is a
 daytime sky (`--hero` fading to `--hero-low`) with navy type (`--hero-ink`, `--hero-muted`); the header button
 is `--cta`; the footer keeps the deep blue (`--foot`). Navy on the sky measures 9:1 or better, above the old
