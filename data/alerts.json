@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-11-02",
+  "generated": "2026-11-03",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -861,94 +861,6 @@
     "reason": "you asked to be told when this school was added"
   },
   "alerts": [
-    {
-      "id": "reg-mister-johns-music-2026-11-02",
-      "schools": [
-        "nebinger",
-        "meredith",
-        "coppin",
-        "vare-washington",
-        "stanton",
-        "mccall",
-        "columbus-charter"
-      ],
-      "programs": [
-        "mister-johns-music"
-      ],
-      "part": "after",
-      "title": "Mister John’s Music",
-      "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "register",
-      "date": "2026-11-02",
-      "sendOn": "2026-11-01",
-      "when": "Monday, November 2",
-      "text": "Winter/Spring session goes on sale to new students."
-    },
-    {
-      "id": "reg-mister-johns-music-2026-11-02-day",
-      "schools": [
-        "nebinger",
-        "meredith",
-        "coppin",
-        "vare-washington",
-        "stanton",
-        "mccall",
-        "columbus-charter"
-      ],
-      "programs": [
-        "mister-johns-music"
-      ],
-      "part": "after",
-      "title": "Mister John’s Music",
-      "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "today",
-      "date": "2026-11-02",
-      "sendOn": "2026-11-02",
-      "when": "Today, Monday, November 2",
-      "text": "Winter/Spring session goes on sale to new students."
-    },
-    {
-      "id": "reg-skilladelphia-2026-11-02",
-      "schools": [
-        "nebinger",
-        "meredith",
-        "mccall"
-      ],
-      "programs": [
-        "skilladelphia"
-      ],
-      "part": "after",
-      "title": "Skilladelphia",
-      "url": "https://phillyafterschool.org/programs/skilladelphia/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "register",
-      "date": "2026-11-02",
-      "sendOn": "2026-11-01",
-      "when": "Monday, November 2",
-      "text": "Fall II session starts."
-    },
-    {
-      "id": "reg-skilladelphia-2026-11-02-day",
-      "schools": [
-        "nebinger",
-        "meredith",
-        "mccall"
-      ],
-      "programs": [
-        "skilladelphia"
-      ],
-      "part": "after",
-      "title": "Skilladelphia",
-      "url": "https://phillyafterschool.org/programs/skilladelphia/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "today",
-      "date": "2026-11-02",
-      "sendOn": "2026-11-02",
-      "when": "Today, Monday, November 2",
-      "text": "Fall II session starts."
-    },
     {
       "id": "camp-arden-drama-school-2026-11-03",
       "kind": "camp",
