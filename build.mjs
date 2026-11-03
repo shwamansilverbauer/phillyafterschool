@@ -654,7 +654,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   const page = `${quiet ? '' : gtmBody}<script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
 ${topbar}<header class="band sitebar${theme ? ' ' + theme : ''}">
   <div class="in bar">
-    <a class="brand" href="${link('', depth)}"><img class="logo" src="${link('logo.png', depth)}${stamp('src/static/logo.png')}" alt="${esc(cfg.siteName)}" width="500" height="168"></a>
+    <a class="brand" href="${link('', depth)}"><img class="logo" src="${link('logo.png', depth)}${stamp('src/static/logo.png')}" alt="${esc(cfg.siteName)}" width="773" height="240"></a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true"></span>Menu</button>
     <nav class="nav" id="site-nav" aria-label="Site">${nav}</nav>
   </div>
@@ -671,7 +671,7 @@ ${body}
 <footer class="foot"><div class="in">
   <nav class="foot-cols" aria-label="Footer">
     <div class="foot-brand">
-      <a class="brand" href="${link('', depth)}"><img class="logo" src="${link('logo-text.png', depth)}${stamp('src/static/logo-text.png')}" alt="${esc(cfg.siteName)}" width="417" height="150"></a>
+      <a class="brand" href="${link('', depth)}"><img class="logo" src="${link('logo-text.png', depth)}${stamp('src/static/logo-text.png')}" alt="${esc(cfg.siteName)}" width="473" height="184"></a>
       <p>${T(`After-school programs in Philadelphia, sorted by the school your child goes to.`)}</p>
       ${cfg.supportUrl ? `<p class="foot-support"><span>${T(`Created and run by the Silverbauers.`)}</span> <a class="btn foot-cta" href="${link('support/', depth)}">Help the site keep going</a></p>` : ''}
     </div>

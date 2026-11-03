@@ -1056,15 +1056,15 @@ counts (the days-off card keeps "N days off still to come", and the summer card 
 stay off the home page's tiles and type chips too; a filter bar's counts and a list section's "(N)" are the live
 numbers of what is on the page, and stay.
 
-**Type.** Four faces, all from Google Fonts (one `<link>` in `layout()`): page titles (`h1`) are **Luckiest Guy**, heavy
-painted capitals (`--title`; the text is set in capitals by CSS, so a title keeps its own casing in the HTML and in
-search results), the small line over a title (`.hero .where`, the breadcrumb or the school's one-line description)
-is **Schoolbell**, a thin print hand (`--hand`), section headings, cards and buttons stay in **Archivo** (`--display`),
-and body text in **Atkinson Hyperlegible** (`--body`). The first two stand in for the branding kit's Kapsalon and
-Hangyaboly, which are not licensed for the web (Kapsalon is sold by Hanoded; Hangyaboly is free for personal use
-only): to swap the real ones in later, self-host them and change `--title` and `--hand`. The week card and the
-planners' pictures (`drawCard` in `src/site.js`) still draw in Archivo. The two link-preview pictures are drawn with
-the page title's face, so they are redrawn whenever it changes.
+**Type.** Four faces, all from Google Fonts (one `<link>` in `layout()`): page titles and section headings (`h1`,
+`h2`) are **Luckiest Guy**, the logo's face, heavy painted capitals (`--title`; the text is set in capitals by CSS, so
+a heading keeps its own casing in the HTML and in search results; its own lowercase is an odd unicase, so the
+transform is not optional), the small line over a title (`.hero .where`, the breadcrumb or the school's one-line
+description) is **Schoolbell**, a thin print hand (`--hand`), smaller headings (`h3`), cards and buttons stay in
+**Archivo** (`--display`), and body text in **Atkinson Hyperlegible** (`--body`). The brand picked Luckiest Guy
+for the logo too, so the site and the logo share a face; Schoolbell stands in for the logo's hand-lettered "AFTER
+SCHOOL". The week card and the planners' pictures (`drawCard` in `src/site.js`) still draw in Archivo. The two
+link-preview pictures are drawn with the page title's face and the logo, so they are redrawn whenever either changes.
 
 **Colours.** Every colour is a named value at the top of `src/site.css`. The band at the top of each page is a
 daytime sky (`--hero` fading to `--hero-low`) with navy type (`--hero-ink`, `--hero-muted`); the header button
@@ -1075,10 +1075,11 @@ colours and the pictures are drawn for a light page. The week card (`drawCard` i
 (`src/static/share.png`, 1200 by 630) use the same sky and footer, so change them together. Both link-preview
 pictures (`share.png` and `share-days-off.png`) open with the logo on a white sticker, since the logo's light
 blue and yellow would sink into the sky or the yellow page; they are screenshots drawn by two small Playwright
-scripts, and are drawn again whenever the logo or the home page's headline changes. The favicon and the
-app icons (`src/static/favicon.svg`, `favicon.png`, `favicon.ico`, `apple-touch-icon.png`, `icon-192.png`,
-`icon-512.png`) are the logo's bulb on a navy square, cut out of `logo.png`; to change them, replace the six files.
-The branding kit's bulb marks live in `src/static/bulb.png` (the yellow bulb) and `bulb-line.png` (the outline one,
+scripts, and are drawn again whenever the logo or the home page's headline changes. The logo files come from the brand's own set (2000px transparent PNGs, kept out of the repo): `src/static/logo.png`
+is the full lockup (the header), `logo-text.png` the wordmark alone (the footer; the bulb masked out of the lockup),
+and the favicon and app icons (`src/static/favicon.svg`, `favicon.png`, `favicon.ico`, `apple-touch-icon.png`,
+`icon-192.png`, `icon-512.png`) are the solid bulb on a navy rounded square; to change them, replace the files.
+The brand's bulb marks live in `src/static/bulb.png` (the yellow bulb) and `bulb-line.png` (the outline one,
 yellow line and light-blue brain): `bulb(depth, cls)` in `build.mjs` draws the yellow one on the "Nothing matches
 that" note under a filtered list (`.ask-bulb`) and at the top of the 404 page's hero (`.hero-bulb`); the outline one
 signs the footer's fine print (`.foot-bulb`, next to "Built by"). The kit's palette is the site's own five colours

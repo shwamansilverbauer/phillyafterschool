@@ -17,8 +17,8 @@
   --street:#0A3566; --scene-line:#0A3566; --scene-drop:#1763B8; --cloud-1:.95; --cloud-2:.8; --sun:1; --note:#0A3566;
   --display:"Archivo","Arial Black","Helvetica Neue",Arial,sans-serif;
   --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
-  /* the branding kit's type, in free stand-ins: page titles in Luckiest Guy (for Kapsalon, heavy painted caps) and the
-     small line over a title in Schoolbell (for Hangyaboly, a thin print hand). Section headings and cards stay in Archivo. */
+  /* the brand's type: page titles and section headings (h1, h2) in Luckiest Guy, the logo's face, heavy painted caps;
+     the small line over a title in Schoolbell, a thin print hand. Smaller headings, cards and buttons stay in Archivo. */
   --title:"Luckiest Guy","Arial Black",Impact,sans-serif;
   --hand:"Schoolbell","Comic Sans MS","Segoe Print",cursive;
 }
@@ -33,7 +33,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font
 img,svg{max-width:100%}
 h1,h2,h3{font-family:var(--display);font-stretch:112%;text-wrap:balance;margin:0;line-height:1.08;letter-spacing:-.01em}
 h1{font-family:var(--title);font-stretch:normal;font-weight:400;text-transform:uppercase;letter-spacing:.02em;font-size:clamp(2rem,6.6vw,3.7rem);line-height:1.02}
-h2{font-size:clamp(1.3rem,3vw,1.6rem);font-weight:800}
+h2{font-family:var(--title);font-stretch:normal;font-weight:400;text-transform:uppercase;letter-spacing:.02em;font-size:clamp(1.25rem,2.8vw,1.5rem);line-height:1.08}
 h3{font-size:1.2rem;font-weight:750}
 p{margin:0}
 a{color:var(--link)}
@@ -403,7 +403,7 @@ button.btn{cursor:pointer;font-family:inherit}
 .foot-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 24px}
 .foot-brand{grid-column:1 / -1;display:flex;flex-direction:column;gap:12px;max-width:34ch}
 @media (min-width:860px){.foot-cols{grid-template-columns:minmax(0,1.6fr) repeat(3,minmax(0,1fr));gap:32px}.foot-brand{grid-column:auto}}
-.foot-cols h2{font-size:1rem;font-stretch:112%;font-weight:800;letter-spacing:0;margin-bottom:12px}
+.foot-cols h2{font-size:1.02rem;letter-spacing:.03em;margin-bottom:12px}
 .foot-cols h2 a{color:var(--foot-ink);text-decoration:none}
 .foot-cols ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
 .foot-cols li a{color:var(--foot-muted);text-decoration:none}
@@ -1077,7 +1077,7 @@ html.signed.form-up .acct-hero-art{display:block}
 .acct-row-art svg{display:block;width:100%;height:auto;max-width:400px;margin:0 auto}
 .acct-row-art .acct-art{background:none;padding:0;border-radius:0}
 .acct-row-art .acct-art svg{max-width:440px}
-.acct-row-text h3,.acct-row-text h2{font-family:var(--display);font-stretch:112%;font-size:1.3rem;line-height:1.2;margin:0 0 8px}
+.acct-row-text h3{font-family:var(--display);font-stretch:112%}.acct-row-text h3,.acct-row-text h2{font-size:1.3rem;line-height:1.2;margin:0 0 8px}
 .acct-row-text p{color:var(--muted);margin:0;max-width:46ch;line-height:1.5}
 .acct-row-text p + p{margin-top:10px}
 .acct-row-text ul{margin:0;padding-left:1.2em;color:var(--muted);display:flex;flex-direction:column;gap:8px;line-height:1.5;max-width:48ch}
