@@ -27,6 +27,7 @@ RewriteRule ^schools/william-m-meredith-school/?$ /meredith/ [R=301,L]
 # A day off that has passed: its own page leads to the list of days still to come.
 RewriteRule ^days-off/staff-professional-development-2026-10-09/?$ /days-off/ [R=301,L]
 RewriteRule ^days-off/indigenous-peoples-day-2026-10-12/?$ /days-off/ [R=301,L]
+RewriteRule ^days-off/election-day-2026-11-03/?$ /days-off/ [R=301,L]
 # A summer camp tied to a program is on the program's page, under Summer (a query string, such as an email's tags, stays ahead of the #).
 RewriteCond %{QUERY_STRING} ^(.+)$
 RewriteRule ^summer-camps/philly-art-center/?$ /programs/philly-art-center-qv/?%1#summer [NE,QSD,R=301,L]

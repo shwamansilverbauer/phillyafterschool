@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-11-03",
+  "generated": "2026-11-04",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -862,276 +862,6 @@
   },
   "alerts": [
     {
-      "id": "camp-arden-drama-school-2026-11-03",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [],
-      "programs": [
-        "arden-drama-school"
-      ],
-      "within": "off-2026-11-03",
-      "when": "Tuesday, November 3",
-      "title": "Arden Drama School: camp on a day off",
-      "text": "School is closed (Election Day). Arden Drama School has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/arden-drama-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-awbury-arboretum-2026-11-03",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [],
-      "programs": [
-        "awbury-arboretum"
-      ],
-      "within": "off-2026-11-03",
-      "when": "Tuesday, November 3",
-      "title": "Awbury Arboretum: camp on a day off",
-      "text": "School is closed (Election Day). Awbury Arboretum has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/awbury-arboretum/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-butchers-sew-shop-2026-11-03",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [],
-      "programs": [
-        "butchers-sew-shop"
-      ],
-      "within": "off-2026-11-03",
-      "when": "Tuesday, November 3",
-      "title": "Butcher’s Sew Shop Junior: camp on a day off",
-      "text": "School is closed (Election Day). Butcher’s Sew Shop Junior has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/butchers-sew-shop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-elite-sports-factory-2026-11-03",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [],
-      "programs": [
-        "elite-sports-factory"
-      ],
-      "within": "off-2026-11-03",
-      "when": "Tuesday, November 3",
-      "title": "Elite Sports Factory: camp on a day off",
-      "text": "School is closed (Election Day). Elite Sports Factory has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/elite-sports-factory/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-fleisher-art-memorial-2026-11-03",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [],
-      "programs": [
-        "fleisher-art-memorial"
-      ],
-      "within": "off-2026-11-03",
-      "when": "Tuesday, November 3",
-      "title": "Fleisher Art Memorial: camp on a day off",
-      "text": "School is closed (Election Day). Fleisher Art Memorial has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-makom-community-2026-11-03",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [],
-      "programs": [
-        "makom-community"
-      ],
-      "within": "off-2026-11-03",
-      "when": "Tuesday, November 3",
-      "title": "Makom Community: camp on a day off",
-      "text": "School is closed (Election Day). Makom Community has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/makom-community/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-mister-johns-music-2026-11-03",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [],
-      "programs": [
-        "mister-johns-music"
-      ],
-      "within": "off-2026-11-03",
-      "when": "Tuesday, November 3",
-      "title": "Mister John’s Music: camp on a day off",
-      "text": "School is closed (Election Day). Mister John’s Music has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-movemakers-2026-11-03",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [],
-      "programs": [
-        "movemakers"
-      ],
-      "within": "off-2026-11-03",
-      "when": "Tuesday, November 3",
-      "title": "MoveMakers Philly: camp on a day off",
-      "text": "School is closed (Election Day). MoveMakers Philly has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/movemakers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-nlarts-2026-11-03",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [],
-      "programs": [
-        "nlarts"
-      ],
-      "within": "off-2026-11-03",
-      "when": "Tuesday, November 3",
-      "title": "NLArts: camp on a day off",
-      "text": "School is closed (Election Day). NLArts has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/nlarts/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-old-pine-2026-11-03",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [],
-      "programs": [
-        "old-pine"
-      ],
-      "within": "off-2026-11-03",
-      "when": "Tuesday, November 3",
-      "title": "The NeighborHub: camp on a day off",
-      "text": "School is closed (Election Day). The NeighborHub has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/old-pine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-philly-art-center-qv-2026-11-03",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [],
-      "programs": [
-        "philly-art-center-qv"
-      ],
-      "within": "off-2026-11-03",
-      "when": "Tuesday, November 3",
-      "title": "Philly Art Center, Queen Village: camp on a day off",
-      "text": "School is closed (Election Day). Philly Art Center, Queen Village has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/philly-art-center-qv/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-philly-inmovement-2026-11-03",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [],
-      "programs": [
-        "philly-inmovement"
-      ],
-      "within": "off-2026-11-03",
-      "when": "Tuesday, November 3",
-      "title": "Philly InMovement: MOVE After School: camp on a day off",
-      "text": "School is closed (Election Day). Philly InMovement: MOVE After School has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/philly-inmovement/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-playarts-day-camps-2026-11-03",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [],
-      "programs": [
-        "playarts-day-camps"
-      ],
-      "within": "off-2026-11-03",
-      "when": "Tuesday, November 3",
-      "title": "PlayArts day camps: camp on a day off",
-      "text": "School is closed (Election Day). PlayArts day camps has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/playarts-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-schuylkill-center-2026-11-03",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [],
-      "programs": [
-        "schuylkill-center"
-      ],
-      "within": "off-2026-11-03",
-      "when": "Tuesday, November 3",
-      "title": "The Schuylkill Center for Environmental Education: camp on a day off",
-      "text": "School is closed (Election Day). The Schuylkill Center for Environmental Education has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/schuylkill-center/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "camp-skate-the-foundry-2026-11-03",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [],
-      "programs": [
-        "skate-the-foundry"
-      ],
-      "within": "off-2026-11-03",
-      "when": "Tuesday, November 3",
-      "title": "Skate The Foundry: camp on a day off",
-      "text": "School is closed (Election Day). Skate The Foundry has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/skate-the-foundry/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "off-2026-11-03",
-      "kind": "dayoff",
-      "date": "2026-11-03",
-      "sendOn": "2026-10-18",
-      "schools": [
-        "*"
-      ],
-      "programs": [],
-      "when": "Tuesday, November 3",
-      "title": "No school: Election Day",
-      "text": "15 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Makom Community, Mister John’s Music, MoveMakers Philly, NLArts, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, Skate The Foundry, The NeighborHub and The Schuylkill Center for Environmental Education.",
-      "url": "https://phillyafterschool.org/days-off/election-day-2026-11-03/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See who’s open"
-    },
-    {
       "id": "week-columbus-charter-2026-11-02",
       "kind": "week",
       "date": "2026-11-06",
@@ -1144,18 +874,14 @@
       ],
       "when": "Week of November 2",
       "title": "This week at Columbus Charter",
-      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students. Tuesday: No school: Election Day.",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students.",
       "lines": [
         {
           "when": "Monday",
           "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students"
-        },
-        {
-          "when": "Tuesday",
-          "what": "No school: Election Day"
         }
       ],
-      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Tuesday: no school, Election Day",
+      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students",
       "url": "https://phillyafterschool.org/columbus-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Columbus Charter’s week"
     },
@@ -1172,44 +898,16 @@
       ],
       "when": "Week of November 2",
       "title": "This week at Coppin",
-      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students. Tuesday: No school: Election Day.",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students.",
       "lines": [
         {
           "when": "Monday",
           "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students"
-        },
-        {
-          "when": "Tuesday",
-          "what": "No school: Election Day"
         }
       ],
-      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Tuesday: no school, Election Day",
+      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students",
       "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Coppin’s week"
-    },
-    {
-      "id": "week-kirkbride-2026-11-02",
-      "kind": "week",
-      "date": "2026-11-06",
-      "sendOn": "2026-11-01",
-      "expires": "2026-11-04",
-      "schools": [],
-      "programs": [],
-      "weeks": [
-        "kirkbride"
-      ],
-      "when": "Week of November 2",
-      "title": "This week at Kirkbride",
-      "text": "Tuesday: No school: Election Day.",
-      "lines": [
-        {
-          "when": "Tuesday",
-          "what": "No school: Election Day"
-        }
-      ],
-      "first": "Tuesday: no school, Election Day",
-      "url": "https://phillyafterschool.org/kirkbride/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
-      "button": "See Kirkbride’s week"
     },
     {
       "id": "week-mccall-2026-11-02",
@@ -1224,15 +922,11 @@
       ],
       "when": "Week of November 2",
       "title": "This week at McCall",
-      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Sign-ups, Skilladelphia: Fall II session starts. Tuesday: No school: Election Day.",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Sign-ups, Skilladelphia: Fall II session starts.",
       "lines": [
         {
           "when": "Monday",
           "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Sign-ups, Skilladelphia: Fall II session starts"
-        },
-        {
-          "when": "Tuesday",
-          "what": "No school: Election Day"
         }
       ],
       "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Monday: Sign-ups, Skilladelphia: Fall II session starts",
@@ -1252,15 +946,11 @@
       ],
       "when": "Week of November 2",
       "title": "This week at Meredith",
-      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Sign-ups, Skilladelphia: Fall II session starts. Tuesday: No school: Election Day.",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Sign-ups, Skilladelphia: Fall II session starts.",
       "lines": [
         {
           "when": "Monday",
           "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Sign-ups, Skilladelphia: Fall II session starts"
-        },
-        {
-          "when": "Tuesday",
-          "what": "No school: Election Day"
         }
       ],
       "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Monday: Sign-ups, Skilladelphia: Fall II session starts",
@@ -1280,15 +970,11 @@
       ],
       "when": "Week of November 2",
       "title": "This week at Nebinger",
-      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Sign-ups, Skilladelphia: Fall II session starts. Tuesday: No school: Election Day. Wednesday: Pretzel day.",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Sign-ups, Skilladelphia: Fall II session starts. Wednesday: Pretzel day.",
       "lines": [
         {
           "when": "Monday",
           "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Sign-ups, Skilladelphia: Fall II session starts"
-        },
-        {
-          "when": "Tuesday",
-          "what": "No school: Election Day"
         },
         {
           "when": "Wednesday",
@@ -1298,30 +984,6 @@
       "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Monday: Sign-ups, Skilladelphia: Fall II session starts",
       "url": "https://phillyafterschool.org/nebinger/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Nebinger’s week"
-    },
-    {
-      "id": "week-southwark-2026-11-02",
-      "kind": "week",
-      "date": "2026-11-06",
-      "sendOn": "2026-11-01",
-      "expires": "2026-11-04",
-      "schools": [],
-      "programs": [],
-      "weeks": [
-        "southwark"
-      ],
-      "when": "Week of November 2",
-      "title": "This week at Southwark",
-      "text": "Tuesday: No school: Election Day.",
-      "lines": [
-        {
-          "when": "Tuesday",
-          "what": "No school: Election Day"
-        }
-      ],
-      "first": "Tuesday: no school, Election Day",
-      "url": "https://phillyafterschool.org/southwark/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
-      "button": "See Southwark’s week"
     },
     {
       "id": "week-stanton-2026-11-02",
@@ -1336,18 +998,14 @@
       ],
       "when": "Week of November 2",
       "title": "This week at Stanton",
-      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students. Tuesday: No school: Election Day.",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students.",
       "lines": [
         {
           "when": "Monday",
           "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students"
-        },
-        {
-          "when": "Tuesday",
-          "what": "No school: Election Day"
         }
       ],
-      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Tuesday: no school, Election Day",
+      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students",
       "url": "https://phillyafterschool.org/stanton/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Stanton’s week"
     },
@@ -1364,18 +1022,14 @@
       ],
       "when": "Week of November 2",
       "title": "This week at Vare-Washington",
-      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students. Tuesday: No school: Election Day.",
+      "text": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students.",
       "lines": [
         {
           "when": "Monday",
           "what": "Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students"
-        },
-        {
-          "when": "Tuesday",
-          "what": "No school: Election Day"
         }
       ],
-      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students; Tuesday: no school, Election Day",
+      "first": "Monday: Sign-ups, Mister John’s Music: Winter/Spring session goes on sale to new students",
       "url": "https://phillyafterschool.org/vare-washington/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Vare-Washington’s week"
     },
