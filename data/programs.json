@@ -2299,13 +2299,13 @@
       "dungeons and dragons",
       "tabletop"
     ],
-    "address": "125 South St",
+    "address": "110 South St",
     "neighborhoods": [
       "Queen Village"
     ],
     "grades": "1-8",
-    "gradeNote": "Ages 6–16",
-    "hours": "Until 6:00 pm, on the School District calendar",
+    "gradeNote": "Ages 6–14",
+    "hours": "School dismissal to 6:00 pm, Monday to Friday",
     "days": [
       "mon",
       "tue",
@@ -2313,7 +2313,7 @@
       "thu",
       "fri"
     ],
-    "daysNote": "Choose 1 to 5 days a week.",
+    "daysNote": "Choose 1 to 5 days a week; each weekday is signed up for separately. Days may be cancelled for low enrollment.",
     "daysOff": {
       "summary": "Full-day board game camps when district schools are closed, 9 am to 3 pm with drop-off from 8:30, for ages 6–14. Aftercare from 3 to 6 pm costs extra. Camp dates had not been posted when we checked.",
       "url": "https://www.queenandrookcafe.com/youth-programs/",
@@ -2329,7 +2329,7 @@
       "ageMax": 14
     },
     "pickupBy": "6:00 pm",
-    "cost": "Not published. Need-based scholarships available.",
+    "cost": "$51 a day. For the Fall 2026 session (Aug 31 to Dec 22), each weekday is its own enrollment: $663 for Mondays or Fridays (13 days), $714 for Wednesdays (14), $765 for Thursdays (15), $816 for Tuesdays (16), paid in four monthly payments ($165.75 to $204 a month). 10% sibling discount. Need-based scholarships available.",
     "price": "paid",
     "phone": "215-995-0043",
     "email": "kat@queenandrookcafe.com",
@@ -2337,41 +2337,41 @@
     "register": {
       "how": "online",
       "url": "https://www.queenrookkeep.com/product/WInterAfterschool/FGRQPCBNZJCILGV4A5OGMYL7?cp=true&sa=false&sbp=false&q=true",
-      "note": "Fall Afterschool 2026 sign-up. Days can be cancelled for low enrollment.",
+      "note": "Fall 2026 sign-up (Aug 31 to Dec 22): pick a weekday, pay the first month now and the rest by payment plan or invoice.",
       "nextTerm": "Only the Fall 2026 session is posted. Winter and spring sign-ups are not listed yet."
     },
-    "note": "",
+    "note": "The after-school program meets at the cafe’s youth space at 110 South St; the cafe is at 125 South St.",
     "sources": [
-      {
-        "label": "Philly Family 2026–27 list",
-        "url": "https://phillyfamily.com/after-school-programs/"
-      },
       {
         "label": "Youth programs",
         "url": "https://www.queenandrookcafe.com/youth-programs/"
+      },
+      {
+        "label": "Fall 2026 Afterschool sign-up",
+        "url": "https://www.queenrookkeep.com/product/WInterAfterschool/FGRQPCBNZJCILGV4A5OGMYL7?cp=true&sa=false&sbp=false&q=true"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-11-04",
     "schools": {
       "nebinger": {
         "relation": "pickup",
-        "note": "Nebinger pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools.",
-        "checked": "2026-10-06"
+        "note": "Nebinger is named on the cafe’s own Fall 2026 sign-up page.",
+        "checked": "2026-11-04"
       },
       "meredith": {
         "relation": "pickup",
-        "note": "Meredith pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools.",
-        "checked": "2026-10-06"
+        "note": "Meredith is named on the cafe’s own Fall 2026 sign-up page.",
+        "checked": "2026-11-04"
       },
       "vare-washington": {
         "relation": "pickup",
-        "note": "Vare-Washington pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools.",
-        "checked": "2026-10-06"
+        "note": "Vare-Washington is named on the cafe’s own Fall 2026 sign-up page.",
+        "checked": "2026-11-04"
       },
       "mccall": {
         "relation": "pickup",
-        "note": "McCall pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools.",
-        "checked": "2026-10-06"
+        "note": "McCall is named on the cafe’s own Fall 2026 sign-up page.",
+        "checked": "2026-11-04"
       }
     },
     "pickupLists": [
