@@ -608,8 +608,8 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   // first item is hidden there. Then Suggestion Box and About as plain links, and the account button.
   const navHref = to => { const p = to.split(/[#?]/)[0]; return link(p, depth) + to.slice(p.length); };   // a link may carry ?kind= or #part
   const menus = [
-    ['Programs', 'all-programs/', [['all-programs/', 'All programs'], ['programs/', 'After-school'], ...(programs.some(p => p.weekend) ? [['weekends/', 'Weekend Activities']] : []), ...(daysOff ? [[dayCampsPath, 'Day Camps']] : []), ...(summerCamps.length ? [['summer-camps/', 'Summer Camps']] : [])]],
-    ['Schedule Builder', 'schedules/', [['schedules/', 'Build a schedule'], ['board/', 'After-school'], ...(daysOff ? [[offPath, 'Days off']] : []), ...(summerCamps.length ? [['summer-schedule/', 'Summer']] : []), ...(GROUPS && daysOff ? [['calendar/', 'Our Calendar']] : [])]],
+    ['Programs', 'all-programs/', [['all-programs/', 'All Programs'], ['programs/', 'After School'], ...(programs.some(p => p.weekend) ? [['weekends/', 'Weekend Activities']] : []), ...(daysOff ? [[dayCampsPath, 'Day Camps']] : []), ...(summerCamps.length ? [['summer-camps/', 'Summer Camps']] : [])]],
+    ['Schedule Builder', 'schedules/', [['schedules/', 'Build a Schedule'], ['board/', 'After School'], ...(daysOff ? [[offPath, 'Days Off']] : []), ...(summerCamps.length ? [['summer-schedule/', 'Summer']] : []), ...(GROUPS && daysOff ? [['calendar/', 'My Calendar']] : [])]],
   ];
   const nav = menus.map(([label, top, items]) => {
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
@@ -638,7 +638,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <meta name="theme-color" content="#0A3566">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&family=Luckiest+Guy&family=Schoolbell&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800&family=Atkinson+Hyperlegible:wght@400;700&family=Luckiest+Guy&family=Schoolbell&display=swap">
 <link rel="stylesheet" href="${link('assets/site.css', depth)}${CSS_V}">${jsonLd ? '\n<script type="application/ld+json">' + JSON.stringify(jsonLd).replace(/</g, '\\u003c') + '</script>' : ''}`;
   // Edit mode (see /edit/) loads a second script. This tells site.js where to find it and where edits are sent.
   const editCfg = { js: link('assets/edit.js', depth) + EDIT_V, send: PREVIEW ? '' : link('edit/send.php', depth), home: link('edit/', depth), contact: cfg.contactEmail || '' };
@@ -671,44 +671,44 @@ ${body}
 <footer class="foot"><div class="in">
   <nav class="foot-cols" aria-label="Footer">
     <div class="foot-brand">
-      <a class="brand" href="${link('', depth)}"><img class="logo" src="${link('logo-text.png', depth)}${stamp('src/static/logo-text.png')}" alt="${esc(cfg.siteName)}" width="473" height="184"></a>
+      <a class="brand" href="${link('', depth)}"><img class="logo" src="${link('logo-text.png', depth)}${stamp('src/static/logo-text.png')}" alt="${esc(cfg.siteName)}" width="479" height="184"></a>
       <p>${T(`After-school programs in Philadelphia, sorted by the school your child goes to.`)}</p>
       ${cfg.supportUrl ? `<p class="foot-support"><span>${T(`Created and run by the Silverbauers.`)}</span> <a class="btn foot-cta" href="${link('support/', depth)}">Help the site keep going</a></p>` : ''}
     </div>
     <div>
       <h2><a href="${link('all-programs/', depth)}">${T(`Programs`)}</a></h2>
       <ul>
-        <li><a href="${link('programs/', depth)}">${T(`After-school`)}</a></li>
-        ${programs.some(p => p.weekend) ? `<li><a href="${link('weekends/', depth)}">${T(`Weekend activities`)}</a></li>` : ''}
-        ${daysOff ? `<li><a href="${link(dayCampsPath, depth)}">${T(`Day camps`)}</a></li>` : ''}
-        ${summerCamps.length ? `<li><a href="${link('summer-camps/', depth)}">${T(`Summer camps`)}</a></li>` : ''}
-        <li><a href="${link('schools/', depth)}">${T(`By school`)}</a></li>
-        <li><a href="${link('neighborhoods/', depth)}">${T(`By neighborhood`)}</a></li>
-        <li><a href="${link('types/', depth)}">${T(`By type`)}</a></li>
-        <li><a href="${link('by-day/', depth)}">${T(`By day of week`)}</a></li>
+        <li><a href="${link('programs/', depth)}">${T(`After School`)}</a></li>
+        ${programs.some(p => p.weekend) ? `<li><a href="${link('weekends/', depth)}">${T(`Weekend Activities`)}</a></li>` : ''}
+        ${daysOff ? `<li><a href="${link(dayCampsPath, depth)}">${T(`Day Camps`)}</a></li>` : ''}
+        ${summerCamps.length ? `<li><a href="${link('summer-camps/', depth)}">${T(`Summer Camps`)}</a></li>` : ''}
+        <li><a href="${link('schools/', depth)}">${T(`By School`)}</a></li>
+        <li><a href="${link('neighborhoods/', depth)}">${T(`By Neighborhood`)}</a></li>
+        <li><a href="${link('types/', depth)}">${T(`By Type`)}</a></li>
+        <li><a href="${link('by-day/', depth)}">${T(`By Day of Week`)}</a></li>
       </ul>
     </div>
     <div>
       <h2><a href="${link('schedules/', depth)}">${T(`Schedule Builder`)}</a></h2>
       <ul>
-        <li><a href="${link('board/', depth)}">${T(`After-school`)}</a></li>
-        ${daysOff ? `<li><a href="${link(offPath, depth)}">${T(`Days off`)}</a></li>` : ''}
+        <li><a href="${link('board/', depth)}">${T(`After School`)}</a></li>
+        ${daysOff ? `<li><a href="${link(offPath, depth)}">${T(`Days Off`)}</a></li>` : ''}
         ${summerCamps.length ? `<li><a href="${link('summer-schedule/', depth)}">${T(`Summer`)}</a></li>` : ''}
-        ${GROUPS && daysOff ? `<li><a href="${link('calendar/', depth)}">${T(`Our calendar`)}</a></li>` : ''}
-        ${ALERTS ? `<li><a href="${link(alertsPath, depth)}">${T(`Reminders by email`)}</a></li>` : ''}
-        ${GROUPS ? `<li><a href="${link('profile/', depth)}">${T(`My profile`)}</a></li>` : ''}
+        ${GROUPS && daysOff ? `<li><a href="${link('calendar/', depth)}">${T(`My Calendar`)}</a></li>` : ''}
+        ${ALERTS ? `<li><a href="${link(alertsPath, depth)}">${T(`Reminders by Email`)}</a></li>` : ''}
+        ${GROUPS ? `<li><a href="${link('profile/', depth)}">${T(`My Profile`)}</a></li>` : ''}
       </ul>
     </div>
     <div>
       <h2><a href="${link('about/', depth)}">${T(`About`)}</a></h2>
       <ul>
-        <li><a href="${link('about/', depth)}">${T(`The story`)}</a></li>
+        <li><a href="${link('about/', depth)}">${T(`The Story`)}</a></li>
         <li><a href="${link('suggest/', depth)}">${T(`Suggestion Box`)}</a></li>
-        <li><a href="${link('review/', depth)}">${T(`Write a review`)}</a></li>${GROUPS ? `
-        <li><a href="${link('managers/', depth)}">${T(`For program managers`)}</a></li>` : ''}
+        <li><a href="${link('review/', depth)}">${T(`Write a Review`)}</a></li>${GROUPS ? `
+        <li><a href="${link('managers/', depth)}">${T(`For Program Managers`)}</a></li>` : ''}
         <li><a href="${link('contact/', depth)}">${T(`Contact`)}</a></li>
         <li><a href="${link('privacy/', depth)}">${T(`Privacy`)}</a></li>${TERMS ? `
-        <li><a href="${link('terms/', depth)}">${T(`Terms of use`)}</a></li>` : ''}
+        <li><a href="${link('terms/', depth)}">${T(`Terms of Use`)}</a></li>` : ''}
       </ul>
     </div>
   </nav>
@@ -717,8 +717,8 @@ ${body}
     <div class="foot-fine-text">
     <p>${T(`Listings come from each provider’s public pages and are not endorsements. Prices, hours and pickup routes change, so confirm with the provider before you enroll.`)}</p>
     <p>${T(`{site} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.`, { site: cfg.siteName })}</p>
-    ${cfg.builtBy ? `<p>Built by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
-    ${cfg.writtenBy ? `<p>Written by ${esc(cfg.writtenBy.name)}.</p>` : ''}
+    ${cfg.builtBy ? `<p>Created, managed, and meticulously vibe coded by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
+    ${cfg.writtenBy ? `<p>Written, edited, and humanized by ${esc(cfg.writtenBy.name)}.</p>` : ''}
     </div>
   </div>
 </div></footer>
@@ -767,7 +767,10 @@ if (daysOff) {
   for (const p of campPrograms) { const odd = p.daysOff.dates.filter(x => x >= TODAY && !closed.has(x)); if (odd.length) console.log(`Note: ${p.name} lists a camp on ${odd.join(', ')}, which isn't a district day off in data/days-off.json.`); }
 }
 // The next day off, for the line on the home page and each school's page. The script picks the first one still ahead.
-const nextOff = (depth, list) => !offDays.length ? '' : `<p class="nextoff"><b data-next-off="${esc(JSON.stringify(offDays.slice(0, 12).map(d => ({ u: d.until, w: d.end ? `${shortDate(d.date)} to ${shortDate(d.end)}` : dayDate(d.date), n: d.name, c: campsOn(d, list).length, p: link(dayPath(d), depth) }))))}" hidden></b> <a data-next-off-day hidden>${T(`Who’s open that day`)}</a> <a href="${link(dayCampsPath, depth)}">${T(`Days off this year, and who’s open`)}</a></p>`;
+const nextOff = (depth, list) => !offDays.length ? '' : `<p class="nextoff"><b data-next-off="${esc(JSON.stringify(offDays.slice(0, 12).map(d => ({ u: d.until, s: d.date, d: d.dates, w: d.end ? `${shortDate(d.date)} to ${shortDate(d.end)}` : dayDate(d.date), n: d.name, c: campsOn(d, list).length, p: link(dayPath(d), depth) }))))}" hidden></b> <a data-next-off-day hidden>${T(`Who’s open that day`)}</a> <a href="${link(dayCampsPath, depth)}">${T(`Days off this year, and who’s open`)}</a></p>`;
+// A day off that is already planned on this device (every child, every date of the break, in the days-off planner)
+// is not news, so the line and the bar skip it for the next one still unplanned, and say nothing when that one is
+// more than 60 days away (offPlanned() in site.js).
 // On the home page the next day off is a bar that stays along the bottom of the screen until it is closed: a question
 // ("Do you know where your kids will be on Election Day?") and a way to that day's page. The words for each day off
 // are made here; the script picks the first one still ahead and remembers, in this browser, which one was closed.
@@ -776,7 +779,7 @@ const ordDate = iso => `${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug
 const offSpan = d => !d.end || d.end === d.date ? ordDate(d.date) : d.end.slice(0, 7) === d.date.slice(0, 7) ? `${ordDate(d.date)} to ${ordinal(+d.end.slice(8, 10))}` : `${ordDate(d.date)} to ${ordDate(d.end)}`;
 const lowerSeason = n => n.replace(/^(Winter|Spring|Summer|Fall|Staff|Report)\b/, w => w.toLowerCase());
 const offAsk = d => /recess|break/i.test(d.name) ? `over ${lowerSeason(d.name)}` : /development|conference/i.test(d.name) ? `when school’s closed for ${lowerSeason(d.name)}` : `on ${d.name}`;
-const nextOffBar = depth => !offDays.length ? '' : `<aside class="offbar" id="offbar" aria-label="The next day school is closed" data-offbar="${esc(JSON.stringify(offDays.slice(0, 12).map(d => ({ u: d.until, s: d.date, q: `Do you know where your kids will be ${offAsk(d)}?`, g: `Get coverage for ${offSpan(d)}`, p: link(dayPath(d), depth) }))))}" hidden>
+const nextOffBar = depth => !offDays.length ? '' : `<aside class="offbar" id="offbar" aria-label="The next day school is closed" data-offbar="${esc(JSON.stringify(offDays.slice(0, 12).map(d => ({ u: d.until, s: d.date, d: d.dates, q: `Do you know where your kids will be ${offAsk(d)}?`, g: `Get coverage for ${offSpan(d)}`, p: link(dayPath(d), depth) }))))}" hidden>
   <div class="in offbar-in"><p><span class="offbar-q"></span> <a class="offbar-go" data-track="offbar"></a></p><button type="button" class="offbar-x" aria-label="Close this note"><span aria-hidden="true">×</span></button></div>
 </aside>`;
 const ymd = iso => iso.replace(/-/g, '');
@@ -3232,8 +3235,8 @@ const gateIn = GATE ? ' class="when-in"' : '';
 // programs and camps in it are invented on purpose: a real listing shown here would be singled out over the others.
 // The dates are real (the next days off, the summer's weeks), so the example reads like this year.
 const EX = { chess: '#B4237A', sport: '#1F7A3A', art: '#C2410C', care: '#0F4D90', music: '#6B3FA0', nature: '#4D6B1F', stem: '#0E7C86', home: '#4D607A' };
-function planExample(kind) {
-  const tag = `<span class="ex-tag">${T(`Example`)}</span>`;
+function planExample(kind, o = {}) {
+  const tag = o.plain ? '' : `<span class="ex-tag">${T(`Example`)}</span>`;
   const kids = `<span class="ex-kids" aria-hidden="true"><i class="on">Sam</i><i>Rae</i></span>`;
   const chip = (text, color, small) => `<span class="ex-chip" style="--tc:${color}">${esc(text)}${small ? `<small>${esc(small)}</small>` : ''}</span>`;
   const todo = `<span class="ex-chip todo">${T(`Not planned yet`)}</span>`;
@@ -3283,7 +3286,7 @@ function planExample(kind) {
   return `<figure class="ex ex-cal" aria-label="An example of a month on My kids’ calendar">
       <figcaption>${tag}<b>${MONTH_NAMES[mo]} ${y}</b>${kids}</figcaption>
       <table class="cal-grid"><thead><tr>${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => `<th scope="col">${d}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>
-      <p class="ex-foot">${T(`Days off, camp weeks, sign-up dates and your own dates on one calendar, month by month.`)}</p>
+      <p class="ex-foot">${o.foot || T(`Days off, camp weeks, sign-up dates and your own dates on one calendar, month by month.`)}</p>
     </figure>`;
 }
 // ---------- the planners, for someone who hasn't signed in: a tour of what each one does ----------
@@ -3334,8 +3337,8 @@ const miniArt = k => `<span class="pshow-mini" aria-hidden="true"><svg viewBox="
 const heroCta = (depth, next) => GATE ? `
     <p class="hero-cta when-out"><a class="btn primary big" href="${link('register/', depth)}?next=${next}" data-plan-cta="hero">${T(`Create a free account`)}</a><span>${T(`Free, with no password to remember: we email you a code, or you use Google.`)}</span></p>` : '';
 // More made-up examples, for the views the short ones above don't cover.
-function showExample(kind) {
-  const tag = `<span class="ex-tag">${T(`Example`)}</span>`;
+function showExample(kind, o = {}) {
+  const tag = o.plain ? '' : `<span class="ex-tag">${T(`Example`)}</span>`;
   const kids = `<span class="ex-kids" aria-hidden="true"><i class="on">Sam</i><i>Rae</i></span>`;
   const chip = (text, color, small, cls) => `<span class="ex-chip${cls ? ' ' + cls : ''}" style="--tc:${color}">${esc(text)}${small ? `<small>${esc(small)}</small>` : ''}</span>`;
   const ahead = offDays.flatMap(d => d.dates.map(x => ({ d: x, name: dayLabel(d) }))).filter(x => x.d >= TODAY);
@@ -3419,7 +3422,7 @@ function showExample(kind) {
     return `<figure class="ex ex-rows" aria-label="An example of My kids’ calendar, as a list">
       <figcaption>${tag}<b>${T(`Coming up`)}</b>${kids}</figcaption>
       <ol class="ex-list">${rows.map(([d, s, c]) => `<li><span class="ex-when"><b>${dayDate(d)}</b><small>${esc(s)}</small></span>${c}</li>`).join('')}</ol>
-      <p class="ex-foot">${T(`The whole year in date order, from this week to Labor Day.`)}</p>
+      <p class="ex-foot">${o.foot || T(`The whole year in date order, from this week to Labor Day.`)}</p>
     </figure>`;
   }
   // the to-do list
@@ -3460,12 +3463,12 @@ function planShow(kind, depth) {
         ['kids', T(`A summer for each child`), T(`Set an age and the camps narrow to the ones that take it.`)],
         ['cost', T(`What the summer adds up to`), T(`A running total from the weekly prices the camps post.`)]],
       steps: [T(`Add a camp to each week, for one child or for each of them.`), T(`Print the summer, or put the weeks in your phone’s calendar.`)] },
-    year: { next: 'calendar', eye: 'My kids’ calendar', h: T(`The week, the days off and the summer, in one place`),
-      views: [['cal', 'Calendar', planExample('year'), T(`A month at a time: days off, camp weeks, sign-up dates and the dates you add yourself.`)],
-        ['list', 'List', showExample('year-list'), T(`Or the same year as a list in date order, to read from the top down.`)]],
-      feats: [['bell', T(`Sign-up dates, lined up`), T(`Openings and deadlines for the programs and camps on your plans, on the days they happen.`)],
+    year: { next: 'calendar', plain: true, h: T(`Sample calendar`),
+      views: [['cal', 'Calendar', planExample('year', { plain: true, foot: T(`This is a sample. Yours will be populated with your kids, your schedule, and the plans you make.`) }), ''],
+        ['list', 'List', showExample('year-list', { plain: true, foot: T(`This is a sample. Yours will be populated with your kids, your schedule, and the plans you make.`) }), '']],
+      feats: [['bell', T(`Line up your sign-ups`), T(`Openings and deadlines for the programs and camps on your plans, on the days they happen.`)],
         ['cal', T(`Your own dates too`), T(`Picture day, a form that’s due: add them and they sit beside everything else.`)],
-        ['lock', T(`Private`), T(`No link and no sharing. Only you can open it.`)]],
+        ['lock', T(`Yours, and only yours`), T(`It lives in your account, with no public link. Share a week or a plan only when you choose to.`)]],
       steps: [T(`Build a week, plan the days off, plan the summer: any or all.`), T(`Open one calendar and see the whole year.`)] },
     todo: { next: 'todo', eye: 'To do', h: T(`What’s left to sign up for, in one list`),
       views: [['todo', 'To do', showExample('todo'), T(`Plan the days school is closed, and each camp day you pick lands here with a link to that camp’s own sign-up page. Tick it off once you’ve signed up.`)]],
@@ -3475,14 +3478,14 @@ function planShow(kind, depth) {
   }[kind];
   const go = where => `<a class="btn big ${where === 'end' ? 'pshow-go' : 'primary'}" href="${link('register/', depth)}?next=${S.next}" data-plan-cta="${where}">${T(`Create a free account`)}</a>`;
   const views = S.views.filter(v => v[2]);
-  return `<div class="pshow when-out" data-acct-ask data-pshow="${kind}">
+  return `<div class="pshow when-out${S.plain ? ' pshow-plain' : ''}" data-acct-ask data-pshow="${kind}">
     <div class="pshow-tour">
       <div class="pshow-head">
-        <div><p class="pshow-eye">${S.eye}</p><h2>${S.h}</h2></div>
+        <div>${S.eye ? `<p class="pshow-eye">${S.eye}</p>` : ''}<h2>${S.h}</h2></div>
         ${views.length > 1 ? `<div class="pshow-switch"><span class="pshow-switch-label">${T(`See it as`)}</span><div class="tabs view-switch pshow-tabs" role="group" aria-label="Ways to look at it">${views.map(([id, label], i) => `<button type="button" class="tab vs" data-pv="${id}" aria-pressed="${i ? 'false' : 'true'}">${label}</button>`).join('')}</div></div>` : ''}
       </div>
-      ${views.map(([id, label, fig, say], i) => { const nx = views[(i + 1) % views.length]; return `<div class="pshow-panel" data-pv="${id}">
-        <div class="pshow-say"><b>${label}</b><p>${say}</p>${views.length > 1 ? `<p class="pshow-nextp"><button type="button" class="btn pshow-next" data-pv-next="${nx[0]}">${i + 1 < views.length ? 'Next: ' : 'Back to '}${nx[1]} <span aria-hidden="true">→</span></button></p>` : ''}</div>
+      ${views.map(([id, label, fig, say], i) => { const nx = views[(i + 1) % views.length]; return `<div class="pshow-panel${S.plain ? ' plain' : ''}" data-pv="${id}">
+        ${S.plain ? '' : `<div class="pshow-say"><b>${label}</b><p>${say}</p>${views.length > 1 ? `<p class="pshow-nextp"><button type="button" class="btn pshow-next" data-pv-next="${nx[0]}">${i + 1 < views.length ? 'Next: ' : 'Back to '}${nx[1]} <span aria-hidden="true">→</span></button></p>` : ''}</div>`}
         ${fig}
       </div>`; }).join('\n      ')}
     </div>
@@ -3569,7 +3572,7 @@ const accountHoods = () => [...new Set([...hoods.map(h => h.name), ...CAMP_AREAS
 const NEWS = (fs.existsSync(path.join(ROOT, 'data/news.json')) ? readJson('data/news.json') : []).filter(n => /^\d{4}-\d{2}-\d{2}$/.test(n.date || '') && n.title && n.text).sort((a, b) => b.date.localeCompare(a.date));
 const groupsScript = depth => `<script src="${link('assets/groups.js', depth)}${GROUPS_V}"></script>`;
 // ---------- small drawings for the account and managers pages, in the site's colors ----------
-const ART_F = 'font-family="Archivo, Arial, sans-serif"';
+const ART_F = 'font-family="Figtree, Arial, sans-serif"';
 const ART_DAYS = [['M', '#1F7A3A', 62], ['T', '#B4237A', 48], ['W', '#0E7C86', 70], ['T', '#6B3FA0', 40], ['F', '#C2410C', 56]];
 // a week card, like the one in the account drawing
 const artWeek = (x, y, label, days = ART_DAYS, w = 120) => `<g transform="translate(${x} ${y})"><rect width="${w}" height="152" rx="11" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/><path d="M0 11a11 11 0 0 1 11-11h${w - 22}a11 11 0 0 1 11 11v17H0z" fill="#0F4D90"/><text x="11" y="19" font-size="11" font-weight="800" fill="#FFFFFF" ${ART_F}>${label}</text>${days.map(([d, c, len], i) => `<circle cx="17" cy="${44 + i * 21}" r="7.5" fill="#E3EEFA"/><text x="17" y="${47.4 + i * 21}" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" ${ART_F}>${d}</text><rect x="31" y="${38 + i * 21}" width="${Math.min(len, w - 42)}" height="12" rx="6" fill="${c}"/>`).join('')}</g>`;
@@ -3651,13 +3654,13 @@ ${hero}
     </div>
     <div class="acct-hero-form" data-clarity-mask="true">${register ? page : ''}</div>`;
   const art = `<svg viewBox="0 0 520 300" aria-hidden="true" focusable="false">
-  <defs><g id="acct-week"><rect width="120" height="152" rx="11" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/><path d="M0 11a11 11 0 0 1 11-11h98a11 11 0 0 1 11 11v17H0z" fill="#0F4D90"/><text x="11" y="19" font-size="11" font-weight="800" fill="#FFFFFF" font-family="Archivo, Arial, sans-serif">Sam’s week</text><circle cx="17" cy="44" r="7.5" fill="#E3EEFA"/><text x="17" y="47.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">M</text><rect x="31" y="38" width="62" height="12" rx="6" fill="#1F7A3A"/><circle cx="17" cy="65" r="7.5" fill="#E3EEFA"/><text x="17" y="68.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">T</text><rect x="31" y="59" width="48" height="12" rx="6" fill="#B4237A"/><circle cx="17" cy="86" r="7.5" fill="#E3EEFA"/><text x="17" y="89.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">W</text><rect x="31" y="80" width="70" height="12" rx="6" fill="#0E7C86"/><circle cx="17" cy="107" r="7.5" fill="#E3EEFA"/><text x="17" y="110.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">T</text><rect x="31" y="101" width="40" height="12" rx="6" fill="#6B3FA0"/><circle cx="17" cy="128" r="7.5" fill="#E3EEFA"/><text x="17" y="131.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Archivo, Arial, sans-serif">F</text><rect x="31" y="122" width="56" height="12" rx="6" fill="#C2410C"/></g></defs>
+  <defs><g id="acct-week"><rect width="120" height="152" rx="11" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/><path d="M0 11a11 11 0 0 1 11-11h98a11 11 0 0 1 11 11v17H0z" fill="#0F4D90"/><text x="11" y="19" font-size="11" font-weight="800" fill="#FFFFFF" font-family="Figtree, Arial, sans-serif">Sam’s week</text><circle cx="17" cy="44" r="7.5" fill="#E3EEFA"/><text x="17" y="47.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Figtree, Arial, sans-serif">M</text><rect x="31" y="38" width="62" height="12" rx="6" fill="#1F7A3A"/><circle cx="17" cy="65" r="7.5" fill="#E3EEFA"/><text x="17" y="68.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Figtree, Arial, sans-serif">T</text><rect x="31" y="59" width="48" height="12" rx="6" fill="#B4237A"/><circle cx="17" cy="86" r="7.5" fill="#E3EEFA"/><text x="17" y="89.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Figtree, Arial, sans-serif">W</text><rect x="31" y="80" width="70" height="12" rx="6" fill="#0E7C86"/><circle cx="17" cy="107" r="7.5" fill="#E3EEFA"/><text x="17" y="110.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Figtree, Arial, sans-serif">T</text><rect x="31" y="101" width="40" height="12" rx="6" fill="#6B3FA0"/><circle cx="17" cy="128" r="7.5" fill="#E3EEFA"/><text x="17" y="131.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Figtree, Arial, sans-serif">F</text><rect x="31" y="122" width="56" height="12" rx="6" fill="#C2410C"/></g></defs>
   <rect x="238" y="20" width="250" height="186" rx="13" class="art-frame"/>
   <path d="M212 214h302a7 7 0 0 1-7 12H219a7 7 0 0 1-7-12z" fill="#0B2140"/>
   <use href="#acct-week" x="262" y="38"/>
   <rect x="398" y="42" width="72" height="9" rx="4.5" class="art-line"/><rect x="398" y="60" width="54" height="9" rx="4.5" class="art-line"/><rect x="398" y="78" width="66" height="9" rx="4.5" class="art-line"/>
-  <rect x="394" y="110" width="82" height="26" rx="13" fill="#F3C613"/><text x="435" y="127.5" text-anchor="middle" font-size="11" font-weight="800" fill="#2A2100" font-family="Archivo, Arial, sans-serif">Nebinger</text>
-  <rect x="394" y="144" width="82" height="26" rx="13" class="art-chip"/><text x="435" y="161.5" text-anchor="middle" font-size="11" font-weight="800" class="art-ink" font-family="Archivo, Arial, sans-serif">Grades K, 3</text>
+  <rect x="394" y="110" width="82" height="26" rx="13" fill="#F3C613"/><text x="435" y="127.5" text-anchor="middle" font-size="11" font-weight="800" fill="#2A2100" font-family="Figtree, Arial, sans-serif">Nebinger</text>
+  <rect x="394" y="144" width="82" height="26" rx="13" class="art-chip"/><text x="435" y="161.5" text-anchor="middle" font-size="11" font-weight="800" class="art-ink" font-family="Figtree, Arial, sans-serif">Grades K, 3</text>
   <rect x="30" y="62" width="150" height="226" rx="22" class="art-frame"/><rect x="88" y="71" width="34" height="5" rx="2.5" fill="#0B2140"/>
   <use href="#acct-week" x="45" y="92"/>
   <path d="M128 58C140 22 212 16 240 54" fill="none" stroke="#0F4D90" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round"/>
@@ -5473,7 +5476,9 @@ function calendarPage() {
     } : null,
   };
   const hero = `    <h1>${T(`My kids’ calendar`)}</h1>
-    <p class="lede">${T(`Everything you’ve planned for the school year and the summer, in one place: the after-school week, every day off, camp weeks and sign-up dates. Only you can see it.`)}</p>${heroCta(D, 'calendar')}`;
+    <p class="lede when-out">${T(`Gone are the days of tracking aftercare, days off, and summer camps in a bajillion different spreadsheets. Here’s a sample of what you’ll see with a free account: the whole year, all in one place.`)}</p>
+    <p class="lede when-in">${T(`Everything you’ve planned for the school year and the summer, in one place: the after-school week, every day off, camp weeks and sign-up dates. Only you can see it.`)}</p>${GATE ? `
+    <p class="hero-cta when-out"><a class="btn primary big" href="${link('register/', D)}?next=calendar" data-plan-cta="hero">${T(`Get started`)}</a><a class="btn big" href="${link('account/', D)}?next=calendar">${T(`Log in`)}</a><span>${T(`Free, with no password to remember: we email you a code, or you use Google.`)}</span></p>` : ''}`;
   const body = `<div ${groupsAttrs(D)} data-year-page data-clarity-mask="true" style="display:contents">
   <noscript><p class="ask">${T(`The calendar needs JavaScript turned on.`)}</p></noscript>
   <section class="section year-out" id="year-out">

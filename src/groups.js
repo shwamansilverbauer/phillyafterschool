@@ -1795,7 +1795,7 @@
     var flyer = function (name, url, rows) {
       var W = 1275, H = 1650, cv = document.createElement('canvas'), x = cv.getContext('2d');
       cv.width = W; cv.height = H;
-      var DISPLAY = '"Archivo","Arial Black","Helvetica Neue",Arial,sans-serif', BODY = '"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif', NAVY = '#0B2140', YELLOW = '#F3C613';
+      var DISPLAY = '"Figtree","Arial Black","Helvetica Neue",Arial,sans-serif', BODY = '"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif', NAVY = '#0B2140', YELLOW = '#F3C613';
       var fit = function (text, font, size, max, min) { do { x.font = font.replace('SIZE', size); size -= 4; } while (x.measureText(text).width > max && size > min); return x.font; };
       var wrap = function (text, max) { var words = text.split(' '), lines = [], line = ''; words.forEach(function (w) { var t = line ? line + ' ' + w : w; if (x.measureText(t).width > max && line) { lines.push(line); line = w; } else line = t; }); if (line) lines.push(line); return lines; };
       x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, W, H);

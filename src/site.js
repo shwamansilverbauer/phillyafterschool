@@ -1094,11 +1094,14 @@
     if (firstOff && firstOff.tagName === 'DETAILS' && !/^#d-/.test(location.hash)) firstOff.open = true;
     var asked = /^#d-/.test(location.hash) ? document.getElementById(location.hash.slice(1)) : null;
     if (asked && asked.tagName === 'DETAILS') asked.open = true;
+    // a day off already planned here is not news: the line and the bar move on to the next one still unplanned,
+    // and say nothing when that one is more than 60 days away
+    var soon = (function () { var t = new Date(now); t.setDate(t.getDate() + 60); return t.getFullYear() + '-' + ('0' + (t.getMonth() + 1)).slice(-2) + '-' + ('0' + t.getDate()).slice(-2); })();
     all(document, '[data-next-off]').forEach(function (b) {
       var list; try { list = JSON.parse(b.getAttribute('data-next-off')); } catch (e) { return; }
       var next = null;
-      list.forEach(function (d) { if (!next && d.u >= today) next = d; });
-      if (!next) return;
+      list.forEach(function (d) { if (!next && d.u >= today && !offPlanned(d.d)) next = d; });
+      if (!next || (next.s || next.u) > soon) return;
       b.textContent = 'Next day off: ' + next.w + ' (' + next.n + ').' + (next.c ? ' ' + next.c + (next.c === 1 ? ' listed program has' : ' listed programs have') + ' a camp posted.' : '');
       b.hidden = false;
       var day = b.parentNode.querySelector('[data-next-off-day]');   // that day's own page: who has a camp
@@ -1108,8 +1111,8 @@
     var bar = document.getElementById('offbar');
     if (bar) {
       var days; try { days = JSON.parse(bar.getAttribute('data-offbar')); } catch (e) { days = []; }
-      var nx = null; days.forEach(function (d) { if (!nx && d.u >= today) nx = d; });
-      if (nx && store('pas-offbar') !== nx.s) {
+      var nx = null; days.forEach(function (d) { if (!nx && d.u >= today && !offPlanned(d.d)) nx = d; });
+      if (nx && nx.s <= soon && store('pas-offbar') !== nx.s) {
         var go = bar.querySelector('.offbar-go'), room = function () { document.body.style.paddingBottom = bar.hidden ? '' : bar.offsetHeight + 'px'; };
         bar.querySelector('.offbar-q').textContent = nx.q;
         go.textContent = nx.g; go.href = nx.p;
@@ -1587,6 +1590,12 @@
     delete rosters.sumProfOff; delete rosters.offProfOff;
     store('pas-rosters', JSON.stringify(rosters)); if (window.pasBoard && window.pasBoard.onSave) window.pasBoard.onSave(); if (window.pasSummer && window.pasSummer.onSave) window.pasSummer.onSave(); if (window.pasDaysOff && window.pasDaysOff.onSave) window.pasDaysOff.onSave(); }
   function activeKid() { var r = loadRosters(); return r.kids[r.kid]; }
+  // true when every child on this device has a pick, in the days-off planner, for every date of a break
+  function offPlanned(dates) {
+    if (!dates || !dates.length) return false;
+    var raw = rosters || parse('pas-rosters'), kids = raw && Array.isArray(raw.kids) ? raw.kids : [];   // read, never load: this runs before the planners are set up
+    return kids.length > 0 && kids.every(function (k) { var off = k && k.off && typeof k.off === 'object' ? k.off : {}; return dates.every(function (x) { return !!off[x]; }); });
+  }
   function activeBoard() { var r = loadRosters(); return r.kids[r.kid][r.active]; }
   function kidLabel(k, i) { return k.name || 'Child ' + (i + 1); }
   function countPicks(b) {
@@ -2255,7 +2264,7 @@
     var photoBox = $o('#off-photo'), photoClear = $o('#off-photo-clear'), cardStatus = $o('#off-card-status');
     var photo = null, page = 'all';
     var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var DISPLAY = '"Archivo", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
+    var DISPLAY = '"Figtree", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
     var NAVY = '#0B2140', YELLOW = '#F3C613';
     var INKS = [['#DAEDFE', '#1763B8'], ['#FFEFA2', '#B88A00'], ['#D6F3D2', '#2C8444'], ['#F0DDF7', '#6B3FA0'], ['#FFD9CC', '#CC3000'], ['#E4ECF6', '#4D607A']];
     var utc = function (iso, n) { var d = new Date(iso + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + (n || 0)); return d; };
@@ -2452,7 +2461,7 @@
         shareEvent('print');
         window.print();
       });
-      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('850 88px Archivo'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (!cardBox.hidden) drawCard(); }, function () { /* system fonts will do */ });
+      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('800 88px Figtree'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (!cardBox.hidden) drawCard(); }, function () { /* system fonts will do */ });
     } else if (cardBox) cardBox.hidden = true;
 
     // What the accounts script (groups.js) needs to keep the days off in a profile. It adds onSave.
@@ -2672,7 +2681,7 @@
       if (!b.getAttribute('data-plain')) b.setAttribute('data-plain', b.textContent);
       var plain = b.getAttribute('data-plain'); if (!plain) return;
       var today = new Date(), iso0 = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
-      var next = null; data.offAhead.forEach(function (d) { if (!next && d.u >= iso0) next = d; });
+      var next = null; data.offAhead.forEach(function (d) { if (!next && d.u >= iso0 && !offPlanned(d.dates)) next = d; });
       var kid = activeKid(), board = countPicks(kid.now) ? kid.now : countPicks(kid.next) ? kid.next : null;
       if (!next || !board) { b.textContent = plain; return; }
       var WD = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'], found = {}, order = [];
@@ -3400,7 +3409,7 @@
     var maker = $('#card-maker'), canvas = $('#card-canvas');
     var teacherBox = $('#card-teacher'), noteBox = $('#card-note'), photoBox = $('#card-photo'), photoClear = $('#card-photo-clear'), cardStatus = $('#card-status');
     var photo = null;
-    var DISPLAY = '"Archivo", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
+    var DISPLAY = '"Figtree", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
     var fit = function (ctx, text, max) {   // shorten with an ellipsis until it fits
       if (ctx.measureText(text).width <= max) return text;
       while (text.length > 1 && ctx.measureText(text + '…').width > max) text = text.slice(0, -1);
@@ -3570,7 +3579,7 @@
         track_share('cta_click');
       });
       if (document.fonts && document.fonts.load) {   // draw again once the site's fonts are ready
-        Promise.all([document.fonts.load('850 92px Archivo'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(drawCard, function () { /* fall back to system fonts */ });
+        Promise.all([document.fonts.load('800 92px Figtree'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(drawCard, function () { /* fall back to system fonts */ });
       }
     }
 
@@ -3935,7 +3944,7 @@
     var photoBox = $s('#sum-photo'), photoClear = $s('#sum-photo-clear'), cardStatus = $s('#sum-card-status');
     var photo = null, page = 'all';
     var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var DISPLAY = '"Archivo", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
+    var DISPLAY = '"Figtree", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
     var NAVY = '#0B2140', YELLOW = '#F3C613';
     var INKS = [['#DAEDFE', '#1763B8'], ['#FFEFA2', '#B88A00'], ['#D6F3D2', '#2C8444'], ['#F0DDF7', '#6B3FA0'], ['#FFD9CC', '#CC3000'], ['#E4ECF6', '#4D607A']];
     var dayOf = function (iso, n) { var d = new Date(iso + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + (n || 0)); return d; };
@@ -4123,7 +4132,7 @@
         window.addEventListener('afterprint', after);
         ev('card_print'); window.print();
       });
-      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('850 88px Archivo'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (!cardBox.hidden) drawCard(); }, function () { /* system fonts will do */ });
+      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('800 88px Figtree'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (!cardBox.hidden) drawCard(); }, function () { /* system fonts will do */ });
     } else if (cardBox) cardBox.hidden = true;
 
     // What the accounts script (groups.js) needs to keep the summer in a profile. It adds onSave.
@@ -4157,7 +4166,7 @@
     var $y = function (id) { return document.getElementById(id); };
     var now0 = new Date(), today0 = now0.getFullYear() + '-' + ('0' + (now0.getMonth() + 1)).slice(-2) + '-' + ('0' + now0.getDate()).slice(-2);
     var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var DISPLAY = '"Archivo", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
+    var DISPLAY = '"Figtree", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
     var NAVY = '#0B2140', YELLOW = '#F3C613';
     var INKS = [['#DAEDFE', '#1763B8'], ['#FFEFA2', '#B88A00'], ['#D6F3D2', '#2C8444'], ['#F0DDF7', '#6B3FA0'], ['#FFD9CC', '#CC3000'], ['#E4ECF6', '#4D607A']];
     var utc = function (iso, n) { var d = new Date(iso + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + (n || 0)); return d; };
@@ -4875,7 +4884,7 @@
         window.addEventListener('afterprint', after);
         window.print();
       });
-      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('850 88px Archivo'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (model && !cardBox.hidden) drawCard(); }, function () { /* system fonts will do */ });
+      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('800 88px Figtree'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (model && !cardBox.hidden) drawCard(); }, function () { /* system fonts will do */ });
     } else if (cardBox) cardBox.hidden = true;
 
     // groups.js calls this once it knows who is signed in. `profile` is null when the profile couldn't be read.

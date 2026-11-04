@@ -28,7 +28,8 @@ Fill in `site.config.json`:
 - `supportUrl` and `supportMonthlyUrl`: the two Stripe Payment Links on the Support page (pay what you want once; a monthly amount), with `supportLabel` and `supportMonthlyLabel` as the button text. Only the public `buy.stripe.com` addresses go here, never a key. If `supportUrl` is empty, the Support page says contributions are being set up. Coming back from Stripe: each link's "after payment" redirect is `https://phillyafterschool.org/support/?thanks=1&session_id={CHECKOUT_SESSION_ID}` (the one-time link) or `?thanks=2&…` (the monthly link); the page shows the matching thank-you (`#support-thanks`), counts the checkout once (`pas_support_thanks` with `plan` once or month, the same `pas-paid-seen` list the premium page uses) and takes the query off the address.
 - `siteUrl`: the domain you treat as the main one. Redirect the other domain to it at your host.
 - `builtBy`: the name, link and short bio shown in the footer, on the home page and on About.
-- `writtenBy`: optional. A name for a "Written by" line under "Built by" in the footer. It carries no link.
+- `writtenBy`: optional. A name for the "Written, edited, and humanized by" line under the "Created, managed, and
+  meticulously vibe coded by" line in the footer. It carries no link.
 - `gtmId`: optional, e.g. `GTM-XXXXXXX`.
 - `admins`: optional, a list of email addresses whose accounts open `/edit/` and its pages (see "Site admins").
 - `editLogin`: optional, `{ "user": "...", "passwordHash": "..." }`. Puts a sign-in on `/edit/`. The hash is a bcrypt hash, never the
@@ -853,9 +854,12 @@ open), then Suggestion Box, About and the button, so a phone sees five lines rat
 The footer (`.foot`) is the sitemap, kept short: the wordmark (`src/static/logo-text.png`, the logo without the
 bulb; the pictures the planners make carry the same wordmark on a navy tab at their top left, `drawMark()` in
 `site.js`), one line and the "Help the site keep going" button, then
-three columns: Programs (the four kinds, then by school, by neighborhood, by type, by day of week), Schedule Builder
-(the three planners, the calendar, reminders by email, My profile) and About (the story, Suggestion Box, Write a
-review, For program managers, Contact, Privacy, Terms), then the fine print with "Built by" and "Written by".
+three columns: Programs (the four kinds, then By School, By Neighborhood, By Type, By Day of Week), Schedule Builder
+(the three planners, My Calendar, Reminders by Email, My Profile) and About (The Story, Suggestion Box, Write a
+Review, For Program Managers, Contact, Privacy, Terms of Use), then the fine print with the two credit lines
+("Created, managed, and meticulously vibe coded by …" and "Written, edited, and humanized by …"). Menu and footer
+items are in title case, and "After School" is two words when it names the thing (it is hyphenated only as an
+adjective: after-school programs).
 
 ## Signed up, or still to: ticks on the days-off plan and the to-do list
 
@@ -942,7 +946,10 @@ The words are made in the build for the next twelve days off: "on" a holiday, "o
 school's closed for" conferences or staff development, with the date or the span of dates. The script shows the
 first one still ahead and leaves room for the bar under the page. The X closes it and remembers which day off was
 closed (`pas-offbar` in this browser), so it comes back for the next one. School pages and the week builder keep
-the older line in the page (`nextOff()`).
+the older line in the page (`nextOff()`). Both skip a day off that is already planned on this device — every child
+on the device has a pick for every date of the break in the days-off planner (`offPlanned()` in `site.js`) — and
+move on to the next one still unplanned; when that one is more than 60 days away they say nothing, since a day off
+two months out is not yet a question.
 
 ## Days of the week, days off, and a saved school
 
@@ -1056,15 +1063,18 @@ counts (the days-off card keeps "N days off still to come", and the summer card 
 stay off the home page's tiles and type chips too; a filter bar's counts and a list section's "(N)" are the live
 numbers of what is on the page, and stay.
 
-**Type.** Four faces, all from Google Fonts (one `<link>` in `layout()`): page titles and section headings (`h1`,
-`h2`) are **Luckiest Guy**, the logo's face, heavy painted capitals (`--title`; the text is set in capitals by CSS, so
-a heading keeps its own casing in the HTML and in search results; its own lowercase is an odd unicase, so the
-transform is not optional), the small line over a title (`.hero .where`, the breadcrumb or the school's one-line
-description) is **Schoolbell**, a thin print hand (`--hand`), smaller headings (`h3`), cards and buttons stay in
-**Archivo** (`--display`), and body text in **Atkinson Hyperlegible** (`--body`). The brand picked Luckiest Guy
-for the logo too, so the site and the logo share a face; Schoolbell stands in for the logo's hand-lettered "AFTER
-SCHOOL". The week card and the planners' pictures (`drawCard` in `src/site.js`) still draw in Archivo. The two
-link-preview pictures are drawn with the page title's face and the logo, so they are redrawn whenever either changes.
+**Type.** Four faces, all from Google Fonts (one `<link>` in `layout()`), following the brand's type key. Signposts —
+headings that name the page or a region of it (`h1`, `h2`: the page headline, "Parents", "When do you need
+coverage?") — are **Luckiest Guy**, the logo's face, heavy painted capitals (`--title`; the text is set in capitals by
+CSS, so a heading keeps its own casing in the HTML and in search results; its own lowercase is an odd unicase, so
+the transform is not optional). Titles — names of things inside a region and short statements (`h3`, the coverage
+cards, tiles, feature cards, step labels, "It's free for parents.") — are **Figtree ExtraBold** in sentence case
+(`--display`, weight 800; the week card and the planners' pictures draw in it too). The small line over a page
+title (`.hero .where`, the breadcrumb or the school's one-line description) is **Schoolbell**, a thin print hand
+(`--hand`), and body text is **Atkinson Hyperlegible** (`--body`). The brand picked Luckiest Guy for the logo too,
+so the site and the logo share a face; Schoolbell stands in for the logo's hand-lettered "AFTER SCHOOL". The two
+link-preview pictures open with the site's own header bar (the deep blue with the logo) and are drawn with the
+page title's face, so they are redrawn whenever either changes.
 
 **Colours.** Every colour is a named value at the top of `src/site.css`. The band at the top of each page is a
 daytime sky (`--hero` fading to `--hero-low`) with navy type (`--hero-ink`, `--hero-muted`); the header button
@@ -1794,7 +1804,10 @@ planner would be (see "The tour" below), and the lists are there for everyone on
   a product page. Under the page's heading is the one thing to press, "Create a free account" (`heroCta()`), which
   comes back to that planner. Then: a heading and a strip of tabs, one for each way of looking at the plan (List,
   Calendar, Grid on the days-off and summer pages; The week, Budget planning, Share it on the week; Calendar,
-  List on My kids' calendar), each showing a made-up example; three things the planner does, each a picture-and-text row (a small
+  List on My kids' calendar), each showing a made-up example (My kids' calendar is the plain one, `plain: true`: a
+  "Sample calendar" heading with no kicker, the example full width with no side copy and no "Example" pill, and
+  "This is a sample. Yours will be populated with your kids, your schedule, and the plans you make." under it; its
+  hero has two buttons, "Get started" and "Log in", and a signed-out lede of its own); three things the planner does, each a picture-and-text row (a small
   drawing, `miniArt()`, on alternating sides, a headline and one line, in the kinds' colors); the three steps as one
   line (1 Create a free account → 2 Make your plan → 3 Take it with you); and a dark band with the button again.
   Three rows and one line each, rather than six cards with sentences, so the page can be taken in at a glance. The strip is labelled "See it as" and each example ends with a "Next: …"

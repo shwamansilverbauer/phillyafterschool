@@ -15,10 +15,10 @@
   --foot:#0A3566; --foot-ink:#FFFFFF; --foot-muted:#CFE3FB;
   --house-1:#1B60AD; --house-2:#2176D2; --house-3:#2E86E0; --house-trim:#0A3566; --school:#FFFFFF; --school-win:#2176D2;
   --street:#0A3566; --scene-line:#0A3566; --scene-drop:#1763B8; --cloud-1:.95; --cloud-2:.8; --sun:1; --note:#0A3566;
-  --display:"Archivo","Arial Black","Helvetica Neue",Arial,sans-serif;
+  --display:"Figtree","Arial Black","Helvetica Neue",Arial,sans-serif;
   --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
   /* the brand's type: page titles and section headings (h1, h2) in Luckiest Guy, the logo's face, heavy painted caps;
-     the small line over a title in Schoolbell, a thin print hand. Smaller headings, cards and buttons stay in Archivo. */
+     the small line over a title in Schoolbell, a thin print hand. Names of things inside a region (h3, cards, tiles, step labels) are Figtree ExtraBold in sentence case. */
   --title:"Luckiest Guy","Arial Black",Impact,sans-serif;
   --hand:"Schoolbell","Comic Sans MS","Segoe Print",cursive;
 }
@@ -1600,6 +1600,7 @@ html:not(.js) .pshow-nextp{display:none}
 .view-switch .vs:focus-visible{outline:3px solid var(--yellow);outline-offset:1px}
 .pshow-panel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.2fr);gap:20px 30px;align-items:center;padding:24px 26px 28px;min-width:0}
 .pshow-panel[hidden]{display:none}
+.pshow-panel.plain{grid-template-columns:minmax(0,1fr)}
 html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .pshow-say{display:flex;flex-direction:column;gap:8px;min-width:0}
 .pshow-say > b{font-family:var(--display);font-stretch:112%;font-size:1.3rem;line-height:1.15}
