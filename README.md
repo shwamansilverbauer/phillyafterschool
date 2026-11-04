@@ -30,6 +30,7 @@ Fill in `site.config.json`:
 - `builtBy`: the name, link and short bio shown in the footer, on the home page and on About.
 - `writtenBy`: optional. A name for the "Written, edited, and humanized by" line under the "Created, managed, and
   meticulously vibe coded by" line in the footer. It carries no link.
+- `designBy`: optional. A name for the "Logo and additional design concepts by" line under those two. No link.
 - `gtmId`: optional, e.g. `GTM-XXXXXXX`.
 - `admins`: optional, a list of email addresses whose accounts open `/edit/` and its pages (see "Site admins").
 - `editLogin`: optional, `{ "user": "...", "passwordHash": "..." }`. Puts a sign-in on `/edit/`. The hash is a bcrypt hash, never the

@@ -719,6 +719,7 @@ ${body}
     <p>${T(`{site} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.`, { site: cfg.siteName })}</p>
     ${cfg.builtBy ? `<p>Created, managed, and meticulously vibe coded by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
     ${cfg.writtenBy ? `<p>Written, edited, and humanized by ${esc(cfg.writtenBy.name)}.</p>` : ''}
+    ${cfg.designBy ? `<p>Logo and additional design concepts by ${esc(cfg.designBy.name)}.</p>` : ''}
     </div>
   </div>
 </div></footer>
