@@ -16,7 +16,7 @@
     "grades": null,
     "gradeNote": "Grades not published",
     "hours": "Before and after school. Times not published.",
-    "cost": "Not published",
+    "cost": "$250 a month for full time (4 or more days a week) or $175 a month for part time (3 days a week), snack included. Not published on the program’s site.",
     "phone": "",
     "email": "info@imaginethatphilly.org",
     "website": "https://imaginethatphilly.org/",
@@ -51,7 +51,22 @@
         "note": "Imagine That’s site names Coppin as one of its two school locations.",
         "checked": "2026-10-05"
       }
-    }
+    },
+    "price": "paid",
+    "daysNote": "Full time is 4 or more days a week; part time is 3.",
+    "told": [
+      {
+        "on": "2026-11-04",
+        "by": "provider",
+        "how": "the 2026–27 rates Imagine That gives enrolled families at Nebinger (the site’s owner is one), not its website",
+        "fields": [
+          "cost",
+          "price",
+          "daysNote"
+        ],
+        "says": "After-school care is $250 a month for full time, 4 or more days a week, or $175 a month for part time, 3 days a week, with a snack included."
+      }
+    ]
   },
   {
     "id": "nebinger-clubs",
