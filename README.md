@@ -1074,8 +1074,10 @@ cards, tiles, feature cards, step labels, "It's free for parents.") — are **Fi
 title (`.hero .where`, the breadcrumb or the school's one-line description) is **Schoolbell**, a thin print hand
 (`--hand`), and body text is **Atkinson Hyperlegible** (`--body`). The brand picked Luckiest Guy for the logo too,
 so the site and the logo share a face; Schoolbell stands in for the logo's hand-lettered "AFTER SCHOOL". The two
-link-preview pictures open with the site's own header bar (the deep blue with the logo) and are drawn with the
-page title's face, so they are redrawn whenever either changes.
+link-preview pictures (`src/static/share.png`, `share-days-off.png`) are the site's sky with the logo for light
+backgrounds (`src/static/logo-sky.png`, PHILLY in the brand blue), a headline, one line and the page's drawing
+along the bottom; `scripts/share-pictures.js` draws them from a build with Playwright, so they are redrawn
+whenever the logo, a headline or the site's colours change.
 
 **Colours.** Every colour is a named value at the top of `src/site.css`. The band at the top of each page is a
 daytime sky (`--hero` fading to `--hero-low`) with navy type (`--hero-ink`, `--hero-muted`); the header button
@@ -1084,11 +1086,11 @@ white-on-deep-blue. There is no dark mode: the site looks the same whatever the 
 (`color-scheme: only light` in the CSS and a matching `<meta>` in every page), because the calendars, the plan
 colours and the pictures are drawn for a light page. The week card (`drawCard` in `src/site.js`) and the link-preview picture
 (`src/static/share.png`, 1200 by 630) use the same sky and footer, so change them together. Both link-preview
-pictures (`share.png` and `share-days-off.png`) open with the logo on a white sticker, since the logo's light
-blue and yellow would sink into the sky or the yellow page; they are screenshots drawn by two small Playwright
-scripts, and are drawn again whenever the logo or the home page's headline changes. The logo files come from the brand's own set (2000px transparent PNGs, kept out of the repo): `src/static/logo.png`
+pictures (`share.png` and `share-days-off.png`) are drawn by `scripts/share-pictures.js` (see "Type" below).
+The logo files come from the brand's own set (2000px transparent PNGs, kept out of the repo): `src/static/logo.png`
 is the full lockup (the header), `logo-text.png` the wordmark alone (the footer; the bulb masked out of the lockup),
-and the favicon and app icons (`src/static/favicon.svg`, `favicon.png`, `favicon.ico`, `apple-touch-icon.png`,
+`logo-sky.png` the lockup with PHILLY in the brand blue (for light backgrounds: the share pictures), and the
+favicon and app icons (`src/static/favicon.svg`, `favicon.png`, `favicon.ico`, `apple-touch-icon.png`,
 `icon-192.png`, `icon-512.png`) are the solid bulb on a navy rounded square; to change them, replace the files.
 The brand's bulb marks live in `src/static/bulb.png` (the yellow bulb) and `bulb-line.png` (the outline one,
 yellow line and light-blue brain): `bulb(depth, cls)` in `build.mjs` draws the yellow one on the "Nothing matches
