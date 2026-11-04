@@ -268,6 +268,7 @@ if (!edit_signed_in()) {
     <p><span data-copy="ab9dba162b" data-tpl="{site} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed." data-vars="{&quot;site&quot;:&quot;Philly After School&quot;}">Philly After School is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.</span></p>
     <p>Created, managed, and meticulously vibe coded by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
     <p>Written, edited, and humanized by Rachael Silverbauer.</p>
+    <p>Logo and additional design concepts by Sierra Kiarsis.</p>
     </div>
   </div>
 </div></footer>
@@ -469,6 +470,7 @@ if (!edit_signed_in()) {
     <p><span data-copy="ab9dba162b" data-tpl="{site} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed." data-vars="{&quot;site&quot;:&quot;Philly After School&quot;}">Philly After School is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.</span></p>
     <p>Created, managed, and meticulously vibe coded by <a href="https://joshsilverbauer.com" target="_blank" rel="noopener">Josh Silverbauer</a>.</p>
     <p>Written, edited, and humanized by Rachael Silverbauer.</p>
+    <p>Logo and additional design concepts by Sierra Kiarsis.</p>
     </div>
   </div>
 </div></footer>
