@@ -719,7 +719,7 @@ ${body}
     <p>${T(`{site} is an independent community project. It is not affiliated with the School District of Philadelphia or any provider listed.`, { site: cfg.siteName })}</p>
     ${cfg.builtBy ? `<p>Created, managed, and meticulously vibe coded by <a href="${esc(cfg.builtBy.url)}" target="_blank" rel="noopener">${esc(cfg.builtBy.name)}</a>.</p>` : ''}
     ${cfg.writtenBy ? `<p>Written, edited, and humanized by ${esc(cfg.writtenBy.name)}.</p>` : ''}
-    ${cfg.designBy ? `<p>Logo and additional design concepts by ${esc(cfg.designBy.name)}.</p>` : ''}
+    ${cfg.designBy ? `<p>Logo and design zhuzhing by ${esc(cfg.designBy.name)}.</p>` : ''}
     </div>
   </div>
 </div></footer>
@@ -2010,7 +2010,7 @@ function schoolPage(s) {
 ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n')}
   </div>
 </section>`).join('\n');
-  const hero = `    <p class="where">After-school programs and aftercare for ${esc(s.name)}, ${esc(s.address.split(',')[0])}</p>
+  const hero = `    <p class="where where-line">After-school programs and aftercare for ${esc(s.name)}, ${esc(s.address.split(',')[0])}</p>
     <h1>${s.dismissal ? T(`It’s {time} at {school}. What now?`, { time: clock(s), school: s.shortName }) : T(`School’s out at {school}. What now?`, { school: s.shortName })}</h1>
     <p class="lede">${T(`Every after-school program we could find that runs at the school, picks children up from it, or sits within a short walk. Pick a grade to see what your child can join.`)}</p>
     <div class="mine needs-js-block" data-mine>

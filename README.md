@@ -30,7 +30,7 @@ Fill in `site.config.json`:
 - `builtBy`: the name, link and short bio shown in the footer, on the home page and on About.
 - `writtenBy`: optional. A name for the "Written, edited, and humanized by" line under the "Created, managed, and
   meticulously vibe coded by" line in the footer. It carries no link.
-- `designBy`: optional. A name for the "Logo and additional design concepts by" line under those two. No link.
+- `designBy`: optional. A name for the "Logo and design zhuzhing by" line under those two. No link.
 - `gtmId`: optional, e.g. `GTM-XXXXXXX`.
 - `admins`: optional, a list of email addresses whose accounts open `/edit/` and its pages (see "Site admins").
 - `editLogin`: optional, `{ "user": "...", "passwordHash": "..." }`. Puts a sign-in on `/edit/`. The hash is a bcrypt hash, never the
@@ -1070,9 +1070,12 @@ coverage?") — are **Luckiest Guy**, the logo's face, heavy painted capitals (`
 CSS, so a heading keeps its own casing in the HTML and in search results; its own lowercase is an odd unicase, so
 the transform is not optional). Titles — names of things inside a region and short statements (`h3`, the coverage
 cards, tiles, feature cards, step labels, "It's free for parents.") — are **Figtree ExtraBold** in sentence case
-(`--display`, weight 800; the week card and the planners' pictures draw in it too). The small line over a page
-title (`.hero .where`, the breadcrumb or the school's one-line description) is **Schoolbell**, a thin print hand
-(`--hand`), and body text is **Atkinson Hyperlegible** (`--body`). The brand picked Luckiest Guy for the logo too,
+(`--display`, weight 800; the week card and the planners' pictures draw in it too). An h2 that names a thing or makes a
+statement rather than signposting a region (a planner's card on `/schedules/`, the Follow box, the review nudge,
+the premium ask, a person's name on their profile card) is a title too, so it is Figtree in sentence case. The
+short line over a page title (`.hero .where`, a breadcrumb) is **Schoolbell**, a thin print hand (`--hand`); a
+whole sentence there (a school page's line) reads in the body face (`.where-line`). Body text is **Atkinson
+Hyperlegible** (`--body`). The brand picked Luckiest Guy for the logo too,
 so the site and the logo share a face; Schoolbell stands in for the logo's hand-lettered "AFTER SCHOOL". The two
 link-preview pictures (`src/static/share.png`, `share-days-off.png`) are the site's sky with the logo for light
 backgrounds (`src/static/logo-sky.png`, PHILLY in the brand blue), a headline, one line and the page's drawing
