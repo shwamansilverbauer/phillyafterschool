@@ -34,6 +34,9 @@ img,svg{max-width:100%}
 h1,h2,h3{font-family:var(--display);font-stretch:112%;text-wrap:balance;margin:0;line-height:1.08;letter-spacing:-.01em}
 h1{font-family:var(--title);font-stretch:normal;font-weight:400;text-transform:uppercase;letter-spacing:.02em;font-size:clamp(2rem,6.6vw,3.7rem);line-height:1.02}
 h2{font-family:var(--title);font-stretch:normal;font-weight:400;text-transform:uppercase;letter-spacing:.02em;font-size:clamp(1.25rem,2.8vw,1.5rem);line-height:1.08}
+/* an h2 that names a thing or makes a statement rather than signposting a region (a planner's card, the Follow box,
+   the review nudge, a person's name on their profile card) is a title: Figtree, sentence case */
+.plan-head h2,.follow-say h2,.remind-say h2,.rv-nudge h2,.pm-cta-say h2,.pc-who h2{font-family:var(--display);font-stretch:112%;font-weight:800;text-transform:none;letter-spacing:-.01em;line-height:1.15}
 h3{font-size:1.2rem;font-weight:750}
 p{margin:0}
 a{color:var(--link)}
@@ -41,7 +44,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 
 /* ---------- band: header + page headline ---------- */
 .band{background:var(--hero);color:var(--hero-ink);overflow:hidden}
-.in{max-width:1040px;margin:0 auto;padding-inline:20px}
+.in{max-width:1040px;margin:0 auto;padding-inline:clamp(20px,6vw,24px)}
 .bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 24px;padding-block:18px}
 .brand{display:inline-flex;align-items:center;text-decoration:none}
 .brand .logo{display:block;height:60px;width:auto}
@@ -50,9 +53,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .nav{display:flex;flex-wrap:wrap;gap:4px 22px;font-size:1rem}
 .nav a{color:var(--hero-ink);text-decoration:none;padding-block:4px;border-bottom:3px solid transparent}
 .nav a:hover,.nav a[aria-current="page"]{border-bottom-color:var(--hero-accent)}
-.hero{padding-block:clamp(28px,6vw,64px) clamp(28px,5vw,52px);display:flex;flex-direction:column;gap:18px}
+.hero{padding-block:clamp(36px,8vw,64px) clamp(28px,5vw,52px);display:flex;flex-direction:column;gap:18px}
 .hero .lede{color:var(--hero-muted);font-size:clamp(1.05rem,2.2vw,1.25rem);max-width:60ch}
 .hero .where{color:var(--hero-muted);font-family:var(--hand);font-size:1.25rem;letter-spacing:.01em}
+.hero .where.where-line{font-family:var(--body);font-size:1rem;letter-spacing:0}   /* a whole sentence over a title reads in the body face, not the hand */
 .pill.multi{white-space:normal;border-radius:14px;line-height:1.35;padding:4px 12px}   /* a label long enough to run onto a second line */
 .hero .where .served{display:inline-flex;flex-wrap:wrap;gap:6px;vertical-align:middle;margin-left:8px}
 .hero .where .pill{font-size:.92rem}
