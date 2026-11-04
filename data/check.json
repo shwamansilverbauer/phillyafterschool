@@ -625,54 +625,6 @@
       }
     },
     {
-      "program": "queen-and-rook",
-      "school": "mccall",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "third-party-list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "third-party"
-      }
-    },
-    {
-      "program": "queen-and-rook",
-      "school": "meredith",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "third-party-list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "third-party"
-      }
-    },
-    {
-      "program": "queen-and-rook",
-      "school": "nebinger",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "third-party-list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "third-party"
-      }
-    },
-    {
-      "program": "queen-and-rook",
-      "school": "vare-washington",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "third-party-list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "third-party"
-      }
-    },
-    {
       "program": "settlement-kaleidoscope-plus",
       "school": "mccall",
       "relation": "pickup",
@@ -1192,6 +1144,54 @@
         "read": "2026-10-26",
         "how": "fetch",
         "by": "provider"
+      }
+    },
+    {
+      "program": "queen-and-rook",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-11-04",
+      "basis": "third-party-list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "third-party"
+      }
+    },
+    {
+      "program": "queen-and-rook",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-11-04",
+      "basis": "third-party-list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "third-party"
+      }
+    },
+    {
+      "program": "queen-and-rook",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-11-04",
+      "basis": "third-party-list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "third-party"
+      }
+    },
+    {
+      "program": "queen-and-rook",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-11-04",
+      "basis": "third-party-list",
+      "list": {
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "third-party"
       }
     }
   ],
