@@ -3021,6 +3021,21 @@
       "says": "Old Pine Community Center and The Neighborhub are the same building after a rebrand, at 401 Lombard St; Fall II starts November 2, 2026, registration is open, and families can join whenever there is space, with the fee pro-rated.",
       "daysAgo": 16,
       "stale": false
+    },
+    {
+      "program": "imagine-that-philly",
+      "name": "Imagine That Philly",
+      "on": "2026-11-04",
+      "by": "provider",
+      "how": "the 2026–27 rates Imagine That gives enrolled families at Nebinger (the site’s owner is one), not its website",
+      "fields": [
+        "cost",
+        "price",
+        "daysNote"
+      ],
+      "says": "After-school care is $250 a month for full time, 4 or more days a week, or $175 a month for part time, 3 days a week, with a snack included.",
+      "daysAgo": 0,
+      "stale": false
     }
   ],
   "asks": [],
