@@ -44,7 +44,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 
 /* ---------- band: header + page headline ---------- */
 .band{background:var(--hero);color:var(--hero-ink);overflow:hidden}
-.in{max-width:1040px;margin:0 auto;padding-inline:clamp(20px,6vw,24px)}
+.in{max-width:1040px;margin:0 auto;padding-inline:20px}
 .bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 24px;padding-block:18px}
 .brand{display:inline-flex;align-items:center;text-decoration:none}
 .brand .logo{display:block;height:60px;width:auto}
@@ -53,7 +53,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .nav{display:flex;flex-wrap:wrap;gap:4px 22px;font-size:1rem}
 .nav a{color:var(--hero-ink);text-decoration:none;padding-block:4px;border-bottom:3px solid transparent}
 .nav a:hover,.nav a[aria-current="page"]{border-bottom-color:var(--hero-accent)}
-.hero{padding-block:clamp(36px,8vw,64px) clamp(28px,5vw,52px);display:flex;flex-direction:column;gap:18px}
+.hero{padding-block:clamp(28px,6vw,64px) clamp(28px,5vw,52px);display:flex;flex-direction:column;gap:18px}
 .hero .lede{color:var(--hero-muted);font-size:clamp(1.05rem,2.2vw,1.25rem);max-width:60ch}
 .hero .where{color:var(--hero-muted);font-family:var(--hand);font-size:1.25rem;letter-spacing:.01em}
 .hero .where.where-line{font-family:var(--body);font-size:1rem;letter-spacing:0}   /* a whole sentence over a title reads in the body face, not the hand */

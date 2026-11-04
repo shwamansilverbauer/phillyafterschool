@@ -23,10 +23,10 @@ const css = read('dist/assets/site.css');
 const picture = (headline, line, art, artHeight) => `<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="${fonts}"><style>${css}
   html,body{margin:0;width:1200px;height:630px;overflow:hidden}
   .pic{position:fixed;inset:0;display:flex;flex-direction:column;justify-content:flex-start}
-  .pic-text{padding:48px 84px 0;position:relative;z-index:2}
+  .pic-text{padding:52px 112px 0;position:relative;z-index:2}   /* room on the left, and between the logo and the headline */
   .pic-logo{display:block;height:84px;width:auto}
-  .pic h1{font-size:88px;margin:16px 0 0;line-height:1.02}
-  .pic p{font-size:32px;margin:14px 0 0;color:var(--hero-muted);white-space:nowrap}
+  .pic h1{font-size:86px;margin:30px 0 0;line-height:1.02}
+  .pic p{font-size:31px;margin:16px 0 0;color:var(--hero-muted);white-space:nowrap}
   .pic .street{position:absolute;left:0;right:0;bottom:0;height:${artHeight}px;width:100%}
   .pic .street.go *{animation:none!important}
 </style></head><body><div class="band pagehead pic">
