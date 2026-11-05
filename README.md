@@ -539,7 +539,10 @@ weekend classes together, with the day row Monday to Sunday and a count for each
 on dates and summer camps by the week, so it points at their lists instead.
 
 The search box on the home page looks through `data/all-schools.json`: every district and charter school in
-Philadelphia with any grade from K to 8, taken from the City's "Schools" open dataset. Schools with a record in
+Philadelphia with any grade from K to 8, taken from the City's "Schools" open dataset. Where the City lists two
+campuses under one name (Ad Prima, Esperanza Academy, Wissahickon), the street is added to the name in
+parentheses so the two can be told apart, and the Hancock middle campus is "John Hancock Demonstration School
+(LaBrum Campus)"; keep those when the list is refreshed. Schools with a record in
 `data/schools.json` (matched by street address) open their page. The rest open `/schools/request/`, where a
 parent can ask for the school with one tap. Each request is emailed to `contactEmail` with a running count and
 logged in `phillyafterschool-school-requests.log` above `public_html`. Refresh `data/all-schools.json` when the
@@ -1064,7 +1067,7 @@ counts (the days-off card keeps "N days off still to come", and the summer card 
 stay off the home page's tiles and type chips too; a filter bar's counts and a list section's "(N)" are the live
 numbers of what is on the page, and stay.
 
-**Type.** Four faces, all from Google Fonts (one `<link>` in `layout()`), following the brand's type key. Signposts —
+**Type.** Three faces, all from Google Fonts (one `<link>` in `layout()`), following the brand's type key. Signposts —
 headings that name the page or a region of it (`h1`, `h2`: the page headline, "Parents", "When do you need
 coverage?") — are **Luckiest Guy**, the logo's face, heavy painted capitals (`--title`; the text is set in capitals by
 CSS, so a heading keeps its own casing in the HTML and in search results; its own lowercase is an odd unicase, so
@@ -1072,11 +1075,10 @@ the transform is not optional). Titles — names of things inside a region and s
 cards, tiles, feature cards, step labels, "It's free for parents.") — are **Figtree ExtraBold** in sentence case
 (`--display`, weight 800; the week card and the planners' pictures draw in it too). An h2 that names a thing or makes a
 statement rather than signposting a region (a planner's card on `/schedules/`, the Follow box, the review nudge,
-the premium ask, a person's name on their profile card) is a title too, so it is Figtree in sentence case. The
-short line over a page title (`.hero .where`, a breadcrumb) is **Schoolbell**, a thin print hand (`--hand`); a
-whole sentence there (a school page's line) reads in the body face (`.where-line`). Body text is **Atkinson
-Hyperlegible** (`--body`). The brand picked Luckiest Guy for the logo too,
-so the site and the logo share a face; Schoolbell stands in for the logo's hand-lettered "AFTER SCHOOL". The two
+the premium ask, a person's name on their profile card) is a title too, so it is Figtree in sentence case.
+Everything else, the line over a page title (`.hero .where`, a breadcrumb or a school's one-line description)
+included, is the body face, **Atkinson Hyperlegible** (`--body`). The brand picked Luckiest Guy for the logo too,
+so the site and the logo share a face; the logo's hand-lettered "AFTER SCHOOL" stays in the logo. The two
 link-preview pictures (`src/static/share.png`, `share-days-off.png`) are the site's sky with the logo for light
 backgrounds (`src/static/logo-sky.png`, PHILLY in the brand blue), a headline, one line and the page's drawing
 along the bottom; `scripts/share-pictures.js` draws them from a build with Playwright, so they are redrawn

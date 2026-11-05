@@ -638,7 +638,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <meta name="theme-color" content="#0A3566">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800&family=Atkinson+Hyperlegible:wght@400;700&family=Luckiest+Guy&family=Schoolbell&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800&family=Atkinson+Hyperlegible:wght@400;700&family=Luckiest+Guy&display=swap">
 <link rel="stylesheet" href="${link('assets/site.css', depth)}${CSS_V}">${jsonLd ? '\n<script type="application/ld+json">' + JSON.stringify(jsonLd).replace(/</g, '\\u003c') + '</script>' : ''}`;
   // Edit mode (see /edit/) loads a second script. This tells site.js where to find it and where edits are sent.
   const editCfg = { js: link('assets/edit.js', depth) + EDIT_V, send: PREVIEW ? '' : link('edit/send.php', depth), home: link('edit/', depth), contact: cfg.contactEmail || '' };
@@ -2010,7 +2010,7 @@ function schoolPage(s) {
 ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n')}
   </div>
 </section>`).join('\n');
-  const hero = `    <p class="where where-line">After-school programs and aftercare for ${esc(s.name)}, ${esc(s.address.split(',')[0])}</p>
+  const hero = `    <p class="where">After-school programs and aftercare for ${esc(s.name)}, ${esc(s.address.split(',')[0])}</p>
     <h1>${s.dismissal ? T(`It’s {time} at {school}. What now?`, { time: clock(s), school: s.shortName }) : T(`School’s out at {school}. What now?`, { school: s.shortName })}</h1>
     <p class="lede">${T(`Every after-school program we could find that runs at the school, picks children up from it, or sits within a short walk. Pick a grade to see what your child can join.`)}</p>
     <div class="mine needs-js-block" data-mine>
@@ -2111,7 +2111,7 @@ function homePage() {
   <div class="starts">
     <div class="start">
       <div class="start-head">${who('parent')}<div><p class="kicker">${T(`Start here`)}</p> <h2>${T(`Parents`)}</h2></div></div>
-      <p>${T(`Found what works with your child’s school? Put the year together.`)}</p>
+      <p class="when-in">${T(`Found what works with your child’s school? Put the year together.`)}</p>
       <div class="start-list">
         ${go(link(schedulesPath, 0), T(`Build a schedule`), T(`The school week, days off and the summer`), 'week')}
         ${GROUPS ? `<span class="when-out" style="display:contents">${go(link('register/', 0), T(`Create a free account`), T(`Keep every plan, and get the whole year in one calendar`), 'person')}</span>` : ''}

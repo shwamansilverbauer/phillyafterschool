@@ -1,5 +1,5 @@
 {
- "source": "City of Philadelphia “Schools” dataset (OpenDataPhilly), district and charter schools with any grade from K to 8. Left out: one juvenile justice school, one transition center, one online-only school and one temporary duplicate.",
+ "source": "City of Philadelphia “Schools” dataset (OpenDataPhilly), district and charter schools with any grade from K to 8. Left out: one juvenile justice school, one transition center, one online-only school and one temporary duplicate. Where the City lists two campuses under one name, the street is added in parentheses so each can be told apart.",
  "sourceUrl": "https://opendataphilly.org/datasets/schools/",
  "sourceUpdated": "2026-08-26",
  "retrieved": "2026-10-05",
@@ -36,7 +36,7 @@
   },
   {
    "id": "ad-prima-charter-school",
-   "name": "Ad Prima Charter School",
+   "name": "Ad Prima Charter School (N 63rd St)",
    "address": "1922 N 63rd St",
    "zip": "19151",
    "grades": "K-8",
@@ -46,7 +46,7 @@
   },
   {
    "id": "ad-prima-charter-school-2",
-   "name": "Ad Prima Charter School",
+   "name": "Ad Prima Charter School (Thouron Ave)",
    "address": "8034 Thouron Ave",
    "zip": "19150",
    "grades": "K-8",
@@ -556,7 +556,7 @@
   },
   {
    "id": "esperanza-academy-charter-school",
-   "name": "Esperanza Academy Charter School",
+   "name": "Esperanza Academy Charter School (N 5th St)",
    "address": "4261 N 5th St",
    "zip": "19140",
    "grades": "6-8",
@@ -566,7 +566,7 @@
   },
   {
    "id": "esperanza-academy-charter-school-2",
-   "name": "Esperanza Academy Charter School",
+   "name": "Esperanza Academy Charter School (W Hunting Park Ave)",
    "address": "201 W Hunting Park Ave",
    "zip": "19140",
    "grades": "K-5",
@@ -1196,7 +1196,7 @@
   },
   {
    "id": "john-hancock-demonstration-middle-school-labrum-campus",
-   "name": "John Hancock Demonstration Middle School- Labrum Campus",
+   "name": "John Hancock Demonstration School (LaBrum Campus)",
    "address": "10800 Hawley Rd",
    "zip": "19114",
    "grades": "6-8",
@@ -2566,7 +2566,7 @@
   },
   {
    "id": "wissahickon-charter-school",
-   "name": "Wissahickon Charter School",
+   "name": "Wissahickon Charter School (E Washington Ln)",
    "address": "815 E Washington Ln",
    "zip": "19138",
    "grades": "K-8",
@@ -2576,7 +2576,7 @@
   },
   {
    "id": "wissahickon-charter-school-2",
-   "name": "Wissahickon Charter School",
+   "name": "Wissahickon Charter School (Wissahickon Ave)",
    "address": "4700 Wissahickon Ave",
    "zip": "19144",
    "grades": "K-8",
