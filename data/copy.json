@@ -160,9 +160,8 @@
   },
   "fe74e3dcea": {
     "was": "Post sign-up openings, deadlines, term dates and camp days as soon as you set them, instead of waiting for us to find them.",
-    "now": "Post dates, hours, pricing, and deadlines as soon as you set them. We answer to you instead of what we can find on your website.",
-    "on": "2026-10-19",
-    "by": "Rachael"
+    "now": "Post dates, hours, pricing, and deadlines as soon as you set them. You become our source of truth, instead of whatever we dig up on your website.",
+    "on": "2026-11-05"
   },
   "0624398afc": {
     "was": "Say whether there’s space.",
@@ -388,9 +387,8 @@
   },
   "79fc372dc7": {
     "was": "Good to know",
-    "now": "Add pizazz with premium.",
-    "on": "2026-10-20",
-    "by": "Rachael"
+    "now": "Add pizzazz with premium.",
+    "on": "2026-11-05"
   },
   "66918d5568": {
     "was": "Want more on yours?",
@@ -1031,6 +1029,16 @@
   "ae2f739d19": {
     "was": "suggest a camp",
     "now": "or suggest a camp",
+    "on": "2026-11-05"
+  },
+  "7297ed90cc": {
+    "was": "It’s free, it takes a couple of minutes, and the listing stays yours to keep right.",
+    "now": "Who's in charge here? When you claim your listing, you can be. It’s free and only takes a couple of minutes.",
+    "on": "2026-11-05"
+  },
+  "31fedd6838": {
+    "was": "What we keep about a claim is on the privacy page.",
+    "now": "Here's how we use the info you're trusting us with.",
     "on": "2026-11-05"
   }
 }
