@@ -185,10 +185,29 @@ function db(): PDO {
     $db->exec('CREATE INDEX IF NOT EXISTS throttle_k ON throttle (k, t)');
     $db->exec('CREATE INDEX IF NOT EXISTS members_user ON members (user_id)');
     $db->exec('CREATE INDEX IF NOT EXISTS kids_member ON kids (member_id)');
+    seal_existing($db);
   } catch (Exception $e) {
     fail('storage', 'Groups are not available right now.', 503);
   }
   return $db;
+}
+// Rows written before plans were encrypted (see "what is kept about a child" below) are sealed once, the first time
+// the database is opened after the change. Short: the site was a few days old when this came in.
+function seal_existing(PDO $db): void {
+  if ((string) $db->query("SELECT v FROM meta WHERE k = 'sealed'")->fetchColumn() === '1') return;
+  $db->exec('BEGIN IMMEDIATE');
+  if ((string) $db->query("SELECT v FROM meta WHERE k = 'sealed'")->fetchColumn() === '1') { $db->exec('COMMIT'); return; }   // another request got here first
+  foreach (SEALED as $table => $cols) {
+    $key = $table === 'summers' || $table === 'daysoffs' ? 'user_id' : 'id';
+    $up = $db->prepare('UPDATE ' . $table . ' SET ' . implode(', ', array_map(function ($c) { return $c . ' = ?'; }, $cols)) . ' WHERE ' . $key . ' = ?');
+    foreach ($db->query('SELECT ' . $key . ', ' . implode(', ', $cols) . ' FROM ' . $table)->fetchAll() as $r) {
+      $vals = array(); $change = false;
+      foreach ($cols as $c) { $v = (string) $r[$c]; if ($v !== '' && strncmp($v, SEAL_TAG, strlen(SEAL_TAG)) !== 0) { $v = seal($v); $change = true; } $vals[] = $v; }
+      if ($change) { $vals[] = $r[$key]; $up->execute($vals); }
+    }
+  }
+  $db->exec("INSERT INTO meta (k, v) VALUES ('sealed', '1') ON CONFLICT(k) DO UPDATE SET v = '1'");
+  $db->exec('COMMIT');
 }
 function q(string $sql, array $args = array()): PDOStatement { $st = db()->prepare($sql); $st->execute($args); return $st; }
 function row(string $sql, array $args = array()) { $r = q($sql, $args)->fetch(); return $r === false ? null : $r; }
@@ -409,6 +428,32 @@ function code_open(string $sealed): string {
   return $pt === false ? '' : $pt;
 }
 
+// ---------- what is kept about a child is encrypted in the file ----------
+// A child's first name and plans (a week in a profile, a week in a group, the days off, the summer, the children on a
+// profile) and a group's name (a shared week is named after the child) are encrypted before they are written, with a
+// key derived from the server's secret, so the database file on its own, or a copy of it, shows none of them.
+// secret.key, beside the database, is needed to read a restored copy. What the site looks up or sorts by stays as it
+// is: an email address, an adult's name, a school, grades and ages (never which child), what is followed, a claim.
+const SEAL_TAG = 'e1.';
+const SEALED = array('weeks' => array('name', 'now_json', 'next_json'), 'kids' => array('name', 'now_json', 'next_json'), 'summers' => array('json'), 'daysoffs' => array('json'), 'users' => array('kids'), 'grp' => array('name'));
+function seal_key(): string { static $k = null; if ($k === null) $k = hash_hmac('sha256', 'pas-plans-v1', secret(), true); return $k; }   // the secret itself signs codes; plans get a key of their own from it
+function seal(string $v): string {
+  if ($v === '') return '';
+  $iv = random_bytes(12); $tag = '';
+  $ct = openssl_encrypt($v, 'aes-256-gcm', seal_key(), OPENSSL_RAW_DATA, $iv, $tag, 'pas');
+  if ($ct === false) fail('storage', 'Groups are not available right now.', 503);
+  return SEAL_TAG . b64($iv . $tag . $ct);
+}
+function unseal($v): string {
+  $v = (string) $v;
+  if ($v === '' || strncmp($v, SEAL_TAG, strlen(SEAL_TAG)) !== 0) return $v;   // written before plans were encrypted (seal_existing catches up on the first open)
+  $raw = b64u_dec(substr($v, strlen(SEAL_TAG)));
+  if (strlen($raw) < 29) return '';
+  $pt = openssl_decrypt(substr($raw, 28), 'aes-256-gcm', seal_key(), OPENSSL_RAW_DATA, substr($raw, 0, 12), substr($raw, 12, 16), 'pas');
+  return $pt === false ? '' : $pt;
+}
+function by_name(array &$rows): void { usort($rows, function ($a, $b) { return strcasecmp($a['name'], $b['name']) ?: ((int) $a['id'] <=> (int) $b['id']); }); }
+
 // ---------- a child's week: program ids, and a class only when the program lists it ----------
 function programs(): array {
   static $p = null;
@@ -597,12 +642,12 @@ function clean_week_full($w): string {
   return json_encode($out);
 }
 function week_out(array $w): array {
-  return array('id' => (int) $w['id'], 'name' => $w['name'], 'now' => json_decode($w['now_json'], true), 'next' => json_decode($w['next_json'], true), 'updated' => (int) $w['updated']);
+  return array('id' => (int) $w['id'], 'name' => unseal($w['name']), 'now' => json_decode(unseal($w['now_json']), true), 'next' => json_decode(unseal($w['next_json']), true), 'updated' => (int) $w['updated']);
 }
 function grade_list(string $kept): array { return $kept === '' ? array() : explode(',', $kept); }
 // The children kept on the profile: each a first name, and the grade and age they're in when given. Up to 8.
 function kids_list(array $u): array {
-  $raw = isset($u['kids']) && $u['kids'] !== '' ? json_decode((string) $u['kids'], true) : null;
+  $raw = isset($u['kids']) && $u['kids'] !== '' ? json_decode(unseal($u['kids']), true) : null;
   $out = array();
   if (is_array($raw)) foreach ($raw as $k) { if (is_array($k) && isset($k['n']) && $k['n'] !== '') $out[] = array('n' => (string) $k['n'], 'g' => isset($k['g']) ? (string) $k['g'] : '', 'a' => isset($k['a']) ? (string) $k['a'] : ''); }
   return $out;
@@ -634,7 +679,7 @@ function clean_summer($s): ?array {
 function summer_out(int $uid): ?array {
   $s = row('SELECT year, json, updated FROM summers WHERE user_id = ?', array($uid));
   if (!$s) return null;
-  $d = json_decode($s['json'], true);
+  $d = json_decode(unseal($s['json']), true);
   $kids = array();
   foreach (is_array($d) && isset($d['kids']) && is_array($d['kids']) ? $d['kids'] : array() as $k) {
     $kids[] = array('name' => isset($k['name']) ? (string) $k['name'] : '', 'w' => (object) (isset($k['w']) && is_array($k['w']) ? $k['w'] : array()));   // an empty set of weeks stays an object, not a list
@@ -669,7 +714,7 @@ function clean_daysoff($s): ?array {
 function daysoff_out(int $uid): ?array {
   $s = row('SELECT year, json, updated FROM daysoffs WHERE user_id = ?', array($uid));
   if (!$s) return null;
-  $d = json_decode($s['json'], true);
+  $d = json_decode(unseal($s['json']), true);
   $kids = array();
   foreach (is_array($d) && isset($d['kids']) && is_array($d['kids']) ? $d['kids'] : array() as $k) {
     $kids[] = array('name' => isset($k['name']) ? (string) $k['name'] : '', 'd' => (object) (isset($k['d']) && is_array($k['d']) ? $k['d'] : array()),   // an empty plan stays an object, not a list
@@ -683,11 +728,13 @@ function profile_out(array $u): array {
   return array('school' => $u['school'], 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'ages' => grade_list(isset($u['ages']) ? (string) $u['ages'] : ''), 'kids' => kids_list($u), 'weeks' => $weeks, 'summer' => summer_out((int) $u['id']), 'daysoff' => daysoff_out((int) $u['id'])) + marks_out((int) $u['id']);
 }
 function kid_out(array $k, bool $mine): array {
-  return array('id' => (int) $k['id'], 'name' => $k['name'], 'now' => json_decode($k['now_json'], true), 'next' => json_decode($k['next_json'], true), 'mine' => $mine);
+  return array('id' => (int) $k['id'], 'name' => unseal($k['name']), 'now' => json_decode(unseal($k['now_json']), true), 'next' => json_decode(unseal($k['next_json']), true), 'mine' => $mine);
 }
 
 function membership(string $gid, int $uid): ?array {
-  return row('SELECT m.id, m.role, m.status, g.name, g.owner_id, g.expires, g.code_enc, g.solo FROM members m JOIN grp g ON g.id = m.group_id WHERE m.group_id = ? AND m.user_id = ? AND g.expires > ?', array($gid, $uid, now()));
+  $m = row('SELECT m.id, m.role, m.status, g.name, g.owner_id, g.expires, g.code_enc, g.solo FROM members m JOIN grp g ON g.id = m.group_id WHERE m.group_id = ? AND m.user_id = ? AND g.expires > ?', array($gid, $uid, now()));
+  if ($m) $m['name'] = unseal($m['name']);
+  return $m;
 }
 // A group can only be joined from an email address its owner invited. Signing in proves the address.
 function invited(string $gid, string $email): bool {
@@ -755,12 +802,13 @@ function need_owner(string $gid, array $u): array {
 }
 function my_groups(int $uid): array {
   $list = array();
-  foreach (q('SELECT g.id, g.name, g.solo, m.role, m.status, m.id AS mid FROM members m JOIN grp g ON g.id = m.group_id WHERE m.user_id = ? AND g.expires > ? ORDER BY g.name COLLATE NOCASE', array($uid, now())) as $g) {
-    $item = array('id' => $g['id'], 'name' => $g['name'], 'role' => $g['role'], 'status' => $g['status'], 'solo' => (bool) $g['solo'], 'kids' => array());
-    foreach (q('SELECT id, name FROM kids WHERE member_id = ? ORDER BY id', array($g['mid'])) as $k) $item['kids'][] = array('id' => (int) $k['id'], 'name' => $k['name']);
+  foreach (q('SELECT g.id, g.name, g.solo, m.role, m.status, m.id AS mid FROM members m JOIN grp g ON g.id = m.group_id WHERE m.user_id = ? AND g.expires > ?', array($uid, now())) as $g) {
+    $item = array('id' => $g['id'], 'name' => unseal($g['name']), 'role' => $g['role'], 'status' => $g['status'], 'solo' => (bool) $g['solo'], 'kids' => array());
+    foreach (q('SELECT id, name FROM kids WHERE member_id = ? ORDER BY id', array($g['mid'])) as $k) $item['kids'][] = array('id' => (int) $k['id'], 'name' => unseal($k['name']));
     if ($g['role'] === 'owner') $item['waiting'] = (int) val('SELECT COUNT(*) FROM members WHERE group_id = ? AND status = ?', array($g['id'], 'pending'));
     $list[] = $item;
   }
+  usort($list, function ($a, $b) { return strcasecmp($a['name'], $b['name']) ?: strcmp($a['id'], $b['id']); });   // by name, as the database sorted them before names were encrypted
   return $list;
 }
 // "ready" means the account has the first and last name every account needs before it can make or join a group.
@@ -2247,7 +2295,7 @@ switch ($method . ' ' . $action) {
     $gKeep = array(); foreach ($allG as $g) { if (in_array($g, $grades, true)) $gKeep[] = $g; }
     $aKeep = array(); foreach ($allA as $a) { if (in_array($a, $ages, true)) $aKeep[] = $a; }
     if ($keep && (!isset($u['kids']) || $u['kids'] === '')) bump('kids_saved');
-    q('UPDATE users SET kids = ?, grades = ?, ages = ? WHERE id = ?', array($keep ? json_encode($keep) : '', implode(',', $gKeep), implode(',', $aKeep), $u['id']));
+    q('UPDATE users SET kids = ?, grades = ?, ages = ? WHERE id = ?', array($keep ? seal(json_encode($keep)) : '', implode(',', $gKeep), implode(',', $aKeep), $u['id']));
     out(array('ok' => true, 'kids' => $keep, 'grades' => $gKeep, 'ages' => $aKeep));
   }
 
@@ -2260,10 +2308,10 @@ switch ($method . ' ' . $action) {
     $id = isset($w['id']) ? (int) $w['id'] : 0;
     if ($id) {
       if (!row('SELECT id FROM weeks WHERE id = ? AND user_id = ?', array($id, $u['id']))) fail('gone', 'That week is no longer in your profile.', 404);
-      q('UPDATE weeks SET name = ?, now_json = ?, next_json = ?, updated = ? WHERE id = ?', array($name, clean_week_full($w['now'] ?? null), clean_week_full($w['next'] ?? null), now(), $id));
+      q('UPDATE weeks SET name = ?, now_json = ?, next_json = ?, updated = ? WHERE id = ?', array(seal($name), seal(clean_week_full($w['now'] ?? null)), seal(clean_week_full($w['next'] ?? null)), now(), $id));
     } else {
       if ((int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) >= MAX_WEEKS) fail('limit', 'Your profile holds ' . MAX_WEEKS . ' weeks, which is the most it takes. Remove one first.');
-      q('INSERT INTO weeks (user_id, name, now_json, next_json, updated) VALUES (?, ?, ?, ?, ?)', array($u['id'], $name, clean_week_full($w['now'] ?? null), clean_week_full($w['next'] ?? null), now()));
+      q('INSERT INTO weeks (user_id, name, now_json, next_json, updated) VALUES (?, ?, ?, ?, ?)', array($u['id'], seal($name), seal(clean_week_full($w['now'] ?? null)), seal(clean_week_full($w['next'] ?? null)), now()));
       $id = (int) db()->lastInsertId();
       bump('week_saved');
     }
@@ -2283,7 +2331,7 @@ switch ($method . ' ' . $action) {
     $s = clean_summer($in['summer'] ?? null);
     if (!$s) fail('summer', 'That summer couldn’t be read. Reload the page and try again.');
     $had = (bool) row('SELECT user_id FROM summers WHERE user_id = ?', array($u['id']));
-    q('INSERT INTO summers (user_id, year, json, updated) VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET year = excluded.year, json = excluded.json, updated = excluded.updated', array($u['id'], $s[0], $s[1], now()));
+    q('INSERT INTO summers (user_id, year, json, updated) VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET year = excluded.year, json = excluded.json, updated = excluded.updated', array($u['id'], $s[0], seal($s[1]), now()));
     if (!$had) bump('summer_saved');
     out(array('ok' => true, 'summer' => summer_out((int) $u['id'])));
   }
@@ -2300,7 +2348,7 @@ switch ($method . ' ' . $action) {
     $s = clean_daysoff($in['daysoff'] ?? null);
     if (!$s) fail('daysoff', 'That plan couldn’t be read. Reload the page and try again.');
     $had = (bool) row('SELECT user_id FROM daysoffs WHERE user_id = ?', array($u['id']));
-    q('INSERT INTO daysoffs (user_id, year, json, updated) VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET year = excluded.year, json = excluded.json, updated = excluded.updated', array($u['id'], $s[0], $s[1], now()));
+    q('INSERT INTO daysoffs (user_id, year, json, updated) VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET year = excluded.year, json = excluded.json, updated = excluded.updated', array($u['id'], $s[0], seal($s[1]), now()));
     if (!$had) bump('daysoff_saved');
     out(array('ok' => true, 'daysoff' => daysoff_out((int) $u['id'])));
   }
@@ -2334,9 +2382,9 @@ switch ($method . ' ' . $action) {
       $code = new_code();
       $gname = group_name($kidName . '’s week');
       db()->beginTransaction();
-      q('INSERT INTO grp (id, name, owner_id, code_mac, code_enc, created, expires, solo) VALUES (?, ?, ?, ?, ?, ?, ?, 1)', array($gid, $gname, $u['id'], code_mac($code), code_seal($code), now(), year_end()));
+      q('INSERT INTO grp (id, name, owner_id, code_mac, code_enc, created, expires, solo) VALUES (?, ?, ?, ?, ?, ?, ?, 1)', array($gid, seal($gname), $u['id'], code_mac($code), code_seal($code), now(), year_end()));
       q('INSERT INTO members (group_id, user_id, role, status, created) VALUES (?, ?, ?, ?, ?)', array($gid, $u['id'], 'owner', 'approved', now()));
-      q('INSERT INTO kids (member_id, name, now_json, next_json, updated) VALUES (?, ?, ?, ?, ?)', array((int) db()->lastInsertId(), $kidName, clean_week($kid['now'] ?? null), clean_week($kid['next'] ?? null), now()));
+      q('INSERT INTO kids (member_id, name, now_json, next_json, updated) VALUES (?, ?, ?, ?, ?)', array((int) db()->lastInsertId(), seal($kidName), seal(clean_week($kid['now'] ?? null)), seal(clean_week($kid['next'] ?? null)), now()));
       $kidId = (int) db()->lastInsertId();
       db()->commit();
       bump('share');
@@ -2359,7 +2407,7 @@ switch ($method . ' ' . $action) {
     if (strlen($gid) < 10) $gid = bin2hex(random_bytes(7));
     $code = new_code();
     db()->beginTransaction();
-    q('INSERT INTO grp (id, name, owner_id, code_mac, code_enc, created, expires) VALUES (?, ?, ?, ?, ?, ?, ?)', array($gid, $name, $u['id'], code_mac($code), code_seal($code), now(), year_end()));
+    q('INSERT INTO grp (id, name, owner_id, code_mac, code_enc, created, expires) VALUES (?, ?, ?, ?, ?, ?, ?)', array($gid, seal($name), $u['id'], code_mac($code), code_seal($code), now(), year_end()));
     q('INSERT INTO members (group_id, user_id, role, status, created) VALUES (?, ?, ?, ?, ?)', array($gid, $u['id'], 'owner', 'approved', now()));
     db()->commit();
     bump('group');
@@ -2372,6 +2420,7 @@ switch ($method . ' ' . $action) {
     if (too_many('join:' . $u['id'], 10, 3600)) fail('slow', 'Too many tries. Check the code in your invitation, and try again in an hour.', 429);
     $code = tidy_code(str($in, 'code', 40));
     $g = strlen($code) === 12 ? row('SELECT id, name, solo FROM grp WHERE code_mac = ? AND expires > ?', array(code_mac($code), now())) : null;
+    if ($g) $g['name'] = unseal($g['name']);
     if (!$g) { note('join:' . $u['id']); fail('code', 'No group has that code. Check it against your invitation email.', 404); }
     $m = row('SELECT status FROM members WHERE group_id = ? AND user_id = ?', array($g['id'], $u['id']));
     if (!$m && !invited($g['id'], $u['email'])) { note('join:' . $u['id']); not_invited($u); }
@@ -2386,6 +2435,7 @@ switch ($method . ' ' . $action) {
     note('join:' . $u['id']);
     $code = tidy_code(str($in, 'code', 40));
     $g = strlen($code) === 12 ? row('SELECT id, name, owner_id, solo FROM grp WHERE code_mac = ? AND expires > ?', array(code_mac($code), now())) : null;
+    if ($g) $g['name'] = unseal($g['name']);
     if (!$g) fail('code', 'No group has that code. Check it against your invitation email.', 404);
     $viewer = !empty($in['viewer']) || !empty($g['solo']);   // a week shared with one person is only looked at
     $kid = isset($in['kid']) && is_array($in['kid']) ? $in['kid'] : null;
@@ -2407,7 +2457,7 @@ switch ($method . ' ' . $action) {
     $kidId = null;
     if (!$viewer) {
       if ((int) val('SELECT COUNT(*) FROM kids WHERE member_id = ?', array($m['id'])) >= MAX_KIDS) fail('limit', 'You’ve added ' . MAX_KIDS . ' children to this group, which is the most it takes.');
-      q('INSERT INTO kids (member_id, name, now_json, next_json, updated) VALUES (?, ?, ?, ?, ?)', array($m['id'], $kidName, clean_week($kid['now'] ?? null), clean_week($kid['next'] ?? null), now()));
+      q('INSERT INTO kids (member_id, name, now_json, next_json, updated) VALUES (?, ?, ?, ?, ?)', array($m['id'], seal($kidName), seal(clean_week($kid['now'] ?? null)), seal(clean_week($kid['next'] ?? null)), now()));
       $kidId = (int) db()->lastInsertId();
     }
     if ($isNew && !too_many('ask:' . $g['id'], 20, 86400)) {   // tell the owner who came in, by the adult's name only
@@ -2471,10 +2521,10 @@ switch ($method . ' ' . $action) {
     if ($kidId) {
       $mine = row('SELECT id FROM kids WHERE id = ? AND member_id = ?', array($kidId, $m['id']));
       if (!$mine) fail('gone', 'That child is no longer in the group.', 404);
-      q('UPDATE kids SET name = ?, now_json = ?, next_json = ?, updated = ? WHERE id = ?', array($name, clean_week($kid['now'] ?? null), clean_week($kid['next'] ?? null), now(), $kidId));
+      q('UPDATE kids SET name = ?, now_json = ?, next_json = ?, updated = ? WHERE id = ?', array(seal($name), seal(clean_week($kid['now'] ?? null)), seal(clean_week($kid['next'] ?? null)), now(), $kidId));
     } else {
       if ((int) val('SELECT COUNT(*) FROM kids WHERE member_id = ?', array($m['id'])) >= MAX_KIDS) fail('limit', 'You’ve added ' . MAX_KIDS . ' children to this group, which is the most it takes.');
-      q('INSERT INTO kids (member_id, name, now_json, next_json, updated) VALUES (?, ?, ?, ?, ?)', array($m['id'], $name, clean_week($kid['now'] ?? null), clean_week($kid['next'] ?? null), now()));
+      q('INSERT INTO kids (member_id, name, now_json, next_json, updated) VALUES (?, ?, ?, ?, ?)', array($m['id'], seal($name), seal(clean_week($kid['now'] ?? null)), seal(clean_week($kid['next'] ?? null)), now()));
       $kidId = (int) db()->lastInsertId();
       if ($m['role'] === 'viewer') q('UPDATE members SET role = ? WHERE id = ?', array('member', $m['id']));
     }
@@ -2491,7 +2541,7 @@ switch ($method . ' ' . $action) {
       $kidId = (int) $kid['id'];
       $mine = row('SELECT k.id FROM kids k JOIN members m ON m.id = k.member_id JOIN grp g ON g.id = m.group_id WHERE k.id = ? AND m.user_id = ? AND g.expires > ?', array($kidId, $u['id'], now()));
       if (!$mine) { $gone[] = $kidId; continue; }
-      q('UPDATE kids SET now_json = ?, next_json = ?, updated = ? WHERE id = ?', array(clean_week($kid['now'] ?? null), clean_week($kid['next'] ?? null), now(), $kidId));
+      q('UPDATE kids SET now_json = ?, next_json = ?, updated = ? WHERE id = ?', array(seal(clean_week($kid['now'] ?? null)), seal(clean_week($kid['next'] ?? null)), now(), $kidId));
       $done[] = $kidId;
     }
     // Weeks kept in the profile: the same device sends those along too.
@@ -2502,8 +2552,8 @@ switch ($method . ' ' . $action) {
       if (!row('SELECT id FROM weeks WHERE id = ? AND user_id = ?', array($wid, $u['id']))) { $lost[] = $wid; continue; }
       $name = first_name(str($w, 'name', 40));
       $t = now();
-      if ($name !== '') q('UPDATE weeks SET name = ? WHERE id = ?', array($name, $wid));
-      q('UPDATE weeks SET now_json = ?, next_json = ?, updated = ? WHERE id = ?', array(clean_week_full($w['now'] ?? null), clean_week_full($w['next'] ?? null), $t, $wid));
+      if ($name !== '') q('UPDATE weeks SET name = ? WHERE id = ?', array(seal($name), $wid));
+      q('UPDATE weeks SET now_json = ?, next_json = ?, updated = ? WHERE id = ?', array(seal(clean_week_full($w['now'] ?? null)), seal(clean_week_full($w['next'] ?? null)), $t, $wid));
       $saved[] = array('id' => $wid, 'updated' => $t);
     }
     out(array('ok' => true, 'done' => $done, 'gone' => $gone, 'weeks' => $saved, 'weeksGone' => $lost));
@@ -2525,16 +2575,17 @@ switch ($method . ' ' . $action) {
     $base = array('ok' => true, 'id' => $gid, 'name' => $m['name'], 'role' => $m['role'], 'status' => $m['status'], 'solo' => !empty($m['solo']), 'expires' => (new DateTime('@' . (int) $m['expires']))->setTimezone(new DateTimeZone('America/New_York'))->format('Y-m-d'));
     if ($m['status'] !== 'approved') out($base);   // waiting: the name of the group and nothing else
     $kids = array();
-    foreach (q('SELECT k.*, m.user_id FROM kids k JOIN members m ON m.id = k.member_id WHERE m.group_id = ? AND m.status = ? ORDER BY k.name COLLATE NOCASE, k.id', array($gid, 'approved')) as $k) {
+    foreach (q('SELECT k.*, m.user_id FROM kids k JOIN members m ON m.id = k.member_id WHERE m.group_id = ? AND m.status = ?', array($gid, 'approved')) as $k) {
       $kids[] = kid_out($k, (int) $k['user_id'] === $u['id']);
     }
+    by_name($kids);
     $base['kids'] = $kids;
     if ($m['role'] === 'owner') {
       $base['code'] = code_open($m['code_enc']);
       $base['members'] = array();
       foreach (q('SELECT m.id, m.role, m.status, u.name, u.email FROM members m JOIN users u ON u.id = m.user_id WHERE m.group_id = ? ORDER BY m.status DESC, m.created', array($gid)) as $x) {
         $names = array();
-        foreach (q('SELECT name FROM kids WHERE member_id = ? ORDER BY id', array($x['id'])) as $k) $names[] = $k['name'];
+        foreach (q('SELECT name FROM kids WHERE member_id = ? ORDER BY id', array($x['id'])) as $k) $names[] = unseal($k['name']);
         $base['members'][] = array('id' => (int) $x['id'], 'name' => $x['name'], 'email' => $x['email'], 'role' => $x['role'], 'status' => $x['status'], 'kids' => $names);
       }
       $base['invites'] = invite_out($gid);
@@ -2591,7 +2642,7 @@ switch ($method . ' ' . $action) {
     need_owner($gid, $u);
     $name = group_name(str($in, 'name', 80));
     if ($name === '') fail('name', 'Give the group a name.');
-    q('UPDATE grp SET name = ? WHERE id = ?', array($name, $gid));
+    q('UPDATE grp SET name = ? WHERE id = ?', array(seal($name), $gid));
     out(array('ok' => true, 'name' => $name));
   }
 

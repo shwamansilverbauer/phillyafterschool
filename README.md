@@ -94,6 +94,16 @@ To go back to a copy: in Hostinger's file manager, replace `groups.sqlite` with 
 signs in again. Listing photos sent by program managers are files in `phillyafterschool-data/photos`, covered by the host's
 backup.
 
+**What is kept about a child is encrypted in the database** (since November 6, 2026): a child's first name and plans (a
+week in a profile, a week in a group, the summer, the days off, the children on a profile) and a group's name (a shared
+week is named after the child), each column AES-256-GCM with a key derived from `phillyafterschool-data/secret.key`
+(`seal()` / `unseal()` and the `SEALED` list in `src/server/groups-api.php`; values start with `e1.`). Rows from
+before were converted once, the first time the database was opened after the change (`seal_existing()`, flag `sealed`
+in `meta`). Two things follow: a restored copy of `groups.sqlite` can only be read next to the same `secret.key`, so
+keep that file with any copy you take off the host (Hostinger's backup has both); and backup copies made before the
+change stay readable until they rotate out, 14 days. What the site looks up or sorts by is not encrypted: an email
+address, an adult's name, a school, grades and ages, follows and favorites, claims.
+
 **The hourly check.** `.github/workflows/monitor.yml` runs `scripts/site-check.mjs` every hour. It only reads. It checks
 that the sitemap and a spread of pages open, that the site was rebuilt in the last two days, that the accounts service
 answers and can write (`groups/api.php?action=health`, which says nothing about anyone), that a database copy was made
