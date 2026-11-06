@@ -1722,6 +1722,56 @@
         "look": "Each camp has a dated heading with the grades, the tuition and a Register link; the page says when registration opens.",
         "notes": "The address and phone are on /contact-us/. On 2026-11-05 the page still described summer 2026: it said five weeks but listed four camps, and gave no extended-day care."
       }
+    },
+    {
+      "id": "esf-camps",
+      "name": "ESF Camps",
+      "what": "Big traditional day camp on school campuses, with junior and senior camps by grade, multi-sports and tennis camps, Jr. 76ers basketball and Phillies baseball weeks, and arts, science and technology camps. Two sites in the city: Friends Select in Center City and Norwood-Fontbonne Academy in Chestnut Hill (a third at The Haverford School on the Main Line).",
+      "types": [
+        "daycamp",
+        "movement",
+        "stem",
+        "art"
+      ],
+      "ages": "Rising pre-K to 8th grade for the day camps (junior camp PreS–2, senior camp 3–8); sports and specialty camps by grade from rising 1st, some to 10th",
+      "ageMin": 4,
+      "ageMax": 14,
+      "season": 2027,
+      "weeks": "June 14 to August 20, 2027, by the week.",
+      "hours": "9 am to 3 pm (the program’s own word; its site doesn’t post hours)",
+      "extended": "Before and after care available, as Club OT, with afternoon snacks. Hours and cost not posted.",
+      "cost": "Varies by site and by when you sign up; the site’s 2027 rates page wasn’t readable. Early-bird pricing opens November 16, 2026 (the program’s own word).",
+      "signup": "Enrollment for 2027 opens in November 2026, online through Bravo Enrollment, with early-bird savings from November 16 (the program told us). Friends Select camp office 215-298-9145; Chestnut Hill 215-247-7010.",
+      "address": "1651 Benjamin Franklin Pkwy (Friends Select School); 8900 Norwood Ave (Norwood-Fontbonne Academy)",
+      "neighborhoods": [
+        "Logan Square",
+        "Chestnut Hill"
+      ],
+      "phone": "215-298-9145",
+      "website": "https://www.esfcamps.com/friendsselect/",
+      "registerUrl": "https://www.bravoenrollment.com/?redirectTo=esf",
+      "price": "paid",
+      "sources": [
+        {
+          "label": "ESF Camps at Friends Select",
+          "url": "https://www.esfcamps.com/friendsselect/"
+        },
+        {
+          "label": "ESF Camps at Norwood-Fontbonne Academy",
+          "url": "https://www.esfcamps.com/chestnuthill/"
+        },
+        {
+          "label": "ESF Camps",
+          "url": "https://www.esfcamps.com/"
+        }
+      ],
+      "checked": "2026-11-05",
+      "check": {
+        "url": "https://www.esfcamps.com/friendsselect/",
+        "how": "fetch",
+        "look": "The location page gives the summer’s dates and the camps by grade; the 2027 Tuition Rates & Savings link has the prices.",
+        "notes": "Hours (9 to 3 with before and after care), pricing varying by site and sign-up time, and early-bird pricing opening November 16 came from the program itself, through the suggestion form on 2026-11-05 (someone who works there). The site’s own pages give no hours or prices; its rates page did not open on 2026-10-07 or 2026-11-05."
+      }
     }
   ],
   "todo": [
@@ -1784,11 +1834,6 @@
       "name": "Kids on 12th summer camp",
       "url": "https://ko12kids.com/summer-camp",
       "why": "The camp site showed an error page in a browser on 2026-10-07."
-    },
-    {
-      "name": "ESF Camps at Friends Select",
-      "url": "https://www.esfcamps.com/friendsselect/",
-      "why": "Read in a browser on 2026-10-07: the rates page is gone and the location page showed no dates or prices."
     },
     {
       "name": "CORA Early Years at Huntingdon Mills",

@@ -3161,11 +3161,11 @@
   "camps": {
     "season": 2026,
     "summary": {
-      "camps": 45,
-      "showingNextSummer": 1,
+      "camps": 46,
+      "showingNextSummer": 2,
       "needingABrowser": 18,
       "needingAPerson": 1,
-      "notReadYet": 16
+      "notReadYet": 15
     },
     "list": [
       {
@@ -3625,6 +3625,17 @@
         "how": "fetch",
         "look": "The season dates sit at the top of the Camp Schuylkill page and the prices are listed per age group lower down.",
         "signup": "Registration for 2027 wasn’t open yet when we checked."
+      },
+      {
+        "camp": "esf-camps",
+        "name": "ESF Camps",
+        "season": 2027,
+        "checked": "2026-11-05",
+        "url": "https://www.esfcamps.com/friendsselect/",
+        "how": "fetch",
+        "look": "The location page gives the summer’s dates and the camps by grade; the 2027 Tuition Rates & Savings link has the prices.",
+        "notes": "Hours (9 to 3 with before and after care), pricing varying by site and sign-up time, and early-bird pricing opening November 16 came from the program itself, through the suggestion form on 2026-11-05 (someone who works there). The site’s own pages give no hours or prices; its rates page did not open on 2026-10-07 or 2026-11-05.",
+        "signup": "Enrollment for 2027 opens in November 2026, online through Bravo Enrollment, with early-bird savings from November 16 (the program told us). Friends Select camp office 215-298-9145; Chestnut Hill 215-247-7010."
       }
     ],
     "todo": [
@@ -3687,11 +3698,6 @@
         "name": "Kids on 12th summer camp",
         "url": "https://ko12kids.com/summer-camp",
         "why": "The camp site showed an error page in a browser on 2026-10-07."
-      },
-      {
-        "name": "ESF Camps at Friends Select",
-        "url": "https://www.esfcamps.com/friendsselect/",
-        "why": "Read in a browser on 2026-10-07: the rates page is gone and the location page showed no dates or prices."
       },
       {
         "name": "CORA Early Years at Huntingdon Mills",

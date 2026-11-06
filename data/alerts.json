@@ -873,6 +873,10 @@
     {
       "id": "philly-pack-summer-camp",
       "name": "Philly PACK"
+    },
+    {
+      "id": "esf-camps",
+      "name": "ESF Camps"
     }
   ],
   "added": {
