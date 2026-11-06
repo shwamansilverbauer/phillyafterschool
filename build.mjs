@@ -3134,7 +3134,7 @@ ${jumpNav()}
     <summary>${T(`Name and age`)}</summary>
     <div class="sum-top off-top">
       <div class="field sum-name"><label for="off-name">${T(`First name (optional)`)}</label>
-        <input id="off-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${GATE ? T(`Kept with the plan in your profile. A nickname or an initial is fine.`) : T(`Stays on this device.`)}</span></div>
+        <input id="off-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${GATE ? T(`Only you see this. A nickname or an initial works.`) : T(`Stays on this device.`)}</span></div>
       <div class="field sum-age"><label for="off-age">${T(`Age (optional)`)}</label>
         <select id="off-age"><option value="">Any age</option>${Array.from({ length: 15 }, (_, i) => `<option value="${i + 3}">${i + 3}</option>`).join('')}</select><span class="hint">${T(`Shows the camps that take that age. Stays on this device.`)}</span></div>
     </div>
@@ -3655,7 +3655,13 @@ function accountPage(register = false) {
   const heroGrid = `    <div class="acct-hero-text">
 ${hero}
     </div>
-    <div class="acct-hero-form" data-clarity-mask="true">${register ? page : ''}</div>`;
+    <div class="acct-hero-form" data-clarity-mask="true">${register ? page : ''}</div>${register ? `
+    <div id="acct-notice" class="acct-notice" hidden>
+      <p><b>${T(`Why you need an account:`)}</b> ${T(`to keep your plans, so they’re there on your phone and your laptop.`)}</p>
+      <p><b>${T(`How we use your info:`)}</b> ${T(`your email signs you in and gets occasional news about the site (unsubscribe in any email). Nothing is sold, and you can delete the account whenever you like.`)}</p>
+      <p><b>${T(`How we use your kids’ info:`)}</b> ${T(`we don’t. It’s encrypted and yours alone, with no public link and no public page, and nobody sees it unless you share a week with someone by name.`)} <a href="${link('privacy/', 1)}#groups">${T(`Who can see what`)}</a></p>
+    </div>
+    <p id="acct-google" class="hint" hidden>${T(`Google gives us your name and email, nothing else.`)}</p>` : ''}`;
   const art = `<svg viewBox="0 0 520 300" aria-hidden="true" focusable="false">
   <defs><g id="acct-week"><rect width="120" height="152" rx="11" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/><path d="M0 11a11 11 0 0 1 11-11h98a11 11 0 0 1 11 11v17H0z" fill="#0F4D90"/><text x="11" y="19" font-size="11" font-weight="800" fill="#FFFFFF" font-family="Figtree, Arial, sans-serif">Sam’s week</text><circle cx="17" cy="44" r="7.5" fill="#E3EEFA"/><text x="17" y="47.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Figtree, Arial, sans-serif">M</text><rect x="31" y="38" width="62" height="12" rx="6" fill="#1F7A3A"/><circle cx="17" cy="65" r="7.5" fill="#E3EEFA"/><text x="17" y="68.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Figtree, Arial, sans-serif">T</text><rect x="31" y="59" width="48" height="12" rx="6" fill="#B4237A"/><circle cx="17" cy="86" r="7.5" fill="#E3EEFA"/><text x="17" y="89.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Figtree, Arial, sans-serif">W</text><rect x="31" y="80" width="70" height="12" rx="6" fill="#0E7C86"/><circle cx="17" cy="107" r="7.5" fill="#E3EEFA"/><text x="17" y="110.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Figtree, Arial, sans-serif">T</text><rect x="31" y="101" width="40" height="12" rx="6" fill="#6B3FA0"/><circle cx="17" cy="128" r="7.5" fill="#E3EEFA"/><text x="17" y="131.4" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0B2140" font-family="Figtree, Arial, sans-serif">F</text><rect x="31" y="122" width="56" height="12" rx="6" fill="#C2410C"/></g></defs>
   <rect x="238" y="20" width="250" height="186" rx="13" class="art-frame"/>
@@ -4390,7 +4396,7 @@ function boardPage() {
         <div class="field">
           <label for="board-name">${T(`Child’s name`)}</label>
           <input id="board-name" type="text" maxlength="40" placeholder="Sam" autocomplete="off">
-          <span class="hint">${GATE ? T(`A first name, a nickname or an initial. It shows on the roster you share, and it’s how your profile tells one child’s week from another’s.`) : T(`Optional. It shows on the roster you share.`)}</span>
+          <span class="hint">${GATE ? T(`Only you see this, unless you share the week. A nickname or an initial works.`) : T(`Optional. It shows on the roster you share.`)}</span>
         </div>
         <div class="actions"><button type="button" class="clear" id="kid-remove" hidden>Remove this child</button></div>
       </details>
@@ -5633,7 +5639,7 @@ ${jumpNav()}
     <summary>${T(`Name and age`)}</summary>
     <div class="sum-top">
       <div class="field sum-name"><label for="sum-name">${T(`First name (optional)`)}</label>
-        <input id="sum-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${GATE ? T(`Kept with the plan in your profile. A nickname or an initial is fine.`) : T(`Stays on this device.`)}</span></div>
+        <input id="sum-name" type="text" maxlength="40" autocomplete="off"><span class="hint">${GATE ? T(`Only you see this. A nickname or an initial works.`) : T(`Stays on this device.`)}</span></div>
       <div class="field sum-age"><label for="sum-age">${T(`Age this summer (optional)`)}</label>
         <select id="sum-age"><option value="">Any age</option>${Array.from({ length: 15 }, (_, i) => `<option value="${i + 3}">${i + 3}</option>`).join('')}</select></div>
     </div>

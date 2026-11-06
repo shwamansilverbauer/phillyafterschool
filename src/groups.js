@@ -507,6 +507,12 @@
       signInBox(box, wantNext, function (d) { fresh = true; if (wantNext !== 'account' && d.user.ready && goNext(wantNext)) return; drawProfile(d); }, 'One step for both: if you’re new, this makes your account. No password. With email, we send a 6-digit code and you type it here.');
       var sh = box.querySelector('h3');
       if (sh) sh.textContent = registering ? 'Create your account' : 'Log in, or create an account';
+      // On /register/, what an account is for and what happens to the information, from the page (so it can be edited
+      // there), read before the email address is typed; and under Google's button, what Google passes on.
+      var notice = document.getElementById('acct-notice'), intro = box.querySelector('.signin > .hint');
+      if (notice && intro) { intro.parentNode.insertBefore(notice, intro.nextSibling); notice.hidden = false; }
+      var gnote = document.getElementById('acct-google'), gslot = box.querySelector('.signin-alt .g-google');
+      if (gnote && gslot) { gslot.parentNode.insertBefore(gnote, gslot.nextSibling); gnote.hidden = false; }
       // an invitation to a group or a shared week comes with its own link; this is the quiet way in for someone who lost it
       var have = el('p', 'hint acct-invite', 'Did someone send you an invitation? '); var hj = el('a', null, 'Open it here'); hj.href = page('join/'); have.appendChild(hj); have.appendChild(document.createTextNode('.'));
       account.appendChild(have);
