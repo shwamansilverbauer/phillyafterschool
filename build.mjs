@@ -3657,7 +3657,6 @@ ${hero}
     </div>
     <div class="acct-hero-form" data-clarity-mask="true">${register ? page : ''}</div>${register ? `
     <div id="acct-notice" class="acct-notice" hidden>
-      <p><b>${T(`Why you need an account:`)}</b> ${T(`to keep your plans, so they’re there on your phone and your laptop.`)}</p>
       <p><b>${T(`How we use your info:`)}</b> ${T(`your email signs you in and gets occasional news about the site (unsubscribe in any email). Nothing is sold, and you can delete the account whenever you like.`)}</p>
       <p><b>${T(`How we use your kids’ info:`)}</b> ${T(`we don’t. It’s encrypted and yours alone, with no public link and no public page, and nobody sees it unless you share a week with someone by name.`)} <a href="${link('privacy/', 1)}#groups">${T(`Who can see what`)}</a></p>
     </div>
