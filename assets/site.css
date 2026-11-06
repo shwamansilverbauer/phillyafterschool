@@ -1042,6 +1042,9 @@ html.signed .when-out{display:none!important}
 /* the footer's support ask */
 .foot-support{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin-top:4px}
 .foot-cta{background:transparent;border:1.5px solid var(--foot-ink);color:var(--foot-ink);text-decoration:none;font-weight:700;border-radius:999px;padding:8px 16px}
+.foot-social a{display:inline-flex;align-items:center;gap:8px;color:var(--foot-ink);font-weight:700;text-decoration:none}
+.foot-social a:hover{text-decoration:underline}
+.foot-social svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round}
 .nav a.nav-cta.nav-cta-mgr{background:var(--yellow);color:var(--yellow-ink)}.nav a.nav-cta.nav-cta-mgr:hover{background:#E0B400}
 .foot-cta:hover{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink)}
 /* after a card has gone out: keep the week? */

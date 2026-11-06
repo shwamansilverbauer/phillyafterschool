@@ -4,11 +4,11 @@
     "pages": 164,
     "pagesNeedingABrowser": 4,
     "pagesNeedingAPerson": 5,
-    "links": 125,
-    "pickupLinks": 70,
-    "pickupOnAStoredList": 61,
+    "links": 130,
+    "pickupLinks": 75,
+    "pickupOnAStoredList": 65,
     "pickupFromAThirdPartyList": 4,
-    "pickupOnItsOwnSource": 5,
+    "pickupOnItsOwnSource": 6,
     "pickupWithNothingBehindIt": 0,
     "pickupNotOnTheProvidersList": 1,
     "oldestCheck": "2026-10-05"
@@ -38,6 +38,19 @@
     {
       "program": "coco-academy",
       "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-05",
+      "basis": "list",
+      "list": {
+        "where": "Bella Vista, 1001 Christian St",
+        "read": "2026-10-05",
+        "how": "person",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "coco-academy",
+      "school": "marian-anderson",
       "relation": "pickup",
       "checked": "2026-10-05",
       "basis": "list",
@@ -431,6 +444,19 @@
       "school": "vare-washington",
       "relation": "nearby",
       "checked": "2026-10-06"
+    },
+    {
+      "program": "movemakers",
+      "school": "marian-anderson",
+      "relation": "pickup",
+      "checked": "2026-10-06",
+      "basis": "list",
+      "list": {
+        "where": "2100 Chestnut St",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
     },
     {
       "program": "movemakers",
@@ -1026,6 +1052,19 @@
     },
     {
       "program": "makom-community",
+      "school": "marian-anderson",
+      "relation": "pickup",
+      "checked": "2026-10-25",
+      "basis": "list",
+      "list": {
+        "where": "2401 Washington Avenue",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "makom-community",
       "school": "stanton",
       "relation": "pickup",
       "checked": "2026-10-25",
@@ -1057,6 +1096,13 @@
     },
     {
       "program": "christian-street-ymca",
+      "school": "marian-anderson",
+      "relation": "pickup",
+      "checked": "2026-10-26",
+      "basis": "own-source"
+    },
+    {
+      "program": "christian-street-ymca",
       "school": "stanton",
       "relation": "pickup",
       "checked": "2026-10-26",
@@ -1077,6 +1123,18 @@
     {
       "program": "mister-johns-music",
       "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-26",
+      "basis": "list",
+      "list": {
+        "read": "2026-10-26",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "mister-johns-music",
+      "school": "marian-anderson",
       "relation": "pickup",
       "checked": "2026-10-26",
       "basis": "list",
@@ -3019,7 +3077,7 @@
         "schools.*.address"
       ],
       "says": "Old Pine Community Center and The Neighborhub are the same building after a rebrand, at 401 Lombard St; Fall II starts November 2, 2026, registration is open, and families can join whenever there is space, with the fee pro-rated.",
-      "daysAgo": 17,
+      "daysAgo": 18,
       "stale": false
     },
     {
@@ -3034,7 +3092,7 @@
         "daysNote"
       ],
       "says": "After-school care is $250 a month for full time, 4 or more days a week, or $175 a month for part time, 3 days a week, with a snack included.",
-      "daysAgo": 1,
+      "daysAgo": 2,
       "stale": false
     }
   ],
@@ -3042,7 +3100,7 @@
   "camps": {
     "season": 2026,
     "summary": {
-      "camps": 44,
+      "camps": 45,
       "showingNextSummer": 1,
       "needingABrowser": 18,
       "needingAPerson": 1,
@@ -3485,6 +3543,17 @@
         "how": "browser",
         "look": "Dates, ages, hours and location are at the top. Pricing is under the “Sliding Scale Pricing” heading, which opens on a click.",
         "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
+      },
+      {
+        "camp": "philly-pack-summer-camp",
+        "name": "Philly PACK",
+        "season": 2026,
+        "checked": "2026-11-05",
+        "url": "https://www.phillypack.org/summer-camp/",
+        "how": "fetch",
+        "look": "Each camp has a dated heading with the grades, the tuition and a Register link; the page says when registration opens.",
+        "notes": "The address and phone are on /contact-us/. On 2026-11-05 the page still described summer 2026: it said five weeks but listed four camps, and gave no extended-day care.",
+        "signup": "Registration opens January 15. The 2026 page lists each camp with its own Register link."
       },
       {
         "camp": "camp-schuylkill",

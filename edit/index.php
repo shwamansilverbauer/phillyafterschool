@@ -178,7 +178,7 @@ if (!edit_signed_in()) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800&family=Atkinson+Hyperlegible:wght@400;700&family=Luckiest+Guy&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=d4a1201c">
+<link rel="stylesheet" href="../assets/site.css?v=43a461ca">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
@@ -223,6 +223,7 @@ if (!edit_signed_in()) {
       <a class="brand" href="../"><img class="logo" src="../logo-text.png?v=1a5884ce" alt="Philly After School" width="479" height="184"></a>
       <p><span data-copy="2ded0fc514" data-was="After-school programs in Philadelphia, sorted by the school your child goes to.">After-school programs, day camps, &amp; summer camps in Philadelphia.</span></p>
       <p class="foot-support"><span></span> <a class="btn foot-cta" href="../support/">Help the site keep going</a></p>
+      <p class="foot-social"><a href="https://www.instagram.com/phillyafterschool/" target="_blank" rel="noopener me"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/></svg><span data-copy="15099f0ac6">@phillyafterschool on Instagram</span></a></p>
     </div>
     <div>
       <h2><a href="../all-programs/"><span data-copy="ab14d0a7db">Programs</span></a></h2>
@@ -312,7 +313,7 @@ if (!edit_signed_in()) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800&family=Atkinson+Hyperlegible:wght@400;700&family=Luckiest+Guy&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=d4a1201c">
+<link rel="stylesheet" href="../assets/site.css?v=43a461ca">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
@@ -386,6 +387,8 @@ if (!edit_signed_in()) {
     <li><a href="../kirkbride/">Kirkbride page</a></li>
     <li><a href="../southwark/">Southwark page</a></li>
     <li><a href="../columbus-charter/">Columbus Charter page</a></li>
+    <li><a href="../marian-anderson/">Marian Anderson page</a></li>
+    <li><a href="../lingelbach/">Lingelbach page</a></li>
     <li><a href="../types/">Program types</a></li>
     <li><a href="../types/aftercare/">A type page (Aftercare)</a></li>
     <li><a href="../by-day/">By day of the week</a></li>
@@ -425,6 +428,7 @@ if (!edit_signed_in()) {
       <a class="brand" href="../"><img class="logo" src="../logo-text.png?v=1a5884ce" alt="Philly After School" width="479" height="184"></a>
       <p><span data-copy="2ded0fc514" data-was="After-school programs in Philadelphia, sorted by the school your child goes to.">After-school programs, day camps, &amp; summer camps in Philadelphia.</span></p>
       <p class="foot-support"><span></span> <a class="btn foot-cta" href="../support/">Help the site keep going</a></p>
+      <p class="foot-social"><a href="https://www.instagram.com/phillyafterschool/" target="_blank" rel="noopener me"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/></svg><span data-copy="15099f0ac6">@phillyafterschool on Instagram</span></a></p>
     </div>
     <div>
       <h2><a href="../all-programs/"><span data-copy="ab14d0a7db">Programs</span></a></h2>

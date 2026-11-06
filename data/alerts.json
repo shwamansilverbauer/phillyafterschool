@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-11-05",
+  "generated": "2026-11-06",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -40,6 +40,14 @@
     {
       "id": "columbus-charter",
       "name": "Columbus Charter"
+    },
+    {
+      "id": "marian-anderson",
+      "name": "Marian Anderson"
+    },
+    {
+      "id": "lingelbach",
+      "name": "Lingelbach"
     }
   ],
   "programs": [
@@ -853,6 +861,10 @@
     {
       "id": "coco-academy-summer-camp",
       "name": "CoCo Academy"
+    },
+    {
+      "id": "philly-pack-summer-camp",
+      "name": "Philly PACK"
     }
   ],
   "added": {
@@ -861,6 +873,40 @@
     "reason": "you asked to be told when this school was added"
   },
   "alerts": [
+    {
+      "id": "added-lingelbach",
+      "kind": "added",
+      "date": "2026-11-05",
+      "sendOn": "2026-11-05",
+      "expires": "2026-11-07",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "anna-l-lingelbach-school"
+      ],
+      "when": "New",
+      "title": "Lingelbach now has a page",
+      "text": "You asked to be told. 0 programs are listed for Lingelbach so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/lingelbach/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-marian-anderson",
+      "kind": "added",
+      "date": "2026-11-05",
+      "sendOn": "2026-11-05",
+      "expires": "2026-11-07",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "marian-anderson-neighborhood-academy"
+      ],
+      "when": "New",
+      "title": "Marian Anderson now has a page",
+      "text": "You asked to be told. 5 programs are listed for Marian Anderson so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/marian-anderson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
     {
       "id": "camp-arden-drama-school-2026-11-11",
       "kind": "camp",
@@ -1227,6 +1273,54 @@
       "first": "Wednesday: no school, Veterans Day; Saturday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students",
       "url": "https://phillyafterschool.org/kirkbride/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Kirkbride’s week"
+    },
+    {
+      "id": "week-lingelbach-2026-11-09",
+      "kind": "week",
+      "date": "2026-11-13",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-11",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "lingelbach"
+      ],
+      "when": "Week of November 9",
+      "title": "This week at Lingelbach",
+      "text": "Wednesday: No school: Veterans Day.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Veterans Day"
+        }
+      ],
+      "first": "Wednesday: no school, Veterans Day",
+      "url": "https://phillyafterschool.org/lingelbach/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Lingelbach’s week"
+    },
+    {
+      "id": "week-marian-anderson-2026-11-09",
+      "kind": "week",
+      "date": "2026-11-13",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-11",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "marian-anderson"
+      ],
+      "when": "Week of November 9",
+      "title": "This week at Marian Anderson",
+      "text": "Wednesday: No school: Veterans Day.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Veterans Day"
+        }
+      ],
+      "first": "Wednesday: no school, Veterans Day",
+      "url": "https://phillyafterschool.org/marian-anderson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Marian Anderson’s week"
     },
     {
       "id": "week-mccall-2026-11-09",
@@ -1714,6 +1808,54 @@
       "first": "Monday: no school, Report card conferences",
       "url": "https://phillyafterschool.org/kirkbride/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Kirkbride’s week"
+    },
+    {
+      "id": "week-lingelbach-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "lingelbach"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Lingelbach",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/lingelbach/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Lingelbach’s week"
+    },
+    {
+      "id": "week-marian-anderson-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "marian-anderson"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Marian Anderson",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/marian-anderson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Marian Anderson’s week"
     },
     {
       "id": "week-mccall-2026-11-16",

@@ -306,5 +306,63 @@
       "Kids on 12th (1112 Chestnut St), K–5. Picks up from ICS, McCall, Greenfield, Russell Byers, Coppin and FACTS only.",
       "Christian Street YMCA (1724 Christian St). Serves Stanton, ICS and Marian Anderson."
     ]
+  },
+  {
+    "id": "marian-anderson",
+    "name": "Marian Anderson Neighborhood Academy",
+    "shortName": "Marian Anderson",
+    "aliases": [
+      "Anderson",
+      "MANA",
+      "Marian Anderson School"
+    ],
+    "address": "2000 Catharine St, Philadelphia, PA 19146",
+    "neighborhood": "Graduate Hospital",
+    "grades": "K-8",
+    "dismissal": "3:20 pm",
+    "dismissalNote": "3:22 pm for grades 6–8",
+    "phone": "215-400-7940",
+    "website": "https://mariananderson.philasd.org/",
+    "lastReviewed": "2026-11-05",
+    "added": "2026-11-05",
+    "notes": [
+      "The school’s own site names no aftercare of its own; it points to the City’s free Out-of-School Time programs and lists partners. Ask the office which partners run on site after school, and when.",
+      "Two more programs name Marian Anderson on their own sites but aren’t matched here yet: ZAZZ (1923 Chestnut St, ages 5–12, guaranteed pickup from Greenfield, ICS and Marian Anderson) and Philly Music Factory (2100 Chestnut St)."
+    ],
+    "alsoListed": {
+      "title": "On the school’s partners list",
+      "intro": "Marian Anderson’s own site names these partners. Which of them run after school, on site, we haven’t confirmed, so ask the office before counting on one.",
+      "items": [
+        "Sunrise of Philadelphia",
+        "Rock Reach",
+        "BalletX Dance eXchange",
+        "Girls on the Run Philadelphia",
+        "RISE Tutoring",
+        "Philadelphia Robotics Coalition",
+        "Raja Yoga",
+        "Walnut Street Theatre",
+        "WHYY Media Labs",
+        "Wildcat Workshop, the school’s own K–8 makerspace"
+      ]
+    }
+  },
+  {
+    "id": "lingelbach",
+    "name": "Anna L. Lingelbach School",
+    "shortName": "Lingelbach",
+    "aliases": [
+      "Anna L. Lingelbach",
+      "Lingelbach Elementary"
+    ],
+    "address": "6340 Wayne Ave, Philadelphia, PA 19144",
+    "neighborhood": "Germantown",
+    "grades": "K-8",
+    "phone": "215-400-3630",
+    "website": "https://lingelbach.philasd.org/",
+    "lastReviewed": "2026-11-05",
+    "added": "2026-11-05",
+    "notes": [
+      "Lingelbach is the site’s first school in Germantown, added because families asked for it. Few of the programs listed so far are nearby, so if you know one that serves it, send it in and it goes on this page."
+    ]
   }
 ]
