@@ -508,9 +508,9 @@
       var sh = box.querySelector('h3');
       if (sh) sh.textContent = registering ? 'Create your account' : 'Log in, or create an account';
       // On /register/, what an account is for and what happens to the information, from the page (so it can be edited
-      // there), read before the email address is typed; and under Google's button, what Google passes on.
-      var notice = document.getElementById('acct-notice'), intro = box.querySelector('.signin > .hint');
-      if (notice && intro) { intro.parentNode.insertBefore(notice, intro.nextSibling); notice.hidden = false; }
+      // there), at the foot of the form under the email field; and under Google's button, what Google passes on.
+      var notice = document.getElementById('acct-notice'), signin = box.querySelector('.signin');
+      if (notice && signin) { signin.appendChild(notice); notice.hidden = false; }
       var gnote = document.getElementById('acct-google'), gslot = box.querySelector('.signin-alt .g-google');
       if (gnote && gslot) { gslot.parentNode.insertBefore(gnote, gslot.nextSibling); gnote.hidden = false; }
       // an invitation to a group or a shared week comes with its own link; this is the quiet way in for someone who lost it
