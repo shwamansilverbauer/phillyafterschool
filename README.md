@@ -31,6 +31,9 @@ Fill in `site.config.json`:
 - `writtenBy`: optional. A name for the "Written, edited, and humanized by" line under the "Created, managed, and
   meticulously vibe coded by" line in the footer. It carries no link.
 - `designBy`: optional. A name for the "Logo and design zhuzhing by" line under those two. No link.
+- `instagram`: optional. The site's Instagram page (an https URL). It goes in the footer's brand column as
+  "@phillyafterschool on Instagram" with a small camera glyph, opening in a new tab, and into the home page's
+  Organization schema as `sameAs`.
 - `gtmId`: optional, e.g. `GTM-XXXXXXX`.
 - `admins`: optional, a list of email addresses whose accounts open `/edit/` and its pages (see "Site admins").
 - `editLogin`: optional, `{ "user": "...", "passwordHash": "..." }`. Puts a sign-in on `/edit/`. The hash is a bcrypt hash, never the
@@ -544,8 +547,12 @@ campuses under one name (Ad Prima, Esperanza Academy, Wissahickon), the street i
 parentheses so the two can be told apart, and the Hancock middle campus is "John Hancock Demonstration School
 (LaBrum Campus)"; keep those when the list is refreshed. Schools with a record in
 `data/schools.json` (matched by street address) open their page. The rest open `/schools/request/`, where a
-parent can ask for the school with one tap. Each request is emailed to `contactEmail` with a running count and
-logged in `phillyafterschool-school-requests.log` above `public_html`. Refresh `data/all-schools.json` when the
+parent can ask for the school with one tap (it uses their free account, so each family counts once). Each new
+request is emailed to `contactEmail` with the asker's email address and everyone waiting for that school so far,
+and logged in `phillyafterschool-school-requests.log` above `public_html` (date, id, name, email), so the owner
+can write to those families by hand when the school goes up; the queue page lists them per school as mailto
+links. The addresses stay in that log, the owner's inbox and the queue page: the batches the queue sends to the
+run carry counts only. Refresh `data/all-schools.json` when the
 City updates its list (about once a year).
 
 ## Neighborhood pages

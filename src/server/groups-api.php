@@ -1141,8 +1141,14 @@ function school_ask_on(int $uid, string $id): array {
   }
   $count = (int) val('SELECT COUNT(*) FROM school_asks WHERE school = ?', array($id));
   if (!$had) {
-    @file_put_contents(dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-school-requests.log', date('c') . "\t" . $id . "\t" . $names[$id] . "\n", FILE_APPEND | LOCK_EX);
-    tell_owner('School request: ' . $names[$id], "A parent asked for this school to be added:\n\n" . $names[$id] . "\n\nFamilies asking for it so far: " . $count . "\n", 'queue');
+    // the owner hears who asked, so a family can be written to by hand when the school goes up: the asker's address
+    // goes in the log (above public_html, read only by the queue page) and in the owner's email, with everyone
+    // waiting for that school so far. Nothing of this reaches the public repository.
+    $email = (string) val('SELECT email FROM users WHERE id = ?', array($uid));
+    $waiting = array();
+    foreach (q('SELECT u.email FROM school_asks a JOIN users u ON u.id = a.user_id WHERE a.school = ? ORDER BY a.created', array($id)) as $w) $waiting[] = (string) $w['email'];
+    @file_put_contents(dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-school-requests.log', date('c') . "\t" . $id . "\t" . $names[$id] . "\t" . str_replace(array("\t", "\n"), ' ', $email) . "\n", FILE_APPEND | LOCK_EX);
+    tell_owner('School request: ' . $names[$id], "A parent asked for this school to be added:\n\n" . $names[$id] . "\n\nAsked by: " . $email . "\n\nFamilies asking for it so far: " . $count . "\n" . implode("\n", $waiting) . "\n", 'queue');
   }
   return array(!$had, $count);
 }

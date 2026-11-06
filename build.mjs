@@ -674,6 +674,7 @@ ${body}
       <a class="brand" href="${link('', depth)}"><img class="logo" src="${link('logo-text.png', depth)}${stamp('src/static/logo-text.png')}" alt="${esc(cfg.siteName)}" width="479" height="184"></a>
       <p>${T(`After-school programs in Philadelphia, sorted by the school your child goes to.`)}</p>
       ${cfg.supportUrl ? `<p class="foot-support"><span>${T(`Created and run by the Silverbauers.`)}</span> <a class="btn foot-cta" href="${link('support/', depth)}">Help the site keep going</a></p>` : ''}
+      ${isUrl(cfg.instagram) ? `<p class="foot-social"><a href="${esc(cfg.instagram)}" target="_blank" rel="noopener me"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/></svg>${T(`@phillyafterschool on Instagram`)}</a></p>` : ''}
     </div>
     <div>
       <h2><a href="${link('all-programs/', depth)}">${T(`Programs`)}</a></h2>
@@ -2159,7 +2160,7 @@ ${ALERTS ? `<section class="section when-out" id="remind">
     description: 'After-school programs and aftercare in Philadelphia, school by school: what runs at the school, who picks up at dismissal, hours, cost and how to register.',
     jsonLd: { '@context': 'https://schema.org', '@graph': [
       { '@type': 'WebSite', '@id': cfg.siteUrl + '/#website', name: cfg.siteName, url: cfg.siteUrl + '/', description: cfg.tagline, publisher: { '@id': cfg.siteUrl + '/#org' } },
-      { '@type': 'Organization', '@id': cfg.siteUrl + '/#org', name: cfg.siteName, url: cfg.siteUrl + '/', logo: cfg.siteUrl + '/icon-512.png', ...(cfg.contactEmail ? { email: cfg.contactEmail } : {}), ...(cfg.builtBy ? { founder: { '@type': 'Person', name: cfg.builtBy.name, url: cfg.builtBy.url } } : {}) },
+      { '@type': 'Organization', '@id': cfg.siteUrl + '/#org', name: cfg.siteName, url: cfg.siteUrl + '/', logo: cfg.siteUrl + '/icon-512.png', ...(isUrl(cfg.instagram) ? { sameAs: [cfg.instagram] } : {}), ...(cfg.contactEmail ? { email: cfg.contactEmail } : {}), ...(cfg.builtBy ? { founder: { '@type': 'Person', name: cfg.builtBy.name, url: cfg.builtBy.url } } : {}) },
       { '@type': 'ItemList', name: 'Schools', itemListElement: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map((x, i) => ({ '@type': 'ListItem', position: i + 1, name: x.name, url: `${cfg.siteUrl}/${x.id}/` })) },
     ] },
   });
@@ -5253,8 +5254,8 @@ $SCHOOL_NAMES = json_decode('${schoolNames}', true);`;
 
   <h2>Schools people asked for</h2>
   <?php if (!$schools) { ?><p class="hint">None in the last <?php echo $KEEP_DAYS; ?> days.</p><?php } else { ?>
-  <p class="hint">Counted from the “ask for your school” page and the suggestion form. Adding a school is yours to do; the run only hears the demand, with every batch.</p>
-  <ul><?php foreach ($schools as $s) { ?><li>${e('$s["school"]')}: <?php echo (int) $s["n"]; ?> (last ${e('ny($s["last"])')})</li><?php } ?></ul>
+  <p class="hint">Counted from the “ask for your school” page and the suggestion form. Adding a school is yours to do; the run only hears the demand, with every batch. The addresses are the families who asked from an account, so you can write to them when their school goes up; they stay on this page.</p>
+  <ul><?php foreach ($schools as $s) { ?><li>${e('$s["school"]')}: <?php echo (int) $s["n"]; ?> (last ${e('ny($s["last"])')})<?php if (!empty($s["who"])) { ?> — <?php $i = 0; foreach ($s["who"] as $w) { if ($i++) echo ', '; ?><a href="mailto:${e('$w')}">${e('$w')}</a><?php } } ?></li><?php } ?></ul>
   <?php } ?>
 
   <h2>Sent to the run</h2>

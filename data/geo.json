@@ -396,6 +396,14 @@
   "98 chamounix dr": [
    39.9935,
    -75.21458
+  ],
+  "2000 catharine st": [
+   39.9419,
+   -75.1759
+  ],
+  "6340 wayne ave": [
+   40.0373,
+   -75.1897
   ]
  },
  "checked": "2026-10-26",
@@ -404,6 +412,8 @@
   "211 s columbus blvd",
   "1501 s 7th st",
   "1835 s 9th st",
-  "916 christian st"
+  "916 christian st",
+  "2000 catharine st",
+  "6340 wayne ave"
  ]
 }

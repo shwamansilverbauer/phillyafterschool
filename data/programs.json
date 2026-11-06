@@ -1751,6 +1751,17 @@
           }
         ],
         "checked": "2026-10-26"
+      },
+      "marian-anderson": {
+        "relation": "pickup",
+        "note": "Mister John’s 2026–27 pickup list names Marian Anderson.",
+        "sources": [
+          {
+            "label": "Mister John’s Music: kids group classes 2026–27",
+            "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/"
+          }
+        ],
+        "checked": "2026-10-26"
       }
     },
     "pickupLists": [
@@ -2269,6 +2280,19 @@
           }
         ],
         "checked": "2026-10-05"
+      },
+      "marian-anderson": {
+        "relation": "pickup",
+        "address": "1001 Christian St (Bella Vista)",
+        "registerUrl": "https://www.hisawyer.com/coco-academy/schedules?location_id%5B%5D=154921&widget_tags=afterschool+winter+spring+2027",
+        "note": "CoCo’s Bella Vista page listed Marian Anderson pickup when we read it on October 5: staff collect children at dismissal and walk them to 1001 Christian St.",
+        "sources": [
+          {
+            "label": "CoCo Academy Bella Vista after school",
+            "url": "https://www.cocoacademyphl.com/afterschool-bellavista"
+          }
+        ],
+        "checked": "2026-10-05"
       }
     },
     "rate": {
@@ -2727,6 +2751,18 @@
       },
       "mccall": {
         "relation": "pickup",
+        "checked": "2026-10-06"
+      },
+      "marian-anderson": {
+        "relation": "pickup",
+        "address": "2100 Chestnut St",
+        "note": "MoveMakers’ youth classes page names Marian Anderson School among the schools its 2100 Chestnut St studio picks up from.",
+        "sources": [
+          {
+            "label": "MoveMakers youth classes",
+            "url": "https://www.movemakersphilly.com/youthclasses.html"
+          }
+        ],
         "checked": "2026-10-06"
       }
     },
@@ -3592,6 +3628,18 @@
         "address": "2401 Washington Ave",
         "distance": "about half a mile southwest, at 24th and Washington",
         "note": "Makom’s page lists Stanton Elementary School among its pickup schools. It needs at least four children from a school, and groups from more than a mile away travel by SEPTA bus with a Makom educator.",
+        "sources": [
+          {
+            "label": "Makom afterschool enrichment",
+            "url": "https://makomcommunity.org/afterschool-enrichment/"
+          }
+        ],
+        "checked": "2026-10-25"
+      },
+      "marian-anderson": {
+        "relation": "pickup",
+        "address": "2401 Washington Ave",
+        "note": "Makom’s page lists Marian Anderson Neighborhood Academy among its pickup schools. It needs at least four children from a school, and groups from more than a mile away travel by SEPTA bus with a Makom educator.",
         "sources": [
           {
             "label": "Makom afterschool enrichment",
@@ -6423,6 +6471,18 @@
         "relation": "pickup",
         "distance": "a short walk west on Christian St",
         "note": "The Y’s before-and-after-school page lists its Christian Street branch as serving Edwin Stanton Elementary School, along with Independence Charter and Marian Anderson, for kindergarten to 6th grade.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Before & After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/"
+          }
+        ],
+        "checked": "2026-10-26"
+      },
+      "marian-anderson": {
+        "relation": "pickup",
+        "distance": "a short walk, at 17th and Christian",
+        "note": "The Y’s before-and-after-school page lists its Christian Street branch as serving Marian Anderson, along with Edwin Stanton and Independence Charter, for kindergarten to 6th grade.",
         "sources": [
           {
             "label": "Greater Philadelphia YMCA: Before & After School Enrichment",
