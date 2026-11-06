@@ -611,6 +611,7 @@
       "id": "philadelphia-school-of-circus-arts",
       "name": "Philadelphia School of Circus Arts",
       "parts": [
+        "after",
         "off",
         "summer"
       ]
@@ -682,6 +683,13 @@
       "parts": [
         "after",
         "weekend"
+      ]
+    },
+    {
+      "id": "philly-art-center-mt-airy",
+      "name": "Philly Art Center, Mt. Airy",
+      "parts": [
+        "after"
       ]
     }
   ],
@@ -886,7 +894,7 @@
       ],
       "when": "New",
       "title": "Lingelbach now has a page",
-      "text": "You asked to be told. 0 programs are listed for Lingelbach so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "text": "You asked to be told. 2 programs are listed for Lingelbach so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/lingelbach/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },

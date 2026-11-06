@@ -7435,29 +7435,32 @@
   {
     "id": "philadelphia-school-of-circus-arts",
     "name": "Philadelphia School of Circus Arts",
-    "what": "The circus school in Mount Airy, with single-day camps on the district’s days off for ages 5 to 15",
+    "what": "Circus After School in Mount Airy, kindergarten to 6th grade, with single-day camps on the district’s days off for ages 5 to 15",
     "types": [
       "movement"
     ],
     "keywords": [
-      "circus",
-      "trapeze",
-      "aerial",
-      "juggling",
-      "unicycle",
-      "tumbling",
-      "clowning",
-      "Mount Airy",
       "Germantown",
-      "day off"
+      "Lingelbach",
+      "Mount Airy",
+      "aerial",
+      "after school",
+      "aftercare",
+      "circus",
+      "clowning",
+      "day off",
+      "juggling",
+      "trapeze",
+      "tumbling",
+      "unicycle"
     ],
     "address": "6452 Greene St",
     "neighborhoods": [
       "Mount Airy"
     ],
-    "grades": "K-8",
-    "gradeNote": "Ages 5 (in kindergarten) to 15, grouped by age",
-    "hours": "Day-off camps run 9 am to 3 pm, with aftercare to 6 and extended care to 7.",
+    "grades": "K-6",
+    "gradeNote": "Kindergarten to 6th grade after school; day-off camps take ages 5 to 15",
+    "hours": "Until 6:00 pm, every weekday. Extended care 6 to 7 pm, $15 a day.",
     "daysOff": {
       "summary": "Kids Day Off Camp, 9 am to 3 pm, $99, on the School District of Philadelphia’s scheduled days off (its page points to the district calendar; which days have a session is on its sign-up page). Static trapeze, aerial sling and fabric, wire walking, juggling, unicycling, tumbling and clowning, with quiet reading and group games. Aftercare 3 to 6 is $35 and 6 to 7 is $15. Snacks provided; bring lunch.",
       "url": "https://phillycircus.com/kids-day-off-camp/",
@@ -7471,27 +7474,63 @@
       "hours": "9 am to 3 pm; aftercare to 6 or 7 pm",
       "cost": "$99 a day; aftercare $35 to 6 pm, $15 more to 7"
     },
-    "cost": "$99 a day. Aftercare 3 to 6 pm $35; 6 to 7 pm $15.",
+    "cost": "Billed monthly for four meetings a month: $207 for one day a week, $274 for two, $372 for three, $480 for four, $555 for five. Extended care 6 to 7 pm is $15 a day. Day-off camps are $99 a day.",
     "price": "paid",
     "phone": "215-849-1991",
     "email": "",
-    "website": "https://phillycircus.com/kids-day-off-camp/",
+    "website": "https://phillycircus.com/afterschool/",
     "register": {
       "how": "online",
-      "url": "https://portal.iclasspro.com/phillycircus/camps/12?sortBy=name",
-      "label": "See camp days",
-      "note": "Each day is booked on its iClassPro camp page."
+      "url": "https://app.iclasspro.com/portal/phillycircus/classes",
+      "note": "The 2026–27 year runs August 24 to June 9. Slots are first come, first served.",
+      "nextTerm": "Enrollment is open through the year while there are slots.",
+      "label": "Register"
     },
-    "note": "Parking behind the building off Cliveden Street. It also runs after-school and summer camps.",
+    "note": "Parking behind the building off Cliveden Street. Missed days aren’t made up or refunded, and when school closes unexpectedly, so does Circus After School.",
     "sources": [
+      {
+        "label": "Circus After School",
+        "url": "https://phillycircus.com/afterschool/"
+      },
       {
         "label": "Philadelphia School of Circus Arts: Kids Day Off Camp",
         "url": "https://phillycircus.com/kids-day-off-camp/"
       }
     ],
-    "lastVerified": "2026-10-16",
-    "scope": "dayoff",
-    "schools": {}
+    "lastVerified": "2026-11-05",
+    "scope": null,
+    "schools": {
+      "lingelbach": {
+        "relation": "pickup",
+        "distance": "a third of a mile, at Greene and Cliveden",
+        "note": "Circus After School’s page lists Lingelbach among the schools it picks up from; children from other schools can be dropped off at 3 pm.",
+        "sources": [
+          {
+            "label": "Circus After School",
+            "url": "https://phillycircus.com/afterschool/"
+          }
+        ],
+        "checked": "2026-11-05"
+      }
+    },
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Choose 1 to 5 days a week. Enrollment renews each month unless you change it, and a change needs 12 days’ notice before the 1st.",
+    "pickupBy": "6:00 pm",
+    "pickupLists": [
+      {
+        "where": "6452 Greene St",
+        "text": "C.W. Henry, Lingelbach Schools, Henry Houston, and the Waldorf School of Philadelphia in Mt. Airy",
+        "url": "https://phillycircus.com/afterschool/",
+        "read": "2026-11-05",
+        "how": "fetch"
+      }
+    ]
   },
   {
     "id": "schuylkill-center",
@@ -8273,6 +8312,87 @@
           "schools.*.address"
         ],
         "says": "Old Pine Community Center and The Neighborhub are the same building after a rebrand, at 401 Lombard St; Fall II starts November 2, 2026, registration is open, and families can join whenever there is space, with the fee pro-rated."
+      }
+    ]
+  },
+  {
+    "id": "philly-art-center-mt-airy",
+    "name": "Philly Art Center, Mt. Airy",
+    "what": "Studio art after school. Choose 1–5 days a week, by season.",
+    "types": [
+      "art"
+    ],
+    "keywords": [
+      "Germantown",
+      "Lingelbach",
+      "Mount Airy",
+      "aftercare",
+      "art",
+      "crafts",
+      "drawing",
+      "painting",
+      "studio"
+    ],
+    "address": "530 Carpenter Ln",
+    "neighborhoods": [
+      "Mount Airy"
+    ],
+    "grades": "PK-6",
+    "gradeNote": "Ages 4–12",
+    "hours": "Until 6:00 pm. Half-day camps on early-dismissal days.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Choose 1 to 5 days a week.",
+    "pickupBy": "6:00 pm",
+    "cost": "Not shown on the public page. Paid by season: 50% deposit, then two 25% installments. 5% sibling discount.",
+    "price": "paid",
+    "phone": "215-765-2787",
+    "email": "info@phillyartcenter.com",
+    "website": "https://phillyartcenter.com/afterschool/program-information/",
+    "register": {
+      "how": "online",
+      "url": "https://phillyartcenter.com/afterschool/program-information/",
+      "label": "Register",
+      "note": "The Register buttons on its page open the sign-up for each location. Fall runs Aug 31–Dec 23; Winter/Spring runs Jan 4–June 9."
+    },
+    "note": "Pick-up from school is free. If a school isn’t on the list, the studio says to call with interest.",
+    "sources": [
+      {
+        "label": "Program information",
+        "url": "https://phillyartcenter.com/afterschool/program-information/"
+      },
+      {
+        "label": "Mt. Airy school pick-up",
+        "url": "https://phillyartcenter.com/locations/mt-airy/school-pick-up/"
+      }
+    ],
+    "lastVerified": "2026-11-05",
+    "schools": {
+      "lingelbach": {
+        "relation": "pickup",
+        "distance": "about a mile and a half north, at Carpenter Lane and Greene St",
+        "note": "Lingelbach is on the Mt. Airy studio’s pick-up list. Pick-up is free, and the studio says to call with interest if a school isn’t listed.",
+        "sources": [
+          {
+            "label": "Mt. Airy school pick-up",
+            "url": "https://phillyartcenter.com/locations/mt-airy/school-pick-up/"
+          }
+        ],
+        "checked": "2026-11-05"
+      }
+    },
+    "pickupLists": [
+      {
+        "where": "Mt. Airy Pickup Schools",
+        "text": "C.W. Henry, Houston, J.S. Jenks, Lingelbach, Germantown Friends, Greene Street Friends, Germantown Jewish Centre",
+        "url": "https://phillyartcenter.com/locations/mt-airy/school-pick-up/",
+        "read": "2026-11-05",
+        "how": "fetch"
       }
     ]
   }

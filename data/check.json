@@ -1,12 +1,12 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 164,
+    "pages": 166,
     "pagesNeedingABrowser": 4,
     "pagesNeedingAPerson": 5,
-    "links": 130,
-    "pickupLinks": 75,
-    "pickupOnAStoredList": 65,
+    "links": 132,
+    "pickupLinks": 77,
+    "pickupOnAStoredList": 67,
     "pickupFromAThirdPartyList": 4,
     "pickupOnItsOwnSource": 6,
     "pickupWithNothingBehindIt": 0,
@@ -1251,6 +1251,32 @@
         "how": "fetch",
         "by": "third-party"
       }
+    },
+    {
+      "program": "philadelphia-school-of-circus-arts",
+      "school": "lingelbach",
+      "relation": "pickup",
+      "checked": "2026-11-05",
+      "basis": "list",
+      "list": {
+        "where": "6452 Greene St",
+        "read": "2026-11-05",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-art-center-mt-airy",
+      "school": "lingelbach",
+      "relation": "pickup",
+      "checked": "2026-11-05",
+      "basis": "list",
+      "list": {
+        "where": "Mt. Airy Pickup Schools",
+        "read": "2026-11-05",
+        "how": "fetch",
+        "by": "provider"
+      }
     }
   ],
   "pages": [
@@ -1365,6 +1391,24 @@
       "lists": []
     },
     {
+      "url": "https://phillyartcenter.com/afterschool/program-information/",
+      "how": "fetch",
+      "programs": [
+        "philly-art-center-qv",
+        "philly-art-center-mt-airy"
+      ],
+      "lists": [
+        {
+          "program": "philly-art-center-qv",
+          "where": "Queen Village Pickup Schools",
+          "text": "McCall, Meredith, Nebinger, Coppin, Southwark, Vare-Washington, Independence Charter",
+          "read": "2026-10-06",
+          "how": "browser",
+          "by": "provider"
+        }
+      ]
+    },
+    {
       "url": "https://web.vwtigers.com/before-and-aftercare-at-vw/",
       "how": "fetch",
       "programs": [
@@ -1388,6 +1432,14 @@
       "programs": [
         "sunrise-mccall",
         "sunrise-stanton"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://app.iclasspro.com/portal/phillycircus/classes",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-school-of-circus-arts"
       ],
       "lists": []
     },
@@ -1995,18 +2047,18 @@
       "lists": []
     },
     {
-      "url": "https://phillyartcenter.com/afterschool/program-information/",
+      "url": "https://phillyartcenter.com/locations/mt-airy/school-pick-up/",
       "how": "fetch",
       "programs": [
-        "philly-art-center-qv"
+        "philly-art-center-mt-airy"
       ],
       "lists": [
         {
-          "program": "philly-art-center-qv",
-          "where": "Queen Village Pickup Schools",
-          "text": "McCall, Meredith, Nebinger, Coppin, Southwark, Vare-Washington, Independence Charter",
-          "read": "2026-10-06",
-          "how": "browser",
+          "program": "philly-art-center-mt-airy",
+          "where": "Mt. Airy Pickup Schools",
+          "text": "C.W. Henry, Houston, J.S. Jenks, Lingelbach, Germantown Friends, Greene Street Friends, Germantown Jewish Centre",
+          "read": "2026-11-05",
+          "how": "fetch",
           "by": "provider"
         }
       ]
@@ -2026,6 +2078,23 @@
         "philly-art-center-qv"
       ],
       "lists": []
+    },
+    {
+      "url": "https://phillycircus.com/afterschool/",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-school-of-circus-arts"
+      ],
+      "lists": [
+        {
+          "program": "philadelphia-school-of-circus-arts",
+          "where": "6452 Greene St",
+          "text": "C.W. Henry, Lingelbach Schools, Henry Houston, and the Waldorf School of Philadelphia in Mt. Airy",
+          "read": "2026-11-05",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
     },
     {
       "url": "https://phillycircus.com/kids-day-off-camp/",
@@ -2097,14 +2166,6 @@
       "how": "fetch",
       "programs": [
         "philly-inmovement"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://portal.iclasspro.com/phillycircus/camps/12?sortBy=name",
-      "how": "fetch",
-      "programs": [
-        "philadelphia-school-of-circus-arts"
       ],
       "lists": []
     },
