@@ -1389,6 +1389,14 @@ These are the only parts of the site that store anything about a child on the se
   recipient must sign in with that address, goes straight in, and can look and print but not change anything.
   More addresses can be added to the same list; each can be removed, and "Stop sharing with everyone" deletes
   it. What is shared is the same as in a group: first name and program ids, never the school, address or notes.
+- **Sharing from the account page** (since November 7, 2026). Each week kept in the profile (Plans & sharing tab)
+  has a Share button: one person by email (`share_one` with `week`), or a group this account is in (`kid_save` with
+  `week`), and it lists who has it, with "Send again", "Stop sharing" and "Take out of the group". A copy made this
+  way carries the week's id (`kids.week_id`), so `week_save` and the device's `sync` bring every copy up to date
+  (`week_follow`, which also renames the shared week after the child) and removing the week from the profile ends
+  its shared weeks and takes its copies out of groups (`week_delete`). Build your week passes `week` too when the
+  roster is kept in the profile, so new shares made there show on the account page; older ones don't, and still work
+  from the device as before. The profile's "program.school" entries become the group's "program" ones (`week_from_full`).
 - **Week links are retired.** A week used to be shareable as a link that held the whole week after the `#`.
   Anyone could open one and it could not be taken back, so the buttons are gone and an old link now shows a
   notice instead of a week. "Copy as text", "Email it to myself" and the share-sheet button went with them (on the day-off planner too): a

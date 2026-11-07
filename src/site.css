@@ -998,6 +998,14 @@ button.btn{cursor:pointer;font-family:inherit}
 .g-part>.clear{align-self:flex-start}
 .g-acts{margin-left:auto;display:flex;gap:14px}
 .g-list .g-acts .clear{margin-left:0}
+.g-list .g-sub{flex:0 0 100%;margin:2px 0 0 14px;padding-left:12px;border-left:3px solid var(--line)}
+.g-list .g-sub li{padding:8px 0;border-top:0;font-size:.95rem}
+.g-list .g-sub li+li{border-top:1px dashed var(--line)}
+.g-share{flex:0 0 100%;display:flex;flex-direction:column;gap:10px;margin-top:4px;padding:12px 14px;background:var(--bg);border-radius:12px}
+.g-share[hidden]{display:none}
+.g-share .g-row{margin:0}
+.g-list .g-status{flex:0 0 100%;margin:0}
+.g-list .g-status:empty{display:none}
 .g-list li.hint{padding:8px 0}
 /* the owner's numbers page */
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
