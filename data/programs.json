@@ -341,6 +341,214 @@
     "price": "paid"
   },
   {
+    "id": "fairmount-mountain-bike-team",
+    "name": "Fairmount Mountain Bike Team",
+    "what": "A middle-school mountain bike team for grades 6–8 in the Art Museum area, in NICA’s Pennsylvania league (PICL), with Cadence Cycling behind it; ten donated bikes, no experience needed",
+    "types": [
+      "movement",
+      "nature"
+    ],
+    "keywords": [
+      "mountain bike",
+      "cycling",
+      "bikes",
+      "middle school",
+      "grades 6-8",
+      "PICL",
+      "NICA",
+      "Cadence Cycling",
+      "Fairmount Park",
+      "outdoors"
+    ],
+    "address": "2201 Brown St",
+    "grades": "6-8",
+    "hours": "Mondays and Wednesdays 3:30–6:30 pm, meeting at 22nd and Brown, per Bache-Martin’s page; try-it days were held at Sedgley Porter House in Fairmount Park.",
+    "cost": "Not published. The school’s page says ten donated bikes are available, so no bike is needed; ask about league fees.",
+    "website": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
+    "register": {
+      "how": "contact",
+      "note": "Email Brady Gibney at Cadence Cycling (bgibney@cadencecycling.com), per the school’s page. PICL, the league, is at pamtb.org.",
+      "nextTerm": ""
+    },
+    "note": "Everything here is from Bache-Martin’s own after-school page; Cadence Cycling’s site says nothing about the team. The page’s dates are from the 2025–26 year, so confirm this season’s.",
+    "sources": [
+      {
+        "label": "Bache-Martin after-school programs",
+        "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+      },
+      {
+        "label": "PICL (Pennsylvania Interscholastic Cycling League)",
+        "url": "https://www.pamtb.org/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "onsite",
+        "note": "On the school’s own after-school page: meets at 22nd and Brown, Mondays and Wednesdays 3:30–6:30 pm, for grades 6–8.",
+        "sources": [
+          {
+            "label": "Bache-Martin after-school programs",
+            "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "neighborhoods": [
+      "Fairmount"
+    ],
+    "days": [
+      "mon",
+      "wed"
+    ],
+    "pickupBy": "6:30 pm",
+    "price": "paid",
+    "email": "bgibney@cadencecycling.com"
+  },
+  {
+    "id": "beat-the-streets-wrestling",
+    "name": "Beat the Streets wrestling (middle school)",
+    "what": "Co-ed wrestling for grades 5–8 at Beat the Streets’ center at 37th and Market, with Bache-Martin’s middle-school team practicing there; members get its academic mentoring center too",
+    "types": [
+      "movement",
+      "academics"
+    ],
+    "keywords": [
+      "wrestling",
+      "middle school",
+      "grades 5-8",
+      "Beat the Streets",
+      "BTSP",
+      "mentoring",
+      "homework help",
+      "University City",
+      "free"
+    ],
+    "address": "3700 Market St",
+    "grades": "5-8",
+    "hours": "Tuesdays and Thursdays 6:30–8:00 pm, per Bache-Martin’s page. Beat the Streets’ own page puts the winter season at November through March, with competitions in January and February.",
+    "cost": "Not published on either page. Beat the Streets is a nonprofit; ask.",
+    "website": "https://btsphilly.org/wrestling",
+    "register": {
+      "how": "online",
+      "url": "https://btsphilly.org/waiver",
+      "note": "Bache-Martin’s page says to sign the waiver at btsphilly.org/waiver and to reach coach Lender Vega (lvega@btsphilly.com) or Mr. McCutcheon at the school. Beat the Streets’ own page lists Bache-Martin among its winter middle-school teams.",
+      "nextTerm": ""
+    },
+    "note": "Families get children to 37th and Market themselves; the school’s page doesn’t mention transport. The school’s page says members also get academic mentoring at the Beat the Streets Mentoring Center. Its dates are from the 2025–26 year, so confirm this season’s.",
+    "sources": [
+      {
+        "label": "Beat the Streets wrestling",
+        "url": "https://btsphilly.org/wrestling"
+      },
+      {
+        "label": "Bache-Martin after-school programs",
+        "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "nearby",
+        "distance": "practices at 37th and Market, about two miles west; families get children there",
+        "note": "Bache-Martin’s own page lists it for grades 5–8, Tuesdays and Thursdays 6:30–8 pm, and Beat the Streets’ own page lists Bache-Martin among its winter middle-school teams.",
+        "sources": [
+          {
+            "label": "Beat the Streets wrestling",
+            "url": "https://btsphilly.org/wrestling"
+          },
+          {
+            "label": "Bache-Martin after-school programs",
+            "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "neighborhoods": [
+      "University City"
+    ],
+    "days": [
+      "tue",
+      "thu"
+    ],
+    "pickupBy": "8:00 pm",
+    "price": "paid",
+    "phone": "215-454-2255",
+    "email": "btsphilly@btsphilly.org"
+  },
+  {
+    "id": "philadelphia-city-rowing",
+    "name": "Philadelphia City Rowing (middle school)",
+    "what": "Free rowing for 7th and 8th graders at any District public or charter school: indoor sessions in Mantua and water sessions on Boathouse Row, no experience needed",
+    "types": [
+      "movement",
+      "nature"
+    ],
+    "keywords": [
+      "rowing",
+      "crew",
+      "middle school",
+      "grades 7-8",
+      "free",
+      "Boathouse Row",
+      "Schuylkill",
+      "SEPTA"
+    ],
+    "address": "4017 Cambridge St",
+    "grades": "7-8",
+    "hours": "Mondays and Wednesdays 4:15–6:00 pm and Saturdays noon–2:00 pm, per the program’s page. Indoor sessions at 4017 Cambridge St; water sessions from #1 Boathouse Row on Kelly Drive.",
+    "cost": "Free. SEPTA cards are among what the program says it offers.",
+    "website": "https://philadelphiacityrowing.org/middle-school/",
+    "register": {
+      "how": "online",
+      "url": "https://philadelphiacityrowing.org/middle-school/",
+      "note": "Apply through the program’s page after contacting Coach George (the page asks for that first). Applications for fall 2026 were closed when we read it; Bache-Martin’s page says spaces are limited and gives last fall’s session as September 18 to October 25.",
+      "nextTerm": ""
+    },
+    "note": "Proof of swimming is asked for but not required: a child who can’t swim two pool lengths or tread water for two minutes wears a life jacket on the water. Bache-Martin’s page names the program for its 7th and 8th graders.",
+    "sources": [
+      {
+        "label": "Philadelphia City Rowing middle school program",
+        "url": "https://philadelphiacityrowing.org/middle-school/"
+      },
+      {
+        "label": "Bache-Martin after-school programs",
+        "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "nearby",
+        "distance": "indoor sessions at 40th and Cambridge, about two miles west, and on Boathouse Row, about a mile and a half; families get children there",
+        "note": "Bache-Martin’s own page names it for grades 7–8, free, with limited spaces. The program’s own page takes 7th and 8th graders from any District public or charter school.",
+        "sources": [
+          {
+            "label": "Philadelphia City Rowing middle school program",
+            "url": "https://philadelphiacityrowing.org/middle-school/"
+          },
+          {
+            "label": "Bache-Martin after-school programs",
+            "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "neighborhoods": [
+      "West Philadelphia"
+    ],
+    "days": [
+      "mon",
+      "wed"
+    ],
+    "pickupBy": "6:00 pm",
+    "price": "free",
+    "daysNote": "Plus Saturdays noon to 2 pm."
+  },
+  {
     "id": "nebinger-arts-partners",
     "name": "Arts partners and Science Olympiad",
     "what": "EgoPo drama residency (weekly, ends in a public performance), Rock Reach Dance (32 weeks, 45 minutes a week), Settlement Choir, Arden Theatre (grades 3–5, in classroom), Science Olympiad",
@@ -8127,7 +8335,7 @@
   {
     "id": "bache-martin-clubs",
     "name": "School clubs and teams",
-    "what": "Elementary: Choir with Settlement Music School (grades 3–5, Tuesdays 3:00–4:30 pm) and Game Club (K–6, Wednesdays until 4:15 pm in the cafeteria, board and card games only). Grades 6–8: Student Advisory Committee, Cheer Squad (Tuesdays and Thursdays 3:15–4:30 pm), a free golf team (Mondays at Walnut Lane by school bus, with First Tee lessons), free girls volleyball (practices at school and Lloyd Hall), History Club (every other Tuesday) and Mural Club (Wednesdays 3:30–4:30 pm). Off site for grades 6–8: the Fairmount Mountain Bike Team (22nd and Brown, Mondays and Wednesdays 3:30–6:30 pm, through Cadence Cycling), wrestling with Beat the Streets (3700 Market St, Tuesdays and Thursdays 6:30–8 pm, with homework help at its mentoring center) and Philadelphia City Rowing (grades 7–8, free, limited spaces).",
+    "what": "Elementary: Choir with Settlement Music School (grades 3–5, Tuesdays 3:00–4:30 pm) and Game Club (K–6, Wednesdays until 4:15 pm in the cafeteria, board and card games only). Grades 6–8: Student Advisory Committee, Cheer Squad (Tuesdays and Thursdays 3:15–4:30 pm), a free golf team (Mondays at Walnut Lane by school bus, with First Tee lessons), free girls volleyball (practices at school and Lloyd Hall), History Club (every other Tuesday) and Mural Club (Wednesdays 3:30–4:30 pm).",
     "types": [
       "clubs",
       "music",
@@ -8146,12 +8354,6 @@
       "cheer",
       "golf",
       "volleyball",
-      "mountain bike",
-      "Cadence Cycling",
-      "Beat the Streets",
-      "wrestling",
-      "Philadelphia City Rowing",
-      "rowing",
       "History Club",
       "Mural Club",
       "Student Advisory Committee",
@@ -8168,7 +8370,7 @@
       "how": "school",
       "note": "Sign-ups go through the school office or the club’s teacher."
     },
-    "note": "All from the school’s own after-school page, with the details as the school gives them. Its dates are from the 2025–26 year, so confirm this year’s before counting on one. Girls on the Run, Heart & Sole, Soccer Shots, Francisville Rec and Philly Art Center have their own listings here.",
+    "note": "All from the school’s own after-school page, with the details as the school gives them. Its dates are from the 2025–26 year, so confirm this year’s before counting on one. Girls on the Run, Heart & Sole, Soccer Shots, the Fairmount Mountain Bike Team, Beat the Streets wrestling, Philadelphia City Rowing, Francisville Rec and Philly Art Center have their own listings here.",
     "sources": [
       {
         "label": "Bache-Martin after-school programs",
