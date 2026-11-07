@@ -4,11 +4,11 @@
     "pages": 175,
     "pagesNeedingABrowser": 9,
     "pagesNeedingAPerson": 5,
-    "links": 153,
-    "pickupLinks": 81,
+    "links": 154,
+    "pickupLinks": 82,
     "pickupOnAStoredList": 70,
     "pickupFromAThirdPartyList": 4,
-    "pickupOnItsOwnSource": 7,
+    "pickupOnItsOwnSource": 8,
     "pickupWithNothingBehindIt": 0,
     "pickupNotOnTheProvidersList": 1,
     "oldestCheck": "2026-10-05"
@@ -1327,6 +1327,13 @@
       "checked": "2026-11-07"
     },
     {
+      "program": "francisville-rec",
+      "school": "bache-martin",
+      "relation": "pickup",
+      "checked": "2026-11-07",
+      "basis": "own-source"
+    },
+    {
       "program": "girls-on-the-run",
       "school": "bache-martin",
       "relation": "onsite",
@@ -1429,13 +1436,15 @@
   ],
   "pages": [
     {
-      "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/",
-      "how": "fetch",
+      "url": "https://www.phila.gov/parks-rec-finder/#/locations",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
       "programs": [
         "shot-tower-rec",
         "chew-playground",
         "wharton-square-playground",
         "disilvestro-playground",
+        "francisville-rec",
         "clemente-playground",
         "rumph-rec",
         "marian-anderson-rec",
@@ -1450,9 +1459,8 @@
       "lists": []
     },
     {
-      "url": "https://www.phila.gov/parks-rec-finder/#/locations",
-      "how": "browser",
-      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/",
+      "how": "fetch",
       "programs": [
         "shot-tower-rec",
         "chew-playground",
@@ -1573,6 +1581,16 @@
       ]
     },
     {
+      "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
+      "how": "fetch",
+      "programs": [
+        "girls-on-the-run",
+        "francisville-rec",
+        "philly-art-center-fairmount"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://mccall.philasd.org/",
       "how": "fetch",
       "programs": [
@@ -1596,15 +1614,6 @@
       "programs": [
         "vare-washington-edey",
         "vare-washington-clubs"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
-      "how": "fetch",
-      "programs": [
-        "girls-on-the-run",
-        "philly-art-center-fairmount"
       ],
       "lists": []
     },

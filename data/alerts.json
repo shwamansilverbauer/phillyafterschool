@@ -146,6 +146,13 @@
       ]
     },
     {
+      "id": "francisville-rec",
+      "name": "Francisville Playground & Rec Center",
+      "parts": [
+        "after"
+      ]
+    },
+    {
       "id": "clemente-playground",
       "name": "Clemente Playground",
       "parts": [
@@ -1026,7 +1033,7 @@
       ],
       "when": "New",
       "title": "Bache-Martin now has a page",
-      "text": "You asked to be told. 3 programs are listed for Bache-Martin so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "text": "You asked to be told. 4 programs are listed for Bache-Martin so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/bache-martin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },
