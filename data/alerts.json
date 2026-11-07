@@ -110,6 +110,14 @@
       ]
     },
     {
+      "id": "zhang-sah-mt-airy",
+      "name": "Zhang Sah (Mt. Airy)",
+      "parts": [
+        "after",
+        "off"
+      ]
+    },
+    {
       "id": "shot-tower-rec",
       "name": "Shot Tower Recreation Center",
       "parts": [
@@ -699,6 +707,13 @@
       "parts": [
         "after"
       ]
+    },
+    {
+      "id": "philly-art-center-fairmount",
+      "name": "Philly Art Center (Fairmount)",
+      "parts": [
+        "after"
+      ]
     }
   ],
   "camps": [
@@ -906,7 +921,7 @@
       ],
       "when": "New",
       "title": "Lingelbach now has a page",
-      "text": "You asked to be told. 2 programs are listed for Lingelbach so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "text": "You asked to be told. 3 programs are listed for Lingelbach so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/lingelbach/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },
@@ -940,7 +955,7 @@
       ],
       "when": "New",
       "title": "Bache-Martin now has a page",
-      "text": "You asked to be told. One program is listed for Bache-Martin so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "text": "You asked to be told. 2 programs are listed for Bache-Martin so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/bache-martin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },

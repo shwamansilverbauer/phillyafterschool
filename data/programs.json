@@ -981,6 +981,97 @@
     ]
   },
   {
+    "id": "zhang-sah-mt-airy",
+    "name": "Zhang Sah (Mt. Airy)",
+    "what": "Martial arts class daily, plus snack, homework time, clubs and outdoor play",
+    "types": [
+      "movement",
+      "aftercare"
+    ],
+    "keywords": [
+      "martial arts",
+      "taekwondo",
+      "tae kwon do",
+      "karate",
+      "homework",
+      "aftercare"
+    ],
+    "address": "6110 Wissahickon Ave",
+    "neighborhoods": [
+      "Mount Airy"
+    ],
+    "grades": "K-8",
+    "gradeNote": "",
+    "hours": "Until 6:00 pm. Open most early dismissals and days off.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysOff": {
+      "summary": "Community sites open for most school closures, including winter and spring breaks, at a separate full-day rate. Camps run 8 am to 4 pm for ages 4–12, with extended day to 6 pm. Early dismissals are covered for enrolled children.",
+      "url": "https://zhangsah.org/camps/",
+      "dates": [],
+      "sources": [
+        {
+          "label": "Zhang Sah after-school program",
+          "url": "https://zhangsah.org/after-school-program/"
+        },
+        {
+          "label": "Zhang Sah camps",
+          "url": "https://zhangsah.org/camps/"
+        }
+      ],
+      "hours": "8 am to 4 pm, extended day to 6 pm",
+      "ageMin": 4,
+      "ageMax": 12
+    },
+    "pickupBy": "6:00 pm",
+    "cost": "Tuition not published. Takes CCIS subsidy and offers sibling discounts.",
+    "price": "paid",
+    "phone": "215-923-6676",
+    "email": "",
+    "website": "https://zhangsah.org/after-school-program/",
+    "register": {
+      "how": "online",
+      "url": "https://schools.procareconnect.com/form/7417c5d3-b696-426e-913c-b9f0144431bb",
+      "note": "Spots fill early each year."
+    },
+    "note": "",
+    "sources": [
+      {
+        "label": "Zhang Sah after-school",
+        "url": "https://zhangsah.org/after-school-program/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "lingelbach": {
+        "relation": "pickup",
+        "distance": "about half a mile west, on Wissahickon Avenue",
+        "note": "Zhang Sah’s own page lists Lingelbach among its Mt. Airy site’s pickup schools. Children come by bus, walking escort or van after dismissal.",
+        "sources": [
+          {
+            "label": "Zhang Sah after-school program",
+            "url": "https://zhangsah.org/after-school-program/"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "pickupLists": [
+      {
+        "where": "Mt. Airy, 6110 Wissahickon Ave",
+        "text": "JS Jenks, CW Henry, Lingelbach, Houston, SCH, Wissahickon Charter",
+        "url": "https://zhangsah.org/after-school-program/",
+        "read": "2026-11-07",
+        "how": "fetch"
+      }
+    ]
+  },
+  {
     "id": "shot-tower-rec",
     "name": "Shot Tower Recreation Center",
     "what": "City rec center after-school program: homework help, gym and activities",
@@ -8416,6 +8507,87 @@
         "text": "C.W. Henry, Houston, J.S. Jenks, Lingelbach, Germantown Friends, Greene Street Friends, Germantown Jewish Centre",
         "url": "https://phillyartcenter.com/locations/mt-airy/school-pick-up/",
         "read": "2026-11-05",
+        "how": "fetch"
+      }
+    ]
+  },
+  {
+    "id": "philly-art-center-fairmount",
+    "name": "Philly Art Center (Fairmount)",
+    "what": "Studio art after school. Choose 1–5 days a week, by season.",
+    "types": [
+      "art"
+    ],
+    "keywords": [
+      "Germantown",
+      "Lingelbach",
+      "Mount Airy",
+      "aftercare",
+      "art",
+      "crafts",
+      "drawing",
+      "painting",
+      "studio"
+    ],
+    "address": "2333 Fairmount Ave",
+    "neighborhoods": [
+      "Fairmount"
+    ],
+    "grades": "PK-6",
+    "gradeNote": "Ages 4–12",
+    "hours": "Until 6:00 pm. Half-day camps on early-dismissal days.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Choose 1 to 5 days a week.",
+    "pickupBy": "6:00 pm",
+    "cost": "Not shown on the public page. Paid by season: 50% deposit, then two 25% installments. 5% sibling discount.",
+    "price": "paid",
+    "phone": "215-765-2787",
+    "email": "info@phillyartcenter.com",
+    "website": "https://phillyartcenter.com/afterschool/program-information/locations/fairmount",
+    "register": {
+      "how": "online",
+      "url": "https://phillyartcenter.captyn.com/find?department=clu8qqzk2009293r866a7j7wg&filter=4&program=clv479d4y02clfsymtfne5rg3&program=clwtkcaoi00kmsudp98n0ecv5&day=Monday&day=Tuesday&day=Thursday&day=Friday&day=Wednesday&location=clu8gpdpx0aagxkl2fbdh6u7v&tag=clv494qhk032olgi2d9i70vw6&tag=clv494xs6032plgi2z23yr0a8",
+      "label": "Register",
+      "note": "The Register buttons on its page open the sign-up for each location. Fall runs Aug 31–Dec 23; Winter/Spring runs Jan 4–June 9."
+    },
+    "note": "Pick-up from school is free. If a school isn’t on the list, the studio says to call with interest.",
+    "sources": [
+      {
+        "label": "Philly Art Center after-school program information",
+        "url": "https://phillyartcenter.com/afterschool/program-information/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "pickup",
+        "distance": "about a third of a mile south, at 24th and Fairmount",
+        "note": "Philly Art Center’s own page lists Bache-Martin among the Fairmount studio’s pickup schools; teachers walk or take SEPTA with the children, and pickup is free. Bache-Martin’s own after-school page names it too (K–6, 1 to 5 days, 3 to 6 pm).",
+        "sources": [
+          {
+            "label": "Philly Art Center after-school program information",
+            "url": "https://phillyartcenter.com/afterschool/program-information/"
+          },
+          {
+            "label": "Bache-Martin after-school programs",
+            "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "pickupLists": [
+      {
+        "where": "Fairmount, 2333 Fairmount Ave",
+        "text": "Bache-Martin, Greenfield, St. Francis Xavier, Independence Charter",
+        "url": "https://phillyartcenter.com/afterschool/program-information/",
+        "read": "2026-11-07",
         "how": "fetch"
       }
     ]

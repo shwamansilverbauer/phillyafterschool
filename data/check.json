@@ -1,12 +1,12 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 167,
-    "pagesNeedingABrowser": 4,
+    "pages": 169,
+    "pagesNeedingABrowser": 5,
     "pagesNeedingAPerson": 5,
-    "links": 134,
-    "pickupLinks": 78,
-    "pickupOnAStoredList": 68,
+    "links": 136,
+    "pickupLinks": 80,
+    "pickupOnAStoredList": 70,
     "pickupFromAThirdPartyList": 4,
     "pickupOnItsOwnSource": 6,
     "pickupWithNothingBehindIt": 0,
@@ -1296,6 +1296,32 @@
         "how": "fetch",
         "by": "provider"
       }
+    },
+    {
+      "program": "philly-art-center-fairmount",
+      "school": "bache-martin",
+      "relation": "pickup",
+      "checked": "2026-11-07",
+      "basis": "list",
+      "list": {
+        "where": "Fairmount, 2333 Fairmount Ave",
+        "read": "2026-11-07",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zhang-sah-mt-airy",
+      "school": "lingelbach",
+      "relation": "pickup",
+      "checked": "2026-11-07",
+      "basis": "list",
+      "list": {
+        "where": "Mt. Airy, 6110 Wissahickon Ave",
+        "read": "2026-11-07",
+        "how": "fetch",
+        "by": "provider"
+      }
     }
   ],
   "pages": [
@@ -1382,6 +1408,33 @@
       "lists": []
     },
     {
+      "url": "https://phillyartcenter.com/afterschool/program-information/",
+      "how": "fetch",
+      "programs": [
+        "philly-art-center-qv",
+        "philly-art-center-mt-airy",
+        "philly-art-center-fairmount"
+      ],
+      "lists": [
+        {
+          "program": "philly-art-center-qv",
+          "where": "Queen Village Pickup Schools",
+          "text": "McCall, Meredith, Nebinger, Coppin, Southwark, Vare-Washington, Independence Charter",
+          "read": "2026-10-06",
+          "how": "browser",
+          "by": "provider"
+        },
+        {
+          "program": "philly-art-center-fairmount",
+          "where": "Fairmount, 2333 Fairmount Ave",
+          "text": "Bache-Martin, Greenfield, St. Francis Xavier, Independence Charter",
+          "read": "2026-11-07",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
+    },
+    {
       "url": "https://southwark.philasd.org/",
       "how": "fetch",
       "programs": [
@@ -1410,22 +1463,13 @@
       "lists": []
     },
     {
-      "url": "https://phillyartcenter.com/afterschool/program-information/",
+      "url": "https://schools.procareconnect.com/form/7417c5d3-b696-426e-913c-b9f0144431bb",
       "how": "fetch",
       "programs": [
-        "philly-art-center-qv",
-        "philly-art-center-mt-airy"
+        "zhang-sah",
+        "zhang-sah-mt-airy"
       ],
-      "lists": [
-        {
-          "program": "philly-art-center-qv",
-          "where": "Queen Village Pickup Schools",
-          "text": "McCall, Meredith, Nebinger, Coppin, Southwark, Vare-Washington, Independence Charter",
-          "read": "2026-10-06",
-          "how": "browser",
-          "by": "provider"
-        }
-      ]
+      "lists": []
     },
     {
       "url": "https://web.vwtigers.com/before-and-aftercare-at-vw/",
@@ -1433,6 +1477,15 @@
       "programs": [
         "vare-washington-edey",
         "vare-washington-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
+      "how": "fetch",
+      "programs": [
+        "girls-on-the-run",
+        "philly-art-center-fairmount"
       ],
       "lists": []
     },
@@ -1451,6 +1504,41 @@
       "programs": [
         "sunrise-mccall",
         "sunrise-stanton"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://zhangsah.org/after-school-program/",
+      "how": "fetch",
+      "programs": [
+        "zhang-sah",
+        "zhang-sah-mt-airy"
+      ],
+      "lists": [
+        {
+          "program": "zhang-sah",
+          "where": "Queen Village, 530 Bainbridge St",
+          "text": "Meredith, Jackson, CCS, Nebinger, McCall, ICS, St. Mary, St. Peter’s, Vare-Washington",
+          "read": "2026-10-06",
+          "how": "browser",
+          "by": "provider"
+        },
+        {
+          "program": "zhang-sah-mt-airy",
+          "where": "Mt. Airy, 6110 Wissahickon Ave",
+          "text": "JS Jenks, CW Henry, Lingelbach, Houston, SCH, Wissahickon Charter",
+          "read": "2026-11-07",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://zhangsah.org/camps/",
+      "how": "fetch",
+      "programs": [
+        "zhang-sah",
+        "zhang-sah-mt-airy"
       ],
       "lists": []
     },
@@ -2057,11 +2145,28 @@
       "lists": []
     },
     {
+      "url": "https://phillyartcenter.captyn.com/find?department=clu8qqzk2009293r866a7j7wg&filter=4&program=clv479d4y02clfsymtfne5rg3&program=clwtkcaoi00kmsudp98n0ecv5&day=Monday&day=Tuesday&day=Thursday&day=Friday&day=Wednesday&location=clu8gpdpx0aagxkl2fbdh6u7v&tag=clv494qhk032olgi2d9i70vw6&tag=clv494xs6032plgi2z23yr0a8",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns only the word Captyn. In a browser the list shows ten results at first and loads the rest as the page is scrolled, so scroll to the end before counting dates.",
+      "programs": [
+        "philly-art-center-fairmount"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://phillyartcenter.captyn.com/find?department=clu8qqzk2009293r866a7j7wg&filter=4&program=clv479vep03ki7to5es3tmyjr&program=clwtkcaoi00kmsudp98n0ecv5&day=Monday&day=Tuesday&day=Wednesday&day=Thursday&day=Friday&location=clu8gptof0aahxkl2mj3v7mxl&tag=clv494qhk032olgi2d9i70vw6&tag=clv494xs6032plgi2z23yr0a8",
       "how": "browser",
       "why": "A JavaScript app: a plain fetch returns only the word Captyn. In a browser the list shows ten results at first and loads the rest as the page is scrolled, so scroll to the end before counting dates.",
       "programs": [
         "philly-art-center-qv"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://phillyartcenter.com/afterschool/program-information/locations/fairmount",
+      "how": "fetch",
+      "programs": [
+        "philly-art-center-fairmount"
       ],
       "lists": []
     },
@@ -2205,14 +2310,6 @@
       "lists": []
     },
     {
-      "url": "https://schools.procareconnect.com/form/7417c5d3-b696-426e-913c-b9f0144431bb",
-      "how": "fetch",
-      "programs": [
-        "zhang-sah"
-      ],
-      "lists": []
-    },
-    {
       "url": "https://schuylkillcenter.org/day-off-camps/",
       "how": "fetch",
       "programs": [
@@ -2265,14 +2362,6 @@
       "how": "fetch",
       "programs": [
         "walnut-street-theatre-school"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
-      "how": "fetch",
-      "programs": [
-        "girls-on-the-run"
       ],
       "lists": []
     },
@@ -2835,31 +2924,6 @@
       "how": "fetch",
       "programs": [
         "zazz-dance"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://zhangsah.org/after-school-program/",
-      "how": "fetch",
-      "programs": [
-        "zhang-sah"
-      ],
-      "lists": [
-        {
-          "program": "zhang-sah",
-          "where": "Queen Village, 530 Bainbridge St",
-          "text": "Meredith, Jackson, CCS, Nebinger, McCall, ICS, St. Mary, St. Peter’s, Vare-Washington",
-          "read": "2026-10-06",
-          "how": "browser",
-          "by": "provider"
-        }
-      ]
-    },
-    {
-      "url": "https://zhangsah.org/camps/",
-      "how": "fetch",
-      "programs": [
-        "zhang-sah"
       ],
       "lists": []
     }
