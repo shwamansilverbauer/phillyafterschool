@@ -3794,9 +3794,9 @@
       "childcare"
     ],
     "address": "",
-    "grades": null,
-    "gradeNote": "For Vare-Washington students. Grades not published",
-    "hours": "Before school, and after school until 6:00 pm. The City’s 2024 sheet for the school gives 7:30 am to 6:00 pm; the provider’s page gives before care from 7:00 am.",
+    "grades": "K-8",
+    "gradeNote": "For Vare-Washington students. The City’s program locator names kindergarten through 8th grade.",
+    "hours": "After school 3:00 to 6:00 pm, Monday to Friday, per the City’s after-school program locator for 2026–27, and before school; the provider’s page gives before care from 7:00 am.",
     "days": [
       "mon",
       "tue",
@@ -3852,13 +3852,93 @@
       {
         "label": "Greater Philadelphia Community Alliance: Pre-K to 8",
         "url": "https://www.gpca-phila.org/prek-8"
+      },
+      {
+        "label": "City program locator: GPCA at Vare aftercare",
+        "url": "https://www.phila.gov/ost/program-locator/?resource=ost_113"
       }
     ],
-    "lastVerified": "2026-10-25",
+    "lastVerified": "2026-11-07",
     "schools": {
       "vare-washington": {
         "relation": "onsite",
         "checked": "2026-10-25"
+      }
+    }
+  },
+  {
+    "id": "childs-edey",
+    "name": "Extended Day, Extended Year at Childs",
+    "what": "Free before and after school care in the school building, run by Greater Philadelphia Community Alliance as part of the City’s Extended Day, Extended Year program",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "before care",
+      "morning care",
+      "free",
+      "city",
+      "EDEY",
+      "extended day",
+      "GPCA",
+      "Greater Philadelphia Community Alliance",
+      "childcare"
+    ],
+    "address": "",
+    "grades": "K-8",
+    "gradeNote": "For Childs students. The City’s listing names kindergarten through 8th grade.",
+    "hours": "After school 3:30 to 5:45 pm, and before school 7:30 to 9:00 am, Monday to Friday, per the City’s after-school program locator for 2026–27.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:45 pm",
+    "daysOff": {
+      "summary": "The City’s program locator lists a GPCA winter break mini camp at Childs for students at the school. Its dates and hours weren’t posted when we read it, so ask the site.",
+      "url": "https://www.phila.gov/ost/program-locator/?resource=ost_103",
+      "dates": [],
+      "sources": [
+        {
+          "label": "City of Philadelphia after-school program locator",
+          "url": "https://www.phila.gov/ost/program-locator/"
+        }
+      ],
+      "cost": "Free for students at the school"
+    },
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-468-1645",
+    "email": "",
+    "website": "https://www.gpca-phila.org/",
+    "register": {
+      "how": "school",
+      "url": "",
+      "note": "Registration is required and the program is only for students at Childs. The City’s listing says registration opened August 10, 2026, and gives GPCA’s number (215-468-1645) and the school’s (215-400-7950); ask either."
+    },
+    "note": "Everything here comes from the City of Philadelphia’s after-school program locator entries for GPCA at Childs, read November 7, 2026; the school’s own site doesn’t mention the program. It runs September 1, 2026 to June 8, 2027, with a healthy snack, and no transportation.",
+    "sources": [
+      {
+        "label": "City program locator: GPCA EDEY at Childs Elementary School",
+        "url": "https://www.phila.gov/ost/program-locator/?resource=ost_103"
+      },
+      {
+        "label": "City program locator: Childs EDEY morning care",
+        "url": "https://www.phila.gov/ost/program-locator/?resource=ost_102"
+      },
+      {
+        "label": "Greater Philadelphia Community Alliance",
+        "url": "https://www.gpca-phila.org/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "childs": {
+        "relation": "onsite",
+        "checked": "2026-11-07"
       }
     }
   },
