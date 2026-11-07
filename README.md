@@ -63,6 +63,26 @@ If the data has a problem, step 2 stops and the live site stays as it was. The "
 
 To put the site on a different host, run `node build.mjs` and upload the contents of `dist/`.
 
+## Tests
+
+```
+node tests/run.mjs            everything (about half a minute)
+node tests/run.mjs api        only the files whose name contains "api"
+node tests/run.mjs --list     the list of tests
+```
+
+The tests live in `tests/` and run entirely on the machine they are started on: a copy of the site is built for one
+fixed day (`TODAY` in `tests/lib/harness.mjs`, a Monday in the school year the data describes) and served by PHP's
+own server, with small stand-ins for the services the site talks to (the mail service, Google's sign-in check, the
+push services). Nothing reaches phillyafterschool.org, the real mail service or anyone's inbox. They need `node`,
+`php` (with pdo_sqlite, openssl and curl) and, for the browser tests, Playwright (`PLAYWRIGHT_DIR` if it isn't
+installed globally); without Playwright the browser tests are reported as skipped and the rest run. What is
+covered, how a test is written and what to do when one fails is in `tests/README.md`.
+
+Run them before pushing a change to `build.mjs`, `src/` or the data. A change that breaks one of the site's own
+rules (a child's name readable on disk, a price for parents, an analytics call on a quiet page, the support line
+missing) fails a test, not a reader.
+
 ## Building for another day (tests only)
 
 `PAS_TODAY=2026-10-12 node build.mjs` builds the site as if today were that day, and says so as it runs. It exists
@@ -732,10 +752,10 @@ own key.
   those addresses out. When the last device goes, the entry goes and the emails start again by themselves.
 - **The service worker** shows a notification and opens a page when one is tapped, and nothing else: it keeps no
   copy of the site and doesn't touch page requests. A notification can only open an address on this site.
-- **Testing.** The tests play the notification service themselves: a stand-in on the test machine that receives
-  what the site posts, opens it with a device's keys and checks the signature, and a comparison over every morning
-  in the feed between what the site would tell a phone and what the email job would send. `PAS_TEST_PUSH` (set
-  only on the test machine) lets the stand-in's address through and lets a test choose the day.
+- **Testing.** `PAS_TEST_PUSH` (set only on the test machine; `tests/lib/harness.mjs` sets it) lets a stand-in
+  notification service's address through and lets a test choose the day. The stand-in receives what the site
+  posts; a test of the push payloads themselves (opening one with a device's keys, and comparing every morning in
+  the feed with what the email job would send) is still to be written, see `tests/README.md`.
 - **Not checked from here:** a real phone. Whether the host's PHP can make the key is answered by opening
   `groups/api.php?action=push_key`.
 
@@ -948,7 +968,7 @@ tour of the planner with one button, "Create a free account" (`planShow()`), so 
 - **What the pages say.** The privacy page, the terms' "Children's information", the sign-up page and each planner's
   intro say plans are kept in the profile while signed in. If this is ever made a choice again, those are the places
   to change (`privacyUpdated` and `termsUpdated` in `site.config.json` are the dates shown).
-- Tests: `auto.js` (weeks), `sumprof.js` (summer, both choices), `todo.js` (days off), `g6.js`, `wk2.js`.
+- Tests: `tests/cases/21-web-planners.mjs` (each planner keeps itself in the profile and comes back on another device) and `tests/cases/11-api-plans.mjs` (what the server keeps, and that none of it is readable on disk).
 
 ### Who's open, as the planner's third view ("Grid")
 
@@ -1682,8 +1702,8 @@ None of the three signed-in pages is a long scroll. The code is in `groups.js`.
   when another listing has a website at the same address. Someone signed in with nothing claimed sees the page as
   before. Opening a tab is counted as a `pas_claim` step (`tab_update` and so on), with nothing about the listing.
 - **On the profile**, "What's new" shows the two newest items and a button for the rest.
-- **Every part at once.** `sessionStorage` `pas-tabs` = `all` shows every tab's parts on one page. The browser tests
-  that were written before the tabs start that way; `tabs.js` tests the tabs themselves.
+- **Every part at once.** `sessionStorage` `pas-tabs` = `all` shows every tab's parts on one page, for a test or a
+  look at everything at once; `tests/cases/22-web-account.mjs` tests the tabs themselves.
 
 ## My profile and the account page
 
