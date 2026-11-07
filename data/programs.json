@@ -1293,6 +1293,82 @@
     }
   },
   {
+    "id": "francisville-rec",
+    "name": "Francisville Playground & Rec Center",
+    "what": "City rec center after-school program that picks up from Bache-Martin, per the school’s own page",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "rec center",
+      "Parks and Recreation",
+      "free",
+      "low cost",
+      "Francisville",
+      "Fairmount",
+      "Bache-Martin",
+      "pickup"
+    ],
+    "address": "1737 Francis St (18th and Francis)",
+    "neighborhoods": [
+      "Fairmount"
+    ],
+    "grades": "K-5",
+    "gradeNote": "Ages 6–12, per Bache-Martin’s page.",
+    "hours": "3:00–6:00 pm, Monday to Friday, plus half days, per Bache-Martin’s page",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not posted. Bache-Martin’s page gives no price, and the City’s finder has no after-school entry for Francisville this year; ask the center.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-2762",
+    "email": "FrancisvilleRecCenter@phila.gov",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or email the center. Bache-Martin’s page says slots are limited and go first come, first served.",
+      "nextTerm": ""
+    },
+    "note": "Everything here is from Bache-Martin’s own after-school page, which lists the Francisville After School Program among the programs that collect its students, and from the City’s record of the rec center (address and phone). The City’s Parks & Rec finder has no after-school entry for Francisville this year, so confirm with the center that it is running.",
+    "sources": [
+      {
+        "label": "Bache-Martin after-school programs (the school’s own page)",
+        "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+      },
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "pickup",
+        "distance": "about half a mile east, at 18th and Francis",
+        "note": "Bache-Martin’s own after-school page says the Francisville After School Program picks up from the school, for K–5, Monday to Friday 3 to 6 pm and half days. The City’s finder has no entry for it this year, so call before counting on it.",
+        "sources": [
+          {
+            "label": "Bache-Martin after-school programs",
+            "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
     "id": "clemente-playground",
     "name": "Clemente Playground",
     "what": "City rec center after-school program: homework help, gym and activities",
