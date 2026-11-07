@@ -410,6 +410,16 @@ Fields worth knowing:
 
 ## Add a school
 
+0. **Sweep the neighborhood first** (standing rule since November 7, 2026, after Childs and Bache-Martin went up with
+   one pickup each): `node scripts/sweep.mjs <id or street address>` prints every listed program within a mile and
+   its relation to the school, every pickup list on the site that names the school (aliases included), and Parks &
+   Rec's after-school programs within a mile from the City's own program data (phl.carto.com, the data behind the
+   Parks & Rec finder: facility, ages, fee, registration status and the year the entry was made). Then the reads it
+   can't do: the City's OST program locator in a browser (phila.gov/ost/program-locator; each entry has its own
+   `?resource=ost_NNN` link to cite), the school's own site and after-school page, each provider's own page for
+   anything found there or in a third-party roundup (phillyfamily.com keeps one), and the families who asked for
+   the school and the school office ("who picks up here, and who runs on site?"). Only a provider's own page or
+   word, the school's own page (shown as the school's word) or the City's own listing goes on the site.
 1. Add a record to `data/schools.json` (copy Nebinger's and change it). The `id` becomes the URL: `"meredith"` gives `/meredith/`. Leave `dismissal` out when the school doesn't post one (the page then says so and tells families to ask); `dismissalNote` still shows. `aliases` lists the other names providers use for the school ("Jackson" for Coppin, "Vare Washington" without the hyphen), so the build can tell whether a provider's pickup list names it. Optional fields: `dismissalNote` (staggered dismissal times), `checkedNoPickup` (providers checked that don't serve the school) and `alsoListed` (programs the school names that haven't been confirmed yet).
 2. In `data/programs.json`, add that school's `id` under `schools` for every program that serves it. Most providers are already there; they just need the new tag.
 3. Add records for programs that are new (the school's own clubs and on-site care).
