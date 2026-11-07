@@ -4,11 +4,11 @@
     "pages": 174,
     "pagesNeedingABrowser": 9,
     "pagesNeedingAPerson": 5,
-    "links": 137,
-    "pickupLinks": 80,
+    "links": 153,
+    "pickupLinks": 81,
     "pickupOnAStoredList": 70,
     "pickupFromAThirdPartyList": 4,
-    "pickupOnItsOwnSource": 6,
+    "pickupOnItsOwnSource": 7,
     "pickupWithNothingBehindIt": 0,
     "pickupNotOnTheProvidersList": 1,
     "oldestCheck": "2026-10-05"
@@ -818,12 +818,6 @@
       "checked": "2026-10-07"
     },
     {
-      "program": "shot-tower-rec",
-      "school": "nebinger",
-      "relation": "nearby",
-      "checked": "2026-10-07"
-    },
-    {
       "program": "philadelphia-dance-academy",
       "school": "mccall",
       "relation": "nearby",
@@ -1279,15 +1273,69 @@
       }
     },
     {
+      "program": "capitolo-playground",
+      "school": "childs",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "capitolo-playground",
+      "school": "coppin",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "chew-playground",
+      "school": "childs",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "chew-playground",
+      "school": "marian-anderson",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "chew-playground",
+      "school": "stanton",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
       "program": "childs-edey",
       "school": "childs",
       "relation": "onsite",
       "checked": "2026-11-07"
     },
     {
+      "program": "clemente-playground",
+      "school": "bache-martin",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "columbus-square-rec",
+      "school": "childs",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "disilvestro-playground",
+      "school": "childs",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
       "program": "girls-on-the-run",
       "school": "bache-martin",
       "relation": "onsite",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "hawthorne-cultural-center",
+      "school": "childs",
+      "relation": "nearby",
       "checked": "2026-11-07"
     },
     {
@@ -1304,6 +1352,30 @@
       }
     },
     {
+      "program": "marian-anderson-rec",
+      "school": "childs",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "marian-anderson-rec",
+      "school": "marian-anderson",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "marian-anderson-rec",
+      "school": "stanton",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "markward-playground",
+      "school": "marian-anderson",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
       "program": "philly-art-center-fairmount",
       "school": "bache-martin",
       "relation": "pickup",
@@ -1315,6 +1387,31 @@
         "how": "fetch",
         "by": "provider"
       }
+    },
+    {
+      "program": "rumph-rec",
+      "school": "lingelbach",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "shot-tower-rec",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-11-07",
+      "basis": "own-source"
+    },
+    {
+      "program": "wharton-square-playground",
+      "school": "childs",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "wharton-square-playground",
+      "school": "marian-anderson",
+      "relation": "nearby",
+      "checked": "2026-11-07"
     },
     {
       "program": "zhang-sah-mt-airy",
@@ -1336,6 +1433,14 @@
       "how": "fetch",
       "programs": [
         "shot-tower-rec",
+        "chew-playground",
+        "wharton-square-playground",
+        "disilvestro-playground",
+        "clemente-playground",
+        "rumph-rec",
+        "marian-anderson-rec",
+        "capitolo-playground",
+        "markward-playground",
         "columbus-square-rec",
         "hawthorne-cultural-center",
         "starr-garden-rec",
@@ -1350,6 +1455,14 @@
       "why": "A JavaScript app: a plain fetch returns no listings.",
       "programs": [
         "shot-tower-rec",
+        "chew-playground",
+        "wharton-square-playground",
+        "disilvestro-playground",
+        "clemente-playground",
+        "rumph-rec",
+        "marian-anderson-rec",
+        "capitolo-playground",
+        "markward-playground",
         "columbus-square-rec",
         "hawthorne-cultural-center",
         "starr-garden-rec",

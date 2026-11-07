@@ -125,6 +125,62 @@
       ]
     },
     {
+      "id": "chew-playground",
+      "name": "Chew Playground",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "wharton-square-playground",
+      "name": "Wharton Square Playground",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "disilvestro-playground",
+      "name": "DiSilvestro Playground",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "clemente-playground",
+      "name": "Clemente Playground",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "rumph-rec",
+      "name": "Rumph Recreation Center",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "marian-anderson-rec",
+      "name": "Marian Anderson Recreation Center",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "capitolo-playground",
+      "name": "Capitolo Playground",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "markward-playground",
+      "name": "Markward Playground",
+      "parts": [
+        "after"
+      ]
+    },
+    {
       "id": "philly-inmovement",
       "name": "Philly InMovement: MOVE After School",
       "parts": [
@@ -929,7 +985,7 @@
       ],
       "when": "New",
       "title": "Lingelbach now has a page",
-      "text": "You asked to be told. 3 programs are listed for Lingelbach so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "text": "You asked to be told. 4 programs are listed for Lingelbach so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/lingelbach/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },
@@ -946,7 +1002,7 @@
       ],
       "when": "New",
       "title": "Marian Anderson now has a page",
-      "text": "You asked to be told. 5 programs are listed for Marian Anderson so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "text": "You asked to be told. 9 programs are listed for Marian Anderson so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/marian-anderson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },
@@ -963,7 +1019,7 @@
       ],
       "when": "New",
       "title": "Bache-Martin now has a page",
-      "text": "You asked to be told. 2 programs are listed for Bache-Martin so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "text": "You asked to be told. 3 programs are listed for Bache-Martin so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/bache-martin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },
@@ -980,7 +1036,7 @@
       ],
       "when": "New",
       "title": "Childs now has a page",
-      "text": "You asked to be told. 2 programs are listed for Childs so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "text": "You asked to be told. 9 programs are listed for Childs so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/childs/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },
