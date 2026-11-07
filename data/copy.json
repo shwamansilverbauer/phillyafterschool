@@ -38,12 +38,6 @@
     "on": "2026-10-13",
     "by": "Rachael"
   },
-  "7f9b6db0a1": {
-    "was": "Hours, cost, pickup and how to register, from each program’s own website",
-    "now": "Hours, cost, pickup and how to register, from each program’s website",
-    "on": "2026-10-13",
-    "by": "Rachael"
-  },
   "d634af0382": {
     "was": "Create your free account",
     "now": "After school's cooler with a free account",
@@ -59,12 +53,6 @@
   "191885e234": {
     "was": "What an account gives you",
     "now": "Family admin, streamlined.",
-    "on": "2026-10-19",
-    "by": "Rachael"
-  },
-  "733d535919": {
-    "was": "What an account keeps, and who sees it",
-    "now": "You make the plans. You decide who sees them.",
     "on": "2026-10-19",
     "by": "Rachael"
   },
@@ -301,18 +289,6 @@
     "on": "2026-10-20",
     "by": "the mrs."
   },
-  "24463c5f78": {
-    "was": "Who built this",
-    "now": "Who's driving this thing?",
-    "on": "2026-10-20",
-    "by": "the mrs."
-  },
-  "93c7200926": {
-    "was": "Every program that’s there, picks up or is nearby",
-    "now": "See aftercare programs offered on-site or nearby.",
-    "on": "2026-10-21",
-    "by": "the mrs."
-  },
   "e24b715bf6": {
     "was": "The school week, days off and the summer",
     "now": "Plan weekdays, days off, and summer in one place",
@@ -329,18 +305,6 @@
     "was": "Run an after-school program, a weekend class or a camp? Make sure parents see it right.",
     "now": "",
     "on": "2026-11-04",
-    "by": "the mrs."
-  },
-  "ccee7d0831": {
-    "was": "The week, the days off and the summer, in one place",
-    "now": "The week, the days off, and the summer in one place",
-    "on": "2026-10-20",
-    "by": "the mrs."
-  },
-  "d6e1878467": {
-    "was": "Days off, camp weeks, sign-up dates and your own dates on one calendar, month by month.",
-    "now": "Days off, camp weeks, sign-up dates, and your own dates on one calendar, month by month.",
-    "on": "2026-10-20",
     "by": "the mrs."
   },
   "4817a9b383": {
@@ -426,12 +390,6 @@
     "on": "2026-10-21",
     "by": "Josh"
   },
-  "ec8bceb5f8": {
-    "was": "See what’s at your child’s school, what picks up from it and what’s nearby",
-    "now": "See what picks up from your child’s school and what’s nearby",
-    "on": "2026-10-21",
-    "by": "Josh"
-  },
   "1ebc5e8730": {
     "was": "See all {n}, A to Z",
     "now": "See all programs",
@@ -441,36 +399,6 @@
   "4b4006d63b": {
     "was": "Saturday and Sunday classes: music, dance, art, skating, science. There’s no school pickup, so any child can sign up.",
     "now": "Saturday/Sunday classes: music, dance, art, science and more!",
-    "on": "2026-10-21",
-    "by": "Josh"
-  },
-  "cc8a03bb87": {
-    "was": "{sat} run on Saturdays, {sun} on Sundays",
-    "now": "Filter by saturday or sunday",
-    "on": "2026-10-21",
-    "by": "Josh"
-  },
-  "5d34cf21a4": {
-    "was": "Sorted by part of the city, so you can start close to home",
-    "now": "Sorted by part of the city, and a map filter so you can start close to home",
-    "on": "2026-10-21",
-    "by": "Josh"
-  },
-  "126664c498": {
-    "was": "Ages, weeks, hours and prices, from each camp’s own website",
-    "now": "Ages, weeks, hours and prices",
-    "on": "2026-10-21",
-    "by": "Josh"
-  },
-  "5d03839326": {
-    "was": "Camps usually post next summer between December and March",
-    "now": "Follow programs and get notified as information updates",
-    "on": "2026-10-21",
-    "by": "Josh"
-  },
-  "ac4714bc99": {
-    "was": "Narrow the list by type, grade, neighborhood or day of the week",
-    "now": "Filter by type, grade, neighborhood or day of the week",
     "on": "2026-10-21",
     "by": "Josh"
   },
@@ -635,12 +563,6 @@
     "on": "2026-10-21",
     "by": "Josh"
   },
-  "ae826cd301": {
-    "was": "Roll a themed week",
-    "now": "Not sure where to start? Roll a themed week!",
-    "on": "2026-10-21",
-    "by": "Josh"
-  },
   "59ba164e7a": {
     "was": "Programs by what they do",
     "now": "Programs by category",
@@ -656,24 +578,6 @@
   "5b2fc57ac3": {
     "was": "How listings are checked",
     "now": "We made this because we needed it",
-    "on": "2026-10-21",
-    "by": "Josh"
-  },
-  "eb164ad365": {
-    "was": "Each listing comes from the provider’s own public pages, the school’s site, or city program data. The sources are linked on every card.",
-    "now": "Josh & Rachael Silverbauer are parents of two in Philadelphia.",
-    "on": "2026-10-21",
-    "by": "Josh"
-  },
-  "3538dbc094": {
-    "was": "Every card shows the date it was last checked. When a detail could not be confirmed, the card says so in a yellow note.",
-    "now": "Planning afterschool was super annoying, and we wanted to make it easier for the Philadelphia Parent Community. So we made this.",
-    "on": "2026-10-21",
-    "by": "Josh"
-  },
-  "168197886b": {
-    "was": "A program is marked “picks up” only when a source names the school. Otherwise it is listed as nearby.",
-    "now": "Now, it's better!",
     "on": "2026-10-21",
     "by": "Josh"
   },
@@ -782,21 +686,9 @@
     "on": "2026-10-21",
     "by": "Josh"
   },
-  "aecdd1c338": {
-    "was": "Your profile keeps the plans you make: a child’s first name with their week, days off and summer, and your school. No last names, addresses, notes or photos.",
-    "now": "Your profile keeps the plans you make: a child’s first name with their week, days off and summer, and your school.",
-    "on": "2026-10-21",
-    "by": "Josh"
-  },
   "754d6bda83": {
     "was": "What’s based near home, and who comes to pick up.",
     "now": "What programs are near your home.",
-    "on": "2026-10-21",
-    "by": "Josh"
-  },
-  "b38ad3dcbe": {
-    "was": "More than weekday afternoons",
-    "now": "More than just weekday afternoons",
     "on": "2026-10-21",
     "by": "Josh"
   },
@@ -857,12 +749,6 @@
   "bf38cb71fc": {
     "was": "{n} weeks between the last day of school and Labor Day. See which camps run each week, and line up your own summer.",
     "now": "{n} weeks between the last day of school and Labor Day. See which camps run each week, and line up your summer.",
-    "on": "2026-10-21",
-    "by": "Josh"
-  },
-  "c432e49f70": {
-    "was": "A month at a time: days off, camp weeks, sign-up dates and the dates you add yourself.",
-    "now": "Plan your days off, camp weeks, sign-up dates and the dates you add yourself.",
     "on": "2026-10-21",
     "by": "Josh"
   },
@@ -990,18 +876,6 @@
     "on": "2026-10-21",
     "by": "Josh"
   },
-  "0ee995ea56": {
-    "was": "Your plans, your kids’ calendar and who you share with",
-    "now": "Manage your profile, favorites, and sharing.",
-    "on": "2026-10-21",
-    "by": "the mrs."
-  },
-  "5a85ffc912": {
-    "was": "See what works with your child’s school, then put the week together.",
-    "now": "Find options near your kid's school, and build a schedule that actually works with yours.",
-    "on": "2026-10-21",
-    "by": "the mrs."
-  },
   "5f3a66b696": {
     "was": "Not listed yet? Send its name and website",
     "now": "Want in? Let's get you added to the site.",
@@ -1035,21 +909,9 @@
     "now": "Here's how we use the info you're trusting us with.",
     "on": "2026-11-05"
   },
-  "a2b36250b1": {
-    "was": "Why you need an account:",
-    "now": "",
-    "on": "2026-11-06",
-    "by": "Josh"
-  },
-  "7b9fdbefaf": {
-    "was": "to keep your plans, so they’re there on your phone and your laptop.",
-    "now": "",
-    "on": "2026-11-06",
-    "by": "Josh"
-  },
-  "7122cada87": {
-    "was": "we don’t. It’s encrypted and yours alone, with no public link and no public page, and nobody sees it unless you share a week with someone by name.",
-    "now": "we don’t. It’s encrypted and there's no public link and no public page. No-one can access it unless you share a week with someone by email.",
+  "6cdb830dcd": {
+    "was": "we don’t. It’s encrypted and yours alone, with no public link and no public page, and nobody sees it unless you share it with someone by name.",
+    "now": "we don’t. It’s encrypted and there's no public link and no public page. No-one can access it unless you share it with someone by email.",
     "on": "2026-11-06",
     "by": "Josh"
   }
