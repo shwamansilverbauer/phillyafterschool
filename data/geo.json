@@ -105,9 +105,17 @@
    39.93,
    -75.1565
   ],
+  "1599 wharton st": [
+   39.93461,
+   -75.17074
+  ],
   "1626 e passyunk ave": [
    39.92955,
    -75.16394
+  ],
+  "1651 benjamin franklin pkwy": [
+   39.9576,
+   -75.1694
   ],
   "1724 christian st": [
    39.94062,
@@ -180,6 +188,10 @@
   "219 cuthbert st": [
    39.95134,
    -75.14359
+  ],
+  "2201 brown st": [
+   39.96965,
+   -75.17392
   ],
   "222 n 20th st": [
    39.95778,
@@ -412,13 +424,9 @@
   "98 chamounix dr": [
    39.9935,
    -75.21458
-  ],
-  "1651 benjamin franklin pkwy": [
-   39.9576,
-   -75.1694
   ]
  },
- "checked": "2026-11-06",
+ "checked": "2026-11-07",
  "byHand": [
   "2600 benjamin franklin pkwy",
   "211 s columbus blvd",

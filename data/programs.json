@@ -255,6 +255,17 @@
           }
         ],
         "checked": "2026-10-10"
+      },
+      "bache-martin": {
+        "relation": "onsite",
+        "note": "Bache-Martin’s own after-school page lists Girls on the Run on Mondays and Wednesdays, 3:15–4:45 pm, for girls in grades 3–5, and Heart & Sole for grades 6–8 on Tuesdays and Thursdays. The page’s dates are from fall 2025, so confirm this season’s.",
+        "sources": [
+          {
+            "label": "Bache-Martin after-school programs",
+            "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+          }
+        ],
+        "checked": "2026-11-07"
       }
     }
   },
@@ -3647,6 +3658,19 @@
           }
         ],
         "checked": "2026-10-25"
+      },
+      "childs": {
+        "relation": "pickup",
+        "address": "2401 Washington Ave",
+        "distance": "about three-quarters of a mile northwest, at 24th and Washington",
+        "note": "Makom’s page lists GW Childs Elementary School among its pickup schools. It needs at least four children from a school, and groups from more than a mile away travel by SEPTA bus with a Makom educator.",
+        "sources": [
+          {
+            "label": "Makom afterschool enrichment",
+            "url": "https://makomcommunity.org/afterschool-enrichment/"
+          }
+        ],
+        "checked": "2026-11-07"
       }
     },
     "pickupLists": [
