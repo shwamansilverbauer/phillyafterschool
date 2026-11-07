@@ -1,7 +1,7 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 174,
+    "pages": 175,
     "pagesNeedingABrowser": 9,
     "pagesNeedingAPerson": 5,
     "links": 153,
@@ -2181,6 +2181,22 @@
         "pafa-saturday-art"
       ],
       "lists": []
+    },
+    {
+      "url": "https://parentinfantcenter.org/programs/after-school-center",
+      "how": "fetch",
+      "programs": [
+        "parent-infant-center"
+      ],
+      "lists": [
+        {
+          "program": "parent-infant-center",
+          "text": "Samuel Powel School (van, limited space); Lea School and Penn Alexander School (teachers walk children over)",
+          "read": "2026-11-07",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
     },
     {
       "url": "https://pennsportschoolofdance.com/class-schedule/",

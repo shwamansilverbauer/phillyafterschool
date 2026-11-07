@@ -214,6 +214,13 @@
       ]
     },
     {
+      "id": "parent-infant-center",
+      "name": "Parent Infant Center After School Center",
+      "parts": [
+        "off"
+      ]
+    },
+    {
       "id": "butchers-sew-shop",
       "name": "Butcher’s Sew Shop Junior",
       "parts": [

@@ -2272,6 +2272,79 @@
     ]
   },
   {
+    "id": "parent-infant-center",
+    "name": "Parent Infant Center After School Center",
+    "what": "Aftercare at a child-care center in University City, with walking pickup from Lea and Penn Alexander and a van from Powel",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "childcare",
+      "PIC",
+      "University City",
+      "Lea",
+      "Penn Alexander",
+      "Powel",
+      "days off"
+    ],
+    "address": "4205 Spruce St",
+    "neighborhoods": [
+      "University City"
+    ],
+    "grades": "K-4",
+    "gradeNote": "",
+    "hours": "3:00–6:00 pm, Monday to Friday. Part days on scheduled half days and weather closures; full days on District holidays.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Enroll for 3, 4 or 5 days a week.",
+    "pickupBy": "6:00 pm",
+    "daysOff": {
+      "summary": "Full-day care on School District holidays, with a holiday-only enrollment option. Dates and hours aren’t posted on the program page; ask the center.",
+      "url": "https://parentinfantcenter.org/programs/after-school-center",
+      "dates": [],
+      "sources": [
+        {
+          "label": "PIC After School Center",
+          "url": "https://parentinfantcenter.org/programs/after-school-center"
+        }
+      ]
+    },
+    "cost": "Tuition is on the center’s Tuition and Affordability page, not the program page; it says to expect an increase over the current rate. $35 one-time application fee.",
+    "price": "paid",
+    "phone": "215-222-5480",
+    "email": "atorrence@parentinfantcenter.org",
+    "website": "https://parentinfantcenter.org/programs/after-school-center",
+    "register": {
+      "how": "online",
+      "url": "https://parentinfantcenter.org/programs/after-school-center",
+      "note": "Applications go through Brightwheel (the “After School 26–27 application” link on the page), first come, first served. Current PIC families get preference through early March; then anyone can enroll.",
+      "nextTerm": ""
+    },
+    "note": "Listed for Lea, Penn Alexander and Powel, which don’t have pages here yet. Teachers walk children over from Lea and Penn Alexander; the Powel van has very limited space and isn’t guaranteed.",
+    "sources": [
+      {
+        "label": "PIC After School Center",
+        "url": "https://parentinfantcenter.org/programs/after-school-center"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {},
+    "pickupLists": [
+      {
+        "text": "Samuel Powel School (van, limited space); Lea School and Penn Alexander School (teachers walk children over)",
+        "url": "https://parentinfantcenter.org/programs/after-school-center",
+        "read": "2026-11-07",
+        "how": "fetch"
+      }
+    ]
+  },
+  {
     "id": "butchers-sew-shop",
     "name": "Butcher’s Sew Shop Junior",
     "what": "Sewing classes in Bella Vista",
