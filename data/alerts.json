@@ -324,6 +324,14 @@
       ]
     },
     {
+      "id": "childs-edey",
+      "name": "Extended Day, Extended Year at Childs",
+      "parts": [
+        "after",
+        "off"
+      ]
+    },
+    {
       "id": "vare-washington-clubs",
       "name": "School clubs and teams at Vare-Washington",
       "parts": [
@@ -972,7 +980,7 @@
       ],
       "when": "New",
       "title": "Childs now has a page",
-      "text": "You asked to be told. One program is listed for Childs so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "text": "You asked to be told. 2 programs are listed for Childs so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/childs/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },

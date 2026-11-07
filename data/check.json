@@ -1,10 +1,10 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 169,
-    "pagesNeedingABrowser": 5,
+    "pages": 174,
+    "pagesNeedingABrowser": 9,
     "pagesNeedingAPerson": 5,
-    "links": 136,
+    "links": 137,
     "pickupLinks": 80,
     "pickupOnAStoredList": 70,
     "pickupFromAThirdPartyList": 4,
@@ -1279,6 +1279,12 @@
       }
     },
     {
+      "program": "childs-edey",
+      "school": "childs",
+      "relation": "onsite",
+      "checked": "2026-11-07"
+    },
+    {
       "program": "girls-on-the-run",
       "school": "bache-martin",
       "relation": "onsite",
@@ -2507,6 +2513,14 @@
       "lists": []
     },
     {
+      "url": "https://www.gpca-phila.org/",
+      "how": "fetch",
+      "programs": [
+        "childs-edey"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.gpca-phila.org/prek-8",
       "how": "fetch",
       "programs": [
@@ -2672,6 +2686,42 @@
     {
       "url": "https://www.phila.gov/media/20240924172821/EDEY-One-pager-Vare.pdf",
       "how": "fetch",
+      "programs": [
+        "vare-washington-edey"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "childs-edey"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?resource=ost_102",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "childs-edey"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?resource=ost_103",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "childs-edey"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?resource=ost_113",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
       "programs": [
         "vare-washington-edey"
       ],
