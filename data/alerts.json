@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-11-06",
+  "generated": "2026-11-07",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -48,6 +48,14 @@
     {
       "id": "lingelbach",
       "name": "Lingelbach"
+    },
+    {
+      "id": "childs",
+      "name": "Childs"
+    },
+    {
+      "id": "bache-martin",
+      "name": "Bache-Martin"
     }
   ],
   "programs": [
@@ -920,6 +928,40 @@
       "button": "See the page"
     },
     {
+      "id": "added-bache-martin",
+      "kind": "added",
+      "date": "2026-11-07",
+      "sendOn": "2026-11-07",
+      "expires": "2026-11-09",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "bache-martin-school"
+      ],
+      "when": "New",
+      "title": "Bache-Martin now has a page",
+      "text": "You asked to be told. One program is listed for Bache-Martin so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/bache-martin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-childs",
+      "kind": "added",
+      "date": "2026-11-07",
+      "sendOn": "2026-11-07",
+      "expires": "2026-11-09",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "george-w-childs-school"
+      ],
+      "when": "New",
+      "title": "Childs now has a page",
+      "text": "You asked to be told. One program is listed for Childs so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/childs/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
       "id": "camp-arden-drama-school-2026-11-11",
       "kind": "camp",
       "part": "off",
@@ -1205,6 +1247,54 @@
       "text": "16 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Hudson Table, Makom Community, Mister John’s Music, MoveMakers Philly, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/veterans-day-2026-11-11/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "week-bache-martin-2026-11-09",
+      "kind": "week",
+      "date": "2026-11-13",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-11",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "bache-martin"
+      ],
+      "when": "Week of November 9",
+      "title": "This week at Bache-Martin",
+      "text": "Wednesday: No school: Veterans Day.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Veterans Day"
+        }
+      ],
+      "first": "Wednesday: no school, Veterans Day",
+      "url": "https://phillyafterschool.org/bache-martin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Bache-Martin’s week"
+    },
+    {
+      "id": "week-childs-2026-11-09",
+      "kind": "week",
+      "date": "2026-11-13",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-11",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "childs"
+      ],
+      "when": "Week of November 9",
+      "title": "This week at Childs",
+      "text": "Wednesday: No school: Veterans Day.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Veterans Day"
+        }
+      ],
+      "first": "Wednesday: no school, Veterans Day",
+      "url": "https://phillyafterschool.org/childs/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Childs’s week"
     },
     {
       "id": "week-columbus-charter-2026-11-09",
@@ -1750,6 +1840,54 @@
       "button": "See who’s open"
     },
     {
+      "id": "week-bache-martin-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "bache-martin"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Bache-Martin",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/bache-martin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Bache-Martin’s week"
+    },
+    {
+      "id": "week-childs-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "childs"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Childs",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/childs/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Childs’s week"
+    },
+    {
       "id": "week-columbus-charter-2026-11-16",
       "kind": "week",
       "date": "2026-11-20",
@@ -2235,6 +2373,446 @@
       "text": "One listed program has posted a camp: Elite Sports Factory.",
       "url": "https://phillyafterschool.org/days-off/thanksgiving-break-2026-11-26/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "week-bache-martin-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "bache-martin"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Bache-Martin",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/bache-martin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Bache-Martin’s week"
+    },
+    {
+      "id": "week-childs-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "childs"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Childs",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/childs/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Childs’s week"
+    },
+    {
+      "id": "week-columbus-charter-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "columbus-charter"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Columbus Charter",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/columbus-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Columbus Charter’s week"
+    },
+    {
+      "id": "week-coppin-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "coppin"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Coppin",
+      "text": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students. Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Tuesday",
+          "what": "Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students"
+        },
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students; Wednesday: no school, Staff professional development",
+      "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Coppin’s week"
+    },
+    {
+      "id": "week-kirkbride-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "kirkbride"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Kirkbride",
+      "text": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students. Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Tuesday",
+          "what": "Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students"
+        },
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students; Wednesday: no school, Staff professional development",
+      "url": "https://phillyafterschool.org/kirkbride/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Kirkbride’s week"
+    },
+    {
+      "id": "week-lingelbach-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "lingelbach"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Lingelbach",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/lingelbach/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Lingelbach’s week"
+    },
+    {
+      "id": "week-marian-anderson-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "marian-anderson"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Marian Anderson",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/marian-anderson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Marian Anderson’s week"
+    },
+    {
+      "id": "week-mccall-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mccall"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at McCall",
+      "text": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students. Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Tuesday",
+          "what": "Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students"
+        },
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students; Wednesday: no school, Staff professional development",
+      "url": "https://phillyafterschool.org/mccall/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See McCall’s week"
+    },
+    {
+      "id": "week-meredith-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "meredith"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Meredith",
+      "text": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students. Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Tuesday",
+          "what": "Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students"
+        },
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students; Wednesday: no school, Staff professional development",
+      "url": "https://phillyafterschool.org/meredith/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Meredith’s week"
+    },
+    {
+      "id": "week-nebinger-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "nebinger"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Nebinger",
+      "text": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students. Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Tuesday",
+          "what": "Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students"
+        },
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students; Wednesday: no school, Staff professional development",
+      "url": "https://phillyafterschool.org/nebinger/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Nebinger’s week"
+    },
+    {
+      "id": "week-southwark-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "southwark"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Southwark",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/southwark/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Southwark’s week"
+    },
+    {
+      "id": "week-stanton-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "stanton"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Stanton",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/stanton/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Stanton’s week"
+    },
+    {
+      "id": "week-vare-washington-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "vare-washington"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Vare-Washington",
+      "text": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students. Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Tuesday",
+          "what": "Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students"
+        },
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students; Wednesday: no school, Staff professional development",
+      "url": "https://phillyafterschool.org/vare-washington/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Vare-Washington’s week"
     },
     {
       "id": "reg-butchers-sew-shop-2026-11-30",

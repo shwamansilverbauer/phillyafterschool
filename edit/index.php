@@ -389,6 +389,8 @@ if (!edit_signed_in()) {
     <li><a href="../columbus-charter/">Columbus Charter page</a></li>
     <li><a href="../marian-anderson/">Marian Anderson page</a></li>
     <li><a href="../lingelbach/">Lingelbach page</a></li>
+    <li><a href="../childs/">Childs page</a></li>
+    <li><a href="../bache-martin/">Bache-Martin page</a></li>
     <li><a href="../types/">Program types</a></li>
     <li><a href="../types/aftercare/">A type page (Aftercare)</a></li>
     <li><a href="../by-day/">By day of the week</a></li>

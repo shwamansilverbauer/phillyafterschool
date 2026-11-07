@@ -366,5 +366,70 @@
       "Lingelbach is the site’s first school in Germantown, added because families asked for it. If you know a program that serves it and isn’t here, send it in and it goes on this page."
     ],
     "dismissal": "2:54 pm"
+  },
+  {
+    "id": "childs",
+    "name": "George W. Childs School",
+    "shortName": "Childs",
+    "aliases": [
+      "G.W. Childs",
+      "GW Childs Elementary",
+      "George W. Childs Elementary",
+      "Childs Elementary"
+    ],
+    "address": "1599 Wharton St, Philadelphia, PA 19146",
+    "neighborhood": "Point Breeze",
+    "grades": "PK-8",
+    "dismissal": "3:39 pm",
+    "phone": "215-400-7950",
+    "website": "https://childs.philasd.org/",
+    "lastReviewed": "2026-11-07",
+    "added": "2026-11-07",
+    "notes": [
+      "The school’s own site gives the school day as 9:00 am to 3:39 pm, pre-kindergarten through 8th grade. It names no aftercare of its own and points families to the City’s Out-of-School Time programs.",
+      "Childs is the site’s first school in Point Breeze, added because families asked for it. If you know a program that serves it and isn’t here, send it in and it goes on this page."
+    ],
+    "alsoListed": {
+      "title": "On the school’s own site",
+      "intro": "Childs’s home page names these clubs and arts programs, without saying when they meet or whether they run after school. Ask the office.",
+      "items": [
+        "Clubs and sports: Game Club, Mindset of Champions (gaming), Run Philly Style, net sports and volleyball.",
+        "Arts: Dance Philly Classrooms (grade 5), instrumental music lessons on Tuesdays and Fridays, Koresh Dance (grade 3) and Rock Reach Dance (grade 4)."
+      ]
+    }
+  },
+  {
+    "id": "bache-martin",
+    "name": "Bache-Martin School",
+    "shortName": "Bache-Martin",
+    "aliases": [
+      "Bache Martin",
+      "Bache-Martin Elementary",
+      "Alexander Dallas Bache School",
+      "Bache-Martin K-8"
+    ],
+    "address": "2201 Brown St, Philadelphia, PA 19130",
+    "neighborhood": "Fairmount",
+    "grades": "K-8",
+    "dismissalNote": "the school’s site posts no bell schedule; its after-school page has clubs starting at 3:00 pm, one at 2:54",
+    "phone": "215-400-7550",
+    "website": "https://www.bachemartin.org/",
+    "lastReviewed": "2026-11-07",
+    "added": "2026-11-07",
+    "notes": [
+      "The school’s own after-school page lists what runs on site and which programs collect children from the school, and it is the source for everything here. It mentions an aftercare in the cafeteria until 5:30 pm on Soccer Shots days without saying who runs it or how to sign up, so ask the office.",
+      "Bache-Martin is the site’s first school in Fairmount, added because families asked for it. If you know a program that serves it and isn’t here, send it in and it goes on this page."
+    ],
+    "alsoListed": {
+      "title": "On the school’s own after-school page",
+      "intro": "Bache-Martin’s own page lists these, with the details as the school gives them. Its dates are from the 2025–26 year, so confirm this year’s before counting on one.",
+      "items": [
+        "Picks up from the school: Francisville After School Program, run by Francisville Playground & Rec Center, K–5 (ages 6–12), Monday to Friday 3:00–6:00 pm plus half days. Limited slots, first come, first served: 215-685-2762 or FrancisvilleRecCenter@phila.gov.",
+        "Picks up from the school: Philly Art Center, K–6, 1 to 5 days a week, 3:00–6:00 pm, with registration online at phillyartcenter.com; 215-765-2787.",
+        "At school, elementary: Choir with Settlement Music School (grades 3–5, Tuesdays 3:00–4:30 pm); Game Club (K–6, Wednesdays until 4:15 pm in the cafeteria, board and card games only); Girls on the Run (grades 3–5, Mondays and Wednesdays 3:15–4:45 pm); Soccer Shots (K–2, Tuesdays 3:00–4:40 pm on the Brown St lawn, $96 a session plus a $35 yearly fee, pickup at 4 pm or aftercare in the cafeteria until 5:30).",
+        "At school, grades 6–8: Student Advisory Committee, Heart & Sole (girls, Tuesdays and Thursdays 3:15–4:45 pm), Cheer Squad (Tuesdays and Thursdays 3:15–4:30 pm), a free golf team (Mondays at Walnut Lane by school bus, with First Tee lessons), free girls volleyball (practices at school and Lloyd Hall), History Club (every other Tuesday) and Mural Club (Wednesdays 3:30–4:30 pm).",
+        "Off site, grades 6–8: Fairmount Mountain Bike Team (22nd and Brown, Mondays and Wednesdays 3:30–6:30 pm, through Cadence Cycling); wrestling with Beat the Streets (3700 Market St, Tuesdays and Thursdays 6:30–8 pm, with homework help at its mentoring center); Philadelphia City Rowing (grades 7–8, free, limited spaces)."
+      ]
+    }
   }
 ]

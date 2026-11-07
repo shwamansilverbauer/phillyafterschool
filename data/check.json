@@ -1,12 +1,12 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 166,
+    "pages": 167,
     "pagesNeedingABrowser": 4,
     "pagesNeedingAPerson": 5,
-    "links": 132,
-    "pickupLinks": 77,
-    "pickupOnAStoredList": 67,
+    "links": 134,
+    "pickupLinks": 78,
+    "pickupOnAStoredList": 68,
     "pickupFromAThirdPartyList": 4,
     "pickupOnItsOwnSource": 6,
     "pickupWithNothingBehindIt": 0,
@@ -1277,6 +1277,25 @@
         "how": "fetch",
         "by": "provider"
       }
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "bache-martin",
+      "relation": "onsite",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "makom-community",
+      "school": "childs",
+      "relation": "pickup",
+      "checked": "2026-11-07",
+      "basis": "list",
+      "list": {
+        "where": "2401 Washington Avenue",
+        "read": "2026-10-06",
+        "how": "fetch",
+        "by": "provider"
+      }
     }
   ],
   "pages": [
@@ -2250,6 +2269,14 @@
       "lists": []
     },
     {
+      "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
+      "how": "fetch",
+      "programs": [
+        "girls-on-the-run"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
       "how": "browser",
       "why": "On 2026-10-06 a plain fetch was served the 2023–24 page (pickup from Coppin and Southwark only) while a browser showed the 2026–27 lists.",
@@ -3138,7 +3165,7 @@
         "schools.*.address"
       ],
       "says": "Old Pine Community Center and The Neighborhub are the same building after a rebrand, at 401 Lombard St; Fall II starts November 2, 2026, registration is open, and families can join whenever there is space, with the fee pro-rated.",
-      "daysAgo": 18,
+      "daysAgo": 19,
       "stale": false
     },
     {
@@ -3153,7 +3180,7 @@
         "daysNote"
       ],
       "says": "After-school care is $250 a month for full time, 4 or more days a week, or $175 a month for part time, 3 days a week, with a snack included.",
-      "daysAgo": 2,
+      "daysAgo": 3,
       "stale": false
     }
   ],
