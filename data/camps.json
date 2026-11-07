@@ -1,2147 +1,2147 @@
 {
-  "season": 2026,
-  "checked": "2026-10-07",
-  "camps": [
+ "season": 2026,
+ "checked": "2026-10-07",
+ "camps": [
+  {
+   "id": "philly-art-center",
+   "name": "Philly Art Center",
+   "what": "Kids make 2-D and 3-D art around weekly themes, with outdoor play and story breaks. Tweens take specialty studio camps.",
+   "types": [
+    "art"
+   ],
+   "ages": "Kids camp ages 4–12; tween camp ages 9–13",
+   "ageMin": 4,
+   "ageMax": 13,
+   "season": 2026,
+   "weeks": "June 8 to August 31, 2026, booked by the week",
+   "hours": "9 am to 3 pm",
+   "extended": "Early care from 8:15 am, $47 a week. Late care to 5:30 pm, $105 a week.",
+   "cost": "$485 a week for kids camp, $495 for tween camp, $515 for tween sewing",
+   "weekly": 485,
+   "aid": "A 15% early-bird offer ran to the end of February.",
+   "address": "2333 Fairmount Ave; 514 Bainbridge St; 530 Carpenter Ln",
+   "neighborhoods": [
+    "Fairmount",
+    "Queen Village",
+    "Mount Airy"
+   ],
+   "phone": "215-765-2787",
+   "website": "https://phillyartcenter.com/camps/summer-camps/",
+   "price": "paid",
+   "program": "philly-art-center-qv",
+   "sources": [
     {
-      "id": "philly-art-center",
-      "name": "Philly Art Center",
-      "what": "Kids make 2-D and 3-D art around weekly themes, with outdoor play and story breaks. Tweens take specialty studio camps.",
-      "types": [
-        "art"
-      ],
-      "ages": "Kids camp ages 4–12; tween camp ages 9–13",
-      "ageMin": 4,
-      "ageMax": 13,
-      "season": 2026,
-      "weeks": "June 8 to August 31, 2026, booked by the week",
-      "hours": "9 am to 3 pm",
-      "extended": "Early care from 8:15 am, $47 a week. Late care to 5:30 pm, $105 a week.",
-      "cost": "$485 a week for kids camp, $495 for tween camp, $515 for tween sewing",
-      "weekly": 485,
-      "aid": "A 15% early-bird offer ran to the end of February.",
-      "address": "2333 Fairmount Ave; 514 Bainbridge St; 530 Carpenter Ln",
-      "neighborhoods": [
-        "Fairmount",
-        "Queen Village",
-        "Mount Airy"
-      ],
-      "phone": "215-765-2787",
-      "website": "https://phillyartcenter.com/camps/summer-camps/",
-      "price": "paid",
-      "program": "philly-art-center-qv",
-      "sources": [
-        {
-          "label": "Philly Art Center",
-          "url": "https://phillyartcenter.com/camps/summer-camps/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://phillyartcenter.com/camps/summer-camps/",
-        "how": "fetch",
-        "look": "The “By-the-week” date line is near the top and prices are in the “Weekly Rates” list on the same page. Sign-up buttons go to Captyn.",
-        "notes": "There is a fourth location in Cherry Hill, NJ, which is left out. Tween camps run on select weeks only."
-      }
-    },
-    {
-      "id": "fleisher-art-memorial-camp",
-      "name": "Fleisher Art Memorial",
-      "what": "Kids work in clay, paint and found objects on weekly themes. Tweens try ceramics, printmaking and photography; teens build portfolios.",
-      "types": [
-        "art"
-      ],
-      "ages": "Ages 5–18",
-      "ageMin": 5,
-      "ageMax": 18,
-      "season": 2026,
-      "weeks": "June 15 to July 31, 2026, in seven one-week sessions",
-      "hours": "Drop-off 8:30 to 9:30 am, pick-up 3:30 to 3:45 pm. Teen immersives are half days.",
-      "extended": "After Camp Club 3:30 to 5:30 pm, $120 a week or $25 a day.",
-      "cost": "Ages 5–12: $410 a week ($370 for members). Ages 13–18: $435 for a two-week half-day immersive ($395 for members).",
-      "weekly": 410,
-      "aid": "Tuition assistance is available.",
-      "address": "719 Catharine St",
-      "neighborhoods": [
-        "Bella Vista"
-      ],
-      "website": "https://fleisher.org/children-and-youth-programs-2/",
-      "price": "paid",
-      "signup": "Sign-ups for 2026 opened January 12.",
-      "program": "fleisher-art-memorial",
-      "sources": [
-        {
-          "label": "Fleisher Art Memorial",
-          "url": "https://fleisher.org/children-and-youth-programs-2/"
-        }
-      ],
-      "checked": "2026-10-07",
-      "check": {
-        "url": "https://fleisher.org/children-and-youth-programs-2/",
-        "how": "fetch",
-        "look": "Session dates are listed week by week and prices appear as member and non-member rates per age group in the page body.",
-        "notes": "The street address is not on the camp page; it is Fleisher’s own building."
-      }
-    },
-    {
-      "id": "mister-johns-music-camp",
-      "name": "Mister John’s Music",
-      "what": "Instrument lessons, show choir, percussion and art around a weekly music theme, ending in a showcase.",
-      "types": [
-        "music"
-      ],
-      "ages": "Ages 5–11, with one week just for 4-year-olds. Piano and guitar camps are for ages 6–11.",
-      "ageMin": 4,
-      "ageMax": 11,
-      "season": 2026,
-      "weeks": "June 8 to August 28, 2026: 11 weeks, none June 29 to July 3",
-      "hours": "9 am to 3 pm",
-      "extended": "Early drop-off at 8 am, $50 a week. Late pick-up at 5 pm, $100 a week.",
-      "cost": "$425 a week",
-      "weekly": 425,
-      "address": "761 S 8th St",
-      "neighborhoods": [
-        "Bella Vista"
-      ],
-      "website": "https://misterjohnsmusic.com/summer-camp/",
-      "price": "paid",
-      "signup": "Sign-ups for 2026 opened January 12.",
-      "program": "mister-johns-music",
-      "sources": [
-        {
-          "label": "Mister John’s Music",
-          "url": "https://misterjohnsmusic.com/summer-camp/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://misterjohnsmusic.com/summer-camp/",
-        "how": "fetch",
-        "look": "Weeks and themes are a dated list in the page body, with the weekly price and the early and late fees in the text beside it.",
-        "notes": "The Register buttons come back with empty links through a plain fetch."
-      }
-    },
-    {
-      "id": "music-theatre-philly-camp",
-      "name": "Music Theatre Philly",
-      "what": "Kids rehearse songs, dances and scenes on a weekly musical theme and perform a live show. Two-week camps stage a junior musical.",
-      "types": [
-        "theater",
-        "music"
-      ],
-      "ages": "Grades 1–6 for the full-day weekly camps; a half-day pre-K to kindergarten camp for ages 3–5; two-week Summer Stock camps for grades 4–8 and three- and four-week evening intensives for grades 9–12",
-      "ageMin": 3,
-      "ageMax": 18,
-      "season": 2027,
-      "weeks": "June 7 to August 27, 2027, in 12 one-week sessions",
-      "hours": "9 am to 3 pm. The pre-K camp is 9 am to noon; Summer Stock is 9 am to 4 pm for grades 4–8 and 4 to 8 pm for grades 9–12.",
-      "extended": "Before care 8 to 9 am, $20 a day or $75 a week. After care 3 to 5:30 pm Monday to Thursday (none on Fridays), $40 a day or $120 a week.",
-      "cost": "$575 a week for grades 1–6; $375 a week for the half-day pre-K camp; $1,250 for a two-week Summer Stock camp (grades 4–8); $975 to $1,150 for the grades 9–12 intensives",
-      "weekly": 575,
-      "aid": "25% off a second child and 50% off more. Scholarships and payment plans are available.",
-      "address": "1301 Locust St; 601 S Broad St (The Arts Bank)",
-      "neighborhoods": [
-        "Washington Square West",
-        "Hawthorne"
-      ],
-      "phone": "445-223-2683",
-      "website": "https://www.musictheatrephilly.com/1-6-camps",
-      "price": "paid",
-      "program": "music-theatre-philly",
-      "sources": [
-        {
-          "label": "Music Theatre Philly",
-          "url": "https://www.musictheatrephilly.com/1-6-camps"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.musictheatrephilly.com/1-6-camps",
-        "how": "fetch",
-        "look": "A week-by-week list gives dates, theme, grades and price, each with its own Sawyer register link.",
-        "notes": "Hours, care fees and discounts sit on /about-camps; the pre-K weeks are on /prek-k-camps and the Summer Stock camps on /4-8-summer-stock and /9-12-summer-stock. The old /summer-camps-pre-k address is gone."
-      },
-      "signup": "Sign-ups for 2027 are open. 20% off all camps with code EARLYBIRD27 for registering before January 1, 2027.",
-      "dates": [
-        {
-          "date": "2026-12-31",
-          "label": "Last day for 20% off all camps with code EARLYBIRD27 (register before January 1)"
-        }
-      ],
-      "updates": [
-        {
-          "date": "2026-11-01",
-          "text": "Summer 2027 is posted: 12 weeks June 7 to August 27, $575 a week for grades 1–6 and $375 for half-day pre-K (up from $350). New two-week Summer Stock camps for grades 4–8 at 601 S Broad St are $1,250. 20% off with code EARLYBIRD27 before January 1."
-        }
-      ]
-    },
-    {
-      "id": "movemakers-camp",
-      "name": "MoveMakers Philly",
-      "what": "Hip hop dance or parkour and karate, with arts and crafts, outdoor play and games.",
-      "types": [
-        "movement"
-      ],
-      "ages": "Ages 5 and up",
-      "ageMin": 5,
-      "season": 2026,
-      "weeks": "June 15 to August 21, 2026, in ten one-week sessions",
-      "hours": "8:30 am to 3 pm",
-      "extended": "Extended stay is offered; the hours and price are not on the page.",
-      "cost": "$425 a week. A half-day week is $225, a three-day week $260 and a single day $99.",
-      "weekly": 425,
-      "aid": "15% off each extra camp week and 25% off a sibling.",
-      "address": "2100 Chestnut St, 2nd floor; 812 Chestnut St",
-      "neighborhoods": [
-        "Rittenhouse",
-        "Washington Square West"
-      ],
-      "phone": "267-600-1030",
-      "website": "https://www.movemakersphilly.com/summer-camp.html",
-      "price": "paid",
-      "program": "movemakers",
-      "sources": [
-        {
-          "label": "MoveMakers Philly",
-          "url": "https://www.movemakersphilly.com/summer-camp.html"
-        }
-      ],
-      "checked": "2026-10-07",
-      "check": {
-        "url": "https://www.movemakersphilly.com/summer-camp.html",
-        "how": "fetch",
-        "look": "Weeks are on the overview page. Hours, price and discounts are in the text of each camp’s own subpage, which links to Mindbody for booking.",
-        "notes": "Three camp subpages with the year in their titles, so the addresses may change for 2027."
-      }
-    },
-    {
-      "id": "queen-and-rook-camp",
-      "name": "Queen & Rook Game Cafe",
-      "what": "Kids learn how board games work, try trading card games and D&D, visit the retro arcade and play outside each day.",
-      "types": [
-        "games"
-      ],
-      "ages": "Ages 6–12",
-      "ageMin": 6,
-      "ageMax": 12,
-      "season": 2026,
-      "weeks": "June 15 to August 21, 2026, in ten weeks; no camp June 19 or July 3",
-      "hours": "9 am to 3 pm, drop-off from 8:30",
-      "extended": "Aftercare 3 to 6 pm: $125 for a five-day week, $100 for a four-day week.",
-      "cost": "$450 a week; the two four-day weeks are $360",
-      "weekly": 450,
-      "aid": "A 10% early-bird discount ran to mid-February, then 5% off for siblings. Scholarships on request.",
-      "address": "125 South St",
-      "neighborhoods": [
-        "Queen Village"
-      ],
-      "phone": "215-995-0043",
-      "website": "https://www.queenrookkeep.com/product/Summercamp/GUYDZS52EHKPGJPXAUNJ7HMP",
-      "price": "paid",
-      "program": "queen-and-rook",
-      "sources": [
-        {
-          "label": "Queen & Rook Game Cafe",
-          "url": "https://www.queenrookkeep.com/product/Summercamp/GUYDZS52EHKPGJPXAUNJ7HMP"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.queenrookkeep.com/product/Summercamp/GUYDZS52EHKPGJPXAUNJ7HMP",
-        "how": "browser",
-        "look": "Hours, price, aftercare and discounts are in the product description. The week dates are in the product’s option picker, which a plain fetch does not return.",
-        "notes": "The camp is sold on a separate store site, not the cafe’s own. The week dates sit in the product’s option picker, which a headless browser reads (2026-11-01) and a plain fetch does not."
-      }
-    },
-    {
-      "id": "parks-and-rec-camps",
-      "name": "Philadelphia Parks & Recreation day camps",
-      "what": "Neighborhood day camps at about 130 rec centers across the city, some with themes like performing arts, visual arts, esports and rowing.",
-      "types": [
-        "rec-center",
-        "daycamp"
-      ],
-      "ages": "Ages 6–12",
-      "ageMin": 6,
-      "ageMax": 12,
-      "season": 2026,
-      "cost": "Set by each rec center, and not on the city’s page",
-      "aid": "A limited number of fee waivers, for half or all of the fee.",
-      "phone": "215-683-3600",
-      "website": "https://www.phila.gov/services/culture-recreation/activities-and-events/register-for-summer-camp/",
-      "registerUrl": "https://www.phila.gov/parks-rec-finder/#/",
-      "note": "Dates, hours and fees differ by rec center, so look yours up in the city’s finder and call or stop in.",
-      "sources": [
-        {
-          "label": "City of Philadelphia: register for summer camp",
-          "url": "https://www.phila.gov/services/culture-recreation/activities-and-events/register-for-summer-camp/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.phila.gov/services/culture-recreation/activities-and-events/register-for-summer-camp/",
-        "how": "fetch",
-        "look": "The service page gives ages, fee waivers and the steps for finding a rec center. Dates were only in a news post, and fees and hours are set per center.",
-        "notes": "The dated post was first published in 2024 and its dates may be stale; do not copy them."
-      }
-    },
-    {
-      "id": "theatre-horizon-woodmere",
-      "name": "Theatre Horizon drama camp at Woodmere",
-      "what": "A one-week drama day camp led by Theatre Horizon at the Woodmere Art Museum. Most of its other sessions are in the suburbs.",
-      "types": [
-        "theater"
-      ],
-      "ages": "Ages 7–12",
-      "ageMin": 7,
-      "ageMax": 12,
-      "season": 2026,
-      "weeks": "August 17 to 21, 2026 at Woodmere",
-      "hours": "9 am to 3 pm",
-      "cost": "$245 for the Woodmere week",
-      "address": "Woodmere Art Museum, 9201 Germantown Ave",
-      "neighborhoods": [
-        "Chestnut Hill"
-      ],
-      "phone": "610-283-2230",
-      "website": "https://theatrehorizon.org/summer-drama-camp/",
-      "price": "paid",
-      "sources": [
-        {
-          "label": "Theatre Horizon drama camp at Woodmere",
-          "url": "https://theatrehorizon.org/summer-drama-camp/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://theatrehorizon.org/summer-drama-camp/",
-        "how": "browser",
-        "look": "A week-by-week table lists “Woodmere Art Museum, Chestnut Hill”. Each site’s dates, hours, ages, address, price and sign-up link sit in a pop-up opened by its button; the pop-up text is in the page for a headless browser."
-      },
-      "weekly": 245
-    },
-    {
-      "id": "butchers-sew-shop-camp",
-      "name": "Butcher’s Sew Shop Junior",
-      "what": "Kids learn to sew by hand and machine in themed weeks, making stuffies, clothes and room decor. Teens get a fashion week.",
-      "types": [
-        "art"
-      ],
-      "ages": "Ages 6–11, plus one teen week for ages 11–15",
-      "ageMin": 6,
-      "ageMax": 15,
-      "season": 2026,
-      "weeks": "June 15 to August 28, 2026",
-      "hours": "9 am to 3 pm",
-      "extended": "Morning care 8 to 9 am, $10 a day. Afternoon care 3 to 5 pm, $20 a day. Not offered for the teen week.",
-      "cost": "$515 a week; $417 for the four-day week. Half is due at sign-up. The teen week adds a $40 materials fee.",
-      "weekly": 515,
-      "aid": "10% off for siblings and 10% off extra weeks.",
-      "address": "800 S 8th St",
-      "neighborhoods": [
-        "Bella Vista"
-      ],
-      "website": "https://butcher-s-sew-shop-junior.jumbula.com/summer-camp",
-      "price": "paid",
-      "program": "butchers-sew-shop",
-      "sources": [
-        {
-          "label": "Butcher’s Sew Shop Junior",
-          "url": "https://butcher-s-sew-shop-junior.jumbula.com/summer-camp"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://butcher-s-sew-shop-junior.jumbula.com/summer-camp",
-        "how": "fetch",
-        "look": "The Jumbula summer-camp page lists each themed week as a row with dates, age group and price, with hours, extended care and discounts in the page text.",
-        "notes": "Details live on the shop’s Jumbula registration site."
-      }
-    },
-    {
-      "id": "clay-studio-camp",
-      "name": "The Clay Studio",
-      "what": "Week-long half-day clay camps where kids and teens handbuild, use the wheel and glaze, plus a full-day claymation camp.",
-      "types": [
-        "art"
-      ],
-      "ages": "Entering grades 1–12",
-      "ageMin": 6,
-      "ageMax": 18,
-      "season": 2026,
-      "weeks": "June 22 to August 21, 2026",
-      "hours": "Half days, 9 am to noon or 1 to 4 pm. The claymation camp is 9 am to 4 pm.",
-      "extended": "Supervised lunch noon to 1 pm, $20 a week. Extended care 4 to 6 pm, $50 a week.",
-      "cost": "Weekly tuition is only in the booking listing. $100 deposit per camper.",
-      "aid": "Tuition assistance by application, with no paperwork required.",
-      "address": "1425 N American St",
-      "neighborhoods": [
-        "South Kensington"
-      ],
-      "phone": "215-925-3453",
-      "website": "https://www.theclaystudio.org/camp-policies",
-      "registerUrl": "https://public.theclaystudio.org/public/3/camps",
-      "price": "paid",
-      "signup": "The 2026 early-bird discount ran January 2 to February 15.",
-      "note": "Most camps are half days, so a full day means two camps plus supervised lunch.",
-      "sources": [
-        {
-          "label": "The Clay Studio",
-          "url": "https://www.theclaystudio.org/camp-policies"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.theclaystudio.org/camp-policies",
-        "how": "browser",
-        "look": "Dates, hours and add-on fees are in the camp policies page. Camp weeks and tuition sit in the booking listing at public.theclaystudio.org/public/3/camps, which needs a browser."
-      }
-    },
-    {
-      "id": "pafa-camp",
-      "name": "PAFA summer art camp",
-      "what": "Weekly themed art camps at a museum school: drawing, painting, sculpture, comics, printmaking and mixed media, by age group.",
-      "types": [
-        "art"
-      ],
-      "ages": "Ages 5–14, in three groups",
-      "ageMin": 5,
-      "ageMax": 14,
-      "season": 2027,
-      "weeks": "June 21 to August 13, 2027, in eight weekly sessions; the week of July 6 is four days with no camp July 5",
-      "hours": "9 am to 3 pm, with drop-off from 8:30",
-      "extended": "Aftercare 3 to 5:30 pm, booked separately. The price isn’t on the camp page.",
-      "cost": "$575 a week; the four-day week of July 6 is $460",
-      "weekly": 575,
-      "aid": "Members get 10% off. $10 off each week when you book three or more.",
-      "address": "128 N Broad St",
-      "neighborhoods": [
-        "Center City"
-      ],
-      "phone": "215-972-2054",
-      "website": "https://www.pafa.org/education/center-for-art-education/youth-and-family/summer-art-camps",
-      "price": "paid",
-      "program": "pafa-saturday-art",
-      "sources": [
-        {
-          "label": "PAFA summer art camp",
-          "url": "https://www.pafa.org/education/center-for-art-education/youth-and-family/summer-art-camps"
-        },
-        {
-          "label": "PAFA Summer Camp 2027 registration (CourseStorm)",
-          "url": "https://pafa-museum.coursestorm.com/category/summer-camp-2027"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.pafa.org/education/center-for-art-education/youth-and-family/summer-art-camps",
-        "how": "fetch",
-        "look": "Dates, hours, price and discounts are in the body of the family-programs summer art camp page. Sign-up is on CourseStorm.",
-        "notes": "pafa.org/camp is a stale page still showing summer 2024. Use the family-programs address."
-      },
-      "registerUrl": "https://pafa-museum.coursestorm.com/category/summer-camp-2027",
-      "signup": "Registration for 2027 was open on PAFA’s CourseStorm site when we checked on November 1, 2026; the page gives no opening date.",
-      "updates": [
-        {
-          "date": "2026-11-01",
-          "text": "Summer 2027 is posted: eight weeks from June 21 to August 13, $575 a week (2026 was $400). Registration is open on PAFA’s CourseStorm site."
-        }
-      ]
-    },
-    {
-      "id": "moore-young-artists",
-      "name": "Moore College of Art & Design youth courses",
-      "what": "Middle and high schoolers take week-long, full-day studio courses in art and design on a college campus.",
-      "types": [
-        "art"
-      ],
-      "ages": "Grades 6–12",
-      "ageMin": 11,
-      "ageMax": 18,
-      "season": 2027,
-      "weeks": "July 12 to August 13, 2027, in week-long courses",
-      "hours": "9 am to 4 pm",
-      "cost": "$700 a course; $2,800 for all five weeks",
-      "weekly": 700,
-      "address": "1916 Race St",
-      "neighborhoods": [
-        "Logan Square"
-      ],
-      "phone": "215-965-4015",
-      "website": "https://moore.edu/academics/youth-education/young-artists-workshop/",
-      "price": "paid",
-      "program": "moore-young-artists-workshop",
-      "sources": [
-        {
-          "label": "Moore College of Art & Design youth courses",
-          "url": "https://moore.edu/academics/youth-education/young-artists-workshop/"
-        },
-        {
-          "label": "Moore youth programs calendar",
-          "url": "https://moore.edu/academics/youth-education/youth-programs-academic-calendar/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://moore.edu/academics/youth-education/",
-        "how": "fetch",
-        "look": "Dates, the daily schedule and the price per course are in the Program Details text.",
-        "notes": "The camp page has the year in its address, so next summer is a new page. Start from the youth-education page to find it."
-      },
-      "note": "The 2027 dates are from the program calendar; the course list and the $700 price are still from summer 2026.",
-      "updates": [
-        {
-          "date": "2026-11-01",
-          "text": "Summer 2027 dates are posted: week-long courses July 12 to August 13, 2027. The 2027 course list and prices are not posted yet; 2026 courses were $700 each."
-        }
-      ]
-    },
-    {
-      "id": "school-of-rock-philadelphia",
-      "name": "School of Rock Philadelphia",
-      "what": "Kids learn and rehearse rock songs in a themed band camp all week, then play a live show on the last day.",
-      "types": [
-        "music"
-      ],
-      "ages": "Ages 7–18. Some camps ask for playing experience.",
-      "ageMin": 7,
-      "ageMax": 18,
-      "season": 2026,
-      "weeks": "One-week themed camps through the summer",
-      "hours": "9 am to 3 pm",
-      "cost": "$559 for a one-week camp",
-      "weekly": 559,
-      "address": "421 N 7th St",
-      "neighborhoods": [
-        "Callowhill"
-      ],
-      "phone": "267-639-4007",
-      "website": "https://www.schoolofrock.com/locations/philadelphia/music-camps",
-      "price": "paid",
-      "note": "No camps were listed on the page when we checked on November 1, 2026. We read one 2026 camp’s page for the price and hours; other weeks may differ.",
-      "sources": [
-        {
-          "label": "School of Rock Philadelphia",
-          "url": "https://www.schoolofrock.com/locations/philadelphia/music-camps"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.schoolofrock.com/locations/philadelphia/music-camps",
-        "how": "fetch",
-        "look": "The listing page gives camp names and dates. Each camp’s own page holds hours, ages and price.",
-        "notes": "The listing page can still return last year’s line-up with no prices; open a dated camp page for the price."
-      }
-    },
-    {
-      "id": "arden-summer-camp",
-      "name": "Arden Drama School",
-      "what": "Kids act, sing, design and try comedy or Shakespeare in one- and two-week theatre studios and themed specialty camps.",
-      "types": [
-        "theater"
-      ],
-      "ages": "Grades 1–8",
-      "ageMin": 6,
-      "ageMax": 13,
-      "season": 2026,
-      "weeks": "June 22 to August 21, 2026. Grades 1–5 studios run July 6 to August 21.",
-      "hours": "9:30 am to 4:30 pm for grades 1–5; 10 am to 5 pm for grades 6–8",
-      "cost": "$400 to $450 for a one-week session; $800 for two weeks; $90 for a single day",
-      "weekly": 400,
-      "aid": "$50 off a session for signing up by March 1. Scholarships by application.",
-      "address": "40 N 2nd St",
-      "neighborhoods": [
-        "Old City"
-      ],
-      "phone": "215-922-1122",
-      "website": "https://ardentheatre.org/arden-drama-school",
-      "price": "paid",
-      "program": "arden-drama-school",
-      "sources": [
-        {
-          "label": "Arden Drama School",
-          "url": "https://ardentheatre.org/arden-drama-school"
-        },
-        {
-          "label": "Arden kids summer camp brochure",
-          "url": "https://ardentheatre.org/wp-content/uploads/2026/02/FY27_Summer-Camp-Kids-Digital-Brochure-compressed.pdf"
-        }
-      ],
-      "checked": "2026-10-07",
-      "check": {
-        "url": "https://ardentheatre.org/arden-drama-school",
-        "how": "browser",
-        "look": "Dates, hours and prices sit in the kids summer camp brochure, a PDF linked from the summer section of the Arden Drama School page.",
-        "notes": "The page itself comes back with no camp details through a plain fetch, and the brochure’s address changes each year."
-      }
-    },
-    {
-      "id": "camp-walnut",
-      "name": "Camp Walnut at Walnut Street Theatre",
-      "what": "Campers get intensive theatre training in divisions and perform in a fully produced show at the end of a four-week session.",
-      "types": [
-        "theater"
-      ],
-      "season": 2027,
-      "weeks": "July 12 to August 5, 2027, Monday to Thursday, one four-week session",
-      "hours": "Monday to Thursday, 9:30 am to 3:30 pm for the Discovery divisions, to 4 pm for Development and to 4:30 pm for Performance",
-      "cost": "$1,300 for a Discovery division, $1,500 for Development and $1,800 for Performance, with payment plans from a $500 deposit",
-      "address": "825 Walnut St",
-      "neighborhoods": [
-        "Washington Square West"
-      ],
-      "phone": "215-574-3550",
-      "website": "https://walnutstreettheatre.coursestorm.com/category/camp-walnut-2027",
-      "price": "paid",
-      "note": "Six divisions, two per level, each one four-week session. Development and Performance divisions need an audition.",
-      "program": "walnut-street-theatre-school",
-      "sources": [
-        {
-          "label": "Camp Walnut at Walnut Street Theatre",
-          "url": "https://walnutstreettheatre.coursestorm.com/category/camp-walnut-2027"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://walnutstreettheatre.coursestorm.com/",
-        "how": "browser",
-        "look": "Each division is a separate course card in the CourseStorm catalog. Dates, hours and price are on the individual course page.",
-        "notes": "The category address has the year in it (camp-walnut-2027). Listing pages load by script and come back empty to a plain fetch; individual course pages give dates, hours and price."
-      },
-      "ages": "Ages 8–11 and 12–17 in the Discovery and Development divisions; ages 10–18 in the Performance divisions",
-      "ageMin": 8,
-      "ageMax": 18,
-      "signup": "Registration for Camp Walnut 2027 is open on CourseStorm. Discovery divisions take sign-ups first come, first served; Development and Performance divisions need an audition the week of May 17 to 21, 2027.",
-      "updates": [
-        {
-          "date": "2026-11-01",
-          "text": "Camp Walnut 2027 is posted: one four-week session, July 12 to August 5, Monday to Thursday. Discovery divisions are $1,300, Development $1,500 and Performance $1,800 (ages 8–18 by division). Sign-ups are open on CourseStorm."
-        }
-      ]
-    },
-    {
-      "id": "macguffin-camps",
-      "name": "MacGuffin Theatre & Film Company",
-      "what": "Kids rehearse and stage a different musical each week. Older campers do musical theatre, acting and comedy camps.",
-      "types": [
-        "theater"
-      ],
-      "ages": "Youth Musical Theatre Camps ages 7–10/11; teen camps ages 11–18",
-      "ageMin": 7,
-      "ageMax": 18,
-      "season": 2027,
-      "weeks": "June 14 to August 20, 2027, in one-week camps plus a four-week teen musical theatre camp, none the week of August 9",
-      "hours": "9:30 am to 4:30 pm. The four-week teen Musical Theatre Camp runs Monday to Thursday.",
-      "cost": "$450 for a one-week camp; $1,000 for the four-week teen Musical Theatre Camp",
-      "aid": "$75 off the teen Musical Theatre Camp for signing up by November 30, 2026, and $50 off the one-week camps by November 30 (teen camps) or December 31, 2026 (youth camps). A limited number of need-based scholarships.",
-      "address": "2030 Sansom St, 2nd floor",
-      "neighborhoods": [
-        "Rittenhouse"
-      ],
-      "phone": "215-922-1141",
-      "website": "https://macguffintf.com/camps/",
-      "registerUrl": "https://www.hisawyer.com/macguffin-theatre/schedules?schedule_id=camps",
-      "signup": "Sign-ups for the 2027 teen camps opened November 1, 2026. Sign-ups for the one-week Youth Musical Theatre Camps (ages 7–10/11) open December 1, 2026.",
-      "program": "macguffin-theatre",
-      "sources": [
-        {
-          "label": "MacGuffin Theatre & Film Company",
-          "url": "https://macguffintf.com/camps/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://macguffintf.com/camps/",
-        "how": "fetch",
-        "look": "The camps page lists each camp with ages and dates and links to per-camp pages with hours. Tuition appears only in the Sawyer booking widget."
-      },
-      "weekly": 450,
-      "dates": [
-        {
-          "date": "2026-11-30",
-          "label": "Last day for $75 off the teen Musical Theatre Camp and $50 off the one-week teen camps"
-        },
-        {
-          "date": "2026-12-01",
-          "label": "Registration opens for the one-week Youth Musical Theatre Camps (ages 7–10/11)"
-        },
-        {
-          "date": "2026-12-31",
-          "label": "Last day for $50 off the Youth Musical Theatre Camps"
-        }
-      ],
-      "note": "The Flourtown camps on the same page are outside the city and not listed here.",
-      "updates": [
-        {
-          "date": "2026-11-01",
-          "text": "Summer 2027 is posted: one-week camps June 14 to August 20 at $450 (none the week of August 9) and a four-week teen Musical Theatre Camp June 21 to July 15 at $1,000. Teen sign-ups opened November 1; youth camps (ages 7–10/11) open December 1."
-        }
-      ]
-    },
-    {
-      "id": "flipout-camp",
-      "name": "FlipOut Productions",
-      "what": "Gymnastics and parkour-style movement, plus arts and crafts, gardening, dance, water play and team games.",
-      "types": [
-        "movement"
-      ],
-      "ages": "Ages 4½ and up, in three groups",
-      "ageMin": 4,
-      "season": 2026,
-      "address": "2757 Frankford Ave",
-      "neighborhoods": [
-        "Kensington"
-      ],
-      "phone": "215-350-6575",
-      "website": "https://www.flipoutproductions.com/summercamp",
-      "signup": "Sign-ups for 2026 opened January 1.",
-      "note": "Dates and prices weren’t readable when we checked, so ask the gym.",
-      "program": "flipout-productions",
-      "sources": [
-        {
-          "label": "FlipOut Productions",
-          "url": "https://www.flipoutproductions.com/summercamp"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.flipoutproductions.com/summercamp",
-        "how": "browser",
-        "look": "The Summer Camp page shows age groups and activities. Weeks and prices are probably inside an embedded registration widget."
-      }
-    },
-    {
-      "id": "philadelphia-ballet-camps",
-      "name": "School of Philadelphia Ballet dance camps",
-      "what": "Half-day themed ballet camps with a creative movement class, a snack, a craft and story rehearsal.",
-      "types": [
-        "movement"
-      ],
-      "ages": "Ages 4–6",
-      "ageMin": 4,
-      "ageMax": 6,
-      "season": 2027,
-      "weeks": "June 14 to August 13, 2027, in four separate weeks: June 14, July 5, July 26 and August 9",
-      "runs": [
-        [
-          "2027-06-14",
-          "2027-06-18"
-        ],
-        [
-          "2027-07-05",
-          "2027-07-09"
-        ],
-        [
-          "2027-07-26",
-          "2027-07-30"
-        ],
-        [
-          "2027-08-09",
-          "2027-08-13"
-        ]
-      ],
-      "hours": "9 am to noon",
-      "cost": "$325 a week for the half day",
-      "weekly": 325,
-      "address": "323 N Broad St",
-      "neighborhoods": [
-        "Center City"
-      ],
-      "phone": "215-551-7000",
-      "website": "https://philadelphiaballet.org/school/summer-programs/philadelphia-summer-childrens-programs/",
-      "price": "paid",
-      "signup": "Registration for the 2027 camps opens December 1, 2026.",
-      "program": "school-of-philadelphia-ballet",
-      "sources": [
-        {
-          "label": "School of Philadelphia Ballet dance camps",
-          "url": "https://philadelphiaballet.org/school/summer-programs/philadelphia-summer-childrens-programs/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://philadelphiaballet.org/school/summer-programs/philadelphia-summer-childrens-programs/",
-        "how": "fetch",
-        "look": "Camp themes, dates, the daily schedule and tuition sit in the Summer Dance Camps section, with a registration link per camp.",
-        "notes": "Separate pages exist for the New Jersey and Bala Cynwyd locations; use the Philadelphia page only."
-      },
-      "dates": [
-        {
-          "date": "2026-12-01",
-          "label": "Registration opens for the 2027 summer dance camps"
-        }
-      ],
-      "note": "The page misprints the fourth camp’s end date as “July 13”; we take it as Friday, August 13.",
-      "updates": [
-        {
-          "date": "2026-11-01",
-          "text": "Summer 2027 is posted: four one-week camps starting June 14, July 5, July 26 and August 9, 9 am to noon, $325 a camp. Registration opens December 1, 2026."
-        }
-      ]
-    },
-    {
-      "id": "wissahickon-figure-skating",
-      "name": "Wissahickon Skating Club figure skating camp",
-      "what": "A week of morning figure skating training for young skaters who already have the basics.",
-      "types": [
-        "movement"
-      ],
-      "ages": "Ages 7 and up, with a minimum skating level",
-      "ageMin": 7,
-      "season": 2026,
-      "weeks": "August 3 to 7, 2026",
-      "hours": "8:30 am to 1 pm",
-      "cost": "$375 for the week",
-      "weekly": 375,
-      "address": "550 W Willow Grove Ave",
-      "neighborhoods": [
-        "Chestnut Hill"
-      ],
-      "website": "https://www.wissskating.com/index.php/new-figure-skating-schedules-general-info-2026/get-the-edge-summer-figure-skating-camp-save-the-date/",
-      "price": "paid",
-      "program": "wissahickon-skating-club",
-      "sources": [
-        {
-          "label": "Wissahickon Skating Club figure skating camp",
-          "url": "https://www.wissskating.com/index.php/new-figure-skating-schedules-general-info-2026/get-the-edge-summer-figure-skating-camp-save-the-date/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.wissskating.com/index.php/new-figure-skating-schedules-general-info-2026/get-the-edge-summer-figure-skating-camp-save-the-date/",
-        "how": "fetch",
-        "look": "Dates, hours and prices are in the body text of the camp’s product page.",
-        "notes": "Older copies of this camp are still up on the club’s calendar. The club’s hockey camp page still showed 2024 dates on this check."
-      }
-    },
-    {
-      "id": "philadelphia-dance-academy",
-      "name": "The Philadelphia Dance Academy",
-      "what": "Ballet-centred summer classes, a half-day Nutcracker camp for ages 4–6, and full-day dance intensives.",
-      "types": [
-        "movement"
-      ],
-      "ages": "Half-day camp ages 4–6; full-day intensive ages 6–12",
-      "ageMin": 4,
-      "ageMax": 12,
-      "season": 2027,
-      "address": "219 Cuthbert St, 3rd floor",
-      "neighborhoods": [
-        "Old City"
-      ],
-      "phone": "215-922-2422",
-      "website": "https://philadelphiadanceacademy.com/summer-program/",
-      "program": "philadelphia-dance-academy",
-      "signup": "The page says summer enrollment opens December 1; its programs are headed 2027.",
-      "note": "An intermediate intensive for ages 10 and up, with more weeks, asks for dance experience. The page also lists an Ardmore location, which is left out.",
-      "sources": [
-        {
-          "label": "The Philadelphia Dance Academy",
-          "url": "https://philadelphiadanceacademy.com/summer-program/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://philadelphiadanceacademy.com/summer-program/",
-        "how": "fetch",
-        "look": "The Summer Dance Programs page lists each program with Old City and Ardmore session tables (dates, hours, tuition) that open on a click under each heading; a headless browser gets their text.",
-        "notes": "An older, undated page at /programs/summer-program2/ has prices that look like 2023. Do not use it."
-      },
-      "weeks": "June 14 to August 20, 2027: the half-day Nutcracker camp June 14 to 18, and full-day dance intensives the weeks of June 21, August 2, August 9 and August 16",
-      "runs": [
-        [
-          "2027-06-14",
-          "2027-06-18"
-        ],
-        [
-          "2027-06-21",
-          "2027-06-25"
-        ],
-        [
-          "2027-08-02",
-          "2027-08-06"
-        ],
-        [
-          "2027-08-09",
-          "2027-08-13"
-        ],
-        [
-          "2027-08-16",
-          "2027-08-20"
-        ]
-      ],
-      "hours": "9 am to noon for the half-day camp; 9 am to 3 pm for the full-day intensive",
-      "cost": "$325 for the half-day Nutcracker camp week; $500 a week for the full-day intensive",
-      "weekly": 500,
-      "price": "paid",
-      "dates": [
-        {
-          "date": "2026-12-01",
-          "label": "Summer 2027 enrollment opens"
-        }
-      ],
-      "updates": [
-        {
-          "date": "2026-11-01",
-          "text": "Summer 2027 is posted: a half-day Nutcracker camp June 14 to 18 ($325) and full-day dance intensives the weeks of June 21, August 2, August 9 and August 16 ($500 a week), in Old City. Enrollment opens December 1."
-        }
-      ]
-    },
-    {
-      "id": "legacy-tennis-camp",
-      "name": "Legacy Youth Tennis community camp",
-      "what": "Kids learn and play tennis at neighborhood courts in a seven-week community day camp, full day or half day.",
-      "types": [
-        "movement"
-      ],
-      "ages": "Ages 6–16",
-      "ageMin": 6,
-      "ageMax": 16,
-      "season": 2026,
-      "weeks": "June 22 to August 7, 2026",
-      "hours": "9 am to 4 pm, or a half day to 1 pm",
-      "cost": "$200 for all seven weeks, or $100 for half days",
-      "aid": "Financial aid and payment plans may be available.",
-      "address": "700 Cobbs Creek Pkwy; 7901 Ridgeway St; 400 S Taney St; 209 E Hartwell Ln",
-      "neighborhoods": [
-        "Cobbs Creek",
-        "Fox Chase",
-        "Fitler Square",
-        "Chestnut Hill"
-      ],
-      "phone": "215-487-3477",
-      "website": "https://legacyyte.org/tennis_camps/full-day-summer-camp/",
-      "price": "paid",
-      "signup": "The page says registration is open now. Its dates, June 22 to August 7, are printed without a year and are last summer’s; it no longer gives a January opening date.",
-      "sources": [
-        {
-          "label": "Legacy Youth Tennis community camp",
-          "url": "https://legacyyte.org/tennis_camps/full-day-summer-camp/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://legacyyte.org/tennis_camps/full-day-summer-camp/",
-        "how": "fetch",
-        "look": "Dates, hours, ages and the flat seven-week price are in the body text of the full-day camp page.",
-        "notes": "The price is one fee for the whole summer, not weekly. The page prints dates without a year."
-      }
-    },
-    {
-      "id": "ceo-camp-phield-house",
-      "name": "C.E.O. Camp at Phield House",
-      "what": "A mix of indoor sports and themed weekly activities at an indoor sports complex.",
-      "types": [
-        "movement"
-      ],
-      "ages": "Ages 6–12, with a counselor-in-training program from 13",
-      "ageMin": 6,
-      "ageMax": 12,
-      "season": 2026,
-      "weeks": "June 8 to August 28, 2026, in 12 one-week sessions",
-      "hours": "9 am to 3 pm",
-      "extended": "Before care from 8 am and after care to 4:30 pm, $15 a session.",
-      "cost": "$340 a week",
-      "weekly": 340,
-      "aid": "A multi-week discount is applied at checkout.",
-      "address": "814 Spring Garden St",
-      "neighborhoods": [
-        "Callowhill"
-      ],
-      "phone": "215-830-1940",
-      "website": "https://www.phieldhouse.com/youth/summer-camp/",
-      "price": "paid",
-      "program": "phield-house",
-      "sources": [
-        {
-          "label": "C.E.O. Camp at Phield House",
-          "url": "https://www.phieldhouse.com/youth/summer-camp/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.phieldhouse.com/youth/summer-camp/",
-        "how": "fetch",
-        "look": "The week list, weekly price and before and after care terms are in the body text of the Phield House summer camp page.",
-        "notes": "ceocampspa.com is the same camp but returns only a title to a plain fetch."
-      }
-    },
-    {
-      "id": "awbury-adventures",
-      "name": "Awbury Adventures at Awbury Arboretum",
-      "what": "Kids explore the arboretum’s woods, farm and wetlands in themed nature, farming, art and wilderness-skills sessions.",
-      "types": [
-        "nature"
-      ],
-      "ages": "Ages 5–8, 8–12, and 11 and up",
-      "ageMin": 5,
-      "ageMax": 13,
-      "season": 2026,
-      "weeks": "June 15 to August 14, 2026",
-      "hours": "8:30 am to 3:30 pm",
-      "extended": "After-camp 3:30 to 6 pm, $18 a day.",
-      "cost": "$375 for one week ($356 for members); two-week sessions $675 to $770",
-      "weekly": 375,
-      "aid": "A full scholarship takes 75% off, and sliding-scale fees run 30% to 60% off.",
-      "address": "One Awbury Rd",
-      "neighborhoods": [
-        "Germantown"
-      ],
-      "phone": "215-849-2855",
-      "website": "https://awbury.org/summer-camp/",
-      "price": "paid",
-      "signup": "Registration for summer 2027 opens Monday, February 1, 2027 at 9 am; family members can sign up a week earlier, from Monday, January 25, 2027 at 9 am. The page gives the 2027 season as June 14 to August 20, 2027, but its session list and prices are still 2026’s.",
-      "program": "awbury-arboretum",
-      "sources": [
-        {
-          "label": "Awbury Adventures at Awbury Arboretum",
-          "url": "https://awbury.org/summer-camp/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://awbury.org/summer-camp/",
-        "how": "fetch",
-        "look": "A session list grouped by age band gives each session’s dates and price. Hours, after-camp and financial aid are in the text around it.",
-        "notes": "The page is mid-changeover: the header says 2027 while the session list and prices are still 2026."
-      },
-      "dates": [
-        {
-          "date": "2027-01-25",
-          "label": "Member registration for summer 2027 opens at 9 am"
-        },
-        {
-          "date": "2027-02-01",
-          "label": "Registration for summer 2027 opens at 9 am"
-        }
-      ]
-    },
-    {
-      "id": "camp-schuylkill",
-      "name": "Camp Schuylkill at the Schuylkill Center",
-      "what": "Kids spend the day outdoors on 365 acres of forest, exploring nature through weekly themes by age group.",
-      "types": [
-        "nature"
-      ],
-      "ages": "Ages 4–13, in four groups",
-      "ageMin": 4,
-      "ageMax": 13,
-      "season": 2027,
-      "weeks": "June 21 to August 13, 2027",
-      "hours": "9 am to 3:30 pm, with a half-day option for ages 4–5",
-      "extended": "Before care 8 to 9 am, $55 a week. After care 3:30 to 6 pm, $110 a week.",
-      "cost": "$475 a week for ages 4–9; $525 for ages 10–11; $585 for ages 12–13",
-      "weekly": 475,
-      "aid": "Takes the $200 Youth Access to Opportunity Grant and the Child Care Works subsidy.",
-      "address": "8480 Hagy’s Mill Rd",
-      "neighborhoods": [
-        "Roxborough"
-      ],
-      "phone": "215-482-7300",
-      "website": "https://schuylkillcenter.org/education/camp-schuylkill/",
-      "price": "paid",
-      "signup": "Registration for 2027 wasn’t open yet when we checked.",
-      "note": "The dates are for 2027, but the prices may still be last summer’s.",
-      "program": "schuylkill-center",
-      "sources": [
-        {
-          "label": "Camp Schuylkill at the Schuylkill Center",
-          "url": "https://schuylkillcenter.org/education/camp-schuylkill/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://schuylkillcenter.org/education/camp-schuylkill/",
-        "how": "fetch",
-        "look": "The season dates sit at the top of the Camp Schuylkill page and the prices are listed per age group lower down."
-      }
-    },
-    {
-      "id": "morris-arboretum-camp",
-      "name": "Nature Explorers at Morris Arboretum & Gardens",
-      "what": "Young kids explore the arboretum’s gardens and natural areas in small groups during week-long nature sessions.",
-      "types": [
-        "nature"
-      ],
-      "ages": "Ages 4–10, in two groups",
-      "ageMin": 4,
-      "ageMax": 10,
-      "season": 2026,
-      "weeks": "June 29 to August 7, 2026, in six weekly sessions",
-      "hours": "9 am to 3 pm",
-      "extended": "None. The arboretum says it can’t offer before or after care.",
-      "cost": "$370 a week ($340 for members); the four-day July 4 week is $330 ($300 for members)",
-      "weekly": 370,
-      "aid": "A limited amount of financial aid, first come, for families with need.",
-      "address": "100 E Northwestern Ave",
-      "neighborhoods": [
-        "Chestnut Hill"
-      ],
-      "phone": "215-247-5777",
-      "website": "https://www.morrisarboretum.org/learn-discover/kids-families/summer-camp",
-      "price": "paid",
-      "sources": [
-        {
-          "label": "Nature Explorers at Morris Arboretum & Gardens",
-          "url": "https://www.morrisarboretum.org/learn-discover/kids-families/summer-camp"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.morrisarboretum.org/learn-discover/kids-families/summer-camp",
-        "how": "fetch",
-        "look": "Session dates, member and non-member prices, hours and age groups are all in the body text of the summer camp page."
-      },
-      "signup": "The page says registration opens in January, with each child limited to three weeks at first and a waitlist from January 30; it doesn’t say which year."
-    },
-    {
-      "id": "circus-arts-camp",
-      "name": "Philadelphia School of Circus Arts",
-      "what": "Kids train in circus skills for a week and finish with a performance on Friday afternoon.",
-      "types": [
-        "movement"
-      ],
-      "ages": "Ages 4–17, in four groups",
-      "ageMin": 4,
-      "ageMax": 17,
-      "season": 2026,
-      "hours": "9 am to 3 pm",
-      "extended": "Before care from 7:30 am, $20 a day. After care to 6 pm, $35 a day (ages 6 and up).",
-      "cost": "$495 a week",
-      "weekly": 495,
-      "address": "6452 Greene St",
-      "neighborhoods": [
-        "Mount Airy"
-      ],
-      "phone": "215-849-1991",
-      "website": "https://phillycircus.com/camp/",
-      "price": "paid",
-      "note": "The week-by-week dates weren’t readable when we checked.",
-      "program": "philadelphia-school-of-circus-arts",
-      "sources": [
-        {
-          "label": "Philadelphia School of Circus Arts",
-          "url": "https://phillycircus.com/camp/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://phillycircus.com/camp/",
-        "how": "browser",
-        "look": "Price, hours, age groups and care fees are in the camp page text. The week dates sit behind the enrollment link."
-      }
-    },
-    {
-      "id": "work-to-ride-camp",
-      "name": "Work to Ride at Chamounix Equestrian Center",
-      "what": "Kids learn horseback riding and horse care at a stable in Fairmount Park, with a little-kids camp and a half-day polo camp.",
-      "types": [
-        "movement",
-        "nature"
-      ],
-      "ages": "Ages 5–13",
-      "ageMin": 5,
-      "ageMax": 13,
-      "season": 2026,
-      "hours": "9 am to 4 pm",
-      "cost": "$525 for a one-week session; $275 for half-day polo camp",
-      "weekly": 525,
-      "address": "98 Chamounix Dr",
-      "neighborhoods": [
-        "West Fairmount Park"
-      ],
-      "phone": "215-877-4419",
-      "website": "https://worktoride.net/summer-camp/",
-      "price": "paid",
-      "signup": "The page is headed 2027 and says to check back for dates.",
-      "note": "The prices are from the 2026 forms, which were still the ones posted.",
-      "sources": [
-        {
-          "label": "Work to Ride at Chamounix Equestrian Center",
-          "url": "https://worktoride.net/summer-camp/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://worktoride.net/summer-camp/",
-        "how": "fetch",
-        "look": "Dates sit under a “Summer Camp Dates” heading and prices are in each camp type’s line. Sign-up is by PDF forms."
-      }
-    },
-    {
-      "id": "seaport-summer-camp",
-      "name": "Seaport Summer Camp at Independence Seaport Museum",
-      "what": "Hands-on crafts and activities, time on the water and visits to the museum’s historic ships, with a new theme each week.",
-      "types": [
-        "daycamp",
-        "stem"
-      ],
-      "ages": "Ages 6–11",
-      "ageMin": 6,
-      "ageMax": 11,
-      "season": 2026,
-      "weeks": "June 22 to August 14, 2026, in seven one-week sessions, none June 29 to July 3",
-      "hours": "8 am to 3 pm",
-      "extended": "Aftercare 3 to 5:30 pm, $150 a week.",
-      "cost": "$450 a week ($375 for members)",
-      "weekly": 450,
-      "aid": "Seven one-week scholarships based on need. An early-bird price took $25 off.",
-      "address": "211 S Columbus Blvd",
-      "neighborhoods": [
-        "Penn’s Landing"
-      ],
-      "phone": "215-413-8655",
-      "website": "https://www.phillyseaport.org/camp",
-      "price": "paid",
-      "sources": [
-        {
-          "label": "Seaport Summer Camp at Independence Seaport Museum",
-          "url": "https://www.phillyseaport.org/camp"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.phillyseaport.org/camp",
-        "how": "fetch",
-        "look": "Weeks and themes are listed on the camp page with a registration link per week. Prices sit in a pricing section on the same page."
-      }
-    },
-    {
-      "id": "taller-puertorriqueno-camp",
-      "name": "Taller Puertorriqueño",
-      "what": "Kids paint, draw and build art projects, learn Caribbean dance and music, and tend a garden.",
-      "types": [
-        "art",
-        "daycamp"
-      ],
-      "ages": "Ages 6–14, in three groups",
-      "ageMin": 6,
-      "ageMax": 14,
-      "season": 2026,
-      "weeks": "July 6 to August 7, 2026",
-      "hours": "8:30 am to 4 pm",
-      "cost": "$125 a week, plus a $30 registration fee and a $10 T-shirt. Free for children who qualify for Child Care Works.",
-      "weekly": 125,
-      "aid": "Free with Child Care Works. Ask Taller about other help.",
-      "address": "2600 N 5th St",
-      "neighborhoods": [
-        "Fairhill"
-      ],
-      "phone": "215-426-3311",
-      "website": "https://tallerpr.org/education/summer-camp/",
-      "price": "paid",
-      "signup": "For 2026 the interest form opened March 1, with a May 31 deadline.",
-      "sources": [
-        {
-          "label": "Taller Puertorriqueño",
-          "url": "https://tallerpr.org/education/summer-camp/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://tallerpr.org/education/summer-camp/",
-        "how": "fetch",
-        "look": "Dates, hours, age groups and the weekly rate are all in the body text of the Summer Camp page. Sign-up is a linked interest form.",
-        "notes": "The site sits behind Cloudflare: a plain curl got HTTP 403 on 2026-11-01 while a headless browser read the page; the Camp Info section is in the page text."
-      }
-    },
-    {
-      "id": "camp-tps",
-      "name": "Camp TPS at The Philadelphia School",
-      "what": "City Country Day Camps with water play for younger kids, plus about 35 one-week enrichment camps up to 8th grade.",
-      "types": [
-        "daycamp"
-      ],
-      "ages": "Ages 4–14",
-      "ageMin": 4,
-      "ageMax": 14,
-      "season": 2027,
-      "weeks": "June 21 to August 27, 2027",
-      "hours": "9:30 am to 3:30 pm, with drop-off from 8:30 and pick-up to 4",
-      "cost": "$250 to $575 a week, depending on the camp",
-      "weekly": 250,
-      "aid": "Links to the Youth Access to Opportunities Grant.",
-      "address": "2501 Lombard St",
-      "neighborhoods": [
-        "Fitler Square"
-      ],
-      "phone": "215-545-5323",
-      "website": "https://www.tpschool.org/tps-experience/camptps",
-      "price": "paid",
-      "note": "The 2027 dates are posted, but the price range comes from the Rates & Info page, which doesn’t name a year, and the camp list shown is still 2026’s. The price is a range across many camps; the low end may be a shorter or particular camp.",
-      "program": "the-philadelphia-school",
-      "sources": [
-        {
-          "label": "Camp TPS at The Philadelphia School",
-          "url": "https://www.tpschool.org/tps-experience/camptps"
-        },
-        {
-          "label": "Camp TPS summer camp page",
-          "url": "https://www.tpschool.org/tps-experience/camptps/summer-camp"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.tpschool.org/tps-experience/camptps",
-        "how": "fetch",
-        "look": "Season dates are in the intro of the Camp TPS page. The price range and daily hours are on the linked Rates & Info page, and per-camp weeks are in the linked catalog."
-      },
-      "signup": "Registration for summer 2027 opens in early December 2026.",
-      "updates": [
-        {
-          "date": "2026-11-01",
-          "text": "Summer 2027 dates are posted: camps run June 21 to August 27, 2027 for ages 4–14. Registration opens in early December. Prices for 2027 are not posted yet; last summer’s range was $250 to $575 a week."
-        }
-      ]
-    },
-    {
-      "id": "ymca-day-camps",
-      "name": "Greater Philadelphia YMCA day camps",
-      "what": "Traditional age-grouped day camp at Y branches, with specialty sports and arts camps.",
-      "types": [
-        "daycamp"
-      ],
-      "ages": "Ages 4–15, varying by branch",
-      "ageMin": 4,
-      "ageMax": 15,
-      "season": 2026,
-      "hours": "Most branches run 7 am to 6 pm",
-      "extended": "Before and after care are included in the price.",
-      "cost": "Weekly rates aren’t on the camp pages. A deposit is required.",
-      "aid": "The Y has a financial assistance program.",
-      "address": "Roxborough YMCA, 7201 Ridge Ave, and other city branches",
-      "neighborhoods": [
-        "Roxborough"
-      ],
-      "phone": "215-220-9199",
-      "website": "https://www.philaymca.org/camps/summer-day-camp/",
-      "signup": "Sign-ups for summer 2027 open January 6, 2027 for family memberships, January 13 for members and January 20 for non-members. The 2027 handbook and prices were not posted yet.",
-      "note": "We read the Roxborough branch’s page. Other city branches, and all prices, weren’t readable.",
-      "sources": [
-        {
-          "label": "Greater Philadelphia YMCA day camps",
-          "url": "https://www.philaymca.org/camps/summer-day-camp/"
-        },
-        {
-          "label": "Roxborough YMCA summer camp",
-          "url": "https://www.philaymca.org/camps/summer-day-camp/roxborough-ymca-summer-camp/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.philaymca.org/camps/summer-day-camp/",
-        "how": "browser",
-        "look": "The summer day camp page lists every branch and a Camp Finder. Week dates and member and non-member rates are most likely in the registration portal or the linked Camp Handbook PDF.",
-        "notes": "Each branch has its own page, on the pattern philaymca.org/camps/summer-day-camp/roxborough-ymca-summer-camp/; the registration dates sit at the top of the branch page under “Registration Dates”."
-      },
-      "dates": [
-        {
-          "date": "2027-01-06",
-          "label": "Summer 2027 day camp sign-ups open for family memberships"
-        },
-        {
-          "date": "2027-01-13",
-          "label": "Summer 2027 day camp sign-ups open for members"
-        },
-        {
-          "date": "2027-01-20",
-          "label": "Summer 2027 day camp sign-ups open for non-members"
-        }
-      ]
-    },
-    {
-      "id": "summer-achievers-edey",
-      "name": "Summer Achievers at Extended Day, Extended Year schools",
-      "what": "A free six-week camp at district schools in the city’s Extended Day, Extended Year program, with meals, enrichment activities and field trips.",
-      "types": [
-        "daycamp",
-        "academics"
-      ],
-      "ages": "Rising 1st to 8th graders",
-      "ageMin": 6,
-      "ageMax": 13,
-      "season": 2026,
-      "weeks": "June 22 to July 31, 2026",
-      "hours": "8:30 am to 5 pm",
-      "cost": "Free, meals included",
-      "weekly": 0,
-      "address": "At 35 district schools and 10 charter schools",
-      "phone": "215-683-2367",
-      "website": "https://www.phila.gov/programs/extended-day-extended-year/",
-      "registerUrl": "https://www.phila.gov/ost/program-locator/?services=programs_isAchievers",
-      "price": "free",
-      "note": "Families pick a school through the city’s program locator. Space was limited in 2026.",
-      "sources": [
-        {
-          "label": "City of Philadelphia: Extended Day, Extended Year",
-          "url": "https://www.phila.gov/programs/extended-day-extended-year/"
-        },
-        {
-          "label": "City post on Summer Achievers 2026",
-          "url": "https://www.phila.gov/2026-05-08-register-now-make-this-summer-unforgettable-with-summer-achievers-summer-camp-at-edey-schools-2/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.phila.gov/programs/extended-day-extended-year/",
-        "how": "fetch",
-        "look": "The program page shows registration status and the school list. Dates, hours and grades come from a spring phila.gov post titled “Register now… Summer Achievers”.",
-        "notes": "The dated post changes each spring (May 8 in 2026)."
-      }
-    },
-    {
-      "id": "allens-lane-art-camp",
-      "name": "Allens Lane Art Center summer art camp",
-      "what": "A new workshop, medium and theme each week, from painting and ceramics to improv and film, with time in the park and a Friday showcase.",
-      "types": [
-        "art"
-      ],
-      "ages": "Ages 5–12",
-      "ageMin": 5,
-      "ageMax": 12,
-      "season": 2026,
-      "weeks": "June 15 to August 7, 2026. No camp June 19 or July 3.",
-      "hours": "Classes 9:30 am to 3:30 pm, with drop-off from 8:30",
-      "extended": "Before care from 8:30 am is free. After care 3:30 to 5:30 pm, $120 a week.",
-      "cost": "$380 a week; $360 for the two holiday weeks",
-      "weekly": 380,
-      "aid": "5% off per child with a family membership. Early-bird price of $360 to the end of February. Full and partial scholarships may be available.",
-      "address": "601 W Allens Ln",
-      "neighborhoods": [
-        "Mount Airy"
-      ],
-      "website": "https://allenslane.org/summer-camp/",
-      "price": "paid",
-      "signup": "Sign-ups for 2026 started January 26 at 8 am.",
-      "sources": [
-        {
-          "label": "Allens Lane Art Center summer art camp",
-          "url": "https://allenslane.org/summer-camp/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://allenslane.org/summer-camp/",
-        "how": "browser",
-        "look": "Dates are at the top under “About Summer Camp”. Prices, discounts and before and after care are in the “Fees & Discounts” section.",
-        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
-      },
-      "phone": "215-248-0546"
-    },
-    {
-      "id": "nlarts-summer-camp",
-      "name": "NLArts summer art camp",
-      "what": "Studio art, outdoor play and creative play in equal parts, with trips around the city and a Friday open house for families.",
-      "types": [
-        "art"
-      ],
-      "ages": "Rising kindergarten to 5th grade, with a counselor-in-training program for grades 6–8",
-      "ageMin": 5,
-      "ageMax": 13,
-      "season": 2026,
-      "weeks": "June 15 to August 21, 2026, none the weeks of June 29 and July 20",
-      "hours": "8:30 am to 3:30 pm",
-      "extended": "After Hours care to 5:30 pm brings the week to $420.",
-      "cost": "$300 a week; $280 for siblings",
-      "weekly": 300,
-      "aid": "Scholarship awards are available.",
-      "address": "700–702 N 3rd St",
-      "neighborhoods": [
-        "Northern Liberties"
-      ],
-      "website": "https://www.nlarts.org/summer-art-camp",
-      "price": "paid",
-      "note": "Summer 2026 sold out and its waitlist closed.",
-      "program": "nlarts",
-      "sources": [
-        {
-          "label": "NLArts summer art camp",
-          "url": "https://www.nlarts.org/summer-art-camp"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.nlarts.org/summer-art-camp",
-        "how": "browser",
-        "look": "Fees by grade group are in the “Information & Fees” section. Session dates are inside the headings under “Sessions & Themes”, which open on a click.",
-        "notes": "Read with a headless browser on 2026-11-01; the session dates under “Sessions & Themes” come through in the page text without clicking. The old address /summer-art-camp-program is now a menu of programs."
-      }
-    },
-    {
-      "id": "yes-and-camp",
-      "name": "Yes! And… Collaborative Arts camps",
-      "what": "Kids make theater together: acting, movement, visual art and storytelling, ending in a show they create themselves.",
-      "types": [
-        "theater",
-        "art"
-      ],
-      "ages": "Imagination Camp for rising K–4th grade; Theater Camp for rising 5th–8th",
-      "ageMin": 5,
-      "ageMax": 13,
-      "season": 2026,
-      "weeks": "June 22 to August 21, 2026, as one-, two- and three-week camps",
-      "hours": "9 am to 3 pm",
-      "extended": "Before care from 8 am and late care to 5 pm (Monday to Thursday), $8 an hour.",
-      "cost": "Sliding scale from $5 to $350 a week; the camp’s own cost is $350",
-      "weekly": 350,
-      "aid": "Anyone can ask for a lower rate on the sliding scale, with no paperwork, and full scholarships are offered.",
-      "address": "21 W Washington Ln",
-      "neighborhoods": [
-        "Germantown"
-      ],
-      "website": "https://www.yesandcamp.org/summer-camps",
-      "price": "paid",
-      "signup": "For 2026, dates came out January 15 and sign-ups opened January 27 for returning families and February 1 for new ones.",
-      "sources": [
-        {
-          "label": "Yes! And… Collaborative Arts camps",
-          "url": "https://www.yesandcamp.org/summer-camps"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.yesandcamp.org/summer-camps",
-        "how": "browser",
-        "look": "The summer camps page links to a page per camp (Imagination Camp, Theater Camp). Each has a “Dates” block and a “Tuition and Fees” section.",
-        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
-      },
-      "phone": "215-278-4264"
-    },
-    {
-      "id": "zazz-summer-camp",
-      "name": "ZAZZ Dance & Drama",
-      "what": "Dance and drama sessions each day, with outdoor lunch, games, art projects and a Friday show. Ages 11–14 get performer intensives and a two-week musical.",
-      "types": [
-        "theater",
-        "movement"
-      ],
-      "ages": "Ages 5–14",
-      "ageMin": 5,
-      "ageMax": 14,
-      "season": 2026,
-      "weeks": "June 15 to August 21, 2026, by the week",
-      "hours": "9 am to 3:30 pm",
-      "extended": "Early care 8 to 9 am, $10 a day. Late programming 3 to 6 pm, $25 a day.",
-      "cost": "$350 a week; $700 for the two-week musical; plus a one-time $50 registration fee",
-      "weekly": 350,
-      "aid": "10% off for siblings. Payment plans and need-based help if cost is a barrier.",
-      "address": "1923 Chestnut St, 2nd floor",
-      "neighborhoods": [
-        "Rittenhouse"
-      ],
-      "website": "https://zazzphilly.com/summer-camp/",
-      "price": "paid",
-      "program": "zazz-dance",
-      "sources": [
-        {
-          "label": "ZAZZ Dance & Drama",
-          "url": "https://zazzphilly.com/summer-camp/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://zazzphilly.com/summer-camp/",
-        "how": "browser",
-        "look": "Weeks and themes are listed by age group, with a “Rates” block and an “Extended care” block between them.",
-        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. A plain fetch came back without details earlier the same day."
-      }
-    },
-    {
-      "id": "sawubona-summer-camp",
-      "name": "Sawubona Creativity Project",
-      "what": "Theatre camp where each week is built around a different musical or movie, with dance routines, skits and a showcase.",
-      "types": [
-        "theater"
-      ],
-      "season": 2026,
-      "weeks": "June 22 to August 21, 2026, in nine themed weeks",
-      "address": "1626 E Passyunk Ave",
-      "neighborhoods": [
-        "East Passyunk"
-      ],
-      "website": "https://www.sawubonacreativityproject.org/campinformationandschedules",
-      "note": "The page lists the summer weeks but not the summer price, hours or ages. Its one-day camps on days off run 8:30 am to 5:30 pm for $60, for pre-K to 6th grade.",
-      "sources": [
-        {
-          "label": "Sawubona Creativity Project",
-          "url": "https://www.sawubonacreativityproject.org/campinformationandschedules"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.sawubonacreativityproject.org/campinformationandschedules",
-        "how": "browser",
-        "look": "The page lists each summer week by its theme and dates. Price, hours and ages for summer are on the page each week links to.",
-        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
-      },
-      "program": "sawubona-creativity-project",
-      "phone": "856-332-4951"
-    },
-    {
-      "id": "zoomdance-camp",
-      "name": "ZoomDance camp",
-      "what": "Movement classes, dancing, art projects and story games for young children, with park trips, water play and time to rest.",
-      "types": [
-        "movement"
-      ],
-      "ages": "Ages 2½ to 7",
-      "ageMin": 2.5,
-      "ageMax": 7,
-      "season": 2026,
-      "weeks": "June 29 to August 21, 2026",
-      "hours": "9 am to 3 pm",
-      "extended": "Early drop-off from 8:30 am, $7 a day. After care to 5 pm, $20 a day.",
-      "cost": "Sliding scale from $200 to $650 a week; the camp’s own cost is $450",
-      "aid": "Sliding-scale tiers from $200 to $650 a week, in place of the old scholarship program.",
-      "address": "1415 S 9th St (at The Dandelion Project)",
-      "neighborhoods": [
-        "Passyunk Square"
-      ],
-      "phone": "215-326-9613",
-      "website": "https://zoomdance.com/camps/",
-      "note": "The page says the 2026 season is over and it looks forward to 2027; no 2027 dates yet.",
-      "sources": [
-        {
-          "label": "ZoomDance camp",
-          "url": "https://zoomdance.com/camps/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://zoomdance.com/camps/",
-        "how": "browser",
-        "look": "Dates, ages, hours and location are at the top. Pricing is under the “Sliding Scale Pricing” heading, whose text is in the page for a headless browser.",
-        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
-      },
-      "weekly": 450
-    },
-    {
-      "id": "dandelion-summer-camp",
-      "name": "The Dandelion Project summer camp",
-      "what": "Open-ended play and creative offerings with a daily park trip, themed weeks like messy science and band camp, and all-outdoor weeks at FDR Park.",
-      "types": [
-        "daycamp",
-        "nature"
-      ],
-      "ages": "Ages 5–11; one band camp week for ages 10–15",
-      "ageMin": 5,
-      "ageMax": 15,
-      "season": 2026,
-      "weeks": "June 15 to August 28, 2026",
-      "hours": "9 am to 3 pm",
-      "extended": "After care is run by ZoomDance in the same building on select weeks.",
-      "cost": "$400 a week, with sliding-scale codes that bring it down as far as $260",
-      "weekly": 400,
-      "aid": "A trust-based sliding scale: families who need to pay less pick a lower rate at checkout.",
-      "address": "1415 S 9th St; FDR Park",
-      "neighborhoods": [
-        "Passyunk Square",
-        "South Philadelphia"
-      ],
-      "website": "https://www.thedandelionproject.us/summer-camp",
-      "price": "paid",
-      "program": "dandelion-after-school",
-      "sources": [
-        {
-          "label": "The Dandelion Project summer camp",
-          "url": "https://www.thedandelionproject.us/summer-camp"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.thedandelionproject.us/summer-camp",
-        "how": "browser",
-        "look": "Price and sliding scale are in the intro. Each of the three camp types has its own block of dates.",
-        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. The site answered 429 to a plain fetch earlier the same day. The old address /summercamp is gone."
-      },
-      "phone": "215-792-3289"
-    },
-    {
-      "id": "rutabaga-naturearts",
-      "name": "Rutabaga NatureArts summer camp",
-      "what": "Hikes and exploring around East Falls, turning what kids find outdoors into artwork. Most of the day is spent outside.",
-      "types": [
-        "nature",
-        "art"
-      ],
-      "ages": "Ages 5 and up, in two groups",
-      "ageMin": 5,
-      "season": 2026,
-      "weeks": "June 15 to August 21, 2026",
-      "hours": "8:30 am to 3 pm",
-      "extended": "Before care from 7:30 am, $12 a day. After care to 5:30 pm, $25 a day.",
-      "cost": "$475 a week; a single day, when open, is $95",
-      "weekly": 475,
-      "aid": "$10 off a week when you book three or more, 5% off for siblings, and a limited number of sliding-scale spots.",
-      "address": "3800 Vaux St",
-      "neighborhoods": [
-        "East Falls"
-      ],
-      "website": "https://www.rutabagatoylibrary.com/summer-camp",
-      "price": "paid",
-      "signup": "The page says 2027 summer camp information is coming soon. For 2026 the early-bird discount ran through February 28.",
-      "sources": [
-        {
-          "label": "Rutabaga NatureArts summer camp",
-          "url": "https://www.rutabagatoylibrary.com/summer-camp"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.rutabagatoylibrary.com/summer-camp",
-        "how": "browser",
-        "look": "Ages, dates and schedule are under “Basics”, then “Pricing” and “Discounts”.",
-        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. The site answered 429 to a plain fetch earlier the same day."
-      },
-      "phone": "267-297-5293"
-    },
-    {
-      "id": "skate-the-foundry-camp",
-      "name": "Skate The Foundry skateboard camp",
-      "what": "Full days of skateboarding by age and skill level, with group skates, free skates and trips such as the Art Museum.",
-      "types": [
-        "movement"
-      ],
-      "ages": "Ages 7–13",
-      "ageMin": 7,
-      "ageMax": 13,
-      "season": 2026,
-      "weeks": "Eight camp weeks at Paine’s Park were listed for 2026, all without dates",
-      "hours": "9 am to 3 pm",
-      "cost": "$600 a week; $550 before May 1",
-      "weekly": 600,
-      "aid": "5% off for siblings on full-day camps.",
-      "address": "Paine’s Park and its West Philly skatepark",
-      "neighborhoods": [
-        "West Philadelphia",
-        "Fairmount"
-      ],
-      "phone": "215-954-0750",
-      "website": "https://www.skatethefoundry.com/camp/",
-      "price": "paid",
-      "note": "The page says camps are on hold until further notice and registration is closed (seen November 1, 2026). It also runs single-day camps on days off.",
-      "sources": [
-        {
-          "label": "Skate The Foundry skateboard camp",
-          "url": "https://www.skatethefoundry.com/camp/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.skatethefoundry.com/camp/",
-        "how": "browser",
-        "look": "“Summer Camp Details” gives the price, then a week-by-week list of dates. Ages and hours are under “Additional Information”.",
-        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. The page is long because it embeds reviews."
-      },
-      "program": "skate-the-foundry",
-      "updates": [
-        {
-          "date": "2026-11-01",
-          "text": "The camp page now says camps are on hold until further notice and registration is closed."
-        }
-      ]
-    },
-    {
-      "id": "lavner-tech-camp-upenn",
-      "name": "Camp Tech Revolution at UPenn (Lavner)",
-      "what": "Weekly tech camps in robotics, coding, game design, Minecraft, Roblox, filmmaking and digital art.",
-      "types": [
-        "stem"
-      ],
-      "ages": "Ages 6–14",
-      "ageMin": 6,
-      "ageMax": 14,
-      "season": 2026,
-      "extended": "Early arrival 8 to 9 am and an extended day 3 to 5:45 pm are add-ons.",
-      "address": "235 S 33rd St (University of Pennsylvania)",
-      "neighborhoods": [
-        "University City"
-      ],
-      "phone": "888-854-2267",
-      "website": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camps-tech-camps-stem-camps-university-of-pennsylvania-upenn/",
-      "note": "Dates and prices weren’t on the page we read. The address for its St. Peter’s School location now leads to this UPenn page.",
-      "sources": [
-        {
-          "label": "Camp Tech Revolution at UPenn (Lavner)",
-          "url": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camps-tech-camps-stem-camps-university-of-pennsylvania-upenn/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camps-tech-camps-stem-camps-university-of-pennsylvania-upenn/",
-        "how": "browser",
-        "look": "The location page describes the camp and its address. Weeks and prices are in the enrollment system behind “Enroll Now”.",
-        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
-      }
-    },
-    {
-      "id": "philly-rock-gym-camps",
-      "name": "Philadelphia Rock Gym summer camps",
-      "what": "Climbing camps with bouldering, team games and crafts. Camp Real Rock adds a Friday trip to climb outdoors with guides.",
-      "types": [
-        "movement"
-      ],
-      "ages": "Discovery Camp ages 6–14; Camp Real Rock ages 8–15",
-      "ageMin": 6,
-      "ageMax": 15,
-      "hours": "9 am to 3 pm, or a half day to noon",
-      "extended": "Early and late care, $20 an hour.",
-      "cost": "$480 a week for a full day, $310 for half days; Camp Real Rock is $590",
-      "weekly": 480,
-      "price": "paid",
-      "address": "2412 E York St (Fishtown); 3500 Scotts Ln (East Falls)",
-      "neighborhoods": [
-        "Fishtown",
-        "East Falls"
-      ],
-      "phone": "877-822-7673",
-      "website": "https://philarockgym.com/youth-camps/",
-      "signup": "The page said registration is coming soon.",
-      "note": "No dates were posted, and the page doesn’t say which summer the prices are for. It also has gyms outside the city.",
-      "program": "philly-rock-gym-day-camps",
-      "sources": [
-        {
-          "label": "Philadelphia Rock Gym youth camps",
-          "url": "https://philarockgym.com/youth-camps/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://philarockgym.com/youth-camps/",
-        "how": "browser",
-        "look": "The Summer Camps section has a block per camp with ages, prices and hours. Gym addresses are on each location’s own page.",
-        "notes": "Read in a browser on 2026-10-07. The site could not be read by the fetch tool the same day."
-      }
-    },
-    {
-      "id": "coco-academy-summer-camp",
-      "name": "CoCo Academy",
-      "what": "Weekly STEAM camps. Kids work on projects in the week’s theme, design and build their own inventions, and test them outside at a nearby park. Themes include robotics, motion, energy, rocket science and everyday machines.",
-      "types": [
-        "stem"
-      ],
-      "ages": "Ages 5–14",
-      "ageMin": 5,
-      "ageMax": 14,
-      "season": 2026,
-      "weeks": "June 8 to September 4, 2026, booked by the week. The July 4 week runs four days, June 29 to July 2.",
-      "hours": "9 am to 3 pm, Monday to Friday",
-      "extended": "Early drop-off from 8:30 am, $36 a week. Extended day to 5:30 pm, $100 a week, except the weeks of June 8, August 24 and August 31.",
-      "cost": "$480 a week. The four-day July 4 week is $384.",
-      "weekly": 480,
-      "price": "paid",
-      "address": "1001 Christian St and 615 S 3rd St",
-      "neighborhoods": [
-        "Bella Vista",
-        "Queen Village"
-      ],
-      "phone": "215-253-7690",
-      "website": "https://www.cocoacademyphl.com/summercamp",
-      "signup": "Online. Its camp page has a separate Register button for Bella Vista and for Queen Village, and early drop-off and extended day are add-ons at checkout.",
-      "note": "Send a labeled water bottle, a lunch that doesn’t need a fridge, and two snacks each day. Most themes run twice over the summer, so check the week’s theme when you book.",
-      "program": "coco-academy",
-      "sources": [
-        {
-          "label": "CoCo Academy summer camp",
-          "url": "https://www.cocoacademyphl.com/summercamp"
-        }
-      ],
-      "checked": "2026-10-07",
-      "check": {
-        "url": "https://www.cocoacademyphl.com/summercamp",
-        "how": "person",
-        "look": "The top paragraph gives ages, the first and last week and the daily hours. Prices, early drop-off, extended day and the July 4 week are under “Pricing” in the Camp Info section lower down.",
-        "notes": "The site does not allow automated reading and the browser extension is not allowed on it, so Josh pastes the page text (last pasted 2026-10-07). Registration runs through Sawyer, one link per location."
-      }
-    },
-    {
-      "id": "philly-pack-summer-camp",
-      "name": "Philly PACK",
-      "what": "Theatre and dance camps at a South Philly garage theatre: a one-week camp on a theme (a witch week, Shakespeare set to Taylor Swift, a book brought to the stage) ends in a Friday show, and a two-week production intensive stages a full-length musical.",
-      "types": [
-        "theater",
-        "movement"
-      ],
-      "ages": "Incoming 2nd grade and up for the production intensive and the book camp (strong reading skills required); incoming 4th grade and up for the others",
-      "ageMin": 7,
-      "season": 2026,
-      "weeks": "June 22 to July 31, 2026, as four camps: June 22 to 26, July 6 to 10, July 13 to 24 (the two-week production intensive) and July 27 to 31. No camp June 29 to July 3. Sign up for one week or all of them.",
-      "hours": "9 am to 3 pm, Monday to Friday",
-      "cost": "$500 a week; $1,000 for the two-week production intensive, with a $400 deposit at registration",
-      "weekly": 500,
-      "signup": "Registration opens January 15. The 2026 page lists each camp with its own Register link.",
-      "address": "233 Federal St",
-      "neighborhoods": [
-        "Pennsport"
-      ],
-      "phone": "215-703-8617",
-      "website": "https://www.phillypack.org/summer-camp/",
-      "registerUrl": "https://www.phillypack.org/registration/",
-      "price": "paid",
-      "sources": [
-        {
-          "label": "Philly PACK summer camp",
-          "url": "https://www.phillypack.org/summer-camp/"
-        },
-        {
-          "label": "Contact",
-          "url": "https://www.phillypack.org/contact-us/"
-        }
-      ],
-      "checked": "2026-11-05",
-      "check": {
-        "url": "https://www.phillypack.org/summer-camp/",
-        "how": "fetch",
-        "look": "Each camp has a dated heading with the grades, the tuition and a Register link; the page says when registration opens.",
-        "notes": "The address and phone are on /contact-us/. On 2026-11-05 the page still described summer 2026: it said five weeks but listed four camps, and gave no extended-day care."
-      }
-    },
-    {
-      "id": "esf-camps",
-      "name": "ESF Camps",
-      "what": "Big traditional day camp on school campuses, with junior and senior camps by grade, multi-sports and tennis camps, Jr. 76ers basketball and Phillies baseball weeks, and arts, science and technology camps. Two sites in the city: Friends Select in Center City and Norwood-Fontbonne Academy in Chestnut Hill (a third at The Haverford School on the Main Line).",
-      "types": [
-        "daycamp",
-        "movement",
-        "stem",
-        "art"
-      ],
-      "ages": "Rising pre-K to 8th grade for the day camps (junior camp PreS–2, senior camp 3–8); sports and specialty camps by grade from rising 1st, some to 10th",
-      "ageMin": 4,
-      "ageMax": 14,
-      "season": 2027,
-      "weeks": "June 14 to August 20, 2027; no camp June 18 or July 5",
-      "hours": "9 am to 3 pm (the program’s own word; its site doesn’t post hours)",
-      "extended": "Club OT extended day from 7:30 am and to 6 pm, with afternoon snacks: at Friends Select $72 a week for mornings, $195 for afternoons, $230 for both.",
-      "cost": "Friends Select: $645 a week when booked by February 1, 2027, $695 after; $30 a week off for five or more weeks; $20 off each extra sibling. Norwood-Fontbonne’s rates are on its own rates page.",
-      "signup": "Enrollment for 2027 opens in November 2026, online through Bravo Enrollment, with early-bird savings from November 16 (the program told us). Friends Select camp office 215-298-9145; Chestnut Hill 215-247-7010.",
-      "address": "1651 Benjamin Franklin Pkwy (Friends Select School); 8900 Norwood Ave (Norwood-Fontbonne Academy)",
-      "neighborhoods": [
-        "Logan Square",
-        "Chestnut Hill"
-      ],
-      "phone": "215-298-9145",
-      "website": "https://www.esfcamps.com/friendsselect/",
-      "registerUrl": "https://www.bravoenrollment.com/?redirectTo=esf",
-      "price": "paid",
-      "sources": [
-        {
-          "label": "ESF Camps at Friends Select",
-          "url": "https://www.esfcamps.com/friendsselect/"
-        },
-        {
-          "label": "ESF Camps at Norwood-Fontbonne Academy",
-          "url": "https://www.esfcamps.com/chestnuthill/"
-        },
-        {
-          "label": "ESF Camps",
-          "url": "https://www.esfcamps.com/"
-        },
-        {
-          "label": "ESF Friends Select tuition rates",
-          "url": "https://www.esfcamps.com/friendsselect/rates/"
-        },
-        {
-          "label": "ESF Friends Select extended day",
-          "url": "https://www.esfcamps.com/friendsselect/rates/extended-day/"
-        }
-      ],
-      "checked": "2026-11-05",
-      "check": {
-        "url": "https://www.esfcamps.com/friendsselect/rates/",
-        "how": "browser",
-        "look": "The season dates and grade range are on the location home page. Weekly tuition by weeks booked, the early-bird window and the holiday weeks are on the Tuition Rates & Savings page in tables that open on a click; Club OT prices are on the extended-day page.",
-        "notes": "Read with a headless browser on 2026-11-01; the rate tables come through in the page text. An earlier check found the rates page gone; it is back at /friendsselect/rates/."
-      },
-      "weekly": 645,
-      "note": "The weeks of June 14 and July 6 are four days at a reduced rate. Prices are for the day, sports and STEAM camps; the extended-day page shows two sets of Club OT rates and the higher set is taken as current.",
-      "dates": [
-        {
-          "date": "2027-02-01",
-          "label": "Last day of early-bird tuition ($645 a week; $695 after)"
-        }
-      ]
-    },
-    {
-      "id": "skateboard-academy-rizzo-rink",
-      "name": "The Skateboard Academy summer camp at Rizzo Rink",
-      "what": "Skateboard instruction and camp activities at the Rizzo Rink, with a camp T-shirt and an end-of-week treat. Campers bring their own board and helmet, or ask to borrow a helmet.",
-      "types": [
-        "movement"
-      ],
-      "ages": "Ages 5–13",
-      "ageMin": 5,
-      "ageMax": 13,
-      "season": 2026,
-      "weeks": "June 15 to June 26, 2026, in two one-week sessions",
-      "hours": "9 am to 2 pm",
-      "cost": "$250 a week",
-      "weekly": 250,
-      "price": "paid",
-      "address": "Rizzo Rink, Front St and Washington Ave",
-      "neighborhoods": [
-        "Pennsport"
-      ],
-      "website": "https://theskateboardacademycom.bigcartel.com/product/rizzo-rink-sumer-sk8-camp",
-      "note": "Both 2026 weeks showed as sold out. The camp is sold as a product in the academy’s online shop, which gives no phone number or sign-up date.",
-      "sources": [
-        {
-          "label": "The Skateboard Academy, 2026 Rizzo Rink Summer Sk8 Camp",
-          "url": "https://theskateboardacademycom.bigcartel.com/product/rizzo-rink-sumer-sk8-camp"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://theskateboardacademycom.bigcartel.com/product/rizzo-rink-sumer-sk8-camp",
-        "how": "browser",
-        "look": "The product page gives the two weeks, hours, ages, price and the rink. The shop front at theskateboardacademycom.bigcartel.com lists the year’s camps as products.",
-        "notes": "Read with a headless browser on 2026-11-01; a plain fetch was not tried. The product address has a typo (sumer) and may change with the year."
-      }
-    },
-    {
-      "id": "hawk-hill-day-camp",
-      "name": "Hawk Hill Day Camp at Saint Joseph’s University (Future Stars)",
-      "what": "Future Stars’ traditional day camp with robotics, art, STEAM, sports and daily swimming on the Saint Joseph’s University campus, plus an all-sports camp for ages 7–13.",
-      "types": [
-        "daycamp",
-        "movement",
-        "stem"
-      ],
-      "ages": "Ages 5–13; the all-sports camp is ages 7–13",
-      "ageMin": 5,
-      "ageMax": 13,
-      "season": 2027,
-      "weeks": "June 21 to August 13, 2027",
-      "hours": "9:15 am to 3:15 pm, with drop-off from 8 am and pick-up to 3:45 pm",
-      "extended": "Early drop-off 7 to 8 am, $5 a day. Extended day to 4:30 pm $8 a day, or to 6 pm $16 a day.",
-      "cost": "$375 a week when booked by December 1; $435 after",
-      "weekly": 375,
-      "price": "paid",
-      "address": "Saint Joseph’s University, 5600 City Ave",
-      "neighborhoods": [
-        "West Philadelphia"
-      ],
-      "phone": "215-674-0494",
-      "website": "https://www.hawkhilldaycamp.com/locations/hawk-hill-day-camp/",
-      "registerUrl": "https://www.hawkhilldaycamp.com/locations/hawk-hill-day-camp/registration/",
-      "signup": "Registration was open when we checked on November 1, 2026; the $375 rate runs until December 1.",
-      "dates": [
-        {
-          "date": "2026-12-01",
-          "label": "Last day for the $375 weekly rate; $435 a week after"
-        }
-      ],
-      "note": "The page prints the camp dates without a year; we take June 21 to August 13 as 2027 because the lower rate runs to December 1. The campus sits on the city line; the camp’s address is in Philadelphia.",
-      "sources": [
-        {
-          "label": "Hawk Hill Day Camp",
-          "url": "https://www.hawkhilldaycamp.com/locations/hawk-hill-day-camp/"
-        },
-        {
-          "label": "Future Stars camp locations",
-          "url": "https://www.futurestars.com/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.hawkhilldaycamp.com/locations/hawk-hill-day-camp/",
-        "how": "browser",
-        "look": "The season dates, the weekly rates by registration deadline and the typical day with extended-time prices are in the body of the location page. Ages are on the programs overview.",
-        "notes": "Read with a headless browser on 2026-11-01; a plain fetch was not tried. The camp has its own site, hawkhilldaycamp.com, linked from the location list on futurestars.com; the dates there carry no year."
-      }
+     "label": "Philly Art Center",
+     "url": "https://phillyartcenter.com/camps/summer-camps/"
     }
-  ],
-  "todo": [
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://phillyartcenter.com/camps/summer-camps/",
+    "how": "fetch",
+    "look": "The “By-the-week” date line is near the top and prices are in the “Weekly Rates” list on the same page. Sign-up buttons go to Captyn.",
+    "notes": "There is a fourth location in Cherry Hill, NJ, which is left out. Tween camps run on select weeks only."
+   }
+  },
+  {
+   "id": "fleisher-art-memorial-camp",
+   "name": "Fleisher Art Memorial",
+   "what": "Kids work in clay, paint and found objects on weekly themes. Tweens try ceramics, printmaking and photography; teens build portfolios.",
+   "types": [
+    "art"
+   ],
+   "ages": "Ages 5–18",
+   "ageMin": 5,
+   "ageMax": 18,
+   "season": 2026,
+   "weeks": "June 15 to July 31, 2026, in seven one-week sessions",
+   "hours": "Drop-off 8:30 to 9:30 am, pick-up 3:30 to 3:45 pm. Teen immersives are half days.",
+   "extended": "After Camp Club 3:30 to 5:30 pm, $120 a week or $25 a day.",
+   "cost": "Ages 5–12: $410 a week ($370 for members). Ages 13–18: $435 for a two-week half-day immersive ($395 for members).",
+   "weekly": 410,
+   "aid": "Tuition assistance is available.",
+   "address": "719 Catharine St",
+   "neighborhoods": [
+    "Bella Vista"
+   ],
+   "website": "https://fleisher.org/children-and-youth-programs-2/",
+   "price": "paid",
+   "signup": "Sign-ups for 2026 opened January 12.",
+   "program": "fleisher-art-memorial",
+   "sources": [
     {
-      "name": "University City Arts League art day camps",
-      "url": "http://www.ucartsleague.org/",
-      "why": "Not read yet: the page could not be opened on 2026-10-07."
-    },
-    {
-      "name": "PlayArts summer camp",
-      "url": "https://www.playartsphilly.com/",
-      "why": "Still no summer camp on 2026-11-01: the site’s Day Camps page lists only 2026–27 school-year day camps at the Maas Building, 1320 N 5th St."
-    },
-    {
-      "name": "Philadelphia Girls Choir choral camp",
-      "url": "https://www.phillygirlschoir.org/choral-camp/",
-      "why": "The camp address still leads to the Philadelphia Youth Choral Ensembles home page (pycemusic.org), with no camp on it (2026-11-01)."
-    },
-    {
-      "name": "Girls Rock Philly",
-      "url": "https://www.girlsrockphilly.org/",
-      "why": "Its Summer Camp link still points to a 2022 camp page on 2026-11-01; the home page gives no camp dates."
-    },
-    {
-      "name": "Move It Kidz 4 Fitness",
-      "url": "https://moveitkidz4fitness.com/k4f-summer-camp",
-      "why": "Its camp page still returned “page not found” on 2026-11-01."
-    },
-    {
-      "name": "Ed Snider Youth Hockey & Education camps",
-      "url": "https://sniderhockey.org/hockey/",
-      "why": "Read in a browser on 2026-11-01: the hockey page has a Summer Camps tab, but its dates, ages, cost and rinks are still not in the page text."
-    },
-    {
-      "name": "Wissahickon Skating Club hockey camp",
-      "url": "https://www.wissskating.com/camps/",
-      "why": "The camps page returned a 404 on 2026-11-01."
-    },
-    {
-      "name": "STEM Prep Academy summer camp",
-      "url": "https://stempreparatory.org/stem-summer-camp",
-      "why": "Read in a browser on 2026-11-01: the camp address returns 404; the programs page lists a full-day summer camp for ages 3–10 at 604 E Girard Ave, “June – August”, with a two-week minimum, but no dates or prices (rates are behind a form)."
-    },
-    {
-      "name": "LocoRobo summer robotics",
-      "url": "https://locorobo.co/locosummer-modern-robotics.html",
-      "why": "Read in a browser on 2026-11-01: the camp address returns 404 and the site’s STEM Camps page sells robotics-camp kits and curriculum to schools and camps, not a day camp families sign up for."
-    },
-    {
-      "name": "Nerd Street / Localhost esports camp",
-      "url": "https://nerdstreet.com/",
-      "why": "Read in a browser on 2026-11-01: the Camp Nerd Street page gives ages 8–13, weeklong camps at Localhost in Philly, drop-off from 8:45 am and aftercare 3 to 5 pm, but no 2027 weeks or prices; a December 2025 post says registration opens in January."
-    },
-    {
-      "name": "Kids on 12th summer camp",
-      "url": "https://ko12kids.com/summer-camp",
-      "why": "The site moved to ko12.org (read in a browser on 2026-11-01): its summer camp page, ko12.org/kids-summer-camp-philadelphia, gives ages 3–11, 8:30 am to 4 pm with after care to 6 pm at 1112 Chestnut St, but the 2026 week list and weekly rates were not in the page text."
-    },
-    {
-      "name": "CORA Early Years at Huntingdon Mills",
-      "url": "https://www.coraservices.org/services/early-childhood/early-years-huntingdon-mills/",
-      "why": "The page answered HTTP 403 with a “confirm you are human” check to a headless browser on 2026-11-01, so it cannot be read automatically and needs Josh."
+     "label": "Fleisher Art Memorial",
+     "url": "https://fleisher.org/children-and-youth-programs-2/"
     }
-  ],
-  "dropped": [
+   ],
+   "checked": "2026-10-07",
+   "check": {
+    "url": "https://fleisher.org/children-and-youth-programs-2/",
+    "how": "fetch",
+    "look": "Session dates are listed week by week and prices appear as member and non-member rates per age group in the page body.",
+    "notes": "The street address is not on the camp page; it is Fleisher’s own building."
+   }
+  },
+  {
+   "id": "mister-johns-music-camp",
+   "name": "Mister John’s Music",
+   "what": "Instrument lessons, show choir, percussion and art around a weekly music theme, ending in a showcase.",
+   "types": [
+    "music"
+   ],
+   "ages": "Ages 5–11, with one week just for 4-year-olds. Piano and guitar camps are for ages 6–11.",
+   "ageMin": 4,
+   "ageMax": 11,
+   "season": 2026,
+   "weeks": "June 8 to August 28, 2026: 11 weeks, none June 29 to July 3",
+   "hours": "9 am to 3 pm",
+   "extended": "Early drop-off at 8 am, $50 a week. Late pick-up at 5 pm, $100 a week.",
+   "cost": "$425 a week",
+   "weekly": 425,
+   "address": "761 S 8th St",
+   "neighborhoods": [
+    "Bella Vista"
+   ],
+   "website": "https://misterjohnsmusic.com/summer-camp/",
+   "price": "paid",
+   "signup": "Sign-ups for 2026 opened January 12.",
+   "program": "mister-johns-music",
+   "sources": [
     {
-      "name": "Academy of Natural Sciences summer camp",
-      "why": "Its own page said it would not host a summer camp in 2026.",
-      "seen": "2026-10-07"
-    },
-    {
-      "name": "Somos Philly Spanish immersion camp",
-      "why": "Reported as no longer operating.",
-      "seen": "2026-10-07"
-    },
-    {
-      "name": "Snapology of Philadelphia",
-      "why": "No location inside the city was found on its site.",
-      "seen": "2026-10-07"
-    },
-    {
-      "name": "Code Ninjas South Philadelphia",
-      "why": "Its page said “location coming soon”.",
-      "seen": "2026-10-07"
-    },
-    {
-      "name": "Vets in Training (HousePaws)",
-      "why": "Not inside the city.",
-      "seen": "2026-10-07"
-    },
-    {
-      "name": "Girl Scouts day camp at Shelly Ridge",
-      "why": "Its own site places Camp Shelly Ridge in Lafayette Hill, “right outside of Philadelphia”, so it is not inside the city.",
-      "seen": "2026-11-01"
+     "label": "Mister John’s Music",
+     "url": "https://misterjohnsmusic.com/summer-camp/"
     }
-  ]
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://misterjohnsmusic.com/summer-camp/",
+    "how": "fetch",
+    "look": "Weeks and themes are a dated list in the page body, with the weekly price and the early and late fees in the text beside it.",
+    "notes": "The Register buttons come back with empty links through a plain fetch."
+   }
+  },
+  {
+   "id": "music-theatre-philly-camp",
+   "name": "Music Theatre Philly",
+   "what": "Kids rehearse songs, dances and scenes on a weekly musical theme and perform a live show. Two-week camps stage a junior musical.",
+   "types": [
+    "theater",
+    "music"
+   ],
+   "ages": "Grades 1–6 for the full-day weekly camps; a half-day pre-K to kindergarten camp for ages 3–5; two-week Summer Stock camps for grades 4–8 and three- and four-week evening intensives for grades 9–12",
+   "ageMin": 3,
+   "ageMax": 18,
+   "season": 2027,
+   "weeks": "June 7 to August 27, 2027, in 12 one-week sessions",
+   "hours": "9 am to 3 pm. The pre-K camp is 9 am to noon; Summer Stock is 9 am to 4 pm for grades 4–8 and 4 to 8 pm for grades 9–12.",
+   "extended": "Before care 8 to 9 am, $20 a day or $75 a week. After care 3 to 5:30 pm Monday to Thursday (none on Fridays), $40 a day or $120 a week.",
+   "cost": "$575 a week for grades 1–6; $375 a week for the half-day pre-K camp; $1,250 for a two-week Summer Stock camp (grades 4–8); $975 to $1,150 for the grades 9–12 intensives",
+   "weekly": 575,
+   "aid": "25% off a second child and 50% off more. Scholarships and payment plans are available.",
+   "address": "1301 Locust St; 601 S Broad St (The Arts Bank)",
+   "neighborhoods": [
+    "Washington Square West",
+    "Hawthorne"
+   ],
+   "phone": "445-223-2683",
+   "website": "https://www.musictheatrephilly.com/1-6-camps",
+   "price": "paid",
+   "program": "music-theatre-philly",
+   "sources": [
+    {
+     "label": "Music Theatre Philly",
+     "url": "https://www.musictheatrephilly.com/1-6-camps"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.musictheatrephilly.com/1-6-camps",
+    "how": "fetch",
+    "look": "A week-by-week list gives dates, theme, grades and price, each with its own Sawyer register link.",
+    "notes": "Hours, care fees and discounts sit on /about-camps; the pre-K weeks are on /prek-k-camps and the Summer Stock camps on /4-8-summer-stock and /9-12-summer-stock. The old /summer-camps-pre-k address is gone."
+   },
+   "signup": "Sign-ups for 2027 are open. 20% off all camps with code EARLYBIRD27 for registering before January 1, 2027.",
+   "dates": [
+    {
+     "date": "2026-12-31",
+     "label": "Last day for 20% off all camps with code EARLYBIRD27 (register before January 1)"
+    }
+   ],
+   "updates": [
+    {
+     "date": "2026-11-01",
+     "text": "Summer 2027 is posted: 12 weeks June 7 to August 27, $575 a week for grades 1–6 and $375 for half-day pre-K (up from $350). New two-week Summer Stock camps for grades 4–8 at 601 S Broad St are $1,250. 20% off with code EARLYBIRD27 before January 1."
+    }
+   ]
+  },
+  {
+   "id": "movemakers-camp",
+   "name": "MoveMakers Philly",
+   "what": "Hip hop dance or parkour and karate, with arts and crafts, outdoor play and games.",
+   "types": [
+    "movement"
+   ],
+   "ages": "Ages 5 and up",
+   "ageMin": 5,
+   "season": 2026,
+   "weeks": "June 15 to August 21, 2026, in ten one-week sessions",
+   "hours": "8:30 am to 3 pm",
+   "extended": "Extended stay is offered; the hours and price are not on the page.",
+   "cost": "$425 a week. A half-day week is $225, a three-day week $260 and a single day $99.",
+   "weekly": 425,
+   "aid": "15% off each extra camp week and 25% off a sibling.",
+   "address": "2100 Chestnut St, 2nd floor; 812 Chestnut St",
+   "neighborhoods": [
+    "Rittenhouse",
+    "Washington Square West"
+   ],
+   "phone": "267-600-1030",
+   "website": "https://www.movemakersphilly.com/summer-camp.html",
+   "price": "paid",
+   "program": "movemakers",
+   "sources": [
+    {
+     "label": "MoveMakers Philly",
+     "url": "https://www.movemakersphilly.com/summer-camp.html"
+    }
+   ],
+   "checked": "2026-10-07",
+   "check": {
+    "url": "https://www.movemakersphilly.com/summer-camp.html",
+    "how": "fetch",
+    "look": "Weeks are on the overview page. Hours, price and discounts are in the text of each camp’s own subpage, which links to Mindbody for booking.",
+    "notes": "Three camp subpages with the year in their titles, so the addresses may change for 2027."
+   }
+  },
+  {
+   "id": "queen-and-rook-camp",
+   "name": "Queen & Rook Game Cafe",
+   "what": "Kids learn how board games work, try trading card games and D&D, visit the retro arcade and play outside each day.",
+   "types": [
+    "games"
+   ],
+   "ages": "Ages 6–12",
+   "ageMin": 6,
+   "ageMax": 12,
+   "season": 2026,
+   "weeks": "June 15 to August 21, 2026, in ten weeks; no camp June 19 or July 3",
+   "hours": "9 am to 3 pm, drop-off from 8:30",
+   "extended": "Aftercare 3 to 6 pm: $125 for a five-day week, $100 for a four-day week.",
+   "cost": "$450 a week; the two four-day weeks are $360",
+   "weekly": 450,
+   "aid": "A 10% early-bird discount ran to mid-February, then 5% off for siblings. Scholarships on request.",
+   "address": "125 South St",
+   "neighborhoods": [
+    "Queen Village"
+   ],
+   "phone": "215-995-0043",
+   "website": "https://www.queenrookkeep.com/product/Summercamp/GUYDZS52EHKPGJPXAUNJ7HMP",
+   "price": "paid",
+   "program": "queen-and-rook",
+   "sources": [
+    {
+     "label": "Queen & Rook Game Cafe",
+     "url": "https://www.queenrookkeep.com/product/Summercamp/GUYDZS52EHKPGJPXAUNJ7HMP"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.queenrookkeep.com/product/Summercamp/GUYDZS52EHKPGJPXAUNJ7HMP",
+    "how": "browser",
+    "look": "Hours, price, aftercare and discounts are in the product description. The week dates are in the product’s option picker, which a plain fetch does not return.",
+    "notes": "The camp is sold on a separate store site, not the cafe’s own. The week dates sit in the product’s option picker, which a headless browser reads (2026-11-01) and a plain fetch does not."
+   }
+  },
+  {
+   "id": "parks-and-rec-camps",
+   "name": "Philadelphia Parks & Recreation day camps",
+   "what": "Neighborhood day camps at about 130 rec centers across the city, some with themes like performing arts, visual arts, esports and rowing.",
+   "types": [
+    "rec-center",
+    "daycamp"
+   ],
+   "ages": "Ages 6–12",
+   "ageMin": 6,
+   "ageMax": 12,
+   "season": 2026,
+   "cost": "Set by each rec center, and not on the city’s page",
+   "aid": "A limited number of fee waivers, for half or all of the fee.",
+   "phone": "215-683-3600",
+   "website": "https://www.phila.gov/services/culture-recreation/activities-and-events/register-for-summer-camp/",
+   "registerUrl": "https://www.phila.gov/parks-rec-finder/#/",
+   "note": "Dates, hours and fees differ by rec center, so look yours up in the city’s finder and call or stop in.",
+   "sources": [
+    {
+     "label": "City of Philadelphia: register for summer camp",
+     "url": "https://www.phila.gov/services/culture-recreation/activities-and-events/register-for-summer-camp/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.phila.gov/services/culture-recreation/activities-and-events/register-for-summer-camp/",
+    "how": "fetch",
+    "look": "The service page gives ages, fee waivers and the steps for finding a rec center. Dates were only in a news post, and fees and hours are set per center.",
+    "notes": "The dated post was first published in 2024 and its dates may be stale; do not copy them."
+   }
+  },
+  {
+   "id": "theatre-horizon-woodmere",
+   "name": "Theatre Horizon drama camp at Woodmere",
+   "what": "A one-week drama day camp led by Theatre Horizon at the Woodmere Art Museum. Most of its other sessions are in the suburbs.",
+   "types": [
+    "theater"
+   ],
+   "ages": "Ages 7–12",
+   "ageMin": 7,
+   "ageMax": 12,
+   "season": 2026,
+   "weeks": "August 17 to 21, 2026 at Woodmere",
+   "hours": "9 am to 3 pm",
+   "cost": "$245 for the Woodmere week",
+   "address": "Woodmere Art Museum, 9201 Germantown Ave",
+   "neighborhoods": [
+    "Chestnut Hill"
+   ],
+   "phone": "610-283-2230",
+   "website": "https://theatrehorizon.org/summer-drama-camp/",
+   "price": "paid",
+   "sources": [
+    {
+     "label": "Theatre Horizon drama camp at Woodmere",
+     "url": "https://theatrehorizon.org/summer-drama-camp/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://theatrehorizon.org/summer-drama-camp/",
+    "how": "browser",
+    "look": "A week-by-week table lists “Woodmere Art Museum, Chestnut Hill”. Each site’s dates, hours, ages, address, price and sign-up link sit in a pop-up opened by its button; the pop-up text is in the page for a headless browser."
+   },
+   "weekly": 245
+  },
+  {
+   "id": "butchers-sew-shop-camp",
+   "name": "Butcher’s Sew Shop Junior",
+   "what": "Kids learn to sew by hand and machine in themed weeks, making stuffies, clothes and room decor. Teens get a fashion week.",
+   "types": [
+    "art"
+   ],
+   "ages": "Ages 6–11, plus one teen week for ages 11–15",
+   "ageMin": 6,
+   "ageMax": 15,
+   "season": 2026,
+   "weeks": "June 15 to August 28, 2026",
+   "hours": "9 am to 3 pm",
+   "extended": "Morning care 8 to 9 am, $10 a day. Afternoon care 3 to 5 pm, $20 a day. Not offered for the teen week.",
+   "cost": "$515 a week; $417 for the four-day week. Half is due at sign-up. The teen week adds a $40 materials fee.",
+   "weekly": 515,
+   "aid": "10% off for siblings and 10% off extra weeks.",
+   "address": "800 S 8th St",
+   "neighborhoods": [
+    "Bella Vista"
+   ],
+   "website": "https://butcher-s-sew-shop-junior.jumbula.com/summer-camp",
+   "price": "paid",
+   "program": "butchers-sew-shop",
+   "sources": [
+    {
+     "label": "Butcher’s Sew Shop Junior",
+     "url": "https://butcher-s-sew-shop-junior.jumbula.com/summer-camp"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://butcher-s-sew-shop-junior.jumbula.com/summer-camp",
+    "how": "fetch",
+    "look": "The Jumbula summer-camp page lists each themed week as a row with dates, age group and price, with hours, extended care and discounts in the page text.",
+    "notes": "Details live on the shop’s Jumbula registration site."
+   }
+  },
+  {
+   "id": "clay-studio-camp",
+   "name": "The Clay Studio",
+   "what": "Week-long half-day clay camps where kids and teens handbuild, use the wheel and glaze, plus a full-day claymation camp.",
+   "types": [
+    "art"
+   ],
+   "ages": "Entering grades 1–12",
+   "ageMin": 6,
+   "ageMax": 18,
+   "season": 2026,
+   "weeks": "June 22 to August 21, 2026",
+   "hours": "Half days, 9 am to noon or 1 to 4 pm. The claymation camp is 9 am to 4 pm.",
+   "extended": "Supervised lunch noon to 1 pm, $20 a week. Extended care 4 to 6 pm, $50 a week.",
+   "cost": "Weekly tuition is only in the booking listing. $100 deposit per camper.",
+   "aid": "Tuition assistance by application, with no paperwork required.",
+   "address": "1425 N American St",
+   "neighborhoods": [
+    "South Kensington"
+   ],
+   "phone": "215-925-3453",
+   "website": "https://www.theclaystudio.org/camp-policies",
+   "registerUrl": "https://public.theclaystudio.org/public/3/camps",
+   "price": "paid",
+   "signup": "The 2026 early-bird discount ran January 2 to February 15.",
+   "note": "Most camps are half days, so a full day means two camps plus supervised lunch.",
+   "sources": [
+    {
+     "label": "The Clay Studio",
+     "url": "https://www.theclaystudio.org/camp-policies"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.theclaystudio.org/camp-policies",
+    "how": "browser",
+    "look": "Dates, hours and add-on fees are in the camp policies page. Camp weeks and tuition sit in the booking listing at public.theclaystudio.org/public/3/camps, which needs a browser."
+   }
+  },
+  {
+   "id": "pafa-camp",
+   "name": "PAFA summer art camp",
+   "what": "Weekly themed art camps at a museum school: drawing, painting, sculpture, comics, printmaking and mixed media, by age group.",
+   "types": [
+    "art"
+   ],
+   "ages": "Ages 5–14, in three groups",
+   "ageMin": 5,
+   "ageMax": 14,
+   "season": 2027,
+   "weeks": "June 21 to August 13, 2027, in eight weekly sessions; the week of July 6 is four days with no camp July 5",
+   "hours": "9 am to 3 pm, with drop-off from 8:30",
+   "extended": "Aftercare 3 to 5:30 pm, booked separately. The price isn’t on the camp page.",
+   "cost": "$575 a week; the four-day week of July 6 is $460",
+   "weekly": 575,
+   "aid": "Members get 10% off. $10 off each week when you book three or more.",
+   "address": "128 N Broad St",
+   "neighborhoods": [
+    "Center City"
+   ],
+   "phone": "215-972-2054",
+   "website": "https://www.pafa.org/education/center-for-art-education/youth-and-family/summer-art-camps",
+   "price": "paid",
+   "program": "pafa-saturday-art",
+   "sources": [
+    {
+     "label": "PAFA summer art camp",
+     "url": "https://www.pafa.org/education/center-for-art-education/youth-and-family/summer-art-camps"
+    },
+    {
+     "label": "PAFA Summer Camp 2027 registration (CourseStorm)",
+     "url": "https://pafa-museum.coursestorm.com/category/summer-camp-2027"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.pafa.org/education/center-for-art-education/youth-and-family/summer-art-camps",
+    "how": "fetch",
+    "look": "Dates, hours, price and discounts are in the body of the family-programs summer art camp page. Sign-up is on CourseStorm.",
+    "notes": "pafa.org/camp is a stale page still showing summer 2024. Use the family-programs address."
+   },
+   "registerUrl": "https://pafa-museum.coursestorm.com/category/summer-camp-2027",
+   "signup": "Registration for 2027 was open on PAFA’s CourseStorm site when we checked on November 1, 2026; the page gives no opening date.",
+   "updates": [
+    {
+     "date": "2026-11-01",
+     "text": "Summer 2027 is posted: eight weeks from June 21 to August 13, $575 a week (2026 was $400). Registration is open on PAFA’s CourseStorm site."
+    }
+   ]
+  },
+  {
+   "id": "moore-young-artists",
+   "name": "Moore College of Art & Design youth courses",
+   "what": "Middle and high schoolers take week-long, full-day studio courses in art and design on a college campus.",
+   "types": [
+    "art"
+   ],
+   "ages": "Grades 6–12",
+   "ageMin": 11,
+   "ageMax": 18,
+   "season": 2027,
+   "weeks": "July 12 to August 13, 2027, in week-long courses",
+   "hours": "9 am to 4 pm",
+   "cost": "$700 a course; $2,800 for all five weeks",
+   "weekly": 700,
+   "address": "1916 Race St",
+   "neighborhoods": [
+    "Logan Square"
+   ],
+   "phone": "215-965-4015",
+   "website": "https://moore.edu/academics/youth-education/young-artists-workshop/",
+   "price": "paid",
+   "program": "moore-young-artists-workshop",
+   "sources": [
+    {
+     "label": "Moore College of Art & Design youth courses",
+     "url": "https://moore.edu/academics/youth-education/young-artists-workshop/"
+    },
+    {
+     "label": "Moore youth programs calendar",
+     "url": "https://moore.edu/academics/youth-education/youth-programs-academic-calendar/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://moore.edu/academics/youth-education/",
+    "how": "fetch",
+    "look": "Dates, the daily schedule and the price per course are in the Program Details text.",
+    "notes": "The camp page has the year in its address, so next summer is a new page. Start from the youth-education page to find it."
+   },
+   "note": "The 2027 dates are from the program calendar; the course list and the $700 price are still from summer 2026.",
+   "updates": [
+    {
+     "date": "2026-11-01",
+     "text": "Summer 2027 dates are posted: week-long courses July 12 to August 13, 2027. The 2027 course list and prices are not posted yet; 2026 courses were $700 each."
+    }
+   ]
+  },
+  {
+   "id": "school-of-rock-philadelphia",
+   "name": "School of Rock Philadelphia",
+   "what": "Kids learn and rehearse rock songs in a themed band camp all week, then play a live show on the last day.",
+   "types": [
+    "music"
+   ],
+   "ages": "Ages 7–18. Some camps ask for playing experience.",
+   "ageMin": 7,
+   "ageMax": 18,
+   "season": 2026,
+   "weeks": "One-week themed camps through the summer",
+   "hours": "9 am to 3 pm",
+   "cost": "$559 for a one-week camp",
+   "weekly": 559,
+   "address": "421 N 7th St",
+   "neighborhoods": [
+    "Callowhill"
+   ],
+   "phone": "267-639-4007",
+   "website": "https://www.schoolofrock.com/locations/philadelphia/music-camps",
+   "price": "paid",
+   "note": "No camps were listed on the page when we checked on November 1, 2026. We read one 2026 camp’s page for the price and hours; other weeks may differ.",
+   "sources": [
+    {
+     "label": "School of Rock Philadelphia",
+     "url": "https://www.schoolofrock.com/locations/philadelphia/music-camps"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.schoolofrock.com/locations/philadelphia/music-camps",
+    "how": "fetch",
+    "look": "The listing page gives camp names and dates. Each camp’s own page holds hours, ages and price.",
+    "notes": "The listing page can still return last year’s line-up with no prices; open a dated camp page for the price."
+   }
+  },
+  {
+   "id": "arden-summer-camp",
+   "name": "Arden Drama School",
+   "what": "Kids act, sing, design and try comedy or Shakespeare in one- and two-week theatre studios and themed specialty camps.",
+   "types": [
+    "theater"
+   ],
+   "ages": "Grades 1–8",
+   "ageMin": 6,
+   "ageMax": 13,
+   "season": 2026,
+   "weeks": "June 22 to August 21, 2026. Grades 1–5 studios run July 6 to August 21.",
+   "hours": "9:30 am to 4:30 pm for grades 1–5; 10 am to 5 pm for grades 6–8",
+   "cost": "$400 to $450 for a one-week session; $800 for two weeks; $90 for a single day",
+   "weekly": 400,
+   "aid": "$50 off a session for signing up by March 1. Scholarships by application.",
+   "address": "40 N 2nd St",
+   "neighborhoods": [
+    "Old City"
+   ],
+   "phone": "215-922-1122",
+   "website": "https://ardentheatre.org/arden-drama-school",
+   "price": "paid",
+   "program": "arden-drama-school",
+   "sources": [
+    {
+     "label": "Arden Drama School",
+     "url": "https://ardentheatre.org/arden-drama-school"
+    },
+    {
+     "label": "Arden kids summer camp brochure",
+     "url": "https://ardentheatre.org/wp-content/uploads/2026/02/FY27_Summer-Camp-Kids-Digital-Brochure-compressed.pdf"
+    }
+   ],
+   "checked": "2026-10-07",
+   "check": {
+    "url": "https://ardentheatre.org/arden-drama-school",
+    "how": "browser",
+    "look": "Dates, hours and prices sit in the kids summer camp brochure, a PDF linked from the summer section of the Arden Drama School page.",
+    "notes": "The page itself comes back with no camp details through a plain fetch, and the brochure’s address changes each year."
+   }
+  },
+  {
+   "id": "camp-walnut",
+   "name": "Camp Walnut at Walnut Street Theatre",
+   "what": "Campers get intensive theatre training in divisions and perform in a fully produced show at the end of a four-week session.",
+   "types": [
+    "theater"
+   ],
+   "season": 2027,
+   "weeks": "July 12 to August 5, 2027, Monday to Thursday, one four-week session",
+   "hours": "Monday to Thursday, 9:30 am to 3:30 pm for the Discovery divisions, to 4 pm for Development and to 4:30 pm for Performance",
+   "cost": "$1,300 for a Discovery division, $1,500 for Development and $1,800 for Performance, with payment plans from a $500 deposit",
+   "address": "825 Walnut St",
+   "neighborhoods": [
+    "Washington Square West"
+   ],
+   "phone": "215-574-3550",
+   "website": "https://walnutstreettheatre.coursestorm.com/category/camp-walnut-2027",
+   "price": "paid",
+   "note": "Six divisions, two per level, each one four-week session. Development and Performance divisions need an audition.",
+   "program": "walnut-street-theatre-school",
+   "sources": [
+    {
+     "label": "Camp Walnut at Walnut Street Theatre",
+     "url": "https://walnutstreettheatre.coursestorm.com/category/camp-walnut-2027"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://walnutstreettheatre.coursestorm.com/",
+    "how": "browser",
+    "look": "Each division is a separate course card in the CourseStorm catalog. Dates, hours and price are on the individual course page.",
+    "notes": "The category address has the year in it (camp-walnut-2027). Listing pages load by script and come back empty to a plain fetch; individual course pages give dates, hours and price."
+   },
+   "ages": "Ages 8–11 and 12–17 in the Discovery and Development divisions; ages 10–18 in the Performance divisions",
+   "ageMin": 8,
+   "ageMax": 18,
+   "signup": "Registration for Camp Walnut 2027 is open on CourseStorm. Discovery divisions take sign-ups first come, first served; Development and Performance divisions need an audition the week of May 17 to 21, 2027.",
+   "updates": [
+    {
+     "date": "2026-11-01",
+     "text": "Camp Walnut 2027 is posted: one four-week session, July 12 to August 5, Monday to Thursday. Discovery divisions are $1,300, Development $1,500 and Performance $1,800 (ages 8–18 by division). Sign-ups are open on CourseStorm."
+    }
+   ]
+  },
+  {
+   "id": "macguffin-camps",
+   "name": "MacGuffin Theatre & Film Company",
+   "what": "Kids rehearse and stage a different musical each week. Older campers do musical theatre, acting and comedy camps.",
+   "types": [
+    "theater"
+   ],
+   "ages": "Youth Musical Theatre Camps ages 7–10/11; teen camps ages 11–18",
+   "ageMin": 7,
+   "ageMax": 18,
+   "season": 2027,
+   "weeks": "June 14 to August 20, 2027, in one-week camps plus a four-week teen musical theatre camp, none the week of August 9",
+   "hours": "9:30 am to 4:30 pm. The four-week teen Musical Theatre Camp runs Monday to Thursday.",
+   "cost": "$450 for a one-week camp; $1,000 for the four-week teen Musical Theatre Camp",
+   "aid": "$75 off the teen Musical Theatre Camp for signing up by November 30, 2026, and $50 off the one-week camps by November 30 (teen camps) or December 31, 2026 (youth camps). A limited number of need-based scholarships.",
+   "address": "2030 Sansom St, 2nd floor",
+   "neighborhoods": [
+    "Rittenhouse"
+   ],
+   "phone": "215-922-1141",
+   "website": "https://macguffintf.com/camps/",
+   "registerUrl": "https://www.hisawyer.com/macguffin-theatre/schedules?schedule_id=camps",
+   "signup": "Sign-ups for the 2027 teen camps opened November 1, 2026. Sign-ups for the one-week Youth Musical Theatre Camps (ages 7–10/11) open December 1, 2026.",
+   "program": "macguffin-theatre",
+   "sources": [
+    {
+     "label": "MacGuffin Theatre & Film Company",
+     "url": "https://macguffintf.com/camps/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://macguffintf.com/camps/",
+    "how": "fetch",
+    "look": "The camps page lists each camp with ages and dates and links to per-camp pages with hours. Tuition appears only in the Sawyer booking widget."
+   },
+   "weekly": 450,
+   "dates": [
+    {
+     "date": "2026-11-30",
+     "label": "Last day for $75 off the teen Musical Theatre Camp and $50 off the one-week teen camps"
+    },
+    {
+     "date": "2026-12-01",
+     "label": "Registration opens for the one-week Youth Musical Theatre Camps (ages 7–10/11)"
+    },
+    {
+     "date": "2026-12-31",
+     "label": "Last day for $50 off the Youth Musical Theatre Camps"
+    }
+   ],
+   "note": "The Flourtown camps on the same page are outside the city and not listed here.",
+   "updates": [
+    {
+     "date": "2026-11-01",
+     "text": "Summer 2027 is posted: one-week camps June 14 to August 20 at $450 (none the week of August 9) and a four-week teen Musical Theatre Camp June 21 to July 15 at $1,000. Teen sign-ups opened November 1; youth camps (ages 7–10/11) open December 1."
+    }
+   ]
+  },
+  {
+   "id": "flipout-camp",
+   "name": "FlipOut Productions",
+   "what": "Gymnastics and parkour-style movement, plus arts and crafts, gardening, dance, water play and team games.",
+   "types": [
+    "movement"
+   ],
+   "ages": "Ages 4½ and up, in three groups",
+   "ageMin": 4,
+   "season": 2026,
+   "address": "2757 Frankford Ave",
+   "neighborhoods": [
+    "Kensington"
+   ],
+   "phone": "215-350-6575",
+   "website": "https://www.flipoutproductions.com/summercamp",
+   "signup": "Sign-ups for 2026 opened January 1.",
+   "note": "Dates and prices weren’t readable when we checked, so ask the gym.",
+   "program": "flipout-productions",
+   "sources": [
+    {
+     "label": "FlipOut Productions",
+     "url": "https://www.flipoutproductions.com/summercamp"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.flipoutproductions.com/summercamp",
+    "how": "browser",
+    "look": "The Summer Camp page shows age groups and activities. Weeks and prices are probably inside an embedded registration widget."
+   }
+  },
+  {
+   "id": "philadelphia-ballet-camps",
+   "name": "School of Philadelphia Ballet dance camps",
+   "what": "Half-day themed ballet camps with a creative movement class, a snack, a craft and story rehearsal.",
+   "types": [
+    "movement"
+   ],
+   "ages": "Ages 4–6",
+   "ageMin": 4,
+   "ageMax": 6,
+   "season": 2027,
+   "weeks": "June 14 to August 13, 2027, in four separate weeks: June 14, July 5, July 26 and August 9",
+   "runs": [
+    [
+     "2027-06-14",
+     "2027-06-18"
+    ],
+    [
+     "2027-07-05",
+     "2027-07-09"
+    ],
+    [
+     "2027-07-26",
+     "2027-07-30"
+    ],
+    [
+     "2027-08-09",
+     "2027-08-13"
+    ]
+   ],
+   "hours": "9 am to noon",
+   "cost": "$325 a week for the half day",
+   "weekly": 325,
+   "address": "323 N Broad St",
+   "neighborhoods": [
+    "Center City"
+   ],
+   "phone": "215-551-7000",
+   "website": "https://philadelphiaballet.org/school/summer-programs/philadelphia-summer-childrens-programs/",
+   "price": "paid",
+   "signup": "Registration for the 2027 camps opens December 1, 2026.",
+   "program": "school-of-philadelphia-ballet",
+   "sources": [
+    {
+     "label": "School of Philadelphia Ballet dance camps",
+     "url": "https://philadelphiaballet.org/school/summer-programs/philadelphia-summer-childrens-programs/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://philadelphiaballet.org/school/summer-programs/philadelphia-summer-childrens-programs/",
+    "how": "fetch",
+    "look": "Camp themes, dates, the daily schedule and tuition sit in the Summer Dance Camps section, with a registration link per camp.",
+    "notes": "Separate pages exist for the New Jersey and Bala Cynwyd locations; use the Philadelphia page only."
+   },
+   "dates": [
+    {
+     "date": "2026-12-01",
+     "label": "Registration opens for the 2027 summer dance camps"
+    }
+   ],
+   "note": "The page misprints the fourth camp’s end date as “July 13”; we take it as Friday, August 13.",
+   "updates": [
+    {
+     "date": "2026-11-01",
+     "text": "Summer 2027 is posted: four one-week camps starting June 14, July 5, July 26 and August 9, 9 am to noon, $325 a camp. Registration opens December 1, 2026."
+    }
+   ]
+  },
+  {
+   "id": "wissahickon-figure-skating",
+   "name": "Wissahickon Skating Club figure skating camp",
+   "what": "A week of morning figure skating training for young skaters who already have the basics.",
+   "types": [
+    "movement"
+   ],
+   "ages": "Ages 7 and up, with a minimum skating level",
+   "ageMin": 7,
+   "season": 2026,
+   "weeks": "August 3 to 7, 2026",
+   "hours": "8:30 am to 1 pm",
+   "cost": "$375 for the week",
+   "weekly": 375,
+   "address": "550 W Willow Grove Ave",
+   "neighborhoods": [
+    "Chestnut Hill"
+   ],
+   "website": "https://www.wissskating.com/index.php/new-figure-skating-schedules-general-info-2026/get-the-edge-summer-figure-skating-camp-save-the-date/",
+   "price": "paid",
+   "program": "wissahickon-skating-club",
+   "sources": [
+    {
+     "label": "Wissahickon Skating Club figure skating camp",
+     "url": "https://www.wissskating.com/index.php/new-figure-skating-schedules-general-info-2026/get-the-edge-summer-figure-skating-camp-save-the-date/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.wissskating.com/index.php/new-figure-skating-schedules-general-info-2026/get-the-edge-summer-figure-skating-camp-save-the-date/",
+    "how": "fetch",
+    "look": "Dates, hours and prices are in the body text of the camp’s product page.",
+    "notes": "Older copies of this camp are still up on the club’s calendar. The club’s hockey camp page still showed 2024 dates on this check."
+   }
+  },
+  {
+   "id": "philadelphia-dance-academy",
+   "name": "The Philadelphia Dance Academy",
+   "what": "Ballet-centred summer classes, a half-day Nutcracker camp for ages 4–6, and full-day dance intensives.",
+   "types": [
+    "movement"
+   ],
+   "ages": "Half-day camp ages 4–6; full-day intensive ages 6–12",
+   "ageMin": 4,
+   "ageMax": 12,
+   "season": 2027,
+   "address": "219 Cuthbert St, 3rd floor",
+   "neighborhoods": [
+    "Old City"
+   ],
+   "phone": "215-922-2422",
+   "website": "https://philadelphiadanceacademy.com/summer-program/",
+   "program": "philadelphia-dance-academy",
+   "signup": "The page says summer enrollment opens December 1; its programs are headed 2027.",
+   "note": "An intermediate intensive for ages 10 and up, with more weeks, asks for dance experience. The page also lists an Ardmore location, which is left out.",
+   "sources": [
+    {
+     "label": "The Philadelphia Dance Academy",
+     "url": "https://philadelphiadanceacademy.com/summer-program/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://philadelphiadanceacademy.com/summer-program/",
+    "how": "fetch",
+    "look": "The Summer Dance Programs page lists each program with Old City and Ardmore session tables (dates, hours, tuition) that open on a click under each heading; a headless browser gets their text.",
+    "notes": "An older, undated page at /programs/summer-program2/ has prices that look like 2023. Do not use it."
+   },
+   "weeks": "June 14 to August 20, 2027: the half-day Nutcracker camp June 14 to 18, and full-day dance intensives the weeks of June 21, August 2, August 9 and August 16",
+   "runs": [
+    [
+     "2027-06-14",
+     "2027-06-18"
+    ],
+    [
+     "2027-06-21",
+     "2027-06-25"
+    ],
+    [
+     "2027-08-02",
+     "2027-08-06"
+    ],
+    [
+     "2027-08-09",
+     "2027-08-13"
+    ],
+    [
+     "2027-08-16",
+     "2027-08-20"
+    ]
+   ],
+   "hours": "9 am to noon for the half-day camp; 9 am to 3 pm for the full-day intensive",
+   "cost": "$325 for the half-day Nutcracker camp week; $500 a week for the full-day intensive",
+   "weekly": 500,
+   "price": "paid",
+   "dates": [
+    {
+     "date": "2026-12-01",
+     "label": "Summer 2027 enrollment opens"
+    }
+   ],
+   "updates": [
+    {
+     "date": "2026-11-01",
+     "text": "Summer 2027 is posted: a half-day Nutcracker camp June 14 to 18 ($325) and full-day dance intensives the weeks of June 21, August 2, August 9 and August 16 ($500 a week), in Old City. Enrollment opens December 1."
+    }
+   ]
+  },
+  {
+   "id": "legacy-tennis-camp",
+   "name": "Legacy Youth Tennis community camp",
+   "what": "Kids learn and play tennis at neighborhood courts in a seven-week community day camp, full day or half day.",
+   "types": [
+    "movement"
+   ],
+   "ages": "Ages 6–16",
+   "ageMin": 6,
+   "ageMax": 16,
+   "season": 2026,
+   "weeks": "June 22 to August 7, 2026",
+   "hours": "9 am to 4 pm, or a half day to 1 pm",
+   "cost": "$200 for all seven weeks, or $100 for half days",
+   "aid": "Financial aid and payment plans may be available.",
+   "address": "700 Cobbs Creek Pkwy; 7901 Ridgeway St; 400 S Taney St; 209 E Hartwell Ln",
+   "neighborhoods": [
+    "Cobbs Creek",
+    "Fox Chase",
+    "Fitler Square",
+    "Chestnut Hill"
+   ],
+   "phone": "215-487-3477",
+   "website": "https://legacyyte.org/tennis_camps/full-day-summer-camp/",
+   "price": "paid",
+   "signup": "The page says registration is open now. Its dates, June 22 to August 7, are printed without a year and are last summer’s; it no longer gives a January opening date.",
+   "sources": [
+    {
+     "label": "Legacy Youth Tennis community camp",
+     "url": "https://legacyyte.org/tennis_camps/full-day-summer-camp/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://legacyyte.org/tennis_camps/full-day-summer-camp/",
+    "how": "fetch",
+    "look": "Dates, hours, ages and the flat seven-week price are in the body text of the full-day camp page.",
+    "notes": "The price is one fee for the whole summer, not weekly. The page prints dates without a year."
+   }
+  },
+  {
+   "id": "ceo-camp-phield-house",
+   "name": "C.E.O. Camp at Phield House",
+   "what": "A mix of indoor sports and themed weekly activities at an indoor sports complex.",
+   "types": [
+    "movement"
+   ],
+   "ages": "Ages 6–12, with a counselor-in-training program from 13",
+   "ageMin": 6,
+   "ageMax": 12,
+   "season": 2026,
+   "weeks": "June 8 to August 28, 2026, in 12 one-week sessions",
+   "hours": "9 am to 3 pm",
+   "extended": "Before care from 8 am and after care to 4:30 pm, $15 a session.",
+   "cost": "$340 a week",
+   "weekly": 340,
+   "aid": "A multi-week discount is applied at checkout.",
+   "address": "814 Spring Garden St",
+   "neighborhoods": [
+    "Callowhill"
+   ],
+   "phone": "215-830-1940",
+   "website": "https://www.phieldhouse.com/youth/summer-camp/",
+   "price": "paid",
+   "program": "phield-house",
+   "sources": [
+    {
+     "label": "C.E.O. Camp at Phield House",
+     "url": "https://www.phieldhouse.com/youth/summer-camp/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.phieldhouse.com/youth/summer-camp/",
+    "how": "fetch",
+    "look": "The week list, weekly price and before and after care terms are in the body text of the Phield House summer camp page.",
+    "notes": "ceocampspa.com is the same camp but returns only a title to a plain fetch."
+   }
+  },
+  {
+   "id": "awbury-adventures",
+   "name": "Awbury Adventures at Awbury Arboretum",
+   "what": "Kids explore the arboretum’s woods, farm and wetlands in themed nature, farming, art and wilderness-skills sessions.",
+   "types": [
+    "nature"
+   ],
+   "ages": "Ages 5–8, 8–12, and 11 and up",
+   "ageMin": 5,
+   "ageMax": 13,
+   "season": 2026,
+   "weeks": "June 15 to August 14, 2026",
+   "hours": "8:30 am to 3:30 pm",
+   "extended": "After-camp 3:30 to 6 pm, $18 a day.",
+   "cost": "$375 for one week ($356 for members); two-week sessions $675 to $770",
+   "weekly": 375,
+   "aid": "A full scholarship takes 75% off, and sliding-scale fees run 30% to 60% off.",
+   "address": "One Awbury Rd",
+   "neighborhoods": [
+    "Germantown"
+   ],
+   "phone": "215-849-2855",
+   "website": "https://awbury.org/summer-camp/",
+   "price": "paid",
+   "signup": "Registration for summer 2027 opens Monday, February 1, 2027 at 9 am; family members can sign up a week earlier, from Monday, January 25, 2027 at 9 am. The page gives the 2027 season as June 14 to August 20, 2027, but its session list and prices are still 2026’s.",
+   "program": "awbury-arboretum",
+   "sources": [
+    {
+     "label": "Awbury Adventures at Awbury Arboretum",
+     "url": "https://awbury.org/summer-camp/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://awbury.org/summer-camp/",
+    "how": "fetch",
+    "look": "A session list grouped by age band gives each session’s dates and price. Hours, after-camp and financial aid are in the text around it.",
+    "notes": "The page is mid-changeover: the header says 2027 while the session list and prices are still 2026."
+   },
+   "dates": [
+    {
+     "date": "2027-01-25",
+     "label": "Member registration for summer 2027 opens at 9 am"
+    },
+    {
+     "date": "2027-02-01",
+     "label": "Registration for summer 2027 opens at 9 am"
+    }
+   ]
+  },
+  {
+   "id": "camp-schuylkill",
+   "name": "Camp Schuylkill at the Schuylkill Center",
+   "what": "Kids spend the day outdoors on 365 acres of forest, exploring nature through weekly themes by age group.",
+   "types": [
+    "nature"
+   ],
+   "ages": "Ages 4–13, in four groups",
+   "ageMin": 4,
+   "ageMax": 13,
+   "season": 2027,
+   "weeks": "June 21 to August 13, 2027",
+   "hours": "9 am to 3:30 pm, with a half-day option for ages 4–5",
+   "extended": "Before care 8 to 9 am, $55 a week. After care 3:30 to 6 pm, $110 a week.",
+   "cost": "$475 a week for ages 4–9; $525 for ages 10–11; $585 for ages 12–13",
+   "weekly": 475,
+   "aid": "Takes the $200 Youth Access to Opportunity Grant and the Child Care Works subsidy.",
+   "address": "8480 Hagy’s Mill Rd",
+   "neighborhoods": [
+    "Roxborough"
+   ],
+   "phone": "215-482-7300",
+   "website": "https://schuylkillcenter.org/education/camp-schuylkill/",
+   "price": "paid",
+   "signup": "Registration for 2027 wasn’t open yet when we checked.",
+   "note": "The dates are for 2027, but the prices may still be last summer’s.",
+   "program": "schuylkill-center",
+   "sources": [
+    {
+     "label": "Camp Schuylkill at the Schuylkill Center",
+     "url": "https://schuylkillcenter.org/education/camp-schuylkill/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://schuylkillcenter.org/education/camp-schuylkill/",
+    "how": "fetch",
+    "look": "The season dates sit at the top of the Camp Schuylkill page and the prices are listed per age group lower down."
+   }
+  },
+  {
+   "id": "morris-arboretum-camp",
+   "name": "Nature Explorers at Morris Arboretum & Gardens",
+   "what": "Young kids explore the arboretum’s gardens and natural areas in small groups during week-long nature sessions.",
+   "types": [
+    "nature"
+   ],
+   "ages": "Ages 4–10, in two groups",
+   "ageMin": 4,
+   "ageMax": 10,
+   "season": 2026,
+   "weeks": "June 29 to August 7, 2026, in six weekly sessions",
+   "hours": "9 am to 3 pm",
+   "extended": "None. The arboretum says it can’t offer before or after care.",
+   "cost": "$370 a week ($340 for members); the four-day July 4 week is $330 ($300 for members)",
+   "weekly": 370,
+   "aid": "A limited amount of financial aid, first come, for families with need.",
+   "address": "100 E Northwestern Ave",
+   "neighborhoods": [
+    "Chestnut Hill"
+   ],
+   "phone": "215-247-5777",
+   "website": "https://www.morrisarboretum.org/learn-discover/kids-families/summer-camp",
+   "price": "paid",
+   "sources": [
+    {
+     "label": "Nature Explorers at Morris Arboretum & Gardens",
+     "url": "https://www.morrisarboretum.org/learn-discover/kids-families/summer-camp"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.morrisarboretum.org/learn-discover/kids-families/summer-camp",
+    "how": "fetch",
+    "look": "Session dates, member and non-member prices, hours and age groups are all in the body text of the summer camp page."
+   },
+   "signup": "The page says registration opens in January, with each child limited to three weeks at first and a waitlist from January 30; it doesn’t say which year."
+  },
+  {
+   "id": "circus-arts-camp",
+   "name": "Philadelphia School of Circus Arts",
+   "what": "Kids train in circus skills for a week and finish with a performance on Friday afternoon.",
+   "types": [
+    "movement"
+   ],
+   "ages": "Ages 4–17, in four groups",
+   "ageMin": 4,
+   "ageMax": 17,
+   "season": 2026,
+   "hours": "9 am to 3 pm",
+   "extended": "Before care from 7:30 am, $20 a day. After care to 6 pm, $35 a day (ages 6 and up).",
+   "cost": "$495 a week",
+   "weekly": 495,
+   "address": "6452 Greene St",
+   "neighborhoods": [
+    "Mount Airy"
+   ],
+   "phone": "215-849-1991",
+   "website": "https://phillycircus.com/camp/",
+   "price": "paid",
+   "note": "The week-by-week dates weren’t readable when we checked.",
+   "program": "philadelphia-school-of-circus-arts",
+   "sources": [
+    {
+     "label": "Philadelphia School of Circus Arts",
+     "url": "https://phillycircus.com/camp/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://phillycircus.com/camp/",
+    "how": "browser",
+    "look": "Price, hours, age groups and care fees are in the camp page text. The week dates sit behind the enrollment link."
+   }
+  },
+  {
+   "id": "work-to-ride-camp",
+   "name": "Work to Ride at Chamounix Equestrian Center",
+   "what": "Kids learn horseback riding and horse care at a stable in Fairmount Park, with a little-kids camp and a half-day polo camp.",
+   "types": [
+    "movement",
+    "nature"
+   ],
+   "ages": "Ages 5–13",
+   "ageMin": 5,
+   "ageMax": 13,
+   "season": 2026,
+   "hours": "9 am to 4 pm",
+   "cost": "$525 for a one-week session; $275 for half-day polo camp",
+   "weekly": 525,
+   "address": "98 Chamounix Dr",
+   "neighborhoods": [
+    "West Fairmount Park"
+   ],
+   "phone": "215-877-4419",
+   "website": "https://worktoride.net/summer-camp/",
+   "price": "paid",
+   "signup": "The page is headed 2027 and says to check back for dates.",
+   "note": "The prices are from the 2026 forms, which were still the ones posted.",
+   "sources": [
+    {
+     "label": "Work to Ride at Chamounix Equestrian Center",
+     "url": "https://worktoride.net/summer-camp/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://worktoride.net/summer-camp/",
+    "how": "fetch",
+    "look": "Dates sit under a “Summer Camp Dates” heading and prices are in each camp type’s line. Sign-up is by PDF forms."
+   }
+  },
+  {
+   "id": "seaport-summer-camp",
+   "name": "Seaport Summer Camp at Independence Seaport Museum",
+   "what": "Hands-on crafts and activities, time on the water and visits to the museum’s historic ships, with a new theme each week.",
+   "types": [
+    "daycamp",
+    "stem"
+   ],
+   "ages": "Ages 6–11",
+   "ageMin": 6,
+   "ageMax": 11,
+   "season": 2026,
+   "weeks": "June 22 to August 14, 2026, in seven one-week sessions, none June 29 to July 3",
+   "hours": "8 am to 3 pm",
+   "extended": "Aftercare 3 to 5:30 pm, $150 a week.",
+   "cost": "$450 a week ($375 for members)",
+   "weekly": 450,
+   "aid": "Seven one-week scholarships based on need. An early-bird price took $25 off.",
+   "address": "211 S Columbus Blvd",
+   "neighborhoods": [
+    "Penn’s Landing"
+   ],
+   "phone": "215-413-8655",
+   "website": "https://www.phillyseaport.org/camp",
+   "price": "paid",
+   "sources": [
+    {
+     "label": "Seaport Summer Camp at Independence Seaport Museum",
+     "url": "https://www.phillyseaport.org/camp"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.phillyseaport.org/camp",
+    "how": "fetch",
+    "look": "Weeks and themes are listed on the camp page with a registration link per week. Prices sit in a pricing section on the same page."
+   }
+  },
+  {
+   "id": "taller-puertorriqueno-camp",
+   "name": "Taller Puertorriqueño",
+   "what": "Kids paint, draw and build art projects, learn Caribbean dance and music, and tend a garden.",
+   "types": [
+    "art",
+    "daycamp"
+   ],
+   "ages": "Ages 6–14, in three groups",
+   "ageMin": 6,
+   "ageMax": 14,
+   "season": 2026,
+   "weeks": "July 6 to August 7, 2026",
+   "hours": "8:30 am to 4 pm",
+   "cost": "$125 a week, plus a $30 registration fee and a $10 T-shirt. Free for children who qualify for Child Care Works.",
+   "weekly": 125,
+   "aid": "Free with Child Care Works. Ask Taller about other help.",
+   "address": "2600 N 5th St",
+   "neighborhoods": [
+    "Fairhill"
+   ],
+   "phone": "215-426-3311",
+   "website": "https://tallerpr.org/education/summer-camp/",
+   "price": "paid",
+   "signup": "For 2026 the interest form opened March 1, with a May 31 deadline.",
+   "sources": [
+    {
+     "label": "Taller Puertorriqueño",
+     "url": "https://tallerpr.org/education/summer-camp/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://tallerpr.org/education/summer-camp/",
+    "how": "fetch",
+    "look": "Dates, hours, age groups and the weekly rate are all in the body text of the Summer Camp page. Sign-up is a linked interest form.",
+    "notes": "The site sits behind Cloudflare: a plain curl got HTTP 403 on 2026-11-01 while a headless browser read the page; the Camp Info section is in the page text."
+   }
+  },
+  {
+   "id": "camp-tps",
+   "name": "Camp TPS at The Philadelphia School",
+   "what": "City Country Day Camps with water play for younger kids, plus about 35 one-week enrichment camps up to 8th grade.",
+   "types": [
+    "daycamp"
+   ],
+   "ages": "Ages 4–14",
+   "ageMin": 4,
+   "ageMax": 14,
+   "season": 2027,
+   "weeks": "June 21 to August 27, 2027",
+   "hours": "9:30 am to 3:30 pm, with drop-off from 8:30 and pick-up to 4",
+   "cost": "$250 to $575 a week, depending on the camp",
+   "weekly": 250,
+   "aid": "Links to the Youth Access to Opportunities Grant.",
+   "address": "2501 Lombard St",
+   "neighborhoods": [
+    "Fitler Square"
+   ],
+   "phone": "215-545-5323",
+   "website": "https://www.tpschool.org/tps-experience/camptps",
+   "price": "paid",
+   "note": "The 2027 dates are posted, but the price range comes from the Rates & Info page, which doesn’t name a year, and the camp list shown is still 2026’s. The price is a range across many camps; the low end may be a shorter or particular camp.",
+   "program": "the-philadelphia-school",
+   "sources": [
+    {
+     "label": "Camp TPS at The Philadelphia School",
+     "url": "https://www.tpschool.org/tps-experience/camptps"
+    },
+    {
+     "label": "Camp TPS summer camp page",
+     "url": "https://www.tpschool.org/tps-experience/camptps/summer-camp"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.tpschool.org/tps-experience/camptps",
+    "how": "fetch",
+    "look": "Season dates are in the intro of the Camp TPS page. The price range and daily hours are on the linked Rates & Info page, and per-camp weeks are in the linked catalog."
+   },
+   "signup": "Registration for summer 2027 opens in early December 2026.",
+   "updates": [
+    {
+     "date": "2026-11-01",
+     "text": "Summer 2027 dates are posted: camps run June 21 to August 27, 2027 for ages 4–14. Registration opens in early December. Prices for 2027 are not posted yet; last summer’s range was $250 to $575 a week."
+    }
+   ]
+  },
+  {
+   "id": "ymca-day-camps",
+   "name": "Greater Philadelphia YMCA day camps",
+   "what": "Traditional age-grouped day camp at Y branches, with specialty sports and arts camps.",
+   "types": [
+    "daycamp"
+   ],
+   "ages": "Ages 4–15, varying by branch",
+   "ageMin": 4,
+   "ageMax": 15,
+   "season": 2026,
+   "hours": "Most branches run 7 am to 6 pm",
+   "extended": "Before and after care are included in the price.",
+   "cost": "Weekly rates aren’t on the camp pages. A deposit is required.",
+   "aid": "The Y has a financial assistance program.",
+   "address": "Roxborough YMCA, 7201 Ridge Ave, and other city branches",
+   "neighborhoods": [
+    "Roxborough"
+   ],
+   "phone": "215-220-9199",
+   "website": "https://www.philaymca.org/camps/summer-day-camp/",
+   "signup": "Sign-ups for summer 2027 open January 6, 2027 for family memberships, January 13 for members and January 20 for non-members. The 2027 handbook and prices were not posted yet.",
+   "note": "We read the Roxborough branch’s page. Other city branches, and all prices, weren’t readable.",
+   "sources": [
+    {
+     "label": "Greater Philadelphia YMCA day camps",
+     "url": "https://www.philaymca.org/camps/summer-day-camp/"
+    },
+    {
+     "label": "Roxborough YMCA summer camp",
+     "url": "https://www.philaymca.org/camps/summer-day-camp/roxborough-ymca-summer-camp/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.philaymca.org/camps/summer-day-camp/",
+    "how": "browser",
+    "look": "The summer day camp page lists every branch and a Camp Finder. Week dates and member and non-member rates are most likely in the registration portal or the linked Camp Handbook PDF.",
+    "notes": "Each branch has its own page, on the pattern philaymca.org/camps/summer-day-camp/roxborough-ymca-summer-camp/; the registration dates sit at the top of the branch page under “Registration Dates”."
+   },
+   "dates": [
+    {
+     "date": "2027-01-06",
+     "label": "Summer 2027 day camp sign-ups open for family memberships"
+    },
+    {
+     "date": "2027-01-13",
+     "label": "Summer 2027 day camp sign-ups open for members"
+    },
+    {
+     "date": "2027-01-20",
+     "label": "Summer 2027 day camp sign-ups open for non-members"
+    }
+   ]
+  },
+  {
+   "id": "summer-achievers-edey",
+   "name": "Summer Achievers at Extended Day, Extended Year schools",
+   "what": "A free six-week camp at district schools in the city’s Extended Day, Extended Year program, with meals, enrichment activities and field trips.",
+   "types": [
+    "daycamp",
+    "academics"
+   ],
+   "ages": "Rising 1st to 8th graders",
+   "ageMin": 6,
+   "ageMax": 13,
+   "season": 2026,
+   "weeks": "June 22 to July 31, 2026",
+   "hours": "8:30 am to 5 pm",
+   "cost": "Free, meals included",
+   "weekly": 0,
+   "address": "At 35 district schools and 10 charter schools",
+   "phone": "215-683-2367",
+   "website": "https://www.phila.gov/programs/extended-day-extended-year/",
+   "registerUrl": "https://www.phila.gov/ost/program-locator/?services=programs_isAchievers",
+   "price": "free",
+   "note": "Families pick a school through the city’s program locator. Space was limited in 2026.",
+   "sources": [
+    {
+     "label": "City of Philadelphia: Extended Day, Extended Year",
+     "url": "https://www.phila.gov/programs/extended-day-extended-year/"
+    },
+    {
+     "label": "City post on Summer Achievers 2026",
+     "url": "https://www.phila.gov/2026-05-08-register-now-make-this-summer-unforgettable-with-summer-achievers-summer-camp-at-edey-schools-2/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.phila.gov/programs/extended-day-extended-year/",
+    "how": "fetch",
+    "look": "The program page shows registration status and the school list. Dates, hours and grades come from a spring phila.gov post titled “Register now… Summer Achievers”.",
+    "notes": "The dated post changes each spring (May 8 in 2026)."
+   }
+  },
+  {
+   "id": "allens-lane-art-camp",
+   "name": "Allens Lane Art Center summer art camp",
+   "what": "A new workshop, medium and theme each week, from painting and ceramics to improv and film, with time in the park and a Friday showcase.",
+   "types": [
+    "art"
+   ],
+   "ages": "Ages 5–12",
+   "ageMin": 5,
+   "ageMax": 12,
+   "season": 2026,
+   "weeks": "June 15 to August 7, 2026. No camp June 19 or July 3.",
+   "hours": "Classes 9:30 am to 3:30 pm, with drop-off from 8:30",
+   "extended": "Before care from 8:30 am is free. After care 3:30 to 5:30 pm, $120 a week.",
+   "cost": "$380 a week; $360 for the two holiday weeks",
+   "weekly": 380,
+   "aid": "5% off per child with a family membership. Early-bird price of $360 to the end of February. Full and partial scholarships may be available.",
+   "address": "601 W Allens Ln",
+   "neighborhoods": [
+    "Mount Airy"
+   ],
+   "website": "https://allenslane.org/summer-camp/",
+   "price": "paid",
+   "signup": "Sign-ups for 2026 started January 26 at 8 am.",
+   "sources": [
+    {
+     "label": "Allens Lane Art Center summer art camp",
+     "url": "https://allenslane.org/summer-camp/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://allenslane.org/summer-camp/",
+    "how": "browser",
+    "look": "Dates are at the top under “About Summer Camp”. Prices, discounts and before and after care are in the “Fees & Discounts” section.",
+    "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
+   },
+   "phone": "215-248-0546"
+  },
+  {
+   "id": "nlarts-summer-camp",
+   "name": "NLArts summer art camp",
+   "what": "Studio art, outdoor play and creative play in equal parts, with trips around the city and a Friday open house for families.",
+   "types": [
+    "art"
+   ],
+   "ages": "Rising kindergarten to 5th grade, with a counselor-in-training program for grades 6–8",
+   "ageMin": 5,
+   "ageMax": 13,
+   "season": 2026,
+   "weeks": "June 15 to August 21, 2026, none the weeks of June 29 and July 20",
+   "hours": "8:30 am to 3:30 pm",
+   "extended": "After Hours care to 5:30 pm brings the week to $420.",
+   "cost": "$300 a week; $280 for siblings",
+   "weekly": 300,
+   "aid": "Scholarship awards are available.",
+   "address": "700–702 N 3rd St",
+   "neighborhoods": [
+    "Northern Liberties"
+   ],
+   "website": "https://www.nlarts.org/summer-art-camp",
+   "price": "paid",
+   "note": "Summer 2026 sold out and its waitlist closed.",
+   "program": "nlarts",
+   "sources": [
+    {
+     "label": "NLArts summer art camp",
+     "url": "https://www.nlarts.org/summer-art-camp"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.nlarts.org/summer-art-camp",
+    "how": "browser",
+    "look": "Fees by grade group are in the “Information & Fees” section. Session dates are inside the headings under “Sessions & Themes”, which open on a click.",
+    "notes": "Read with a headless browser on 2026-11-01; the session dates under “Sessions & Themes” come through in the page text without clicking. The old address /summer-art-camp-program is now a menu of programs."
+   }
+  },
+  {
+   "id": "yes-and-camp",
+   "name": "Yes! And… Collaborative Arts camps",
+   "what": "Kids make theater together: acting, movement, visual art and storytelling, ending in a show they create themselves.",
+   "types": [
+    "theater",
+    "art"
+   ],
+   "ages": "Imagination Camp for rising K–4th grade; Theater Camp for rising 5th–8th",
+   "ageMin": 5,
+   "ageMax": 13,
+   "season": 2026,
+   "weeks": "June 22 to August 21, 2026, as one-, two- and three-week camps",
+   "hours": "9 am to 3 pm",
+   "extended": "Before care from 8 am and late care to 5 pm (Monday to Thursday), $8 an hour.",
+   "cost": "Sliding scale from $5 to $350 a week; the camp’s own cost is $350",
+   "weekly": 350,
+   "aid": "Anyone can ask for a lower rate on the sliding scale, with no paperwork, and full scholarships are offered.",
+   "address": "21 W Washington Ln",
+   "neighborhoods": [
+    "Germantown"
+   ],
+   "website": "https://www.yesandcamp.org/summer-camps",
+   "price": "paid",
+   "signup": "For 2026, dates came out January 15 and sign-ups opened January 27 for returning families and February 1 for new ones.",
+   "sources": [
+    {
+     "label": "Yes! And… Collaborative Arts camps",
+     "url": "https://www.yesandcamp.org/summer-camps"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.yesandcamp.org/summer-camps",
+    "how": "browser",
+    "look": "The summer camps page links to a page per camp (Imagination Camp, Theater Camp). Each has a “Dates” block and a “Tuition and Fees” section.",
+    "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
+   },
+   "phone": "215-278-4264"
+  },
+  {
+   "id": "zazz-summer-camp",
+   "name": "ZAZZ Dance & Drama",
+   "what": "Dance and drama sessions each day, with outdoor lunch, games, art projects and a Friday show. Ages 11–14 get performer intensives and a two-week musical.",
+   "types": [
+    "theater",
+    "movement"
+   ],
+   "ages": "Ages 5–14",
+   "ageMin": 5,
+   "ageMax": 14,
+   "season": 2026,
+   "weeks": "June 15 to August 21, 2026, by the week",
+   "hours": "9 am to 3:30 pm",
+   "extended": "Early care 8 to 9 am, $10 a day. Late programming 3 to 6 pm, $25 a day.",
+   "cost": "$350 a week; $700 for the two-week musical; plus a one-time $50 registration fee",
+   "weekly": 350,
+   "aid": "10% off for siblings. Payment plans and need-based help if cost is a barrier.",
+   "address": "1923 Chestnut St, 2nd floor",
+   "neighborhoods": [
+    "Rittenhouse"
+   ],
+   "website": "https://zazzphilly.com/summer-camp/",
+   "price": "paid",
+   "program": "zazz-dance",
+   "sources": [
+    {
+     "label": "ZAZZ Dance & Drama",
+     "url": "https://zazzphilly.com/summer-camp/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://zazzphilly.com/summer-camp/",
+    "how": "browser",
+    "look": "Weeks and themes are listed by age group, with a “Rates” block and an “Extended care” block between them.",
+    "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. A plain fetch came back without details earlier the same day."
+   }
+  },
+  {
+   "id": "sawubona-summer-camp",
+   "name": "Sawubona Creativity Project",
+   "what": "Theatre camp where each week is built around a different musical or movie, with dance routines, skits and a showcase.",
+   "types": [
+    "theater"
+   ],
+   "season": 2026,
+   "weeks": "June 22 to August 21, 2026, in nine themed weeks",
+   "address": "1626 E Passyunk Ave",
+   "neighborhoods": [
+    "East Passyunk"
+   ],
+   "website": "https://www.sawubonacreativityproject.org/campinformationandschedules",
+   "note": "The page lists the summer weeks but not the summer price, hours or ages. Its one-day camps on days off run 8:30 am to 5:30 pm for $60, for pre-K to 6th grade.",
+   "sources": [
+    {
+     "label": "Sawubona Creativity Project",
+     "url": "https://www.sawubonacreativityproject.org/campinformationandschedules"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.sawubonacreativityproject.org/campinformationandschedules",
+    "how": "browser",
+    "look": "The page lists each summer week by its theme and dates. Price, hours and ages for summer are on the page each week links to.",
+    "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
+   },
+   "program": "sawubona-creativity-project",
+   "phone": "856-332-4951"
+  },
+  {
+   "id": "zoomdance-camp",
+   "name": "ZoomDance camp",
+   "what": "Movement classes, dancing, art projects and story games for young children, with park trips, water play and time to rest.",
+   "types": [
+    "movement"
+   ],
+   "ages": "Ages 2½ to 7",
+   "ageMin": 2.5,
+   "ageMax": 7,
+   "season": 2026,
+   "weeks": "June 29 to August 21, 2026",
+   "hours": "9 am to 3 pm",
+   "extended": "Early drop-off from 8:30 am, $7 a day. After care to 5 pm, $20 a day.",
+   "cost": "Sliding scale from $200 to $650 a week; the camp’s own cost is $450",
+   "aid": "Sliding-scale tiers from $200 to $650 a week, in place of the old scholarship program.",
+   "address": "1415 S 9th St (at The Dandelion Project)",
+   "neighborhoods": [
+    "Passyunk Square"
+   ],
+   "phone": "215-326-9613",
+   "website": "https://zoomdance.com/camps/",
+   "note": "The page says the 2026 season is over and it looks forward to 2027; no 2027 dates yet.",
+   "sources": [
+    {
+     "label": "ZoomDance camp",
+     "url": "https://zoomdance.com/camps/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://zoomdance.com/camps/",
+    "how": "browser",
+    "look": "Dates, ages, hours and location are at the top. Pricing is under the “Sliding Scale Pricing” heading, whose text is in the page for a headless browser.",
+    "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
+   },
+   "weekly": 450
+  },
+  {
+   "id": "dandelion-summer-camp",
+   "name": "The Dandelion Project summer camp",
+   "what": "Open-ended play and creative offerings with a daily park trip, themed weeks like messy science and band camp, and all-outdoor weeks at FDR Park.",
+   "types": [
+    "daycamp",
+    "nature"
+   ],
+   "ages": "Ages 5–11; one band camp week for ages 10–15",
+   "ageMin": 5,
+   "ageMax": 15,
+   "season": 2026,
+   "weeks": "June 15 to August 28, 2026",
+   "hours": "9 am to 3 pm",
+   "extended": "After care is run by ZoomDance in the same building on select weeks.",
+   "cost": "$400 a week, with sliding-scale codes that bring it down as far as $260",
+   "weekly": 400,
+   "aid": "A trust-based sliding scale: families who need to pay less pick a lower rate at checkout.",
+   "address": "1415 S 9th St; FDR Park",
+   "neighborhoods": [
+    "Passyunk Square",
+    "South Philadelphia"
+   ],
+   "website": "https://www.thedandelionproject.us/summer-camp",
+   "price": "paid",
+   "program": "dandelion-after-school",
+   "sources": [
+    {
+     "label": "The Dandelion Project summer camp",
+     "url": "https://www.thedandelionproject.us/summer-camp"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.thedandelionproject.us/summer-camp",
+    "how": "browser",
+    "look": "Price and sliding scale are in the intro. Each of the three camp types has its own block of dates.",
+    "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. The site answered 429 to a plain fetch earlier the same day. The old address /summercamp is gone."
+   },
+   "phone": "215-792-3289"
+  },
+  {
+   "id": "rutabaga-naturearts",
+   "name": "Rutabaga NatureArts summer camp",
+   "what": "Hikes and exploring around East Falls, turning what kids find outdoors into artwork. Most of the day is spent outside.",
+   "types": [
+    "nature",
+    "art"
+   ],
+   "ages": "Ages 5 and up, in two groups",
+   "ageMin": 5,
+   "season": 2026,
+   "weeks": "June 15 to August 21, 2026",
+   "hours": "8:30 am to 3 pm",
+   "extended": "Before care from 7:30 am, $12 a day. After care to 5:30 pm, $25 a day.",
+   "cost": "$475 a week; a single day, when open, is $95",
+   "weekly": 475,
+   "aid": "$10 off a week when you book three or more, 5% off for siblings, and a limited number of sliding-scale spots.",
+   "address": "3800 Vaux St",
+   "neighborhoods": [
+    "East Falls"
+   ],
+   "website": "https://www.rutabagatoylibrary.com/summer-camp",
+   "price": "paid",
+   "signup": "The page says 2027 summer camp information is coming soon. For 2026 the early-bird discount ran through February 28.",
+   "sources": [
+    {
+     "label": "Rutabaga NatureArts summer camp",
+     "url": "https://www.rutabagatoylibrary.com/summer-camp"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.rutabagatoylibrary.com/summer-camp",
+    "how": "browser",
+    "look": "Ages, dates and schedule are under “Basics”, then “Pricing” and “Discounts”.",
+    "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. The site answered 429 to a plain fetch earlier the same day."
+   },
+   "phone": "267-297-5293"
+  },
+  {
+   "id": "skate-the-foundry-camp",
+   "name": "Skate The Foundry skateboard camp",
+   "what": "Full days of skateboarding by age and skill level, with group skates, free skates and trips such as the Art Museum.",
+   "types": [
+    "movement"
+   ],
+   "ages": "Ages 7–13",
+   "ageMin": 7,
+   "ageMax": 13,
+   "season": 2026,
+   "weeks": "Eight camp weeks at Paine’s Park were listed for 2026, all without dates",
+   "hours": "9 am to 3 pm",
+   "cost": "$600 a week; $550 before May 1",
+   "weekly": 600,
+   "aid": "5% off for siblings on full-day camps.",
+   "address": "Paine’s Park and its West Philly skatepark",
+   "neighborhoods": [
+    "West Philadelphia",
+    "Fairmount"
+   ],
+   "phone": "215-954-0750",
+   "website": "https://www.skatethefoundry.com/camp/",
+   "price": "paid",
+   "note": "The page says camps are on hold until further notice and registration is closed (seen November 1, 2026). It also runs single-day camps on days off.",
+   "sources": [
+    {
+     "label": "Skate The Foundry skateboard camp",
+     "url": "https://www.skatethefoundry.com/camp/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.skatethefoundry.com/camp/",
+    "how": "browser",
+    "look": "“Summer Camp Details” gives the price, then a week-by-week list of dates. Ages and hours are under “Additional Information”.",
+    "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. The page is long because it embeds reviews."
+   },
+   "program": "skate-the-foundry",
+   "updates": [
+    {
+     "date": "2026-11-01",
+     "text": "The camp page now says camps are on hold until further notice and registration is closed."
+    }
+   ]
+  },
+  {
+   "id": "lavner-tech-camp-upenn",
+   "name": "Camp Tech Revolution at UPenn (Lavner)",
+   "what": "Weekly tech camps in robotics, coding, game design, Minecraft, Roblox, filmmaking and digital art.",
+   "types": [
+    "stem"
+   ],
+   "ages": "Ages 6–14",
+   "ageMin": 6,
+   "ageMax": 14,
+   "season": 2026,
+   "extended": "Early arrival 8 to 9 am and an extended day 3 to 5:45 pm are add-ons.",
+   "address": "235 S 33rd St (University of Pennsylvania)",
+   "neighborhoods": [
+    "University City"
+   ],
+   "phone": "888-854-2267",
+   "website": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camps-tech-camps-stem-camps-university-of-pennsylvania-upenn/",
+   "note": "Dates and prices weren’t on the page we read. The address for its St. Peter’s School location now leads to this UPenn page.",
+   "sources": [
+    {
+     "label": "Camp Tech Revolution at UPenn (Lavner)",
+     "url": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camps-tech-camps-stem-camps-university-of-pennsylvania-upenn/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camps-tech-camps-stem-camps-university-of-pennsylvania-upenn/",
+    "how": "browser",
+    "look": "The location page describes the camp and its address. Weeks and prices are in the enrollment system behind “Enroll Now”.",
+    "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
+   }
+  },
+  {
+   "id": "philly-rock-gym-camps",
+   "name": "Philadelphia Rock Gym summer camps",
+   "what": "Climbing camps with bouldering, team games and crafts. Camp Real Rock adds a Friday trip to climb outdoors with guides.",
+   "types": [
+    "movement"
+   ],
+   "ages": "Discovery Camp ages 6–14; Camp Real Rock ages 8–15",
+   "ageMin": 6,
+   "ageMax": 15,
+   "hours": "9 am to 3 pm, or a half day to noon",
+   "extended": "Early and late care, $20 an hour.",
+   "cost": "$480 a week for a full day, $310 for half days; Camp Real Rock is $590",
+   "weekly": 480,
+   "price": "paid",
+   "address": "2412 E York St (Fishtown); 3500 Scotts Ln (East Falls)",
+   "neighborhoods": [
+    "Fishtown",
+    "East Falls"
+   ],
+   "phone": "877-822-7673",
+   "website": "https://philarockgym.com/youth-camps/",
+   "signup": "The page said registration is coming soon.",
+   "note": "No dates were posted, and the page doesn’t say which summer the prices are for. It also has gyms outside the city.",
+   "program": "philly-rock-gym-day-camps",
+   "sources": [
+    {
+     "label": "Philadelphia Rock Gym youth camps",
+     "url": "https://philarockgym.com/youth-camps/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://philarockgym.com/youth-camps/",
+    "how": "browser",
+    "look": "The Summer Camps section has a block per camp with ages, prices and hours. Gym addresses are on each location’s own page.",
+    "notes": "Read in a browser on 2026-10-07. The site could not be read by the fetch tool the same day."
+   }
+  },
+  {
+   "id": "coco-academy-summer-camp",
+   "name": "CoCo Academy",
+   "what": "Weekly STEAM camps. Kids work on projects in the week’s theme, design and build their own inventions, and test them outside at a nearby park. Themes include robotics, motion, energy, rocket science and everyday machines.",
+   "types": [
+    "stem"
+   ],
+   "ages": "Ages 5–14",
+   "ageMin": 5,
+   "ageMax": 14,
+   "season": 2026,
+   "weeks": "June 8 to September 4, 2026, booked by the week. The July 4 week runs four days, June 29 to July 2.",
+   "hours": "9 am to 3 pm, Monday to Friday",
+   "extended": "Early drop-off from 8:30 am, $36 a week. Extended day to 5:30 pm, $100 a week, except the weeks of June 8, August 24 and August 31.",
+   "cost": "$480 a week. The four-day July 4 week is $384.",
+   "weekly": 480,
+   "price": "paid",
+   "address": "1001 Christian St and 615 S 3rd St",
+   "neighborhoods": [
+    "Bella Vista",
+    "Queen Village"
+   ],
+   "phone": "215-253-7690",
+   "website": "https://www.cocoacademyphl.com/summercamp",
+   "signup": "Online. Its camp page has a separate Register button for Bella Vista and for Queen Village, and early drop-off and extended day are add-ons at checkout.",
+   "note": "Send a labeled water bottle, a lunch that doesn’t need a fridge, and two snacks each day. Most themes run twice over the summer, so check the week’s theme when you book.",
+   "program": "coco-academy",
+   "sources": [
+    {
+     "label": "CoCo Academy summer camp",
+     "url": "https://www.cocoacademyphl.com/summercamp"
+    }
+   ],
+   "checked": "2026-10-07",
+   "check": {
+    "url": "https://www.cocoacademyphl.com/summercamp",
+    "how": "person",
+    "look": "The top paragraph gives ages, the first and last week and the daily hours. Prices, early drop-off, extended day and the July 4 week are under “Pricing” in the Camp Info section lower down.",
+    "notes": "The site does not allow automated reading and the browser extension is not allowed on it, so Josh pastes the page text (last pasted 2026-10-07). Registration runs through Sawyer, one link per location."
+   }
+  },
+  {
+   "id": "philly-pack-summer-camp",
+   "name": "Philly PACK",
+   "what": "Theatre and dance camps at a South Philly garage theatre: a one-week camp on a theme (a witch week, Shakespeare set to Taylor Swift, a book brought to the stage) ends in a Friday show, and a two-week production intensive stages a full-length musical.",
+   "types": [
+    "theater",
+    "movement"
+   ],
+   "ages": "Incoming 2nd grade and up for the production intensive and the book camp (strong reading skills required); incoming 4th grade and up for the others",
+   "ageMin": 7,
+   "season": 2026,
+   "weeks": "June 22 to July 31, 2026, as four camps: June 22 to 26, July 6 to 10, July 13 to 24 (the two-week production intensive) and July 27 to 31. No camp June 29 to July 3. Sign up for one week or all of them.",
+   "hours": "9 am to 3 pm, Monday to Friday",
+   "cost": "$500 a week; $1,000 for the two-week production intensive, with a $400 deposit at registration",
+   "weekly": 500,
+   "signup": "Registration opens January 15. The 2026 page lists each camp with its own Register link.",
+   "address": "233 Federal St",
+   "neighborhoods": [
+    "Pennsport"
+   ],
+   "phone": "215-703-8617",
+   "website": "https://www.phillypack.org/summer-camp/",
+   "registerUrl": "https://www.phillypack.org/registration/",
+   "price": "paid",
+   "sources": [
+    {
+     "label": "Philly PACK summer camp",
+     "url": "https://www.phillypack.org/summer-camp/"
+    },
+    {
+     "label": "Contact",
+     "url": "https://www.phillypack.org/contact-us/"
+    }
+   ],
+   "checked": "2026-11-05",
+   "check": {
+    "url": "https://www.phillypack.org/summer-camp/",
+    "how": "fetch",
+    "look": "Each camp has a dated heading with the grades, the tuition and a Register link; the page says when registration opens.",
+    "notes": "The address and phone are on /contact-us/. On 2026-11-05 the page still described summer 2026: it said five weeks but listed four camps, and gave no extended-day care."
+   }
+  },
+  {
+   "id": "esf-camps",
+   "name": "ESF Camps",
+   "what": "Big traditional day camp on school campuses, with junior and senior camps by grade, multi-sports and tennis camps, Jr. 76ers basketball and Phillies baseball weeks, and arts, science and technology camps. Two sites in the city: Friends Select in Center City and Norwood-Fontbonne Academy in Chestnut Hill (a third at The Haverford School on the Main Line).",
+   "types": [
+    "daycamp",
+    "movement",
+    "stem",
+    "art"
+   ],
+   "ages": "Rising pre-K to 8th grade for the day camps (junior camp PreS–2, senior camp 3–8); sports and specialty camps by grade from rising 1st, some to 10th",
+   "ageMin": 4,
+   "ageMax": 14,
+   "season": 2027,
+   "weeks": "June 14 to August 20, 2027; no camp June 18 or July 5",
+   "hours": "9 am to 3 pm (the program’s own word; its site doesn’t post hours)",
+   "extended": "Club OT extended day from 7:30 am and to 6 pm, with afternoon snacks: at Friends Select $72 a week for mornings, $195 for afternoons, $230 for both.",
+   "cost": "Friends Select: $645 a week when booked by February 1, 2027, $695 after; $30 a week off for five or more weeks; $20 off each extra sibling. Norwood-Fontbonne’s rates are on its own rates page.",
+   "signup": "Enrollment for 2027 opens in November 2026, online through Bravo Enrollment, with early-bird savings from November 16 (the program told us). Friends Select camp office 215-298-9145; Chestnut Hill 215-247-7010.",
+   "address": "1651 Benjamin Franklin Pkwy (Friends Select School); 8900 Norwood Ave (Norwood-Fontbonne Academy)",
+   "neighborhoods": [
+    "Logan Square",
+    "Chestnut Hill"
+   ],
+   "phone": "215-298-9145",
+   "website": "https://www.esfcamps.com/friendsselect/",
+   "registerUrl": "https://www.bravoenrollment.com/?redirectTo=esf",
+   "price": "paid",
+   "sources": [
+    {
+     "label": "ESF Camps at Friends Select",
+     "url": "https://www.esfcamps.com/friendsselect/"
+    },
+    {
+     "label": "ESF Camps at Norwood-Fontbonne Academy",
+     "url": "https://www.esfcamps.com/chestnuthill/"
+    },
+    {
+     "label": "ESF Camps",
+     "url": "https://www.esfcamps.com/"
+    },
+    {
+     "label": "ESF Friends Select tuition rates",
+     "url": "https://www.esfcamps.com/friendsselect/rates/"
+    },
+    {
+     "label": "ESF Friends Select extended day",
+     "url": "https://www.esfcamps.com/friendsselect/rates/extended-day/"
+    }
+   ],
+   "checked": "2026-11-05",
+   "check": {
+    "url": "https://www.esfcamps.com/friendsselect/rates/",
+    "how": "browser",
+    "look": "The season dates and grade range are on the location home page. Weekly tuition by weeks booked, the early-bird window and the holiday weeks are on the Tuition Rates & Savings page in tables that open on a click; Club OT prices are on the extended-day page.",
+    "notes": "Read with a headless browser on 2026-11-01; the rate tables come through in the page text. An earlier check found the rates page gone; it is back at /friendsselect/rates/."
+   },
+   "weekly": 645,
+   "note": "The weeks of June 14 and July 6 are four days at a reduced rate. Prices are for the day, sports and STEAM camps; the extended-day page shows two sets of Club OT rates and the higher set is taken as current.",
+   "dates": [
+    {
+     "date": "2027-02-01",
+     "label": "Last day of early-bird tuition ($645 a week; $695 after)"
+    }
+   ]
+  },
+  {
+   "id": "skateboard-academy-rizzo-rink",
+   "name": "The Skateboard Academy summer camp at Rizzo Rink",
+   "what": "Skateboard instruction and camp activities at the Rizzo Rink, with a camp T-shirt and an end-of-week treat. Campers bring their own board and helmet, or ask to borrow a helmet.",
+   "types": [
+    "movement"
+   ],
+   "ages": "Ages 5–13",
+   "ageMin": 5,
+   "ageMax": 13,
+   "season": 2026,
+   "weeks": "June 15 to June 26, 2026, in two one-week sessions",
+   "hours": "9 am to 2 pm",
+   "cost": "$250 a week",
+   "weekly": 250,
+   "price": "paid",
+   "address": "Rizzo Rink, Front St and Washington Ave",
+   "neighborhoods": [
+    "Pennsport"
+   ],
+   "website": "https://theskateboardacademycom.bigcartel.com/product/rizzo-rink-sumer-sk8-camp",
+   "note": "Both 2026 weeks showed as sold out. The camp is sold as a product in the academy’s online shop, which gives no phone number or sign-up date.",
+   "sources": [
+    {
+     "label": "The Skateboard Academy, 2026 Rizzo Rink Summer Sk8 Camp",
+     "url": "https://theskateboardacademycom.bigcartel.com/product/rizzo-rink-sumer-sk8-camp"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://theskateboardacademycom.bigcartel.com/product/rizzo-rink-sumer-sk8-camp",
+    "how": "browser",
+    "look": "The product page gives the two weeks, hours, ages, price and the rink. The shop front at theskateboardacademycom.bigcartel.com lists the year’s camps as products.",
+    "notes": "Read with a headless browser on 2026-11-01; a plain fetch was not tried. The product address has a typo (sumer) and may change with the year."
+   }
+  },
+  {
+   "id": "hawk-hill-day-camp",
+   "name": "Hawk Hill Day Camp at Saint Joseph’s University (Future Stars)",
+   "what": "Future Stars’ traditional day camp with robotics, art, STEAM, sports and daily swimming on the Saint Joseph’s University campus, plus an all-sports camp for ages 7–13.",
+   "types": [
+    "daycamp",
+    "movement",
+    "stem"
+   ],
+   "ages": "Ages 5–13; the all-sports camp is ages 7–13",
+   "ageMin": 5,
+   "ageMax": 13,
+   "season": 2027,
+   "weeks": "June 21 to August 13, 2027",
+   "hours": "9:15 am to 3:15 pm, with drop-off from 8 am and pick-up to 3:45 pm",
+   "extended": "Early drop-off 7 to 8 am, $5 a day. Extended day to 4:30 pm $8 a day, or to 6 pm $16 a day.",
+   "cost": "$375 a week when booked by December 1; $435 after",
+   "weekly": 375,
+   "price": "paid",
+   "address": "Saint Joseph’s University, 5600 City Ave",
+   "neighborhoods": [
+    "West Philadelphia"
+   ],
+   "phone": "215-674-0494",
+   "website": "https://www.hawkhilldaycamp.com/locations/hawk-hill-day-camp/",
+   "registerUrl": "https://www.hawkhilldaycamp.com/locations/hawk-hill-day-camp/registration/",
+   "signup": "Registration was open when we checked on November 1, 2026; the $375 rate runs until December 1.",
+   "dates": [
+    {
+     "date": "2026-12-01",
+     "label": "Last day for the $375 weekly rate; $435 a week after"
+    }
+   ],
+   "note": "The page prints the camp dates without a year; we take June 21 to August 13 as 2027 because the lower rate runs to December 1. The campus sits on the city line; the camp’s address is in Philadelphia.",
+   "sources": [
+    {
+     "label": "Hawk Hill Day Camp",
+     "url": "https://www.hawkhilldaycamp.com/locations/hawk-hill-day-camp/"
+    },
+    {
+     "label": "Future Stars camp locations",
+     "url": "https://www.futurestars.com/"
+    }
+   ],
+   "checked": "2026-11-01",
+   "check": {
+    "url": "https://www.hawkhilldaycamp.com/locations/hawk-hill-day-camp/",
+    "how": "browser",
+    "look": "The season dates, the weekly rates by registration deadline and the typical day with extended-time prices are in the body of the location page. Ages are on the programs overview.",
+    "notes": "Read with a headless browser on 2026-11-01; a plain fetch was not tried. The camp has its own site, hawkhilldaycamp.com, linked from the location list on futurestars.com; the dates there carry no year."
+   }
+  }
+ ],
+ "todo": [
+  {
+   "name": "University City Arts League art day camps",
+   "url": "http://www.ucartsleague.org/",
+   "why": "Not read yet: the page could not be opened on 2026-10-07."
+  },
+  {
+   "name": "PlayArts summer camp",
+   "url": "https://www.playartsphilly.com/",
+   "why": "Still no summer camp on 2026-11-01: the site’s Day Camps page lists only 2026–27 school-year day camps at the Maas Building, 1320 N 5th St."
+  },
+  {
+   "name": "Philadelphia Girls Choir choral camp",
+   "url": "https://www.phillygirlschoir.org/choral-camp/",
+   "why": "The camp address still leads to the Philadelphia Youth Choral Ensembles home page (pycemusic.org), with no camp on it (2026-11-01)."
+  },
+  {
+   "name": "Girls Rock Philly",
+   "url": "https://www.girlsrockphilly.org/",
+   "why": "Its Summer Camp link still points to a 2022 camp page on 2026-11-01; the home page gives no camp dates."
+  },
+  {
+   "name": "Move It Kidz 4 Fitness",
+   "url": "https://moveitkidz4fitness.com/k4f-summer-camp",
+   "why": "Its camp page still returned “page not found” on 2026-11-01."
+  },
+  {
+   "name": "Ed Snider Youth Hockey & Education camps",
+   "url": "https://sniderhockey.org/hockey/",
+   "why": "Read in a browser on 2026-11-01: the hockey page has a Summer Camps tab, but its dates, ages, cost and rinks are still not in the page text."
+  },
+  {
+   "name": "Wissahickon Skating Club hockey camp",
+   "url": "https://www.wissskating.com/camps/",
+   "why": "The camps page returned a 404 on 2026-11-01."
+  },
+  {
+   "name": "STEM Prep Academy summer camp",
+   "url": "https://stempreparatory.org/stem-summer-camp",
+   "why": "Read in a browser on 2026-11-01: the camp address returns 404; the programs page lists a full-day summer camp for ages 3–10 at 604 E Girard Ave, “June – August”, with a two-week minimum, but no dates or prices (rates are behind a form)."
+  },
+  {
+   "name": "LocoRobo summer robotics",
+   "url": "https://locorobo.co/locosummer-modern-robotics.html",
+   "why": "Read in a browser on 2026-11-01: the camp address returns 404 and the site’s STEM Camps page sells robotics-camp kits and curriculum to schools and camps, not a day camp families sign up for."
+  },
+  {
+   "name": "Nerd Street / Localhost esports camp",
+   "url": "https://nerdstreet.com/",
+   "why": "Read in a browser on 2026-11-01: the Camp Nerd Street page gives ages 8–13, weeklong camps at Localhost in Philly, drop-off from 8:45 am and aftercare 3 to 5 pm, but no 2027 weeks or prices; a December 2025 post says registration opens in January."
+  },
+  {
+   "name": "Kids on 12th summer camp",
+   "url": "https://ko12kids.com/summer-camp",
+   "why": "The site moved to ko12.org (read in a browser on 2026-11-01): its summer camp page, ko12.org/kids-summer-camp-philadelphia, gives ages 3–11, 8:30 am to 4 pm with after care to 6 pm at 1112 Chestnut St, but the 2026 week list and weekly rates were not in the page text."
+  },
+  {
+   "name": "CORA Early Years at Huntingdon Mills",
+   "url": "https://www.coraservices.org/services/early-childhood/early-years-huntingdon-mills/",
+   "why": "The page answered HTTP 403 with a “confirm you are human” check to a headless browser on 2026-11-01, so it cannot be read automatically and needs Josh."
+  }
+ ],
+ "dropped": [
+  {
+   "name": "Academy of Natural Sciences summer camp",
+   "why": "Its own page said it would not host a summer camp in 2026.",
+   "seen": "2026-10-07"
+  },
+  {
+   "name": "Somos Philly Spanish immersion camp",
+   "why": "Reported as no longer operating.",
+   "seen": "2026-10-07"
+  },
+  {
+   "name": "Snapology of Philadelphia",
+   "why": "No location inside the city was found on its site.",
+   "seen": "2026-10-07"
+  },
+  {
+   "name": "Code Ninjas South Philadelphia",
+   "why": "Its page said “location coming soon”.",
+   "seen": "2026-10-07"
+  },
+  {
+   "name": "Vets in Training (HousePaws)",
+   "why": "Not inside the city.",
+   "seen": "2026-10-07"
+  },
+  {
+   "name": "Girl Scouts day camp at Shelly Ridge",
+   "why": "Its own site places Camp Shelly Ridge in Lafayette Hill, “right outside of Philadelphia”, so it is not inside the city.",
+   "seen": "2026-11-01"
+  }
+ ]
 }
