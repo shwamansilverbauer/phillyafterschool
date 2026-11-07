@@ -266,8 +266,75 @@
           }
         ],
         "checked": "2026-11-07"
+      },
+      "marian-anderson": {
+        "relation": "onsite",
+        "note": "On Marian Anderson’s own partners list. The school’s site gives no season or days, so ask the office.",
+        "sources": [
+          {
+            "label": "Marian Anderson partners",
+            "url": "https://mariananderson.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-07"
       }
     }
+  },
+  {
+    "id": "soccer-shots-bache-martin",
+    "name": "Soccer Shots at Bache-Martin",
+    "what": "Weekly soccer on the school lawn for K–2, run by Soccer Shots, with pickup at 4 or aftercare in the cafeteria to 5:30",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "soccer",
+      "sports",
+      "K-2",
+      "Bache-Martin",
+      "Fairmount",
+      "aftercare"
+    ],
+    "address": "2201 Brown St",
+    "grades": "K-2",
+    "hours": "Tuesdays 3:00–4:40 pm on the Brown St lawn. Pickup at 4 pm, or children go to aftercare in the cafeteria until 5:30 pm.",
+    "cost": "$96 a session plus a $35 yearly enrollment fee, per the school’s page",
+    "website": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
+    "register": {
+      "how": "online",
+      "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
+      "note": "The school’s page links to Soccer Shots’ Bache-Martin sign-up; the link on this page goes to that page.",
+      "nextTerm": ""
+    },
+    "note": "Everything here is from Bache-Martin’s own after-school page. It doesn’t say who runs the cafeteria aftercare after 4 pm or how to sign up for it; ask the office. The page’s dates are from the 2025–26 year, so confirm this season’s.",
+    "sources": [
+      {
+        "label": "Bache-Martin after-school programs",
+        "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "onsite",
+        "note": "On the school’s own after-school page: Tuesdays 3:00–4:40 pm on the Brown St lawn, K–2.",
+        "sources": [
+          {
+            "label": "Bache-Martin after-school programs",
+            "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "neighborhoods": [
+      "Fairmount"
+    ],
+    "days": [
+      "tue"
+    ],
+    "pickupBy": "5:30 pm",
+    "price": "paid"
   },
   {
     "id": "nebinger-arts-partners",
@@ -3508,6 +3575,576 @@
     }
   },
   {
+    "id": "code-ninjas-south-philly",
+    "name": "Code Ninjas (South Philly)",
+    "what": "Game-based coding after school, on Coppin’s pickup sheet",
+    "types": [
+      "stem"
+    ],
+    "keywords": [
+      "Code Ninjas (South Philly)",
+      "Coppin",
+      "aftercare",
+      "pickup"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "445-942-0955",
+    "email": "",
+    "website": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf",
+    "register": {
+      "how": "phone",
+      "note": "Call the program. We haven’t been able to read a page of its own."
+    },
+    "note": "Named on Coppin’s own aftercare pickup sheet (posted May 2024) with this phone number. We haven’t found a page of the program’s own to read, so hours, price, ages and whether it still picks up from Coppin all need a call.",
+    "sources": [
+      {
+        "label": "Coppin aftercare pickup sheet",
+        "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "coppin": {
+        "relation": "pickup",
+        "note": "Named on Coppin’s own aftercare pickup sheet (May 2024). Confirm with the program before counting on it.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "brilliant-minds",
+    "name": "Brilliant Minds",
+    "what": "Child-care center on Coppin’s pickup sheet",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "Brilliant Minds",
+      "Coppin",
+      "aftercare",
+      "pickup"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-928-3890",
+    "email": "",
+    "website": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf",
+    "register": {
+      "how": "phone",
+      "note": "Call the program. We haven’t been able to read a page of its own."
+    },
+    "note": "Named on Coppin’s own aftercare pickup sheet (posted May 2024) with this phone number. We haven’t found a page of the program’s own to read, so hours, price, ages and whether it still picks up from Coppin all need a call.",
+    "sources": [
+      {
+        "label": "Coppin aftercare pickup sheet",
+        "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "coppin": {
+        "relation": "pickup",
+        "note": "Named on Coppin’s own aftercare pickup sheet (May 2024). Confirm with the program before counting on it.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "early-childhood-environment",
+    "name": "Early Childhood Environment",
+    "what": "Child-care center on Coppin’s pickup sheet",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "Early Childhood Environment",
+      "Coppin",
+      "aftercare",
+      "pickup"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-844-0178",
+    "email": "",
+    "website": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf",
+    "register": {
+      "how": "phone",
+      "note": "Call the program. We haven’t been able to read a page of its own."
+    },
+    "note": "Named on Coppin’s own aftercare pickup sheet (posted May 2024) with this phone number. We haven’t found a page of the program’s own to read, so hours, price, ages and whether it still picks up from Coppin all need a call.",
+    "sources": [
+      {
+        "label": "Coppin aftercare pickup sheet",
+        "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "coppin": {
+        "relation": "pickup",
+        "note": "Named on Coppin’s own aftercare pickup sheet (May 2024). Confirm with the program before counting on it.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "principal-academy",
+    "name": "Principal Academy",
+    "what": "On Coppin’s pickup sheet",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "Principal Academy",
+      "Coppin",
+      "aftercare",
+      "pickup"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "267-275-3835",
+    "email": "",
+    "website": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf",
+    "register": {
+      "how": "phone",
+      "note": "Call the program. We haven’t been able to read a page of its own."
+    },
+    "note": "Named on Coppin’s own aftercare pickup sheet (posted May 2024) with this phone number. We haven’t found a page of the program’s own to read, so hours, price, ages and whether it still picks up from Coppin all need a call.",
+    "sources": [
+      {
+        "label": "Coppin aftercare pickup sheet",
+        "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "coppin": {
+        "relation": "pickup",
+        "note": "Named on Coppin’s own aftercare pickup sheet (May 2024). Confirm with the program before counting on it.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "little-shepherds",
+    "name": "Little Shepherds Christian Learning Center",
+    "what": "Child-care center on Coppin’s pickup sheet",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "Little Shepherds Christian Learning Center",
+      "Coppin",
+      "aftercare",
+      "pickup"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-772-1825",
+    "email": "",
+    "website": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf",
+    "register": {
+      "how": "phone",
+      "note": "Call the program. We haven’t been able to read a page of its own."
+    },
+    "note": "Named on Coppin’s own aftercare pickup sheet (posted May 2024) with this phone number. We haven’t found a page of the program’s own to read, so hours, price, ages and whether it still picks up from Coppin all need a call.",
+    "sources": [
+      {
+        "label": "Coppin aftercare pickup sheet",
+        "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "coppin": {
+        "relation": "pickup",
+        "note": "Named on Coppin’s own aftercare pickup sheet (May 2024). Confirm with the program before counting on it.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
     "id": "movemakers",
     "name": "MoveMakers Philly",
     "what": "Dance and movement classes, with homework time and snack",
@@ -5414,7 +6051,19 @@
       }
     ],
     "lastVerified": "2026-10-07",
-    "schools": {}
+    "schools": {
+      "coppin": {
+        "relation": "pickup",
+        "note": "Named on Coppin’s own aftercare pickup sheet (May 2024). The program’s own page doesn’t say so, so confirm before counting on it.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    }
   },
   {
     "id": "playarts-day-camps",
@@ -5895,7 +6544,7 @@
   {
     "id": "rock-school-for-dance",
     "name": "The Rock School for Dance Education",
-    "what": "Saturday pre-ballet for ages 3 to 6 at the ballet school on South Broad Street",
+    "what": "Ballet school on South Broad Street: a weekday class that collects Vare-Washington students, and Saturday pre-ballet for ages 3 to 6",
     "types": [
       "movement"
     ],
@@ -5911,9 +6560,9 @@
     "neighborhoods": [
       "South Philadelphia"
     ],
-    "grades": "PK-1",
-    "gradeNote": "Pre-ballet is for ages 3–6",
-    "hours": "Weekend classes only are listed here.",
+    "grades": "PK-4",
+    "gradeNote": "Pre-ballet for ages 3–6 on Saturdays; the Vare-Washington class is for grades 2–4.",
+    "hours": "For Vare-Washington students in grades 2–4, per the school’s page: collected at 3 pm, class to 4:15 pm, pickup at the Rock School. Saturday pre-ballet for ages 3–6 is separate.",
     "cost": "Nine payments of $95 for ages 4–6 ($80 for age 3), plus a $75 registration fee and a $135 spring showcase fee",
     "price": "paid",
     "phone": "",
@@ -5932,9 +6581,22 @@
         "url": "https://www.therockschool.org/pre-ballet"
       }
     ],
-    "lastVerified": "2026-10-07",
-    "scope": "weekend",
-    "schools": {},
+    "lastVerified": "2026-11-07",
+    "scope": null,
+    "schools": {
+      "vare-washington": {
+        "relation": "pickup",
+        "distance": "about half a mile west, at Broad and Washington",
+        "note": "Vare-Washington’s own after-school page says the Rock School collects students at 3 pm for a class that runs to 4:15 pm, with pickup at the Rock School, for grades 2–4, and says to ask Dr. Barnes at the school. The Rock School’s own site can’t be read automatically, so confirm with the school.",
+        "sources": [
+          {
+            "label": "Vare-Washington after-school page",
+            "url": "https://vare.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
     "weekend": {
       "summary": "Pre-ballet by age, one class a week from September to June. Age 3 meets at 9:15 am or 12:15 pm, age 4 at 10 am, age 5 at 9 or 11 am and age 6 at 11:30 am. Several sections were full with a waitlist when we checked.",
       "days": [
@@ -7127,6 +7789,449 @@
     ]
   },
   {
+    "id": "stanton-clubs",
+    "name": "School clubs and teams",
+    "what": "Dance Club, African Drum Club (with Bainbridge House, which the school says has run drum and dance there for more than 25 years), Rock Band, Running Club, Orchestra, Chorus, a poetry program with Writing Matters, a robotics team that reached the 2024 World Championships, flag football, track and volleyball (a doctor-signed physical is required), intramurals for K–5 and the Middle Grades Conference for grades 6–8.",
+    "types": [
+      "clubs",
+      "music",
+      "movement",
+      "stem",
+      "academics"
+    ],
+    "keywords": [
+      "clubs",
+      "school",
+      "team",
+      "after school"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Varies by club and season",
+    "cost": "Not published",
+    "phone": "215-400-8170",
+    "email": "",
+    "website": "https://emstanton.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Sign-ups go through the school office or the club’s teacher."
+    },
+    "note": "The school’s home page names these without saying when they meet or whether they run after school; ask the office. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Stanton’s site",
+        "url": "https://emstanton.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "stanton": {
+        "relation": "onsite",
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "marian-anderson-clubs",
+    "name": "School clubs and teams",
+    "what": "Wildcat Workshop, the school’s own K–8 makerspace, and the partners the school names: Sunrise of Philadelphia, Rock Reach, BalletX Dance eXchange, Girls on the Run, RISE Tutoring, the Philadelphia Robotics Coalition, Raja Yoga, Walnut Street Theatre and WHYY Media Labs.",
+    "types": [
+      "clubs",
+      "stem",
+      "movement",
+      "theater",
+      "academics"
+    ],
+    "keywords": [
+      "clubs",
+      "school",
+      "team",
+      "after school"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Varies by club and season",
+    "cost": "Not published",
+    "phone": "215-400-7890",
+    "email": "",
+    "website": "https://mariananderson.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Sign-ups go through the school office or the club’s teacher."
+    },
+    "note": "The school’s site lists these as partners without saying which run after school, on site; ask the office before counting on one. Girls on the Run has its own listing here.",
+    "sources": [
+      {
+        "label": "Marian Anderson’s partners list",
+        "url": "https://mariananderson.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "marian-anderson": {
+        "relation": "onsite",
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "childs-clubs",
+    "name": "School clubs and teams",
+    "what": "Game Club, Mindset of Champions (gaming), Run Philly Style, net sports and volleyball; and the arts partners the school names: Dance Philly Classrooms (grade 5), Koresh Dance (grade 3), Rock Reach Dance (grade 4) and instrumental music lessons on Tuesdays and Fridays.",
+    "types": [
+      "clubs",
+      "games",
+      "movement",
+      "music"
+    ],
+    "keywords": [
+      "clubs",
+      "school",
+      "team",
+      "after school"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Varies by club and season",
+    "cost": "Not published",
+    "phone": "215-400-7950",
+    "email": "",
+    "website": "https://childs.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Sign-ups go through the school office or the club’s teacher."
+    },
+    "note": "The school’s home page names these without times or sign-up details, and some of the arts partners may run during the school day; ask the office. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Childs’s site",
+        "url": "https://childs.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "childs": {
+        "relation": "onsite",
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bache-martin-clubs",
+    "name": "School clubs and teams",
+    "what": "Elementary: Choir with Settlement Music School (grades 3–5, Tuesdays 3:00–4:30 pm) and Game Club (K–6, Wednesdays until 4:15 pm in the cafeteria, board and card games only). Grades 6–8: Student Advisory Committee, Cheer Squad (Tuesdays and Thursdays 3:15–4:30 pm), a free golf team (Mondays at Walnut Lane by school bus, with First Tee lessons), free girls volleyball (practices at school and Lloyd Hall), History Club (every other Tuesday) and Mural Club (Wednesdays 3:30–4:30 pm). Off site for grades 6–8: the Fairmount Mountain Bike Team (22nd and Brown, Mondays and Wednesdays 3:30–6:30 pm, through Cadence Cycling), wrestling with Beat the Streets (3700 Market St, Tuesdays and Thursdays 6:30–8 pm, with homework help at its mentoring center) and Philadelphia City Rowing (grades 7–8, free, limited spaces).",
+    "types": [
+      "clubs",
+      "music",
+      "games",
+      "movement",
+      "art"
+    ],
+    "keywords": [
+      "clubs",
+      "school",
+      "team",
+      "after school"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Varies by club; see each one",
+    "cost": "Not published",
+    "phone": "215-400-7550",
+    "email": "",
+    "website": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
+    "register": {
+      "how": "school",
+      "note": "Sign-ups go through the school office or the club’s teacher."
+    },
+    "note": "All from the school’s own after-school page, with the details as the school gives them. Its dates are from the 2025–26 year, so confirm this year’s before counting on one. Girls on the Run, Heart & Sole, Soccer Shots, Francisville Rec and Philly Art Center have their own listings here.",
+    "sources": [
+      {
+        "label": "Bache-Martin after-school programs",
+        "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "onsite",
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
     "id": "east-passyunk-rec",
     "name": "East Passyunk Community Center",
     "what": "City rec center that Southwark names for after-school pickup",
@@ -7188,6 +8293,18 @@
           }
         ],
         "checked": "2026-10-10"
+      },
+      "coppin": {
+        "relation": "pickup",
+        "note": "Named on Coppin’s own aftercare pickup sheet (May 2024). The program’s own page doesn’t say so, so confirm before counting on it.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ],
+        "checked": "2026-11-07",
+        "distance": "about a mile south, at 11th and Mifflin"
       }
     },
     "pickupLists": [
