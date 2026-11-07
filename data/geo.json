@@ -428,6 +428,34 @@
   "98 chamounix dr": [
    39.9935,
    -75.21458
+  ],
+  "1800 washington ave": [
+   39.93876,
+   -75.17149
+  ],
+  "2300 wharton st": [
+   39.936,
+   -75.18126
+  ],
+  "1701 s 15th st": [
+   39.92934,
+   -75.16849
+  ],
+  "1800 wallace st": [
+   39.96614,
+   -75.16839
+  ],
+  "100 e johnson st": [
+   40.03997,
+   -75.17162
+  ],
+  "740 s 17th st": [
+   39.9438,
+   -75.17067
+  ],
+  "900 federal st": [
+   39.93504,
+   -75.15871
   ]
  },
  "checked": "2026-11-07",
@@ -439,6 +467,14 @@
   "916 christian st",
   "2000 catharine st",
   "6340 wayne ave",
-  "1651 benjamin franklin pkwy"
+  "1651 benjamin franklin pkwy",
+  "1800 washington ave",
+  "2300 wharton st",
+  "1701 s 15th st",
+  "1800 wallace st",
+  "100 e johnson st",
+  "740 s 17th st",
+  "900 federal st",
+  "400 s taney st"
  ]
 }

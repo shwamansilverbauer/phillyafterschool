@@ -1010,7 +1010,7 @@
       "fri"
     ],
     "pickupBy": "6:00 pm",
-    "cost": "$100 per month in the 2025–26 listing",
+    "cost": "$100 a month in the City’s listing",
     "rate": {
       "per": "month",
       "flat": 100,
@@ -1025,7 +1025,7 @@
       "note": "Call or stop by the rec center. There is no online sign-up.",
       "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
     },
-    "note": "The city’s finder has not posted a 2026–27 listing yet; the newest one ran September 8, 2025 to June 12, 2026. Call to confirm the program and the price for this year. The finder also lists Girl Scouts, soccer and baseball clinics, a garden club and crafts here.",
+    "note": "The City’s finder has four after-school entries for Shot Tower; the newest, from 2023, says “Pick up from Nebinger Elementary school. The program runs from 3 to 6 pm,” at $100 a month, and shows open for registration. Call to confirm the pickup and the price for this year. The finder also lists Girl Scouts, soccer and baseball clinics, a garden club and crafts here.",
     "sources": [
       {
         "label": "City Parks & Rec finder",
@@ -1036,13 +1036,19 @@
         "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
       }
     ],
-    "lastVerified": "2026-10-05",
+    "lastVerified": "2026-11-07",
     "schools": {
       "nebinger": {
-        "relation": "nearby",
+        "relation": "pickup",
         "distance": "six blocks east of Nebinger on the same street",
-        "note": "The city’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
-        "checked": "2026-10-07"
+        "note": "The City’s own listing for the program says it picks up from Nebinger Elementary and runs 3 to 6 pm. Confirm with the center before counting on it.",
+        "sources": [
+          {
+            "label": "City Parks & Rec finder",
+            "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+          }
+        ],
+        "checked": "2026-11-07"
       },
       "meredith": {
         "relation": "nearby",
@@ -1055,6 +1061,602 @@
         "distance": "about half a mile east of Vare-Washington",
         "note": "The city’s listing doesn’t mention pickup from any school.",
         "checked": "2026-10-06"
+      }
+    }
+  },
+  {
+    "id": "chew-playground",
+    "name": "Chew Playground",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "1800 Washington Ave (18th and Washington)",
+    "neighborhoods": [
+      "Point Breeze"
+    ],
+    "grades": "K-7",
+    "gradeNote": "Ages 5–13",
+    "hours": "Not published in the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$20 a month in the City’s listing, which dates from 2018; registration there shows closed, so call.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-6596",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder lists an after-school program here with homework help, entered in 2018 and marked closed for registration. Call to ask whether it is running this year and what it costs now. The finder also lists a summer day camp, chess, a gaming club and sewing here.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "childs": {
+        "relation": "nearby",
+        "distance": "about a quarter mile north, at 18th and Washington",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      },
+      "marian-anderson": {
+        "relation": "nearby",
+        "distance": "about a quarter mile south, at 18th and Washington",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      },
+      "stanton": {
+        "relation": "nearby",
+        "distance": "about a quarter mile southwest, at 18th and Washington",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "wharton-square-playground",
+    "name": "Wharton Square Playground",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "2300 Wharton St (23rd and Wharton)",
+    "neighborhoods": [
+      "Point Breeze"
+    ],
+    "grades": "K-6",
+    "gradeNote": "Ages 5–12",
+    "hours": "3:00–6:00 pm, weekdays, per the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$5 for the season in the City’s listing, which dates from 2018; registration there shows open.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-1888",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder says the program has homework help, board games, arts and crafts and a snack provided by the City, 3 to 6 pm, and gives Demetrius Richardson at the center as the contact. The listing was entered in 2018, so confirm the price.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "childs": {
+        "relation": "nearby",
+        "distance": "about two-thirds of a mile west along Wharton St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      },
+      "marian-anderson": {
+        "relation": "nearby",
+        "distance": "about two-thirds of a mile southwest, at 23rd and Wharton",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "disilvestro-playground",
+    "name": "DiSilvestro Playground",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "1701 S 15th St (15th and Morris)",
+    "neighborhoods": [
+      "Newbold"
+    ],
+    "grades": "K-6",
+    "gradeNote": "Ages 5–12",
+    "hours": "Not published in the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$50 a month in the City’s listing, which dates from 2016; registration there shows open.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-1598",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder lists its standard after-school program here (sports, outdoor activities, arts, reading), entered in 2016 and open for registration. Call to confirm this year’s hours and price.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "childs": {
+        "relation": "nearby",
+        "distance": "about half a mile south, at 15th and Morris",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "clemente-playground",
+    "name": "Clemente Playground",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "1800 Wallace St (18th and Wallace)",
+    "neighborhoods": [
+      "Fairmount"
+    ],
+    "grades": "K-6",
+    "gradeNote": "Ages 5–12",
+    "hours": "Not published in the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free in one of the City’s listings (from 2016) and $25 a month in a newer one (from 2022); ask which applies.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "free",
+    "phone": "215-685-2760",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder has two after-school entries here, both open for registration: one free, for ages 5–12, and one at $25 a month for ages 6–12. Call to ask which is running and the hours.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "nearby",
+        "distance": "about half a mile southeast, at 18th and Wallace",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "rumph-rec",
+    "name": "Rumph Recreation Center",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "100–70 E Johnson St (Johnson St east of Germantown Ave)",
+    "neighborhoods": [
+      "Germantown"
+    ],
+    "grades": "K-7",
+    "gradeNote": "Ages 5–13",
+    "hours": "Not published in the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$25 a month in the City’s listing, which dates from 2017; registration there shows open.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-2234",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder lists its standard after-school program here (sports, outdoor activities, arts, reading), entered in 2017 and open for registration. Call to confirm this year’s hours and price.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "lingelbach": {
+        "relation": "nearby",
+        "distance": "about two-thirds of a mile east along Johnson St, past Germantown Ave",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "marian-anderson-rec",
+    "name": "Marian Anderson Recreation Center",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "740 S 17th St (17th and Fitzwater)",
+    "neighborhoods": [
+      "Graduate Hospital"
+    ],
+    "grades": "K-6",
+    "gradeNote": "Ages 5–12",
+    "hours": "Not published in the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$25 a week in the City’s listings, which date from 2019 and 2021; one shows closed and the other is listed as seeking registrants, so call.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-6594",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder has two after-school entries here with homework help, from 2019 and 2021, neither clearly open. Stanton’s own site names the rec center among its after-school partners. Call to ask whether it is running this year. The finder also lists chess, boxing, baseball, soccer and a drama class here.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "stanton": {
+        "relation": "nearby",
+        "distance": "two blocks north of the school, at 17th and Fitzwater",
+        "note": "Stanton’s own page names the rec center among its after-school partners; the City’s listing doesn’t mention pickup, so ask the school or the center how children get there.",
+        "checked": "2026-11-07"
+      },
+      "marian-anderson": {
+        "relation": "nearby",
+        "distance": "about a quarter mile east, at 17th and Fitzwater",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      },
+      "childs": {
+        "relation": "nearby",
+        "distance": "about half a mile north, at 17th and Fitzwater",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "capitolo-playground",
+    "name": "Capitolo Playground",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "900 Federal St (9th and Federal)",
+    "neighborhoods": [
+      "Passyunk Square"
+    ],
+    "grades": "K-7",
+    "gradeNote": "Ages 5–13",
+    "hours": "Not published in the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$120 a month in the City’s listing, which dates from 2016; registration there shows closed, so call.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-1883",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder lists its standard after-school program here, entered in 2016 and marked closed for registration. Coppin’s own May 2024 sheet names Capitolo among the programs that collect its students, so ask the center about pickup and this year’s price.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "coppin": {
+        "relation": "nearby",
+        "distance": "three blocks east along Federal St",
+        "note": "Coppin’s own May 2024 sheet of after-care pickups names Capitolo Playground; the City’s listing doesn’t mention pickup, so confirm with the center.",
+        "checked": "2026-11-07"
+      },
+      "childs": {
+        "relation": "nearby",
+        "distance": "about two-thirds of a mile east, at 9th and Federal",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "markward-playground",
+    "name": "Markward Playground",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "400 S Taney St (Taney and Pine)",
+    "neighborhoods": [
+      "Fitler Square"
+    ],
+    "grades": "1-6",
+    "gradeNote": "Ages 6–12",
+    "hours": "Not published in the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$75 a week in the City’s listing, which dates from 2022; registration there shows closed, so call.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-6649",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder lists its standard after-school program here, entered in 2022 and marked closed for registration. Call to ask whether it is running this year.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "marian-anderson": {
+        "relation": "nearby",
+        "distance": "about half a mile northwest, by the river at Taney and Pine",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
       }
     }
   },
@@ -3057,6 +3659,12 @@
         "relation": "nearby",
         "distance": "about a 12-minute walk south-west of the school",
         "checked": "2026-10-10"
+      },
+      "childs": {
+        "relation": "nearby",
+        "distance": "four blocks east along Wharton St, at 12th and Wharton",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
       }
     }
   },
@@ -3140,6 +3748,12 @@
         "relation": "nearby",
         "distance": "about a 6-minute walk west of the school",
         "checked": "2026-10-10"
+      },
+      "childs": {
+        "relation": "nearby",
+        "distance": "about half a mile northeast, at 12th and Carpenter",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
       }
     }
   },
