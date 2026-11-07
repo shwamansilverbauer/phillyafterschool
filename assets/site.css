@@ -1006,6 +1006,12 @@ button.btn{cursor:pointer;font-family:inherit}
 .g-share .g-row{margin:0}
 .g-list .g-status{flex:0 0 100%;margin:0}
 .g-list .g-status:empty{display:none}
+.g-coparent{margin:14px 0 22px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
+.g-coparent h3{margin:0 0 6px}
+.g-coparent .hint{margin:0 0 10px}
+.g-coparent .g-row{margin:0}
+.g-acts-row{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:0}
+.g-coparent .g-acts-row .clear{margin-left:0}
 .g-list li.hint{padding:8px 0}
 /* the owner's numbers page */
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
