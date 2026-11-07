@@ -28,7 +28,12 @@ Fill in `site.config.json`:
 - `supportUrl` and `supportMonthlyUrl`: the two Stripe Payment Links on the Support page (pay what you want once; a monthly amount), with `supportLabel` and `supportMonthlyLabel` as the button text. Only the public `buy.stripe.com` addresses go here, never a key. If `supportUrl` is empty, the Support page says contributions are being set up. Coming back from Stripe: each link's "after payment" redirect is `https://phillyafterschool.org/support/?thanks=1&session_id={CHECKOUT_SESSION_ID}` (the one-time link) or `?thanks=2&…` (the monthly link); the page shows the matching thank-you (`#support-thanks`), counts the checkout once (`pas_support_thanks` with `plan` once or month, the same `pas-paid-seen` list the premium page uses) and takes the query off the address.
 - `siteUrl`: the domain you treat as the main one. Redirect the other domain to it at your host.
 - `builtBy`: the name, link and short bio shown in the footer, on the home page and on About.
-- `writtenBy`: optional. A name for a "Written by" line under "Built by" in the footer. It carries no link.
+- `writtenBy`: optional. A name for the "Written, edited, and humanized by" line under the "Created, managed, and
+  meticulously vibe coded by" line in the footer. It carries no link.
+- `designBy`: optional. A name for the "Logo and design zhuzhing by" line under those two. No link.
+- `instagram`: optional. The site's Instagram page (an https URL). It goes in the footer's brand column as
+  "@phillyafterschool on Instagram" with a small camera glyph, opening in a new tab, and into the home page's
+  Organization schema as `sameAs`.
 - `gtmId`: optional, e.g. `GTM-XXXXXXX`.
 - `admins`: optional, a list of email addresses whose accounts open `/edit/` and its pages (see "Site admins").
 - `editLogin`: optional, `{ "user": "...", "passwordHash": "..." }`. Puts a sign-in on `/edit/`. The hash is a bcrypt hash, never the
@@ -57,6 +62,26 @@ To look at the site without a server: `PREVIEW=1 node build.mjs`, then open `pre
 If the data has a problem, step 2 stops and the live site stays as it was. The "Actions" tab on GitHub shows what went wrong.
 
 To put the site on a different host, run `node build.mjs` and upload the contents of `dist/`.
+
+## Tests
+
+```
+node tests/run.mjs            everything (about half a minute)
+node tests/run.mjs api        only the files whose name contains "api"
+node tests/run.mjs --list     the list of tests
+```
+
+The tests live in `tests/` and run entirely on the machine they are started on: a copy of the site is built for one
+fixed day (`TODAY` in `tests/lib/harness.mjs`, a Monday in the school year the data describes) and served by PHP's
+own server, with small stand-ins for the services the site talks to (the mail service, Google's sign-in check, the
+push services). Nothing reaches phillyafterschool.org, the real mail service or anyone's inbox. They need `node`,
+`php` (with pdo_sqlite, openssl and curl) and, for the browser tests, Playwright (`PLAYWRIGHT_DIR` if it isn't
+installed globally); without Playwright the browser tests are reported as skipped and the rest run. What is
+covered, how a test is written and what to do when one fails is in `tests/README.md`.
+
+Run them before pushing a change to `build.mjs`, `src/` or the data. A change that breaks one of the site's own
+rules (a child's name readable on disk, a price for parents, an analytics call on a quiet page, the support line
+missing) fails a test, not a reader.
 
 ## Building for another day (tests only)
 
@@ -88,6 +113,16 @@ To go back to a copy: in Hostinger's file manager, replace `groups.sqlite` with 
 `groups.sqlite-wal` and `groups.sqlite-shm` if they are there. Anything done after that copy was made is lost, and anyone who signed in after it
 signs in again. Listing photos sent by program managers are files in `phillyafterschool-data/photos`, covered by the host's
 backup.
+
+**What is kept about a child is encrypted in the database** (since November 6, 2026): a child's first name and plans (a
+week in a profile, a week in a group, the summer, the days off, the children on a profile) and a group's name (a shared
+week is named after the child), each column AES-256-GCM with a key derived from `phillyafterschool-data/secret.key`
+(`seal()` / `unseal()` and the `SEALED` list in `src/server/groups-api.php`; values start with `e1.`). Rows from
+before were converted once, the first time the database was opened after the change (`seal_existing()`, flag `sealed`
+in `meta`). Two things follow: a restored copy of `groups.sqlite` can only be read next to the same `secret.key`, so
+keep that file with any copy you take off the host (Hostinger's backup has both); and backup copies made before the
+change stay readable until they rotate out, 14 days. What the site looks up or sorts by is not encrypted: an email
+address, an adult's name, a school, grades and ages, follows and favorites, claims.
 
 **The hourly check.** `.github/workflows/monitor.yml` runs `scripts/site-check.mjs` every hour. It only reads. It checks
 that the sitemap and a spread of pages open, that the site was rebuilt in the last two days, that the accounts service
@@ -395,6 +430,16 @@ Fields worth knowing:
 
 ## Add a school
 
+0. **Sweep the neighborhood first** (standing rule since November 7, 2026, after Childs and Bache-Martin went up with
+   one pickup each): `node scripts/sweep.mjs <id or street address>` prints every listed program within a mile and
+   its relation to the school, every pickup list on the site that names the school (aliases included), and Parks &
+   Rec's after-school programs within a mile from the City's own program data (phl.carto.com, the data behind the
+   Parks & Rec finder: facility, ages, fee, registration status and the year the entry was made). Then the reads it
+   can't do: the City's OST program locator in a browser (phila.gov/ost/program-locator; each entry has its own
+   `?resource=ost_NNN` link to cite), the school's own site and after-school page, each provider's own page for
+   anything found there or in a third-party roundup (phillyfamily.com keeps one), and the families who asked for
+   the school and the school office ("who picks up here, and who runs on site?"). Only a provider's own page or
+   word, the school's own page (shown as the school's word) or the City's own listing goes on the site.
 1. Add a record to `data/schools.json` (copy Nebinger's and change it). The `id` becomes the URL: `"meredith"` gives `/meredith/`. Leave `dismissal` out when the school doesn't post one (the page then says so and tells families to ask); `dismissalNote` still shows. `aliases` lists the other names providers use for the school ("Jackson" for Coppin, "Vare Washington" without the hyphen), so the build can tell whether a provider's pickup list names it. Optional fields: `dismissalNote` (staggered dismissal times), `checkedNoPickup` (providers checked that don't serve the school) and `alsoListed` (programs the school names that haven't been confirmed yet).
 2. In `data/programs.json`, add that school's `id` under `schools` for every program that serves it. Most providers are already there; they just need the new tag.
 3. Add records for programs that are new (the school's own clubs and on-site care).
@@ -408,9 +453,9 @@ Fields worth knowing:
 Every program gets its own page at `/programs/<id>/` (for example `/programs/zhang-sah/`), built from the
 same record as its cards. `/programs/` lists them all, in a section per kind of program (each under the first of
 its `types`, A to Z inside; `typeSections()` in `build.mjs`, which the weekend, day-camp and summer lists use too),
-with the hero naming each section as a colored pill and a strip under the menu bar (`pageNav(jumpNav())`) that
-jumps between the sections and stays under the slim search bar as the page scrolls; the type, neighborhood and
-by-day pages have the same strip over their kind sections.
+with no strip of section links over them: the Type row of the filters holds the same categories (the type,
+weekend, day-camp and summer lists are the same; the neighborhood and by-day pages keep a strip, `pageNav(jumpNav())`,
+over their kind sections).
 
 **What stays under the menu bar.** Anything that switches between views of a page is sticky, so it is the page's
 navigation wherever you are on it: `.pagenav` holds a list page's jump links and, on the day-camps page, the
@@ -429,11 +474,20 @@ posted, break by break, from `daysOff`) and Summer (the summer camp tied to it, 
 same shape: the details in a card, then a filled button that puts it on the parent's plan for that part of the
 year ("Add to your week" → the week builder; "Add Saturday to your week" → the week builder's weekend;
 "Add it to your days off" → the days-off planner, opened on the first day it has posted; "Add to your summer"
-→ the summer planner) and plain buttons for the provider's own sign-up and website. The hero says what it runs
-as a row of colored pills (`runsStrip()`, one color per kind, the same colors as the All programs page) and the
-sticky strip under the menu bar (`jumpNav()`) jumps between the sections, Schools and Reviews. The sections are
-`kindSection()` in `programPage()`; the follow box ("Follow it, or save it for later", `#follow`, `.follow-first`)
-sits first, right under the strip, since following and favorites are what a parent does most on the page; the
+→ the summer planner) and plain buttons for the provider's own sign-up and website. The hero is only the name,
+the line and what it runs, as a row of colored pills (`runsStrip()`, one color per kind, the same colors as the
+All programs page). Everything else general sits right under it as one block, the **spotlight** (`#snapshot`,
+`spotlight()`, "Program spotlight — The basics, at a glance."): a card with a yellow left edge (`.spot`) holding
+a grid of callouts (`spotItem()`, `.spot-item`), each an icon in a sky square (`SPOT_ICON`), a small uppercase
+label and the value — the type, where it is (address, neighborhood under it), the schools it serves with a
+colored dot for the kind of tie, grades, pick-up time, reviews, spots, the Claimed mark and the date checked.
+Spots and Claimed (`.spot-live`) stay hidden until `site.js` fills them, so the grid never shows an empty
+callout. A camp of its own (`campPage()`) has the same shape: a bare hero, a "Camp spotlight" (type, where,
+ages, price, dates, checked), then its Follow box. The sticky strip under the menu bar (`jumpNav()`) jumps
+between the spotlight, the sections, Schools and Reviews. The sections are `kindSection()` in
+`programPage()`; the follow box ("Follow it, or save it for later", `#follow`, `.follow-first`) sits under the
+spotlight, since following and favorites are what a parent does most on the page (the Summer section no longer
+has a box of its own; "summer" is one of the parts the page's box can follow, see "Follow and favorites"); the
 claim box (`listingTools()`: "Run this program?", a "Claim this listing" button and "Suggest an update") sits
 under the sections, and once `site.js` learns the listing is claimed (`?action=claimed`) it says "Claimed by the
 people who run it" and keeps the update link (`.claim-cta.is-claimed`).
@@ -449,11 +503,14 @@ page that sends people on (`campMovedPage()`: a meta refresh, a canonical link t
 sitemap. Untie a camp (remove `program`) and it gets its page back.
 
 **One row for every list.** The A to Z list, the weekend list, the day-camp list and the summer camps list are
-rows of the same shape, `listRow(kind, …)`: the name, a line about it, its categories, then the facts that
-matter for that part of the year (the schools and grades after school; Saturdays or Sundays for a weekend class;
-the breaks a day-camp program has posted, "Winter break (3 of 5 days) · +2 more"; the weeks, ages and grades for
-a summer camp). Nothing on a row is a button: the row is the way to the listing's page, and every list opens
-with the way into its planner (`heroGo()`). The old cards with buttons on them are gone from the lists.
+rows of the same shape, `listRow(kind, …)`: the name and a line about it on the left, and on the right a stack
+of small labeled cards (`mini()`: Type, Schools, Area, Grades, Days, Dates…) with the facts that matter for that
+part of the year (the schools and grades after school; Saturdays or Sundays for a weekend class; the breaks a
+day-camp program has posted, "Winter break (3 of 5 days) · +2 more"; the weeks, ages and grades for a summer
+camp). The cards are quiet on purpose, plain words with a colored dot for the kind of school tie
+(`servedLines()`), so the name is what the eye lands on; on a phone they stack under the line. The distance
+label, when someone sorts by distance, is a "From you" card. Nothing on a row is a button: the row is the way
+to the listing's page, and every list opens with the way into its planner (`heroGo()`).
 
 ## Finding programs: filters, types and the school finder
 
@@ -468,7 +525,11 @@ tiles (After school → `/programs/`, Days off → `/day-camps/`, Weekends → `
 then "What's your kid into?" (the type chips), then "Get reminders" (one line and a button to `/alerts/`, signed out
 only), then "the story" (`#story`: a few lines on who made the site and why, with "Read the story" to `/about/` and
 "Help us make it better" to `/suggest/`). The explainers (how programs are sorted, every listing is dated and sourced, who built this) are on the
-About page. Each box has a picture of who it is for (a grown-up with a child, a person with a clipboard), drawn in
+About page, which reads like a blog: six rows (`aboutPage()`), each a heading and its words on one side and a
+drawing on the other, sides alternating (why it exists, what it is for, how programs are sorted, dated and
+sourced, how to help, reviews), with the ids `#how`, `#what`, `#sorted`, `#sources`, `#corrections`, `#reviews`.
+The first row's picture is the two who made it: their photo (`src/static/about-us.jpg`, served at `/about-us.jpg`,
+1000px wide). To change it, replace that file with another 4:3 photo. Each box has a picture of who it is for (a grown-up with a child, a person with a clipboard), drawn in
 `WHO` in `homePage()`.
 
 The top of a program's page says which schools it works for as colored labels (`servedPills()`): yellow for pickup, green for on-site, blue for nearby, the same colors as on the cards.
@@ -476,7 +537,8 @@ The top of a program's page says which schools it works for as colored labels (`
 On a program's own page, a row of "The details" longer than about a hundred characters shows its first two lines with a "More" link (`fold()` in `build.mjs`). It is a `<details>` element holding the whole text, so it opens without JavaScript and nothing is left out of the page.
 
 **The filters start shut.** They run to six rows plus the grade row, which is a lot to meet before the list, so
-`filterBar()` writes one dark "Filters" button (`#filters-toggle`) under the search box and `site.js` keeps the rows
+`filterBar()` writes the search box first, full width, and under it one dark "Filters" button (`#filters-toggle`)
+with its line (`.fbar-top`), and `site.js` keeps the rows
 and the grade row hidden until it is pressed (the class `open` on `.fbar` and `.picker`; without JavaScript there are
 no filters at all, as before). Beside the button a line says what is inside, built from the rows that page has
 ("Narrow this list by grade, type, pickup or cost. Or see it on a map."), and a yellow number counts the filters in
@@ -487,9 +549,12 @@ it is remembered for the visit (`sessionStorage`, `pas-filters-open`), a link to
 does the slim bar's "Filters" button.
 
 The filters and the grade row scroll away with the page. Once they are out of sight, a slim bar is fixed under
-the menu bar (`#quickbar`, written by `filterBar()`): a search box that filters the list as you type and keeps
-the main search box in step, a "Filters" button that goes back up to the filters and shows how many are on, and
-a line saying what is showing with a Clear link. It goes away again at the footer.
+the menu bar (`#quickbar`, written by `filterBar()`): a "Filters" button on the left, where the main one is, that
+goes back up to the filters and shows how many are on, then a search box that filters the list as you type and
+keeps the main search box in step, and a line saying what is showing with a Clear link. It goes away again at the
+footer. While someone is typing in it the bar stays whatever they scroll, until they scroll back up past the
+filters: then it goes rather than sit stuck over the page (what they typed is in the main box already, and the
+cursor moves there if that box is on screen).
 
 A filter row that is wider than the screen scrolls sideways. `site.js` wraps each `.rail` so it gets a fade at
 the edge that has more and a round arrow button that moves it along; both disappear when there is nothing further
@@ -517,10 +582,17 @@ weekend classes together, with the day row Monday to Sunday and a count for each
 on dates and summer camps by the week, so it points at their lists instead.
 
 The search box on the home page looks through `data/all-schools.json`: every district and charter school in
-Philadelphia with any grade from K to 8, taken from the City's "Schools" open dataset. Schools with a record in
+Philadelphia with any grade from K to 8, taken from the City's "Schools" open dataset. Where the City lists two
+campuses under one name (Ad Prima, Esperanza Academy, Wissahickon), the street is added to the name in
+parentheses so the two can be told apart, and the Hancock middle campus is "John Hancock Demonstration School
+(LaBrum Campus)"; keep those when the list is refreshed. Schools with a record in
 `data/schools.json` (matched by street address) open their page. The rest open `/schools/request/`, where a
-parent can ask for the school with one tap. Each request is emailed to `contactEmail` with a running count and
-logged in `phillyafterschool-school-requests.log` above `public_html`. Refresh `data/all-schools.json` when the
+parent can ask for the school with one tap (it uses their free account, so each family counts once). Each new
+request is emailed to `contactEmail` with the asker's email address and everyone waiting for that school so far,
+and logged in `phillyafterschool-school-requests.log` above `public_html` (date, id, name, email), so the owner
+can write to those families by hand when the school goes up; the queue page lists them per school as mailto
+links. The addresses stay in that log, the owner's inbox and the queue page: the batches the queue sends to the
+run carry counts only. Refresh `data/all-schools.json` when the
 City updates its list (about once a year).
 
 ## Neighborhood pages
@@ -579,7 +651,8 @@ a row before a deploy don't lose each other, and it allows thirty publishes an h
 
 Each entry in `data/copy.json` is keyed by a fingerprint of the original sentence and holds `was` (the original) and
 `now`. An empty `now` takes the sentence off the page, and a list item, paragraph or heading left with nothing else
-in it goes too (a benefit on the register or managers page, say; the example listing's callout numbers follow).
+in it goes too, links whose words were all removed included (a benefit on the register or managers page, say; the
+example listing's callout numbers follow).
 Words in curly braces, like `{school}`, are filled in per page. If a sentence is later reworded in
 `build.mjs`, its entry stops matching; the build prints a note and carries on.
 
@@ -679,10 +752,10 @@ own key.
   those addresses out. When the last device goes, the entry goes and the emails start again by themselves.
 - **The service worker** shows a notification and opens a page when one is tapped, and nothing else: it keeps no
   copy of the site and doesn't touch page requests. A notification can only open an address on this site.
-- **Testing.** The tests play the notification service themselves: a stand-in on the test machine that receives
-  what the site posts, opens it with a device's keys and checks the signature, and a comparison over every morning
-  in the feed between what the site would tell a phone and what the email job would send. `PAS_TEST_PUSH` (set
-  only on the test machine) lets the stand-in's address through and lets a test choose the day.
+- **Testing.** `PAS_TEST_PUSH` (set only on the test machine; `tests/lib/harness.mjs` sets it) lets a stand-in
+  notification service's address through and lets a test choose the day. The stand-in receives what the site
+  posts; a test of the push payloads themselves (opening one with a device's keys, and comparing every morning in
+  the feed with what the email job would send) is still to be written, see `tests/README.md`.
 - **Not checked from here:** a real phone. Whether the host's PHP can make the key is answered by opening
   `groups/api.php?action=push_key`.
 
@@ -716,6 +789,12 @@ changes where a listing appears in a list, and it has no say over reviews.
     page) once every listing they hold is premium, or while the premium page isn't listed. Parents see no change.
   - **One sentence on the managers page**, in the list under "How claiming works", for people who haven't claimed.
   - **One line at the end of the monthly numbers email**, only for an account with no premium listing.
+  - **The page itself** is laid out like a product page: the two prices sit in the hero, each with its own
+    "Sign up yearly" / "Sign up monthly" button (`?plan=year#signup`, `?plan=month#signup`, which the picker at the
+    foot starts on), then a sticky strip of links to each part with a "Sign up" button at its right (`pageNav()` with
+    a `.pagenav-go`), then "What premium adds" as six numbered cards (`.pm-gets`), the example listing whose dots match
+    the cards, "How it works" in three steps (`.pm-steps`), what it doesn't do, and a closing part (`#signup`) with
+    the prices again beside the sign-in box. No testimonials, nothing invented.
   - **Prices** are `"premiumPrice": { "month": 19, "year": 190, "laterMonth": 29, "laterYear": 290 }`, whole dollars.
     The two "later" numbers are the regular price the founding price gives way to; leave them out and the founding
     paragraph goes. The page promises that a founding price is kept while the program stays signed up.
@@ -824,10 +903,14 @@ opens a white panel where each group is a big row that opens on a tap (only the 
 open), then Suggestion Box, About and the button, so a phone sees five lines rather than every link at once.
 
 The footer (`.foot`) is the sitemap, kept short: the wordmark (`src/static/logo-text.png`, the logo without the
-bulb), one line and the "Help the site keep going" button, then
-three columns: Programs (the four kinds, then by school, by neighborhood, by type, by day of week), Schedule Builder
-(the three planners, the calendar, reminders by email, My profile) and About (the story, Suggestion Box, Write a
-review, For program managers, Contact, Privacy, Terms), then the fine print with "Built by" and "Written by".
+bulb; the pictures the planners make carry the same wordmark on a navy tab at their top left, `drawMark()` in
+`site.js`), one line and the "Help the site keep going" button, then
+three columns: Programs (the four kinds, then By School, By Neighborhood, By Type, By Day of Week), Schedule Builder
+(the three planners, My Calendar, Reminders by Email, My Profile) and About (The Story, Suggestion Box, Write a
+Review, For Program Managers, Contact, Privacy, Terms of Use), then the fine print with the two credit lines
+("Created, managed, and meticulously vibe coded by …" and "Written, edited, and humanized by …"). Menu and footer
+items are in title case, and "After School" is two words when it names the thing (it is hyphenated only as an
+adjective: after-school programs).
 
 ## Signed up, or still to: ticks on the days-off plan and the to-do list
 
@@ -863,27 +946,29 @@ Putting a camp on a day off is a plan, not a registration, so each camp day in a
 ### Plans keep themselves
 
 The planners need an account (`plannersNeedAccount`), and a plan made by someone signed in is kept in their profile
-without asking: there is no "Keep it in my profile" button to find. Signed out, the planner's place is taken by the
+without asking: there is no "Keep it in my profile" button to find, and no box saying it was kept. Signed out, the planner's place is taken by the
 tour of the planner with one button, "Create a free account" (`planShow()`), so that is the first thing a visitor sees.
 
 - **Summer and days off** (`keepPlan()` in `groups.js`): once the profile has loaded, a plan on this device and none
-  in the profile is sent (`auto()`); one in the profile and none here is put on this device. The box under the plan
-  says "This summer is kept in your profile" with a "Take it out of my profile" link.
+  in the profile is sent (`auto()`); one in the profile and none here is put on this device. Nothing on the page
+  says so: the "In your profile" box (`#sum-profile`, `#off-profile`) stays hidden unless there is something to
+  decide or retry (below). Taking a plan out of the profile is done on the account page's Plans tab.
 - **The week** (`autoKeep()` and `keepWeek()` in the Build your week part of `groups.js`): each child's week is its
   own row in the profile, told apart by first name, so a week is sent once it has a first name and a program. A week
   the profile has and this device doesn't is put on this device. Removing a child on the page deletes their week
   from the profile too (`onKidGone`), or it would come straight back.
-- **What is still the parent's choice.** (1) The profile and this device both hold a plan that were never tied
+- **What is still the parent's choice.** The profile and this device both hold a plan that were never tied
   together (a plan made on this device before the planners needed an account, say): neither is sent or replaced
   until they pick, and replacing takes a second tap. For weeks that means a child here with the same first name as a
-  week in the profile. (2) A plan they took out of the profile stays out: the device remembers (`sumProfOff`,
-  `offProfOff` on `pas-rosters`, `profOff` on a child) and shows "only on this device" with a button to keep it
-  again. A plan removed from the profile on another device, or on the profile page, is marked the same way on the
-  devices that still have a copy, so they don't put it back.
+  week in the profile. Only then does the "In your profile" box show (and after a save that didn't work, with "Try
+  again"); the week builder's version sits in its sharing panel and also lists a week the profile has that this
+  device doesn't, with "Put it on this device". A plan taken out of the profile (`sumProfOff`, `offProfOff` on
+  `pas-rosters`, `profOff` on a child) no longer stays out: a device that still has it keeps it again the next time
+  the planner is opened, because plans save themselves. To drop one for good, clear it on the device too.
 - **What the pages say.** The privacy page, the terms' "Children's information", the sign-up page and each planner's
   intro say plans are kept in the profile while signed in. If this is ever made a choice again, those are the places
   to change (`privacyUpdated` and `termsUpdated` in `site.config.json` are the dates shown).
-- Tests: `auto.js` (weeks), `sumprof.js` (summer, both choices), `todo.js` (days off), `g6.js`, `wk2.js`.
+- Tests: `tests/cases/21-web-planners.mjs` (each planner keeps itself in the profile and comes back on another device) and `tests/cases/11-api-plans.mjs` (what the server keeps, and that none of it is readable on disk).
 
 ### Who's open, as the planner's third view ("Grid")
 
@@ -912,7 +997,10 @@ The words are made in the build for the next twelve days off: "on" a holiday, "o
 school's closed for" conferences or staff development, with the date or the span of dates. The script shows the
 first one still ahead and leaves room for the bar under the page. The X closes it and remembers which day off was
 closed (`pas-offbar` in this browser), so it comes back for the next one. School pages and the week builder keep
-the older line in the page (`nextOff()`).
+the older line in the page (`nextOff()`). Both skip a day off that is already planned on this device — every child
+on the device has a pick for every date of the break in the days-off planner (`offPlanned()` in `site.js`) — and
+move on to the next one still unplanned; when that one is more than 60 days away they say nothing, since a day off
+two months out is not yet a question.
 
 ## Days of the week, days off, and a saved school
 
@@ -982,6 +1070,10 @@ of `roll`, `again` or `undo`).
   ages don't take the child's age is left out of the one-tap fill but still shown with its ages. On Build your
   week, the "Next day off" line names the child's own program when it has a camp posted for that day
   (`personalOff()`, from `offAhead` in the page's data) and counts the others.
+- **Kids.** The pills for switching between children (and "Add a sibling") stay in view; the first name and age
+  fold away under a "Name and age" line (`details.kids-edit`, the same on the summer planner and, as "Child's
+  name", on Build your week), opening by itself for a child who has no name yet. The tally of what is planned and
+  what is left (`.sum-tally.main-tally`) is the first thing in the main section, under the view switch.
 - **Age.** "Age (optional)" beside the first name (`#off-age`, the same select as the summer planner's) narrows
   the chooser to the camps that take that age, with the others under "N camps posted for this day don't list
   age 7" and the grid's rows hidden the same way; each camp's span comes from `daysOff.ageMin`/`ageMax`, else
@@ -1016,10 +1108,28 @@ it. The way to the planner (and, for summer, the weeks chart) is a line at the f
 `.plan-line`), so nothing pulls a reader off the page before they have looked. The after-school page's drawing is the street with `showStreet: 'out'` (`street('out')`): school's out, five
 kids come through the door one at a time, hop along the sidewalk to the bus door and climb in, and the bus leaves;
 it plays once, and not at all for someone who asked for reduced motion. The overview pages (`/all-programs/`,
-`/schedules/`) are cards with an icon, a kicker, a heading, a line and buttons; no bullet lists and no program
+`/schedules/`) are cards with an icon, a kicker, a heading, a line and a button (All programs: one each, to the
+kind's own list); no bullet lists and no program
 counts (the days-off card keeps "N days off still to come", and the summer card its weeks). Counts of programs
 stay off the home page's tiles and type chips too; a filter bar's counts and a list section's "(N)" are the live
 numbers of what is on the page, and stay.
+
+**Type.** Three faces, all from Google Fonts (one `<link>` in `layout()`), following the brand's type key. Signposts —
+headings that name the page or a region of it (`h1`, `h2`: the page headline, "Parents", "When do you need
+coverage?") — are **Luckiest Guy**, the logo's face, heavy painted capitals (`--title`; the text is set in capitals by
+CSS, so a heading keeps its own casing in the HTML and in search results; its own lowercase is an odd unicase, so
+the transform is not optional). Titles — names of things inside a region and short statements (`h3`, the coverage
+cards, tiles, feature cards, step labels, "It's free for parents.") — are **Figtree ExtraBold** in sentence case
+(`--display`, weight 800; the week card and the planners' pictures draw in it too). An h2 that names a thing or makes a
+statement rather than signposting a region (a planner's card on `/schedules/`, the Follow box, the review nudge,
+the premium ask, a person's name on their profile card) is a title too, so it is Figtree in sentence case.
+Everything else, the line over a page title (`.hero .where`, a breadcrumb or a school's one-line description)
+included, is the body face, **Atkinson Hyperlegible** (`--body`). The brand picked Luckiest Guy for the logo too,
+so the site and the logo share a face; the logo's hand-lettered "AFTER SCHOOL" stays in the logo. The two
+link-preview pictures (`src/static/share.png`, `share-days-off.png`) are the site's sky with the logo for light
+backgrounds (`src/static/logo-sky.png`, PHILLY in the brand blue), a headline, one line and the page's drawing
+along the bottom; `scripts/share-pictures.js` draws them from a build with Playwright, so they are redrawn
+whenever the logo, a headline or the site's colours change.
 
 **Colours.** Every colour is a named value at the top of `src/site.css`. The band at the top of each page is a
 daytime sky (`--hero` fading to `--hero-low`) with navy type (`--hero-ink`, `--hero-muted`); the header button
@@ -1027,7 +1137,18 @@ is `--cta`; the footer keeps the deep blue (`--foot`). Navy on the sky measures 
 white-on-deep-blue. There is no dark mode: the site looks the same whatever the device is set to
 (`color-scheme: only light` in the CSS and a matching `<meta>` in every page), because the calendars, the plan
 colours and the pictures are drawn for a light page. The week card (`drawCard` in `src/site.js`) and the link-preview picture
-(`src/static/share.png`, 1200 by 630) use the same sky and footer, so change them together.
+(`src/static/share.png`, 1200 by 630) use the same sky and footer, so change them together. Both link-preview
+pictures (`share.png` and `share-days-off.png`) are drawn by `scripts/share-pictures.js` (see "Type" below).
+The logo files come from the brand's own set (2000px transparent PNGs, kept out of the repo): `src/static/logo.png`
+is the full lockup (the header), `logo-text.png` the wordmark alone (the footer; the bulb masked out of the lockup),
+`logo-sky.png` the lockup with PHILLY in the brand blue (for light backgrounds: the share pictures), and the
+favicon and app icons (`src/static/favicon.svg`, `favicon.png`, `favicon.ico`, `apple-touch-icon.png`,
+`icon-192.png`, `icon-512.png`) are the solid bulb on a navy rounded square; to change them, replace the files.
+The brand's bulb marks live in `src/static/bulb.png` (the yellow bulb) and `bulb-line.png` (the outline one,
+yellow line and light-blue brain): `bulb(depth, cls)` in `build.mjs` draws the yellow one on the "Nothing matches
+that" note under a filtered list (`.ask-bulb`) and at the top of the 404 page's hero (`.hero-bulb`); the outline one
+signs the footer's fine print (`.foot-bulb`, next to "Built by"). The kit's palette is the site's own five colours
+(`--link`, `--yellow`, `--hero`, `--ink`, `--bg`), so nothing in the CSS had to change for it.
 
 **What a shared link shows.** A link to the site that is texted or posted shows the picture, a title and a line of
 text. The picture's headline and its one line are part of the picture, so when the home page's headline changes the
@@ -1251,10 +1372,17 @@ These are the only parts of the site that store anything about a child on the se
   in), a strip above the menu offers "Log in" to anyone signed out, and the support ask ("Help the site keep
   going") moves to the footer and the account page. Which version shows is decided from a flag in the browser, with
   no request: elements carry the class `when-out` or `when-in`.
-- **Creating an account and logging in.** Two addresses share one form. `/register/` is the landing page for
-  creating an account: what an account gives you (with a drawing of a week on a phone and a laptop) beside the
-  form. `/account/` is where you log in and, signed in, where you change what is in the account; someone already signed in who opens
-  `/register/` is sent there. `?next=board` on either sends them back to Build your week afterwards. The old
+- **Creating an account and logging in.** Two addresses share one form. `/register/` is the sign-up page: the
+  two kinds of account (parent here, program manager on the managers page) and the form sit in the first screen,
+  beside the heading (`.acct-hero-form` in the hero), and what an account gives you follows below as rows of
+  pictures in two groups, "Plan the whole year" and "Never miss a thing" (`.acct-row`, one drawing each), with a
+  closing "Create a free account" band that scrolls back to the form. Under the heading sits a drawing of the school
+  year on one ribbon (`artYearRibbon()`), hidden once someone is signed in. `/account/` is where you log in: while
+  nobody is signed in the form moves up beside the heading (`seat()` in `groups.js`) with a "New here?" link to
+  `/register/`, and the same rows follow; signed in, the form moves back down and the page is where you change what
+  is in the account. Someone already signed in who opens `/register/` is sent on. An invitation to a group or a
+  shared week is a side path, not part of signing up: under the form there is one quiet line, "Did someone send you
+  an invitation? Open it here" (to `/join/`), and the profile card has an "Invitations" row with the same way in. `?next=board` on either sends them back to Build your week afterwards. The old
   address `/account/?new=1` forwards to `/register/`. `/register/` loads analytics (see Privacy below); `/account/` does not.
 - **Build your week.** The card comes first. Once someone shares, saves, copies or prints a card, a box asks
   whether they want to keep the week too, and opens the Keep & share view: "Save this week, or share it" for
@@ -1291,6 +1419,25 @@ These are the only parts of the site that store anything about a child on the se
   recipient must sign in with that address, goes straight in, and can look and print but not change anything.
   More addresses can be added to the same list; each can be removed, and "Stop sharing with everyone" deletes
   it. What is shared is the same as in a group: first name and program ids, never the school, address or notes.
+- **Sharing from the account page** (since November 7, 2026). Each week kept in the profile (Plans & sharing tab)
+  has a Share button: one person by email (`share_one` with `week`), or a group this account is in (`kid_save` with
+  `week`), and it lists who has it, with "Send again", "Stop sharing" and "Take out of the group". A copy made this
+  way carries the week's id (`kids.week_id`), so `week_save` and the device's `sync` bring every copy up to date
+  (`week_follow`, which also renames the shared week after the child) and removing the week from the profile ends
+  its shared weeks and takes its copies out of groups (`week_delete`). Build your week passes `week` too when the
+  roster is kept in the profile, so new shares made there show on the account page; older ones don't, and still work
+  from the device as before. The profile's "program.school" entries become the group's "program" ones (`week_from_full`).
+- **Co-parents: two accounts, one set of plans** (since November 7, 2026). On the Plans & sharing tab an account names
+  one other adult by email (`coparent_invite`; the email is "{Name} wants to share all plans with you"). The invited
+  account sees the invitation under the same tab once signed in with that address, with what accepting does to its
+  own plans, and accepts or declines (`coparent_accept`, `coparent_cancel`). On accepting, its weeks move to the
+  inviter's account, the kids lists merge, and one summer and one days-off plan are kept per household (the inviter's
+  if both had one); `users.home` then points the partner at the inviter's plans, and every plan action reads and
+  writes through `home_id()` / `household()` (weeks, summer, days off, the kids list; shares and group copies made
+  from a week follow it for both). Grades and ages stay each account's own filters, as do follows, emails, groups and
+  listings. Either side ends it (`coparent_end`): the plans stay with the inviter; the partner starts empty. Deleting
+  the inviter's account unlinks the partner. One row per inviter in `coparent`; `coparent_out()` is the state the
+  account page draws from (`me.coparent`).
 - **Week links are retired.** A week used to be shareable as a link that held the whole week after the `#`.
   Anyone could open one and it could not be taken back, so the buttons are gone and an old link now shows a
   notice instead of a week. "Copy as text", "Email it to myself" and the share-sheet button went with them (on the day-off planner too): a
@@ -1335,9 +1482,14 @@ These are the only parts of the site that store anything about a child on the se
   remove theirs; giving up the claim or deleting the account removes it.
   `/managers/` loads analytics with the tool masked in recordings; its events are `pas_claim` with a `step`
   (`picked`, `claimed`, `waiting`, `address_mismatch`, `refused`, `change_sent`, `photo_sent`) and `pas_signup`
-  with `role: manager` when someone signs in there. The "What claiming gets you" section shows an example
-  listing (`claimDemo()` in `build.mjs`): an invented program, drawn from the same parts a real listing uses, with
-  numbers that match the list beside it (`CLAIM_GETS`). Change a benefit there and the picture's numbers follow. There are no student accounts, on purpose:
+  with `role: manager` when someone signs in there. The page is laid out like the sign-up page: the heading, a
+  drawing and the "Find your listing" search share the first screen (`.acct-hero-form`); "What claiming gets you"
+  follows as rows of drawings in two groups, "Keep it right" and "See it working", one drawing a benefit
+  (`ART_CLAIM` in `build.mjs`, in the order of `CLAIM_GETS`) and each numbered; then "See it on a listing", an
+  example listing (`claimDemo()`): an invented program, drawn from the same parts a real listing uses, with numbers
+  that match the rows above it. Change a benefit there and the picture's numbers follow. Signed in with a claim,
+  the search moves down the page (`seatClaims()` in `groups.js`) and the listing's own tools take its place; the
+  explanatory sections fold away as before. A closing band leads back to the search. There are no student accounts, on purpose:
   the site never asks a child for an email address. The planners are for the adult who signs in.
 - **Where.** `src/server/groups-api.php` is the whole server side; the build copies it to `groups/api.php` with
   its settings (site name, address, sender, the date shared weeks expire, the Google client ID). It keeps one
@@ -1417,12 +1569,24 @@ database does not move: both addresses are served from the same folder.
 ## Follow and favorites
 
 Dates by email now run on accounts. A **follow** means the listing's or school's dates are emailed; a **favorite**
-keeps a listing in the account and emails nothing. `followBox()` in `build.mjs` draws the box: at the top of a
-program's page and inside the details card on a camp's page, with a line under the two buttons saying which is
+keeps a listing in the account and emails nothing. `followBox()` in `build.mjs` draws the box: under the spotlight
+on a program's page and on a camp's page, with a line under the two buttons saying which is
 which ("Follow means emails when it posts a date. Save to favorites means no emails…", `.follow-which`), and as a
 wide box on a school page, the home page, the days-off page and `/alerts/` (those last three with a school picker). Without accounts (`groups` unset) the old sign-up form,
 `alertsBox()`, is used instead.
 
+- **Which parts.** A program with more than one part (after school, day camps, weekend classes, a summer camp)
+  asks which of them to follow: pressing Follow while signed in opens a short list of ticked boxes in the box
+  (`.follow-kinds`; the parts come from `partsOf()` as `data-follow-kinds`), and the follow is kept with those
+  parts (`follows.kinds`, a sorted list; empty for everything, which is also what signing in from the button
+  gives). "Summer camp" is the camp's own listing (`data-camp`), so ticking it follows `c:<camp>` alongside and
+  unticking it, or stopping the program, stops that too. The button then reads "Following: day camps, summer
+  camp" and the account page's list says "day camps, summer camp only". The mail job learns the parts the same
+  way it learns stops: the site keeps one scrambled entry per narrowed follow in the stops list
+  (`only|p:<id>|off,summer`, hashed with the account's stop code), each entry in `data/alerts.json` carries the
+  part it is about (`part`: a program's sign-up dates and notes belong to its main part, a camp day to the days
+  off) and `withoutStopped()` in `scripts/send-alerts.mjs` tries each way of choosing some of the program's parts
+  to read the entry back (`person.only`), which `dueFor()` then honors. A listing with one part asks nothing.
 - **Signed out.** Tapping Follow or Save fetches `assets/groups.js` (listing pages don't carry it otherwise) and
   shows its sign-in form in the box. The sign-in is started with `next` set to `f:<key>` or `v:<key>`, and the
   server does the follow or the save itself when the sign-in finishes (`sign_in()`), so it also works when
@@ -1538,8 +1702,8 @@ None of the three signed-in pages is a long scroll. The code is in `groups.js`.
   when another listing has a website at the same address. Someone signed in with nothing claimed sees the page as
   before. Opening a tab is counted as a `pas_claim` step (`tab_update` and so on), with nothing about the listing.
 - **On the profile**, "What's new" shows the two newest items and a button for the rest.
-- **Every part at once.** `sessionStorage` `pas-tabs` = `all` shows every tab's parts on one page. The browser tests
-  that were written before the tabs start that way; `tabs.js` tests the tabs themselves.
+- **Every part at once.** `sessionStorage` `pas-tabs` = `all` shows every tab's parts on one page, for a test or a
+  look at everything at once; `tests/cases/22-web-account.mjs` tests the tabs themselves.
 
 ## My profile and the account page
 
@@ -1583,9 +1747,10 @@ its own page.
 ## The way in for program managers
 
 The strip above the menu (signed-out visitors) carries "Run a program or camp? Claim your listing" on the left and
-"Log in" on the right. The account and register pages open with two cards, "Parent or caregiver" (this page) and
+"Log in" on the right. The sign-up page opens with two cards, "Parent or caregiver" (this page) and
 "Program manager", which goes to `/managers/`: that page is where a manager's account is made, by claiming a
-listing, and where a program that isn't listed yet is sent in. The footer's About column links to the managers
+listing, and where a program that isn't listed yet is sent in. (The log-in page has no cards: it is the one form,
+and the closing band says a manager's account is the same account.) The footer's About column links to the managers
 page, and every listing ends with the claim box (`listingTools()`).
 
 ## Emails to program managers about their listing
@@ -1713,7 +1878,10 @@ planner would be (see "The tour" below), and the lists are there for everyone on
   a product page. Under the page's heading is the one thing to press, "Create a free account" (`heroCta()`), which
   comes back to that planner. Then: a heading and a strip of tabs, one for each way of looking at the plan (List,
   Calendar, Grid on the days-off and summer pages; The week, Budget planning, Share it on the week; Calendar,
-  List on My kids' calendar), each showing a made-up example; three things the planner does, each a picture-and-text row (a small
+  List on My kids' calendar), each showing a made-up example (My kids' calendar is the plain one, `plain: true`: a
+  "Sample calendar" heading with no kicker, the example full width with no side copy and no "Example" pill, and
+  "This is a sample. Yours will be populated with your kids, your schedule, and the plans you make." under it; its
+  hero has two buttons, "Get started" and "Log in", and a signed-out lede of its own); three things the planner does, each a picture-and-text row (a small
   drawing, `miniArt()`, on alternating sides, a headline and one line, in the kinds' colors); the three steps as one
   line (1 Create a free account → 2 Make your plan → 3 Take it with you); and a dark band with the button again.
   Three rows and one line each, rather than six cards with sentences, so the page can be taken in at a glance. The strip is labelled "See it as" and each example ends with a "Next: …"
@@ -1742,9 +1910,10 @@ planner would be (see "The tour" below), and the lists are there for everyone on
 
 ## The plan as a calendar
 
-- **My kids' calendar** is laid out in four numbered steps: 1 Add it (where the plans come from, and "Add your own
-  dates"), 2 View it, 3 Share it (the pictures), 4 Pencil it in (the calendar file). "View it" shows the plan as a
-  **calendar** (the default) or a **list**, with the choice kept on the device (`pas-year-view`). The calendar is
+- **My kids' calendar** is tabs, like the planners (`#year-views`, panes `[data-year-pane]`): **Calendar** (the
+  default) and **List** show the plan, **Add dates** holds where the plans come from and "Add your own dates", and
+  **Share/Save** the pictures and the calendar file. The Calendar/List choice is kept on the device
+  (`pas-year-view`); `?tab=own` or `#share` opens a tab; with nothing planned the page opens on Add dates. The calendar is
   one month at a time: a day off is yellow with where each child will be or "Not planned", a camp week runs Monday
   to Friday, sign-up dates and your own dates sit on their days, and a weekly date of your own is on every school
   day it falls on. A tap on a day lists it underneath with the same links as the list. Printing prints the list.

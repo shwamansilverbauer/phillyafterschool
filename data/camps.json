@@ -721,7 +721,24 @@
       "ageMax": 6,
       "season": 2027,
       "weeks": "June 14 to August 13, 2027, in four separate weeks: June 14, July 5, July 26 and August 9",
-      "runs": [["2027-06-14", "2027-06-18"], ["2027-07-05", "2027-07-09"], ["2027-07-26", "2027-07-30"], ["2027-08-09", "2027-08-13"]],
+      "runs": [
+        [
+          "2027-06-14",
+          "2027-06-18"
+        ],
+        [
+          "2027-07-05",
+          "2027-07-09"
+        ],
+        [
+          "2027-07-26",
+          "2027-07-30"
+        ],
+        [
+          "2027-08-09",
+          "2027-08-13"
+        ]
+      ],
       "hours": "9 am to noon",
       "cost": "$325 a week for the half day",
       "weekly": 325,
@@ -830,7 +847,28 @@
         "notes": "An older, undated page at /programs/summer-program2/ has prices that look like 2023. Do not use it."
       },
       "weeks": "June 14 to August 20, 2027: the half-day Nutcracker camp June 14 to 18, and full-day dance intensives the weeks of June 21, August 2, August 9 and August 16",
-      "runs": [["2027-06-14", "2027-06-18"], ["2027-06-21", "2027-06-25"], ["2027-08-02", "2027-08-06"], ["2027-08-09", "2027-08-13"], ["2027-08-16", "2027-08-20"]],
+      "runs": [
+        [
+          "2027-06-14",
+          "2027-06-18"
+        ],
+        [
+          "2027-06-21",
+          "2027-06-25"
+        ],
+        [
+          "2027-08-02",
+          "2027-08-06"
+        ],
+        [
+          "2027-08-09",
+          "2027-08-13"
+        ],
+        [
+          "2027-08-16",
+          "2027-08-20"
+        ]
+      ],
       "hours": "9 am to noon for the half-day camp; 9 am to 3 pm for the full-day intensive",
       "cost": "$325 for the half-day Nutcracker camp week; $500 a week for the full-day intensive",
       "weekly": 500,
@@ -1816,6 +1854,114 @@
       }
     },
     {
+      "id": "philly-pack-summer-camp",
+      "name": "Philly PACK",
+      "what": "Theatre and dance camps at a South Philly garage theatre: a one-week camp on a theme (a witch week, Shakespeare set to Taylor Swift, a book brought to the stage) ends in a Friday show, and a two-week production intensive stages a full-length musical.",
+      "types": [
+        "theater",
+        "movement"
+      ],
+      "ages": "Incoming 2nd grade and up for the production intensive and the book camp (strong reading skills required); incoming 4th grade and up for the others",
+      "ageMin": 7,
+      "season": 2026,
+      "weeks": "June 22 to July 31, 2026, as four camps: June 22 to 26, July 6 to 10, July 13 to 24 (the two-week production intensive) and July 27 to 31. No camp June 29 to July 3. Sign up for one week or all of them.",
+      "hours": "9 am to 3 pm, Monday to Friday",
+      "cost": "$500 a week; $1,000 for the two-week production intensive, with a $400 deposit at registration",
+      "weekly": 500,
+      "signup": "Registration opens January 15. The 2026 page lists each camp with its own Register link.",
+      "address": "233 Federal St",
+      "neighborhoods": [
+        "Pennsport"
+      ],
+      "phone": "215-703-8617",
+      "website": "https://www.phillypack.org/summer-camp/",
+      "registerUrl": "https://www.phillypack.org/registration/",
+      "price": "paid",
+      "sources": [
+        {
+          "label": "Philly PACK summer camp",
+          "url": "https://www.phillypack.org/summer-camp/"
+        },
+        {
+          "label": "Contact",
+          "url": "https://www.phillypack.org/contact-us/"
+        }
+      ],
+      "checked": "2026-11-05",
+      "check": {
+        "url": "https://www.phillypack.org/summer-camp/",
+        "how": "fetch",
+        "look": "Each camp has a dated heading with the grades, the tuition and a Register link; the page says when registration opens.",
+        "notes": "The address and phone are on /contact-us/. On 2026-11-05 the page still described summer 2026: it said five weeks but listed four camps, and gave no extended-day care."
+      }
+    },
+    {
+      "id": "esf-camps",
+      "name": "ESF Camps",
+      "what": "Big traditional day camp on school campuses, with junior and senior camps by grade, multi-sports and tennis camps, Jr. 76ers basketball and Phillies baseball weeks, and arts, science and technology camps. Two sites in the city: Friends Select in Center City and Norwood-Fontbonne Academy in Chestnut Hill (a third at The Haverford School on the Main Line).",
+      "types": [
+        "daycamp",
+        "movement",
+        "stem",
+        "art"
+      ],
+      "ages": "Rising pre-K to 8th grade for the day camps (junior camp PreS–2, senior camp 3–8); sports and specialty camps by grade from rising 1st, some to 10th",
+      "ageMin": 4,
+      "ageMax": 14,
+      "season": 2027,
+      "weeks": "June 14 to August 20, 2027; no camp June 18 or July 5",
+      "hours": "9 am to 3 pm (the program’s own word; its site doesn’t post hours)",
+      "extended": "Club OT extended day from 7:30 am and to 6 pm, with afternoon snacks: at Friends Select $72 a week for mornings, $195 for afternoons, $230 for both.",
+      "cost": "Friends Select: $645 a week when booked by February 1, 2027, $695 after; $30 a week off for five or more weeks; $20 off each extra sibling. Norwood-Fontbonne’s rates are on its own rates page.",
+      "signup": "Enrollment for 2027 opens in November 2026, online through Bravo Enrollment, with early-bird savings from November 16 (the program told us). Friends Select camp office 215-298-9145; Chestnut Hill 215-247-7010.",
+      "address": "1651 Benjamin Franklin Pkwy (Friends Select School); 8900 Norwood Ave (Norwood-Fontbonne Academy)",
+      "neighborhoods": [
+        "Logan Square",
+        "Chestnut Hill"
+      ],
+      "phone": "215-298-9145",
+      "website": "https://www.esfcamps.com/friendsselect/",
+      "registerUrl": "https://www.bravoenrollment.com/?redirectTo=esf",
+      "price": "paid",
+      "sources": [
+        {
+          "label": "ESF Camps at Friends Select",
+          "url": "https://www.esfcamps.com/friendsselect/"
+        },
+        {
+          "label": "ESF Camps at Norwood-Fontbonne Academy",
+          "url": "https://www.esfcamps.com/chestnuthill/"
+        },
+        {
+          "label": "ESF Camps",
+          "url": "https://www.esfcamps.com/"
+        },
+        {
+          "label": "ESF Friends Select tuition rates",
+          "url": "https://www.esfcamps.com/friendsselect/rates/"
+        },
+        {
+          "label": "ESF Friends Select extended day",
+          "url": "https://www.esfcamps.com/friendsselect/rates/extended-day/"
+        }
+      ],
+      "checked": "2026-11-05",
+      "check": {
+        "url": "https://www.esfcamps.com/friendsselect/rates/",
+        "how": "browser",
+        "look": "The season dates and grade range are on the location home page. Weekly tuition by weeks booked, the early-bird window and the holiday weeks are on the Tuition Rates & Savings page in tables that open on a click; Club OT prices are on the extended-day page.",
+        "notes": "Read with a headless browser on 2026-11-01; the rate tables come through in the page text. An earlier check found the rates page gone; it is back at /friendsselect/rates/."
+      },
+      "weekly": 645,
+      "note": "The weeks of June 14 and July 6 are four days at a reduced rate. Prices are for the day, sports and STEAM camps; the extended-day page shows two sets of Club OT rates and the higher set is taken as current.",
+      "dates": [
+        {
+          "date": "2027-02-01",
+          "label": "Last day of early-bird tuition ($645 a week; $695 after)"
+        }
+      ]
+    },
+    {
       "id": "skateboard-academy-rizzo-rink",
       "name": "The Skateboard Academy summer camp at Rizzo Rink",
       "what": "Skateboard instruction and camp activities at the Rizzo Rink, with a camp T-shirt and an end-of-week treat. Campers bring their own board and helmet, or ask to borrow a helmet.",
@@ -1849,66 +1995,6 @@
         "how": "browser",
         "look": "The product page gives the two weeks, hours, ages, price and the rink. The shop front at theskateboardacademycom.bigcartel.com lists the year’s camps as products.",
         "notes": "Read with a headless browser on 2026-11-01; a plain fetch was not tried. The product address has a typo (sumer) and may change with the year."
-      }
-    },
-    {
-      "id": "esf-camps-friends-select",
-      "name": "ESF Camps at Friends Select",
-      "what": "Traditional day camp in divisions by grade, plus multi-sports, STEAM specialty and Jr. 76ers basketball camps, on the Friends Select School campus.",
-      "types": [
-        "daycamp",
-        "movement",
-        "stem"
-      ],
-      "ages": "Rising preschool to 10th grade; the day camp divisions run preschool to 8th grade",
-      "ageMin": 3,
-      "ageMax": 15,
-      "season": 2027,
-      "weeks": "June 14 to August 20, 2027; no camp June 18 or July 5",
-      "hours": "9 am to 3 pm",
-      "extended": "Club OT extended day from 7:30 am and to 6 pm: $72 a week for mornings, $195 for afternoons, $230 for both.",
-      "cost": "$645 a week when booked by February 1, 2027; $695 after. $30 a week off for five or more weeks; $20 off each extra sibling.",
-      "weekly": 645,
-      "price": "paid",
-      "address": "Friends Select School, 17th St and Benjamin Franklin Pkwy",
-      "neighborhoods": [
-        "Logan Square"
-      ],
-      "phone": "215-298-9145",
-      "website": "https://www.esfcamps.com/friendsselect/",
-      "registerUrl": "https://www.bravoenrollment.com/?redirectTo=esf",
-      "signup": "Enrollment for summer 2027 opens November 20, 2026. Early-bird tuition runs from November 20 to February 1, 2027.",
-      "dates": [
-        {
-          "date": "2026-11-20",
-          "label": "Enrollment for summer 2027 opens; early-bird rates start"
-        },
-        {
-          "date": "2027-02-01",
-          "label": "Last day of early-bird tuition ($645 a week; $695 after)"
-        }
-      ],
-      "note": "The weeks of June 14 and July 6 are four days at a reduced rate. Prices are for the day, sports and STEAM camps; the extended-day page shows two sets of Club OT rates and the higher set is taken as current.",
-      "sources": [
-        {
-          "label": "ESF Camps at Friends Select",
-          "url": "https://www.esfcamps.com/friendsselect/"
-        },
-        {
-          "label": "ESF Friends Select tuition rates",
-          "url": "https://www.esfcamps.com/friendsselect/rates/"
-        },
-        {
-          "label": "ESF Friends Select extended day",
-          "url": "https://www.esfcamps.com/friendsselect/rates/extended-day/"
-        }
-      ],
-      "checked": "2026-11-01",
-      "check": {
-        "url": "https://www.esfcamps.com/friendsselect/rates/",
-        "how": "browser",
-        "look": "The season dates and grade range are on the location home page. Weekly tuition by weeks booked, the early-bird window and the holiday weeks are on the Tuition Rates & Savings page in tables that open on a click; Club OT prices are on the extended-day page.",
-        "notes": "Read with a headless browser on 2026-11-01; the rate tables come through in the page text. An earlier check found the rates page gone; it is back at /friendsselect/rates/."
       }
     },
     {

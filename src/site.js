@@ -26,6 +26,24 @@
     return e;
   }
   function all(root, sel) { return [].slice.call(root.querySelectorAll(sel)); }
+  // The wordmark for the pictures the planners make: the lettering of the logo (/logo-text.png) on a navy tab at the
+  // top left, where the bus and the name used to be. It is fetched once, from wherever the header's logo is served;
+  // a picture drawn before it has arrived is drawn again once it has (again: the card's own redraw).
+  var MARK = (function () {
+    var logo = document.querySelector('a.brand img.logo'), src = logo ? logo.getAttribute('src').replace(/logo(-text)?\.png.*$/, 'logo-text.png') : '';
+    if (!src) return null;
+    var im = new Image(); im.src = src; return im;
+  })();
+  function drawMark(ctx, x, y, h, again) {
+    var ready = !!(MARK && MARK.complete && MARK.naturalWidth), pad = 12;
+    var w = ready ? Math.round(MARK.naturalWidth * h / MARK.naturalHeight) : Math.round(h * 2.78), bw = w + pad * 2, bh = h + pad * 2, rad = 14;
+    ctx.save();
+    ctx.fillStyle = '#0A3566';
+    ctx.beginPath(); ctx.moveTo(x + rad, y); ctx.arcTo(x + bw, y, x + bw, y + bh, rad); ctx.arcTo(x + bw, y + bh, x, y + bh, rad); ctx.arcTo(x, y + bh, x, y, rad); ctx.arcTo(x, y, x + bw, y, rad); ctx.closePath(); ctx.fill();
+    if (ready) ctx.drawImage(MARK, x + pad, y + pad, w, h);
+    else if (MARK && again && !MARK.pasAgain) { MARK.pasAgain = true; MARK.addEventListener('load', function () { MARK.pasAgain = false; again(); }, { once: true }); }
+    ctx.restore();
+  }
   // Taking a child off a planner asks first, in place: the button gives way to the question and two real buttons,
   // which stay until one is pressed (a redraw of the page does not take them away). A button whose label turned
   // into "tap again" was too easy to read as a notice and walk away from. Returns a function that closes the ask.
@@ -595,7 +613,8 @@
     return {
       state: state, api: api, sync: sync,
       load: function () { return api('marks').then(take); },
-      follow: function (k, on) { return api('follow', { key: k, on: !!on }).then(take); },
+      follow: function (k, on, kinds) { var body = { key: k, on: !!on }; if (on && kinds && kinds.length) body.kinds = kinds; return api('follow', body).then(take); },
+      kindsOf: function (k) { var f = (state.named && state.named.follows || []).filter(function (x) { return x.k === k; })[0]; return f && f.kinds ? f.kinds : null; },
       fav: function (k, on) { return api('fav', { key: k, on: !!on }).then(take); },
       unmute: function (k) { return api('unmute', { key: k }).then(take); },
       // The account now uses a different email address. The server has marked every follow as untold, so loading
@@ -681,6 +700,11 @@
       var fb = box.querySelector('[data-follow-btn]'), vb = box.querySelector('[data-fav-btn]');
       var status = box.querySelector('[data-follow-status]'), signin = box.querySelector('[data-follow-signin]'), more = box.querySelector('[data-follow-more]');
       var followLabel = fb.textContent, favLabel = vb ? vb.textContent : '';
+      // A listing with more than one part (after school, day camps, a summer camp…) asks which parts to follow. The
+      // summer camp is a listing of its own, so "summer" follows (or stops following) that one alongside.
+      var KINDS = (box.getAttribute('data-follow-kinds') || '').split('|').filter(Boolean).map(function (x) { var i = x.indexOf(':'); return { id: x.slice(0, i), label: x.slice(i + 1) }; });
+      var campKey = box.getAttribute('data-camp') || '';
+      var kindWords = function (ids) { return ids.map(function (id) { var k = KINDS.filter(function (x) { return x.id === id; })[0]; return k ? k.label.toLowerCase() : id; }); };
       var key = function () { return pick ? 's:' + pick.value : fixed; };
       var name = function () { return pick ? (pick.options[pick.selectedIndex].getAttribute('data-name') || '') : (box.getAttribute('data-name') || ''); };
       var say = function (msg, kind) { status.textContent = msg || ''; status.className = 'follow-status' + (kind ? ' ' + kind : ''); };
@@ -688,7 +712,8 @@
       if (pick && saved && all(pick, 'option').some(function (o) { return o.value === saved.id; })) pick.value = saved.id;
       var paint = function () {
         var on = MK.state.follows.indexOf(key()) > -1;
-        fb.textContent = on ? 'Following' : followLabel;
+        var narrowed = on && KINDS.length ? MK.kindsOf(key()) : null;
+        fb.textContent = on ? (narrowed ? 'Following: ' + kindWords(narrowed).join(', ') : 'Following') : followLabel;
         fb.className = 'btn ' + (on ? 'following' : 'primary');
         fb.setAttribute('aria-pressed', String(on));
         fb.title = on ? 'Tap to stop following' : '';
@@ -697,11 +722,12 @@
       };
       painters.push(paint);
       if (pick) pick.addEventListener('change', function () { say(''); paint(); });
-      var followed = function () {
-        var k = key(), kind = k.charAt(0);
+      var followed = function (kinds) {
+        var k = key(), kind = k.charAt(0), parts = kinds ? kindWords(kinds) : [];
+        var which = parts.length ? ' for ' + (parts.length > 1 ? parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1] : parts[0]) : '';
         say(kind === 's' ? 'You’re following ' + name() + '. Sign-up dates come the morning after they’re posted, and days off in a Sunday round-up.'
           : kind === 'c' ? 'You’re following ' + name() + '. You’ll hear when it posts next summer or names a sign-up day.'
-          : 'You’re following ' + name() + '. You’ll hear the morning after it posts a date, and again the day before.', 'good');
+          : 'You’re following ' + name() + which + '. You’ll hear the morning after it posts a date, and again the day before.', 'good');
         track({ event: 'pas_alert_signup', school: kind === 's' ? k.slice(2) : '', program_id: kind === 'p' ? k.slice(2) : '', camp_id: kind === 'c' ? k.slice(2) : '', place: place });
         if (kind !== 's') hit(k, 'email');
         basics();
@@ -742,15 +768,59 @@
         });
         more.appendChild(f);
       };
+      var picking = null;   // the parts picker, while it is open
+      var askKinds = function () {
+        if (!more) return;
+        more.textContent = ''; more.hidden = false;
+        var f = document.createElement('form'); f.className = 'follow-kinds';
+        var h = document.createElement('p'); h.className = 'follow-basics-h'; h.textContent = 'Which parts of ' + name() + ' do you want to hear about?'; f.appendChild(h);
+        var was = MK.kindsOf(key());
+        var boxes = KINDS.map(function (kd) {
+          var l = document.createElement('label'); l.className = 'follow-check';
+          var c = document.createElement('input'); c.type = 'checkbox'; c.value = kd.id; c.checked = !was || was.indexOf(kd.id) > -1;
+          var t = document.createElement('span'); t.textContent = kd.label;
+          l.appendChild(c); l.appendChild(t); f.appendChild(l); return c;
+        });
+        var acts = document.createElement('div'); acts.className = 'actions';
+        var go = document.createElement('button'); go.type = 'submit'; go.className = 'btn primary'; go.textContent = 'Follow'; acts.appendChild(go);
+        var no = document.createElement('button'); no.type = 'button'; no.className = 'btn'; no.textContent = 'Cancel'; no.addEventListener('click', function () { more.hidden = true; more.textContent = ''; picking = null; }); acts.appendChild(no);
+        f.appendChild(acts);
+        var note = document.createElement('p'); note.className = 'hint'; note.textContent = 'Tick everything to hear about all of it.'; f.appendChild(note);
+        f.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var chosen = boxes.filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
+          if (!chosen.length) { note.textContent = 'Tick at least one.'; note.className = 'hint bad'; return; }
+          go.disabled = true;
+          doFollow(chosen.length === KINDS.length ? null : chosen, function () { go.disabled = false; more.hidden = true; more.textContent = ''; picking = null; });
+        });
+        more.appendChild(f); picking = f;
+        var first = f.querySelector('input'); if (first) first.focus();
+      };
+      // following with the parts chosen; "summer" follows the summer camp's own listing too, and leaving it out stops that
+      var doFollow = function (kinds, then) {
+        var k = key();
+        fb.disabled = true;
+        MK.follow(k, true, kinds).then(function (d) {
+          fb.disabled = false;
+          if (!d.ok) { if (then) then(); if (d.http === 401) { MK.state.user = null; try { window.localStorage.removeItem('pas-in'); } catch (e) { /* storage blocked */ } open('follow'); return; } say(d.message, 'bad'); return; }
+          var wantCamp = !!campKey && (!kinds || kinds.indexOf('summer') > -1), hasCamp = !!campKey && MK.state.follows.indexOf(campKey) > -1;
+          var next = wantCamp !== hasCamp ? MK.follow(campKey, wantCamp) : Promise.resolve(d);
+          next.then(function () { paintAll(); if (then) then(); followed(kinds); });
+        });
+      };
       var act = function (what) {
         if (box.getAttribute('data-preview')) { say('This is the preview, so nothing was saved. Following works on the live site.'); return; }
         var k = key();
         if (!MK.state.user) { open(what); return; }
         var list = what === 'fav' ? MK.state.favs : MK.state.follows, on = list.indexOf(k) < 0, b = what === 'fav' ? vb : fb;
+        if (what === 'follow' && on && KINDS.length) { if (picking) { more.hidden = true; more.textContent = ''; picking = null; } else askKinds(); return; }
+        if (what === 'follow' && picking) { more.hidden = true; more.textContent = ''; picking = null; }
         b.disabled = true;
         MK[what](k, on).then(function (d) {
           b.disabled = false;
           if (!d.ok) { if (d.http === 401) { MK.state.user = null; try { window.localStorage.removeItem('pas-in'); } catch (e) { /* storage blocked */ } open(what); return; } say(d.message, 'bad'); return; }
+          // stopping a program stops its summer camp's listing too, when it was followed along with it
+          if (what === 'follow' && !on && campKey && MK.state.follows.indexOf(campKey) > -1) { MK.follow(campKey, false).then(paintAll); }
           paintAll();
           if (what === 'fav') { say(on ? name() + ' is in your favorites. Find it on your profile.' : 'Taken out of your favorites.', on ? 'good' : ''); track({ event: 'pas_favorite', action: on ? 'save' : 'remove', listing: k, place: place }); }
           else if (on) followed();
@@ -768,6 +838,7 @@
               paintAll();
               var k = key(), did = (what === 'fav' ? MK.state.favs : MK.state.follows).indexOf(k) > -1;
               if (!did) { act(what); return; }
+              if (what === 'follow' && KINDS.length && MK.state.user && MK.state.user.ready) { followed(null); askKinds(); return; }   // following everything so far; the parts can be narrowed here (a new account is asked its name first instead)
               if (what === 'fav') { say(name() + ' is in your favorites. Find it on your profile.', 'good'); track({ event: 'pas_favorite', action: 'save', listing: k, place: place }); basics(); }
               else followed();
             });
@@ -1023,11 +1094,14 @@
     if (firstOff && firstOff.tagName === 'DETAILS' && !/^#d-/.test(location.hash)) firstOff.open = true;
     var asked = /^#d-/.test(location.hash) ? document.getElementById(location.hash.slice(1)) : null;
     if (asked && asked.tagName === 'DETAILS') asked.open = true;
+    // a day off already planned here is not news: the line and the bar move on to the next one still unplanned,
+    // and say nothing when that one is more than 60 days away
+    var soon = (function () { var t = new Date(now); t.setDate(t.getDate() + 60); return t.getFullYear() + '-' + ('0' + (t.getMonth() + 1)).slice(-2) + '-' + ('0' + t.getDate()).slice(-2); })();
     all(document, '[data-next-off]').forEach(function (b) {
       var list; try { list = JSON.parse(b.getAttribute('data-next-off')); } catch (e) { return; }
       var next = null;
-      list.forEach(function (d) { if (!next && d.u >= today) next = d; });
-      if (!next) return;
+      list.forEach(function (d) { if (!next && d.u >= today && !offPlanned(d.d)) next = d; });
+      if (!next || (next.s || next.u) > soon) return;
       b.textContent = 'Next day off: ' + next.w + ' (' + next.n + ').' + (next.c ? ' ' + next.c + (next.c === 1 ? ' listed program has' : ' listed programs have') + ' a camp posted.' : '');
       b.hidden = false;
       var day = b.parentNode.querySelector('[data-next-off-day]');   // that day's own page: who has a camp
@@ -1037,8 +1111,8 @@
     var bar = document.getElementById('offbar');
     if (bar) {
       var days; try { days = JSON.parse(bar.getAttribute('data-offbar')); } catch (e) { days = []; }
-      var nx = null; days.forEach(function (d) { if (!nx && d.u >= today) nx = d; });
-      if (nx && store('pas-offbar') !== nx.s) {
+      var nx = null; days.forEach(function (d) { if (!nx && d.u >= today && !offPlanned(d.d)) nx = d; });
+      if (nx && nx.s <= soon && store('pas-offbar') !== nx.s) {
         var go = bar.querySelector('.offbar-go'), room = function () { document.body.style.paddingBottom = bar.hidden ? '' : bar.offsetHeight + 'px'; };
         bar.querySelector('.offbar-q').textContent = nx.q;
         go.textContent = nx.g; go.href = nx.p;
@@ -1510,8 +1584,18 @@
     }
     return rosters;
   }
-  function saveRosters() { store('pas-rosters', JSON.stringify(rosters)); if (window.pasBoard && window.pasBoard.onSave) window.pasBoard.onSave(); if (window.pasSummer && window.pasSummer.onSave) window.pasSummer.onSave(); if (window.pasDaysOff && window.pasDaysOff.onSave) window.pasDaysOff.onSave(); }
+  function saveRosters() {
+    // A change made here is the parent's say: a plan they had taken out of their profile goes back to keeping itself.
+    var kk = rosters.kids && rosters.kids[rosters.kid]; if (kk && kk.profOff) delete kk.profOff;
+    delete rosters.sumProfOff; delete rosters.offProfOff;
+    store('pas-rosters', JSON.stringify(rosters)); if (window.pasBoard && window.pasBoard.onSave) window.pasBoard.onSave(); if (window.pasSummer && window.pasSummer.onSave) window.pasSummer.onSave(); if (window.pasDaysOff && window.pasDaysOff.onSave) window.pasDaysOff.onSave(); }
   function activeKid() { var r = loadRosters(); return r.kids[r.kid]; }
+  // true when every child on this device has a pick, in the days-off planner, for every date of a break
+  function offPlanned(dates) {
+    if (!dates || !dates.length) return false;
+    var raw = rosters || parse('pas-rosters'), kids = raw && Array.isArray(raw.kids) ? raw.kids : [];   // read, never load: this runs before the planners are set up
+    return kids.length > 0 && kids.every(function (k) { var off = k && k.off && typeof k.off === 'object' ? k.off : {}; return dates.every(function (x) { return !!off[x]; }); });
+  }
   function activeBoard() { var r = loadRosters(); return r.kids[r.kid][r.active]; }
   function kidLabel(k, i) { return k.name || 'Child ' + (i + 1); }
   function countPicks(b) {
@@ -1895,6 +1979,7 @@
       if (dropSure && (dropSureFor !== r.kid || !many || !bare)) dropSure();   // the question was about another child
       kidDrop.hidden = !many || !bare || !!dropSure;   // a child with an after-school roster is removed on the roster page, where share groups are told
       if (document.activeElement !== nameBox) nameBox.value = me.name || '';
+      if (!me.name && $o('#off-kid-edit')) $o('#off-kid-edit').open = true;
       daysEl.textContent = ''; stripEl.textContent = '';
       // a sibling's days, to start from
       var same = planEl.querySelector('.sum-same'); if (same) same.parentNode.removeChild(same);
@@ -2179,7 +2264,7 @@
     var photoBox = $o('#off-photo'), photoClear = $o('#off-photo-clear'), cardStatus = $o('#off-card-status');
     var photo = null, page = 'all';
     var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var DISPLAY = '"Archivo", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
+    var DISPLAY = '"Figtree", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
     var NAVY = '#0B2140', YELLOW = '#F3C613';
     var INKS = [['#DAEDFE', '#1763B8'], ['#FFEFA2', '#B88A00'], ['#D6F3D2', '#2C8444'], ['#F0DDF7', '#6B3FA0'], ['#FFD9CC', '#CC3000'], ['#E4ECF6', '#4D607A']];
     var utc = function (iso, n) { var d = new Date(iso + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + (n || 0)); return d; };
@@ -2206,10 +2291,8 @@
       ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
       ctx.fillStyle = '#0A3566'; ctx.fillRect(0, H - FOOT, W, FOOT);
       // brand
-      ctx.fillStyle = YELLOW; rbox(ctx, 56, 58, 54, 28, 8); ctx.fill();
-      ctx.fillStyle = NAVY; ctx.beginPath(); ctx.arc(70, 90, 7, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(98, 90, 7, 0, 7); ctx.fill();
+      drawMark(ctx, 56, 44, 44, drawCard);
       ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
-      ctx.font = '800 32px ' + DISPLAY; ctx.fillText('Philly After School', 126, 86);
       // top right: the photo, or a kite
       var cx = 928, cy = 158, rad = 100;
       if (photo) {
@@ -2378,7 +2461,7 @@
         shareEvent('print');
         window.print();
       });
-      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('850 88px Archivo'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (!cardBox.hidden) drawCard(); }, function () { /* system fonts will do */ });
+      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('800 88px Figtree'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (!cardBox.hidden) drawCard(); }, function () { /* system fonts will do */ });
     } else if (cardBox) cardBox.hidden = true;
 
     // What the accounts script (groups.js) needs to keep the days off in a profile. It adds onSave.
@@ -2582,6 +2665,7 @@
         ? 'Search for a program above and pick its days, or tap Browse to look through them by type, school or neighborhood. Not sure? Switch to “Roll a themed week”.'
         : 'Nothing on the current roster yet. Search for a program above, or tap Browse, and pick its days.';
       if (document.activeElement !== nameInput) nameInput.value = kid.name;
+      if (!kid.name && $('#kid-edit')) $('#kid-edit').open = true;
       if (maker) {
         if (document.activeElement !== teacherBox) teacherBox.value = kid.teacher || '';
         if (document.activeElement !== noteBox) noteBox.value = kid.cardNote || '';
@@ -2597,7 +2681,7 @@
       if (!b.getAttribute('data-plain')) b.setAttribute('data-plain', b.textContent);
       var plain = b.getAttribute('data-plain'); if (!plain) return;
       var today = new Date(), iso0 = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
-      var next = null; data.offAhead.forEach(function (d) { if (!next && d.u >= iso0) next = d; });
+      var next = null; data.offAhead.forEach(function (d) { if (!next && d.u >= iso0 && !offPlanned(d.dates)) next = d; });
       var kid = activeKid(), board = countPicks(kid.now) ? kid.now : countPicks(kid.next) ? kid.next : null;
       if (!next || !board) { b.textContent = plain; return; }
       var WD = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'], found = {}, order = [];
@@ -2731,7 +2815,7 @@
       if (r.kids.length >= MAX_KIDS) return;
       r.kids.push(newKid('')); r.kid = r.kids.length - 1; r.active = 'next';
       saveRosters(); say('New roster added. Give it a name, then search for programs to add.'); render();
-      nameInput.value = ''; nameInput.focus();
+      nameInput.value = ''; if ($('#kid-edit')) $('#kid-edit').open = true; nameInput.focus();
     });
     var kidSure = null, kidSureFor = -1;
     kidRemove.addEventListener('click', function () {
@@ -3325,7 +3409,7 @@
     var maker = $('#card-maker'), canvas = $('#card-canvas');
     var teacherBox = $('#card-teacher'), noteBox = $('#card-note'), photoBox = $('#card-photo'), photoClear = $('#card-photo-clear'), cardStatus = $('#card-status');
     var photo = null;
-    var DISPLAY = '"Archivo", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
+    var DISPLAY = '"Figtree", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
     var fit = function (ctx, text, max) {   // shorten with an ellipsis until it fits
       if (ctx.measureText(text).width <= max) return text;
       while (text.length > 1 && ctx.measureText(text + '…').width > max) text = text.slice(0, -1);
@@ -3351,10 +3435,8 @@
       ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
       ctx.fillStyle = '#0A3566'; ctx.fillRect(0, H - FOOT, W, FOOT);
       // brand
-      ctx.fillStyle = '#F3C613'; box(ctx, 56, 58, 54, 28, 8); ctx.fill();
-      ctx.fillStyle = '#0B2140'; ctx.beginPath(); ctx.arc(70, 90, 7, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(98, 90, 7, 0, 7); ctx.fill();
+      drawMark(ctx, 56, 44, 44, drawCard);
       ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
-      ctx.font = '800 32px ' + DISPLAY; ctx.fillText('Philly After School', 126, 86);
       // photo
       var hasPhoto = !!photo, textMax = hasPhoto ? 720 : 968;
       if (hasPhoto) {
@@ -3497,7 +3579,7 @@
         track_share('cta_click');
       });
       if (document.fonts && document.fonts.load) {   // draw again once the site's fonts are ready
-        Promise.all([document.fonts.load('850 92px Archivo'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(drawCard, function () { /* fall back to system fonts */ });
+        Promise.all([document.fonts.load('800 92px Figtree'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(drawCard, function () { /* fall back to system fonts */ });
       }
     }
 
@@ -3640,6 +3722,7 @@
       if (dropSure && (dropSureFor !== r.kid || !many || !bare)) dropSure();   // the question was about another child
       kidDrop.hidden = !many || !bare || !!dropSure;   // a child with an after-school roster is removed on the roster page, where share groups are told
       if (document.activeElement !== nameBox) nameBox.value = me.name || '';
+      if (!me.name && $s('#sum-kid-edit')) $s('#sum-kid-edit').open = true;
       if (document.activeElement !== ageBox) ageBox.value = ageOf(me);
       weeksEl.textContent = ''; stripEl.textContent = '';
       // a sibling's weeks, to start from
@@ -3861,7 +3944,7 @@
     var photoBox = $s('#sum-photo'), photoClear = $s('#sum-photo-clear'), cardStatus = $s('#sum-card-status');
     var photo = null, page = 'all';
     var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var DISPLAY = '"Archivo", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
+    var DISPLAY = '"Figtree", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
     var NAVY = '#0B2140', YELLOW = '#F3C613';
     var INKS = [['#DAEDFE', '#1763B8'], ['#FFEFA2', '#B88A00'], ['#D6F3D2', '#2C8444'], ['#F0DDF7', '#6B3FA0'], ['#FFD9CC', '#CC3000'], ['#E4ECF6', '#4D607A']];
     var dayOf = function (iso, n) { var d = new Date(iso + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + (n || 0)); return d; };
@@ -3895,10 +3978,8 @@
       ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
       ctx.fillStyle = '#0A3566'; ctx.fillRect(0, H - FOOT, W, FOOT);
       // brand
-      ctx.fillStyle = YELLOW; rbox(ctx, 56, 58, 54, 28, 8); ctx.fill();
-      ctx.fillStyle = NAVY; ctx.beginPath(); ctx.arc(70, 90, 7, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(98, 90, 7, 0, 7); ctx.fill();
+      drawMark(ctx, 56, 44, 44, drawCard);
       ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
-      ctx.font = '800 32px ' + DISPLAY; ctx.fillText('Philly After School', 126, 86);
       // top right: the photo, or the sun
       var cx = 928, cy = 158, rad = 100;
       if (photo) {
@@ -4051,7 +4132,7 @@
         window.addEventListener('afterprint', after);
         ev('card_print'); window.print();
       });
-      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('850 88px Archivo'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (!cardBox.hidden) drawCard(); }, function () { /* system fonts will do */ });
+      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('800 88px Figtree'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (!cardBox.hidden) drawCard(); }, function () { /* system fonts will do */ });
     } else if (cardBox) cardBox.hidden = true;
 
     // What the accounts script (groups.js) needs to keep the summer in a profile. It adds onSave.
@@ -4085,7 +4166,7 @@
     var $y = function (id) { return document.getElementById(id); };
     var now0 = new Date(), today0 = now0.getFullYear() + '-' + ('0' + (now0.getMonth() + 1)).slice(-2) + '-' + ('0' + now0.getDate()).slice(-2);
     var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var DISPLAY = '"Archivo", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
+    var DISPLAY = '"Figtree", "Arial Black", Arial, sans-serif', BODY = '"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif';
     var NAVY = '#0B2140', YELLOW = '#F3C613';
     var INKS = [['#DAEDFE', '#1763B8'], ['#FFEFA2', '#B88A00'], ['#D6F3D2', '#2C8444'], ['#F0DDF7', '#6B3FA0'], ['#FFD9CC', '#CC3000'], ['#E4ECF6', '#4D607A']];
     var utc = function (iso, n) { var d = new Date(iso + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + (n || 0)); return d; };
@@ -4447,16 +4528,21 @@
       return li;
     };
     // ----- the plan as a calendar: one month at a time. Tap a day and what's on it is listed underneath. -----
-    var calBox = $y('year-cal'), viewBtns = all(yearEl, '#year-views .vs');
-    var view = store('pas-year-view') === 'list' ? 'list' : 'cal', calMonth = '', calDay = '', calBy = {}, calMonths = [];
+    // The page is tabs, like the planners: Calendar and List show the plan; Add dates and Share/Save are panes of their own.
+    var calBox = $y('year-cal'), viewBtns = all(yearEl, '#year-views .vs'), panes = all(yearEl, '[data-year-pane]');
+    var VIEWS = ['cal', 'list', 'own', 'share'], asked = (query().tab || location.hash.replace('#', '')), stored = store('pas-year-view');
+    var view = VIEWS.indexOf(asked) > -1 ? asked : stored === 'list' ? 'list' : 'cal', calMonth = '', calDay = '', calBy = {}, calMonths = [];
     var showView = function () {
-      if (!calBox) view = 'list';
+      if (!calBox && view === 'cal') view = 'list';
       viewBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === view)); });
+      var pane = view === 'own' || view === 'share' ? view : 'view', allOn = false;
+      try { allOn = window.sessionStorage.getItem('pas-tabs') === 'all'; } catch (e) { /* no storage */ }   // the account pages' "show every tab" switch, for the tests
+      panes.forEach(function (p) { p.hidden = !allOn && p.getAttribute('data-year-pane') !== pane; });
       if (calBox) calBox.hidden = view !== 'cal';
-      $y('year-agenda').hidden = view === 'cal';
+      $y('year-agenda').hidden = view !== 'list';
     };
     viewBtns.forEach(function (b) {
-      b.addEventListener('click', function () { view = b.getAttribute('data-view') === 'list' ? 'list' : 'cal'; store('pas-year-view', view); showView(); if (window.pasJump) window.pasJump(); });
+      b.addEventListener('click', function () { view = b.getAttribute('data-view'); if (view === 'cal' || view === 'list') store('pas-year-view', view); showView(); });
     });
     var kidInk = function (k) { return INKS[Math.max(0, model.kids.indexOf(k)) % 6]; };
     // what a day's square shows: short labels, one for each thing on it
@@ -4537,8 +4623,13 @@
       if (S) srcEl.appendChild(srcLine('Summer', m.src.sum, yd.sumPage + '#plan', 'nothing planned yet.', 'Plan the summer'));
       drawOwn();
       var none = !m.kids.length && !m.own.length, empty = $y('year-empty');
-      empty.hidden = !none; $y('year-full').hidden = none; empty.textContent = '';
-      if (none) { empty.appendChild(el('p', null, 'Nothing is planned yet, so there’s no calendar to show. Start with any of the three above, or add a date of your own, and it fills in by itself.')); $y('year-changed').hidden = true; if (window.pasJump) window.pasJump(); return; }
+      empty.hidden = !none; $y('year-full').hidden = none; if ($y('year-full-share')) $y('year-full-share').hidden = none; empty.textContent = '';
+      if (none) {   // nothing to draw: the page opens on Add dates, with the empty note on the Calendar tab for anyone who looks
+        empty.appendChild(el('p', null, 'Nothing is planned yet, so there’s no calendar to show. Start with any of the three planners, or add a date of your own here, and it fills in by itself.'));
+        $y('year-changed').hidden = true;
+        if (view === 'cal' || view === 'list') view = 'own';
+        showView(); return;
+      }
       // every school week
       var wkBox = $y('year-week'); wkBox.textContent = '';
       var withWeek = m.kids.filter(hasWeekCard), family = m.kids.length ? [] : ownWeekly(null);
@@ -4612,10 +4703,8 @@
       var sky = ctx.createLinearGradient(0, 0, 0, H - FOOT); sky.addColorStop(0, '#96C9FF'); sky.addColorStop(1, '#C3E1FF');
       ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
       ctx.fillStyle = '#0A3566'; ctx.fillRect(0, H - FOOT, W, FOOT);
-      ctx.fillStyle = YELLOW; rbox(ctx, 56, 58, 54, 28, 8); ctx.fill();
-      ctx.fillStyle = NAVY; ctx.beginPath(); ctx.arc(70, 90, 7, 0, 7); ctx.fill(); ctx.beginPath(); ctx.arc(98, 90, 7, 0, 7); ctx.fill();
+      drawMark(ctx, 56, 44, 44, drawCard);
       ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
-      ctx.font = '800 32px ' + DISPLAY; ctx.fillText('Philly After School', 126, 86);
       // top right: the photo, or the sun
       var cx = 928, cy = 158, rad = 100;
       if (photo) {
@@ -4795,7 +4884,7 @@
         window.addEventListener('afterprint', after);
         window.print();
       });
-      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('850 88px Archivo'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (model && !cardBox.hidden) drawCard(); }, function () { /* system fonts will do */ });
+      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('800 88px Figtree'), document.fonts.load('400 30px "Atkinson Hyperlegible"')]).then(function () { if (model && !cardBox.hidden) drawCard(); }, function () { /* system fonts will do */ });
     } else if (cardBox) cardBox.hidden = true;
 
     // groups.js calls this once it knows who is signed in. `profile` is null when the profile couldn't be read.
@@ -4919,8 +5008,13 @@
         items.forEach(function (it) {
           var pill = it.querySelector('.mi-pill'), m = ref && !here ? milesTo(it) : Infinity;
           it._mi = ref ? milesTo(it) : Infinity;
-          if (m === Infinity) { if (pill) pill.parentNode.removeChild(pill); return; }
-          if (!pill) { pill = el('span', 'pill mi-pill'); var home = it.querySelector('.tally') || it.querySelector('.top'); if (home) home.appendChild(pill); }
+          if (m === Infinity) { if (pill) { var box = pill.closest ? pill.closest('.mini-mi') : null; (box || pill).parentNode.removeChild(box || pill); } return; }
+          if (!pill) {
+            pill = el('span', 'pill mi-pill');
+            var side = it.querySelector('.prow-side'), home = it.querySelector('.tally') || it.querySelector('.top');
+            if (side) { var mi = el('span', 'mini mini-mi'); mi.appendChild(el('span', 'mini-l', 'From you')); var mv = el('span', 'mini-v'); mv.appendChild(pill); mi.appendChild(mv); side.insertBefore(mi, side.firstChild); }
+            else if (home) home.appendChild(pill);
+          }
           pill.textContent = short(m);
         });
         if (here) return;   // a school's page keeps its own order: on-site, pickup, nearby
@@ -5160,7 +5254,17 @@
         var top = under();
         var past = filtersEnd.getBoundingClientRect().bottom < top + 2;                       // the filters are out of sight above
         var inList = !footer || footer.getBoundingClientRect().top > top + 180;                // and the list is still on screen
-        quick.bar.hidden = !(document.activeElement === quick.search || (past && inList));   // never pulled away from someone typing in it
+        var typing = document.activeElement === quick.search;
+        // Never pulled away from someone typing in it, unless they have scrolled back up past the filters: then the bar
+        // goes rather than sit stuck over the page. What they typed is in the real search box already; if that box is
+        // on screen their cursor moves to it, otherwise it just lets go.
+        if (typing && !past) {
+          var sr = search ? search.getBoundingClientRect() : null;
+          if (sr && sr.top >= top && sr.bottom <= window.innerHeight) { try { search.focus({ preventScroll: true }); } catch (e) { search.focus(); } }
+          else quick.search.blur();
+          typing = false;
+        }
+        quick.bar.hidden = !(typing || (past && inList));
         // a page with a jump strip keeps it in view under the slim bar: the strip moves down by the bar's height
         var jw = document.querySelector('.pagenav') || document.querySelector('.jump-wrap');
         if (jw) jw.style.top = quick.bar.hidden ? '' : 'calc(var(--bar-h, 64px) + ' + quick.bar.offsetHeight + 'px)';

@@ -48,7 +48,9 @@ export function dueFor(person, feed, today) {
   // The schools someone hears about: the one a sign-up form set, and any an account follows. "all" is every school.
   const mine = [person.school, ...(person.schools || [])].filter(Boolean);
   const bySchool = a => mine.length > 0 && (mine.includes('all') ? a.schools.length > 0 : a.schools.includes('*') || a.schools.some(s => mine.includes(s)));
-  const byProgram = a => (a.programs || []).some(id => follows.includes(id));
+  // A follow narrowed to some parts of a program ("day camps only") hears only about those parts.
+  const only = person.only || {};
+  const byProgram = a => (a.programs || []).some(id => follows.includes(id) && (!only[id] || !a.part || only[id].includes(a.part)));
   const byCamp = a => (a.camps || []).some(id => camps.includes(id));
   const byWaiting = a => (a.waiting || []).some(id => waiting.includes(id));
   const byWeek = a => (a.weeks || []).some(id => (person.weeks || []).includes(id));   // "This week at your school", for those who turned it on
@@ -148,12 +150,21 @@ export function eventFor(person, due, feed) {
 const stopHash = (code, key) => createHash('sha256').update(code + '|' + key).digest('hex');
 // Three kinds of entry: "<key>" (that follow was turned off), "mute|<key>" (stopped from an email: nothing about
 // that listing, even by way of a school) and "*" (everything).
+// The same list says which parts of a program a follow is for ("only|p:<id>|after,off"): the site writes one entry
+// for the parts chosen, and this reads it back by trying each way of choosing some of the program's parts.
+const subsets = parts => { const out = []; for (let m = 1; m < (1 << parts.length) - 1; m++) out.push(parts.filter((_, i) => m & (1 << i)).sort()); return out; };
 export function withoutStopped(person, stopped, feed) {
   if (!person.stopCode || !stopped || !stopped.size) return person;
   const has = key => stopped.has(stopHash(person.stopCode, key));
-  if (has('*')) return { ...person, school: '', schools: [], programs: [], camps: [], weeks: [], muted: [] };
+  if (has('*')) return { ...person, school: '', schools: [], programs: [], camps: [], weeks: [], muted: [], only: {} };
   const off = key => has(key) || has('mute|' + key);
-  return { ...person,
+  const only = {};
+  (person.programs || []).forEach(id => {
+    const parts = (feed?.programs || []).find(x => x.id === id)?.parts || [];
+    const chosen = subsets(parts).find(sub => has('only|p:' + id + '|' + sub.join(',')));
+    if (chosen) only[id] = chosen;
+  });
+  return { ...person, only,
     school: person.school && off('s:' + person.school) ? '' : person.school,
     schools: (person.schools || []).filter(id => !off('s:' + id)),
     programs: (person.programs || []).filter(id => !off('p:' + id)),
