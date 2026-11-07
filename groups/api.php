@@ -127,6 +127,11 @@ function db(): PDO {
     foreach ($db->query('PRAGMA table_info(grp)') as $c) $gcols[] = $c['name'];
     if (!in_array('solo', $gcols, true)) $db->exec('ALTER TABLE grp ADD COLUMN solo INTEGER NOT NULL DEFAULT 0');
     $db->exec('CREATE INDEX IF NOT EXISTS weeks_user ON weeks (user_id)');
+    // A child in a group or a shared week can be a copy of a week kept in the owner's profile (week_id): it is then
+    // brought up to date whenever that week is saved, from any device, and goes when the week is removed.
+    $kcols = array();
+    foreach ($db->query('PRAGMA table_info(kids)') as $c) $kcols[] = $c['name'];
+    if (!in_array('week_id', $kcols, true)) $db->exec('ALTER TABLE kids ADD COLUMN week_id INTEGER');
     // "Is there space?": what a listing's own manager last said. One row per listing; it stops showing after SPACE_DAYS.
     $db->exec("CREATE TABLE IF NOT EXISTS space (listing TEXT PRIMARY KEY, state TEXT NOT NULL, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, updated INTEGER NOT NULL)");
     // A summer schedule kept in a profile: one per account. Each child's first name and their camps by week, nothing else.
@@ -666,6 +671,44 @@ function clean_week($w): string {
   }
   return json_encode($out);
 }
+// A week shared from the profile: the profile's "program.school" entries become the group's "program" ones.
+function week_from_full($w): array {
+  $out = array();
+  if (!is_array($w)) return $out;
+  foreach (DAYS as $d) {
+    $out[$d] = array();
+    foreach (isset($w[$d]) && is_array($w[$d]) ? $w[$d] : array() as $e) {
+      if (!is_string($e)) continue;
+      $parts = explode('~', $e, 2);
+      $out[$d][] = explode('.', $parts[0], 2)[0] . (isset($parts[1]) ? '~' . $parts[1] : '');
+    }
+  }
+  return $out;
+}
+// The week a share or a group copy was made from, as the group sees it: first name and the two weeks.
+function week_kid(int $wid, int $uid): ?array {
+  $w = row('SELECT * FROM weeks WHERE id = ? AND user_id = ?', array($wid, $uid));
+  if (!$w) return null;
+  return array('name' => unseal($w['name']), 'now' => week_from_full(json_decode(unseal($w['now_json']), true)), 'next' => week_from_full(json_decode(unseal($w['next_json']), true)));
+}
+function week_count(array $kid): int { $n = 0; foreach (array('now', 'next') as $w) foreach (json_decode(clean_week($kid[$w] ?? null), true) as $d) $n += count($d); return $n; }
+// After a profile week is saved: every copy of it in a group or a shared week follows.
+function week_follow(int $wid, int $uid): void {
+  $k = week_kid($wid, $uid);
+  if (!$k) return;
+  q('UPDATE kids SET name = ?, now_json = ?, next_json = ?, updated = ? WHERE week_id = ? AND member_id IN (SELECT id FROM members WHERE user_id = ?)', array(seal($k['name']), seal(clean_week($k['now'])), seal(clean_week($k['next'])), now(), $wid, $uid));
+  q('UPDATE grp SET name = ? WHERE solo = 1 AND owner_id = ? AND id IN (SELECT m.group_id FROM kids k JOIN members m ON m.id = k.member_id WHERE k.week_id = ? AND m.user_id = ?)', array(seal(group_name($k['name'] . '’s week')), $uid, $wid, $uid));   // a shared week is named after the child
+}
+// Where a profile week has been shared from the profile: each shared week (with who has it) and each group it is in.
+function week_shares(int $wid, int $uid): array {
+  $list = array();
+  foreach (q('SELECT g.id, g.name, g.solo, k.id AS kid FROM kids k JOIN members m ON m.id = k.member_id JOIN grp g ON g.id = m.group_id WHERE k.week_id = ? AND m.user_id = ? AND g.expires > ? ORDER BY g.created', array($wid, $uid, now())) as $g) {
+    $item = array('id' => $g['id'], 'name' => unseal($g['name']), 'solo' => (bool) $g['solo'], 'kid' => (int) $g['kid']);
+    if ($g['solo']) $item['invites'] = invite_out($g['id']);
+    $list[] = $item;
+  }
+  return $list;
+}
 // A week saved to someone's own profile also keeps which school each program was picked under ("program.school"),
 // because that is what puts it back on another device. Still no free-text notes.
 function clean_week_full($w): string {
@@ -776,7 +819,7 @@ function daysoff_out(int $uid): ?array {
 }
 function profile_out(array $u): array {
   $weeks = array();
-  foreach (q('SELECT * FROM weeks WHERE user_id = ? ORDER BY id', array($u['id'])) as $w) $weeks[] = week_out($w);
+  foreach (q('SELECT * FROM weeks WHERE user_id = ? ORDER BY id', array($u['id'])) as $w) $weeks[] = week_out($w) + array('shares' => week_shares((int) $w['id'], (int) $u['id']));
   return array('school' => $u['school'], 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'ages' => grade_list(isset($u['ages']) ? (string) $u['ages'] : ''), 'kids' => kids_list($u), 'weeks' => $weeks, 'summer' => summer_out((int) $u['id']), 'daysoff' => daysoff_out((int) $u['id'])) + marks_out((int) $u['id']);
 }
 function kid_out(array $k, bool $mine): array {
@@ -2361,6 +2404,7 @@ switch ($method . ' ' . $action) {
     if ($id) {
       if (!row('SELECT id FROM weeks WHERE id = ? AND user_id = ?', array($id, $u['id']))) fail('gone', 'That week is no longer in your profile.', 404);
       q('UPDATE weeks SET name = ?, now_json = ?, next_json = ?, updated = ? WHERE id = ?', array(seal($name), seal(clean_week_full($w['now'] ?? null)), seal(clean_week_full($w['next'] ?? null)), now(), $id));
+      week_follow($id, (int) $u['id']);
     } else {
       if ((int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])) >= MAX_WEEKS) fail('limit', 'Your profile holds ' . MAX_WEEKS . ' weeks, which is the most it takes. Remove one first.');
       q('INSERT INTO weeks (user_id, name, now_json, next_json, updated) VALUES (?, ?, ?, ?, ?)', array($u['id'], seal($name), seal(clean_week_full($w['now'] ?? null)), seal(clean_week_full($w['next'] ?? null)), now()));
@@ -2372,7 +2416,13 @@ switch ($method . ' ' . $action) {
 
   case 'POST week_delete': {
     $u = need_user();
-    q('DELETE FROM weeks WHERE id = ? AND user_id = ?', array(isset($in['week']) ? (int) $in['week'] : 0, $u['id']));
+    $wid = isset($in['week']) ? (int) $in['week'] : 0;
+    if (row('SELECT id FROM weeks WHERE id = ? AND user_id = ?', array($wid, $u['id']))) {
+      // what was shared from the profile goes with it: the shared weeks end, the copies leave their groups
+      q('DELETE FROM grp WHERE solo = 1 AND owner_id = ? AND id IN (SELECT m.group_id FROM kids k JOIN members m ON m.id = k.member_id WHERE k.week_id = ? AND m.user_id = ?)', array($u['id'], $wid, $u['id']));
+      q('DELETE FROM kids WHERE week_id = ? AND member_id IN (SELECT id FROM members WHERE user_id = ?)', array($wid, $u['id']));
+      q('DELETE FROM weeks WHERE id = ?', array($wid));
+    }
     out(array('ok' => true));
   }
 
@@ -2425,9 +2475,17 @@ switch ($method . ' ' . $action) {
       $g = need_owner($gid, $u);
       if (empty($g['solo'])) fail('bad', 'That request was not understood.');
     } else {
-      $kid = isset($in['kid']) && is_array($in['kid']) ? $in['kid'] : array();
+      $wid = isset($in['week']) ? (int) $in['week'] : 0;
+      $kid = isset($in['kid']) && is_array($in['kid']) ? $in['kid'] : ($wid ? week_kid($wid, (int) $u['id']) : null);
+      if ($kid === null) fail('gone', 'That week is no longer in your profile.', 404);
+      if ($wid && !isset($in['kid']) && !week_count($kid)) fail('empty', 'Add a program to the week first, on Build your week.');
       $kidName = first_name(str($kid, 'name', 40));
       if ($kidName === '') fail('kid', 'Add your child’s first name first.');
+      $had = $wid && !isset($in['kid']) ? row('SELECT g.id FROM kids k JOIN members m ON m.id = k.member_id JOIN grp g ON g.id = m.group_id WHERE k.week_id = ? AND g.solo = 1 AND g.owner_id = ? AND g.expires > ? ORDER BY g.created LIMIT 1', array($wid, $u['id'], now())) : null;
+      if ($had) {   // shared from the profile already: one more person gets the same shared week
+        $gid = $had['id'];
+        $g = need_owner($gid, $u);
+      } else {
       if ((int) val('SELECT COUNT(*) FROM grp WHERE owner_id = ? AND solo = 1 AND expires > ?', array($u['id'], now())) >= MAX_SOLO) fail('limit', 'You’re sharing as many weeks as one account can. Stop sharing one first.');
       $gid = substr(preg_replace('/[^A-Za-z0-9]/', '', b64(random_bytes(18))) ?? '', 0, 14);
       if (strlen($gid) < 10) $gid = bin2hex(random_bytes(7));
@@ -2436,12 +2494,13 @@ switch ($method . ' ' . $action) {
       db()->beginTransaction();
       q('INSERT INTO grp (id, name, owner_id, code_mac, code_enc, created, expires, solo) VALUES (?, ?, ?, ?, ?, ?, ?, 1)', array($gid, seal($gname), $u['id'], code_mac($code), code_seal($code), now(), year_end()));
       q('INSERT INTO members (group_id, user_id, role, status, created) VALUES (?, ?, ?, ?, ?)', array($gid, $u['id'], 'owner', 'approved', now()));
-      q('INSERT INTO kids (member_id, name, now_json, next_json, updated) VALUES (?, ?, ?, ?, ?)', array((int) db()->lastInsertId(), seal($kidName), seal(clean_week($kid['now'] ?? null)), seal(clean_week($kid['next'] ?? null)), now()));
+      q('INSERT INTO kids (member_id, name, now_json, next_json, updated, week_id) VALUES (?, ?, ?, ?, ?, ?)', array((int) db()->lastInsertId(), seal($kidName), seal(clean_week($kid['now'] ?? null)), seal(clean_week($kid['next'] ?? null)), now(), $wid ?: null));
       $kidId = (int) db()->lastInsertId();
       db()->commit();
       bump('share');
       $made = true;
       $g = need_owner($gid, $u);
+      }
     }
     $r = invite_one($u, $g, $gid, $email);
     if ($r === 'full') fail('limit', 'That week is already shared with as many people as it takes.');
@@ -2566,7 +2625,13 @@ switch ($method . ' ' . $action) {
     $m = membership($gid, $u['id']);
     if (!$m) fail('forbidden', 'You’re not in that group.', 403);
     if (!empty($m['solo']) && $m['role'] !== 'owner') fail('forbidden', 'This week was shared with you to look at. Only the person who shared it can change it.', 403);
-    $kid = isset($in['kid']) && is_array($in['kid']) ? $in['kid'] : array();
+    $wid = isset($in['week']) ? (int) $in['week'] : 0;
+    $kid = isset($in['kid']) && is_array($in['kid']) ? $in['kid'] : ($wid ? week_kid($wid, (int) $u['id']) : array());
+    if ($kid === null) fail('gone', 'That week is no longer in your profile.', 404);
+    if ($wid && !isset($in['kid'])) {
+      if (!week_count($kid)) fail('empty', 'Add a program to the week first, on Build your week.');
+      if (row('SELECT k.id FROM kids k WHERE k.week_id = ? AND k.member_id = ?', array($wid, $m['id']))) fail('dup', 'That week is already in this group.');
+    }
     $name = first_name(str($kid, 'name', 40));
     if ($name === '') fail('kid', 'Add your child’s first name.');
     $kidId = isset($kid['id']) ? (int) $kid['id'] : 0;
@@ -2576,7 +2641,7 @@ switch ($method . ' ' . $action) {
       q('UPDATE kids SET name = ?, now_json = ?, next_json = ?, updated = ? WHERE id = ?', array(seal($name), seal(clean_week($kid['now'] ?? null)), seal(clean_week($kid['next'] ?? null)), now(), $kidId));
     } else {
       if ((int) val('SELECT COUNT(*) FROM kids WHERE member_id = ?', array($m['id'])) >= MAX_KIDS) fail('limit', 'You’ve added ' . MAX_KIDS . ' children to this group, which is the most it takes.');
-      q('INSERT INTO kids (member_id, name, now_json, next_json, updated) VALUES (?, ?, ?, ?, ?)', array($m['id'], seal($name), seal(clean_week($kid['now'] ?? null)), seal(clean_week($kid['next'] ?? null)), now()));
+      q('INSERT INTO kids (member_id, name, now_json, next_json, updated, week_id) VALUES (?, ?, ?, ?, ?, ?)', array($m['id'], seal($name), seal(clean_week($kid['now'] ?? null)), seal(clean_week($kid['next'] ?? null)), now(), $wid ?: null));
       $kidId = (int) db()->lastInsertId();
       if ($m['role'] === 'viewer') q('UPDATE members SET role = ? WHERE id = ?', array('member', $m['id']));
     }
@@ -2606,6 +2671,7 @@ switch ($method . ' ' . $action) {
       $t = now();
       if ($name !== '') q('UPDATE weeks SET name = ? WHERE id = ?', array(seal($name), $wid));
       q('UPDATE weeks SET now_json = ?, next_json = ?, updated = ? WHERE id = ?', array(seal(clean_week_full($w['now'] ?? null)), seal(clean_week_full($w['next'] ?? null)), $t, $wid));
+      week_follow($wid, (int) $u['id']);
       $saved[] = array('id' => $wid, 'updated' => $t);
     }
     out(array('ok' => true, 'done' => $done, 'gone' => $gone, 'weeks' => $saved, 'weeksGone' => $lost));
