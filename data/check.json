@@ -1,10 +1,10 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 178,
+    "pages": 182,
     "pagesNeedingABrowser": 9,
     "pagesNeedingAPerson": 5,
-    "links": 168,
+    "links": 171,
     "pickupLinks": 90,
     "pickupOnAStoredList": 70,
     "pickupFromAThirdPartyList": 4,
@@ -1279,6 +1279,12 @@
       "checked": "2026-11-07"
     },
     {
+      "program": "beat-the-streets-wrestling",
+      "school": "bache-martin",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
       "program": "brilliant-minds",
       "school": "coppin",
       "relation": "pickup",
@@ -1367,6 +1373,12 @@
       "basis": "own-source"
     },
     {
+      "program": "fairmount-mountain-bike-team",
+      "school": "bache-martin",
+      "relation": "onsite",
+      "checked": "2026-11-07"
+    },
+    {
       "program": "francisville-rec",
       "school": "bache-martin",
       "relation": "pickup",
@@ -1438,6 +1450,12 @@
     {
       "program": "markward-playground",
       "school": "marian-anderson",
+      "relation": "nearby",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "philadelphia-city-rowing",
+      "school": "bache-martin",
       "relation": "nearby",
       "checked": "2026-11-07"
     },
@@ -1590,6 +1608,21 @@
       "lists": []
     },
     {
+      "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
+      "how": "fetch",
+      "programs": [
+        "girls-on-the-run",
+        "soccer-shots-bache-martin",
+        "fairmount-mountain-bike-team",
+        "beat-the-streets-wrestling",
+        "philadelphia-city-rowing",
+        "francisville-rec",
+        "bache-martin-clubs",
+        "philly-art-center-fairmount"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://nebinger.philasd.org/#ourschool",
       "how": "fetch",
       "programs": [
@@ -1598,18 +1631,6 @@
         "girls-on-the-run",
         "nebinger-arts-partners",
         "zhang-sah"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
-      "how": "fetch",
-      "programs": [
-        "girls-on-the-run",
-        "soccer-shots-bache-martin",
-        "francisville-rec",
-        "bache-martin-clubs",
-        "philly-art-center-fairmount"
       ],
       "lists": []
     },
@@ -1858,6 +1879,22 @@
       "how": "fetch",
       "programs": [
         "temple-music-prep-cmsp"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://btsphilly.org/waiver",
+      "how": "fetch",
+      "programs": [
+        "beat-the-streets-wrestling"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://btsphilly.org/wrestling",
+      "how": "fetch",
+      "programs": [
+        "beat-the-streets-wrestling"
       ],
       "lists": []
     },
@@ -2347,6 +2384,14 @@
       "how": "fetch",
       "programs": [
         "school-of-philadelphia-ballet"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://philadelphiacityrowing.org/middle-school/",
+      "how": "fetch",
+      "programs": [
+        "philadelphia-city-rowing"
       ],
       "lists": []
     },
@@ -2913,6 +2958,14 @@
       "how": "fetch",
       "programs": [
         "pafa-saturday-art"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.pamtb.org/",
+      "how": "fetch",
+      "programs": [
+        "fairmount-mountain-bike-team"
       ],
       "lists": []
     },

@@ -88,6 +88,27 @@
       ]
     },
     {
+      "id": "fairmount-mountain-bike-team",
+      "name": "Fairmount Mountain Bike Team at Bache-Martin",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "beat-the-streets-wrestling",
+      "name": "Beat the Streets wrestling (middle school)",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "philadelphia-city-rowing",
+      "name": "Philadelphia City Rowing (middle school)",
+      "parts": [
+        "after"
+      ]
+    },
+    {
       "id": "nebinger-arts-partners",
       "name": "Arts partners and Science Olympiad at Nebinger",
       "parts": [
@@ -1105,7 +1126,7 @@
       ],
       "when": "New",
       "title": "Bache-Martin now has a page",
-      "text": "You asked to be told. 6 programs are listed for Bache-Martin so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "text": "You asked to be told. 9 programs are listed for Bache-Martin so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/bache-martin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },
