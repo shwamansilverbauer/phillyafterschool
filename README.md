@@ -1397,6 +1397,17 @@ These are the only parts of the site that store anything about a child on the se
   its shared weeks and takes its copies out of groups (`week_delete`). Build your week passes `week` too when the
   roster is kept in the profile, so new shares made there show on the account page; older ones don't, and still work
   from the device as before. The profile's "program.school" entries become the group's "program" ones (`week_from_full`).
+- **Co-parents: two accounts, one set of plans** (since November 7, 2026). On the Plans & sharing tab an account names
+  one other adult by email (`coparent_invite`; the email is "{Name} wants to share all plans with you"). The invited
+  account sees the invitation under the same tab once signed in with that address, with what accepting does to its
+  own plans, and accepts or declines (`coparent_accept`, `coparent_cancel`). On accepting, its weeks move to the
+  inviter's account, the kids lists merge, and one summer and one days-off plan are kept per household (the inviter's
+  if both had one); `users.home` then points the partner at the inviter's plans, and every plan action reads and
+  writes through `home_id()` / `household()` (weeks, summer, days off, the kids list; shares and group copies made
+  from a week follow it for both). Grades and ages stay each account's own filters, as do follows, emails, groups and
+  listings. Either side ends it (`coparent_end`): the plans stay with the inviter; the partner starts empty. Deleting
+  the inviter's account unlinks the partner. One row per inviter in `coparent`; `coparent_out()` is the state the
+  account page draws from (`me.coparent`).
 - **Week links are retired.** A week used to be shareable as a link that held the whole week after the `#`.
   Anyone could open one and it could not be taken back, so the buttons are gone and an old link now shows a
   notice instead of a week. "Copy as text", "Email it to myself" and the share-sheet button went with them (on the day-off planner too): a

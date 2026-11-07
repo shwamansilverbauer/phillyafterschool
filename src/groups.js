@@ -764,6 +764,61 @@
       var prof = part(el('section', 'panel'), 'plans');
       prof.appendChild(el('h2', null, 'Plans you’ve kept'));
       prof.appendChild(el('p', null, 'A week, a summer and a days-off plan can live in your profile, so they’re there when you sign in on another phone or computer.'));
+      // A co-parent: one other account that shares everything here, both ways. Drawn from me.coparent, which every
+      // co-parent action sends back.
+      var cop = el('div', 'g-coparent'); prof.appendChild(cop);
+      var paintCoparent = function (c) {
+        cop.textContent = '';
+        var said = el('span', 'hint'); said.setAttribute('aria-live', 'polite');
+        var after = function (d) { if (!d.ok) { said.textContent = d.message; return false; } me.coparent = d.coparent || null; paintCoparent(me.coparent); loadProfile(); return true; };
+        var pair = function (w) { return w.name ? w.name + ' (' + w.email + ')' : w.email; };
+        if (!c) {
+          cop.appendChild(el('h3', null, 'Share everything with a co-parent'));
+          cop.appendChild(el('p', 'hint', 'Name one other adult, by email. Once they accept, your two accounts use one set of plans: weeks, days off, summer, the kids list and the calendar. Either of you can change them from any device, and either of you can end it.'));
+          var f = el('form', 'g-row');
+          var lab = el('label', null, 'Their email'); lab.htmlFor = 'cop-email';
+          var inp = el('input'); inp.id = 'cop-email'; inp.type = 'email'; inp.maxLength = 150; inp.autocomplete = 'off'; inp.setAttribute('autocapitalize', 'off'); inp.placeholder = 'name@example.com';
+          var go = el('button', 'btn primary', 'Invite'); go.type = 'submit';
+          f.appendChild(lab); f.appendChild(inp); f.appendChild(go);
+          f.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(inp.value.trim())) { said.textContent = 'That email address doesn’t look right.'; return; }
+            go.disabled = true; said.textContent = 'Sending…';
+            call('coparent_invite', { email: inp.value.trim().toLowerCase() }).then(function (d) { go.disabled = false; if (d.ok) saidCop = d.sent ? 'Invitation sent. They sign in with that address and accept under Plans & sharing.' : 'Invitation saved, but the email couldn’t go out just now. Use “Send again” in a bit.'; after(d); });
+          });
+          cop.appendChild(f);
+        } else if (c.role === 'invited') {
+          cop.appendChild(el('h3', null, pair(c.from) + ' invited you to share everything'));
+          var what = ['Weeks, days off, summer, the kids list and the calendar, both ways: either of you can change them, from any device.'];
+          var m = c.mine || {}, t = c.theirs || {};
+          if (m.weeks || m.kids) what.push('Your ' + [m.weeks ? m.weeks + (m.weeks === 1 ? ' week' : ' weeks') : '', m.kids ? m.kids + (m.kids === 1 ? ' kid' : ' kids') : ''].filter(Boolean).join(' and ') + ((m.weeks || 0) + (m.kids || 0) === 1 ? ' joins theirs.' : ' join theirs.'));
+          if (m.summer) what.push(t.summer ? 'Your summer plan would be replaced by theirs.' : 'Your summer plan comes along.');
+          if (m.daysoff) what.push(t.daysoff ? 'Your days-off plan would be replaced by theirs.' : 'Your days-off plan comes along.');
+          cop.appendChild(el('p', 'hint', what.join(' ')));
+          var acts = el('p', 'g-acts-row');
+          var yes = btn('btn primary', 'Accept'); yes.addEventListener('click', function () { yes.disabled = true; call('coparent_accept', {}).then(function (d) { yes.disabled = false; if (d.ok) saidCop = 'You now share everything with ' + pair(c.from) + '.'; after(d); }); });
+          var no = btn('clear', 'Decline'); no.addEventListener('click', function () { call('coparent_cancel', {}).then(after); });
+          acts.appendChild(yes); acts.appendChild(no); cop.appendChild(acts);
+        } else if (c.role === 'owner' && c.invited) {
+          cop.appendChild(el('h3', null, 'Co-parent invitation sent'));
+          cop.appendChild(el('p', 'hint', c.invited + ' can accept by signing in with that address and looking under Plans & sharing. Until then nothing is shared.'));
+          var acts2 = el('p', 'g-acts-row');
+          var again = btn('clear', 'Send again'); again.addEventListener('click', function () { again.disabled = true; call('coparent_resend', {}).then(function (d) { again.textContent = d.ok && d.sent ? 'Sent' : 'Not sent just now'; }); });
+          var cancel = btn('clear', 'Cancel the invitation'); cancel.addEventListener('click', function () { call('coparent_cancel', {}).then(after); });
+          acts2.appendChild(again); acts2.appendChild(cancel); cop.appendChild(acts2);
+        } else {
+          var owner = c.role === 'owner';
+          cop.appendChild(el('h3', null, 'You share everything with ' + pair(c.with)));
+          cop.appendChild(el('p', 'hint', (owner ? 'The plans live with your account; they see and change them like their own.' : 'The plans live with their account; you see and change them here like your own.') + ' Either of you can end it' + (owner ? '.' : ', and the plans stay with theirs.')));
+          var end = btn('clear', 'Stop sharing everything');
+          twoTap(end, owner ? 'Tap again: they lose access to these plans' : 'Tap again: you start with no plans of your own', function () { call('coparent_end', {}).then(after); });
+          var acts3 = el('p', 'g-acts-row'); acts3.appendChild(end); cop.appendChild(acts3);
+        }
+        if (saidCop) { said.textContent = saidCop; saidCop = ''; }
+        cop.appendChild(said);
+      };
+      var saidCop = '';
+      paintCoparent(me.coparent || null);
       var schoolRow = el('form', 'g-row');
       var sl = el('label', null, 'Your school'); sl.htmlFor = 'prof-school';
       var ss = el('select'); ss.id = 'prof-school';
