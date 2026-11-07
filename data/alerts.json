@@ -81,6 +81,13 @@
       ]
     },
     {
+      "id": "soccer-shots-bache-martin",
+      "name": "Soccer Shots at Bache-Martin",
+      "parts": [
+        "after"
+      ]
+    },
+    {
       "id": "nebinger-arts-partners",
       "name": "Arts partners and Science Olympiad at Nebinger",
       "parts": [
@@ -308,6 +315,41 @@
       ]
     },
     {
+      "id": "code-ninjas-south-philly",
+      "name": "Code Ninjas (South Philly)",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "brilliant-minds",
+      "name": "Brilliant Minds",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "early-childhood-environment",
+      "name": "Early Childhood Environment",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "principal-academy",
+      "name": "Principal Academy",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "little-shepherds",
+      "name": "Little Shepherds Christian Learning Center",
+      "parts": [
+        "after"
+      ]
+    },
+    {
       "id": "movemakers",
       "name": "MoveMakers Philly",
       "parts": [
@@ -433,6 +475,7 @@
       "id": "sawubona-creativity-project",
       "name": "Sawubona Creativity Project",
       "parts": [
+        "after",
         "off",
         "summer"
       ]
@@ -494,6 +537,7 @@
       "id": "rock-school-for-dance",
       "name": "The Rock School for Dance Education",
       "parts": [
+        "after",
         "weekend"
       ]
     },
@@ -597,6 +641,34 @@
     {
       "id": "southwark-clubs",
       "name": "Southwark clubs and teams",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "stanton-clubs",
+      "name": "School clubs and teams at Stanton",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "marian-anderson-clubs",
+      "name": "School clubs and teams at Marian Anderson",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "childs-clubs",
+      "name": "School clubs and teams at Childs",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "bache-martin-clubs",
+      "name": "School clubs and teams at Bache-Martin",
       "parts": [
         "after"
       ]
@@ -1016,7 +1088,7 @@
       ],
       "when": "New",
       "title": "Marian Anderson now has a page",
-      "text": "You asked to be told. 9 programs are listed for Marian Anderson so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "text": "You asked to be told. 11 programs are listed for Marian Anderson so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/marian-anderson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },
@@ -1033,7 +1105,7 @@
       ],
       "when": "New",
       "title": "Bache-Martin now has a page",
-      "text": "You asked to be told. 4 programs are listed for Bache-Martin so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "text": "You asked to be told. 6 programs are listed for Bache-Martin so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/bache-martin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },
@@ -1050,7 +1122,7 @@
       ],
       "when": "New",
       "title": "Childs now has a page",
-      "text": "You asked to be told. 9 programs are listed for Childs so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "text": "You asked to be told. 10 programs are listed for Childs so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/childs/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },

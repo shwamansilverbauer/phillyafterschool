@@ -1,14 +1,14 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 175,
+    "pages": 178,
     "pagesNeedingABrowser": 9,
     "pagesNeedingAPerson": 5,
-    "links": 154,
-    "pickupLinks": 82,
+    "links": 168,
+    "pickupLinks": 90,
     "pickupOnAStoredList": 70,
     "pickupFromAThirdPartyList": 4,
-    "pickupOnItsOwnSource": 8,
+    "pickupOnItsOwnSource": 16,
     "pickupWithNothingBehindIt": 0,
     "pickupNotOnTheProvidersList": 1,
     "oldestCheck": "2026-10-05"
@@ -1273,6 +1273,19 @@
       }
     },
     {
+      "program": "bache-martin-clubs",
+      "school": "bache-martin",
+      "relation": "onsite",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "brilliant-minds",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-11-07",
+      "basis": "own-source"
+    },
+    {
       "program": "capitolo-playground",
       "school": "childs",
       "relation": "nearby",
@@ -1303,6 +1316,12 @@
       "checked": "2026-11-07"
     },
     {
+      "program": "childs-clubs",
+      "school": "childs",
+      "relation": "onsite",
+      "checked": "2026-11-07"
+    },
+    {
       "program": "childs-edey",
       "school": "childs",
       "relation": "onsite",
@@ -1315,6 +1334,13 @@
       "checked": "2026-11-07"
     },
     {
+      "program": "code-ninjas-south-philly",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-11-07",
+      "basis": "own-source"
+    },
+    {
       "program": "columbus-square-rec",
       "school": "childs",
       "relation": "nearby",
@@ -1325,6 +1351,20 @@
       "school": "childs",
       "relation": "nearby",
       "checked": "2026-11-07"
+    },
+    {
+      "program": "early-childhood-environment",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-11-07",
+      "basis": "own-source"
+    },
+    {
+      "program": "east-passyunk-rec",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-11-07",
+      "basis": "own-source"
     },
     {
       "program": "francisville-rec",
@@ -1340,10 +1380,23 @@
       "checked": "2026-11-07"
     },
     {
+      "program": "girls-on-the-run",
+      "school": "marian-anderson",
+      "relation": "onsite",
+      "checked": "2026-11-07"
+    },
+    {
       "program": "hawthorne-cultural-center",
       "school": "childs",
       "relation": "nearby",
       "checked": "2026-11-07"
+    },
+    {
+      "program": "little-shepherds",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-11-07",
+      "basis": "own-source"
     },
     {
       "program": "makom-community",
@@ -1357,6 +1410,12 @@
         "how": "fetch",
         "by": "provider"
       }
+    },
+    {
+      "program": "marian-anderson-clubs",
+      "school": "marian-anderson",
+      "relation": "onsite",
+      "checked": "2026-11-07"
     },
     {
       "program": "marian-anderson-rec",
@@ -1396,10 +1455,31 @@
       }
     },
     {
+      "program": "principal-academy",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-11-07",
+      "basis": "own-source"
+    },
+    {
+      "program": "rock-school-for-dance",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-11-07",
+      "basis": "own-source"
+    },
+    {
       "program": "rumph-rec",
       "school": "lingelbach",
       "relation": "nearby",
       "checked": "2026-11-07"
+    },
+    {
+      "program": "sawubona-creativity-project",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-11-07",
+      "basis": "own-source"
     },
     {
       "program": "shot-tower-rec",
@@ -1407,6 +1487,18 @@
       "relation": "pickup",
       "checked": "2026-11-07",
       "basis": "own-source"
+    },
+    {
+      "program": "soccer-shots-bache-martin",
+      "school": "bache-martin",
+      "relation": "onsite",
+      "checked": "2026-11-07"
+    },
+    {
+      "program": "stanton-clubs",
+      "school": "stanton",
+      "relation": "onsite",
+      "checked": "2026-11-07"
     },
     {
       "program": "wharton-square-playground",
@@ -1480,6 +1572,24 @@
       "lists": []
     },
     {
+      "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf",
+      "how": "fetch",
+      "programs": [
+        "coco-academy",
+        "code-ninjas-south-philly",
+        "brilliant-minds",
+        "early-childhood-environment",
+        "principal-academy",
+        "little-shepherds",
+        "columbus-square-rec",
+        "hawthorne-cultural-center",
+        "makom-community",
+        "sawubona-creativity-project",
+        "east-passyunk-rec"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://nebinger.philasd.org/#ourschool",
       "how": "fetch",
       "programs": [
@@ -1492,13 +1602,14 @@
       "lists": []
     },
     {
-      "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf",
+      "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
       "how": "fetch",
       "programs": [
-        "coco-academy",
-        "columbus-square-rec",
-        "hawthorne-cultural-center",
-        "makom-community"
+        "girls-on-the-run",
+        "soccer-shots-bache-martin",
+        "francisville-rec",
+        "bache-martin-clubs",
+        "philly-art-center-fairmount"
       ],
       "lists": []
     },
@@ -1581,12 +1692,20 @@
       ]
     },
     {
-      "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
+      "url": "https://emstanton.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "sunrise-stanton",
+        "stanton-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://mariananderson.philasd.org/",
       "how": "fetch",
       "programs": [
         "girls-on-the-run",
-        "francisville-rec",
-        "philly-art-center-fairmount"
+        "marian-anderson-clubs"
       ],
       "lists": []
     },
@@ -1783,6 +1902,14 @@
       "lists": []
     },
     {
+      "url": "https://childs.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "childs-clubs"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100573",
       "how": "fetch",
       "programs": [
@@ -1835,14 +1962,6 @@
       "how": "fetch",
       "programs": [
         "elite-sports-factory"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://emstanton.philasd.org/",
-      "how": "fetch",
-      "programs": [
-        "sunrise-stanton"
       ],
       "lists": []
     },
@@ -2498,6 +2617,14 @@
       "how": "fetch",
       "programs": [
         "starfinder-saturday-soccer"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://vare.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "rock-school-for-dance"
       ],
       "lists": []
     },
