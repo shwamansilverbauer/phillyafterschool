@@ -56,10 +56,10 @@ To look at the site without a server: `PREVIEW=1 node build.mjs`, then open `pre
 ## How changes reach the site
 
 1. A change is merged into the `main` branch (edit a file on GitHub, or approve a proposed change).
-2. GitHub builds the site automatically (`.github/workflows/publish.yml`) and puts the finished files on the `live` branch.
+2. GitHub builds the site automatically (`.github/workflows/publish.yml`), runs the tests (below) against a local copy, and puts the finished files on the `live` branch.
 3. The web host is connected to the `live` branch and deploys it.
 
-If the data has a problem, step 2 stops and the live site stays as it was. The "Actions" tab on GitHub shows what went wrong.
+If the data has a problem, or a test fails, step 2 stops and the live site stays as it was. The "Actions" tab on GitHub shows what went wrong.
 
 To put the site on a different host, run `node build.mjs` and upload the contents of `dist/`.
 
@@ -79,9 +79,10 @@ push services). Nothing reaches phillyafterschool.org, the real mail service or 
 installed globally); without Playwright the browser tests are reported as skipped and the rest run. What is
 covered, how a test is written and what to do when one fails is in `tests/README.md`.
 
-Run them before pushing a change to `build.mjs`, `src/` or the data. A change that breaks one of the site's own
-rules (a child's name readable on disk, a price for parents, an analytics call on a quiet page, the support line
-missing) fails a test, not a reader.
+The publishing job runs them too, after the build and before anything goes to the `live` branch, so a change that
+breaks one of the site's own rules (a child's name readable on disk, a price for parents, an analytics call on a
+quiet page, the support line missing) fails a test, not a reader. Run them yourself before pushing a change to
+`build.mjs`, `src/` or the data, and the job is only a second opinion.
 
 ## Building for another day (tests only)
 
