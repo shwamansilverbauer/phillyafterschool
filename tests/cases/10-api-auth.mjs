@@ -17,11 +17,11 @@ test('sign in with the emailed code: the email names the site, the code works on
   const c = api();
   const email = someone('auth');
   const start = await c.okay('POST', 'login_start', { email, next: 'account' });
-  ok(start.req && start.minutes > 0, 'a request id and the minutes it lasts');
+  ok(start.req, 'a request id'); eq(start.minutes, 10, 'the link and code last ten minutes');
   const m = await mail.waitFor(email, /sign-in/i);
   includes(m.Subject, 'Philly After School');
   matches(m.TextBody, /(\d{3}) (\d{3})/, 'a six-digit code, shown as two halves');
-  includes(m.TextBody, '/account/#t=', 'a sign-in link');
+  includes(m.TextBody, '/account/#t=', 'a sign-in link'); includes(m.TextBody, 'after 10 minutes', 'the email says how long it lasts');
   ok(m.HtmlBody && m.HtmlBody.includes('Sign in'), 'an HTML version with the button');
   eq(m.TrackOpens, false, 'no open tracking'); eq(m.TrackLinks, 'None', 'no click tracking');
   const code = codeIn(m);

@@ -38,7 +38,7 @@ header('X-Content-Type-Options: nosniff');
 header('X-Robots-Tag: noindex, nofollow');
 header('Referrer-Policy: no-referrer');
 
-const LINK_MINUTES = 15;
+const LINK_MINUTES = 10;
 const SESSION_DAYS = 30;
 const MAX_OWNED = 10;       // groups one person can own
 const MAX_JOINED = 30;      // groups one person can be in
