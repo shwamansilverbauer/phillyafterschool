@@ -615,7 +615,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
     return `<details class="menu${here ? ' here' : ''}" data-top="${navHref(top)}"><summary>${label}</summary><ul>${items.map(([to, text]) => `<li${to === top ? ' class="menu-all"' : ''}><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
   }).join('') + `<a href="${link('suggest/', depth)}"${pathName.startsWith('suggest/') || pathName.startsWith('ideas/') || pathName.startsWith('schools/request/') ? ' aria-current="page"' : ''}>Suggestion Box</a><a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
-    ? `<a class="when-in nav-acct" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}>Account</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('profile/', depth)}"${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}${PM_LISTED ? ' data-pm="1"' : ''}>My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>`
+    ? `${PASSPORT ? `<a class="when-in nav-pp" href="${link(passportPath, depth)}"${pathName === passportPath ? ' aria-current="page"' : ''}>Passport</a>` : ''}<a class="when-in nav-acct" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}>Account</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('profile/', depth)}"${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}${PM_LISTED ? ' data-pm="1"' : ''}>My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>`
     : `<a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`}`;
   const head = `${first}${fragment || quiet ? '' : roleHead + gtmHead + '\n' + klaviyoHead}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
@@ -698,6 +698,7 @@ ${body}
         ${GROUPS && daysOff ? `<li><a href="${link('calendar/', depth)}">${T(`My Calendar`)}</a></li>` : ''}
         ${ALERTS ? `<li><a href="${link(alertsPath, depth)}">${T(`Reminders by Email`)}</a></li>` : ''}
         ${GROUPS ? `<li><a href="${link('profile/', depth)}">${T(`My Profile`)}</a></li>` : ''}
+        ${PASSPORT ? `<li><a href="${link(passportPath, depth)}">${T(`Passport`)}</a></li>` : ''}
       </ul>
     </div>
     <div>
@@ -2382,6 +2383,7 @@ function privacyPage() {
     <li>${T(`For a summer schedule in your profile, we store each child’s first name as you typed it and the camps picked for each week, so the summer is there on your other devices. The calendar’s title and photos are not stored. A summer in your profile can’t be shared with anyone except a co-parent you’ve linked (below), and it is deleted when you take it out of your profile or delete your account. The summer schedule section is hidden in session recordings, and analytics is told only that a summer was kept, never what is in it.`)}</li>
     <li>${T(`For a days-off plan in your profile, we store each child’s first name as you typed it, the place picked for each day school is closed, and which of those days you ticked as signed up. The calendar’s title and photos are not stored. The plan can’t be shared with anyone except a co-parent you’ve linked (below), and it is deleted when you take it out of your profile or delete your account. The planner is hidden in session recordings, and analytics is never told what is in a plan.`)}</li>
     <li>${T(`“My kids’ calendar” is drawn in your browser, for you alone, from the plans on your device and the ones in your profile. Opening it stores nothing new and sends nothing about your plans. It has no link of its own, so nobody else can open it. A picture or calendar file you save is a copy on your device that we never receive. So it can tell you when a date changes, the page remembers what your last file held, on your device only. Google Analytics and Microsoft Clarity are not loaded on it.`)}</li>
+    <li>${T(`The Passport is a page for each child, drawn from what you confirm they have been to. We store, encrypted like the plans, the child’s first name as you typed it, the listings you confirmed with the kind and the year, the suggestions you waved away, and the favorites the child ranked. Nothing else: no notes, no photos, nothing typed by a child. Stamps and the map are worked out in your browser. The page loads no analytics or recordings, sends nothing to the email list, and has no link to share; the picture you can save shows stamps and neighborhoods, with no name and no map.`)}</li>
     <li>${T(`Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.`)}</li>
     <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
     <li>${T(`The email list also notes whether an account belongs to a parent or to someone who manages a program, so each gets only the news meant for them. For a manager it notes the name of the listing they hold.`)}</li>
@@ -5361,6 +5363,75 @@ const summerPlan = (() => {
 // no address of its own for any family: nothing about a child is ever in the page that is served, or in a link.
 const yearPath = 'calendar/';
 const YEAR_PAGE = !!(GROUPS && daysOff);
+// ---------- the Passport: a page of each child's own, inside a parent's account ----------
+// Stamps for the kinds of program a child has been to, the neighborhoods, the milestones and the seasons; a map of
+// every place; a bracket that ranks favorites. Everything on it comes from what a parent has confirmed (the "passport"
+// endpoint in groups-api.php, kept encrypted with the rest of a household's plans). The page is quiet (no analytics,
+// no recordings, nothing to Klaviyo), out of search, and in kid mode no link leaves the site. The stamps are drawn
+// here as simple shapes; artwork can replace them later by changing this list alone.
+const PASSPORT = !!GROUPS && !PREVIEW;
+const passportPath = 'passport/';
+const PASSPORT_V = PASSPORT ? stamp('src/passport.js') : '';
+const STAMP_ICON = {
+  star: 'M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z',
+  pin: 'M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z',
+  sun: 'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm-1-6h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.9 2.9-1.4 1.4zm11.3 11.3 1.4-1.4 2.9 2.9-1.4 1.4zM4.2 18.4l2.9-2.9 1.4 1.4-2.9 2.9zM15.5 7.1l2.9-2.9 1.4 1.4-2.9 2.9z',
+  snow: 'M11 1h2v22h-2zM1 11h22v2H1zm3.2-5.4 1.4-1.4 15.6 15.6-1.4 1.4zm15.6-1.4 1.4 1.4L5.6 21.2l-1.4-1.4z',
+  backpack: 'M9 2h6a2 2 0 0 1 2 2v2h1a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h1V4a2 2 0 0 1 2-2zm0 4h6V4H9zm-1 7v5h8v-5z',
+  calendar: 'M7 2h2v2h6V2h2v2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm-2 8v10h14V10zm2 2h4v4H7z',
+  trophy: 'M7 2h10v2h3v3a5 5 0 0 1-4.6 5A5 5 0 0 1 13 15.9V18h3v2H8v-2h3v-2.1A5 5 0 0 1 8.6 12 5 5 0 0 1 4 7V4h3zm-1 4v1a3 3 0 0 0 2 2.8V6zm12 0h-2v3.8A3 3 0 0 0 18 7z',
+  compass: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.5 5.5-2.8 6.2-6.2 2.8 2.8-6.2zM12 10.8a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z',
+};
+const STAMP_NAMES = { aftercare: 'After-school regular', music: 'Music maker', theater: 'Stage star', art: 'Maker', movement: 'Mover', stem: 'Scientist', academics: 'Bookworm', games: 'Game master', nature: 'Explorer', daycamp: 'Camper', clubs: 'Club member', 'rec-center': 'Rec center regular' };
+const STAMPS = [
+  ...TYPES.map(t => ({ id: 'type:' + t.id, group: 'type', label: STAMP_NAMES[t.id] || t.label, how: `A ${t.label.toLowerCase()} program`, color: t.color, icon: t.icon })),
+  { id: 'season:after', group: 'season', label: 'After-schooler', how: 'An after-school program', color: '#1763B8', icon: STAMP_ICON.backpack },
+  { id: 'season:weekend', group: 'season', label: 'Weekend regular', how: 'A Saturday or Sunday class', color: '#6B3FA0', icon: STAMP_ICON.calendar },
+  { id: 'season:off', group: 'season', label: 'Day-off explorer', how: 'A camp on a day school is closed', color: '#0E7C86', icon: STAMP_ICON.snow },
+  { id: 'season:summer', group: 'season', label: 'Summer camper', how: 'A week of summer camp', color: '#C2410C', icon: STAMP_ICON.sun },
+  { id: 'first', group: 'milestone', n: 1, label: 'First stamp', how: 'Your first class or camp', color: '#B8860B', icon: STAMP_ICON.star },
+  { id: 'five', group: 'milestone', n: 5, label: 'High five', how: '5 classes or camps', color: '#B8860B', icon: STAMP_ICON.star },
+  { id: 'ten', group: 'milestone', n: 10, label: 'Perfect ten', how: '10 classes or camps', color: '#B8860B', icon: STAMP_ICON.trophy },
+  { id: 'twentyfive', group: 'milestone', n: 25, label: 'Quarter century', how: '25 classes or camps', color: '#B8860B', icon: STAMP_ICON.trophy },
+  { id: 'hoods:3', group: 'milestone', hoods: 3, label: 'Around town', how: 'Classes in 3 neighborhoods', color: '#1F7A3A', icon: STAMP_ICON.compass },
+  { id: 'hoods:6', group: 'milestone', hoods: 6, label: 'All over Philly', how: 'Classes in 6 neighborhoods', color: '#1F7A3A', icon: STAMP_ICON.compass },
+];
+function passportPage() {
+  const D = 1;
+  const listings = {};
+  // A listing's sites: its neighborhoods, each with a map point when the addresses line up with them one to one.
+  // A listing with several sites earns a neighborhood stamp and a pin only once a parent says which site.
+  const sites = (hoods, lls) => hoods.map((h, i) => ({ h, ll: hoods.length === 1 ? (lls[0] || null) : hoods.length === lls.length ? lls[i] : null }));
+  for (const p of programs) listings['p:' + p.id] = { n: p.name, t: p.types || [], sites: sites(programHoods(p), placesOf(p)), href: link(programPath(p), D) };
+  for (const c of summerCamps) listings['c:' + c.id] = { n: c.name, t: c.types || [], sites: sites(c.neighborhoods || [], coordsOf(c.address)), href: link(campPath(c), D) };
+  const data = {
+    site: cfg.siteName, url: cfg.siteUrl.replace(/^https?:\/\//, ''), year: +String(daysOff.schoolYear).slice(0, 4), leaflet: link('assets/leaflet/', D),
+    listings, schools: Object.fromEntries(schools.map(s => [s.id, { n: s.shortName, h: schoolHoods(s) }])),
+    typeMap: Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, color: t.color, icon: t.icon }])), badges: STAMPS, pin: STAMP_ICON.pin,
+    kinds: { after: 'After school', weekend: 'Weekend class', off: 'Day-off camp', summer: 'Summer camp' },
+    links: { kids: link('account/', D) + '#school', account: link('account/', D), review: link('review/', D) },
+  };
+  const hero = `    <h1><span class="when-out">${T(`A passport for every kid`)}</span><span class="when-in">${T(`Passport`)}</span></h1>
+    <p class="lede when-out">${T(`Every class and camp your child has been to becomes a stamp on a page of their own: stamps for the kinds of program, the neighborhoods, the milestones; a map of every place; a bracket to pick favorites.`)}</p>
+    <p class="lede when-in">${T(`Hand over the phone. The passport is for the kid; the grown-ups’ corner is behind a press-and-hold.`)}</p>`;
+  const body = `<div class="pp" id="passport" data-api="${link('groups/api.php', D)}">
+  <section class="section pp-out" id="pp-out">
+    <h2>${T(`How it works`)}</h2>
+    <ul>
+      <li>${T(`A page for each child on your account, by first name. No child signs in and nothing is typed by a child: it’s the parent’s account, handed over for a look.`)}</li>
+      <li>${T(`What counts is what you confirm. The page suggests from your kept week, your summer and your days off (“Did Sam go to chess club this year?”), and you say yes or no. You can add anything the plans missed.`)}</li>
+      <li>${T(`Stamps are worked out from that: one for each kind of program, each neighborhood, the milestones (1, 5, 10, 25) and the seasons. A map shows every place. A bracket lets the kid pick favorites, and those come first when you plan the next term.`)}</li>
+      <li>${T(`Nothing on this page is counted, recorded or sent anywhere. It has no link of its own to share: a picture of the stamps, with no name and no map, is the only thing that leaves it.`)}</li>
+    </ul>
+    <div class="actions"><a class="btn primary big" href="${link('register/', D)}?next=passport">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=passport">${T(`Log in`)}</a></div>
+  </section>
+  <p class="hint when-in" id="pp-wait">${T(`Opening the passport…`)}</p>
+  <div id="pp-app" class="needs-js-block" hidden></div>
+  <script type="application/json" id="passport-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
+</div>`;
+  return layout({ title: 'Passport', description: `A page for each child: stamps for every class and camp they have been to on ${cfg.siteName}, a map of the places, and their favorites.`, pathName: passportPath, depth: D, current: null, hero, body, next: 'passport', noindex: true, quiet: true, scripts: `<script src="${link('assets/passport.js', D)}${PASSPORT_V}"></script>` });
+}
+
 // ---------- the planners in one place: the week, the days off, the summer, and the calendar they add up to ----------
 const schedulesPath = 'schedules/';
 function schedulesPage() {
@@ -6092,6 +6163,7 @@ for (const c of summerCamps) write(campPath(c) + 'index.html', c.program ? campM
 if (summerCamps.length) { write(summerPath + 'index.html', summerSchedulePage()); write(weeksPath + 'index.html', summerWeeksPage()); }
 if (YEAR_PAGE) write(yearPath + 'index.html', calendarPage());
 if (YEAR_PAGE) write('to-do/index.html', todoPage());
+if (PASSPORT) { write(passportPath + 'index.html', passportPage()); write('assets/passport.js', fs.readFileSync(path.join(ROOT, 'src/passport.js'))); }
 if (weekendPrograms.length) write(weekendPath + 'index.html', weekendPage());
 if (ALERTS) write(alertsPath + 'index.html', alertsPage());
 if (ALERTS && GROUPS) write(alertsPath + 'stop/index.html', stopPage());

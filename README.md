@@ -344,6 +344,40 @@ analytics or recordings.
   flags off; the choice is kept on the device (`pas-year-pic-own`). Title (`yearTitle`) and
   photo work as on the other cards, and stay on the device.
 
+## The Passport
+
+`/passport/` (`passportPage()` in `build.mjs`, `src/passport.js`) is a page of each child's own, inside a parent's
+account: stamps for the kinds of program they have been to, the neighborhoods, the milestones and the seasons; a
+map of every place; a bracket that ranks their favorites. It is the only part of the site meant to be handed to a
+child, so it is built the other way round from the rest.
+
+- **Kid mode.** From the picker ("Whose passport?") and on the child's page, `html.pp-kid` hides the site's header,
+  menu, hero and footer, and nothing on the page is a link: a program's name is text, the map's credit is kept from
+  opening while kid mode is on, and nothing is typed. The grown-ups' corner opens from a press-and-hold button
+  (`.pp-hold`, 1.1 seconds; a tap does nothing). With one child on the account the page opens on their passport.
+- **What counts.** Only what a parent has confirmed. The server suggests from the household's plans
+  (`passport_suggest()`: every program on a child's kept week, each camp whose week has started, each day-off program
+  whose day has passed, once per listing per year) and the parent says yes or no in the grown-ups' corner, or adds one
+  the plans missed. A listing with several sites (Philly Art Center, say) earns a neighborhood and a pin only once the
+  parent says which site.
+- **The data.** `passports` in the accounts database, one row per child per household (by first name, the way weeks
+  match), encrypted like the plans: `{ done: [{ k: "p:<program>" | "c:<camp>", kind: after | weekend | off | summer,
+  y: <year>, s: <school or "">, h?: <site's neighborhood> }], skip: [suggestion keys the parent waved away],
+  fav: [listings, best first] }`. `GET passport` gives every child on the kids list with their lists and suggestions;
+  `POST passport_save { kid, done, skip, fav }` replaces one child's lists. Co-parents share them (a partner's
+  passports move to the home account on accepting, same first names merge). Deleting the account deletes them.
+  Stamps are never stored: `earned()` in `passport.js` works them out from `done`.
+- **Stamps.** `STAMPS` in `build.mjs`: one per program type (named from `STAMP_NAMES`), the four seasons, the
+  milestones (1, 5, 10, 25 listings; 3 and 6 neighborhoods), plus a stamp per neighborhood made on the page. Each is a
+  colour and an SVG path; to replace them with artwork, change that list (and `STAMP_ICON`) and nothing else.
+- **The map** is Leaflet from this site's own copy with circle markers, one per place a confirmed listing has a point
+  for. The shareable picture (`drawShare()`, a canvas, like the week card) shows the stamps and the neighborhoods with
+  no name and no map, and is never a link; the page itself has no link to share.
+- **Favorites.** The bracket pairs the child's distinct listings until one is left; the order they fell in is saved as
+  `fav`. `GET profile` carries `favorites: [{ name, fav }]` for the planners.
+- **Quiet.** No analytics, no recordings, nothing to Klaviyo, out of search (`quiet: true, noindex: true`), and no
+  `track()` anywhere in `passport.js`. `tests/cases/17-api-passport.mjs` and `23-web-passport.mjs` cover it.
+
 ## Weekend classes
 
 A listing in `data/programs.json` with a `weekend` block shows on `/weekends/` and gets a "Weekends" row on its own
