@@ -36,13 +36,14 @@ test('signed out, Kid’s Corner explains itself and offers the account; signed 
   includes(flat(await page.locator('#kc-out #for-kids').innerText()), 'A CORNER JUST FOR YOU', 'what a kid gets, said to the kid');
   eq(await page.locator('#for-kids .kids-tile').count(), 4);
   ok(await page.locator('#for-kids a[href*="register/?next=kids"]').isVisible(), 'Grown-ups: make a free account');
-  // Signed out, the way there: the menu's button, a row in the home page's Parents box, a strip on the Schedule Builder.
+  // Signed out, the one way there is under About; the button waits for a signed-in parent, and nothing else points to it.
   const home = await t.open('/');
-  eq(await home.locator('#for-kids').count(), 0, 'not on the home page itself');
-  ok(await home.locator('header.sitebar a.nav-kc').isVisible(), 'the Kid’s Corner button, signed out too');
-  ok(await home.locator('#start .start-go[href$="kids-corner/"]').isVisible(), 'a row in the Parents box');
+  eq(await home.locator('#for-kids').count(), 0, 'not on the home page');
+  ok(!(await home.locator('header.sitebar a.nav-kc').isVisible()), 'no Kid’s Corner button signed out');
+  eq(await home.locator('header.sitebar details.menu[data-top$="about/"] a[href$="kids-corner/"]').count(), 1, 'under About');
+  eq(await home.locator('#start a[href$="kids-corner/"]').count(), 0, 'not in the Parents box');
   const plans = await t.open('/schedules/');
-  ok(await plans.locator('.kids-strip a[href$="kids-corner/"]').isVisible(), 'a strip on the Schedule Builder');
+  eq(await plans.locator('main a[href$="kids-corner/"]').count(), 0, 'not on the Schedule Builder');
   await t.close();
   const pat = ctx.api().as(someone('kcw'), 'Pat', 'Lee');
   const t2 = await b.context(ctx.site, { sid: pat.cookie });

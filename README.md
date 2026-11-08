@@ -374,9 +374,9 @@ keep that name.)
 - **"For kids", on the open site.** `kidsShowcase()` is a band in Kid's Corner's own look, said to the child: four
   tiles (pins, a lightbulb to dress up, the map with secret spots, picking a favorite), Eddie, and "Grown-ups: make
   a free account" (`register/?next=kids`). It lives on Kid's Corner itself, at the top for someone signed out, before
-  "How it works" for the grown-up. The menu's Kid's Corner button shows for everyone (not only signed in), and two
-  one-line pointers lead there: a row in the home page's Parents box and a strip on the Schedule Builder
-  (`.kids-strip`). Its drawings are made in the build (`artBulb()`, `artPin()`); no real child's page is shown anywhere.
+  "How it works" for the grown-up. The site is for parents and doesn't push it: someone signed out finds it under
+  About in the menu (About is a group: About Us, Kid's Corner), and the Kid's Corner button is only there once a
+  parent is signed in. Nothing on the home page or the planners points to it. Its drawings are made in the build (`artBulb()`, `artPin()`); no real child's page is shown anywhere.
 - **On a laptop** the Pins / Map / Showdown tabs sit under the child's header and stick with it, instead of the
   phone's bar at the bottom; Eddie's welcome is one centred, framed card.
 
