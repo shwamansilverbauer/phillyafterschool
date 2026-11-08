@@ -52,10 +52,9 @@
     ],
     "alsoListed": {
       "title": "Also on the Meredith Home & School list",
-      "intro": "The Home & School Association names these neighborhood programs. We haven’t confirmed whether they pick up from Meredith.",
+      "intro": "The Home & School Association names this neighborhood program too (Skilladelphia, also on its list, has a listing above). We haven’t confirmed whether it picks up from Meredith.",
       "items": [
-        "Philly P.A.C.K. (233 Federal St): theater and dance classes. phillypack.org",
-        "Skilladelphia (401 Lombard St): basketball and lacrosse clinics and aftercare for girls and nonbinary players ages 5–14. skilladelphia.org"
+        "Philly P.A.C.K. (233 Federal St): theater and dance classes. phillypack.org"
       ]
     }
   },
@@ -88,18 +87,9 @@
     ],
     "alsoListed": {
       "title": "Also on Coppin’s aftercare pickup sheet",
-      "intro": "Coppin’s own sheet (posted May 2024) names these too. We haven’t confirmed their current details, so call before counting on them.",
+      "intro": "Coppin’s own sheet (posted May 2024) also names this one; everything else on it has a listing above.",
       "items": [
-        "Capitolo Playground, 215-685-1883",
-        "East Passyunk Recreation Center, 215-685-0008",
-        "Code Ninjas, 445-942-0955",
-        "Brilliant Minds, 215-928-3890",
-        "Early Childhood Environment, 215-844-0178",
-        "Principal Academy, 267-275-3835",
-        "Little Shepherds Christian Learning Center, 215-772-1825",
-        "Sawubona Creativity Project, 215-420-2555",
-        "The Dandelion Project, 215-490-9640",
-        "Fitness Alive, 267-702-6043"
+        "Fitness Alive, 267-702-6043. Its own site says its aftercare is paused, so ask before counting on it."
       ]
     }
   },
@@ -137,7 +127,6 @@
       "title": "Also on the school’s own after-school page",
       "intro": "The school’s 2026–27 after-school page describes this program and lists other options nearby.",
       "items": [
-        "The Rock School for Dance Education (1101 S Broad St), grades 2–4. The school’s page says the Rock School collects students at 3 pm, class runs to 4:15 pm, and families pick up at the Rock School. For more, the page says to reach out to Dr. Barnes at the school.",
         "Other aftercare options in South Philly, as the page lists them: Zhang Sah, Philly Art Center, Mister John’s Music, Sunshine Camp, The Rock School, CoCo Academy, Code Ninjas, InMovement, Queen and Rook, YCCA, Settlement Music, Beehive at Bok, The Dandelion Project, Action Karate (winter and spring break camps), Old Pine Community Center and Tiny Towne Academy (Pre-K families only). The page doesn’t say which of these pick up from the school; the ones whose own pages name Vare-Washington are listed above."
       ]
     }
@@ -173,16 +162,7 @@
       "Settlement Music School. Escorts from Meredith, Nebinger and McCall only, though the school’s page says more than 80 students take part in Settlement’s orchestra program at Stanton.",
       "Philly Art Center. Its Queen Village after-school pickup list does not include Stanton.",
       "Mighty Writers. No South Philadelphia location near the school; its closest, El Futuro at 1025 S 9th St, is about a mile east."
-    ],
-    "alsoListed": {
-      "title": "Also on the school’s own site",
-      "intro": "The school’s home page names these activities, without saying when they meet or whether they run after school. Ask the office.",
-      "items": [
-        "Arts, music and dance: Dance Club, African Drum Club, Rock Band, Running Club, Orchestra, Chorus, and a poetry program through Writing Matters. The page says Bainbridge House has provided African drum and dance programming for more than 25 years.",
-        "Sports: flag football, track and volleyball, with a doctor-signed physical form required. Intramurals for grades K–5, and the Middle Grades Conference for grades 6–8.",
-        "A robotics team, which the page says competed in the 2024 World Championships."
-      ]
-    }
+    ]
   },
   {
     "id": "mccall",
@@ -305,6 +285,96 @@
       "Makom Community. Picks up from Greenfield, Childs, ICS, Marian Anderson, Stanton, The Philadelphia School, Wild Seeds and Vare-Washington.",
       "Kids on 12th (1112 Chestnut St), K–5. Picks up from ICS, McCall, Greenfield, Russell Byers, Coppin and FACTS only.",
       "Christian Street YMCA (1724 Christian St). Serves Stanton, ICS and Marian Anderson."
+    ]
+  },
+  {
+    "id": "marian-anderson",
+    "name": "Marian Anderson Neighborhood Academy",
+    "shortName": "Marian Anderson",
+    "aliases": [
+      "Anderson",
+      "MANA",
+      "Marian Anderson School"
+    ],
+    "address": "2000 Catharine St, Philadelphia, PA 19146",
+    "neighborhood": "Graduate Hospital",
+    "grades": "K-8",
+    "dismissal": "3:20 pm",
+    "dismissalNote": "3:22 pm for grades 6–8",
+    "phone": "215-400-7940",
+    "website": "https://mariananderson.philasd.org/",
+    "lastReviewed": "2026-11-05",
+    "added": "2026-11-05",
+    "notes": [
+      "The school’s own site names no aftercare of its own; it points to the City’s free Out-of-School Time programs and lists partners. Ask the office which partners run on site after school, and when.",
+      "Two more programs name Marian Anderson on their own sites but aren’t matched here yet: ZAZZ (1923 Chestnut St, ages 5–12, guaranteed pickup from Greenfield, ICS and Marian Anderson) and Philly Music Factory (2100 Chestnut St)."
+    ]
+  },
+  {
+    "id": "lingelbach",
+    "name": "Anna L. Lingelbach School",
+    "shortName": "Lingelbach",
+    "aliases": [
+      "Anna L. Lingelbach",
+      "Lingelbach Elementary"
+    ],
+    "address": "6340 Wayne Ave, Philadelphia, PA 19144",
+    "neighborhood": "Germantown",
+    "grades": "K-8",
+    "phone": "215-400-3630",
+    "website": "https://lingelbach.philasd.org/",
+    "lastReviewed": "2026-11-05",
+    "added": "2026-11-05",
+    "notes": [
+      "The school’s own site says the school day ends promptly at 2:54 pm, that children should not be dropped off before 8:10 am, and that it has no before-care. It names no aftercare of its own.",
+      "Lingelbach is the site’s first school in Germantown, added because families asked for it. If you know a program that serves it and isn’t here, send it in and it goes on this page."
+    ],
+    "dismissal": "2:54 pm"
+  },
+  {
+    "id": "childs",
+    "name": "George W. Childs School",
+    "shortName": "Childs",
+    "aliases": [
+      "G.W. Childs",
+      "GW Childs Elementary",
+      "George W. Childs Elementary",
+      "Childs Elementary"
+    ],
+    "address": "1599 Wharton St, Philadelphia, PA 19146",
+    "neighborhood": "Point Breeze",
+    "grades": "PK-8",
+    "dismissal": "3:39 pm",
+    "phone": "215-400-7950",
+    "website": "https://childs.philasd.org/",
+    "lastReviewed": "2026-11-07",
+    "added": "2026-11-07",
+    "notes": [
+      "The school’s own site gives the school day as 9:00 am to 3:39 pm, pre-kindergarten through 8th grade. It doesn’t mention aftercare; the City’s after-school program locator lists free before and after school care in the building, run by Greater Philadelphia Community Alliance, for students at the school.",
+      "Childs is the site’s first school in Point Breeze, added because families asked for it. If you know a program that serves it and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "bache-martin",
+    "name": "Bache-Martin School",
+    "shortName": "Bache-Martin",
+    "aliases": [
+      "Bache Martin",
+      "Bache-Martin Elementary",
+      "Alexander Dallas Bache School",
+      "Bache-Martin K-8"
+    ],
+    "address": "2201 Brown St, Philadelphia, PA 19130",
+    "neighborhood": "Fairmount",
+    "grades": "K-8",
+    "dismissalNote": "the school’s site posts no bell schedule; its after-school page has clubs starting at 3:00 pm, one at 2:54",
+    "phone": "215-400-7550",
+    "website": "https://www.bachemartin.org/",
+    "lastReviewed": "2026-11-07",
+    "added": "2026-11-07",
+    "notes": [
+      "The school’s own after-school page lists what runs on site and which programs collect children from the school, and it is the source for everything here. It mentions an aftercare in the cafeteria until 5:30 pm on Soccer Shots days without saying who runs it or how to sign up, so ask the office.",
+      "Bache-Martin is the site’s first school in Fairmount, added because families asked for it. If you know a program that serves it and isn’t here, send it in and it goes on this page."
     ]
   }
 ]

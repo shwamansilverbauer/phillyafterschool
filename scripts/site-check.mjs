@@ -131,6 +131,26 @@ async function accounts() {
     else if (h.mail.last && h.mail.last !== 'ok') fail('Email', `Postmark refused the last email (${h.mail.last})`, 'The site fell back to the host’s own mail, which stops at 100 a day. In Postmark, check the account is approved, the sending domain is verified and the token is the current one. e10 is a wrong token, e412 an account still waiting for approval, e400 or e401 a sender that is not verified.');
     else pass('Email', 'going out through Postmark');
   }
+  // The key /edit/ publishes copy edits with (a fine-grained GitHub token in phillyafterschool-github.key). GitHub
+  // gives these an end date; when it passes, publishing stops without a word. Warn two weeks ahead.
+  if (cfg.editLogin && cfg.repo) {
+    const k = h.editKey, renew = 'On GitHub: Settings > Developer settings > Fine-grained tokens, regenerate the token for this repository (same repository and permissions as before), and put the new value in phillyafterschool-github.key next to the public folder in Hostinger’s file manager. Until then, publishing from /edit/ fails.';
+    if (!k) fail('Publishing key', 'there is no phillyafterschool-github.key on the server', renew);
+    else if (k.ok === false) fail('Publishing key', k.why === 'expired' ? 'the GitHub key /edit/ publishes with has run out' : k.why === 'refused' ? 'GitHub refuses the key /edit/ publishes with (it has run out or was taken back)' : k.why === 'no access' ? 'the key /edit/ publishes with has no access to this repository' : 'the key file on the server doesn’t hold a GitHub key', renew);
+    else if (k.ok === true && k.daysLeft !== null && k.daysLeft < 14) fail('Publishing key', `the GitHub key /edit/ publishes with runs out in ${k.daysLeft} day${k.daysLeft === 1 ? '' : 's'}`, renew);
+    else if (k.ok === true) pass('Publishing key', k.daysLeft === null ? 'GitHub takes it; it has no end date' : `GitHub takes it; ${k.daysLeft} days left`);
+    else pass('Publishing key', 'GitHub could not be asked just now; asked again later');
+  }
+}
+
+// ----- the security headers the site's .htaccess sets (the host has to honor them) -----
+async function headers() {
+  if (LOCAL) return;
+  let h = null;
+  try { const r = await fetch(SITE + '/', { headers: { 'user-agent': 'phillyafterschool-site-check' }, redirect: 'manual', signal: AbortSignal.timeout(20000) }); h = r.headers; } catch { return; }
+  const missing = [['strict-transport-security', /max-age=\d{6,}/], ['x-frame-options', /sameorigin/i], ['x-content-type-options', /nosniff/i]].filter(([n, re]) => !re.test(h.get(n) || '')).map(([n]) => n);
+  if (missing.length) fail('Security headers', `the home page is missing ${missing.join(', ')}`, 'They are set in the .htaccess the build writes (look for "Security headers" in build.mjs). Check the live .htaccess is the built one, and that the host still reads Header lines from it.');
+  else pass('Security headers', 'HTTPS-only, no framing by other sites, no type guessing');
 }
 
 // ----- the forms answer (nothing is sent) -----
@@ -210,6 +230,7 @@ if (await door()) {
   await fresh();
   await accounts();
   await forms();
+  await headers();
 }
 await certificate();
 await deployed();

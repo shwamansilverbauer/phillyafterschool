@@ -16,7 +16,7 @@
     "grades": null,
     "gradeNote": "Grades not published",
     "hours": "Before and after school. Times not published.",
-    "cost": "Not published",
+    "cost": "$250 a month for full time (4 or more days a week) or $175 a month for part time (3 days a week), snack included. Not published on the program’s site.",
     "phone": "",
     "email": "info@imaginethatphilly.org",
     "website": "https://imaginethatphilly.org/",
@@ -51,7 +51,22 @@
         "note": "Imagine That’s site names Coppin as one of its two school locations.",
         "checked": "2026-10-05"
       }
-    }
+    },
+    "price": "paid",
+    "daysNote": "Full time is 4 or more days a week; part time is 3.",
+    "told": [
+      {
+        "on": "2026-11-04",
+        "by": "provider",
+        "how": "the 2026–27 rates Imagine That gives enrolled families at Nebinger (the site’s owner is one), not its website",
+        "fields": [
+          "cost",
+          "price",
+          "daysNote"
+        ],
+        "says": "After-school care is $250 a month for full time, 4 or more days a week, or $175 a month for part time, 3 days a week, with a snack included."
+      }
+    ]
   },
   {
     "id": "nebinger-clubs",
@@ -184,7 +199,11 @@
       "running",
       "5K",
       "sports",
-      "girls"
+      "girls",
+      "Heart & Sole",
+      "Heart and Sole",
+      "middle school",
+      "grades 6-8"
     ],
     "address": "",
     "grades": "3-8",
@@ -240,8 +259,294 @@
           }
         ],
         "checked": "2026-10-10"
+      },
+      "bache-martin": {
+        "relation": "onsite",
+        "note": "Bache-Martin’s own after-school page lists Girls on the Run on Mondays and Wednesdays, 3:15–4:45 pm, for girls in grades 3–5, and Heart & Sole for grades 6–8 on Tuesdays and Thursdays. The page’s dates are from fall 2025, so confirm this season’s.",
+        "sources": [
+          {
+            "label": "Bache-Martin after-school programs",
+            "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+          }
+        ],
+        "checked": "2026-11-07"
+      },
+      "marian-anderson": {
+        "relation": "onsite",
+        "note": "On Marian Anderson’s own partners list. The school’s site gives no season or days, so ask the office.",
+        "sources": [
+          {
+            "label": "Marian Anderson partners",
+            "url": "https://mariananderson.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-07"
       }
     }
+  },
+  {
+    "id": "soccer-shots-bache-martin",
+    "name": "Soccer Shots at Bache-Martin",
+    "what": "Weekly soccer on the school lawn for K–2, run by Soccer Shots, with pickup at 4 or aftercare in the cafeteria to 5:30",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "soccer",
+      "sports",
+      "K-2",
+      "Bache-Martin",
+      "Fairmount",
+      "aftercare"
+    ],
+    "address": "2201 Brown St",
+    "grades": "K-2",
+    "hours": "Tuesdays 3:00–4:40 pm on the Brown St lawn. Pickup at 4 pm, or children go to aftercare in the cafeteria until 5:30 pm.",
+    "cost": "$96 a session plus a $35 yearly enrollment fee, per the school’s page",
+    "website": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
+    "register": {
+      "how": "online",
+      "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
+      "note": "The school’s page links to Soccer Shots’ Bache-Martin sign-up; the link on this page goes to that page.",
+      "nextTerm": ""
+    },
+    "note": "Everything here is from Bache-Martin’s own after-school page. It doesn’t say who runs the cafeteria aftercare after 4 pm or how to sign up for it; ask the office. The page’s dates are from the 2025–26 year, so confirm this season’s.",
+    "sources": [
+      {
+        "label": "Bache-Martin after-school programs",
+        "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "onsite",
+        "note": "On the school’s own after-school page: Tuesdays 3:00–4:40 pm on the Brown St lawn, K–2.",
+        "sources": [
+          {
+            "label": "Bache-Martin after-school programs",
+            "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "neighborhoods": [
+      "Fairmount"
+    ],
+    "days": [
+      "tue"
+    ],
+    "pickupBy": "5:30 pm",
+    "price": "paid"
+  },
+  {
+    "id": "fairmount-mountain-bike-team",
+    "name": "Fairmount Mountain Bike Team",
+    "what": "A middle-school mountain bike team for grades 6–8 in the Art Museum area, in NICA’s Pennsylvania league (PICL), with Cadence Cycling behind it; ten donated bikes, no experience needed",
+    "types": [
+      "movement",
+      "nature"
+    ],
+    "keywords": [
+      "mountain bike",
+      "cycling",
+      "bikes",
+      "middle school",
+      "grades 6-8",
+      "PICL",
+      "NICA",
+      "Cadence Cycling",
+      "Fairmount Park",
+      "outdoors"
+    ],
+    "address": "2201 Brown St",
+    "grades": "6-8",
+    "hours": "Mondays and Wednesdays 3:30–6:30 pm, meeting at 22nd and Brown, per Bache-Martin’s page; try-it days were held at Sedgley Porter House in Fairmount Park.",
+    "cost": "Not published. The school’s page says ten donated bikes are available, so no bike is needed; ask about league fees.",
+    "website": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
+    "register": {
+      "how": "contact",
+      "note": "Email Brady Gibney at Cadence Cycling (bgibney@cadencecycling.com), per the school’s page. PICL, the league, is at pamtb.org.",
+      "nextTerm": ""
+    },
+    "note": "Everything here is from Bache-Martin’s own after-school page; Cadence Cycling’s site says nothing about the team. The page’s dates are from the 2025–26 year, so confirm this season’s.",
+    "sources": [
+      {
+        "label": "Bache-Martin after-school programs",
+        "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+      },
+      {
+        "label": "PICL (Pennsylvania Interscholastic Cycling League)",
+        "url": "https://www.pamtb.org/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "onsite",
+        "note": "On the school’s own after-school page: meets at 22nd and Brown, Mondays and Wednesdays 3:30–6:30 pm, for grades 6–8.",
+        "sources": [
+          {
+            "label": "Bache-Martin after-school programs",
+            "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "neighborhoods": [
+      "Fairmount"
+    ],
+    "days": [
+      "mon",
+      "wed"
+    ],
+    "pickupBy": "6:30 pm",
+    "price": "paid",
+    "email": "bgibney@cadencecycling.com"
+  },
+  {
+    "id": "beat-the-streets-wrestling",
+    "name": "Beat the Streets wrestling (middle school)",
+    "what": "Co-ed wrestling for grades 5–8 at Beat the Streets’ center at 37th and Market, with Bache-Martin’s middle-school team practicing there; members get its academic mentoring center too",
+    "types": [
+      "movement",
+      "academics"
+    ],
+    "keywords": [
+      "wrestling",
+      "middle school",
+      "grades 5-8",
+      "Beat the Streets",
+      "BTSP",
+      "mentoring",
+      "homework help",
+      "University City",
+      "free"
+    ],
+    "address": "3700 Market St",
+    "grades": "5-8",
+    "hours": "Tuesdays and Thursdays 6:30–8:00 pm, per Bache-Martin’s page. Beat the Streets’ own page puts the winter season at November through March, with competitions in January and February.",
+    "cost": "Not published on either page. Beat the Streets is a nonprofit; ask.",
+    "website": "https://btsphilly.org/wrestling",
+    "register": {
+      "how": "online",
+      "url": "https://btsphilly.org/waiver",
+      "note": "Bache-Martin’s page says to sign the waiver at btsphilly.org/waiver and to reach coach Lender Vega (lvega@btsphilly.com) or Mr. McCutcheon at the school. Beat the Streets’ own page lists Bache-Martin among its winter middle-school teams.",
+      "nextTerm": ""
+    },
+    "note": "Families get children to 37th and Market themselves; the school’s page doesn’t mention transport. The school’s page says members also get academic mentoring at the Beat the Streets Mentoring Center. Its dates are from the 2025–26 year, so confirm this season’s.",
+    "sources": [
+      {
+        "label": "Beat the Streets wrestling",
+        "url": "https://btsphilly.org/wrestling"
+      },
+      {
+        "label": "Bache-Martin after-school programs",
+        "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "nearby",
+        "distance": "practices at 37th and Market, about two miles west; families get children there",
+        "note": "Bache-Martin’s own page lists it for grades 5–8, Tuesdays and Thursdays 6:30–8 pm, and Beat the Streets’ own page lists Bache-Martin among its winter middle-school teams.",
+        "sources": [
+          {
+            "label": "Beat the Streets wrestling",
+            "url": "https://btsphilly.org/wrestling"
+          },
+          {
+            "label": "Bache-Martin after-school programs",
+            "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "neighborhoods": [
+      "University City"
+    ],
+    "days": [
+      "tue",
+      "thu"
+    ],
+    "pickupBy": "8:00 pm",
+    "price": "paid",
+    "phone": "215-454-2255",
+    "email": "btsphilly@btsphilly.org"
+  },
+  {
+    "id": "philadelphia-city-rowing",
+    "name": "Philadelphia City Rowing (middle school)",
+    "what": "Free rowing for 7th and 8th graders at any District public or charter school: indoor sessions in Mantua and water sessions on Boathouse Row, no experience needed",
+    "types": [
+      "movement",
+      "nature"
+    ],
+    "keywords": [
+      "rowing",
+      "crew",
+      "middle school",
+      "grades 7-8",
+      "free",
+      "Boathouse Row",
+      "Schuylkill",
+      "SEPTA"
+    ],
+    "address": "4017 Cambridge St",
+    "grades": "7-8",
+    "hours": "Mondays and Wednesdays 4:15–6:00 pm and Saturdays noon–2:00 pm, per the program’s page. Indoor sessions at 4017 Cambridge St; water sessions from #1 Boathouse Row on Kelly Drive.",
+    "cost": "Free. SEPTA cards are among what the program says it offers.",
+    "website": "https://philadelphiacityrowing.org/middle-school/",
+    "register": {
+      "how": "online",
+      "url": "https://philadelphiacityrowing.org/middle-school/",
+      "note": "Apply through the program’s page after contacting Coach George (the page asks for that first). Applications for fall 2026 were closed when we read it; Bache-Martin’s page says spaces are limited and gives last fall’s session as September 18 to October 25.",
+      "nextTerm": ""
+    },
+    "note": "Proof of swimming is asked for but not required: a child who can’t swim two pool lengths or tread water for two minutes wears a life jacket on the water. Bache-Martin’s page names the program for its 7th and 8th graders.",
+    "sources": [
+      {
+        "label": "Philadelphia City Rowing middle school program",
+        "url": "https://philadelphiacityrowing.org/middle-school/"
+      },
+      {
+        "label": "Bache-Martin after-school programs",
+        "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "nearby",
+        "distance": "indoor sessions at 40th and Cambridge, about two miles west, and on Boathouse Row, about a mile and a half; families get children there",
+        "note": "Bache-Martin’s own page names it for grades 7–8, free, with limited spaces. The program’s own page takes 7th and 8th graders from any District public or charter school.",
+        "sources": [
+          {
+            "label": "Philadelphia City Rowing middle school program",
+            "url": "https://philadelphiacityrowing.org/middle-school/"
+          },
+          {
+            "label": "Bache-Martin after-school programs",
+            "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "neighborhoods": [
+      "West Philadelphia"
+    ],
+    "days": [
+      "mon",
+      "wed"
+    ],
+    "pickupBy": "6:00 pm",
+    "price": "free",
+    "daysNote": "Plus Saturdays noon to 2 pm."
   },
   {
     "id": "nebinger-arts-partners",
@@ -860,6 +1165,97 @@
     ]
   },
   {
+    "id": "zhang-sah-mt-airy",
+    "name": "Zhang Sah (Mt. Airy)",
+    "what": "Martial arts class daily, plus snack, homework time, clubs and outdoor play",
+    "types": [
+      "movement",
+      "aftercare"
+    ],
+    "keywords": [
+      "martial arts",
+      "taekwondo",
+      "tae kwon do",
+      "karate",
+      "homework",
+      "aftercare"
+    ],
+    "address": "6110 Wissahickon Ave",
+    "neighborhoods": [
+      "Mount Airy"
+    ],
+    "grades": "K-8",
+    "gradeNote": "",
+    "hours": "Until 6:00 pm. Open most early dismissals and days off.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysOff": {
+      "summary": "Community sites open for most school closures, including winter and spring breaks, at a separate full-day rate. Camps run 8 am to 4 pm for ages 4–12, with extended day to 6 pm. Early dismissals are covered for enrolled children.",
+      "url": "https://zhangsah.org/camps/",
+      "dates": [],
+      "sources": [
+        {
+          "label": "Zhang Sah after-school program",
+          "url": "https://zhangsah.org/after-school-program/"
+        },
+        {
+          "label": "Zhang Sah camps",
+          "url": "https://zhangsah.org/camps/"
+        }
+      ],
+      "hours": "8 am to 4 pm, extended day to 6 pm",
+      "ageMin": 4,
+      "ageMax": 12
+    },
+    "pickupBy": "6:00 pm",
+    "cost": "Tuition not published. Takes CCIS subsidy and offers sibling discounts.",
+    "price": "paid",
+    "phone": "215-923-6676",
+    "email": "",
+    "website": "https://zhangsah.org/after-school-program/",
+    "register": {
+      "how": "online",
+      "url": "https://schools.procareconnect.com/form/7417c5d3-b696-426e-913c-b9f0144431bb",
+      "note": "Spots fill early each year."
+    },
+    "note": "",
+    "sources": [
+      {
+        "label": "Zhang Sah after-school",
+        "url": "https://zhangsah.org/after-school-program/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "lingelbach": {
+        "relation": "pickup",
+        "distance": "about half a mile west, on Wissahickon Avenue",
+        "note": "Zhang Sah’s own page lists Lingelbach among its Mt. Airy site’s pickup schools. Children come by bus, walking escort or van after dismissal.",
+        "sources": [
+          {
+            "label": "Zhang Sah after-school program",
+            "url": "https://zhangsah.org/after-school-program/"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "pickupLists": [
+      {
+        "where": "Mt. Airy, 6110 Wissahickon Ave",
+        "text": "JS Jenks, CW Henry, Lingelbach, Houston, SCH, Wissahickon Charter",
+        "url": "https://zhangsah.org/after-school-program/",
+        "read": "2026-11-07",
+        "how": "fetch"
+      }
+    ]
+  },
+  {
     "id": "shot-tower-rec",
     "name": "Shot Tower Recreation Center",
     "what": "City rec center after-school program: homework help, gym and activities",
@@ -893,7 +1289,7 @@
       "fri"
     ],
     "pickupBy": "6:00 pm",
-    "cost": "$100 per month in the 2025–26 listing",
+    "cost": "$100 a month in the City’s listing",
     "rate": {
       "per": "month",
       "flat": 100,
@@ -908,7 +1304,7 @@
       "note": "Call or stop by the rec center. There is no online sign-up.",
       "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
     },
-    "note": "The city’s finder has not posted a 2026–27 listing yet; the newest one ran September 8, 2025 to June 12, 2026. Call to confirm the program and the price for this year. The finder also lists Girl Scouts, soccer and baseball clinics, a garden club and crafts here.",
+    "note": "The City’s finder has four after-school entries for Shot Tower; the newest, from 2023, says “Pick up from Nebinger Elementary school. The program runs from 3 to 6 pm,” at $100 a month, and shows open for registration. Call to confirm the pickup and the price for this year. The finder also lists Girl Scouts, soccer and baseball clinics, a garden club and crafts here.",
     "sources": [
       {
         "label": "City Parks & Rec finder",
@@ -919,13 +1315,19 @@
         "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
       }
     ],
-    "lastVerified": "2026-10-05",
+    "lastVerified": "2026-11-07",
     "schools": {
       "nebinger": {
-        "relation": "nearby",
+        "relation": "pickup",
         "distance": "six blocks east of Nebinger on the same street",
-        "note": "The city’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
-        "checked": "2026-10-07"
+        "note": "The City’s own listing for the program says it picks up from Nebinger Elementary and runs 3 to 6 pm. Confirm with the center before counting on it.",
+        "sources": [
+          {
+            "label": "City Parks & Rec finder",
+            "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+          }
+        ],
+        "checked": "2026-11-07"
       },
       "meredith": {
         "relation": "nearby",
@@ -938,6 +1340,678 @@
         "distance": "about half a mile east of Vare-Washington",
         "note": "The city’s listing doesn’t mention pickup from any school.",
         "checked": "2026-10-06"
+      }
+    }
+  },
+  {
+    "id": "chew-playground",
+    "name": "Chew Playground",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "1800 Washington Ave (18th and Washington)",
+    "neighborhoods": [
+      "Point Breeze"
+    ],
+    "grades": "K-7",
+    "gradeNote": "Ages 5–13",
+    "hours": "Not published in the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$20 a month in the City’s listing, which dates from 2018; registration there shows closed, so call.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-6596",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder lists an after-school program here with homework help, entered in 2018 and marked closed for registration. Call to ask whether it is running this year and what it costs now. The finder also lists a summer day camp, chess, a gaming club and sewing here.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "childs": {
+        "relation": "nearby",
+        "distance": "about a quarter mile north, at 18th and Washington",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      },
+      "marian-anderson": {
+        "relation": "nearby",
+        "distance": "about a third of a mile southeast, at 18th and Washington",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      },
+      "stanton": {
+        "relation": "nearby",
+        "distance": "about a quarter mile southwest, at 18th and Washington",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "wharton-square-playground",
+    "name": "Wharton Square Playground",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "2300 Wharton St (23rd and Wharton)",
+    "neighborhoods": [
+      "Point Breeze"
+    ],
+    "grades": "K-6",
+    "gradeNote": "Ages 5–12",
+    "hours": "3:00–6:00 pm, weekdays, per the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$5 for the season in the City’s listing, which dates from 2018; registration there shows open.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-1888",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder says the program has homework help, board games, arts and crafts and a snack provided by the City, 3 to 6 pm, and gives Demetrius Richardson at the center as the contact. The listing was entered in 2018, so confirm the price.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "childs": {
+        "relation": "nearby",
+        "distance": "about half a mile west along Wharton St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      },
+      "marian-anderson": {
+        "relation": "nearby",
+        "distance": "about half a mile southwest, at 23rd and Wharton",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "disilvestro-playground",
+    "name": "DiSilvestro Playground",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "1701 S 15th St (15th and Morris)",
+    "neighborhoods": [
+      "Newbold"
+    ],
+    "grades": "K-6",
+    "gradeNote": "Ages 5–12",
+    "hours": "Not published in the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$50 a month in the City’s listing, which dates from 2016; registration there shows open.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-1598",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder lists its standard after-school program here (sports, outdoor activities, arts, reading), entered in 2016 and open for registration. Call to confirm this year’s hours and price.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "childs": {
+        "relation": "nearby",
+        "distance": "about a third of a mile south, at 15th and Morris",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "francisville-rec",
+    "name": "Francisville Playground & Rec Center",
+    "what": "City rec center after-school program that picks up from Bache-Martin, per the school’s own page",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "rec center",
+      "Parks and Recreation",
+      "free",
+      "low cost",
+      "Francisville",
+      "Fairmount",
+      "Bache-Martin",
+      "pickup"
+    ],
+    "address": "1737 Francis St (18th and Francis)",
+    "neighborhoods": [
+      "Fairmount"
+    ],
+    "grades": "K-5",
+    "gradeNote": "Ages 6–12, per Bache-Martin’s page.",
+    "hours": "3:00–6:00 pm, Monday to Friday, plus half days, per Bache-Martin’s page",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not posted. Bache-Martin’s page gives no price, and the City’s finder has no after-school entry for Francisville this year; ask the center.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-2762",
+    "email": "FrancisvilleRecCenter@phila.gov",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or email the center. Bache-Martin’s page says slots are limited and go first come, first served.",
+      "nextTerm": ""
+    },
+    "note": "Everything here is from Bache-Martin’s own after-school page, which lists the Francisville After School Program among the programs that collect its students, and from the City’s record of the rec center (address and phone). The City’s Parks & Rec finder has no after-school entry for Francisville this year, so confirm with the center that it is running.",
+    "sources": [
+      {
+        "label": "Bache-Martin after-school programs (the school’s own page)",
+        "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+      },
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "pickup",
+        "distance": "about half a mile east, at 18th and Francis",
+        "note": "Bache-Martin’s own after-school page says the Francisville After School Program picks up from the school, for K–5, Monday to Friday 3 to 6 pm and half days. The City’s finder has no entry for it this year, so call before counting on it.",
+        "sources": [
+          {
+            "label": "Bache-Martin after-school programs",
+            "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "clemente-playground",
+    "name": "Clemente Playground",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "1800 Wallace St (18th and Wallace)",
+    "neighborhoods": [
+      "Fairmount"
+    ],
+    "grades": "K-6",
+    "gradeNote": "Ages 5–12",
+    "hours": "Not published in the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free in one of the City’s listings (from 2016) and $25 a month in a newer one (from 2022); ask which applies.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "free",
+    "phone": "215-685-2760",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder has two after-school entries here, both open for registration: one free, for ages 5–12, and one at $25 a month for ages 6–12. Call to ask which is running and the hours.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "nearby",
+        "distance": "about a third of a mile southeast, at 18th and Wallace",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "rumph-rec",
+    "name": "Rumph Recreation Center",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "100–70 E Johnson St (Johnson St east of Germantown Ave)",
+    "neighborhoods": [
+      "Germantown"
+    ],
+    "grades": "K-7",
+    "gradeNote": "Ages 5–13",
+    "hours": "Not published in the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$25 a month in the City’s listing, which dates from 2017; registration there shows open.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-2234",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder lists its standard after-school program here (sports, outdoor activities, arts, reading), entered in 2017 and open for registration. Call to confirm this year’s hours and price.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "lingelbach": {
+        "relation": "nearby",
+        "distance": "about a mile east along Johnson St, past Germantown Ave",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "marian-anderson-rec",
+    "name": "Marian Anderson Recreation Center",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "740 S 17th St (17th and Fitzwater)",
+    "neighborhoods": [
+      "Graduate Hospital"
+    ],
+    "grades": "K-6",
+    "gradeNote": "Ages 5–12",
+    "hours": "Not published in the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$25 a week in the City’s listings, which date from 2019 and 2021; one shows closed and the other is listed as seeking registrants, so call.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-6594",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder has two after-school entries here with homework help, from 2019 and 2021, neither clearly open. Stanton’s own site names the rec center among its after-school partners. Call to ask whether it is running this year. The finder also lists chess, boxing, baseball, soccer and a drama class here.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "stanton": {
+        "relation": "nearby",
+        "distance": "two blocks north of the school, at 17th and Fitzwater",
+        "note": "Stanton’s own page names the rec center among its after-school partners; the City’s listing doesn’t mention pickup, so ask the school or the center how children get there.",
+        "checked": "2026-11-07"
+      },
+      "marian-anderson": {
+        "relation": "nearby",
+        "distance": "about a quarter mile east, at 17th and Fitzwater",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      },
+      "childs": {
+        "relation": "nearby",
+        "distance": "about half a mile north, at 17th and Fitzwater",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "capitolo-playground",
+    "name": "Capitolo Playground",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "900 Federal St (9th and Federal)",
+    "neighborhoods": [
+      "Passyunk Square"
+    ],
+    "grades": "K-7",
+    "gradeNote": "Ages 5–13",
+    "hours": "Not published in the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$120 a month in the City’s listing, which dates from 2016; registration there shows closed, so call.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-1883",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder lists its standard after-school program here, entered in 2016 and marked closed for registration. Coppin’s own May 2024 sheet names Capitolo among the programs that collect its students, so ask the center about pickup and this year’s price.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "coppin": {
+        "relation": "nearby",
+        "distance": "three blocks east along Federal St",
+        "note": "Coppin’s own May 2024 sheet of after-care pickups names Capitolo Playground; the City’s listing doesn’t mention pickup, so confirm with the center.",
+        "checked": "2026-11-07"
+      },
+      "childs": {
+        "relation": "nearby",
+        "distance": "about two-thirds of a mile east, at 9th and Federal",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "markward-playground",
+    "name": "Markward Playground",
+    "what": "City rec center after-school program: homework help, gym and activities",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "gym",
+      "sports",
+      "aftercare",
+      "low cost"
+    ],
+    "address": "400 S Taney St (Taney and Pine)",
+    "neighborhoods": [
+      "Fitler Square"
+    ],
+    "grades": "1-6",
+    "gradeNote": "Ages 6–12",
+    "hours": "Not published in the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$75 a week in the City’s listing, which dates from 2022; registration there shows closed, so call.",
+    "rate": {
+      "per": "month",
+      "flat": 100,
+      "extra": "From the 2025–26 listing."
+    },
+    "price": "paid",
+    "phone": "215-685-6649",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder lists its standard after-school program here, entered in 2022 and marked closed for registration. Call to ask whether it is running this year.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "marian-anderson": {
+        "relation": "nearby",
+        "distance": "about half a mile northwest, by the river at Taney and Pine",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
       }
     }
   },
@@ -1458,6 +2532,79 @@
     ]
   },
   {
+    "id": "parent-infant-center",
+    "name": "Parent Infant Center After School Center",
+    "what": "Aftercare at a child-care center in University City, with walking pickup from Lea and Penn Alexander and a van from Powel",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "childcare",
+      "PIC",
+      "University City",
+      "Lea",
+      "Penn Alexander",
+      "Powel",
+      "days off"
+    ],
+    "address": "4205 Spruce St",
+    "neighborhoods": [
+      "University City"
+    ],
+    "grades": "K-4",
+    "gradeNote": "",
+    "hours": "3:00–6:00 pm, Monday to Friday. Part days on scheduled half days and weather closures; full days on District holidays.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Enroll for 3, 4 or 5 days a week.",
+    "pickupBy": "6:00 pm",
+    "daysOff": {
+      "summary": "Full-day care on School District holidays, with a holiday-only enrollment option. Dates and hours aren’t posted on the program page; ask the center.",
+      "url": "https://parentinfantcenter.org/programs/after-school-center",
+      "dates": [],
+      "sources": [
+        {
+          "label": "PIC After School Center",
+          "url": "https://parentinfantcenter.org/programs/after-school-center"
+        }
+      ]
+    },
+    "cost": "Tuition is on the center’s Tuition and Affordability page, not the program page; it says to expect an increase over the current rate. $35 one-time application fee.",
+    "price": "paid",
+    "phone": "215-222-5480",
+    "email": "atorrence@parentinfantcenter.org",
+    "website": "https://parentinfantcenter.org/programs/after-school-center",
+    "register": {
+      "how": "online",
+      "url": "https://parentinfantcenter.org/programs/after-school-center",
+      "note": "Applications go through Brightwheel (the “After School 26–27 application” link on the page), first come, first served. Current PIC families get preference through early March; then anyone can enroll.",
+      "nextTerm": ""
+    },
+    "note": "Listed for Lea, Penn Alexander and Powel, which don’t have pages here yet. Teachers walk children over from Lea and Penn Alexander; the Powel van has very limited space and isn’t guaranteed.",
+    "sources": [
+      {
+        "label": "PIC After School Center",
+        "url": "https://parentinfantcenter.org/programs/after-school-center"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {},
+    "pickupLists": [
+      {
+        "text": "Samuel Powel School (van, limited space); Lea School and Penn Alexander School (teachers walk children over)",
+        "url": "https://parentinfantcenter.org/programs/after-school-center",
+        "read": "2026-11-07",
+        "how": "fetch"
+      }
+    ]
+  },
+  {
     "id": "butchers-sew-shop",
     "name": "Butcher’s Sew Shop Junior",
     "what": "Sewing classes in Bella Vista",
@@ -1729,6 +2876,17 @@
         "relation": "pickup",
         "distance": "about a mile east, in Bella Vista",
         "note": "Mister John’s 2026–27 pickup list names Stanton on Mondays, Wednesdays and Thursdays only, with pickup run in partnership with CoCo Academy.",
+        "sources": [
+          {
+            "label": "Mister John’s Music: kids group classes 2026–27",
+            "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/"
+          }
+        ],
+        "checked": "2026-10-26"
+      },
+      "marian-anderson": {
+        "relation": "pickup",
+        "note": "Mister John’s 2026–27 pickup list names Marian Anderson.",
         "sources": [
           {
             "label": "Mister John’s Music: kids group classes 2026–27",
@@ -2254,6 +3412,19 @@
           }
         ],
         "checked": "2026-10-05"
+      },
+      "marian-anderson": {
+        "relation": "pickup",
+        "address": "1001 Christian St (Bella Vista)",
+        "registerUrl": "https://www.hisawyer.com/coco-academy/schedules?location_id%5B%5D=154921&widget_tags=afterschool+winter+spring+2027",
+        "note": "CoCo’s Bella Vista page listed Marian Anderson pickup when we read it on October 5: staff collect children at dismissal and walk them to 1001 Christian St.",
+        "sources": [
+          {
+            "label": "CoCo Academy Bella Vista after school",
+            "url": "https://www.cocoacademyphl.com/afterschool-bellavista"
+          }
+        ],
+        "checked": "2026-10-05"
       }
     },
     "rate": {
@@ -2299,13 +3470,13 @@
       "dungeons and dragons",
       "tabletop"
     ],
-    "address": "125 South St",
+    "address": "110 South St",
     "neighborhoods": [
       "Queen Village"
     ],
     "grades": "1-8",
-    "gradeNote": "Ages 6–16",
-    "hours": "Until 6:00 pm, on the School District calendar",
+    "gradeNote": "Ages 6–14",
+    "hours": "School dismissal to 6:00 pm, Monday to Friday",
     "days": [
       "mon",
       "tue",
@@ -2313,7 +3484,7 @@
       "thu",
       "fri"
     ],
-    "daysNote": "Choose 1 to 5 days a week.",
+    "daysNote": "Choose 1 to 5 days a week; each weekday is signed up for separately. Days may be cancelled for low enrollment.",
     "daysOff": {
       "summary": "Full-day board game camps when district schools are closed, 9 am to 3 pm with drop-off from 8:30, for ages 6–14. Aftercare from 3 to 6 pm costs extra. Camp dates had not been posted when we checked.",
       "url": "https://www.queenandrookcafe.com/youth-programs/",
@@ -2329,7 +3500,7 @@
       "ageMax": 14
     },
     "pickupBy": "6:00 pm",
-    "cost": "Not published. Need-based scholarships available.",
+    "cost": "$51 a day. For the Fall 2026 session (Aug 31 to Dec 22), each weekday is its own enrollment: $663 for Mondays or Fridays (13 days), $714 for Wednesdays (14), $765 for Thursdays (15), $816 for Tuesdays (16), paid in four monthly payments ($165.75 to $204 a month). 10% sibling discount. Need-based scholarships available.",
     "price": "paid",
     "phone": "215-995-0043",
     "email": "kat@queenandrookcafe.com",
@@ -2337,41 +3508,41 @@
     "register": {
       "how": "online",
       "url": "https://www.queenrookkeep.com/product/WInterAfterschool/FGRQPCBNZJCILGV4A5OGMYL7?cp=true&sa=false&sbp=false&q=true",
-      "note": "Fall Afterschool 2026 sign-up. Days can be cancelled for low enrollment.",
+      "note": "Fall 2026 sign-up (Aug 31 to Dec 22): pick a weekday, pay the first month now and the rest by payment plan or invoice.",
       "nextTerm": "Only the Fall 2026 session is posted. Winter and spring sign-ups are not listed yet."
     },
-    "note": "",
+    "note": "The after-school program meets at the cafe’s youth space at 110 South St; the cafe is at 125 South St.",
     "sources": [
-      {
-        "label": "Philly Family 2026–27 list",
-        "url": "https://phillyfamily.com/after-school-programs/"
-      },
       {
         "label": "Youth programs",
         "url": "https://www.queenandrookcafe.com/youth-programs/"
+      },
+      {
+        "label": "Fall 2026 Afterschool sign-up",
+        "url": "https://www.queenrookkeep.com/product/WInterAfterschool/FGRQPCBNZJCILGV4A5OGMYL7?cp=true&sa=false&sbp=false&q=true"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-11-04",
     "schools": {
       "nebinger": {
         "relation": "pickup",
-        "note": "Nebinger pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools.",
-        "checked": "2026-10-06"
+        "note": "Nebinger is named on the cafe’s own Fall 2026 sign-up page.",
+        "checked": "2026-11-04"
       },
       "meredith": {
         "relation": "pickup",
-        "note": "Meredith pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools.",
-        "checked": "2026-10-06"
+        "note": "Meredith is named on the cafe’s own Fall 2026 sign-up page.",
+        "checked": "2026-11-04"
       },
       "vare-washington": {
         "relation": "pickup",
-        "note": "Vare-Washington pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools.",
-        "checked": "2026-10-06"
+        "note": "Vare-Washington is named on the cafe’s own Fall 2026 sign-up page.",
+        "checked": "2026-11-04"
       },
       "mccall": {
         "relation": "pickup",
-        "note": "McCall pickup comes from Philly Family’s 2026–27 list; the cafe’s own page does not name schools.",
-        "checked": "2026-10-06"
+        "note": "McCall is named on the cafe’s own Fall 2026 sign-up page.",
+        "checked": "2026-11-04"
       }
     },
     "pickupLists": [
@@ -2616,6 +3787,576 @@
     }
   },
   {
+    "id": "code-ninjas-south-philly",
+    "name": "Code Ninjas (South Philly)",
+    "what": "Game-based coding after school, on Coppin’s pickup sheet",
+    "types": [
+      "stem"
+    ],
+    "keywords": [
+      "Code Ninjas (South Philly)",
+      "Coppin",
+      "aftercare",
+      "pickup"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "445-942-0955",
+    "email": "",
+    "website": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf",
+    "register": {
+      "how": "phone",
+      "note": "Call the program. We haven’t been able to read a page of its own."
+    },
+    "note": "Named on Coppin’s own aftercare pickup sheet (posted May 2024) with this phone number. We haven’t found a page of the program’s own to read, so hours, price, ages and whether it still picks up from Coppin all need a call.",
+    "sources": [
+      {
+        "label": "Coppin aftercare pickup sheet",
+        "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "coppin": {
+        "relation": "pickup",
+        "note": "Named on Coppin’s own aftercare pickup sheet (May 2024). Confirm with the program before counting on it.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "brilliant-minds",
+    "name": "Brilliant Minds",
+    "what": "Child-care center on Coppin’s pickup sheet",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "Brilliant Minds",
+      "Coppin",
+      "aftercare",
+      "pickup"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-928-3890",
+    "email": "",
+    "website": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf",
+    "register": {
+      "how": "phone",
+      "note": "Call the program. We haven’t been able to read a page of its own."
+    },
+    "note": "Named on Coppin’s own aftercare pickup sheet (posted May 2024) with this phone number. We haven’t found a page of the program’s own to read, so hours, price, ages and whether it still picks up from Coppin all need a call.",
+    "sources": [
+      {
+        "label": "Coppin aftercare pickup sheet",
+        "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "coppin": {
+        "relation": "pickup",
+        "note": "Named on Coppin’s own aftercare pickup sheet (May 2024). Confirm with the program before counting on it.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "early-childhood-environment",
+    "name": "Early Childhood Environment",
+    "what": "Child-care center on Coppin’s pickup sheet",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "Early Childhood Environment",
+      "Coppin",
+      "aftercare",
+      "pickup"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-844-0178",
+    "email": "",
+    "website": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf",
+    "register": {
+      "how": "phone",
+      "note": "Call the program. We haven’t been able to read a page of its own."
+    },
+    "note": "Named on Coppin’s own aftercare pickup sheet (posted May 2024) with this phone number. We haven’t found a page of the program’s own to read, so hours, price, ages and whether it still picks up from Coppin all need a call.",
+    "sources": [
+      {
+        "label": "Coppin aftercare pickup sheet",
+        "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "coppin": {
+        "relation": "pickup",
+        "note": "Named on Coppin’s own aftercare pickup sheet (May 2024). Confirm with the program before counting on it.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "principal-academy",
+    "name": "Principal Academy",
+    "what": "On Coppin’s pickup sheet",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "Principal Academy",
+      "Coppin",
+      "aftercare",
+      "pickup"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "267-275-3835",
+    "email": "",
+    "website": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf",
+    "register": {
+      "how": "phone",
+      "note": "Call the program. We haven’t been able to read a page of its own."
+    },
+    "note": "Named on Coppin’s own aftercare pickup sheet (posted May 2024) with this phone number. We haven’t found a page of the program’s own to read, so hours, price, ages and whether it still picks up from Coppin all need a call.",
+    "sources": [
+      {
+        "label": "Coppin aftercare pickup sheet",
+        "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "coppin": {
+        "relation": "pickup",
+        "note": "Named on Coppin’s own aftercare pickup sheet (May 2024). Confirm with the program before counting on it.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "little-shepherds",
+    "name": "Little Shepherds Christian Learning Center",
+    "what": "Child-care center on Coppin’s pickup sheet",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "Little Shepherds Christian Learning Center",
+      "Coppin",
+      "aftercare",
+      "pickup"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-772-1825",
+    "email": "",
+    "website": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf",
+    "register": {
+      "how": "phone",
+      "note": "Call the program. We haven’t been able to read a page of its own."
+    },
+    "note": "Named on Coppin’s own aftercare pickup sheet (posted May 2024) with this phone number. We haven’t found a page of the program’s own to read, so hours, price, ages and whether it still picks up from Coppin all need a call.",
+    "sources": [
+      {
+        "label": "Coppin aftercare pickup sheet",
+        "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "coppin": {
+        "relation": "pickup",
+        "note": "Named on Coppin’s own aftercare pickup sheet (May 2024). Confirm with the program before counting on it.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
     "id": "movemakers",
     "name": "MoveMakers Philly",
     "what": "Dance and movement classes, with homework time and snack",
@@ -2712,6 +4453,18 @@
       },
       "mccall": {
         "relation": "pickup",
+        "checked": "2026-10-06"
+      },
+      "marian-anderson": {
+        "relation": "pickup",
+        "address": "2100 Chestnut St",
+        "note": "MoveMakers’ youth classes page names Marian Anderson School among the schools its 2100 Chestnut St studio picks up from.",
+        "sources": [
+          {
+            "label": "MoveMakers youth classes",
+            "url": "https://www.movemakersphilly.com/youthclasses.html"
+          }
+        ],
         "checked": "2026-10-06"
       }
     },
@@ -2904,6 +4657,12 @@
         "relation": "nearby",
         "distance": "about a 12-minute walk south-west of the school",
         "checked": "2026-10-10"
+      },
+      "childs": {
+        "relation": "nearby",
+        "distance": "four blocks east along Wharton St, at 12th and Wharton",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
       }
     }
   },
@@ -2987,6 +4746,12 @@
         "relation": "nearby",
         "distance": "about a 6-minute walk west of the school",
         "checked": "2026-10-10"
+      },
+      "childs": {
+        "relation": "nearby",
+        "distance": "about half a mile northeast, at 12th and Carpenter",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-07"
       }
     }
   },
@@ -3584,6 +5349,31 @@
           }
         ],
         "checked": "2026-10-25"
+      },
+      "marian-anderson": {
+        "relation": "pickup",
+        "address": "2401 Washington Ave",
+        "note": "Makom’s page lists Marian Anderson Neighborhood Academy among its pickup schools. It needs at least four children from a school, and groups from more than a mile away travel by SEPTA bus with a Makom educator.",
+        "sources": [
+          {
+            "label": "Makom afterschool enrichment",
+            "url": "https://makomcommunity.org/afterschool-enrichment/"
+          }
+        ],
+        "checked": "2026-10-25"
+      },
+      "childs": {
+        "relation": "pickup",
+        "address": "2401 Washington Ave",
+        "distance": "about three-quarters of a mile northwest, at 24th and Washington",
+        "note": "Makom’s page lists GW Childs Elementary School among its pickup schools. It needs at least four children from a school, and groups from more than a mile away travel by SEPTA bus with a Makom educator.",
+        "sources": [
+          {
+            "label": "Makom afterschool enrichment",
+            "url": "https://makomcommunity.org/afterschool-enrichment/"
+          }
+        ],
+        "checked": "2026-11-07"
       }
     },
     "pickupLists": [
@@ -3616,9 +5406,9 @@
       "childcare"
     ],
     "address": "",
-    "grades": null,
-    "gradeNote": "For Vare-Washington students. Grades not published",
-    "hours": "Before school, and after school until 6:00 pm. The City’s 2024 sheet for the school gives 7:30 am to 6:00 pm; the provider’s page gives before care from 7:00 am.",
+    "grades": "K-8",
+    "gradeNote": "For Vare-Washington students. The City’s program locator names kindergarten through 8th grade.",
+    "hours": "After school 3:00 to 6:00 pm, Monday to Friday, per the City’s after-school program locator for 2026–27, and before school; the provider’s page gives before care from 7:00 am.",
     "days": [
       "mon",
       "tue",
@@ -3674,13 +5464,93 @@
       {
         "label": "Greater Philadelphia Community Alliance: Pre-K to 8",
         "url": "https://www.gpca-phila.org/prek-8"
+      },
+      {
+        "label": "City program locator: GPCA at Vare aftercare",
+        "url": "https://www.phila.gov/ost/program-locator/?resource=ost_113"
       }
     ],
-    "lastVerified": "2026-10-25",
+    "lastVerified": "2026-11-07",
     "schools": {
       "vare-washington": {
         "relation": "onsite",
         "checked": "2026-10-25"
+      }
+    }
+  },
+  {
+    "id": "childs-edey",
+    "name": "Extended Day, Extended Year at Childs",
+    "what": "Free before and after school care in the school building, run by Greater Philadelphia Community Alliance as part of the City’s Extended Day, Extended Year program",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "before care",
+      "morning care",
+      "free",
+      "city",
+      "EDEY",
+      "extended day",
+      "GPCA",
+      "Greater Philadelphia Community Alliance",
+      "childcare"
+    ],
+    "address": "",
+    "grades": "K-8",
+    "gradeNote": "For Childs students. The City’s listing names kindergarten through 8th grade.",
+    "hours": "After school 3:30 to 5:45 pm, and before school 7:30 to 9:00 am, Monday to Friday, per the City’s after-school program locator for 2026–27.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:45 pm",
+    "daysOff": {
+      "summary": "The City’s program locator lists a GPCA winter break mini camp at Childs for students at the school. Its dates and hours weren’t posted when we read it, so ask the site.",
+      "url": "https://www.phila.gov/ost/program-locator/?resource=ost_103",
+      "dates": [],
+      "sources": [
+        {
+          "label": "City of Philadelphia after-school program locator",
+          "url": "https://www.phila.gov/ost/program-locator/"
+        }
+      ],
+      "cost": "Free for students at the school"
+    },
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-468-1645",
+    "email": "",
+    "website": "https://www.gpca-phila.org/",
+    "register": {
+      "how": "school",
+      "url": "",
+      "note": "Registration is required and the program is only for students at Childs. The City’s listing says registration opened August 10, 2026, and gives GPCA’s number (215-468-1645) and the school’s (215-400-7950); ask either."
+    },
+    "note": "Everything here comes from the City of Philadelphia’s after-school program locator entries for GPCA at Childs, read November 7, 2026; the school’s own site doesn’t mention the program. It runs September 1, 2026 to June 8, 2027, with a healthy snack, and no transportation.",
+    "sources": [
+      {
+        "label": "City program locator: GPCA EDEY at Childs Elementary School",
+        "url": "https://www.phila.gov/ost/program-locator/?resource=ost_103"
+      },
+      {
+        "label": "City program locator: Childs EDEY morning care",
+        "url": "https://www.phila.gov/ost/program-locator/?resource=ost_102"
+      },
+      {
+        "label": "Greater Philadelphia Community Alliance",
+        "url": "https://www.gpca-phila.org/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "childs": {
+        "relation": "onsite",
+        "checked": "2026-11-07"
       }
     }
   },
@@ -4393,7 +6263,19 @@
       }
     ],
     "lastVerified": "2026-10-07",
-    "schools": {}
+    "schools": {
+      "coppin": {
+        "relation": "pickup",
+        "note": "Named on Coppin’s own aftercare pickup sheet (May 2024). The program’s own page doesn’t say so, so confirm before counting on it.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    }
   },
   {
     "id": "playarts-day-camps",
@@ -4874,7 +6756,7 @@
   {
     "id": "rock-school-for-dance",
     "name": "The Rock School for Dance Education",
-    "what": "Saturday pre-ballet for ages 3 to 6 at the ballet school on South Broad Street",
+    "what": "Ballet school on South Broad Street: a weekday class that collects Vare-Washington students, and Saturday pre-ballet for ages 3 to 6",
     "types": [
       "movement"
     ],
@@ -4890,9 +6772,9 @@
     "neighborhoods": [
       "South Philadelphia"
     ],
-    "grades": "PK-1",
-    "gradeNote": "Pre-ballet is for ages 3–6",
-    "hours": "Weekend classes only are listed here.",
+    "grades": "PK-4",
+    "gradeNote": "Pre-ballet for ages 3–6 on Saturdays; the Vare-Washington class is for grades 2–4.",
+    "hours": "For Vare-Washington students in grades 2–4, per the school’s page: collected at 3 pm, class to 4:15 pm, pickup at the Rock School. Saturday pre-ballet for ages 3–6 is separate.",
     "cost": "Nine payments of $95 for ages 4–6 ($80 for age 3), plus a $75 registration fee and a $135 spring showcase fee",
     "price": "paid",
     "phone": "",
@@ -4911,9 +6793,22 @@
         "url": "https://www.therockschool.org/pre-ballet"
       }
     ],
-    "lastVerified": "2026-10-07",
-    "scope": "weekend",
-    "schools": {},
+    "lastVerified": "2026-11-07",
+    "scope": null,
+    "schools": {
+      "vare-washington": {
+        "relation": "pickup",
+        "distance": "about half a mile west, at Broad and Washington",
+        "note": "Vare-Washington’s own after-school page says the Rock School collects students at 3 pm for a class that runs to 4:15 pm, with pickup at the Rock School, for grades 2–4, and says to ask Dr. Barnes at the school. The Rock School’s own site can’t be read automatically, so confirm with the school.",
+        "sources": [
+          {
+            "label": "Vare-Washington after-school page",
+            "url": "https://vare.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
     "weekend": {
       "summary": "Pre-ballet by age, one class a week from September to June. Age 3 meets at 9:15 am or 12:15 pm, age 4 at 10 am, age 5 at 9 or 11 am and age 6 at 11:30 am. Several sections were full with a waitlist when we checked.",
       "days": [
@@ -6106,6 +8001,459 @@
     ]
   },
   {
+    "id": "stanton-clubs",
+    "name": "School clubs and teams",
+    "what": "Dance Club, African Drum Club (with Bainbridge House, which the school says has run drum and dance there for more than 25 years), Rock Band, Running Club, Orchestra, Chorus, a poetry program with Writing Matters, a robotics team that reached the 2024 World Championships, flag football, track and volleyball (a doctor-signed physical is required), intramurals for K–5 and the Middle Grades Conference for grades 6–8.",
+    "types": [
+      "clubs",
+      "music",
+      "movement",
+      "stem",
+      "academics"
+    ],
+    "keywords": [
+      "clubs",
+      "school",
+      "team",
+      "after school"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Varies by club and season",
+    "cost": "Not published",
+    "phone": "215-400-8170",
+    "email": "",
+    "website": "https://emstanton.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Sign-ups go through the school office or the club’s teacher."
+    },
+    "note": "The school’s home page names these without saying when they meet or whether they run after school; ask the office. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Stanton’s site",
+        "url": "https://emstanton.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "stanton": {
+        "relation": "onsite",
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "marian-anderson-clubs",
+    "name": "School clubs and teams",
+    "what": "Wildcat Workshop, the school’s own K–8 makerspace, and the partners the school names: Sunrise of Philadelphia, Rock Reach, BalletX Dance eXchange, Girls on the Run, RISE Tutoring, the Philadelphia Robotics Coalition, Raja Yoga, Walnut Street Theatre and WHYY Media Labs.",
+    "types": [
+      "clubs",
+      "stem",
+      "movement",
+      "theater",
+      "academics"
+    ],
+    "keywords": [
+      "clubs",
+      "school",
+      "team",
+      "after school"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Varies by club and season",
+    "cost": "Not published",
+    "phone": "215-400-7890",
+    "email": "",
+    "website": "https://mariananderson.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Sign-ups go through the school office or the club’s teacher."
+    },
+    "note": "The school’s site lists these as partners without saying which run after school, on site; ask the office before counting on one. Girls on the Run has its own listing here.",
+    "sources": [
+      {
+        "label": "Marian Anderson’s partners list",
+        "url": "https://mariananderson.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "marian-anderson": {
+        "relation": "onsite",
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "childs-clubs",
+    "name": "School clubs and teams",
+    "what": "Game Club, Mindset of Champions (gaming), Run Philly Style, net sports and volleyball; and the arts partners the school names: Dance Philly Classrooms (grade 5), Koresh Dance (grade 3), Rock Reach Dance (grade 4) and instrumental music lessons on Tuesdays and Fridays.",
+    "types": [
+      "clubs",
+      "games",
+      "movement",
+      "music"
+    ],
+    "keywords": [
+      "clubs",
+      "school",
+      "team",
+      "after school"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Varies by club and season",
+    "cost": "Not published",
+    "phone": "215-400-7950",
+    "email": "",
+    "website": "https://childs.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Sign-ups go through the school office or the club’s teacher."
+    },
+    "note": "The school’s home page names these without times or sign-up details, and some of the arts partners may run during the school day; ask the office. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Childs’s site",
+        "url": "https://childs.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "childs": {
+        "relation": "onsite",
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bache-martin-clubs",
+    "name": "School clubs and teams",
+    "what": "Elementary: Choir with Settlement Music School (grades 3–5, Tuesdays 3:00–4:30 pm) and Game Club (K–6, Wednesdays until 4:15 pm in the cafeteria, board and card games only). Grades 6–8: Student Advisory Committee, Cheer Squad (Tuesdays and Thursdays 3:15–4:30 pm), a free golf team (Mondays at Walnut Lane by school bus, with First Tee lessons), free girls volleyball (practices at school and Lloyd Hall), History Club (every other Tuesday) and Mural Club (Wednesdays 3:30–4:30 pm).",
+    "types": [
+      "clubs",
+      "music",
+      "games",
+      "movement",
+      "art"
+    ],
+    "keywords": [
+      "clubs",
+      "school",
+      "team",
+      "after school",
+      "middle school",
+      "grades 6-8",
+      "Heart & Sole",
+      "cheer",
+      "golf",
+      "volleyball",
+      "History Club",
+      "Mural Club",
+      "Student Advisory Committee",
+      "Settlement choir"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Varies by club; see each one",
+    "cost": "Not published",
+    "phone": "215-400-7550",
+    "email": "",
+    "website": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
+    "register": {
+      "how": "school",
+      "note": "Sign-ups go through the school office or the club’s teacher."
+    },
+    "note": "All from the school’s own after-school page, with the details as the school gives them. Its dates are from the 2025–26 year, so confirm this year’s before counting on one. Girls on the Run, Heart & Sole, Soccer Shots, the Fairmount Mountain Bike Team, Beat the Streets wrestling, Philadelphia City Rowing, Francisville Rec and Philly Art Center have their own listings here.",
+    "sources": [
+      {
+        "label": "Bache-Martin after-school programs",
+        "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "onsite",
+        "checked": "2026-11-07"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Studio",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Song Writing",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "gardening",
+          "nature",
+          "outdoors"
+        ]
+      },
+      {
+        "name": "Rock Band",
+        "tags": [
+          "music",
+          "band"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": []
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement",
+          "cheerleading"
+        ]
+      }
+    ]
+  },
+  {
     "id": "east-passyunk-rec",
     "name": "East Passyunk Community Center",
     "what": "City rec center that Southwark names for after-school pickup",
@@ -6167,6 +8515,18 @@
           }
         ],
         "checked": "2026-10-10"
+      },
+      "coppin": {
+        "relation": "pickup",
+        "note": "Named on Coppin’s own aftercare pickup sheet (May 2024). The program’s own page doesn’t say so, so confirm before counting on it.",
+        "sources": [
+          {
+            "label": "Coppin aftercare pickup sheet",
+            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
+          }
+        ],
+        "checked": "2026-11-07",
+        "distance": "about a mile south, at 11th and Mifflin"
       }
     },
     "pickupLists": [
@@ -6408,6 +8768,18 @@
         "relation": "pickup",
         "distance": "a short walk west on Christian St",
         "note": "The Y’s before-and-after-school page lists its Christian Street branch as serving Edwin Stanton Elementary School, along with Independence Charter and Marian Anderson, for kindergarten to 6th grade.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Before & After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/"
+          }
+        ],
+        "checked": "2026-10-26"
+      },
+      "marian-anderson": {
+        "relation": "pickup",
+        "distance": "a short walk, at 17th and Christian",
+        "note": "The Y’s before-and-after-school page lists its Christian Street branch as serving Marian Anderson, along with Edwin Stanton and Independence Charter, for kindergarten to 6th grade.",
         "sources": [
           {
             "label": "Greater Philadelphia YMCA: Before & After School Enrichment",
@@ -7127,29 +9499,32 @@
   {
     "id": "philadelphia-school-of-circus-arts",
     "name": "Philadelphia School of Circus Arts",
-    "what": "The circus school in Mount Airy, with single-day camps on the district’s days off for ages 5 to 15",
+    "what": "Circus After School in Mount Airy, kindergarten to 6th grade, with single-day camps on the district’s days off for ages 5 to 15",
     "types": [
       "movement"
     ],
     "keywords": [
-      "circus",
-      "trapeze",
-      "aerial",
-      "juggling",
-      "unicycle",
-      "tumbling",
-      "clowning",
-      "Mount Airy",
       "Germantown",
-      "day off"
+      "Lingelbach",
+      "Mount Airy",
+      "aerial",
+      "after school",
+      "aftercare",
+      "circus",
+      "clowning",
+      "day off",
+      "juggling",
+      "trapeze",
+      "tumbling",
+      "unicycle"
     ],
     "address": "6452 Greene St",
     "neighborhoods": [
       "Mount Airy"
     ],
-    "grades": "K-8",
-    "gradeNote": "Ages 5 (in kindergarten) to 15, grouped by age",
-    "hours": "Day-off camps run 9 am to 3 pm, with aftercare to 6 and extended care to 7.",
+    "grades": "K-6",
+    "gradeNote": "Kindergarten to 6th grade after school; day-off camps take ages 5 to 15",
+    "hours": "Until 6:00 pm, every weekday. Extended care 6 to 7 pm, $15 a day.",
     "daysOff": {
       "summary": "Kids Day Off Camp, 9 am to 3 pm, $99, on the School District of Philadelphia’s scheduled days off (its page points to the district calendar; which days have a session is on its sign-up page). Static trapeze, aerial sling and fabric, wire walking, juggling, unicycling, tumbling and clowning, with quiet reading and group games. Aftercare 3 to 6 is $35 and 6 to 7 is $15. Snacks provided; bring lunch.",
       "url": "https://phillycircus.com/kids-day-off-camp/",
@@ -7163,27 +9538,63 @@
       "hours": "9 am to 3 pm; aftercare to 6 or 7 pm",
       "cost": "$99 a day; aftercare $35 to 6 pm, $15 more to 7"
     },
-    "cost": "$99 a day. Aftercare 3 to 6 pm $35; 6 to 7 pm $15.",
+    "cost": "Billed monthly for four meetings a month: $207 for one day a week, $274 for two, $372 for three, $480 for four, $555 for five. Extended care 6 to 7 pm is $15 a day. Day-off camps are $99 a day.",
     "price": "paid",
     "phone": "215-849-1991",
     "email": "",
-    "website": "https://phillycircus.com/kids-day-off-camp/",
+    "website": "https://phillycircus.com/afterschool/",
     "register": {
       "how": "online",
-      "url": "https://portal.iclasspro.com/phillycircus/camps/12?sortBy=name",
-      "label": "See camp days",
-      "note": "Each day is booked on its iClassPro camp page."
+      "url": "https://app.iclasspro.com/portal/phillycircus/classes",
+      "note": "The 2026–27 year runs August 24 to June 9. Slots are first come, first served.",
+      "nextTerm": "Enrollment is open through the year while there are slots.",
+      "label": "Register"
     },
-    "note": "Parking behind the building off Cliveden Street. It also runs after-school and summer camps.",
+    "note": "Parking behind the building off Cliveden Street. Missed days aren’t made up or refunded, and when school closes unexpectedly, so does Circus After School.",
     "sources": [
+      {
+        "label": "Circus After School",
+        "url": "https://phillycircus.com/afterschool/"
+      },
       {
         "label": "Philadelphia School of Circus Arts: Kids Day Off Camp",
         "url": "https://phillycircus.com/kids-day-off-camp/"
       }
     ],
-    "lastVerified": "2026-10-16",
-    "scope": "dayoff",
-    "schools": {}
+    "lastVerified": "2026-11-05",
+    "scope": null,
+    "schools": {
+      "lingelbach": {
+        "relation": "pickup",
+        "distance": "a third of a mile, at Greene and Cliveden",
+        "note": "Circus After School’s page lists Lingelbach among the schools it picks up from; children from other schools can be dropped off at 3 pm.",
+        "sources": [
+          {
+            "label": "Circus After School",
+            "url": "https://phillycircus.com/afterschool/"
+          }
+        ],
+        "checked": "2026-11-05"
+      }
+    },
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Choose 1 to 5 days a week. Enrollment renews each month unless you change it, and a change needs 12 days’ notice before the 1st.",
+    "pickupBy": "6:00 pm",
+    "pickupLists": [
+      {
+        "where": "6452 Greene St",
+        "text": "C.W. Henry, Lingelbach Schools, Henry Houston, and the Waldorf School of Philadelphia in Mt. Airy",
+        "url": "https://phillycircus.com/afterschool/",
+        "read": "2026-11-05",
+        "how": "fetch"
+      }
+    ]
   },
   {
     "id": "schuylkill-center",
@@ -7965,6 +10376,168 @@
           "schools.*.address"
         ],
         "says": "Old Pine Community Center and The Neighborhub are the same building after a rebrand, at 401 Lombard St; Fall II starts November 2, 2026, registration is open, and families can join whenever there is space, with the fee pro-rated."
+      }
+    ]
+  },
+  {
+    "id": "philly-art-center-mt-airy",
+    "name": "Philly Art Center, Mt. Airy",
+    "what": "Studio art after school. Choose 1–5 days a week, by season.",
+    "types": [
+      "art"
+    ],
+    "keywords": [
+      "Germantown",
+      "Lingelbach",
+      "Mount Airy",
+      "aftercare",
+      "art",
+      "crafts",
+      "drawing",
+      "painting",
+      "studio"
+    ],
+    "address": "530 Carpenter Ln",
+    "neighborhoods": [
+      "Mount Airy"
+    ],
+    "grades": "PK-6",
+    "gradeNote": "Ages 4–12",
+    "hours": "Until 6:00 pm. Half-day camps on early-dismissal days.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Choose 1 to 5 days a week.",
+    "pickupBy": "6:00 pm",
+    "cost": "Not shown on the public page. Paid by season: 50% deposit, then two 25% installments. 5% sibling discount.",
+    "price": "paid",
+    "phone": "215-765-2787",
+    "email": "info@phillyartcenter.com",
+    "website": "https://phillyartcenter.com/afterschool/program-information/",
+    "register": {
+      "how": "online",
+      "url": "https://phillyartcenter.com/afterschool/program-information/",
+      "label": "Register",
+      "note": "The Register buttons on its page open the sign-up for each location. Fall runs Aug 31–Dec 23; Winter/Spring runs Jan 4–June 9."
+    },
+    "note": "Pick-up from school is free. If a school isn’t on the list, the studio says to call with interest.",
+    "sources": [
+      {
+        "label": "Program information",
+        "url": "https://phillyartcenter.com/afterschool/program-information/"
+      },
+      {
+        "label": "Mt. Airy school pick-up",
+        "url": "https://phillyartcenter.com/locations/mt-airy/school-pick-up/"
+      }
+    ],
+    "lastVerified": "2026-11-05",
+    "schools": {
+      "lingelbach": {
+        "relation": "pickup",
+        "distance": "about three-quarters of a mile northwest, at Carpenter Lane and Greene St",
+        "note": "Lingelbach is on the Mt. Airy studio’s pick-up list. Pick-up is free, and the studio says to call with interest if a school isn’t listed.",
+        "sources": [
+          {
+            "label": "Mt. Airy school pick-up",
+            "url": "https://phillyartcenter.com/locations/mt-airy/school-pick-up/"
+          }
+        ],
+        "checked": "2026-11-05"
+      }
+    },
+    "pickupLists": [
+      {
+        "where": "Mt. Airy Pickup Schools",
+        "text": "C.W. Henry, Houston, J.S. Jenks, Lingelbach, Germantown Friends, Greene Street Friends, Germantown Jewish Centre",
+        "url": "https://phillyartcenter.com/locations/mt-airy/school-pick-up/",
+        "read": "2026-11-05",
+        "how": "fetch"
+      }
+    ]
+  },
+  {
+    "id": "philly-art-center-fairmount",
+    "name": "Philly Art Center (Fairmount)",
+    "what": "Studio art after school. Choose 1–5 days a week, by season.",
+    "types": [
+      "art"
+    ],
+    "keywords": [
+      "Germantown",
+      "Lingelbach",
+      "Mount Airy",
+      "aftercare",
+      "art",
+      "crafts",
+      "drawing",
+      "painting",
+      "studio"
+    ],
+    "address": "2333 Fairmount Ave",
+    "neighborhoods": [
+      "Fairmount"
+    ],
+    "grades": "PK-6",
+    "gradeNote": "Ages 4–12",
+    "hours": "Until 6:00 pm. Half-day camps on early-dismissal days.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Choose 1 to 5 days a week.",
+    "pickupBy": "6:00 pm",
+    "cost": "Not shown on the public page. Paid by season: 50% deposit, then two 25% installments. 5% sibling discount.",
+    "price": "paid",
+    "phone": "215-765-2787",
+    "email": "info@phillyartcenter.com",
+    "website": "https://phillyartcenter.com/afterschool/program-information/locations/fairmount",
+    "register": {
+      "how": "online",
+      "url": "https://phillyartcenter.captyn.com/find?department=clu8qqzk2009293r866a7j7wg&filter=4&program=clv479d4y02clfsymtfne5rg3&program=clwtkcaoi00kmsudp98n0ecv5&day=Monday&day=Tuesday&day=Thursday&day=Friday&day=Wednesday&location=clu8gpdpx0aagxkl2fbdh6u7v&tag=clv494qhk032olgi2d9i70vw6&tag=clv494xs6032plgi2z23yr0a8",
+      "label": "Register",
+      "note": "The Register buttons on its page open the sign-up for each location. Fall runs Aug 31–Dec 23; Winter/Spring runs Jan 4–June 9."
+    },
+    "note": "Pick-up from school is free. If a school isn’t on the list, the studio says to call with interest.",
+    "sources": [
+      {
+        "label": "Philly Art Center after-school program information",
+        "url": "https://phillyartcenter.com/afterschool/program-information/"
+      }
+    ],
+    "lastVerified": "2026-11-07",
+    "schools": {
+      "bache-martin": {
+        "relation": "pickup",
+        "distance": "about a third of a mile south, at 24th and Fairmount",
+        "note": "Philly Art Center’s own page lists Bache-Martin among the Fairmount studio’s pickup schools; teachers walk or take SEPTA with the children, and pickup is free. Bache-Martin’s own after-school page names it too (K–6, 1 to 5 days, 3 to 6 pm).",
+        "sources": [
+          {
+            "label": "Philly Art Center after-school program information",
+            "url": "https://phillyartcenter.com/afterschool/program-information/"
+          },
+          {
+            "label": "Bache-Martin after-school programs",
+            "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+          }
+        ],
+        "checked": "2026-11-07"
+      }
+    },
+    "pickupLists": [
+      {
+        "where": "Fairmount, 2333 Fairmount Ave",
+        "text": "Bache-Martin, Greenfield, St. Francis Xavier, Independence Charter",
+        "url": "https://phillyartcenter.com/afterschool/program-information/",
+        "read": "2026-11-07",
+        "how": "fetch"
       }
     ]
   }

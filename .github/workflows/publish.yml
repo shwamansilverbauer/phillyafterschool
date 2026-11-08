@@ -29,6 +29,33 @@ jobs:
       - name: Build (stops here if the data has a problem)
         run: node build.mjs
 
+      # The tests (tests/README.md) run against their own copy, built for a fixed day and served by PHP on this
+      # machine, with stand-ins for the mail, sign-in and push services: nothing reaches the live site. A failure
+      # stops the publish, so a change that breaks one of the site's rules never reaches the live branch.
+      - name: Playwright for the browser tests (the browser is cached between runs)
+        id: pw
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.63.0
+          echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+      - name: Chromium (and what it needs on this machine)
+        run: npx playwright install --with-deps chromium
+      - name: Test (stops here if a test fails)
+        run: |
+          php --version | head -1
+          node tests/run.mjs
+      - name: Keep the screenshots of anything that failed
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-screenshots
+          path: tests/.scratch/shots/
+          retention-days: 7
+          if-no-files-found: ignore
+
       # Kept for the last step: what the live site's sitemap said before this publish.
       - name: Note what the live sitemap says now
         run: curl -fsS -m 20 -o before-sitemap.xml "$(node -p "require('./site.config.json').siteUrl")/sitemap.xml" || echo "The live sitemap could not be read. That only means no pages are reported as changed this time."

@@ -113,17 +113,18 @@ function queue_proposals() {
 // ----- 3. schools people asked for, counted (Josh adds schools; the run only hears the demand) -----
 function queue_schools($fromSuggestions) {
   global $ROOT, $SCHOOL_NAMES;
-  $n = array(); $last = array();
+  $n = array(); $last = array(); $who = array();
   $lines = @file($ROOT . '/phillyafterschool-school-requests.log');
   if (is_array($lines)) foreach ($lines as $line) {
     $p = explode("\t", rtrim($line, "\n"));
     if (count($p) < 3 || !recent($p[0])) continue;
     $name = one(isset($SCHOOL_NAMES[$p[1]]) ? $SCHOOL_NAMES[$p[1]] : $p[2], 120);
     $n[$name] = (isset($n[$name]) ? $n[$name] : 0) + 1; $last[$name] = max(isset($last[$name]) ? $last[$name] : '', substr($p[0], 0, 10));
+    if (isset($p[3]) && $p[3] !== '') $who[$name][] = one($p[3], 150);   // who asked, for this page only: never sent to the run
   }
   foreach ($fromSuggestions as $s) { $n[$s['school']] = (isset($n[$s['school']]) ? $n[$s['school']] : 0) + 1; $last[$s['school']] = max(isset($last[$s['school']]) ? $last[$s['school']] : '', substr($s['when'], 0, 10)); }
   $out = array();
-  foreach ($n as $name => $count) $out[] = array('school' => $name, 'n' => $count, 'last' => $last[$name]);
+  foreach ($n as $name => $count) $out[] = array('school' => $name, 'n' => $count, 'last' => $last[$name], 'who' => isset($who[$name]) ? array_values(array_unique($who[$name])) : array());
   usort($out, function ($a, $b) { return $b['n'] - $a['n'] ?: strcmp($a['school'], $b['school']); });
   return $out;
 }
@@ -174,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $batch = (new DateTime('now', new DateTimeZone('America/New_York')))->format('Y-m-d-Hi');
       $items = array();
       foreach ($pick as $x) $items[] = $x;
-      $payload = array('batch' => $batch, 'sent' => date('c'), 'rush' => $rush, 'site' => $SITE_URL, 'items' => $items, 'schoolsAsked' => $schools);
+      $payload = array('batch' => $batch, 'sent' => date('c'), 'rush' => $rush, 'site' => $SITE_URL, 'items' => $items, 'schoolsAsked' => array_map(function ($s) { unset($s['who']); return $s; }, $schools));   // counts only: no addresses leave this page
       $text = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "\n";
       $err = gh_branch('queue', 'main');
       $cur = $err === '' ? gh_file('data/queue.json', 'queue') : null;
