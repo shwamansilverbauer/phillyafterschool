@@ -371,6 +371,14 @@ part of the site meant to be handed to a child, so it is built the other way rou
 Passport at first: `/passport/` redirects here, `?next=passport` still works, and the server's endpoint and table
 keep that name.)
 
+- **"For kids", on the open site.** `kidsShowcase()` is a band in Kid's Corner's own look, said to the child: four
+  tiles (pins, a lightbulb to dress up, the map with secret spots, picking a favorite), Eddie, and "Grown-ups: make
+  a free account" (`register/?next=kids`), or "Open Kid's Corner" when signed in. It sits on the home page after
+  "What's your kid into?" and at the top of Kid's Corner for someone signed out, before "How it works" for the
+  grown-up. Its drawings are made in the build (`artBulb()`, `artPin()`); no real child's page is shown anywhere.
+- **On a laptop** the Pins / Map / Showdown tabs sit under the child's header and stick with it, instead of the
+  phone's bar at the bottom; Eddie's welcome is one centred, framed card.
+
 - **Kid mode.** From the picker ("Who's playing?") on, `html.kc-kid` hides the site's header, menu, hero and footer,
   and nothing on the page is a link or asks for typing. The grown-ups' corner opens from a press-and-hold button
   (`.kc-hold`, 1.1 seconds; a tap does nothing). With one child on the account the page opens on their page; the
@@ -1515,7 +1523,9 @@ These are the only parts of the site that store anything about a child on the se
 - **Creating an account and logging in.** Two addresses share one form. `/register/` is the sign-up page: the
   two kinds of account (parent here, program manager on the managers page) and the form sit in the first screen,
   beside the heading (`.acct-hero-form` in the hero), and what an account gives you follows below as rows of
-  pictures in two groups, "Plan the whole year" and "Never miss a thing" (`.acct-row`, one drawing each), with a
+  pictures in three groups, "Plan the whole year" (the calendar, the phone and the fridge, the Parent Portal, a
+  co-parent), "Never miss a thing" and "Something for your kids" (Kid's Corner and favorites first; `.acct-row`, one
+  drawing each), with a
   closing "Create a free account" band that scrolls back to the form. Under the heading sits a drawing of the school
   year on one ribbon (`artYearRibbon()`), hidden once someone is signed in. `/account/` is where you log in: while
   nobody is signed in the form moves up beside the heading (`seat()` in `groups.js`) with a "New here?" link to

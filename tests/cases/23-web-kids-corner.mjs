@@ -33,6 +33,12 @@ test('signed out, Kid’s Corner explains itself and offers the account; signed 
   includes(flat(await page.locator('#kc-out').innerText()), 'What counts is what you confirm');
   ok(await page.locator('#kc-out a[href*="next=kids"]').count() >= 2, 'create and log in both come back here');
   eq(counted(t).length, 0, 'quiet even when signed out');
+  includes(flat(await page.locator('#kc-out #for-kids').innerText()), 'A CORNER JUST FOR YOU', 'what a kid gets, said to the kid');
+  // The home page has it too, with the way to an account (and, signed in, the way in).
+  const home = await t.open('/');
+  ok(await home.locator('#for-kids').isVisible(), 'For kids on the home page');
+  eq(await home.locator('#for-kids .kids-tile').count(), 4);
+  ok(await home.locator('#for-kids a[href*="register/?next=kids"]').isVisible(), 'Grown-ups: make a free account');
   await t.close();
   const pat = ctx.api().as(someone('kcw'), 'Pat', 'Lee');
   const t2 = await b.context(ctx.site, { sid: pat.cookie });

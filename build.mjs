@@ -2158,6 +2158,7 @@ function homePage() {
   <p>${T(`Music, art, sports, plain old aftercare.`)}</p>
   <div class="chips-row">${typeChips(0)}</div>
 </section>
+${kidsShowcase(0)}
 ${ALERTS ? `<section class="section when-out" id="remind">
   <div class="remind">
     <div class="remind-say"><h2>${T(`Get reminders`)}</h2><p>${T(`A heads-up before days off and when sign-ups open.`)}</p></div>
@@ -3655,6 +3656,11 @@ const ART_CLAIM = {
   ${artChip(62, 122, 40, 'Art')}${artChip(110, 122, 90, 'Grades K to 5')}
   <rect x="62" y="162" width="236" height="30" rx="15" fill="#DDF3E4"/><circle cx="80" cy="177" r="9" fill="#1F7A3A"/><path d="M75.5 177.5l3 3 6-6" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><text x="96" y="181.5" font-size="12" font-weight="800" fill="#0F5132" ${ART_F}>Claimed by the people who run it</text>`),
 };
+// Kid's Corner in a drawing: a lightbulb with a face (Eddie's kind, not a real child's), a pin with a star, a "?" cloud
+const artStar = (R, r) => Array.from({ length: 10 }, (_, i) => { const a = -Math.PI / 2 + i * Math.PI / 5, d = i % 2 ? r : R; return `${(d * Math.cos(a)).toFixed(1)},${(d * Math.sin(a)).toFixed(1)}`; }).join(' ');
+const artBulb = (cx, cy, glass, s = 1, hat = '') => `<g transform="translate(${cx} ${cy}) scale(${s})"><ellipse cx="0" cy="-6" rx="54" ry="50" fill="${glass}" opacity=".22"/><path d="M0 -44C-26 -44 -40 -24 -40 -6C-40 10 -28 18 -22 30H22C28 18 40 10 40 -6C40 -24 26 -44 0 -44Z" fill="${glass}" stroke="#0B2140" stroke-width="3" stroke-linejoin="round"/><rect x="-18" y="30" width="36" height="8" rx="3" fill="#FFFFFF" stroke="#0B2140" stroke-width="2.5"/><rect x="-15" y="38" width="30" height="8" rx="3" fill="#FFFFFF" stroke="#0B2140" stroke-width="2.5"/><circle cx="-13" cy="-8" r="9" fill="#FFFFFF" stroke="#0B2140" stroke-width="2.5"/><circle cx="13" cy="-8" r="9" fill="#FFFFFF" stroke="#0B2140" stroke-width="2.5"/><circle cx="-11" cy="-7" r="4.5" fill="#0B2140"/><circle cx="15" cy="-7" r="4.5" fill="#0B2140"/><path d="M-11 10Q0 20 11 10" fill="none" stroke="#0B2140" stroke-width="3" stroke-linecap="round"/>${hat === 'crown' ? '<path d="M-18 -40L-20 -60L-9 -50L0 -64L9 -50L20 -60L18 -40Z" fill="#F3C613" stroke="#0B2140" stroke-width="2.5" stroke-linejoin="round"/><circle cx="0" cy="-49" r="3" fill="#CC3000"/>' : hat === 'shades' ? '<rect x="-25" y="-15" width="22" height="13" rx="4" fill="#0B2140"/><rect x="3" y="-15" width="22" height="13" rx="4" fill="#0B2140"/><path d="M-3 -10H3" stroke="#0B2140" stroke-width="3"/>' : ''}</g>`;
+const artPin = (cx, cy, r, ring, face) => `<g transform="translate(${cx} ${cy})"><circle r="${r}" fill="${ring}" stroke="#0B2140" stroke-width="3"/><circle r="${(r * 0.72).toFixed(1)}" fill="${face}" stroke="#0B2140" stroke-width="2"/><polygon points="${artStar(r * 0.42, r * 0.18)}" fill="#FFFFFF"/></g>`;
+const artCloudQ = (cx, cy) => `<g transform="translate(${cx} ${cy})"><path d="M-24 14C-34 14 -34 0 -22 -1C-22 -14 -6 -18 0 -10C5 -22 22 -20 22 -7C32 -7 33 14 22 14Z" fill="#FFFFFF" stroke="#0B2140" stroke-width="2.5"/><text x="0" y="10" text-anchor="middle" font-size="22" font-weight="800" fill="#1763B8" ${ART_F}>?</text></g>`;
 // a row of the "what you get" list: a drawing beside a heading and a sentence, numbered when a picture below matches
 const artRow = (art, head, text, n = 0) => `<div class="acct-row"><div class="acct-row-art">${art}</div><div class="acct-row-text">${n ? `<i class="demo-n" aria-hidden="true">${n}</i>` : ''}<h3>${head}</h3><p>${text}</p></div></div>`;
 
@@ -3733,10 +3739,45 @@ ${hero}
   ${artWeek(151, 60, 'Rae', [['M', '#1F7A3A', 50], ['T', '#0E7C86', 44], ['W', '#0E7C86', 56], ['T', '#C2410C', 38], ['F', '#6B3FA0', 30]], 98)}
   ${artWeek(256, 60, 'Zoe', [['M', '#B4237A', 40], ['T', '#B4237A', 36], ['W', '#1F7A3A', 52], ['T', '#6B3FA0', 30], ['F', '#C2410C', 44]], 98)}
   ${artChip(148, 220, 104, 'Invite only', true)}`);
+  // the Parent Portal: one screen with where each part has got to
+  const artPortal = artBox(`
+  <rect x="26" y="20" width="348" height="222" rx="16" class="art-frame"/>
+  <text x="48" y="52" font-size="15" font-weight="800" fill="#0B2140" ${ART_F}>Parent Portal</text>
+  ${[['Week', '#1F7A3A', 0.8], ['Days off', '#0E7C86', 0.5], ['Summer', '#C2410C', 0.3], ['To do', '#6B3FA0', 0.65]].map(([t, c, f], i) => { const x = 48 + (i % 2) * 158, y = 66 + Math.floor(i / 2) * 82; return `<rect x="${x}" y="${y}" width="146" height="70" rx="12" fill="#FFFFFF" stroke="#C9DAEE" stroke-width="1.5"/><circle cx="${x + 22}" cy="${y + 24}" r="12" fill="${c}"/><text x="${x + 42}" y="${y + 29}" font-size="12" font-weight="800" fill="#0B2140" ${ART_F}>${t}</text><rect x="${x + 14}" y="${y + 48}" width="118" height="8" rx="4" fill="#E3EEFA"/><rect x="${x + 14}" y="${y + 48}" width="${Math.round(118 * f)}" height="8" rx="4" fill="${c}"/>`; }).join('')}`);
+  // two grown-ups, one set of plans
+  const artCoparent = artBox(`
+  ${artWeek(140, 54, 'Sam’s week', ART_DAYS, 120)}
+  <circle cx="62" cy="104" r="16" fill="#F3C613"/><path d="M34 152a28 28 0 0 1 56 0z" fill="#F3C613"/>
+  <circle cx="338" cy="104" r="16" fill="#0F4D90"/><path d="M310 152a28 28 0 0 1 56 0z" fill="#0F4D90"/>
+  <path d="M94 128C112 128 118 124 134 118" fill="none" stroke="#0F4D90" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 7"/>
+  <path d="M306 128C288 128 282 124 266 118" fill="none" stroke="#0F4D90" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 7"/>
+  ${artChip(31, 166, 62, 'You', true)}${artChip(296, 166, 84, 'Co-parent')}`);
+  // Kid's Corner: their own bulb, pins from bronze to gold, a map with a secret spot
+  const artKids = artBox(`
+  <rect x="20" y="16" width="360" height="228" rx="24" fill="#0F4D90"/>
+  ${artPin(74, 74, 30, '#F3C613', '#1763B8')}${artPin(74, 152, 24, '#D6DEEA', '#3FA34D')}${artPin(74, 214, 18, '#E8A365', '#CC3000')}
+  ${artBulb(196, 136, '#F3C613', 1.15, 'crown')}
+  <rect x="268" y="50" width="94" height="132" rx="12" fill="#FFF4DA" stroke="#0B2140" stroke-width="3"/>
+  <path d="M290 50C300 90 280 120 300 182" fill="none" stroke="#4DABF7" stroke-width="7" stroke-linecap="round"/>
+  <path d="M318 132L338 120L352 140L332 156Z" fill="#F3C613" stroke="#0B2140" stroke-width="2"/>
+  ${artCloudQ(326, 86)}
+  ${artChip(268, 200, 94, 'Level 4', true)}`);
+  // picking a favorite: two bulbs, which was more fun?
+  const artFav = artBox(`
+  ${artChip(110, 18, 180, 'Which was more fun?', true)}
+  ${artBulb(108, 148, '#69DB7C', 1)}${artBulb(292, 148, '#74C0FC', 1, 'shades')}
+  <circle cx="200" cy="150" r="26" fill="#CC3000" stroke="#0B2140" stroke-width="3"/><text x="200" y="158" text-anchor="middle" font-size="20" font-weight="800" fill="#FFFFFF" ${ART_F}>VS</text>
+  ${artChip(52, 214, 112, 'Art club')}${artChip(236, 214, 112, 'Soccer')}`);
   const plan = GROUPS && daysOff ? [
     artRow(`<div class="acct-art">${art}</div>`, T(`See the whole year in one calendar.`), T(`“My kids’ calendar” puts the school week, every day off, the camp weeks and each sign-up date in date order. Only you can open it.`)),
     artRow(artFridge, T(`Put it on your phone.`), T(`One calendar file for the year that you can bring up to date, and a picture of any month for the fridge.`)),
+    artRow(artPortal, T(`Your Parent Portal.`), T(`See where you’re at: your kids’ week, days off, summer, calendar and a to-do list of camps to sign up for.`)),
+    artRow(artCoparent, T(`Plan it with your co-parent.`), T(`You both see and change the same plans, each on your own phone.`)),
   ] : [artRow(`<div class="acct-art">${art}</div>`, T(`Keep your week.`), T(`Build it on your phone tonight, find it on your laptop tomorrow.`))];
+  const kidsRows = KIDS ? [
+    artRow(artKids, T(`Kid’s Corner, a page of their own.`), T(`Every class and camp earns them pins, secret spots on a map of Philly, and new stuff for their very own lightbulb.`)),
+    artRow(artFav, T(`Their favorites come first.`), T(`They pick the class they had more fun at, and you see it first when you plan. Nothing they do there is counted or sent anywhere.`)),
+  ] : [];
   const miss = [
     ALERTS ? artRow(artRemind, T(`Follow and save.`), T(`Follow a program, a camp or your school and its sign-up dates come by email. Save favorites to find them again.`)) : '',
     artRow(artShare, T(`Share a week with one person.`), T(`A grandparent or a sitter signs in to see it, and you can take it back.`)),
@@ -3754,7 +3795,11 @@ ${hero}
     <div class="acct-group">
       <h2 class="acct-group-h">${T(`Never miss a thing`)}</h2>
       ${miss.join('\n      ')}
-    </div>
+    </div>${kidsRows.length ? `
+    <div class="acct-group">
+      <h2 class="acct-group-h">${T(`Something for your kids`)}</h2>
+      ${kidsRows.join('\n      ')}
+    </div>` : ''}
   </section>
   <section class="acct-close when-out">
     <h2>${T(`Create a free account`)}</h2>
@@ -3765,7 +3810,7 @@ ${hero}
   </section>
   <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, ages: AGES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })), hoods: accountHoods(), news: NEWS.slice(0, 5) }).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to keep your week, days-off and summer plans, and see the whole year in one private calendar.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero: heroGrid, body, noindex: true, quiet: !register, theme: 'acct-head', scripts: groupsScript(1) });
+  return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to keep your week, days-off and summer plans, see the whole year in one private calendar, plan with your co-parent, and give your kids a Kid’s Corner of their own.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero: heroGrid, body, noindex: true, quiet: !register, theme: 'acct-head', scripts: groupsScript(1) });
 }
 // "My profile": a snapshot of the account on one card (nothing is changed here; that is the account page). The page is a shell; groups.js fills it
 // (the same script as the account page, told which page it is on by data-view). Signed out, it shows the log-in form.
@@ -5553,6 +5598,35 @@ function kidsData() {
   return KIDS_DATA;
 }
 const kidsDataV = () => '?v=' + createHash('sha1').update(JSON.stringify(kidsData())).digest('hex').slice(0, 8);
+// "For kids": what a child gets once a grown-up makes an account, said to the child, on the home page and on Kid's
+// Corner itself for someone signed out. The pictures are drawn here (no real child's page is shown anywhere).
+function kidsShowcase(D, onKidsPage = false) {
+  if (!KIDS) return '';
+  const tile = (art, head, text) => `<li class="kids-tile"><svg viewBox="0 0 160 120" aria-hidden="true" focusable="false">${art}</svg><h3>${head}</h3><p>${text}</p></li>`;
+  const museum = `<g transform="translate(96 88)"><path d="M-16 -4L0 -14L16 -4Z" fill="#F1E3C4" stroke="#0B2140" stroke-width="2" stroke-linejoin="round"/>${[-11, -4, 3, 10].map(x => `<rect x="${x - 1}" y="-4" width="3.5" height="11" fill="#FFFFFF" stroke="#0B2140" stroke-width="1.2"/>`).join('')}<rect x="-18" y="7" width="36" height="4" fill="#E9DDC2" stroke="#0B2140" stroke-width="1.2"/></g>`;
+  const tiles = [
+    tile(`${artPin(40, 66, 26, '#E8A365', '#CC3000')}${artPin(120, 66, 26, '#F3C613', '#1763B8')}${artPin(80, 56, 32, '#D6DEEA', '#3FA34D')}`, T(`Earn pins`), T(`Every class gets you a pin. Keep going and it turns bronze, then silver, then gold!`)),
+    tile(artBulb(80, 70, '#F3C613', 0.9, 'crown'), T(`Be a lightbulb`), T(`Pick your bulb, then dress it up as you level up: shades, a cape, a crown, even a jetpack.`)),
+    tile(`<rect x="22" y="8" width="116" height="104" rx="14" fill="#FFF4DA" stroke="#0B2140" stroke-width="3"/><path d="M46 8C56 48 36 76 56 112" fill="none" stroke="#4DABF7" stroke-width="7" stroke-linecap="round"/>${artCloudQ(102, 40)}${museum}`, T(`Explore Philly`), T(`Your classes clear the clouds on a map of Philly and find secret spots.`)),
+    tile(`${artBulb(38, 68, '#69DB7C', 0.62)}${artBulb(122, 68, '#74C0FC', 0.62, 'shades')}<circle cx="80" cy="70" r="17" fill="#CC3000" stroke="#0B2140" stroke-width="3"/><text x="80" y="76" text-anchor="middle" font-size="14" font-weight="800" fill="#FFFFFF" ${ART_F}>VS</text>`, T(`Pick your favorite`), T(`Which class was more fun? You decide, and your grown-up sees it first.`)),
+  ];
+  return `<section class="section kids-band" id="for-kids" aria-labelledby="for-kids-h">
+  <div class="kids-head">
+    <img class="kids-eddie" src="${link('bulb.png', D)}${stamp('src/static/bulb.png')}" alt="" width="327" height="400" loading="lazy">
+    <div>
+      <p class="kicker">${T(`For kids`)}</p>
+      <h2 id="for-kids-h">${T(`A corner just for you!`)}</h2>
+      <p class="kids-say">${T(`Ask a grown-up to make a free account, and every class and camp you go to earns you cool stuff on a page of your own. Eddie Bulboa, the bulb in our logo, shows you around.`)}</p>
+    </div>
+  </div>
+  <ul class="kids-tiles">
+    ${tiles.join('\n    ')}
+  </ul>
+  <div class="kids-go"><span class="when-out"><a class="btn primary big" href="${link('register/', D)}?next=kids">${T(`Grown-ups: make a free account`)}</a>${onKidsPage ? '' : `<a class="btn big" href="${link(kidsPath, D)}">${T(`How Kid’s Corner works`)}</a>`}</span>${onKidsPage ? '' : `<span class="when-in"><a class="btn primary big" href="${link(kidsPath, D)}">${T(`Open Kid’s Corner`)}</a></span>`}</div>
+  <p class="kids-fine">${T(`For grown-ups: it’s free, you say which classes count, and nothing your child does there is counted or sent anywhere.`)}</p>
+</section>`;
+}
+
 function kidsPage() {
   const D = 1;
   const data = kidsData();
@@ -5560,7 +5634,9 @@ function kidsPage() {
     <p class="lede when-out">${T(`Every class and camp your child goes to earns them something on a page of their own: shiny pins that grow grander as they level up, a cartoon map of Philly with secret spots to find, a bulb of their own to dress up, and showdowns where they pick the class they had more fun at. Eddie Bulboa, the bulb in our logo, shows them around.`)}</p>
     <p class="lede when-in">${T(`Hand over the phone. Kid’s Corner is for the kid; the grown-ups’ corner is behind a press-and-hold.`)}</p>`;
   const body = `<div class="kc" id="kc" data-api="${link('groups/api.php', D)}">
-  <section class="section kc-out" id="kc-out">
+  <div class="kc-out" id="kc-out">
+  ${kidsShowcase(D, true)}
+  <section class="section">
     <h2>${T(`How it works`)}</h2>
     <ul>
       <li>${T(`A page for each child on your account, by first name. No child signs in and nothing is typed by a child: it’s the parent’s account, handed over for a look. Each child picks a lightbulb to be.`)}</li>
@@ -5570,6 +5646,7 @@ function kidsPage() {
     </ul>
     <div class="actions"><a class="btn primary big" href="${link('register/', D)}?next=kids">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=kids">${T(`Log in`)}</a></div>
   </section>
+  </div>
   <p class="hint when-in" id="kc-wait">${T(`Opening Kid’s Corner…`)}</p>
   <div id="kc-app" class="needs-js-block" hidden></div>
   <script type="application/json" id="kc-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
