@@ -43,12 +43,12 @@ test('health: the publishing key is reported as working, with the days it has le
 
 test('the note to the owner about a new account goes out on any hourly run, not only in the morning', async ({ api, mail }) => {
   const email = someone('late');
-  await api().signIn(email);   // the address proven, no name given yet
-  const r = await api().okay('POST', 'push_run', { told_age: -5 });   // test clock: now counts as an hour on
-  ok(r.told >= 1, 'notes sent: ' + JSON.stringify(r));
-  const start = Date.now();
-  let note = null;
-  while (!note && Date.now() - start < 4000) { note = mail.to('contact@phillyafterschool.org').find(m => /New Parent Account Signup/.test(m.Subject) && m.TextBody.includes(email)); if (!note) await new Promise(res => setTimeout(res, 50)); }
+  api().as(email, '', '');   // an account whose address was proven, no name given yet (seeded: no sign-in email spent)
+  // Every run sends those due, twenty at a time (the other tests' accounts are waiting too); run until none are left.
+  let sent = 0;
+  for (let i = 0; i < 20; i++) { const r = await api().okay('POST', 'push_run', { told_age: -5 }); ok(typeof r.told === 'number', JSON.stringify(r)); if (!r.told) break; sent += r.told; }
+  ok(sent >= 1, 'notes sent');
+  const note = mail.to('contact@phillyafterschool.org').find(m => /New Parent Account Signup/.test(m.Subject) && m.TextBody.includes(email));
   ok(note, 'the owner hears about it');
   ok(note.TextBody.includes('Name: not added yet'));
   eq((await api().okay('POST', 'push_run', { told_age: -5 })).told || 0, 0, 'once');
