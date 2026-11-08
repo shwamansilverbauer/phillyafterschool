@@ -803,7 +803,7 @@ button.btn{cursor:pointer;font-family:inherit}
 }
 /* a fuller menu on a narrower wide screen closes up (site.js adds these only when it would not fit) */
 @media (min-width:1100px){
-  html.nav-both .nav > a.nav-more{display:none}   /* a parent who is also a program manager: room for their own links */
+  html.nav-both .nav > .nav-more{display:none}   /* a parent who is also a program manager: room for their own links */
   html.nav-tight .nav{gap:6px 12px}
   html.nav-tight .nav a.nav-cta{padding:7px 13px;margin-left:0}
   html.nav-tight .brand .logo{height:50px}
@@ -2496,10 +2496,6 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 /* ----- the Passport: a child's own page. Kid mode hides the site around it; the grown-ups' corner is a press-and-hold away. ----- */
 /* ---------- Kid's Corner (src/kids-corner.js): a cartoon arcade for ages 5 to 10, in the site's own colours ---------- */
 :root{--kink:#0B2140;--kblue:#1763B8;--kgreen:#3FA34D;--kyellow:#F3C613;--kred:#CC3000}
-/* a one-line pointer to Kid's Corner (the Schedule Builder) */
-.kids-strip{display:flex;align-items:center;gap:12px;margin:0 0 28px;padding:12px 18px;border-radius:16px;background:#FFF6CC;border:2px solid #F3C613;color:#2A2100;font-weight:600;max-width:820px}
-.kids-strip .nav-kc-bulb{flex:none;width:26px;height:32px}
-.kids-strip a{font-weight:800;white-space:nowrap}
 /* "For kids" on Kid's Corner for someone signed out: Kid's Corner's own look, said to the child */
 .kids-band{position:relative;color:#fff;border:4px solid var(--kink);border-radius:30px;box-shadow:0 8px 0 var(--kink);padding:clamp(20px,4vw,40px);margin-block:28px;
   background:radial-gradient(rgba(255,255,255,.12) 1.5px,transparent 2px) 0 0/22px 22px,linear-gradient(160deg,#0A3566 0%,#1763B8 100%)}
