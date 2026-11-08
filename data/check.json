@@ -1,12 +1,12 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 190,
+    "pages": 192,
     "pagesNeedingABrowser": 16,
     "pagesNeedingAPerson": 7,
-    "links": 171,
-    "pickupLinks": 90,
-    "pickupOnAStoredList": 75,
+    "links": 176,
+    "pickupLinks": 93,
+    "pickupOnAStoredList": 78,
     "pickupFromAThirdPartyList": 0,
     "pickupOnItsOwnSource": 15,
     "pickupWithNothingBehindIt": 0,
@@ -1260,7 +1260,7 @@
       "basis": "list",
       "list": {
         "where": "6452 Greene St",
-        "read": "2026-11-05",
+        "read": "2026-11-08",
         "how": "fetch",
         "by": "provider"
       }
@@ -1273,7 +1273,7 @@
       "basis": "list",
       "list": {
         "where": "Mt. Airy Pickup Schools",
-        "read": "2026-11-05",
+        "read": "2026-11-08",
         "how": "fetch",
         "by": "provider"
       }
@@ -1544,7 +1544,58 @@
       "basis": "list",
       "list": {
         "where": "Mt. Airy, 6110 Wissahickon Ave",
-        "read": "2026-11-07",
+        "read": "2026-11-08",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "jordan-family-learning-center",
+      "school": "houston",
+      "relation": "nearby",
+      "checked": "2026-11-08"
+    },
+    {
+      "program": "mount-airy-playground",
+      "school": "houston",
+      "relation": "nearby",
+      "checked": "2026-11-08"
+    },
+    {
+      "program": "philadelphia-school-of-circus-arts",
+      "school": "houston",
+      "relation": "pickup",
+      "checked": "2026-11-08",
+      "basis": "list",
+      "list": {
+        "where": "6452 Greene St",
+        "read": "2026-11-08",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-art-center-mt-airy",
+      "school": "houston",
+      "relation": "pickup",
+      "checked": "2026-11-08",
+      "basis": "list",
+      "list": {
+        "where": "Mt. Airy Pickup Schools",
+        "read": "2026-11-08",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zhang-sah-mt-airy",
+      "school": "houston",
+      "relation": "pickup",
+      "checked": "2026-11-08",
+      "basis": "list",
+      "list": {
+        "where": "Mt. Airy, 6110 Wissahickon Ave",
+        "read": "2026-11-08",
         "how": "fetch",
         "by": "provider"
       }
@@ -1563,6 +1614,7 @@
         "francisville-rec",
         "clemente-playground",
         "rumph-rec",
+        "mount-airy-playground",
         "marian-anderson-rec",
         "capitolo-playground",
         "markward-playground",
@@ -1584,6 +1636,7 @@
         "disilvestro-playground",
         "clemente-playground",
         "rumph-rec",
+        "mount-airy-playground",
         "marian-anderson-rec",
         "capitolo-playground",
         "markward-playground",
@@ -1791,8 +1844,8 @@
         {
           "program": "zhang-sah-mt-airy",
           "where": "Mt. Airy, 6110 Wissahickon Ave",
-          "text": "JS Jenks, CW Henry, Lingelbach, Houston, SCH, Wissahickon Charter",
-          "read": "2026-11-07",
+          "text": "JS Jenks, CW Henry, Lingelbach, Houston, SCH, Wissahickon Charter, Cooke-Wissahickon, Houston",
+          "read": "2026-11-08",
           "how": "fetch",
           "by": "provider"
         }
@@ -2522,7 +2575,7 @@
           "program": "philly-art-center-mt-airy",
           "where": "Mt. Airy Pickup Schools",
           "text": "C.W. Henry, Houston, J.S. Jenks, Lingelbach, Germantown Friends, Greene Street Friends, Germantown Jewish Centre",
-          "read": "2026-11-05",
+          "read": "2026-11-08",
           "how": "fetch",
           "by": "provider"
         }
@@ -2555,7 +2608,7 @@
           "program": "philadelphia-school-of-circus-arts",
           "where": "6452 Greene St",
           "text": "C.W. Henry, Lingelbach Schools, Henry Houston, and the Waldorf School of Philadelphia in Mt. Airy",
-          "read": "2026-11-05",
+          "read": "2026-11-08",
           "how": "fetch",
           "by": "provider"
         }
@@ -2912,6 +2965,22 @@
       "why": "On 2026-10-07 the browser extension was not allowed on the booking page and a plain fetch was refused, so its dates, ages and hours were not read.",
       "programs": [
         "dandelion-after-school"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.jordanfamilylearningcenter.com/aftercare-signup",
+      "how": "fetch",
+      "programs": [
+        "jordan-family-learning-center"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.jordanfamilylearningcenter.com/before-and-aftercare",
+      "how": "fetch",
+      "programs": [
+        "jordan-family-learning-center"
       ],
       "lists": []
     },

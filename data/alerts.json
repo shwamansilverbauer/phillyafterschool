@@ -50,6 +50,10 @@
       "name": "Lingelbach"
     },
     {
+      "id": "houston",
+      "name": "Houston"
+    },
+    {
       "id": "childs",
       "name": "Childs"
     },
@@ -146,6 +150,13 @@
       ]
     },
     {
+      "id": "jordan-family-learning-center",
+      "name": "Jordan Family Learning Center",
+      "parts": [
+        "after"
+      ]
+    },
+    {
       "id": "shot-tower-rec",
       "name": "Shot Tower Recreation Center",
       "parts": [
@@ -190,6 +201,13 @@
     {
       "id": "rumph-rec",
       "name": "Rumph Recreation Center",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "mount-airy-playground",
+      "name": "Mount Airy Playground",
       "parts": [
         "after"
       ]
@@ -1123,6 +1141,23 @@
       "button": "See the page"
     },
     {
+      "id": "added-houston",
+      "kind": "added",
+      "date": "2026-11-08",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-10",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "henry-h-houston-school"
+      ],
+      "when": "New",
+      "title": "Houston now has a page",
+      "text": "You asked to be told. 5 programs are listed for Houston so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/houston/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
       "id": "camp-arden-drama-school-2026-11-11",
       "kind": "camp",
       "part": "off",
@@ -1525,6 +1560,30 @@
       "first": "Wednesday: no school, Veterans Day; Saturday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students",
       "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Coppin’s week"
+    },
+    {
+      "id": "week-houston-2026-11-09",
+      "kind": "week",
+      "date": "2026-11-13",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-11",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "houston"
+      ],
+      "when": "Week of November 9",
+      "title": "This week at Houston",
+      "text": "Wednesday: No school: Veterans Day.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Veterans Day"
+        }
+      ],
+      "first": "Wednesday: no school, Veterans Day",
+      "url": "https://phillyafterschool.org/houston/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Houston’s week"
     },
     {
       "id": "week-kirkbride-2026-11-09",
@@ -2214,6 +2273,30 @@
       "first": "Monday: no school, Report card conferences; Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students",
       "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Coppin’s week"
+    },
+    {
+      "id": "week-houston-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "houston"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Houston",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/houston/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Houston’s week"
     },
     {
       "id": "week-kirkbride-2026-11-16",
@@ -2973,6 +3056,38 @@
       "first": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students; Wednesday: no school, Staff professional development",
       "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Coppin’s week"
+    },
+    {
+      "id": "week-houston-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "houston"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Houston",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/houston/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Houston’s week"
     },
     {
       "id": "week-kirkbride-2026-11-23",

@@ -332,6 +332,27 @@
     "dismissal": "2:54 pm"
   },
   {
+    "id": "houston",
+    "name": "Henry H. Houston School",
+    "shortName": "Houston",
+    "aliases": [
+      "Henry H. Houston",
+      "Henry Houston",
+      "Houston Elementary"
+    ],
+    "address": "7300 Rural Ln, Philadelphia, PA 19119",
+    "neighborhood": "Mount Airy",
+    "grades": "K-8",
+    "phone": "215-400-3490",
+    "website": "https://houston.philasd.org/",
+    "lastReviewed": "2026-11-08",
+    "added": "2026-11-08",
+    "notes": [
+      "The school’s own site says the school day starts at 8:15 am. It doesn’t post a dismissal time or name an after-school program of its own, so ask the office.",
+      "Houston is the site’s first school in Mount Airy, added because families asked for it. If you know a program that serves it and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
     "id": "childs",
     "name": "George W. Childs School",
     "shortName": "Childs",
