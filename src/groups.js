@@ -626,7 +626,7 @@
         ['profile', 'Update your profile', 'Your school, and your kids’ names, grades and ages. The lists start from these.', 'account/', '#school'],
         ['todo', 'Manage your to-do list', 'The camp days you’ve planned and haven’t signed up for yet.', 'to-do/', '', hasYearPage],
         ['year', 'Build your year calendar', 'Every plan you make, together, month by month.', 'calendar/', '', hasYearPage],
-        ['kids', 'Have your kids play', 'Kid’s Corner: pins to earn, a map of Philly to light up, and bulb boxing.', 'kids-corner/', '', !!host.getAttribute('data-kids')],
+        ['kids', 'Have your kids play', 'Kid’s Corner: pins to earn, a map of Philly to light up, a bulb to dress up, and showdowns.', 'kids-corner/', '', !!host.getAttribute('data-kids')],
         ['summer', 'Plan your summer', 'Camps, week by week, for each child.', 'summer-schedule/', '#plan'],
         ['help', 'Help the site keep going', 'It’s free for families. If it saved you an evening, you can chip in.', 'support/', '']
       ];

@@ -1,7 +1,7 @@
 // Kid's Corner in a browser: the picker, a child picking their lightbulb, kid mode (no site around it, no link off it),
 // the grown-ups' corner behind a press-and-hold, a confirmed class turning into pins and a level (celebrated once),
-// the map of Philadelphia drawn from this site alone, the boxing match ranking favorites with Eddie Bulboa
-// refereeing, the mute button, the account page's Kid's Corner tab, and that nothing is counted or sent anywhere.
+// the level-up unlocking things for the child's bulb to wear, the map of Philadelphia drawn from this site alone, the
+// showdowns (a race, a glow-off, a dance-off) ranking favorites with Eddie Bulboa hosting, the mute button, the account page's Kid's Corner tab, and that nothing is counted or sent anywhere.
 import { test, ok, eq, includes, matches, someone } from '../lib/harness.mjs';
 import { pickupPair, weekendProgram } from '../lib/data.mjs';
 
@@ -101,13 +101,28 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   ok(shown.some(s => /NEW PIN/.test(s)), 'a new pin');
   ok(shown.some(s => /afternoon adventurer/i.test(s)), 'the after-school pin');   // headings are in capitals
   ok(shown.some(s => /LEVEL UP/.test(s)), 'a new level');
+  ok(shown.some(s => /New stuff to wear/i.test(s) && /Sunglasses/i.test(s) && /Bow tie/i.test(s)), 'level 2 unlocks sunglasses and a bow tie');
   await page.waitForFunction(() => !document.querySelector('.kc-over'));
+  // "Try it on!" opens the bulb's wardrobe: what level 2 unlocked, the rest locked with the level that opens it.
+  await page.waitForSelector('.kc-avatar .kc-wardrobe');
+  eq(await page.locator('.kc-wearbtn').count(), 16, 'everything there is to wear');
+  eq(await page.locator('.kc-wearbtn:not(.locked)').count(), 2, 'two unlocked at level 2');
+  const cap = page.locator('.kc-wearbtn', { hasText: 'Cap' });
+  includes(flat(await cap.locator('.kc-lock').innerText()).toLowerCase(), 'level 3');
+  await cap.click();
+  includes(flat(await page.locator('.kc-avatar .kc-host .kc-eddie-say').innerText()), 'Reach level 3', 'Eddie says when it unlocks');
+  eq(await cap.getAttribute('aria-pressed'), 'false', 'a locked thing can’t be worn');
+  const shades = page.locator('.kc-wearbtn', { hasText: 'Sunglasses' });
+  await shades.click();
+  eq(await shades.getAttribute('aria-pressed'), 'true');
+  await page.locator('.kc-avatar .kc-big.go').click();
+  await page.waitForSelector('.kc-pincard');
   ok(await page.locator('.kc-pincard.t1').count() >= 2, 'bronze pins on the page');
   includes(flat(await page.locator('.kc-lvl').innerText()), 'Level 2');
   // The server keeps what was celebrated, so it isn't celebrated again.
   const p1 = await pat.okay('GET', 'passport');
   eq(p1.kids[0].done.length, 1); eq(p1.kids[0].done[0].k, 'p:' + program.id); eq(p1.kids[0].done[0].s, school);
-  eq(p1.kids[0].seen['season:after'], 1); eq(p1.kids[0].lvl, 2);
+  eq(p1.kids[0].seen['season:after'], 1); eq(p1.kids[0].lvl, 2); eq(JSON.stringify(p1.kids[0].av.w), '{"face":"shades"}', 'the bulb wears its sunglasses');
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForSelector('.kc-kidbtn');
   await page.locator('.kc-kidbtn', { hasText: 'Sam' }).click();
@@ -154,7 +169,7 @@ test('the map of Philadelphia: drawn from this site, clear where the child has b
   await t.close();
 });
 
-test('the boxing match ranks favorites, which the profile then carries for the planners; the mute button is remembered', async (ctx) => {
+test('the showdown ranks favorites with no one hurt, which the profile then carries for the planners; the mute button is remembered', async (ctx) => {
   const b = await ctx.browser();
   const pat = ctx.api().as(someone('kcb'), 'Pat', 'Lee');
   const { program, school } = pickupPair();
@@ -163,7 +178,7 @@ test('the boxing match ranks favorites, which the profile then carries for the p
   const y = (await pat.okay('GET', 'passport')).year;
   await pat.okay('POST', 'passport_save', { kid: 'Zoe', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school }, { k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], av: { b: 'candle', c: 1 }, seen: { 'season:after': 1, 'season:weekend': 1 }, lvl: 9 });
   const t = await b.context(ctx.site, { sid: pat.cookie });
-  await t.page.emulateMedia({ reducedMotion: 'reduce' });   // the fight acted out quickly
+  await t.page.emulateMedia({ reducedMotion: 'reduce' });   // the contest acted out quickly
   const page = await t.open('/kids-corner/#battle');
   await page.waitForSelector('.kc-zoo');
   await page.evaluate(() => document.querySelectorAll('.kc-over').forEach(o => o.remove()));
@@ -175,9 +190,15 @@ test('the boxing match ranks favorites, which the profile then carries for the p
   await page.locator('.kc-big.fight').click();
   await page.waitForSelector('.kc-arena .kc-fighter');
   eq(await page.locator('.kc-arena .kc-fighter').count(), 2);
-  eq(await page.locator('.kc-ring .kc-ref img[alt="Eddie Bulboa"]').count(), 1, 'Eddie referees');
-  eq(await page.locator('.kc-ring .kc-fighter .kc-bulb').count(), 2, 'two bulbs in the ring');
+  eq(await page.locator('.kc-show .kc-ref img[alt="Eddie Bulboa"]').count(), 1, 'Eddie hosts');
+  eq(await page.locator('.kc-show .kc-fighter .kc-bulb').count(), 2, 'two bulbs on the stage');
+  matches(await page.locator('.kc-show').getAttribute('class'), /\bkc-ev-(race|glow|dance)\b/, 'a race, a glow-off or a dance-off');
+  matches(flat(await page.locator('.kc-fight .kc-ask').innerText()), /race up the steps|glow-off|dance-off/i);
   await page.locator('.kc-arena .kc-fighter', { hasText: wp.name }).click();
+  // The other comes second and cheers; no light goes out.
+  await page.waitForSelector('.kc-show .kc-fighter.second .kc-second', { timeout: 8000 });
+  includes(flat(await page.locator('.kc-show .kc-fighter.second').innerText()), program.name);
+  eq(await page.locator('.kc-show .kc-bulb.off').count(), 0, 'nobody knocked out');
   await page.waitForSelector('.kc-champ', { timeout: 15000 });
   includes(flat(await page.locator('.kc-champ').innerText()).toLowerCase(), wp.name.toLowerCase(), 'the winner is the champion');
   await page.waitForTimeout(600);   // the ranking saves

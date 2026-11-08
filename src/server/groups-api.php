@@ -784,13 +784,16 @@ function daysoff_out(int $uid): ?array {
 // the calendar year), "s": the school it was picked under, or "", "h": which of the listing's sites, as a
 // neighborhood name, when it has more than one }. "skip" holds the keys of suggestions the parent
 // waved away ("k|kind|y"); "fav" is the child's ranking of listings, best first. For Kid's Corner (the page the
-// child sees) it also keeps "av", the lightbulb the child picked ({ "b": a bulb from KC_BODIES, "c": a color, 0 to 9 }),
+// child sees) it also keeps "av", the lightbulb the child picked ({ "b": a bulb from KC_BODIES, "c": a color, 0 to 9,
+// "w": what it wears, { place: thing } from KC_WEAR }),
 // "seen", the pins whose level the child has already been shown ({ "type:music": 2, ... }), and "lvl", the last level
 // celebrated. Pins and levels themselves are never stored: the page works them out from "done". Nothing here is ever
 // sent anywhere but back to the household's own browsers.
 const PASSPORT_KINDS = array('after', 'weekend', 'off', 'summer');
 const PASSPORT_MAX = 300;
 const KC_BODIES = array('classic', 'globe', 'edison', 'candle', 'flood', 'tube', 'twisty', 'holiday', 'mushroom', 'heart');   // the lightbulbs a child picks from
+// What a child's bulb can wear, by where it goes (kids-corner.js has the same list, with the level each unlocks at).
+const KC_WEAR = array('hat' => array('cap', 'crown', 'tophat', 'halo'), 'face' => array('shades', 'stars'), 'neck' => array('bow', 'scarf', 'medal'), 'back' => array('cape', 'wings', 'jetpack'), 'glow' => array('sparkle', 'rainbow', 'galaxy'), 'base' => array('goldbase'));
 const KC_BODIES_BEFORE = array('blob', 'tall', 'box', 'pear', 'ghost', 'spiky', 'bean', 'squid', 'egg', 'fuzzy');   // the monsters they replaced, in the same order
 function school_year(): int {   // the year the current school year started
   global $CFG;
@@ -818,7 +821,12 @@ function passport_clean($raw): array {
   }
   $av = isset($raw['av']) && is_array($raw['av']) ? $raw['av'] : null;
   if ($av && isset($av['b']) && ($i = array_search($av['b'], KC_BODIES_BEFORE, true)) !== false) $av['b'] = KC_BODIES[$i];   // a monster picked before the bulbs: the bulb in its place
-  if ($av && isset($av['b'], $av['c']) && in_array($av['b'], KC_BODIES, true) && is_numeric($av['c']) && (int) $av['c'] >= 0 && (int) $av['c'] <= 9) $out['av'] = array('b' => $av['b'], 'c' => (int) $av['c']);
+  if ($av && isset($av['b'], $av['c']) && in_array($av['b'], KC_BODIES, true) && is_numeric($av['c']) && (int) $av['c'] >= 0 && (int) $av['c'] <= 9) {
+    $out['av'] = array('b' => $av['b'], 'c' => (int) $av['c']);
+    $w = array();   // what the bulb wears: one known thing per place
+    if (isset($av['w']) && is_array($av['w'])) foreach (KC_WEAR as $slot => $items) if (isset($av['w'][$slot]) && is_string($av['w'][$slot]) && in_array($av['w'][$slot], $items, true)) $w[$slot] = $av['w'][$slot];
+    if ($w) $out['av']['w'] = $w;
+  }
   if (isset($raw['seen']) && is_array($raw['seen'])) {
     $sn = array();
     foreach (array_slice($raw['seen'], 0, 40, true) as $id => $t) if (is_string($id) && preg_match('~^((type|season):[a-z-]{1,20}|explore)$~', $id) && is_numeric($t) && (int) $t >= 1 && (int) $t <= 3) $sn[$id] = (int) $t;

@@ -2555,7 +2555,7 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-pins{display:grid;grid-template-columns:repeat(auto-fill,minmax(142px,1fr));gap:14px}
 .kc-pincard{font:inherit;color:var(--kink);background:#fff;border:3px solid var(--kink);border-radius:24px;padding:12px 8px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;box-shadow:0 5px 0 var(--kink);text-align:center;transition:transform .08s,box-shadow .08s}
 .kc-pincard.t0{background:#EEF0F7}
-.kc-pincard .kc-pin{width:100px;height:auto;overflow:visible}
+.kc-pincard .kc-pin{width:132px;height:auto;overflow:visible;margin:-8px 0 -10px}
 .kc-pincard.t0 .kc-pin{opacity:.85}
 .kc-pincard b{font-weight:800;font-size:1rem;line-height:1.15}
 .kc-pin .kc-shine{animation:kc-shine 3.6s ease-in-out infinite}
@@ -2566,14 +2566,14 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-tier.bronze{background:#E8A365}.kc-tier.silver{background:#DDE3EC}.kc-tier.gold{background:var(--kyellow)}
 .kc-tier.big{font-size:1.5rem;display:inline-block;margin:4px 0}
 .kc-pins.kc-mini{width:100%;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;margin:10px 0 16px}
-.kc-pins.kc-mini .kc-pincard{box-shadow:none;border-width:2px;padding:8px 4px}.kc-pins.kc-mini .kc-pin{width:70px}.kc-pins.kc-mini b{font-size:.82rem}
+.kc-pins.kc-mini .kc-pincard{box-shadow:none;border-width:2px;padding:8px 4px}.kc-pins.kc-mini .kc-pin{width:90px;margin:-4px 0}.kc-pins.kc-mini b{font-size:.82rem}
 /* overlays: a pin up close, the present, new pins, level up */
 .kc-over{position:fixed;inset:0;z-index:1000;background:rgba(10,53,102,.82);display:flex;align-items:center;justify-content:center;padding:16px;animation:kc-fade .18s ease-out}
 .kc-over.out{opacity:0;transition:opacity .18s}
 .kc-over-card{box-sizing:border-box;width:100%;position:relative;overflow:hidden;background:#fff;border:4px solid var(--kink);border-radius:30px;box-shadow:0 10px 0 var(--kink);padding:24px 22px;max-width:min(440px,94vw);max-height:92vh;overflow-y:auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
 .kc-over-card>*{position:relative;z-index:1}
 .kc-over-card .kc-h{font-size:clamp(1.7rem,7vw,2.4rem)}
-.kc-pinbig .kc-pin,.kc-reveal>.kc-pin{width:170px;height:auto;overflow:visible}
+.kc-pinbig .kc-pin,.kc-reveal>.kc-pin{width:220px;height:auto;overflow:visible}
 .kc-rays{position:absolute!important;z-index:0!important;inset:-60%;-webkit-mask-image:radial-gradient(circle,#000 22%,transparent 62%);mask-image:radial-gradient(circle,#000 22%,transparent 62%);background:repeating-conic-gradient(from 0deg,rgba(243,198,19,.4) 0 9deg,transparent 9deg 18deg);animation:kc-spin 14s linear infinite}
 .kc-burst{font-family:var(--title);font-size:clamp(2rem,9vw,2.8rem);letter-spacing:.03em;margin:0;color:var(--kyellow);text-shadow:0 4px 0 var(--kink),2px 2px 0 var(--kink),-2px -2px 0 var(--kink),2px -2px 0 var(--kink),-2px 2px 0 var(--kink)}
 .kc-levelup .kc-bulb{width:140px}
@@ -2626,8 +2626,6 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-vs{align-self:center;font-family:var(--title);font-size:2.2rem;color:#fff;background:var(--kred);border:4px solid var(--kink);border-radius:50%;width:76px;height:76px;display:flex;align-items:center;justify-content:center;padding-top:6px;box-sizing:border-box;transform:rotate(-8deg);box-shadow:0 5px 0 var(--kink);text-shadow:0 3px 0 var(--kink)}
 .kc-fx{position:absolute;inset:0;pointer-events:none;overflow:visible}
 .kc-shot{position:absolute;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;overflow:visible}
-.kc-pow{position:absolute;font-family:var(--title);font-size:1.7rem;color:var(--kyellow);background:var(--kred);padding:26px 22px 20px;clip-path:polygon(50% 0,61% 22%,85% 8%,78% 34%,100% 40%,80% 56%,96% 80%,70% 74%,62% 100%,48% 80%,30% 98%,28% 72%,2% 80%,18% 56%,0 36%,24% 32%,16% 6%,40% 20%);text-shadow:0 2px 0 var(--kink),1px 1px 0 var(--kink),-1px -1px 0 var(--kink);white-space:nowrap}
-.kc-dizzy{position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:1.4rem;color:var(--kyellow);text-shadow:0 2px 0 var(--kink);letter-spacing:.2em;animation:kc-wiggle 1s linear infinite}
 .kc-wins{position:absolute;top:-14px;left:50%;transform:translateX(-50%) rotate(-8deg);font-family:var(--title);font-size:1.5rem;color:#fff;background:var(--kgreen);border:3px solid var(--kink);border-radius:14px;padding:6px 14px 2px;text-shadow:0 2px 0 var(--kink);box-shadow:0 4px 0 var(--kink);white-space:nowrap}
 .kc-cheer{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin-top:14px}
 .kc-cheer .kc-bulb{width:84px}
@@ -2649,7 +2647,6 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 @keyframes kc-glow{0%,100%{opacity:.75;transform:scale(.94)}50%{opacity:1;transform:scale(1.04)}}
 @keyframes kc-beam{from{opacity:1;transform:scale(1)}to{opacity:1;transform:scale(1.35)}}
 .kc-unpicked{opacity:.95}
-.kc-bulb.kc-unpicked .kc-xeyes{display:none}
 /* Eddie Bulboa, the logo's bulb, showing the way: he faces left, so his words sit to his left */
 .kc-eddie{display:flex;flex-direction:row-reverse;align-items:center;justify-content:flex-end;gap:10px;margin:10px 0}
 .kc-eddie-img{width:62px;height:auto;flex:none;filter:drop-shadow(0 3px 0 rgba(11,33,64,.35));animation:kc-eddie 3.2s ease-in-out infinite;transform-origin:50% 90%}
@@ -2657,18 +2654,48 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-eddie-say{position:relative;margin:0;background:#fff;color:var(--kink);border:3px solid var(--kink);border-radius:18px;padding:8px 14px;font-weight:800;font-size:1.02rem;line-height:1.3;box-shadow:0 4px 0 var(--kink);max-width:34ch}
 .kc-eddie-say::after{content:"";position:absolute;right:-11px;top:50%;margin-top:-8px;border:8px solid transparent;border-left:10px solid var(--kink)}
 .kc-host{justify-content:flex-end}
-.kc-ref{position:absolute;top:8px;left:0;right:0;z-index:3;justify-content:center;margin:0;pointer-events:none}
+.kc-ref{position:absolute;top:8px;left:0;right:0;z-index:5;justify-content:center;margin:0;pointer-events:none}
 .kc-ref .kc-eddie-img{width:56px}
-.kc-ref .kc-eddie-say{font-family:var(--title);font-weight:400;font-size:1.25rem;letter-spacing:.02em;padding:7px 14px 3px;white-space:nowrap}
+.kc-ref .kc-eddie-say{font-family:var(--title);font-weight:400;font-size:1.2rem;line-height:1.15;letter-spacing:.02em;padding:7px 14px 3px;max-width:min(30ch,calc(100% - 80px));text-align:center}
 .kc-champ .kc-eddie{justify-content:center}
-/* the boxing ring: ropes, posts, and the bulbs in front of them */
-.kc-ropes{position:absolute;left:8px;right:8px;top:118px;height:96px;z-index:0;pointer-events:none}
-.kc-ropes i{position:absolute;left:0;right:0;height:7px;border:2px solid var(--kink);border-radius:6px}
-.kc-ropes i:nth-child(1){top:0;background:#CC3000}.kc-ropes i:nth-child(2){top:34px;background:#fff}.kc-ropes i:nth-child(3){top:68px;background:#2176D2}
-.kc-ropes::before,.kc-ropes::after{content:"";position:absolute;top:-10px;width:12px;height:96px;background:var(--kyellow);border:3px solid var(--kink);border-radius:5px}
-.kc-ropes::before{left:-4px}.kc-ropes::after{right:-4px}
-.kc-ring .kc-fighter,.kc-ring .kc-vs{z-index:2}
-.kc-ring .kc-fx{z-index:4}
+/* the showdown: three stages, the bulbs in front of them */
+.kc-show .kc-fighter,.kc-show .kc-vs{z-index:2}
+.kc-show .kc-fx{z-index:4}
+.kc-ev-race{background:linear-gradient(180deg,#96C9FF 0%,#C3E1FF 34%,#E6F2FF 100%)}
+.kc-steps{position:absolute;left:4%;right:4%;top:118px;bottom:0;z-index:0;background:repeating-linear-gradient(180deg,#F1E3C4 0 13px,#C9B88F 13px 16px);clip-path:polygon(32% 0,68% 0,100% 100%,0 100%)}
+.kc-museum{position:absolute;top:66px;left:50%;width:44%;max-width:200px;transform:translateX(-50%);z-index:1}
+.kc-ev-glow{background:radial-gradient(ellipse at 50% 0%,#1763B8 0,#0A3566 58%,#061F3D 100%)}
+.kc-ev-glow .kc-fighter b{background:#fff}
+.kc-spot{position:absolute;top:0;bottom:0;width:58%;z-index:0;opacity:.18;background:linear-gradient(180deg,rgba(255,243,176,.9),rgba(255,243,176,0));transition:opacity .4s}
+.kc-spot.l{left:-4%;clip-path:polygon(56% 0,64% 0,100% 100%,0 100%)}.kc-spot.r{right:-4%;clip-path:polygon(36% 0,44% 0,100% 100%,0 100%)}
+.kc-ev-glow.spot-l .kc-spot.l,.kc-ev-glow.spot-r .kc-spot.r,.kc-ev-dance.spot-l .kc-spot.l,.kc-ev-dance.spot-r .kc-spot.r{opacity:.75}
+.kc-meter{display:block;width:80%;height:14px;border:2.5px solid var(--kink);border-radius:999px;background:#fff;overflow:hidden}
+.kc-meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#F3C613,#FFF3B0)}
+.kc-ev-dance{background:linear-gradient(180deg,#0A3566 0%,#0F4D90 55%)}
+.kc-floor{position:absolute;left:-10%;right:-10%;bottom:0;height:46%;z-index:0;background:repeating-conic-gradient(#F3C613 0 25%,#2176D2 0 50%) 0 0/44px 44px;transform:perspective(260px) rotateX(48deg);transform-origin:50% 100%;opacity:.85;animation:kc-floor 1.2s steps(2) infinite}
+@keyframes kc-floor{to{filter:hue-rotate(90deg)}}
+.kc-disco{position:absolute;top:8px;left:12px;width:44px;z-index:1}
+.kc-disco-face{animation:kc-spin 6s linear infinite;transform-origin:0 0}
+.kc-second{position:absolute;top:-14px;left:50%;transform:translateX(-50%) rotate(6deg);font-family:var(--title);font-size:1.05rem;color:var(--kink);background:#C3E1FF;border:3px solid var(--kink);border-radius:14px;padding:5px 12px 2px;box-shadow:0 3px 0 var(--kink);white-space:nowrap;z-index:3}
+.kc-fighter.second b{opacity:.8}
+/* the wardrobe: what a bulb can wear, locked until its level */
+.kc-wardrobe{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.kc-wearbtn{position:relative;font:inherit;color:var(--kink);background:#fff;border:3px solid var(--kink);border-radius:18px;padding:8px 6px 8px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;box-shadow:0 4px 0 var(--kink)}
+.kc-wearbtn .kc-bulb{width:70px}
+.kc-wearbtn b{font-weight:800;font-size:.86rem;line-height:1.15}
+.kc-wearbtn.on{background:#C3E1FF;transform:translateY(-3px);box-shadow:0 7px 0 var(--kink)}
+.kc-wearbtn.locked{background:#E4ECF6;box-shadow:0 4px 0 #8E9AB0;border-color:#8E9AB0;color:#4D607A}
+.kc-lock{position:absolute;top:6px;right:6px;font-family:var(--title);font-size:.8rem;background:var(--kink);color:#fff;border-radius:999px;padding:3px 8px 1px}
+.kc-newwear{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.kc-newwear{gap:6px;margin:4px 0 6px}.kc-newitem{display:flex;flex-direction:column;align-items:center;width:68px}.kc-newitem .kc-bulb{width:60px}.kc-newitem b{font-size:.8rem;font-weight:800;line-height:1.1}
+.kc-levelup.kc-hasnew .kc-bulb.big{width:96px}.kc-levelup.kc-hasnew .kc-levelnum{font-size:3.2rem}.kc-levelup.kc-hasnew .kc-h{margin:2px 0}.kc-levelup.kc-hasnew .kc-say{margin:6px 0 0}
+.kc-avatar .kc-sechead{margin:16px 0 8px}
+/* grander pins and dressed-up bulbs: a turning sunburst, sparkles that twinkle, a jetpack's flame */
+.kc-pinrays{transform-box:view-box;transform-origin:50px 50px;animation:kc-spin 18s linear infinite}
+.kc-twinkle{transform-box:fill-box;transform-origin:center;animation:kc-twinkle 1.8s ease-in-out infinite}
+@keyframes kc-twinkle{0%,100%{opacity:.2;scale:.6}50%{opacity:1;scale:1.15}}
+.kc-flame{transform-box:fill-box;transform-origin:50% 0;animation:kc-flame .25s ease-in-out infinite alternate}
+@keyframes kc-flame{from{scale:1 .8}to{scale:1 1.15}}
 /* the account page's Kid's Corner tab (looks like the rest of the site) */
 .kc-sum{border:1px solid var(--line);border-radius:16px;padding:16px;margin:14px 0;background:var(--surface);display:grid;gap:12px}
 .kc-sum-head{display:flex;align-items:center;gap:14px}
@@ -2682,7 +2709,7 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-sum-facts{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:8px}
 .kc-sum-facts li{background:var(--sky-bg);color:var(--sky-ink);border-radius:999px;padding:4px 12px;font-size:.92rem;display:flex;gap:5px;align-items:baseline}
 .kc-sum-pins{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.kc-sum-pins .kc-pin{width:40px;height:auto}
+.kc-sum-pins .kc-pin{width:52px;height:auto}
 .kc-sum-fav{margin:0;font-weight:700}
 .kc-sum-wait{background:var(--warn);border-radius:12px;padding:12px 14px}
 .kc-sum-wait h4{margin:0 0 4px;font-family:var(--display);font-size:1rem}
@@ -2707,7 +2734,7 @@ html.kc-kid .kc-hold{background:rgba(255,255,255,.85);border-color:rgba(11,33,64
 .kc-hits{top:100%}
 .kc-picked{font-weight:700;margin:6px 0 0}
 @media (max-width:420px){.kc-me{width:56px;height:56px}.kc-top .kc-back,.kc-top .kc-mute{width:44px;height:44px}.kc-top{gap:8px;padding:8px}.kc-vs{width:54px;height:54px;font-size:1.6rem}.kc-arena{padding:92px 6px 16px}.kc-fighter b{font-size:.85rem;padding:5px 7px}.kc-ref .kc-eddie-say{font-size:1.05rem}.kc-eddie-img{width:52px}}
-@media (prefers-reduced-motion:reduce){.kc-glow,.kc-eddie-img,.kc-bulb.beam .kc-glow,.kc-bulb.bob,.kc-eyes,.kc-prop,.kc-pin .kc-shine,.kc-waves,.kc-rays,.kc-giftart,.kc-xp i,.kc-dizzy{animation:none}}
+@media (prefers-reduced-motion:reduce){.kc-pinrays,.kc-twinkle,.kc-flame,.kc-floor,.kc-disco-face,.kc-glow,.kc-eddie-img,.kc-bulb.beam .kc-glow,.kc-bulb.bob,.kc-eyes,.kc-prop,.kc-pin .kc-shine,.kc-waves,.kc-rays,.kc-giftart,.kc-xp i,.kc-meter i{animation:none}}
 @media print{html.kc-kid body{background:#fff}html.kc-kid body::before,html.kc-kid .kc-tabs,html.kc-kid .kc-grown,html.kc-kid .kc-mute,html.kc-kid .kc-back{display:none}html.kc-kid .kc-top{position:static}.kc-h2,.kc-say{color:var(--kink);text-shadow:none}.kc-pincard,.kc-top{box-shadow:none;break-inside:avoid}}
 
 /* a child's favorites from the Passport, offered first in the planners */

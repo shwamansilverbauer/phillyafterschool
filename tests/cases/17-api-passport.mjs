@@ -107,9 +107,18 @@ test('Kid’s Corner keeps each child’s lightbulb, the pins already shown and 
   await pat.okay('POST', 'passport_save', { kid: 'Sam', done, av: { b: 'mushroom', c: 9 }, seen: { 'type:music': 1 }, lvl: 3 });
   r = await pat.okay('POST', 'passport_save', { kid: 'Sam', done, skip: [], fav: [] });
   deepEq(r.kid.av, { b: 'mushroom', c: 9 }); deepEq(r.kid.seen, { 'type:music': 1 }); eq(r.kid.lvl, 3);
+  // What the bulb wears: one thing per place, only things the page has.
+  r = await pat.okay('POST', 'passport_save', { kid: 'Sam', av: { b: 'mushroom', c: 9, w: { hat: 'crown', face: 'lasers', back: 'wings', neck: 5, tail: 'bow' } } });
+  deepEq(r.kid.av, { b: 'mushroom', c: 9, w: { hat: 'crown', back: 'wings' } });
+  r = await pat.okay('POST', 'passport_save', { kid: 'Sam', done, skip: [], fav: [] });
+  deepEq(r.kid.av.w, { hat: 'crown', back: 'wings' }, 'kept when left out');
+  r = await pat.okay('POST', 'passport_save', { kid: 'Sam', av: { b: 'mushroom', c: 9, w: {} } });
+  deepEq(r.kid.av, { b: 'mushroom', c: 9 }, 'taking it all off');
+  r = await pat.okay('POST', 'passport_save', { kid: 'Sam', av: { b: 'mushroom', c: 9, w: { hat: 'crown' } } });
   const p = await pat.okay('GET', 'passport');
   deepEq(p.kids.map(k => [k.name, k.av && k.av.b, k.lvl]), [['Sam', 'mushroom', 3], ['Rae', 'holiday', 0]]);
+  deepEq(p.kids[0].av.w, { hat: 'crown' });
   // Sealed like the rest: the bulb isn't readable in the database.
   const rows = ctx.site.sql(`SELECT json FROM passports WHERE user_id = ${pat.id}`);
-  ok(rows.every(x => !/mushroom|holiday|type:music/.test(x.json)), 'stored sealed');
+  ok(rows.every(x => !/mushroom|holiday|type:music|crown/.test(x.json)), 'stored sealed');
 });

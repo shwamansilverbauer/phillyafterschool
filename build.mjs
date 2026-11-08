@@ -2401,7 +2401,7 @@ function privacyPage() {
     <li>${T(`For a summer schedule in your profile, we store each child’s first name as you typed it and the camps picked for each week, so the summer is there on your other devices. The calendar’s title and photos are not stored. A summer in your profile can’t be shared with anyone except a co-parent you’ve linked (below), and it is deleted when you take it out of your profile or delete your account. The summer schedule section is hidden in session recordings, and analytics is told only that a summer was kept, never what is in it.`)}</li>
     <li>${T(`For a days-off plan in your profile, we store each child’s first name as you typed it, the place picked for each day school is closed, and which of those days you ticked as signed up. The calendar’s title and photos are not stored. The plan can’t be shared with anyone except a co-parent you’ve linked (below), and it is deleted when you take it out of your profile or delete your account. The planner is hidden in session recordings, and analytics is never told what is in a plan.`)}</li>
     <li>${T(`“My kids’ calendar” is drawn in your browser, for you alone, from the plans on your device and the ones in your profile. Opening it stores nothing new and sends nothing about your plans. It has no link of its own, so nobody else can open it. A picture or calendar file you save is a copy on your device that we never receive. So it can tell you when a date changes, the page remembers what your last file held, on your device only. Google Analytics and Microsoft Clarity are not loaded on it.`)}</li>
-    <li>${T(`Kid’s Corner is a page for each child, drawn from what you confirm they have been to. We store, encrypted like the plans, the child’s first name as you typed it, the listings you confirmed with the kind and the year, the suggestions you waved away, the favorites the child ranked, the lightbulb and color the child picked, and which pins and level the page has already celebrated. Nothing else: no notes, no photos, nothing typed by a child. Pins, levels and the map are worked out in your browser, and the map is drawn there too, from this site, with no outside map service. The page loads no analytics or recordings, sends nothing to the email list, and has no link to share; the picture you can save shows the pins and the level, with no name and no map.`)}</li>
+    <li>${T(`Kid’s Corner is a page for each child, drawn from what you confirm they have been to. We store, encrypted like the plans, the child’s first name as you typed it, the listings you confirmed with the kind and the year, the suggestions you waved away, the favorites the child ranked, the lightbulb, color and dress-up items the child picked, and which pins and level the page has already celebrated. Nothing else: no notes, no photos, nothing typed by a child. Pins, levels and the map are worked out in your browser, and the map is drawn there too, from this site, with no outside map service. The page loads no analytics or recordings, sends nothing to the email list, and has no link to share; the picture you can save shows the pins and the level, with no name and no map.`)}</li>
     <li>${T(`Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.`)}</li>
     <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
     <li>${T(`The email list also notes whether an account belongs to a parent or to someone who manages a program, so each gets only the news meant for them. For a manager it notes the name of the listing they hold.`)}</li>
@@ -5422,8 +5422,9 @@ const YEAR_PAGE = !!(GROUPS && daysOff);
 // ---------- Kid's Corner: a page of each child's own, inside a parent's account ----------
 // For the child: shiny pins that level up (bronze, silver, gold) for the kinds of program they have been to, the
 // seasons and the neighborhoods; a level that climbs; a cartoon map of Philadelphia whose clouds clear over the
-// neighborhoods they have been to; and a boxing match where each program's lightbulb takes on another and the child picks the
-// winner, which ranks their favorites. Everything on it comes from what a parent has confirmed (the "passport"
+// neighborhoods they have been to; a bulb of their own that dresses up as they level up; and showdowns (a race up the Art
+// Museum steps, a glow-off, a dance-off) where each program's lightbulb takes on another and the child picks the winner,
+// which ranks their favorites. Everything on it comes from what a parent has confirmed (the "passport"
 // endpoint in groups-api.php, Kid's Corner's first name, kept encrypted with the rest of a household's plans). The page
 // is quiet (no analytics, no recordings, nothing to Klaviyo), out of search, and in kid mode no link leaves the site.
 // The lightbulbs, pins, map and sounds are all made in src/kids-corner.js; the map's shapes are data/philly-map.json
@@ -5513,7 +5514,7 @@ function kidsPage() {
   const D = 1;
   const data = kidsData();
   const hero = `    <h1><span class="when-out">${T(`Kid’s Corner`)}</span><span class="when-in">${T(`Kid’s Corner`)}</span></h1>
-    <p class="lede when-out">${T(`Every class and camp your child goes to earns them something on a page of their own: shiny pins that level up, a cartoon map of Philly that clears as they explore it, and a lightbulb for every program, boxing for the title of favorite. Eddie Bulboa, the bulb in our logo, shows them around.`)}</p>
+    <p class="lede when-out">${T(`Every class and camp your child goes to earns them something on a page of their own: shiny pins that grow grander as they level up, a cartoon map of Philly that clears as they explore it, a bulb of their own to dress up, and showdowns between their programs’ lightbulbs to crown a favorite. Eddie Bulboa, the bulb in our logo, shows them around.`)}</p>
     <p class="lede when-in">${T(`Hand over the phone. Kid’s Corner is for the kid; the grown-ups’ corner is behind a press-and-hold.`)}</p>`;
   const body = `<div class="kc" id="kc" data-api="${link('groups/api.php', D)}">
   <section class="section kc-out" id="kc-out">
@@ -5521,7 +5522,7 @@ function kidsPage() {
     <ul>
       <li>${T(`A page for each child on your account, by first name. No child signs in and nothing is typed by a child: it’s the parent’s account, handed over for a look. Each child picks a lightbulb to be.`)}</li>
       <li>${T(`What counts is what you confirm. The page suggests from your kept week, your summer and your days off (“Did Sam go to chess club this year?”), and you say yes or no. You can add anything the plans missed.`)}</li>
-      <li>${T(`From that come pins for each kind of program, each season and the neighborhoods, which go from bronze to silver to gold; a level that goes up; a map of Philadelphia whose clouds clear where they have been; and a boxing match of program bulbs, where the winners they pick come first when you plan the next term.`)}</li>
+      <li>${T(`From that come pins for each kind of program, each season and the neighborhoods, which go from bronze to silver to gold and get grander each time; a level that goes up and unlocks things for their bulb to wear; a map of Philadelphia whose clouds clear where they have been; and showdowns between program bulbs (a race up the Art Museum steps, a glow-off, a dance-off), where the winners they pick come first when you plan the next term.`)}</li>
       <li>${T(`Nothing on this page is counted, recorded or sent anywhere. It has no link of its own to share: a picture of the pins, with no name and no map, is the only thing that leaves it.`)}</li>
     </ul>
     <div class="actions"><a class="btn primary big" href="${link('register/', D)}?next=kids">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=kids">${T(`Log in`)}</a></div>
@@ -5530,7 +5531,7 @@ function kidsPage() {
   <div id="kc-app" class="needs-js-block" hidden></div>
   <script type="application/json" id="kc-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: 'Kid’s Corner', description: `A page for each child: pins for every class and camp they have been to on ${cfg.siteName}, a map of Philadelphia that fills in, and a lightbulb boxing match to pick favorites.`, pathName: kidsPath, depth: D, current: null, hero, body, next: 'kids', noindex: true, quiet: true, scripts: `<script src="${link('assets/kids-corner.js', D)}${KIDS_V}"></script>` });
+  return layout({ title: 'Kid’s Corner', description: `A page for each child: pins for every class and camp they have been to on ${cfg.siteName}, a map of Philadelphia that fills in, a bulb to dress up, and lightbulb showdowns to pick favorites.`, pathName: kidsPath, depth: D, current: null, hero, body, next: 'kids', noindex: true, quiet: true, scripts: `<script src="${link('assets/kids-corner.js', D)}${KIDS_V}"></script>` });
 }
 
 // ---------- the planners in one place: the week, the days off, the summer, and the calendar they add up to ----------

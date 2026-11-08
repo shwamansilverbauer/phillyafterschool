@@ -365,8 +365,8 @@ analytics or recordings.
 `/kids-corner/` (`kidsPage()` in `build.mjs`, `src/kids-corner.js`) is a page of each child's own, inside a parent's
 account, made for ages about 5 to 10 as a cartoon arcade in the site's own colours (the deep Philly blue, sky blue and
 Bell Yellow): shiny pins that level up, a level that climbs, a cartoon map of Philadelphia that clears as they explore
-it, and a lightbulb boxing match that ranks their favorites. Eddie Bulboa, the bulb in the logo (`bulb.png`, the logo's
-own art), shows kids around, says what to do next, and referees. It is the only
+it, a bulb of their own that dresses up as they level up, and lightbulb showdowns that rank their favorites. Eddie Bulboa,
+the bulb in the logo (`bulb.png`, the logo's own art), shows kids around, says what to do next, and hosts the showdowns. It is the only
 part of the site meant to be handed to a child, so it is built the other way round from the rest. (It was called the
 Passport at first: `/passport/` redirects here, `?next=passport` still works, and the server's endpoint and table
 keep that name.)
@@ -374,10 +374,13 @@ keep that name.)
 - **Kid mode.** From the picker ("Who's playing?") on, `html.kc-kid` hides the site's header, menu, hero and footer,
   and nothing on the page is a link or asks for typing. The grown-ups' corner opens from a press-and-hold button
   (`.kc-hold`, 1.1 seconds; a tap does nothing). With one child on the account the page opens on their page; the
-  address keeps the tab (`#pins`, `#map`, `#battle`).
+  address keeps the tab (`#pins`, `#map`, `#battle` for the Showdown tab).
 - **Each child's bulb.** On first visit a child lights up a bulb of their own: one of ten shapes and ten colours, picked
   by tapping (`BULB`, `KID_COLORS`; Bell Yellow first). It stands in the header (tap it to change), on the picker, on
-  the map and in the cheering corner of every match. (Monsters picked before the bulbs became the bulb in the same
+  the map and in the cheering corner of every showdown. It starts plain; as the child's level climbs it unlocks things
+  to wear (`WEAR`: 16 items in six places, hat, face, neck, back, glow and base, from shades at level 2 to a galaxy
+  glow at 12), and the child picks one per place under "Dress up". A level-up shows what it unlocked, with "Try it
+  on!". Locked items show their level; the server keeps only items it knows (`KC_WEAR`). (Monsters picked before the bulbs became the bulb in the same
   place in the list, on the server and on the page.)
 - **What counts.** Only what a parent has confirmed. The server suggests from the household's plans
   (`passport_suggest()`: every program on a child's kept week, each camp whose week has started, each day-off program
@@ -386,7 +389,9 @@ keep that name.)
   which site.
 - **Pins.** `KIDS_PINS` in `build.mjs`: one per program type (names in `KIDS_PIN`), one per season (after school,
   weekends, days off, summer) and one for neighborhoods. Each goes bronze, silver, gold at 1, 3 and 5 (neighborhoods:
-  2, 4, 6). Drawn as SVG in `drawPin()` (metal rim by level, the type's colour and icon, a shine, ribbons on gold).
+  2, 4, 6). Drawn as SVG in `drawPin()`, grander at each level: bronze is the badge and a star; silver adds a laurel,
+  a blue banner, a gem and more stars; gold adds a turning sunburst, wings, a gold laurel, a crown, red ribbons and
+  twinkling sparkles.
 - **Levels.** Points are 10 a class, 5 a neighborhood and 5 a pin level (`stats()`); `LEVELS` and `TITLES` turn them
   into "Explorer · Level 4" with a bar to the next.
 - **Celebrations.** Pins whose level went up since the child last looked, and a new level, wait behind a present to
@@ -401,18 +406,21 @@ keep that name.)
   neighborhood (`mapHood()`: by its point, else by name, through `MAP_ALIAS`) and notes any name it can't place.
   Drag, pinch or the buttons zoom; a tap says what is there, and Eddie waits at the top of the Art Museum steps. No map
   service, no tiles: nothing is fetched from anywhere else.
-- **Bulbs and the boxing match.** Each program type is a family of bulbs (`SPECIES`: a bulb shape, something to wear,
+- **Bulbs and the showdown.** Each program type is a family of bulbs (`SPECIES`: a bulb shape, something to wear,
   a special move), its glass tinted with the type's colour, and each program a member of it, varied by its id (eyes,
   mouth, freckles, shades). `drawBulb()` draws them; a lit bulb glows, and the class `off` puts its light out. The
-  match pairs the child's distinct listings in a boxing ring until one is left: the child taps the winner, which throws
-  three punches and its special move (notes, paint, lightning, dice…), the loser's light flickers out, and Eddie counts
-  to three. The order they fell in is saved as `fav`. With reduced motion set, the fights and confetti are skipped.
+  showdown pairs the child's distinct listings until one is left, each pair in one of three contests that take turns
+  (`EVENTS`): a race up the Art Museum steps, a glow-off (meters fill, spotlights) and a dance-off. The child taps the
+  winner, Eddie counts them in, the winner pulls out its special move (notes, paint, lightning, dice…), and the other
+  comes second and cheers ("Good race!"). Nobody gets hit and no light goes out: it was boxing at first, changed so
+  parents needn't mind. The order they dropped out in is saved as `fav`. With reduced motion set, the moves and
+  confetti are skipped.
 - **Sound** is made on the page with the Web Audio API (`Sound`): nothing plays until the first tap, and the mute
   button is remembered on the device (`kc-mute`).
 - **The data.** `passports` in the accounts database, one row per child per household (by first name, the way weeks
   match), encrypted like the plans: `{ done: [{ k: "p:<program>" | "c:<camp>", kind: after | weekend | off | summer,
   y: <year>, s: <school or "">, h?: <site's neighborhood> }], skip: [suggestion keys the parent waved away],
-  fav: [listings, best first], av?: { b: <body>, c: <colour 0-9> }, seen?: { <pin>: <level> }, lvl?: <level> }`.
+  fav: [listings, best first], av?: { b: <body>, c: <colour 0-9>, w?: { <place>: <item> } }, seen?: { <pin>: <level> }, lvl?: <level> }`.
   `GET passport` gives every child on the kids list with all of that and the suggestions; `POST passport_save { kid,
   done, skip, fav, av?, seen?, lvl? }` replaces one child's lists, and keeps `av`, `seen` and `lvl` when they are left
   out. Co-parents share them (a partner's rows move to the home account on accepting, same first names merge).
