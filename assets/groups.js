@@ -56,7 +56,7 @@
   // the three read as one place and none of them is a long scroll. A tab whose part is on the page in view switches in
   // place; the others are links to the page that has them. (sessionStorage "pas-tabs" = "all" shows every part at once:
   // the tests use it, and so can anyone who would rather have the one long page.)
-  var ACCT_TABS = [['todo', 'To do', 'to-do/', ''], ['profile', 'Profile', 'profile/', ''], ['you', 'Details', 'account/', ''], ['school', 'School & kids', 'account/', '#school'], ['emails', 'Emails & following', 'account/', '#emails'], ['plans', 'Plans & sharing', 'account/', '#plans'], ['listings', 'Listings', 'managers/', '']];
+  var ACCT_TABS = [['todo', 'To do', 'to-do/', ''], ['profile', 'Profile', 'profile/', ''], ['you', 'Details', 'account/', ''], ['school', 'School & kids', 'account/', '#school'], ['kids', 'Kid’s Corner', 'account/', '#kids'], ['emails', 'Emails & following', 'account/', '#emails'], ['plans', 'Plans & sharing', 'account/', '#plans'], ['listings', 'Listings', 'managers/', '']];
   function tabsAll() { return sget('pas-tabs') === 'all'; }
   function acctStrip(box, active, hasListings, here, pick) {
     var nav = el('nav', 'jump acct-tabs'), links = {}; nav.setAttribute('aria-label', 'Your account');
@@ -64,6 +64,7 @@
     ACCT_TABS.forEach(function (t) {
       if (t[0] === 'listings' && !hasListings) return;
       if (t[0] === 'todo' && !yearOn) return;
+      if (t[0] === 'kids' && !host.getAttribute('data-kids')) return;   // Kid's Corner is on the live site only
       var a = el('a', t[0] === 'todo' ? 'tab-cta' : null, t[1]); a.href = page(t[2]) + t[3]; a.setAttribute('data-tab-go', t[0]);
       if (t[2] === here && pick) a.addEventListener('click', function (e) { if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return; e.preventDefault(); pick(t[0]); });
       links[t[0]] = a; nav.appendChild(a);
@@ -450,10 +451,10 @@
     // /account/ is where everything is changed: name, email address, phone, school and grades, emails, follows, kept
     // plans, sharing, signing out. A link to a part that lives on the other page (/profile/#following) is sent there.
     var view = account.getAttribute('data-view') === 'profile' ? 'profile' : 'account';
-    var PARTS = { profile: ['card', 'new'], account: ['you', 'email', 'texts', 'school', 'emails', 'push', 'following', 'favorites', 'plans', 'sharing', 'listings', 'sign-out'] };
+    var PARTS = { profile: ['card', 'new'], account: ['you', 'email', 'texts', 'school', 'kids', 'emails', 'push', 'following', 'favorites', 'plans', 'sharing', 'listings', 'sign-out'] };
     var MOVED = { profile: 'you' };   // names a part has had
     // the account page is tabs: which tab each part of it is on
-    var TAB_OF = { you: 'you', email: 'you', texts: 'you', listings: 'you', 'sign-out': 'you', school: 'school', emails: 'emails', push: 'emails', following: 'emails', favorites: 'emails', plans: 'plans', sharing: 'plans' };
+    var TAB_OF = { you: 'you', email: 'you', texts: 'you', listings: 'you', 'sign-out': 'you', school: 'school', kids: 'kids', emails: 'emails', push: 'emails', following: 'emails', favorites: 'emails', plans: 'plans', sharing: 'plans' };
     var onHash = null;   // set once the signed-in page is drawn
     var fresh = false;   // someone signed in on this visit, rather than arriving signed in
     // a link followed while the page is already open (the address changes, the page doesn't load again)
@@ -584,6 +585,7 @@
         tabNow = id; var allOn = tabsAll();
         Array.prototype.forEach.call(account.children, function (c) { var t = c.getAttribute('data-tab'); if (t) c.className = c.className.replace(/ tab-off/g, '') + (allOn || t === id ? '' : ' tab-off'); });
         strip.pasMark(id);
+        if ((id === 'kids' || allOn) && kcBody) loadKids();
         if (!byHand) return;
         try { history.replaceState(null, '', location.pathname + location.search + (id === 'you' ? '' : '#' + id)); } catch (e) { /* the tab still opens */ }
         // the strip stays under the menu bar while the page scrolls: a new tab starts from its top
@@ -685,6 +687,25 @@
       sch.appendChild(el('h2', null, 'Your school and kids'));
       var kidsBox = el('div', 'g-kids'); sch.appendChild(kidsBox);   // filled once the profile is read (paintKidsTab)
       put(sch, 'account', 'school');
+      // Kid's Corner at a glance: each child's bulb, level, pins and places, and the classes waiting for a yes or no.
+      // Its script and data (kids-corner.js and its JSON) load only when this tab is opened; it draws into kcBody.
+      var kcBody = null, kcScript = null;
+      if (host.getAttribute('data-kids')) {
+        var kcBox = part(el('section', 'panel'), 'kids');
+        kcBox.appendChild(el('h2', null, 'Kid’s Corner'));
+        kcBody = el('div', 'g-kc'); kcBox.appendChild(kcBody);
+        put(kcBox, 'account', 'kids');
+      }
+      var loadKids = function () {
+        var show = function () { if (window.pasKids) window.pasKids.summary(kcBody, { data: host.getAttribute('data-kids-data'), api: API }); };
+        if (window.pasKids) { show(); return; }
+        if (kcScript) return;
+        kcBody.textContent = ''; kcBody.appendChild(el('p', 'hint', 'Opening Kid’s Corner…'));
+        kcScript = document.createElement('script'); kcScript.src = host.getAttribute('data-kids');
+        kcScript.onload = show;
+        kcScript.onerror = function () { kcScript = null; kcBody.textContent = ''; kcBody.appendChild(el('p', 'g-status bad', 'Couldn’t open Kid’s Corner just now. Try again in a moment.')); };
+        document.head.appendChild(kcScript);
+      };
       // the Sunday email (its tick box goes in further down, once the school is known)
       var mail = part(el('section', 'panel'), 'emails');
       mail.appendChild(el('h2', null, 'Emails and notifications'));
