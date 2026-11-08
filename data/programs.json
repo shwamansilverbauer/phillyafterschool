@@ -1291,17 +1291,94 @@
           }
         ],
         "checked": "2026-11-07"
+      },
+      "houston": {
+        "relation": "pickup",
+        "distance": "about 1.8 miles south, on Wissahickon Avenue",
+        "note": "Zhang Sah’s own page lists Houston among its Mt. Airy site’s pickup schools. Children come by bus, walking escort or van after dismissal.",
+        "sources": [
+          {
+            "label": "Zhang Sah after-school program",
+            "url": "https://zhangsah.org/after-school-program/"
+          }
+        ],
+        "checked": "2026-11-08"
       }
     },
     "pickupLists": [
       {
         "where": "Mt. Airy, 6110 Wissahickon Ave",
-        "text": "JS Jenks, CW Henry, Lingelbach, Houston, SCH, Wissahickon Charter",
+        "text": "JS Jenks, CW Henry, Lingelbach, Houston, SCH, Wissahickon Charter, Cooke-Wissahickon, Houston",
         "url": "https://zhangsah.org/after-school-program/",
-        "read": "2026-11-07",
+        "read": "2026-11-08",
         "how": "fetch"
       }
     ]
+  },
+  {
+    "id": "jordan-family-learning-center",
+    "name": "Jordan Family Learning Center",
+    "what": "A Mount Airy child care center’s before and after care for school-age children, with school pickup in its own bus",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "before care",
+      "morning care",
+      "child care",
+      "childcare",
+      "school pickup",
+      "bus",
+      "homework",
+      "Mount Airy",
+      "JFLC"
+    ],
+    "address": "7500 Germantown Ave",
+    "neighborhoods": [
+      "Mount Airy"
+    ],
+    "grades": "K-8",
+    "gradeNote": "School-age children; its pickup request form runs to 8th grade",
+    "hours": "Open 7 am to 6 pm, Monday to Friday. Before care, after care or both, September through June.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not published on the center’s site. Its pickup request asks whether your child has a child care subsidy.",
+    "phone": "484-369-6050",
+    "email": "admin@jordanfamilylearningcenter.com",
+    "website": "https://www.jordanfamilylearningcenter.com/before-and-aftercare",
+    "register": {
+      "how": "online",
+      "url": "https://www.jordanfamilylearningcenter.com/aftercare-signup",
+      "label": "Request pickup",
+      "note": "An aftercare pickup request: give your child’s school, dismissal time and start date, and the office follows up about availability. Or text AFTERCARE to 484-369-6050 with your child’s school and the days you need."
+    },
+    "note": "The center’s site doesn’t publish prices or list the schools it picks up from: it asks for your child’s school and dismissal time and plans pickup from there.",
+    "sources": [
+      {
+        "label": "Jordan Family Learning Center: Before & Aftercare",
+        "url": "https://www.jordanfamilylearningcenter.com/before-and-aftercare"
+      },
+      {
+        "label": "Jordan Family Learning Center: Aftercare Signup",
+        "url": "https://www.jordanfamilylearningcenter.com/aftercare-signup"
+      }
+    ],
+    "lastVerified": "2026-11-08",
+    "schools": {
+      "houston": {
+        "relation": "nearby",
+        "distance": "under half a mile north, on Germantown Ave",
+        "note": "The center asks for your child’s school and plans pickup from there; its site doesn’t list schools, so ask whether Houston is one.",
+        "checked": "2026-11-08"
+      }
+    }
   },
   {
     "id": "shot-tower-rec",
@@ -1426,11 +1503,6 @@
     ],
     "pickupBy": "6:00 pm",
     "cost": "$20 a month in the City’s listing, which dates from 2018; registration there shows closed, so call.",
-    "rate": {
-      "per": "month",
-      "flat": 100,
-      "extra": "From the 2025–26 listing."
-    },
     "price": "paid",
     "phone": "215-685-6596",
     "email": "",
@@ -1508,11 +1580,6 @@
     ],
     "pickupBy": "6:00 pm",
     "cost": "$5 for the season in the City’s listing, which dates from 2018; registration there shows open.",
-    "rate": {
-      "per": "month",
-      "flat": 100,
-      "extra": "From the 2025–26 listing."
-    },
     "price": "paid",
     "phone": "215-685-1888",
     "email": "",
@@ -1584,11 +1651,6 @@
     ],
     "pickupBy": "6:00 pm",
     "cost": "$50 a month in the City’s listing, which dates from 2016; registration there shows open.",
-    "rate": {
-      "per": "month",
-      "flat": 100,
-      "extra": "From the 2025–26 listing."
-    },
     "price": "paid",
     "phone": "215-685-1598",
     "email": "",
@@ -1730,11 +1792,6 @@
     ],
     "pickupBy": "6:00 pm",
     "cost": "Free in one of the City’s listings (from 2016) and $25 a month in a newer one (from 2022); ask which applies.",
-    "rate": {
-      "per": "month",
-      "flat": 100,
-      "extra": "From the 2025–26 listing."
-    },
     "price": "free",
     "phone": "215-685-2760",
     "email": "",
@@ -1800,11 +1857,6 @@
     ],
     "pickupBy": "6:00 pm",
     "cost": "$25 a month in the City’s listing, which dates from 2017; registration there shows open.",
-    "rate": {
-      "per": "month",
-      "flat": 100,
-      "extra": "From the 2025–26 listing."
-    },
     "price": "paid",
     "phone": "215-685-2234",
     "email": "",
@@ -1832,6 +1884,71 @@
         "distance": "about a mile east along Johnson St, past Germantown Ave",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-07"
+      }
+    }
+  },
+  {
+    "id": "mount-airy-playground",
+    "name": "Mount Airy Playground",
+    "what": "City rec center after-school program: sports, games, outdoor activities and the arts",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "sports",
+      "games",
+      "aftercare",
+      "low cost",
+      "Mount Airy",
+      "Houston"
+    ],
+    "address": "7001 Germantown Ave",
+    "neighborhoods": [
+      "Mount Airy"
+    ],
+    "grades": "1-6",
+    "gradeNote": "Ages 6–12",
+    "hours": "Not published in the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "cost": "$30 a month in the City’s listing, which dates from 2021; registration there shows closed, so call.",
+    "price": "paid",
+    "phone": "215-685-9297",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up.",
+      "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
+    },
+    "note": "The City’s finder lists an after-school program here for ages 6 to 12, entered in 2021 and marked closed for registration (“Check back again!”). Call to ask whether it is running this year and what it costs now. The finder also lists a karate club for ages 5 to 15 here.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City announcement, August 2024",
+        "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-08",
+    "schools": {
+      "houston": {
+        "relation": "nearby",
+        "distance": "about a third of a mile east, on Germantown Ave",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-08"
       }
     }
   },
@@ -1870,11 +1987,6 @@
     ],
     "pickupBy": "6:00 pm",
     "cost": "$25 a week in the City’s listings, which date from 2019 and 2021; one shows closed and the other is listed as seeking registrants, so call.",
-    "rate": {
-      "per": "month",
-      "flat": 100,
-      "extra": "From the 2025–26 listing."
-    },
     "price": "paid",
     "phone": "215-685-6594",
     "email": "",
@@ -1952,11 +2064,6 @@
     ],
     "pickupBy": "6:00 pm",
     "cost": "$120 a month in the City’s listing, which dates from 2016; registration there shows closed, so call.",
-    "rate": {
-      "per": "month",
-      "flat": 100,
-      "extra": "From the 2025–26 listing."
-    },
     "price": "paid",
     "phone": "215-685-1883",
     "email": "",
@@ -2028,11 +2135,6 @@
     ],
     "pickupBy": "6:00 pm",
     "cost": "$75 a week in the City’s listing, which dates from 2022; registration there shows closed, so call.",
-    "rate": {
-      "per": "month",
-      "flat": 100,
-      "extra": "From the 2025–26 listing."
-    },
     "price": "paid",
     "phone": "215-685-6649",
     "email": "",
@@ -9825,16 +9927,17 @@
       "movement"
     ],
     "keywords": [
-      "Germantown",
-      "Lingelbach",
-      "Mount Airy",
       "aerial",
       "after school",
       "aftercare",
       "circus",
       "clowning",
       "day off",
+      "Germantown",
+      "Houston",
       "juggling",
+      "Lingelbach",
+      "Mount Airy",
       "trapeze",
       "tumbling",
       "unicycle"
@@ -9896,6 +9999,18 @@
           }
         ],
         "checked": "2026-11-05"
+      },
+      "houston": {
+        "relation": "pickup",
+        "distance": "a little over a mile south, at Greene and Cliveden",
+        "note": "Circus After School’s page lists Henry Houston among the schools it picks up from: PSCA chaperones walk children from school to the Circus Campus on Greene St, rain or shine.",
+        "sources": [
+          {
+            "label": "Circus After School",
+            "url": "https://phillycircus.com/afterschool/"
+          }
+        ],
+        "checked": "2026-11-08"
       }
     },
     "days": [
@@ -9912,7 +10027,7 @@
         "where": "6452 Greene St",
         "text": "C.W. Henry, Lingelbach Schools, Henry Houston, and the Waldorf School of Philadelphia in Mt. Airy",
         "url": "https://phillycircus.com/afterschool/",
-        "read": "2026-11-05",
+        "read": "2026-11-08",
         "how": "fetch"
       }
     ]
@@ -10780,6 +10895,18 @@
           }
         ],
         "checked": "2026-11-05"
+      },
+      "houston": {
+        "relation": "pickup",
+        "distance": "about three-quarters of a mile south, at Carpenter Lane and Greene St",
+        "note": "Houston is on the Mt. Airy studio’s school pick-up list. The studio says to call with interest if a school isn’t listed.",
+        "sources": [
+          {
+            "label": "Mt. Airy school pick-up",
+            "url": "https://phillyartcenter.com/locations/mt-airy/school-pick-up/"
+          }
+        ],
+        "checked": "2026-11-08"
       }
     },
     "pickupLists": [
@@ -10787,7 +10914,7 @@
         "where": "Mt. Airy Pickup Schools",
         "text": "C.W. Henry, Houston, J.S. Jenks, Lingelbach, Germantown Friends, Greene Street Friends, Germantown Jewish Centre",
         "url": "https://phillyartcenter.com/locations/mt-airy/school-pick-up/",
-        "read": "2026-11-05",
+        "read": "2026-11-08",
         "how": "fetch"
       }
     ]
