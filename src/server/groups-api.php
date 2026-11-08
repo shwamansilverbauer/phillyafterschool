@@ -1688,6 +1688,50 @@ function google_email(string $jwt): array {
   if (!$own) fail('google_other', 'That Google account uses an address Google doesn’t run (' . $email . '). Sign in with the email code instead, so we can check the address is yours.', 403);
   return array('email' => $email, 'first' => person_name(isset($c['given_name']) && is_string($c['given_name']) ? $c['given_name'] : '', 30), 'last' => person_name(isset($c['family_name']) && is_string($c['family_name']) ? $c['family_name'] : '', 40));
 }
+// The key /edit/ publishes with (a fine-grained GitHub token in phillyafterschool-github.key, next to the public folder)
+// runs out on a day GitHub sets, and then publishing stops without a word. The health answer says whether GitHub still
+// takes it and how many days it has left, so the hourly check can warn two weeks ahead. GitHub is asked at most every
+// six hours (sooner when the key file changes); the key itself never leaves the server and is never shown.
+function edit_key_state(): ?array {
+  global $CFG;
+  $dir = dirname((string) $_SERVER['DOCUMENT_ROOT']);
+  $raw = @file_get_contents($dir . '/phillyafterschool-github.key');
+  if (!is_string($raw)) return null;   // no key on this server: nothing to say
+  $tok = trim($raw);
+  $mark = substr(hash('sha256', $tok), 0, 12);   // which key the remembered answer was about
+  $cacheFile = $dir . '/phillyafterschool-github-check.json';
+  $c = json_decode((string) @file_get_contents($cacheFile), true);
+  if (is_array($c) && isset($c['at'], $c['key']) && $c['key'] === $mark && (int) $c['at'] > now() - 6 * 3600) return edit_key_out($c);
+  $repo = isset($CFG['repo']) ? (string) $CFG['repo'] : '';
+  $new = array('at' => now(), 'key' => $mark, 'ok' => null, 'exp' => 0, 'why' => '');
+  if (!preg_match('/^(github_pat_[A-Za-z0-9_]{20,}|ghp_[A-Za-z0-9]{20,})$/', $tok)) { $new['ok'] = false; $new['why'] = 'not a key'; }
+  elseif ($repo === '' || !function_exists('curl_init')) { $new['ok'] = null; $new['why'] = 'cannot ask'; }
+  else {
+    $base = (PHP_SAPI === 'cli-server' && getenv('PAS_TEST_GITHUB')) ? rtrim((string) getenv('PAS_TEST_GITHUB'), '/') : 'https://api.github.com';   // the local test server only
+    $exp = '';
+    $ch = curl_init($base . '/repos/' . $repo);
+    curl_setopt_array($ch, array(CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 5, CURLOPT_TIMEOUT => 8,
+      CURLOPT_HTTPHEADER => array('Accept: application/vnd.github+json', 'Authorization: Bearer ' . $tok, 'X-GitHub-Api-Version: 2022-11-28', 'User-Agent: phillyafterschool-health'),
+      CURLOPT_HEADERFUNCTION => function ($c, $line) use (&$exp) { if (stripos($line, 'github-authentication-token-expiration:') === 0) $exp = trim(substr($line, strlen('github-authentication-token-expiration:'))); return strlen($line); }));
+    curl_exec($ch);
+    $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($code === 200) { $new['ok'] = true; $t = $exp !== '' ? strtotime($exp) : false; $new['exp'] = $t ? (int) $t : 0; }
+    elseif ($code === 401) { $new['ok'] = false; $new['why'] = 'refused'; }          // expired or taken back
+    elseif ($code === 403 || $code === 404) { $new['ok'] = false; $new['why'] = 'no access'; }   // a key without this repository
+    else {   // GitHub didn't answer: keep what was known, ask again in an hour
+      if (is_array($c) && isset($c['key']) && $c['key'] === $mark) { $c['at'] = now() - 5 * 3600; @file_put_contents($cacheFile, json_encode($c), LOCK_EX); return edit_key_out($c); }
+      $new['at'] = now() - 5 * 3600; $new['why'] = 'no answer';
+    }
+  }
+  @file_put_contents($cacheFile, json_encode($new), LOCK_EX);
+  return edit_key_out($new);
+}
+function edit_key_out(array $c): array {
+  $days = !empty($c['exp']) ? (int) floor(((int) $c['exp'] - now()) / 86400) : null;
+  if ($days !== null && $days < 0) { $c['ok'] = false; $c['why'] = 'expired'; }
+  return array('ok' => $c['ok'], 'daysLeft' => $days, 'why' => (string) $c['why'], 'checked' => gmdate('Y-m-d', (int) $c['at']));
+}
 function year_end(): int {
   global $CFG;
   $t = isset($CFG['yearEnd']) ? strtotime($CFG['yearEnd'] . ' 23:59:59 America/New_York') : false;
@@ -1725,7 +1769,7 @@ switch ($method . ' ' . $action) {
     catch (Exception $e) { $ok = false; }
     $last = last_backup();
     $age = $last === '' ? -1 : (int) round((strtotime(today_ny()) - strtotime($last)) / 86400);
-    out(array('ok' => $ok, 'database' => $ok, 'day' => today_ny(), 'backup' => $last, 'backupAgeDays' => $age, 'backupsKept' => count(glob(backup_dir() . '/groups-*.sqlite') ?: array()), 'mail' => pas_mail_state()), $ok ? 200 : 503);
+    out(array('ok' => $ok, 'database' => $ok, 'day' => today_ny(), 'backup' => $last, 'backupAgeDays' => $age, 'backupsKept' => count(glob(backup_dir() . '/groups-*.sqlite') ?: array()), 'mail' => pas_mail_state()) + (($ek = edit_key_state()) !== null ? array('editKey' => $ek) : array()), $ok ? 200 : 503);
   }
 
   // ----- signing in -----

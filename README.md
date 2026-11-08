@@ -79,7 +79,9 @@ push services). Nothing reaches phillyafterschool.org, the real mail service or 
 installed globally); without Playwright the browser tests are reported as skipped and the rest run. What is
 covered, how a test is written and what to do when one fails is in `tests/README.md`.
 
-The publishing job runs them too, after the build and before anything goes to the `live` branch, so a change that
+Every pull request into `main` runs them too (`.github/workflows/test.yml`), so a proposal from the monthly or weekly
+check shows a green tick or a red cross before it is merged; screenshots of a failed browser test are kept on the run
+for a week. The publishing job runs them as well, after the build and before anything goes to the `live` branch, so a change that
 breaks one of the site's own rules (a child's name readable on disk, a price for parents, an analytics call on a
 quiet page, the support line missing) fails a test, not a reader. Run them yourself before pushing a change to
 `build.mjs`, `src/` or the data, and the job is only a second opinion.
@@ -129,7 +131,21 @@ address, an adult's name, a school, grades and ages, follows and favorites, clai
 that the sitemap and a spread of pages open, that the site was rebuilt in the last two days, that the accounts service
 answers and can write (`groups/api.php?action=health`, which says nothing about anyone), that a database copy was made
 in the last two days, that the three forms answer, that the https certificate has more than 10 days left, and that the
-two daily jobs (the build, and the date emails) last ran, and last passed, inside 36 hours.
+two daily jobs (the build, and the date emails) last ran, and last passed, inside 36 hours. It also checks the key
+`/edit/` publishes with: the health answer says whether GitHub still takes the token in `phillyafterschool-github.key`
+and how many days it has left (`edit_key_state()`, asking GitHub at most every six hours; the key is never shown), and
+the check fails two weeks before it runs out, with how to renew it. And it checks the home page still carries the
+security headers below.
+
+**Security headers.** The `.htaccess` the build writes sets, on every response: `Strict-Transport-Security` (HTTPS
+only, for a year, for this host alone: the email service's link domain is a subdomain, so no `includeSubDomains`, and
+the site is not on the browsers' preload list), `X-Frame-Options: SAMEORIGIN` (no other site can show these pages in a
+frame, which protects the account and Passport pages from click tricks), `X-Content-Type-Options: nosniff`,
+`Referrer-Policy: strict-origin-when-cross-origin` (other sites see the bare domain, never the page), and a
+`Permissions-Policy` that turns off what the site never uses (camera, microphone, payments, USB, serial, Bluetooth)
+and keeps location for this site alone ("Nearest" asks for it). Font files are cached for a year. If the site ever
+has to be shown inside a frame elsewhere, or moves off HTTPS, those lines are where to start; HSTS in particular is
+remembered by browsers for a year once seen.
 
 When a check fails it opens an issue titled "Site check: something needs a look", assigned to the repository's owner,
 which GitHub emails. The issue says what failed and what to do. While something keeps failing the same issue is
@@ -1177,6 +1193,13 @@ link-preview pictures (`src/static/share.png`, `share-days-off.png`) are the sit
 backgrounds (`src/static/logo-sky.png`, PHILLY in the brand blue), a headline, one line and the page's drawing
 along the bottom; `scripts/share-pictures.js` draws them from a build with Playwright, so they are redrawn
 whenever the logo, a headline or the site's colours change.
+
+The three faces are served from this site, not from Google: `src/fonts/` holds the WOFF2 files (Latin and Latin
+Extended, the weights the site uses: Luckiest Guy 400, Figtree 700 and 800, Atkinson Hyperlegible 400 and 700, from
+the `@fontsource` packages) with their SIL Open Font License texts, the build copies them to `assets/fonts/`, and the
+`@font-face` rules are at the top of `src/site.css`. Every page preloads the body face and Luckiest Guy. So no page,
+the quiet ones included, asks another site for its fonts; `tests/cases/01-build.mjs` fails if one ever does. To add a
+weight, take its file from `@fontsource/<family>` (`npm pack`) and add a rule with the same `unicode-range`.
 
 **Colours.** Every colour is a named value at the top of `src/site.css`. The band at the top of each page is a
 daytime sky (`--hero` fading to `--hero-low`) with navy type (`--hero-ink`, `--hero-muted`); the header button

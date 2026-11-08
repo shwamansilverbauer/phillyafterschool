@@ -640,9 +640,8 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <link rel="manifest" href="${link('manifest.json', depth)}">` : ''}
 <meta name="color-scheme" content="only light">
 <meta name="theme-color" content="#0A3566">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800&family=Atkinson+Hyperlegible:wght@400;700&family=Luckiest+Guy&display=swap">
+<link rel="preload" href="${link('assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2', depth)}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="${link('assets/fonts/luckiest-guy-latin-400-normal.woff2', depth)}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${link('assets/site.css', depth)}${CSS_V}">${jsonLd ? '\n<script type="application/ld+json">' + JSON.stringify(jsonLd).replace(/</g, '\\u003c') + '</script>' : ''}`;
   // Edit mode (see /edit/) loads a second script. This tells site.js where to find it and where edits are sent.
   const editCfg = { js: link('assets/edit.js', depth) + EDIT_V, send: PREVIEW ? '' : link('edit/send.php', depth), home: link('edit/', depth), contact: cfg.contactEmail || '' };
@@ -4337,7 +4336,7 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])), citySchools: Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])) });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, repo: /^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : '', from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])), citySchools: Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])) });
   const src = phpCopy(fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8'));
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   if (!src.includes('/*MAILER*/')) throw new Error('src/server/groups-api.php has lost its /*MAILER*/ marker');
@@ -6228,6 +6227,8 @@ if (GATED && GROUPS) write('edit/claims/index.php', editClaimsPhp());
 if (GATED) write('edit/queue/index.php', editQueuePhp());
 const notFound = notFoundPage();   // always rendered, so its copy is known to the editor
 write('assets/site.css', fs.readFileSync(path.join(ROOT, 'src/site.css')));
+// The typefaces, served from this site (the @font-face rules are at the top of site.css), with their licenses.
+for (const f of fs.readdirSync(path.join(ROOT, 'src/fonts'))) write('assets/fonts/' + f, fs.readFileSync(path.join(ROOT, 'src/fonts', f)));
 write('assets/site.js', fs.readFileSync(path.join(ROOT, 'src/site.js')));
 write('assets/edit.js', fs.readFileSync(path.join(ROOT, 'src/edit.js')));
 // Notifications without an app: a service worker at the top of the site (it shows a notification and opens a page,
@@ -6310,7 +6311,24 @@ if (!PREVIEW) {
   // Other addresses that should land on this one (see "Changing the site's address" in the README).
   const formerHosts = (cfg.formerHosts || []).filter(h => /^[a-z0-9.-]+\.[a-z]{2,}$/.test(h) && h !== bare && h !== 'www.' + bare);
   const goneDays = (daysOff?.days || []).filter(d => (d.end || d.date) < TODAY).map(daySlug);
-  write('.htaccess', `ErrorDocument 404 /404.html\nAddType text/calendar .ics\nDirectoryIndex index.html index.php\n\n# One address for the site: www goes to the bare domain.\n<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.${bare.replace(/\./g, '\\.')}$ [NC]\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n${formerHosts.length ? `# The site's other addresses all lead here, page for page (the certificate check on each is left alone).\nRewriteCond %{HTTP_HOST} ^(www\\.)?(${formerHosts.map(h => h.replace(/\./g, '\\.')).join('|')})$ [NC]\nRewriteCond %{REQUEST_URI} !^/\\.well-known/\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n` : ''}${cardQr ? `# The short addresses in the QR codes on the week card and the day-camp card.\nRewriteRule ^w/?$ ${cardQr.goesTo} [NC,R=302,L]\n${cardQr.dayoff ? `RewriteRule ^d/?$ ${cardQr.dayoff.goesTo} [NC,R=302,L]\n` : ''}` : ''}${movedSchools.length ? `# A school that has been added: its old "not covered yet" address goes to its page.\n${movedSchools.map(([from, to]) => `RewriteRule ^schools/${from}/?$ /${to}/ [R=301,L]\n`).join('')}` : ''}${goneDays.length ? `# A day off that has passed: its own page leads to the list of days still to come.\n${goneDays.map(x => `RewriteRule ^${offPath}${x}/?$ /${offPath} [R=301,L]\n`).join('')}` : ''}${summerCamps.some(c => c.program) ? `# A summer camp tied to a program is on the program's page, under Summer (a query string, such as an email's tags, stays ahead of the #).\n${summerCamps.filter(c => c.program).map(c => { const to = '/' + programPath(programs.find(p => p.id === c.program)); return `RewriteCond %{QUERY_STRING} ^(.+)$\nRewriteRule ^${campsPath}${c.id}/?$ ${to}?%1#summer [NE,QSD,R=301,L]\nRewriteRule ^${campsPath}${c.id}/?$ ${to}#summer [NE,R=301,L]\n`; }).join('')}` : ''}</IfModule>\n`);
+  // Security headers for every response (pages, files and the PHP endpoints): HTTPS only from now on (a year, this
+  // host alone: the email service's link domain is a subdomain, so no includeSubDomains, and no preload list), no
+  // framing by another site, no guessing at file types, the address of the page sent to other sites as the bare domain
+  // only, and the browser features the site never uses switched off (location stays on: "Nearest" asks for it).
+  // The fonts never change once named, so they are kept a year.
+  const headers = `<IfModule mod_headers.c>
+Header always set Strict-Transport-Security "max-age=31536000"
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set X-Content-Type-Options "nosniff"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Permissions-Policy "camera=(), microphone=(), payment=(), usb=(), serial=(), bluetooth=(), geolocation=(self)"
+<FilesMatch "\\.woff2$">
+Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+</IfModule>
+AddType font/woff2 .woff2
+`;
+  write('.htaccess', `ErrorDocument 404 /404.html\nAddType text/calendar .ics\nDirectoryIndex index.html index.php\n\n${headers}\n# One address for the site: www goes to the bare domain.\n<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.${bare.replace(/\./g, '\\.')}$ [NC]\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n${formerHosts.length ? `# The site's other addresses all lead here, page for page (the certificate check on each is left alone).\nRewriteCond %{HTTP_HOST} ^(www\\.)?(${formerHosts.map(h => h.replace(/\./g, '\\.')).join('|')})$ [NC]\nRewriteCond %{REQUEST_URI} !^/\\.well-known/\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n` : ''}${cardQr ? `# The short addresses in the QR codes on the week card and the day-camp card.\nRewriteRule ^w/?$ ${cardQr.goesTo} [NC,R=302,L]\n${cardQr.dayoff ? `RewriteRule ^d/?$ ${cardQr.dayoff.goesTo} [NC,R=302,L]\n` : ''}` : ''}${movedSchools.length ? `# A school that has been added: its old "not covered yet" address goes to its page.\n${movedSchools.map(([from, to]) => `RewriteRule ^schools/${from}/?$ /${to}/ [R=301,L]\n`).join('')}` : ''}${goneDays.length ? `# A day off that has passed: its own page leads to the list of days still to come.\n${goneDays.map(x => `RewriteRule ^${offPath}${x}/?$ /${offPath} [R=301,L]\n`).join('')}` : ''}${summerCamps.some(c => c.program) ? `# A summer camp tied to a program is on the program's page, under Summer (a query string, such as an email's tags, stays ahead of the #).\n${summerCamps.filter(c => c.program).map(c => { const to = '/' + programPath(programs.find(p => p.id === c.program)); return `RewriteCond %{QUERY_STRING} ^(.+)$\nRewriteRule ^${campsPath}${c.id}/?$ ${to}?%1#summer [NE,QSD,R=301,L]\nRewriteRule ^${campsPath}${c.id}/?$ ${to}#summer [NE,R=301,L]\n`; }).join('')}` : ''}</IfModule>\n`);
 }
 // Edits in data/copy.json are matched to sentences by a fingerprint of the original wording.
 // If the original was reworded or removed in this file, the edit no longer applies: say so, but still build.

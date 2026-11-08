@@ -47,6 +47,14 @@ jobs:
         run: |
           php --version | head -1
           node tests/run.mjs
+      - name: Keep the screenshots of anything that failed
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-screenshots
+          path: tests/.scratch/shots/
+          retention-days: 7
+          if-no-files-found: ignore
 
       # Kept for the last step: what the live site's sitemap said before this publish.
       - name: Note what the live sitemap says now
