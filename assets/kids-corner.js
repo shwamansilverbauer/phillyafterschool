@@ -1,9 +1,10 @@
 // Kid's Corner: a page of each child's own, inside a parent's account (kidsPage() in build.mjs). For ages about 5 to 10,
 // in the site's colours: shiny pins that level up from bronze to silver to gold, a level that climbs, a cartoon map of
-// Philadelphia whose clouds clear over the neighborhoods the child has been to, and a boxing match where each
-// program's lightbulb takes on another and the child taps the winner (which ranks their favorites for the planners).
+// Philadelphia whose clouds clear over the neighborhoods the child has been to, and a showdown where each program's
+// lightbulb takes on another in a race, a glow-off or a dance-off and the child taps the winner (which ranks their
+// favorites for the planners). Each child's bulb starts plain and gets more to wear as they level up.
 // Each child picks a lightbulb of their own to be, and Eddie Bulboa, the bulb in the logo, shows them around and
-// referees. What counts is what a parent has confirmed (the "passport" endpoint in groups/api.php): the page suggests
+// hosts the showdowns. What counts is what a parent has confirmed (the "passport" endpoint in groups/api.php): the page suggests
 // from the household's plans, and the parent says yes or no behind the grown-ups' hold-to-open button, or on the
 // account page's Kid's Corner tab (window.pasKids below draws that tab).
 //
@@ -100,9 +101,10 @@
       pop: function (t) { tone(280, t, 0.14, 'sine', 0.28, 920); },
       sparkle: function (t) { [1319, 1568, 1976, 2637, 3136].forEach(function (f, i) { tone(f, t + i * 0.065, 0.3, 'triangle', 0.07); }); },
       zap: function (t) { tone(1400, t, 0.18, 'sawtooth', 0.06, 300); noise(t, 0.12, 0.12, 3000, 800); },
-      bell: function (t) { [0, 0.28].forEach(function (d) { tone(1568, t + d, 0.7, 'triangle', 0.16); tone(2350, t + d, 0.5, 'sine', 0.06); }); },
-      punch: function (t) { noise(t, 0.12, 0.5, 900, 150); tone(110, t, 0.14, 'sine', 0.3, 50); },
-      buzz: function (t) { [0, 0.09, 0.2, 0.27, 0.4].forEach(function (d, i) { tone(i % 2 ? 90 : 120, t + d, 0.07, 'sawtooth', 0.07); }); tone(500, t + 0.45, 0.35, 'triangle', 0.08, 90); },
+      go: function (t) { tone(880, t, 0.12, 'square', 0.07); tone(880, t + 0.2, 0.12, 'square', 0.07); tone(1320, t + 0.4, 0.45, 'square', 0.08); },
+      glow: function (t) { tone(260, t, 1.3, 'sine', 0.14, 1300); tone(390, t + 0.1, 1.2, 'triangle', 0.06, 1950); },
+      dance: function (t) { for (var i = 0; i < 8; i++) { if (i % 2 === 0) tone(130, t + i * 0.16, 0.14, 'sine', 0.3, 45); noise(t + i * 0.16 + 0.08, 0.05, 0.12, 6000, 9000); } [523, 659, 784, 659].forEach(function (f, i) { tone(f, t + i * 0.32, 0.25, 'triangle', 0.06); }); },
+      clap: function (t) { [0, 0.18, 0.36, 0.5].forEach(function (d) { noise(t + d, 0.09, 0.32, 1800, 1200); }); },
       pow: function (t) { noise(t, 0.22, 0.45, 2000, 300); tone(170, t, 0.18, 'square', 0.13, 45); },
       whoosh: function (t) { noise(t, 0.3, 0.16, 350, 2600); },
       boing: function (t) { tone(200, t, 0.32, 'sine', 0.22, 700); },
@@ -146,7 +148,20 @@
   var BEFORE = ['blob', 'tall', 'box', 'pear', 'ghost', 'spiky', 'bean', 'squid', 'egg', 'fuzzy'];   // the monsters the bulbs replaced, in the same order
   // The colours a child picks from: Bell Yellow first, then the sky and Franklin blues, then the rest.
   var KID_COLORS = ['#FFD43B', '#96C9FF', '#4D94E0', '#7ED07A', '#FF8A65', '#FFB347', '#FF9EC7', '#B9A3FF', '#7FE0C8', '#EEF3F9'];
-  // The families: a bulb, something to wear, what they throw as their special move, and what Eddie calls it.
+  // What a child's bulb can wear, one thing in each place, each unlocked at a level: a child starts plain and picks
+  // from more as they level up. (groups-api.php keeps the same ids, KC_WEAR.)
+  var WEAR = [
+    { id: 'shades', slot: 'face', name: 'Sunglasses', lvl: 2 }, { id: 'bow', slot: 'neck', name: 'Bow tie', lvl: 2 },
+    { id: 'cap', slot: 'hat', name: 'Cap', lvl: 3 }, { id: 'scarf', slot: 'neck', name: 'Scarf', lvl: 3 },
+    { id: 'cape', slot: 'back', name: 'Cape', lvl: 4 }, { id: 'stars', slot: 'face', name: 'Star glasses', lvl: 4 },
+    { id: 'crown', slot: 'hat', name: 'Crown', lvl: 5 }, { id: 'sparkle', slot: 'glow', name: 'Sparkles', lvl: 5 },
+    { id: 'medal', slot: 'neck', name: 'Gold medal', lvl: 6 }, { id: 'wings', slot: 'back', name: 'Wings', lvl: 7 },
+    { id: 'tophat', slot: 'hat', name: 'Top hat', lvl: 8 }, { id: 'rainbow', slot: 'glow', name: 'Rainbow', lvl: 8 },
+    { id: 'jetpack', slot: 'back', name: 'Jetpack', lvl: 9 }, { id: 'goldbase', slot: 'base', name: 'Gold base', lvl: 10 },
+    { id: 'halo', slot: 'hat', name: 'Halo', lvl: 11 }, { id: 'galaxy', slot: 'glow', name: 'Galaxy glow', lvl: 12 }
+  ];
+  var WEAR_BY = {}; WEAR.forEach(function (x) { WEAR_BY[x.id] = x; });
+  // The families: a bulb, something to wear, what they show off as their special move, and what Eddie calls it.
   var SPECIES = {
     aftercare: { shape: 'flood', acc: 'backpack', atk: 'plane', move: 'Paper planes!' },
     music: { shape: 'globe', acc: 'headphones', atk: 'note', move: 'Music blast!' },
@@ -154,7 +169,7 @@
     art: { shape: 'mushroom', acc: 'beret', atk: 'splat', move: 'Paint splat!' },
     movement: { shape: 'tube', acc: 'headband', atk: 'swirl', move: 'Whirlwind!' },
     stem: { shape: 'twisty', acc: 'goggles', atk: 'bolt', move: 'Lightning!' },
-    academics: { shape: 'classic', acc: 'gradcap', atk: 'letter', move: 'Word attack!' },
+    academics: { shape: 'classic', acc: 'gradcap', atk: 'letter', move: 'Word power!' },
     games: { shape: 'classic', acc: 'propeller', atk: 'die', move: 'Dice roll!' },
     nature: { shape: 'heart', acc: 'sprout', atk: 'leaf', move: 'Leaf storm!' },
     daycamp: { shape: 'candle', acc: 'ranger', atk: 'flame', move: 'Campfire!' },
@@ -169,14 +184,14 @@
     var h = base[0] + (r() * 16 - 8), L = 66 + Math.round(r() * 10);
     return { shape: sp.shape, glass: hsl(h, 80, L), dark: hsl(h, 60, L - 36), glow: hsl(h, 95, 72), eyes: r() < 0.3 ? 1 : 2, mouth: Math.floor(r() * 4), spots: r() < 0.35, blush: r() < 0.4, shades: r() < 0.12, acc: sp.acc, atk: sp.atk, move: sp.move };
   };
-  // A child's own bulb: the shape and colour they picked, and a crown.
+  // A child's own bulb: the shape and colour they picked, and what they chose to wear.
   var kidBulb = function (av) {
     var b = av && av.b; if (BEFORE.indexOf(b) > -1) b = BULB_IDS[BEFORE.indexOf(b)]; if (!BULB[b]) b = 'classic';
     var c = av && KID_COLORS[av.c] ? av.c : 0, x = hexHsl(KID_COLORS[c]);
-    return { shape: b, glass: KID_COLORS[c], dark: hsl(x[0], Math.min(x[1], 55), Math.max(x[2] - 42, 20)), glow: c === 9 ? '#FFE066' : KID_COLORS[c], eyes: 2, mouth: 0, spots: false, blush: true, acc: 'crown', atk: 'star', move: 'Star power!' };
+    return { shape: b, glass: KID_COLORS[c], dark: hsl(x[0], Math.min(x[1], 55), Math.max(x[2] - 42, 20)), glow: c === 9 ? '#FFE066' : KID_COLORS[c], eyes: 2, mouth: 0, spots: false, blush: true, acc: '', wear: av && av.w ? av.w : {}, atk: 'star', move: 'Star power!' };
   };
   var uid = 0;
-  // Draws a bulb. A lit bulb glows; add the class "off" and it goes dark, with X eyes (a knockout).
+  // Draws a bulb. A lit bulb glows; add the class "off" and it goes dark, its eyes closed (asleep).
   var drawBulb = function (m, cls) {
     var b = BULB[m.shape] || BULB.classic, id = 'kcb' + (++uid), T = b.top, ey = b.eye, w = b.w;
     var s = sv('svg', { viewBox: '0 -22 100 124', 'class': 'kc-bulb' + (cls ? ' ' + cls : ''), 'aria-hidden': 'true', focusable: 'false' });
@@ -186,15 +201,20 @@
     sv('path', { d: b.d }, sv('clipPath', { id: id + 'c' }, defs));
     var g = sv('g', { 'class': 'kc-bulb-g' }, s);
     var ink = function (o, width) { o.stroke = INK; o['stroke-width'] = width || 3; o['stroke-linejoin'] = 'round'; o['stroke-linecap'] = 'round'; return o; };
+    var ink0 = function (o) { return ink(o, 2.5); };
     sv('circle', { 'class': 'kc-glow', cx: 50, cy: ey + 4, r: 54, fill: 'url(#' + id + 'g)' }, g);
-    // arms behind the glass: hands down and waving, or up in boxing gloves
-    var ay = ey + 18, sx = Math.min(w, 26) - 2, arm = { fill: 'none', stroke: INK, 'stroke-width': 3.5, 'stroke-linecap': 'round' }, gl = [];
+    var wr = m.wear || {};
+    if (wr.glow === 'galaxy') { sv('circle', { 'class': 'kc-glow', cx: 50, cy: ey + 8, r: 50, fill: '#1B2366', opacity: 0.9 }, g); [[14, 8], [84, 2], [92, 40], [8, 50], [30, -8], [70, -12], [88, 74], [12, 82], [50, -16]].forEach(function (q, i) { sv(i % 3 ? 'circle' : 'path', i % 3 ? { cx: q[0], cy: q[1], r: 1.8, fill: '#fff' } : { 'class': 'kc-twinkle', d: TWINKLE, transform: 'translate(' + q[0] + ' ' + q[1] + ') scale(.6)', fill: '#fff' }, g); }); }
+    if (wr.glow === 'rainbow') [['#CC3000', 47], ['#F3C613', 42], ['#3FA34D', 37], ['#2176D2', 32]].forEach(function (c) { sv('path', { d: 'M' + (50 - c[1]) + ' ' + (ey + 16) + 'A' + c[1] + ' ' + c[1] + ' 0 0 1 ' + (50 + c[1]) + ' ' + (ey + 16), fill: 'none', stroke: c[0], 'stroke-width': 5, 'stroke-linecap': 'round' }, g); });
+    if (wr.back === 'cape') { sv('path', ink0({ d: 'M34 58C22 74 15 90 17 100H83C85 90 78 74 66 58Z', fill: '#CC3000' }), g); sv('path', { d: 'M29 72C25 84 23 93 23 100M71 72C75 84 77 93 77 100', fill: 'none', stroke: '#8A1F00', 'stroke-width': 2 }, g); }
+    if (wr.back === 'wings') [-1, 1].forEach(function (sd) { var wg = sv('g', sd > 0 ? { transform: 'translate(100 0) scale(-1 1)' } : null, g), x0 = 50 - w - 2, y0 = ey + 10; [[x0 - 9, y0 - 9, 15, 5, -32], [x0 - 12, y0 + 2, 16, 5.5, -10], [x0 - 9, y0 + 12, 13, 5, 14]].forEach(function (f) { sv('ellipse', { cx: f[0], cy: f[1], rx: f[2], ry: f[3], fill: '#fff', stroke: INK, 'stroke-width': 2, transform: 'rotate(' + f[4] + ' ' + f[0] + ' ' + f[1] + ')' }, wg); }); });
+    if (wr.back === 'jetpack') [-1, 1].forEach(function (sd) { var x = 50 + sd * (w + 3) - 6; sv('path', { 'class': 'kc-flame', d: 'M' + (x + 1.5) + ' ' + (ey + 34) + 'Q' + (x + 6) + ' ' + (ey + 56) + ' ' + (x + 10.5) + ' ' + (ey + 34) + 'Z', fill: '#FF922B', stroke: INK, 'stroke-width': 1.5 }, g); sv('rect', { x: x, y: ey + 4, width: 12, height: 32, rx: 6, fill: '#ADB5BD', stroke: INK, 'stroke-width': 2.2 }, g); sv('rect', { x: x + 2, y: ey + 9, width: 8, height: 4, rx: 2, fill: '#CC3000' }, g); });
+    // arms behind the glass, hands down
+    var ay = ey + 18, sx = Math.min(w, 26) - 2;
     [-1, 1].forEach(function (sd) {
-      var x0 = 50 + sd * sx, a = {}; for (var k in arm) a[k] = arm[k];
-      if (m.gloves) { var gx = 50 + sd * (sx + 4), gy = ey + (sd < 0 ? 8 : 4); a.d = 'M' + x0 + ' ' + ay + 'Q' + (x0 + sd * 14) + ' ' + (ay + 2) + ' ' + gx + ' ' + gy; gl.push([gx, gy, sd]); }
-      else a.d = 'M' + x0 + ' ' + ay + 'Q' + (x0 + sd * 12) + ' ' + (ay + 4) + ' ' + (x0 + sd * 14) + ' ' + (ay + 15);
-      sv('path', a, g);
-      if (!m.gloves) sv('circle', ink({ cx: x0 + sd * 14, cy: ay + 16, r: 4.5, fill: '#fff' }, 2.5), g);
+      var x0 = 50 + sd * sx;
+      sv('path', { d: 'M' + x0 + ' ' + ay + 'Q' + (x0 + sd * 12) + ' ' + (ay + 4) + ' ' + (x0 + sd * 14) + ' ' + (ay + 15), fill: 'none', stroke: INK, 'stroke-width': 3.5, 'stroke-linecap': 'round' }, g);
+      sv('circle', ink({ cx: x0 + sd * 14, cy: ay + 16, r: 4.5, fill: '#fff' }, 2.5), g);
     });
     // legs and feet under the base
     sv('path', { d: 'M45 89L43 96M55 89L57 96', fill: 'none', stroke: INK, 'stroke-width': 3, 'stroke-linecap': 'round' }, g);
@@ -212,20 +232,22 @@
     if (m.acc === 'backpack') { sv('rect', { x: 50 - w * 0.62 - 3, y: ey + 8, width: 6, height: 60, fill: '#F3C613' }, inner); sv('rect', { x: 50 + w * 0.62 - 3, y: ey + 8, width: 6, height: 60, fill: '#F3C613' }, inner); }
     sv('path', ink({ d: b.d, fill: 'none' }), g);
     // the screw base, in the logo's sky blues
-    sv('rect', ink({ x: 37, y: 64, width: 26, height: 7, rx: 3.5, fill: '#E6F2FF' }, 2.5), g);
-    sv('rect', ink({ x: 38, y: 70, width: 24, height: 7, rx: 3.5, fill: '#C3E1FF' }, 2.5), g);
-    sv('rect', ink({ x: 39, y: 76, width: 22, height: 7, rx: 3.5, fill: '#96C9FF' }, 2.5), g);
+    var bf = wr.base === 'goldbase' ? ['#FFF3B0', '#F3C613', '#E0B400'] : ['#E6F2FF', '#C3E1FF', '#96C9FF'];
+    sv('rect', ink({ x: 37, y: 64, width: 26, height: 7, rx: 3.5, fill: bf[0] }, 2.5), g);
+    sv('rect', ink({ x: 38, y: 70, width: 24, height: 7, rx: 3.5, fill: bf[1] }, 2.5), g);
+    sv('rect', ink({ x: 39, y: 76, width: 22, height: 7, rx: 3.5, fill: bf[2] }, 2.5), g);
     sv('path', { d: 'M43 82.5H57L54 89H46Z', fill: INK }, g);
-    // eyes (a group that blinks), and the X eyes of a knockout
+    // eyes (a group that blinks), and the closed eyes of a bulb that's off
     var ex = m.eyes === 1 ? [[50, ey, Math.min(11, w * 0.45)]] : [[50 - w * 0.42, ey, Math.min(8.5, w * 0.36)], [50 + w * 0.42, ey, Math.min(8.5, w * 0.36)]];
+    if (wr.face === 'stars') ex.forEach(function (e) { var d = '', R = e[2] + 6.5; for (var k = 0; k < 10; k++) { var an = -Math.PI / 2 + Math.PI * k / 5, rr = k % 2 ? R * 0.55 : R; d += (k ? 'L' : 'M') + (e[0] + rr * Math.cos(an)).toFixed(1) + ' ' + (e[1] + rr * Math.sin(an)).toFixed(1); } sv('path', { d: d + 'Z', fill: '#FF9EC7', stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, g); });
     var eg = sv('g', { 'class': 'kc-eyes' }, g), xg = sv('g', { 'class': 'kc-xeyes' }, g);
     ex.forEach(function (e) {
       sv('circle', { cx: e[0], cy: e[1], r: e[2], fill: '#fff', stroke: INK, 'stroke-width': 2.5 }, eg);
       sv('circle', { cx: e[0] + e[2] * 0.2, cy: e[1] + e[2] * 0.12, r: e[2] * 0.52, fill: INK }, eg);
       sv('circle', { cx: e[0], cy: e[1] - e[2] * 0.25, r: e[2] * 0.2, fill: '#fff' }, eg);
-      var q = e[2] * 0.6; sv('path', { d: 'M' + (e[0] - q) + ' ' + (e[1] - q) + 'L' + (e[0] + q) + ' ' + (e[1] + q) + 'M' + (e[0] + q) + ' ' + (e[1] - q) + 'L' + (e[0] - q) + ' ' + (e[1] + q), stroke: INK, 'stroke-width': 3, 'stroke-linecap': 'round' }, xg);
+      var q = e[2] * 0.7; sv('path', { d: 'M' + (e[0] - q) + ' ' + e[1] + 'Q' + e[0] + ' ' + (e[1] + q) + ' ' + (e[0] + q) + ' ' + e[1], fill: 'none', stroke: INK, 'stroke-width': 3, 'stroke-linecap': 'round' }, xg);
     });
-    if (m.shades) { ex.forEach(function (e) { sv('rect', { x: e[0] - e[2] - 2, y: e[1] - e[2] * 0.75, width: 2 * e[2] + 4, height: e[2] * 1.5, rx: 3, fill: INK }, eg); sv('path', { d: 'M' + (e[0] - e[2] + 1) + ' ' + (e[1] - e[2] * 0.3) + 'l3 -2', stroke: '#fff', 'stroke-width': 1.6, 'stroke-linecap': 'round' }, eg); }); if (ex.length > 1) sv('path', { d: 'M' + (ex[0][0] + ex[0][2]) + ' ' + ex[0][1] + 'H' + (ex[1][0] - ex[1][2]), stroke: INK, 'stroke-width': 2.5 }, eg); }
+    if (m.shades || wr.face === 'shades') { ex.forEach(function (e) { sv('rect', { x: e[0] - e[2] - 2, y: e[1] - e[2] * 0.75, width: 2 * e[2] + 4, height: e[2] * 1.5, rx: 3, fill: INK }, eg); sv('path', { d: 'M' + (e[0] - e[2] + 1) + ' ' + (e[1] - e[2] * 0.3) + 'l3 -2', stroke: '#fff', 'stroke-width': 1.6, 'stroke-linecap': 'round' }, eg); }); if (ex.length > 1) sv('path', { d: 'M' + (ex[0][0] + ex[0][2]) + ' ' + ex[0][1] + 'H' + (ex[1][0] - ex[1][2]), stroke: INK, 'stroke-width': 2.5 }, eg); }
     if (m.acc === 'gradcap') {   // glasses go with the cap
       ex.forEach(function (e) { sv('circle', { cx: e[0], cy: e[1], r: e[2] + 3, fill: 'none', stroke: INK, 'stroke-width': 2.2 }, g); });
       if (ex.length > 1) sv('path', { d: 'M' + (ex[0][0] + ex[0][2] + 3) + ' ' + ex[0][1] + 'L' + (ex[1][0] - ex[1][2] - 3) + ' ' + ex[1][1], stroke: INK, 'stroke-width': 2.2 }, g);
@@ -237,14 +259,11 @@
     if (m.mouth === 2) { sv('path', ink({ d: 'M' + (50 - mw) + ' ' + my + 'H' + (50 + mw) + 'Q' + (50 + mw - 3) + ' ' + (my + 11) + ' 50 ' + (my + 11) + 'Q' + (50 - mw + 3) + ' ' + (my + 11) + ' ' + (50 - mw) + ' ' + my + 'Z', fill: INK }, 2), g); sv('rect', { x: 50 - mw + 3, y: my + 0.5, width: 2 * mw - 6, height: 3.2, fill: '#fff' }, g); }
     if (m.mouth === 3) sv('path', { d: 'M' + (50 - mw * 0.6) + ' ' + (my + 1) + 'Q50 ' + (my + 9) + ' ' + (50 + mw * 0.6) + ' ' + (my + 1), fill: 'none', stroke: INK, 'stroke-width': 3, 'stroke-linecap': 'round' }, g);
     if (m.blush) { sv('ellipse', { cx: 50 - w * 0.68, cy: my - 2, rx: 4, ry: 2.4, fill: '#FF7A8A', opacity: 0.55 }, g); sv('ellipse', { cx: 50 + w * 0.68, cy: my - 2, rx: 4, ry: 2.4, fill: '#FF7A8A', opacity: 0.55 }, g); }
-    // boxing gloves, up in front of the face
-    gl.forEach(function (x) {
-      sv('rect', ink({ x: x[0] - 5.5, y: x[1] + 7, width: 11, height: 5, rx: 2, fill: '#fff' }, 2), g);
-      sv('path', ink({ d: 'M' + (x[0] - 8) + ' ' + (x[1] + 6) + 'C' + (x[0] - 11) + ' ' + (x[1] - 6) + ' ' + (x[0] - 4) + ' ' + (x[1] - 11) + ' ' + (x[0] + 2) + ' ' + (x[1] - 10) + 'C' + (x[0] + 9) + ' ' + (x[1] - 9) + ' ' + (x[0] + 11) + ' ' + (x[1] - 2) + ' ' + (x[0] + 8) + ' ' + (x[1] + 6) + 'Z', fill: '#CC3000' }, 2.5), g);
-      sv('ellipse', { cx: x[0] - 3, cy: x[1] - 5, rx: 3, ry: 1.8, fill: '#fff', opacity: 0.6 }, g);
-    });
-    // what they wear
-    var a = m.acc;
+    if (wr.neck === 'bow') { sv('path', ink0({ d: 'M50 63L39 57V69ZM50 63L61 57V69Z', fill: '#2176D2' }), g); sv('circle', ink0({ cx: 50, cy: 63, r: 3, fill: '#0F4D90' }), g); }
+    if (wr.neck === 'scarf') { sv('path', ink0({ d: 'M56 63L59 82L66 80L62 62Z', fill: '#CC3000' }), g); sv('rect', ink0({ x: 34, y: 58.5, width: 32, height: 8, rx: 4, fill: '#CC3000' }), g); sv('path', { d: 'M41 59V66M48 59V66M55 59V66', stroke: '#fff', 'stroke-width': 1.6 }, g); }
+    if (wr.neck === 'medal') { sv('path', { d: 'M41 59L50 73L59 59', fill: 'none', stroke: '#2176D2', 'stroke-width': 4.5, 'stroke-linejoin': 'round' }, g); sv('circle', ink0({ cx: 50, cy: 78, r: 7.5, fill: '#F3C613' }), g); sv('path', { d: STAR, transform: 'translate(50 78) scale(.75)', fill: '#fff' }, g); }
+    // what they wear: a family's gear, or what a child picked to put on their head
+    var a = m.acc || ({ cap: 'ballcap', crown: 'crown', tophat: 'tophat' })[wr.hat] || '';
     if (a === 'headphones') {
       var hd = 'M' + (50 - w - 3) + ' ' + ey + 'C' + (50 - w - 3) + ' ' + (T - 16) + ' ' + (50 + w + 3) + ' ' + (T - 16) + ' ' + (50 + w + 3) + ' ' + ey;
       sv('path', { d: hd, fill: 'none', stroke: INK, 'stroke-width': 8, 'stroke-linecap': 'round' }, g); sv('path', { d: hd, fill: 'none', stroke: '#2176D2', 'stroke-width': 4, 'stroke-linecap': 'round' }, g);
@@ -271,6 +290,8 @@
     if (a === 'ballcap') { sv('path', ink({ d: 'M62 ' + (T + 6) + 'Q82 ' + (T + 3) + ' 83 ' + (T + 10) + 'Q72 ' + (T + 12) + ' 62 ' + (T + 10) + 'Z', fill: '#0F4D90' }, 2.5), g); sv('path', ink({ d: 'M33 ' + (T + 9) + 'A17 15 0 0 1 67 ' + (T + 9) + 'Z', fill: '#2176D2' }, 2.5), g); sv('circle', { cx: 50, cy: T - 6, r: 2.5, fill: INK }, g); }
     if (a === 'backpack') sv('rect', ink({ x: 44, y: ey + 24, width: 12, height: 8, rx: 2, fill: '#F3C613' }, 2), g);
     if (a === 'crown') { sv('path', ink({ d: 'M36 ' + (T + 4) + 'L35 ' + (T - 12) + 'L43 ' + (T - 4) + 'L50 ' + (T - 16) + 'L57 ' + (T - 4) + 'L65 ' + (T - 12) + 'L64 ' + (T + 4) + 'Z', fill: '#F3C613' }, 2.5), g); sv('circle', { cx: 50, cy: T - 3, r: 2.6, fill: '#CC3000' }, g); sv('circle', { cx: 42, cy: T, r: 2, fill: '#2176D2' }, g); sv('circle', { cx: 58, cy: T, r: 2, fill: '#2176D2' }, g); }
+    if (wr.hat === 'halo') { sv('ellipse', { cx: 50, cy: T - 12, rx: 17, ry: 4.8, fill: 'none', stroke: '#E0B400', 'stroke-width': 6 }, g); sv('ellipse', { cx: 50, cy: T - 12, rx: 17, ry: 4.8, fill: 'none', stroke: '#FFF3B0', 'stroke-width': 2.5 }, g); }
+    if (wr.glow === 'sparkle') [[6, 8, 0], [94, 2, 0.6], [97, 58, 1.2], [3, 64, 1.8], [50, T - 26, 0.9]].forEach(function (q) { sv('path', { 'class': 'kc-twinkle', d: TWINKLE, transform: 'translate(' + q[0] + ' ' + q[1] + ')', fill: '#FFF3B0', stroke: '#E0B400', 'stroke-width': 1.2, style: 'animation-delay:' + q[2] + 's' }, g); });
     return s;
   };
   // A bulb nobody has picked yet: dark, with a question mark.
@@ -314,25 +335,63 @@
     season: ['M50 3L89 16V48C89 73 72 89 50 97C28 89 11 73 11 48V16Z', 'M50 14L79 24V48C79 66 67 79 50 86C33 79 21 66 21 48V24Z', 48],
     explore: [(function () { var d = ''; for (var i = 0; i < 16; i++) { var r = i % 2 ? 38 : 47, a = Math.PI * 2 * i / 16 - Math.PI / 2; d += (i ? 'L' : 'M') + (50 + r * Math.cos(a)).toFixed(1) + ' ' + (50 + r * Math.sin(a)).toFixed(1); } return d + 'Z'; })(), 'M50 20A30 30 0 1 1 49.99 20Z', 50]
   };
+  // A pin gets grander as it levels up. Bronze: the pin and one star. Silver: a laurel wreath, a blue banner, a gem and
+  // two stars. Gold: a turning sunburst, wings, a gold laurel, a crown, a red banner with three stars, and sparkles.
+  var STAR = 'M0 -6l1.8 3.8 4.2.5-3.1 2.8.8 4.1L0 3.1l-3.7 2.1.8-4.1-3.1-2.8 4.2-.5z';
+  var TWINKLE = 'M0 -7L1.6 -1.6L7 0L1.6 1.6L0 7L-1.6 1.6L-7 0L-1.6 -1.6Z';
+  var laurel = function (s, leaf, stem) {
+    [-1, 1].forEach(function (sd) {
+      var g = sv('g', sd > 0 ? { transform: 'translate(100 0) scale(-1 1)' } : null, s), r0 = Math.PI / 180, R = 58;
+      sv('path', { d: 'M' + (50 + R * Math.cos(100 * r0)).toFixed(1) + ' ' + (50 + R * Math.sin(100 * r0)).toFixed(1) + 'A' + R + ' ' + R + ' 0 0 1 ' + (50 + R * Math.cos(214 * r0)).toFixed(1) + ' ' + (50 + R * Math.sin(214 * r0)).toFixed(1), fill: 'none', stroke: stem, 'stroke-width': 2.6, 'stroke-linecap': 'round' }, g);
+      for (var a = 106, i = 0; a <= 214; a += 12, i++) {
+        var side = i % 2 ? 1 : -1, rr = R + side * 4.5, x = 50 + rr * Math.cos(a * r0), y = 50 + rr * Math.sin(a * r0);
+        sv('ellipse', { cx: x.toFixed(1), cy: y.toFixed(1), rx: 7.5, ry: 3.6, fill: leaf, stroke: INK, 'stroke-width': 1.4, transform: 'rotate(' + (a + 90 + side * 32) + ' ' + x.toFixed(1) + ' ' + y.toFixed(1) + ')' }, g);
+      }
+    });
+  };
   var drawPin = function (p, tier) {
     var id = 'kcp' + (++uid), sh = PIN_SHAPE[p.group] || PIN_SHAPE.type, cy = sh[2];
-    var s = sv('svg', { viewBox: '0 0 100 112', 'class': 'kc-pin t' + tier, 'aria-hidden': 'true', focusable: 'false' });
+    var s = sv('svg', { viewBox: '-30 -24 160 144', 'class': 'kc-pin t' + tier, 'aria-hidden': 'true', focusable: 'false' });
     var defs = sv('defs', null, s);
     if (tier) {
       var lg = sv('linearGradient', { id: id + 'm', x1: 0, y1: 0, x2: 1, y2: 1 }, defs), st = METAL[tier];
       [[0, st[0]], [0.3, st[1]], [0.5, st[2]], [0.72, st[1]], [1, st[3]]].forEach(function (x) { sv('stop', { offset: x[0], 'stop-color': x[1] }, lg); });
       sv('path', { d: sh[0] }, sv('clipPath', { id: id + 'c' }, defs));
     }
-    if (tier === 3) { sv('path', { d: 'M34 80L24 108L36 101L42 110L50 84Z', fill: '#CC3000', stroke: INK, 'stroke-width': 2.5, 'stroke-linejoin': 'round' }, s); sv('path', { d: 'M66 80L76 108L64 101L58 110L50 84Z', fill: '#CC3000', stroke: INK, 'stroke-width': 2.5, 'stroke-linejoin': 'round' }, s); }
+    if (tier === 3) {   // behind it all: a sunburst, and wings
+      var rg = sv('radialGradient', { id: id + 'r' }, defs);
+      [[0, '#FFF6C7'], [0.6, '#FFD84D'], [1, '#F3C613']].forEach(function (x) { sv('stop', { offset: x[0], 'stop-color': x[1] }, rg); });
+      var pts = ''; for (var k = 0; k < 36; k++) { var ang = Math.PI * 2 * k / 36, r = k % 2 ? 58 : 74; pts += (k ? 'L' : 'M') + (50 + r * Math.cos(ang)).toFixed(1) + ' ' + (50 + r * Math.sin(ang)).toFixed(1); }
+      sv('path', { 'class': 'kc-pinrays', d: pts + 'Z', fill: 'url(#' + id + 'r)', stroke: '#E0B400', 'stroke-width': 1.5, 'stroke-linejoin': 'round' }, s);
+      [-1, 1].forEach(function (sd) {
+        var wg = sv('g', sd > 0 ? { transform: 'translate(100 0) scale(-1 1)' } : null, s);
+        [[-12, 30, 20, 6.5, -30], [-17, 44, 22, 7, -12], [-15, 58, 20, 6.5, 6], [-8, 70, 15, 5.5, 24]].forEach(function (f) { sv('ellipse', { cx: f[0], cy: f[1], rx: f[2], ry: f[3], fill: '#FFF3B0', stroke: INK, 'stroke-width': 2, transform: 'rotate(' + f[4] + ' ' + f[0] + ' ' + f[1] + ')' }, wg); });
+      });
+    }
+    if (tier >= 2) laurel(s, tier === 3 ? '#FFD84D' : '#D6DEEA', tier === 3 ? '#B8860B' : '#8E9AB0');
+    if (tier === 3) { sv('path', { d: 'M34 80L24 112L36 105L42 114L50 84Z', fill: '#CC3000', stroke: INK, 'stroke-width': 2.5, 'stroke-linejoin': 'round' }, s); sv('path', { d: 'M66 80L76 112L64 105L58 114L50 84Z', fill: '#CC3000', stroke: INK, 'stroke-width': 2.5, 'stroke-linejoin': 'round' }, s); }
+    // the pin
     sv('path', { d: sh[0], fill: tier ? 'url(#' + id + 'm)' : '#C3CBD8', stroke: INK, 'stroke-width': 3, 'stroke-linejoin': 'round' }, s);
     sv('path', { d: sh[1], fill: tier ? p.color : '#E2E7EF', stroke: 'rgba(0,0,0,.28)', 'stroke-width': 2 }, s);
     var ic = sv('g', { transform: 'translate(' + (50 - 19.2) + ' ' + (cy - 19.2) + ') scale(1.6)' }, s);
     sv('path', { d: p.icon, fill: tier ? '#fff' : '#A9B3C4' }, ic);
-    if (tier) {
-      sv('ellipse', { cx: 37, cy: cy - 16, rx: 16, ry: 8, fill: '#fff', opacity: 0.22, transform: 'rotate(-32 37 ' + (cy - 16) + ')' }, s);
-      var sg = sv('g', { 'clip-path': 'url(#' + id + 'c)' }, s);
-      sv('rect', { 'class': 'kc-shine', x: -40, y: -20, width: 18, height: 150, fill: '#fff', opacity: 0.55 }, sv('g', { transform: 'rotate(22 50 50)' }, sg));
-      for (var i = 0; i < tier; i++) sv('path', { d: 'M0 -6l1.8 3.8 4.2.5-3.1 2.8.8 4.1L0 3.1l-3.7 2.1.8-4.1-3.1-2.8 4.2-.5z', transform: 'translate(' + (50 + (i - (tier - 1) / 2) * 13) + ' ' + (p.group === 'season' ? 90 : 89) + ')', fill: '#FFF', stroke: INK, 'stroke-width': 1.3, 'stroke-linejoin': 'round' }, s);
+    if (!tier) return s;
+    sv('ellipse', { cx: 37, cy: cy - 16, rx: 16, ry: 8, fill: '#fff', opacity: 0.22, transform: 'rotate(-32 37 ' + (cy - 16) + ')' }, s);
+    var sg = sv('g', { 'clip-path': 'url(#' + id + 'c)' }, s);
+    sv('rect', { 'class': 'kc-shine', x: -40, y: -20, width: 18, height: 150, fill: '#fff', opacity: 0.55 }, sv('g', { transform: 'rotate(22 50 50)' }, sg));
+    if (tier >= 2) {   // a banner across the foot, its ends folded behind
+      var band = tier === 3 ? '#CC3000' : '#2176D2', fold = tier === 3 ? '#8A1F00' : '#0F4D90';
+      sv('path', { d: 'M0 88H16V104H0L6 96Z', fill: fold, stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, s);
+      sv('path', { d: 'M100 88H84V104H100L94 96Z', fill: fold, stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, s);
+      sv('rect', { x: 12, y: 85, width: 76, height: 16, rx: 2, fill: band, stroke: INK, 'stroke-width': 2.2 }, s);
+      sv('circle', { cx: 50, cy: 4, r: 5.5, fill: tier === 3 ? '#CC3000' : '#96C9FF', stroke: INK, 'stroke-width': 2 }, s);   // a gem in the rim
+    }
+    var sy = tier >= 2 ? 93 : (p.group === 'season' ? 90 : 89);
+    for (var i = 0; i < tier; i++) sv('path', { d: STAR, transform: 'translate(' + (50 + (i - (tier - 1) / 2) * 14) + ' ' + sy + ')', fill: tier >= 2 ? '#F3C613' : '#FFF', stroke: INK, 'stroke-width': 1.3, 'stroke-linejoin': 'round' }, s);
+    if (tier === 3) {   // a crown on top, and sparkles around
+      sv('path', { d: 'M34 4L32 -14L42 -5L50 -19L58 -5L68 -14L66 4Z', fill: 'url(#' + id + 'm)', stroke: INK, 'stroke-width': 2.4, 'stroke-linejoin': 'round' }, s);
+      sv('circle', { cx: 50, cy: -6, r: 2.8, fill: '#2176D2' }, s); sv('circle', { cx: 40, cy: -2, r: 2.2, fill: '#CC3000' }, s); sv('circle', { cx: 60, cy: -2, r: 2.2, fill: '#CC3000' }, s);
+      [[-18, -6, 0], [118, 2, 0.5], [-22, 92, 1], [120, 84, 1.5]].forEach(function (t) { sv('path', { 'class': 'kc-twinkle', d: TWINKLE, transform: 'translate(' + t[0] + ' ' + t[1] + ')', fill: '#fff', stroke: '#E0B400', 'stroke-width': 1.2, style: 'animation-delay:' + t[2] + 's' }, s); });
     }
     return s;
   };
@@ -476,21 +535,26 @@
     app.appendChild(box);
   };
 
-  // ----- picking a bulb: a shape and a colour, no typing -----
+  // ----- picking a bulb: a shape, a colour and what to wear, no typing -----
+  var unlockedAt = function (lvl) { return WEAR.filter(function (x) { return x.lvl <= lvl; }); };
   var drawAvatar = function () {
     var k = kid(); if (!k) { go('pick', null, false); return; }
     setKidMode(true);
-    var start = k.av ? kidBulb(k.av) : null;
-    var cur = start ? { b: start.shape, c: KID_COLORS.indexOf(start.glass) } : { b: 'classic', c: 0 };
+    var lvl = stats(k).level.n;
+    var start = k.av ? kidBulb(k.av) : null, cur = start ? { b: start.shape, c: KID_COLORS.indexOf(start.glass), w: {} } : { b: 'classic', c: 0, w: {} };
+    if (cur.c < 0) cur.c = 0;
+    if (k.av && k.av.w) Object.keys(k.av.w).forEach(function (sl) { var it = WEAR_BY[k.av.w[sl]]; if (it && it.lvl <= lvl) cur.w[sl] = it.id; });
     var page = el('section', 'kc-avatar');
-    var top = el('div', 'kc-picktop'); top.appendChild(el('h1', 'kc-h', k.av ? 'Change your bulb' : 'Pick your bulb!')); top.appendChild(muteBtn()); page.appendChild(top);
-    page.appendChild(eddie(k.av ? 'Try a new look!' : 'Pick a bulb and a color. That’s you!', 'kc-host'));
+    var top = el('div', 'kc-picktop'); top.appendChild(el('h1', 'kc-h', k.av ? 'My bulb' : 'Pick your bulb!')); top.appendChild(muteBtn()); page.appendChild(top);
+    var host = eddie(k.av ? 'Change it up! Level up to unlock more stuff to wear.' : 'Pick a bulb and a color. That’s you!', 'kc-host'); page.appendChild(host);
     var stage = el('div', 'kc-avstage'); page.appendChild(stage);
     var paintStage = function () { stage.textContent = ''; var m = drawBulb(kidBulb(cur), 'bob big'); stage.appendChild(m); bounce(m); };
+    var head = function (t) { var h = el('div', 'kc-sechead'); h.appendChild(el('h2', 'kc-h2', t)); return h; };
     var bodies = el('div', 'kc-bodies'); bodies.setAttribute('role', 'group'); bodies.setAttribute('aria-label', 'Bulbs');
     var colors = el('div', 'kc-colors'); colors.setAttribute('role', 'group'); colors.setAttribute('aria-label', 'Colors');
+    var wardrobe = el('div', 'kc-wardrobe'); wardrobe.setAttribute('role', 'group'); wardrobe.setAttribute('aria-label', 'Things to wear');
     var paintChoices = function () {
-      bodies.textContent = ''; colors.textContent = '';
+      bodies.textContent = ''; colors.textContent = ''; wardrobe.textContent = '';
       BULB_IDS.forEach(function (b, i) {
         var c = btn('kc-bodybtn' + (cur.b === b ? ' on' : ''), '', function () { cur.b = b; Sound.play('zap'); paintChoices(); paintStage(); });
         c.setAttribute('aria-label', 'Bulb ' + (i + 1)); c.setAttribute('aria-pressed', cur.b === b ? 'true' : 'false');
@@ -501,12 +565,30 @@
         c.style.background = hex; c.setAttribute('aria-label', 'Color ' + (i + 1)); c.setAttribute('aria-pressed', cur.c === i ? 'true' : 'false');
         colors.appendChild(c);
       });
+      WEAR.forEach(function (it) {
+        var open = it.lvl <= lvl, on = cur.w[it.slot] === it.id;
+        var c = btn('kc-wearbtn' + (on ? ' on' : '') + (open ? '' : ' locked'), '', function () {
+          if (!open) { Sound.play('tap'); host.say('Reach level ' + it.lvl + ' to wear the ' + it.name.toLowerCase() + '!'); return; }
+          if (on) delete cur.w[it.slot]; else cur.w[it.slot] = it.id;
+          Sound.play(on ? 'tap' : 'sparkle'); paintChoices(); paintStage();
+        });
+        c.setAttribute('aria-pressed', on ? 'true' : 'false');
+        c.setAttribute('aria-label', it.name + (open ? (on ? ', wearing' : '') : ', unlocks at level ' + it.lvl));
+        var wearOne = {}; wearOne[it.slot] = it.id;
+        c.appendChild(drawBulb(kidBulb({ b: cur.b, c: cur.c, w: wearOne }), open ? '' : 'off kc-unpicked'));
+        c.appendChild(el('b', null, it.name));
+        if (!open) c.appendChild(el('span', 'kc-lock', 'Level ' + it.lvl));
+        wardrobe.appendChild(c);
+      });
     };
-    page.appendChild(bodies); page.appendChild(colors);
+    page.appendChild(head('Shape')); page.appendChild(bodies);
+    page.appendChild(head('Color')); page.appendChild(colors);
+    var wh = head('Dress up'); wh.appendChild(el('span', 'kc-tally', unlockedAt(lvl).length + ' / ' + WEAR.length)); page.appendChild(wh); page.appendChild(wardrobe);
     var acts = el('div', 'kc-avacts');
     acts.appendChild(btn('kc-big go', 'That’s me!', function () {
       Sound.play('sparkle'); confetti(40);
-      save({ av: { b: cur.b, c: cur.c } }, function () { go('kid', S.tab || 'pins'); });
+      var av = { b: cur.b, c: cur.c }; if (Object.keys(cur.w).length) av.w = cur.w;
+      save({ av: av }, function () { go('kid', S.tab || 'pins'); });
     }));
     if (k.av) acts.appendChild(btn('kc-big ghost', 'Never mind', function () { go('kid'); }));
     page.appendChild(acts);
@@ -523,7 +605,7 @@
     var page = el('section', 'kc-page kc-tab-' + S.tab);
     var top = el('header', 'kc-top');
     if (S.data.kids.length > 1) { var back = btn('kc-back', '', function () { Sound.play('tap'); go('pick'); }); back.setAttribute('aria-label', 'Who’s playing?'); back.appendChild(icon('M15.4 4.6 8 12l7.4 7.4-1.8 1.8L4.4 12l9.2-9.2z')); top.appendChild(back); }
-    var me = btn('kc-me', '', function () { Sound.play('boing'); go('avatar'); }); me.setAttribute('aria-label', 'Change my bulb'); me.appendChild(drawBulb(kidBulb(k.av), 'bob')); top.appendChild(me);
+    var me = btn('kc-me', '', function () { Sound.play('boing'); go('avatar'); }); me.setAttribute('aria-label', 'My bulb: change it and dress it up'); me.appendChild(drawBulb(kidBulb(k.av), 'bob')); top.appendChild(me);
     var who = el('div', 'kc-who');
     who.appendChild(el('b', 'kc-name', k.name));
     who.appendChild(el('span', 'kc-lvl', st.level.title + ' · Level ' + st.level.n));
@@ -539,7 +621,7 @@
     else drawPinsTab(body, k, st);
     body.appendChild(grownupRow());
     var tabs = el('nav', 'kc-tabs'); tabs.setAttribute('aria-label', 'Kid’s Corner');
-    [['pins', 'Pins', 'M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z'], ['map', 'Map', 'M15 4 9 2 3 4v18l6-2 6 2 6-2V2zm0 15.8-6-2V4.2l6 2z'], ['battle', 'Boxing', 'M8 2h6a5 5 0 0 1 5 5v5a5 5 0 0 1-2.5 4.3V19a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2v-3.4A6 6 0 0 1 3 10V7a3 3 0 0 1 3-3h.3A2 2 0 0 1 8 2zM6 6a1 1 0 0 0-1 1v3a4 4 0 0 0 4 4h4v-2H9a2 2 0 0 1-2-2V7a1 1 0 0 0-1-1z']].forEach(function (t) {
+    [['pins', 'Pins', 'M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z'], ['map', 'Map', 'M15 4 9 2 3 4v18l6-2 6 2 6-2V2zm0 15.8-6-2V4.2l6 2z'], ['battle', 'Showdown', 'M7 3h10v2h3v3a4 4 0 0 1-4 4h-.3A5 5 0 0 1 13 14.9V17h3v3H8v-3h3v-2.1A5 5 0 0 1 8.3 12H8a4 4 0 0 1-4-4V5h3zm-1 4v1a2 2 0 0 0 2 2V7zm11 0v3a2 2 0 0 0 2-2V7z']].forEach(function (t) {
       var b = btn('kc-tabbtn' + (S.tab === t[0] ? ' on' : ''), '', function () { if (S.tab === t[0]) return; Sound.play('tap'); go('kid', t[0]); });
       if (S.tab === t[0]) b.setAttribute('aria-current', 'page');
       b.appendChild(icon(t[2])); b.appendChild(el('span', null, t[1])); tabs.appendChild(b);
@@ -600,7 +682,7 @@
     celebrating = true;
     var done = function () {
       var seen = {}; D.pins.forEach(function (p) { if (st.pins[p.id].tier) seen[p.id] = st.pins[p.id].tier; });
-      save({ seen: seen, lvl: st.level.n }, function () { celebrating = false; draw(); });
+      save({ seen: seen, lvl: st.level.n }, function () { celebrating = false; if (S.tryOn) { S.tryOn = false; go('avatar'); } else draw(); });
     };
     // A present to tap open: sounds can only start after a tap.
     overlay(function (card, close) {
@@ -662,7 +744,16 @@
       var m = drawBulb(kidBulb(k.av), 'bob big beam'); card.appendChild(m);
       card.appendChild(el('p', 'kc-levelnum', String(st.level.n)));
       card.appendChild(el('h2', 'kc-h', st.level.title + ' · Level ' + st.level.n));
-      card.appendChild(btn('kc-big go', 'Woo-hoo!', function () { Sound.play('tap'); close(); }));
+      var fresh = WEAR.filter(function (x) { return x.lvl > (k.lvl || 1) && x.lvl <= st.level.n; });
+      if (fresh.length) {   // new things to wear, on the child's own bulb
+        card.classList.add('kc-hasnew');
+        card.appendChild(el('p', 'kc-say', 'New stuff to wear!'));
+        var row = el('div', 'kc-newwear');
+        fresh.slice(-4).forEach(function (it) { var one = {}; one[it.slot] = it.id; var c = el('div', 'kc-newitem'); c.appendChild(drawBulb(kidBulb({ b: k.av.b, c: k.av.c, w: one }))); c.appendChild(el('b', null, it.name)); row.appendChild(c); });
+        card.appendChild(row);
+        card.appendChild(btn('kc-big go', 'Try it on!', function () { Sound.play('tap'); S.tryOn = true; close(); }));
+        card.appendChild(btn('kc-big ghost', 'Later', function () { Sound.play('tap'); close(); }));
+      } else card.appendChild(btn('kc-big go', 'Woo-hoo!', function () { Sound.play('tap'); close(); }));
       Sound.play('levelup'); confetti(90);
       anim(m, [{ transform: 'translateY(0)' }, { transform: 'translateY(-30%)' }, { transform: 'translateY(0)' }, { transform: 'translateY(-15%)' }, { transform: 'translateY(0)' }], { duration: 900, easing: 'ease-out' });
     }, 'reveal');
@@ -885,7 +976,11 @@
     }
   };
 
-  // ----- the Boxing tab: the bulbs collected, the favorites, and the boxing match -----
+  // ----- the Showdown tab: the bulbs collected, the favorites, and the showdown -----
+  // Two bulbs at a time, in one of three contests that take turns: a race up the Art Museum steps, a glow-off and a
+  // dance-off. The child taps who wins; the winner pulls out its special move, the other comes second and cheers, and
+  // Eddie hosts. Nobody gets hurt: it's a contest, not a fight. The order they drop out of the running in is
+  // the child's ranking of favorites.
   var drawBattleTab = function (body, k, st) {
     var keys = st.keys;
     if (k.fav.length) {
@@ -901,11 +996,11 @@
       });
       body.appendChild(pod);
     }
-    var bh = el('div', 'kc-sechead'); bh.appendChild(el('h2', 'kc-h2', 'Bulb boxing')); body.appendChild(bh);
+    var bh = el('div', 'kc-sechead'); bh.appendChild(el('h2', 'kc-h2', 'Bulb showdown')); body.appendChild(bh);
     if (keys.length >= 2) {
-      body.appendChild(eddie('Two bulbs box. You pick the winner! The last one standing is your favorite.', 'kc-host'));
-      body.appendChild(btn('kc-big go fight', k.fav.length ? 'Box again!' : 'Ding ding! Start!', function () { Sound.play('bell'); startBracket(keys); }));
-    } else body.appendChild(eddie(keys.length ? 'You have 1 bulb. Get one more to box!' : 'Every class lights up a new bulb. Get two to box!', 'kc-host'));
+      body.appendChild(eddie('Bulbs race up the Art Museum steps, have a glow-off and a dance-off. You pick the winner! The champion is your favorite.', 'kc-host'));
+      body.appendChild(btn('kc-big go fight', k.fav.length ? 'Play again!' : 'Start the showdown!', function () { Sound.play('go'); startBracket(keys); }));
+    } else body.appendChild(eddie(keys.length ? 'You have 1 bulb. Get one more for a showdown!' : 'Every class lights up a new bulb. Get two for a showdown!', 'kc-host'));
     var ch = el('div', 'kc-sechead'); ch.appendChild(el('h2', 'kc-h2', 'My bulbs')); ch.appendChild(el('span', 'kc-tally', String(keys.length))); body.appendChild(ch);
     var grid = el('div', 'kc-zoo');
     keys.forEach(function (key) {
@@ -918,16 +1013,28 @@
     body.appendChild(grid);
   };
   var shuffle = function (a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
-  var startBracket = function (keys) { S.bracket = { round: shuffle(keys), next: [], out: [], i: 0, n: 1 }; go('fight'); };
+  var startBracket = function (keys) { S.bracket = { round: shuffle(keys), next: [], out: [], i: 0, n: 1, m: Math.floor(Math.random() * 3) }; go('fight'); };
   var CHEERS = ['Go go go!', 'You can do it!', 'Woo-hoo!', 'Awesome!', 'Whoa!', 'Yeah!'];
-  var BURSTS = ['POW!', 'BAM!', 'WHAM!', 'BOOM!', 'BIFF!', 'KAPOW!'];
-  // A knockout: the light flickers, then goes out.
-  var flicker = function (svg) {
-    var steps = [0, 1, 0, 1, 0, 0, 1, 0], i = 0;
-    return new Promise(function (res) {
-      var tick = function () { if (i >= steps.length || CALM) { svg.classList.add('off'); res(); return; } svg.classList.toggle('off', !steps[i]); i++; setTimeout(tick, 85); };
-      tick();
-    });
+  var EVENTS = [
+    { id: 'race', title: 'Race up the steps!', ask: 'Who’s fastest? Tap one!', count: ['On your marks…', 'Get set…', 'GO!'], second: 'Good race!' },
+    { id: 'glow', title: 'Glow-off!', ask: 'Who’s brightest? Tap one!', count: ['Lights…', 'Get ready…', 'GLOW!'], second: 'So bright!' },
+    { id: 'dance', title: 'Dance-off!', ask: 'Best moves? Tap one!', count: ['Ready?', '5, 6, 7, 8…', 'DANCE!'], second: 'Great moves!' }
+  ];
+  var museumArt = function () {
+    var s = sv('svg', { viewBox: '0 0 120 46', 'class': 'kc-museum', 'aria-hidden': 'true' });
+    sv('path', { d: 'M8 16L60 2L112 16Z', fill: '#F1E3C4', stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, s);
+    sv('rect', { x: 10, y: 16, width: 100, height: 4, fill: '#E9DDC2', stroke: INK, 'stroke-width': 1.5 }, s);
+    for (var i = 0; i < 8; i++) sv('rect', { x: 15 + i * 12.4, y: 20, width: 5, height: 20, fill: '#fff', stroke: INK, 'stroke-width': 1.3 }, s);
+    sv('rect', { x: 6, y: 40, width: 108, height: 5, fill: '#E9DDC2', stroke: INK, 'stroke-width': 1.5 }, s);
+    return s;
+  };
+  var discoArt = function () {
+    var s = sv('svg', { viewBox: '-20 -26 40 46', 'class': 'kc-disco', 'aria-hidden': 'true' });
+    sv('path', { d: 'M0 -26V-16', stroke: '#fff', 'stroke-width': 1.5 }, s);
+    sv('circle', { r: 16, fill: '#C3E1FF', stroke: INK, 'stroke-width': 2 }, s);
+    var g = sv('g', { 'class': 'kc-disco-face' }, s);
+    for (var y = -12; y <= 12; y += 6) for (var x = -14; x <= 14; x += 6) if (x * x + y * y < 200) sv('rect', { x: x - 2.4, y: y - 2.4, width: 4.8, height: 4.8, fill: (x + y) % 12 ? '#fff' : '#96C9FF', opacity: 0.9 }, g);
+    return s;
   };
   var drawFight = function () {
     var k = kid(), b = S.bracket; if (!k || !b) { go('kid', 'battle', false); return; }
@@ -937,24 +1044,27 @@
       if (b.next.length === 1) { champion(k, b); return; }
       b.round = shuffle(b.next); b.next = []; b.i = 0; b.n++;
     }
+    var ev = EVENTS[b.m % EVENTS.length];
     var left = b.round.length - b.i + b.next.length;
     var page = el('section', 'kc-fight');
     var top = el('div', 'kc-fighttop');
-    var stop = btn('kc-back', '', function () { Sound.play('tap'); S.bracket = null; go('kid', 'battle'); }); stop.setAttribute('aria-label', 'Stop the match');
+    var stop = btn('kc-back', '', function () { Sound.play('tap'); S.bracket = null; go('kid', 'battle'); }); stop.setAttribute('aria-label', 'Stop the showdown');
     stop.appendChild(icon('M18.3 5.7 16.9 4.3 12 9.2 7.1 4.3 5.7 5.7 10.6 12l-4.9 4.9 1.4 1.4L12 13.4l4.9 4.9 1.4-1.4-4.9-4.9z')); top.appendChild(stop);
     top.appendChild(el('p', 'kc-round', left <= 2 ? 'THE FINAL!' : 'Round ' + b.n + ' · ' + left + ' left'));
     top.appendChild(muteBtn());
     page.appendChild(top);
-    page.appendChild(el('h1', 'kc-h kc-ask', 'Who wins?'));
-    // the ring: the crowd, the ropes, Eddie refereeing, and two bulbs with their gloves up
-    var ring = el('div', 'kc-arena kc-ring'), fx = el('div', 'kc-fx');
-    var ropes = el('span', 'kc-ropes'); ropes.setAttribute('aria-hidden', 'true'); ropes.appendChild(el('i')); ropes.appendChild(el('i')); ropes.appendChild(el('i')); ring.appendChild(ropes);
-    var ref = eddie('Tap the one you like best!', 'kc-ref'); ring.appendChild(ref);
+    page.appendChild(el('h1', 'kc-h kc-ask', ev.title));
+    // the stage for this contest, Eddie hosting, and two bulbs
+    var ring = el('div', 'kc-arena kc-show kc-ev-' + ev.id), fx = el('div', 'kc-fx');
+    if (ev.id === 'race') { var steps = el('span', 'kc-steps'); steps.setAttribute('aria-hidden', 'true'); ring.appendChild(steps); ring.appendChild(museumArt()); }
+    if (ev.id === 'glow') { ['l', 'r'].forEach(function (sd) { var sp = el('span', 'kc-spot ' + sd); sp.setAttribute('aria-hidden', 'true'); ring.appendChild(sp); }); }
+    if (ev.id === 'dance') { var floor = el('span', 'kc-floor'); floor.setAttribute('aria-hidden', 'true'); ring.appendChild(floor); ring.appendChild(discoArt()); }
+    var ref = eddie(ev.ask, 'kc-ref'); ring.appendChild(ref);
     var pair = [b.round[b.i], b.round[b.i + 1]], cards = [];
     pair.forEach(function (key, idx) {
       var c = btn('kc-fighter ' + (idx ? 'right' : 'left'), '', function () { choose(idx); });
-      var m = bulbFor(key); m.gloves = true;
-      var svg = drawBulb(m, 'bob'), wrap = el('span', 'kc-fwrap'), flip = el('span', 'kc-flip'); flip.appendChild(svg); wrap.appendChild(flip); c.appendChild(wrap);
+      var svg = drawBulb(bulbFor(key), 'bob'), wrap = el('span', 'kc-fwrap'), flip = el('span', 'kc-flip'); flip.appendChild(svg); wrap.appendChild(flip); c.appendChild(wrap);
+      if (ev.id === 'glow') { var meter = el('span', 'kc-meter'); meter.appendChild(el('i')); c.appendChild(meter); }
       c.appendChild(el('b', null, nameOf(key)));
       c.setAttribute('aria-label', nameOf(key) + ' wins');
       cards.push(c); ring.appendChild(c);
@@ -969,61 +1079,71 @@
     var choose = function (idx) {
       if (busy) return; busy = true;
       cards.forEach(function (c) { c.disabled = true; });
-      var win = cards[idx], lose = cards[1 - idx], wm = win.querySelector('.kc-fwrap'), lm = lose.querySelector('.kc-fwrap'), loseBulb = lose.querySelector('.kc-bulb'), winBulb = win.querySelector('.kc-bulb');
-      var mon = bulbFor(pair[idx]), dir = idx === 0 ? 1 : -1;
-      win.classList.add('winner'); ring.classList.add('fighting');
-      Sound.play('bell'); ref.say('Ding ding!'); said.textContent = pick(CHEERS); bounce(me);
-      var fr = fx.getBoundingClientRect(), a = wm.getBoundingClientRect(), z = lm.getBoundingClientRect();
-      var from = [a.left - fr.left + a.width / 2, a.top - fr.top + a.height * 0.42], to = [z.left - fr.left + z.width / 2, z.top - fr.top + z.height * 0.42];
-      var reach = (to[0] - from[0]) * 0.4;
-      var punch = function (n) {
-        return anim(wm, [{ transform: 'translateX(0)' }, { transform: 'translateX(' + reach + 'px) rotate(' + (dir * 8) + 'deg)', offset: 0.45 }, { transform: 'translateX(0)' }], { duration: 300, easing: 'ease-out' });
+      var win = cards[idx], lose = cards[1 - idx], wm = win.querySelector('.kc-fwrap'), lm = lose.querySelector('.kc-fwrap'), winBulb = win.querySelector('.kc-bulb');
+      var mon = bulbFor(pair[idx]);
+      win.classList.add('winner'); ring.classList.add('going');
+      said.textContent = pick(CHEERS); bounce(me);
+      var countdown = function () {
+        var p = Promise.resolve();
+        ev.count.forEach(function (line, i) { p = p.then(function () { ref.say(line); Sound.play(i === ev.count.length - 1 ? 'go' : 'tap'); return wait(i === ev.count.length - 1 ? 250 : 480); }); });
+        return p;
       };
-      var jab = function (n) { var p = punch(n); setTimeout(function () { Sound.play('punch'); hit(fx, [to[0] - dir * 14, to[1] - 8 + n * 9], lm); }, CALM ? 0 : 140); return p; };
-      wait(380)
-        .then(function () { return jab(0); }).then(function () { return jab(1); }).then(function () { return jab(2); })
-        .then(function () {   // then its special move
+      var shotAt = function (from, to, kind, ms) {
+        var s = drawShot(kind); fx.appendChild(s);
+        return anim(s, [{ transform: 'translate(' + from[0] + 'px,' + from[1] + 'px) scale(.4)', opacity: 1 }, { transform: 'translate(' + to[0] + 'px,' + to[1] + 'px) rotate(360deg) scale(1.2)', opacity: 0 }], { duration: ms || 600, easing: 'ease-out', fill: 'forwards' }).then(function () { s.remove(); });
+      };
+      var centerOf = function (node) { var fr = fx.getBoundingClientRect(), r = node.getBoundingClientRect(); return [r.left - fr.left + r.width / 2, r.top - fr.top + r.height / 2]; };
+      var contest;
+      if (ev.id === 'race') contest = function () {   // both climb; the winner faster, its special move as a speed boost
+        var rr = ring.getBoundingClientRect(), climb = Math.max(70, wm.getBoundingClientRect().top - rr.top - 64);
+        var hops = function (ms) { var fr = []; for (var i = 0; i <= 8; i++) { var f = i / 8; fr.push({ transform: 'translateY(' + (-climb * f - (i % 2 && i < 8 ? 10 : 0)).toFixed(1) + 'px) scale(' + (1 - 0.32 * f).toFixed(2) + ')', offset: f }); } return fr; };
+        Sound.play('whoosh'); ref.say(mon.move);
+        var trail = []; [150, 450, 750].forEach(function (t) { trail.push(wait(t).then(function () { var c = centerOf(wm); return shotAt([c[0], c[1] + 20], [c[0] + (Math.random() * 40 - 20), c[1] + 90], mon.atk, 650); })); });
+        var a1 = anim(wm, hops(1300), { duration: 1300, easing: 'linear', fill: 'forwards' }).then(function () { Sound.play('boing'); win.appendChild(el('span', 'kc-wins', 'WINS!')); confetti(30); });
+        var a2 = anim(lm, hops(1900), { duration: 1900, easing: 'linear', fill: 'forwards' });
+        return Promise.all([a1, a2].concat(trail));
+      };
+      if (ev.id === 'glow') contest = function () {   // both light up; the winner's meter fills, and it puts on a light show
+        Sound.play('glow');
+        var wf = win.querySelector('.kc-meter i'), lf = lose.querySelector('.kc-meter i');
+        var a1 = anim(wf, [{ width: '0%' }, { width: '100%' }], { duration: 1400, easing: 'ease-out', fill: 'forwards' });
+        var a2 = anim(lf, [{ width: '0%' }, { width: '72%' }], { duration: 1400, easing: 'ease-out', fill: 'forwards' });
+        if (CALM) { wf.style.width = '100%'; lf.style.width = '72%'; }
+        ring.classList.add(idx ? 'spot-r' : 'spot-l');
+        return Promise.all([a1, a2]).then(function () {
+          ref.say(mon.move); winBulb.classList.add('beam'); Sound.play('sparkle');
+          var c = centerOf(wm), shows = [];
+          for (var i = 0; i < 8; i++) { var ang = Math.PI * 2 * i / 8; shows.push(shotAt(c, [c[0] + Math.cos(ang) * 90, c[1] + Math.sin(ang) * 70], mon.atk, 800)); }
+          win.appendChild(el('span', 'kc-wins', 'MAX GLOW!'));
+          return Promise.all(shows.concat([anim(wm, [{ transform: 'scale(1)' }, { transform: 'scale(1.18)' }, { transform: 'scale(1.1)' }], { duration: 700, easing: 'ease-out', fill: 'forwards' })]));
+        });
+      };
+      if (ev.id === 'dance') contest = function () {   // the other dances first; then the winner, bigger, with its special move swirling round
+        Sound.play('dance');
+        var shimmy = [{ transform: 'rotate(0) translateY(0)' }, { transform: 'rotate(-12deg) translateY(-8%)' }, { transform: 'rotate(12deg) translateY(0)' }, { transform: 'rotate(-12deg) translateY(-8%)' }, { transform: 'rotate(0) translateY(0)' }];
+        return anim(lm, shimmy, { duration: 900, easing: 'ease-in-out' }).then(function () {
           ref.say(mon.move);
-          var shots = [];
-          for (var i = 0; i < 4; i++) (function (i) {
-            shots.push(wait(i * 140).then(function () {
-              var s = drawShot(mon.atk); fx.appendChild(s);
-              var lift = 50 + Math.random() * 50, mx = (from[0] + to[0]) / 2, my = Math.min(from[1], to[1]) - lift;
-              Sound.play('whoosh');
-              return anim(s, [{ transform: 'translate(' + from[0] + 'px,' + from[1] + 'px) rotate(0) scale(.5)' }, { transform: 'translate(' + mx + 'px,' + my + 'px) rotate(200deg) scale(1.3)', offset: 0.5 }, { transform: 'translate(' + (to[0] + Math.random() * 30 - 15) + 'px,' + (to[1] + Math.random() * 30 - 15) + 'px) rotate(400deg) scale(1)' }], { duration: 460, easing: 'ease-in', fill: 'forwards' }).then(function () {
-                s.remove(); Sound.play('pow'); hit(fx, to, lm);
-              });
-            }));
-          })(i);
-          return Promise.all(shots);
+          var c = centerOf(wm), swirl = [];
+          for (var i = 0; i < 6; i++) (function (i) { swirl.push(wait(i * 120).then(function () { var ang = Math.PI * 2 * i / 6; return shotAt([c[0] + Math.cos(ang) * 30, c[1] + Math.sin(ang) * 30], [c[0] + Math.cos(ang + 2) * 80, c[1] + Math.sin(ang + 2) * 60], mon.atk, 700); })); })(i);
+          var spin = anim(wm, [{ transform: 'rotate(0) translateY(0) scale(1)' }, { transform: 'rotate(180deg) translateY(-18%) scale(1.1)', offset: 0.4 }, { transform: 'rotate(360deg) translateY(0) scale(1.1)', offset: 0.7 }, { transform: 'rotate(360deg) translateY(-10%) scale(1.15)', offset: 0.85 }, { transform: 'rotate(360deg) translateY(0) scale(1.1)' }], { duration: 1200, easing: 'ease-in-out', fill: 'forwards' });
+          ring.classList.add(idx ? 'spot-r' : 'spot-l');
+          return Promise.all(swirl.concat([spin])).then(function () { Sound.play('cheer'); win.appendChild(el('span', 'kc-wins', 'WINS!')); });
+        });
+      };
+      wait(250).then(countdown).then(contest)
+        .then(function () {   // the other comes second, and cheers
+          lose.classList.add('second');
+          var good = el('span', 'kc-second', ev.second); lose.appendChild(good);
+          anim(lose.querySelector('.kc-bulb'), [{ transform: 'translateY(0)' }, { transform: 'translateY(-10%)' }, { transform: 'translateY(0)' }], { duration: 380, iterations: 2 });
+          Sound.play('clap'); ref.say('Winner: ' + nameOf(pair[idx]) + '!');
+          return wait(1300);
         })
-        .then(function () {   // the loser's light goes out
-          Sound.play('buzz'); lose.classList.add('ko');
-          return flicker(loseBulb).then(function () {
-            lose.appendChild(el('span', 'kc-dizzy', '★ ★ ★'));
-            return anim(lm, [{ transform: 'rotate(0) translateY(0)' }, { transform: 'rotate(' + (-dir * 14) + 'deg) translateY(6%)' }], { duration: 380, easing: 'ease-in', fill: 'forwards' });
-          });
-        })
-        .then(function () { ref.say('1…'); return wait(330); })
-        .then(function () { ref.say('2…'); return wait(330); })
-        .then(function () { ref.say('3…'); return wait(330); })
-        .then(function () {
-          ref.say('Knockout!'); Sound.play('bell'); winBulb.classList.add('beam'); win.appendChild(el('span', 'kc-wins', 'WINS!'));
-          return anim(wm, [{ transform: 'translateY(0)' }, { transform: 'translateY(-22%)' }, { transform: 'translateY(0)' }, { transform: 'translateY(-10%)' }, { transform: 'translateY(0)' }], { duration: 700, easing: 'ease-out' });
-        })
-        .then(function () { return wait(500); })
         .then(function () {
           if (S.bracket !== b || S.view !== 'fight') return;
-          b.next.push(pair[idx]); b.out.push(pair[1 - idx]); b.i += 2;
+          b.next.push(pair[idx]); b.out.push(pair[1 - idx]); b.i += 2; b.m++;
           draw();
         });
     };
-  };
-  var hit = function (fx, at, target) {
-    var bang = el('span', 'kc-pow', pick(BURSTS)); bang.style.left = at[0] + 'px'; bang.style.top = at[1] + 'px'; fx.appendChild(bang);
-    anim(bang, [{ transform: 'translate(-50%,-50%) scale(0) rotate(-15deg)', opacity: 1 }, { transform: 'translate(-50%,-50%) scale(1.25) rotate(5deg)', opacity: 1, offset: 0.35 }, { transform: 'translate(-50%,-50%) scale(1) rotate(0)', opacity: 0 }], { duration: 520, easing: 'ease-out', fill: 'forwards' }).then(function () { bang.remove(); });
-    if (CALM) bang.remove();
-    anim(target, [{ transform: 'translateX(0)' }, { transform: 'translateX(-8%) rotate(-6deg)' }, { transform: 'translateX(7%) rotate(5deg)' }, { transform: 'translateX(0)' }], { duration: 260 });
   };
   var champion = function (k, b) {
     var winner = b.next[0], fav = [winner].concat(b.out.slice().reverse());
@@ -1032,8 +1152,7 @@
     page.appendChild(rays());
     page.appendChild(el('p', 'kc-burst', 'CHAMPION!'));
     page.appendChild(eddie('And the champ is…', 'kc-host'));
-    var m = bulbFor(winner); m.gloves = true;
-    var big = drawBulb(m, 'bob big beam'); page.appendChild(big);
+    var big = drawBulb(bulbFor(winner), 'bob big beam'); page.appendChild(big);
     page.appendChild(trophyArt());
     page.appendChild(el('h1', 'kc-h', nameOf(winner)));
     page.appendChild(el('p', 'kc-say', 'Your favorite! Your grown-ups will see it first when they plan.'));
@@ -1175,10 +1294,31 @@
     app.appendChild(page);
   };
 
-  // The picture: the site's name, the child's monster, the level and the pins earned. No name, no map.
+  // The picture: the site's name, the child's bulb as it is now (what it wears too), the level and the pins earned.
+  // No name, no map.
   var svgImage = function (node, size) {
     return new Promise(function (res) {
-      var c = node.cloneNode(true); c.setAttribute('width', size); c.setAttribute('height', size); c.setAttribute('xmlns', NS);
+      var c = node.cloneNode(true); c.setAttribute('xmlns', NS);
+      // On its own the picture has none of the page's styles, so what they would hide goes first: a lit bulb's unlit
+      // glass and closed eyes (or, for a bulb that's off, its light). What's left is the bulb as the child sees it.
+      var off = /\boff\b/.test(c.getAttribute('class') || '');
+      Array.prototype.forEach.call(c.querySelectorAll(off ? '.kc-lit, .kc-glow, .kc-eyes' : '.kc-unlit, .kc-xeyes'), function (n) { n.parentNode.removeChild(n); });
+      // On the page wings, glows and a gold pin's sunburst may reach past the drawing's box; a picture would cut them
+      // off, so it is framed on everything drawn, and keeps its shape.
+      var vb = (c.getAttribute('viewBox') || '0 0 100 100').split(' ').map(Number), box = { x: vb[0], y: vb[1], width: vb[2], height: vb[3] };
+      var hold = el('div'); hold.style.cssText = 'position:fixed;left:-10000px;top:0;width:' + size + 'px;visibility:hidden';
+      document.body.appendChild(hold); hold.appendChild(c);
+      try {
+        var bb = c.getBBox();
+        if (bb.width > 0 && bb.height > 0) {
+          var x0 = Math.min(vb[0], bb.x - 2), y0 = Math.min(vb[1], bb.y - 2), x1 = Math.max(vb[0] + vb[2], bb.x + bb.width + 2), y1 = Math.max(vb[1] + vb[3], bb.y + bb.height + 2);
+          box = { x: x0, y: y0, width: x1 - x0, height: y1 - y0 };
+        }
+      } catch (e) { /* the drawing's own box, then */ }
+      hold.remove();
+      c.setAttribute('viewBox', [box.x, box.y, box.width, box.height].map(function (n) { return n.toFixed(1); }).join(' '));
+      var k = size / Math.max(box.width, box.height);
+      c.setAttribute('width', Math.round(box.width * k)); c.setAttribute('height', Math.round(box.height * k));
       var img = new Image(); img.onload = function () { res(img); }; img.onerror = function () { res(null); };
       img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(c));
     });
@@ -1187,19 +1327,22 @@
     var ctx = c.getContext('2d'), W = c.width, H = c.height, st = stats(k);
     var on = D.pins.filter(function (p) { return st.pins[p.id].tier; }).sort(function (a, b) { return st.pins[b.id].tier - st.pins[a.id].tier; });
     var fonts = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('80px "Luckiest Guy"'), document.fonts.load('800 30px Figtree')]).catch(function () { /* fallback fonts */ }) : Promise.resolve();
-    var imgs = [k.av ? svgImage(drawBulb(kidBulb(k.av)), 220) : Promise.resolve(null)].concat(on.slice(0, 12).map(function (p) { return svgImage(drawPin(p, st.pins[p.id].tier), 200); }));
+    var imgs = [k.av ? svgImage(drawBulb(kidBulb(k.av)), 300) : Promise.resolve(null)].concat(on.slice(0, 12).map(function (p) { return svgImage(drawPin(p, st.pins[p.id].tier), 220); }));
     return fonts.then(function () { return Promise.all(imgs); }).then(function (got) {
       var g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#0A3566'); g.addColorStop(1, '#1763B8'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
       ctx.fillStyle = 'rgba(255,255,255,.08)'; for (var i = 0; i < 40; i++) { ctx.beginPath(); ctx.arc((i * 263) % W, (i * 397) % H, 6 + (i % 5) * 4, 0, Math.PI * 2); ctx.fill(); }
       ctx.textAlign = 'center'; ctx.lineJoin = 'round';
       ctx.font = '400 104px "Luckiest Guy", "Arial Black", Impact, sans-serif'; ctx.lineWidth = 14; ctx.strokeStyle = INK; ctx.strokeText('MY PINS', W / 2, 140); ctx.fillStyle = '#F3C613'; ctx.fillText('MY PINS', W / 2, 140);
-      if (got[0]) ctx.drawImage(got[0], W / 2 - 110, 155, 220, 273);
+      var fit = function (im, x, y, w, h) { var s = Math.min(w / im.width, h / im.height), dw = im.width * s, dh = im.height * s; ctx.drawImage(im, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh); };   // in the box, its own shape
+      if (got[0]) fit(got[0], W / 2 - 140, 150, 280, 285);
       ctx.font = '400 52px "Luckiest Guy", "Arial Black", Impact, sans-serif'; ctx.lineWidth = 10; ctx.strokeText(st.level.title + ' · Level ' + st.level.n, W / 2, got[0] ? 478 : 230); ctx.fillStyle = '#fff'; ctx.fillText(st.level.title + ' · Level ' + st.level.n, W / 2, got[0] ? 478 : 230);
       var cols = 4, size = 200, gapX = 30, x0 = (W - cols * size - (cols - 1) * gapX) / 2, y0 = got[0] ? 510 : 280;
       on.slice(0, 12).forEach(function (p, i) {
         var x = x0 + (i % cols) * (size + gapX), y = y0 + Math.floor(i / cols) * (size + 50);
-        if (got[i + 1]) ctx.drawImage(got[i + 1], x + 20, y, size - 40, (size - 40) * 1.12);
-        ctx.font = '800 25px Figtree, Arial, sans-serif'; ctx.fillStyle = '#fff'; ctx.fillText(p.label.length > 20 ? p.label.slice(0, 19) + '…' : p.label, x + size / 2, y + size + 8);
+        if (got[i + 1]) fit(got[i + 1], x, y - 6, size, size + 6);
+        var lab = p.label.length > 24 ? p.label.slice(0, 23) + '…' : p.label, fz = 25;   // a long name in smaller type, so names don't run into each other
+        ctx.font = '800 ' + fz + 'px Figtree, Arial, sans-serif'; while (fz > 17 && ctx.measureText(lab).width > size + gapX - 8) { fz--; ctx.font = '800 ' + fz + 'px Figtree, Arial, sans-serif'; }
+        ctx.fillStyle = '#fff'; ctx.fillText(lab, x + size / 2, y + size + 8);
       });
       if (!on.length) { ctx.font = '700 40px Figtree, Arial, sans-serif'; ctx.fillStyle = '#fff'; ctx.fillText('The first pin is the first class!', W / 2, 760); }
       if (on.length > 12) { ctx.font = '700 30px Figtree, Arial, sans-serif'; ctx.fillStyle = '#fff'; ctx.fillText('and ' + (on.length - 12) + ' more', W / 2, H - 92); }
