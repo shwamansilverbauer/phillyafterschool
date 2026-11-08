@@ -135,8 +135,8 @@ export async function startSite({ scratch, standin, log = () => {} } = {}) {
     exists(rel) { return fs.existsSync(path.join(pub, rel)); },
     // An account with a session, made straight in the database: how most tests get a signed-in person without
     // spending one of the sign-in emails the server allows an address (the sign-in tests use the real flow).
-    seed(email, first = '', last = '') {
-      const out = execFileSync('php', [path.join(ROOT, 'tests/lib/db.php'), path.join(dataDir, 'groups.sqlite'), 'seed', email, first, last], { encoding: 'utf8' });
+    seed(email, first = '', last = '', origin = '') {
+      const out = execFileSync('php', [path.join(ROOT, 'tests/lib/db.php'), path.join(dataDir, 'groups.sqlite'), 'seed', email, first, last, origin], { encoding: 'utf8' });
       return JSON.parse(out);
     },
     // One SELECT against the test database, as rows.
@@ -187,7 +187,7 @@ export function client(site, standin) {
       return fin;
     },
     // A signed-in account made in the database (no email spent). With a first and last name it is "ready" to share.
-    as(email, first = '', last = '') { const s = site.seed(email, first, last); c.cookie = s.sid; c.email = email; c.id = s.id; return c; },
+    as(email, first = '', last = '', origin = '') { const s = site.seed(email, first, last, origin); c.cookie = s.sid; c.email = email; c.id = s.id; return c; },
   };
   return c;
 }

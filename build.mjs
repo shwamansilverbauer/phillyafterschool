@@ -6364,7 +6364,9 @@ if (!PREVIEW) {
   // host alone: the email service's link domain is a subdomain, so no includeSubDomains, and no preload list), no
   // framing by another site, no guessing at file types, the address of the page sent to other sites as the bare domain
   // only, and the browser features the site never uses switched off (location stays on: "Nearest" asks for it).
-  // The fonts never change once named, so they are kept a year.
+  // The fonts never change once named, so they are kept a year. Pages are always checked with the server before a
+  // saved copy is used (no-cache, answered with a quick "not modified" when nothing changed): without it a browser
+  // may show a page it saved before the last publish, with that day's menu and scripts, for an hour or more.
   const headers = `<IfModule mod_headers.c>
 Header always set Strict-Transport-Security "max-age=31536000"
 Header always set X-Frame-Options "SAMEORIGIN"
@@ -6373,6 +6375,9 @@ Header always set Referrer-Policy "strict-origin-when-cross-origin"
 Header always set Permissions-Policy "camera=(), microphone=(), payment=(), usb=(), serial=(), bluetooth=(), geolocation=(self)"
 <FilesMatch "\\.woff2$">
 Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+<FilesMatch "\\.(html|ics)$">
+Header set Cache-Control "no-cache"
 </FilesMatch>
 </IfModule>
 AddType font/woff2 .woff2

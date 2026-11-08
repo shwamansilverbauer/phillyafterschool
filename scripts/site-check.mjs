@@ -148,9 +148,9 @@ async function headers() {
   if (LOCAL) return;
   let h = null;
   try { const r = await fetch(SITE + '/', { headers: { 'user-agent': 'phillyafterschool-site-check' }, redirect: 'manual', signal: AbortSignal.timeout(20000) }); h = r.headers; } catch { return; }
-  const missing = [['strict-transport-security', /max-age=\d{6,}/], ['x-frame-options', /sameorigin/i], ['x-content-type-options', /nosniff/i]].filter(([n, re]) => !re.test(h.get(n) || '')).map(([n]) => n);
+  const missing = [['strict-transport-security', /max-age=\d{6,}/], ['x-frame-options', /sameorigin/i], ['x-content-type-options', /nosniff/i], ['cache-control', /no-cache/i]].filter(([n, re]) => !re.test(h.get(n) || '')).map(([n]) => n);
   if (missing.length) fail('Security headers', `the home page is missing ${missing.join(', ')}`, 'They are set in the .htaccess the build writes (look for "Security headers" in build.mjs). Check the live .htaccess is the built one, and that the host still reads Header lines from it.');
-  else pass('Security headers', 'HTTPS-only, no framing by other sites, no type guessing');
+  else pass('Security headers', 'HTTPS-only, no framing by other sites, no type guessing, pages checked fresh');
 }
 
 // ----- the forms answer (nothing is sent) -----

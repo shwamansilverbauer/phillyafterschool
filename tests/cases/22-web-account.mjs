@@ -175,3 +175,35 @@ test('the menu signed in: My Profile, the Parent Portal button, Kid’s Corner; 
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
 });
+
+test('a program manager who also plans for kids keeps Parent Portal and Kid’s Corner, with their listings beside them; one who doesn’t gets the manager’s button', async (ctx) => {
+  const b = await ctx.browser();
+  const both = ctx.api().as(someone('mgrpar'), 'Pat', 'Lee', 'managers');
+  await both.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '2' }] });
+  const me = await both.okay('GET', 'me');
+  eq(me.user.role, 'manager'); eq(me.user.family, true, 'kids named: a family');
+  const t = await b.context(ctx.site, { sid: both.cookie });
+  const page = await t.open('/account/');
+  await page.waitForSelector('#account .acct-tabs');
+  await page.reload({ waitUntil: 'networkidle' });   // the menu reads what the first visit learned
+  await page.waitForSelector('#overview .ov-card');
+  eq(await page.locator('.acct-tabs [aria-current="page"]').innerText(), 'Overview', 'a parent’s overview');
+  const nav = page.locator('header.sitebar nav');
+  matches(flat(await nav.locator('a.nav-cta.when-in').innerText()), /^Parent Portal/, 'the button stays');
+  ok(await nav.locator('a.nav-kc').isVisible(), 'Kid’s Corner stays');
+  eq(await nav.locator('a.nav-mgr').count(), 1, 'their listings get a link of their own');
+  await t.close();
+  // A manager with no kids and no plans: the button is about their listing, and the account opens on Details.
+  const pro = ctx.api().as(someone('mgronly'), 'Dana', 'Reyes', 'managers');
+  const t2 = await b.context(ctx.site, { sid: pro.cookie });
+  const p2 = await t2.open('/account/');
+  await p2.waitForSelector('#account .acct-tabs');
+  await p2.reload({ waitUntil: 'networkidle' });
+  await p2.waitForSelector('#account .acct-tabs');
+  eq(await p2.locator('.acct-tabs [aria-current="page"]').innerText(), 'Details');
+  eq(await p2.locator('.acct-tabs [data-tab-go="overview"]').count(), 0, 'no overview tab');
+  matches(flat(await p2.locator('header.sitebar nav a.nav-cta.when-in').innerText()), /Your listings|Go premium/);
+  ok(!(await p2.locator('header.sitebar nav a.nav-kc').isVisible()), 'no Kid’s Corner button');
+  eq(t.errors.length + t2.errors.length, 0, t.errors.concat(t2.errors).join(' | '));
+  await t2.close();
+});
