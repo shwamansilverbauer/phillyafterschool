@@ -1,7 +1,7 @@
-// Kid's Corner in a browser: the picker, a child picking their monster, kid mode (no site around it, no link off it),
+// Kid's Corner in a browser: the picker, a child picking their lightbulb, kid mode (no site around it, no link off it),
 // the grown-ups' corner behind a press-and-hold, a confirmed class turning into pins and a level (celebrated once),
-// the map of Philadelphia drawn from this site alone, the monster battle ranking favorites, the mute button, and that
-// nothing is counted or sent anywhere.
+// the map of Philadelphia drawn from this site alone, the boxing match ranking favorites with Eddie Bulboa
+// refereeing, the mute button, the account page's Kid's Corner tab, and that nothing is counted or sent anywhere.
 import { test, ok, eq, includes, matches, someone } from '../lib/harness.mjs';
 import { pickupPair, weekendProgram } from '../lib/data.mjs';
 
@@ -46,7 +46,7 @@ test('signed out, Kid’s Corner explains itself and offers the account; signed 
   await t2.close();
 });
 
-test('a child picks their monster, the site disappears around the page, a hold opens the grown-ups’ corner, and a confirmed class is celebrated once', async (ctx) => {
+test('a child picks their lightbulb, the site disappears around the page, a hold opens the grown-ups’ corner, and a confirmed class is celebrated once', async (ctx) => {
   const b = await ctx.browser();
   const pat = ctx.api().as(someone('kck'), 'Pat', 'Lee');
   const { entry, program, school } = pickupPair();
@@ -59,8 +59,10 @@ test('a child picks their monster, the site disappears around the page, a hold o
   ok(await kidMode(page), 'kid mode from the picker on');
   ok(!(await page.locator('header.sitebar').isVisible()), 'the site header is hidden');
   ok(!(await page.locator('footer.foot').isVisible()), 'the footer is hidden');
-  eq(await page.locator('.kc-kidbtn .kc-egg').count(), 2, 'no monster picked yet: an egg to hatch');
-  // Picking a monster: a body and a color, nothing typed.
+  eq(await page.locator('.kc-kidbtn .kc-unpicked').count(), 2, 'no bulb picked yet: an unlit one');
+  includes(flat(await page.locator('.kc-pick .kc-eddie').innerText()), 'Eddie Bulboa', 'Eddie says hello');
+  eq(await page.locator('.kc-pick .kc-eddie img[alt="Eddie Bulboa"]').count(), 1);
+  // Picking a bulb: a shape and a color, nothing typed.
   await page.locator('.kc-kidbtn', { hasText: 'Sam' }).click();
   await page.waitForSelector('.kc-bodies');
   eq(await page.locator('.kc-avatar input, .kc-avatar textarea').count(), 0, 'nothing to type');
@@ -71,7 +73,7 @@ test('a child picks their monster, the site disappears around the page, a hold o
   await page.locator('.kc-avacts .kc-big.go').click();
   await page.waitForSelector('.kc-top');
   const p0 = await pat.okay('GET', 'passport');
-  eq(JSON.stringify(p0.kids[0].av), JSON.stringify({ b: 'squid', c: 2 }), 'the monster is kept on the account');
+  eq(JSON.stringify(p0.kids[0].av), JSON.stringify({ b: 'holiday', c: 2 }), 'the bulb is kept on the account');
   includes(flat(await page.locator('.kc-top').innerText()), 'Sam');
   includes(flat(await page.locator('.kc-lvl').innerText()), 'Rookie · Level 1');
   eq(await page.locator('.kc-page a[href]').count(), 0, 'no link on the child’s page');
@@ -118,14 +120,14 @@ test('a child picks their monster, the site disappears around the page, a hold o
   await t.close();
 });
 
-test('the map of Philadelphia: drawn from this site, clear where the child has been, a monster for each place, a tap says where', async (ctx) => {
+test('the map of Philadelphia: drawn from this site, clear where the child has been, a bulb for each place, Eddie at the Art Museum, a tap says where', async (ctx) => {
   const b = await ctx.browser();
   const pat = ctx.api().as(someone('kcm'), 'Pat', 'Lee');
   const { program, school } = pickupPair();
   const { program: wp } = weekendProgram();
   await pat.okay('POST', 'kids_save', { kids: [{ n: 'Zoe', g: '4' }] });
   const y = (await pat.okay('GET', 'passport')).year;
-  await pat.okay('POST', 'passport_save', { kid: 'Zoe', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school }, { k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], av: { b: 'blob', c: 6 }, seen: { 'season:after': 1, 'season:weekend': 1 }, lvl: 9 });
+  await pat.okay('POST', 'passport_save', { kid: 'Zoe', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school }, { k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], av: { b: 'globe', c: 6 }, seen: { 'season:after': 1, 'season:weekend': 1 }, lvl: 9 });
   const t = await b.context(ctx.site, { sid: pat.cookie });
   const page = await t.open('/kids-corner/#map');
   await page.waitForSelector('.kc-map');   // one child: straight to her page, on the tab in the address
@@ -133,8 +135,9 @@ test('the map of Philadelphia: drawn from this site, clear where the child has b
   const open = await page.locator('.kc-map .kc-hoods path.open').count();
   ok(open >= 1, 'at least one neighborhood cleared');
   eq(await page.locator('.kc-placelist li').count(), open, 'the cleared ones named under the map');
-  ok(await page.locator('.kc-map svg[data-k]').count() >= 1, 'a program’s monster on the map');
-  eq(await page.locator('.kc-map .kc-you').count(), 1, 'the child’s own monster');
+  ok(await page.locator('.kc-map svg[data-k]').count() >= 1, 'a program’s bulb on the map');
+  eq(await page.locator('.kc-map .kc-you').count(), 1, 'the child’s own bulb');
+  eq(await page.locator('.kc-map .kc-eddie-map').count(), 1, 'Eddie on the Art Museum steps');
   ok(await page.locator('.kc-map [data-lm]').count() >= 8, 'the landmarks');
   // A tap on a cleared neighborhood says which it is (zoomed onto it, with what stands on it moved off).
   const hood = page.locator('.kc-map .kc-hoods path.open').first();
@@ -151,20 +154,20 @@ test('the map of Philadelphia: drawn from this site, clear where the child has b
   await t.close();
 });
 
-test('the monster battle ranks favorites, which the profile then carries for the planners; the mute button is remembered', async (ctx) => {
+test('the boxing match ranks favorites, which the profile then carries for the planners; the mute button is remembered', async (ctx) => {
   const b = await ctx.browser();
   const pat = ctx.api().as(someone('kcb'), 'Pat', 'Lee');
   const { program, school } = pickupPair();
   const { program: wp } = weekendProgram();
   await pat.okay('POST', 'kids_save', { kids: [{ n: 'Zoe', g: '4' }] });
   const y = (await pat.okay('GET', 'passport')).year;
-  await pat.okay('POST', 'passport_save', { kid: 'Zoe', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school }, { k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], av: { b: 'ghost', c: 1 }, seen: { 'season:after': 1, 'season:weekend': 1 }, lvl: 9 });
+  await pat.okay('POST', 'passport_save', { kid: 'Zoe', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school }, { k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], av: { b: 'candle', c: 1 }, seen: { 'season:after': 1, 'season:weekend': 1 }, lvl: 9 });
   const t = await b.context(ctx.site, { sid: pat.cookie });
   await t.page.emulateMedia({ reducedMotion: 'reduce' });   // the fight acted out quickly
   const page = await t.open('/kids-corner/#battle');
   await page.waitForSelector('.kc-zoo');
   await page.evaluate(() => document.querySelectorAll('.kc-over').forEach(o => o.remove()));
-  eq(await page.locator('.kc-moncard').count(), 2, 'a monster for each program');
+  eq(await page.locator('.kc-bulbcard').count(), 2, 'a bulb for each program');
   // Sound: on until muted, and muted stays muted.
   eq(await page.locator('.kc-top .kc-mute').getAttribute('aria-pressed'), 'false');
   await page.locator('.kc-top .kc-mute').click();
@@ -172,6 +175,8 @@ test('the monster battle ranks favorites, which the profile then carries for the
   await page.locator('.kc-big.fight').click();
   await page.waitForSelector('.kc-arena .kc-fighter');
   eq(await page.locator('.kc-arena .kc-fighter').count(), 2);
+  eq(await page.locator('.kc-ring .kc-ref img[alt="Eddie Bulboa"]').count(), 1, 'Eddie referees');
+  eq(await page.locator('.kc-ring .kc-fighter .kc-bulb').count(), 2, 'two bulbs in the ring');
   await page.locator('.kc-arena .kc-fighter', { hasText: wp.name }).click();
   await page.waitForSelector('.kc-champ', { timeout: 15000 });
   includes(flat(await page.locator('.kc-champ').innerText()).toLowerCase(), wp.name.toLowerCase(), 'the winner is the champion');
@@ -224,6 +229,43 @@ test('favorites from Kid’s Corner are offered first in the planners: the week 
     await sum.locator('#sum-weeks .sum-add').nth(i).click();   // close it again
   }
   ok(marked, 'some week lists the favorite camp with its mark');
+  eq(t.errors.length, 0, t.errors.join(' | '));
+  await t.close();
+});
+
+test('the account page’s Kid’s Corner tab: each child at a glance, a class confirmed there, and a way into their page', async (ctx) => {
+  const b = await ctx.browser();
+  const pat = ctx.api().as(someone('kca'), 'Pat', 'Lee');
+  const { entry, program } = pickupPair();
+  const { program: wp } = weekendProgram();
+  await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '2' }, { n: 'Rae', g: 'K' }] });
+  await pat.okay('POST', 'week_save', { week: { name: 'Rae', now: { ...empty(), mon: [entry] }, next: empty() } });
+  const y = (await pat.okay('GET', 'passport')).year;
+  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [{ k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], av: { b: 'heart', c: 1 }, seen: { 'season:weekend': 1 }, lvl: 2 });
+  const t = await b.context(ctx.site, { sid: pat.cookie });
+  const page = await t.open('/account/');
+  await page.waitForSelector('#account .acct-tabs');
+  eq(await page.locator('script[src*="kids-corner.js"]').count(), 0, 'not loaded until the tab is opened');
+  await page.click('.acct-tabs [data-tab-go="kids"]');
+  await page.waitForSelector('#kids .kc-sum');
+  eq(await page.locator('#kids .kc-sum').count(), 2, 'a card per child');
+  const sam = flat(await page.locator('#kids .kc-sum', { hasText: 'Sam' }).innerText());
+  includes(sam, 'Level'); includes(sam, 'pins'); includes(sam, '1 class or camp');
+  eq(await page.locator('#kids .kc-sum', { hasText: 'Sam' }).locator('.kc-bulb').count(), 1, 'Sam’s bulb');
+  includes(flat(await page.locator('#kids .kc-sum', { hasText: 'Rae' }).innerText()), 'Hasn’t picked a bulb yet');
+  // Rae's kept week suggests a class: a yes here counts.
+  const rae = page.locator('#kids .kc-sum', { hasText: 'Rae' });
+  includes(flat(await rae.locator('.kc-sum-wait').innerText()), program.name);
+  await rae.locator('.kc-sum-wait button', { hasText: 'Yes' }).click();
+  await page.waitForFunction(() => { const c = [...document.querySelectorAll('#kids .kc-sum')].find(x => /Rae/.test(x.textContent)); return c && !c.querySelector('.kc-sum-wait'); });
+  const pp = await pat.okay('GET', 'passport');
+  eq(pp.kids.find(k => k.name === 'Rae').done[0].k, 'p:' + program.id, 'saved for Rae');
+  // Into Sam's own page, past the picker.
+  await page.locator('#kids .kc-sum', { hasText: 'Sam' }).locator('button', { hasText: 'Open Sam’s Kid’s Corner' }).click();
+  await page.waitForURL(/kids-corner/);
+  await page.waitForSelector('.kc-top');
+  includes(flat(await page.locator('.kc-top .kc-name').innerText()), 'Sam');
+  eq(t.outside.filter(u => !/^https:\/\/a\.klaviyo\.com\/client\//.test(u)).length, 0, 'nothing asked of another site');
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
 });

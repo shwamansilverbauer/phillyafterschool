@@ -363,8 +363,10 @@ analytics or recordings.
 ## Kid's Corner
 
 `/kids-corner/` (`kidsPage()` in `build.mjs`, `src/kids-corner.js`) is a page of each child's own, inside a parent's
-account, made for ages about 5 to 10 as a cartoon arcade: shiny pins that level up, a level that climbs, a cartoon
-map of Philadelphia that clears as they explore it, and a monster battle that ranks their favorites. It is the only
+account, made for ages about 5 to 10 as a cartoon arcade in the site's own colours (the deep Philly blue, sky blue and
+Bell Yellow): shiny pins that level up, a level that climbs, a cartoon map of Philadelphia that clears as they explore
+it, and a lightbulb boxing match that ranks their favorites. Eddie Bulboa, the bulb in the logo (`bulb.png`, the logo's
+own art), shows kids around, says what to do next, and referees. It is the only
 part of the site meant to be handed to a child, so it is built the other way round from the rest. (It was called the
 Passport at first: `/passport/` redirects here, `?next=passport` still works, and the server's endpoint and table
 keep that name.)
@@ -373,9 +375,10 @@ keep that name.)
   and nothing on the page is a link or asks for typing. The grown-ups' corner opens from a press-and-hold button
   (`.kc-hold`, 1.1 seconds; a tap does nothing). With one child on the account the page opens on their page; the
   address keeps the tab (`#pins`, `#map`, `#battle`).
-- **Each child's monster.** On first visit a child "hatches" a monster: one of ten bodies and ten colours, picked by
-  tapping (`BODY`, `COLORS`). It stands in the header (tap it to change), on the picker, on the map and in the
-  cheering corner of every battle.
+- **Each child's bulb.** On first visit a child lights up a bulb of their own: one of ten shapes and ten colours, picked
+  by tapping (`BULB`, `KID_COLORS`; Bell Yellow first). It stands in the header (tap it to change), on the picker, on
+  the map and in the cheering corner of every match. (Monsters picked before the bulbs became the bulb in the same
+  place in the list, on the server and on the page.)
 - **What counts.** Only what a parent has confirmed. The server suggests from the household's plans
   (`passport_suggest()`: every program on a child's kept week, each camp whose week has started, each day-off program
   whose day has passed, once per listing per year) and the parent says yes or no in the grown-ups' corner, or adds one
@@ -394,15 +397,16 @@ keep that name.)
   `scripts/philly-map.py` makes it from OpenDataPhilly's "Philadelphia Neighborhoods" (Robert Cheetham, CC BY 4.0)
   and Natural Earth's rivers (public domain), with the Schuylkill past Center City redrawn by hand; run it again only
   if a source changes. Neighborhoods are under clouds until the child has been to a class there; each program's
-  monster stands where it is, the child's own at the latest place. The build places every listing's site on a map
+  bulb stands where it is, the child's own at the latest place. The build places every listing's site on a map
   neighborhood (`mapHood()`: by its point, else by name, through `MAP_ALIAS`) and notes any name it can't place.
-  Drag, pinch or the buttons zoom; a tap says what is there. No map service, no tiles: nothing is fetched from
-  anywhere else.
-- **Monsters and the battle.** Each program type is a family (`SPECIES`: a body, a colour, something to wear, what it
-  throws), and each program a member of it, varied by its id (colour, eyes, horns, mouth, spots). The battle pairs the
-  child's distinct listings until one is left: the child taps the winner, which throws its thing (notes, paint,
-  lightning, dice…) until the other is knocked out; the order they fell in is saved as `fav`. With reduced motion
-  set, the fights and confetti are skipped.
+  Drag, pinch or the buttons zoom; a tap says what is there, and Eddie waits at the top of the Art Museum steps. No map
+  service, no tiles: nothing is fetched from anywhere else.
+- **Bulbs and the boxing match.** Each program type is a family of bulbs (`SPECIES`: a bulb shape, something to wear,
+  a special move), its glass tinted with the type's colour, and each program a member of it, varied by its id (eyes,
+  mouth, freckles, shades). `drawBulb()` draws them; a lit bulb glows, and the class `off` puts its light out. The
+  match pairs the child's distinct listings in a boxing ring until one is left: the child taps the winner, which throws
+  three punches and its special move (notes, paint, lightning, dice…), the loser's light flickers out, and Eddie counts
+  to three. The order they fell in is saved as `fav`. With reduced motion set, the fights and confetti are skipped.
 - **Sound** is made on the page with the Web Audio API (`Sound`): nothing plays until the first tap, and the mute
   button is remembered on the device (`kc-mute`).
 - **The data.** `passports` in the accounts database, one row per child per household (by first name, the way weeks
@@ -418,7 +422,13 @@ keep that name.)
   favorite programs as chips under the search, and the summer and days-off choosers list a favorite camp or program
   first, marked "★ Sam's favorite". Matching is by the child's first name, the way plans match.
 - **Share and print.** The grown-ups' corner makes a picture (`drawShare()`, a canvas) of the pins, the level and the
-  child's monster, with no name and no map, and is never a link; the page itself has no link to share.
+  child's bulb, with no name and no map, and is never a link; the page itself has no link to share.
+- **On the account page.** A Kid's Corner tab (between School & kids and Emails) shows each child at a glance: their
+  bulb, level, pins, neighborhoods, classes and favorites, and the suggestions waiting for a yes or no, answered right
+  there. Buttons open the child's own page (straight to them, past the picker: `sessionStorage` "kc-open", on the
+  device only) or the grown-ups' corner. It loads `kids-corner.js` and `assets/kids-corner.json` (the same data the
+  page has inline) only when the tab is opened, through `window.pasKids.summary()`; the account page's
+  `data-kids` and `data-kids-data` say where they are.
 - **Kid reviews.** Each confirmed program in the grown-ups' corner links to the review form with the child's name and
   grade filled in (see Reviews).
 - **Quiet.** No analytics, no recordings, nothing to Klaviyo, out of search (`quiet: true, noindex: true`), and no

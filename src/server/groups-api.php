@@ -784,13 +784,14 @@ function daysoff_out(int $uid): ?array {
 // the calendar year), "s": the school it was picked under, or "", "h": which of the listing's sites, as a
 // neighborhood name, when it has more than one }. "skip" holds the keys of suggestions the parent
 // waved away ("k|kind|y"); "fav" is the child's ranking of listings, best first. For Kid's Corner (the page the
-// child sees) it also keeps "av", the monster the child picked ({ "b": a body from KC_BODIES, "c": a color, 0 to 9 }),
+// child sees) it also keeps "av", the lightbulb the child picked ({ "b": a bulb from KC_BODIES, "c": a color, 0 to 9 }),
 // "seen", the pins whose level the child has already been shown ({ "type:music": 2, ... }), and "lvl", the last level
 // celebrated. Pins and levels themselves are never stored: the page works them out from "done". Nothing here is ever
 // sent anywhere but back to the household's own browsers.
 const PASSPORT_KINDS = array('after', 'weekend', 'off', 'summer');
 const PASSPORT_MAX = 300;
-const KC_BODIES = array('blob', 'tall', 'box', 'pear', 'ghost', 'spiky', 'bean', 'squid', 'egg', 'fuzzy');
+const KC_BODIES = array('classic', 'globe', 'edison', 'candle', 'flood', 'tube', 'twisty', 'holiday', 'mushroom', 'heart');   // the lightbulbs a child picks from
+const KC_BODIES_BEFORE = array('blob', 'tall', 'box', 'pear', 'ghost', 'spiky', 'bean', 'squid', 'egg', 'fuzzy');   // the monsters they replaced, in the same order
 function school_year(): int {   // the year the current school year started
   global $CFG;
   $end = isset($CFG['yearEnd']) ? (int) substr((string) $CFG['yearEnd'], 0, 4) : 0;
@@ -816,6 +817,7 @@ function passport_clean($raw): array {
     if (is_string($k) && isset($l[$k]) && !in_array($k, $out['fav'], true)) $out['fav'][] = $k;
   }
   $av = isset($raw['av']) && is_array($raw['av']) ? $raw['av'] : null;
+  if ($av && isset($av['b']) && ($i = array_search($av['b'], KC_BODIES_BEFORE, true)) !== false) $av['b'] = KC_BODIES[$i];   // a monster picked before the bulbs: the bulb in its place
   if ($av && isset($av['b'], $av['c']) && in_array($av['b'], KC_BODIES, true) && is_numeric($av['c']) && (int) $av['c'] >= 0 && (int) $av['c'] <= 9) $out['av'] = array('b' => $av['b'], 'c' => (int) $av['c']);
   if (isset($raw['seen']) && is_array($raw['seen'])) {
     $sn = array();
