@@ -2499,3 +2499,16 @@ html.pp-kid main.wrap{padding-top:10px}
 .pp-hits{top:100%}
 .pp-picked{font-weight:700;margin:6px 0 0}
 @media print{html.pp-kid .pp-grown,html.pp-kid .pp-back,html.pp-kid .pp-map,html.pp-kid .pp-big{display:none}}
+
+/* a child's favorites from the Passport, offered first in the planners */
+.fav-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
+.fav-row-h{font-weight:700;color:var(--muted);font-size:.92rem}
+
+/* reviews in a kid's words: the switch on a program's page, and the block on the review form */
+.rv-tabs{display:flex;gap:6px;margin:0 0 10px}
+.rv-tabs .tab{font:inherit;font-weight:700;border:1.5px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:6px 14px;cursor:pointer}
+.rv-tabs .tab[aria-selected="true"]{background:var(--btn);border-color:var(--btn);color:var(--btn-ink)}
+.revlist-kids li p{font-size:1.05rem}
+.rv-kid{border:1.5px dashed var(--line);border-radius:14px;padding:12px 14px}
+.rv-kid legend{font-weight:800;padding:0 6px}
+.rv-kid-switch{margin:4px 0}

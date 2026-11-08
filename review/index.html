@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800&family=Atkinson+Hyperlegible:wght@400;700&family=Luckiest+Guy&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=806b8576">
+<link rel="stylesheet" href="../assets/site.css?v=32c7ea57">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
@@ -85,7 +85,24 @@
         <span class="hint"><span data-copy="2354db7577">Never shown. Only used if we need to confirm something.</span> <a href="../privacy/"><span data-copy="b687c2eb73">How we handle it.</span></a></span>
       </div>
     </div>
-    <label class="check"><input type="checkbox" name="firsthand" value="yes" required><span><span data-copy="16add200f8">This is my own experience as a parent or caregiver.</span></span></label>
+    <fieldset class="field rv-kid" id="rv-kid" hidden>
+      <legend><span data-copy="72e2f95491">In your child’s words</span></legend>
+      <span class="hint"><span data-copy="614571bc4a">Your child said it, you’re typing it. It’s shown as a kid’s review, with your child’s first name and grade, or just the grade.</span></span>
+      <input type="hidden" name="kid" id="r-kid" value="">
+      <div class="pair">
+        <div class="field">
+          <label for="r-kidname"><span data-copy="993c19b7a7">Child’s first name</span></label>
+          <input id="r-kidname" name="kidname" type="text" maxlength="20" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="r-kidgrade"><span data-copy="aecc49c153">Grade</span></label>
+          <select id="r-kidgrade" name="kidgrade"><option value=""><span data-copy="78b7c9f6d6">Choose</span></option><option value="PK">pre-K</option><option value="K">kindergarten</option><option value="1">1st grade</option><option value="2">2nd grade</option><option value="3">3rd grade</option><option value="4">4th grade</option><option value="5">5th grade</option><option value="6">6th grade</option><option value="7">7th grade</option><option value="8">8th grade</option></select>
+        </div>
+      </div>
+      <label class="check"><input type="checkbox" name="kidshow" value="yes" checked><span><span data-copy="30b8579ed1">Show the first name with the review (otherwise it says “a 2nd grader”).</span></span></label>
+    </fieldset>
+    <p class="hint rv-kid-switch"><button type="button" class="linklike" id="rv-kid-on"><span data-copy="5525e91941">Writing down what your kid said instead?</span></button><button type="button" class="linklike" id="rv-kid-off" hidden><span data-copy="caac1e9741">Back to a parent’s review</span></button></p>
+    <label class="check"><input type="checkbox" name="firsthand" value="yes" required><span class="rv-first-parent"><span data-copy="16add200f8">This is my own experience as a parent or caregiver.</span></span><span class="rv-first-kid" hidden><span data-copy="8738e69b69">These are my own child’s words, and I’m their parent or caregiver.</span></span></label>
     <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
       <label for="r-company">Leave this blank</label>
       <input id="r-company" name="company" type="text" tabindex="-1" autocomplete="off">
@@ -97,7 +114,7 @@
     <ul class="rules">
       <li><span data-copy="568a415161">First-hand only. Write about what your own family experienced.</span></li>
       <li><span data-copy="1f0a3f8568">Be specific and fair. Details help more than adjectives.</span></li>
-      <li><span data-copy="3f759500a1">No names of children or individual staff.</span></li>
+      <li><span data-copy="609492099a">No names of other children or of individual staff.</span></li>
       <li><span data-copy="21eeea0c1a">Programs can’t review themselves.</span></li>
     </ul>
     <p class="hint"><span data-copy="8382938cc6">Reviews show your first name and school, and appear after they’ve been read. Nobody pays to have a review posted or removed.</span></p>
@@ -161,7 +178,7 @@
     </div>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=22d1d16c" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=a5073440" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 
 </body>
 </html>

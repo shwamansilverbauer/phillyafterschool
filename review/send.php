@@ -57,11 +57,12 @@ $TO = "contact@phillyafterschool.org";
 $SITE = "Philly After School";
 $PROGRAMS = array("imagine-that-philly", "nebinger-clubs", "girls-on-the-run", "soccer-shots-bache-martin", "fairmount-mountain-bike-team", "beat-the-streets-wrestling", "philadelphia-city-rowing", "nebinger-arts-partners", "meredith-clubs", "coppin-clubs", "zhang-sah", "zhang-sah-mt-airy", "shot-tower-rec", "chew-playground", "wharton-square-playground", "disilvestro-playground", "francisville-rec", "clemente-playground", "rumph-rec", "marian-anderson-rec", "capitolo-playground", "markward-playground", "philly-inmovement", "settlement-kaleidoscope-plus", "philly-art-center-qv", "old-pine", "parent-infant-center", "butchers-sew-shop", "mister-johns-music", "music-theatre-philly", "arden-drama-school", "walnut-street-theatre-school", "coco-academy", "queen-and-rook", "beehive-at-bok", "dandelion-after-school", "code-ninjas-south-philly", "brilliant-minds", "early-childhood-environment", "principal-academy", "little-shepherds", "movemakers", "kids-on-12th", "columbus-square-rec", "hawthorne-cultural-center", "starr-garden-rec", "palumbo-rec", "mighty-writers-el-futuro", "free-library-leap", "fleisher-art-memorial", "makom-community", "vare-washington-edey", "childs-edey", "vare-washington-clubs", "sunrise-mccall", "sunrise-stanton", "mccall-clubs", "sawubona-creativity-project", "playarts-day-camps", "philly-rock-gym-day-camps", "skate-the-foundry", "pafa-saturday-art", "moore-young-artists-workshop", "philadelphia-museum-of-art-kids", "made-institute-sunday-sewing", "rock-school-for-dance", "koresh-school-of-dance", "school-of-philadelphia-ballet", "zazz-dance", "temple-music-prep-cmsp", "wissahickon-skating-club", "penn-ice-rink", "starfinder-saturday-soccer", "franklin-institute-pacts", "macguffin-theatre", "philadelphia-dance-academy", "sunrise-kirkbride", "kirkbride-clubs", "sunrise-southwark", "southwark-clubs", "stanton-clubs", "marian-anderson-clubs", "childs-clubs", "bache-martin-clubs", "east-passyunk-rec", "philadelphia-martial-arts-academy", "fitness-alive-south-philly", "christian-street-ymca", "hudson-table-philadelphia", "rizzo-rink", "flips-4-kidz", "equilibrium-dance-academy", "blue-chip-flag-south-philadelphia", "kumon-south-philadelphia", "pennsport-school-of-dance", "philly-pack", "magic-gardens-family-jams", "phield-house", "philadelphia-school-of-circus-arts", "schuylkill-center", "flipout-productions", "elite-sports-factory", "movement-callowhill", "the-philadelphia-school", "nlarts", "philadelphia-youth-basketball", "awbury-arboretum", "skilladelphia", "philly-art-center-mt-airy", "philly-art-center-fairmount");
 $SCHOOLS = array("nebinger", "meredith", "coppin", "vare-washington", "stanton", "mccall", "kirkbride", "southwark", "columbus-charter", "marian-anderson", "lingelbach", "childs", "bache-martin");
+$GRADES = array("PK", "K", "1", "2", "3", "4", "5", "6", "7", "8");
 
 function fail($msg, $code) {
   http_response_code($code);
   header('Content-Type: text/html; charset=utf-8');
-  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css?v=806b8576"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="javascript:history.back()">Go back to the form</a></p></main></body></html>';
+  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css?v=32c7ea57"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="javascript:history.back()">Go back to the form</a></p></main></body></html>';
   exit;
 }
 function field($key, $max) {
@@ -108,20 +109,37 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 if (field('firsthand', 5) !== 'yes') {
   fail('Please confirm this is your own experience.', 400);
 }
+// In a child's words: the grade is needed, the first name only when the parent chose to show it.
+$kid = null;
+if (field('kid', 5) === 'yes') {
+  $grade = one_line(field('kidgrade', 4));
+  if (!in_array($grade, $GRADES, true)) {
+    fail('Please choose your child’s grade.', 400);
+  }
+  $kid = array('grade' => $grade);
+  $kidName = one_line(field('kidname', 20));
+  if (field('kidshow', 5) === 'yes' && $kidName !== '' && preg_match('/^[\p{L}\p{M}][\p{L}\p{M} \'’.-]{0,19}$/u', $kidName)) {
+    $kid['name'] = $kidName;
+  }
+}
 if (substr_count(strtolower($comment), 'http') > 1) {
   fail('Reviews cannot include links. Please remove them and try again.', 400);
 }
 
-$entry = json_encode(array(
+$record = array(
   'programId' => $program,
   'school' => $school,
   'name' => $name,
   'stars' => $stars,
   'comment' => trim(preg_replace('/\s+/', ' ', $comment)),
   'date' => date('Y-m-d'),
-), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+);
+if ($kid !== null) {
+  $record['kid'] = $kid;
+}
+$entry = json_encode($record, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-$body = "New review, waiting for your approval.\n\n"
+$body = ($kid !== null ? "New review IN A KID'S WORDS (" . (isset($kid['name']) ? $kid['name'] . ', ' : 'name not shown, ') . 'grade ' . $kid['grade'] . "), waiting for your approval.\n\n" : "New review, waiting for your approval.\n\n")
   . "Program: $program\n"
   . "School: $school\n"
   . "Stars: $stars\n"
