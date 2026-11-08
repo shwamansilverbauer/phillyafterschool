@@ -1,0 +1,26 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:camp-ymca-day-camps-2027-01-06@phillyafterschool.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20270106
+DTEND;VALUE=DATE:20270107
+SUMMARY:Greater Philadelphia YMCA day camps: Summer 2027 day
+  camp sign-ups open for family memberships
+DESCRIPTION:https://www.philaymca.org/camps/summer-day-camp/
+ ?utm_source=phillyafterschool.org&utm_medium=referral&utm_ca
+ mpaign=directory&utm_content=calendar\n\nFrom Philly After S
+ chool: https://phillyafterschool.org/
+URL:https://www.philaymca.org/camps/summer-day-camp/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Greater Philadelphia YMCA day camps: Summer 2027
+  day camp sign-ups open for family memberships
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

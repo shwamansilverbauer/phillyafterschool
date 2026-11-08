@@ -1,0 +1,29 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:blue-chip-flag-south-philadelphia-2027-03-15@phillyafter
+ school.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20270315
+DTEND;VALUE=DATE:20270316
+SUMMARY:Blue Chip Flag football\, South Philadelphia: Spring
+  2027 registration closes
+DESCRIPTION:https://blue-chip-flag-south-philadelphia.sportn
+ gin.com/register/form/571361594?utm_source=phillyafterschool
+ .org&utm_medium=referral&utm_campaign=directory&utm_content=
+ calendar\n\nFrom Philly After School: https://phillyaftersch
+ ool.org/
+URL:https://blue-chip-flag-south-philadelphia.sportngin.com/
+ register/form/571361594
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Blue Chip Flag football\, South Philadelphia: Sp
+ ring 2027 registration closes
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,28 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:fitness-alive-south-philly-2026-12-01@phillyafterschool.
+ org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
+SUMMARY:Fitness Alive: swim lessons in South Philly: Spring 
+ swim session: early registration for returning fall swimmers
+DESCRIPTION:https://fitnessalivephilly.com/spring-session?ut
+ m_source=phillyafterschool.org&utm_medium=referral&utm_campa
+ ign=directory&utm_content=calendar\n\nFrom Philly After Scho
+ ol: https://phillyafterschool.org/
+URL:https://fitnessalivephilly.com/spring-session
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Fitness Alive: swim lessons in South Philly: Spr
+ ing swim session: early registration for returning fall swim
+ mers
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

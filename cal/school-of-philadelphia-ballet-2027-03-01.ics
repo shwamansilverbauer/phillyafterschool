@@ -1,0 +1,28 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:school-of-philadelphia-ballet-2027-03-01@phillyafterscho
+ ol.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20270301
+DTEND;VALUE=DATE:20270302
+SUMMARY:School of Philadelphia Ballet: Children’s Program: e
+ nrollment for 2026–27 closes
+DESCRIPTION:https://philadelphiaballet.org/school/childrens-
+ programs/?utm_source=phillyafterschool.org&utm_medium=referr
+ al&utm_campaign=directory&utm_content=calendar\n\nFrom Phill
+ y After School: https://phillyafterschool.org/
+URL:https://philadelphiaballet.org/school/childrens-programs
+ /
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:School of Philadelphia Ballet: Children’s Progra
+ m: enrollment for 2026–27 closes
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

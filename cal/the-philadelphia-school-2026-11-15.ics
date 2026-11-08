@@ -1,0 +1,31 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:the-philadelphia-school-2026-11-15@phillyafterschool.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20261115
+DTEND;VALUE=DATE:20261116
+SUMMARY:Camp TPS at The Philadelphia School: Camp TPS: last 
+ day to register online for Winter Break Camp (closes at midn
+ ight; later enrollments pay in full and may incur a $50 late
+  fee)
+DESCRIPTION:https://www.tpschool.org/tps-experience/camptps/
+ winter-break-camp?utm_source=phillyafterschool.org&utm_mediu
+ m=referral&utm_campaign=directory&utm_content=calendar\n\nFr
+ om Philly After School: https://phillyafterschool.org/
+URL:https://www.tpschool.org/tps-experience/camptps/winter-b
+ reak-camp
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Camp TPS at The Philadelphia School: Camp TPS: l
+ ast day to register online for Winter Break Camp (closes at 
+ midnight; later enrollments pay in full and may incur a $50 
+ late fee)
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

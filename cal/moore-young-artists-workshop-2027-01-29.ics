@@ -1,0 +1,29 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:moore-young-artists-workshop-2027-01-29@phillyafterschoo
+ l.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20270129
+DTEND;VALUE=DATE:20270130
+SUMMARY:Moore Young Artists Workshop: Spring 2027 courses: r
+ egistration deadline
+DESCRIPTION:https://moore.edu/academics/youth-education/youn
+ g-artists-workshop/spring-2027-youth-courses/?utm_source=phi
+ llyafterschool.org&utm_medium=referral&utm_campaign=director
+ y&utm_content=calendar\n\nFrom Philly After School: https://
+ phillyafterschool.org/
+URL:https://moore.edu/academics/youth-education/young-artist
+ s-workshop/spring-2027-youth-courses/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Moore Young Artists Workshop: Spring 2027 course
+ s: registration deadline
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

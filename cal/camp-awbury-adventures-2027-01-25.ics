@@ -1,0 +1,26 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:camp-awbury-adventures-2027-01-25@phillyafterschool.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20270125
+DTEND;VALUE=DATE:20270126
+SUMMARY:Awbury Adventures at Awbury Arboretum: Member regist
+ ration for summer 2027 opens at 9 am
+DESCRIPTION:https://awbury.org/summer-camp/?utm_source=phill
+ yafterschool.org&utm_medium=referral&utm_campaign=directory&
+ utm_content=calendar\n\nFrom Philly After School: https://ph
+ illyafterschool.org/
+URL:https://awbury.org/summer-camp/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Awbury Adventures at Awbury Arboretum: Member re
+ gistration for summer 2027 opens at 9 am
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

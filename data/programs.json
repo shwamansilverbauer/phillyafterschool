@@ -33,7 +33,7 @@
         "url": "https://imaginethatphilly.org/programs"
       }
     ],
-    "lastVerified": "2026-10-05",
+    "lastVerified": "2026-11-01",
     "schools": {
       "nebinger": {
         "relation": "onsite",
@@ -44,12 +44,12 @@
             "url": "https://nebinger.philasd.org/#ourschool"
           }
         ],
-        "checked": "2026-10-05"
+        "checked": "2026-11-01"
       },
       "coppin": {
         "relation": "onsite",
         "note": "Imagine That’s site names Coppin as one of its two school locations.",
-        "checked": "2026-10-05"
+        "checked": "2026-11-01"
       }
     },
     "price": "paid",
@@ -71,7 +71,7 @@
   {
     "id": "nebinger-clubs",
     "name": "School clubs and teams",
-    "what": "Art Studio, Song Writing, Garden Club, Rock Band, Chess, Debate Club, Student Government, Basketball, Soccer, Cheerleading. Robotics is listed as returning soon.",
+    "what": "Art Studio, Cheerleading, Chess, Coding, Debate Club, Garden Club, Rock Band, Robotics, Song Writing, Student Government, Basketball, Soccer.",
     "types": [
       "clubs",
       "art",
@@ -79,6 +79,7 @@
       "movement",
       "games",
       "nature",
+      "stem",
       "academics"
     ],
     "keywords": [
@@ -93,7 +94,8 @@
       "basketball",
       "soccer",
       "cheerleading",
-      "robotics"
+      "robotics",
+      "coding"
     ],
     "address": "",
     "grades": null,
@@ -114,11 +116,11 @@
         "url": "https://nebinger.philasd.org/#ourschool"
       }
     ],
-    "lastVerified": "2026-10-05",
+    "lastVerified": "2026-11-01",
     "schools": {
       "nebinger": {
         "relation": "onsite",
-        "checked": "2026-10-05"
+        "checked": "2026-11-01"
       }
     },
     "clubs": [
@@ -157,10 +159,24 @@
         ]
       },
       {
+        "name": "Coding",
+        "tags": [
+          "stem",
+          "coding"
+        ]
+      },
+      {
         "name": "Debate Club",
         "tags": [
           "academics",
           "debate"
+        ]
+      },
+      {
+        "name": "Robotics",
+        "tags": [
+          "stem",
+          "robotics"
         ]
       },
       {
@@ -189,13 +205,21 @@
         ]
       }
     ],
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "Nebinger’s page now lists a Coding club, and Robotics is listed as a current club rather than one returning soon. The school still gives no days, grades or sign-up details."
+      }
+    ],
     "offers": [
       "Art Studio",
       "Song Writing",
       "Garden Club",
       "Rock Band",
       "Chess",
+      "Coding",
       "Debate Club",
+      "Robotics",
       "Student Government",
       "Basketball",
       "Soccer",
@@ -224,7 +248,7 @@
     "gradeNote": "3rd–5th program; a 6th–8th program also exists",
     "hours": "Seasonal (fall and spring), a couple of afternoons a week",
     "daysNote": "Teams meet twice a week. The days vary by site.",
-    "cost": "Not published on the pages checked",
+    "cost": "$225 a girl for a season (Fall 2026), which includes the 5K entry, shirt, medal and materials. Financial assistance on a sliding scale is built into registration for households earning under $100,000 a year, and there is a two-payment plan.",
     "phone": "215-247-8598",
     "email": "",
     "website": "https://www.gotrphiladelphia.org/",
@@ -243,36 +267,48 @@
       {
         "label": "GOTR Philadelphia",
         "url": "https://www.gotrphiladelphia.org/"
+      },
+      {
+        "label": "GOTR 3rd–5th grade program details",
+        "url": "https://www.gotrphiladelphia.org/3rd-5th-grade-program-details"
+      },
+      {
+        "label": "GOTR team locations (Fall 2026)",
+        "url": "https://www.gotrphiladelphia.org/locations"
       }
     ],
-    "lastVerified": "2026-10-05",
+    "lastVerified": "2026-11-01",
     "schools": {
       "nebinger": {
         "relation": "onsite",
-        "note": "Confirm with the school which grade band the Nebinger team covers this season.",
-        "checked": "2026-10-05"
+        "note": "GOTR’s own Fall 2026 site list includes George W. Nebinger, and Nebinger’s page lists Girls on the Run under its sports. Confirm with the school which grade band the Nebinger team covers.",
+        "checked": "2026-11-01"
       },
       "mccall": {
         "relation": "onsite",
-        "note": "McCall’s clubs page lists Girls on the Run on Mondays and Wednesdays after school, for girls in grades 3–5. The page gives no year, so confirm the team is running this season.",
+        "note": "GOTR’s own Fall 2026 site list includes McCall Elementary. McCall’s page (updated September 2026) no longer lists the team; its earlier page gave Mondays and Wednesdays after school for girls in grades 3–5, so ask the school for this season’s days.",
         "sources": [
           {
-            "label": "McCall sports and clubs",
-            "url": "https://mccall.philasd.org/"
+            "label": "GOTR team locations (Fall 2026)",
+            "url": "https://www.gotrphiladelphia.org/locations"
           }
         ],
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "kirkbride": {
         "relation": "onsite",
-        "note": "Kirkbride’s page lists Girls on the Run among its clubs and sports, with no days and no school year. Confirm the team is running this season.",
+        "note": "GOTR’s own Fall 2026 site list includes Eliza B. Kirkbride Elementary, and Kirkbride’s page lists Girls on the Run among its clubs and sports, with no days given.",
         "sources": [
           {
             "label": "Kirkbride School",
             "url": "https://kirkbride.philasd.org/"
+          },
+          {
+            "label": "GOTR team locations (Fall 2026)",
+            "url": "https://www.gotrphiladelphia.org/locations"
           }
         ],
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       },
       "bache-martin": {
         "relation": "onsite",
@@ -296,7 +332,20 @@
         ],
         "checked": "2026-11-07"
       }
-    }
+    },
+    "price": "paid",
+    "rate": {
+      "per": "term",
+      "flat": 225,
+      "extra": "The Fall 2026 season registration fee per girl; a sliding scale applies for households under $100,000 a year."
+    },
+    "aid": "Financial assistance is built into the online registration: households with income under $100,000 a year are eligible for a discounted fee on a sliding scale by income and household size, and a 2-payment plan is offered.",
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "Girls on the Run now posts its fee: $225 a girl for the season, with a sliding-scale discount for households earning under $100,000 a year built into registration, and a two-payment plan."
+      }
+    ]
   },
   {
     "id": "soccer-shots-bache-martin",
@@ -565,7 +614,7 @@
   {
     "id": "nebinger-arts-partners",
     "name": "Arts partners and Science Olympiad",
-    "what": "EgoPo drama residency (weekly, ends in a public performance), Rock Reach Dance (32 weeks, 45 minutes a week), Settlement Choir, Arden Theatre (grades 3–5, in classroom), Science Olympiad",
+    "what": "EgoPo Classic Theater residency (weekly workshops, year-long, ending in a public performance), Rock Reach Dance (in classroom, one grade level each year), Settlement Choir, Arden Theatre (grades 3–5, in classroom), Science Olympiad (PTA-funded)",
     "types": [
       "clubs",
       "music",
@@ -605,11 +654,11 @@
         "url": "https://www.nebingerpta.org/projects"
       }
     ],
-    "lastVerified": "2026-10-05",
+    "lastVerified": "2026-11-01",
     "schools": {
       "nebinger": {
         "relation": "onsite",
-        "checked": "2026-10-05"
+        "checked": "2026-11-01"
       }
     }
   },
@@ -666,24 +715,24 @@
     "website": "https://meredithmatters.org/internalexternal-activities/",
     "register": {
       "how": "school",
-      "note": "Each club signs up its own way: a form, an email to the teacher, or tryouts. The links and teacher contacts are on the school’s club sheet. The Chess interest form closes October 7, and families hear by October 12."
+      "note": "Each club signs up its own way: a form, an email to the teacher, or tryouts. The links and teacher contacts are on the school’s club sheet."
     },
     "note": "The school’s sheet is marked tentative and says clubs can change. A club doesn’t meet when its teacher is out, and the school says no aftercare is available on those days, so keep a backup. A few rows on the sheet haven’t been updated this year; the listing’s full details say which.",
     "sources": [
       {
         "label": "Meredith after-school clubs sheet, 2026–27",
-        "url": "https://docs.google.com/spreadsheets/d/1FGIV9bDa2OKzL1VZ5hgBb2JCFId4H3OI5_sPFBze_SY/edit?gid=0#gid=0"
+        "url": "https://docs.google.com/spreadsheets/d/1FGIV9bDa2OKzL1VZ5hgBb2JCFId4H3OI5_sPFBze_SY/edit?gid=966250841#gid=966250841"
       },
       {
         "label": "Meredith Home & School: activities",
         "url": "https://meredithmatters.org/internalexternal-activities/"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-11-01",
     "schools": {
       "meredith": {
         "relation": "onsite",
-        "checked": "2026-10-05"
+        "checked": "2026-11-01"
       }
     },
     "days": [
@@ -734,7 +783,7 @@
         "time": "3:30–4:30 pm",
         "grades": "K-8",
         "when": "October to May",
-        "status": "Interest form open until October 7; coaches reply by October 12",
+        "status": "The interest form was open until October 7; coaches replied by October 12. Ask the coaches about a late spot.",
         "tags": [
           "games",
           "chess"
@@ -1070,11 +1119,11 @@
         "url": "https://coppin.philasd.org/"
       }
     ],
-    "lastVerified": "2026-10-05",
+    "lastVerified": "2026-11-01",
     "schools": {
       "coppin": {
         "relation": "onsite",
-        "checked": "2026-10-05"
+        "checked": "2026-11-01"
       }
     },
     "clubs": [
@@ -1191,7 +1240,8 @@
       ],
       "hours": "8 am to 4 pm, extended day to 6 pm",
       "ageMin": 4,
-      "ageMax": 12
+      "ageMax": 12,
+      "cost": "$400 a week for five days"
     },
     "pickupBy": "6:00 pm",
     "cost": "Tuition not published. Takes CCIS subsidy and offers sibling discounts.",
@@ -1211,7 +1261,7 @@
         "url": "https://zhangsah.org/after-school-program/"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-11-01",
     "schools": {
       "nebinger": {
         "relation": "pickup",
@@ -1223,24 +1273,24 @@
             "url": "https://nebinger.philasd.org/#ourschool"
           }
         ],
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "meredith": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "coppin": {
         "relation": "pickup",
         "note": "Zhang Sah’s page lists the school under its former name, Jackson.",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "vare-washington": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "mccall": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "columbus-charter": {
         "relation": "nearby",
@@ -1254,10 +1304,11 @@
         "where": "Queen Village, 530 Bainbridge St",
         "text": "Meredith, Jackson, CCS, Nebinger, McCall, ICS, St. Mary, St. Peter’s, Vare-Washington",
         "url": "https://zhangsah.org/after-school-program/",
-        "read": "2026-10-06",
-        "how": "browser"
+        "read": "2026-11-01",
+        "how": "fetch"
       }
-    ]
+    ],
+    "aid": "Tuition assistance may be available based on demonstrated financial need, and subsidy is accepted."
   },
   {
     "id": "zhang-sah-mt-airy",
@@ -2145,14 +2196,15 @@
     ],
     "daysNote": "Enroll by the day.",
     "daysOff": {
-      "summary": "Vacation camps, 9 am to 3:30 pm, for kindergarten and up (plus a pre-K camp for ages 3–5), at Queen Village and Bok, $97.32 a day. Dates are posted through November so far. MOVE After School also still runs 3:30 to 6:30 pm on district closure days, as drop-off.",
+      "summary": "Vacation camps, 9 am to 3:30 pm, for kindergarten and up (plus a pre-K camp for ages 3–5), at Queen Village and Bok, $97.32 a day. Dates are posted through November so far; Bok also lists days when independent schools are closed. MOVE After School also still runs 3:30 to 6:30 pm on district closure days, as drop-off.",
       "url": "https://phillyinmovement.com/vacation-camps/",
       "dates": [
         "2026-10-09",
         "2026-10-12",
         "2026-11-03",
         "2026-11-11",
-        "2026-11-16"
+        "2026-11-16",
+        "2026-11-30"
       ],
       "sources": [
         {
@@ -2188,39 +2240,39 @@
         "url": "https://phillyinmovement.com/move-after-school/"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-11-01",
     "schools": {
       "nebinger": {
         "relation": "pickup",
-        "note": "Ask whether Mini MOVE (Pre-K, $40.66 per day) includes pickup from Nebinger’s Pre-K.",
-        "checked": "2026-10-06"
+        "note": "Its page also lists a Pre-K pickup from Nebinger (“Mini MOVE”) on Mondays and Tuesdays, 3:00 to 5:00 pm, at $40.66 a day, and on Fridays from the 1:30 early dismissal to 5:00 pm at $51.52 a day.",
+        "checked": "2026-11-01"
       },
       "meredith": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "coppin": {
         "relation": "pickup",
         "address": "Bok, 1901 S 9th St",
         "note": "Coppin children go to InMovement’s Bok location, not Queen Village.",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "mccall": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "kirkbride": {
         "relation": "pickup",
         "address": "Bok, 1901 S 9th St",
         "note": "Kirkbride children go to InMovement’s Bok location, not Queen Village. Its page also lists a Pre-K pickup from Kirkbride (“Mini MOVE”) on Monday to Thursday, 3:00 to 5:00 pm, at $40.66 a day.",
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       },
       "southwark": {
         "relation": "pickup",
         "address": "Bok, 1901 S 9th St",
         "distance": "in the Bok building, across Mifflin St from Southwark",
         "note": "Southwark children go to InMovement’s Bok location, not Queen Village. Its page also lists a Pre-K pickup from Southwark (“Mini MOVE”) on Monday to Thursday, 3:00 to 5:00 pm, at $40.66 a day.",
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       }
     },
     "pickupLists": [
@@ -2228,19 +2280,19 @@
         "where": "Queen Village, 500 Kenilworth St",
         "text": "William M. Meredith, George W. Nebinger, General George A McCall, Independence Charter School (Wednesdays Only)",
         "url": "https://phillyinmovement.com/move-after-school/",
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "fetch"
       },
       {
         "where": "Bok, 1901 S 9th St",
         "text": "Fanny Jackson Coppin, Southwark School, Eliza B. Kirkbride",
         "url": "https://phillyinmovement.com/move-after-school/",
-        "read": "2026-10-10",
+        "read": "2026-11-01",
         "how": "fetch"
       }
     ],
     "weekend": {
-      "summary": "School-age gymnastics, tumbling and aerials classes for kindergarten and up meet on Saturdays at the Queen Village and Bok gyms, roughly 10 am to 1:45 pm.",
+      "summary": "School-age gymnastics classes (Intro to Gymnastics and Gym 1–4) for kindergarten and up meet on Saturdays at the Bok gym, 10 am to 1 pm, and the Queen Village gym, 11 am to 1:45 pm.",
       "days": [
         "sat"
       ],
@@ -2262,10 +2314,16 @@
         "url": "https://phillyinmovement.com/school-aged-classes/",
         "how": "fetch",
         "look": "Days and times are in the Saturday column of the two linked school-aged schedule PDFs (Bok and Queen Village). Prices are in the weekend tuition table on the page.",
-        "notes": "The PDF grids read poorly: some Saturday slots come back without class names."
+        "notes": "The two schedule PDFs read cleanly with a text extractor on 2026-11-01; the Saturday column is the last one."
       },
-      "checked": "2026-10-07"
-    }
+      "checked": "2026-11-01"
+    },
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "Philly InMovement’s page now lists a Pre-K “Mini MOVE” pickup from Nebinger: Mondays and Tuesdays 3:00 to 5:00 pm at $40.66 a day, and Fridays 1:30 to 5:00 pm at $51.52 a day."
+      }
+    ]
   },
   {
     "id": "settlement-kaleidoscope-plus",
@@ -2328,26 +2386,26 @@
         "url": "https://settlementmusic.org/afterschool/"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-11-01",
     "schools": {
       "nebinger": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "meredith": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "mccall": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       }
     },
     "pickupLists": [
       {
         "text": "William M. Meredith Elementary School, George W. Nebinger Elementary School, and General George McCall Elementary School",
         "url": "https://settlementmusic.org/afterschool/",
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "fetch"
       }
     ]
@@ -2373,7 +2431,7 @@
     ],
     "grades": "PK-6",
     "gradeNote": "Ages 4–12",
-    "hours": "Until 6:00 pm. Half-day camps on early-dismissal days.",
+    "hours": "3:30–6:00 pm. Studio drop-off from 3:30 pm.",
     "days": [
       "mon",
       "tue",
@@ -2431,7 +2489,7 @@
       "ageMax": 12
     },
     "pickupBy": "6:00 pm",
-    "cost": "Not shown on the public page. Paid by season: 50% deposit, then two 25% installments. 5% sibling discount.",
+    "cost": "Winter/Spring 2027 (Jan 4–June 9): $1,020 to $1,122 for one weekday a week for the season, depending on the day; Fall 2026 was $765 to $867. Paid by season: 50% deposit, then two 25% installments. 5% sibling discount, 1% off paying by ACH.",
     "price": "paid",
     "phone": "215-765-2787",
     "email": "info@phillyartcenter.com",
@@ -2459,32 +2517,32 @@
         "url": "https://phillyartcenter.com/locations/queen-village/school-pick-up/"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-11-01",
     "schools": {
       "nebinger": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "meredith": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "coppin": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "vare-washington": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "mccall": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "southwark": {
         "relation": "pickup",
         "note": "Southwark is on the Queen Village pickup list, and on Southwark’s own list of programs that pick up. The studio is more than a mile north, so ask how children get there.",
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       }
     },
     "pickupLists": [
@@ -2492,8 +2550,22 @@
         "where": "Queen Village Pickup Schools",
         "text": "McCall, Meredith, Nebinger, Coppin, Southwark, Vare-Washington, Independence Charter",
         "url": "https://phillyartcenter.com/afterschool/program-information/",
-        "read": "2026-10-06",
-        "how": "browser"
+        "read": "2026-11-01",
+        "how": "fetch"
+      }
+    ],
+    "rate": {
+      "per": "term",
+      "eachDay": [
+        1020,
+        1122
+      ],
+      "extra": "Winter/Spring 2027 price for one weekday a week at Queen Village: Mondays $1,020, Thursdays and Fridays $1,071, Tuesdays and Wednesdays $1,122. Discounts are not counted."
+    },
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "Philly Art Center’s registration page shows the Queen Village price: Winter/Spring 2027 (Jan 4 to June 9) is $1,020 to $1,122 for one weekday a week for the season, depending on the day. Changes can be made until December 7."
       }
     ]
   },
@@ -2605,23 +2677,23 @@
     "schools": {
       "nebinger": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "meredith": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "mccall": {
         "relation": "pickup",
         "distance": "about four blocks from McCall",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       }
     },
     "pickupLists": [
       {
         "text": "McCall, Meredith, Nebinger, and St. Peter’s elementary schools",
         "url": "https://oldpinecommunitycenter.org/afterschool/",
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "fetch"
       }
     ]
@@ -2876,10 +2948,11 @@
       "thu",
       "fri"
     ],
-    "daysNote": "Depends on the class. Piano and guitar meet every weekday, percussion on Monday and Friday, choir on Tuesday and Thursday.",
+    "daysNote": "Depends on the class. Piano and guitar meet every weekday, percussion on Monday, Wednesday and Friday, choir on Tuesday and Thursday.",
     "offerDays": {
       "Percussion": [
         "mon",
+        "wed",
         "fri"
       ],
       "Choir": [
@@ -2927,8 +3000,8 @@
       "nextTerm": "The Winter/Spring session (Jan 4–June 13, 2027) goes on sale to new students on November 2. Returning families are emailed about re-enrollment first.",
       "dates": [
         {
-          "date": "2026-11-02",
-          "label": "Winter/Spring session goes on sale to new students"
+          "date": "2026-12-01",
+          "label": "Winter/Spring balance is refundable until this day (50% until January 3)"
         }
       ]
     },
@@ -2939,33 +3012,33 @@
         "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-11-01",
     "schools": {
       "nebinger": {
         "relation": "pickup",
-        "checked": "2026-10-26"
+        "checked": "2026-11-01"
       },
       "meredith": {
         "relation": "pickup",
-        "checked": "2026-10-26"
+        "checked": "2026-11-01"
       },
       "coppin": {
         "relation": "pickup",
-        "checked": "2026-10-26"
+        "checked": "2026-11-01"
       },
       "vare-washington": {
         "relation": "pickup",
-        "checked": "2026-10-26"
+        "checked": "2026-11-01"
       },
       "mccall": {
         "relation": "pickup",
-        "checked": "2026-10-26"
+        "checked": "2026-11-01"
       },
       "columbus-charter": {
         "relation": "pickup",
         "distance": "its 904 S 9th St studio is around the corner",
         "note": "Mister John’s pickup list names “CCCS”.",
-        "checked": "2026-10-26"
+        "checked": "2026-11-01"
       },
       "stanton": {
         "relation": "pickup",
@@ -2977,7 +3050,7 @@
             "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/"
           }
         ],
-        "checked": "2026-10-26"
+        "checked": "2026-11-01"
       },
       "marian-anderson": {
         "relation": "pickup",
@@ -2995,7 +3068,7 @@
       {
         "text": "CCCS, Fanny Jackson Coppin, Independence Charter School, Marian Anderson, Meredith, McCall, Nebinger, Stanton (M/W/R only) and Vare-Washington",
         "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
-        "read": "2026-10-26",
+        "read": "2026-11-01",
         "how": "fetch"
       }
     ],
@@ -3025,8 +3098,14 @@
         "how": "fetch",
         "look": "Each instrument section lists its levels as lines like “Level, SATURDAYS at a time (age)”."
       },
-      "checked": "2026-10-07"
-    }
+      "checked": "2026-11-01"
+    },
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "Mister John’s added a Wednesday 3:50 pm beginning percussion class for ages 5–10, so percussion now meets Monday, Wednesday and Friday. The Winter/Spring session (Jan 4–June 13) goes on sale to new students on November 2."
+      }
+    ]
   },
   {
     "id": "music-theatre-philly",
@@ -3131,12 +3210,12 @@
         "url": "https://www.musictheatrephilly.com/grades-5-8"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "schools": {
       "mccall": {
         "relation": "nearby",
         "distance": "about a 12-minute walk west of McCall",
-        "checked": "2026-10-07"
+        "checked": "2026-11-01"
       }
     },
     "weekend": {
@@ -3169,8 +3248,9 @@
         "look": "Classes are listed under day-of-week headings, which are images, each line giving class, grades, time and price. Repeat for the grades 5–8 page.",
         "notes": "The day headings are images, so a plain text read loses them; the fetch tool reads them."
       },
-      "checked": "2026-10-07"
-    }
+      "checked": "2026-11-01"
+    },
+    "aid": "Scholarships and payment plans are available; apply through the school’s application page or email its executive director."
   },
   {
     "id": "arden-drama-school",
@@ -3199,7 +3279,7 @@
     "gradeNote": "Day camps for K–5 and for 6–8. Saturday classes run K–12",
     "hours": "Nothing on weekday afternoons. Day camps run 9 am to 5 pm, and weekly classes meet on Saturdays.",
     "daysOff": {
-      "summary": "Play-in-a-Day for grades K–5: the group makes up and performs its own play, 9 am to 5 pm (9 to 4 on December 31). One-day musical theatre workshops for grades 6–8 run 9:30 am to 4:30 pm on the same days through December 29. Financial aid is available.",
+      "summary": "Play-in-a-Day for grades K–5: the group makes up and performs its own play, 9 am to 5 pm. One-day musical theatre workshops for grades 6–8 run 9:30 am to 4:30 pm on December 28 and 29, January 18 and March 10 (the page also lists a President’s Day workshop, dated January 18 by mistake). Winter 2027 sessions (December 28 to March 10) are $90 each, including a $25 non-refundable deposit; the fall dates show no price. The page gives December 31 as 9 to 4 in one place and 9 to 5 in another. Financial aid is by a scholarship application.",
       "url": "https://ardentheatre.org/arden-drama-school/",
       "dates": [
         "2026-10-12",
@@ -3208,7 +3288,10 @@
         "2026-12-28",
         "2026-12-29",
         "2026-12-30",
-        "2026-12-31"
+        "2026-12-31",
+        "2027-01-18",
+        "2027-02-15",
+        "2027-03-10"
       ],
       "sources": [
         {
@@ -3218,9 +3301,10 @@
       ],
       "hours": "9 am to 5 pm (grades 6–8: 9:30 am to 4:30 pm)",
       "ageMin": 5,
-      "ageMax": 14
+      "ageMax": 14,
+      "cost": "$90 a session (winter 2027); fall prices not on the page"
     },
-    "cost": "Not on the pages we could read. Each date’s price shows on Arden’s booking page.",
+    "cost": "Winter 2027 day camps (December 28 to March 10) are $90 a session, including a $25 non-refundable deposit. The fall dates show no price on the page; it’s on each booking link.",
     "phone": "215-922-1122",
     "email": "",
     "website": "https://ardentheatre.org/arden-drama-school",
@@ -3228,7 +3312,13 @@
       "how": "online",
       "url": "https://ardentheatre.org/arden-drama-school/",
       "label": "See dates",
-      "note": "Each camp day has its own booking link on Arden’s page."
+      "note": "Each camp day has its own booking link on Arden’s page.",
+      "dates": [
+        {
+          "date": "2026-11-27",
+          "label": "Arden early-bird ends: $15 off each winter Play-in-a-Day (code WINTERPIAD15) and $25 off 8-week classes (code WINTERSTAGE) when you enroll by November 27"
+        }
+      ]
     },
     "note": "Arden’s weekly classes are on Saturdays, so there is nothing here for a weekday afternoon.",
     "sources": [
@@ -3241,7 +3331,7 @@
         "url": "https://ardentheatre.org/arden-drama-school/"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "schools": {},
     "weekend": {
       "summary": "Saturday acting and musical theatre classes for grades K–8, between 10 am and 4 pm, plus Bookworms for ages 2–5.",
@@ -3249,11 +3339,11 @@
         "sat"
       ],
       "grades": "PK-8",
-      "term": "Fall 2026: eight weeks to October 31, then a three-Saturday mini-semester November 7 to 21",
+      "term": "Fall 2026: eight weeks to October 31, then a three-Saturday mini-semester November 7 to 21. Winter 2027: eight Saturdays January 9 to February 27, then a two-Saturday March mini-semester, March 6 and 20.",
       "times": {
         "sat": "10 am to 4 pm"
       },
-      "note": "Prices aren’t on the page, and no winter or spring classes were posted yet.",
+      "note": "Fall prices were not on the page; winter ones are. Enroll by November 27 for $25 off an eight-week winter class.",
       "url": "https://ardentheatre.org/arden-drama-school",
       "sources": [
         {
@@ -3266,8 +3356,15 @@
         "how": "fetch",
         "look": "Classes are grouped by grade band under the eight-week and mini-semester headings, each with a “Saturdays” line and its own registration link."
       },
-      "checked": "2026-10-07"
-    }
+      "checked": "2026-11-01",
+      "cost": "$245 to $260 for an eight-week winter class, $90 for the March mini-semester. Bookworms is $20 a session or $84 for six."
+    },
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "Arden posted its winter 2027 day camps: Play-in-a-Day (K–5) and one-day musical theatre workshops (6–8) on December 28–31, January 18, February 15 and March 10, $90 a session. Order by November 27 for $15 off each with code WINTERPIAD15."
+      }
+    ]
   },
   {
     "id": "walnut-street-theatre-school",
@@ -3292,25 +3389,25 @@
     "grades": "K-8",
     "gradeNote": "Ages 5–17, in three age groups",
     "hours": "Nothing on weekday afternoons. Kids’ classes meet on Saturday mornings.",
-    "cost": "$300 to $400 for a ten-week class",
+    "cost": "$300 to $400 for a ten-week class; $150 for a five-week class or a one-day camp",
     "price": "paid",
     "phone": "215-574-3550",
     "email": "",
-    "website": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4",
+    "website": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids5",
     "register": {
       "how": "online",
-      "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4",
+      "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids5",
       "label": "See classes",
       "note": "Each class has its own page on the theatre school’s registration site."
     },
-    "note": "We found no after-school classes on weekdays and no camps posted for days off this school year. In past years it has run a one-day Presidents’ Day camp and a spring break camp.",
+    "note": "We found no after-school classes on weekdays. It posts a one-day Presidents’ Day camp for February 15, 2027.",
     "sources": [
       {
-        "label": "Walnut Street Theatre School classes for kids",
-        "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4"
+        "label": "Walnut Street Theatre School classes for kids, spring 2027",
+        "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids5"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "schools": {},
     "weekend": {
       "summary": "Acting and musical theatre classes on Saturdays between 9 am and 1:05 pm, in groups for ages 5–7, 8–11 and 12–17. Each ends in a showcase for family and friends.",
@@ -3318,26 +3415,49 @@
         "sat"
       ],
       "grades": "K-8",
-      "term": "Fall 2026: October 10 to December 19, with no class November 28",
+      "term": "Fall 2026: October 10 to December 19, with no class November 28; a five-week dance class for ages 7–11 runs November 14 to December 19. Spring 2027: February 6 to April 17, with no class March 27. Spring sign-up is open.",
       "times": {
         "sat": "9 am to 1:05 pm"
       },
-      "cost": "$300 to $400 a class.",
-      "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4",
+      "cost": "$300 to $400 for a ten-week class, $150 for a five-week dance class.",
+      "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids5",
       "sources": [
         {
-          "label": "Walnut Street Theatre School classes for kids",
-          "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4"
+          "label": "Walnut Street Theatre School classes for kids, spring 2027",
+          "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids5"
         }
       ],
       "check": {
-        "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4",
+        "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids5",
         "how": "fetch",
         "look": "Each class card shows the title with its age range, then the day, the time, the date range and the price.",
-        "notes": "The category address changes with the term (classes-for-kids4). The site’s home page loads by script and comes back empty."
+        "notes": "The category address changes with the term (classes-for-kids4 was fall 2026, classes-for-kids5 is spring 2027); the site’s category list shows the current terms. The site’s home page loads by script and comes back empty."
       },
-      "checked": "2026-10-07"
-    }
+      "checked": "2026-11-01"
+    },
+    "daysOff": {
+      "summary": "A one-day Presidents’ Day camp on February 15, 2027, 9:30 am to 3:30 pm, for ages 8–11 and 12–17, ending in a 3 pm showcase.",
+      "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids5",
+      "dates": [
+        "2027-02-15"
+      ],
+      "sources": [
+        {
+          "label": "Walnut Street Theatre School classes for kids, spring 2027",
+          "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids5"
+        }
+      ],
+      "hours": "9:30 am to 3:30 pm",
+      "cost": "$150 a day",
+      "ageMin": 8,
+      "ageMax": 17
+    },
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "Spring 2027 Saturday classes are posted and open: February 6 to April 17, $300 to $400. A five-week musical theatre dance class for ages 7–11 runs November 14 to December 19 at 12:15, $150."
+      }
+    ]
   },
   {
     "id": "coco-academy",
@@ -3409,7 +3529,7 @@
         "url": "https://www.cocoacademyphl.com/afterschool-queenvillage"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-11-01",
     "schools": {
       "nebinger": {
         "relation": "pickup",
@@ -3435,7 +3555,7 @@
             "url": "https://www.cocoacademyphl.com/afterschool-queenvillage"
           }
         ],
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "coppin": {
         "relation": "pickup",
@@ -3465,7 +3585,7 @@
             "url": "https://www.cocoacademyphl.com/afterschool-queenvillage"
           }
         ],
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "mccall": {
         "relation": "pickup",
@@ -3478,7 +3598,7 @@
             "url": "https://www.cocoacademyphl.com/afterschool-queenvillage"
           }
         ],
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "columbus-charter": {
         "relation": "pickup",
@@ -3535,7 +3655,7 @@
         "where": "Queen Village, 615 S 3rd St",
         "text": "McCall, Meredith, Vare-Washington, St. Mary’s, St. Peter’s",
         "url": "https://www.cocoacademyphl.com/afterschool-queenvillage",
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "fetch"
       },
       {
@@ -3648,6 +3768,20 @@
         "how": "fetch",
         "by": "third-party",
         "note": "Philadelphia Family’s list. The cafe’s own page names no schools."
+      },
+      {
+        "text": "School pick up is available from Meredith Elementary School, McCall Elementary School, Nebinger Elementary School, St. Peter’s School, and Vare-Washington Elementary School. (Pickup from other schools may be available with enough interest!)",
+        "url": "https://www.queenrookkeep.com/product/WInterAfterschool/FGRQPCBNZJCILGV4A5OGMYL7?cp=true&sa=false&sbp=false&q=true",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider",
+        "note": "From the description of the Fall 2026 Afterschool sign-up on the cafe’s own shop site (the page body needs JavaScript; the description is in its page metadata)."
+      }
+    ],
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "Queen & Rook’s sign-up page lists the afterschool price: $51 a day, with a 10% sibling discount and need-based scholarships. It names Meredith, McCall, Nebinger, St. Peter’s and Vare-Washington for pickup, and says afterschool is held at 110 South St."
       }
     ]
   },
@@ -3701,8 +3835,8 @@
     "website": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
     "register": {
       "how": "online",
-      "url": "https://bookeo.com/beehivecommunity?type=41574EYC3LN19B4B8067C5",
-      "note": "This link books the fall semester. Winter/Spring booking is on Beehive’s page. 25% non-refundable deposit.",
+      "url": "https://bookeo.com/beehivecommunity?type=415744R7TLN19E50C648C7",
+      "note": "This link books the Winter/Spring semester at Bok for 2026–27; the fall link and a Pre-K Fridays link are on Beehive’s page. 25% non-refundable deposit.",
       "nextTerm": "Winter and Spring booking for 2026–27 is open now."
     },
     "note": "",
@@ -3712,37 +3846,37 @@
         "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-11-01",
     "schools": {
       "nebinger": {
         "relation": "pickup",
         "distance": "about a mile south of Nebinger",
         "note": "Ask how pickup from Nebinger works and whether it runs every day.",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "coppin": {
         "relation": "pickup",
         "distance": "about half a mile south of Coppin",
         "note": "Ask how pickup from Coppin works and whether it runs every day.",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "vare-washington": {
         "relation": "pickup",
         "distance": "about a mile southwest of Vare-Washington",
         "note": "Ask how pickup from Vare-Washington works and whether it runs every day.",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "kirkbride": {
         "relation": "pickup",
         "distance": "about a 10-minute walk south of Kirkbride",
         "note": "Beehive’s 2026–27 list for Bok names Kirkbride, Monday to Friday.",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "southwark": {
         "relation": "pickup",
         "distance": "in the Bok building, across Mifflin St from Southwark",
         "note": "Beehive’s 2026–27 list for Bok names Southwark, Monday to Friday. Southwark’s own page names Beehive too.",
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       }
     },
     "pickupLists": [
@@ -3750,14 +3884,14 @@
         "where": "Beehive @ Bok, 2026-2027",
         "text": "Monday through Friday from Kirkbride, Coppin, Nebinger, Southwark, Jenks, and Vare Washington",
         "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "browser"
       },
       {
         "where": "Beehive @ Ethical Society, 2026-2027",
         "text": "Monday through Friday from MANA, Stanton, Greenfield and ICS",
         "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "browser"
       }
     ]
@@ -3824,44 +3958,44 @@
         "url": "https://www.thedandelionproject.us/dandelion-after-school"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "schools": {
       "coppin": {
         "relation": "pickup",
         "distance": "about a 10-minute walk from Coppin",
         "note": "Dandelion lists free pickup from Coppin Monday to Friday.",
-        "checked": "2026-10-07"
+        "checked": "2026-11-01"
       },
       "vare-washington": {
         "relation": "pickup",
         "distance": "about half a mile west of Vare-Washington",
         "note": "Dandelion lists free pickup from Vare-Washington. Its page reads “Monday Friday”, which could mean every day or those two days, so ask which.",
-        "checked": "2026-10-07"
+        "checked": "2026-11-01"
       },
       "nebinger": {
         "relation": "nearby",
         "distance": "about a 15-minute walk south of Nebinger",
         "note": "Nebinger isn’t on Dandelion’s pickup list. Its page invites families at other South Philly schools to get in touch.",
-        "checked": "2026-10-07"
+        "checked": "2026-11-01"
       },
       "kirkbride": {
         "relation": "pickup",
         "distance": "about a 5-minute walk from Kirkbride",
         "note": "Dandelion lists free pickup from Kirkbride Monday to Friday.",
-        "checked": "2026-10-07"
+        "checked": "2026-11-01"
       },
       "southwark": {
         "relation": "pickup",
         "distance": "about a 10-minute walk north of Southwark",
         "note": "Dandelion lists free pickup from Southwark on Mondays, Thursdays and Fridays.",
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       }
     },
     "pickupLists": [
       {
         "text": "Coppin Elementary: Monday-Friday. Southwark Elementary: Monday, Thursday, Friday. Kirkbride Elementary: Monday-Friday. Vare-Washington Elementary: Monday Friday. If you are from a different South Philly school and are interested, reach out!",
         "url": "https://www.thedandelionproject.us/dandelion-after-school",
-        "read": "2026-10-07",
+        "read": "2026-11-01",
         "how": "fetch",
         "by": "provider",
         "note": "The same list showed in a browser on the same day."
@@ -4596,7 +4730,7 @@
       "hours": "8:30 am to 3:30 pm, to 6 pm for $25 more",
       "cost": "$69 a day"
     },
-    "cost": "2025–26 rates, per month: $369 for 1 day a week, $399 for 2, $449 for 3, $489 for 4, $529 for 5, plus $100 registration",
+    "cost": "2026–27 rates, per month: $369 for 1 day a week, $399 for 2, $449 for 3, $489 for 4, $529 for 5, plus $100 registration. 20% sibling discount.",
     "rate": {
       "per": "month",
       "byDays": {
@@ -4606,7 +4740,7 @@
         "4": 489,
         "5": 529
       },
-      "extra": "2025–26 rates. A $100 registration fee is extra."
+      "extra": "2026–27 rates. A $100 registration fee is extra."
     },
     "price": "paid",
     "phone": "267-600-1030",
@@ -4614,31 +4748,36 @@
     "website": "https://www.movemakersphilly.com/youthclasses.html",
     "register": {
       "how": "online",
-      "url": "https://www.movemakersphilly.com/youthclasses.html",
-      "note": "Each school has its own sign-up link."
+      "url": "https://www.movemakersphilly.com/range-of-motion-after-school-programming.html",
+      "note": "Each school has its own 2026–27 sign-up link on the Range of Motion page."
     },
-    "note": "Prices shown are last year’s. Ask for 2026–27 rates and the age range.",
+    "note": "Ages for after school aren’t published; ask for the age range. Its school closing camps are for K–8.",
     "sources": [
       {
         "label": "MoveMakers after school",
         "url": "https://www.movemakersphilly.com/youthclasses.html"
+      },
+      {
+        "label": "Range of Motion after school (812 Chestnut), 2026–27",
+        "url": "https://www.movemakersphilly.com/range-of-motion-after-school-programming.html"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-11-01",
     "schools": {
       "nebinger": {
         "relation": "pickup",
-        "registerUrl": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100574",
-        "checked": "2026-10-06"
+        "registerUrl": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100032&prodGroupId=100714",
+        "checked": "2026-11-01"
       },
       "meredith": {
         "relation": "pickup",
-        "registerUrl": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100573",
-        "checked": "2026-10-06"
+        "registerUrl": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100032&prodGroupId=100713",
+        "checked": "2026-11-01"
       },
       "mccall": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01",
+        "registerUrl": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100032&prodGroupId=100712"
       },
       "marian-anderson": {
         "relation": "pickup",
@@ -4658,14 +4797,14 @@
         "where": "812 Chestnut St",
         "text": "McCall Elementary, Meredith Elementary, Nebinger Elementary",
         "url": "https://www.movemakersphilly.com/youthclasses.html",
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "fetch"
       },
       {
         "where": "2100 Chestnut St",
         "text": "Albert M. Greenfield School, Independence Charter School, Marian Anderson School",
         "url": "https://www.movemakersphilly.com/youthclasses.html",
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "fetch"
       }
     ],
@@ -4692,8 +4831,14 @@
         "how": "fetch",
         "look": "Each studio’s weekly schedule has a Saturday row listing times and class names."
       },
-      "checked": "2026-10-07"
-    }
+      "checked": "2026-11-01"
+    },
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "MoveMakers’ Range of Motion page posts 2026–27 after-school rates, unchanged from last year: $369 a month for one day a week up to $529 for five, plus a $100 registration fee, with a 20% sibling discount."
+      }
+    ]
   },
   {
     "id": "kids-on-12th",
@@ -4718,13 +4863,45 @@
     "gradeNote": "",
     "hours": "2:30–6:00 pm. From 12:30 pm on early-release days; full days on most school holidays.",
     "daysOff": {
-      "summary": "Camp days on teacher work days and most holidays: 8:30 am to 6 pm for enrolled children, 8:30 am to 3 pm for drop-ins. There is no school pickup on those days. On early-release days it picks up and runs 12:30 to 6 pm.",
+      "summary": "Camp days on teacher work days and most holidays: 8:30 am to 6 pm for enrolled children, 8:30 am to 3 pm for drop-ins. There is no school pickup on those days. On early-release days it picks up and runs 12:30 to 6 pm. Its 2026–27 calendar marks camp days by school; the dates here are the district’s. It closes at 4 pm on November 25 and December 23, and is closed Nov 26–27, Dec 24–25, Dec 31 and Jan 1.",
       "url": "https://ko12.org/after-school-pick-up-philadelphia",
-      "dates": [],
+      "dates": [
+        "2026-09-18",
+        "2026-09-21",
+        "2026-10-09",
+        "2026-10-12",
+        "2026-11-03",
+        "2026-11-11",
+        "2026-11-16",
+        "2026-11-25",
+        "2026-12-23",
+        "2027-01-15",
+        "2027-01-18",
+        "2027-01-19",
+        "2027-01-29",
+        "2027-02-12",
+        "2027-02-15",
+        "2027-03-10",
+        "2027-03-22",
+        "2027-03-23",
+        "2027-03-24",
+        "2027-03-25",
+        "2027-03-26",
+        "2027-03-29",
+        "2027-04-16",
+        "2027-05-17",
+        "2027-05-18",
+        "2027-06-10",
+        "2027-06-11"
+      ],
       "sources": [
         {
           "label": "Kids on 12th after school",
           "url": "https://ko12.org/after-school-pick-up-philadelphia"
+        },
+        {
+          "label": "Kids on 12th 2026–27 calendar",
+          "url": "https://ko12.org/school-calendar"
         }
       ],
       "hours": "8:30 am to 6 pm (drop-ins to 3 pm)"
@@ -4737,7 +4914,7 @@
       "atLeast": true
     },
     "price": "paid",
-    "phone": "",
+    "phone": "215-545-2930",
     "email": "",
     "website": "https://ko12.org/after-school-pick-up-philadelphia",
     "register": {
@@ -4753,22 +4930,22 @@
         "url": "https://ko12.org/after-school-pick-up-philadelphia"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-11-01",
     "schools": {
       "coppin": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "mccall": {
         "relation": "pickup",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       }
     },
     "pickupLists": [
       {
         "text": "Independence Charter School (ICS), McCall Elementary School, Greenfield Elementary School, Russell Byers Elementary School, Fanny Jackson Coppin Elementary School, Folk Arts Cultural Treasures Charter School (FACTS)",
         "url": "https://ko12.org/after-school-pick-up-philadelphia",
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "fetch",
         "note": "The same six schools showed in a browser on the same day."
       }
@@ -4796,8 +4973,8 @@
     ],
     "grades": "1-6",
     "gradeNote": "Ages 6–12",
-    "hours": "Not confirmed for this year. City rec programs typically run 3:00–6:00 pm on weekdays.",
-    "cost": "$130 in the 2025–26 listing",
+    "hours": "3:00–6:00 pm, weekdays",
+    "cost": "$120 per month in the 2026–27 listing",
     "price": "paid",
     "phone": "215-685-1890",
     "email": "",
@@ -4807,8 +4984,12 @@
       "note": "Call or stop by the rec center. There is no online sign-up.",
       "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
     },
-    "note": "The city’s finder shows registration as closed and has no 2026–27 listing yet. Call about openings.",
+    "note": "The city’s finder posts the 2026–27 program (August 24, 2026 to June 10, 2027) and shows registration as closed. Call about openings or a waitlist.",
     "sources": [
+      {
+        "label": "City Parks & Rec finder: Columbus Square after school program",
+        "url": "https://www.phila.gov/parks-rec-finder/#/activity/after-school-program/57d2f53af927e8cd4a9bcfaa"
+      },
       {
         "label": "City Parks & Rec finder",
         "url": "https://www.phila.gov/parks-rec-finder/#/locations"
@@ -4818,30 +4999,34 @@
         "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
       }
     ],
-    "lastVerified": "2026-10-05",
+    "lastVerified": "2026-11-01",
     "schools": {
       "coppin": {
         "relation": "pickup",
         "distance": "one block south of Coppin",
-        "note": "Named on Coppin’s own aftercare pickup sheet (posted May 2024). Confirm pickup still runs this year.",
+        "note": "The city’s 2026–27 listing for the program says it picks up students from Fanny Jackson Coppin Elementary School. Coppin’s own May 2024 pickup sheet is no longer on the school’s site.",
         "sources": [
+          {
+            "label": "City Parks & Rec finder: Columbus Square after school program",
+            "url": "https://www.phila.gov/parks-rec-finder/#/activity/after-school-program/57d2f53af927e8cd4a9bcfaa"
+          },
           {
             "label": "Coppin aftercare pickup sheet",
             "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
           }
         ],
-        "checked": "2026-10-05"
+        "checked": "2026-11-01"
       },
       "kirkbride": {
         "relation": "nearby",
         "distance": "about a 12-minute walk west of Kirkbride",
         "note": "The City’s listing doesn’t mention pickup from Kirkbride.",
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       },
       "columbus-charter": {
         "relation": "nearby",
         "distance": "about a 12-minute walk south-west of the school",
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       },
       "childs": {
         "relation": "nearby",
@@ -4849,7 +5034,35 @@
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-07"
       }
-    }
+    },
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "rate": {
+      "per": "month",
+      "flat": 120,
+      "extra": "From the 2026–27 listing."
+    },
+    "pickupLists": [
+      {
+        "where": "City finder listing for Columbus Square’s after school program",
+        "text": "This program picks up students from Fanny Jackson Coppin Elementary School.",
+        "url": "https://www.phila.gov/parks-rec-finder/#/activity/after-school-program/57d2f53af927e8cd4a9bcfaa",
+        "read": "2026-11-01",
+        "how": "browser"
+      }
+    ],
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "The city’s finder has posted Columbus Square’s 2026–27 after-school program: $120 a month (it was $130 last year), ages 6–12, 3:00–6:00 pm weekdays, August 24 to June 10, with pickup from Coppin. Registration shows as closed, so call about openings."
+      }
+    ]
   },
   {
     "id": "hawthorne-cultural-center",
@@ -4897,7 +5110,7 @@
       "note": "Call or stop by the rec center. There is no online sign-up.",
       "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
     },
-    "note": "The 2026–27 listing is not posted yet; the newest ran August 25, 2025 to June 11, 2026.",
+    "note": "On November 1, 2026 the city’s finder listed only an adult samba class at Hawthorne and no 2026–27 after-school program; the newest after-school listing ran August 25, 2025 to June 11, 2026. Call to confirm the program and the price for this year.",
     "sources": [
       {
         "label": "City Parks & Rec finder",
@@ -4986,7 +5199,7 @@
       "note": "Call or stop by the rec center. There is no online sign-up.",
       "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
     },
-    "note": "The city’s finder shows registration as closed. Ask about a waitlist.",
+    "note": "On November 1, 2026 the city’s finder listed no activities at Starr Garden and no 2026–27 after-school program. Call to confirm the program and the price for this year, and ask about a waitlist.",
     "sources": [
       {
         "label": "City Parks & Rec finder",
@@ -5054,7 +5267,7 @@
       "note": "Call or stop by the rec center. There is no online sign-up.",
       "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
     },
-    "note": "The city’s finder has no schedule for Palumbo’s program after June 2025. Call to confirm it is running.",
+    "note": "On November 1, 2026 the city’s finder listed no activities at Palumbo and no schedule for its after-school program since June 2025. Call to confirm it is running.",
     "sources": [
       {
         "label": "City Parks & Rec finder",
@@ -5134,33 +5347,33 @@
         "url": "https://mightywriters.org/philadelphia/"
       }
     ],
-    "lastVerified": "2026-10-05",
+    "lastVerified": "2026-11-01",
     "schools": {
       "nebinger": {
         "relation": "nearby",
-        "checked": "2026-10-05"
+        "checked": "2026-11-01"
       },
       "meredith": {
         "relation": "nearby",
-        "checked": "2026-10-05"
+        "checked": "2026-11-01"
       },
       "coppin": {
         "relation": "nearby",
-        "checked": "2026-10-05"
+        "checked": "2026-11-01"
       },
       "vare-washington": {
         "relation": "nearby",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "kirkbride": {
         "relation": "nearby",
         "distance": "about a 13-minute walk north of Kirkbride",
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       },
       "columbus-charter": {
         "relation": "nearby",
         "distance": "about a 3-minute walk south on 9th St",
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       }
     }
   },
@@ -5270,7 +5483,6 @@
       "summary": "One-day art camps on district days off for ages 5–11: drop-off 8:30 to 9:30 am, classes until 3:30 pm. After Camp Club runs 3:30 to 5:30 pm for an added fee. The price is not on its page.",
       "url": "https://fleisher.org/day-off-camps/",
       "dates": [
-        "2026-10-12",
         "2026-11-03",
         "2026-11-11",
         "2027-02-15",
@@ -5305,15 +5517,23 @@
       "url": "https://reg137.imperisoft.com/Fleisher/Search/Registration.aspx",
       "label": "Register for classes",
       "note": "Teen Lounge needs no registration. Fall 2026 class registration closed September 12.",
-      "nextTerm": "Winter 2027 term (January 9 to March 6, Saturdays): enrolled students register November 14 to 21, new students November 24 to January 4.",
+      "nextTerm": "Winter 2027 term (January 9 to March 6, Saturdays): current students register November 14 to 21, new students November 24 to December 18.",
       "dates": [
         {
           "date": "2026-11-14",
           "label": "Winter term registration opens for enrolled students"
         },
         {
+          "date": "2026-11-21",
+          "label": "Last day of winter term registration for enrolled students"
+        },
+        {
           "date": "2026-11-24",
           "label": "Winter term registration opens for new students"
+        },
+        {
+          "date": "2026-12-18",
+          "label": "Last day of winter term registration for new students"
         }
       ]
     },
@@ -5336,37 +5556,37 @@
         "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/winter-2027/"
       }
     ],
-    "lastVerified": "2026-10-19",
+    "lastVerified": "2026-11-01",
     "schools": {
       "nebinger": {
         "relation": "nearby",
         "distance": "about three blocks from Nebinger",
-        "checked": "2026-10-05"
+        "checked": "2026-11-01"
       },
       "meredith": {
         "relation": "nearby",
         "distance": "about three blocks from Meredith",
-        "checked": "2026-10-05"
+        "checked": "2026-11-01"
       },
       "coppin": {
         "relation": "nearby",
-        "checked": "2026-10-05"
+        "checked": "2026-11-01"
       },
       "vare-washington": {
         "relation": "nearby",
         "distance": "about half a mile from Vare-Washington",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "mccall": {
         "relation": "nearby",
         "distance": "about half a mile from McCall",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "kirkbride": {
         "relation": "nearby",
         "distance": "about a 16-minute walk north of Kirkbride",
         "note": "Kirkbride names Fleisher among its partners.",
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       }
     },
     "weekend": {
@@ -5395,8 +5615,9 @@
         "look": "Dates sit in the intro text. The Saturday class grid is an embedded schedule and a “Fall listings” link to the registration system.",
         "notes": "Each term is its own page under Children and Youth Education, so the next term is a new address."
       },
-      "checked": "2026-10-19"
-    }
+      "checked": "2026-11-01"
+    },
+    "aid": "Tuition assistance is available each term to anyone who needs it, with no documentation required; the tuition assistance application doubles as the registration form, and applications for 2026–27 Day Off Camps are open."
   },
   {
     "id": "makom-community",
@@ -5432,7 +5653,6 @@
       "summary": "School’s Out Camp, 8:30 am to 6 pm, for ages 4 and up, $90 a day ($100 in the last week before the date).",
       "url": "https://makomcommunity.org/schools-out-camp/",
       "dates": [
-        "2026-10-12",
         "2026-11-03",
         "2026-11-11",
         "2026-11-16",
@@ -5491,12 +5711,12 @@
         "url": "https://makomcommunity.org/afterschool-enrichment/"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-11-01",
     "schools": {
       "nebinger": {
         "relation": "nearby",
         "note": "Makom’s pickup list (Greenfield, Childs, ICS, Marian Anderson, Stanton, The Philadelphia School, Wild Seeds and Vare-Washington) does not include Nebinger.",
-        "checked": "2026-10-05"
+        "checked": "2026-11-01"
       },
       "coppin": {
         "relation": "pickup",
@@ -5520,7 +5740,7 @@
             "url": "https://makomcommunity.org/afterschool-enrichment/"
           }
         ],
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       },
       "stanton": {
         "relation": "pickup",
@@ -5533,7 +5753,7 @@
             "url": "https://makomcommunity.org/afterschool-enrichment/"
           }
         ],
-        "checked": "2026-10-25"
+        "checked": "2026-11-01"
       },
       "marian-anderson": {
         "relation": "pickup",
@@ -5566,10 +5786,11 @@
         "where": "2401 Washington Avenue",
         "text": "Greenfield Elementary School, GW Childs Elementary School, Independence Charter School, Marian Anderson Neighborhood Academy, Stanton Elementary School, The Philadelphia School, Wild Seeds ALC at The Dandelion Project, Vare Washington Elementary School",
         "url": "https://makomcommunity.org/afterschool-enrichment/",
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "fetch"
       }
-    ]
+    ],
+    "aid": "Need-based tuition assistance is available; ask before enrolling."
   },
   {
     "id": "vare-washington-edey",
@@ -5593,7 +5814,7 @@
     "address": "",
     "grades": "K-8",
     "gradeNote": "For Vare-Washington students. The City’s program locator names kindergarten through 8th grade.",
-    "hours": "After school 3:00 to 6:00 pm, Monday to Friday, per the City’s after-school program locator for 2026–27, and before school; the provider’s page gives before care from 7:00 am.",
+    "hours": "Before care 7:00 to 8:15 am and after school 2:30 to 6:00 pm, Monday to Friday, per the provider’s (GPCA) page; the City’s 2026–27 after-school program locator gives the after-school hours as 3:00 to 6:00 pm.",
     "days": [
       "mon",
       "tue",
@@ -5632,7 +5853,7 @@
       "url": "https://form.jotform.com/262154951033048",
       "note": "The school’s page links an online registration form for 2026–27. The site director is Ms. Lisa Washington of Greater Philadelphia Community Alliance (GPCA)."
     },
-    "note": "The school’s own page for 2026–27 names Greater Philadelphia Community Alliance (GPCA) as the provider, with Ms. Lisa Washington as site director, and says the program includes before and after school care, enrichment, and winter, spring and summer camps. The hours come from the City’s 2024 sheet; confirm them with her.",
+    "note": "The school’s own page for 2026–27 names Greater Philadelphia Community Alliance (GPCA) as the provider, with Ms. Lisa Washington as site director, and says the program includes before and after school care, enrichment, and winter, spring and summer camps. The hours are from GPCA’s page. The online registration form’s before-care question says “Childs and Steel Only”, while GPCA’s page lists before care at Vare, so confirm before care with the site director.",
     "sources": [
       {
         "label": "Vare-Washington: before and after care",
@@ -5659,9 +5880,15 @@
     "schools": {
       "vare-washington": {
         "relation": "onsite",
-        "checked": "2026-10-25"
+        "checked": "2026-11-01"
       }
-    }
+    },
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "The provider’s (GPCA) page gives the program’s hours: before care 7:00 to 8:15 am and after school 2:30 to 6:00 pm, Monday to Friday. The registration form is live for 2026–27."
+      }
+    ]
   },
   {
     "id": "childs-edey",
@@ -5789,11 +6016,11 @@
         "url": "https://web.vwtigers.com/before-and-aftercare-at-vw/"
       }
     ],
-    "lastVerified": "2026-10-25",
+    "lastVerified": "2026-11-01",
     "schools": {
       "vare-washington": {
         "relation": "onsite",
-        "checked": "2026-10-25"
+        "checked": "2026-11-01"
       }
     },
     "clubs": [
@@ -6105,7 +6332,7 @@
     "address": "",
     "grades": "K-8",
     "gradeNote": "For McCall students",
-    "hours": "After school 3:30–5:30 pm, and before school 7:45–8:45 am, per the school’s 2025–26 handbook",
+    "hours": "After school 3:30–5:30 pm, and before school 7:45–8:45 am, Monday to Friday, per the school’s handbook",
     "days": [
       "mon",
       "tue",
@@ -6125,7 +6352,7 @@
       "url": "https://www.sunriseofphila.org/services-8",
       "note": "Sunrise’s site says 2026–27 enrollment is open. Use its K–8 application and choose McCall."
     },
-    "note": "The hours are from McCall’s 2025–26 handbook. Sunrise says start and end times differ from site to site, so confirm this year’s. Programs run through June 8.",
+    "note": "The hours are from McCall’s handbook, which now carries 2026–27 material. Sunrise says start and end times differ from site to site, so confirm this year’s. Programs run through June 8.",
     "sources": [
       {
         "label": "Sunrise of Philadelphia: school year programs",
@@ -6140,11 +6367,11 @@
         "url": "https://docs.google.com/document/d/1ZaNrbFZBNa2CoxBA5hJWXRvNxv6Uk3ZWmd17ubIxL9A/edit?usp=sharing"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-11-01",
     "schools": {
       "mccall": {
         "relation": "onsite",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       }
     }
   },
@@ -6204,25 +6431,27 @@
         "url": "https://emstanton.philasd.org/"
       }
     ],
-    "lastVerified": "2026-10-25",
+    "lastVerified": "2026-11-01",
     "schools": {
       "stanton": {
         "relation": "onsite",
-        "checked": "2026-10-25"
+        "checked": "2026-11-01"
       }
     }
   },
   {
     "id": "mccall-clubs",
     "name": "McCall clubs and teams",
-    "what": "Clubs and teams run at the school: Chess, Debate, Crochet, two running clubs, and middle-school volleyball, basketball, softball, baseball and soccer.",
+    "what": "Clubs and teams the school lists for this year: Academic Enrichment, Art, Astronomy, Chess Team, Chorus/Music, Crochet/Fiber Arts, Cub Scouts Pack 6601, Debate, Drama/Theater, Little Medical School, Math Team, Media Club, STEM/Aviation and Student Ambassadors, plus football, golf, soccer, girls volleyball, boys and girls basketball, softball and baseball.",
     "types": [
       "clubs",
       "games",
       "academics",
       "art",
       "movement",
-      "stem"
+      "stem",
+      "music",
+      "theater"
     ],
     "keywords": [
       "clubs",
@@ -6230,26 +6459,30 @@
       "chess",
       "debate",
       "crochet",
-      "running",
+      "astronomy",
+      "art",
+      "chorus",
+      "music",
+      "drama",
+      "theater",
+      "math team",
+      "media",
+      "STEM",
+      "aviation",
+      "cub scouts",
+      "scouts",
+      "football",
+      "golf",
       "volleyball",
       "basketball",
       "softball",
       "baseball",
-      "soccer",
-      "odyssey of the mind",
-      "student council"
+      "soccer"
     ],
     "address": "",
     "grades": "K-8",
     "gradeNote": "Varies by club",
-    "hours": "After school, by club. Times not published",
-    "days": [
-      "mon",
-      "tue",
-      "wed",
-      "thu",
-      "fri"
-    ],
+    "hours": "After school, by club. Days and times not published",
     "cost": "Not published",
     "phone": "215-400-7840",
     "email": "",
@@ -6258,92 +6491,152 @@
       "how": "school",
       "note": "Ask the club’s coach or coordinator through the school. The school says spots may be limited."
     },
-    "note": "The school’s page gives days and grades but no times and no school year. A few clubs meet before school; those are marked. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "note": "The school’s page (updated September 2026) names these clubs and teams without days, times or grades, and no longer lists Girls on the Run, the running clubs or the before-school clubs that were on its earlier page. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
     "sources": [
       {
         "label": "McCall sports and clubs",
         "url": "https://mccall.philasd.org/"
       }
     ],
-    "lastVerified": "2026-10-06",
+    "lastVerified": "2026-11-01",
     "schools": {
       "mccall": {
         "relation": "onsite",
-        "checked": "2026-10-06"
+        "checked": "2026-11-01"
       }
     },
     "clubs": [
       {
-        "name": "Chess Club",
-        "days": [
-          "fri"
-        ],
-        "grades": "1-8",
-        "note": "Also meets before school on Tuesdays and Thursdays.",
+        "name": "Academic Enrichment Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Art Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Astronomy Club",
+        "tags": [
+          "stem",
+          "science"
+        ]
+      },
+      {
+        "name": "Chess Team",
         "tags": [
           "games",
           "chess"
         ]
       },
       {
-        "name": "Debate Club",
-        "days": [
-          "wed"
-        ],
-        "grades": "6-8",
+        "name": "Chorus / Music Club",
         "tags": [
-          "academics",
-          "debate"
+          "music",
+          "singing"
         ]
       },
       {
-        "name": "Crochet Club",
-        "days": [
-          "tue",
-          "wed",
-          "thu"
-        ],
-        "grades": "K-8",
+        "name": "Crochet / Fiber Arts Club",
         "tags": [
           "art",
           "crafts"
         ]
       },
       {
-        "name": "McCall Run Club",
-        "days": [
-          "tue",
-          "thu"
-        ],
-        "grades": "5-6",
+        "name": "Cub Scouts Pack 6601",
         "tags": [
-          "movement",
-          "running",
-          "outdoors"
+          "scouts"
         ]
       },
       {
-        "name": "Students Run Philly Style",
-        "days": [
-          "tue",
-          "thu"
-        ],
-        "grades": "6-8",
+        "name": "Debate Club",
         "tags": [
-          "movement",
-          "running",
-          "outdoors"
+          "academics",
+          "debate"
         ]
       },
       {
-        "name": "Softball Team",
-        "days": [
-          "mon",
-          "tue",
-          "wed",
-          "thu"
-        ],
-        "grades": "6-8",
+        "name": "Drama / Theater Club",
+        "tags": [
+          "theater",
+          "drama"
+        ]
+      },
+      {
+        "name": "Little Medical School",
+        "tags": [
+          "stem",
+          "science"
+        ]
+      },
+      {
+        "name": "Math Team",
+        "tags": [
+          "academics",
+          "math"
+        ]
+      },
+      {
+        "name": "Media Club",
+        "tags": []
+      },
+      {
+        "name": "STEM / Aviation Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Student Ambassadors",
+        "tags": []
+      },
+      {
+        "name": "Football",
+        "tags": [
+          "movement",
+          "football"
+        ]
+      },
+      {
+        "name": "Golf",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement",
+          "soccer"
+        ]
+      },
+      {
+        "name": "Girls Volleyball",
+        "tags": [
+          "movement",
+          "volleyball"
+        ]
+      },
+      {
+        "name": "Boys Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Girls Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Softball",
         "tags": [
           "movement",
           "softball",
@@ -6351,144 +6644,44 @@
         ]
       },
       {
-        "name": "Volleyball Team",
-        "grades": "6-8",
-        "note": "After school; the page doesn’t give days.",
-        "tags": [
-          "movement",
-          "volleyball"
-        ]
-      },
-      {
-        "name": "Girls Basketball Team",
-        "grades": "6-8",
-        "note": "After school; the page doesn’t give days.",
-        "tags": [
-          "movement",
-          "basketball"
-        ]
-      },
-      {
-        "name": "Boys Basketball Team",
-        "grades": "6-8",
-        "note": "After school; the page doesn’t give days.",
-        "tags": [
-          "movement",
-          "basketball"
-        ]
-      },
-      {
-        "name": "Baseball Team",
-        "grades": "6-8",
-        "note": "After school; the page doesn’t give days.",
+        "name": "Baseball",
         "tags": [
           "movement",
           "baseball",
           "outdoors"
         ]
-      },
+      }
+    ],
+    "updates": [
       {
-        "name": "Volleyball Club",
-        "days": [
-          "mon",
-          "wed"
-        ],
-        "grades": "3-7",
-        "when": "Before school",
-        "roster": false,
-        "tags": [
-          "movement",
-          "volleyball"
-        ]
-      },
-      {
-        "name": "Soccer Team",
-        "days": [
-          "mon",
-          "tue",
-          "wed",
-          "thu"
-        ],
-        "grades": "6-8",
-        "when": "Before school",
-        "roster": false,
-        "tags": [
-          "movement",
-          "soccer"
-        ]
-      },
-      {
-        "name": "Media Club",
-        "days": [
-          "wed"
-        ],
-        "grades": "4-6",
-        "when": "Before school",
-        "roster": false,
-        "tags": []
-      },
-      {
-        "name": "Student Council",
-        "days": [
-          "tue"
-        ],
-        "grades": "6-8",
-        "when": "Before school",
-        "roster": false,
-        "tags": []
-      },
-      {
-        "name": "Odyssey of the Mind",
-        "days": [
-          "fri"
-        ],
-        "grades": "3-8",
-        "when": "Before school",
-        "roster": false,
-        "tags": [
-          "stem"
-        ]
+        "date": "2026-11-01",
+        "text": "McCall’s page now lists a different set of clubs: Academic Enrichment, Art, Astronomy, Chess Team, Chorus/Music, Crochet, Cub Scouts Pack 6601, Debate, Drama, Little Medical School, Math Team, Media and STEM/Aviation, with no days or times given. The running clubs are no longer listed."
       }
     ],
     "offers": [
-      "Chess Club",
+      "Academic Enrichment Club",
+      "Art Club",
+      "Astronomy Club",
+      "Chess Team",
+      "Chorus / Music Club",
+      "Crochet / Fiber Arts Club",
+      "Cub Scouts Pack 6601",
       "Debate Club",
-      "Crochet Club",
-      "McCall Run Club",
-      "Students Run Philly Style",
-      "Softball Team",
-      "Volleyball Team",
-      "Girls Basketball Team",
-      "Boys Basketball Team",
-      "Baseball Team"
-    ],
-    "offerDays": {
-      "Chess Club": [
-        "fri"
-      ],
-      "Debate Club": [
-        "wed"
-      ],
-      "Crochet Club": [
-        "tue",
-        "wed",
-        "thu"
-      ],
-      "McCall Run Club": [
-        "tue",
-        "thu"
-      ],
-      "Students Run Philly Style": [
-        "tue",
-        "thu"
-      ],
-      "Softball Team": [
-        "mon",
-        "tue",
-        "wed",
-        "thu"
-      ]
-    }
+      "Drama / Theater Club",
+      "Little Medical School",
+      "Math Team",
+      "Media Club",
+      "STEM / Aviation Club",
+      "Student Ambassadors",
+      "Football",
+      "Golf",
+      "Soccer",
+      "Girls Volleyball",
+      "Boys Basketball",
+      "Girls Basketball",
+      "Softball",
+      "Baseball"
+    ]
   },
   {
     "id": "sawubona-creativity-project",
@@ -6548,7 +6741,7 @@
         "url": "https://www.sawubonacreativityproject.org/campinformationandschedules"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "schools": {
       "coppin": {
         "relation": "pickup",
@@ -6620,14 +6813,14 @@
     },
     "cost": "$80 a day to 3 pm or $110 to 6 pm. A package of all 16 full-day camps to 6 pm is $1,120 for the year.",
     "price": "paid",
-    "phone": "",
+    "phone": "267-225-8434",
     "email": "",
     "website": "https://www.playartsphilly.com/day-camps",
     "register": {
       "how": "online",
       "url": "https://www.playartsphilly.com/day-camps",
       "label": "See camp days",
-      "note": "The page has a button for the full-year package and one for booking by the day."
+      "note": "The page has a button for the full-year package and one for booking by the day. Registration closes 48 hours before each camp (Monday camps close the previous Friday at noon); payment is due within 24 hours or the spot is dropped."
     },
     "note": "The camp days come from the 2026–27 schedule on its page; May 18 is marked tentative, like the district’s own calendar. PlayArts also runs Pre-K half-day camps on Fridays, but only inside the schools where it runs after-school, none of them on this site.",
     "sources": [
@@ -6636,8 +6829,9 @@
         "url": "https://www.playartsphilly.com/day-camps"
       }
     ],
-    "lastVerified": "2026-10-07",
-    "schools": {}
+    "lastVerified": "2026-11-01",
+    "schools": {},
+    "aid": "Tuition assistance for its after-school and half-day camps for qualified families through the Child Care Works (CCW) program."
   },
   {
     "id": "philly-rock-gym-day-camps",
@@ -6696,7 +6890,7 @@
         "url": "https://philarockgym.com/youth-camps/"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "schools": {}
   },
   {
@@ -6720,13 +6914,11 @@
     ],
     "grades": "2-8",
     "gradeNote": "Ages 7–13",
-    "hours": "Camps run 9 am to 3 pm unless the listing says otherwise.",
+    "hours": "Holiday camps run 8:30 am to 3 pm when they run; its general camp notes say 9 to 3.",
     "daysOff": {
-      "summary": "Holiday and school-day-off skateboard camps for ages 7–13, all levels. Election Day, November 3, was the one day posted when we checked. Bring a skateboard, helmet and pads.",
+      "summary": "Holiday and school-day-off skateboard camps for ages 7–13, all levels, at its West Philly indoor skatepark. On November 1 its camp page said “Camps are on hold until further notice. Registration is currently closed,” and no dates were listed (the Election Day camp it had posted is gone). When they run, the page gives 8:30 am to 3 pm, $130 a day or $230 for two days, with a $30 registration fee included. Bring a skateboard, helmet and pads.",
       "url": "https://www.skatethefoundry.com/camp/",
-      "dates": [
-        "2026-11-03"
-      ],
+      "dates": [],
       "sources": [
         {
           "label": "Skate The Foundry camps",
@@ -6734,9 +6926,11 @@
         }
       ],
       "ageMin": 7,
-      "ageMax": 13
+      "ageMax": 13,
+      "hours": "8:30 am to 3 pm (its general camp notes say 9 to 3)",
+      "cost": "$130 a day, $230 for two days"
     },
-    "cost": "The day-camp price is in its booking system, not on the page.",
+    "cost": "$130 a day or $230 for two camp days, including a $30 registration fee. Camps were on hold with registration closed when we checked.",
     "phone": "215-954-0750",
     "email": "",
     "website": "https://www.skatethefoundry.com/camp/",
@@ -6744,17 +6938,23 @@
       "how": "online",
       "url": "https://www.skatethefoundry.com/camp/",
       "label": "See camp days",
-      "note": "Sign-up links are on the camp page."
+      "note": "The camp page said on November 1 that camps are on hold until further notice and registration is closed. Booking is through its Wellness Living account when it reopens."
     },
-    "note": "The page gives no street address or day-camp price, so check both when you book. Its site says first-timers should take a lesson or two before a camp.",
+    "note": "Its camp page said on November 1 that camps are on hold until further notice and registration is closed; check the page before planning on a day. No street address is given. Its site says first-timers should take a lesson or two before a camp.",
     "sources": [
       {
         "label": "Skate The Foundry camps",
         "url": "https://www.skatethefoundry.com/camp/"
       }
     ],
-    "lastVerified": "2026-10-07",
-    "schools": {}
+    "lastVerified": "2026-11-01",
+    "schools": {},
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "Skate The Foundry’s camp page now says its camps are on hold until further notice and registration is closed; the Election Day (November 3) camp is no longer listed. It also posted its day-camp price: $130 a day or $230 for two days."
+      }
+    ]
   },
   {
     "id": "pafa-saturday-art",
@@ -6797,7 +6997,7 @@
         "url": "https://www.pafa.org/education/center-art-education/youth-family/saturday-studio-art-classes"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
@@ -6824,7 +7024,7 @@
           "url": "https://www.pafa.org/education/center-art-education/youth-family/saturday-studio-art-classes"
         }
       ],
-      "checked": "2026-10-07"
+      "checked": "2026-11-01"
     }
   },
   {
@@ -6857,49 +7057,62 @@
     "price": "paid",
     "phone": "215-965-4015",
     "email": "",
-    "website": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/",
+    "website": "https://moore.edu/academics/youth-education/young-artists-workshop/spring-2027-youth-courses/",
     "register": {
       "how": "online",
-      "url": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/",
+      "url": "https://moore.edu/academics/youth-education/young-artists-workshop/spring-2027-youth-courses/",
       "label": "See courses",
-      "note": "Each course has its own sign-up on Moore’s page."
+      "note": "Each course has its own sign-up on Moore’s page.",
+      "nextTerm": "Spring 2027 courses (Saturdays February 13 to April 17) are open for registration until January 29, 2027.",
+      "dates": [
+        {
+          "date": "2027-01-29",
+          "label": "Spring 2027 courses: registration deadline"
+        }
+      ]
     },
-    "note": "Fall sign-up closed on September 18. Moore says new courses come out each fall, spring and summer.",
+    "note": "Fall sign-up closed on September 18; spring 2027 sign-up is open until January 29. Moore says new courses come out each fall, spring and summer.",
     "sources": [
       {
-        "label": "Moore Young Artists Workshop, fall 2026",
-        "url": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/"
+        "label": "Moore Young Artists Workshop, spring 2027",
+        "url": "https://moore.edu/academics/youth-education/young-artists-workshop/spring-2027-youth-courses/"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
-      "summary": "Ten Saturdays of studio courses. For grades 6–8 this fall: animation, character design, anatomy drawing, fashion illustration and sewing, and drawing and painting. Each course meets in the morning or the afternoon.",
+      "summary": "Ten Saturdays of studio courses. For grades 6–8 in spring 2027: character design, acrylic painting, fashion illustration and simple sewing, and ceramics in the morning; animation, anatomy drawing, and architecture and interior design in the afternoon.",
       "days": [
         "sat"
       ],
       "grades": "6-8",
-      "term": "Fall 2026: October 3 to December 12. Sign-up closed September 18.",
+      "term": "Fall 2026: October 3 to December 12. Spring 2027: February 13 to April 17; sign up by January 29.",
       "times": {
         "sat": "9 am to noon, or 1 to 4 pm"
       },
       "cost": "$620 a course.",
-      "url": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/",
+      "url": "https://moore.edu/academics/youth-education/young-artists-workshop/spring-2027-youth-courses/",
       "check": {
-        "url": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/",
+        "url": "https://moore.edu/academics/youth-education/young-artists-workshop/spring-2027-youth-courses/",
         "how": "fetch",
         "look": "The Program Details block gives the dates, grades and price; each course below says morning or afternoon.",
-        "notes": "The page address carries the term (fall-2026-youth-courses), so look for the spring page once fall ends."
+        "notes": "The page address carries the term (spring-2027-youth-courses); the Young Artists Workshop landing page links each term’s page."
       },
       "sources": [
         {
-          "label": "Moore Young Artists Workshop, fall 2026",
-          "url": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/"
+          "label": "Moore Young Artists Workshop, spring 2027",
+          "url": "https://moore.edu/academics/youth-education/young-artists-workshop/spring-2027-youth-courses/"
         }
       ],
-      "checked": "2026-10-07"
-    }
+      "checked": "2026-11-01"
+    },
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "Spring 2027 courses are posted: ten Saturdays, February 13 to April 17, $620 a course. Grades 6–8 can pick character design, acrylic painting, fashion, ceramics, animation, anatomy drawing or architecture and interior design."
+      }
+    ]
   },
   {
     "id": "philadelphia-museum-of-art-kids",
@@ -6941,7 +7154,7 @@
         "url": "https://www.philamuseum.org/events/art-kids-classes-7-8"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
@@ -6968,13 +7181,13 @@
           "url": "https://www.philamuseum.org/events/art-kids-classes-7-8"
         }
       ],
-      "checked": "2026-10-07"
+      "checked": "2026-11-01"
     }
   },
   {
     "id": "made-institute-sunday-sewing",
     "name": "MADE Institute: Sunday Sewing",
-    "what": "Sunday sewing classes for kids and teens at a West Philly sewing school",
+    "what": "Sunday sewing classes for kids and tweens at a West Philly sewing school",
     "types": [
       "art"
     ],
@@ -6990,10 +7203,10 @@
     "neighborhoods": [
       "West Philadelphia"
     ],
-    "grades": "2-8",
-    "gradeNote": "Ages 7–12; a teen class takes ages 13–17",
+    "grades": "1-8",
+    "gradeNote": "Ages 6–10; a tween and teen class takes ages 11 and up",
     "hours": "Weekend classes only are listed here.",
-    "cost": "$200 a month",
+    "cost": "$600 for an 11-session term",
     "price": "paid",
     "phone": "855-623-3745",
     "email": "",
@@ -7002,7 +7215,7 @@
       "how": "online",
       "url": "https://made-institute.com/courses-items/p/kids-sunday-sewing",
       "label": "Sign up",
-      "note": "Teens sign up on a separate page on the same site."
+      "note": "Tweens and teens sign up on a separate page on the same site."
     },
     "sources": [
       {
@@ -7010,20 +7223,20 @@
         "url": "https://made-institute.com/weekend-sewing"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
-      "summary": "Kids Sunday Sewing for ages 7–12 meets in the morning, and Teen Sunday Sewing for ages 13–17 in the afternoon.",
+      "summary": "Kids Sunday Sewing for ages 6–10 meets in the morning, and T(w)een Sunday Sewing for ages 11 and up in the afternoon, at the West Philly studio.",
       "days": [
         "sun"
       ],
-      "grades": "2-8",
-      "term": "Fall 2026: September 13 to December 20.",
+      "grades": "1-8",
+      "term": "Winter 2027: 11 Sundays, January 3 to March 14, with no class February 14.",
       "times": {
-        "sun": "10 am to noon (ages 7–12), 2 to 4 pm (teens)"
+        "sun": "10 am to noon (ages 6–10), 2 to 4 pm (ages 11 and up)"
       },
-      "cost": "$200 a month.",
+      "cost": "$600 for the 11-session term.",
       "url": "https://made-institute.com/weekend-sewing",
       "check": {
         "url": "https://made-institute.com/weekend-sewing",
@@ -7036,8 +7249,14 @@
           "url": "https://made-institute.com/weekend-sewing"
         }
       ],
-      "checked": "2026-10-07"
-    }
+      "checked": "2026-11-01"
+    },
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "Winter 2027 Sunday Sewing is posted: 11 Sundays, January 3 to March 14, $600 for the term (fall was $200 a month). Kids is now ages 6–10 at 10 am; T(w)een is ages 11 and up at 2 pm."
+      }
+    ]
   },
   {
     "id": "rock-school-for-dance",
@@ -7119,7 +7338,7 @@
           "url": "https://www.therockschool.org/pre-ballet"
         }
       ],
-      "checked": "2026-10-07"
+      "checked": "2026-11-01"
     }
   },
   {
@@ -7150,8 +7369,10 @@
     "email": "",
     "website": "https://www.koreshdance.org/children-classes",
     "register": {
-      "how": "phone",
-      "note": "Call or email the school to enroll. It takes cards or cash, not checks."
+      "how": "online",
+      "url": "https://www.koreshdance.org/children-registration",
+      "label": "Register",
+      "note": "Fill in the form on the school’s site; the school then calls to take payment. Cards or cash, not checks."
     },
     "note": "Koresh teaches ages 5–14 on weekday afternoons, which we haven’t matched to any school.",
     "sources": [
@@ -7160,11 +7381,11 @@
         "url": "https://www.koreshdance.org/children-classes"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
-      "summary": "Pre Ballet for ages 4–6 is the one Saturday class for younger children. The other Saturday classes are for ages 16–18.",
+      "summary": "Pre Ballet for ages 4–6 is the one Saturday class for younger children. The other Saturday classes are for teens.",
       "days": [
         "sat"
       ],
@@ -7187,7 +7408,7 @@
           "url": "https://www.koreshdance.org/children-classes"
         }
       ],
-      "checked": "2026-10-07"
+      "checked": "2026-11-01"
     }
   },
   {
@@ -7223,7 +7444,13 @@
       "how": "online",
       "url": "https://philadelphiaballet.org/school/childrens-programs/",
       "label": "See classes",
-      "note": "Each class time has its own Register link in the table on the school’s page."
+      "note": "Each class time has its own Register link in the table on the school’s page. Enrollment for 2026–27 stays open until March 1, 2027.",
+      "dates": [
+        {
+          "date": "2027-03-01",
+          "label": "Children’s Program: enrollment for 2026–27 closes"
+        }
+      ]
     },
     "note": "From age 8 the school is by audition and meets several days a week.",
     "sources": [
@@ -7232,7 +7459,7 @@
         "url": "https://philadelphiaballet.org/school/childrens-programs/"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
@@ -7261,7 +7488,7 @@
           "url": "https://philadelphiaballet.org/school/childrens-programs/"
         }
       ],
-      "checked": "2026-10-07"
+      "checked": "2026-11-01"
     }
   },
   {
@@ -7304,11 +7531,11 @@
         "url": "https://zazzphilly.com/early-childhood/"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
-      "summary": "A seven-week fall series: Nutcracker Pre-Ballet for ages 4–6 on Saturdays, and Dance Basics for ages 4–6 on Sundays. A Sunday class for ages 2½ to 3½ runs at the same time.",
+      "summary": "A seven-week fall series: Nutcracker Pre-Ballet for ages 4–6 on Saturdays at 9:30, and Dance Basics for ages 4–6 on Sundays at 10:30. A Sunday 9:30 class takes ages 2½ to 3½.",
       "days": [
         "sat",
         "sun"
@@ -7317,7 +7544,7 @@
       "term": "Fall 2026: seven weeks from October 31 and November 1, skipping Thanksgiving weekend.",
       "times": {
         "sat": "9:30 am",
-        "sun": "9:30 am"
+        "sun": "10:30 am"
       },
       "cost": "$132.50 for the Saturday series, $122.50 for a Sunday series.",
       "url": "https://zazzphilly.com/early-childhood/",
@@ -7333,7 +7560,7 @@
           "url": "https://zazzphilly.com/early-childhood/"
         }
       ],
-      "checked": "2026-10-07"
+      "checked": "2026-11-01"
     }
   },
   {
@@ -7381,7 +7608,7 @@
         "url": "https://boyer.temple.edu/community/temple-music-prep/programs/community-music-scholars-program"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
@@ -7408,7 +7635,7 @@
           "url": "https://boyer.temple.edu/community/temple-music-prep/programs/community-music-scholars-program"
         }
       ],
-      "checked": "2026-10-07"
+      "checked": "2026-11-01"
     }
   },
   {
@@ -7445,14 +7672,14 @@
       "label": "How to register",
       "note": "Sign-up is online only, through the club’s member site."
     },
-    "note": "The club’s home page said the rink was closed for repairs when we checked, so call before you go.",
+    "note": "The club’s home page said the rink was closed because of a broken Zamboni and poor ice when we checked, so call before you go.",
     "sources": [
       {
         "label": "Wissahickon Skating Club 2026–27 season",
         "url": "https://www.wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
@@ -7462,13 +7689,13 @@
         "sun"
       ],
       "grades": "PK-8",
-      "term": "Fall series I ran September to early November 2026; series II runs early November to mid-January; a winter series runs late January to March 2027.",
+      "term": "Fall series I ran September 12 to October 31, 2026. Fall series II: Saturdays November 7 to January 16 (no class November 28, December 26 or January 2) and Sunday hockey November 8 to January 17. Winter series III: Saturdays January 23 to March 20, 2027 (no class February 13) and Sunday hockey January 24 to March 21.",
       "times": {
         "sat": "11:45 am",
         "sun": "12:40 to 1:40 pm (hockey)"
       },
       "cost": "$215 for an eight-week series.",
-      "note": "The club’s home page said the rink was closed for repairs when we checked, so call before you go.",
+      "note": "The club’s home page says the rink is closed because of a broken Zamboni and poor ice, so check before you go.",
       "url": "https://www.wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
       "check": {
         "url": "https://www.wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
@@ -7482,7 +7709,7 @@
           "url": "https://www.wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/"
         }
       ],
-      "checked": "2026-10-07"
+      "checked": "2026-11-01"
     }
   },
   {
@@ -7518,14 +7745,14 @@
       "label": "See sessions",
       "note": "The rink’s page links to its sign-up for each session."
     },
-    "note": "The rink said a class for ages 3–6 would be announced in the fall.",
+    "note": "The rink says a Tots class for ages 3–6 will be announced in November, with lessons expected to begin in late November on Sundays, Wednesdays or Fridays.",
     "sources": [
       {
         "label": "Penn Ice Rink group lessons",
         "url": "https://icerink.business-services.upenn.edu/skating-lessons/group-lessons-5-years-old-through-adults"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
@@ -7534,7 +7761,7 @@
         "sun"
       ],
       "grades": "K-8",
-      "term": "2026–27: six sessions from September 13 to May 9. Session 2 runs October 18 to November 15 and session 3 November 22 to January 3.",
+      "term": "2026–27: six sessions from September 13 to May 9. Sessions 1 and 2 are full. Session 3 runs November 22 to January 3, session 4 January 17 to February 14, session 5 February 28 to April 4 and session 6 April 11 to May 9.",
       "times": {
         "sun": "noon"
       },
@@ -7544,7 +7771,7 @@
         "url": "https://icerink.business-services.upenn.edu/skating-lessons/group-lessons-5-years-old-through-adults",
         "how": "fetch",
         "look": "The body text gives the Sunday noon start, the six lists of session dates and the $175 fee.",
-        "notes": "Sessions fill and close; session 1 was full."
+        "notes": "Sessions fill and close; sessions 1 and 2 were full by November."
       },
       "sources": [
         {
@@ -7552,7 +7779,7 @@
           "url": "https://icerink.business-services.upenn.edu/skating-lessons/group-lessons-5-years-old-through-adults"
         }
       ],
-      "checked": "2026-10-07"
+      "checked": "2026-11-01"
     }
   },
   {
@@ -7596,7 +7823,7 @@
         "url": "https://starfinderfoundation.org/programs/middle-school-programs/"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
@@ -7605,14 +7832,14 @@
         "sat"
       ],
       "grades": "1-8",
-      "term": "Fall and winter Saturdays. Dates are on its sign-up page.",
+      "term": "Fall 2026 Saturdays: September 12 to December 5. Spring 2027 Saturdays: February 6 to May 1. Dates are from its RecDesk sign-up list, which gives no times.",
       "cost": "$50 for six days. Sliding scale and pay-what-you-can.",
       "url": "https://starfinderfoundation.org/programs/middle-school-programs/",
       "check": {
         "url": "https://starfinderfoundation.org/programs/middle-school-programs/",
         "how": "fetch",
         "look": "A Saturdays heading for Golazo Girls & Vamos Boys gives the ages and the $50 price.",
-        "notes": "Session dates and times are only on its RecDesk sign-up pages, which were not read."
+        "notes": "Session dates are on its RecDesk sign-up list (starfinder.recdesk.com/Community/Program), which loads by script and needs a browser; it gives no clock times. On 2026-11-01 that list had Golazo Girls on Fridays and Vamos! Boys and Juniors (ages 6–9) on Saturdays."
       },
       "sources": [
         {
@@ -7620,7 +7847,7 @@
           "url": "https://starfinderfoundation.org/programs/middle-school-programs/"
         }
       ],
-      "checked": "2026-10-07"
+      "checked": "2026-11-01"
     }
   },
   {
@@ -7664,7 +7891,7 @@
         "url": "https://fi.edu/en/science-education/youth-and-community-programs/pacts"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
@@ -7691,7 +7918,7 @@
           "url": "https://fi.edu/en/science-education/youth-and-community-programs/pacts"
         }
       ],
-      "checked": "2026-10-07"
+      "checked": "2026-11-01"
     }
   },
   {
@@ -7719,7 +7946,7 @@
     "grades": "2-8",
     "gradeNote": "Ages 7–10, and 11–18",
     "hours": "Weekend classes only are listed here.",
-    "cost": "$295 for the production class, $245 for clowning or improv, $35 for a drop-in class",
+    "cost": "$295 for the production class, $245 for clowning, improv or tap, $123 for a four-week mini course. Spring classes are $170.",
     "price": "paid",
     "phone": "215-922-1141",
     "email": "",
@@ -7730,33 +7957,33 @@
       "label": "See classes",
       "note": "Each class on MacGuffin’s page links to its sign-up."
     },
-    "note": "Fall began September 19, so it is mid-term. MacGuffin posts a new set of classes for winter and spring.",
+    "note": "Fall ends November 7. Winter 2027 classes (January 16 to March 6) and spring 2027 classes (April 3 to May 1) are posted and open for sign-up. A Wednesday 4:30 pm tap class for ages 11–18 also meets at Sansom Street in winter.",
     "sources": [
       {
         "label": "MacGuffin fall 2026 classes",
         "url": "https://macguffintf.com/classes/fall-2026/"
       }
     ],
-    "lastVerified": "2026-10-07",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
-      "summary": "Ages 7–10 rehearse a short show in a production class, then can stay for clowning. Ages 11–18 have drop-in musical theatre and acting at noon and comedy improv in the afternoon.",
+      "summary": "Ages 7–10 rehearse a short show in a production class at 9:30, then can stay for clowning at 11. Ages 11–18 have four-week musical theatre and acting mini courses at noon and comedy improv at 1 and 2 pm. Spring is shorter: a musical theatre prep class and clowning for ages 7–10.",
       "days": [
         "sat"
       ],
       "grades": "2-8",
-      "term": "Fall 2026: September 19 to November 7.",
+      "term": "Fall 2026: September 19 to November 7. Winter 2027: Saturdays January 16 to March 6. Spring 2027: Saturdays April 3 to May 1.",
       "times": {
         "sat": "9:30 am to noon (ages 7–10), noon to 3 pm (ages 11–18)"
       },
-      "cost": "$295 for the production class, $245 for clowning or improv, $35 for a drop-in class. Some need-based scholarships.",
+      "cost": "$295 for the production class, $245 for clowning or improv, $123 for a four-week mini course; spring classes are $170. Some need-based scholarships.",
       "url": "https://macguffintf.com/classes/fall-2026/",
       "check": {
-        "url": "https://macguffintf.com/classes/fall-2026/youth-classes-ages-7-10/",
+        "url": "https://macguffintf.com/classes/winter-2026/youth-ages-7-10/",
         "how": "fetch",
         "look": "Each class block lists its day, time, date range and tuition; ages 11–18 are on a sibling page.",
-        "notes": "The page address changes each term. Its Thursday classes meet in Fort Washington, outside the city."
+        "notes": "The page address changes each term, and the menu’s \"Winter 2027\" and \"Spring 2027\" items point at addresses ending winter-2026 and spring-2026. Its Thursday classes meet in Fort Washington, outside the city."
       },
       "sources": [
         {
@@ -7764,8 +7991,14 @@
           "url": "https://macguffintf.com/classes/fall-2026/"
         }
       ],
-      "checked": "2026-10-07"
-    }
+      "checked": "2026-11-01"
+    },
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "Winter 2027 is posted: Saturdays January 16 to March 6. Ages 7–10: production class $295, clowning $245. Ages 11–18: four-week noon mini courses $123, comedy improv $245. Spring (April 3 to May 1) is also up at $170."
+      }
+    ]
   },
   {
     "id": "philadelphia-dance-academy",
@@ -7815,7 +8048,21 @@
       "url": "https://philadelphiadanceacademy.com/registration/",
       "label": "Register",
       "note": "New families fill in a registration form, which enrolls the child in the classes they pick. Dancers with experience are asked to contact the school for a placement first.",
-      "nextTerm": "The 2026–27 school year started September 14. New students can join during the year when a class has room, with tuition prorated, until February 15 for most classes and March 1 for Creative Movement and Dance Together. Enrollment for a school year opens May 15."
+      "nextTerm": "The 2026–27 school year started September 14. New students can join during the year when a class has room, with tuition prorated, until February 15 for most classes and March 1 for Creative Movement and Dance Together. Enrollment for a school year opens May 15.",
+      "dates": [
+        {
+          "date": "2027-02-15",
+          "label": "Last day to enroll in most classes for 2026–27 (tuition prorated)"
+        },
+        {
+          "date": "2027-03-01",
+          "label": "Last day to enroll in Creative Movement and Dance Together for 2026–27"
+        },
+        {
+          "date": "2027-05-15",
+          "label": "Enrollment for the 2027–28 school year opens (expected, from the school’s stated May 15 rule)"
+        }
+      ]
     },
     "note": "We couldn’t read the class times, so we can’t say which classes fall right after school. The school’s pages don’t mention pickup from any school. It also has a studio in Ardmore, which isn’t listed here.",
     "sources": [
@@ -7836,13 +8083,13 @@
         "url": "https://philadelphiadanceacademy.com/calendar/"
       }
     ],
-    "lastVerified": "2026-10-09",
+    "lastVerified": "2026-11-01",
     "schools": {
       "mccall": {
         "relation": "nearby",
         "distance": "about a 15-minute walk north-east of McCall",
         "note": "The school’s pages don’t mention pickup from any school.",
-        "checked": "2026-10-09"
+        "checked": "2026-11-01"
       }
     }
   },
@@ -7900,11 +8147,11 @@
         "url": "https://kirkbride.philasd.org/"
       }
     ],
-    "lastVerified": "2026-10-10",
+    "lastVerified": "2026-11-01",
     "schools": {
       "kirkbride": {
         "relation": "onsite",
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       }
     }
   },
@@ -7951,11 +8198,11 @@
         "url": "https://kirkbride.philasd.org/"
       }
     ],
-    "lastVerified": "2026-10-10",
+    "lastVerified": "2026-11-01",
     "schools": {
       "kirkbride": {
         "relation": "onsite",
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       }
     },
     "clubs": [
@@ -8112,11 +8359,11 @@
         "url": "https://www.phila.gov/2024-09-11-extended-school-days-mean-great-opportunities-for-families/"
       }
     ],
-    "lastVerified": "2026-10-10",
+    "lastVerified": "2026-11-01",
     "schools": {
       "southwark": {
         "relation": "onsite",
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       }
     }
   },
@@ -8174,11 +8421,11 @@
         "url": "https://southwark.philasd.org/"
       }
     ],
-    "lastVerified": "2026-10-10",
+    "lastVerified": "2026-11-01",
     "schools": {
       "southwark": {
         "relation": "onsite",
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       }
     },
     "clubs": [
@@ -8862,15 +9109,15 @@
     "gradeNote": "City rec after-school programs are for ages 6–12",
     "hours": "Not confirmed for this year. City rec programs typically run 3:00–6:00 pm on weekdays.",
     "cost": "Not published",
-    "phone": "",
-    "email": "",
-    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "phone": "215-685-0008",
+    "email": "EastPassyunkCommunityCenter@phila.gov",
+    "website": "https://www.phila.gov/parks-rec-finder/#/location/east-passyunk-community-center/56a8f8787a8cee5e3a25b123",
     "register": {
       "how": "contact",
-      "note": "Stop by the center or look it up in the City’s finder for its phone number. There is no online sign-up.",
+      "note": "Call the center at 215-685-0008 or stop by. There is no online sign-up.",
       "nextTerm": "In past years the city opened rec center after-school registration in early to mid August. Ask the center whether it takes children mid-year."
     },
-    "note": "We couldn’t read the City’s page for this center, so the hours and price aren’t confirmed. The pickup comes from Southwark’s own list.",
+    "note": "The City’s finder lists the center (open weekdays 9 am to 9 pm) but no after-school program for it, so the hours and price aren’t confirmed. The pickup comes from Southwark’s own list.",
     "sources": [
       {
         "label": "Southwark School",
@@ -8883,6 +9130,10 @@
       {
         "label": "City announcement, August 2024",
         "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/"
+      },
+      {
+        "label": "City finder: East Passyunk Community Center",
+        "url": "https://www.phila.gov/parks-rec-finder/#/location/east-passyunk-community-center/56a8f8787a8cee5e3a25b123"
       }
     ],
     "lastVerified": "2026-10-10",
@@ -8897,7 +9148,7 @@
             "url": "https://southwark.philasd.org/"
           }
         ],
-        "checked": "2026-10-10"
+        "checked": "2026-11-01"
       },
       "coppin": {
         "relation": "pickup",
@@ -8917,7 +9168,7 @@
         "where": "Southwark School’s list of programs that pick up",
         "text": "East Passyunk Rec Center, Beehive, Butcher Sew Shop, Dandelion Project, Philly Art Center, Philly InMovement",
         "url": "https://southwark.philasd.org/",
-        "read": "2026-10-10",
+        "read": "2026-11-01",
         "how": "fetch",
         "by": "school"
       }
@@ -8963,7 +9214,7 @@
         "url": "https://www.philadelphiamartialartsacademy.com/"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
@@ -8990,7 +9241,7 @@
           "url": "https://www.philadelphiamartialartsacademy.com/"
         }
       ],
-      "checked": "2026-10-16"
+      "checked": "2026-11-01"
     }
   },
   {
@@ -9017,16 +9268,31 @@
     "grades": "PK-8",
     "gradeNote": "Age 3 through the teens",
     "hours": "At the South Philly pool, lessons run Saturday 10 am to 3 pm, Sunday 9 am to 2 pm, and Monday to Thursday from 9:30 or 10 am into the evening. Closed Fridays.",
-    "cost": "For the 13-week fall session: $780 for private lessons, $650 a swimmer for semi-private, $585 a swimmer for a group of three, $520 for a Swim Skills class. Paid monthly.",
+    "cost": "For the 18-week spring 2027 session: $1,080 for private lessons, $900 a swimmer for semi-private, $810 a swimmer for a group of three, $720 for a Swim Skills class. Paid monthly. The 13-week fall session was $520 to $780.",
     "price": "paid",
     "phone": "267-702-6043",
     "email": "",
     "website": "https://fitnessalivephilly.com/",
     "register": {
       "how": "online",
-      "url": "https://fitnessalivephilly.com/current-session",
-      "label": "See the session",
-      "note": "Fall 2026 registration is closed, with a waitlist. Drop-in lessons can be booked one at a time."
+      "url": "https://fitnessalivephilly.com/spring-session",
+      "label": "See the spring session",
+      "note": "Fall 2026 registration is closed, with a waitlist. Spring 2027 sign-up opens December 1 to 3 on the spring session page. Drop-in lessons can be booked one at a time.",
+      "nextTerm": "Spring 2027 session (January 11 to May 23): registration opens December 1 for returning fall swimmers, December 2 for the waitlist and December 3 for everyone.",
+      "dates": [
+        {
+          "date": "2026-12-01",
+          "label": "Spring swim session: early registration for returning fall swimmers"
+        },
+        {
+          "date": "2026-12-02",
+          "label": "Spring swim session: early registration for waitlisted swimmers"
+        },
+        {
+          "date": "2026-12-03",
+          "label": "Spring swim session: general registration opens"
+        }
+      ]
     },
     "note": "Weekly lessons keep the same day and time all session. Semi-private and group swimmers sign up with their own partners. It also has a Center City pool at 1425 Arch Street.",
     "sources": [
@@ -9037,9 +9303,13 @@
       {
         "label": "Fitness Alive fall session",
         "url": "https://fitnessalivephilly.com/current-session"
+      },
+      {
+        "label": "Fitness Alive spring session",
+        "url": "https://fitnessalivephilly.com/spring-session"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
@@ -9049,17 +9319,17 @@
         "sun"
       ],
       "grades": "PK-8",
-      "term": "Fall 2026: September 8 to December 14, with no lessons November 23–29. Registration is closed, with a waitlist; the next session is announced on its site.",
+      "term": "Fall 2026: September 8 to December 14, with no lessons November 23–29; registration is closed, with a waitlist. Spring 2027: January 11 to May 23, with no lessons March 22–28; sign-up opens December 1 for returning swimmers, December 2 for the waitlist and December 3 for everyone.",
       "times": {
         "sat": "10 am to 3 pm",
         "sun": "9 am to 2 pm"
       },
-      "cost": "$585 to $780 a swimmer for the 13-week session, paid monthly. A Swim Skills class is $520.",
-      "url": "https://fitnessalivephilly.com/current-session",
+      "cost": "Spring 2027 (18 weeks): $810 to $1,080 a swimmer, paid monthly; a Swim Skills class is $720. Fall (13 weeks) was $585 to $780, Swim Skills $520.",
+      "url": "https://fitnessalivephilly.com/spring-session",
       "check": {
         "url": "https://fitnessalivephilly.com/locations",
         "how": "fetch",
-        "look": "The locations page gives each pool’s lesson hours by day. The current-session page gives the dates, the prices and whether registration is open.",
+        "look": "The locations page gives each pool’s lesson hours by day. The session pages (current-session for fall, spring-session for spring) give the dates, the prices, the registration days and whether registration is open.",
         "notes": "South Philly hours “may vary slightly” with instructor availability."
       },
       "sources": [
@@ -9068,12 +9338,18 @@
           "url": "https://fitnessalivephilly.com/locations"
         },
         {
-          "label": "Fitness Alive fall session",
-          "url": "https://fitnessalivephilly.com/current-session"
+          "label": "Fitness Alive spring session",
+          "url": "https://fitnessalivephilly.com/spring-session"
         }
       ],
-      "checked": "2026-10-16"
-    }
+      "checked": "2026-11-01"
+    },
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "The spring 2027 swim session is posted: 18 weeks, January 11 to May 23, no lessons March 22–28. $810 to $1,080 a swimmer, Swim Skills $720, paid monthly. Returning fall swimmers get first pick; the waitlist is next."
+      }
+    ]
   },
   {
     "id": "christian-street-ymca",
@@ -9145,7 +9421,7 @@
         "url": "https://www.philaymca.org/child-care/school-age-care-programs/full-day-school-age-care/"
       }
     ],
-    "lastVerified": "2026-10-25",
+    "lastVerified": "2026-11-01",
     "schools": {
       "stanton": {
         "relation": "pickup",
@@ -9157,7 +9433,7 @@
             "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/"
           }
         ],
-        "checked": "2026-10-26"
+        "checked": "2026-11-01"
       },
       "marian-anderson": {
         "relation": "pickup",
@@ -9179,7 +9455,8 @@
       "thu",
       "fri"
     ],
-    "pickupBy": "6:00 pm"
+    "pickupBy": "6:00 pm",
+    "aid": "The Y accepts ELRC (child care subsidy) funding and has a financial assistance program you apply for before registering for child care."
   },
   {
     "id": "hudson-table-philadelphia",
@@ -9203,12 +9480,15 @@
     ],
     "grades": "3-8",
     "gradeNote": "Ages 8–14 for the day-off class; some classes take ages 6–12",
-    "hours": "Nothing listed for weekday afternoons. The Veterans Day class runs 10 am to 1 pm.",
+    "hours": "Nothing listed for weekday afternoons. The Veterans Day class runs 10 am to 1 pm; the winter break camps run 10 am to 3 pm.",
     "daysOff": {
-      "summary": "Drop-off cooking classes, posted a few weeks ahead, on some days off. On Veterans Day (November 11) it’s a creative pasta intensive for ages 8–14, 10 am to 1 pm, $95.",
+      "summary": "Drop-off cooking classes, posted a few weeks ahead, on some days off. On Veterans Day (November 11) it’s a creative pasta intensive for ages 8–14, 10 am to 1 pm, $95. Over winter break it runs full-day drop-off baking camps for ages 8–14, 10 am to 3 pm (flexible drop-off from 9:45, pick-up to 3:15), $130 a day with all food included and nut-free: a snowman cake on December 28, holiday cookies on December 29 and donuts on December 30.",
       "url": "https://hudsontable.com/philadelphia/kids-classes/",
       "dates": [
-        "2026-11-11"
+        "2026-11-11",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30"
       ],
       "sources": [
         {
@@ -9216,12 +9496,12 @@
           "url": "https://hudsontable.com/philadelphia/kids-classes/"
         }
       ],
-      "hours": "10 am to 1 pm (Veterans Day)",
-      "cost": "$95",
+      "hours": "10 am to 1 pm (Veterans Day); 10 am to 3 pm (winter break camps)",
+      "cost": "$95 (Veterans Day); $130 a day (winter break camps)",
       "ageMin": 8,
       "ageMax": 14
     },
-    "cost": "$95 for the Veterans Day class. Other kids’ classes are $80 to $90.",
+    "cost": "$95 for the Veterans Day class and $130 a day for the winter break camps. Other kids’ classes are $80 to $90.",
     "price": "paid",
     "phone": "",
     "email": "",
@@ -9232,15 +9512,21 @@
       "label": "See classes",
       "note": "Each class has its own sign-up on the kids classes page."
     },
-    "note": "The kids page also lists a Sunday afternoon cookie-decorating class on October 25 (ages 6–12, $80) and parent-and-child classes for ages 2–4 on weekday mornings. It runs summer camps too.",
+    "note": "The kids page also lists family classes (a child with an adult): gingerbread houses on Sunday December 13, pasta for ages 8 and up on Sunday December 27, and a New Year’s Eve morning party for ages 4–10 on December 31, plus parent-and-child classes for ages 2–4 on weekday mornings. It runs summer camps too.",
     "sources": [
       {
         "label": "Hudson Table kids classes",
         "url": "https://hudsontable.com/philadelphia/kids-classes/"
       }
     ],
-    "lastVerified": "2026-10-16",
-    "schools": {}
+    "lastVerified": "2026-11-01",
+    "schools": {},
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "Hudson Table added three winter break drop-off camps for ages 8–14, 10 am to 3 pm, $130 a day with food included: a snowman cake camp December 28, holiday cookies December 29 and donuts December 30."
+      }
+    ]
   },
   {
     "id": "rizzo-rink",
@@ -9310,13 +9596,13 @@
           "url": "https://www.phila.gov/2026-01-09-ice-ice-baby-public-skating-hours/"
         }
       ],
-      "checked": "2026-10-16"
+      "checked": "2026-11-01"
     }
   },
   {
     "id": "flips-4-kidz",
     "name": "Flips 4 Kidz",
-    "what": "Gymnastics for ages 4 to 12 inside East Passyunk Community Center, with three Saturday classes",
+    "what": "Gymnastics for ages 3 to 12 inside East Passyunk Community Center, with four Saturday classes",
     "types": [
       "movement"
     ],
@@ -9331,13 +9617,13 @@
     "neighborhoods": [
       "East Passyunk"
     ],
-    "grades": "K-6",
-    "gradeNote": "Ages 5–12 on Saturdays; weekday classes start at 4",
-    "hours": "Saturday 11 am to 2:20 pm, in three one-hour classes by age. Weekday classes run 5 to 7:10 pm, Tuesday to Friday.",
-    "cost": "$270 a class for the session.",
+    "grades": "PK-6",
+    "gradeNote": "Ages 3–12 on Saturdays; weekday classes start at 4",
+    "hours": "Saturday 9:50 am to 2:20 pm, in four one-hour classes by age. Weekday classes run 5 to 7:10 pm, Tuesday to Friday.",
+    "cost": "$270 a class for the session; $240 for some classes, including the Saturday ages 3–4 class.",
     "price": "paid",
     "phone": "",
-    "email": "",
+    "email": "flips4kidz@gmail.com",
     "website": "https://www.flips4kidz.com/",
     "register": {
       "how": "online",
@@ -9352,20 +9638,20 @@
         "url": "https://www.flips4kidz.com/book-online"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
-      "summary": "Saturday gymnastics at East Passyunk Community Center: ages 5–6 at 11, then ages 7–12 at 12:10 and again at 1:20. Each class is an hour.",
+      "summary": "Saturday gymnastics at East Passyunk Community Center: ages 3–4 at 9:50, ages 5–6 at 11, ages 7–12 at 12:10 and again at 1:20 (the 1:20 class is on hold; contact Flips to book). Each class is an hour.",
       "days": [
         "sat"
       ],
-      "grades": "K-6",
-      "term": "Fall 2 session: Saturdays October 24 to December 19, 2026.",
+      "grades": "PK-6",
+      "term": "Fall 2 session: Saturdays October 24 to December 19, 2026. The winter session is not posted yet.",
       "times": {
-        "sat": "11 am to 2:20 pm"
+        "sat": "9:50 am to 2:20 pm"
       },
-      "cost": "$270 for the session.",
+      "cost": "$270 for the session; $240 for the ages 3–4 class.",
       "url": "https://www.flips4kidz.com/book-online",
       "check": {
         "url": "https://www.flips4kidz.com/book-online",
@@ -9379,8 +9665,14 @@
           "url": "https://www.flips4kidz.com/book-online"
         }
       ],
-      "checked": "2026-10-16"
-    }
+      "checked": "2026-11-01"
+    },
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "A Saturday 9:50 am class for ages 3–4 was added to the fall 2 session, $240. The 1:20 pm class for ages 7–12 is on hold; contact Flips to book it."
+      }
+    ]
   },
   {
     "id": "equilibrium-dance-academy",
@@ -9424,11 +9716,11 @@
         "url": "https://www.equilibriumdanceacademy.com/classes"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
-      "summary": "Saturday classes at 1802 South Broad: Ballet/Tap for ages 3–5 at 10, Jazz/Tap for ages 7–9 at 11, and Jazz Level 1/2 at noon.",
+      "summary": "Saturday classes at 1802 South Broad: Ballet/Tap for ages 3–5 at 10 (marked closed when we checked), Jazz/Tap for ages 7–9 at 11, and Jazz Level 1/2 at noon.",
       "days": [
         "sat"
       ],
@@ -9451,7 +9743,7 @@
           "url": "https://www.equilibriumdanceacademy.com/classes"
         }
       ],
-      "checked": "2026-10-16"
+      "checked": "2026-11-01"
     }
   },
   {
@@ -9486,7 +9778,13 @@
       "how": "online",
       "url": "https://blue-chip-flag-south-philadelphia.sportngin.com/register/form/571361594",
       "label": "Register for spring",
-      "note": "Spring 2027 registration closes March 15, 2027. Fall 2026 registration closed August 15."
+      "note": "Spring 2027 registration closes March 15, 2027. Fall 2026 registration closed August 15.",
+      "dates": [
+        {
+          "date": "2027-03-15",
+          "label": "Spring 2027 registration closes"
+        }
+      ]
     },
     "note": "A league, not a class: a season of Sunday games. Refunds run until a few days before each season.",
     "sources": [
@@ -9495,7 +9793,7 @@
         "url": "https://www.bluechipyouthsports.com/south-philadelphia-registrations/"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
@@ -9519,7 +9817,7 @@
           "url": "https://www.bluechipyouthsports.com/south-philadelphia-registrations/"
         }
       ],
-      "checked": "2026-10-16"
+      "checked": "2026-11-01"
     }
   },
   {
@@ -9621,7 +9919,7 @@
     "hours": "Saturday 10 am to 1 pm for ages 3–5. Classes for ages 6 and up run weekdays 4:45 to 8:45 pm.",
     "cost": "$14 a class a week for one or two classes ($13 for three, $12 for four or more), due monthly, plus $20 to register the first child and $10 each after. Costumes and recital fees are extra.",
     "price": "paid",
-    "phone": "",
+    "phone": "215-334-2002",
     "email": "",
     "website": "https://pennsportschoolofdance.com/class-schedule/",
     "register": {
@@ -9639,7 +9937,7 @@
         "url": "https://pennsportschoolofdance.com/registration-tuition/"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
@@ -9670,7 +9968,7 @@
           "url": "https://pennsportschoolofdance.com/registration-tuition/"
         }
       ],
-      "checked": "2026-10-16"
+      "checked": "2026-11-01"
     }
   },
   {
@@ -9703,7 +10001,7 @@
     "grades": "PK-K",
     "gradeNote": "Ages 3–5 on Saturdays; K to 8th grade on weekdays, with high school programs too",
     "hours": "Saturday 11 am to 12:45 pm for ages 3–5. Weekday classes run 4:30 to 7:30 pm.",
-    "cost": "$400 for a 45-minute Saturday class over 12 weeks; $500 for a one-hour weekday class. Payment plans and financial aid by email.",
+    "cost": "$400 for a 45-minute Saturday class over 12 weeks; $615 for a one-hour weekday class over the 16-week spring session (the 12-week fall class was $500). Payment plans and financial aid by email.",
     "price": "paid",
     "phone": "215-703-8617",
     "email": "",
@@ -9712,25 +10010,32 @@
       "how": "online",
       "url": "https://www.phillypack.org/registration/",
       "label": "Register",
-      "note": "Sign up on its registration page."
+      "note": "Sign up on its registration page.",
+      "nextTerm": "Spring 2027 registration opens Saturday, December 12, 2026. The session starts January 4.",
+      "dates": [
+        {
+          "date": "2026-12-12",
+          "label": "Spring 2027 registration opens"
+        }
+      ]
     },
-    "note": "The fall session began August 31, 2026 and ends with a K–8 production weekend on December 5–6. No class Thanksgiving week.",
+    "note": "The fall session ends with a K–8 production weekend on December 5–6; Creative Movement ends November 21. Spring 2027 starts January 4 and ends with a production weekend May 1–2; no class March 22–27.",
     "sources": [
       {
         "label": "Philly PACK classes",
         "url": "https://www.phillypack.org/schedule/"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
-      "summary": "Creative Movement on Saturdays: ages 3–4 at 11, ages 4–5 at noon, 45 minutes each, over 12 weeks ending with a showcase on November 21.",
+      "summary": "Creative Movement on Saturdays: ages 3–4 at 11, ages 4–5 at noon, 45 minutes each, over 12 weeks ending with a showcase (November 21 this fall, March 20 in spring).",
       "days": [
         "sat"
       ],
       "grades": "PK-K",
-      "term": "Fall 2026: from August 31 through Saturday, November 21.",
+      "term": "Fall 2026: through Saturday, November 21. Spring 2027: the session starts January 4 and Creative Movement runs 12 weeks through Saturday, March 20. Registration opens December 12.",
       "times": {
         "sat": "11 am to 12:45 pm"
       },
@@ -9740,7 +10045,7 @@
         "url": "https://www.phillypack.org/schedule/",
         "how": "fetch",
         "look": "The classes page lists Creative Movement 1 and 2 with their Saturday times and ages, and the tuition scale by class length.",
-        "notes": "The page also keeps an older Spring 2026 grid; read the current session’s list."
+        "notes": "The page shows the coming session’s schedule and tuition scale; read the current session’s list."
       },
       "sources": [
         {
@@ -9748,8 +10053,14 @@
           "url": "https://www.phillypack.org/schedule/"
         }
       ],
-      "checked": "2026-10-16"
-    }
+      "checked": "2026-11-01"
+    },
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "Spring 2027 is posted: the session starts January 4; Creative Movement runs 12 Saturdays through March 20, $400. One-hour weekday classes are $615 for the 16-week spring session."
+      }
+    ]
   },
   {
     "id": "magic-gardens-family-jams",
@@ -9792,7 +10103,7 @@
         "url": "https://www.phillymagicgardens.org/events/peco-family-jams/"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "weekend",
     "schools": {},
     "weekend": {
@@ -9819,7 +10130,7 @@
           "url": "https://www.phillymagicgardens.org/events/peco-family-jams/"
         }
       ],
-      "checked": "2026-10-16"
+      "checked": "2026-11-01"
     }
   },
   {
@@ -9875,7 +10186,7 @@
         "url": "https://www.phieldhouse.com/youth/vacation-day-camp/"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "dayoff",
     "schools": {}
   },
@@ -10004,7 +10315,7 @@
     "hours": "Day-off camps run 8 am to 3 pm, with aftercare to 6.",
     "daysOff": {
       "summary": "Day-off camps, 8 am to 3 pm, for grades K–6: nature explorations led by its educators, using the science lab, Discovery Center, trails, streams and ponds, in light rain and snow. $80 a day for members, $90 for others; aftercare 3 to 6 is $20 more. Its 2026–27 schedule covers most of the district’s days off (not Thanksgiving week, winter break or Memorial Day) and some days other districts are off. Registration closes a week before each day, and a day is cancelled a week out if too few sign up.",
-      "url": "https://www.schuylkillcenter.org/education/day-off-camps/",
+      "url": "https://schuylkillcenter.org/education/day-off-camps/",
       "dates": [
         "2026-09-18",
         "2026-09-21",
@@ -10036,7 +10347,7 @@
       "sources": [
         {
           "label": "Schuylkill Center day-off camps",
-          "url": "https://www.schuylkillcenter.org/education/day-off-camps/"
+          "url": "https://schuylkillcenter.org/education/day-off-camps/"
         }
       ],
       "hours": "8 am to 3 pm; aftercare 3 to 6 pm",
@@ -10048,7 +10359,7 @@
     "price": "paid",
     "phone": "215-482-7300",
     "email": "",
-    "website": "https://www.schuylkillcenter.org/education/day-off-camps/",
+    "website": "https://schuylkillcenter.org/education/day-off-camps/",
     "register": {
       "how": "online",
       "url": "https://schuylkillcenter.org/day-off-camps/",
@@ -10059,10 +10370,10 @@
     "sources": [
       {
         "label": "Schuylkill Center day-off camps",
-        "url": "https://www.schuylkillcenter.org/education/day-off-camps/"
+        "url": "https://schuylkillcenter.org/education/day-off-camps/"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "dayoff",
     "schools": {}
   },
@@ -10120,7 +10431,7 @@
         "url": "https://www.flipoutproductions.com/day-camp"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "dayoff",
     "schools": {}
   },
@@ -10215,7 +10526,7 @@
         "url": "https://elitesportsfactory.com/childcare"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "dayoff",
     "schools": {}
   },
@@ -10291,7 +10602,7 @@
         "url": "https://movementgyms.com/callowhill"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "dayoff",
     "schools": {}
   },
@@ -10313,7 +10624,7 @@
       "Fitler Square",
       "Graduate Hospital"
     ],
-    "address": "2501 Lombard St",
+    "address": "2501 Lombard St and 2501 South St",
     "neighborhoods": [
       "Fitler Square"
     ],
@@ -10321,7 +10632,7 @@
     "gradeNote": "From age 3 (potty trained), with camps grouped by the child’s 2026–27 grade",
     "hours": "Camp days run 9 am to 4 pm, with drop-off from 8:30 and pick-up until 4:30.",
     "daysOff": {
-      "summary": "Winter Break Camp December 21–23 and 28–30 (closed December 24, 25, 31 and January 1), 9 am to 4 pm, with week-long themed camps such as ice skating, STEM engineering, a winter wonderland week, gymnastics, clay and cooking, and volleyball. $200 to $450 a week by camp; registration opens October 26, and a $50 late fee applies after November 15. Spring Break Camp runs March 22–26, with the catalog posted later and registration opening November 23. The first two winter days fall before the district’s break.",
+      "summary": "Winter Break Camp December 21–23 and 28–30 (closed December 24, 25, 31 and January 1), 9 am to 4 pm, with week-long themed camps such as ice skating, STEM engineering, a winter wonderland week, gymnastics, clay and cooking, and volleyball; registration is for a full three-day week. $200 to $450 a week by camp. Online registration is open until Sunday, November 15 at midnight; later enrollments pay in full and may be charged a $50 late fee. Spring Break Camp runs March 22–26, with the catalog posted later and registration opening November 23. The first two winter days fall before the district’s break.",
       "url": "https://www.tpschool.org/tps-experience/camptps/winter-break-camp",
       "dates": [
         "2026-12-21",
@@ -10358,7 +10669,17 @@
       "how": "online",
       "url": "https://www.tpschool.org/tps-experience/camptps/winter-break-camp",
       "label": "See winter camps",
-      "note": "Winter registration opens October 26, 2026 and spring registration November 23. Deposits are non-refundable."
+      "note": "Winter registration is open online through ActiveWorks until November 15 at midnight; spring registration opens November 23. Deposits are non-refundable.",
+      "dates": [
+        {
+          "date": "2026-11-15",
+          "label": "Camp TPS: last day to register online for Winter Break Camp (closes at midnight; later enrollments pay in full and may incur a $50 late fee)"
+        },
+        {
+          "date": "2026-11-23",
+          "label": "Camp TPS: Spring Break Camp (March 22–26) registration opens"
+        }
+      ]
     },
     "note": "Families whose children don’t attend TPS can join its camp mailing list for registration dates. Pack a snack, lunch and warm layers.",
     "sources": [
@@ -10375,7 +10696,7 @@
         "url": "https://www.tpschool.org/tps-experience/camptps/spring-break-camp"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "dayoff",
     "schools": {}
   },
@@ -10403,17 +10724,18 @@
     "gradeNote": "Kindergarten to 5th grade (the winter break package takes pre-K 4 too); a child of 4½ can come with a sibling in 2nd grade or up",
     "hours": "Camp days run 9 am to 3:30 or 5:30, with 8:30 drop-off for $5.",
     "daysOff": {
-      "summary": "School’s Out day camps for K–5: hands-on art projects tied to what kids learn in school, and outdoor play, led by teaching artists. $60 for 9 to 3:30 or $75 for 9 to 5:30 (second sibling $50 or $65); 8:30 drop-off is $5. Days this fall are November 3 (sold out), 11, 16 and 25, and a four-day winter break package runs December 28–31 ($200 or $250). Bring a peanut-free lunch, water and snacks.",
+      "summary": "School’s Out day camps for K–5: hands-on art projects tied to what kids learn in school, and outdoor play, led by teaching artists. $60 for 9 to 3:30 or $75 for 9 to 5:30 (second sibling $50 or $65); 8:30 drop-off is $5. Days posted are November 11 (more spots added), 16 (sold out) and 25, then December 21 and 22 before the district’s break, and a four-day winter break package December 28–31 for pre-K 4 to 5th grade ($200 or $250; second sibling $160 or $210). Bring a peanut-free lunch, water and snacks.",
       "url": "https://www.nlarts.org/schools-out-day-camp",
       "dates": [
         "2026-09-18",
         "2026-09-21",
         "2026-10-09",
         "2026-10-12",
-        "2026-11-03",
         "2026-11-11",
         "2026-11-16",
         "2026-11-25",
+        "2026-12-21",
+        "2026-12-22",
         "2026-12-28",
         "2026-12-29",
         "2026-12-30",
@@ -10430,7 +10752,7 @@
       "ageMin": 5,
       "ageMax": 11
     },
-    "cost": "$60 a day to 3:30 or $75 to 5:30; second sibling $50 or $65. Winter break package $200 or $250.",
+    "cost": "$60 a day to 3:30 or $75 to 5:30; second sibling $50 or $65. Winter break package $200 or $250 (second sibling $160 or $210).",
     "price": "paid",
     "phone": "973-868-6675",
     "email": "info@nlarts.org",
@@ -10452,9 +10774,15 @@
         "url": "https://www.nlarts.org/purchase-day-camps"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "dayoff",
-    "schools": {}
+    "schools": {},
+    "updates": [
+      {
+        "date": "2026-11-01",
+        "text": "NLArts added School’s Out day camps on December 21 and 22, the two school days before the district’s winter break, at its usual $60 or $75. November 16 is sold out and more spots were added for November 11."
+      }
+    ]
   },
   {
     "id": "philadelphia-youth-basketball",
@@ -10521,7 +10849,7 @@
         "url": "https://www.phillyyouthbasketball.org/pybholidayclinics"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "dayoff",
     "schools": {}
   },
@@ -10596,7 +10924,7 @@
         "url": "https://secure.lglforms.com/form_engine/s/hj6M5wuOpPinLZyA3e6dkQ"
       }
     ],
-    "lastVerified": "2026-10-16",
+    "lastVerified": "2026-11-01",
     "scope": "dayoff",
     "schools": {}
   },
@@ -10650,13 +10978,7 @@
       "url": "https://skilladelphia.campbrainregistration.com/?returnUrl=%252FLanding",
       "label": "Register",
       "note": "Sign-up is on its CampBrain site; you make an account first. Questions go to admin@skilladelphia.org.",
-      "nextTerm": "Fall II starts November 2, 2026, and registration is open now. Families can join any time there is space, with the fee pro-rated for the sessions left.",
-      "dates": [
-        {
-          "date": "2026-11-02",
-          "label": "Fall II session starts"
-        }
-      ]
+      "nextTerm": "Fall II starts November 2, 2026, and registration is open now. Families can join any time there is space, with the fee pro-rated for the sessions left."
     },
     "note": "Old Pine Community Center now goes by The Neighborhub, the program told us in October 2026, so its site may still say either name. It also runs Wednesday evening scrimmages for ages 9–14 ($15 a session), summer camps and clinics, and Monday evening lacrosse at Penn Park in summer. Caregivers can also drop children off from other schools, the program says.",
     "sources": [

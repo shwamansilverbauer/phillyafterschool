@@ -1,0 +1,30 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:arden-drama-school-2026-11-27@phillyafterschool.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20261127
+DTEND;VALUE=DATE:20261128
+SUMMARY:Arden Drama School: Arden early-bird ends: $15 off e
+ ach winter Play-in-a-Day (code WINTERPIAD15) and $25 off 8-w
+ eek classes (code WINTERSTAGE) when you enroll by November 2
+ 7
+DESCRIPTION:https://ardentheatre.org/arden-drama-school/?utm
+ _source=phillyafterschool.org&utm_medium=referral&utm_campai
+ gn=directory&utm_content=calendar\n\nFrom Philly After Schoo
+ l: https://phillyafterschool.org/
+URL:https://ardentheatre.org/arden-drama-school/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Arden Drama School: Arden early-bird ends: $15 o
+ ff each winter Play-in-a-Day (code WINTERPIAD15) and $25 off
+  8-week classes (code WINTERSTAGE) when you enroll by Novemb
+ er 27
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

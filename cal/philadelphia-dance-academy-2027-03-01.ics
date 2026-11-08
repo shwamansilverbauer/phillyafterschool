@@ -1,0 +1,27 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:philadelphia-dance-academy-2027-03-01@phillyafterschool.
+ org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20270301
+DTEND;VALUE=DATE:20270302
+SUMMARY:The Philadelphia Dance Academy: Last day to enroll i
+ n Creative Movement and Dance Together for 2026–27
+DESCRIPTION:https://philadelphiadanceacademy.com/registratio
+ n/?utm_source=phillyafterschool.org&utm_medium=referral&utm_
+ campaign=directory&utm_content=calendar\n\nFrom Philly After
+  School: https://phillyafterschool.org/
+URL:https://philadelphiadanceacademy.com/registration/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Philadelphia Dance Academy: Last day to enro
+ ll in Creative Movement and Dance Together for 2026–27
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

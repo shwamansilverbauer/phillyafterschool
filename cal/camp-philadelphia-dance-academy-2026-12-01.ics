@@ -1,0 +1,27 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:camp-philadelphia-dance-academy-2026-12-01@phillyaftersc
+ hool.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
+SUMMARY:The Philadelphia Dance Academy: Summer 2027 enrollme
+ nt opens
+DESCRIPTION:https://philadelphiadanceacademy.com/summer-prog
+ ram/?utm_source=phillyafterschool.org&utm_medium=referral&ut
+ m_campaign=directory&utm_content=calendar\n\nFrom Philly Aft
+ er School: https://phillyafterschool.org/
+URL:https://philadelphiadanceacademy.com/summer-program/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Philadelphia Dance Academy: Summer 2027 enro
+ llment opens
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

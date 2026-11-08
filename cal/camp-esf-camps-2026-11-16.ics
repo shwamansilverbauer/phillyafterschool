@@ -1,0 +1,26 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:camp-esf-camps-2026-11-16@phillyafterschool.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20261116
+DTEND;VALUE=DATE:20261117
+SUMMARY:ESF Camps: Summer 2027 enrollment opens\, with early
+ -bird savings ($645 a week until February 1)
+DESCRIPTION:https://www.bravoenrollment.com/?redirectTo=esf&
+ utm_source=phillyafterschool.org&utm_medium=referral&utm_cam
+ paign=directory&utm_content=calendar\n\nFrom Philly After Sc
+ hool: https://phillyafterschool.org/
+URL:https://www.bravoenrollment.com/?redirectTo=esf
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:ESF Camps: Summer 2027 enrollment opens\, with e
+ arly-bird savings ($645 a week until February 1)
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

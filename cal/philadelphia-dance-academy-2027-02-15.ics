@@ -1,0 +1,27 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:philadelphia-dance-academy-2027-02-15@phillyafterschool.
+ org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20270215
+DTEND;VALUE=DATE:20270216
+SUMMARY:The Philadelphia Dance Academy: Last day to enroll i
+ n most classes for 2026–27 (tuition prorated)
+DESCRIPTION:https://philadelphiadanceacademy.com/registratio
+ n/?utm_source=phillyafterschool.org&utm_medium=referral&utm_
+ campaign=directory&utm_content=calendar\n\nFrom Philly After
+  School: https://phillyafterschool.org/
+URL:https://philadelphiadanceacademy.com/registration/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:The Philadelphia Dance Academy: Last day to enro
+ ll in most classes for 2026–27 (tuition prorated)
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

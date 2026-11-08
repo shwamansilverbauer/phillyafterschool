@@ -1,0 +1,27 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:fleisher-art-memorial-2026-11-21@phillyafterschool.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20261121
+DTEND;VALUE=DATE:20261122
+SUMMARY:Fleisher Art Memorial: Last day of winter term regis
+ tration for enrolled students
+DESCRIPTION:https://reg137.imperisoft.com/Fleisher/Search/Re
+ gistration.aspx?utm_source=phillyafterschool.org&utm_medium=
+ referral&utm_campaign=directory&utm_content=calendar\n\nFrom
+  Philly After School: https://phillyafterschool.org/
+URL:https://reg137.imperisoft.com/Fleisher/Search/Registrati
+ on.aspx
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Fleisher Art Memorial: Last day of winter term r
+ egistration for enrolled students
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

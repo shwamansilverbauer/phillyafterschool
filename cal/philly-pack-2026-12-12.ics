@@ -1,0 +1,24 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:philly-pack-2026-12-12@phillyafterschool.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20261212
+DTEND;VALUE=DATE:20261213
+SUMMARY:Philly PACK: Spring 2027 registration opens
+DESCRIPTION:https://www.phillypack.org/registration/?utm_sou
+ rce=phillyafterschool.org&utm_medium=referral&utm_campaign=d
+ irectory&utm_content=calendar\n\nFrom Philly After School: h
+ ttps://phillyafterschool.org/
+URL:https://www.phillypack.org/registration/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Philly PACK: Spring 2027 registration opens
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

@@ -297,6 +297,7 @@
       "name": "Walnut Street Theatre School",
       "parts": [
         "weekend",
+        "off",
         "summer"
       ]
     },
@@ -1071,6 +1072,14 @@
     {
       "id": "esf-camps",
       "name": "ESF Camps"
+    },
+    {
+      "id": "skateboard-academy-rizzo-rink",
+      "name": "The Skateboard Academy summer camp at Rizzo Rink"
+    },
+    {
+      "id": "hawk-hill-day-camp",
+      "name": "Hawk Hill Day Camp at Saint Joseph’s University (Future Stars)"
     }
   ],
   "added": {
@@ -1213,6 +1222,23 @@
       "title": "Hudson Table: camp on a day off",
       "text": "School is closed (Veterans Day). Hudson Table has posted a camp.",
       "url": "https://phillyafterschool.org/programs/hudson-table-philadelphia/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-kids-on-12th-2026-11-11",
+      "kind": "camp",
+      "part": "off",
+      "date": "2026-11-11",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "kids-on-12th"
+      ],
+      "within": "off-2026-11-11",
+      "when": "Wednesday, November 11",
+      "title": "Kids on 12th: camp on a day off",
+      "text": "School is closed (Veterans Day). Kids on 12th has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/kids-on-12th/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -1396,7 +1422,7 @@
       "programs": [],
       "when": "Wednesday, November 11",
       "title": "No school: Veterans Day",
-      "text": "16 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Hudson Table, Makom Community, Mister John’s Music, MoveMakers Philly, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "text": "17 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Hudson Table, Kids on 12th, Makom Community, Mister John’s Music, MoveMakers Philly, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/veterans-day-2026-11-11/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -1807,6 +1833,55 @@
       "text": "Winter term registration opens for enrolled students."
     },
     {
+      "id": "reg-the-philadelphia-school-2026-11-15",
+      "schools": [],
+      "programs": [
+        "the-philadelphia-school"
+      ],
+      "part": "off",
+      "title": "Camp TPS at The Philadelphia School",
+      "url": "https://phillyafterschool.org/programs/the-philadelphia-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-08",
+      "when": "Sunday, November 15",
+      "text": "Camp TPS: last day to register online for Winter Break Camp (closes at midnight; later enrollments pay in full and may incur a $50 late fee)."
+    },
+    {
+      "id": "reg-the-philadelphia-school-2026-11-15-day",
+      "schools": [],
+      "programs": [
+        "the-philadelphia-school"
+      ],
+      "part": "off",
+      "title": "Camp TPS at The Philadelphia School",
+      "url": "https://phillyafterschool.org/programs/the-philadelphia-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "when": "Today, Sunday, November 15",
+      "text": "Camp TPS: last day to register online for Winter Break Camp (closes at midnight; later enrollments pay in full and may incur a $50 late fee)."
+    },
+    {
+      "id": "reg-the-philadelphia-school-2026-11-15-eve",
+      "schools": [],
+      "programs": [
+        "the-philadelphia-school"
+      ],
+      "part": "off",
+      "title": "Camp TPS at The Philadelphia School",
+      "url": "https://phillyafterschool.org/programs/the-philadelphia-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "soon",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-14",
+      "expires": "2026-11-14",
+      "when": "Tomorrow, Sunday, November 15",
+      "text": "Camp TPS: last day to register online for Winter Break Camp (closes at midnight; later enrollments pay in full and may incur a $50 late fee)."
+    },
+    {
       "id": "camp-butchers-sew-shop-2026-11-16",
       "kind": "camp",
       "part": "off",
@@ -1838,6 +1913,23 @@
       "title": "Elite Sports Factory: camp on a day off",
       "text": "School is closed (Report card conferences). Elite Sports Factory has posted a camp.",
       "url": "https://phillyafterschool.org/programs/elite-sports-factory/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-kids-on-12th-2026-11-16",
+      "kind": "camp",
+      "part": "off",
+      "date": "2026-11-16",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "kids-on-12th"
+      ],
+      "within": "off-2026-11-16",
+      "when": "Monday, November 16",
+      "title": "Kids on 12th: camp on a day off",
+      "text": "School is closed (Report card conferences). Kids on 12th has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/kids-on-12th/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -1977,6 +2069,38 @@
       "button": "See the listing"
     },
     {
+      "id": "campreg-esf-camps-2026-11-16",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "esf-camps"
+      ],
+      "title": "ESF Camps",
+      "url": "https://phillyafterschool.org/summer-camps/esf-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "register",
+      "date": "2026-11-16",
+      "sendOn": "2026-11-15",
+      "when": "Monday, November 16",
+      "text": "Summer 2027 enrollment opens, with early-bird savings ($645 a week until February 1)."
+    },
+    {
+      "id": "campreg-esf-camps-2026-11-16-day",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "esf-camps"
+      ],
+      "title": "ESF Camps",
+      "url": "https://phillyafterschool.org/summer-camps/esf-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "today",
+      "date": "2026-11-16",
+      "sendOn": "2026-11-16",
+      "when": "Today, Monday, November 16",
+      "text": "Summer 2027 enrollment opens, with early-bird savings ($645 a week until February 1)."
+    },
+    {
       "id": "off-2026-11-16",
       "kind": "dayoff",
       "date": "2026-11-16",
@@ -1987,7 +2111,7 @@
       "programs": [],
       "when": "Monday, November 16",
       "title": "No school: Report card conferences",
-      "text": "10 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Makom Community, MoveMakers Philly, NLArts, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "text": "11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, MoveMakers Philly, NLArts, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/report-card-conferences-2026-11-16/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -2076,14 +2200,18 @@
       ],
       "when": "Week of November 16",
       "title": "This week at Coppin",
-      "text": "Monday: No school: Report card conferences.",
+      "text": "Monday: No school: Report card conferences. Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students.",
       "lines": [
         {
           "when": "Monday",
           "what": "No school: Report card conferences"
+        },
+        {
+          "when": "Saturday",
+          "what": "Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students"
         }
       ],
-      "first": "Monday: no school, Report card conferences",
+      "first": "Monday: no school, Report card conferences; Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students",
       "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Coppin’s week"
     },
@@ -2100,14 +2228,18 @@
       ],
       "when": "Week of November 16",
       "title": "This week at Kirkbride",
-      "text": "Monday: No school: Report card conferences.",
+      "text": "Monday: No school: Report card conferences. Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students.",
       "lines": [
         {
           "when": "Monday",
           "what": "No school: Report card conferences"
+        },
+        {
+          "when": "Saturday",
+          "what": "Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students"
         }
       ],
-      "first": "Monday: no school, Report card conferences",
+      "first": "Monday: no school, Report card conferences; Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students",
       "url": "https://phillyafterschool.org/kirkbride/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Kirkbride’s week"
     },
@@ -2172,14 +2304,18 @@
       ],
       "when": "Week of November 16",
       "title": "This week at McCall",
-      "text": "Monday: No school: Report card conferences.",
+      "text": "Monday: No school: Report card conferences. Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students.",
       "lines": [
         {
           "when": "Monday",
           "what": "No school: Report card conferences"
+        },
+        {
+          "when": "Saturday",
+          "what": "Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students"
         }
       ],
-      "first": "Monday: no school, Report card conferences",
+      "first": "Monday: no school, Report card conferences; Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students",
       "url": "https://phillyafterschool.org/mccall/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See McCall’s week"
     },
@@ -2196,14 +2332,18 @@
       ],
       "when": "Week of November 16",
       "title": "This week at Meredith",
-      "text": "Monday: No school: Report card conferences.",
+      "text": "Monday: No school: Report card conferences. Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students.",
       "lines": [
         {
           "when": "Monday",
           "what": "No school: Report card conferences"
+        },
+        {
+          "when": "Saturday",
+          "what": "Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students"
         }
       ],
-      "first": "Monday: no school, Report card conferences",
+      "first": "Monday: no school, Report card conferences; Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students",
       "url": "https://phillyafterschool.org/meredith/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Meredith’s week"
     },
@@ -2220,7 +2360,7 @@
       ],
       "when": "Week of November 16",
       "title": "This week at Nebinger",
-      "text": "Monday: No school: Report card conferences. Wednesday: Pretzel day.",
+      "text": "Monday: No school: Report card conferences. Wednesday: Pretzel day. Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students.",
       "lines": [
         {
           "when": "Monday",
@@ -2229,9 +2369,13 @@
         {
           "when": "Wednesday",
           "what": "Pretzel day"
+        },
+        {
+          "when": "Saturday",
+          "what": "Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students"
         }
       ],
-      "first": "Monday: no school, Report card conferences",
+      "first": "Monday: no school, Report card conferences; Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students",
       "url": "https://phillyafterschool.org/nebinger/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Nebinger’s week"
     },
@@ -2296,16 +2440,122 @@
       ],
       "when": "Week of November 16",
       "title": "This week at Vare-Washington",
-      "text": "Monday: No school: Report card conferences.",
+      "text": "Monday: No school: Report card conferences. Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students.",
       "lines": [
         {
           "when": "Monday",
           "what": "No school: Report card conferences"
+        },
+        {
+          "when": "Saturday",
+          "what": "Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students"
         }
       ],
-      "first": "Monday: no school, Report card conferences",
+      "first": "Monday: no school, Report card conferences; Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students",
       "url": "https://phillyafterschool.org/vare-washington/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Vare-Washington’s week"
+    },
+    {
+      "id": "reg-fleisher-art-memorial-2026-11-21",
+      "schools": [
+        "nebinger",
+        "meredith",
+        "coppin",
+        "vare-washington",
+        "mccall",
+        "kirkbride"
+      ],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "part": "after",
+      "title": "Fleisher Art Memorial",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-15",
+      "when": "Saturday, November 21",
+      "text": "Last day of winter term registration for enrolled students."
+    },
+    {
+      "id": "reg-fleisher-art-memorial-2026-11-21-day",
+      "schools": [
+        "nebinger",
+        "meredith",
+        "coppin",
+        "vare-washington",
+        "mccall",
+        "kirkbride"
+      ],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "part": "after",
+      "title": "Fleisher Art Memorial",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "when": "Today, Saturday, November 21",
+      "text": "Last day of winter term registration for enrolled students."
+    },
+    {
+      "id": "reg-fleisher-art-memorial-2026-11-21-eve",
+      "schools": [
+        "nebinger",
+        "meredith",
+        "coppin",
+        "vare-washington",
+        "mccall",
+        "kirkbride"
+      ],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "part": "after",
+      "title": "Fleisher Art Memorial",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "soon",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-20",
+      "expires": "2026-11-20",
+      "when": "Tomorrow, Saturday, November 21",
+      "text": "Last day of winter term registration for enrolled students."
+    },
+    {
+      "id": "reg-the-philadelphia-school-2026-11-23",
+      "schools": [],
+      "programs": [
+        "the-philadelphia-school"
+      ],
+      "part": "off",
+      "title": "Camp TPS at The Philadelphia School",
+      "url": "https://phillyafterschool.org/programs/the-philadelphia-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2026-11-23",
+      "sendOn": "2026-11-22",
+      "when": "Monday, November 23",
+      "text": "Camp TPS: Spring Break Camp (March 22–26) registration opens."
+    },
+    {
+      "id": "reg-the-philadelphia-school-2026-11-23-day",
+      "schools": [],
+      "programs": [
+        "the-philadelphia-school"
+      ],
+      "part": "off",
+      "title": "Camp TPS at The Philadelphia School",
+      "url": "https://phillyafterschool.org/programs/the-philadelphia-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2026-11-23",
+      "sendOn": "2026-11-23",
+      "when": "Today, Monday, November 23",
+      "text": "Camp TPS: Spring Break Camp (March 22–26) registration opens."
     },
     {
       "id": "reg-fleisher-art-memorial-2026-11-24",
@@ -2412,6 +2662,23 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-kids-on-12th-2026-11-25",
+      "kind": "camp",
+      "part": "off",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [],
+      "programs": [
+        "kids-on-12th"
+      ],
+      "within": "off-2026-11-25",
+      "when": "Wednesday, November 25",
+      "title": "Kids on 12th: camp on a day off",
+      "text": "School is closed (Staff professional development). Kids on 12th has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/kids-on-12th/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "camp-movemakers-2026-11-25",
       "kind": "camp",
       "part": "off",
@@ -2490,7 +2757,7 @@
       "programs": [],
       "when": "Wednesday, November 25",
       "title": "No school: Staff professional development",
-      "text": "6 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
+      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
       "url": "https://phillyafterschool.org/days-off/staff-professional-development-2026-11-25/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -2525,6 +2792,55 @@
       "text": "One listed program has posted a camp: Elite Sports Factory.",
       "url": "https://phillyafterschool.org/days-off/thanksgiving-break-2026-11-26/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "reg-arden-drama-school-2026-11-27",
+      "schools": [],
+      "programs": [
+        "arden-drama-school"
+      ],
+      "part": "weekend",
+      "title": "Arden Drama School",
+      "url": "https://phillyafterschool.org/programs/arden-drama-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "when": "Friday, November 27",
+      "text": "Arden early-bird ends: $15 off each winter Play-in-a-Day (code WINTERPIAD15) and $25 off 8-week classes (code WINTERSTAGE) when you enroll by November 27."
+    },
+    {
+      "id": "reg-arden-drama-school-2026-11-27-day",
+      "schools": [],
+      "programs": [
+        "arden-drama-school"
+      ],
+      "part": "weekend",
+      "title": "Arden Drama School",
+      "url": "https://phillyafterschool.org/programs/arden-drama-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-27",
+      "when": "Today, Friday, November 27",
+      "text": "Arden early-bird ends: $15 off each winter Play-in-a-Day (code WINTERPIAD15) and $25 off 8-week classes (code WINTERSTAGE) when you enroll by November 27."
+    },
+    {
+      "id": "reg-arden-drama-school-2026-11-27-eve",
+      "schools": [],
+      "programs": [
+        "arden-drama-school"
+      ],
+      "part": "weekend",
+      "title": "Arden Drama School",
+      "url": "https://phillyafterschool.org/programs/arden-drama-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "soon",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-26",
+      "expires": "2026-11-26",
+      "when": "Tomorrow, Friday, November 27",
+      "text": "Arden early-bird ends: $15 off each winter Play-in-a-Day (code WINTERPIAD15) and $25 off 8-week classes (code WINTERSTAGE) when you enroll by November 27."
     },
     {
       "id": "week-bache-martin-2026-11-23",
@@ -2967,6 +3283,38 @@
       "button": "See Vare-Washington’s week"
     },
     {
+      "id": "campreg-macguffin-camps-2026-11-30",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "macguffin-camps"
+      ],
+      "title": "MacGuffin Theatre & Film Company",
+      "url": "https://phillyafterschool.org/programs/macguffin-theatre/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "register",
+      "date": "2026-11-30",
+      "sendOn": "2026-11-29",
+      "when": "Monday, November 30",
+      "text": "Last day for $75 off the teen Musical Theatre Camp and $50 off the one-week teen camps."
+    },
+    {
+      "id": "campreg-macguffin-camps-2026-11-30-day",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "macguffin-camps"
+      ],
+      "title": "MacGuffin Theatre & Film Company",
+      "url": "https://phillyafterschool.org/programs/macguffin-theatre/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "today",
+      "date": "2026-11-30",
+      "sendOn": "2026-11-30",
+      "when": "Today, Monday, November 30",
+      "text": "Last day for $75 off the teen Musical Theatre Camp and $50 off the one-week teen camps."
+    },
+    {
       "id": "reg-butchers-sew-shop-2026-11-30",
       "schools": [
         "nebinger",
@@ -3013,6 +3361,425 @@
       "text": "Last day of early-bird pricing for Winter and Spring sessions."
     },
     {
+      "id": "campreg-hawk-hill-day-camp-2026-12-01",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "hawk-hill-day-camp"
+      ],
+      "title": "Hawk Hill Day Camp at Saint Joseph’s University (Future Stars)",
+      "url": "https://phillyafterschool.org/summer-camps/hawk-hill-day-camp/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "register",
+      "date": "2026-12-01",
+      "sendOn": "2026-11-29",
+      "when": "Tuesday, December 1",
+      "text": "Last day for the $375 weekly rate; $435 a week after."
+    },
+    {
+      "id": "campreg-hawk-hill-day-camp-2026-12-01-day",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "hawk-hill-day-camp"
+      ],
+      "title": "Hawk Hill Day Camp at Saint Joseph’s University (Future Stars)",
+      "url": "https://phillyafterschool.org/summer-camps/hawk-hill-day-camp/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "today",
+      "date": "2026-12-01",
+      "sendOn": "2026-12-01",
+      "when": "Today, Tuesday, December 1",
+      "text": "Last day for the $375 weekly rate; $435 a week after."
+    },
+    {
+      "id": "campreg-hawk-hill-day-camp-2026-12-01-eve",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "hawk-hill-day-camp"
+      ],
+      "title": "Hawk Hill Day Camp at Saint Joseph’s University (Future Stars)",
+      "url": "https://phillyafterschool.org/summer-camps/hawk-hill-day-camp/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "soon",
+      "date": "2026-12-01",
+      "sendOn": "2026-11-30",
+      "expires": "2026-11-30",
+      "when": "Tomorrow, Tuesday, December 1",
+      "text": "Last day for the $375 weekly rate; $435 a week after."
+    },
+    {
+      "id": "campreg-macguffin-camps-2026-12-01",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "macguffin-camps"
+      ],
+      "title": "MacGuffin Theatre & Film Company",
+      "url": "https://phillyafterschool.org/programs/macguffin-theatre/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "register",
+      "date": "2026-12-01",
+      "sendOn": "2026-11-29",
+      "when": "Tuesday, December 1",
+      "text": "Registration opens for the one-week Youth Musical Theatre Camps (ages 7–10/11)."
+    },
+    {
+      "id": "campreg-macguffin-camps-2026-12-01-day",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "macguffin-camps"
+      ],
+      "title": "MacGuffin Theatre & Film Company",
+      "url": "https://phillyafterschool.org/programs/macguffin-theatre/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "today",
+      "date": "2026-12-01",
+      "sendOn": "2026-12-01",
+      "when": "Today, Tuesday, December 1",
+      "text": "Registration opens for the one-week Youth Musical Theatre Camps (ages 7–10/11)."
+    },
+    {
+      "id": "campreg-macguffin-camps-2026-12-01-eve",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "macguffin-camps"
+      ],
+      "title": "MacGuffin Theatre & Film Company",
+      "url": "https://phillyafterschool.org/programs/macguffin-theatre/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "soon",
+      "date": "2026-12-01",
+      "sendOn": "2026-11-30",
+      "expires": "2026-11-30",
+      "when": "Tomorrow, Tuesday, December 1",
+      "text": "Registration opens for the one-week Youth Musical Theatre Camps (ages 7–10/11)."
+    },
+    {
+      "id": "campreg-philadelphia-ballet-camps-2026-12-01",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "philadelphia-ballet-camps"
+      ],
+      "title": "School of Philadelphia Ballet dance camps",
+      "url": "https://phillyafterschool.org/programs/school-of-philadelphia-ballet/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "register",
+      "date": "2026-12-01",
+      "sendOn": "2026-11-29",
+      "when": "Tuesday, December 1",
+      "text": "Registration opens for the 2027 summer dance camps."
+    },
+    {
+      "id": "campreg-philadelphia-ballet-camps-2026-12-01-day",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "philadelphia-ballet-camps"
+      ],
+      "title": "School of Philadelphia Ballet dance camps",
+      "url": "https://phillyafterschool.org/programs/school-of-philadelphia-ballet/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "today",
+      "date": "2026-12-01",
+      "sendOn": "2026-12-01",
+      "when": "Today, Tuesday, December 1",
+      "text": "Registration opens for the 2027 summer dance camps."
+    },
+    {
+      "id": "campreg-philadelphia-ballet-camps-2026-12-01-eve",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "philadelphia-ballet-camps"
+      ],
+      "title": "School of Philadelphia Ballet dance camps",
+      "url": "https://phillyafterschool.org/programs/school-of-philadelphia-ballet/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "soon",
+      "date": "2026-12-01",
+      "sendOn": "2026-11-30",
+      "expires": "2026-11-30",
+      "when": "Tomorrow, Tuesday, December 1",
+      "text": "Registration opens for the 2027 summer dance camps."
+    },
+    {
+      "id": "campreg-philadelphia-dance-academy-2026-12-01",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "philadelphia-dance-academy"
+      ],
+      "title": "The Philadelphia Dance Academy",
+      "url": "https://phillyafterschool.org/programs/philadelphia-dance-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "register",
+      "date": "2026-12-01",
+      "sendOn": "2026-11-29",
+      "when": "Tuesday, December 1",
+      "text": "Summer 2027 enrollment opens."
+    },
+    {
+      "id": "campreg-philadelphia-dance-academy-2026-12-01-day",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "philadelphia-dance-academy"
+      ],
+      "title": "The Philadelphia Dance Academy",
+      "url": "https://phillyafterschool.org/programs/philadelphia-dance-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "today",
+      "date": "2026-12-01",
+      "sendOn": "2026-12-01",
+      "when": "Today, Tuesday, December 1",
+      "text": "Summer 2027 enrollment opens."
+    },
+    {
+      "id": "campreg-philadelphia-dance-academy-2026-12-01-eve",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "philadelphia-dance-academy"
+      ],
+      "title": "The Philadelphia Dance Academy",
+      "url": "https://phillyafterschool.org/programs/philadelphia-dance-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "soon",
+      "date": "2026-12-01",
+      "sendOn": "2026-11-30",
+      "expires": "2026-11-30",
+      "when": "Tomorrow, Tuesday, December 1",
+      "text": "Summer 2027 enrollment opens."
+    },
+    {
+      "id": "reg-fitness-alive-south-philly-2026-12-01",
+      "schools": [],
+      "programs": [
+        "fitness-alive-south-philly"
+      ],
+      "part": "weekend",
+      "title": "Fitness Alive: swim lessons in South Philly",
+      "url": "https://phillyafterschool.org/programs/fitness-alive-south-philly/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2026-12-01",
+      "sendOn": "2026-11-29",
+      "when": "Tuesday, December 1",
+      "text": "Spring swim session: early registration for returning fall swimmers."
+    },
+    {
+      "id": "reg-fitness-alive-south-philly-2026-12-01-day",
+      "schools": [],
+      "programs": [
+        "fitness-alive-south-philly"
+      ],
+      "part": "weekend",
+      "title": "Fitness Alive: swim lessons in South Philly",
+      "url": "https://phillyafterschool.org/programs/fitness-alive-south-philly/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2026-12-01",
+      "sendOn": "2026-12-01",
+      "when": "Today, Tuesday, December 1",
+      "text": "Spring swim session: early registration for returning fall swimmers."
+    },
+    {
+      "id": "reg-fitness-alive-south-philly-2026-12-01-eve",
+      "schools": [],
+      "programs": [
+        "fitness-alive-south-philly"
+      ],
+      "part": "weekend",
+      "title": "Fitness Alive: swim lessons in South Philly",
+      "url": "https://phillyafterschool.org/programs/fitness-alive-south-philly/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "soon",
+      "date": "2026-12-01",
+      "sendOn": "2026-11-30",
+      "expires": "2026-11-30",
+      "when": "Tomorrow, Tuesday, December 1",
+      "text": "Spring swim session: early registration for returning fall swimmers."
+    },
+    {
+      "id": "reg-mister-johns-music-2026-12-01",
+      "schools": [
+        "nebinger",
+        "meredith",
+        "coppin",
+        "vare-washington",
+        "stanton",
+        "mccall",
+        "columbus-charter",
+        "marian-anderson"
+      ],
+      "programs": [
+        "mister-johns-music"
+      ],
+      "part": "after",
+      "title": "Mister John’s Music",
+      "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2026-12-01",
+      "sendOn": "2026-11-29",
+      "when": "Tuesday, December 1",
+      "text": "Winter/Spring balance is refundable until this day (50% until January 3)."
+    },
+    {
+      "id": "reg-mister-johns-music-2026-12-01-day",
+      "schools": [
+        "nebinger",
+        "meredith",
+        "coppin",
+        "vare-washington",
+        "stanton",
+        "mccall",
+        "columbus-charter",
+        "marian-anderson"
+      ],
+      "programs": [
+        "mister-johns-music"
+      ],
+      "part": "after",
+      "title": "Mister John’s Music",
+      "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2026-12-01",
+      "sendOn": "2026-12-01",
+      "when": "Today, Tuesday, December 1",
+      "text": "Winter/Spring balance is refundable until this day (50% until January 3)."
+    },
+    {
+      "id": "reg-mister-johns-music-2026-12-01-eve",
+      "schools": [
+        "nebinger",
+        "meredith",
+        "coppin",
+        "vare-washington",
+        "stanton",
+        "mccall",
+        "columbus-charter",
+        "marian-anderson"
+      ],
+      "programs": [
+        "mister-johns-music"
+      ],
+      "part": "after",
+      "title": "Mister John’s Music",
+      "url": "https://phillyafterschool.org/programs/mister-johns-music/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "soon",
+      "date": "2026-12-01",
+      "sendOn": "2026-11-30",
+      "expires": "2026-11-30",
+      "when": "Tomorrow, Tuesday, December 1",
+      "text": "Winter/Spring balance is refundable until this day (50% until January 3)."
+    },
+    {
+      "id": "reg-fitness-alive-south-philly-2026-12-02",
+      "schools": [],
+      "programs": [
+        "fitness-alive-south-philly"
+      ],
+      "part": "weekend",
+      "title": "Fitness Alive: swim lessons in South Philly",
+      "url": "https://phillyafterschool.org/programs/fitness-alive-south-philly/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2026-12-02",
+      "sendOn": "2026-11-29",
+      "when": "Wednesday, December 2",
+      "text": "Spring swim session: early registration for waitlisted swimmers."
+    },
+    {
+      "id": "reg-fitness-alive-south-philly-2026-12-02-day",
+      "schools": [],
+      "programs": [
+        "fitness-alive-south-philly"
+      ],
+      "part": "weekend",
+      "title": "Fitness Alive: swim lessons in South Philly",
+      "url": "https://phillyafterschool.org/programs/fitness-alive-south-philly/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2026-12-02",
+      "sendOn": "2026-12-02",
+      "when": "Today, Wednesday, December 2",
+      "text": "Spring swim session: early registration for waitlisted swimmers."
+    },
+    {
+      "id": "reg-fitness-alive-south-philly-2026-12-02-eve",
+      "schools": [],
+      "programs": [
+        "fitness-alive-south-philly"
+      ],
+      "part": "weekend",
+      "title": "Fitness Alive: swim lessons in South Philly",
+      "url": "https://phillyafterschool.org/programs/fitness-alive-south-philly/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "soon",
+      "date": "2026-12-02",
+      "sendOn": "2026-12-01",
+      "expires": "2026-12-01",
+      "when": "Tomorrow, Wednesday, December 2",
+      "text": "Spring swim session: early registration for waitlisted swimmers."
+    },
+    {
+      "id": "reg-fitness-alive-south-philly-2026-12-03",
+      "schools": [],
+      "programs": [
+        "fitness-alive-south-philly"
+      ],
+      "part": "weekend",
+      "title": "Fitness Alive: swim lessons in South Philly",
+      "url": "https://phillyafterschool.org/programs/fitness-alive-south-philly/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2026-12-03",
+      "sendOn": "2026-11-29",
+      "when": "Thursday, December 3",
+      "text": "Spring swim session: general registration opens."
+    },
+    {
+      "id": "reg-fitness-alive-south-philly-2026-12-03-day",
+      "schools": [],
+      "programs": [
+        "fitness-alive-south-philly"
+      ],
+      "part": "weekend",
+      "title": "Fitness Alive: swim lessons in South Philly",
+      "url": "https://phillyafterschool.org/programs/fitness-alive-south-philly/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2026-12-03",
+      "sendOn": "2026-12-03",
+      "when": "Today, Thursday, December 3",
+      "text": "Spring swim session: general registration opens."
+    },
+    {
+      "id": "reg-fitness-alive-south-philly-2026-12-03-eve",
+      "schools": [],
+      "programs": [
+        "fitness-alive-south-philly"
+      ],
+      "part": "weekend",
+      "title": "Fitness Alive: swim lessons in South Philly",
+      "url": "https://phillyafterschool.org/programs/fitness-alive-south-philly/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "soon",
+      "date": "2026-12-03",
+      "sendOn": "2026-12-02",
+      "expires": "2026-12-02",
+      "when": "Tomorrow, Thursday, December 3",
+      "text": "Spring swim session: general registration opens."
+    },
+    {
       "id": "reg-philly-art-center-qv-2026-12-07",
       "schools": [
         "nebinger",
@@ -3057,6 +3824,125 @@
       "sendOn": "2026-12-07",
       "when": "Today, Monday, December 7",
       "text": "Last day to change a Winter/Spring registration."
+    },
+    {
+      "id": "reg-philly-pack-2026-12-12",
+      "schools": [],
+      "programs": [
+        "philly-pack"
+      ],
+      "part": "weekend",
+      "title": "Philly PACK",
+      "url": "https://phillyafterschool.org/programs/philly-pack/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2026-12-12",
+      "sendOn": "2026-12-06",
+      "when": "Saturday, December 12",
+      "text": "Spring 2027 registration opens."
+    },
+    {
+      "id": "reg-philly-pack-2026-12-12-day",
+      "schools": [],
+      "programs": [
+        "philly-pack"
+      ],
+      "part": "weekend",
+      "title": "Philly PACK",
+      "url": "https://phillyafterschool.org/programs/philly-pack/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2026-12-12",
+      "sendOn": "2026-12-12",
+      "when": "Today, Saturday, December 12",
+      "text": "Spring 2027 registration opens."
+    },
+    {
+      "id": "reg-philly-pack-2026-12-12-eve",
+      "schools": [],
+      "programs": [
+        "philly-pack"
+      ],
+      "part": "weekend",
+      "title": "Philly PACK",
+      "url": "https://phillyafterschool.org/programs/philly-pack/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "soon",
+      "date": "2026-12-12",
+      "sendOn": "2026-12-11",
+      "expires": "2026-12-11",
+      "when": "Tomorrow, Saturday, December 12",
+      "text": "Spring 2027 registration opens."
+    },
+    {
+      "id": "reg-fleisher-art-memorial-2026-12-18",
+      "schools": [
+        "nebinger",
+        "meredith",
+        "coppin",
+        "vare-washington",
+        "mccall",
+        "kirkbride"
+      ],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "part": "after",
+      "title": "Fleisher Art Memorial",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2026-12-18",
+      "sendOn": "2026-12-13",
+      "when": "Friday, December 18",
+      "text": "Last day of winter term registration for new students."
+    },
+    {
+      "id": "reg-fleisher-art-memorial-2026-12-18-day",
+      "schools": [
+        "nebinger",
+        "meredith",
+        "coppin",
+        "vare-washington",
+        "mccall",
+        "kirkbride"
+      ],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "part": "after",
+      "title": "Fleisher Art Memorial",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2026-12-18",
+      "sendOn": "2026-12-18",
+      "when": "Today, Friday, December 18",
+      "text": "Last day of winter term registration for new students."
+    },
+    {
+      "id": "reg-fleisher-art-memorial-2026-12-18-eve",
+      "schools": [
+        "nebinger",
+        "meredith",
+        "coppin",
+        "vare-washington",
+        "mccall",
+        "kirkbride"
+      ],
+      "programs": [
+        "fleisher-art-memorial"
+      ],
+      "part": "after",
+      "title": "Fleisher Art Memorial",
+      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "soon",
+      "date": "2026-12-18",
+      "sendOn": "2026-12-17",
+      "expires": "2026-12-17",
+      "when": "Tomorrow, Friday, December 18",
+      "text": "Last day of winter term registration for new students."
     },
     {
       "id": "camp-arden-drama-school-2026-12-23",
@@ -3107,6 +3993,40 @@
       "title": "Elite Sports Factory: camp on a day off",
       "text": "School is closed (Winter recess). Elite Sports Factory has posted a camp for Dec 23, Dec 28, Dec 29 and Dec 30.",
       "url": "https://phillyafterschool.org/programs/elite-sports-factory/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-hudson-table-philadelphia-2026-12-23",
+      "kind": "camp",
+      "part": "off",
+      "date": "2026-12-23",
+      "sendOn": "2026-12-13",
+      "schools": [],
+      "programs": [
+        "hudson-table-philadelphia"
+      ],
+      "within": "off-2026-12-23",
+      "when": "Monday, December 28 to Wednesday, December 30",
+      "title": "Hudson Table: camp on a day off",
+      "text": "School is closed (Winter recess). Hudson Table has posted a camp for Dec 28, Dec 29 and Dec 30.",
+      "url": "https://phillyafterschool.org/programs/hudson-table-philadelphia/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-kids-on-12th-2026-12-23",
+      "kind": "camp",
+      "part": "off",
+      "date": "2026-12-23",
+      "sendOn": "2026-12-13",
+      "schools": [],
+      "programs": [
+        "kids-on-12th"
+      ],
+      "within": "off-2026-12-23",
+      "when": "Wednesday, December 23",
+      "title": "Kids on 12th: camp on a day off",
+      "text": "School is closed (Winter recess). Kids on 12th has posted a camp for Dec 23.",
+      "url": "https://phillyafterschool.org/programs/kids-on-12th/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -3222,9 +4142,205 @@
       "programs": [],
       "when": "Wednesday, December 23 to Friday, January 1",
       "title": "No school: Winter recess",
-      "text": "9 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The NeighborHub.",
+      "text": "11 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The NeighborHub.",
       "url": "https://phillyafterschool.org/days-off/winter-break-2026-12-23/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "campreg-macguffin-camps-2026-12-31",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "macguffin-camps"
+      ],
+      "title": "MacGuffin Theatre & Film Company",
+      "url": "https://phillyafterschool.org/programs/macguffin-theatre/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "register",
+      "date": "2026-12-31",
+      "sendOn": "2026-12-27",
+      "when": "Thursday, December 31",
+      "text": "Last day for $50 off the Youth Musical Theatre Camps."
+    },
+    {
+      "id": "campreg-macguffin-camps-2026-12-31-day",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "macguffin-camps"
+      ],
+      "title": "MacGuffin Theatre & Film Company",
+      "url": "https://phillyafterschool.org/programs/macguffin-theatre/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "today",
+      "date": "2026-12-31",
+      "sendOn": "2026-12-31",
+      "when": "Today, Thursday, December 31",
+      "text": "Last day for $50 off the Youth Musical Theatre Camps."
+    },
+    {
+      "id": "campreg-macguffin-camps-2026-12-31-eve",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "macguffin-camps"
+      ],
+      "title": "MacGuffin Theatre & Film Company",
+      "url": "https://phillyafterschool.org/programs/macguffin-theatre/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "soon",
+      "date": "2026-12-31",
+      "sendOn": "2026-12-30",
+      "expires": "2026-12-30",
+      "when": "Tomorrow, Thursday, December 31",
+      "text": "Last day for $50 off the Youth Musical Theatre Camps."
+    },
+    {
+      "id": "campreg-music-theatre-philly-camp-2026-12-31",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "music-theatre-philly-camp"
+      ],
+      "title": "Music Theatre Philly",
+      "url": "https://phillyafterschool.org/programs/music-theatre-philly/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "register",
+      "date": "2026-12-31",
+      "sendOn": "2026-12-27",
+      "when": "Thursday, December 31",
+      "text": "Last day for 20% off all camps with code EARLYBIRD27 (register before January 1)."
+    },
+    {
+      "id": "campreg-music-theatre-philly-camp-2026-12-31-day",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "music-theatre-philly-camp"
+      ],
+      "title": "Music Theatre Philly",
+      "url": "https://phillyafterschool.org/programs/music-theatre-philly/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "today",
+      "date": "2026-12-31",
+      "sendOn": "2026-12-31",
+      "when": "Today, Thursday, December 31",
+      "text": "Last day for 20% off all camps with code EARLYBIRD27 (register before January 1)."
+    },
+    {
+      "id": "campreg-music-theatre-philly-camp-2026-12-31-eve",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "music-theatre-philly-camp"
+      ],
+      "title": "Music Theatre Philly",
+      "url": "https://phillyafterschool.org/programs/music-theatre-philly/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "soon",
+      "date": "2026-12-31",
+      "sendOn": "2026-12-30",
+      "expires": "2026-12-30",
+      "when": "Tomorrow, Thursday, December 31",
+      "text": "Last day for 20% off all camps with code EARLYBIRD27 (register before January 1)."
+    },
+    {
+      "id": "campreg-ymca-day-camps-2027-01-06",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "ymca-day-camps"
+      ],
+      "title": "Greater Philadelphia YMCA day camps",
+      "url": "https://phillyafterschool.org/summer-camps/ymca-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "register",
+      "date": "2027-01-06",
+      "sendOn": "2027-01-03",
+      "when": "Wednesday, January 6",
+      "text": "Summer 2027 day camp sign-ups open for family memberships."
+    },
+    {
+      "id": "campreg-ymca-day-camps-2027-01-06-day",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "ymca-day-camps"
+      ],
+      "title": "Greater Philadelphia YMCA day camps",
+      "url": "https://phillyafterschool.org/summer-camps/ymca-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "today",
+      "date": "2027-01-06",
+      "sendOn": "2027-01-06",
+      "when": "Today, Wednesday, January 6",
+      "text": "Summer 2027 day camp sign-ups open for family memberships."
+    },
+    {
+      "id": "campreg-ymca-day-camps-2027-01-06-eve",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "ymca-day-camps"
+      ],
+      "title": "Greater Philadelphia YMCA day camps",
+      "url": "https://phillyafterschool.org/summer-camps/ymca-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "soon",
+      "date": "2027-01-06",
+      "sendOn": "2027-01-05",
+      "expires": "2027-01-05",
+      "when": "Tomorrow, Wednesday, January 6",
+      "text": "Summer 2027 day camp sign-ups open for family memberships."
+    },
+    {
+      "id": "campreg-ymca-day-camps-2027-01-13",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "ymca-day-camps"
+      ],
+      "title": "Greater Philadelphia YMCA day camps",
+      "url": "https://phillyafterschool.org/summer-camps/ymca-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "register",
+      "date": "2027-01-13",
+      "sendOn": "2027-01-10",
+      "when": "Wednesday, January 13",
+      "text": "Summer 2027 day camp sign-ups open for members."
+    },
+    {
+      "id": "campreg-ymca-day-camps-2027-01-13-day",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "ymca-day-camps"
+      ],
+      "title": "Greater Philadelphia YMCA day camps",
+      "url": "https://phillyafterschool.org/summer-camps/ymca-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "today",
+      "date": "2027-01-13",
+      "sendOn": "2027-01-13",
+      "when": "Today, Wednesday, January 13",
+      "text": "Summer 2027 day camp sign-ups open for members."
+    },
+    {
+      "id": "campreg-ymca-day-camps-2027-01-13-eve",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "ymca-day-camps"
+      ],
+      "title": "Greater Philadelphia YMCA day camps",
+      "url": "https://phillyafterschool.org/summer-camps/ymca-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "soon",
+      "date": "2027-01-13",
+      "sendOn": "2027-01-12",
+      "expires": "2027-01-12",
+      "when": "Tomorrow, Wednesday, January 13",
+      "text": "Summer 2027 day camp sign-ups open for members."
     },
     {
       "id": "camp-butchers-sew-shop-2027-01-15",
@@ -3258,6 +4374,23 @@
       "title": "Elite Sports Factory: camp on a day off",
       "text": "School is closed (Staff professional development). Elite Sports Factory has posted a camp.",
       "url": "https://phillyafterschool.org/programs/elite-sports-factory/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-kids-on-12th-2027-01-15",
+      "kind": "camp",
+      "part": "off",
+      "date": "2027-01-15",
+      "sendOn": "2027-01-03",
+      "schools": [],
+      "programs": [
+        "kids-on-12th"
+      ],
+      "within": "off-2027-01-15",
+      "when": "Friday, January 15",
+      "title": "Kids on 12th: camp on a day off",
+      "text": "School is closed (Staff professional development). Kids on 12th has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/kids-on-12th/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -3356,9 +4489,26 @@
       "programs": [],
       "when": "Friday, January 15",
       "title": "No school: Staff professional development",
-      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "text": "8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/staff-professional-development-2027-01-15/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-arden-drama-school-2027-01-18",
+      "kind": "camp",
+      "part": "off",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [],
+      "programs": [
+        "arden-drama-school"
+      ],
+      "within": "off-2027-01-18",
+      "when": "Monday, January 18",
+      "title": "Arden Drama School: camp on a day off",
+      "text": "School is closed (Dr. Martin Luther King Jr. Day). Arden Drama School has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/arden-drama-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "camp-butchers-sew-shop-2027-01-18",
@@ -3392,6 +4542,23 @@
       "title": "Elite Sports Factory: camp on a day off",
       "text": "School is closed (Dr. Martin Luther King Jr. Day). Elite Sports Factory has posted a camp.",
       "url": "https://phillyafterschool.org/programs/elite-sports-factory/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-kids-on-12th-2027-01-18",
+      "kind": "camp",
+      "part": "off",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [],
+      "programs": [
+        "kids-on-12th"
+      ],
+      "within": "off-2027-01-18",
+      "when": "Monday, January 18",
+      "title": "Kids on 12th: camp on a day off",
+      "text": "School is closed (Dr. Martin Luther King Jr. Day). Kids on 12th has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/kids-on-12th/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -3456,9 +4623,90 @@
       "programs": [],
       "when": "Monday, January 18",
       "title": "No school: Dr. Martin Luther King Jr. Day",
-      "text": "5 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "text": "7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/dr-martin-luther-king-jr-day-2027-01-18/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "campreg-ymca-day-camps-2027-01-20",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "ymca-day-camps"
+      ],
+      "title": "Greater Philadelphia YMCA day camps",
+      "url": "https://phillyafterschool.org/summer-camps/ymca-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "register",
+      "date": "2027-01-20",
+      "sendOn": "2027-01-17",
+      "when": "Wednesday, January 20",
+      "text": "Summer 2027 day camp sign-ups open for non-members."
+    },
+    {
+      "id": "campreg-ymca-day-camps-2027-01-20-day",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "ymca-day-camps"
+      ],
+      "title": "Greater Philadelphia YMCA day camps",
+      "url": "https://phillyafterschool.org/summer-camps/ymca-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "today",
+      "date": "2027-01-20",
+      "sendOn": "2027-01-20",
+      "when": "Today, Wednesday, January 20",
+      "text": "Summer 2027 day camp sign-ups open for non-members."
+    },
+    {
+      "id": "campreg-ymca-day-camps-2027-01-20-eve",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "ymca-day-camps"
+      ],
+      "title": "Greater Philadelphia YMCA day camps",
+      "url": "https://phillyafterschool.org/summer-camps/ymca-day-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "soon",
+      "date": "2027-01-20",
+      "sendOn": "2027-01-19",
+      "expires": "2027-01-19",
+      "when": "Tomorrow, Wednesday, January 20",
+      "text": "Summer 2027 day camp sign-ups open for non-members."
+    },
+    {
+      "id": "campreg-awbury-adventures-2027-01-25",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "awbury-adventures"
+      ],
+      "title": "Awbury Adventures at Awbury Arboretum",
+      "url": "https://phillyafterschool.org/programs/awbury-arboretum/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "register",
+      "date": "2027-01-25",
+      "sendOn": "2027-01-24",
+      "when": "Monday, January 25",
+      "text": "Member registration for summer 2027 opens at 9 am."
+    },
+    {
+      "id": "campreg-awbury-adventures-2027-01-25-day",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "awbury-adventures"
+      ],
+      "title": "Awbury Adventures at Awbury Arboretum",
+      "url": "https://phillyafterschool.org/programs/awbury-arboretum/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "today",
+      "date": "2027-01-25",
+      "sendOn": "2027-01-25",
+      "when": "Today, Monday, January 25",
+      "text": "Member registration for summer 2027 opens at 9 am."
     },
     {
       "id": "camp-butchers-sew-shop-2027-01-29",
@@ -3492,6 +4740,23 @@
       "title": "Elite Sports Factory: camp on a day off",
       "text": "School is closed (Report card conferences). Elite Sports Factory has posted a camp.",
       "url": "https://phillyafterschool.org/programs/elite-sports-factory/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-kids-on-12th-2027-01-29",
+      "kind": "camp",
+      "part": "off",
+      "date": "2027-01-29",
+      "sendOn": "2027-01-17",
+      "schools": [],
+      "programs": [
+        "kids-on-12th"
+      ],
+      "within": "off-2027-01-29",
+      "when": "Friday, January 29",
+      "title": "Kids on 12th: camp on a day off",
+      "text": "School is closed (Report card conferences). Kids on 12th has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/kids-on-12th/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -3590,9 +4855,122 @@
       "programs": [],
       "when": "Friday, January 29",
       "title": "No school: Report card conferences",
-      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "text": "8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/report-card-conferences-2027-01-29/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "reg-moore-young-artists-workshop-2027-01-29",
+      "schools": [],
+      "programs": [
+        "moore-young-artists-workshop"
+      ],
+      "part": "weekend",
+      "title": "Moore Young Artists Workshop",
+      "url": "https://phillyafterschool.org/programs/moore-young-artists-workshop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2027-01-29",
+      "sendOn": "2027-01-24",
+      "when": "Friday, January 29",
+      "text": "Spring 2027 courses: registration deadline."
+    },
+    {
+      "id": "reg-moore-young-artists-workshop-2027-01-29-day",
+      "schools": [],
+      "programs": [
+        "moore-young-artists-workshop"
+      ],
+      "part": "weekend",
+      "title": "Moore Young Artists Workshop",
+      "url": "https://phillyafterschool.org/programs/moore-young-artists-workshop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2027-01-29",
+      "sendOn": "2027-01-29",
+      "when": "Today, Friday, January 29",
+      "text": "Spring 2027 courses: registration deadline."
+    },
+    {
+      "id": "reg-moore-young-artists-workshop-2027-01-29-eve",
+      "schools": [],
+      "programs": [
+        "moore-young-artists-workshop"
+      ],
+      "part": "weekend",
+      "title": "Moore Young Artists Workshop",
+      "url": "https://phillyafterschool.org/programs/moore-young-artists-workshop/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "soon",
+      "date": "2027-01-29",
+      "sendOn": "2027-01-28",
+      "expires": "2027-01-28",
+      "when": "Tomorrow, Friday, January 29",
+      "text": "Spring 2027 courses: registration deadline."
+    },
+    {
+      "id": "campreg-awbury-adventures-2027-02-01",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "awbury-adventures"
+      ],
+      "title": "Awbury Adventures at Awbury Arboretum",
+      "url": "https://phillyafterschool.org/programs/awbury-arboretum/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "register",
+      "date": "2027-02-01",
+      "sendOn": "2027-01-31",
+      "when": "Monday, February 1",
+      "text": "Registration for summer 2027 opens at 9 am."
+    },
+    {
+      "id": "campreg-awbury-adventures-2027-02-01-day",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "awbury-adventures"
+      ],
+      "title": "Awbury Adventures at Awbury Arboretum",
+      "url": "https://phillyafterschool.org/programs/awbury-arboretum/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "today",
+      "date": "2027-02-01",
+      "sendOn": "2027-02-01",
+      "when": "Today, Monday, February 1",
+      "text": "Registration for summer 2027 opens at 9 am."
+    },
+    {
+      "id": "campreg-esf-camps-2027-02-01",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "esf-camps"
+      ],
+      "title": "ESF Camps",
+      "url": "https://phillyafterschool.org/summer-camps/esf-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "register",
+      "date": "2027-02-01",
+      "sendOn": "2027-01-31",
+      "when": "Monday, February 1",
+      "text": "Last day of early-bird tuition ($645 a week; $695 after)."
+    },
+    {
+      "id": "campreg-esf-camps-2027-02-01-day",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "esf-camps"
+      ],
+      "title": "ESF Camps",
+      "url": "https://phillyafterschool.org/summer-camps/esf-camps/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the camp",
+      "kind": "today",
+      "date": "2027-02-01",
+      "sendOn": "2027-02-01",
+      "when": "Today, Monday, February 1",
+      "text": "Last day of early-bird tuition ($645 a week; $695 after)."
     },
     {
       "id": "camp-butchers-sew-shop-2027-02-12",
@@ -3626,6 +5004,23 @@
       "title": "Elite Sports Factory: camp on a day off",
       "text": "School is closed (Staff professional development). Elite Sports Factory has posted a camp.",
       "url": "https://phillyafterschool.org/programs/elite-sports-factory/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-kids-on-12th-2027-02-12",
+      "kind": "camp",
+      "part": "off",
+      "date": "2027-02-12",
+      "sendOn": "2027-01-31",
+      "schools": [],
+      "programs": [
+        "kids-on-12th"
+      ],
+      "within": "off-2027-02-12",
+      "when": "Friday, February 12",
+      "title": "Kids on 12th: camp on a day off",
+      "text": "School is closed (Staff professional development). Kids on 12th has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/kids-on-12th/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -3724,9 +5119,26 @@
       "programs": [],
       "when": "Friday, February 12",
       "title": "No school: Staff professional development",
-      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "text": "8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/staff-professional-development-2027-02-12/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "camp-arden-drama-school-2027-02-15",
+      "kind": "camp",
+      "part": "off",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [],
+      "programs": [
+        "arden-drama-school"
+      ],
+      "within": "off-2027-02-15",
+      "when": "Monday, February 15",
+      "title": "Arden Drama School: camp on a day off",
+      "text": "School is closed (Presidents’ Day). Arden Drama School has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/arden-drama-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "camp-awbury-arboretum-2027-02-15",
@@ -3794,6 +5206,23 @@
       "title": "Fleisher Art Memorial: camp on a day off",
       "text": "School is closed (Presidents’ Day). Fleisher Art Memorial has posted a camp.",
       "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-kids-on-12th-2027-02-15",
+      "kind": "camp",
+      "part": "off",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [],
+      "programs": [
+        "kids-on-12th"
+      ],
+      "within": "off-2027-02-15",
+      "when": "Monday, February 15",
+      "title": "Kids on 12th: camp on a day off",
+      "text": "School is closed (Presidents’ Day). Kids on 12th has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/kids-on-12th/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -3865,6 +5294,23 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-walnut-street-theatre-school-2027-02-15",
+      "kind": "camp",
+      "part": "off",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [],
+      "programs": [
+        "walnut-street-theatre-school"
+      ],
+      "within": "off-2027-02-15",
+      "when": "Monday, February 15",
+      "title": "Walnut Street Theatre School: camp on a day off",
+      "text": "School is closed (Presidents’ Day). Walnut Street Theatre School has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/walnut-street-theatre-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2027-02-15",
       "kind": "dayoff",
       "date": "2027-02-15",
@@ -3875,9 +5321,130 @@
       "programs": [],
       "when": "Monday, February 15",
       "title": "No school: Presidents’ Day",
-      "text": "8 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps and The Schuylkill Center for Environmental Education.",
+      "text": "11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
       "url": "https://phillyafterschool.org/days-off/presidents-day-2027-02-15/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "reg-philadelphia-dance-academy-2027-02-15",
+      "schools": [
+        "mccall"
+      ],
+      "programs": [
+        "philadelphia-dance-academy"
+      ],
+      "part": "after",
+      "title": "The Philadelphia Dance Academy",
+      "url": "https://phillyafterschool.org/programs/philadelphia-dance-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2027-02-15",
+      "sendOn": "2027-02-14",
+      "when": "Monday, February 15",
+      "text": "Last day to enroll in most classes for 2026–27 (tuition prorated)."
+    },
+    {
+      "id": "reg-philadelphia-dance-academy-2027-02-15-day",
+      "schools": [
+        "mccall"
+      ],
+      "programs": [
+        "philadelphia-dance-academy"
+      ],
+      "part": "after",
+      "title": "The Philadelphia Dance Academy",
+      "url": "https://phillyafterschool.org/programs/philadelphia-dance-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2027-02-15",
+      "sendOn": "2027-02-15",
+      "when": "Today, Monday, February 15",
+      "text": "Last day to enroll in most classes for 2026–27 (tuition prorated)."
+    },
+    {
+      "id": "reg-philadelphia-dance-academy-2027-03-01",
+      "schools": [
+        "mccall"
+      ],
+      "programs": [
+        "philadelphia-dance-academy"
+      ],
+      "part": "after",
+      "title": "The Philadelphia Dance Academy",
+      "url": "https://phillyafterschool.org/programs/philadelphia-dance-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2027-03-01",
+      "sendOn": "2027-02-28",
+      "when": "Monday, March 1",
+      "text": "Last day to enroll in Creative Movement and Dance Together for 2026–27."
+    },
+    {
+      "id": "reg-philadelphia-dance-academy-2027-03-01-day",
+      "schools": [
+        "mccall"
+      ],
+      "programs": [
+        "philadelphia-dance-academy"
+      ],
+      "part": "after",
+      "title": "The Philadelphia Dance Academy",
+      "url": "https://phillyafterschool.org/programs/philadelphia-dance-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2027-03-01",
+      "sendOn": "2027-03-01",
+      "when": "Today, Monday, March 1",
+      "text": "Last day to enroll in Creative Movement and Dance Together for 2026–27."
+    },
+    {
+      "id": "reg-school-of-philadelphia-ballet-2027-03-01",
+      "schools": [],
+      "programs": [
+        "school-of-philadelphia-ballet"
+      ],
+      "part": "weekend",
+      "title": "School of Philadelphia Ballet",
+      "url": "https://phillyafterschool.org/programs/school-of-philadelphia-ballet/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2027-03-01",
+      "sendOn": "2027-02-28",
+      "when": "Monday, March 1",
+      "text": "Children’s Program: enrollment for 2026–27 closes."
+    },
+    {
+      "id": "reg-school-of-philadelphia-ballet-2027-03-01-day",
+      "schools": [],
+      "programs": [
+        "school-of-philadelphia-ballet"
+      ],
+      "part": "weekend",
+      "title": "School of Philadelphia Ballet",
+      "url": "https://phillyafterschool.org/programs/school-of-philadelphia-ballet/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2027-03-01",
+      "sendOn": "2027-03-01",
+      "when": "Today, Monday, March 1",
+      "text": "Children’s Program: enrollment for 2026–27 closes."
+    },
+    {
+      "id": "camp-arden-drama-school-2027-03-10",
+      "kind": "camp",
+      "part": "off",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [],
+      "programs": [
+        "arden-drama-school"
+      ],
+      "within": "off-2027-03-10",
+      "when": "Wednesday, March 10",
+      "title": "Arden Drama School: camp on a day off",
+      "text": "School is closed (Eid al-Fitr). Arden Drama School has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/arden-drama-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "camp-awbury-arboretum-2027-03-10",
@@ -3928,6 +5495,23 @@
       "title": "Fleisher Art Memorial: camp on a day off",
       "text": "School is closed (Eid al-Fitr). Fleisher Art Memorial has posted a camp.",
       "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-kids-on-12th-2027-03-10",
+      "kind": "camp",
+      "part": "off",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [],
+      "programs": [
+        "kids-on-12th"
+      ],
+      "within": "off-2027-03-10",
+      "when": "Wednesday, March 10",
+      "title": "Kids on 12th: camp on a day off",
+      "text": "School is closed (Eid al-Fitr). Kids on 12th has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/kids-on-12th/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -4026,9 +5610,41 @@
       "programs": [],
       "when": "Wednesday, March 10",
       "title": "No school: Eid al-Fitr",
-      "text": "8 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "text": "10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/eid-al-fitr-2027-03-10/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "reg-blue-chip-flag-south-philadelphia-2027-03-15",
+      "schools": [],
+      "programs": [
+        "blue-chip-flag-south-philadelphia"
+      ],
+      "part": "weekend",
+      "title": "Blue Chip Flag football, South Philadelphia",
+      "url": "https://phillyafterschool.org/programs/blue-chip-flag-south-philadelphia/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2027-03-15",
+      "sendOn": "2027-03-14",
+      "when": "Monday, March 15",
+      "text": "Spring 2027 registration closes."
+    },
+    {
+      "id": "reg-blue-chip-flag-south-philadelphia-2027-03-15-day",
+      "schools": [],
+      "programs": [
+        "blue-chip-flag-south-philadelphia"
+      ],
+      "part": "weekend",
+      "title": "Blue Chip Flag football, South Philadelphia",
+      "url": "https://phillyafterschool.org/programs/blue-chip-flag-south-philadelphia/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2027-03-15",
+      "sendOn": "2027-03-15",
+      "when": "Today, Monday, March 15",
+      "text": "Spring 2027 registration closes."
     },
     {
       "id": "camp-butchers-sew-shop-2027-03-22",
@@ -4079,6 +5695,23 @@
       "title": "Fleisher Art Memorial: camp on a day off",
       "text": "School is closed (Spring recess and Good Friday). Fleisher Art Memorial has posted a camp.",
       "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-kids-on-12th-2027-03-22",
+      "kind": "camp",
+      "part": "off",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [],
+      "programs": [
+        "kids-on-12th"
+      ],
+      "within": "off-2027-03-22",
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "Kids on 12th: camp on a day off",
+      "text": "School is closed (Spring recess and Good Friday). Kids on 12th has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/kids-on-12th/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -4211,7 +5844,7 @@
       "programs": [],
       "when": "Monday, March 22 to Friday, March 26",
       "title": "No school: Spring recess and Good Friday",
-      "text": "10 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "text": "11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/spring-break-and-good-friday-2027-03-22/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -4247,6 +5880,23 @@
       "title": "Elite Sports Factory: camp on a day off",
       "text": "School is closed (Staff professional development). Elite Sports Factory has posted a camp.",
       "url": "https://phillyafterschool.org/programs/elite-sports-factory/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-kids-on-12th-2027-03-29",
+      "kind": "camp",
+      "part": "off",
+      "date": "2027-03-29",
+      "sendOn": "2027-03-14",
+      "schools": [],
+      "programs": [
+        "kids-on-12th"
+      ],
+      "within": "off-2027-03-29",
+      "when": "Monday, March 29",
+      "title": "Kids on 12th: camp on a day off",
+      "text": "School is closed (Staff professional development). Kids on 12th has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/kids-on-12th/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -4328,7 +5978,7 @@
       "programs": [],
       "when": "Monday, March 29",
       "title": "No school: Staff professional development",
-      "text": "6 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/staff-professional-development-2027-03-29/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -4381,6 +6031,23 @@
       "title": "Fleisher Art Memorial: camp on a day off",
       "text": "School is closed (Report card conferences). Fleisher Art Memorial has posted a camp.",
       "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-kids-on-12th-2027-04-16",
+      "kind": "camp",
+      "part": "off",
+      "date": "2027-04-16",
+      "sendOn": "2027-04-04",
+      "schools": [],
+      "programs": [
+        "kids-on-12th"
+      ],
+      "within": "off-2027-04-16",
+      "when": "Friday, April 16",
+      "title": "Kids on 12th: camp on a day off",
+      "text": "School is closed (Report card conferences). Kids on 12th has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/kids-on-12th/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -4462,9 +6129,64 @@
       "programs": [],
       "when": "Friday, April 16",
       "title": "No school: Report card conferences",
-      "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "text": "8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/report-card-conferences-2027-04-16/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "reg-philadelphia-dance-academy-2027-05-15",
+      "schools": [
+        "mccall"
+      ],
+      "programs": [
+        "philadelphia-dance-academy"
+      ],
+      "part": "after",
+      "title": "The Philadelphia Dance Academy",
+      "url": "https://phillyafterschool.org/programs/philadelphia-dance-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "register",
+      "date": "2027-05-15",
+      "sendOn": "2027-05-09",
+      "when": "Saturday, May 15",
+      "text": "Enrollment for the 2027–28 school year opens (expected, from the school’s stated May 15 rule)."
+    },
+    {
+      "id": "reg-philadelphia-dance-academy-2027-05-15-day",
+      "schools": [
+        "mccall"
+      ],
+      "programs": [
+        "philadelphia-dance-academy"
+      ],
+      "part": "after",
+      "title": "The Philadelphia Dance Academy",
+      "url": "https://phillyafterschool.org/programs/philadelphia-dance-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "today",
+      "date": "2027-05-15",
+      "sendOn": "2027-05-15",
+      "when": "Today, Saturday, May 15",
+      "text": "Enrollment for the 2027–28 school year opens (expected, from the school’s stated May 15 rule)."
+    },
+    {
+      "id": "reg-philadelphia-dance-academy-2027-05-15-eve",
+      "schools": [
+        "mccall"
+      ],
+      "programs": [
+        "philadelphia-dance-academy"
+      ],
+      "part": "after",
+      "title": "The Philadelphia Dance Academy",
+      "url": "https://phillyafterschool.org/programs/philadelphia-dance-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing",
+      "kind": "soon",
+      "date": "2027-05-15",
+      "sendOn": "2027-05-14",
+      "expires": "2027-05-14",
+      "when": "Tomorrow, Saturday, May 15",
+      "text": "Enrollment for the 2027–28 school year opens (expected, from the school’s stated May 15 rule)."
     },
     {
       "id": "camp-awbury-arboretum-2027-05-17",
@@ -4532,6 +6254,23 @@
       "title": "Fleisher Art Memorial: camp on a day off",
       "text": "School is closed (Eid al-Adha). Fleisher Art Memorial has posted a camp.",
       "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-kids-on-12th-2027-05-17",
+      "kind": "camp",
+      "part": "off",
+      "date": "2027-05-17",
+      "sendOn": "2027-05-02",
+      "schools": [],
+      "programs": [
+        "kids-on-12th"
+      ],
+      "within": "off-2027-05-17",
+      "when": "Monday, May 17",
+      "title": "Kids on 12th: camp on a day off",
+      "text": "School is closed (Eid al-Adha). Kids on 12th has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/kids-on-12th/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -4630,7 +6369,7 @@
       "programs": [],
       "when": "Monday, May 17",
       "title": "No school: Eid al-Adha",
-      "text": "9 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "text": "10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/eid-al-adha-2027-05-17/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -4700,6 +6439,23 @@
       "title": "Fleisher Art Memorial: camp on a day off",
       "text": "School is closed (Election Day). Fleisher Art Memorial has posted a camp.",
       "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-kids-on-12th-2027-05-18",
+      "kind": "camp",
+      "part": "off",
+      "date": "2027-05-18",
+      "sendOn": "2027-05-02",
+      "schools": [],
+      "programs": [
+        "kids-on-12th"
+      ],
+      "within": "off-2027-05-18",
+      "when": "Tuesday, May 18",
+      "title": "Kids on 12th: camp on a day off",
+      "text": "School is closed (Election Day). Kids on 12th has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/kids-on-12th/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -4798,7 +6554,7 @@
       "programs": [],
       "when": "Tuesday, May 18",
       "title": "No school: Election Day",
-      "text": "9 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "text": "10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/election-day-2027-05-18/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },

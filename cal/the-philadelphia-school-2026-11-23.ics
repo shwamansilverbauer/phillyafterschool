@@ -1,0 +1,27 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:the-philadelphia-school-2026-11-23@phillyafterschool.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20261123
+DTEND;VALUE=DATE:20261124
+SUMMARY:Camp TPS at The Philadelphia School: Camp TPS: Sprin
+ g Break Camp (March 22–26) registration opens
+DESCRIPTION:https://www.tpschool.org/tps-experience/camptps/
+ winter-break-camp?utm_source=phillyafterschool.org&utm_mediu
+ m=referral&utm_campaign=directory&utm_content=calendar\n\nFr
+ om Philly After School: https://phillyafterschool.org/
+URL:https://www.tpschool.org/tps-experience/camptps/winter-b
+ reak-camp
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Camp TPS at The Philadelphia School: Camp TPS: S
+ pring Break Camp (March 22–26) registration opens
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

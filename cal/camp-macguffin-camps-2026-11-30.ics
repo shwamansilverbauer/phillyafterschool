@@ -1,0 +1,29 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:camp-macguffin-camps-2026-11-30@phillyafterschool.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20261130
+DTEND;VALUE=DATE:20261201
+SUMMARY:MacGuffin Theatre & Film Company: Last day for $75 o
+ ff the teen Musical Theatre Camp and $50 off the one-week te
+ en camps
+DESCRIPTION:https://www.hisawyer.com/macguffin-theatre/sched
+ ules?schedule_id=camps&utm_source=phillyafterschool.org&utm_
+ medium=referral&utm_campaign=directory&utm_content=calendar\
+ n\nFrom Philly After School: https://phillyafterschool.org/
+URL:https://www.hisawyer.com/macguffin-theatre/schedules?sch
+ edule_id=camps
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:MacGuffin Theatre & Film Company: Last day for $
+ 75 off the teen Musical Theatre Camp and $50 off the one-wee
+ k teen camps
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

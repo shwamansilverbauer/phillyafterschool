@@ -1,0 +1,29 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:camp-philadelphia-ballet-camps-2026-12-01@phillyaftersch
+ ool.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
+SUMMARY:School of Philadelphia Ballet dance camps: Registrat
+ ion opens for the 2027 summer dance camps
+DESCRIPTION:https://philadelphiaballet.org/school/summer-pro
+ grams/philadelphia-summer-childrens-programs/?utm_source=phi
+ llyafterschool.org&utm_medium=referral&utm_campaign=director
+ y&utm_content=calendar\n\nFrom Philly After School: https://
+ phillyafterschool.org/
+URL:https://philadelphiaballet.org/school/summer-programs/ph
+ iladelphia-summer-childrens-programs/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:School of Philadelphia Ballet dance camps: Regis
+ tration opens for the 2027 summer dance camps
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

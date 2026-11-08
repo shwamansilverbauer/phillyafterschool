@@ -1,0 +1,27 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:camp-music-theatre-philly-camp-2026-12-31@phillyaftersch
+ ool.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20261231
+DTEND;VALUE=DATE:20270101
+SUMMARY:Music Theatre Philly: Last day for 20% off all camps
+  with code EARLYBIRD27 (register before January 1)
+DESCRIPTION:https://www.musictheatrephilly.com/1-6-camps?utm
+ _source=phillyafterschool.org&utm_medium=referral&utm_campai
+ gn=directory&utm_content=calendar\n\nFrom Philly After Schoo
+ l: https://phillyafterschool.org/
+URL:https://www.musictheatrephilly.com/1-6-camps
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Music Theatre Philly: Last day for 20% off all c
+ amps with code EARLYBIRD27 (register before January 1)
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

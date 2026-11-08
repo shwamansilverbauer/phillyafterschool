@@ -1,14 +1,14 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 182,
-    "pagesNeedingABrowser": 9,
-    "pagesNeedingAPerson": 5,
+    "pages": 190,
+    "pagesNeedingABrowser": 16,
+    "pagesNeedingAPerson": 7,
     "links": 171,
     "pickupLinks": 90,
-    "pickupOnAStoredList": 70,
-    "pickupFromAThirdPartyList": 4,
-    "pickupOnItsOwnSource": 16,
+    "pickupOnAStoredList": 75,
+    "pickupFromAThirdPartyList": 0,
+    "pickupOnItsOwnSource": 15,
     "pickupWithNothingBehindIt": 0,
     "pickupNotOnTheProvidersList": 1,
     "oldestCheck": "2026-10-05"
@@ -88,37 +88,6 @@
       }
     },
     {
-      "program": "columbus-square-rec",
-      "school": "coppin",
-      "relation": "pickup",
-      "checked": "2026-10-05",
-      "basis": "own-source"
-    },
-    {
-      "program": "coppin-clubs",
-      "school": "coppin",
-      "relation": "onsite",
-      "checked": "2026-10-05"
-    },
-    {
-      "program": "fleisher-art-memorial",
-      "school": "coppin",
-      "relation": "nearby",
-      "checked": "2026-10-05"
-    },
-    {
-      "program": "fleisher-art-memorial",
-      "school": "meredith",
-      "relation": "nearby",
-      "checked": "2026-10-05"
-    },
-    {
-      "program": "fleisher-art-memorial",
-      "school": "nebinger",
-      "relation": "nearby",
-      "checked": "2026-10-05"
-    },
-    {
       "program": "free-library-leap",
       "school": "meredith",
       "relation": "nearby",
@@ -128,12 +97,6 @@
       "program": "free-library-leap",
       "school": "nebinger",
       "relation": "nearby",
-      "checked": "2026-10-05"
-    },
-    {
-      "program": "girls-on-the-run",
-      "school": "nebinger",
-      "relation": "onsite",
       "checked": "2026-10-05"
     },
     {
@@ -147,60 +110,6 @@
       "program": "hawthorne-cultural-center",
       "school": "nebinger",
       "relation": "nearby",
-      "checked": "2026-10-05"
-    },
-    {
-      "program": "imagine-that-philly",
-      "school": "coppin",
-      "relation": "onsite",
-      "checked": "2026-10-05"
-    },
-    {
-      "program": "imagine-that-philly",
-      "school": "nebinger",
-      "relation": "onsite",
-      "checked": "2026-10-05"
-    },
-    {
-      "program": "makom-community",
-      "school": "nebinger",
-      "relation": "nearby",
-      "checked": "2026-10-05"
-    },
-    {
-      "program": "meredith-clubs",
-      "school": "meredith",
-      "relation": "onsite",
-      "checked": "2026-10-05"
-    },
-    {
-      "program": "mighty-writers-el-futuro",
-      "school": "coppin",
-      "relation": "nearby",
-      "checked": "2026-10-05"
-    },
-    {
-      "program": "mighty-writers-el-futuro",
-      "school": "meredith",
-      "relation": "nearby",
-      "checked": "2026-10-05"
-    },
-    {
-      "program": "mighty-writers-el-futuro",
-      "school": "nebinger",
-      "relation": "nearby",
-      "checked": "2026-10-05"
-    },
-    {
-      "program": "nebinger-arts-partners",
-      "school": "nebinger",
-      "relation": "onsite",
-      "checked": "2026-10-05"
-    },
-    {
-      "program": "nebinger-clubs",
-      "school": "nebinger",
-      "relation": "onsite",
       "checked": "2026-10-05"
     },
     {
@@ -234,58 +143,6 @@
       "checked": "2026-10-05"
     },
     {
-      "program": "beehive-at-bok",
-      "school": "coppin",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Beehive @ Bok, 2026-2027",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "beehive-at-bok",
-      "school": "kirkbride",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Beehive @ Bok, 2026-2027",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "beehive-at-bok",
-      "school": "nebinger",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Beehive @ Bok, 2026-2027",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "beehive-at-bok",
-      "school": "vare-washington",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Beehive @ Bok, 2026-2027",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
       "program": "butchers-sew-shop",
       "school": "coppin",
       "relation": "pickup",
@@ -332,115 +189,9 @@
         "how": "fetch",
         "by": "provider"
       }
-    },
-    {
-      "program": "coco-academy",
-      "school": "mccall",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village, 615 S 3rd St",
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "coco-academy",
-      "school": "meredith",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village, 615 S 3rd St",
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "coco-academy",
-      "school": "vare-washington",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village, 615 S 3rd St",
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "fleisher-art-memorial",
-      "school": "mccall",
-      "relation": "nearby",
-      "checked": "2026-10-06"
-    },
-    {
-      "program": "fleisher-art-memorial",
-      "school": "vare-washington",
-      "relation": "nearby",
-      "checked": "2026-10-06"
     },
     {
       "program": "free-library-leap",
-      "school": "vare-washington",
-      "relation": "nearby",
-      "checked": "2026-10-06"
-    },
-    {
-      "program": "girls-on-the-run",
-      "school": "mccall",
-      "relation": "onsite",
-      "checked": "2026-10-06"
-    },
-    {
-      "program": "kids-on-12th",
-      "school": "coppin",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "kids-on-12th",
-      "school": "mccall",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "makom-community",
-      "school": "vare-washington",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "2401 Washington Avenue",
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "mccall-clubs",
-      "school": "mccall",
-      "relation": "onsite",
-      "checked": "2026-10-06"
-    },
-    {
-      "program": "mighty-writers-el-futuro",
       "school": "vare-washington",
       "relation": "nearby",
       "checked": "2026-10-06"
@@ -453,235 +204,7 @@
       "basis": "list",
       "list": {
         "where": "2100 Chestnut St",
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "movemakers",
-      "school": "mccall",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "812 Chestnut St",
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "movemakers",
-      "school": "meredith",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "812 Chestnut St",
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "movemakers",
-      "school": "nebinger",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "812 Chestnut St",
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "old-pine",
-      "school": "mccall",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "old-pine",
-      "school": "meredith",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "old-pine",
-      "school": "nebinger",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "philly-art-center-qv",
-      "school": "coppin",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village Pickup Schools",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "philly-art-center-qv",
-      "school": "mccall",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village Pickup Schools",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "philly-art-center-qv",
-      "school": "meredith",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village Pickup Schools",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "philly-art-center-qv",
-      "school": "nebinger",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village Pickup Schools",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "philly-art-center-qv",
-      "school": "vare-washington",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village Pickup Schools",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "philly-inmovement",
-      "school": "coppin",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Bok, 1901 S 9th St",
-        "read": "2026-10-10",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "philly-inmovement",
-      "school": "mccall",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village, 500 Kenilworth St",
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "philly-inmovement",
-      "school": "meredith",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village, 500 Kenilworth St",
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "philly-inmovement",
-      "school": "nebinger",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village, 500 Kenilworth St",
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "settlement-kaleidoscope-plus",
-      "school": "mccall",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "settlement-kaleidoscope-plus",
-      "school": "meredith",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "settlement-kaleidoscope-plus",
-      "school": "nebinger",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "fetch",
         "by": "provider"
       }
@@ -699,144 +222,6 @@
       "checked": "2026-10-06"
     },
     {
-      "program": "sunrise-mccall",
-      "school": "mccall",
-      "relation": "onsite",
-      "checked": "2026-10-06"
-    },
-    {
-      "program": "zhang-sah",
-      "school": "coppin",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village, 530 Bainbridge St",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "zhang-sah",
-      "school": "mccall",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village, 530 Bainbridge St",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "zhang-sah",
-      "school": "meredith",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village, 530 Bainbridge St",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "zhang-sah",
-      "school": "nebinger",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village, 530 Bainbridge St",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "zhang-sah",
-      "school": "vare-washington",
-      "relation": "pickup",
-      "checked": "2026-10-06",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village, 530 Bainbridge St",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "dandelion-after-school",
-      "school": "coppin",
-      "relation": "pickup",
-      "checked": "2026-10-07",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-07",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "dandelion-after-school",
-      "school": "kirkbride",
-      "relation": "pickup",
-      "checked": "2026-10-07",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-07",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "dandelion-after-school",
-      "school": "nebinger",
-      "relation": "nearby",
-      "checked": "2026-10-07"
-    },
-    {
-      "program": "dandelion-after-school",
-      "school": "vare-washington",
-      "relation": "pickup",
-      "checked": "2026-10-07",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-07",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "music-theatre-philly",
-      "school": "mccall",
-      "relation": "nearby",
-      "checked": "2026-10-07"
-    },
-    {
-      "program": "philadelphia-dance-academy",
-      "school": "mccall",
-      "relation": "nearby",
-      "checked": "2026-10-09"
-    },
-    {
-      "program": "beehive-at-bok",
-      "school": "southwark",
-      "relation": "pickup",
-      "checked": "2026-10-10",
-      "basis": "list",
-      "list": {
-        "where": "Beehive @ Bok, 2026-2027",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
       "program": "butchers-sew-shop",
       "school": "columbus-charter",
       "relation": "nearby",
@@ -855,43 +240,6 @@
       }
     },
     {
-      "program": "columbus-square-rec",
-      "school": "columbus-charter",
-      "relation": "nearby",
-      "checked": "2026-10-10"
-    },
-    {
-      "program": "columbus-square-rec",
-      "school": "kirkbride",
-      "relation": "nearby",
-      "checked": "2026-10-10"
-    },
-    {
-      "program": "dandelion-after-school",
-      "school": "southwark",
-      "relation": "pickup",
-      "checked": "2026-10-10",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-07",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "east-passyunk-rec",
-      "school": "southwark",
-      "relation": "pickup",
-      "checked": "2026-10-10",
-      "basis": "own-source"
-    },
-    {
-      "program": "fleisher-art-memorial",
-      "school": "kirkbride",
-      "relation": "nearby",
-      "checked": "2026-10-10"
-    },
-    {
       "program": "free-library-leap",
       "school": "columbus-charter",
       "relation": "nearby",
@@ -901,35 +249,11 @@
       "program": "free-library-leap",
       "school": "kirkbride",
       "relation": "nearby",
-      "checked": "2026-10-10"
-    },
-    {
-      "program": "girls-on-the-run",
-      "school": "kirkbride",
-      "relation": "onsite",
       "checked": "2026-10-10"
     },
     {
       "program": "hawthorne-cultural-center",
       "school": "columbus-charter",
-      "relation": "nearby",
-      "checked": "2026-10-10"
-    },
-    {
-      "program": "kirkbride-clubs",
-      "school": "kirkbride",
-      "relation": "onsite",
-      "checked": "2026-10-10"
-    },
-    {
-      "program": "mighty-writers-el-futuro",
-      "school": "columbus-charter",
-      "relation": "nearby",
-      "checked": "2026-10-10"
-    },
-    {
-      "program": "mighty-writers-el-futuro",
-      "school": "kirkbride",
       "relation": "nearby",
       "checked": "2026-10-10"
     },
@@ -940,66 +264,9 @@
       "checked": "2026-10-10"
     },
     {
-      "program": "philly-art-center-qv",
-      "school": "southwark",
-      "relation": "pickup",
-      "checked": "2026-10-10",
-      "basis": "list",
-      "list": {
-        "where": "Queen Village Pickup Schools",
-        "read": "2026-10-06",
-        "how": "browser",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "philly-inmovement",
-      "school": "kirkbride",
-      "relation": "pickup",
-      "checked": "2026-10-10",
-      "basis": "list",
-      "list": {
-        "where": "Bok, 1901 S 9th St",
-        "read": "2026-10-10",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "philly-inmovement",
-      "school": "southwark",
-      "relation": "pickup",
-      "checked": "2026-10-10",
-      "basis": "list",
-      "list": {
-        "where": "Bok, 1901 S 9th St",
-        "read": "2026-10-10",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "southwark-clubs",
-      "school": "southwark",
-      "relation": "onsite",
-      "checked": "2026-10-10"
-    },
-    {
       "program": "starr-garden-rec",
       "school": "columbus-charter",
       "relation": "nearby",
-      "checked": "2026-10-10"
-    },
-    {
-      "program": "sunrise-kirkbride",
-      "school": "kirkbride",
-      "relation": "onsite",
-      "checked": "2026-10-10"
-    },
-    {
-      "program": "sunrise-southwark",
-      "school": "southwark",
-      "relation": "onsite",
       "checked": "2026-10-10"
     },
     {
@@ -1052,41 +319,10 @@
       "basis": "list",
       "list": {
         "where": "2401 Washington Avenue",
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "fetch",
         "by": "provider"
       }
-    },
-    {
-      "program": "makom-community",
-      "school": "stanton",
-      "relation": "pickup",
-      "checked": "2026-10-25",
-      "basis": "list",
-      "list": {
-        "where": "2401 Washington Avenue",
-        "read": "2026-10-06",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "sunrise-stanton",
-      "school": "stanton",
-      "relation": "onsite",
-      "checked": "2026-10-25"
-    },
-    {
-      "program": "vare-washington-clubs",
-      "school": "vare-washington",
-      "relation": "onsite",
-      "checked": "2026-10-25"
-    },
-    {
-      "program": "vare-washington-edey",
-      "school": "vare-washington",
-      "relation": "onsite",
-      "checked": "2026-10-25"
     },
     {
       "program": "christian-street-ymca",
@@ -1096,20 +332,404 @@
       "basis": "own-source"
     },
     {
+      "program": "mister-johns-music",
+      "school": "marian-anderson",
+      "relation": "pickup",
+      "checked": "2026-10-26",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "beehive-at-bok",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Beehive @ Bok, 2026-2027",
+        "read": "2026-11-01",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "beehive-at-bok",
+      "school": "kirkbride",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Beehive @ Bok, 2026-2027",
+        "read": "2026-11-01",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "beehive-at-bok",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Beehive @ Bok, 2026-2027",
+        "read": "2026-11-01",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "beehive-at-bok",
+      "school": "southwark",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Beehive @ Bok, 2026-2027",
+        "read": "2026-11-01",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "beehive-at-bok",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Beehive @ Bok, 2026-2027",
+        "read": "2026-11-01",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
       "program": "christian-street-ymca",
       "school": "stanton",
       "relation": "pickup",
-      "checked": "2026-10-26",
+      "checked": "2026-11-01",
       "basis": "own-source"
+    },
+    {
+      "program": "coco-academy",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 615 S 3rd St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "coco-academy",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 615 S 3rd St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "coco-academy",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 615 S 3rd St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "columbus-square-rec",
+      "school": "columbus-charter",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "columbus-square-rec",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "City finder listing for Columbus Square’s after school program",
+        "read": "2026-11-01",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "columbus-square-rec",
+      "school": "kirkbride",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "coppin-clubs",
+      "school": "coppin",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "dandelion-after-school",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "dandelion-after-school",
+      "school": "kirkbride",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "dandelion-after-school",
+      "school": "nebinger",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "dandelion-after-school",
+      "school": "southwark",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "dandelion-after-school",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "east-passyunk-rec",
+      "school": "southwark",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "own-source"
+    },
+    {
+      "program": "fleisher-art-memorial",
+      "school": "coppin",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "fleisher-art-memorial",
+      "school": "kirkbride",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "fleisher-art-memorial",
+      "school": "mccall",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "fleisher-art-memorial",
+      "school": "meredith",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "fleisher-art-memorial",
+      "school": "nebinger",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "fleisher-art-memorial",
+      "school": "vare-washington",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "kirkbride",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "mccall",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "nebinger",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "imagine-that-philly",
+      "school": "coppin",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "imagine-that-philly",
+      "school": "nebinger",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "kids-on-12th",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "kids-on-12th",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "kirkbride-clubs",
+      "school": "kirkbride",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "makom-community",
+      "school": "nebinger",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "makom-community",
+      "school": "stanton",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "2401 Washington Avenue",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "makom-community",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "2401 Washington Avenue",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "mccall-clubs",
+      "school": "mccall",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "meredith-clubs",
+      "school": "meredith",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "mighty-writers-el-futuro",
+      "school": "columbus-charter",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "mighty-writers-el-futuro",
+      "school": "coppin",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "mighty-writers-el-futuro",
+      "school": "kirkbride",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "mighty-writers-el-futuro",
+      "school": "meredith",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "mighty-writers-el-futuro",
+      "school": "nebinger",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "mighty-writers-el-futuro",
+      "school": "vare-washington",
+      "relation": "nearby",
+      "checked": "2026-11-01"
     },
     {
       "program": "mister-johns-music",
       "school": "columbus-charter",
       "relation": "pickup",
-      "checked": "2026-10-26",
+      "checked": "2026-11-01",
       "basis": "list",
       "list": {
-        "read": "2026-10-26",
+        "read": "2026-11-01",
         "how": "fetch",
         "by": "provider"
       }
@@ -1118,22 +738,10 @@
       "program": "mister-johns-music",
       "school": "coppin",
       "relation": "pickup",
-      "checked": "2026-10-26",
+      "checked": "2026-11-01",
       "basis": "list",
       "list": {
-        "read": "2026-10-26",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "mister-johns-music",
-      "school": "marian-anderson",
-      "relation": "pickup",
-      "checked": "2026-10-26",
-      "basis": "list",
-      "list": {
-        "read": "2026-10-26",
+        "read": "2026-11-01",
         "how": "fetch",
         "by": "provider"
       }
@@ -1142,10 +750,10 @@
       "program": "mister-johns-music",
       "school": "mccall",
       "relation": "pickup",
-      "checked": "2026-10-26",
+      "checked": "2026-11-01",
       "basis": "list",
       "list": {
-        "read": "2026-10-26",
+        "read": "2026-11-01",
         "how": "fetch",
         "by": "provider"
       }
@@ -1154,10 +762,10 @@
       "program": "mister-johns-music",
       "school": "meredith",
       "relation": "pickup",
-      "checked": "2026-10-26",
+      "checked": "2026-11-01",
       "basis": "list",
       "list": {
-        "read": "2026-10-26",
+        "read": "2026-11-01",
         "how": "fetch",
         "by": "provider"
       }
@@ -1166,10 +774,10 @@
       "program": "mister-johns-music",
       "school": "nebinger",
       "relation": "pickup",
-      "checked": "2026-10-26",
+      "checked": "2026-11-01",
       "basis": "list",
       "list": {
-        "read": "2026-10-26",
+        "read": "2026-11-01",
         "how": "fetch",
         "by": "provider"
       }
@@ -1178,10 +786,10 @@
       "program": "mister-johns-music",
       "school": "stanton",
       "relation": "pickup",
-      "checked": "2026-10-26",
+      "checked": "2026-11-01",
       "basis": "list",
       "list": {
-        "read": "2026-10-26",
+        "read": "2026-11-01",
         "how": "fetch",
         "by": "provider"
       }
@@ -1190,10 +798,408 @@
       "program": "mister-johns-music",
       "school": "vare-washington",
       "relation": "pickup",
-      "checked": "2026-10-26",
+      "checked": "2026-11-01",
       "basis": "list",
       "list": {
-        "read": "2026-10-26",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "movemakers",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "812 Chestnut St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "movemakers",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "812 Chestnut St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "movemakers",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "812 Chestnut St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "music-theatre-philly",
+      "school": "mccall",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "nebinger-arts-partners",
+      "school": "nebinger",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "nebinger-clubs",
+      "school": "nebinger",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "old-pine",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "old-pine",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "old-pine",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philadelphia-dance-academy",
+      "school": "mccall",
+      "relation": "nearby",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "philly-art-center-qv",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village Pickup Schools",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-art-center-qv",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village Pickup Schools",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-art-center-qv",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village Pickup Schools",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-art-center-qv",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village Pickup Schools",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-art-center-qv",
+      "school": "southwark",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village Pickup Schools",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-art-center-qv",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village Pickup Schools",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-inmovement",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Bok, 1901 S 9th St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-inmovement",
+      "school": "kirkbride",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Bok, 1901 S 9th St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-inmovement",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 500 Kenilworth St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-inmovement",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 500 Kenilworth St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-inmovement",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 500 Kenilworth St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-inmovement",
+      "school": "southwark",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Bok, 1901 S 9th St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "settlement-kaleidoscope-plus",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "settlement-kaleidoscope-plus",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "settlement-kaleidoscope-plus",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "southwark-clubs",
+      "school": "southwark",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "sunrise-kirkbride",
+      "school": "kirkbride",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "sunrise-mccall",
+      "school": "mccall",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "sunrise-southwark",
+      "school": "southwark",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "sunrise-stanton",
+      "school": "stanton",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "vare-washington-clubs",
+      "school": "vare-washington",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "vare-washington-edey",
+      "school": "vare-washington",
+      "relation": "onsite",
+      "checked": "2026-11-01"
+    },
+    {
+      "program": "zhang-sah",
+      "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 530 Bainbridge St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zhang-sah",
+      "school": "mccall",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 530 Bainbridge St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zhang-sah",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 530 Bainbridge St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zhang-sah",
+      "school": "nebinger",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 530 Bainbridge St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zhang-sah",
+      "school": "vare-washington",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 530 Bainbridge St",
+        "read": "2026-11-01",
         "how": "fetch",
         "by": "provider"
       }
@@ -1203,11 +1209,11 @@
       "school": "mccall",
       "relation": "pickup",
       "checked": "2026-11-04",
-      "basis": "third-party-list",
+      "basis": "list",
       "list": {
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "fetch",
-        "by": "third-party"
+        "by": "provider"
       }
     },
     {
@@ -1215,11 +1221,11 @@
       "school": "meredith",
       "relation": "pickup",
       "checked": "2026-11-04",
-      "basis": "third-party-list",
+      "basis": "list",
       "list": {
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "fetch",
-        "by": "third-party"
+        "by": "provider"
       }
     },
     {
@@ -1227,11 +1233,11 @@
       "school": "nebinger",
       "relation": "pickup",
       "checked": "2026-11-04",
-      "basis": "third-party-list",
+      "basis": "list",
       "list": {
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "fetch",
-        "by": "third-party"
+        "by": "provider"
       }
     },
     {
@@ -1239,11 +1245,11 @@
       "school": "vare-washington",
       "relation": "pickup",
       "checked": "2026-11-04",
-      "basis": "third-party-list",
+      "basis": "list",
       "list": {
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "fetch",
-        "by": "third-party"
+        "by": "provider"
       }
     },
     {
@@ -1418,7 +1424,7 @@
       "basis": "list",
       "list": {
         "where": "2401 Washington Avenue",
-        "read": "2026-10-06",
+        "read": "2026-11-01",
         "how": "fetch",
         "by": "provider"
       }
@@ -1679,8 +1685,8 @@
           "program": "philly-art-center-qv",
           "where": "Queen Village Pickup Schools",
           "text": "McCall, Meredith, Nebinger, Coppin, Southwark, Vare-Washington, Independence Charter",
-          "read": "2026-10-06",
-          "how": "browser",
+          "read": "2026-11-01",
+          "how": "fetch",
           "by": "provider"
         },
         {
@@ -1706,7 +1712,7 @@
           "program": "east-passyunk-rec",
           "where": "Southwark School’s list of programs that pick up",
           "text": "East Passyunk Rec Center, Beehive, Butcher Sew Shop, Dandelion Project, Philly Art Center, Philly InMovement",
-          "read": "2026-10-10",
+          "read": "2026-11-01",
           "how": "fetch",
           "by": "school"
         }
@@ -1727,15 +1733,6 @@
       "programs": [
         "girls-on-the-run",
         "marian-anderson-clubs"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://mccall.philasd.org/",
-      "how": "fetch",
-      "programs": [
-        "girls-on-the-run",
-        "mccall-clubs"
       ],
       "lists": []
     },
@@ -1787,8 +1784,8 @@
           "program": "zhang-sah",
           "where": "Queen Village, 530 Bainbridge St",
           "text": "Meredith, Jackson, CCS, Nebinger, McCall, ICS, St. Mary, St. Peter’s, Vare-Washington",
-          "read": "2026-10-06",
-          "how": "browser",
+          "read": "2026-11-01",
+          "how": "fetch",
           "by": "provider"
         },
         {
@@ -1860,15 +1857,17 @@
     },
     {
       "url": "https://bondsports.co/activity/programs/CO_ED-youth-OTHER/1321",
-      "how": "fetch",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns only 'Bond Sports Loading...', so Elite Sports Factory’s camp prices were not read.",
       "programs": [
         "elite-sports-factory"
       ],
       "lists": []
     },
     {
-      "url": "https://bookeo.com/beehivecommunity?type=41574EYC3LN19B4B8067C5",
-      "how": "fetch",
+      "url": "https://bookeo.com/beehivecommunity?type=415744R7TLN19E50C648C7",
+      "how": "person",
+      "why": "Bookeo's booking pages say automated access violates its terms and blocked the address for an hour on 2026-11-01, so Beehive's semester and full-day prices and dates are read by a person.",
       "programs": [
         "beehive-at-bok"
       ],
@@ -1932,7 +1931,8 @@
     },
     {
       "url": "https://campscui.active.com/orgs/PhieldHouse?orglink=camps-registration",
-      "how": "fetch",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch is redirected to an Active.com loader that returns no text, so Phield House’s vacation-day dates and prices were not read.",
       "programs": [
         "phield-house"
       ],
@@ -1947,7 +1947,7 @@
       "lists": []
     },
     {
-      "url": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100573",
+      "url": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100032&prodGroupId=100712",
       "how": "fetch",
       "programs": [
         "movemakers"
@@ -1955,7 +1955,15 @@
       "lists": []
     },
     {
-      "url": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100001&prodGroupId=100574",
+      "url": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100032&prodGroupId=100713",
+      "how": "fetch",
+      "programs": [
+        "movemakers"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100032&prodGroupId=100714",
       "how": "fetch",
       "programs": [
         "movemakers"
@@ -1979,7 +1987,7 @@
       "lists": []
     },
     {
-      "url": "https://docs.google.com/spreadsheets/d/1FGIV9bDa2OKzL1VZ5hgBb2JCFId4H3OI5_sPFBze_SY/edit?gid=0#gid=0",
+      "url": "https://docs.google.com/spreadsheets/d/1FGIV9bDa2OKzL1VZ5hgBb2JCFId4H3OI5_sPFBze_SY/edit?gid=966250841#gid=966250841",
       "how": "fetch",
       "programs": [
         "meredith-clubs"
@@ -2028,6 +2036,14 @@
     },
     {
       "url": "https://fitnessalivephilly.com/locations",
+      "how": "fetch",
+      "programs": [
+        "fitness-alive-south-philly"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://fitnessalivephilly.com/spring-session",
       "how": "fetch",
       "programs": [
         "fitness-alive-south-philly"
@@ -2132,7 +2148,7 @@
         {
           "program": "kids-on-12th",
           "text": "Independence Charter School (ICS), McCall Elementary School, Greenfield Elementary School, Russell Byers Elementary School, Fanny Jackson Coppin Elementary School, Folk Arts Cultural Treasures Charter School (FACTS)",
-          "read": "2026-10-06",
+          "read": "2026-11-01",
           "how": "fetch",
           "by": "provider"
         }
@@ -2147,8 +2163,17 @@
       "lists": []
     },
     {
-      "url": "https://libwww.freelibrary.org/programs/leap/",
+      "url": "https://ko12.org/school-calendar",
       "how": "fetch",
+      "programs": [
+        "kids-on-12th"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://libwww.freelibrary.org/programs/leap/",
+      "how": "person",
+      "why": "A plain fetch answered HTTP 403 twice on 2026-11-01, so the page must not be read with a workaround; Josh checks it.",
       "programs": [
         "free-library-leap"
       ],
@@ -2197,7 +2222,7 @@
           "program": "makom-community",
           "where": "2401 Washington Avenue",
           "text": "Greenfield Elementary School, GW Childs Elementary School, Independence Charter School, Marian Anderson Neighborhood Academy, Stanton Elementary School, The Philadelphia School, Wild Seeds ALC at The Dandelion Project, Vare Washington Elementary School",
-          "read": "2026-10-06",
+          "read": "2026-11-01",
           "how": "fetch",
           "by": "provider"
         }
@@ -2224,6 +2249,14 @@
       "how": "fetch",
       "programs": [
         "makom-community"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://mccall.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "mccall-clubs"
       ],
       "lists": []
     },
@@ -2269,14 +2302,14 @@
         {
           "program": "mister-johns-music",
           "text": "CCCS, Fanny Jackson Coppin, Independence Charter School, Marian Anderson, Meredith, McCall, Nebinger, Stanton (M/W/R only) and Vare-Washington",
-          "read": "2026-10-26",
+          "read": "2026-11-01",
           "how": "fetch",
           "by": "provider"
         }
       ]
     },
     {
-      "url": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/",
+      "url": "https://moore.edu/academics/youth-education/young-artists-workshop/spring-2027-youth-courses/",
       "how": "fetch",
       "programs": [
         "moore-young-artists-workshop"
@@ -2309,7 +2342,7 @@
         {
           "program": "old-pine",
           "text": "McCall, Meredith, Nebinger, and St. Peter’s elementary schools",
-          "read": "2026-10-06",
+          "read": "2026-11-01",
           "how": "fetch",
           "by": "provider"
         }
@@ -2563,7 +2596,7 @@
           "program": "philly-inmovement",
           "where": "Queen Village, 500 Kenilworth St",
           "text": "William M. Meredith, George W. Nebinger, General George A McCall, Independence Charter School (Wednesdays Only)",
-          "read": "2026-10-06",
+          "read": "2026-11-01",
           "how": "fetch",
           "by": "provider"
         },
@@ -2571,7 +2604,7 @@
           "program": "philly-inmovement",
           "where": "Bok, 1901 S 9th St",
           "text": "Fanny Jackson Coppin, Southwark School, Eliza B. Kirkbride",
-          "read": "2026-10-10",
+          "read": "2026-11-01",
           "how": "fetch",
           "by": "provider"
         }
@@ -2587,7 +2620,8 @@
     },
     {
       "url": "https://phillyyouthbasketball.leagueapps.com/classes/5096846-2026-27-sy-pyb-school-closure-holiday-clinics-grades-k-9",
-      "how": "fetch",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns only 'LeagueApps Member Portal', so PYB’s clinic prices were not read.",
       "programs": [
         "philadelphia-youth-basketball"
       ],
@@ -2603,7 +2637,8 @@
     },
     {
       "url": "https://portal.movementgyms.com/callowhill/programs/winter-break-camp",
-      "how": "fetch",
+      "how": "browser",
+      "why": "The portal’s text comes through a plain fetch but the session calendar is a JavaScript widget, so the exact camp dates on the Callowhill camp pages were not read.",
       "programs": [
         "movement-callowhill"
       ],
@@ -2619,6 +2654,14 @@
     },
     {
       "url": "https://schuylkillcenter.org/day-off-camps/",
+      "how": "fetch",
+      "programs": [
+        "schuylkill-center"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://schuylkillcenter.org/education/day-off-camps/",
       "how": "fetch",
       "programs": [
         "schuylkill-center"
@@ -2643,7 +2686,7 @@
         {
           "program": "settlement-kaleidoscope-plus",
           "text": "William M. Meredith Elementary School, George W. Nebinger Elementary School, and General George McCall Elementary School",
-          "read": "2026-10-06",
+          "read": "2026-11-01",
           "how": "fetch",
           "by": "provider"
         }
@@ -2674,7 +2717,7 @@
       "lists": []
     },
     {
-      "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4",
+      "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids5",
       "how": "fetch",
       "programs": [
         "walnut-street-theatre-school"
@@ -2693,7 +2736,7 @@
           "program": "beehive-at-bok",
           "where": "Beehive @ Bok, 2026-2027",
           "text": "Monday through Friday from Kirkbride, Coppin, Nebinger, Southwark, Jenks, and Vare Washington",
-          "read": "2026-10-06",
+          "read": "2026-11-01",
           "how": "browser",
           "by": "provider"
         },
@@ -2701,7 +2744,7 @@
           "program": "beehive-at-bok",
           "where": "Beehive @ Ethical Society, 2026-2027",
           "text": "Monday through Friday from MANA, Stanton, Greenfield and ICS",
-          "read": "2026-10-06",
+          "read": "2026-11-01",
           "how": "browser",
           "by": "provider"
         }
@@ -2752,7 +2795,7 @@
           "program": "coco-academy",
           "where": "Queen Village, 615 S 3rd St",
           "text": "McCall, Meredith, Vare-Washington, St. Mary’s, St. Peter’s",
-          "read": "2026-10-06",
+          "read": "2026-11-01",
           "how": "fetch",
           "by": "provider"
         }
@@ -2815,6 +2858,23 @@
       "lists": []
     },
     {
+      "url": "https://www.gotrphiladelphia.org/3rd-5th-grade-program-details",
+      "how": "fetch",
+      "programs": [
+        "girls-on-the-run"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.gotrphiladelphia.org/locations",
+      "how": "browser",
+      "why": "Team sites are an embedded map that does not come through a plain fetch.",
+      "programs": [
+        "girls-on-the-run"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.gotrphiladelphia.org/programs",
       "how": "fetch",
       "programs": [
@@ -2864,6 +2924,14 @@
       "lists": []
     },
     {
+      "url": "https://www.koreshdance.org/children-registration",
+      "how": "fetch",
+      "programs": [
+        "koresh-school-of-dance"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.kumon.com/south-philadelphia",
       "how": "person",
       "why": "On 2026-10-26 the center page answered HTTP 403 to the link sweep and was refused to a second automated reader, though it had read fine by plain fetch on 2026-10-16; the whole kumon.com site refused the same day.",
@@ -2891,7 +2959,7 @@
           "program": "movemakers",
           "where": "812 Chestnut St",
           "text": "McCall Elementary, Meredith Elementary, Nebinger Elementary",
-          "read": "2026-10-06",
+          "read": "2026-11-01",
           "how": "fetch",
           "by": "provider"
         },
@@ -2899,7 +2967,7 @@
           "program": "movemakers",
           "where": "2100 Chestnut St",
           "text": "Albert M. Greenfield School, Independence Charter School, Marian Anderson School",
-          "read": "2026-10-06",
+          "read": "2026-11-01",
           "how": "fetch",
           "by": "provider"
         }
@@ -3046,6 +3114,33 @@
       "lists": []
     },
     {
+      "url": "https://www.phila.gov/parks-rec-finder/#/activity/after-school-program/57d2f53af927e8cd4a9bcfaa",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "columbus-square-rec"
+      ],
+      "lists": [
+        {
+          "program": "columbus-square-rec",
+          "where": "City finder listing for Columbus Square’s after school program",
+          "text": "This program picks up students from Fanny Jackson Coppin Elementary School.",
+          "read": "2026-11-01",
+          "how": "browser",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://www.phila.gov/parks-rec-finder/#/location/east-passyunk-community-center/56a8f8787a8cee5e3a25b123",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "east-passyunk-rec"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.philadelphiamartialartsacademy.com/",
       "how": "fetch",
       "programs": [
@@ -3163,21 +3258,21 @@
       "programs": [
         "queen-and-rook"
       ],
-      "lists": []
+      "lists": [
+        {
+          "program": "queen-and-rook",
+          "text": "School pick up is available from Meredith Elementary School, McCall Elementary School, Nebinger Elementary School, St. Peter’s School, and Vare-Washington Elementary School. (Pickup from other schools may be available with enough interest!)",
+          "read": "2026-11-01",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
     },
     {
       "url": "https://www.sawubonacreativityproject.org/campinformationandschedules",
       "how": "fetch",
       "programs": [
         "sawubona-creativity-project"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://www.schuylkillcenter.org/education/day-off-camps/",
-      "how": "fetch",
-      "programs": [
-        "schuylkill-center"
       ],
       "lists": []
     },
@@ -3225,7 +3320,7 @@
         {
           "program": "dandelion-after-school",
           "text": "Coppin Elementary: Monday-Friday. Southwark Elementary: Monday, Thursday, Friday. Kirkbride Elementary: Monday-Friday. Vare-Washington Elementary: Monday Friday. If you are from a different South Philly school and are interested, reach out!",
-          "read": "2026-10-07",
+          "read": "2026-11-01",
           "how": "fetch",
           "by": "provider"
         }
@@ -3298,218 +3393,6 @@
   ],
   "weekend": [
     {
-      "program": "arden-drama-school",
-      "term": "Fall 2026: eight weeks to October 31, then a three-Saturday mini-semester November 7 to 21",
-      "checked": "2026-10-07",
-      "url": "https://ardentheatre.org/arden-drama-school",
-      "how": "fetch",
-      "look": "Classes are grouped by grade band under the eight-week and mini-semester headings, each with a “Saturdays” line and its own registration link."
-    },
-    {
-      "program": "franklin-institute-pacts",
-      "term": "During the school year, twice a month. The page gives no dates.",
-      "checked": "2026-10-07",
-      "url": "https://fi.edu/en/science-education/youth-and-community-programs/pacts",
-      "how": "fetch",
-      "look": "The program description gives the grades, the twice-monthly Saturday mornings and that it is free.",
-      "notes": "No dates, clock times or application deadline on the page."
-    },
-    {
-      "program": "koresh-school-of-dance",
-      "term": "Fall 2026: September 14 to December 12.",
-      "checked": "2026-10-07",
-      "url": "https://www.koreshdance.org/children-classes",
-      "how": "fetch",
-      "look": "The fall schedule is listed day by day with a Saturday block, and the tuition table sits below it.",
-      "notes": "The street address is on the school-info page, not this one."
-    },
-    {
-      "program": "macguffin-theatre",
-      "term": "Fall 2026: September 19 to November 7.",
-      "checked": "2026-10-07",
-      "url": "https://macguffintf.com/classes/fall-2026/youth-classes-ages-7-10/",
-      "how": "fetch",
-      "look": "Each class block lists its day, time, date range and tuition; ages 11–18 are on a sibling page.",
-      "notes": "The page address changes each term. Its Thursday classes meet in Fort Washington, outside the city."
-    },
-    {
-      "program": "made-institute-sunday-sewing",
-      "term": "Fall 2026: September 13 to December 20.",
-      "checked": "2026-10-07",
-      "url": "https://made-institute.com/weekend-sewing",
-      "how": "fetch",
-      "look": "Each of the two class blocks lists its ages, Sunday time, date range and monthly price."
-    },
-    {
-      "program": "mister-johns-music",
-      "term": "2026–27: fall runs August 31 to December 20, and winter and spring January 4 to June 13",
-      "checked": "2026-10-07",
-      "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
-      "how": "fetch",
-      "look": "Each instrument section lists its levels as lines like “Level, SATURDAYS at a time (age)”."
-    },
-    {
-      "program": "moore-young-artists-workshop",
-      "term": "Fall 2026: October 3 to December 12. Sign-up closed September 18.",
-      "checked": "2026-10-07",
-      "url": "https://moore.edu/academics/youth-education/young-artists-workshop/fall-2026-youth-courses/",
-      "how": "fetch",
-      "look": "The Program Details block gives the dates, grades and price; each course below says morning or afternoon.",
-      "notes": "The page address carries the term (fall-2026-youth-courses), so look for the spring page once fall ends."
-    },
-    {
-      "program": "movemakers",
-      "term": "2026–27 school year",
-      "checked": "2026-10-07",
-      "url": "https://www.movemakersphilly.com/schedule-390284.html",
-      "how": "fetch",
-      "look": "Each studio’s weekly schedule has a Saturday row listing times and class names."
-    },
-    {
-      "program": "music-theatre-philly",
-      "term": "Spring 2027: to June 4, starting January 31 for grades 1–4 and January 10 for grades 5–8",
-      "checked": "2026-10-07",
-      "url": "https://www.musictheatrephilly.com/grades-1-4",
-      "how": "fetch",
-      "look": "Classes are listed under day-of-week headings, which are images, each line giving class, grades, time and price. Repeat for the grades 5–8 page.",
-      "notes": "The day headings are images, so a plain text read loses them; the fetch tool reads them."
-    },
-    {
-      "program": "pafa-saturday-art",
-      "term": "Fall 2026: October 24 to December 12. Spring 2027: January 30 to April 17.",
-      "checked": "2026-10-07",
-      "url": "https://www.pafa.org/education/center-art-education/youth-family/saturday-studio-art-classes",
-      "how": "fetch",
-      "look": "Each term block gives its dates, the 10 am to noon time and the $480 price.",
-      "notes": "An older Young Artist Academy page on the same site still shows a 2025 class; ignore it."
-    },
-    {
-      "program": "penn-ice-rink",
-      "term": "2026–27: six sessions from September 13 to May 9. Session 2 runs October 18 to November 15 and session 3 November 22 to January 3.",
-      "checked": "2026-10-07",
-      "url": "https://icerink.business-services.upenn.edu/skating-lessons/group-lessons-5-years-old-through-adults",
-      "how": "fetch",
-      "look": "The body text gives the Sunday noon start, the six lists of session dates and the $175 fee.",
-      "notes": "Sessions fill and close; session 1 was full."
-    },
-    {
-      "program": "philadelphia-museum-of-art-kids",
-      "term": "Fall 2026: October 3 to December 12, with no class November 21 or 28. Sold out; spring 2027 sign-up opens in January.",
-      "checked": "2026-10-07",
-      "url": "https://www.philamuseum.org/events/art-kids-classes-7-8",
-      "how": "fetch",
-      "look": "The event description gives the Saturday date range, the two session times and the price with the member price.",
-      "notes": "Only the ages 7–8 page was read; the other groups have pages ending -3-4, -5-6 and -9-10. The weekend Art Kids Studio is a free drop-in, not this class."
-    },
-    {
-      "program": "philly-inmovement",
-      "term": "2026–27 school year: August 31 to June 13",
-      "checked": "2026-10-07",
-      "url": "https://phillyinmovement.com/school-aged-classes/",
-      "how": "fetch",
-      "look": "Days and times are in the Saturday column of the two linked school-aged schedule PDFs (Bok and Queen Village). Prices are in the weekend tuition table on the page.",
-      "notes": "The PDF grids read poorly: some Saturday slots come back without class names."
-    },
-    {
-      "program": "rock-school-for-dance",
-      "term": "2026–27 school year, September to June. A child must be the class age by August 31, 2026.",
-      "checked": "2026-10-07",
-      "url": "https://www.therockschool.org/pre-ballet",
-      "how": "fetch",
-      "look": "Each pre-ballet level is a block under the Philadelphia location with its tuition and its Saturday time.",
-      "notes": "The page also lists a West Chester location with similar times; use the Philadelphia blocks only."
-    },
-    {
-      "program": "school-of-philadelphia-ballet",
-      "term": "2026–27 school year, August 31 to June 6.",
-      "checked": "2026-10-07",
-      "url": "https://philadelphiaballet.org/school/childrens-programs/",
-      "how": "fetch",
-      "look": "A table lists each class with its ages, Saturday and Sunday times and monthly tuition.",
-      "notes": "Classes need a minimum enrollment to run. Ages 8 and up are on the student-programs page."
-    },
-    {
-      "program": "starfinder-saturday-soccer",
-      "term": "Fall and winter Saturdays. Dates are on its sign-up page.",
-      "checked": "2026-10-07",
-      "url": "https://starfinderfoundation.org/programs/middle-school-programs/",
-      "how": "fetch",
-      "look": "A Saturdays heading for Golazo Girls & Vamos Boys gives the ages and the $50 price.",
-      "notes": "Session dates and times are only on its RecDesk sign-up pages, which were not read."
-    },
-    {
-      "program": "temple-music-prep-cmsp",
-      "term": "2026–27: September to May. The upper division began September 12, the String and Brass & Wind Projects September 19.",
-      "checked": "2026-10-07",
-      "url": "https://boyer.temple.edu/community/temple-music-prep/programs/community-music-scholars-program",
-      "how": "fetch",
-      "look": "The day, building, start dates and fees are in the program description and the sections for each division.",
-      "notes": "Class times are not on the page. Temple Music Prep’s Center City class list loads by script and has not been read."
-    },
-    {
-      "program": "walnut-street-theatre-school",
-      "term": "Fall 2026: October 10 to December 19, with no class November 28",
-      "checked": "2026-10-07",
-      "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids4",
-      "how": "fetch",
-      "look": "Each class card shows the title with its age range, then the day, the time, the date range and the price.",
-      "notes": "The category address changes with the term (classes-for-kids4). The site’s home page loads by script and comes back empty."
-    },
-    {
-      "program": "wissahickon-skating-club",
-      "term": "Fall series I ran September to early November 2026; series II runs early November to mid-January; a winter series runs late January to March 2027.",
-      "checked": "2026-10-07",
-      "url": "https://www.wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
-      "how": "fetch",
-      "look": "The season page lists the Saturday 11:45 am group lesson series and the Sunday hockey lessons with their dates and the $215 fee.",
-      "notes": "Ages and levels are on a separate group-lessons page. Check the home page for a closure notice."
-    },
-    {
-      "program": "zazz-dance",
-      "term": "Fall 2026: seven weeks from October 31 and November 1, skipping Thanksgiving weekend.",
-      "checked": "2026-10-07",
-      "url": "https://zazzphilly.com/early-childhood/",
-      "how": "fetch",
-      "look": "The fall session block lists each series on one line with its ages, day, time and price.",
-      "notes": "The site calls itself ZAZZ by Philly Dance Fitness."
-    },
-    {
-      "program": "blue-chip-flag-south-philadelphia",
-      "term": "Fall 2026: September 13 to October 25 (registration closed). Spring 2027: April 11 to May 23; register by March 15.",
-      "checked": "2026-10-16",
-      "url": "https://www.bluechipyouthsports.com/south-philadelphia-registrations/",
-      "how": "fetch",
-      "look": "The page gives each season’s dates and deadline, the divisions by age and the prices.",
-      "notes": "The sign-up forms are on sportngin.com, one per season."
-    },
-    {
-      "program": "equilibrium-dance-academy",
-      "term": "2026–27 season, from September 14 to June. Registration is open.",
-      "checked": "2026-10-16",
-      "url": "https://www.equilibriumdanceacademy.com/classes",
-      "how": "fetch",
-      "look": "The Saturday block of the class schedule lists the three classes with ages and spots left.",
-      "notes": "Classes are at two addresses; the Saturday ones are at 1802."
-    },
-    {
-      "program": "fitness-alive-south-philly",
-      "term": "Fall 2026: September 8 to December 14, with no lessons November 23–29. Registration is closed, with a waitlist; the next session is announced on its site.",
-      "checked": "2026-10-16",
-      "url": "https://fitnessalivephilly.com/locations",
-      "how": "fetch",
-      "look": "The locations page gives each pool’s lesson hours by day. The current-session page gives the dates, the prices and whether registration is open.",
-      "notes": "South Philly hours “may vary slightly” with instructor availability."
-    },
-    {
-      "program": "flips-4-kidz",
-      "term": "Fall 2 session: Saturdays October 24 to December 19, 2026.",
-      "checked": "2026-10-16",
-      "url": "https://www.flips4kidz.com/book-online",
-      "how": "fetch",
-      "look": "Each session block gives its day, dates, time, age group and the $270.",
-      "notes": "Sessions are named Fall 2, Winter and so on; look for the next one once this ends."
-    },
-    {
       "program": "kumon-south-philadelphia",
       "term": "Year-round.",
       "checked": "2026-10-16",
@@ -3519,18 +3402,167 @@
       "notes": ""
     },
     {
+      "program": "skilladelphia",
+      "term": "Fall: September through October, seven clinics. A summer Sunday series ran July 12 to August 16. Check its page for the next series.",
+      "checked": "2026-10-19",
+      "url": "https://www.skilladelphia.org/programs",
+      "how": "browser",
+      "look": "Open the “Sundays With Val” section under Basketball Programs; it lists each session’s time, ages, dates and price.",
+      "notes": "The site asks automated readers to stay out, so read it in a browser."
+    },
+    {
+      "program": "arden-drama-school",
+      "term": "Fall 2026: eight weeks to October 31, then a three-Saturday mini-semester November 7 to 21. Winter 2027: eight Saturdays January 9 to February 27, then a two-Saturday March mini-semester, March 6 and 20.",
+      "checked": "2026-11-01",
+      "url": "https://ardentheatre.org/arden-drama-school",
+      "how": "fetch",
+      "look": "Classes are grouped by grade band under the eight-week and mini-semester headings, each with a “Saturdays” line and its own registration link."
+    },
+    {
+      "program": "blue-chip-flag-south-philadelphia",
+      "term": "Fall 2026: September 13 to October 25 (registration closed). Spring 2027: April 11 to May 23; register by March 15.",
+      "checked": "2026-11-01",
+      "url": "https://www.bluechipyouthsports.com/south-philadelphia-registrations/",
+      "how": "fetch",
+      "look": "The page gives each season’s dates and deadline, the divisions by age and the prices.",
+      "notes": "The sign-up forms are on sportngin.com, one per season."
+    },
+    {
+      "program": "equilibrium-dance-academy",
+      "term": "2026–27 season, from September 14 to June. Registration is open.",
+      "checked": "2026-11-01",
+      "url": "https://www.equilibriumdanceacademy.com/classes",
+      "how": "fetch",
+      "look": "The Saturday block of the class schedule lists the three classes with ages and spots left.",
+      "notes": "Classes are at two addresses; the Saturday ones are at 1802."
+    },
+    {
+      "program": "fitness-alive-south-philly",
+      "term": "Fall 2026: September 8 to December 14, with no lessons November 23–29; registration is closed, with a waitlist. Spring 2027: January 11 to May 23, with no lessons March 22–28; sign-up opens December 1 for returning swimmers, December 2 for the waitlist and December 3 for everyone.",
+      "checked": "2026-11-01",
+      "url": "https://fitnessalivephilly.com/locations",
+      "how": "fetch",
+      "look": "The locations page gives each pool’s lesson hours by day. The session pages (current-session for fall, spring-session for spring) give the dates, the prices, the registration days and whether registration is open.",
+      "notes": "South Philly hours “may vary slightly” with instructor availability."
+    },
+    {
+      "program": "fleisher-art-memorial",
+      "term": "Fall 2026: Saturday classes run September 19 to November 21. Winter 2027: January 9 to March 6.",
+      "checked": "2026-11-01",
+      "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/winter-2027/",
+      "how": "browser",
+      "look": "Dates sit in the intro text. The Saturday class grid is an embedded schedule and a “Fall listings” link to the registration system.",
+      "notes": "Each term is its own page under Children and Youth Education, so the next term is a new address."
+    },
+    {
+      "program": "flips-4-kidz",
+      "term": "Fall 2 session: Saturdays October 24 to December 19, 2026. The winter session is not posted yet.",
+      "checked": "2026-11-01",
+      "url": "https://www.flips4kidz.com/book-online",
+      "how": "fetch",
+      "look": "Each session block gives its day, dates, time, age group and the $270.",
+      "notes": "Sessions are named Fall 2, Winter and so on; look for the next one once this ends."
+    },
+    {
+      "program": "franklin-institute-pacts",
+      "term": "During the school year, twice a month. The page gives no dates.",
+      "checked": "2026-11-01",
+      "url": "https://fi.edu/en/science-education/youth-and-community-programs/pacts",
+      "how": "fetch",
+      "look": "The program description gives the grades, the twice-monthly Saturday mornings and that it is free.",
+      "notes": "No dates, clock times or application deadline on the page."
+    },
+    {
+      "program": "koresh-school-of-dance",
+      "term": "Fall 2026: September 14 to December 12.",
+      "checked": "2026-11-01",
+      "url": "https://www.koreshdance.org/children-classes",
+      "how": "fetch",
+      "look": "The fall schedule is listed day by day with a Saturday block, and the tuition table sits below it.",
+      "notes": "The street address is on the school-info page, not this one."
+    },
+    {
+      "program": "macguffin-theatre",
+      "term": "Fall 2026: September 19 to November 7. Winter 2027: Saturdays January 16 to March 6. Spring 2027: Saturdays April 3 to May 1.",
+      "checked": "2026-11-01",
+      "url": "https://macguffintf.com/classes/winter-2026/youth-ages-7-10/",
+      "how": "fetch",
+      "look": "Each class block lists its day, time, date range and tuition; ages 11–18 are on a sibling page.",
+      "notes": "The page address changes each term, and the menu’s \"Winter 2027\" and \"Spring 2027\" items point at addresses ending winter-2026 and spring-2026. Its Thursday classes meet in Fort Washington, outside the city."
+    },
+    {
+      "program": "made-institute-sunday-sewing",
+      "term": "Winter 2027: 11 Sundays, January 3 to March 14, with no class February 14.",
+      "checked": "2026-11-01",
+      "url": "https://made-institute.com/weekend-sewing",
+      "how": "fetch",
+      "look": "Each of the two class blocks lists its ages, Sunday time, date range and monthly price."
+    },
+    {
       "program": "magic-gardens-family-jams",
       "term": "Second Sunday of each month. The next listed is November 8, 2026.",
-      "checked": "2026-10-16",
+      "checked": "2026-11-01",
       "url": "https://www.phillymagicgardens.org/events/peco-family-jams/",
       "how": "fetch",
       "look": "The Family Jams page gives the second-Sunday rule, the noon-to-4 hours and the next date.",
       "notes": ""
     },
     {
+      "program": "mister-johns-music",
+      "term": "2026–27: fall runs August 31 to December 20, and winter and spring January 4 to June 13",
+      "checked": "2026-11-01",
+      "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
+      "how": "fetch",
+      "look": "Each instrument section lists its levels as lines like “Level, SATURDAYS at a time (age)”."
+    },
+    {
+      "program": "moore-young-artists-workshop",
+      "term": "Fall 2026: October 3 to December 12. Spring 2027: February 13 to April 17; sign up by January 29.",
+      "checked": "2026-11-01",
+      "url": "https://moore.edu/academics/youth-education/young-artists-workshop/spring-2027-youth-courses/",
+      "how": "fetch",
+      "look": "The Program Details block gives the dates, grades and price; each course below says morning or afternoon.",
+      "notes": "The page address carries the term (spring-2027-youth-courses); the Young Artists Workshop landing page links each term’s page."
+    },
+    {
+      "program": "movemakers",
+      "term": "2026–27 school year",
+      "checked": "2026-11-01",
+      "url": "https://www.movemakersphilly.com/schedule-390284.html",
+      "how": "fetch",
+      "look": "Each studio’s weekly schedule has a Saturday row listing times and class names."
+    },
+    {
+      "program": "music-theatre-philly",
+      "term": "Spring 2027: to June 4, starting January 31 for grades 1–4 and January 10 for grades 5–8",
+      "checked": "2026-11-01",
+      "url": "https://www.musictheatrephilly.com/grades-1-4",
+      "how": "fetch",
+      "look": "Classes are listed under day-of-week headings, which are images, each line giving class, grades, time and price. Repeat for the grades 5–8 page.",
+      "notes": "The day headings are images, so a plain text read loses them; the fetch tool reads them."
+    },
+    {
+      "program": "pafa-saturday-art",
+      "term": "Fall 2026: October 24 to December 12. Spring 2027: January 30 to April 17.",
+      "checked": "2026-11-01",
+      "url": "https://www.pafa.org/education/center-art-education/youth-family/saturday-studio-art-classes",
+      "how": "fetch",
+      "look": "Each term block gives its dates, the 10 am to noon time and the $480 price.",
+      "notes": "An older Young Artist Academy page on the same site still shows a 2025 class; ignore it."
+    },
+    {
+      "program": "penn-ice-rink",
+      "term": "2026–27: six sessions from September 13 to May 9. Sessions 1 and 2 are full. Session 3 runs November 22 to January 3, session 4 January 17 to February 14, session 5 February 28 to April 4 and session 6 April 11 to May 9.",
+      "checked": "2026-11-01",
+      "url": "https://icerink.business-services.upenn.edu/skating-lessons/group-lessons-5-years-old-through-adults",
+      "how": "fetch",
+      "look": "The body text gives the Sunday noon start, the six lists of session dates and the $175 fee.",
+      "notes": "Sessions fill and close; sessions 1 and 2 were full by November."
+    },
+    {
       "program": "pennsport-school-of-dance",
       "term": "2026–27 season. The schedule is marked tentative.",
-      "checked": "2026-10-16",
+      "checked": "2026-11-01",
       "url": "https://pennsportschoolofdance.com/class-schedule/",
       "how": "fetch",
       "look": "The Saturday rows of the class schedule give the three Introduction to Dance classes by age; the tuition page gives the per-class rates.",
@@ -3539,47 +3571,110 @@
     {
       "program": "philadelphia-martial-arts-academy",
       "term": "Month to month, with no term dates.",
-      "checked": "2026-10-16",
+      "checked": "2026-11-01",
       "url": "https://www.philadelphiamartialartsacademy.com/",
       "how": "fetch",
       "look": "The Class Schedule block on the home page lists each class with its days and times, including the three Saturday classes, and the pricing block gives the $129 and $50.",
       "notes": "The separate schedule page could not be read; the home page carries the same schedule."
     },
     {
+      "program": "philadelphia-museum-of-art-kids",
+      "term": "Fall 2026: October 3 to December 12, with no class November 21 or 28. Sold out; spring 2027 sign-up opens in January.",
+      "checked": "2026-11-01",
+      "url": "https://www.philamuseum.org/events/art-kids-classes-7-8",
+      "how": "fetch",
+      "look": "The event description gives the Saturday date range, the two session times and the price with the member price.",
+      "notes": "Only the ages 7–8 page was read; the other groups have pages ending -3-4, -5-6 and -9-10. The weekend Art Kids Studio is a free drop-in, not this class."
+    },
+    {
+      "program": "philly-inmovement",
+      "term": "2026–27 school year: August 31 to June 13",
+      "checked": "2026-11-01",
+      "url": "https://phillyinmovement.com/school-aged-classes/",
+      "how": "fetch",
+      "look": "Days and times are in the Saturday column of the two linked school-aged schedule PDFs (Bok and Queen Village). Prices are in the weekend tuition table on the page.",
+      "notes": "The two schedule PDFs read cleanly with a text extractor on 2026-11-01; the Saturday column is the last one."
+    },
+    {
       "program": "philly-pack",
-      "term": "Fall 2026: from August 31 through Saturday, November 21.",
-      "checked": "2026-10-16",
+      "term": "Fall 2026: through Saturday, November 21. Spring 2027: the session starts January 4 and Creative Movement runs 12 weeks through Saturday, March 20. Registration opens December 12.",
+      "checked": "2026-11-01",
       "url": "https://www.phillypack.org/schedule/",
       "how": "fetch",
       "look": "The classes page lists Creative Movement 1 and 2 with their Saturday times and ages, and the tuition scale by class length.",
-      "notes": "The page also keeps an older Spring 2026 grid; read the current session’s list."
+      "notes": "The page shows the coming session’s schedule and tuition scale; read the current session’s list."
     },
     {
       "program": "rizzo-rink",
       "term": "Hours are from the city’s January 2026 post for the 2025–26 season. The city posts this season’s hours when the rink opens.",
-      "checked": "2026-10-16",
+      "checked": "2026-11-01",
       "url": "https://www.phila.gov/2026-01-09-ice-ice-baby-public-skating-hours/",
       "how": "fetch",
       "look": "The post lists each city rink with its public-skating days and times and says admission is free during set hours.",
       "notes": "A new post appears each season (the 2024–25 one gave Saturday sessions instead of Sunday), so search phila.gov for the latest before trusting the days."
     },
     {
-      "program": "fleisher-art-memorial",
-      "term": "Fall 2026: Saturday classes run September 19 to November 21. Winter 2027: January 9 to March 6.",
-      "checked": "2026-10-19",
-      "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/winter-2027/",
-      "how": "browser",
-      "look": "Dates sit in the intro text. The Saturday class grid is an embedded schedule and a “Fall listings” link to the registration system.",
-      "notes": "Each term is its own page under Children and Youth Education, so the next term is a new address."
+      "program": "rock-school-for-dance",
+      "term": "2026–27 school year, September to June. A child must be the class age by August 31, 2026.",
+      "checked": "2026-11-01",
+      "url": "https://www.therockschool.org/pre-ballet",
+      "how": "fetch",
+      "look": "Each pre-ballet level is a block under the Philadelphia location with its tuition and its Saturday time.",
+      "notes": "The page also lists a West Chester location with similar times; use the Philadelphia blocks only."
     },
     {
-      "program": "skilladelphia",
-      "term": "Fall: September through October, seven clinics. A summer Sunday series ran July 12 to August 16. Check its page for the next series.",
-      "checked": "2026-10-19",
-      "url": "https://www.skilladelphia.org/programs",
-      "how": "browser",
-      "look": "Open the “Sundays With Val” section under Basketball Programs; it lists each session’s time, ages, dates and price.",
-      "notes": "The site asks automated readers to stay out, so read it in a browser."
+      "program": "school-of-philadelphia-ballet",
+      "term": "2026–27 school year, August 31 to June 6.",
+      "checked": "2026-11-01",
+      "url": "https://philadelphiaballet.org/school/childrens-programs/",
+      "how": "fetch",
+      "look": "A table lists each class with its ages, Saturday and Sunday times and monthly tuition.",
+      "notes": "Classes need a minimum enrollment to run. Ages 8 and up are on the student-programs page."
+    },
+    {
+      "program": "starfinder-saturday-soccer",
+      "term": "Fall 2026 Saturdays: September 12 to December 5. Spring 2027 Saturdays: February 6 to May 1. Dates are from its RecDesk sign-up list, which gives no times.",
+      "checked": "2026-11-01",
+      "url": "https://starfinderfoundation.org/programs/middle-school-programs/",
+      "how": "fetch",
+      "look": "A Saturdays heading for Golazo Girls & Vamos Boys gives the ages and the $50 price.",
+      "notes": "Session dates are on its RecDesk sign-up list (starfinder.recdesk.com/Community/Program), which loads by script and needs a browser; it gives no clock times. On 2026-11-01 that list had Golazo Girls on Fridays and Vamos! Boys and Juniors (ages 6–9) on Saturdays."
+    },
+    {
+      "program": "temple-music-prep-cmsp",
+      "term": "2026–27: September to May. The upper division began September 12, the String and Brass & Wind Projects September 19.",
+      "checked": "2026-11-01",
+      "url": "https://boyer.temple.edu/community/temple-music-prep/programs/community-music-scholars-program",
+      "how": "fetch",
+      "look": "The day, building, start dates and fees are in the program description and the sections for each division.",
+      "notes": "Class times are not on the page. Temple Music Prep’s Center City class list loads by script and has not been read."
+    },
+    {
+      "program": "walnut-street-theatre-school",
+      "term": "Fall 2026: October 10 to December 19, with no class November 28; a five-week dance class for ages 7–11 runs November 14 to December 19. Spring 2027: February 6 to April 17, with no class March 27. Spring sign-up is open.",
+      "checked": "2026-11-01",
+      "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids5",
+      "how": "fetch",
+      "look": "Each class card shows the title with its age range, then the day, the time, the date range and the price.",
+      "notes": "The category address changes with the term (classes-for-kids4 was fall 2026, classes-for-kids5 is spring 2027); the site’s category list shows the current terms. The site’s home page loads by script and comes back empty."
+    },
+    {
+      "program": "wissahickon-skating-club",
+      "term": "Fall series I ran September 12 to October 31, 2026. Fall series II: Saturdays November 7 to January 16 (no class November 28, December 26 or January 2) and Sunday hockey November 8 to January 17. Winter series III: Saturdays January 23 to March 20, 2027 (no class February 13) and Sunday hockey January 24 to March 21.",
+      "checked": "2026-11-01",
+      "url": "https://www.wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
+      "how": "fetch",
+      "look": "The season page lists the Saturday 11:45 am group lesson series and the Sunday hockey lessons with their dates and the $215 fee.",
+      "notes": "Ages and levels are on a separate group-lessons page. Check the home page for a closure notice."
+    },
+    {
+      "program": "zazz-dance",
+      "term": "Fall 2026: seven weeks from October 31 and November 1, skipping Thanksgiving weekend.",
+      "checked": "2026-11-01",
+      "url": "https://zazzphilly.com/early-childhood/",
+      "how": "fetch",
+      "look": "The fall session block lists each series on one line with its ages, day, time and price.",
+      "notes": "The site calls itself ZAZZ by Philly Dance Fitness."
     }
   ],
   "told": [
@@ -3620,34 +3715,23 @@
   "camps": {
     "season": 2026,
     "summary": {
-      "camps": 46,
-      "showingNextSummer": 2,
-      "needingABrowser": 18,
+      "camps": 48,
+      "showingNextSummer": 11,
+      "needingABrowser": 22,
       "needingAPerson": 1,
-      "notReadYet": 15
+      "notReadYet": 12
     },
     "list": [
       {
         "camp": "philly-rock-gym-camps",
         "name": "Philadelphia Rock Gym summer camps",
         "season": null,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://philarockgym.com/youth-camps/",
         "how": "browser",
         "look": "The Summer Camps section has a block per camp with ages, prices and hours. Gym addresses are on each location’s own page.",
         "notes": "Read in a browser on 2026-10-07. The site could not be read by the fetch tool the same day.",
         "signup": "The page said registration is coming soon."
-      },
-      {
-        "camp": "allens-lane-art-camp",
-        "name": "Allens Lane Art Center summer art camp",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://allenslane.org/summer-camp/",
-        "how": "browser",
-        "look": "Dates are at the top under “About Summer Camp”. Prices, discounts and before and after care are in the “Fees & Discounts” section.",
-        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work.",
-        "signup": "Sign-ups for 2026 started January 26 at 8 am."
       },
       {
         "camp": "arden-summer-camp",
@@ -3658,75 +3742,6 @@
         "how": "browser",
         "look": "Dates, hours and prices sit in the kids summer camp brochure, a PDF linked from the summer section of the Arden Drama School page.",
         "notes": "The page itself comes back with no camp details through a plain fetch, and the brochure’s address changes each year."
-      },
-      {
-        "camp": "awbury-adventures",
-        "name": "Awbury Adventures at Awbury Arboretum",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://awbury.org/summer-camp/",
-        "how": "fetch",
-        "look": "A session list grouped by age band gives each session’s dates and price. Hours, after-camp and financial aid are in the text around it.",
-        "notes": "The page is mid-changeover: the header says 2027 while the session list and prices are still 2026.",
-        "signup": "Registration for summer 2027 opens February 1, 2027 at 9 am, and a week earlier for family members. The page gives the 2027 season as June 14 to August 20."
-      },
-      {
-        "camp": "butchers-sew-shop-camp",
-        "name": "Butcher’s Sew Shop Junior",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://butcher-s-sew-shop-junior.jumbula.com/summer-camp",
-        "how": "fetch",
-        "look": "The Jumbula summer-camp page lists each themed week as a row with dates, age group and price, with hours, extended care and discounts in the page text.",
-        "notes": "Details live on the shop’s Jumbula registration site."
-      },
-      {
-        "camp": "camp-tps",
-        "name": "Camp TPS at The Philadelphia School",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://www.tpschool.org/tps-experience/camptps",
-        "how": "fetch",
-        "look": "Season dates are in the intro of the Camp TPS page. The price range and daily hours are on the linked Rates & Info page, and per-camp weeks are in the linked catalog."
-      },
-      {
-        "camp": "camp-walnut",
-        "name": "Camp Walnut at Walnut Street Theatre",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://walnutstreettheatre.coursestorm.com/",
-        "how": "browser",
-        "look": "Each division is a separate course card in the CourseStorm catalog. Dates, hours and price are on the individual course page.",
-        "notes": "The category address has the year in it. Listing pages load by script and come back empty; individual course pages fetch fine."
-      },
-      {
-        "camp": "ceo-camp-phield-house",
-        "name": "C.E.O. Camp at Phield House",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://www.phieldhouse.com/youth/summer-camp/",
-        "how": "fetch",
-        "look": "The week list, weekly price and before and after care terms are in the body text of the Phield House summer camp page.",
-        "notes": "ceocampspa.com is the same camp but returns only a title to a plain fetch."
-      },
-      {
-        "camp": "circus-arts-camp",
-        "name": "Philadelphia School of Circus Arts",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://phillycircus.com/camp/",
-        "how": "browser",
-        "look": "Price, hours, age groups and care fees are in the camp page text. The week dates sit behind the enrollment link."
-      },
-      {
-        "camp": "clay-studio-camp",
-        "name": "The Clay Studio",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://www.theclaystudio.org/camp-policies",
-        "how": "browser",
-        "look": "Dates, hours and add-on fees are in the camp policies page. Camp weeks and tuition sit in the booking listing at public.theclaystudio.org/public/3/camps, which needs a browser.",
-        "signup": "The 2026 early-bird discount ran January 2 to February 15."
       },
       {
         "camp": "coco-academy-summer-camp",
@@ -3740,16 +3755,6 @@
         "signup": "Online. Its camp page has a separate Register button for Bella Vista and for Queen Village, and early drop-off and extended day are add-ons at checkout."
       },
       {
-        "camp": "dandelion-summer-camp",
-        "name": "The Dandelion Project summer camp",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://www.thedandelionproject.us/summer-camp",
-        "how": "browser",
-        "look": "Price and sliding scale are in the intro. Each of the three camp types has its own block of dates.",
-        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. The site answered 429 to a plain fetch earlier the same day. The old address /summercamp is gone."
-      },
-      {
         "camp": "fleisher-art-memorial-camp",
         "name": "Fleisher Art Memorial",
         "season": 2026,
@@ -3759,77 +3764,6 @@
         "look": "Session dates are listed week by week and prices appear as member and non-member rates per age group in the page body.",
         "notes": "The street address is not on the camp page; it is Fleisher’s own building.",
         "signup": "Sign-ups for 2026 opened January 12."
-      },
-      {
-        "camp": "flipout-camp",
-        "name": "FlipOut Productions",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://www.flipoutproductions.com/summercamp",
-        "how": "browser",
-        "look": "The Summer Camp page shows age groups and activities. Weeks and prices are probably inside an embedded registration widget.",
-        "signup": "Sign-ups for 2026 opened January 1."
-      },
-      {
-        "camp": "lavner-tech-camp-upenn",
-        "name": "Camp Tech Revolution at UPenn (Lavner)",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camps-tech-camps-stem-camps-university-of-pennsylvania-upenn/",
-        "how": "browser",
-        "look": "The location page describes the camp and its address. Weeks and prices are in the enrollment system behind “Enroll Now”.",
-        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
-      },
-      {
-        "camp": "legacy-tennis-camp",
-        "name": "Legacy Youth Tennis community camp",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://legacyyte.org/tennis_camps/full-day-summer-camp/",
-        "how": "fetch",
-        "look": "Dates, hours, ages and the flat seven-week price are in the body text of the full-day camp page.",
-        "notes": "The price is one fee for the whole summer, not weekly. The page prints dates without a year.",
-        "signup": "The page says registration opens January 5."
-      },
-      {
-        "camp": "macguffin-camps",
-        "name": "MacGuffin Theatre & Film Company",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://macguffintf.com/camps/",
-        "how": "fetch",
-        "look": "The camps page lists each camp with ages and dates and links to per-camp pages with hours. Tuition appears only in the Sawyer booking widget.",
-        "signup": "Sign-ups for the 2026 camps began December 1, 2025."
-      },
-      {
-        "camp": "mister-johns-music-camp",
-        "name": "Mister John’s Music",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://misterjohnsmusic.com/summer-camp/",
-        "how": "fetch",
-        "look": "Weeks and themes are a dated list in the page body, with the weekly price and the early and late fees in the text beside it.",
-        "notes": "The Register buttons come back with empty links through a plain fetch.",
-        "signup": "Sign-ups for 2026 opened January 12."
-      },
-      {
-        "camp": "moore-young-artists",
-        "name": "Moore College of Art & Design youth courses",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://moore.edu/academics/youth-education/",
-        "how": "fetch",
-        "look": "Dates, the daily schedule and the price per course are in the Program Details text.",
-        "notes": "The camp page has the year in its address, so next summer is a new page. Start from the youth-education page to find it."
-      },
-      {
-        "camp": "morris-arboretum-camp",
-        "name": "Nature Explorers at Morris Arboretum & Gardens",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://www.morrisarboretum.org/learn-discover/kids-families/summer-camp",
-        "how": "fetch",
-        "look": "Session dates, member and non-member prices, hours and age groups are all in the body text of the summer camp page."
       },
       {
         "camp": "movemakers-camp",
@@ -3842,72 +3776,153 @@
         "notes": "Three camp subpages with the year in their titles, so the addresses may change for 2027."
       },
       {
-        "camp": "music-theatre-philly-camp",
-        "name": "Music Theatre Philly",
+        "camp": "allens-lane-art-camp",
+        "name": "Allens Lane Art Center summer art camp",
         "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://www.musictheatrephilly.com/1-6-camps",
+        "checked": "2026-11-01",
+        "url": "https://allenslane.org/summer-camp/",
+        "how": "browser",
+        "look": "Dates are at the top under “About Summer Camp”. Prices, discounts and before and after care are in the “Fees & Discounts” section.",
+        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work.",
+        "signup": "Sign-ups for 2026 started January 26 at 8 am."
+      },
+      {
+        "camp": "awbury-adventures",
+        "name": "Awbury Adventures at Awbury Arboretum",
+        "season": 2026,
+        "checked": "2026-11-01",
+        "url": "https://awbury.org/summer-camp/",
         "how": "fetch",
-        "look": "A week-by-week list gives dates, theme, grades and price, each with its own Sawyer register link.",
-        "notes": "Hours, care fees and discounts sit on /about-camps and the Pre-K weeks on /summer-camps-pre-k."
+        "look": "A session list grouped by age band gives each session’s dates and price. Hours, after-camp and financial aid are in the text around it.",
+        "notes": "The page is mid-changeover: the header says 2027 while the session list and prices are still 2026.",
+        "signup": "Registration for summer 2027 opens Monday, February 1, 2027 at 9 am; family members can sign up a week earlier, from Monday, January 25, 2027 at 9 am. The page gives the 2027 season as June 14 to August 20, 2027, but its session list and prices are still 2026’s."
+      },
+      {
+        "camp": "butchers-sew-shop-camp",
+        "name": "Butcher’s Sew Shop Junior",
+        "season": 2026,
+        "checked": "2026-11-01",
+        "url": "https://butcher-s-sew-shop-junior.jumbula.com/summer-camp",
+        "how": "fetch",
+        "look": "The Jumbula summer-camp page lists each themed week as a row with dates, age group and price, with hours, extended care and discounts in the page text.",
+        "notes": "Details live on the shop’s Jumbula registration site."
+      },
+      {
+        "camp": "ceo-camp-phield-house",
+        "name": "C.E.O. Camp at Phield House",
+        "season": 2026,
+        "checked": "2026-11-01",
+        "url": "https://www.phieldhouse.com/youth/summer-camp/",
+        "how": "fetch",
+        "look": "The week list, weekly price and before and after care terms are in the body text of the Phield House summer camp page.",
+        "notes": "ceocampspa.com is the same camp but returns only a title to a plain fetch."
+      },
+      {
+        "camp": "circus-arts-camp",
+        "name": "Philadelphia School of Circus Arts",
+        "season": 2026,
+        "checked": "2026-11-01",
+        "url": "https://phillycircus.com/camp/",
+        "how": "browser",
+        "look": "Price, hours, age groups and care fees are in the camp page text. The week dates sit behind the enrollment link."
+      },
+      {
+        "camp": "clay-studio-camp",
+        "name": "The Clay Studio",
+        "season": 2026,
+        "checked": "2026-11-01",
+        "url": "https://www.theclaystudio.org/camp-policies",
+        "how": "browser",
+        "look": "Dates, hours and add-on fees are in the camp policies page. Camp weeks and tuition sit in the booking listing at public.theclaystudio.org/public/3/camps, which needs a browser.",
+        "signup": "The 2026 early-bird discount ran January 2 to February 15."
+      },
+      {
+        "camp": "dandelion-summer-camp",
+        "name": "The Dandelion Project summer camp",
+        "season": 2026,
+        "checked": "2026-11-01",
+        "url": "https://www.thedandelionproject.us/summer-camp",
+        "how": "browser",
+        "look": "Price and sliding scale are in the intro. Each of the three camp types has its own block of dates.",
+        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. The site answered 429 to a plain fetch earlier the same day. The old address /summercamp is gone."
+      },
+      {
+        "camp": "flipout-camp",
+        "name": "FlipOut Productions",
+        "season": 2026,
+        "checked": "2026-11-01",
+        "url": "https://www.flipoutproductions.com/summercamp",
+        "how": "browser",
+        "look": "The Summer Camp page shows age groups and activities. Weeks and prices are probably inside an embedded registration widget.",
+        "signup": "Sign-ups for 2026 opened January 1."
+      },
+      {
+        "camp": "lavner-tech-camp-upenn",
+        "name": "Camp Tech Revolution at UPenn (Lavner)",
+        "season": 2026,
+        "checked": "2026-11-01",
+        "url": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camps-tech-camps-stem-camps-university-of-pennsylvania-upenn/",
+        "how": "browser",
+        "look": "The location page describes the camp and its address. Weeks and prices are in the enrollment system behind “Enroll Now”.",
+        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
+      },
+      {
+        "camp": "legacy-tennis-camp",
+        "name": "Legacy Youth Tennis community camp",
+        "season": 2026,
+        "checked": "2026-11-01",
+        "url": "https://legacyyte.org/tennis_camps/full-day-summer-camp/",
+        "how": "fetch",
+        "look": "Dates, hours, ages and the flat seven-week price are in the body text of the full-day camp page.",
+        "notes": "The price is one fee for the whole summer, not weekly. The page prints dates without a year.",
+        "signup": "The page says registration is open now. Its dates, June 22 to August 7, are printed without a year and are last summer’s; it no longer gives a January opening date."
+      },
+      {
+        "camp": "mister-johns-music-camp",
+        "name": "Mister John’s Music",
+        "season": 2026,
+        "checked": "2026-11-01",
+        "url": "https://misterjohnsmusic.com/summer-camp/",
+        "how": "fetch",
+        "look": "Weeks and themes are a dated list in the page body, with the weekly price and the early and late fees in the text beside it.",
+        "notes": "The Register buttons come back with empty links through a plain fetch.",
+        "signup": "Sign-ups for 2026 opened January 12."
+      },
+      {
+        "camp": "morris-arboretum-camp",
+        "name": "Nature Explorers at Morris Arboretum & Gardens",
+        "season": 2026,
+        "checked": "2026-11-01",
+        "url": "https://www.morrisarboretum.org/learn-discover/kids-families/summer-camp",
+        "how": "fetch",
+        "look": "Session dates, member and non-member prices, hours and age groups are all in the body text of the summer camp page.",
+        "signup": "The page says registration opens in January, with each child limited to three weeks at first and a waitlist from January 30; it doesn’t say which year."
       },
       {
         "camp": "nlarts-summer-camp",
         "name": "NLArts summer art camp",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://www.nlarts.org/summer-art-camp",
         "how": "browser",
         "look": "Fees by grade group are in the “Information & Fees” section. Session dates are inside the headings under “Sessions & Themes”, which open on a click.",
-        "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. The old address /summer-art-camp-program is now a menu of programs."
-      },
-      {
-        "camp": "pafa-camp",
-        "name": "PAFA summer art camp",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://www.pafa.org/education/center-for-art-education/youth-and-family/summer-art-camps",
-        "how": "fetch",
-        "look": "Dates, hours, price and discounts are in the body of the family-programs summer art camp page. Sign-up is on CourseStorm.",
-        "notes": "pafa.org/camp is a stale page still showing summer 2024. Use the family-programs address."
+        "notes": "Read with a headless browser on 2026-11-01; the session dates under “Sessions & Themes” come through in the page text without clicking. The old address /summer-art-camp-program is now a menu of programs."
       },
       {
         "camp": "parks-and-rec-camps",
         "name": "Philadelphia Parks & Recreation day camps",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://www.phila.gov/services/culture-recreation/activities-and-events/register-for-summer-camp/",
         "how": "fetch",
         "look": "The service page gives ages, fee waivers and the steps for finding a rec center. Dates were only in a news post, and fees and hours are set per center.",
         "notes": "The dated post was first published in 2024 and its dates may be stale; do not copy them."
       },
       {
-        "camp": "philadelphia-ballet-camps",
-        "name": "School of Philadelphia Ballet dance camps",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://philadelphiaballet.org/school/summer-programs/philadelphia-summer-childrens-programs/",
-        "how": "fetch",
-        "look": "Camp themes, dates, the daily schedule and tuition sit in the Summer Dance Camps section, with a registration link per camp.",
-        "notes": "Separate pages exist for the New Jersey and Bala Cynwyd locations; use the Philadelphia page only.",
-        "signup": "Sign-ups for 2026 opened January 1."
-      },
-      {
-        "camp": "philadelphia-dance-academy",
-        "name": "The Philadelphia Dance Academy",
-        "season": 2026,
-        "checked": "2026-10-07",
-        "url": "https://philadelphiadanceacademy.com/summer-program/",
-        "how": "fetch",
-        "look": "The Summer Dance Programs page lists programs and ages only. Dates and weekly tuition are probably in the registration portal.",
-        "notes": "An older, undated page at /programs/summer-program2/ has prices that look like 2023. Do not use it.",
-        "signup": "The page says summer enrollment opens December 1."
-      },
-      {
         "camp": "philly-art-center",
         "name": "Philly Art Center",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://phillyartcenter.com/camps/summer-camps/",
         "how": "fetch",
         "look": "The “By-the-week” date line is near the top and prices are in the “Weekly Rates” list on the same page. Sign-up buttons go to Captyn.",
@@ -3917,17 +3932,17 @@
         "camp": "queen-and-rook-camp",
         "name": "Queen & Rook Game Cafe",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://www.queenrookkeep.com/product/Summercamp/GUYDZS52EHKPGJPXAUNJ7HMP",
-        "how": "fetch",
+        "how": "browser",
         "look": "Hours, price, aftercare and discounts are in the product description. The week dates are in the product’s option picker, which a plain fetch does not return.",
-        "notes": "The camp is sold on a separate store site, not the cafe’s own."
+        "notes": "The camp is sold on a separate store site, not the cafe’s own. The week dates sit in the product’s option picker, which a headless browser reads (2026-11-01) and a plain fetch does not."
       },
       {
         "camp": "rutabaga-naturearts",
         "name": "Rutabaga NatureArts summer camp",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://www.rutabagatoylibrary.com/summer-camp",
         "how": "browser",
         "look": "Ages, dates and schedule are under “Basics”, then “Pricing” and “Discounts”.",
@@ -3938,7 +3953,7 @@
         "camp": "sawubona-summer-camp",
         "name": "Sawubona Creativity Project",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://www.sawubonacreativityproject.org/campinformationandschedules",
         "how": "browser",
         "look": "The page lists each summer week by its theme and dates. Price, hours and ages for summer are on the page each week links to.",
@@ -3948,7 +3963,7 @@
         "camp": "school-of-rock-philadelphia",
         "name": "School of Rock Philadelphia",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://www.schoolofrock.com/locations/philadelphia/music-camps",
         "how": "fetch",
         "look": "The listing page gives camp names and dates. Each camp’s own page holds hours, ages and price.",
@@ -3958,7 +3973,7 @@
         "camp": "seaport-summer-camp",
         "name": "Seaport Summer Camp at Independence Seaport Museum",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://www.phillyseaport.org/camp",
         "how": "fetch",
         "look": "Weeks and themes are listed on the camp page with a registration link per week. Prices sit in a pricing section on the same page."
@@ -3967,17 +3982,27 @@
         "camp": "skate-the-foundry-camp",
         "name": "Skate The Foundry skateboard camp",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://www.skatethefoundry.com/camp/",
         "how": "browser",
         "look": "“Summer Camp Details” gives the price, then a week-by-week list of dates. Ages and hours are under “Additional Information”.",
         "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work. The page is long because it embeds reviews."
       },
       {
+        "camp": "skateboard-academy-rizzo-rink",
+        "name": "The Skateboard Academy summer camp at Rizzo Rink",
+        "season": 2026,
+        "checked": "2026-11-01",
+        "url": "https://theskateboardacademycom.bigcartel.com/product/rizzo-rink-sumer-sk8-camp",
+        "how": "browser",
+        "look": "The product page gives the two weeks, hours, ages, price and the rink. The shop front at theskateboardacademycom.bigcartel.com lists the year’s camps as products.",
+        "notes": "Read with a headless browser on 2026-11-01; a plain fetch was not tried. The product address has a typo (sumer) and may change with the year."
+      },
+      {
         "camp": "summer-achievers-edey",
         "name": "Summer Achievers at Extended Day, Extended Year schools",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://www.phila.gov/programs/extended-day-extended-year/",
         "how": "fetch",
         "look": "The program page shows registration status and the school list. Dates, hours and grades come from a spring phila.gov post titled “Register now… Summer Achievers”.",
@@ -3987,26 +4012,27 @@
         "camp": "taller-puertorriqueno-camp",
         "name": "Taller Puertorriqueño",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://tallerpr.org/education/summer-camp/",
         "how": "fetch",
         "look": "Dates, hours, age groups and the weekly rate are all in the body text of the Summer Camp page. Sign-up is a linked interest form.",
+        "notes": "The site sits behind Cloudflare: a plain curl got HTTP 403 on 2026-11-01 while a headless browser read the page; the Camp Info section is in the page text.",
         "signup": "For 2026 the interest form opened March 1, with a May 31 deadline."
       },
       {
         "camp": "theatre-horizon-woodmere",
         "name": "Theatre Horizon drama camp at Woodmere",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://theatrehorizon.org/summer-drama-camp/",
         "how": "browser",
-        "look": "A week-by-week table lists “Woodmere Art Museum, Chestnut Hill”. Each site’s price and sign-up link sit in a pop-up opened by its button."
+        "look": "A week-by-week table lists “Woodmere Art Museum, Chestnut Hill”. Each site’s dates, hours, ages, address, price and sign-up link sit in a pop-up opened by its button; the pop-up text is in the page for a headless browser."
       },
       {
         "camp": "wissahickon-figure-skating",
         "name": "Wissahickon Skating Club figure skating camp",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://www.wissskating.com/index.php/new-figure-skating-schedules-general-info-2026/get-the-edge-summer-figure-skating-camp-save-the-date/",
         "how": "fetch",
         "look": "Dates, hours and prices are in the body text of the camp’s product page.",
@@ -4016,7 +4042,7 @@
         "camp": "work-to-ride-camp",
         "name": "Work to Ride at Chamounix Equestrian Center",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://worktoride.net/summer-camp/",
         "how": "fetch",
         "look": "Dates sit under a “Summer Camp Dates” heading and prices are in each camp type’s line. Sign-up is by PDF forms.",
@@ -4026,7 +4052,7 @@
         "camp": "yes-and-camp",
         "name": "Yes! And… Collaborative Arts camps",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://www.yesandcamp.org/summer-camps",
         "how": "browser",
         "look": "The summer camps page links to a page per camp (Imagination Camp, Theater Camp). Each has a “Dates” block and a “Tuition and Fees” section.",
@@ -4037,18 +4063,18 @@
         "camp": "ymca-day-camps",
         "name": "Greater Philadelphia YMCA day camps",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://www.philaymca.org/camps/summer-day-camp/",
         "how": "browser",
         "look": "The summer day camp page lists every branch and a Camp Finder. Week dates and member and non-member rates are most likely in the registration portal or the linked Camp Handbook PDF.",
-        "notes": "Each branch has its own page, on the pattern philaymca.org/camp/roxborough.",
-        "signup": "For 2026, sign-ups opened January 7 for family members, January 14 for members and January 21 for everyone."
+        "notes": "Each branch has its own page, on the pattern philaymca.org/camps/summer-day-camp/roxborough-ymca-summer-camp/; the registration dates sit at the top of the branch page under “Registration Dates”.",
+        "signup": "Sign-ups for summer 2027 open January 6, 2027 for family memberships, January 13 for members and January 20 for non-members. The 2027 handbook and prices were not posted yet."
       },
       {
         "camp": "zazz-summer-camp",
         "name": "ZAZZ Dance & Drama",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://zazzphilly.com/summer-camp/",
         "how": "browser",
         "look": "Weeks and themes are listed by age group, with a “Rates” block and an “Extended care” block between them.",
@@ -4058,10 +4084,10 @@
         "camp": "zoomdance-camp",
         "name": "ZoomDance camp",
         "season": 2026,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://zoomdance.com/camps/",
         "how": "browser",
-        "look": "Dates, ages, hours and location are at the top. Pricing is under the “Sliding Scale Pricing” heading, which opens on a click.",
+        "look": "Dates, ages, hours and location are at the top. Pricing is under the “Sliding Scale Pricing” heading, whose text is in the page for a headless browser.",
         "notes": "Read in a browser on 2026-10-07; a plain fetch was not tried, so it may also work."
       },
       {
@@ -4079,21 +4105,117 @@
         "camp": "camp-schuylkill",
         "name": "Camp Schuylkill at the Schuylkill Center",
         "season": 2027,
-        "checked": "2026-10-07",
+        "checked": "2026-11-01",
         "url": "https://schuylkillcenter.org/education/camp-schuylkill/",
         "how": "fetch",
         "look": "The season dates sit at the top of the Camp Schuylkill page and the prices are listed per age group lower down.",
         "signup": "Registration for 2027 wasn’t open yet when we checked."
       },
       {
+        "camp": "camp-tps",
+        "name": "Camp TPS at The Philadelphia School",
+        "season": 2027,
+        "checked": "2026-11-01",
+        "url": "https://www.tpschool.org/tps-experience/camptps",
+        "how": "fetch",
+        "look": "Season dates are in the intro of the Camp TPS page. The price range and daily hours are on the linked Rates & Info page, and per-camp weeks are in the linked catalog.",
+        "signup": "Registration for summer 2027 opens in early December 2026."
+      },
+      {
+        "camp": "camp-walnut",
+        "name": "Camp Walnut at Walnut Street Theatre",
+        "season": 2027,
+        "checked": "2026-11-01",
+        "url": "https://walnutstreettheatre.coursestorm.com/",
+        "how": "browser",
+        "look": "Each division is a separate course card in the CourseStorm catalog. Dates, hours and price are on the individual course page.",
+        "notes": "The category address has the year in it (camp-walnut-2027). Listing pages load by script and come back empty to a plain fetch; individual course pages give dates, hours and price.",
+        "signup": "Registration for Camp Walnut 2027 is open on CourseStorm. Discovery divisions take sign-ups first come, first served; Development and Performance divisions need an audition the week of May 17 to 21, 2027."
+      },
+      {
+        "camp": "hawk-hill-day-camp",
+        "name": "Hawk Hill Day Camp at Saint Joseph’s University (Future Stars)",
+        "season": 2027,
+        "checked": "2026-11-01",
+        "url": "https://www.hawkhilldaycamp.com/locations/hawk-hill-day-camp/",
+        "how": "browser",
+        "look": "The season dates, the weekly rates by registration deadline and the typical day with extended-time prices are in the body of the location page. Ages are on the programs overview.",
+        "notes": "Read with a headless browser on 2026-11-01; a plain fetch was not tried. The camp has its own site, hawkhilldaycamp.com, linked from the location list on futurestars.com; the dates there carry no year.",
+        "signup": "Registration was open when we checked on November 1, 2026; the $375 rate runs until December 1."
+      },
+      {
+        "camp": "macguffin-camps",
+        "name": "MacGuffin Theatre & Film Company",
+        "season": 2027,
+        "checked": "2026-11-01",
+        "url": "https://macguffintf.com/camps/",
+        "how": "fetch",
+        "look": "The camps page lists each camp with ages and dates and links to per-camp pages with hours. Tuition appears only in the Sawyer booking widget.",
+        "signup": "Sign-ups for the 2027 teen camps opened November 1, 2026. Sign-ups for the one-week Youth Musical Theatre Camps (ages 7–10/11) open December 1, 2026."
+      },
+      {
+        "camp": "moore-young-artists",
+        "name": "Moore College of Art & Design youth courses",
+        "season": 2027,
+        "checked": "2026-11-01",
+        "url": "https://moore.edu/academics/youth-education/",
+        "how": "fetch",
+        "look": "Dates, the daily schedule and the price per course are in the Program Details text.",
+        "notes": "The camp page has the year in its address, so next summer is a new page. Start from the youth-education page to find it."
+      },
+      {
+        "camp": "music-theatre-philly-camp",
+        "name": "Music Theatre Philly",
+        "season": 2027,
+        "checked": "2026-11-01",
+        "url": "https://www.musictheatrephilly.com/1-6-camps",
+        "how": "fetch",
+        "look": "A week-by-week list gives dates, theme, grades and price, each with its own Sawyer register link.",
+        "notes": "Hours, care fees and discounts sit on /about-camps; the pre-K weeks are on /prek-k-camps and the Summer Stock camps on /4-8-summer-stock and /9-12-summer-stock. The old /summer-camps-pre-k address is gone.",
+        "signup": "Sign-ups for 2027 are open. 20% off all camps with code EARLYBIRD27 for registering before January 1, 2027."
+      },
+      {
+        "camp": "pafa-camp",
+        "name": "PAFA summer art camp",
+        "season": 2027,
+        "checked": "2026-11-01",
+        "url": "https://www.pafa.org/education/center-for-art-education/youth-and-family/summer-art-camps",
+        "how": "fetch",
+        "look": "Dates, hours, price and discounts are in the body of the family-programs summer art camp page. Sign-up is on CourseStorm.",
+        "notes": "pafa.org/camp is a stale page still showing summer 2024. Use the family-programs address.",
+        "signup": "Registration for 2027 was open on PAFA’s CourseStorm site when we checked on November 1, 2026; the page gives no opening date."
+      },
+      {
+        "camp": "philadelphia-ballet-camps",
+        "name": "School of Philadelphia Ballet dance camps",
+        "season": 2027,
+        "checked": "2026-11-01",
+        "url": "https://philadelphiaballet.org/school/summer-programs/philadelphia-summer-childrens-programs/",
+        "how": "fetch",
+        "look": "Camp themes, dates, the daily schedule and tuition sit in the Summer Dance Camps section, with a registration link per camp.",
+        "notes": "Separate pages exist for the New Jersey and Bala Cynwyd locations; use the Philadelphia page only.",
+        "signup": "Registration for the 2027 camps opens December 1, 2026."
+      },
+      {
+        "camp": "philadelphia-dance-academy",
+        "name": "The Philadelphia Dance Academy",
+        "season": 2027,
+        "checked": "2026-11-01",
+        "url": "https://philadelphiadanceacademy.com/summer-program/",
+        "how": "fetch",
+        "look": "The Summer Dance Programs page lists each program with Old City and Ardmore session tables (dates, hours, tuition) that open on a click under each heading; a headless browser gets their text.",
+        "notes": "An older, undated page at /programs/summer-program2/ has prices that look like 2023. Do not use it.",
+        "signup": "The page says summer enrollment opens December 1; its programs are headed 2027."
+      },
+      {
         "camp": "esf-camps",
         "name": "ESF Camps",
         "season": 2027,
         "checked": "2026-11-05",
-        "url": "https://www.esfcamps.com/friendsselect/",
-        "how": "fetch",
-        "look": "The location page gives the summer’s dates and the camps by grade; the 2027 Tuition Rates & Savings link has the prices.",
-        "notes": "Hours (9 to 3 with before and after care), pricing varying by site and sign-up time, and early-bird pricing opening November 16 came from the program itself, through the suggestion form on 2026-11-05 (someone who works there). The site’s own pages give no hours or prices; its rates page did not open on 2026-10-07 or 2026-11-05.",
+        "url": "https://www.esfcamps.com/friendsselect/rates/",
+        "how": "browser",
+        "look": "The season dates and grade range are on the location home page. Weekly tuition by weeks booked, the early-bird window and the holiday weeks are on the Tuition Rates & Savings page in tables that open on a click; Club OT prices are on the extended-day page.",
+        "notes": "Read with a headless browser on 2026-11-01; the rate tables come through in the page text. An earlier check found the rates page gone; it is back at /friendsselect/rates/.",
         "signup": "Enrollment for 2027 opens in November 2026, online through Bravo Enrollment, with early-bird savings from November 16 (the program told us). Friends Select camp office 215-298-9145; Chestnut Hill 215-247-7010."
       }
     ],
@@ -4106,72 +4228,57 @@
       {
         "name": "PlayArts summer camp",
         "url": "https://www.playartsphilly.com/",
-        "why": "Its 2026 summer camp page was gone on 2026-10-07. The site showed day camps for days off at 1320 N 5th St, but nothing for summer."
+        "why": "Still no summer camp on 2026-11-01: the site’s Day Camps page lists only 2026–27 school-year day camps at the Maas Building, 1320 N 5th St."
       },
       {
         "name": "Philadelphia Girls Choir choral camp",
         "url": "https://www.phillygirlschoir.org/choral-camp/",
-        "why": "The camp address now leads to another organization’s home page, with no camp on it (2026-10-07)."
+        "why": "The camp address still leads to the Philadelphia Youth Choral Ensembles home page (pycemusic.org), with no camp on it (2026-11-01)."
       },
       {
         "name": "Girls Rock Philly",
         "url": "https://www.girlsrockphilly.org/",
-        "why": "Its camp page still described summer 2022 and 2023 on 2026-10-07."
+        "why": "Its Summer Camp link still points to a 2022 camp page on 2026-11-01; the home page gives no camp dates."
       },
       {
         "name": "Move It Kidz 4 Fitness",
         "url": "https://moveitkidz4fitness.com/k4f-summer-camp",
-        "why": "Its camp page returned “page not found” on 2026-10-07."
+        "why": "Its camp page still returned “page not found” on 2026-11-01."
       },
       {
         "name": "Ed Snider Youth Hockey & Education camps",
         "url": "https://sniderhockey.org/hockey/",
-        "why": "Read in a browser on 2026-10-07: the hockey page has a Summer Camps tab, but its dates, ages, cost and rinks weren’t in the page text."
+        "why": "Read in a browser on 2026-11-01: the hockey page has a Summer Camps tab, but its dates, ages, cost and rinks are still not in the page text."
       },
       {
         "name": "Wissahickon Skating Club hockey camp",
         "url": "https://www.wissskating.com/camps/",
-        "why": "The page still showed 2024 dates on 2026-10-07."
-      },
-      {
-        "name": "The Skateboard Academy at Rizzo Rink",
-        "url": "https://theskateboardacademycom.bigcartel.com/",
-        "why": "No 2026 camp page was found on 2026-10-07."
+        "why": "The camps page returned a 404 on 2026-11-01."
       },
       {
         "name": "STEM Prep Academy summer camp",
         "url": "https://stempreparatory.org/stem-summer-camp",
-        "why": "Its summer camp page returned “page not found” on 2026-10-07, and its programs page showed nothing readable."
+        "why": "Read in a browser on 2026-11-01: the camp address returns 404; the programs page lists a full-day summer camp for ages 3–10 at 604 E Girard Ave, “June – August”, with a two-week minimum, but no dates or prices (rates are behind a form)."
       },
       {
         "name": "LocoRobo summer robotics",
         "url": "https://locorobo.co/locosummer-modern-robotics.html",
-        "why": "Not read yet: the page could not be opened on 2026-10-07."
+        "why": "Read in a browser on 2026-11-01: the camp address returns 404 and the site’s STEM Camps page sells robotics-camp kits and curriculum to schools and camps, not a day camp families sign up for."
       },
       {
         "name": "Nerd Street / Localhost esports camp",
         "url": "https://nerdstreet.com/",
-        "why": "Not read yet: the page could not be opened on 2026-10-07."
+        "why": "Read in a browser on 2026-11-01: the Camp Nerd Street page gives ages 8–13, weeklong camps at Localhost in Philly, drop-off from 8:45 am and aftercare 3 to 5 pm, but no 2027 weeks or prices; a December 2025 post says registration opens in January."
       },
       {
         "name": "Kids on 12th summer camp",
         "url": "https://ko12kids.com/summer-camp",
-        "why": "The camp site showed an error page in a browser on 2026-10-07."
+        "why": "The site moved to ko12.org (read in a browser on 2026-11-01): its summer camp page, ko12.org/kids-summer-camp-philadelphia, gives ages 3–11, 8:30 am to 4 pm with after care to 6 pm at 1112 Chestnut St, but the 2026 week list and weekly rates were not in the page text."
       },
       {
         "name": "CORA Early Years at Huntingdon Mills",
         "url": "https://www.coraservices.org/services/early-childhood/early-years-huntingdon-mills/",
-        "why": "Read in a browser on 2026-10-07: the page gives contact details only, nothing about summer camp."
-      },
-      {
-        "name": "Girl Scouts day camp at Shelly Ridge",
-        "url": "https://www.gsep.org/en/camp/camp.html",
-        "why": "Not read yet: the page could not be opened on 2026-10-07."
-      },
-      {
-        "name": "Future Stars summer camps",
-        "url": "https://www.futurestars.com/",
-        "why": "Not read yet: the page could not be opened on 2026-10-07."
+        "why": "The page answered HTTP 403 with a “confirm you are human” check to a headless browser on 2026-11-01, so it cannot be read automatically and needs Josh."
       }
     ],
     "dropped": [
@@ -4199,6 +4306,11 @@
         "name": "Vets in Training (HousePaws)",
         "why": "Not inside the city.",
         "seen": "2026-10-07"
+      },
+      {
+        "name": "Girl Scouts day camp at Shelly Ridge",
+        "why": "Its own site places Camp Shelly Ridge in Lafayette Hill, “right outside of Philadelphia”, so it is not inside the city.",
+        "seen": "2026-11-01"
       }
     ]
   }

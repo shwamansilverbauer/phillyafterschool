@@ -1,0 +1,30 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:camp-hawk-hill-day-camp-2026-12-01@phillyafterschool.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
+SUMMARY:Hawk Hill Day Camp at Saint Joseph’s University (Fut
+ ure Stars): Last day for the $375 weekly rate; $435 a week a
+ fter
+DESCRIPTION:https://www.hawkhilldaycamp.com/locations/hawk-h
+ ill-day-camp/registration/?utm_source=phillyafterschool.org&
+ utm_medium=referral&utm_campaign=directory&utm_content=calen
+ dar\n\nFrom Philly After School: https://phillyafterschool.o
+ rg/
+URL:https://www.hawkhilldaycamp.com/locations/hawk-hill-day-
+ camp/registration/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hawk Hill Day Camp at Saint Joseph’s University 
+ (Future Stars): Last day for the $375 weekly rate; $435 a we
+ ek after
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

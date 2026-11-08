@@ -1,0 +1,26 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:camp-esf-camps-2027-02-01@phillyafterschool.org
+DTSTAMP:20261108T120000Z
+DTSTART;VALUE=DATE:20270201
+DTEND;VALUE=DATE:20270202
+SUMMARY:ESF Camps: Last day of early-bird tuition ($645 a we
+ ek; $695 after)
+DESCRIPTION:https://www.bravoenrollment.com/?redirectTo=esf&
+ utm_source=phillyafterschool.org&utm_medium=referral&utm_cam
+ paign=directory&utm_content=calendar\n\nFrom Philly After Sc
+ hool: https://phillyafterschool.org/
+URL:https://www.bravoenrollment.com/?redirectTo=esf
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:ESF Camps: Last day of early-bird tuition ($645 
+ a week; $695 after)
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR
