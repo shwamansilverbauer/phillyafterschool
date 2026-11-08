@@ -412,6 +412,10 @@ reviews.forEach((r, i) => {
   if (!Number.isInteger(r.stars) || r.stars < 1 || r.stars > 5) errors.push(`${at}: stars must be a whole number from 1 to 5`);
   if (!r.name || !r.comment) errors.push(`${at}: needs a name and a comment`);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(r.date || '')) errors.push(`${at}: date must be YYYY-MM-DD`);
+  if (r.kid !== undefined) {   // in a child's words: the grade, and the first name only when the parent said to show it
+    if (!r.kid || typeof r.kid !== 'object' || !GRADES.includes(String(r.kid.grade))) errors.push(`${at}: "kid" needs a grade from ${GRADES.join(', ')}`);
+    else if (r.kid.name !== undefined && (typeof r.kid.name !== 'string' || !/^[\p{L}\p{M}][\p{L}\p{M} '’.-]{0,19}$/u.test(r.kid.name))) errors.push(`${at}: "kid.name" is a first name (letters only, up to 20), or left out`);
+  }
 });
 for (const [id, e] of Object.entries(copyEdits)) {
   if (!e || typeof e.now !== 'string') errors.push(`data/copy.json: entry "${id}" needs a "now" with the new wording (an empty one takes the sentence off the page)`);
@@ -615,7 +619,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
     return `<details class="menu${here ? ' here' : ''}" data-top="${navHref(top)}"><summary>${label}</summary><ul>${items.map(([to, text]) => `<li${to === top ? ' class="menu-all"' : ''}><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
   }).join('') + `<a href="${link('suggest/', depth)}"${pathName.startsWith('suggest/') || pathName.startsWith('ideas/') || pathName.startsWith('schools/request/') ? ' aria-current="page"' : ''}>Suggestion Box</a><a href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
-    ? `<a class="when-in nav-acct" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}>Account</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('profile/', depth)}"${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}${PM_LISTED ? ' data-pm="1"' : ''}>My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>`
+    ? `${PASSPORT ? `<a class="when-in nav-pp" href="${link(passportPath, depth)}"${pathName === passportPath ? ' aria-current="page"' : ''}>Passport</a>` : ''}<a class="when-in nav-acct" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}>Account</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('profile/', depth)}"${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}${PM_LISTED ? ' data-pm="1"' : ''}>My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>`
     : `<a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`}`;
   const head = `${first}${fragment || quiet ? '' : roleHead + gtmHead + '\n' + klaviyoHead}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
@@ -636,9 +640,8 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <link rel="manifest" href="${link('manifest.json', depth)}">` : ''}
 <meta name="color-scheme" content="only light">
 <meta name="theme-color" content="#0A3566">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800&family=Atkinson+Hyperlegible:wght@400;700&family=Luckiest+Guy&display=swap">
+<link rel="preload" href="${link('assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2', depth)}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="${link('assets/fonts/luckiest-guy-latin-400-normal.woff2', depth)}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${link('assets/site.css', depth)}${CSS_V}">${jsonLd ? '\n<script type="application/ld+json">' + JSON.stringify(jsonLd).replace(/</g, '\\u003c') + '</script>' : ''}`;
   // Edit mode (see /edit/) loads a second script. This tells site.js where to find it and where edits are sent.
   const editCfg = { js: link('assets/edit.js', depth) + EDIT_V, send: PREVIEW ? '' : link('edit/send.php', depth), home: link('edit/', depth), contact: cfg.contactEmail || '' };
@@ -698,6 +701,7 @@ ${body}
         ${GROUPS && daysOff ? `<li><a href="${link('calendar/', depth)}">${T(`My Calendar`)}</a></li>` : ''}
         ${ALERTS ? `<li><a href="${link(alertsPath, depth)}">${T(`Reminders by Email`)}</a></li>` : ''}
         ${GROUPS ? `<li><a href="${link('profile/', depth)}">${T(`My Profile`)}</a></li>` : ''}
+        ${PASSPORT ? `<li><a href="${link(passportPath, depth)}">${T(`Passport`)}</a></li>` : ''}
       </ul>
     </div>
     <div>
@@ -815,7 +819,12 @@ function icsFile(p, d) {
 
 // ---------- reviews ----------
 const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
-const reviewsFor = id => reviews.filter(r => r.programId === id).sort((a, b) => b.date.localeCompare(a.date));
+const allReviewsFor = id => reviews.filter(r => r.programId === id).sort((a, b) => b.date.localeCompare(a.date));
+const reviewsFor = id => allReviewsFor(id).filter(r => !r.kid);        // parents' reviews: the rating and the count
+const kidReviewsFor = id => allReviewsFor(id).filter(r => !!r.kid);    // in a child's words, submitted by their parent
+const gradeWord = g => g === 'PK' ? 'pre-K' : g === 'K' ? 'kindergarten' : /^\d+$/.test(g) ? `${g}${{ 1: 'st', 2: 'nd', 3: 'rd' }[g] || 'th'} grade` : g;
+// How a kid's review is signed: the first name when the parent chose to show it, otherwise "a 2nd grader".
+const kidBy = r => r.kid.name ? `${r.kid.name}, ${gradeWord(r.kid.grade)}` : `A ${gradeWord(r.kid.grade).replace(/ grade$/, '')} grader`.replace('A kindergarten grader', 'A kindergartner').replace('A pre-K grader', 'A pre-K kid');
 const monthYear = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 const schoolShort = id => (schools.find(s => s.id === id) || {}).shortName || '';
 const BOARD_DAYS = [['mon', 'Mon'], ['tue', 'Tue'], ['wed', 'Wed'], ['thu', 'Thu'], ['fri', 'Fri']];
@@ -839,7 +848,15 @@ const registerText = p => {
 };
 const datesHtml = (p, depth) => upcomingDates(p).map(d => `<span class="cal" data-date="${d.date}"><b>${shortDate(d.date)}:</b> ${esc(d.label)}. ${PREVIEW ? '' : `<a href="${link('cal/' + p.id + '-' + d.date + '.ics', depth)}" data-track="calendar">Add to calendar</a> `}<a href="${esc(gcalUrl(p, d))}" target="_blank" rel="noopener" data-track="calendar">${PREVIEW ? 'Add to Google Calendar' : 'Google Calendar'}</a></span>`).join('');
 const average = revs => revs.reduce((a, x) => a + x.stars, 0) / revs.length;
-const reviewItems = revs => revs.map(x => `<li><span class="stars" role="img" aria-label="${x.stars} out of 5 stars">${stars(x.stars)}</span><p>${esc(x.comment)}</p><span class="by">${esc(x.name)}, ${esc(schoolShort(x.school))} parent, ${monthYear(x.date)}</span></li>`).join('');
+const reviewItems = revs => revs.map(x => `<li><span class="stars" role="img" aria-label="${x.stars} out of 5 stars">${stars(x.stars)}</span><p>${esc(x.comment)}</p><span class="by">${x.kid ? `${esc(kidBy(x))} at ${esc(schoolShort(x.school))}` : `${esc(x.name)}, ${esc(schoolShort(x.school))} parent`}, ${monthYear(x.date)}</span></li>`).join('');
+// The reviews on a program's page: parents' and kids' side by side when both exist, a switch between them.
+const reviewsBlock = (revs, kids, id) => {
+  if (!kids.length) return `<ul class="revlist">${reviewItems(revs)}</ul>`;
+  if (!revs.length) return `<ul class="revlist revlist-kids">${reviewItems(kids)}</ul>`;
+  return `<div class="rv-tabs" role="tablist" aria-label="Whose reviews"><button type="button" class="tab" role="tab" aria-selected="true" aria-controls="rv-parents-${esc(id)}" id="rv-tab-p-${esc(id)}">Parents (${revs.length})</button><button type="button" class="tab" role="tab" aria-selected="false" aria-controls="rv-kids-${esc(id)}" id="rv-tab-k-${esc(id)}">Kids (${kids.length})</button></div>
+    <ul class="revlist" id="rv-parents-${esc(id)}" role="tabpanel" aria-labelledby="rv-tab-p-${esc(id)}">${reviewItems(revs)}</ul>
+    <ul class="revlist revlist-kids" id="rv-kids-${esc(id)}" role="tabpanel" aria-labelledby="rv-tab-k-${esc(id)}" hidden>${reviewItems(kids)}</ul>`;
+};
 // A source named by both the listing and one of its school entries is linked once.
 const sourceLinks = (list, p = null, school = null) => { const own = p ? ownHosts(p) : null; const seen = new Set(); return list.filter(s => !seen.has(s.url) && seen.add(s.url)).map(s => `<a href="${esc(own?.has(bareHost(s.url)) ? outUrl(s.url, { type: 'source', school, program: p }) : s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join(''); };
 const programPath = p => `programs/${p.id}/`;
@@ -1488,7 +1505,7 @@ function programPage(p) {
   const D = 2;
   const served = servedBy(p);
   const r = p.register;
-  const revs = reviewsFor(p.id);
+  const revs = reviewsFor(p.id), kidRevs = kidReviewsFor(p.id);
   const avg = revs.length ? average(revs) : 0;
   const address = programAddress(p);
   const regUrl = r.how === 'online' ? outUrl(r.url, { type: 'register', program: p }) : null;
@@ -1606,9 +1623,9 @@ ${schoolRows}
     <p>${T(`Does it serve a school that isn’t shown here?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
   </section>`}
   <section class="section" id="reviews" data-jump-to="Reviews" data-rv-program="${esc(p.id)}">
-    <h2>${T(`What parents say`)}</h2>
-    ${revs.length ? `<p><span class="stars" aria-hidden="true">${stars(Math.floor(avg + 0.25))}</span> <b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'review' : 'reviews'}</p>
-    <ul class="revlist">${reviewItems(revs)}</ul>` : `<p>${T(`No reviews yet. If your child has been, a few sentences help the next family choose.`)}</p>`}
+    <h2>${kidRevs.length ? T(`What parents and kids say`) : T(`What parents say`)}</h2>
+    ${revs.length ? `<p><span class="stars" aria-hidden="true">${stars(Math.floor(avg + 0.25))}</span> <b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'parent' : 'parents'}${kidRevs.length ? `, and ${kidRevs.length} ${kidRevs.length === 1 ? 'review' : 'reviews'} in a kid’s own words` : ''}</p>` : kidRevs.length ? `<p>${kidRevs.length} ${kidRevs.length === 1 ? 'review' : 'reviews'} in a kid’s own words, none from a parent yet.</p>` : ''}
+    ${revs.length || kidRevs.length ? reviewsBlock(revs, kidRevs, p.id) : `<p>${T(`No reviews yet. If your child has been, a few sentences help the next family choose.`)}</p>`}
     <p class="rv-yours" hidden></p>
     <p class="actions"><a class="btn" href="${reviewUrl}" data-track="review">${revs.length ? T(`Write a review`) : T(`Write the first review`)}</a></p>
     <p class="hint">${T(`Reviews are first-hand notes from parents and caregivers. Each one is read before it’s posted.`)}</p>
@@ -2382,12 +2399,13 @@ function privacyPage() {
     <li>${T(`For a summer schedule in your profile, we store each child’s first name as you typed it and the camps picked for each week, so the summer is there on your other devices. The calendar’s title and photos are not stored. A summer in your profile can’t be shared with anyone except a co-parent you’ve linked (below), and it is deleted when you take it out of your profile or delete your account. The summer schedule section is hidden in session recordings, and analytics is told only that a summer was kept, never what is in it.`)}</li>
     <li>${T(`For a days-off plan in your profile, we store each child’s first name as you typed it, the place picked for each day school is closed, and which of those days you ticked as signed up. The calendar’s title and photos are not stored. The plan can’t be shared with anyone except a co-parent you’ve linked (below), and it is deleted when you take it out of your profile or delete your account. The planner is hidden in session recordings, and analytics is never told what is in a plan.`)}</li>
     <li>${T(`“My kids’ calendar” is drawn in your browser, for you alone, from the plans on your device and the ones in your profile. Opening it stores nothing new and sends nothing about your plans. It has no link of its own, so nobody else can open it. A picture or calendar file you save is a copy on your device that we never receive. So it can tell you when a date changes, the page remembers what your last file held, on your device only. Google Analytics and Microsoft Clarity are not loaded on it.`)}</li>
+    <li>${T(`The Passport is a page for each child, drawn from what you confirm they have been to. We store, encrypted like the plans, the child’s first name as you typed it, the listings you confirmed with the kind and the year, the suggestions you waved away, and the favorites the child ranked. Nothing else: no notes, no photos, nothing typed by a child. Stamps and the map are worked out in your browser. The page loads no analytics or recordings, sends nothing to the email list, and has no link to share; the picture you can save shows stamps and neighborhoods, with no name and no map.`)}</li>
     <li>${T(`Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.`)}</li>
     <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
     <li>${T(`The email list also notes whether an account belongs to a parent or to someone who manages a program, so each gets only the news meant for them. For a manager it notes the name of the listing they hold.`)}</li>
     <li>${T(`A new account is asked for a first and last name, and may add a school and a neighborhood. The school and neighborhood set where lists start, and they are noted on the email list so news can be about where you are. Both are optional, and you can change or clear them on your account page.`)}</li>
     <li>${T(`Once you have signed in, this device remembers one word, “parent” or “manager”. On the pages that load analytics, that word is passed along so we can count the two groups separately. Your name, your email address and anything in your profile are not.`)}</li>
-    <li>${T(`There are no passwords. We email you a link and a 6-digit code; each works once and for 15 minutes. A cookie then keeps that device signed in for 30 days, and you can sign out everywhere from your account page.`)}</li>
+    <li>${T(`There are no passwords. We email you a link and a 6-digit code; each works once and for 10 minutes. A cookie then keeps that device signed in for 30 days, and you can sign out everywhere from your account page.`)}</li>
     <li>${T(`When you add a week to a group, we store the child’s first name as you type it and the programs on their current and upcoming weeks. We do not store a last name, school, address, pickup time, note, teacher’s name, photo, price or day-off plan.`)}</li>
     <li>${T(`Nobody can find a group or ask to join one. The person who made it invites email addresses, and only someone signed in with an invited address, who also has the code from the invitation, gets in. A group isn’t listed anywhere, and its link shows nothing to anyone else.`)}</li>
     <li>${T(`If someone invites you, they give us your email address so we can send the invitation and recognise you if you join. We keep it with that group, use it for nothing else, and delete it when you are removed or the group ends. The invitation shows the name and email of the person who invited you.`)}</li>
@@ -4318,7 +4336,7 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])), citySchools: Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])) });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, repo: /^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : '', from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])), citySchools: Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])) });
   const src = phpCopy(fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8'));
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   if (!src.includes('/*MAILER*/')) throw new Error('src/server/groups-api.php has lost its /*MAILER*/ marker');
@@ -4427,6 +4445,7 @@ function boardPage() {
           <button type="button" class="btn adder-browse" id="explore-toggle" aria-expanded="false" aria-controls="explore">${T(`Browse`)}</button>
         </div>
         <ul id="add-list" class="finder-list" role="listbox" aria-label="Programs" hidden></ul>
+        <div class="fav-row" id="add-favs" hidden></div>
       </div>
       <div class="explore" id="explore" hidden>
         <div class="explore-head"><b>${T(`Not sure what to search for? Browse by what it is.`)}</b><button type="button" class="clear" id="explore-close">Close</button></div>
@@ -4596,7 +4615,24 @@ function reviewPage() {
         <span class="hint">${T(`Never shown. Only used if we need to confirm something.`)} <a href="${link('privacy/', 1)}">${T(`How we handle it.`)}</a></span>
       </div>
     </div>
-    <label class="check"><input type="checkbox" name="firsthand" value="yes" required><span>${T(`This is my own experience as a parent or caregiver.`)}</span></label>
+    <fieldset class="field rv-kid" id="rv-kid" hidden>
+      <legend>${T(`In your child’s words`)}</legend>
+      <span class="hint">${T(`Your child said it, you’re typing it. It’s shown as a kid’s review, with your child’s first name and grade, or just the grade.`)}</span>
+      <input type="hidden" name="kid" id="r-kid" value="">
+      <div class="pair">
+        <div class="field">
+          <label for="r-kidname">${T(`Child’s first name`)}</label>
+          <input id="r-kidname" name="kidname" type="text" maxlength="20" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="r-kidgrade">${T(`Grade`)}</label>
+          <select id="r-kidgrade" name="kidgrade"><option value="">${T(`Choose`)}</option>${GRADES.map(g => `<option value="${g}">${esc(gradeWord(g))}</option>`).join('')}</select>
+        </div>
+      </div>
+      <label class="check"><input type="checkbox" name="kidshow" value="yes" checked><span>${T(`Show the first name with the review (otherwise it says “a 2nd grader”).`)}</span></label>
+    </fieldset>
+    <p class="hint rv-kid-switch"><button type="button" class="linklike" id="rv-kid-on">${T(`Writing down what your kid said instead?`)}</button><button type="button" class="linklike" id="rv-kid-off" hidden>${T(`Back to a parent’s review`)}</button></p>
+    <label class="check"><input type="checkbox" name="firsthand" value="yes" required><span class="rv-first-parent">${T(`This is my own experience as a parent or caregiver.`)}</span><span class="rv-first-kid" hidden>${T(`These are my own child’s words, and I’m their parent or caregiver.`)}</span></label>
     <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
       <label for="r-company">Leave this blank</label>
       <input id="r-company" name="company" type="text" tabindex="-1" autocomplete="off">
@@ -4608,7 +4644,7 @@ function reviewPage() {
     <ul class="rules">
       <li>${T(`First-hand only. Write about what your own family experienced.`)}</li>
       <li>${T(`Be specific and fair. Details help more than adjectives.`)}</li>
-      <li>${T(`No names of children or individual staff.`)}</li>
+      <li>${T(`No names of other children or of individual staff.`)}</li>
       <li>${T(`Programs can’t review themselves.`)}</li>
     </ul>
     <p class="hint">${T(`Reviews show your first name and school, and appear after they’ve been read. Nobody pays to have a review posted or removed.`)}</p>
@@ -4635,6 +4671,7 @@ $TO = ${JSON.stringify(cfg.contactEmail)};
 $SITE = ${JSON.stringify(cfg.siteName)};
 $PROGRAMS = ${phpList(programs.map(p => p.id))};
 $SCHOOLS = ${phpList(schools.map(s => s.id))};
+$GRADES = ${phpList(GRADES)};
 
 function fail($msg, $code) {
   http_response_code($code);
@@ -4686,20 +4723,37 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 if (field('firsthand', 5) !== 'yes') {
   fail('Please confirm this is your own experience.', 400);
 }
+// In a child's words: the grade is needed, the first name only when the parent chose to show it.
+$kid = null;
+if (field('kid', 5) === 'yes') {
+  $grade = one_line(field('kidgrade', 4));
+  if (!in_array($grade, $GRADES, true)) {
+    fail('Please choose your child’s grade.', 400);
+  }
+  $kid = array('grade' => $grade);
+  $kidName = one_line(field('kidname', 20));
+  if (field('kidshow', 5) === 'yes' && $kidName !== '' && preg_match('/^[\\p{L}\\p{M}][\\p{L}\\p{M} \\'’.-]{0,19}$/u', $kidName)) {
+    $kid['name'] = $kidName;
+  }
+}
 if (substr_count(strtolower($comment), 'http') > 1) {
   fail('Reviews cannot include links. Please remove them and try again.', 400);
 }
 
-$entry = json_encode(array(
+$record = array(
   'programId' => $program,
   'school' => $school,
   'name' => $name,
   'stars' => $stars,
   'comment' => trim(preg_replace('/\\s+/', ' ', $comment)),
   'date' => date('Y-m-d'),
-), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+);
+if ($kid !== null) {
+  $record['kid'] = $kid;
+}
+$entry = json_encode($record, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-$body = "New review, waiting for your approval.\\n\\n"
+$body = ($kid !== null ? "New review IN A KID'S WORDS (" . (isset($kid['name']) ? $kid['name'] . ', ' : 'name not shown, ') . 'grade ' . $kid['grade'] . "), waiting for your approval.\\n\\n" : "New review, waiting for your approval.\\n\\n")
   . "Program: $program\\n"
   . "School: $school\\n"
   . "Stars: $stars\\n"
@@ -5361,6 +5415,75 @@ const summerPlan = (() => {
 // no address of its own for any family: nothing about a child is ever in the page that is served, or in a link.
 const yearPath = 'calendar/';
 const YEAR_PAGE = !!(GROUPS && daysOff);
+// ---------- the Passport: a page of each child's own, inside a parent's account ----------
+// Stamps for the kinds of program a child has been to, the neighborhoods, the milestones and the seasons; a map of
+// every place; a bracket that ranks favorites. Everything on it comes from what a parent has confirmed (the "passport"
+// endpoint in groups-api.php, kept encrypted with the rest of a household's plans). The page is quiet (no analytics,
+// no recordings, nothing to Klaviyo), out of search, and in kid mode no link leaves the site. The stamps are drawn
+// here as simple shapes; artwork can replace them later by changing this list alone.
+const PASSPORT = !!GROUPS && !PREVIEW;
+const passportPath = 'passport/';
+const PASSPORT_V = PASSPORT ? stamp('src/passport.js') : '';
+const STAMP_ICON = {
+  star: 'M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z',
+  pin: 'M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z',
+  sun: 'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm-1-6h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.9 2.9-1.4 1.4zm11.3 11.3 1.4-1.4 2.9 2.9-1.4 1.4zM4.2 18.4l2.9-2.9 1.4 1.4-2.9 2.9zM15.5 7.1l2.9-2.9 1.4 1.4-2.9 2.9z',
+  snow: 'M11 1h2v22h-2zM1 11h22v2H1zm3.2-5.4 1.4-1.4 15.6 15.6-1.4 1.4zm15.6-1.4 1.4 1.4L5.6 21.2l-1.4-1.4z',
+  backpack: 'M9 2h6a2 2 0 0 1 2 2v2h1a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h1V4a2 2 0 0 1 2-2zm0 4h6V4H9zm-1 7v5h8v-5z',
+  calendar: 'M7 2h2v2h6V2h2v2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm-2 8v10h14V10zm2 2h4v4H7z',
+  trophy: 'M7 2h10v2h3v3a5 5 0 0 1-4.6 5A5 5 0 0 1 13 15.9V18h3v2H8v-2h3v-2.1A5 5 0 0 1 8.6 12 5 5 0 0 1 4 7V4h3zm-1 4v1a3 3 0 0 0 2 2.8V6zm12 0h-2v3.8A3 3 0 0 0 18 7z',
+  compass: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.5 5.5-2.8 6.2-6.2 2.8 2.8-6.2zM12 10.8a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z',
+};
+const STAMP_NAMES = { aftercare: 'After-school regular', music: 'Music maker', theater: 'Stage star', art: 'Maker', movement: 'Mover', stem: 'Scientist', academics: 'Bookworm', games: 'Game master', nature: 'Explorer', daycamp: 'Camper', clubs: 'Club member', 'rec-center': 'Rec center regular' };
+const STAMPS = [
+  ...TYPES.map(t => ({ id: 'type:' + t.id, group: 'type', label: STAMP_NAMES[t.id] || t.label, how: `A ${t.label.toLowerCase()} program`, color: t.color, icon: t.icon })),
+  { id: 'season:after', group: 'season', label: 'After-schooler', how: 'An after-school program', color: '#1763B8', icon: STAMP_ICON.backpack },
+  { id: 'season:weekend', group: 'season', label: 'Weekend regular', how: 'A Saturday or Sunday class', color: '#6B3FA0', icon: STAMP_ICON.calendar },
+  { id: 'season:off', group: 'season', label: 'Day-off explorer', how: 'A camp on a day school is closed', color: '#0E7C86', icon: STAMP_ICON.snow },
+  { id: 'season:summer', group: 'season', label: 'Summer camper', how: 'A week of summer camp', color: '#C2410C', icon: STAMP_ICON.sun },
+  { id: 'first', group: 'milestone', n: 1, label: 'First stamp', how: 'Your first class or camp', color: '#B8860B', icon: STAMP_ICON.star },
+  { id: 'five', group: 'milestone', n: 5, label: 'High five', how: '5 classes or camps', color: '#B8860B', icon: STAMP_ICON.star },
+  { id: 'ten', group: 'milestone', n: 10, label: 'Perfect ten', how: '10 classes or camps', color: '#B8860B', icon: STAMP_ICON.trophy },
+  { id: 'twentyfive', group: 'milestone', n: 25, label: 'Quarter century', how: '25 classes or camps', color: '#B8860B', icon: STAMP_ICON.trophy },
+  { id: 'hoods:3', group: 'milestone', hoods: 3, label: 'Around town', how: 'Classes in 3 neighborhoods', color: '#1F7A3A', icon: STAMP_ICON.compass },
+  { id: 'hoods:6', group: 'milestone', hoods: 6, label: 'All over Philly', how: 'Classes in 6 neighborhoods', color: '#1F7A3A', icon: STAMP_ICON.compass },
+];
+function passportPage() {
+  const D = 1;
+  const listings = {};
+  // A listing's sites: its neighborhoods, each with a map point when the addresses line up with them one to one.
+  // A listing with several sites earns a neighborhood stamp and a pin only once a parent says which site.
+  const sites = (hoods, lls) => hoods.map((h, i) => ({ h, ll: hoods.length === 1 ? (lls[0] || null) : hoods.length === lls.length ? lls[i] : null }));
+  for (const p of programs) listings['p:' + p.id] = { n: p.name, t: p.types || [], sites: sites(programHoods(p), placesOf(p)), href: link(programPath(p), D) };
+  for (const c of summerCamps) listings['c:' + c.id] = { n: c.name, t: c.types || [], sites: sites(c.neighborhoods || [], coordsOf(c.address)), href: link(campPath(c), D) };
+  const data = {
+    site: cfg.siteName, url: cfg.siteUrl.replace(/^https?:\/\//, ''), year: +String(daysOff.schoolYear).slice(0, 4), leaflet: link('assets/leaflet/', D),
+    listings, schools: Object.fromEntries(schools.map(s => [s.id, { n: s.shortName, h: schoolHoods(s) }])),
+    typeMap: Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, color: t.color, icon: t.icon }])), badges: STAMPS, pin: STAMP_ICON.pin,
+    kinds: { after: 'After school', weekend: 'Weekend class', off: 'Day-off camp', summer: 'Summer camp' },
+    links: { kids: link('account/', D) + '#school', account: link('account/', D), review: link('review/', D) },
+  };
+  const hero = `    <h1><span class="when-out">${T(`A passport for every kid`)}</span><span class="when-in">${T(`Passport`)}</span></h1>
+    <p class="lede when-out">${T(`Every class and camp your child has been to becomes a stamp on a page of their own: stamps for the kinds of program, the neighborhoods, the milestones; a map of every place; a bracket to pick favorites.`)}</p>
+    <p class="lede when-in">${T(`Hand over the phone. The passport is for the kid; the grown-ups’ corner is behind a press-and-hold.`)}</p>`;
+  const body = `<div class="pp" id="passport" data-api="${link('groups/api.php', D)}">
+  <section class="section pp-out" id="pp-out">
+    <h2>${T(`How it works`)}</h2>
+    <ul>
+      <li>${T(`A page for each child on your account, by first name. No child signs in and nothing is typed by a child: it’s the parent’s account, handed over for a look.`)}</li>
+      <li>${T(`What counts is what you confirm. The page suggests from your kept week, your summer and your days off (“Did Sam go to chess club this year?”), and you say yes or no. You can add anything the plans missed.`)}</li>
+      <li>${T(`Stamps are worked out from that: one for each kind of program, each neighborhood, the milestones (1, 5, 10, 25) and the seasons. A map shows every place. A bracket lets the kid pick favorites, and those come first when you plan the next term.`)}</li>
+      <li>${T(`Nothing on this page is counted, recorded or sent anywhere. It has no link of its own to share: a picture of the stamps, with no name and no map, is the only thing that leaves it.`)}</li>
+    </ul>
+    <div class="actions"><a class="btn primary big" href="${link('register/', D)}?next=passport">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=passport">${T(`Log in`)}</a></div>
+  </section>
+  <p class="hint when-in" id="pp-wait">${T(`Opening the passport…`)}</p>
+  <div id="pp-app" class="needs-js-block" hidden></div>
+  <script type="application/json" id="passport-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
+</div>`;
+  return layout({ title: 'Passport', description: `A page for each child: stamps for every class and camp they have been to on ${cfg.siteName}, a map of the places, and their favorites.`, pathName: passportPath, depth: D, current: null, hero, body, next: 'passport', noindex: true, quiet: true, scripts: `<script src="${link('assets/passport.js', D)}${PASSPORT_V}"></script>` });
+}
+
 // ---------- the planners in one place: the week, the days off, the summer, and the calendar they add up to ----------
 const schedulesPath = 'schedules/';
 function schedulesPage() {
@@ -6092,6 +6215,7 @@ for (const c of summerCamps) write(campPath(c) + 'index.html', c.program ? campM
 if (summerCamps.length) { write(summerPath + 'index.html', summerSchedulePage()); write(weeksPath + 'index.html', summerWeeksPage()); }
 if (YEAR_PAGE) write(yearPath + 'index.html', calendarPage());
 if (YEAR_PAGE) write('to-do/index.html', todoPage());
+if (PASSPORT) { write(passportPath + 'index.html', passportPage()); write('assets/passport.js', fs.readFileSync(path.join(ROOT, 'src/passport.js'))); }
 if (weekendPrograms.length) write(weekendPath + 'index.html', weekendPage());
 if (ALERTS) write(alertsPath + 'index.html', alertsPage());
 if (ALERTS && GROUPS) write(alertsPath + 'stop/index.html', stopPage());
@@ -6103,6 +6227,8 @@ if (GATED && GROUPS) write('edit/claims/index.php', editClaimsPhp());
 if (GATED) write('edit/queue/index.php', editQueuePhp());
 const notFound = notFoundPage();   // always rendered, so its copy is known to the editor
 write('assets/site.css', fs.readFileSync(path.join(ROOT, 'src/site.css')));
+// The typefaces, served from this site (the @font-face rules are at the top of site.css), with their licenses.
+for (const f of fs.readdirSync(path.join(ROOT, 'src/fonts'))) write('assets/fonts/' + f, fs.readFileSync(path.join(ROOT, 'src/fonts', f)));
 write('assets/site.js', fs.readFileSync(path.join(ROOT, 'src/site.js')));
 write('assets/edit.js', fs.readFileSync(path.join(ROOT, 'src/edit.js')));
 // Notifications without an app: a service worker at the top of the site (it shows a notification and opens a page,
@@ -6185,7 +6311,24 @@ if (!PREVIEW) {
   // Other addresses that should land on this one (see "Changing the site's address" in the README).
   const formerHosts = (cfg.formerHosts || []).filter(h => /^[a-z0-9.-]+\.[a-z]{2,}$/.test(h) && h !== bare && h !== 'www.' + bare);
   const goneDays = (daysOff?.days || []).filter(d => (d.end || d.date) < TODAY).map(daySlug);
-  write('.htaccess', `ErrorDocument 404 /404.html\nAddType text/calendar .ics\nDirectoryIndex index.html index.php\n\n# One address for the site: www goes to the bare domain.\n<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.${bare.replace(/\./g, '\\.')}$ [NC]\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n${formerHosts.length ? `# The site's other addresses all lead here, page for page (the certificate check on each is left alone).\nRewriteCond %{HTTP_HOST} ^(www\\.)?(${formerHosts.map(h => h.replace(/\./g, '\\.')).join('|')})$ [NC]\nRewriteCond %{REQUEST_URI} !^/\\.well-known/\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n` : ''}${cardQr ? `# The short addresses in the QR codes on the week card and the day-camp card.\nRewriteRule ^w/?$ ${cardQr.goesTo} [NC,R=302,L]\n${cardQr.dayoff ? `RewriteRule ^d/?$ ${cardQr.dayoff.goesTo} [NC,R=302,L]\n` : ''}` : ''}${movedSchools.length ? `# A school that has been added: its old "not covered yet" address goes to its page.\n${movedSchools.map(([from, to]) => `RewriteRule ^schools/${from}/?$ /${to}/ [R=301,L]\n`).join('')}` : ''}${goneDays.length ? `# A day off that has passed: its own page leads to the list of days still to come.\n${goneDays.map(x => `RewriteRule ^${offPath}${x}/?$ /${offPath} [R=301,L]\n`).join('')}` : ''}${summerCamps.some(c => c.program) ? `# A summer camp tied to a program is on the program's page, under Summer (a query string, such as an email's tags, stays ahead of the #).\n${summerCamps.filter(c => c.program).map(c => { const to = '/' + programPath(programs.find(p => p.id === c.program)); return `RewriteCond %{QUERY_STRING} ^(.+)$\nRewriteRule ^${campsPath}${c.id}/?$ ${to}?%1#summer [NE,QSD,R=301,L]\nRewriteRule ^${campsPath}${c.id}/?$ ${to}#summer [NE,R=301,L]\n`; }).join('')}` : ''}</IfModule>\n`);
+  // Security headers for every response (pages, files and the PHP endpoints): HTTPS only from now on (a year, this
+  // host alone: the email service's link domain is a subdomain, so no includeSubDomains, and no preload list), no
+  // framing by another site, no guessing at file types, the address of the page sent to other sites as the bare domain
+  // only, and the browser features the site never uses switched off (location stays on: "Nearest" asks for it).
+  // The fonts never change once named, so they are kept a year.
+  const headers = `<IfModule mod_headers.c>
+Header always set Strict-Transport-Security "max-age=31536000"
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set X-Content-Type-Options "nosniff"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Permissions-Policy "camera=(), microphone=(), payment=(), usb=(), serial=(), bluetooth=(), geolocation=(self)"
+<FilesMatch "\\.woff2$">
+Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+</IfModule>
+AddType font/woff2 .woff2
+`;
+  write('.htaccess', `ErrorDocument 404 /404.html\nAddType text/calendar .ics\nDirectoryIndex index.html index.php\n\n${headers}\n# One address for the site: www goes to the bare domain.\n<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.${bare.replace(/\./g, '\\.')}$ [NC]\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n${formerHosts.length ? `# The site's other addresses all lead here, page for page (the certificate check on each is left alone).\nRewriteCond %{HTTP_HOST} ^(www\\.)?(${formerHosts.map(h => h.replace(/\./g, '\\.')).join('|')})$ [NC]\nRewriteCond %{REQUEST_URI} !^/\\.well-known/\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n` : ''}${cardQr ? `# The short addresses in the QR codes on the week card and the day-camp card.\nRewriteRule ^w/?$ ${cardQr.goesTo} [NC,R=302,L]\n${cardQr.dayoff ? `RewriteRule ^d/?$ ${cardQr.dayoff.goesTo} [NC,R=302,L]\n` : ''}` : ''}${movedSchools.length ? `# A school that has been added: its old "not covered yet" address goes to its page.\n${movedSchools.map(([from, to]) => `RewriteRule ^schools/${from}/?$ /${to}/ [R=301,L]\n`).join('')}` : ''}${goneDays.length ? `# A day off that has passed: its own page leads to the list of days still to come.\n${goneDays.map(x => `RewriteRule ^${offPath}${x}/?$ /${offPath} [R=301,L]\n`).join('')}` : ''}${summerCamps.some(c => c.program) ? `# A summer camp tied to a program is on the program's page, under Summer (a query string, such as an email's tags, stays ahead of the #).\n${summerCamps.filter(c => c.program).map(c => { const to = '/' + programPath(programs.find(p => p.id === c.program)); return `RewriteCond %{QUERY_STRING} ^(.+)$\nRewriteRule ^${campsPath}${c.id}/?$ ${to}?%1#summer [NE,QSD,R=301,L]\nRewriteRule ^${campsPath}${c.id}/?$ ${to}#summer [NE,R=301,L]\n`; }).join('')}` : ''}</IfModule>\n`);
 }
 // Edits in data/copy.json are matched to sentences by a fingerprint of the original wording.
 // If the original was reworded or removed in this file, the edit no longer applies: say so, but still build.

@@ -38,7 +38,7 @@ header('X-Content-Type-Options: nosniff');
 header('X-Robots-Tag: noindex, nofollow');
 header('Referrer-Policy: no-referrer');
 
-const LINK_MINUTES = 15;
+const LINK_MINUTES = 10;
 const SESSION_DAYS = 30;
 const MAX_OWNED = 10;       // groups one person can own
 const MAX_JOINED = 30;      // groups one person can be in
@@ -161,6 +161,10 @@ function db(): PDO {
     $db->exec('CREATE TABLE IF NOT EXISTS school_asks (user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, school TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY (user_id, school))');
     $db->exec('CREATE TABLE IF NOT EXISTS favs (user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, k TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY (user_id, k))');
     $db->exec('CREATE TABLE IF NOT EXISTS daysoffs (user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, year INTEGER NOT NULL, json TEXT NOT NULL, updated INTEGER NOT NULL)');
+    // The passport: for each child in a household, the classes and camps a parent has confirmed they went to, the
+    // suggestions the parent waved away, and the favorites the child ranked. One row per child, by first name.
+    $db->exec('CREATE TABLE IF NOT EXISTS passports (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, name TEXT NOT NULL, json TEXT NOT NULL, updated INTEGER NOT NULL)');
+    $db->exec('CREATE INDEX IF NOT EXISTS passports_user ON passports (user_id)');
     // Directors: a claim on a listing ("p:<program id>" or "c:<camp id>") and the changes a director has proposed for it.
     $db->exec("CREATE TABLE IF NOT EXISTS claims (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, listing TEXT NOT NULL, status TEXT NOT NULL, domain TEXT NOT NULL DEFAULT '', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0, UNIQUE (user_id, listing))");
     $db->exec("CREATE TABLE IF NOT EXISTS edits (id INTEGER PRIMARY KEY, claim_id INTEGER NOT NULL REFERENCES claims(id) ON DELETE CASCADE, listing TEXT NOT NULL, body TEXT NOT NULL, link TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'new', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0)");
@@ -447,7 +451,7 @@ function code_open(string $sealed): string {
 // secret.key, beside the database, is needed to read a restored copy. What the site looks up or sorts by stays as it
 // is: an email address, an adult's name, a school, grades and ages (never which child), what is followed, a claim.
 const SEAL_TAG = 'e1.';
-const SEALED = array('weeks' => array('name', 'now_json', 'next_json'), 'kids' => array('name', 'now_json', 'next_json'), 'summers' => array('json'), 'daysoffs' => array('json'), 'users' => array('kids'), 'grp' => array('name'));
+const SEALED = array('weeks' => array('name', 'now_json', 'next_json'), 'kids' => array('name', 'now_json', 'next_json'), 'summers' => array('json'), 'daysoffs' => array('json'), 'users' => array('kids'), 'grp' => array('name'), 'passports' => array('name', 'json'));
 function seal_key(): string { static $k = null; if ($k === null) $k = hash_hmac('sha256', 'pas-plans-v1', secret(), true); return $k; }   // the secret itself signs codes; plans get a key of their own from it
 function seal(string $v): string {
   if ($v === '') return '';
@@ -773,11 +777,117 @@ function daysoff_out(int $uid): ?array {
   }
   return array('y' => (int) $s['year'], 'kids' => $kids, 'updated' => (int) $s['updated']);
 }
+// ---------- the passport: what each child has done, as a parent confirms it ----------
+// A passport is kept per child (by first name, the way weeks and the kids list match) under the household's home
+// account. Its json: { "done": [...], "skip": [...], "fav": [...] }. A "done" entry is one listing in one period:
+// { "k": "p:<program>" or "c:<camp>", "kind": after | weekend | off | summer, "y": the school year it started (summer:
+// the calendar year), "s": the school it was picked under, or "", "h": which of the listing's sites, as a
+// neighborhood name, when it has more than one }. "skip" holds the keys of suggestions the parent
+// waved away ("k|kind|y"); "fav" is the child's ranking of listings, best first. Badges are never stored: the page
+// works them out from "done". Nothing here is ever sent anywhere but back to the household's own browsers.
+const PASSPORT_KINDS = array('after', 'weekend', 'off', 'summer');
+const PASSPORT_MAX = 300;
+function school_year(): int {   // the year the current school year started
+  global $CFG;
+  $end = isset($CFG['yearEnd']) ? (int) substr((string) $CFG['yearEnd'], 0, 4) : 0;
+  return $end ? $end - 1 : (int) substr(today_ny(), 0, 4);
+}
+function passport_key(array $e): string { return $e['k'] . '|' . $e['kind'] . '|' . $e['y']; }
+function passport_clean($raw): array {
+  $l = listings(); $out = array('done' => array(), 'skip' => array(), 'fav' => array()); $seen = array();
+  $yNow = (int) substr(today_ny(), 0, 4);
+  foreach (isset($raw['done']) && is_array($raw['done']) ? array_slice($raw['done'], 0, PASSPORT_MAX) : array() as $e) {
+    if (!is_array($e) || !isset($e['k'], $e['kind'], $e['y']) || !is_string($e['k']) || !isset($l[$e['k']]) || !in_array($e['kind'], PASSPORT_KINDS, true)) continue;
+    $y = (int) $e['y']; if ($y < 2020 || $y > $yNow + 1) continue;
+    $s = isset($e['s']) && is_string($e['s']) && in_array($e['s'], schools(), true) ? $e['s'] : '';
+    $x = array('k' => $e['k'], 'kind' => $e['kind'], 'y' => $y, 's' => $s);
+    if (isset($e['h']) && is_string($e['h']) && preg_match('/^[\p{L}\p{M} .’\'-]{2,60}$/u', $e['h'])) $x['h'] = $e['h'];   // which of a listing's sites, by neighborhood name
+    $key = passport_key($x); if (isset($seen[$key])) continue; $seen[$key] = true;
+    $out['done'][] = $x;
+  }
+  foreach (isset($raw['skip']) && is_array($raw['skip']) ? array_slice($raw['skip'], 0, PASSPORT_MAX) : array() as $k) {
+    if (is_string($k) && preg_match('~^[pc]:[a-z0-9-]{1,80}\|(after|weekend|off|summer)\|\d{4}$~', $k) && !in_array($k, $out['skip'], true)) $out['skip'][] = $k;
+  }
+  foreach (isset($raw['fav']) && is_array($raw['fav']) ? array_slice($raw['fav'], 0, 60) : array() as $k) {
+    if (is_string($k) && isset($l[$k]) && !in_array($k, $out['fav'], true)) $out['fav'][] = $k;
+  }
+  return $out;
+}
+function passport_row(int $home, string $name): ?array {
+  foreach (q('SELECT id, name, json, updated FROM passports WHERE user_id = ?', array($home)) as $r) {
+    if (mb_strtolower(unseal($r['name']), 'UTF-8') === mb_strtolower($name, 'UTF-8')) return $r;
+  }
+  return null;
+}
+function passport_data(?array $r): array {
+  $d = $r ? json_decode(unseal($r['json']), true) : null;
+  return passport_clean(is_array($d) ? $d : array());
+}
+// What the household's plans say this child has been to, for the parent to confirm: the programs on the kept week,
+// the camps whose week has passed, the day-off programs whose day has passed. Each once per listing per year.
+function passport_suggest(int $home, string $name, array $data): array {
+  $have = array(); foreach ($data['done'] as $e) $have[passport_key($e)] = true; foreach ($data['skip'] as $k) $have[$k] = true;
+  $same = function ($n) use ($name) { return mb_strtolower(trim((string) $n), 'UTF-8') === mb_strtolower($name, 'UTF-8'); };
+  $out = array(); $sy = school_year(); $today = today_ny();
+  $add = function ($k, $kind, $y, $s = '') use (&$out, &$have) { $e = array('k' => $k, 'kind' => $kind, 'y' => (int) $y, 's' => $s); $key = passport_key($e); if (isset($have[$key])) return; $have[$key] = true; $out[] = $e; };
+  foreach (q('SELECT name, now_json FROM weeks WHERE user_id = ?', array($home)) as $w) {
+    if (!$same(unseal($w['name']))) continue;
+    $now = json_decode(unseal($w['now_json']), true);
+    foreach (DAYS as $d) foreach (is_array($now) && isset($now[$d]) && is_array($now[$d]) ? $now[$d] : array() as $entry) {
+      if (!is_string($entry)) continue;
+      $id = explode('~', $entry, 2)[0];
+      if (in_array($d, WEEKEND, true)) { $add('p:' . $id, 'weekend', $sy); continue; }
+      $parts = explode('.', $id, 2);
+      $add('p:' . $parts[0], 'after', $sy, isset($parts[1]) ? $parts[1] : '');
+    }
+  }
+  $s = row('SELECT year, json FROM summers WHERE user_id = ?', array($home));
+  if ($s) {
+    $d = json_decode(unseal($s['json']), true);
+    foreach (is_array($d) && isset($d['kids']) && is_array($d['kids']) ? $d['kids'] : array() as $k) {
+      if (!is_array($k) || !$same(isset($k['name']) ? $k['name'] : '')) continue;
+      foreach (isset($k['w']) && is_array($k['w']) ? $k['w'] : array() as $monday => $ids) {
+        if (!is_string($monday) || $monday > $today || !is_array($ids)) continue;   // only weeks that have started
+        foreach ($ids as $id) if (is_string($id) && !in_array($id, OWN_PLANS, true)) $add('c:' . $id, 'summer', (int) $s['year']);
+      }
+    }
+  }
+  $o = row('SELECT year, json FROM daysoffs WHERE user_id = ?', array($home));
+  if ($o) {
+    $d = json_decode(unseal($o['json']), true);
+    foreach (is_array($d) && isset($d['kids']) && is_array($d['kids']) ? $d['kids'] : array() as $k) {
+      if (!is_array($k) || !$same(isset($k['name']) ? $k['name'] : '')) continue;
+      foreach (isset($k['d']) && is_array($k['d']) ? $k['d'] : array() as $day => $id) {
+        if (!is_string($day) || $day > $today || !is_string($id) || in_array($id, OWN_PLANS, true)) continue;
+        $add('p:' . $id, 'off', (int) $o['year']);
+      }
+    }
+  }
+  $l = listings();
+  return array_values(array_filter($out, function ($e) use ($l) { return isset($l[$e['k']]); }));
+}
+function passport_out(array $u): array {
+  $home = home_id($u);
+  $kids = array();
+  foreach (kids_list(home_user($u)) as $k) {
+    $r = passport_row($home, $k['n']);
+    $d = passport_data($r);
+    $kids[] = array('name' => $k['n'], 'grade' => $k['g'], 'age' => $k['a'], 'done' => $d['done'], 'skip' => $d['skip'], 'fav' => $d['fav'], 'suggest' => passport_suggest($home, $k['n'], $d), 'updated' => $r ? (int) $r['updated'] : 0);
+  }
+  return array('kids' => $kids, 'year' => school_year());
+}
+// The favorites alone, for the planners: each child's ranking, best first.
+function passport_favs(int $home): array {
+  $out = array();
+  foreach (q('SELECT name, json FROM passports WHERE user_id = ?', array($home)) as $r) { $d = passport_data($r); if ($d['fav']) $out[] = array('name' => unseal($r['name']), 'fav' => $d['fav']); }
+  return $out;
+}
+
 function profile_out(array $u): array {
   $h = home_id($u); $hh = household($u);
   $weeks = array();
   foreach (q('SELECT * FROM weeks WHERE user_id = ? ORDER BY id', array($h)) as $w) $weeks[] = week_out($w) + array('shares' => week_shares((int) $w['id'], $hh));
-  return array('school' => $u['school'], 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'ages' => grade_list(isset($u['ages']) ? (string) $u['ages'] : ''), 'kids' => kids_list(home_user($u)), 'weeks' => $weeks, 'summer' => summer_out($h), 'daysoff' => daysoff_out($h)) + marks_out((int) $u['id']);
+  return array('school' => $u['school'], 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'ages' => grade_list(isset($u['ages']) ? (string) $u['ages'] : ''), 'kids' => kids_list(home_user($u)), 'weeks' => $weeks, 'summer' => summer_out($h), 'daysoff' => daysoff_out($h), 'favorites' => passport_favs($h)) + marks_out((int) $u['id']);
 }
 function kid_out(array $k, bool $mine): array {
   return array('id' => (int) $k['id'], 'name' => unseal($k['name']), 'now' => json_decode(unseal($k['now_json']), true), 'next' => json_decode(unseal($k['next_json']), true), 'mine' => $mine);
@@ -1578,6 +1688,50 @@ function google_email(string $jwt): array {
   if (!$own) fail('google_other', 'That Google account uses an address Google doesn’t run (' . $email . '). Sign in with the email code instead, so we can check the address is yours.', 403);
   return array('email' => $email, 'first' => person_name(isset($c['given_name']) && is_string($c['given_name']) ? $c['given_name'] : '', 30), 'last' => person_name(isset($c['family_name']) && is_string($c['family_name']) ? $c['family_name'] : '', 40));
 }
+// The key /edit/ publishes with (a fine-grained GitHub token in phillyafterschool-github.key, next to the public folder)
+// runs out on a day GitHub sets, and then publishing stops without a word. The health answer says whether GitHub still
+// takes it and how many days it has left, so the hourly check can warn two weeks ahead. GitHub is asked at most every
+// six hours (sooner when the key file changes); the key itself never leaves the server and is never shown.
+function edit_key_state(): ?array {
+  global $CFG;
+  $dir = dirname((string) $_SERVER['DOCUMENT_ROOT']);
+  $raw = @file_get_contents($dir . '/phillyafterschool-github.key');
+  if (!is_string($raw)) return null;   // no key on this server: nothing to say
+  $tok = trim($raw);
+  $mark = substr(hash('sha256', $tok), 0, 12);   // which key the remembered answer was about
+  $cacheFile = $dir . '/phillyafterschool-github-check.json';
+  $c = json_decode((string) @file_get_contents($cacheFile), true);
+  if (is_array($c) && isset($c['at'], $c['key']) && $c['key'] === $mark && (int) $c['at'] > now() - 6 * 3600) return edit_key_out($c);
+  $repo = isset($CFG['repo']) ? (string) $CFG['repo'] : '';
+  $new = array('at' => now(), 'key' => $mark, 'ok' => null, 'exp' => 0, 'why' => '');
+  if (!preg_match('/^(github_pat_[A-Za-z0-9_]{20,}|ghp_[A-Za-z0-9]{20,})$/', $tok)) { $new['ok'] = false; $new['why'] = 'not a key'; }
+  elseif ($repo === '' || !function_exists('curl_init')) { $new['ok'] = null; $new['why'] = 'cannot ask'; }
+  else {
+    $base = (PHP_SAPI === 'cli-server' && getenv('PAS_TEST_GITHUB')) ? rtrim((string) getenv('PAS_TEST_GITHUB'), '/') : 'https://api.github.com';   // the local test server only
+    $exp = '';
+    $ch = curl_init($base . '/repos/' . $repo);
+    curl_setopt_array($ch, array(CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 5, CURLOPT_TIMEOUT => 8,
+      CURLOPT_HTTPHEADER => array('Accept: application/vnd.github+json', 'Authorization: Bearer ' . $tok, 'X-GitHub-Api-Version: 2022-11-28', 'User-Agent: phillyafterschool-health'),
+      CURLOPT_HEADERFUNCTION => function ($c, $line) use (&$exp) { if (stripos($line, 'github-authentication-token-expiration:') === 0) $exp = trim(substr($line, strlen('github-authentication-token-expiration:'))); return strlen($line); }));
+    curl_exec($ch);
+    $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($code === 200) { $new['ok'] = true; $t = $exp !== '' ? strtotime($exp) : false; $new['exp'] = $t ? (int) $t : 0; }
+    elseif ($code === 401) { $new['ok'] = false; $new['why'] = 'refused'; }          // expired or taken back
+    elseif ($code === 403 || $code === 404) { $new['ok'] = false; $new['why'] = 'no access'; }   // a key without this repository
+    else {   // GitHub didn't answer: keep what was known, ask again in an hour
+      if (is_array($c) && isset($c['key']) && $c['key'] === $mark) { $c['at'] = now() - 5 * 3600; @file_put_contents($cacheFile, json_encode($c), LOCK_EX); return edit_key_out($c); }
+      $new['at'] = now() - 5 * 3600; $new['why'] = 'no answer';
+    }
+  }
+  @file_put_contents($cacheFile, json_encode($new), LOCK_EX);
+  return edit_key_out($new);
+}
+function edit_key_out(array $c): array {
+  $days = !empty($c['exp']) ? (int) floor(((int) $c['exp'] - now()) / 86400) : null;
+  if ($days !== null && $days < 0) { $c['ok'] = false; $c['why'] = 'expired'; }
+  return array('ok' => $c['ok'], 'daysLeft' => $days, 'why' => (string) $c['why'], 'checked' => gmdate('Y-m-d', (int) $c['at']));
+}
 function year_end(): int {
   global $CFG;
   $t = isset($CFG['yearEnd']) ? strtotime($CFG['yearEnd'] . ' 23:59:59 America/New_York') : false;
@@ -1615,7 +1769,7 @@ switch ($method . ' ' . $action) {
     catch (Exception $e) { $ok = false; }
     $last = last_backup();
     $age = $last === '' ? -1 : (int) round((strtotime(today_ny()) - strtotime($last)) / 86400);
-    out(array('ok' => $ok, 'database' => $ok, 'day' => today_ny(), 'backup' => $last, 'backupAgeDays' => $age, 'backupsKept' => count(glob(backup_dir() . '/groups-*.sqlite') ?: array()), 'mail' => pas_mail_state()), $ok ? 200 : 503);
+    out(array('ok' => $ok, 'database' => $ok, 'day' => today_ny(), 'backup' => $last, 'backupAgeDays' => $age, 'backupsKept' => count(glob(backup_dir() . '/groups-*.sqlite') ?: array()), 'mail' => pas_mail_state()) + (($ek = edit_key_state()) !== null ? array('editKey' => $ek) : array()), $ok ? 200 : 503);
   }
 
   // ----- signing in -----
@@ -1623,7 +1777,7 @@ switch ($method . ' ' . $action) {
     $email = strtolower(str($in, 'email', 150));
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) fail('email', 'That email address doesn’t look right.');
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|todo|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80}|a:[a-z0-9-]{1,80})$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|todo|passport|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80}|a:[a-z0-9-]{1,80})$~', $next)) $next = 'account';
     if (too_many('mail:' . h($email), 3, 900) || too_many('mail:' . h($email), 8, 86400) || too_many('ip:' . who(), 10, 900) || too_many('ip:' . who(), 40, 86400)) {
       fail('slow', 'That’s a lot of sign-in emails. Use the newest one, or wait 15 minutes and try again.', 429);
     }
@@ -1676,7 +1830,7 @@ switch ($method . ' ' . $action) {
     if (too_many('try:' . who(), 30, 900)) fail('slow', 'Too many tries. Wait 15 minutes and try again.', 429);
     note('try:' . who());
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|todo|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80}|a:[a-z0-9-]{1,80})$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|todo|passport|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80}|a:[a-z0-9-]{1,80})$~', $next)) $next = 'account';
     $g = google_email(str($in, 'credential', 4200));
     sign_in($g['email'], 'google', $next, $g['first'], $g['last']);
   }
@@ -1996,6 +2150,14 @@ switch ($method . ' ' . $action) {
     foreach (array('summers', 'daysoffs') as $tbl) {
       if (row('SELECT user_id FROM ' . $tbl . ' WHERE user_id = ?', array($owner))) q('DELETE FROM ' . $tbl . ' WHERE user_id = ?', array($u['id']));
       else q('UPDATE ' . $tbl . ' SET user_id = ? WHERE user_id = ?', array($owner, $u['id']));
+    }
+    foreach (q('SELECT id, name, json FROM passports WHERE user_id = ?', array($u['id'])) as $pp) {
+      $had = passport_row($owner, unseal($pp['name']));
+      if (!$had) { q('UPDATE passports SET user_id = ? WHERE id = ?', array($owner, $pp['id'])); continue; }
+      $a = passport_data($had); $b = passport_data($pp);   // the same first name on both sides: one passport, with both lists
+      $m = passport_clean(array('done' => array_merge($a['done'], $b['done']), 'skip' => array_merge($a['skip'], $b['skip']), 'fav' => array_merge($a['fav'], $b['fav'])));
+      q('UPDATE passports SET json = ?, updated = ? WHERE id = ?', array(seal(json_encode($m)), now(), $had['id']));
+      q('DELETE FROM passports WHERE id = ?', array($pp['id']));
     }
     q('UPDATE users SET home = ? WHERE id = ?', array($owner, $u['id']));
     q('UPDATE coparent SET partner_id = ?, accepted = ? WHERE owner_id = ?', array($u['id'], now(), $owner));
@@ -2421,6 +2583,33 @@ switch ($method . ' ' . $action) {
   case 'GET profile': {
     $u = need_user();
     out(array('ok' => true) + profile_out($u));
+  }
+
+  // ----- the passport -----
+  case 'GET passport': {
+    $u = need_user();
+    out(array('ok' => true) + passport_out($u));
+  }
+  case 'POST passport_save': {
+    $u = need_user();
+    $name = first_name(str($in, 'kid', 40));
+    if ($name === '') fail('kid', 'Which child?');
+    $known = false; foreach (kids_list(home_user($u)) as $k) if (mb_strtolower($k['n'], 'UTF-8') === mb_strtolower($name, 'UTF-8')) { $known = true; $name = $k['n']; }
+    if (!$known) fail('kid', 'Add this child’s first name on your account page first (School & kids).', 404);
+    $home = home_id($u);
+    $r = passport_row($home, $name);
+    $d = passport_clean($in);
+    if (count($d['done']) === 0 && count($d['skip']) === 0 && count($d['fav']) === 0) {
+      if ($r) q('DELETE FROM passports WHERE id = ?', array($r['id']));
+    } elseif ($r) {
+      q('UPDATE passports SET json = ?, updated = ? WHERE id = ?', array(seal(json_encode($d)), now(), $r['id']));
+    } else {
+      if ((int) val('SELECT COUNT(*) FROM passports WHERE user_id = ?', array($home)) >= 8) fail('limit', 'A household can hold eight passports.');
+      q('INSERT INTO passports (user_id, name, json, updated) VALUES (?, ?, ?, ?)', array($home, seal($name), seal(json_encode($d)), now()));
+      bump('passport');
+    }
+    $r = passport_row($home, $name); $d = passport_data($r);
+    out(array('ok' => true, 'kid' => array('name' => $name, 'done' => $d['done'], 'skip' => $d['skip'], 'fav' => $d['fav'], 'suggest' => passport_suggest($home, $name, $d), 'updated' => $r ? (int) $r['updated'] : 0)));
   }
 
   case 'POST school_save': {

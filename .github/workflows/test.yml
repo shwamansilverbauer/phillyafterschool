@@ -1,0 +1,56 @@
+# Runs the tests on every pull request into main (the monthly and weekly checks' proposals included), so a change
+# shows a green tick or a red cross before it is merged. Nothing is published from here, and nothing reaches the live
+# site: the tests build their own copy and serve it on the runner (see tests/README.md). Can also be run by hand on
+# any branch: Actions > Test > Run workflow.
+name: Test
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build (stops here if the data has a problem)
+        run: node build.mjs
+
+      - name: Playwright for the browser tests
+        id: pw
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.63.0
+          echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+      - name: Chromium (and what it needs on this machine)
+        run: npx playwright install --with-deps chromium
+
+      - name: Test
+        run: |
+          php --version | head -1
+          node tests/run.mjs
+
+      - name: Keep the screenshots of anything that failed
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-screenshots
+          path: tests/.scratch/shots/
+          retention-days: 7
+          if-no-files-found: ignore

@@ -56,10 +56,10 @@ To look at the site without a server: `PREVIEW=1 node build.mjs`, then open `pre
 ## How changes reach the site
 
 1. A change is merged into the `main` branch (edit a file on GitHub, or approve a proposed change).
-2. GitHub builds the site automatically (`.github/workflows/publish.yml`) and puts the finished files on the `live` branch.
+2. GitHub builds the site automatically (`.github/workflows/publish.yml`), runs the tests (below) against a local copy, and puts the finished files on the `live` branch.
 3. The web host is connected to the `live` branch and deploys it.
 
-If the data has a problem, step 2 stops and the live site stays as it was. The "Actions" tab on GitHub shows what went wrong.
+If the data has a problem, or a test fails, step 2 stops and the live site stays as it was. The "Actions" tab on GitHub shows what went wrong.
 
 To put the site on a different host, run `node build.mjs` and upload the contents of `dist/`.
 
@@ -79,9 +79,12 @@ push services). Nothing reaches phillyafterschool.org, the real mail service or 
 installed globally); without Playwright the browser tests are reported as skipped and the rest run. What is
 covered, how a test is written and what to do when one fails is in `tests/README.md`.
 
-Run them before pushing a change to `build.mjs`, `src/` or the data. A change that breaks one of the site's own
-rules (a child's name readable on disk, a price for parents, an analytics call on a quiet page, the support line
-missing) fails a test, not a reader.
+Every pull request into `main` runs them too (`.github/workflows/test.yml`), so a proposal from the monthly or weekly
+check shows a green tick or a red cross before it is merged; screenshots of a failed browser test are kept on the run
+for a week. The publishing job runs them as well, after the build and before anything goes to the `live` branch, so a change that
+breaks one of the site's own rules (a child's name readable on disk, a price for parents, an analytics call on a
+quiet page, the support line missing) fails a test, not a reader. Run them yourself before pushing a change to
+`build.mjs`, `src/` or the data, and the job is only a second opinion.
 
 ## Building for another day (tests only)
 
@@ -128,7 +131,21 @@ address, an adult's name, a school, grades and ages, follows and favorites, clai
 that the sitemap and a spread of pages open, that the site was rebuilt in the last two days, that the accounts service
 answers and can write (`groups/api.php?action=health`, which says nothing about anyone), that a database copy was made
 in the last two days, that the three forms answer, that the https certificate has more than 10 days left, and that the
-two daily jobs (the build, and the date emails) last ran, and last passed, inside 36 hours.
+two daily jobs (the build, and the date emails) last ran, and last passed, inside 36 hours. It also checks the key
+`/edit/` publishes with: the health answer says whether GitHub still takes the token in `phillyafterschool-github.key`
+and how many days it has left (`edit_key_state()`, asking GitHub at most every six hours; the key is never shown), and
+the check fails two weeks before it runs out, with how to renew it. And it checks the home page still carries the
+security headers below.
+
+**Security headers.** The `.htaccess` the build writes sets, on every response: `Strict-Transport-Security` (HTTPS
+only, for a year, for this host alone: the email service's link domain is a subdomain, so no `includeSubDomains`, and
+the site is not on the browsers' preload list), `X-Frame-Options: SAMEORIGIN` (no other site can show these pages in a
+frame, which protects the account and Passport pages from click tricks), `X-Content-Type-Options: nosniff`,
+`Referrer-Policy: strict-origin-when-cross-origin` (other sites see the bare domain, never the page), and a
+`Permissions-Policy` that turns off what the site never uses (camera, microphone, payments, USB, serial, Bluetooth)
+and keeps location for this site alone ("Nearest" asks for it). Font files are cached for a year. If the site ever
+has to be shown inside a frame elsewhere, or moves off HTTPS, those lines are where to start; HSTS in particular is
+remembered by browsers for a year once seen.
 
 When a check fails it opens an issue titled "Site check: something needs a look", assigned to the repository's owner,
 which GitHub emails. The issue says what failed and what to do. While something keeps failing the same issue is
@@ -342,6 +359,45 @@ analytics or recordings.
   date of your own (two to a day, then "+ 2 more"). "Show the dates I added" beside the pictures turns the teal
   flags off; the choice is kept on the device (`pas-year-pic-own`). Title (`yearTitle`) and
   photo work as on the other cards, and stay on the device.
+
+## The Passport
+
+`/passport/` (`passportPage()` in `build.mjs`, `src/passport.js`) is a page of each child's own, inside a parent's
+account: stamps for the kinds of program they have been to, the neighborhoods, the milestones and the seasons; a
+map of every place; a bracket that ranks their favorites. It is the only part of the site meant to be handed to a
+child, so it is built the other way round from the rest.
+
+- **Kid mode.** From the picker ("Whose passport?") and on the child's page, `html.pp-kid` hides the site's header,
+  menu, hero and footer, and nothing on the page is a link: a program's name is text, the map's credit is kept from
+  opening while kid mode is on, and nothing is typed. The grown-ups' corner opens from a press-and-hold button
+  (`.pp-hold`, 1.1 seconds; a tap does nothing). With one child on the account the page opens on their passport.
+- **What counts.** Only what a parent has confirmed. The server suggests from the household's plans
+  (`passport_suggest()`: every program on a child's kept week, each camp whose week has started, each day-off program
+  whose day has passed, once per listing per year) and the parent says yes or no in the grown-ups' corner, or adds one
+  the plans missed. A listing with several sites (Philly Art Center, say) earns a neighborhood and a pin only once the
+  parent says which site.
+- **The data.** `passports` in the accounts database, one row per child per household (by first name, the way weeks
+  match), encrypted like the plans: `{ done: [{ k: "p:<program>" | "c:<camp>", kind: after | weekend | off | summer,
+  y: <year>, s: <school or "">, h?: <site's neighborhood> }], skip: [suggestion keys the parent waved away],
+  fav: [listings, best first] }`. `GET passport` gives every child on the kids list with their lists and suggestions;
+  `POST passport_save { kid, done, skip, fav }` replaces one child's lists. Co-parents share them (a partner's
+  passports move to the home account on accepting, same first names merge). Deleting the account deletes them.
+  Stamps are never stored: `earned()` in `passport.js` works them out from `done`.
+- **Stamps.** `STAMPS` in `build.mjs`: one per program type (named from `STAMP_NAMES`), the four seasons, the
+  milestones (1, 5, 10, 25 listings; 3 and 6 neighborhoods), plus a stamp per neighborhood made on the page. Each is a
+  colour and an SVG path; to replace them with artwork, change that list (and `STAMP_ICON`) and nothing else.
+- **The map** is Leaflet from this site's own copy with circle markers, one per place a confirmed listing has a point
+  for. The shareable picture (`drawShare()`, a canvas, like the week card) shows the stamps and the neighborhoods with
+  no name and no map, and is never a link; the page itself has no link to share.
+- **Favorites.** The bracket pairs the child's distinct listings until one is left; the order they fell in is saved as
+  `fav`. `GET profile` carries `favorites: [{ name, fav }]`, and the accounts script hands them to each planner
+  (`favorites()` on `window.pasBoard`, `pasSummer` and `pasDaysOff`): Build your week shows the child's favorite
+  programs as chips under the search, and the summer and days-off choosers list a favorite camp or program first,
+  marked "★ Sam's favorite". Matching is by the child's first name, the way plans match.
+- **Kid reviews.** Each confirmed program in the grown-ups' corner links to the review form with the child's name and
+  grade filled in (see Reviews).
+- **Quiet.** No analytics, no recordings, nothing to Klaviyo, out of search (`quiet: true, noindex: true`), and no
+  `track()` anywhere in `passport.js`. `tests/cases/17-api-passport.mjs` and `23-web-passport.mjs` cover it.
 
 ## Weekend classes
 
@@ -688,6 +744,13 @@ Reviews are approved before they appear. The form at `/review/` emails each revi
 ready-made entry at the bottom of the email. To publish one, paste that entry into
 `data/reviews.json` (inside the square brackets, entries separated by commas) and commit.
 To remove a review, delete its entry. Cards show the average and the reviews for each program.
+
+A review can be **in a child's words**: the parent types what the child said (from the Passport's grown-ups' corner,
+where each confirmed program has a "Review in Sam's words" link, or by switching on the form). The entry then carries
+`"kid": { "grade": "2", "name": "Sam" }`, with `name` only when the parent ticked "show the first name"; without it the
+review is signed "A 2nd grader at Nebinger". Kids' reviews are shown beside parents' on the program's page behind a
+Parents | Kids switch (`reviewsBlock()`), never make the rating (the average and the count are parents' reviews only),
+and are left out of the page's structured data. The build checks the grade and the name's shape.
 
 ### Asking for reviews
 
@@ -1131,6 +1194,13 @@ backgrounds (`src/static/logo-sky.png`, PHILLY in the brand blue), a headline, o
 along the bottom; `scripts/share-pictures.js` draws them from a build with Playwright, so they are redrawn
 whenever the logo, a headline or the site's colours change.
 
+The three faces are served from this site, not from Google: `src/fonts/` holds the WOFF2 files (Latin and Latin
+Extended, the weights the site uses: Luckiest Guy 400, Figtree 700 and 800, Atkinson Hyperlegible 400 and 700, from
+the `@fontsource` packages) with their SIL Open Font License texts, the build copies them to `assets/fonts/`, and the
+`@font-face` rules are at the top of `src/site.css`. Every page preloads the body face and Luckiest Guy. So no page,
+the quiet ones included, asks another site for its fonts; `tests/cases/01-build.mjs` fails if one ever does. To add a
+weight, take its file from `@fontsource/<family>` (`npm pack`) and add a rule with the same `unicode-range`.
+
 **Colours.** Every colour is a named value at the top of `src/site.css`. The band at the top of each page is a
 daytime sky (`--hero` fading to `--hero-low`) with navy type (`--hero-ink`, `--hero-muted`); the header button
 is `--cta`; the footer keeps the deep blue (`--foot`). Navy on the sky measures 9:1 or better, above the old
@@ -1496,7 +1566,7 @@ These are the only parts of the site that store anything about a child on the se
   SQLite file and a key in a folder named `phillyafterschool-data`, next to (not inside) the public folder on
   the host. Deleting that folder in the host's file manager wipes every account, profile and group. It is not
   in git and not backed up by this repository.
-- **Limits and expiry.** Sign-in links and codes last 15 minutes and work once; five wrong codes kill a code;
+- **Limits and expiry.** Sign-in links and codes last 10 minutes and work once; five wrong codes kill a code;
   three sign-in emails per address per 15 minutes. A device stays signed in 30 days. Up to 60 invited addresses
   per group, 60 invitation emails a day per person and 3 a day per address. A profile holds 6 weeks. Every
   shared week and group is deleted two weeks after `lastDay` in `data/days-off.json`; profiles stay.

@@ -58,7 +58,7 @@ export async function startStandin() {
   };
   const google = { tokens: new Map(), allow(credential, claims) { this.tokens.set(credential, claims); } };
   const push = { posts: [] };
-  const github = { calls: [] };
+  const github = { calls: [], expires: '', refuse: false };   // a test can set when the key "runs out", or have the key refused
   const server = http.createServer((req, res) => {
     let body = '';
     req.on('data', c => { body += c; });
@@ -77,7 +77,12 @@ export async function startStandin() {
         return c ? json(200, c) : json(400, { error: 'invalid_token' });
       }
       if (u.pathname.startsWith('/push')) { push.posts.push({ path: u.pathname, headers: req.headers, body: Buffer.from(body, 'binary'), at: Date.now() }); res.writeHead(201); return res.end(); }
-      if (u.pathname.startsWith('/github')) { github.calls.push({ method: req.method, path: u.pathname, headers: req.headers, body }); return json(200, { ok: true }); }
+      if (u.pathname.startsWith('/github')) {
+        github.calls.push({ method: req.method, path: u.pathname, headers: req.headers, body });
+        if (github.refuse) return json(401, { message: 'Bad credentials' });
+        if (github.expires) res.setHeader('github-authentication-token-expiration', github.expires);
+        return json(200, { ok: true });
+      }
       res.writeHead(404); res.end();
     });
   });

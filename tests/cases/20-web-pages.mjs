@@ -95,12 +95,18 @@ test('quiet pages: signed in, the account and profile pages run no analytics, an
   await pat.okay('POST', 'week_save', { week: { name: 'Zelphina', now: Object.fromEntries(DAYS.map(d => [d, []])), next: Object.fromEntries(DAYS.map(d => [d, []])) } });
   await pat.okay('POST', 'kids_save', { kids: [{ n: 'Zelphina', g: '2' }, { n: 'Thaddeus', a: '9' }] });
   const t = await b.context(ctx.site, { sid: pat.cookie });
-  for (const rel of ['/account/', '/profile/', '/account/#plans']) {
+  for (const rel of ['/account/', '/profile/', '/account/#plans', '/passport/', '/calendar/', '/to-do/']) {
     const page = await t.open(rel);
-    await page.waitForSelector('#account .acct-tabs');
+    if (rel.startsWith('/passport')) await page.waitForSelector('#pp-app:not([hidden])');
+    else if (rel.startsWith('/calendar') || rel.startsWith('/to-do')) await page.waitForFunction(() => { const w = document.querySelector('#year-wait, #todo-wait'); return !w || w.hidden; }, null, { timeout: 10000 });
+    else await page.waitForSelector('#account .acct-tabs');
     await page.waitForTimeout(400);   // the list subscription goes out after the page is drawn
     const called = t.outside.filter(u => /googletagmanager|google-analytics|clarity\.ms|static\.klaviyo|klaviyo\.com\/onsite/.test(u));
     eq(called.length, 0, `${rel} ran analytics: ${called.join(', ')}`);
+    // Nothing else leaves the page either (no fonts from Google, no outside scripts): only the adult's email-list
+    // sign-up, which the account page sends once.
+    const elsewhere = t.outside.filter(u => !/^https:\/\/a\.klaviyo\.com\/client\//.test(u));
+    eq(elsewhere.length, 0, `${rel} asked another site for something: ${elsewhere.join(', ')}`);
     // The email list is told about the adult (that is what "news about the site" is), never about a child.
     for (const r of t.outside.filter(u => /a\.klaviyo\.com/.test(u))) {
       includes(r.body, pat.email, 'the list hears the adult’s address');

@@ -10,6 +10,9 @@ node tests/run.mjs --list        the tests, without running them
 node tests/run.mjs --keep        leave the local server up afterwards, with its address
 ```
 
+They also run on every pull request into `main` (`.github/workflows/test.yml`) and in the publishing job before
+anything goes live; a failed browser test's screenshots are kept on the run for a week.
+
 Needs `node` 20 or later, `php` 8 with pdo_sqlite, openssl and curl (the same as the host), and, for the browser
 tests, Playwright with Chromium: `npm i -g playwright && npx playwright install chromium`, or point `PLAYWRIGHT_DIR`
 at a folder that has it. Without Playwright the browser tests are reported as skipped and the rest still run.
@@ -46,9 +49,12 @@ time. When `data/days-off.json` moves to a new school year, move it (one place) 
 | `13-api-coparent.mjs` | the invitation, what accepting merges, both accounts reading and changing everything, ending it, deleting an account |
 | `14-api-follow.mjs` | follows and favorites, the stop links in emails (and the public stopped list carrying only hashes), asking for a school |
 | `15-api-claims.mjs` | claiming a listing with a work email, a parent's question passed to its holders, a proposed change, the manager's emails switch |
+| `17-api-passport.mjs` | the Passport: suggestions from the plans, confirming and ranking, sealed on disk, co-parents sharing it |
+| `18-api-health.mjs` | the health answer's report on the key `/edit/` publishes with: working, days left, refused, replaced, never shown |
 | `16-edit-gate.mjs` | `/edit/` asks for a sign-in, refuses a wrong password, and the cookie opens the editor and the queue |
-| `20-web-pages.mjs` | pages load without errors; the finder; the privacy page says what the notice promises; the sign-up notice sits under the email form; signing in through the page; quiet pages run no analytics and the email list hears nothing about a child |
+| `20-web-pages.mjs` | pages load without errors; the finder; the privacy page says what the notice promises; the sign-up notice sits under the email form; signing in through the page; quiet pages (account, profile, Passport, calendar, to-do) ask no other site for anything, fonts included, and the email list hears nothing about a child |
 | `21-web-planners.mjs` | each planner, signed in: a first name and a pick keep the plan in the profile, and it comes back on another device |
+| `23-web-passport.mjs` | the Passport in a browser: the picker, kid mode, the press-and-hold, confirming, stamps, the bracket, favorites in the planners |
 | `22-web-account.mjs` | the account tabs; sharing a kept week from the Plans tab; the co-parent box from invitation to "stop sharing everything" |
 
 Not covered yet, in rough order of value: the push payloads (opening what the site posts to the stand-in with a

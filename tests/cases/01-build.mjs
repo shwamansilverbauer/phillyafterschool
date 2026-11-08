@@ -47,6 +47,7 @@ test('wording rules: no claim that listings are checked by hand, no Venmo, the s
     const rel = path.relative(site.pub, f);
     ok(!/(checked|verified|reviewed|confirmed|vetted) by hand/i.test(h), `${rel} claims something is checked by hand`);
     ok(!/venmo/i.test(h), `${rel} mentions Venmo`);
+    ok(!/fonts\.(googleapis|gstatic)\.com/.test(h), `${rel} loads fonts from Google (they are served from this site)`);
     if (h.includes('Help the site keep going')) support++;
     const links = h.match(/href="https:\/\/joshsilverbauer\.com[^"]*"/g) || [];
     ok(links.length <= 1, `${rel} links joshsilverbauer.com ${links.length} times`);
