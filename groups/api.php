@@ -2422,15 +2422,21 @@ switch ($method . ' ' . $action) {
     $today = $test && preg_match('/^\d{4}-\d{2}-\d{2}$/', str($in, 'today', 10)) ? str($in, 'today', 10) : today_ny();
     $clock = (new DateTime('now', new DateTimeZone('America/New_York')))->format('H:i');
     $open = ($clock >= PUSH_WINDOW[0] && $clock < PUSH_WINDOW[1]) || ($test && !empty($in['any']));
-    if (!$dry && !$open) out(array('ok' => true, 'ran' => false, 'why' => 'outside the morning'));
+    // New-account notes for the owner don't wait for the morning: every run sends those due (each account once), so
+    // they arrive an hour or so after the account, not all together the next morning the job happens to run in.
+    $told = 0;
     if (!$dry) {
-      if (!($test && !empty($in['any'])) && (int) meta_get('push_ran') > now() - 240) out(array('ok' => true, 'ran' => false, 'why' => 'just ran'));
-      if (!($test && !empty($in['any'])) && too_many('pushrun:' . who(), 12, 3600)) out(array('ok' => true, 'ran' => false, 'why' => 'asked too often'));
+      $told = too_many('catchup:' . who(), 30, 3600) ? 0 : signup_catchup($test && isset($in['told_age']) ? (int) $in['told_age'] : 3600);
+      note('catchup:' . who());
+    }
+    if (!$dry && !$open) out(array('ok' => true, 'ran' => false, 'why' => 'outside the morning', 'told' => $told));
+    if (!$dry) {
+      if (!($test && !empty($in['any'])) && (int) meta_get('push_ran') > now() - 240) out(array('ok' => true, 'ran' => false, 'why' => 'just ran', 'told' => $told));
+      if (!($test && !empty($in['any'])) && too_many('pushrun:' . who(), 12, 3600)) out(array('ok' => true, 'ran' => false, 'why' => 'asked too often', 'told' => $told));
       note('pushrun:' . who());
       meta_set('push_ran', (string) now());
     } elseif (!$test && too_many('pushdry:' . who(), 20, 3600)) out(array('ok' => true, 'ran' => false, 'why' => 'asked too often'));
     else note('pushdry:' . who());
-    $told = $dry ? 0 : signup_catchup($test && isset($in['told_age']) ? (int) $in['told_age'] : 3600);
     $mgr = $dry ? 0 : array_sum(mgr_run($test && preg_match('/^\\d{4}-\\d{2}-\\d{2}$/', str($in, 'mgr_day', 10)) ? str($in, 'mgr_day', 10) : today_ny(), $test ? array_filter(array('fresh' => isset($in['mgr_fresh']) ? (int) $in['mgr_fresh'] : null, 'rv' => isset($in['mgr_rv']) && is_array($in['mgr_rv']) ? $in['mgr_rv'] : null, 'asks' => isset($in['mgr_asks']) && is_array($in['mgr_asks']) ? $in['mgr_asks'] : null), function ($v) { return $v !== null; }) : array()));
     out(array('ok' => true, 'ran' => !$dry, 'dry' => $dry, 'told' => $told, 'mgr' => $mgr) + push_run($today, $dry));
   }
