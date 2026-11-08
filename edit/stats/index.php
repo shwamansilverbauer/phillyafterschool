@@ -216,7 +216,7 @@ $sum = function ($key, $span) use (&$days, &$ever) {
 <meta name="theme-color" content="#0A3566">
 <link rel="preload" href="../../assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../../assets/fonts/luckiest-guy-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../assets/site.css?v=f78637fa">
+<link rel="stylesheet" href="../../assets/site.css?v=207599a9">
 </head>
 <body>
 <script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
@@ -228,7 +228,7 @@ $sum = function ($key, $span) use (&$days, &$ever) {
   <div class="in bar">
     <a class="brand" href="../../"><img class="logo" src="../../logo.png?v=05a08149" alt="Philly After School" width="773" height="240"></a>
     <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true"></span>Menu</button>
-    <nav class="nav" id="site-nav" aria-label="Site"><details class="menu" data-top="../../all-programs/"><summary>Programs</summary><ul><li class="menu-all"><a href="../../all-programs/">All Programs</a></li><li><a href="../../programs/">After School</a></li><li><a href="../../weekends/">Weekend Activities</a></li><li><a href="../../day-camps/">Day Camps</a></li><li><a href="../../summer-camps/">Summer Camps</a></li></ul></details><details class="menu" data-top="../../schedules/"><summary>Schedule Builder</summary><ul><li class="menu-all"><a href="../../schedules/">Build a Schedule</a></li><li><a href="../../board/">After School</a></li><li><a href="../../days-off/">Days Off</a></li><li><a href="../../summer-schedule/">Summer</a></li><li><a href="../../calendar/">My Calendar</a></li></ul></details><a href="../../suggest/">Suggestion Box</a><a href="../../about/">About</a><a class="when-in nav-pp" href="../../passport/">Passport</a><a class="when-in nav-acct" href="../../account/">Account</a><a class="nav-cta when-out" href="../../register/">Create a free account</a><a class="nav-cta when-in" href="../../profile/" data-news="2026-10-20" data-pm="1">My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a></nav>
+    <nav class="nav" id="site-nav" aria-label="Site"><details class="menu" data-top="../../all-programs/"><summary>Programs</summary><ul><li class="menu-all"><a href="../../all-programs/">All Programs</a></li><li><a href="../../programs/">After School</a></li><li><a href="../../weekends/">Weekend Activities</a></li><li><a href="../../day-camps/">Day Camps</a></li><li><a href="../../summer-camps/">Summer Camps</a></li></ul></details><details class="menu" data-top="../../schedules/"><summary>Schedule Builder</summary><ul><li class="menu-all"><a href="../../schedules/">Build a Schedule</a></li><li><a href="../../board/">After School</a></li><li><a href="../../days-off/">Days Off</a></li><li><a href="../../summer-schedule/">Summer</a></li><li><a href="../../calendar/">My Calendar</a></li></ul></details><a href="../../suggest/">Suggestion Box</a><a href="../../about/">About</a><a class="when-in nav-kc" href="../../kids-corner/">Kid’s Corner</a><a class="when-in nav-acct" href="../../account/">Account</a><a class="nav-cta when-out" href="../../register/">Create a free account</a><a class="nav-cta when-in" href="../../profile/" data-news="2026-10-20" data-pm="1">My profile<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a></nav>
   </div>
 </header>
 <div class="band pagehead">
@@ -303,7 +303,7 @@ $sum = function ($key, $span) use (&$days, &$ever) {
         <li><a href="../../calendar/"><span data-copy="4b29c410c7">My Calendar</span></a></li>
         <li><a href="../../alerts/"><span data-copy="8d786c59dd">Reminders by Email</span></a></li>
         <li><a href="../../profile/"><span data-copy="9ba8d391c5">My Profile</span></a></li>
-        <li><a href="../../passport/"><span data-copy="d5ed1ca0e3">Passport</span></a></li>
+        <li><a href="../../kids-corner/"><span data-copy="b952e490df">Kid’s Corner</span></a></li>
       </ul>
     </div>
     <div>
@@ -330,7 +330,7 @@ $sum = function ($key, $span) use (&$days, &$ever) {
     </div>
   </div>
 </div></footer>
-<script src="../../assets/site.js?v=a5073440" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
+<script src="../../assets/site.js?v=0024d753" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
 
 </body>
 </html>
