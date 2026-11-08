@@ -1215,7 +1215,7 @@
     if (kc) kc.style.display = 'none';   // Kid's Corner is for a parent's kids
   };
   navRole();
-  window.pasNavRole = navRole;
+  window.pasNavRole = function () { navRole(); fitNav(); };
 
   // ----- the menu. Wide screens: the logo on the left, groups on the right, one open at a time.
   // Narrow screens: a Menu button that opens every group in one panel. A tap elsewhere or Escape closes either. -----
@@ -1259,7 +1259,23 @@
     var had = document.getElementById('admin-menu'), m = adminNav(!!on);
     if (on && m && !had) { menus.push(m); wireMenu(m); }
     if (!on && had) menus = menus.filter(function (x) { return x !== had; });
+    fitNav();
   };
+  // On a wide screen the logo and the menu share one line. When the menu has more in it than usual (a manager who is
+  // also a parent, an admin) and the window is on the narrow side, it closes up a step or two (nav-tight, nav-tighter)
+  // rather than run off the page or squeeze the logo.
+  function fitNav() {
+    var h = document.documentElement, bar = document.querySelector('.sitebar .bar');
+    if (!bar) return;
+    h.classList.remove('nav-tight', 'nav-tighter');
+    if (narrow.matches) return;
+    if (bar.scrollWidth > bar.clientWidth + 1) h.classList.add('nav-tight');
+    if (bar.scrollWidth > bar.clientWidth + 1) h.classList.add('nav-tighter');
+  }
+  fitNav();
+  var fitLater = null;
+  window.addEventListener('resize', function () { if (fitLater) window.clearTimeout(fitLater); fitLater = window.setTimeout(fitNav, 120); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitNav, function () { /* fonts or not, it fits */ });
   document.addEventListener('click', function (e) {
     if (panelOpen()) { if (!siteNav.contains(e.target) && !menuBtn.contains(e.target)) setPanel(false); return; }
     menus.forEach(function (m) { if (m.open && !m.contains(e.target)) m.open = false; });

@@ -847,8 +847,9 @@ function daysoff_out(int $uid): ?array {
 // account. Its json: { "done": [...], "skip": [...], "fav": [...] }. A "done" entry is one listing in one period:
 // { "k": "p:<program>" or "c:<camp>", "kind": after | weekend | off | summer, "y": the school year it started (summer:
 // the calendar year), "s": the school it was picked under, or "", "h": which of the listing's sites, as a
-// neighborhood name, when it has more than one }. "skip" holds the keys of suggestions the parent
-// waved away ("k|kind|y"); "fav" is the child's ranking of listings, best first. For Kid's Corner (the page the
+// neighborhood name, when it has more than one, "n": how many times, 2 or more (each day a week it meets, each term,
+// each week of the same camp, each day off; left out when it's once) }. "skip" holds the keys of suggestions the
+// parent waved away ("k|kind|y", or "k|kind|y|n" for "not that many times"); "fav" is the child's ranking of listings, best first. For Kid's Corner (the page the
 // child sees) it also keeps "av", the lightbulb the child picked ({ "b": a bulb from KC_BODIES, "c": a color, 0 to 9,
 // "w": what it wears, { place: thing } from KC_WEAR }),
 // "seen", the pins whose level the child has already been shown ({ "type:music": 2, ... }), and "lvl", the last level
@@ -856,6 +857,7 @@ function daysoff_out(int $uid): ?array {
 // sent anywhere but back to the household's own browsers.
 const PASSPORT_KINDS = array('after', 'weekend', 'off', 'summer');
 const PASSPORT_MAX = 300;
+const PASSPORT_TIMES = 20;   // the most times one confirmed class can count
 const KC_BODIES = array('classic', 'globe', 'edison', 'candle', 'flood', 'tube', 'twisty', 'holiday', 'mushroom', 'heart');   // the lightbulbs a child picks from
 // What a child's bulb can wear, by where it goes (kids-corner.js has the same list, with the level each unlocks at).
 const KC_WEAR = array('hat' => array('cap', 'crown', 'tophat', 'halo'), 'face' => array('shades', 'stars'), 'neck' => array('bow', 'scarf', 'medal'), 'back' => array('cape', 'wings', 'jetpack'), 'glow' => array('sparkle', 'rainbow', 'galaxy'), 'base' => array('goldbase'));
@@ -875,11 +877,12 @@ function passport_clean($raw): array {
     $s = isset($e['s']) && is_string($e['s']) && in_array($e['s'], schools(), true) ? $e['s'] : '';
     $x = array('k' => $e['k'], 'kind' => $e['kind'], 'y' => $y, 's' => $s);
     if (isset($e['h']) && is_string($e['h']) && preg_match('/^[\p{L}\p{M} .’\'-]{2,60}$/u', $e['h'])) $x['h'] = $e['h'];   // which of a listing's sites, by neighborhood name
+    if (isset($e['n']) && is_numeric($e['n']) && (int) $e['n'] >= 2) $x['n'] = min((int) $e['n'], PASSPORT_TIMES);   // how many times: days a week, terms, weeks of camp, days off (1 is left out)
     $key = passport_key($x); if (isset($seen[$key])) continue; $seen[$key] = true;
     $out['done'][] = $x;
   }
   foreach (isset($raw['skip']) && is_array($raw['skip']) ? array_slice($raw['skip'], 0, PASSPORT_MAX) : array() as $k) {
-    if (is_string($k) && preg_match('~^[pc]:[a-z0-9-]{1,80}\|(after|weekend|off|summer)\|\d{4}$~', $k) && !in_array($k, $out['skip'], true)) $out['skip'][] = $k;
+    if (is_string($k) && preg_match('~^[pc]:[a-z0-9-]{1,80}\|(after|weekend|off|summer)\|\d{4}(\|\d{1,2})?$~', $k) && !in_array($k, $out['skip'], true)) $out['skip'][] = $k;   // with |n: "not that many times"
   }
   foreach (isset($raw['fav']) && is_array($raw['fav']) ? array_slice($raw['fav'], 0, 60) : array() as $k) {
     if (is_string($k) && isset($l[$k]) && !in_array($k, $out['fav'], true)) $out['fav'][] = $k;
@@ -894,7 +897,7 @@ function passport_clean($raw): array {
   }
   if (isset($raw['seen']) && is_array($raw['seen'])) {
     $sn = array();
-    foreach (array_slice($raw['seen'], 0, 40, true) as $id => $t) if (is_string($id) && preg_match('~^((type|season):[a-z-]{1,20}|explore)$~', $id) && is_numeric($t) && (int) $t >= 1 && (int) $t <= 3) $sn[$id] = (int) $t;
+    foreach (array_slice($raw['seen'], 0, 40, true) as $id => $t) if (is_string($id) && preg_match('~^((type|season|map):[a-z-]{1,20}|explore|repeat)$~', $id) && is_numeric($t) && (int) $t >= 1 && (int) $t <= 3) $sn[$id] = (int) $t;
     if ($sn) $out['seen'] = $sn;
   }
   if (isset($raw['lvl']) && is_numeric($raw['lvl']) && (int) $raw['lvl'] >= 1 && (int) $raw['lvl'] <= 99) $out['lvl'] = (int) $raw['lvl'];
@@ -919,10 +922,14 @@ function passport_data(?array $r): array {
 // What the household's plans say this child has been to, for the parent to confirm: the programs on the kept week,
 // the camps whose week has passed, the day-off programs whose day has passed. Each once per listing per year.
 function passport_suggest(int $home, string $name, array $data): array {
-  $have = array(); foreach ($data['done'] as $e) $have[passport_key($e)] = true; foreach ($data['skip'] as $k) $have[$k] = true;
+  // Each listing is counted as often as the plans have it: days a week on the kept week, weeks of the same camp that
+  // have started, days off that have passed. A new one is suggested with that count; one already confirmed is
+  // suggested again when the plans now count more ("up"), unless the parent said no to that count.
+  $done = array(); foreach ($data['done'] as $e) $done[passport_key($e)] = isset($e['n']) ? (int) $e['n'] : 1;
+  $skip = array(); foreach ($data['skip'] as $k) $skip[$k] = true;
   $same = function ($n) use ($name) { return mb_strtolower(trim((string) $n), 'UTF-8') === mb_strtolower($name, 'UTF-8'); };
-  $out = array(); $sy = school_year(); $today = today_ny();
-  $add = function ($k, $kind, $y, $s = '') use (&$out, &$have) { $e = array('k' => $k, 'kind' => $kind, 'y' => (int) $y, 's' => $s); $key = passport_key($e); if (isset($have[$key])) return; $have[$key] = true; $out[] = $e; };
+  $count = array(); $sy = school_year(); $today = today_ny();
+  $add = function ($k, $kind, $y, $s = '') use (&$count) { $e = array('k' => $k, 'kind' => $kind, 'y' => (int) $y, 's' => $s); $key = passport_key($e); if (isset($count[$key])) { $count[$key]['n']++; return; } $e['n'] = 1; $count[$key] = $e; };
   foreach (q('SELECT name, now_json FROM weeks WHERE user_id = ?', array($home)) as $w) {
     if (!$same(unseal($w['name']))) continue;
     $now = json_decode(unseal($w['now_json']), true);
@@ -956,8 +963,17 @@ function passport_suggest(int $home, string $name, array $data): array {
       }
     }
   }
-  $l = listings();
-  return array_values(array_filter($out, function ($e) use ($l) { return isset($l[$e['k']]); }));
+  $l = listings(); $out = array();
+  foreach ($count as $key => $e) {
+    if (!isset($l[$e['k']])) continue;
+    $e['n'] = min($e['n'], PASSPORT_TIMES);
+    if (!isset($done[$key])) { if (isset($skip[$key])) continue; }
+    elseif ($e['n'] > $done[$key] && !isset($skip[$key . '|' . $e['n']])) $e['up'] = $done[$key];   // confirmed before, fewer times
+    else continue;
+    if ($e['n'] === 1) unset($e['n']);
+    $out[] = $e;
+  }
+  return $out;
 }
 function passport_out(array $u): array {
   $home = home_id($u);
