@@ -34,11 +34,15 @@ test('signed out, Kid’s Corner explains itself and offers the account; signed 
   ok(await page.locator('#kc-out a[href*="next=kids"]').count() >= 2, 'create and log in both come back here');
   eq(counted(t).length, 0, 'quiet even when signed out');
   includes(flat(await page.locator('#kc-out #for-kids').innerText()), 'A CORNER JUST FOR YOU', 'what a kid gets, said to the kid');
-  // The home page has it too, with the way to an account (and, signed in, the way in).
+  eq(await page.locator('#for-kids .kids-tile').count(), 4);
+  ok(await page.locator('#for-kids a[href*="register/?next=kids"]').isVisible(), 'Grown-ups: make a free account');
+  // Signed out, the way there: the menu's button, a row in the home page's Parents box, a strip on the Schedule Builder.
   const home = await t.open('/');
-  ok(await home.locator('#for-kids').isVisible(), 'For kids on the home page');
-  eq(await home.locator('#for-kids .kids-tile').count(), 4);
-  ok(await home.locator('#for-kids a[href*="register/?next=kids"]').isVisible(), 'Grown-ups: make a free account');
+  eq(await home.locator('#for-kids').count(), 0, 'not on the home page itself');
+  ok(await home.locator('header.sitebar a.nav-kc').isVisible(), 'the Kid’s Corner button, signed out too');
+  ok(await home.locator('#start .start-go[href$="kids-corner/"]').isVisible(), 'a row in the Parents box');
+  const plans = await t.open('/schedules/');
+  ok(await plans.locator('.kids-strip a[href$="kids-corner/"]').isVisible(), 'a strip on the Schedule Builder');
   await t.close();
   const pat = ctx.api().as(someone('kcw'), 'Pat', 'Lee');
   const t2 = await b.context(ctx.site, { sid: pat.cookie });

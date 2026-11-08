@@ -601,6 +601,8 @@ function street(mode) {   // 'go': the bus drives in; 'parked': still; 'out': sc
   return `<svg class="street${mode === 'go' ? ' go' : mode === 'out' ? ' out' : ''}" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${sky}${run(-10, sx)}${school}${run(sx + sw, 2010)}<rect class="st" x="0" y="${G}" width="2000" height="12"/>${kids}<g class="bus"><g transform="translate(968,${G - 22})">${bus}</g></g></svg>`;
 }
 
+// Kid's Corner's little bulb: on its menu button, and beside the pointers to it
+const KC_BULB = '<svg class="nav-kc-bulb" viewBox="0 0 24 30" width="20" height="25" aria-hidden="true" focusable="false"><path d="M8.5 20C8.5 17 3 15 3 10C3 5 7 1.5 12 1.5S21 5 21 10C21 15 15.5 17 15.5 20Z" fill="#F3C613" stroke="#0B2140" stroke-width="1.6"/><rect x="8.3" y="20" width="7.4" height="3" rx="1.5" fill="#E6F2FF" stroke="#0B2140" stroke-width="1.3"/><rect x="8.8" y="23" width="6.4" height="3" rx="1.5" fill="#96C9FF" stroke="#0B2140" stroke-width="1.3"/><circle cx="9.3" cy="9.5" r="1.4" fill="#0B2140"/><circle cx="14.7" cy="9.5" r="1.4" fill="#0B2140"/><path d="M9.3 12.6Q12 15.4 14.7 12.6" fill="none" stroke="#0B2140" stroke-width="1.4" stroke-linecap="round"/></svg>';
 function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false, first = '', theme = '', shareImage = null, shareText = '', quiet = false, next = '' }) {
   const canonical = cfg.siteUrl + '/' + pathName;
   // Search results show roughly 60 characters of a title and 155 of a description. The site name is added
@@ -611,7 +613,6 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   // the whole list; on a wide screen the script opens a group on hover and sends the label itself to that list, and the
   // first item is hidden there. Then Suggestion Box and About as plain links, and the account button.
   // the Kid's Corner button's little bulb, drawn like the bulbs on Kid's Corner
-  const KC_BULB = '<svg class="nav-kc-bulb" viewBox="0 0 24 30" width="20" height="25" aria-hidden="true" focusable="false"><path d="M8.5 20C8.5 17 3 15 3 10C3 5 7 1.5 12 1.5S21 5 21 10C21 15 15.5 17 15.5 20Z" fill="#F3C613" stroke="#0B2140" stroke-width="1.6"/><rect x="8.3" y="20" width="7.4" height="3" rx="1.5" fill="#E6F2FF" stroke="#0B2140" stroke-width="1.3"/><rect x="8.8" y="23" width="6.4" height="3" rx="1.5" fill="#96C9FF" stroke="#0B2140" stroke-width="1.3"/><circle cx="9.3" cy="9.5" r="1.4" fill="#0B2140"/><circle cx="14.7" cy="9.5" r="1.4" fill="#0B2140"/><path d="M9.3 12.6Q12 15.4 14.7 12.6" fill="none" stroke="#0B2140" stroke-width="1.4" stroke-linecap="round"/></svg>';
   const navHref = to => { const p = to.split(/[#?]/)[0]; return link(p, depth) + to.slice(p.length); };   // a link may carry ?kind= or #part
   const menus = [
     ['Programs', 'all-programs/', [['all-programs/', 'All Programs'], ['programs/', 'After School'], ...(programs.some(p => p.weekend) ? [['weekends/', 'Weekend Activities']] : []), ...(daysOff ? [[dayCampsPath, 'Day Camps']] : []), ...(summerCamps.length ? [['summer-camps/', 'Summer Camps']] : [])]],
@@ -621,7 +622,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
     return `<details class="menu${here ? ' here' : ''}" data-top="${navHref(top)}"><summary>${label}</summary><ul>${items.map(([to, text]) => `<li${to === top ? ' class="menu-all"' : ''}><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
   }).join('') + `<a class="nav-more" href="${link('suggest/', depth)}"${pathName.startsWith('suggest/') || pathName.startsWith('ideas/') || pathName.startsWith('schools/request/') ? ' aria-current="page"' : ''}>Suggestion Box</a><a class="nav-more" href="${link('about/', depth)}"${current === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
-    ? `<a class="when-in nav-acct" href="${link('profile/', depth)}"${pathName === 'profile/' ? ' aria-current="page"' : ''}>My Profile</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}${PM_LISTED ? ' data-pm="1"' : ''}>Parent Portal<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>${KIDS ? `<a class="when-in nav-kc" href="${link(kidsPath, depth)}"${pathName === kidsPath ? ' aria-current="page"' : ''}>${KC_BULB}Kid’s Corner</a>` : ''}`
+    ? `<a class="when-in nav-acct" href="${link('profile/', depth)}"${pathName === 'profile/' ? ' aria-current="page"' : ''}>My Profile</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}${PM_LISTED ? ' data-pm="1"' : ''}>Parent Portal<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>${KIDS ? `<a class="nav-kc" href="${link(kidsPath, depth)}"${pathName === kidsPath ? ' aria-current="page"' : ''}>${KC_BULB}Kid’s Corner</a>` : ''}`
     : `<a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`}`;
   const head = `${first}${fragment || quiet ? '' : roleHead + gtmHead + '\n' + klaviyoHead}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
@@ -2111,6 +2112,7 @@ function homePage() {
     plus: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4z',
     tent: 'M12 3 1.5 20h21zm0 7 2.6 8H9.4z',
     tick: 'M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm1 2v14h14V5zm5.6 10.6-3.3-3.3 1.4-1.4 1.9 1.9 4.7-4.7 1.4 1.4z',
+    bulb: 'M12 2a7 7 0 0 0-4 12.7V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.3A7 7 0 0 0 12 2zm-3 18h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z',
   };
   // Who each box is for: a grown-up with a child, and someone holding a clipboard.
   const WHO = {
@@ -2135,6 +2137,7 @@ function homePage() {
         ${go(link(schedulesPath, 0), T(`Build a schedule`), T(`The school week, days off and the summer`), 'week')}
         ${GROUPS ? `<span class="when-out" style="display:contents">${go(link('register/', 0), T(`Create a free account`), T(`Keep every plan, and get the whole year in one calendar`), 'person')}</span>` : ''}
         ${GROUPS && daysOff ? `<span class="when-in" style="display:contents">${go(link('to-do/', 0), T(`To-do list`), T(`The camp days you’ve planned and haven’t signed up for yet`), 'tick')}</span>` : ''}
+        ${KIDS ? go(link(kidsPath, 0), T(`Kid’s Corner`), T(`Something for your kids: pins, a map and a lightbulb of their own`), 'bulb') : ''}
       </div>
     </div>
     <div class="start managers">
@@ -2158,7 +2161,6 @@ function homePage() {
   <p>${T(`Music, art, sports, plain old aftercare.`)}</p>
   <div class="chips-row">${typeChips(0)}</div>
 </section>
-${kidsShowcase(0)}
 ${ALERTS ? `<section class="section when-out" id="remind">
   <div class="remind">
     <div class="remind-say"><h2>${T(`Get reminders`)}</h2><p>${T(`A heads-up before days off and when sign-ups open.`)}</p></div>
@@ -5598,8 +5600,9 @@ function kidsData() {
   return KIDS_DATA;
 }
 const kidsDataV = () => '?v=' + createHash('sha1').update(JSON.stringify(kidsData())).digest('hex').slice(0, 8);
-// "For kids": what a child gets once a grown-up makes an account, said to the child, on the home page and on Kid's
-// Corner itself for someone signed out. The pictures are drawn here (no real child's page is shown anywhere).
+// "For kids": what a child gets once a grown-up makes an account, said to the child, on Kid's Corner for someone
+// signed out (the menu's Kid's Corner button is there for everyone, and the home page's Parents box and the Schedule
+// Builder point to it). The pictures are drawn here (no real child's page is shown anywhere).
 function kidsShowcase(D, onKidsPage = false) {
   if (!KIDS) return '';
   const tile = (art, head, text) => `<li class="kids-tile"><svg viewBox="0 0 160 120" aria-hidden="true" focusable="false">${art}</svg><h3>${head}</h3><p>${text}</p></li>`;
@@ -5708,7 +5711,8 @@ function schedulesPage() {
   <div class="plans">
     ${cards.join('\n    ')}
   </div>
-</section>
+</section>${KIDS ? `
+<p class="kids-strip">${KC_BULB}<span>${T(`Your kids get a Kid’s Corner too: pins, a map of Philly and a lightbulb of their own for every class and camp.`)} <a href="${link(kidsPath, D)}">${T(`See what they get`)}</a></span></p>` : ''}
 <section class="notes">
   <h2>${T(`How the planners work`)}</h2>
   <ul>
