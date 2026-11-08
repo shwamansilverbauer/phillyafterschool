@@ -164,6 +164,13 @@
   // for a manager the names of the listings they hold. Nothing else about the person goes with it.
   function noteRole(u, listings) {
     if (!u || !/^(parent|manager)$/.test(u.role || '')) return;
+    var menuWas = [get('pas-role'), get('pas-premium'), get('pas-parent')].join('|');
+    noteMenu(u);
+    if ([get('pas-role'), get('pas-premium'), get('pas-parent')].join('|') !== menuWas && window.pasNavRole) window.pasNavRole();   // the menu changes on this page too
+    noteList(u, listings);
+  }
+  // What the menu goes by: the role, whether every listing held is premium, and whether there's a family.
+  function noteMenu(u) {
     if (get('pas-role') !== u.role) {
       set('pas-role', u.role);
       if (window.dataLayer) window.dataLayer.push({ event: 'pas_role', pas_role: u.role, pas_signed_in: 'yes' });
@@ -171,6 +178,8 @@
     }
     if (typeof u.premium === 'boolean') set('pas-premium', u.premium ? '1' : null);   // the menu's button for a manager: premium, or their listings once every one is premium
     if (typeof u.family === 'boolean') set('pas-parent', u.role === 'parent' || u.family ? '1' : null);   // a manager who plans for kids keeps the parent's menu
+  }
+  function noteList(u, listings) {
     if (!KL_KEY || !u.email || !u.listed) return;
     var mark = 0, i;
     for (i = 0; i < u.email.length; i++) mark = (mark * 31 + u.email.charCodeAt(i)) % 9973;   // tells two accounts on one device apart without keeping the address
@@ -1292,7 +1301,7 @@
         call('kids_save', { kids: kids }).then(function (r) {
           if (!r.ok) { kidsSay = r.message || 'That didn’t save. Try again.'; paintCard(); kidsSay = ''; return; }
           if (lastP) lastP.kids = r.kids; else lastP = { kids: r.kids, grades: r.grades, ages: r.ages, weeks: [] };
-          if ((r.kids || []).length) { me.family = true; set('pas-parent', '1'); }
+          if ((r.kids || []).length && get('pas-parent') !== '1') { me.family = true; set('pas-parent', '1'); if (window.pasNavRole) window.pasNavRole(); }
           adoptGrades(r.grades); adoptAges(r.ages); paintGrades(r.grades || []); paintAges(r.ages || []);
           seedKids(r.kids, null);
           kidsSay = said; paintCard(); paintKidsTab(); kidsSay = '';

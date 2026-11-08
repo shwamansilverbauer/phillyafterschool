@@ -3,6 +3,7 @@
 // Only ever pointed at the copy under tests/.scratch (the harness passes the path); never at a real database.
 //   php tests/lib/db.php <groups.sqlite> seed <email> [first] [last] [origin]   -> {"id":..,"sid":".."}  (origin "managers": a program manager's account)
 //   php tests/lib/db.php <groups.sqlite> select <sql>                   -> rows as JSON
+//   php tests/lib/db.php <groups.sqlite> age <sid> <idle days> <age days> -> a sign-in last used, and begun, that long ago
 $file = $argv[1] ?? '';
 $mode = $argv[2] ?? '';
 if ($file === '' || !is_file($file)) { fwrite(STDERR, "no database at $file\n"); exit(2); }
@@ -20,8 +21,15 @@ if ($mode === 'seed') {
     $id = $db->lastInsertId();
   }
   $sid = $b64(random_bytes(32));
-  $db->prepare('INSERT INTO sessions (user_id, sid_hash, expires, seen) VALUES (?, ?, ?, ?)')->execute(array($id, hash('sha256', $sid), time() + 30 * 86400, time()));
+  $db->prepare('INSERT INTO sessions (user_id, sid_hash, expires, seen, created) VALUES (?, ?, ?, ?, ?)')->execute(array($id, hash('sha256', $sid), time() + 14 * 86400, time(), time()));
   echo json_encode(array('id' => (int) $id, 'sid' => $sid));
+  exit;
+}
+if ($mode === 'age') {   // as the server would have left it at that last visit: 14 days on, never past 90 from the start
+  $now = time(); $seen = $now - (int) round(86400 * (float) ($argv[4] ?? 0)); $created = $now - (int) round(86400 * (float) ($argv[5] ?? 0));
+  $st = $db->prepare('UPDATE sessions SET seen = ?, created = ?, expires = ? WHERE sid_hash = ?');
+  $st->execute(array($seen, $created, min($seen + 14 * 86400, $created + 90 * 86400), hash('sha256', $argv[3] ?? '')));
+  echo json_encode(array('changed' => $st->rowCount()));
   exit;
 }
 if ($mode === 'select') {
@@ -30,5 +38,5 @@ if ($mode === 'select') {
   echo json_encode($db->query($sql)->fetchAll());
   exit;
 }
-fwrite(STDERR, "mode: seed or select\n");
+fwrite(STDERR, "mode: seed, age or select\n");
 exit(2);

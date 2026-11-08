@@ -87,6 +87,35 @@ test('sign out here, sign out everywhere, and the cookie stops working', async (
   eq(r.body.user, null, 'the old session is gone');
 });
 
+test('a sign-in ends after 14 days without a visit, and 90 days after it began however much it is used', async ({ api, site }) => {
+  const email = someone('ages');
+  const left = id => (site.sql(`SELECT expires FROM sessions WHERE id = ${id}`)[0].expires - Date.now() / 1000) / 86400;
+  // Last used 13 days ago: still signed in, and the visit pushes the end out to 14 days from now.
+  const a = api().as(email);
+  eq(site.ageSession(a.cookie, 13, 13).changed, 1);
+  eq((await a.okay('GET', 'me')).user.email, email, 'still signed in after 13 quiet days');
+  const id = site.sql(`SELECT id FROM sessions WHERE user_id = ${a.id} ORDER BY id DESC LIMIT 1`)[0].id;
+  ok(left(id) > 13.9 && left(id) <= 14, '14 days from this visit: ' + left(id));
+  // 15 days without a visit: signed out.
+  site.ageSession(a.cookie, 15, 15);
+  eq((await a.get('me')).body.user, null, 'signed out after 15 quiet days');
+  // Used every day, but begun 89 and a half days ago: a visit pushes the end no further than day 90.
+  const b = api().as(email);
+  const bid = site.sql(`SELECT id FROM sessions WHERE user_id = ${b.id} ORDER BY id DESC LIMIT 1`)[0].id;
+  site.ageSession(b.cookie, 1.5, 89.5);
+  eq((await b.okay('GET', 'me')).user.email, email);
+  ok(left(bid) > 0.4 && left(bid) < 0.6, 'ends at day 90, not 14 days on: ' + left(bid));
+  // Day 90 and a half: signed out, however recently it was used.
+  site.ageSession(b.cookie, 0.5, 90.5);
+  eq((await b.get('me')).body.user, null, 'signed out after 90 days');
+  // A fresh sign-in (the way a person does it) starts its own 14 days.
+  const c = api();
+  await c.signIn(email);
+  const cid = site.sql(`SELECT id, created FROM sessions WHERE user_id = ${b.id} ORDER BY id DESC LIMIT 1`)[0];
+  ok(left(cid.id) > 13.9 && left(cid.id) <= 14, 'a new sign-in: 14 days');
+  ok(Math.abs(cid.created - Date.now() / 1000) < 60, 'and it counts its 90 days from now');
+});
+
 test('the name on the account, and deleting the account', async ({ api }) => {
   const email = someone('auth');
   const c = api().as(email);

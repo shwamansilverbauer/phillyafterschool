@@ -183,9 +183,14 @@ test('a program manager who also plans for kids keeps Parent Portal and Kid’s 
   const me = await both.okay('GET', 'me');
   eq(me.user.role, 'manager'); eq(me.user.family, true, 'kids named: a family');
   const t = await b.context(ctx.site, { sid: both.cookie });
-  const page = await t.open('/account/');
-  await page.waitForSelector('#account .acct-tabs');
-  await page.reload({ waitUntil: 'networkidle' });   // the menu reads what the first visit learned
+  // A device that last heard of a manager with no family (signed in before the kids were named): the first page that
+  // asks the server puts the parent's menu back there and then, not on the next page.
+  const page = await t.open('/about/');
+  await page.evaluate(() => { localStorage.setItem('pas-in', '1'); localStorage.setItem('pas-role', 'manager'); localStorage.removeItem('pas-parent'); });
+  await page.goto(ctx.site.base + '/profile/', { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => /^Parent Portal/.test((document.querySelector('header.sitebar nav a.nav-cta.when-in') || {}).textContent || '') && !!document.querySelector('header.sitebar nav a.nav-mgr'), null, { timeout: 8000 });
+  ok(await page.locator('header.sitebar nav a.nav-kc').isVisible(), 'Kid’s Corner back on the same page');
+  await page.goto(ctx.site.base + '/account/', { waitUntil: 'networkidle' });
   await page.waitForSelector('#overview .ov-card');
   eq(await page.locator('.acct-tabs [aria-current="page"]').innerText(), 'Overview', 'a parent’s overview');
   const nav = page.locator('header.sitebar nav');
@@ -196,8 +201,11 @@ test('a program manager who also plans for kids keeps Parent Portal and Kid’s 
   // A manager with no kids and no plans: the button is about their listing, and the account opens on Details.
   const pro = ctx.api().as(someone('mgronly'), 'Dana', 'Reyes', 'managers');
   const t2 = await b.context(ctx.site, { sid: pro.cookie });
-  const p2 = await t2.open('/account/');
+  const p2 = await t2.open('/about/');
+  await p2.evaluate(() => { localStorage.setItem('pas-in', '1'); localStorage.setItem('pas-role', 'manager'); localStorage.setItem('pas-parent', '1'); });   // told wrong: it's put right
+  await p2.goto(ctx.site.base + '/account/', { waitUntil: 'networkidle' });
   await p2.waitForSelector('#account .acct-tabs');
+  await p2.waitForFunction(() => !document.querySelector('header.sitebar nav a.nav-mgr'), null, { timeout: 8000 });
   await p2.reload({ waitUntil: 'networkidle' });
   await p2.waitForSelector('#account .acct-tabs');
   eq(await p2.locator('.acct-tabs [aria-current="page"]').innerText(), 'Details');

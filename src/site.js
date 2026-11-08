@@ -1186,11 +1186,20 @@
   adminNav(store('pas-admin') === '1' && store('pas-in') === '1');
   // A program manager's menu button is about their listing: premium while a listing they hold isn't, their listings
   // once every one is. A manager who is also a parent (kids named, or plans kept: "pas-parent") keeps Parent Portal and
-  // Kid's Corner, and the listings get a link of their own beside My Profile. (The device learns the role, the premium
-  // state and whether there's a family from the accounts script at each sign-in.)
-  (function () {
+  // Kid's Corner, and the listings get a link of their own beside My Profile. The device learns the role, the premium
+  // state and whether there's a family from the accounts script whenever it asks the server who's signed in, and the
+  // accounts script calls this again when any of them changed, so the menu is right on that page, not only the next.
+  var navRole = function () {
     var cta = document.querySelector('.nav-cta.when-in');
-    if (!cta || store('pas-in') !== '1' || store('pas-role') !== 'manager') return;
+    if (!cta) return;
+    if (!navRole.was) navRole.was = { html: cta.innerHTML, href: cta.getAttribute('href'), news: cta.getAttribute('data-news') };
+    // back to the parent's menu first, then the manager's changes, if any
+    var w = navRole.was;
+    cta.innerHTML = w.html; cta.setAttribute('href', w.href); if (w.news !== null) cta.setAttribute('data-news', w.news);
+    cta.classList.remove('nav-cta-mgr');
+    all(document, '.nav-mgr').forEach(function (a) { a.parentNode.removeChild(a); });
+    var kc = document.querySelector('.nav-kc'); if (kc) kc.style.display = '';
+    if (store('pas-in') !== '1' || store('pas-role') !== 'manager') return;
     var brand = document.querySelector('a.brand'), root = brand ? brand.getAttribute('href').replace(/index\.html$/, '') : './';
     if (root === './') root = '';
     var premium = store('pas-premium') === '1' || !cta.hasAttribute('data-pm');   // no premium page yet: the button goes to their listings
@@ -1203,8 +1212,10 @@
     cta.href = root + (premium ? 'managers/' : 'premium/');
     cta.classList.add('nav-cta-mgr');
     cta.removeAttribute('data-news');
-    var kc = document.querySelector('.nav-kc'); if (kc) kc.style.display = 'none';   // Kid's Corner is for a parent's kids
-  })();
+    if (kc) kc.style.display = 'none';   // Kid's Corner is for a parent's kids
+  };
+  navRole();
+  window.pasNavRole = navRole;
 
   // ----- the menu. Wide screens: the logo on the left, groups on the right, one open at a time.
   // Narrow screens: a Menu button that opens every group in one panel. A tap elsewhere or Escape closes either. -----

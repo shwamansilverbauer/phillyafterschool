@@ -25,7 +25,8 @@
 // address (which proves it is theirs) and gives the code from the invitation. Both are needed.
 //
 // Signing in has no passwords. The site emails a link (and a 6-digit code for the device that asked); each works once
-// and for 15 minutes. Or Google vouches for the address. A device then stays signed in for 30 days.
+// and for 10 minutes. Or Google vouches for the address. A device then stays signed in until it goes 14 days without
+// being used, and for 90 days at most: then it signs in again.
 
 declare(strict_types=1);
 
@@ -39,7 +40,8 @@ header('X-Robots-Tag: noindex, nofollow');
 header('Referrer-Policy: no-referrer');
 
 const LINK_MINUTES = 10;
-const SESSION_DAYS = 30;
+const SESSION_DAYS = 14;      // a sign-in ends after this many days without a visit
+const SESSION_MAX_DAYS = 90;  // and this many days after it began, however much it's used
 const MAX_OWNED = 10;       // groups one person can own
 const MAX_JOINED = 30;      // groups one person can be in
 const MAX_MEMBERS = 80;     // people in one group
@@ -129,6 +131,14 @@ function db(): PDO {
     $db->exec('CREATE INDEX IF NOT EXISTS weeks_user ON weeks (user_id)');
     // A child in a group or a shared week can be a copy of a week kept in the owner's profile (week_id): it is then
     // brought up to date whenever that week is saved, from any device, and goes when the week is removed.
+    // When each sign-in began, for the 90-day limit. Sign-ins from before it count from their last visit, and any that
+    // has gone 14 days without one ends now (they used to last 30).
+    $scols = array();
+    foreach ($db->query('PRAGMA table_info(sessions)') as $c) $scols[] = $c['name'];
+    if (!in_array('created', $scols, true)) {
+      $db->exec('ALTER TABLE sessions ADD COLUMN created INTEGER NOT NULL DEFAULT 0');
+      $db->exec('UPDATE sessions SET created = seen, expires = MIN(expires, seen + ' . (SESSION_DAYS * 86400) . ')');
+    }
     $kcols = array();
     foreach ($db->query('PRAGMA table_info(kids)') as $c) $kcols[] = $c['name'];
     if (!in_array('week_id', $kcols, true)) $db->exec('ALTER TABLE kids ADD COLUMN week_id INTEGER');
@@ -347,16 +357,19 @@ function set_session_cookie(string $value, int $expires): void {
   global $https;
   setcookie('pas_s', $value, array('expires' => $expires, 'path' => '/', 'secure' => $https, 'httponly' => true, 'samesite' => 'Lax'));
 }
+function session_ends(int $created): int {
+  return min(now() + SESSION_DAYS * 86400, $created + SESSION_MAX_DAYS * 86400);
+}
 function current_user(): ?array {
   static $done = false, $user = null;
   if ($done) return $user;
   $done = true;
   $sid = isset($_COOKIE['pas_s']) && is_string($_COOKIE['pas_s']) ? $_COOKIE['pas_s'] : '';
   if (!preg_match('/^[A-Za-z0-9_-]{40,50}$/', $sid)) return null;
-  $s = row('SELECT s.id AS sid, s.expires, s.seen, u.id, u.email, u.name, u.first, u.last, u.listed, u.school, u.grades, u.ages, u.kids, u.origin, u.hood, u.phone, u.phone_ok, u.home FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
+  $s = row('SELECT s.id AS sid, s.expires, s.seen, s.created, u.id, u.email, u.name, u.first, u.last, u.listed, u.school, u.grades, u.ages, u.kids, u.origin, u.hood, u.phone, u.phone_ok, u.home FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.sid_hash = ? AND s.expires > ?', array(h($sid), now()));
   if (!$s) return null;
-  if ($s['seen'] < now() - 86400) {   // once a day, push the 30 days out again
-    $exp = now() + SESSION_DAYS * 86400;
+  if ($s['seen'] < now() - 86400) {   // once a day, push the 14 days out again, never past 90 days from signing in
+    $exp = session_ends((int) $s['created']);
     q('UPDATE sessions SET seen = ?, expires = ? WHERE id = ?', array(now(), $exp, $s['sid']));
     set_session_cookie($sid, $exp);
   }
@@ -1677,8 +1690,8 @@ function sign_in(string $email, string $via, string $next, string $first = '', s
     signup_named((int) $user['id']);
   }
   $sid = b64(random_bytes(32));
-  $exp = now() + SESSION_DAYS * 86400;
-  q('INSERT INTO sessions (user_id, sid_hash, expires, seen) VALUES (?, ?, ?, ?)', array($user['id'], h($sid), $exp, now()));
+  $exp = session_ends(now());
+  q('INSERT INTO sessions (user_id, sid_hash, expires, seen, created) VALUES (?, ?, ?, ?, ?)', array($user['id'], h($sid), $exp, now(), now()));
   set_session_cookie($sid, $exp);
   bump('signin_' . $via);
   $user['id'] = (int) $user['id'];

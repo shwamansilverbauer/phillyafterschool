@@ -1,6 +1,13 @@
 [
   {
     "date": "2026-11-08",
+    "title": "Signing in: two weeks at a time",
+    "text": "To keep your plans and your kids’ names safe on a shared or lost device, a device now signs itself out after two weeks without a visit, and after 90 days however often it’s used. Signing back in is the same 6-digit code by email, or Google.",
+    "href": "account/#you",
+    "link": "Your account"
+  },
+  {
+    "date": "2026-11-08",
     "title": "Kid’s Corner: dress-up, showdowns and grander pins",
     "text": "Each kid’s bulb now starts plain and unlocks things to wear as they level up, from shades and a bow tie to a cape, wings and a galaxy glow, and they choose what it wears. Pins get grander as they go from bronze to silver to gold. And the bulbs now race up the Art Museum steps, have glow-offs and dance-offs to pick a favorite, instead of boxing.",
     "href": "kids-corner/",

@@ -1610,7 +1610,8 @@ These are the only parts of the site that store anything about a child on the se
   the host. Deleting that folder in the host's file manager wipes every account, profile and group. It is not
   in git and not backed up by this repository.
 - **Limits and expiry.** Sign-in links and codes last 10 minutes and work once; five wrong codes kill a code;
-  three sign-in emails per address per 15 minutes. A device stays signed in 30 days. Up to 60 invited addresses
+  three sign-in emails per address per 15 minutes. A device stays signed in until it goes 14 days without a visit
+  (`SESSION_DAYS`), and 90 days at most from signing in (`SESSION_MAX_DAYS`). Up to 60 invited addresses
   per group, 60 invitation emails a day per person and 3 a day per address. A profile holds 6 weeks. Every
   shared week and group is deleted two weeks after `lastDay` in `data/days-off.json`; profiles stay.
 - **The email list.** `"klaviyoList"` under `groups` names a Klaviyo list ("Account holders"). When an account

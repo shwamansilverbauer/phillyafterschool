@@ -139,6 +139,8 @@ export async function startSite({ scratch, standin, log = () => {} } = {}) {
       const out = execFileSync('php', [path.join(ROOT, 'tests/lib/db.php'), path.join(dataDir, 'groups.sqlite'), 'seed', email, first, last, origin], { encoding: 'utf8' });
       return JSON.parse(out);
     },
+    // Make a sign-in look as if it was last used, and began, so many days ago.
+    ageSession(sid, idleDays, ageDays) { return JSON.parse(execFileSync('php', [path.join(ROOT, 'tests/lib/db.php'), path.join(dataDir, 'groups.sqlite'), 'age', sid, String(idleDays), String(ageDays)], { encoding: 'utf8' })); },
     // One SELECT against the test database, as rows.
     sql(q) { return JSON.parse(execFileSync('php', [path.join(ROOT, 'tests/lib/db.php'), path.join(dataDir, 'groups.sqlite'), 'select', q], { encoding: 'utf8' })); },
     async stop() { php.kill('SIGTERM'); await new Promise(r => php.on('exit', r)); fs.closeSync(logFd); },
