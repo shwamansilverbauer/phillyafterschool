@@ -1185,13 +1185,20 @@
   };
   adminNav(store('pas-admin') === '1' && store('pas-in') === '1');
   // A program manager's menu button is about their listing: premium while a listing they hold isn't, their listings
-  // once every one is. (The device learns the role and the premium state from the accounts script at each sign-in.)
+  // once every one is. A manager who is also a parent (kids named, or plans kept: "pas-parent") keeps Parent Portal and
+  // Kid's Corner, and the listings get a link of their own beside My Profile. (The device learns the role, the premium
+  // state and whether there's a family from the accounts script at each sign-in.)
   (function () {
     var cta = document.querySelector('.nav-cta.when-in');
     if (!cta || store('pas-in') !== '1' || store('pas-role') !== 'manager') return;
     var brand = document.querySelector('a.brand'), root = brand ? brand.getAttribute('href').replace(/index\.html$/, '') : './';
     if (root === './') root = '';
     var premium = store('pas-premium') === '1' || !cta.hasAttribute('data-pm');   // no premium page yet: the button goes to their listings
+    if (store('pas-parent') === '1') {
+      var mine = document.createElement('a'); mine.className = 'when-in nav-mgr'; mine.textContent = premium ? 'Your listings' : 'Go premium'; mine.href = root + (premium ? 'managers/' : 'premium/');
+      var at = document.querySelector('.nav-acct'); if (at) at.parentNode.insertBefore(mine, at);
+      return;
+    }
     cta.textContent = premium ? 'Your listings' : 'Go premium';
     cta.href = root + (premium ? 'managers/' : 'premium/');
     cta.classList.add('nav-cta-mgr');

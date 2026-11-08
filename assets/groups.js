@@ -65,7 +65,7 @@
       if (t[0] === 'listings' && !hasListings) return;
       if (t[0] === 'todo' && !yearOn) return;
       if (t[0] === 'kids' && !host.getAttribute('data-kids')) return;   // Kid's Corner is on the live site only
-      if (t[0] === 'overview' && get('pas-role') === 'manager') return;   // the overview is a parent's: a program manager starts on Details
+      if (t[0] === 'overview' && get('pas-role') === 'manager' && get('pas-parent') !== '1') return;   // the overview is a parent's: a program manager with no kids or plans starts on Details
       var a = el('a', t[0] === 'todo' ? 'tab-cta' : null, t[1]); a.href = page(t[2]) + t[3]; a.setAttribute('data-tab-go', t[0]);
       if (t[2] === here && pick) a.addEventListener('click', function (e) { if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return; e.preventDefault(); pick(t[0]); });
       links[t[0]] = a; nav.appendChild(a);
@@ -170,6 +170,7 @@
       if (typeof window.clarity === 'function') window.clarity('set', 'role', u.role);
     }
     if (typeof u.premium === 'boolean') set('pas-premium', u.premium ? '1' : null);   // the menu's button for a manager: premium, or their listings once every one is premium
+    if (typeof u.family === 'boolean') set('pas-parent', u.role === 'parent' || u.family ? '1' : null);   // a manager who plans for kids keeps the parent's menu
     if (!KL_KEY || !u.email || !u.listed) return;
     var mark = 0, i;
     for (i = 0; i < u.email.length; i++) mark = (mark * 31 + u.email.charCodeAt(i)) % 9973;   // tells two accounts on one device apart without keeping the address
@@ -581,7 +582,7 @@
       if (hashPart === 'listings' && me.claims) { location.replace(page('managers/')); return; }   // a manager's listings have a page of their own
       // The tabs. One strip runs across the profile, this page and the listings page; here it switches between the
       // parts of the account, so nobody has to scroll through all of them to find one.
-      var firstTab = me.role === 'manager' ? 'you' : 'overview', tabNow = firstTab;
+      var firstTab = me.role === 'manager' && !me.family ? 'you' : 'overview', tabNow = firstTab;
       var showTab = function (id, byHand) {
         tabNow = id; var allOn = tabsAll();
         Array.prototype.forEach.call(account.children, function (c) { var t = c.getAttribute('data-tab'); if (t) c.className = c.className.replace(/ tab-off/g, '') + (allOn || t === id ? '' : ' tab-off'); });
@@ -1291,6 +1292,7 @@
         call('kids_save', { kids: kids }).then(function (r) {
           if (!r.ok) { kidsSay = r.message || 'That didn’t save. Try again.'; paintCard(); kidsSay = ''; return; }
           if (lastP) lastP.kids = r.kids; else lastP = { kids: r.kids, grades: r.grades, ages: r.ages, weeks: [] };
+          if ((r.kids || []).length) { me.family = true; set('pas-parent', '1'); }
           adoptGrades(r.grades); adoptAges(r.ages); paintGrades(r.grades || []); paintAges(r.ages || []);
           seedKids(r.kids, null);
           kidsSay = said; paintCard(); paintKidsTab(); kidsSay = '';

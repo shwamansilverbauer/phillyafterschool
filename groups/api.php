@@ -1111,8 +1111,16 @@ function me_out(array $u): array {
   return array('email' => $u['email'], 'first' => $u['first'], 'last' => $u['last'], 'ready' => ready($u), 'listed' => (bool) $u['listed'],
     'school' => isset($u['school']) ? (string) $u['school'] : '', 'hood' => isset($u['hood']) ? (string) $u['hood'] : '', 'phone' => isset($u['phone']) && !empty($u['phone_ok']) ? phone_show((string) $u['phone']) : '', 'grades' => grade_list(isset($u['grades']) ? (string) $u['grades'] : ''), 'ages' => grade_list(isset($u['ages']) ? (string) $u['ages'] : ''), 'weeks' => isset($u['id']) ? (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array(home_id($u))) : 0,
     'claims' => $claims, 'role' => role_of($u, $claims), 'premium' => $allPremium, 'push' => isset($u['id']) ? push_state((int) $u['id']) : array('devices' => 0, 'only' => false),
-    'coparent' => isset($u['id']) ? coparent_out($u) : null)
+    'coparent' => isset($u['id']) ? coparent_out($u) : null, 'family' => isset($u['id']) ? has_family($u) : false)
     + (is_admin($u) ? array('admin' => true) : array());   // only an admin's own account is ever told so
+}
+// Whether the account plans for children: kids named on it, or a week, summer or days-off plan kept in it. A program
+// manager who does is a parent too, so the menu keeps the Parent Portal and Kid's Corner for them.
+function has_family(array $u): bool {
+  $h = home_user($u);
+  if (count(kids_list($h))) return true;
+  $id = (int) $h['id'];
+  return (int) val('SELECT (SELECT COUNT(*) FROM weeks WHERE user_id = ?) + (SELECT COUNT(*) FROM summers WHERE user_id = ?) + (SELECT COUNT(*) FROM daysoffs WHERE user_id = ?)', array($id, $id, $id)) > 0;
 }
 // A site admin: an account whose address is on the admins list in site.config.json. It opens the owner's pages under
 // /edit/ (which check the same thing themselves); here it only lets the account page show the way in.
