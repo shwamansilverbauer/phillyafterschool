@@ -883,7 +883,7 @@ changes where a listing appears in a list, and it has no say over reviews.
     sentence, "See what premium adds" and the price, for people who haven't claimed yet.
   - **The menu's button, for a manager.** Signed in as a program manager (the device keeps `pas-role`, and now
     `pas-premium` from `me.premium`: whether every listing the account holds is premium), `site.js` turns the
-    menu's "My profile" button into a yellow "Go premium" that opens `/premium/`, or "Your listings" (the managers
+    menu's "Parent Portal" button into a yellow "Go premium" that opens `/premium/`, or "Your listings" (the managers
     page) once every listing they hold is premium, or while the premium page isn't listed. Parents see no change.
   - **One sentence on the managers page**, in the list under "How claiming works", for people who haven't claimed.
   - **One line at the end of the monthly numbers email**, only for an account with no premium listing.
@@ -1826,12 +1826,16 @@ its own page.
 - **Where the kids' names come from.** No list of children is kept. The card collects first names from the plans
   kept in the account (weeks, summer, days off) and from the rosters on this device. Grades are stored without
   saying which child is in which, so the card shows them as their own row.
-- **`/account/` is where everything is changed.** Your details (name, email address, mobile number), School and
-  kids (school, grades, neighborhood), Emails (the Sunday email), Places you follow and Favorites, Kept plans,
-  Sharing and groups, invitations, listings, the support ask, signing out and deleting. Signed out, it is still
-  where people log in.
-- **Getting there.** Signed in, the menu has "Account" beside the "My profile" button; in the phone menu the two are
-  the first things listed. The footer's Schedule Builder column has "My profile" as well.
+- **`/account/` is the Parent Portal, and where everything is changed.** It opens on an **Overview** (`#overview`,
+  `paintOverview()`): a card for each place to start (Build your kids' week, Plan your days off, Update your profile,
+  Manage your to-do list, Build your year calendar, Have your kids play, Plan your summer, Help the site keep going),
+  each with how far it has got from the plans kept in the account, then "What's new". The other tabs: Details (`#you`:
+  name, email address, mobile number, signing out and deleting), School & kids, Kid's Corner, Emails & following, and
+  Plans & sharing. A program manager's account has no overview and opens on Details. Signed out, it is still where
+  people log in.
+- **Getting there.** Signed in, the menu has "My Profile" as a plain link, then the yellow "Parent Portal" button (to
+  the overview), then a Kid's Corner button with a little bulb. In the phone menu, Parent Portal, Kid's Corner and My
+  Profile are the first things listed. The footer's Schedule Builder column has "My Profile" as well.
 - **Changing the email address.** "Change my email address" under Your details asks for the new address
   (`email_start`), which is sent a 6-digit code, and then for the code (`email_finish`). Until the code is typed
   nothing changes. Then the account's address is replaced, every other device is signed out, a note goes to the old
@@ -1925,10 +1929,12 @@ page. (The account page used to have one; it has tabs now.) With fewer than two 
 
 ## What's new
 
-`data/news.json` is a short list, newest first: `{ "date", "title", "text", "href", "link" }`. The account page
-shows the latest five under "What's new", and "Your account" in the header carries a dot until the newest one has
-been seen on that device (`pas-news` in `localStorage`). Add an entry when something ships that an account holder
-would want to know about.
+`data/news.json` is a short list, newest first: `{ "date", "title", "text", "href", "link" }`. The Parent Portal's
+overview (the account page's first tab) and the profile show the latest under "What's new", and "Parent Portal" in the
+header carries a dot until the newest one has been seen on that device (`pas-news` in `localStorage`). **Add an entry
+in the same change as anything that ships that a parent would want to know about** (a new school, a new planner or
+feature, a change to how things work); listing and copy fixes don't need one. The build prints a Note once the newest
+entry is more than two weeks old, as a reminder.
 
 ## Parents and program managers, told apart
 

@@ -1,5 +1,33 @@
 [
   {
+    "date": "2026-11-08",
+    "title": "Your Parent Portal",
+    "text": "The button in the menu is now Parent Portal. It opens on an overview of where to start, with how far each part has got: your kids’ week, the days off, the summer, your to-do list and your year calendar. My Profile sits beside it in the menu, and Kid’s Corner has a button of its own.",
+    "href": "account/",
+    "link": "Open the Parent Portal"
+  },
+  {
+    "date": "2026-11-07",
+    "title": "Kid’s Corner: a page for each of your kids",
+    "text": "Every class and camp your kids go to now earns them something on a page of their own: shiny pins that go from bronze to gold, a cartoon map of Philly that clears as they explore it, and a lightbulb for every program, boxing for the title of favorite. Eddie Bulboa, the bulb in our logo, shows them around. You say what counts, their favorites come first when you plan, and nothing on it is counted or recorded.",
+    "href": "kids-corner/",
+    "link": "Open Kid’s Corner"
+  },
+  {
+    "date": "2026-11-07",
+    "title": "Co-parents, and sharing a week",
+    "text": "Two parents can now share one set of plans: invite your co-parent from Plans & sharing, and you both see and change the same weeks, days off, summer and calendar. You can also share a kept week with one person, like a grandparent or a sitter.",
+    "href": "account/#plans",
+    "link": "Invite a co-parent"
+  },
+  {
+    "date": "2026-11-07",
+    "title": "Four more schools: Marian Anderson, Lingelbach, Childs and Bache-Martin",
+    "text": "Each has its own page now: what runs in the building, which programs pick up at dismissal, and what’s a short walk away. That makes 13 schools. Two of the four were asked for by parents.",
+    "href": "schools/request/",
+    "link": "Ask for your school"
+  },
+  {
     "date": "2026-10-20",
     "title": "We’re open",
     "text": "Philly After School is out of preview as of today: eight schools east of Broad, 82 programs, 44 summer camps and every district day off, with planners that save to your profile. If your school isn’t here yet, ask for it and we’ll tell you when it’s up. And tell one parent at pickup.",

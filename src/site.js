@@ -537,7 +537,7 @@
     });
   });
 
-  // ----- a dot on "My profile" when the site has news this device hasn't seen (the profile page lists it) -----
+  // ----- a dot on "Parent Portal" when the site has news this device hasn't seen (its overview and the profile list it) -----
   (function () {
     var a = document.querySelector('.nav-cta[data-news]'), dot = a ? a.querySelector('.news-dot') : null;
     if (!dot || store('pas-in') !== '1') return;
@@ -1196,6 +1196,7 @@
     cta.href = root + (premium ? 'managers/' : 'premium/');
     cta.classList.add('nav-cta-mgr');
     cta.removeAttribute('data-news');
+    var kc = document.querySelector('.nav-kc'); if (kc) kc.style.display = 'none';   // Kid's Corner is for a parent's kids
   })();
 
   // ----- the menu. Wide screens: the logo on the left, groups on the right, one open at a time.

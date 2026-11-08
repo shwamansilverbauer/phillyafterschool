@@ -12,13 +12,14 @@ test('the account tabs: each hash opens its tab, and the tab bar says which', as
   const t = await b.context(ctx.site, { sid: pat.cookie });
   const page = await t.open('/account/');
   await page.waitForSelector('#account .acct-tabs');
-  eq(await page.locator('.acct-tabs [aria-current="page"]').innerText(), 'Details');
-  ok(await page.locator('#you').isVisible(), 'the details panel shows');
-  for (const [hash, label, probe] of [['school', 'School & kids', '#school'], ['emails', 'Emails & following', '#emails'], ['plans', 'Plans & sharing', '#plans']]) {
+  eq(await page.locator('.acct-tabs [aria-current="page"]').innerText(), 'Overview', 'the Parent Portal opens on its overview');
+  ok(await page.locator('#overview').isVisible(), 'the overview shows');
+  ok(!(await page.locator('#you').isVisible()), 'the details wait on their own tab');
+  for (const [hash, label, probe] of [['you', 'Details', '#you'], ['school', 'School & kids', '#school'], ['emails', 'Emails & following', '#emails'], ['plans', 'Plans & sharing', '#plans']]) {
     await page.click(`.acct-tabs [data-tab-go="${hash}"]`);
     await page.waitForTimeout(300);
     eq(flat(await page.locator('.acct-tabs [aria-current="page"]').innerText()), label, `tab for #${hash}`);
-    ok(!(await page.locator('#you').isVisible()), `details panel hidden on #${hash}`);
+    ok(!(await page.locator('#overview').isVisible()), `overview hidden on #${hash}`);
     ok(await page.locator(probe).first().isVisible(), `#${hash} shows its content`);
   }
   const prof = await t.open('/profile/');
@@ -137,6 +138,40 @@ test('School & kids: the kids by name on top, to add, change and remove; the pla
   await page.waitForSelector('.g-kids .g-status:has-text("Rae is off your profile")');
   prof = await pat.okay('GET', 'profile');
   eq(prof.kids.length, 1); eq(prof.kids[0].n, 'Sam');
+  eq(t.errors.length, 0, t.errors.join(' | '));
+  await t.close();
+});
+
+test('the menu signed in: My Profile, the Parent Portal button, Kid’s Corner; the overview says where to start and how far each part has got', async (ctx) => {
+  const b = await ctx.browser();
+  const pat = ctx.api().as(someone('portal'), 'Pat', 'Lee');
+  const { entry } = pickupPair();
+  await pat.okay('POST', 'week_save', { week: { name: 'Sam', now: { ...empty(), mon: [entry] }, next: empty() } });
+  const t = await b.context(ctx.site, { sid: pat.cookie });
+  const page = await t.open('/');
+  const nav = page.locator('header.sitebar nav');
+  eq(flat(await nav.locator('a.nav-acct').innerText()), 'My Profile'); matches(await nav.locator('a.nav-acct').getAttribute('href'), /profile\/$/);
+  matches(flat(await nav.locator('a.nav-cta.when-in').innerText()), /^Parent Portal( \(something new\))?$/); matches(await nav.locator('a.nav-cta.when-in').getAttribute('href'), /account\/$/);
+  eq(flat(await nav.locator('a.nav-kc').innerText()).toLowerCase(), 'kid’s corner'); matches(await nav.locator('a.nav-kc').getAttribute('href'), /kids-corner\/$/);
+  eq(await nav.locator('a', { hasText: /^Account$/ }).count(), 0, 'no separate Account link');
+  const order = await nav.evaluate(n => [...n.children].map(c => c.className).filter(c => /nav-(acct|cta|kc)/.test(c) && !/when-out/.test(c)));
+  ok(order.join(' ').indexOf('nav-acct') < order.join(' ').indexOf('nav-cta') && order.join(' ').indexOf('nav-cta') < order.join(' ').indexOf('nav-kc'), 'My Profile, then Parent Portal, then Kid’s Corner: ' + order.join(' | '));
+  ok(await nav.locator('a.nav-cta.when-in .news-dot').isVisible(), 'a dot for news not yet seen');
+  // The Parent Portal: the overview first.
+  await nav.locator('a.nav-cta.when-in').click();
+  await page.waitForSelector('#overview .ov-card');
+  const cards = (await page.locator('#overview .ov-card b').allInnerTexts()).map(x => flat(x).toLowerCase());   // the Kid’s Corner card is in capitals
+  for (const want of ['Build your kids’ week', 'Plan your days off', 'Update your profile', 'Manage your to-do list', 'Build your year calendar', 'Have your kids play', 'Plan your summer', 'Help the site keep going']) ok(cards.includes(want.toLowerCase()), 'a card for ' + want + ': ' + cards.join(', '));
+  await page.waitForFunction(() => /week kept/.test((document.querySelector('#overview .ov-week .ov-state') || {}).textContent || ''));
+  includes(flat(await page.locator('#overview .ov-week .ov-state').innerText()), '1 week kept');
+  includes(flat(await page.locator('#overview .ov-summer .ov-state').innerText()), 'Not started');
+  matches(await page.locator('#overview .ov-kids').getAttribute('href'), /kids-corner\/$/);
+  ok(await page.locator('#new').isVisible(), 'What’s new is on the overview');
+  ok(!(await nav.locator('a.nav-cta.when-in .news-dot').isVisible()), 'seen: the dot goes');
+  // Update your profile switches to School & kids, here on the page.
+  await page.locator('#overview .ov-profile').click();
+  await page.waitForTimeout(300);
+  eq(flat(await page.locator('.acct-tabs [aria-current="page"]').innerText()), 'School & kids');
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
 });
