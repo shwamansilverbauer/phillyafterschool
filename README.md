@@ -384,19 +384,24 @@ keep that name.)
   place in the list, on the server and on the page.)
 - **What counts.** Only what a parent has confirmed. The server suggests from the household's plans
   (`passport_suggest()`: every program on a child's kept week, each camp whose week has started, each day-off program
-  whose day has passed, once per listing per year) and the parent says yes or no in the grown-ups' corner, or adds one
-  the plans missed. A listing with several sites (Philly Art Center, say) lands on the map only once the parent says
+  whose day has passed, once per listing per year, with how many times the plans have it: days a week, weeks of the
+  same camp, days off) and the parent says yes or no in the grown-ups' corner, or adds one the plans missed. One
+  already confirmed comes back ("now 3 days a week, was once") when the plans count it more; no to that count isn't
+  asked again (`skip` gets `k|kind|y|n`). The grown-ups' corner has a − / + for the times on each one too. A listing with several sites (Philly Art Center, say) lands on the map only once the parent says
   which site.
 - **Pins.** `KIDS_PINS` in `build.mjs`: one per program type (names in `KIDS_PIN`), one per season (after school,
-  weekends, days off, summer) and one for neighborhoods. Each goes bronze, silver, gold at 1, 3 and 5 (neighborhoods:
-  2, 4, 6). Drawn as SVG in `drawPin()`, grander at each level: bronze is the badge and a star; silver adds a laurel,
+  weekends, days off, summer: that one counts weeks of camp), one for neighborhoods, and the Repeater Reward for going
+  back (each time after the first at the same listing: a second day a week, another term or year, another week of the
+  same camp). Each goes bronze, silver, gold at 1, 3 and 5 (neighborhoods: 2, 4, 6; repeats: 1, 5, 10); the Repeater
+  Reward is shown with a burst of its own ("REPEATER REWARD!"), and each bulb in the collection wears its "×3". Drawn as SVG in `drawPin()`, grander at each level: bronze is the badge and a star; silver adds a laurel,
   a blue banner, a gem and more stars; gold adds a turning sunburst, wings, a gold laurel, a crown, red ribbons and
   twinkling sparkles.
-- **Levels.** Points are 10 a class, 5 a neighborhood and 5 a pin level (`stats()`); `LEVELS` and `TITLES` turn them
+- **Levels.** Points are 10 a class, 5 a repeat, 5 a neighborhood and 5 a pin level (`stats()`); `LEVELS` and `TITLES` turn them
   into "Explorer · Level 4" with a bar to the next.
-- **Celebrations.** Pins whose level went up since the child last looked, and a new level, wait behind a present to
-  tap open (sounds can only start after a tap), then pop in one by one (or all together past three), then the level
-  up. What was shown is saved (`seen`, `lvl`) so it is celebrated once.
+- **Celebrations.** Pins whose level went up since the child last looked, secret spots found on the map, and a new
+  level, wait behind a present to tap open (sounds can only start after a tap), then pop in one by one (or all together
+  past three), then the spots, then the level up. What was shown is saved (`seen`, with `map:<area>` for the spots;
+  `lvl`) so it is celebrated once.
 - **The map** is drawn on the page from `data/philly-map.json` (served as `assets/philly-map.json`): the city's 159
   neighborhoods, its outline, the Delaware along its edge, the Schuylkill, and a dozen landmarks, all in map units.
   `scripts/philly-map.py` makes it from OpenDataPhilly's "Philadelphia Neighborhoods" (Robert Cheetham, CC BY 4.0)
@@ -406,12 +411,21 @@ keep that name.)
   neighborhood (`mapHood()`: by its point, else by name, through `MAP_ALIAS`) and notes any name it can't place.
   Drag, pinch or the buttons zoom; a tap says what is there, and Eddie waits at the top of the Art Museum steps. No map
   service, no tiles: nothing is fetched from anywhere else.
+- **Secret spots.** `MAP_AREAS` in `build.mjs` cuts the city into areas (the Parkway, Center City, Old City, South
+  Philly, the Northwest, the Southwest, the Northeast), each with one to three famous things: the map's landmarks, and
+  a few more placed by latitude and longitude (`MAP_EXTRA`: Elfreth's Alley, the Italian Market, the covered bridge,
+  the wildlife refuge, Pennypack Park). Each starts as a "?" cloud and is found in order as the child goes to classes
+  nearby: the first with one listing in the area, the next with two, the last with three. The build puts each listing
+  site in the area whose middle is nearest, within 5 km (`mapArea()`, as `a` on the site). `LANDMARK` and
+  `LANDMARK_SAY` in `kids-corner.js` draw each one and say something about it; a tap on a "?" says how many more
+  classes nearby it needs. (No Rocky statue: it's the film's character.)
 - **Bulbs and the showdown.** Each program type is a family of bulbs (`SPECIES`: a bulb shape, something to wear,
   a special move), its glass tinted with the type's colour, and each program a member of it, varied by its id (eyes,
   mouth, freckles, shades). `drawBulb()` draws them; a lit bulb glows, and the class `off` puts its light out. The
   showdown pairs the child's distinct listings until one is left, each pair in one of three contests that take turns
-  (`EVENTS`): a race up the Art Museum steps, a glow-off (meters fill, spotlights) and a dance-off. The child taps the
-  winner, Eddie counts them in, the winner pulls out its special move (notes, paint, lightning, dice…), and the other
+  (`EVENTS`): a race up the Art Museum steps, a glow-off (meters fill, spotlights) and a dance-off. The question is
+  always the same and plain, "Which did you have more fun at?", with the contest as a label under it: the child taps
+  the one they had more fun at, Eddie counts them in, the winner pulls out its special move (notes, paint, lightning, dice…), and the other
   comes second and cheers ("Good race!"). Nobody gets hit and no light goes out: it was boxing at first, changed so
   parents needn't mind. The order they dropped out in is saved as `fav`. With reduced motion set, the moves and
   confetti are skipped.
@@ -419,7 +433,7 @@ keep that name.)
   button is remembered on the device (`kc-mute`).
 - **The data.** `passports` in the accounts database, one row per child per household (by first name, the way weeks
   match), encrypted like the plans: `{ done: [{ k: "p:<program>" | "c:<camp>", kind: after | weekend | off | summer,
-  y: <year>, s: <school or "">, h?: <site's neighborhood> }], skip: [suggestion keys the parent waved away],
+  y: <year>, s: <school or "">, h?: <site's neighborhood>, n?: <times, 2 to 20> }], skip: [suggestion keys the parent waved away],
   fav: [listings, best first], av?: { b: <body>, c: <colour 0-9>, w?: { <place>: <item> } }, seen?: { <pin>: <level> }, lvl?: <level> }`.
   `GET passport` gives every child on the kids list with all of that and the suggestions; `POST passport_save { kid,
   done, skip, fav, av?, seen?, lvl? }` replaces one child's lists, and keeps `av`, `seen` and `lvl` when they are left

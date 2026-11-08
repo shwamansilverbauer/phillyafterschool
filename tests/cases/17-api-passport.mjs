@@ -31,6 +31,34 @@ test('a passport per child: suggestions come from the kept week, past camp weeks
   deepEq(rae.suggest, [{ k: 'c:' + ids[0], kind: 'summer', y: summerY, s: '' }, { k: 'p:' + program.id, kind: 'off', y, s: '' }], 'Rae: the camp week that passed, the day off that passed');
 });
 
+test('going back: a class counts as often as the plans have it, and comes back to confirm when they have it more', async (ctx) => {
+  const pat = person(ctx, 'Pat', 'Lee', 'rep');
+  const { entry, program, school } = pickupPair();
+  const { season, ids } = twoCamps();
+  const y = schoolYearStart();
+  await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '2' }, { n: 'Rae', g: 'K' }] });
+  // Three days a week on the kept week: suggested as three times.
+  await pat.okay('POST', 'week_save', { week: { name: 'Sam', now: { ...empty(), mon: [entry], wed: [entry], fri: [entry] }, next: empty() } });
+  let p = await pat.okay('GET', 'passport');
+  deepEq(p.kids[0].suggest, [{ k: 'p:' + program.id, kind: 'after', y, s: school, n: 3 }], 'three days a week');
+  // Confirmed before as once: it comes back as "now 3, was 1"; no keeps it from asking again for 3.
+  const once = { k: 'p:' + program.id, kind: 'after', y, s: school };
+  let r = await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [once] });
+  deepEq(r.kid.suggest, [{ k: 'p:' + program.id, kind: 'after', y, s: school, n: 3, up: 1 }], 'more times than confirmed');
+  r = await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [once], skip: ['p:' + program.id + '|after|' + y + '|3'] });
+  deepEq(r.kid.suggest, [], 'not that many times: not asked again');
+  r = await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [{ ...once, n: 3 }], skip: [] });
+  deepEq(r.kid.done, [{ ...once, n: 3 }]); deepEq(r.kid.suggest, [], 'three, as the plans say');
+  // Two weeks of the same camp that have started: two times.
+  await pat.okay('POST', 'summer_save', { summer: { y: season, kids: [{ name: 'Rae', w: { [`${season}-07-06`]: [ids[0]], [`${season}-07-13`]: [ids[0]], [`${season + 5}-07-20`]: [ids[0]] } }] } });
+  p = await pat.okay('GET', 'passport');
+  deepEq(p.kids[1].suggest, [{ k: 'c:' + ids[0], kind: 'summer', y: season, s: '', n: 2 }], 'two camp weeks so far');
+  // What a save keeps: 2 to 20 times, 1 left out, the rest dropped; the Repeater pin and the map's spots as seen.
+  r = await pat.okay('POST', 'passport_save', { kid: 'Rae', done: [{ k: 'c:' + ids[0], kind: 'summer', y: season, n: 1 }, { k: 'c:' + ids[1], kind: 'summer', y: season, n: 99 }, { k: 'p:' + program.id, kind: 'off', y, n: 'lots' }], seen: { repeat: 2, 'map:south': 3, 'map:<b>': 1 } });
+  deepEq(r.kid.done.map(e => e.n), [undefined, 20, undefined]);
+  deepEq(r.kid.seen, { repeat: 2, 'map:south': 3 });
+});
+
 test('confirming, waving away and ranking: saved per child, sealed on disk, gone when the account goes', async (ctx) => {
   const pat = person(ctx, 'Pat', 'Lee', 'pp');
   const { entry, program, school } = pickupPair();

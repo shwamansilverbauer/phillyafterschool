@@ -153,7 +153,21 @@ test('the map of Philadelphia: drawn from this site, clear where the child has b
   ok(await page.locator('.kc-map svg[data-k]').count() >= 1, 'a program’s bulb on the map');
   eq(await page.locator('.kc-map .kc-you').count(), 1, 'the child’s own bulb');
   eq(await page.locator('.kc-map .kc-eddie-map').count(), 1, 'Eddie on the Art Museum steps');
-  ok(await page.locator('.kc-map [data-lm]').count() >= 8, 'the landmarks');
+  // The secret spots: every area's famous things, a ? until classes nearby find them.
+  const spots = await page.evaluate(() => document.querySelectorAll('.kc-map [data-lm]').length);
+  eq(spots, 17, 'every secret spot is on the map');
+  const found = await page.locator('.kc-map [data-lm]:not(.kc-secret)').count();
+  ok(found >= 1 && found < spots, 'some found, some still a ?: ' + found);
+  matches(flat(await page.locator('.kc-spottally').innerText()), new RegExp('^' + found + ' / 17 secret spots found'));
+  // A tap on a ? says how to find it (everything else taken off the map, so the tap lands on it).
+  await page.evaluate(() => { const keep = document.querySelector('.kc-map .kc-secret'); document.querySelectorAll('.kc-map [data-k], .kc-map .kc-you, .kc-map .kc-eddie-map, .kc-map [data-lm]').forEach(n => { if (n !== keep) n.remove(); }); });
+  const q = await page.locator('.kc-map .kc-secret').boundingBox();
+  await page.mouse.click(q.x + q.width / 2, q.y + q.height / 2);
+  await page.waitForSelector('.kc-bubble:not([hidden])');
+  matches(flat(await page.locator('.kc-bubble').innerText()), /A secret spot!.*Go to \d+ more class(es)? near here/);
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('.kc-map');
+  await page.evaluate(() => document.querySelectorAll('.kc-over').forEach(o => o.remove()));
   // A tap on a cleared neighborhood says which it is (zoomed onto it, with what stands on it moved off).
   const hood = page.locator('.kc-map .kc-hoods path.open').first();
   const id = await page.evaluate(() => document.querySelector('.kc-map .kc-hoods path.open').getAttribute('data-hood'));
@@ -165,6 +179,43 @@ test('the map of Philadelphia: drawn from this site, clear where the child has b
   includes(flat(await page.locator('.kc-credit').innerText()), 'Robert Cheetham', 'the neighborhoods are credited');
   // The map's shapes come from this site: no map service, no tiles.
   eq(t.outside.length, 0, 'nothing asked of another site: ' + t.outside.join(', '));
+  eq(t.errors.length, 0, t.errors.join(' | '));
+  await t.close();
+});
+
+test('going back to a class: a ×2 on its bulb, the Repeater Reward pin, and the times in the grown-ups’ corner', async (ctx) => {
+  const b = await ctx.browser();
+  const pat = ctx.api().as(someone('kcr'), 'Pat', 'Lee');
+  const { program, school } = pickupPair();
+  await pat.okay('POST', 'kids_save', { kids: [{ n: 'Ana', g: '3' }] });
+  const y = (await pat.okay('GET', 'passport')).year;
+  await pat.okay('POST', 'passport_save', { kid: 'Ana', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school, n: 2 }], av: { b: 'globe', c: 2 }, lvl: 1 });
+  const t = await b.context(ctx.site, { sid: pat.cookie });
+  await t.page.emulateMedia({ reducedMotion: 'reduce' });
+  const page = await t.open('/kids-corner/');
+  await page.waitForSelector('.kc-gift');
+  const shown = await celebrate(page);
+  ok(shown.some(s => /Repeater Reward/i.test(s)), 'the Repeater Reward among the new pins: ' + shown.join(' / '));
+  await page.waitForFunction(() => !document.querySelector('.kc-over'));
+  if (await page.locator('.kc-avatar').count()) await page.locator('.kc-avatar .kc-big.ghost').click();   // "Try it on!" was tapped: back to the page
+  await page.waitForSelector('.kc-pincard');
+  ok(await page.locator('.kc-pincard.t1', { hasText: 'Repeater Reward' }).count() === 1, 'a bronze Repeater Reward');
+  await page.locator('.kc-tabbtn', { hasText: 'Showdown' }).click();
+  await page.waitForSelector('.kc-zoo');
+  eq(flat(await page.locator('.kc-bulbcard .kc-timesbadge').innerText()), '×2', 'twice, on its bulb');
+  // The grown-ups' corner: one more time, then back to once (left out when it's once).
+  await hold(page, '.kc-hold');
+  await page.waitForSelector('.kc-grownup .kc-times');
+  eq(flat(await page.locator('.kc-times-n').innerText()), '2');
+  await page.locator('.kc-times button[aria-label="One time more"]').click();
+  await page.waitForFunction(() => (document.querySelector('.kc-times-n') || {}).textContent === '3');
+  eq((await pat.okay('GET', 'passport')).kids[0].done[0].n, 3, 'saved as three times');
+  await page.locator('.kc-times button[aria-label="One time fewer"]').click();
+  await page.waitForFunction(() => (document.querySelector('.kc-times-n') || {}).textContent === '2');
+  await page.locator('.kc-times button[aria-label="One time fewer"]').click();
+  await page.waitForFunction(() => (document.querySelector('.kc-times-n') || {}).textContent === '1');
+  eq((await pat.okay('GET', 'passport')).kids[0].done[0].n, undefined, 'once: no count kept');
+  ok(await page.locator('.kc-times button[aria-label="One time fewer"]').isDisabled(), 'no fewer than once');
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
 });
@@ -193,7 +244,8 @@ test('the showdown ranks favorites with no one hurt, which the profile then carr
   eq(await page.locator('.kc-show .kc-ref img[alt="Eddie Bulboa"]').count(), 1, 'Eddie hosts');
   eq(await page.locator('.kc-show .kc-fighter .kc-bulb').count(), 2, 'two bulbs on the stage');
   matches(await page.locator('.kc-show').getAttribute('class'), /\bkc-ev-(race|glow|dance)\b/, 'a race, a glow-off or a dance-off');
-  matches(flat(await page.locator('.kc-fight .kc-ask').innerText()), /race up the steps|glow-off|dance-off/i);
+  matches(flat(await page.locator('.kc-fight .kc-ask').innerText()), /which did you have more fun at\?/i, 'the question is plain');
+  matches(flat(await page.locator('.kc-fight .kc-evname').innerText()), /race up the steps|glow-off|dance-off/i);
   // Watch the contest (with reduced motion it passes quickly): the other comes second and cheers; no light goes out.
   await page.evaluate(() => {
     window.__kc = { second: '', said: '', off: 0 };

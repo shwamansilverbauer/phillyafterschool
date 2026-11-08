@@ -2401,7 +2401,7 @@ function privacyPage() {
     <li>${T(`For a summer schedule in your profile, we store each child’s first name as you typed it and the camps picked for each week, so the summer is there on your other devices. The calendar’s title and photos are not stored. A summer in your profile can’t be shared with anyone except a co-parent you’ve linked (below), and it is deleted when you take it out of your profile or delete your account. The summer schedule section is hidden in session recordings, and analytics is told only that a summer was kept, never what is in it.`)}</li>
     <li>${T(`For a days-off plan in your profile, we store each child’s first name as you typed it, the place picked for each day school is closed, and which of those days you ticked as signed up. The calendar’s title and photos are not stored. The plan can’t be shared with anyone except a co-parent you’ve linked (below), and it is deleted when you take it out of your profile or delete your account. The planner is hidden in session recordings, and analytics is never told what is in a plan.`)}</li>
     <li>${T(`“My kids’ calendar” is drawn in your browser, for you alone, from the plans on your device and the ones in your profile. Opening it stores nothing new and sends nothing about your plans. It has no link of its own, so nobody else can open it. A picture or calendar file you save is a copy on your device that we never receive. So it can tell you when a date changes, the page remembers what your last file held, on your device only. Google Analytics and Microsoft Clarity are not loaded on it.`)}</li>
-    <li>${T(`Kid’s Corner is a page for each child, drawn from what you confirm they have been to. We store, encrypted like the plans, the child’s first name as you typed it, the listings you confirmed with the kind and the year, the suggestions you waved away, the favorites the child ranked, the lightbulb, color and dress-up items the child picked, and which pins and level the page has already celebrated. Nothing else: no notes, no photos, nothing typed by a child. Pins, levels and the map are worked out in your browser, and the map is drawn there too, from this site, with no outside map service. The page loads no analytics or recordings, sends nothing to the email list, and has no link to share; the picture you can save shows the pins and the level, with no name and no map.`)}</li>
+    <li>${T(`Kid’s Corner is a page for each child, drawn from what you confirm they have been to. We store, encrypted like the plans, the child’s first name as you typed it, the listings you confirmed with the kind, the year and how many times, the suggestions you waved away, the favorites the child ranked, the lightbulb, color and dress-up items the child picked, and which pins and level the page has already celebrated. Nothing else: no notes, no photos, nothing typed by a child. Pins, levels and the map are worked out in your browser, and the map is drawn there too, from this site, with no outside map service. The page loads no analytics or recordings, sends nothing to the email list, and has no link to share; the picture you can save shows the pins and the level, with no name and no map.`)}</li>
     <li>${T(`Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.`)}</li>
     <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
     <li>${T(`The email list also notes whether an account belongs to a parent or to someone who manages a program, so each gets only the news meant for them. For a manager it notes the name of the listing they hold.`)}</li>
@@ -5422,9 +5422,9 @@ const YEAR_PAGE = !!(GROUPS && daysOff);
 // ---------- Kid's Corner: a page of each child's own, inside a parent's account ----------
 // For the child: shiny pins that level up (bronze, silver, gold) for the kinds of program they have been to, the
 // seasons and the neighborhoods; a level that climbs; a cartoon map of Philadelphia whose clouds clear over the
-// neighborhoods they have been to; a bulb of their own that dresses up as they level up; and showdowns (a race up the Art
-// Museum steps, a glow-off, a dance-off) where each program's lightbulb takes on another and the child picks the winner,
-// which ranks their favorites. Everything on it comes from what a parent has confirmed (the "passport"
+// neighborhoods they have been to, with secret spots that unlock with classes nearby; a Repeater Reward for going back;
+// a bulb of their own that dresses up as they level up; and showdowns (a race up the Art Museum steps, a glow-off, a
+// dance-off) where the child picks which of two programs they had more fun at, which ranks their favorites. Everything on it comes from what a parent has confirmed (the "passport"
 // endpoint in groups-api.php, Kid's Corner's first name, kept encrypted with the rest of a household's plans). The page
 // is quiet (no analytics, no recordings, nothing to Klaviyo), out of search, and in kid mode no link leaves the site.
 // The lightbulbs, pins, map and sounds are all made in src/kids-corner.js; the map's shapes are data/philly-map.json
@@ -5460,6 +5460,47 @@ const mapHood = (() => {
   fn.missed = missed;
   return fn;
 })();
+// The map's secret spots. The city is in areas, each with a few famous things that start as a "?" and unlock as a
+// child goes to more classes nearby: the first with one, the next with two, the last with three. A class counts for
+// the area whose middle is nearest, within 5 km. The map's own landmarks (data/philly-map.json) are most of them;
+// MAP_EXTRA places the rest by latitude and longitude. kids-corner.js draws each one and says something about it.
+const MAP_AREAS = [
+  { id: 'parkway', name: 'the Art Museum and the Parkway', at: [39.9680, -75.1850], items: ['art-museum', 'boathouses', 'zoo'] },
+  { id: 'center', name: 'Center City', at: [39.9530, -75.1680], items: ['city-hall', 'love', 'franklin'] },
+  { id: 'oldcity', name: 'Old City', at: [39.9510, -75.1440], items: ['liberty-bell', 'elfreth', 'bridge'] },
+  { id: 'south', name: 'South Philly', at: [39.9250, -75.1650], items: ['cheesesteak', 'italian-market', 'stadiums'] },
+  { id: 'northwest', name: 'Northwest Philly', at: [40.0400, -75.2150], items: ['wissahickon', 'covered-bridge'] },
+  { id: 'southwest', name: 'Southwest Philly', at: [39.8950, -75.2300], items: ['heinz', 'airport'] },
+  { id: 'northeast', name: 'Northeast Philly', at: [40.0500, -75.0500], items: ['pennypack'] },
+];
+const MAP_EXTRA = {
+  elfreth: ['Elfreth’s Alley', 39.9527, -75.1425], 'italian-market': ['The Italian Market', 39.9380, -75.1580], 'covered-bridge': ['The covered bridge', 40.0647, -75.2177],
+  heinz: ['The wildlife refuge', 39.8920, -75.2570], pennypack: ['Pennypack Park', 40.0640, -75.0500],
+};
+const mapArea = (() => {
+  if (!PHILLY) return () => '';
+  const { lon0, lat1, cos, k, pad } = PHILLY.proj, byHood = Object.fromEntries(PHILLY.hoods.map(h => [h.id, h]));
+  const back = c => [lat1 - (c[1] - pad) / k, lon0 + (c[0] - pad) / (cos * k)];   // a point on the map, as latitude and longitude
+  const km = (a, b) => Math.hypot((a[0] - b[0]) * 111.2, (a[1] - b[1]) * 111.2 * Math.cos(a[0] * Math.PI / 180));
+  return (ll, hood) => {
+    const at = ll || (hood && byHood[hood] ? back(byHood[hood].c) : null);
+    if (!at) return '';
+    let best = '', near = 5;
+    for (const a of MAP_AREAS) { const d = km(at, a.at); if (d < near) { near = d; best = a.id; } }
+    return best;
+  };
+})();
+const mapAreas = () => {
+  if (!PHILLY) return [];
+  const { lon0, lat1, cos, k, pad } = PHILLY.proj, r1 = n => Math.round(n * 10) / 10;
+  return MAP_AREAS.map(a => ({ id: a.id, name: a.name, items: a.items.map(id => {
+    const lm = PHILLY.landmarks.find(l => l.id === id);
+    if (lm) return { id, n: lm.name, x: lm.x, y: lm.y };
+    const e = MAP_EXTRA[id];
+    if (!e) throw new Error(`Kid's Corner map: no place for "${id}" (MAP_EXTRA in build.mjs)`);
+    return { id, n: e[0], x: r1((e[2] - lon0) * cos * k + pad), y: r1((lat1 - e[1]) * k + pad) };
+  }) }));
+};
 // The pins: one for each kind of program, one for each season, and one for the neighborhoods. Each has three levels.
 const KIDS_PIN = {   // the pin's name, and what one of it is called on the page ("1 more music class for silver")
   aftercare: ['After-School Ace', 'after-school program', 'after-school programs'], music: ['Music Maker', 'music class', 'music classes'],
@@ -5475,6 +5516,7 @@ const KIDS_ICON = {
   snow: 'M11 1h2v22h-2zM1 11h22v2H1zm3.2-5.4 1.4-1.4 15.6 15.6-1.4 1.4zm15.6-1.4 1.4 1.4L5.6 21.2l-1.4-1.4z',
   sun: 'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm-1-6h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.9 2.9-1.4 1.4zm11.3 11.3 1.4-1.4 2.9 2.9-1.4 1.4zM4.2 18.4l2.9-2.9 1.4 1.4-2.9 2.9zM15.5 7.1l2.9-2.9 1.4 1.4-2.9 2.9z',
   compass: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.5 5.5-2.8 6.2-6.2 2.8 2.8-6.2zM12 10.8a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z',
+  repeat: 'M17 1l4 4-4 4V6H7a2 2 0 0 0-2 2v3H3V8a4 4 0 0 1 4-4h10zM7 23l-4-4 4-4v3h10a2 2 0 0 0 2-2v-3h2v3a4 4 0 0 1-4 4H7z',
 };
 const KIDS_PINS = [
   ...TYPES.map(t => ({ id: 'type:' + t.id, group: 'type', label: (KIDS_PIN[t.id] || [t.label])[0], one: (KIDS_PIN[t.id] || [, t.label.toLowerCase()])[1], many: (KIDS_PIN[t.id] || [, , t.label.toLowerCase()])[2], color: t.color, icon: t.icon, tiers: [1, 3, 5] })),
@@ -5483,6 +5525,8 @@ const KIDS_PINS = [
   { id: 'season:off', group: 'season', label: 'Day-Off Daredevil', one: 'day-off camp', many: 'day-off camps', color: '#0E7C86', icon: KIDS_ICON.snow, tiers: [1, 3, 5] },
   { id: 'season:summer', group: 'season', label: 'Summer Superstar', one: 'week of summer camp', many: 'weeks of summer camp', color: '#C2410C', icon: KIDS_ICON.sun, tiers: [1, 3, 5] },
   { id: 'explore', group: 'explore', label: 'Neighborhood Hopper', one: 'neighborhood', many: 'neighborhoods', color: '#1F7A3A', icon: KIDS_ICON.compass, tiers: [2, 4, 6] },
+  // going back: each day a week a program meets, each term or year, each week of the same camp, after the first
+  { id: 'repeat', group: 'repeat', label: 'Repeater Reward', one: 'repeat', many: 'repeats', color: '#CC3000', icon: KIDS_ICON.repeat, tiers: [1, 5, 10] },
 ];
 // What Kid's Corner works from: the listings (name, kinds, sites on the map), the schools, the pins, and where things
 // are. One copy, for pages one folder down: inline on Kid's Corner, and as assets/kids-corner.json for the Kid's
@@ -5494,13 +5538,13 @@ function kidsData() {
   const listings = {};
   // A listing's sites: its neighborhoods, each with a point when the addresses line up with them one to one, and the
   // neighborhood on the map ("m"). A listing with several sites lands on the map once a parent says which site.
-  const sites = (hoods, lls) => hoods.map((h, i) => { const ll = hoods.length === 1 ? (lls[0] || null) : hoods.length === lls.length ? lls[i] : null; return { h, ll, m: mapHood(ll, h) }; });
+  const sites = (hoods, lls) => hoods.map((h, i) => { const ll = hoods.length === 1 ? (lls[0] || null) : hoods.length === lls.length ? lls[i] : null, m = mapHood(ll, h), a = mapArea(ll, m); return a ? { h, ll, m, a } : { h, ll, m }; });
   for (const p of programs) listings['p:' + p.id] = { n: p.name, t: p.types || [], sites: sites(programHoods(p), placesOf(p)) };
   for (const c of summerCamps) listings['c:' + c.id] = { n: c.name, t: c.types || [], sites: sites(c.neighborhoods || [], coordsOf(c.address)) };
   if (mapHood.missed && mapHood.missed.size) console.log(`Note: ${mapHood.missed.size} neighborhood name(s) aren't on the Kid's Corner map, so places there without an address don't show on it: ${[...mapHood.missed].join(', ')}. Add them to MAP_ALIAS in build.mjs.`);
   KIDS_DATA = {
     site: cfg.siteName, url: cfg.siteUrl.replace(/^https?:\/\//, ''), year: +String(daysOff.schoolYear).slice(0, 4),
-    map: PHILLY ? link('assets/philly-map.json', D) + PHILLY_V : '',
+    map: PHILLY ? link('assets/philly-map.json', D) + PHILLY_V : '', areas: mapAreas(),
     eddie: link('bulb.png', D) + stamp('src/static/bulb.png'),   // Eddie Bulboa, the bulb in the logo, who shows kids around
     listings, schools: Object.fromEntries(schools.map(s => [s.id, { n: s.shortName, h: schoolHoods(s), ll: SCHOOL_LL[s.id] || null, m: mapHood(SCHOOL_LL[s.id] || null, schoolHoods(s)[0]) }])),
     types: Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, color: t.color, icon: t.icon }])), pins: KIDS_PINS,
@@ -5514,7 +5558,7 @@ function kidsPage() {
   const D = 1;
   const data = kidsData();
   const hero = `    <h1><span class="when-out">${T(`Kid’s Corner`)}</span><span class="when-in">${T(`Kid’s Corner`)}</span></h1>
-    <p class="lede when-out">${T(`Every class and camp your child goes to earns them something on a page of their own: shiny pins that grow grander as they level up, a cartoon map of Philly that clears as they explore it, a bulb of their own to dress up, and showdowns between their programs’ lightbulbs to crown a favorite. Eddie Bulboa, the bulb in our logo, shows them around.`)}</p>
+    <p class="lede when-out">${T(`Every class and camp your child goes to earns them something on a page of their own: shiny pins that grow grander as they level up, a cartoon map of Philly with secret spots to find, a bulb of their own to dress up, and showdowns where they pick the class they had more fun at. Eddie Bulboa, the bulb in our logo, shows them around.`)}</p>
     <p class="lede when-in">${T(`Hand over the phone. Kid’s Corner is for the kid; the grown-ups’ corner is behind a press-and-hold.`)}</p>`;
   const body = `<div class="kc" id="kc" data-api="${link('groups/api.php', D)}">
   <section class="section kc-out" id="kc-out">
@@ -5522,7 +5566,7 @@ function kidsPage() {
     <ul>
       <li>${T(`A page for each child on your account, by first name. No child signs in and nothing is typed by a child: it’s the parent’s account, handed over for a look. Each child picks a lightbulb to be.`)}</li>
       <li>${T(`What counts is what you confirm. The page suggests from your kept week, your summer and your days off (“Did Sam go to chess club this year?”), and you say yes or no. You can add anything the plans missed.`)}</li>
-      <li>${T(`From that come pins for each kind of program, each season and the neighborhoods, which go from bronze to silver to gold and get grander each time; a level that goes up and unlocks things for their bulb to wear; a map of Philadelphia whose clouds clear where they have been; and showdowns between program bulbs (a race up the Art Museum steps, a glow-off, a dance-off), where the winners they pick come first when you plan the next term.`)}</li>
+      <li>${T(`From that come pins for each kind of program, each season and the neighborhoods, which go from bronze to silver to gold and get grander each time; a Repeater Reward for going back to a class they love (each day a week, each term, each week of the same camp); a level that goes up and unlocks things for their bulb to wear; a map of Philadelphia whose clouds clear where they have been, with secret spots that turn up as they go to more classes nearby; and showdowns where they pick which class they had more fun at, two at a time, and the ones they pick come first when you plan the next term.`)}</li>
       <li>${T(`Nothing on this page is counted, recorded or sent anywhere. It has no link of its own to share: a picture of the pins, with no name and no map, is the only thing that leaves it.`)}</li>
     </ul>
     <div class="actions"><a class="btn primary big" href="${link('register/', D)}?next=kids">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=kids">${T(`Log in`)}</a></div>

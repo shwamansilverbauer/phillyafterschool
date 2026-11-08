@@ -333,6 +333,8 @@
   var PIN_SHAPE = {
     type: ['M50 4A46 46 0 1 1 49.99 4Z', 'M50 15A35 35 0 1 1 49.99 15Z', 50],
     season: ['M50 3L89 16V48C89 73 72 89 50 97C28 89 11 73 11 48V16Z', 'M50 14L79 24V48C79 66 67 79 50 86C33 79 21 66 21 48V24Z', 48],
+    repeat: [(function () { var d = ''; for (var i = 0; i < 6; i++) { var a = Math.PI * 2 * i / 6 - Math.PI / 2; d += (i ? 'L' : 'M') + (50 + 47 * Math.cos(a)).toFixed(1) + ' ' + (50 + 47 * Math.sin(a)).toFixed(1); } return d + 'Z'; })(),
+      (function () { var d = ''; for (var i = 0; i < 6; i++) { var a = Math.PI * 2 * i / 6 - Math.PI / 2; d += (i ? 'L' : 'M') + (50 + 36 * Math.cos(a)).toFixed(1) + ' ' + (50 + 36 * Math.sin(a)).toFixed(1); } return d + 'Z'; })(), 50],
     explore: [(function () { var d = ''; for (var i = 0; i < 16; i++) { var r = i % 2 ? 38 : 47, a = Math.PI * 2 * i / 16 - Math.PI / 2; d += (i ? 'L' : 'M') + (50 + r * Math.cos(a)).toFixed(1) + ' ' + (50 + r * Math.sin(a)).toFixed(1); } return d + 'Z'; })(), 'M50 20A30 30 0 1 1 49.99 20Z', 50]
   };
   // A pin gets grander as it levels up. Bronze: the pin and one star. Silver: a laurel wreath, a blue banner, a gem and
@@ -402,24 +404,29 @@
   var need = function (n) { return n - 1 < LEVELS.length ? LEVELS[n - 1] : LEVELS[LEVELS.length - 1] + (n - LEVELS.length) * 150; };   // points to reach level n
   var levelOf = function (xp) { var n = 1; while (xp >= need(n + 1)) n++; return { n: n, title: TITLES[Math.min(n - 1, TITLES.length - 1)], from: need(n), to: need(n + 1) }; };
   var stats = function (k) {
-    var types = {}, kinds = {}, hoods = {}, places = [], keys = [], seenKey = {}, n = 0;
+    var types = {}, kinds = {}, hoods = {}, places = [], keys = [], seenKey = {}, n = 0, times = {}, weeks = 0, near = {};
     k.done.forEach(function (e) {
       var l = listing(e.k); if (!l) return;
-      n++; kinds[e.kind] = (kinds[e.kind] || 0) + 1;
+      var x = Math.max(1, e.n || 1);   // days a week, terms, weeks of the same camp: each time after the first is a repeat
+      n++; kinds[e.kind] = (kinds[e.kind] || 0) + 1; times[e.k] = (times[e.k] || 0) + x; if (e.kind === 'summer') weeks += x;
       (l.t || []).forEach(function (t) { types[t] = (types[t] || 0) + 1; });
       if (!seenKey[e.k]) { seenKey[e.k] = true; keys.push(e.k); }
       var st = siteOf(e);
-      if (st) { var hid = st.m || 'n:' + st.h; hoods[hid] = true; places.push({ k: e.k, st: st }); }
+      if (st) { var hid = st.m || 'n:' + st.h; hoods[hid] = true; places.push({ k: e.k, st: st }); if (st.a) (near[st.a] = near[st.a] || {})[e.k] = true; }
     });
-    var nh = Object.keys(hoods).length, pins = {}, tiers = 0;
+    // the map's secret spots: each area's open one by one, a class nearby for each
+    var spots = {}, found = 0, hidden = 0;
+    (D.areas || []).forEach(function (a) { var c = Object.keys(near[a.id] || {}).length, open = Math.min(c, a.items.length); spots[a.id] = { c: c, open: open }; found += open; hidden += a.items.length; });
+    var nh = Object.keys(hoods).length, pins = {}, tiers = 0, repeats = 0;
+    keys.forEach(function (key) { repeats += times[key] - 1; });
     D.pins.forEach(function (p) {
-      var c = p.group === 'type' ? types[p.id.slice(5)] || 0 : p.group === 'season' ? kinds[p.id.slice(7)] || 0 : nh, tier = 0;
+      var c = p.group === 'type' ? types[p.id.slice(5)] || 0 : p.id === 'season:summer' ? weeks : p.group === 'season' ? kinds[p.id.slice(7)] || 0 : p.group === 'repeat' ? repeats : nh, tier = 0;
       p.tiers.forEach(function (t, i) { if (c >= t) tier = i + 1; });
       pins[p.id] = { c: c, tier: tier, next: tier < 3 ? p.tiers[tier] : 0 };
       tiers += tier;
     });
-    var xp = n * 10 + nh * 5 + tiers * 5;
-    return { n: n, nh: nh, hoods: hoods, places: places, keys: keys, pins: pins, tiers: tiers, xp: xp, level: levelOf(xp) };
+    var xp = n * 10 + repeats * 5 + nh * 5 + tiers * 5;   // going back counts toward the level too
+    return { n: n, nh: nh, hoods: hoods, places: places, keys: keys, times: times, repeats: repeats, spots: spots, found: found, hidden: hidden, pins: pins, tiers: tiers, xp: xp, level: levelOf(xp) };
   };
 
   // ----- state -----
@@ -441,6 +448,16 @@
   });
 
   // Save this child's lists, then keep the server's answer (which also brings fresh suggestions).
+  // A suggestion from the plans, and the answer to it. One already confirmed comes back when the plans count it more
+  // times ("up": what it was): yes sets the new count, no isn't asked again for that count.
+  var sgKey = function (e) { return e.k + '|' + e.kind + '|' + e.y; };
+  var timesWord = function (kind, n) { return kind === 'summer' ? plural(n, 'week', 'weeks') : kind === 'off' ? plural(n, 'day', 'days') : n === 1 ? 'once a week' : n + ' days a week'; };
+  var sgLine = function (sgt) { return (D.kinds[sgt.kind] || sgt.kind) + ', ' + yearLabel(sgt) + (sgt.up ? ' · now ' + timesWord(sgt.kind, sgt.n) + ' (was ' + timesWord(sgt.kind, sgt.up) + ')' : sgt.n ? ' · ' + timesWord(sgt.kind, sgt.n) : ''); };
+  var sgAnswer = function (k, sgt, yes) {
+    if (sgt.up) return yes ? { done: k.done.map(function (x) { if (sgKey(x) !== sgKey(sgt)) return x; var y = {}; Object.keys(x).forEach(function (f) { y[f] = x[f]; }); y.n = sgt.n; return y; }) } : { skip: k.skip.concat([sgKey(sgt) + '|' + sgt.n]) };
+    var e = { k: sgt.k, kind: sgt.kind, y: sgt.y, s: sgt.s || '' }; if (sgt.n) e.n = sgt.n;
+    return yes ? { done: k.done.concat([e]) } : { skip: k.skip.concat([sgKey(sgt)]) };
+  };
   var save = function (changes, then) {
     var k = kid(); if (!k || S.saving) return;
     S.saving = true;
@@ -663,7 +680,8 @@
       var pv = drawPin(p, x.tier); card.appendChild(pv); bounce(pv);
       card.appendChild(el('h2', 'kc-h', p.label));
       if (x.tier) card.appendChild(el('p', 'kc-tier big ' + TIER[x.tier].toLowerCase(), TIER[x.tier] + (x.tier === 3 ? '! The top!' : '')));
-      card.appendChild(el('p', 'kc-say', x.c ? 'You’ve been to ' + plural(x.c, p.one, p.many) + '!' : 'Go to a ' + p.one + ' to get this pin!'));
+      if (p.group === 'repeat') card.appendChild(el('p', 'kc-say', x.c ? 'You went back to classes you love ' + plural(x.c, 'time', 'times') + '!' : 'Go back to a class you love to get this pin!'));
+      else card.appendChild(el('p', 'kc-say', x.c ? 'You’ve been to ' + plural(x.c, p.one, p.many) + '!' : 'Go to a ' + p.one + ' to get this pin!'));
       if (x.c && x.tier < 3) card.appendChild(el('p', 'kc-say small', (x.next - x.c) + ' more ' + unitWord(p, x.next - x.c) + ' for ' + TIER[x.tier + 1].toUpperCase() + '!'));
       card.appendChild(btn('kc-big go', 'Cool!', function () { Sound.play('tap'); close(); }));
     });
@@ -671,8 +689,9 @@
 
   // What's new: pins whose level went up since the child last saw them, and a new level.
   var newsFor = function (k, st) {
-    var seen = k.seen || {}, out = { pins: [], level: 0 };
+    var seen = k.seen || {}, out = { pins: [], spots: [], level: 0 };
     D.pins.forEach(function (p) { var t = st.pins[p.id].tier; if (t > (seen[p.id] || 0)) out.pins.push({ p: p, tier: t }); });
+    (D.areas || []).forEach(function (a) { for (var i = seen['map:' + a.id] || 0; i < st.spots[a.id].open; i++) out.spots.push({ a: a, it: a.items[i] }); });
     if (st.level.n > (k.lvl || 1)) out.level = st.level.n;
     return out;
   };
@@ -682,12 +701,13 @@
     celebrating = true;
     var done = function () {
       var seen = {}; D.pins.forEach(function (p) { if (st.pins[p.id].tier) seen[p.id] = st.pins[p.id].tier; });
-      save({ seen: seen, lvl: st.level.n }, function () { celebrating = false; if (S.tryOn) { S.tryOn = false; go('avatar'); } else draw(); });
+      (D.areas || []).forEach(function (a) { if (st.spots[a.id].open) seen['map:' + a.id] = st.spots[a.id].open; });
+      save({ seen: seen, lvl: st.level.n }, function () { celebrating = false; if (S.tryOn) { S.tryOn = false; go('avatar'); } else if (S.toMap) { S.toMap = false; go('kid', 'map'); } else draw(); });
     };
     // A present to tap open: sounds can only start after a tap.
     overlay(function (card, close) {
       card.classList.add('kc-gift');
-      card.appendChild(el('h2', 'kc-h', news.pins.length ? 'Something new!' : 'Level up!'));
+      card.appendChild(el('h2', 'kc-h', news.pins.length || news.spots.length ? 'Something new!' : 'Level up!'));
       var g = btn('kc-giftbtn', '', function () { close(); });
       g.setAttribute('aria-label', 'Tap to open');
       g.appendChild(giftArt()); g.appendChild(el('span', 'kc-say', 'Tap to open!'));
@@ -696,6 +716,7 @@
       var chain = Promise.resolve();
       if (news.pins.length && news.pins.length <= 3) news.pins.forEach(function (x) { chain = chain.then(function () { return revealPin(x.p, x.tier, st); }); });
       else if (news.pins.length) chain = chain.then(function () { return revealMany(news.pins); });
+      if (news.spots.length) chain = chain.then(function () { return revealSpots(news.spots); });
       if (news.level) chain = chain.then(function () { return levelUp(k, st); });
       chain.then(done);
     });
@@ -713,9 +734,10 @@
     return overlay(function (card, close) {
       card.classList.add('kc-reveal');
       card.appendChild(rays());
-      card.appendChild(el('p', 'kc-burst', tier === 1 ? 'NEW PIN!' : TIER[tier].toUpperCase() + '!'));
+      var again = p.group === 'repeat';   // going back to a class gets a reward of its own
+      card.appendChild(el('p', 'kc-burst', again ? 'REPEATER REWARD!' : tier === 1 ? 'NEW PIN!' : TIER[tier].toUpperCase() + '!'));
       var pv = drawPin(p, tier); card.appendChild(pv);
-      card.appendChild(el('h2', 'kc-h', p.label));
+      card.appendChild(el('h2', 'kc-h', again ? (tier === 1 ? 'You went back!' : TIER[tier] + ' Repeater!') : p.label));
       var x = st.pins[p.id];
       card.appendChild(el('p', 'kc-say', tier === 3 ? 'Gold! That’s the top!' : (x.next - x.c) + ' more ' + unitWord(p, x.next - x.c) + ' for ' + TIER[tier + 1] + '!'));
       card.appendChild(btn('kc-big go', 'Yay!', function () { Sound.play('tap'); close(); }));
@@ -734,6 +756,25 @@
       card.appendChild(grid);
       card.appendChild(btn('kc-big go', 'Yay!', function () { Sound.play('tap'); close(); }));
       Sound.play('sparkle'); confetti(60);
+    }, 'reveal');
+  };
+  // Secret spots found on the map: each drawn big, with its name (and, for one, what's fun about it).
+  var spotArt = function (id) { var s = sv('svg', { viewBox: '-24 -32 48 54', 'class': 'kc-spotart', 'aria-hidden': 'true' }); sv('ellipse', { cx: 0, cy: 16, rx: 16, ry: 4, fill: 'rgba(11,33,64,.18)' }, s); (LANDMARK[id] || drawSecret)(sv('g', null, s)); return s; };
+  var revealSpots = function (list) {
+    return overlay(function (card, close) {
+      card.classList.add('kc-reveal', 'kc-spotreveal');
+      card.appendChild(rays());
+      card.appendChild(el('p', 'kc-burst', list.length === 1 ? 'SECRET SPOT!' : list.length + ' SECRET SPOTS!'));
+      var row = el('div', 'kc-spotrow' + (list.length > 2 ? ' many' : ''));
+      list.slice(0, 6).forEach(function (x, i) {
+        var c = el('div', 'kc-spot1'); var art = spotArt(x.it.id); c.appendChild(art); c.appendChild(el('b', null, x.it.n)); row.appendChild(c);
+        anim(art, [{ transform: 'scale(0) rotate(-30deg)' }, { transform: 'scale(1.2) rotate(6deg)', offset: 0.7 }, { transform: 'scale(1)' }], { duration: 600, delay: Math.min(i * 140, 700), easing: 'ease-out', fill: 'backwards' });
+      });
+      card.appendChild(row);
+      card.appendChild(el('p', 'kc-say', list.length === 1 ? (LANDMARK_SAY[list[0].it.id] || '') + ' You found it in ' + list[0].a.name + '!' : 'You found them by going to classes nearby!'));
+      card.appendChild(btn('kc-big go', 'See my map!', function () { Sound.play('tap'); S.toMap = true; close(); }));
+      card.appendChild(btn('kc-big ghost', 'Yay!', function () { Sound.play('tap'); close(); }));
+      Sound.play('sparkle'); confetti(50);
     }, 'reveal');
   };
   var levelUp = function (k, st) {
@@ -769,7 +810,9 @@
   var LANDMARK_SAY = {
     'city-hall': 'William Penn stands on top!', love: 'The big LOVE sign!', 'liberty-bell': 'It has a famous crack.', 'art-museum': 'Run up all 72 steps!',
     zoo: 'America’s first zoo!', boathouses: 'They light up at night.', franklin: 'Walk through a giant heart!', bridge: 'It goes to New Jersey!',
-    stadiums: 'Where the Phillies, Eagles, Sixers and Flyers play.', cheesesteak: 'Wit or witout?', wissahickon: 'Trails, a creek and a covered bridge.', airport: 'Planes zoom over the river.'
+    stadiums: 'Where the Phillies, Eagles, Sixers and Flyers play.', cheesesteak: 'Wit or witout?', wissahickon: 'Trails, a creek and big rocks.', airport: 'Planes zoom over the river.',
+    elfreth: 'One of America’s oldest streets!', 'italian-market': 'Fruit, cheese and pasta, all outside!', 'covered-bridge': 'A wooden bridge with a roof!',
+    heinz: 'Herons, turtles and a giant marsh!', pennypack: 'Woods, ducks and a long creek trail.'
   };
   var LANDMARK = {
     'city-hall': function (g) { sv('rect', { x: -15, y: 2, width: 30, height: 14, fill: '#F1E3C4', stroke: INK, 'stroke-width': 2 }, g); sv('rect', { x: -6, y: -14, width: 12, height: 18, fill: '#F1E3C4', stroke: INK, 'stroke-width': 2 }, g); sv('path', { d: 'M-6 -14Q0 -24 6 -14Z', fill: '#8FC9A8', stroke: INK, 'stroke-width': 2 }, g); sv('path', { d: 'M0 -21V-27', stroke: INK, 'stroke-width': 2 }, g); sv('circle', { cx: 0, cy: -28, r: 2, fill: INK }, g); sv('circle', { cx: 0, cy: -5, r: 3, fill: '#fff', stroke: INK, 'stroke-width': 1.3 }, g); [-11, -5, 5, 11].forEach(function (x) { sv('rect', { x: x - 1.5, y: 6, width: 3, height: 5, fill: '#4DABF7' }, g); }); },
@@ -783,11 +826,57 @@
     stadiums: function (g) { sv('ellipse', { cx: 0, cy: 0, rx: 19, ry: 13, fill: '#ADB5BD', stroke: INK, 'stroke-width': 2 }, g); sv('ellipse', { cx: 0, cy: 0, rx: 13, ry: 8, fill: '#51CF66', stroke: '#fff', 'stroke-width': 1.5 }, g); sv('path', { d: 'M0 -8V8', stroke: '#fff', 'stroke-width': 1.5 }, g); },
     cheesesteak: function (g) { sv('path', { d: 'M-18 2C-18 -6 18 -6 18 2C18 8 -18 8 -18 2Z', fill: '#E8B864', stroke: INK, 'stroke-width': 2 }, g); sv('path', { d: 'M-15 -2L-11 -6L-7 -2L-3 -6L1 -2L5 -6L9 -2L13 -6L16 -2', fill: '#FFD43B', stroke: INK, 'stroke-width': 1.3, 'stroke-linejoin': 'round' }, g); sv('path', { d: 'M-17 -3C-17 -12 17 -12 17 -3Z', fill: '#F2C97D', stroke: INK, 'stroke-width': 2 }, g); },
     wissahickon: function (g) { [[-8, 2, '#2F9E44'], [6, -2, '#37B24D']].forEach(function (t) { sv('rect', { x: t[0] - 1.5, y: t[1] + 8, width: 3, height: 6, fill: '#7B4F2A' }, g); sv('path', { d: 'M' + t[0] + ' ' + (t[1] - 14) + 'L' + (t[0] + 9) + ' ' + (t[1] + 9) + 'H' + (t[0] - 9) + 'Z', fill: t[2], stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, g); }); },
+    elfreth: function (g) {   // little brick row houses
+      [[-17, '#B5523B'], [-6, '#C96B4F'], [5, '#9C4A35']].forEach(function (h) {
+        var x = h[0];
+        sv('rect', { x: x, y: -10, width: 11, height: 24, fill: h[1], stroke: INK, 'stroke-width': 1.8 }, g);
+        sv('path', { d: 'M' + (x - 1) + ' -10H' + (x + 12) + 'L' + (x + 9) + ' -15H' + (x + 2) + 'Z', fill: '#5C3A2E', stroke: INK, 'stroke-width': 1.5, 'stroke-linejoin': 'round' }, g);
+        [[2, -6], [6.5, -6], [2, 1], [6.5, 1]].forEach(function (w) { sv('rect', { x: x + w[0], y: w[1], width: 2.5, height: 3.5, fill: '#FFF3BF' }, g); });
+        sv('rect', { x: x + 3.5, y: 7, width: 4, height: 7, fill: '#1C3F6E' }, g);
+      });
+      sv('path', { d: 'M-19 14H19', stroke: INK, 'stroke-width': 2 }, g);
+    },
+    'italian-market': function (g) {   // a fruit stand under a striped awning
+      sv('rect', { x: -16, y: -2, width: 32, height: 15, fill: '#C08A5B', stroke: INK, 'stroke-width': 2 }, g);
+      sv('path', { d: 'M-16 -9V-2M16 -9V-2', stroke: INK, 'stroke-width': 2 }, g);
+      [[-11, '#FF922B'], [-5, '#E03131'], [1, '#94D82D'], [7, '#FFD43B'], [12, '#FF922B']].forEach(function (f) { sv('circle', { cx: f[0], cy: -4, r: 3.2, fill: f[1], stroke: INK, 'stroke-width': 1.2 }, g); });
+      for (var i = 0; i < 4; i++) { var x = -18 + i * 9; sv('path', { d: 'M' + x + ' -16H' + (x + 9) + 'V-10Q' + (x + 4.5) + ' -6 ' + x + ' -10Z', fill: i % 2 ? '#fff' : '#E03131', stroke: INK, 'stroke-width': 1.5, 'stroke-linejoin': 'round' }, g); }
+    },
+    'covered-bridge': function (g) {   // a red wooden bridge with a roof, over a creek
+      sv('path', { d: 'M-21 13Q-11 9 0 13T21 13', fill: 'none', stroke: '#4DABF7', 'stroke-width': 3, 'stroke-linecap': 'round' }, g);
+      sv('rect', { x: -18, y: -6, width: 36, height: 15, fill: '#C92A2A', stroke: INK, 'stroke-width': 2 }, g);
+      [-14, -10, 10, 14].forEach(function (x) { sv('path', { d: 'M' + x + ' -5V8', stroke: '#A61E1E', 'stroke-width': 1.2 }, g); });
+      sv('path', { d: 'M-21 -6L-14 -14H14L21 -6Z', fill: '#5C3A2E', stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, g);
+      sv('path', { d: 'M-6 9V1Q0 -5 6 1V9Z', fill: '#2B1A12', stroke: INK, 'stroke-width': 1.5 }, g);
+    },
+    heinz: function (g) {   // a heron in the reeds
+      sv('path', { d: 'M-16 14V2M-12 14V-3M13 14V0M17 14V5', stroke: '#2F9E44', 'stroke-width': 2, 'stroke-linecap': 'round' }, g);
+      sv('path', { d: 'M-1 14L0 4M4 14L3 4', stroke: INK, 'stroke-width': 1.5 }, g);
+      sv('path', { d: 'M-9 2C-9 -5 4 -7 9 -2C11 1 6 5 -2 5Z', fill: '#91A7FF', stroke: INK, 'stroke-width': 1.8, 'stroke-linejoin': 'round' }, g);
+      sv('path', { d: 'M6 -3C2 -8 9 -12 5 -17', fill: 'none', stroke: INK, 'stroke-width': 4.6, 'stroke-linecap': 'round' }, g);
+      sv('path', { d: 'M6 -3C2 -8 9 -12 5 -17', fill: 'none', stroke: '#91A7FF', 'stroke-width': 2.4, 'stroke-linecap': 'round' }, g);
+      sv('circle', { cx: 5, cy: -18, r: 3.3, fill: '#91A7FF', stroke: INK, 'stroke-width': 1.6 }, g);
+      sv('path', { d: 'M7.6 -18.6L15.5 -17.2L7.6 -16.4Z', fill: '#FFD43B', stroke: INK, 'stroke-width': 1.2, 'stroke-linejoin': 'round' }, g);
+      sv('circle', { cx: 5.6, cy: -18.7, r: 0.9, fill: INK }, g);
+    },
+    pennypack: function (g) {   // a duck on the creek, a tree behind
+      sv('path', { d: 'M-15 0L-8 -18L-1 0Z', fill: '#37B24D', stroke: INK, 'stroke-width': 1.6, 'stroke-linejoin': 'round' }, g);
+      sv('ellipse', { cx: 0, cy: 10, rx: 19, ry: 5, fill: '#74C0FC', stroke: INK, 'stroke-width': 1.8 }, g);
+      sv('path', { d: 'M-12 6C-12 -2 0 -2 4 2C8 0 12 1 12 4C12 9 -10 10 -12 6Z', fill: '#A47148', stroke: INK, 'stroke-width': 1.8, 'stroke-linejoin': 'round' }, g);
+      sv('circle', { cx: 7, cy: -5, r: 4.5, fill: '#2B8A3E', stroke: INK, 'stroke-width': 1.6 }, g);
+      sv('path', { d: 'M11 -5.6L16.5 -4.4L11 -3Z', fill: '#FFD43B', stroke: INK, 'stroke-width': 1.2, 'stroke-linejoin': 'round' }, g);
+      sv('circle', { cx: 8, cy: -6.2, r: 0.9, fill: '#fff' }, g);
+    },
     airport: function (g) { sv('path', { d: 'M-2 -16C0 -18 2 -16 2 -12V-4L16 4V8L2 3V11L6 14V17L0 15L-6 17V14L-2 11V3L-16 8V4L-2 -4V-12C-2 -14 -2 -15 -2 -16Z', fill: '#fff', stroke: INK, 'stroke-width': 1.8, 'stroke-linejoin': 'round', transform: 'rotate(-35)' }, g); }
+  };
+  var drawSecret = function (g) {   // a spot still to find: a cloud with a question mark
+    sv('path', { d: 'M-16 10C-23 10 -23 0 -15 -1C-15 -10 -4 -13 0 -7C3 -15 15 -14 15 -5C22 -5 23 10 15 10Z', fill: '#fff', stroke: INK, 'stroke-width': 2 }, g);
+    var t = sv('text', { x: 0, y: 8, 'text-anchor': 'middle', 'font-size': 16, 'font-family': 'Luckiest Guy, Arial Black, sans-serif', fill: '#1763B8' }, g); t.textContent = '?';
   };
   var drawMapTab = function (body, k, st) {
     var head = el('div', 'kc-sechead'); head.appendChild(el('h2', 'kc-h2', 'My Philly')); head.appendChild(el('span', 'kc-tally', plural(st.nh, 'place', 'places'))); body.appendChild(head);
-    body.appendChild(eddie(st.nh ? 'Every class lights up a new part of Philly. Tap a place!' : 'It’s all cloudy! Every class you go to clears the clouds where it is.', 'kc-host'));
+    if (st.hidden) { var tl = el('p', 'kc-spottally'); tl.appendChild(el('b', null, st.found + ' / ' + st.hidden)); tl.appendChild(document.createTextNode(' secret spots found')); body.appendChild(tl); }
+    body.appendChild(eddie(!st.nh ? 'It’s all cloudy! Every class you go to clears the clouds where it is.' : st.found < st.hidden ? 'Every class lights up a new part of Philly. Classes near a ? find a secret spot!' : 'You found every secret spot! Tap a place!', 'kc-host'));
     var box = el('div', 'kc-mapbox'); box.appendChild(el('p', 'kc-say', 'Drawing the map…')); body.appendChild(box);
     loadMap().then(function (M) {
       if (!box.isConnected) return;
@@ -839,13 +928,17 @@
     // Things standing on the map are sized for the zoom, so they stay tappable.
     var things = [];
     var place = function (node, x, y, base, lift) { things.push({ n: node, x: x, y: y, base: base, lift: lift === undefined ? 1 : lift }); svg.appendChild(node); };
-    M.landmarks.forEach(function (lm) {
-      if (!LANDMARK[lm.id]) return;
-      var s = sv('svg', { viewBox: '-22 -30 44 50', 'class': 'kc-lm', 'data-lm': lm.id });
-      sv('ellipse', { cx: 0, cy: 16, rx: 16, ry: 4, fill: 'rgba(11,33,64,.18)' }, s);
-      LANDMARK[lm.id](sv('g', null, s));
-      sv('rect', { x: -22, y: -30, width: 44, height: 50, fill: 'transparent' }, s);
-      place(s, lm.x, lm.y, 0.8, 0.6);
+    var spotAt = {};
+    (D.areas || []).forEach(function (a) {
+      a.items.forEach(function (lm, i) {
+        var found = i < st.spots[a.id].open;
+        var s = sv('svg', { viewBox: '-22 -30 44 50', 'class': found ? 'kc-lm' : 'kc-lm kc-secret', 'data-lm': lm.id });
+        sv('ellipse', { cx: 0, cy: 16, rx: 16, ry: 4, fill: 'rgba(11,33,64,.18)' }, s);
+        (found && LANDMARK[lm.id] ? LANDMARK[lm.id] : drawSecret)(sv('g', null, s));
+        sv('rect', { x: -22, y: -30, width: 44, height: 50, fill: 'transparent' }, s);
+        spotAt[lm.id] = { a: a, i: i, found: found, it: lm };
+        place(s, lm.x, lm.y, 0.8, 0.6);
+      });
     });
     // Eddie Bulboa waits at the top of the Art Museum steps.
     var am = M.landmarks.filter(function (l) { return l.id === 'art-museum'; })[0];
@@ -932,7 +1025,14 @@
       if (me) { Sound.play('boing'); bounce(me); say(ev.clientX, ev.clientY, 'That’s you!', possessive(k.name) + ' bulb'); return; }
       if (ed) { Sound.play('boing'); say(ev.clientX, ev.clientY, 'Eddie Bulboa', 'Race me up the Art Museum steps!'); return; }
       if (mon) { Sound.play('zap'); bounce(mon); var mk = mon.getAttribute('data-k'); say(ev.clientX, ev.clientY, nameOf(mk), ''); return; }
-      if (lm) { Sound.play('pop'); var id = lm.getAttribute('data-lm'), L = M.landmarks.filter(function (x) { return x.id === id; })[0]; say(ev.clientX, ev.clientY, L ? L.name : '', LANDMARK_SAY[id] || ''); return; }
+      if (lm) {
+        var sp = spotAt[lm.getAttribute('data-lm')];
+        if (!sp) return;
+        if (sp.found) { Sound.play('pop'); bounce(lm); say(ev.clientX, ev.clientY, sp.it.n, LANDMARK_SAY[sp.it.id] || ''); return; }
+        var need = sp.i + 1 - st.spots[sp.a.id].c;
+        Sound.play('whoosh'); say(ev.clientX, ev.clientY, 'A secret spot!', 'Go to ' + (need === 1 ? '1 more class' : need + ' more classes') + ' near here to find out what it is!');
+        return;
+      }
       if (hood) {
         var h = byId[hood.getAttribute('data-hood')];
         if (open[h.id]) { Sound.play('sparkle'); var here = []; st.places.forEach(function (pl) { if (pl.st.m === h.id && here.indexOf(nameOf(pl.k)) < 0) here.push(nameOf(pl.k)); }); say(ev.clientX, ev.clientY, h.name, 'You explored here!', here); }
@@ -996,16 +1096,17 @@
       });
       body.appendChild(pod);
     }
-    var bh = el('div', 'kc-sechead'); bh.appendChild(el('h2', 'kc-h2', 'Bulb showdown')); body.appendChild(bh);
+    var bh = el('div', 'kc-sechead'); bh.appendChild(el('h2', 'kc-h2', 'Which was more fun?')); body.appendChild(bh);
     if (keys.length >= 2) {
-      body.appendChild(eddie('Bulbs race up the Art Museum steps, have a glow-off and a dance-off. You pick the winner! The champion is your favorite.', 'kc-host'));
-      body.appendChild(btn('kc-big go fight', k.fav.length ? 'Play again!' : 'Start the showdown!', function () { Sound.play('go'); startBracket(keys); }));
-    } else body.appendChild(eddie(keys.length ? 'You have 1 bulb. Get one more for a showdown!' : 'Every class lights up a new bulb. Get two for a showdown!', 'kc-host'));
+      body.appendChild(eddie('I’ll show you two of your classes. Tap the one you had more fun at, and it wins! The last one left is your favorite.', 'kc-host'));
+      body.appendChild(btn('kc-big go fight', k.fav.length ? 'Play again!' : 'Find my favorite!', function () { Sound.play('go'); startBracket(keys); }));
+    } else body.appendChild(eddie(keys.length ? 'You have 1 bulb. One more class, and you can pick your favorite!' : 'Every class lights up a new bulb. Get two, and you can pick your favorite!', 'kc-host'));
     var ch = el('div', 'kc-sechead'); ch.appendChild(el('h2', 'kc-h2', 'My bulbs')); ch.appendChild(el('span', 'kc-tally', String(keys.length))); body.appendChild(ch);
     var grid = el('div', 'kc-zoo');
     keys.forEach(function (key) {
       var c = btn('kc-bulbcard', '', function () { Sound.play('zap'); var s = c.querySelector('svg'); s.classList.remove('flash'); void s.getBoundingClientRect(); s.classList.add('flash'); bounce(s); });
       c.appendChild(drawBulb(bulbFor(key))); c.appendChild(el('b', null, nameOf(key)));
+      if (st.times[key] > 1) { var tb = el('span', 'kc-timesbadge', '×' + st.times[key]); tb.setAttribute('aria-label', st.times[key] + ' times'); c.appendChild(tb); }
       var t = listing(key).t; if (t && t[0] && D.types[t[0]]) c.appendChild(el('small', null, D.types[t[0]].label));
       grid.appendChild(c);
     });
@@ -1016,9 +1117,9 @@
   var startBracket = function (keys) { S.bracket = { round: shuffle(keys), next: [], out: [], i: 0, n: 1, m: Math.floor(Math.random() * 3) }; go('fight'); };
   var CHEERS = ['Go go go!', 'You can do it!', 'Woo-hoo!', 'Awesome!', 'Whoa!', 'Yeah!'];
   var EVENTS = [
-    { id: 'race', title: 'Race up the steps!', ask: 'Who’s fastest? Tap one!', count: ['On your marks…', 'Get set…', 'GO!'], second: 'Good race!' },
-    { id: 'glow', title: 'Glow-off!', ask: 'Who’s brightest? Tap one!', count: ['Lights…', 'Get ready…', 'GLOW!'], second: 'So bright!' },
-    { id: 'dance', title: 'Dance-off!', ask: 'Best moves? Tap one!', count: ['Ready?', '5, 6, 7, 8…', 'DANCE!'], second: 'Great moves!' }
+    { id: 'race', title: 'Race up the steps!', ask: 'Tap it, and it wins the race!', count: ['On your marks…', 'Get set…', 'GO!'], second: 'Good race!' },
+    { id: 'glow', title: 'Glow-off!', ask: 'Tap it, and it glows brightest!', count: ['Lights…', 'Get ready…', 'GLOW!'], second: 'So bright!' },
+    { id: 'dance', title: 'Dance-off!', ask: 'Tap it, and it wins the dance-off!', count: ['Ready?', '5, 6, 7, 8…', 'DANCE!'], second: 'Great moves!' }
   ];
   var museumArt = function () {
     var s = sv('svg', { viewBox: '0 0 120 46', 'class': 'kc-museum', 'aria-hidden': 'true' });
@@ -1053,7 +1154,8 @@
     top.appendChild(el('p', 'kc-round', left <= 2 ? 'THE FINAL!' : 'Round ' + b.n + ' · ' + left + ' left'));
     top.appendChild(muteBtn());
     page.appendChild(top);
-    page.appendChild(el('h1', 'kc-h kc-ask', ev.title));
+    page.appendChild(el('h1', 'kc-h kc-ask', 'Which did you have more fun at?'));   // what the child is choosing; the contest is only how the winner celebrates
+    page.appendChild(el('p', 'kc-evname', ev.title));
     // the stage for this contest, Eddie hosting, and two bulbs
     var ring = el('div', 'kc-arena kc-show kc-ev-' + ev.id), fx = el('div', 'kc-fx');
     if (ev.id === 'race') { var steps = el('span', 'kc-steps'); steps.setAttribute('aria-hidden', 'true'); ring.appendChild(steps); ring.appendChild(museumArt()); }
@@ -1066,7 +1168,7 @@
       var svg = drawBulb(bulbFor(key), 'bob'), wrap = el('span', 'kc-fwrap'), flip = el('span', 'kc-flip'); flip.appendChild(svg); wrap.appendChild(flip); c.appendChild(wrap);
       if (ev.id === 'glow') { var meter = el('span', 'kc-meter'); meter.appendChild(el('i')); c.appendChild(meter); }
       c.appendChild(el('b', null, nameOf(key)));
-      c.setAttribute('aria-label', nameOf(key) + ' wins');
+      c.setAttribute('aria-label', 'I had more fun at ' + nameOf(key));
       cards.push(c); ring.appendChild(c);
       if (!idx) ring.appendChild(el('span', 'kc-vs', 'VS'));
     });
@@ -1199,11 +1301,11 @@
       var ul = el('ul', 'kc-suggest');
       k.suggest.forEach(function (sgt) {
         var li = el('li');
-        var what = el('div', 'kc-sg-what'); what.appendChild(el('b', null, nameOf(sgt.k))); what.appendChild(el('span', null, (D.kinds[sgt.kind] || sgt.kind) + ', ' + yearLabel(sgt)));
+        var what = el('div', 'kc-sg-what'); what.appendChild(el('b', null, nameOf(sgt.k))); what.appendChild(el('span', null, sgLine(sgt)));
         li.appendChild(what);
         var row = el('div', 'kc-sg-acts');
-        row.appendChild(btn('btn primary', 'Yes, add it', function () { save({ done: k.done.concat([sgt]) }); }));
-        row.appendChild(btn('btn', 'No', function () { save({ skip: k.skip.concat([sgt.k + '|' + sgt.kind + '|' + sgt.y]) }); }));
+        row.appendChild(btn('btn primary', sgt.up ? 'Yes, update it' : 'Yes, add it', function () { save(sgAnswer(k, sgt, true)); }));
+        row.appendChild(btn('btn', 'No', function () { save(sgAnswer(k, sgt, false)); }));
         li.appendChild(row); ul.appendChild(li);
       });
       sg.appendChild(ul);
@@ -1256,6 +1358,7 @@
     // What's on it, with a way to take one off, and a review in the child's words.
     var dl = el('div', 'panel'); dl.appendChild(el('h3', null, 'Where ' + k.name + ' has been'));
     if (k.done.length) {
+      dl.appendChild(el('p', 'hint', 'Times: count each day a week it meets, each term, or each week of the same camp. Going back earns ' + k.name + ' the Repeater Reward, and counts toward the next level.'));
       var list = el('ul', 'kc-donelist');
       k.done.slice().sort(function (a, b) { return b.y - a.y; }).forEach(function (x) {
         var li = el('li');
@@ -1267,6 +1370,12 @@
         }
         li.appendChild(what);
         var row = el('div', 'kc-sg-acts');
+        var tn = Math.max(1, x.n || 1), tm = el('div', 'kc-times'); tm.setAttribute('role', 'group'); tm.setAttribute('aria-label', 'Times at ' + nameOf(x.k));
+        var setTimes = function (v) { if (v > 1) x.n = v; else delete x.n; save({ done: k.done }); };
+        var less = btn('btn kc-step', '−', function () { setTimes(tn - 1); }); less.setAttribute('aria-label', 'One time fewer'); less.disabled = tn <= 1;
+        var more = btn('btn kc-step', '+', function () { setTimes(tn + 1); }); more.setAttribute('aria-label', 'One time more'); more.disabled = tn >= 20;
+        tm.appendChild(el('span', 'hint', 'Times')); tm.appendChild(less); tm.appendChild(el('b', 'kc-times-n', String(tn))); tm.appendChild(more);
+        row.appendChild(tm);
         if (x.k.charAt(0) === 'p' && D.links.review) {
           var rv = el('a', 'btn', 'Review in ' + possessive(k.name) + ' words');
           rv.href = D.links.review + '?program=' + encodeURIComponent(x.k.slice(2)) + (x.s ? '&school=' + encodeURIComponent(x.s) : '') + '&kid=' + encodeURIComponent(k.name) + (k.grade ? '&grade=' + encodeURIComponent(k.grade) : '');
@@ -1397,11 +1506,11 @@
         var ul = el('ul', 'kc-suggest');
         k.suggest.forEach(function (sgt) {
           var li = el('li');
-          var what = el('div', 'kc-sg-what'); what.appendChild(el('b', null, nameOf(sgt.k))); what.appendChild(el('span', null, (D.kinds[sgt.kind] || sgt.kind) + ', ' + yearLabel(sgt))); li.appendChild(what);
+          var what = el('div', 'kc-sg-what'); what.appendChild(el('b', null, nameOf(sgt.k))); what.appendChild(el('span', null, sgLine(sgt))); li.appendChild(what);
           var row = el('div', 'kc-sg-acts');
           var answer = function (changes) { return function () { row.querySelectorAll('button').forEach(function (x) { x.disabled = true; }); call('passport_save', { kid: k.name, done: changes.done || k.done, skip: changes.skip || k.skip, fav: k.fav }).then(function (d) { if (!d.ok) { row.appendChild(el('span', 'g-status bad', d.message || 'That didn’t save. Try again.')); row.querySelectorAll('button').forEach(function (x) { x.disabled = false; }); return; } ['done', 'skip', 'fav', 'suggest', 'av', 'seen', 'lvl'].forEach(function (fl) { if (d.kid[fl] !== undefined) k[fl] = d.kid[fl]; }); paintSummary(box, p); }); }; };
-          row.appendChild(btn('btn primary', 'Yes, add it', answer({ done: k.done.concat([sgt]) })));
-          row.appendChild(btn('btn', 'No', answer({ skip: k.skip.concat([sgt.k + '|' + sgt.kind + '|' + sgt.y]) })));
+          row.appendChild(btn('btn primary', sgt.up ? 'Yes, update it' : 'Yes, add it', answer(sgAnswer(k, sgt, true))));
+          row.appendChild(btn('btn', 'No', answer(sgAnswer(k, sgt, false))));
           li.appendChild(row); ul.appendChild(li);
         });
         wait.appendChild(ul); card.appendChild(wait);
