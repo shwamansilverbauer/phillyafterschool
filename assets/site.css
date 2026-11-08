@@ -2216,11 +2216,40 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
   .pc-row dd{grid-column:1/-1}
   .g-page .prof-card a.pc-edit{width:100%;text-align:center}
 }
-/* in the phone menu, someone signed in finds their own two pages first */
+/* in the phone menu, someone signed in finds their own pages first: Parent Portal, Kid's Corner, then My Profile */
 @media (max-width:1099px){
-  .js .nav.open > a.nav-cta.when-in{order:-2;margin:0 0 6px}
+  .js .nav.open > a.nav-cta.when-in{order:-3;margin:0 0 6px}
+  .js .nav.open > a.nav-kc{order:-2;display:flex;align-items:center;justify-content:center;gap:8px;margin:0 0 8px;font-family:var(--title);font-stretch:normal;font-weight:400;font-size:1.15rem;padding:9px 12px 6px;border:2px solid #0B2140;border-radius:999px;box-shadow:0 3px 0 #0B2140;background:#96C9FF;transform:none}
+  .js .nav.open > a.nav-kc:hover{background:#C3E1FF}
   .js .nav.open > a.nav-acct{order:-1;text-align:center;border:2px solid #0B2140;border-radius:999px;margin-bottom:8px;padding:8px 12px}
 }
+/* Kid's Corner, beside Parent Portal: a button that looks like it belongs on Kid's Corner */
+.nav a.nav-kc{display:inline-flex;align-items:center;gap:6px;font-family:var(--title);font-weight:400;font-size:1rem;letter-spacing:.04em;text-transform:uppercase;line-height:1;white-space:nowrap;
+  background:#96C9FF;color:#0B2140;border:2px solid #FFFFFF;border-radius:999px;padding:6px 15px 4px 10px;box-shadow:0 3px 0 #061F3D;transform:rotate(-2deg);transition:transform .15s,background .15s}
+.sitebar .nav a.nav-kc{color:#0B2140;border-bottom:2px solid #FFFFFF}
+.nav a.nav-kc:hover,.nav a.nav-kc[aria-current="page"]{background:#C3E1FF;transform:rotate(0) translateY(-2px) scale(1.04)}
+.nav-kc-bulb{flex:none;margin-top:-3px;transform-origin:50% 90%}
+.nav a.nav-kc:hover .nav-kc-bulb{animation:nav-kc-wiggle .6s ease-in-out}
+@keyframes nav-kc-wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-14deg)}50%{transform:rotate(10deg)}75%{transform:rotate(-6deg)}}
+@media (min-width:1100px){.nav a.nav-kc{margin-left:-14px}}
+@media (prefers-reduced-motion:reduce){.nav a.nav-kc,.nav a.nav-kc:hover{transform:none}.nav a.nav-kc:hover .nav-kc-bulb{animation:none}}
+/* the Parent Portal's overview: where to start */
+.ov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:6px}
+.ov-card{display:grid;grid-template-columns:auto 1fr;column-gap:12px;row-gap:2px;align-content:start;padding:14px 16px;border:1.5px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);text-decoration:none;transition:transform .12s,box-shadow .12s,border-color .12s}
+.ov-card:hover{transform:translateY(-2px);border-color:var(--hero-2);box-shadow:0 4px 0 var(--line)}
+.ov-icon{grid-row:1/span 3;width:42px;height:42px;border-radius:12px;background:var(--sky-bg);color:var(--sky-ink);display:flex;align-items:center;justify-content:center}
+.ov-icon svg{width:22px;height:22px}
+.ov-card b{font-family:var(--display);font-size:1.05rem;line-height:1.25}
+.ov-text{color:var(--muted);font-size:.93rem;line-height:1.35}
+.ov-state{justify-self:start;margin-top:6px;font-size:.82rem;font-weight:700;border-radius:999px;padding:2px 10px;background:var(--cell-off);color:var(--muted)}
+.ov-state.done{background:var(--green-bg);color:var(--green-ink)}
+.ov-card.ov-kids{background:#0F4D90;border-color:#0A3566;color:#fff}
+.ov-card.ov-kids:hover{border-color:var(--yellow);box-shadow:0 4px 0 #0A3566}
+.ov-kids b{font-family:var(--title);font-weight:400;letter-spacing:.03em;text-transform:uppercase;font-size:1.15rem}
+.ov-kids .ov-text{color:#DCEBFA}
+.ov-kids .ov-icon{background:#0A3566;color:var(--yellow)}
+.ov-help .ov-icon{background:#FFE3DA;color:var(--red)}
+@media (prefers-reduced-motion:reduce){.ov-card,.ov-card:hover{transition:none;transform:none}}
 
 /* "Has your family been to ...?": asked on Build your week and on the profile, when a program has been on a week a while */
 .rv-nudge{border:2px solid var(--yellow);border-radius:16px;background:var(--surface);padding:18px 20px;display:flex;flex-direction:column;gap:10px;max-width:960px}

@@ -56,7 +56,7 @@
   // the three read as one place and none of them is a long scroll. A tab whose part is on the page in view switches in
   // place; the others are links to the page that has them. (sessionStorage "pas-tabs" = "all" shows every part at once:
   // the tests use it, and so can anyone who would rather have the one long page.)
-  var ACCT_TABS = [['todo', 'To do', 'to-do/', ''], ['profile', 'Profile', 'profile/', ''], ['you', 'Details', 'account/', ''], ['school', 'School & kids', 'account/', '#school'], ['kids', 'Kid’s Corner', 'account/', '#kids'], ['emails', 'Emails & following', 'account/', '#emails'], ['plans', 'Plans & sharing', 'account/', '#plans'], ['listings', 'Listings', 'managers/', '']];
+  var ACCT_TABS = [['overview', 'Overview', 'account/', ''], ['todo', 'To do', 'to-do/', ''], ['profile', 'Profile', 'profile/', ''], ['you', 'Details', 'account/', '#you'], ['school', 'School & kids', 'account/', '#school'], ['kids', 'Kid’s Corner', 'account/', '#kids'], ['emails', 'Emails & following', 'account/', '#emails'], ['plans', 'Plans & sharing', 'account/', '#plans'], ['listings', 'Listings', 'managers/', '']];
   function tabsAll() { return sget('pas-tabs') === 'all'; }
   function acctStrip(box, active, hasListings, here, pick) {
     var nav = el('nav', 'jump acct-tabs'), links = {}; nav.setAttribute('aria-label', 'Your account');
@@ -65,6 +65,7 @@
       if (t[0] === 'listings' && !hasListings) return;
       if (t[0] === 'todo' && !yearOn) return;
       if (t[0] === 'kids' && !host.getAttribute('data-kids')) return;   // Kid's Corner is on the live site only
+      if (t[0] === 'overview' && get('pas-role') === 'manager') return;   // the overview is a parent's: a program manager starts on Details
       var a = el('a', t[0] === 'todo' ? 'tab-cta' : null, t[1]); a.href = page(t[2]) + t[3]; a.setAttribute('data-tab-go', t[0]);
       if (t[2] === here && pick) a.addEventListener('click', function (e) { if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return; e.preventDefault(); pick(t[0]); });
       links[t[0]] = a; nav.appendChild(a);
@@ -451,10 +452,10 @@
     // /account/ is where everything is changed: name, email address, phone, school and grades, emails, follows, kept
     // plans, sharing, signing out. A link to a part that lives on the other page (/profile/#following) is sent there.
     var view = account.getAttribute('data-view') === 'profile' ? 'profile' : 'account';
-    var PARTS = { profile: ['card', 'new'], account: ['you', 'email', 'texts', 'school', 'kids', 'emails', 'push', 'following', 'favorites', 'plans', 'sharing', 'listings', 'sign-out'] };
+    var PARTS = { profile: ['card', 'new'], account: ['overview', 'new', 'you', 'email', 'texts', 'school', 'kids', 'emails', 'push', 'following', 'favorites', 'plans', 'sharing', 'listings', 'sign-out'] };
     var MOVED = { profile: 'you' };   // names a part has had
     // the account page is tabs: which tab each part of it is on
-    var TAB_OF = { you: 'you', email: 'you', texts: 'you', listings: 'you', 'sign-out': 'you', school: 'school', kids: 'kids', emails: 'emails', push: 'emails', following: 'emails', favorites: 'emails', plans: 'plans', sharing: 'plans' };
+    var TAB_OF = { overview: 'overview', 'new': 'overview', you: 'you', email: 'you', texts: 'you', listings: 'you', 'sign-out': 'you', school: 'school', kids: 'kids', emails: 'emails', push: 'emails', following: 'emails', favorites: 'emails', plans: 'plans', sharing: 'plans' };
     var onHash = null;   // set once the signed-in page is drawn
     var fresh = false;   // someone signed in on this visit, rather than arriving signed in
     // a link followed while the page is already open (the address changes, the page doesn't load again)
@@ -580,19 +581,23 @@
       if (hashPart === 'listings' && me.claims) { location.replace(page('managers/')); return; }   // a manager's listings have a page of their own
       // The tabs. One strip runs across the profile, this page and the listings page; here it switches between the
       // parts of the account, so nobody has to scroll through all of them to find one.
-      var tabNow = 'you';
+      var firstTab = me.role === 'manager' ? 'you' : 'overview', tabNow = firstTab;
       var showTab = function (id, byHand) {
         tabNow = id; var allOn = tabsAll();
         Array.prototype.forEach.call(account.children, function (c) { var t = c.getAttribute('data-tab'); if (t) c.className = c.className.replace(/ tab-off/g, '') + (allOn || t === id ? '' : ' tab-off'); });
         strip.pasMark(id);
         if ((id === 'kids' || allOn) && kcBody) loadKids();
+        if ((id === 'overview' || allOn) && NEWS && NEWS.length) {   // What's new is on the overview: seen there, the dot on Parent Portal goes
+          set('pas-news', NEWS[0].date);
+          var nd = document.querySelector('.nav-cta .news-dot'); if (nd) nd.hidden = true;
+        }
         if (!byHand) return;
-        try { history.replaceState(null, '', location.pathname + location.search + (id === 'you' ? '' : '#' + id)); } catch (e) { /* the tab still opens */ }
+        try { history.replaceState(null, '', location.pathname + location.search + (id === firstTab ? '' : '#' + id)); } catch (e) { /* the tab still opens */ }
         // the strip stays under the menu bar while the page scrolls: a new tab starts from its top
         var top = account.getBoundingClientRect().top + window.pageYOffset - 84;
         if (window.pageYOffset > top) window.scrollTo(0, Math.max(0, top));
       };
-      var strip = acctStrip(account, view === 'profile' ? 'profile' : 'you', !!me.claims, view + '/', view === 'account' ? function (id) { showTab(id, true); } : null);
+      var strip = acctStrip(account, view === 'profile' ? 'profile' : firstTab, !!me.claims, view + '/', view === 'account' ? function (id) { showTab(id, true); } : null);
       var part = function (box, id) { box.id = id; return box; };
       var put = function (panel, where, tab) { if (tab) panel.setAttribute('data-tab', tab); if (where === view) account.appendChild(panel); };   // each panel is built either way and shown on its own page
       // the account page starts with who is signed in, and a way out that is always in reach
@@ -600,6 +605,58 @@
       who.appendChild(whoMail); who.appendChild(document.createTextNode('. ')); who.appendChild(quickOut);
       quickOut.addEventListener('click', function () { call('logout', {}).then(function () { set('pas-in', null); drawSignedOut(); }); });
       put(who, 'account');
+      // The overview, where the Parent Portal button lands: where to start, each with how far it has got, and what's new.
+      var ov = part(el('section', 'panel ov'), 'overview');
+      ov.appendChild(el('h2', null, me.first ? 'Hi, ' + me.first + '! Where to start' : 'Where to start'));
+      var ovGrid = el('div', 'ov-grid'); ov.appendChild(ovGrid);
+      var OV_ICON = {
+        week: 'M7 2h2v2h6V2h2v2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm-2 8v10h14V10zm2 2h3v3H7zm5 0h3v3h-3zm-5 4h3v3H7z',
+        daysoff: 'M11 1h2v22h-2zM1 11h22v2H1zm3.2-5.4 1.4-1.4 15.6 15.6-1.4 1.4zm15.6-1.4 1.4 1.4L5.6 21.2l-1.4-1.4z',
+        profile: 'M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.4 0-8 2.2-8 5v3h16v-3c0-2.8-3.6-5-8-5z',
+        todo: 'M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm5.6 12.6 7-7-1.4-1.4-5.6 5.6-2.8-2.8-1.4 1.4z',
+        year: 'M7 2h2v2h6V2h2v2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm-2 8v10h14V10zm2 2h4v4H7z',
+        kids: 'M8.5 20C8.5 17 3 15 3 10C3 5 7 1.5 12 1.5S21 5 21 10C21 15 15.5 17 15.5 20ZM8.5 21h7v2h-7zm.5 3h6v2H9z',
+        summer: 'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm-1-6h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.9 2.9-1.4 1.4zm11.3 11.3 1.4-1.4 2.9 2.9-1.4 1.4zM4.2 18.4l2.9-2.9 1.4 1.4-2.9 2.9zM15.5 7.1l2.9-2.9 1.4 1.4-2.9 2.9z',
+        help: 'M12 21s-7.5-4.6-9.5-9C1 8.6 3.2 5 6.6 5c2 0 3.6 1.1 4.4 2.6h2C13.8 6.1 15.4 5 17.4 5 20.8 5 23 8.6 21.5 12c-2 4.4-9.5 9-9.5 9z'
+      };
+      var OV = [
+        ['week', 'Build your kids’ week', 'After-school programs, day by day, for each child.', 'board/', ''],
+        ['daysoff', 'Plan your days off', 'A camp for every day school is closed.', 'days-off/', '#plan', hasYearPage],
+        ['profile', 'Update your profile', 'Your school, and your kids’ names, grades and ages. The lists start from these.', 'account/', '#school'],
+        ['todo', 'Manage your to-do list', 'The camp days you’ve planned and haven’t signed up for yet.', 'to-do/', '', hasYearPage],
+        ['year', 'Build your year calendar', 'Every plan you make, together, month by month.', 'calendar/', '', hasYearPage],
+        ['kids', 'Have your kids play', 'Kid’s Corner: pins to earn, a map of Philly to light up, and bulb boxing.', 'kids-corner/', '', !!host.getAttribute('data-kids')],
+        ['summer', 'Plan your summer', 'Camps, week by week, for each child.', 'summer-schedule/', '#plan'],
+        ['help', 'Help the site keep going', 'It’s free for families. If it saved you an evening, you can chip in.', 'support/', '']
+      ];
+      var ovState = {};
+      OV.forEach(function (o) {
+        if (o.length > 5 && !o[5]) return;
+        var a = el('a', 'ov-card ov-' + o[0]); a.href = page(o[3]) + o[4];
+        if (o[0] === 'profile') a.addEventListener('click', function (e) { if (view !== 'account' || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return; e.preventDefault(); showTab('school', true); });   // on this page: just switch tabs
+        var ic = el('span', 'ov-icon'); var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('viewBox', o[0] === 'kids' ? '0 0 24 28' : '0 0 24 24'); svg.setAttribute('aria-hidden', 'true'); svg.setAttribute('focusable', 'false');
+        var pth = document.createElementNS('http://www.w3.org/2000/svg', 'path'); pth.setAttribute('d', OV_ICON[o[0]]); pth.setAttribute('fill', 'currentColor'); svg.appendChild(pth); ic.appendChild(svg); a.appendChild(ic);
+        a.appendChild(el('b', null, o[1])); a.appendChild(el('span', 'ov-text', o[2]));
+        var stt = el('span', 'ov-state'); stt.hidden = true; a.appendChild(stt); ovState[o[0]] = stt;
+        ovGrid.appendChild(a);
+      });
+      // how far each has got, from the plans kept in the profile (filled in again once they arrive)
+      var paintOverview = function () {
+        var p = lastP || {}, kidsN = (p.kids || me.kids || []).length, count = function (list, key) { var n = 0; (list || []).forEach(function (k) { Object.keys(k[key] || {}).forEach(function (d) { if (k[key][d]) n++; }); }); return n; };
+        var weeksN = (p.weeks || []).length, offN = count(p.daysoff && p.daysoff.kids, 'd'), sumN = count(p.summer && p.summer.kids, 'w'), left = lastP ? todoLeft(p.daysoff) : 0;
+        var st = {
+          week: weeksN ? [1, weeksN === 1 ? '1 week kept' : weeksN + ' weeks kept'] : [0, 'Not started'],
+          daysoff: offN ? [1, offN === 1 ? '1 day planned' : offN + ' days planned'] : [0, 'Not started'],
+          profile: (p.school || me.school) && kidsN ? [1, 'Done'] : [0, kidsN ? 'Add your school' : 'Add your kids'],
+          todo: left ? [0, left === 1 ? '1 to sign up for' : left + ' to sign up for'] : offN ? [1, 'All signed up'] : [0, 'Nothing yet'],
+          year: weeksN || offN || sumN ? [1, 'Has your plans'] : [0, 'Fills in as you plan'],
+          summer: sumN ? [1, sumN === 1 ? '1 week planned' : sumN + ' weeks planned'] : [0, 'Not started']
+        };
+        if (!lastP) { delete st.week; delete st.daysoff; delete st.todo; delete st.year; delete st.summer; }   // not known yet
+        Object.keys(ovState).forEach(function (k) { var x = st[k], sp = ovState[k]; if (!x) { sp.hidden = true; return; } sp.hidden = false; sp.className = 'ov-state' + (x[0] ? ' done' : ''); sp.textContent = (x[0] ? '✓ ' : '') + x[1]; });
+      };
+      paintOverview();
+      if (firstTab === 'overview') put(ov, 'account', 'overview');
       // your details: name, email address, mobile number
       var you = part(el('section', 'panel'), 'you');
       you.appendChild(el('h2', null, 'Your details'));
@@ -734,7 +791,7 @@
           moreNews.addEventListener('click', function () { Array.prototype.forEach.call(nul.children, function (li) { li.hidden = false; }); mnRow.hidden = true; var f = nul.children[2] && nul.children[2].querySelector('a'); if (f) f.focus(); });
         }
         if (view === 'profile') {
-          set('pas-news', NEWS[0].date);   // seen: the dot on "My profile" goes
+          set('pas-news', NEWS[0].date);   // seen: the dot on "Parent Portal" goes
           var dot = document.querySelector('.nav-cta .news-dot'); if (dot) dot.hidden = true;
         }
       }
@@ -1289,7 +1346,7 @@
         var hw = el('div', 'pc-who'); hw.appendChild(el('h2', null, [me.first, me.last].filter(Boolean).join(' ') || 'Your profile'));
         hw.appendChild(el('p', 'pc-mail', me.email));
         hw.appendChild(el('span', 'pill', me.role === 'manager' ? 'Program manager' : 'Parent or caregiver'));
-        var edit = el('a', 'btn primary pc-edit', 'Edit my account'); edit.href = page('account/');
+        var edit = el('a', 'btn primary pc-edit', 'Edit my account'); edit.href = page('account/') + '#you';
         head.appendChild(mark); head.appendChild(hw); head.appendChild(edit); card.appendChild(head);
         var rows = el('dl', 'pc-rows'); card.appendChild(rows);
         var row = function (label, fill, go, href) {
@@ -1411,14 +1468,14 @@
           paintSchool(p.school); paintGrades(p.grades || []); paintAges(p.ages || []); paintWeeks(p.weeks || []); paintSummer(p.summer || null); paintDaysOff(p.daysoff || null);
           seedKids(p.kids, null);
           if (strip.pasTodo) strip.pasTodo(todoLeft(p.daysoff));
-          lastP = p; paintCard(); paintKidsTab();
+          lastP = p; paintCard(); paintKidsTab(); paintOverview();
         });
       };
       paintSchool(me.school || ''); paintGrades(me.grades || []); paintAges(me.ages || []); paintWeek(); loadProfile();
       put(prof, 'account', 'plans');
       // the profile page: the card, then what's new on the site
       paintCard(); put(card, 'profile'); put(rvCard, 'profile');
-      if (NEWS.length) put(newsBox, 'profile');
+      if (NEWS.length) { put(newsBox, 'profile'); if (firstTab === 'overview') put(newsBox, 'account', 'overview'); }   // on the profile, and on the overview
       // sharing: weeks shared with one person, and groups
       var mine = part(el('section', 'panel'), 'sharing');
       mine.appendChild(el('h2', null, groupsOn ? 'Sharing and groups' : 'Sharing'));
@@ -1520,7 +1577,7 @@
         var want = h !== TAB_OF[h] ? document.getElementById(h) : null;
         if (want && want.scrollIntoView) want.scrollIntoView();
       };
-      if (view === 'account') { showTab('you'); openPart(hashPart); }
+      if (view === 'account') { showTab(firstTab); openPart(hashPart); }
       else { var wantP = hashPart ? document.getElementById(hashPart) : null; if (wantP && wantP.scrollIntoView) wantP.scrollIntoView(); }
       onHash = openPart;
     };
