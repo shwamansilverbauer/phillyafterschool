@@ -2566,6 +2566,7 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-bubble b{font-family:var(--title);font-weight:400;font-size:1.2rem;letter-spacing:.02em;line-height:1.1;padding-top:3px}
 .kc-bubble span{font-weight:700;font-size:.95rem;line-height:1.25}
 .kc-bubble-li{color:var(--kpurple)}
+.kc-credit{color:rgba(255,255,255,.85);font-size:.8rem;margin:12px 0 0;text-align:center}
 .kc-placelist{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-wrap:wrap;gap:8px}
 .kc-placelist li{background:#fff;border:2.5px solid var(--kink);border-radius:999px;padding:4px 12px;font-weight:800}
 /* the battle */

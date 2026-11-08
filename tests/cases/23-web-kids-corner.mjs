@@ -144,6 +144,7 @@ test('the map of Philadelphia: drawn from this site, clear where the child has b
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
   await page.waitForSelector('.kc-bubble:not([hidden])');
   includes(flat(await page.locator('.kc-bubble').innerText()), 'You explored here', 'the bubble for ' + id);
+  includes(flat(await page.locator('.kc-credit').innerText()), 'Robert Cheetham', 'the neighborhoods are credited');
   // The map's shapes come from this site: no map service, no tiles.
   eq(t.outside.length, 0, 'nothing asked of another site: ' + t.outside.join(', '));
   eq(t.errors.length, 0, t.errors.join(' | '));
