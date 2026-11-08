@@ -36,11 +36,12 @@ test('signed out, Kid’s Corner explains itself and offers the account; signed 
   includes(flat(await page.locator('#kc-out #for-kids').innerText()), 'A CORNER JUST FOR YOU', 'what a kid gets, said to the kid');
   eq(await page.locator('#for-kids .kids-tile').count(), 4);
   ok(await page.locator('#for-kids a[href*="register/?next=kids"]').isVisible(), 'Grown-ups: make a free account');
-  // Signed out, the one way there is under About; the button waits for a signed-in parent, and nothing else points to it.
+  // Signed out, the one way there is the Account Features menu; the button waits for a signed-in parent, and nothing else points to it.
   const home = await t.open('/');
   eq(await home.locator('#for-kids').count(), 0, 'not on the home page');
   ok(!(await home.locator('header.sitebar a.nav-kc').isVisible()), 'no Kid’s Corner button signed out');
-  eq(await home.locator('header.sitebar details.menu[data-top$="about/"] a[href$="kids-corner/"]').count(), 1, 'under About');
+  eq(await home.locator('header.sitebar details.menu[data-top$="features/"] a[href$="features/kids-corner/"]').count(), 1, 'under Account Features');
+  eq(await home.locator('header.sitebar a[href$="/kids-corner/"]:not([href*="features/"]):visible').count(), 0, 'no way into Kid’s Corner itself');
   eq(await home.locator('#start a[href$="kids-corner/"]').count(), 0, 'not in the Parents box');
   const plans = await t.open('/schedules/');
   eq(await plans.locator('main a[href$="kids-corner/"]').count(), 0, 'not on the Schedule Builder');
@@ -124,6 +125,7 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   const shown = await celebrate(page);
   ok(shown.some(s => /Tap to open/.test(s)), 'the present first: ' + shown.join(' / '));
   ok(shown.some(s => /NEW PIN/.test(s)), 'a new pin');
+  ok(shown.some(s => /SURPRISE!/.test(s) && /You found it in/.test(s)), 'a surprise in the neighborhood: ' + shown.join(' / '));
   ok(shown.some(s => /afternoon adventurer/i.test(s)), 'the after-school pin');   // headings are in capitals
   ok(shown.some(s => /LEVEL UP/.test(s)), 'a new level');
   ok(shown.some(s => /New stuff to wear/i.test(s) && /Sunglasses/i.test(s) && /Bow tie/i.test(s)), 'level 2 unlocks sunglasses and a bow tie');
@@ -178,25 +180,36 @@ test('the map of Philadelphia: drawn from this site, clear where the child has b
   ok(await page.locator('.kc-map svg[data-k]').count() >= 1, 'a program’s bulb on the map');
   eq(await page.locator('.kc-map .kc-you').count(), 1, 'the child’s own bulb');
   eq(await page.locator('.kc-map .kc-eddie-map').count(), 1, 'Eddie on the Art Museum steps');
+  // Each neighborhood with a class has a surprise or two: what she found drawn on it, a second one a ? until another class there.
+  const sur = await page.locator('.kc-map [data-sur]:not(.kc-surq)').count();
+  ok(sur >= 1, 'a surprise where she has been');
   // The secret spots: every area's famous things, a ? until classes nearby find them.
   const spots = await page.evaluate(() => document.querySelectorAll('.kc-map [data-lm]').length);
   eq(spots, 17, 'every secret spot is on the map');
   const found = await page.locator('.kc-map [data-lm]:not(.kc-secret)').count();
   ok(found >= 1 && found < spots, 'some found, some still a ?: ' + found);
-  matches(flat(await page.locator('.kc-spottally').innerText()), new RegExp('^' + found + ' / 17 secret spots found'));
+  matches(flat(await page.locator('.kc-spottally').innerText()), new RegExp('^' + found + ' / 17 secret spots found · ' + sur + ' surprises?$'));
   // A tap on a ? says how to find it (everything else taken off the map, so the tap lands on it).
-  await page.evaluate(() => { const keep = document.querySelector('.kc-map .kc-secret'); document.querySelectorAll('.kc-map [data-k], .kc-map .kc-you, .kc-map .kc-eddie-map, .kc-map [data-lm]').forEach(n => { if (n !== keep) n.remove(); }); });
+  await page.evaluate(() => { const keep = document.querySelector('.kc-map .kc-secret'); document.querySelectorAll('.kc-map [data-k], .kc-map .kc-you, .kc-map .kc-eddie-map, .kc-map [data-lm], .kc-map [data-sur]').forEach(n => { if (n !== keep) n.remove(); }); });
   const q = await page.locator('.kc-map .kc-secret').boundingBox();
   await page.mouse.click(q.x + q.width / 2, q.y + q.height / 2);
   await page.waitForSelector('.kc-bubble:not([hidden])');
   matches(flat(await page.locator('.kc-bubble').innerText()), /A secret spot!.*Go to \d+ more class(es)? near here/);
+  // A tap on a surprise says what it is and where it was found.
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('.kc-map');
+  await page.evaluate(() => { document.querySelectorAll('.kc-over').forEach(o => o.remove()); const keep = document.querySelector('.kc-map [data-sur]:not(.kc-surq)'); document.querySelectorAll('.kc-map [data-k], .kc-map .kc-you, .kc-map .kc-eddie-map, .kc-map [data-lm], .kc-map [data-sur]').forEach(n => { if (n !== keep) n.remove(); }); });
+  const sb = await page.locator('.kc-map [data-sur]').boundingBox();
+  await page.mouse.click(sb.x + sb.width / 2, sb.y + sb.height / 2);
+  await page.waitForSelector('.kc-bubble:not([hidden])');
+  matches(flat(await page.locator('.kc-bubble').innerText()), /!.*Found in [A-Z]/);
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForSelector('.kc-map');
   await page.evaluate(() => document.querySelectorAll('.kc-over').forEach(o => o.remove()));
   // A tap on a cleared neighborhood says which it is (zoomed onto it, with what stands on it moved off).
   const hood = page.locator('.kc-map .kc-hoods path.open').first();
   const id = await page.evaluate(() => document.querySelector('.kc-map .kc-hoods path.open').getAttribute('data-hood'));
-  await page.evaluate(() => { const p = document.querySelector('.kc-map .kc-hoods path.open'); const svg = p.ownerSVGElement; const bb = p.getBBox(); svg.setAttribute('viewBox', `${bb.x - 5} ${bb.y - 5} ${Math.max(bb.width, bb.height) + 10} ${Math.max(bb.width, bb.height) + 10}`); document.querySelectorAll('.kc-map [data-k], .kc-map .kc-you, .kc-map [data-lm]').forEach(n => n.remove()); });
+  await page.evaluate(() => { const p = document.querySelector('.kc-map .kc-hoods path.open'); const svg = p.ownerSVGElement; const bb = p.getBBox(); svg.setAttribute('viewBox', `${bb.x - 5} ${bb.y - 5} ${Math.max(bb.width, bb.height) + 10} ${Math.max(bb.width, bb.height) + 10}`); document.querySelectorAll('.kc-map [data-k], .kc-map .kc-you, .kc-map [data-lm], .kc-map [data-sur]').forEach(n => n.remove()); });
   const box = await hood.boundingBox();
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
   await page.waitForSelector('.kc-bubble:not([hidden])');

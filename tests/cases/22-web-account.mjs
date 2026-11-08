@@ -166,12 +166,26 @@ test('the menu signed in: My Profile, the Parent Portal button, Kid’s Corner; 
   includes(flat(await page.locator('#overview .ov-week .ov-state').innerText()), '1 week kept');
   includes(flat(await page.locator('#overview .ov-summer .ov-state').innerText()), 'Not started');
   matches(await page.locator('#overview .ov-kids').getAttribute('href'), /kids-corner\/$/);
+  // Kid's Corner: a card like the others, with where it has got to.
+  const kidsState = () => page.locator('#overview .ov-kids .ov-state').innerText().then(flat);
+  await page.waitForFunction(() => /\S/.test((document.querySelector('#overview .ov-kids .ov-state') || {}).textContent || ''));
+  eq(await kidsState(), 'Add your kids first');
+  ok(!/kids/.test(await page.locator('#overview .ov-kids').evaluate(a => getComputedStyle(a).backgroundColor === 'rgb(15, 77, 144)' ? 'kids' : '')), 'not dark like a button');
   ok(await page.locator('#new').isVisible(), 'What’s new is on the overview');
   ok(!(await nav.locator('a.nav-cta.when-in .news-dot').isVisible()), 'seen: the dot goes');
   // Update your profile switches to School & kids, here on the page.
   await page.locator('#overview .ov-profile').click();
   await page.waitForTimeout(300);
   eq(flat(await page.locator('.acct-tabs [aria-current="page"]').innerText()), 'School & kids');
+  // Names given, the week's program waits to be confirmed; confirmed and a bulb picked, the child is playing.
+  await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '3' }] });
+  const waitKids = re => page.waitForFunction(r => new RegExp(r).test((document.querySelector('#overview .ov-kids .ov-state') || {}).textContent || ''), re.source);
+  await page.goto(page.url().replace(/#.*$/, '')); await waitKids(/to confirm|Not started/);
+  const pk = (await pat.okay('GET', 'passport')).kids[0];
+  eq(await kidsState(), pk.suggest.length ? (pk.suggest.length === 1 ? '1 class to confirm' : pk.suggest.length + ' classes to confirm') : 'Not started');
+  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: pk.suggest.map(x => ({ k: x.k, kind: x.kind, y: x.y, s: x.s || '' })), av: { b: 'globe', c: 2 } });
+  await page.reload(); await waitKids(/Playing/);
+  eq(await kidsState(), '✓ Playing');
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
 });

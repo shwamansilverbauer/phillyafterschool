@@ -53,10 +53,10 @@ test('going back: a class counts as often as the plans have it, and comes back t
   await pat.okay('POST', 'summer_save', { summer: { y: season, kids: [{ name: 'Rae', w: { [`${season}-07-06`]: [ids[0]], [`${season}-07-13`]: [ids[0]], [`${season + 5}-07-20`]: [ids[0]] } }] } });
   p = await pat.okay('GET', 'passport');
   deepEq(p.kids[1].suggest, [{ k: 'c:' + ids[0], kind: 'summer', y: season, s: '', n: 2 }], 'two camp weeks so far');
-  // What a save keeps: 2 to 20 times, 1 left out, the rest dropped; the Repeater pin and the map's spots as seen.
-  r = await pat.okay('POST', 'passport_save', { kid: 'Rae', done: [{ k: 'c:' + ids[0], kind: 'summer', y: season, n: 1 }, { k: 'c:' + ids[1], kind: 'summer', y: season, n: 99 }, { k: 'p:' + program.id, kind: 'off', y, n: 'lots' }], seen: { repeat: 2, 'map:south': 3, 'map:<b>': 1 } });
+  // What a save keeps: 2 to 20 times, 1 left out, the rest dropped; the Repeater pin, the map's spots and a neighborhood's surprises as seen.
+  r = await pat.okay('POST', 'passport_save', { kid: 'Rae', done: [{ k: 'c:' + ids[0], kind: 'summer', y: season, n: 1 }, { k: 'c:' + ids[1], kind: 'summer', y: season, n: 99 }, { k: 'p:' + program.id, kind: 'off', y, n: 'lots' }], seen: { repeat: 2, 'map:south': 3, 'map:<b>': 1, 'hood:point-breeze': 2, 'hood:<i>': 1, 'hood:fishtown': 4 } });
   deepEq(r.kid.done.map(e => e.n), [undefined, 20, undefined]);
-  deepEq(r.kid.seen, { repeat: 2, 'map:south': 3 });
+  deepEq(r.kid.seen, { repeat: 2, 'map:south': 3, 'hood:point-breeze': 2 }, 'a neighborhood’s surprises seen, 1 or 2 of them');
 });
 
 test('starting a child over: the bulb, what was shown, Eddie’s welcome and the favorites go; the classes stay unless asked', async (ctx) => {

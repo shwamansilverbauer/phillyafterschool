@@ -88,6 +88,44 @@ test('signing in through the page: the code from the email lands a new account o
   await t.close();
 });
 
+test('Account Features: a menu of its own for someone signed out, a page for each feature, About a plain link again', async (ctx) => {
+  const b = await ctx.browser();
+  const flat = x => x.replace(/\s+/g, ' ').trim();
+  const t = await b.context(ctx.site);
+  const home = await t.open('/');
+  const menu = home.locator('header.sitebar details.nav-feat');
+  eq(flat(await menu.locator('summary').innerText()), 'Account Features');
+  const items = await menu.locator('a').evaluateAll(as => as.map(a => a.textContent.trim() + ' ' + a.getAttribute('href')));
+  eq(items.join(' | '), 'All Account Features features/ | Calendar & Sharing features/calendar/ | Parent Portal features/parent-portal/ | Kid’s Corner features/kids-corner/');
+  eq(await home.locator('header.sitebar details.menu[data-top$="about/"]').count(), 0, 'About is not a menu');
+  eq(await home.locator('header.sitebar nav > a.nav-more[href$="about/"]').count(), 1, 'About is a link');
+  includes(flat(await home.locator('footer .foot-cols').innerText()), 'ACCOUNT FEATURES');
+  // The page that leads to all three, and each feature's own page with cards to the other two.
+  const index = await t.open('/features/');
+  eq(await index.locator('.feat > .feat-cards .feat-card').count(), 3);
+  for (const [f, h1] of [['calendar', 'Calendar & sharing'], ['parent-portal', 'Parent Portal'], ['kids-corner', 'Kid’s Corner']]) {
+    const page = await t.open(`/features/${f}/`);
+    eq(flat(await page.locator('h1').innerText()).toLowerCase(), h1.toLowerCase(), f);
+    eq(await page.locator('.feat-more .feat-card').count(), 2, f + ' leads to the other two');
+    ok(await page.locator('a.btn[href*="register/"]').first().isVisible(), f + ' offers the account');
+    eq(await page.locator('header.sitebar details.nav-feat.here').count(), 1, f + ': the menu shows where you are');
+  }
+  // Kid's Corner's page says nothing there is counted, so it runs no analytics either.
+  const before = t.outside.length;
+  const kc = await t.open('/features/kids-corner/');
+  eq(t.outside.slice(before).filter(u => ANALYTICS.test(u)).length, 0, 'no analytics on the Kid’s Corner page');
+  includes(flat(await kc.locator('#for-kids').innerText()), 'A CORNER JUST FOR YOU');
+  eq(t.errors.length, 0, t.errors.join(' | '));
+  await t.close();
+  // Signed in, the Parent Portal and Kid's Corner buttons take its place.
+  const pat = ctx.api().as(someone('feat'), 'Pat', 'Lee');
+  const t2 = await b.context(ctx.site, { sid: pat.cookie });
+  const p2 = await t2.open('/');
+  ok(!(await p2.locator('header.sitebar details.nav-feat').isVisible()), 'no Account Features menu signed in');
+  eq(t2.errors.length, 0, t2.errors.join(' | '));
+  await t2.close();
+});
+
 test('quiet pages: signed in, the account and profile pages run no analytics, and the email list hears nothing about a child', async (ctx) => {
   const b = await ctx.browser();
   const pat = ctx.api().as(someone('quiet'), 'Pat', 'Lee');

@@ -372,11 +372,12 @@ Passport at first: `/passport/` redirects here, `?next=passport` still works, an
 keep that name.)
 
 - **"For kids", on the open site.** `kidsShowcase()` is a band in Kid's Corner's own look, said to the child: four
-  tiles (pins, a lightbulb to dress up, the map with secret spots, picking a favorite), Eddie, and "Grown-ups: make
-  a free account" (`register/?next=kids`). It lives on Kid's Corner itself, at the top for someone signed out, before
-  "How it works" for the grown-up. The site is for parents and doesn't push it: someone signed out finds it under
-  About in the menu (About is a group: About Us, Kid's Corner), and the Kid's Corner button is only there once a
-  parent is signed in. Nothing on the home page or the planners points to it. Its drawings are made in the build (`artBulb()`, `artPin()`); no real child's page is shown anywhere.
+  tiles (pins, a lightbulb to dress up, the map with surprises and secret spots, picking a favorite), Eddie, and
+  "Grown-ups: make a free account" (`register/?next=kids`), followed by "How it works" for the grown-up (`kidsHow()`).
+  Both are on Kid's Corner's Account Features page (`/features/kids-corner/`, see "Account Features") and on Kid's
+  Corner itself for someone signed out. The site is for parents and doesn't push it: someone signed out finds it
+  under Account Features in the menu, and the Kid's Corner button is only there once a parent is signed in. Nothing
+  on the home page or the planners points to it. Its drawings are made in the build (`artBulb()`, `artPin()`); no real child's page is shown anywhere.
 - **On a laptop** the Pins / Map / Showdown tabs sit under the child's header and stick with it, instead of the
   phone's bar at the bottom; Eddie's welcome is one centred, framed card.
 
@@ -416,10 +417,11 @@ keep that name.)
   twinkling sparkles.
 - **Levels.** Points are 10 a class, 5 a repeat, 5 a neighborhood and 5 a pin level (`stats()`); `LEVELS` and `TITLES` turn them
   into "Explorer · Level 4" with a bar to the next.
-- **Celebrations.** Pins whose level went up since the child last looked, secret spots found on the map, and a new
-  level, wait behind a present to tap open (sounds can only start after a tap), then pop in one by one (or all together
-  past three), then the spots, then the level up. What was shown is saved (`seen`, with `map:<area>` for the spots;
-  `lvl`) so it is celebrated once.
+- **Celebrations.** Pins whose level went up since the child last looked, secret spots and surprises found on the
+  map, and a new level, wait behind a present to tap open (sounds can only start after a tap), then pop in one by one
+  (or all together past three), then the spots, then the surprises ("SURPRISE! … You found it in Fairmount!"), then
+  the level up. What was shown is saved (`seen`, with `map:<area>` for the spots and `hood:<neighborhood>` for the
+  surprises; `lvl`; the server keeps up to 120 keys) so it is celebrated once.
 - **The map** is drawn on the page from `data/philly-map.json` (served as `assets/philly-map.json`): the city's 159
   neighborhoods, its outline, the Delaware along its edge, the Schuylkill, and a dozen landmarks, all in map units.
   `scripts/philly-map.py` makes it from OpenDataPhilly's "Philadelphia Neighborhoods" (Robert Cheetham, CC BY 4.0)
@@ -437,6 +439,16 @@ keep that name.)
   site in the area whose middle is nearest, within 5 km (`mapArea()`, as `a` on the site). `LANDMARK` and
   `LANDMARK_SAY` in `kids-corner.js` draw each one and say something about it; a tap on a "?" says how many more
   classes nearby it needs. (No Rocky statue: it's the film's character.)
+- **Surprises in every neighborhood.** Each map neighborhood that has a listing or a school in it (51 of them) has one
+  or two little Philly things hiding in it: a soft pretzel, water ice, a hoagie, a trolley, a rowhouse stoop, a mural,
+  a basketball hoop, a kite, a duck, a stoop cat, a bike, an apple tree, window flowers, a boombox, an open hydrant or
+  a pigeon (`SURPRISE_KINDS` and `surpriseHoods()` in `build.mjs`, as `surprises` in `kids-corner.json`: a
+  neighborhood's name, its middle, and its one or two kinds, picked by a hash of its id so they don't change from
+  build to build; two where it has two or more places). The first class in a neighborhood finds its first surprise,
+  a second listing there finds the second. They stand beside the neighborhood's middle once found; a second one
+  still hiding is a bobbing "?" (`.kc-surq`) that says to go to one more class there. A tap says what it is and
+  where it was found (`SURPRISE`, `SURPRISE_NAME` and `SURPRISE_SAY` in `kids-corner.js`). The tally under the map's
+  heading counts them beside the secret spots.
 - **Bulbs and the showdown.** Each program type is a family of bulbs (`SPECIES`: a bulb shape, something to wear,
   a special move), its glass tinted with the type's colour, and each program a member of it, varied by its id (eyes,
   mouth, freckles, shades). `drawBulb()` draws them; a lit bulb glows, and the class `off` puts its light out. The
@@ -1030,8 +1042,8 @@ Decisions that later features have to respect:
 
 The header has two groups that open (Programs, whose first item is `/all-programs/`, the page that sorts every
 listing by kind, and Schedule Builder, whose first is `/schedules/`, the page that introduces all the planners),
-then Suggestion Box and About as plain links, and the account button (the "Help the site keep going" button before
-accounts).
+then, for someone signed out, Account Features (see below), then Suggestion Box and About as plain links, and the
+account button (the "Help the site keep going" button before accounts).
 The groups are defined in `layout()` in `build.mjs` as a list of labels, a top link and items. Each is a
 `<details>` element, so it opens without scripts. On a wide screen with a mouse (`hover: hover`, from 1100px) the
 script opens a group on hover or keyboard focus and makes its label the link to the top page (`data-top`), so the
@@ -1047,12 +1059,34 @@ open), then Suggestion Box, About and the button, so a phone sees five lines rat
 The footer (`.foot`) is the sitemap, kept short: the wordmark (`src/static/logo-text.png`, the logo without the
 bulb; the pictures the planners make carry the same wordmark on a navy tab at their top left, `drawMark()` in
 `site.js`), one line and the "Help the site keep going" button, then
-three columns: Programs (the four kinds, then By School, By Neighborhood, By Type, By Day of Week), Schedule Builder
-(the three planners, My Calendar, Reminders by Email, My Profile) and About (The Story, Suggestion Box, Write a
-Review, For Program Managers, Contact, Privacy, Terms of Use), then the fine print with the two credit lines
+four columns: Programs (the four kinds, then By School, By Neighborhood, By Type, By Day of Week), Schedule Builder
+(the three planners, My Calendar, Reminders by Email, My Profile), Account Features (Calendar & Sharing, Parent
+Portal, Kid's Corner, and "Create a free account" for someone signed out) and About (The Story, Suggestion Box,
+Write a Review, For Program Managers, Contact, Privacy, Terms of Use), then the fine print with the two credit lines
 ("Created, managed, and meticulously vibe coded by …" and "Written, edited, and humanized by …"). Menu and footer
 items are in title case, and "After School" is two words when it names the thing (it is hyphenated only as an
 adjective: after-school programs).
+
+### Account Features
+
+A group of its own in the menu, for someone signed out (`featMenu` in `layout()`, `when-out nav-feat`; signed in,
+the Parent Portal and Kid's Corner buttons take its place): a page for each thing a free account does, made by
+`featPage()` in `build.mjs` (`FEATS()` lists them):
+
+- `/features/` ("What a free account does"): a card for each of the three, which is where the group's label goes on a
+  wide screen.
+- `/features/calendar/` (Calendar & Sharing): building the week, the days off and the summer; the whole year in one
+  calendar and on your phone; planning with a co-parent, sharing a week with one person, and sharing with a small group.
+- `/features/parent-portal/` (Parent Portal): the overview, your school and your kids (first names, grades, ages), the
+  to-do list of sign-ups, following and favorites, and that the kids' info is encrypted and the family's alone.
+- `/features/kids-corner/` (Kid's Corner): the "For kids" band and "How it works", the same as Kid's Corner shows
+  someone signed out. It runs no analytics (`quiet`), since it says nothing on Kid's Corner is counted.
+
+Each page uses the register page's rows and pictures (`accountArt()`, shared with `accountPage()`, plus a profile card,
+a to-do list, the days off and summer, and a lock drawn in `featArt()`), with "Free for every family" and the
+account button at the foot (for someone signed in, a button to the matching part of their account) and cards to the
+other two. They are in the sitemap and open to search engines. Sentences shared with the register page are the same
+editable sentences, so an edit to one shows on both.
 
 ## Signed up, or still to: ticks on the days-off plan and the to-do list
 
@@ -1876,13 +1910,16 @@ its own page.
 - **`/account/` is the Parent Portal, and where everything is changed.** It opens on an **Overview** (`#overview`,
   `paintOverview()`): a card for each place to start (Build your kids' week, Plan your days off, Update your profile,
   Manage your to-do list, Build your year calendar, Have your kids play, Plan your summer, Help the site keep going),
-  each with how far it has got from the plans kept in the account, then "What's new". The other tabs: Details (`#you`:
+  each with how far it has got from the plans kept in the account, then "What's new". Kid's Corner's card looks like
+  the others; its line says "Add your kids first", "2 classes to confirm", "Not started" (no child has picked a bulb
+  or met Eddie yet) or "Playing", from the same `passport` call the page makes. The other tabs: Details (`#you`:
   name, email address, mobile number, signing out and deleting), School & kids, Kid's Corner, Emails & following, and
   Plans & sharing. A program manager's account has no overview and opens on Details. Signed out, it is still where
   people log in.
 - **Getting there.** Signed in, the menu has "My Profile" as a plain link, then the yellow "Parent Portal" button (to
   the overview), then a Kid's Corner button with a little bulb. In the phone menu, Parent Portal, Kid's Corner and My
-  Profile are the first things listed. The footer's Schedule Builder column has "My Profile" as well.
+  Profile are the first things listed: Parent Portal as the big yellow button, Kid's Corner as a small pill under it,
+  so the portal leads. The footer's Schedule Builder column has "My Profile" as well.
 - **Changing the email address.** "Change my email address" under Your details asks for the new address
   (`email_start`), which is sent a 6-digit code, and then for the code (`email_finish`). Until the code is typed
   nothing changes. Then the account's address is replaced, every other device is signed out, a note goes to the old
