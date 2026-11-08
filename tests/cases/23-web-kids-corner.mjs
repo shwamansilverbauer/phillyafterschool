@@ -107,12 +107,12 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   await page.waitForSelector('.kc-avatar .kc-wardrobe');
   eq(await page.locator('.kc-wearbtn').count(), 16, 'everything there is to wear');
   eq(await page.locator('.kc-wearbtn:not(.locked)').count(), 2, 'two unlocked at level 2');
-  const cap = page.locator('.kc-wearbtn', { hasText: 'Cap' });
+  const cap = page.locator('.kc-wearbtn', { has: page.locator('b', { hasText: /^cap$/i }) });   // not the cape
   includes(flat(await cap.locator('.kc-lock').innerText()).toLowerCase(), 'level 3');
   await cap.click();
   includes(flat(await page.locator('.kc-avatar .kc-host .kc-eddie-say').innerText()), 'Reach level 3', 'Eddie says when it unlocks');
   eq(await cap.getAttribute('aria-pressed'), 'false', 'a locked thing can’t be worn');
-  const shades = page.locator('.kc-wearbtn', { hasText: 'Sunglasses' });
+  const shades = page.locator('.kc-wearbtn', { has: page.locator('b', { hasText: /^sunglasses$/i }) });
   await shades.click();
   eq(await shades.getAttribute('aria-pressed'), 'true');
   await page.locator('.kc-avatar .kc-big.go').click();
@@ -194,12 +194,21 @@ test('the showdown ranks favorites with no one hurt, which the profile then carr
   eq(await page.locator('.kc-show .kc-fighter .kc-bulb').count(), 2, 'two bulbs on the stage');
   matches(await page.locator('.kc-show').getAttribute('class'), /\bkc-ev-(race|glow|dance)\b/, 'a race, a glow-off or a dance-off');
   matches(flat(await page.locator('.kc-fight .kc-ask').innerText()), /race up the steps|glow-off|dance-off/i);
+  // Watch the contest (with reduced motion it passes quickly): the other comes second and cheers; no light goes out.
+  await page.evaluate(() => {
+    window.__kc = { second: '', said: '', off: 0 };
+    new MutationObserver(() => {
+      const s = document.querySelector('.kc-show .kc-fighter.second');
+      if (s && !window.__kc.second) { window.__kc.second = s.innerText; window.__kc.said = (s.querySelector('.kc-second') || {}).textContent || ''; }
+      window.__kc.off += document.querySelectorAll('.kc-show .kc-bulb.off').length;
+    }).observe(document.body, { subtree: true, childList: true, attributes: true });
+  });
   await page.locator('.kc-arena .kc-fighter', { hasText: wp.name }).click();
-  // The other comes second and cheers; no light goes out.
-  await page.waitForSelector('.kc-show .kc-fighter.second .kc-second', { timeout: 8000 });
-  includes(flat(await page.locator('.kc-show .kc-fighter.second').innerText()), program.name);
-  eq(await page.locator('.kc-show .kc-bulb.off').count(), 0, 'nobody knocked out');
   await page.waitForSelector('.kc-champ', { timeout: 15000 });
+  const watched = await page.evaluate(() => window.__kc);
+  includes(flat(watched.second).toLowerCase(), program.name.toLowerCase(), 'the other comes second');
+  matches(watched.said, /Good race!|So bright!|Great moves!/, 'and is cheered');
+  eq(watched.off, 0, 'nobody knocked out');
   includes(flat(await page.locator('.kc-champ').innerText()).toLowerCase(), wp.name.toLowerCase(), 'the winner is the champion');
   await page.waitForTimeout(600);   // the ranking saves
   const prof = await pat.okay('GET', 'profile');
