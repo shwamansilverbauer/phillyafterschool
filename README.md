@@ -1948,9 +1948,11 @@ Each new account sends one email to the site's contact address (`tell_owner()` a
 - **New Program Manager Signup**: the email address, name and the listing's name. It goes with the account's first
   claim, in place of the plain "Listing claimed" email, and says whether the claim stands or waits for your yes
   (then the subject ends "(claim needs your yes)"). A parent who later claims a listing gets this one as well.
-- An account that stops before the name step, or a manager who never claims, is picked up by the morning job
-  (`signup_catchup()`, run from `push_run`) once it is an hour old: the email then says "Name: not added yet" or
-  "Listing: none claimed yet".
+- An account that stops before the name step, or a manager who never claims, is picked up by the hourly job
+  (`signup_catchup()`, run from `push_run` on every run, in the morning window or not) once it is an hour old: the
+  email then says "Name: not added yet" or "Listing: none claimed yet". (It used to wait for a run inside the
+  morning window, and GitHub's hourly schedule often skips several hours, so a few days of these could arrive at
+  once.) The job's log says how many went, never who.
 
 `users.told` records which email went (0 none, 1 parent, 2 manager), so each is sent once. Accounts that existed
 before this was added were marked as told. The emails hold nothing about a child, and the privacy page says they

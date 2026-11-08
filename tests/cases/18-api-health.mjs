@@ -1,7 +1,7 @@
 // The health answer the hourly check reads: the database, the copies, the mail, and the key /edit/ publishes with.
 import fs from 'node:fs';
 import path from 'node:path';
-import { test, ok, eq, excludes } from '../lib/harness.mjs';
+import { test, ok, eq, excludes, someone } from '../lib/harness.mjs';
 
 // A key-shaped value made here, so nothing in the repository looks like a real token.
 const fakeKey = () => ['github', 'pat', 'x'.repeat(48)].join('_');
@@ -39,4 +39,17 @@ test('health: the publishing key is reported as working, with the days it has le
   h = await api().okay('GET', 'health');
   eq(h.editKey.ok, false); eq(h.editKey.why, 'not a key');
   fs.unlinkSync(keyFile); fresh();
+});
+
+test('the note to the owner about a new account goes out on any hourly run, not only in the morning', async ({ api, mail }) => {
+  const email = someone('late');
+  await api().signIn(email);   // the address proven, no name given yet
+  const r = await api().okay('POST', 'push_run', { told_age: -5 });   // test clock: now counts as an hour on
+  ok(r.told >= 1, 'notes sent: ' + JSON.stringify(r));
+  const start = Date.now();
+  let note = null;
+  while (!note && Date.now() - start < 4000) { note = mail.to('contact@phillyafterschool.org').find(m => /New Parent Account Signup/.test(m.Subject) && m.TextBody.includes(email)); if (!note) await new Promise(res => setTimeout(res, 50)); }
+  ok(note, 'the owner hears about it');
+  ok(note.TextBody.includes('Name: not added yet'));
+  eq((await api().okay('POST', 'push_run', { told_age: -5 })).told || 0, 0, 'once');
 });

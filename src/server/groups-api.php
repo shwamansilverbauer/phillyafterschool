@@ -2370,7 +2370,13 @@ switch ($method . ' ' . $action) {
     $today = $test && preg_match('/^\d{4}-\d{2}-\d{2}$/', str($in, 'today', 10)) ? str($in, 'today', 10) : today_ny();
     $clock = (new DateTime('now', new DateTimeZone('America/New_York')))->format('H:i');
     $open = ($clock >= PUSH_WINDOW[0] && $clock < PUSH_WINDOW[1]) || ($test && !empty($in['any']));
-    if (!$dry && !$open) out(array('ok' => true, 'ran' => false, 'why' => 'outside the morning'));
+    // New-account notes for the owner don't wait for the morning: every run sends those due (each account once), so
+    // they arrive an hour or so after the account, not all together the next morning the job happens to run in.
+    if (!$dry && !$open) {
+      $told = too_many('catchup:' . who(), 30, 3600) ? 0 : signup_catchup($test && isset($in['told_age']) ? (int) $in['told_age'] : 3600);
+      note('catchup:' . who());
+      out(array('ok' => true, 'ran' => false, 'why' => 'outside the morning', 'told' => $told));
+    }
     if (!$dry) {
       if (!($test && !empty($in['any'])) && (int) meta_get('push_ran') > now() - 240) out(array('ok' => true, 'ran' => false, 'why' => 'just ran'));
       if (!($test && !empty($in['any'])) && too_many('pushrun:' . who(), 12, 3600)) out(array('ok' => true, 'ran' => false, 'why' => 'asked too often'));
