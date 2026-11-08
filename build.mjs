@@ -2131,7 +2131,6 @@ function homePage() {
   <div class="starts">
     <div class="start">
       <div class="start-head">${who('parent')}<div><p class="kicker">${T(`Start here`)}</p> <h2>${T(`Parents`)}</h2></div></div>
-      <p class="when-in">${T(`Found what works with your child’s school? Put the year together.`)}</p>
       <div class="start-list">
         ${go(link(schedulesPath, 0), T(`Build a schedule`), T(`The school week, days off and the summer`), 'week')}
         ${GROUPS ? `<span class="when-out" style="display:contents">${go(link('register/', 0), T(`Create a free account`), T(`Keep every plan, and get the whole year in one calendar`), 'person')}</span>` : ''}

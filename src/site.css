@@ -2532,7 +2532,9 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 /* who's playing */
 .kc-pick,.kc-page,.kc-avatar,.kc-fight{width:100%;max-width:760px;margin:0 auto;padding:6px 0 40px;box-sizing:border-box}
 .kc-picktop{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.kc-kids{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin:20px 0}
+.kc-kids{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,220px));justify-content:center;gap:16px;margin:20px 0}
+.kc-pick .kc-host{justify-content:center}
+@media (min-width:720px){.kc-pick{padding-top:24px}.kc-pick .kc-kids{margin:34px 0 30px;gap:22px}}
 .kc-kidbtn{font:inherit;color:var(--kink);background:#fff;border:3px solid var(--kink);border-radius:26px;padding:16px 12px 14px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;box-shadow:0 6px 0 var(--kink);transition:transform .08s,box-shadow .08s}
 .kc-kidface{width:120px;display:block}
 .kc-kidbtn b{font-family:var(--title);font-weight:400;font-size:1.7rem;letter-spacing:.02em}
@@ -2708,26 +2710,37 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 @keyframes kc-twinkle{0%,100%{opacity:.2;scale:.6}50%{opacity:1;scale:1.15}}
 .kc-flame{transform-box:fill-box;transform-origin:50% 0;animation:kc-flame .25s ease-in-out infinite alternate}
 @keyframes kc-flame{from{scale:1 .8}to{scale:1 1.15}}
-/* Eddie's welcome: dots for the steps, Eddie big, one thing to look at, one big button (and Skip for a grown-up) */
-.kc-tour{display:flex;flex-direction:column;gap:6px;min-height:calc(100vh - 40px);min-height:calc(100dvh - 40px)}
+/* Eddie's welcome: dots for the steps, then one card in the middle of the screen: Eddie and what he says, one thing to
+   look at, one big button (and Skip for a grown-up). Everything in it is centred, on a phone and on a laptop. */
+.kc-tour{width:100%;max-width:760px;margin:0 auto;box-sizing:border-box;display:flex;flex-direction:column;gap:10px;padding:6px 0 24px;min-height:calc(100vh - 40px);min-height:calc(100dvh - 40px)}
 .kc-dots{display:flex;gap:8px;align-items:center}
 .kc-dots i{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.35);border:2.5px solid var(--kink)}
 .kc-dots i.done{background:#96C9FF}.kc-dots i.on{background:var(--kyellow);transform:scale(1.25)}
+.kc-tourcard{margin:auto 0;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.kc-tour .kc-tour-host{justify-content:center;margin:0}
 .kc-tour .kc-tour-host .kc-eddie-img{width:84px}
-.kc-tour .kc-tour-host .kc-eddie-say{font-size:1.2rem;max-width:30ch}
-.kc-tourshow{flex:1;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 14px;padding:8px 0;text-align:center}
+.kc-tour .kc-tour-host .kc-eddie-say{font-size:1.2rem;max-width:30ch;text-align:left}
+.kc-tourshow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 14px;width:100%;padding:4px 0}
 .kc-tourshow > .kc-bulb{width:min(104px,25vw)}
-.kc-tourshow .kc-spot1 b{color:#fff;text-shadow:0 2px 0 var(--kink);font-size:1.05rem}
 .kc-tourshow > .kc-bulb.big{width:min(200px,50vw)}
-.kc-tourshow .kc-pins{width:100%}
+.kc-tourshow .kc-pins{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;width:100%;max-width:560px}
+.kc-tourshow .kc-pins .kc-pincard{width:104px;box-sizing:border-box}
 .kc-tourshow .kc-say{width:100%;margin:0}
+.kc-tourshow .kc-spot1 b{color:#fff;text-shadow:0 2px 0 var(--kink);font-size:1.05rem}
 .kc-tour-big{width:min(220px,55vw);height:auto;filter:drop-shadow(0 6px 0 rgba(11,33,64,.35))}
 .kc-tour0 .kc-tour-big{animation:kc-eddie 3.2s ease-in-out infinite;transform-origin:50% 90%}
-.kc-tour-lvl{width:100%;margin:4px 0 0;font-family:var(--title);font-size:1.35rem;color:#fff;text-shadow:0 3px 0 var(--kink)}
+.kc-tour-lvl{width:100%;margin:2px 0 0;font-family:var(--title);font-size:1.35rem;color:#fff;text-shadow:0 3px 0 var(--kink)}
 .kc-tourvs{display:flex;align-items:center;justify-content:center;gap:10px;width:100%}
 .kc-tourvs .kc-bulb{width:min(120px,30vw)}.kc-tourvs .kc-bulb.big{width:min(190px,48vw)}
 .kc-tourvs .kc-vs{width:60px;height:60px;font-size:1.7rem}
+.kc-tour .kc-avacts{margin-top:4px;align-items:center}
 .kc-skip{font:inherit;font-weight:700;color:#fff;background:none;border:0;text-decoration:underline;padding:10px;cursor:pointer;opacity:.85}
+@media (min-width:720px){   /* a laptop: the card gets a frame, and a little more room */
+  .kc-tourcard{width:100%;max-width:640px;align-self:center;box-sizing:border-box;padding:30px 34px 26px;border-radius:34px;background:rgba(255,255,255,.07);border:3px solid rgba(255,255,255,.2);box-shadow:0 10px 0 rgba(11,33,64,.35)}
+  .kc-tour .kc-tour-host .kc-eddie-img{width:104px}
+  .kc-tour .kc-tour-host .kc-eddie-say{font-size:1.35rem}
+  .kc-tourshow{min-height:220px}
+}
 /* the map's secret spots: a ? cloud that bobs until it's found, the count, and the card that shows what was found */
 .kc-map .kc-secret{cursor:pointer}
 .kc-map .kc-secret > g{animation:kc-secret 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}

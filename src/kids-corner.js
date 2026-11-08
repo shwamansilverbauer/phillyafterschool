@@ -712,7 +712,8 @@
       var seen = {}; Object.keys(k.seen).forEach(function (f) { seen[f] = k.seen[f]; }); seen.intro = 1; k.seen.intro = 1; S.tour = null;
       save({ seen: seen }, function () { go('kid', 'pins'); });
     };
-    var say = function (t) { var e = eddie(t, 'kc-host kc-tour-host'); page.appendChild(e); return e; };
+    var card = el('div', 'kc-tourcard');   // one card in the middle of the screen, on a phone or a laptop
+    var say = function (t) { var e = eddie(t, 'kc-host kc-tour-host'); card.appendChild(e); return e; };
     var show = el('div', 'kc-tourshow');
     var acts = el('div', 'kc-avacts');
     var nameUp = k.name;
@@ -767,9 +768,10 @@
       show.appendChild(duo);
       acts.appendChild(btn('kc-big go', 'Let’s go!', finish));
     }
-    page.appendChild(show);
+    card.appendChild(show);
     if (step < TOUR_STEPS - 1) acts.appendChild(btn('kc-skip', 'Skip', skip));
-    page.appendChild(acts);
+    card.appendChild(acts);
+    page.appendChild(card);
     app.appendChild(page);
     if (step === 0) anim(page.querySelector('.kc-tour-big'), [{ transform: 'translateY(40%) scale(.5) rotate(-10deg)', opacity: 0 }, { transform: 'translateY(-6%) scale(1.06) rotate(4deg)', opacity: 1, offset: 0.7 }, { transform: 'none', opacity: 1 }], { duration: 700, easing: 'ease-out' });
   };
