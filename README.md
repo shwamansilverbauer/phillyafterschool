@@ -374,7 +374,12 @@ child, so it is built the other way round from the rest.
   for. The shareable picture (`drawShare()`, a canvas, like the week card) shows the stamps and the neighborhoods with
   no name and no map, and is never a link; the page itself has no link to share.
 - **Favorites.** The bracket pairs the child's distinct listings until one is left; the order they fell in is saved as
-  `fav`. `GET profile` carries `favorites: [{ name, fav }]` for the planners.
+  `fav`. `GET profile` carries `favorites: [{ name, fav }]`, and the accounts script hands them to each planner
+  (`favorites()` on `window.pasBoard`, `pasSummer` and `pasDaysOff`): Build your week shows the child's favorite
+  programs as chips under the search, and the summer and days-off choosers list a favorite camp or program first,
+  marked "★ Sam's favorite". Matching is by the child's first name, the way plans match.
+- **Kid reviews.** Each confirmed program in the grown-ups' corner links to the review form with the child's name and
+  grade filled in (see Reviews).
 - **Quiet.** No analytics, no recordings, nothing to Klaviyo, out of search (`quiet: true, noindex: true`), and no
   `track()` anywhere in `passport.js`. `tests/cases/17-api-passport.mjs` and `23-web-passport.mjs` cover it.
 
@@ -723,6 +728,13 @@ Reviews are approved before they appear. The form at `/review/` emails each revi
 ready-made entry at the bottom of the email. To publish one, paste that entry into
 `data/reviews.json` (inside the square brackets, entries separated by commas) and commit.
 To remove a review, delete its entry. Cards show the average and the reviews for each program.
+
+A review can be **in a child's words**: the parent types what the child said (from the Passport's grown-ups' corner,
+where each confirmed program has a "Review in Sam's words" link, or by switching on the form). The entry then carries
+`"kid": { "grade": "2", "name": "Sam" }`, with `name` only when the parent ticked "show the first name"; without it the
+review is signed "A 2nd grader at Nebinger". Kids' reviews are shown beside parents' on the program's page behind a
+Parents | Kids switch (`reviewsBlock()`), never make the rating (the average and the count are parents' reviews only),
+and are left out of the page's structured data. The build checks the grade and the name's shape.
 
 ### Asking for reviews
 

@@ -990,12 +990,44 @@
         if (!qs.school && !rMine && d.user.school && all(rSchool, 'option').some(function (o) { return o.value === d.user.school; })) rSchool.value = d.user.school;
       }).then(null, function () { /* they can type them */ });
     }
+    // In a child's words: the link from the Passport says so (?kid=<first name>&grade=), or the parent switches to it.
+    var kidBox = review.querySelector('#rv-kid'), kidFlag = review.querySelector('#r-kid'), kidOn = review.querySelector('#rv-kid-on'), kidOff = review.querySelector('#rv-kid-off');
+    var firstP = review.querySelector('.rv-first-parent'), firstK = review.querySelector('.rv-first-kid'), comment = review.querySelector('[name="comment"]');
+    var commentHint = comment && comment.parentNode ? comment.parentNode.querySelector('.hint') : null, plainHint = commentHint ? commentHint.textContent : '';
+    var setKid = function (on) {
+      if (!kidBox) return;
+      kidBox.hidden = !on; kidFlag.value = on ? 'yes' : '';
+      if (kidOn) kidOn.hidden = on; if (kidOff) kidOff.hidden = !on;
+      if (firstP) firstP.hidden = on; if (firstK) firstK.hidden = !on;
+      var kn = review.querySelector('[name="kidname"]'), kg = review.querySelector('[name="kidgrade"]');
+      if (kg) kg.required = on;
+      if (commentHint) commentHint.textContent = on ? 'What did ' + (kn && kn.value ? kn.value : 'your child') + ' say about it? Their words, as they said them.' : plainHint;
+    };
+    if (kidBox) {
+      if (qs.kid) {
+        var kn0 = review.querySelector('[name="kidname"]'), kg0 = review.querySelector('[name="kidgrade"]');
+        if (kn0) kn0.value = String(qs.kid).replace(/[^A-Za-z\u00C0-\u024F\u1E00-\u1EFF '’.-]/g, '').slice(0, 20);
+        if (kg0 && qs.grade && all(kg0, 'option').some(function (o) { return o.value === qs.grade; })) kg0.value = qs.grade;
+        setKid(true);
+      }
+      if (kidOn) kidOn.addEventListener('click', function () { setKid(true); var kg = review.querySelector('[name="kidgrade"]'); if (kg) kg.focus(); });
+      if (kidOff) kidOff.addEventListener('click', function () { setKid(false); });
+      var knIn = review.querySelector('[name="kidname"]'); if (knIn) knIn.addEventListener('input', function () { if (kidFlag.value === 'yes') setKid(true); });
+    }
     review.addEventListener('submit', function () {
       var s = review.querySelector('input[name="stars"]:checked');
       RV.done(review.querySelector('[name="program"]').value);   // this device won't ask about it again
-      track({ event: 'pas_review_submit', program_id: review.querySelector('[name="program"]').value, school: review.querySelector('[name="school"]').value, stars: s ? s.value : '' });
+      track({ event: 'pas_review_submit', program_id: review.querySelector('[name="program"]').value, school: review.querySelector('[name="school"]').value, stars: s ? s.value : '', kid: kidFlag && kidFlag.value === 'yes' ? 'yes' : 'no' });   // whether it is in a child's words, nothing about the child
     });
   }
+  // On a program's page, parents' and kids' reviews side by side: a switch between the two lists.
+  all(document, '.rv-tabs').forEach(function (tabs) {
+    all(tabs, '.tab').forEach(function (t) {
+      t.addEventListener('click', function () {
+        all(tabs, '.tab').forEach(function (x) { x.setAttribute('aria-selected', String(x === t)); var panel = document.getElementById(x.getAttribute('aria-controls')); if (panel) panel.hidden = x !== t; });
+      });
+    });
+  });
 
   // Copy a canvas to the clipboard as one PNG, with a line saying where to make one.
   // Safari can hold the picture and the line as two things, so both paste into a message. Chrome holds one thing:
@@ -1551,6 +1583,13 @@
   }
   function newKid(name) { return { name: cleanName(name), now: emptyBoard(), next: emptyBoard(), teacher: '', cardNote: '', off: {}, offOk: {}, offWhat: {}, sumWhat: {}, age: '', offNote: '', prices: {}, groups: [], sum: null }; }
   function possessive(name) { return name + '’s'; }
+  // Each child's favorites from their Passport (the bracket's ranking, "p:<program>" and "c:<camp>" keys), by first
+  // name, handed over by the accounts script once the profile is read. The planners offer them first.
+  var favsByName = {};
+  function setFavs(list) { favsByName = {}; (list || []).forEach(function (x) { if (x && x.name) favsByName[String(x.name).toLowerCase()] = x.fav || []; }); }
+  function favsOf(kid) { var n = kid && (kid.name || kid.n); return n ? favsByName[String(n).toLowerCase().split(/\s+/)[0]] || favsByName[String(n).toLowerCase()] || [] : []; }
+  function isFav(kid, key) { return favsOf(kid).indexOf(key) > -1; }
+  function favFirst(kid, prefix, ids) { var f = favsOf(kid); if (!f.length) return ids; return ids.slice().sort(function (a, b) { var ia = f.indexOf(prefix + a), ib = f.indexOf(prefix + b); return (ia < 0 ? 999 : ia) - (ib < 0 ? 999 : ib); }); }
   // A pick is "program.school", optionally followed by "~" and a class or short note.
   function entryKey(e) { var i = e.indexOf('~'); return i < 0 ? e : e.slice(0, i); }
   function entryNote(e) { var i = e.indexOf('~'); return i < 0 ? '' : e.slice(i + 1); }
@@ -2139,12 +2178,12 @@
           // the camps, for this child's age when one is set
           var age = me.age, fits = function (id) { return fitsAge(me, id); };
           var rest = ids.filter(function (id) { return id !== v && mineIds.indexOf(id) < 0; });   // the child's own programs are shown above
-          var runs = rest.filter(function (id) { return d.camps.indexOf(id) > -1 && fits(id); });
+          var runs = favFirst(me, 'p:', rest.filter(function (id) { return d.camps.indexOf(id) > -1 && fits(id); }));
           var tooOld = rest.filter(function (id) { return d.camps.indexOf(id) > -1 && !fits(id); });
           var quiet = rest.filter(function (id) { return d.camps.indexOf(id) < 0 && fits(id); });
           ch.appendChild(el('p', 'sum-choose-h', (d.camps.length ? (d.camps.length === 1 ? '1 program has posted a camp for this day' : d.camps.length + ' programs have posted a camp for this day') : 'No listed program has posted a camp for this day yet') + (age && d.camps.length ? (tooOld.length ? ', ' + (runs.length + mineIds.filter(function (id) { return d.camps.indexOf(id) > -1 && fits(id); }).length + (v && d.camps.indexOf(v) > -1 && fits(v) ? 1 : 0)) + ' for age ' + age : ', all for age ' + age) : '')));
           var grid = el('div', 'sum-opts');
-          runs.forEach(function (id) { grid.appendChild(option(id, d, [od.programs[id].hood, 'Camp posted'].filter(Boolean).join(' · '))); });
+          runs.forEach(function (id) { grid.appendChild(option(id, d, [isFav(me, 'p:' + id) ? '★ ' + possessive(me.name || 'their') + ' favorite' : '', od.programs[id].hood, 'Camp posted'].filter(Boolean).join(' · '))); });
           ch.appendChild(grid);
           if (tooOld.length) {
             var mo = el('details', 'sum-more');
@@ -2469,7 +2508,8 @@
       year: od.year, days: days.map(function (d) { return d.d; }), programs: od.programs, track: track, maxKids: MAX_KIDS, newKid: newKid,
       rosters: function () { return r; },
       save: function () { store('pas-rosters', JSON.stringify(r)); },
-      redraw: function () { openDay = ''; draw(); }
+      redraw: function () { openDay = ''; draw(); },
+      favorites: function (list) { setFavs(list); draw(); }   // from the Passport, by first name
     };
     // An email's "See who's open" button names the day: open it. A day-off page's "Add it to your plan for …" names
     // the day and the program (?add=): that program goes on that day for the child in view, and the address is
@@ -2537,7 +2577,17 @@
       shared: function () { return shared; },
       save: function () { store('pas-rosters', JSON.stringify(rosters)); },
       emptyBoard: emptyBoard, newKid: newKid, maxKids: MAX_KIDS,
-      redraw: function () { weekFull.key = ''; render(); }   // after the share-groups script changes a roster (a week put back from a profile): no dragon for that
+      redraw: function () { weekFull.key = ''; render(); },   // after the share-groups script changes a roster (a week put back from a profile): no dragon for that
+      favorites: function (list) { setFavs(list); render(); }   // from the Passport, by first name
+    };
+    // The child's favorites from their Passport (the bracket's ranking), offered first when a program is added.
+    var drawFavs = function (kid) {
+      var box = $('#add-favs'); if (!box) return;
+      var ids = favsOf(kid).filter(function (k) { return k.indexOf('p:') === 0 && data.programs[k.slice(2)]; }).map(function (k) { return k.slice(2); }).slice(0, 6);
+      box.textContent = ''; box.hidden = !ids.length || !!shared;
+      if (box.hidden) return;
+      box.appendChild(el('span', 'fav-row-h', possessive(kid.name) + ' favorites:'));
+      ids.forEach(function (id) { var c = el('button', 'chip-btn', data.programs[id].name); c.type = 'button'; c.addEventListener('click', function () { pickAdd(id, '', 'favorite'); }); box.appendChild(c); });
     };
     var syncRoller = null;   // set further down, by the themed-week section
     var savedNote = function () { return storageOk ? 'Saved on this device.' : 'Your browser is blocking saved data, so this roster will be gone when you close the page. Make a card to keep a copy.'; };
@@ -2666,6 +2716,7 @@
         : 'Nothing on the current roster yet. Search for a program above, or tap Browse, and pick its days.';
       if (document.activeElement !== nameInput) nameInput.value = kid.name;
       if (!kid.name && $('#kid-edit')) $('#kid-edit').open = true;
+      drawFavs(kid);
       if (maker) {
         if (document.activeElement !== teacherBox) teacherBox.value = kid.teacher || '';
         if (document.activeElement !== noteBox) noteBox.value = kid.cardNote || '';
@@ -3703,7 +3754,7 @@
       var c = sd.camps[id], b = el('button', 'sum-opt');
       b.type = 'button';
       b.appendChild(el('b', null, c.n));
-      b.appendChild(el('small', null, [c.hood, c.h, price(c), dates(c)].filter(Boolean).join(' · ')));
+      b.appendChild(el('small', null, [isFav(kid(), 'c:' + id) ? '★ ' + possessive(kid().name || 'their') + ' favorite' : '', c.hood, c.h, price(c), dates(c)].filter(Boolean).join(' · ')));
       b.addEventListener('click', function () { openWeek = -1; toggle(id, i, 'week_list'); });
       return b;
     };
@@ -3826,7 +3877,7 @@
           wi.appendChild(wiLab); wi.appendChild(wiRow); wi.appendChild(el('span', 'hint', 'What you write stays on this device.'));
           og.appendChild(wi); ownBox.appendChild(og); ch.appendChild(ownBox);
           var open = ids.filter(function (id) { return mine.indexOf(id) < 0 && fitsAge(sd.camps[id]); });
-          var runs = open.filter(function (id) { return sd.camps[id].w.indexOf(i) > -1; });
+          var runs = favFirst(me, 'c:', open.filter(function (id) { return sd.camps[id].w.indexOf(i) > -1; }));
           var undated = open.filter(function (id) { return !sd.camps[id].w.length; });
           ch.appendChild(el('p', 'sum-choose-h', runs.length ? (runs.length === 1 ? '1 camp lists this week' : runs.length + ' camps list this week') + (age ? ' for age ' + age : '') : 'No camp' + (age ? ' for age ' + age : '') + ' lists this week yet'));
           var grid = el('div', 'sum-opts'); runs.forEach(function (id) { grid.appendChild(option(id, i)); }); ch.appendChild(grid);
@@ -4140,7 +4191,8 @@
       year: sd.year, weeks: sd.weeks.map(function (w) { return w.d; }), camps: sd.camps, track: track, maxKids: MAX_KIDS, newKid: newKid,
       rosters: function () { return r; },
       save: function () { store('pas-rosters', JSON.stringify(r)); },
-      redraw: function () { openWeek = -1; draw(); }
+      redraw: function () { openWeek = -1; draw(); },
+      favorites: function (list) { setFavs(list); draw(); }   // from the Passport, by first name
     };
     draw();
     if (!storageOk) say('This browser is blocking saved data, so your summer won’t be here when you come back. Copy or print it before you leave.');

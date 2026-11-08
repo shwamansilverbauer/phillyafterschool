@@ -79,3 +79,30 @@ test('a proposed change from a listing’s manager reaches the owner; the manage
   eq((await manager.okay('POST', 'mgr_mail', { on: true })).mail, true);
   eq((await manager.okay('GET', 'claims')).mail, true);
 });
+
+test('a review in a kid’s words: the form’s handler emails the owner a ready-made entry with the grade, and the name only when shown', async ({ site, mail }) => {
+  const form = o => new URLSearchParams(o).toString();
+  const post = o => fetch(`${site.base}/review/send.php`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: form(o), redirect: 'manual' });
+  const { programs, schools } = await import('../lib/data.mjs');
+  const p = programs()[0].id, s = schools()[0].id;
+  const base = { program: p, school: s, stars: '5', comment: 'Chess club on Tuesdays is the best part of my week, and the snack is pretzels.', name: 'Pat', email: 'pat@example.test', firsthand: 'yes' };
+  // A kid's review needs the grade.
+  const noGrade = await post({ ...base, kid: 'yes', kidname: 'Sam' });
+  eq(noGrade.status, 400); includes(await noGrade.text(), 'grade');
+  // With the name shown.
+  mail.clear();
+  const r1 = await post({ ...base, kid: 'yes', kidname: 'Sam', kidgrade: '2', kidshow: 'yes' });
+  eq(r1.status, 303, 'sent: on to the thanks page');
+  const m1 = await mail.waitFor('contact@phillyafterschool.org', /Review/);
+  includes(m1.TextBody, "IN A KID'S WORDS"); includes(m1.TextBody, '"kid": {'); includes(m1.TextBody, '"grade": "2"'); includes(m1.TextBody, '"name": "Sam"');
+  // Without the name shown: the grade only.
+  const r2 = await post({ ...base, email: 'pat2@example.test', kid: 'yes', kidname: 'Sam', kidgrade: 'K' });
+  eq(r2.status, 303);
+  const m2 = (await mail.to('contact@phillyafterschool.org')).at(-1);
+  includes(m2.TextBody, '"grade": "K"'); excludes(m2.TextBody, '"name": "Sam"');
+  // A parent's review carries no "kid" at all.
+  const r3 = await post({ ...base, email: 'pat3@example.test' });
+  eq(r3.status, 303);
+  const m3 = (await mail.to('contact@phillyafterschool.org')).at(-1);
+  excludes(m3.TextBody, '"kid"'); includes(m3.TextBody, 'New review, waiting');
+});

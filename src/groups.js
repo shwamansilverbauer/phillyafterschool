@@ -2856,6 +2856,7 @@
         loaded = true;
         if (!p.ok) { note = 'Couldn’t reach your profile just now.'; bad = true; draw(); return; }
         seedKids(p.kids, plan);
+        if (plan.favorites) plan.favorites(p.favorites || []);
         kept = p[K.field] || null;
         var link = ros()[K.flag];
         if (link && !kept) { ros()[K.flag] = null; ros()[OFF] = 1; plan.save(); }                   // taken out of the profile somewhere else: it stays out here too
@@ -3073,6 +3074,7 @@
     var reconcile = function (p) {
       profile = p;
       adoptSchool(p.school, schoolName(p.school)); adoptGrades(p.grades); adoptAges(p.ages);
+      if (board.favorites) board.favorites(p.favorites || []);
       seedKids(p.kids, board);
       var changed = false;
       board.rosters().kids.forEach(function (k) {
@@ -3351,7 +3353,7 @@
         if (changed) board.save();
         if (!me) { draw(); return; }
         call('profile').then(function (p) {
-          if (p.ok) reconcile({ school: p.school || '', grades: p.grades || [], ages: p.ages || [], weeks: p.weeks || [] });
+          if (p.ok) reconcile({ school: p.school || '', grades: p.grades || [], ages: p.ages || [], weeks: p.weeks || [], favorites: p.favorites || [] });
           draw();
           syncNow();
           autoKeep();

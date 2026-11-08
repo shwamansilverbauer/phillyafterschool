@@ -412,6 +412,10 @@ reviews.forEach((r, i) => {
   if (!Number.isInteger(r.stars) || r.stars < 1 || r.stars > 5) errors.push(`${at}: stars must be a whole number from 1 to 5`);
   if (!r.name || !r.comment) errors.push(`${at}: needs a name and a comment`);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(r.date || '')) errors.push(`${at}: date must be YYYY-MM-DD`);
+  if (r.kid !== undefined) {   // in a child's words: the grade, and the first name only when the parent said to show it
+    if (!r.kid || typeof r.kid !== 'object' || !GRADES.includes(String(r.kid.grade))) errors.push(`${at}: "kid" needs a grade from ${GRADES.join(', ')}`);
+    else if (r.kid.name !== undefined && (typeof r.kid.name !== 'string' || !/^[\p{L}\p{M}][\p{L}\p{M} '’.-]{0,19}$/u.test(r.kid.name))) errors.push(`${at}: "kid.name" is a first name (letters only, up to 20), or left out`);
+  }
 });
 for (const [id, e] of Object.entries(copyEdits)) {
   if (!e || typeof e.now !== 'string') errors.push(`data/copy.json: entry "${id}" needs a "now" with the new wording (an empty one takes the sentence off the page)`);
@@ -816,7 +820,12 @@ function icsFile(p, d) {
 
 // ---------- reviews ----------
 const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
-const reviewsFor = id => reviews.filter(r => r.programId === id).sort((a, b) => b.date.localeCompare(a.date));
+const allReviewsFor = id => reviews.filter(r => r.programId === id).sort((a, b) => b.date.localeCompare(a.date));
+const reviewsFor = id => allReviewsFor(id).filter(r => !r.kid);        // parents' reviews: the rating and the count
+const kidReviewsFor = id => allReviewsFor(id).filter(r => !!r.kid);    // in a child's words, submitted by their parent
+const gradeWord = g => g === 'PK' ? 'pre-K' : g === 'K' ? 'kindergarten' : /^\d+$/.test(g) ? `${g}${{ 1: 'st', 2: 'nd', 3: 'rd' }[g] || 'th'} grade` : g;
+// How a kid's review is signed: the first name when the parent chose to show it, otherwise "a 2nd grader".
+const kidBy = r => r.kid.name ? `${r.kid.name}, ${gradeWord(r.kid.grade)}` : `A ${gradeWord(r.kid.grade).replace(/ grade$/, '')} grader`.replace('A kindergarten grader', 'A kindergartner').replace('A pre-K grader', 'A pre-K kid');
 const monthYear = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 const schoolShort = id => (schools.find(s => s.id === id) || {}).shortName || '';
 const BOARD_DAYS = [['mon', 'Mon'], ['tue', 'Tue'], ['wed', 'Wed'], ['thu', 'Thu'], ['fri', 'Fri']];
@@ -840,7 +849,15 @@ const registerText = p => {
 };
 const datesHtml = (p, depth) => upcomingDates(p).map(d => `<span class="cal" data-date="${d.date}"><b>${shortDate(d.date)}:</b> ${esc(d.label)}. ${PREVIEW ? '' : `<a href="${link('cal/' + p.id + '-' + d.date + '.ics', depth)}" data-track="calendar">Add to calendar</a> `}<a href="${esc(gcalUrl(p, d))}" target="_blank" rel="noopener" data-track="calendar">${PREVIEW ? 'Add to Google Calendar' : 'Google Calendar'}</a></span>`).join('');
 const average = revs => revs.reduce((a, x) => a + x.stars, 0) / revs.length;
-const reviewItems = revs => revs.map(x => `<li><span class="stars" role="img" aria-label="${x.stars} out of 5 stars">${stars(x.stars)}</span><p>${esc(x.comment)}</p><span class="by">${esc(x.name)}, ${esc(schoolShort(x.school))} parent, ${monthYear(x.date)}</span></li>`).join('');
+const reviewItems = revs => revs.map(x => `<li><span class="stars" role="img" aria-label="${x.stars} out of 5 stars">${stars(x.stars)}</span><p>${esc(x.comment)}</p><span class="by">${x.kid ? `${esc(kidBy(x))} at ${esc(schoolShort(x.school))}` : `${esc(x.name)}, ${esc(schoolShort(x.school))} parent`}, ${monthYear(x.date)}</span></li>`).join('');
+// The reviews on a program's page: parents' and kids' side by side when both exist, a switch between them.
+const reviewsBlock = (revs, kids, id) => {
+  if (!kids.length) return `<ul class="revlist">${reviewItems(revs)}</ul>`;
+  if (!revs.length) return `<ul class="revlist revlist-kids">${reviewItems(kids)}</ul>`;
+  return `<div class="rv-tabs" role="tablist" aria-label="Whose reviews"><button type="button" class="tab" role="tab" aria-selected="true" aria-controls="rv-parents-${esc(id)}" id="rv-tab-p-${esc(id)}">Parents (${revs.length})</button><button type="button" class="tab" role="tab" aria-selected="false" aria-controls="rv-kids-${esc(id)}" id="rv-tab-k-${esc(id)}">Kids (${kids.length})</button></div>
+    <ul class="revlist" id="rv-parents-${esc(id)}" role="tabpanel" aria-labelledby="rv-tab-p-${esc(id)}">${reviewItems(revs)}</ul>
+    <ul class="revlist revlist-kids" id="rv-kids-${esc(id)}" role="tabpanel" aria-labelledby="rv-tab-k-${esc(id)}" hidden>${reviewItems(kids)}</ul>`;
+};
 // A source named by both the listing and one of its school entries is linked once.
 const sourceLinks = (list, p = null, school = null) => { const own = p ? ownHosts(p) : null; const seen = new Set(); return list.filter(s => !seen.has(s.url) && seen.add(s.url)).map(s => `<a href="${esc(own?.has(bareHost(s.url)) ? outUrl(s.url, { type: 'source', school, program: p }) : s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join(''); };
 const programPath = p => `programs/${p.id}/`;
@@ -1489,7 +1506,7 @@ function programPage(p) {
   const D = 2;
   const served = servedBy(p);
   const r = p.register;
-  const revs = reviewsFor(p.id);
+  const revs = reviewsFor(p.id), kidRevs = kidReviewsFor(p.id);
   const avg = revs.length ? average(revs) : 0;
   const address = programAddress(p);
   const regUrl = r.how === 'online' ? outUrl(r.url, { type: 'register', program: p }) : null;
@@ -1607,9 +1624,9 @@ ${schoolRows}
     <p>${T(`Does it serve a school that isn’t shown here?`)} <a href="${link('suggest/', D)}">${T(`Tell us.`)}</a></p>
   </section>`}
   <section class="section" id="reviews" data-jump-to="Reviews" data-rv-program="${esc(p.id)}">
-    <h2>${T(`What parents say`)}</h2>
-    ${revs.length ? `<p><span class="stars" aria-hidden="true">${stars(Math.floor(avg + 0.25))}</span> <b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'review' : 'reviews'}</p>
-    <ul class="revlist">${reviewItems(revs)}</ul>` : `<p>${T(`No reviews yet. If your child has been, a few sentences help the next family choose.`)}</p>`}
+    <h2>${kidRevs.length ? T(`What parents and kids say`) : T(`What parents say`)}</h2>
+    ${revs.length ? `<p><span class="stars" aria-hidden="true">${stars(Math.floor(avg + 0.25))}</span> <b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'parent' : 'parents'}${kidRevs.length ? `, and ${kidRevs.length} ${kidRevs.length === 1 ? 'review' : 'reviews'} in a kid’s own words` : ''}</p>` : kidRevs.length ? `<p>${kidRevs.length} ${kidRevs.length === 1 ? 'review' : 'reviews'} in a kid’s own words, none from a parent yet.</p>` : ''}
+    ${revs.length || kidRevs.length ? reviewsBlock(revs, kidRevs, p.id) : `<p>${T(`No reviews yet. If your child has been, a few sentences help the next family choose.`)}</p>`}
     <p class="rv-yours" hidden></p>
     <p class="actions"><a class="btn" href="${reviewUrl}" data-track="review">${revs.length ? T(`Write a review`) : T(`Write the first review`)}</a></p>
     <p class="hint">${T(`Reviews are first-hand notes from parents and caregivers. Each one is read before it’s posted.`)}</p>
@@ -4429,6 +4446,7 @@ function boardPage() {
           <button type="button" class="btn adder-browse" id="explore-toggle" aria-expanded="false" aria-controls="explore">${T(`Browse`)}</button>
         </div>
         <ul id="add-list" class="finder-list" role="listbox" aria-label="Programs" hidden></ul>
+        <div class="fav-row" id="add-favs" hidden></div>
       </div>
       <div class="explore" id="explore" hidden>
         <div class="explore-head"><b>${T(`Not sure what to search for? Browse by what it is.`)}</b><button type="button" class="clear" id="explore-close">Close</button></div>
@@ -4598,7 +4616,24 @@ function reviewPage() {
         <span class="hint">${T(`Never shown. Only used if we need to confirm something.`)} <a href="${link('privacy/', 1)}">${T(`How we handle it.`)}</a></span>
       </div>
     </div>
-    <label class="check"><input type="checkbox" name="firsthand" value="yes" required><span>${T(`This is my own experience as a parent or caregiver.`)}</span></label>
+    <fieldset class="field rv-kid" id="rv-kid" hidden>
+      <legend>${T(`In your child’s words`)}</legend>
+      <span class="hint">${T(`Your child said it, you’re typing it. It’s shown as a kid’s review, with your child’s first name and grade, or just the grade.`)}</span>
+      <input type="hidden" name="kid" id="r-kid" value="">
+      <div class="pair">
+        <div class="field">
+          <label for="r-kidname">${T(`Child’s first name`)}</label>
+          <input id="r-kidname" name="kidname" type="text" maxlength="20" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="r-kidgrade">${T(`Grade`)}</label>
+          <select id="r-kidgrade" name="kidgrade"><option value="">${T(`Choose`)}</option>${GRADES.map(g => `<option value="${g}">${esc(gradeWord(g))}</option>`).join('')}</select>
+        </div>
+      </div>
+      <label class="check"><input type="checkbox" name="kidshow" value="yes" checked><span>${T(`Show the first name with the review (otherwise it says “a 2nd grader”).`)}</span></label>
+    </fieldset>
+    <p class="hint rv-kid-switch"><button type="button" class="linklike" id="rv-kid-on">${T(`Writing down what your kid said instead?`)}</button><button type="button" class="linklike" id="rv-kid-off" hidden>${T(`Back to a parent’s review`)}</button></p>
+    <label class="check"><input type="checkbox" name="firsthand" value="yes" required><span class="rv-first-parent">${T(`This is my own experience as a parent or caregiver.`)}</span><span class="rv-first-kid" hidden>${T(`These are my own child’s words, and I’m their parent or caregiver.`)}</span></label>
     <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
       <label for="r-company">Leave this blank</label>
       <input id="r-company" name="company" type="text" tabindex="-1" autocomplete="off">
@@ -4610,7 +4645,7 @@ function reviewPage() {
     <ul class="rules">
       <li>${T(`First-hand only. Write about what your own family experienced.`)}</li>
       <li>${T(`Be specific and fair. Details help more than adjectives.`)}</li>
-      <li>${T(`No names of children or individual staff.`)}</li>
+      <li>${T(`No names of other children or of individual staff.`)}</li>
       <li>${T(`Programs can’t review themselves.`)}</li>
     </ul>
     <p class="hint">${T(`Reviews show your first name and school, and appear after they’ve been read. Nobody pays to have a review posted or removed.`)}</p>
@@ -4637,6 +4672,7 @@ $TO = ${JSON.stringify(cfg.contactEmail)};
 $SITE = ${JSON.stringify(cfg.siteName)};
 $PROGRAMS = ${phpList(programs.map(p => p.id))};
 $SCHOOLS = ${phpList(schools.map(s => s.id))};
+$GRADES = ${phpList(GRADES)};
 
 function fail($msg, $code) {
   http_response_code($code);
@@ -4688,20 +4724,37 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 if (field('firsthand', 5) !== 'yes') {
   fail('Please confirm this is your own experience.', 400);
 }
+// In a child's words: the grade is needed, the first name only when the parent chose to show it.
+$kid = null;
+if (field('kid', 5) === 'yes') {
+  $grade = one_line(field('kidgrade', 4));
+  if (!in_array($grade, $GRADES, true)) {
+    fail('Please choose your child’s grade.', 400);
+  }
+  $kid = array('grade' => $grade);
+  $kidName = one_line(field('kidname', 20));
+  if (field('kidshow', 5) === 'yes' && $kidName !== '' && preg_match('/^[\\p{L}\\p{M}][\\p{L}\\p{M} \\'’.-]{0,19}$/u', $kidName)) {
+    $kid['name'] = $kidName;
+  }
+}
 if (substr_count(strtolower($comment), 'http') > 1) {
   fail('Reviews cannot include links. Please remove them and try again.', 400);
 }
 
-$entry = json_encode(array(
+$record = array(
   'programId' => $program,
   'school' => $school,
   'name' => $name,
   'stars' => $stars,
   'comment' => trim(preg_replace('/\\s+/', ' ', $comment)),
   'date' => date('Y-m-d'),
-), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+);
+if ($kid !== null) {
+  $record['kid'] = $kid;
+}
+$entry = json_encode($record, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-$body = "New review, waiting for your approval.\\n\\n"
+$body = ($kid !== null ? "New review IN A KID'S WORDS (" . (isset($kid['name']) ? $kid['name'] . ', ' : 'name not shown, ') . 'grade ' . $kid['grade'] . "), waiting for your approval.\\n\\n" : "New review, waiting for your approval.\\n\\n")
   . "Program: $program\\n"
   . "School: $school\\n"
   . "Stars: $stars\\n"

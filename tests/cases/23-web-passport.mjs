@@ -102,3 +102,42 @@ test('the bracket ranks favorites, which the profile then carries for the planne
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
 });
+
+test('favorites from the passport are offered first in the planners: the week builder, the days off, the summer', async (ctx) => {
+  const b = await ctx.browser();
+  const pat = ctx.api().as(someone('ppf'), 'Pat', 'Lee');
+  const { program, school } = pickupPair();
+  const { twoCamps, dayOffProgram } = await import('../lib/data.mjs');
+  const { ids } = twoCamps(); const off = dayOffProgram();
+  await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '2' }] });
+  const y = (await pat.okay('GET', 'passport')).year;
+  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school }, { k: 'p:' + off.id, kind: 'off', y }, { k: 'c:' + ids[1], kind: 'summer', y }], fav: ['c:' + ids[1], 'p:' + off.id, 'p:' + program.id] });
+  // The board names the child Sam, so Sam's favorites show under the search.
+  await pat.okay('POST', 'week_save', { week: { name: 'Sam', now: Object.fromEntries(DAYS.map(d => [d, []])), next: Object.fromEntries(DAYS.map(d => [d, []])) } });
+  const t = await b.context(ctx.site, { sid: pat.cookie });
+  const page = await t.open('/board/');
+  await page.waitForFunction(() => (document.querySelector('#board-name') || {}).value === 'Sam', null, { timeout: 8000 });
+  await page.waitForSelector('#add-favs:not([hidden])', { timeout: 8000 });
+  const favRow = flat(await page.locator('#add-favs').innerText());
+  includes(favRow, 'Sam’s favorites'); includes(favRow, program.name); includes(favRow, off.name);
+  await page.locator('#add-favs button', { hasText: program.name }).click();
+  await page.waitForSelector('#add-panel:not([hidden])');
+  includes(flat(await page.locator('#add-panel').innerText()), program.name, 'a tap on a favorite starts adding it');
+  // The summer planner marks the favorite camp and lists it first in a week it runs.
+  const sum = await t.open('/summer-schedule/');
+  await sum.waitForSelector('#sum-weeks .sum-add');
+  await sum.waitForFunction(() => /Sam’s summer/.test((document.querySelector('#sum-count') || {}).textContent || ''), null, { timeout: 8000 });   // the child comes from the profile's kids list
+  await sum.waitForTimeout(1500);   // the favorites arrive with the profile and redraw once
+  const weeks = await sum.locator('#sum-weeks .sum-add').count();
+  let marked = false;
+  for (let i = 0; i < Math.min(weeks, 12) && !marked; i++) {
+    await sum.locator('#sum-weeks .sum-add').nth(i).click();
+    await sum.waitForSelector('#sum-weeks .sum-choose', { timeout: 5000 });
+    const opts = await sum.locator('#sum-weeks .sum-choose .sum-opts:not(.own-opts) .sum-opt').allInnerTexts();
+    if (opts.some(o => /favorite/.test(o))) { marked = true; ok(/favorite/.test(opts[0]), 'the favorite comes first: ' + flat(opts[0])); }
+    await sum.locator('#sum-weeks .sum-add').nth(i).click();   // close it again
+  }
+  ok(marked, 'some week lists the favorite camp with its mark');
+  eq(t.errors.length, 0, t.errors.join(' | '));
+  await t.close();
+});
