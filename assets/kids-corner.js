@@ -1442,7 +1442,7 @@
     var ad = el('div', 'panel'); ad.appendChild(el('h3', null, 'Add one the plans missed'));
     var form = el('form', 'kc-add');
     var f1 = el('div', 'field'); var lab = el('label', null, 'Program or camp'); lab.htmlFor = 'kc-add-q'; f1.appendChild(lab);
-    var q = el('input'); q.id = 'kc-add-q'; q.type = 'search'; q.autocomplete = 'off'; q.placeholder = 'Start typing a name'; q.setAttribute('role', 'combobox'); q.setAttribute('aria-expanded', 'false'); f1.appendChild(q);
+    var q = el('input'); q.id = 'kc-add-q'; q.type = 'text'; q.autocomplete = 'off'; q.placeholder = 'Start typing a name'; q.setAttribute('role', 'combobox'); q.setAttribute('aria-expanded', 'false'); f1.appendChild(q);
     var hits = el('ul', 'finder-list kc-hits'); hits.hidden = true; hits.setAttribute('role', 'listbox'); f1.appendChild(hits);
     form.appendChild(f1);
     var picked = null, pickedLine = el('p', 'kc-picked'); pickedLine.hidden = true; form.appendChild(pickedLine);
