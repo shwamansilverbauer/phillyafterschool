@@ -380,6 +380,10 @@ keep that name.)
   the pins they already have and their level (shown here, so they aren't unwrapped again afterwards); the map and its
   secret spots; picking a favorite; and off they go. "Skip" goes straight to the page (what's new is unwrapped there
   as usual). The grown-ups' corner can play it again.
+- **Starting over.** For a grown-up who tried it out first: "Start over" on the child's card in the Parent Portal's
+  Kid's Corner tab, or in the grown-ups' corner, takes two taps (`startOver()`, `POST passport_reset { kid,
+  classes? }`). The bulb, what was shown (Eddie's welcome too), the level celebrated and the showdown favorites go;
+  the confirmed classes stay unless "Also take off the classes" is ticked, and then the child's row goes.
 - **Each child's bulb.** On first visit a child lights up a bulb of their own: one of ten shapes and ten colours, picked
   by tapping (`BULB`, `KID_COLORS`; Bell Yellow first). It stands in the header (tap it to change), on the picker, on
   the map and in the cheering corner of every showdown. It starts plain; as the child's level climbs it unlocks things

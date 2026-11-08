@@ -230,6 +230,15 @@ test('going back to a class: a ×2 on its bulb, the Repeater Reward pin, and the
   await page.waitForFunction(() => (document.querySelector('.kc-times-n') || {}).textContent === '1');
   eq((await pat.okay('GET', 'passport')).kids[0].done[0].n, undefined, 'once: no count kept');
   ok(await page.locator('.kc-times button[aria-label="One time fewer"]').isDisabled(), 'no fewer than once');
+  // Start over, from the grown-ups' corner: two taps, then Eddie's welcome again; the class stays.
+  const again = page.locator('.kc-reset-go');
+  await again.click();
+  eq(flat(await again.innerText()), 'Tap again to start over');
+  await again.click();
+  await page.waitForSelector('.kc-tour');
+  includes(flat(await page.locator('.kc-tour .kc-eddie-say').innerText()), 'Hi, Ana!');
+  const fresh = (await pat.okay('GET', 'passport')).kids[0];
+  eq(fresh.av, null); eq(fresh.seen.intro, undefined); eq(fresh.done.length, 1, 'the class stays');
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
 });
@@ -356,6 +365,19 @@ test('the account page’s Kid’s Corner tab: each child at a glance, a class c
   await page.waitForFunction(() => { const c = [...document.querySelectorAll('#kids .kc-sum')].find(x => /Rae/.test(x.textContent)); return c && !c.querySelector('.kc-sum-wait'); });
   const pp = await pat.okay('GET', 'passport');
   eq(pp.kids.find(k => k.name === 'Rae').done[0].k, 'p:' + program.id, 'saved for Rae');
+  // Start over, from the Parent Portal: the box opens in Sam's card; the class stays unless the box is ticked.
+  const samCard = () => page.locator('#kids .kc-sum', { hasText: 'Sam' });
+  await samCard().locator('button', { hasText: 'Start over' }).first().click();
+  await samCard().locator('.kc-reset').waitFor();
+  includes(flat(await samCard().locator('.kc-reset').innerText()), 'Also take off the 1 class or camp you confirmed');
+  await samCard().locator('.kc-reset .kc-reset-go').click();
+  await samCard().locator('.kc-reset .kc-reset-go').click();
+  await page.waitForSelector('#kids .g-status.good');
+  includes(flat(await samCard().innerText()), 'Hasn’t picked a bulb yet');
+  includes(flat(await page.locator('#kids .g-status.good').innerText()), 'Sam starts from the beginning');
+  const ps = (await pat.okay('GET', 'passport')).kids.find(k => k.name === 'Sam');
+  eq(ps.av, null); eq(ps.done.length, 1, 'unticked: the class stays');
+  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: ps.done, av: { b: 'heart', c: 1 }, seen: { intro: 1, 'season:weekend': 1 }, lvl: 2 });   // as it was, for what follows
   // Into Sam's own page, past the picker.
   await page.locator('#kids .kc-sum', { hasText: 'Sam' }).locator('button', { hasText: 'Open Sam’s Kid’s Corner' }).click();
   await page.waitForURL(/kids-corner/);

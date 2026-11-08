@@ -59,6 +59,24 @@ test('going back: a class counts as often as the plans have it, and comes back t
   deepEq(r.kid.seen, { repeat: 2, 'map:south': 3 });
 });
 
+test('starting a child over: the bulb, what was shown, Eddie’s welcome and the favorites go; the classes stay unless asked', async (ctx) => {
+  const pat = person(ctx, 'Pat', 'Lee', 'reset');
+  const { program, school } = pickupPair();
+  const { program: wp } = weekendProgram();
+  const y = schoolYearStart();
+  await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam' }] });
+  const done = [{ k: 'p:' + program.id, kind: 'after', y, s: school }, { k: 'p:' + wp.id, kind: 'weekend', y, s: '' }];
+  await pat.okay('POST', 'passport_save', { kid: 'Sam', done, skip: ['p:' + program.id + '|off|' + y], fav: [done[1].k, done[0].k], av: { b: 'globe', c: 3, w: { hat: 'cap' } }, seen: { intro: 1, 'season:after': 1 }, lvl: 3 });
+  let r = await pat.okay('POST', 'passport_reset', { kid: 'sam' });
+  eq(r.kid.name, 'Sam'); deepEq(r.kid.done, done, 'the classes stay'); deepEq(r.kid.skip, ['p:' + program.id + '|off|' + y]);
+  eq(r.kid.av, null); deepEq(r.kid.seen, {}); eq(r.kid.lvl, 0); deepEq(r.kid.fav, [], 'favorites picked again');
+  r = await pat.okay('POST', 'passport_reset', { kid: 'Sam', classes: true });
+  deepEq(r.kid.done, []); deepEq(r.kid.skip, []);
+  eq(ctx.site.sql(`SELECT COUNT(*) AS n FROM passports WHERE user_id = ${pat.id}`)[0].n, 0, 'nothing left to keep');
+  await pat.fails('POST', 'passport_reset', { kid: 'Zed' }, 'kid', 404);
+  eq((await pat.okay('POST', 'passport_reset', { kid: 'Sam' })).kid.av, null, 'starting over with nothing there is fine');
+});
+
 test('confirming, waving away and ranking: saved per child, sealed on disk, gone when the account goes', async (ctx) => {
   const pat = person(ctx, 'Pat', 'Lee', 'pp');
   const { entry, program, school } = pickupPair();
