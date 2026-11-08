@@ -140,7 +140,7 @@ security headers below.
 **Security headers.** The `.htaccess` the build writes sets, on every response: `Strict-Transport-Security` (HTTPS
 only, for a year, for this host alone: the email service's link domain is a subdomain, so no `includeSubDomains`, and
 the site is not on the browsers' preload list), `X-Frame-Options: SAMEORIGIN` (no other site can show these pages in a
-frame, which protects the account and Passport pages from click tricks), `X-Content-Type-Options: nosniff`,
+frame, which protects the account and Kid's Corner pages from click tricks), `X-Content-Type-Options: nosniff`,
 `Referrer-Policy: strict-origin-when-cross-origin` (other sites see the bare domain, never the page), and a
 `Permissions-Policy` that turns off what the site never uses (camera, microphone, payments, USB, serial, Bluetooth)
 and keeps location for this site alone ("Nearest" asks for it). Font files are cached for a year. If the site ever
@@ -360,44 +360,69 @@ analytics or recordings.
   flags off; the choice is kept on the device (`pas-year-pic-own`). Title (`yearTitle`) and
   photo work as on the other cards, and stay on the device.
 
-## The Passport
+## Kid's Corner
 
-`/passport/` (`passportPage()` in `build.mjs`, `src/passport.js`) is a page of each child's own, inside a parent's
-account: stamps for the kinds of program they have been to, the neighborhoods, the milestones and the seasons; a
-map of every place; a bracket that ranks their favorites. It is the only part of the site meant to be handed to a
-child, so it is built the other way round from the rest.
+`/kids-corner/` (`kidsPage()` in `build.mjs`, `src/kids-corner.js`) is a page of each child's own, inside a parent's
+account, made for ages about 5 to 10 as a cartoon arcade: shiny pins that level up, a level that climbs, a cartoon
+map of Philadelphia that clears as they explore it, and a monster battle that ranks their favorites. It is the only
+part of the site meant to be handed to a child, so it is built the other way round from the rest. (It was called the
+Passport at first: `/passport/` redirects here, `?next=passport` still works, and the server's endpoint and table
+keep that name.)
 
-- **Kid mode.** From the picker ("Whose passport?") and on the child's page, `html.pp-kid` hides the site's header,
-  menu, hero and footer, and nothing on the page is a link: a program's name is text, the map's credit is kept from
-  opening while kid mode is on, and nothing is typed. The grown-ups' corner opens from a press-and-hold button
-  (`.pp-hold`, 1.1 seconds; a tap does nothing). With one child on the account the page opens on their passport.
+- **Kid mode.** From the picker ("Who's playing?") on, `html.kc-kid` hides the site's header, menu, hero and footer,
+  and nothing on the page is a link or asks for typing. The grown-ups' corner opens from a press-and-hold button
+  (`.kc-hold`, 1.1 seconds; a tap does nothing). With one child on the account the page opens on their page; the
+  address keeps the tab (`#pins`, `#map`, `#battle`).
+- **Each child's monster.** On first visit a child "hatches" a monster: one of ten bodies and ten colours, picked by
+  tapping (`BODY`, `COLORS`). It stands in the header (tap it to change), on the picker, on the map and in the
+  cheering corner of every battle.
 - **What counts.** Only what a parent has confirmed. The server suggests from the household's plans
   (`passport_suggest()`: every program on a child's kept week, each camp whose week has started, each day-off program
   whose day has passed, once per listing per year) and the parent says yes or no in the grown-ups' corner, or adds one
-  the plans missed. A listing with several sites (Philly Art Center, say) earns a neighborhood and a pin only once the
-  parent says which site.
+  the plans missed. A listing with several sites (Philly Art Center, say) lands on the map only once the parent says
+  which site.
+- **Pins.** `KIDS_PINS` in `build.mjs`: one per program type (names in `KIDS_PIN`), one per season (after school,
+  weekends, days off, summer) and one for neighborhoods. Each goes bronze, silver, gold at 1, 3 and 5 (neighborhoods:
+  2, 4, 6). Drawn as SVG in `drawPin()` (metal rim by level, the type's colour and icon, a shine, ribbons on gold).
+- **Levels.** Points are 10 a class, 5 a neighborhood and 5 a pin level (`stats()`); `LEVELS` and `TITLES` turn them
+  into "Explorer · Level 4" with a bar to the next.
+- **Celebrations.** Pins whose level went up since the child last looked, and a new level, wait behind a present to
+  tap open (sounds can only start after a tap), then pop in one by one (or all together past three), then the level
+  up. What was shown is saved (`seen`, `lvl`) so it is celebrated once.
+- **The map** is drawn on the page from `data/philly-map.json` (served as `assets/philly-map.json`): the city's 159
+  neighborhoods, its outline, the Delaware along its edge, the Schuylkill, and a dozen landmarks, all in map units.
+  `scripts/philly-map.py` makes it from OpenDataPhilly's "Philadelphia Neighborhoods" (Robert Cheetham, CC BY 4.0)
+  and Natural Earth's rivers (public domain), with the Schuylkill past Center City redrawn by hand; run it again only
+  if a source changes. Neighborhoods are under clouds until the child has been to a class there; each program's
+  monster stands where it is, the child's own at the latest place. The build places every listing's site on a map
+  neighborhood (`mapHood()`: by its point, else by name, through `MAP_ALIAS`) and notes any name it can't place.
+  Drag, pinch or the buttons zoom; a tap says what is there. No map service, no tiles: nothing is fetched from
+  anywhere else.
+- **Monsters and the battle.** Each program type is a family (`SPECIES`: a body, a colour, something to wear, what it
+  throws), and each program a member of it, varied by its id (colour, eyes, horns, mouth, spots). The battle pairs the
+  child's distinct listings until one is left: the child taps the winner, which throws its thing (notes, paint,
+  lightning, dice…) until the other is knocked out; the order they fell in is saved as `fav`. With reduced motion
+  set, the fights and confetti are skipped.
+- **Sound** is made on the page with the Web Audio API (`Sound`): nothing plays until the first tap, and the mute
+  button is remembered on the device (`kc-mute`).
 - **The data.** `passports` in the accounts database, one row per child per household (by first name, the way weeks
   match), encrypted like the plans: `{ done: [{ k: "p:<program>" | "c:<camp>", kind: after | weekend | off | summer,
   y: <year>, s: <school or "">, h?: <site's neighborhood> }], skip: [suggestion keys the parent waved away],
-  fav: [listings, best first] }`. `GET passport` gives every child on the kids list with their lists and suggestions;
-  `POST passport_save { kid, done, skip, fav }` replaces one child's lists. Co-parents share them (a partner's
-  passports move to the home account on accepting, same first names merge). Deleting the account deletes them.
-  Stamps are never stored: `earned()` in `passport.js` works them out from `done`.
-- **Stamps.** `STAMPS` in `build.mjs`: one per program type (named from `STAMP_NAMES`), the four seasons, the
-  milestones (1, 5, 10, 25 listings; 3 and 6 neighborhoods), plus a stamp per neighborhood made on the page. Each is a
-  colour and an SVG path; to replace them with artwork, change that list (and `STAMP_ICON`) and nothing else.
-- **The map** is Leaflet from this site's own copy with circle markers, one per place a confirmed listing has a point
-  for. The shareable picture (`drawShare()`, a canvas, like the week card) shows the stamps and the neighborhoods with
-  no name and no map, and is never a link; the page itself has no link to share.
-- **Favorites.** The bracket pairs the child's distinct listings until one is left; the order they fell in is saved as
-  `fav`. `GET profile` carries `favorites: [{ name, fav }]`, and the accounts script hands them to each planner
-  (`favorites()` on `window.pasBoard`, `pasSummer` and `pasDaysOff`): Build your week shows the child's favorite
-  programs as chips under the search, and the summer and days-off choosers list a favorite camp or program first,
-  marked "★ Sam's favorite". Matching is by the child's first name, the way plans match.
+  fav: [listings, best first], av?: { b: <body>, c: <colour 0-9> }, seen?: { <pin>: <level> }, lvl?: <level> }`.
+  `GET passport` gives every child on the kids list with all of that and the suggestions; `POST passport_save { kid,
+  done, skip, fav, av?, seen?, lvl? }` replaces one child's lists, and keeps `av`, `seen` and `lvl` when they are left
+  out. Co-parents share them (a partner's rows move to the home account on accepting, same first names merge).
+  Deleting the account deletes them. Pins and levels are never stored, only which were already celebrated.
+- **Favorites.** `GET profile` carries `favorites: [{ name, fav }]`, and the accounts script hands them to each
+  planner (`favorites()` on `window.pasBoard`, `pasSummer` and `pasDaysOff`): Build your week shows the child's
+  favorite programs as chips under the search, and the summer and days-off choosers list a favorite camp or program
+  first, marked "★ Sam's favorite". Matching is by the child's first name, the way plans match.
+- **Share and print.** The grown-ups' corner makes a picture (`drawShare()`, a canvas) of the pins, the level and the
+  child's monster, with no name and no map, and is never a link; the page itself has no link to share.
 - **Kid reviews.** Each confirmed program in the grown-ups' corner links to the review form with the child's name and
   grade filled in (see Reviews).
 - **Quiet.** No analytics, no recordings, nothing to Klaviyo, out of search (`quiet: true, noindex: true`), and no
-  `track()` anywhere in `passport.js`. `tests/cases/17-api-passport.mjs` and `23-web-passport.mjs` cover it.
+  `track()` anywhere in `kids-corner.js`. `tests/cases/17-api-passport.mjs` and `23-web-kids-corner.mjs` cover it.
 
 ## Weekend classes
 
@@ -745,7 +770,7 @@ ready-made entry at the bottom of the email. To publish one, paste that entry in
 `data/reviews.json` (inside the square brackets, entries separated by commas) and commit.
 To remove a review, delete its entry. Cards show the average and the reviews for each program.
 
-A review can be **in a child's words**: the parent types what the child said (from the Passport's grown-ups' corner,
+A review can be **in a child's words**: the parent types what the child said (from Kid's Corner's grown-ups' corner,
 where each confirmed program has a "Review in Sam's words" link, or by switching on the form). The entry then carries
 `"kid": { "grade": "2", "name": "Sam" }`, with `name` only when the parent ticked "show the first name"; without it the
 review is signed "A 2nd grader at Nebinger". Kids' reviews are shown beside parents' on the program's page behind a

@@ -990,7 +990,7 @@
         if (!qs.school && !rMine && d.user.school && all(rSchool, 'option').some(function (o) { return o.value === d.user.school; })) rSchool.value = d.user.school;
       }).then(null, function () { /* they can type them */ });
     }
-    // In a child's words: the link from the Passport says so (?kid=<first name>&grade=), or the parent switches to it.
+    // In a child's words: the link from Kid's Corner says so (?kid=<first name>&grade=), or the parent switches to it.
     var kidBox = review.querySelector('#rv-kid'), kidFlag = review.querySelector('#r-kid'), kidOn = review.querySelector('#rv-kid-on'), kidOff = review.querySelector('#rv-kid-off');
     var firstP = review.querySelector('.rv-first-parent'), firstK = review.querySelector('.rv-first-kid'), comment = review.querySelector('[name="comment"]');
     var commentHint = comment && comment.parentNode ? comment.parentNode.querySelector('.hint') : null, plainHint = commentHint ? commentHint.textContent : '';
@@ -1583,7 +1583,7 @@
   }
   function newKid(name) { return { name: cleanName(name), now: emptyBoard(), next: emptyBoard(), teacher: '', cardNote: '', off: {}, offOk: {}, offWhat: {}, sumWhat: {}, age: '', offNote: '', prices: {}, groups: [], sum: null }; }
   function possessive(name) { return name + '’s'; }
-  // Each child's favorites from their Passport (the bracket's ranking, "p:<program>" and "c:<camp>" keys), by first
+  // Each child's favorites from Kid's Corner (the battle's ranking, "p:<program>" and "c:<camp>" keys), by first
   // name, handed over by the accounts script once the profile is read. The planners offer them first.
   var favsByName = {};
   function setFavs(list) { favsByName = {}; (list || []).forEach(function (x) { if (x && x.name) favsByName[String(x.name).toLowerCase()] = x.fav || []; }); }
@@ -2509,7 +2509,7 @@
       rosters: function () { return r; },
       save: function () { store('pas-rosters', JSON.stringify(r)); },
       redraw: function () { openDay = ''; draw(); },
-      favorites: function (list) { setFavs(list); draw(); }   // from the Passport, by first name
+      favorites: function (list) { setFavs(list); draw(); }   // from Kid's Corner, by first name
     };
     // An email's "See who's open" button names the day: open it. A day-off page's "Add it to your plan for …" names
     // the day and the program (?add=): that program goes on that day for the child in view, and the address is
@@ -2578,9 +2578,9 @@
       save: function () { store('pas-rosters', JSON.stringify(rosters)); },
       emptyBoard: emptyBoard, newKid: newKid, maxKids: MAX_KIDS,
       redraw: function () { weekFull.key = ''; render(); },   // after the share-groups script changes a roster (a week put back from a profile): no dragon for that
-      favorites: function (list) { setFavs(list); render(); }   // from the Passport, by first name
+      favorites: function (list) { setFavs(list); render(); }   // from Kid's Corner, by first name
     };
-    // The child's favorites from their Passport (the bracket's ranking), offered first when a program is added.
+    // The child's favorites from Kid's Corner (the battle's ranking), offered first when a program is added.
     var drawFavs = function (kid) {
       var box = $('#add-favs'); if (!box) return;
       var ids = favsOf(kid).filter(function (k) { return k.indexOf('p:') === 0 && data.programs[k.slice(2)]; }).map(function (k) { return k.slice(2); }).slice(0, 6);
@@ -4192,7 +4192,7 @@
       rosters: function () { return r; },
       save: function () { store('pas-rosters', JSON.stringify(r)); },
       redraw: function () { openWeek = -1; draw(); },
-      favorites: function (list) { setFavs(list); draw(); }   // from the Passport, by first name
+      favorites: function (list) { setFavs(list); draw(); }   // from Kid's Corner, by first name
     };
     draw();
     if (!storageOk) say('This browser is blocking saved data, so your summer won’t be here when you come back. Copy or print it before you leave.');

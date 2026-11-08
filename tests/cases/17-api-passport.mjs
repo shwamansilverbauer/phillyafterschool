@@ -1,4 +1,5 @@
-// The passport: what a parent confirms each child has been to, suggested from the household's plans.
+// Kid's Corner's data (the "passport" endpoint, its first name): what a parent confirms each child has been to,
+// suggested from the household's plans, and the child's own monster, pins shown and level.
 import { test, ok, eq, deepEq, includes, excludes, person } from '../lib/harness.mjs';
 import { pickupPair, weekendProgram, twoCamps, upcomingDaysOff, daysOff, schoolYearStart, config } from '../lib/data.mjs';
 
@@ -84,4 +85,30 @@ test('co-parents share the passports: a partner’s passports move to the househ
   await dana.okay('POST', 'passport_save', { kid: 'Zoe', done: [], fav: [] });
   eq((await pat.okay('GET', 'passport')).kids[1].done.length, 0);
   void config;
+});
+
+test('Kid’s Corner keeps each child’s monster, the pins already shown and the level celebrated, and nothing it doesn’t know', async (ctx) => {
+  const pat = person(ctx, 'Pat', 'Lee', 'kc');
+  const { program, school } = pickupPair();
+  const y = schoolYearStart();
+  await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam' }, { n: 'Rae' }] });
+  // A monster alone keeps the row (a child can pick one before any class).
+  let r = await pat.okay('POST', 'passport_save', { kid: 'Rae', done: [], av: { b: 'squid', c: 3 } });
+  deepEq(r.kid.av, { b: 'squid', c: 3 }); deepEq(r.kid.seen, {}); eq(r.kid.lvl, 0);
+  eq(ctx.site.sql(`SELECT COUNT(*) AS n FROM passports WHERE user_id = ${pat.id}`)[0].n, 1);
+  // Made-up bodies, colors, pins and levels are dropped.
+  r = await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school }], av: { b: 'dragon', c: 4 }, seen: { 'type:music': 2, 'explore': 1, 'hack<script>': 3, 'season:after': 9 }, lvl: 500 });
+  eq(r.kid.av, null, 'not a body the page draws'); deepEq(r.kid.seen, { 'type:music': 2, explore: 1 }); eq(r.kid.lvl, 0);
+  const done = [{ k: 'p:' + program.id, kind: 'after', y, s: school }];
+  r = await pat.okay('POST', 'passport_save', { kid: 'Sam', done, av: { b: 'egg', c: 12 } });
+  eq(r.kid.av, null, 'not a color the page has');
+  // A save that leaves them out keeps them: the grown-ups' corner saves only the lists.
+  await pat.okay('POST', 'passport_save', { kid: 'Sam', done, av: { b: 'egg', c: 9 }, seen: { 'type:music': 1 }, lvl: 3 });
+  r = await pat.okay('POST', 'passport_save', { kid: 'Sam', done, skip: [], fav: [] });
+  deepEq(r.kid.av, { b: 'egg', c: 9 }); deepEq(r.kid.seen, { 'type:music': 1 }); eq(r.kid.lvl, 3);
+  const p = await pat.okay('GET', 'passport');
+  deepEq(p.kids.map(k => [k.name, k.av && k.av.b, k.lvl]), [['Sam', 'egg', 3], ['Rae', 'squid', 0]]);
+  // Sealed like the rest: the monster isn't readable in the database.
+  const rows = ctx.site.sql(`SELECT json FROM passports WHERE user_id = ${pat.id}`);
+  ok(rows.every(x => !/egg|squid|type:music/.test(x.json)), 'stored sealed');
 });

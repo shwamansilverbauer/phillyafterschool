@@ -95,9 +95,9 @@ test('quiet pages: signed in, the account and profile pages run no analytics, an
   await pat.okay('POST', 'week_save', { week: { name: 'Zelphina', now: Object.fromEntries(DAYS.map(d => [d, []])), next: Object.fromEntries(DAYS.map(d => [d, []])) } });
   await pat.okay('POST', 'kids_save', { kids: [{ n: 'Zelphina', g: '2' }, { n: 'Thaddeus', a: '9' }] });
   const t = await b.context(ctx.site, { sid: pat.cookie });
-  for (const rel of ['/account/', '/profile/', '/account/#plans', '/passport/', '/calendar/', '/to-do/']) {
+  for (const rel of ['/account/', '/profile/', '/account/#plans', '/kids-corner/', '/calendar/', '/to-do/']) {
     const page = await t.open(rel);
-    if (rel.startsWith('/passport')) await page.waitForSelector('#pp-app:not([hidden])');
+    if (rel.startsWith('/kids-corner')) await page.waitForSelector('#kc-app:not([hidden])');
     else if (rel.startsWith('/calendar') || rel.startsWith('/to-do')) await page.waitForFunction(() => { const w = document.querySelector('#year-wait, #todo-wait'); return !w || w.hidden; }, null, { timeout: 10000 });
     else await page.waitForSelector('#account .acct-tabs');
     await page.waitForTimeout(400);   // the list subscription goes out after the page is drawn

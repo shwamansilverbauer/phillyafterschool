@@ -345,6 +345,7 @@
     else { set('pas-my-ages', null); if (get('pas-age') === 'MINE') set('pas-age', 'ALL'); }
   }
   function ageWord(a) { return a === '14' ? '14 and up' : a; }
+  function possessive(n) { return /s$/i.test(n) ? n + '’' : n + '’s'; }
   function gradeWord(g) { return g === 'PK' ? 'Pre-K' : g; }
   function shortDate(t) { var d = new Date(t * 1000); return isNaN(d) ? '' : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
   function weekCount(b) {
@@ -467,7 +468,7 @@
     if (aq.groups) set('pas-groups', '1');   // while groups are a pilot, this is the way in for someone who wasn't invited to one
     var ainfo = {}; try { ainfo = JSON.parse(document.getElementById('groups-data').textContent); } catch (e) { /* older page */ }
     var groupsOn = host.getAttribute('data-pilot') !== '1' || get('pas-groups') === '1';
-    var wantNext = /^(board|summer|daysoff|calendar|todo|passport|profile)$/.test(aq.next || '') ? aq.next : view === 'profile' ? 'profile' : 'account';
+    var wantNext = /^(board|summer|daysoff|calendar|todo|kids|passport|profile)$/.test(aq.next || '') ? aq.next : view === 'profile' ? 'profile' : 'account';
     var goNext = function (next) {
       if (next === 'join') { location.href = page('join/'); return true; }
       if (next === 'board') { location.href = page('board/') + '?back=1'; return true; }
@@ -475,7 +476,7 @@
       if (next === 'daysoff') { location.href = page('days-off/') + '#plan'; return true; }
       if (next === 'calendar') { location.href = page('calendar/'); return true; }
       if (next === 'todo') { location.href = page('to-do/'); return true; }
-      if (next === 'passport') { location.href = page('passport/'); return true; }
+      if (next === 'kids' || next === 'passport') { location.href = page('kids-corner/'); return true; }   // "passport": Kid's Corner's first name
       if (next === 'profile') { if (view === 'profile') return false; location.href = page('profile/'); return true; }
       if (next === 'managers' || next === 'directors') { location.href = page('managers/'); return true; }
       var fm = /^[fv]:(p|c|s):([a-z0-9-]+)$/.exec(next || '');   // signed in from a Follow or Save button: back to that page
@@ -682,6 +683,7 @@
       // your school, your children's grades and your neighborhood
       var sch = part(el('section', 'panel'), 'school');
       sch.appendChild(el('h2', null, 'Your school and kids'));
+      var kidsBox = el('div', 'g-kids'); sch.appendChild(kidsBox);   // filled once the profile is read (paintKidsTab)
       put(sch, 'account', 'school');
       // the Sunday email (its tick box goes in further down, once the school is known)
       var mail = part(el('section', 'panel'), 'emails');
@@ -981,7 +983,7 @@
       ss.addEventListener('change', saveSchool);
       schoolRow.addEventListener('submit', function (e) { e.preventDefault(); });
       var gradeRow = el('div', 'g-grades');
-      var gl0 = el('span', 'g-label', 'Your children’s grades'); gl0.id = 'prof-grades-label'; gradeRow.appendChild(gl0);
+      var gl0 = el('span', 'g-label', 'Grades the lists start on'); gl0.id = 'prof-grades-label'; gradeRow.appendChild(gl0);
       var gradeRail = el('div', 'g-grade-rail'); gradeRail.setAttribute('role', 'group'); gradeRail.setAttribute('aria-labelledby', 'prof-grades-label');
       var gradeNote = el('span', 'hint'); gradeNote.setAttribute('aria-live', 'polite');
       var keptGrades = [], gradeBtns = [];
@@ -1000,11 +1002,11 @@
       });
       var paintGrades = function (list) { keptGrades = list || []; gradeBtns.forEach(function (x) { x[1].setAttribute('aria-pressed', String(keptGrades.indexOf(x[0]) > -1)); }); };
       gradeRow.appendChild(gradeRail); gradeRow.appendChild(gradeNote);
-      gradeRow.appendChild(el('span', 'hint', 'Tap each grade you have a child in. We keep the grades only, not which child is in which.'));
+      gradeRow.appendChild(el('span', 'hint', 'Filled in from your kids above. Rather not add names? Tap each grade you have a child in instead.'));
       if ((ainfo.grades || []).length) sch.appendChild(gradeRow);
       // their ages, the same way: weekend classes, day camps and summer camps go by age
       var ageRow = el('div', 'g-grades g-ages');
-      var al0 = el('span', 'g-label', 'Your children’s ages'); al0.id = 'prof-ages-label'; ageRow.appendChild(al0);
+      var al0 = el('span', 'g-label', 'Ages the camp lists start on'); al0.id = 'prof-ages-label'; ageRow.appendChild(al0);
       var ageRail = el('div', 'g-grade-rail'); ageRail.setAttribute('role', 'group'); ageRail.setAttribute('aria-labelledby', 'prof-ages-label');
       var ageNote = el('span', 'hint'); ageNote.setAttribute('aria-live', 'polite');
       var keptAges = [], ageBtns = [];
@@ -1023,7 +1025,7 @@
       });
       var paintAges = function (list) { keptAges = list || []; ageBtns.forEach(function (x) { x[1].setAttribute('aria-pressed', String(keptAges.indexOf(x[0]) > -1)); }); };
       ageRow.appendChild(ageRail); ageRow.appendChild(ageNote);
-      ageRow.appendChild(el('span', 'hint', 'Tap each age. An age you give a child on the summer planner is kept here too. We keep the ages only, not which child is which.'));
+      ageRow.appendChild(el('span', 'hint', 'Filled in from your kids above, and from ages you give on the summer planner. Or tap each age yourself.'));
       if ((ainfo.ages || []).length) sch.appendChild(ageRow);
       if ((ainfo.hoods || []).length) {
         var hoodRow = el('form', 'g-row');
@@ -1177,9 +1179,11 @@
       };
       // Adding a child to the profile: a first name, and the grade and age if they want lists to start there.
       var kidsSay = '';
-      var kidForm = function (onSave, onCancel) {
+      var kidForm = function (onSave, onCancel, start, idp) {
+        start = start || null; idp = idp || 'pk';
         var f = el('form', 'g-form kid-form pc-wide'), f1 = el('div', 'field'), l1 = el('label', null, 'First name'), n1 = el('input');
-        f.noValidate = true; n1.id = 'pk-name'; n1.type = 'text'; n1.maxLength = 20; n1.autocomplete = 'off'; n1.required = true; l1.htmlFor = n1.id;
+        f.noValidate = true; n1.id = idp + '-name'; n1.type = 'text'; n1.maxLength = 20; n1.autocomplete = 'off'; n1.required = true; l1.htmlFor = n1.id;
+        if (start) { n1.value = start.n; n1.readOnly = true; }   // the name is how plans and Kid's Corner find a child: changing a kid changes grade and age
         f1.appendChild(l1); f1.appendChild(n1); f.appendChild(f1);
         var pair = el('div', 'kid-pair');
         var sel = function (id, label, items, word) {
@@ -1188,17 +1192,18 @@
           items.forEach(function (v) { var o = el('option', null, word(v)); o.value = v; sl.appendChild(o); });
           fd.appendChild(lb); fd.appendChild(sl); pair.appendChild(fd); return sl;
         };
-        var gs = sel('pk-grade', 'Grade', ainfo.grades || [], function (g) { return g === 'PK' ? 'Pre-K' : g === 'K' ? 'Kindergarten' : gradeName(g) + ' grade'; });
-        var as = sel('pk-age', 'Age', (ainfo.ages || []).map(String), function (a) { return a === '14' ? '14 and up' : a; });
+        var gs = sel(idp + '-grade', 'Grade', ainfo.grades || [], function (g) { return g === 'PK' ? 'Pre-K' : g === 'K' ? 'Kindergarten' : gradeName(g) + ' grade'; });
+        var as = sel(idp + '-age', 'Age', (ainfo.ages || []).map(String), function (a) { return a === '14' ? '14 and up' : a; });
+        if (start) { gs.value = start.g || ''; as.value = start.a || ''; }
         f.appendChild(pair);
-        var acts = el('div', 'actions'), ok = el('button', 'btn primary', 'Add'), no = btn('btn quiet', 'Cancel'), kn = el('span', 'hint'); ok.type = 'submit'; kn.setAttribute('aria-live', 'polite');
+        var acts = el('div', 'actions'), ok = el('button', 'btn primary', start ? 'Save' : 'Add'), no = btn('btn quiet', 'Cancel'), kn = el('span', 'hint'); ok.type = 'submit'; kn.setAttribute('aria-live', 'polite');
         acts.appendChild(ok); acts.appendChild(no); acts.appendChild(kn); f.appendChild(acts);
         f.appendChild(el('p', 'hint', 'The first name only, with the grade and age if you like: the lists of programs and camps then start on your kids. Nobody else sees this.'));
         no.addEventListener('click', onCancel);
         f.addEventListener('submit', function (e) {
           e.preventDefault();
           var n = firstWord(n1.value); if (!n) { kn.textContent = 'A first name is needed.'; n1.focus(); return; }
-          if ((lastP && lastP.kids || []).some(function (k) { return k.n.toLowerCase() === n.toLowerCase(); })) { kn.textContent = n + ' is already on your profile.'; return; }
+          if (!start && (lastP && lastP.kids || []).some(function (k) { return k.n.toLowerCase() === n.toLowerCase(); })) { kn.textContent = n + ' is already on your profile.'; return; }
           ok.disabled = true; kn.textContent = 'Saving…';
           onSave({ n: n, g: gs.value, a: as.value });
         });
@@ -1210,8 +1215,50 @@
           if (lastP) lastP.kids = r.kids; else lastP = { kids: r.kids, grades: r.grades, ages: r.ages, weeks: [] };
           adoptGrades(r.grades); adoptAges(r.ages); paintGrades(r.grades || []); paintAges(r.ages || []);
           seedKids(r.kids, null);
-          kidsSay = said; paintCard(); kidsSay = '';
+          kidsSay = said; paintCard(); paintKidsTab(); kidsSay = '';
         });
+      };
+      // The account page's "School & kids" tab: each kid by first name, with grade and age, to add, change or remove.
+      // The same list the profile card shows, the planners start from and Kid's Corner has a page for.
+      var kidsOpen = '';   // which form is open: 'add', or a kid's name being changed
+      var paintKidsTab = function () {
+        if (view !== 'account' || !kidsBox) return;
+        kidsBox.textContent = '';
+        var p = lastP || {}, kids = p.kids || [], fromPlans = kidNames(p).filter(function (n) { return !kids.some(function (k) { return k.n.toLowerCase() === n.toLowerCase(); }); });
+        var head = el('div', 'g-kids-head'); head.appendChild(el('h3', null, 'Your kids'));
+        kidsBox.appendChild(head);
+        kidsBox.appendChild(el('p', 'hint', 'First names only (a nickname or an initial works), with the grade and age if you like. The planners start with them, and each gets a page of their own in Kid’s Corner. Only you, and a co-parent you’ve linked, see them.'));
+        if (kids.length || fromPlans.length) {
+          var ul = el('ul', 'g-list g-kidlist');
+          kids.forEach(function (k) {
+            var li = el('li'), who = el('div', 'g-kid');
+            who.appendChild(el('span', 'g-kid-ini', k.n.charAt(0).toUpperCase()));
+            var t = el('div'); t.appendChild(el('b', null, k.n));
+            var bits = []; if (k.g) bits.push(k.g === 'PK' ? 'Pre-K' : k.g === 'K' ? 'Kindergarten' : gradeName(k.g) + ' grade'); if (k.a) bits.push('age ' + ageWord(k.a));
+            t.appendChild(el('span', 'hint', bits.join(', ') || 'No grade or age yet')); who.appendChild(t); li.appendChild(who);
+            var acts = el('div', 'g-acts-row');
+            var ch = btn('btn', 'Change'); ch.setAttribute('aria-label', 'Change ' + possessive(k.n) + ' grade or age');
+            ch.addEventListener('click', function () { kidsOpen = kidsOpen === k.n ? '' : k.n; paintKidsTab(); });
+            var rm = btn('clear', 'Remove'); rm.setAttribute('aria-label', 'Remove ' + k.n);
+            twoTap(rm, 'Tap again to remove ' + k.n, function () { saveKids(kids.filter(function (x) { return x !== k; }), k.n + ' is off your profile. Plans with that name stay, and their Kid’s Corner comes back if you add ' + k.n + ' again.'); });
+            acts.appendChild(ch); acts.appendChild(rm); li.appendChild(acts);
+            if (kidsOpen === k.n) li.appendChild(kidForm(function (x) { kidsOpen = ''; saveKids(kids.map(function (y) { return y === k ? { n: k.n, g: x.g, a: x.a } : y; }), 'Saved.'); }, function () { kidsOpen = ''; paintKidsTab(); }, k, 'ak-' + kids.indexOf(k)));
+            ul.appendChild(li);
+          });
+          fromPlans.forEach(function (n) {
+            var li = el('li'), who = el('div', 'g-kid');
+            who.appendChild(el('span', 'g-kid-ini quiet', n.charAt(0).toUpperCase()));
+            var t = el('div'); t.appendChild(el('b', null, n)); t.appendChild(el('span', 'hint', 'From a plan, not on your list yet')); who.appendChild(t); li.appendChild(who);
+            var add = btn('btn', 'Add ' + n); add.addEventListener('click', function () { add.disabled = true; saveKids(kids.concat([{ n: n, g: '', a: '' }]), n + ' is on your list now.'); });
+            var acts = el('div', 'g-acts-row'); acts.appendChild(add); li.appendChild(acts);
+            ul.appendChild(li);
+          });
+          kidsBox.appendChild(ul);
+        } else kidsBox.appendChild(el('p', null, 'No kids on your list yet.'));
+        if (kidsSay) kidsBox.appendChild(el('p', 'g-status good', kidsSay));
+        if (kidsOpen === 'add') kidsBox.appendChild(kidForm(function (x) { kidsOpen = ''; saveKids(kids.concat([x]), x.n + ' is on your list, on every planner, and in Kid’s Corner.'); }, function () { kidsOpen = ''; paintKidsTab(); }, null, 'ak-new'));
+        else if (kids.length < 8) { var addKid = btn('btn primary', kids.length ? 'Add another kid' : 'Add a kid'); addKid.addEventListener('click', function () { kidsOpen = 'add'; paintKidsTab(); var i = kidsBox.querySelector('#ak-new-name'); if (i) i.focus(); }); kidsBox.appendChild(addKid); }
+        var form0 = kidsBox.querySelector('.kid-form input:not([readonly])') || kidsBox.querySelector('.kid-form select'); if (form0 && kidsOpen) form0.focus();
       };
       var paintCard = function () {
         if (view !== 'profile') return;
@@ -1343,7 +1390,7 @@
           paintSchool(p.school); paintGrades(p.grades || []); paintAges(p.ages || []); paintWeeks(p.weeks || []); paintSummer(p.summer || null); paintDaysOff(p.daysoff || null);
           seedKids(p.kids, null);
           if (strip.pasTodo) strip.pasTodo(todoLeft(p.daysoff));
-          lastP = p; paintCard();
+          lastP = p; paintCard(); paintKidsTab();
         });
       };
       paintSchool(me.school || ''); paintGrades(me.grades || []); paintAges(me.ages || []); paintWeek(); loadProfile();

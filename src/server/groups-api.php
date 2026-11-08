@@ -783,10 +783,14 @@ function daysoff_out(int $uid): ?array {
 // { "k": "p:<program>" or "c:<camp>", "kind": after | weekend | off | summer, "y": the school year it started (summer:
 // the calendar year), "s": the school it was picked under, or "", "h": which of the listing's sites, as a
 // neighborhood name, when it has more than one }. "skip" holds the keys of suggestions the parent
-// waved away ("k|kind|y"); "fav" is the child's ranking of listings, best first. Badges are never stored: the page
-// works them out from "done". Nothing here is ever sent anywhere but back to the household's own browsers.
+// waved away ("k|kind|y"); "fav" is the child's ranking of listings, best first. For Kid's Corner (the page the
+// child sees) it also keeps "av", the monster the child picked ({ "b": a body from KC_BODIES, "c": a color, 0 to 9 }),
+// "seen", the pins whose level the child has already been shown ({ "type:music": 2, ... }), and "lvl", the last level
+// celebrated. Pins and levels themselves are never stored: the page works them out from "done". Nothing here is ever
+// sent anywhere but back to the household's own browsers.
 const PASSPORT_KINDS = array('after', 'weekend', 'off', 'summer');
 const PASSPORT_MAX = 300;
+const KC_BODIES = array('blob', 'tall', 'box', 'pear', 'ghost', 'spiky', 'bean', 'squid', 'egg', 'fuzzy');
 function school_year(): int {   // the year the current school year started
   global $CFG;
   $end = isset($CFG['yearEnd']) ? (int) substr((string) $CFG['yearEnd'], 0, 4) : 0;
@@ -811,7 +815,21 @@ function passport_clean($raw): array {
   foreach (isset($raw['fav']) && is_array($raw['fav']) ? array_slice($raw['fav'], 0, 60) : array() as $k) {
     if (is_string($k) && isset($l[$k]) && !in_array($k, $out['fav'], true)) $out['fav'][] = $k;
   }
+  $av = isset($raw['av']) && is_array($raw['av']) ? $raw['av'] : null;
+  if ($av && isset($av['b'], $av['c']) && in_array($av['b'], KC_BODIES, true) && is_numeric($av['c']) && (int) $av['c'] >= 0 && (int) $av['c'] <= 9) $out['av'] = array('b' => $av['b'], 'c' => (int) $av['c']);
+  if (isset($raw['seen']) && is_array($raw['seen'])) {
+    $sn = array();
+    foreach (array_slice($raw['seen'], 0, 40, true) as $id => $t) if (is_string($id) && preg_match('~^((type|season):[a-z-]{1,20}|explore)$~', $id) && is_numeric($t) && (int) $t >= 1 && (int) $t <= 3) $sn[$id] = (int) $t;
+    if ($sn) $out['seen'] = $sn;
+  }
+  if (isset($raw['lvl']) && is_numeric($raw['lvl']) && (int) $raw['lvl'] >= 1 && (int) $raw['lvl'] <= 99) $out['lvl'] = (int) $raw['lvl'];
   return $out;
+}
+// One child as the page gets it.
+function passport_kid(int $home, array $k, ?array $r, array $d): array {
+  return array('name' => $k['n'], 'grade' => isset($k['g']) ? $k['g'] : '', 'age' => isset($k['a']) ? $k['a'] : '', 'done' => $d['done'], 'skip' => $d['skip'], 'fav' => $d['fav'],
+    'av' => isset($d['av']) ? $d['av'] : null, 'seen' => (object) (isset($d['seen']) ? $d['seen'] : array()), 'lvl' => isset($d['lvl']) ? $d['lvl'] : 0,
+    'suggest' => passport_suggest($home, $k['n'], $d), 'updated' => $r ? (int) $r['updated'] : 0);
 }
 function passport_row(int $home, string $name): ?array {
   foreach (q('SELECT id, name, json, updated FROM passports WHERE user_id = ?', array($home)) as $r) {
@@ -871,8 +889,7 @@ function passport_out(array $u): array {
   $kids = array();
   foreach (kids_list(home_user($u)) as $k) {
     $r = passport_row($home, $k['n']);
-    $d = passport_data($r);
-    $kids[] = array('name' => $k['n'], 'grade' => $k['g'], 'age' => $k['a'], 'done' => $d['done'], 'skip' => $d['skip'], 'fav' => $d['fav'], 'suggest' => passport_suggest($home, $k['n'], $d), 'updated' => $r ? (int) $r['updated'] : 0);
+    $kids[] = passport_kid($home, $k, $r, passport_data($r));
   }
   return array('kids' => $kids, 'year' => school_year());
 }
@@ -1777,7 +1794,7 @@ switch ($method . ' ' . $action) {
     $email = strtolower(str($in, 'email', 150));
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) fail('email', 'That email address doesn’t look right.');
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|todo|passport|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80}|a:[a-z0-9-]{1,80})$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|todo|passport|kids|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80}|a:[a-z0-9-]{1,80})$~', $next)) $next = 'account';
     if (too_many('mail:' . h($email), 3, 900) || too_many('mail:' . h($email), 8, 86400) || too_many('ip:' . who(), 10, 900) || too_many('ip:' . who(), 40, 86400)) {
       fail('slow', 'That’s a lot of sign-in emails. Use the newest one, or wait 15 minutes and try again.', 429);
     }
@@ -1830,7 +1847,7 @@ switch ($method . ' ' . $action) {
     if (too_many('try:' . who(), 30, 900)) fail('slow', 'Too many tries. Wait 15 minutes and try again.', 429);
     note('try:' . who());
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|todo|passport|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80}|a:[a-z0-9-]{1,80})$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|todo|passport|kids|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80}|a:[a-z0-9-]{1,80})$~', $next)) $next = 'account';
     $g = google_email(str($in, 'credential', 4200));
     sign_in($g['email'], 'google', $next, $g['first'], $g['last']);
   }
@@ -2155,7 +2172,8 @@ switch ($method . ' ' . $action) {
       $had = passport_row($owner, unseal($pp['name']));
       if (!$had) { q('UPDATE passports SET user_id = ? WHERE id = ?', array($owner, $pp['id'])); continue; }
       $a = passport_data($had); $b = passport_data($pp);   // the same first name on both sides: one passport, with both lists
-      $m = passport_clean(array('done' => array_merge($a['done'], $b['done']), 'skip' => array_merge($a['skip'], $b['skip']), 'fav' => array_merge($a['fav'], $b['fav'])));
+      $m = passport_clean(array('done' => array_merge($a['done'], $b['done']), 'skip' => array_merge($a['skip'], $b['skip']), 'fav' => array_merge($a['fav'], $b['fav']),
+        'av' => isset($a['av']) ? $a['av'] : (isset($b['av']) ? $b['av'] : null), 'seen' => (isset($a['seen']) ? $a['seen'] : array()) + (isset($b['seen']) ? $b['seen'] : array()), 'lvl' => max(isset($a['lvl']) ? $a['lvl'] : 0, isset($b['lvl']) ? $b['lvl'] : 0)));
       q('UPDATE passports SET json = ?, updated = ? WHERE id = ?', array(seal(json_encode($m)), now(), $had['id']));
       q('DELETE FROM passports WHERE id = ?', array($pp['id']));
     }
@@ -2599,7 +2617,9 @@ switch ($method . ' ' . $action) {
     $home = home_id($u);
     $r = passport_row($home, $name);
     $d = passport_clean($in);
-    if (count($d['done']) === 0 && count($d['skip']) === 0 && count($d['fav']) === 0) {
+    $old = passport_data($r);   // what the request leaves out of Kid's Corner's own fields stays as it was
+    foreach (array('av', 'seen', 'lvl') as $f) if (!array_key_exists($f, $in) && isset($old[$f])) $d[$f] = $old[$f];
+    if (count($d['done']) === 0 && count($d['skip']) === 0 && count($d['fav']) === 0 && !isset($d['av'])) {
       if ($r) q('DELETE FROM passports WHERE id = ?', array($r['id']));
     } elseif ($r) {
       q('UPDATE passports SET json = ?, updated = ? WHERE id = ?', array(seal(json_encode($d)), now(), $r['id']));
@@ -2608,8 +2628,8 @@ switch ($method . ' ' . $action) {
       q('INSERT INTO passports (user_id, name, json, updated) VALUES (?, ?, ?, ?)', array($home, seal($name), seal(json_encode($d)), now()));
       bump('passport');
     }
-    $r = passport_row($home, $name); $d = passport_data($r);
-    out(array('ok' => true, 'kid' => array('name' => $name, 'done' => $d['done'], 'skip' => $d['skip'], 'fav' => $d['fav'], 'suggest' => passport_suggest($home, $name, $d), 'updated' => $r ? (int) $r['updated'] : 0)));
+    $r = passport_row($home, $name);
+    out(array('ok' => true, 'kid' => passport_kid($home, array('n' => $name), $r, passport_data($r))));
   }
 
   case 'POST school_save': {

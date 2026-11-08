@@ -102,3 +102,41 @@ test('co-parents on the Plans tab: invite, the invitation with its merge warning
   eq(tp.errors.length + td.errors.length, 0, tp.errors.concat(td.errors).join(' | '));
   await tp.close(); await td.close();
 });
+
+test('School & kids: the kids by name on top, to add, change and remove; the planners’ grades follow', async (ctx) => {
+  const b = await ctx.browser();
+  const pat = ctx.api().as(someone('kids'), 'Pat', 'Lee');
+  await pat.okay('POST', 'week_save', { week: { name: 'Rae', now: empty(), next: empty() } });   // a name that only a plan has
+  const t = await b.context(ctx.site, { sid: pat.cookie });
+  const page = await t.open('/account/#school');
+  await page.waitForSelector('.g-kids h3');
+  includes(flat(await page.locator('.g-kidlist').innerText()), 'From a plan', 'a name from a plan is offered');
+  // Add one.
+  await page.locator('.g-kids button', { hasText: 'Add a kid' }).click();
+  await page.fill('#ak-new-name', 'Sam');
+  await page.selectOption('#ak-new-grade', '2');
+  await page.selectOption('#ak-new-age', '7');
+  await page.locator('.g-kids .kid-form button[type=submit]').click();
+  await page.waitForSelector('.g-kidlist li:has-text("2nd grade, age 7")');
+  // Take the one from the plan.
+  await page.locator('.g-kidlist button', { hasText: 'Add Rae' }).click();
+  await page.waitForFunction(() => document.querySelectorAll('.g-kidlist .g-kid-ini:not(.quiet)').length === 2);
+  // Change Sam's grade: the name stays.
+  await page.locator('.g-kidlist li', { hasText: 'Sam' }).locator('button', { hasText: 'Change' }).click();
+  ok(await page.locator('.g-kidlist .kid-form input[readonly]').count() === 1, 'the name can’t be changed here');
+  await page.locator('.g-kidlist .kid-form select').first().selectOption('3');
+  await page.locator('.g-kidlist .kid-form button[type=submit]').click();
+  await page.waitForSelector('.g-kidlist li:has-text("3rd grade, age 7")');
+  let prof = await pat.okay('GET', 'profile');
+  eq(JSON.stringify(prof.kids), JSON.stringify([{ n: 'Sam', g: '3', a: '7' }, { n: 'Rae', g: '', a: '' }]));
+  ok(prof.grades.includes('3'), 'the grade the lists start on follows');
+  // Remove takes two taps.
+  const rm = page.locator('.g-kidlist li', { hasText: 'Rae' }).locator('button', { hasText: 'Remove' });
+  await rm.click();
+  await page.locator('.g-kidlist li', { hasText: 'Rae' }).locator('button[data-armed]').click();
+  await page.waitForSelector('.g-kids .g-status:has-text("Rae is off your profile")');
+  prof = await pat.okay('GET', 'profile');
+  eq(prof.kids.length, 1); eq(prof.kids[0].n, 'Sam');
+  eq(t.errors.length, 0, t.errors.join(' | '));
+  await t.close();
+});
