@@ -417,7 +417,7 @@ button.btn{cursor:pointer;font-family:inherit}
 .foot .in{padding-block:clamp(40px,6vw,64px) 40px;gap:0}
 .foot-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 24px}
 .foot-brand{grid-column:1 / -1;display:flex;flex-direction:column;gap:12px;max-width:34ch}
-@media (min-width:860px){.foot-cols{grid-template-columns:minmax(0,1.6fr) repeat(3,minmax(0,1fr));gap:32px}.foot-brand{grid-column:auto}}
+@media (min-width:860px){.foot-cols{grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr));gap:32px}.foot-brand{grid-column:auto}.foot-cols:has(> div:nth-child(5)){grid-template-columns:minmax(0,1.4fr) repeat(4,minmax(0,1fr));gap:28px}}
 .foot-cols h2{font-size:1.02rem;letter-spacing:.03em;margin-bottom:12px}
 .foot-cols h2 a{color:var(--foot-ink);text-decoration:none}
 .foot-cols ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
@@ -1127,6 +1127,21 @@ html.signed.form-up .acct-hero-art{display:block}
 .acct-row-text .kinds{display:flex;flex-direction:column;gap:10px;margin:0}
 .acct-row-text .kinds div{flex-direction:row;align-items:baseline;flex-wrap:wrap;gap:4px 10px}
 .acct-row-text .kinds p{margin:0;flex:1 1 16rem}
+/* Account Features: a page for each thing an account does, the account page's rows, and cards that lead between them */
+.feat{display:flex;flex-direction:column;gap:34px;min-width:0}
+.hero .kicker{margin:0 0 4px;font-weight:800;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--hero-muted)}
+.hero .kicker a{color:inherit}
+.feat-cards{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+@media (min-width:720px){.feat-cards{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}}
+.feat-card{display:flex;flex-direction:column;gap:6px;height:100%;padding:14px 14px 18px;background:var(--surface);border:1.5px solid var(--line);border-radius:18px;color:inherit;text-decoration:none;transition:border-color .15s,box-shadow .15s,transform .15s}
+.feat-card:hover,.feat-card:focus-visible{border-color:var(--link);box-shadow:0 8px 22px rgba(11,33,64,.12);transform:translateY(-2px)}
+.feat-card-art{display:block;background:linear-gradient(160deg,#DCEBFB,#F3F8FE);border-radius:12px;padding:8px;margin-bottom:6px}
+.feat-card-art svg{display:block;width:100%;height:auto;max-height:180px}
+.feat-card b{font-family:var(--display);font-stretch:112%;font-size:1.25rem;line-height:1.2;color:var(--ink)}
+.feat-card b::after{content:" →";color:var(--link)}
+.feat-card > span:last-child{color:var(--muted);line-height:1.5}
+.feat-more > h2{font-size:1.3rem;margin:0 0 14px}
+.feat .kids-band{margin-block:0}
 /* the About page: the same rows, read as a story */
 .about-rows{display:flex;flex-direction:column;gap:22px}
 .acct-row-art .about-photo{display:block;width:100%;height:auto;border-radius:10px}
@@ -2229,9 +2244,12 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 }
 /* in the phone menu, someone signed in finds their own pages first: Parent Portal, Kid's Corner, then My Profile */
 @media (max-width:1099px){
-  .js .nav.open > a.nav-cta.when-in{order:-3;margin:0 0 6px}
-  .js .nav.open > a.nav-kc{order:-2;display:flex;align-items:center;justify-content:center;gap:8px;margin:0 0 8px;font-family:var(--title);font-stretch:normal;font-weight:400;font-size:1.15rem;padding:9px 12px 6px;border:2px solid #0B2140;border-radius:999px;box-shadow:0 3px 0 #0B2140;background:#96C9FF;transform:none}
-  .js .nav.open > a.nav-kc:hover{background:#C3E1FF}
+  /* the phone menu, signed in: Parent Portal leads (big, yellow, with an ink edge); Kid's Corner and My Profile come
+     under it, smaller and quieter */
+  .js .nav.open > a.nav-cta.when-in{order:-3;margin:0 0 10px;padding:15px 12px;font-size:1.2rem;font-weight:800;border:3px solid #0B2140;box-shadow:0 4px 0 #0B2140}
+  .js .nav.open > a.nav-kc{order:-2;display:flex;align-items:center;justify-content:center;gap:6px;margin:0 0 8px;font-family:inherit;font-stretch:normal;font-weight:700;font-size:.98rem;padding:8px 12px;border:2px solid #9CC3EE;border-radius:999px;box-shadow:none;background:#EEF6FF;transform:none}
+  .js .nav.open > a.nav-kc .nav-kc-bulb{width:16px;height:20px}
+  .js .nav.open > a.nav-kc:hover{background:#DAEDFE}
   .js .nav.open > a.nav-acct{order:-1;text-align:center;border:2px solid #0B2140;border-radius:999px;margin-bottom:8px;padding:8px 12px}
 }
 /* Kid's Corner, beside Parent Portal: a button that looks like it belongs on Kid's Corner */
@@ -2254,11 +2272,6 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .ov-text{color:var(--muted);font-size:.93rem;line-height:1.35}
 .ov-state{justify-self:start;margin-top:6px;font-size:.82rem;font-weight:700;border-radius:999px;padding:2px 10px;background:var(--cell-off);color:var(--muted)}
 .ov-state.done{background:var(--green-bg);color:var(--green-ink)}
-.ov-card.ov-kids{background:#0F4D90;border-color:#0A3566;color:#fff}
-.ov-card.ov-kids:hover{border-color:var(--yellow);box-shadow:0 4px 0 #0A3566}
-.ov-kids b{font-family:var(--title);font-weight:400;letter-spacing:.03em;text-transform:uppercase;font-size:1.15rem}
-.ov-kids .ov-text{color:#DCEBFA}
-.ov-kids .ov-icon{background:#0A3566;color:var(--yellow)}
 .ov-help .ov-icon{background:#FFE3DA;color:var(--red)}
 @media (prefers-reduced-motion:reduce){.ov-card,.ov-card:hover{transition:none;transform:none}}
 
@@ -2770,8 +2783,8 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
   .kc-tourshow{min-height:220px}
 }
 /* the map's secret spots: a ? cloud that bobs until it's found, the count, and the card that shows what was found */
-.kc-map .kc-secret{cursor:pointer}
-.kc-map .kc-secret > g{animation:kc-secret 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.kc-map .kc-secret,.kc-map .kc-sur{cursor:pointer}
+.kc-map .kc-secret > g,.kc-map .kc-surq > g{animation:kc-secret 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
 @keyframes kc-secret{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 .kc-spottally{margin:-4px 0 6px;font-weight:800;color:#fff;text-shadow:0 2px 0 var(--kink)}
 .kc-spottally b{font-family:var(--title);font-weight:400;font-size:1.2rem;color:var(--kyellow);margin-right:2px}
@@ -2829,7 +2842,7 @@ html.kc-kid .kc-hold{background:rgba(255,255,255,.85);border-color:rgba(11,33,64
 .kc-hits{top:100%}
 .kc-picked{font-weight:700;margin:6px 0 0}
 @media (max-width:420px){.kc-me{width:56px;height:56px}.kc-top .kc-back,.kc-top .kc-mute{width:44px;height:44px}.kc-top{gap:8px;padding:8px}.kc-vs{width:54px;height:54px;font-size:1.6rem}.kc-arena{padding:92px 6px 16px}.kc-fighter b{font-size:.85rem;padding:5px 7px}.kc-ref .kc-eddie-say{font-size:1.05rem}.kc-eddie-img{width:52px}}
-@media (prefers-reduced-motion:reduce){.kc-tour0 .kc-tour-big,.kc-map .kc-secret > g,.kc-pinrays,.kc-twinkle,.kc-flame,.kc-floor,.kc-disco-face,.kc-glow,.kc-eddie-img,.kc-bulb.beam .kc-glow,.kc-bulb.bob,.kc-eyes,.kc-prop,.kc-pin .kc-shine,.kc-waves,.kc-rays,.kc-giftart,.kc-xp i,.kc-meter i{animation:none}}
+@media (prefers-reduced-motion:reduce){.kc-tour0 .kc-tour-big,.kc-map .kc-secret > g,.kc-map .kc-surq > g,.kc-pinrays,.kc-twinkle,.kc-flame,.kc-floor,.kc-disco-face,.kc-glow,.kc-eddie-img,.kc-bulb.beam .kc-glow,.kc-bulb.bob,.kc-eyes,.kc-prop,.kc-pin .kc-shine,.kc-waves,.kc-rays,.kc-giftart,.kc-xp i,.kc-meter i{animation:none}}
 @media print{html.kc-kid body{background:#fff}html.kc-kid body::before,html.kc-kid .kc-tabs,html.kc-kid .kc-grown,html.kc-kid .kc-mute,html.kc-kid .kc-back{display:none}html.kc-kid .kc-top{position:static}.kc-h2,.kc-say{color:var(--kink);text-shadow:none}.kc-pincard,.kc-top{box-shadow:none;break-inside:avoid}}
 
 /* a child's favorites from the Passport, offered first in the planners */

@@ -404,7 +404,7 @@
   var need = function (n) { return n - 1 < LEVELS.length ? LEVELS[n - 1] : LEVELS[LEVELS.length - 1] + (n - LEVELS.length) * 150; };   // points to reach level n
   var levelOf = function (xp) { var n = 1; while (xp >= need(n + 1)) n++; return { n: n, title: TITLES[Math.min(n - 1, TITLES.length - 1)], from: need(n), to: need(n + 1) }; };
   var stats = function (k) {
-    var types = {}, kinds = {}, hoods = {}, places = [], keys = [], seenKey = {}, n = 0, times = {}, weeks = 0, near = {};
+    var types = {}, kinds = {}, hoods = {}, places = [], keys = [], seenKey = {}, n = 0, times = {}, weeks = 0, near = {}, inHood = {};
     k.done.forEach(function (e) {
       var l = listing(e.k); if (!l) return;
       var x = Math.max(1, e.n || 1);   // days a week, terms, weeks of the same camp: each time after the first is a repeat
@@ -412,11 +412,14 @@
       (l.t || []).forEach(function (t) { types[t] = (types[t] || 0) + 1; });
       if (!seenKey[e.k]) { seenKey[e.k] = true; keys.push(e.k); }
       var st = siteOf(e);
-      if (st) { var hid = st.m || 'n:' + st.h; hoods[hid] = true; places.push({ k: e.k, st: st }); if (st.a) (near[st.a] = near[st.a] || {})[e.k] = true; }
+      if (st) { var hid = st.m || 'n:' + st.h; hoods[hid] = true; places.push({ k: e.k, st: st }); if (st.a) (near[st.a] = near[st.a] || {})[e.k] = true; if (st.m) (inHood[st.m] = inHood[st.m] || {})[e.k] = true; }
     });
     // the map's secret spots: each area's open one by one, a class nearby for each
     var spots = {}, found = 0, hidden = 0;
     (D.areas || []).forEach(function (a) { var c = Object.keys(near[a.id] || {}).length, open = Math.min(c, a.items.length); spots[a.id] = { c: c, open: open }; found += open; hidden += a.items.length; });
+    // the neighborhoods' surprises: the first with a class there, the second with another
+    var sur = {}, surFound = 0;
+    Object.keys(D.surprises || {}).forEach(function (h) { var c = Object.keys(inHood[h] || {}).length; if (c) { sur[h] = { c: c, open: Math.min(c, D.surprises[h].s.length) }; surFound += sur[h].open; } });
     var nh = Object.keys(hoods).length, pins = {}, tiers = 0, repeats = 0;
     keys.forEach(function (key) { repeats += times[key] - 1; });
     D.pins.forEach(function (p) {
@@ -426,7 +429,7 @@
       tiers += tier;
     });
     var xp = n * 10 + repeats * 5 + nh * 5 + tiers * 5;   // going back counts toward the level too
-    return { n: n, nh: nh, hoods: hoods, places: places, keys: keys, times: times, repeats: repeats, spots: spots, found: found, hidden: hidden, pins: pins, tiers: tiers, xp: xp, level: levelOf(xp) };
+    return { n: n, nh: nh, hoods: hoods, places: places, keys: keys, times: times, repeats: repeats, spots: spots, found: found, hidden: hidden, sur: sur, surFound: surFound, pins: pins, tiers: tiers, xp: xp, level: levelOf(xp) };
   };
 
   // ----- state -----
@@ -463,7 +466,7 @@
   // they've been shown, Eddie's welcome and their favorites go; the classes stay unless the box is ticked. Two taps.
   var startOver = function (k, then) {
     var box = el('div', 'kc-reset');
-    box.appendChild(el('p', 'hint', 'Like new for ' + k.name + ': Eddie’s welcome, picking a bulb, and unwrapping every pin and secret spot again. The showdown favorites go too. This can’t be undone.'));
+    box.appendChild(el('p', 'hint', 'Like new for ' + k.name + ': Eddie’s welcome, picking a bulb, and unwrapping every pin, secret spot and surprise again. The showdown favorites go too. This can’t be undone.'));
     var cb = null;
     if (k.done.length) {
       var lab = el('label', 'g-check'); cb = el('input'); cb.type = 'checkbox'; cb.id = 'kc-reset-' + (++uid);
@@ -682,6 +685,7 @@
   var shownNow = function (k, st) {
     var seen = {}; D.pins.forEach(function (p) { if (st.pins[p.id].tier) seen[p.id] = st.pins[p.id].tier; });
     (D.areas || []).forEach(function (a) { if (st.spots[a.id].open) seen['map:' + a.id] = st.spots[a.id].open; });
+    Object.keys(st.sur).forEach(function (h) { seen['hood:' + h] = st.sur[h].open; });
     if (k.seen.intro) seen.intro = 1;
     return seen;
   };
@@ -747,11 +751,11 @@
       acts.appendChild(btn('kc-big go', got.length ? 'Cool!' : 'Got it!', next));
       if (got.length) Sound.play('sparkle');
     } else if (step === 3) {
-      say('This is your map of Philly. Every class clears the clouds, and classes nearby find secret spots!');
+      say('This is your map of Philly. Every class clears the clouds and finds a surprise, and classes nearby find secret spots!');
       var row = el('div', 'kc-spotrow');
       [['art-museum', 'Found!'], ['?', 'Secret!']].forEach(function (x) { var c = el('div', 'kc-spot1'); c.appendChild(spotArt(x[0])); c.appendChild(el('b', null, x[1])); row.appendChild(c); });
       show.appendChild(row);
-      show.appendChild(el('p', 'kc-tour-lvl', plural(st.nh, 'place', 'places') + ' explored' + (st.hidden ? ' · ' + st.found + ' / ' + st.hidden + ' secret spots' : '')));
+      show.appendChild(el('p', 'kc-tour-lvl', plural(st.nh, 'place', 'places') + ' explored' + (st.hidden ? ' · ' + st.found + ' / ' + st.hidden + ' secret spots' : '') + (st.surFound ? ' · ' + plural(st.surFound, 'surprise', 'surprises') : '')));
       acts.appendChild(btn('kc-big go', 'Next', next));
     } else if (step === 4) {
       say('Which class did you have the most fun at? I show you two at a time. You tap the one you liked more!');
@@ -818,6 +822,8 @@
     var seen = k.seen || {}, out = { pins: [], spots: [], level: 0 };
     D.pins.forEach(function (p) { var t = st.pins[p.id].tier; if (t > (seen[p.id] || 0)) out.pins.push({ p: p, tier: t }); });
     (D.areas || []).forEach(function (a) { for (var i = seen['map:' + a.id] || 0; i < st.spots[a.id].open; i++) out.spots.push({ a: a, it: a.items[i] }); });
+    out.sur = [];
+    Object.keys(st.sur).forEach(function (h) { var x = D.surprises[h]; for (var i = seen['hood:' + h] || 0; i < st.sur[h].open; i++) out.sur.push({ a: { name: x.n }, it: { id: x.s[i], n: SURPRISE_NAME[x.s[i]] } }); });
     if (st.level.n > (k.lvl || 1)) out.level = st.level.n;
     return out;
   };
@@ -832,7 +838,7 @@
     // A present to tap open: sounds can only start after a tap.
     overlay(function (card, close) {
       card.classList.add('kc-gift');
-      card.appendChild(el('h2', 'kc-h', news.pins.length || news.spots.length ? 'Something new!' : 'Level up!'));
+      card.appendChild(el('h2', 'kc-h', news.pins.length || news.spots.length || news.sur.length ? 'Something new!' : 'Level up!'));
       var g = btn('kc-giftbtn', '', function () { close(); });
       g.setAttribute('aria-label', 'Tap to open');
       g.appendChild(giftArt()); g.appendChild(el('span', 'kc-say', 'Tap to open!'));
@@ -842,6 +848,7 @@
       if (news.pins.length && news.pins.length <= 3) news.pins.forEach(function (x) { chain = chain.then(function () { return revealPin(x.p, x.tier, st); }); });
       else if (news.pins.length) chain = chain.then(function () { return revealMany(news.pins); });
       if (news.spots.length) chain = chain.then(function () { return revealSpots(news.spots); });
+      if (news.sur.length) chain = chain.then(function () { return revealSpots(news.sur, true); });
       if (news.level) chain = chain.then(function () { return levelUp(k, st); });
       chain.then(done);
     });
@@ -884,19 +891,19 @@
     }, 'reveal');
   };
   // Secret spots found on the map: each drawn big, with its name (and, for one, what's fun about it).
-  var spotArt = function (id) { var s = sv('svg', { viewBox: '-24 -32 48 54', 'class': 'kc-spotart', 'aria-hidden': 'true' }); sv('ellipse', { cx: 0, cy: 16, rx: 16, ry: 4, fill: 'rgba(11,33,64,.18)' }, s); (LANDMARK[id] || drawSecret)(sv('g', null, s)); return s; };
-  var revealSpots = function (list) {
+  var spotArt = function (id) { var s = sv('svg', { viewBox: '-24 -32 48 54', 'class': 'kc-spotart', 'aria-hidden': 'true' }); sv('ellipse', { cx: 0, cy: 16, rx: 16, ry: 4, fill: 'rgba(11,33,64,.18)' }, s); (LANDMARK[id] || SURPRISE[id] || drawSecret)(sv('g', null, s)); return s; };
+  var revealSpots = function (list, surprise) {
     return overlay(function (card, close) {
       card.classList.add('kc-reveal', 'kc-spotreveal');
       card.appendChild(rays());
-      card.appendChild(el('p', 'kc-burst', list.length === 1 ? 'SECRET SPOT!' : list.length + ' SECRET SPOTS!'));
+      card.appendChild(el('p', 'kc-burst', surprise ? (list.length === 1 ? 'SURPRISE!' : list.length + ' SURPRISES!') : list.length === 1 ? 'SECRET SPOT!' : list.length + ' SECRET SPOTS!'));
       var row = el('div', 'kc-spotrow' + (list.length > 2 ? ' many' : ''));
       list.slice(0, 6).forEach(function (x, i) {
         var c = el('div', 'kc-spot1'); var art = spotArt(x.it.id); c.appendChild(art); c.appendChild(el('b', null, x.it.n)); row.appendChild(c);
         anim(art, [{ transform: 'scale(0) rotate(-30deg)' }, { transform: 'scale(1.2) rotate(6deg)', offset: 0.7 }, { transform: 'scale(1)' }], { duration: 600, delay: Math.min(i * 140, 700), easing: 'ease-out', fill: 'backwards' });
       });
       card.appendChild(row);
-      card.appendChild(el('p', 'kc-say', list.length === 1 ? (LANDMARK_SAY[list[0].it.id] || '') + ' You found it in ' + list[0].a.name + '!' : 'You found them by going to classes nearby!'));
+      card.appendChild(el('p', 'kc-say', list.length === 1 ? ((surprise ? SURPRISE_SAY : LANDMARK_SAY)[list[0].it.id] || '') + ' You found it in ' + list[0].a.name + '!' : surprise ? 'Hiding in the neighborhoods where your classes are!' : 'You found them by going to classes nearby!'));
       card.appendChild(btn('kc-big go', 'See my map!', function () { Sound.play('tap'); S.toMap = true; close(); }));
       card.appendChild(btn('kc-big ghost', 'Yay!', function () { Sound.play('tap'); close(); }));
       Sound.play('sparkle'); confetti(50);
@@ -994,14 +1001,142 @@
     },
     airport: function (g) { sv('path', { d: 'M-2 -16C0 -18 2 -16 2 -12V-4L16 4V8L2 3V11L6 14V17L0 15L-6 17V14L-2 11V3L-16 8V4L-2 -4V-12C-2 -14 -2 -15 -2 -16Z', fill: '#fff', stroke: INK, 'stroke-width': 1.8, 'stroke-linejoin': 'round', transform: 'rotate(-35)' }, g); }
   };
+  // ----- the neighborhoods' surprises: little Philly things, one or two in each neighborhood with classes -----
+  var SURPRISE_NAME = { pretzel: 'A soft pretzel', waterice: 'Water ice', hoagie: 'A hoagie', trolley: 'A trolley', stoop: 'A rowhouse stoop', mural: 'A mural', hoop: 'A basketball hoop', kite: 'A kite', duck: 'A duck', cat: 'A stoop cat', bike: 'A bike', tree: 'An apple tree', flowers: 'Window flowers', boombox: 'A boombox', hydrant: 'An open hydrant', pigeon: 'A pigeon' };
+  var SURPRISE_SAY = { pretzel: 'Twisty, salty and very Philly.', waterice: 'Cold and sweet on a hot day.', hoagie: 'A Philly classic.', trolley: 'Ding ding!', stoop: 'The best seat on the block.', mural: 'Philly has thousands of murals!', hoop: 'Shoot your shot!', kite: 'Up, up and away!', duck: 'Quack!', cat: 'Every block has one.', bike: 'Ring ring!', tree: 'Shade and a snack.', flowers: 'A little garden on the sill.', boombox: 'Turn it up!', hydrant: 'A summer splash on the block.', pigeon: 'Coo! A city regular.' };
+  var line2 = function (g, d, w, color) { sv('path', { d: d, fill: 'none', stroke: INK, 'stroke-width': w + 3, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, g); sv('path', { d: d, fill: 'none', stroke: color, 'stroke-width': w, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, g); };
+  var SURPRISE = {
+    pretzel: function (g) {
+      line2(g, 'M-13 9C-22 0 -15 -15 -5 -10C0 -7 0 -1 0 3C0 -1 0 -7 5 -10C15 -15 22 0 13 9M-13 9L7 -5M13 9L-7 -5', 5.5, '#A0632B');
+      [[-12, -4], [-6, -9], [6, -9], [12, -4], [0, 1], [-9, 5], [9, 5]].forEach(function (p) { sv('circle', { cx: p[0], cy: p[1], r: 1, fill: '#fff' }, g); });
+    },
+    waterice: function (g) {
+      sv('path', { d: 'M-11 0C-11 -15 11 -15 11 0Z', fill: '#FF6B6B', stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, g);
+      sv('path', { d: 'M-4 -9C-2 -11 1 -11 3 -9', fill: 'none', stroke: '#fff', 'stroke-width': 1.6, 'stroke-linecap': 'round' }, g);
+      sv('path', { d: 'M-11 0H11L8 15H-8Z', fill: '#fff', stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, g);
+      sv('path', { d: 'M-9 6H9', stroke: '#4DABF7', 'stroke-width': 2.4 }, g);
+      sv('path', { d: 'M5 -6L12 -18', stroke: INK, 'stroke-width': 3.6, 'stroke-linecap': 'round' }, g); sv('path', { d: 'M5 -6L12 -18', stroke: '#FFD43B', 'stroke-width': 1.8, 'stroke-linecap': 'round' }, g);
+    },
+    hoagie: function (g) {
+      sv('path', { d: 'M-19 4C-19 12 19 12 19 4Z', fill: '#E8B567', stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, g);
+      sv('path', { d: 'M-18 3Q-14 -1 -10 3T-2 3T6 3T14 3T19 3', fill: 'none', stroke: '#40C057', 'stroke-width': 3, 'stroke-linecap': 'round' }, g);
+      [-11, -2, 7].forEach(function (x) { sv('ellipse', { cx: x, cy: 1, rx: 4, ry: 2, fill: '#FA5252', stroke: INK, 'stroke-width': 1 }, g); });
+      sv('path', { d: 'M-19 -1C-19 -13 19 -13 19 -1Z', fill: '#E8B567', stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, g);
+      [-10, -3, 4, 11].forEach(function (x) { sv('path', { d: 'M' + x + ' -8l2 -2', stroke: '#B07A35', 'stroke-width': 1.4, 'stroke-linecap': 'round' }, g); });
+    },
+    trolley: function (g) {
+      sv('path', { d: 'M-22 -27H22', stroke: INK, 'stroke-width': 1.2 }, g);
+      sv('path', { d: 'M3 -13L11 -27', stroke: INK, 'stroke-width': 1.8 }, g);
+      sv('rect', { x: -19, y: -13, width: 38, height: 22, rx: 5, fill: '#2F9E44', stroke: INK, 'stroke-width': 2 }, g);
+      sv('rect', { x: -19, y: 2, width: 38, height: 4, fill: '#FFD43B' }, g);
+      [-15, -6, 3].forEach(function (x) { sv('rect', { x: x, y: -9, width: 7, height: 7, rx: 1.5, fill: '#D0EBFF', stroke: INK, 'stroke-width': 1.2 }, g); });
+      sv('rect', { x: 12, y: -9, width: 4, height: 15, fill: '#D0EBFF', stroke: INK, 'stroke-width': 1.2 }, g);
+      [-10, 10].forEach(function (x) { sv('circle', { cx: x, cy: 11, r: 3.5, fill: '#495057', stroke: INK, 'stroke-width': 1.5 }, g); });
+    },
+    stoop: function (g) {
+      sv('rect', { x: -14, y: -24, width: 28, height: 34, fill: '#B5523B', stroke: INK, 'stroke-width': 2 }, g);
+      sv('path', { d: 'M-16 -24H16', stroke: INK, 'stroke-width': 3 }, g);
+      [[-11, -19], [3, -19]].forEach(function (w) { sv('rect', { x: w[0], y: w[1], width: 8, height: 8, fill: '#FFF3BF', stroke: INK, 'stroke-width': 1.2 }, g); });
+      sv('rect', { x: -10, y: -6, width: 7, height: 6, fill: '#FFF3BF', stroke: INK, 'stroke-width': 1.2 }, g);
+      sv('rect', { x: 2, y: -7, width: 8, height: 17, fill: '#1C3F6E', stroke: INK, 'stroke-width': 1.5 }, g);
+      sv('rect', { x: -2, y: 10, width: 16, height: 3, fill: '#CED4DA', stroke: INK, 'stroke-width': 1.2 }, g);
+      sv('rect', { x: -4, y: 13, width: 20, height: 3, fill: '#CED4DA', stroke: INK, 'stroke-width': 1.2 }, g);
+    },
+    mural: function (g) {
+      sv('rect', { x: -19, y: -20, width: 38, height: 32, rx: 2, fill: '#F1E3C4', stroke: INK, 'stroke-width': 2 }, g);
+      sv('circle', { cx: -9, cy: -10, r: 5, fill: '#FFD43B' }, g);
+      sv('path', { d: 'M-19 4Q-12 -4 -4 4T12 4T19 2V12H-19Z', fill: '#4DABF7' }, g);
+      sv('path', { d: 'M8 -12C8 -16 13 -16 13 -12C13 -16 18 -16 18 -12C18 -8 13 -5 13 -4C13 -5 8 -8 8 -12Z', fill: '#FA5252' }, g);
+      sv('rect', { x: -19, y: -20, width: 38, height: 32, rx: 2, fill: 'none', stroke: INK, 'stroke-width': 2 }, g);
+    },
+    hoop: function (g) {
+      line2(g, 'M12 14V-14', 2.5, '#868E96');
+      sv('rect', { x: -6, y: -26, width: 22, height: 15, rx: 2, fill: '#fff', stroke: INK, 'stroke-width': 2 }, g);
+      sv('rect', { x: 1, y: -21, width: 8, height: 6, fill: 'none', stroke: '#FA5252', 'stroke-width': 1.5 }, g);
+      sv('path', { d: 'M-1 -10L1 -3H9L11 -10M3 -10L4 -3M7 -10L6 -3', fill: 'none', stroke: INK, 'stroke-width': 1 }, g);
+      sv('ellipse', { cx: 5, cy: -10, rx: 6.5, ry: 1.8, fill: 'none', stroke: '#FD7E14', 'stroke-width': 2 }, g);
+      sv('circle', { cx: -10, cy: 6, r: 7, fill: '#FD7E14', stroke: INK, 'stroke-width': 1.8 }, g);
+      sv('path', { d: 'M-17 6H-3M-10 -1V13M-15 1Q-10 6 -15 11M-5 1Q-10 6 -5 11', fill: 'none', stroke: INK, 'stroke-width': 1 }, g);
+    },
+    kite: function (g) {
+      sv('path', { d: 'M2 -27L14 -12L2 3L-10 -12Z', fill: '#FFD43B', stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, g);
+      sv('path', { d: 'M2 -27V3M-10 -12H14', stroke: INK, 'stroke-width': 1.2 }, g);
+      sv('path', { d: 'M2 -27L-10 -12L2 -12Z', fill: '#FA5252', opacity: '.85' }, g);
+      sv('path', { d: 'M2 3C-2 8 6 10 1 15', fill: 'none', stroke: INK, 'stroke-width': 1.4 }, g);
+      [[0, 7], [3, 12]].forEach(function (b) { sv('path', { d: 'M' + (b[0] - 3) + ' ' + (b[1] - 2) + 'L' + (b[0] + 3) + ' ' + (b[1] + 2) + 'M' + (b[0] - 3) + ' ' + (b[1] + 2) + 'L' + (b[0] + 3) + ' ' + (b[1] - 2), stroke: '#4DABF7', 'stroke-width': 2.2, 'stroke-linecap': 'round' }, g); });
+    },
+    duck: function (g) {
+      g = sv('g', { transform: 'translate(0 -2) scale(1.3)' }, g);
+      sv('ellipse', { cx: 0, cy: 10, rx: 16, ry: 4.5, fill: '#74C0FC', stroke: INK, 'stroke-width': 1.6 }, g);
+      sv('path', { d: 'M-12 6C-13 -1 -2 -2 3 2C6 0 10 1 10 5C10 10 -9 11 -12 6Z', fill: '#A47148', stroke: INK, 'stroke-width': 1.6, 'stroke-linejoin': 'round' }, g);
+      sv('path', { d: 'M-6 3C-3 5 1 5 3 3', fill: 'none', stroke: '#7A4F2A', 'stroke-width': 1.2, 'stroke-linecap': 'round' }, g);
+      sv('path', { d: 'M3 2C3 -2 4 -4 5 -5', fill: 'none', stroke: '#2B8A3E', 'stroke-width': 4, 'stroke-linecap': 'round' }, g);
+      sv('circle', { cx: 6, cy: -7, r: 4.5, fill: '#2B8A3E', stroke: INK, 'stroke-width': 1.5 }, g);
+      sv('path', { d: 'M10 -7.6L15 -6.4L10 -5Z', fill: '#FFD43B', stroke: INK, 'stroke-width': 1.1, 'stroke-linejoin': 'round' }, g);
+      sv('circle', { cx: 7, cy: -8.2, r: 0.9, fill: '#fff' }, g);
+    },
+    cat: function (g) {
+      line2(g, 'M7 12C16 12 18 3 13 -1', 2.5, '#FF922B');
+      sv('path', { d: 'M-8 14C-12 2 -8 -4 0 -4C8 -4 12 2 8 14Z', fill: '#FF922B', stroke: INK, 'stroke-width': 1.8, 'stroke-linejoin': 'round' }, g);
+      sv('path', { d: 'M-7 -14L-6 -22L-1 -17ZM7 -14L6 -22L1 -17Z', fill: '#FF922B', stroke: INK, 'stroke-width': 1.6, 'stroke-linejoin': 'round' }, g);
+      sv('circle', { cx: 0, cy: -10, r: 7.5, fill: '#FF922B', stroke: INK, 'stroke-width': 1.8 }, g);
+      [-3, 3].forEach(function (x) { sv('circle', { cx: x, cy: -11, r: 1.1, fill: INK }, g); });
+      sv('path', { d: 'M-1.5 -7.5L0 -6.5L1.5 -7.5', fill: 'none', stroke: INK, 'stroke-width': 1, 'stroke-linecap': 'round' }, g);
+      sv('path', { d: 'M-3 4V13M3 4V13', stroke: '#E8590C', 'stroke-width': 1.2 }, g);
+    },
+    bike: function (g) {
+      [-11, 11].forEach(function (x) { sv('circle', { cx: x, cy: 7, r: 7, fill: 'none', stroke: INK, 'stroke-width': 2.4 }, g); sv('circle', { cx: x, cy: 7, r: 1.2, fill: INK }, g); });
+      line2(g, 'M-11 7L-3 -5H8L11 7M-3 -5L0 7L8 -5', 2, '#CC3000');
+      line2(g, 'M-6 -9H0M8 -5L6 -11H11', 2, '#495057');
+    },
+    tree: function (g) {
+      sv('rect', { x: -3, y: -1, width: 6, height: 15, fill: '#8D5524', stroke: INK, 'stroke-width': 1.6 }, g);
+      sv('circle', { cx: 0, cy: -10, r: 14, fill: '#40C057', stroke: INK, 'stroke-width': 2 }, g);
+      [[-6, -14], [6, -12], [-2, -5], [8, -4], [-9, -6], [1, -19]].forEach(function (a) { sv('circle', { cx: a[0], cy: a[1], r: 2.2, fill: '#FA5252', stroke: INK, 'stroke-width': 0.8 }, g); });
+    },
+    flowers: function (g) {
+      sv('path', { d: 'M-6 3V-8M0 3V-13M6 3V-7', stroke: '#2F9E44', 'stroke-width': 2 }, g);
+      [[-6, -9, '#F783AC'], [0, -14, '#B197FC'], [6, -8, '#FFD43B']].forEach(function (f) {
+        for (var i = 0; i < 5; i++) { var a = i * Math.PI * 2 / 5; sv('circle', { cx: f[0] + 3.2 * Math.cos(a), cy: f[1] + 3.2 * Math.sin(a), r: 2.4, fill: f[2], stroke: INK, 'stroke-width': 0.8 }, g); }
+        sv('circle', { cx: f[0], cy: f[1], r: 1.6, fill: '#FFF3BF' }, g);
+      });
+      sv('path', { d: 'M-15 2H15L13 14H-13Z', fill: '#E8590C', stroke: INK, 'stroke-width': 1.8, 'stroke-linejoin': 'round' }, g);
+      sv('path', { d: 'M-16 2H16', stroke: INK, 'stroke-width': 2.5 }, g);
+    },
+    boombox: function (g) {
+      sv('path', { d: 'M-10 -9V-14H10V-9', fill: 'none', stroke: INK, 'stroke-width': 2.2 }, g);
+      sv('rect', { x: -19, y: -9, width: 38, height: 21, rx: 4, fill: '#495057', stroke: INK, 'stroke-width': 2 }, g);
+      [-10, 10].forEach(function (x) { sv('circle', { cx: x, cy: 2, r: 6, fill: '#CED4DA', stroke: INK, 'stroke-width': 1.4 }, g); sv('circle', { cx: x, cy: 2, r: 2.2, fill: INK }, g); });
+      sv('rect', { x: -4, y: -5, width: 8, height: 4, rx: 1, fill: '#FFD43B' }, g);
+      [[14, -22], [-15, -19]].forEach(function (n) { sv('ellipse', { cx: n[0], cy: n[1] + 5, rx: 2.4, ry: 1.8, fill: INK }, g); sv('path', { d: 'M' + (n[0] + 2.2) + ' ' + (n[1] + 5) + 'V' + (n[1] - 2) + 'l3 1.5', fill: 'none', stroke: INK, 'stroke-width': 1.4 }, g); });
+    },
+    hydrant: function (g) {
+      sv('path', { d: 'M8 -3C15 -8 19 0 21 10', fill: 'none', stroke: '#4DABF7', 'stroke-width': 3, 'stroke-linecap': 'round' }, g);
+      [[17, -6], [21, 2], [14, 3]].forEach(function (d) { sv('circle', { cx: d[0], cy: d[1], r: 1.4, fill: '#74C0FC' }, g); });
+      sv('path', { d: 'M-7 14V-6C-7 -13 7 -13 7 -6V14Z', fill: '#E03131', stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, g);
+      sv('rect', { x: -11, y: -3, width: 5, height: 5, rx: 1, fill: '#E03131', stroke: INK, 'stroke-width': 1.5 }, g);
+      sv('rect', { x: 6, y: -5, width: 4, height: 5, rx: 1, fill: '#E03131', stroke: INK, 'stroke-width': 1.5 }, g);
+      sv('rect', { x: -9, y: 12, width: 18, height: 3, fill: '#C92A2A', stroke: INK, 'stroke-width': 1.4 }, g);
+      sv('circle', { cx: 0, cy: -13, r: 2, fill: '#C92A2A', stroke: INK, 'stroke-width': 1.2 }, g);
+    },
+    pigeon: function (g) {
+      sv('path', { d: 'M-2 12L-3 15M3 12L4 15', stroke: '#F06595', 'stroke-width': 1.6, 'stroke-linecap': 'round' }, g);
+      sv('path', { d: 'M-16 4C-10 0 -6 -6 2 -6C10 -6 12 2 9 8C6 12 -4 12 -16 4Z', fill: '#ADB5BD', stroke: INK, 'stroke-width': 1.8, 'stroke-linejoin': 'round' }, g);
+      sv('path', { d: 'M-6 2C-2 6 4 6 6 3', fill: 'none', stroke: '#868E96', 'stroke-width': 1.4 }, g);
+      sv('path', { d: 'M3 -6C3 -11 5 -15 9 -15C13 -15 14 -11 12 -7', fill: '#748FFC', stroke: INK, 'stroke-width': 1.6, 'stroke-linejoin': 'round' }, g);
+      sv('path', { d: 'M3 -6C6 -5 10 -6 12 -7', fill: 'none', stroke: '#51CF66', 'stroke-width': 2 }, g);
+      sv('path', { d: 'M13 -13L17 -12L13 -11Z', fill: '#495057', stroke: INK, 'stroke-width': 1 }, g);
+      sv('circle', { cx: 10, cy: -12, r: 1.2, fill: '#FF922B', stroke: INK, 'stroke-width': 0.6 }, g);
+    }
+  };
   var drawSecret = function (g) {   // a spot still to find: a cloud with a question mark
     sv('path', { d: 'M-16 10C-23 10 -23 0 -15 -1C-15 -10 -4 -13 0 -7C3 -15 15 -14 15 -5C22 -5 23 10 15 10Z', fill: '#fff', stroke: INK, 'stroke-width': 2 }, g);
     var t = sv('text', { x: 0, y: 8, 'text-anchor': 'middle', 'font-size': 16, 'font-family': 'Luckiest Guy, Arial Black, sans-serif', fill: '#1763B8' }, g); t.textContent = '?';
   };
   var drawMapTab = function (body, k, st) {
     var head = el('div', 'kc-sechead'); head.appendChild(el('h2', 'kc-h2', 'My Philly')); head.appendChild(el('span', 'kc-tally', plural(st.nh, 'place', 'places'))); body.appendChild(head);
-    if (st.hidden) { var tl = el('p', 'kc-spottally'); tl.appendChild(el('b', null, st.found + ' / ' + st.hidden)); tl.appendChild(document.createTextNode(' secret spots found')); body.appendChild(tl); }
-    body.appendChild(eddie(!st.nh ? 'It’s all cloudy! Every class you go to clears the clouds where it is.' : st.found < st.hidden ? 'Every class lights up a new part of Philly. Classes near a ? find a secret spot!' : 'You found every secret spot! Tap a place!', 'kc-host'));
+    if (st.hidden) { var tl = el('p', 'kc-spottally'); tl.appendChild(el('b', null, st.found + ' / ' + st.hidden)); tl.appendChild(document.createTextNode(' secret spots found')); if (st.surFound) { tl.appendChild(document.createTextNode(' · ')); tl.appendChild(el('b', null, String(st.surFound))); tl.appendChild(document.createTextNode(st.surFound === 1 ? ' surprise' : ' surprises')); } body.appendChild(tl); }
+    body.appendChild(eddie(!st.nh ? 'It’s all cloudy! Every class you go to clears the clouds where it is, and finds a surprise.' : st.found < st.hidden ? 'Every class lights up a new part of Philly, with a surprise in it. Classes near a ? find a secret spot!' : 'You found every secret spot! Tap a place!', 'kc-host'));
     var box = el('div', 'kc-mapbox'); box.appendChild(el('p', 'kc-say', 'Drawing the map…')); body.appendChild(box);
     loadMap().then(function (M) {
       if (!box.isConnected) return;
@@ -1053,6 +1188,19 @@
     // Things standing on the map are sized for the zoom, so they stay tappable.
     var things = [];
     var place = function (node, x, y, base, lift) { things.push({ n: node, x: x, y: y, base: base, lift: lift === undefined ? 1 : lift }); svg.appendChild(node); };
+    // each neighborhood's surprises, once a class there clears its clouds: what's found, and a ? for the one still hiding
+    var surAt = {}, SUR_AT = [[-9, 7], [9, -5]];
+    Object.keys(st.sur).forEach(function (h) {
+      var x = D.surprises[h];
+      x.s.forEach(function (kind, i) {
+        var found = i < st.sur[h].open, s = sv('svg', { viewBox: '-22 -30 44 50', 'class': found ? 'kc-sur' : 'kc-sur kc-surq', 'data-sur': h + '|' + i });
+        sv('ellipse', { cx: 0, cy: 16, rx: 14, ry: 3.5, fill: 'rgba(11,33,64,.18)' }, s);
+        (found ? SURPRISE[kind] : drawSecret)(sv('g', null, s));
+        sv('rect', { x: -22, y: -30, width: 44, height: 50, fill: 'transparent' }, s);
+        surAt[h + '|' + i] = { h: h, i: i, found: found, kind: kind };
+        place(s, x.c[0] + SUR_AT[i][0], x.c[1] + SUR_AT[i][1], 0.72, 0.6);
+      });
+    });
     var spotAt = {};
     (D.areas || []).forEach(function (a) {
       a.items.forEach(function (lm, i) {
@@ -1146,10 +1294,16 @@
     var tapAt = function (ev) {
       var t = document.elementFromPoint(ev.clientX, ev.clientY) || ev.target;   // the drag holds the pointer, so ask what is under it
       if (!t.closest) return;
-      var lm = t.closest('[data-lm]'), mon = t.closest('[data-k]'), hood = t.closest('[data-hood]'), me = t.closest('.kc-you'), ed = t.closest('.kc-eddie-map');
+      var lm = t.closest('[data-lm]'), mon = t.closest('[data-k]'), hood = t.closest('[data-hood]'), me = t.closest('.kc-you'), ed = t.closest('.kc-eddie-map'), su = t.closest('[data-sur]');
       if (me) { Sound.play('boing'); bounce(me); say(ev.clientX, ev.clientY, 'That’s you!', possessive(k.name) + ' bulb'); return; }
       if (ed) { Sound.play('boing'); say(ev.clientX, ev.clientY, 'Eddie Bulboa', 'Race me up the Art Museum steps!'); return; }
       if (mon) { Sound.play('zap'); bounce(mon); var mk = mon.getAttribute('data-k'); say(ev.clientX, ev.clientY, nameOf(mk), ''); return; }
+      if (su) {
+        var sx = surAt[su.getAttribute('data-sur')], hn = D.surprises[sx.h].n;
+        if (sx.found) { Sound.play('pop'); bounce(su); say(ev.clientX, ev.clientY, SURPRISE_NAME[sx.kind] + '!', 'Found in ' + hn + '. ' + (SURPRISE_SAY[sx.kind] || '')); return; }
+        Sound.play('whoosh'); say(ev.clientX, ev.clientY, 'Another surprise!', 'Go to one more class in ' + hn + ' to find it!');
+        return;
+      }
       if (lm) {
         var sp = spotAt[lm.getAttribute('data-lm')];
         if (!sp) return;

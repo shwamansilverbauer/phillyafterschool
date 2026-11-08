@@ -635,7 +635,7 @@
         ['profile', 'Update your profile', 'Your school, and your kids’ names, grades and ages. The lists start from these.', 'account/', '#school'],
         ['todo', 'Manage your to-do list', 'The camp days you’ve planned and haven’t signed up for yet.', 'to-do/', '', hasYearPage],
         ['year', 'Build your year calendar', 'Every plan you make, together, month by month.', 'calendar/', '', hasYearPage],
-        ['kids', 'Have your kids play', 'Kid’s Corner: pins to earn, a map of Philly to light up, a bulb to dress up, and showdowns.', 'kids-corner/', '', !!host.getAttribute('data-kids')],
+        ['kids', 'Have your kids play', 'Kid’s Corner: pins to earn, a map of Philly to explore, a bulb to dress up, and picking favorites.', 'kids-corner/', '', !!host.getAttribute('data-kids')],
         ['summer', 'Plan your summer', 'Camps, week by week, for each child.', 'summer-schedule/', '#plan'],
         ['help', 'Help the site keep going', 'It’s free for families. If it saved you an evening, you can chip in.', 'support/', '']
       ];
@@ -663,9 +663,16 @@
           summer: sumN ? [1, sumN === 1 ? '1 week planned' : sumN + ' weeks planned'] : [0, 'Not started']
         };
         if (!lastP) { delete st.week; delete st.daysoff; delete st.todo; delete st.year; delete st.summer; }   // not known yet
+        if (kidsP) {   // Kid's Corner: whether any child has opened it yet, and classes waiting to be confirmed
+          var playing = kidsP.kids.filter(function (k) { return k.av || (k.seen && k.seen.intro); }).length, waiting = 0;
+          kidsP.kids.forEach(function (k) { waiting += (k.suggest || []).length; });
+          st.kids = !kidsP.kids.length ? [0, 'Add your kids first'] : waiting ? [0, waiting === 1 ? '1 class to confirm' : waiting + ' classes to confirm'] : playing ? [1, playing === 1 ? (kidsP.kids.length === 1 ? 'Playing' : '1 playing') : playing + ' playing'] : [0, 'Not started'];
+        }
         Object.keys(ovState).forEach(function (k) { var x = st[k], sp = ovState[k]; if (!x) { sp.hidden = true; return; } sp.hidden = false; sp.className = 'ov-state' + (x[0] ? ' done' : ''); sp.textContent = (x[0] ? '✓ ' : '') + x[1]; });
       };
+      var kidsP = null;
       paintOverview();
+      if (ovState.kids) call('passport').then(function (d) { if (d && d.ok) { kidsP = d; paintOverview(); } });   // just the children's state, for the card
       if (firstTab === 'overview') put(ov, 'account', 'overview');
       // your details: name, email address, mobile number
       var you = part(el('section', 'panel'), 'you');

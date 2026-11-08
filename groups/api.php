@@ -897,7 +897,8 @@ function passport_clean($raw): array {
   }
   if (isset($raw['seen']) && is_array($raw['seen'])) {
     $sn = array();
-    foreach (array_slice($raw['seen'], 0, 40, true) as $id => $t) if (is_string($id) && preg_match('~^((type|season|map):[a-z-]{1,20}|explore|repeat|intro)$~', $id) && is_numeric($t) && (int) $t >= 1 && (int) $t <= 3) $sn[$id] = (int) $t;
+    // what the page has already celebrated: pins, a map area's secret spots, a neighborhood's surprises ("hood:")
+    foreach (array_slice($raw['seen'], 0, 120, true) as $id => $t) if (is_string($id) && preg_match('~^((type|season|map):[a-z-]{1,20}|hood:[a-z-]{1,40}|explore|repeat|intro)$~', $id) && is_numeric($t) && (int) $t >= 1 && (int) $t <= 3) $sn[$id] = (int) $t;
     if ($sn) $out['seen'] = $sn;
   }
   if (isset($raw['lvl']) && is_numeric($raw['lvl']) && (int) $raw['lvl'] >= 1 && (int) $raw['lvl'] <= 99) $out['lvl'] = (int) $raw['lvl'];
