@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-11-07",
+  "generated": "2026-11-08",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -1079,40 +1079,6 @@
     "reason": "you asked to be told when this school was added"
   },
   "alerts": [
-    {
-      "id": "added-lingelbach",
-      "kind": "added",
-      "date": "2026-11-05",
-      "sendOn": "2026-11-05",
-      "expires": "2026-11-07",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "anna-l-lingelbach-school"
-      ],
-      "when": "New",
-      "title": "Lingelbach now has a page",
-      "text": "You asked to be told. 4 programs are listed for Lingelbach so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/lingelbach/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
-    {
-      "id": "added-marian-anderson",
-      "kind": "added",
-      "date": "2026-11-05",
-      "sendOn": "2026-11-05",
-      "expires": "2026-11-07",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "marian-anderson-neighborhood-academy"
-      ],
-      "when": "New",
-      "title": "Marian Anderson now has a page",
-      "text": "You asked to be told. 11 programs are listed for Marian Anderson so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/marian-anderson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
     {
       "id": "added-bache-martin",
       "kind": "added",

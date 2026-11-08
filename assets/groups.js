@@ -467,7 +467,7 @@
     if (aq.groups) set('pas-groups', '1');   // while groups are a pilot, this is the way in for someone who wasn't invited to one
     var ainfo = {}; try { ainfo = JSON.parse(document.getElementById('groups-data').textContent); } catch (e) { /* older page */ }
     var groupsOn = host.getAttribute('data-pilot') !== '1' || get('pas-groups') === '1';
-    var wantNext = /^(board|summer|daysoff|calendar|todo|profile)$/.test(aq.next || '') ? aq.next : view === 'profile' ? 'profile' : 'account';
+    var wantNext = /^(board|summer|daysoff|calendar|todo|passport|profile)$/.test(aq.next || '') ? aq.next : view === 'profile' ? 'profile' : 'account';
     var goNext = function (next) {
       if (next === 'join') { location.href = page('join/'); return true; }
       if (next === 'board') { location.href = page('board/') + '?back=1'; return true; }
@@ -475,6 +475,7 @@
       if (next === 'daysoff') { location.href = page('days-off/') + '#plan'; return true; }
       if (next === 'calendar') { location.href = page('calendar/'); return true; }
       if (next === 'todo') { location.href = page('to-do/'); return true; }
+      if (next === 'passport') { location.href = page('passport/'); return true; }
       if (next === 'profile') { if (view === 'profile') return false; location.href = page('profile/'); return true; }
       if (next === 'managers' || next === 'directors') { location.href = page('managers/'); return true; }
       var fm = /^[fv]:(p|c|s):([a-z0-9-]+)$/.exec(next || '');   // signed in from a Follow or Save button: back to that page
