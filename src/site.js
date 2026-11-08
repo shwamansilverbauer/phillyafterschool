@@ -1199,11 +1199,13 @@
     cta.classList.remove('nav-cta-mgr');
     all(document, '.nav-mgr').forEach(function (a) { a.parentNode.removeChild(a); });
     var kc = document.querySelector('.nav-kc'); if (kc) kc.style.display = '';
+    document.documentElement.classList.remove('nav-both');
     if (store('pas-in') !== '1' || store('pas-role') !== 'manager') return;
     var brand = document.querySelector('a.brand'), root = brand ? brand.getAttribute('href').replace(/index\.html$/, '') : './';
     if (root === './') root = '';
     var premium = store('pas-premium') === '1' || !cta.hasAttribute('data-pm');   // no premium page yet: the button goes to their listings
     if (store('pas-parent') === '1') {
+      document.documentElement.classList.add('nav-both');   // a parent and a manager: About and the Suggestion Box step out of the bar on a wide screen (they're in the footer)
       var mine = document.createElement('a'); mine.className = 'when-in nav-mgr'; mine.textContent = premium ? 'Your listings' : 'Go premium'; mine.href = root + (premium ? 'managers/' : 'premium/');
       var at = document.querySelector('.nav-acct'); if (at) at.parentNode.insertBefore(mine, at);
       return;

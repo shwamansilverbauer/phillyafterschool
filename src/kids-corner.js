@@ -430,7 +430,7 @@
   };
 
   // ----- state -----
-  var S = { data: null, kid: -1, view: 'pick', tab: 'pins', bracket: null, saving: false, said: '', fresh: null };
+  var S = { data: null, kid: -1, view: 'pick', tab: 'pins', bracket: null, saving: false, said: '', fresh: null, tour: null };
   var kid = function () { return S.data && S.kid > -1 ? S.data.kids[S.kid] : null; };
   var setKidMode = function (on) { html.classList.toggle('kc-kid', !!on); };
   var go = function (view, tab, push) {
@@ -444,6 +444,7 @@
     var st = ev.state && ev.state.kc ? ev.state : { kc: 'pick' };
     if (st.kc !== 'pick' && st.kc !== 'grownup' && !kid()) st = { kc: 'pick' };
     if (st.kc === 'fight' && !S.bracket) st = { kc: 'kid', tab: 'battle' };
+    if (st.kc === 'tour' && !S.tour) st = { kc: 'kid', tab: 'pins' };
     S.view = st.kc; if (st.tab) S.tab = st.tab; draw();
   });
 
@@ -539,7 +540,7 @@
     var row = el('div', 'kc-kids');
     S.data.kids.forEach(function (k, i) {
       var st = stats(k);
-      var b = btn('kc-kidbtn', '', function () { Sound.play('pop'); S.kid = i; S.bracket = null; go(k.av ? 'kid' : 'avatar', 'pins'); });
+      var b = btn('kc-kidbtn', '', function () { Sound.play('pop'); S.kid = i; S.bracket = null; S.tour = null; go('kid', 'pins'); });   // the page itself starts Eddie's welcome or the bulb picking, if due
       var face = el('span', 'kc-kidface');
       face.appendChild(k.av ? drawBulb(kidBulb(k.av), 'bob') : unlitBulb());
       b.appendChild(face);
@@ -605,9 +606,9 @@
     acts.appendChild(btn('kc-big go', 'That’s me!', function () {
       Sound.play('sparkle'); confetti(40);
       var av = { b: cur.b, c: cur.c }; if (Object.keys(cur.w).length) av.w = cur.w;
-      save({ av: av }, function () { go('kid', S.tab || 'pins'); });
+      save({ av: av }, function () { if (S.tour) go('tour'); else go('kid', S.tab || 'pins'); });   // in Eddie's welcome: on to the next part
     }));
-    if (k.av) acts.appendChild(btn('kc-big ghost', 'Never mind', function () { go('kid'); }));
+    if (k.av) acts.appendChild(btn('kc-big ghost', 'Never mind', function () { if (S.tour) go('tour'); else go('kid'); }));
     page.appendChild(acts);
     app.appendChild(page);
     paintChoices(); paintStage();
@@ -616,6 +617,7 @@
   // ----- the child's page: a header with their bulb and level, three tabs -----
   var drawKid = function () {
     var k = kid(); if (!k) { go('pick', null, false); return; }
+    if (!k.seen.intro) { S.tour = S.tour || { step: 0 }; S.view = 'tour'; drawTour(); return; }   // the first time: Eddie shows them round
     if (!k.av) { S.view = 'avatar'; drawAvatar(); return; }
     setKidMode(true);
     var st = stats(k);
@@ -648,6 +650,102 @@
     // Anything new since the last visit: pins that went up a level, then a new level.
     var news = newsFor(k, st);
     if (news.pins.length || news.level) setTimeout(function () { celebrate(k, st, news); }, 250);
+  };
+
+  // What the child has been shown: every pin at its level, every spot found, and whether Eddie has welcomed them.
+  var shownNow = function (k, st) {
+    var seen = {}; D.pins.forEach(function (p) { if (st.pins[p.id].tier) seen[p.id] = st.pins[p.id].tier; });
+    (D.areas || []).forEach(function (a) { if (st.spots[a.id].open) seen['map:' + a.id] = st.spots[a.id].open; });
+    if (k.seen.intro) seen.intro = 1;
+    return seen;
+  };
+
+  // ----- Eddie's welcome: the first time a child opens their page -----
+  // Six short steps, one big button each: hello; their own bulb (the bulb picker, then back here); the pins they have
+  // already (shown here instead of the usual unwrapping); the map and its secret spots; picking a favorite; off you go.
+  // "Skip" is there for a grown-up. A grown-up can play it again from the grown-ups' corner.
+  var TOUR_STEPS = 6;
+  var drawTour = function () {
+    var k = kid(); if (!k) { go('pick', null, false); return; }
+    if (!S.tour) S.tour = { step: 0 };
+    setKidMode(true);
+    var st = stats(k), step = Math.min(S.tour.step, TOUR_STEPS - 1);
+    var page = el('section', 'kc-tour kc-tour' + step);
+    var top = el('div', 'kc-picktop');
+    var dots = el('div', 'kc-dots'); dots.setAttribute('aria-label', 'Part ' + (step + 1) + ' of ' + TOUR_STEPS);
+    for (var i = 0; i < TOUR_STEPS; i++) dots.appendChild(el('i', i === step ? 'on' : i < step ? 'done' : ''));
+    top.appendChild(dots); top.appendChild(muteBtn()); page.appendChild(top);
+    var next = function () { Sound.play('pop'); S.tour.step = step + 1; go('tour'); };
+    var finish = function () {   // all of it shown: nothing to unwrap afterwards
+      Sound.play('fanfare'); confetti(80);
+      k.seen.intro = 1; var seen = shownNow(k, st); S.tour = null;
+      save({ seen: seen, lvl: st.level.n }, function () { go('kid', 'pins'); });
+    };
+    var skip = function () {   // straight to the page; what's new still gets unwrapped there
+      Sound.play('tap');
+      var seen = {}; Object.keys(k.seen).forEach(function (f) { seen[f] = k.seen[f]; }); seen.intro = 1; k.seen.intro = 1; S.tour = null;
+      save({ seen: seen }, function () { go('kid', 'pins'); });
+    };
+    var say = function (t) { var e = eddie(t, 'kc-host kc-tour-host'); page.appendChild(e); return e; };
+    var show = el('div', 'kc-tourshow');
+    var acts = el('div', 'kc-avacts');
+    var nameUp = k.name;
+    if (step === 0) {
+      say('Hi, ' + nameUp + '! I’m Eddie Bulboa. Welcome to YOUR Kid’s Corner!');
+      var big = el('img', 'kc-tour-big'); big.src = D.eddie; big.alt = ''; big.width = 327; big.height = 400; show.appendChild(big);
+      acts.appendChild(btn('kc-big go', 'Hi, Eddie!', next));
+    } else if (step === 1) {
+      if (!k.av) {
+        say('First, let’s make your very own bulb. That’s you in here!');
+        [{ b: 'globe', c: 1 }, { b: 'heart', c: 6 }, { b: 'candle', c: 3 }].forEach(function (x, j) { var m = drawBulb(kidBulb(x), 'bob'); m.style.animationDelay = (j * 0.3) + 's'; show.appendChild(m); });
+        acts.appendChild(btn('kc-big go', 'Make my bulb!', function () { Sound.play('pop'); S.tour.step = 2; go('avatar'); }));
+      } else {
+        say('Here’s your bulb! Tap it at the top any time to change it, and dress it up as you level up.');
+        var mine = drawBulb(kidBulb(k.av), 'bob big'); show.appendChild(mine);
+        acts.appendChild(btn('kc-big go', 'Next', next));
+        acts.appendChild(btn('kc-big ghost', 'Change it', function () { Sound.play('tap'); S.tour.step = 2; go('avatar'); }));
+      }
+    } else if (step === 2) {
+      var got = D.pins.filter(function (p) { return st.pins[p.id].tier; }).sort(function (a, b) { return st.pins[b.id].tier - st.pins[a.id].tier; });
+      say(got.length ? 'Look! You already have ' + plural(got.length, 'pin', 'pins') + '!' : 'Every class you go to gets you a pin. Your grown-up adds them!');
+      var grid = el('div', 'kc-pins kc-mini');
+      (got.length ? got.slice(0, 9) : D.pins.slice(0, 3)).forEach(function (p, j) {
+        var x = st.pins[p.id], c = el('div', 'kc-pincard t' + x.tier); var pv = drawPin(p, x.tier); c.appendChild(pv); c.appendChild(el('b', null, p.label)); grid.appendChild(c);
+        anim(pv, [{ transform: 'scale(0)' }, { transform: 'scale(1.2)', offset: 0.7 }, { transform: 'scale(1)' }], { duration: 500, delay: Math.min(j * 110, 900), easing: 'ease-out', fill: 'backwards' });
+      });
+      show.appendChild(grid);
+      if (got.length > 9) show.appendChild(el('p', 'kc-say small', 'and ' + (got.length - 9) + ' more!'));
+      show.appendChild(el('p', 'kc-tour-lvl', st.level.title + ' · Level ' + st.level.n));
+      show.appendChild(el('p', 'kc-say small', 'Pins go bronze, silver, then gold. Go back to a class you love for a Repeater Reward!'));
+      acts.appendChild(btn('kc-big go', got.length ? 'Cool!' : 'Got it!', next));
+      if (got.length) Sound.play('sparkle');
+    } else if (step === 3) {
+      say('This is your map of Philly. Every class clears the clouds, and classes nearby find secret spots!');
+      var row = el('div', 'kc-spotrow');
+      [['art-museum', 'Found!'], ['?', 'Secret!']].forEach(function (x) { var c = el('div', 'kc-spot1'); c.appendChild(spotArt(x[0])); c.appendChild(el('b', null, x[1])); row.appendChild(c); });
+      show.appendChild(row);
+      show.appendChild(el('p', 'kc-tour-lvl', plural(st.nh, 'place', 'places') + ' explored' + (st.hidden ? ' · ' + st.found + ' / ' + st.hidden + ' secret spots' : '')));
+      acts.appendChild(btn('kc-big go', 'Next', next));
+    } else if (step === 4) {
+      say('Which class did you have the most fun at? I show you two at a time. You tap the one you liked more!');
+      var vs = el('div', 'kc-tourvs');
+      var two = st.keys.length >= 2 ? [bulbFor(st.keys[0]), bulbFor(st.keys[1])] : [kidBulb({ b: 'edison', c: 4 }), kidBulb({ b: 'flood', c: 8 })];
+      vs.appendChild(drawBulb(two[0], 'bob')); vs.appendChild(el('span', 'kc-vs', 'VS')); vs.appendChild(drawBulb(two[1], 'bob'));
+      show.appendChild(vs);
+      if (st.keys.length >= 2) show.appendChild(el('p', 'kc-say small', nameOf(st.keys[0]) + ' or ' + nameOf(st.keys[1]) + '?'));
+      acts.appendChild(btn('kc-big go', 'Next', next));
+    } else {
+      say('Every new class gets you more pins, more map and more stuff for your bulb. Ready, ' + nameUp + '?');
+      var duo = el('div', 'kc-tourvs');
+      if (k.av) duo.appendChild(drawBulb(kidBulb(k.av), 'bob big'));
+      show.appendChild(duo);
+      acts.appendChild(btn('kc-big go', 'Let’s go!', finish));
+    }
+    page.appendChild(show);
+    if (step < TOUR_STEPS - 1) acts.appendChild(btn('kc-skip', 'Skip', skip));
+    page.appendChild(acts);
+    app.appendChild(page);
+    if (step === 0) anim(page.querySelector('.kc-tour-big'), [{ transform: 'translateY(40%) scale(.5) rotate(-10deg)', opacity: 0 }, { transform: 'translateY(-6%) scale(1.06) rotate(4deg)', opacity: 1, offset: 0.7 }, { transform: 'none', opacity: 1 }], { duration: 700, easing: 'ease-out' });
   };
 
   // ----- the Pins tab -----
@@ -700,8 +798,7 @@
     if (celebrating || S.view !== 'kid') return;
     celebrating = true;
     var done = function () {
-      var seen = {}; D.pins.forEach(function (p) { if (st.pins[p.id].tier) seen[p.id] = st.pins[p.id].tier; });
-      (D.areas || []).forEach(function (a) { if (st.spots[a.id].open) seen['map:' + a.id] = st.spots[a.id].open; });
+      var seen = shownNow(k, st);
       save({ seen: seen, lvl: st.level.n }, function () { celebrating = false; if (S.tryOn) { S.tryOn = false; go('avatar'); } else if (S.toMap) { S.toMap = false; go('kid', 'map'); } else draw(); });
     };
     // A present to tap open: sounds can only start after a tap.
@@ -1288,6 +1385,7 @@
     acts.appendChild(btn('btn primary', k ? 'Back to ' + possessive(k.name) + ' page' : 'Back to Kid’s Corner', function () { go(k ? 'kid' : 'pick'); }));
     if (S.data.kids.length > 1 || !k) acts.appendChild(btn('btn', 'Pick a child', function () { go('pick'); }));
     var acct = el('a', 'btn', 'My account'); acct.href = D.links.account; acts.appendChild(acct);
+    if (k) acts.appendChild(btn('btn', 'Play Eddie’s welcome again', function () { S.tour = { step: 0 }; go('tour'); }));
     head.appendChild(acts);
     head.appendChild(el('p', 'hint', 'Only what you confirm here counts. Pins, levels, the map and the bulbs are worked out from it; nothing about your child is sent anywhere or counted by anything.'));
     page.appendChild(head);
@@ -1466,6 +1564,7 @@
     if (S.view === 'kid') drawKid();
     else if (S.view === 'fight') drawFight();
     else if (S.view === 'avatar') drawAvatar();
+    else if (S.view === 'tour') drawTour();
     else if (S.view === 'grownup') drawGrownup();
     else drawPick();
   };

@@ -62,8 +62,16 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   eq(await page.locator('.kc-kidbtn .kc-unpicked').count(), 2, 'no bulb picked yet: an unlit one');
   includes(flat(await page.locator('.kc-pick .kc-eddie').innerText()), 'Eddie Bulboa', 'Eddie says hello');
   eq(await page.locator('.kc-pick .kc-eddie img[alt="Eddie Bulboa"]').count(), 1);
-  // Picking a bulb: a shape and a color, nothing typed.
+  // The first time: Eddie's welcome, one big button a step, with the bulb picked partway through.
   await page.locator('.kc-kidbtn', { hasText: 'Sam' }).click();
+  await page.waitForSelector('.kc-tour');
+  includes(flat(await page.locator('.kc-tour .kc-eddie-say').innerText()), 'Hi, Sam! I’m Eddie Bulboa');
+  eq(await page.locator('.kc-dots i').count(), 6, 'six steps');
+  eq(await page.locator('.kc-tour a[href]').count(), 0, 'no link in the welcome');
+  await page.locator('.kc-tour .kc-big.go').click();
+  includes(flat(await page.locator('.kc-tour .kc-eddie-say').innerText()), 'make your very own bulb');
+  await page.locator('.kc-tour .kc-big.go').click();
+  // Picking a bulb: a shape and a color, nothing typed.
   await page.waitForSelector('.kc-bodies');
   eq(await page.locator('.kc-avatar input, .kc-avatar textarea').count(), 0, 'nothing to type');
   eq(await page.locator('.kc-bodybtn').count(), 10); eq(await page.locator('.kc-swatch').count(), 10);
@@ -71,9 +79,14 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   await page.locator('.kc-swatch').nth(2).click();
   eq(await page.locator('.kc-bodybtn').nth(7).getAttribute('aria-pressed'), 'true');
   await page.locator('.kc-avacts .kc-big.go').click();
-  await page.waitForSelector('.kc-top');
+  // Back in the welcome: no pins yet, the map, picking a favorite, then off to the page.
+  await page.waitForFunction(() => /gets you a pin/.test((document.querySelector('.kc-tour .kc-eddie-say') || {}).textContent || ''));
   const p0 = await pat.okay('GET', 'passport');
   eq(JSON.stringify(p0.kids[0].av), JSON.stringify({ b: 'holiday', c: 2 }), 'the bulb is kept on the account');
+  for (const said of [/map of Philly/, /most fun at/, /Ready, Sam\?/]) { await page.locator('.kc-tour .kc-big.go').click(); await page.waitForFunction(re => new RegExp(re).test((document.querySelector('.kc-tour .kc-eddie-say') || {}).textContent || ''), said.source); }
+  await page.locator('.kc-tour .kc-big.go', { hasText: 'Let’s go' }).click();
+  await page.waitForSelector('.kc-top');
+  eq((await pat.okay('GET', 'passport')).kids[0].seen.intro, 1, 'welcomed once');
   includes(flat(await page.locator('.kc-top').innerText()), 'Sam');
   includes(flat(await page.locator('.kc-lvl').innerText()), 'Rookie · Level 1');
   eq(await page.locator('.kc-page a[href]').count(), 0, 'no link on the child’s page');
@@ -86,6 +99,7 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   await hold(page, '.kc-hold');
   await page.waitForSelector('.kc-grownup');
   ok(!(await kidMode(page)), 'kid mode off for the grown-up');
+  eq(await page.locator('.kc-ghead button', { hasText: 'Play Eddie’s welcome again' }).count(), 1, 'the welcome can be played again');
   ok(await page.locator('header.sitebar').isVisible(), 'the site is back');
   const sg = page.locator('.kc-suggest li', { hasText: program.name });
   eq(await sg.count(), 1, 'the week’s program is suggested');
@@ -142,7 +156,7 @@ test('the map of Philadelphia: drawn from this site, clear where the child has b
   const { program: wp } = weekendProgram();
   await pat.okay('POST', 'kids_save', { kids: [{ n: 'Zoe', g: '4' }] });
   const y = (await pat.okay('GET', 'passport')).year;
-  await pat.okay('POST', 'passport_save', { kid: 'Zoe', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school }, { k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], av: { b: 'globe', c: 6 }, seen: { 'season:after': 1, 'season:weekend': 1 }, lvl: 9 });
+  await pat.okay('POST', 'passport_save', { kid: 'Zoe', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school }, { k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], av: { b: 'globe', c: 6 }, seen: { intro: 1, 'season:after': 1, 'season:weekend': 1 }, lvl: 9 });
   const t = await b.context(ctx.site, { sid: pat.cookie });
   const page = await t.open('/kids-corner/#map');
   await page.waitForSelector('.kc-map');   // one child: straight to her page, on the tab in the address
@@ -189,7 +203,7 @@ test('going back to a class: a ×2 on its bulb, the Repeater Reward pin, and the
   const { program, school } = pickupPair();
   await pat.okay('POST', 'kids_save', { kids: [{ n: 'Ana', g: '3' }] });
   const y = (await pat.okay('GET', 'passport')).year;
-  await pat.okay('POST', 'passport_save', { kid: 'Ana', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school, n: 2 }], av: { b: 'globe', c: 2 }, lvl: 1 });
+  await pat.okay('POST', 'passport_save', { kid: 'Ana', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school, n: 2 }], av: { b: 'globe', c: 2 }, seen: { intro: 1 }, lvl: 1 });
   const t = await b.context(ctx.site, { sid: pat.cookie });
   await t.page.emulateMedia({ reducedMotion: 'reduce' });
   const page = await t.open('/kids-corner/');
@@ -227,7 +241,7 @@ test('the showdown ranks favorites with no one hurt, which the profile then carr
   const { program: wp } = weekendProgram();
   await pat.okay('POST', 'kids_save', { kids: [{ n: 'Zoe', g: '4' }] });
   const y = (await pat.okay('GET', 'passport')).year;
-  await pat.okay('POST', 'passport_save', { kid: 'Zoe', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school }, { k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], av: { b: 'candle', c: 1 }, seen: { 'season:after': 1, 'season:weekend': 1 }, lvl: 9 });
+  await pat.okay('POST', 'passport_save', { kid: 'Zoe', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school }, { k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], av: { b: 'candle', c: 1 }, seen: { intro: 1, 'season:after': 1, 'season:weekend': 1 }, lvl: 9 });
   const t = await b.context(ctx.site, { sid: pat.cookie });
   await t.page.emulateMedia({ reducedMotion: 'reduce' });   // the contest acted out quickly
   const page = await t.open('/kids-corner/#battle');
@@ -323,7 +337,7 @@ test('the account page’s Kid’s Corner tab: each child at a glance, a class c
   await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '2' }, { n: 'Rae', g: 'K' }] });
   await pat.okay('POST', 'week_save', { week: { name: 'Rae', now: { ...empty(), mon: [entry] }, next: empty() } });
   const y = (await pat.okay('GET', 'passport')).year;
-  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [{ k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], av: { b: 'heart', c: 1 }, seen: { 'season:weekend': 1 }, lvl: 2 });
+  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [{ k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], av: { b: 'heart', c: 1 }, seen: { intro: 1, 'season:weekend': 1 }, lvl: 2 });
   const t = await b.context(ctx.site, { sid: pat.cookie });
   const page = await t.open('/account/');
   await page.waitForSelector('#account .acct-tabs');

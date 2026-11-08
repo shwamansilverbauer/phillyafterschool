@@ -803,6 +803,7 @@ button.btn{cursor:pointer;font-family:inherit}
 }
 /* a fuller menu on a narrower wide screen closes up (site.js adds these only when it would not fit) */
 @media (min-width:1100px){
+  html.nav-both .nav > a.nav-more{display:none}   /* a parent who is also a program manager: room for their own links */
   html.nav-tight .nav{gap:6px 12px}
   html.nav-tight .nav a.nav-cta{padding:7px 13px;margin-left:0}
   html.nav-tight .brand .logo{height:50px}
@@ -2707,6 +2708,26 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 @keyframes kc-twinkle{0%,100%{opacity:.2;scale:.6}50%{opacity:1;scale:1.15}}
 .kc-flame{transform-box:fill-box;transform-origin:50% 0;animation:kc-flame .25s ease-in-out infinite alternate}
 @keyframes kc-flame{from{scale:1 .8}to{scale:1 1.15}}
+/* Eddie's welcome: dots for the steps, Eddie big, one thing to look at, one big button (and Skip for a grown-up) */
+.kc-tour{display:flex;flex-direction:column;gap:6px;min-height:calc(100vh - 40px);min-height:calc(100dvh - 40px)}
+.kc-dots{display:flex;gap:8px;align-items:center}
+.kc-dots i{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.35);border:2.5px solid var(--kink)}
+.kc-dots i.done{background:#96C9FF}.kc-dots i.on{background:var(--kyellow);transform:scale(1.25)}
+.kc-tour .kc-tour-host .kc-eddie-img{width:84px}
+.kc-tour .kc-tour-host .kc-eddie-say{font-size:1.2rem;max-width:30ch}
+.kc-tourshow{flex:1;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 14px;padding:8px 0;text-align:center}
+.kc-tourshow > .kc-bulb{width:min(104px,25vw)}
+.kc-tourshow .kc-spot1 b{color:#fff;text-shadow:0 2px 0 var(--kink);font-size:1.05rem}
+.kc-tourshow > .kc-bulb.big{width:min(200px,50vw)}
+.kc-tourshow .kc-pins{width:100%}
+.kc-tourshow .kc-say{width:100%;margin:0}
+.kc-tour-big{width:min(220px,55vw);height:auto;filter:drop-shadow(0 6px 0 rgba(11,33,64,.35))}
+.kc-tour0 .kc-tour-big{animation:kc-eddie 3.2s ease-in-out infinite;transform-origin:50% 90%}
+.kc-tour-lvl{width:100%;margin:4px 0 0;font-family:var(--title);font-size:1.35rem;color:#fff;text-shadow:0 3px 0 var(--kink)}
+.kc-tourvs{display:flex;align-items:center;justify-content:center;gap:10px;width:100%}
+.kc-tourvs .kc-bulb{width:min(120px,30vw)}.kc-tourvs .kc-bulb.big{width:min(190px,48vw)}
+.kc-tourvs .kc-vs{width:60px;height:60px;font-size:1.7rem}
+.kc-skip{font:inherit;font-weight:700;color:#fff;background:none;border:0;text-decoration:underline;padding:10px;cursor:pointer;opacity:.85}
 /* the map's secret spots: a ? cloud that bobs until it's found, the count, and the card that shows what was found */
 .kc-map .kc-secret{cursor:pointer}
 .kc-map .kc-secret > g{animation:kc-secret 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
@@ -2763,7 +2784,7 @@ html.kc-kid .kc-hold{background:rgba(255,255,255,.85);border-color:rgba(11,33,64
 .kc-hits{top:100%}
 .kc-picked{font-weight:700;margin:6px 0 0}
 @media (max-width:420px){.kc-me{width:56px;height:56px}.kc-top .kc-back,.kc-top .kc-mute{width:44px;height:44px}.kc-top{gap:8px;padding:8px}.kc-vs{width:54px;height:54px;font-size:1.6rem}.kc-arena{padding:92px 6px 16px}.kc-fighter b{font-size:.85rem;padding:5px 7px}.kc-ref .kc-eddie-say{font-size:1.05rem}.kc-eddie-img{width:52px}}
-@media (prefers-reduced-motion:reduce){.kc-map .kc-secret > g,.kc-pinrays,.kc-twinkle,.kc-flame,.kc-floor,.kc-disco-face,.kc-glow,.kc-eddie-img,.kc-bulb.beam .kc-glow,.kc-bulb.bob,.kc-eyes,.kc-prop,.kc-pin .kc-shine,.kc-waves,.kc-rays,.kc-giftart,.kc-xp i,.kc-meter i{animation:none}}
+@media (prefers-reduced-motion:reduce){.kc-tour0 .kc-tour-big,.kc-map .kc-secret > g,.kc-pinrays,.kc-twinkle,.kc-flame,.kc-floor,.kc-disco-face,.kc-glow,.kc-eddie-img,.kc-bulb.beam .kc-glow,.kc-bulb.bob,.kc-eyes,.kc-prop,.kc-pin .kc-shine,.kc-waves,.kc-rays,.kc-giftart,.kc-xp i,.kc-meter i{animation:none}}
 @media print{html.kc-kid body{background:#fff}html.kc-kid body::before,html.kc-kid .kc-tabs,html.kc-kid .kc-grown,html.kc-kid .kc-mute,html.kc-kid .kc-back{display:none}html.kc-kid .kc-top{position:static}.kc-h2,.kc-say{color:var(--kink);text-shadow:none}.kc-pincard,.kc-top{box-shadow:none;break-inside:avoid}}
 
 /* a child's favorites from the Passport, offered first in the planners */

@@ -375,6 +375,11 @@ keep that name.)
   and nothing on the page is a link or asks for typing. The grown-ups' corner opens from a press-and-hold button
   (`.kc-hold`, 1.1 seconds; a tap does nothing). With one child on the account the page opens on their page; the
   address keeps the tab (`#pins`, `#map`, `#battle` for the Showdown tab).
+- **Eddie's welcome.** The first time a child opens their page (`seen.intro` not set), Eddie shows them round in six
+  steps, one big button each (`drawTour()`): hello; making their bulb (the bulb picker, then back to the welcome);
+  the pins they already have and their level (shown here, so they aren't unwrapped again afterwards); the map and its
+  secret spots; picking a favorite; and off they go. "Skip" goes straight to the page (what's new is unwrapped there
+  as usual). The grown-ups' corner can play it again.
 - **Each child's bulb.** On first visit a child lights up a bulb of their own: one of ten shapes and ten colours, picked
   by tapping (`BULB`, `KID_COLORS`; Bell Yellow first). It stands in the header (tap it to change), on the picker, on
   the map and in the cheering corner of every showdown. It starts plain; as the child's level climbs it unlocks things
@@ -906,7 +911,11 @@ changes where a listing appears in a list, and it has no say over reviews.
   - **The menu's button, for a manager.** Signed in as a program manager (the device keeps `pas-role`, and now
     `pas-premium` from `me.premium`: whether every listing the account holds is premium), `site.js` turns the
     menu's "Parent Portal" button into a yellow "Go premium" that opens `/premium/`, or "Your listings" (the managers
-    page) once every listing they hold is premium, or while the premium page isn't listed. Parents see no change.
+    page) once every listing they hold is premium, or while the premium page isn't listed. Parents see no change. A
+    manager who is also a parent (`pas-parent`: kids named or plans kept) keeps Parent Portal and Kid's Corner, gets
+    "Your listings"/"Go premium" as a plain link before My Profile, and on a wide screen About and the Suggestion Box
+    leave the bar (`html.nav-both`; they stay in the phone menu and the footer). If a menu still wouldn't fit on one
+    line, `fitNav()` closes it up a step or two (`nav-tight`, `nav-tighter`) rather than squeeze the logo.
   - **One sentence on the managers page**, in the list under "How claiming works", for people who haven't claimed.
   - **One line at the end of the monthly numbers email**, only for an account with no premium listing.
   - **The page itself** is laid out like a product page: the two prices sit in the hero, each with its own
