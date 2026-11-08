@@ -667,6 +667,7 @@
       box.textContent = '';
       if (!M) { box.appendChild(el('p', 'kc-say', 'The map couldn’t load. Try again later!')); return; }
       drawPhilly(box, M, k, st);
+      if (M.attribution) box.parentNode.insertBefore(el('p', 'kc-credit', 'Map: ' + M.attribution), box.parentNode.querySelector('.kc-grown'));   // the neighborhoods' license asks for the credit; text, not a link
     });
   };
   var drawPhilly = function (box, M, k, st) {
