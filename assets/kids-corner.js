@@ -459,6 +459,32 @@
     var e = { k: sgt.k, kind: sgt.kind, y: sgt.y, s: sgt.s || '' }; if (sgt.n) e.n = sgt.n;
     return yes ? { done: k.done.concat([e]) } : { skip: k.skip.concat([sgKey(sgt)]) };
   };
+  // Start over: Kid's Corner from the beginning for one child (for a grown-up who tried it out first). Their bulb, what
+  // they've been shown, Eddie's welcome and their favorites go; the classes stay unless the box is ticked. Two taps.
+  var startOver = function (k, then) {
+    var box = el('div', 'kc-reset');
+    box.appendChild(el('p', 'hint', 'Like new for ' + k.name + ': Eddie’s welcome, picking a bulb, and unwrapping every pin and secret spot again. The showdown favorites go too. This can’t be undone.'));
+    var cb = null;
+    if (k.done.length) {
+      var lab = el('label', 'g-check'); cb = el('input'); cb.type = 'checkbox'; cb.id = 'kc-reset-' + (++uid);
+      lab.appendChild(cb); lab.appendChild(el('span', null, 'Also take off the ' + plural(k.done.length, 'class or camp', 'classes and camps') + ' you confirmed'));
+      box.appendChild(lab);
+    }
+    var row = el('div', 'actions'), msg = el('p', 'g-status'); msg.hidden = true;
+    var armed = false, first = 'Start over for ' + k.name;
+    var b = btn('btn primary kc-reset-go', first, function () {
+      if (!armed) { armed = true; b.textContent = 'Tap again to start over'; window.setTimeout(function () { armed = false; b.textContent = first; }, 6000); return; }
+      b.disabled = true;
+      call('passport_reset', { kid: k.name, classes: !!(cb && cb.checked) }).then(function (d) {
+        if (!d.ok) { b.disabled = false; armed = false; b.textContent = first; msg.className = 'g-status bad'; msg.textContent = d.message || 'That didn’t work. Try again.'; msg.hidden = false; return; }
+        ['done', 'skip', 'fav', 'suggest', 'updated', 'av', 'seen', 'lvl'].forEach(function (f) { k[f] = d.kid[f]; });
+        if (!k.seen || Array.isArray(k.seen)) k.seen = {};
+        then();
+      });
+    });
+    row.appendChild(b); box.appendChild(row); box.appendChild(msg);
+    return box;
+  };
   var save = function (changes, then) {
     var k = kid(); if (!k || S.saving) return;
     S.saving = true;
@@ -1486,6 +1512,11 @@
     } else dl.appendChild(el('p', 'hint', 'Nothing yet.'));
     page.appendChild(dl);
 
+    // From the beginning: for when a grown-up tried it out first.
+    var rs = el('div', 'panel'); rs.appendChild(el('h3', null, 'Start ' + possessive(k.name) + ' Kid’s Corner over'));
+    rs.appendChild(startOver(k, function () { S.tour = null; S.bracket = null; S.said = ''; go('kid', 'pins'); }));
+    page.appendChild(rs);
+
     // A picture to share (no name, no map), and print.
     var sh = el('div', 'panel'); sh.appendChild(el('h3', null, 'Share the pins'));
     sh.appendChild(el('p', 'hint', 'A picture of the pins and the level, with no name and no map, for the group chat or the fridge. It’s made here on this device; nothing is uploaded.'));
@@ -1617,6 +1648,11 @@
       var acts = el('div', 'actions');
       acts.appendChild(btn('btn primary', 'Open ' + possessive(k.name) + ' Kid’s Corner', openOn(k)));
       acts.appendChild(btn('btn', 'Add or take off classes', openOn(k, '#grownup')));
+      var again = btn('btn', 'Start over', function () {
+        again.disabled = true;
+        card.appendChild(startOver(k, function () { paintSummary(box, p); var c = [].filter.call(box.querySelectorAll('.kc-sum'), function (x) { return x.querySelector('h3') && x.querySelector('h3').textContent === k.name; })[0]; if (c) c.appendChild(el('p', 'g-status good', k.name + ' starts from the beginning next time: Eddie’s welcome first.')); }));
+      });
+      acts.appendChild(again);
       card.appendChild(acts);
       box.appendChild(card);
     });

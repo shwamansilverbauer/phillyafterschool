@@ -2731,6 +2731,28 @@ switch ($method . ' ' . $action) {
     out(array('ok' => true, 'kid' => passport_kid($home, array('n' => $name), $r, passport_data($r))));
   }
 
+  // Kid's Corner from the beginning for one child, from the Parent Portal or the grown-ups' corner: their bulb, what
+  // they've been shown (Eddie's welcome too), the level celebrated and their showdown favorites go; the classes the
+  // parent confirmed stay, unless "classes" says to take those off as well (then the whole row goes).
+  case 'POST passport_reset': {
+    $u = need_user();
+    $name = first_name(str($in, 'kid', 40));
+    if ($name === '') fail('kid', 'Which child?');
+    $known = false; foreach (kids_list(home_user($u)) as $k) if (mb_strtolower($k['n'], 'UTF-8') === mb_strtolower($name, 'UTF-8')) { $known = true; $name = $k['n']; }
+    if (!$known) fail('kid', 'Add this child’s first name on your account page first (School & kids).', 404);
+    $home = home_id($u);
+    $r = passport_row($home, $name);
+    if ($r) {
+      $d = passport_data($r);
+      $keep = array('done' => !empty($in['classes']) ? array() : $d['done'], 'skip' => !empty($in['classes']) ? array() : $d['skip'], 'fav' => array());
+      if (count($keep['done']) === 0 && count($keep['skip']) === 0) q('DELETE FROM passports WHERE id = ?', array($r['id']));
+      else q('UPDATE passports SET json = ?, updated = ? WHERE id = ?', array(seal(json_encode($keep)), now(), $r['id']));
+    }
+    bump('passport_reset');
+    $r = passport_row($home, $name);
+    out(array('ok' => true, 'kid' => passport_kid($home, array('n' => $name), $r, passport_data($r))));
+  }
+
   case 'POST school_save': {
     $u = need_user();
     $school = str($in, 'school', 60);
