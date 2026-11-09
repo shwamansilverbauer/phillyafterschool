@@ -5483,8 +5483,8 @@ const YEAR_PAGE = !!(GROUPS && daysOff);
 // For the child: shiny pins that level up (bronze, silver, gold) for the kinds of program they have been to, the
 // seasons and the neighborhoods; a level that climbs; a cartoon map of Philadelphia whose clouds clear over the
 // neighborhoods they have been to, with secret spots that unlock with classes nearby; a Repeater Reward for going back;
-// a bulb of their own that dresses up as they level up; and showdowns (five Philly contests: the Art Museum steps, a
-// cheesesteak, the Liberty Bell, a Mummers strut, a soft pretzel stack) where the child picks which of two programs they had more fun at, which ranks their favorites. Everything on it comes from what a parent has confirmed (the "passport"
+// a bulb of their own that dresses up as they level up; and showdowns (eleven Philly contests, from the Art Museum
+// steps and a cheesesteak to a Boathouse Row regatta, a pothole dodge and a mural) where the child picks which of two programs they had more fun at, which ranks their favorites. Everything on it comes from what a parent has confirmed (the "passport"
 // endpoint in groups-api.php, Kid's Corner's first name, kept encrypted with the rest of a household's plans). The page
 // is quiet (no analytics, no recordings, nothing to Klaviyo), out of search, and in kid mode no link leaves the site.
 // The lightbulbs, pins, map and sounds are all made in src/kids-corner.js; the map's shapes are data/philly-map.json

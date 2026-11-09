@@ -484,12 +484,20 @@ keep that name.)
 - **Bulbs and the showdown.** Each program type is a family of bulbs (`SPECIES`: a bulb shape, something to wear,
   a special move), its glass tinted with the type's colour, and each program a member of it, varied by its id (eyes,
   mouth, freckles, shades). `drawBulb()` draws them; a lit bulb glows, and the class `off` puts its light out. The
-  showdown pairs the child's distinct listings until one is left, each pair in one of five Philly contests that take
-  turns from a random one (`EVENTS`; `?contest=steak` on the page starts with a given one): a race up the Art Museum
-  steps, a cheesesteak eating contest (the rolls go in bites; "Wiz… Wit… EAT!"), a Liberty Bell ring-off (meters
-  fill, then the bell swings, its crack lights up and it rings), a Mummers strut-off (a feathered parasol on Broad
-  Street) and a soft pretzel stack-off (pretzels pile up in a pyramid in front of each). Each winner gets its own sign
-  ("CLEAN PLATE!", "LOUDEST!", "BEST STRUT!", "BEST STACK!"). The question is
+  showdown pairs the child's distinct listings until one is left, each pair in one of eleven Philly contests that take
+  turns from a random one (`EVENTS`, ordered so the food ones don't come back to back; `?contest=steak` on the page
+  starts with a given one): a race up the Art Museum steps; a cheesesteak eating contest (the rolls go in bites; "Wiz…
+  Wit… EAT!"); a Ben Franklin kite fly-off (the winner's kite goes highest, lightning finds the key on its string and
+  it sparks); a Liberty Bell ring-off (meters fill, then the bell swings, its crack lights up and it rings); a water ice
+  slurp-off (the winner empties its cup, the other gets a brain freeze: a shiver and snowflakes); a Boathouse Row
+  regatta (lit-up boathouses at night, both shells row up the river to the far bank, the winner first); a Mummers
+  strut-off (a feathered parasol on Broad Street); a hoagie build-off (the layers drop on, and only the winner's gets
+  the top of the roll); a pothole dodge (the road rolls under each bike, and the winner hops every pothole while the
+  other hits the last); a soft pretzel stack-off (pretzels pile up in a pyramid in front of each); and a mural
+  paint-off (paint flies at a wall under each, and the winner's gets all five parts). Each winner gets its own sign
+  ("CLEAN PLATE!", "HIGHEST!", "LOUDEST!", "SLURPED!", "FIRST!", "BEST STRUT!", "BEST HOAGIE!", "SMOOTH RIDE!",
+  "BEST STACK!", "MASTERPIECE!"); in the regatta the signs go where the boats were, since the bulbs row up to where
+  they would sit. The question is
   always the same and plain, "Which did you have more fun at?", with the contest as a label under it: the child taps
   the one they had more fun at, Eddie counts them in, the winner pulls out its special move (notes, paint, lightning, dice…), and the other
   comes second and cheers ("Good race!"). Nobody gets hit and no light goes out: it was boxing at first, changed so

@@ -114,7 +114,11 @@
       levelup: function (t) { [392, 523, 659, 784, 1047, 1319, 1568].forEach(function (f, i) { tone(f, t + i * 0.085, 0.32, 'triangle', 0.11); }); },
       cheer: function (t) { noise(t, 0.9, 0.08, 1400, 2600); tone(880, t, 0.2, 'triangle', 0.06, 1320); },
       chomp: function (t) { noise(t, 0.08, 0.3, 900, 400); tone(140, t, 0.08, 'square', 0.08, 90); },
-      bell: function (t) { [[196, 0.24], [392, 0.14], [470, 0.1], [588, 0.08], [784, 0.05]].forEach(function (p) { tone(p[0], t, 2.4, 'sine', p[1], p[0] * 0.995); }); noise(t, 0.05, 0.2, 2500, 1500); }
+      bell: function (t) { [[196, 0.24], [392, 0.14], [470, 0.1], [588, 0.08], [784, 0.05]].forEach(function (p) { tone(p[0], t, 2.4, 'sine', p[1], p[0] * 0.995); }); noise(t, 0.05, 0.2, 2500, 1500); },
+      slurp: function (t) { noise(t, 0.28, 0.2, 500, 2600); tone(320, t + 0.05, 0.2, 'sine', 0.06, 760); },
+      brr: function (t) { for (var i = 0; i < 8; i++) tone(i % 2 ? 300 : 340, t + i * 0.05, 0.05, 'square', 0.04); },
+      splash: function (t) { noise(t, 0.35, 0.22, 2200, 500); },
+      splat: function (t) { noise(t, 0.1, 0.3, 1400, 400); tone(140, t, 0.09, 'sine', 0.14, 70); }
     };
     return {
       play: function (name) { if (muted || !ctx || !SFX[name]) return; try { if (ctx.state === 'suspended') ctx.resume(); SFX[name](ctx.currentTime + 0.02); } catch (e) { /* no sound here */ } },
@@ -328,7 +332,10 @@
     ball: function (g) { sv('circle', { r: 9.5, fill: '#FF8C1A', stroke: INK, 'stroke-width': 1.8 }, g); sv('path', { d: 'M-9.5 0H9.5M0 -9.5V9.5M-6.5 -7C-3 -3 -3 3 -6.5 7M6.5 -7C3 -3 3 3 6.5 7', fill: 'none', stroke: INK, 'stroke-width': 1.2 }, g); },
     crumb: function (g) { [[-5, -3, 3.5], [4, -6, 2.5], [2, 4, 3], [-3, 6, 2]].forEach(function (c) { sv('circle', { cx: c[0], cy: c[1], r: c[2], fill: '#E8B567', stroke: INK, 'stroke-width': 1.2 }, g); }); },
     feather: function (g) { sv('path', { d: 'M0 12C-8 4 -6 -8 6 -12C4 -4 6 4 0 12Z', fill: pick(['#F3C613', '#FF4D6D', '#B197FC', '#4DABF7']), stroke: INK, 'stroke-width': 1.5 }, g); sv('path', { d: 'M0 12C1 2 3 -6 6 -12', fill: 'none', stroke: INK, 'stroke-width': 1.1 }, g); },
-    plane: function (g) { sv('path', { d: 'M-12 2L12 -9L4 11L1 3Z', fill: '#fff', stroke: INK, 'stroke-width': 1.6, 'stroke-linejoin': 'round' }, g); sv('path', { d: 'M1 3L12 -9', stroke: INK, 'stroke-width': 1.2 }, g); }
+    plane: function (g) { sv('path', { d: 'M-12 2L12 -9L4 11L1 3Z', fill: '#fff', stroke: INK, 'stroke-width': 1.6, 'stroke-linejoin': 'round' }, g); sv('path', { d: 'M1 3L12 -9', stroke: INK, 'stroke-width': 1.2 }, g); },
+    flake: function (g) { var d = 'M0 -11V11M-3.5 -8L0 -4.5L3.5 -8M-3.5 8L0 4.5L3.5 8'; [[INK, 4.2], ['#D0EBFF', 2]].forEach(function (k) { for (var i = 0; i < 3; i++) sv('path', { d: d, fill: 'none', stroke: k[0], 'stroke-width': k[1], 'stroke-linecap': 'round', 'stroke-linejoin': 'round', transform: 'rotate(' + (i * 60) + ')' }, g); }); },
+    drop: function (g) { sv('path', { d: 'M0 -11C5 -3 8 2 8 5A8 8 0 0 1 -8 5C-8 2 -5 -3 0 -11Z', fill: '#74C0FC', stroke: INK, 'stroke-width': 1.5 }, g); sv('path', { d: 'M-3.5 3Q-3.5 7 0 8', fill: 'none', stroke: '#fff', 'stroke-width': 1.6, 'stroke-linecap': 'round' }, g); },
+    dust: function (g) { [[-5, 2, 5], [4, -2, 4], [3, 6, 3.5]].forEach(function (c) { sv('circle', { cx: c[0], cy: c[1], r: c[2], fill: '#DEE2E6', stroke: INK, 'stroke-width': 1.1 }, g); }); }
   };
   var drawShot = function (kind) { var s = sv('svg', { viewBox: '-14 -14 28 28', 'class': 'kc-shot', 'aria-hidden': 'true' }); (SHOT[kind] || SHOT.star)(sv('g', null, s)); return s; };
 
@@ -1361,8 +1368,9 @@
   };
 
   // ----- the Showdown tab: the bulbs collected, the favorites, and the showdown -----
-  // Two bulbs at a time, in one of five Philly contests that take turns: a race up the Art Museum steps, a cheesesteak
-  // eating contest, a Liberty Bell ring-off, a Mummers strut-off and a soft pretzel stack-off. The child taps who wins; the winner pulls out its special move, the other comes second and cheers, and
+  // Two bulbs at a time, in one of eleven Philly contests that take turns (EVENTS): the Art Museum steps, a cheesesteak,
+  // Ben Franklin's kite, the Liberty Bell, water ice, a Boathouse Row regatta, a Mummers strut, a hoagie, a pothole
+  // dodge, a soft pretzel stack and a mural. The child taps who wins; the winner pulls out its special move, the other comes second and cheers, and
   // Eddie hosts. Nobody gets hurt: it's a contest, not a fight. The order they drop out of the running in is
   // the child's ranking of favorites.
   var drawBattleTab = function (body, k, st) {
@@ -1407,13 +1415,19 @@
     S.bracket = { round: shuffle(keys), next: [], out: [], i: 0, n: 1, m: m }; go('fight');
   };
   var CHEERS = ['Go go go!', 'You can do it!', 'Woo-hoo!', 'Awesome!', 'Whoa!', 'Yeah!'];
-  // Every contest is a Philly one. won: the winner's sign.
+  // Every contest is a Philly one, in an order that keeps the food ones apart. won: the winner's sign.
   var EVENTS = [
     { id: 'race', title: 'Race up the Art Museum steps!', ask: 'Tap it, and it wins the race!', count: ['On your marks…', 'Get set…', 'GO!'], second: 'Good race!', won: 'WINS!' },
     { id: 'steak', title: 'Cheesesteak eating contest!', ask: 'Tap it, and it eats the fastest!', count: ['Wiz…', 'Wit…', 'EAT!'], second: 'So full!', won: 'CLEAN PLATE!' },
+    { id: 'kite', title: 'Ben Franklin kite fly-off!', ask: 'Tap it, and its kite flies highest!', count: ['Tie on the key…', 'Catch the wind…', 'FLY!'], second: 'Nice flight!', won: 'HIGHEST!' },
     { id: 'bell', title: 'Liberty Bell ring-off!', ask: 'Tap it, and it rings the bell loudest!', count: ['Grab the rope…', 'Pull…', 'RING!'], second: 'Nice ring!', won: 'LOUDEST!' },
+    { id: 'waterice', title: 'Water ice slurp-off!', ask: 'Tap it, and it slurps the fastest!', count: ['Cherry…', 'Lemon…', 'SLURP!'], second: 'Brain freeze!', won: 'SLURPED!' },
+    { id: 'row', title: 'Boathouse Row regatta!', ask: 'Tap it, and it rows the fastest!', count: ['Oars in…', 'Ready all…', 'ROW!'], second: 'Strong rowing!', won: 'FIRST!' },
     { id: 'strut', title: 'Mummers strut-off!', ask: 'Tap it, and it struts the best!', count: ['Feathers up…', 'Fans out…', 'STRUT!'], second: 'Great strut!', won: 'BEST STRUT!' },
-    { id: 'pretzel', title: 'Soft pretzel stack-off!', ask: 'Tap it, and it stacks the most pretzels!', count: ['Twist…', 'Salt…', 'STACK!'], second: 'Tasty stack!', won: 'BEST STACK!' }
+    { id: 'hoagie', title: 'Hoagie build-off!', ask: 'Tap it, and it builds the best hoagie!', count: ['Roll…', 'Cheese…', 'BUILD!'], second: 'Yum!', won: 'BEST HOAGIE!' },
+    { id: 'pothole', title: 'Pothole dodge!', ask: 'Tap it, and it dodges every pothole!', count: ['Helmet on…', 'Pedal…', 'DODGE!'], second: 'Bumpy ride!', won: 'SMOOTH RIDE!' },
+    { id: 'pretzel', title: 'Soft pretzel stack-off!', ask: 'Tap it, and it stacks the most pretzels!', count: ['Twist…', 'Salt…', 'STACK!'], second: 'Tasty stack!', won: 'BEST STACK!' },
+    { id: 'mural', title: 'Mural paint-off!', ask: 'Tap it, and it paints the best mural!', count: ['Brushes up…', 'Pick a color…', 'PAINT!'], second: 'So colorful!', won: 'MASTERPIECE!' }
   ];
   // The props: a cheesesteak in a long roll, the Liberty Bell with its crack, a Mummers' feathered parasol, a soft pretzel.
   var steakArt = function () {
@@ -1459,6 +1473,95 @@
     sv('rect', { x: 6, y: 40, width: 108, height: 5, fill: '#E9DDC2', stroke: INK, 'stroke-width': 1.5 }, s);
     return s;
   };
+  // More props: a cup of water ice, Ben Franklin's kite with the key on its string, Boathouse Row lit up at night, a
+  // rowing shell, a hoagie that goes together in layers, a bike and the potholes coming at it, and a wall to paint.
+  var waterArt = function () {
+    var s = sv('svg', { viewBox: '-26 -30 52 50', 'class': 'kc-wice', 'aria-hidden': 'true' });
+    var ice = sv('g', { 'class': 'kc-ice' }, s);
+    sv('path', { d: 'M-17 -2C-17 -27 17 -27 17 -2Z', fill: '#FF6B6B', stroke: INK, 'stroke-width': 2.5, 'stroke-linejoin': 'round' }, ice);
+    sv('path', { d: 'M-9 -15C-5 -20 1 -20 5 -18', fill: 'none', stroke: '#fff', 'stroke-width': 2.4, 'stroke-linecap': 'round' }, ice);
+    [[-10, -7], [-1, -11], [9, -6], [-4, -4], [7, -15]].forEach(function (p) { sv('circle', { cx: p[0], cy: p[1], r: 1.3, fill: '#FFC9C9' }, ice); });
+    line2(s, 'M7 -4L17 -27', 2.2, '#FFD43B');
+    sv('path', { d: 'M-18 -2H18L14 18H-14Z', fill: '#fff', stroke: INK, 'stroke-width': 2.5, 'stroke-linejoin': 'round' }, s);
+    sv('path', { d: 'M-16.6 6H16.6', stroke: '#4DABF7', 'stroke-width': 3 }, s);
+    return s;
+  };
+  var kiteArt = function (right) {   // drawn for the left bulb; mirrored for the right one, so its string runs toward the bulb
+    var s = sv('svg', { viewBox: '-22 -26 44 78', 'class': 'kc-kite', 'aria-hidden': 'true' }), top = s;
+    if (right) s = sv('g', { transform: 'scale(-1 1)' }, s);
+    sv('path', { d: 'M0 12C-4 18 -12 18 -10 26C-8 32 -16 34 -14 40', fill: 'none', stroke: INK, 'stroke-width': 1.4 }, s);
+    [[-10, 24], [-14, 37]].forEach(function (b) { sv('path', { d: 'M' + (b[0] - 4) + ' ' + (b[1] - 3) + 'L' + (b[0] + 4) + ' ' + (b[1] + 3) + 'M' + (b[0] - 4) + ' ' + (b[1] + 3) + 'L' + (b[0] + 4) + ' ' + (b[1] - 3), stroke: '#FA5252', 'stroke-width': 2.6, 'stroke-linecap': 'round' }, s); });
+    sv('path', { d: 'M0 -2C6 8 4 18 8 28C10 36 8 44 10 52', fill: 'none', stroke: INK, 'stroke-width': 1.2 }, s);
+    sv('path', { d: 'M0 -24L15 -6L0 12L-15 -6Z', fill: '#FFF3BF' }, s);
+    sv('path', { d: 'M0 -24L15 -6L0 -6ZM0 -6L-15 -6L0 12Z', fill: '#4DABF7' }, s);
+    sv('path', { d: 'M0 -24V12M-15 -6H15', stroke: INK, 'stroke-width': 1.4 }, s);
+    sv('path', { d: 'M0 -24L15 -6L0 12L-15 -6Z', fill: 'none', stroke: INK, 'stroke-width': 2.2, 'stroke-linejoin': 'round' }, s);
+    var key = sv('g', { 'class': 'kc-key' }, s);
+    sv('path', { d: 'M8 33V44H11.5M8 40.5H10.5', fill: 'none', stroke: INK, 'stroke-width': 1.9, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, key);
+    sv('circle', { cx: 8, cy: 30, r: 3.4, fill: '#CED4DA', stroke: INK, 'stroke-width': 1.5 }, key);
+    return top;
+  };
+  var boathouseArt = function () {
+    var s = sv('svg', { viewBox: '0 0 600 44', preserveAspectRatio: 'xMidYMax slice', 'class': 'kc-boathouses', 'aria-hidden': 'true' });
+    for (var i = 0; i < 12; i++) {
+      var x = i * 50, top = 4 + (i % 3) * 3, j, f;
+      sv('path', { d: 'M' + (x + 6) + ' 44V20L' + (x + 25) + ' ' + top + 'L' + (x + 44) + ' 20V44Z', fill: i % 2 ? '#22324F' : '#2B3D5E', stroke: '#0B1D3A', 'stroke-width': 1.5 }, s);
+      [x + 13, x + 31].forEach(function (wx) { sv('rect', { x: wx, y: 27, width: 6, height: 7, fill: '#FFE8A3' }, s); });
+      for (j = 0; j <= 6; j++) { f = j / 6; sv('circle', { cx: x + 6 + 19 * f, cy: 20 - (20 - top) * f, r: 1.4, fill: '#FFE066' }, s); sv('circle', { cx: x + 25 + 19 * f, cy: top + (20 - top) * f, r: 1.4, fill: '#FFE066' }, s); }
+      for (j = 1; j <= 3; j++) { sv('circle', { cx: x + 6, cy: 20 + j * 7, r: 1.4, fill: '#FFE066' }, s); sv('circle', { cx: x + 44, cy: 20 + j * 7, r: 1.4, fill: '#FFE066' }, s); }
+    }
+    return s;
+  };
+  var boatArt = function () {
+    var s = sv('svg', { viewBox: '-70 -8 140 34', 'class': 'kc-boat', 'aria-hidden': 'true' });
+    sv('path', { d: 'M-66 0Q0 12 66 0L56 12Q0 22 -56 12Z', fill: '#fff', stroke: INK, 'stroke-width': 2.4, 'stroke-linejoin': 'round' }, s);
+    sv('path', { d: 'M-60 5Q0 15 60 5', fill: 'none', stroke: '#CC3000', 'stroke-width': 3 }, s);
+    [-1, 1].forEach(function (side) {   // the oars turn about 0,0, where the bulb holds them
+      var g = sv('g', { 'class': 'kc-oar' }, s);
+      line2(g, 'M0 0L' + (side * 52) + ' 18', 2.6, '#E8B567');
+      sv('ellipse', { cx: side * 56, cy: 19.5, rx: 9, ry: 4, transform: 'rotate(' + (side * 18) + ' ' + (side * 56) + ' 19.5)', fill: '#FA5252', stroke: INK, 'stroke-width': 1.6 }, g);
+    });
+    return s;
+  };
+  var hoagieArt = function () {
+    var s = sv('svg', { viewBox: '0 0 120 52', 'class': 'kc-hoagie', 'aria-hidden': 'true' });
+    sv('ellipse', { cx: 60, cy: 49, rx: 56, ry: 3, fill: 'rgba(11,33,64,.18)' }, s);
+    sv('path', { d: 'M6 38C6 50 114 50 114 38Z', fill: '#E8B567', stroke: INK, 'stroke-width': 2.5, 'stroke-linejoin': 'round' }, s);
+    var layer = function () { var g = sv('g', { 'class': 'kc-layer' }, s); g.style.opacity = '0'; return g; };
+    sv('path', { d: 'M5 38Q11 31 17 37T29 36T41 37T53 36T65 37T77 36T89 37T101 36T115 38Z', fill: '#69DB7C', stroke: INK, 'stroke-width': 1.8, 'stroke-linejoin': 'round' }, layer());
+    var g = layer(); [18, 40, 62, 84, 103].forEach(function (x) { sv('ellipse', { cx: x, cy: 33, rx: 10, ry: 3.6, fill: '#FA5252', stroke: INK, 'stroke-width': 1.6 }, g); });
+    sv('path', { d: 'M8 30L18 23L28 30L38 23L48 30L58 23L68 30L78 23L88 30L98 23L108 30L112 28V31H8Z', fill: '#FFD43B', stroke: INK, 'stroke-width': 1.6, 'stroke-linejoin': 'round' }, layer());
+    sv('path', { d: 'M7 25Q15 19 23 24T39 24T55 24T71 24T87 24T103 24T113 25V28H7Z', fill: '#FF8787', stroke: INK, 'stroke-width': 1.6, 'stroke-linejoin': 'round' }, layer());
+    g = layer();
+    sv('path', { d: 'M8 22C8 1 112 1 112 22Q60 27 8 22Z', fill: '#F0C27B', stroke: INK, 'stroke-width': 2.5, 'stroke-linejoin': 'round' }, g);
+    sv('path', { d: 'M20 11Q60 3 100 11', fill: 'none', stroke: '#FFE8C2', 'stroke-width': 3, 'stroke-linecap': 'round' }, g);
+    [[30, 10], [44, 7], [58, 6], [72, 7], [86, 10], [50, 14], [66, 14]].forEach(function (p) { sv('ellipse', { cx: p[0], cy: p[1], rx: 2, ry: 1.1, fill: '#FFF8E1' }, g); });
+    return s;
+  };
+  var bikeArt = function () { var s = sv('svg', { viewBox: '-21 -13 42 28', 'class': 'kc-bike', 'aria-hidden': 'true' }); SURPRISE.bike(sv('g', null, s)); return s; };
+  // The road under the bike: three windows wide, so sliding it two windows brings the potholes (at 100, 150 and 200)
+  // under the bike a quarter, a half and three quarters of the way through.
+  var holesArt = function () {
+    var w = el('span', 'kc-holes'); w.setAttribute('aria-hidden', 'true');
+    var s = sv('svg', { viewBox: '0 0 300 14', preserveAspectRatio: 'none', 'class': 'kc-road' }, w);
+    sv('rect', { width: 300, height: 14, fill: '#ADB5BD' }, s);
+    for (var x = 8; x < 300; x += 24) sv('rect', { x: x, y: 6.2, width: 10, height: 1.6, fill: '#fff' }, s);
+    [100, 150, 200].forEach(function (x) { sv('ellipse', { cx: x, cy: 7, rx: 10, ry: 5, fill: '#212529', stroke: '#495057', 'stroke-width': 1.4 }, s); });
+    return w;
+  };
+  var wallArt = function () {
+    var s = sv('svg', { viewBox: '0 0 120 70', 'class': 'kc-wall', 'aria-hidden': 'true' });
+    sv('rect', { x: 2, y: 2, width: 116, height: 66, rx: 3, fill: '#F8F1E3' }, s);
+    var part = function () { var g = sv('g', { 'class': 'kc-paint' }, s); g.style.opacity = '0'; return g; };
+    sv('rect', { x: 2, y: 2, width: 116, height: 46, fill: '#74C0FC' }, part());
+    var g = part(); [['#FA5252', 34], ['#FFD43B', 28], ['#69DB7C', 22], ['#9775FA', 16]].forEach(function (a) { sv('path', { d: 'M' + (70 - a[1]) + ' 50A' + a[1] + ' ' + a[1] + ' 0 0 1 ' + (70 + a[1]) + ' 50', fill: 'none', stroke: a[0], 'stroke-width': 6 }, g); });
+    g = part(); sv('circle', { cx: 22, cy: 18, r: 9, fill: '#FFD43B', stroke: '#F59F00', 'stroke-width': 2 }, g);
+    for (var i = 0; i < 8; i++) { var a = i * Math.PI / 4; sv('path', { d: 'M' + (22 + 12 * Math.cos(a)).toFixed(1) + ' ' + (18 + 12 * Math.sin(a)).toFixed(1) + 'L' + (22 + 16 * Math.cos(a)).toFixed(1) + ' ' + (18 + 16 * Math.sin(a)).toFixed(1), stroke: '#F59F00', 'stroke-width': 2.2, 'stroke-linecap': 'round' }, g); }
+    sv('path', { d: 'M2 50Q24 34 46 46T90 42T118 46V68H2Z', fill: '#40C057' }, part());
+    sv('path', { d: 'M92 12C92 6 100 6 100 12C100 6 108 6 108 12C108 18 100 23 100 25C100 23 92 18 92 12Z', fill: '#F06595', stroke: INK, 'stroke-width': 1.5, 'stroke-linejoin': 'round' }, part());
+    sv('rect', { x: 2, y: 2, width: 116, height: 66, rx: 3, fill: 'none', stroke: INK, 'stroke-width': 3 }, s);
+    return s;
+  };
   var drawFight = function () {
     var k = kid(), b = S.bracket; if (!k || !b) { go('kid', 'battle', false); return; }
     setKidMode(true);
@@ -1486,6 +1589,12 @@
     if (ev.id === 'bell') { deco('kc-hall'); ring.appendChild(bellArt()); }
     if (ev.id === 'strut') { deco('kc-street'); ring.appendChild(parasolArt()); }
     if (ev.id === 'pretzel') deco('kc-oven');
+    if (ev.id === 'waterice') deco('kc-counter');
+    if (ev.id === 'kite') { deco('kc-clouds'); deco('kc-field'); }
+    if (ev.id === 'row') { ring.appendChild(boathouseArt()); deco('kc-river'); }
+    if (ev.id === 'hoagie') deco('kc-deli');
+    if (ev.id === 'pothole') { deco('kc-rows'); deco('kc-road-bg'); }
+    if (ev.id === 'mural') deco('kc-bricks');
     var ref = eddie(ev.ask, 'kc-ref'); ring.appendChild(ref);
     var pair = [b.round[b.i], b.round[b.i + 1]], cards = [];
     pair.forEach(function (key, idx) {
@@ -1494,6 +1603,12 @@
       if (ev.id === 'bell') { var meter = el('span', 'kc-meter'); meter.appendChild(el('i')); c.appendChild(meter); }
       if (ev.id === 'steak') c.appendChild(steakArt());
       if (ev.id === 'pretzel') c.appendChild(el('span', 'kc-stack'));
+      if (ev.id === 'waterice') c.appendChild(waterArt());
+      if (ev.id === 'kite') wrap.appendChild(kiteArt(idx));   // beside the bulb itself, however wide the column
+      if (ev.id === 'row') wrap.appendChild(boatArt());   // in the bulb's box, so the boat goes where the bulb goes
+      if (ev.id === 'hoagie') c.appendChild(hoagieArt());
+      if (ev.id === 'pothole') { wrap.appendChild(bikeArt()); c.appendChild(holesArt()); }
+      if (ev.id === 'mural') c.appendChild(wallArt());
       c.appendChild(el('b', null, nameOf(key)));
       c.setAttribute('aria-label', 'I had more fun at ' + nameOf(key));
       cards.push(c); ring.appendChild(c);
@@ -1522,6 +1637,7 @@
         return anim(s, [{ transform: 'translate(' + from[0] + 'px,' + from[1] + 'px) scale(.4)', opacity: 1 }, { transform: 'translate(' + to[0] + 'px,' + to[1] + 'px) rotate(360deg) scale(1.2)', opacity: 0 }], { duration: ms || 600, easing: 'ease-out', fill: 'forwards' }).then(function () { s.remove(); });
       };
       var centerOf = function (node) { var fr = fx.getBoundingClientRect(), r = node.getBoundingClientRect(); return [r.left - fr.left + r.width / 2, r.top - fr.top + r.height / 2]; };
+      var sign = function () { win.appendChild(el('span', 'kc-wins' + (ev.won.length > 8 ? ' long' : ''), ev.won)); };
       var contest;
       if (ev.id === 'race') contest = function () {   // both climb; the winner faster, its special move as a speed boost
         var rr = ring.getBoundingClientRect(), climb = Math.max(70, wm.getBoundingClientRect().top - rr.top - 64);
@@ -1580,6 +1696,105 @@
         ref.say(mon.move);
         var a1 = add(win, 6, 210).then(function () { anim(win.querySelector('.kc-stack'), [{ transform: 'rotate(0)' }, { transform: 'rotate(-6deg)' }, { transform: 'rotate(5deg)' }, { transform: 'rotate(0)' }], { duration: 700, easing: 'ease-in-out' }); Sound.play('boing'); win.appendChild(el('span', 'kc-wins' + (ev.won.length > 8 ? ' long' : ''), ev.won)); confetti(30); });
         var a2 = wait(120).then(function () { return add(lose, 4, 300); });
+        return Promise.all([a1, a2]);
+      };
+      if (ev.id === 'waterice') contest = function () {   // both slurp; the winner empties its cup first, and the other gets a brain freeze
+        var wi = win.querySelector('.kc-ice'), li = lose.querySelector('.kc-ice');
+        var down = function (to, n) { var fr = []; for (var i = 0; i <= n; i++) fr.push({ transform: 'scaleY(' + (1 - (1 - to) * i / n).toFixed(2) + ')' }); return fr; };
+        ref.say(mon.move);
+        var slurps = []; for (var i = 0; i < 4; i++) (function (i) { slurps.push(wait(i * 300).then(function () { Sound.play('slurp'); bounce(wm); var c = centerOf(win.querySelector('.kc-wice')); return shotAt([c[0], c[1] - 10], [c[0] + (Math.random() * 70 - 35), c[1] - 60 - Math.random() * 30], i % 2 ? mon.atk : 'drop', 600); })); })(i);
+        var a1 = anim(wi, down(0, 4), { duration: 1300, easing: 'steps(4, end)', fill: 'forwards' }).then(function () { if (CALM) wi.style.transform = 'scaleY(0)'; Sound.play('boing'); sign(); confetti(30); });
+        var a2 = anim(li, down(0.35, 3), { duration: 1300, easing: 'steps(3, end)', fill: 'forwards' }).then(function () { if (CALM) li.style.transform = 'scaleY(.35)'; });
+        return Promise.all([a1, a2].concat(slurps)).then(function () {   // brain freeze: a shiver, and snowflakes
+          Sound.play('brr');
+          var c = centerOf(lm), flakes = [];
+          for (var i = 0; i < 6; i++) { var ang = Math.PI * 2 * i / 6; flakes.push(shotAt([c[0], c[1] - 10], [c[0] + Math.cos(ang) * 70, c[1] - 10 + Math.sin(ang) * 50], 'flake', 900)); }
+          return Promise.all(flakes.concat([anim(lm, [{ transform: 'translateX(0)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(5px)' }, { transform: 'translateX(-4px)' }, { transform: 'translateX(4px)' }, { transform: 'translateX(0)' }], { duration: 180, iterations: 4 })]));
+        });
+      };
+      if (ev.id === 'kite') contest = function () {   // both kites go up; the winner's higher, then lightning finds the key on its string and it sparks
+        var wk = win.querySelector('.kc-kite'), lk = lose.querySelector('.kc-kite');
+        var fly = function (h) { return [{ transform: 'translateY(0) rotate(0)' }, { transform: 'translateY(' + (-h * 0.4) + 'px) rotate(-10deg)', offset: 0.3 }, { transform: 'translateY(' + (-h * 0.75) + 'px) rotate(8deg)', offset: 0.65 }, { transform: 'translateY(' + (-h) + 'px) rotate(-4deg)' }]; };
+        Sound.play('whoosh'); ref.say(mon.move);
+        var a1 = anim(wk, fly(34), { duration: 1300, easing: 'ease-out', fill: 'forwards' });
+        var a2 = anim(lk, fly(12), { duration: 1300, easing: 'ease-out', fill: 'forwards' });
+        if (CALM) { wk.style.transform = 'translateY(-34px)'; lk.style.transform = 'translateY(-12px)'; }
+        return Promise.all([a1, a2]).then(function () {
+          var c = centerOf(wk.querySelector('.kc-key')), flash = el('span', 'kc-flash');
+          ring.appendChild(flash); Sound.play('zap');
+          anim(flash, [{ opacity: 0.85 }, { opacity: 0 }], { duration: 420, easing: 'ease-out' }).then(function () { flash.remove(); });
+          return shotAt([c[0], -10], [c[0], c[1]], 'bolt', 240).then(function () {
+            wk.classList.add('zapped'); Sound.play('sparkle');
+            var sparks = []; for (var i = 0; i < 6; i++) { var ang = Math.PI * 2 * i / 6; sparks.push(shotAt(c, [c[0] + Math.cos(ang) * 60, c[1] + Math.sin(ang) * 50], i % 2 ? mon.atk : 'star', 700)); }
+            return Promise.all(sparks).then(function () { sign(); confetti(30); });   // the sign after the sparks, which it would cover
+          });
+        });
+      };
+      if (ev.id === 'row') contest = function () {   // both row up the river toward the boathouses, oars going; the winner faster, splashing
+        var rr = ring.getBoundingClientRect(), horizon = rr.bottom - rr.height * 0.42, wr = wm.getBoundingClientRect();
+        var climb = Math.max(40, wm.querySelector('.kc-boat').getBoundingClientRect().bottom - horizon - wr.height * 0.15);   // the boat ends at the far bank
+        var glide = function () { var fr = []; for (var i = 0; i <= 8; i++) { var f = i / 8; fr.push({ transform: 'translateY(' + (-climb * f + (i % 2 && i < 8 ? 4 : 0)).toFixed(1) + 'px) scale(' + (1 - 0.3 * f).toFixed(2) + ')', offset: f }); } return fr; };
+        var oars = function (card, ms) { return Promise.all([].map.call(card.querySelectorAll('.kc-oar'), function (o, j) { var r = j ? -20 : 20; return anim(o, [{ transform: 'rotate(0)' }, { transform: 'rotate(' + r + 'deg)' }, { transform: 'rotate(0)' }], { duration: ms / 4, iterations: 4, easing: 'ease-in-out' }); })); };
+        ref.say(mon.move);
+        var splash = []; [100, 420, 740, 1060].forEach(function (t, i) { splash.push(wait(t).then(function () { Sound.play('splash'); var c = centerOf(wm.querySelector('.kc-boat')); return shotAt([c[0], c[1]], [c[0] + (Math.random() * 60 - 30), c[1] + 30 + Math.random() * 20], i % 2 ? mon.atk : 'drop', 600); })); });
+        var a1 = Promise.all([anim(wm, glide(), { duration: 1300, easing: 'linear', fill: 'forwards' }), oars(win, 1300)]).then(function () { Sound.play('boing'); sign(); confetti(30); });
+        var a2 = Promise.all([anim(lm, glide(), { duration: 1900, easing: 'linear', fill: 'forwards' }), oars(lose, 1900)]);
+        return Promise.all([a1, a2].concat(splash));
+      };
+      if (ev.id === 'hoagie') contest = function () {   // the layers drop onto both rolls; the winner's gets everything and the top, and wiggles
+        var build = function (card, n, ms) {
+          var layers = card.querySelectorAll('.kc-layer'), p = Promise.resolve();
+          for (var i = 0; i < n; i++) (function (g) { p = p.then(function () { Sound.play('pop'); return anim(g, [{ transform: 'translateY(-26px)', opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }], { duration: ms, easing: 'cubic-bezier(.3,1.5,.5,1)', fill: 'forwards' }).then(function () { g.style.opacity = '1'; }); }); })(layers[i]);
+          return p;
+        };
+        ref.say(mon.move);
+        var a1 = build(win, 5, 240).then(function () { anim(win.querySelector('.kc-hoagie'), [{ transform: 'rotate(0)' }, { transform: 'rotate(-5deg)' }, { transform: 'rotate(4deg)' }, { transform: 'rotate(0)' }], { duration: 600, easing: 'ease-in-out' }); Sound.play('boing'); sign(); confetti(30); });
+        var a2 = wait(120).then(function () { return build(lose, 3, 380); });
+        return Promise.all([a1, a2]);
+      };
+      if (ev.id === 'pothole') contest = function () {   // both ride and the potholes roll at them; the winner hops every one, the other hits the last
+        var D = 1800;
+        var road = function (card) { return anim(card.querySelector('.kc-road'), [{ transform: 'translateX(0)' }, { transform: 'translateX(-66.667%)' }], { duration: D, easing: 'linear', fill: 'forwards' }); };
+        var hop = function (m) { return anim(m, [{ transform: 'translateY(0) rotate(0)' }, { transform: 'translateY(-22%) rotate(-6deg)', offset: 0.45 }, { transform: 'translateY(0) rotate(0)' }], { duration: 300, easing: 'ease-out' }); };
+        ref.say(mon.move);
+        var hops = [0.25, 0.5, 0.75].map(function (f, i) {
+          return wait(f * D - 150).then(function () {
+            Sound.play('boing');
+            var c = centerOf(win.querySelector('.kc-holes')); shotAt([c[0], c[1]], [c[0] + (Math.random() * 40 - 20), c[1] - 24], i === 1 ? mon.atk : 'dust', 500);
+            var both = [hop(wm)];
+            if (i < 2) both.push(hop(lm));
+            else {   // bonk
+              Sound.play('pow');
+              var lc = centerOf(lose.querySelector('.kc-holes'));
+              for (var j = 0; j < 4; j++) shotAt([lc[0], lc[1] - 10], [lc[0] + (j - 1.5) * 30, lc[1] - 70], 'star', 650);
+              both.push(anim(lm, [{ transform: 'translateY(0) rotate(0)' }, { transform: 'translateY(6%) rotate(-12deg)' }, { transform: 'translateY(0) rotate(10deg)' }, { transform: 'translateY(0) rotate(-6deg)' }, { transform: 'translateY(0) rotate(0)' }], { duration: 650, easing: 'ease-out' }));
+            }
+            return Promise.all(both);
+          });
+        });
+        return Promise.all([road(win), road(lose)].concat(hops)).then(function () { sign(); confetti(30); });
+      };
+      if (ev.id === 'mural') contest = function () {   // paint flies at both walls; the winner's mural gets all five parts, and sparkles
+        var paint = function (card, m, n, ms, special) {
+          var parts = card.querySelectorAll('.kc-paint'), wall = card.querySelector('.kc-wall'), p = Promise.resolve();
+          for (var i = 0; i < n; i++) (function (g, i) {
+            p = p.then(function () {
+              var a = centerOf(m), b = centerOf(wall); Sound.play('splat');
+              return shotAt([a[0], a[1] - 30], [b[0] + (Math.random() * 40 - 20), b[1] + (Math.random() * 16 - 8)], special && i % 2 ? special : 'splat', ms * 0.55).then(function () {
+                return anim(g, [{ transform: 'scale(.2)', opacity: 0 }, { transform: 'scale(1.08)', opacity: 1, offset: 0.7 }, { transform: 'scale(1)', opacity: 1 }], { duration: ms * 0.45, easing: 'ease-out', fill: 'forwards' }).then(function () { g.style.opacity = '1'; });
+              });
+            });
+          })(parts[i], i);
+          return p;
+        };
+        ref.say(mon.move);
+        var a1 = paint(win, wm, 5, 260, mon.atk).then(function () {
+          Sound.play('sparkle'); sign(); confetti(30);
+          var b = centerOf(win.querySelector('.kc-wall')), twinkles = [];
+          for (var i = 0; i < 6; i++) { var ang = Math.PI * 2 * i / 6; twinkles.push(shotAt(b, [b[0] + Math.cos(ang) * 70, b[1] + Math.sin(ang) * 45], 'star', 700)); }
+          return Promise.all(twinkles);
+        });
+        var a2 = wait(150).then(function () { return paint(lose, lm, 3, 400, null); });
         return Promise.all([a1, a2]);
       };
       wait(250).then(countdown).then(contest)
