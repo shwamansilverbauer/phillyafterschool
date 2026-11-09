@@ -484,8 +484,12 @@ keep that name.)
 - **Bulbs and the showdown.** Each program type is a family of bulbs (`SPECIES`: a bulb shape, something to wear,
   a special move), its glass tinted with the type's colour, and each program a member of it, varied by its id (eyes,
   mouth, freckles, shades). `drawBulb()` draws them; a lit bulb glows, and the class `off` puts its light out. The
-  showdown pairs the child's distinct listings until one is left, each pair in one of three contests that take turns
-  (`EVENTS`): a race up the Art Museum steps, a glow-off (meters fill, spotlights) and a dance-off. The question is
+  showdown pairs the child's distinct listings until one is left, each pair in one of five Philly contests that take
+  turns from a random one (`EVENTS`; `?contest=steak` on the page starts with a given one): a race up the Art Museum
+  steps, a cheesesteak eating contest (the rolls go in bites; "Wiz… Wit… EAT!"), a Liberty Bell ring-off (meters
+  fill, then the bell swings, its crack lights up and it rings), a Mummers strut-off (a feathered parasol on Broad
+  Street) and a soft pretzel stack-off (pretzels pile up in a pyramid in front of each). Each winner gets its own sign
+  ("CLEAN PLATE!", "LOUDEST!", "BEST STRUT!", "BEST STACK!"). The question is
   always the same and plain, "Which did you have more fun at?", with the contest as a label under it: the child taps
   the one they had more fun at, Eddie counts them in, the winner pulls out its special move (notes, paint, lightning, dice…), and the other
   comes second and cheers ("Good race!"). Nobody gets hit and no light goes out: it was boxing at first, changed so
@@ -2153,10 +2157,13 @@ planner would be (see "The tour" below), and the lists are there for everyone on
 - **The summer schedule** has the same switch (`pas-sum-view`); there the pick is a whole week.
 - Both use `calMonthView()` in `site.js`. On a phone the labels in the squares become coloured bars.
 
-## The dragon
+## Eddie in his sunglasses
 
-When a change fills the last open day of a part of a plan, a dragon flies across the screen with "You did it! … You
-are on fireeee!" (`cheer()` in `site.js`, drawn in SVG, moved by CSS):
+When a change fills the last open day of a part of a plan, Eddie Bulboa (the bulb in the logo, `bulb.png`) slides
+across the screen with "You did it! … Too cool for school!": he comes in from the right (he faces left, so what he
+says sits to his left), his sunglasses drop on and glint while he waits in the middle long enough to read, and he
+leaves to the left (`cheer()` in `site.js`; the shades are drawn in SVG over the picture, and CSS moves them). It
+replaced a dragon, once Eddie was the mascot. It comes for:
 
 - the last day off of a month ("November is planned."), or of the whole year ("You planned the whole year.");
 - a camp on the last open week of the summer ("You planned the whole summer.");
@@ -2165,8 +2172,8 @@ are on fireeee!" (`cheer()` in `site.js`, drawn in SVG, moved by CSS):
 
 It comes once for each of those on a visit, takes no taps, leaves by itself after about seven seconds or on Escape,
 and the planner's status line says the same words for a screen reader. For someone whose device asks for less
-motion it stands still at the foot of the screen with a Close button. Opening a page, or a plan put back from a
-profile, brings no dragon. Analytics gets `pas_cheer` with which kind, and nothing else.
+motion he stands still at the foot of the screen, shades on, with a Close button. Opening a page, or a plan put back
+from a profile, brings no Eddie. Analytics gets `pas_cheer` with which kind, and nothing else.
 
 ## The planners in one place
 

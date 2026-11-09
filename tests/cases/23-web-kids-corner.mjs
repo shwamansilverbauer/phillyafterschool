@@ -1,7 +1,7 @@
 // Kid's Corner in a browser: the picker, a child picking their lightbulb, kid mode (no site around it, no link off it),
 // the grown-ups' corner behind a press-and-hold, a confirmed class turning into pins and a level (celebrated once),
 // the level-up unlocking things for the child's bulb to wear, the map of Philadelphia drawn from this site alone, the
-// showdowns (a race, a glow-off, a dance-off) ranking favorites with Eddie Bulboa hosting, the mute button, the account page's Kid's Corner tab, and that nothing is counted or sent anywhere.
+// showdowns (five Philly contests: the Art Museum steps, a cheesesteak, the Liberty Bell, a Mummers strut, a pretzel stack) ranking favorites with Eddie Bulboa hosting, the mute button, the account page's Kid's Corner tab, and that nothing is counted or sent anywhere.
 import { test, ok, eq, includes, matches, someone } from '../lib/harness.mjs';
 import { pickupPair, weekendProgram } from '../lib/data.mjs';
 
@@ -290,9 +290,9 @@ test('the showdown ranks favorites with no one hurt, which the profile then carr
   eq(await page.locator('.kc-arena .kc-fighter').count(), 2);
   eq(await page.locator('.kc-show .kc-ref img[alt="Eddie Bulboa"]').count(), 1, 'Eddie hosts');
   eq(await page.locator('.kc-show .kc-fighter .kc-bulb').count(), 2, 'two bulbs on the stage');
-  matches(await page.locator('.kc-show').getAttribute('class'), /\bkc-ev-(race|glow|dance)\b/, 'a race, a glow-off or a dance-off');
+  matches(await page.locator('.kc-show').getAttribute('class'), /\bkc-ev-(race|steak|bell|strut|pretzel)\b/, 'one of the Philly contests');
   matches(flat(await page.locator('.kc-fight .kc-ask').innerText()), /which did you have more fun at\?/i, 'the question is plain');
-  matches(flat(await page.locator('.kc-fight .kc-evname').innerText()), /race up the steps|glow-off|dance-off/i);
+  matches(flat(await page.locator('.kc-fight .kc-evname').innerText()), /art museum steps|cheesesteak|liberty bell|mummers|soft pretzel/i);
   // Watch the contest (with reduced motion it passes quickly): the other comes second and cheers; no light goes out.
   await page.evaluate(() => {
     window.__kc = { second: '', said: '', off: 0 };
@@ -306,7 +306,7 @@ test('the showdown ranks favorites with no one hurt, which the profile then carr
   await page.waitForSelector('.kc-champ', { timeout: 15000 });
   const watched = await page.evaluate(() => window.__kc);
   includes(flat(watched.second).toLowerCase(), program.name.toLowerCase(), 'the other comes second');
-  matches(watched.said, /Good race!|So bright!|Great moves!/, 'and is cheered');
+  matches(watched.said, /Good race!|So full!|Nice ring!|Great strut!|Tasty stack!/, 'and is cheered');
   eq(watched.off, 0, 'nobody knocked out');
   includes(flat(await page.locator('.kc-champ').innerText()).toLowerCase(), wp.name.toLowerCase(), 'the winner is the champion');
   await page.waitForTimeout(600);   // the ranking saves
@@ -318,6 +318,21 @@ test('the showdown ranks favorites with no one hurt, which the profile then carr
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForSelector('.kc-top .kc-mute');
   eq(await page.locator('.kc-top .kc-mute').getAttribute('aria-pressed'), 'true', 'still muted after a reload');
+  // Each contest, by name: its stage and props, played through to a champion with the winner's sign.
+  const PROPS = { race: ['.kc-museum', 1], steak: ['.kc-steak', 2], bell: ['.kc-bell', 1], strut: ['.kc-parasol', 1], pretzel: ['.kc-stack', 2] };
+  const SIGN = { race: 'WINS!', steak: 'CLEAN PLATE!', bell: 'LOUDEST!', strut: 'BEST STRUT!', pretzel: 'BEST STACK!' };
+  for (const id of Object.keys(PROPS)) {
+    await page.goto(new URL('/kids-corner/?contest=' + id + '#battle', page.url()).href);
+    await page.waitForSelector('.kc-zoo');
+    await page.evaluate(() => document.querySelectorAll('.kc-over').forEach(o => o.remove()));
+    await page.locator('.kc-big.fight').click();
+    await page.waitForSelector('.kc-show.kc-ev-' + id);
+    eq(await page.locator('.kc-show ' + PROPS[id][0]).count(), PROPS[id][1], id + ': its props');
+    await page.evaluate(() => { window.__sign = ''; new MutationObserver(() => { const w = document.querySelector('.kc-show .kc-wins'); if (w && !window.__sign) window.__sign = w.textContent; }).observe(document.body, { subtree: true, childList: true }); });
+    await page.locator('.kc-arena .kc-fighter').first().click();
+    await page.waitForSelector('.kc-champ', { timeout: 15000 });
+    eq(await page.evaluate(() => window.__sign), SIGN[id], id + ': the winner’s sign');
+  }
   eq(t.outside.length, 0, 'nothing asked of another site: ' + t.outside.join(', '));
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();

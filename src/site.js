@@ -1682,23 +1682,18 @@
   }
 
 
-  // ----- a dragon flies across the screen when the last open day in a part of a plan is filled in: a month of days off,
-  // every day off, the whole summer, all five days of a week. Once for each on a visit; it gets out of the way by
-  // itself (or with Escape), takes no taps, and stands still for anyone who has asked for less motion. -----
-  var DRAGON = '<svg viewBox="0 0 280 170" aria-hidden="true" focusable="false">'
-    + '<g class="dr-flame"><path d="M206 78c22-18 50-12 70 2-20 10-46 22-70 6z" fill="#FF7A1A"/><path d="M208 80c16-10 34-8 48 0-14 6-32 12-48 4z" fill="#FFD23F"/><circle cx="262" cy="64" r="3.5" fill="#FF7A1A"/><circle cx="272" cy="96" r="2.5" fill="#FFD23F"/><circle cx="250" cy="104" r="3" fill="#FF7A1A"/></g>'
-    + '<path d="M62 112c-22 6-40 0-50-16 8 4 16 4 22 0-10-6-14-16-12-28 10 14 26 24 46 26z" fill="#2C8444"/><path d="M12 96l-10-12 16 2z" fill="#1F6B36"/>'
-    + '<g class="dr-wing dr-wing-b"><path d="M100 86C92 50 64 24 22 24c12 10 16 22 16 36 10-6 20-2 24 10 10-6 20 0 24 10 6 0 11 2 14 6z" fill="#1F6B36"/></g>'
-    + '<ellipse cx="106" cy="108" rx="52" ry="32" fill="#2C8444"/><path d="M66 118c10 20 66 22 86 2-14 8-62 10-86-2z" fill="#F3C613"/>'
-    + '<path d="M84 80l8-14 8 12 8-14 8 13 8-13 6 14z" fill="#1F6B36"/>'
-    + '<path d="M138 92c6-22 20-36 40-38l8 30c-14 2-24 12-28 26z" fill="#2C8444"/>'
-    + '<path d="M168 44l-4-20 16 14z" fill="#F3C613"/><path d="M186 42l4-20 10 18z" fill="#F3C613"/>'
-    + '<ellipse cx="186" cy="62" rx="26" ry="22" fill="#2C8444"/><path d="M190 60h26c8 0 12 6 12 12s-4 12-12 12h-30z" fill="#3E9E57"/>'
-    + '<circle cx="182" cy="56" r="8" fill="#FFFFFF"/><circle cx="184" cy="57" r="4" fill="#0B2140"/><circle cx="185.500" cy="55.500" r="1.500" fill="#FFFFFF"/>'
-    + '<circle cx="219" cy="67" r="2" fill="#0B2140"/><path d="M196 76q10 6 22 2" fill="none" stroke="#0B2140" stroke-width="2.500" stroke-linecap="round"/>'
-    + '<g class="dr-wing"><path d="M112 90C110 52 88 18 40 4c12 16 14 30 10 44 10-2 18 4 22 14 10-4 18 2 22 12 8 0 14 6 18 16z" fill="#3E9E57"/><path d="M112 90C102 56 80 28 40 4M112 90C98 70 74 52 50 48M112 90c-10-14-24-24-40-28" fill="none" stroke="#1F6B36" stroke-width="2.500" stroke-linecap="round"/></g>'
-    + '<path d="M84 134c-2 10 0 16 6 18h12c0-6-4-8-6-8l2-10zM122 136c-2 10 0 14 6 16h12c0-6-4-8-6-8l2-9z" fill="#1F6B36"/>'
-    + '</svg>';
+  // ----- Eddie Bulboa, the bulb in the logo, slides across the screen in sunglasses when the last open day in a part of
+  // a plan is filled in: a month of days off, every day off, the whole summer, all five days of a week. Once for each
+  // on a visit; he gets out of the way by himself (or with Escape), takes no taps, and stands still for anyone who has
+  // asked for less motion. He faces left, so he comes in from the right, and what he says sits to his left. -----
+  var EDDIE_SRC = (function () { var s = document.currentScript && document.currentScript.src; return s ? s.replace(/assets\/site\.js.*$/, 'bulb.png') : 'bulb.png'; })();
+  var SHADES = '<svg class="cheer-shades" viewBox="0 0 327 400" aria-hidden="true" focusable="false"><g class="cheer-shades-on">'
+    + '<path d="M146 116L200 105" stroke="#0B2140" stroke-width="8" stroke-linecap="round"/>'
+    + '<path d="M66 112Q104 102 148 112Q148 132 138 144Q116 158 90 152Q70 146 66 126Z" fill="#0B2140"/>'
+    + '<path d="M60 114L68 112" stroke="#0B2140" stroke-width="6" stroke-linecap="round"/>'
+    + '<path d="M84 122L104 116" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity=".85"/>'
+    + '<path d="M91 134L98 132" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity=".55"/></g>'
+    + '<path class="cheer-glint" d="M112 104l4 12 12 4-12 4-4 12-4-12-12-4 12-4z" fill="#FFFFFF"/></svg>';
   var cheered = {};
   function cheer(kind, key, line) {
     if (cheered[key] || !document.body) return;
@@ -1706,10 +1701,11 @@
     track({ event: 'pas_cheer', what: kind });
     var old = document.querySelector('.cheer'); if (old && old.parentNode) old.parentNode.removeChild(old);
     var calm = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-    var box = el('div', 'cheer' + (calm ? ' calm' : '')), train = el('div', 'cheer-train'), bob = el('div', 'cheer-bob'), say = el('div', 'cheer-say'), art = el('div', 'cheer-dragon');
+    var box = el('div', 'cheer' + (calm ? ' calm' : '')), train = el('div', 'cheer-train'), bob = el('div', 'cheer-bob'), say = el('div', 'cheer-say'), art = el('div', 'cheer-eddie');
     box.setAttribute('role', 'status');
-    say.appendChild(el('b', null, 'You did it!')); say.appendChild(el('span', null, line)); say.appendChild(el('em', null, 'You are on fireeee!'));
-    art.innerHTML = DRAGON;
+    say.appendChild(el('b', null, 'You did it!')); say.appendChild(el('span', null, line)); say.appendChild(el('em', null, 'Too cool for school!'));
+    var img = el('img'); img.src = EDDIE_SRC; img.alt = ''; img.width = 327; img.height = 400;
+    art.appendChild(img); art.insertAdjacentHTML('beforeend', SHADES);
     bob.appendChild(say); bob.appendChild(art); train.appendChild(bob); box.appendChild(train);
     var gone = false;
     var done = function () { if (gone) return; gone = true; if (box.parentNode) box.parentNode.removeChild(box); document.removeEventListener('keydown', esc); };
@@ -1991,7 +1987,7 @@
         draw();
       });
     });
-    // The last open day of a month, or of the whole year, brings the dragon.
+    // The last open day of a month, or of the whole year, brings Eddie in his sunglasses.
     var monthName = function (mk) { return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][+mk.slice(5) - 1]; };
     var doneNow = function (k) { var o = { all: days.length > 0, m: {} }; days.forEach(function (d) { var mk = d.d.slice(0, 7); if (!(mk in o.m)) o.m[mk] = true; if (!pickOf(k, d)) { o.m[mk] = false; o.all = false; } }); return o; };
     var cheerOff = function (was) {
@@ -2006,7 +2002,7 @@
         line = fresh.length === 1 ? monthName(fresh[0]) + ' is planned.' : fresh.length === 2 ? monthName(fresh[0]) + ' and ' + monthName(fresh[1]) + ' are planned.' : fresh.length + ' more months are planned.';
         cheer('days_off_month', 'off-' + r.kid + '-' + fresh.join(), line);
       }
-      if (line) say('You did it! ' + line + ' You are on fireeee!');
+      if (line) say('You did it! ' + line + ' Too cool for school!');
     };
     // One place a day: picking the same one again takes it off, picking another replaces it.
     var set = function (d, val, how, what) {
@@ -2614,7 +2610,7 @@
       shared: function () { return shared; },
       save: function () { store('pas-rosters', JSON.stringify(rosters)); },
       emptyBoard: emptyBoard, newKid: newKid, maxKids: MAX_KIDS,
-      redraw: function () { weekFull.key = ''; render(); },   // after the share-groups script changes a roster (a week put back from a profile): no dragon for that
+      redraw: function () { weekFull.key = ''; render(); },   // after the share-groups script changes a roster (a week put back from a profile): no Eddie for that
       favorites: function (list) { setFavs(list); render(); }   // from Kid's Corner, by first name
     };
     // The child's favorites from Kid's Corner (the battle's ranking), offered first when a program is added.
@@ -2636,7 +2632,7 @@
       var kid = shared ? null : r.kids[r.kid];
       var name = shared ? shared.name : kid.name;
       var b = shared ? shared.board : kid[which];
-      if (!shared) {   // something on all five school days, made so by a change here, brings the dragon
+      if (!shared) {   // something on all five school days, made so by a change here, brings Eddie
         var fullKey = r.kid + '|' + which, fullNow = DAYS.every(function (day) { return b.days[day[0]].length > 0; });
         if (weekFull.key === fullKey && !weekFull.on && fullNow) cheer('week', 'week-' + fullKey, 'You planned the whole week.');
         weekFull = { key: fullKey, on: fullNow };
@@ -3759,14 +3755,14 @@
       draw();
     };
     viewBtns.forEach(function (b) { b.addEventListener('click', function () { setView(b.getAttribute('data-view')); }); });
-    // Every week of the summer with a camp on it brings the dragon.
+    // Every week of the summer with a camp on it brings Eddie.
     var cheerSum = function (was) {
       var full = sd.weeks.length > 0 && covered() === sd.weeks.length;
       if (!full || was) return;
       var me = kid(), others = r.kids.filter(function (k) { return k !== me && coveredOf(k) > 0 && coveredOf(k) < sd.weeks.length; });
       var line = others.length && me.name ? 'You planned ' + possessive(me.name) + ' whole summer.' : 'You planned the whole summer.';
       cheer('summer', 'sum-' + r.kid, line);
-      say('You did it! ' + line + ' You are on fireeee!');
+      say('You did it! ' + line + ' Too cool for school!');
     };
     var toggle = function (id, i, how, what) {
       var s = plan(), d = sd.weeks[i].d, list = s.w[d] || [], at = list.indexOf(id), c = sd.camps[id], full0 = sd.weeks.length > 0 && covered() === sd.weeks.length;
