@@ -1,7 +1,8 @@
 // Kid's Corner: a page of each child's own, inside a parent's account (kidsPage() in build.mjs). For ages about 5 to 10,
 // in the site's colours: shiny pins that level up from bronze to silver to gold, a level that climbs, a cartoon map of
 // Philadelphia whose clouds clear over the neighborhoods the child has been to, and a showdown where each program's
-// lightbulb takes on another in a race, a glow-off or a dance-off and the child taps the winner (which ranks their
+// lightbulb takes on another in a Philly contest (the Art Museum steps, a cheesesteak, the Liberty Bell, a Mummers
+// strut, a soft pretzel stack) and the child taps the winner (which ranks their
 // favorites for the planners). Each child's bulb starts plain and gets more to wear as they level up.
 // Each child picks a lightbulb of their own to be, and Eddie Bulboa, the bulb in the logo, shows them around and
 // hosts the showdowns. What counts is what a parent has confirmed (the "passport" endpoint in groups/api.php): the page suggests
@@ -111,7 +112,9 @@
       ko: function (t) { tone(700, t, 0.7, 'triangle', 0.13, 70); },
       fanfare: function (t) { [523, 659, 784, 1047].forEach(function (f, i) { tone(f, t + i * 0.12, i === 3 ? 0.7 : 0.15, 'square', 0.08); }); [1047, 1319].forEach(function (f) { tone(f, t + 0.36, 0.7, 'triangle', 0.06); }); },
       levelup: function (t) { [392, 523, 659, 784, 1047, 1319, 1568].forEach(function (f, i) { tone(f, t + i * 0.085, 0.32, 'triangle', 0.11); }); },
-      cheer: function (t) { noise(t, 0.9, 0.08, 1400, 2600); tone(880, t, 0.2, 'triangle', 0.06, 1320); }
+      cheer: function (t) { noise(t, 0.9, 0.08, 1400, 2600); tone(880, t, 0.2, 'triangle', 0.06, 1320); },
+      chomp: function (t) { noise(t, 0.08, 0.3, 900, 400); tone(140, t, 0.08, 'square', 0.08, 90); },
+      bell: function (t) { [[196, 0.24], [392, 0.14], [470, 0.1], [588, 0.08], [784, 0.05]].forEach(function (p) { tone(p[0], t, 2.4, 'sine', p[1], p[0] * 0.995); }); noise(t, 0.05, 0.2, 2500, 1500); }
     };
     return {
       play: function (name) { if (muted || !ctx || !SFX[name]) return; try { if (ctx.state === 'suspended') ctx.resume(); SFX[name](ctx.currentTime + 0.02); } catch (e) { /* no sound here */ } },
@@ -323,6 +326,8 @@
     flame: function (g) { sv('path', { d: 'M0 -12C6 -4 9 2 6 7C4 11 -4 11 -6 7C-9 2 -4 -3 0 -12Z', fill: '#FF922B', stroke: INK, 'stroke-width': 1.6 }, g); sv('path', { d: 'M0 -2C3 2 4 5 2 7C1 9 -2 9 -3 7C-4 4 -2 1 0 -2Z', fill: '#FFE066' }, g); },
     confetti: function (g) { ['#FF4D6D', '#FFD43B', '#4DABF7', '#69DB7C', '#B197FC'].forEach(function (c, i) { sv('rect', { x: -10 + i * 4, y: -8 + (i % 2) * 9, width: 4, height: 7, fill: c, transform: 'rotate(' + (i * 37) + ' ' + (-8 + i * 4) + ' ' + (-4 + (i % 2) * 9) + ')' }, g); }); },
     ball: function (g) { sv('circle', { r: 9.5, fill: '#FF8C1A', stroke: INK, 'stroke-width': 1.8 }, g); sv('path', { d: 'M-9.5 0H9.5M0 -9.5V9.5M-6.5 -7C-3 -3 -3 3 -6.5 7M6.5 -7C3 -3 3 3 6.5 7', fill: 'none', stroke: INK, 'stroke-width': 1.2 }, g); },
+    crumb: function (g) { [[-5, -3, 3.5], [4, -6, 2.5], [2, 4, 3], [-3, 6, 2]].forEach(function (c) { sv('circle', { cx: c[0], cy: c[1], r: c[2], fill: '#E8B567', stroke: INK, 'stroke-width': 1.2 }, g); }); },
+    feather: function (g) { sv('path', { d: 'M0 12C-8 4 -6 -8 6 -12C4 -4 6 4 0 12Z', fill: pick(['#F3C613', '#FF4D6D', '#B197FC', '#4DABF7']), stroke: INK, 'stroke-width': 1.5 }, g); sv('path', { d: 'M0 12C1 2 3 -6 6 -12', fill: 'none', stroke: INK, 'stroke-width': 1.1 }, g); },
     plane: function (g) { sv('path', { d: 'M-12 2L12 -9L4 11L1 3Z', fill: '#fff', stroke: INK, 'stroke-width': 1.6, 'stroke-linejoin': 'round' }, g); sv('path', { d: 'M1 3L12 -9', stroke: INK, 'stroke-width': 1.2 }, g); }
   };
   var drawShot = function (kind) { var s = sv('svg', { viewBox: '-14 -14 28 28', 'class': 'kc-shot', 'aria-hidden': 'true' }); (SHOT[kind] || SHOT.star)(sv('g', null, s)); return s; };
@@ -1356,8 +1361,8 @@
   };
 
   // ----- the Showdown tab: the bulbs collected, the favorites, and the showdown -----
-  // Two bulbs at a time, in one of three contests that take turns: a race up the Art Museum steps, a glow-off and a
-  // dance-off. The child taps who wins; the winner pulls out its special move, the other comes second and cheers, and
+  // Two bulbs at a time, in one of five Philly contests that take turns: a race up the Art Museum steps, a cheesesteak
+  // eating contest, a Liberty Bell ring-off, a Mummers strut-off and a soft pretzel stack-off. The child taps who wins; the winner pulls out its special move, the other comes second and cheers, and
   // Eddie hosts. Nobody gets hurt: it's a contest, not a fight. The order they drop out of the running in is
   // the child's ranking of favorites.
   var drawBattleTab = function (body, k, st) {
@@ -1393,27 +1398,65 @@
     body.appendChild(grid);
   };
   var shuffle = function (a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
-  var startBracket = function (keys) { S.bracket = { round: shuffle(keys), next: [], out: [], i: 0, n: 1, m: Math.floor(Math.random() * 3) }; go('fight'); };
+  // The contests take turns from a random one (or the one named in ?contest=, to show a particular one; read as the
+  // page opens, before the address is tidied).
+  var WANT_CONTEST = (location.search.match(/[?&]contest=([a-z]+)/) || [])[1];
+  var startBracket = function (keys) {
+    var m = Math.floor(Math.random() * EVENTS.length), want = WANT_CONTEST;
+    for (var i = 0; i < EVENTS.length; i++) if (EVENTS[i].id === want) m = i;
+    S.bracket = { round: shuffle(keys), next: [], out: [], i: 0, n: 1, m: m }; go('fight');
+  };
   var CHEERS = ['Go go go!', 'You can do it!', 'Woo-hoo!', 'Awesome!', 'Whoa!', 'Yeah!'];
+  // Every contest is a Philly one. won: the winner's sign.
   var EVENTS = [
-    { id: 'race', title: 'Race up the steps!', ask: 'Tap it, and it wins the race!', count: ['On your marks…', 'Get set…', 'GO!'], second: 'Good race!' },
-    { id: 'glow', title: 'Glow-off!', ask: 'Tap it, and it glows brightest!', count: ['Lights…', 'Get ready…', 'GLOW!'], second: 'So bright!' },
-    { id: 'dance', title: 'Dance-off!', ask: 'Tap it, and it wins the dance-off!', count: ['Ready?', '5, 6, 7, 8…', 'DANCE!'], second: 'Great moves!' }
+    { id: 'race', title: 'Race up the Art Museum steps!', ask: 'Tap it, and it wins the race!', count: ['On your marks…', 'Get set…', 'GO!'], second: 'Good race!', won: 'WINS!' },
+    { id: 'steak', title: 'Cheesesteak eating contest!', ask: 'Tap it, and it eats the fastest!', count: ['Wiz…', 'Wit…', 'EAT!'], second: 'So full!', won: 'CLEAN PLATE!' },
+    { id: 'bell', title: 'Liberty Bell ring-off!', ask: 'Tap it, and it rings the bell loudest!', count: ['Grab the rope…', 'Pull…', 'RING!'], second: 'Nice ring!', won: 'LOUDEST!' },
+    { id: 'strut', title: 'Mummers strut-off!', ask: 'Tap it, and it struts the best!', count: ['Feathers up…', 'Fans out…', 'STRUT!'], second: 'Great strut!', won: 'BEST STRUT!' },
+    { id: 'pretzel', title: 'Soft pretzel stack-off!', ask: 'Tap it, and it stacks the most pretzels!', count: ['Twist…', 'Salt…', 'STACK!'], second: 'Tasty stack!', won: 'BEST STACK!' }
   ];
+  // The props: a cheesesteak in a long roll, the Liberty Bell with its crack, a Mummers' feathered parasol, a soft pretzel.
+  var steakArt = function () {
+    var s = sv('svg', { viewBox: '0 0 120 46', 'class': 'kc-steak', 'aria-hidden': 'true' });
+    sv('ellipse', { cx: 60, cy: 41, rx: 56, ry: 4, fill: 'rgba(11,33,64,.18)' }, s);
+    sv('path', { d: 'M6 30C6 41 114 41 114 30Z', fill: '#E8B567', stroke: INK, 'stroke-width': 2.5, 'stroke-linejoin': 'round' }, s);
+    sv('path', { d: 'M5 30Q16 21 28 28T52 26T76 28T100 26T115 30Z', fill: '#8B5A2B', stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, s);
+    sv('path', { d: 'M10 28Q22 34 34 27T58 28T82 27T110 29', fill: 'none', stroke: '#FFD43B', 'stroke-width': 4.5, 'stroke-linecap': 'round' }, s);
+    [20, 46, 72, 96].forEach(function (x) { sv('path', { d: 'M' + x + ' 30q2 5 0 8', fill: 'none', stroke: '#FFD43B', 'stroke-width': 3, 'stroke-linecap': 'round' }, s); });
+    sv('path', { d: 'M9 25C9 4 111 4 111 25Q60 30 9 25Z', fill: '#F0C27B', stroke: INK, 'stroke-width': 2.5, 'stroke-linejoin': 'round' }, s);
+    sv('path', { d: 'M20 14Q60 6 100 14', fill: 'none', stroke: '#FFE8C2', 'stroke-width': 3, 'stroke-linecap': 'round' }, s);
+    [[34, 12], [52, 9], [70, 9], [88, 12]].forEach(function (p) { sv('ellipse', { cx: p[0], cy: p[1], rx: 2.2, ry: 1.2, fill: '#FFF8E1' }, s); });
+    return s;
+  };
+  var bellArt = function () {
+    var s = sv('svg', { viewBox: '-40 -46 80 92', 'class': 'kc-bell', 'aria-hidden': 'true' });
+    sv('rect', { x: -34, y: -44, width: 68, height: 9, rx: 3, fill: '#8B5A2B', stroke: INK, 'stroke-width': 2.5 }, s);
+    var g = sv('g', { 'class': 'kc-bellswing' }, s);
+    sv('rect', { x: -6, y: -36, width: 12, height: 9, fill: '#6B4A2B', stroke: INK, 'stroke-width': 2 }, g);
+    sv('path', { d: 'M-16 -28C-24 -26 -24 -8 -26 6C-28 20 -34 26 -34 32H34C34 26 28 20 26 6C24 -8 24 -26 16 -28Z', fill: '#C9A13B', stroke: INK, 'stroke-width': 3, 'stroke-linejoin': 'round' }, g);
+    sv('path', { d: 'M-34 32Q0 40 34 32', fill: 'none', stroke: INK, 'stroke-width': 3 }, g);
+    sv('path', { d: 'M-27 12H27M-30 22H30', stroke: '#8C6A1E', 'stroke-width': 2 }, g);
+    sv('path', { 'class': 'kc-crack', d: 'M-4 -18L0 -10L-5 -2L1 6L-3 14L2 22L-1 34', fill: 'none', stroke: INK, 'stroke-width': 2.8, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, g);
+    sv('circle', { cx: 0, cy: 40, r: 5, fill: '#6B4A2B', stroke: INK, 'stroke-width': 2 }, g);
+    sv('path', { d: 'M-14 -20Q-18 0 -20 14', fill: 'none', stroke: '#FFF3B0', 'stroke-width': 3, 'stroke-linecap': 'round', opacity: 0.7 }, g);
+    return s;
+  };
+  var parasolArt = function () {
+    var s = sv('svg', { viewBox: '-34 -34 68 70', 'class': 'kc-parasol', 'aria-hidden': 'true' });
+    var g = sv('g', { 'class': 'kc-parasol-spin' }, s);
+    ['#F3C613', '#CC3000', '#2176D2', '#69DB7C', '#B197FC', '#FF922B'].forEach(function (c, i) { var a = i * 60, r = Math.PI / 180; sv('path', { d: 'M0 0L' + (26 * Math.cos(a * r)).toFixed(1) + ' ' + (26 * Math.sin(a * r)).toFixed(1) + 'A26 26 0 0 1 ' + (26 * Math.cos((a + 60) * r)).toFixed(1) + ' ' + (26 * Math.sin((a + 60) * r)).toFixed(1) + 'Z', fill: c, stroke: INK, 'stroke-width': 1.8, 'stroke-linejoin': 'round' }, g); });
+    for (var i = 0; i < 12; i++) { var a = i * 30 * Math.PI / 180, x = (29 * Math.cos(a)).toFixed(1), y = (29 * Math.sin(a)).toFixed(1); sv('ellipse', { cx: x, cy: y, rx: 5, ry: 2.6, transform: 'rotate(' + (i * 30) + ' ' + x + ' ' + y + ')', fill: '#FFF3B0', stroke: INK, 'stroke-width': 1.2 }, g); }
+    sv('circle', { r: 3.5, fill: '#F3C613', stroke: INK, 'stroke-width': 1.5 }, s);
+    sv('path', { d: 'M0 3V34', stroke: INK, 'stroke-width': 3, 'stroke-linecap': 'round' }, s);
+    return s;
+  };
+  var pretzelArt = function () { var s = sv('svg', { viewBox: '-22 -18 44 32', 'class': 'kc-pretzel', 'aria-hidden': 'true' }); SURPRISE.pretzel(sv('g', { transform: 'translate(0 2)' }, s)); return s; };
   var museumArt = function () {
     var s = sv('svg', { viewBox: '0 0 120 46', 'class': 'kc-museum', 'aria-hidden': 'true' });
     sv('path', { d: 'M8 16L60 2L112 16Z', fill: '#F1E3C4', stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, s);
     sv('rect', { x: 10, y: 16, width: 100, height: 4, fill: '#E9DDC2', stroke: INK, 'stroke-width': 1.5 }, s);
     for (var i = 0; i < 8; i++) sv('rect', { x: 15 + i * 12.4, y: 20, width: 5, height: 20, fill: '#fff', stroke: INK, 'stroke-width': 1.3 }, s);
     sv('rect', { x: 6, y: 40, width: 108, height: 5, fill: '#E9DDC2', stroke: INK, 'stroke-width': 1.5 }, s);
-    return s;
-  };
-  var discoArt = function () {
-    var s = sv('svg', { viewBox: '-20 -26 40 46', 'class': 'kc-disco', 'aria-hidden': 'true' });
-    sv('path', { d: 'M0 -26V-16', stroke: '#fff', 'stroke-width': 1.5 }, s);
-    sv('circle', { r: 16, fill: '#C3E1FF', stroke: INK, 'stroke-width': 2 }, s);
-    var g = sv('g', { 'class': 'kc-disco-face' }, s);
-    for (var y = -12; y <= 12; y += 6) for (var x = -14; x <= 14; x += 6) if (x * x + y * y < 200) sv('rect', { x: x - 2.4, y: y - 2.4, width: 4.8, height: 4.8, fill: (x + y) % 12 ? '#fff' : '#96C9FF', opacity: 0.9 }, g);
     return s;
   };
   var drawFight = function () {
@@ -1437,15 +1480,20 @@
     page.appendChild(el('p', 'kc-evname', ev.title));
     // the stage for this contest, Eddie hosting, and two bulbs
     var ring = el('div', 'kc-arena kc-show kc-ev-' + ev.id), fx = el('div', 'kc-fx');
-    if (ev.id === 'race') { var steps = el('span', 'kc-steps'); steps.setAttribute('aria-hidden', 'true'); ring.appendChild(steps); ring.appendChild(museumArt()); }
-    if (ev.id === 'glow') { ['l', 'r'].forEach(function (sd) { var sp = el('span', 'kc-spot ' + sd); sp.setAttribute('aria-hidden', 'true'); ring.appendChild(sp); }); }
-    if (ev.id === 'dance') { var floor = el('span', 'kc-floor'); floor.setAttribute('aria-hidden', 'true'); ring.appendChild(floor); ring.appendChild(discoArt()); }
+    var deco = function (cls) { var x = el('span', cls); x.setAttribute('aria-hidden', 'true'); ring.appendChild(x); return x; };
+    if (ev.id === 'race') { deco('kc-steps'); ring.appendChild(museumArt()); }
+    if (ev.id === 'steak') deco('kc-cloth');
+    if (ev.id === 'bell') { deco('kc-hall'); ring.appendChild(bellArt()); }
+    if (ev.id === 'strut') { deco('kc-street'); ring.appendChild(parasolArt()); }
+    if (ev.id === 'pretzel') deco('kc-oven');
     var ref = eddie(ev.ask, 'kc-ref'); ring.appendChild(ref);
     var pair = [b.round[b.i], b.round[b.i + 1]], cards = [];
     pair.forEach(function (key, idx) {
       var c = btn('kc-fighter ' + (idx ? 'right' : 'left'), '', function () { choose(idx); });
       var svg = drawBulb(bulbFor(key), 'bob'), wrap = el('span', 'kc-fwrap'), flip = el('span', 'kc-flip'); flip.appendChild(svg); wrap.appendChild(flip); c.appendChild(wrap);
-      if (ev.id === 'glow') { var meter = el('span', 'kc-meter'); meter.appendChild(el('i')); c.appendChild(meter); }
+      if (ev.id === 'bell') { var meter = el('span', 'kc-meter'); meter.appendChild(el('i')); c.appendChild(meter); }
+      if (ev.id === 'steak') c.appendChild(steakArt());
+      if (ev.id === 'pretzel') c.appendChild(el('span', 'kc-stack'));
       c.appendChild(el('b', null, nameOf(key)));
       c.setAttribute('aria-label', 'I had more fun at ' + nameOf(key));
       cards.push(c); ring.appendChild(c);
@@ -1480,36 +1528,59 @@
         var hops = function (ms) { var fr = []; for (var i = 0; i <= 8; i++) { var f = i / 8; fr.push({ transform: 'translateY(' + (-climb * f - (i % 2 && i < 8 ? 10 : 0)).toFixed(1) + 'px) scale(' + (1 - 0.32 * f).toFixed(2) + ')', offset: f }); } return fr; };
         Sound.play('whoosh'); ref.say(mon.move);
         var trail = []; [150, 450, 750].forEach(function (t) { trail.push(wait(t).then(function () { var c = centerOf(wm); return shotAt([c[0], c[1] + 20], [c[0] + (Math.random() * 40 - 20), c[1] + 90], mon.atk, 650); })); });
-        var a1 = anim(wm, hops(1300), { duration: 1300, easing: 'linear', fill: 'forwards' }).then(function () { Sound.play('boing'); win.appendChild(el('span', 'kc-wins', 'WINS!')); confetti(30); });
+        var a1 = anim(wm, hops(1300), { duration: 1300, easing: 'linear', fill: 'forwards' }).then(function () { Sound.play('boing'); win.appendChild(el('span', 'kc-wins' + (ev.won.length > 8 ? ' long' : ''), ev.won)); confetti(30); });
         var a2 = anim(lm, hops(1900), { duration: 1900, easing: 'linear', fill: 'forwards' });
         return Promise.all([a1, a2].concat(trail));
       };
-      if (ev.id === 'glow') contest = function () {   // both light up; the winner's meter fills, and it puts on a light show
-        Sound.play('glow');
+      if (ev.id === 'steak') contest = function () {   // both chomp; the winner clears its plate first, and crumbs fly
+        var ws = win.querySelector('.kc-steak'), ls = lose.querySelector('.kc-steak');
+        var bites = function (to, n) { var fr = []; for (var i = 0; i <= n; i++) fr.push({ transform: 'scaleX(' + (1 - (1 - to) * i / n).toFixed(2) + ')' }); return fr; };
+        ref.say(mon.move);
+        var chomps = []; for (var i = 0; i < 5; i++) (function (i) { chomps.push(wait(i * 260).then(function () { Sound.play('chomp'); bounce(wm); var c = centerOf(ws); return shotAt([c[0], c[1]], [c[0] + (Math.random() * 90 - 45), c[1] - 50 - Math.random() * 40], i % 2 ? mon.atk : 'crumb', 600); })); })(i);
+        var a1 = anim(ws, bites(0, 5), { duration: 1300, easing: 'steps(5, end)', fill: 'forwards' }).then(function () { if (CALM) ws.style.transform = 'scaleX(0)'; Sound.play('boing'); win.appendChild(el('span', 'kc-wins' + (ev.won.length > 8 ? ' long' : ''), ev.won)); confetti(30); });
+        var a2 = anim(ls, bites(0.3, 4), { duration: 1300, easing: 'steps(4, end)', fill: 'forwards' }).then(function () { if (CALM) ls.style.transform = 'scaleX(.3)'; });
+        return Promise.all([a1, a2].concat(chomps));
+      };
+      if (ev.id === 'bell') contest = function () {   // both pull; the winner's meter fills, and it rings the bell: it swings, the crack glows, the sound rolls out
         var wf = win.querySelector('.kc-meter i'), lf = lose.querySelector('.kc-meter i');
-        var a1 = anim(wf, [{ width: '0%' }, { width: '100%' }], { duration: 1400, easing: 'ease-out', fill: 'forwards' });
-        var a2 = anim(lf, [{ width: '0%' }, { width: '72%' }], { duration: 1400, easing: 'ease-out', fill: 'forwards' });
+        Sound.play('whoosh');
+        var a1 = anim(wf, [{ width: '0%' }, { width: '100%' }], { duration: 1200, easing: 'ease-out', fill: 'forwards' });
+        var a2 = anim(lf, [{ width: '0%' }, { width: '72%' }], { duration: 1200, easing: 'ease-out', fill: 'forwards' });
         if (CALM) { wf.style.width = '100%'; lf.style.width = '72%'; }
-        ring.classList.add(idx ? 'spot-r' : 'spot-l');
         return Promise.all([a1, a2]).then(function () {
-          ref.say(mon.move); winBulb.classList.add('beam'); Sound.play('sparkle');
-          var c = centerOf(wm), shows = [];
-          for (var i = 0; i < 8; i++) { var ang = Math.PI * 2 * i / 8; shows.push(shotAt(c, [c[0] + Math.cos(ang) * 90, c[1] + Math.sin(ang) * 70], mon.atk, 800)); }
-          win.appendChild(el('span', 'kc-wins', 'MAX GLOW!'));
-          return Promise.all(shows.concat([anim(wm, [{ transform: 'scale(1)' }, { transform: 'scale(1.18)' }, { transform: 'scale(1.1)' }], { duration: 700, easing: 'ease-out', fill: 'forwards' })]));
+          ref.say(mon.move); Sound.play('bell');
+          var bell = ring.querySelector('.kc-bell'), sw = ring.querySelector('.kc-bellswing');
+          bell.classList.add('rung');
+          var swing = anim(sw, [{ transform: 'rotate(0)' }, { transform: 'rotate(' + (idx ? 18 : -18) + 'deg)' }, { transform: 'rotate(' + (idx ? -12 : 12) + 'deg)' }, { transform: 'rotate(6deg)' }, { transform: 'rotate(0)' }], { duration: 1200, easing: 'ease-in-out' });
+          var c = centerOf(bell), waves = [];
+          for (var i = 0; i < 8; i++) { var ang = Math.PI * 2 * i / 8; waves.push(shotAt([c[0], c[1]], [c[0] + Math.cos(ang) * 110, c[1] + Math.sin(ang) * 70], i % 2 ? mon.atk : 'note', 800)); }
+          win.appendChild(el('span', 'kc-wins' + (ev.won.length > 8 ? ' long' : ''), ev.won));
+          return Promise.all(waves.concat([swing, anim(wm, [{ transform: 'scale(1)' }, { transform: 'scale(1.15)' }, { transform: 'scale(1.08)' }], { duration: 700, easing: 'ease-out', fill: 'forwards' })]));
         });
       };
-      if (ev.id === 'dance') contest = function () {   // the other dances first; then the winner, bigger, with its special move swirling round
+      if (ev.id === 'strut') contest = function () {   // the other struts first; then the winner, bigger, twirling, with feathers and its special move swirling round
         Sound.play('dance');
-        var shimmy = [{ transform: 'rotate(0) translateY(0)' }, { transform: 'rotate(-12deg) translateY(-8%)' }, { transform: 'rotate(12deg) translateY(0)' }, { transform: 'rotate(-12deg) translateY(-8%)' }, { transform: 'rotate(0) translateY(0)' }];
-        return anim(lm, shimmy, { duration: 900, easing: 'ease-in-out' }).then(function () {
+        var strut = [{ transform: 'rotate(0) translateX(0)' }, { transform: 'rotate(-10deg) translateX(-8%)' }, { transform: 'rotate(10deg) translateX(8%)' }, { transform: 'rotate(-10deg) translateX(-8%)' }, { transform: 'rotate(0) translateX(0)' }];
+        return anim(lm, strut, { duration: 900, easing: 'ease-in-out' }).then(function () {
           ref.say(mon.move);
           var c = centerOf(wm), swirl = [];
-          for (var i = 0; i < 6; i++) (function (i) { swirl.push(wait(i * 120).then(function () { var ang = Math.PI * 2 * i / 6; return shotAt([c[0] + Math.cos(ang) * 30, c[1] + Math.sin(ang) * 30], [c[0] + Math.cos(ang + 2) * 80, c[1] + Math.sin(ang + 2) * 60], mon.atk, 700); })); })(i);
-          var spin = anim(wm, [{ transform: 'rotate(0) translateY(0) scale(1)' }, { transform: 'rotate(180deg) translateY(-18%) scale(1.1)', offset: 0.4 }, { transform: 'rotate(360deg) translateY(0) scale(1.1)', offset: 0.7 }, { transform: 'rotate(360deg) translateY(-10%) scale(1.15)', offset: 0.85 }, { transform: 'rotate(360deg) translateY(0) scale(1.1)' }], { duration: 1200, easing: 'ease-in-out', fill: 'forwards' });
+          for (var i = 0; i < 6; i++) (function (i) { swirl.push(wait(i * 120).then(function () { var ang = Math.PI * 2 * i / 6; return shotAt([c[0] + Math.cos(ang) * 30, c[1] + Math.sin(ang) * 30], [c[0] + Math.cos(ang + 2) * 80, c[1] + Math.sin(ang + 2) * 60], i % 2 ? mon.atk : 'feather', 700); })); })(i);
+          var spin = anim(wm, [{ transform: 'rotate(0) translateY(0) scale(1)' }, { transform: 'rotate(-14deg) translateY(-12%) scale(1.08)', offset: 0.25 }, { transform: 'rotate(14deg) translateY(0) scale(1.1)', offset: 0.5 }, { transform: 'rotate(360deg) translateY(-10%) scale(1.15)', offset: 0.85 }, { transform: 'rotate(360deg) translateY(0) scale(1.1)' }], { duration: 1300, easing: 'ease-in-out', fill: 'forwards' });
           ring.classList.add(idx ? 'spot-r' : 'spot-l');
-          return Promise.all(swirl.concat([spin])).then(function () { Sound.play('cheer'); win.appendChild(el('span', 'kc-wins', 'WINS!')); });
+          return Promise.all(swirl.concat([spin])).then(function () { Sound.play('cheer'); win.appendChild(el('span', 'kc-wins' + (ev.won.length > 8 ? ' long' : ''), ev.won)); });
         });
+      };
+      if (ev.id === 'pretzel') contest = function () {   // pretzels pile up in front of both; the winner's pile is the full pyramid, and wobbles
+        var PILE = [[0, 0], [33, 0], [66, 0], [16.5, 34], [49.5, 34], [33, 68]];
+        var add = function (card, n, ms) {
+          var stack = card.querySelector('.kc-stack'), p = Promise.resolve();
+          for (var i = 0; i < n; i++) (function (i) { p = p.then(function () { var pz = pretzelArt(), at = PILE[i]; pz.style.left = at[0] + '%'; pz.style.bottom = at[1] + '%'; stack.appendChild(pz); Sound.play('pop'); return anim(pz, [{ transform: 'translateY(-40px) scale(.6)', opacity: 0 }, { transform: 'translateY(0) scale(1)', opacity: 1 }], { duration: ms, easing: 'cubic-bezier(.3,1.5,.5,1)', fill: 'forwards' }); }); })(i);
+          return p;
+        };
+        ref.say(mon.move);
+        var a1 = add(win, 6, 210).then(function () { anim(win.querySelector('.kc-stack'), [{ transform: 'rotate(0)' }, { transform: 'rotate(-6deg)' }, { transform: 'rotate(5deg)' }, { transform: 'rotate(0)' }], { duration: 700, easing: 'ease-in-out' }); Sound.play('boing'); win.appendChild(el('span', 'kc-wins' + (ev.won.length > 8 ? ' long' : ''), ev.won)); confetti(30); });
+        var a2 = wait(120).then(function () { return add(lose, 4, 300); });
+        return Promise.all([a1, a2]);
       };
       wait(250).then(countdown).then(contest)
         .then(function () {   // the other comes second, and cheers
