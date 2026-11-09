@@ -135,4 +135,7 @@ RewriteRule ^summer-camps/philly-rock-gym-camps/?$ /programs/philly-rock-gym-day
 RewriteCond %{QUERY_STRING} ^(.+)$
 RewriteRule ^summer-camps/coco-academy-summer-camp/?$ /programs/coco-academy/?%1#summer [NE,QSD,R=301,L]
 RewriteRule ^summer-camps/coco-academy-summer-camp/?$ /programs/coco-academy/#summer [NE,R=301,L]
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule ^summer-camps/kids-on-12th-summer-camp/?$ /programs/kids-on-12th/?%1#summer [NE,QSD,R=301,L]
+RewriteRule ^summer-camps/kids-on-12th-summer-camp/?$ /programs/kids-on-12th/#summer [NE,R=301,L]
 </IfModule>

@@ -2052,13 +2052,139 @@
         "look": "The season dates, the weekly rates by registration deadline and the typical day with extended-time prices are in the body of the location page. Ages are on the programs overview.",
         "notes": "Read with a headless browser on 2026-11-01; a plain fetch was not tried. The camp has its own site, hawkhilldaycamp.com, linked from the location list on futurestars.com; the dates there carry no year."
       }
+    },
+    {
+      "id": "kids-on-12th-summer-camp",
+      "name": "Kids on 12th summer camp",
+      "what": "Weekly themes with games, art projects and outdoor play, trips to playgrounds and spray parks, a weekly swim at Ridgeway Pool, and science and museum trips.",
+      "types": [
+        "daycamp"
+      ],
+      "ages": "Ages 3–11",
+      "ageMin": 3,
+      "ageMax": 11,
+      "season": 2026,
+      "weeks": "June 1 to August 28, 2026, no camp July 3, booked by the week",
+      "hours": "8:30 am to 4 pm, Monday to Friday",
+      "extended": "Early drop-off from 8 am, $10 a day. After care to 6 pm, $15 a day.",
+      "cost": "$375 a week for weeks bought by March 31, $400 from April 1 to May 31, $425 from June 1",
+      "weekly": 375,
+      "price": "paid",
+      "address": "1112 Chestnut St, Suite C",
+      "neighborhoods": [
+        "Washington Square West"
+      ],
+      "phone": "215-545-2930",
+      "website": "https://ko12.org/kids-summer-camp-philadelphia",
+      "registerUrl": "https://ko12.org/register-summer",
+      "signup": "The camp’s pages still describe summer 2026; the 2027 weeks and prices aren’t posted yet. In 2026 the lowest weekly price was for weeks bought by March 31, and the camp says last summer sold out.",
+      "program": "kids-on-12th",
+      "sources": [
+        {
+          "label": "Kids on 12th summer camp",
+          "url": "https://ko12.org/kids-summer-camp-philadelphia"
+        },
+        {
+          "label": "Kids on 12th summer camp rates (2026)",
+          "url": "https://ko12.org/best-philadelphia-summer-camp-pricing-rates"
+        }
+      ],
+      "checked": "2026-11-09",
+      "check": {
+        "url": "https://ko12.org/best-philadelphia-summer-camp-pricing-rates",
+        "how": "browser",
+        "look": "The camp dates, daily hours and the three weekly prices are in an image on the rates page, not in its text; early drop-off and after care are listed beside it. Ages and activities are on the summer camp page (ko12.org/kids-summer-camp-philadelphia), with hours in its “Summer Camp Regular Hours” box.",
+        "notes": "The site moved from ko12kids.com to ko12.org; ko12.org/rates-summer-camp redirects to the rates page."
+      }
+    },
+    {
+      "id": "stem-prep-summer-camp",
+      "name": "STEM Prep summer camp",
+      "what": "A new camp theme each summer, with weekly adventures in science, technology, engineering, math, coding, robotics and outdoor exploration.",
+      "types": [
+        "stem"
+      ],
+      "ages": "Ages 3–10",
+      "ageMin": 3,
+      "ageMax": 10,
+      "season": 2026,
+      "weeks": "June to August, at least 2 weeks; the weeks aren’t posted",
+      "hours": "Full days (the hours aren’t posted)",
+      "cost": "Not on the site: the rates come from a “View Rates” form",
+      "price": "paid",
+      "address": "604 E Girard Ave",
+      "neighborhoods": [
+        "Fishtown"
+      ],
+      "phone": "267-687-2402",
+      "website": "https://stempreparatory.org/programs",
+      "registerUrl": "https://stempreparatory.org/apply",
+      "signup": "No dates or prices are posted for summer 2027 yet. Apply or schedule a tour on the site.",
+      "note": "Minimum enrollment is 2 weeks.",
+      "sources": [
+        {
+          "label": "STEM Prep programs",
+          "url": "https://stempreparatory.org/programs"
+        }
+      ],
+      "checked": "2026-11-09",
+      "check": {
+        "url": "https://stempreparatory.org/programs",
+        "how": "browser",
+        "look": "Open the “Programs” tab under the heading; the Summer Camp card is under “Events & Camps”. Rates are behind the “View Rates” button (a JotForm).",
+        "notes": "The old address, /stem-summer-camp, returns 404. The site also has a cookie banner (decline it)."
+      }
+    },
+    {
+      "id": "camp-nerd-street",
+      "name": "Camp Nerd Street video game and esports camp",
+      "what": "Week-long video game and esports camps at Localhost, Nerd Street’s gaming center, mixing on-screen play with off-screen team games, trivia, relay races and staff-led tournaments.",
+      "types": [
+        "games",
+        "stem"
+      ],
+      "ages": "Ages 8–13",
+      "ageMin": 8,
+      "ageMax": 13,
+      "season": 2026,
+      "weeks": "Week-long camps through the summer; the 2027 weeks aren’t posted yet",
+      "hours": "Drop-off from 8:45 am; camp runs until 3 pm",
+      "extended": "Aftercare from 3 to 5 pm (free play and gaming challenges), added at checkout or at the door.",
+      "cost": "Shown with each week when it goes on sale; not posted for 2027 yet",
+      "price": "paid",
+      "address": "401 N Broad St",
+      "neighborhoods": [
+        "Callowhill"
+      ],
+      "phone": "215-710-1052",
+      "website": "https://nerdstreet.com/series/camp-nerd-street-video-game-and-esports-summer-camp",
+      "registerUrl": "https://nerdstreet.com/camps",
+      "signup": "For summer 2026, Nerd Street said in December that the camps would go on sale in January. The 2027 weeks aren’t posted yet.",
+      "note": "Nerd Street says Camp Nerd Street and Localhost are not a child care facility and aren’t licensed as one. Campers bring a nut-free lunch; no gaming experience is needed.",
+      "sources": [
+        {
+          "label": "Camp Nerd Street",
+          "url": "https://nerdstreet.com/series/camp-nerd-street-video-game-and-esports-summer-camp"
+        },
+        {
+          "label": "Localhost in Philly",
+          "url": "https://nerdstreet.com/venues/localhost-in-philly"
+        }
+      ],
+      "checked": "2026-11-09",
+      "check": {
+        "url": "https://nerdstreet.com/series/camp-nerd-street-video-game-and-esports-summer-camp",
+        "how": "browser",
+        "look": "The series page gives the season’s span, ages, drop-off and aftercare; each week shows up under “Schedule” once it is on sale, with its price at checkout. nerdstreet.com/camps lists the series.",
+        "notes": "The same series covers venues outside Philadelphia (Rowan in New Jersey, Denver); only Localhost in Philly, 401 N Broad, is listed here."
+      }
     }
   ],
   "todo": [
     {
       "name": "University City Arts League art day camps",
       "url": "http://www.ucartsleague.org/",
-      "why": "Not read yet: the page could not be opened on 2026-10-07."
+      "why": "Not read yet: the site could not be opened on 2026-10-07 or 2026-11-09 (the browser got an error page), and a search turned up no other site for it."
     },
     {
       "name": "PlayArts summer camp",
@@ -2089,26 +2215,6 @@
       "name": "Wissahickon Skating Club hockey camp",
       "url": "https://www.wissskating.com/camps/",
       "why": "The camps page returned a 404 on 2026-11-01."
-    },
-    {
-      "name": "STEM Prep Academy summer camp",
-      "url": "https://stempreparatory.org/stem-summer-camp",
-      "why": "Read in a browser on 2026-11-01: the camp address returns 404; the programs page lists a full-day summer camp for ages 3–10 at 604 E Girard Ave, “June – August”, with a two-week minimum, but no dates or prices (rates are behind a form)."
-    },
-    {
-      "name": "LocoRobo summer robotics",
-      "url": "https://locorobo.co/locosummer-modern-robotics.html",
-      "why": "Read in a browser on 2026-11-01: the camp address returns 404 and the site’s STEM Camps page sells robotics-camp kits and curriculum to schools and camps, not a day camp families sign up for."
-    },
-    {
-      "name": "Nerd Street / Localhost esports camp",
-      "url": "https://nerdstreet.com/",
-      "why": "Read in a browser on 2026-11-01: the Camp Nerd Street page gives ages 8–13, weeklong camps at Localhost in Philly, drop-off from 8:45 am and aftercare 3 to 5 pm, but no 2027 weeks or prices; a December 2025 post says registration opens in January."
-    },
-    {
-      "name": "Kids on 12th summer camp",
-      "url": "https://ko12kids.com/summer-camp",
-      "why": "The site moved to ko12.org (read in a browser on 2026-11-01): its summer camp page, ko12.org/kids-summer-camp-philadelphia, gives ages 3–11, 8:30 am to 4 pm with after care to 6 pm at 1112 Chestnut St, but the 2026 week list and weekly rates were not in the page text."
     },
     {
       "name": "CORA Early Years at Huntingdon Mills",
@@ -2145,6 +2251,11 @@
     {
       "name": "Girl Scouts day camp at Shelly Ridge",
       "why": "Its own site places Camp Shelly Ridge in Lafayette Hill, “right outside of Philadelphia”, so it is not inside the city.",
+      "seen": "2026-11-01"
+    },
+    {
+      "name": "LocoRobo summer robotics",
+      "why": "Its camp address returns 404, and its STEM Camps page sells robotics-camp kits and curriculum to schools and camps, not a day camp families sign up for.",
       "seen": "2026-11-01"
     }
   ]

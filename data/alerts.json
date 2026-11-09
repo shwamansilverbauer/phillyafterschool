@@ -404,7 +404,8 @@
       "name": "Kids on 12th",
       "parts": [
         "after",
-        "off"
+        "off",
+        "summer"
       ]
     },
     {
@@ -1098,6 +1099,18 @@
     {
       "id": "hawk-hill-day-camp",
       "name": "Hawk Hill Day Camp at Saint Joseph’s University (Future Stars)"
+    },
+    {
+      "id": "kids-on-12th-summer-camp",
+      "name": "Kids on 12th summer camp"
+    },
+    {
+      "id": "stem-prep-summer-camp",
+      "name": "STEM Prep summer camp"
+    },
+    {
+      "id": "camp-nerd-street",
+      "name": "Camp Nerd Street video game and esports camp"
     }
   ],
   "added": {
