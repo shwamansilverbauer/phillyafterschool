@@ -111,6 +111,36 @@ host): accounts, share groups, claims, saved weeks and summers. Two things cover
   site is in use, which a plain file copy of a database in use may not be.
 - Hostinger backs the whole site up daily, which carries those copies off the server. Check once, in Hostinger under
   Files > Backups > Restore and download, that the `phillyafterschool-data` folder is inside the backup.
+- **A copy off the host, every day** (`offsite_run()` in `src/server/groups-api.php`, from the hourly `push_run`):
+  the day's copy goes to the private repository `backupRepo` in `site.config.json`
+  (`shwamansilverbauer/phillyafterschool-backups`), so losing the Hostinger account loses neither the site (this
+  repository) nor its accounts. Before it leaves it is gzipped and encrypted (AES-256-GCM, key derived from
+  `secret.key`, file starts `PASB1`), so the repository holds nothing readable on its own. One commit a day:
+  `groups.sqlite.enc`, `backup.json` (the day, size, checksum, and how many rows each table has; no one's details),
+  and listing photos not sent before, as `photos/<id>.jpg.enc` (six a run, the rest the next hour). Every past day
+  stays in the repository's history. It goes through the key file /edit/ publishes with
+  (`phillyafterschool-github.key`), which must have the backup repository in its access list (Contents: Read and
+  write), and the repository must have a first commit ("Add a README file" when making it).
+- **The restore drill, every day.** Right after sending, the server fetches the copy back from GitHub, opens it with
+  the key, checks it is byte for byte the copy it sent, writes it out and opens it as a database (integrity check, the
+  same row count in every table). Only then does the day count as backed up. The health answer says how that went
+  (`offsite`: the last checked day, how many days ago, why the last try failed, photos still to go), and the hourly
+  check fails when no checked copy has gone off the host for two days. A failed hour is tried again the next hour.
+  The test suite does the whole round trip against a stand-in GitHub, then restores with the script below.
+
+**Keep a copy of `secret.key` off the host** (a secure note in a password manager): the offsite copies, and a child's
+details inside any copy, open only with it. Never put it in a repository or a message.
+
+**Restoring from the offsite copy** (Hostinger gone, or a copy older than the 14 kept on the host):
+
+1. From the backup repository, download `groups.sqlite.enc` and `backup.json` (or, for an earlier day, the file from
+   that day's commit in its history).
+2. `node scripts/restore-backup.mjs groups.sqlite.enc secret.key groups.sqlite`, with your saved copy of `secret.key`.
+   It checks the copy against `backup.json` and writes the database. A folder of `photos/*.enc` opens the same way:
+   `node scripts/restore-backup.mjs photos secret.key photos-restored`.
+3. On the host, put `groups.sqlite` and the same `secret.key` in `phillyafterschool-data/` (and the photos in
+   `phillyafterschool-data/photos/`), deleting any `groups.sqlite-wal` and `groups.sqlite-shm`. Publish the site as
+   usual from this repository.
 
 To go back to a copy: in Hostinger's file manager, replace `groups.sqlite` with the copy you want (renamed), and delete
 `groups.sqlite-wal` and `groups.sqlite-shm` if they are there. Anything done after that copy was made is lost, and anyone who signed in after it
@@ -886,8 +916,10 @@ own key.
   named, the rest counted. Each date is told to each account once (`push_sent`). There is no catching up on a
   missed morning and no "welcome" notification.
 - **When.** Only between `PUSH_WINDOW` (7:50 to 11:50, Philadelphia). The job that sends the emails asks the site
-  to do it (`POST push_run`) at each hourly run. Anyone can ask, because asking only makes the server do what it
-  would do anyway; it answers with two counts. A dry run of the job asks for counts only.
+  to do it (`POST push_run`) at each hourly run. Outside the morning the same workflow still calls `push_run` every
+  hour (a single `curl` step, "The site's hourly jobs"), for the work below that isn't tied to the morning: the
+  owner's notes about new accounts and the copy off the host. Anyone can ask, because asking only makes the server do
+  what it would do anyway; it answers with counts and states, never who. A dry run of the job asks for counts only.
 - **How a message is protected.** Each one is sealed for the device with the keys its browser gave (RFC 8291,
   `aes128gcm`), so the notification service carrying it can't read it, and signed with the server's key (VAPID,
   ES256) so the service knows who is sending. The key is made on first use and kept in the `meta` table, so the
@@ -1986,7 +2018,7 @@ Each new account sends one email to the site's contact address (`tell_owner()` a
   claim, in place of the plain "Listing claimed" email, and says whether the claim stands or waits for your yes
   (then the subject ends "(claim needs your yes)"). A parent who later claims a listing gets this one as well.
 - An account that stops before the name step, or a manager who never claims, is picked up by the hourly job
-  (`signup_catchup()`, run from `push_run` on every run, in the morning window or not) once it is an hour old: the
+  (`signup_catchup()`, run from `push_run` on every call, which the hourly workflow now makes every hour) once it is an hour old: the
   email then says "Name: not added yet" or "Listing: none claimed yet". (It used to wait for a run inside the
   morning window, and GitHub's hourly schedule often skips several hours, so a few days of these could arrive at
   once.) The job's log says how many went, never who.

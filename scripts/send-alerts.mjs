@@ -183,6 +183,7 @@ async function pushRun(site, dry, today) {
     const d = await r.json();
     if (!d || d.ok !== true) throw new Error('the site answered ' + r.status);
     if (d.told) console.log(`New-account notes to the owner: ${d.told}.`);   // a count, never who
+    if (d.offsite) console.log(`Copy off the host: ${d.offsite.state}${d.offsite.day ? ' (' + d.offsite.day + ')' : ''}${d.offsite.why ? ', ' + d.offsite.why : ''}.`);
     if (d.ran === false && !d.dry) return console.log(`Notifications: the site didn’t send any this time (${d.why || 'no reason given'}).`);
     console.log(dry ? `Notifications: ${d.people || 0} account(s) with a device would be told something today.` : `Notifications: ${d.people || 0} account(s) were due something, and ${d.sent || 0} notification(s) were delivered.`);
   } catch (err) {

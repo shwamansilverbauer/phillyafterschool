@@ -141,6 +141,19 @@ async function accounts() {
     else if (k.ok === true) pass('Publishing key', k.daysLeft === null ? 'GitHub takes it; it has no end date' : `GitHub takes it; ${k.daysLeft} days left`);
     else pass('Publishing key', 'GitHub could not be asked just now; asked again later');
   }
+  // The copy off the host (backupRepo): once a day the server sends the database, encrypted, to the private backup
+  // repository and fetches it back to check it opens. One bad hour is retried; this fails when no checked copy has
+  // gone off the host for two days, or none ever has.
+  const o = h.offsite;
+  if (cfg.backupRepo && o && o.on) {
+    const why = { 'no key': ['there is no GitHub key on the server', 'Put the fine-grained token /edit/ publishes with in phillyafterschool-github.key next to the public folder.'],
+      'no access': ['the server’s GitHub key has no access to the backup repository', `On GitHub: Settings > Developer settings > Fine-grained tokens, edit the token /edit/ publishes with, and add ${cfg.backupRepo} under Repository access (Contents: Read and write). The repository needs at least one commit (create it with "Add a README file").`],
+      refused: ['GitHub refuses the server’s key (it has run out or was taken back)', 'Renew the token /edit/ publishes with (see "Publishing key") and keep the backup repository in its access list.'] }[o.why]
+      || [o.why ? `the last try said “${o.why}”` : 'it has not run yet', 'Look at the last run of Actions > Send date emails for the "offsite" answer; the next hourly run tries again. "drill:" means the copy sent did not open back as the same database.'];
+    if (o.day === '' || o.ageDays < 0) fail('Offsite copy', `no copy has gone to ${cfg.backupRepo} yet: ${why[0]}`, why[1]);
+    else if (o.ageDays >= 2) fail('Offsite copy', `the last checked copy off the host is from ${o.day} (${o.ageDays} days ago): ${why[0]}`, why[1]);
+    else pass('Offsite copy', `${o.day}, sent to ${cfg.backupRepo} and opened again${o.photosLeft ? `; ${o.photosLeft} photo${o.photosLeft === 1 ? '' : 's'} still to go` : ''}`);
+  }
 }
 
 // ----- the security headers the site's .htaccess sets (the host has to honor them) -----

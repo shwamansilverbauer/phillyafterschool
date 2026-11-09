@@ -38,6 +38,16 @@ jobs:
           echo "It is $now in Philadelphia."
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] || { [ "$((10#$now))" -ge 750 ] && [ "$((10#$now))" -lt 1150 ]; }; then echo "go=yes" >> "$GITHUB_OUTPUT"; else echo "Outside 7:50 to 11:50, so there is nothing to do."; fi
 
+      # Every other hour of the day: the site's own hourly work, which needs nothing from here but the call. It sends the
+      # owner's notes about new accounts, and once a day the encrypted copy of the database off the host (to the
+      # private backup repository) with its restore drill. In the morning send-alerts.mjs makes this same call itself.
+      # Only counts and a state come back (never who); a refused or slow answer just waits for the next hour.
+      - name: The site's hourly jobs
+        if: steps.clock.outputs.go != 'yes'
+        run: |
+          curl -sS -m 150 -X POST -H 'X-PAS: 1' -H 'content-type: application/json' -H 'accept: application/json' -d '{}' \
+            'https://phillyafterschool.org/groups/api.php?action=push_run' | jq -c '{told, why, offsite}' || echo "The site didn't answer this time; the next hour asks again."
+
       # The whole history, not just the latest commit: the build reads it to see when each date was posted.
       - uses: actions/checkout@v4
         if: steps.clock.outputs.go == 'yes'

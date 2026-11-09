@@ -1,6 +1,7 @@
 // The test harness: a copy of the site built for one fixed day, served by PHP's own server on this machine, with
 // stand-ins for the services the site talks to (the mail service, Google's sign-in check, the push services).
 // Nothing here touches the live site. See tests/README.md.
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -59,6 +60,14 @@ export async function startStandin() {
   const google = { tokens: new Map(), allow(credential, claims) { this.tokens.set(credential, claims); } };
   const push = { posts: [] };
   const github = { calls: [], expires: '', refuse: false };   // a test can set when the key "runs out", or have the key refused
+  // A private "-backups" repository, for the copy off the host: a small git store (blobs, trees, commits, main),
+  // started with one commit as GitHub's "Add a README file" does. github.backup.file(path) reads main.
+  const gid = () => crypto.randomBytes(20).toString('hex');
+  const bk = { blobs: new Map(), trees: new Map(), commits: new Map(), main: '', noAccess: false };
+  { const t = gid(), c = gid(); bk.trees.set(t, new Map()); bk.commits.set(c, { tree: t, parents: [], message: 'Initial commit' }); bk.main = c; }
+  bk.file = p => { const sha = bk.trees.get(bk.commits.get(bk.main).tree).get(p); return sha ? bk.blobs.get(sha) : null; };
+  bk.log = () => { const out = []; for (let c = bk.main; c; c = (bk.commits.get(c).parents || [])[0]) out.push(bk.commits.get(c).message); return out; };
+  github.backup = bk;
   const server = http.createServer((req, res) => {
     let body = '';
     req.on('data', c => { body += c; });
@@ -80,6 +89,20 @@ export async function startStandin() {
       if (u.pathname.startsWith('/github')) {
         github.calls.push({ method: req.method, path: u.pathname, headers: req.headers, body });
         if (github.refuse) return json(401, { message: 'Bad credentials' });
+        const g = u.pathname.match(/^\/github\/repos\/[^/]+\/[^/]+-backups\/git\/(.+)$/);
+        if (g) {
+          if (bk.noAccess) return json(404, { message: 'Not Found' });
+          let b = {}; try { b = JSON.parse(body || '{}'); } catch (e) { /* not json */ }
+          const [kind, ...rest] = g[1].split('/'), id = rest.join('/');
+          if (req.method === 'GET' && kind === 'ref' && id === 'heads/main') return json(200, { object: { sha: bk.main } });
+          if (req.method === 'GET' && kind === 'commits' && bk.commits.has(id)) return json(200, { sha: id, tree: { sha: bk.commits.get(id).tree } });
+          if (req.method === 'GET' && kind === 'blobs' && bk.blobs.has(id)) return json(200, { sha: id, encoding: 'base64', content: bk.blobs.get(id).toString('base64').replace(/(.{60})/g, '$1\n') });
+          if (req.method === 'POST' && kind === 'blobs') { const sha = gid(); bk.blobs.set(sha, Buffer.from(b.content || '', 'base64')); return json(201, { sha }); }
+          if (req.method === 'POST' && kind === 'trees') { const t = new Map(bk.trees.get(b.base_tree) || []); for (const e of b.tree || []) t.set(e.path, e.sha); const sha = gid(); bk.trees.set(sha, t); return json(201, { sha }); }
+          if (req.method === 'POST' && kind === 'commits') { const sha = gid(); bk.commits.set(sha, { tree: b.tree, parents: b.parents, message: b.message }); return json(201, { sha }); }
+          if (req.method === 'PATCH' && kind === 'refs' && id === 'heads/main') { if (!bk.commits.has(b.sha) || (bk.commits.get(b.sha).parents || [])[0] !== bk.main) return json(422, { message: 'Update is not a fast forward' }); bk.main = b.sha; return json(200, { object: { sha: b.sha } }); }
+          return json(404, { message: 'Not Found' });
+        }
         if (github.expires) res.setHeader('github-authentication-token-expiration', github.expires);
         return json(200, { ok: true });
       }
@@ -96,6 +119,7 @@ export async function startSite({ scratch, standin, log = () => {} } = {}) {
   const dir = scratch || fs.mkdtempSync(path.join(os.tmpdir(), 'pas-tests-'));
   const copy = path.join(dir, 'repo'), pub = path.join(dir, 'public'), dataDir = path.join(dir, 'phillyafterschool-data');
   fs.rmSync(copy, { recursive: true, force: true }); fs.rmSync(pub, { recursive: true, force: true }); fs.rmSync(dataDir, { recursive: true, force: true });
+  for (const f of ['phillyafterschool-github.key', 'phillyafterschool-github-check.json']) fs.rmSync(path.join(dir, f), { force: true });   // left by a run that stopped part way
   fs.mkdirSync(copy, { recursive: true });
   // A copy of what the build reads, so the repository's own dist/ is left alone.
   for (const f of ['build.mjs', 'site.config.json', 'data', 'src', 'email', 'scripts']) fs.cpSync(path.join(ROOT, f), path.join(copy, f), { recursive: true });

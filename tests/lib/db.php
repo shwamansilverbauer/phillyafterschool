@@ -4,6 +4,7 @@
 //   php tests/lib/db.php <groups.sqlite> seed <email> [first] [last] [origin]   -> {"id":..,"sid":".."}  (origin "managers": a program manager's account)
 //   php tests/lib/db.php <groups.sqlite> select <sql>                   -> rows as JSON
 //   php tests/lib/db.php <groups.sqlite> age <sid> <idle days> <age days> -> a sign-in last used, and begun, that long ago
+//   php tests/lib/db.php <groups.sqlite> photo                         -> {"id":..}: a listing photo's record (its file is the test's to write)
 $file = $argv[1] ?? '';
 $mode = $argv[2] ?? '';
 if ($file === '' || !is_file($file)) { fwrite(STDERR, "no database at $file\n"); exit(2); }
@@ -23,6 +24,11 @@ if ($mode === 'seed') {
   $sid = $b64(random_bytes(32));
   $db->prepare('INSERT INTO sessions (user_id, sid_hash, expires, seen, created) VALUES (?, ?, ?, ?, ?)')->execute(array($id, hash('sha256', $sid), time() + 14 * 86400, time(), time()));
   echo json_encode(array('id' => (int) $id, 'sid' => $sid));
+  exit;
+}
+if ($mode === 'photo') {   // kept (not 'new', not 'declined'), for a listing that doesn't exist, so no page or queue shows it
+  $db->prepare('INSERT INTO photos (claim_id, listing, alt, status, created) VALUES (0, ?, ?, ?, ?)')->execute(array('p:offsite-test', 'test', 'approved', time()));
+  echo json_encode(array('id' => (int) $db->lastInsertId()));
   exit;
 }
 if ($mode === 'age') {   // as the server would have left it at that last visit: 14 days on, never past 90 from the start

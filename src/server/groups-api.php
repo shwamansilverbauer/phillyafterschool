@@ -305,6 +305,135 @@ function backup(): void {
   } catch (Exception $e) { /* a copy that fails never gets in the way of the site; the health check reports its age */ }
 }
 
+// ---------- a copy off the host, once a day ----------
+// The daily copy above stays on the host, and so does Hostinger's own backup of it. Once a day the hourly job
+// (push_run) also sends that copy to a private GitHub repository (backupRepo in the config), through the same key file
+// /edit/ publishes with (phillyafterschool-github.key, which needs that repository added to it). What leaves is
+// encrypted first, AES-256-GCM with a key derived from secret.key, after gzip, so the repository holds nothing anyone
+// can read without that file. Listing photos go the same way, each once. One commit a day: groups.sqlite.enc,
+// backup.json (the day, the size, a checksum and how many rows each table has: no one's details), and any new photos.
+// Then the restore drill: the copy is fetched back from GitHub, opened with the key, checked against the original,
+// and opened as a database (integrity check, row counts). The health answer says how that went; the hourly site check
+// fails when no verified copy has gone off the host for two days. scripts/restore-backup.mjs opens a copy anywhere.
+const OFFSITE_MAGIC = 'PASB1';
+const OFFSITE_PHOTOS = 6;    // photos sent in one run at most (the rest follow an hour later), so a run stays short
+function offsite_repo(): string { global $CFG; $r = isset($CFG['backupRepo']) ? (string) $CFG['backupRepo'] : ''; return preg_match('~^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$~', $r) ? $r : ''; }
+function offsite_token(): string {
+  $raw = @file_get_contents(dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-github.key');
+  $t = is_string($raw) ? trim($raw) : '';
+  return preg_match('/^(github_pat_[A-Za-z0-9_]{20,}|ghp_[A-Za-z0-9]{20,})$/', $t) ? $t : '';
+}
+function offsite_gh(string $method, string $path, $body = null): array {
+  $base = (PHP_SAPI === 'cli-server' && getenv('PAS_TEST_GITHUB')) ? rtrim((string) getenv('PAS_TEST_GITHUB'), '/') : 'https://api.github.com';   // the local test server only
+  $ch = curl_init($base . $path);
+  $headers = array('Accept: application/vnd.github+json', 'Authorization: Bearer ' . offsite_token(), 'X-GitHub-Api-Version: 2022-11-28', 'User-Agent: phillyafterschool-backup');
+  $opts = array(CURLOPT_CUSTOMREQUEST => $method, CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 8, CURLOPT_TIMEOUT => 60);
+  if ($body !== null) { $headers[] = 'Content-Type: application/json'; $opts[CURLOPT_POSTFIELDS] = json_encode($body, JSON_UNESCAPED_SLASHES); }
+  $opts[CURLOPT_HTTPHEADER] = $headers;
+  curl_setopt_array($ch, $opts);
+  $raw = curl_exec($ch);
+  $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  curl_close($ch);
+  return array($code, is_string($raw) ? json_decode($raw, true) : null);
+}
+function offsite_key(): string { static $k = null; if ($k === null) $k = hash_hmac('sha256', 'pas-offsite-v1', secret(), true); return $k; }
+function offsite_seal(string $bin): string {
+  $iv = random_bytes(12); $tag = '';
+  $ct = openssl_encrypt((string) gzencode($bin, 9), 'aes-256-gcm', offsite_key(), OPENSSL_RAW_DATA, $iv, $tag, 'pas-offsite');
+  return OFFSITE_MAGIC . $iv . $tag . $ct;
+}
+function offsite_open(string $enc): ?string {
+  if (strlen($enc) < 33 || strncmp($enc, OFFSITE_MAGIC, 5) !== 0) return null;
+  $z = openssl_decrypt(substr($enc, 33), 'aes-256-gcm', offsite_key(), OPENSSL_RAW_DATA, substr($enc, 5, 12), substr($enc, 17, 16), 'pas-offsite');
+  if ($z === false) return null;
+  $b = @gzdecode($z);
+  return $b === false ? null : $b;
+}
+// How many rows each table of a database file has (what the drill compares, and what backup.json records).
+function offsite_counts(string $file): ?array {
+  try {
+    $d = new PDO('sqlite:' . $file); $d->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    if ((string) $d->query('PRAGMA integrity_check')->fetchColumn() !== 'ok') return null;
+    $n = array();
+    foreach ($d->query("SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name")->fetchAll(PDO::FETCH_COLUMN) as $t) $n[$t] = (int) $d->query('SELECT COUNT(*) FROM "' . str_replace('"', '""', $t) . '"')->fetchColumn();
+    $d = null;
+    return $n;
+  } catch (Exception $e) { return null; }
+}
+function offsite_state(): array {
+  $day = meta_get('offsite_day');
+  return array('on' => offsite_repo() !== '', 'day' => $day, 'ok' => meta_get('offsite_ok') === '1',
+    'ageDays' => $day === '' ? -1 : (int) round((strtotime(today_ny()) - strtotime($day)) / 86400), 'why' => meta_get('offsite_why'),
+    'photosLeft' => count(offsite_photos_left()));
+}
+function offsite_photos_left(): array {
+  $dir = data_dir() . '/photos';
+  $sent = array_flip(array_filter(explode(',', meta_get('offsite_photos'))));
+  $left = array();
+  if (is_dir($dir)) foreach ((array) @scandir($dir) as $f) if (preg_match('/^(\d+)\.jpg$/', (string) $f, $m) && !isset($sent[$m[1]])) $left[] = (int) $m[1];
+  sort($left);
+  return $left;
+}
+function offsite_fail(string $why): array { meta_set('offsite_ok', '0'); meta_set('offsite_why', $why); return array('state' => 'failed', 'why' => $why); }
+function offsite_run(bool $force = false): array {
+  $repo = offsite_repo();
+  if ($repo === '') return array('state' => 'off');
+  if ($force) @unlink(backup_dir() . '/groups-' . today_ny() . '.sqlite');   // (tests only) a fresh copy of what is there now
+  backup();   // today's copy, if the day's first request hasn't made it yet
+  $day = last_backup();
+  if ($day === '') return offsite_fail('no copy');
+  $photos = offsite_photos_left();
+  if (!$force && meta_get('offsite_day') === $day && meta_get('offsite_ok') === '1' && !$photos) return array('state' => 'done', 'day' => $day);
+  if (!$force && (int) meta_get('offsite_try') > now() - 50 * 60) return array('state' => 'waiting');   // one try an hour, whoever asks
+  meta_set('offsite_try', (string) now());
+  @set_time_limit(180);
+  if (offsite_token() === '' || !function_exists('curl_init')) return offsite_fail('no key');
+  $file = backup_dir() . '/groups-' . $day . '.sqlite';
+  $plain = (string) @file_get_contents($file);
+  $counts = offsite_counts($file);
+  if ($plain === '' || $counts === null) return offsite_fail('copy unreadable');
+  $sum = hash('sha256', $plain);
+  $files = array('groups.sqlite.enc' => offsite_seal($plain));
+  $sentPhotos = array();
+  foreach (array_slice($photos, 0, OFFSITE_PHOTOS) as $id) { $b = @file_get_contents(data_dir() . '/photos/' . $id . '.jpg'); if (is_string($b) && $b !== '') { $files['photos/' . $id . '.jpg.enc'] = offsite_seal($b); $sentPhotos[] = $id; } }
+  $files['backup.json'] = json_encode(array('day' => $day, 'made' => gmdate('c'), 'bytes' => strlen($plain), 'sha256' => $sum, 'rows' => $counts, 'photosSent' => count(array_filter(explode(',', meta_get('offsite_photos')))) + count($sentPhotos), 'format' => 'PASB1: 12-byte IV, 16-byte tag, AES-256-GCM of gzip, key HMAC-SHA256(secret.key, "pas-offsite-v1"), AAD "pas-offsite"; open with scripts/restore-backup.mjs'), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
+  // One commit on main: blobs, a tree on top of the last one, the commit, then main moved to it.
+  list($c, $r) = offsite_gh('GET', '/repos/' . $repo . '/git/ref/heads/main');
+  if ($c === 401) return offsite_fail('refused');                                   // the key ran out or was taken back
+  if ($c === 403 || $c === 404 || $c === 409) return offsite_fail('no access');      // the key hasn't been given the repository, or it has no first commit yet
+  if ($c !== 200 || !isset($r['object']['sha'])) return offsite_fail('github ' . $c);
+  $parent = (string) $r['object']['sha'];
+  list($c, $r) = offsite_gh('GET', '/repos/' . $repo . '/git/commits/' . $parent);
+  if ($c !== 200 || !isset($r['tree']['sha'])) return offsite_fail('github ' . $c);
+  $baseTree = (string) $r['tree']['sha'];
+  $tree = array(); $dbBlob = '';
+  foreach ($files as $path => $bin) {
+    list($c, $r) = offsite_gh('POST', '/repos/' . $repo . '/git/blobs', array('content' => base64_encode($bin), 'encoding' => 'base64'));
+    if ($c === 403 || $c === 404) return offsite_fail('no access');
+    if ($c !== 201 || !isset($r['sha'])) return offsite_fail('github ' . $c);
+    $tree[] = array('path' => $path, 'mode' => '100644', 'type' => 'blob', 'sha' => (string) $r['sha']);
+    if ($path === 'groups.sqlite.enc') $dbBlob = (string) $r['sha'];
+  }
+  list($c, $r) = offsite_gh('POST', '/repos/' . $repo . '/git/trees', array('base_tree' => $baseTree, 'tree' => $tree));
+  if ($c !== 201 || !isset($r['sha'])) return offsite_fail('github ' . $c);
+  list($c, $r) = offsite_gh('POST', '/repos/' . $repo . '/git/commits', array('message' => 'Copy of ' . $day . ($sentPhotos ? ' and ' . count($sentPhotos) . (count($sentPhotos) === 1 ? ' photo' : ' photos') : ''), 'tree' => (string) $r['sha'], 'parents' => array($parent)));
+  if ($c !== 201 || !isset($r['sha'])) return offsite_fail('github ' . $c);
+  list($c, $r2) = offsite_gh('PATCH', '/repos/' . $repo . '/git/refs/heads/main', array('sha' => (string) $r['sha']));
+  if ($c !== 200) return offsite_fail($c === 422 ? 'moved' : 'github ' . $c);   // 422: main moved meanwhile; the next run tries again
+  if ($sentPhotos) meta_set('offsite_photos', implode(',', array_merge(array_filter(explode(',', meta_get('offsite_photos'))), $sentPhotos)));
+  // The drill: fetch the copy back, open it, and check it is the same database.
+  list($c, $r) = offsite_gh('GET', '/repos/' . $repo . '/git/blobs/' . $dbBlob);
+  $back = ($c === 200 && isset($r['content'])) ? offsite_open((string) base64_decode(str_replace("\n", '', (string) $r['content']))) : null;
+  if ($back === null || !hash_equals($sum, hash('sha256', $back))) return offsite_fail('drill: copy differs');
+  $tmp = backup_dir() . '/drill-' . bin2hex(random_bytes(6)) . '.tmp';
+  $okWrite = @file_put_contents($tmp, $back) !== false;
+  $again = $okWrite ? offsite_counts($tmp) : null;
+  @unlink($tmp);
+  if ($again === null || $again !== $counts) return offsite_fail('drill: database differs');
+  meta_set('offsite_day', $day); meta_set('offsite_ok', '1'); meta_set('offsite_why', ''); meta_set('offsite_at', (string) now()); meta_set('offsite_bytes', (string) strlen($files['groups.sqlite.enc']));
+  return array('state' => 'sent', 'day' => $day, 'photos' => count($sentPhotos));
+}
+
 // ---------- slowing down guessing and floods ----------
 function who(): string { return substr(hash_hmac('sha256', isset($_SERVER['REMOTE_ADDR']) ? (string) $_SERVER['REMOTE_ADDR'] : '', secret()), 0, 20); }
 function too_many(string $key, int $max, int $seconds): bool {
@@ -1834,7 +1963,7 @@ switch ($method . ' ' . $action) {
     catch (Exception $e) { $ok = false; }
     $last = last_backup();
     $age = $last === '' ? -1 : (int) round((strtotime(today_ny()) - strtotime($last)) / 86400);
-    out(array('ok' => $ok, 'database' => $ok, 'day' => today_ny(), 'backup' => $last, 'backupAgeDays' => $age, 'backupsKept' => count(glob(backup_dir() . '/groups-*.sqlite') ?: array()), 'mail' => pas_mail_state()) + (($ek = edit_key_state()) !== null ? array('editKey' => $ek) : array()), $ok ? 200 : 503);
+    out(array('ok' => $ok, 'database' => $ok, 'day' => today_ny(), 'backup' => $last, 'backupAgeDays' => $age, 'backupsKept' => count(glob(backup_dir() . '/groups-*.sqlite') ?: array()), 'mail' => pas_mail_state(), 'offsite' => $ok ? offsite_state() : null) + (($ek = edit_key_state()) !== null ? array('editKey' => $ek) : array()), $ok ? 200 : 503);
   }
 
   // ----- signing in -----
@@ -2378,16 +2507,18 @@ switch ($method . ' ' . $action) {
       $told = too_many('catchup:' . who(), 30, 3600) ? 0 : signup_catchup($test && isset($in['told_age']) ? (int) $in['told_age'] : 3600);
       note('catchup:' . who());
     }
-    if (!$dry && !$open) out(array('ok' => true, 'ran' => false, 'why' => 'outside the morning', 'told' => $told));
+    // The copy off the host: once a day, tried at most hourly whoever asks (offsite_run keeps its own clock).
+    $off = $dry ? array() : array('offsite' => offsite_run($test && !empty($in['offsite_force'])));
+    if (!$dry && !$open) out(array('ok' => true, 'ran' => false, 'why' => 'outside the morning', 'told' => $told) + $off);
     if (!$dry) {
-      if (!($test && !empty($in['any'])) && (int) meta_get('push_ran') > now() - 240) out(array('ok' => true, 'ran' => false, 'why' => 'just ran', 'told' => $told));
-      if (!($test && !empty($in['any'])) && too_many('pushrun:' . who(), 12, 3600)) out(array('ok' => true, 'ran' => false, 'why' => 'asked too often', 'told' => $told));
+      if (!($test && !empty($in['any'])) && (int) meta_get('push_ran') > now() - 240) out(array('ok' => true, 'ran' => false, 'why' => 'just ran', 'told' => $told) + $off);
+      if (!($test && !empty($in['any'])) && too_many('pushrun:' . who(), 12, 3600)) out(array('ok' => true, 'ran' => false, 'why' => 'asked too often', 'told' => $told) + $off);
       note('pushrun:' . who());
       meta_set('push_ran', (string) now());
     } elseif (!$test && too_many('pushdry:' . who(), 20, 3600)) out(array('ok' => true, 'ran' => false, 'why' => 'asked too often'));
     else note('pushdry:' . who());
     $mgr = $dry ? 0 : array_sum(mgr_run($test && preg_match('/^\\d{4}-\\d{2}-\\d{2}$/', str($in, 'mgr_day', 10)) ? str($in, 'mgr_day', 10) : today_ny(), $test ? array_filter(array('fresh' => isset($in['mgr_fresh']) ? (int) $in['mgr_fresh'] : null, 'rv' => isset($in['mgr_rv']) && is_array($in['mgr_rv']) ? $in['mgr_rv'] : null, 'asks' => isset($in['mgr_asks']) && is_array($in['mgr_asks']) ? $in['mgr_asks'] : null), function ($v) { return $v !== null; }) : array()));
-    out(array('ok' => true, 'ran' => !$dry, 'dry' => $dry, 'told' => $told, 'mgr' => $mgr) + push_run($today, $dry));
+    out(array('ok' => true, 'ran' => !$dry, 'dry' => $dry, 'told' => $told, 'mgr' => $mgr) + $off + push_run($today, $dry));
   }
 
   // A parent's question, sent on to the people who run the program. It is not kept: the site passes it along, with
