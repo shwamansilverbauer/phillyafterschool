@@ -113,7 +113,7 @@ host): accounts, share groups, claims, saved weeks and summers. Two things cover
   Files > Backups > Restore and download, that the `phillyafterschool-data` folder is inside the backup.
 - **A copy off the host, every day** (`offsite_run()` in `src/server/groups-api.php`, from the hourly `push_run`):
   the day's copy goes to the private repository `backupRepo` in `site.config.json`
-  (`shwamansilverbauer/-phillyafterschool-backups`, with the leading hyphen it was made with), so losing the Hostinger account loses neither the site (this
+  (`shwamansilverbauer/phillyafterschool-backups`), so losing the Hostinger account loses neither the site (this
   repository) nor its accounts. Before it leaves it is gzipped and encrypted (AES-256-GCM, key derived from
   `secret.key`, file starts `PASB1`), so the repository holds nothing readable on its own. One commit a day:
   `groups.sqlite.enc`, `backup.json` (the day, size, checksum, and how many rows each table has; no one's details),
