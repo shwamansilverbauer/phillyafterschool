@@ -2716,7 +2716,7 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-ref .kc-eddie-img{width:56px}
 .kc-ref .kc-eddie-say{font-family:var(--title);font-weight:400;font-size:1.2rem;line-height:1.15;letter-spacing:.02em;padding:7px 14px 3px;max-width:min(30ch,calc(100% - 80px));text-align:center}
 .kc-champ .kc-eddie{justify-content:center}
-/* the showdown: three stages, the bulbs in front of them */
+/* the showdown: a stage for each contest, the bulbs in front of it */
 .kc-show .kc-fighter,.kc-show .kc-vs{z-index:2}
 .kc-show .kc-fx{z-index:4}
 .kc-ev-race{background:linear-gradient(180deg,#96C9FF 0%,#C3E1FF 34%,#E6F2FF 100%)}
@@ -2746,6 +2746,48 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-pretzel{position:absolute;width:34%;height:auto;overflow:visible}
 .kc-second{position:absolute;top:-14px;left:50%;transform:translateX(-50%) rotate(6deg);font-family:var(--title);font-size:1.05rem;color:var(--kink);background:#C3E1FF;border:3px solid var(--kink);border-radius:14px;padding:5px 12px 2px;box-shadow:0 3px 0 var(--kink);white-space:nowrap;z-index:3}
 .kc-fighter.second b{opacity:.8}
+.kc-flash{position:absolute;inset:0;z-index:3;background:#fff;pointer-events:none;opacity:0}
+/* water ice: a striped stand, a cup under each bulb whose ice goes down as it is slurped */
+.kc-ev-waterice{background:linear-gradient(180deg,#D0EBFF 0%,#FFF0F6 60%)}
+.kc-counter{position:absolute;left:0;right:0;bottom:0;height:30%;z-index:0;background:repeating-linear-gradient(90deg,#FF6B6B 0 24px,#fff 24px 48px);border-top:4px solid var(--kink);opacity:.9}
+.kc-wice{display:block;width:min(74px,18vw);margin-top:-16px;position:relative;z-index:1;overflow:visible}
+.kc-ice{transform-box:fill-box;transform-origin:50% 100%}
+/* the kite: a stormy sky, a kite at each bulb's outside edge with the key on its string */
+.kc-ev-kite{background:linear-gradient(180deg,#5C677D 0%,#8D99AE 50%,#C3E1FF 100%)}
+.kc-clouds{position:absolute;left:0;right:0;top:-20px;height:86px;z-index:0;opacity:.92;background:radial-gradient(circle at 30px 44px,#CED4DA 0 30px,transparent 31px) 0 0/110px 86px repeat-x,radial-gradient(circle at 80px 32px,#DEE2E6 0 36px,transparent 37px) 0 0/110px 86px repeat-x,linear-gradient(#DEE2E6,#DEE2E6) 0 0/100% 46px no-repeat}
+.kc-field{position:absolute;left:0;right:0;bottom:0;height:30%;z-index:0;background:#69DB7C;border-top:4px solid var(--kink)}
+.kc-ev-kite .kc-fwrap{position:relative}
+.kc-kite{position:absolute;top:-34px;width:min(50px,12.5vw);z-index:1;overflow:visible}
+.kc-fighter.left .kc-kite{left:-8%}
+.kc-fighter.right .kc-kite{right:-8%}
+.kc-kite.zapped .kc-key circle{fill:#FFE066}
+.kc-kite.zapped .kc-key path{stroke:#F59F00}
+.kc-kite.zapped .kc-key{filter:drop-shadow(0 0 4px #FFE066)}
+/* the regatta: Boathouse Row lit up at night, a river, a shell under each bulb */
+.kc-ev-row{background:linear-gradient(180deg,#0B1D3A 0%,#1C3F6E 60%)}
+.kc-boathouses{position:absolute;left:0;bottom:42%;width:100%;height:46px;z-index:0}
+.kc-river{position:absolute;left:0;right:0;bottom:0;height:42%;z-index:0;background:repeating-linear-gradient(180deg,#1971C2 0 10px,#1864AB 10px 12px);border-top:3px solid #FFE066}
+.kc-boat{display:block;width:118%;margin:-16% 0 0 -9%;position:relative;overflow:visible}
+.kc-oar{transform-box:view-box;transform-origin:0 0}
+.kc-ev-row .kc-wins,.kc-ev-row .kc-second{top:auto;bottom:38%}   /* where the boat was: the bulb rows up to where the sign would be */
+/* the hoagie: a deli counter, a roll under each bulb that fills up */
+.kc-ev-hoagie{background:linear-gradient(180deg,#D3F9D8 0%,#F4FCE3 60%)}
+.kc-deli{position:absolute;left:0;right:0;bottom:0;height:30%;z-index:0;background:repeating-linear-gradient(90deg,#F1F3F5 0 40px,#DEE2E6 40px 42px);border-top:4px solid var(--kink)}
+.kc-hoagie{display:block;width:min(130px,30vw);margin-top:-18px;position:relative;z-index:1;overflow:visible}
+/* the pothole dodge: rowhouses, a road, a bike under each bulb and the road coming at it */
+.kc-ev-pothole{background:linear-gradient(180deg,#A5D8FF 0%,#E7F5FF 55%)}
+.kc-rows{position:absolute;left:0;right:0;bottom:30%;height:92px;z-index:0;border-top:5px solid #5C3A21;
+  background:linear-gradient(90deg,transparent 12px,#FFF3BF 12px 24px,transparent 24px 36px,#FFF3BF 36px 48px,transparent 48px) 0 16px/60px 20px repeat-x,linear-gradient(90deg,transparent 12px,#FFF3BF 12px 24px,transparent 24px 36px,#1C3F6E 36px 48px,transparent 48px) 0 54px/60px 38px repeat-x,repeating-linear-gradient(90deg,#B5523B 0 58px,#8E3B28 58px 60px,#C0643F 60px 118px,#8E3B28 118px 120px)}
+.kc-road-bg{position:absolute;left:0;right:0;bottom:0;height:30%;z-index:0;background:#495057;border-top:4px solid var(--kink)}
+.kc-bike{display:block;width:78%;margin:-20% auto 0;position:relative;overflow:visible}
+.kc-fighter.right .kc-bike,.kc-fighter.right .kc-holes{transform:scaleX(-1)}
+.kc-holes{display:block;width:min(120px,28vw);aspect-ratio:100/14;overflow:hidden;border:2px solid var(--kink);border-radius:4px;margin-top:-4px;position:relative;z-index:1}
+.kc-road{display:block;width:300%;height:100%}
+/* the mural: a brick wall, a wall to paint under each bulb */
+.kc-ev-mural{background:linear-gradient(180deg,#FFF4E6 0%,#FFE8CC 100%)}
+.kc-bricks{position:absolute;left:0;right:0;bottom:0;top:42%;z-index:0;opacity:.85;border-top:4px solid var(--kink);background:repeating-linear-gradient(0deg,#8E3B28 0 2px,transparent 2px 14px),repeating-linear-gradient(90deg,#8E3B28 0 2px,transparent 2px 30px),#B5523B}
+.kc-wall{display:block;width:min(120px,28vw);margin-top:-14px;position:relative;z-index:1;overflow:visible}
+.kc-paint{transform-box:fill-box;transform-origin:50% 50%}
 /* the wardrobe: what a bulb can wear, locked until its level */
 .kc-wardrobe{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
 .kc-wearbtn{position:relative;font:inherit;color:var(--kink);background:#fff;border:3px solid var(--kink);border-radius:18px;padding:8px 6px 8px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;box-shadow:0 4px 0 var(--kink)}
