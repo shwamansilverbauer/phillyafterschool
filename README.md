@@ -127,6 +127,8 @@ host): accounts, share groups, claims, saved weeks and summers. Two things cover
   (`offsite`: the last checked day, how many days ago, why the last try failed, photos still to go), and the hourly
   check fails when no checked copy has gone off the host for two days. A failed hour is tried again the next hour.
   The test suite does the whole round trip against a stand-in GitHub, then restores with the script below.
+  To run it now rather than wait for the hour: Actions > Send date emails > Run workflow, tick "Only the site's
+  hourly jobs" (no emails go out). It is still once a day: a run after the day's copy has gone does nothing more.
 
 **Keep a copy of `secret.key` off the host** (a secure note in a password manager): the offsite copies, and a child's
 details inside any copy, open only with it. Never put it in a repository or a message.

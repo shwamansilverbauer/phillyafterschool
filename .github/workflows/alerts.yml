@@ -19,6 +19,10 @@ on:
       today:
         description: 'Pretend it is this day (YYYY-MM-DD). Dry runs only.'
         required: false
+      hourly_only:
+        description: 'Only the site’s hourly jobs now (new-account notes, the copy off the host). No emails.'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -36,7 +40,8 @@ jobs:
         run: |
           now=$(TZ=America/New_York date +%H%M)
           echo "It is $now in Philadelphia."
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || { [ "$((10#$now))" -ge 750 ] && [ "$((10#$now))" -lt 1150 ]; }; then echo "go=yes" >> "$GITHUB_OUTPUT"; else echo "Outside 7:50 to 11:50, so there is nothing to do."; fi
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.hourly_only }}" = "true" ]; then echo "Only the site's hourly jobs this time."
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ] || { [ "$((10#$now))" -ge 750 ] && [ "$((10#$now))" -lt 1150 ]; }; then echo "go=yes" >> "$GITHUB_OUTPUT"; else echo "Outside 7:50 to 11:50, so there are no emails to work out."; fi
 
       # Every other hour of the day: the site's own hourly work, which needs nothing from here but the call. It sends the
       # owner's notes about new accounts, and once a day the encrypted copy of the database off the host (to the
