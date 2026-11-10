@@ -1348,10 +1348,25 @@ the premium ask, a person's name on their profile card) is a title too, so it is
 Everything else, the line over a page title (`.hero .where`, a breadcrumb or a school's one-line description)
 included, is the body face, **Atkinson Hyperlegible** (`--body`). The brand picked Luckiest Guy for the logo too,
 so the site and the logo share a face; the logo's hand-lettered "AFTER SCHOOL" stays in the logo. The two
-link-preview pictures (`src/static/share.png`, `share-days-off.png`) are the site's sky with the logo for light
-backgrounds (`src/static/logo-sky.png`, PHILLY in the brand blue), a headline, one line and the page's drawing
+site-wide link-preview pictures (`src/static/share.png`, `share-days-off.png`) are the site's sky with the logo for
+light backgrounds (`src/static/logo-sky.png`, PHILLY in the brand blue), a headline, one line and the page's drawing
 along the bottom; `scripts/share-pictures.js` draws them from a build with Playwright, so they are redrawn
 whenever the logo, a headline or the site's colours change.
+
+Each day-off, school, summer-camp and weekend page has a preview picture of its own (`shareImage: { page: true }` in
+its `layout()` call), so a link texted to a class group chat shows that page: "It's 3:39 at Nebinger. What now?",
+or "Veterans Day: camps for the day off" with the date and how many programs posted a camp. The words are the
+page's own headline and the line under it, read from the built page, so Rachael's wording and anything edited on
+`/edit/` is what the picture says (the line drops to its first sentence when the whole of it won't fit in two lines).
+A school page has the home page's street under it; the others have their own drawing. The publish workflow draws
+them after the tests (`node scripts/share-pictures.js --pages`, into `dist/share/<path>.png`), so they follow every
+change, and the page names its picture with a stamp of its headline, its line and the script (`sharePageStamp`), so
+an app that kept an old preview fetches the new one. If a picture can't be drawn, the site-wide one is copied in
+its place and the publish goes on. `tests/cases/01-build.mjs` checks that each of those pages names its own.
+
+The same script makes posts for social media from any page: `node scripts/share-pictures.js --post
+days-off/veterans-day-2026-11-11 <folder>` draws a 1080 by 1350 one for a feed and a 1080 by 1920 story, in the
+page's own words (the whole line, up to three or four lines), with Eddie in his sunglasses and the site's address.
 
 The three faces are served from this site, not from Google: `src/fonts/` holds the WOFF2 files (Latin and Latin
 Extended, the weights the site uses: Luckiest Guy 400, Figtree 700 and 800, Atkinson Hyperlegible 400 and 700, from

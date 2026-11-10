@@ -41,6 +41,20 @@ test('every school, program, camp and neighborhood has its page, and the sitemap
   excludes(site.read('data/programs.json'), 'test-listing', 'the public program data never carries the test listings');
 });
 
+test('link previews: each day-off, school, summer-camp and weekend page names a picture of its own, stamped by its words', async ({ site }) => {
+  const og = rel => (site.read(rel).match(/<meta property="og:image" content="([^"]+)"/) || [])[1] || '';
+  matches(og('index.html'), /\/share\.png\?v=[0-9a-f]{8}$/, 'the home page keeps the site-wide picture');
+  matches(og('days-off/index.html'), /\/share-days-off\.png\?v=[0-9a-f]{8}$/, 'the planner keeps the day-off picture');
+  for (const s of schools()) matches(og(`${s.id}/index.html`), new RegExp(`/share/${s.id}\\.png\\?v=[0-9a-f]{8}$`), `${s.id} has its own`);
+  matches(og('summer-camps/index.html'), /\/share\/summer-camps\.png\?v=[0-9a-f]{8}$/);
+  matches(og('weekends/index.html'), /\/share\/weekends\.png\?v=[0-9a-f]{8}$/);
+  const days = fs.readdirSync(path.join(site.pub, 'days-off'), { withFileTypes: true }).filter(e => e.isDirectory()).map(e => e.name);
+  ok(days.length > 3, 'day-off pages: ' + days.length);
+  for (const d of days) matches(og(`days-off/${d}/index.html`), new RegExp(`/share/days-off-${d}\\.png\\?v=[0-9a-f]{8}$`), d);
+  // Different words, a different address, so an app that kept an old preview fetches the new one.
+  eq(new Set(schools().map(s => og(`${s.id}/index.html`).split('?v=')[1])).size, schools().length, 'each school its own stamp');
+});
+
 test('wording rules: no claim that listings are checked by hand, no Venmo, the support line, and the maker’s link only in the footer', async ({ site }) => {
   const html = pages(site);
   let support = 0;

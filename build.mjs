@@ -125,6 +125,12 @@ function dropEmpty(html) {
 // A short fingerprint of each asset, added to its URL. When the file changes, the URL changes,
 // so browsers and the host's CDN fetch the new one instead of a cached copy.
 const stamp = f => PREVIEW ? '' : '?v=' + createHash('sha1').update(fs.readFileSync(path.join(ROOT, f))).digest('hex').slice(0, 8);
+// A page's own link-preview picture (shareImage: { page: true }): drawn after the build by scripts/share-pictures.js
+// --pages from the page as built (its headline and first line, as edited, over its drawing), at share/<path>.png. Its
+// stamp follows those words and the script, so a preview that changes gets a new address and the apps fetch it again.
+const sharePagePath = pathName => 'share/' + (pathName.replace(/\/$/, '').replace(/\//g, '-') || 'home') + '.png';
+const SHARE_JS = fs.readFileSync(path.join(ROOT, 'scripts/share-pictures.js'));
+const sharePageStamp = (hero, scene) => PREVIEW ? '' : '?v=' + createHash('sha1').update(String(hero)).update(String(scene)).update(SHARE_JS).digest('hex').slice(0, 8);
 const CSS_V = stamp('src/site.css'), JS_V = stamp('src/site.js'), EDIT_V = stamp('src/edit.js'), GROUPS_V = stamp('src/groups.js');
 
 // ---------- helpers ----------
@@ -637,7 +643,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
 <meta property="og:type" content="website">
 <meta property="og:url" content="${esc(canonical)}">
 <meta property="og:site_name" content="${esc(cfg.siteName)}">
-<meta property="og:image" content="${cfg.siteUrl}/${shareImage ? shareImage.file : 'share.png'}${stamp('src/static/' + (shareImage ? shareImage.file : 'share.png'))}">
+<meta property="og:image" content="${cfg.siteUrl}/${shareImage && shareImage.page ? sharePagePath(pathName) + sharePageStamp(hero, showStreet) : (shareImage ? shareImage.file : 'share.png') + stamp('src/static/' + (shareImage ? shareImage.file : 'share.png'))}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="${esc(shareImage ? shareImage.alt : `${cfg.siteName}: a row of Philadelphia rowhouses, a school and a yellow school bus`)}">
@@ -2101,6 +2107,7 @@ ${groups}
 </div>`;
   return layout({
     title: `${s.shortName} after-school programs and aftercare`,
+    shareImage: { page: true, alt: `${cfg.siteName}: after-school programs for ${s.name}` },
     description: `Aftercare and after-school programs for ${s.name}, Philadelphia: ${list.length} options at the school, with pickup, or nearby. Hours, cost and how to register.`,
     jsonLd: { '@context': 'https://schema.org', '@graph': [
       { '@type': 'ItemList', name: `After-school programs for ${s.name}`, itemListElement: list.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
@@ -3047,6 +3054,7 @@ ${rest.map(p => `    <li><a href="${link(programPath(p), D)}">${esc(fullName(p))
   const url = `${cfg.siteUrl}/${dayPath(d)}`;
   return layout({
     title, description, pathName: dayPath(d), depth: D, current: dayCampsPath, hero, body, showStreet: 'dayoff', noindex: !open.length,
+    shareImage: { page: true, alt: `${cfg.siteName}: ${label}, ${when}. Camps for the day off school` },
     jsonLd: { '@context': 'https://schema.org', '@graph': [
       { '@type': 'ItemList', name: `${label}: day camps`, itemListElement: open.map((p, n) => ({ '@type': 'ListItem', position: n + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },
       { '@type': 'BreadcrumbList', itemListElement: [[cfg.siteName, cfg.siteUrl + '/'], ['Days off from school', `${cfg.siteUrl}/${dayCampsPath}`], [label, url]].map(([name, item], n) => ({ '@type': 'ListItem', position: n + 1, name, item })) },
@@ -6382,6 +6390,7 @@ ${todo.length ? `<section class="section">
     title: 'Summer day camps in Philadelphia: ages, weeks, hours and prices',
     description: `${list.length} summer day camps inside Philadelphia in one list: ages, weeks, hours, cost, before and after care, and when sign-ups open. Filter by type, grade and part of the city.`,
     pathName: campsPath, depth: D, current: null, hero, body, showStreet: 'summer',
+    shareImage: { page: true, alt: `${cfg.siteName}: summer day camps in Philadelphia` },
     jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: list.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, url: `${cfg.siteUrl}/${campPath(c)}` })) },
   });
 }
@@ -6415,6 +6424,7 @@ ${planLine(T(`A weekend class goes on the week too, next to the weekday afternoo
 </section>`;
   return layout({
     title: 'Weekend classes for kids in Philadelphia, by neighborhood',
+    shareImage: { page: true, alt: `${cfg.siteName}: Saturday and Sunday classes for kids in Philadelphia` },
     description: `Saturday and Sunday classes for kids at ${weekendPrograms.length} places in Philadelphia: music, theater, art, dance, skating, soccer and science, with the day, the neighborhood, and each one’s term, times and cost.`,
     pathName: weekendPath, depth: D, current: null, hero, body, showStreet: 'weekend',
     jsonLd: { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: weekendPrograms.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: fullName(p), url: `${cfg.siteUrl}/${programPath(p)}` })) },

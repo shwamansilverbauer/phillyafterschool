@@ -56,6 +56,12 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
+      # Each day-off, school, summer-camp and weekend page's own link-preview picture, drawn from the page as built (its
+      # headline and first line, as edited) by scripts/share-pictures.js --pages, with the Chromium the tests used. A
+      # picture that can't be drawn gets the site-wide one in its place, so this step never stops a publish.
+      - name: Link-preview pictures for the pages
+        run: node scripts/share-pictures.js --pages
+
       # Kept for the last step: what the live site's sitemap said before this publish.
       - name: Note what the live sitemap says now
         run: curl -fsS -m 20 -o before-sitemap.xml "$(node -p "require('./site.config.json').siteUrl")/sitemap.xml" || echo "The live sitemap could not be read. That only means no pages are reported as changed this time."
