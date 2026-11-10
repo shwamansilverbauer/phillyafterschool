@@ -12,8 +12,9 @@ import { test, ok, eq, deepEq, includes, ROOT } from '../lib/harness.mjs';
 test('the pre-read: same, changed (with the lines), compared with the version on the day last confirmed, robots.txt and people respected, and a stalled page given up on', async () => {
   const pages = {
     '/robots.txt': 'User-agent: *\nDisallow: /closed\n',
-    '/camp': '<html><head><title>x</title><script>var t = Date.now()</script></head><body><nav><a href="/">Home</a></nav><h1>Summer camp</h1><p>June 8 to August 28, 2027</p><p>$395 a week</p><footer>© 2026 Camp</footer></body></html>',
-    '/aftercare': '<html><body><h2>Pickup schools</h2><ul><li>Meredith</li><li>Nebinger</li></ul><p>3 to 6 pm</p></body></html>',
+    '/camp': '<html><head><title>x</title><script>var t = Date.now()</script></head><body><nav><a href="/">Home</a></nav><h1>Summer camp</h1><p>June 8 to August 28, 2027</p><p>$395 a week</p>' + Array.from({ length: 14 }, (_, i) => `<p>Week ${i + 1}</p>`).join('') + '<footer>© 2026 Camp</footer></body></html>',
+    '/aftercare': '<html><body><h2>Pickup schools</h2><ul><li>Meredith</li><li>Nebinger</li></ul><p>3 to 6 pm</p>' + Array.from({ length: 14 }, (_, i) => `<p>Activity ${i + 1}</p>`).join('') + '</body></html>',
+    '/app': '<html><body><div id="root"></div><noscript>You need to enable JavaScript to run this app.</noscript><p>Loading…</p></body></html>',
     '/closed': '<p>should never be read</p>',
     '/person': '<p>should never be read</p>',
   };
@@ -36,6 +37,7 @@ test('the pre-read: same, changed (with the lines), compared with the version on
       { url: base + '/person', how: 'person', programs: ['p1'], lists: [] },
       { url: base + '/gone', how: 'fetch', programs: ['p1'], lists: [] },
       { url: base + '/slow', how: 'fetch', programs: ['p1'], lists: [] },
+      { url: base + '/app', how: 'fetch', programs: ['p1'], lists: [] },
     ], camps: { list: [{ camp: 'c1', url: base + '/camp', how: 'fetch', checked: confirmed }] }, weekend: [] };
     fs.writeFileSync(path.join(dir, 'check.json'), JSON.stringify(check));
     fs.writeFileSync(path.join(dir, 'programs.json'), JSON.stringify([{ id: 'p1', lastVerified: confirmed }]));
@@ -51,6 +53,7 @@ test('the pre-read: same, changed (with the lines), compared with the version on
     eq(report.failed.length, 2, 'a 404 and a stalled page'); eq(failed['/gone'].status, 404);
     includes(failed['/slow'].note || '', 'no answer within 1.5 seconds', 'a page that never finishes is given up on, and the run still ends');
     ok(!asked.includes('/closed') && !asked.includes('/person'), 'neither was requested: ' + asked.join(' '));
+    deepEq(report.thin.map(r => r.url.replace(base, '')), ['/app'], 'a page with almost no text (a JavaScript app) is never called the same');
     const kept = JSON.parse(fs.readFileSync(path.join(dir, 'pages.json'), 'utf8')).pages[base + '/camp'].versions[0].lines;
     ok(!kept.some(l => /Date\.now|©/.test(l)), 'scripts and the copyright line are not part of the text: ' + kept.join(' | '));
     includes(kept, '$395 a week');

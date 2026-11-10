@@ -2423,8 +2423,14 @@ The report compares each page with the version it had on the day its listings we
 `lastVerified`, a pickup list's `read`, a camp's or weekend block's `checked`, the oldest of them when listings share a
 page), not with last month's reading, so a change still shows if last month's check was never merged. It sorts the
 pages into `same`, `sameSince` (no version that old is kept yet; unchanged since the oldest kept), `changed` (with the
-lines `added` and `removed`, order ignored, sixty of each at most), `new`, `failed`, `closed` (robots.txt) and
-`person`, each naming the listings that rest on the page. No page gets more than a minute (`PRECHECK_PAGE_MS`),
+lines `added` and `removed`, order ignored, sixty of each at most), `new`, `thin` (under 15 lines of text: a
+JavaScript app's shell, a sign-in page or a bare form, where "the same" would mean nothing, so the check reads it as
+before), `failed`, `closed` (robots.txt) and `person`, each naming the listings that rest on the page.
+
+The monthly check starts from `report.json` (its prompt's START FROM THE PRE-READ): it doesn't open `same` pages, nor
+`sameSince` ones whose "since" is within two weeks of the date they were confirmed; it reads a `changed` page's lines
+first and opens the page only when they touch something a listing holds; it reads everything else as before, plus a
+spot check of ten skipped pages. With no report from the last two days it reads everything. No page gets more than a minute (`PRECHECK_PAGE_MS`),
 however it stalls, and after 25 minutes (`PRECHECK_MINUTES`) the run starts no new pages: what's left goes under
 `failed` as not read this time and keeps its versions, so the job always ends and saves what it read. The log counts
 pages as it goes. `tests/cases/02-precheck.mjs` runs it five times over a small site of its own, with a page that

@@ -21,6 +21,8 @@
 //   sameSince   no version that old is kept yet; the text is unchanged since the oldest version kept ("since")
 //   changed     different from that version: "added" and "removed" hold the lines that differ (order ignored)
 //   new         read for the first time
+//   thin        too little text to compare (under 15 lines): a JavaScript app's shell, a sign-in page, a bare form.
+//               "The same" would mean nothing, so the check reads these as it always has
 //   failed      no answer, or not a 200
 //   closed      robots.txt asks automated readers to stay out
 //   person      not requested: a person reads it (data/reading.json)
@@ -34,7 +36,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIR = process.argv[2] || path.join(ROOT, '.precheck');
 const UA = UA_BASE + ' PhillyAfterSchoolPreRead/1.0';
 const TODAY = process.env.PRECHECK_TODAY || new Date().toISOString().slice(0, 10);   // the test sets the day
-const MAX_LINES = 1500, MAX_CHARS = 60000, KEEP = 4, SHOW = 60;
+const MAX_LINES = 1500, MAX_CHARS = 60000, KEEP = 4, SHOW = 60, MIN_LINES = 15;
 
 // The test points these at files of its own.
 const check = JSON.parse(fs.readFileSync(process.env.PRECHECK_CHECK || path.join(ROOT, 'dist/data/check.json'), 'utf8'));
@@ -140,7 +142,7 @@ if (browser) await within(browser.close(), 20000, null);
 
 // ----- compare, and keep the versions -----
 const diff = (a, b) => { const A = new Set(a), B = new Set(b); return { added: b.filter(l => !A.has(l)).slice(0, SHOW), removed: a.filter(l => !B.has(l)).slice(0, SHOW), more: Math.max(0, b.filter(l => !A.has(l)).length - SHOW) + Math.max(0, a.filter(l => !B.has(l)).length - SHOW) }; };
-const kept = {}, report = { ran: new Date().toISOString(), summary: {}, same: [], sameSince: [], changed: [], new: [], failed: [], closed: [], person: [] };
+const kept = {}, report = { ran: new Date().toISOString(), summary: {}, same: [], sameSince: [], changed: [], new: [], thin: [], failed: [], closed: [], person: [] };
 for (const p of list) {
   const r = results.get(p.url) || { status: 'error' }, old = (before[p.url] && before[p.url].versions) || [];
   const row = { url: p.url, how: p.how, for: p.who, confirmed: p.confirmed || null };
@@ -150,19 +152,20 @@ for (const p of list) {
   const h = hash(r.lines);
   const versions = old.length && old[0].hash === h ? [{ ...old[0], last: TODAY, lines: r.lines }, ...old.slice(1)] : [{ hash: h, first: TODAY, last: TODAY, lines: r.lines }, ...old];
   kept[p.url] = { how: p.how, versions: versions.slice(0, KEEP) };
+  if (r.lines.length < MIN_LINES) { report.thin.push({ ...row, lines: r.lines.length }); continue; }
   if (!old.length) { report.new.push(row); continue; }
   // the version the page had on the day its listings were last confirmed, or else the oldest one kept
   const then = (p.confirmed && old.find(v => v.first <= p.confirmed)) || null, base = then || old[old.length - 1];
   if (base.hash === h) { if (then) report.same.push(row); else report.sameSince.push({ ...row, since: base.first }); continue; }
   report.changed.push({ ...row, against: base.first, ...(then ? {} : { olderThanKept: true }), ...diff(base.lines || [], r.lines) });
 }
-for (const k of ['same', 'sameSince', 'changed', 'new', 'failed', 'closed', 'person']) report.summary[k] = report[k].length;
+for (const k of ['same', 'sameSince', 'changed', 'new', 'thin', 'failed', 'closed', 'person']) report.summary[k] = report[k].length;
 report.summary.pages = list.length;
 fs.mkdirSync(DIR, { recursive: true });
 fs.writeFileSync(path.join(DIR, 'pages.json'), JSON.stringify({ read: TODAY, pages: kept }) + '\n');
 fs.writeFileSync(path.join(DIR, 'report.json'), JSON.stringify(report, null, 1) + '\n');
 const s = report.summary;
-console.log(`${s.pages} pages: ${s.same} the same as when last confirmed, ${s.sameSince} unchanged since the oldest reading kept, ${s.changed} changed, ${s.new} read for the first time, ${s.failed} didn't answer, ${s.closed} closed by robots.txt, ${s.person} for a person to read.`);
+console.log(`${s.pages} pages: ${s.same} the same as when last confirmed, ${s.sameSince} unchanged since the oldest reading kept, ${s.changed} changed, ${s.new} read for the first time, ${s.thin} with too little text to compare, ${s.failed} didn't answer, ${s.closed} closed by robots.txt, ${s.person} for a person to read.`);
 for (const c of report.changed) console.log(`  changed: ${c.url} (${c.for.join(', ')}): ${c.added.length + c.removed.length + c.more} lines`);
 for (const f of report.failed) console.log(`  failed: ${f.url} ${f.status}${f.note ? ' ' + f.note : ''}`);
 process.exit(0);   // a page that stalled past its minute may still hold the event loop open
