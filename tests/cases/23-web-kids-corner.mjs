@@ -2,7 +2,7 @@
 // the grown-ups' corner behind a press-and-hold, a confirmed class turning into pins and a level (celebrated once),
 // the level-up unlocking things for the child's bulb to wear, the map of Philadelphia drawn from this site alone, the
 // showdowns (eleven Philly contests, from the Art Museum steps and a cheesesteak to a Boathouse Row regatta and a pothole dodge) ranking favorites with Eddie Bulboa hosting, the mute button, the account page's Kid's Corner tab, and that nothing is counted or sent anywhere.
-import { test, ok, eq, includes, matches, someone } from '../lib/harness.mjs';
+import { test, ok, eq, deepEq, includes, matches, someone } from '../lib/harness.mjs';
 import { pickupPair, weekendProgram } from '../lib/data.mjs';
 
 const DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
@@ -244,6 +244,7 @@ test('going back to a class: a ×2 on its bulb, the Repeater Reward pin, and the
   // The grown-ups' corner: one more time, then back to once (left out when it's once).
   await hold(page, '.kc-hold');
   await page.waitForSelector('.kc-grownup .kc-times');
+  includes(flat(await page.locator('.kc-grownup').innerText()), 'No showdown yet', 'the Favorites panel says how a ranking starts');
   eq(flat(await page.locator('.kc-times-n').innerText()), '2');
   await page.locator('.kc-times button[aria-label="One time more"]').click();
   await page.waitForFunction(() => (document.querySelector('.kc-times-n') || {}).textContent === '3');
@@ -385,7 +386,7 @@ test('the account page’s Kid’s Corner tab: each child at a glance, a class c
   await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '2' }, { n: 'Rae', g: 'K' }] });
   await pat.okay('POST', 'week_save', { week: { name: 'Rae', now: { ...empty(), mon: [entry] }, next: empty() } });
   const y = (await pat.okay('GET', 'passport')).year;
-  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [{ k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], av: { b: 'heart', c: 1 }, seen: { intro: 1, 'season:weekend': 1 }, lvl: 2 });
+  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [{ k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], fav: ['p:' + program.id, 'p:' + wp.id], av: { b: 'heart', c: 1 }, seen: { intro: 1, 'season:weekend': 1 }, lvl: 2 });
   const t = await b.context(ctx.site, { sid: pat.cookie });
   const page = await t.open('/account/');
   await page.waitForSelector('#account .acct-tabs');
@@ -397,6 +398,9 @@ test('the account page’s Kid’s Corner tab: each child at a glance, a class c
   includes(sam, 'Level'); includes(sam, 'pins'); includes(sam, '1 class or camp');
   eq(await page.locator('#kids .kc-sum', { hasText: 'Sam' }).locator('.kc-bulb').count(), 1, 'Sam’s bulb');
   includes(flat(await page.locator('#kids .kc-sum', { hasText: 'Rae' }).innerText()), 'Hasn’t picked a bulb yet');
+  // Sam's whole showdown ranking, best first.
+  deepEq((await page.locator('#kids .kc-sum', { hasText: 'Sam' }).locator('.kc-rank-list li').allInnerTexts()).map(flat), [program.name, wp.name], 'the whole ranking, in order');
+  eq(await page.locator('#kids .kc-sum', { hasText: 'Rae' }).locator('.kc-rank').count(), 0, 'nothing for a child with no showdown yet');
   // Rae's kept week suggests a class: a yes here counts.
   const rae = page.locator('#kids .kc-sum', { hasText: 'Rae' });
   includes(flat(await rae.locator('.kc-sum-wait').innerText()), program.name);

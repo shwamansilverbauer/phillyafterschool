@@ -2889,7 +2889,12 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-sum-facts li{background:var(--sky-bg);color:var(--sky-ink);border-radius:999px;padding:4px 12px;font-size:.92rem;display:flex;gap:5px;align-items:baseline}
 .kc-sum-pins{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .kc-sum-pins .kc-pin{width:52px;height:auto}
-.kc-sum-fav{margin:0;font-weight:700}
+.kc-rank h4{margin:0 0 4px;font-family:var(--display);font-size:1rem}
+.kc-rank-list{margin:0;padding-left:1.7em;display:grid;gap:2px}
+.kc-rank-list li{padding-left:2px}
+.kc-rank-list li:first-child{font-weight:800}
+.kc-rank-list li::marker{font-weight:800;color:var(--muted)}
+.kc-rank .hint{margin:6px 0 0}
 .kc-sum-wait{background:var(--warn);border-radius:12px;padding:12px 14px}
 .kc-sum-wait h4{margin:0 0 4px;font-family:var(--display);font-size:1rem}
 .kc-sum .actions{margin:0}

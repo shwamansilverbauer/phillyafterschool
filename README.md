@@ -520,7 +520,8 @@ keep that name.)
 - **Share and print.** The grown-ups' corner makes a picture (`drawShare()`, a canvas) of the pins, the level and the
   child's bulb, with no name and no map, and is never a link; the page itself has no link to share.
 - **On the account page.** A Kid's Corner tab (between School & kids and Emails) shows each child at a glance: their
-  bulb, level, pins, neighborhoods, classes and favorites, and the suggestions waiting for a yes or no, answered right
+  bulb, level, pins, neighborhoods, classes, the whole showdown ranking best first (`rankList()`, also a Favorites
+  panel in the grown-ups' corner), and the suggestions waiting for a yes or no, answered right
   there. Buttons open the child's own page (straight to them, past the picker: `sessionStorage` "kc-open", on the
   device only) or the grown-ups' corner. It loads `kids-corner.js` and `assets/kids-corner.json` (the same data the
   page has inline) only when the tab is opened, through `window.pasKids.summary()`; the account page's
