@@ -636,6 +636,25 @@ Fields worth knowing:
    sent on to the new page by a line the build writes into `.htaccess`.
 5. Commit to `main`.
 
+### Five schools a day
+
+A scheduled task ("Philly After School: five new schools a day", every morning) adds five schools a day by these same
+steps and proposes them as one pull request for Josh to merge. It never pushes to `main` or `live`.
+
+- **Which schools.** `node scripts/next-schools.mjs [n]` lists the schools without a page that teach some of K to
+  5th grade, in order: first `data/school-queue.json` (Josh's own order, most often schools parents asked for: add
+  `{ "id": <its id in data/all-schools.json>, "why": "parents asked" }`), then schools a stored pickup list already
+  names (the match is rough and prints the list's own words, so it's a lead to read), then the nearest to a school
+  that has a page, so coverage grows outward. A school the run can't do well (no site to read, a charter whose
+  calendar it can't read, fewer than two programs that run there or pick up there) is skipped and named in the pull
+  request, and the next one is taken.
+- **One pull request at a time.** If yesterday's is still open, the run brings it up to date with `main` and adds
+  the day's five to it, so merging never conflicts. Every school in the open pull request carries today's date as
+  `added`.
+- **Merge within two days.** `added` is what emails the parents waiting for a school, on that morning or one of
+  the two after it (the email job's catch-up), so a pull request merged later still publishes the pages but those
+  emails are missed.
+
 ## Program pages
 
 Every program gets its own page at `/programs/<id>/` (for example `/programs/zhang-sah/`), built from the

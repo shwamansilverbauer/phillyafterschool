@@ -1,0 +1,4 @@
+{
+  "about": "Schools to add before any others, in this order (scripts/next-schools.mjs reads it, and the daily new-schools run takes from the top). Each entry is { \"id\": the school's id in data/all-schools.json, \"why\": a few words, such as \"parents asked\" }. A school drops off this list by itself once it has a page. Josh keeps this list.",
+  "schools": []
+}
