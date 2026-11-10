@@ -1,12 +1,12 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 192,
+    "pages": 194,
     "pagesNeedingABrowser": 16,
-    "pagesNeedingAPerson": 7,
-    "links": 176,
-    "pickupLinks": 93,
-    "pickupOnAStoredList": 78,
+    "pagesNeedingAPerson": 8,
+    "links": 177,
+    "pickupLinks": 94,
+    "pickupOnAStoredList": 79,
     "pickupFromAThirdPartyList": 0,
     "pickupOnItsOwnSource": 15,
     "pickupWithNothingBehindIt": 0,
@@ -1599,6 +1599,18 @@
         "how": "fetch",
         "by": "provider"
       }
+    },
+    {
+      "program": "everland-homework-club",
+      "school": "meredith",
+      "relation": "pickup",
+      "checked": "2026-11-09",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-09",
+        "how": "person",
+        "by": "provider"
+      }
     }
   ],
   "pages": [
@@ -2746,6 +2758,14 @@
       ]
     },
     {
+      "url": "https://shopeverland.com/",
+      "how": "fetch",
+      "programs": [
+        "everland-homework-club"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://skilladelphia.campbrainregistration.com/?returnUrl=%252FLanding",
       "how": "fetch",
       "programs": [
@@ -2958,6 +2978,23 @@
         "coco-academy"
       ],
       "lists": []
+    },
+    {
+      "url": "https://www.hisawyer.com/everland/schedules/activity-set/2015759",
+      "how": "person",
+      "why": "A plain fetch of the Homework Club sign-up page failed on 2026-11-09, and Sawyer’s booking pages have refused automated reading before (see Dandelion and Sawubona), so its price and dates are read by a person.",
+      "programs": [
+        "everland-homework-club"
+      ],
+      "lists": [
+        {
+          "program": "everland-homework-club",
+          "text": "We pick up from Meredith and walk to Everland as a group. Parent pickup from Everland is between 5:45-6:00pm. Please note that this offering is available to 2nd, 3rd, and 4th graders at Meredith School only.",
+          "read": "2026-11-09",
+          "how": "person",
+          "by": "provider"
+        }
+      ]
     },
     {
       "url": "https://www.hisawyer.com/the-dandelion-project/schedules",
@@ -3777,6 +3814,27 @@
       ],
       "says": "After-school care is $250 a month for full time, 4 or more days a week, or $175 a month for part time, 3 days a week, with a snack included.",
       "daysAgo": 6,
+      "stale": false
+    },
+    {
+      "program": "everland-homework-club",
+      "name": "Homework Club at Everland",
+      "on": "2026-11-09",
+      "by": "provider",
+      "how": "a message through the site’s suggestion form from someone who runs the program",
+      "fields": [
+        "grades",
+        "gradeNote",
+        "hours",
+        "days",
+        "daysNote",
+        "pickupBy",
+        "cost",
+        "register.nextTerm",
+        "schools.meredith"
+      ],
+      "says": "Homework Club is Everland’s Monday aftercare, run with Prep Academy Tutors, for 2nd to 4th graders at Meredith only: staff pick up from Meredith and walk the group to Everland, children do homework in small groups with certified teachers and then have organized downtime, parents pick up from Everland between 5:45 and 6:00 pm, 1:1 tutoring during the club is $65 per 40-minute session, and the 2027 semester is 17 Mondays from January 4 to June 7, ending with a showcase.",
+      "daysAgo": 1,
       "stale": false
     }
   ],

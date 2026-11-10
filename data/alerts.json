@@ -338,6 +338,13 @@
       ]
     },
     {
+      "id": "everland-homework-club",
+      "name": "Homework Club at Everland",
+      "parts": [
+        "after"
+      ]
+    },
+    {
       "id": "beehive-at-bok",
       "name": "Beehive at Bok",
       "parts": [
