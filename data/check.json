@@ -3836,6 +3836,21 @@
       "says": "Homework Club is Everland’s Monday aftercare, run with Prep Academy Tutors, for 2nd to 4th graders at Meredith only: staff pick up from Meredith and walk the group to Everland, children do homework in small groups with certified teachers and then have organized downtime, parents pick up from Everland between 5:45 and 6:00 pm, 1:1 tutoring during the club is $65 per 40-minute session, and the 2027 semester is 17 Mondays from January 4 to June 7, ending with a showcase.",
       "daysAgo": 1,
       "stale": false
+    },
+    {
+      "program": "everland-homework-club",
+      "name": "Homework Club at Everland",
+      "on": "2026-11-09",
+      "by": "provider",
+      "how": "passed on to the site’s owner after the program’s message",
+      "fields": [
+        "cost",
+        "price",
+        "rate"
+      ],
+      "says": "The base cost of Homework Club for the 2027 semester is $1,190, which works out to $70 per 3-hour session over its 17 Mondays.",
+      "daysAgo": 1,
+      "stale": false
     }
   ],
   "asks": [],
