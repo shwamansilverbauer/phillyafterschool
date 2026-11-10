@@ -124,5 +124,11 @@
     "how": "person",
     "why": "The site answered HTTP 403 with a “confirm you are human” check to a headless browser on 2026-11-01.",
     "seen": "2026-11-01"
+  },
+  {
+    "match": "hisawyer.com/everland",
+    "how": "person",
+    "why": "A plain fetch of the Homework Club sign-up page failed on 2026-11-09, and Sawyer’s booking pages have refused automated reading before (see Dandelion and Sawubona), so its price and dates are read by a person.",
+    "seen": "2026-11-09"
   }
 ]

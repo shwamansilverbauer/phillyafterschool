@@ -3790,6 +3790,96 @@
     ]
   },
   {
+    "id": "everland-homework-club",
+    "name": "Homework Club at Everland",
+    "what": "Monday aftercare with homework help from certified teachers, for Meredith 2nd to 4th graders, with pickup from Meredith",
+    "types": [
+      "academics",
+      "aftercare"
+    ],
+    "keywords": [
+      "homework",
+      "homework help",
+      "homework club",
+      "tutoring",
+      "tutor",
+      "aftercare",
+      "Prep Academy Tutors",
+      "Everland",
+      "Queen Village"
+    ],
+    "address": "529 S 4th St",
+    "neighborhoods": [
+      "Queen Village"
+    ],
+    "grades": "2-4",
+    "gradeNote": "2nd, 3rd and 4th graders at Meredith only",
+    "hours": "After school to 6:00 pm on Mondays, at Everland. Children do their homework in small groups with certified teachers, then have organized downtime: building, reading, crafts and movement.",
+    "days": [
+      "mon"
+    ],
+    "daysNote": "Mondays only, following Meredith’s school calendar.",
+    "pickupBy": "6:00 pm",
+    "cost": "The club’s own price is on its sign-up page. Optional 1:1 tutoring during the club is $65 for a 40-minute session.",
+    "phone": "",
+    "email": "info@shopeverland.com",
+    "website": "https://shopeverland.com/",
+    "register": {
+      "how": "online",
+      "url": "https://www.hisawyer.com/everland/schedules/activity-set/2015759",
+      "label": "Sign up",
+      "note": "Sign-up is on Everland’s Sawyer page.",
+      "nextTerm": "The fall semester runs August to December 2026. The 2027 semester is 17 Mondays, January 4 to June 7, following Meredith’s school calendar, and ends with a showcase for parents."
+    },
+    "note": "Parents collect children from Everland, not from the school, between 5:45 and 6:00 pm. The club’s own price isn’t listed here yet: see the sign-up page.",
+    "sources": [
+      {
+        "label": "Everland",
+        "url": "https://shopeverland.com/"
+      },
+      {
+        "label": "Homework Club sign-up",
+        "url": "https://www.hisawyer.com/everland/schedules/activity-set/2015759"
+      }
+    ],
+    "lastVerified": "2026-11-09",
+    "schools": {
+      "meredith": {
+        "relation": "pickup",
+        "note": "The program told us its staff pick up at Meredith and walk the group to Everland. It is for Meredith students only.",
+        "checked": "2026-11-09"
+      }
+    },
+    "told": [
+      {
+        "on": "2026-11-09",
+        "by": "provider",
+        "how": "a message through the site’s suggestion form from someone who runs the program",
+        "fields": [
+          "grades",
+          "gradeNote",
+          "hours",
+          "days",
+          "daysNote",
+          "pickupBy",
+          "cost",
+          "register.nextTerm",
+          "schools.meredith"
+        ],
+        "says": "Homework Club is Everland’s Monday aftercare, run with Prep Academy Tutors, for 2nd to 4th graders at Meredith only: staff pick up from Meredith and walk the group to Everland, children do homework in small groups with certified teachers and then have organized downtime, parents pick up from Everland between 5:45 and 6:00 pm, 1:1 tutoring during the club is $65 per 40-minute session, and the 2027 semester is 17 Mondays from January 4 to June 7, ending with a showcase."
+      }
+    ],
+    "pickupLists": [
+      {
+        "text": "We pick up from Meredith and walk to Everland as a group. Parent pickup from Everland is between 5:45-6:00pm. Please note that this offering is available to 2nd, 3rd, and 4th graders at Meredith School only.",
+        "url": "https://www.hisawyer.com/everland/schedules/activity-set/2015759",
+        "read": "2026-11-09",
+        "how": "person",
+        "note": "The program’s own description of the club, sent through the suggestion form by someone who runs it; the Sawyer page itself couldn’t be read."
+      }
+    ]
+  },
+  {
     "id": "beehive-at-bok",
     "name": "Beehive at Bok",
     "what": "Play-based aftercare in the Bok building",
