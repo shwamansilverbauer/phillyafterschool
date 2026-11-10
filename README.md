@@ -725,19 +725,19 @@ On a program's own page, a row of "The details" longer than about a hundred char
 
 **Each list starts with one question** (`focusCard()` in `build.mjs`, the `[data-focus]` block in `site.js`): the
 filter that makes that list the most use to one family, asked in a yellow card above the search box. The after-school
-list (`/programs/`) asks for the child's school; the day-camp list, each day off's page and the weekend list ask for
-the neighborhood; the summer list asks where you live, as a ZIP code (with "Use where I am", and "From <your school>"
-when one is saved). Answered, the card shrinks to one line ("Showing what works for Meredith", "Showing what's in
-Bella Vista", "Closest first, from ZIP code 19147") with Change and a way back to the whole list (Every school,
-Everywhere, Back to A to Z), which brings the question back. The answer drives the filters that were already there
-(the School row, the Area row, "Nearest first"), so the chips, the count and the address all agree with it. It is
-kept on the device: the school is the same "my school" a school's page saves (`keepSchool()`, which also keeps it in
-the profile for someone signed in who keeps their school there); neighborhoods go in `pas-my-hoods`, the last four
-picked, newest first, since the weekend list names its areas differently from the day-camp lists, so each list
-starts from the newest one it has (a neighborhood kept in a profile joins that list when it changes: `adoptHood()`
-in `groups.js`), and "Everywhere" holds for that list alone (`pas-hood-wide:<path>`); the ZIP code (`pas-my-zip`) is
-looked up in `data/zips.json`, the middle of each ZIP code area in and around Philadelphia from the Census Bureau's
-2024 Gazetteer file, and never leaves the browser. The week builder asks for the school the same way, above its
+list (`/programs/`) asks for the child's school, because pickup decides what works. Every other list (day camps, each
+day off's page, weekend classes, summer camps) asks where you live, as a ZIP code (with "Use where I am", and "From
+<your school>" when one is saved), and puts the closest first without hiding anything: any child can go to those, so
+the rest stay on the list further down. In a list under headings, each heading's places are closest first and the
+heading with the closest place comes first. One ZIP code serves every list. Answered, the card shrinks to one line
+("Showing what works for Meredith", "Closest first, from ZIP code 19147") with Change and a way back to the whole list
+(Every school, Back to A to Z), which brings the question back. The answer drives the filters that were already there
+(the School row, "Nearest first"), so the chips, the count and the address all agree with it. It is kept on the
+device: the school is the same "my school" a school's page saves (`keepSchool()`, which also keeps it in the profile
+for someone signed in who keeps their school there); the ZIP code (`pas-my-zip`) is looked up in `data/zips.json`, the middle of each ZIP code area in and around Philadelphia from the Census Bureau's
+2024 Gazetteer file, and never leaves the browser. A neighborhood question (`focusCard('hood')`: pick a neighborhood, which narrows the list to
+it, kept in `pas-my-hoods` with the profile's neighborhood joining it through `adoptHood()` in `groups.js`) is still
+built and wired for a list that wants one; no list uses it now. The week builder asks for the school the same way, above its
 search (`#board-focus`): programs that work for it come first in the search, and browsing starts there. Analytics
 gets `pas_focus` (focus: school, neighborhood; how: pick, wide, planner) and never which school, neighborhood or ZIP;
 `pas_near` says `zip` when a ZIP code set the order. The card's words are on `/edit/` like any other sentence.

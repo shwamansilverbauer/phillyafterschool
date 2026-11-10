@@ -126,7 +126,7 @@ test('Account Features: a menu of its own for someone signed out, a page for eac
   await t2.close();
 });
 
-test('each list starts with its question (the school, the neighborhood, a ZIP code), and the week builder with the school', async (ctx) => {
+test('each list starts with its question (the school, or a ZIP code that puts the closest first), and the week builder with the school', async (ctx) => {
   const b = await ctx.browser();
   const t = await b.context(ctx.site, { width: 390, height: 844, mobile: true });
   // After school: which school. Answered, it's one line, the list is narrowed, and it's "my school" from then on.
@@ -143,22 +143,35 @@ test('each list starts with its question (the school, the neighborhood, a ZIP co
   await page.locator('.focus-wide').click();
   ok(await page.locator('.focus .focus-ask').isVisible(), '"Every school" asks again');
   eq(await page.locator('#count').innerText(), everything, 'with the whole list back');
-  // Day camps: which neighborhood, remembered on the next visit.
+  // Day camps, a day off, weekend classes and summer camps: a ZIP code puts the closest first and hides nothing; one
+  // ZIP code serves every list, and it stays in the browser.
+  // Closest first inside each section (a list under headings keeps its headings, the one with the nearest place first).
+  const closestFirst = async (what) => {
+    const runs = await page.evaluate(() => {
+      const by = new Map();
+      for (const it of document.querySelectorAll('[data-item]:not([hidden])')) { const p = it.querySelector('.mi-pill'); if (!p) continue; if (!by.has(it.parentNode)) by.set(it.parentNode, []); by.get(it.parentNode).push(/Under/.test(p.textContent) ? 0 : parseFloat(p.textContent)); }
+      return [...by.values()];
+    });
+    ok(runs.flat().length > 2, what + ': distances shown');
+    for (const mi of runs) ok(mi.every((m, i) => i === 0 || m >= mi[i - 1]), what + ', closest first: ' + mi.join(', '));
+    const firsts = runs.map(r => r[0]);
+    ok(firsts.every((m, i) => i === 0 || m >= firsts[i - 1]), what + ', the section with the closest place first: ' + firsts.join(', '));
+  };
   page = await t.open('/day-camps/');
-  ok(await page.locator('.focus .focus-ask').isVisible(), 'the day-camp list asks for the neighborhood');
-  const hood = await page.locator('#focus-pick option').nth(1).getAttribute('value');
-  await page.selectOption('#focus-pick', hood);
-  matches(await page.locator('#count').innerText(), /\(in /, 'narrowed to the neighborhood');
-  page = await t.open('/day-camps/');
-  ok(await page.locator('.focus .focus-on').isVisible(), 'and remembered on the next visit');
-  // Summer: a ZIP code puts the closest camps first; it stays in the browser.
-  page = await t.open('/summer-camps/');
+  ok(await page.locator('.focus .focus-ask').isVisible(), 'the day-camp list asks for a ZIP code');
+  const allCamps = await page.locator('#count').innerText();
   await page.fill('#focus-zip', '00000'); await page.locator('.focus form button[type=submit]').click();
   matches(await page.locator('.focus-say').innerText(), /isn’t one this site knows/, 'a ZIP code it doesn’t know is said plainly');
   await page.fill('#focus-zip', '19147'); await page.locator('.focus form button[type=submit]').click();
   includes(await page.locator('.focus-name').innerText(), '19147', 'answered with the ZIP code');
-  const mi = (await page.locator('[data-item]:not([hidden]) .mi-pill').allInnerTexts()).slice(0, 8).map(x => /Under/.test(x) ? 0 : parseFloat(x));
-  ok(mi.length > 2 && mi.every((m, i) => i === 0 || m >= mi[i - 1]), 'closest first: ' + mi.join(', '));
+  eq(await page.locator('#count').innerText(), allCamps, 'nothing is filtered out, only put in order');
+  await closestFirst('day camps');
+  for (const u of ['/weekends/', '/summer-camps/']) {
+    page = await t.open(u);
+    ok(await page.locator('.focus .focus-on').isVisible(), u + ' already knows the ZIP code');
+    includes(await page.locator('.focus-name').innerText(), '19147');
+    await closestFirst(u);
+  }
   ok(!t.outside.some(u => /19147/.test(u)), 'the ZIP code went nowhere');
   eq(t.errors.length, 0, 'no page errors: ' + t.errors.join(' | '));
   await t.close();
