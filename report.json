@@ -1,0 +1,2192 @@
+{
+ "ran": "2026-11-10T14:51:16.795Z",
+ "summary": {
+  "same": 0,
+  "sameSince": 0,
+  "changed": 0,
+  "new": 214,
+  "failed": 21,
+  "closed": 4,
+  "person": 10,
+  "pages": 249
+ },
+ "same": [],
+ "sameSince": [],
+ "changed": [],
+ "new": [
+  {
+   "url": "https://www.phila.gov/parks-rec-finder/",
+   "how": "browser",
+   "for": [
+    "program shot-tower-rec",
+    "program chew-playground",
+    "program wharton-square-playground",
+    "program disilvestro-playground",
+    "program francisville-rec",
+    "program clemente-playground",
+    "program rumph-rec",
+    "program mount-airy-playground",
+    "program marian-anderson-rec",
+    "program capitolo-playground",
+    "program markward-playground",
+    "program columbus-square-rec",
+    "program hawthorne-cultural-center",
+    "program starr-garden-rec",
+    "program palumbo-rec",
+    "program east-passyunk-rec",
+    "pickup list of columbus-square-rec"
+   ],
+   "confirmed": "2026-10-05",
+   "final": "https://www.phila.gov/parks-rec-finder/#/"
+  },
+  {
+   "url": "https://www.phila.gov/2024-08-07-register-now-for-philadelphia-parks-recreations-after-school-programs/",
+   "how": "fetch",
+   "for": [
+    "program shot-tower-rec",
+    "program chew-playground",
+    "program wharton-square-playground",
+    "program disilvestro-playground",
+    "program clemente-playground",
+    "program rumph-rec",
+    "program mount-airy-playground",
+    "program marian-anderson-rec",
+    "program capitolo-playground",
+    "program markward-playground",
+    "program columbus-square-rec",
+    "program hawthorne-cultural-center",
+    "program starr-garden-rec",
+    "program palumbo-rec",
+    "program east-passyunk-rec"
+   ],
+   "confirmed": "2026-10-05"
+  },
+  {
+   "url": "https://greenfield.philasd.org/",
+   "how": "fetch",
+   "for": [
+    "program movemakers",
+    "program kids-on-12th",
+    "program makom-community",
+    "program zazz-dance",
+    "program beacon-center",
+    "program evolve-dance",
+    "program martial-posture",
+    "program greenfield-clubs",
+    "program philly-art-center-fairmount"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars",
+   "how": "fetch",
+   "for": [
+    "program girls-on-the-run",
+    "program soccer-shots-bache-martin",
+    "program fairmount-mountain-bike-team",
+    "program beat-the-streets-wrestling",
+    "program philadelphia-city-rowing",
+    "program francisville-rec",
+    "program bache-martin-clubs",
+    "program philly-art-center-fairmount"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://nebinger.philasd.org/",
+   "how": "fetch",
+   "for": [
+    "program imagine-that-philly",
+    "program nebinger-clubs",
+    "program girls-on-the-run",
+    "program nebinger-arts-partners",
+    "program zhang-sah"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.sunriseofphila.org/school-year",
+   "how": "fetch",
+   "for": [
+    "program sunrise-mccall",
+    "program sunrise-stanton",
+    "program sunrise-kirkbride",
+    "program sunrise-southwark"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.sunriseofphila.org/services-8",
+   "how": "fetch",
+   "for": [
+    "program sunrise-mccall",
+    "program sunrise-stanton",
+    "program sunrise-kirkbride",
+    "program sunrise-southwark"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://kirkbride.philasd.org/",
+   "how": "fetch",
+   "for": [
+    "program girls-on-the-run",
+    "program sunrise-kirkbride",
+    "program kirkbride-clubs"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://phillyartcenter.com/afterschool/program-information/",
+   "how": "fetch",
+   "for": [
+    "program philly-art-center-qv",
+    "program philly-art-center-mt-airy",
+    "program philly-art-center-fairmount",
+    "pickup list of philly-art-center-qv",
+    "pickup list of philly-art-center-fairmount"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://southwark.philasd.org/",
+   "how": "fetch",
+   "for": [
+    "program sunrise-southwark",
+    "program southwark-clubs",
+    "program east-passyunk-rec",
+    "pickup list of east-passyunk-rec"
+   ],
+   "confirmed": "2026-10-10"
+  },
+  {
+   "url": "https://emstanton.philasd.org/",
+   "how": "fetch",
+   "for": [
+    "program sunrise-stanton",
+    "program stanton-clubs"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://mariananderson.philasd.org/",
+   "how": "fetch",
+   "for": [
+    "program girls-on-the-run",
+    "program marian-anderson-clubs"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://schools.procareconnect.com/form/7417c5d3-b696-426e-913c-b9f0144431bb",
+   "how": "fetch",
+   "for": [
+    "program zhang-sah",
+    "program zhang-sah-mt-airy"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://web.vwtigers.com/before-and-aftercare-at-vw/",
+   "how": "fetch",
+   "for": [
+    "program vare-washington-edey",
+    "program vare-washington-clubs"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.phila.gov/programs/extended-day-extended-year/",
+   "how": "fetch",
+   "for": [
+    "program vare-washington-edey",
+    "program sunrise-southwark",
+    "camp summer-achievers-edey"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.sunriseofphila.org/program-sites",
+   "how": "fetch",
+   "for": [
+    "program sunrise-mccall",
+    "program sunrise-stanton"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://app.iclasspro.com/portal/phillycircus/classes",
+   "how": "fetch",
+   "for": [
+    "program philadelphia-school-of-circus-arts"
+   ],
+   "confirmed": "2026-11-05",
+   "final": "https://portal.iclasspro.com/phillycircus/classes"
+  },
+  {
+   "url": "https://app.jackrabbitclass.com/regv2.asp?id=552627",
+   "how": "fetch",
+   "for": [
+    "program rock-school-for-dance"
+   ],
+   "confirmed": "2026-11-07"
+  },
+  {
+   "url": "https://ardentheatre.org/arden-drama-school",
+   "how": "browser",
+   "for": [
+    "program arden-drama-school",
+    "camp arden-summer-camp",
+    "weekend classes of arden-drama-school"
+   ],
+   "confirmed": "2026-10-07",
+   "final": "https://ardentheatre.org/arden-drama-school/"
+  },
+  {
+   "url": "https://ardentheatre.org/arden-drama-school/",
+   "how": "fetch",
+   "for": [
+    "program arden-drama-school"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://awbury.org/school-day-off-camps/",
+   "how": "fetch",
+   "for": [
+    "program awbury-arboretum"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://beaconcenterforchildren.com/after-school-program-tuition/",
+   "how": "fetch",
+   "for": [
+    "program beacon-center"
+   ],
+   "confirmed": "2026-11-10"
+  },
+  {
+   "url": "https://beaconcenterforchildren.com/after-school-program/",
+   "how": "fetch",
+   "for": [
+    "program beacon-center",
+    "pickup list of beacon-center"
+   ],
+   "confirmed": "2026-11-10"
+  },
+  {
+   "url": "https://beaconcenterforchildren.com/application/",
+   "how": "fetch",
+   "for": [
+    "program beacon-center"
+   ],
+   "confirmed": "2026-11-10"
+  },
+  {
+   "url": "https://blue-chip-flag-south-philadelphia.sportngin.com/register/form/571361594",
+   "how": "fetch",
+   "for": [
+    "program blue-chip-flag-south-philadelphia"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://bondsports.co/activity/programs/CO_ED-youth-OTHER/1321",
+   "how": "browser",
+   "for": [
+    "program elite-sports-factory"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://boyer.temple.edu/community/temple-music-prep/programs/community-music-scholars-program",
+   "how": "fetch",
+   "for": [
+    "program temple-music-prep-cmsp",
+    "weekend classes of temple-music-prep-cmsp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://btsphilly.org/waiver",
+   "how": "fetch",
+   "for": [
+    "program beat-the-streets-wrestling"
+   ],
+   "confirmed": "2026-11-07",
+   "final": "https://btsphilly.org/waiver/"
+  },
+  {
+   "url": "https://btsphilly.org/wrestling",
+   "how": "fetch",
+   "for": [
+    "program beat-the-streets-wrestling"
+   ],
+   "confirmed": "2026-11-07",
+   "final": "https://btsphilly.org/wrestling/"
+  },
+  {
+   "url": "https://butcherssewshop.com/pages/youth-classes",
+   "how": "fetch",
+   "for": [
+    "program butchers-sew-shop"
+   ],
+   "confirmed": "2026-10-06"
+  },
+  {
+   "url": "https://campscui.active.com/orgs/PhieldHouse?orglink=camps-registration",
+   "how": "browser",
+   "for": [
+    "program phield-house"
+   ],
+   "confirmed": "2026-11-01",
+   "final": "https://go.active.com/softblock/?c=active&e=snlvcmpscui00001load&t=https%3A%2F%2Fcampscui.active.com%2Forgs%2FPhieldHouse%3Forglink%3Dcamps-registration&cid=en-US&rticr=3"
+  },
+  {
+   "url": "https://childs.philasd.org/",
+   "how": "fetch",
+   "for": [
+    "program childs-clubs"
+   ],
+   "confirmed": "2026-11-07"
+  },
+  {
+   "url": "https://coppin.philasd.org/",
+   "how": "fetch",
+   "for": [
+    "program coppin-clubs"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://docs.google.com/document/d/1ZaNrbFZBNa2CoxBA5hJWXRvNxv6Uk3ZWmd17ubIxL9A/edit?usp=sharing",
+   "how": "fetch",
+   "for": [
+    "program sunrise-mccall"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://docs.google.com/spreadsheets/d/1FGIV9bDa2OKzL1VZ5hgBb2JCFId4H3OI5_sPFBze_SY/edit?gid=966250841",
+   "how": "fetch",
+   "for": [
+    "program meredith-clubs"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://elitesportsfactory.com/childcare",
+   "how": "fetch",
+   "for": [
+    "program elite-sports-factory"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://elitesportsfactory.com/schools-out-camp",
+   "how": "fetch",
+   "for": [
+    "program elite-sports-factory"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://evolvedancephilly.com/youth-programs",
+   "how": "fetch",
+   "for": [
+    "program evolve-dance",
+    "pickup list of evolve-dance"
+   ],
+   "confirmed": "2026-11-10"
+  },
+  {
+   "url": "https://fi.edu/en/science-education/youth-and-community-programs/pacts",
+   "how": "fetch",
+   "for": [
+    "program franklin-institute-pacts",
+    "weekend classes of franklin-institute-pacts"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://fitnessalivephilly.com/",
+   "how": "fetch",
+   "for": [
+    "program fitness-alive-south-philly"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://fitnessalivephilly.com/current-session",
+   "how": "fetch",
+   "for": [
+    "program fitness-alive-south-philly"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://fitnessalivephilly.com/locations",
+   "how": "fetch",
+   "for": [
+    "program fitness-alive-south-philly",
+    "weekend classes of fitness-alive-south-philly"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://fitnessalivephilly.com/spring-session",
+   "how": "fetch",
+   "for": [
+    "program fitness-alive-south-philly"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://fleisher.org/children-and-youth-programs-2/",
+   "how": "fetch",
+   "for": [
+    "program fleisher-art-memorial",
+    "camp fleisher-art-memorial-camp"
+   ],
+   "confirmed": "2026-10-07"
+  },
+  {
+   "url": "https://fleisher.org/children-and-youth-programs-2/children-and-youth-programs-2/winter-2027/",
+   "how": "browser",
+   "for": [
+    "program fleisher-art-memorial",
+    "weekend classes of fleisher-art-memorial"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://fleisher.org/children-and-youth-programs-2/young-artists-program-spring-2026/fall-2026/",
+   "how": "fetch",
+   "for": [
+    "program fleisher-art-memorial"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://fleisher.org/day-off-camps/",
+   "how": "fetch",
+   "for": [
+    "program fleisher-art-memorial"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://fleisher.org/take-a-class/saturday-young-artist-program/",
+   "how": "fetch",
+   "for": [
+    "program fleisher-art-memorial"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://form.jotform.com/262154951033048",
+   "how": "fetch",
+   "for": [
+    "program vare-washington-edey"
+   ],
+   "confirmed": "2026-11-07"
+  },
+  {
+   "url": "https://gpy.my.site.com/s/login/",
+   "how": "fetch",
+   "for": [
+    "program christian-street-ymca"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://hudsontable.com/philadelphia/kids-classes/",
+   "how": "fetch",
+   "for": [
+    "program hudson-table-philadelphia"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://icerink.business-services.upenn.edu/skating-lessons/group-lessons-5-years-old-through-adults",
+   "how": "fetch",
+   "for": [
+    "program penn-ice-rink",
+    "weekend classes of penn-ice-rink"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://imaginethatphilly.org/",
+   "how": "fetch",
+   "for": [
+    "program imagine-that-philly"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://imaginethatphilly.org/programs",
+   "how": "fetch",
+   "for": [
+    "program imagine-that-philly"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://independencecharter.org/21st-century-program/",
+   "how": "fetch",
+   "for": [
+    "program ics-21st-century"
+   ],
+   "confirmed": "2026-11-10"
+  },
+  {
+   "url": "https://ko12.org/after-school-pick-up-philadelphia",
+   "how": "fetch",
+   "for": [
+    "program kids-on-12th",
+    "pickup list of kids-on-12th"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://ko12.org/contact",
+   "how": "fetch",
+   "for": [
+    "program kids-on-12th"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://ko12.org/school-calendar",
+   "how": "fetch",
+   "for": [
+    "program kids-on-12th"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://macguffintf.com/classes/fall-2026/",
+   "how": "fetch",
+   "for": [
+    "program macguffin-theatre"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://made-institute.com/courses-items/p/kids-sunday-sewing",
+   "how": "fetch",
+   "for": [
+    "program made-institute-sunday-sewing"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://made-institute.com/weekend-sewing",
+   "how": "fetch",
+   "for": [
+    "program made-institute-sunday-sewing",
+    "weekend classes of made-institute-sunday-sewing"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://mccall.philasd.org/",
+   "how": "fetch",
+   "for": [
+    "program mccall-clubs"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://meredithmatters.org/internalexternal-activities/",
+   "how": "fetch",
+   "for": [
+    "program meredith-clubs"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://mightywriters.org/participant-registration/",
+   "how": "fetch",
+   "for": [
+    "program mighty-writers-el-futuro"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://mightywriters.org/philadelphia/",
+   "how": "fetch",
+   "for": [
+    "program mighty-writers-el-futuro"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://misterjohnsmusic.com/day-camps/",
+   "how": "fetch",
+   "for": [
+    "program mister-johns-music"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/",
+   "how": "fetch",
+   "for": [
+    "program mister-johns-music",
+    "pickup list of mister-johns-music",
+    "weekend classes of mister-johns-music"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://moore.edu/academics/youth-education/young-artists-workshop/spring-2027-youth-courses/",
+   "how": "fetch",
+   "for": [
+    "program moore-young-artists-workshop",
+    "weekend classes of moore-young-artists-workshop"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://movementgyms.com/callowhill",
+   "how": "fetch",
+   "for": [
+    "program movement-callowhill"
+   ],
+   "confirmed": "2026-11-01",
+   "final": "https://movementgyms.com/callowhill/"
+  },
+  {
+   "url": "https://movementgyms.com/callowhill/climbing/youth-programs/camps/",
+   "how": "fetch",
+   "for": [
+    "program movement-callowhill"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://oldpinecommunitycenter.org/afterschool/",
+   "how": "fetch",
+   "for": [
+    "program old-pine",
+    "pickup list of old-pine"
+   ],
+   "confirmed": "2026-10-06"
+  },
+  {
+   "url": "https://pafa-museum.coursestorm.com/category/saturday-art-classes-for-ages-10-14",
+   "how": "fetch",
+   "for": [
+    "program pafa-saturday-art"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://parentinfantcenter.org/programs/after-school-center",
+   "how": "fetch",
+   "for": [
+    "program parent-infant-center",
+    "pickup list of parent-infant-center"
+   ],
+   "confirmed": "2026-11-07"
+  },
+  {
+   "url": "https://pennsportschoolofdance.com/class-schedule/",
+   "how": "fetch",
+   "for": [
+    "program pennsport-school-of-dance",
+    "weekend classes of pennsport-school-of-dance"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://pennsportschoolofdance.com/registration-tuition/",
+   "how": "fetch",
+   "for": [
+    "program pennsport-school-of-dance"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://philadelphiaballet.org/school/childrens-programs/",
+   "how": "fetch",
+   "for": [
+    "program school-of-philadelphia-ballet",
+    "weekend classes of school-of-philadelphia-ballet"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://philadelphiadanceacademy.com/calendar/",
+   "how": "fetch",
+   "for": [
+    "program philadelphia-dance-academy"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://philadelphiadanceacademy.com/class-schedule-old-city/",
+   "how": "fetch",
+   "for": [
+    "program philadelphia-dance-academy"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://philadelphiadanceacademy.com/frequently-asked-questions/",
+   "how": "fetch",
+   "for": [
+    "program philadelphia-dance-academy"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://philadelphiadanceacademy.com/registration/",
+   "how": "fetch",
+   "for": [
+    "program philadelphia-dance-academy"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://philadelphiadanceacademy.com/tuition/",
+   "how": "fetch",
+   "for": [
+    "program philadelphia-dance-academy"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://phillyartcenter.captyn.com/find?department=clu8qqr6y008w93r8jn074ir6&filter=2&program=clur1wu8b03tv13yv63r0u2w1&location=clu8gptof0aahxkl2mj3v7mxl",
+   "how": "browser",
+   "for": [
+    "program philly-art-center-qv"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://phillyartcenter.captyn.com/find?department=clu8qqzk2009293r866a7j7wg&filter=4&program=clv479d4y02clfsymtfne5rg3&program=clwtkcaoi00kmsudp98n0ecv5&day=Monday&day=Tuesday&day=Thursday&day=Friday&day=Wednesday&location=clu8gpdpx0aagxkl2fbdh6u7v&tag=clv494qhk032olgi2d9i70vw6&tag=clv494xs6032plgi2z23yr0a8",
+   "how": "browser",
+   "for": [
+    "program philly-art-center-fairmount"
+   ],
+   "confirmed": "2026-11-07"
+  },
+  {
+   "url": "https://phillyartcenter.captyn.com/find?department=clu8qqzk2009293r866a7j7wg&filter=4&program=clv479vep03ki7to5es3tmyjr&program=clwtkcaoi00kmsudp98n0ecv5&day=Monday&day=Tuesday&day=Wednesday&day=Thursday&day=Friday&location=clu8gptof0aahxkl2mj3v7mxl&tag=clv494qhk032olgi2d9i70vw6&tag=clv494xs6032plgi2z23yr0a8",
+   "how": "browser",
+   "for": [
+    "program philly-art-center-qv"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://phillyartcenter.com/afterschool/program-information/locations/fairmount",
+   "how": "fetch",
+   "for": [
+    "program philly-art-center-fairmount"
+   ],
+   "confirmed": "2026-11-07",
+   "final": "https://phillyartcenter.com/locations/fairmount/"
+  },
+  {
+   "url": "https://phillyartcenter.com/locations/mt-airy/school-pick-up/",
+   "how": "fetch",
+   "for": [
+    "program philly-art-center-mt-airy",
+    "pickup list of philly-art-center-mt-airy"
+   ],
+   "confirmed": "2026-11-05"
+  },
+  {
+   "url": "https://phillyartcenter.com/locations/queen-village/school-pick-up/",
+   "how": "fetch",
+   "for": [
+    "program philly-art-center-qv"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://phillyartcenter.com/vacation-camps-1",
+   "how": "fetch",
+   "for": [
+    "program philly-art-center-qv"
+   ],
+   "confirmed": "2026-11-01",
+   "final": "https://phillyartcenter.com/vacation-camps-1/"
+  },
+  {
+   "url": "https://phillycircus.com/afterschool/",
+   "how": "fetch",
+   "for": [
+    "program philadelphia-school-of-circus-arts",
+    "pickup list of philadelphia-school-of-circus-arts"
+   ],
+   "confirmed": "2026-11-05"
+  },
+  {
+   "url": "https://phillycircus.com/kids-day-off-camp/",
+   "how": "fetch",
+   "for": [
+    "program philadelphia-school-of-circus-arts"
+   ],
+   "confirmed": "2026-11-05"
+  },
+  {
+   "url": "https://phillyfamily.com/after-school-programs/",
+   "how": "fetch",
+   "for": [
+    "program queen-and-rook",
+    "pickup list of queen-and-rook"
+   ],
+   "confirmed": "2026-10-06"
+  },
+  {
+   "url": "https://phillyinmovement.com/move-after-school/",
+   "how": "fetch",
+   "for": [
+    "program philly-inmovement",
+    "pickup list of philly-inmovement"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://phillyinmovement.com/vacation-camps/",
+   "how": "fetch",
+   "for": [
+    "program philly-inmovement"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://phillyyouthbasketball.leagueapps.com/classes/5096846-2026-27-sy-pyb-school-closure-holiday-clinics-grades-k-9",
+   "how": "browser",
+   "for": [
+    "program philadelphia-youth-basketball"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://portal.iclasspro.com/inmovement",
+   "how": "fetch",
+   "for": [
+    "program philly-inmovement"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://portal.movementgyms.com/callowhill/programs/winter-break-camp",
+   "how": "browser",
+   "for": [
+    "program movement-callowhill"
+   ],
+   "confirmed": "2026-11-01",
+   "final": "https://portal.movementgyms.com/callowhill/programs/winter-break-camp?course=Q291cnNlOjk2YzliODMzNTcyZjI2YmEwMzJkNmZjYmFkZjc0ODg3&date=2026-12-23"
+  },
+  {
+   "url": "https://reg137.imperisoft.com/Fleisher/Search/Registration.aspx",
+   "how": "fetch",
+   "for": [
+    "program fleisher-art-memorial"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://schuylkillcenter.org/day-off-camps/",
+   "how": "fetch",
+   "for": [
+    "program schuylkill-center"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://schuylkillcenter.org/education/day-off-camps/",
+   "how": "fetch",
+   "for": [
+    "program schuylkill-center"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://settlementmusic.org/afterschool/",
+   "how": "fetch",
+   "for": [
+    "program settlement-kaleidoscope-plus",
+    "pickup list of settlement-kaleidoscope-plus"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://shopeverland.com/",
+   "how": "fetch",
+   "for": [
+    "program everland-homework-club"
+   ],
+   "confirmed": "2026-11-09"
+  },
+  {
+   "url": "https://skilladelphia.campbrainregistration.com/?returnUrl=%252FLanding",
+   "how": "fetch",
+   "for": [
+    "program skilladelphia"
+   ],
+   "confirmed": "2026-10-19"
+  },
+  {
+   "url": "https://starfinderfoundation.org/programs/middle-school-programs/",
+   "how": "fetch",
+   "for": [
+    "program starfinder-saturday-soccer",
+    "weekend classes of starfinder-saturday-soccer"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://vare.philasd.org/",
+   "how": "fetch",
+   "for": [
+    "program rock-school-for-dance"
+   ],
+   "confirmed": "2026-11-07"
+  },
+  {
+   "url": "https://walnutstreettheatre.coursestorm.com/category/classes-for-kids5",
+   "how": "fetch",
+   "for": [
+    "program walnut-street-theatre-school",
+    "weekend classes of walnut-street-theatre-school"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
+   "how": "browser",
+   "for": [
+    "program beehive-at-bok",
+    "pickup list of beehive-at-bok"
+   ],
+   "confirmed": "2026-11-10"
+  },
+  {
+   "url": "https://www.bellavistaneighbors.org/parks",
+   "how": "fetch",
+   "for": [
+    "program palumbo-rec"
+   ],
+   "confirmed": "2026-10-05"
+  },
+  {
+   "url": "https://www.bluechipyouthsports.com/south-philadelphia-registrations/",
+   "how": "fetch",
+   "for": [
+    "program blue-chip-flag-south-philadelphia",
+    "weekend classes of blue-chip-flag-south-philadelphia"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.cocoacademyphl.com/afterschool-queenvillage",
+   "how": "fetch",
+   "for": [
+    "program coco-academy",
+    "pickup list of coco-academy"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.cocoacademyphl.com/vacationcamps",
+   "how": "fetch",
+   "for": [
+    "program coco-academy"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.equilibriumdanceacademy.com/",
+   "how": "fetch",
+   "for": [
+    "program equilibrium-dance-academy"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.equilibriumdanceacademy.com/classes",
+   "how": "fetch",
+   "for": [
+    "program equilibrium-dance-academy",
+    "weekend classes of equilibrium-dance-academy"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.flipoutproductions.com/day-camp",
+   "how": "fetch",
+   "for": [
+    "program flipout-productions"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.flips4kidz.com/",
+   "how": "fetch",
+   "for": [
+    "program flips-4-kidz"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.flips4kidz.com/book-online",
+   "how": "fetch",
+   "for": [
+    "program flips-4-kidz",
+    "weekend classes of flips-4-kidz"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.gotrphiladelphia.org/",
+   "how": "fetch",
+   "for": [
+    "program girls-on-the-run"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.gotrphiladelphia.org/3rd-5th-grade-program-details",
+   "how": "fetch",
+   "for": [
+    "program girls-on-the-run"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.gotrphiladelphia.org/locations",
+   "how": "browser",
+   "for": [
+    "program girls-on-the-run"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.gotrphiladelphia.org/programs",
+   "how": "fetch",
+   "for": [
+    "program girls-on-the-run"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.gpca-phila.org/",
+   "how": "fetch",
+   "for": [
+    "program childs-edey"
+   ],
+   "confirmed": "2026-11-07"
+  },
+  {
+   "url": "https://www.gpca-phila.org/prek-8",
+   "how": "fetch",
+   "for": [
+    "program vare-washington-edey"
+   ],
+   "confirmed": "2026-11-07"
+  },
+  {
+   "url": "https://www.jordanfamilylearningcenter.com/aftercare-signup",
+   "how": "fetch",
+   "for": [
+    "program jordan-family-learning-center"
+   ],
+   "confirmed": "2026-11-08"
+  },
+  {
+   "url": "https://www.jordanfamilylearningcenter.com/before-and-aftercare",
+   "how": "fetch",
+   "for": [
+    "program jordan-family-learning-center"
+   ],
+   "confirmed": "2026-11-08"
+  },
+  {
+   "url": "https://www.koreshdance.org/children-classes",
+   "how": "fetch",
+   "for": [
+    "program koresh-school-of-dance",
+    "pickup list of koresh-school-of-dance",
+    "weekend classes of koresh-school-of-dance"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.koreshdance.org/children-registration",
+   "how": "fetch",
+   "for": [
+    "program koresh-school-of-dance"
+   ],
+   "confirmed": "2026-11-10"
+  },
+  {
+   "url": "https://www.movemakersphilly.com/range-of-motion-after-school-programming.html",
+   "how": "fetch",
+   "for": [
+    "program movemakers"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.movemakersphilly.com/youthclasses.html",
+   "how": "fetch",
+   "for": [
+    "program movemakers",
+    "pickup list of movemakers"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.musictheatrephilly.com/about-mtp-classes",
+   "how": "fetch",
+   "for": [
+    "program music-theatre-philly"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.musictheatrephilly.com/grades-1-4",
+   "how": "fetch",
+   "for": [
+    "program music-theatre-philly",
+    "weekend classes of music-theatre-philly"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.musictheatrephilly.com/grades-5-8",
+   "how": "fetch",
+   "for": [
+    "program music-theatre-philly"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.nebingerpta.org/projects",
+   "how": "fetch",
+   "for": [
+    "program nebinger-arts-partners"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.nlarts.org/purchase-day-camps",
+   "how": "fetch",
+   "for": [
+    "program nlarts"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.nlarts.org/schools-out-day-camp",
+   "how": "fetch",
+   "for": [
+    "program nlarts"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.pafa.org/education/center-art-education/youth-family/saturday-studio-art-classes",
+   "how": "fetch",
+   "for": [
+    "program pafa-saturday-art",
+    "weekend classes of pafa-saturday-art"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.pamtb.org/",
+   "how": "fetch",
+   "for": [
+    "program fairmount-mountain-bike-team"
+   ],
+   "confirmed": "2026-11-07"
+  },
+  {
+   "url": "https://www.phieldhouse.com/youth/vacation-day-camp/",
+   "how": "fetch",
+   "for": [
+    "program phield-house"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.phila.gov/2024-09-11-extended-school-days-mean-great-opportunities-for-families/",
+   "how": "fetch",
+   "for": [
+    "program sunrise-southwark"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.phila.gov/2026-01-09-ice-ice-baby-public-skating-hours/",
+   "how": "fetch",
+   "for": [
+    "program rizzo-rink",
+    "weekend classes of rizzo-rink"
+   ],
+   "confirmed": "2026-10-16"
+  },
+  {
+   "url": "https://www.phila.gov/2026-03-06-seats-filling-fast-for-spring-break-camp-at-extended-day-extended-year-schools/",
+   "how": "fetch",
+   "for": [
+    "program vare-washington-edey"
+   ],
+   "confirmed": "2026-11-07"
+  },
+  {
+   "url": "https://www.phila.gov/media/20240924172821/EDEY-One-pager-Vare.pdf",
+   "how": "fetch",
+   "for": [
+    "program vare-washington-edey"
+   ],
+   "confirmed": "2026-11-07"
+  },
+  {
+   "url": "https://www.phila.gov/ost/program-locator/",
+   "how": "browser",
+   "for": [
+    "program childs-edey"
+   ],
+   "confirmed": "2026-11-07"
+  },
+  {
+   "url": "https://www.phila.gov/ost/program-locator/?resource=ost_102",
+   "how": "browser",
+   "for": [
+    "program childs-edey"
+   ],
+   "confirmed": "2026-11-07"
+  },
+  {
+   "url": "https://www.phila.gov/ost/program-locator/?resource=ost_103",
+   "how": "browser",
+   "for": [
+    "program childs-edey"
+   ],
+   "confirmed": "2026-11-07"
+  },
+  {
+   "url": "https://www.phila.gov/ost/program-locator/?resource=ost_113",
+   "how": "browser",
+   "for": [
+    "program vare-washington-edey"
+   ],
+   "confirmed": "2026-11-07"
+  },
+  {
+   "url": "https://www.philadelphiamartialartsacademy.com/",
+   "how": "fetch",
+   "for": [
+    "program philadelphia-martial-arts-academy",
+    "weekend classes of philadelphia-martial-arts-academy"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.philadelphiamartialartsacademy.com/free-trial",
+   "how": "fetch",
+   "for": [
+    "program philadelphia-martial-arts-academy"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.philamuseum.org/events/art-kids-classes-7-8",
+   "how": "fetch",
+   "for": [
+    "program philadelphia-museum-of-art-kids",
+    "weekend classes of philadelphia-museum-of-art-kids"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+   "how": "fetch",
+   "for": [
+    "program christian-street-ymca"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.philaymca.org/child-care/school-age-care-programs/full-day-school-age-care/",
+   "how": "fetch",
+   "for": [
+    "program christian-street-ymca"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.philaymca.org/locations/christian-street-ymca/",
+   "how": "fetch",
+   "for": [
+    "program christian-street-ymca"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.phillymagicgardens.org/events/events-calendar/",
+   "how": "fetch",
+   "for": [
+    "program magic-gardens-family-jams"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.phillymagicgardens.org/events/peco-family-jams/",
+   "how": "fetch",
+   "for": [
+    "program magic-gardens-family-jams",
+    "weekend classes of magic-gardens-family-jams"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.phillypack.org/",
+   "how": "fetch",
+   "for": [
+    "program philly-pack"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.phillypack.org/registration/",
+   "how": "fetch",
+   "for": [
+    "program philly-pack"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.phillypack.org/schedule/",
+   "how": "fetch",
+   "for": [
+    "program philly-pack",
+    "weekend classes of philly-pack"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.phillyyouthbasketball.org/pybholidayclinics",
+   "how": "fetch",
+   "for": [
+    "program philadelphia-youth-basketball"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.playartsphilly.com/day-camps",
+   "how": "fetch",
+   "for": [
+    "program playarts-day-camps"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.queenandrookcafe.com/youth-programs/",
+   "how": "fetch",
+   "for": [
+    "program queen-and-rook"
+   ],
+   "confirmed": "2026-11-04"
+  },
+  {
+   "url": "https://www.queenrookkeep.com/product/WInterAfterschool/FGRQPCBNZJCILGV4A5OGMYL7?cp=true&sa=false&sbp=false&q=true",
+   "how": "fetch",
+   "for": [
+    "program queen-and-rook",
+    "pickup list of queen-and-rook"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.sawubonacreativityproject.org/campinformationandschedules",
+   "how": "browser",
+   "for": [
+    "program sawubona-creativity-project",
+    "camp sawubona-summer-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.skatethefoundry.com/camp/",
+   "how": "browser",
+   "for": [
+    "program skate-the-foundry",
+    "camp skate-the-foundry-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.therockschool.org/pre-ballet",
+   "how": "fetch",
+   "for": [
+    "program rock-school-for-dance",
+    "weekend classes of rock-school-for-dance"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.tpschool.org/tps-experience/camptps",
+   "how": "fetch",
+   "for": [
+    "program the-philadelphia-school",
+    "camp camp-tps"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.tpschool.org/tps-experience/camptps/spring-break-camp",
+   "how": "fetch",
+   "for": [
+    "program the-philadelphia-school"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.tpschool.org/tps-experience/camptps/winter-break-camp",
+   "how": "fetch",
+   "for": [
+    "program the-philadelphia-school"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.wissskating.com/index.php/membership/about-mywsconnect-com/",
+   "how": "fetch",
+   "for": [
+    "program wissahickon-skating-club"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.wissskating.com/index.php/public-skating-sessions/welcome-to-the-2026-27-club-season/",
+   "how": "fetch",
+   "for": [
+    "program wissahickon-skating-club",
+    "weekend classes of wissahickon-skating-club"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://yous.life/after-school-programs-philadelphia/",
+   "how": "fetch",
+   "for": [
+    "program yous-fitfulness",
+    "pickup list of yous-fitfulness"
+   ],
+   "confirmed": "2026-11-10"
+  },
+  {
+   "url": "https://zazzphilly.com/afterschool/",
+   "how": "browser",
+   "for": [
+    "program zazz-dance",
+    "pickup list of zazz-dance"
+   ],
+   "confirmed": "2026-11-10"
+  },
+  {
+   "url": "https://zazzphilly.com/early-childhood/",
+   "how": "browser",
+   "for": [
+    "program zazz-dance",
+    "weekend classes of zazz-dance"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.movemakersphilly.com/summer-camp.html",
+   "how": "fetch",
+   "for": [
+    "camp movemakers-camp"
+   ],
+   "confirmed": "2026-10-07"
+  },
+  {
+   "url": "https://allenslane.org/summer-camp/",
+   "how": "browser",
+   "for": [
+    "camp allens-lane-art-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://awbury.org/summer-camp/",
+   "how": "fetch",
+   "for": [
+    "camp awbury-adventures"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.phieldhouse.com/youth/summer-camp/",
+   "how": "fetch",
+   "for": [
+    "camp ceo-camp-phield-house"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://phillycircus.com/camp/",
+   "how": "browser",
+   "for": [
+    "camp circus-arts-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.theclaystudio.org/camp-policies",
+   "how": "browser",
+   "for": [
+    "camp clay-studio-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.flipoutproductions.com/summercamp",
+   "how": "browser",
+   "for": [
+    "camp flipout-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.lavnercampsandprograms.com/location/philadelphia-pa-summer-camps-tech-camps-stem-camps-university-of-pennsylvania-upenn/",
+   "how": "browser",
+   "for": [
+    "camp lavner-tech-camp-upenn"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://legacyyte.org/tennis_camps/full-day-summer-camp/",
+   "how": "fetch",
+   "for": [
+    "camp legacy-tennis-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://misterjohnsmusic.com/summer-camp/",
+   "how": "fetch",
+   "for": [
+    "camp mister-johns-music-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.morrisarboretum.org/learn-discover/kids-families/summer-camp",
+   "how": "fetch",
+   "for": [
+    "camp morris-arboretum-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.nlarts.org/summer-art-camp",
+   "how": "browser",
+   "for": [
+    "camp nlarts-summer-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.phila.gov/services/culture-recreation/activities-and-events/register-for-summer-camp/",
+   "how": "fetch",
+   "for": [
+    "camp parks-and-rec-camps"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://phillyartcenter.com/camps/summer-camps/",
+   "how": "fetch",
+   "for": [
+    "camp philly-art-center"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.queenrookkeep.com/product/Summercamp/GUYDZS52EHKPGJPXAUNJ7HMP",
+   "how": "browser",
+   "for": [
+    "camp queen-and-rook-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.rutabagatoylibrary.com/summer-camp",
+   "how": "browser",
+   "for": [
+    "camp rutabaga-naturearts"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.schoolofrock.com/locations/philadelphia/music-camps",
+   "how": "fetch",
+   "for": [
+    "camp school-of-rock-philadelphia"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.phillyseaport.org/camp",
+   "how": "fetch",
+   "for": [
+    "camp seaport-summer-camp"
+   ],
+   "confirmed": "2026-11-01",
+   "final": "https://www.phillyseaport.org/camp/"
+  },
+  {
+   "url": "https://theskateboardacademycom.bigcartel.com/product/rizzo-rink-sumer-sk8-camp",
+   "how": "browser",
+   "for": [
+    "camp skateboard-academy-rizzo-rink"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://tallerpr.org/education/summer-camp/",
+   "how": "fetch",
+   "for": [
+    "camp taller-puertorriqueno-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://theatrehorizon.org/summer-drama-camp/",
+   "how": "browser",
+   "for": [
+    "camp theatre-horizon-woodmere"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.wissskating.com/index.php/new-figure-skating-schedules-general-info-2026/get-the-edge-summer-figure-skating-camp-save-the-date/",
+   "how": "fetch",
+   "for": [
+    "camp wissahickon-figure-skating"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://worktoride.net/summer-camp/",
+   "how": "fetch",
+   "for": [
+    "camp work-to-ride-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.yesandcamp.org/summer-camps",
+   "how": "browser",
+   "for": [
+    "camp yes-and-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.philaymca.org/camps/summer-day-camp/",
+   "how": "browser",
+   "for": [
+    "camp ymca-day-camps"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://zazzphilly.com/summer-camp/",
+   "how": "browser",
+   "for": [
+    "camp zazz-summer-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://zoomdance.com/camps/",
+   "how": "browser",
+   "for": [
+    "camp zoomdance-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.phillypack.org/summer-camp/",
+   "how": "fetch",
+   "for": [
+    "camp philly-pack-summer-camp"
+   ],
+   "confirmed": "2026-11-05"
+  },
+  {
+   "url": "https://nerdstreet.com/series/camp-nerd-street-video-game-and-esports-summer-camp",
+   "how": "browser",
+   "for": [
+    "camp camp-nerd-street"
+   ],
+   "confirmed": "2026-11-09"
+  },
+  {
+   "url": "https://ko12.org/best-philadelphia-summer-camp-pricing-rates",
+   "how": "browser",
+   "for": [
+    "camp kids-on-12th-summer-camp"
+   ],
+   "confirmed": "2026-11-09"
+  },
+  {
+   "url": "https://stempreparatory.org/programs",
+   "how": "browser",
+   "for": [
+    "camp stem-prep-summer-camp"
+   ],
+   "confirmed": "2026-11-09"
+  },
+  {
+   "url": "https://schuylkillcenter.org/education/camp-schuylkill/",
+   "how": "fetch",
+   "for": [
+    "camp camp-schuylkill"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://walnutstreettheatre.coursestorm.com/",
+   "how": "browser",
+   "for": [
+    "camp camp-walnut"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.hawkhilldaycamp.com/locations/hawk-hill-day-camp/",
+   "how": "browser",
+   "for": [
+    "camp hawk-hill-day-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://macguffintf.com/camps/",
+   "how": "fetch",
+   "for": [
+    "camp macguffin-camps"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://moore.edu/academics/youth-education/",
+   "how": "fetch",
+   "for": [
+    "camp moore-young-artists"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.musictheatrephilly.com/1-6-camps",
+   "how": "fetch",
+   "for": [
+    "camp music-theatre-philly-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.pafa.org/education/center-for-art-education/youth-and-family/summer-art-camps",
+   "how": "fetch",
+   "for": [
+    "camp pafa-camp"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://philadelphiaballet.org/school/summer-programs/philadelphia-summer-childrens-programs/",
+   "how": "fetch",
+   "for": [
+    "camp philadelphia-ballet-camps"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://philadelphiadanceacademy.com/summer-program/",
+   "how": "fetch",
+   "for": [
+    "camp philadelphia-dance-academy"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.esfcamps.com/friendsselect/rates/",
+   "how": "browser",
+   "for": [
+    "camp esf-camps"
+   ],
+   "confirmed": "2026-11-05"
+  },
+  {
+   "url": "https://macguffintf.com/classes/winter-2026/youth-ages-7-10/",
+   "how": "fetch",
+   "for": [
+    "weekend classes of macguffin-theatre"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.movemakersphilly.com/schedule-390284.html",
+   "how": "fetch",
+   "for": [
+    "weekend classes of movemakers"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://phillyinmovement.com/school-aged-classes/",
+   "how": "fetch",
+   "for": [
+    "weekend classes of philly-inmovement"
+   ],
+   "confirmed": "2026-11-01"
+  }
+ ],
+ "failed": [
+  {
+   "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf",
+   "how": "fetch",
+   "for": [
+    "program coco-academy",
+    "program code-ninjas-south-philly",
+    "program brilliant-minds",
+    "program early-childhood-environment",
+    "program principal-academy",
+    "program little-shepherds",
+    "program columbus-square-rec",
+    "program hawthorne-cultural-center",
+    "program makom-community",
+    "program sawubona-creativity-project",
+    "program east-passyunk-rec"
+   ],
+   "confirmed": "2026-10-05",
+   "status": 404
+  },
+  {
+   "url": "https://zhangsah.org/after-school-program/",
+   "how": "fetch",
+   "for": [
+    "program zhang-sah",
+    "program zhang-sah-mt-airy",
+    "pickup list of zhang-sah",
+    "pickup list of zhang-sah-mt-airy"
+   ],
+   "confirmed": "2026-11-01",
+   "status": 403
+  },
+  {
+   "url": "https://zhangsah.org/camps/",
+   "how": "fetch",
+   "for": [
+    "program zhang-sah",
+    "program zhang-sah-mt-airy"
+   ],
+   "confirmed": "2026-11-01",
+   "status": 403
+  },
+  {
+   "url": "https://butcher-s-sew-shop-junior.jumbula.com/school-year-classes",
+   "how": "fetch",
+   "for": [
+    "program butchers-sew-shop",
+    "pickup list of butchers-sew-shop"
+   ],
+   "confirmed": "2026-10-06",
+   "status": 403
+  },
+  {
+   "url": "https://butcher-s-sew-shop-junior.jumbula.com/vacation-camps",
+   "how": "fetch",
+   "for": [
+    "program butchers-sew-shop"
+   ],
+   "confirmed": "2026-10-06",
+   "status": 403
+  },
+  {
+   "url": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100032&prodGroupId=100712",
+   "how": "fetch",
+   "for": [
+    "program movemakers"
+   ],
+   "confirmed": "2026-11-01",
+   "status": 403
+  },
+  {
+   "url": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100032&prodGroupId=100713",
+   "how": "fetch",
+   "for": [
+    "program movemakers"
+   ],
+   "confirmed": "2026-11-01",
+   "status": 403
+  },
+  {
+   "url": "https://clients.mindbodyonline.com/classic/ws?studioid=5728353&stype=43&catid=100032&prodGroupId=100714",
+   "how": "fetch",
+   "for": [
+    "program movemakers"
+   ],
+   "confirmed": "2026-11-01",
+   "status": 403
+  },
+  {
+   "url": "https://makomcommunity.org/",
+   "how": "fetch",
+   "for": [
+    "program makom-community"
+   ],
+   "confirmed": "2026-11-01",
+   "status": 403
+  },
+  {
+   "url": "https://makomcommunity.org/afterschool-enrichment/",
+   "how": "fetch",
+   "for": [
+    "program makom-community",
+    "pickup list of makom-community"
+   ],
+   "confirmed": "2026-11-01",
+   "status": 403
+  },
+  {
+   "url": "https://makomcommunity.org/afterschool-enrichment/tuition/",
+   "how": "fetch",
+   "for": [
+    "program makom-community"
+   ],
+   "confirmed": "2026-11-01",
+   "status": 403
+  },
+  {
+   "url": "https://makomcommunity.org/enroll/",
+   "how": "fetch",
+   "for": [
+    "program makom-community"
+   ],
+   "confirmed": "2026-11-01",
+   "status": 403
+  },
+  {
+   "url": "https://makomcommunity.org/schools-out-camp/",
+   "how": "fetch",
+   "for": [
+    "program makom-community"
+   ],
+   "confirmed": "2026-11-01",
+   "status": 403
+  },
+  {
+   "url": "https://martialposture.com/walnut-street/after-school/",
+   "how": "fetch",
+   "for": [
+    "program martial-posture"
+   ],
+   "confirmed": "2026-11-10",
+   "status": 403
+  },
+  {
+   "url": "https://opcc.jumbula.com/",
+   "how": "fetch",
+   "for": [
+    "program old-pine"
+   ],
+   "confirmed": "2026-10-06",
+   "status": 403
+  },
+  {
+   "url": "https://opcc.jumbula.com/Afterschool20262027/RegularSchoolDaysDailyRate",
+   "how": "fetch",
+   "for": [
+    "program old-pine"
+   ],
+   "confirmed": "2026-10-06",
+   "status": 403
+  },
+  {
+   "url": "https://opcc.jumbula.com/Afterschool20262027/RegularSchoolDaysMonthlyRate",
+   "how": "fetch",
+   "for": [
+    "program old-pine"
+   ],
+   "confirmed": "2026-10-06",
+   "status": 403
+  },
+  {
+   "url": "https://philadelphiacityrowing.org/middle-school/",
+   "how": "fetch",
+   "for": [
+    "program philadelphia-city-rowing"
+   ],
+   "confirmed": "2026-11-07",
+   "status": 403
+  },
+  {
+   "url": "https://philarockgym.com/youth-camps/",
+   "how": "browser",
+   "for": [
+    "program philly-rock-gym-day-camps",
+    "camp philly-rock-gym-camps"
+   ],
+   "confirmed": "2026-11-01",
+   "status": 403
+  },
+  {
+   "url": "https://www.hisawyer.com/coco-academy/schedules?location_id%5B%5D=154921&widget_tags=afterschool+winter+spring+2027",
+   "how": "fetch",
+   "for": [
+    "program coco-academy"
+   ],
+   "confirmed": "2026-11-01",
+   "status": 403
+  },
+  {
+   "url": "https://butcher-s-sew-shop-junior.jumbula.com/summer-camp",
+   "how": "fetch",
+   "for": [
+    "camp butchers-sew-shop-camp"
+   ],
+   "confirmed": "2026-11-01",
+   "status": 403
+  }
+ ],
+ "closed": [
+  {
+   "url": "https://secure.lglforms.com/form_engine/s/hj6M5wuOpPinLZyA3e6dkQ",
+   "how": "fetch",
+   "for": [
+    "program awbury-arboretum"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.thedandelionproject.us/dandelion-after-school",
+   "how": "fetch",
+   "for": [
+    "program dandelion-after-school",
+    "pickup list of dandelion-after-school"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.thedandelionproject.us/spring-break-camp",
+   "how": "fetch",
+   "for": [
+    "program dandelion-after-school"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.thedandelionproject.us/summer-camp",
+   "how": "browser",
+   "for": [
+    "camp dandelion-summer-camp"
+   ],
+   "confirmed": "2026-11-01"
+  }
+ ],
+ "person": [
+  {
+   "url": "https://bookeo.com/beehivecommunity?type=415744R7TLN19E50C648C7",
+   "how": "person",
+   "for": [
+    "program beehive-at-bok"
+   ],
+   "confirmed": "2026-11-10"
+  },
+  {
+   "url": "https://libwww.freelibrary.org/programs/leap/",
+   "how": "person",
+   "for": [
+    "program free-library-leap"
+   ],
+   "confirmed": "2026-10-05"
+  },
+  {
+   "url": "https://www.cocoacademyphl.com/afterschool-bellavista",
+   "how": "person",
+   "for": [
+    "program coco-academy",
+    "pickup list of coco-academy"
+   ],
+   "confirmed": "2026-10-05"
+  },
+  {
+   "url": "https://www.hisawyer.com/everland/schedules/activity-set/2015759",
+   "how": "person",
+   "for": [
+    "program everland-homework-club",
+    "pickup list of everland-homework-club"
+   ],
+   "confirmed": "2026-11-09"
+  },
+  {
+   "url": "https://www.hisawyer.com/the-dandelion-project/schedules",
+   "how": "person",
+   "for": [
+    "program dandelion-after-school"
+   ],
+   "confirmed": "2026-11-01"
+  },
+  {
+   "url": "https://www.hisawyer.com/youslife/schedules",
+   "how": "person",
+   "for": [
+    "program yous-fitfulness"
+   ],
+   "confirmed": "2026-11-10"
+  },
+  {
+   "url": "https://www.kumon.com/south-philadelphia",
+   "how": "person",
+   "for": [
+    "program kumon-south-philadelphia",
+    "weekend classes of kumon-south-philadelphia"
+   ],
+   "confirmed": "2026-10-16"
+  },
+  {
+   "url": "https://www.skilladelphia.org/programs",
+   "how": "person",
+   "for": [
+    "program skilladelphia",
+    "pickup list of skilladelphia",
+    "weekend classes of skilladelphia"
+   ],
+   "confirmed": "2026-10-19"
+  },
+  {
+   "url": "https://www.skilladelphia.org/register",
+   "how": "person",
+   "for": [
+    "program skilladelphia"
+   ],
+   "confirmed": "2026-10-19"
+  },
+  {
+   "url": "https://www.cocoacademyphl.com/summercamp",
+   "how": "person",
+   "for": [
+    "camp coco-academy-summer-camp"
+   ],
+   "confirmed": "2026-10-07"
+  }
+ ]
+}
