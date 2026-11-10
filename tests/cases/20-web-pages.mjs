@@ -187,6 +187,37 @@ test('each list starts with its question (the school, or a ZIP code that puts th
   await t2.close();
 });
 
+test('a phone gets one “Put it on your home screen” card after something worth coming back to, never again after No thanks, and a computer never does', async (ctx) => {
+  const b = await ctx.browser();
+  const IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1';
+  const flat = s => s.replace(/\s+/g, ' ').trim();
+  const sid = schools()[0].id;
+  const t = await b.context(ctx.site, { mobile: true, userAgent: IPHONE });
+  let page = await t.open('/' + sid + '/');
+  await page.waitForTimeout(500);
+  eq(await page.locator('#homecard').count(), 0, 'nothing before anything is done');
+  await page.locator('[data-my-school]').first().click();   // saving the school is worth coming back to
+  await page.waitForSelector('#homecard', { timeout: 8000 });
+  const text = flat(await page.locator('#homecard').innerText());
+  includes(text, 'Put Philly After School on your home screen'); includes(text, 'Add to Home Screen'); includes(text, 'notifications');
+  await page.locator('#homecard .homecard-no').click();
+  eq(await page.locator('#homecard').count(), 0, 'No thanks closes it');
+  includes(await page.evaluate(() => localStorage.getItem('pas-home') || ''), '"off":1', 'and it is remembered');
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.locator('[data-my-school]').first().click(); await page.locator('[data-my-school]').first().click();
+  await page.waitForTimeout(3500);
+  eq(await page.locator('#homecard').count(), 0, 'never again after No thanks');
+  eq(t.errors.length, 0, t.errors.join(' | '));
+  await t.close();
+  // A computer: nothing, however much is saved.
+  const t2 = await b.context(ctx.site);
+  page = await t2.open('/' + sid + '/');
+  await page.locator('[data-my-school]').first().click();
+  await page.waitForTimeout(3500);
+  eq(await page.locator('#homecard').count(), 0, 'no card on a computer');
+  await t2.close();
+});
+
 test('quiet pages: signed in, the account and profile pages run no analytics, and the email list hears nothing about a child', async (ctx) => {
   const b = await ctx.browser();
   const pat = ctx.api().as(someone('quiet'), 'Pat', 'Lee');

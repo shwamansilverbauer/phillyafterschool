@@ -24,8 +24,8 @@ export async function launch() {
   return {
     browser, live,
     // A fresh browser profile, on the fixed day, signed in when given a session cookie.
-    async context(site, { sid = '', width = 1100, height = 900, mobile = false } = {}) {
-      const ctx = await browser.newContext({ viewport: mobile ? { width: 390, height: 844 } : { width, height }, deviceScaleFactor: 1, timezoneId: 'America/New_York', locale: 'en-US', isMobile: mobile, hasTouch: mobile });
+    async context(site, { sid = '', width = 1100, height = 900, mobile = false, userAgent = '' } = {}) {
+      const ctx = await browser.newContext({ viewport: mobile ? { width: 390, height: 844 } : { width, height }, deviceScaleFactor: 1, timezoneId: 'America/New_York', locale: 'en-US', isMobile: mobile, hasTouch: mobile, ...(userAgent ? { userAgent } : {}) });
       const outside = [];
       // Each outside request is kept with what it carried (the body, for a POST), then refused.
       await ctx.route(u => OUTSIDE.test(u.href), route => { const r = route.request(); outside.push(Object.assign(new String(r.url()), { url: r.url(), method: r.method(), body: r.postData() || '' })); route.abort(); });

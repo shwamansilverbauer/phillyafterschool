@@ -932,6 +932,17 @@ about it is sent anywhere.
 
 ## Notifications without an app
 
+**Put it on your home screen.** The site is already an app a phone can keep (`manifest.json`, `display:
+standalone`, opened at `/?utm_source=homescreen&utm_medium=app`, so analytics can count home-screen visits). Right
+after something worth coming back to (following a school, program or camp; saving a favorite or a school; putting
+something on a week, a day off or the summer: `homeWorth()` in `site.js`, which reads the same events analytics
+gets), a phone that isn't already running the home-screen copy gets a card along the bottom (`homeNudge()`, `.homecard`).
+Android: "Add it" opens the browser's own install prompt when it has offered one (`beforeinstallprompt`), otherwise
+the two menu steps. iPhone and iPad: the three Share steps, and that the home-screen copy keeps its own sign-in, since
+it's also the only way notifications reach an iPhone. Never on a computer or a quiet page (`data-quiet` on `<html>`).
+It waits two and a half seconds, shows once a visit and at most three times, two weeks apart, and never again after
+"No thanks", "Got it" or an install (`pas-home` on the device). The close button only puts it off.
+
 A parent can get the same dates as the emails as a notification on a phone or computer (web push). Nothing is
 installed from an app store, there is no account with anyone to set up, and no secret to keep: the server makes its
 own key.
@@ -2365,6 +2376,8 @@ Set `gtmId` to load Google Tag Manager on every page. Every page view and event 
   on. (The planners' List, Month, Who's open and Make it a calendar switches report through `pas_summer` and
   `pas_dayoff` instead, as `action: view_list`, `view_cal`, `view_chart` or `view_card`.) `pas_menu_group` (group, open)
   is a section of the phone menu opened or closed. `pas_offbar` (action, day) is the next-day-off bar closed.
+  `pas_home_screen` (action: shown, add, dismiss, later or installed; platform: ios or android; after: the event that
+  brought the card) is the "Put it on your home screen" card.
 - **Leaving the site.** `pas_outbound` (link_type, program_id, school): link_type is `register`, `website`, `calendar`,
   `review` or `camp`; school is empty on a program's own page. `pas_support_click` (plan: once or month, which of the
   Support page's two buttons), and `pas_support_thanks` (plan) once per checkout when someone comes back from paying a contribution on Stripe

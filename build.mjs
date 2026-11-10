@@ -673,7 +673,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
     <span class="top-login"><span class="top-wide">Already have an account?</span> <a href="${link('account/', depth)}${next ? '?next=' + next : ''}">Log in</a></span>
   </div></div></div>
 ` : '';
-  const page = `${quiet ? '' : gtmBody}<script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
+  const page = `${quiet ? '' : gtmBody}<script>document.documentElement.className+=' js';${quiet ? "document.documentElement.setAttribute('data-quiet','');" : ''}try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
 ${topbar}<header class="band sitebar${theme ? ' ' + theme : ''}">
   <div class="in bar">
     <a class="brand" href="${link('', depth)}"><img class="logo" src="${link('logo.png', depth)}${stamp('src/static/logo.png')}" alt="${esc(cfg.siteName)}" width="773" height="240"></a>
