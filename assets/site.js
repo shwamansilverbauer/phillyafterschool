@@ -5446,8 +5446,8 @@
       }
     }
     // ----- the one question that makes a long list yours (focusCard in build.mjs) -----
-    // The after-school list asks for the school, the day-camp and weekend lists for the neighborhood, and the summer list
-    // for where you live (a ZIP code, or where you are, or your school): unanswered it asks, answered it is one line
+    // The after-school list asks for the school; the day-camp, day-off, weekend and summer lists for where you live (a ZIP
+    // code, or where you are, or your school), and put the closest first without hiding the rest: unanswered it asks, answered it is one line
     // saying what the list shows, with a way to change it. Answers are kept on this device; a school also goes to the
     // profile for someone who keeps it there. The ZIP code never leaves the browser.
     if (focusEl) (function () {
