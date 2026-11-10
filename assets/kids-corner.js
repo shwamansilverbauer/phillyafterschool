@@ -54,6 +54,19 @@
   };
   var listing = function (k) { return D.listings[k] || null; };
   var nameOf = function (k) { var l = listing(k); return l ? l.n : k.replace(/^[pc]:/, ''); };
+  // The child's whole ranking from the showdowns, best first, for the grown-ups (the Parent Portal's Kid's Corner tab
+  // and the grown-ups' corner). The planners offer them in this order.
+  var rankList = function (k, cls) {
+    var keys = (k.fav || []).filter(function (key) { return listing(key); });
+    if (!keys.length) return null;
+    var box = el('div', 'kc-rank' + (cls ? ' ' + cls : ''));
+    box.appendChild(el('h4', null, keys.length === 1 ? possessive(k.name) + ' favorite, from the showdown' : possessive(k.name) + ' favorites, from the showdowns'));
+    var ol = el('ol', 'kc-rank-list');
+    keys.forEach(function (key) { ol.appendChild(el('li', null, nameOf(key))); });
+    box.appendChild(ol);
+    if (keys.length > 1) box.appendChild(el('p', 'hint', 'Best first. The week builder and the summer and days-off planners offer them in this order.'));
+    return box;
+  };
   var yearLabel = function (e) { return e.kind === 'summer' ? 'Summer ' + e.y : e.y + '–' + String(e.y + 1).slice(2); };
 
   // Where a confirmed class was: the listing's one site, the site the parent picked when it has several, or the
@@ -1878,6 +1891,13 @@
     } else sg.appendChild(el('p', 'hint', 'Nothing waiting. A program on ' + possessive(k.name) + ' kept week, a camp whose week has started, or a day-off camp whose day has passed shows up here to confirm.'));
     page.appendChild(sg);
 
+    // The showdowns' ranking, all of it.
+    var fv = el('div', 'panel'); fv.appendChild(el('h3', null, 'Favorites'));
+    var rk = rankList(k);
+    if (rk) { rk.removeChild(rk.firstChild); fv.appendChild(rk); }
+    else fv.appendChild(el('p', 'hint', 'No showdown yet. Once ' + k.name + ' has two classes or camps, the Showdown tab picks a favorite, and the whole ranking shows here.'));
+    page.appendChild(fv);
+
     // Add one by hand.
     var ad = el('div', 'panel'); ad.appendChild(el('h3', null, 'Add one the plans missed'));
     var form = el('form', 'kc-add');
@@ -2071,7 +2091,7 @@
       card.appendChild(facts);
       var on = D.pins.filter(function (x) { return st.pins[x.id].tier; }).sort(function (a, b) { return st.pins[b.id].tier - st.pins[a.id].tier; });
       if (on.length) { var strip = el('div', 'kc-sum-pins'); on.slice(0, 10).forEach(function (x) { var pv = drawPin(x, st.pins[x.id].tier); pv.setAttribute('aria-hidden', 'false'); pv.setAttribute('role', 'img'); pv.setAttribute('aria-label', x.label + ', ' + TIER[st.pins[x.id].tier]); strip.appendChild(pv); }); if (on.length > 10) strip.appendChild(el('span', 'hint', '+' + (on.length - 10))); card.appendChild(strip); }
-      if (k.fav.length && listing(k.fav[0])) card.appendChild(el('p', 'kc-sum-fav', 'Favorite: ' + nameOf(k.fav[0]) + (k.fav[1] && listing(k.fav[1]) ? ', then ' + nameOf(k.fav[1]) : '')));
+      var rank = rankList(k, 'kc-sum-rank'); if (rank) card.appendChild(rank);
       if (k.suggest.length) {
         var wait = el('div', 'kc-sum-wait');
         wait.appendChild(el('h4', null, 'Did ' + k.name + ' go?'));
