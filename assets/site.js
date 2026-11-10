@@ -167,8 +167,84 @@
     window.addEventListener('hashchange', function () { var h = (location.hash || '').slice(1); if (names.indexOf(h) > -1) set(h, true); });
   });
 
-  // Events for Google Tag Manager. Harmless when GTM is not installed.
-  function track(data) { (window.dataLayer = window.dataLayer || []).push(data); }
+  // Events for Google Tag Manager. Harmless when GTM is not installed. A few of them are also the moment to suggest
+  // putting the site on the phone's home screen (homeNudge, below).
+  function track(data) { (window.dataLayer = window.dataLayer || []).push(data); if (homeWorth(data)) homeNudge(data.event); }
+
+  // ----- "Put it on your home screen" -----
+  // The site is already an app a phone can keep (manifest.json, display: standalone), and on an iPhone the home screen
+  // copy is the only one notifications reach. So right after something worth coming back to (following a school,
+  // program or camp; saving a favorite or a school; putting something on a week, a day off or the summer), a phone
+  // that isn't running the home screen copy gets a small card at the bottom: Android's own "Install" prompt behind
+  // one button where the browser offers it (beforeinstallprompt), the steps on an iPhone or iPad and on an Android
+  // phone whose browser doesn't offer it, nothing on a computer. It shows a few seconds after the action, once a visit,
+  // at most three times two weeks apart, and never again after "No thanks" or once it's added (pas-home, on this
+  // device). Never on a quiet page. Analytics hears pas_home_screen: shown, add, dismiss, installed, and the platform.
+  var homePrompt = null;
+  window.addEventListener('beforeinstallprompt', function (e) { if (e.preventDefault) e.preventDefault(); homePrompt = e; });
+  window.addEventListener('appinstalled', function () { homeKeep({ off: 1 }); homePrompt = null; var c = document.getElementById('homecard'); if (c) c.parentNode.removeChild(c); track({ event: 'pas_home_screen', action: 'installed' }); });
+  function homeWorth(d) {
+    if (!d) return false;
+    if (d.event === 'pas_alert_signup' || d.event === 'pas_school_save' || d.event === 'pas_board_add' || d.event === 'pas_dayoff_pick') return true;
+    if (d.event === 'pas_favorite' || d.event === 'pas_summer') return d.action === 'save' || d.action === 'add';
+    return false;
+  }
+  function homeState() { try { var o = JSON.parse(window.localStorage.getItem('pas-home') || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } }
+  function homeKeep(o) { try { var cur = homeState(); Object.keys(o).forEach(function (k) { cur[k] = o[k]; }); window.localStorage.setItem('pas-home', JSON.stringify(cur)); } catch (e) { /* storage blocked: it may ask again */ } }
+  var homeAsked = false;
+  function homeNudge(why) {
+    if (homeAsked || document.documentElement.hasAttribute('data-quiet')) return;
+    var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+    if (standalone) return;
+    var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var android = /Android/i.test(navigator.userAgent);
+    if (!ios && !android) return;
+    var st = homeState(), now = Date.now();
+    if (st.off || (st.n || 0) >= 3 || (st.last && now - st.last < 14 * 864e5)) return;
+    homeAsked = true;
+    window.setTimeout(function () {
+      if (document.getElementById('homecard')) return;
+      homeKeep({ n: (st.n || 0) + 1, last: now });
+      var platform = ios ? 'ios' : 'android';
+      var card = document.createElement('aside'); card.className = 'homecard'; card.id = 'homecard'; card.setAttribute('aria-labelledby', 'homecard-h');
+      var inner = el('div', 'homecard-in');
+      var ic = el('img', 'homecard-ic'); ic.src = (document.querySelector('link[rel="apple-touch-icon"]') || {}).href || '/apple-touch-icon.png'; ic.alt = ''; ic.width = 48; ic.height = 48; inner.appendChild(ic);
+      var words = el('div', 'homecard-words');
+      var h = el('p', 'homecard-h', 'Put Philly After School on your home screen'); h.id = 'homecard-h'; words.appendChild(h);
+      words.appendChild(el('p', 'homecard-p', ios ? 'One tap back to your plans, and on an iPhone it’s how notifications for the dates you follow reach you. No app store, nothing to pay.' : 'One tap back to your plans and the dates you follow. No app store, nothing to pay.'));
+      var acts = el('p', 'homecard-acts');
+      var close = function (how) { if (card.parentNode) card.parentNode.removeChild(card); if (how) track({ event: 'pas_home_screen', action: how, platform: platform }); };
+      if (ios || !homePrompt) {
+        var ol = el('ol', 'homecard-steps');
+        (ios ? ['Tap Share (the square with an arrow).', 'Choose “Add to Home Screen”, then “Add”.', 'Open it from your home screen. With an account, log in there once.']
+          : ['Open your browser’s menu (the three dots).', 'Choose “Add to Home screen” or “Install app”.']).forEach(function (t) { ol.appendChild(el('li', null, t)); });
+        words.appendChild(ol);
+        var ok = el('button', 'btn primary', 'Got it'); ok.type = 'button';
+        ok.addEventListener('click', function () { homeKeep({ off: 1 }); close('add'); });
+        acts.appendChild(ok);
+      } else {
+        var add = el('button', 'btn primary', 'Add it'); add.type = 'button';
+        add.addEventListener('click', function () {
+          var pr = homePrompt; homePrompt = null; close('add');
+          if (!pr || !pr.prompt) return;
+          pr.prompt();
+          if (pr.userChoice && pr.userChoice.then) pr.userChoice.then(function (c) { if (c && c.outcome === 'accepted') homeKeep({ off: 1 }); });
+        });
+        acts.appendChild(add);
+      }
+      var no = el('button', 'clear homecard-no', 'No thanks'); no.type = 'button';
+      no.addEventListener('click', function () { homeKeep({ off: 1 }); close('dismiss'); });
+      acts.appendChild(no);
+      words.appendChild(acts);
+      inner.appendChild(words);
+      var x = el('button', 'homecard-x', '×'); x.type = 'button'; x.setAttribute('aria-label', 'Close');
+      x.addEventListener('click', function () { close('later'); });
+      inner.appendChild(x);
+      card.appendChild(inner);
+      document.body.appendChild(card);
+      track({ event: 'pas_home_screen', action: 'shown', platform: platform, after: why });
+    }, 2500);
+  }
 
   // ----- the tour a signed-out visitor sees where a planner would be: an example of each view, a tab apiece. Without
   // this script every example shows, one under the other. Analytics hears which view was opened, and a press of

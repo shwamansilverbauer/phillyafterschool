@@ -367,10 +367,10 @@ if ($have) {
 <meta name="theme-color" content="#0A3566">
 <link rel="preload" href="../../assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../../assets/fonts/luckiest-guy-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../assets/site.css?v=9b369ed3">
+<link rel="stylesheet" href="../../assets/site.css?v=50bf7248">
 </head>
 <body>
-<script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
+<script>document.documentElement.className+=' js';document.documentElement.setAttribute('data-quiet','');try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
 <div class="band topstrip when-out"><div class="topbar"><div class="in">
     <span class="top-claim"><span class="top-wide">Run a program or camp?</span><span class="top-narrow">Run a program?</span> <a href="../../managers/">Claim your listing</a></span>
     <span class="top-login"><span class="top-wide">Already have an account?</span> <a href="../../account/">Log in</a></span>
@@ -527,7 +527,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
     </div>
   </div>
 </div></footer>
-<script src="../../assets/site.js?v=6e64d15d" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
+<script src="../../assets/site.js?v=6615bf21" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
 
 </body>
 </html>
