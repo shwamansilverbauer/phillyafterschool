@@ -2398,6 +2398,26 @@ build turns them into one worklist, `dist/data/check.json`, published with the s
   `https://`. This exists because it has happened: on October 6, 2026 a plain fetch of Beehive's page returned its
   2023–24 pickup list while a browser showed the 2026–27 one.
 
+### The free pre-read
+
+Most of the pages the monthly check opens say the same thing they said last month, and reading them costs the check
+time and money. So on the 1st, a few hours before it, a GitHub workflow (`.github/workflows/precheck.yml`, which also
+runs by hand from the Actions tab) reads them for free: `scripts/precheck.mjs` takes every page in `check.json`
+(`pages`, `camps`, `weekend`), reads it the way `data/reading.json` says (a plain fetch, or a headless Chromium for the
+"browser" pages; a "person" page is never requested), honors robots.txt (the rules are shared with
+`scripts/linkcheck.mjs` in `scripts/robots.mjs`), and keeps the page's visible text: scripts, styles and menus'
+markup out, one line per line, a repeated line once, and copyright lines left out, since the year turning over isn't a
+change. Each page keeps up to four versions (newest first, with the first and last day each was seen) in `pages.json`
+on the `precheck` branch, one commit replaced each time, with `report.json` beside it.
+
+The report compares each page with the version it had on the day its listings were last confirmed (a program's
+`lastVerified`, a pickup list's `read`, a camp's or weekend block's `checked`, the oldest of them when listings share a
+page), not with last month's reading, so a change still shows if last month's check was never merged. It sorts the
+pages into `same`, `sameSince` (no version that old is kept yet; unchanged since the oldest kept), `changed` (with the
+lines `added` and `removed`, order ignored, sixty of each at most), `new`, `failed`, `closed` (robots.txt) and
+`person`, each naming the listings that rest on the page. `tests/cases/02-precheck.mjs` runs it three times over a
+small site of its own.
+
 `check.json` has three parts:
 
 - `links`: every program-to-school link with its `checked` date. Pickup links also say what backs them (`basis`):

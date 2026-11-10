@@ -1,0 +1,60 @@
+name: Pre-read the listings' pages
+
+# Free, before the monthly listing check (README.md, "The free pre-read"). It reads every page that check would open,
+# the way data/reading.json says each must be read (a plain fetch, or a headless browser for the "browser" pages; never
+# the "person" ones), honoring robots.txt, and keeps each page's visible text on the "precheck" branch with a
+# report.json: which pages are the same as when their listings were last confirmed, which changed (with the lines that
+# changed), and which didn't answer. The monthly check then opens only what changed. Nothing here touches main, the
+# live site or the data.
+on:
+  schedule:
+    - cron: '17 9 1 * *'   # the 1st of the month, about 4:17am in Philadelphia (5:17 in summer), before the check at 8:53
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: precheck
+  cancel-in-progress: false
+
+jobs:
+  read:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: The worklist
+        run: node build.mjs > /dev/null
+      - name: Playwright, for the pages that need a browser
+        id: pw
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.63.0
+          echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+      - run: npx playwright install --with-deps chromium
+      - name: What was read last time
+        run: |
+          mkdir -p .precheck
+          if git fetch --quiet origin precheck 2>/dev/null; then git show origin/precheck:pages.json > .precheck/pages.json || true; fi
+      - name: Read the pages
+        run: node scripts/precheck.mjs .precheck
+      # One commit on a branch of its own, replaced each time: the pages' texts with up to four versions each, and the
+      # report. Pushing it doesn't publish anything (publish.yml runs on main).
+      - name: Keep it on the precheck branch
+        env:
+          REMOTE: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+        run: |
+          cd .precheck
+          git init --quiet -b precheck
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pages.json report.json
+          git commit --quiet -m "Pre-read of $(date -u +%F)"
+          git push --quiet --force "$REMOTE" precheck
