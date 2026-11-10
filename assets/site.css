@@ -439,6 +439,22 @@ button.btn{cursor:pointer;font-family:inherit}
 
 /* ---------- shared filters: type, pickup, area, cost rows; the grade strip stays on screen ---------- */
 .fbar{flex-direction:column;gap:12px;margin-bottom:-16px}
+/* The one question at the top of a long list (focusCard in build.mjs): a yellow card that asks, then one quiet line. */
+.focus{margin:0 0 6px;padding:16px 18px 14px;border:3px solid var(--ink);border-radius:18px;background:#FFF3BF;box-shadow:0 4px 0 var(--ink);color:var(--ink)}
+.focus[hidden]{display:none}
+.focus-h{font-family:var(--display);font-stretch:112%;font-weight:800;letter-spacing:-.01em;font-size:1.2rem;line-height:1.2;margin:0 0 4px}
+.focus-p{margin:0 0 12px}
+.focus-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0}
+.focus-row select,.focus-row input{font:inherit;font-size:1rem;padding:11px 12px;border:2px solid var(--ink);border-radius:12px;background:#fff;color:var(--ink);min-width:0;flex:1 1 200px;max-width:360px}
+.focus-row .btn{flex:none}
+.focus-more,.focus-alt{margin:10px 0 0;font-size:.95rem;display:flex;flex-wrap:wrap;gap:4px 18px}
+.focus-say{margin:8px 0 0}
+.focus-say:empty{display:none}
+.focus.answered{padding:10px 14px;background:var(--sky-bg);border-width:2px;box-shadow:none}
+.focus-on{margin:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.focus-name{font-weight:800}
+.focus-acts{display:inline-flex;flex-wrap:wrap;gap:4px 16px}
+.focus-board{margin:0 0 14px}
 .fbar-top{display:flex;flex-direction:column;gap:12px}
 .fbar-top .finder{margin:0 0 4px}
 .frow{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;min-width:0}
