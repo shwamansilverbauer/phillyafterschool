@@ -6,7 +6,7 @@ METHOD:PUBLISH
 BEGIN:VEVENT
 UID:blue-chip-flag-south-philadelphia-2027-03-15@phillyafter
  school.org
-DTSTAMP:20261109T120000Z
+DTSTAMP:20261110T120000Z
 DTSTART;VALUE=DATE:20270315
 DTEND;VALUE=DATE:20270316
 SUMMARY:Blue Chip Flag football\, South Philadelphia: Spring

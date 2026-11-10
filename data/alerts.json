@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-11-09",
+  "generated": "2026-11-10",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -1119,40 +1119,6 @@
     "reason": "you asked to be told when this school was added"
   },
   "alerts": [
-    {
-      "id": "added-bache-martin",
-      "kind": "added",
-      "date": "2026-11-07",
-      "sendOn": "2026-11-07",
-      "expires": "2026-11-09",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "bache-martin-school"
-      ],
-      "when": "New",
-      "title": "Bache-Martin now has a page",
-      "text": "You asked to be told. 9 programs are listed for Bache-Martin so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/bache-martin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
-    {
-      "id": "added-childs",
-      "kind": "added",
-      "date": "2026-11-07",
-      "sendOn": "2026-11-07",
-      "expires": "2026-11-09",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "george-w-childs-school"
-      ],
-      "when": "New",
-      "title": "Childs now has a page",
-      "text": "You asked to be told. 10 programs are listed for Childs so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/childs/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
     {
       "id": "added-houston",
       "kind": "added",
