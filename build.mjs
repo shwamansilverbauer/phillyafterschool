@@ -927,6 +927,8 @@ const haystack = (p, extra = []) => [p.name, p.what, ...(p.offers || []), ...(p.
 // data/geo.json holds a latitude and longitude for each street address in the data (scripts/geocode.mjs fills it in).
 // From it: how far a program is from a school, in a straight line, and the points a page hands to the map.
 const GEO = fs.existsSync(path.join(ROOT, 'data/geo.json')) ? readJson('data/geo.json').places || {} : {};
+// The middle of each ZIP code in and around Philadelphia (Census), for "closest first" from a ZIP typed on the summer list.
+const ZIPS = fs.existsSync(path.join(ROOT, 'data/zips.json')) ? readJson('data/zips.json').zips || {} : {};
 const coordsOf = text => streetAddresses(text).map(a => GEO[addressKey(a)]).filter(Boolean);
 {
   // Say which addresses the map and the distances can't use yet, so whoever changed one knows to run the lookup.
@@ -1057,7 +1059,40 @@ const planLine = (text, gos) => `<section class="section plan-line">
 const nearRow = (depth, here) => !Object.keys(GEO).length ? '' : `<div class="frow nearbar" data-near${PREVIEW ? '' : ` data-leaflet="${link('assets/leaflet/', depth)}"`} data-schools="${esc(JSON.stringify(SCHOOL_LL))}"${here && SCHOOL_LL[here.id] ? ` data-here="${SCHOOL_LL[here.id].join(',')}" data-here-name="${esc(here.shortName)}"` : ''}><span class="flabel">${here ? 'Map' : 'Nearest'}</span><div class="rail" role="group" aria-label="${here ? 'Map' : 'Nearest first, and the map'}">${here ? '' : `<button type="button" class="tbtn" id="near-school" aria-pressed="false" hidden></button><button type="button" class="tbtn" id="near-me" aria-pressed="false">From where I am</button><button type="button" class="tbtn" id="near-off" hidden>Back to A to Z</button>`}${PREVIEW ? '' : `<button type="button" class="tbtn" id="map-toggle" aria-expanded="false">Show the map</button>`}</div></div>`;
 const nearMap = depth => !Object.keys(GEO).length ? '' : `<p class="hint near-status" id="near-status" aria-live="polite"></p>
   <div class="mapwrap" id="near-map" hidden><div class="mapbox" id="near-mapbox" role="region" aria-label="Map of the places in this list"></div><p class="hint">${T(`Places are put on the map from their street address. The map’s pictures come from OpenStreetMap.`)} <a href="${link('privacy/', depth)}#map">${T(`What that means for your privacy.`)}</a></p></div>`;
-function filterBar({ list, depth, school = null, show = {}, near = false, searchLabel, placeholder = 'Its name, or try drums, art, chess…' }) {
+// The one question at the top of a long list that makes it yours: which school (after school), which neighborhood (day
+// camps, a day off, weekend classes) or where you live (summer camps). site.js shows it only where it can work (never
+// without JavaScript), asks until it's answered, then shrinks to one line saying what the list shows, with Change. The
+// answer is kept on the device: a school is the same "my school" the school pages save (and goes to the profile for
+// someone who keeps it there); a neighborhood is remembered across the lists; a ZIP code never leaves the browser.
+const sortedSchools = () => [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName));
+const focusOn = (lead, wide) => `<p class="focus-on" hidden><span class="focus-lead">${lead} <b class="focus-name"></b></span> <span class="focus-acts"><button type="button" class="clear focus-change">${T(`Change`)}</button>${wide ? `<button type="button" class="clear focus-wide">${wide}</button>` : ''}</span></p>`;
+const schoolSelect = id => `<div class="focus-row"><label class="vh" for="${id}">Your child’s school</label><select class="focus-pick" id="${id}"><option value="">Choose a school…</option>${sortedSchools().map(s => `<option value="${esc(s.id)}">${esc(s.shortName)}</option>`).join('')}</select></div>`;
+function focusCard(mode, depth) {
+  const head = (h, p) => `<p class="focus-h">${h}</p><p class="focus-p">${p}</p>`;
+  if (mode === 'school') return `<div class="focus" data-focus="school" hidden>
+    <div class="focus-ask">${head(T(`Start with your child’s school`), T(`Pick it, and this list shows what works for that school: programs in the building, programs that pick up from it, and places a short walk away.`))}
+      ${schoolSelect('focus-pick')}
+      <p class="focus-more"><a href="${link('schools/request/', depth)}">${T(`School not on the list? Ask for it.`)}</a></p>
+    </div>
+    ${focusOn(T(`Showing what works for`), T(`Every school`))}
+  </div>`;
+  if (mode === 'hood') return `<div class="focus" data-focus="hood" hidden>
+    <div class="focus-ask">${head(T(`Start with your neighborhood`), T(`Pick it, and this list shows what’s there. Any child can go, whatever school they’re at.`))}
+      <div class="focus-row"><label class="vh" for="focus-pick">Your neighborhood</label><select class="focus-pick" id="focus-pick"><option value="">Choose a neighborhood…</option></select></div>
+    </div>
+    ${focusOn(T(`Showing what’s in`), T(`Everywhere`))}
+  </div>`;
+  if (mode === 'near') return `<div class="focus" data-focus="near" data-zips="${esc(JSON.stringify(ZIPS))}" hidden>
+    <div class="focus-ask">${head(T(`Start from home`), T(`Type your ZIP code, and the camps closest to you come first. It stays on this device.`))}
+      <form class="focus-row" novalidate><label class="vh" for="focus-zip">ZIP code</label><input class="focus-zip" id="focus-zip" inputmode="numeric" autocomplete="postal-code" maxlength="5" placeholder="Your ZIP code"><button type="submit" class="btn primary">${T(`Closest first`)}</button></form>
+      <p class="focus-alt"><button type="button" class="clear focus-me">${T(`Use where I am`)}</button><button type="button" class="clear focus-school" hidden></button></p>
+      <p class="hint focus-say" aria-live="polite"></p>
+    </div>
+    ${focusOn(T(`Closest first, from`), T(`Back to A to Z`))}
+  </div>`;
+  return '';
+}
+function filterBar({ list, depth, school = null, show = {}, near = false, focus = '', searchLabel, placeholder = 'Its name, or try drums, art, chess…' }) {
   const on = { q: true, type: true, grade: true, age: false, hood: true, cost: true, ...show };
   const btn = (f, v, label, n, cls = 'tbtn', extra = '') => `<button type="button" class="${cls}" id="${f}-${v}" data-f="${f}" data-v="${v}" data-label="${esc(label)}" aria-pressed="${v === 'ALL'}"${extra}>${esc(label)}${n === null ? '' : ` (${n})`}</button>`;
   const KIND_LABEL = { after: 'After school', weekend: 'Weekends', off: 'Day camps', summer: 'Summer' };
@@ -1087,6 +1122,7 @@ function filterBar({ list, depth, school = null, show = {}, near = false, search
   }).join('') : '';
   const both = on.grade && on.age;
   return `<div class="fbar needs-js-block" data-filters${school ? ` data-school="${esc(school.id)}"` : ''}>
+    ${focus && !school ? focusCard(focus, depth) : ''}
     <div class="fbar-top">
     ${on.q ? `<div class="finder">
       <label for="prog-search">${T(searchLabel || `Looking for a particular program?`)}</label>
@@ -1682,7 +1718,7 @@ function programsPage() {
   const { sections } = typeSections('after', list, 1);
   const hero = `    <h1>${T(`After-school programs`)}</h1>
     <p class="lede">${T(`All {n} after-school programs on this site, across every school, sorted by what they are. Narrow them by type, grade or neighborhood, then open one for its hours, cost and how to register.`, { n: list.length })}</p>`;
-  const body = `${filterBar({ list, depth: 1, show: { day: true }, near: true, searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
+  const body = `${filterBar({ list, depth: 1, show: { day: true }, near: true, focus: 'school', searchLabel: `Find a program`, placeholder: 'A name, or try drums, art, chess…' })}
 ${noMatch(1)}
 ${sections}
 ${planLine(T(`Found one? Put it on the week and see how the afternoons line up.`), [[link('board/', 1), T(`Build your week`)]])}
@@ -2400,6 +2436,7 @@ function privacyPage() {
     <li>${T(`A roster lives in the browser you made it in. Clearing your browser’s site data deletes it.`)}</li>
     <li>${(GATE ? T(`A summer schedule and a days-off plan are kept the same way: your picks, and any first name you type, are saved in your browser and, while you are signed in, in your profile. You can take either out of your profile, and it then stays in your browser only. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`) : GROUPS ? T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us unless you sign in and choose to keep the summer in your profile. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`) : T(`A summer schedule is kept the same way: the camps you picked for each week, and any first name you type, stay in your browser and are not sent to us. A photo you add to a calendar picture is used once, in your browser, and is never saved or uploaded.`))}</li>
     <li>${T(`If you save a school as yours, that choice is kept in your own browser too. Our visit counts record that a school was saved, not who saved it.`)}</li>
+    <li>${T(`A neighborhood or ZIP code you pick at the top of a list is kept in your own browser, so the list starts there next time. The ZIP code is only used in your browser to put the closest camps first. It is never sent to us or to analytics.`)}</li>
     <li>${T(`A child’s name is optional, and a nickname or an initial works. A week with no name on it stays on your device. A name you do add is kept in your profile with the plan it is on, and goes with a week you share.`)}</li>${GROUPS ? `
     <li>${T(`Dates you add yourself to “My kids’ calendar”, like picture day or a form that’s due, are kept in your browser and nowhere else. They are not sent to us and are not part of your profile, so they don’t appear on your other devices.`)}</li>` : ''}
     <li>${T(`A week can no longer be shared as a link. A link showed the week to anyone who had it and could not be taken back, so links made before October 2026 have stopped opening.`)}</li>
@@ -3024,7 +3061,7 @@ ${d.note ? `<p class="flag">${esc(d.note)}</p>` : ''}
 <section class="section" id="open">
   <h2>${open.length ? (one ? T(`Open that day`) : T(`Open during the break`)) : T(`Nothing posted yet`)}</h2>
   ${open.length ? `<p>${T(`A program is listed here only when its own website names this date. Spots fill, so check with the program before you count on one.`)}</p>
-${open.length > 2 ? filterBar({ list: shaped, depth: D, show: { grade: false, age: true, day: false, cost: false }, searchLabel: `Looking for a particular camp?`, placeholder: 'A name or a neighborhood, or try art, sports…' }).replace('data-filters', 'data-filters data-noschool data-noun="camp" data-nouns="camps"') + noMatch(D) : ''}
+${open.length > 2 ? filterBar({ list: shaped, depth: D, show: { grade: false, age: true, day: false, cost: false }, focus: 'hood', searchLabel: `Looking for a particular camp?`, placeholder: 'A name or a neighborhood, or try art, sports…' }).replace('data-filters', 'data-filters data-noschool data-noun="camp" data-nouns="camps"') + noMatch(D) : ''}
 ${cards}` : `<p>${T(`None of the programs here that run camps on days off had this date on its website when we checked. Some post their dates a few weeks ahead, so ask the ones below.`)}</p>`}
   <div class="actions"><a class="btn primary needs-js" href="${link(offPath, D)}#d-${d.dates[0]}">${one ? T(`Plan this day for each child`) : T(`Plan the break for each child`)}</a><a class="btn" href="${link(dayCampsPath, D)}#days">${T(`All days off this year`)}</a></div>
 </section>
@@ -3119,7 +3156,7 @@ ${pageNav(`<div class="tabs view-switch page-views" id="off-page-views" role="gr
 <section class="section" id="who" data-pane="who">
   <h2>${T(`Who runs something when school is closed`)}</h2>
   <p>${T(`{n} listed programs say they run camps or full days on days off. Children from any school can go, so start from your part of the city. {m} of them had no dates on their site when we checked, so ask which days they cover.`, { n: campPrograms.length, m: noDates.length })}</p>
-  ${filterBar({ list: campPrograms.map(p => shapeFor('off', p)), depth: D, show: { grade: false, age: true, day: false }, searchLabel: `Looking for a particular program?`, placeholder: 'A name or a neighborhood, or try art, chess…' }).replace('data-filters', 'data-filters data-noschool')}
+  ${filterBar({ list: campPrograms.map(p => shapeFor('off', p)), depth: D, show: { grade: false, age: true, day: false }, focus: 'hood', searchLabel: `Looking for a particular program?`, placeholder: 'A name or a neighborhood, or try art, chess…' }).replace('data-filters', 'data-filters data-noschool')}
   ${noMatch(D)}
   ${dc.sections}
   ${planLine(T(`Pick a camp, or a day at home, for every day off this year.`), [[link(offPath, D), T(`Plan the days off`)]])}
@@ -4508,6 +4545,11 @@ function boardPage() {
         <button type="button" class="tab" data-fill="roll" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="${DICE}"/></svg>${T(`Roll a week`)}</button>
       </div>
       <div data-fill-pane="add" style="display:contents">
+      <div class="focus focus-board" id="board-focus" hidden>
+        <div class="focus-ask"><p class="focus-h">${T(`Start with your child’s school`)}</p><p class="focus-p">${T(`Programs that work for it come first when you search or browse.`)}</p>
+          ${schoolSelect('board-focus-pick')}</div>
+        ${focusOn(T(`Starting from`), '')}
+      </div>
       <div class="adder-find adder-big">
         <label for="add-search" class="vh">${T(`Add a program`)}</label>
         <span class="hint">${T(`Search by name, or by what it is: music, chess, soccer, a neighborhood, your school.`)}</span>
@@ -6370,7 +6412,7 @@ function summerCampsPage() {
   const body = `<section class="section">
   <p class="flag camp-guide"><b>${T(`Most of what’s here is from summer {year}, shown as a guide.`, { year: base })}</b> ${T(`Camps usually post next summer between December and March. Each listing changes to {year} when its camp posts dates and prices, and says so on its card.`, { year: next })}${ALERTS ? ' ' + T(`Waiting on one camp? Its page has a box to be emailed when it posts.`) : ''}</p>
 </section>
-${filterBar({ list: shaped, depth: D, show: { grade: false, age: true }, near: true, searchLabel: `Looking for a particular camp?`, placeholder: 'Its name, or try art, tennis, Mount Airy…' }).replace('data-filters', 'data-filters data-noun="camp" data-nouns="camps"')}
+${filterBar({ list: shaped, depth: D, show: { grade: false, age: true }, near: true, focus: 'near', searchLabel: `Looking for a particular camp?`, placeholder: 'Its name, or try art, tennis, Mount Airy…' }).replace('data-filters', 'data-filters data-noun="camp" data-nouns="camps"')}
 <p class="hint">${T(`Grades here are worked out from each camp’s ages, so check the ages on the camp’s page. Each camp has its own page with everything it posts.`)}</p>
 ${noMatch(D)}
 ${sc.sections}
@@ -6413,7 +6455,7 @@ function weekendPage() {
   const wk = typeSections('weekend', weekendPrograms, D, shape);
   const hero = `    <h1>${T(`Saturday and Sunday classes`)}</h1>
     <p class="lede">${T(`Weekend classes for kids across the city: what runs, on which day, and where. Open one for its term, times and cost.`)}</p>`;
-  const body = `${filterBar({ list: weekendPrograms.map(shape), depth: D, show: { grade: false, age: true, cost: false, day: false }, near: true, searchLabel: `Looking for a particular class?`, placeholder: 'A name or a neighborhood, or try piano, acting…' }).replace('data-filters', 'data-filters data-noschool')}
+  const body = `${filterBar({ list: weekendPrograms.map(shape), depth: D, show: { grade: false, age: true, cost: false, day: false }, near: true, focus: 'hood', searchLabel: `Looking for a particular class?`, placeholder: 'A name or a neighborhood, or try piano, acting…' }).replace('data-filters', 'data-filters data-noschool')}
 <p class="hint">${T(`A weekend class has no school pickup, so this list goes by where the class is. Any child can sign up, whichever school they go to.`)}</p>
 ${noMatch(D)}
 ${wk.sections}

@@ -1101,6 +1101,18 @@
   function mySchool() {
     try { var m = JSON.parse(store('pas-my-school') || 'null'); return m && /^[a-z0-9-]+$/.test(m.id || '') && typeof m.name === 'string' ? { id: m.id, name: m.name.slice(0, 60) } : null; } catch (e) { return null; }
   }
+  // Saving "my school" from anywhere that asks (a school's page, the question at the top of the after-school list, the
+  // week builder): on this device, and in the profile too for someone signed in who keeps their school there. Nothing is
+  // sent for anyone else. `done` hears whether the profile has it now.
+  function keepSchool(id, name, done) {
+    if (!id) { try { window.localStorage.removeItem('pas-my-school'); } catch (e) { /* nothing saved */ } }
+    else { store('pas-my-school', JSON.stringify({ id: id, name: name })); track({ event: 'pas_school_save', school: id }); }
+    var tag = document.querySelector('script[data-api]'), api = tag ? tag.getAttribute('data-api') : '';
+    if (api && window.fetch && store('pas-in') === '1' && store('pas-prof-school') === '1') {
+      window.fetch(api + '?action=school_save', { method: 'POST', credentials: 'same-origin', headers: { 'X-PAS': '1', 'Content-Type': 'application/json' }, body: JSON.stringify({ school: id || '' }) })
+        .then(function (r) { if (done) done(!!r.ok); }, function () { if (done) done(false); });   // offline: the device still has it
+    } else if (done) done(false);
+  }
   // ----- the days a program runs: null when it doesn't say, otherwise whether that day is one of them -----
   var DAY_FULL = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' };
   function daysFor(days, offerDays, cls) { return (cls && offerDays && offerDays[cls]) || days || null; }
@@ -3141,7 +3153,8 @@
       var tests = words.map(function (w) { return new RegExp('(^|[^a-z0-9])' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')); });
       var every = function (hay) { return tests.every(function (t) { return t.test(hay); }); };
       var hits = Object.keys(data.programs).filter(function (id) { return every(data.programs[id].q); });
-      var rank = function (id) { return every(data.programs[id].name.toLowerCase()) ? 0 : 1; };   // a match in the name comes first
+      var mineB = mySchool();   // a match in the name comes first, then what works for the child's school
+      var rank = function (id) { return (every(data.programs[id].name.toLowerCase()) ? 0 : 2) + (mineB && !data.programs[id].schools[mineB.id] ? 1 : 0); };
       hits.sort(function (a, b) { return rank(a) - rank(b) || data.programs[a].name.localeCompare(data.programs[b].name); });
       addShown = hits.slice(0, 8);
       var b = activeBoard();
@@ -3278,6 +3291,30 @@
         if (mine0 && data.schools[mine0.id]) { exSchool.value = mine0.id; exState.school = mine0.id; }
         window.pasExploreRedraw = drawExplore;
       }
+      // The week builder starts from the child's school as well (focusCard in build.mjs): asked until it's known, then one
+      // line. The answer is the same "my school" the lists use, and browsing and search start from it.
+      var bFocus = $('#board-focus');
+      if (bFocus) (function () {
+        var bAsk = bFocus.querySelector('.focus-ask'), bOn = bFocus.querySelector('.focus-on'), bName = bFocus.querySelector('.focus-name'), bPick = bFocus.querySelector('.focus-pick'), bChange = bFocus.querySelector('.focus-change');
+        var paintB = function (asking) {
+          var m = mySchool(), on = !!m && !!data.schools[m.id] && !asking;
+          bAsk.hidden = on; bOn.hidden = !on;
+          bFocus.className = bFocus.className.replace(/ answered\b/g, '') + (on ? ' answered' : '');
+          if (on) bName.textContent = data.schools[m.id].name;
+          if (m && data.schools[m.id]) bPick.value = m.id;
+        };
+        bPick.addEventListener('change', function () {
+          var id = bPick.value; if (!id || !data.schools[id]) return;
+          keepSchool(id, data.schools[id].name);
+          if (exSchool) { exSchool.value = id; var ev; try { ev = new Event('change'); } catch (e) { ev = document.createEvent('Event'); ev.initEvent('change', true, true); } exSchool.dispatchEvent(ev); }
+          paintB(false);
+          if (addInput.value) renderAdd();
+          track({ event: 'pas_focus', focus: 'school', how: 'planner' });
+        });
+        bChange.addEventListener('click', function () { paintB(true); if (bPick.focus) bPick.focus(); });
+        bFocus.hidden = !!shared;
+        paintB(false);
+      })();
       // Arriving from a program's page ("Add to your week"): open that program here, ready for its days.
       var asked = query();
       if (asked.wk && data.weekend && data.weekend[asked.wk] && !shared && mayPlan()) {   // from the weekend classes page: "Add Saturday to your week"
@@ -4990,20 +5027,26 @@
     var groups = all(document, '[data-group]');
     // Someone who saved their school sees the citywide lists narrowed to it, with one tap to widen them again.
     var mineF = fSchool || fbar.hasAttribute('data-noschool') ? null : mySchool();   // weekend classes go by neighborhood, never by school
-    if (mineF && !items.some(function (it) { return (' ' + (it.getAttribute('data-schools') || '') + ' ').indexOf(' ' + mineF.id + ' ') > -1; })) mineF = null;
-    if (mineF) {
+    var servesSchool = function (id) { return items.some(function (it) { return (' ' + (it.getAttribute('data-schools') || '') + ' ').indexOf(' ' + id + ' ') > -1; }); };
+    if (mineF && !servesSchool(mineF.id)) mineF = null;
+    var schoolRowEl = null, fbtns = null, wireBtn = null;
+    var schoolRow = function (m) {   // the School row in the filters: "Works for Nebinger" or "Any school"
+      if (schoolRowEl) { schoolRowEl.parentNode.removeChild(schoolRowEl); if (fbtns) fbtns = fbtns.filter(function (b) { return b.getAttribute('data-f') !== 'school'; }); }
       var srow = el('div', 'frow'), srail = el('div', 'rail');
       srow.appendChild(el('span', 'flabel', 'School'));
       srail.setAttribute('role', 'group'); srail.setAttribute('aria-label', 'School');
-      [[mineF.id, 'Works for ' + mineF.name, mineF.name], ['ALL', 'Any school', 'Any school']].forEach(function (o) {
+      [[m.id, 'Works for ' + m.name, m.name], ['ALL', 'Any school', 'Any school']].forEach(function (o) {
         var sb = el('button', 'tbtn', o[1]);
         sb.type = 'button'; sb.id = 'school-' + o[0]; sb.setAttribute('data-f', 'school'); sb.setAttribute('data-v', o[0]); sb.setAttribute('data-label', o[2]); sb.setAttribute('aria-pressed', 'false');
         srail.appendChild(sb);
+        if (fbtns && wireBtn) { fbtns.push(sb); wireBtn(sb); }   // made after the page started: wired here
       });
       srow.appendChild(srail);
       var firstRow = fbar.querySelector('.frow');
       if (firstRow) fbar.insertBefore(srow, firstRow); else fbar.appendChild(srow);
-    }
+      schoolRowEl = srow; mineF = m;
+    };
+    if (mineF) schoolRow(mineF);
     // Grades a signed-in parent keeps in their profile (the account pages copy them to this browser) become one more
     // choice on the grade row: programs that take any of their children's grades.
     var myGrades = [];
@@ -5030,7 +5073,18 @@
       mineA.appendChild(el('span', 'n', myAges.map(function (a) { return a === '14' ? '14+' : a; }).join(', ')));
       ageAll.parentNode.insertBefore(mineA, ageAll.nextSibling);
     }
-    var fbtns = all(document, '[data-f]');
+    fbtns = all(document, '[data-f]');
+    var focusEl = fbar.querySelector('[data-focus]'), focusMode = focusEl ? focusEl.getAttribute('data-focus') : '', focusPaint = null;
+    // Neighborhoods picked on these lists: the last few, newest first, because the weekend list names its areas
+    // differently from the day-camp lists, so each list starts from the newest one it has. "Everywhere" holds for that list.
+    var hoodsSaved = function () { try { var a = JSON.parse(store('pas-my-hoods') || '[]'); return Array.isArray(a) ? a.filter(function (x) { return typeof x === 'string' && /^[a-z0-9-]{1,60}$/.test(x); }) : []; } catch (e) { return []; } };
+    var keepHood = function (v) {
+      if (focusMode !== 'hood') return;
+      if (v === 'ALL') { store('pas-hood-wide:' + location.pathname, '1'); return; }
+      var a = hoodsSaved().filter(function (x) { return x !== v; }); a.unshift(v);
+      store('pas-my-hoods', JSON.stringify(a.slice(0, 4)));
+      try { window.localStorage.removeItem('pas-hood-wide:' + location.pathname); } catch (e) { /* nothing saved */ }
+    };
     var count = document.querySelector('#count'), clear = document.querySelector('#clear');
     var search = document.querySelector('#prog-search'), noMatch = document.querySelector('[data-nomatch]'), searchMore = document.querySelector('#search-more');
     var FILTERS = ['kind', 'type', 'grade', 'age', 'rel', 'hood', 'cost', 'day', 'school'];
@@ -5072,7 +5126,7 @@
     // Each listing carries the points it is at (data-ll). Distances are worked out here, in the browser, from a saved
     // school or from where the person is; neither is sent anywhere. The map library and its pictures load only once
     // someone asks for the map.
-    var nearEl = document.querySelector('[data-near]');
+    var nearEl = document.querySelector('[data-near]'), nearApi = null;
     if (nearEl) (function () {
       var statusEl = document.getElementById('near-status'), mapWrap = document.getElementById('near-map'), mapBox = document.getElementById('near-mapbox');
       var bSchool = document.getElementById('near-school'), bMe = document.getElementById('near-me'), bOff = document.getElementById('near-off'), bMap = document.getElementById('map-toggle');
@@ -5118,15 +5172,17 @@
         if (bMe) bMe.setAttribute('aria-pressed', String(!!ref && ref.kind === 'me'));
         if (bOff) bOff.hidden = !ref;
       };
-      var setRef = function (r, note) {
+      var setRef = function (r, note, quiet) {
         ref = r; order(); press();
         say(r ? 'Nearest to ' + r.label + ' first. Distances are in a straight line.' + (note ? ' ' + note : '') : '');
-        track({ event: 'pas_near', from: r ? r.kind : 'off' });
+        if (!quiet) track({ event: 'pas_near', from: r ? r.kind : 'off' });
         if (drawMap) drawMap();
+        if (nearApi.onChange) nearApi.onChange(r);
       };
+      nearApi = { set: setRef, ref: function () { return ref; }, me: bMe, school: null, onChange: null };   // the question at the top of the summer list uses these
       var saved = mySchool();
       if (bSchool && saved && schoolsLL[saved.id]) {
-        bSchool.hidden = false; bSchool.textContent = 'From ' + saved.name;
+        bSchool.hidden = false; bSchool.textContent = 'From ' + saved.name; nearApi.school = bSchool;
         bSchool.addEventListener('click', function () { if (ref && ref.kind === 'school') setRef(null); else setRef({ ll: schoolsLL[saved.id], label: saved.name, kind: 'school' }); });
       }
       if (bMe) {
@@ -5233,6 +5289,7 @@
         if (badge) badge.textContent = n;
       });
       if (afterFilter) afterFilter();
+      if (focusPaint) focusPaint();
       var bits = [];
       ['kind', 'school', 'type', 'rel', 'hood', 'cost', 'day'].forEach(function (f) {
         var b = state[f] !== 'ALL' ? findBtn(f, state[f]) : null;
@@ -5261,6 +5318,7 @@
             state[f] = 'ALL';
             if (f === 'grade') store('pas-grade', 'ALL');
             if (f === 'age') store('pas-age', 'ALL');
+            if (f === 'hood') keepHood('ALL');
             apply();
             if (tog && tog.focus) tog.focus();
             track({ event: 'pas_filter', filter_type: NAMES[f], filter_value: 'ALL', school: fSchool });
@@ -5302,21 +5360,24 @@
       return total;
     };
     var NAMES = { kind: 'kind', type: 'program_type', rel: 'relation', hood: 'neighborhood', grade: 'grade', age: 'age', cost: 'cost', day: 'day', school: 'school' };
-    fbtns.forEach(function (b) {
+    wireBtn = function (b) {
       if (b.tagName !== 'BUTTON') return;
       b.addEventListener('click', function () {
         var f = b.getAttribute('data-f'), v = b.getAttribute('data-v');
         state[f] = v;
         if (f === 'grade') store('pas-grade', v);
         if (f === 'age') store('pas-age', v);
+        if (f === 'hood') keepHood(v);   // a list that starts from your neighborhood remembers it
         apply();
         track({ event: 'pas_filter', filter_type: NAMES[f], filter_value: v, school: fSchool });
       });
-    });
+    };
+    fbtns.forEach(wireBtn);
     clear.addEventListener('click', function () {
       state = blank();
       terms = []; if (search) search.value = '';
       store('pas-grade', 'ALL'); store('pas-age', 'ALL');
+      if (state.hood === 'ALL') keepHood('ALL');
       apply();
     });
     if (search) {
@@ -5384,6 +5445,70 @@
         });
       }
     }
+    // ----- the one question that makes a long list yours (focusCard in build.mjs) -----
+    // The after-school list asks for the school, the day-camp and weekend lists for the neighborhood, and the summer list
+    // for where you live (a ZIP code, or where you are, or your school): unanswered it asks, answered it is one line
+    // saying what the list shows, with a way to change it. Answers are kept on this device; a school also goes to the
+    // profile for someone who keeps it there. The ZIP code never leaves the browser.
+    if (focusEl) (function () {
+      var ask = focusEl.querySelector('.focus-ask'), onLine = focusEl.querySelector('.focus-on'), nameEl = focusEl.querySelector('.focus-name');
+      var pick = focusEl.querySelector('.focus-pick'), change = focusEl.querySelector('.focus-change'), wide = focusEl.querySelector('.focus-wide'), note = focusEl.querySelector('.focus-say');
+      var asking = false;
+      var show = function (name) {
+        var answered = !!name && !asking;
+        ask.hidden = answered; onLine.hidden = !answered;
+        focusEl.className = focusEl.className.replace(/ answered\b/g, '') + (answered ? ' answered' : '');
+        if (answered) nameEl.textContent = name;
+      };
+      var reopen = function () { asking = true; focusPaint(); var f = focusEl.querySelector('select, input'); if (f && f.focus) f.focus(); };
+      if (change) change.addEventListener('click', reopen);
+      if (focusMode === 'school') {
+        focusPaint = function () { var b = state.school !== 'ALL' ? findBtn('school', state.school) : null; show(b ? b.getAttribute('data-label') : ''); };
+        all(pick, 'option').forEach(function (o) { if (o.value && !servesSchool(o.value)) o.parentNode.removeChild(o); });   // only schools this list has something for
+        var mine0 = mySchool(); if (mine0) pick.value = mine0.id;
+        pick.addEventListener('change', function () {
+          var id = pick.value; if (!id) return;
+          var name = pick.options[pick.selectedIndex].text;
+          keepSchool(id, name);
+          schoolRow({ id: id, name: name });
+          state.school = id; asking = false; apply();
+          track({ event: 'pas_focus', focus: 'school', how: 'pick' });
+        });
+        wide.addEventListener('click', function () { state.school = 'ALL'; asking = false; apply(); track({ event: 'pas_focus', focus: 'school', how: 'wide' }); });
+      } else if (focusMode === 'hood') {
+        var hoodBtns = fbtns.filter(function (b) { return b.getAttribute('data-f') === 'hood' && b.getAttribute('data-v') !== 'ALL'; });
+        if (!hoodBtns.length) { focusEl.hidden = true; return; }
+        hoodBtns.forEach(function (b) { var o = el('option', null, b.textContent); o.value = b.getAttribute('data-v'); pick.appendChild(o); });
+        if (!q0.hood && store('pas-hood-wide:' + location.pathname) !== '1') { var have = hoodsSaved().filter(function (x) { return findBtn('hood', x); }); if (have.length) state.hood = have[0]; }
+        focusPaint = function () { var b = state.hood !== 'ALL' ? findBtn('hood', state.hood) : null; show(b ? b.getAttribute('data-label') : ''); if (b) pick.value = state.hood; };
+        pick.addEventListener('change', function () {
+          if (!pick.value) return;
+          state.hood = pick.value; keepHood(pick.value); asking = false; apply();
+          track({ event: 'pas_focus', focus: 'neighborhood', how: 'pick' });
+        });
+        wide.addEventListener('click', function () { state.hood = 'ALL'; keepHood('ALL'); asking = false; apply(); track({ event: 'pas_focus', focus: 'neighborhood', how: 'wide' }); });
+      } else if (focusMode === 'near') {
+        if (!nearApi) { focusEl.hidden = true; return; }
+        var zips = {}; try { zips = JSON.parse(focusEl.getAttribute('data-zips')) || {}; } catch (e) { zips = {}; }
+        var zipIn = focusEl.querySelector('.focus-zip'), form = focusEl.querySelector('form'), meGo = focusEl.querySelector('.focus-me'), schoolGo = focusEl.querySelector('.focus-school');
+        var useZip = function (z, quiet) {
+          z = String(z || '').replace(/\D/g, '').slice(0, 5);
+          if (!zips[z]) { if (note) note.textContent = z.length === 5 ? 'That ZIP code isn’t one this site knows. It has the ones in and around Philadelphia.' : 'Type a five-digit ZIP code.'; return; }
+          if (note) note.textContent = '';
+          store('pas-my-zip', z); asking = false;
+          nearApi.set({ ll: zips[z], label: 'ZIP code ' + z, kind: 'zip' }, 'Measured from the middle of the ZIP code, which stays on this device.', quiet);
+        };
+        focusPaint = function () { var r = nearApi.ref(); show(r ? r.label : ''); };
+        nearApi.onChange = function () { asking = false; focusPaint(); };
+        form.addEventListener('submit', function (e) { e.preventDefault(); useZip(zipIn.value); });
+        if (meGo) { if (nearApi.me && !nearApi.me.hidden) meGo.addEventListener('click', function () { nearApi.me.click(); }); else meGo.hidden = true; }
+        if (schoolGo) { if (nearApi.school) { schoolGo.hidden = false; schoolGo.textContent = nearApi.school.textContent; schoolGo.addEventListener('click', function () { nearApi.school.click(); }); } else schoolGo.hidden = true; }
+        wide.addEventListener('click', function () { try { window.localStorage.removeItem('pas-my-zip'); } catch (e) { /* nothing saved */ } nearApi.set(null); });
+        var savedZip = store('pas-my-zip');
+        if (savedZip && zips[savedZip]) { zipIn.value = savedZip; useZip(savedZip, true); }
+      }
+      focusEl.hidden = false;
+    })();
     apply();
     var pressedGrade = document.querySelector('.gbtn[aria-pressed="true"]');
     if (pressedGrade && pressedGrade.scrollIntoView && state.grade !== 'ALL') pressedGrade.scrollIntoView({ block: 'nearest', inline: 'center' });
@@ -5408,15 +5533,8 @@
     btn.addEventListener('click', function () {
       var m = mySchool();
       var on = !(m && m.id === id);
-      if (!on) { try { window.localStorage.removeItem('pas-my-school'); } catch (e) { /* nothing saved */ } }
-      else { store('pas-my-school', JSON.stringify({ id: id, name: name })); track({ event: 'pas_school_save', school: id }); }
+      keepSchool(on ? id : '', name, function (inProfile) { if (inProfile && note && on) note.textContent = 'Saved on this device and in your profile. The home page, lists and your roster now start from ' + name + '. Tap again to undo.'; });
       paint();
-      // Someone signed in who keeps their school in their profile: keep the two in step. Nothing is sent for anyone else.
-      var tag = document.querySelector('script[data-api]'), api = tag ? tag.getAttribute('data-api') : '';
-      if (api && window.fetch && store('pas-in') === '1' && store('pas-prof-school') === '1') {
-        window.fetch(api + '?action=school_save', { method: 'POST', credentials: 'same-origin', headers: { 'X-PAS': '1', 'Content-Type': 'application/json' }, body: JSON.stringify({ school: on ? id : '' }) })
-          .then(function (r) { if (r.ok && note && on) note.textContent = 'Saved on this device and in your profile. The home page, lists and your roster now start from ' + name + '. Tap again to undo.'; }, function () { /* offline: the device still has it */ });
-      }
     });
     paint();
   });

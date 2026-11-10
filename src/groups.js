@@ -341,6 +341,17 @@
     var cur = deviceSchool();
     if (!cur || cur.id !== id) set('pas-my-school', JSON.stringify({ id: id, name: name }));
   }
+  // The neighborhood kept in a profile becomes the one the day-camp and weekend lists start from (site.js reads
+  // "pas-my-hoods", newest first). Only when the profile's changes, so a neighborhood picked on a list since isn't undone.
+  function adoptHood(id) {
+    id = id || '';
+    if ((get('pas-prof-hood') || '') === id) return;
+    set('pas-prof-hood', id || null);
+    if (!id || id === 'other' || !/^[a-z0-9-]{1,60}$/.test(id)) return;
+    var a = []; try { a = JSON.parse(get('pas-my-hoods') || '[]'); if (!Array.isArray(a)) a = []; } catch (e) { a = []; }
+    a = a.filter(function (x) { return x !== id; }); a.unshift(id);
+    set('pas-my-hoods', JSON.stringify(a.slice(0, 4)));
+  }
   // The grades kept in a profile are copied to this browser, where the lists read them (no request from those pages).
   // Keeping grades for the first time, or changing them, makes "My kids" the grade the lists start on.
   function adoptGrades(list) {
@@ -535,6 +546,7 @@
       if (registering) { location.replace(wantNext === 'account' ? page('profile/') : page('account/') + '?next=' + wantNext); return; }   // signed in: on to the profile, or to where they were headed
       seat(false);
       var me = d.user, groups = d.groups || [];
+      adoptHood(me && me.hood);
       // someone who has just signed in on the account page lands on their profile: that is where their things are
       if (fresh && view === 'account' && me.ready && wantNext === 'account') { location.replace(page('profile/')); return; }
       // a link to a part that lives on the other page
@@ -578,6 +590,7 @@
             if (!r.ok) { fs.textContent = r.message; fs.className = 'g-status bad'; return; }
             Object.keys(r.user).forEach(function (k) { me[k] = r.user[k]; });
             if (me.school) adoptSchool(me.school, (ainfo.schools || []).filter(function (x) { return x.id === me.school; }).map(function (x) { return x.name; })[0] || '');
+            adoptHood(me.hood);
             listOnce(me);
             if (wantNext !== 'account' && goNext(wantNext)) return;
             drawProfile(d);
@@ -1130,7 +1143,7 @@
         ainfo.hoods.forEach(function (x) { var o = el('option', null, x.name); o.value = x.id; hs.appendChild(o); });
         hs.value = me.hood || '';
         var hn = el('span', 'hint'); hn.setAttribute('aria-live', 'polite');
-        hs.addEventListener('change', function () { hn.textContent = 'Saving…'; call('hood_save', { hood: hs.value }).then(function (r) { hn.textContent = r.ok ? (r.hood ? 'Kept.' : 'Taken out of your profile.') : r.message; if (r.ok) { me.hood = r.hood; noteRole(me); } }); });
+        hs.addEventListener('change', function () { hn.textContent = 'Saving…'; call('hood_save', { hood: hs.value }).then(function (r) { hn.textContent = r.ok ? (r.hood ? 'Kept.' : 'Taken out of your profile.') : r.message; if (r.ok) { me.hood = r.hood; noteRole(me); adoptHood(r.hood); } }); });
         hoodRow.addEventListener('submit', function (e) { e.preventDefault(); });
         hoodRow.appendChild(hl); hoodRow.appendChild(hs); hoodRow.appendChild(hn);
         sch.appendChild(hoodRow);

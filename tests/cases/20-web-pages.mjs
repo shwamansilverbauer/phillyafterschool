@@ -126,6 +126,54 @@ test('Account Features: a menu of its own for someone signed out, a page for eac
   await t2.close();
 });
 
+test('each list starts with its question (the school, the neighborhood, a ZIP code), and the week builder with the school', async (ctx) => {
+  const b = await ctx.browser();
+  const t = await b.context(ctx.site, { width: 390, height: 844, mobile: true });
+  // After school: which school. Answered, it's one line, the list is narrowed, and it's "my school" from then on.
+  let page = await t.open('/programs/');
+  ok(await page.locator('.focus .focus-ask').isVisible(), 'the after-school list asks for the school');
+  const everything = await page.locator('#count').innerText();
+  const sid = await page.locator('#focus-pick option').nth(1).getAttribute('value');
+  await page.selectOption('#focus-pick', sid);
+  ok(await page.locator('.focus .focus-on').isVisible(), 'answered, the question is one line');
+  matches(await page.locator('#count').innerText(), /works for /, 'and the list shows what works for that school');
+  includes(await page.evaluate(() => localStorage.getItem('pas-my-school') || ''), `"id":"${sid}"`, 'kept as this device’s school');
+  await page.reload();
+  ok(await page.locator('.focus .focus-on').isVisible(), 'still answered after a reload');
+  await page.locator('.focus-wide').click();
+  ok(await page.locator('.focus .focus-ask').isVisible(), '"Every school" asks again');
+  eq(await page.locator('#count').innerText(), everything, 'with the whole list back');
+  // Day camps: which neighborhood, remembered on the next visit.
+  page = await t.open('/day-camps/');
+  ok(await page.locator('.focus .focus-ask').isVisible(), 'the day-camp list asks for the neighborhood');
+  const hood = await page.locator('#focus-pick option').nth(1).getAttribute('value');
+  await page.selectOption('#focus-pick', hood);
+  matches(await page.locator('#count').innerText(), /\(in /, 'narrowed to the neighborhood');
+  page = await t.open('/day-camps/');
+  ok(await page.locator('.focus .focus-on').isVisible(), 'and remembered on the next visit');
+  // Summer: a ZIP code puts the closest camps first; it stays in the browser.
+  page = await t.open('/summer-camps/');
+  await page.fill('#focus-zip', '00000'); await page.locator('.focus form button[type=submit]').click();
+  matches(await page.locator('.focus-say').innerText(), /isn’t one this site knows/, 'a ZIP code it doesn’t know is said plainly');
+  await page.fill('#focus-zip', '19147'); await page.locator('.focus form button[type=submit]').click();
+  includes(await page.locator('.focus-name').innerText(), '19147', 'answered with the ZIP code');
+  const mi = (await page.locator('[data-item]:not([hidden]) .mi-pill').allInnerTexts()).slice(0, 8).map(x => /Under/.test(x) ? 0 : parseFloat(x));
+  ok(mi.length > 2 && mi.every((m, i) => i === 0 || m >= mi[i - 1]), 'closest first: ' + mi.join(', '));
+  ok(!t.outside.some(u => /19147/.test(u)), 'the ZIP code went nowhere');
+  eq(t.errors.length, 0, 'no page errors: ' + t.errors.join(' | '));
+  await t.close();
+  // The week builder, signed in, with no school saved: it asks, then says where it starts from.
+  const pat = ctx.api().as(someone('focus'), 'Pat', 'Lee');
+  const t2 = await b.context(ctx.site, { sid: pat.cookie, width: 390, height: 844, mobile: true });
+  page = await t2.open('/board/');
+  await page.waitForSelector('#board-focus .focus-ask', { state: 'visible' });
+  await page.selectOption('#board-focus-pick', schools()[0].id);
+  ok(await page.locator('#board-focus .focus-on').isVisible(), 'the week builder starts from the school picked');
+  includes(await page.locator('#board-focus .focus-name').innerText(), schools()[0].shortName);
+  eq(await page.locator('#explore-school').inputValue(), schools()[0].id, 'and browsing starts there too');
+  await t2.close();
+});
+
 test('quiet pages: signed in, the account and profile pages run no analytics, and the email list hears nothing about a child', async (ctx) => {
   const b = await ctx.browser();
   const pat = ctx.api().as(someone('quiet'), 'Pat', 'Lee');

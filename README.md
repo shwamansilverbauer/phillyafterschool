@@ -723,6 +723,26 @@ The top of a program's page says which schools it works for as colored labels (`
 
 On a program's own page, a row of "The details" longer than about a hundred characters shows its first two lines with a "More" link (`fold()` in `build.mjs`). It is a `<details>` element holding the whole text, so it opens without JavaScript and nothing is left out of the page.
 
+**Each list starts with one question** (`focusCard()` in `build.mjs`, the `[data-focus]` block in `site.js`): the
+filter that makes that list the most use to one family, asked in a yellow card above the search box. The after-school
+list (`/programs/`) asks for the child's school; the day-camp list, each day off's page and the weekend list ask for
+the neighborhood; the summer list asks where you live, as a ZIP code (with "Use where I am", and "From <your school>"
+when one is saved). Answered, the card shrinks to one line ("Showing what works for Meredith", "Showing what's in
+Bella Vista", "Closest first, from ZIP code 19147") with Change and a way back to the whole list (Every school,
+Everywhere, Back to A to Z), which brings the question back. The answer drives the filters that were already there
+(the School row, the Area row, "Nearest first"), so the chips, the count and the address all agree with it. It is
+kept on the device: the school is the same "my school" a school's page saves (`keepSchool()`, which also keeps it in
+the profile for someone signed in who keeps their school there); neighborhoods go in `pas-my-hoods`, the last four
+picked, newest first, since the weekend list names its areas differently from the day-camp lists, so each list
+starts from the newest one it has (a neighborhood kept in a profile joins that list when it changes: `adoptHood()`
+in `groups.js`), and "Everywhere" holds for that list alone (`pas-hood-wide:<path>`); the ZIP code (`pas-my-zip`) is
+looked up in `data/zips.json`, the middle of each ZIP code area in and around Philadelphia from the Census Bureau's
+2024 Gazetteer file, and never leaves the browser. The week builder asks for the school the same way, above its
+search (`#board-focus`): programs that work for it come first in the search, and browsing starts there. Analytics
+gets `pas_focus` (focus: school, neighborhood; how: pick, wide, planner) and never which school, neighborhood or ZIP;
+`pas_near` says `zip` when a ZIP code set the order. The card's words are on `/edit/` like any other sentence.
+`tests/cases/20-web-pages.mjs` answers each kind.
+
 **The filters start shut.** They run to six rows plus the grade row, which is a lot to meet before the list, so
 `filterBar()` writes the search box first, full width, and under it one dark "Filters" button (`#filters-toggle`)
 with its line (`.fbar-top`), and `site.js` keeps the rows
