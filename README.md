@@ -1366,7 +1366,9 @@ its place and the publish goes on. `tests/cases/01-build.mjs` checks that each o
 
 The same script makes posts for social media from any page: `node scripts/share-pictures.js --post
 days-off/veterans-day-2026-11-11 <folder>` draws a 1080 by 1350 one for a feed and a 1080 by 1920 story, in the
-page's own words (the whole line, up to three or four lines), with Eddie in his sunglasses and the site's address.
+page's own words (the whole line, up to three or four lines), with Eddie in his sunglasses and the site's address. That Eddie is the original one from the logo, with the dark
+outline (`src/static/eddie.png`, cut from the brand's light-background lockup, the one `logo-sky.png` comes from),
+because the plain yellow bulb fades into the sky; the sunglasses are fitted to his eye in the script.
 
 The three faces are served from this site, not from Google: `src/fonts/` holds the WOFF2 files (Latin and Latin
 Extended, the weights the site uses: Luckiest Guy 400, Figtree 700 and 800, Atkinson Hyperlegible 400 and 700, from

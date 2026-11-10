@@ -8,7 +8,8 @@
 //   node scripts/share-pictures.js --pages                    one for each page the build gave its own picture
 //                                                              (shareImage: { page: true }): dist/share/<path>.png
 //   node scripts/share-pictures.js --post <page> [out folder] posts for a page, e.g. days-off/veterans-day-2026-11-11:
-//                                                              a 1080 by 1350 one for a feed and a 1080 by 1920 story
+//                                                              a 1080 by 1350 one for a feed and a 1080 by 1920 story,
+//                                                              with the outlined Eddie (eddie.png) in his sunglasses
 //
 // A page's picture and post say what the page itself says: its headline and its first line, as Rachael and the
 // /edit/ pages have them, read from the built page. The publish workflow draws the pages' pictures after the tests,
@@ -64,7 +65,7 @@ const picture = ({ headline, line, art, height }, w, h, opts = {}) => `<!doctype
 </style></head><body><div class="band pagehead pic">
   <div class="pic-text"><img class="pic-logo" src="../logo-sky.png" alt=""><h1>${esc(headline)}</h1>${line ? `<p>${esc(line)}</p>` : ''}</div>
   ${opts.url ? `<div class="pic-url">${esc(opts.url)}</div>` : ''}
-  ${opts.eddie ? `<div class="pic-eddie"><img src="../bulb.png" alt="">${SHADES}</div>` : ''}
+  ${opts.eddie ? `<div class="pic-eddie"><img src="../eddie.png" alt="">${SHADES}</div>` : ''}
   ${art}
 </div><script>
   window.fit = (bottom, size, min, full, first, most) => {
@@ -78,8 +79,15 @@ const picture = ({ headline, line, art, height }, w, h, opts = {}) => `<!doctype
   };
 </script></body></html>`;
 
-// Eddie's sunglasses, the same drawing the site puts on him when a plan is finished (cheer() in site.js).
-const SHADES = (() => { const m = read('src/site.js').match(/var SHADES = ('[\s\S]*?');\n/); return m ? Function('return ' + m[1])().replace(/class="cheer-shades-on"/, '') : ''; })();
+// Eddie on a post is the original one from the logo, with the dark outline that stands out on the sky
+// (src/static/eddie.png, 438 by 526, cut from the brand's light-background lockup). His sunglasses are the drawing the
+// site puts on him when a plan is finished (cheer() in site.js), made for bulb.png's frame (327 by 400), so they are
+// moved onto this Eddie's eye: about 1.23 times as big, and over and down a little.
+const SHADES = (() => {
+  const m = read('src/site.js').match(/var SHADES = ('[\s\S]*?');\n/); if (!m) return '';
+  const svg = Function('return ' + m[1])().replace(/class="cheer-shades-on"/, '');
+  return svg.replace('viewBox="0 0 327 400"', 'viewBox="0 0 438 526"').replace(/(<svg[^>]*>)([\s\S]*)(<\/svg>)/, '$1<g transform="translate(7 35) scale(1.227)">$2</g>$3');
+})();
 
 const firstSentence = s => { const m = s.match(/^.*?[.!?](?=\s|$)/); return m ? m[0] : s; };
 
@@ -92,7 +100,7 @@ async function draw(ctx, words, file, w, h, opts) {
     await p.goto('file://' + tmp);
     await p.evaluate(() => document.fonts.ready);
     const art = (opts.artScale || 1) * words.height;
-    const room = opts.eddie ? h - art - 50 - opts.eddie * 1.22 : h - art - 6;   // the words stay clear of the drawing (and of Eddie, on a post)
+    const room = opts.eddie ? h - art - 50 - opts.eddie * 1.2 : h - art - 6;   // the words stay clear of the drawing (and of Eddie, on a post)
     const got = await p.evaluate(([b, s, m, full, first, most]) => window.fit(b, s, m, full, first, most), [room, opts.size || 80, opts.min || 50, words.line, firstSentence(words.line), opts.lines || 2]);
     fs.mkdirSync(path.dirname(file), { recursive: true });
     await p.screenshot({ path: file });
