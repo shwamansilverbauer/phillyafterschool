@@ -399,6 +399,8 @@ if (!edit_signed_in()) {
     <li><a href="../houston/">Houston page</a></li>
     <li><a href="../childs/">Childs page</a></li>
     <li><a href="../bache-martin/">Bache-Martin page</a></li>
+    <li><a href="../independence-charter/">Independence Charter page</a></li>
+    <li><a href="../greenfield/">Greenfield page</a></li>
     <li><a href="../types/">Program types</a></li>
     <li><a href="../types/aftercare/">A type page (Aftercare)</a></li>
     <li><a href="../by-day/">By day of the week</a></li>

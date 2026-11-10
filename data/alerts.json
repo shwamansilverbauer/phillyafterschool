@@ -60,6 +60,14 @@
     {
       "id": "bache-martin",
       "name": "Bache-Martin"
+    },
+    {
+      "id": "independence-charter",
+      "name": "Independence Charter"
+    },
+    {
+      "id": "greenfield",
+      "name": "Greenfield"
     }
   ],
   "programs": [
@@ -593,6 +601,7 @@
       "id": "koresh-school-of-dance",
       "name": "Koresh School of Dance",
       "parts": [
+        "after",
         "weekend"
       ]
     },
@@ -608,8 +617,45 @@
       "id": "zazz-dance",
       "name": "ZAZZ",
       "parts": [
+        "after",
         "weekend",
+        "off",
         "summer"
+      ]
+    },
+    {
+      "id": "ics-21st-century",
+      "name": "21st Century Community Learning Center at ICS at Independence Charter",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "beacon-center",
+      "name": "Beacon Center for Children: After-School Program",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "evolve-dance",
+      "name": "Evolve Dance",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "martial-posture",
+      "name": "Martial Posture After School",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "yous-fitfulness",
+      "name": "Yous “Fitfulness” After-School",
+      "parts": [
+        "after"
       ]
     },
     {
@@ -717,6 +763,13 @@
     {
       "id": "bache-martin-clubs",
       "name": "School clubs and teams at Bache-Martin",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "greenfield-clubs",
+      "name": "School clubs and teams at Greenfield",
       "parts": [
         "after"
       ]
@@ -1144,6 +1197,40 @@
       "button": "See the page"
     },
     {
+      "id": "added-greenfield",
+      "kind": "added",
+      "date": "2026-11-10",
+      "sendOn": "2026-11-10",
+      "expires": "2026-11-12",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "albert-m-greenfield-school"
+      ],
+      "when": "New",
+      "title": "Greenfield now has a page",
+      "text": "You asked to be told. 13 programs are listed for Greenfield so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/greenfield/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-independence-charter",
+      "kind": "added",
+      "date": "2026-11-10",
+      "sendOn": "2026-11-10",
+      "expires": "2026-11-12",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "independence-charter-school"
+      ],
+      "when": "New",
+      "title": "Independence Charter now has a page",
+      "text": "You asked to be told. 14 programs are listed for Independence Charter so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
       "id": "camp-arden-drama-school-2026-11-11",
       "kind": "camp",
       "part": "off",
@@ -1433,6 +1520,23 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-zazz-dance-2026-11-11",
+      "kind": "camp",
+      "part": "off",
+      "date": "2026-11-11",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "zazz-dance"
+      ],
+      "within": "off-2026-11-11",
+      "when": "Wednesday, November 11",
+      "title": "ZAZZ: camp on a day off",
+      "text": "School is closed (Veterans Day). ZAZZ has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/zazz-dance/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "off-2026-11-11",
       "kind": "dayoff",
       "date": "2026-11-11",
@@ -1441,9 +1545,12 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Wednesday, November 11",
       "title": "No school: Veterans Day",
-      "text": "17 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Hudson Table, Kids on 12th, Makom Community, Mister John’s Music, MoveMakers Philly, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "text": "18 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Hudson Table, Kids on 12th, Makom Community, Mister John’s Music, MoveMakers Philly, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, The NeighborHub, The Schuylkill Center for Environmental Education and ZAZZ.",
       "url": "https://phillyafterschool.org/days-off/veterans-day-2026-11-11/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -1546,6 +1653,30 @@
       "first": "Wednesday: no school, Veterans Day; Saturday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for enrolled students",
       "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Coppin’s week"
+    },
+    {
+      "id": "week-greenfield-2026-11-09",
+      "kind": "week",
+      "date": "2026-11-13",
+      "sendOn": "2026-11-08",
+      "expires": "2026-11-11",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "greenfield"
+      ],
+      "when": "Week of November 9",
+      "title": "This week at Greenfield",
+      "text": "Wednesday: No school: Veterans Day.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Veterans Day"
+        }
+      ],
+      "first": "Wednesday: no school, Veterans Day",
+      "url": "https://phillyafterschool.org/greenfield/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Greenfield’s week"
     },
     {
       "id": "week-houston-2026-11-09",
@@ -2114,6 +2245,23 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-zazz-dance-2026-11-16",
+      "kind": "camp",
+      "part": "off",
+      "date": "2026-11-16",
+      "sendOn": "2026-11-01",
+      "schools": [],
+      "programs": [
+        "zazz-dance"
+      ],
+      "within": "off-2026-11-16",
+      "when": "Monday, November 16",
+      "title": "ZAZZ: camp on a day off",
+      "text": "School is closed (Report card conferences). ZAZZ has posted a camp.",
+      "url": "https://phillyafterschool.org/programs/zazz-dance/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "campreg-esf-camps-2026-11-16",
       "schools": [],
       "programs": [],
@@ -2154,9 +2302,12 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Monday, November 16",
       "title": "No school: Report card conferences",
-      "text": "11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, MoveMakers Philly, NLArts, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "text": "12 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, MoveMakers Philly, NLArts, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, The NeighborHub, The Schuylkill Center for Environmental Education and ZAZZ.",
       "url": "https://phillyafterschool.org/days-off/report-card-conferences-2026-11-16/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
     },
@@ -2259,6 +2410,30 @@
       "first": "Monday: no school, Report card conferences; Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students",
       "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Coppin’s week"
+    },
+    {
+      "id": "week-greenfield-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "greenfield"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Greenfield",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/greenfield/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Greenfield’s week"
     },
     {
       "id": "week-houston-2026-11-16",
@@ -2824,11 +2999,29 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Wednesday, November 25",
       "title": "No school: Staff professional development",
       "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
       "url": "https://phillyafterschool.org/days-off/staff-professional-development-2026-11-25/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-independence-charter-2026-11-25",
+      "kind": "dayoff",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "independence-charter"
+      ],
+      "programs": [],
+      "when": "Wednesday, November 25 to Friday, November 27",
+      "title": "No school at Independence Charter: Thanksgiving holiday",
+      "text": "From Independence Charter’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
+      "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Independence Charter’s week"
     },
     {
       "id": "camp-elite-sports-factory-2026-11-26",
@@ -2856,6 +3049,9 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Thursday, November 26 to Friday, November 27",
       "title": "No school: Thanksgiving recess",
       "text": "One listed program has posted a camp: Elite Sports Factory.",
@@ -3044,6 +3240,38 @@
       "button": "See Coppin’s week"
     },
     {
+      "id": "week-greenfield-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "greenfield"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Greenfield",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/greenfield/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Greenfield’s week"
+    },
+    {
       "id": "week-houston-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -3074,6 +3302,38 @@
       "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
       "url": "https://phillyafterschool.org/houston/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Houston’s week"
+    },
+    {
+      "id": "week-independence-charter-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "independence-charter"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Independence Charter",
+      "text": "Wednesday: No school: Thanksgiving holiday. Thursday: No school: Thanksgiving holiday. Friday: No school: Thanksgiving holiday.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Thanksgiving holiday"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving holiday"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving holiday"
+        }
+      ],
+      "first": "Wednesday: no school, Thanksgiving holiday; Thursday: no school, Thanksgiving holiday",
+      "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Independence Charter’s week"
     },
     {
       "id": "week-kirkbride-2026-11-23",
@@ -3716,7 +3976,8 @@
         "stanton",
         "mccall",
         "columbus-charter",
-        "marian-anderson"
+        "marian-anderson",
+        "independence-charter"
       ],
       "programs": [
         "mister-johns-music"
@@ -3741,7 +4002,8 @@
         "stanton",
         "mccall",
         "columbus-charter",
-        "marian-anderson"
+        "marian-anderson",
+        "independence-charter"
       ],
       "programs": [
         "mister-johns-music"
@@ -3766,7 +4028,8 @@
         "stanton",
         "mccall",
         "columbus-charter",
-        "marian-anderson"
+        "marian-anderson",
+        "independence-charter"
       ],
       "programs": [
         "mister-johns-music"
@@ -3888,7 +4151,8 @@
         "coppin",
         "vare-washington",
         "mccall",
-        "southwark"
+        "southwark",
+        "independence-charter"
       ],
       "programs": [
         "philly-art-center-qv"
@@ -3911,7 +4175,8 @@
         "coppin",
         "vare-washington",
         "mccall",
-        "southwark"
+        "southwark",
+        "independence-charter"
       ],
       "programs": [
         "philly-art-center-qv"
@@ -3925,6 +4190,21 @@
       "sendOn": "2026-12-07",
       "when": "Today, Monday, December 7",
       "text": "Last day to change a Winter/Spring registration."
+    },
+    {
+      "id": "off-independence-charter-2026-12-11",
+      "kind": "dayoff",
+      "date": "2026-12-11",
+      "sendOn": "2026-11-29",
+      "schools": [
+        "independence-charter"
+      ],
+      "programs": [],
+      "when": "Friday, December 11",
+      "title": "No school at Independence Charter: Report card day",
+      "text": "From Independence Charter’s own calendar. One listed program has posted a camp: ZAZZ.",
+      "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Independence Charter’s week"
     },
     {
       "id": "reg-philly-pack-2026-12-12",
@@ -4044,6 +4324,21 @@
       "expires": "2026-12-17",
       "when": "Tomorrow, Friday, December 18",
       "text": "Last day of winter term registration for new students."
+    },
+    {
+      "id": "off-independence-charter-2026-12-21",
+      "kind": "dayoff",
+      "date": "2026-12-21",
+      "sendOn": "2026-12-06",
+      "schools": [
+        "independence-charter"
+      ],
+      "programs": [],
+      "when": "Monday, December 21 to Friday, January 1",
+      "title": "No school at Independence Charter: Winter break",
+      "text": "From Independence Charter’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The NeighborHub.",
+      "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Independence Charter’s week"
     },
     {
       "id": "camp-arden-drama-school-2026-12-23",
@@ -4241,6 +4536,9 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Wednesday, December 23 to Friday, January 1",
       "title": "No school: Winter recess",
       "text": "11 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The NeighborHub.",
@@ -4344,6 +4642,21 @@
       "expires": "2026-12-30",
       "when": "Tomorrow, Thursday, December 31",
       "text": "Last day for 20% off all camps with code EARLYBIRD27 (register before January 1)."
+    },
+    {
+      "id": "off-independence-charter-2027-01-04",
+      "kind": "dayoff",
+      "date": "2027-01-04",
+      "sendOn": "2026-12-20",
+      "schools": [
+        "independence-charter"
+      ],
+      "programs": [],
+      "when": "Monday, January 4",
+      "title": "No school at Independence Charter: Staff professional development",
+      "text": "From Independence Charter’s own calendar. One listed program has posted a camp: The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Independence Charter’s week"
     },
     {
       "id": "campreg-ymca-day-camps-2027-01-06",
@@ -4588,6 +4901,9 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Friday, January 15",
       "title": "No school: Staff professional development",
       "text": "8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
@@ -4722,11 +5038,29 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Monday, January 18",
       "title": "No school: Dr. Martin Luther King Jr. Day",
       "text": "7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/dr-martin-luther-king-jr-day-2027-01-18/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-independence-charter-2027-01-18",
+      "kind": "dayoff",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [
+        "independence-charter"
+      ],
+      "programs": [],
+      "when": "Monday, January 18",
+      "title": "No school at Independence Charter: Dr. Martin Luther King Jr. Day",
+      "text": "From Independence Charter’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Independence Charter’s week"
     },
     {
       "id": "campreg-ymca-day-camps-2027-01-20",
@@ -4954,6 +5288,9 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Friday, January 29",
       "title": "No school: Report card conferences",
       "text": "8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
@@ -5218,6 +5555,9 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Friday, February 12",
       "title": "No school: Staff professional development",
       "text": "8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
@@ -5420,11 +5760,29 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Monday, February 15",
       "title": "No school: Presidents’ Day",
       "text": "11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
       "url": "https://phillyafterschool.org/days-off/presidents-day-2027-02-15/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-independence-charter-2027-02-15",
+      "kind": "dayoff",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "independence-charter"
+      ],
+      "programs": [],
+      "when": "Monday, February 15",
+      "title": "No school at Independence Charter: Presidents’ Day",
+      "text": "From Independence Charter’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
+      "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Independence Charter’s week"
     },
     {
       "id": "reg-philadelphia-dance-academy-2027-02-15",
@@ -5709,6 +6067,9 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Wednesday, March 10",
       "title": "No school: Eid al-Fitr",
       "text": "10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
@@ -5746,6 +6107,21 @@
       "sendOn": "2027-03-15",
       "when": "Today, Monday, March 15",
       "text": "Spring 2027 registration closes."
+    },
+    {
+      "id": "off-independence-charter-2027-03-19",
+      "kind": "dayoff",
+      "date": "2027-03-19",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "independence-charter"
+      ],
+      "programs": [],
+      "when": "Friday, March 19",
+      "title": "No school at Independence Charter: Report card day",
+      "text": "From Independence Charter’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Independence Charter’s week"
     },
     {
       "id": "camp-butchers-sew-shop-2027-03-22",
@@ -5943,11 +6319,29 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Monday, March 22 to Friday, March 26",
       "title": "No school: Spring recess and Good Friday",
       "text": "11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/spring-break-and-good-friday-2027-03-22/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-independence-charter-2027-03-22",
+      "kind": "dayoff",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "independence-charter"
+      ],
+      "programs": [],
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "No school at Independence Charter: Spring break",
+      "text": "From Independence Charter’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Independence Charter’s week"
     },
     {
       "id": "camp-butchers-sew-shop-2027-03-29",
@@ -6077,11 +6471,29 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Monday, March 29",
       "title": "No school: Staff professional development",
       "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/staff-professional-development-2027-03-29/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-independence-charter-2027-04-09",
+      "kind": "dayoff",
+      "date": "2027-04-09",
+      "sendOn": "2027-03-28",
+      "schools": [
+        "independence-charter"
+      ],
+      "programs": [],
+      "when": "Friday, April 9",
+      "title": "No school at Independence Charter: Staff professional development",
+      "text": "From Independence Charter’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Independence Charter’s week"
     },
     {
       "id": "camp-butchers-sew-shop-2027-04-16",
@@ -6228,6 +6640,9 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Friday, April 16",
       "title": "No school: Report card conferences",
       "text": "8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
@@ -6468,6 +6883,9 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Monday, May 17",
       "title": "No school: Eid al-Adha",
       "text": "10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
@@ -6653,6 +7071,9 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Tuesday, May 18",
       "title": "No school: Election Day",
       "text": "10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
@@ -6685,11 +7106,29 @@
         "*"
       ],
       "programs": [],
+      "notSchools": [
+        "independence-charter"
+      ],
       "when": "Monday, May 31",
       "title": "No school: Memorial Day",
       "text": "One listed program has posted a camp: Elite Sports Factory.",
       "url": "https://phillyafterschool.org/days-off/memorial-day-2027-05-31/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-independence-charter-2027-05-31",
+      "kind": "dayoff",
+      "date": "2027-05-31",
+      "sendOn": "2027-05-16",
+      "schools": [
+        "independence-charter"
+      ],
+      "programs": [],
+      "when": "Monday, May 31",
+      "title": "No school at Independence Charter: Memorial Day",
+      "text": "From Independence Charter’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Independence Charter’s week"
     }
   ]
 }

@@ -1,14 +1,14 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 194,
-    "pagesNeedingABrowser": 16,
-    "pagesNeedingAPerson": 8,
-    "links": 177,
-    "pickupLinks": 94,
-    "pickupOnAStoredList": 79,
+    "pages": 204,
+    "pagesNeedingABrowser": 18,
+    "pagesNeedingAPerson": 9,
+    "links": 208,
+    "pickupLinks": 121,
+    "pickupOnAStoredList": 104,
     "pickupFromAThirdPartyList": 0,
-    "pickupOnItsOwnSource": 15,
+    "pickupOnItsOwnSource": 17,
     "pickupWithNothingBehindIt": 0,
     "pickupNotOnTheProvidersList": 1,
     "oldestCheck": "2026-10-05"
@@ -38,6 +38,19 @@
     {
       "program": "coco-academy",
       "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-10-05",
+      "basis": "list",
+      "list": {
+        "where": "Bella Vista, 1001 Christian St",
+        "read": "2026-10-05",
+        "how": "person",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "coco-academy",
+      "school": "independence-charter",
       "relation": "pickup",
       "checked": "2026-10-05",
       "basis": "list",
@@ -351,7 +364,7 @@
       "basis": "list",
       "list": {
         "where": "Beehive @ Bok, 2026-2027",
-        "read": "2026-11-01",
+        "read": "2026-11-10",
         "how": "browser",
         "by": "provider"
       }
@@ -364,7 +377,7 @@
       "basis": "list",
       "list": {
         "where": "Beehive @ Bok, 2026-2027",
-        "read": "2026-11-01",
+        "read": "2026-11-10",
         "how": "browser",
         "by": "provider"
       }
@@ -377,7 +390,7 @@
       "basis": "list",
       "list": {
         "where": "Beehive @ Bok, 2026-2027",
-        "read": "2026-11-01",
+        "read": "2026-11-10",
         "how": "browser",
         "by": "provider"
       }
@@ -390,7 +403,7 @@
       "basis": "list",
       "list": {
         "where": "Beehive @ Bok, 2026-2027",
-        "read": "2026-11-01",
+        "read": "2026-11-10",
         "how": "browser",
         "by": "provider"
       }
@@ -403,10 +416,17 @@
       "basis": "list",
       "list": {
         "where": "Beehive @ Bok, 2026-2027",
-        "read": "2026-11-01",
+        "read": "2026-11-10",
         "how": "browser",
         "by": "provider"
       }
+    },
+    {
+      "program": "christian-street-ymca",
+      "school": "independence-charter",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "own-source"
     },
     {
       "program": "christian-street-ymca",
@@ -626,6 +646,30 @@
     },
     {
       "program": "kids-on-12th",
+      "school": "greenfield",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "kids-on-12th",
+      "school": "independence-charter",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "kids-on-12th",
       "school": "mccall",
       "relation": "pickup",
       "checked": "2026-11-01",
@@ -641,6 +685,32 @@
       "school": "kirkbride",
       "relation": "onsite",
       "checked": "2026-11-01"
+    },
+    {
+      "program": "makom-community",
+      "school": "greenfield",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "2401 Washington Avenue",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "makom-community",
+      "school": "independence-charter",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "2401 Washington Avenue",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
     },
     {
       "program": "makom-community",
@@ -748,6 +818,18 @@
     },
     {
       "program": "mister-johns-music",
+      "school": "independence-charter",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "mister-johns-music",
       "school": "mccall",
       "relation": "pickup",
       "checked": "2026-11-01",
@@ -801,6 +883,32 @@
       "checked": "2026-11-01",
       "basis": "list",
       "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "movemakers",
+      "school": "greenfield",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "2100 Chestnut St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "movemakers",
+      "school": "independence-charter",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "2100 Chestnut St",
         "read": "2026-11-01",
         "how": "fetch",
         "by": "provider"
@@ -920,6 +1028,19 @@
     },
     {
       "program": "philly-art-center-qv",
+      "school": "independence-charter",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village Pickup Schools",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-art-center-qv",
       "school": "mccall",
       "relation": "pickup",
       "checked": "2026-11-01",
@@ -991,6 +1112,19 @@
       "basis": "list",
       "list": {
         "where": "Bok, 1901 S 9th St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-inmovement",
+      "school": "independence-charter",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 500 Kenilworth St",
         "read": "2026-11-01",
         "how": "fetch",
         "by": "provider"
@@ -1142,6 +1276,19 @@
     {
       "program": "zhang-sah",
       "school": "coppin",
+      "relation": "pickup",
+      "checked": "2026-11-01",
+      "basis": "list",
+      "list": {
+        "where": "Queen Village, 530 Bainbridge St",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zhang-sah",
+      "school": "independence-charter",
       "relation": "pickup",
       "checked": "2026-11-01",
       "basis": "list",
@@ -1479,6 +1626,32 @@
       }
     },
     {
+      "program": "philly-art-center-fairmount",
+      "school": "greenfield",
+      "relation": "pickup",
+      "checked": "2026-11-07",
+      "basis": "list",
+      "list": {
+        "where": "Fairmount, 2333 Fairmount Ave",
+        "read": "2026-11-07",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-art-center-fairmount",
+      "school": "independence-charter",
+      "relation": "pickup",
+      "checked": "2026-11-07",
+      "basis": "list",
+      "list": {
+        "where": "Fairmount, 2333 Fairmount Ave",
+        "read": "2026-11-07",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
       "program": "principal-academy",
       "school": "coppin",
       "relation": "pickup",
@@ -1611,6 +1784,189 @@
         "how": "person",
         "by": "provider"
       }
+    },
+    {
+      "program": "beacon-center",
+      "school": "greenfield",
+      "relation": "pickup",
+      "checked": "2026-11-10",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-10",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "beehive-at-bok",
+      "school": "greenfield",
+      "relation": "pickup",
+      "checked": "2026-11-10",
+      "basis": "list",
+      "list": {
+        "where": "Beehive @ Ethical Society, 2026-2027",
+        "read": "2026-11-10",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "beehive-at-bok",
+      "school": "independence-charter",
+      "relation": "pickup",
+      "checked": "2026-11-10",
+      "basis": "list",
+      "list": {
+        "where": "Beehive @ Ethical Society, 2026-2027",
+        "read": "2026-11-10",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "beehive-at-bok",
+      "school": "marian-anderson",
+      "relation": "pickup",
+      "checked": "2026-11-10",
+      "basis": "list",
+      "list": {
+        "where": "Beehive @ Ethical Society, 2026-2027",
+        "read": "2026-11-10",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "beehive-at-bok",
+      "school": "stanton",
+      "relation": "pickup",
+      "checked": "2026-11-10",
+      "basis": "list",
+      "list": {
+        "where": "Beehive @ Ethical Society, 2026-2027",
+        "read": "2026-11-10",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "evolve-dance",
+      "school": "greenfield",
+      "relation": "pickup",
+      "checked": "2026-11-10",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-10",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "greenfield-clubs",
+      "school": "greenfield",
+      "relation": "onsite",
+      "checked": "2026-11-10"
+    },
+    {
+      "program": "ics-21st-century",
+      "school": "independence-charter",
+      "relation": "onsite",
+      "checked": "2026-11-10"
+    },
+    {
+      "program": "koresh-school-of-dance",
+      "school": "greenfield",
+      "relation": "pickup",
+      "checked": "2026-11-10",
+      "basis": "list",
+      "list": {
+        "where": "2002 Rittenhouse Square St",
+        "read": "2026-11-10",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "marian-anderson-rec",
+      "school": "independence-charter",
+      "relation": "nearby",
+      "checked": "2026-11-10"
+    },
+    {
+      "program": "markward-playground",
+      "school": "greenfield",
+      "relation": "nearby",
+      "checked": "2026-11-10"
+    },
+    {
+      "program": "martial-posture",
+      "school": "greenfield",
+      "relation": "pickup",
+      "checked": "2026-11-10",
+      "basis": "own-source"
+    },
+    {
+      "program": "yous-fitfulness",
+      "school": "greenfield",
+      "relation": "pickup",
+      "checked": "2026-11-10",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-10",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "yous-fitfulness",
+      "school": "marian-anderson",
+      "relation": "pickup",
+      "checked": "2026-11-10",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-10",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zazz-dance",
+      "school": "greenfield",
+      "relation": "pickup",
+      "checked": "2026-11-10",
+      "basis": "list",
+      "list": {
+        "where": "1923 Chestnut St",
+        "read": "2026-11-10",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zazz-dance",
+      "school": "independence-charter",
+      "relation": "pickup",
+      "checked": "2026-11-10",
+      "basis": "list",
+      "list": {
+        "where": "1923 Chestnut St",
+        "read": "2026-11-10",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zazz-dance",
+      "school": "marian-anderson",
+      "relation": "pickup",
+      "checked": "2026-11-10",
+      "basis": "list",
+      "list": {
+        "where": "1923 Chestnut St",
+        "read": "2026-11-10",
+        "how": "browser",
+        "by": "provider"
+      }
     }
   ],
   "pages": [
@@ -1675,6 +2031,22 @@
         "makom-community",
         "sawubona-creativity-project",
         "east-passyunk-rec"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://greenfield.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "movemakers",
+        "kids-on-12th",
+        "makom-community",
+        "zazz-dance",
+        "beacon-center",
+        "evolve-dance",
+        "martial-posture",
+        "greenfield-clubs",
+        "philly-art-center-fairmount"
       ],
       "lists": []
     },
@@ -1913,6 +2285,38 @@
       "lists": []
     },
     {
+      "url": "https://beaconcenterforchildren.com/after-school-program-tuition/",
+      "how": "fetch",
+      "programs": [
+        "beacon-center"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://beaconcenterforchildren.com/after-school-program/",
+      "how": "fetch",
+      "programs": [
+        "beacon-center"
+      ],
+      "lists": [
+        {
+          "program": "beacon-center",
+          "text": "children from 5-6 years old who attend Greenfield Elementary School",
+          "read": "2026-11-10",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://beaconcenterforchildren.com/application/",
+      "how": "fetch",
+      "programs": [
+        "beacon-center"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://blue-chip-flag-south-philadelphia.sportngin.com/register/form/571361594",
       "how": "fetch",
       "programs": [
@@ -2076,6 +2480,22 @@
       "lists": []
     },
     {
+      "url": "https://evolvedancephilly.com/youth-programs",
+      "how": "fetch",
+      "programs": [
+        "evolve-dance"
+      ],
+      "lists": [
+        {
+          "program": "evolve-dance",
+          "text": "Albert M Greenfield Elementary (Ages 5-6 and 7-9)",
+          "read": "2026-11-10",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
+    },
+    {
       "url": "https://fi.edu/en/science-education/youth-and-community-programs/pacts",
       "how": "fetch",
       "programs": [
@@ -2204,6 +2624,14 @@
       "lists": []
     },
     {
+      "url": "https://independencecharter.org/21st-century-program/",
+      "how": "fetch",
+      "programs": [
+        "ics-21st-century"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://ko12.org/after-school-pick-up-philadelphia",
       "how": "fetch",
       "programs": [
@@ -2314,6 +2742,14 @@
       "how": "fetch",
       "programs": [
         "makom-community"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://martialposture.com/walnut-street/after-school/",
+      "how": "fetch",
+      "programs": [
+        "martial-posture"
       ],
       "lists": []
     },
@@ -2809,7 +3245,7 @@
           "program": "beehive-at-bok",
           "where": "Beehive @ Bok, 2026-2027",
           "text": "Monday through Friday from Kirkbride, Coppin, Nebinger, Southwark, Jenks, and Vare Washington",
-          "read": "2026-11-01",
+          "read": "2026-11-10",
           "how": "browser",
           "by": "provider"
         },
@@ -2817,7 +3253,7 @@
           "program": "beehive-at-bok",
           "where": "Beehive @ Ethical Society, 2026-2027",
           "text": "Monday through Friday from MANA, Stanton, Greenfield and ICS",
-          "read": "2026-11-01",
+          "read": "2026-11-10",
           "how": "browser",
           "by": "provider"
         }
@@ -3006,6 +3442,15 @@
       "lists": []
     },
     {
+      "url": "https://www.hisawyer.com/youslife/schedules",
+      "how": "person",
+      "why": "Yous’s Sawyer sign-up page answered HTTP 403 to a plain fetch on 2026-11-10, and Sawyer’s booking pages have refused automated reading before (see Dandelion and Sawubona).",
+      "programs": [
+        "yous-fitfulness"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.jordanfamilylearningcenter.com/aftercare-signup",
       "how": "fetch",
       "programs": [
@@ -3027,7 +3472,16 @@
       "programs": [
         "koresh-school-of-dance"
       ],
-      "lists": []
+      "lists": [
+        {
+          "program": "koresh-school-of-dance",
+          "where": "2002 Rittenhouse Square St",
+          "text": "Albert M Greenfield Elementary",
+          "read": "2026-11-10",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
     },
     {
       "url": "https://www.koreshdance.org/children-registration",
@@ -3489,8 +3943,43 @@
       "lists": []
     },
     {
-      "url": "https://zazzphilly.com/early-childhood/",
+      "url": "https://yous.life/after-school-programs-philadelphia/",
       "how": "fetch",
+      "programs": [
+        "yous-fitfulness"
+      ],
+      "lists": [
+        {
+          "program": "yous-fitfulness",
+          "text": "Marian Anderson & Albert Greenfield",
+          "read": "2026-11-10",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://zazzphilly.com/afterschool/",
+      "how": "browser",
+      "why": "A plain fetch got SiteGround’s bot check (HTTP 202 and a refresh to /.well-known/sgcaptcha/) on 2026-11-10 for both the after-school and early-childhood pages; Chrome showed the pages.",
+      "programs": [
+        "zazz-dance"
+      ],
+      "lists": [
+        {
+          "program": "zazz-dance",
+          "where": "1923 Chestnut St",
+          "text": "Albert Greenfield School, Independence Charter School, Marian Anderson",
+          "read": "2026-11-10",
+          "how": "browser",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://zazzphilly.com/early-childhood/",
+      "how": "browser",
+      "why": "A plain fetch got SiteGround’s bot check (HTTP 202 and a refresh to /.well-known/sgcaptcha/) on 2026-11-10 for both the after-school and early-childhood pages; Chrome showed the pages.",
       "programs": [
         "zazz-dance"
       ],
@@ -3778,9 +4267,9 @@
       "term": "Fall 2026: seven weeks from October 31 and November 1, skipping Thanksgiving weekend.",
       "checked": "2026-11-01",
       "url": "https://zazzphilly.com/early-childhood/",
-      "how": "fetch",
+      "how": "browser",
       "look": "The fall session block lists each series on one line with its ages, day, time and price.",
-      "notes": "The site calls itself ZAZZ by Philly Dance Fitness."
+      "notes": "The site calls itself ZAZZ by Philly Dance Fitness. A plain fetch gets a SiteGround bot check (data/reading.json)."
     }
   ],
   "told": [

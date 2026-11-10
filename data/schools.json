@@ -153,7 +153,7 @@
     "notes": [
       "Stanton has free before and after school care in the building, run by Sunrise of Philadelphia. Enrollment is open all year on Sunrise’s site.",
       "The Christian Street YMCA is a short walk west on Christian St, and the Y’s before-and-after-school page lists that branch as serving Stanton, with care from 7 am and until 6 pm.",
-      "Beehive’s 2026–27 after-care list for its Rittenhouse site named Stanton when we read it on October 6. Beehive’s site doesn’t give that location’s address or hours, so ask Beehive directly.",
+      "Beehive’s group at the Ethical Society (1906 Rittenhouse Square) picks up from Stanton, for pre-K to 3rd grade. It has a listing here; Beehive’s site doesn’t give that group’s hours, so ask Beehive.",
       "The school’s partners page also names Marian Anderson Recreation Center (740 S 17th St), Mighty Writers and a homework club at Grace and Peace Community Church, without saying what each offers or when. Ask the office."
     ],
     "checkedNoPickup": [
@@ -307,7 +307,7 @@
     "added": "2026-11-05",
     "notes": [
       "The school’s own site names no aftercare of its own; it points to the City’s free Out-of-School Time programs and lists partners. Ask the office which partners run on site after school, and when.",
-      "Two more programs name Marian Anderson on their own sites but aren’t matched here yet: ZAZZ (1923 Chestnut St, ages 5–12, guaranteed pickup from Greenfield, ICS and Marian Anderson) and Philly Music Factory (2100 Chestnut St)."
+      "One more program names Marian Anderson on its own site but isn’t matched here yet: Philly Music Factory (2100 Chestnut St)."
     ]
   },
   {
@@ -397,5 +397,127 @@
       "The school’s own after-school page lists what runs on site and which programs collect children from the school, and it is the source for everything here. It mentions an aftercare in the cafeteria until 5:30 pm on Soccer Shots days without saying who runs it or how to sign up, so ask the office.",
       "Bache-Martin is the site’s first school in Fairmount, added because families asked for it. If you know a program that serves it and isn’t here, send it in and it goes on this page."
     ]
+  },
+  {
+    "id": "independence-charter",
+    "name": "Independence Charter School",
+    "shortName": "Independence Charter",
+    "aliases": [
+      "ICS",
+      "Independence Charter",
+      "Independence Charter School (ICS)"
+    ],
+    "address": "1600 Lombard St, Philadelphia, PA 19146",
+    "neighborhood": "Rittenhouse",
+    "grades": "K-8",
+    "dismissalNote": "the school’s site posts no bell schedule; its own after-school program starts at 3:15 pm, and at 1:30 pm on Wednesdays",
+    "phone": "215-238-8000",
+    "website": "https://independencecharter.org/",
+    "calendar": {
+      "source": {
+        "label": "ICS 2026–27 calendar",
+        "url": "https://drive.google.com/file/d/1sMqzJPf5XSenLlDXFcJlGyL_Eu8hh8kb/view"
+      },
+      "checked": "2026-11-10",
+      "lastDay": "2027-06-11",
+      "days": [
+        {
+          "date": "2026-09-07",
+          "name": "Labor Day"
+        },
+        {
+          "date": "2026-10-09",
+          "name": "Staff professional development"
+        },
+        {
+          "date": "2026-10-12",
+          "name": "Indigenous Peoples’ Day"
+        },
+        {
+          "date": "2026-11-25",
+          "end": "2026-11-27",
+          "name": "Thanksgiving holiday"
+        },
+        {
+          "date": "2026-12-11",
+          "name": "Report card day"
+        },
+        {
+          "date": "2026-12-21",
+          "end": "2027-01-01",
+          "name": "Winter break"
+        },
+        {
+          "date": "2027-01-04",
+          "name": "Staff professional development"
+        },
+        {
+          "date": "2027-01-18",
+          "name": "Dr. Martin Luther King Jr. Day"
+        },
+        {
+          "date": "2027-02-15",
+          "name": "Presidents’ Day"
+        },
+        {
+          "date": "2027-03-19",
+          "name": "Report card day"
+        },
+        {
+          "date": "2027-03-22",
+          "end": "2027-03-26",
+          "name": "Spring break"
+        },
+        {
+          "date": "2027-04-09",
+          "name": "Staff professional development"
+        },
+        {
+          "date": "2027-05-31",
+          "name": "Memorial Day"
+        }
+      ]
+    },
+    "lastReviewed": "2026-11-10",
+    "added": "2026-11-10",
+    "notes": [
+      "ICS runs its own after-school program at the school, the 21st Century Community Learning Center, funded by the Pennsylvania Department of Education. It has a listing here; ask the school how to sign up and whether it costs anything.",
+      "ICS keeps its own calendar, and its days off aren’t the District’s: it is open on Veterans Day and on November 16, for instance, and closed on December 11 and March 19 for report card days. The days off on this page come from the ICS calendar; the days-off planner and the list of who’s open go by the District’s, so check a camp’s dates against ICS’s.",
+      "Wednesdays are early-dismissal days at ICS, and programs handle them differently. ICS’s own program starts at 1:30 pm that day, Philly InMovement picks up from ICS on Wednesdays only, ZAZZ charges extra for its Wednesday early pickup, and Beehive doesn’t pick up on ICS’s half-day Wednesdays. Ask each program how Wednesdays work.",
+      "If you know a program that serves ICS and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "greenfield",
+    "name": "Albert M. Greenfield School",
+    "shortName": "Greenfield",
+    "aliases": [
+      "Albert M. Greenfield",
+      "Albert Greenfield",
+      "Greenfield Elementary",
+      "Greenfield School"
+    ],
+    "address": "2200 Chestnut St, Philadelphia, PA 19103",
+    "neighborhood": "Rittenhouse",
+    "grades": "K-8",
+    "dismissal": "3:00 pm",
+    "dismissalNote": "the school day is 8:21 am to 3:00 pm; Beacon and Yous both collect children at 2:50",
+    "phone": "215-400-7810",
+    "website": "https://greenfield.philasd.org/",
+    "lastReviewed": "2026-11-10",
+    "added": "2026-11-10",
+    "notes": [
+      "Greenfield’s own site names the programs that pick up at the school: Martial Posture, Move Makers, Evolve Dance, Philly Dance Fitness (its kids’ program is ZAZZ), Makom, Philly Arts Center, Kids on 12th and Beacon. Each has a listing here.",
+      "Several programs need a minimum number of children from one school (ZAZZ and Makom need four), and several don’t pick up on half days. Ask before counting on a half day.",
+      "If you know a program that serves Greenfield and isn’t here, send it in and it goes on this page."
+    ],
+    "alsoListed": {
+      "title": "Also on the Greenfield Home & School list",
+      "intro": "The Home & School Association’s list of after-school programs names these too. It says they are unaffiliated with the school, and we haven’t confirmed Greenfield pickup on their own pages.",
+      "items": [
+        "BZBI Neziner Hebrew School (300 S 18th St): Wednesdays 4:00–6:00 pm for K–7th grade. BZBI’s own page offers a 3:00 pm pre-care with pickup from participating schools without naming them; the Home & School list says Greenfield is one. bzbi.org",
+        "After School Philly (2210 Walnut St), which the list describes as working with MoveMakers Philly, Martial Posture and Philly Music Factory. afterschoolphilly.com"
+      ]
+    }
   }
 ]
