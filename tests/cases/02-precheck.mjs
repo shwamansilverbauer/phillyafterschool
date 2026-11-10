@@ -9,7 +9,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { test, ok, eq, deepEq, includes, ROOT } from '../lib/harness.mjs';
 
-test('the pre-read: same, changed (with the lines), compared with the version on the day last confirmed, robots.txt and people respected', async () => {
+test('the pre-read: same, changed (with the lines), compared with the version on the day last confirmed, robots.txt and people respected, and a stalled page given up on', async () => {
   const pages = {
     '/robots.txt': 'User-agent: *\nDisallow: /closed\n',
     '/camp': '<html><head><title>x</title><script>var t = Date.now()</script></head><body><nav><a href="/">Home</a></nav><h1>Summer camp</h1><p>June 8 to August 28, 2027</p><p>$395 a week</p><footer>© 2026 Camp</footer></body></html>',
@@ -21,6 +21,7 @@ test('the pre-read: same, changed (with the lines), compared with the version on
   const server = http.createServer((req, res) => {
     asked.push(req.url);
     const body = pages[req.url];
+    if (req.url === '/slow') { res.writeHead(200, { 'content-type': 'text/html' }); res.write('<p>the start of a page that never ends'); return; }
     if (body === undefined) { res.writeHead(404); res.end('no'); return; }
     res.writeHead(200, { 'content-type': req.url === '/robots.txt' ? 'text/plain' : 'text/html; charset=utf-8' }); res.end(body);
   });
@@ -34,10 +35,11 @@ test('the pre-read: same, changed (with the lines), compared with the version on
       { url: base + '/closed', how: 'fetch', programs: ['p1'], lists: [] },
       { url: base + '/person', how: 'person', programs: ['p1'], lists: [] },
       { url: base + '/gone', how: 'fetch', programs: ['p1'], lists: [] },
+      { url: base + '/slow', how: 'fetch', programs: ['p1'], lists: [] },
     ], camps: { list: [{ camp: 'c1', url: base + '/camp', how: 'fetch', checked: confirmed }] }, weekend: [] };
     fs.writeFileSync(path.join(dir, 'check.json'), JSON.stringify(check));
     fs.writeFileSync(path.join(dir, 'programs.json'), JSON.stringify([{ id: 'p1', lastVerified: confirmed }]));
-    const { stdout: out } = await promisify(execFile)('node', [path.join(ROOT, 'scripts/precheck.mjs'), dir], { env: { ...process.env, PRECHECK_TODAY: today, PRECHECK_CHECK: path.join(dir, 'check.json'), PRECHECK_PROGRAMS: path.join(dir, 'programs.json') }, encoding: 'utf8' });
+    const { stdout: out } = await promisify(execFile)('node', [path.join(ROOT, 'scripts/precheck.mjs'), dir], { env: { ...process.env, PRECHECK_PAGE_MS: '1500', PRECHECK_TODAY: today, PRECHECK_CHECK: path.join(dir, 'check.json'), PRECHECK_PROGRAMS: path.join(dir, 'programs.json') }, encoding: 'utf8' });
     return { out, report: JSON.parse(fs.readFileSync(path.join(dir, 'report.json'), 'utf8')) };
   };
   try {
@@ -45,7 +47,9 @@ test('the pre-read: same, changed (with the lines), compared with the version on
     let { report } = await run('2026-11-01', '2026-11-01');
     deepEq(report.new.map(r => r.url.replace(base, '')).sort(), ['/aftercare', '/camp']);
     eq(report.closed.length, 1, 'robots.txt closes /closed'); eq(report.person.length, 1, 'a person reads /person');
-    eq(report.failed.length, 1, 'a 404 is reported'); eq(report.failed[0].status, 404);
+    const failed = Object.fromEntries(report.failed.map(f => [f.url.replace(base, ''), f]));
+    eq(report.failed.length, 2, 'a 404 and a stalled page'); eq(failed['/gone'].status, 404);
+    includes(failed['/slow'].note || '', 'no answer within 1.5 seconds', 'a page that never finishes is given up on, and the run still ends');
     ok(!asked.includes('/closed') && !asked.includes('/person'), 'neither was requested: ' + asked.join(' '));
     const kept = JSON.parse(fs.readFileSync(path.join(dir, 'pages.json'), 'utf8')).pages[base + '/camp'].versions[0].lines;
     ok(!kept.some(l => /Date\.now|©/.test(l)), 'scripts and the copyright line are not part of the text: ' + kept.join(' | '));
@@ -72,5 +76,5 @@ test('the pre-read: same, changed (with the lines), compared with the version on
     ({ report } = await run('2027-03-01', '2026-10-01'));
     deepEq(report.sameSince.map(r => [r.url.replace(base, ''), r.since]), [['/aftercare', '2026-11-01']]);
     eq(report.changed.length, 1); eq(report.changed[0].against, '2026-11-01'); eq(report.changed[0].olderThanKept, true);
-  } finally { server.close(); fs.rmSync(dir, { recursive: true, force: true }); }
+  } finally { server.closeAllConnections(); server.close(); fs.rmSync(dir, { recursive: true, force: true }); }
 });

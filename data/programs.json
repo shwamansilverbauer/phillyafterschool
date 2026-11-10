@@ -1199,6 +1199,11 @@
         "distance": "about a 10-minute walk east of the school",
         "note": "Zhang Sah’s pickup list names “CCS”, which may mean this school. We couldn’t confirm that, so ask before you count on pickup.",
         "checked": "2026-10-10"
+      },
+      "independence-charter": {
+        "relation": "pickup",
+        "note": "Zhang Sah’s Queen Village pickup list names ICS.",
+        "checked": "2026-11-01"
       }
     },
     "pickupLists": [
@@ -2026,6 +2031,12 @@
         "distance": "about half a mile north, at 17th and Fitzwater",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-07"
+      },
+      "independence-charter": {
+        "relation": "nearby",
+        "distance": "a couple of blocks southwest, at 17th and Fitzwater",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-10"
       }
     }
   },
@@ -2162,6 +2173,12 @@
         "distance": "about half a mile northwest, by the river at Taney and Pine",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-07"
+      },
+      "greenfield": {
+        "relation": "nearby",
+        "distance": "about half a mile southwest, by the river at Taney and Pine",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-10"
       }
     }
   },
@@ -2276,6 +2293,11 @@
         "address": "Bok, 1901 S 9th St",
         "distance": "in the Bok building, across Mifflin St from Southwark",
         "note": "Southwark children go to InMovement’s Bok location, not Queen Village. Its page also lists a Pre-K pickup from Southwark (“Mini MOVE”) on Monday to Thursday, 3:00 to 5:00 pm, at $40.66 a day.",
+        "checked": "2026-11-01"
+      },
+      "independence-charter": {
+        "relation": "pickup",
+        "note": "Philly InMovement’s Queen Village pickup list names Independence Charter School for Wednesdays only.",
         "checked": "2026-11-01"
       }
     },
@@ -2546,6 +2568,11 @@
       "southwark": {
         "relation": "pickup",
         "note": "Southwark is on the Queen Village pickup list, and on Southwark’s own list of programs that pick up. The studio is more than a mile north, so ask how children get there.",
+        "checked": "2026-11-01"
+      },
+      "independence-charter": {
+        "relation": "pickup",
+        "note": "Philly Art Center’s Queen Village pickup list names Independence Charter.",
         "checked": "2026-11-01"
       }
     },
@@ -3066,6 +3093,17 @@
           }
         ],
         "checked": "2026-10-26"
+      },
+      "independence-charter": {
+        "relation": "pickup",
+        "note": "Mister John’s 2026–27 pickup list names Independence Charter School.",
+        "sources": [
+          {
+            "label": "Mister John’s Music: kids group classes 2026–27",
+            "url": "https://misterjohnsmusic.com/kids-group-classes-26-27/"
+          }
+        ],
+        "checked": "2026-11-01"
       }
     },
     "pickupLists": [
@@ -3644,6 +3682,19 @@
           }
         ],
         "checked": "2026-10-05"
+      },
+      "independence-charter": {
+        "relation": "pickup",
+        "address": "1001 Christian St (Bella Vista)",
+        "registerUrl": "https://www.hisawyer.com/coco-academy/schedules?location_id%5B%5D=154921&widget_tags=afterschool+winter+spring+2027",
+        "note": "CoCo’s Bella Vista page listed Independence Charter pickup when we read it on October 5: staff collect children at dismissal and walk them to 1001 Christian St.",
+        "sources": [
+          {
+            "label": "CoCo Academy Bella Vista after school",
+            "url": "https://www.cocoacademyphl.com/afterschool-bellavista"
+          }
+        ],
+        "checked": "2026-10-05"
       }
     },
     "rate": {
@@ -3899,18 +3950,23 @@
   {
     "id": "beehive-at-bok",
     "name": "Beehive at Bok",
-    "what": "Play-based aftercare in the Bok building",
+    "what": "Play-based aftercare with storytime and crafting, at Bok and at the Ethical Society on Rittenhouse Square",
     "types": [
       "aftercare"
     ],
     "keywords": [
       "play",
       "aftercare",
-      "childcare"
+      "childcare",
+      "crafts",
+      "storytime",
+      "Ethical Society",
+      "Rittenhouse"
     ],
     "address": "Bok, 1901 S 9th St",
     "neighborhoods": [
-      "East Passyunk"
+      "East Passyunk",
+      "Rittenhouse"
     ],
     "grades": "PK-3",
     "gradeNote": "",
@@ -3947,17 +4003,17 @@
     "register": {
       "how": "online",
       "url": "https://bookeo.com/beehivecommunity?type=415744R7TLN19E50C648C7",
-      "note": "This link books the Winter/Spring semester at Bok for 2026–27; the fall link and a Pre-K Fridays link are on Beehive’s page. 25% non-refundable deposit.",
+      "note": "This link books the Winter/Spring semester at Bok for 2026–27; the Ethical Society group, the fall semester and Pre-K Fridays have their own links on Beehive’s page. 25% non-refundable deposit.",
       "nextTerm": "Winter and Spring booking for 2026–27 is open now."
     },
-    "note": "",
+    "note": "Each school’s group runs on its own: staff pick up, go to a park, then have a meeting and snack, storytime, crafting and art. The Ethical Society group meets at 1906 Rittenhouse Square.",
     "sources": [
       {
         "label": "Beehive After Care",
         "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs"
       }
     ],
-    "lastVerified": "2026-11-01",
+    "lastVerified": "2026-11-10",
     "schools": {
       "nebinger": {
         "relation": "pickup",
@@ -3988,6 +4044,56 @@
         "distance": "in the Bok building, across Mifflin St from Southwark",
         "note": "Beehive’s 2026–27 list for Bok names Southwark, Monday to Friday. Southwark’s own page names Beehive too.",
         "checked": "2026-11-01"
+      },
+      "independence-charter": {
+        "relation": "pickup",
+        "address": "Ethical Society, 1906 Rittenhouse Sq",
+        "distance": "about a third of a mile northwest",
+        "note": "Beehive’s 2026–27 list for its Ethical Society group names ICS, Monday to Friday, for pre-K to 3rd grade. For now it can’t pick up from ICS on half-day Wednesdays.",
+        "sources": [
+          {
+            "label": "Beehive After Care",
+            "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs"
+          }
+        ],
+        "checked": "2026-11-10"
+      },
+      "greenfield": {
+        "relation": "pickup",
+        "address": "Ethical Society, 1906 Rittenhouse Sq",
+        "distance": "about a third of a mile southeast",
+        "note": "Beehive’s 2026–27 list for its Ethical Society group names Greenfield, Monday to Friday, for pre-K to 3rd grade.",
+        "sources": [
+          {
+            "label": "Beehive After Care",
+            "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs"
+          }
+        ],
+        "checked": "2026-11-10"
+      },
+      "stanton": {
+        "relation": "pickup",
+        "address": "Ethical Society, 1906 Rittenhouse Sq",
+        "note": "Beehive’s 2026–27 list for its Ethical Society group names Stanton, Monday to Friday, for pre-K to 3rd grade.",
+        "sources": [
+          {
+            "label": "Beehive After Care",
+            "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs"
+          }
+        ],
+        "checked": "2026-11-10"
+      },
+      "marian-anderson": {
+        "relation": "pickup",
+        "address": "Ethical Society, 1906 Rittenhouse Sq",
+        "note": "Beehive’s 2026–27 list for its Ethical Society group names MANA (Marian Anderson), Monday to Friday, for pre-K to 3rd grade.",
+        "sources": [
+          {
+            "label": "Beehive After Care",
+            "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs"
+          }
+        ],
+        "checked": "2026-11-10"
       }
     },
     "pickupLists": [
@@ -3995,14 +4101,14 @@
         "where": "Beehive @ Bok, 2026-2027",
         "text": "Monday through Friday from Kirkbride, Coppin, Nebinger, Southwark, Jenks, and Vare Washington",
         "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
-        "read": "2026-11-01",
+        "read": "2026-11-10",
         "how": "browser"
       },
       {
         "where": "Beehive @ Ethical Society, 2026-2027",
         "text": "Monday through Friday from MANA, Stanton, Greenfield and ICS",
         "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
-        "read": "2026-11-01",
+        "read": "2026-11-10",
         "how": "browser"
       }
     ]
@@ -4811,6 +4917,35 @@
           }
         ],
         "checked": "2026-10-06"
+      },
+      "independence-charter": {
+        "relation": "pickup",
+        "address": "2100 Chestnut St",
+        "note": "MoveMakers’ youth classes page names Independence Charter School among the schools its 2100 Chestnut St studio picks up from.",
+        "sources": [
+          {
+            "label": "MoveMakers youth classes",
+            "url": "https://www.movemakersphilly.com/youthclasses.html"
+          }
+        ],
+        "checked": "2026-11-01"
+      },
+      "greenfield": {
+        "relation": "pickup",
+        "address": "2100 Chestnut St",
+        "distance": "a block east, at 21st and Chestnut",
+        "note": "MoveMakers’ youth classes page names Albert M. Greenfield School among the schools its 2100 Chestnut St studio picks up from, and Greenfield’s own site names Move Makers.",
+        "sources": [
+          {
+            "label": "MoveMakers youth classes",
+            "url": "https://www.movemakersphilly.com/youthclasses.html"
+          },
+          {
+            "label": "Greenfield: after-school programs that pick up",
+            "url": "https://greenfield.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-01"
       }
     },
     "pickupLists": [
@@ -4959,6 +5094,25 @@
       },
       "mccall": {
         "relation": "pickup",
+        "checked": "2026-11-01"
+      },
+      "independence-charter": {
+        "relation": "pickup",
+        "checked": "2026-11-01"
+      },
+      "greenfield": {
+        "relation": "pickup",
+        "note": "Kids on 12th’s pickup list names Greenfield Elementary School, and Greenfield’s own site names Kids on 12th.",
+        "sources": [
+          {
+            "label": "Kids on 12th pick-up",
+            "url": "https://ko12.org/after-school-pick-up-philadelphia"
+          },
+          {
+            "label": "Greenfield: after-school programs that pick up",
+            "url": "https://greenfield.philasd.org/"
+          }
+        ],
         "checked": "2026-11-01"
       }
     },
@@ -5800,6 +5954,34 @@
           }
         ],
         "checked": "2026-11-07"
+      },
+      "independence-charter": {
+        "relation": "pickup",
+        "address": "2401 Washington Ave",
+        "note": "Makom’s page lists Independence Charter School among its pickup schools. It needs at least four children from a school, and groups from more than a mile away travel by SEPTA bus with a Makom educator.",
+        "sources": [
+          {
+            "label": "Makom afterschool enrichment",
+            "url": "https://makomcommunity.org/afterschool-enrichment/"
+          }
+        ],
+        "checked": "2026-11-01"
+      },
+      "greenfield": {
+        "relation": "pickup",
+        "address": "2401 Washington Ave",
+        "note": "Makom’s page lists Greenfield Elementary School among its pickup schools, and Greenfield’s own site names Makom. It needs at least four children from a school, and groups from more than a mile away travel by SEPTA bus with a Makom educator.",
+        "sources": [
+          {
+            "label": "Makom afterschool enrichment",
+            "url": "https://makomcommunity.org/afterschool-enrichment/"
+          },
+          {
+            "label": "Greenfield: after-school programs that pick up",
+            "url": "https://greenfield.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-01"
       }
     },
     "pickupLists": [
@@ -7277,7 +7459,7 @@
   {
     "id": "koresh-school-of-dance",
     "name": "Koresh School of Dance",
-    "what": "A Saturday morning pre-ballet class for ages 4 to 6 near Rittenhouse Square",
+    "what": "Dance classes after school near Rittenhouse Square for ages 5 to 12, with a pickup service from Greenfield",
     "types": [
       "movement"
     ],
@@ -7287,16 +7469,22 @@
       "pre-ballet",
       "Koresh",
       "Rittenhouse",
-      "Saturday"
+      "Saturday",
+      "after school",
+      "pickup",
+      "Greenfield",
+      "hip hop",
+      "jazz",
+      "modern"
     ],
     "address": "2002 Rittenhouse Square St",
     "neighborhoods": [
       "Rittenhouse"
     ],
-    "grades": "PK-1",
-    "gradeNote": "Saturday class is for ages 4–6",
-    "hours": "Weekend classes only are listed here.",
-    "cost": "$286 a session for one class a week, plus $25 for new students",
+    "grades": "K-6",
+    "gradeNote": "Weekday classes for ages 5–12, plus Pre-Ballet for ages 4–6 on Thursdays; the Saturday class is for ages 4–6",
+    "hours": "Spring 2027 (January 4 to May 29): Ballet and Modern Jazz on Mondays and Hippity Hop and Hip Hop on Tuesdays, at 4:00 or 4:45 pm by age, and Pre-Ballet at 4:00 pm on Thursdays. Classes run 45 minutes to an hour.",
+    "cost": "Spring 2027: $462 for one 45-minute or hour-long class a week for the session, $882 for two, $1,260 for three. Greenfield pickup is $420 a session for one pickup a week, $760 for two, $1,000 for three.",
     "price": "paid",
     "phone": "215-751-0959",
     "email": "",
@@ -7307,16 +7495,28 @@
       "label": "Register",
       "note": "Fill in the form on the school’s site; the school then calls to take payment. Cards or cash, not checks."
     },
-    "note": "Koresh teaches ages 5–14 on weekday afternoons, which we haven’t matched to any school.",
+    "note": "The Greenfield pickup service is not aftercare: children do their homework quietly at the studio until class. It doesn’t run on half days or when the school or studio is closed.",
     "sources": [
       {
         "label": "Koresh School of Dance children’s classes",
         "url": "https://www.koreshdance.org/children-classes"
       }
     ],
-    "lastVerified": "2026-11-01",
-    "scope": "weekend",
-    "schools": {},
+    "lastVerified": "2026-11-10",
+    "schools": {
+      "greenfield": {
+        "relation": "pickup",
+        "distance": "about a quarter mile southeast, near Rittenhouse Square",
+        "note": "Koresh’s own page offers a pickup service from Greenfield for children in its dance classes, priced per session on top of tuition.",
+        "sources": [
+          {
+            "label": "Koresh School of Dance children’s classes",
+            "url": "https://www.koreshdance.org/children-classes"
+          }
+        ],
+        "checked": "2026-11-10"
+      }
+    },
     "weekend": {
       "summary": "Pre Ballet for ages 4–6 is the one Saturday class for younger children. The other Saturday classes are for teens.",
       "days": [
@@ -7342,7 +7542,31 @@
         }
       ],
       "checked": "2026-11-01"
-    }
+    },
+    "days": [
+      "mon",
+      "tue",
+      "thu"
+    ],
+    "rate": {
+      "per": "term",
+      "byDays": {
+        "1": 882,
+        "2": 1642,
+        "3": 2260
+      },
+      "extra": "Spring 2027 class tuition plus Greenfield pickup on the same days."
+    },
+    "pickupLists": [
+      {
+        "where": "2002 Rittenhouse Square St",
+        "text": "Albert M Greenfield Elementary",
+        "url": "https://www.koreshdance.org/children-classes",
+        "read": "2026-11-10",
+        "how": "fetch",
+        "note": "A pickup service for children in Koresh classes, not aftercare."
+      }
+    ]
   },
   {
     "id": "school-of-philadelphia-ballet",
@@ -7427,9 +7651,11 @@
   {
     "id": "zazz-dance",
     "name": "ZAZZ",
-    "what": "Short Saturday and Sunday dance series for ages 4 to 6 in Center City",
+    "what": "After-school dance, drama, musical theater and music for ages 5 to 12, with pickup from Greenfield, ICS and Marian Anderson",
     "types": [
-      "movement"
+      "movement",
+      "theater",
+      "music"
     ],
     "keywords": [
       "dance",
@@ -7439,34 +7665,92 @@
       "Philly Dance Fitness",
       "Chestnut Street",
       "Saturday",
-      "Sunday"
+      "Sunday",
+      "after school",
+      "drama",
+      "musical theater",
+      "acting",
+      "improv",
+      "show choir",
+      "piano",
+      "tap",
+      "acro",
+      "hip hop",
+      "pickup",
+      "Greenfield",
+      "ICS",
+      "Marian Anderson"
     ],
     "address": "1923 Chestnut St, 2nd floor",
     "neighborhoods": [
       "Rittenhouse"
     ],
-    "grades": "PK-1",
-    "gradeNote": "Weekend series are for ages 4–6",
-    "hours": "Weekend classes only are listed here.",
-    "cost": "$132.50 for the Saturday series, $122.50 for a Sunday series",
+    "grades": "K-6",
+    "gradeNote": "Ages 5–12 after school; the weekend series are for ages 4–6",
+    "hours": "3:00–6:00 pm, Monday to Friday, at the Chestnut St studio. Each day brings different classes: acting, improv, musical theater, show choir, dance foundations and technique, acro, tap, hip hop and more. ZAZZ suggests 3 to 5 days a week, but any combination of days works.",
+    "cost": "2026–27: $3,950 a year for 1 or 2 days a week, $4,300 for 3, $4,800 for 4 and $5,200 for 5, in 10 installments, plus a $100 registration fee. Siblings get 10% off. Early pickup from ICS on Wednesdays is $1,200 a year more.",
     "price": "paid",
     "phone": "215-645-2717",
     "email": "",
-    "website": "https://zazzphilly.com/early-childhood/",
+    "website": "https://zazzphilly.com/afterschool/",
     "register": {
-      "how": "contact",
-      "note": "The page says to sign up for the full series but showed no sign-up link, so call."
+      "how": "online",
+      "url": "https://zazzphilly.com/afterschool/",
+      "label": "Enroll",
+      "note": "Pay the $100 registration fee and fill in the registration form, both on ZAZZ’s after-school page. Families commit to the whole school year; joining mid-year is pro-rated."
     },
-    "note": "ZAZZ also runs a weekday after-school program for K–5, which we haven’t matched to any school.",
+    "note": "Pickup from each school is guaranteed only with at least four children from it that day. ZAZZ says it will consider a pickup group for other schools if enough families ask, naming Bache-Martin and Stanton among them.",
     "sources": [
+      {
+        "label": "ZAZZ after school",
+        "url": "https://zazzphilly.com/afterschool/"
+      },
       {
         "label": "ZAZZ early childhood classes",
         "url": "https://zazzphilly.com/early-childhood/"
       }
     ],
-    "lastVerified": "2026-11-01",
-    "scope": "weekend",
-    "schools": {},
+    "lastVerified": "2026-11-10",
+    "schools": {
+      "greenfield": {
+        "relation": "pickup",
+        "distance": "about a quarter mile east, at 19th and Chestnut",
+        "note": "ZAZZ’s after-school page names Albert Greenfield School, and Greenfield’s own site names Philly Dance Fitness, which runs ZAZZ. Pickup is guaranteed with at least four children that day.",
+        "sources": [
+          {
+            "label": "ZAZZ after school",
+            "url": "https://zazzphilly.com/afterschool/"
+          },
+          {
+            "label": "Greenfield: after-school programs that pick up",
+            "url": "https://greenfield.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-10"
+      },
+      "independence-charter": {
+        "relation": "pickup",
+        "note": "ZAZZ’s after-school page names Independence Charter School, with early pickup on Wednesdays for $1,200 a year more. Pickup is guaranteed with at least four children that day.",
+        "sources": [
+          {
+            "label": "ZAZZ after school",
+            "url": "https://zazzphilly.com/afterschool/"
+          }
+        ],
+        "checked": "2026-11-10"
+      },
+      "marian-anderson": {
+        "relation": "pickup",
+        "note": "ZAZZ’s after-school page names Marian Anderson. Pickup is guaranteed with at least four children that day.",
+        "sources": [
+          {
+            "label": "ZAZZ after school",
+            "url": "https://zazzphilly.com/afterschool/"
+          }
+        ],
+        "checked": "2026-11-10"
+      }
+    },
     "weekend": {
       "summary": "A seven-week fall series: Nutcracker Pre-Ballet for ages 4–6 on Saturdays at 9:30, and Dance Basics for ages 4–6 on Sundays at 10:30. A Sunday 9:30 class takes ages 2½ to 3½.",
       "days": [
@@ -7483,9 +7767,9 @@
       "url": "https://zazzphilly.com/early-childhood/",
       "check": {
         "url": "https://zazzphilly.com/early-childhood/",
-        "how": "fetch",
+        "how": "browser",
         "look": "The fall session block lists each series on one line with its ages, day, time and price.",
-        "notes": "The site calls itself ZAZZ by Philly Dance Fitness."
+        "notes": "The site calls itself ZAZZ by Philly Dance Fitness. A plain fetch gets a SiteGround bot check (data/reading.json)."
       },
       "sources": [
         {
@@ -7494,7 +7778,439 @@
         }
       ],
       "checked": "2026-11-01"
+    },
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "rate": {
+      "per": "term",
+      "byDays": {
+        "1": 3950,
+        "2": 3950,
+        "3": 4300,
+        "4": 4800,
+        "5": 5200
+      },
+      "extra": "The 2026–27 price for the school year, paid in 10 installments. The $100 registration fee and ICS’s Wednesday early pickup ($1,200 a year) aren’t counted."
+    },
+    "aid": "If cost is a concern, ZAZZ offers other payment plans or need-based tuition help; ask the studio. Siblings get 10% off.",
+    "pickupLists": [
+      {
+        "where": "1923 Chestnut St",
+        "text": "Albert Greenfield School, Independence Charter School, Marian Anderson",
+        "url": "https://zazzphilly.com/afterschool/",
+        "read": "2026-11-10",
+        "how": "browser",
+        "note": "Guaranteed only with a minimum of four participants a day."
+      }
+    ],
+    "daysOff": {
+      "summary": "Full-day camps (9 am to 3:30 pm) when schools close, and half-day camps (noon to 3:30 pm, with pickup from Greenfield and Marian Anderson) on early-dismissal days, followed by the afternoon classes until 6 pm, which cost $25 more for children not in the after-school program. Its page lists November 11 and 16 next, and a camp for ICS families on December 11, ICS’s report card day; every date is on its MindBody booking page. Sign-up closes 48 hours before each camp.",
+      "url": "https://zazzphilly.com/afterschool/",
+      "dates": [
+        "2026-11-11",
+        "2026-11-16",
+        "2026-12-11"
+      ],
+      "sources": [
+        {
+          "label": "ZAZZ after school",
+          "url": "https://zazzphilly.com/afterschool/"
+        }
+      ],
+      "hours": "9 am to 3:30 pm (6 pm with the afternoon classes)",
+      "cost": "$75 a full day, $40 a half day",
+      "ageMin": 5,
+      "ageMax": 12
     }
+  },
+  {
+    "id": "ics-21st-century",
+    "name": "21st Century Community Learning Center at ICS",
+    "what": "Independence Charter’s own after-school program: a snack, an hour of reading and writing, then homework time and a STEAM class",
+    "types": [
+      "academics",
+      "aftercare",
+      "stem"
+    ],
+    "keywords": [
+      "21st Century",
+      "21st CCLC",
+      "ICS",
+      "Independence Charter",
+      "homework",
+      "homework help",
+      "STEAM",
+      "reading",
+      "writing",
+      "after school",
+      "aftercare"
+    ],
+    "address": "",
+    "neighborhoods": [
+      "Rittenhouse"
+    ],
+    "gradeNote": "The school’s page doesn’t say which grades it takes; ask the school.",
+    "hours": "3:15–5:30 pm on Mondays, Tuesdays, Thursdays and Fridays, and 1:30–5:30 pm on Wednesdays. Children get a snack, then an hour of English Language Arts, then homework time and a STEAM class.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Not published. The program is funded by the Pennsylvania Department of Education; ask the school whether families pay.",
+    "phone": "215-238-8000",
+    "email": "",
+    "website": "https://independencecharter.org/21st-century-program/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office how to sign up. The program’s page links a family handbook."
+    },
+    "note": "From the school’s own page.",
+    "sources": [
+      {
+        "label": "ICS 21st Century Community Learning Center",
+        "url": "https://independencecharter.org/21st-century-program/"
+      }
+    ],
+    "lastVerified": "2026-11-10",
+    "schools": {
+      "independence-charter": {
+        "relation": "onsite",
+        "checked": "2026-11-10"
+      }
+    }
+  },
+  {
+    "id": "beacon-center",
+    "name": "Beacon Center for Children: After-School Program",
+    "what": "Aftercare for Greenfield children aged 5 and 6 at a child care center a block from the school, with a snack, activities and free play",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "childcare",
+      "child care",
+      "kindergarten",
+      "first grade",
+      "Beacon",
+      "Greenfield",
+      "Rittenhouse",
+      "Chestnut Street"
+    ],
+    "address": "2125 Chestnut St",
+    "neighborhoods": [
+      "Rittenhouse"
+    ],
+    "grades": "K-1",
+    "gradeNote": "Ages 5–6, Greenfield students only",
+    "hours": "3:00–6:00 pm. Beacon staff collect children at Greenfield’s 2:50 pm dismissal. If Greenfield closes early, extra time at the center depends on space, first come, first served, at a daily rate.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "daysNote": "Two to five days a week.",
+    "pickupBy": "6:00 pm",
+    "cost": "2026–27: $4,030 a year for 2 days a week, $5,780 for 3, $7,610 for 4 and $9,310 for 5, paid in 10, 3 or 2 payments.",
+    "price": "paid",
+    "rate": {
+      "per": "term",
+      "byDays": {
+        "2": 4030,
+        "3": 5780,
+        "4": 7610,
+        "5": 9310
+      },
+      "extra": "The 2026–27 rate for the 10-month year."
+    },
+    "phone": "215-963-0748",
+    "email": "info@beaconcenterforchildren.com",
+    "website": "https://beaconcenterforchildren.com/after-school-program/",
+    "register": {
+      "how": "online",
+      "url": "https://beaconcenterforchildren.com/application/",
+      "label": "Apply",
+      "note": "Apply through the center’s application form."
+    },
+    "note": "",
+    "sources": [
+      {
+        "label": "Beacon Center after-school program",
+        "url": "https://beaconcenterforchildren.com/after-school-program/"
+      },
+      {
+        "label": "Beacon Center after-school tuition",
+        "url": "https://beaconcenterforchildren.com/after-school-program-tuition/"
+      }
+    ],
+    "lastVerified": "2026-11-10",
+    "schools": {
+      "greenfield": {
+        "relation": "pickup",
+        "distance": "a block east on Chestnut St",
+        "note": "Beacon’s page says its after-school program is for children aged 5–6 who attend Greenfield, collected by Beacon staff at the 2:50 pm dismissal. Greenfield’s own site names Beacon too.",
+        "sources": [
+          {
+            "label": "Beacon Center after-school program",
+            "url": "https://beaconcenterforchildren.com/after-school-program/"
+          },
+          {
+            "label": "Greenfield: after-school programs that pick up",
+            "url": "https://greenfield.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-10"
+      }
+    },
+    "pickupLists": [
+      {
+        "text": "children from 5-6 years old who attend Greenfield Elementary School",
+        "url": "https://beaconcenterforchildren.com/after-school-program/",
+        "read": "2026-11-10",
+        "how": "fetch"
+      }
+    ]
+  },
+  {
+    "id": "evolve-dance",
+    "name": "Evolve Dance",
+    "what": "Dance classes at 17th and Chestnut for ages 5 to 13, with a pickup service from Greenfield for the 3:45 pm classes",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "dance",
+      "ballet",
+      "tap",
+      "jazz",
+      "hip hop",
+      "Evolve",
+      "Chestnut Street",
+      "Rittenhouse",
+      "Greenfield",
+      "pickup",
+      "recital"
+    ],
+    "address": "1719 Chestnut St, Suite 401",
+    "neighborhoods": [
+      "Rittenhouse"
+    ],
+    "grades": "K-7",
+    "gradeNote": "Weekday classes for ages 5–13; the Greenfield pickup is for ages 5–9 in a 3:45 pm class",
+    "hours": "Weekday classes start at 3:45 pm (ages 5–9) or 4:45 pm (ages 7–13) and run an hour. Weekend classes are for younger children.",
+    "daysNote": "Each class meets one day a week; the schedule on Evolve’s page shows which day.",
+    "cost": "2026–27: $1,099 for the year for one class a week, $2,030 for two, $2,793 for three, with the spring recital costume included. Greenfield pickup is $70 a month for one day a week, $130 for two and $182 for three.",
+    "price": "paid",
+    "rate": {
+      "per": "term",
+      "byDays": {
+        "1": 1099,
+        "2": 2030,
+        "3": 2793
+      },
+      "extra": "The 2026–27 class tuition for the year. Greenfield pickup ($70, $130 or $182 a month) isn’t counted."
+    },
+    "phone": "",
+    "email": "hello@evolvedancephilly.com",
+    "website": "https://evolvedancephilly.com/youth-programs",
+    "register": {
+      "how": "online",
+      "url": "https://evolvedancephilly.com/youth-programs",
+      "label": "Register",
+      "note": "Buy a class package on Evolve’s page, then enroll in the classes; email the studio to add Greenfield pickup. The year runs from August 31 to early June, and families commit to all of it."
+    },
+    "note": "Pickup from Greenfield is only for children enrolled in a 3:45 pm class that day, and it doesn’t run on half days or when the school or studio is closed. Some classes are full.",
+    "sources": [
+      {
+        "label": "Evolve Dance youth programs",
+        "url": "https://evolvedancephilly.com/youth-programs"
+      }
+    ],
+    "lastVerified": "2026-11-10",
+    "schools": {
+      "greenfield": {
+        "relation": "pickup",
+        "note": "Evolve’s page offers after-school pickup from Greenfield for children aged 5–6 and 7–9 enrolled in a 3:45 pm class, billed monthly on top of tuition. Greenfield’s own site names Evolve Dance too.",
+        "sources": [
+          {
+            "label": "Evolve Dance youth programs",
+            "url": "https://evolvedancephilly.com/youth-programs"
+          },
+          {
+            "label": "Greenfield: after-school programs that pick up",
+            "url": "https://greenfield.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-10"
+      }
+    },
+    "pickupLists": [
+      {
+        "text": "Albert M Greenfield Elementary (Ages 5-6 and 7-9)",
+        "url": "https://evolvedancephilly.com/youth-programs",
+        "read": "2026-11-10",
+        "how": "fetch",
+        "note": "Only for children in a 3:45 pm class that day."
+      }
+    ]
+  },
+  {
+    "id": "martial-posture",
+    "name": "Martial Posture After School",
+    "what": "A movement-based after-school program at a martial arts studio near Rittenhouse Square",
+    "types": [
+      "aftercare",
+      "movement"
+    ],
+    "keywords": [
+      "martial arts",
+      "karate",
+      "after school",
+      "aftercare",
+      "Martial Posture",
+      "Walnut Street",
+      "Rittenhouse",
+      "Greenfield"
+    ],
+    "address": "2210 Walnut St",
+    "neighborhoods": [
+      "Rittenhouse"
+    ],
+    "gradeNote": "Not published; ask the studio",
+    "hours": "Not published. The page mentions late pickup and being open on most days school is out.",
+    "cost": "Not published",
+    "phone": "215-925-8070",
+    "email": "martialposture@gmail.com",
+    "website": "https://martialposture.com/walnut-street/after-school/",
+    "register": {
+      "how": "contact",
+      "note": "The page’s schedule and registration buttons open a sign-up form; call the studio for days, hours and prices."
+    },
+    "note": "Martial Posture’s page doesn’t post hours, ages, prices or which schools it collects from. Greenfield’s own site lists it among the programs that pick up at the school, so ask the studio how pickup from Greenfield works.",
+    "sources": [
+      {
+        "label": "Martial Posture after school",
+        "url": "https://martialposture.com/walnut-street/after-school/"
+      },
+      {
+        "label": "Greenfield: after-school programs that pick up",
+        "url": "https://greenfield.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-10",
+    "schools": {
+      "greenfield": {
+        "relation": "pickup",
+        "distance": "a block south, at 22nd and Walnut",
+        "note": "Greenfield’s own site lists Martial Posture among the programs that pick up at the school. Martial Posture’s page doesn’t name schools.",
+        "sources": [
+          {
+            "label": "Greenfield: after-school programs that pick up",
+            "url": "https://greenfield.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-10"
+      }
+    }
+  },
+  {
+    "id": "yous-fitfulness",
+    "name": "Yous “Fitfulness” After-School",
+    "what": "Fitness, yoga and mindfulness after school for kindergarten to 2nd grade at Trinity Church, with pickup from Greenfield and Marian Anderson",
+    "types": [
+      "movement",
+      "aftercare"
+    ],
+    "keywords": [
+      "fitness",
+      "yoga",
+      "mindfulness",
+      "meditation",
+      "Yous",
+      "Fitfulness",
+      "Trinity Church",
+      "Spruce Street",
+      "Rittenhouse",
+      "Greenfield",
+      "Marian Anderson",
+      "snack"
+    ],
+    "address": "Trinity Church, 2212 Spruce St",
+    "neighborhoods": [
+      "Rittenhouse"
+    ],
+    "grades": "K-2",
+    "gradeNote": "Kindergarten to 2nd grade; 20 places a day",
+    "hours": "3:00–6:00 pm. After a snack and calm play, the Fitfulness class (fitness, yoga and mindfulness games) runs at 4:00, then a wind-down hour with rolling pickup from 5:00 to 6:00.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$280 every four weeks for one day a week, $560 for two, $840 for three and $1,120 for four, charged only for weeks the program runs.",
+    "price": "paid",
+    "rate": {
+      "per": "week",
+      "byDays": {
+        "1": 70,
+        "2": 140,
+        "3": 210,
+        "4": 280
+      },
+      "extra": "Billed every four weeks the program is in session: $280 for one day a week, up to $1,120 for four."
+    },
+    "phone": "",
+    "email": "",
+    "website": "https://yous.life/after-school-programs-philadelphia/",
+    "register": {
+      "how": "online",
+      "url": "https://www.hisawyer.com/youslife/schedules",
+      "label": "Sign up",
+      "note": "Sign-up is by season, on Yous’s Sawyer page.",
+      "nextTerm": "The winter and spring 2027 cycle runs January 4 to June 9, 2027."
+    },
+    "note": "Greenfield children are collected at 2:50 pm and Marian Anderson children at 3:20 pm, and both groups walk to Trinity Church with staff.",
+    "sources": [
+      {
+        "label": "Yous after-school program",
+        "url": "https://yous.life/after-school-programs-philadelphia/"
+      }
+    ],
+    "lastVerified": "2026-11-10",
+    "schools": {
+      "greenfield": {
+        "relation": "pickup",
+        "distance": "about a quarter mile south, at 22nd and Spruce",
+        "note": "Yous collects Greenfield children at 2:50 pm and walks them to Trinity Church at 22nd and Spruce.",
+        "checked": "2026-11-10"
+      },
+      "marian-anderson": {
+        "relation": "pickup",
+        "note": "Yous collects Marian Anderson children at 3:20 pm and walks them to Trinity Church at 22nd and Spruce.",
+        "checked": "2026-11-10"
+      }
+    },
+    "pickupLists": [
+      {
+        "text": "Marian Anderson & Albert Greenfield",
+        "url": "https://yous.life/after-school-programs-philadelphia/",
+        "read": "2026-11-10",
+        "how": "fetch"
+      }
+    ]
   },
   {
     "id": "temple-music-prep-cmsp",
@@ -8920,6 +9636,120 @@
     ]
   },
   {
+    "id": "greenfield-clubs",
+    "name": "School clubs and teams",
+    "what": "Clubs named by the school: Middle School Debate, Chess Club, Student Voice, Literary Magazine Club, and Middle School and Lower School Choir. Teams: girls volleyball, boys and girls basketball, and track, plus intramural sports for grades K–5.",
+    "types": [
+      "clubs",
+      "academics",
+      "games",
+      "music",
+      "movement"
+    ],
+    "keywords": [
+      "clubs",
+      "school",
+      "team",
+      "after school",
+      "middle school",
+      "debate",
+      "chess",
+      "choir",
+      "literary magazine",
+      "Student Voice",
+      "volleyball",
+      "basketball",
+      "track",
+      "intramural"
+    ],
+    "address": "",
+    "gradeNote": "Varies by club",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-400-7810",
+    "email": "",
+    "website": "https://greenfield.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Sign-ups go through the school office or the club’s teacher. Teams need a physical form signed by a doctor."
+    },
+    "note": "From the school’s own site, which names the clubs and teams without days or times. Programs that pick up at Greenfield have their own listings here.",
+    "sources": [
+      {
+        "label": "Greenfield: our school",
+        "url": "https://greenfield.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-10",
+    "schools": {
+      "greenfield": {
+        "relation": "onsite",
+        "checked": "2026-11-10"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Middle School Debate",
+        "tags": [
+          "academics",
+          "debate"
+        ]
+      },
+      {
+        "name": "Chess Club",
+        "tags": [
+          "games",
+          "chess"
+        ]
+      },
+      {
+        "name": "Student Voice",
+        "tags": []
+      },
+      {
+        "name": "Literary Magazine Club",
+        "tags": [
+          "academics",
+          "writing"
+        ]
+      },
+      {
+        "name": "Middle School and Lower School Choir",
+        "tags": [
+          "music",
+          "choir"
+        ]
+      },
+      {
+        "name": "Girls Volleyball",
+        "tags": [
+          "movement",
+          "volleyball"
+        ]
+      },
+      {
+        "name": "Boys and Girls Basketball",
+        "tags": [
+          "movement",
+          "basketball"
+        ]
+      },
+      {
+        "name": "Track",
+        "tags": [
+          "movement",
+          "running"
+        ]
+      },
+      {
+        "name": "Intramural sports (K–5)",
+        "tags": [
+          "movement"
+        ]
+      }
+    ]
+  },
+  {
     "id": "east-passyunk-rec",
     "name": "East Passyunk Community Center",
     "what": "City rec center that Southwark names for after-school pickup",
@@ -9282,6 +10112,18 @@
           }
         ],
         "checked": "2026-10-26"
+      },
+      "independence-charter": {
+        "relation": "pickup",
+        "distance": "about a third of a mile southwest, at 18th and Christian",
+        "note": "The Y’s before-and-after-school page lists its Christian Street branch as serving Independence Charter, along with Edwin Stanton and Marian Anderson, for kindergarten to 6th grade.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Before & After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/"
+          }
+        ],
+        "checked": "2026-11-01"
       }
     },
     "days": [
@@ -11092,6 +11934,34 @@
           {
             "label": "Bache-Martin after-school programs",
             "url": "https://www.bachemartin.org/for-our-families/after-school-programs-extra-curriculars"
+          }
+        ],
+        "checked": "2026-11-07"
+      },
+      "independence-charter": {
+        "relation": "pickup",
+        "distance": "about a mile and a half north, in Fairmount",
+        "note": "Philly Art Center’s own page lists Independence Charter among the Fairmount studio’s pickup schools. Teachers walk or take SEPTA with the children, and pickup is free.",
+        "sources": [
+          {
+            "label": "Philly Art Center after-school program information",
+            "url": "https://phillyartcenter.com/afterschool/program-information/"
+          }
+        ],
+        "checked": "2026-11-07"
+      },
+      "greenfield": {
+        "relation": "pickup",
+        "distance": "about a mile north, in Fairmount",
+        "note": "Philly Art Center’s own page lists Greenfield among the Fairmount studio’s pickup schools, and Greenfield’s own site names Philly Arts Center. Teachers walk or take SEPTA with the children, and pickup is free.",
+        "sources": [
+          {
+            "label": "Philly Art Center after-school program information",
+            "url": "https://phillyartcenter.com/afterschool/program-information/"
+          },
+          {
+            "label": "Greenfield: after-school programs that pick up",
+            "url": "https://greenfield.philasd.org/"
           }
         ],
         "checked": "2026-11-07"

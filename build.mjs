@@ -397,6 +397,11 @@ for (const p of programs) {
     }
   }
 }
+for (const sc of schools.filter(x => x.calendar !== undefined)) {
+  const c = sc.calendar, at = `data/schools.json, "${sc.id}": calendar`;
+  if (!c || !c.source?.label || !isUrl(c.source?.url) || !isIso(c.checked) || !isIso(c.lastDay) || !Array.isArray(c.days)) errors.push(`${at} needs source (label and url), checked, lastDay and days`);
+  else for (const d of c.days) if (!isIso(d.date) || !d.name || (d.end !== undefined && (!isIso(d.end) || d.end < d.date))) errors.push(`${at}: each day needs a date and a name, and an end on or after it (${d.date || '?'})`);
+}
 if (daysOff) {
   if (!daysOff.schoolYear || !isUrl(daysOff.source?.url) || !isIso(daysOff.checked) || !Array.isArray(daysOff.days)) errors.push('data/days-off.json: needs schoolYear, source.url, checked and days');
   else for (const d of daysOff.days) if (!isIso(d.date) || !d.name || (d.end !== undefined && (!isIso(d.end) || d.end < d.date))) errors.push(`data/days-off.json: each day needs a date and a name, and an end on or after it (${d.date || '?'})`);
@@ -779,11 +784,17 @@ const isoAdd = (iso, n) => new Date(Date.parse(iso + 'T12:00:00Z') + n * 864e5).
 const weekday = iso => new Date(iso + 'T12:00:00Z').getUTCDay();
 const dayDate = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' });
 // Each closed day or break, with the weekdays inside it, from the district calendar in data/days-off.json.
-const offDays = (daysOff?.days || []).map(d => {
+const closedDays = list => (list || []).map(d => {
   const dates = [];
   for (let x = d.date; x <= (d.end || d.date); x = isoAdd(x, 1)) if (weekday(x) >= 1 && weekday(x) <= 5) dates.push(x);
   return { ...d, until: d.end || d.date, dates };
 }).filter(d => d.until >= TODAY).sort((a, b) => a.date.localeCompare(b.date));
+const offDays = closedDays(daysOff?.days);
+// A school that keeps its own calendar (a charter school, say) has "calendar" in data/schools.json, and its page,
+// its week and its day-off emails go by that instead of the district's. The planners still go by the district's.
+const schoolOff = s => s.calendar ? closedDays(s.calendar.days) : offDays;
+const schoolLastDay = s => s.calendar ? s.calendar.lastDay : daysOff?.lastDay;
+const ownCalendars = schools.filter(s => s.calendar);
 const campPrograms = programs.filter(p => p.daysOff).sort((a, b) => a.name.localeCompare(b.name));
 const campsOn = (d, list = campPrograms) => list.filter(p => p.daysOff && p.daysOff.dates.some(x => d.dates.includes(x)));
 const offPath = 'days-off/';          // the days-off planner ("Day-camp schedule")
@@ -793,7 +804,8 @@ if (daysOff) {
   for (const p of campPrograms) { const odd = p.daysOff.dates.filter(x => x >= TODAY && !closed.has(x)); if (odd.length) console.log(`Note: ${p.name} lists a camp on ${odd.join(', ')}, which isn't a district day off in data/days-off.json.`); }
 }
 // The next day off, for the line on the home page and each school's page. The script picks the first one still ahead.
-const nextOff = (depth, list) => !offDays.length ? '' : `<p class="nextoff"><b data-next-off="${esc(JSON.stringify(offDays.slice(0, 12).map(d => ({ u: d.until, s: d.date, d: d.dates, w: d.end ? `${shortDate(d.date)} to ${shortDate(d.end)}` : dayDate(d.date), n: d.name, c: campsOn(d, list).length, p: link(dayPath(d), depth) }))))}" hidden></b> <a data-next-off-day hidden>${T(`Who’s open that day`)}</a> <a href="${link(dayCampsPath, depth)}">${T(`Days off this year, and who’s open`)}</a></p>`;
+// A school with its own calendar passes its days: a day the district also has off links to that day's page.
+const nextOff = (depth, list, days = offDays) => !days.length ? '' : `<p class="nextoff"><b data-next-off="${esc(JSON.stringify(days.slice(0, 12).map(d => { const dist = days === offDays ? d : offDays.find(o => o.dates.includes(d.dates[0] || d.date)); return { u: d.until, s: d.date, d: d.dates, w: d.end ? `${shortDate(d.date)} to ${shortDate(d.end)}` : dayDate(d.date), n: d.name, c: campsOn(d, list).length, p: link(dist ? dayPath(dist) : dayCampsPath, depth) }; })))}" hidden></b> <a data-next-off-day hidden>${T(`Who’s open that day`)}</a> <a href="${link(dayCampsPath, depth)}">${T(`Days off this year, and who’s open`)}</a></p>`;
 // A day off that is already planned on this device (every child, every date of the break, in the days-off planner)
 // is not news, so the line and the bar skip it for the next one still unplanned, and say nothing when that one is
 // more than 60 days away (offPlanned() in site.js).
@@ -1213,12 +1225,12 @@ const weekMonday = iso => isoAdd(iso, -((weekday(iso) + 6) % 7));
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const schoolWeek = (s, monday) => {
   const sd = schoolDatesFile.schools?.[s.id] || {}, days = [0, 1, 2, 3, 4].map(n => isoAdd(monday, n)), week = [0, 1, 2, 3, 4, 5, 6].map(n => isoAdd(monday, n));
-  const closed = new Map(offDays.flatMap(d => d.dates.map(x => [x, d.name])));
+  const closed = new Map(schoolOff(s).flatMap(d => d.dates.map(x => [x, d.name]))), lastDay = schoolLastDay(s);
   const lines = [];
   for (const d of days) {
     if (closed.has(d)) { lines.push({ d, kind: 'off', what: `No school: ${closed.get(d)}` }); continue; }
-    if (daysOff?.lastDay && d > daysOff.lastDay) continue;
-    if (d === daysOff?.lastDay) lines.push({ d, kind: 'last', what: 'Last day of school' });
+    if (lastDay && d > lastDay) continue;
+    if (d === lastDay) lines.push({ d, kind: 'last', what: 'Last day of school' });
     for (const e of sd.dates || []) if (e.date === d) lines.push({ d, kind: 'date', what: e.title.trim(), note: e.note || '', by: e.by });
     for (const e of sd.weekly || []) if (e.day === WEEKDAY_IDS[weekday(d) - 1] && (!e.from || e.from <= d) && (!e.until || e.until >= d)) lines.push({ d, kind: 'weekly', what: e.title.trim(), note: e.note || '', by: e.by });
   }
@@ -1322,11 +1334,22 @@ const alertItems = [
     const camps = campsOn(d);
     return {
       id: `off-${d.date}`, kind: 'dayoff', date: d.date, sendOn: sendOn(d.date, LEAD.dayoff), schools: ['*'], programs: [],
+      ...(ownCalendars.length ? { notSchools: ownCalendars.map(s => s.id) } : {}),   // not for someone who follows only those
       when: d.end ? `${longDay(d.date)} to ${longDay(d.end)}` : longDay(d.date), title: `No school: ${d.name}`,
       text: camps.length ? `${camps.length === 1 ? 'One listed program has' : camps.length + ' listed programs have'} posted a camp: ${listNames(camps.map(p => p.name))}.` : 'No listed program has posted a camp for it yet.',
       url: mailUrl(dayPath(d)), button: camps.length ? 'See who’s open' : 'See the day',   // the day's own page, which anyone can read; the planner needs an account
     };
   }),
+  // A school with its own calendar: its days off go to the people who follow it.
+  ...ownCalendars.flatMap(s => schoolOff(s).filter(d => d.date >= TODAY).map(d => {
+    const camps = campsOn(d);
+    return {
+      id: `off-${s.id}-${d.date}`, kind: 'dayoff', date: d.date, sendOn: sendOn(d.date, LEAD.dayoff), schools: [s.id], programs: [],
+      when: d.end ? `${longDay(d.date)} to ${longDay(d.end)}` : longDay(d.date), title: `No school at ${s.shortName}: ${d.name}`,
+      text: `From ${s.shortName}’s own calendar. ` + (camps.length ? `${camps.length === 1 ? 'One listed program has' : camps.length + ' listed programs have'} posted a camp: ${listNames(camps.map(p => p.name))}.` : 'No listed program has posted a camp for it yet.'),
+      url: mailUrl(`${s.id}/`, '#this-week'), button: `See ${s.shortName}’s week`,
+    };
+  })),
 ].sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
 // Entries that need the camp list and the city's school list, which are read further down this file.
 //   a camp's own sign-up dates and notes  -> the people who asked about that camp
@@ -2052,7 +2075,7 @@ function schoolWeekSection(s) {
   };
   return `<section class="section this-week" id="this-week">
     <h2>${T(`This week at {school}`, { school: s.shortName })}</h2>
-    <p>${T(`Days off and sign-ups at the programs that serve it, a week at a time. A school’s own dates show here only when a parent sends one in, so go by what the school sends home.`)}</p>
+    <p>${T(`Days off and sign-ups at the programs that serve it, a week at a time. A school’s own dates show here only when a parent sends one in, so go by what the school sends home.`)}${s.calendar ? ' ' + T(`{school} keeps its own calendar, so the days off here are from it, not the District’s.`, { school: s.shortName }) : ''}</p>
     <div class="wk-cards">
       ${show(weeks[0], weekday(TODAY) === 6 || weekday(TODAY) === 0 ? T(`This coming week`) : T(`This week`))}
       ${show(weeks[1], T(`The week after`))}
@@ -2099,12 +2122,13 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
     <div class="facts">
       ${!s.dismissal || s.dismissalNote ? `<span>Dismissal <b>${esc(s.dismissal || 'not posted by the school')}</b>${s.dismissalNote ? ` (${esc(s.dismissalNote)})` : ''}</span>` : ''}
       <span>School office <b><a href="${telHref(s.phone)}">${esc(s.phone)}</a></b></span>
+      ${s.calendar ? `<span>Calendar <b><a href="${esc(s.calendar.source.url)}" rel="noopener">${esc(s.calendar.source.label)}</a></b></span>` : ''}
       ${schoolHoods(s).length ? `<span>Neighborhood <b>${hoodLinks(schoolHoods(s), 1)}</b></span>` : ''}
       <span>Reviewed <b>${longDate(s.lastReviewed)}</b></span>
     </div>`;
   const wk0 = schoolWeek(s, thisMonday());
   const body = `<div data-school-page="${esc(s.id)}" style="display:contents">
-  ${nextOff(1, list)}
+  ${nextOff(1, list, schoolOff(s))}
   <p class="nextoff wk-jump"><a href="#this-week">${T(`This week at {school}`, { school: s.shortName })}</a>${wk0.lines.length ? ` <span class="hint">${esc(wk0.lines.length === 1 ? '1 thing on' : wk0.lines.length + ' things on')}</span>` : ''}</p>
   ${filterBar({ list, depth: 1, school: s, show: { hood: false }, near: true })}
   <div class="legend">

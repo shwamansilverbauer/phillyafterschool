@@ -6,6 +6,14 @@
         { "day": "wed", "title": "Pretzel day", "by": "parent" }
       ],
       "dates": []
+    },
+    "independence-charter": {
+      "weekly": [
+        { "day": "wed", "title": "Early dismissal", "by": "school", "url": "https://drive.google.com/file/d/1sMqzJPf5XSenLlDXFcJlGyL_Eu8hh8kb/view" }
+      ],
+      "dates": [
+        { "date": "2027-05-28", "title": "Half day: dismissal at noon", "by": "school", "url": "https://drive.google.com/file/d/1sMqzJPf5XSenLlDXFcJlGyL_Eu8hh8kb/view" }
+      ]
     }
   }
 }

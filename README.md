@@ -627,7 +627,7 @@ Fields worth knowing:
    anything found there or in a third-party roundup (phillyfamily.com keeps one), and the families who asked for
    the school and the school office ("who picks up here, and who runs on site?"). Only a provider's own page or
    word, the school's own page (shown as the school's word) or the City's own listing goes on the site.
-1. Add a record to `data/schools.json` (copy Nebinger's and change it). The `id` becomes the URL: `"meredith"` gives `/meredith/`. Leave `dismissal` out when the school doesn't post one (the page then says so and tells families to ask); `dismissalNote` still shows. `aliases` lists the other names providers use for the school ("Jackson" for Coppin, "Vare Washington" without the hyphen), so the build can tell whether a provider's pickup list names it. Optional fields: `dismissalNote` (staggered dismissal times), `checkedNoPickup` (providers checked that don't serve the school) and `alsoListed` (programs the school names that haven't been confirmed yet).
+1. Add a record to `data/schools.json` (copy Nebinger's and change it). A charter school usually keeps its own calendar: add it as `calendar` (see "A school with its own calendar"). The `id` becomes the URL: `"meredith"` gives `/meredith/`. Leave `dismissal` out when the school doesn't post one (the page then says so and tells families to ask); `dismissalNote` still shows. `aliases` lists the other names providers use for the school ("Jackson" for Coppin, "Vare Washington" without the hyphen), so the build can tell whether a provider's pickup list names it. Optional fields: `dismissalNote` (staggered dismissal times), `checkedNoPickup` (providers checked that don't serve the school) and `alsoListed` (programs the school names that haven't been confirmed yet).
 2. In `data/programs.json`, add that school's `id` under `schools` for every program that serves it. Most providers are already there; they just need the new tag.
 3. Add records for programs that are new (the school's own clubs and on-site care).
 4. Give the school record `"added": "YYYY-MM-DD"` with the day it goes live. Parents who asked on the school's old
@@ -1268,6 +1268,15 @@ and every program with `daysOff`. Past days drop off at build time and are hidde
 builds. The home page and each school page show a "Next day off" line. The build prints a note when a provider
 date isn't a district day off (a typo on their side, or a day only they close for). Replace the file's days
 each summer when the district publishes the new calendar.
+
+**A school with its own calendar.** A charter school's days off can differ from the district's (ICS is open on
+Veterans Day and closes for its own report card days). Give its record in `data/schools.json` a `calendar`:
+`{ "source": { "label", "url" }, "checked", "lastDay", "days": [{ "date", "name", "end"? }] }`, from the school's own
+calendar. Then its page's "Next day off" line, its "This week at" section and email (`schoolOff()`,
+`schoolLastDay()`) and its day-off emails go by it: each of its days becomes an `off-<school>-<date>` entry for the
+people who follow that school, and the district's day-off entries carry `notSchools` so someone who follows only
+such schools isn't told about district days (`groups-api.php` honors it). The planners and the day-camps page still go
+by the district's days. Replace the days each year with the district's.
 
 **A themed week.** On the roster page, "Roll a themed week" fills Monday to Friday at random for a chosen school
 and theme (Music Prodigy, Mathlete, The Da Vinci, Move It or Lose It, Glitter and Glue, Bookworm, Just for
@@ -1926,7 +1935,7 @@ The things a family has to remember that aren't on the district calendar: pictur
   The file is keyed by a place's id rather than tied to the district list, so a daycare or preschool can be added
   later as another kind of place.
 - **On the school's page**, `schoolWeekSection()` shows "This week at {school}" (`#this-week`): this week and the
-  next, day by day, from `schoolWeek()`: district days off, the last day of school, the school's dates, the weekly
+  next, day by day, from `schoolWeek()`: district days off (or the school's own, from its `calendar`), the last day of school, the school's dates, the weekly
   things (skipped on a day off) and sign-up dates at the programs that serve the school. From Saturday it shows the
   coming week. The nightly rebuild keeps it current.
 - **Kept small on purpose.** Only what runs itself is promised: district days off and sign-up dates. A school's
@@ -2415,8 +2424,11 @@ The report compares each page with the version it had on the day its listings we
 page), not with last month's reading, so a change still shows if last month's check was never merged. It sorts the
 pages into `same`, `sameSince` (no version that old is kept yet; unchanged since the oldest kept), `changed` (with the
 lines `added` and `removed`, order ignored, sixty of each at most), `new`, `failed`, `closed` (robots.txt) and
-`person`, each naming the listings that rest on the page. `tests/cases/02-precheck.mjs` runs it three times over a
-small site of its own.
+`person`, each naming the listings that rest on the page. No page gets more than a minute (`PRECHECK_PAGE_MS`),
+however it stalls, and after 25 minutes (`PRECHECK_MINUTES`) the run starts no new pages: what's left goes under
+`failed` as not read this time and keeps its versions, so the job always ends and saves what it read. The log counts
+pages as it goes. `tests/cases/02-precheck.mjs` runs it five times over a small site of its own, with a page that
+never finishes.
 
 `check.json` has three parts:
 

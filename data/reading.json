@@ -130,5 +130,17 @@
     "how": "person",
     "why": "A plain fetch of the Homework Club sign-up page failed on 2026-11-09, and Sawyer’s booking pages have refused automated reading before (see Dandelion and Sawubona), so its price and dates are read by a person.",
     "seen": "2026-11-09"
+  },
+  {
+    "match": "zazzphilly.com",
+    "how": "browser",
+    "why": "A plain fetch got SiteGround’s bot check (HTTP 202 and a refresh to /.well-known/sgcaptcha/) on 2026-11-10 for both the after-school and early-childhood pages; Chrome showed the pages.",
+    "seen": "2026-11-10"
+  },
+  {
+    "match": "hisawyer.com/youslife",
+    "how": "person",
+    "why": "Yous’s Sawyer sign-up page answered HTTP 403 to a plain fetch on 2026-11-10, and Sawyer’s booking pages have refused automated reading before (see Dandelion and Sawubona).",
+    "seen": "2026-11-10"
   }
 ]

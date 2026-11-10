@@ -1412,7 +1412,8 @@ function push_due(array $follows, array $mutedKeys, array $feed, string $today):
     foreach ($list($a, 'camps') as $id) if (in_array('c:' . $id, $mutedKeys, true)) $isMuted = true;
     if ($isMuted) continue;
     $as = $list($a, 'schools');
-    $bySchool = $schools && (in_array('all', $schools, true) ? count($as) > 0 : in_array('*', $as, true) || count(array_intersect($as, $schools)) > 0);
+    // "*" is every school, less any in "notSchools" (schools that keep their own calendar get their own day-off entries)
+    $bySchool = $schools && (in_array('all', $schools, true) ? count($as) > 0 : (in_array('*', $as, true) && count(array_diff($schools, $list($a, 'notSchools'))) > 0) || count(array_intersect($as, $schools)) > 0);
     if ($bySchool || array_intersect($list($a, 'programs'), $programs) || array_intersect($list($a, 'camps'), $camps) || array_intersect($list($a, 'weeks'), $weeks)) { $wanted[] = $a; $got[$a['id']] = true; }
   }
   $stage = function ($a) { $k = isset($a['kind']) ? $a['kind'] : ''; return $k === 'soon' ? 1 : ($k === 'today' ? 2 : 0); };

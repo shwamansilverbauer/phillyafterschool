@@ -1,6 +1,13 @@
 [
   {
     "date": "2026-11-10",
+    "title": "Two more schools: Independence Charter and Greenfield",
+    "text": "Each has its own page: 13 programs run at ICS or pick up from it, and 12 at or from Greenfield, most of them around Rittenhouse Square. New to the site are Beacon Center, Evolve Dance, Martial Posture, Yous Fitfulness and ICS’s own after-school program, and ZAZZ and Koresh now show their after-school classes with pickup. ICS keeps its own calendar, so its page goes by ICS’s days off, not the District’s. That makes 16 schools.",
+    "href": "independence-charter/",
+    "link": "See Independence Charter"
+  },
+  {
+    "date": "2026-11-10",
     "title": "Lists that start from your school or your street",
     "text": "The after-school list now starts by asking for your child’s school, the day-camp and weekend lists ask for your neighborhood, and the summer camps list asks for your ZIP code and puts the closest camps first. Answer once and each list remembers it on your device. The week builder starts from your school too.",
     "href": "programs/",

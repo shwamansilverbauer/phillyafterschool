@@ -120,12 +120,23 @@ async function readOne(p) {
 }
 
 // ----- read them all: six plain fetches at a time, two browser pages at a time -----
+// No page gets more than a minute, however it stalls (a script that never settles, a body that never ends), and
+// the whole read stops starting pages after PRECHECK_MINUTES (25): what's left is reported as not read this time,
+// and keeps the versions it had, so the job always finishes and always saves what it did read.
 const before = (() => { try { return JSON.parse(fs.readFileSync(path.join(DIR, 'pages.json'), 'utf8')).pages || {}; } catch { return {}; } })();
 const list = [...pages.values()];
 const results = new Map();
-const pool = async (items, n) => { let i = 0; await Promise.all(Array.from({ length: n }, async () => { while (i < items.length) { const p = items[i++]; results.set(p.url, await readOne(p)); } })); };
+const PAGE_MS = +process.env.PRECHECK_PAGE_MS || 60000, STOP_AT = Date.now() + (+process.env.PRECHECK_MINUTES || 25) * 60000;
+const within = (work, ms, late) => { let t; return Promise.race([work.finally(() => clearTimeout(t)), new Promise(r => { t = setTimeout(() => r(late), ms); })]); };
+let done = 0;
+const pool = async (items, n) => { let i = 0; await Promise.all(Array.from({ length: n }, async () => { while (i < items.length) {
+  const p = items[i++];
+  results.set(p.url, Date.now() > STOP_AT ? { status: 'error', note: 'not read: the run was out of time' } : await within(readOne(p), PAGE_MS, { status: 'error', note: `no answer within ${PAGE_MS / 1000} seconds` }));
+  if (++done % 25 === 0) console.log(`  read ${done} of ${list.length}`);
+} })); };
+console.log(`${list.length} pages to read: ${list.filter(p => p.how === 'fetch').length} by plain fetch, ${list.filter(p => p.how === 'browser').length} in a browser, ${list.filter(p => p.how === 'person').length} for a person.`);
 await Promise.all([pool(list.filter(p => p.how !== 'browser'), 6), pool(list.filter(p => p.how === 'browser'), 2)]);
-if (browser) await browser.close();
+if (browser) await within(browser.close(), 20000, null);
 
 // ----- compare, and keep the versions -----
 const diff = (a, b) => { const A = new Set(a), B = new Set(b); return { added: b.filter(l => !A.has(l)).slice(0, SHOW), removed: a.filter(l => !B.has(l)).slice(0, SHOW), more: Math.max(0, b.filter(l => !A.has(l)).length - SHOW) + Math.max(0, a.filter(l => !B.has(l)).length - SHOW) }; };
@@ -154,3 +165,4 @@ const s = report.summary;
 console.log(`${s.pages} pages: ${s.same} the same as when last confirmed, ${s.sameSince} unchanged since the oldest reading kept, ${s.changed} changed, ${s.new} read for the first time, ${s.failed} didn't answer, ${s.closed} closed by robots.txt, ${s.person} for a person to read.`);
 for (const c of report.changed) console.log(`  changed: ${c.url} (${c.for.join(', ')}): ${c.added.length + c.removed.length + c.more} lines`);
 for (const f of report.failed) console.log(`  failed: ${f.url} ${f.status}${f.note ? ' ' + f.note : ''}`);
+process.exit(0);   // a page that stalled past its minute may still hold the event loop open

@@ -6,7 +6,7 @@ const KNOWN = {   // places written without a street number
   'Woodmere Art Museum': '9201 Germantown Ave',
   'One Awbury Rd': '1 Awbury Rd',
 };
-const STREET = /(\d+)(?:\s*[–-]\s*\d+)?\s+((?:[NSEW]\.? )?(?:[A-Z0-9][A-Za-z0-9’'.]*\s)+?(?:St|Ave|Blvd|Rd|Ln|Pkwy|Dr|Way|Pl|Ct|Ter|Pike)\b)/g;
+const STREET = /(\d+)(?:\s*[–-]\s*\d+)?\s+((?:[NSEW]\.? )?(?:[A-Z0-9][A-Za-z0-9’'.]*\s)+?(?:St|Ave|Blvd|Rd|Ln|Pkwy|Dr|Way|Pl|Ct|Ter|Pike|Sq)\b)/g;
 export const addressKey = a => a.toLowerCase().replace(/[’']/g, '').replace(/\./g, '').replace(/\s+/g, ' ').trim();
 export function streetAddresses(text) {
   let t = String(text || '');
