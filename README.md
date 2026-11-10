@@ -654,6 +654,13 @@ steps and proposes them as one pull request for Josh to merge. It never pushes t
 - **Merge within two days.** `added` is what emails the parents waiting for a school, on that morning or one of
   the two after it (the email job's catch-up), so a pull request merged later still publishes the pages but those
   emails are missed.
+- **The claim-outreach sheet.** Josh keeps a Google Sheet of every provider with a contact email, to invite them to
+  claim their listings. Each run also adds the providers it brought in: `node scripts/provider-contacts.mjs --known
+  <file> --browser` takes the sheet's Website and "Links to the listings" columns, and returns a row (in the sheet's
+  columns) for each provider not in it yet, with the best address on the provider's own site (`--offline` groups
+  the listings without reading any site; `tests/cases/04-provider-contacts.mjs` runs it that way). The addresses go
+  to the sheet only, never into the repository or a pull request. The browser is only for a site that answered but
+  showed no address; a site that refuses a plain fetch is left alone.
 
 ## Program pages
 
