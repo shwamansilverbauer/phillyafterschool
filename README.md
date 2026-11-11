@@ -500,8 +500,10 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   if a source changes. Neighborhoods are under clouds until the child has been to a class there; each program's
   bulb stands where it is, the child's own at the latest place. The build places every listing's site on a map
   neighborhood (`mapHood()`: by its point, else by name, through `MAP_ALIAS`) and notes any name it can't place.
-  Drag, pinch or the buttons zoom; a tap says what is there, and Eddie waits at the top of the Art Museum steps. No map
-  service, no tiles: nothing is fetched from anywhere else.
+  Drag, pinch or the buttons zoom; a tap says what is there, and Eddie waits at the top of the Art Museum steps. The
+  neighborhoods explored are named under the map, and a tap on one glides the map in on it, lights up its outline and
+  says what's there (`showHood()`; a jump instead of a glide for someone who asked for less motion). No map service, no
+  tiles: nothing is fetched from anywhere else.
 - **Secret spots.** `MAP_AREAS` in `build.mjs` cuts the city into areas (the Parkway, Center City, Old City, South
   Philly, the Northwest, the Southwest, the Northeast), each with one to three famous things: the map's landmarks, and
   a few more placed by latitude and longitude (`MAP_EXTRA`: Elfreth's Alley, the Italian Market, the covered bridge,

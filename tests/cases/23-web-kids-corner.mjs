@@ -221,6 +221,23 @@ test('the map of Philadelphia: drawn from this site, clear where the child has b
   const open = await page.locator('.kc-map .kc-hoods path.open').count();
   ok(open >= 1, 'at least one neighborhood cleared');
   eq(await page.locator('.kc-placelist li').count(), open, 'the cleared ones named under the map');
+  // A tap on a name under the map glides in close on that neighborhood, lights up its outline and says what's there.
+  const pill = page.locator('.kc-placelist .kc-placebtn').first(), pname = flat(await pill.innerText()), pid = await pill.getAttribute('data-place');
+  await pill.click();
+  await page.waitForSelector('.kc-bubble:not([hidden])');
+  includes(flat(await page.locator('.kc-bubble').innerText()), pname, 'the bubble names it');
+  includes(flat(await page.locator('.kc-bubble').innerText()), 'You explored here');
+  eq(await pill.getAttribute('aria-pressed'), 'true', 'the name picked stays lit');
+  const zoomed = await page.evaluate(id => {
+    const svg = document.querySelector('.kc-map'), [x, y, w, h] = svg.getAttribute('viewBox').split(' ').map(Number), full = +svg.getAttribute('data-w') || 0;
+    const bb = svg.querySelector('[data-hood="' + id + '"]').getBBox(), hi = svg.querySelector('.kc-hoodhi');
+    return { inView: bb.x >= x - 1 && bb.y >= y - 1 && bb.x + bb.width <= x + w + 1 && bb.y + bb.height <= y + h + 1, w, lit: hi.classList.contains('on') && hi.getAttribute('d') === svg.querySelector('[data-hood="' + id + '"]').getAttribute('d') };
+  }, pid);
+  ok(zoomed.inView && zoomed.w <= 600, 'zoomed in on it: ' + JSON.stringify(zoomed));
+  ok(zoomed.lit, 'its outline lit up');
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('.kc-map');
+  await page.evaluate(() => document.querySelectorAll('.kc-over').forEach(o => o.remove()));
   ok(await page.locator('.kc-map svg[data-k]').count() >= 1, 'a program’s bulb on the map');
   eq(await page.locator('.kc-map .kc-you').count(), 1, 'the child’s own bulb');
   eq(await page.locator('.kc-map .kc-eddie-map').count(), 1, 'Eddie on the Art Museum steps');

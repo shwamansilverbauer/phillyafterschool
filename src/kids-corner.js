@@ -1341,6 +1341,8 @@
     var compass = sv('g', { transform: 'translate(985 1085)', 'pointer-events': 'none' }, svg);
     sv('circle', { r: 26, fill: '#fff', stroke: INK, 'stroke-width': 3 }, compass); sv('path', { d: 'M0 -20L6 0L0 -4L-6 0Z', fill: '#E03131', stroke: INK, 'stroke-width': 1.5 }, compass); sv('path', { d: 'M0 20L6 0L0 4L-6 0Z', fill: '#fff', stroke: INK, 'stroke-width': 1.5 }, compass);
     var nt = sv('text', { x: 0, y: -30, 'text-anchor': 'middle', 'font-size': 16, 'font-family': 'Luckiest Guy, Arial Black, sans-serif', fill: INK }, compass); nt.textContent = 'N';
+    // the outline that lights up around a neighborhood picked from the list under the map
+    var hilite = sv('path', { d: '', fill: 'none', stroke: '#FFD43B', 'stroke-width': 6, 'stroke-linejoin': 'round', 'vector-effect': 'non-scaling-stroke', 'class': 'kc-hoodhi', 'pointer-events': 'none' }, svg);
     // Things standing on the map are sized for the zoom, so they stay tappable.
     var things = [];
     var place = function (node, x, y, base, lift) { things.push({ n: node, x: x, y: y, base: base, lift: lift === undefined ? 1 : lift }); svg.appendChild(node); };
@@ -1396,13 +1398,16 @@
     place(you, home[0] + 16, home[1], 1.35, 1); things[things.length - 1].you = true;
     // zoom and drag, by changing what part of the map is in view
     var vb = { x: 0, y: 0, w: W, h: H };
+    var boxOf = function (ids) {   // the box around some neighborhoods, from their outlines
+      var x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+      ids.forEach(function (id) { var n = byId[id].d.match(/-?\d+(\.\d+)?/g); for (var i = 0; i + 1 < n.length; i += 2) { var x = +n[i], y = +n[i + 1]; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; } });
+      return { x0: x0, y0: y0, x1: x1, y1: y1, cx: (x0 + x1) / 2, cy: (y0 + y1) / 2 };
+    };
     var fit = function () {
       var ids = Object.keys(open);
       if (!ids.length) { vb = { x: 0, y: 0, w: W, h: H }; return; }
-      var x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
-      ids.forEach(function (id) { var n = byId[id].d.match(/-?\d+(\.\d+)?/g); for (var i = 0; i + 1 < n.length; i += 2) { var x = +n[i], y = +n[i + 1]; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; } });
-      var cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, w = Math.max(360, (x1 - x0) * 1.5), h = Math.max(w * H / W, (y1 - y0) * 1.5);
-      w = h * W / H; vb = { x: cx - w / 2, y: cy - h / 2, w: w, h: h }; clamp();
+      var bb = boxOf(ids), w = Math.max(360, (bb.x1 - bb.x0) * 1.5), h = Math.max(w * H / W, (bb.y1 - bb.y0) * 1.5);
+      w = h * W / H; vb = { x: bb.cx - w / 2, y: bb.cy - h / 2, w: w, h: h }; clamp();
     };
     var clamp = function () {
       vb.w = Math.max(160, Math.min(W, vb.w)); vb.h = vb.w * H / W;
@@ -1430,13 +1435,25 @@
       var nw = Math.max(160, Math.min(W, vb.w * f)), r = nw / vb.w;
       vb.x = cx - (cx - vb.x) * r; vb.y = cy - (cy - vb.y) * r; vb.w = nw; vb.h = nw * H / W; clamp(); apply();
     };
+    // glide to a part of the map (or jump there, for someone who asked for less motion)
+    var flyTo = function (to, done) {
+      var from = { x: vb.x, y: vb.y, w: vb.w }, t0 = 0;
+      if (CALM) { vb = to; apply(); if (done) done(); return; }
+      var step = function (now) {
+        if (!t0) t0 = now;
+        var f = Math.min(1, (now - t0) / 450), e = f < 0.5 ? 2 * f * f : 1 - Math.pow(-2 * f + 2, 2) / 2;
+        vb.w = from.w + (to.w - from.w) * e; vb.h = vb.w * H / W; vb.x = from.x + (to.x - from.x) * e; vb.y = from.y + (to.y - from.y) * e; apply();
+        if (f < 1) requestAnimationFrame(step); else if (done) done();
+      };
+      requestAnimationFrame(step);
+    };
     fit(); apply();
     box.appendChild(svg);
     var ctl = el('div', 'kc-mapctl');
     var zb = function (label, txt, f) { var b = btn('kc-zoom', txt, function () { Sound.play('tap'); f(); }); b.setAttribute('aria-label', label); return b; };
     ctl.appendChild(zb('Zoom in', '+', function () { zoom(0.66); }));
     ctl.appendChild(zb('Zoom out', '−', function () { zoom(1.5); }));
-    ctl.appendChild(zb('Whole city', '⤢', function () { vb = { x: 0, y: 0, w: W, h: H }; apply(); }));
+    ctl.appendChild(zb('Whole city', '⤢', function () { hilite.classList.remove('on'); vb = { x: 0, y: 0, w: W, h: H }; apply(); }));
     box.appendChild(ctl);
     var bubble = el('div', 'kc-bubble'); bubble.hidden = true; box.appendChild(bubble);
     var say = function (cx, cy, title, line, more) {
@@ -1446,6 +1463,24 @@
       var bx = Math.max(8, Math.min(r.width - bubble.offsetWidth - 8, cx - r.left - bubble.offsetWidth / 2)), by = Math.max(8, cy - r.top - bubble.offsetHeight - 16);
       bubble.style.left = bx + 'px'; bubble.style.top = by + 'px';
       anim(bubble, [{ transform: 'scale(.6)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], { duration: 180, easing: 'ease-out' });
+    };
+    var hoodSay = function (h, cx, cy) {   // a neighborhood's bubble: the classes there, or still cloudy
+      if (open[h.id]) { var here = []; st.places.forEach(function (pl) { if (pl.st.m === h.id && here.indexOf(nameOf(pl.k)) < 0) here.push(nameOf(pl.k)); }); say(cx, cy, h.name, 'You explored here!', here); }
+      else say(cx, cy, h.name, 'Still cloudy! A class here clears the clouds.');
+    };
+    // a neighborhood picked from the list under the map: light it up, glide in close, and say what's there
+    var showHood = function (id) {
+      var h = byId[id], bb = boxOf([id]);
+      var w = Math.max(220, (bb.x1 - bb.x0) * 2.2, (bb.y1 - bb.y0) * 2.2 * W / H);
+      var save = vb; vb = { x: bb.cx - w / 2, y: bb.cy - w * H / W / 2, w: w, h: w * H / W }; clamp(); var to = vb; vb = save;
+      bubble.hidden = true;
+      hilite.setAttribute('d', h.d); hilite.classList.remove('on'); void hilite.getBoundingClientRect(); hilite.classList.add('on');
+      var r = box.getBoundingClientRect();
+      if (r.top < 0 || r.bottom > (window.innerHeight || 0)) box.scrollIntoView({ behavior: CALM ? 'auto' : 'smooth', block: 'center' });
+      flyTo(to, function () {
+        var sr = svg.getBoundingClientRect();
+        hoodSay(h, sr.left + (bb.cx - vb.x) / vb.w * sr.width, sr.top + (bb.y0 - vb.y) / vb.h * sr.height);   // the bubble sits just above it
+      });
     };
     var tapAt = function (ev) {
       var t = document.elementFromPoint(ev.clientX, ev.clientY) || ev.target;   // the drag holds the pointer, so ask what is under it
@@ -1468,12 +1503,7 @@
         Sound.play('whoosh'); say(ev.clientX, ev.clientY, 'A secret spot!', 'Go to ' + (need === 1 ? '1 more class' : need + ' more classes') + ' near here to find out what it is!');
         return;
       }
-      if (hood) {
-        var h = byId[hood.getAttribute('data-hood')];
-        if (open[h.id]) { Sound.play('sparkle'); var here = []; st.places.forEach(function (pl) { if (pl.st.m === h.id && here.indexOf(nameOf(pl.k)) < 0) here.push(nameOf(pl.k)); }); say(ev.clientX, ev.clientY, h.name, 'You explored here!', here); }
-        else { Sound.play('whoosh'); say(ev.clientX, ev.clientY, h.name, 'Still cloudy! A class here clears the clouds.'); }
-        return;
-      }
+      if (hood) { var h = byId[hood.getAttribute('data-hood')]; Sound.play(open[h.id] ? 'sparkle' : 'whoosh'); hoodSay(h, ev.clientX, ev.clientY); return; }
       bubble.hidden = true;
     };
     // drag to move, pinch or buttons to zoom; a touch that doesn't move is a tap
@@ -1503,10 +1533,17 @@
     };
     svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up);
     svg.addEventListener('wheel', function (ev) { ev.preventDefault(); var c = toMap(ev.clientX, ev.clientY); zoom(ev.deltaY > 0 ? 1.2 : 0.83, c[0], c[1]); }, { passive: false });
-    // the places explored, in words too
+    // the places explored, in words too: a tap on one zooms the map in on it
     if (st.nh) {
-      var names = []; Object.keys(open).forEach(function (id) { names.push(byId[id].name); });
-      var ul = el('ul', 'kc-placelist'); names.sort().forEach(function (n) { ul.appendChild(el('li', null, n)); });
+      var ul = el('ul', 'kc-placelist');
+      Object.keys(open).sort(function (a, b) { return byId[a].name.localeCompare(byId[b].name); }).forEach(function (id) {
+        var li = el('li'), b = btn('kc-placebtn', byId[id].name, function () {
+          Sound.play('whoosh');
+          ul.querySelectorAll('.kc-placebtn').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+          showHood(id);
+        });
+        b.setAttribute('aria-pressed', 'false'); b.setAttribute('data-place', id); li.appendChild(b); ul.appendChild(li);
+      });
       box.parentNode.insertBefore(ul, box.parentNode.querySelector('.kc-grown'));
     }
   };
