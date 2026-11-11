@@ -22,8 +22,10 @@ AddType font/woff2 .woff2
 RewriteEngine On
 RewriteCond %{HTTP_HOST} ^www\.phillyafterschool\.org$ [NC]
 RewriteRule ^ https://phillyafterschool.org%{REQUEST_URI} [R=301,L]
-# Kid's Corner was called the Passport at first.
-RewriteRule ^passport/?$ /kids-corner/ [R=301,L]
+# Kids' Playground was called the Passport at first.
+RewriteRule ^passport/?$ /kids-playground/ [R=301,L]
+RewriteRule ^kids-corner/?$ /kids-playground/ [R=301,L]
+RewriteRule ^features/kids-corner/?$ /features/kids-playground/ [R=301,L]
 # The site's other addresses all lead here, page for page (the certificate check on each is left alone).
 RewriteCond %{HTTP_HOST} ^(www\.)?(phillyafterschool\.com)$ [NC]
 RewriteCond %{REQUEST_URI} !^/\.well-known/

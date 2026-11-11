@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-11-10",
+  "generated": "2026-11-11",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -1179,23 +1179,6 @@
     "reason": "you asked to be told when this school was added"
   },
   "alerts": [
-    {
-      "id": "added-houston",
-      "kind": "added",
-      "date": "2026-11-08",
-      "sendOn": "2026-11-08",
-      "expires": "2026-11-10",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "henry-h-houston-school"
-      ],
-      "when": "New",
-      "title": "Houston now has a page",
-      "text": "You asked to be told. 5 programs are listed for Houston so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/houston/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
     {
       "id": "added-greenfield",
       "kind": "added",

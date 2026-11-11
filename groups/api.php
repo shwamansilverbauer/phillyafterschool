@@ -978,7 +978,7 @@ function daysoff_out(int $uid): ?array {
 // the calendar year), "s": the school it was picked under, or "", "h": which of the listing's sites, as a
 // neighborhood name, when it has more than one, "n": how many times, 2 or more (each day a week it meets, each term,
 // each week of the same camp, each day off; left out when it's once) }. "skip" holds the keys of suggestions the
-// parent waved away ("k|kind|y", or "k|kind|y|n" for "not that many times"); "fav" is the child's ranking of listings, best first. For Kid's Corner (the page the
+// parent waved away ("k|kind|y", or "k|kind|y|n" for "not that many times"); "fav" is the child's ranking of listings, best first. For Kids' Playground (the page the
 // child sees) it also keeps "av", the lightbulb the child picked ({ "b": a bulb from KC_BODIES, "c": a color, 0 to 9,
 // "w": what it wears, { place: thing } from KC_WEAR }),
 // "seen", the pins whose level the child has already been shown ({ "type:music": 2, ... }), and "lvl", the last level
@@ -1282,7 +1282,7 @@ function me_out(array $u): array {
     + (is_admin($u) ? array('admin' => true) : array());   // only an admin's own account is ever told so
 }
 // Whether the account plans for children: kids named on it, or a week, summer or days-off plan kept in it. A program
-// manager who does is a parent too, so the menu keeps the Parent Portal and Kid's Corner for them.
+// manager who does is a parent too, so the menu keeps the Parent Portal and Kids' Playground for them.
 function has_family(array $u): bool {
   $h = home_user($u);
   if (count(kids_list($h))) return true;
@@ -2855,7 +2855,7 @@ switch ($method . ' ' . $action) {
     $home = home_id($u);
     $r = passport_row($home, $name);
     $d = passport_clean($in);
-    $old = passport_data($r);   // what the request leaves out of Kid's Corner's own fields stays as it was
+    $old = passport_data($r);   // what the request leaves out of Kids' Playground's own fields stays as it was
     foreach (array('av', 'seen', 'lvl') as $f) if (!array_key_exists($f, $in) && isset($old[$f])) $d[$f] = $old[$f];
     if (count($d['done']) === 0 && count($d['skip']) === 0 && count($d['fav']) === 0 && !isset($d['av'])) {
       if ($r) q('DELETE FROM passports WHERE id = ?', array($r['id']));
@@ -2870,7 +2870,7 @@ switch ($method . ' ' . $action) {
     out(array('ok' => true, 'kid' => passport_kid($home, array('n' => $name), $r, passport_data($r))));
   }
 
-  // Kid's Corner from the beginning for one child, from the Parent Portal or the grown-ups' corner: their bulb, what
+  // Kids' Playground from the beginning for one child, from the Parent Portal or the grown-ups' corner: their bulb, what
   // they've been shown (Eddie's welcome too), the level celebrated and their showdown favorites go; the classes the
   // parent confirmed stay, unless "classes" says to take those off as well (then the whole row goes).
   case 'POST passport_reset': {

@@ -2274,9 +2274,9 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
   .pc-row dd{grid-column:1/-1}
   .g-page .prof-card a.pc-edit{width:100%;text-align:center}
 }
-/* in the phone menu, someone signed in finds their own pages first: Parent Portal, Kid's Corner, then My Profile */
+/* in the phone menu, someone signed in finds their own pages first: Parent Portal, Kids' Playground, then My Profile */
 @media (max-width:1099px){
-  /* the phone menu, signed in: Parent Portal leads (big, yellow, with an ink edge); Kid's Corner and My Profile come
+  /* the phone menu, signed in: Parent Portal leads (big, yellow, with an ink edge); Kids' Playground and My Profile come
      under it, smaller and quieter */
   .js .nav.open > a.nav-cta.when-in{order:-3;margin:0 0 10px;padding:15px 12px;font-size:1.2rem;font-weight:800;border:3px solid #0B2140;box-shadow:0 4px 0 #0B2140}
   .js .nav.open > a.nav-kc{order:-2;display:flex;align-items:center;justify-content:center;gap:6px;margin:0 0 8px;font-family:inherit;font-stretch:normal;font-weight:700;font-size:.98rem;padding:8px 12px;border:2px solid #9CC3EE;border-radius:999px;box-shadow:none;background:#EEF6FF;transform:none}
@@ -2284,7 +2284,7 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
   .js .nav.open > a.nav-kc:hover{background:#DAEDFE}
   .js .nav.open > a.nav-acct{order:-1;text-align:center;border:2px solid #0B2140;border-radius:999px;margin-bottom:8px;padding:8px 12px}
 }
-/* Kid's Corner, beside Parent Portal: a button that looks like it belongs on Kid's Corner */
+/* Kids' Playground, beside Parent Portal: a button that looks like it belongs on Kids' Playground */
 .nav a.nav-kc{display:inline-flex;align-items:center;gap:6px;font-family:var(--title);font-weight:400;font-size:1rem;letter-spacing:.04em;text-transform:uppercase;line-height:1;white-space:nowrap;
   background:#96C9FF;color:#0B2140;border:2px solid #FFFFFF;border-radius:999px;padding:6px 15px 4px 10px;box-shadow:0 3px 0 #061F3D;transform:rotate(-2deg);transition:transform .15s,background .15s}
 .sitebar .nav a.nav-kc{color:#0B2140;border-bottom:2px solid #FFFFFF}
@@ -2292,7 +2292,7 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .nav-kc-bulb{flex:none;margin-top:-3px;transform-origin:50% 90%}
 .nav a.nav-kc:hover .nav-kc-bulb{animation:nav-kc-wiggle .6s ease-in-out}
 @keyframes nav-kc-wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-14deg)}50%{transform:rotate(10deg)}75%{transform:rotate(-6deg)}}
-@media (min-width:1100px){.nav a.nav-kc{margin-left:-14px}}
+@media (min-width:1100px){.nav a.nav-kc{margin-left:-14px}html.nav-tight .nav a.nav-kc{margin-left:-4px}}
 @media (prefers-reduced-motion:reduce){.nav a.nav-kc,.nav a.nav-kc:hover{transform:none}.nav a.nav-kc:hover .nav-kc-bulb{animation:none}}
 /* the Parent Portal's overview: where to start */
 .ov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:6px}
@@ -2539,9 +2539,9 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 #pub-removed ul{padding-left:1.2em}
 
 /* ----- the Passport: a child's own page. Kid mode hides the site around it; the grown-ups' corner is a press-and-hold away. ----- */
-/* ---------- Kid's Corner (src/kids-corner.js): a cartoon arcade for ages 5 to 10, in the site's own colours ---------- */
+/* ---------- Kids' Playground (src/kids-corner.js): a cartoon arcade for ages 5 to 10, in the site's own colours ---------- */
 :root{--kink:#0B2140;--kblue:#1763B8;--kgreen:#3FA34D;--kyellow:#F3C613;--kred:#CC3000}
-/* "For kids" on Kid's Corner for someone signed out: Kid's Corner's own look, said to the child */
+/* "For kids" on Kids' Playground for someone signed out: Kids' Playground's own look, said to the child */
 .kids-band{position:relative;color:#fff;border:4px solid var(--kink);border-radius:30px;box-shadow:0 8px 0 var(--kink);padding:clamp(20px,4vw,40px);margin-block:28px;
   background:radial-gradient(rgba(255,255,255,.12) 1.5px,transparent 2px) 0 0/22px 22px,linear-gradient(160deg,#0A3566 0%,#1763B8 100%)}
 .kids-head{display:flex;align-items:center;gap:clamp(14px,3vw,30px)}
@@ -2879,7 +2879,7 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-spotart{width:120px;height:auto;overflow:visible}
 .kc-spotrow.many .kc-spotart{width:86px}
 .kc-spot1 b{font-weight:800;line-height:1.15;text-align:center}
-/* starting a child's Kid's Corner over */
+/* starting a child's Kids' Playground over */
 .kc-reset{display:flex;flex-direction:column;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
 .panel .kc-reset{border-top:0;padding-top:0;margin-top:0}
 .kc-reset .actions{margin:0}
@@ -2889,7 +2889,7 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-times-n{min-width:1.6em;text-align:center;font-size:1.05rem}
 .kc-bulbcard{position:relative}
 .kc-timesbadge{position:absolute;top:8px;right:8px;font-family:var(--title);font-size:1rem;color:#fff;background:var(--kred);border:2.5px solid var(--kink);border-radius:999px;padding:4px 9px 1px;transform:rotate(8deg);box-shadow:0 2px 0 var(--kink)}
-/* the account page's Kid's Corner tab (looks like the rest of the site) */
+/* the account page's Kids' Playground tab (looks like the rest of the site) */
 .kc-sum{border:1px solid var(--line);border-radius:16px;padding:16px;margin:14px 0;background:var(--surface);display:grid;gap:12px}
 .kc-sum-head{display:flex;align-items:center;gap:14px}
 .kc-sum-face{flex:none;width:64px;height:64px;border-radius:50%;background:#0F4D90;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;padding-top:6px;box-sizing:border-box}
