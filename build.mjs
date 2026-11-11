@@ -612,7 +612,7 @@ function street(mode) {   // 'go': the bus drives in; 'parked': still; 'out': sc
   return `<svg class="street${mode === 'go' ? ' go' : mode === 'out' ? ' out' : ''}" viewBox="0 0 2000 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${sky}${run(-10, sx)}${school}${run(sx + sw, 2010)}<rect class="st" x="0" y="${G}" width="2000" height="12"/>${kids}<g class="bus"><g transform="translate(968,${G - 22})">${bus}</g></g></svg>`;
 }
 
-// Kid's Corner's little bulb, on its menu button
+// Kids' Playground's little bulb, on its menu button
 const KC_BULB = '<svg class="nav-kc-bulb" viewBox="0 0 24 30" width="20" height="25" aria-hidden="true" focusable="false"><path d="M8.5 20C8.5 17 3 15 3 10C3 5 7 1.5 12 1.5S21 5 21 10C21 15 15.5 17 15.5 20Z" fill="#F3C613" stroke="#0B2140" stroke-width="1.6"/><rect x="8.3" y="20" width="7.4" height="3" rx="1.5" fill="#E6F2FF" stroke="#0B2140" stroke-width="1.3"/><rect x="8.8" y="23" width="6.4" height="3" rx="1.5" fill="#96C9FF" stroke="#0B2140" stroke-width="1.3"/><circle cx="9.3" cy="9.5" r="1.4" fill="#0B2140"/><circle cx="14.7" cy="9.5" r="1.4" fill="#0B2140"/><path d="M9.3 12.6Q12 15.4 14.7 12.6" fill="none" stroke="#0B2140" stroke-width="1.4" stroke-linecap="round"/></svg>';
 function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false, first = '', theme = '', shareImage = null, shareText = '', quiet = false, next = '' }) {
   const canonical = cfg.siteUrl + '/' + pathName;
@@ -623,14 +623,14 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
   // The menu: Programs and Schedule Builder, each a <details> group (so it works without scripts) whose first item is
   // the whole list; on a wide screen the script opens a group on hover and sends the label itself to that list, and the
   // first item is hidden there. Then Suggestion Box and About as plain links, and the account button.
-  // the Kid's Corner button's little bulb, drawn like the bulbs on Kid's Corner
+  // the Kids' Playground button's little bulb, drawn like the bulbs on Kids' Playground
   const navHref = to => { const p = to.split(/[#?]/)[0]; return link(p, depth) + to.slice(p.length); };   // a link may carry ?kind= or #part
   const menus = [
     ['Programs', 'all-programs/', [['all-programs/', 'All Programs'], ['programs/', 'After School'], ...(programs.some(p => p.weekend) ? [['weekends/', 'Weekend Activities']] : []), ...(daysOff ? [[dayCampsPath, 'Day Camps']] : []), ...(summerCamps.length ? [['summer-camps/', 'Summer Camps']] : [])]],
     ['Schedule Builder', 'schedules/', [['schedules/', 'Build a Schedule'], ['board/', 'After School'], ...(daysOff ? [[offPath, 'Days Off']] : []), ...(summerCamps.length ? [['summer-schedule/', 'Summer']] : []), ...(GROUPS && daysOff ? [['calendar/', 'My Calendar']] : [])]],
   ];
   // Account Features: a page for each thing an account does, for someone signed out (signed in, the Parent Portal and
-  // Kid's Corner buttons take its place). It's the one way to Kid's Corner before signing in: the open site doesn't
+  // Kids' Playground buttons take its place). It's the one way to Kids' Playground before signing in: the open site doesn't
   // push kids' things anywhere else.
   const featMenu = GROUPS ? ['Account Features', featPath, [[featPath, 'All Account Features'], ...FEATS().map(([f, label]) => [featPath + f + '/', label])], 'when-out nav-feat'] : null;
   const group = ([label, top, items, cls]) => {
@@ -638,7 +638,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
     return `<details class="menu${cls ? ' ' + cls : ''}${here ? ' here' : ''}" data-top="${navHref(top)}"><summary>${label}</summary><ul>${items.map(([to, text]) => `<li${to === top ? ' class="menu-all"' : ''}><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
   };
   const nav = menus.map(group).join('') + (featMenu ? group(featMenu) : '') + `<a class="nav-more" href="${link('suggest/', depth)}"${pathName.startsWith('suggest/') || pathName.startsWith('ideas/') || pathName.startsWith('schools/request/') ? ' aria-current="page"' : ''}>Suggestion Box</a><a class="nav-more" href="${link('about/', depth)}"${pathName === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
-    ? `<a class="when-in nav-acct" href="${link('profile/', depth)}"${pathName === 'profile/' ? ' aria-current="page"' : ''}>My Profile</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}${PM_LISTED ? ' data-pm="1"' : ''}>Parent Portal<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>${KIDS ? `<a class="when-in nav-kc" href="${link(kidsPath, depth)}"${pathName === kidsPath ? ' aria-current="page"' : ''}>${KC_BULB}Kid’s Corner</a>` : ''}`
+    ? `<a class="when-in nav-acct" href="${link('profile/', depth)}"${pathName === 'profile/' ? ' aria-current="page"' : ''}>My Profile</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}${PM_LISTED ? ' data-pm="1"' : ''}>Parent Portal<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>${KIDS ? `<a class="when-in nav-kc" href="${link(kidsPath, depth)}"${pathName === kidsPath ? ' aria-current="page"' : ''}>${KC_BULB}Kids’ Playground</a>` : ''}`
     : `<a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`}`;
   const head = `${first}${fragment || quiet ? '' : roleHead + gtmHead + '\n' + klaviyoHead}<title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(description)}">
@@ -2482,7 +2482,7 @@ function privacyPage() {
     <li>${T(`For a summer schedule in your profile, we store each child’s first name as you typed it and the camps picked for each week, so the summer is there on your other devices. The calendar’s title and photos are not stored. A summer in your profile can’t be shared with anyone except a co-parent you’ve linked (below), and it is deleted when you take it out of your profile or delete your account. The summer schedule section is hidden in session recordings, and analytics is told only that a summer was kept, never what is in it.`)}</li>
     <li>${T(`For a days-off plan in your profile, we store each child’s first name as you typed it, the place picked for each day school is closed, and which of those days you ticked as signed up. The calendar’s title and photos are not stored. The plan can’t be shared with anyone except a co-parent you’ve linked (below), and it is deleted when you take it out of your profile or delete your account. The planner is hidden in session recordings, and analytics is never told what is in a plan.`)}</li>
     <li>${T(`“My kids’ calendar” is drawn in your browser, for you alone, from the plans on your device and the ones in your profile. Opening it stores nothing new and sends nothing about your plans. It has no link of its own, so nobody else can open it. A picture or calendar file you save is a copy on your device that we never receive. So it can tell you when a date changes, the page remembers what your last file held, on your device only. Google Analytics and Microsoft Clarity are not loaded on it.`)}</li>
-    <li>${T(`Kid’s Corner is a page for each child, drawn from what you confirm they have been to. We store, encrypted like the plans, the child’s first name as you typed it, the listings you confirmed with the kind, the year and how many times, the suggestions you waved away, the favorites the child ranked, the lightbulb, color and dress-up items the child picked, and which pins and level the page has already celebrated. Nothing else: no notes, no photos, nothing typed by a child. Pins, levels and the map are worked out in your browser, and the map is drawn there too, from this site, with no outside map service. The page loads no analytics or recordings, sends nothing to the email list, and has no link to share; the picture you can save shows the pins and the level, with no name and no map.`)}</li>
+    <li>${T(`Kids’ Playground is a page for each child, drawn from what you confirm they have been to. We store, encrypted like the plans, the child’s first name as you typed it, the listings you confirmed with the kind, the year and how many times, the suggestions you waved away, the favorites the child ranked, the lightbulb, color and dress-up items the child picked, and which pins and level the page has already celebrated. Nothing else: no notes, no photos, nothing typed by a child. Pins, levels and the map are worked out in your browser, and the map is drawn there too, from this site, with no outside map service. The page loads no analytics or recordings, sends nothing to the email list, and has no link to share; the picture you can save shows the pins and the level, with no name and no map.`)}</li>
     <li>${T(`Sharing a week with one person sends an invitation to the address you give. It only opens for someone signed in with that address, they can look and print but not change anything, and you can take it back at any time.`)}</li>
     <li>${T(`Making an account also adds your name and email to our email list, kept by Klaviyo, for occasional news about the site. Every email has an unsubscribe link, and unsubscribing does not affect your account.`)}</li>
     <li>${T(`The email list also notes whether an account belongs to a parent or to someone who manages a program, so each gets only the news meant for them. For a manager it notes the name of the listing they hold.`)}</li>
@@ -3738,7 +3738,7 @@ const ART_CLAIM = {
   ${artChip(62, 122, 40, 'Art')}${artChip(110, 122, 90, 'Grades K to 5')}
   <rect x="62" y="162" width="236" height="30" rx="15" fill="#DDF3E4"/><circle cx="80" cy="177" r="9" fill="#1F7A3A"/><path d="M75.5 177.5l3 3 6-6" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><text x="96" y="181.5" font-size="12" font-weight="800" fill="#0F5132" ${ART_F}>Claimed by the people who run it</text>`),
 };
-// Kid's Corner in a drawing: a lightbulb with a face (Eddie's kind, not a real child's), a pin with a star, a "?" cloud
+// Kids' Playground in a drawing: a lightbulb with a face (Eddie's kind, not a real child's), a pin with a star, a "?" cloud
 const artStar = (R, r) => Array.from({ length: 10 }, (_, i) => { const a = -Math.PI / 2 + i * Math.PI / 5, d = i % 2 ? r : R; return `${(d * Math.cos(a)).toFixed(1)},${(d * Math.sin(a)).toFixed(1)}`; }).join(' ');
 const artBulb = (cx, cy, glass, s = 1, hat = '') => `<g transform="translate(${cx} ${cy}) scale(${s})"><ellipse cx="0" cy="-6" rx="54" ry="50" fill="${glass}" opacity=".22"/><path d="M0 -44C-26 -44 -40 -24 -40 -6C-40 10 -28 18 -22 30H22C28 18 40 10 40 -6C40 -24 26 -44 0 -44Z" fill="${glass}" stroke="#0B2140" stroke-width="3" stroke-linejoin="round"/><rect x="-18" y="30" width="36" height="8" rx="3" fill="#FFFFFF" stroke="#0B2140" stroke-width="2.5"/><rect x="-15" y="38" width="30" height="8" rx="3" fill="#FFFFFF" stroke="#0B2140" stroke-width="2.5"/><circle cx="-13" cy="-8" r="9" fill="#FFFFFF" stroke="#0B2140" stroke-width="2.5"/><circle cx="13" cy="-8" r="9" fill="#FFFFFF" stroke="#0B2140" stroke-width="2.5"/><circle cx="-11" cy="-7" r="4.5" fill="#0B2140"/><circle cx="15" cy="-7" r="4.5" fill="#0B2140"/><path d="M-11 10Q0 20 11 10" fill="none" stroke="#0B2140" stroke-width="3" stroke-linecap="round"/>${hat === 'crown' ? '<path d="M-18 -40L-20 -60L-9 -50L0 -64L9 -50L20 -60L18 -40Z" fill="#F3C613" stroke="#0B2140" stroke-width="2.5" stroke-linejoin="round"/><circle cx="0" cy="-49" r="3" fill="#CC3000"/>' : hat === 'shades' ? '<rect x="-25" y="-15" width="22" height="13" rx="4" fill="#0B2140"/><rect x="3" y="-15" width="22" height="13" rx="4" fill="#0B2140"/><path d="M-3 -10H3" stroke="#0B2140" stroke-width="3"/>' : ''}</g>`;
 const artPin = (cx, cy, r, ring, face) => `<g transform="translate(${cx} ${cy})"><circle r="${r}" fill="${ring}" stroke="#0B2140" stroke-width="3"/><circle r="${(r * 0.72).toFixed(1)}" fill="${face}" stroke="#0B2140" stroke-width="2"/><polygon points="${artStar(r * 0.42, r * 0.18)}" fill="#FFFFFF"/></g>`;
@@ -3811,7 +3811,7 @@ function accountArt() {
   <path d="M94 128C112 128 118 124 134 118" fill="none" stroke="#0F4D90" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 7"/>
   <path d="M306 128C288 128 282 124 266 118" fill="none" stroke="#0F4D90" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 7"/>
   ${artChip(31, 166, 62, 'You', true)}${artChip(296, 166, 84, 'Co-parent')}`);
-  // Kid's Corner: their own bulb, pins from bronze to gold, a map with a secret spot
+  // Kids' Playground: their own bulb, pins from bronze to gold, a map with a secret spot
   const artKids = artBox(`
   <rect x="20" y="16" width="360" height="228" rx="24" fill="#0F4D90"/>
   ${artPin(74, 74, 30, '#F3C613', '#1763B8')}${artPin(74, 152, 24, '#D6DEEA', '#3FA34D')}${artPin(74, 214, 18, '#E8A365', '#CC3000')}
@@ -3841,7 +3841,7 @@ function accountPage(register = false) {
     <div class="acct-hero-art">${artYearRibbon()}</div>`
     : `    <h1><span class="when-out">${T(`Log in to your account`)}</span><span class="when-in">${T(`Parent Portal`)}</span></h1>
     <p class="lede when-out">${T(`Your school, your plans and your kids’ calendar for the year, on any device. There’s no password to remember.`)} ${T(`New here?`)} <a href="${link('register/', 1)}">${T(`Create a free account`)}</a></p>
-    <p class="lede when-in">${T(`Everything for planning your kids’ year in one place: their week, the days off, the summer, your calendar and to-do list, Kid’s Corner, and your account.`)}</p>
+    <p class="lede when-in">${T(`Everything for planning your kids’ year in one place: their week, the days off, the summer, your calendar and to-do list, Kids’ Playground, and your account.`)}</p>
     <div class="acct-hero-art">${artYearRibbon()}</div>`;
   const page = `<div class="g-page" id="account"${register ? ' data-mode="register" data-clarity-mask="true"' : ''}></div>`;
   // the heading on the left, the form on the right: on /register/ the form starts there; on /account/ it moves up while signed out
@@ -3862,7 +3862,7 @@ ${hero}
     artRow(artCoparent, T(`Plan it with your co-parent.`), T(`You both see and change the same plans, each on your own phone.`)),
   ] : [artRow(`<div class="acct-art">${art}</div>`, T(`Keep your week.`), T(`Build it on your phone tonight, find it on your laptop tomorrow.`))];
   const kidsRows = KIDS ? [
-    artRow(artKids, T(`Kid’s Corner, a page of their own.`), T(`Every class and camp earns them pins, secret spots on a map of Philly, and new stuff for their very own lightbulb.`)),
+    artRow(artKids, T(`Kids’ Playground, a page of their own.`), T(`Every class and camp earns them pins, secret spots on a map of Philly, and new stuff for their very own lightbulb.`)),
     artRow(artFav, T(`Their favorites come first.`), T(`They pick the class they had more fun at, and you see it first when you plan. Nothing they do there is counted or sent anywhere.`)),
   ] : [];
   const miss = [
@@ -3897,7 +3897,7 @@ ${hero}
   </section>
   <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, ages: AGES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })), hoods: accountHoods(), news: NEWS.slice(0, 5) }).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to keep your week, days-off and summer plans, see the whole year in one private calendar, plan with your co-parent, and give your kids a Kid’s Corner of their own.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero: heroGrid, body, noindex: true, quiet: !register, theme: 'acct-head', scripts: groupsScript(1) });
+  return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to keep your week, days-off and summer plans, see the whole year in one private calendar, plan with your co-parent, and give your kids a Kids’ Playground of their own.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero: heroGrid, body, noindex: true, quiet: !register, theme: 'acct-head', scripts: groupsScript(1) });
 }
 // "My profile": a snapshot of the account on one card (nothing is changed here; that is the account page). The page is a shell; groups.js fills it
 // (the same script as the account page, told which page it is on by data-view). Signed out, it shows the log-in form.
@@ -5555,18 +5555,18 @@ const summerPlan = (() => {
 // no address of its own for any family: nothing about a child is ever in the page that is served, or in a link.
 const yearPath = 'calendar/';
 const YEAR_PAGE = !!(GROUPS && daysOff);
-// ---------- Kid's Corner: a page of each child's own, inside a parent's account ----------
+// ---------- Kids' Playground: a page of each child's own, inside a parent's account ----------
 // For the child: shiny pins that level up (bronze, silver, gold) for the kinds of program they have been to, the
 // seasons and the neighborhoods; a level that climbs; a cartoon map of Philadelphia whose clouds clear over the
 // neighborhoods they have been to, with secret spots that unlock with classes nearby; a Repeater Reward for going back;
 // a bulb of their own that dresses up as they level up; and showdowns (eleven Philly contests, from the Art Museum
 // steps and a cheesesteak to a Boathouse Row regatta, a pothole dodge and a mural) where the child picks which of two programs they had more fun at, which ranks their favorites. Everything on it comes from what a parent has confirmed (the "passport"
-// endpoint in groups-api.php, Kid's Corner's first name, kept encrypted with the rest of a household's plans). The page
+// endpoint in groups-api.php, Kids' Playground's first name, kept encrypted with the rest of a household's plans). The page
 // is quiet (no analytics, no recordings, nothing to Klaviyo), out of search, and in kid mode no link leaves the site.
 // The lightbulbs, pins, map and sounds are all made in src/kids-corner.js; the map's shapes are data/philly-map.json
 // (scripts/philly-map.py makes it, and says where they come from).
 const KIDS = !!GROUPS && !PREVIEW;
-const kidsPath = 'kids-corner/';
+const kidsPath = 'kids-playground/';
 const KIDS_V = KIDS ? stamp('src/kids-corner.js') : '';
 const PHILLY = KIDS && fs.existsSync(path.join(ROOT, 'data/philly-map.json')) ? readJson('data/philly-map.json') : null;
 const PHILLY_V = PHILLY ? stamp('data/philly-map.json') : '';
@@ -5584,7 +5584,7 @@ const mapHood = (() => {
   const shapes = PHILLY.hoods.map(h => ({ id: h.id, a: h.a, rings: h.d.split('Z').filter(Boolean).map(r => r.replace(/^M/, '').split('L').map(pt => pt.split(',').map(Number))) }));
   const inside = (pt, ring) => { let c = false; for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) { const [xi, yi] = ring[i], [xj, yj] = ring[j]; if ((yi > pt[1]) !== (yj > pt[1]) && pt[0] < (xj - xi) * (pt[1] - yi) / (yj - yi) + xi) c = !c; } return c; };
   const ids = new Set(PHILLY.hoods.map(h => h.id));
-  for (const [from, to] of Object.entries(MAP_ALIAS)) if (!ids.has(to)) console.log(`Note: the Kid's Corner map has no neighborhood "${to}" for "${from}" (MAP_ALIAS in build.mjs).`);
+  for (const [from, to] of Object.entries(MAP_ALIAS)) if (!ids.has(to)) console.log(`Note: the Kids' Playground map has no neighborhood "${to}" for "${from}" (MAP_ALIAS in build.mjs).`);
   const missed = new Set();
   const fn = (ll, name) => {
     if (ll) { const pt = xy(ll); const hits = shapes.filter(h => h.rings.some(r => inside(pt, r))).sort((x, y) => x.a - y.a); if (hits.length) return hits[0].id; }
@@ -5633,7 +5633,7 @@ const mapAreas = () => {
     const lm = PHILLY.landmarks.find(l => l.id === id);
     if (lm) return { id, n: lm.name, x: lm.x, y: lm.y };
     const e = MAP_EXTRA[id];
-    if (!e) throw new Error(`Kid's Corner map: no place for "${id}" (MAP_EXTRA in build.mjs)`);
+    if (!e) throw new Error(`Kids' Playground map: no place for "${id}" (MAP_EXTRA in build.mjs)`);
     return { id, n: e[0], x: r1((e[2] - lon0) * cos * k + pad), y: r1((lat1 - e[1]) * k + pad) };
   }) }));
 };
@@ -5684,9 +5684,9 @@ const KIDS_PINS = [
   // going back: each day a week a program meets, each term or year, each week of the same camp, after the first
   { id: 'repeat', group: 'repeat', label: 'Repeater Reward', one: 'repeat', many: 'repeats', color: '#CC3000', icon: KIDS_ICON.repeat, tiers: [1, 5, 10] },
 ];
-// What Kid's Corner works from: the listings (name, kinds, sites on the map), the schools, the pins, and where things
-// are. One copy, for pages one folder down: inline on Kid's Corner, and as assets/kids-corner.json for the Kid's
-// Corner tab on the account page, which loads it only when that tab is opened.
+// What Kids' Playground works from: the listings (name, kinds, sites on the map), the schools, the pins, and where things
+// are. One copy, for pages one folder down: inline on Kids' Playground, and as assets/kids-corner.json for the Kids'
+// Playground tab on the account page, which loads it only when that tab is opened.
 let KIDS_DATA = null;
 function kidsData() {
   if (KIDS_DATA) return KIDS_DATA;
@@ -5697,7 +5697,7 @@ function kidsData() {
   const sites = (hoods, lls) => hoods.map((h, i) => { const ll = hoods.length === 1 ? (lls[0] || null) : hoods.length === lls.length ? lls[i] : null, m = mapHood(ll, h), a = mapArea(ll, m); return a ? { h, ll, m, a } : { h, ll, m }; });
   for (const p of programs) listings['p:' + p.id] = { n: p.name, t: p.types || [], sites: sites(programHoods(p), placesOf(p)) };
   for (const c of summerCamps) listings['c:' + c.id] = { n: c.name, t: c.types || [], sites: sites(c.neighborhoods || [], coordsOf(c.address)) };
-  if (mapHood.missed && mapHood.missed.size) console.log(`Note: ${mapHood.missed.size} neighborhood name(s) aren't on the Kid's Corner map, so places there without an address don't show on it: ${[...mapHood.missed].join(', ')}. Add them to MAP_ALIAS in build.mjs.`);
+  if (mapHood.missed && mapHood.missed.size) console.log(`Note: ${mapHood.missed.size} neighborhood name(s) aren't on the Kids' Playground map, so places there without an address don't show on it: ${[...mapHood.missed].join(', ')}. Add them to MAP_ALIAS in build.mjs.`);
   const schoolsOut = Object.fromEntries(schools.map(s => [s.id, { n: s.shortName, h: schoolHoods(s), ll: SCHOOL_LL[s.id] || null, m: mapHood(SCHOOL_LL[s.id] || null, schoolHoods(s)[0]) }]));
   KIDS_DATA = {
     site: cfg.siteName, url: cfg.siteUrl.replace(/^https?:\/\//, ''), year: +String(daysOff.schoolYear).slice(0, 4),
@@ -5711,9 +5711,9 @@ function kidsData() {
   return KIDS_DATA;
 }
 const kidsDataV = () => '?v=' + createHash('sha1').update(JSON.stringify(kidsData())).digest('hex').slice(0, 8);
-// "For kids": what a child gets once a grown-up makes an account, said to the child, on Kid's Corner for someone
+// "For kids": what a child gets once a grown-up makes an account, said to the child, on Kids' Playground for someone
 // signed out and on its Account Features page. The site is for parents and doesn't push it: the way in is the Account
-// Features menu (the Kid's Corner button is for signed-in parents). The pictures are drawn here (no real child's page
+// Features menu (the Kids' Playground button is for signed-in parents). The pictures are drawn here (no real child's page
 // is shown anywhere).
 function kidsShowcase(D, onKidsPage = false) {
   if (!KIDS) return '';
@@ -5737,12 +5737,12 @@ function kidsShowcase(D, onKidsPage = false) {
   <ul class="kids-tiles">
     ${tiles.join('\n    ')}
   </ul>
-  <div class="kids-go"><span class="when-out"><a class="btn primary big" href="${link('register/', D)}?next=kids">${T(`Grown-ups: make a free account`)}</a></span>${onKidsPage ? '' : `<span class="when-in"><a class="btn primary big" href="${link(kidsPath, D)}">${T(`Open Kid’s Corner`)}</a></span>`}</div>
+  <div class="kids-go"><span class="when-out"><a class="btn primary big" href="${link('register/', D)}?next=kids">${T(`Grown-ups: make a free account`)}</a></span>${onKidsPage ? '' : `<span class="when-in"><a class="btn primary big" href="${link(kidsPath, D)}">${T(`Open Kids’ Playground`)}</a></span>`}</div>
   <p class="kids-fine">${T(`For grown-ups: it’s free, you say which classes count, and nothing your child does there is counted or sent anywhere.`)}</p>
 </section>`;
 }
 
-// How Kid's Corner works, for the grown-up: on Kid's Corner signed out, and on its Account Features page.
+// How Kids' Playground works, for the grown-up: on Kids' Playground signed out, and on its Account Features page.
 const kidsHow = (D, onKidsPage = false) => `  <section class="section">
     <h2>${T(`How it works`)}</h2>
     <ul>
@@ -5752,33 +5752,33 @@ const kidsHow = (D, onKidsPage = false) => `  <section class="section">
       <li>${T(`Nothing on this page is counted, recorded or sent anywhere. It has no link of its own to share: a picture of the pins, with no name and no map, is the only thing that leaves it.`)}</li>
     </ul>
     <div class="actions when-out"><a class="btn primary big" href="${link('register/', D)}?next=kids">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=kids">${T(`Log in`)}</a></div>${onKidsPage ? '' : `
-    <div class="actions when-in"><a class="btn primary big" href="${link(kidsPath, D)}">${T(`Open Kid’s Corner`)}</a></div>`}
+    <div class="actions when-in"><a class="btn primary big" href="${link(kidsPath, D)}">${T(`Open Kids’ Playground`)}</a></div>`}
   </section>`;
 function kidsPage() {
   const D = 1;
   const data = kidsData();
-  const hero = `    <h1><span class="when-out">${T(`Kid’s Corner`)}</span><span class="when-in">${T(`Kid’s Corner`)}</span></h1>
+  const hero = `    <h1><span class="when-out">${T(`Kids’ Playground`)}</span><span class="when-in">${T(`Kids’ Playground`)}</span></h1>
     <p class="lede when-out">${T(`Every class and camp your child goes to earns them something on a page of their own: shiny pins that grow grander as they level up, a cartoon map of Philly with surprises and secret spots to find, a bulb of their own to dress up, and showdowns where they pick the class they had more fun at. Eddie Bulboa, the bulb in our logo, shows them around.`)}</p>
-    <p class="lede when-in">${T(`Hand over the phone. Kid’s Corner is for the kid; the grown-ups’ corner is behind a press-and-hold.`)}</p>`;
+    <p class="lede when-in">${T(`Hand over the phone. Kids’ Playground is for the kid; the grown-ups’ corner is behind a press-and-hold.`)}</p>`;
   const body = `<div class="kc" id="kc" data-api="${link('groups/api.php', D)}">
   <div class="kc-out" id="kc-out">
   ${kidsShowcase(D, true)}
 ${kidsHow(D, true)}
   </section>
   </div>
-  <p class="hint when-in" id="kc-wait">${T(`Opening Kid’s Corner…`)}</p>
+  <p class="hint when-in" id="kc-wait">${T(`Opening Kids’ Playground…`)}</p>
   <div id="kc-app" class="needs-js-block" hidden></div>
   <script type="application/json" id="kc-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 </div>`;
-  return layout({ title: 'Kid’s Corner', description: `A page for each child: pins for every class and camp they have been to on ${cfg.siteName}, a map of Philadelphia that fills in, a bulb to dress up, and lightbulb showdowns to pick favorites.`, pathName: kidsPath, depth: D, current: null, hero, body, next: 'kids', noindex: true, quiet: true, scripts: `<script src="${link('assets/kids-corner.js', D)}${KIDS_V}"></script>` });
+  return layout({ title: 'Kids’ Playground', description: `A page for each child: pins for every class and camp they have been to on ${cfg.siteName}, a map of Philadelphia that fills in, a bulb to dress up, and lightbulb showdowns to pick favorites.`, pathName: kidsPath, depth: D, current: null, hero, body, next: 'kids', noindex: true, quiet: true, scripts: `<script src="${link('assets/kids-corner.js', D)}${KIDS_V}"></script>` });
 }
 
 // ---------- Account Features: what a free account does, a page each (a menu of its own for someone signed out) ----------
-// Calendar & Sharing, Parent Portal and Kid's Corner, and a page that leads to all three. They say what an account
+// Calendar & Sharing, Parent Portal and Kids' Playground, and a page that leads to all three. They say what an account
 // gives you before you make one; the pictures are the register page's, drawn here (no real family's plans are shown).
 const featPath = 'features/';
 const FEATS = () => [
-  ...(daysOff ? [['calendar', 'Calendar & Sharing']] : []), ['parent-portal', 'Parent Portal'], ...(KIDS ? [['kids-corner', 'Kid’s Corner']] : []),
+  ...(daysOff ? [['calendar', 'Calendar & Sharing']] : []), ['parent-portal', 'Parent Portal'], ...(KIDS ? [['kids-playground', 'Kids’ Playground']] : []),
 ];
 function featArt() {
   const r = accountArt(), a = { art: r.art, fridge: r.artFridge, remind: r.artRemind, share: r.artShare, group: r.artGroup, portal: r.artPortal, coparent: r.artCoparent, kids: r.artKids };
@@ -5814,12 +5814,12 @@ function featArt() {
 }
 function featPage(id) {
   const D = id ? 2 : 1, A = featArt(), all = FEATS();
-  const reg = `<a class="btn primary big" href="${link('register/', D)}${id === 'kids-corner' ? '?next=kids' : id === 'calendar' ? '?next=calendar' : ''}">${T(`Create a free account`)}</a>`;
+  const reg = `<a class="btn primary big" href="${link('register/', D)}${id === 'kids-playground' ? '?next=kids' : id === 'calendar' ? '?next=calendar' : ''}">${T(`Create a free account`)}</a>`;
   // the other features, as cards at the foot of each page (all three on the page that leads to them)
   const card = ([f, label]) => {
     const [art, text] = { calendar: [A.fridge, T(`Build your kids’ week, days off and summer, see them together in one calendar, and share them with the people who help.`)],
       'parent-portal': [A.portal, T(`Your school, your kids’ grades, the programs you follow, and a to-do list of sign-ups, all in one place.`)],
-      'kids-corner': [A.kids, T(`A page of their own, where every class and camp earns pins, a map of Philly to explore and a bulb to dress up.`)] }[f];
+      'kids-playground': [A.kids, T(`A page of their own, where every class and camp earns pins, a map of Philly to explore and a bulb to dress up.`)] }[f];
     return `<li><a class="feat-card" href="${link(featPath + f + '/', D)}"><span class="feat-card-art">${art}</span><b>${T(label)}</b><span>${text}</span></a></li>`;
   };
   const cards = list => `<ul class="feat-cards">${list.map(card).join('')}</ul>`;
@@ -5838,7 +5838,7 @@ function featPage(id) {
   if (!id) {
     title = 'Account features'; h1 = T(`What a free account does`);
     lede = T(`A free account keeps what you plan in one place, on your phone and your computer. Here’s what you get.`);
-    desc = `What a free ${cfg.siteName} account does: one calendar for your kids’ year, sharing with a co-parent or a sitter, a Parent Portal for your school, kids and to-do list, and a Kid’s Corner.`;
+    desc = `What a free ${cfg.siteName} account does: one calendar for your kids’ year, sharing with a co-parent or a sitter, a Parent Portal for your school, kids and to-do list, and a Kids’ Playground.`;
     body = `${cards(all)}\n  ${close('account/', T(`Open your Parent Portal`))}`;
   } else if (id === 'calendar') {
     title = 'Calendar & sharing'; h1 = T(`Calendar & sharing`);
@@ -5879,9 +5879,9 @@ function featPage(id) {
   ${close('account/', T(`Open your Parent Portal`))}
   ${more}`;
   } else {
-    title = 'Kid’s Corner'; h1 = T(`Kid’s Corner`); quiet = true;   // it says nothing on Kid's Corner is counted, so this page isn't either
+    title = 'Kids’ Playground'; h1 = T(`Kids’ Playground`); quiet = true;   // it says nothing on Kids' Playground is counted, so this page isn't either
     lede = T(`Every class and camp your child goes to earns them something on a page of their own: shiny pins that grow grander as they level up, a cartoon map of Philly with surprises and secret spots to find, a bulb of their own to dress up, and showdowns where they pick the class they had more fun at. Eddie Bulboa, the bulb in our logo, shows them around.`);
-    desc = `Kid’s Corner on ${cfg.siteName}: a page for each child where every class and camp earns pins, a map of Philadelphia fills in, and they pick their favorites.`;
+    desc = `Kids’ Playground on ${cfg.siteName}: a page for each child where every class and camp earns pins, a map of Philadelphia fills in, and they pick their favorites.`;
     body = `${kidsShowcase(D)}
   ${kidsHow(D)}
   ${more}`;
@@ -6745,7 +6745,7 @@ Header set Cache-Control "no-cache"
 </IfModule>
 AddType font/woff2 .woff2
 `;
-  write('.htaccess', `ErrorDocument 404 /404.html\nAddType text/calendar .ics\nDirectoryIndex index.html index.php\n\n${headers}\n# One address for the site: www goes to the bare domain.\n<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.${bare.replace(/\./g, '\\.')}$ [NC]\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n${KIDS ? `# Kid's Corner was called the Passport at first.\nRewriteRule ^passport/?$ /${kidsPath} [R=301,L]\n` : ''}${formerHosts.length ? `# The site's other addresses all lead here, page for page (the certificate check on each is left alone).\nRewriteCond %{HTTP_HOST} ^(www\\.)?(${formerHosts.map(h => h.replace(/\./g, '\\.')).join('|')})$ [NC]\nRewriteCond %{REQUEST_URI} !^/\\.well-known/\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n` : ''}${cardQr ? `# The short addresses in the QR codes on the week card and the day-camp card.\nRewriteRule ^w/?$ ${cardQr.goesTo} [NC,R=302,L]\n${cardQr.dayoff ? `RewriteRule ^d/?$ ${cardQr.dayoff.goesTo} [NC,R=302,L]\n` : ''}` : ''}${movedSchools.length ? `# A school that has been added: its old "not covered yet" address goes to its page.\n${movedSchools.map(([from, to]) => `RewriteRule ^schools/${from}/?$ /${to}/ [R=301,L]\n`).join('')}` : ''}${goneDays.length ? `# A day off that has passed: its own page leads to the list of days still to come.\n${goneDays.map(x => `RewriteRule ^${offPath}${x}/?$ /${offPath} [R=301,L]\n`).join('')}` : ''}${summerCamps.some(c => c.program) ? `# A summer camp tied to a program is on the program's page, under Summer (a query string, such as an email's tags, stays ahead of the #).\n${summerCamps.filter(c => c.program).map(c => { const to = '/' + programPath(programs.find(p => p.id === c.program)); return `RewriteCond %{QUERY_STRING} ^(.+)$\nRewriteRule ^${campsPath}${c.id}/?$ ${to}?%1#summer [NE,QSD,R=301,L]\nRewriteRule ^${campsPath}${c.id}/?$ ${to}#summer [NE,R=301,L]\n`; }).join('')}` : ''}</IfModule>\n`);
+  write('.htaccess', `ErrorDocument 404 /404.html\nAddType text/calendar .ics\nDirectoryIndex index.html index.php\n\n${headers}\n# One address for the site: www goes to the bare domain.\n<IfModule mod_rewrite.c>\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.${bare.replace(/\./g, '\\.')}$ [NC]\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n${KIDS ? `# Kids' Playground was called the Passport at first.\nRewriteRule ^passport/?$ /${kidsPath} [R=301,L]\nRewriteRule ^kids-corner/?$ /${kidsPath} [R=301,L]\nRewriteRule ^features/kids-corner/?$ /features/kids-playground/ [R=301,L]\n` : ''}${formerHosts.length ? `# The site's other addresses all lead here, page for page (the certificate check on each is left alone).\nRewriteCond %{HTTP_HOST} ^(www\\.)?(${formerHosts.map(h => h.replace(/\./g, '\\.')).join('|')})$ [NC]\nRewriteCond %{REQUEST_URI} !^/\\.well-known/\nRewriteRule ^ https://${bare}%{REQUEST_URI} [R=301,L]\n` : ''}${cardQr ? `# The short addresses in the QR codes on the week card and the day-camp card.\nRewriteRule ^w/?$ ${cardQr.goesTo} [NC,R=302,L]\n${cardQr.dayoff ? `RewriteRule ^d/?$ ${cardQr.dayoff.goesTo} [NC,R=302,L]\n` : ''}` : ''}${movedSchools.length ? `# A school that has been added: its old "not covered yet" address goes to its page.\n${movedSchools.map(([from, to]) => `RewriteRule ^schools/${from}/?$ /${to}/ [R=301,L]\n`).join('')}` : ''}${goneDays.length ? `# A day off that has passed: its own page leads to the list of days still to come.\n${goneDays.map(x => `RewriteRule ^${offPath}${x}/?$ /${offPath} [R=301,L]\n`).join('')}` : ''}${summerCamps.some(c => c.program) ? `# A summer camp tied to a program is on the program's page, under Summer (a query string, such as an email's tags, stays ahead of the #).\n${summerCamps.filter(c => c.program).map(c => { const to = '/' + programPath(programs.find(p => p.id === c.program)); return `RewriteCond %{QUERY_STRING} ^(.+)$\nRewriteRule ^${campsPath}${c.id}/?$ ${to}?%1#summer [NE,QSD,R=301,L]\nRewriteRule ^${campsPath}${c.id}/?$ ${to}#summer [NE,R=301,L]\n`; }).join('')}` : ''}</IfModule>\n`);
 }
 // Edits in data/copy.json are matched to sentences by a fingerprint of the original wording.
 // If the original was reworded or removed in this file, the edit no longer applies: say so, but still build.

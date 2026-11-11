@@ -142,7 +142,7 @@ test('School & kids: the kids by name on top, to add, change and remove; the pla
   await t.close();
 });
 
-test('the menu signed in: My Profile, the Parent Portal button, Kid’s Corner; the overview says where to start and how far each part has got', async (ctx) => {
+test('the menu signed in: My Profile, the Parent Portal button, Kids’ Playground; the overview says where to start and how far each part has got', async (ctx) => {
   const b = await ctx.browser();
   const pat = ctx.api().as(someone('portal'), 'Pat', 'Lee');
   const { entry } = pickupPair();
@@ -152,21 +152,21 @@ test('the menu signed in: My Profile, the Parent Portal button, Kid’s Corner; 
   const nav = page.locator('header.sitebar nav');
   eq(flat(await nav.locator('a.nav-acct').innerText()), 'My Profile'); matches(await nav.locator('a.nav-acct').getAttribute('href'), /profile\/$/);
   matches(flat(await nav.locator('a.nav-cta.when-in').innerText()), /^Parent Portal( \(something new\))?$/); matches(await nav.locator('a.nav-cta.when-in').getAttribute('href'), /account\/$/);
-  eq(flat(await nav.locator('a.nav-kc').innerText()).toLowerCase(), 'kid’s corner'); matches(await nav.locator('a.nav-kc').getAttribute('href'), /kids-corner\/$/);
+  eq(flat(await nav.locator('a.nav-kc').innerText()).toLowerCase(), 'kids’ playground'); matches(await nav.locator('a.nav-kc').getAttribute('href'), /kids-playground\/$/);
   eq(await nav.locator('a', { hasText: /^Account$/ }).count(), 0, 'no separate Account link');
   const order = await nav.evaluate(n => [...n.children].map(c => c.className).filter(c => /nav-(acct|cta|kc)/.test(c) && !/when-out/.test(c)));
-  ok(order.join(' ').indexOf('nav-acct') < order.join(' ').indexOf('nav-cta') && order.join(' ').indexOf('nav-cta') < order.join(' ').indexOf('nav-kc'), 'My Profile, then Parent Portal, then Kid’s Corner: ' + order.join(' | '));
+  ok(order.join(' ').indexOf('nav-acct') < order.join(' ').indexOf('nav-cta') && order.join(' ').indexOf('nav-cta') < order.join(' ').indexOf('nav-kc'), 'My Profile, then Parent Portal, then Kids’ Playground: ' + order.join(' | '));
   ok(await nav.locator('a.nav-cta.when-in .news-dot').isVisible(), 'a dot for news not yet seen');
   // The Parent Portal: the overview first.
   await nav.locator('a.nav-cta.when-in').click();
   await page.waitForSelector('#overview .ov-card');
-  const cards = (await page.locator('#overview .ov-card b').allInnerTexts()).map(x => flat(x).toLowerCase());   // the Kid’s Corner card is in capitals
+  const cards = (await page.locator('#overview .ov-card b').allInnerTexts()).map(x => flat(x).toLowerCase());   // the Kids’ Playground card is in capitals
   for (const want of ['Build your kids’ week', 'Plan your days off', 'Update your profile', 'Manage your to-do list', 'Build your year calendar', 'Have your kids play', 'Plan your summer', 'Help the site keep going']) ok(cards.includes(want.toLowerCase()), 'a card for ' + want + ': ' + cards.join(', '));
   await page.waitForFunction(() => /week kept/.test((document.querySelector('#overview .ov-week .ov-state') || {}).textContent || ''));
   includes(flat(await page.locator('#overview .ov-week .ov-state').innerText()), '1 week kept');
   includes(flat(await page.locator('#overview .ov-summer .ov-state').innerText()), 'Not started');
-  matches(await page.locator('#overview .ov-kids').getAttribute('href'), /kids-corner\/$/);
-  // Kid's Corner: a card like the others, with where it has got to.
+  matches(await page.locator('#overview .ov-kids').getAttribute('href'), /kids-playground\/$/);
+  // Kids' Playground: a card like the others, with where it has got to.
   const kidsState = () => page.locator('#overview .ov-kids .ov-state').innerText().then(flat);
   await page.waitForFunction(() => /\S/.test((document.querySelector('#overview .ov-kids .ov-state') || {}).textContent || ''));
   eq(await kidsState(), 'Add your kids first');
@@ -190,7 +190,7 @@ test('the menu signed in: My Profile, the Parent Portal button, Kid’s Corner; 
   await t.close();
 });
 
-test('a program manager who also plans for kids keeps Parent Portal and Kid’s Corner, with their listings beside them; one who doesn’t gets the manager’s button', async (ctx) => {
+test('a program manager who also plans for kids keeps Parent Portal and Kids’ Playground, with their listings beside them; one who doesn’t gets the manager’s button', async (ctx) => {
   const b = await ctx.browser();
   const both = ctx.api().as(someone('mgrpar'), 'Pat', 'Lee', 'managers');
   await both.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '2' }] });
@@ -203,13 +203,13 @@ test('a program manager who also plans for kids keeps Parent Portal and Kid’s 
   await page.evaluate(() => { localStorage.setItem('pas-in', '1'); localStorage.setItem('pas-role', 'manager'); localStorage.removeItem('pas-parent'); });
   await page.goto(ctx.site.base + '/profile/', { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => /^Parent Portal/.test((document.querySelector('header.sitebar nav a.nav-cta.when-in') || {}).textContent || '') && !!document.querySelector('header.sitebar nav a.nav-mgr'), null, { timeout: 8000 });
-  ok(await page.locator('header.sitebar nav a.nav-kc').isVisible(), 'Kid’s Corner back on the same page');
+  ok(await page.locator('header.sitebar nav a.nav-kc').isVisible(), 'Kids’ Playground back on the same page');
   await page.goto(ctx.site.base + '/account/', { waitUntil: 'networkidle' });
   await page.waitForSelector('#overview .ov-card');
   eq(await page.locator('.acct-tabs [aria-current="page"]').innerText(), 'Overview', 'a parent’s overview');
   const nav = page.locator('header.sitebar nav');
   matches(flat(await nav.locator('a.nav-cta.when-in').innerText()), /^Parent Portal/, 'the button stays');
-  ok(await nav.locator('a.nav-kc').isVisible(), 'Kid’s Corner stays');
+  ok(await nav.locator('a.nav-kc').isVisible(), 'Kids’ Playground stays');
   eq(await nav.locator('a.nav-mgr').count(), 1, 'their listings get a link of their own');
   await t.close();
   // A manager with no kids and no plans: the button is about their listing, and the account opens on Details.
@@ -225,7 +225,7 @@ test('a program manager who also plans for kids keeps Parent Portal and Kid’s 
   eq(await p2.locator('.acct-tabs [aria-current="page"]').innerText(), 'Details');
   eq(await p2.locator('.acct-tabs [data-tab-go="overview"]').count(), 0, 'no overview tab');
   matches(flat(await p2.locator('header.sitebar nav a.nav-cta.when-in').innerText()), /Your listings|Go premium/);
-  ok(!(await p2.locator('header.sitebar nav a.nav-kc').isVisible()), 'no Kid’s Corner button');
+  ok(!(await p2.locator('header.sitebar nav a.nav-kc').isVisible()), 'no Kids’ Playground button');
   eq(t.errors.length + t2.errors.length, 0, t.errors.concat(t2.errors).join(' | '));
   await t2.close();
 });

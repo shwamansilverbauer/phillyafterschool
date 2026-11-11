@@ -1,6 +1,13 @@
 [
   {
     "date": "2026-11-10",
+    "title": "Kid’s Corner is now Kids’ Playground",
+    "text": "The part of your account made for your children has a new name: Kids’ Playground. Everything in it stays the same, from pins and the map to Eddie’s showdowns, and the old address still takes you there.",
+    "href": "kids-playground/",
+    "link": "Open Kids’ Playground"
+  },
+  {
+    "date": "2026-11-10",
     "title": "Two more schools: Independence Charter and Greenfield",
     "text": "Each has its own page: 13 programs run at ICS or pick up from it, and 12 at or from Greenfield, most of them around Rittenhouse Square. New to the site are Beacon Center, Evolve Dance, Martial Posture, Yous Fitfulness and ICS’s own after-school program, and ZAZZ and Koresh now show their after-school classes with pickup. ICS keeps its own calendar, so its page goes by ICS’s days off, not the District’s. That makes 16 schools.",
     "href": "independence-charter/",
@@ -16,7 +23,7 @@
   {
     "date": "2026-11-09",
     "title": "Eddie in sunglasses, and Philly showdowns",
-    "text": "Finish planning a week, a month of days off or the whole summer, and Eddie Bulboa slides across the screen in his sunglasses: too cool for school. In Kid’s Corner, the showdowns are all Philly now, eleven of them: a race up the Art Museum steps, a cheesesteak eating contest, a Ben Franklin kite fly-off, a Liberty Bell ring-off, a water ice slurp-off, a Boathouse Row regatta, a Mummers strut-off, a hoagie build-off, a pothole dodge, a soft pretzel stack-off and a mural paint-off.",
+    "text": "Finish planning a week, a month of days off or the whole summer, and Eddie Bulboa slides across the screen in his sunglasses: too cool for school. In Kids’ Playground, the showdowns are all Philly now, eleven of them: a race up the Art Museum steps, a cheesesteak eating contest, a Ben Franklin kite fly-off, a Liberty Bell ring-off, a water ice slurp-off, a Boathouse Row regatta, a Mummers strut-off, a hoagie build-off, a pothole dodge, a soft pretzel stack-off and a mural paint-off.",
     "href": "schedules/",
     "link": "Plan your year"
   },
@@ -37,16 +44,16 @@
   {
     "date": "2026-11-08",
     "title": "Surprises in every neighborhood, and Account Features",
-    "text": "Every neighborhood on the Kid’s Corner map now hides one or two little Philly things, from a soft pretzel and water ice to a trolley, a stoop cat and an open hydrant. The first class there finds one, and another class there finds the next. The Parent Portal’s Kid’s Corner card now says whether your kids have started. And there’s a new Account Features section in the menu, with a page each on calendar and sharing, the Parent Portal and Kid’s Corner, so you can show a friend what an account does.",
+    "text": "Every neighborhood on the Kids’ Playground map now hides one or two little Philly things, from a soft pretzel and water ice to a trolley, a stoop cat and an open hydrant. The first class there finds one, and another class there finds the next. The Parent Portal’s Kids’ Playground card now says whether your kids have started. And there’s a new Account Features section in the menu, with a page each on calendar and sharing, the Parent Portal and Kids’ Playground, so you can show a friend what an account does.",
     "href": "features/",
     "link": "Account Features"
   },
   {
     "date": "2026-11-08",
-    "title": "Kid’s Corner: Eddie’s welcome, a Repeater Reward and secret spots",
-    "text": "The first time your kid opens Kid’s Corner, Eddie Bulboa shows them round: making their bulb, the pins they already have, the map and how to pick a favorite. Going back to a class your kid loves now counts: each day a week, each term and each week of the same camp earns the new Repeater Reward pin and points toward the next level. Set how many times in the grown-ups’ corner, and Kid’s Corner asks when your plans show more. The map has secret spots that turn up as they go to more classes nearby, and the showdown now simply asks which class they had more fun at. Tried it out yourself first? “Start over” on your kid’s card in the Parent Portal gives them a fresh start.",
-    "href": "kids-corner/",
-    "link": "Open Kid’s Corner"
+    "title": "Kids’ Playground: Eddie’s welcome, a Repeater Reward and secret spots",
+    "text": "The first time your kid opens Kids’ Playground, Eddie Bulboa shows them round: making their bulb, the pins they already have, the map and how to pick a favorite. Going back to a class your kid loves now counts: each day a week, each term and each week of the same camp earns the new Repeater Reward pin and points toward the next level. Set how many times in the grown-ups’ corner, and Kids’ Playground asks when your plans show more. The map has secret spots that turn up as they go to more classes nearby, and the showdown now simply asks which class they had more fun at. Tried it out yourself first? “Start over” on your kid’s card in the Parent Portal gives them a fresh start.",
+    "href": "kids-playground/",
+    "link": "Open Kids’ Playground"
   },
   {
     "date": "2026-11-08",
@@ -57,24 +64,24 @@
   },
   {
     "date": "2026-11-08",
-    "title": "Kid’s Corner: dress-up, showdowns and grander pins",
+    "title": "Kids’ Playground: dress-up, showdowns and grander pins",
     "text": "Each kid’s bulb now starts plain and unlocks things to wear as they level up, from shades and a bow tie to a cape, wings and a galaxy glow, and they choose what it wears. Pins get grander as they go from bronze to silver to gold. And the bulbs now race up the Art Museum steps, have glow-offs and dance-offs to pick a favorite, instead of boxing.",
-    "href": "kids-corner/",
-    "link": "Open Kid’s Corner"
+    "href": "kids-playground/",
+    "link": "Open Kids’ Playground"
   },
   {
     "date": "2026-11-08",
     "title": "Your Parent Portal",
-    "text": "The button in the menu is now Parent Portal. It opens on an overview of where to start, with how far each part has got: your kids’ week, the days off, the summer, your to-do list and your year calendar. My Profile sits beside it in the menu, and Kid’s Corner has a button of its own.",
+    "text": "The button in the menu is now Parent Portal. It opens on an overview of where to start, with how far each part has got: your kids’ week, the days off, the summer, your to-do list and your year calendar. My Profile sits beside it in the menu, and Kids’ Playground has a button of its own.",
     "href": "account/",
     "link": "Open the Parent Portal"
   },
   {
     "date": "2026-11-07",
-    "title": "Kid’s Corner: a page for each of your kids",
+    "title": "Kids’ Playground: a page for each of your kids",
     "text": "Every class and camp your kids go to now earns them something on a page of their own: shiny pins that go from bronze to gold, a cartoon map of Philly that clears as they explore it, and a lightbulb for every program, racing and dancing for the title of favorite. Eddie Bulboa, the bulb in our logo, shows them around. You say what counts, their favorites come first when you plan, and nothing on it is counted or recorded.",
-    "href": "kids-corner/",
-    "link": "Open Kid’s Corner"
+    "href": "kids-playground/",
+    "link": "Open Kids’ Playground"
   },
   {
     "date": "2026-11-07",

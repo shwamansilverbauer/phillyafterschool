@@ -96,28 +96,28 @@ test('Account Features: a menu of its own for someone signed out, a page for eac
   const menu = home.locator('header.sitebar details.nav-feat');
   eq(flat(await menu.locator('summary').innerText()), 'Account Features');
   const items = await menu.locator('a').evaluateAll(as => as.map(a => a.textContent.trim() + ' ' + a.getAttribute('href')));
-  eq(items.join(' | '), 'All Account Features features/ | Calendar & Sharing features/calendar/ | Parent Portal features/parent-portal/ | Kid’s Corner features/kids-corner/');
+  eq(items.join(' | '), 'All Account Features features/ | Calendar & Sharing features/calendar/ | Parent Portal features/parent-portal/ | Kids’ Playground features/kids-playground/');
   eq(await home.locator('header.sitebar details.menu[data-top$="about/"]').count(), 0, 'About is not a menu');
   eq(await home.locator('header.sitebar nav > a.nav-more[href$="about/"]').count(), 1, 'About is a link');
   includes(flat(await home.locator('footer .foot-cols').innerText()), 'ACCOUNT FEATURES');
   // The page that leads to all three, and each feature's own page with cards to the other two.
   const index = await t.open('/features/');
   eq(await index.locator('.feat > .feat-cards .feat-card').count(), 3);
-  for (const [f, h1] of [['calendar', 'Calendar & sharing'], ['parent-portal', 'Parent Portal'], ['kids-corner', 'Kid’s Corner']]) {
+  for (const [f, h1] of [['calendar', 'Calendar & sharing'], ['parent-portal', 'Parent Portal'], ['kids-playground', 'Kids’ Playground']]) {
     const page = await t.open(`/features/${f}/`);
     eq(flat(await page.locator('h1').innerText()).toLowerCase(), h1.toLowerCase(), f);
     eq(await page.locator('.feat-more .feat-card').count(), 2, f + ' leads to the other two');
     ok(await page.locator('a.btn[href*="register/"]').first().isVisible(), f + ' offers the account');
     eq(await page.locator('header.sitebar details.nav-feat.here').count(), 1, f + ': the menu shows where you are');
   }
-  // Kid's Corner's page says nothing there is counted, so it runs no analytics either.
+  // Kids' Playground's page says nothing there is counted, so it runs no analytics either.
   const before = t.outside.length;
-  const kc = await t.open('/features/kids-corner/');
-  eq(t.outside.slice(before).filter(u => ANALYTICS.test(u)).length, 0, 'no analytics on the Kid’s Corner page');
+  const kc = await t.open('/features/kids-playground/');
+  eq(t.outside.slice(before).filter(u => ANALYTICS.test(u)).length, 0, 'no analytics on the Kids’ Playground page');
   includes(flat(await kc.locator('#for-kids').innerText()), 'A CORNER JUST FOR YOU');
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
-  // Signed in, the Parent Portal and Kid's Corner buttons take its place.
+  // Signed in, the Parent Portal and Kids' Playground buttons take its place.
   const pat = ctx.api().as(someone('feat'), 'Pat', 'Lee');
   const t2 = await b.context(ctx.site, { sid: pat.cookie });
   const p2 = await t2.open('/');
@@ -225,9 +225,9 @@ test('quiet pages: signed in, the account and profile pages run no analytics, an
   await pat.okay('POST', 'week_save', { week: { name: 'Zelphina', now: Object.fromEntries(DAYS.map(d => [d, []])), next: Object.fromEntries(DAYS.map(d => [d, []])) } });
   await pat.okay('POST', 'kids_save', { kids: [{ n: 'Zelphina', g: '2' }, { n: 'Thaddeus', a: '9' }] });
   const t = await b.context(ctx.site, { sid: pat.cookie });
-  for (const rel of ['/account/', '/profile/', '/account/#plans', '/kids-corner/', '/calendar/', '/to-do/']) {
+  for (const rel of ['/account/', '/profile/', '/account/#plans', '/kids-playground/', '/calendar/', '/to-do/']) {
     const page = await t.open(rel);
-    if (rel.startsWith('/kids-corner')) await page.waitForSelector('#kc-app:not([hidden])');
+    if (rel.startsWith('/kids-playground')) await page.waitForSelector('#kc-app:not([hidden])');
     else if (rel.startsWith('/calendar') || rel.startsWith('/to-do')) await page.waitForFunction(() => { const w = document.querySelector('#year-wait, #todo-wait'); return !w || w.hidden; }, null, { timeout: 10000 });
     else await page.waitForSelector('#account .acct-tabs');
     await page.waitForTimeout(400);   // the list subscription goes out after the page is drawn

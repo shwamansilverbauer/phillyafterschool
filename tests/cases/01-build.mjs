@@ -33,7 +33,10 @@ test('every school, program, camp and neighborhood has its page, and the sitemap
   const hoods = new Set([...schools().flatMap(s => String(s.neighborhood || '').split('/').map(x => x.trim()).filter(Boolean)), ...programs().filter(p => Object.keys(p.schools || {}).length).flatMap(p => p.neighborhoods || [])].map(slug));
   for (const h of hoods) ok(site.exists(`neighborhoods/${h}/index.html`), `neighborhood page ${h}`);
   // Account Features: a page for each thing an account does, open to search engines.
-  for (const f of ['', 'calendar/', 'parent-portal/', 'kids-corner/']) { ok(site.exists(`features/${f}index.html`), `features/${f}`); includes(sitemap, `/features/${f}<`, `sitemap has features/${f}`); excludes(site.read(`features/${f}index.html`), 'name="robots"', `features/${f} is not kept from search engines`); }
+  for (const f of ['', 'calendar/', 'parent-portal/', 'kids-playground/']) { ok(site.exists(`features/${f}index.html`), `features/${f}`); includes(sitemap, `/features/${f}<`, `sitemap has features/${f}`); excludes(site.read(`features/${f}index.html`), 'name="robots"', `features/${f} is not kept from search engines`); }
+  // Kids' Playground was the Passport, then Kid's Corner: the old addresses still land on it.
+  const ht = site.read('.htaccess');
+  for (const [from, to] of [['passport', '/kids-playground/'], ['kids-corner', '/kids-playground/'], ['features/kids-corner', '/features/kids-playground/']]) includes(ht, `RewriteRule ^${from}/?$ ${to} [R=301,L]`, `/${from}/ redirects to ${to}`);
   for (const must of ['index.html', 'privacy/index.html', 'terms/index.html', 'register/index.html', 'account/index.html', 'summer-camps/index.html', 'weekends/index.html', 'days-off/index.html', 'robots.txt', 'manifest.json', 'sw.js', 'groups/api.php', '404.html']) ok(site.exists(must), must);
   // The hidden test listings: pages for the owner, kept out of the sitemap and search engines.
   excludes(sitemap, 'test-listing');

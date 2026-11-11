@@ -1,4 +1,4 @@
-// Kid's Corner's data (the "passport" endpoint, its first name): what a parent confirms each child has been to,
+// Kids' Playground's data (the "passport" endpoint, its first name): what a parent confirms each child has been to,
 // suggested from the household's plans, and the child's own lightbulb, pins shown and level.
 import { test, ok, eq, deepEq, includes, excludes, person } from '../lib/harness.mjs';
 import { pickupPair, weekendProgram, twoCamps, upcomingDaysOff, daysOff, schoolYearStart, config } from '../lib/data.mjs';
@@ -133,7 +133,7 @@ test('co-parents share the passports: a partner’s passports move to the househ
   void config;
 });
 
-test('Kid’s Corner keeps each child’s lightbulb, the pins already shown and the level celebrated, and nothing it doesn’t know', async (ctx) => {
+test('Kids’ Playground keeps each child’s lightbulb, the pins already shown and the level celebrated, and nothing it doesn’t know', async (ctx) => {
   const pat = person(ctx, 'Pat', 'Lee', 'kc');
   const { program, school } = pickupPair();
   const y = schoolYearStart();

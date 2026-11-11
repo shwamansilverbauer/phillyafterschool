@@ -1,7 +1,7 @@
-// Kid's Corner in a browser: the picker, a child picking their lightbulb, kid mode (no site around it, no link off it),
+// Kids' Playground in a browser: the picker, a child picking their lightbulb, kid mode (no site around it, no link off it),
 // the grown-ups' corner behind a press-and-hold, a confirmed class turning into pins and a level (celebrated once),
 // the level-up unlocking things for the child's bulb to wear, the map of Philadelphia drawn from this site alone, the
-// showdowns (eleven Philly contests, from the Art Museum steps and a cheesesteak to a Boathouse Row regatta and a pothole dodge) ranking favorites with Eddie Bulboa hosting, the mute button, the account page's Kid's Corner tab, and that nothing is counted or sent anywhere.
+// showdowns (eleven Philly contests, from the Art Museum steps and a cheesesteak to a Boathouse Row regatta and a pothole dodge) ranking favorites with Eddie Bulboa hosting, the mute button, the account page's Kids' Playground tab, and that nothing is counted or sent anywhere.
 import { test, ok, eq, deepEq, includes, matches, someone } from '../lib/harness.mjs';
 import { pickupPair, weekendProgram } from '../lib/data.mjs';
 
@@ -25,10 +25,10 @@ const celebrate = async (page) => {
 };
 const counted = t => t.outside.filter(u => /googletagmanager|google-analytics|clarity|klaviyo/.test(u));
 
-test('signed out, Kid’s Corner explains itself and offers the account; signed in with no names, it asks for them', async (ctx) => {
+test('signed out, Kids’ Playground explains itself and offers the account; signed in with no names, it asks for them', async (ctx) => {
   const b = await ctx.browser();
   const t = await b.context(ctx.site);
-  const page = await t.open('/kids-corner/');
+  const page = await t.open('/kids-playground/');
   ok(await page.locator('#kc-out').isVisible(), 'the signed-out panel');
   includes(flat(await page.locator('#kc-out').innerText()), 'What counts is what you confirm');
   ok(await page.locator('#kc-out a[href*="next=kids"]').count() >= 2, 'create and log in both come back here');
@@ -39,16 +39,16 @@ test('signed out, Kid’s Corner explains itself and offers the account; signed 
   // Signed out, the one way there is the Account Features menu; the button waits for a signed-in parent, and nothing else points to it.
   const home = await t.open('/');
   eq(await home.locator('#for-kids').count(), 0, 'not on the home page');
-  ok(!(await home.locator('header.sitebar a.nav-kc').isVisible()), 'no Kid’s Corner button signed out');
-  eq(await home.locator('header.sitebar details.menu[data-top$="features/"] a[href$="features/kids-corner/"]').count(), 1, 'under Account Features');
-  eq(await home.locator('header.sitebar a[href$="/kids-corner/"]:not([href*="features/"]):visible').count(), 0, 'no way into Kid’s Corner itself');
-  eq(await home.locator('#start a[href$="kids-corner/"]').count(), 0, 'not in the Parents box');
+  ok(!(await home.locator('header.sitebar a.nav-kc').isVisible()), 'no Kids’ Playground button signed out');
+  eq(await home.locator('header.sitebar details.menu[data-top$="features/"] a[href$="features/kids-playground/"]').count(), 1, 'under Account Features');
+  eq(await home.locator('header.sitebar a[href$="/kids-playground/"]:not([href*="features/"]):visible').count(), 0, 'no way into Kids’ Playground itself');
+  eq(await home.locator('#start a[href$="kids-playground/"]').count(), 0, 'not in the Parents box');
   const plans = await t.open('/schedules/');
-  eq(await plans.locator('main a[href$="kids-corner/"]').count(), 0, 'not on the Schedule Builder');
+  eq(await plans.locator('main a[href$="kids-playground/"]').count(), 0, 'not on the Schedule Builder');
   await t.close();
   const pat = ctx.api().as(someone('kcw'), 'Pat', 'Lee');
   const t2 = await b.context(ctx.site, { sid: pat.cookie });
-  const p2 = await t2.open('/kids-corner/');
+  const p2 = await t2.open('/kids-playground/');
   await p2.waitForSelector('.kc-none');
   includes(flat(await p2.locator('.kc-none').innerText()), 'Add your kids’ first names');
   matches(await p2.locator('.kc-none a').getAttribute('href'), /account\/#school$/);
@@ -65,7 +65,7 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '2' }, { n: 'Rae', g: 'K' }] });
   await pat.okay('POST', 'week_save', { week: { name: 'Sam', now: { ...empty(), mon: [entry] }, next: empty() } });
   const t = await b.context(ctx.site, { sid: pat.cookie, mobile: true });
-  const page = await t.open('/kids-corner/');
+  const page = await t.open('/kids-playground/');
   await page.waitForSelector('.kc-kidbtn');
   eq(await page.locator('.kc-kidbtn').count(), 2, 'one button per child');
   ok(await kidMode(page), 'kid mode from the picker on');
@@ -171,7 +171,7 @@ test('the map of Philadelphia: drawn from this site, clear where the child has b
   const y = (await pat.okay('GET', 'passport')).year;
   await pat.okay('POST', 'passport_save', { kid: 'Zoe', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school }, { k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], av: { b: 'globe', c: 6 }, seen: { intro: 1, 'season:after': 1, 'season:weekend': 1 }, lvl: 9 });
   const t = await b.context(ctx.site, { sid: pat.cookie });
-  const page = await t.open('/kids-corner/#map');
+  const page = await t.open('/kids-playground/#map');
   await page.waitForSelector('.kc-map');   // one child: straight to her page, on the tab in the address
   await page.evaluate(() => document.querySelectorAll('.kc-over').forEach(o => o.remove()));   // any pin not seen yet
   const open = await page.locator('.kc-map .kc-hoods path.open').count();
@@ -230,7 +230,7 @@ test('going back to a class: a ×2 on its bulb, the Repeater Reward pin, and the
   await pat.okay('POST', 'passport_save', { kid: 'Ana', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school, n: 2 }], av: { b: 'globe', c: 2 }, seen: { intro: 1 }, lvl: 1 });
   const t = await b.context(ctx.site, { sid: pat.cookie });
   await t.page.emulateMedia({ reducedMotion: 'reduce' });
-  const page = await t.open('/kids-corner/');
+  const page = await t.open('/kids-playground/');
   await page.waitForSelector('.kc-gift');
   const shown = await celebrate(page);
   ok(shown.some(s => /Repeater Reward/i.test(s)), 'the Repeater Reward among the new pins: ' + shown.join(' / '));
@@ -278,7 +278,7 @@ test('the showdown ranks favorites with no one hurt, which the profile then carr
   await pat.okay('POST', 'passport_save', { kid: 'Zoe', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school }, { k: 'p:' + wp.id, kind: 'weekend', y, s: '' }], av: { b: 'candle', c: 1 }, seen: { intro: 1, 'season:after': 1, 'season:weekend': 1 }, lvl: 9 });
   const t = await b.context(ctx.site, { sid: pat.cookie });
   await t.page.emulateMedia({ reducedMotion: 'reduce' });   // the contest acted out quickly
-  const page = await t.open('/kids-corner/#battle');
+  const page = await t.open('/kids-playground/#battle');
   await page.waitForSelector('.kc-zoo');
   await page.evaluate(() => document.querySelectorAll('.kc-over').forEach(o => o.remove()));
   eq(await page.locator('.kc-bulbcard').count(), 2, 'a bulb for each program');
@@ -323,7 +323,7 @@ test('the showdown ranks favorites with no one hurt, which the profile then carr
   const PROPS = { race: ['.kc-museum', 1], steak: ['.kc-steak', 2], kite: ['.kc-kite', 2], bell: ['.kc-bell', 1], waterice: ['.kc-wice', 2], row: ['.kc-boat', 2], strut: ['.kc-parasol', 1], hoagie: ['.kc-hoagie', 2], pothole: ['.kc-bike', 2], pretzel: ['.kc-stack', 2], mural: ['.kc-wall', 2] };
   const SIGN = { race: 'WINS!', steak: 'CLEAN PLATE!', kite: 'HIGHEST!', bell: 'LOUDEST!', waterice: 'SLURPED!', row: 'FIRST!', strut: 'BEST STRUT!', hoagie: 'BEST HOAGIE!', pothole: 'SMOOTH RIDE!', pretzel: 'BEST STACK!', mural: 'MASTERPIECE!' };
   for (const id of Object.keys(PROPS)) {
-    await page.goto(new URL('/kids-corner/?contest=' + id + '#battle', page.url()).href);
+    await page.goto(new URL('/kids-playground/?contest=' + id + '#battle', page.url()).href);
     await page.waitForSelector('.kc-zoo');
     await page.evaluate(() => document.querySelectorAll('.kc-over').forEach(o => o.remove()));
     await page.locator('.kc-big.fight').click();
@@ -339,7 +339,7 @@ test('the showdown ranks favorites with no one hurt, which the profile then carr
   await t.close();
 });
 
-test('favorites from Kid’s Corner are offered first in the planners: the week builder, the days off, the summer', async (ctx) => {
+test('favorites from Kids’ Playground are offered first in the planners: the week builder, the days off, the summer', async (ctx) => {
   const b = await ctx.browser();
   const pat = ctx.api().as(someone('kcf'), 'Pat', 'Lee');
   const { program, school } = pickupPair();
@@ -378,7 +378,7 @@ test('favorites from Kid’s Corner are offered first in the planners: the week 
   await t.close();
 });
 
-test('the account page’s Kid’s Corner tab: each child at a glance, a class confirmed there, and a way into their page', async (ctx) => {
+test('the account page’s Kids’ Playground tab: each child at a glance, a class confirmed there, and a way into their page', async (ctx) => {
   const b = await ctx.browser();
   const pat = ctx.api().as(someone('kca'), 'Pat', 'Lee');
   const { entry, program } = pickupPair();
@@ -422,8 +422,8 @@ test('the account page’s Kid’s Corner tab: each child at a glance, a class c
   eq(ps.av, null); eq(ps.done.length, 1, 'unticked: the class stays');
   await pat.okay('POST', 'passport_save', { kid: 'Sam', done: ps.done, av: { b: 'heart', c: 1 }, seen: { intro: 1, 'season:weekend': 1 }, lvl: 2 });   // as it was, for what follows
   // Into Sam's own page, past the picker.
-  await page.locator('#kids .kc-sum', { hasText: 'Sam' }).locator('button', { hasText: 'Open Sam’s Kid’s Corner' }).click();
-  await page.waitForURL(/kids-corner/);
+  await page.locator('#kids .kc-sum', { hasText: 'Sam' }).locator('button', { hasText: 'Open Sam’s Kids’ Playground' }).click();
+  await page.waitForURL(/kids-playground/);
   await page.waitForSelector('.kc-top');
   includes(flat(await page.locator('.kc-top .kc-name').innerText()), 'Sam');
   eq(t.outside.filter(u => !/^https:\/\/a\.klaviyo\.com\/client\//.test(u)).length, 0, 'nothing asked of another site');

@@ -56,7 +56,7 @@
   // the three read as one place and none of them is a long scroll. A tab whose part is on the page in view switches in
   // place; the others are links to the page that has them. (sessionStorage "pas-tabs" = "all" shows every part at once:
   // the tests use it, and so can anyone who would rather have the one long page.)
-  var ACCT_TABS = [['overview', 'Overview', 'account/', ''], ['todo', 'To do', 'to-do/', ''], ['profile', 'Profile', 'profile/', ''], ['you', 'Details', 'account/', '#you'], ['school', 'School & kids', 'account/', '#school'], ['kids', 'Kid’s Corner', 'account/', '#kids'], ['emails', 'Emails & following', 'account/', '#emails'], ['plans', 'Plans & sharing', 'account/', '#plans'], ['listings', 'Listings', 'managers/', '']];
+  var ACCT_TABS = [['overview', 'Overview', 'account/', ''], ['todo', 'To do', 'to-do/', ''], ['profile', 'Profile', 'profile/', ''], ['you', 'Details', 'account/', '#you'], ['school', 'School & kids', 'account/', '#school'], ['kids', 'Kids’ Playground', 'account/', '#kids'], ['emails', 'Emails & following', 'account/', '#emails'], ['plans', 'Plans & sharing', 'account/', '#plans'], ['listings', 'Listings', 'managers/', '']];
   function tabsAll() { return sget('pas-tabs') === 'all'; }
   function acctStrip(box, active, hasListings, here, pick) {
     var nav = el('nav', 'jump acct-tabs'), links = {}; nav.setAttribute('aria-label', 'Your account');
@@ -64,7 +64,7 @@
     ACCT_TABS.forEach(function (t) {
       if (t[0] === 'listings' && !hasListings) return;
       if (t[0] === 'todo' && !yearOn) return;
-      if (t[0] === 'kids' && !host.getAttribute('data-kids')) return;   // Kid's Corner is on the live site only
+      if (t[0] === 'kids' && !host.getAttribute('data-kids')) return;   // Kids' Playground is on the live site only
       if (t[0] === 'overview' && get('pas-role') === 'manager' && get('pas-parent') !== '1') return;   // the overview is a parent's: a program manager with no kids or plans starts on Details
       var a = el('a', t[0] === 'todo' ? 'tab-cta' : null, t[1]); a.href = page(t[2]) + t[3]; a.setAttribute('data-tab-go', t[0]);
       if (t[2] === here && pick) a.addEventListener('click', function (e) { if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return; e.preventDefault(); pick(t[0]); });
@@ -499,7 +499,7 @@
       if (next === 'daysoff') { location.href = page('days-off/') + '#plan'; return true; }
       if (next === 'calendar') { location.href = page('calendar/'); return true; }
       if (next === 'todo') { location.href = page('to-do/'); return true; }
-      if (next === 'kids' || next === 'passport') { location.href = page('kids-corner/'); return true; }   // "passport": Kid's Corner's first name
+      if (next === 'kids' || next === 'passport') { location.href = page('kids-playground/'); return true; }   // "passport": Kids' Playground's first name
       if (next === 'profile') { if (view === 'profile') return false; location.href = page('profile/'); return true; }
       if (next === 'managers' || next === 'directors') { location.href = page('managers/'); return true; }
       var fm = /^[fv]:(p|c|s):([a-z0-9-]+)$/.exec(next || '');   // signed in from a Follow or Save button: back to that page
@@ -648,7 +648,7 @@
         ['profile', 'Update your profile', 'Your school, and your kids’ names, grades and ages. The lists start from these.', 'account/', '#school'],
         ['todo', 'Manage your to-do list', 'The camp days you’ve planned and haven’t signed up for yet.', 'to-do/', '', hasYearPage],
         ['year', 'Build your year calendar', 'Every plan you make, together, month by month.', 'calendar/', '', hasYearPage],
-        ['kids', 'Have your kids play', 'Kid’s Corner: pins to earn, a map of Philly to explore, a bulb to dress up, and picking favorites.', 'kids-corner/', '', !!host.getAttribute('data-kids')],
+        ['kids', 'Have your kids play', 'Kids’ Playground: pins to earn, a map of Philly to explore, a bulb to dress up, and picking favorites.', 'kids-playground/', '', !!host.getAttribute('data-kids')],
         ['summer', 'Plan your summer', 'Camps, week by week, for each child.', 'summer-schedule/', '#plan'],
         ['help', 'Help the site keep going', 'It’s free for families. If it saved you an evening, you can chip in.', 'support/', '']
       ];
@@ -676,7 +676,7 @@
           summer: sumN ? [1, sumN === 1 ? '1 week planned' : sumN + ' weeks planned'] : [0, 'Not started']
         };
         if (!lastP) { delete st.week; delete st.daysoff; delete st.todo; delete st.year; delete st.summer; }   // not known yet
-        if (kidsP) {   // Kid's Corner: whether any child has opened it yet, and classes waiting to be confirmed
+        if (kidsP) {   // Kids' Playground: whether any child has opened it yet, and classes waiting to be confirmed
           var playing = kidsP.kids.filter(function (k) { return k.av || (k.seen && k.seen.intro); }).length, waiting = 0;
           kidsP.kids.forEach(function (k) { waiting += (k.suggest || []).length; });
           st.kids = !kidsP.kids.length ? [0, 'Add your kids first'] : waiting ? [0, waiting === 1 ? '1 class to confirm' : waiting + ' classes to confirm'] : playing ? [1, playing === 1 ? (kidsP.kids.length === 1 ? 'Playing' : '1 playing') : playing + ' playing'] : [0, 'Not started'];
@@ -774,12 +774,12 @@
       sch.appendChild(el('h2', null, 'Your school and kids'));
       var kidsBox = el('div', 'g-kids'); sch.appendChild(kidsBox);   // filled once the profile is read (paintKidsTab)
       put(sch, 'account', 'school');
-      // Kid's Corner at a glance: each child's bulb, level, pins and places, and the classes waiting for a yes or no.
+      // Kids' Playground at a glance: each child's bulb, level, pins and places, and the classes waiting for a yes or no.
       // Its script and data (kids-corner.js and its JSON) load only when this tab is opened; it draws into kcBody.
       var kcBody = null, kcScript = null;
       if (host.getAttribute('data-kids')) {
         var kcBox = part(el('section', 'panel'), 'kids');
-        kcBox.appendChild(el('h2', null, 'Kid’s Corner'));
+        kcBox.appendChild(el('h2', null, 'Kids’ Playground'));
         kcBody = el('div', 'g-kc'); kcBox.appendChild(kcBody);
         put(kcBox, 'account', 'kids');
       }
@@ -787,10 +787,10 @@
         var show = function () { if (window.pasKids) window.pasKids.summary(kcBody, { data: host.getAttribute('data-kids-data'), api: API }); };
         if (window.pasKids) { show(); return; }
         if (kcScript) return;
-        kcBody.textContent = ''; kcBody.appendChild(el('p', 'hint', 'Opening Kid’s Corner…'));
+        kcBody.textContent = ''; kcBody.appendChild(el('p', 'hint', 'Opening Kids’ Playground…'));
         kcScript = document.createElement('script'); kcScript.src = host.getAttribute('data-kids');
         kcScript.onload = show;
-        kcScript.onerror = function () { kcScript = null; kcBody.textContent = ''; kcBody.appendChild(el('p', 'g-status bad', 'Couldn’t open Kid’s Corner just now. Try again in a moment.')); };
+        kcScript.onerror = function () { kcScript = null; kcBody.textContent = ''; kcBody.appendChild(el('p', 'g-status bad', 'Couldn’t open Kids’ Playground just now. Try again in a moment.')); };
         document.head.appendChild(kcScript);
       };
       // the Sunday email (its tick box goes in further down, once the school is known)
@@ -1291,7 +1291,7 @@
         start = start || null; idp = idp || 'pk';
         var f = el('form', 'g-form kid-form pc-wide'), f1 = el('div', 'field'), l1 = el('label', null, 'First name'), n1 = el('input');
         f.noValidate = true; n1.id = idp + '-name'; n1.type = 'text'; n1.maxLength = 20; n1.autocomplete = 'off'; n1.required = true; l1.htmlFor = n1.id;
-        if (start) { n1.value = start.n; n1.readOnly = true; }   // the name is how plans and Kid's Corner find a child: changing a kid changes grade and age
+        if (start) { n1.value = start.n; n1.readOnly = true; }   // the name is how plans and Kids' Playground find a child: changing a kid changes grade and age
         f1.appendChild(l1); f1.appendChild(n1); f.appendChild(f1);
         var pair = el('div', 'kid-pair');
         var sel = function (id, label, items, word) {
@@ -1328,7 +1328,7 @@
         });
       };
       // The account page's "School & kids" tab: each kid by first name, with grade and age, to add, change or remove.
-      // The same list the profile card shows, the planners start from and Kid's Corner has a page for.
+      // The same list the profile card shows, the planners start from and Kids' Playground has a page for.
       var kidsOpen = '';   // which form is open: 'add', or a kid's name being changed
       var paintKidsTab = function () {
         if (view !== 'account' || !kidsBox) return;
@@ -1336,7 +1336,7 @@
         var p = lastP || {}, kids = p.kids || [], fromPlans = kidNames(p).filter(function (n) { return !kids.some(function (k) { return k.n.toLowerCase() === n.toLowerCase(); }); });
         var head = el('div', 'g-kids-head'); head.appendChild(el('h3', null, 'Your kids'));
         kidsBox.appendChild(head);
-        kidsBox.appendChild(el('p', 'hint', 'First names only (a nickname or an initial works), with the grade and age if you like. The planners start with them, and each gets a page of their own in Kid’s Corner. Only you, and a co-parent you’ve linked, see them.'));
+        kidsBox.appendChild(el('p', 'hint', 'First names only (a nickname or an initial works), with the grade and age if you like. The planners start with them, and each gets a page of their own in Kids’ Playground. Only you, and a co-parent you’ve linked, see them.'));
         if (kids.length || fromPlans.length) {
           var ul = el('ul', 'g-list g-kidlist');
           kids.forEach(function (k) {
@@ -1349,7 +1349,7 @@
             var ch = btn('btn', 'Change'); ch.setAttribute('aria-label', 'Change ' + possessive(k.n) + ' grade or age');
             ch.addEventListener('click', function () { kidsOpen = kidsOpen === k.n ? '' : k.n; paintKidsTab(); });
             var rm = btn('clear', 'Remove'); rm.setAttribute('aria-label', 'Remove ' + k.n);
-            twoTap(rm, 'Tap again to remove ' + k.n, function () { saveKids(kids.filter(function (x) { return x !== k; }), k.n + ' is off your profile. Plans with that name stay, and their Kid’s Corner comes back if you add ' + k.n + ' again.'); });
+            twoTap(rm, 'Tap again to remove ' + k.n, function () { saveKids(kids.filter(function (x) { return x !== k; }), k.n + ' is off your profile. Plans with that name stay, and their Kids’ Playground comes back if you add ' + k.n + ' again.'); });
             acts.appendChild(ch); acts.appendChild(rm); li.appendChild(acts);
             if (kidsOpen === k.n) li.appendChild(kidForm(function (x) { kidsOpen = ''; saveKids(kids.map(function (y) { return y === k ? { n: k.n, g: x.g, a: x.a } : y; }), 'Saved.'); }, function () { kidsOpen = ''; paintKidsTab(); }, k, 'ak-' + kids.indexOf(k)));
             ul.appendChild(li);
@@ -1365,7 +1365,7 @@
           kidsBox.appendChild(ul);
         } else kidsBox.appendChild(el('p', null, 'No kids on your list yet.'));
         if (kidsSay) kidsBox.appendChild(el('p', 'g-status good', kidsSay));
-        if (kidsOpen === 'add') kidsBox.appendChild(kidForm(function (x) { kidsOpen = ''; saveKids(kids.concat([x]), x.n + ' is on your list, on every planner, and in Kid’s Corner.'); }, function () { kidsOpen = ''; paintKidsTab(); }, null, 'ak-new'));
+        if (kidsOpen === 'add') kidsBox.appendChild(kidForm(function (x) { kidsOpen = ''; saveKids(kids.concat([x]), x.n + ' is on your list, on every planner, and in Kids’ Playground.'); }, function () { kidsOpen = ''; paintKidsTab(); }, null, 'ak-new'));
         else if (kids.length < 8) { var addKid = btn('btn primary', kids.length ? 'Add another kid' : 'Add a kid'); addKid.addEventListener('click', function () { kidsOpen = 'add'; paintKidsTab(); var i = kidsBox.querySelector('#ak-new-name'); if (i) i.focus(); }); kidsBox.appendChild(addKid); }
         var form0 = kidsBox.querySelector('.kid-form input:not([readonly])') || kidsBox.querySelector('.kid-form select'); if (form0 && kidsOpen) form0.focus();
       };

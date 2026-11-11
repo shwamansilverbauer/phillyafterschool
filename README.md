@@ -172,7 +172,7 @@ security headers below.
 **Security headers.** The `.htaccess` the build writes sets, on every response: `Strict-Transport-Security` (HTTPS
 only, for a year, for this host alone: the email service's link domain is a subdomain, so no `includeSubDomains`, and
 the site is not on the browsers' preload list), `X-Frame-Options: SAMEORIGIN` (no other site can show these pages in a
-frame, which protects the account and Kid's Corner pages from click tricks), `X-Content-Type-Options: nosniff`,
+frame, which protects the account and Kids' Playground pages from click tricks), `X-Content-Type-Options: nosniff`,
 `Referrer-Policy: strict-origin-when-cross-origin` (other sites see the bare domain, never the page), and a
 `Permissions-Policy` that turns off what the site never uses (camera, microphone, payments, USB, serial, Bluetooth)
 and keeps location for this site alone ("Nearest" asks for it). Font files are cached for a year. If the site ever
@@ -392,23 +392,25 @@ analytics or recordings.
   flags off; the choice is kept on the device (`pas-year-pic-own`). Title (`yearTitle`) and
   photo work as on the other cards, and stay on the device.
 
-## Kid's Corner
+## Kids' Playground
 
-`/kids-corner/` (`kidsPage()` in `build.mjs`, `src/kids-corner.js`) is a page of each child's own, inside a parent's
+`/kids-playground/` (`kidsPage()` in `build.mjs`, `src/kids-corner.js`) is a page of each child's own, inside a parent's
 account, made for ages about 5 to 10 as a cartoon arcade in the site's own colours (the deep Philly blue, sky blue and
 Bell Yellow): shiny pins that level up, a level that climbs, a cartoon map of Philadelphia that clears as they explore
 it, a bulb of their own that dresses up as they level up, and lightbulb showdowns that rank their favorites. Eddie Bulboa,
 the bulb in the logo (`bulb.png`, the logo's own art), shows kids around, says what to do next, and hosts the showdowns. It is the only
 part of the site meant to be handed to a child, so it is built the other way round from the rest. (It was called the
-Passport at first: `/passport/` redirects here, `?next=passport` still works, and the server's endpoint and table
-keep that name.)
+Passport at first, then Kid's Corner: `/passport/` and `/kids-corner/` redirect here, as `/features/kids-corner/` does
+to `/features/kids-playground/`; `?next=passport` still works, and the server's endpoint and table keep the Passport
+name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-corner.json`, the `kc-` classes, the
+`kc-open` and `kc-mute` keys on the device, and `tests/cases/23-web-kids-corner.mjs`.)
 
-- **"For kids", on the open site.** `kidsShowcase()` is a band in Kid's Corner's own look, said to the child: four
+- **"For kids", on the open site.** `kidsShowcase()` is a band in Kids' Playground's own look, said to the child: four
   tiles (pins, a lightbulb to dress up, the map with surprises and secret spots, picking a favorite), Eddie, and
   "Grown-ups: make a free account" (`register/?next=kids`), followed by "How it works" for the grown-up (`kidsHow()`).
-  Both are on Kid's Corner's Account Features page (`/features/kids-corner/`, see "Account Features") and on Kid's
-  Corner itself for someone signed out. The site is for parents and doesn't push it: someone signed out finds it
-  under Account Features in the menu, and the Kid's Corner button is only there once a parent is signed in. Nothing
+  Both are on Kids' Playground's Account Features page (`/features/kids-playground/`, see "Account Features") and on Kids'
+  Playground itself for someone signed out. The site is for parents and doesn't push it: someone signed out finds it
+  under Account Features in the menu, and the Kids' Playground button is only there once a parent is signed in. Nothing
   on the home page or the planners points to it. Its drawings are made in the build (`artBulb()`, `artPin()`); no real child's page is shown anywhere.
 - **On a laptop** the Pins / Map / Showdown tabs sit under the child's header and stick with it, instead of the
   phone's bar at the bottom; Eddie's welcome is one centred, framed card.
@@ -423,7 +425,7 @@ keep that name.)
   secret spots; picking a favorite; and off they go. "Skip" goes straight to the page (what's new is unwrapped there
   as usual). The grown-ups' corner can play it again.
 - **Starting over.** For a grown-up who tried it out first: "Start over" on the child's card in the Parent Portal's
-  Kid's Corner tab, or in the grown-ups' corner, takes two taps (`startOver()`, `POST passport_reset { kid,
+  Kids' Playground tab, or in the grown-ups' corner, takes two taps (`startOver()`, `POST passport_reset { kid,
   classes? }`). The bulb, what was shown (Eddie's welcome too), the level celebrated and the showdown favorites go;
   the confirmed classes stay unless "Also take off the classes" is ticked, and then the child's row goes.
 - **Each child's bulb.** On first visit a child lights up a bulb of their own: one of ten shapes and ten colours, picked
@@ -519,7 +521,7 @@ keep that name.)
   first, marked "★ Sam's favorite". Matching is by the child's first name, the way plans match.
 - **Share and print.** The grown-ups' corner makes a picture (`drawShare()`, a canvas) of the pins, the level and the
   child's bulb, with no name and no map, and is never a link; the page itself has no link to share.
-- **On the account page.** A Kid's Corner tab (between School & kids and Emails) shows each child at a glance: their
+- **On the account page.** A Kids' Playground tab (between School & kids and Emails) shows each child at a glance: their
   bulb, level, pins, neighborhoods, classes, the whole showdown ranking best first (`rankList()`, also a Favorites
   panel in the grown-ups' corner), and the suggestions waiting for a yes or no, answered right
   there. Buttons open the child's own page (straight to them, past the picker: `sessionStorage` "kc-open", on the
@@ -923,7 +925,7 @@ ready-made entry at the bottom of the email. To publish one, paste that entry in
 `data/reviews.json` (inside the square brackets, entries separated by commas) and commit.
 To remove a review, delete its entry. Cards show the average and the reviews for each program.
 
-A review can be **in a child's words**: the parent types what the child said (from Kid's Corner's grown-ups' corner,
+A review can be **in a child's words**: the parent types what the child said (from Kids' Playground's grown-ups' corner,
 where each confirmed program has a "Review in Sam's words" link, or by switching on the form). The entry then carries
 `"kid": { "grade": "2", "name": "Sam" }`, with `name` only when the parent ticked "show the first name"; without it the
 review is signed "A 2nd grader at Nebinger". Kids' reviews are shown beside parents' on the program's page behind a
@@ -1041,7 +1043,7 @@ changes where a listing appears in a list, and it has no say over reviews.
     `pas-premium` from `me.premium`: whether every listing the account holds is premium), `site.js` turns the
     menu's "Parent Portal" button into a yellow "Go premium" that opens `/premium/`, or "Your listings" (the managers
     page) once every listing they hold is premium, or while the premium page isn't listed. Parents see no change. A
-    manager who is also a parent (`pas-parent`: kids named or plans kept) keeps Parent Portal and Kid's Corner, gets
+    manager who is also a parent (`pas-parent`: kids named or plans kept) keeps Parent Portal and Kids' Playground, gets
     "Your listings"/"Go premium" as a plain link before My Profile, and on a wide screen About and the Suggestion Box
     leave the bar (`html.nav-both`; they stay in the phone menu and the footer). If a menu still wouldn't fit on one
     line, `fitNav()` closes it up a step or two (`nav-tight`, `nav-tighter`) rather than squeeze the logo.
@@ -1165,7 +1167,7 @@ bulb; the pictures the planners make carry the same wordmark on a navy tab at th
 `site.js`), one line and the "Help the site keep going" button, then
 four columns: Programs (the four kinds, then By School, By Neighborhood, By Type, By Day of Week), Schedule Builder
 (the three planners, My Calendar, Reminders by Email, My Profile), Account Features (Calendar & Sharing, Parent
-Portal, Kid's Corner, and "Create a free account" for someone signed out) and About (The Story, Suggestion Box,
+Portal, Kids' Playground, and "Create a free account" for someone signed out) and About (The Story, Suggestion Box,
 Write a Review, For Program Managers, Contact, Privacy, Terms of Use), then the fine print with the two credit lines
 ("Created, managed, and meticulously vibe coded by …" and "Written, edited, and humanized by …"). Menu and footer
 items are in title case, and "After School" is two words when it names the thing (it is hyphenated only as an
@@ -1174,7 +1176,7 @@ adjective: after-school programs).
 ### Account Features
 
 A group of its own in the menu, for someone signed out (`featMenu` in `layout()`, `when-out nav-feat`; signed in,
-the Parent Portal and Kid's Corner buttons take its place): a page for each thing a free account does, made by
+the Parent Portal and Kids' Playground buttons take its place): a page for each thing a free account does, made by
 `featPage()` in `build.mjs` (`FEATS()` lists them):
 
 - `/features/` ("What a free account does"): a card for each of the three, which is where the group's label goes on a
@@ -1183,8 +1185,8 @@ the Parent Portal and Kid's Corner buttons take its place): a page for each thin
   calendar and on your phone; planning with a co-parent, sharing a week with one person, and sharing with a small group.
 - `/features/parent-portal/` (Parent Portal): the overview, your school and your kids (first names, grades, ages), the
   to-do list of sign-ups, following and favorites, and that the kids' info is encrypted and the family's alone.
-- `/features/kids-corner/` (Kid's Corner): the "For kids" band and "How it works", the same as Kid's Corner shows
-  someone signed out. It runs no analytics (`quiet`), since it says nothing on Kid's Corner is counted.
+- `/features/kids-playground/` (Kids' Playground): the "For kids" band and "How it works", the same as Kids' Playground shows
+  someone signed out. It runs no analytics (`quiet`), since it says nothing on Kids' Playground is counted.
 
 Each page uses the register page's rows and pictures (`accountArt()`, shared with `accountPage()`, plus a profile card,
 a to-do list, the days off and summer, and a lock drawn in `featArt()`), with "Free for every family" and the
@@ -1689,7 +1691,7 @@ These are the only parts of the site that store anything about a child on the se
   two kinds of account (parent here, program manager on the managers page) and the form sit in the first screen,
   beside the heading (`.acct-hero-form` in the hero), and what an account gives you follows below as rows of
   pictures in three groups, "Plan the whole year" (the calendar, the phone and the fridge, the Parent Portal, a
-  co-parent), "Never miss a thing" and "Something for your kids" (Kid's Corner and favorites first; `.acct-row`, one
+  co-parent), "Never miss a thing" and "Something for your kids" (Kids' Playground and favorites first; `.acct-row`, one
   drawing each), with a
   closing "Create a free account" band that scrolls back to the form. Under the heading sits a drawing of the school
   year on one ribbon (`artYearRibbon()`), hidden once someone is signed in. `/account/` is where you log in: while
@@ -2040,15 +2042,15 @@ its own page.
 - **`/account/` is the Parent Portal, and where everything is changed.** It opens on an **Overview** (`#overview`,
   `paintOverview()`): a card for each place to start (Build your kids' week, Plan your days off, Update your profile,
   Manage your to-do list, Build your year calendar, Have your kids play, Plan your summer, Help the site keep going),
-  each with how far it has got from the plans kept in the account, then "What's new". Kid's Corner's card looks like
+  each with how far it has got from the plans kept in the account, then "What's new". Kids' Playground's card looks like
   the others; its line says "Add your kids first", "2 classes to confirm", "Not started" (no child has picked a bulb
   or met Eddie yet) or "Playing", from the same `passport` call the page makes. The other tabs: Details (`#you`:
-  name, email address, mobile number, signing out and deleting), School & kids, Kid's Corner, Emails & following, and
+  name, email address, mobile number, signing out and deleting), School & kids, Kids' Playground, Emails & following, and
   Plans & sharing. A program manager's account has no overview and opens on Details. Signed out, it is still where
   people log in.
 - **Getting there.** Signed in, the menu has "My Profile" as a plain link, then the yellow "Parent Portal" button (to
-  the overview), then a Kid's Corner button with a little bulb. In the phone menu, Parent Portal, Kid's Corner and My
-  Profile are the first things listed: Parent Portal as the big yellow button, Kid's Corner as a small pill under it,
+  the overview), then a Kids' Playground button with a little bulb. In the phone menu, Parent Portal, Kids' Playground and My
+  Profile are the first things listed: Parent Portal as the big yellow button, Kids' Playground as a small pill under it,
   so the portal leads. The footer's Schedule Builder column has "My Profile" as well.
 - **Changing the email address.** "Change my email address" under Your details asks for the new address
   (`email_start`), which is sent a 6-digit code, and then for the code (`email_finish`). Until the code is typed

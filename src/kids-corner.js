@@ -1,4 +1,4 @@
-// Kid's Corner: a page of each child's own, inside a parent's account (kidsPage() in build.mjs). For ages about 5 to 10,
+// Kids' Playground: a page of each child's own, inside a parent's account (kidsPage() in build.mjs). For ages about 5 to 10,
 // in the site's colours: shiny pins that level up from bronze to silver to gold, a level that climbs, a cartoon map of
 // Philadelphia whose clouds clear over the neighborhoods the child has been to, and a showdown where each program's
 // lightbulb takes on another in a Philly contest (the Art Museum steps, a cheesesteak, the Liberty Bell, a Mummers
@@ -7,7 +7,7 @@
 // Each child picks a lightbulb of their own to be, and Eddie Bulboa, the bulb in the logo, shows them around and
 // hosts the showdowns. What counts is what a parent has confirmed (the "passport" endpoint in groups/api.php): the page suggests
 // from the household's plans, and the parent says yes or no behind the grown-ups' hold-to-open button, or on the
-// account page's Kid's Corner tab (window.pasKids below draws that tab).
+// account page's Kids' Playground tab (window.pasKids below draws that tab).
 //
 // Kid mode: while a child is holding the phone the site's header, menu and footer are hidden, nothing on the page is
 // typed, and no link leaves the site. Nothing on this page is counted, recorded or sent anywhere but the household's
@@ -17,7 +17,7 @@
 (function () {
   'use strict';
   if (!window.fetch || !window.Promise) return;
-  var root = document.getElementById('kc');   // Kid's Corner itself; without it, this is the account page's tab (window.pasKids)
+  var root = document.getElementById('kc');   // Kids' Playground itself; without it, this is the account page's tab (window.pasKids)
   var D = root ? JSON.parse(document.getElementById('kc-data').textContent) : null;
   var API = root ? root.getAttribute('data-api') || '' : '';
   var app = document.getElementById('kc-app'), outBox = document.getElementById('kc-out'), waitEl = document.getElementById('kc-wait');
@@ -54,7 +54,7 @@
   };
   var listing = function (k) { return D.listings[k] || null; };
   var nameOf = function (k) { var l = listing(k); return l ? l.n : k.replace(/^[pc]:/, ''); };
-  // The child's whole ranking from the showdowns, best first, for the grown-ups (the Parent Portal's Kid's Corner tab
+  // The child's whole ranking from the showdowns, best first, for the grown-ups (the Parent Portal's Kids' Playground tab
   // and the grown-ups' corner). The planners offer them in this order.
   var rankList = function (k, cls) {
     var keys = (k.fav || []).filter(function (key) { return listing(key); });
@@ -487,7 +487,7 @@
     var e = { k: sgt.k, kind: sgt.kind, y: sgt.y, s: sgt.s || '' }; if (sgt.n) e.n = sgt.n;
     return yes ? { done: k.done.concat([e]) } : { skip: k.skip.concat([sgKey(sgt)]) };
   };
-  // Start over: Kid's Corner from the beginning for one child (for a grown-up who tried it out first). Their bulb, what
+  // Start over: Kids' Playground from the beginning for one child (for a grown-up who tried it out first). Their bulb, what
   // they've been shown, Eddie's welcome and their favorites go; the classes stay unless the box is ticked. Two taps.
   var startOver = function (k, then) {
     var box = el('div', 'kc-reset');
@@ -586,7 +586,7 @@
       setKidMode(false);
       var none = el('div', 'panel kc-none');
       none.appendChild(el('h2', null, 'No names yet'));
-      none.appendChild(el('p', null, 'Kid’s Corner has a page for each child. Add your kids’ first names on your account page (a nickname or an initial works), and each gets a page here.'));
+      none.appendChild(el('p', null, 'Kids’ Playground has a page for each child. Add your kids’ first names on your account page (a nickname or an initial works), and each gets a page here.'));
       var a = el('a', 'btn primary', 'Add their names'); a.href = D.links.kids; none.appendChild(a);
       box.appendChild(none); app.appendChild(box); return;
     }
@@ -693,7 +693,7 @@
     else if (S.tab === 'battle') drawBattleTab(body, k, st);
     else drawPinsTab(body, k, st);
     body.appendChild(grownupRow());
-    var tabs = el('nav', 'kc-tabs'); tabs.setAttribute('aria-label', 'Kid’s Corner');
+    var tabs = el('nav', 'kc-tabs'); tabs.setAttribute('aria-label', 'Kids’ Playground');
     [['pins', 'Pins', 'M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z'], ['map', 'Map', 'M15 4 9 2 3 4v18l6-2 6 2 6-2V2zm0 15.8-6-2V4.2l6 2z'], ['battle', 'Showdown', 'M7 3h10v2h3v3a4 4 0 0 1-4 4h-.3A5 5 0 0 1 13 14.9V17h3v3H8v-3h3v-2.1A5 5 0 0 1 8.3 12H8a4 4 0 0 1-4-4V5h3zm-1 4v1a2 2 0 0 0 2 2V7zm11 0v3a2 2 0 0 0 2-2V7z']].forEach(function (t) {
       var b = btn('kc-tabbtn' + (S.tab === t[0] ? ' on' : ''), '', function () { if (S.tab === t[0]) return; Sound.play('tap'); go('kid', t[0]); });
       if (S.tab === t[0]) b.setAttribute('aria-current', 'page');
@@ -747,7 +747,7 @@
     var acts = el('div', 'kc-avacts');
     var nameUp = k.name;
     if (step === 0) {
-      say('Hi, ' + nameUp + '! I’m Eddie Bulboa. Welcome to YOUR Kid’s Corner!');
+      say('Hi, ' + nameUp + '! I’m Eddie Bulboa. Welcome to YOUR Kids’ Playground!');
       var big = el('img', 'kc-tour-big'); big.src = D.eddie; big.alt = ''; big.width = 327; big.height = 400; show.appendChild(big);
       acts.appendChild(btn('kc-big go', 'Hi, Eddie!', next));
     } else if (step === 1) {
@@ -1861,9 +1861,9 @@
     var k = kid();
     var page = el('section', 'kc-grownup');
     var head = el('div', 'kc-ghead');
-    head.appendChild(el('h2', null, k ? possessive(k.name) + ' Kid’s Corner: grown-ups' : 'Kid’s Corner: grown-ups'));
+    head.appendChild(el('h2', null, k ? possessive(k.name) + ' Kids’ Playground: grown-ups' : 'Kids’ Playground: grown-ups'));
     var acts = el('div', 'actions');
-    acts.appendChild(btn('btn primary', k ? 'Back to ' + possessive(k.name) + ' page' : 'Back to Kid’s Corner', function () { go(k ? 'kid' : 'pick'); }));
+    acts.appendChild(btn('btn primary', k ? 'Back to ' + possessive(k.name) + ' page' : 'Back to Kids’ Playground', function () { go(k ? 'kid' : 'pick'); }));
     if (S.data.kids.length > 1 || !k) acts.appendChild(btn('btn', 'Pick a child', function () { go('pick'); }));
     var acct = el('a', 'btn', 'My account'); acct.href = D.links.account; acts.appendChild(acct);
     if (k) acts.appendChild(btn('btn', 'Play Eddie’s welcome again', function () { S.tour = { step: 0 }; go('tour'); }));
@@ -1975,7 +1975,7 @@
     page.appendChild(dl);
 
     // From the beginning: for when a grown-up tried it out first.
-    var rs = el('div', 'panel'); rs.appendChild(el('h3', null, 'Start ' + possessive(k.name) + ' Kid’s Corner over'));
+    var rs = el('div', 'panel'); rs.appendChild(el('h3', null, 'Start ' + possessive(k.name) + ' Kids’ Playground over'));
     rs.appendChild(startOver(k, function () { S.tour = null; S.bracket = null; S.said = ''; go('kid', 'pins'); }));
     page.appendChild(rs);
 
@@ -2062,14 +2062,14 @@
     else drawPick();
   };
 
-  // ----- for the account page's Kid's Corner tab: each child's page at a glance, and the classes waiting to confirm -----
+  // ----- for the account page's Kids' Playground tab: each child's page at a glance, and the classes waiting to confirm -----
   // groups.js loads this script and its data only when that tab is opened, then calls window.pasKids.summary().
   var summaryBox = null;
   var paintSummary = function (box, p) {
     box.textContent = '';
-    box.appendChild(el('p', 'hint', 'What each child has on Kid’s Corner, and the classes waiting for you to say yes or no. Only you, and a co-parent you’ve linked, see this.'));
+    box.appendChild(el('p', 'hint', 'What each child has on Kids’ Playground, and the classes waiting for you to say yes or no. Only you, and a co-parent you’ve linked, see this.'));
     if (!p.kids.length) {
-      var none = el('p', null, 'Add your kids’ first names on School & kids, and each gets a page in Kid’s Corner.');
+      var none = el('p', null, 'Add your kids’ first names on School & kids, and each gets a page in Kids’ Playground.');
       box.appendChild(none);
       var go2 = el('a', 'btn primary', 'Add their names'); go2.href = D.links.kids; box.appendChild(go2);
       return;
@@ -2108,7 +2108,7 @@
         wait.appendChild(ul); card.appendChild(wait);
       }
       var acts = el('div', 'actions');
-      acts.appendChild(btn('btn primary', 'Open ' + possessive(k.name) + ' Kid’s Corner', openOn(k)));
+      acts.appendChild(btn('btn primary', 'Open ' + possessive(k.name) + ' Kids’ Playground', openOn(k)));
       acts.appendChild(btn('btn', 'Add or take off classes', openOn(k, '#grownup')));
       var again = btn('btn', 'Start over', function () {
         again.disabled = true;
@@ -2123,25 +2123,25 @@
     summary: function (box, opts) {
       summaryBox = box;
       if (opts && opts.api) API = opts.api;
-      box.textContent = ''; box.appendChild(el('p', 'hint', 'Opening Kid’s Corner…'));
+      box.textContent = ''; box.appendChild(el('p', 'hint', 'Opening Kids’ Playground…'));
       var data = D ? Promise.resolve(D) : window.fetch(opts.data, { credentials: 'same-origin' }).then(function (r) { if (!r.ok) throw new Error('data'); return r.json(); }).then(function (d) { D = d; return d; });
       return Promise.all([data, call('passport')]).then(function (x) {
         if (summaryBox !== box) return;
-        if (!x[1] || !x[1].ok) { box.textContent = ''; box.appendChild(el('p', 'g-status bad', (x[1] && x[1].message) || 'Couldn’t open Kid’s Corner just now. Try again in a moment.')); return; }
+        if (!x[1] || !x[1].ok) { box.textContent = ''; box.appendChild(el('p', 'g-status bad', (x[1] && x[1].message) || 'Couldn’t open Kids’ Playground just now. Try again in a moment.')); return; }
         paintSummary(box, x[1]);
-      }).catch(function () { box.textContent = ''; box.appendChild(el('p', 'g-status bad', 'Couldn’t open Kid’s Corner just now. Try again in a moment.')); });
+      }).catch(function () { box.textContent = ''; box.appendChild(el('p', 'g-status bad', 'Couldn’t open Kids’ Playground just now. Try again in a moment.')); });
     }
   };
 
   // ----- start -----
-  if (!root) return;   // not Kid's Corner itself: the account page's tab uses window.pasKids, above
+  if (!root) return;   // not Kids' Playground itself: the account page's tab uses window.pasKids, above
   if (!signedIn()) { setKidMode(false); return; }   // the page's own signed-out panel stays
   outBox.hidden = true;
   call('me').then(function (d) {
     if (!d.ok || !d.user) { try { localStorage.removeItem('pas-in'); } catch (e) { /* storage */ } html.classList.remove('signed'); outBox.hidden = false; if (waitEl) waitEl.hidden = true; return; }
     return call('passport').then(function (p) {
       if (waitEl) waitEl.hidden = true;
-      if (!p.ok) { outBox.hidden = false; outBox.insertBefore(el('p', 'g-status bad', p.message || 'Couldn’t open Kid’s Corner just now. Reload to try again.'), outBox.firstChild); return; }
+      if (!p.ok) { outBox.hidden = false; outBox.insertBefore(el('p', 'g-status bad', p.message || 'Couldn’t open Kids’ Playground just now. Reload to try again.'), outBox.firstChild); return; }
       p.kids.forEach(function (k) { if (!k.seen || Array.isArray(k.seen)) k.seen = {}; });
       S.data = p; app.hidden = false;
       var h = (location.hash || '').slice(1);
