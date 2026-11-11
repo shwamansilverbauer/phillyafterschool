@@ -109,8 +109,12 @@ if ($isNew && !preg_match('~^(https?://)?[a-z0-9][a-z0-9.-]*\.[a-z]{2,}([/?#]\S*
 if ($isNew && $program === '') {
   fail('Please add the name of the program or camp.', 400);
 }
-if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-  $email = '';
+// Everything sent in needs a name and an email, so it can be followed up and isn't sent by a stranger to the site.
+if ($name === '') {
+  fail('Please add your name.', 400);
+}
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  fail('Please add your email, so we can ask a question about what you sent if we need to.', 400);
 }
 
 $body = "Type: $kind\n"

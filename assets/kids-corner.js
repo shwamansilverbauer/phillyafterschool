@@ -959,7 +959,7 @@
           : p.how === 'broad' ? 'East of Broad: ' + names(st.side.e) + '. West of Broad: ' + names(st.side.w) + '.' : '';
         if (w) card.appendChild(el('p', 'kc-say small kc-counted', w));
       }
-      else card.appendChild(el('p', 'kc-say', x.c ? 'You’ve been to ' + plural(x.c, p.one, p.many) + '!' : 'Go to a ' + p.one + ' to get this pin!'));
+      else card.appendChild(el('p', 'kc-say', x.c ? 'You’ve been to ' + plural(x.c, p.one, p.many) + '!' : p.get || 'Go to ' + (/^[aeiou]/i.test(p.one) ? 'an ' : 'a ') + p.one + ' to get this pin!'));   // "an after-school program", "a music class"
       if (x.c && x.tier < TOP) card.appendChild(el('p', 'kc-say small', (x.next - x.c) + ' more ' + unitWord(p, x.next - x.c) + ' for ' + TIER[x.tier + 1].toUpperCase() + '!'));
       if (x.c && x.tier < TOP && p.rule) { var how = el('p', 'kc-say small kc-rule'); how.appendChild(el('b', null, 'To level up: ')); how.appendChild(document.createTextNode(p.rule)); card.appendChild(how); }   // a found secret pin's rule, in plain words
       if (p.secret && x.tier < TOP) miniMap(card, p);
