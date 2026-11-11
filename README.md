@@ -1078,7 +1078,7 @@ changes where a listing appears in a list, and it has no say over reviews.
   four places, all of them for people who run a program and none on a page a parent uses:
   - **In each claimed listing's box on the managers page** (`premiumTease()` in `groups.js`), on a tab of its own
     called "Premium", after the listing's own tabs: one dashed box that leads with the listing's own number of
-    visits when there are at least 20, lists the seven things premium adds, and gives the price. The tab is always
+    visits when there are at least 20, lists the eight things premium adds, and gives the price. The tab is always
     there and never in the way, so there is nothing to dismiss. A listing that has signed up sees where to finish;
     a premium listing has no such tab and sees its tools on the other tabs instead. Nothing pops up, and nothing is
     repeated elsewhere on the page.
@@ -1143,7 +1143,8 @@ changes where a listing appears in a list, and it has no say over reviews.
   `/edit/claims/` ("Make it premium" beside each claimed listing); a payment would set the same row later. Turning
   it off hides what was added and keeps it. By the rule under "What stays free", a free program can simply be made
   premium at no charge.
-- **Everything waits for a person.** Photos, the logo, the words and the offer line each go to `/edit/claims/` to
+- **Everything waits for a person.** Photos, the logo, the words, the offer line, the social links and the Instagram
+  posts each go to `/edit/claims/` to
   be published or declined, and the manager is emailed either way. In `"preview"` those emails say that only they
   can see it for now.
 - **Photos.** The `photos` table gained a `kind` (`photo` or `logo`). A premium listing keeps up to
@@ -1157,6 +1158,17 @@ changes where a listing appears in a list, and it has no say over reviews.
   like the words ("Kids' Playground pin"). The guardrails: a child gets it only after going to the program, it's
   never shown as something to go and get, it has no link, logo or offer, and every program counts toward all the
   other pins the same way.
+- **Social links and Instagram posts** are rows in `extras` too. `social`: the program's own accounts on
+  `SOCIAL_SITES` (Instagram, Facebook, TikTok, YouTube), typed as an address or a handle and kept as plain addresses
+  (`social_url()`; anything on another site is refused), as `{"ig": …, "fb": …}`. `posts`: up to `POSTS_MAX` (3)
+  public Instagram posts or reels the manager picks, from the link Instagram copies, kept as
+  `https://www.instagram.com/p/…/` or `/reel/…/` (`post_url()`). Automatic "latest posts" would need every program to
+  connect its account to a Meta app of ours that has passed Meta's app review, so the manager picks them instead. The
+  review page shows each link to open and check, and the manager is asked to pick posts where no child can be named
+  or recognized up close. On the listing: "Follow <program>" with a pill per account, and "From <program> on Instagram" as plain
+  links plus a "Show the posts here" button; only that tap adds Instagram's own embeds and loads
+  `https://www.instagram.com/embed.js`, with a line saying Instagram may set its own cookies (`pas_instagram` is
+  counted when it's tapped).
 - **Words and offers** are rows in `extras` (`kind` `words` or `offer`, `status` new, ok or declined). Words are
   plain text, 40 to `WORDS_MAX` characters. An offer is one line of up to `OFFER_MAX` characters with a last day,
   no more than `OFFER_DAYS` ahead, after which it stops showing by itself.
@@ -1173,7 +1185,8 @@ changes where a listing appears in a list, and it has no say over reviews.
   flyer's link carries `utm_source=flyer`. (The website badge used to be here; it now comes with every claimed
   listing, see "Being found by search engines".)
 - **On the listing** (`premiumSlot()` in `build.mjs`, drawn by `site.js`): the offer line near the top, "In their
-  own words" with the logo and a line saying the program wrote it, "Photos", and "Ask a question". The page asks the
+  own words" with the logo and a line saying the program wrote it, "Follow <program>", "From <program> on
+  Instagram", "Photos", and "Ask a question". The page asks the
   accounts service (`GET extras`) only when it needs to: in `"preview"`, only for a signed-in visitor; when on, only
   if the public list of claimed listings names it. School pages show the offer line on the program's card. Add
   `?premium=demo` to any program's or camp's address to see a made-up sample.

@@ -107,6 +107,62 @@ test('a review in a kid’s words: the form’s handler emails the owner a ready
   excludes(m3.TextBody, '"kid"'); includes(m3.TextBody, 'New review, waiting');
 });
 
+test('a premium listing’s social links and Instagram posts: sent by its manager, checked by the owner, then on its page, with Instagram loaded only on a tap', async (ctx) => {
+  if (!ctx.site.edit) return;
+  const t = Date.now().toString(36);
+  const manager = ctx.api().as(`soc${t}@phillyafterschool.org`, 'Pat', 'Lee');
+  await manager.okay('POST', 'claim_add', { listing: PREMIUM });
+  const soc = o => JSON.stringify(o);
+  await manager.fails('POST', 'extra_save', { listing: PREMIUM, kind: 'social', body: soc({}) }, 'short');
+  await manager.fails('POST', 'extra_save', { listing: PREMIUM, kind: 'social', body: soc({ ig: 'https://evil.example/makom' }) }, 'ig');
+  await manager.fails('POST', 'extra_save', { listing: PREMIUM, kind: 'social', body: soc({ yt: 'https://youtu.be/abc' }) }, 'yt');
+  const r = await manager.okay('POST', 'extra_save', { listing: PREMIUM, kind: 'social', body: soc({ ig: '@test.program', fb: 'https://m.facebook.com/TestProgram/?ref=x', tt: '' }) });
+  deepEq(JSON.parse(r.claims.find(c => c.listing === PREMIUM).premium.texts.social.new), { ig: 'https://www.instagram.com/test.program/', fb: 'https://www.facebook.com/TestProgram' }, 'waiting, as plain addresses');
+  const told = await ctx.mail.waitFor('contact@phillyafterschool.org', /Social links to approve/);
+  includes(told.TextBody, 'Instagram: https://www.instagram.com/test.program/');
+  await manager.fails('POST', 'extra_save', { listing: PREMIUM, kind: 'posts', body: soc(['https://www.instagram.com/test.program/']) }, 'post');
+  await manager.fails('POST', 'extra_save', { listing: PREMIUM, kind: 'posts', body: soc(['https://www.instagram.com/p/AAAAA1/', 'https://www.instagram.com/p/AAAAA2/', 'https://www.instagram.com/p/AAAAA3/', 'https://www.instagram.com/reel/AAAAA4/']) }, 'long');
+  await manager.okay('POST', 'extra_save', { listing: PREMIUM, kind: 'posts', body: soc(['https://www.instagram.com/p/AAAAA1/?utm_source=ig_web_copy_link', 'instagram.com/test.program/reel/AAAAA2', 'https://www.instagram.com/p/AAAAA1/']) });
+  await ctx.mail.waitFor('contact@phillyafterschool.org', /Instagram posts to approve/);
+  // Nothing shows while they wait.
+  const before = await manager.okay('GET', 'extras', 'l=' + encodeURIComponent(PREMIUM));
+  eq(before.social, null); deepEq(before.posts, []);
+  // The owner checks the links and publishes both on the review page.
+  const form = o => Object.entries(o).map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v)).join('&');
+  const login = await fetch(`${ctx.site.base}/edit/`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: form({ user: ctx.site.edit.user, pass: ctx.site.edit.password }), redirect: 'manual' });
+  const cookie = login.headers.getSetCookie().find(c => c.startsWith('pas_edit=')).split(';')[0];
+  const page = await (await fetch(`${ctx.site.base}/edit/claims/`, { headers: { Cookie: cookie } })).text();
+  includes(page, 'Social links'); includes(page, 'Instagram posts (parents tap to load them)');
+  includes(page, 'href="https://www.instagram.com/reel/AAAAA2/"', 'each link opens for a look');
+  const csrf = /name="csrf" value="([^"]+)"/.exec(page)[1];
+  for (const what of ['Facebook: https://www.facebook.com/TestProgram', 'https://www.instagram.com/p/AAAAA1/\nhttps://www.instagram.com/reel/AAAAA2/']) {
+    const at = page.indexOf(what.replace(/\n/g, '\n')); ok(at > -1, 'on the review page: ' + what);
+    const id = /name="id" value="(\d+)"/.exec(page.slice(at))[1];
+    await fetch(`${ctx.site.base}/edit/claims/`, { method: 'POST', headers: { Cookie: cookie, 'Content-Type': 'application/x-www-form-urlencoded' }, body: form({ csrf, id, do: 'extra_ok' }), redirect: 'manual' });
+  }
+  await ctx.mail.waitFor(manager.email, /Your social links for .* are on the site/);
+  const after = await manager.okay('GET', 'extras', 'l=' + encodeURIComponent(PREMIUM));
+  deepEq(after.social, { ig: 'https://www.instagram.com/test.program/', fb: 'https://www.facebook.com/TestProgram' });
+  deepEq(after.posts, ['https://www.instagram.com/p/AAAAA1/', 'https://www.instagram.com/reel/AAAAA2/']);
+  // On the listing's own page: "Follow", plain links to the posts, and Instagram asked for nothing until the tap.
+  const b = await ctx.browser();
+  const tab = await b.context(ctx.site, { sid: manager.cookie });
+  const pg = await tab.open('/programs/' + PREMIUM.slice(2) + '/');
+  await pg.waitForSelector('#social .pm-soc');
+  eq(await pg.locator('#social a.pm-soc').count(), 2, 'Instagram and Facebook');
+  eq(await pg.locator('#social a.pm-soc.ig').getAttribute('href'), 'https://www.instagram.com/test.program/');
+  eq(await pg.locator('#instagram .pm-ig-links a').count(), 2, 'the posts as plain links first');
+  ok(!tab.outside.some(u => /instagram\.com/.test(u)), 'nothing asked of Instagram yet: ' + tab.outside.join(', '));
+  await pg.locator('#instagram .btn').click();
+  await pg.waitForSelector('#instagram blockquote.instagram-media');
+  eq(await pg.locator('#instagram blockquote.instagram-media').count(), 2, 'Instagram’s own embeds, once asked for');
+  await tab.close();
+  await manager.okay('POST', 'extra_drop', { listing: PREMIUM, kind: 'social' });
+  await manager.okay('POST', 'extra_drop', { listing: PREMIUM, kind: 'posts' });
+  eq((await manager.okay('GET', 'extras', 'l=' + encodeURIComponent(PREMIUM))).social, null, 'gone once taken down');
+  await manager.okay('POST', 'claim_drop', { listing: PREMIUM });
+});
+
 test('a premium listing’s pin in Kids’ Playground: sent by its manager, checked by the owner, then only for a family whose child went there', async (ctx) => {
   if (!ctx.site.edit) return;
   const t = Date.now().toString(36);

@@ -1918,7 +1918,7 @@
           : 'Premium gives the families who open your listing more to go on:'));
       if (!c.asked) {
         var ul = el('ul', 'pm-locks');
-        ['Up to six photos and your logo', 'A section in your own words', 'An offer or event line', 'A button parents use to send you a question', 'Month-by-month numbers, and the schools families come from', 'A flyer to print', 'A pin of your own in Kids’ Playground'].forEach(function (x) { ul.appendChild(el('li', null, x)); });
+        ['Up to six photos and your logo', 'A section in your own words', 'An offer or event line', 'Your social links, and up to three Instagram posts', 'A button parents use to send you a question', 'Month-by-month numbers, and the schools families come from', 'A flyer to print', 'A pin of your own in Kids’ Playground'].forEach(function (x) { ul.appendChild(el('li', null, x)); });
         box.appendChild(ul);
       }
       var row = el('div', 'actions'), go = el('a', 'btn primary', c.asked ? 'Open the premium page' : 'See what premium adds'); go.href = url;
@@ -2000,7 +2000,7 @@
         var f = el('form', 'g-form pm-form'), inputs = make(f, t);
         var st = el('p', 'g-status'); st.setAttribute('aria-live', 'polite'); f.appendChild(st);
         var acts = el('div', 'actions'), go = el('button', 'btn primary', t.live || t['new'] ? 'Send the new version' : 'Send it for a look'); go.type = 'submit'; acts.appendChild(go);
-        if (t.live || t['new']) { var rm = btn('btn', kind === 'pin' ? 'Take the pin down' : 'Take it off my listing'); twoTap(rm, 'Tap again to take it off', function () { call('extra_drop', { listing: key, kind: kind }).then(after(kind === 'offer' ? 'The offer line is off ' + c.name + '.' : kind === 'pin' ? 'Your pin is out of Kids’ Playground.' : 'Your words are off ' + c.name + '.')); }); acts.appendChild(rm); }
+        if (t.live || t['new']) { var rm = btn('btn', kind === 'pin' ? 'Take the pin down' : kind === 'social' || kind === 'posts' ? 'Take them off my listing' : 'Take it off my listing'); twoTap(rm, 'Tap again to take it off', function () { call('extra_drop', { listing: key, kind: kind }).then(after(kind === 'offer' ? 'The offer line is off ' + c.name + '.' : kind === 'pin' ? 'Your pin is out of Kids’ Playground.' : kind === 'social' ? 'Your social links are off ' + c.name + '.' : kind === 'posts' ? 'Your Instagram posts are off ' + c.name + '.' : 'Your words are off ' + c.name + '.')); }); acts.appendChild(rm); }
         f.appendChild(acts);
         f.addEventListener('submit', function (e) {
           e.preventDefault(); go.disabled = true; st.className = 'g-status'; st.textContent = 'Sending…';
@@ -2027,6 +2027,25 @@
         var d0 = new Date(), iso = function (d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); };
         until.min = iso(d0); until.max = iso(new Date(d0.getTime() + 90 * 86400000)); until.value = t.newUntil || (t.liveUntil >= iso(d0) ? t.liveUntil : '') || '';
         return { body: inp, until: until };
+      });
+      // --- the program's own social accounts, and up to three Instagram posts it picks (parents tap to load them)
+      if (P.texts.social) texts('social', sub('words', 'Your social accounts', 'Links to your own accounts, shown on your listing under “Follow ' + c.name + '”. Paste an address or a handle; leave out any you don’t use.'), P.texts.social, function (f, t) {
+        var cur = {}; try { cur = JSON.parse(t['new'] || t.live || '{}') || {}; } catch (e) { cur = {}; }
+        var ins = [['ig', 'Instagram', 'instagram.com/yourprogram'], ['fb', 'Facebook', 'facebook.com/yourprogram'], ['tt', 'TikTok', 'tiktok.com/@yourprogram'], ['yt', 'YouTube', 'youtube.com/@yourprogram']].map(function (x) {
+          var i = field(f, 'ps-' + x[0] + '-' + slug, x[1], 'input', { type: 'text', maxLength: 200, placeholder: x[2], autocomplete: 'off', spellcheck: false }); i.value = cur[x[0]] || ''; i.setAttribute('data-site', x[0]); return i;
+        });
+        var body = el('input'); body.type = 'hidden'; f.appendChild(body);
+        var sync = function () { var o = {}; ins.forEach(function (i) { if (i.value.trim()) o[i.getAttribute('data-site')] = i.value.trim(); }); body.value = JSON.stringify(o); };
+        ins.forEach(function (i) { i.addEventListener('input', sync); }); sync();
+        return { body: body };
+      });
+      if (P.texts.posts) texts('posts', sub('words', 'Instagram posts on your listing', 'Pick up to three of your public posts or reels to show on your listing. On Instagram, tap ⋯ on a post, then “Copy link”, and paste it here. Parents see the posts when they tap to load them, so Instagram is only asked for by those who want it. Please pick posts where no child can be named or recognized up close.'), P.texts.posts, function (f, t) {
+        var cur = []; try { cur = JSON.parse(t['new'] || t.live || '[]') || []; } catch (e) { cur = []; }
+        var ins = [1, 2, 3].map(function (n) { var i = field(f, 'pp-' + n + '-' + slug, 'Post ' + n, 'input', { type: 'text', inputMode: 'url', maxLength: 300, placeholder: 'https://www.instagram.com/p/…', autocomplete: 'off', spellcheck: false }); i.value = cur[n - 1] || ''; return i; });
+        var body = el('input'); body.type = 'hidden'; f.appendChild(body);
+        var sync = function () { body.value = JSON.stringify(ins.map(function (i) { return i.value.trim(); }).filter(Boolean)); };
+        ins.forEach(function (i) { i.addEventListener('input', sync); }); sync();
+        return { body: body };
       });
       // --- the program's own pin in Kids' Playground: a name, a color and a picture, drawn the way Kids' Playground draws it
       var KJS = host.getAttribute('data-kids'), KDATA = host.getAttribute('data-kids-data');

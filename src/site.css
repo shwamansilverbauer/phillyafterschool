@@ -2345,6 +2345,16 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .pm-grid figure{margin:0;border-radius:14px;overflow:hidden;background:var(--cell-off)}
 .pm-grid img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
 .pm-ask > .btn{align-self:flex-start;cursor:pointer;font:inherit;font-weight:700}
+.pm-social-row{display:flex;flex-wrap:wrap;gap:10px;margin:0}
+.pm-soc{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font-weight:700;text-decoration:none}
+a.pm-soc::after{content:"↗";font-weight:400;color:var(--muted)}
+a.pm-soc:hover{border-color:var(--ink)}
+.pm-ig-posts{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;align-items:start;max-width:980px}
+.pm-ig-posts .instagram-media{margin:0 !important;min-width:0 !important;width:100% !important}
+.pm-ig-links{margin:0;padding-left:1.2em}
+.pm-ig-links[hidden]{display:none}
+.pm-ig > .btn{align-self:flex-start;cursor:pointer;font:inherit;font-weight:700}
+.pm-ig > .btn[hidden]{display:none}
 .pm-ask-form{max-width:560px;display:flex;flex-direction:column;gap:14px}
 .pm-ask-form[hidden]{display:none}
 .pm-ask-form input,.pm-ask-form textarea{font:inherit;width:100%;padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}
@@ -2404,6 +2414,8 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .pmd-words{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:12px}
 .pmd-h{margin:0;font-family:var(--display);font-stretch:112%;font-weight:800;font-size:1.05rem;display:flex;align-items:center}
 .pm-demo .pm-by{font-size:.84rem;gap:10px}
+.pmd-social{position:relative;display:flex;gap:6px;margin:8px 0 0}
+.pmd-social span{border:1.5px solid var(--line);border-radius:999px;padding:3px 10px;font-size:.78rem;font-weight:700;background:#FFFFFF}
 .pmd-logo{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:#FFFFFF;flex:none;overflow:hidden;line-height:0}
 .pmd-logo svg{width:100%;height:100%;display:block}
 .pmd-text{margin:0;font-size:.93rem;line-height:1.45}

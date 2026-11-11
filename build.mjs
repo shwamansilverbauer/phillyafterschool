@@ -4013,7 +4013,7 @@ ${hero}
     <div class="pm-cta-box">
       <div class="pm-cta-say">
         <h2>${T(`Want more on your listing?`)}</h2>
-        <p>${T(`A premium listing adds photos and your logo, a section in your own words, an offer or event line, a button parents use to send you a question, month-by-month numbers and a pin of your own in Kids’ Playground. The listing itself stays free; premium is the extras.`)}</p>
+        <p>${T(`A premium listing adds photos and your logo, a section in your own words, an offer or event line, your social links and up to three Instagram posts, a button parents use to send you a question, month-by-month numbers and a pin of your own in Kids’ Playground. The listing itself stays free; premium is the extras.`)}</p>
       </div>
       <p class="actions"><a class="btn primary" href="${link('premium/', 1)}" data-track="premium_cta_managers">${T(`See what premium adds`)}</a><span class="hint">${T(`From {price} a month. Claim your listing first; premium is added to it.`, { price: '$' + PM_PRICE.month })}</span></p>
     </div>
@@ -4061,6 +4061,7 @@ function premiumPage() {
     ['photos', T(`Photos and your logo`), T(`Up to six photos and a logo, at the top of your listing.`)],
     ['offer', T(`An offer or event line`), T(`An open house, a trial class, early-bird pricing. It shows near the top until the date you set.`)],
     ['words', T(`A section in your own words`), T(`Say what makes your program yours, the way you’d say it to a parent on a tour.`)],
+    ['social', T(`Your social links and Instagram posts`), T(`Links to your Instagram, Facebook, TikTok or YouTube, and up to three Instagram posts you pick. The posts load only when a parent taps to see them.`)],
     ['ask', T(`A button for questions`), T(`Parents send a question from your listing and it lands in your inbox, with their address to reply to.`)],
     ['numbers', T(`Fuller numbers`), T(`Month by month: how often your listing was opened, how many families follow it or saved it, and which schools they come from. Numbers only, never who.`)],
     ['flyer', T(`A flyer to print`), T(`With a code that opens your listing, for the front desk or the school fair.`)],
@@ -4093,6 +4094,7 @@ function premiumPage() {
             <p class="pm-by"><span class="pmd-logo">${art('<circle cx="60" cy="45" r="30" fill="#B4237A"/><path d="M44 58l10-26 6 16 6-16 10 26" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>', '#FFFFFF')}</span><span>${T(`Written by Maple Street Arts Club, not by us.`)}</span></p>
             <p class="pmd-text">${T(`We keep groups small, so every kid gets their hands in the clay. Most afternoons end with something to carry home.`)}</p>
           </div>
+          <p class="pmd-social"><span>Instagram</span><span>Facebook</span>${at.social}</p>
           <div class="pmd-thumbs">${thumbs.join('')}</div>
           <p class="demo-actions"><span class="btn primary">${T(`Sign up`)}</span><span class="btn">${T(`Ask a question`)}</span>${at.ask}</p>
         </div>
@@ -4219,17 +4221,18 @@ Link: ${e('$x["link"]')}<?php } ?></pre>
   <?php if ($photosLive) { ?><h2>Photos on the site (<?php echo count($photosLive); ?>)</h2>
   <div class="review-grid"><?php foreach ($photosLive as $x) { ?><div class="panel"><p><img class="review-photo" src="./?photo=<?php echo (int) $x["id"]; ?>" alt=""></p><p><b>${e('$name($x["listing"])')}</b><br><span class="hint">${e('$x["alt"]')}</span></p>${form('$x["id"]', act('photo_no', 'Take it down'))}</div><?php } ?></div><?php } ?>
 
-${GROUPS.premium !== 'off' ? `  <h2>Words, offer lines and pins waiting for you (<?php echo count($extrasNew); ?>)</h2>
-  <?php if (!$extrasNew) { ?><p class="hint">None waiting. What a manager writes for a premium listing, and its Kids’ Playground pin, shows only after you publish it here.</p><?php } ?>
+${GROUPS.premium !== 'off' ? `  <h2>Words, offer lines, pins and social links waiting for you (<?php echo count($extrasNew); ?>)</h2>
+  <?php if (!$extrasNew) { ?><p class="hint">None waiting. What a manager writes for a premium listing, its Kids’ Playground pin, its social links and its Instagram posts show only after you publish them here.</p><?php } ?>
   <?php foreach ($extrasNew as $x) { ?><div class="panel">
-    <h3>${e('$name($x["listing"])')} <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line' : ($x["kind"] === 'pin' ? 'Kids’ Playground pin (kids see it only after going there)' : 'In their own words'); ?></span></h3>
+    <h3>${e('$name($x["listing"])')} <span class="hint"><?php echo $kindName($x["kind"], true); ?></span></h3>
     <p class="hint">From ${e('$x["first"] . " " . $x["last"]')} &lt;${e('$x["email"]')}&gt;, ${e('$day($x["created"])')}<?php if ($x["kind"] === 'offer') { ?>. To show until ${e('$x["until"]')}<?php } ?></p>
     <pre class="edit-ask">${e('$pinText($x)')}</pre>
+    <?php if ($x["kind"] === 'social' || $x["kind"] === 'posts') { ?><p class="hint">Open each to check it’s the program’s own<?php echo $x["kind"] === 'posts' ? ', public, and fine to show on the site' : ''; ?>: <?php foreach ($extraLinks($x) as $u) { ?><a href="${e('$u')}" rel="noopener noreferrer" target="_blank">${e('$u')}</a> <?php } ?></p><?php } ?>
     ${form('$x["id"]', act('extra_ok', 'Publish it', 'btn primary') + act('extra_no', 'Decline'))}
   </div><?php } ?>
-  <?php if ($extrasLive) { ?><h2>Words, offer lines and pins on the site (<?php echo count($extrasLive); ?>)</h2>
+  <?php if ($extrasLive) { ?><h2>Words, offer lines, pins and social links on the site (<?php echo count($extrasLive); ?>)</h2>
   <?php foreach ($extrasLive as $x) { ?><div class="panel">
-    <h3>${e('$name($x["listing"])')} <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line, until ' . htmlspecialchars($x["until"], ENT_QUOTES, 'UTF-8') : ($x["kind"] === 'pin' ? 'Kids’ Playground pin' : 'In their own words'); ?></span></h3>
+    <h3>${e('$name($x["listing"])')} <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line, until ' . htmlspecialchars($x["until"], ENT_QUOTES, 'UTF-8') : $kindName($x["kind"], false); ?></span></h3>
     <pre class="edit-ask">${e('$pinText($x)')}</pre>
     ${form('$x["id"]', act('extra_no', 'Take it down'))}
   </div><?php } ?><?php } ?>
@@ -4237,7 +4240,7 @@ ${GROUPS.premium !== 'off' ? `  <h2>Words, offer lines and pins waiting for you 
 ` : ''}  <h2>Claimed listings (<?php echo count($claims); ?>)</h2>${testListings.length ? `
   <p class="hint" id="test-listings">Your test listings, hidden from the rest of the site: ${testListings.map(p => `<a href="../../programs/${esc(p.id)}/">${esc(p.name)}</a> (claimed with an address at ${esc(p.claimDomain)}${p.premium === true ? ', always premium' : ''})`).join(' and ')}.</p>` : ''}
   <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>${GROUPS.premium !== 'off' ? `
-  <p class="hint">${GROUPS.premium === 'preview' ? 'Premium is being tried out: when you make a listing premium, its manager gets the premium tools, and what they add shows on the listing only to them (after you approve it). Nobody else sees it until premium is switched on for the site.' : 'Premium is on: a premium listing’s photos, own words, offer line and question button show to everyone, after you approve what the manager sends.'}</p>` : ''}
+  <p class="hint">${GROUPS.premium === 'preview' ? 'Premium is being tried out: when you make a listing premium, its manager gets the premium tools, and what they add shows on the listing only to them (after you approve it). Nobody else sees it until premium is switched on for the site.' : 'Premium is on: a premium listing’s photos, own words, offer line, social links, Instagram posts and question button show to everyone, after you approve what the manager sends.'}</p>` : ''}
   <div class="stat-scroll"><table class="stat-table wrap"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th>${GROUPS.premium !== 'off' ? '<th scope="col">Premium</th>' : ''}<th scope="col"></th></tr></thead><tbody>
   <?php foreach ($claims as $c) { ?><tr><th scope="row">${e('$name($c["listing"])')}</th><td>${e('$c["first"] . " " . $c["last"]')}<br><span class="hint">${e('$c["email"]')}<?php if (isset($c["domain"]) && $c["domain"] === 'by hand') { ?> · given by hand<?php } ?></span></td><td>${e('$day($c["created"])')}</td>${GROUPS.premium !== 'off' ? `<td><?php if (in_array($c["listing"], $ALWAYS, true)) { ?><b>Premium</b><br><span class="hint">always: a test listing</span><?php } elseif (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since ${e('$day($premium[$c["listing"]])')}</span>${form('$c["id"]', act('premium_off', 'Turn off'))}<?php } else { ?><?php if (isset($asks[(int) $c["id"]])) { ?><b>Signed up: <?php echo $asks[(int) $c["id"]]["plan"] === 'year' ? 'yearly' : 'monthly'; ?></b><br><span class="hint">${e('$day($asks[(int) $c["id"]]["created"])')}</span><?php } ?>${form('$c["id"]', act('premium_on', 'Make it premium'))}<?php } ?></td>` : ''}<td>${form('$c["id"]', act('claim_remove', 'Take the claim away'))}</td></tr><?php } ?>
   </tbody></table></div>
@@ -4268,7 +4271,11 @@ $NAMES = json_decode('${names}', true);
 $name = function ($key) use ($NAMES) { return isset($NAMES[$key]) ? $NAMES[$key] : $key . ' (no longer on the site)'; };
 $NAMES_AZ = $NAMES; asort($NAMES_AZ, SORT_NATURAL | SORT_FLAG_CASE);
 $day = function ($t) { $d = new DateTime('@' . (int) $t); $d->setTimezone(new DateTimeZone('America/New_York')); return $d->format('M j, Y'); };
-$pinText = function ($x) { if ($x['kind'] !== 'pin') return $x['body']; $p = json_decode($x['body'], true); if (!is_array($p)) return $x['body']; $cols = array('red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'violet', 'pink', 'gray'); return 'Name: ' . $p['n'] . "\nColor: " . (isset($cols[(int) $p['c']]) ? $cols[(int) $p['c']] : '?') . "\nPicture: " . $p['i']; };
+$kindName = function ($k, $waiting) { return $k === 'offer' ? 'Offer or event line' : ($k === 'pin' ? ($waiting ? 'Kids’ Playground pin (kids see it only after going there)' : 'Kids’ Playground pin') : ($k === 'social' ? 'Social links' : ($k === 'posts' ? 'Instagram posts (parents tap to load them)' : 'In their own words'))); };
+$extraLinks = function ($x) { $v = json_decode($x['body'], true); return is_array($v) ? array_values(array_filter($v, function ($u) { return is_string($u) && preg_match('~^https://~', $u); })) : array(); };
+$pinText = function ($x) { if ($x['kind'] === 'social') { $v = json_decode($x['body'], true); $n = array('ig' => 'Instagram', 'fb' => 'Facebook', 'tt' => 'TikTok', 'yt' => 'YouTube'); $out = array(); foreach (is_array($v) ? $v : array() as $k => $u) $out[] = (isset($n[$k]) ? $n[$k] : $k) . ': ' . $u; return implode("\n", $out); }
+  if ($x['kind'] === 'posts') { $v = json_decode($x['body'], true); return is_array($v) ? implode("\n", $v) : $x['body']; }
+  if ($x['kind'] !== 'pin') return $x['body']; $p = json_decode($x['body'], true); if (!is_array($p)) return $x['body']; $cols = array('red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'violet', 'pink', 'gray'); return 'Name: ' . $p['n'] . "\nColor: " . (isset($cols[(int) $p['c']]) ? $cols[(int) $p['c']] : '?') . "\nPicture: " . $p['i']; };
 $csrf = hash_hmac('sha256', 'claims-form', edit_key());
 $said = isset($_GET['said']) && is_string($_GET['said']) ? substr($_GET['said'], 0, 200) : '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
@@ -4397,16 +4404,16 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
       $st = $db->prepare('SELECT e.id, e.listing, e.kind, e.status, u.email, u.first FROM extras e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.id = ?'); $st->execute(array($id)); $x = $st->fetch();
       if ($x) {
-        $n = $name($x['listing']); $what = $x['kind'] === 'offer' ? 'offer line' : ($x['kind'] === 'pin' ? 'Kids’ Playground pin' : 'section in your own words');
+        $n = $name($x['listing']); $what = $x['kind'] === 'offer' ? 'offer line' : ($x['kind'] === 'pin' ? 'Kids’ Playground pin' : ($x['kind'] === 'social' ? 'social links' : ($x['kind'] === 'posts' ? 'Instagram posts' : 'section in your own words'))); $are = $x['kind'] === 'social' || $x['kind'] === 'posts' ? 'are' : 'is';
         if ($do === 'extra_ok') {
           $db->prepare("DELETE FROM extras WHERE listing = ? AND kind = ? AND status = 'ok' AND id != ?")->execute(array($x['listing'], $x['kind'], $id));   // the newer one takes its place
           $db->prepare("UPDATE extras SET status = 'ok', decided = ? WHERE id = ?")->execute(array(time(), $id));
-          tell($x['email'], 'Your ' . $what . ' for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",\n\nThe " . $what . ' you wrote for “' . $n . '” is on the listing now.' . ($PREMIUM === 'preview' ? ' For now only you can see it there, while premium listings are being tried out.' : '') . ' You can change it or take it down here:' . "\n" . $SITE_URL . '/managers/');
+          tell($x['email'], 'Your ' . $what . ' for ' . $n . ' ' . $are . ' on the site', 'Hi ' . $x['first'] . ",\n\nThe " . $what . ' you ' . ($are === 'are' ? 'sent' : 'wrote') . ' for “' . $n . '” ' . $are . ' on the listing now.' . ($PREMIUM === 'preview' ? ' For now only you can see it there, while premium listings are being tried out.' : '') . ' You can change it or take it down here:' . "\n" . $SITE_URL . '/managers/');
           $msg = 'Published, and they’ve been told.';
         } else {
           $was = $x['status'];
           $db->prepare("UPDATE extras SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), $id));
-          tell($x['email'], 'About the ' . $what . ' for ' . $n, 'Hi ' . $x['first'] . ",\n\nWe " . ($was === 'ok' ? 'have taken down' : 'weren’t able to publish') . ' the ' . $what . ' you wrote for “' . $n . '”. ' . ($x['kind'] === 'pin' ? 'A pin’s name should be the program’s name or a short, kid-friendly title, with no prices, offers or web addresses.' : 'It should describe the program in plain words, with no prices that differ from the listing and no claims about other programs.') . ' You’re welcome to send another, or reply to this email with any questions.');
+          tell($x['email'], 'About the ' . $what . ' for ' . $n, 'Hi ' . $x['first'] . ",\n\nWe " . ($was === 'ok' ? 'have taken down' : 'weren’t able to publish') . ' the ' . $what . ' you ' . ($are === 'are' ? 'sent' : 'wrote') . ' for “' . $n . '”. ' . ($x['kind'] === 'pin' ? 'A pin’s name should be the program’s name or a short, kid-friendly title, with no prices, offers or web addresses.' : ($x['kind'] === 'social' ? 'Social links should go to the program’s own accounts.' : ($x['kind'] === 'posts' ? 'Instagram posts should be public posts from the program’s own account that are fine for families to see on the site.' : 'It should describe the program in plain words, with no prices that differ from the listing and no claims about other programs.'))) . ' You’re welcome to send another, or reply to this email with any questions.');
           $msg = $was === 'ok' ? 'Taken down, and they’ve been told.' : 'Declined, and they’ve been told.';
         }
       }
