@@ -151,7 +151,8 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   matches(flat(await page.locator('.kc-pinsec.secret').innerText()), /1 of 10 found/i);
   eq(await page.locator('.kc-pincard.secret').count(), 9, 'the other nine are still secrets');
   await page.locator('.kc-pincard.secret').first().click();
-  matches(flat(await page.locator('.kc-over .kc-pinbig').innerText()), /Secret Philly pin.*How to find it: Go to/i, 'a secret pin shows its riddle and the plain rule');
+  matches(flat(await page.locator('.kc-over .kc-pinbig').innerText()), /Secret Philly pin.*Keep exploring/i, 'a secret pin shows only its riddle');
+  eq(await page.locator('.kc-over .kc-rule, .kc-over .kc-minimap').count(), 0, 'no rule and no map until it’s found');
   await page.locator('.kc-over .kc-big').click();
   await page.waitForFunction(() => !document.querySelector('.kc-over'));
   // The server keeps what was celebrated, so it isn't celebrated again.

@@ -909,8 +909,8 @@
     if (more) n = n.slice(0, 3).concat([more + ' more']);
     return n.length > 1 ? n.slice(0, -1).join(', ') + ' and ' + n[n.length - 1] : n[0] || '';
   };
-  // A secret Philly pin's part of the city: a small map with its neighborhoods colored in, the famous thing there marked,
-  // and the neighborhoods by name for a grown-up who asks.
+  // A found secret Philly pin's part of the city: a small map with its neighborhoods colored in and the famous thing there
+  // circled.
   var areaOf = function (p) { var id = p.how && p.how.indexOf('area:') === 0 ? p.how.slice(5) : ''; return id ? (D.areas || []).filter(function (a) { return a.id === id; })[0] || null : null; };
   var miniMap = function (card, p) {
     var a = areaOf(p); if (!a || !a.hoods || !a.hoods.length) return;
@@ -927,18 +927,16 @@
       var lm = (a.items || [])[0]; if (lm && lm.x != null) sv('circle', { cx: lm.x, cy: lm.y, r: 16, fill: '#fff', stroke: INK, 'stroke-width': 5 }, svg);
       box.appendChild(svg);
       box.appendChild(el('p', 'kc-mini-say', 'Classes in the colored part of Philly count' + (lm && lm.x != null && a.mark ? '. The circle is ' + a.mark + '!' : '!')));
-      var more = el('details', 'kc-mini-hoods'); more.appendChild(el('summary', null, 'Which neighborhoods?')); more.appendChild(el('p', null, (a.hn || []).join(', ') + '.')); box.appendChild(more);
     });
   };
   var pinUpClose = function (p, x, st) {
     overlay(function (card, close) {
       card.classList.add('kc-pinbig');
       var pv = drawPin(p, x.tier); card.appendChild(pv); bounce(pv);
-      if (p.secret && !x.tier) {   // still a secret: the riddle, then the plain rule
+      if (p.secret && !x.tier) {   // still a secret: only the riddle (the rule and the map come once it's found)
         card.appendChild(el('h2', 'kc-h', 'Secret Philly pin'));
         card.appendChild(el('p', 'kc-say', p.hint));
-        var how = el('p', 'kc-say small kc-rule'); how.appendChild(el('b', null, 'How to find it: ')); how.appendChild(document.createTextNode(p.rule || 'Keep exploring!')); card.appendChild(how);
-        miniMap(card, p);
+        card.appendChild(el('p', 'kc-say small', 'Keep exploring to find it!'));
         card.appendChild(btn('kc-big go', 'Ooh!', function () { Sound.play('tap'); close(); }));
         return;
       }
@@ -955,8 +953,8 @@
       }
       else card.appendChild(el('p', 'kc-say', x.c ? 'You’ve been to ' + plural(x.c, p.one, p.many) + '!' : 'Go to a ' + p.one + ' to get this pin!'));
       if (x.c && x.tier < TOP) card.appendChild(el('p', 'kc-say small', (x.next - x.c) + ' more ' + unitWord(p, x.next - x.c) + ' for ' + TIER[x.tier + 1].toUpperCase() + '!'));
-      if (x.c && x.tier < TOP && p.rule) card.appendChild(el('p', 'kc-say small kc-rule', p.rule));   // a secret pin's rule, in plain words
-      if (p.secret) miniMap(card, p);
+      if (x.c && x.tier < TOP && p.rule) { var how = el('p', 'kc-say small kc-rule'); how.appendChild(el('b', null, 'To level up: ')); how.appendChild(document.createTextNode(p.rule)); card.appendChild(how); }   // a found secret pin's rule, in plain words
+      if (p.secret && x.tier < TOP) miniMap(card, p);
       card.appendChild(btn('kc-big go', 'Cool!', function () { Sound.play('tap'); close(); }));
     });
   };

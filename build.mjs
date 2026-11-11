@@ -5637,9 +5637,8 @@ const mapArea = (ll, hood) => (hood && HOOD_AREA[hood]) || '';
 const mapAreas = () => {
   if (!PHILLY) return [];
   const { lon0, lat1, cos, k, pad } = PHILLY.proj, r1 = n => Math.round(n * 10) / 10;
-  const names = Object.fromEntries(PHILLY.hoods.map(h => [h.id, h.name]));
-  const hoodsOf = id => Object.keys(HOOD_AREA).filter(h => HOOD_AREA[h] === id).sort((x, y) => names[x].localeCompare(names[y]));
-  return MAP_AREAS.map(a => ({ id: a.id, name: a.name, mark: a.mark, hoods: hoodsOf(a.id), hn: hoodsOf(a.id).map(h => names[h]), items: a.items.map(id => {
+  const hoodsOf = id => Object.keys(HOOD_AREA).filter(h => HOOD_AREA[h] === id);
+  return MAP_AREAS.map(a => ({ id: a.id, name: a.name, mark: a.mark, hoods: hoodsOf(a.id), items: a.items.map(id => {
     const lm = PHILLY.landmarks.find(l => l.id === id);
     if (lm) return { id, n: lm.name, x: lm.x, y: lm.y };
     const e = MAP_EXTRA[id];
@@ -5741,7 +5740,8 @@ const KIDS_PINS = [
     ['pin:home-base', 'repeat', 'Home Base', 'house', '#364FC7', [1, 2, 3, 5, 8], 'class at your school', 'classes at your school', 'Go to a class right in your own school!'],
     ['pin:pickup-pro', 'repeat', 'Pickup Pro', 'bus', '#E67700', [1, 2, 3, 5, 8], 'class that picked you up', 'classes that picked you up', 'Go to a class that picks you up from school!'],
   ].map(([id, group, label, icon, color, tiers, one, many, get]) => ({ id, group, label, one, many, color, icon: KIDS_ICON2[icon], eo: 1, tiers, how: id.slice(4), get })),
-  // The secret Philly pins: a "?", a riddle and the plain rule until found. "area" is a part of the Kids' Playground map
+  // The secret Philly pins: a "?" and a riddle until found; then the plain rule ("rule") says how to level up. "area" is a
+  // part of the Kids' Playground map
   // (a class counts for its neighborhood's area: HOOD_AREA).
   ...[
     ['liberty-bell', 'Liberty Bell Ringer', 'bell', '#8C4A1E', 'area:oldcity', [1, 3, 5, 8, 12], 'class around Old City', 'classes around Old City', 'Somewhere old, a famous bell has a crack in it…', 'Go to a class around Old City, where the Liberty Bell is!'],
@@ -5751,7 +5751,7 @@ const KIDS_PINS = [
     ['wissahickon', 'Wissahickon Wanderer', 'pine', '#2B8A3E', 'area:northwest', [1, 3, 5, 8, 12], 'class in Northwest Philly', 'classes in Northwest Philly', 'Deep in the woods of Northwest Philly…', 'Go to a class in Northwest Philly, near the Wissahickon woods!'],
     ['heron', 'Heron Spotter', 'bird', '#0C8599', 'area:southwest', [1, 3, 5, 8, 12], 'class in Southwest Philly', 'classes in Southwest Philly', 'Tall birds wade in the marsh in Southwest Philly…', 'Go to a class in Southwest Philly, near the wildlife refuge!'],
     ['pennypack', 'Pennypack Pathfinder', 'feet', '#5C940D', 'area:northeast', [1, 3, 5, 8, 12], 'class in Northeast Philly', 'classes in Northeast Philly', 'A trail through the trees, way up in Northeast Philly…', 'Go to a class in Northeast Philly, near Pennypack Park!'],
-    ['broad-street', 'Broad Street Crosser', 'cross', '#E03131', 'broad', [1, 2, 3, 5, 8], 'class on each side of Broad Street', 'classes on each side of Broad Street', 'One long street cuts Philly down the middle. Try both sides!', 'Broad Street runs down the middle of Philly. Go to a class on the east side AND one on the west side. Each pair counts!'],
+    ['broad-street', 'Broad Street Crosser', 'cross', '#E03131', 'broad', [1, 2, 3, 5, 8], 'class on each side of Broad Street', 'classes on each side of Broad Street', 'One long street cuts Philly down the middle. Try both sides!', 'Go to a class on each side of Broad Street, the long street down the middle of Philly. Each east-and-west pair counts!'],
     ['franklin-kite', 'Ben Franklin’s Kite', 'kite', '#F59F00', 'kite', [1, 2, 3, 4, 5], 'science + nature pair', 'science + nature pairs', 'Ben Franklin flew a kite in a storm. Try science AND nature!', 'Do a science class AND a nature or outdoors class. Each pair counts!'],
     ['jawn', 'Jawn Collector', 'jay', '#7048E8', 'jawn', [3, 6, 10, 15, 20], 'different program', 'different programs', 'Collect a whole lotta jawns: lots of different programs!', 'Go to lots of different programs. Each new one counts!'],
   ].map(([id, label, icon, color, how, tiers, one, many, hint, rule]) => ({ id: 'philly:' + id, group: 'philly', label, one, many, color, icon: KIDS_ICON2[icon], eo: 1, tiers, how, hint, rule, secret: 1 })),

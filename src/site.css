@@ -2576,9 +2576,6 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-minimap{max-width:210px;margin:6px auto 4px;text-align:center}
 .kc-mini{display:block;width:100%;height:auto}
 .kc-mini-say{margin:4px 0 2px;font-weight:700;font-size:.9rem;color:#3d4a63}
-.kc-mini-hoods{font-size:.85rem;color:#3d4a63;text-align:left}
-.kc-mini-hoods summary{cursor:pointer;font-weight:700;color:var(--kink);text-align:center}
-.kc-mini-hoods p{margin:4px 0 0;line-height:1.35}
 .kc-over .kc-say,.kc-over .kc-h2{color:var(--kink);text-shadow:none}
 .kc-tally{font-family:var(--title);font-size:1.2rem;background:#fff;color:var(--kink);border:3px solid var(--kink);border-radius:999px;padding:4px 14px 0;box-shadow:0 3px 0 var(--kink)}
 .kc-sechead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:22px 0 10px}
