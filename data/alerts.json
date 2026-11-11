@@ -480,7 +480,8 @@
       "name": "Makom Community",
       "parts": [
         "after",
-        "off"
+        "off",
+        "summer"
       ]
     },
     {
@@ -1171,6 +1172,10 @@
     {
       "id": "camp-nerd-street",
       "name": "Camp Nerd Street video game and esports camp"
+    },
+    {
+      "id": "makom-community-camp",
+      "name": "Makom Community"
     }
   ],
   "added": {

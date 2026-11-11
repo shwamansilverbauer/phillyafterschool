@@ -5987,23 +5987,24 @@
     "name": "Makom Community",
     "what": "Jewish afterschool enrichment and care",
     "types": [
-      "aftercare"
+      "aftercare",
+      "daycamp"
     ],
     "keywords": [
       "Jewish",
       "Judaism",
       "enrichment",
       "aftercare",
-      "teens"
+      "teens",
+      "day camp"
     ],
-    "address": "1311 S Juniper St and 2401 Washington Ave",
+    "address": "2401 Washington Ave, Unit C1",
     "neighborhoods": [
-      "Passyunk Square",
       "Graduate Hospital"
     ],
     "grades": "K-8",
     "gradeNote": "K–5, grades 6–7, and teens",
-    "hours": "Mon–Fri",
+    "hours": "4 to 6 pm",
     "days": [
       "mon",
       "tue",
@@ -6011,7 +6012,7 @@
       "thu",
       "fri"
     ],
-    "daysNote": "Kindergarten to 5th grade choose 2 to 5 days. Grades 6 and 7 come Tuesday to Thursday.",
+    "daysNote": "Open five days a week, with days that differ by age group (Makom’s site has them): kindergarten to 5th grade come Fridays only or 2 to 5 days a week, and grades 6 and 7 come 3 or 4 days.",
     "daysOff": {
       "summary": "School’s Out Camp, 8:30 am to 6 pm, for ages 4 and up, $90 a day ($100 in the last week before the date).",
       "url": "https://makomcommunity.org/schools-out-camp/",
@@ -6042,7 +6043,7 @@
       "cost": "$90 a day ($100 in the last week before)",
       "ageMin": 4
     },
-    "cost": "K–5, per month: $280 for Fridays only, $553 for 2 days, $623 for 3, $741 for 4, $857 for 5, plus a $200 family enrollment fee. Tuition assistance available.",
+    "cost": "K–5, per month: $280 for Fridays only, $553 for 2 days, $623 for 3, $741 for 4, $857 for 5. Grades 6 and 7, per month: $746 for 3 days, $846 for 4. Plus a $200 family enrollment fee. Tuition assistance available.",
     "rate": {
       "per": "month",
       "byDays": {
@@ -6061,7 +6062,7 @@
     "register": {
       "how": "online",
       "url": "https://makomcommunity.org/enroll/",
-      "note": ""
+      "note": "Questions: call or text 484-278-1335."
     },
     "note": "",
     "sources": [
@@ -6074,25 +6075,8 @@
         "url": "https://makomcommunity.org/afterschool-enrichment/"
       }
     ],
-    "lastVerified": "2026-11-01",
+    "lastVerified": "2026-11-11",
     "schools": {
-      "nebinger": {
-        "relation": "nearby",
-        "note": "Makom’s pickup list (Greenfield, Childs, ICS, Marian Anderson, Stanton, The Philadelphia School, Wild Seeds and Vare-Washington) does not include Nebinger.",
-        "checked": "2026-11-01"
-      },
-      "coppin": {
-        "relation": "pickup",
-        "distance": "a few blocks from Coppin",
-        "note": "Named on Coppin’s own aftercare pickup sheet (posted May 2024). Makom’s current pickup list does not include Coppin, so confirm before counting on it.",
-        "sources": [
-          {
-            "label": "Coppin aftercare pickup sheet",
-            "url": "https://coppin.philasd.org/wp-content/uploads/sites/413/2024/05/Coppin-After-Care-Pickup-Programs.pdf"
-          }
-        ],
-        "checked": "2026-10-05"
-      },
       "vare-washington": {
         "relation": "pickup",
         "address": "2401 Washington Ave",
@@ -6134,26 +6118,27 @@
         "relation": "pickup",
         "address": "2401 Washington Ave",
         "distance": "about three-quarters of a mile northwest, at 24th and Washington",
-        "note": "Makom’s page lists GW Childs Elementary School among its pickup schools. It needs at least four children from a school, and groups from more than a mile away travel by SEPTA bus with a Makom educator.",
+        "note": "Makom told us its pickup at Childs is a special early Friday pickup for pre-K children.",
         "sources": [
           {
             "label": "Makom afterschool enrichment",
             "url": "https://makomcommunity.org/afterschool-enrichment/"
           }
         ],
-        "checked": "2026-11-07"
+        "checked": "2026-11-11"
       },
       "independence-charter": {
         "relation": "pickup",
         "address": "2401 Washington Ave",
-        "note": "Makom’s page lists Independence Charter School among its pickup schools. It needs at least four children from a school, and groups from more than a mile away travel by SEPTA bus with a Makom educator.",
+        "note": "Makom told us it picks up from Independence Charter for its early dismissal on Wednesdays.",
         "sources": [
           {
-            "label": "Makom afterschool enrichment",
-            "url": "https://makomcommunity.org/afterschool-enrichment/"
+            "label": "Makom tuition",
+            "url": "https://makomcommunity.org/afterschool-enrichment/tuition/"
           }
         ],
-        "checked": "2026-11-01"
+        "checked": "2026-11-11",
+        "cost": "$175 a month for the early-dismissal Wednesdays"
       },
       "greenfield": {
         "relation": "pickup",
@@ -6181,7 +6166,27 @@
         "how": "fetch"
       }
     ],
-    "aid": "Need-based tuition assistance is available; ask before enrolling."
+    "aid": "Need-based tuition assistance is available; ask before enrolling.",
+    "told": [
+      {
+        "on": "2026-11-11",
+        "by": "program manager",
+        "how": "a proposed change from the listing’s manager, through the site",
+        "fields": [
+          "types",
+          "address",
+          "neighborhoods",
+          "hours",
+          "daysNote",
+          "cost",
+          "schools.nebinger",
+          "schools.coppin",
+          "schools.independence-charter",
+          "schools.childs"
+        ],
+        "says": "Makom is aftercare and a day camp, at 2401 Washington Ave, Unit C1. Aftercare runs 4 to 6 pm, five days a week, with days that differ by age group; K–5 starts at $280 a month for Fridays only and grades 6 and 7 at $746 a month for 3 days, with tuition assistance. Day camps are for ages 4 and up. It does not pick up at Nebinger or Coppin (it needs at least four children from a school to pick up there); at Independence Charter it picks up for early dismissal on Wednesdays, and at Childs it has a special early Friday pickup for pre-K children. It also picks up at The Philadelphia School, and runs summer camp."
+      }
+    ]
   },
   {
     "id": "vare-washington-edey",

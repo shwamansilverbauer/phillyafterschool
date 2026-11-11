@@ -4,24 +4,16 @@
     "pages": 204,
     "pagesNeedingABrowser": 18,
     "pagesNeedingAPerson": 9,
-    "links": 208,
-    "pickupLinks": 121,
+    "links": 206,
+    "pickupLinks": 120,
     "pickupOnAStoredList": 104,
     "pickupFromAThirdPartyList": 0,
-    "pickupOnItsOwnSource": 17,
+    "pickupOnItsOwnSource": 16,
     "pickupWithNothingBehindIt": 0,
-    "pickupNotOnTheProvidersList": 1,
+    "pickupNotOnTheProvidersList": 0,
     "oldestCheck": "2026-10-05"
   },
   "links": [
-    {
-      "program": "makom-community",
-      "school": "coppin",
-      "relation": "pickup",
-      "checked": "2026-10-05",
-      "basis": "own-source",
-      "notOnProviderList": true
-    },
     {
       "program": "coco-academy",
       "school": "columbus-charter",
@@ -698,25 +690,6 @@
         "how": "fetch",
         "by": "provider"
       }
-    },
-    {
-      "program": "makom-community",
-      "school": "independence-charter",
-      "relation": "pickup",
-      "checked": "2026-11-01",
-      "basis": "list",
-      "list": {
-        "where": "2401 Washington Avenue",
-        "read": "2026-11-01",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
-      "program": "makom-community",
-      "school": "nebinger",
-      "relation": "nearby",
-      "checked": "2026-11-01"
     },
     {
       "program": "makom-community",
@@ -1564,19 +1537,6 @@
       "basis": "own-source"
     },
     {
-      "program": "makom-community",
-      "school": "childs",
-      "relation": "pickup",
-      "checked": "2026-11-07",
-      "basis": "list",
-      "list": {
-        "where": "2401 Washington Avenue",
-        "read": "2026-11-01",
-        "how": "fetch",
-        "by": "provider"
-      }
-    },
-    {
       "program": "marian-anderson-clubs",
       "school": "marian-anderson",
       "relation": "onsite",
@@ -1967,6 +1927,32 @@
         "how": "browser",
         "by": "provider"
       }
+    },
+    {
+      "program": "makom-community",
+      "school": "childs",
+      "relation": "pickup",
+      "checked": "2026-11-11",
+      "basis": "list",
+      "list": {
+        "where": "2401 Washington Avenue",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "makom-community",
+      "school": "independence-charter",
+      "relation": "pickup",
+      "checked": "2026-11-11",
+      "basis": "list",
+      "list": {
+        "where": "2401 Washington Avenue",
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
     }
   ],
   "pages": [
@@ -2028,7 +2014,6 @@
         "little-shepherds",
         "columbus-square-rec",
         "hawthorne-cultural-center",
-        "makom-community",
         "sawubona-creativity-project",
         "east-passyunk-rec"
       ],
@@ -4340,14 +4325,36 @@
       "says": "The base cost of Homework Club for the 2027 semester is $1,190, which works out to $70 per 3-hour session over its 17 Mondays.",
       "daysAgo": 2,
       "stale": false
+    },
+    {
+      "program": "makom-community",
+      "name": "Makom Community",
+      "on": "2026-11-11",
+      "by": "program manager",
+      "how": "a proposed change from the listing’s manager, through the site",
+      "fields": [
+        "types",
+        "address",
+        "neighborhoods",
+        "hours",
+        "daysNote",
+        "cost",
+        "schools.nebinger",
+        "schools.coppin",
+        "schools.independence-charter",
+        "schools.childs"
+      ],
+      "says": "Makom is aftercare and a day camp, at 2401 Washington Ave, Unit C1. Aftercare runs 4 to 6 pm, five days a week, with days that differ by age group; K–5 starts at $280 a month for Fridays only and grades 6 and 7 at $746 a month for 3 days, with tuition assistance. Day camps are for ages 4 and up. It does not pick up at Nebinger or Coppin (it needs at least four children from a school to pick up there); at Independence Charter it picks up for early dismissal on Wednesdays, and at Childs it has a special early Friday pickup for pre-K children. It also picks up at The Philadelphia School, and runs summer camp.",
+      "daysAgo": 0,
+      "stale": false
     }
   ],
   "asks": [],
   "camps": {
     "season": 2026,
     "summary": {
-      "camps": 51,
-      "showingNextSummer": 11,
+      "camps": 52,
+      "showingNextSummer": 12,
       "needingABrowser": 25,
       "needingAPerson": 1,
       "notReadYet": 8
@@ -4881,6 +4888,16 @@
         "look": "The season dates and grade range are on the location home page. Weekly tuition by weeks booked, the early-bird window and the holiday weeks are on the Tuition Rates & Savings page in tables that open on a click; Club OT prices are on the extended-day page.",
         "notes": "Read with a headless browser on 2026-11-01; the rate tables come through in the page text. An earlier check found the rates page gone; it is back at /friendsselect/rates/.",
         "signup": "Enrollment for 2027 opens in November 2026, online through Bravo Enrollment, with early-bird savings from November 16 (the program told us). Friends Select camp office 215-298-9145; Chestnut Hill 215-247-7010."
+      },
+      {
+        "camp": "makom-community-camp",
+        "name": "Makom Community",
+        "season": 2027,
+        "checked": "2026-11-11",
+        "url": "https://makomcommunity.org/schools-out-camp-2/",
+        "how": "fetch",
+        "look": "“Camp Days for the 2026-2027 school year” is a dated list; Summer Break Camp is the last line. The $90 day price and the $100 late price are in the text above it.",
+        "notes": "The site lists two addresses (2401 Washington Ave and 1311 S Juniper St) without saying which holds camp; Makom’s manager told us camp is at 2401 Washington Ave."
       }
     ],
     "todo": [

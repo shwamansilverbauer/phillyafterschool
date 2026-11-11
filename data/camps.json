@@ -2178,6 +2178,42 @@
         "look": "The series page gives the season’s span, ages, drop-off and aftercare; each week shows up under “Schedule” once it is on sale, with its price at checkout. nerdstreet.com/camps lists the series.",
         "notes": "The same series covers venues outside Philadelphia (Rowan in New Jersey, Denver); only Localhost in Philly, 401 N Broad, is listed here."
       }
+    },
+    {
+      "id": "makom-community-camp",
+      "name": "Makom Community",
+      "what": "Summer Break Camp: a week of Makom’s day camp right after school lets out, like its School’s Out Camp days.",
+      "types": [
+        "daycamp"
+      ],
+      "ages": "Ages 4 and up",
+      "ageMin": 4,
+      "season": 2027,
+      "weeks": "June 14 to 18, 2027",
+      "hours": "8:30 am to 6 pm",
+      "cost": "The summer week’s price isn’t posted yet. School’s Out Camp days are $90 ($100 booked in the last week), and the spring break week is $500.",
+      "address": "2401 Washington Ave, Unit C1",
+      "neighborhoods": [
+        "Graduate Hospital"
+      ],
+      "phone": "484-278-1335",
+      "website": "https://makomcommunity.org/schools-out-camp-2/",
+      "registerUrl": "https://makomcommunity.org/enroll/",
+      "price": "paid",
+      "program": "makom-community",
+      "sources": [
+        {
+          "label": "Makom School’s Out Camps",
+          "url": "https://makomcommunity.org/schools-out-camp-2/"
+        }
+      ],
+      "checked": "2026-11-11",
+      "check": {
+        "url": "https://makomcommunity.org/schools-out-camp-2/",
+        "how": "fetch",
+        "look": "“Camp Days for the 2026-2027 school year” is a dated list; Summer Break Camp is the last line. The $90 day price and the $100 late price are in the text above it.",
+        "notes": "The site lists two addresses (2401 Washington Ave and 1311 S Juniper St) without saying which holds camp; Makom’s manager told us camp is at 2401 Washington Ave."
+      }
     }
   ],
   "todo": [
