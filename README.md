@@ -451,9 +451,9 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
     two, so one music class around Old City is a pair by itself), at 1, 2, 3, 5 and 8: Liberty Bell Ringer (music and
     Old City), Ben Franklin's Kite (science and Old City), Billy Penn's Hat (theater and Center City), Cheesesteak Champ
     (games and South Philly), Boathouse Rower (sports and the Art Museum), Wissahickon Wanderer (nature and the
-    Northwest), Heron Spotter (nature and the Southwest), Pennypack Pathfinder (sports and the Northeast). Rocky Bulboa
-    (Eddie with his boxing gloves up) counts rounds: a sports class, a class in South Philly and one around the Art
-    Museum and Fairmount (`mix:movement:south:parkway`); its map colors both parts. The other two are Broad Street
+    Northwest), Heron Spotter (nature and the Southwest), Pennypack Pathfinder (sports and the Northeast). Bulboa
+    Knockout (Eddie with his boxing gloves up) counts rounds: a sports class, a class in South Philly and one around the
+    Art Museum and Fairmount (`mix:movement:south:parkway`); its map colors both parts. The other two are Broad Street
     Crosser (a class on each side of Broad: `BROAD` in `kids-corner.js`) and Jawn Collector (different
     programs). Once found, the close-up says how many ("You have 2 music + Old City pairs!"), names the classes that
     counted for each half (for Broad Street, which side each was on) and gives the plain rule for leveling up ("To level
