@@ -2650,7 +2650,25 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-pinbar i{display:block;height:100%;background:var(--kgreen)}
 .kc-tier{font-family:var(--title);font-size:1rem;letter-spacing:.04em;text-transform:uppercase;border:2.5px solid var(--kink);border-radius:999px;padding:3px 12px 0;background:#fff}
 .kc-tier.bronze{background:#E8A365}.kc-tier.silver{background:#DDE3EC}.kc-tier.gold{background:var(--kyellow)}
+.kc-tier.rainbow{background:linear-gradient(90deg,#FFC9DE,#FFE8A3,#C3FAE8,#D0EBFF,#E5DBFF)}.kc-tier.diamond{background:linear-gradient(135deg,#E3FAFC,#FFFFFF 45%,#C5F6FA)}
+/* The Pins tab in sections; the secret Philly pins on a dark card until found */
+.kc-pinsec{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:22px 0 10px}
+.kc-pinsec .kc-h3{font-family:var(--title);font-weight:400;text-transform:uppercase;letter-spacing:.03em;font-size:1.25rem;margin:0;color:#fff;text-shadow:0 2px 0 var(--kink),1.5px 1.5px 0 var(--kink),-1.5px -1.5px 0 var(--kink),1.5px -1.5px 0 var(--kink),-1.5px 1.5px 0 var(--kink)}
+.kc-pinsec-n{font-weight:800;font-size:.95rem;color:var(--kink);background:#fff;border:2.5px solid var(--kink);border-radius:999px;padding:2px 10px}
+.kc-pinsec.secret .kc-pinsec-n{background:var(--kyellow)}
+.kc-pincard.secret{background:#0F2A4D;color:#fff;border-style:dashed}
+.kc-pincard.secret .kc-pin{opacity:1}
+.kc-pincard.secret .kc-tier{background:#1E4170;color:#fff;border-color:#fff}
+.kc-pincard.t4{background:linear-gradient(160deg,#FFF0F6,#FFF9DB 40%,#E6FCF5 70%,#E7F5FF)}.kc-pincard.t5{background:linear-gradient(160deg,#E3FAFC,#FFFFFF 50%,#E7F5FF)}
 .kc-tier.big{font-size:1.5rem;display:inline-block;margin:4px 0}
+@media (max-width:520px){   /* a phone: three pins a row, so the list isn't miles long */
+  .kc-pins:not(.kc-mini){grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .kc-pins:not(.kc-mini) .kc-pincard{padding:8px 3px 10px;border-radius:18px;gap:4px;border-width:2.5px;box-shadow:0 4px 0 var(--kink)}
+  .kc-pins:not(.kc-mini) .kc-pin{width:100%;max-width:104px;margin:-6px 0 -8px}
+  .kc-pins:not(.kc-mini) .kc-pincard b{font-size:.78rem}
+  .kc-pins:not(.kc-mini) .kc-tier{font-size:.72rem;padding:2px 7px 0;border-width:2px}
+  .kc-pins:not(.kc-mini) .kc-pinbar{height:9px;border-width:2px}
+}
 .kc-pins.kc-mini{width:100%;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;margin:10px 0 16px}
 .kc-pins.kc-mini .kc-pincard{box-shadow:none;border-width:2px;padding:8px 4px}.kc-pins.kc-mini .kc-pin{width:90px;margin:-4px 0}.kc-pins.kc-mini b{font-size:.82rem}
 /* overlays: a pin up close, the present, new pins, level up */

@@ -33,7 +33,7 @@ test('signed out, Kids’ Playground explains itself and offers the account; sig
   includes(flat(await page.locator('#kc-out').innerText()), 'What counts is what you confirm');
   ok(await page.locator('#kc-out a[href*="next=kids"]').count() >= 2, 'create and log in both come back here');
   eq(counted(t).length, 0, 'quiet even when signed out');
-  includes(flat(await page.locator('#kc-out #for-kids').innerText()), 'A CORNER JUST FOR YOU', 'what a kid gets, said to the kid');
+  includes(flat(await page.locator('#kc-out #for-kids').innerText()), 'A PLAYGROUND JUST FOR YOU', 'what a kid gets, said to the kid');
   eq(await page.locator('#for-kids .kids-tile').count(), 4);
   ok(await page.locator('#for-kids a[href*="register/?next=kids"]').isVisible(), 'Grown-ups: make a free account');
   // Signed out, the one way there is the Account Features menu; the button waits for a signed-in parent, and nothing else points to it.
@@ -124,32 +124,41 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   await page.waitForSelector('.kc-gift');
   const shown = await celebrate(page);
   ok(shown.some(s => /Tap to open/.test(s)), 'the present first: ' + shown.join(' / '));
-  ok(shown.some(s => /NEW PIN/.test(s)), 'a new pin');
+  ok(shown.some(s => /new pins?!/i.test(s)), 'new pins: ' + shown.join(' / '));
+  ok(shown.some(s => /SECRET PHILLY PIN!/.test(s) && /You found a secret pin/.test(s)), 'a secret Philly pin found, on its own: ' + shown.join(' / '));
   ok(shown.some(s => /SURPRISE!/.test(s) && /You found it in/.test(s)), 'a surprise in the neighborhood: ' + shown.join(' / '));
   ok(shown.some(s => /afternoon adventurer/i.test(s)), 'the after-school pin');   // headings are in capitals
   ok(shown.some(s => /LEVEL UP/.test(s)), 'a new level');
-  ok(shown.some(s => /New stuff to wear/i.test(s) && /Sunglasses/i.test(s) && /Bow tie/i.test(s)), 'level 2 unlocks sunglasses and a bow tie');
+  ok(shown.some(s => /New stuff to wear/i.test(s) && /Sunglasses/i.test(s) && /Bow tie/i.test(s) && /Cap/.test(s) && /Scarf/i.test(s)), 'up to level 3, which unlocks sunglasses, a bow tie, a cap and a scarf');
   await page.waitForFunction(() => !document.querySelector('.kc-over'));
   // "Try it on!" opens the bulb's wardrobe: what level 2 unlocked, the rest locked with the level that opens it.
   await page.waitForSelector('.kc-avatar .kc-wardrobe');
   eq(await page.locator('.kc-wearbtn').count(), 16, 'everything there is to wear');
-  eq(await page.locator('.kc-wearbtn:not(.locked)').count(), 2, 'two unlocked at level 2');
-  const cap = page.locator('.kc-wearbtn', { has: page.locator('b', { hasText: /^cap$/i }) });   // not the cape
-  includes(flat(await cap.locator('.kc-lock').innerText()).toLowerCase(), 'level 3');
-  await cap.click();
-  includes(flat(await page.locator('.kc-avatar .kc-host .kc-eddie-say').innerText()), 'Reach level 3', 'Eddie says when it unlocks');
-  eq(await cap.getAttribute('aria-pressed'), 'false', 'a locked thing can’t be worn');
+  eq(await page.locator('.kc-wearbtn:not(.locked)').count(), 4, 'four unlocked at level 3');
+  const cape = page.locator('.kc-wearbtn', { has: page.locator('b', { hasText: /^cape$/i }) });   // not the cap
+  includes(flat(await cape.locator('.kc-lock').innerText()).toLowerCase(), 'level 4');
+  await cape.click();
+  includes(flat(await page.locator('.kc-avatar .kc-host .kc-eddie-say').innerText()), 'Reach level 4', 'Eddie says when it unlocks');
+  eq(await cape.getAttribute('aria-pressed'), 'false', 'a locked thing can’t be worn');
   const shades = page.locator('.kc-wearbtn', { has: page.locator('b', { hasText: /^sunglasses$/i }) });
   await shades.click();
   eq(await shades.getAttribute('aria-pressed'), 'true');
   await page.locator('.kc-avatar .kc-big.go').click();
   await page.waitForSelector('.kc-pincard');
   ok(await page.locator('.kc-pincard.t1').count() >= 2, 'bronze pins on the page');
-  includes(flat(await page.locator('.kc-lvl').innerText()), 'Level 2');
+  includes(flat(await page.locator('.kc-lvl').innerText()), 'Level 3');
+  // The secret Philly pins: the one found, and nine still a ? with a hint.
+  matches(flat(await page.locator('.kc-pinsec.secret').innerText()), /1 of 10 found/i);
+  eq(await page.locator('.kc-pincard.secret').count(), 9, 'the other nine are still secrets');
+  await page.locator('.kc-pincard.secret').first().click();
+  matches(flat(await page.locator('.kc-over .kc-pinbig').innerText()), /Secret Philly pin.*Keep exploring/i, 'a secret pin shows only its hint');
+  await page.locator('.kc-over .kc-big').click();
+  await page.waitForFunction(() => !document.querySelector('.kc-over'));
   // The server keeps what was celebrated, so it isn't celebrated again.
   const p1 = await pat.okay('GET', 'passport');
   eq(p1.kids[0].done.length, 1); eq(p1.kids[0].done[0].k, 'p:' + program.id); eq(p1.kids[0].done[0].s, school);
-  eq(p1.kids[0].seen['season:after'], 1); eq(p1.kids[0].lvl, 2); eq(JSON.stringify(p1.kids[0].av.w), '{"face":"shades"}', 'the bulb wears its sunglasses');
+  eq(p1.kids[0].seen['season:after'], 1); eq(p1.kids[0].lvl, 3);
+  ok(Object.keys(p1.kids[0].seen).some(id => /^philly:/.test(id)) && Object.keys(p1.kids[0].seen).some(id => /^pin:/.test(id)), 'the server keeps the new pins as seen too: ' + Object.keys(p1.kids[0].seen).join(', ')); eq(JSON.stringify(p1.kids[0].av.w), '{"face":"shades"}', 'the bulb wears its sunglasses');
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForSelector('.kc-kidbtn');
   await page.locator('.kc-kidbtn', { hasText: 'Sam' }).click();

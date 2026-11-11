@@ -442,14 +442,34 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   already confirmed comes back ("now 3 days a week, was once") when the plans count it more; no to that count isn't
   asked again (`skip` gets `k|kind|y|n`). The grown-ups' corner has a − / + for the times on each one too. A listing with several sites (Philly Art Center, say) lands on the map only once the parent says
   which site.
-- **Pins.** `KIDS_PINS` in `build.mjs`: one per program type (names in `KIDS_PIN`), one per season (after school,
-  weekends, days off, summer: that one counts weeks of camp), one for neighborhoods, and the Repeater Reward for going
-  back (each time after the first at the same listing: a second day a week, another term or year, another week of the
-  same camp). Each goes bronze, silver, gold at 1, 3 and 5 (neighborhoods: 2, 4, 6; repeats: 1, 5, 10); the Repeater
-  Reward is shown with a burst of its own ("REPEATER REWARD!"), and each bulb in the collection wears its "×3". Drawn as SVG in `drawPin()`, grander at each level: bronze is the badge and a star; silver adds a laurel,
-  a blue banner, a gem and more stars; gold adds a turning sunburst, wings, a gold laurel, a crown, red ribbons and
-  twinkling sparkles.
-- **Levels.** Points are 10 a class, 5 a repeat, 5 a neighborhood and 5 a pin level (`stats()`); `LEVELS` and `TITLES` turn them
+- **Pins.** `KIDS_PINS` in `build.mjs`, 41 of them, each with five levels: bronze, silver, gold, rainbow and diamond
+  (the counts are each pin's `tiers`). On the Pins tab they come in sections, one per `group`, each its own shape:
+  - **Classes** (a circle): one per program type (names in `KIDS_PIN`), at 1, 3, 5, 8 and 12.
+  - **Secret Philly pins** (a keystone): ten that show as a "?" with a hint ("Somewhere old, a famous bell has a crack
+    in it…") until found, and are revealed with a burst of their own ("SECRET PHILLY PIN!"): one for classes in each
+    part of the map (Liberty Bell Ringer for Old City, Billy Penn's Hat for Center City, Cheesesteak Champ for South
+    Philly, Boathouse Rower for the Parkway, Wissahickon Wanderer, Heron Spotter for Southwest, Pennypack Pathfinder for
+    the Northeast), Broad Street Crosser (classes on both sides of Broad: `BROAD` in `kids-corner.js`), Ben Franklin's
+    Kite (science and nature) and Jawn Collector (different programs).
+  - **All year** (a shield): after school, weekends, days off, summer (weeks of camp), and Year-Rounder (each kind in
+    each school year).
+  - **Explorer** (a star): Neighborhood Hopper (2, 4, 6, 9, 12), City Sampler (parts of the map), Secret Spotter and
+    Surprise Sleuth (what the map has turned up).
+  - **Combos** (a rounded square): Mix Master (kinds tried), Triple Threat (music, theater and dance or sports), Lab &
+    Easel (science and art), Brains & Bounce (reading and sports).
+  - **Super fan** (a hexagon): the Repeater Reward (each time after the first at the same listing: 1, 5, 10, 15, 25;
+    shown with a burst of its own, "REPEATER REWARD!", and each bulb in the collection wears its "×3"),
+    Comeback Kid (the same listing in another school year), Tag Team (a class a brother or sister also went to; only
+    in a household with two or more children), Showdown Judge (classes ranked), Home Base and Pickup Pro (a class that
+    runs in, or picks up from, the school it was confirmed under: the listings' `r` in the Playground's data).
+  The newer pins have a `how` that `stats()` counts, a `get` (how to earn the first level, said to the child) and
+  `one`/`many`. Drawn as SVG in `drawPin()`, grander at each level: bronze is the badge and a star; silver adds a
+  laurel, a blue banner, a gem and more stars; gold adds a turning sunburst, wings, a gold laurel, a crown, red
+  ribbons and twinkling sparkles; rainbow makes it all rainbow, with a bigger wing and more sparkles (`GRAND`,
+  `METAL`); diamond is icy blue with a diamond on the crown. Five stars on the banner at the top. On a phone the tab
+  fits three pins a row. The server keeps which level of each pin a child has been shown (`seen`, 1 to 5).
+- **Levels.** Points are 10 a class, 5 a repeat, 5 a neighborhood and 5 a pin level (`stats()`; one class is usually
+  level 3 now, with the newer pins); `LEVELS` and `TITLES` turn them
   into "Explorer · Level 4" with a bar to the next.
 - **Celebrations.** Pins whose level went up since the child last looked, secret spots and surprises found on the
   map, and a new level, wait behind a present to tap open (sounds can only start after a tap), then pop in one by one

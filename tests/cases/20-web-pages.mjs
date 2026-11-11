@@ -114,7 +114,7 @@ test('Account Features: a menu of its own for someone signed out, a page for eac
   const before = t.outside.length;
   const kc = await t.open('/features/kids-playground/');
   eq(t.outside.slice(before).filter(u => ANALYTICS.test(u)).length, 0, 'no analytics on the Kids’ Playground page');
-  includes(flat(await kc.locator('#for-kids').innerText()), 'A CORNER JUST FOR YOU');
+  includes(flat(await kc.locator('#for-kids').innerText()), 'A PLAYGROUND JUST FOR YOU');
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
   // Signed in, the Parent Portal and Kids' Playground buttons take its place.

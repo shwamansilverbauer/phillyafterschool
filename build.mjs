@@ -3811,7 +3811,7 @@ function accountArt() {
   <path d="M94 128C112 128 118 124 134 118" fill="none" stroke="#0F4D90" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 7"/>
   <path d="M306 128C288 128 282 124 266 118" fill="none" stroke="#0F4D90" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 7"/>
   ${artChip(31, 166, 62, 'You', true)}${artChip(296, 166, 84, 'Co-parent')}`);
-  // Kids' Playground: their own bulb, pins from bronze to gold, a map with a secret spot
+  // Kids' Playground: their own bulb, pins from bronze up, a map with a secret spot
   const artKids = artBox(`
   <rect x="20" y="16" width="360" height="228" rx="24" fill="#0F4D90"/>
   ${artPin(74, 74, 30, '#F3C613', '#1763B8')}${artPin(74, 152, 24, '#D6DEEA', '#3FA34D')}${artPin(74, 214, 18, '#E8A365', '#CC3000')}
@@ -5556,7 +5556,7 @@ const summerPlan = (() => {
 const yearPath = 'calendar/';
 const YEAR_PAGE = !!(GROUPS && daysOff);
 // ---------- Kids' Playground: a page of each child's own, inside a parent's account ----------
-// For the child: shiny pins that level up (bronze, silver, gold) for the kinds of program they have been to, the
+// For the child: shiny pins that level up (bronze, silver, gold, rainbow, diamond) for the kinds of program they have been to, the
 // seasons and the neighborhoods; a level that climbs; a cartoon map of Philadelphia whose clouds clear over the
 // neighborhoods they have been to, with secret spots that unlock with classes nearby; a Repeater Reward for going back;
 // a bulb of their own that dresses up as they level up; and showdowns (eleven Philly contests, from the Art Museum
@@ -5657,7 +5657,11 @@ const surpriseHoods = (listings, schoolsOut) => {
   }
   return out;
 };
-// The pins: one for each kind of program, one for each season, and one for the neighborhoods. Each has three levels.
+// The pins. Each has five levels (bronze, silver, gold, rainbow, diamond) at the counts in "tiers". "group" is its
+// shape and its section on the Pins tab: a kind of program (a circle), a season (a shield), exploring (a star), a combo
+// of kinds (a rounded square), being a super fan (a hexagon) and the secret Philly pins (a keystone), which show as a
+// "?" with a hint until they're found. "how" says what kids-corner.js counts for the new ones (stats()); "get" is how to
+// earn the first level, in the child's words, and "one"/"many" name what is counted ("2 more secret spots for GOLD!").
 const KIDS_PIN = {   // the pin's name, and what one of it is called on the page ("1 more music class for silver")
   aftercare: ['After-School Ace', 'after-school program', 'after-school programs'], music: ['Music Maker', 'music class', 'music classes'],
   theater: ['Stage Star', 'theater class', 'theater classes'], art: ['Art Wizard', 'art class', 'art classes'],
@@ -5674,15 +5678,72 @@ const KIDS_ICON = {
   compass: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.5 5.5-2.8 6.2-6.2 2.8 2.8-6.2zM12 10.8a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z',
   repeat: 'M17 1l4 4-4 4V6H7a2 2 0 0 0-2 2v3H3V8a4 4 0 0 1 4-4h10zM7 23l-4-4 4-4v3h10a2 2 0 0 0 2-2v-3h2v3a4 4 0 0 1-4 4H7z',
 };
+// The newer pins' icons: each a list of shapes, filled even-odd, so a hole (a window, a crack, a fold) is a cut-out.
+const kidsStar = (cx, cy, r) => { let d = ''; for (let i = 0; i < 10; i++) { const a = Math.PI * i / 5 - Math.PI / 2, rr = i % 2 ? r * 0.45 : r; d += (i ? 'L' : 'M') + (cx + rr * Math.cos(a)).toFixed(2) + ' ' + (cy + rr * Math.sin(a)).toFixed(2); } return d + 'Z'; };
+const kidsDot = (cx, cy, r) => `M${cx} ${cy - r}A${r} ${r} 0 1 0 ${cx} ${cy + r}A${r} ${r} 0 1 0 ${cx} ${cy - r}Z`;
+const KIDS_ICON2 = {
+  map: ['M2 6L8 3L16 6L22 3V18L16 21L8 18L2 21Z M7.3 4.8H8.7V17.2H7.3Z M15.3 7.8H16.7V19.2H15.3Z'],
+  glass: [kidsDot(10, 10, 8) + ' ' + kidsDot(10, 10, 5), 'M15.4 16.8L16.8 15.4L22.6 21.2L21.2 22.6Z'],
+  gift: ['M3 9H21V13H3Z M11 9H13V13H11Z', 'M4.5 14H19.5V22H4.5Z M11 14H13V22H11Z', 'M12 9C9 3 4 4 6 7.5C7 9 10 9 12 9ZM12 9C15 3 20 4 18 7.5C17 9 14 9 12 9Z'],
+  palette: ['M12 2C6 2 2 6.5 2 12S6.5 22 12 22C13.7 22 14.5 21 14.5 19.8C14.5 18.3 13.3 17.8 13.3 16.5C13.3 15.3 14.3 14.5 15.6 14.5H19C21 14.5 22 12.9 22 11C22 6 17.5 2 12 2Z ' + [[7, 9], [11, 6], [16, 7], [6.5, 14]].map(([x, y]) => kidsDot(x, y, 1.7)).join(' ')],
+  year: ['M4 5H20V21H4Z M6 10H18V19H6Z', 'M7 2.5H9V7H7Z M15 2.5H17V7H15Z', kidsStar(12, 14.6, 4.2)],
+  stars3: [kidsStar(6, 7, 5), kidsStar(18, 7, 5), kidsStar(12, 16.5, 6)],
+  flaskbrush: ['M3.5 3H9.5V5H8.5V9L12.5 17C13.1 18.5 12.3 20 10.7 20H2.3C0.7 20 -0.1 18.5 0.5 17L4.5 9V5H3.5Z', 'M21.6 2.4L23.1 3.9L16.6 12.9L15.1 11.4Z', 'M14.3 12.2L15.8 13.7C15.8 16.4 13.6 18.7 11.9 18.5C12.7 17.3 12.5 14 14.3 12.2Z'],
+  bookball: ['M1 4C3.5 3.2 6 3.2 8.5 4.8V15C6 13.5 3.5 13.5 1 14.3Z', 'M9.5 4.8C12 3.2 14.5 3.2 17 4V14.3C14.5 13.5 12 13.5 9.5 15Z', kidsDot(17.5, 17.5, 5)],
+  uturn: ['M14 3H8A6 6 0 0 0 8 15H16V19L22 13L16 7V11H8A2 2 0 0 1 8 7H14Z'],
+  two: [kidsDot(8, 6, 3.5), 'M1.5 21C1.5 15.5 4.4 11.5 8 11.5S14.5 15.5 14.5 21Z', kidsDot(16, 6, 3.5), 'M9.5 21C9.5 15.5 12.4 11.5 16 11.5S22.5 15.5 22.5 21Z'],
+  trophy: ['M7 3H17V9A5 5 0 0 1 7 9Z', 'M3 4H7V6H5C5 8 6 9.5 7.3 10L6.8 11.8C4.4 11 3 8.6 3 6Z', 'M21 4H17V6H19C19 8 18 9.5 16.7 10L17.2 11.8C19.6 11 21 8.6 21 6Z', 'M11 13.5H13V17H11Z', 'M7 18H17V21H7Z'],
+  house: ['M12 2L22 11H19V21H14V15H10V21H5V11H2Z'],
+  bus: ['M5 3H19A2 2 0 0 1 21 5V17A1 1 0 0 1 20 18H4A1 1 0 0 1 3 17V5A2 2 0 0 1 5 3Z M5 6H19V11H5Z', kidsDot(7, 19.7, 2.2), kidsDot(17, 19.7, 2.2)],
+  bell: ['M12 2C13 2 13.5 2.6 13.5 3.3V4.2C16.7 5 18.5 7.8 18.5 11V15L21 18.5V20H3V18.5L5.5 15V11C5.5 7.8 7.3 5 10.5 4.2V3.3C10.5 2.6 11 2 12 2Z M12.6 8L11.3 11.2L13 13.4L11.9 16.4H12.9L14.1 13.4L12.4 11.2L13.6 8Z', 'M10.2 20.8A1.8 1.8 0 0 0 13.8 20.8Z'],
+  hat: ['M7 12C7 7 8.5 4 12 4S17 7 17 12Z', 'M1 13.5C1 12.4 4 11.5 12 11.5S23 12.4 23 13.5S19.5 16 12 16S1 14.6 1 13.5Z'],
+  hoagie: ['M2 12C2 8.5 5 7 12 7S22 8.5 22 12C22 15.5 19 17 12 17S2 15.5 2 12Z M4 11.3H20V12.7H4Z', 'M5 17.5C7 19 9 19 11 17.5C13 19 15 19 17 17.5L17.5 18.5C15.5 20.3 13 20.3 11 19C9 20.3 6.5 20.3 4.5 18.5Z'],
+  oars: ['M2 14H22L19 19H5Z', 'M4 4.5L5.5 3L15 12.5L13.5 14Z', 'M20 4.5L18.5 3L9 12.5L10.5 14Z'],
+  pine: ['M12 2L18 9H15L20 15H16L21 20H13V23H11V20H3L8 15H4L9 9H6Z'],
+  bird: ['M2 12C5 9 8 9 12 12C16 9 19 9 22 12C19 11.5 16 12.5 12 16C8 12.5 5 11.5 2 12Z', kidsDot(12, 8.5, 2.2)],
+  feet: ['M8 3C9.7 3 10.5 5 10.5 7.5S9.5 12 8 12S5.5 10 5.5 7.5S6.3 3 8 3Z', 'M6 13.5H10V16A2 2 0 0 1 6 16Z', 'M16 8C17.7 8 18.5 10 18.5 12.5S17.5 17 16 17S13.5 15 13.5 12.5S14.3 8 16 8Z', 'M14 18.5H18V21A2 2 0 0 1 14 21Z'],
+  cross: ['M10.5 2H13.5V22H10.5Z', 'M2 12L6 8V10.5H18V8L22 12L18 16V13.5H6V16Z'],
+  kite: ['M12 1L18 9L12 17L6 9Z M13 4L10 9.5H12L11 14L14.5 8H12.4Z', 'M11.4 16.5H12.6V23H11.4Z', 'M9 19L11.4 19.6V20.8L9 21.4Z', 'M15 21L12.6 21.6V22.8L15 23.4Z'],
+  jay: ['M9 3H19V6H16V15C16 19 13.5 21.5 9.5 21.5C6.5 21.5 4 19.5 4 16H7.5C7.5 17.5 8.3 18.3 9.5 18.3C11.3 18.3 12.5 17 12.5 15V6H9Z', kidsStar(20.5, 17.5, 3.2), kidsStar(4.5, 6, 2.6)],
+};
 const KIDS_PINS = [
-  ...TYPES.map(t => ({ id: 'type:' + t.id, group: 'type', label: (KIDS_PIN[t.id] || [t.label])[0], one: (KIDS_PIN[t.id] || [, t.label.toLowerCase()])[1], many: (KIDS_PIN[t.id] || [, , t.label.toLowerCase()])[2], color: t.color, icon: t.icon, tiers: [1, 3, 5] })),
-  { id: 'season:after', group: 'season', label: 'Afternoon Adventurer', one: 'after-school class', many: 'after-school classes', color: '#1763B8', icon: KIDS_ICON.backpack, tiers: [1, 3, 5] },
-  { id: 'season:weekend', group: 'season', label: 'Weekend Warrior', one: 'weekend class', many: 'weekend classes', color: '#6B3FA0', icon: KIDS_ICON.calendar, tiers: [1, 3, 5] },
-  { id: 'season:off', group: 'season', label: 'Day-Off Daredevil', one: 'day-off camp', many: 'day-off camps', color: '#0E7C86', icon: KIDS_ICON.snow, tiers: [1, 3, 5] },
-  { id: 'season:summer', group: 'season', label: 'Summer Superstar', one: 'week of summer camp', many: 'weeks of summer camp', color: '#C2410C', icon: KIDS_ICON.sun, tiers: [1, 3, 5] },
-  { id: 'explore', group: 'explore', label: 'Neighborhood Hopper', one: 'neighborhood', many: 'neighborhoods', color: '#1F7A3A', icon: KIDS_ICON.compass, tiers: [2, 4, 6] },
+  ...TYPES.map(t => ({ id: 'type:' + t.id, group: 'type', label: (KIDS_PIN[t.id] || [t.label])[0], one: (KIDS_PIN[t.id] || [, t.label.toLowerCase()])[1], many: (KIDS_PIN[t.id] || [, , t.label.toLowerCase()])[2], color: t.color, icon: t.icon, tiers: [1, 3, 5, 8, 12] })),
+  { id: 'season:after', group: 'season', label: 'Afternoon Adventurer', one: 'after-school class', many: 'after-school classes', color: '#1763B8', icon: KIDS_ICON.backpack, tiers: [1, 3, 5, 8, 12] },
+  { id: 'season:weekend', group: 'season', label: 'Weekend Warrior', one: 'weekend class', many: 'weekend classes', color: '#6B3FA0', icon: KIDS_ICON.calendar, tiers: [1, 3, 5, 8, 12] },
+  { id: 'season:off', group: 'season', label: 'Day-Off Daredevil', one: 'day-off camp', many: 'day-off camps', color: '#0E7C86', icon: KIDS_ICON.snow, tiers: [1, 3, 5, 8, 12] },
+  { id: 'season:summer', group: 'season', label: 'Summer Superstar', one: 'week of summer camp', many: 'weeks of summer camp', color: '#C2410C', icon: KIDS_ICON.sun, tiers: [1, 3, 5, 8, 12] },
+  { id: 'explore', group: 'explore', label: 'Neighborhood Hopper', one: 'neighborhood', many: 'neighborhoods', color: '#1F7A3A', icon: KIDS_ICON.compass, tiers: [2, 4, 6, 9, 12] },
   // going back: each day a week a program meets, each term or year, each week of the same camp, after the first
-  { id: 'repeat', group: 'repeat', label: 'Repeater Reward', one: 'repeat', many: 'repeats', color: '#CC3000', icon: KIDS_ICON.repeat, tiers: [1, 5, 10] },
+  { id: 'repeat', group: 'repeat', label: 'Repeater Reward', one: 'repeat', many: 'repeats', color: '#CC3000', icon: KIDS_ICON.repeat, tiers: [1, 5, 10, 15, 25] },
+  // the newer ones, counted in stats() by "how"
+  ...[
+    ['pin:year-rounder', 'season', 'Year-Rounder', 'year', '#2B8A3E', [2, 3, 4, 6, 8], 'season', 'seasons', 'Do after school, a weekend class, a day-off camp or summer camp. Each kind in each school year counts!'],
+    ['pin:city-sampler', 'explore', 'City Sampler', 'map', '#0B7285', [2, 3, 4, 5, 7], 'part of the city', 'parts of the city', 'Go to classes in two different parts of Philly!'],
+    ['pin:secret-spotter', 'explore', 'Secret Spotter', 'glass', '#5F3DC4', [1, 3, 6, 10, 15], 'secret spot', 'secret spots', 'Find a secret spot on your map!'],
+    ['pin:surprise-sleuth', 'explore', 'Surprise Sleuth', 'gift', '#C2255C', [1, 3, 6, 10, 15], 'surprise', 'surprises', 'Find a surprise in a neighborhood on your map!'],
+    ['pin:mix-master', 'combo', 'Mix Master', 'palette', '#E8590C', [2, 4, 6, 8, 10], 'kind of class', 'kinds of classes', 'Try two different kinds of classes!'],
+    ['pin:triple-threat', 'combo', 'Triple Threat', 'stars3', '#AE3EC9', [1, 2, 3, 4, 5], 'round of music, theater and dance', 'rounds of music, theater and dance', 'Do a music class, a theater class AND a dance or sports class!'],
+    ['pin:lab-easel', 'combo', 'Lab & Easel', 'flaskbrush', '#1971C2', [1, 2, 3, 4, 5], 'science + art pair', 'science + art pairs', 'Do a science class AND an art class!'],
+    ['pin:brains-bounce', 'combo', 'Brains & Bounce', 'bookball', '#F08C00', [1, 2, 3, 4, 5], 'reading + sports pair', 'reading + sports pairs', 'Do a reading class AND a sports class!'],
+    ['pin:comeback-kid', 'repeat', 'Comeback Kid', 'uturn', '#D9480F', [1, 2, 3, 5, 8], 'comeback', 'comebacks', 'Go back to a class you loved in a new school year!'],
+    ['pin:tag-team', 'repeat', 'Tag Team', 'two', '#087F5B', [1, 2, 3, 5, 8], 'class with a brother or sister', 'classes with a brother or sister', 'Go to a class with your brother or sister!'],
+    ['pin:showdown-judge', 'repeat', 'Showdown Judge', 'trophy', '#B8860B', [2, 4, 6, 9, 12], 'class ranked', 'classes ranked', 'Pick your favorites in a showdown!'],
+    ['pin:home-base', 'repeat', 'Home Base', 'house', '#364FC7', [1, 2, 3, 5, 8], 'class at your school', 'classes at your school', 'Go to a class right in your own school!'],
+    ['pin:pickup-pro', 'repeat', 'Pickup Pro', 'bus', '#E67700', [1, 2, 3, 5, 8], 'class that picked you up', 'classes that picked you up', 'Go to a class that picks you up from school!'],
+  ].map(([id, group, label, icon, color, tiers, one, many, get]) => ({ id, group, label, one, many, color, icon: KIDS_ICON2[icon], eo: 1, tiers, how: id.slice(4), get })),
+  // The secret Philly pins: a "?" and a hint until found. "area" is a part of the Kids' Playground map.
+  ...[
+    ['liberty-bell', 'Liberty Bell Ringer', 'bell', '#8C4A1E', 'area:oldcity', [1, 3, 5, 8, 12], 'class there', 'classes there', 'Somewhere old, a famous bell has a crack in it…'],
+    ['billy-penn', 'Billy Penn’s Hat', 'hat', '#495057', 'area:center', [1, 3, 5, 8, 12], 'class there', 'classes there', 'Look up! Someone in a big hat stands on top of City Hall…'],
+    ['cheesesteak', 'Cheesesteak Champ', 'hoagie', '#C92A2A', 'area:south', [1, 3, 5, 8, 12], 'class there', 'classes there', 'Wit or witout? It’s somewhere in South Philly…'],
+    ['boathouse', 'Boathouse Rower', 'oars', '#1864AB', 'area:parkway', [1, 3, 5, 8, 12], 'class there', 'classes there', 'Down by the river, where the boathouses light up at night…'],
+    ['wissahickon', 'Wissahickon Wanderer', 'pine', '#2B8A3E', 'area:northwest', [1, 3, 5, 8, 12], 'class there', 'classes there', 'Deep in the woods of Northwest Philly…'],
+    ['heron', 'Heron Spotter', 'bird', '#0C8599', 'area:southwest', [1, 3, 5, 8, 12], 'class there', 'classes there', 'Tall birds wade in the marsh in Southwest Philly…'],
+    ['pennypack', 'Pennypack Pathfinder', 'feet', '#5C940D', 'area:northeast', [1, 3, 5, 8, 12], 'class there', 'classes there', 'A trail through the trees, way up in Northeast Philly…'],
+    ['broad-street', 'Broad Street Crosser', 'cross', '#E03131', 'broad', [1, 2, 3, 5, 8], 'class on each side', 'classes on each side', 'One long street cuts Philly down the middle. Try both sides!'],
+    ['franklin-kite', 'Ben Franklin’s Kite', 'kite', '#F59F00', 'kite', [1, 2, 3, 4, 5], 'science + nature pair', 'science + nature pairs', 'Ben Franklin flew a kite in a storm. Try science AND nature!'],
+    ['jawn', 'Jawn Collector', 'jay', '#7048E8', 'jawn', [3, 6, 10, 15, 20], 'different program', 'different programs', 'Collect a whole lotta jawns: lots of different programs!'],
+  ].map(([id, label, icon, color, how, tiers, one, many, hint]) => ({ id: 'philly:' + id, group: 'philly', label, one, many, color, icon: KIDS_ICON2[icon], eo: 1, tiers, how, hint, secret: 1 })),
 ];
 // What Kids' Playground works from: the listings (name, kinds, sites on the map), the schools, the pins, and where things
 // are. One copy, for pages one folder down: inline on Kids' Playground, and as assets/kids-corner.json for the Kids'
@@ -5695,7 +5756,10 @@ function kidsData() {
   // A listing's sites: its neighborhoods, each with a point when the addresses line up with them one to one, and the
   // neighborhood on the map ("m"). A listing with several sites lands on the map once a parent says which site.
   const sites = (hoods, lls) => hoods.map((h, i) => { const ll = hoods.length === 1 ? (lls[0] || null) : hoods.length === lls.length ? lls[i] : null, m = mapHood(ll, h), a = mapArea(ll, m); return a ? { h, ll, m, a } : { h, ll, m }; });
-  for (const p of programs) listings['p:' + p.id] = { n: p.name, t: p.types || [], sites: sites(programHoods(p), placesOf(p)) };
+  for (const p of programs) {
+    const r = Object.fromEntries(Object.entries(p.schools || {}).filter(([, x]) => x && (x.relation === 'onsite' || x.relation === 'pickup')).map(([id, x]) => [id, x.relation === 'onsite' ? 'o' : 'p']));
+    listings['p:' + p.id] = { n: p.name, t: p.types || [], sites: sites(programHoods(p), placesOf(p)), ...(Object.keys(r).length ? { r } : {}) };   // r: the schools it runs in ("o") or picks up from ("p")
+  }
   for (const c of summerCamps) listings['c:' + c.id] = { n: c.name, t: c.types || [], sites: sites(c.neighborhoods || [], coordsOf(c.address)) };
   if (mapHood.missed && mapHood.missed.size) console.log(`Note: ${mapHood.missed.size} neighborhood name(s) aren't on the Kids' Playground map, so places there without an address don't show on it: ${[...mapHood.missed].join(', ')}. Add them to MAP_ALIAS in build.mjs.`);
   const schoolsOut = Object.fromEntries(schools.map(s => [s.id, { n: s.shortName, h: schoolHoods(s), ll: SCHOOL_LL[s.id] || null, m: mapHood(SCHOOL_LL[s.id] || null, schoolHoods(s)[0]) }]));
@@ -5720,7 +5784,7 @@ function kidsShowcase(D, onKidsPage = false) {
   const tile = (art, head, text) => `<li class="kids-tile"><svg viewBox="0 0 160 120" aria-hidden="true" focusable="false">${art}</svg><h3>${head}</h3><p>${text}</p></li>`;
   const museum = `<g transform="translate(96 88)"><path d="M-16 -4L0 -14L16 -4Z" fill="#F1E3C4" stroke="#0B2140" stroke-width="2" stroke-linejoin="round"/>${[-11, -4, 3, 10].map(x => `<rect x="${x - 1}" y="-4" width="3.5" height="11" fill="#FFFFFF" stroke="#0B2140" stroke-width="1.2"/>`).join('')}<rect x="-18" y="7" width="36" height="4" fill="#E9DDC2" stroke="#0B2140" stroke-width="1.2"/></g>`;
   const tiles = [
-    tile(`${artPin(40, 66, 26, '#E8A365', '#CC3000')}${artPin(120, 66, 26, '#F3C613', '#1763B8')}${artPin(80, 56, 32, '#D6DEEA', '#3FA34D')}`, T(`Earn pins`), T(`Every class gets you a pin. Keep going and it turns bronze, then silver, then gold!`)),
+    tile(`${artPin(40, 66, 26, '#E8A365', '#CC3000')}${artPin(120, 66, 26, '#F3C613', '#1763B8')}${artPin(80, 56, 32, '#D6DEEA', '#3FA34D')}`, T(`Earn pins`), T(`Every class gets you a pin. Keep going and it turns bronze, silver, gold, rainbow, then diamond. Some pins are secret!`)),
     tile(artBulb(80, 70, '#F3C613', 0.9, 'crown'), T(`Be a lightbulb`), T(`Pick your bulb, then dress it up as you level up: shades, a cape, a crown, even a jetpack.`)),
     tile(`<rect x="22" y="8" width="116" height="104" rx="14" fill="#FFF4DA" stroke="#0B2140" stroke-width="3"/><path d="M46 8C56 48 36 76 56 112" fill="none" stroke="#4DABF7" stroke-width="7" stroke-linecap="round"/>${artCloudQ(102, 40)}${museum}`, T(`Explore Philly`), T(`Your classes clear the clouds on a map of Philly, with surprises and secret spots to find.`)),
     tile(`${artBulb(38, 68, '#69DB7C', 0.62)}${artBulb(122, 68, '#74C0FC', 0.62, 'shades')}<circle cx="80" cy="70" r="17" fill="#CC3000" stroke="#0B2140" stroke-width="3"/><text x="80" y="76" text-anchor="middle" font-size="14" font-weight="800" fill="#FFFFFF" ${ART_F}>VS</text>`, T(`Pick your favorite`), T(`Which class was more fun? You decide, and your grown-up sees it first.`)),
@@ -5730,7 +5794,7 @@ function kidsShowcase(D, onKidsPage = false) {
     <img class="kids-eddie" src="${link('bulb.png', D)}${stamp('src/static/bulb.png')}" alt="" width="327" height="400" loading="lazy">
     <div>
       <p class="kicker">${T(`For kids`)}</p>
-      <h2 id="for-kids-h">${T(`A corner just for you!`)}</h2>
+      <h2 id="for-kids-h">${T(`A playground just for you!`)}</h2>
       <p class="kids-say">${T(`Ask a grown-up to make a free account, and every class and camp you go to earns you cool stuff on a page of your own. Eddie Bulboa, the bulb in our logo, shows you around.`)}</p>
     </div>
   </div>
@@ -5748,7 +5812,7 @@ const kidsHow = (D, onKidsPage = false) => `  <section class="section">
     <ul>
       <li>${T(`A page for each child on your account, by first name. No child signs in and nothing is typed by a child: it’s the parent’s account, handed over for a look. Each child picks a lightbulb to be.`)}</li>
       <li>${T(`What counts is what you confirm. The page suggests from your kept week, your summer and your days off (“Did Sam go to chess club this year?”), and you say yes or no. You can add anything the plans missed.`)}</li>
-      <li>${T(`From that come pins for each kind of program, each season and the neighborhoods, which go from bronze to silver to gold and get grander each time; a Repeater Reward for going back to a class they love (each day a week, each term, each week of the same camp); a level that goes up and unlocks things for their bulb to wear; a map of Philadelphia whose clouds clear where they have been, with a surprise or two in each neighborhood and secret spots that turn up as they go to more classes nearby; and showdowns where they pick which class they had more fun at, two at a time, and the ones they pick come first when you plan the next term.`)}</li>
+      <li>${T(`From that come pins for each kind of program, each season and the neighborhoods, which go from bronze to silver, gold, rainbow and diamond and get grander each time; pins for exploring the city, for combos of kinds of classes and for going back to a class they love (each day a week, each term, each week of the same camp); ten secret Philly pins that stay a mystery until they’re found; a level that goes up and unlocks things for their bulb to wear; a map of Philadelphia whose clouds clear where they have been, with a surprise or two in each neighborhood and secret spots that turn up as they go to more classes nearby; and showdowns where they pick which class they had more fun at, two at a time, and the ones they pick come first when you plan the next term.`)}</li>
       <li>${T(`Nothing on this page is counted, recorded or sent anywhere. It has no link of its own to share: a picture of the pins, with no name and no map, is the only thing that leaves it.`)}</li>
     </ul>
     <div class="actions when-out"><a class="btn primary big" href="${link('register/', D)}?next=kids">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=kids">${T(`Log in`)}</a></div>${onKidsPage ? '' : `
