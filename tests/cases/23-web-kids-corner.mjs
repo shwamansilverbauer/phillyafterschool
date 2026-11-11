@@ -125,7 +125,7 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   const shown = await celebrate(page);
   ok(shown.some(s => /Tap to open/.test(s)), 'the present first: ' + shown.join(' / '));
   ok(shown.some(s => /new pins?!/i.test(s)), 'new pins: ' + shown.join(' / '));
-  ok(shown.some(s => /SECRET PHILLY PIN!/.test(s) && /You found a secret pin/.test(s)), 'a secret Philly pin found, on its own: ' + shown.join(' / '));
+  const secretShown = shown.some(s => /SECRET PHILLY PIN!/.test(s) && /You found a secret pin/.test(s));   // only if this one class makes a pair
   ok(shown.some(s => /SURPRISE!/.test(s) && /You found it in/.test(s)), 'a surprise in the neighborhood: ' + shown.join(' / '));
   ok(shown.some(s => /afternoon adventurer/i.test(s)), 'the after-school pin');   // headings are in capitals
   ok(shown.some(s => /LEVEL UP/.test(s)), 'a new level');
@@ -147,9 +147,11 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   await page.waitForSelector('.kc-pincard');
   ok(await page.locator('.kc-pincard.t1').count() >= 2, 'bronze pins on the page');
   includes(flat(await page.locator('.kc-lvl').innerText()), 'Level 2');
-  // The secret Philly pins: the one found, and nine still a ? with a hint.
-  matches(flat(await page.locator('.kc-pinsec.secret').innerText()), /1 of 10 found/i);
-  eq(await page.locator('.kc-pincard.secret').count(), 9, 'the other nine are still secrets');
+  // The secret Philly pins: any found (one class is a pair only if it is, say, music around Old City), the rest a ? with a riddle.
+  const foundN = +(flat(await page.locator('.kc-pinsec.secret').innerText()).match(/(\d+) of 10 found/i) || [, -1])[1];
+  ok(foundN >= 0 && foundN <= 2, 'the secret Philly pins counted: ' + foundN);
+  eq(secretShown, foundN > 0, 'a secret pin found is revealed on its own');
+  eq(await page.locator('.kc-pincard.secret').count(), 10 - foundN, 'the rest are still secrets');
   await page.locator('.kc-pincard.secret').first().click();
   matches(flat(await page.locator('.kc-over .kc-pinbig').innerText()), /Secret Philly pin.*Keep exploring/i, 'a secret pin shows only its riddle');
   eq(await page.locator('.kc-over .kc-rule, .kc-over .kc-minimap').count(), 0, 'no rule and no map until it’s found');
@@ -159,7 +161,8 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   const p1 = await pat.okay('GET', 'passport');
   eq(p1.kids[0].done.length, 1); eq(p1.kids[0].done[0].k, 'p:' + program.id); eq(p1.kids[0].done[0].s, school);
   eq(p1.kids[0].seen['season:after'], 1); eq(p1.kids[0].lvl, 2);
-  ok(Object.keys(p1.kids[0].seen).some(id => /^philly:/.test(id)) && Object.keys(p1.kids[0].seen).some(id => /^pin:/.test(id)), 'the server keeps the new pins as seen too: ' + Object.keys(p1.kids[0].seen).join(', ')); eq(JSON.stringify(p1.kids[0].av.w), '{"face":"shades"}', 'the bulb wears its sunglasses');
+  ok(Object.keys(p1.kids[0].seen).some(id => /^pin:/.test(id)), 'the server keeps the new pins as seen too: ' + Object.keys(p1.kids[0].seen).join(', '));
+  eq(Object.keys(p1.kids[0].seen).some(id => /^philly:/.test(id)), foundN > 0, 'and a secret pin found'); eq(JSON.stringify(p1.kids[0].av.w), '{"face":"shades"}', 'the bulb wears its sunglasses');
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForSelector('.kc-kidbtn');
   await page.locator('.kc-kidbtn', { hasText: 'Sam' }).click();
@@ -168,6 +171,36 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   eq(await page.locator('.kc-over').count(), 0, 'nothing to celebrate the second time');
   eq(counted(t).length, 0, 'nothing counted: ' + counted(t).join(', '));
   eq(t.outside.length, 0, 'nothing asked of another site: ' + t.outside.join(', '));
+  eq(t.errors.length, 0, t.errors.join(' | '));
+  await t.close();
+});
+
+test('a secret Philly pin: a riddle until found, then revealed on its own, saying how to level up, what counted and where', async (ctx) => {
+  const b = await ctx.browser();
+  const pat = ctx.api().as(someone('kcp'), 'Pat', 'Lee');
+  await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '3' }] });
+  const y = (await pat.okay('GET', 'passport')).year;
+  const t = await b.context(ctx.site, { sid: pat.cookie });
+  const look = await t.open('/');
+  // a music class with one site, around Old City: Liberty Bell Ringer's pair by itself
+  const k = await look.evaluate(() => fetch('/assets/kids-corner.json').then(r => r.json()).then(d => Object.keys(d.listings).find(k => { const l = d.listings[k]; return (l.t || []).includes('music') && l.sites.length === 1 && l.sites[0].a === 'oldcity'; })));
+  ok(k, 'a music class around Old City in the data');
+  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [{ k, kind: 'after', y, s: '' }], av: { b: 'globe', c: 6 }, seen: { intro: 1 }, lvl: 1 });
+  const page = await t.open('/kids-playground/#pins');
+  await page.waitForSelector('.kc-over, .kc-gift');
+  const shown = await celebrate(page);
+  ok(shown.some(s => /SECRET PHILLY PIN!/.test(s) && /LIBERTY BELL RINGER/i.test(s) && /You found a secret pin/.test(s)), 'revealed on its own: ' + shown.join(' / '));
+  await page.waitForFunction(() => !document.querySelector('.kc-over'));
+  if (await page.locator('.kc-avatar').count()) await page.locator('.kc-avatar .kc-big.go').click();
+  await page.waitForSelector('.kc-pincard');
+  await page.locator('.kc-pincard', { hasText: 'Liberty Bell Ringer' }).click();
+  await page.waitForSelector('.kc-over .kc-mini');
+  const close = flat(await page.locator('.kc-over .kc-pinbig').innerText());
+  includes(close, 'You have 1 music + Old City pair!');
+  matches(close, /Music: .+\. Around Old City: .+\./, 'what counted for each half');
+  includes(close, 'To level up: Do a music class AND a class around Old City.');
+  includes(close, 'The colored part of Philly is Old City. The circle is the Liberty Bell!');
+  eq(await page.locator('.kc-over details').count(), 0, 'no list of neighborhoods');
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
 });

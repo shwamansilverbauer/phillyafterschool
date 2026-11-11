@@ -13,7 +13,9 @@ test('a passport per child: suggestions come from the kept week, past camp weeks
   const { program: wp, day: wd } = weekendProgram();
   const { season, ids } = twoCamps();
   const y = schoolYearStart();
-  const past = pastDayOff(), future = upcomingDaysOff()[0];
+  // the server goes by the real date in Philadelphia, so "to come" is after that too (a day off on the real today has passed)
+  const realToday = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(new Date());
+  const past = pastDayOff(), future = upcomingDaysOff().find(d => d > realToday);
   ok(past, 'a day off before the fixed day');
   await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '2' }, { n: 'Rae', g: 'K' }] });
   // Sam: a current week with a weekday program and a weekend class; the next week does not count.

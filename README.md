@@ -446,15 +446,17 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   (the counts are each pin's `tiers`). On the Pins tab they come in sections, one per `group`, each its own shape:
   - **Classes** (a circle): one per program type (names in `KIDS_PIN`), at 1, 3, 5, 8 and 12.
   - **Secret Philly pins** (a keystone): ten that show as a "?" with only a riddle ("Somewhere old, a famous bell has a
-    crack in it…") until found, and are revealed with a burst of their own ("SECRET PHILLY PIN!"). Once found, the
-    close-up says where ("You have 3 classes around Old City!"), names the classes that counted (for Broad Street,
-    which side each was on) and gives the plain rule for leveling up ("To level up: Go to a class around Old City,
-    where the Liberty Bell is!", `rule`); the seven area pins add a small map with the area's neighborhoods colored in
-    and the famous thing circled. They are: one for classes in each
-    part of the map (Liberty Bell Ringer for Old City, Billy Penn's Hat for Center City, Cheesesteak Champ for South
-    Philly, Boathouse Rower for the Parkway, Wissahickon Wanderer, Heron Spotter for Southwest, Pennypack Pathfinder for
-    the Northeast), Broad Street Crosser (classes on both sides of Broad: `BROAD` in `kids-corner.js`), Ben Franklin's
-    Kite (science and nature) and Jawn Collector (different programs).
+    crack in it… and it wants some music!") until found, and are revealed with a burst of their own ("SECRET PHILLY
+    PIN!"). Eight are a mix of a kind of class and a part of the map (`mix:type:area`; the pairs are the fewer of the
+    two, so one music class around Old City is a pair by itself), at 1, 2, 3, 5 and 8: Liberty Bell Ringer (music and
+    Old City), Ben Franklin's Kite (science and Old City), Billy Penn's Hat (theater and Center City), Cheesesteak Champ
+    (games and South Philly), Boathouse Rower (sports and the Art Museum), Wissahickon Wanderer (nature and the
+    Northwest), Heron Spotter (nature and the Southwest), Pennypack Pathfinder (sports and the Northeast). The other two
+    are Broad Street Crosser (a class on each side of Broad: `BROAD` in `kids-corner.js`) and Jawn Collector (different
+    programs). Once found, the close-up says how many ("You have 2 music + Old City pairs!"), names the classes that
+    counted for each half (for Broad Street, which side each was on) and gives the plain rule for leveling up ("To level
+    up: Do a music class AND a class around Old City. Each pair counts!", `rule`); the place pins add a small map with
+    that part of Philly colored in and the famous thing circled.
   - **All year** (a shield): after school, weekends, days off, summer (weeks of camp), and Year-Rounder (each kind in
     each school year).
   - **Explorer** (a star): Neighborhood Hopper (2, 4, 6, 9, 12), City Sampler (parts of the map), Secret Spotter and
