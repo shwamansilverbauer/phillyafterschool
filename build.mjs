@@ -2091,7 +2091,8 @@ function schoolWeekSection(s) {
         <div class="field"><label for="wk-what-${esc(s.id)}">${T(`What is it?`)}</label><input id="wk-what-${esc(s.id)}" name="program" type="text" maxlength="80" required placeholder="Picture day" autocomplete="off"></div>
         <div class="field"><label for="wk-when-${esc(s.id)}">${T(`When?`)}</label><input id="wk-when-${esc(s.id)}" name="when" type="text" maxlength="120" required placeholder="Oct 14, or every Wednesday" autocomplete="off"></div>
         <div class="field wide"><label for="wk-details-${esc(s.id)}">${T(`Anything else? (optional)`)}</label><input id="wk-details-${esc(s.id)}" name="details" type="text" maxlength="300" placeholder="Which grades, what to bring" autocomplete="off"></div>
-        <div class="field wide"><label for="wk-email-${esc(s.id)}">${T(`Your email (optional)`)}</label><input id="wk-email-${esc(s.id)}" name="email" type="email" maxlength="150" autocomplete="email"><span class="hint">${T(`Only used to ask you a question about it. Please leave out children’s names.`)}</span></div>
+        <div class="field"><label for="wk-name-${esc(s.id)}">${T(`Your name`)}</label><input id="wk-name-${esc(s.id)}" name="name" type="text" maxlength="100" autocomplete="name" required></div>
+        <div class="field"><label for="wk-email-${esc(s.id)}">${T(`Your email`)}</label><input id="wk-email-${esc(s.id)}" name="email" type="email" maxlength="150" autocomplete="email" required><span class="hint">${T(`Only used to ask you a question about it. Please leave out children’s names.`)}</span></div>
         <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label>Leave this blank <input name="company" type="text" tabindex="-1" autocomplete="off"></label></div>
         <div class="wide"><button class="btn" type="submit">${T(`Send it`)}</button> <span class="hint">${T(`We read each one before it goes on the page.`)}</span></div>
       </form>
@@ -2732,7 +2733,7 @@ function suggestPage() {
     </div>
     <div class="about-you">
       <h2>${T(`About you`)}</h2>
-      <p class="hint">${T(`All optional. Your email is only used to ask a follow-up question about what you sent.`)} <a href="${link('privacy/', 1)}">${T(`How we handle it.`)}</a></p>
+      <p class="hint">${T(`We need your name and email. Your email is only used to ask a follow-up question about what you sent.`)} <a href="${link('privacy/', 1)}">${T(`How we handle it.`)}</a></p>
       <div class="field">
         <label for="f-role">${T(`How do you know it?`)}</label>
         <select id="f-role" name="role">
@@ -2745,11 +2746,11 @@ function suggestPage() {
       <div class="pair">
         <div class="field">
           <label for="f-name">${T(`Your name`)}</label>
-          <input id="f-name" name="name" type="text" maxlength="100" autocomplete="name">
+          <input id="f-name" name="name" type="text" maxlength="100" autocomplete="name" required>
         </div>
         <div class="field">
           <label for="f-email">${T(`Your email`)}</label>
-          <input id="f-email" name="email" type="email" maxlength="150" autocomplete="email">
+          <input id="f-email" name="email" type="email" maxlength="150" autocomplete="email" required>
         </div>
       </div>
     </div>
@@ -2787,12 +2788,12 @@ function ideasPage() {
     </div>
     <div class="pair">
       <div class="field">
-        <label for="i-name">${T(`Your name (optional)`)}</label>
-        <input id="i-name" name="name" type="text" maxlength="100" autocomplete="name">
+        <label for="i-name">${T(`Your name`)}</label>
+        <input id="i-name" name="name" type="text" maxlength="100" autocomplete="name" required>
       </div>
       <div class="field">
-        <label for="i-email">${T(`Your email (optional)`)}</label>
-        <input id="i-email" name="email" type="email" maxlength="150" autocomplete="email">
+        <label for="i-email">${T(`Your email`)}</label>
+        <input id="i-email" name="email" type="email" maxlength="150" autocomplete="email" required>
         <span class="hint">${T(`Only used to ask a follow-up question.`)} <a href="${link('privacy/', 1)}">${T(`How we handle it.`)}</a></span>
       </div>
     </div>
@@ -2887,8 +2888,12 @@ if ($isNew && !preg_match('~^(https?://)?[a-z0-9][a-z0-9.-]*\\.[a-z]{2,}([/?#]\\
 if ($isNew && $program === '') {
   fail('Please add the name of the program or camp.', 400);
 }
-if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-  $email = '';
+// Everything sent in needs a name and an email, so it can be followed up and isn't sent by a stranger to the site.
+if ($name === '') {
+  fail('Please add your name.', 400);
+}
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  fail('Please add your email, so we can ask a question about what you sent if we need to.', 400);
 }
 
 $body = "Type: $kind\\n"
@@ -5756,9 +5761,9 @@ const KIDS_PINS = [
   { id: 'season:weekend', group: 'season', label: 'Weekend Warrior', one: 'weekend class', many: 'weekend classes', color: '#6B3FA0', icon: KIDS_ICON.calendar, tiers: [1, 3, 5, 8, 12] },
   { id: 'season:off', group: 'season', label: 'Day-Off Daredevil', one: 'day-off camp', many: 'day-off camps', color: '#0E7C86', icon: KIDS_ICON.snow, tiers: [1, 3, 5, 8, 12] },
   { id: 'season:summer', group: 'season', label: 'Summer Superstar', one: 'week of summer camp', many: 'weeks of summer camp', color: '#C2410C', icon: KIDS_ICON.sun, tiers: [1, 3, 5, 8, 12] },
-  { id: 'explore', group: 'explore', label: 'Neighborhood Hopper', one: 'neighborhood', many: 'neighborhoods', color: '#1F7A3A', icon: KIDS_ICON.compass, tiers: [2, 4, 6, 9, 12] },
+  { id: 'explore', group: 'explore', label: 'Neighborhood Hopper', one: 'neighborhood', many: 'neighborhoods', color: '#1F7A3A', icon: KIDS_ICON.compass, tiers: [2, 4, 6, 9, 12], get: 'Go to classes in different neighborhoods to get this pin!' },
   // going back: each day a week a program meets, each term or year, each week of the same camp, after the first
-  { id: 'repeat', group: 'repeat', label: 'Repeater Reward', one: 'repeat', many: 'repeats', color: '#CC3000', icon: KIDS_ICON.repeat, tiers: [1, 5, 10, 15, 25] },
+  { id: 'repeat', group: 'repeat', label: 'Repeater Reward', one: 'repeat', many: 'repeats', color: '#CC3000', icon: KIDS_ICON.repeat, tiers: [1, 5, 10, 15, 25], get: 'Go back to a class you’ve been to before to get this pin!' },
   // the newer ones, counted in stats() by "how"
   ...[
     ['pin:year-rounder', 'season', 'Year-Rounder', 'year', '#2B8A3E', [2, 3, 4, 6, 8], 'season', 'seasons', 'Do after school, a weekend class, a day-off camp or summer camp. Each kind in each school year counts!'],
