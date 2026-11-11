@@ -519,5 +519,237 @@
         "After School Philly (2210 Walnut St), which the list describes as working with MoveMakers Philly, Martial Posture and Philly Music Factory. afterschoolphilly.com"
       ]
     }
+  },
+  {
+    "id": "jenks",
+    "name": "Jenks Academy for the Arts and Sciences",
+    "shortName": "J.S. Jenks",
+    "aliases": [
+      "J.S. Jenks",
+      "JS Jenks",
+      "John Story Jenks",
+      "Jenks Academy",
+      "Jenks Academy for Arts and Sciences",
+      "Jenks Academy for the Arts & Sciences"
+    ],
+    "address": "8301 Germantown Ave, Philadelphia, PA 19118",
+    "neighborhood": "Chestnut Hill",
+    "grades": "K-8",
+    "dismissal": "2:09 pm",
+    "dismissalNote": "the school day is 7:30 am to 2:09 pm, earlier than at most schools",
+    "phone": "215-400-3360",
+    "website": "https://jsjenks.philasd.org/",
+    "lastReviewed": "2026-11-11",
+    "added": "2026-11-11",
+    "notes": [
+      "Jenks’s own site names no after-school program of its own. It lists clubs and activities, among them chess, debate, Girls on the Run, Body Empowerment and elementary intramural sports, without saying when they meet, so ask the office which run after dismissal.",
+      "School ends at 2:09 pm. Two Mount Airy programs name Jenks on their pickup lists, Zhang Sah and Philly Art Center; ask each what time they collect children and how they handle half days, when Jenks lets out earlier still.",
+      "If you know a program that serves J.S. Jenks and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "byers",
+    "name": "Russell Byers Charter School",
+    "shortName": "Russell Byers",
+    "aliases": [
+      "Russell Byers",
+      "Russell Byers Charter",
+      "Russell Byers Elementary School",
+      "Russell Byers Elementary",
+      "RBCS",
+      "Byers School"
+    ],
+    "address": "1911 Arch St, Philadelphia, PA 19103",
+    "neighborhood": "Logan Square",
+    "grades": "PK-8",
+    "dismissal": "3:30 pm",
+    "dismissalNote": "7th and 8th graders who ride SEPTA leave at 3:20, and the handbook asks families to collect children by 4:00 pm",
+    "phone": "215-972-1700",
+    "website": "https://www.byerschool.org/",
+    "calendar": {
+      "source": {
+        "label": "Russell Byers 2026–27 academic calendar",
+        "url": "https://docs.google.com/document/d/15tIP0VBpsllBziBmuL8nXBW97xzcX-4k/edit"
+      },
+      "checked": "2026-11-11",
+      "lastDay": "2027-06-03",
+      "days": [
+        {
+          "date": "2026-09-07",
+          "name": "Labor Day"
+        },
+        {
+          "date": "2026-10-08",
+          "name": "Interim conferences"
+        },
+        {
+          "date": "2026-10-09",
+          "name": "Staff professional development"
+        },
+        {
+          "date": "2026-10-12",
+          "name": "Indigenous Peoples’ Day"
+        },
+        {
+          "date": "2026-11-03",
+          "name": "Staff professional development"
+        },
+        {
+          "date": "2026-11-11",
+          "name": "Veterans Day"
+        },
+        {
+          "date": "2026-11-25",
+          "end": "2026-11-27",
+          "name": "Thanksgiving break"
+        },
+        {
+          "date": "2026-12-21",
+          "name": "Interim conferences"
+        },
+        {
+          "date": "2026-12-22",
+          "end": "2027-01-01",
+          "name": "Winter break"
+        },
+        {
+          "date": "2027-01-04",
+          "name": "Staff professional development"
+        },
+        {
+          "date": "2027-01-18",
+          "name": "Dr. Martin Luther King Jr. Day"
+        },
+        {
+          "date": "2027-02-12",
+          "name": "Staff professional development"
+        },
+        {
+          "date": "2027-02-15",
+          "name": "Presidents’ Day"
+        },
+        {
+          "date": "2027-03-10",
+          "name": "Eid al-Fitr"
+        },
+        {
+          "date": "2027-03-19",
+          "name": "Student-led conferences"
+        },
+        {
+          "date": "2027-03-22",
+          "end": "2027-03-29",
+          "name": "Spring break"
+        },
+        {
+          "date": "2027-04-09",
+          "name": "Staff professional development"
+        },
+        {
+          "date": "2027-05-14",
+          "name": "Staff professional development"
+        },
+        {
+          "date": "2027-05-17",
+          "name": "Eid al-Adha"
+        },
+        {
+          "date": "2027-05-31",
+          "name": "Memorial Day"
+        }
+      ]
+    },
+    "lastReviewed": "2026-11-11",
+    "added": "2026-11-11",
+    "notes": [
+      "Russell Byers’s 2026–27 Parent & Guardian Handbook mentions an RBCS After School Program at the school, but the site gives no hours, grades or cost for it. It has a listing here; ask the office how it works and how to sign up.",
+      "Byers keeps its own calendar, and its days off aren’t the District’s: it is closed for interim conferences on October 8 and December 21, on March 10 for Eid al-Fitr and on May 17 for Eid al-Adha, for instance, and its last day is June 3. The days off on this page come from the Byers calendar; the days-off planner and the list of who’s open go by the District’s, so check a camp’s dates against Byers’s.",
+      "Kids on 12th picks up from Byers. Ask how it handles Byers’s own days off and early dismissals, which aren’t the District’s.",
+      "If you know a program that serves Russell Byers and isn’t here, send it in and it goes on this page."
+    ],
+    "alsoListed": {
+      "title": "Also named for Russell Byers elsewhere",
+      "intro": "A third-party roundup of after-school pickup lists names this program for Byers too, but its own pages don’t.",
+      "items": [
+        "Philly Art Center (2333 Fairmount Ave and other studios): the roundup lists Russell Byers Charter among its pickup schools, but the art center’s own pickup lists name only Bache-Martin, Greenfield, St. Francis Xavier and Independence Charter for Fairmount. phillyartcenter.com"
+      ]
+    }
+  },
+  {
+    "id": "cook-wissahickon",
+    "name": "Cook-Wissahickon School",
+    "shortName": "Cook-Wissahickon",
+    "aliases": [
+      "Cook-Wissahickon",
+      "Cooke-Wissahickon",
+      "Cook Wissahickon",
+      "Cook-Wissahickon Elementary"
+    ],
+    "address": "201 E Salaignac St, Philadelphia, PA 19128",
+    "neighborhood": "Roxborough",
+    "grades": "K-8",
+    "dismissal": "3:29 pm",
+    "dismissalNote": "the school day is 8:50 am to 3:29 pm",
+    "phone": "215-400-3430",
+    "website": "https://cookwissahickon.philasd.org/",
+    "lastReviewed": "2026-11-11",
+    "added": "2026-11-11",
+    "notes": [
+      "Cook-Wissahickon’s own site names one after-school partner, the Urban Youth Afterschool Program (Urban Youth King & Queens, or UYKQ), which runs before and after care in the building. It has a listing here.",
+      "The clubs the school’s site lists (robotics, intramural sports, volleyball, art club, yearbook) are described as running during the school day, so they aren’t listed here as after-school care.",
+      "UYKQ runs on early-dismissal days but not when the school closes early for weather. Ask Zhang Sah, which also picks up here, how it handles half days.",
+      "If you know a program that serves Cook-Wissahickon and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "morris",
+    "name": "Robert Morris School",
+    "shortName": "Robert Morris",
+    "aliases": [
+      "Robert Morris",
+      "Robert Morris Elementary",
+      "Robert Morris Elementary School",
+      "Morris Elementary"
+    ],
+    "address": "2600 W Thompson St, Philadelphia, PA 19121",
+    "neighborhood": "Brewerytown",
+    "grades": "K-8",
+    "dismissalNote": "the school’s bell schedule page is empty; its after-school clubs start at 3:45 pm and the Caring People Alliance program at 3:30 pm",
+    "phone": "215-400-7320",
+    "website": "https://morris.philasd.org/",
+    "lastReviewed": "2026-11-11",
+    "added": "2026-11-11",
+    "notes": [
+      "Two things run in the building after school. Caring People Alliance runs a free after-school program there, Monday to Friday until 6:00 pm, for Morris students only; it is listed in the City’s program locator. The school runs its own clubs too: tech, music, volleyball and writing.",
+      "The school doesn’t post a dismissal time, half days or how the after-school program handles early dismissals. Ask the office.",
+      "If you know a program that serves Robert Morris and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "henry",
+    "name": "Charles W. Henry School",
+    "shortName": "C.W. Henry",
+    "aliases": [
+      "C.W. Henry",
+      "CW Henry",
+      "C. W. Henry",
+      "Charles W. Henry",
+      "Charles W. Henry School",
+      "Henry School"
+    ],
+    "address": "601 Carpenter Ln, Philadelphia, PA 19119",
+    "neighborhood": "Mount Airy",
+    "grades": "K-8",
+    "dismissal": "3:24 pm",
+    "dismissalNote": "the school day is 8:45 am to 3:24 pm",
+    "phone": "215-400-3480",
+    "website": "https://henry.philasd.org/",
+    "lastReviewed": "2026-11-11",
+    "added": "2026-11-11",
+    "notes": [
+      "Henry’s own site names Urban Youth King and Queens (UYKQ) among its community partners; UYKQ runs before and after care in the building and has a listing here. Philly Art Center’s Mount Airy studio is a block away on Carpenter Lane, and it and Zhang Sah both name Henry on their pickup lists.",
+      "The school’s site lists clubs and activities too, among them debate, robotics, chess, yoga, cooking, Students Run Philly Style and the spring musical, without saying when they meet. It links an up-to-date list; ask the office which run after dismissal.",
+      "If you know a program that serves C.W. Henry and isn’t here, send it in and it goes on this page."
+    ]
   }
 ]

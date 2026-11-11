@@ -1308,6 +1308,42 @@
           }
         ],
         "checked": "2026-11-08"
+      },
+      "jenks": {
+        "relation": "pickup",
+        "distance": "about 3 miles south, on Wissahickon Avenue",
+        "note": "Zhang Sah’s own page lists JS Jenks among its Mt. Airy site’s pickup schools. Children come by bus, walking escort or van after dismissal.",
+        "sources": [
+          {
+            "label": "Zhang Sah after-school program",
+            "url": "https://zhangsah.org/after-school-program/"
+          }
+        ],
+        "checked": "2026-11-11"
+      },
+      "henry": {
+        "relation": "pickup",
+        "distance": "about a mile south, on Wissahickon Avenue",
+        "note": "Zhang Sah’s own page lists CW Henry among its Mt. Airy site’s pickup schools. Children come by bus, walking escort or van after dismissal.",
+        "sources": [
+          {
+            "label": "Zhang Sah after-school program",
+            "url": "https://zhangsah.org/after-school-program/"
+          }
+        ],
+        "checked": "2026-11-11"
+      },
+      "cook-wissahickon": {
+        "relation": "pickup",
+        "distance": "about a mile northeast, on Wissahickon Avenue",
+        "note": "Zhang Sah’s own page lists Cook-Wissahickon (spelled “Cooke-Wissahickon”) among its Mt. Airy site’s pickup schools. Children come by bus, walking escort or van after dismissal.",
+        "sources": [
+          {
+            "label": "Zhang Sah after-school program",
+            "url": "https://zhangsah.org/after-school-program/"
+          }
+        ],
+        "checked": "2026-11-11"
       }
     },
     "pickupLists": [
@@ -5114,6 +5150,18 @@
           }
         ],
         "checked": "2026-11-01"
+      },
+      "byers": {
+        "relation": "pickup",
+        "distance": "about three-quarters of a mile southeast, at 12th and Chestnut",
+        "note": "Kids on 12th’s pickup list names Russell Byers Elementary School. Byers keeps its own calendar, so ask how Kids on 12th handles Byers’s days off and early dismissals.",
+        "sources": [
+          {
+            "label": "Kids on 12th pick-up",
+            "url": "https://ko12.org/after-school-pick-up-philadelphia"
+          }
+        ],
+        "checked": "2026-11-11"
       }
     },
     "pickupLists": [
@@ -7749,6 +7797,18 @@
           }
         ],
         "checked": "2026-11-10"
+      },
+      "byers": {
+        "relation": "nearby",
+        "distance": "about a quarter mile south, on Chestnut St",
+        "note": "ZAZZ’s own pickup list doesn’t include Byers, so plan on getting your child to the studio.",
+        "sources": [
+          {
+            "label": "ZAZZ after school",
+            "url": "https://zazzphilly.com/afterschool/"
+          }
+        ],
+        "checked": "2026-11-11"
       }
     },
     "weekend": {
@@ -8053,6 +8113,18 @@
           }
         ],
         "checked": "2026-11-10"
+      },
+      "byers": {
+        "relation": "nearby",
+        "distance": "about a third of a mile southeast, on Chestnut St",
+        "note": "Evolve’s own page names only Greenfield for pickup, so plan on getting your child to the studio for a 3:45 or 4:45 pm class.",
+        "sources": [
+          {
+            "label": "Evolve Dance youth programs",
+            "url": "https://evolvedancephilly.com/youth-programs"
+          }
+        ],
+        "checked": "2026-11-11"
       }
     },
     "pickupLists": [
@@ -11856,6 +11928,30 @@
           }
         ],
         "checked": "2026-11-08"
+      },
+      "jenks": {
+        "relation": "pickup",
+        "distance": "about 2 miles south, at Carpenter Lane and Greene St",
+        "note": "J.S. Jenks is on the Mt. Airy studio’s pick-up list. Teachers walk children over or bring them by SEPTA bus, and on days public schools dismiss early, enrolled children can be picked up for a half-day camp.",
+        "sources": [
+          {
+            "label": "Mt. Airy school pick-up",
+            "url": "https://phillyartcenter.com/locations/mt-airy/school-pick-up/"
+          }
+        ],
+        "checked": "2026-11-11"
+      },
+      "henry": {
+        "relation": "pickup",
+        "distance": "a block away, on Carpenter Lane",
+        "note": "C.W. Henry is on the Mt. Airy studio’s pick-up list. On days public schools dismiss early, enrolled children can be picked up for a half-day camp.",
+        "sources": [
+          {
+            "label": "Mt. Airy school pick-up",
+            "url": "https://phillyartcenter.com/locations/mt-airy/school-pick-up/"
+          }
+        ],
+        "checked": "2026-11-11"
       }
     },
     "pickupLists": [
@@ -11976,5 +12072,391 @@
         "how": "fetch"
       }
     ]
+  },
+  {
+    "id": "uykq-after-care",
+    "name": "Urban Youth King & Queens (UYKQ) After-School",
+    "what": "Before and after care inside the school building, with a snack, homework help, sports, mentoring groups and free play",
+    "types": [
+      "aftercare",
+      "movement"
+    ],
+    "keywords": [
+      "aftercare",
+      "after care",
+      "before care",
+      "childcare",
+      "sports",
+      "homework",
+      "mentoring",
+      "UYKQ",
+      "Urban Youth",
+      "Kings and Queens",
+      "Houston",
+      "C.W. Henry",
+      "Cook-Wissahickon",
+      "Mount Airy",
+      "Roxborough"
+    ],
+    "address": "Inside Houston, C.W. Henry and Cook-Wissahickon schools",
+    "grades": "PK-5",
+    "gradeNote": "Pre-K to 5th grade at Cook-Wissahickon, K–5 at Houston and C.W. Henry",
+    "hours": "From dismissal to 5:45 pm, Monday to Friday, including early-dismissal days. Before care from as early as 7:30 am at C.W. Henry and Cook-Wissahickon. No care on days the school is closed, or when it closes early for weather.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:45 pm",
+    "cost": "After care is $300 a month for 4–5 days a week, $180 for 3 days and $60 for one set day a week. Before care is $100 a month on its own, or $50 on top of after care. A $25 application fee isn’t refunded. Drop-in days are $25 ($50 on a noon early dismissal), arranged ahead through the Lillio app.",
+    "price": "paid",
+    "rate": {
+      "per": "month",
+      "byDays": {
+        "1": 60,
+        "3": 180,
+        "4": 300,
+        "5": 300
+      },
+      "extra": "After care only; before care and the $25 application fee are extra."
+    },
+    "phone": "215-645-2770",
+    "email": "info@uykq.org",
+    "website": "https://www.urbanyouthkq.com/after-school",
+    "register": {
+      "how": "online",
+      "url": "https://www.himama.com/online_registration/apply/uykq",
+      "label": "Apply",
+      "note": "Applications go through Lillio (formerly HiMama). UYKQ’s page says it is accepting applications for 2026–27."
+    },
+    "note": "",
+    "sources": [
+      {
+        "label": "UYKQ after-school",
+        "url": "https://www.urbanyouthkq.com/after-school"
+      },
+      {
+        "label": "UYKQ before and after care parent handbook (August 2026)",
+        "url": "https://cdn.prod.website-files.com/65abe8d39ea0112409954ada/6a71daf93fceabbecf9eb050_UYKQ%20Before%20%26%20After-Care%20Parent%20Handbook_Updated%20Aug%202026.docx%20(1).pdf"
+      }
+    ],
+    "lastVerified": "2026-11-11",
+    "schools": {
+      "houston": {
+        "relation": "onsite",
+        "note": "UYKQ’s page lists Houston for after care, grades K–5.",
+        "sources": [
+          {
+            "label": "UYKQ after-school",
+            "url": "https://www.urbanyouthkq.com/after-school"
+          }
+        ],
+        "checked": "2026-11-11"
+      },
+      "henry": {
+        "relation": "onsite",
+        "note": "UYKQ’s page lists C.W. Henry for before and after care, grades K–5, and Henry’s own site names UYKQ among its community partners.",
+        "sources": [
+          {
+            "label": "UYKQ after-school",
+            "url": "https://www.urbanyouthkq.com/after-school"
+          },
+          {
+            "label": "C.W. Henry community partnerships",
+            "url": "https://henry.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-11"
+      },
+      "cook-wissahickon": {
+        "relation": "onsite",
+        "note": "UYKQ’s page lists Cook-Wissahickon for before and after care, Pre-K to 5th grade, and the school’s own site names the Urban Youth Afterschool Program among its community partnerships.",
+        "sources": [
+          {
+            "label": "UYKQ after-school",
+            "url": "https://www.urbanyouthkq.com/after-school"
+          },
+          {
+            "label": "Cook-Wissahickon community partnerships",
+            "url": "https://cookwissahickon.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-11"
+      }
+    }
+  },
+  {
+    "id": "byers-after-school",
+    "name": "Russell Byers Charter School: After School Program",
+    "what": "The school’s own after-school program, in the building",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "Russell Byers",
+      "Byers",
+      "RBCS",
+      "Logan Square",
+      "Arch Street"
+    ],
+    "address": "1911 Arch St",
+    "grades": null,
+    "gradeNote": "Not published; ask the school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-972-1700",
+    "email": "",
+    "website": "https://www.byerschool.org/pghandbook",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office how to sign up."
+    },
+    "note": "The only mention of this program on the school’s site is in its 2026–27 Parent & Guardian Handbook, which asks families of children in the RBCS After School Program to send a signed note when plans change. Ask the school for its days, hours, grades and cost.",
+    "sources": [
+      {
+        "label": "Russell Byers 2026–27 Parent & Guardian Handbook",
+        "url": "https://docs.google.com/document/d/1iIV6Jx7TeBi0Nmg-DJxO-hF4vt8gQVRtxMrYIkw7cG0/edit"
+      }
+    ],
+    "lastVerified": "2026-11-11",
+    "schools": {
+      "byers": {
+        "relation": "onsite",
+        "note": "Russell Byers’s own handbook names the RBCS After School Program.",
+        "sources": [
+          {
+            "label": "Russell Byers 2026–27 Parent & Guardian Handbook",
+            "url": "https://docs.google.com/document/d/1iIV6Jx7TeBi0Nmg-DJxO-hF4vt8gQVRtxMrYIkw7cG0/edit"
+          }
+        ],
+        "checked": "2026-11-11"
+      }
+    }
+  },
+  {
+    "id": "cpa-robert-morris",
+    "name": "Caring People Alliance at Robert Morris",
+    "what": "A free after-school program inside Robert Morris School, built around STEM and student choice, with snacks, homework help, physical activity and field trips",
+    "types": [
+      "aftercare",
+      "stem"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "STEM",
+      "coding",
+      "computers",
+      "homework",
+      "snack",
+      "field trips",
+      "Caring People Alliance",
+      "Robert Morris",
+      "Brewerytown"
+    ],
+    "address": "2600 W Thompson St",
+    "grades": "K-8",
+    "gradeNote": "Robert Morris students only",
+    "hours": "3:30–6:00 pm, Monday to Friday, September 11, 2026 to June 8, 2027.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "267-836-2402",
+    "email": "",
+    "website": "https://www.caringpeoplealliance.org/",
+    "register": {
+      "how": "online",
+      "url": "https://www.caringpeoplealliance.org/contact-us/enroll-today",
+      "label": "Enroll",
+      "note": "The City’s listing says registration is required and open from September 11, 2026 to June 8, 2027, for students at the school only."
+    },
+    "note": "The details here come from the City’s After School and Summer Program Locator. It says the program provides no transportation and serves meals and healthy snacks.",
+    "sources": [
+      {
+        "label": "City program locator: Caring People Alliance at Robert Morris",
+        "url": "https://www.phila.gov/ost/program-locator/?resource=ost_22"
+      }
+    ],
+    "lastVerified": "2026-11-11",
+    "schools": {
+      "morris": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists this program at Robert Morris, for the school’s own students.",
+        "sources": [
+          {
+            "label": "City program locator: Caring People Alliance at Robert Morris",
+            "url": "https://www.phila.gov/ost/program-locator/?resource=ost_22"
+          }
+        ],
+        "checked": "2026-11-11"
+      }
+    }
+  },
+  {
+    "id": "morris-clubs",
+    "name": "School clubs",
+    "what": "Tech Club, Music Club, Volleyball and Writing Club, after school at Robert Morris.",
+    "types": [
+      "clubs",
+      "stem",
+      "music",
+      "movement",
+      "academics"
+    ],
+    "keywords": [
+      "clubs",
+      "technology",
+      "robotics",
+      "music",
+      "guitar",
+      "ukulele",
+      "keyboard",
+      "band",
+      "volleyball",
+      "writing",
+      "journaling"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published; ask the school",
+    "hours": "3:45 to 4:30 or 4:45 pm, depending on the club",
+    "cost": "Not published",
+    "phone": "215-400-7320",
+    "email": "",
+    "website": "https://morris.philasd.org/summer-programs/",
+    "register": {
+      "how": "school",
+      "note": "Sign-ups go through the school office or the club’s teacher."
+    },
+    "note": "The school’s clubs page is headed 2025–26; its home page still lists these four clubs. Ask the office which are running this year and for which grades. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Robert Morris after school clubs",
+        "url": "https://morris.philasd.org/summer-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-11",
+    "schools": {
+      "morris": {
+        "relation": "onsite",
+        "checked": "2026-11-11"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Tech Club",
+        "what": "Digital literacy, technology and robotics",
+        "days": [
+          "mon",
+          "thu"
+        ],
+        "time": "3:45–4:45 pm",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Music Club",
+        "what": "Guitar, ukulele, keyboard and modern band",
+        "days": [
+          "mon"
+        ],
+        "time": "3:45–4:45 pm",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Volleyball",
+        "what": "Rules, technique and in-house games",
+        "days": [
+          "mon",
+          "tue",
+          "wed",
+          "thu"
+        ],
+        "time": "3:45–4:30 pm",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Writing Club",
+        "what": "Creative writing and journaling",
+        "days": [
+          "mon",
+          "wed"
+        ],
+        "time": "3:45–4:45 pm",
+        "tags": [
+          "academics"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "water-tower-rec",
+    "name": "Water Tower Recreation Center",
+    "what": "City rec center after-school program: sports and games, outdoor activities, the arts, reading and STEM",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "sports",
+      "games",
+      "aftercare",
+      "Chestnut Hill",
+      "Hartwell Lane",
+      "Jenks"
+    ],
+    "address": "209 E Hartwell Ln",
+    "neighborhoods": [
+      "Chestnut Hill"
+    ],
+    "grades": "1-6",
+    "gradeNote": "Ages 6–12",
+    "hours": "Not published in the City’s listing",
+    "cost": "$45 a week in the City’s listing, which dates from 2016; call to ask what it costs now.",
+    "price": "paid",
+    "phone": "215-685-9296",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The City’s finder lists an after-school program here for ages 6 to 12, entered in 2016 and marked “Planning: Seeking registrants!”. Call to ask whether it is running this year, its hours and what it costs.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-11",
+    "schools": {
+      "jenks": {
+        "relation": "nearby",
+        "distance": "a couple of blocks east, on Hartwell Lane",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-11"
+      }
+    }
   }
 ]
