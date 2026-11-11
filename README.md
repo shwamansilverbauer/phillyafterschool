@@ -468,9 +468,11 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   ribbons and twinkling sparkles; rainbow makes it all rainbow, with a bigger wing and more sparkles (`GRAND`,
   `METAL`); diamond is icy blue with a diamond on the crown. Five stars on the banner at the top. On a phone the tab
   fits three pins a row. The server keeps which level of each pin a child has been shown (`seen`, 1 to 5).
-- **Levels.** Points are 10 a class, 5 a repeat, 5 a neighborhood and 5 a pin level (`stats()`; one class is usually
-  level 3 now, with the newer pins); `LEVELS` and `TITLES` turn them
-  into "Explorer · Level 4" with a bar to the next.
+- **Levels.** Paced on purpose: points are 10 a class or camp, 3 a repeat, 3 a neighborhood and 1 a pin level
+  (`stats()`); `LEVELS` and `TITLES` turn them into "Explorer · Level 4" with a bar to the next. A first class is level 2,
+  a busy first year (eight classes and camps, some going more than once) level 4, 40 classes about level 8, and Legend
+  (level 11) about 70. A level once reached is kept (`lvl`, the last one celebrated): if the points ever count for less,
+  the child stays at it and the bar fills toward the next from where the points are.
 - **Celebrations.** Pins whose level went up since the child last looked, secret spots and surprises found on the
   map, and a new level, wait behind a present to tap open (sounds can only start after a tap), then pop in one by one
   (or all together past three), then the spots, then the surprises ("SURPRISE! … You found it in Fairmount!"), then

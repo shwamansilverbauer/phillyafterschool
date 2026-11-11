@@ -455,9 +455,10 @@
   // The household's children, for Tag Team (a class with a brother or sister). The pin is there only with two or more.
   var HOUSE = [];
   var PINS = function () { return D.pins.filter(function (p) { return p.id !== 'pin:tag-team' || HOUSE.length > 1; }); };
-  var LEVELS = [0, 15, 40, 75, 120, 175, 240, 315, 400, 495, 600, 715, 840, 975, 1120];
+  // Paced: a first class is level 2, a busy first year (eight classes and camps) level 4, Legend (11) about 70 classes.
+  var LEVELS = [0, 15, 50, 100, 170, 260, 370, 500, 650, 820, 1010, 1220, 1450, 1700, 1970];
   var TITLES = ['Rookie', 'Rookie', 'Explorer', 'Explorer', 'Adventurer', 'Adventurer', 'Trailblazer', 'Trailblazer', 'Champion', 'Champion', 'Legend'];
-  var need = function (n) { return n - 1 < LEVELS.length ? LEVELS[n - 1] : LEVELS[LEVELS.length - 1] + (n - LEVELS.length) * 150; };   // points to reach level n
+  var need = function (n) { return n - 1 < LEVELS.length ? LEVELS[n - 1] : LEVELS[LEVELS.length - 1] + (n - LEVELS.length) * 300; };   // points to reach level n
   var levelOf = function (xp) { var n = 1; while (xp >= need(n + 1)) n++; return { n: n, title: TITLES[Math.min(n - 1, TITLES.length - 1)], from: need(n), to: need(n + 1) }; };
   var stats = function (k) {
     var types = {}, kinds = {}, hoods = {}, places = [], keys = [], seenKey = {}, n = 0, times = {}, weeks = 0, near = {}, inHood = {};
@@ -502,8 +503,12 @@
       pins[p.id] = { c: c, tier: tier, next: tier < TOP ? p.tiers[tier] : 0 };
       tiers += tier;
     });
-    var xp = n * 10 + repeats * 5 + nh * 5 + tiers * 5;   // going back counts toward the level too
-    return { n: n, nh: nh, hoods: hoods, places: places, keys: keys, times: times, repeats: repeats, spots: spots, found: found, hidden: hidden, sur: sur, surFound: surFound, pins: pins, tiers: tiers, xp: xp, level: levelOf(xp) };
+    var xp = n * 10 + repeats * 3 + nh * 3 + tiers;   // classes count most; going back, new places and pin levels a little
+    // A level once reached is kept (what's been unlocked to wear stays unlocked), even if the points were counted
+    // more generously then: the bar fills toward the next one from where the points are now.
+    var level = levelOf(xp), kept = k.lvl || 1;
+    if (kept > level.n) level = { n: kept, title: TITLES[Math.min(kept - 1, TITLES.length - 1)], from: need(kept), to: need(kept + 1), kept: true };
+    return { n: n, nh: nh, hoods: hoods, places: places, keys: keys, times: times, repeats: repeats, spots: spots, found: found, hidden: hidden, sur: sur, surFound: surFound, pins: pins, tiers: tiers, xp: xp, level: level };
   };
 
   // ----- state -----
@@ -732,7 +737,7 @@
     who.appendChild(el('b', 'kc-name', k.name));
     who.appendChild(el('span', 'kc-lvl', st.level.title + ' · Level ' + st.level.n));
     var bar = el('div', 'kc-xp'); bar.setAttribute('role', 'progressbar'); bar.setAttribute('aria-label', 'To the next level'); bar.setAttribute('aria-valuemin', '0'); bar.setAttribute('aria-valuemax', '100');
-    var pct = Math.round(100 * (st.xp - st.level.from) / (st.level.to - st.level.from)); bar.setAttribute('aria-valuenow', String(pct));
+    var pct = Math.max(0, Math.round(100 * (st.xp - st.level.from) / (st.level.to - st.level.from))); bar.setAttribute('aria-valuenow', String(pct));
     var fill = el('i'); fill.style.width = Math.max(4, pct) + '%'; bar.appendChild(fill); who.appendChild(bar);
     top.appendChild(who);
     top.appendChild(muteBtn());

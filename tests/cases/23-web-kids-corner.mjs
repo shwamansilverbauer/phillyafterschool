@@ -129,12 +129,12 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   ok(shown.some(s => /SURPRISE!/.test(s) && /You found it in/.test(s)), 'a surprise in the neighborhood: ' + shown.join(' / '));
   ok(shown.some(s => /afternoon adventurer/i.test(s)), 'the after-school pin');   // headings are in capitals
   ok(shown.some(s => /LEVEL UP/.test(s)), 'a new level');
-  ok(shown.some(s => /New stuff to wear/i.test(s) && /Sunglasses/i.test(s) && /Bow tie/i.test(s) && /Cap/.test(s) && /Scarf/i.test(s)), 'up to level 3, which unlocks sunglasses, a bow tie, a cap and a scarf');
+  ok(shown.some(s => /New stuff to wear/i.test(s) && /Sunglasses/i.test(s) && /Bow tie/i.test(s) && !/Scarf/i.test(s)), 'a first class is level 2 (paced: no further), which unlocks sunglasses and a bow tie: ' + shown.join(' / '));
   await page.waitForFunction(() => !document.querySelector('.kc-over'));
   // "Try it on!" opens the bulb's wardrobe: what level 2 unlocked, the rest locked with the level that opens it.
   await page.waitForSelector('.kc-avatar .kc-wardrobe');
   eq(await page.locator('.kc-wearbtn').count(), 16, 'everything there is to wear');
-  eq(await page.locator('.kc-wearbtn:not(.locked)').count(), 4, 'four unlocked at level 3');
+  eq(await page.locator('.kc-wearbtn:not(.locked)').count(), 2, 'two unlocked at level 2');
   const cape = page.locator('.kc-wearbtn', { has: page.locator('b', { hasText: /^cape$/i }) });   // not the cap
   includes(flat(await cape.locator('.kc-lock').innerText()).toLowerCase(), 'level 4');
   await cape.click();
@@ -146,7 +146,7 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   await page.locator('.kc-avatar .kc-big.go').click();
   await page.waitForSelector('.kc-pincard');
   ok(await page.locator('.kc-pincard.t1').count() >= 2, 'bronze pins on the page');
-  includes(flat(await page.locator('.kc-lvl').innerText()), 'Level 3');
+  includes(flat(await page.locator('.kc-lvl').innerText()), 'Level 2');
   // The secret Philly pins: the one found, and nine still a ? with a hint.
   matches(flat(await page.locator('.kc-pinsec.secret').innerText()), /1 of 10 found/i);
   eq(await page.locator('.kc-pincard.secret').count(), 9, 'the other nine are still secrets');
@@ -157,7 +157,7 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   // The server keeps what was celebrated, so it isn't celebrated again.
   const p1 = await pat.okay('GET', 'passport');
   eq(p1.kids[0].done.length, 1); eq(p1.kids[0].done[0].k, 'p:' + program.id); eq(p1.kids[0].done[0].s, school);
-  eq(p1.kids[0].seen['season:after'], 1); eq(p1.kids[0].lvl, 3);
+  eq(p1.kids[0].seen['season:after'], 1); eq(p1.kids[0].lvl, 2);
   ok(Object.keys(p1.kids[0].seen).some(id => /^philly:/.test(id)) && Object.keys(p1.kids[0].seen).some(id => /^pin:/.test(id)), 'the server keeps the new pins as seen too: ' + Object.keys(p1.kids[0].seen).join(', ')); eq(JSON.stringify(p1.kids[0].av.w), '{"face":"shades"}', 'the bulb wears its sunglasses');
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForSelector('.kc-kidbtn');
@@ -183,6 +183,7 @@ test('the map of Philadelphia: drawn from this site, clear where the child has b
   const page = await t.open('/kids-playground/#map');
   await page.waitForSelector('.kc-map');   // one child: straight to her page, on the tab in the address
   await page.evaluate(() => document.querySelectorAll('.kc-over').forEach(o => o.remove()));   // any pin not seen yet
+  includes(flat(await page.locator('.kc-lvl').innerText()), 'Level 9', 'a level once reached is kept, though two classes are fewer points now');
   const open = await page.locator('.kc-map .kc-hoods path.open').count();
   ok(open >= 1, 'at least one neighborhood cleared');
   eq(await page.locator('.kc-placelist li').count(), open, 'the cleared ones named under the map');
