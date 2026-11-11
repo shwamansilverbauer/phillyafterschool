@@ -164,7 +164,13 @@ $NAMES = json_decode('{"p:test-listing-premium":"Test Listing (Premium)","p:test
 $name = function ($key) use ($NAMES) { return isset($NAMES[$key]) ? $NAMES[$key] : $key . ' (no longer on the site)'; };
 $NAMES_AZ = $NAMES; asort($NAMES_AZ, SORT_NATURAL | SORT_FLAG_CASE);
 $day = function ($t) { $d = new DateTime('@' . (int) $t); $d->setTimezone(new DateTimeZone('America/New_York')); return $d->format('M j, Y'); };
-$pinText = function ($x) { if ($x['kind'] !== 'pin') return $x['body']; $p = json_decode($x['body'], true); if (!is_array($p)) return $x['body']; $cols = array('red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'violet', 'pink', 'gray'); return 'Name: ' . $p['n'] . "
+$kindName = function ($k, $waiting) { return $k === 'offer' ? 'Offer or event line' : ($k === 'pin' ? ($waiting ? 'Kids’ Playground pin (kids see it only after going there)' : 'Kids’ Playground pin') : ($k === 'social' ? 'Social links' : ($k === 'posts' ? 'Instagram posts (parents tap to load them)' : 'In their own words'))); };
+$extraLinks = function ($x) { $v = json_decode($x['body'], true); return is_array($v) ? array_values(array_filter($v, function ($u) { return is_string($u) && preg_match('~^https://~', $u); })) : array(); };
+$pinText = function ($x) { if ($x['kind'] === 'social') { $v = json_decode($x['body'], true); $n = array('ig' => 'Instagram', 'fb' => 'Facebook', 'tt' => 'TikTok', 'yt' => 'YouTube'); $out = array(); foreach (is_array($v) ? $v : array() as $k => $u) $out[] = (isset($n[$k]) ? $n[$k] : $k) . ': ' . $u; return implode("
+", $out); }
+  if ($x['kind'] === 'posts') { $v = json_decode($x['body'], true); return is_array($v) ? implode("
+", $v) : $x['body']; }
+  if ($x['kind'] !== 'pin') return $x['body']; $p = json_decode($x['body'], true); if (!is_array($p)) return $x['body']; $cols = array('red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'violet', 'pink', 'gray'); return 'Name: ' . $p['n'] . "
 Color: " . (isset($cols[(int) $p['c']]) ? $cols[(int) $p['c']] : '?') . "
 Picture: " . $p['i']; };
 $csrf = hash_hmac('sha256', 'claims-form', edit_key());
@@ -303,13 +309,13 @@ We " . ($was === 'ok' ? 'have taken down' : 'weren’t able to use') . ' the pho
     try {
       $st = $db->prepare('SELECT e.id, e.listing, e.kind, e.status, u.email, u.first FROM extras e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.id = ?'); $st->execute(array($id)); $x = $st->fetch();
       if ($x) {
-        $n = $name($x['listing']); $what = $x['kind'] === 'offer' ? 'offer line' : ($x['kind'] === 'pin' ? 'Kids’ Playground pin' : 'section in your own words');
+        $n = $name($x['listing']); $what = $x['kind'] === 'offer' ? 'offer line' : ($x['kind'] === 'pin' ? 'Kids’ Playground pin' : ($x['kind'] === 'social' ? 'social links' : ($x['kind'] === 'posts' ? 'Instagram posts' : 'section in your own words'))); $are = $x['kind'] === 'social' || $x['kind'] === 'posts' ? 'are' : 'is';
         if ($do === 'extra_ok') {
           $db->prepare("DELETE FROM extras WHERE listing = ? AND kind = ? AND status = 'ok' AND id != ?")->execute(array($x['listing'], $x['kind'], $id));   // the newer one takes its place
           $db->prepare("UPDATE extras SET status = 'ok', decided = ? WHERE id = ?")->execute(array(time(), $id));
-          tell($x['email'], 'Your ' . $what . ' for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",
+          tell($x['email'], 'Your ' . $what . ' for ' . $n . ' ' . $are . ' on the site', 'Hi ' . $x['first'] . ",
 
-The " . $what . ' you wrote for “' . $n . '” is on the listing now.' . ($PREMIUM === 'preview' ? ' For now only you can see it there, while premium listings are being tried out.' : '') . ' You can change it or take it down here:' . "
+The " . $what . ' you ' . ($are === 'are' ? 'sent' : 'wrote') . ' for “' . $n . '” ' . $are . ' on the listing now.' . ($PREMIUM === 'preview' ? ' For now only you can see it there, while premium listings are being tried out.' : '') . ' You can change it or take it down here:' . "
 " . $SITE_URL . '/managers/');
           $msg = 'Published, and they’ve been told.';
         } else {
@@ -317,7 +323,7 @@ The " . $what . ' you wrote for “' . $n . '” is on the listing now.' . ($PRE
           $db->prepare("UPDATE extras SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), $id));
           tell($x['email'], 'About the ' . $what . ' for ' . $n, 'Hi ' . $x['first'] . ",
 
-We " . ($was === 'ok' ? 'have taken down' : 'weren’t able to publish') . ' the ' . $what . ' you wrote for “' . $n . '”. ' . ($x['kind'] === 'pin' ? 'A pin’s name should be the program’s name or a short, kid-friendly title, with no prices, offers or web addresses.' : 'It should describe the program in plain words, with no prices that differ from the listing and no claims about other programs.') . ' You’re welcome to send another, or reply to this email with any questions.');
+We " . ($was === 'ok' ? 'have taken down' : 'weren’t able to publish') . ' the ' . $what . ' you ' . ($are === 'are' ? 'sent' : 'wrote') . ' for “' . $n . '”. ' . ($x['kind'] === 'pin' ? 'A pin’s name should be the program’s name or a short, kid-friendly title, with no prices, offers or web addresses.' : ($x['kind'] === 'social' ? 'Social links should go to the program’s own accounts.' : ($x['kind'] === 'posts' ? 'Instagram posts should be public posts from the program’s own account that are fine for families to see on the site.' : 'It should describe the program in plain words, with no prices that differ from the listing and no claims about other programs.'))) . ' You’re welcome to send another, or reply to this email with any questions.');
           $msg = $was === 'ok' ? 'Taken down, and they’ve been told.' : 'Declined, and they’ve been told.';
         }
       }
@@ -370,7 +376,7 @@ if ($have) {
 <meta name="theme-color" content="#0A3566">
 <link rel="preload" href="../../assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../../assets/fonts/luckiest-guy-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../assets/site.css?v=bc68cdec">
+<link rel="stylesheet" href="../../assets/site.css?v=9fa7eb1f">
 </head>
 <body>
 <script>document.documentElement.className+=' js';document.documentElement.setAttribute('data-quiet','');try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
@@ -429,17 +435,18 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
   <?php if ($photosLive) { ?><h2>Photos on the site (<?php echo count($photosLive); ?>)</h2>
   <div class="review-grid"><?php foreach ($photosLive as $x) { ?><div class="panel"><p><img class="review-photo" src="./?photo=<?php echo (int) $x["id"]; ?>" alt=""></p><p><b><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?></b><br><span class="hint"><?php echo htmlspecialchars($x["alt"], ENT_QUOTES, 'UTF-8'); ?></span></p><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $x["id"]; ?>"><button class="btn" type="submit" name="do" value="photo_no">Take it down</button></form></div><?php } ?></div><?php } ?>
 
-  <h2>Words, offer lines and pins waiting for you (<?php echo count($extrasNew); ?>)</h2>
-  <?php if (!$extrasNew) { ?><p class="hint">None waiting. What a manager writes for a premium listing, and its Kids’ Playground pin, shows only after you publish it here.</p><?php } ?>
+  <h2>Words, offer lines, pins and social links waiting for you (<?php echo count($extrasNew); ?>)</h2>
+  <?php if (!$extrasNew) { ?><p class="hint">None waiting. What a manager writes for a premium listing, its Kids’ Playground pin, its social links and its Instagram posts show only after you publish them here.</p><?php } ?>
   <?php foreach ($extrasNew as $x) { ?><div class="panel">
-    <h3><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?> <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line' : ($x["kind"] === 'pin' ? 'Kids’ Playground pin (kids see it only after going there)' : 'In their own words'); ?></span></h3>
+    <h3><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?> <span class="hint"><?php echo $kindName($x["kind"], true); ?></span></h3>
     <p class="hint">From <?php echo htmlspecialchars($x["first"] . " " . $x["last"], ENT_QUOTES, 'UTF-8'); ?> &lt;<?php echo htmlspecialchars($x["email"], ENT_QUOTES, 'UTF-8'); ?>&gt;, <?php echo htmlspecialchars($day($x["created"]), ENT_QUOTES, 'UTF-8'); ?><?php if ($x["kind"] === 'offer') { ?>. To show until <?php echo htmlspecialchars($x["until"], ENT_QUOTES, 'UTF-8'); ?><?php } ?></p>
     <pre class="edit-ask"><?php echo htmlspecialchars($pinText($x), ENT_QUOTES, 'UTF-8'); ?></pre>
+    <?php if ($x["kind"] === 'social' || $x["kind"] === 'posts') { ?><p class="hint">Open each to check it’s the program’s own<?php echo $x["kind"] === 'posts' ? ', public, and fine to show on the site' : ''; ?>: <?php foreach ($extraLinks($x) as $u) { ?><a href="<?php echo htmlspecialchars($u, ENT_QUOTES, 'UTF-8'); ?>" rel="noopener noreferrer" target="_blank"><?php echo htmlspecialchars($u, ENT_QUOTES, 'UTF-8'); ?></a> <?php } ?></p><?php } ?>
     <form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $x["id"]; ?>"><button class="btn primary" type="submit" name="do" value="extra_ok">Publish it</button><button class="btn" type="submit" name="do" value="extra_no">Decline</button></form>
   </div><?php } ?>
-  <?php if ($extrasLive) { ?><h2>Words, offer lines and pins on the site (<?php echo count($extrasLive); ?>)</h2>
+  <?php if ($extrasLive) { ?><h2>Words, offer lines, pins and social links on the site (<?php echo count($extrasLive); ?>)</h2>
   <?php foreach ($extrasLive as $x) { ?><div class="panel">
-    <h3><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?> <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line, until ' . htmlspecialchars($x["until"], ENT_QUOTES, 'UTF-8') : ($x["kind"] === 'pin' ? 'Kids’ Playground pin' : 'In their own words'); ?></span></h3>
+    <h3><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?> <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line, until ' . htmlspecialchars($x["until"], ENT_QUOTES, 'UTF-8') : $kindName($x["kind"], false); ?></span></h3>
     <pre class="edit-ask"><?php echo htmlspecialchars($pinText($x), ENT_QUOTES, 'UTF-8'); ?></pre>
     <form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $x["id"]; ?>"><button class="btn" type="submit" name="do" value="extra_no">Take it down</button></form>
   </div><?php } ?><?php } ?>
@@ -447,7 +454,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
   <h2>Claimed listings (<?php echo count($claims); ?>)</h2>
   <p class="hint" id="test-listings">Your test listings, hidden from the rest of the site: <a href="../../programs/test-listing-premium/">Test Listing (Premium)</a> (claimed with an address at phillyafterschool.org, always premium) and <a href="../../programs/test-listing-free/">Test Listing (Free)</a> (claimed with an address at joshsilverbauer.com).</p>
   <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>
-  <p class="hint">Premium is on: a premium listing’s photos, own words, offer line and question button show to everyone, after you approve what the manager sends.</p>
+  <p class="hint">Premium is on: a premium listing’s photos, own words, offer line, social links, Instagram posts and question button show to everyone, after you approve what the manager sends.</p>
   <div class="stat-scroll"><table class="stat-table wrap"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th><th scope="col">Premium</th><th scope="col"></th></tr></thead><tbody>
   <?php foreach ($claims as $c) { ?><tr><th scope="row"><?php echo htmlspecialchars($name($c["listing"]), ENT_QUOTES, 'UTF-8'); ?></th><td><?php echo htmlspecialchars($c["first"] . " " . $c["last"], ENT_QUOTES, 'UTF-8'); ?><br><span class="hint"><?php echo htmlspecialchars($c["email"], ENT_QUOTES, 'UTF-8'); ?><?php if (isset($c["domain"]) && $c["domain"] === 'by hand') { ?> · given by hand<?php } ?></span></td><td><?php echo htmlspecialchars($day($c["created"]), ENT_QUOTES, 'UTF-8'); ?></td><td><?php if (in_array($c["listing"], $ALWAYS, true)) { ?><b>Premium</b><br><span class="hint">always: a test listing</span><?php } elseif (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since <?php echo htmlspecialchars($day($premium[$c["listing"]]), ENT_QUOTES, 'UTF-8'); ?></span><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn" type="submit" name="do" value="premium_off">Turn off</button></form><?php } else { ?><?php if (isset($asks[(int) $c["id"]])) { ?><b>Signed up: <?php echo $asks[(int) $c["id"]]["plan"] === 'year' ? 'yearly' : 'monthly'; ?></b><br><span class="hint"><?php echo htmlspecialchars($day($asks[(int) $c["id"]]["created"]), ENT_QUOTES, 'UTF-8'); ?></span><?php } ?><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn" type="submit" name="do" value="premium_on">Make it premium</button></form><?php } ?></td><td><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn" type="submit" name="do" value="claim_remove">Take the claim away</button></form></td></tr><?php } ?>
   </tbody></table></div>
@@ -530,7 +537,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
     </div>
   </div>
 </div></footer>
-<script src="../../assets/site.js?v=2921d770" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
+<script src="../../assets/site.js?v=aa454751" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
 
 </body>
 </html>
