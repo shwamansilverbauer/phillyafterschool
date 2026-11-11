@@ -152,7 +152,7 @@ test('the menu signed in: My Profile, the Parent Portal button, Kids’ Playgrou
   const nav = page.locator('header.sitebar nav');
   eq(flat(await nav.locator('a.nav-acct').innerText()), 'My Profile'); matches(await nav.locator('a.nav-acct').getAttribute('href'), /profile\/$/);
   matches(flat(await nav.locator('a.nav-cta.when-in').innerText()), /^Parent Portal( \(something new\))?$/); matches(await nav.locator('a.nav-cta.when-in').getAttribute('href'), /account\/$/);
-  eq(flat(await nav.locator('a.nav-kc').innerText()).toLowerCase(), 'kids’ playground'); matches(await nav.locator('a.nav-kc').getAttribute('href'), /kids-playground\/$/);
+  eq(flat(await nav.locator('a.nav-kc').textContent()).toLowerCase(), 'kids’ playground', 'its full name, for screen readers'); eq(await nav.locator('a.nav-kc .vh').textContent(), 'Kids’ ', 'the button itself just says Playground'); matches(await nav.locator('a.nav-kc').getAttribute('href'), /kids-playground\/$/);
   eq(await nav.locator('a', { hasText: /^Account$/ }).count(), 0, 'no separate Account link');
   const order = await nav.evaluate(n => [...n.children].map(c => c.className).filter(c => /nav-(acct|cta|kc)/.test(c) && !/when-out/.test(c)));
   ok(order.join(' ').indexOf('nav-acct') < order.join(' ').indexOf('nav-cta') && order.join(' ').indexOf('nav-cta') < order.join(' ').indexOf('nav-kc'), 'My Profile, then Parent Portal, then Kids’ Playground: ' + order.join(' | '));

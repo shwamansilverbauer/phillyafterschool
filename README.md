@@ -525,7 +525,7 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   bulb, level, pins, neighborhoods, classes, the whole showdown ranking best first (`rankList()`, also a Favorites
   panel in the grown-ups' corner), and the suggestions waiting for a yes or no, answered right
   there. Buttons open the child's own page (straight to them, past the picker: `sessionStorage` "kc-open", on the
-  device only) or the grown-ups' corner. It loads `kids-corner.js` and `assets/kids-corner.json` (the same data the
+  device only) or the grown-ups' corner ("Playground Portal": confirming classes, favorites, sharing, starting over). It loads `kids-corner.js` and `assets/kids-corner.json` (the same data the
   page has inline) only when the tab is opened, through `window.pasKids.summary()`; the account page's
   `data-kids` and `data-kids-data` say where they are.
 - **Kid reviews.** Each confirmed program in the grown-ups' corner links to the review form with the child's name and
@@ -2049,8 +2049,9 @@ its own page.
   Plans & sharing. A program manager's account has no overview and opens on Details. Signed out, it is still where
   people log in.
 - **Getting there.** Signed in, the menu has "My Profile" as a plain link, then the yellow "Parent Portal" button (to
-  the overview), then a Kids' Playground button with a little bulb. In the phone menu, Parent Portal, Kids' Playground and My
-  Profile are the first things listed: Parent Portal as the big yellow button, Kids' Playground as a small pill under it,
+  the overview), then the Kids' Playground button with a little bulb, which just says "Playground" ("Kids' " is there
+  for screen readers only). In the phone menu, Parent Portal, Playground and My
+  Profile are the first things listed: Parent Portal as the big yellow button, Playground as a small pill under it,
   so the portal leads. The footer's Schedule Builder column has "My Profile" as well.
 - **Changing the email address.** "Change my email address" under Your details asks for the new address
   (`email_start`), which is sent a 6-digit code, and then for the code (`email_finish`). Until the code is typed
