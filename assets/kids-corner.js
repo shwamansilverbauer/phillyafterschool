@@ -2109,7 +2109,7 @@
       }
       var acts = el('div', 'actions');
       acts.appendChild(btn('btn primary', 'Open ' + possessive(k.name) + ' Kids’ Playground', openOn(k)));
-      acts.appendChild(btn('btn', 'Add or take off classes', openOn(k, '#grownup')));
+      acts.appendChild(btn('btn', 'Playground Portal', openOn(k, '#grownup')));
       var again = btn('btn', 'Start over', function () {
         again.disabled = true;
         card.appendChild(startOver(k, function () { paintSummary(box, p); var c = [].filter.call(box.querySelectorAll('.kc-sum'), function (x) { return x.querySelector('h3') && x.querySelector('h3').textContent === k.name; })[0]; if (c) c.appendChild(el('p', 'g-status good', k.name + ' starts from the beginning next time: Eddie’s welcome first.')); }));
