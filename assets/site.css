@@ -2569,6 +2569,16 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-h2{font-family:var(--title);font-weight:400;text-transform:uppercase;letter-spacing:.03em;font-size:clamp(1.4rem,5vw,1.9rem);margin:0;color:#fff;text-shadow:0 3px 0 var(--kink),2px 2px 0 var(--kink),-2px -2px 0 var(--kink),2px -2px 0 var(--kink),-2px 2px 0 var(--kink)}
 .kc-say{color:#fff;font-weight:800;font-size:1.15rem;line-height:1.35;margin:8px 0;text-shadow:0 2px 0 rgba(11,33,64,.5)}
 .kc-say.small{font-size:1rem}
+.kc-over .kc-say.kc-counted{font-size:.95rem;font-weight:600;color:#3d4a63;max-width:30em;margin-left:auto;margin-right:auto}
+.kc-over .kc-say.kc-rule{font-size:.95rem;font-weight:600;color:#3d4a63;background:#f1f5fb;border-radius:12px;padding:.55em .8em;max-width:30em;margin-left:auto;margin-right:auto}
+.kc-over .kc-say.kc-rule b{color:#0b2140}
+.kc-pinbig.has-map .kc-pin{width:160px}
+.kc-minimap{max-width:210px;margin:6px auto 4px;text-align:center}
+.kc-mini{display:block;width:100%;height:auto}
+.kc-mini-say{margin:4px 0 2px;font-weight:700;font-size:.9rem;color:#3d4a63}
+.kc-mini-hoods{font-size:.85rem;color:#3d4a63;text-align:left}
+.kc-mini-hoods summary{cursor:pointer;font-weight:700;color:var(--kink);text-align:center}
+.kc-mini-hoods p{margin:4px 0 0;line-height:1.35}
 .kc-over .kc-say,.kc-over .kc-h2{color:var(--kink);text-shadow:none}
 .kc-tally{font-family:var(--title);font-size:1.2rem;background:#fff;color:var(--kink);border:3px solid var(--kink);border-radius:999px;padding:4px 14px 0;box-shadow:0 3px 0 var(--kink)}
 .kc-sechead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:22px 0 10px}
