@@ -952,7 +952,7 @@
       else if (p.group === 'repeat' && !p.how) card.appendChild(el('p', 'kc-say', x.c ? 'You went back to classes you love ' + plural(x.c, 'time', 'times') + '!' : 'Go back to a class you love to get this pin!'));
       else if (p.how) {
         card.appendChild(el('p', 'kc-say', x.c ? 'You have ' + plural(x.c, p.one, p.many) + '!' : p.get || p.rule || p.hint));
-        // which classes counted, so "around Old City" isn't a mystery
+        // which classes counted, so "in Old City or Society Hill" isn't a mystery
         var mx = p.how.indexOf('mix:') === 0 ? p.how.split(':') : null;
         var w = !x.c || !st ? '' : mx && p.parts ? p.parts.map(function (part, i) { return part + ': ' + names(i ? st.near[mx[i + 1]] : st.typeKeys[mx[1]]) + '.'; }).join(' ')
           : p.how.indexOf('area:') === 0 ? names(st.near[p.how.slice(5)]) && 'Counted: ' + names(st.near[p.how.slice(5)]) + '.'
