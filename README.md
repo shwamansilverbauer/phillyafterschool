@@ -448,16 +448,16 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   - **Secret Philly pins** (a keystone): eleven that show as a "?" with only a riddle ("Somewhere old, a famous bell has a
     crack in it… and it wants some music!") until found, and are revealed with a burst of their own ("SECRET PHILLY
     PIN!"). Eight are a mix of a kind of class and a part of the map (`mix:type:area`; the pairs are the fewer of the
-    two, so one music class around Old City is a pair by itself), at 1, 2, 3, 5 and 8: Liberty Bell Ringer (music and
+    two, so one music class in Old City is a pair by itself), at 1, 2, 3, 5 and 8: Liberty Bell Ringer (music and
     Old City), Ben Franklin's Kite (science and Old City), Billy Penn's Hat (theater and Center City), Cheesesteak Champ
     (games and South Philly), Boathouse Rower (sports and the Art Museum), Wissahickon Wanderer (nature and the
     Northwest), Heron Spotter (nature and the Southwest), Pennypack Pathfinder (sports and the Northeast). Bulboa
     Knockout (Eddie with his boxing gloves up) counts rounds: a sports class, a class in South Philly and one around the
-    Art Museum and Fairmount (`mix:movement:south:parkway`); its map colors both parts. The other two are Broad Street
+    Art Museum (`mix:movement:south:parkway`); its map colors both parts. The other two are Broad Street
     Crosser (a class on each side of Broad: `BROAD` in `kids-corner.js`) and Jawn Collector (different
     programs). Once found, the close-up says how many ("You have 2 music + Old City pairs!"), names the classes that
     counted for each half (for Broad Street, which side each was on) and gives the plain rule for leveling up ("To level
-    up: Do a music class AND a class around Old City. Each pair counts!", `rule`); the place pins add a small map with
+    up: Do a music class AND a class in Old City or Society Hill. Each pair counts!", `rule`); the place pins add a small map with
     that part of Philly colored in and the famous thing circled.
   - **All year** (a shield): after school, weekends, days off, summer (weeks of camp), and Year-Rounder (each kind in
     each school year).
@@ -508,11 +508,14 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   Philly, the Northwest, the Southwest, the Northeast), each with one to three famous things: the map's landmarks, and
   a few more placed by latitude and longitude (`MAP_EXTRA`: Elfreth's Alley, the Italian Market, the covered bridge,
   the wildlife refuge, Pennypack Park). Each starts as a "?" cloud and is found in order as the child goes to classes
-  nearby: the first with one listing in the area, the next with two, the last with three. Each map neighborhood belongs
-  to one area or none (`HOOD_AREA`: the area whose middle is nearest the neighborhood's middle, within 5 km, with
-  `AREA_FIX` for the ones that gets wrong, such as Bella Vista, home of the Italian Market, in South Philly), and a
-  listing site counts for its neighborhood's area (`mapArea()`, as `a` on the site). 31 neighborhoods, most of North
-  Philly among them, are in no area. `LANDMARK` and
+  nearby: the first with one listing in the area, the next with two, the last with three. Each area is the
+  neighborhoods Philadelphians would call it, listed by name in `AREA_HOODS`: Old City and Society Hill; Center City
+  (Vine to South between the rivers, less those two and Logan Square); the Art Museum and the Parkway (Fairmount,
+  Spring Garden, Logan Square, East Park); South Philly (everything below South Street east of the Schuylkill, Queen
+  Village and Graduate Hospital included); Southwest, Northwest (Germantown, Mount Airy, Chestnut Hill, Roxborough,
+  Manayunk, East Falls) and Northeast Philly. West Philly, North Philly and the River Wards are in no area for now. A
+  listing site counts for the area of the neighborhood the program itself names (what parents see on its page), or,
+  when that isn't one on the map, of the neighborhood its address falls in (`mapArea()`, as `a` on the site). `LANDMARK` and
   `LANDMARK_SAY` in `kids-corner.js` draw each one and say something about it; a tap on a "?" says how many more
   classes nearby it needs. (No Rocky statue: it's the film's character.)
 - **Surprises in every neighborhood.** Each map neighborhood that has a listing or a school in it (51 of them) has one

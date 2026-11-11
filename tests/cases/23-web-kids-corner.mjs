@@ -147,7 +147,7 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   await page.waitForSelector('.kc-pincard');
   ok(await page.locator('.kc-pincard.t1').count() >= 2, 'bronze pins on the page');
   includes(flat(await page.locator('.kc-lvl').innerText()), 'Level 2');
-  // The secret Philly pins: any found (one class is a pair only if it is, say, music around Old City), the rest a ? with a riddle.
+  // The secret Philly pins: any found (one class is a pair only if it is, say, music in Old City), the rest a ? with a riddle.
   const foundN = +(flat(await page.locator('.kc-pinsec.secret').innerText()).match(/(\d+) of 11 found/i) || [, -1])[1];
   ok(foundN >= 0 && foundN <= 2, 'the secret Philly pins counted: ' + foundN);
   eq(secretShown, foundN > 0, 'a secret pin found is revealed on its own');
@@ -182,24 +182,33 @@ test('a secret Philly pin: a riddle until found, then revealed on its own, sayin
   const y = (await pat.okay('GET', 'passport')).year;
   const t = await b.context(ctx.site, { sid: pat.cookie });
   const look = await t.open('/');
-  // a music class with one site, around Old City: Liberty Bell Ringer's pair by itself
-  const k = await look.evaluate(() => fetch('/assets/kids-corner.json').then(r => r.json()).then(d => Object.keys(d.listings).find(k => { const l = d.listings[k]; return (l.t || []).includes('music') && l.sites.length === 1 && l.sites[0].a === 'oldcity'; })));
-  ok(k, 'a music class around Old City in the data');
-  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [{ k, kind: 'after', y, s: '' }], av: { b: 'globe', c: 6 }, seen: { intro: 1 }, lvl: 1 });
+  // One class that is a whole pair by itself, for whichever mixed pin the data has one for (say, a music class in Old City
+  // for Liberty Bell Ringer): the pin, the class and the area's name.
+  const pick = await look.evaluate(() => fetch('/assets/kids-corner.json').then(r => r.json()).then(d => {
+    for (const p of d.pins) {
+      const mx = p.how && p.how.split(':'); if (!mx || mx[0] !== 'mix' || mx.length !== 3) continue;
+      const k = Object.keys(d.listings).find(k => { const l = d.listings[k]; return (l.t || []).includes(mx[1]) && l.sites.length === 1 && l.sites[0].a === mx[2]; });
+      if (k) return { k, label: p.label, one: p.one, rule: p.rule, parts: p.parts, area: d.areas.find(a => a.id === mx[2]).name };
+    }
+    return null;
+  }));
+  ok(pick, 'a class that makes a pair by itself, for one of the mixed secret pins');
+  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [{ k: pick.k, kind: 'after', y, s: '' }], av: { b: 'globe', c: 6 }, seen: { intro: 1 }, lvl: 1 });
   const page = await t.open('/kids-playground/#pins');
   await page.waitForSelector('.kc-over, .kc-gift');
   const shown = await celebrate(page);
-  ok(shown.some(s => /SECRET PHILLY PIN!/.test(s) && /LIBERTY BELL RINGER/i.test(s) && /You found a secret pin/.test(s)), 'revealed on its own: ' + shown.join(' / '));
+  ok(shown.some(s => /SECRET PHILLY PIN!/.test(s) && s.toUpperCase().includes(pick.label.toUpperCase()) && /You found a secret pin/.test(s)), 'revealed on its own: ' + shown.join(' / '));
   await page.waitForFunction(() => !document.querySelector('.kc-over'));
   if (await page.locator('.kc-avatar').count()) await page.locator('.kc-avatar .kc-big.go').click();
   await page.waitForSelector('.kc-pincard');
-  await page.locator('.kc-pincard', { hasText: 'Liberty Bell Ringer' }).click();
+  await page.locator('.kc-pincard', { hasText: pick.label }).click();
   await page.waitForSelector('.kc-over .kc-mini');
   const close = flat(await page.locator('.kc-over .kc-pinbig').innerText());
-  includes(close, 'You have 1 music + Old City pair!');
-  matches(close, /Music: .+\. Around Old City: .+\./, 'what counted for each half');
-  includes(close, 'To level up: Do a music class AND a class around Old City.');
-  includes(close, 'The colored part of Philly is Old City. The circle is the Liberty Bell!');
+  includes(close, 'You have 1 ' + pick.one + '!');
+  includes(close, pick.parts[0] + ': ', 'what counted as the kind of class');
+  includes(close, pick.parts[1] + ': ', 'and as the place');
+  includes(close, 'To level up: ' + pick.rule);
+  includes(close, 'The colored part of Philly is ' + pick.area);
   eq(await page.locator('.kc-over details').count(), 0, 'no list of neighborhoods');
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();

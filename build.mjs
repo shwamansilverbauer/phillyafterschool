@@ -5597,18 +5597,21 @@ const mapHood = (() => {
     return id;
   };
   fn.missed = missed;
+  fn.byName = name => { if (!name) return null; const sl = hoodSlug(name); return ids.has(sl) ? sl : MAP_ALIAS[sl] && ids.has(MAP_ALIAS[sl]) ? MAP_ALIAS[sl] : null; };
   return fn;
 })();
 // The map's secret spots. The city is in areas, each with a few famous things that start as a "?" and unlock as a
-// child goes to more classes nearby: the first with one, the next with two, the last with three. Each neighborhood on
-// the map belongs to one area (or none): the area whose middle is nearest the neighborhood's middle, within 5 km, with
-// AREA_FIX for the few that distance gets wrong. A class counts for its neighborhood's area, so the rule is one a
-// parent can check ("classes in these neighborhoods"), and Kids' Playground colors them in on a pin's close-up. The map's own landmarks (data/philly-map.json) are most of them;
-// MAP_EXTRA places the rest by latitude and longitude. kids-corner.js draws each one and says something about it.
+// child goes to more classes nearby: the first with one, the next with two, the last with three. Each area is the
+// neighborhoods Philadelphians would call it, by name (AREA_HOODS): South Philly is below South Street, Center City is
+// Vine to South between the rivers (less Old City, Society Hill and the Parkway's Logan Square), and so on. A class
+// counts for its neighborhood's area, so the rule is one a parent can check; a neighborhood in no area (West Philly,
+// North Philly, the River Wards for now) counts for none. The map's own landmarks (data/philly-map.json) are most of the
+// famous things; MAP_EXTRA places the rest by latitude and longitude. kids-corner.js draws each one and says something
+// about it.
 const MAP_AREAS = [
   { id: 'parkway', name: 'the Art Museum and the Parkway', mark: 'the Art Museum', at: [39.9680, -75.1850], items: ['art-museum', 'boathouses', 'zoo'] },
   { id: 'center', name: 'Center City', mark: 'City Hall', at: [39.9530, -75.1680], items: ['city-hall', 'love', 'franklin'] },
-  { id: 'oldcity', name: 'Old City', mark: 'the Liberty Bell', at: [39.9510, -75.1440], items: ['liberty-bell', 'elfreth', 'bridge'] },
+  { id: 'oldcity', name: 'Old City and Society Hill', mark: 'the Liberty Bell', at: [39.9510, -75.1440], items: ['liberty-bell', 'elfreth', 'bridge'] },
   { id: 'south', name: 'South Philly', mark: 'the cheesesteak shops', at: [39.9250, -75.1650], items: ['cheesesteak', 'italian-market', 'stadiums'] },
   { id: 'northwest', name: 'Northwest Philly', mark: 'the Wissahickon', at: [40.0400, -75.2150], items: ['wissahickon', 'covered-bridge'] },
   { id: 'southwest', name: 'Southwest Philly', mark: 'the wildlife refuge', at: [39.8950, -75.2300], items: ['heinz', 'airport'] },
@@ -5618,22 +5621,38 @@ const MAP_EXTRA = {
   elfreth: ['Elfreth’s Alley', 39.9527, -75.1425], 'italian-market': ['The Italian Market', 39.9380, -75.1580], 'covered-bridge': ['The covered bridge', 40.0647, -75.2177],
   heinz: ['The wildlife refuge', 39.8920, -75.2570], pennypack: ['Pennypack Park', 40.0640, -75.0500],
 };
-const AREA_FIX = { 'bella-vista': 'south' };   // the Italian Market is in Bella Vista
+const AREA_HOODS = {
+  parkway: ['fairmount', 'spring-garden', 'logan-square', 'east-park'],
+  center: ['center-city-east', 'chinatown', 'rittenhouse', 'fitler-square', 'washington-square-west'],
+  oldcity: ['old-city', 'society-hill'],
+  south: ['queen-village', 'bella-vista', 'hawthorne', 'graduate-hospital', 'pennsport', 'dickinson-narrows', 'passyunk-square',
+    'east-passyunk', 'point-breeze', 'newbold', 'west-passyunk', 'girard-estates', 'lower-moyamensing', 'whitman', 'greenwich',
+    'packer-park', 'stadium-district', 'navy-yard', 'grays-ferry', 'riverfront'],
+  northwest: ['chestnut-hill', 'west-mount-airy', 'east-mount-airy', 'cedarbrook', 'blue-bell-hill', 'germantown-morton',
+    'germantown-penn-knox', 'germantown-westside', 'west-central-germantown', 'southwest-germantown', 'east-germantown', 'wister',
+    'roxborough', 'upper-roxborough', 'roxborough-park', 'manayunk', 'wissahickon', 'wissahickon-hills', 'wissahickon-park',
+    'andorra', 'dearnley-park', 'germany-hill', 'east-falls'],
+  southwest: ['kingsessing', 'elmwood', 'eastwick', 'paschall', 'southwest-schuylkill', 'bartram-village', 'penrose', 'clearview',
+    'airport', 'industrial'],
+  northeast: ['mayfair', 'holmesburg', 'tacony', 'wissinoming', 'oxford-circle', 'rhawnhurst', 'fox-chase', 'bustleton', 'somerton',
+    'torresdale', 'west-torresdale', 'pennypack', 'pennypack-park', 'pennypack-woods', 'burholme', 'crestmont-farms', 'academy-gardens',
+    'aston-woodbridge', 'lexington-park', 'millbrook', 'modena', 'morrell-park', 'normandy-village', 'byberry', 'winchester-park',
+    'parkwood-manor', 'mechanicsville', 'franklin-mills', 'northeast-phila-airport', 'frankford', 'crescentville', 'lawndale',
+    'summerdale', 'northwood'],
+};
 const HOOD_AREA = (() => {
-  if (!PHILLY) return {};
-  const { lon0, lat1, cos, k, pad } = PHILLY.proj;
-  const back = c => [lat1 - (c[1] - pad) / k, lon0 + (c[0] - pad) / (cos * k)];   // a point on the map, as latitude and longitude
-  const km = (a, b) => Math.hypot((a[0] - b[0]) * 111.2, (a[1] - b[1]) * 111.2 * Math.cos(a[0] * Math.PI / 180));
-  const ids = new Set(PHILLY.hoods.map(h => h.id));
-  for (const id of Object.keys(AREA_FIX)) if (!ids.has(id)) console.log(`Note: AREA_FIX in build.mjs names "${id}", which isn't a neighborhood on the Kids' Playground map.`);
-  return Object.fromEntries(PHILLY.hoods.map(h => {
-    if (h.id in AREA_FIX) return [h.id, AREA_FIX[h.id]];
-    const at = back(h.c); let best = '', near = 5;
-    for (const a of MAP_AREAS) { const d = km(at, a.at); if (d < near) { near = d; best = a.id; } }
-    return [h.id, best];
-  }));
+  const out = {}, ids = new Set(PHILLY ? PHILLY.hoods.map(h => h.id) : []);
+  for (const [area, hoods] of Object.entries(AREA_HOODS)) for (const id of hoods) {
+    if (PHILLY && !ids.has(id)) console.log(`Note: AREA_HOODS in build.mjs names "${id}" (${area}), which isn't a neighborhood on the Kids' Playground map.`);
+    if (out[id]) console.log(`Note: AREA_HOODS in build.mjs puts "${id}" in both ${out[id]} and ${area}.`);
+    out[id] = area;
+  }
+  return out;
 })();
-const mapArea = (ll, hood) => (hood && HOOD_AREA[hood]) || '';
+// A site's area goes by the neighborhood the program itself names (what parents see on its page: Everland's "Queen
+// Village" is South Philly, though its address is a few doors north of South Street), when that's one on the map; else
+// by the neighborhood its address falls in.
+const mapArea = (ll, hood, name) => { const named = mapHood.byName ? mapHood.byName(name) : null; return (named ? HOOD_AREA[named] : hood && HOOD_AREA[hood]) || ''; };
 const mapAreas = () => {
   if (!PHILLY) return [];
   const { lon0, lat1, cos, k, pad } = PHILLY.proj, r1 = n => Math.round(n * 10) / 10;
@@ -5751,18 +5770,18 @@ const KIDS_PINS = [
   ].map(([id, group, label, icon, color, tiers, one, many, get]) => ({ id, group, label, one, many, color, icon: KIDS_ICON2[icon], eo: 1, tiers, how: id.slice(4), get })),
   // The secret Philly pins: a "?" and a riddle until found; then the plain rule ("rule") says how to level up. Most are a
   // mix of a kind of class and a part of the Kids' Playground map ("mix:type:area", or "mix:type:area:area" for Bulboa
-  // Knockout's rounds: the count is the fewest of them, so one music class around Old City is a pair by itself); a class
-  // counts for its neighborhood's area (HOOD_AREA).
+  // Knockout's rounds: the count is the fewest of them, so one music class in Old City is a pair by itself); a class
+  // counts for its neighborhood's area (AREA_HOODS).
   ...[
-    ['liberty-bell', 'Liberty Bell Ringer', 'bell', '#8C4A1E', 'mix:music:oldcity', [1, 2, 3, 5, 8], 'music + Old City pair', 'music + Old City pairs', 'Somewhere old, a famous bell has a crack in it… and it wants some music!', 'Do a music class AND a class around Old City. Each pair counts!', ['Music', 'Around Old City']],
-    ['franklin-kite', 'Ben Franklin’s Kite', 'kite', '#F59F00', 'mix:stem:oldcity', [1, 2, 3, 5, 8], 'science + Old City pair', 'science + Old City pairs', 'Ben Franklin flew a kite in a storm. Do what he loved, near where he lived…', 'Do a science class AND a class around Old City. Each pair counts!', ['Science', 'Around Old City']],
-    ['billy-penn', 'Billy Penn’s Hat', 'hat', '#495057', 'mix:theater:center', [1, 2, 3, 5, 8], 'theater + Center City pair', 'theater + Center City pairs', 'Look up! Someone in a big hat on City Hall watches the shows below…', 'Do a theater class AND a class around Center City. Each pair counts!', ['Theater', 'Around Center City']],
+    ['liberty-bell', 'Liberty Bell Ringer', 'bell', '#8C4A1E', 'mix:music:oldcity', [1, 2, 3, 5, 8], 'music + Old City pair', 'music + Old City pairs', 'Somewhere old, a famous bell has a crack in it… and it wants some music!', 'Do a music class AND a class in Old City or Society Hill. Each pair counts!', ['Music', 'In Old City or Society Hill']],
+    ['franklin-kite', 'Ben Franklin’s Kite', 'kite', '#F59F00', 'mix:stem:oldcity', [1, 2, 3, 5, 8], 'science + Old City pair', 'science + Old City pairs', 'Ben Franklin flew a kite in a storm. Do what he loved, near where he lived…', 'Do a science class AND a class in Old City or Society Hill. Each pair counts!', ['Science', 'In Old City or Society Hill']],
+    ['billy-penn', 'Billy Penn’s Hat', 'hat', '#495057', 'mix:theater:center', [1, 2, 3, 5, 8], 'theater + Center City pair', 'theater + Center City pairs', 'Look up! Someone in a big hat on City Hall watches the shows below…', 'Do a theater class AND a class in Center City. Each pair counts!', ['Theater', 'In Center City']],
     ['cheesesteak', 'Cheesesteak Champ', 'hoagie', '#C92A2A', 'mix:games:south', [1, 2, 3, 5, 8], 'games + South Philly pair', 'games + South Philly pairs', 'Wit or witout? A champ in South Philly plays to win…', 'Do a games class AND a class in South Philly. Each pair counts!', ['Games', 'In South Philly']],
-    ['boathouse', 'Boathouse Rower', 'oars', '#1864AB', 'mix:movement:parkway', [1, 2, 3, 5, 8], 'sports + Art Museum pair', 'sports + Art Museum pairs', 'Down by the river, where the boathouses light up at night… grab an oar!', 'Do a sports class AND a class around the Art Museum. Each pair counts!', ['Sports', 'Around the Art Museum']],
+    ['boathouse', 'Boathouse Rower', 'oars', '#1864AB', 'mix:movement:parkway', [1, 2, 3, 5, 8], 'sports + Art Museum pair', 'sports + Art Museum pairs', 'Down by the river, where the boathouses light up at night… grab an oar!', 'Do a sports class AND a class near the Art Museum: in Fairmount, Spring Garden or along the Parkway. Each pair counts!', ['Sports', 'Near the Art Museum']],
     ['wissahickon', 'Wissahickon Wanderer', 'pine', '#2B8A3E', 'mix:nature:northwest', [1, 2, 3, 5, 8], 'nature + Northwest pair', 'nature + Northwest pairs', 'Deep in the woods of Northwest Philly, something wild is waiting…', 'Do a nature class AND a class in Northwest Philly. Each pair counts!', ['Nature', 'In Northwest Philly']],
     ['heron', 'Heron Spotter', 'bird', '#0C8599', 'mix:nature:southwest', [1, 2, 3, 5, 8], 'nature + Southwest pair', 'nature + Southwest pairs', 'Tall birds wade in the marsh in Southwest Philly… go outside and look!', 'Do a nature class AND a class in Southwest Philly. Each pair counts!', ['Nature', 'In Southwest Philly']],
     ['pennypack', 'Pennypack Pathfinder', 'feet', '#5C940D', 'mix:movement:northeast', [1, 2, 3, 5, 8], 'sports + Northeast pair', 'sports + Northeast pairs', 'A trail through the trees, way up in Northeast Philly… run it!', 'Do a sports class AND a class in Northeast Philly. Each pair counts!', ['Sports', 'In Northeast Philly']],
-    ['bulboa-knockout', 'Bulboa Knockout', 'gloves', '#D9480F', 'mix:movement:south:parkway', [1, 2, 3, 5, 8], 'round', 'rounds', 'A champ trains in South Philly, then runs all the way up the Art Museum steps… gloves on!', 'A round is a sports class, a class in South Philly AND a class around the Art Museum and Fairmount. Each round counts!', ['Sports', 'In South Philly', 'Around the Art Museum']],
+    ['bulboa-knockout', 'Bulboa Knockout', 'gloves', '#D9480F', 'mix:movement:south:parkway', [1, 2, 3, 5, 8], 'round', 'rounds', 'A champ trains in South Philly, then runs all the way up the Art Museum steps… gloves on!', 'A round is a sports class, a class in South Philly AND a class near the Art Museum (in Fairmount, Spring Garden or along the Parkway). Each round counts!', ['Sports', 'In South Philly', 'Near the Art Museum']],
     ['broad-street', 'Broad Street Crosser', 'cross', '#E03131', 'broad', [1, 2, 3, 5, 8], 'class on each side of Broad Street', 'classes on each side of Broad Street', 'One long street cuts Philly down the middle. Try both sides!', 'Go to a class on each side of Broad Street, the long street down the middle of Philly. Each east-and-west pair counts!'],
     ['jawn', 'Jawn Collector', 'jay', '#7048E8', 'jawn', [3, 6, 10, 15, 20], 'different program', 'different programs', 'Collect a whole lotta jawns: lots of different programs!', 'Go to lots of different programs. Each new one counts!'],
   ].map(([id, label, icon, color, how, tiers, one, many, hint, rule, parts]) => ({ id: 'philly:' + id, group: 'philly', label, one, many, color, icon: KIDS_ICON2[icon], eo: 1, tiers, how, hint, rule, ...(parts ? { parts } : {}), secret: 1 })),
@@ -5777,7 +5796,7 @@ function kidsData() {
   const listings = {};
   // A listing's sites: its neighborhoods, each with a point when the addresses line up with them one to one, and the
   // neighborhood on the map ("m"). A listing with several sites lands on the map once a parent says which site.
-  const sites = (hoods, lls) => hoods.map((h, i) => { const ll = hoods.length === 1 ? (lls[0] || null) : hoods.length === lls.length ? lls[i] : null, m = mapHood(ll, h), a = mapArea(ll, m); return a ? { h, ll, m, a } : { h, ll, m }; });
+  const sites = (hoods, lls) => hoods.map((h, i) => { const ll = hoods.length === 1 ? (lls[0] || null) : hoods.length === lls.length ? lls[i] : null, m = mapHood(ll, h), a = mapArea(ll, m, h); return a ? { h, ll, m, a } : { h, ll, m }; });
   for (const p of programs) {
     const r = Object.fromEntries(Object.entries(p.schools || {}).filter(([, x]) => x && (x.relation === 'onsite' || x.relation === 'pickup')).map(([id, x]) => [id, x.relation === 'onsite' ? 'o' : 'p']));
     listings['p:' + p.id] = { n: p.name, t: p.types || [], sites: sites(programHoods(p), placesOf(p)), ...(Object.keys(r).length ? { r } : {}) };   // r: the schools it runs in ("o") or picks up from ("p")
