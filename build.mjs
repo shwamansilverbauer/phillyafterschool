@@ -5714,6 +5714,15 @@ const KIDS_ICON2 = {
   cross: ['M10.5 2H13.5V22H10.5Z', 'M2 12L6 8V10.5H18V8L22 12L18 16V13.5H6V16Z'],
   kite: ['M12 1L18 9L12 17L6 9Z M13 4L10 9.5H12L11 14L14.5 8H12.4Z', 'M11.4 16.5H12.6V23H11.4Z', 'M9 19L11.4 19.6V20.8L9 21.4Z', 'M15 21L12.6 21.6V22.8L15 23.4Z'],
   jay: ['M9 3H19V6H16V15C16 19 13.5 21.5 9.5 21.5C6.5 21.5 4 19.5 4 16H7.5C7.5 17.5 8.3 18.3 9.5 18.3C11.3 18.3 12.5 17 12.5 15V6H9Z', kidsStar(20.5, 17.5, 3.2), kidsStar(4.5, 6, 2.6)],
+  // Eddie with his boxing gloves up: the bulb (eyes and smile cut out), its base, and on each side a glove (the thumb a cut)
+  // and its cuff
+  gloves: [
+    'M12 2C15.6 2 18 4.8 18 8.4C18 10.9 16.8 12.3 15.5 13.6C14.9 14.2 14.6 14.8 14.6 15.4H9.4C9.4 14.8 9.1 14.2 8.5 13.6C7.2 12.3 6 10.9 6 8.4C6 4.8 8.4 2 12 2Z M9.9 6.6499999999999995A0.95 0.95 0 1 0 9.9 8.549999999999999A0.95 0.95 0 1 0 9.9 6.6499999999999995Z M14.1 6.6499999999999995A0.95 0.95 0 1 0 14.1 8.549999999999999A0.95 0.95 0 1 0 14.1 6.6499999999999995Z M9.3 10.1Q12 13.3 14.7 10.1Q12 11.7 9.3 10.1Z',
+    'M9.3 16.1H14.7V17.6H9.3Z M9.8 18.4H14.2V19.6Q12 21.5 9.8 19.6Z',
+    'M0.3 7.3C0.3 4.9 1.8 3.4 3.4 3.4C5 3.4 5.7 4.7 5.7 6.6C5.7 8.4 5.3 9.4 4.8 10.2V12.4H1.2V10.4C0.6 9.6 0.3 8.6 0.3 7.3Z M5.2 7.3Q3.3 7.8 3.2 10.4H3.9Q4.1 8.5 5.3 8.1Z',
+    'M0.6 13.1H5.3V15.4H0.6Z',
+    'M23.7 7.3C23.7 4.9 22.2 3.4 20.6 3.4C19 3.4 18.3 4.7 18.3 6.6C18.3 8.4 18.7 9.4 19.2 10.2V12.4H22.8V10.4C23.4 9.6 23.7 8.6 23.7 7.3Z M18.8 7.3Q20.7 7.8 20.8 10.4H20.1Q19.9 8.5 18.7 8.1Z',
+    'M23.4 13.1H18.7V15.4H23.4Z'],
 };
 const KIDS_PINS = [
   ...TYPES.map(t => ({ id: 'type:' + t.id, group: 'type', label: (KIDS_PIN[t.id] || [t.label])[0], one: (KIDS_PIN[t.id] || [, t.label.toLowerCase()])[1], many: (KIDS_PIN[t.id] || [, , t.label.toLowerCase()])[2], color: t.color, icon: t.icon, tiers: [1, 3, 5, 8, 12] })),
@@ -5741,8 +5750,9 @@ const KIDS_PINS = [
     ['pin:pickup-pro', 'repeat', 'Pickup Pro', 'bus', '#E67700', [1, 2, 3, 5, 8], 'class that picked you up', 'classes that picked you up', 'Go to a class that picks you up from school!'],
   ].map(([id, group, label, icon, color, tiers, one, many, get]) => ({ id, group, label, one, many, color, icon: KIDS_ICON2[icon], eo: 1, tiers, how: id.slice(4), get })),
   // The secret Philly pins: a "?" and a riddle until found; then the plain rule ("rule") says how to level up. Most are a
-  // mix of a kind of class and a part of the Kids' Playground map ("mix:type:area": the pairs are the fewer of the two,
-  // so one music class around Old City is a pair by itself); a class counts for its neighborhood's area (HOOD_AREA).
+  // mix of a kind of class and a part of the Kids' Playground map ("mix:type:area", or "mix:type:area:area" for Rocky
+  // Bulboa's rounds: the count is the fewest of them, so one music class around Old City is a pair by itself); a class
+  // counts for its neighborhood's area (HOOD_AREA).
   ...[
     ['liberty-bell', 'Liberty Bell Ringer', 'bell', '#8C4A1E', 'mix:music:oldcity', [1, 2, 3, 5, 8], 'music + Old City pair', 'music + Old City pairs', 'Somewhere old, a famous bell has a crack in it… and it wants some music!', 'Do a music class AND a class around Old City. Each pair counts!', ['Music', 'Around Old City']],
     ['franklin-kite', 'Ben Franklin’s Kite', 'kite', '#F59F00', 'mix:stem:oldcity', [1, 2, 3, 5, 8], 'science + Old City pair', 'science + Old City pairs', 'Ben Franklin flew a kite in a storm. Do what he loved, near where he lived…', 'Do a science class AND a class around Old City. Each pair counts!', ['Science', 'Around Old City']],
@@ -5752,6 +5762,7 @@ const KIDS_PINS = [
     ['wissahickon', 'Wissahickon Wanderer', 'pine', '#2B8A3E', 'mix:nature:northwest', [1, 2, 3, 5, 8], 'nature + Northwest pair', 'nature + Northwest pairs', 'Deep in the woods of Northwest Philly, something wild is waiting…', 'Do a nature class AND a class in Northwest Philly. Each pair counts!', ['Nature', 'In Northwest Philly']],
     ['heron', 'Heron Spotter', 'bird', '#0C8599', 'mix:nature:southwest', [1, 2, 3, 5, 8], 'nature + Southwest pair', 'nature + Southwest pairs', 'Tall birds wade in the marsh in Southwest Philly… go outside and look!', 'Do a nature class AND a class in Southwest Philly. Each pair counts!', ['Nature', 'In Southwest Philly']],
     ['pennypack', 'Pennypack Pathfinder', 'feet', '#5C940D', 'mix:movement:northeast', [1, 2, 3, 5, 8], 'sports + Northeast pair', 'sports + Northeast pairs', 'A trail through the trees, way up in Northeast Philly… run it!', 'Do a sports class AND a class in Northeast Philly. Each pair counts!', ['Sports', 'In Northeast Philly']],
+    ['rocky-bulboa', 'Rocky Bulboa', 'gloves', '#D9480F', 'mix:movement:south:parkway', [1, 2, 3, 5, 8], 'round', 'rounds', 'A champ trains in South Philly, then runs all the way up the Art Museum steps… gloves on!', 'A round is a sports class, a class in South Philly AND a class around the Art Museum and Fairmount. Each round counts!', ['Sports', 'In South Philly', 'Around the Art Museum']],
     ['broad-street', 'Broad Street Crosser', 'cross', '#E03131', 'broad', [1, 2, 3, 5, 8], 'class on each side of Broad Street', 'classes on each side of Broad Street', 'One long street cuts Philly down the middle. Try both sides!', 'Go to a class on each side of Broad Street, the long street down the middle of Philly. Each east-and-west pair counts!'],
     ['jawn', 'Jawn Collector', 'jay', '#7048E8', 'jawn', [3, 6, 10, 15, 20], 'different program', 'different programs', 'Collect a whole lotta jawns: lots of different programs!', 'Go to lots of different programs. Each new one counts!'],
   ].map(([id, label, icon, color, how, tiers, one, many, hint, rule, parts]) => ({ id: 'philly:' + id, group: 'philly', label, one, many, color, icon: KIDS_ICON2[icon], eo: 1, tiers, how, hint, rule, ...(parts ? { parts } : {}), secret: 1 })),
@@ -5825,7 +5836,7 @@ const kidsHow = (D, onKidsPage = false) => `  <section class="section">
     <ul>
       <li>${T(`A page for each child on your account, by first name. No child signs in and nothing is typed by a child: it’s the parent’s account, handed over for a look. Each child picks a lightbulb to be.`)}</li>
       <li>${T(`What counts is what you confirm. The page suggests from your kept week, your summer and your days off (“Did Sam go to chess club this year?”), and you say yes or no. You can add anything the plans missed.`)}</li>
-      <li>${T(`From that come pins for each kind of program, each season and the neighborhoods, which go from bronze to silver, gold, emerald and diamond and get grander each time; pins for exploring the city, for combos of kinds of classes and for going back to a class they love (each day a week, each term, each week of the same camp); ten secret Philly pins that stay a mystery until they’re found; a level that goes up and unlocks things for their bulb to wear; a map of Philadelphia whose clouds clear where they have been, with a surprise or two in each neighborhood and secret spots that turn up as they go to more classes nearby; and showdowns where they pick which class they had more fun at, two at a time, and the ones they pick come first when you plan the next term.`)}</li>
+      <li>${T(`From that come pins for each kind of program, each season and the neighborhoods, which go from bronze to silver, gold, emerald and diamond and get grander each time; pins for exploring the city, for combos of kinds of classes and for going back to a class they love (each day a week, each term, each week of the same camp); eleven secret Philly pins that stay a mystery until they’re found; a level that goes up and unlocks things for their bulb to wear; a map of Philadelphia whose clouds clear where they have been, with a surprise or two in each neighborhood and secret spots that turn up as they go to more classes nearby; and showdowns where they pick which class they had more fun at, two at a time, and the ones they pick come first when you plan the next term.`)}</li>
       <li>${T(`Nothing on this page is counted, recorded or sent anywhere. It has no link of its own to share: a picture of the pins, with no name and no map, is the only thing that leaves it.`)}</li>
     </ul>
     <div class="actions when-out"><a class="btn primary big" href="${link('register/', D)}?next=kids">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=kids">${T(`Log in`)}</a></div>${onKidsPage ? '' : `

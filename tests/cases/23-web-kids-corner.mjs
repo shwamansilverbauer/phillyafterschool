@@ -148,10 +148,10 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   ok(await page.locator('.kc-pincard.t1').count() >= 2, 'bronze pins on the page');
   includes(flat(await page.locator('.kc-lvl').innerText()), 'Level 2');
   // The secret Philly pins: any found (one class is a pair only if it is, say, music around Old City), the rest a ? with a riddle.
-  const foundN = +(flat(await page.locator('.kc-pinsec.secret').innerText()).match(/(\d+) of 10 found/i) || [, -1])[1];
+  const foundN = +(flat(await page.locator('.kc-pinsec.secret').innerText()).match(/(\d+) of 11 found/i) || [, -1])[1];
   ok(foundN >= 0 && foundN <= 2, 'the secret Philly pins counted: ' + foundN);
   eq(secretShown, foundN > 0, 'a secret pin found is revealed on its own');
-  eq(await page.locator('.kc-pincard.secret').count(), 10 - foundN, 'the rest are still secrets');
+  eq(await page.locator('.kc-pincard.secret').count(), 11 - foundN, 'the rest are still secrets');
   await page.locator('.kc-pincard.secret').first().click();
   matches(flat(await page.locator('.kc-over .kc-pinbig').innerText()), /Secret Philly pin.*Keep exploring/i, 'a secret pin shows only its riddle');
   eq(await page.locator('.kc-over .kc-rule, .kc-over .kc-minimap').count(), 0, 'no rule and no map until it’s found');
