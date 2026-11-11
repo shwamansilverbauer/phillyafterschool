@@ -106,3 +106,48 @@ test('a review in a kid’s words: the form’s handler emails the owner a ready
   const m3 = (await mail.to('contact@phillyafterschool.org')).at(-1);
   excludes(m3.TextBody, '"kid"'); includes(m3.TextBody, 'New review, waiting');
 });
+
+test('a premium listing’s pin in Kids’ Playground: sent by its manager, checked by the owner, then only for a family whose child went there', async (ctx) => {
+  if (!ctx.site.edit) return;
+  const t = Date.now().toString(36);
+  const manager = ctx.api().as(`pin${t}@phillyafterschool.org`, 'Pat', 'Lee');
+  await manager.okay('POST', 'claim_add', { listing: PREMIUM });
+  const pin = (n, c, i) => JSON.stringify({ n, c, i });
+  await manager.fails('POST', 'extra_save', { listing: PREMIUM, kind: 'pin', body: pin('', 2, 'star') }, 'short');
+  await manager.fails('POST', 'extra_save', { listing: PREMIUM, kind: 'pin', body: pin('Way Too Long A Name For A Little Pin', 2, 'star') }, 'long');
+  await manager.fails('POST', 'extra_save', { listing: PREMIUM, kind: 'pin', body: pin('Dance Star', 12, 'star') }, 'color');
+  await manager.fails('POST', 'extra_save', { listing: PREMIUM, kind: 'pin', body: pin('Dance Star', 2, 'logo') }, 'icon');
+  await manager.fails('POST', 'extra_save', { listing: PREMIUM, kind: 'pin', body: pin('Go to www.example.com', 2, 'star') }, 'name');
+  const r = await manager.okay('POST', 'extra_save', { listing: PREMIUM, kind: 'pin', body: pin('Dance  Star', 3, 'movement') });
+  const mine = r.claims.find(c => c.listing === PREMIUM);
+  deepEq(JSON.parse(mine.premium.texts.pin.new), { n: 'Dance Star', c: 3, i: 'movement' }, 'waiting, tidied');
+  const told = await ctx.mail.waitFor('contact@phillyafterschool.org', /Kids’ Playground pin to approve/);
+  includes(told.TextBody, 'Name: Dance Star'); includes(told.TextBody, 'only after going to the program');
+  // A family whose child went there: nothing yet, while it waits.
+  const pat = ctx.api().as(`fam${t}@example.test`, 'Ann', 'Fox');
+  await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '2' }] });
+  const y = (await pat.okay('GET', 'passport')).year;
+  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [{ k: PREMIUM, kind: 'after', y, s: '' }] });
+  deepEq((await pat.okay('GET', 'passport')).ppins, [], 'not before the owner says yes');
+  // The owner publishes it on the review page.
+  const form = o => Object.entries(o).map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v)).join('&');
+  const login = await fetch(`${ctx.site.base}/edit/`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: form({ user: ctx.site.edit.user, pass: ctx.site.edit.password }), redirect: 'manual' });
+  const cookie = login.headers.getSetCookie().find(c => c.startsWith('pas_edit=')).split(';')[0];
+  const page = await (await fetch(`${ctx.site.base}/edit/claims/`, { headers: { Cookie: cookie } })).text();
+  includes(page, 'Kids’ Playground pin (kids see it only after going there)'); includes(page, 'Name: Dance Star'); includes(page, 'Color: green');
+  const csrf = /name="csrf" value="([^"]+)"/.exec(page)[1];
+  const id = new RegExp('Name: Dance Star[\\s\\S]*?name="id" value="(\\d+)"').exec(page)[1];
+  await fetch(`${ctx.site.base}/edit/claims/`, { method: 'POST', headers: { Cookie: cookie, 'Content-Type': 'application/x-www-form-urlencoded' }, body: form({ csrf, id, do: 'extra_ok' }), redirect: 'manual' });
+  await ctx.mail.waitFor(manager.email, /Kids’ Playground pin for/);
+  // Now the family whose child went there gets it; a family whose child didn't doesn't.
+  deepEq((await pat.okay('GET', 'passport')).ppins, [{ k: PREMIUM, n: 'Dance Star', c: 3, i: 'movement' }]);
+  const other = ctx.api().as(`fam2${t}@example.test`, 'Bo', 'Fox');
+  await other.okay('POST', 'kids_save', { kids: [{ n: 'Rae', g: '1' }] });
+  deepEq((await other.okay('GET', 'passport')).ppins, [], 'never offered as a goal to a child who hasn’t gone');
+  // Its level is kept as seen like any pin; the manager can take it down.
+  const s = await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [{ k: PREMIUM, kind: 'after', y, s: '' }], seen: { ['prog:' + PREMIUM]: 1 } });
+  eq(s.kid.seen['prog:' + PREMIUM], 1);
+  await manager.okay('POST', 'extra_drop', { listing: PREMIUM, kind: 'pin' });
+  deepEq((await pat.okay('GET', 'passport')).ppins, [], 'gone once taken down');
+  await manager.okay('POST', 'claim_drop', { listing: PREMIUM });
+});

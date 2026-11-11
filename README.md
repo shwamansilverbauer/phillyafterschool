@@ -442,7 +442,7 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   already confirmed comes back ("now 3 days a week, was once") when the plans count it more; no to that count isn't
   asked again (`skip` gets `k|kind|y|n`). The grown-ups' corner has a − / + for the times on each one too. A listing with several sites (Philly Art Center, say) lands on the map only once the parent says
   which site.
-- **Pins.** `KIDS_PINS` in `build.mjs`, 41 of them, each with five levels: bronze, silver, gold, rainbow and diamond
+- **Pins.** `KIDS_PINS` in `build.mjs`, 41 of them, each with five levels: bronze, silver, gold, emerald and diamond
   (the counts are each pin's `tiers`). On the Pins tab they come in sections, one per `group`, each its own shape:
   - **Classes** (a circle): one per program type (names in `KIDS_PIN`), at 1, 3, 5, 8 and 12.
   - **Secret Philly pins** (a keystone): ten that show as a "?" with a hint ("Somewhere old, a famous bell has a crack
@@ -463,9 +463,16 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
     in a household with two or more children), Showdown Judge (classes ranked), Home Base and Pickup Pro (a class that
     runs in, or picks up from, the school it was confirmed under: the listings' `r` in the Playground's data).
   The newer pins have a `how` that `stats()` counts, a `get` (how to earn the first level, said to the child) and
-  `one`/`many`. Drawn as SVG in `drawPin()`, grander at each level: bronze is the badge and a star; silver adds a
+  `one`/`many`.
+  - **Program pins** (a rosette): a premium listing's own pin (see "Premium listings"), counted by the times a child
+    went there, at 1, 2, 3, 5 and 8. They come with the household's Kids' Playground (`ppins` in `GET passport`: only
+    for programs a child there has gone to, only once the owner has published the pin, and only while premium is "on"
+    or for the owner's test listing). The Pins tab shows a program pin only once it's earned, never as a goal or a
+    "?", and it isn't counted in "12 / 40 pins". It carries no link or offer. The account page's Kids' Playground tab
+    tells parents what program pins are.
+  Drawn as SVG in `drawPin()`, grander at each level: bronze is the badge and a star; silver adds a
   laurel, a blue banner, a gem and more stars; gold adds a turning sunburst, wings, a gold laurel, a crown, red
-  ribbons and twinkling sparkles; rainbow makes it all rainbow, with a bigger wing and more sparkles (`GRAND`,
+  ribbons and twinkling sparkles; emerald turns it green, with a bigger wing and more sparkles (`GRAND`,
   `METAL`); diamond is icy blue with a diamond on the crown. Five stars on the banner at the top. On a phone the tab
   fits three pins a row. The server keeps which level of each pin a child has been shown (`seen`, 1 to 5).
 - **Levels.** Paced on purpose: points are 10 a class or camp, 3 a repeat, 3 a neighborhood and 1 a pin level
@@ -1055,7 +1062,7 @@ changes where a listing appears in a list, and it has no say over reviews.
   four places, all of them for people who run a program and none on a page a parent uses:
   - **In each claimed listing's box on the managers page** (`premiumTease()` in `groups.js`), on a tab of its own
     called "Premium", after the listing's own tabs: one dashed box that leads with the listing's own number of
-    visits when there are at least 20, lists the six things premium adds, and gives the price. The tab is always
+    visits when there are at least 20, lists the seven things premium adds, and gives the price. The tab is always
     there and never in the way, so there is nothing to dismiss. A listing that has signed up sees where to finish;
     a premium listing has no such tab and sees its tools on the other tabs instead. Nothing pops up, and nothing is
     repeated elsewhere on the page.
@@ -1074,7 +1081,8 @@ changes where a listing appears in a list, and it has no say over reviews.
   - **The page itself** is laid out like a product page: the two prices sit in the hero, each with its own
     "Sign up yearly" / "Sign up monthly" button (`?plan=year#signup`, `?plan=month#signup`, which the picker at the
     foot starts on), then a sticky strip of links to each part with a "Sign up" button at its right (`pageNav()` with
-    a `.pagenav-go`), then "What premium adds" as six numbered cards (`.pm-gets`), the example listing whose dots match
+    a `.pagenav-go`), then "What premium adds" as seven numbered cards (`.pm-gets`; the seventh, the Kids' Playground
+    pin, isn't on the example listing), the example listing whose dots match
     the cards, "How it works" in three steps (`.pm-steps`), what it doesn't do, and a closing part (`#signup`) with
     the prices again beside the sign-in box. No testimonials, nothing invented.
   - **Prices** are `"premiumPrice": { "month": 19, "year": 190, "laterMonth": 29, "laterYear": 290 }`, whole dollars.
@@ -1126,6 +1134,13 @@ changes where a listing appears in a list, and it has no say over reviews.
   `PREMIUM_PHOTOS` approved photos: the newest sits at the top of the listing, the rest make the gallery. The older
   single-photo extra (`"groups": { "photos": true }`) still works on its own. `GET photo` serves one photo by `id`;
   a waiting photo only to the people who hold the listing.
+- **A pin in Kids' Playground** is a row in `extras` too (`kind` `pin`, its `body` `{"n": a name of up to
+  `PIN_NAME_MAX` characters, no web addresses, "c": one of ten colors, "i": a picture from `PIN_ICONS`}`). The
+  manager names it, picks a color and a picture on the "Words & offer" tab, with a preview drawn by `kids-corner.js`
+  (`window.pasKids.programPin()`, loaded on that page only when the box is there), and it waits on the review page
+  like the words ("Kids' Playground pin"). The guardrails: a child gets it only after going to the program, it's
+  never shown as something to go and get, it has no link, logo or offer, and every program counts toward all the
+  other pins the same way.
 - **Words and offers** are rows in `extras` (`kind` `words` or `offer`, `status` new, ok or declined). Words are
   plain text, 40 to `WORDS_MAX` characters. An offer is one line of up to `OFFER_MAX` characters with a last day,
   no more than `OFFER_DAYS` ahead, after which it stops showing by itself.
@@ -1160,8 +1175,10 @@ placement is advertising, not an endorsement.
 
 Decisions that later features have to respect:
 
-- Parents never pay for anything. The one thing that could reopen this is the cost of sending reminder emails
-  growing out of hand.
+- Parents never pay for anything on the site. The one thing that could reopen this is the cost of sending reminder
+  emails growing out of hand. (Real versions of the Kids' Playground pins, made to order, are planned as something a
+  parent can choose to buy for a pin their child has earned; nothing on the site depends on them, and they are never
+  offered on the child's own screens.)
 - A free program's listing stays free, including claiming it and keeping it up to date.
 - The plan is that more parents using the site is what makes it worth a program manager's while. Paid placement
   (clearly marked advertising) is a possibility for later, only once there is a real use for it.

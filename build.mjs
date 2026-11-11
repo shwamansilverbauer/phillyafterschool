@@ -4013,7 +4013,7 @@ ${hero}
     <div class="pm-cta-box">
       <div class="pm-cta-say">
         <h2>${T(`Want more on your listing?`)}</h2>
-        <p>${T(`A premium listing adds photos and your logo, a section in your own words, an offer or event line, a button parents use to send you a question, and month-by-month numbers. The listing itself stays free; premium is the extras.`)}</p>
+        <p>${T(`A premium listing adds photos and your logo, a section in your own words, an offer or event line, a button parents use to send you a question, month-by-month numbers and a pin of your own in Kids’ Playground. The listing itself stays free; premium is the extras.`)}</p>
       </div>
       <p class="actions"><a class="btn primary" href="${link('premium/', 1)}" data-track="premium_cta_managers">${T(`See what premium adds`)}</a><span class="hint">${T(`From {price} a month. Claim your listing first; premium is added to it.`, { price: '$' + PM_PRICE.month })}</span></p>
     </div>
@@ -4064,6 +4064,7 @@ function premiumPage() {
     ['ask', T(`A button for questions`), T(`Parents send a question from your listing and it lands in your inbox, with their address to reply to.`)],
     ['numbers', T(`Fuller numbers`), T(`Month by month: how often your listing was opened, how many families follow it or saved it, and which schools they come from. Numbers only, never who.`)],
     ['flyer', T(`A flyer to print`), T(`With a code that opens your listing, for the front desk or the school fair.`)],
+    ['pin', T(`A pin in Kids’ Playground`), T(`Your own pin, in your color, for the children who go to your program. They get it only after going there: it’s never shown to a child as something to go and get.`)],
   ];
   const at = Object.fromEntries(gets.map(([k], i) => [k, `<i class="demo-n" aria-hidden="true">${i + 1}</i>`]));
   // A picture of a premium listing, built from the parts a real one uses. The program is invented, and says so.
@@ -4126,6 +4127,7 @@ function premiumPage() {
     ask: 'M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-7l-5 4v-4H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm1 2v8h5v2.5l3-2.5h6V6zm6.2 1.5c1.7 0 2.8 1 2.8 2.3 0 1-.6 1.5-1.2 1.9-.5.3-.6.5-.6.9h-2c0-1 .4-1.6 1.1-2 .5-.3.7-.5.7-.8 0-.3-.3-.6-.8-.6s-.9.3-1 .8l-1.9-.4c.3-1.3 1.4-2.1 2.9-2.1zM11.2 13h2v2h-2z',
     numbers: 'M4 19V9h3v10zm6.5 0V5h3v14zm6.5 0v-7h3v7zM3 20h18v1H3z',
     flyer: 'M4 3h10l6 6v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm1 2v16h13V10h-5V5zm2 8h3v3H7zm5 0h3v3h-3zm-5 4h3v2H7zm5 0h3v2h-3z',
+    pin: 'M8 2h3l1 3 1-3h3l-2.4 6.4A6.5 6.5 0 1 1 10.4 8.4z',
   };
   const hero = `    <h1>${T(`Premium listings`)}</h1>
     <p class="lede">${T(`Your listing on {site} is free, and it stays free. Premium adds your photos, your words and your offers to it, and shows you what families do with it.`, { site: cfg.siteName })}</p>
@@ -4217,18 +4219,18 @@ Link: ${e('$x["link"]')}<?php } ?></pre>
   <?php if ($photosLive) { ?><h2>Photos on the site (<?php echo count($photosLive); ?>)</h2>
   <div class="review-grid"><?php foreach ($photosLive as $x) { ?><div class="panel"><p><img class="review-photo" src="./?photo=<?php echo (int) $x["id"]; ?>" alt=""></p><p><b>${e('$name($x["listing"])')}</b><br><span class="hint">${e('$x["alt"]')}</span></p>${form('$x["id"]', act('photo_no', 'Take it down'))}</div><?php } ?></div><?php } ?>
 
-${GROUPS.premium !== 'off' ? `  <h2>Words and offer lines waiting for you (<?php echo count($extrasNew); ?>)</h2>
-  <?php if (!$extrasNew) { ?><p class="hint">None waiting. What a manager writes for a premium listing shows only after you publish it here.</p><?php } ?>
+${GROUPS.premium !== 'off' ? `  <h2>Words, offer lines and pins waiting for you (<?php echo count($extrasNew); ?>)</h2>
+  <?php if (!$extrasNew) { ?><p class="hint">None waiting. What a manager writes for a premium listing, and its Kids’ Playground pin, shows only after you publish it here.</p><?php } ?>
   <?php foreach ($extrasNew as $x) { ?><div class="panel">
-    <h3>${e('$name($x["listing"])')} <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line' : 'In their own words'; ?></span></h3>
+    <h3>${e('$name($x["listing"])')} <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line' : ($x["kind"] === 'pin' ? 'Kids’ Playground pin (kids see it only after going there)' : 'In their own words'); ?></span></h3>
     <p class="hint">From ${e('$x["first"] . " " . $x["last"]')} &lt;${e('$x["email"]')}&gt;, ${e('$day($x["created"])')}<?php if ($x["kind"] === 'offer') { ?>. To show until ${e('$x["until"]')}<?php } ?></p>
-    <pre class="edit-ask">${e('$x["body"]')}</pre>
+    <pre class="edit-ask">${e('$pinText($x)')}</pre>
     ${form('$x["id"]', act('extra_ok', 'Publish it', 'btn primary') + act('extra_no', 'Decline'))}
   </div><?php } ?>
-  <?php if ($extrasLive) { ?><h2>Words and offer lines on the site (<?php echo count($extrasLive); ?>)</h2>
+  <?php if ($extrasLive) { ?><h2>Words, offer lines and pins on the site (<?php echo count($extrasLive); ?>)</h2>
   <?php foreach ($extrasLive as $x) { ?><div class="panel">
-    <h3>${e('$name($x["listing"])')} <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line, until ' . htmlspecialchars($x["until"], ENT_QUOTES, 'UTF-8') : 'In their own words'; ?></span></h3>
-    <pre class="edit-ask">${e('$x["body"]')}</pre>
+    <h3>${e('$name($x["listing"])')} <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line, until ' . htmlspecialchars($x["until"], ENT_QUOTES, 'UTF-8') : ($x["kind"] === 'pin' ? 'Kids’ Playground pin' : 'In their own words'); ?></span></h3>
+    <pre class="edit-ask">${e('$pinText($x)')}</pre>
     ${form('$x["id"]', act('extra_no', 'Take it down'))}
   </div><?php } ?><?php } ?>
 
@@ -4266,6 +4268,7 @@ $NAMES = json_decode('${names}', true);
 $name = function ($key) use ($NAMES) { return isset($NAMES[$key]) ? $NAMES[$key] : $key . ' (no longer on the site)'; };
 $NAMES_AZ = $NAMES; asort($NAMES_AZ, SORT_NATURAL | SORT_FLAG_CASE);
 $day = function ($t) { $d = new DateTime('@' . (int) $t); $d->setTimezone(new DateTimeZone('America/New_York')); return $d->format('M j, Y'); };
+$pinText = function ($x) { if ($x['kind'] !== 'pin') return $x['body']; $p = json_decode($x['body'], true); if (!is_array($p)) return $x['body']; $cols = array('red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'violet', 'pink', 'gray'); return 'Name: ' . $p['n'] . "\nColor: " . (isset($cols[(int) $p['c']]) ? $cols[(int) $p['c']] : '?') . "\nPicture: " . $p['i']; };
 $csrf = hash_hmac('sha256', 'claims-form', edit_key());
 $said = isset($_GET['said']) && is_string($_GET['said']) ? substr($_GET['said'], 0, 200) : '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
@@ -4394,7 +4397,7 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
       $st = $db->prepare('SELECT e.id, e.listing, e.kind, e.status, u.email, u.first FROM extras e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.id = ?'); $st->execute(array($id)); $x = $st->fetch();
       if ($x) {
-        $n = $name($x['listing']); $what = $x['kind'] === 'offer' ? 'offer line' : 'section in your own words';
+        $n = $name($x['listing']); $what = $x['kind'] === 'offer' ? 'offer line' : ($x['kind'] === 'pin' ? 'Kids’ Playground pin' : 'section in your own words');
         if ($do === 'extra_ok') {
           $db->prepare("DELETE FROM extras WHERE listing = ? AND kind = ? AND status = 'ok' AND id != ?")->execute(array($x['listing'], $x['kind'], $id));   // the newer one takes its place
           $db->prepare("UPDATE extras SET status = 'ok', decided = ? WHERE id = ?")->execute(array(time(), $id));
@@ -4403,7 +4406,7 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
           $was = $x['status'];
           $db->prepare("UPDATE extras SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), $id));
-          tell($x['email'], 'About the ' . $what . ' for ' . $n, 'Hi ' . $x['first'] . ",\n\nWe " . ($was === 'ok' ? 'have taken down' : 'weren’t able to publish') . ' the ' . $what . ' you wrote for “' . $n . '”. It should describe the program in plain words, with no prices that differ from the listing and no claims about other programs. You’re welcome to send another, or reply to this email with any questions.');
+          tell($x['email'], 'About the ' . $what . ' for ' . $n, 'Hi ' . $x['first'] . ",\n\nWe " . ($was === 'ok' ? 'have taken down' : 'weren’t able to publish') . ' the ' . $what . ' you wrote for “' . $n . '”. ' . ($x['kind'] === 'pin' ? 'A pin’s name should be the program’s name or a short, kid-friendly title, with no prices, offers or web addresses.' : 'It should describe the program in plain words, with no prices that differ from the listing and no claims about other programs.') . ' You’re welcome to send another, or reply to this email with any questions.');
           $msg = $was === 'ok' ? 'Taken down, and they’ve been told.' : 'Declined, and they’ve been told.';
         }
       }
@@ -5556,7 +5559,7 @@ const summerPlan = (() => {
 const yearPath = 'calendar/';
 const YEAR_PAGE = !!(GROUPS && daysOff);
 // ---------- Kids' Playground: a page of each child's own, inside a parent's account ----------
-// For the child: shiny pins that level up (bronze, silver, gold, rainbow, diamond) for the kinds of program they have been to, the
+// For the child: shiny pins that level up (bronze, silver, gold, emerald, diamond) for the kinds of program they have been to, the
 // seasons and the neighborhoods; a level that climbs; a cartoon map of Philadelphia whose clouds clear over the
 // neighborhoods they have been to, with secret spots that unlock with classes nearby; a Repeater Reward for going back;
 // a bulb of their own that dresses up as they level up; and showdowns (eleven Philly contests, from the Art Museum
@@ -5657,7 +5660,7 @@ const surpriseHoods = (listings, schoolsOut) => {
   }
   return out;
 };
-// The pins. Each has five levels (bronze, silver, gold, rainbow, diamond) at the counts in "tiers". "group" is its
+// The pins. Each has five levels (bronze, silver, gold, emerald, diamond) at the counts in "tiers". "group" is its
 // shape and its section on the Pins tab: a kind of program (a circle), a season (a shield), exploring (a star), a combo
 // of kinds (a rounded square), being a super fan (a hexagon) and the secret Philly pins (a keystone), which show as a
 // "?" with a hint until they're found. "how" says what kids-corner.js counts for the new ones (stats()); "get" is how to
@@ -5769,6 +5772,8 @@ function kidsData() {
     eddie: link('bulb.png', D) + stamp('src/static/bulb.png'),   // Eddie Bulboa, the bulb in the logo, who shows kids around
     listings, schools: schoolsOut, surprises: surpriseHoods(listings, schoolsOut),
     types: Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, color: t.color, icon: t.icon }])), pins: KIDS_PINS,
+    // the pictures a premium program can pick for its own pin (the server's PIN_ICONS)
+    picons: { ...Object.fromEntries(TYPES.map(t => [t.id, t.icon])), star: kidsStar(12, 12.5, 10.5), heart: 'M12 21C5 15.5 2 12 2 8.2C2 5.3 4.3 3 7.1 3C9 3 10.8 4 12 5.6C13.2 4 15 3 16.9 3C19.7 3 22 5.3 22 8.2C22 12 19 15.5 12 21Z', bolt: 'M13 2L4 14H11L10 22L20 9H13Z' },
     kinds: { after: 'After school', weekend: 'Weekend class', off: 'Day-off camp', summer: 'Summer camp' },
     links: { kids: link('account/', D) + '#school', account: link('account/', D), review: link('review/', D), corner: link(kidsPath, D) },
   };
@@ -5784,7 +5789,7 @@ function kidsShowcase(D, onKidsPage = false) {
   const tile = (art, head, text) => `<li class="kids-tile"><svg viewBox="0 0 160 120" aria-hidden="true" focusable="false">${art}</svg><h3>${head}</h3><p>${text}</p></li>`;
   const museum = `<g transform="translate(96 88)"><path d="M-16 -4L0 -14L16 -4Z" fill="#F1E3C4" stroke="#0B2140" stroke-width="2" stroke-linejoin="round"/>${[-11, -4, 3, 10].map(x => `<rect x="${x - 1}" y="-4" width="3.5" height="11" fill="#FFFFFF" stroke="#0B2140" stroke-width="1.2"/>`).join('')}<rect x="-18" y="7" width="36" height="4" fill="#E9DDC2" stroke="#0B2140" stroke-width="1.2"/></g>`;
   const tiles = [
-    tile(`${artPin(40, 66, 26, '#E8A365', '#CC3000')}${artPin(120, 66, 26, '#F3C613', '#1763B8')}${artPin(80, 56, 32, '#D6DEEA', '#3FA34D')}`, T(`Earn pins`), T(`Every class gets you a pin. Keep going and it turns bronze, silver, gold, rainbow, then diamond. Some pins are secret!`)),
+    tile(`${artPin(40, 66, 26, '#E8A365', '#CC3000')}${artPin(120, 66, 26, '#F3C613', '#1763B8')}${artPin(80, 56, 32, '#D6DEEA', '#3FA34D')}`, T(`Earn pins`), T(`Every class gets you a pin. Keep going and it turns bronze, silver, gold, emerald, then diamond. Some pins are secret!`)),
     tile(artBulb(80, 70, '#F3C613', 0.9, 'crown'), T(`Be a lightbulb`), T(`Pick your bulb, then dress it up as you level up: shades, a cape, a crown, even a jetpack.`)),
     tile(`<rect x="22" y="8" width="116" height="104" rx="14" fill="#FFF4DA" stroke="#0B2140" stroke-width="3"/><path d="M46 8C56 48 36 76 56 112" fill="none" stroke="#4DABF7" stroke-width="7" stroke-linecap="round"/>${artCloudQ(102, 40)}${museum}`, T(`Explore Philly`), T(`Your classes clear the clouds on a map of Philly, with surprises and secret spots to find.`)),
     tile(`${artBulb(38, 68, '#69DB7C', 0.62)}${artBulb(122, 68, '#74C0FC', 0.62, 'shades')}<circle cx="80" cy="70" r="17" fill="#CC3000" stroke="#0B2140" stroke-width="3"/><text x="80" y="76" text-anchor="middle" font-size="14" font-weight="800" fill="#FFFFFF" ${ART_F}>VS</text>`, T(`Pick your favorite`), T(`Which class was more fun? You decide, and your grown-up sees it first.`)),
@@ -5812,7 +5817,7 @@ const kidsHow = (D, onKidsPage = false) => `  <section class="section">
     <ul>
       <li>${T(`A page for each child on your account, by first name. No child signs in and nothing is typed by a child: it’s the parent’s account, handed over for a look. Each child picks a lightbulb to be.`)}</li>
       <li>${T(`What counts is what you confirm. The page suggests from your kept week, your summer and your days off (“Did Sam go to chess club this year?”), and you say yes or no. You can add anything the plans missed.`)}</li>
-      <li>${T(`From that come pins for each kind of program, each season and the neighborhoods, which go from bronze to silver, gold, rainbow and diamond and get grander each time; pins for exploring the city, for combos of kinds of classes and for going back to a class they love (each day a week, each term, each week of the same camp); ten secret Philly pins that stay a mystery until they’re found; a level that goes up and unlocks things for their bulb to wear; a map of Philadelphia whose clouds clear where they have been, with a surprise or two in each neighborhood and secret spots that turn up as they go to more classes nearby; and showdowns where they pick which class they had more fun at, two at a time, and the ones they pick come first when you plan the next term.`)}</li>
+      <li>${T(`From that come pins for each kind of program, each season and the neighborhoods, which go from bronze to silver, gold, emerald and diamond and get grander each time; pins for exploring the city, for combos of kinds of classes and for going back to a class they love (each day a week, each term, each week of the same camp); ten secret Philly pins that stay a mystery until they’re found; a level that goes up and unlocks things for their bulb to wear; a map of Philadelphia whose clouds clear where they have been, with a surprise or two in each neighborhood and secret spots that turn up as they go to more classes nearby; and showdowns where they pick which class they had more fun at, two at a time, and the ones they pick come first when you plan the next term.`)}</li>
       <li>${T(`Nothing on this page is counted, recorded or sent anywhere. It has no link of its own to share: a picture of the pins, with no name and no map, is the only thing that leaves it.`)}</li>
     </ul>
     <div class="actions when-out"><a class="btn primary big" href="${link('register/', D)}?next=kids">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=kids">${T(`Log in`)}</a></div>${onKidsPage ? '' : `

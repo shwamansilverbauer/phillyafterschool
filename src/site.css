@@ -2650,7 +2650,7 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-pinbar i{display:block;height:100%;background:var(--kgreen)}
 .kc-tier{font-family:var(--title);font-size:1rem;letter-spacing:.04em;text-transform:uppercase;border:2.5px solid var(--kink);border-radius:999px;padding:3px 12px 0;background:#fff}
 .kc-tier.bronze{background:#E8A365}.kc-tier.silver{background:#DDE3EC}.kc-tier.gold{background:var(--kyellow)}
-.kc-tier.rainbow{background:linear-gradient(90deg,#FFC9DE,#FFE8A3,#C3FAE8,#D0EBFF,#E5DBFF)}.kc-tier.diamond{background:linear-gradient(135deg,#E3FAFC,#FFFFFF 45%,#C5F6FA)}
+.kc-tier.emerald{background:linear-gradient(135deg,#B2F2BB,#EBFBEE 50%,#8CE99A)}.kc-tier.diamond{background:linear-gradient(135deg,#E3FAFC,#FFFFFF 45%,#C5F6FA)}
 /* The Pins tab in sections; the secret Philly pins on a dark card until found */
 .kc-pinsec{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:22px 0 10px}
 .kc-pinsec .kc-h3{font-family:var(--title);font-weight:400;text-transform:uppercase;letter-spacing:.03em;font-size:1.25rem;margin:0;color:#fff;text-shadow:0 2px 0 var(--kink),1.5px 1.5px 0 var(--kink),-1.5px -1.5px 0 var(--kink),1.5px -1.5px 0 var(--kink),-1.5px 1.5px 0 var(--kink)}
@@ -2659,7 +2659,7 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-pincard.secret{background:#0F2A4D;color:#fff;border-style:dashed}
 .kc-pincard.secret .kc-pin{opacity:1}
 .kc-pincard.secret .kc-tier{background:#1E4170;color:#fff;border-color:#fff}
-.kc-pincard.t4{background:linear-gradient(160deg,#FFF0F6,#FFF9DB 40%,#E6FCF5 70%,#E7F5FF)}.kc-pincard.t5{background:linear-gradient(160deg,#E3FAFC,#FFFFFF 50%,#E7F5FF)}
+.kc-pincard.t4{background:linear-gradient(160deg,#EBFBEE,#FFFFFF 50%,#D3F9D8)}.kc-pincard.t5{background:linear-gradient(160deg,#E3FAFC,#FFFFFF 50%,#E7F5FF)}
 .kc-tier.big{font-size:1.5rem;display:inline-block;margin:4px 0}
 @media (max-width:520px){   /* a phone: three pins a row, so the list isn't miles long */
   .kc-pins:not(.kc-mini){grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
@@ -2975,3 +2975,15 @@ html.kc-kid .kc-hold{background:rgba(255,255,255,.85);border-color:rgba(11,33,64
 .g-kid>div{display:grid}
 .g-kid-ini{width:40px;height:40px;border-radius:50%;background:var(--yellow);color:var(--yellow-ink);font-family:var(--title);font-size:1.3rem;display:flex;align-items:center;justify-content:center;padding-top:3px;box-sizing:border-box;flex:none}
 .g-kid-ini.quiet{background:var(--bg);color:var(--muted);border:2px dashed var(--line)}
+/* The managers page: a premium listing's Kids' Playground pin, its colors and a preview at three levels */
+.pm-pin-colors{border:0;padding:0;margin:10px 0;display:flex;flex-wrap:wrap;gap:8px}
+.pm-pin-colors legend{font-weight:700;margin-bottom:6px;padding:0}
+.pm-pin-swatch{position:relative;cursor:pointer}
+.pm-pin-swatch input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.pm-pin-swatch span:not(.vh){display:block;width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px #C5D2E4}
+.pm-pin-swatch input:checked + span{box-shadow:0 0 0 3px #0B2140}
+.pm-pin-swatch input:focus-visible + span{outline:3px solid #2176D2;outline-offset:3px}
+.pm-pin-prev{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.pm-pin-prev figure{margin:0;text-align:center;font-size:.85rem;font-weight:700}
+.pm-pin-prev svg{width:110px;height:auto;overflow:visible}
+.pm-form select{font:inherit;font-size:1rem;padding:10px 12px;border:2px solid #C5D2E4;border-radius:12px;background:#fff;color:inherit;max-width:100%}

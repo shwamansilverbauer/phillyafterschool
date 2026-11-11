@@ -60,6 +60,11 @@ const PREMIUM_PHOTOS = 6;   // photos a premium listing can show
 const WORDS_MAX = 900;      // "in their own words", in characters
 const OFFER_MAX = 140;      // the offer or event line
 const OFFER_DAYS = 90;      // the furthest ahead an offer's last day can be
+// A premium listing's own pin in Kids' Playground: its name, one of the colors (0 to 9, kids-corner.js has them) and a
+// picture (a kind of program's, or a star, a heart or a lightning bolt). Kids see it only once they've gone there.
+const PIN_NAME_MAX = 28;
+const PIN_ICONS = array('aftercare', 'music', 'theater', 'art', 'movement', 'stem', 'academics', 'games', 'nature', 'daycamp', 'clubs', 'rec-center', 'star', 'heart', 'bolt');
+const EXTRA_KINDS = array('words', 'offer', 'pin');
 const HITS_AN_HOUR = 240;   // counts taken from one internet address in an hour before the rest are dropped
 const BACKUP_DAYS = 14;      // how many daily copies of the database are kept
 const PHOTO_BYTES = 1600000; // the biggest listing photo accepted, after the browser has shrunk it
@@ -975,7 +980,7 @@ function passport_clean($raw): array {
   if (isset($raw['seen']) && is_array($raw['seen'])) {
     $sn = array();
     // what the page has already celebrated: pins, a map area's secret spots, a neighborhood's surprises ("hood:")
-    foreach (array_slice($raw['seen'], 0, 200, true) as $id => $t) if (is_string($id) && preg_match('~^((type|season|map):[a-z-]{1,20}|(pin|philly):[a-z-]{1,30}|hood:[a-z-]{1,40}|explore|repeat|intro)$~', $id) && is_numeric($t) && (int) $t >= 1 && (int) $t <= (preg_match('~^(map|hood):~', $id) ? 3 : 5)) $sn[$id] = (int) $t;   // pins have five levels; a map area's spots and a neighborhood's surprises, three at most
+    foreach (array_slice($raw['seen'], 0, 200, true) as $id => $t) if (is_string($id) && preg_match('~^((type|season|map):[a-z-]{1,20}|(pin|philly):[a-z-]{1,30}|prog:[pc]:[a-z0-9-]{1,80}|hood:[a-z-]{1,40}|explore|repeat|intro)$~', $id) && is_numeric($t) && (int) $t >= 1 && (int) $t <= (preg_match('~^(map|hood):~', $id) ? 3 : 5)) $sn[$id] = (int) $t;   // pins have five levels; a map area's spots and a neighborhood's surprises, three at most
     if ($sn) $out['seen'] = $sn;
   }
   if (isset($raw['lvl']) && is_numeric($raw['lvl']) && (int) $raw['lvl'] >= 1 && (int) $raw['lvl'] <= 99) $out['lvl'] = (int) $raw['lvl'];
@@ -1060,7 +1065,22 @@ function passport_out(array $u): array {
     $r = passport_row($home, $k['n']);
     $kids[] = passport_kid($home, $k, $r, passport_data($r));
   }
-  return array('kids' => $kids, 'year' => school_year());
+  return array('kids' => $kids, 'year' => school_year(), 'ppins' => program_pins($kids));
+}
+// The pins of premium listings a child in the household has gone to, approved by the owner. Only while premium listings
+// are open to everyone (or for the owner's test listing). The page shows one only once a child has earned it.
+function program_pins(array $kids): array {
+  global $CFG;
+  $keys = array(); foreach ($kids as $k) foreach ($k['done'] as $e) $keys[$e['k']] = true;
+  $out = array();
+  foreach (array_keys($keys) as $key) {
+    $always = !empty($CFG['premiumAlways']) && in_array($key, (array) $CFG['premiumAlways'], true);
+    if (!($always || premium_mode() === 'on') || !is_premium($key)) continue;
+    $x = extra_live($key, 'pin'); if (!$x) continue;
+    $p = json_decode($x['body'], true); if (!is_array($p) || !isset($p['n'], $p['c'], $p['i'])) continue;
+    $out[] = array('k' => $key, 'n' => $p['n'], 'c' => (int) $p['c'], 'i' => $p['i']);
+  }
+  return $out;
 }
 // The favorites alone, for the planners: each child's ranking, best first.
 function passport_favs(int $home): array {
@@ -1549,7 +1569,7 @@ function premium_out(string $key): array {
     if (is_file(photo_file((int) $r['id']))) $photos[] = array('id' => (int) $r['id'], 'kind' => $r['kind'], 'status' => $r['status'], 'alt' => $r['alt']);
   }
   $texts = array();
-  foreach (array('words', 'offer') as $kind) {
+  foreach (EXTRA_KINDS as $kind) {
     $live = extra_live($key, $kind);
     $new = row("SELECT e.body, e.until FROM extras e JOIN claims c ON c.id = e.claim_id WHERE e.listing = ? AND e.kind = ? AND e.status = 'new' AND c.status = 'ok' ORDER BY e.id DESC LIMIT 1", array($key, $kind));
     $last = row("SELECT e.status FROM extras e JOIN claims c ON c.id = e.claim_id WHERE e.listing = ? AND e.kind = ? AND c.status = 'ok' ORDER BY e.id DESC LIMIT 1", array($key, $kind));
@@ -2559,7 +2579,8 @@ switch ($method . ' ' . $action) {
     out(array('ok' => true));
   }
 
-  // A manager writes a premium listing's own words, or its offer line. It waits for the owner before it shows.
+  // A manager writes a premium listing's own words, its offer line, or names its Kids' Playground pin. It waits for the
+  // owner before it shows.
   case 'POST extra_save': {
     $u = need_user();
     $key = str($in, 'listing', 90);
@@ -2567,11 +2588,25 @@ switch ($method . ' ' . $action) {
     if (!$c) fail('claim', 'You can add this once your claim on this listing stands.', 403);
     if (!is_premium($key)) fail('off', 'This is part of a premium listing.', 403);
     $kind = str($in, 'kind', 10);
-    if (!in_array($kind, array('words', 'offer'), true)) fail('kind', 'That isn’t something a listing has.');
+    if (!in_array($kind, EXTRA_KINDS, true)) fail('kind', 'That isn’t something a listing has.');
     $raw = isset($in['body']) && is_string($in['body']) ? $in['body'] : '';
+    $pinSaid = '';
     $raw = preg_replace('/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]+/u', ' ', str_replace("\r", '', $raw)) ?? '';
     $until = '';
-    if ($kind === 'words') {
+    if ($kind === 'pin') {   // { "n": its name, "c": a color, "i": a picture }
+      $p = json_decode($raw, true);
+      $n = is_array($p) && isset($p['n']) && is_string($p['n']) ? trim(preg_replace('/\s+/u', ' ', $p['n']) ?? '') : '';
+      if (mb_strlen($n, 'UTF-8') < 3) fail('short', 'Give your pin a name, like “Dance Star”.');
+      if (mb_strlen($n, 'UTF-8') > PIN_NAME_MAX) fail('long', 'Keep the name to ' . PIN_NAME_MAX . ' characters.');
+      if (!preg_match('/^[\p{L}\p{N} &’\'.!-]+$/u', $n)) fail('name', 'Use letters, numbers and spaces in the name.');
+      if (preg_match('~(https?|www|\.[a-z]{2,})~i', $n)) fail('name', 'Leave web addresses out of the name.');
+      $col = is_array($p) && isset($p['c']) && is_numeric($p['c']) ? (int) $p['c'] : -1;
+      if ($col < 0 || $col > 9) fail('color', 'Pick a color.');
+      $ic = is_array($p) && isset($p['i']) && is_string($p['i']) ? $p['i'] : '';
+      if (!in_array($ic, PIN_ICONS, true)) fail('icon', 'Pick a picture for the pin.');
+      $body = json_encode(array('n' => $n, 'c' => $col, 'i' => $ic), JSON_UNESCAPED_UNICODE);
+      $pinSaid = 'Name: ' . $n . "\nColor: " . ($col + 1) . ' of 10' . "\nPicture: " . $ic;
+    } elseif ($kind === 'words') {
       $body = trim(preg_replace("/\n{3,}/", "\n\n", preg_replace('/[ \t]+/u', ' ', $raw) ?? '') ?? '');
       if (mb_strlen($body, 'UTF-8') > WORDS_MAX) fail('long', 'That’s longer than ' . WORDS_MAX . ' characters. Trim it a little.');
       if (mb_strlen($body, 'UTF-8') < 40) fail('short', 'Write a few sentences: what a day looks like, who runs it, what makes it yours.');
@@ -2591,7 +2626,8 @@ switch ($method . ' ' . $action) {
     q('INSERT INTO extras (claim_id, listing, kind, body, until, created) VALUES (?, ?, ?, ?, ?, ?)', array($c['id'], $key, $kind, $body, $until, now()));
     bump('extra_sent');
     $l = listings(); $name = isset($l[$key]) ? $l[$key]['n'] : $key;
-    tell_owner(($kind === 'words' ? 'Words to approve: ' : 'An offer line to approve: ') . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '”, wrote this for its listing' . ($kind === 'offer' ? ', to show until ' . $until : '') . ":\n\n" . $body . "\n\nIt is not on the site. Publish or decline it on the review page.");
+    if ($kind === 'pin') tell_owner('A Kids’ Playground pin to approve: ' . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '”, made a pin for it:' . "\n\n" . $pinSaid . "\n\nKids see it only after going to the program. It is not on the site. Publish or decline it on the review page.");
+    else tell_owner(($kind === 'words' ? 'Words to approve: ' : 'An offer line to approve: ') . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '”, wrote this for its listing' . ($kind === 'offer' ? ', to show until ' . $until : '') . ":\n\n" . $body . "\n\nIt is not on the site. Publish or decline it on the review page.");
     out(array('ok' => true, 'claims' => my_claims($u['id'])));
   }
 
@@ -2600,7 +2636,7 @@ switch ($method . ' ' . $action) {
     $u = need_user();
     $key = str($in, 'listing', 90);
     $kind = str($in, 'kind', 10);
-    if (holds($u, $key) && in_array($kind, array('words', 'offer'), true)) q('DELETE FROM extras WHERE listing = ? AND kind = ?', array($key, $kind));
+    if (holds($u, $key) && in_array($kind, EXTRA_KINDS, true)) q('DELETE FROM extras WHERE listing = ? AND kind = ?', array($key, $kind));
     out(array('ok' => true, 'claims' => my_claims($u['id'])));
   }
 

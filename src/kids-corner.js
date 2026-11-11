@@ -353,17 +353,17 @@
   var drawShot = function (kind) { var s = sv('svg', { viewBox: '-14 -14 28 28', 'class': 'kc-shot', 'aria-hidden': 'true' }); (SHOT[kind] || SHOT.star)(sv('g', null, s)); return s; };
 
   // ----- pins: shiny, in five levels -----
-  var TIER = ['', 'Bronze', 'Silver', 'Gold', 'Rainbow', 'Diamond'], TOP = 5;
+  var TIER = ['', 'Bronze', 'Silver', 'Gold', 'Emerald', 'Diamond'], TOP = 5;
   var METAL = [null,   // each level's metal, as gradient stops from the top left
     [[0, '#7A4A1E'], [0.3, '#D99A5B'], [0.5, '#FFD2A1'], [0.72, '#D99A5B'], [1, '#A86A33']],
     [[0, '#68778F'], [0.3, '#CFD8E6'], [0.5, '#FFFFFF'], [0.72, '#CFD8E6'], [1, '#93A0B6']],
     [[0, '#946200'], [0.3, '#FFC930'], [0.5, '#FFF3B0'], [0.72, '#FFC930'], [1, '#D19B00']],
-    [[0, '#E64980'], [0.2, '#FD7E14'], [0.38, '#FCC419'], [0.55, '#51CF66'], [0.75, '#339AF0'], [1, '#845EF7']],
+    [[0, '#0B5D2A'], [0.3, '#2FB362'], [0.5, '#C3FAD5'], [0.72, '#2FB362'], [1, '#14753A']],
     [[0, '#3B8BC4'], [0.25, '#A5D8FF'], [0.45, '#FFFFFF'], [0.6, '#C5F6FA'], [0.8, '#74C0FC'], [1, '#4DABF7']]];
   // what the top three levels wear: the sunburst, the wings, the laurel, the banner and its folds, the gem
   var GRAND = [null, null, null,
     { sun: ['#FFF6C7', '#FFD84D', '#F3C613'], ray: '#E0B400', wing: '#FFF3B0', leaf: '#FFD84D', stem: '#B8860B', band: '#CC3000', fold: '#8A1F00', gem: '#CC3000' },
-    { sun: ['#FFF0F6', '#F783AC', '#9775FA'], ray: '#AE3EC9', wing: '#F3D9FA', leaf: '#B197FC', stem: '#6741D9', band: '#7048E8', fold: '#4C2AA8', gem: '#E64980' },
+    { sun: ['#EBFBEE', '#8CE99A', '#2F9E44'], ray: '#2B8A3E', wing: '#D3F9D8', leaf: '#69DB7C', stem: '#2B8A3E', band: '#2B8A3E', fold: '#1B5E2B', gem: '#12B886' },
     { sun: ['#FFFFFF', '#C5F6FA', '#66D9E8'], ray: '#3BC9DB', wing: '#E3FAFC', leaf: '#99E9F2', stem: '#1098AD', band: '#1098AD', fold: '#0B7285', gem: '#4DABF7' }];
   var PIN_SHAPE = {
     type: ['M50 4A46 46 0 1 1 49.99 4Z', 'M50 15A35 35 0 1 1 49.99 15Z', 50],
@@ -372,7 +372,8 @@
       (function () { var d = ''; for (var i = 0; i < 6; i++) { var a = Math.PI * 2 * i / 6 - Math.PI / 2; d += (i ? 'L' : 'M') + (50 + 36 * Math.cos(a)).toFixed(1) + ' ' + (50 + 36 * Math.sin(a)).toFixed(1); } return d + 'Z'; })(), 50],
     explore: [(function () { var d = ''; for (var i = 0; i < 16; i++) { var r = i % 2 ? 38 : 47, a = Math.PI * 2 * i / 16 - Math.PI / 2; d += (i ? 'L' : 'M') + (50 + r * Math.cos(a)).toFixed(1) + ' ' + (50 + r * Math.sin(a)).toFixed(1); } return d + 'Z'; })(), 'M50 20A30 30 0 1 1 49.99 20Z', 50],
     combo: ['M24 5H76A19 19 0 0 1 95 24V76A19 19 0 0 1 76 95H24A19 19 0 0 1 5 76V24A19 19 0 0 1 24 5Z', 'M30 16H70A14 14 0 0 1 84 30V70A14 14 0 0 1 70 84H30A14 14 0 0 1 16 70V30A14 14 0 0 1 30 16Z', 50],
-    philly: ['M8 4H92L84 26H95L74 96H26L5 26H16Z', 'M21 14H79L73 32H81L66 85H34L19 32H27Z', 48]   // the keystone: Pennsylvania's
+    philly: ['M8 4H92L84 26H95L74 96H26L5 26H16Z', 'M21 14H79L73 32H81L66 85H34L19 32H27Z', 48],   // the keystone: Pennsylvania's
+    program: [(function () { var d = ''; for (var i = 0; i < 28; i++) { var r = i % 2 ? 42 : 48, a = Math.PI * 2 * i / 28 - Math.PI / 2; d += (i ? 'L' : 'M') + (50 + r * Math.cos(a)).toFixed(1) + ' ' + (50 + r * Math.sin(a)).toFixed(1); } return d + 'Z'; })(), 'M50 17A33 33 0 1 1 49.99 17Z', 50]   // a rosette
   };
   // A pin gets grander as it levels up. Bronze: the pin and one star. Silver: a laurel wreath, a blue banner, a gem and
   // two stars. Gold: a turning sunburst, wings, a gold laurel, a crown, a red banner with three stars, and sparkles.
@@ -405,7 +406,7 @@
       [-1, 1].forEach(function (sd) {
         var wg = sv('g', sd > 0 ? { transform: 'translate(100 0) scale(-1 1)' } : null, s);
         var fe = [[-12, 30, 20, 6.5, -30], [-17, 44, 22, 7, -12], [-15, 58, 20, 6.5, 6], [-8, 70, 15, 5.5, 24]];
-        if (tier >= 4) fe.unshift([-6, 18, 16, 5.5, -46]);   // rainbow and diamond: a bigger wing
+        if (tier >= 4) fe.unshift([-6, 18, 16, 5.5, -46]);   // emerald and diamond: a bigger wing
         fe.forEach(function (f) { sv('ellipse', { cx: f[0], cy: f[1], rx: f[2], ry: f[3], fill: G.wing, stroke: INK, 'stroke-width': 2, transform: 'rotate(' + f[4] + ' ' + f[0] + ' ' + f[1] + ')' }, wg); });
       });
     }
@@ -433,7 +434,7 @@
     }
     var sy = tier >= 2 ? 93 : (p.group === 'season' ? 90 : p.group === 'philly' ? 86 : 89), gap = tier >= 4 ? 12.5 : 14;   // a star for each level
     for (var i = 0; i < tier; i++) sv('path', { d: STAR, transform: 'translate(' + (50 + (i - (tier - 1) / 2) * gap) + ' ' + sy + ')' + (tier >= 4 ? ' scale(.9)' : ''), fill: tier >= 2 ? '#F3C613' : '#FFF', stroke: INK, 'stroke-width': 1.3, 'stroke-linejoin': 'round' }, s);
-    if (G) {   // a crown on top, and sparkles around: more of them at rainbow and diamond
+    if (G) {   // a crown on top, and sparkles around: more of them at emerald and diamond
       sv('path', { d: 'M34 4L32 -14L42 -5L50 -19L58 -5L68 -14L66 4Z', fill: 'url(#' + id + 'm)', stroke: INK, 'stroke-width': 2.4, 'stroke-linejoin': 'round' }, s);
       if (tier === TOP) sv('path', { d: 'M50 -30L57 -22L50 -11L43 -22Z', fill: '#E7F5FF', stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' }, s);   // a diamond on the crown
       sv('circle', { cx: 50, cy: -6, r: 2.8, fill: tier === 3 ? '#2176D2' : '#FFFFFF' }, s); sv('circle', { cx: 40, cy: -2, r: 2.2, fill: G.gem }, s); sv('circle', { cx: 60, cy: -2, r: 2.2, fill: G.gem }, s);
@@ -454,7 +455,14 @@
   };
   // The household's children, for Tag Team (a class with a brother or sister). The pin is there only with two or more.
   var HOUSE = [];
-  var PINS = function () { return D.pins.filter(function (p) { return p.id !== 'pin:tag-team' || HOUSE.length > 1; }); };
+  // Program pins: a premium listing's own pin, approved by the site's owner, sent with the household's Kids' Playground
+  // (only for programs a child there has gone to). Counted like any pin, but shown only once earned: never as a goal.
+  var PP = [];
+  var PPAL = ['#C92A2A', '#E8590C', '#F59F00', '#2B8A3E', '#0B7285', '#1971C2', '#5F3DC4', '#AE3EC9', '#C2255C', '#495057'];   // red to gray, as the server numbers them
+  var progPin = function (x) { return { id: 'prog:' + x.k, group: 'program', prog: 1, k: x.k, label: x.n, color: PPAL[x.c] || PPAL[5], icon: (D.picons || {})[x.i] || '', tiers: [1, 2, 3, 5, 8], one: 'time', many: 'times' }; };
+  var everyPin = function () { return D.pins.concat(PP.map(progPin)); };
+  var PINS = function () { return everyPin().filter(function (p) { return p.id !== 'pin:tag-team' || HOUSE.length > 1; }); };
+  var countable = function (p) { return !p.prog; };   // what "12 / 40 pins" counts: program pins are extras
   // Paced: a first class is level 2, a busy first year (eight classes and camps) level 4, Legend (11) about 70 classes.
   var LEVELS = [0, 15, 50, 100, 170, 260, 370, 500, 650, 820, 1010, 1220, 1450, 1700, 1970];
   var TITLES = ['Rookie', 'Rookie', 'Explorer', 'Explorer', 'Adventurer', 'Adventurer', 'Trailblazer', 'Trailblazer', 'Champion', 'Champion', 'Legend'];
@@ -497,8 +505,8 @@
       'tag-team': keys.filter(function (key) { return sibs[key]; }).length, 'showdown-judge': (k.fav || []).length, 'home-base': home, 'pickup-pro': pickup,
       broad: Math.min(east, west), kite: Math.min(t('stem'), t('nature')), jawn: keys.length
     };
-    D.pins.forEach(function (p) {
-      var c = p.how ? (p.how.indexOf('area:') === 0 ? areas[p.how.slice(5)] || 0 : HOW[p.how] || 0) : p.group === 'type' ? types[p.id.slice(5)] || 0 : p.id === 'season:summer' ? weeks : p.group === 'season' ? kinds[p.id.slice(7)] || 0 : p.group === 'repeat' ? repeats : nh, tier = 0;
+    everyPin().forEach(function (p) {
+      var c = p.prog ? times[p.k] || 0 : p.how ? (p.how.indexOf('area:') === 0 ? areas[p.how.slice(5)] || 0 : HOW[p.how] || 0) : p.group === 'type' ? types[p.id.slice(5)] || 0 : p.id === 'season:summer' ? weeks : p.group === 'season' ? kinds[p.id.slice(7)] || 0 : p.group === 'repeat' ? repeats : nh, tier = 0;
       p.tiers.forEach(function (tt, i) { if (c >= tt) tier = i + 1; });
       pins[p.id] = { c: c, tier: tier, next: tier < TOP ? p.tiers[tier] : 0 };
       tiers += tier;
@@ -826,7 +834,7 @@
       show.appendChild(grid);
       if (got.length > 9) show.appendChild(el('p', 'kc-say small', 'and ' + (got.length - 9) + ' more!'));
       show.appendChild(el('p', 'kc-tour-lvl', st.level.title + ' · Level ' + st.level.n));
-      show.appendChild(el('p', 'kc-say small', 'Pins go bronze, silver, gold, rainbow, then DIAMOND. And some pins are secret Philly pins: can you find them?'));
+      show.appendChild(el('p', 'kc-say small', 'Pins go bronze, silver, gold, emerald, then DIAMOND. And some pins are secret Philly pins: can you find them?'));
       acts.appendChild(btn('kc-big go', got.length ? 'Cool!' : 'Got it!', next));
       if (got.length) Sound.play('sparkle');
     } else if (step === 3) {
@@ -861,19 +869,20 @@
 
   // ----- the Pins tab -----
   var unitWord = function (p, n) { return n === 1 ? p.one : p.many; };
-  var SECTIONS = [['type', 'Classes'], ['philly', 'Secret Philly pins'], ['season', 'All year'], ['explore', 'Explorer'], ['combo', 'Combos'], ['repeat', 'Super fan']];
+  var SECTIONS = [['type', 'Classes'], ['philly', 'Secret Philly pins'], ['season', 'All year'], ['explore', 'Explorer'], ['combo', 'Combos'], ['repeat', 'Super fan'], ['program', 'Program pins']];
   var drawPinsTab = function (body, k, st) {
-    var all = PINS(), got = 0; all.forEach(function (p) { if (st.pins[p.id].tier) got++; });
+    var all = PINS().filter(countable), got = 0; all.forEach(function (p) { if (st.pins[p.id].tier) got++; });
     var head = el('div', 'kc-sechead'); head.appendChild(el('h2', 'kc-h2', 'My pins')); head.appendChild(el('span', 'kc-tally', got + ' / ' + all.length)); body.appendChild(head);
     var tops = all.filter(function (p) { return st.pins[p.id].tier === TOP; }).length;
     body.appendChild(eddie(!st.n ? 'Your first class gets your first pin! A grown-up adds it.' : tops === all.length ? 'Every pin is DIAMOND! You’re a legend!' : got === all.length ? 'You have every pin! Now make them all DIAMOND!' : pick(['Tap a pin to see how to level it up!', 'Diamond is the top. Can you get one?', 'Psst… can you find all the secret Philly pins?', 'Every class gets you closer to the next level!']), 'kc-host'));
     SECTIONS.forEach(function (sec) {
-      var list = all.filter(function (p) { return p.group === sec[0] || (sec[0] === 'type' && !SECTIONS.some(function (x) { return x[0] === p.group; })); });
+      var list = sec[0] === 'program' ? PINS().filter(function (p) { return p.prog && st.pins[p.id].tier; })   // program pins: only the ones earned
+        : all.filter(function (p) { return p.group === sec[0] || (sec[0] === 'type' && !SECTIONS.some(function (x) { return x[0] === p.group; })); });
       if (!list.length) return;
       list.sort(function (a, b) { return st.pins[b.id].tier - st.pins[a.id].tier; });
       var have = list.filter(function (p) { return st.pins[p.id].tier; }).length;
       var sh = el('div', 'kc-pinsec' + (sec[0] === 'philly' ? ' secret' : ''));
-      sh.appendChild(el('h3', 'kc-h3', sec[1])); sh.appendChild(el('span', 'kc-pinsec-n', sec[0] === 'philly' ? have + ' of ' + list.length + ' found' : have + ' / ' + list.length));
+      sh.appendChild(el('h3', 'kc-h3', sec[1])); sh.appendChild(el('span', 'kc-pinsec-n', sec[0] === 'philly' ? have + ' of ' + list.length + ' found' : sec[0] === 'program' ? String(have) : have + ' / ' + list.length));
       body.appendChild(sh);
       var grid = el('div', 'kc-pins');
       list.forEach(function (p) {
@@ -907,7 +916,8 @@
       }
       card.appendChild(el('h2', 'kc-h', p.label));
       if (x.tier) card.appendChild(el('p', 'kc-tier big ' + TIER[x.tier].toLowerCase(), TIER[x.tier] + (x.tier === TOP ? '! The top!' : '')));
-      if (p.group === 'repeat' && !p.how) card.appendChild(el('p', 'kc-say', x.c ? 'You went back to classes you love ' + plural(x.c, 'time', 'times') + '!' : 'Go back to a class you love to get this pin!'));
+      if (p.prog) { card.appendChild(el('p', 'kc-say', 'You went to ' + nameOf(p.k) + ' ' + plural(x.c, 'time', 'times') + '!')); card.appendChild(el('p', 'kc-say small', 'A pin from ' + nameOf(p.k) + ', just for kids who go there.')); }
+      else if (p.group === 'repeat' && !p.how) card.appendChild(el('p', 'kc-say', x.c ? 'You went back to classes you love ' + plural(x.c, 'time', 'times') + '!' : 'Go back to a class you love to get this pin!'));
       else if (p.how) card.appendChild(el('p', 'kc-say', x.c ? 'You have ' + plural(x.c, p.one, p.many) + '!' : p.get || p.hint));
       else card.appendChild(el('p', 'kc-say', x.c ? 'You’ve been to ' + plural(x.c, p.one, p.many) + '!' : 'Go to a ' + p.one + ' to get this pin!'));
       if (x.c && x.tier < TOP) card.appendChild(el('p', 'kc-say small', (x.next - x.c) + ' more ' + unitWord(p, x.next - x.c) + ' for ' + TIER[x.tier + 1].toUpperCase() + '!'));
@@ -969,11 +979,12 @@
       card.appendChild(rays());
       var again = p.group === 'repeat';   // going back to a class gets a reward of its own
       var found = p.secret && tier === 1;   // a secret Philly pin, found
-      card.appendChild(el('p', 'kc-burst', found ? 'SECRET PHILLY PIN!' : again ? 'REPEATER REWARD!' : tier === 1 ? 'NEW PIN!' : TIER[tier].toUpperCase() + '!'));
+      card.appendChild(el('p', 'kc-burst', found ? 'SECRET PHILLY PIN!' : p.prog && tier === 1 ? 'PROGRAM PIN!' : again ? 'REPEATER REWARD!' : tier === 1 ? 'NEW PIN!' : TIER[tier].toUpperCase() + '!'));
       var pv = drawPin(p, tier); card.appendChild(pv);
       card.appendChild(el('h2', 'kc-h', again ? (tier === 1 ? 'You went back!' : TIER[tier] + ' Repeater!') : p.label));
       var x = st.pins[p.id];
       if (found) card.appendChild(el('p', 'kc-say', 'You found a secret pin!'));
+      if (p.prog && tier === 1) card.appendChild(el('p', 'kc-say', 'A pin from ' + nameOf(p.k) + '!'));
       card.appendChild(el('p', 'kc-say' + (found ? ' small' : ''), tier === TOP ? 'DIAMOND! That’s the top!' : (x.next - x.c) + ' more ' + unitWord(p, x.next - x.c) + ' for ' + TIER[tier + 1] + '!'));
       card.appendChild(btn('kc-big go', 'Yay!', function () { Sound.play('tap'); close(); }));
       Sound.play('sparkle');
@@ -2146,6 +2157,7 @@
   var paintSummary = function (box, p) {
     box.textContent = '';
     box.appendChild(el('p', 'hint', 'What each child has on Kids’ Playground, and the classes waiting for you to say yes or no. Only you, and a co-parent you’ve linked, see this.'));
+    box.appendChild(el('p', 'hint', 'Program pins: a program with a premium listing can have a pin of its own. Kids see it only after going there, and every program counts toward all the other pins the same way.'));
     if (!p.kids.length) {
       var none = el('p', null, 'Add your kids’ first names on School & kids, and each gets a page in Kids’ Playground.');
       box.appendChild(none);
@@ -2155,7 +2167,7 @@
     var openOn = function (k, hash) { return function () { try { sessionStorage.setItem('kc-open', k.name); } catch (e) { /* storage blocked: the picker asks */ } location.href = D.links.corner + (hash || ''); }; };
     p.kids.forEach(function (k) {
       if (!k.seen || Array.isArray(k.seen)) k.seen = {};
-      var st = stats(k), got = 0; PINS().forEach(function (x) { if (st.pins[x.id].tier) got++; });
+      var st = stats(k), got = 0; PINS().filter(countable).forEach(function (x) { if (st.pins[x.id].tier) got++; });
       var card = el('div', 'kc-sum');
       var head = el('div', 'kc-sum-head');
       var face = el('span', 'kc-sum-face'); face.appendChild(k.av ? drawBulb(kidBulb(k.av)) : unlitBulb()); head.appendChild(face);
@@ -2165,7 +2177,7 @@
       var bar = el('div', 'kc-sum-xp'); var f = el('i'); f.style.width = Math.max(3, Math.round(100 * (st.xp - st.level.from) / (st.level.to - st.level.from))) + '%'; bar.appendChild(f); who.appendChild(bar);
       head.appendChild(who); card.appendChild(head);
       var facts = el('ul', 'kc-sum-facts');
-      [[got + ' of ' + PINS().length, 'pins'], [String(st.nh), st.nh === 1 ? 'neighborhood' : 'neighborhoods'], [String(st.n), st.n === 1 ? 'class or camp' : 'classes and camps']].forEach(function (x) { var li = el('li'); li.appendChild(el('b', null, x[0])); li.appendChild(document.createTextNode(' ')); li.appendChild(el('span', null, x[1])); facts.appendChild(li); });
+      [[got + ' of ' + PINS().filter(countable).length, 'pins'], [String(st.nh), st.nh === 1 ? 'neighborhood' : 'neighborhoods'], [String(st.n), st.n === 1 ? 'class or camp' : 'classes and camps']].forEach(function (x) { var li = el('li'); li.appendChild(el('b', null, x[0])); li.appendChild(document.createTextNode(' ')); li.appendChild(el('span', null, x[1])); facts.appendChild(li); });
       card.appendChild(facts);
       var on = PINS().filter(function (x) { return st.pins[x.id].tier; }).sort(function (a, b) { return st.pins[b.id].tier - st.pins[a.id].tier; });
       if (on.length) { var strip = el('div', 'kc-sum-pins'); on.slice(0, 10).forEach(function (x) { var pv = drawPin(x, st.pins[x.id].tier); pv.setAttribute('aria-hidden', 'false'); pv.setAttribute('role', 'img'); pv.setAttribute('aria-label', x.label + ', ' + TIER[st.pins[x.id].tier]); strip.appendChild(pv); }); if (on.length > 10) strip.appendChild(el('span', 'hint', '+' + (on.length - 10))); card.appendChild(strip); }
@@ -2198,6 +2210,10 @@
     });
   };
   window.pasKids = {
+    // the managers page: load the Playground's data, then draw a program's pin at a level
+    load: function (url) { return D ? Promise.resolve(D) : window.fetch(url, { credentials: 'same-origin' }).then(function (r) { if (!r.ok) throw new Error('data'); return r.json(); }).then(function (d) { D = d; return d; }); },
+    programPin: function (name, color, icon, tier) { return drawPin(progPin({ k: '', n: name, c: color, i: icon }), tier); },
+    colors: PPAL,
     summary: function (box, opts) {
       summaryBox = box;
       if (opts && opts.api) API = opts.api;
@@ -2206,7 +2222,7 @@
       return Promise.all([data, call('passport')]).then(function (x) {
         if (summaryBox !== box) return;
         if (!x[1] || !x[1].ok) { box.textContent = ''; box.appendChild(el('p', 'g-status bad', (x[1] && x[1].message) || 'Couldn’t open Kids’ Playground just now. Try again in a moment.')); return; }
-        HOUSE = x[1].kids || []; paintSummary(box, x[1]);
+        HOUSE = x[1].kids || []; PP = x[1].ppins || []; paintSummary(box, x[1]);
       }).catch(function () { box.textContent = ''; box.appendChild(el('p', 'g-status bad', 'Couldn’t open Kids’ Playground just now. Try again in a moment.')); });
     }
   };
@@ -2221,7 +2237,7 @@
       if (waitEl) waitEl.hidden = true;
       if (!p.ok) { outBox.hidden = false; outBox.insertBefore(el('p', 'g-status bad', p.message || 'Couldn’t open Kids’ Playground just now. Reload to try again.'), outBox.firstChild); return; }
       p.kids.forEach(function (k) { if (!k.seen || Array.isArray(k.seen)) k.seen = {}; });
-      S.data = p; HOUSE = p.kids; app.hidden = false;
+      S.data = p; HOUSE = p.kids; PP = p.ppins || []; app.hidden = false;
       var h = (location.hash || '').slice(1);
       if (p.kids.length === 1) S.kid = 0;   // one child: straight to their page
       var want = null; try { want = sessionStorage.getItem('kc-open'); sessionStorage.removeItem('kc-open'); } catch (e) { /* storage blocked */ }

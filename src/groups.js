@@ -1918,7 +1918,7 @@
           : 'Premium gives the families who open your listing more to go on:'));
       if (!c.asked) {
         var ul = el('ul', 'pm-locks');
-        ['Up to six photos and your logo', 'A section in your own words', 'An offer or event line', 'A button parents use to send you a question', 'Month-by-month numbers, and the schools families come from', 'A flyer to print'].forEach(function (x) { ul.appendChild(el('li', null, x)); });
+        ['Up to six photos and your logo', 'A section in your own words', 'An offer or event line', 'A button parents use to send you a question', 'Month-by-month numbers, and the schools families come from', 'A flyer to print', 'A pin of your own in Kids’ Playground'].forEach(function (x) { ul.appendChild(el('li', null, x)); });
         box.appendChild(ul);
       }
       var row = el('div', 'actions'), go = el('a', 'btn primary', c.asked ? 'Open the premium page' : 'See what premium adds'); go.href = url;
@@ -1994,13 +1994,13 @@
       pictures('logo', sub('photos', 'Your logo', 'Shown beside what you write about your program.'), logos.slice(0, 2), true);
       // --- in their own words, and the offer line: text that waits for a look
       var texts = function (kind, part, t, make) {
-        if (t.live) part.appendChild(el('p', 'claim-status ok', 'On your listing' + (kind === 'offer' && t.liveUntil ? ' until ' + when2(t.liveUntil) : '')));
+        if (t.live) part.appendChild(el('p', 'claim-status ok', kind === 'pin' ? 'In Kids’ Playground' : 'On your listing' + (kind === 'offer' && t.liveUntil ? ' until ' + when2(t.liveUntil) : '')));
         if (t['new']) part.appendChild(el('p', 'claim-status pending', t.live ? 'A newer version is waiting to be approved' : 'Waiting to be approved'));
         if (t.declined && !t['new']) part.appendChild(el('p', 'claim-status declined', 'The last one you sent wasn’t published. We emailed you about it.'));
         var f = el('form', 'g-form pm-form'), inputs = make(f, t);
         var st = el('p', 'g-status'); st.setAttribute('aria-live', 'polite'); f.appendChild(st);
         var acts = el('div', 'actions'), go = el('button', 'btn primary', t.live || t['new'] ? 'Send the new version' : 'Send it for a look'); go.type = 'submit'; acts.appendChild(go);
-        if (t.live || t['new']) { var rm = btn('btn', 'Take it off my listing'); twoTap(rm, 'Tap again to take it off', function () { call('extra_drop', { listing: key, kind: kind }).then(after(kind === 'offer' ? 'The offer line is off ' + c.name + '.' : 'Your words are off ' + c.name + '.')); }); acts.appendChild(rm); }
+        if (t.live || t['new']) { var rm = btn('btn', kind === 'pin' ? 'Take the pin down' : 'Take it off my listing'); twoTap(rm, 'Tap again to take it off', function () { call('extra_drop', { listing: key, kind: kind }).then(after(kind === 'offer' ? 'The offer line is off ' + c.name + '.' : kind === 'pin' ? 'Your pin is out of Kids’ Playground.' : 'Your words are off ' + c.name + '.')); }); acts.appendChild(rm); }
         f.appendChild(acts);
         f.addEventListener('submit', function (e) {
           e.preventDefault(); go.disabled = true; st.className = 'g-status'; st.textContent = 'Sending…';
@@ -2008,7 +2008,7 @@
             go.disabled = false;
             if (!r.ok) { st.textContent = r.message; st.className = 'g-status bad'; return; }
             pushStep(kind + '_sent');
-            after('Sent. It shows on ' + c.name + ' once a person has looked at it, and we’ll email you.')(r);
+            after(kind === 'pin' ? 'Sent. Your pin goes into Kids’ Playground once a person has looked at it, and we’ll email you.' : 'Sent. It shows on ' + c.name + ' once a person has looked at it, and we’ll email you.')(r);
           });
         });
         part.appendChild(f);
@@ -2027,6 +2027,37 @@
         var d0 = new Date(), iso = function (d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); };
         until.min = iso(d0); until.max = iso(new Date(d0.getTime() + 90 * 86400000)); until.value = t.newUntil || (t.liveUntil >= iso(d0) ? t.liveUntil : '') || '';
         return { body: inp, until: until };
+      });
+      // --- the program's own pin in Kids' Playground: a name, a color and a picture, drawn the way Kids' Playground draws it
+      var KJS = host.getAttribute('data-kids'), KDATA = host.getAttribute('data-kids-data');
+      if (KJS && KDATA && P.texts.pin) texts('pin', sub('words', 'Your pin in Kids’ Playground', 'Kids’ Playground is where children earn pins for the classes their parents confirm. Your listing can have a pin of its own: a child gets it only after going to ' + c.name + ', and it levels up from bronze to diamond as they keep going. It never shows to a child as something to go and get, and it carries no link or offer.'), P.texts.pin, function (f, t) {
+        var cur = {}; try { cur = JSON.parse(t['new'] || t.live || '{}') || {}; } catch (e) { cur = {}; }
+        var name = field(f, 'pn-' + slug, 'The pin’s name', 'input', { type: 'text', maxLength: 28, placeholder: 'Dance Star' }); name.value = cur.n || '';
+        var cs = el('fieldset', 'pm-pin-colors'); cs.appendChild(el('legend', null, 'Its color'));
+        var COLORS = ['Red', 'Orange', 'Yellow', 'Green', 'Teal', 'Blue', 'Purple', 'Violet', 'Pink', 'Gray'], HEX = ['#C92A2A', '#E8590C', '#F59F00', '#2B8A3E', '#0B7285', '#1971C2', '#5F3DC4', '#AE3EC9', '#C2255C', '#495057'];
+        var radios = COLORS.map(function (nm, i) {
+          var lab = el('label', 'pm-pin-swatch'), r = el('input'); r.type = 'radio'; r.name = 'pc-' + slug; r.value = String(i); r.checked = (cur.c === undefined ? 5 : cur.c) === i;
+          var sw = el('span'); sw.style.background = HEX[i]; lab.appendChild(r); lab.appendChild(sw); lab.appendChild(el('span', 'vh', nm)); lab.title = nm; cs.appendChild(lab); return r;
+        });
+        f.appendChild(cs);
+        var pic = field(f, 'pi-' + slug, 'Its picture', 'select');
+        [['star', 'A star'], ['heart', 'A heart'], ['bolt', 'A lightning bolt'], ['music', 'Music'], ['theater', 'Theater'], ['art', 'Art'], ['movement', 'Sports and dance'], ['stem', 'Science'], ['academics', 'Reading'], ['games', 'Games'], ['nature', 'Nature'], ['daycamp', 'Camp'], ['clubs', 'Clubs'], ['aftercare', 'After school'], ['rec-center', 'Rec center']].forEach(function (o) { var op = el('option', null, o[1]); op.value = o[0]; pic.appendChild(op); });
+        pic.value = cur.i || 'star';
+        var prev = el('div', 'pm-pin-prev'); prev.setAttribute('aria-hidden', 'true'); f.appendChild(prev);
+        var body = el('input'); body.type = 'hidden'; f.appendChild(body);
+        var color = function () { var v = 5; radios.forEach(function (r) { if (r.checked) v = +r.value; }); return v; };
+        var draw = function () {
+          body.value = JSON.stringify({ n: name.value, c: color(), i: pic.value });
+          if (!window.pasKids || !window.pasKids.programPin) return;
+          prev.textContent = '';
+          [[1, 'Bronze'], [3, 'Gold'], [5, 'Diamond']].forEach(function (x) { var fig = el('figure'); fig.appendChild(window.pasKids.programPin(name.value || 'Your pin', color(), pic.value, x[0])); fig.appendChild(el('figcaption', null, x[1])); prev.appendChild(fig); });
+        };
+        [name, pic].forEach(function (x) { x.addEventListener('input', draw); x.addEventListener('change', draw); }); radios.forEach(function (r) { r.addEventListener('change', draw); });
+        var ready = function () { window.pasKids.load(KDATA).then(draw, draw); };
+        if (window.pasKids && window.pasKids.load) ready();
+        else { var sc = document.createElement('script'); sc.src = KJS; sc.onload = ready; document.head.appendChild(sc); }
+        draw();
+        return { body: body };
       });
       // --- questions
       sub('words', 'Questions from parents', 'Your listing has an “Ask a question” button. A parent’s question comes by email to ' + (cMe ? cMe.email : 'you') + (P.mode === 'preview' ? ' (for now only you can see the button)' : '') + ', and to anyone else who holds this listing. Reply to that email to answer them. We pass it along and don’t keep a copy.');
