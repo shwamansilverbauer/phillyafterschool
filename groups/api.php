@@ -981,7 +981,7 @@ function daysoff_out(int $uid): ?array {
 // parent waved away ("k|kind|y", or "k|kind|y|n" for "not that many times"); "fav" is the child's ranking of listings, best first. For Kids' Playground (the page the
 // child sees) it also keeps "av", the lightbulb the child picked ({ "b": a bulb from KC_BODIES, "c": a color, 0 to 9,
 // "w": what it wears, { place: thing } from KC_WEAR }),
-// "seen", the pins whose level the child has already been shown ({ "type:music": 2, ... }), and "lvl", the last level
+// "seen", the pins whose level the child has already been shown ({ "type:music": 2, "philly:jawn": 1, ... }, 1 to 5), and "lvl", the last level
 // celebrated. Pins and levels themselves are never stored: the page works them out from "done". Nothing here is ever
 // sent anywhere but back to the household's own browsers.
 const PASSPORT_KINDS = array('after', 'weekend', 'off', 'summer');
@@ -1027,7 +1027,7 @@ function passport_clean($raw): array {
   if (isset($raw['seen']) && is_array($raw['seen'])) {
     $sn = array();
     // what the page has already celebrated: pins, a map area's secret spots, a neighborhood's surprises ("hood:")
-    foreach (array_slice($raw['seen'], 0, 120, true) as $id => $t) if (is_string($id) && preg_match('~^((type|season|map):[a-z-]{1,20}|hood:[a-z-]{1,40}|explore|repeat|intro)$~', $id) && is_numeric($t) && (int) $t >= 1 && (int) $t <= 3) $sn[$id] = (int) $t;
+    foreach (array_slice($raw['seen'], 0, 200, true) as $id => $t) if (is_string($id) && preg_match('~^((type|season|map):[a-z-]{1,20}|(pin|philly):[a-z-]{1,30}|hood:[a-z-]{1,40}|explore|repeat|intro)$~', $id) && is_numeric($t) && (int) $t >= 1 && (int) $t <= (preg_match('~^(map|hood):~', $id) ? 3 : 5)) $sn[$id] = (int) $t;   // pins have five levels; a map area's spots and a neighborhood's surprises, three at most
     if ($sn) $out['seen'] = $sn;
   }
   if (isset($raw['lvl']) && is_numeric($raw['lvl']) && (int) $raw['lvl'] >= 1 && (int) $raw['lvl'] <= 99) $out['lvl'] = (int) $raw['lvl'];
