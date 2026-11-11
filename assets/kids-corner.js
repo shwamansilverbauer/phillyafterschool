@@ -469,12 +469,12 @@
   var need = function (n) { return n - 1 < LEVELS.length ? LEVELS[n - 1] : LEVELS[LEVELS.length - 1] + (n - LEVELS.length) * 300; };   // points to reach level n
   var levelOf = function (xp) { var n = 1; while (xp >= need(n + 1)) n++; return { n: n, title: TITLES[Math.min(n - 1, TITLES.length - 1)], from: need(n), to: need(n + 1) }; };
   var stats = function (k) {
-    var types = {}, kinds = {}, hoods = {}, places = [], keys = [], seenKey = {}, n = 0, times = {}, weeks = 0, near = {}, inHood = {};
+    var types = {}, typeKeys = {}, kinds = {}, hoods = {}, places = [], keys = [], seenKey = {}, n = 0, times = {}, weeks = 0, near = {}, inHood = {};
     k.done.forEach(function (e) {
       var l = listing(e.k); if (!l) return;
       var x = Math.max(1, e.n || 1);   // days a week, terms, weeks of the same camp: each time after the first is a repeat
       n++; kinds[e.kind] = (kinds[e.kind] || 0) + 1; times[e.k] = (times[e.k] || 0) + x; if (e.kind === 'summer') weeks += x;
-      (l.t || []).forEach(function (t) { types[t] = (types[t] || 0) + 1; });
+      (l.t || []).forEach(function (t) { types[t] = (types[t] || 0) + 1; (typeKeys[t] = typeKeys[t] || {})[e.k] = true; });
       if (!seenKey[e.k]) { seenKey[e.k] = true; keys.push(e.k); }
       var st = siteOf(e);
       if (st) { var hid = st.m || 'n:' + st.h; hoods[hid] = true; places.push({ k: e.k, st: st }); if (st.a) (near[st.a] = near[st.a] || {})[e.k] = true; if (st.m) (inHood[st.m] = inHood[st.m] || {})[e.k] = true; }
@@ -506,7 +506,8 @@
       broad: Math.min(east, west), kite: Math.min(t('stem'), t('nature')), jawn: keys.length
     };
     everyPin().forEach(function (p) {
-      var c = p.prog ? times[p.k] || 0 : p.how ? (p.how.indexOf('area:') === 0 ? areas[p.how.slice(5)] || 0 : HOW[p.how] || 0) : p.group === 'type' ? types[p.id.slice(5)] || 0 : p.id === 'season:summer' ? weeks : p.group === 'season' ? kinds[p.id.slice(7)] || 0 : p.group === 'repeat' ? repeats : nh, tier = 0;
+      var mx = p.how && p.how.indexOf('mix:') === 0 ? p.how.split(':') : null;   // a kind of class and a part of the map: the pairs
+      var c = p.prog ? times[p.k] || 0 : mx ? Math.min(t(mx[1]), areas[mx[2]] || 0) : p.how ? (p.how.indexOf('area:') === 0 ? areas[p.how.slice(5)] || 0 : HOW[p.how] || 0) : p.group === 'type' ? types[p.id.slice(5)] || 0 : p.id === 'season:summer' ? weeks : p.group === 'season' ? kinds[p.id.slice(7)] || 0 : p.group === 'repeat' ? repeats : nh, tier = 0;
       p.tiers.forEach(function (tt, i) { if (c >= tt) tier = i + 1; });
       pins[p.id] = { c: c, tier: tier, next: tier < TOP ? p.tiers[tier] : 0 };
       tiers += tier;
@@ -516,7 +517,7 @@
     // more generously then: the bar fills toward the next one from where the points are now.
     var level = levelOf(xp), kept = k.lvl || 1;
     if (kept > level.n) level = { n: kept, title: TITLES[Math.min(kept - 1, TITLES.length - 1)], from: need(kept), to: need(kept + 1), kept: true };
-    return { n: n, nh: nh, hoods: hoods, places: places, keys: keys, times: times, repeats: repeats, spots: spots, found: found, hidden: hidden, sur: sur, surFound: surFound, pins: pins, tiers: tiers, xp: xp, level: level, near: near, side: side };
+    return { n: n, nh: nh, hoods: hoods, places: places, keys: keys, times: times, repeats: repeats, spots: spots, found: found, hidden: hidden, sur: sur, surFound: surFound, pins: pins, tiers: tiers, xp: xp, level: level, near: near, side: side, typeKeys: typeKeys };
   };
 
   // ----- state -----
@@ -909,9 +910,9 @@
     if (more) n = n.slice(0, 3).concat([more + ' more']);
     return n.length > 1 ? n.slice(0, -1).join(', ') + ' and ' + n[n.length - 1] : n[0] || '';
   };
-  // A secret Philly pin's part of the city: a small map with its neighborhoods colored in, the famous thing there marked,
-  // and the neighborhoods by name for a grown-up who asks.
-  var areaOf = function (p) { var id = p.how && p.how.indexOf('area:') === 0 ? p.how.slice(5) : ''; return id ? (D.areas || []).filter(function (a) { return a.id === id; })[0] || null : null; };
+  // A found secret Philly pin's part of the city: a small map with its neighborhoods colored in and the famous thing there
+  // circled.
+  var areaOf = function (p) { var id = !p.how ? '' : p.how.indexOf('area:') === 0 ? p.how.slice(5) : p.how.indexOf('mix:') === 0 ? p.how.split(':')[2] : ''; return id ? (D.areas || []).filter(function (a) { return a.id === id; })[0] || null : null; };
   var miniMap = function (card, p) {
     var a = areaOf(p); if (!a || !a.hoods || !a.hoods.length) return;
     var box = el('div', 'kc-minimap'); card.appendChild(box); card.classList.add('has-map');
@@ -926,19 +927,17 @@
       sv('path', { d: M.outline, fill: 'none', stroke: INK, 'stroke-width': 5, 'stroke-linejoin': 'round' }, svg);
       var lm = (a.items || [])[0]; if (lm && lm.x != null) sv('circle', { cx: lm.x, cy: lm.y, r: 16, fill: '#fff', stroke: INK, 'stroke-width': 5 }, svg);
       box.appendChild(svg);
-      box.appendChild(el('p', 'kc-mini-say', 'Classes in the colored part of Philly count' + (lm && lm.x != null && a.mark ? '. The circle is ' + a.mark + '!' : '!')));
-      var more = el('details', 'kc-mini-hoods'); more.appendChild(el('summary', null, 'Which neighborhoods?')); more.appendChild(el('p', null, (a.hn || []).join(', ') + '.')); box.appendChild(more);
+      box.appendChild(el('p', 'kc-mini-say', 'The colored part of Philly is ' + a.name + (lm && lm.x != null && a.mark ? '. The circle is ' + a.mark + '!' : '!')));
     });
   };
   var pinUpClose = function (p, x, st) {
     overlay(function (card, close) {
       card.classList.add('kc-pinbig');
       var pv = drawPin(p, x.tier); card.appendChild(pv); bounce(pv);
-      if (p.secret && !x.tier) {   // still a secret: the riddle, then the plain rule
+      if (p.secret && !x.tier) {   // still a secret: only the riddle (the rule and the map come once it's found)
         card.appendChild(el('h2', 'kc-h', 'Secret Philly pin'));
         card.appendChild(el('p', 'kc-say', p.hint));
-        var how = el('p', 'kc-say small kc-rule'); how.appendChild(el('b', null, 'How to find it: ')); how.appendChild(document.createTextNode(p.rule || 'Keep exploring!')); card.appendChild(how);
-        miniMap(card, p);
+        card.appendChild(el('p', 'kc-say small', 'Keep exploring to find it!'));
         card.appendChild(btn('kc-big go', 'Ooh!', function () { Sound.play('tap'); close(); }));
         return;
       }
@@ -949,14 +948,16 @@
       else if (p.how) {
         card.appendChild(el('p', 'kc-say', x.c ? 'You have ' + plural(x.c, p.one, p.many) + '!' : p.get || p.rule || p.hint));
         // which classes counted, so "around Old City" isn't a mystery
-        var w = !x.c || !st ? '' : p.how.indexOf('area:') === 0 ? names(st.near[p.how.slice(5)]) && 'Counted: ' + names(st.near[p.how.slice(5)]) + '.'
+        var mx = p.how.indexOf('mix:') === 0 ? p.how.split(':') : null;
+        var w = !x.c || !st ? '' : mx && p.parts ? p.parts[0] + ': ' + names(st.typeKeys[mx[1]]) + '. ' + p.parts[1] + ': ' + names(st.near[mx[2]]) + '.'
+          : p.how.indexOf('area:') === 0 ? names(st.near[p.how.slice(5)]) && 'Counted: ' + names(st.near[p.how.slice(5)]) + '.'
           : p.how === 'broad' ? 'East of Broad: ' + names(st.side.e) + '. West of Broad: ' + names(st.side.w) + '.' : '';
         if (w) card.appendChild(el('p', 'kc-say small kc-counted', w));
       }
       else card.appendChild(el('p', 'kc-say', x.c ? 'You’ve been to ' + plural(x.c, p.one, p.many) + '!' : 'Go to a ' + p.one + ' to get this pin!'));
       if (x.c && x.tier < TOP) card.appendChild(el('p', 'kc-say small', (x.next - x.c) + ' more ' + unitWord(p, x.next - x.c) + ' for ' + TIER[x.tier + 1].toUpperCase() + '!'));
-      if (x.c && x.tier < TOP && p.rule) card.appendChild(el('p', 'kc-say small kc-rule', p.rule));   // a secret pin's rule, in plain words
-      if (p.secret) miniMap(card, p);
+      if (x.c && x.tier < TOP && p.rule) { var how = el('p', 'kc-say small kc-rule'); how.appendChild(el('b', null, 'To level up: ')); how.appendChild(document.createTextNode(p.rule)); card.appendChild(how); }   // a found secret pin's rule, in plain words
+      if (p.secret && x.tier < TOP) miniMap(card, p);
       card.appendChild(btn('kc-big go', 'Cool!', function () { Sound.play('tap'); close(); }));
     });
   };
