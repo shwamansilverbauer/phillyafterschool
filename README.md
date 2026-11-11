@@ -445,8 +445,12 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
 - **Pins.** `KIDS_PINS` in `build.mjs`, 41 of them, each with five levels: bronze, silver, gold, emerald and diamond
   (the counts are each pin's `tiers`). On the Pins tab they come in sections, one per `group`, each its own shape:
   - **Classes** (a circle): one per program type (names in `KIDS_PIN`), at 1, 3, 5, 8 and 12.
-  - **Secret Philly pins** (a keystone): ten that show as a "?" with a hint ("Somewhere old, a famous bell has a crack
-    in it…") until found, and are revealed with a burst of their own ("SECRET PHILLY PIN!"): one for classes in each
+  - **Secret Philly pins** (a keystone): ten that show as a "?" with a riddle ("Somewhere old, a famous bell has a crack
+    in it…") and the plain rule ("How to find it: Go to a class around Old City, where the Liberty Bell is!", `rule`)
+    until found, and are revealed with a burst of their own ("SECRET PHILLY PIN!"). The seven area pins' close-ups add
+    a small map with the area's neighborhoods colored in, the famous thing circled and the neighborhoods by name under
+    "Which neighborhoods?"; once found, the close-up names the classes that counted (and for Broad Street, which side
+    each was on). They are: one for classes in each
     part of the map (Liberty Bell Ringer for Old City, Billy Penn's Hat for Center City, Cheesesteak Champ for South
     Philly, Boathouse Rower for the Parkway, Wissahickon Wanderer, Heron Spotter for Southwest, Pennypack Pathfinder for
     the Northeast), Broad Street Crosser (classes on both sides of Broad: `BROAD` in `kids-corner.js`), Ben Franklin's
@@ -498,8 +502,11 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   Philly, the Northwest, the Southwest, the Northeast), each with one to three famous things: the map's landmarks, and
   a few more placed by latitude and longitude (`MAP_EXTRA`: Elfreth's Alley, the Italian Market, the covered bridge,
   the wildlife refuge, Pennypack Park). Each starts as a "?" cloud and is found in order as the child goes to classes
-  nearby: the first with one listing in the area, the next with two, the last with three. The build puts each listing
-  site in the area whose middle is nearest, within 5 km (`mapArea()`, as `a` on the site). `LANDMARK` and
+  nearby: the first with one listing in the area, the next with two, the last with three. Each map neighborhood belongs
+  to one area or none (`HOOD_AREA`: the area whose middle is nearest the neighborhood's middle, within 5 km, with
+  `AREA_FIX` for the ones that gets wrong, such as Bella Vista, home of the Italian Market, in South Philly), and a
+  listing site counts for its neighborhood's area (`mapArea()`, as `a` on the site). 31 neighborhoods, most of North
+  Philly among them, are in no area. `LANDMARK` and
   `LANDMARK_SAY` in `kids-corner.js` draw each one and say something about it; a tap on a "?" says how many more
   classes nearby it needs. (No Rocky statue: it's the film's character.)
 - **Surprises in every neighborhood.** Each map neighborhood that has a listing or a school in it (51 of them) has one

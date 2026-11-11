@@ -5600,39 +5600,46 @@ const mapHood = (() => {
   return fn;
 })();
 // The map's secret spots. The city is in areas, each with a few famous things that start as a "?" and unlock as a
-// child goes to more classes nearby: the first with one, the next with two, the last with three. A class counts for
-// the area whose middle is nearest, within 5 km. The map's own landmarks (data/philly-map.json) are most of them;
+// child goes to more classes nearby: the first with one, the next with two, the last with three. Each neighborhood on
+// the map belongs to one area (or none): the area whose middle is nearest the neighborhood's middle, within 5 km, with
+// AREA_FIX for the few that distance gets wrong. A class counts for its neighborhood's area, so the rule is one a
+// parent can check ("classes in these neighborhoods"), and Kids' Playground colors them in on a pin's close-up. The map's own landmarks (data/philly-map.json) are most of them;
 // MAP_EXTRA places the rest by latitude and longitude. kids-corner.js draws each one and says something about it.
 const MAP_AREAS = [
-  { id: 'parkway', name: 'the Art Museum and the Parkway', at: [39.9680, -75.1850], items: ['art-museum', 'boathouses', 'zoo'] },
-  { id: 'center', name: 'Center City', at: [39.9530, -75.1680], items: ['city-hall', 'love', 'franklin'] },
-  { id: 'oldcity', name: 'Old City', at: [39.9510, -75.1440], items: ['liberty-bell', 'elfreth', 'bridge'] },
-  { id: 'south', name: 'South Philly', at: [39.9250, -75.1650], items: ['cheesesteak', 'italian-market', 'stadiums'] },
-  { id: 'northwest', name: 'Northwest Philly', at: [40.0400, -75.2150], items: ['wissahickon', 'covered-bridge'] },
-  { id: 'southwest', name: 'Southwest Philly', at: [39.8950, -75.2300], items: ['heinz', 'airport'] },
-  { id: 'northeast', name: 'Northeast Philly', at: [40.0500, -75.0500], items: ['pennypack'] },
+  { id: 'parkway', name: 'the Art Museum and the Parkway', mark: 'the Art Museum', at: [39.9680, -75.1850], items: ['art-museum', 'boathouses', 'zoo'] },
+  { id: 'center', name: 'Center City', mark: 'City Hall', at: [39.9530, -75.1680], items: ['city-hall', 'love', 'franklin'] },
+  { id: 'oldcity', name: 'Old City', mark: 'the Liberty Bell', at: [39.9510, -75.1440], items: ['liberty-bell', 'elfreth', 'bridge'] },
+  { id: 'south', name: 'South Philly', mark: 'the cheesesteak shops', at: [39.9250, -75.1650], items: ['cheesesteak', 'italian-market', 'stadiums'] },
+  { id: 'northwest', name: 'Northwest Philly', mark: 'the Wissahickon', at: [40.0400, -75.2150], items: ['wissahickon', 'covered-bridge'] },
+  { id: 'southwest', name: 'Southwest Philly', mark: 'the wildlife refuge', at: [39.8950, -75.2300], items: ['heinz', 'airport'] },
+  { id: 'northeast', name: 'Northeast Philly', mark: 'Pennypack Park', at: [40.0500, -75.0500], items: ['pennypack'] },
 ];
 const MAP_EXTRA = {
   elfreth: ['Elfreth’s Alley', 39.9527, -75.1425], 'italian-market': ['The Italian Market', 39.9380, -75.1580], 'covered-bridge': ['The covered bridge', 40.0647, -75.2177],
   heinz: ['The wildlife refuge', 39.8920, -75.2570], pennypack: ['Pennypack Park', 40.0640, -75.0500],
 };
-const mapArea = (() => {
-  if (!PHILLY) return () => '';
-  const { lon0, lat1, cos, k, pad } = PHILLY.proj, byHood = Object.fromEntries(PHILLY.hoods.map(h => [h.id, h]));
+const AREA_FIX = { 'bella-vista': 'south' };   // the Italian Market is in Bella Vista
+const HOOD_AREA = (() => {
+  if (!PHILLY) return {};
+  const { lon0, lat1, cos, k, pad } = PHILLY.proj;
   const back = c => [lat1 - (c[1] - pad) / k, lon0 + (c[0] - pad) / (cos * k)];   // a point on the map, as latitude and longitude
   const km = (a, b) => Math.hypot((a[0] - b[0]) * 111.2, (a[1] - b[1]) * 111.2 * Math.cos(a[0] * Math.PI / 180));
-  return (ll, hood) => {
-    const at = ll || (hood && byHood[hood] ? back(byHood[hood].c) : null);
-    if (!at) return '';
-    let best = '', near = 5;
+  const ids = new Set(PHILLY.hoods.map(h => h.id));
+  for (const id of Object.keys(AREA_FIX)) if (!ids.has(id)) console.log(`Note: AREA_FIX in build.mjs names "${id}", which isn't a neighborhood on the Kids' Playground map.`);
+  return Object.fromEntries(PHILLY.hoods.map(h => {
+    if (h.id in AREA_FIX) return [h.id, AREA_FIX[h.id]];
+    const at = back(h.c); let best = '', near = 5;
     for (const a of MAP_AREAS) { const d = km(at, a.at); if (d < near) { near = d; best = a.id; } }
-    return best;
-  };
+    return [h.id, best];
+  }));
 })();
+const mapArea = (ll, hood) => (hood && HOOD_AREA[hood]) || '';
 const mapAreas = () => {
   if (!PHILLY) return [];
   const { lon0, lat1, cos, k, pad } = PHILLY.proj, r1 = n => Math.round(n * 10) / 10;
-  return MAP_AREAS.map(a => ({ id: a.id, name: a.name, items: a.items.map(id => {
+  const names = Object.fromEntries(PHILLY.hoods.map(h => [h.id, h.name]));
+  const hoodsOf = id => Object.keys(HOOD_AREA).filter(h => HOOD_AREA[h] === id).sort((x, y) => names[x].localeCompare(names[y]));
+  return MAP_AREAS.map(a => ({ id: a.id, name: a.name, mark: a.mark, hoods: hoodsOf(a.id), hn: hoodsOf(a.id).map(h => names[h]), items: a.items.map(id => {
     const lm = PHILLY.landmarks.find(l => l.id === id);
     if (lm) return { id, n: lm.name, x: lm.x, y: lm.y };
     const e = MAP_EXTRA[id];
@@ -5734,19 +5741,20 @@ const KIDS_PINS = [
     ['pin:home-base', 'repeat', 'Home Base', 'house', '#364FC7', [1, 2, 3, 5, 8], 'class at your school', 'classes at your school', 'Go to a class right in your own school!'],
     ['pin:pickup-pro', 'repeat', 'Pickup Pro', 'bus', '#E67700', [1, 2, 3, 5, 8], 'class that picked you up', 'classes that picked you up', 'Go to a class that picks you up from school!'],
   ].map(([id, group, label, icon, color, tiers, one, many, get]) => ({ id, group, label, one, many, color, icon: KIDS_ICON2[icon], eo: 1, tiers, how: id.slice(4), get })),
-  // The secret Philly pins: a "?" and a hint until found. "area" is a part of the Kids' Playground map.
+  // The secret Philly pins: a "?", a riddle and the plain rule until found. "area" is a part of the Kids' Playground map
+  // (a class counts for its neighborhood's area: HOOD_AREA).
   ...[
-    ['liberty-bell', 'Liberty Bell Ringer', 'bell', '#8C4A1E', 'area:oldcity', [1, 3, 5, 8, 12], 'class there', 'classes there', 'Somewhere old, a famous bell has a crack in it…'],
-    ['billy-penn', 'Billy Penn’s Hat', 'hat', '#495057', 'area:center', [1, 3, 5, 8, 12], 'class there', 'classes there', 'Look up! Someone in a big hat stands on top of City Hall…'],
-    ['cheesesteak', 'Cheesesteak Champ', 'hoagie', '#C92A2A', 'area:south', [1, 3, 5, 8, 12], 'class there', 'classes there', 'Wit or witout? It’s somewhere in South Philly…'],
-    ['boathouse', 'Boathouse Rower', 'oars', '#1864AB', 'area:parkway', [1, 3, 5, 8, 12], 'class there', 'classes there', 'Down by the river, where the boathouses light up at night…'],
-    ['wissahickon', 'Wissahickon Wanderer', 'pine', '#2B8A3E', 'area:northwest', [1, 3, 5, 8, 12], 'class there', 'classes there', 'Deep in the woods of Northwest Philly…'],
-    ['heron', 'Heron Spotter', 'bird', '#0C8599', 'area:southwest', [1, 3, 5, 8, 12], 'class there', 'classes there', 'Tall birds wade in the marsh in Southwest Philly…'],
-    ['pennypack', 'Pennypack Pathfinder', 'feet', '#5C940D', 'area:northeast', [1, 3, 5, 8, 12], 'class there', 'classes there', 'A trail through the trees, way up in Northeast Philly…'],
-    ['broad-street', 'Broad Street Crosser', 'cross', '#E03131', 'broad', [1, 2, 3, 5, 8], 'class on each side', 'classes on each side', 'One long street cuts Philly down the middle. Try both sides!'],
-    ['franklin-kite', 'Ben Franklin’s Kite', 'kite', '#F59F00', 'kite', [1, 2, 3, 4, 5], 'science + nature pair', 'science + nature pairs', 'Ben Franklin flew a kite in a storm. Try science AND nature!'],
-    ['jawn', 'Jawn Collector', 'jay', '#7048E8', 'jawn', [3, 6, 10, 15, 20], 'different program', 'different programs', 'Collect a whole lotta jawns: lots of different programs!'],
-  ].map(([id, label, icon, color, how, tiers, one, many, hint]) => ({ id: 'philly:' + id, group: 'philly', label, one, many, color, icon: KIDS_ICON2[icon], eo: 1, tiers, how, hint, secret: 1 })),
+    ['liberty-bell', 'Liberty Bell Ringer', 'bell', '#8C4A1E', 'area:oldcity', [1, 3, 5, 8, 12], 'class around Old City', 'classes around Old City', 'Somewhere old, a famous bell has a crack in it…', 'Go to a class around Old City, where the Liberty Bell is!'],
+    ['billy-penn', 'Billy Penn’s Hat', 'hat', '#495057', 'area:center', [1, 3, 5, 8, 12], 'class around Center City', 'classes around Center City', 'Look up! Someone in a big hat stands on top of City Hall…', 'Go to a class around Center City, where City Hall is!'],
+    ['cheesesteak', 'Cheesesteak Champ', 'hoagie', '#C92A2A', 'area:south', [1, 3, 5, 8, 12], 'class in South Philly', 'classes in South Philly', 'Wit or witout? It’s somewhere in South Philly…', 'Go to a class in South Philly, home of the cheesesteak!'],
+    ['boathouse', 'Boathouse Rower', 'oars', '#1864AB', 'area:parkway', [1, 3, 5, 8, 12], 'class around the Art Museum', 'classes around the Art Museum', 'Down by the river, where the boathouses light up at night…', 'Go to a class around the Art Museum, the Parkway or West Philly!'],
+    ['wissahickon', 'Wissahickon Wanderer', 'pine', '#2B8A3E', 'area:northwest', [1, 3, 5, 8, 12], 'class in Northwest Philly', 'classes in Northwest Philly', 'Deep in the woods of Northwest Philly…', 'Go to a class in Northwest Philly, near the Wissahickon woods!'],
+    ['heron', 'Heron Spotter', 'bird', '#0C8599', 'area:southwest', [1, 3, 5, 8, 12], 'class in Southwest Philly', 'classes in Southwest Philly', 'Tall birds wade in the marsh in Southwest Philly…', 'Go to a class in Southwest Philly, near the wildlife refuge!'],
+    ['pennypack', 'Pennypack Pathfinder', 'feet', '#5C940D', 'area:northeast', [1, 3, 5, 8, 12], 'class in Northeast Philly', 'classes in Northeast Philly', 'A trail through the trees, way up in Northeast Philly…', 'Go to a class in Northeast Philly, near Pennypack Park!'],
+    ['broad-street', 'Broad Street Crosser', 'cross', '#E03131', 'broad', [1, 2, 3, 5, 8], 'class on each side of Broad Street', 'classes on each side of Broad Street', 'One long street cuts Philly down the middle. Try both sides!', 'Broad Street runs down the middle of Philly. Go to a class on the east side AND one on the west side. Each pair counts!'],
+    ['franklin-kite', 'Ben Franklin’s Kite', 'kite', '#F59F00', 'kite', [1, 2, 3, 4, 5], 'science + nature pair', 'science + nature pairs', 'Ben Franklin flew a kite in a storm. Try science AND nature!', 'Do a science class AND a nature or outdoors class. Each pair counts!'],
+    ['jawn', 'Jawn Collector', 'jay', '#7048E8', 'jawn', [3, 6, 10, 15, 20], 'different program', 'different programs', 'Collect a whole lotta jawns: lots of different programs!', 'Go to lots of different programs. Each new one counts!'],
+  ].map(([id, label, icon, color, how, tiers, one, many, hint, rule]) => ({ id: 'philly:' + id, group: 'philly', label, one, many, color, icon: KIDS_ICON2[icon], eo: 1, tiers, how, hint, rule, secret: 1 })),
 ];
 // What Kids' Playground works from: the listings (name, kinds, sites on the map), the schools, the pins, and where things
 // are. One copy, for pages one folder down: inline on Kids' Playground, and as assets/kids-corner.json for the Kids'
