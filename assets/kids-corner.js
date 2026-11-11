@@ -507,7 +507,7 @@
     };
     everyPin().forEach(function (p) {
       var mx = p.how && p.how.indexOf('mix:') === 0 ? p.how.split(':') : null;   // a kind of class and a part of the map: the pairs
-      var c = p.prog ? times[p.k] || 0 : mx ? Math.min(t(mx[1]), areas[mx[2]] || 0) : p.how ? (p.how.indexOf('area:') === 0 ? areas[p.how.slice(5)] || 0 : HOW[p.how] || 0) : p.group === 'type' ? types[p.id.slice(5)] || 0 : p.id === 'season:summer' ? weeks : p.group === 'season' ? kinds[p.id.slice(7)] || 0 : p.group === 'repeat' ? repeats : nh, tier = 0;
+      var c = p.prog ? times[p.k] || 0 : mx ? Math.min.apply(null, [t(mx[1])].concat(mx.slice(2).map(function (a) { return areas[a] || 0; }))) : p.how ? (p.how.indexOf('area:') === 0 ? areas[p.how.slice(5)] || 0 : HOW[p.how] || 0) : p.group === 'type' ? types[p.id.slice(5)] || 0 : p.id === 'season:summer' ? weeks : p.group === 'season' ? kinds[p.id.slice(7)] || 0 : p.group === 'repeat' ? repeats : nh, tier = 0;
       p.tiers.forEach(function (tt, i) { if (c >= tt) tier = i + 1; });
       pins[p.id] = { c: c, tier: tier, next: tier < TOP ? p.tiers[tier] : 0 };
       tiers += tier;
@@ -912,9 +912,13 @@
   };
   // A found secret Philly pin's part of the city: a small map with its neighborhoods colored in and the famous thing there
   // circled.
-  var areaOf = function (p) { var id = !p.how ? '' : p.how.indexOf('area:') === 0 ? p.how.slice(5) : p.how.indexOf('mix:') === 0 ? p.how.split(':')[2] : ''; return id ? (D.areas || []).filter(function (a) { return a.id === id; })[0] || null : null; };
+  var areasOf = function (p) {
+    var ids = !p.how ? [] : p.how.indexOf('area:') === 0 ? [p.how.slice(5)] : p.how.indexOf('mix:') === 0 ? p.how.split(':').slice(2) : [];
+    return (D.areas || []).filter(function (a) { return ids.indexOf(a.id) >= 0 && a.hoods && a.hoods.length; });
+  };
   var miniMap = function (card, p) {
-    var a = areaOf(p); if (!a || !a.hoods || !a.hoods.length) return;
+    var all = areasOf(p); if (!all.length) return;
+    var a = all.length === 1 ? all[0] : { name: '', hoods: [].concat.apply([], all.map(function (x) { return x.hoods; })), items: [] };
     var box = el('div', 'kc-minimap'); card.appendChild(box); card.classList.add('has-map');
     loadMap().then(function (M) {
       if (!box.isConnected) return;
@@ -925,9 +929,10 @@
       M.hoods.forEach(function (h) { if (on[h.id]) sv('path', { d: h.d, fill: p.color, stroke: '#fff', 'stroke-width': 2 }, svg); });
       M.hoods.forEach(function (h) { if (!on[h.id]) sv('path', { d: h.d, fill: 'none', stroke: 'rgba(11,33,64,.18)', 'stroke-width': 1.2 }, svg); });
       sv('path', { d: M.outline, fill: 'none', stroke: INK, 'stroke-width': 5, 'stroke-linejoin': 'round' }, svg);
-      var lm = (a.items || [])[0]; if (lm && lm.x != null) sv('circle', { cx: lm.x, cy: lm.y, r: 16, fill: '#fff', stroke: INK, 'stroke-width': 5 }, svg);
+      all.forEach(function (x) { var m = (x.items || [])[0]; if (m && m.x != null) sv('circle', { cx: m.x, cy: m.y, r: 16, fill: '#fff', stroke: INK, 'stroke-width': 5 }, svg); });
       box.appendChild(svg);
-      box.appendChild(el('p', 'kc-mini-say', 'The colored part of Philly is ' + a.name + (lm && lm.x != null && a.mark ? '. The circle is ' + a.mark + '!' : '!')));
+      var lm = (a.items || [])[0];
+      box.appendChild(el('p', 'kc-mini-say', all.length > 1 ? 'You need a class in each colored part of Philly!' : 'The colored part of Philly is ' + a.name + (lm && lm.x != null && a.mark ? '. The circle is ' + a.mark + '!' : '!')));
     });
   };
   var pinUpClose = function (p, x, st) {
@@ -949,7 +954,7 @@
         card.appendChild(el('p', 'kc-say', x.c ? 'You have ' + plural(x.c, p.one, p.many) + '!' : p.get || p.rule || p.hint));
         // which classes counted, so "around Old City" isn't a mystery
         var mx = p.how.indexOf('mix:') === 0 ? p.how.split(':') : null;
-        var w = !x.c || !st ? '' : mx && p.parts ? p.parts[0] + ': ' + names(st.typeKeys[mx[1]]) + '. ' + p.parts[1] + ': ' + names(st.near[mx[2]]) + '.'
+        var w = !x.c || !st ? '' : mx && p.parts ? p.parts.map(function (part, i) { return part + ': ' + names(i ? st.near[mx[i + 1]] : st.typeKeys[mx[1]]) + '.'; }).join(' ')
           : p.how.indexOf('area:') === 0 ? names(st.near[p.how.slice(5)]) && 'Counted: ' + names(st.near[p.how.slice(5)]) + '.'
           : p.how === 'broad' ? 'East of Broad: ' + names(st.side.e) + '. West of Broad: ' + names(st.side.w) + '.' : '';
         if (w) card.appendChild(el('p', 'kc-say small kc-counted', w));
