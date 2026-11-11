@@ -2706,7 +2706,13 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-bubble-li{color:var(--kblue)}
 .kc-credit{color:rgba(255,255,255,.85);font-size:.8rem;margin:12px 0 0;text-align:center}
 .kc-placelist{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-wrap:wrap;gap:8px}
-.kc-placelist li{background:#fff;border:2.5px solid var(--kink);border-radius:999px;padding:4px 12px;font-weight:800}
+.kc-placelist .kc-placebtn{font:inherit;font-weight:800;color:var(--kink);background:#fff;border:2.5px solid var(--kink);border-radius:999px;padding:4px 12px;cursor:pointer;transition:transform .12s,background .12s}
+.kc-placelist .kc-placebtn:hover{transform:translateY(-1px)}
+.kc-placelist .kc-placebtn[aria-pressed="true"]{background:#FFD43B}
+.kc-hoodhi{opacity:0}
+.kc-hoodhi.on{opacity:1;animation:kc-hoodhi 1.2s ease-out}
+@keyframes kc-hoodhi{0%,40%,80%{opacity:1}20%,60%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.kc-hoodhi.on{animation:none}}
 /* the battle */
 .kc-podium{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-items:end}
 .kc-step{background:#fff;border:3px solid var(--kink);border-radius:20px 20px 10px 10px;box-shadow:0 5px 0 var(--kink);display:flex;flex-direction:column;align-items:center;padding:10px 6px 12px;text-align:center;gap:4px}
