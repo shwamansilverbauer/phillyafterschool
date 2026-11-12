@@ -46,9 +46,9 @@
   },
   "367962819d": {
     "was": "Keep every plan you build, the school week, the days off and the summer, and see them together in one private calendar for the whole year. It takes about a minute, and there’s no password to remember.",
-    "now": "Knowledge is power, yes, but wait till you channel that power into one private calendar with your plans for the whole year. (Lightning bolts!) It takes about a minute, and you don’t even have to remember a password.",
-    "on": "2026-10-19",
-    "by": "Rachael"
+    "now": "Knowledge is power, yes, but wait till you channel that power into one private calendar with your plans for the whole year. (Lightning bolts!)",
+    "on": "2026-11-12",
+    "by": "Josh"
   },
   "191885e234": {
     "was": "What an account gives you",
@@ -907,6 +907,24 @@
     "was": "we don’t. It’s encrypted and yours alone, with no public link and no public page, and nobody sees it unless you share it with someone by name.",
     "now": "we don’t. It’s encrypted and there's no public link and no public page. No-one can access it unless you share it with someone by email.",
     "on": "2026-11-06",
+    "by": "Josh"
+  },
+  "ba9c480053": {
+    "was": "Google gives us your name and email, nothing else.",
+    "now": "",
+    "on": "2026-11-12",
+    "by": "Josh"
+  },
+  "1b1e9a9b66": {
+    "was": "You both see and change the same plans, each on your own phone.",
+    "now": "You both see and change the same plans",
+    "on": "2026-11-12",
+    "by": "Josh"
+  },
+  "61540deaf8": {
+    "was": "your email signs you in and gets occasional news about the site (unsubscribe in any email). Nothing is sold, and you can delete the account whenever you like.",
+    "now": "your email signs you in and gets occasional news about the site (unsubscribe in any email). We is sold, and you can delete the account whenever you'd like.",
+    "on": "2026-11-12",
     "by": "Josh"
   }
 }
