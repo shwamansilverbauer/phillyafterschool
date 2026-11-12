@@ -4347,6 +4347,23 @@
       "says": "Makom is aftercare and a day camp, at 2401 Washington Ave, Unit C1. Aftercare runs 4 to 6 pm, five days a week, with days that differ by age group; K–5 starts at $280 a month for Fridays only and grades 6 and 7 at $746 a month for 3 days, with tuition assistance. Day camps are for ages 4 and up. It does not pick up at Nebinger or Coppin (it needs at least four children from a school to pick up there); at Independence Charter it picks up for early dismissal on Wednesdays, and at Childs it has a special early Friday pickup for pre-K children. It also picks up at The Philadelphia School, and runs summer camp.",
       "daysAgo": 1,
       "stale": false
+    },
+    {
+      "program": "dandelion-after-school",
+      "name": "Dandelion After School",
+      "on": "2026-11-12",
+      "by": "program manager",
+      "how": "a proposed change from the listing’s manager, through the site",
+      "fields": [
+        "hours",
+        "cost",
+        "register.nextTerm",
+        "what",
+        "note"
+      ],
+      "says": "Enrollment is open. Dandelion After School runs 3 to 6 pm and costs $165 a month for each weekday enrolled, and tuition includes certain day-off camps. It is a self-directed space with cooking, group games, park trips, arts and crafts, messy science and building projects, and each child decides how to spend their afternoon.",
+      "daysAgo": 0,
+      "stale": false
     }
   ],
   "asks": [],
