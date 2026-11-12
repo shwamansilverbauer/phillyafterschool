@@ -3842,6 +3842,13 @@ function accountPage(register = false) {
   // opens /register/ is sent on.
   const hero = register ? `    <h1>${T(`Create your free account`)}</h1>
     <p class="lede">${GROUPS && daysOff ? T(`Keep every plan you build, the school week, the days off and the summer, and see them together in one private calendar for the whole year. It takes about a minute, and there’s no password to remember.`) : T(`Save your school, your kids’ grades and your week, and share a week with a grandparent or a sitter. It takes about a minute, and there’s no password to remember.`)}</p>
+    <ul class="acct-gets">
+      ${GROUPS && daysOff ? `<li>${T(`Plan each kid’s school week, days off and summer`)}</li>
+      <li>${T(`See it all in one private calendar for the year, on your phone or the fridge`)}</li>` : `<li>${T(`Save your school and your kids’ week`)}</li>`}
+      ${ALERTS ? `<li>${T(`Get a heads-up before sign-ups open`)}</li>` : ''}
+      <li>${T(`Plan with your co-parent, and share a week with a sitter`)}</li>
+      ${KIDS ? `<li>${T(`Kids’ Playground: pins and a map of Philly for your kids`)}</li>` : ''}
+    </ul>
     <p class="lede hero-fine">${T(`Already have an account?`)} <a href="${link('account/', 1)}">${T(`Log in`)}</a></p>
     <div class="acct-hero-art acct-hero-ex">${planExample('week')}</div>`
     : `    <h1><span class="when-out">${T(`Log in to your account`)}</span><span class="when-in">${T(`Parent Portal`)}</span></h1>

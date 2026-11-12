@@ -537,7 +537,7 @@
       var notice = document.getElementById('acct-notice'), signin = box.querySelector('.signin');
       if (notice && signin) { signin.appendChild(notice); notice.hidden = false; }
       var gnote = document.getElementById('acct-google'), gslot = box.querySelector('.signin-alt .g-google');
-      if (gnote && gslot) { gslot.parentNode.insertBefore(gnote, gslot.nextSibling); gnote.hidden = false; }
+      if (gnote && gslot && gnote.textContent.trim()) { gslot.parentNode.insertBefore(gnote, gslot.nextSibling); gnote.hidden = false; }   // unless its line was taken off the page
       // an invitation to a group or a shared week comes with its own link; this is the quiet way in for someone who lost it
       var have = el('p', 'hint acct-invite', 'Did someone send you an invitation? '); var hj = el('a', null, 'Open it here'); hj.href = page('join/'); have.appendChild(hj); have.appendChild(document.createTextNode('.'));
       account.appendChild(have);

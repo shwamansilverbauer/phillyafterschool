@@ -76,11 +76,14 @@ test('the sign-up page: a line of fine print at the foot of the sign-in card ope
   await notice.locator('[data-dialog="acct-data"]').click();
   await page.mouse.click(4, 4);
   eq(await page.locator('#acct-data').evaluate(d => d.open), false, 'a tap outside closes it');
-  // The picture beside the heading is the example week.
+  // Beside the heading: a few lines on what you get, and the example week.
+  ok(await page.locator('.acct-gets li').count() >= 3, 'what a free account gets you');
   includes(await page.locator('.acct-hero-ex').innerText(), 'Sam’s week');
-  // Under Google's button, what Google passes on (its slot is there even when Google's script can't load).
-  const g = await page.evaluate(() => { const n = document.getElementById('acct-google'); return n && n.previousElementSibling && n.previousElementSibling.className; });
-  eq(g, 'g-google', 'the Google hint sits right under the Google button');
+  // Under Google's button, what Google passes on (its slot is there even when Google's script can't load), unless
+  // that line has been taken off the page in the editor: then nothing shows there.
+  const g = await page.evaluate(() => { const n = document.getElementById('acct-google'); return n ? { text: n.textContent.trim(), shown: !n.hidden, after: n.previousElementSibling && n.previousElementSibling.className } : null; });
+  if (g && g.text) eq(g.after, 'g-google', 'the Google hint sits right under the Google button');
+  else ok(!g || !g.shown, 'an empty Google hint stays hidden');
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
 });

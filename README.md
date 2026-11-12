@@ -1761,8 +1761,10 @@ These are the only parts of the site that store anything about a child on the se
   pictures in three groups, "Plan the whole year" (the calendar, the phone and the fridge, the Parent Portal, a
   co-parent), "Never miss a thing" and "Something for your kids" (Kids' Playground and favorites first; `.acct-row`, one
   drawing each), with a
-  closing "Create a free account" band that scrolls back to the form. Under the heading on `/register/` sits the
-  example "Sam's week" (`planExample('week')`, one row per day; on a phone it comes after the form), and on
+  closing "Create a free account" band that scrolls back to the form. Under the heading on `/register/` sit a few
+  lines on what a free account gets you (`.acct-gets`) and the example "Sam's week" (`planExample('week')`, the five
+  days across, made small; one row per day where its column is narrower than 430px; on a phone both come after the
+  form), and on
   `/account/` a drawing of the school year on one ribbon (`artYearRibbon()`), both hidden once someone is signed in.
   At the foot of the sign-in card one line of fine print, "Want to know how we use your and your kids' data
   responsibly? Click here!", opens a small window (`#acct-data`, a `<dialog>`; any button with `data-dialog` opens

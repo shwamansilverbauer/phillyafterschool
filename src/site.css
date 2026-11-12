@@ -2233,17 +2233,34 @@ dialog.pas-dialog::backdrop{background:rgba(11,33,64,.45)}
 .pas-dialog-in p{margin:0}
 .pas-dialog-in b{font-weight:700}
 .pas-dialog-in .btn{align-self:flex-start;cursor:pointer;font:inherit;font-weight:700}
-.acct-hero-ex .ex{max-width:520px}
-/* beside the sign-up form the column is too narrow for five day columns: one row per day, as on a phone */
-.acct-hero-ex .ex-days{grid-template-columns:minmax(0,1fr)}
-.acct-hero-ex .ex-days li{flex-direction:row;flex-wrap:wrap;align-items:center;padding:7px 8px}
-.acct-hero-ex .ex-days li > b{width:2.6rem;flex:none}
-.acct-hero-ex .ex-days .ex-chip{flex:1 1 9rem}
-/* on a phone the form comes first and the example after it, so creating the account doesn't start below the fold */
+/* beside the sign-up form: the five days across, made small so it doesn't take over the first screen; when its
+   column is too narrow for that (a phone, where it comes after the form), one row per day */
+.acct-hero-ex{container-type:inline-size}
+.acct-hero-ex .ex{max-width:520px;padding:10px 12px;gap:8px}
+.acct-hero-ex .ex figcaption b{font-size:.98rem}
+.acct-hero-ex .ex-tag,.acct-hero-ex .ex-kids i{font-size:.7rem}
+.acct-hero-ex .ex-days{gap:4px}
+.acct-hero-ex .ex-days li{padding:6px 5px;gap:4px;border-radius:10px}
+.acct-hero-ex .ex-days li > b{font-size:.68rem}
+.acct-hero-ex .ex-chip{font-size:.74rem;padding:4px 5px 4px 6px;border-left-width:4px;border-radius:7px;line-height:1.2;overflow-wrap:normal;hyphens:auto}
+.acct-hero-ex .ex-chip small{font-size:.64rem}
+.acct-hero-ex .ex-foot{display:none}
+@container (max-width:430px){
+  .acct-hero-ex .ex-days{grid-template-columns:minmax(0,1fr)}
+  .acct-hero-ex .ex-days li{flex-direction:row;flex-wrap:wrap;align-items:center;padding:6px 8px}
+  .acct-hero-ex .ex-days li > b{width:2.4rem;flex:none}
+  .acct-hero-ex .ex-days .ex-chip{flex:1 1 8rem}
+}
+/* what a free account gets you, under the heading */
+.acct-gets{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:1.02rem;line-height:1.35}
+.acct-gets li{position:relative;padding-left:30px}
+.acct-gets li::before{content:"";position:absolute;left:0;top:.08em;width:20px;height:20px;border-radius:50%;background:var(--yellow) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='%230B2140' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/20px no-repeat}
+/* on a phone the form comes first, then what you get and the example, so creating the account doesn't start below the fold */
 @media (max-width:879px){
   .acct-head .acct-hero-text:has(.acct-hero-ex){display:contents}
   .acct-head .hero:has(.acct-hero-ex) .acct-hero-form{order:1}
-  .acct-head .hero .acct-hero-ex{order:2;margin-top:0}
+  .acct-head .hero .acct-gets{order:2}
+  .acct-head .hero .acct-hero-ex{order:3;margin-top:0}
 }
 .signin-alt>.hint{margin:-4px 0 0;text-align:center;font-size:.85rem}
 .acct-who span{font-size:.9rem;color:var(--muted)}
