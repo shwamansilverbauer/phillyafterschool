@@ -412,7 +412,7 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   Playground itself for someone signed out. The site is for parents and doesn't push it: someone signed out finds it
   under Account Features in the menu, and the Kids' Playground button is only there once a parent is signed in. Nothing
   on the home page or the planners points to it. Its drawings are made in the build (`artBulb()`, `artPin()`); no real child's page is shown anywhere.
-- **On a laptop** the Pins / Map / Showdown tabs sit under the child's header and stick with it, instead of the
+- **On a laptop** the Pins / Bingo / Map / Showdown tabs sit under the child's header and stick with it, instead of the
   phone's bar at the bottom; Eddie's welcome is one centred, framed card.
 
 - **Kid mode.** From the picker ("Who's playing?") on, `html.kc-kid` hides the site's header, menu, hero and footer,
@@ -432,8 +432,9 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   by tapping (`BULB`, `KID_COLORS`; Bell Yellow first). It stands in the header (tap it to change), on the picker, on
   the map and in the cheering corner of every showdown. It starts plain; as the child's level climbs it unlocks things
   to wear (`WEAR`: 16 items in six places, hat, face, neck, back, glow and base, from shades at level 2 to a galaxy
-  glow at 12), and the child picks one per place under "Dress up". A level-up shows what it unlocked, with "Try it
-  on!". Locked items show their level; the server keeps only items it knows (`KC_WEAR`). (Monsters picked before the bulbs became the bulb in the same
+  glow at 12, and four more won at bingo: a party hat, balloons, confetti and the champ ribbon, see "Bingo"), and the
+  child picks one per place under "Dress up". A level-up shows what it unlocked, with "Try it on!". Locked items show
+  their level (or the bingo that wins them); the server keeps only items it knows (`KC_WEAR`). (Monsters picked before the bulbs became the bulb in the same
   place in the list, on the server and on the page.)
 - **What counts.** Only what a parent has confirmed. The server suggests from the household's plans
   (`passport_suggest()`: every program on a child's kept week, each camp whose week has started, each day-off program
@@ -478,6 +479,29 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
     or for the owner's test listing). The Pins tab shows a program pin only once it's earned, never as a goal or a
     "?", and it isn't counted in "12 / 40 pins". It carries no link or offer. The account page's Kids' Playground tab
     tells parents what program pins are.
+- **Bingo** (the Bingo tab, `drawBingoTab()`): a 5×5 card for each school year and another for each summer, the same
+  card for every child, with Eddie's free square in the middle. The school year's card runs until the last day of
+  school (`lastDay` in `data/days-off.json`), then the summer's (`boardNow()`); the cards are `KIDS_BINGO` in
+  `build.mjs` (each square's label, what Eddie says when it's tapped, and its icon). Eighteen squares are classes a
+  parent confirmed for that school year or that summer (the first class, after school, a weekend class, a day-off
+  camp, three days a week, a sports, arts, "brainy" or games class, a neighborhood new to the child, two
+  neighborhoods, a secret spot, a surprise, both sides of Broad Street, a class at or from their school; the summer's
+  card counts weeks of camp, camps and kinds of camp instead), worked out in `bingo()` from `stats()` over that
+  season's classes. Six are things done on the page that season, kept as they happen: a showdown, a new look for the
+  bulb, a new pin, a pin going up a level, a new level, a secret Philly pin. The easy diagonal (the first class, after
+  school or a second camp, the free square, a new pin, a new look) comes early; the whole card takes a busy year, and
+  any child can finish one without anything that costs money (rec centers, libraries and free programs count like
+  any other). Five in a row is a bingo: new squares are daubed one by one when the tab is opened (a dot on the tab
+  says there are some), then "BINGO!". The first three bingos ever win a party hat, balloons and confetti for the
+  bulb. Each card also has a pin of its own ("Bingo 2026–27", a ticket shape) that goes bronze at its first bingo,
+  then silver, gold and emerald (2, 3, 6) and diamond for the whole card (all twelve rows), which also wins the champ
+  ribbon and turns the top of the tab into a certificate ("Sam filled the whole 2026–27 bingo card! — Eddie Bulboa")
+  that the grown-ups' corner prints ("Print the Bingo Champ certificate"; before that, "Print the bingo card"). The
+  card pins show under "Bingo pins" on the Pins tab once they have a bingo, and aren't counted in "12 / 41 pins".
+  What's kept, in `seen`, is four numbers a card, so the server checks them (`passport_clean()`): `bingo:y2026` the
+  squares already shown daubed (a bit each, in reading order), `bingo:y2026:m` the things done on the page
+  (`BINGO_MARK`, six bits), `bingo:y2026:l` the bingos celebrated (the card's pin keeps the best, like a level) and
+  `bingo:y2026:f` the whole card. Summer cards are `bingo:s2027`.
   Drawn as SVG in `drawPin()`, grander at each level: bronze is the badge and a star; silver adds a
   laurel, a blue banner, a gem and more stars; gold adds a turning sunburst, wings, a gold laurel, a crown, red
   ribbons and twinkling sparkles; emerald turns it green, with a bigger wing and more sparkles (`GRAND`,

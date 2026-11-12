@@ -160,8 +160,15 @@ test('Kids’ Playground keeps each child’s lightbulb, the pins already shown 
   deepEq(r.kid.av, { b: 'mushroom', c: 9, w: { hat: 'crown', back: 'wings' } });
   r = await pat.okay('POST', 'passport_save', { kid: 'Sam', done, skip: [], fav: [] });
   deepEq(r.kid.av.w, { hat: 'crown', back: 'wings' }, 'kept when left out');
+  r = await pat.okay('POST', 'passport_save', { kid: 'Sam', av: { b: 'mushroom', c: 9, w: { hat: 'partyhat', back: 'balloons', glow: 'confetti', neck: 'rosette' } } });
+  deepEq(r.kid.av.w, { hat: 'partyhat', neck: 'rosette', back: 'balloons', glow: 'confetti' }, 'the bingo prizes are things to wear too');
   r = await pat.okay('POST', 'passport_save', { kid: 'Sam', av: { b: 'mushroom', c: 9, w: {} } });
   deepEq(r.kid.av, { b: 'mushroom', c: 9 }, 'taking it all off');
+  // A bingo card's four numbers: the squares shown (a bit each of 25), the things done on the page (six bits), the
+  // bingos celebrated (up to 12) and the whole card (1). Anything else under "bingo:" is dropped.
+  r = await pat.okay('POST', 'passport_save', { kid: 'Sam', seen: { 'type:music': 1, 'bingo:y2026': 33550335, 'bingo:y2026:m': 63, 'bingo:y2026:l': 12, 'bingo:y2026:f': 1, 'bingo:s2027:l': 13, 'bingo:s2027:m': 64, 'bingo:y2026:x': 1, 'bingo:q2026': 3, 'bingo:s2027': 0 } });
+  deepEq(r.kid.seen, { 'type:music': 1, 'bingo:y2026': 33550335, 'bingo:y2026:m': 63, 'bingo:y2026:l': 12, 'bingo:y2026:f': 1 });
+  r = await pat.okay('POST', 'passport_save', { kid: 'Sam', seen: { 'type:music': 1 } });
   r = await pat.okay('POST', 'passport_save', { kid: 'Sam', av: { b: 'mushroom', c: 9, w: { hat: 'crown' } } });
   const p = await pat.okay('GET', 'passport');
   deepEq(p.kids.map(k => [k.name, k.av && k.av.b, k.lvl]), [['Sam', 'mushroom', 3], ['Rae', 'holiday', 0]]);

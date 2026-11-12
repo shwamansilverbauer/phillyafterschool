@@ -5767,6 +5767,13 @@ const KIDS_ICON2 = {
     'M0.6 13.1H5.3V15.4H0.6Z',
     'M23.7 7.3C23.7 4.9 22.2 3.4 20.6 3.4C19 3.4 18.3 4.7 18.3 6.6C18.3 8.4 18.7 9.4 19.2 10.2V12.4H22.8V10.4C23.4 9.6 23.7 8.6 23.7 7.3Z M18.8 7.3Q20.7 7.8 20.8 10.4H20.1Q19.9 8.5 18.7 8.1Z',
     'M23.4 13.1H18.7V15.4H23.4Z'],
+  // Bingo: a card with its winning diagonal daubed; a new pin; a pin going up; a new level; a keystone (a secret pin)
+  bingo: ['M1 1H23V23H1Z M3 3H21V21H3Z', 'M3 8.6H21V10H3Z M3 14H21V15.4H3Z', 'M8.6 3H10V21H8.6Z M14 3H15.4V21H14Z', kidsDot(5.8, 5.8, 2.1), kidsDot(12, 12, 2.1), kidsDot(18.2, 18.2, 2.1)],
+  newpin: [kidsDot(12, 12, 10.5) + ' ' + kidsDot(12, 12, 8), kidsStar(12, 12.6, 6)],
+  pinup: [kidsStar(12, 15.2, 7.6), 'M12 0.5L17 5.5H14V8.5H10V5.5H7Z'],
+  bolt: ['M13.5 1L3.5 13.5H11L9.5 23L20.5 9.5H13Z'],
+  star: [kidsStar(12, 12.8, 11)],
+  keystone: ['M2 2H22L20 7H23L18 22H6L1 7H4Z M10.2 9.6C10.2 8.4 11 7.6 12.2 7.6C13.5 7.6 14.3 8.4 14.3 9.5C14.3 11.2 12.7 11.3 12.7 13.2H11.4C11.4 10.8 13 10.8 13 9.6C13 9.1 12.7 8.8 12.2 8.8C11.6 8.8 11.4 9.2 11.4 9.6Z M12.05 14.3A0.85 0.85 0 1 0 12.05 16A0.85 0.85 0 1 0 12.05 14.3Z'],
 };
 const KIDS_PINS = [
   ...TYPES.map(t => ({ id: 'type:' + t.id, group: 'type', label: (KIDS_PIN[t.id] || [t.label])[0], one: (KIDS_PIN[t.id] || [, t.label.toLowerCase()])[1], many: (KIDS_PIN[t.id] || [, , t.label.toLowerCase()])[2], color: t.color, icon: t.icon, tiers: [1, 3, 5, 8, 12] })),
@@ -5811,6 +5818,42 @@ const KIDS_PINS = [
     ['jawn', 'Jawn Collector', 'jay', '#7048E8', 'jawn', [3, 6, 10, 15, 20], 'different program', 'different programs', 'Collect a whole lotta jawns: lots of different programs!', 'Go to lots of different programs. Each new one counts!'],
   ].map(([id, label, icon, color, how, tiers, one, many, hint, rule, parts]) => ({ id: 'philly:' + id, group: 'philly', label, one, many, color, icon: KIDS_ICON2[icon], eo: 1, tiers, how, hint, rule, ...(parts ? { parts } : {}), secret: 1 })),
 ];
+// Bingo: a card for each school year ("y") and one for each summer ("s"), the squares in reading order (Eddie's free
+// square goes in the middle, after the twelfth). What makes each one is worked out in kids-corner.js (bingo()): the
+// classes a parent confirmed for that school year or that summer, and six things done on the page itself that season
+// (a showdown, a new look for the bulb, a new pin, a pin going up a level, a new level, a secret pin found). The easy
+// diagonal (the first class, after school or a second camp, the free square, a new pin, a new look) comes early; the
+// whole card takes a busy year. Each square: [id, label on the card, what Eddie says, icon].
+const kidsIcon = n => KIDS_ICON2[n] || KIDS_ICON[n] || (TYPES.find(t => t.id === n) || {}).icon;
+const BINGO_ANY = {   // the squares both cards share
+  spot: ['Secret spot', 'Find a secret spot on your map!', 'glass'], surprise: ['Surprise!', 'Find a surprise on your map!', 'gift'],
+  newhood: ['New place', 'Go to a class in a neighborhood you’ve never been to!', 'compass'], hoods2: ['2 places', 'Go to classes in 2 different neighborhoods!', 'map'],
+  broad: ['Cross Broad St.', 'Go to classes on both sides of Broad Street, the long street down the middle of Philly!', 'cross'],
+  showdown: ['Showdown', 'Play a showdown and pick your favorite!', 'trophy'], look: ['New look', 'Give your bulb a new look: a new color, a new shape, or something to wear!', 'hat'],
+  newpin: ['New pin', 'Get a brand-new pin!', 'newpin'], pinup: ['Pin goes up', 'Make a pin go up a level, like bronze to silver!', 'pinup'],
+  levelup: ['Level up', 'Go up a level!', 'bolt'], secretpin: ['Secret pin', 'Find a secret Philly pin!', 'keystone'],
+};
+const bingoCard = (order, own) => order.map(id => { const [label, say, icon] = own[id] || BINGO_ANY[id]; return { id, label, say, icon: [].concat(kidsIcon(icon)), ...(KIDS_ICON2[icon] ? { eo: 1 } : {}) }; });
+const KIDS_BINGO = {
+  y: bingoCard(['first', 'arts', 'weekend', 'spot', 'levelup', 'surprise', 'after', 'brainy', 'dayoffs2', 'hoods2', 'dayoff', 'newhood', 'showdown', 'school', 'progs3', 'move', 'secretpin', 'newpin', 'broad', 'pinup', 'play', 'kinds2', 'days3', 'look'], {
+    first: ['First class', 'Go to your first class this school year!', 'star'], after: ['After school', 'Go to an after-school program!', 'backpack'],
+    dayoff: ['Day-off camp', 'Go to a camp on a day off from school!', 'snow'], dayoffs2: ['2 days off', 'Go to camp on 2 days off from school!', 'year'],
+    weekend: ['Weekend class', 'Go to a class on a Saturday or a Sunday!', 'calendar'], days3: ['3 days a week', 'Go to the same program 3 days a week!', 'repeat'],
+    kinds2: ['2 kinds', 'Try 2 different kinds of classes!', 'palette'], progs3: ['3 programs', 'Go to 3 different programs this year!', 'stars3'],
+    move: ['Sports or dance', 'Go to a sports or dance class!', 'movement'], arts: ['Art or music', 'Go to an art, music or theater class!', 'art'],
+    brainy: ['Brainy class', 'Go to a science, nature or reading class!', 'stem'], play: ['Games or club', 'Go to a games club, a school club or a rec center!', 'games'],
+    school: ['At your school', 'Go to a class right in your school, or one that picks you up there!', 'house'],
+  }),
+  s: bingoCard(['first', 'arts', 'camps3', 'spot', 'levelup', 'surprise', 'camps2', 'brainy', 'same2', 'areas2', 'weeks3', 'newhood', 'showdown', 'kinds2', 'play', 'move', 'secretpin', 'newpin', 'broad', 'pinup', 'weeks6', 'hoods2', 'kinds3', 'look'], {
+    first: ['First camp', 'Go to your first week of summer camp!', 'sun'], camps2: ['2 camps', 'Go to 2 different summer camps!', 'daycamp'],
+    camps3: ['3 camps', 'Go to 3 different summer camps!', 'stars3'], weeks3: ['3 weeks', 'Go to 3 weeks of summer camp!', 'sun'],
+    weeks6: ['6 weeks', 'Go to 6 weeks of summer camp. That’s most of the summer!', 'sun'], same2: ['Same camp twice', 'Go back to the same camp for a second week!', 'repeat'],
+    kinds2: ['2 kinds', 'Try 2 different kinds of camp!', 'palette'], kinds3: ['3 kinds', 'Try 3 different kinds of camp!', 'flaskbrush'],
+    areas2: ['2 parts of Philly', 'Go to camps in 2 different parts of Philly!', 'feet'],
+    move: ['Sports or dance', 'Go to a sports or dance camp!', 'movement'], arts: ['Art or music', 'Go to an art, music or theater camp!', 'art'],
+    brainy: ['Brainy camp', 'Go to a science, nature or reading camp!', 'stem'], play: ['Games or rec', 'Go to a games camp, a club or a rec center camp!', 'games'],
+  }),
+};
 // What Kids' Playground works from: the listings (name, kinds, sites on the map), the schools, the pins, and where things
 // are. One copy, for pages one folder down: inline on Kids' Playground, and as assets/kids-corner.json for the Kids'
 // Playground tab on the account page, which loads it only when that tab is opened.
@@ -5835,6 +5878,8 @@ function kidsData() {
     eddie: link('bulb.png', D) + stamp('src/static/bulb.png'),   // Eddie Bulboa, the bulb in the logo, who shows kids around
     listings, schools: schoolsOut, surprises: surpriseHoods(listings, schoolsOut),
     types: Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, color: t.color, icon: t.icon }])), pins: KIDS_PINS,
+    // the bingo cards, the last day of school (the summer card starts the day after) and the Bingo Champ pin's picture
+    bingo: KIDS_BINGO, lastDay: daysOff ? daysOff.lastDay : '', bingoIcon: KIDS_ICON2.bingo,
     // the pictures a premium program can pick for its own pin (the server's PIN_ICONS)
     picons: { ...Object.fromEntries(TYPES.map(t => [t.id, t.icon])), star: kidsStar(12, 12.5, 10.5), heart: 'M12 21C5 15.5 2 12 2 8.2C2 5.3 4.3 3 7.1 3C9 3 10.8 4 12 5.6C13.2 4 15 3 16.9 3C19.7 3 22 5.3 22 8.2C22 12 19 15.5 12 21Z', bolt: 'M13 2L4 14H11L10 22L20 9H13Z' },
     kinds: { after: 'After school', weekend: 'Weekend class', off: 'Day-off camp', summer: 'Summer camp' },
@@ -5880,7 +5925,7 @@ const kidsHow = (D, onKidsPage = false) => `  <section class="section">
     <ul>
       <li>${T(`A page for each child on your account, by first name. No child signs in and nothing is typed by a child: it’s the parent’s account, handed over for a look. Each child picks a lightbulb to be.`)}</li>
       <li>${T(`What counts is what you confirm. The page suggests from your kept week, your summer and your days off (“Did Sam go to chess club this year?”), and you say yes or no. You can add anything the plans missed.`)}</li>
-      <li>${T(`From that come pins for each kind of program, each season and the neighborhoods, which go from bronze to silver, gold, emerald and diamond and get grander each time; pins for exploring the city, for combos of kinds of classes and for going back to a class they love (each day a week, each term, each week of the same camp); eleven secret Philly pins that stay a mystery until they’re found; a level that goes up and unlocks things for their bulb to wear; a map of Philadelphia whose clouds clear where they have been, with a surprise or two in each neighborhood and secret spots that turn up as they go to more classes nearby; and showdowns where they pick which class they had more fun at, two at a time, and the ones they pick come first when you plan the next term.`)}</li>
+      <li>${T(`From that come pins for each kind of program, each season and the neighborhoods, which go from bronze to silver, gold, emerald and diamond and get grander each time; pins for exploring the city, for combos of kinds of classes and for going back to a class they love (each day a week, each term, each week of the same camp); eleven secret Philly pins that stay a mystery until they’re found; a level that goes up and unlocks things for their bulb to wear; a bingo card for each school year and each summer, where five in a row wins something for the bulb and the whole card a diamond pin and a certificate to print; a map of Philadelphia whose clouds clear where they have been, with a surprise or two in each neighborhood and secret spots that turn up as they go to more classes nearby; and showdowns where they pick which class they had more fun at, two at a time, and the ones they pick come first when you plan the next term.`)}</li>
       <li>${T(`Nothing on this page is counted, recorded or sent anywhere. It has no link of its own to share: a picture of the pins, with no name and no map, is the only thing that leaves it.`)}</li>
     </ul>
     <div class="actions when-out"><a class="btn primary big" href="${link('register/', D)}?next=kids">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=kids">${T(`Log in`)}</a></div>${onKidsPage ? '' : `

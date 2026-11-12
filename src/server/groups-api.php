@@ -936,7 +936,8 @@ function daysoff_out(int $uid): ?array {
 // parent waved away ("k|kind|y", or "k|kind|y|n" for "not that many times"); "fav" is the child's ranking of listings, best first. For Kids' Playground (the page the
 // child sees) it also keeps "av", the lightbulb the child picked ({ "b": a bulb from KC_BODIES, "c": a color, 0 to 9,
 // "w": what it wears, { place: thing } from KC_WEAR }),
-// "seen", the pins whose level the child has already been shown ({ "type:music": 2, "philly:jawn": 1, ... }, 1 to 5), and "lvl", the last level
+// "seen", the pins whose level the child has already been shown ({ "type:music": 2, "philly:jawn": 1, ... }, 1 to 5) and
+// each bingo card's four numbers ("bingo:y2026", "bingo:y2026:m", ":l", ":f", see passport_clean()), and "lvl", the last level
 // celebrated. Pins and levels themselves are never stored: the page works them out from "done". Nothing here is ever
 // sent anywhere but back to the household's own browsers.
 const PASSPORT_KINDS = array('after', 'weekend', 'off', 'summer');
@@ -944,7 +945,8 @@ const PASSPORT_MAX = 300;
 const PASSPORT_TIMES = 20;   // the most times one confirmed class can count
 const KC_BODIES = array('classic', 'globe', 'edison', 'candle', 'flood', 'tube', 'twisty', 'holiday', 'mushroom', 'heart');   // the lightbulbs a child picks from
 // What a child's bulb can wear, by where it goes (kids-corner.js has the same list, with the level each unlocks at).
-const KC_WEAR = array('hat' => array('cap', 'crown', 'tophat', 'halo'), 'face' => array('shades', 'stars'), 'neck' => array('bow', 'scarf', 'medal'), 'back' => array('cape', 'wings', 'jetpack'), 'glow' => array('sparkle', 'rainbow', 'galaxy'), 'base' => array('goldbase'));
+// The bingo prizes are in it too (partyhat, balloons, confetti, rosette): the page says when each is won.
+const KC_WEAR = array('hat' => array('cap', 'crown', 'tophat', 'halo', 'partyhat'), 'face' => array('shades', 'stars'), 'neck' => array('bow', 'scarf', 'medal', 'rosette'), 'back' => array('cape', 'wings', 'jetpack', 'balloons'), 'glow' => array('sparkle', 'rainbow', 'galaxy', 'confetti'), 'base' => array('goldbase'));
 const KC_BODIES_BEFORE = array('blob', 'tall', 'box', 'pear', 'ghost', 'spiky', 'bean', 'squid', 'egg', 'fuzzy');   // the monsters they replaced, in the same order
 function school_year(): int {   // the year the current school year started
   global $CFG;
@@ -983,6 +985,11 @@ function passport_clean($raw): array {
     $sn = array();
     // what the page has already celebrated: pins, a map area's secret spots, a neighborhood's surprises ("hood:")
     foreach (array_slice($raw['seen'], 0, 200, true) as $id => $t) if (is_string($id) && preg_match('~^((type|season|map):[a-z-]{1,20}|(pin|philly):[a-z-]{1,30}|prog:[pc]:[a-z0-9-]{1,80}|hood:[a-z-]{1,40}|explore|repeat|intro)$~', $id) && is_numeric($t) && (int) $t >= 1 && (int) $t <= (preg_match('~^(map|hood):~', $id) ? 3 : 5)) $sn[$id] = (int) $t;   // pins have five levels; a map area's spots and a neighborhood's surprises, three at most
+    // a bingo card's four numbers ("bingo:y2026", a school year's; "bingo:s2027", a summer's): the squares shown daubed (a
+    // bit for each of the 25), the things done on the page that season (":m", six bits), the bingos celebrated (":l", up
+    // to 12) and the whole card (":f", 1)
+    $bingoMax = array('' => 33554431, ':m' => 63, ':l' => 12, ':f' => 1);
+    foreach (array_slice($raw['seen'], 0, 200, true) as $id => $t) if (is_string($id) && preg_match('~^bingo:[ys]20\d\d(|:[mlf])$~', $id, $bm) && is_numeric($t) && (int) $t >= 1 && (int) $t <= $bingoMax[$bm[1]]) $sn[$id] = (int) $t;
     if ($sn) $out['seen'] = $sn;
   }
   if (isset($raw['lvl']) && is_numeric($raw['lvl']) && (int) $raw['lvl'] >= 1 && (int) $raw['lvl'] <= 99) $out['lvl'] = (int) $raw['lvl'];
