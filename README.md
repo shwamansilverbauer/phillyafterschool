@@ -489,9 +489,8 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   card counts weeks of camp, camps and kinds of camp instead), worked out in `bingo()` from `stats()` over that
   season's classes. Six are things done on the page that season, kept as they happen: a showdown, a new look for the
   bulb, a new pin, a pin going up a level, a new level, a secret Philly pin. The easy diagonal (the first class, after
-  school or a second camp, the free square, a new pin, a new look) comes early; the whole card takes a busy year, and
-  any child can finish one without anything that costs money (rec centers, libraries and free programs count like
-  any other). Five in a row is a bingo: new squares are daubed one by one when the tab is opened (a dot on the tab
+  school or a second camp, the free square, a new pin, a new look) comes early; the whole card takes a busy year (free
+  programs, rec centers and libraries count like any other). Five in a row is a bingo: new squares are daubed one by one when the tab is opened (a dot on the tab
   says there are some), then "BINGO!". The first three bingos ever win a party hat, balloons and confetti for the
   bulb. Each card also has a pin of its own ("Bingo 2026–27", a ticket shape) that goes bronze at its first bingo,
   then silver, gold and emerald (2, 3, 6) and diamond for the whole card (all twelve rows), which also wins the champ
