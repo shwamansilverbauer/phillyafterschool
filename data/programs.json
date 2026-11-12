@@ -4116,7 +4116,7 @@
   {
     "id": "dandelion-after-school",
     "name": "Dandelion After School",
-    "what": "Play-based aftercare from The Dandelion Project, built around social-emotional learning",
+    "what": "Self-directed, play-based aftercare from The Dandelion Project, where kids choose how to spend the afternoon",
     "types": [
       "aftercare"
     ],
@@ -4133,6 +4133,11 @@
       "dance",
       "games",
       "neighborhood walks",
+      "park trips",
+      "group games",
+      "science",
+      "building",
+      "self-directed",
       "social emotional learning",
       "SEL",
       "snack",
@@ -4144,7 +4149,7 @@
     ],
     "grades": null,
     "gradeNote": "Grades not published",
-    "hours": "After school, with a snack. End time not published.",
+    "hours": "3 to 6 pm, with a snack",
     "days": [
       "mon",
       "tue",
@@ -4153,7 +4158,7 @@
       "fri"
     ],
     "daysNote": "Enroll for 1 to 5 days a week.",
-    "cost": "$165 a month for each weekday enrolled, billed monthly (two days a week is $330 a month). Pickup from the schools it lists is free. 5% off for siblings, 5% off for a full week, 10% off for BIPOC youth.",
+    "cost": "$165 a month for each weekday enrolled, billed monthly (two days a week is $330 a month), and tuition includes some day-off camps. Pickup from the schools it lists is free. 5% off for siblings, 5% off for a full week, 10% off for BIPOC youth.",
     "rate": {
       "per": "month",
       "eachDay": 165,
@@ -4166,16 +4171,32 @@
     "register": {
       "how": "online",
       "url": "https://www.hisawyer.com/the-dandelion-project/schedules",
-      "note": "The Sign Up button on Dandelion’s page opens its booking page."
+      "note": "The Sign Up button on Dandelion’s page opens its booking page.",
+      "nextTerm": "Enrollment is open now."
     },
-    "note": "Dandelion’s page doesn’t give grades or an end time, so ask before you sign up. Each afternoon mixes cooking, crafts, dramatic play, music, games and neighborhood walks.",
+    "note": "Dandelion’s page doesn’t give grades, so ask before you sign up. It’s a self-directed space: each child decides how to spend the afternoon, from cooking, group games, park trips and arts and crafts to messy science and building projects. It’s built around social-emotional learning.",
     "sources": [
       {
         "label": "Dandelion After School",
         "url": "https://www.thedandelionproject.us/dandelion-after-school"
       }
     ],
-    "lastVerified": "2026-11-01",
+    "lastVerified": "2026-11-12",
+    "told": [
+      {
+        "on": "2026-11-12",
+        "by": "program manager",
+        "how": "a proposed change from the listing’s manager, through the site",
+        "fields": [
+          "hours",
+          "cost",
+          "register.nextTerm",
+          "what",
+          "note"
+        ],
+        "says": "Enrollment is open. Dandelion After School runs 3 to 6 pm and costs $165 a month for each weekday enrolled, and tuition includes certain day-off camps. It is a self-directed space with cooking, group games, park trips, arts and crafts, messy science and building projects, and each child decides how to spend their afternoon."
+      }
+    ],
     "schools": {
       "coppin": {
         "relation": "pickup",
