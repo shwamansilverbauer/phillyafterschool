@@ -3849,7 +3849,7 @@ function accountPage(register = false) {
       <li>${T(`Plan with your co-parent, and share a week with a sitter`)}</li>
       ${KIDS ? `<li>${T(`Kids’ Playground: pins and a map of Philly for your kids`)}</li>` : ''}
     </ul>
-    <p class="lede hero-fine">${T(`Already have an account?`)} <a href="${link('account/', 1)}">${T(`Log in`)}</a></p>
+    <p id="acct-login" class="acct-login">${T(`Already have an account?`)} <a href="${link('account/', 1)}">${T(`Log in`)}</a></p>
     <div class="acct-hero-art acct-hero-ex">${planExample('week')}</div>`
     : `    <h1><span class="when-out">${T(`Log in to your account`)}</span><span class="when-in">${T(`Parent Portal`)}</span></h1>
     <p class="lede when-out">${T(`Your school, your plans and your kids’ calendar for the year, on any device. There’s no password to remember.`)} ${T(`New here?`)} <a href="${link('register/', 1)}">${T(`Create a free account`)}</a></p>

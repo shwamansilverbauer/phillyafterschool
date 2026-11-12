@@ -1766,6 +1766,10 @@ These are the only parts of the site that store anything about a child on the se
   days across, made small; one row per day where its column is narrower than 430px; on a phone both come after the
   form), and on
   `/account/` a drawing of the school year on one ribbon (`artYearRibbon()`), both hidden once someone is signed in.
+  On `/register/` on a computer the heading side takes two thirds and the form one third (the account-type tiles
+  stacked), the sign-in card has no intro line ("One step for both..." stays on `/account/` only; `signInBox()` takes
+  `false` for no line), and "Already have an account? Log in" (`#acct-login`) moves from the hero to just under the
+  card.
   At the foot of the sign-in card one line of fine print, "Want to know how we use your and your kids' data
   responsibly? Click here!", opens a small window (`#acct-data`, a `<dialog>`; any button with `data-dialog` opens
   one, and Esc, its "Got it" or a tap outside closes it) with how we use your info and your kids' info and a link to

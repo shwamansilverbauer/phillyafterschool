@@ -79,6 +79,15 @@ test('the sign-up page: a line of fine print at the foot of the sign-in card ope
   // Beside the heading: a few lines on what you get, and the example week.
   ok(await page.locator('.acct-gets li').count() >= 3, 'what a free account gets you');
   includes(await page.locator('.acct-hero-ex').innerText(), 'Sam’s week');
+  // No intro line in the sign-in card here, and "Already have an account? Log in" sits under it, on the right.
+  const side = await page.evaluate(() => {
+    const login = document.getElementById('acct-login'), card = document.querySelector('.g-page .signin');
+    return { text: (document.querySelector('.g-page') || {}).textContent || '', shown: !!login && !login.hidden && login.offsetParent !== null,
+      inForm: !!login && !!login.closest('.acct-hero-form'), after: !!login && !!card && !!(card.compareDocumentPosition(login) & Node.DOCUMENT_POSITION_FOLLOWING) };
+  });
+  ok(!/One step for both/.test(side.text), 'no intro line on the sign-up page');
+  ok(side.shown && side.inForm && side.after, 'the log-in line sits under the sign-in card');
+  matches(await page.locator('#acct-login a').getAttribute('href') || '', /account\/$/, 'and goes to the log-in page');
   // Under Google's button, what Google passes on (its slot is there even when Google's script can't load), unless
   // that line has been taken off the page in the editor: then nothing shows there.
   const g = await page.evaluate(() => { const n = document.getElementById('acct-google'); return n ? { text: n.textContent.trim(), shown: !n.hidden, after: n.previousElementSibling && n.previousElementSibling.className } : null; });

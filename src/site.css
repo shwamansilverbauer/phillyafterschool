@@ -1128,6 +1128,8 @@ html.signed .when-out{display:none!important}
 html.signed .acct-hero-art{display:none}
 html.signed.form-up .acct-hero-art{display:block}
 .acct-invite{margin:0}
+.acct-login{margin:0;font-size:1rem;color:var(--ink)}
+.acct-login a{font-weight:700}
 .acct-hero-form{min-width:0}
 .acct-hero-form:not(:has(.g-page)){display:none}
 .acct-hero-form .acct-hero-art{margin-top:18px}
@@ -1137,6 +1139,10 @@ html.signed.form-up .acct-hero-art{display:block}
 .acct-hero-form .g-callout{box-shadow:none}
 @media (min-width:880px){
   .acct-head .hero:has(.acct-hero-form .g-page){grid-template-columns:minmax(0,1fr) minmax(0,460px);gap:48px;align-items:start}
+  /* the sign-up page: about two thirds for the heading, what you get and the example; a third for the form */
+  .acct-head .hero:has(.acct-hero-form .g-page[data-mode="register"]){grid-template-columns:minmax(0,2fr) minmax(320px,1fr);gap:40px}
+  .acct-hero-form .g-page[data-mode="register"] .acct-who{grid-template-columns:minmax(0,1fr);gap:8px}   /* the narrow column: the two kinds of account one above the other */
+  .acct-hero-form .g-page[data-mode="register"] .acct-who-on,.acct-hero-form .g-page[data-mode="register"] .acct-who-go{padding:10px 14px}
 }
 .acct-main:empty{display:none}
 .acct-why{display:flex;flex-direction:column;gap:30px;min-width:0}
