@@ -2687,15 +2687,15 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-lvl{font-weight:800;color:var(--kblue);font-size:.92rem;line-height:1.2}
 .kc-xp{height:16px;border:3px solid var(--kink);border-radius:999px;background:#F1F3F5;overflow:hidden}
 .kc-xp i{display:block;height:100%;border-radius:999px;background:repeating-linear-gradient(-45deg,#F3C613 0 7px,#E0B400 7px 14px);background-size:28px 100%;animation:kc-stripes 1s linear infinite}
-.kc-tabs{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);width:min(520px,calc(100% - 20px));display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#fff;border:3px solid var(--kink);border-radius:28px;padding:6px;box-shadow:0 6px 0 var(--kink);z-index:40}
-.kc-tabbtn{font-family:var(--title);font-weight:400;font-size:1.15rem;letter-spacing:.03em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:0;padding:8px 4px 4px;border:0;border-radius:20px;background:transparent;color:var(--kink);cursor:pointer}
+.kc-tabs{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);width:min(560px,calc(100% - 20px));display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#fff;border:3px solid var(--kink);border-radius:28px;padding:6px;box-shadow:0 6px 0 var(--kink);z-index:40}
+.kc-tabbtn{position:relative;font-family:var(--title);font-weight:400;font-size:clamp(.9rem,3.6vw,1.15rem);letter-spacing:.03em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:0;padding:8px 4px 4px;border:0;border-radius:20px;background:transparent;color:var(--kink);cursor:pointer}
 .kc-tabbtn svg{width:30px;height:30px}
 .kc-tabbtn.on{background:var(--kyellow);box-shadow:inset 0 0 0 3px var(--kink)}
 /* On a laptop the tabs sit under the child's header, stuck there with it, instead of a phone's bar at the bottom. */
 @media (min-width:900px){
   .kc-page{display:flex;flex-direction:column;padding-bottom:40px}
   .kc-page > .kc-top{order:0}.kc-page > .kc-tabs{order:1}.kc-page > .kc-body{order:2}
-  .kc-tabs{position:sticky;top:99px;left:auto;bottom:auto;transform:none;width:auto;margin:0 0 14px;z-index:29;grid-template-columns:repeat(3,minmax(0,1fr));box-shadow:0 5px 0 var(--kink);border-radius:24px}
+  .kc-tabs{position:sticky;top:99px;left:auto;bottom:auto;transform:none;width:auto;margin:0 0 14px;z-index:29;grid-template-columns:repeat(4,minmax(0,1fr));box-shadow:0 5px 0 var(--kink);border-radius:24px}
   .kc-tabbtn{flex-direction:row;justify-content:center;gap:10px;padding:10px 8px 7px;font-size:1.25rem}
   .kc-tabbtn svg{width:26px;height:26px;margin-top:-3px}
 }
@@ -3019,6 +3019,7 @@ html.kc-kid .kc-hold{background:rgba(255,255,255,.85);border-color:rgba(11,33,64
 .kc-picked{font-weight:700;margin:6px 0 0}
 @media (max-width:420px){.kc-me{width:56px;height:56px}.kc-top .kc-back,.kc-top .kc-mute{width:44px;height:44px}.kc-top{gap:8px;padding:8px}.kc-vs{width:54px;height:54px;font-size:1.6rem}.kc-arena{padding:92px 6px 16px}.kc-fighter b{font-size:.85rem;padding:5px 7px}.kc-ref .kc-eddie-say{font-size:1.05rem}.kc-eddie-img{width:52px}}
 @media (prefers-reduced-motion:reduce){.kc-tour0 .kc-tour-big,.kc-map .kc-secret > g,.kc-map .kc-surq > g,.kc-pinrays,.kc-twinkle,.kc-flame,.kc-parasol-spin,.kc-glow,.kc-eddie-img,.kc-bulb.beam .kc-glow,.kc-bulb.bob,.kc-eyes,.kc-prop,.kc-pin .kc-shine,.kc-waves,.kc-rays,.kc-giftart,.kc-xp i,.kc-meter i{animation:none}}
+@media print{.kc-tab-bingo .kc-host,.kc-prizes,.kc-prizehead,.kc-tabdot{display:none!important}.kc-bingo,.kc-cert{box-shadow:none;break-inside:avoid}.kc-sq.fresh .kc-daub{opacity:.5}}
 @media print{html.kc-kid body{background:#fff}html.kc-kid body::before,html.kc-kid .kc-tabs,html.kc-kid .kc-grown,html.kc-kid .kc-mute,html.kc-kid .kc-back{display:none}html.kc-kid .kc-top{position:static}.kc-h2,.kc-say{color:var(--kink);text-shadow:none}.kc-pincard,.kc-top{box-shadow:none;break-inside:avoid}}
 
 /* a child's favorites from the Passport, offered first in the planners */
@@ -3055,3 +3056,44 @@ html.kc-kid .kc-hold{background:rgba(255,255,255,.85);border-color:rgba(11,33,64
 .pm-pin-prev figure{margin:0;text-align:center;font-size:.85rem;font-weight:700}
 .pm-pin-prev svg{width:110px;height:auto;overflow:visible}
 .pm-form select{font:inherit;font-size:1rem;padding:10px 12px;border:2px solid #C5D2E4;border-radius:12px;background:#fff;color:inherit;max-width:100%}
+
+/* Bingo: this season's card (kids-corner.js, drawBingoTab) */
+.kc-tabdot{position:absolute;top:4px;right:12%;width:14px;height:14px;border-radius:50%;background:var(--kred);border:2.5px solid #fff;box-shadow:0 0 0 2px var(--kink)}
+.kc-bingo{background:#fff;border:3px solid var(--kink);border-radius:26px;box-shadow:0 6px 0 var(--kink);padding:10px 10px 12px;max-width:620px;margin:0 auto 6px}
+.kc-bingo-letters{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:0 0 6px}
+.kc-bingo-letters b{font-family:var(--title);font-weight:400;font-size:clamp(1.5rem,7vw,2.3rem);line-height:1;text-align:center;padding:6px 0 2px;border-radius:12px;color:#fff;text-shadow:0 2px 0 var(--kink),1.5px 1.5px 0 var(--kink),-1.5px -1.5px 0 var(--kink),1.5px -1.5px 0 var(--kink),-1.5px 1.5px 0 var(--kink);border:2.5px solid var(--kink)}
+.kc-bingo-letters b:nth-child(1){background:#CC3000}.kc-bingo-letters b:nth-child(2){background:#2176D2}.kc-bingo-letters b:nth-child(3){background:var(--kyellow)}.kc-bingo-letters b:nth-child(4){background:#3FA34D}.kc-bingo-letters b:nth-child(5){background:#C2255C}
+.kc-bingo-grid{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.kc-sq{position:relative;aspect-ratio:1;min-width:0;font:inherit;color:#4D607A;background:#F1F5FB;border:2.5px solid #8E9AB0;border-radius:14px;padding:4px 3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;overflow:hidden;transition:transform .08s}
+.kc-sq b{position:relative;z-index:1;font-weight:800;font-size:clamp(.58rem,2.5vw,.86rem);line-height:1.05;text-align:center;overflow-wrap:anywhere;hyphens:auto}
+.kc-sqicon{position:relative;z-index:1;width:46%;height:auto;flex:none;opacity:.55}
+.kc-sq.on{color:var(--kink);background:#FFF7D6;border-color:var(--kink)}
+.kc-sq.on .kc-sqicon{opacity:1}
+.kc-daub{position:absolute;left:50%;top:50%;width:84%;aspect-ratio:1;margin:-42% 0 0 -42%;border-radius:50%;opacity:0;mix-blend-mode:multiply;pointer-events:none}
+.kc-sq.on .kc-daub{opacity:.5}
+.kc-sq.fresh .kc-daub{opacity:0}
+.kc-sq.free{background:var(--kyellow);border-color:var(--kink);color:var(--kink)}
+.kc-sq.free b{font-family:var(--title);font-weight:400;font-size:clamp(.8rem,3.4vw,1.2rem);text-transform:uppercase;letter-spacing:.03em}
+.kc-sq-eddie{width:auto;height:58%;filter:drop-shadow(0 2px 0 rgba(11,33,64,.3))}
+.kc-sq:active{transform:translateY(2px)}
+.kc-sq:focus-visible{outline:4px solid var(--kyellow);outline-offset:2px}
+.kc-bingo-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.kc-sqbig .kc-sq.big{width:150px;font-size:1rem;cursor:default}
+.kc-sqbig .kc-sq.big b{font-size:1.05rem}
+.kc-prizes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-width:620px;margin:0 auto}
+.kc-prize{position:relative;background:#E4ECF6;color:#4D607A;border:3px solid #8E9AB0;border-radius:18px;box-shadow:0 4px 0 #8E9AB0;padding:26px 6px 10px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px}
+.kc-prize .kc-bulb{width:min(84px,100%)}
+.kc-prize b{font-weight:800;font-size:.92rem;line-height:1.15}
+.kc-prize .kc-lock{left:50%;right:auto;transform:translateX(-50%);white-space:nowrap}
+.kc-prize.won{background:#fff;color:var(--kink);border-color:var(--kink);box-shadow:0 4px 0 var(--kink)}
+.kc-prize.won .kc-lock{background:var(--kgreen)}
+.kc-prize.big{grid-column:1/-1;flex-direction:row;justify-content:center;gap:12px;padding:26px 12px 10px}
+.kc-prize.big .kc-pin{width:96px;height:auto;overflow:visible}
+.kc-prize-txt{display:flex;flex-direction:column;gap:3px;text-align:left;max-width:22em}
+.kc-prize-txt b{font-size:1.05rem}.kc-prize-txt span{font-weight:700;font-size:.88rem;line-height:1.3}
+.kc-cert{text-align:center;background:#FFF4DA;border:3px solid var(--kink);outline:3px dashed var(--kyellow);outline-offset:-12px;border-radius:26px;box-shadow:0 6px 0 var(--kink);padding:22px 16px 18px;max-width:620px;margin:0 auto 10px}
+.kc-cert .kc-pin{width:150px;height:auto;overflow:visible;margin:6px auto}
+.kc-cert-say{font-family:var(--title);font-weight:400;text-transform:uppercase;letter-spacing:.02em;font-size:clamp(1.2rem,5vw,1.7rem);line-height:1.1;color:var(--kink);margin:6px 0}
+.kc-cert-sign{font-weight:800;font-style:italic;color:var(--kink);margin:4px 0 0}
+.kc-bingowin .kc-champbulb{width:110px}
+.kc-wearbtn.bingo.locked .kc-lock{background:var(--kred)}
