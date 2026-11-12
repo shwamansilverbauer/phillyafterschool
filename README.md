@@ -1761,8 +1761,13 @@ These are the only parts of the site that store anything about a child on the se
   pictures in three groups, "Plan the whole year" (the calendar, the phone and the fridge, the Parent Portal, a
   co-parent), "Never miss a thing" and "Something for your kids" (Kids' Playground and favorites first; `.acct-row`, one
   drawing each), with a
-  closing "Create a free account" band that scrolls back to the form. Under the heading sits a drawing of the school
-  year on one ribbon (`artYearRibbon()`), hidden once someone is signed in. `/account/` is where you log in: while
+  closing "Create a free account" band that scrolls back to the form. Under the heading on `/register/` sits the
+  example "Sam's week" (`planExample('week')`, one row per day; on a phone it comes after the form), and on
+  `/account/` a drawing of the school year on one ribbon (`artYearRibbon()`), both hidden once someone is signed in.
+  At the foot of the sign-in card one line of fine print, "Want to know how we use your and your kids' data
+  responsibly? Click here!", opens a small window (`#acct-data`, a `<dialog>`; any button with `data-dialog` opens
+  one, and Esc, its "Got it" or a tap outside closes it) with how we use your info and your kids' info and a link to
+  "Who can see what". `/account/` is where you log in: while
   nobody is signed in the form moves up beside the heading (`seat()` in `groups.js`) with a "New here?" link to
   `/register/`, and the same rows follow; signed in, the form moves back down and the page is where you change what
   is in the account. Someone already signed in who opens `/register/` is sent on. An invitation to a group or a

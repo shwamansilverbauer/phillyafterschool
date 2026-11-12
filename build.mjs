@@ -3843,7 +3843,7 @@ function accountPage(register = false) {
   const hero = register ? `    <h1>${T(`Create your free account`)}</h1>
     <p class="lede">${GROUPS && daysOff ? T(`Keep every plan you build, the school week, the days off and the summer, and see them together in one private calendar for the whole year. It takes about a minute, and there’s no password to remember.`) : T(`Save your school, your kids’ grades and your week, and share a week with a grandparent or a sitter. It takes about a minute, and there’s no password to remember.`)}</p>
     <p class="lede hero-fine">${T(`Already have an account?`)} <a href="${link('account/', 1)}">${T(`Log in`)}</a></p>
-    <div class="acct-hero-art">${artYearRibbon()}</div>`
+    <div class="acct-hero-art acct-hero-ex">${planExample('week')}</div>`
     : `    <h1><span class="when-out">${T(`Log in to your account`)}</span><span class="when-in">${T(`Parent Portal`)}</span></h1>
     <p class="lede when-out">${T(`Your school, your plans and your kids’ calendar for the year, on any device. There’s no password to remember.`)} ${T(`New here?`)} <a href="${link('register/', 1)}">${T(`Create a free account`)}</a></p>
     <p class="lede when-in">${T(`Everything for planning your kids’ year in one place: their week, the days off, the summer, your calendar and to-do list, Kids’ Playground, and your account.`)}</p>
@@ -3855,8 +3855,14 @@ ${hero}
     </div>
     <div class="acct-hero-form" data-clarity-mask="true">${register ? page : ''}</div>${register ? `
     <div id="acct-notice" class="acct-notice" hidden>
-      <p><b>${T(`How we use your info:`)}</b> ${T(`your email signs you in and gets occasional news about the site (unsubscribe in any email). Nothing is sold, and you can delete the account whenever you like.`)}</p>
-      <p><b>${T(`How we use your kids’ info:`)}</b> ${T(`we don’t. It’s encrypted and yours alone, with no public link and no public page, and nobody sees it unless you share it with someone by name.`)} <a href="${link('privacy/', 1)}#groups">${T(`Who can see what`)}</a></p>
+      <p class="acct-fine">${T(`Want to know how we use your and your kids’ data responsibly?`)} <button type="button" class="linkish" data-dialog="acct-data">${T(`Click here!`)}</button></p>
+      <dialog id="acct-data" class="pas-dialog" aria-labelledby="acct-data-h"><div class="pas-dialog-in">
+        <h2 id="acct-data-h">${T(`How we use your data`)}</h2>
+        <p><b>${T(`How we use your info:`)}</b> ${T(`your email signs you in and gets occasional news about the site (unsubscribe in any email). Nothing is sold, and you can delete the account whenever you like.`)}</p>
+        <p><b>${T(`How we use your kids’ info:`)}</b> ${T(`we don’t. It’s encrypted and yours alone, with no public link and no public page, and nobody sees it unless you share it with someone by name.`)}</p>
+        <p><a href="${link('privacy/', 1)}#groups">${T(`Who can see what`)}</a></p>
+        <button type="button" class="btn primary" data-dialog-close>${T(`Got it`)}</button>
+      </div></dialog>
     </div>
     <p id="acct-google" class="hint" hidden>${T(`Google gives us your name and email, nothing else.`)}</p>` : ''}`;
   const { art, artFridge, artRemind, artShare, artGroup, artPortal, artCoparent, artKids, artFav } = accountArt();
