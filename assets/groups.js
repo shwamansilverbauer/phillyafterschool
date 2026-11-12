@@ -643,7 +643,8 @@
         year: 'M7 2h2v2h6V2h2v2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm-2 8v10h14V10zm2 2h4v4H7z',
         kids: 'M8.5 20C8.5 17 3 15 3 10C3 5 7 1.5 12 1.5S21 5 21 10C21 15 15.5 17 15.5 20ZM8.5 21h7v2h-7zm.5 3h6v2H9z',
         summer: 'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm-1-6h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.9 2.9-1.4 1.4zm11.3 11.3 1.4-1.4 2.9 2.9-1.4 1.4zM4.2 18.4l2.9-2.9 1.4 1.4-2.9 2.9zM15.5 7.1l2.9-2.9 1.4 1.4-2.9 2.9z',
-        help: 'M12 21s-7.5-4.6-9.5-9C1 8.6 3.2 5 6.6 5c2 0 3.6 1.1 4.4 2.6h2C13.8 6.1 15.4 5 17.4 5 20.8 5 23 8.6 21.5 12c-2 4.4-9.5 9-9.5 9z'
+        help: 'M12 21s-7.5-4.6-9.5-9C1 8.6 3.2 5 6.6 5c2 0 3.6 1.1 4.4 2.6h2C13.8 6.1 15.4 5 17.4 5 20.8 5 23 8.6 21.5 12c-2 4.4-9.5 9-9.5 9z',
+        app: 'M7 1h10a2 2 0 0 1 2 2v18a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 3v14h10V4zm5 15.2a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z'
       };
       var OV = [
         ['week', 'Build your kids’ week', 'After-school programs, day by day, for each child.', 'board/', ''],
@@ -653,12 +654,14 @@
         ['year', 'Build your year calendar', 'Every plan you make, together, month by month.', 'calendar/', '', hasYearPage],
         ['kids', 'Have your kids play', 'Kids’ Playground: pins to earn, a map of Philly to explore, a bulb to dress up, and picking favorites.', 'kids-playground/', '', !!host.getAttribute('data-kids')],
         ['summer', 'Plan your summer', 'Camps, week by week, for each child.', 'summer-schedule/', '#plan'],
+        ['app', 'Get the app', 'Philly After School on your home screen, one tap from your plans. No app store.', '', '#getapp'],   // site.js opens it; hidden where it can't be installed
         ['help', 'Help the site keep going', 'It’s free for families. If it saved you an evening, you can chip in.', 'support/', '']
       ];
       var ovState = {};
       OV.forEach(function (o) {
         if (o.length > 5 && !o[5]) return;
-        var a = el('a', 'ov-card ov-' + o[0]); a.href = page(o[3]) + o[4];
+        var a = el('a', 'ov-card ov-' + o[0]); a.href = o[0] === 'app' ? '#getapp' : page(o[3]) + o[4];
+        if (o[0] === 'app') a.setAttribute('data-getapp', '');
         if (o[0] === 'profile') a.addEventListener('click', function (e) { if (view !== 'account' || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return; e.preventDefault(); showTab('school', true); });   // on this page: just switch tabs
         var ic = el('span', 'ov-icon'); var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('viewBox', o[0] === 'kids' ? '0 0 24 28' : '0 0 24 24'); svg.setAttribute('aria-hidden', 'true'); svg.setAttribute('focusable', 'false');
         var pth = document.createElementNS('http://www.w3.org/2000/svg', 'path'); pth.setAttribute('d', OV_ICON[o[0]]); pth.setAttribute('fill', 'currentColor'); svg.appendChild(pth); ic.appendChild(svg); a.appendChild(ic);

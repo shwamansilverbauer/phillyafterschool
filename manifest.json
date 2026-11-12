@@ -2,6 +2,7 @@
   "name": "Philly After School",
   "short_name": "After School",
   "description": "After-school programs in Philadelphia, sorted by the school your child goes to.",
+  "id": "/?utm_source=homescreen&utm_medium=app",
   "start_url": "/?utm_source=homescreen&utm_medium=app",
   "scope": "/",
   "display": "standalone",

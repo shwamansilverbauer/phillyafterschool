@@ -195,7 +195,7 @@ document.addEventListener('click', function (e) {
   // device). Never on a quiet page. Analytics hears pas_home_screen: shown, add, dismiss, installed, and the platform.
   var homePrompt = null;
   window.addEventListener('beforeinstallprompt', function (e) { if (e.preventDefault) e.preventDefault(); homePrompt = e; });
-  window.addEventListener('appinstalled', function () { homeKeep({ off: 1 }); homePrompt = null; var c = document.getElementById('homecard'); if (c) c.parentNode.removeChild(c); track({ event: 'pas_home_screen', action: 'installed' }); });
+  window.addEventListener('appinstalled', function () { homeKeep({ off: 1 }); homePrompt = null; document.documentElement.classList.remove('app-ok'); var c = document.getElementById('homecard'); if (c) c.parentNode.removeChild(c); track({ event: 'pas_home_screen', action: 'installed' }); });
   function homeWorth(d) {
     if (!d) return false;
     if (d.event === 'pas_alert_signup' || d.event === 'pas_school_save' || d.event === 'pas_board_add' || d.event === 'pas_dayoff_pick') return true;
@@ -204,6 +204,46 @@ document.addEventListener('click', function (e) {
   }
   function homeState() { try { var o = JSON.parse(window.localStorage.getItem('pas-home') || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } }
   function homeKeep(o) { try { var cur = homeState(); Object.keys(o).forEach(function (k) { cur[k] = o[k]; }); window.localStorage.setItem('pas-home', JSON.stringify(cur)); } catch (e) { /* storage blocked: it may ask again */ } }
+  // ----- "Get the app": a button that's always there (the menu on a phone, the footer, the Parent Portal) -----
+  // Where the browser has offered its own install prompt (beforeinstallprompt: Chrome, Edge and Samsung Internet, on
+  // Android and on computers) the button opens it, and where a browser has the newer navigator.install() it uses that;
+  // otherwise it opens #getapp at the steps for this device. The buttons are hidden (html:not(.app-ok) in site.css)
+  // when the site is already running as the installed app, and where a site can't be installed (Firefox on a computer).
+  // Analytics hears pas_home_screen with after: button (action: add for the prompt, steps for the window).
+  var appPlat = (function () {
+    var ua = navigator.userAgent || '';
+    if (/iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) return 'ios';
+    if (/Android/i.test(ua)) return 'android';
+    if (/Firefox\//.test(ua)) return '';
+    if (/Macintosh/.test(ua) && /Safari\//.test(ua) && !/Chrome\/|Chromium\/|Edg\//.test(ua)) return 'mac';
+    return ('onbeforeinstallprompt' in window || typeof navigator.install === 'function') ? 'desktop' : '';
+  })();
+  var appRunning = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  if (appPlat && !appRunning && document.getElementById('getapp')) document.documentElement.classList.add('app-ok');
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-getapp]');
+    if (!b) return;
+    e.preventDefault();
+    var steps = function () {
+      var d = document.getElementById('getapp'); if (!d) return;
+      [].forEach.call(d.querySelectorAll('[data-plat]'), function (x) { x.hidden = x.getAttribute('data-plat') !== appPlat; });
+      if (d.showModal) d.showModal(); else d.setAttribute('open', '');
+      track({ event: 'pas_home_screen', action: 'steps', platform: appPlat, after: 'button' });
+    };
+    if (homePrompt && homePrompt.prompt) {
+      var pr = homePrompt; homePrompt = null;
+      track({ event: 'pas_home_screen', action: 'add', platform: appPlat, after: 'button' });
+      pr.prompt();
+      if (pr.userChoice && pr.userChoice.then) pr.userChoice.then(function (c) { if (c && c.outcome === 'accepted') homeKeep({ off: 1 }); });
+      return;
+    }
+    if (appPlat === 'desktop' && typeof navigator.install === 'function') {
+      track({ event: 'pas_home_screen', action: 'add', platform: appPlat, after: 'button' });
+      try { navigator.install().then(function () { homeKeep({ off: 1 }); }, function (err) { if (!err || err.name !== 'AbortError') steps(); }); } catch (err) { steps(); }
+      return;
+    }
+    steps();
+  });
   var homeAsked = false;
   function homeNudge(why) {
     if (homeAsked || document.documentElement.hasAttribute('data-quiet')) return;
