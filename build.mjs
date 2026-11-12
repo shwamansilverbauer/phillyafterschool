@@ -614,6 +614,35 @@ function street(mode) {   // 'go': the bus drives in; 'parked': still; 'out': sc
 
 // Kids' Playground's little bulb, on its menu button
 const KC_BULB = '<svg class="nav-kc-bulb" viewBox="0 0 24 30" width="20" height="25" aria-hidden="true" focusable="false"><path d="M8.5 20C8.5 17 3 15 3 10C3 5 7 1.5 12 1.5S21 5 21 10C21 15 15.5 17 15.5 20Z" fill="#F3C613" stroke="#0B2140" stroke-width="1.6"/><rect x="8.3" y="20" width="7.4" height="3" rx="1.5" fill="#E6F2FF" stroke="#0B2140" stroke-width="1.3"/><rect x="8.8" y="23" width="6.4" height="3" rx="1.5" fill="#96C9FF" stroke="#0B2140" stroke-width="1.3"/><circle cx="9.3" cy="9.5" r="1.4" fill="#0B2140"/><circle cx="14.7" cy="9.5" r="1.4" fill="#0B2140"/><path d="M9.3 12.6Q12 15.4 14.7 12.6" fill="none" stroke="#0B2140" stroke-width="1.4" stroke-linecap="round"/></svg>';
+// "Get the app" (the menu on a phone, the footer, the Parent Portal): where the browser offers its own install prompt
+// (Chrome, Edge and Samsung Internet, on Android and on computers) the button opens it; everywhere else site.js opens
+// this window at the steps for that device (data-plat): an iPhone or iPad, Safari on a Mac, an Android browser that
+// didn't offer a prompt, a computer whose browser didn't (most often because it's already installed).
+const APP_PHONE = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7 1h10a2 2 0 0 1 2 2v18a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 3v14h10V4zm5 15.2a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"/></svg>';
+const getAppDialog = () => `
+<dialog id="getapp" class="pas-dialog getapp" aria-labelledby="getapp-h"><div class="pas-dialog-in">
+  <img class="getapp-ic" src="/icon-192.png${stamp('src/static/icon-192.png')}" alt="" width="64" height="64">
+  <h2 id="getapp-h">${T(`Get the Philly After School app`)}</h2>
+  <div data-plat="ios" hidden>
+    <p>${T(`On an iPhone or iPad, Apple has you add it yourself. It takes three taps:`)}</p>
+    <ol class="getapp-steps"><li>${T(`Tap Share (the square with an arrow).`)}</li><li>${T(`Choose “Add to Home Screen”, then “Add”.`)}</li><li>${T(`Open it from your Home Screen. With an account, log in there once.`)}</li></ol>
+    <p class="hint">${T(`Reading this inside Instagram or Facebook? Open the page in Safari first.`)} ${T(`On an iPhone, the Home Screen copy is also how notifications for the dates you follow reach you.`)}</p>
+  </div>
+  <div data-plat="android" hidden>
+    <ol class="getapp-steps"><li>${T(`Open your browser’s menu (the three dots).`)}</li><li>${T(`Choose “Add to Home screen” or “Install app”.`)}</li></ol>
+    <p class="hint">${T(`Reading this inside Instagram or Facebook? Open the page in Chrome first.`)}</p>
+  </div>
+  <div data-plat="mac" hidden>
+    <ol class="getapp-steps"><li>${T(`In the menu bar at the top of the screen, choose File.`)}</li><li>${T(`Choose “Add to Dock”, then “Add”.`)}</li></ol>
+    <p class="hint">${T(`It opens in its own window, from the Dock. Safari on an older Mac doesn’t have this; Chrome or Edge can install it there.`)}</p>
+  </div>
+  <div data-plat="desktop" hidden>
+    <p>${T(`Your browser didn’t offer to install it just now. Most often that means it’s already installed, so look for it with your apps. If not:`)}</p>
+    <ol class="getapp-steps"><li>${T(`Click the install icon at the right end of the address bar.`)}</li><li>${T(`Or open the browser’s menu and choose “Install Philly After School” (Chrome keeps it under “Cast, save and share”, Edge under “Apps”).`)}</li></ol>
+  </div>
+  <p class="hint">${T(`It’s this same site, kept like an app: free, nothing from an app store, and it opens right to your plans.`)}</p>
+  <button type="button" class="btn primary" data-dialog-close>${T(`Got it`)}</button>
+</div></dialog>`;
 function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false, first = '', theme = '', shareImage = null, shareText = '', quiet = false, next = '' }) {
   const canonical = cfg.siteUrl + '/' + pathName;
   // Search results show roughly 60 characters of a title and 155 of a description. The site name is added
@@ -637,7 +666,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
     return `<details class="menu${cls ? ' ' + cls : ''}${here ? ' here' : ''}" data-top="${navHref(top)}"><summary>${label}</summary><ul>${items.map(([to, text]) => `<li${to === top ? ' class="menu-all"' : ''}><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
   };
-  const nav = menus.map(group).join('') + (featMenu ? group(featMenu) : '') + `<a class="nav-more" href="${link('suggest/', depth)}"${pathName.startsWith('suggest/') || pathName.startsWith('ideas/') || pathName.startsWith('schools/request/') ? ' aria-current="page"' : ''}>Suggestion Box</a><a class="nav-more" href="${link('about/', depth)}"${pathName === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
+  const nav = menus.map(group).join('') + (featMenu ? group(featMenu) : '') + `${GROUPS && !PREVIEW ? '<a class="nav-app" href="#getapp" data-getapp>Get the app</a>' : ''}<a class="nav-more" href="${link('suggest/', depth)}"${pathName.startsWith('suggest/') || pathName.startsWith('ideas/') || pathName.startsWith('schools/request/') ? ' aria-current="page"' : ''}>Suggestion Box</a><a class="nav-more" href="${link('about/', depth)}"${pathName === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
     ? `<a class="when-in nav-acct" href="${link('profile/', depth)}"${pathName === 'profile/' ? ' aria-current="page"' : ''}>My Profile</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}${PM_LISTED ? ' data-pm="1"' : ''}>Parent Portal<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>${KIDS ? `<a class="when-in nav-kc" href="${link(kidsPath, depth)}"${pathName === kidsPath ? ' aria-current="page"' : ''}>${KC_BULB}<span class="vh">Kids’ </span>Playground</a>` : ''}`
     : `<a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`}`;
   const head = `${first}${fragment || quiet ? '' : roleHead + gtmHead + '\n' + klaviyoHead}<title>${esc(fullTitle)}</title>
@@ -696,6 +725,7 @@ ${body}
       <a class="brand" href="${link('', depth)}"><img class="logo" src="${link('logo-text.png', depth)}${stamp('src/static/logo-text.png')}" alt="${esc(cfg.siteName)}" width="479" height="184"></a>
       <p>${T(`After-school programs in Philadelphia, sorted by the school your child goes to.`)}</p>
       ${cfg.supportUrl ? `<p class="foot-support"><span>${T(`Created and run by the Silverbauers.`)}</span> <a class="btn foot-cta" href="${link('support/', depth)}">Help the site keep going</a></p>` : ''}
+      ${GROUPS && !PREVIEW ? `<p class="foot-app"><button type="button" class="btn foot-app-btn" data-getapp>${APP_PHONE}${T(`Get the app`)}</button></p>` : ''}
       ${isUrl(cfg.instagram) ? `<p class="foot-social"><a href="${esc(cfg.instagram)}" target="_blank" rel="noopener me"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/></svg>${T(`@phillyafterschool on Instagram`)}</a></p>` : ''}
     </div>
     <div>
@@ -752,7 +782,7 @@ ${body}
     ${cfg.designBy ? `<p>Logo and design zhuzhing by ${esc(cfg.designBy.name)}.</p>` : ''}
     </div>
   </div>
-</div></footer>
+</div></footer>${GROUPS && !PREVIEW ? getAppDialog() : ''}
 <script src="${link('assets/site.js', depth)}${JS_V}" data-edit="${esc(JSON.stringify(editCfg))}"${GROUPS && !PREVIEW ? ` data-api="${link('groups/api.php', depth)}"` : ''}></script>
 ${scripts}`;
   if (fragment) return head + '\n' + page;
@@ -6824,7 +6854,7 @@ write('assets/edit.js', fs.readFileSync(path.join(ROOT, 'src/edit.js')));
 if (GROUPS && !PREVIEW) {
   write('sw.js', fs.readFileSync(path.join(ROOT, 'src/sw.js')));
   write('manifest.json', JSON.stringify({ name: cfg.siteName, short_name: cfg.siteName.length > 12 ? cfg.siteName.replace(/^Philly /, '') : cfg.siteName, description: 'After-school programs in Philadelphia, sorted by the school your child goes to.',
-    start_url: '/?utm_source=homescreen&utm_medium=app', scope: '/', display: 'standalone', background_color: '#96C9FF', theme_color: '#96C9FF',
+    id: '/?utm_source=homescreen&utm_medium=app', start_url: '/?utm_source=homescreen&utm_medium=app', scope: '/', display: 'standalone', background_color: '#96C9FF', theme_color: '#96C9FF',
     icons: [{ src: '/icon-192.png' + stamp('src/static/icon-192.png'), sizes: '192x192', type: 'image/png' }, { src: '/icon-512.png' + stamp('src/static/icon-512.png'), sizes: '512x512', type: 'image/png' }] }, null, 2) + '\n');
 }
 if (GROUPS && GROUPS.premium !== 'off') write('assets/qr.js', fs.readFileSync(path.join(ROOT, 'src/qr.js')));   // draws the code on a premium listing's flyer; loaded only when one is asked for

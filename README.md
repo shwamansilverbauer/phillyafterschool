@@ -1039,6 +1039,18 @@ it's also the only way notifications reach an iPhone. Never on a computer or a q
 It waits two and a half seconds, shows once a visit and at most three times, two weeks apart, and never again after
 "No thanks", "Got it" or an install (`pas-home` on the device). The close button only puts it off.
 
+**"Get the app", always there.** A button in the menu on a phone or tablet (`.nav-app`; not in the menu bar on a
+computer), in the footer, and as a card in the Parent Portal's overview (`app` in `OV`, `groups.js`). Where the browser
+has offered its own install prompt (`beforeinstallprompt`: Chrome, Edge and Samsung Internet, on Android and on
+computers) it opens that; where a browser has the newer `navigator.install()` it uses that; otherwise it opens the
+`#getapp` window (`getAppDialog()` in `build.mjs`) at the steps for the device: an iPhone or iPad (Apple doesn't let a
+site start the install), an Android browser that didn't offer a prompt, Safari on a Mac (File → Add to Dock), or a
+computer whose browser didn't offer one (usually because it's already installed). The buttons stay hidden until
+`site.js` adds `html.app-ok`: not when the site is running as the installed app, not in Firefox on a computer (it
+can't install a site), and not in a preview build (no manifest). The manifest's `id` is the address it has always
+opened at, so copies already installed stay the same app. Analytics hears `pas_home_screen` with `after: button`
+(`add` for a prompt, `steps` for the window).
+
 A parent can get the same dates as the emails as a notification on a phone or computer (web push). Nothing is
 installed from an app store, there is no account with anyone to set up, and no secret to keep: the server makes its
 own key.
@@ -2507,7 +2519,7 @@ Set `gtmId` to load Google Tag Manager on every page. Every page view and event 
   on. (The planners' List, Month, Who's open and Make it a calendar switches report through `pas_summer` and
   `pas_dayoff` instead, as `action: view_list`, `view_cal`, `view_chart` or `view_card`.) `pas_menu_group` (group, open)
   is a section of the phone menu opened or closed. `pas_offbar` (action, day) is the next-day-off bar closed.
-  `pas_home_screen` (action: shown, add, dismiss, later or installed; platform: ios or android; after: the event that
+  `pas_home_screen` (action: shown, add, steps, dismiss, later or installed; platform: ios, android, mac or desktop; after: the event that
   brought the card) is the "Put it on your home screen" card.
 - **Leaving the site.** `pas_outbound` (link_type, program_id, school): link_type is `register`, `website`, `calendar`,
   `review` or `camp`; school is empty on a program's own page. `pas_support_click` (plan: once or month, which of the

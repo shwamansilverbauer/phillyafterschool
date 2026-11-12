@@ -215,6 +215,40 @@ test('each list starts with its question (the school, or a ZIP code that puts th
   await t2.close();
 });
 
+test('“Get the app”: on a phone the steps (or the browser’s own prompt), on a computer in the footer only, and not where a site can’t be installed', async (ctx) => {
+  const b = await ctx.browser();
+  const IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1';
+  const flat = s => s.replace(/\s+/g, ' ').trim();
+  const t = await b.context(ctx.site, { mobile: true, userAgent: IPHONE });
+  let page = await t.open('/');
+  ok(await page.locator('.foot-app-btn').isVisible(), 'in the footer');
+  await page.locator('.menu-btn').click();
+  ok(await page.locator('.nav .nav-app').isVisible(), 'and in the menu, on a phone');
+  await page.locator('.nav .nav-app').click();
+  await page.waitForSelector('#getapp[open]');
+  ok(await page.locator('#getapp [data-plat="ios"]').isVisible(), 'the iPhone steps');
+  eq(await page.locator('#getapp [data-plat]:not([hidden])').count(), 1, 'and only those');
+  includes(flat(await page.locator('#getapp').innerText()), 'Add to Home Screen');
+  await page.locator('#getapp [data-dialog-close]').click();
+  ok(!(await page.locator('#getapp').evaluate(d => d.open)), 'Got it closes it');
+  eq(t.errors.length, 0, t.errors.join(' | '));
+  await t.close();
+  // A computer whose browser can install a site: the footer, not the menu; with no prompt offered, the steps for it.
+  const t2 = await b.context(ctx.site, { width: 1280, height: 900 });
+  page = await t2.open('/');
+  ok(await page.locator('.foot-app-btn').isVisible(), 'in the footer on a computer');
+  ok(!(await page.locator('.nav .nav-app').isVisible()), 'not in the menu bar');
+  await page.locator('.foot-app-btn').click();
+  await page.waitForSelector('#getapp[open]', { timeout: 5000 });
+  ok(await page.locator('#getapp [data-plat="desktop"]').isVisible(), 'the computer’s steps');
+  await t2.close();
+  // Firefox on a computer can't install a site: no button anywhere.
+  const t3 = await b.context(ctx.site, { width: 1280, height: 900, userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0' });
+  page = await t3.open('/');
+  eq(await page.locator('[data-getapp]:visible').count(), 0, 'nothing to install with');
+  await t3.close();
+});
+
 test('a phone gets one “Put it on your home screen” card after something worth coming back to, never again after No thanks, and a computer never does', async (ctx) => {
   const b = await ctx.browser();
   const IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1';
