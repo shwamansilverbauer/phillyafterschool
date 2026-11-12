@@ -205,7 +205,7 @@
     var wrap = el('div', 'signin');
     wrap.appendChild(el('h3', null, 'Sign in with your email'));
     var intro = el('p', 'hint', lede || 'No password to remember. We email you a 6-digit code, and you type it here.');
-    wrap.appendChild(intro);
+    if (lede !== false) wrap.appendChild(intro);   // false: no line under the heading (the sign-up page says enough around it)
     var form = el('form', 'signin-row');
     var input = el('input'); input.type = 'email'; input.required = true; input.autocomplete = 'email'; input.placeholder = 'you@example.com'; input.setAttribute('aria-label', 'Your email'); input.maxLength = 150;
     var send = el('button', 'btn primary', 'Email me a code'); send.type = 'submit';
@@ -529,7 +529,7 @@
         who.appendChild(mine); who.appendChild(theirs); account.appendChild(who);
       }
       var box = el('div', 'panel'); account.appendChild(box);
-      signInBox(box, wantNext, function (d) { fresh = true; if (wantNext !== 'account' && d.user.ready && goNext(wantNext)) return; drawProfile(d); }, 'One step for both: if you’re new, this makes your account. No password. With email, we send a 6-digit code and you type it here.');
+      signInBox(box, wantNext, function (d) { fresh = true; if (wantNext !== 'account' && d.user.ready && goNext(wantNext)) return; drawProfile(d); }, registering ? false : 'One step for both: if you’re new, this makes your account. No password. With email, we send a 6-digit code and you type it here.');
       var sh = box.querySelector('h3');
       if (sh) sh.textContent = registering ? 'Create your account' : 'Log in, or create an account';
       // On /register/, what an account is for and what happens to the information, from the page (so it can be edited
@@ -539,6 +539,9 @@
       var gnote = document.getElementById('acct-google'), gslot = box.querySelector('.signin-alt .g-google');
       if (gnote && gslot && gnote.textContent.trim()) { gslot.parentNode.insertBefore(gnote, gslot.nextSibling); gnote.hidden = false; }   // unless its line was taken off the page
       // an invitation to a group or a shared week comes with its own link; this is the quiet way in for someone who lost it
+      // on /register/, the "Already have an account?" line from beside the heading comes over here, under the form
+      var login = registering && document.getElementById('acct-login');
+      if (login) { account.appendChild(login); login.hidden = false; }
       var have = el('p', 'hint acct-invite', 'Did someone send you an invitation? '); var hj = el('a', null, 'Open it here'); hj.href = page('join/'); have.appendChild(hj); have.appendChild(document.createTextNode('.'));
       account.appendChild(have);
     };
