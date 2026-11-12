@@ -29,3 +29,23 @@ test('the edit page asks for a sign-in, refuses a wrong password, and lets the r
   const send = await fetch(`${site.base}/edit/send.php`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
   ok(send.status >= 400, `nothing can be sent without signing in (got ${send.status})`);
 });
+
+test('a suggestion needs a name and an email: the forms ask for them, and the sender refuses one without', async ({ site, open }) => {
+  const send = o => fetch(`${site.base}/suggest/send.php`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: form(o), redirect: 'manual' });
+  const missing = { kind: 'A program that’s missing', school: 'Nebinger', program: 'Test Program', website: 'https://example.org/', details: 'Picks up at 3.', role: 'I’m a parent or caregiver' };
+  const noName = await send({ ...missing, email: 'pat@example.org' });
+  eq(noName.status, 400, 'no name: refused'); includes(await noName.text(), 'Please add your name');
+  const noEmail = await send({ ...missing, name: 'Pat' });
+  eq(noEmail.status, 400, 'no email: refused'); includes(await noEmail.text(), 'Please add your email');
+  const badEmail = await send({ ...missing, name: 'Pat', email: 'not an email' });
+  eq(badEmail.status, 400, 'an email that isn’t one: refused');
+  const fine = await send({ ...missing, name: 'Pat', email: 'pat@example.org' });
+  eq(fine.status, 303, 'with both, it goes through');
+  // The three forms that send here mark both as required.
+  const page = await (await fetch(`${site.base}/suggest/`)).text();
+  ok(/id="f-name"[^>]*required/.test(page) && /id="f-email"[^>]*required/.test(page), 'the suggestion form');
+  const idea = await (await fetch(`${site.base}/ideas/`)).text();
+  ok(/id="i-name"[^>]*required/.test(idea) && /id="i-email"[^>]*required/.test(idea), 'the feature-idea form');
+  const school = await (await fetch(`${site.base}/nebinger/`)).text();
+  ok(/id="wk-name-nebinger"[^>]*required/.test(school) && /id="wk-email-nebinger"[^>]*required/.test(school), 'a school’s missing-date form');
+});

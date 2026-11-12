@@ -412,7 +412,7 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   Playground itself for someone signed out. The site is for parents and doesn't push it: someone signed out finds it
   under Account Features in the menu, and the Kids' Playground button is only there once a parent is signed in. Nothing
   on the home page or the planners points to it. Its drawings are made in the build (`artBulb()`, `artPin()`); no real child's page is shown anywhere.
-- **On a laptop** the Pins / Map / Showdown tabs sit under the child's header and stick with it, instead of the
+- **On a laptop** the Pins / Bingo / Map / Showdown tabs sit under the child's header and stick with it, instead of the
   phone's bar at the bottom; Eddie's welcome is one centred, framed card.
 
 - **Kid mode.** From the picker ("Who's playing?") on, `html.kc-kid` hides the site's header, menu, hero and footer,
@@ -432,8 +432,9 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   by tapping (`BULB`, `KID_COLORS`; Bell Yellow first). It stands in the header (tap it to change), on the picker, on
   the map and in the cheering corner of every showdown. It starts plain; as the child's level climbs it unlocks things
   to wear (`WEAR`: 16 items in six places, hat, face, neck, back, glow and base, from shades at level 2 to a galaxy
-  glow at 12), and the child picks one per place under "Dress up". A level-up shows what it unlocked, with "Try it
-  on!". Locked items show their level; the server keeps only items it knows (`KC_WEAR`). (Monsters picked before the bulbs became the bulb in the same
+  glow at 12, and four more won at bingo: a party hat, balloons, confetti and the champ ribbon, see "Bingo"), and the
+  child picks one per place under "Dress up". A level-up shows what it unlocked, with "Try it on!". Locked items show
+  their level (or the bingo that wins them); the server keeps only items it knows (`KC_WEAR`). (Monsters picked before the bulbs became the bulb in the same
   place in the list, on the server and on the page.)
 - **What counts.** Only what a parent has confirmed. The server suggests from the household's plans
   (`passport_suggest()`: every program on a child's kept week, each camp whose week has started, each day-off program
@@ -445,17 +446,19 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
 - **Pins.** `KIDS_PINS` in `build.mjs`, 41 of them, each with five levels: bronze, silver, gold, emerald and diamond
   (the counts are each pin's `tiers`). On the Pins tab they come in sections, one per `group`, each its own shape:
   - **Classes** (a circle): one per program type (names in `KIDS_PIN`), at 1, 3, 5, 8 and 12.
-  - **Secret Philly pins** (a keystone): ten that show as a "?" with only a riddle ("Somewhere old, a famous bell has a
+  - **Secret Philly pins** (a keystone): eleven that show as a "?" with only a riddle ("Somewhere old, a famous bell has a
     crack in it… and it wants some music!") until found, and are revealed with a burst of their own ("SECRET PHILLY
     PIN!"). Eight are a mix of a kind of class and a part of the map (`mix:type:area`; the pairs are the fewer of the
-    two, so one music class around Old City is a pair by itself), at 1, 2, 3, 5 and 8: Liberty Bell Ringer (music and
+    two, so one music class in Old City is a pair by itself), at 1, 2, 3, 5 and 8: Liberty Bell Ringer (music and
     Old City), Ben Franklin's Kite (science and Old City), Billy Penn's Hat (theater and Center City), Cheesesteak Champ
     (games and South Philly), Boathouse Rower (sports and the Art Museum), Wissahickon Wanderer (nature and the
-    Northwest), Heron Spotter (nature and the Southwest), Pennypack Pathfinder (sports and the Northeast). The other two
-    are Broad Street Crosser (a class on each side of Broad: `BROAD` in `kids-corner.js`) and Jawn Collector (different
+    Northwest), Heron Spotter (nature and the Southwest), Pennypack Pathfinder (sports and the Northeast). Bulboa
+    Knockout (Eddie with his boxing gloves up) counts rounds: a sports class, a class in South Philly and one around the
+    Art Museum (`mix:movement:south:parkway`); its map colors both parts. The other two are Broad Street
+    Crosser (a class on each side of Broad: `BROAD` in `kids-corner.js`) and Jawn Collector (different
     programs). Once found, the close-up says how many ("You have 2 music + Old City pairs!"), names the classes that
     counted for each half (for Broad Street, which side each was on) and gives the plain rule for leveling up ("To level
-    up: Do a music class AND a class around Old City. Each pair counts!", `rule`); the place pins add a small map with
+    up: Do a music class AND a class in Old City or Society Hill. Each pair counts!", `rule`); the place pins add a small map with
     that part of Philly colored in and the famous thing circled.
   - **All year** (a shield): after school, weekends, days off, summer (weeks of camp), and Year-Rounder (each kind in
     each school year).
@@ -476,6 +479,28 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
     or for the owner's test listing). The Pins tab shows a program pin only once it's earned, never as a goal or a
     "?", and it isn't counted in "12 / 40 pins". It carries no link or offer. The account page's Kids' Playground tab
     tells parents what program pins are.
+- **Bingo** (the Bingo tab, `drawBingoTab()`): a 5×5 card for each school year and another for each summer, the same
+  card for every child, with Eddie's free square in the middle. The school year's card runs until the last day of
+  school (`lastDay` in `data/days-off.json`), then the summer's (`boardNow()`); the cards are `KIDS_BINGO` in
+  `build.mjs` (each square's label, what Eddie says when it's tapped, and its icon). Eighteen squares are classes a
+  parent confirmed for that school year or that summer (the first class, after school, a weekend class, a day-off
+  camp, three days a week, a sports, arts, "brainy" or games class, a neighborhood new to the child, two
+  neighborhoods, a secret spot, a surprise, both sides of Broad Street, a class at or from their school; the summer's
+  card counts weeks of camp, camps and kinds of camp instead), worked out in `bingo()` from `stats()` over that
+  season's classes. Six are things done on the page that season, kept as they happen: a showdown, a new look for the
+  bulb, a new pin, a pin going up a level, a new level, a secret Philly pin. The easy diagonal (the first class, after
+  school or a second camp, the free square, a new pin, a new look) comes early; the whole card takes a busy year (free
+  programs, rec centers and libraries count like any other). Five in a row is a bingo: new squares are daubed one by one when the tab is opened (a dot on the tab
+  says there are some), then "BINGO!". The first three bingos ever win a party hat, balloons and confetti for the
+  bulb. Each card also has a pin of its own ("Bingo 2026–27", a ticket shape) that goes bronze at its first bingo,
+  then silver, gold and emerald (2, 3, 6) and diamond for the whole card (all twelve rows), which also wins the champ
+  ribbon and turns the top of the tab into a certificate ("Sam filled the whole 2026–27 bingo card! — Eddie Bulboa")
+  that the grown-ups' corner prints ("Print the Bingo Champ certificate"; before that, "Print the bingo card"). The
+  card pins show under "Bingo pins" on the Pins tab once they have a bingo, and aren't counted in "12 / 41 pins".
+  What's kept, in `seen`, is four numbers a card, so the server checks them (`passport_clean()`): `bingo:y2026` the
+  squares already shown daubed (a bit each, in reading order), `bingo:y2026:m` the things done on the page
+  (`BINGO_MARK`, six bits), `bingo:y2026:l` the bingos celebrated (the card's pin keeps the best, like a level) and
+  `bingo:y2026:f` the whole card. Summer cards are `bingo:s2027`.
   Drawn as SVG in `drawPin()`, grander at each level: bronze is the badge and a star; silver adds a
   laurel, a blue banner, a gem and more stars; gold adds a turning sunburst, wings, a gold laurel, a crown, red
   ribbons and twinkling sparkles; emerald turns it green, with a bigger wing and more sparkles (`GRAND`,
@@ -498,17 +523,22 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   if a source changes. Neighborhoods are under clouds until the child has been to a class there; each program's
   bulb stands where it is, the child's own at the latest place. The build places every listing's site on a map
   neighborhood (`mapHood()`: by its point, else by name, through `MAP_ALIAS`) and notes any name it can't place.
-  Drag, pinch or the buttons zoom; a tap says what is there, and Eddie waits at the top of the Art Museum steps. No map
-  service, no tiles: nothing is fetched from anywhere else.
+  Drag, pinch or the buttons zoom; a tap says what is there, and Eddie waits at the top of the Art Museum steps. The
+  neighborhoods explored are named under the map, and a tap on one glides the map in on it, lights up its outline and
+  says what's there (`showHood()`; a jump instead of a glide for someone who asked for less motion). No map service, no
+  tiles: nothing is fetched from anywhere else.
 - **Secret spots.** `MAP_AREAS` in `build.mjs` cuts the city into areas (the Parkway, Center City, Old City, South
   Philly, the Northwest, the Southwest, the Northeast), each with one to three famous things: the map's landmarks, and
   a few more placed by latitude and longitude (`MAP_EXTRA`: Elfreth's Alley, the Italian Market, the covered bridge,
   the wildlife refuge, Pennypack Park). Each starts as a "?" cloud and is found in order as the child goes to classes
-  nearby: the first with one listing in the area, the next with two, the last with three. Each map neighborhood belongs
-  to one area or none (`HOOD_AREA`: the area whose middle is nearest the neighborhood's middle, within 5 km, with
-  `AREA_FIX` for the ones that gets wrong, such as Bella Vista, home of the Italian Market, in South Philly), and a
-  listing site counts for its neighborhood's area (`mapArea()`, as `a` on the site). 31 neighborhoods, most of North
-  Philly among them, are in no area. `LANDMARK` and
+  nearby: the first with one listing in the area, the next with two, the last with three. Each area is the
+  neighborhoods Philadelphians would call it, listed by name in `AREA_HOODS`: Old City and Society Hill; Center City
+  (Vine to South between the rivers, less those two and Logan Square); the Art Museum and the Parkway (Fairmount,
+  Spring Garden, Logan Square, East Park); South Philly (everything below South Street east of the Schuylkill, Queen
+  Village and Graduate Hospital included); Southwest, Northwest (Germantown, Mount Airy, Chestnut Hill, Roxborough,
+  Manayunk, East Falls) and Northeast Philly. West Philly, North Philly and the River Wards are in no area for now. A
+  listing site counts for the area of the neighborhood the program itself names (what parents see on its page), or,
+  when that isn't one on the map, of the neighborhood its address falls in (`mapArea()`, as `a` on the site). `LANDMARK` and
   `LANDMARK_SAY` in `kids-corner.js` draw each one and say something about it; a tap on a "?" says how many more
   classes nearby it needs. (No Rocky statue: it's the film's character.)
 - **Surprises in every neighborhood.** Each map neighborhood that has a listing or a school in it (51 of them) has one
@@ -1071,7 +1101,7 @@ changes where a listing appears in a list, and it has no say over reviews.
   four places, all of them for people who run a program and none on a page a parent uses:
   - **In each claimed listing's box on the managers page** (`premiumTease()` in `groups.js`), on a tab of its own
     called "Premium", after the listing's own tabs: one dashed box that leads with the listing's own number of
-    visits when there are at least 20, lists the seven things premium adds, and gives the price. The tab is always
+    visits when there are at least 20, lists the eight things premium adds, and gives the price. The tab is always
     there and never in the way, so there is nothing to dismiss. A listing that has signed up sees where to finish;
     a premium listing has no such tab and sees its tools on the other tabs instead. Nothing pops up, and nothing is
     repeated elsewhere on the page.
@@ -1136,7 +1166,8 @@ changes where a listing appears in a list, and it has no say over reviews.
   `/edit/claims/` ("Make it premium" beside each claimed listing); a payment would set the same row later. Turning
   it off hides what was added and keeps it. By the rule under "What stays free", a free program can simply be made
   premium at no charge.
-- **Everything waits for a person.** Photos, the logo, the words and the offer line each go to `/edit/claims/` to
+- **Everything waits for a person.** Photos, the logo, the words, the offer line, the social links and the Instagram
+  posts each go to `/edit/claims/` to
   be published or declined, and the manager is emailed either way. In `"preview"` those emails say that only they
   can see it for now.
 - **Photos.** The `photos` table gained a `kind` (`photo` or `logo`). A premium listing keeps up to
@@ -1150,6 +1181,17 @@ changes where a listing appears in a list, and it has no say over reviews.
   like the words ("Kids' Playground pin"). The guardrails: a child gets it only after going to the program, it's
   never shown as something to go and get, it has no link, logo or offer, and every program counts toward all the
   other pins the same way.
+- **Social links and Instagram posts** are rows in `extras` too. `social`: the program's own accounts on
+  `SOCIAL_SITES` (Instagram, Facebook, TikTok, YouTube), typed as an address or a handle and kept as plain addresses
+  (`social_url()`; anything on another site is refused), as `{"ig": …, "fb": …}`. `posts`: up to `POSTS_MAX` (3)
+  public Instagram posts or reels the manager picks, from the link Instagram copies, kept as
+  `https://www.instagram.com/p/…/` or `/reel/…/` (`post_url()`). Automatic "latest posts" would need every program to
+  connect its account to a Meta app of ours that has passed Meta's app review, so the manager picks them instead. The
+  review page shows each link to open and check, and the manager is asked to pick posts where no child can be named
+  or recognized up close. On the listing: "Follow <program>" with a pill per account, and "From <program> on Instagram" as plain
+  links plus a "Show the posts here" button; only that tap adds Instagram's own embeds and loads
+  `https://www.instagram.com/embed.js`, with a line saying Instagram may set its own cookies (`pas_instagram` is
+  counted when it's tapped).
 - **Words and offers** are rows in `extras` (`kind` `words` or `offer`, `status` new, ok or declined). Words are
   plain text, 40 to `WORDS_MAX` characters. An offer is one line of up to `OFFER_MAX` characters with a last day,
   no more than `OFFER_DAYS` ahead, after which it stops showing by itself.
@@ -1166,7 +1208,8 @@ changes where a listing appears in a list, and it has no say over reviews.
   flyer's link carries `utm_source=flyer`. (The website badge used to be here; it now comes with every claimed
   listing, see "Being found by search engines".)
 - **On the listing** (`premiumSlot()` in `build.mjs`, drawn by `site.js`): the offer line near the top, "In their
-  own words" with the logo and a line saying the program wrote it, "Photos", and "Ask a question". The page asks the
+  own words" with the logo and a line saying the program wrote it, "Follow <program>", "From <program> on
+  Instagram", "Photos", and "Ask a question". The page asks the
   accounts service (`GET extras`) only when it needs to: in `"preview"`, only for a signed-in visitor; when on, only
   if the public list of claimed listings names it. School pages show the offer line on the program's card. Add
   `?premium=demo` to any program's or camp's address to see a made-up sample.
@@ -1741,8 +1784,19 @@ These are the only parts of the site that store anything about a child on the se
   pictures in three groups, "Plan the whole year" (the calendar, the phone and the fridge, the Parent Portal, a
   co-parent), "Never miss a thing" and "Something for your kids" (Kids' Playground and favorites first; `.acct-row`, one
   drawing each), with a
-  closing "Create a free account" band that scrolls back to the form. Under the heading sits a drawing of the school
-  year on one ribbon (`artYearRibbon()`), hidden once someone is signed in. `/account/` is where you log in: while
+  closing "Create a free account" band that scrolls back to the form. Under the heading on `/register/` sit a few
+  lines on what a free account gets you (`.acct-gets`) and the example "Sam's week" (`planExample('week')`, the five
+  days across, made small; one row per day where its column is narrower than 430px; on a phone both come after the
+  form), and on
+  `/account/` a drawing of the school year on one ribbon (`artYearRibbon()`), both hidden once someone is signed in.
+  On `/register/` on a computer the heading side takes two thirds and the form one third (the account-type tiles
+  stacked), the sign-in card has no intro line ("One step for both..." stays on `/account/` only; `signInBox()` takes
+  `false` for no line), and "Already have an account? Log in" (`#acct-login`) moves from the hero to just under the
+  card.
+  At the foot of the sign-in card one line of fine print, "Want to know how we use your and your kids' data
+  responsibly? Click here!", opens a small window (`#acct-data`, a `<dialog>`; any button with `data-dialog` opens
+  one, and Esc, its "Got it" or a tap outside closes it) with how we use your info and your kids' info and a link to
+  "Who can see what". `/account/` is where you log in: while
   nobody is signed in the form moves up beside the heading (`seat()` in `groups.js`) with a "New here?" link to
   `/register/`, and the same rows follow; signed in, the form moves back down and the page is where you change what
   is in the account. Someone already signed in who opens `/register/` is sent on. An invitation to a group or a

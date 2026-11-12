@@ -205,7 +205,7 @@
     var wrap = el('div', 'signin');
     wrap.appendChild(el('h3', null, 'Sign in with your email'));
     var intro = el('p', 'hint', lede || 'No password to remember. We email you a 6-digit code, and you type it here.');
-    wrap.appendChild(intro);
+    if (lede !== false) wrap.appendChild(intro);   // false: no line under the heading (the sign-up page says enough around it)
     var form = el('form', 'signin-row');
     var input = el('input'); input.type = 'email'; input.required = true; input.autocomplete = 'email'; input.placeholder = 'you@example.com'; input.setAttribute('aria-label', 'Your email'); input.maxLength = 150;
     var send = el('button', 'btn primary', 'Email me a code'); send.type = 'submit';
@@ -529,7 +529,7 @@
         who.appendChild(mine); who.appendChild(theirs); account.appendChild(who);
       }
       var box = el('div', 'panel'); account.appendChild(box);
-      signInBox(box, wantNext, function (d) { fresh = true; if (wantNext !== 'account' && d.user.ready && goNext(wantNext)) return; drawProfile(d); }, 'One step for both: if you’re new, this makes your account. No password. With email, we send a 6-digit code and you type it here.');
+      signInBox(box, wantNext, function (d) { fresh = true; if (wantNext !== 'account' && d.user.ready && goNext(wantNext)) return; drawProfile(d); }, registering ? false : 'One step for both: if you’re new, this makes your account. No password. With email, we send a 6-digit code and you type it here.');
       var sh = box.querySelector('h3');
       if (sh) sh.textContent = registering ? 'Create your account' : 'Log in, or create an account';
       // On /register/, what an account is for and what happens to the information, from the page (so it can be edited
@@ -537,8 +537,11 @@
       var notice = document.getElementById('acct-notice'), signin = box.querySelector('.signin');
       if (notice && signin) { signin.appendChild(notice); notice.hidden = false; }
       var gnote = document.getElementById('acct-google'), gslot = box.querySelector('.signin-alt .g-google');
-      if (gnote && gslot) { gslot.parentNode.insertBefore(gnote, gslot.nextSibling); gnote.hidden = false; }
+      if (gnote && gslot && gnote.textContent.trim()) { gslot.parentNode.insertBefore(gnote, gslot.nextSibling); gnote.hidden = false; }   // unless its line was taken off the page
       // an invitation to a group or a shared week comes with its own link; this is the quiet way in for someone who lost it
+      // on /register/, the "Already have an account?" line from beside the heading comes over here, under the form
+      var login = registering && document.getElementById('acct-login');
+      if (login) { account.appendChild(login); login.hidden = false; }
       var have = el('p', 'hint acct-invite', 'Did someone send you an invitation? '); var hj = el('a', null, 'Open it here'); hj.href = page('join/'); have.appendChild(hj); have.appendChild(document.createTextNode('.'));
       account.appendChild(have);
     };
@@ -1918,7 +1921,7 @@
           : 'Premium gives the families who open your listing more to go on:'));
       if (!c.asked) {
         var ul = el('ul', 'pm-locks');
-        ['Up to six photos and your logo', 'A section in your own words', 'An offer or event line', 'A button parents use to send you a question', 'Month-by-month numbers, and the schools families come from', 'A flyer to print', 'A pin of your own in Kids’ Playground'].forEach(function (x) { ul.appendChild(el('li', null, x)); });
+        ['Up to six photos and your logo', 'A section in your own words', 'An offer or event line', 'Your social links, and up to three Instagram posts', 'A button parents use to send you a question', 'Month-by-month numbers, and the schools families come from', 'A flyer to print', 'A pin of your own in Kids’ Playground'].forEach(function (x) { ul.appendChild(el('li', null, x)); });
         box.appendChild(ul);
       }
       var row = el('div', 'actions'), go = el('a', 'btn primary', c.asked ? 'Open the premium page' : 'See what premium adds'); go.href = url;
@@ -2000,7 +2003,7 @@
         var f = el('form', 'g-form pm-form'), inputs = make(f, t);
         var st = el('p', 'g-status'); st.setAttribute('aria-live', 'polite'); f.appendChild(st);
         var acts = el('div', 'actions'), go = el('button', 'btn primary', t.live || t['new'] ? 'Send the new version' : 'Send it for a look'); go.type = 'submit'; acts.appendChild(go);
-        if (t.live || t['new']) { var rm = btn('btn', kind === 'pin' ? 'Take the pin down' : 'Take it off my listing'); twoTap(rm, 'Tap again to take it off', function () { call('extra_drop', { listing: key, kind: kind }).then(after(kind === 'offer' ? 'The offer line is off ' + c.name + '.' : kind === 'pin' ? 'Your pin is out of Kids’ Playground.' : 'Your words are off ' + c.name + '.')); }); acts.appendChild(rm); }
+        if (t.live || t['new']) { var rm = btn('btn', kind === 'pin' ? 'Take the pin down' : kind === 'social' || kind === 'posts' ? 'Take them off my listing' : 'Take it off my listing'); twoTap(rm, 'Tap again to take it off', function () { call('extra_drop', { listing: key, kind: kind }).then(after(kind === 'offer' ? 'The offer line is off ' + c.name + '.' : kind === 'pin' ? 'Your pin is out of Kids’ Playground.' : kind === 'social' ? 'Your social links are off ' + c.name + '.' : kind === 'posts' ? 'Your Instagram posts are off ' + c.name + '.' : 'Your words are off ' + c.name + '.')); }); acts.appendChild(rm); }
         f.appendChild(acts);
         f.addEventListener('submit', function (e) {
           e.preventDefault(); go.disabled = true; st.className = 'g-status'; st.textContent = 'Sending…';
@@ -2027,6 +2030,25 @@
         var d0 = new Date(), iso = function (d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); };
         until.min = iso(d0); until.max = iso(new Date(d0.getTime() + 90 * 86400000)); until.value = t.newUntil || (t.liveUntil >= iso(d0) ? t.liveUntil : '') || '';
         return { body: inp, until: until };
+      });
+      // --- the program's own social accounts, and up to three Instagram posts it picks (parents tap to load them)
+      if (P.texts.social) texts('social', sub('words', 'Your social accounts', 'Links to your own accounts, shown on your listing under “Follow ' + c.name + '”. Paste an address or a handle; leave out any you don’t use.'), P.texts.social, function (f, t) {
+        var cur = {}; try { cur = JSON.parse(t['new'] || t.live || '{}') || {}; } catch (e) { cur = {}; }
+        var ins = [['ig', 'Instagram', 'instagram.com/yourprogram'], ['fb', 'Facebook', 'facebook.com/yourprogram'], ['tt', 'TikTok', 'tiktok.com/@yourprogram'], ['yt', 'YouTube', 'youtube.com/@yourprogram']].map(function (x) {
+          var i = field(f, 'ps-' + x[0] + '-' + slug, x[1], 'input', { type: 'text', maxLength: 200, placeholder: x[2], autocomplete: 'off', spellcheck: false }); i.value = cur[x[0]] || ''; i.setAttribute('data-site', x[0]); return i;
+        });
+        var body = el('input'); body.type = 'hidden'; f.appendChild(body);
+        var sync = function () { var o = {}; ins.forEach(function (i) { if (i.value.trim()) o[i.getAttribute('data-site')] = i.value.trim(); }); body.value = JSON.stringify(o); };
+        ins.forEach(function (i) { i.addEventListener('input', sync); }); sync();
+        return { body: body };
+      });
+      if (P.texts.posts) texts('posts', sub('words', 'Instagram posts on your listing', 'Pick up to three of your public posts or reels to show on your listing. On Instagram, tap ⋯ on a post, then “Copy link”, and paste it here. Parents see the posts when they tap to load them, so Instagram is only asked for by those who want it. Please pick posts where no child can be named or recognized up close.'), P.texts.posts, function (f, t) {
+        var cur = []; try { cur = JSON.parse(t['new'] || t.live || '[]') || []; } catch (e) { cur = []; }
+        var ins = [1, 2, 3].map(function (n) { var i = field(f, 'pp-' + n + '-' + slug, 'Post ' + n, 'input', { type: 'text', inputMode: 'url', maxLength: 300, placeholder: 'https://www.instagram.com/p/…', autocomplete: 'off', spellcheck: false }); i.value = cur[n - 1] || ''; return i; });
+        var body = el('input'); body.type = 'hidden'; f.appendChild(body);
+        var sync = function () { body.value = JSON.stringify(ins.map(function (i) { return i.value.trim(); }).filter(Boolean)); };
+        ins.forEach(function (i) { i.addEventListener('input', sync); }); sync();
+        return { body: body };
       });
       // --- the program's own pin in Kids' Playground: a name, a color and a picture, drawn the way Kids' Playground draws it
       var KJS = host.getAttribute('data-kids'), KDATA = host.getAttribute('data-kids-data');

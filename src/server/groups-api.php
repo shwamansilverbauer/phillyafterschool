@@ -64,7 +64,9 @@ const OFFER_DAYS = 90;      // the furthest ahead an offer's last day can be
 // picture (a kind of program's, or a star, a heart or a lightning bolt). Kids see it only once they've gone there.
 const PIN_NAME_MAX = 28;
 const PIN_ICONS = array('aftercare', 'music', 'theater', 'art', 'movement', 'stem', 'academics', 'games', 'nature', 'daycamp', 'clubs', 'rec-center', 'star', 'heart', 'bolt');
-const EXTRA_KINDS = array('words', 'offer', 'pin');
+const EXTRA_KINDS = array('words', 'offer', 'pin', 'social', 'posts');
+const SOCIAL_SITES = array('ig' => 'Instagram', 'fb' => 'Facebook', 'tt' => 'TikTok', 'yt' => 'YouTube');   // a premium listing's own accounts
+const POSTS_MAX = 3;        // Instagram posts a premium listing can show
 const HITS_AN_HOUR = 240;   // counts taken from one internet address in an hour before the rest are dropped
 const BACKUP_DAYS = 14;      // how many daily copies of the database are kept
 const PHOTO_BYTES = 1600000; // the biggest listing photo accepted, after the browser has shrunk it
@@ -934,7 +936,8 @@ function daysoff_out(int $uid): ?array {
 // parent waved away ("k|kind|y", or "k|kind|y|n" for "not that many times"); "fav" is the child's ranking of listings, best first. For Kids' Playground (the page the
 // child sees) it also keeps "av", the lightbulb the child picked ({ "b": a bulb from KC_BODIES, "c": a color, 0 to 9,
 // "w": what it wears, { place: thing } from KC_WEAR }),
-// "seen", the pins whose level the child has already been shown ({ "type:music": 2, "philly:jawn": 1, ... }, 1 to 5), and "lvl", the last level
+// "seen", the pins whose level the child has already been shown ({ "type:music": 2, "philly:jawn": 1, ... }, 1 to 5) and
+// each bingo card's four numbers ("bingo:y2026", "bingo:y2026:m", ":l", ":f", see passport_clean()), and "lvl", the last level
 // celebrated. Pins and levels themselves are never stored: the page works them out from "done". Nothing here is ever
 // sent anywhere but back to the household's own browsers.
 const PASSPORT_KINDS = array('after', 'weekend', 'off', 'summer');
@@ -942,7 +945,8 @@ const PASSPORT_MAX = 300;
 const PASSPORT_TIMES = 20;   // the most times one confirmed class can count
 const KC_BODIES = array('classic', 'globe', 'edison', 'candle', 'flood', 'tube', 'twisty', 'holiday', 'mushroom', 'heart');   // the lightbulbs a child picks from
 // What a child's bulb can wear, by where it goes (kids-corner.js has the same list, with the level each unlocks at).
-const KC_WEAR = array('hat' => array('cap', 'crown', 'tophat', 'halo'), 'face' => array('shades', 'stars'), 'neck' => array('bow', 'scarf', 'medal'), 'back' => array('cape', 'wings', 'jetpack'), 'glow' => array('sparkle', 'rainbow', 'galaxy'), 'base' => array('goldbase'));
+// The bingo prizes are in it too (partyhat, balloons, confetti, rosette): the page says when each is won.
+const KC_WEAR = array('hat' => array('cap', 'crown', 'tophat', 'halo', 'partyhat'), 'face' => array('shades', 'stars'), 'neck' => array('bow', 'scarf', 'medal', 'rosette'), 'back' => array('cape', 'wings', 'jetpack', 'balloons'), 'glow' => array('sparkle', 'rainbow', 'galaxy', 'confetti'), 'base' => array('goldbase'));
 const KC_BODIES_BEFORE = array('blob', 'tall', 'box', 'pear', 'ghost', 'spiky', 'bean', 'squid', 'egg', 'fuzzy');   // the monsters they replaced, in the same order
 function school_year(): int {   // the year the current school year started
   global $CFG;
@@ -981,6 +985,11 @@ function passport_clean($raw): array {
     $sn = array();
     // what the page has already celebrated: pins, a map area's secret spots, a neighborhood's surprises ("hood:")
     foreach (array_slice($raw['seen'], 0, 200, true) as $id => $t) if (is_string($id) && preg_match('~^((type|season|map):[a-z-]{1,20}|(pin|philly):[a-z-]{1,30}|prog:[pc]:[a-z0-9-]{1,80}|hood:[a-z-]{1,40}|explore|repeat|intro)$~', $id) && is_numeric($t) && (int) $t >= 1 && (int) $t <= (preg_match('~^(map|hood):~', $id) ? 3 : 5)) $sn[$id] = (int) $t;   // pins have five levels; a map area's spots and a neighborhood's surprises, three at most
+    // a bingo card's four numbers ("bingo:y2026", a school year's; "bingo:s2027", a summer's): the squares shown daubed (a
+    // bit for each of the 25), the things done on the page that season (":m", six bits), the bingos celebrated (":l", up
+    // to 12) and the whole card (":f", 1)
+    $bingoMax = array('' => 33554431, ':m' => 63, ':l' => 12, ':f' => 1);
+    foreach (array_slice($raw['seen'], 0, 200, true) as $id => $t) if (is_string($id) && preg_match('~^bingo:[ys]20\d\d(|:[mlf])$~', $id, $bm) && is_numeric($t) && (int) $t >= 1 && (int) $t <= $bingoMax[$bm[1]]) $sn[$id] = (int) $t;
     if ($sn) $out['seen'] = $sn;
   }
   if (isset($raw['lvl']) && is_numeric($raw['lvl']) && (int) $raw['lvl'] >= 1 && (int) $raw['lvl'] <= 99) $out['lvl'] = (int) $raw['lvl'];
@@ -1527,6 +1536,27 @@ function photos_of(string $key, string $kind = 'photo'): array {
   }
   return $out;
 }
+// A program's own account on one of SOCIAL_SITES, from an address or a handle, as its plain web address: '' for
+// nothing, null for something that isn't an account there.
+function social_url(string $site, string $v): ?string {
+  $v = trim($v);
+  if ($v === '') return '';
+  if ($site === 'fb' && preg_match('~^(?:https?://)?(?:www\.|m\.)?facebook\.com/profile\.php\?id=(\d{5,20})~i', $v, $m)) return 'https://www.facebook.com/profile.php?id=' . $m[1];
+  $v = preg_replace('~[?#].*$~', '', $v) ?? '';
+  $v = rtrim(preg_replace('~^(?:https?://)?(?:www\.|m\.)?~i', '', $v) ?? '', '/');
+  switch ($site) {
+    case 'ig': return preg_match('~^(?:instagram\.com/)?@?([A-Za-z0-9._]{1,30})$~i', $v, $m) && !preg_match('~^(p|reel|reels|stories|explore)$~i', $m[1]) ? 'https://www.instagram.com/' . $m[1] . '/' : null;
+    case 'tt': return preg_match('~^(?:tiktok\.com/)?@?([A-Za-z0-9._]{2,24})$~i', $v, $m) ? 'https://www.tiktok.com/@' . $m[1] : null;
+    case 'fb': return preg_match('~^(?:(?:facebook|fb)\.com/)?((?:people/[^/]{1,80}/\d{5,20})|[A-Za-z0-9.\-]{2,80})$~i', $v, $m) && !preg_match('~^(sharer|share|login|groups|events)$~i', $m[1]) ? 'https://www.facebook.com/' . $m[1] : null;
+    case 'yt': return preg_match('~^(?:youtube\.com/)?((?:@[A-Za-z0-9._-]{3,30})|(?:channel/UC[A-Za-z0-9_-]{20,24})|(?:c|user)/[A-Za-z0-9._-]{2,60})$~i', $v, $m) ? 'https://www.youtube.com/' . $m[1] : null;
+  }
+  return null;
+}
+// One public Instagram post or reel, from the link Instagram copies, as its plain address; null for anything else.
+function post_url(string $v): ?string {
+  return preg_match('~^(?:https?://)?(?:www\.)?instagram\.com/(?:[A-Za-z0-9._]{1,30}/)?(p|reels?|tv)/([A-Za-z0-9_-]{5,40})/?(?:[?#].*)?$~i', trim($v), $m)
+    ? 'https://www.instagram.com/' . (strtolower($m[1]) === 'p' || strtolower($m[1]) === 'tv' ? 'p' : 'reel') . '/' . $m[2] . '/' : null;
+}
 // What a manager wrote and the owner approved: the newest of its kind, and for an offer only until its last day.
 function extra_live(string $key, string $kind): ?array {
   $r = row("SELECT e.id, e.body, e.until FROM extras e JOIN claims c ON c.id = e.claim_id WHERE e.listing = ? AND e.kind = ? AND e.status = 'ok' AND c.status = 'ok' ORDER BY e.id DESC LIMIT 1", array($key, $kind));
@@ -1539,8 +1569,11 @@ function extras_out(string $key): array {
   $photos = photos_of($key);
   $logo = photos_of($key, 'logo');
   $words = extra_live($key, 'words'); $offer = extra_live($key, 'offer');
+  $social = extra_live($key, 'social'); $posts = extra_live($key, 'posts');
+  $social = $social ? json_decode($social['body'], true) : null; $posts = $posts ? json_decode($posts['body'], true) : null;
   return array('photos' => $photos, 'logo' => $logo ? $logo[0]['v'] : 0, 'words' => $words ? $words['body'] : '',
     'offer' => $offer ? array('t' => $offer['body'], 'until' => $offer['until']) : null,
+    'social' => is_array($social) && $social ? $social : null, 'posts' => is_array($posts) ? array_values($posts) : array(),
     'ask' => (bool) val("SELECT 1 FROM claims WHERE listing = ? AND status = 'ok'", array($key)));
 }
 // The fuller numbers a premium listing's manager gets: month by month, who follows and saved it, and which schools
@@ -2606,6 +2639,28 @@ switch ($method . ' ' . $action) {
       if (!in_array($ic, PIN_ICONS, true)) fail('icon', 'Pick a picture for the pin.');
       $body = json_encode(array('n' => $n, 'c' => $col, 'i' => $ic), JSON_UNESCAPED_UNICODE);
       $pinSaid = 'Name: ' . $n . "\nColor: " . ($col + 1) . ' of 10' . "\nPicture: " . $ic;
+    } elseif ($kind === 'social') {   // { "ig": …, "fb": …, "tt": …, "yt": … }, any of them
+      $p = json_decode($raw, true); $links = array();
+      foreach (SOCIAL_SITES as $site => $label) {
+        $link = social_url($site, is_array($p) && isset($p[$site]) && is_string($p[$site]) ? mb_substr($p[$site], 0, 200, 'UTF-8') : '');
+        if ($link === null) fail($site, 'That doesn’t look like a ' . $label . ' account. Paste its address, like ' . ($site === 'ig' ? 'instagram.com/yourprogram' : ($site === 'fb' ? 'facebook.com/yourprogram' : ($site === 'tt' ? 'tiktok.com/@yourprogram' : 'youtube.com/@yourprogram'))) . '.');
+        if ($link !== '') $links[$site] = $link;
+      }
+      if (!$links) fail('short', 'Add at least one of your accounts.');
+      $body = json_encode($links, JSON_UNESCAPED_SLASHES);
+      $pinSaid = implode("\n", array_map(function ($site) use ($links) { return SOCIAL_SITES[$site] . ': ' . $links[$site]; }, array_keys($links)));
+    } elseif ($kind === 'posts') {   // [ up to three post links ]
+      $p = json_decode($raw, true); $list = array();
+      foreach (is_array($p) ? array_slice($p, 0, 10) : array() as $v) {
+        if (!is_string($v) || trim($v) === '') continue;
+        $link = post_url(mb_substr($v, 0, 300, 'UTF-8'));
+        if ($link === null) fail('post', 'Paste the link to a post or reel on Instagram, like instagram.com/p/AbC123/. On Instagram, tap ⋯ and then “Copy link”.');
+        if (!in_array($link, $list, true)) $list[] = $link;
+      }
+      if (!$list) fail('short', 'Paste the link to at least one post.');
+      if (count($list) > POSTS_MAX) fail('long', 'Pick ' . POSTS_MAX . ' posts at most.');
+      $body = json_encode($list, JSON_UNESCAPED_SLASHES);
+      $pinSaid = implode("\n", $list);
     } elseif ($kind === 'words') {
       $body = trim(preg_replace("/\n{3,}/", "\n\n", preg_replace('/[ \t]+/u', ' ', $raw) ?? '') ?? '');
       if (mb_strlen($body, 'UTF-8') > WORDS_MAX) fail('long', 'That’s longer than ' . WORDS_MAX . ' characters. Trim it a little.');
@@ -2626,7 +2681,8 @@ switch ($method . ' ' . $action) {
     q('INSERT INTO extras (claim_id, listing, kind, body, until, created) VALUES (?, ?, ?, ?, ?, ?)', array($c['id'], $key, $kind, $body, $until, now()));
     bump('extra_sent');
     $l = listings(); $name = isset($l[$key]) ? $l[$key]['n'] : $key;
-    if ($kind === 'pin') tell_owner('A Kids’ Playground pin to approve: ' . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '”, made a pin for it:' . "\n\n" . $pinSaid . "\n\nKids see it only after going to the program. It is not on the site. Publish or decline it on the review page.");
+    if ($kind === 'social' || $kind === 'posts') tell_owner(($kind === 'social' ? 'Social links to approve: ' : 'Instagram posts to approve: ') . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '”, wants ' . ($kind === 'social' ? 'these accounts linked from its listing' : 'these Instagram posts shown on its listing (parents see them only after tapping to load Instagram)') . ":\n\n" . $pinSaid . "\n\nOpen each one to check it's the program's own. It is not on the site. Publish or decline it on the review page.");
+    elseif ($kind === 'pin') tell_owner('A Kids’ Playground pin to approve: ' . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '”, made a pin for it:' . "\n\n" . $pinSaid . "\n\nKids see it only after going to the program. It is not on the site. Publish or decline it on the review page.");
     else tell_owner(($kind === 'words' ? 'Words to approve: ' : 'An offer line to approve: ') . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '”, wrote this for its listing' . ($kind === 'offer' ? ', to show until ' . $until : '') . ":\n\n" . $body . "\n\nIt is not on the site. Publish or decline it on the review page.");
     out(array('ok' => true, 'claims' => my_claims($u['id'])));
   }

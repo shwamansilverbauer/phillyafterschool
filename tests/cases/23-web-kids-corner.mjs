@@ -133,7 +133,8 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   await page.waitForFunction(() => !document.querySelector('.kc-over'));
   // "Try it on!" opens the bulb's wardrobe: what level 2 unlocked, the rest locked with the level that opens it.
   await page.waitForSelector('.kc-avatar .kc-wardrobe');
-  eq(await page.locator('.kc-wearbtn').count(), 16, 'everything there is to wear');
+  eq(await page.locator('.kc-wearbtn').count(), 20, 'everything there is to wear: 16 by level, 4 won at bingo');
+  includes(flat(await page.locator('.kc-wearbtn', { has: page.locator('b', { hasText: /^party hat$/i }) }).locator('.kc-lock').innerText()).toLowerCase(), '1 bingo', 'a bingo prize says so');
   eq(await page.locator('.kc-wearbtn:not(.locked)').count(), 2, 'two unlocked at level 2');
   const cape = page.locator('.kc-wearbtn', { has: page.locator('b', { hasText: /^cape$/i }) });   // not the cap
   includes(flat(await cape.locator('.kc-lock').innerText()).toLowerCase(), 'level 4');
@@ -147,11 +148,11 @@ test('a child picks their lightbulb, the site disappears around the page, a hold
   await page.waitForSelector('.kc-pincard');
   ok(await page.locator('.kc-pincard.t1').count() >= 2, 'bronze pins on the page');
   includes(flat(await page.locator('.kc-lvl').innerText()), 'Level 2');
-  // The secret Philly pins: any found (one class is a pair only if it is, say, music around Old City), the rest a ? with a riddle.
-  const foundN = +(flat(await page.locator('.kc-pinsec.secret').innerText()).match(/(\d+) of 10 found/i) || [, -1])[1];
+  // The secret Philly pins: any found (one class is a pair only if it is, say, music in Old City), the rest a ? with a riddle.
+  const foundN = +(flat(await page.locator('.kc-pinsec.secret').innerText()).match(/(\d+) of 11 found/i) || [, -1])[1];
   ok(foundN >= 0 && foundN <= 2, 'the secret Philly pins counted: ' + foundN);
   eq(secretShown, foundN > 0, 'a secret pin found is revealed on its own');
-  eq(await page.locator('.kc-pincard.secret').count(), 10 - foundN, 'the rest are still secrets');
+  eq(await page.locator('.kc-pincard.secret').count(), 11 - foundN, 'the rest are still secrets');
   await page.locator('.kc-pincard.secret').first().click();
   matches(flat(await page.locator('.kc-over .kc-pinbig').innerText()), /Secret Philly pin.*Keep exploring/i, 'a secret pin shows only its riddle');
   eq(await page.locator('.kc-over .kc-rule, .kc-over .kc-minimap').count(), 0, 'no rule and no map until it’s found');
@@ -182,24 +183,33 @@ test('a secret Philly pin: a riddle until found, then revealed on its own, sayin
   const y = (await pat.okay('GET', 'passport')).year;
   const t = await b.context(ctx.site, { sid: pat.cookie });
   const look = await t.open('/');
-  // a music class with one site, around Old City: Liberty Bell Ringer's pair by itself
-  const k = await look.evaluate(() => fetch('/assets/kids-corner.json').then(r => r.json()).then(d => Object.keys(d.listings).find(k => { const l = d.listings[k]; return (l.t || []).includes('music') && l.sites.length === 1 && l.sites[0].a === 'oldcity'; })));
-  ok(k, 'a music class around Old City in the data');
-  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [{ k, kind: 'after', y, s: '' }], av: { b: 'globe', c: 6 }, seen: { intro: 1 }, lvl: 1 });
+  // One class that is a whole pair by itself, for whichever mixed pin the data has one for (say, a music class in Old City
+  // for Liberty Bell Ringer): the pin, the class and the area's name.
+  const pick = await look.evaluate(() => fetch('/assets/kids-corner.json').then(r => r.json()).then(d => {
+    for (const p of d.pins) {
+      const mx = p.how && p.how.split(':'); if (!mx || mx[0] !== 'mix' || mx.length !== 3) continue;
+      const k = Object.keys(d.listings).find(k => { const l = d.listings[k]; return (l.t || []).includes(mx[1]) && l.sites.length === 1 && l.sites[0].a === mx[2]; });
+      if (k) return { k, label: p.label, one: p.one, rule: p.rule, parts: p.parts, area: d.areas.find(a => a.id === mx[2]).name };
+    }
+    return null;
+  }));
+  ok(pick, 'a class that makes a pair by itself, for one of the mixed secret pins');
+  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [{ k: pick.k, kind: 'after', y, s: '' }], av: { b: 'globe', c: 6 }, seen: { intro: 1 }, lvl: 1 });
   const page = await t.open('/kids-playground/#pins');
   await page.waitForSelector('.kc-over, .kc-gift');
   const shown = await celebrate(page);
-  ok(shown.some(s => /SECRET PHILLY PIN!/.test(s) && /LIBERTY BELL RINGER/i.test(s) && /You found a secret pin/.test(s)), 'revealed on its own: ' + shown.join(' / '));
+  ok(shown.some(s => /SECRET PHILLY PIN!/.test(s) && s.toUpperCase().includes(pick.label.toUpperCase()) && /You found a secret pin/.test(s)), 'revealed on its own: ' + shown.join(' / '));
   await page.waitForFunction(() => !document.querySelector('.kc-over'));
   if (await page.locator('.kc-avatar').count()) await page.locator('.kc-avatar .kc-big.go').click();
   await page.waitForSelector('.kc-pincard');
-  await page.locator('.kc-pincard', { hasText: 'Liberty Bell Ringer' }).click();
+  await page.locator('.kc-pincard', { hasText: pick.label }).click();
   await page.waitForSelector('.kc-over .kc-mini');
   const close = flat(await page.locator('.kc-over .kc-pinbig').innerText());
-  includes(close, 'You have 1 music + Old City pair!');
-  matches(close, /Music: .+\. Around Old City: .+\./, 'what counted for each half');
-  includes(close, 'To level up: Do a music class AND a class around Old City.');
-  includes(close, 'The colored part of Philly is Old City. The circle is the Liberty Bell!');
+  includes(close, 'You have 1 ' + pick.one + '!');
+  includes(close, pick.parts[0] + ': ', 'what counted as the kind of class');
+  includes(close, pick.parts[1] + ': ', 'and as the place');
+  includes(close, 'To level up: ' + pick.rule);
+  includes(close, 'The colored part of Philly is ' + pick.area);
   eq(await page.locator('.kc-over details').count(), 0, 'no list of neighborhoods');
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
@@ -221,6 +231,23 @@ test('the map of Philadelphia: drawn from this site, clear where the child has b
   const open = await page.locator('.kc-map .kc-hoods path.open').count();
   ok(open >= 1, 'at least one neighborhood cleared');
   eq(await page.locator('.kc-placelist li').count(), open, 'the cleared ones named under the map');
+  // A tap on a name under the map glides in close on that neighborhood, lights up its outline and says what's there.
+  const pill = page.locator('.kc-placelist .kc-placebtn').first(), pname = flat(await pill.innerText()), pid = await pill.getAttribute('data-place');
+  await pill.click();
+  await page.waitForSelector('.kc-bubble:not([hidden])');
+  includes(flat(await page.locator('.kc-bubble').innerText()), pname, 'the bubble names it');
+  includes(flat(await page.locator('.kc-bubble').innerText()), 'You explored here');
+  eq(await pill.getAttribute('aria-pressed'), 'true', 'the name picked stays lit');
+  const zoomed = await page.evaluate(id => {
+    const svg = document.querySelector('.kc-map'), [x, y, w, h] = svg.getAttribute('viewBox').split(' ').map(Number), full = +svg.getAttribute('data-w') || 0;
+    const bb = svg.querySelector('[data-hood="' + id + '"]').getBBox(), hi = svg.querySelector('.kc-hoodhi');
+    return { inView: bb.x >= x - 1 && bb.y >= y - 1 && bb.x + bb.width <= x + w + 1 && bb.y + bb.height <= y + h + 1, w, lit: hi.classList.contains('on') && hi.getAttribute('d') === svg.querySelector('[data-hood="' + id + '"]').getAttribute('d') };
+  }, pid);
+  ok(zoomed.inView && zoomed.w <= 600, 'zoomed in on it: ' + JSON.stringify(zoomed));
+  ok(zoomed.lit, 'its outline lit up');
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('.kc-map');
+  await page.evaluate(() => document.querySelectorAll('.kc-over').forEach(o => o.remove()));
   ok(await page.locator('.kc-map svg[data-k]').count() >= 1, 'a program’s bulb on the map');
   eq(await page.locator('.kc-map .kc-you').count(), 1, 'the child’s own bulb');
   eq(await page.locator('.kc-map .kc-eddie-map').count(), 1, 'Eddie on the Art Museum steps');
@@ -418,6 +445,85 @@ test('favorites from Kids’ Playground are offered first in the planners: the w
     await sum.locator('#sum-weeks .sum-add').nth(i).click();   // close it again
   }
   ok(marked, 'some week lists the favorite camp with its mark');
+  eq(t.errors.length, 0, t.errors.join(' | '));
+  await t.close();
+});
+
+test('bingo: a card for the school year, squares daubed from confirmed classes and the page itself, a bingo wins a party hat and the card’s own pin', async (ctx) => {
+  const b = await ctx.browser();
+  const pat = ctx.api().as(someone('kcb'), 'Pat', 'Lee');
+  const { program, school } = pickupPair();
+  await pat.okay('POST', 'kids_save', { kids: [{ n: 'Lu', g: '1' }] });
+  const y = (await pat.okay('GET', 'passport')).year, card = 'bingo:y' + y;
+  // An after-school program three days a week, and a new look for the bulb already (a square done on the page itself).
+  await pat.okay('POST', 'passport_save', { kid: 'Lu', done: [{ k: 'p:' + program.id, kind: 'after', y, s: school, n: 3 }], av: { b: 'globe', c: 2 }, seen: { intro: 1, [card + ':m']: 2 }, lvl: 1 });
+  const t = await b.context(ctx.site, { sid: pat.cookie, mobile: true });
+  await t.page.emulateMedia({ reducedMotion: 'reduce' });
+  const page = await t.open('/kids-playground/#pins');
+  await page.waitForSelector('.kc-gift');
+  // The new pins and the level first; "Later" and "Yay!" keep the page where it is.
+  const tap = async () => {
+    const shown = [];
+    for (let i = 0, quiet = 0; i < 40; i++) {
+      await page.waitForTimeout(300);
+      const over = page.locator('.kc-over:not(.out)');
+      if (!(await over.count())) { if (!(await page.locator('.kc-sq.fresh').count()) && ++quiet >= 4) break; continue; }
+      quiet = 0; shown.push(flat(await over.first().innerText()));
+      const later = over.first().locator('.kc-big.ghost');
+      await ((await later.count()) ? later.first() : over.first().locator('.kc-giftbtn, .kc-big').first()).click();
+    }
+    return shown;
+  };
+  await tap();
+  // A dot on the Bingo tab: squares to daub.
+  const tabBtn = page.locator('.kc-tabbtn', { hasText: 'Bingo' });
+  eq(await tabBtn.locator('.kc-tabdot').count(), 1, 'a dot on Bingo');
+  await tabBtn.click();
+  await page.waitForSelector('.kc-bingo');
+  eq(await page.locator('.kc-bingo').getAttribute('data-board'), 'y' + y, 'this school year’s card');
+  eq(await page.locator('.kc-bingo-grid .kc-sq').count(), 25, 'five by five');
+  matches(flat(await page.locator('.kc-sq.free').innerText()), /free/i, 'Eddie’s free square in the middle');
+  const shown = await tap();
+  ok(shown.some(s => /BINGO/.test(s) && /BRONZE/i.test(s) && /Party hat/i.test(s)), 'a bingo: the card’s pin is bronze, and a party hat is won: ' + shown.join(' / '));
+  // Daubed: the first class, after school, three days a week, at the school it picks up from, a new pin, a new level, the new look.
+  for (const sq of ['First class', 'After school', '3 days a week', 'At your school', 'New pin', 'Level up', 'New look']) eq(await page.locator('.kc-sq.on', { hasText: sq }).count(), 1, sq + ' daubed');
+  eq(await page.locator('.kc-sq.on', { hasText: 'Weekend class' }).count(), 0, 'not a weekend class');
+  ok(await page.locator('.kc-bingo-lines line').count() >= 2, 'the row is drawn across');
+  eq(await tabBtn.locator('.kc-tabdot').count(), 0, 'the dot is gone');
+  // A square not daubed yet says how to get it.
+  await page.locator('.kc-sq', { hasText: 'Weekend class' }).click();
+  matches(flat(await page.locator('.kc-over').innerText()), /Not yet!.*Saturday or a Sunday.*grown-up adds your classes/i);
+  await page.locator('.kc-over .kc-big').click();
+  await page.waitForFunction(() => !document.querySelector('.kc-over'));
+  // Kept on the server: the squares shown, the things done here, one bingo.
+  const seen = (await pat.okay('GET', 'passport')).kids[0].seen;
+  eq(seen[card + ':l'] >= 1, true, 'a bingo kept: ' + JSON.stringify(seen));
+  eq(seen[card + ':m'] & (2 | 4 | 16), 2 | 4 | 16, 'a new look, a new pin, a new level');
+  ok(seen[card] > 0 && !seen[card + ':f'], 'squares shown, not the whole card');
+  // The prize is in the wardrobe, and the card's pin with the pins.
+  await page.locator('.kc-me').click();
+  await page.waitForSelector('.kc-wardrobe');
+  eq(await page.locator('.kc-wearbtn:not(.locked)', { has: page.locator('b', { hasText: /^party hat$/i }) }).count(), 1, 'the party hat can be worn');
+  eq(await page.locator('.kc-wearbtn.locked', { has: page.locator('b', { hasText: /^champ ribbon$/i }) }).count(), 1, 'the champ ribbon waits for a whole card');
+  await page.locator('.kc-avatar .kc-big.ghost').click();
+  await page.locator('.kc-tabbtn', { hasText: 'Pins' }).click();
+  await page.waitForSelector('.kc-pincard');
+  const pinCard = page.locator('.kc-pincard', { hasText: 'Bingo ' + y + '–' + String(y + 1).slice(2) });
+  eq(await pinCard.count(), 1, 'the card’s own pin');
+  ok(/t1|t2|t3/.test(await pinCard.getAttribute('class')), 'bronze or better');
+  // Opened again: nothing to celebrate.
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('.kc-top');
+  await page.locator('.kc-tabbtn', { hasText: 'Bingo' }).click();
+  await page.waitForSelector('.kc-bingo');
+  await page.waitForTimeout(800);
+  eq(await page.locator('.kc-over').count(), 0, 'celebrated once');
+  // The grown-ups' corner: how far along, and a way to print it.
+  await hold(page, '.kc-hold');
+  await page.waitForSelector('.kc-grownup');
+  matches(flat(await page.locator('.kc-grownup').innerText()), /Lu’s bingo card, \d{4}–\d\d \d+ squares of 24, \d bingos?\./);
+  eq(await page.locator('.kc-grownup button', { hasText: 'Print the bingo card' }).count(), 1);
+  eq(t.outside.length, 0, 'nothing asked of another site: ' + t.outside.join(', '));
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
 });

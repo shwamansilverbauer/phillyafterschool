@@ -2091,7 +2091,8 @@ function schoolWeekSection(s) {
         <div class="field"><label for="wk-what-${esc(s.id)}">${T(`What is it?`)}</label><input id="wk-what-${esc(s.id)}" name="program" type="text" maxlength="80" required placeholder="Picture day" autocomplete="off"></div>
         <div class="field"><label for="wk-when-${esc(s.id)}">${T(`When?`)}</label><input id="wk-when-${esc(s.id)}" name="when" type="text" maxlength="120" required placeholder="Oct 14, or every Wednesday" autocomplete="off"></div>
         <div class="field wide"><label for="wk-details-${esc(s.id)}">${T(`Anything else? (optional)`)}</label><input id="wk-details-${esc(s.id)}" name="details" type="text" maxlength="300" placeholder="Which grades, what to bring" autocomplete="off"></div>
-        <div class="field wide"><label for="wk-email-${esc(s.id)}">${T(`Your email (optional)`)}</label><input id="wk-email-${esc(s.id)}" name="email" type="email" maxlength="150" autocomplete="email"><span class="hint">${T(`Only used to ask you a question about it. Please leave out children’s names.`)}</span></div>
+        <div class="field"><label for="wk-name-${esc(s.id)}">${T(`Your name`)}</label><input id="wk-name-${esc(s.id)}" name="name" type="text" maxlength="100" autocomplete="name" required></div>
+        <div class="field"><label for="wk-email-${esc(s.id)}">${T(`Your email`)}</label><input id="wk-email-${esc(s.id)}" name="email" type="email" maxlength="150" autocomplete="email" required><span class="hint">${T(`Only used to ask you a question about it. Please leave out children’s names.`)}</span></div>
         <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label>Leave this blank <input name="company" type="text" tabindex="-1" autocomplete="off"></label></div>
         <div class="wide"><button class="btn" type="submit">${T(`Send it`)}</button> <span class="hint">${T(`We read each one before it goes on the page.`)}</span></div>
       </form>
@@ -2732,7 +2733,7 @@ function suggestPage() {
     </div>
     <div class="about-you">
       <h2>${T(`About you`)}</h2>
-      <p class="hint">${T(`All optional. Your email is only used to ask a follow-up question about what you sent.`)} <a href="${link('privacy/', 1)}">${T(`How we handle it.`)}</a></p>
+      <p class="hint">${T(`We need your name and email. Your email is only used to ask a follow-up question about what you sent.`)} <a href="${link('privacy/', 1)}">${T(`How we handle it.`)}</a></p>
       <div class="field">
         <label for="f-role">${T(`How do you know it?`)}</label>
         <select id="f-role" name="role">
@@ -2745,11 +2746,11 @@ function suggestPage() {
       <div class="pair">
         <div class="field">
           <label for="f-name">${T(`Your name`)}</label>
-          <input id="f-name" name="name" type="text" maxlength="100" autocomplete="name">
+          <input id="f-name" name="name" type="text" maxlength="100" autocomplete="name" required>
         </div>
         <div class="field">
           <label for="f-email">${T(`Your email`)}</label>
-          <input id="f-email" name="email" type="email" maxlength="150" autocomplete="email">
+          <input id="f-email" name="email" type="email" maxlength="150" autocomplete="email" required>
         </div>
       </div>
     </div>
@@ -2787,12 +2788,12 @@ function ideasPage() {
     </div>
     <div class="pair">
       <div class="field">
-        <label for="i-name">${T(`Your name (optional)`)}</label>
-        <input id="i-name" name="name" type="text" maxlength="100" autocomplete="name">
+        <label for="i-name">${T(`Your name`)}</label>
+        <input id="i-name" name="name" type="text" maxlength="100" autocomplete="name" required>
       </div>
       <div class="field">
-        <label for="i-email">${T(`Your email (optional)`)}</label>
-        <input id="i-email" name="email" type="email" maxlength="150" autocomplete="email">
+        <label for="i-email">${T(`Your email`)}</label>
+        <input id="i-email" name="email" type="email" maxlength="150" autocomplete="email" required>
         <span class="hint">${T(`Only used to ask a follow-up question.`)} <a href="${link('privacy/', 1)}">${T(`How we handle it.`)}</a></span>
       </div>
     </div>
@@ -2887,8 +2888,12 @@ if ($isNew && !preg_match('~^(https?://)?[a-z0-9][a-z0-9.-]*\\.[a-z]{2,}([/?#]\\
 if ($isNew && $program === '') {
   fail('Please add the name of the program or camp.', 400);
 }
-if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-  $email = '';
+// Everything sent in needs a name and an email, so it can be followed up and isn't sent by a stranger to the site.
+if ($name === '') {
+  fail('Please add your name.', 400);
+}
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  fail('Please add your email, so we can ask a question about what you sent if we need to.', 400);
 }
 
 $body = "Type: $kind\\n"
@@ -3837,8 +3842,15 @@ function accountPage(register = false) {
   // opens /register/ is sent on.
   const hero = register ? `    <h1>${T(`Create your free account`)}</h1>
     <p class="lede">${GROUPS && daysOff ? T(`Keep every plan you build, the school week, the days off and the summer, and see them together in one private calendar for the whole year. It takes about a minute, and there’s no password to remember.`) : T(`Save your school, your kids’ grades and your week, and share a week with a grandparent or a sitter. It takes about a minute, and there’s no password to remember.`)}</p>
-    <p class="lede hero-fine">${T(`Already have an account?`)} <a href="${link('account/', 1)}">${T(`Log in`)}</a></p>
-    <div class="acct-hero-art">${artYearRibbon()}</div>`
+    <ul class="acct-gets">
+      ${GROUPS && daysOff ? `<li>${T(`Plan each kid’s school week, days off and summer`)}</li>
+      <li>${T(`See it all in one private calendar for the year, on your phone or the fridge`)}</li>` : `<li>${T(`Save your school and your kids’ week`)}</li>`}
+      ${ALERTS ? `<li>${T(`Get a heads-up before sign-ups open`)}</li>` : ''}
+      <li>${T(`Plan with your co-parent, and share a week with a sitter`)}</li>
+      ${KIDS ? `<li>${T(`Kids’ Playground: pins and a map of Philly for your kids`)}</li>` : ''}
+    </ul>
+    <p id="acct-login" class="acct-login">${T(`Already have an account?`)} <a href="${link('account/', 1)}">${T(`Log in`)}</a></p>
+    <div class="acct-hero-art acct-hero-ex">${planExample('week')}</div>`
     : `    <h1><span class="when-out">${T(`Log in to your account`)}</span><span class="when-in">${T(`Parent Portal`)}</span></h1>
     <p class="lede when-out">${T(`Your school, your plans and your kids’ calendar for the year, on any device. There’s no password to remember.`)} ${T(`New here?`)} <a href="${link('register/', 1)}">${T(`Create a free account`)}</a></p>
     <p class="lede when-in">${T(`Everything for planning your kids’ year in one place: their week, the days off, the summer, your calendar and to-do list, Kids’ Playground, and your account.`)}</p>
@@ -3850,8 +3862,14 @@ ${hero}
     </div>
     <div class="acct-hero-form" data-clarity-mask="true">${register ? page : ''}</div>${register ? `
     <div id="acct-notice" class="acct-notice" hidden>
-      <p><b>${T(`How we use your info:`)}</b> ${T(`your email signs you in and gets occasional news about the site (unsubscribe in any email). Nothing is sold, and you can delete the account whenever you like.`)}</p>
-      <p><b>${T(`How we use your kids’ info:`)}</b> ${T(`we don’t. It’s encrypted and yours alone, with no public link and no public page, and nobody sees it unless you share it with someone by name.`)} <a href="${link('privacy/', 1)}#groups">${T(`Who can see what`)}</a></p>
+      <p class="acct-fine">${T(`Want to know how we use your and your kids’ data responsibly?`)} <button type="button" class="linkish" data-dialog="acct-data">${T(`Click here!`)}</button></p>
+      <dialog id="acct-data" class="pas-dialog" aria-labelledby="acct-data-h"><div class="pas-dialog-in">
+        <h2 id="acct-data-h">${T(`How we use your data`)}</h2>
+        <p><b>${T(`How we use your info:`)}</b> ${T(`your email signs you in and gets occasional news about the site (unsubscribe in any email). Nothing is sold, and you can delete the account whenever you like.`)}</p>
+        <p><b>${T(`How we use your kids’ info:`)}</b> ${T(`we don’t. It’s encrypted and yours alone, with no public link and no public page, and nobody sees it unless you share it with someone by name.`)}</p>
+        <p><a href="${link('privacy/', 1)}#groups">${T(`Who can see what`)}</a></p>
+        <button type="button" class="btn primary" data-dialog-close>${T(`Got it`)}</button>
+      </div></dialog>
     </div>
     <p id="acct-google" class="hint" hidden>${T(`Google gives us your name and email, nothing else.`)}</p>` : ''}`;
   const { art, artFridge, artRemind, artShare, artGroup, artPortal, artCoparent, artKids, artFav } = accountArt();
@@ -4013,7 +4031,7 @@ ${hero}
     <div class="pm-cta-box">
       <div class="pm-cta-say">
         <h2>${T(`Want more on your listing?`)}</h2>
-        <p>${T(`A premium listing adds photos and your logo, a section in your own words, an offer or event line, a button parents use to send you a question, month-by-month numbers and a pin of your own in Kids’ Playground. The listing itself stays free; premium is the extras.`)}</p>
+        <p>${T(`A premium listing adds photos and your logo, a section in your own words, an offer or event line, your social links and up to three Instagram posts, a button parents use to send you a question, month-by-month numbers and a pin of your own in Kids’ Playground. The listing itself stays free; premium is the extras.`)}</p>
       </div>
       <p class="actions"><a class="btn primary" href="${link('premium/', 1)}" data-track="premium_cta_managers">${T(`See what premium adds`)}</a><span class="hint">${T(`From {price} a month. Claim your listing first; premium is added to it.`, { price: '$' + PM_PRICE.month })}</span></p>
     </div>
@@ -4061,6 +4079,7 @@ function premiumPage() {
     ['photos', T(`Photos and your logo`), T(`Up to six photos and a logo, at the top of your listing.`)],
     ['offer', T(`An offer or event line`), T(`An open house, a trial class, early-bird pricing. It shows near the top until the date you set.`)],
     ['words', T(`A section in your own words`), T(`Say what makes your program yours, the way you’d say it to a parent on a tour.`)],
+    ['social', T(`Your social links and Instagram posts`), T(`Links to your Instagram, Facebook, TikTok or YouTube, and up to three Instagram posts you pick. The posts load only when a parent taps to see them.`)],
     ['ask', T(`A button for questions`), T(`Parents send a question from your listing and it lands in your inbox, with their address to reply to.`)],
     ['numbers', T(`Fuller numbers`), T(`Month by month: how often your listing was opened, how many families follow it or saved it, and which schools they come from. Numbers only, never who.`)],
     ['flyer', T(`A flyer to print`), T(`With a code that opens your listing, for the front desk or the school fair.`)],
@@ -4093,6 +4112,7 @@ function premiumPage() {
             <p class="pm-by"><span class="pmd-logo">${art('<circle cx="60" cy="45" r="30" fill="#B4237A"/><path d="M44 58l10-26 6 16 6-16 10 26" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>', '#FFFFFF')}</span><span>${T(`Written by Maple Street Arts Club, not by us.`)}</span></p>
             <p class="pmd-text">${T(`We keep groups small, so every kid gets their hands in the clay. Most afternoons end with something to carry home.`)}</p>
           </div>
+          <p class="pmd-social"><span>Instagram</span><span>Facebook</span>${at.social}</p>
           <div class="pmd-thumbs">${thumbs.join('')}</div>
           <p class="demo-actions"><span class="btn primary">${T(`Sign up`)}</span><span class="btn">${T(`Ask a question`)}</span>${at.ask}</p>
         </div>
@@ -4219,17 +4239,18 @@ Link: ${e('$x["link"]')}<?php } ?></pre>
   <?php if ($photosLive) { ?><h2>Photos on the site (<?php echo count($photosLive); ?>)</h2>
   <div class="review-grid"><?php foreach ($photosLive as $x) { ?><div class="panel"><p><img class="review-photo" src="./?photo=<?php echo (int) $x["id"]; ?>" alt=""></p><p><b>${e('$name($x["listing"])')}</b><br><span class="hint">${e('$x["alt"]')}</span></p>${form('$x["id"]', act('photo_no', 'Take it down'))}</div><?php } ?></div><?php } ?>
 
-${GROUPS.premium !== 'off' ? `  <h2>Words, offer lines and pins waiting for you (<?php echo count($extrasNew); ?>)</h2>
-  <?php if (!$extrasNew) { ?><p class="hint">None waiting. What a manager writes for a premium listing, and its Kids’ Playground pin, shows only after you publish it here.</p><?php } ?>
+${GROUPS.premium !== 'off' ? `  <h2>Words, offer lines, pins and social links waiting for you (<?php echo count($extrasNew); ?>)</h2>
+  <?php if (!$extrasNew) { ?><p class="hint">None waiting. What a manager writes for a premium listing, its Kids’ Playground pin, its social links and its Instagram posts show only after you publish them here.</p><?php } ?>
   <?php foreach ($extrasNew as $x) { ?><div class="panel">
-    <h3>${e('$name($x["listing"])')} <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line' : ($x["kind"] === 'pin' ? 'Kids’ Playground pin (kids see it only after going there)' : 'In their own words'); ?></span></h3>
+    <h3>${e('$name($x["listing"])')} <span class="hint"><?php echo $kindName($x["kind"], true); ?></span></h3>
     <p class="hint">From ${e('$x["first"] . " " . $x["last"]')} &lt;${e('$x["email"]')}&gt;, ${e('$day($x["created"])')}<?php if ($x["kind"] === 'offer') { ?>. To show until ${e('$x["until"]')}<?php } ?></p>
     <pre class="edit-ask">${e('$pinText($x)')}</pre>
+    <?php if ($x["kind"] === 'social' || $x["kind"] === 'posts') { ?><p class="hint">Open each to check it’s the program’s own<?php echo $x["kind"] === 'posts' ? ', public, and fine to show on the site' : ''; ?>: <?php foreach ($extraLinks($x) as $u) { ?><a href="${e('$u')}" rel="noopener noreferrer" target="_blank">${e('$u')}</a> <?php } ?></p><?php } ?>
     ${form('$x["id"]', act('extra_ok', 'Publish it', 'btn primary') + act('extra_no', 'Decline'))}
   </div><?php } ?>
-  <?php if ($extrasLive) { ?><h2>Words, offer lines and pins on the site (<?php echo count($extrasLive); ?>)</h2>
+  <?php if ($extrasLive) { ?><h2>Words, offer lines, pins and social links on the site (<?php echo count($extrasLive); ?>)</h2>
   <?php foreach ($extrasLive as $x) { ?><div class="panel">
-    <h3>${e('$name($x["listing"])')} <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line, until ' . htmlspecialchars($x["until"], ENT_QUOTES, 'UTF-8') : ($x["kind"] === 'pin' ? 'Kids’ Playground pin' : 'In their own words'); ?></span></h3>
+    <h3>${e('$name($x["listing"])')} <span class="hint"><?php echo $x["kind"] === 'offer' ? 'Offer or event line, until ' . htmlspecialchars($x["until"], ENT_QUOTES, 'UTF-8') : $kindName($x["kind"], false); ?></span></h3>
     <pre class="edit-ask">${e('$pinText($x)')}</pre>
     ${form('$x["id"]', act('extra_no', 'Take it down'))}
   </div><?php } ?><?php } ?>
@@ -4237,7 +4258,7 @@ ${GROUPS.premium !== 'off' ? `  <h2>Words, offer lines and pins waiting for you 
 ` : ''}  <h2>Claimed listings (<?php echo count($claims); ?>)</h2>${testListings.length ? `
   <p class="hint" id="test-listings">Your test listings, hidden from the rest of the site: ${testListings.map(p => `<a href="../../programs/${esc(p.id)}/">${esc(p.name)}</a> (claimed with an address at ${esc(p.claimDomain)}${p.premium === true ? ', always premium' : ''})`).join(' and ')}.</p>` : ''}
   <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>${GROUPS.premium !== 'off' ? `
-  <p class="hint">${GROUPS.premium === 'preview' ? 'Premium is being tried out: when you make a listing premium, its manager gets the premium tools, and what they add shows on the listing only to them (after you approve it). Nobody else sees it until premium is switched on for the site.' : 'Premium is on: a premium listing’s photos, own words, offer line and question button show to everyone, after you approve what the manager sends.'}</p>` : ''}
+  <p class="hint">${GROUPS.premium === 'preview' ? 'Premium is being tried out: when you make a listing premium, its manager gets the premium tools, and what they add shows on the listing only to them (after you approve it). Nobody else sees it until premium is switched on for the site.' : 'Premium is on: a premium listing’s photos, own words, offer line, social links, Instagram posts and question button show to everyone, after you approve what the manager sends.'}</p>` : ''}
   <div class="stat-scroll"><table class="stat-table wrap"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th>${GROUPS.premium !== 'off' ? '<th scope="col">Premium</th>' : ''}<th scope="col"></th></tr></thead><tbody>
   <?php foreach ($claims as $c) { ?><tr><th scope="row">${e('$name($c["listing"])')}</th><td>${e('$c["first"] . " " . $c["last"]')}<br><span class="hint">${e('$c["email"]')}<?php if (isset($c["domain"]) && $c["domain"] === 'by hand') { ?> · given by hand<?php } ?></span></td><td>${e('$day($c["created"])')}</td>${GROUPS.premium !== 'off' ? `<td><?php if (in_array($c["listing"], $ALWAYS, true)) { ?><b>Premium</b><br><span class="hint">always: a test listing</span><?php } elseif (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since ${e('$day($premium[$c["listing"]])')}</span>${form('$c["id"]', act('premium_off', 'Turn off'))}<?php } else { ?><?php if (isset($asks[(int) $c["id"]])) { ?><b>Signed up: <?php echo $asks[(int) $c["id"]]["plan"] === 'year' ? 'yearly' : 'monthly'; ?></b><br><span class="hint">${e('$day($asks[(int) $c["id"]]["created"])')}</span><?php } ?>${form('$c["id"]', act('premium_on', 'Make it premium'))}<?php } ?></td>` : ''}<td>${form('$c["id"]', act('claim_remove', 'Take the claim away'))}</td></tr><?php } ?>
   </tbody></table></div>
@@ -4268,7 +4289,11 @@ $NAMES = json_decode('${names}', true);
 $name = function ($key) use ($NAMES) { return isset($NAMES[$key]) ? $NAMES[$key] : $key . ' (no longer on the site)'; };
 $NAMES_AZ = $NAMES; asort($NAMES_AZ, SORT_NATURAL | SORT_FLAG_CASE);
 $day = function ($t) { $d = new DateTime('@' . (int) $t); $d->setTimezone(new DateTimeZone('America/New_York')); return $d->format('M j, Y'); };
-$pinText = function ($x) { if ($x['kind'] !== 'pin') return $x['body']; $p = json_decode($x['body'], true); if (!is_array($p)) return $x['body']; $cols = array('red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'violet', 'pink', 'gray'); return 'Name: ' . $p['n'] . "\nColor: " . (isset($cols[(int) $p['c']]) ? $cols[(int) $p['c']] : '?') . "\nPicture: " . $p['i']; };
+$kindName = function ($k, $waiting) { return $k === 'offer' ? 'Offer or event line' : ($k === 'pin' ? ($waiting ? 'Kids’ Playground pin (kids see it only after going there)' : 'Kids’ Playground pin') : ($k === 'social' ? 'Social links' : ($k === 'posts' ? 'Instagram posts (parents tap to load them)' : 'In their own words'))); };
+$extraLinks = function ($x) { $v = json_decode($x['body'], true); return is_array($v) ? array_values(array_filter($v, function ($u) { return is_string($u) && preg_match('~^https://~', $u); })) : array(); };
+$pinText = function ($x) { if ($x['kind'] === 'social') { $v = json_decode($x['body'], true); $n = array('ig' => 'Instagram', 'fb' => 'Facebook', 'tt' => 'TikTok', 'yt' => 'YouTube'); $out = array(); foreach (is_array($v) ? $v : array() as $k => $u) $out[] = (isset($n[$k]) ? $n[$k] : $k) . ': ' . $u; return implode("\n", $out); }
+  if ($x['kind'] === 'posts') { $v = json_decode($x['body'], true); return is_array($v) ? implode("\n", $v) : $x['body']; }
+  if ($x['kind'] !== 'pin') return $x['body']; $p = json_decode($x['body'], true); if (!is_array($p)) return $x['body']; $cols = array('red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'violet', 'pink', 'gray'); return 'Name: ' . $p['n'] . "\nColor: " . (isset($cols[(int) $p['c']]) ? $cols[(int) $p['c']] : '?') . "\nPicture: " . $p['i']; };
 $csrf = hash_hmac('sha256', 'claims-form', edit_key());
 $said = isset($_GET['said']) && is_string($_GET['said']) ? substr($_GET['said'], 0, 200) : '';
 $file = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-data/groups.sqlite';
@@ -4397,16 +4422,16 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
       $st = $db->prepare('SELECT e.id, e.listing, e.kind, e.status, u.email, u.first FROM extras e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.id = ?'); $st->execute(array($id)); $x = $st->fetch();
       if ($x) {
-        $n = $name($x['listing']); $what = $x['kind'] === 'offer' ? 'offer line' : ($x['kind'] === 'pin' ? 'Kids’ Playground pin' : 'section in your own words');
+        $n = $name($x['listing']); $what = $x['kind'] === 'offer' ? 'offer line' : ($x['kind'] === 'pin' ? 'Kids’ Playground pin' : ($x['kind'] === 'social' ? 'social links' : ($x['kind'] === 'posts' ? 'Instagram posts' : 'section in your own words'))); $are = $x['kind'] === 'social' || $x['kind'] === 'posts' ? 'are' : 'is';
         if ($do === 'extra_ok') {
           $db->prepare("DELETE FROM extras WHERE listing = ? AND kind = ? AND status = 'ok' AND id != ?")->execute(array($x['listing'], $x['kind'], $id));   // the newer one takes its place
           $db->prepare("UPDATE extras SET status = 'ok', decided = ? WHERE id = ?")->execute(array(time(), $id));
-          tell($x['email'], 'Your ' . $what . ' for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",\n\nThe " . $what . ' you wrote for “' . $n . '” is on the listing now.' . ($PREMIUM === 'preview' ? ' For now only you can see it there, while premium listings are being tried out.' : '') . ' You can change it or take it down here:' . "\n" . $SITE_URL . '/managers/');
+          tell($x['email'], 'Your ' . $what . ' for ' . $n . ' ' . $are . ' on the site', 'Hi ' . $x['first'] . ",\n\nThe " . $what . ' you ' . ($are === 'are' ? 'sent' : 'wrote') . ' for “' . $n . '” ' . $are . ' on the listing now.' . ($PREMIUM === 'preview' ? ' For now only you can see it there, while premium listings are being tried out.' : '') . ' You can change it or take it down here:' . "\n" . $SITE_URL . '/managers/');
           $msg = 'Published, and they’ve been told.';
         } else {
           $was = $x['status'];
           $db->prepare("UPDATE extras SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), $id));
-          tell($x['email'], 'About the ' . $what . ' for ' . $n, 'Hi ' . $x['first'] . ",\n\nWe " . ($was === 'ok' ? 'have taken down' : 'weren’t able to publish') . ' the ' . $what . ' you wrote for “' . $n . '”. ' . ($x['kind'] === 'pin' ? 'A pin’s name should be the program’s name or a short, kid-friendly title, with no prices, offers or web addresses.' : 'It should describe the program in plain words, with no prices that differ from the listing and no claims about other programs.') . ' You’re welcome to send another, or reply to this email with any questions.');
+          tell($x['email'], 'About the ' . $what . ' for ' . $n, 'Hi ' . $x['first'] . ",\n\nWe " . ($was === 'ok' ? 'have taken down' : 'weren’t able to publish') . ' the ' . $what . ' you ' . ($are === 'are' ? 'sent' : 'wrote') . ' for “' . $n . '”. ' . ($x['kind'] === 'pin' ? 'A pin’s name should be the program’s name or a short, kid-friendly title, with no prices, offers or web addresses.' : ($x['kind'] === 'social' ? 'Social links should go to the program’s own accounts.' : ($x['kind'] === 'posts' ? 'Instagram posts should be public posts from the program’s own account that are fine for families to see on the site.' : 'It should describe the program in plain words, with no prices that differ from the listing and no claims about other programs.'))) . ' You’re welcome to send another, or reply to this email with any questions.');
           $msg = $was === 'ok' ? 'Taken down, and they’ve been told.' : 'Declined, and they’ve been told.';
         }
       }
@@ -5597,18 +5622,21 @@ const mapHood = (() => {
     return id;
   };
   fn.missed = missed;
+  fn.byName = name => { if (!name) return null; const sl = hoodSlug(name); return ids.has(sl) ? sl : MAP_ALIAS[sl] && ids.has(MAP_ALIAS[sl]) ? MAP_ALIAS[sl] : null; };
   return fn;
 })();
 // The map's secret spots. The city is in areas, each with a few famous things that start as a "?" and unlock as a
-// child goes to more classes nearby: the first with one, the next with two, the last with three. Each neighborhood on
-// the map belongs to one area (or none): the area whose middle is nearest the neighborhood's middle, within 5 km, with
-// AREA_FIX for the few that distance gets wrong. A class counts for its neighborhood's area, so the rule is one a
-// parent can check ("classes in these neighborhoods"), and Kids' Playground colors them in on a pin's close-up. The map's own landmarks (data/philly-map.json) are most of them;
-// MAP_EXTRA places the rest by latitude and longitude. kids-corner.js draws each one and says something about it.
+// child goes to more classes nearby: the first with one, the next with two, the last with three. Each area is the
+// neighborhoods Philadelphians would call it, by name (AREA_HOODS): South Philly is below South Street, Center City is
+// Vine to South between the rivers (less Old City, Society Hill and the Parkway's Logan Square), and so on. A class
+// counts for its neighborhood's area, so the rule is one a parent can check; a neighborhood in no area (West Philly,
+// North Philly, the River Wards for now) counts for none. The map's own landmarks (data/philly-map.json) are most of the
+// famous things; MAP_EXTRA places the rest by latitude and longitude. kids-corner.js draws each one and says something
+// about it.
 const MAP_AREAS = [
   { id: 'parkway', name: 'the Art Museum and the Parkway', mark: 'the Art Museum', at: [39.9680, -75.1850], items: ['art-museum', 'boathouses', 'zoo'] },
   { id: 'center', name: 'Center City', mark: 'City Hall', at: [39.9530, -75.1680], items: ['city-hall', 'love', 'franklin'] },
-  { id: 'oldcity', name: 'Old City', mark: 'the Liberty Bell', at: [39.9510, -75.1440], items: ['liberty-bell', 'elfreth', 'bridge'] },
+  { id: 'oldcity', name: 'Old City and Society Hill', mark: 'the Liberty Bell', at: [39.9510, -75.1440], items: ['liberty-bell', 'elfreth', 'bridge'] },
   { id: 'south', name: 'South Philly', mark: 'the cheesesteak shops', at: [39.9250, -75.1650], items: ['cheesesteak', 'italian-market', 'stadiums'] },
   { id: 'northwest', name: 'Northwest Philly', mark: 'the Wissahickon', at: [40.0400, -75.2150], items: ['wissahickon', 'covered-bridge'] },
   { id: 'southwest', name: 'Southwest Philly', mark: 'the wildlife refuge', at: [39.8950, -75.2300], items: ['heinz', 'airport'] },
@@ -5618,22 +5646,38 @@ const MAP_EXTRA = {
   elfreth: ['Elfreth’s Alley', 39.9527, -75.1425], 'italian-market': ['The Italian Market', 39.9380, -75.1580], 'covered-bridge': ['The covered bridge', 40.0647, -75.2177],
   heinz: ['The wildlife refuge', 39.8920, -75.2570], pennypack: ['Pennypack Park', 40.0640, -75.0500],
 };
-const AREA_FIX = { 'bella-vista': 'south' };   // the Italian Market is in Bella Vista
+const AREA_HOODS = {
+  parkway: ['fairmount', 'spring-garden', 'logan-square', 'east-park'],
+  center: ['center-city-east', 'chinatown', 'rittenhouse', 'fitler-square', 'washington-square-west'],
+  oldcity: ['old-city', 'society-hill'],
+  south: ['queen-village', 'bella-vista', 'hawthorne', 'graduate-hospital', 'pennsport', 'dickinson-narrows', 'passyunk-square',
+    'east-passyunk', 'point-breeze', 'newbold', 'west-passyunk', 'girard-estates', 'lower-moyamensing', 'whitman', 'greenwich',
+    'packer-park', 'stadium-district', 'navy-yard', 'grays-ferry', 'riverfront'],
+  northwest: ['chestnut-hill', 'west-mount-airy', 'east-mount-airy', 'cedarbrook', 'blue-bell-hill', 'germantown-morton',
+    'germantown-penn-knox', 'germantown-westside', 'west-central-germantown', 'southwest-germantown', 'east-germantown', 'wister',
+    'roxborough', 'upper-roxborough', 'roxborough-park', 'manayunk', 'wissahickon', 'wissahickon-hills', 'wissahickon-park',
+    'andorra', 'dearnley-park', 'germany-hill', 'east-falls'],
+  southwest: ['kingsessing', 'elmwood', 'eastwick', 'paschall', 'southwest-schuylkill', 'bartram-village', 'penrose', 'clearview',
+    'airport', 'industrial'],
+  northeast: ['mayfair', 'holmesburg', 'tacony', 'wissinoming', 'oxford-circle', 'rhawnhurst', 'fox-chase', 'bustleton', 'somerton',
+    'torresdale', 'west-torresdale', 'pennypack', 'pennypack-park', 'pennypack-woods', 'burholme', 'crestmont-farms', 'academy-gardens',
+    'aston-woodbridge', 'lexington-park', 'millbrook', 'modena', 'morrell-park', 'normandy-village', 'byberry', 'winchester-park',
+    'parkwood-manor', 'mechanicsville', 'franklin-mills', 'northeast-phila-airport', 'frankford', 'crescentville', 'lawndale',
+    'summerdale', 'northwood'],
+};
 const HOOD_AREA = (() => {
-  if (!PHILLY) return {};
-  const { lon0, lat1, cos, k, pad } = PHILLY.proj;
-  const back = c => [lat1 - (c[1] - pad) / k, lon0 + (c[0] - pad) / (cos * k)];   // a point on the map, as latitude and longitude
-  const km = (a, b) => Math.hypot((a[0] - b[0]) * 111.2, (a[1] - b[1]) * 111.2 * Math.cos(a[0] * Math.PI / 180));
-  const ids = new Set(PHILLY.hoods.map(h => h.id));
-  for (const id of Object.keys(AREA_FIX)) if (!ids.has(id)) console.log(`Note: AREA_FIX in build.mjs names "${id}", which isn't a neighborhood on the Kids' Playground map.`);
-  return Object.fromEntries(PHILLY.hoods.map(h => {
-    if (h.id in AREA_FIX) return [h.id, AREA_FIX[h.id]];
-    const at = back(h.c); let best = '', near = 5;
-    for (const a of MAP_AREAS) { const d = km(at, a.at); if (d < near) { near = d; best = a.id; } }
-    return [h.id, best];
-  }));
+  const out = {}, ids = new Set(PHILLY ? PHILLY.hoods.map(h => h.id) : []);
+  for (const [area, hoods] of Object.entries(AREA_HOODS)) for (const id of hoods) {
+    if (PHILLY && !ids.has(id)) console.log(`Note: AREA_HOODS in build.mjs names "${id}" (${area}), which isn't a neighborhood on the Kids' Playground map.`);
+    if (out[id]) console.log(`Note: AREA_HOODS in build.mjs puts "${id}" in both ${out[id]} and ${area}.`);
+    out[id] = area;
+  }
+  return out;
 })();
-const mapArea = (ll, hood) => (hood && HOOD_AREA[hood]) || '';
+// A site's area goes by the neighborhood the program itself names (what parents see on its page: Everland's "Queen
+// Village" is South Philly, though its address is a few doors north of South Street), when that's one on the map; else
+// by the neighborhood its address falls in.
+const mapArea = (ll, hood, name) => { const named = mapHood.byName ? mapHood.byName(name) : null; return (named ? HOOD_AREA[named] : hood && HOOD_AREA[hood]) || ''; };
 const mapAreas = () => {
   if (!PHILLY) return [];
   const { lon0, lat1, cos, k, pad } = PHILLY.proj, r1 = n => Math.round(n * 10) / 10;
@@ -5714,6 +5758,22 @@ const KIDS_ICON2 = {
   cross: ['M10.5 2H13.5V22H10.5Z', 'M2 12L6 8V10.5H18V8L22 12L18 16V13.5H6V16Z'],
   kite: ['M12 1L18 9L12 17L6 9Z M13 4L10 9.5H12L11 14L14.5 8H12.4Z', 'M11.4 16.5H12.6V23H11.4Z', 'M9 19L11.4 19.6V20.8L9 21.4Z', 'M15 21L12.6 21.6V22.8L15 23.4Z'],
   jay: ['M9 3H19V6H16V15C16 19 13.5 21.5 9.5 21.5C6.5 21.5 4 19.5 4 16H7.5C7.5 17.5 8.3 18.3 9.5 18.3C11.3 18.3 12.5 17 12.5 15V6H9Z', kidsStar(20.5, 17.5, 3.2), kidsStar(4.5, 6, 2.6)],
+  // Eddie with his boxing gloves up: the bulb (eyes and smile cut out), its base, and on each side a glove (the thumb a cut)
+  // and its cuff
+  gloves: [
+    'M12 2C15.6 2 18 4.8 18 8.4C18 10.9 16.8 12.3 15.5 13.6C14.9 14.2 14.6 14.8 14.6 15.4H9.4C9.4 14.8 9.1 14.2 8.5 13.6C7.2 12.3 6 10.9 6 8.4C6 4.8 8.4 2 12 2Z M9.9 6.6499999999999995A0.95 0.95 0 1 0 9.9 8.549999999999999A0.95 0.95 0 1 0 9.9 6.6499999999999995Z M14.1 6.6499999999999995A0.95 0.95 0 1 0 14.1 8.549999999999999A0.95 0.95 0 1 0 14.1 6.6499999999999995Z M9.3 10.1Q12 13.3 14.7 10.1Q12 11.7 9.3 10.1Z',
+    'M9.3 16.1H14.7V17.6H9.3Z M9.8 18.4H14.2V19.6Q12 21.5 9.8 19.6Z',
+    'M0.3 7.3C0.3 4.9 1.8 3.4 3.4 3.4C5 3.4 5.7 4.7 5.7 6.6C5.7 8.4 5.3 9.4 4.8 10.2V12.4H1.2V10.4C0.6 9.6 0.3 8.6 0.3 7.3Z M5.2 7.3Q3.3 7.8 3.2 10.4H3.9Q4.1 8.5 5.3 8.1Z',
+    'M0.6 13.1H5.3V15.4H0.6Z',
+    'M23.7 7.3C23.7 4.9 22.2 3.4 20.6 3.4C19 3.4 18.3 4.7 18.3 6.6C18.3 8.4 18.7 9.4 19.2 10.2V12.4H22.8V10.4C23.4 9.6 23.7 8.6 23.7 7.3Z M18.8 7.3Q20.7 7.8 20.8 10.4H20.1Q19.9 8.5 18.7 8.1Z',
+    'M23.4 13.1H18.7V15.4H23.4Z'],
+  // Bingo: a card with its winning diagonal daubed; a new pin; a pin going up; a new level; a keystone (a secret pin)
+  bingo: ['M1 1H23V23H1Z M3 3H21V21H3Z', 'M3 8.6H21V10H3Z M3 14H21V15.4H3Z', 'M8.6 3H10V21H8.6Z M14 3H15.4V21H14Z', kidsDot(5.8, 5.8, 2.1), kidsDot(12, 12, 2.1), kidsDot(18.2, 18.2, 2.1)],
+  newpin: [kidsDot(12, 12, 10.5) + ' ' + kidsDot(12, 12, 8), kidsStar(12, 12.6, 6)],
+  pinup: [kidsStar(12, 15.2, 7.6), 'M12 0.5L17 5.5H14V8.5H10V5.5H7Z'],
+  bolt: ['M13.5 1L3.5 13.5H11L9.5 23L20.5 9.5H13Z'],
+  star: [kidsStar(12, 12.8, 11)],
+  keystone: ['M2 2H22L20 7H23L18 22H6L1 7H4Z M10.2 9.6C10.2 8.4 11 7.6 12.2 7.6C13.5 7.6 14.3 8.4 14.3 9.5C14.3 11.2 12.7 11.3 12.7 13.2H11.4C11.4 10.8 13 10.8 13 9.6C13 9.1 12.7 8.8 12.2 8.8C11.6 8.8 11.4 9.2 11.4 9.6Z M12.05 14.3A0.85 0.85 0 1 0 12.05 16A0.85 0.85 0 1 0 12.05 14.3Z'],
 };
 const KIDS_PINS = [
   ...TYPES.map(t => ({ id: 'type:' + t.id, group: 'type', label: (KIDS_PIN[t.id] || [t.label])[0], one: (KIDS_PIN[t.id] || [, t.label.toLowerCase()])[1], many: (KIDS_PIN[t.id] || [, , t.label.toLowerCase()])[2], color: t.color, icon: t.icon, tiers: [1, 3, 5, 8, 12] })),
@@ -5721,9 +5781,9 @@ const KIDS_PINS = [
   { id: 'season:weekend', group: 'season', label: 'Weekend Warrior', one: 'weekend class', many: 'weekend classes', color: '#6B3FA0', icon: KIDS_ICON.calendar, tiers: [1, 3, 5, 8, 12] },
   { id: 'season:off', group: 'season', label: 'Day-Off Daredevil', one: 'day-off camp', many: 'day-off camps', color: '#0E7C86', icon: KIDS_ICON.snow, tiers: [1, 3, 5, 8, 12] },
   { id: 'season:summer', group: 'season', label: 'Summer Superstar', one: 'week of summer camp', many: 'weeks of summer camp', color: '#C2410C', icon: KIDS_ICON.sun, tiers: [1, 3, 5, 8, 12] },
-  { id: 'explore', group: 'explore', label: 'Neighborhood Hopper', one: 'neighborhood', many: 'neighborhoods', color: '#1F7A3A', icon: KIDS_ICON.compass, tiers: [2, 4, 6, 9, 12] },
+  { id: 'explore', group: 'explore', label: 'Neighborhood Hopper', one: 'neighborhood', many: 'neighborhoods', color: '#1F7A3A', icon: KIDS_ICON.compass, tiers: [2, 4, 6, 9, 12], get: 'Go to classes in different neighborhoods to get this pin!' },
   // going back: each day a week a program meets, each term or year, each week of the same camp, after the first
-  { id: 'repeat', group: 'repeat', label: 'Repeater Reward', one: 'repeat', many: 'repeats', color: '#CC3000', icon: KIDS_ICON.repeat, tiers: [1, 5, 10, 15, 25] },
+  { id: 'repeat', group: 'repeat', label: 'Repeater Reward', one: 'repeat', many: 'repeats', color: '#CC3000', icon: KIDS_ICON.repeat, tiers: [1, 5, 10, 15, 25], get: 'Go back to a class you’ve been to before to get this pin!' },
   // the newer ones, counted in stats() by "how"
   ...[
     ['pin:year-rounder', 'season', 'Year-Rounder', 'year', '#2B8A3E', [2, 3, 4, 6, 8], 'season', 'seasons', 'Do after school, a weekend class, a day-off camp or summer camp. Each kind in each school year counts!'],
@@ -5741,21 +5801,59 @@ const KIDS_PINS = [
     ['pin:pickup-pro', 'repeat', 'Pickup Pro', 'bus', '#E67700', [1, 2, 3, 5, 8], 'class that picked you up', 'classes that picked you up', 'Go to a class that picks you up from school!'],
   ].map(([id, group, label, icon, color, tiers, one, many, get]) => ({ id, group, label, one, many, color, icon: KIDS_ICON2[icon], eo: 1, tiers, how: id.slice(4), get })),
   // The secret Philly pins: a "?" and a riddle until found; then the plain rule ("rule") says how to level up. Most are a
-  // mix of a kind of class and a part of the Kids' Playground map ("mix:type:area": the pairs are the fewer of the two,
-  // so one music class around Old City is a pair by itself); a class counts for its neighborhood's area (HOOD_AREA).
+  // mix of a kind of class and a part of the Kids' Playground map ("mix:type:area", or "mix:type:area:area" for Bulboa
+  // Knockout's rounds: the count is the fewest of them, so one music class in Old City is a pair by itself); a class
+  // counts for its neighborhood's area (AREA_HOODS).
   ...[
-    ['liberty-bell', 'Liberty Bell Ringer', 'bell', '#8C4A1E', 'mix:music:oldcity', [1, 2, 3, 5, 8], 'music + Old City pair', 'music + Old City pairs', 'Somewhere old, a famous bell has a crack in it… and it wants some music!', 'Do a music class AND a class around Old City. Each pair counts!', ['Music', 'Around Old City']],
-    ['franklin-kite', 'Ben Franklin’s Kite', 'kite', '#F59F00', 'mix:stem:oldcity', [1, 2, 3, 5, 8], 'science + Old City pair', 'science + Old City pairs', 'Ben Franklin flew a kite in a storm. Do what he loved, near where he lived…', 'Do a science class AND a class around Old City. Each pair counts!', ['Science', 'Around Old City']],
-    ['billy-penn', 'Billy Penn’s Hat', 'hat', '#495057', 'mix:theater:center', [1, 2, 3, 5, 8], 'theater + Center City pair', 'theater + Center City pairs', 'Look up! Someone in a big hat on City Hall watches the shows below…', 'Do a theater class AND a class around Center City. Each pair counts!', ['Theater', 'Around Center City']],
+    ['liberty-bell', 'Liberty Bell Ringer', 'bell', '#8C4A1E', 'mix:music:oldcity', [1, 2, 3, 5, 8], 'music + Old City pair', 'music + Old City pairs', 'Somewhere old, a famous bell has a crack in it… and it wants some music!', 'Do a music class AND a class in Old City or Society Hill. Each pair counts!', ['Music', 'In Old City or Society Hill']],
+    ['franklin-kite', 'Ben Franklin’s Kite', 'kite', '#F59F00', 'mix:stem:oldcity', [1, 2, 3, 5, 8], 'science + Old City pair', 'science + Old City pairs', 'Ben Franklin flew a kite in a storm. Do what he loved, near where he lived…', 'Do a science class AND a class in Old City or Society Hill. Each pair counts!', ['Science', 'In Old City or Society Hill']],
+    ['billy-penn', 'Billy Penn’s Hat', 'hat', '#495057', 'mix:theater:center', [1, 2, 3, 5, 8], 'theater + Center City pair', 'theater + Center City pairs', 'Look up! Someone in a big hat on City Hall watches the shows below…', 'Do a theater class AND a class in Center City. Each pair counts!', ['Theater', 'In Center City']],
     ['cheesesteak', 'Cheesesteak Champ', 'hoagie', '#C92A2A', 'mix:games:south', [1, 2, 3, 5, 8], 'games + South Philly pair', 'games + South Philly pairs', 'Wit or witout? A champ in South Philly plays to win…', 'Do a games class AND a class in South Philly. Each pair counts!', ['Games', 'In South Philly']],
-    ['boathouse', 'Boathouse Rower', 'oars', '#1864AB', 'mix:movement:parkway', [1, 2, 3, 5, 8], 'sports + Art Museum pair', 'sports + Art Museum pairs', 'Down by the river, where the boathouses light up at night… grab an oar!', 'Do a sports class AND a class around the Art Museum. Each pair counts!', ['Sports', 'Around the Art Museum']],
+    ['boathouse', 'Boathouse Rower', 'oars', '#1864AB', 'mix:movement:parkway', [1, 2, 3, 5, 8], 'sports + Art Museum pair', 'sports + Art Museum pairs', 'Down by the river, where the boathouses light up at night… grab an oar!', 'Do a sports class AND a class near the Art Museum: in Fairmount, Spring Garden or along the Parkway. Each pair counts!', ['Sports', 'Near the Art Museum']],
     ['wissahickon', 'Wissahickon Wanderer', 'pine', '#2B8A3E', 'mix:nature:northwest', [1, 2, 3, 5, 8], 'nature + Northwest pair', 'nature + Northwest pairs', 'Deep in the woods of Northwest Philly, something wild is waiting…', 'Do a nature class AND a class in Northwest Philly. Each pair counts!', ['Nature', 'In Northwest Philly']],
     ['heron', 'Heron Spotter', 'bird', '#0C8599', 'mix:nature:southwest', [1, 2, 3, 5, 8], 'nature + Southwest pair', 'nature + Southwest pairs', 'Tall birds wade in the marsh in Southwest Philly… go outside and look!', 'Do a nature class AND a class in Southwest Philly. Each pair counts!', ['Nature', 'In Southwest Philly']],
     ['pennypack', 'Pennypack Pathfinder', 'feet', '#5C940D', 'mix:movement:northeast', [1, 2, 3, 5, 8], 'sports + Northeast pair', 'sports + Northeast pairs', 'A trail through the trees, way up in Northeast Philly… run it!', 'Do a sports class AND a class in Northeast Philly. Each pair counts!', ['Sports', 'In Northeast Philly']],
+    ['bulboa-knockout', 'Bulboa Knockout', 'gloves', '#D9480F', 'mix:movement:south:parkway', [1, 2, 3, 5, 8], 'round', 'rounds', 'A champ trains in South Philly, then runs all the way up the Art Museum steps… gloves on!', 'A round is a sports class, a class in South Philly AND a class near the Art Museum (in Fairmount, Spring Garden or along the Parkway). Each round counts!', ['Sports', 'In South Philly', 'Near the Art Museum']],
     ['broad-street', 'Broad Street Crosser', 'cross', '#E03131', 'broad', [1, 2, 3, 5, 8], 'class on each side of Broad Street', 'classes on each side of Broad Street', 'One long street cuts Philly down the middle. Try both sides!', 'Go to a class on each side of Broad Street, the long street down the middle of Philly. Each east-and-west pair counts!'],
     ['jawn', 'Jawn Collector', 'jay', '#7048E8', 'jawn', [3, 6, 10, 15, 20], 'different program', 'different programs', 'Collect a whole lotta jawns: lots of different programs!', 'Go to lots of different programs. Each new one counts!'],
   ].map(([id, label, icon, color, how, tiers, one, many, hint, rule, parts]) => ({ id: 'philly:' + id, group: 'philly', label, one, many, color, icon: KIDS_ICON2[icon], eo: 1, tiers, how, hint, rule, ...(parts ? { parts } : {}), secret: 1 })),
 ];
+// Bingo: a card for each school year ("y") and one for each summer ("s"), the squares in reading order (Eddie's free
+// square goes in the middle, after the twelfth). What makes each one is worked out in kids-corner.js (bingo()): the
+// classes a parent confirmed for that school year or that summer, and six things done on the page itself that season
+// (a showdown, a new look for the bulb, a new pin, a pin going up a level, a new level, a secret pin found). The easy
+// diagonal (the first class, after school or a second camp, the free square, a new pin, a new look) comes early; the
+// whole card takes a busy year. Each square: [id, label on the card, what Eddie says, icon].
+const kidsIcon = n => KIDS_ICON2[n] || KIDS_ICON[n] || (TYPES.find(t => t.id === n) || {}).icon;
+const BINGO_ANY = {   // the squares both cards share
+  spot: ['Secret spot', 'Find a secret spot on your map!', 'glass'], surprise: ['Surprise!', 'Find a surprise on your map!', 'gift'],
+  newhood: ['New place', 'Go to a class in a neighborhood you’ve never been to!', 'compass'], hoods2: ['2 places', 'Go to classes in 2 different neighborhoods!', 'map'],
+  broad: ['Cross Broad St.', 'Go to classes on both sides of Broad Street, the long street down the middle of Philly!', 'cross'],
+  showdown: ['Showdown', 'Play a showdown and pick your favorite!', 'trophy'], look: ['New look', 'Give your bulb a new look: a new color, a new shape, or something to wear!', 'hat'],
+  newpin: ['New pin', 'Get a brand-new pin!', 'newpin'], pinup: ['Pin goes up', 'Make a pin go up a level, like bronze to silver!', 'pinup'],
+  levelup: ['Level up', 'Go up a level!', 'bolt'], secretpin: ['Secret pin', 'Find a secret Philly pin!', 'keystone'],
+};
+const bingoCard = (order, own) => order.map(id => { const [label, say, icon] = own[id] || BINGO_ANY[id]; return { id, label, say, icon: [].concat(kidsIcon(icon)), ...(KIDS_ICON2[icon] ? { eo: 1 } : {}) }; });
+const KIDS_BINGO = {
+  y: bingoCard(['first', 'arts', 'weekend', 'spot', 'levelup', 'surprise', 'after', 'brainy', 'dayoffs2', 'hoods2', 'dayoff', 'newhood', 'showdown', 'school', 'progs3', 'move', 'secretpin', 'newpin', 'broad', 'pinup', 'play', 'kinds2', 'days3', 'look'], {
+    first: ['First class', 'Go to your first class this school year!', 'star'], after: ['After school', 'Go to an after-school program!', 'backpack'],
+    dayoff: ['Day-off camp', 'Go to a camp on a day off from school!', 'snow'], dayoffs2: ['2 days off', 'Go to camp on 2 days off from school!', 'year'],
+    weekend: ['Weekend class', 'Go to a class on a Saturday or a Sunday!', 'calendar'], days3: ['3 days a week', 'Go to the same program 3 days a week!', 'repeat'],
+    kinds2: ['2 kinds', 'Try 2 different kinds of classes!', 'palette'], progs3: ['3 programs', 'Go to 3 different programs this year!', 'stars3'],
+    move: ['Sports or dance', 'Go to a sports or dance class!', 'movement'], arts: ['Art or music', 'Go to an art, music or theater class!', 'art'],
+    brainy: ['Brainy class', 'Go to a science, nature or reading class!', 'stem'], play: ['Games or club', 'Go to a games club, a school club or a rec center!', 'games'],
+    school: ['At your school', 'Go to a class right in your school, or one that picks you up there!', 'house'],
+  }),
+  s: bingoCard(['first', 'arts', 'camps3', 'spot', 'levelup', 'surprise', 'camps2', 'brainy', 'same2', 'areas2', 'weeks3', 'newhood', 'showdown', 'kinds2', 'play', 'move', 'secretpin', 'newpin', 'broad', 'pinup', 'weeks6', 'hoods2', 'kinds3', 'look'], {
+    first: ['First camp', 'Go to your first week of summer camp!', 'sun'], camps2: ['2 camps', 'Go to 2 different summer camps!', 'daycamp'],
+    camps3: ['3 camps', 'Go to 3 different summer camps!', 'stars3'], weeks3: ['3 weeks', 'Go to 3 weeks of summer camp!', 'sun'],
+    weeks6: ['6 weeks', 'Go to 6 weeks of summer camp. That’s most of the summer!', 'sun'], same2: ['Same camp twice', 'Go back to the same camp for a second week!', 'repeat'],
+    kinds2: ['2 kinds', 'Try 2 different kinds of camp!', 'palette'], kinds3: ['3 kinds', 'Try 3 different kinds of camp!', 'flaskbrush'],
+    areas2: ['2 parts of Philly', 'Go to camps in 2 different parts of Philly!', 'feet'],
+    move: ['Sports or dance', 'Go to a sports or dance camp!', 'movement'], arts: ['Art or music', 'Go to an art, music or theater camp!', 'art'],
+    brainy: ['Brainy camp', 'Go to a science, nature or reading camp!', 'stem'], play: ['Games or rec', 'Go to a games camp, a club or a rec center camp!', 'games'],
+  }),
+};
 // What Kids' Playground works from: the listings (name, kinds, sites on the map), the schools, the pins, and where things
 // are. One copy, for pages one folder down: inline on Kids' Playground, and as assets/kids-corner.json for the Kids'
 // Playground tab on the account page, which loads it only when that tab is opened.
@@ -5766,7 +5864,7 @@ function kidsData() {
   const listings = {};
   // A listing's sites: its neighborhoods, each with a point when the addresses line up with them one to one, and the
   // neighborhood on the map ("m"). A listing with several sites lands on the map once a parent says which site.
-  const sites = (hoods, lls) => hoods.map((h, i) => { const ll = hoods.length === 1 ? (lls[0] || null) : hoods.length === lls.length ? lls[i] : null, m = mapHood(ll, h), a = mapArea(ll, m); return a ? { h, ll, m, a } : { h, ll, m }; });
+  const sites = (hoods, lls) => hoods.map((h, i) => { const ll = hoods.length === 1 ? (lls[0] || null) : hoods.length === lls.length ? lls[i] : null, m = mapHood(ll, h), a = mapArea(ll, m, h); return a ? { h, ll, m, a } : { h, ll, m }; });
   for (const p of programs) {
     const r = Object.fromEntries(Object.entries(p.schools || {}).filter(([, x]) => x && (x.relation === 'onsite' || x.relation === 'pickup')).map(([id, x]) => [id, x.relation === 'onsite' ? 'o' : 'p']));
     listings['p:' + p.id] = { n: p.name, t: p.types || [], sites: sites(programHoods(p), placesOf(p)), ...(Object.keys(r).length ? { r } : {}) };   // r: the schools it runs in ("o") or picks up from ("p")
@@ -5780,6 +5878,8 @@ function kidsData() {
     eddie: link('bulb.png', D) + stamp('src/static/bulb.png'),   // Eddie Bulboa, the bulb in the logo, who shows kids around
     listings, schools: schoolsOut, surprises: surpriseHoods(listings, schoolsOut),
     types: Object.fromEntries(TYPES.map(t => [t.id, { label: t.label, color: t.color, icon: t.icon }])), pins: KIDS_PINS,
+    // the bingo cards, the last day of school (the summer card starts the day after) and the Bingo Champ pin's picture
+    bingo: KIDS_BINGO, lastDay: daysOff ? daysOff.lastDay : '', bingoIcon: KIDS_ICON2.bingo,
     // the pictures a premium program can pick for its own pin (the server's PIN_ICONS)
     picons: { ...Object.fromEntries(TYPES.map(t => [t.id, t.icon])), star: kidsStar(12, 12.5, 10.5), heart: 'M12 21C5 15.5 2 12 2 8.2C2 5.3 4.3 3 7.1 3C9 3 10.8 4 12 5.6C13.2 4 15 3 16.9 3C19.7 3 22 5.3 22 8.2C22 12 19 15.5 12 21Z', bolt: 'M13 2L4 14H11L10 22L20 9H13Z' },
     kinds: { after: 'After school', weekend: 'Weekend class', off: 'Day-off camp', summer: 'Summer camp' },
@@ -5825,7 +5925,7 @@ const kidsHow = (D, onKidsPage = false) => `  <section class="section">
     <ul>
       <li>${T(`A page for each child on your account, by first name. No child signs in and nothing is typed by a child: it’s the parent’s account, handed over for a look. Each child picks a lightbulb to be.`)}</li>
       <li>${T(`What counts is what you confirm. The page suggests from your kept week, your summer and your days off (“Did Sam go to chess club this year?”), and you say yes or no. You can add anything the plans missed.`)}</li>
-      <li>${T(`From that come pins for each kind of program, each season and the neighborhoods, which go from bronze to silver, gold, emerald and diamond and get grander each time; pins for exploring the city, for combos of kinds of classes and for going back to a class they love (each day a week, each term, each week of the same camp); ten secret Philly pins that stay a mystery until they’re found; a level that goes up and unlocks things for their bulb to wear; a map of Philadelphia whose clouds clear where they have been, with a surprise or two in each neighborhood and secret spots that turn up as they go to more classes nearby; and showdowns where they pick which class they had more fun at, two at a time, and the ones they pick come first when you plan the next term.`)}</li>
+      <li>${T(`From that come pins for each kind of program, each season and the neighborhoods, which go from bronze to silver, gold, emerald and diamond and get grander each time; pins for exploring the city, for combos of kinds of classes and for going back to a class they love (each day a week, each term, each week of the same camp); eleven secret Philly pins that stay a mystery until they’re found; a level that goes up and unlocks things for their bulb to wear; a bingo card for each school year and each summer, where five in a row wins something for the bulb and the whole card a diamond pin and a certificate to print; a map of Philadelphia whose clouds clear where they have been, with a surprise or two in each neighborhood and secret spots that turn up as they go to more classes nearby; and showdowns where they pick which class they had more fun at, two at a time, and the ones they pick come first when you plan the next term.`)}</li>
       <li>${T(`Nothing on this page is counted, recorded or sent anywhere. It has no link of its own to share: a picture of the pins, with no name and no map, is the only thing that leaves it.`)}</li>
     </ul>
     <div class="actions when-out"><a class="btn primary big" href="${link('register/', D)}?next=kids">${T(`Create a free account`)}</a><a class="btn big" href="${link('account/', D)}?next=kids">${T(`Log in`)}</a></div>${onKidsPage ? '' : `

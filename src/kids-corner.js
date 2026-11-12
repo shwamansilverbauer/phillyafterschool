@@ -30,6 +30,7 @@
   var NS = 'http://www.w3.org/2000/svg';
   var sv = function (tag, at, parent) { var e = document.createElementNS(NS, tag); if (at) for (var k in at) if (Object.prototype.hasOwnProperty.call(at, k) && at[k] !== undefined && at[k] !== null) e.setAttribute(k, at[k]); if (parent) parent.appendChild(e); return e; };
   var icon = function (path, color, cls) { var s = sv('svg', { viewBox: '0 0 24 24', 'aria-hidden': 'true', focusable: 'false', 'class': cls }); sv('path', { d: path, fill: color || 'currentColor' }, s); return s; };
+  var icons = function (paths, eo, cls) { var s = sv('svg', { viewBox: '0 0 24 24', 'aria-hidden': 'true', focusable: 'false', 'class': cls }); [].concat(paths).forEach(function (d) { sv('path', { d: d, fill: 'currentColor', 'fill-rule': eo === false ? null : 'evenodd' }, s); }); return s; };
   var possessive = function (n) { return /s$/i.test(n) ? n + '’' : n + '’s'; };
   var plural = function (n, one, many) { return n + ' ' + (n === 1 ? one : many); };
   var store = {
@@ -178,7 +179,10 @@
     { id: 'medal', slot: 'neck', name: 'Gold medal', lvl: 6 }, { id: 'wings', slot: 'back', name: 'Wings', lvl: 7 },
     { id: 'tophat', slot: 'hat', name: 'Top hat', lvl: 8 }, { id: 'rainbow', slot: 'glow', name: 'Rainbow', lvl: 8 },
     { id: 'jetpack', slot: 'back', name: 'Jetpack', lvl: 9 }, { id: 'goldbase', slot: 'base', name: 'Gold base', lvl: 10 },
-    { id: 'halo', slot: 'hat', name: 'Halo', lvl: 11 }, { id: 'galaxy', slot: 'glow', name: 'Galaxy glow', lvl: 12 }
+    { id: 'halo', slot: 'hat', name: 'Halo', lvl: 11 }, { id: 'galaxy', slot: 'glow', name: 'Galaxy glow', lvl: 12 },
+    // won at bingo, not by level: the first bingo, the second, the third (on any card), and a whole card
+    { id: 'partyhat', slot: 'hat', name: 'Party hat', bingo: 1 }, { id: 'balloons', slot: 'back', name: 'Balloons', bingo: 2 },
+    { id: 'confetti', slot: 'glow', name: 'Confetti', bingo: 3 }, { id: 'rosette', slot: 'neck', name: 'Champ ribbon', bingo: 'full' }
   ];
   var WEAR_BY = {}; WEAR.forEach(function (x) { WEAR_BY[x.id] = x; });
   // The families: a bulb, something to wear, what they show off as their special move, and what Eddie calls it.
@@ -226,6 +230,12 @@
     var wr = m.wear || {};
     if (wr.glow === 'galaxy') { sv('circle', { 'class': 'kc-glow', cx: 50, cy: ey + 8, r: 50, fill: '#1B2366', opacity: 0.9 }, g); [[14, 8], [84, 2], [92, 40], [8, 50], [30, -8], [70, -12], [88, 74], [12, 82], [50, -16]].forEach(function (q, i) { sv(i % 3 ? 'circle' : 'path', i % 3 ? { cx: q[0], cy: q[1], r: 1.8, fill: '#fff' } : { 'class': 'kc-twinkle', d: TWINKLE, transform: 'translate(' + q[0] + ' ' + q[1] + ') scale(.6)', fill: '#fff' }, g); }); }
     if (wr.glow === 'rainbow') [['#CC3000', 47], ['#F3C613', 42], ['#3FA34D', 37], ['#2176D2', 32]].forEach(function (c) { sv('path', { d: 'M' + (50 - c[1]) + ' ' + (ey + 16) + 'A' + c[1] + ' ' + c[1] + ' 0 0 1 ' + (50 + c[1]) + ' ' + (ey + 16), fill: 'none', stroke: c[0], 'stroke-width': 5, 'stroke-linecap': 'round' }, g); });
+    if (wr.glow === 'confetti') [[8, 4, '#CC3000', 20], [92, 8, '#2176D2', -30], [3, 40, '#F3C613', 50], [97, 44, '#3FA34D', -15], [12, 76, '#FF9EC7', 35], [88, 80, '#F3C613', -40], [28, -12, '#3FA34D', 70], [72, -14, '#CC3000', -60], [50, -19, '#96C9FF', 15]].forEach(function (q, i) { sv('rect', { 'class': i % 3 ? null : 'kc-twinkle', x: q[0] - 2.5, y: q[1] - 4.5, width: 5, height: 9, rx: 1.2, fill: q[2], stroke: INK, 'stroke-width': 1, transform: 'rotate(' + q[3] + ' ' + q[0] + ' ' + q[1] + ')', style: i % 3 ? null : 'animation-delay:' + (i * 0.3) + 's' }, g); });
+    if (wr.back === 'balloons') {   // tied to the right hand, floating up beside the glass
+      var hx = 50 + Math.min(w, 26) - 2 + 14, hy = ey + 34;
+      [[72, T - 19, '#F3C613'], [86, T - 10, '#CC3000'], [93, T + 6, '#2176D2']].forEach(function (q) { sv('path', { d: 'M' + q[0] + ' ' + (q[1] + 9) + 'Q' + (q[0] + 3) + ' ' + ((q[1] + hy) / 2) + ' ' + hx + ' ' + hy, fill: 'none', stroke: INK, 'stroke-width': 1.4 }, g); });
+      [[72, T - 19, '#F3C613'], [86, T - 10, '#CC3000'], [93, T + 6, '#2176D2']].forEach(function (q) { sv('ellipse', { cx: q[0], cy: q[1], rx: 6.5, ry: 8, fill: q[2], stroke: INK, 'stroke-width': 2 }, g); sv('path', { d: 'M' + (q[0] - 1.8) + ' ' + (q[1] + 9.6) + 'L' + q[0] + ' ' + (q[1] + 7.4) + 'L' + (q[0] + 1.8) + ' ' + (q[1] + 9.6) + 'Z', fill: q[2], stroke: INK, 'stroke-width': 1.2, 'stroke-linejoin': 'round' }, g); sv('ellipse', { cx: q[0] - 2.2, cy: q[1] - 3, rx: 1.6, ry: 2.6, fill: '#fff', opacity: 0.6 }, g); });
+    }
     if (wr.back === 'cape') { sv('path', ink0({ d: 'M34 58C22 74 15 90 17 100H83C85 90 78 74 66 58Z', fill: '#CC3000' }), g); sv('path', { d: 'M29 72C25 84 23 93 23 100M71 72C75 84 77 93 77 100', fill: 'none', stroke: '#8A1F00', 'stroke-width': 2 }, g); }
     if (wr.back === 'wings') [-1, 1].forEach(function (sd) { var wg = sv('g', sd > 0 ? { transform: 'translate(100 0) scale(-1 1)' } : null, g), x0 = 50 - w - 2, y0 = ey + 10; [[x0 - 9, y0 - 9, 15, 5, -32], [x0 - 12, y0 + 2, 16, 5.5, -10], [x0 - 9, y0 + 12, 13, 5, 14]].forEach(function (f) { sv('ellipse', { cx: f[0], cy: f[1], rx: f[2], ry: f[3], fill: '#fff', stroke: INK, 'stroke-width': 2, transform: 'rotate(' + f[4] + ' ' + f[0] + ' ' + f[1] + ')' }, wg); }); });
     if (wr.back === 'jetpack') [-1, 1].forEach(function (sd) { var x = 50 + sd * (w + 3) - 6; sv('path', { 'class': 'kc-flame', d: 'M' + (x + 1.5) + ' ' + (ey + 34) + 'Q' + (x + 6) + ' ' + (ey + 56) + ' ' + (x + 10.5) + ' ' + (ey + 34) + 'Z', fill: '#FF922B', stroke: INK, 'stroke-width': 1.5 }, g); sv('rect', { x: x, y: ey + 4, width: 12, height: 32, rx: 6, fill: '#ADB5BD', stroke: INK, 'stroke-width': 2.2 }, g); sv('rect', { x: x + 2, y: ey + 9, width: 8, height: 4, rx: 2, fill: '#CC3000' }, g); });
@@ -282,8 +292,14 @@
     if (wr.neck === 'bow') { sv('path', ink0({ d: 'M50 63L39 57V69ZM50 63L61 57V69Z', fill: '#2176D2' }), g); sv('circle', ink0({ cx: 50, cy: 63, r: 3, fill: '#0F4D90' }), g); }
     if (wr.neck === 'scarf') { sv('path', ink0({ d: 'M56 63L59 82L66 80L62 62Z', fill: '#CC3000' }), g); sv('rect', ink0({ x: 34, y: 58.5, width: 32, height: 8, rx: 4, fill: '#CC3000' }), g); sv('path', { d: 'M41 59V66M48 59V66M55 59V66', stroke: '#fff', 'stroke-width': 1.6 }, g); }
     if (wr.neck === 'medal') { sv('path', { d: 'M41 59L50 73L59 59', fill: 'none', stroke: '#2176D2', 'stroke-width': 4.5, 'stroke-linejoin': 'round' }, g); sv('circle', ink0({ cx: 50, cy: 78, r: 7.5, fill: '#F3C613' }), g); sv('path', { d: STAR, transform: 'translate(50 78) scale(.75)', fill: '#fff' }, g); }
+    if (wr.neck === 'rosette') {   // a champ's ribbon: two tails, a gold rosette, a B
+      sv('path', ink0({ d: 'M46 70L41 88L46 85L49 89L51 72ZM54 70L59 88L54 85L51 89L49 72Z', fill: '#CC3000' }), g);
+      var ros = ''; for (var ri = 0; ri < 24; ri++) { var ra = Math.PI * 2 * ri / 24, rr = ri % 2 ? 7.4 : 9.4; ros += (ri ? 'L' : 'M') + (50 + rr * Math.cos(ra)).toFixed(1) + ' ' + (66 + rr * Math.sin(ra)).toFixed(1); }
+      sv('path', ink0({ d: ros + 'Z', fill: '#F3C613' }), g); sv('circle', { cx: 50, cy: 66, r: 5.4, fill: '#2176D2', stroke: INK, 'stroke-width': 1.6 }, g);
+      var rb = sv('text', { x: 50, y: 69.2, 'text-anchor': 'middle', 'font-size': 8.5, 'font-family': 'Luckiest Guy, Arial Black, sans-serif', fill: '#fff' }, g); rb.textContent = 'B';
+    }
     // what they wear: a family's gear, or what a child picked to put on their head
-    var a = m.acc || ({ cap: 'ballcap', crown: 'crown', tophat: 'tophat' })[wr.hat] || '';
+    var a = m.acc || ({ cap: 'ballcap', crown: 'crown', tophat: 'tophat', partyhat: 'partyhat' })[wr.hat] || '';
     if (a === 'headphones') {
       var hd = 'M' + (50 - w - 3) + ' ' + ey + 'C' + (50 - w - 3) + ' ' + (T - 16) + ' ' + (50 + w + 3) + ' ' + (T - 16) + ' ' + (50 + w + 3) + ' ' + ey;
       sv('path', { d: hd, fill: 'none', stroke: INK, 'stroke-width': 8, 'stroke-linecap': 'round' }, g); sv('path', { d: hd, fill: 'none', stroke: '#2176D2', 'stroke-width': 4, 'stroke-linecap': 'round' }, g);
@@ -373,6 +389,7 @@
     explore: [(function () { var d = ''; for (var i = 0; i < 16; i++) { var r = i % 2 ? 38 : 47, a = Math.PI * 2 * i / 16 - Math.PI / 2; d += (i ? 'L' : 'M') + (50 + r * Math.cos(a)).toFixed(1) + ' ' + (50 + r * Math.sin(a)).toFixed(1); } return d + 'Z'; })(), 'M50 20A30 30 0 1 1 49.99 20Z', 50],
     combo: ['M24 5H76A19 19 0 0 1 95 24V76A19 19 0 0 1 76 95H24A19 19 0 0 1 5 76V24A19 19 0 0 1 24 5Z', 'M30 16H70A14 14 0 0 1 84 30V70A14 14 0 0 1 70 84H30A14 14 0 0 1 16 70V30A14 14 0 0 1 30 16Z', 50],
     philly: ['M8 4H92L84 26H95L74 96H26L5 26H16Z', 'M21 14H79L73 32H81L66 85H34L19 32H27Z', 48],   // the keystone: Pennsylvania's
+    bingo: ['M18 5H82A13 13 0 0 0 95 18V82A13 13 0 0 0 82 95H18A13 13 0 0 0 5 82V18A13 13 0 0 0 18 5Z', 'M25 15H75A10 10 0 0 0 85 25V75A10 10 0 0 0 75 85H25A10 10 0 0 0 15 75V25A10 10 0 0 0 25 15Z', 50],   // a ticket
     program: [(function () { var d = ''; for (var i = 0; i < 28; i++) { var r = i % 2 ? 42 : 48, a = Math.PI * 2 * i / 28 - Math.PI / 2; d += (i ? 'L' : 'M') + (50 + r * Math.cos(a)).toFixed(1) + ' ' + (50 + r * Math.sin(a)).toFixed(1); } return d + 'Z'; })(), 'M50 17A33 33 0 1 1 49.99 17Z', 50]   // a rosette
   };
   // A pin gets grander as it levels up. Bronze: the pin and one star. Silver: a laurel wreath, a blue banner, a gem and
@@ -507,7 +524,7 @@
     };
     everyPin().forEach(function (p) {
       var mx = p.how && p.how.indexOf('mix:') === 0 ? p.how.split(':') : null;   // a kind of class and a part of the map: the pairs
-      var c = p.prog ? times[p.k] || 0 : mx ? Math.min(t(mx[1]), areas[mx[2]] || 0) : p.how ? (p.how.indexOf('area:') === 0 ? areas[p.how.slice(5)] || 0 : HOW[p.how] || 0) : p.group === 'type' ? types[p.id.slice(5)] || 0 : p.id === 'season:summer' ? weeks : p.group === 'season' ? kinds[p.id.slice(7)] || 0 : p.group === 'repeat' ? repeats : nh, tier = 0;
+      var c = p.prog ? times[p.k] || 0 : mx ? Math.min.apply(null, [t(mx[1])].concat(mx.slice(2).map(function (a) { return areas[a] || 0; }))) : p.how ? (p.how.indexOf('area:') === 0 ? areas[p.how.slice(5)] || 0 : HOW[p.how] || 0) : p.group === 'type' ? types[p.id.slice(5)] || 0 : p.id === 'season:summer' ? weeks : p.group === 'season' ? kinds[p.id.slice(7)] || 0 : p.group === 'repeat' ? repeats : nh, tier = 0;
       p.tiers.forEach(function (tt, i) { if (c >= tt) tier = i + 1; });
       pins[p.id] = { c: c, tier: tier, next: tier < TOP ? p.tiers[tier] : 0 };
       tiers += tier;
@@ -519,6 +536,71 @@
     if (kept > level.n) level = { n: kept, title: TITLES[Math.min(kept - 1, TITLES.length - 1)], from: need(kept), to: need(kept + 1), kept: true };
     return { n: n, nh: nh, hoods: hoods, places: places, keys: keys, times: times, repeats: repeats, spots: spots, found: found, hidden: hidden, sur: sur, surFound: surFound, pins: pins, tiers: tiers, xp: xp, level: level, near: near, side: side, typeKeys: typeKeys };
   };
+
+  // ----- bingo: a card for each school year and each summer -----
+  // Five in a row (Eddie's free square in the middle counts) is a bingo: the first one ever wins a party hat, the second
+  // balloons, the third confetti. Each card has a pin of its own that goes up a level with each bingo on it, diamond
+  // for the whole card (all twelve rows), which also wins the champ ribbon and a certificate to print. A square is a
+  // class a parent confirmed for that school year or summer (D.bingo, from build.mjs), or one of six things done here
+  // that season, kept as it happens. What's kept, in "seen", four numbers a card: "bingo:y2026" the squares already
+  // shown daubed (a bit each, in reading order), "bingo:y2026:m" the things done here (a bit each, BINGO_MARK),
+  // "bingo:y2026:l" the bingos celebrated, "bingo:y2026:f" the whole card celebrated.
+  var LINES = (function () { var L = [], i, j; for (i = 0; i < 5; i++) { var r = [], c = []; for (j = 0; j < 5; j++) { r.push(i * 5 + j); c.push(j * 5 + i); } L.push(r, c); } L.push([0, 6, 12, 18, 24], [4, 8, 12, 16, 20]); return L; })();
+  var BINGO_MARK = { showdown: 1, look: 2, newpin: 4, pinup: 8, levelup: 16, secretpin: 32 };
+  var BINGO_PRIZE = [['partyhat', 1], ['balloons', 2], ['confetti', 3]];
+  var todayIso = function () { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); };
+  // The card now: the school year's until its last day, then that summer's (until the next school year's data comes).
+  var boardNow = function () {
+    var t = todayIso(), y = D.year;
+    if (D.lastDay && t > D.lastDay) return t >= (y + 1) + '-09-01' ? 'y' + (y + 1) : 's' + (y + 1);
+    return 'y' + y;
+  };
+  var boardName = function (b) { var y = +b.slice(1); return b.charAt(0) === 's' ? 'Summer ' + y : y + '–' + String(y + 1).slice(2); };
+  var inBoard = function (b, e) { return (b.charAt(0) === 's') === (e.kind === 'summer') && e.y === +b.slice(1); };
+  var beforeBoard = function (b, e) { var y = +b.slice(1); return e.kind === 'summer' ? (b.charAt(0) === 's' ? e.y < y : e.y <= y) : e.y < y; };
+  var linesWon = function (k) { var n = 0, s = (k && k.seen) || {}; Object.keys(s).forEach(function (id) { if (/^bingo:[ys]\d{4}:l$/.test(id)) n += +s[id] || 0; }); return n; };
+  var champCards = function (k) { var s = (k && k.seen) || {}; return Object.keys(s).filter(function (id) { return /^bingo:[ys]\d{4}:f$/.test(id); }).map(function (id) { return id.split(':')[1]; }).sort(); };
+  // Each card's own pin: bronze at its first bingo, then silver, gold, emerald, and diamond for the whole card (all 12).
+  var cardPin = function (b) { return { id: 'bingo:' + b, group: 'bingo', label: 'Bingo ' + boardName(b), color: '#CC3000', icon: D.bingoIcon, eo: 1, tiers: [1, 2, 3, 6, 12], one: 'bingo', many: 'bingos' }; };
+  var tierOfLines = function (n) { var t = 0; [1, 2, 3, 6, 12].forEach(function (x) { if (n >= x) t++; }); return t; };
+  var cardsPlayed = function (k) { var s = (k && k.seen) || {}; return Object.keys(s).filter(function (id) { return /^bingo:[ys]\d{4}:l$/.test(id); }).map(function (id) { return { b: id.split(':')[1], n: +s[id] || 0 }; }).sort(function (a, b) { return a.b.slice(1) - b.b.slice(1) || (a.b < b.b ? 1 : -1); }); };
+  // "seen" with this season's things done here added (a showdown, a new look, ...): to save along with them.
+  var withMarks = function (k, ids, base) {
+    var out = {}, src = base || k.seen || {}, key = 'bingo:' + boardNow() + ':m';
+    Object.keys(src).forEach(function (f) { out[f] = src[f]; });
+    ids.forEach(function (id) { if (BINGO_MARK[id]) out[key] = (out[key] || 0) | BINGO_MARK[id]; });
+    return out;
+  };
+  var lookOf = function (av) { if (!av) return ''; var w = av.w || {}; return [av.b, av.c].concat(['hat', 'face', 'neck', 'back', 'glow', 'base'].map(function (sl) { return w[sl] || ''; })).join('|'); };
+  var bingo = function (k, b) {
+    b = b || boardNow();
+    var squares = (D.bingo || {})[b.charAt(0)] || [], seen = k.seen || {};
+    var mine = { name: k.name, done: k.done.filter(function (e) { return inBoard(b, e); }), fav: [], lvl: 0 };
+    var st = stats(mine), before = {}, kinds = {};
+    k.done.forEach(function (e) { if (!beforeBoard(b, e)) return; var s = siteOf(e); if (s) before[s.m || 'n:' + s.h] = true; });
+    mine.done.forEach(function (e) { kinds[e.kind] = (kinds[e.kind] || 0) + Math.max(1, e.n || 1); });
+    var P = function (id) { return st.pins[id] ? st.pins[id].c : 0; };
+    var ty = function (ids) { return ids.some(function (x) { return st.typeKeys[x]; }); };
+    var how = {
+      first: st.n >= 1, after: !!kinds.after, dayoff: !!kinds.off, dayoffs2: (kinds.off || 0) >= 2, weekend: !!kinds.weekend,
+      days3: mine.done.some(function (e) { return e.kind === 'after' && (e.n || 1) >= 3; }), same2: mine.done.some(function (e) { return (e.n || 1) >= 2; }),
+      kinds2: P('pin:mix-master') >= 2, kinds3: P('pin:mix-master') >= 3, progs3: st.keys.length >= 3, camps2: st.keys.length >= 2, camps3: st.keys.length >= 3,
+      weeks3: (kinds.summer || 0) >= 3, weeks6: (kinds.summer || 0) >= 6,
+      move: ty(['movement']), arts: ty(['art', 'music', 'theater']), brainy: ty(['stem', 'nature', 'academics']), play: ty(['games', 'clubs', 'rec-center']),
+      newhood: Object.keys(st.hoods).some(function (h) { return !before[h]; }), hoods2: st.nh >= 2, areas2: P('pin:city-sampler') >= 2,
+      spot: st.found >= 1, surprise: st.surFound >= 1, broad: P('philly:broad-street') >= 1, school: P('pin:home-base') + P('pin:pickup-pro') >= 1
+    };
+    var shownBits = +seen['bingo:' + b] || 0, marks = +seen['bingo:' + b + ':m'] || 0, cells = [];
+    squares.forEach(function (q) {
+      if (cells.length === 12) cells.push({ free: true, done: true, shown: true });
+      var i = cells.length;
+      cells.push({ q: q, i: i, here: !!BINGO_MARK[q.id], done: BINGO_MARK[q.id] ? !!(marks & BINGO_MARK[q.id]) : !!how[q.id], shown: !!(shownBits & (1 << i)) });
+    });
+    var lines = cells.length === 25 ? LINES.filter(function (L) { return L.every(function (i) { return cells[i].done; }); }) : [];
+    var got = cells.filter(function (c) { return !c.free && c.done; }).length;
+    return { b: b, cells: cells, lines: lines, got: got, full: cells.length === 25 && got === 24, had: +seen['bingo:' + b + ':l'] || 0, hadFull: !!seen['bingo:' + b + ':f'] };
+  };
+  var bingoNews = function (bg) { return bg.cells.some(function (c) { return !c.free && c.done && !c.shown; }) || bg.lines.length > bg.had || (bg.full && !bg.hadFull); };
 
   // ----- state -----
   var S = { data: null, kid: -1, view: 'pick', tab: 'pins', bracket: null, saving: false, said: '', fresh: null, tour: null };
@@ -671,14 +753,17 @@
   };
 
   // ----- picking a bulb: a shape, a colour and what to wear, no typing -----
-  var unlockedAt = function (lvl) { return WEAR.filter(function (x) { return x.lvl <= lvl; }); };
+  // What can be worn: a level's things once the level is reached, a bingo prize once it's won (linesWon(), champCards()).
+  var wearOpen = function (it, lvl, k) { return it.bingo ? (it.bingo === 'full' ? champCards(k).length > 0 : linesWon(k) >= it.bingo) : it.lvl <= lvl; };
+  var wearLock = function (it) { return it.bingo ? (it.bingo === 'full' ? 'Whole card' : plural(it.bingo, 'bingo', 'bingos')) : 'Level ' + it.lvl; };
+  var unlockedAt = function (lvl, k) { return WEAR.filter(function (x) { return wearOpen(x, lvl, k); }); };
   var drawAvatar = function () {
     var k = kid(); if (!k) { go('pick', null, false); return; }
     setKidMode(true);
     var lvl = stats(k).level.n;
     var start = k.av ? kidBulb(k.av) : null, cur = start ? { b: start.shape, c: KID_COLORS.indexOf(start.glass), w: {} } : { b: 'classic', c: 0, w: {} };
     if (cur.c < 0) cur.c = 0;
-    if (k.av && k.av.w) Object.keys(k.av.w).forEach(function (sl) { var it = WEAR_BY[k.av.w[sl]]; if (it && it.lvl <= lvl) cur.w[sl] = it.id; });
+    if (k.av && k.av.w) Object.keys(k.av.w).forEach(function (sl) { var it = WEAR_BY[k.av.w[sl]]; if (it && wearOpen(it, lvl, k)) cur.w[sl] = it.id; });
     var page = el('section', 'kc-avatar');
     var top = el('div', 'kc-picktop'); top.appendChild(el('h1', 'kc-h', k.av ? 'My bulb' : 'Pick your bulb!')); top.appendChild(muteBtn()); page.appendChild(top);
     var host = eddie(k.av ? 'Change it up! Level up to unlock more stuff to wear.' : 'Pick a bulb and a color. That’s you!', 'kc-host'); page.appendChild(host);
@@ -701,29 +786,30 @@
         colors.appendChild(c);
       });
       WEAR.forEach(function (it) {
-        var open = it.lvl <= lvl, on = cur.w[it.slot] === it.id;
-        var c = btn('kc-wearbtn' + (on ? ' on' : '') + (open ? '' : ' locked'), '', function () {
-          if (!open) { Sound.play('tap'); host.say('Reach level ' + it.lvl + ' to wear the ' + it.name.toLowerCase() + '!'); return; }
+        var open = wearOpen(it, lvl, k), on = cur.w[it.slot] === it.id;
+        var c = btn('kc-wearbtn' + (on ? ' on' : '') + (open ? '' : ' locked') + (it.bingo ? ' bingo' : ''), '', function () {
+          if (!open) { Sound.play('tap'); host.say(it.bingo ? (it.bingo === 'full' ? 'Fill a whole bingo card' : 'Get ' + plural(it.bingo, 'bingo', 'bingos')) + ' to wear the ' + it.name.toLowerCase() + '!' : 'Reach level ' + it.lvl + ' to wear the ' + it.name.toLowerCase() + '!'); return; }
           if (on) delete cur.w[it.slot]; else cur.w[it.slot] = it.id;
           Sound.play(on ? 'tap' : 'sparkle'); paintChoices(); paintStage();
         });
         c.setAttribute('aria-pressed', on ? 'true' : 'false');
-        c.setAttribute('aria-label', it.name + (open ? (on ? ', wearing' : '') : ', unlocks at level ' + it.lvl));
+        c.setAttribute('aria-label', it.name + (open ? (on ? ', wearing' : '') : it.bingo ? ', a bingo prize: ' + wearLock(it).toLowerCase() : ', unlocks at level ' + it.lvl));
         var wearOne = {}; wearOne[it.slot] = it.id;
         c.appendChild(drawBulb(kidBulb({ b: cur.b, c: cur.c, w: wearOne }), open ? '' : 'off kc-unpicked'));
         c.appendChild(el('b', null, it.name));
-        if (!open) c.appendChild(el('span', 'kc-lock', 'Level ' + it.lvl));
+        if (!open) c.appendChild(el('span', 'kc-lock', wearLock(it)));
         wardrobe.appendChild(c);
       });
     };
     page.appendChild(head('Shape')); page.appendChild(bodies);
     page.appendChild(head('Color')); page.appendChild(colors);
-    var wh = head('Dress up'); wh.appendChild(el('span', 'kc-tally', unlockedAt(lvl).length + ' / ' + WEAR.length)); page.appendChild(wh); page.appendChild(wardrobe);
+    var wh = head('Dress up'); wh.appendChild(el('span', 'kc-tally', unlockedAt(lvl, k).length + ' / ' + WEAR.length)); page.appendChild(wh); page.appendChild(wardrobe);
     var acts = el('div', 'kc-avacts');
     acts.appendChild(btn('kc-big go', 'That’s me!', function () {
       Sound.play('sparkle'); confetti(40);
       var av = { b: cur.b, c: cur.c }; if (Object.keys(cur.w).length) av.w = cur.w;
-      save({ av: av }, function () { if (S.tour) go('tour'); else go('kid', S.tab || 'pins'); });   // in Eddie's welcome: on to the next part
+      var ch = { av: av }; if (lookOf(av) !== lookOf(k.av)) ch.seen = withMarks(k, ['look']);   // a new look: a bingo square
+      save(ch, function () { if (S.tour) go('tour'); else go('kid', S.tab || 'pins'); });   // in Eddie's welcome: on to the next part
     }));
     if (k.av) acts.appendChild(btn('kc-big ghost', 'Never mind', function () { if (S.tour) go('tour'); else go('kid'); }));
     page.appendChild(acts);
@@ -754,13 +840,17 @@
     var body = el('div', 'kc-body'); page.appendChild(body);
     if (S.tab === 'map') drawMapTab(body, k, st);
     else if (S.tab === 'battle') drawBattleTab(body, k, st);
+    else if (S.tab === 'bingo') drawBingoTab(body, k);
     else drawPinsTab(body, k, st);
     body.appendChild(grownupRow());
     var tabs = el('nav', 'kc-tabs'); tabs.setAttribute('aria-label', 'Kids’ Playground');
-    [['pins', 'Pins', 'M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z'], ['map', 'Map', 'M15 4 9 2 3 4v18l6-2 6 2 6-2V2zm0 15.8-6-2V4.2l6 2z'], ['battle', 'Showdown', 'M7 3h10v2h3v3a4 4 0 0 1-4 4h-.3A5 5 0 0 1 13 14.9V17h3v3H8v-3h3v-2.1A5 5 0 0 1 8.3 12H8a4 4 0 0 1-4-4V5h3zm-1 4v1a2 2 0 0 0 2 2V7zm11 0v3a2 2 0 0 0 2-2V7z']].forEach(function (t) {
+    var bnew = S.tab !== 'bingo' && bingoNews(bingo(k));   // a dot on Bingo when there's a square to daub
+    [['pins', 'Pins', 'M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z'], ['bingo', 'Bingo', D.bingoIcon], ['map', 'Map', 'M15 4 9 2 3 4v18l6-2 6 2 6-2V2zm0 15.8-6-2V4.2l6 2z'], ['battle', 'Showdown', 'M7 3h10v2h3v3a4 4 0 0 1-4 4h-.3A5 5 0 0 1 13 14.9V17h3v3H8v-3h3v-2.1A5 5 0 0 1 8.3 12H8a4 4 0 0 1-4-4V5h3zm-1 4v1a2 2 0 0 0 2 2V7zm11 0v3a2 2 0 0 0 2-2V7z']].forEach(function (t) {
       var b = btn('kc-tabbtn' + (S.tab === t[0] ? ' on' : ''), '', function () { if (S.tab === t[0]) return; Sound.play('tap'); go('kid', t[0]); });
       if (S.tab === t[0]) b.setAttribute('aria-current', 'page');
-      b.appendChild(icon(t[2])); b.appendChild(el('span', null, t[1])); tabs.appendChild(b);
+      b.appendChild(Array.isArray(t[2]) ? icons(t[2]) : icon(t[2])); b.appendChild(el('span', null, t[1]));
+      if (t[0] === 'bingo' && bnew) { b.appendChild(el('i', 'kc-tabdot')); b.setAttribute('aria-label', 'Bingo: something new'); }
+      tabs.appendChild(b);
     });
     page.appendChild(tabs);
     app.appendChild(page);
@@ -775,6 +865,7 @@
     (D.areas || []).forEach(function (a) { if (st.spots[a.id].open) seen['map:' + a.id] = st.spots[a.id].open; });
     Object.keys(st.sur).forEach(function (h) { seen['hood:' + h] = st.sur[h].open; });
     if (k.seen.intro) seen.intro = 1;
+    Object.keys(k.seen).forEach(function (f) { if (/^bingo:/.test(f)) seen[f] = k.seen[f]; });   // the bingo cards keep what they kept
     return seen;
   };
 
@@ -903,6 +994,168 @@
       });
       body.appendChild(grid);
     });
+    var cards = cardsPlayed(k);   // each bingo card's pin, once it has a bingo: not counted in the pins above
+    if (cards.length) {
+      var ch = el('div', 'kc-pinsec'); ch.appendChild(el('h3', 'kc-h3', 'Bingo pins')); ch.appendChild(el('span', 'kc-pinsec-n', String(cards.length))); body.appendChild(ch);
+      var cg = el('div', 'kc-pins');
+      cards.forEach(function (x) {
+        var p = cardPin(x.b), t = tierOfLines(x.n), c = btn('kc-pincard t' + t, '', function () { Sound.play('sparkle'); cardUpClose(x.b, x.n); });
+        c.setAttribute('aria-label', p.label + ': ' + TIER[t]); c.appendChild(drawPin(p, t)); c.appendChild(el('b', null, p.label)); c.appendChild(el('span', 'kc-tier ' + TIER[t].toLowerCase(), t === TOP ? 'Diamond!' : TIER[t]));
+        cg.appendChild(c);
+      });
+      body.appendChild(cg);
+    }
+  };
+  var cardUpClose = function (b, n) {
+    return overlay(function (card, close) {
+      card.classList.add('kc-pinbig');
+      var t = tierOfLines(n), p = cardPin(b), pv = drawPin(p, t); card.appendChild(pv); bounce(pv);
+      card.appendChild(el('h2', 'kc-h', t === TOP ? 'Bingo Champ' : p.label));
+      card.appendChild(el('p', 'kc-tier big ' + TIER[t].toLowerCase(), TIER[t] + (t === TOP ? '! The top!' : '')));
+      card.appendChild(el('p', 'kc-say', t === TOP ? 'You filled the WHOLE ' + boardName(b) + ' bingo card!' : 'You got ' + plural(n, 'bingo', 'bingos') + ' on your ' + boardName(b) + ' card!'));
+      if (t < TOP && b === boardNow()) card.appendChild(el('p', 'kc-say small', (p.tiers[t] - n) + ' more ' + (p.tiers[t] - n === 1 ? 'bingo' : 'bingos') + ' for ' + TIER[t + 1].toUpperCase() + '!' + (t >= 3 ? ' (Diamond is the whole card.)' : '')));
+      card.appendChild(btn('kc-big go', 'Cool!', function () { Sound.play('tap'); close(); }));
+    });
+  };
+
+  // ----- the Bingo tab: this season's card -----
+  var daubColors = ['#CC3000', '#2176D2', '#3FA34D', '#C2255C', '#E8590C', '#5F3DC4'];
+  var sqArt = function (q) { return icons(q.icon, !!q.eo, 'kc-sqicon'); };
+  var drawBingoTab = function (body, k) {
+    var bg = bingo(k), b = bg.b;
+    var head = el('div', 'kc-sechead'); head.appendChild(el('h2', 'kc-h2', b.charAt(0) === 's' ? 'Summer bingo' : 'My bingo card')); head.appendChild(el('span', 'kc-tally', bg.got + ' / 24')); body.appendChild(head);
+    var won = bg.lines.length;
+    if (bg.full) {   // the whole card: a certificate (the grown-ups' corner prints it)
+      var cert = el('div', 'kc-cert');
+      cert.appendChild(el('p', 'kc-burst', 'BINGO CHAMP!'));
+      cert.appendChild(drawPin(cardPin(b), TOP));
+      cert.appendChild(el('p', 'kc-cert-say', k.name + ' filled the whole ' + boardName(b) + ' bingo card!'));
+      cert.appendChild(el('p', 'kc-cert-sign', '— Eddie Bulboa'));
+      body.appendChild(cert);
+    }
+    body.appendChild(eddie(bg.full ? 'THE WHOLE CARD! You’re a Bingo Champ!' : won ? 'You have ' + plural(won, 'bingo', 'bingos') + '! Every bingo makes your Bingo pin shinier. The WHOLE card makes it DIAMOND!' : bg.got ? 'Five in a row is a BINGO! Tap a square to see how to get it.' : 'Every class daubs a square. Five in a row is a BINGO! Tap a square to see how.', 'kc-host'));
+    var wrap = el('div', 'kc-bingo'); wrap.setAttribute('data-board', b);
+    var letters = el('div', 'kc-bingo-letters'); 'BINGO'.split('').forEach(function (L) { letters.appendChild(el('b', null, L)); }); wrap.appendChild(letters);
+    var grid = el('div', 'kc-bingo-grid'); grid.setAttribute('role', 'group'); grid.setAttribute('aria-label', 'Bingo card, ' + boardName(b));
+    var inLine = {}; bg.lines.forEach(function (L) { L.forEach(function (i) { inLine[i] = true; }); });
+    bg.cells.forEach(function (c, i) {
+      var cell;
+      if (c.free) {
+        cell = btn('kc-sq free on', '', function () { Sound.play('boing'); overlay(function (card, close) { card.classList.add('kc-pinbig'); var im = el('img', 'kc-tour-big'); im.src = D.eddie; im.alt = ''; im.width = 327; im.height = 400; card.appendChild(im); card.appendChild(el('h2', 'kc-h', 'Free!')); card.appendChild(el('p', 'kc-say', 'This square is on me. It counts for every row it’s in!')); card.appendChild(btn('kc-big go', 'Thanks, Eddie!', function () { Sound.play('tap'); close(); })); }); });
+        cell.setAttribute('aria-label', 'Free square');
+        var im = el('img', 'kc-sq-eddie'); im.src = D.eddie; im.alt = ''; im.width = 327; im.height = 400; cell.appendChild(im);
+        cell.appendChild(el('b', null, 'Free'));
+      } else {
+        cell = btn('kc-sq' + (c.done ? ' on' : '') + (c.done && !c.shown ? ' fresh' : ''), '', function () { Sound.play(c.done ? 'sparkle' : 'tap'); sqUpClose(c); });
+        cell.setAttribute('aria-label', c.q.label + (c.done ? ', done' : ', not yet'));
+        cell.setAttribute('aria-pressed', c.done ? 'true' : 'false');
+        cell.appendChild(sqArt(c.q)); cell.appendChild(el('b', null, c.q.label));
+        var dab = el('i', 'kc-daub'); dab.style.background = daubColors[i % daubColors.length]; cell.appendChild(dab);
+      }
+      if (inLine[i]) cell.classList.add('inline');
+      cell.setAttribute('data-i', String(i));
+      grid.appendChild(cell);
+    });
+    wrap.appendChild(grid);
+    var lineArt = sv('svg', { 'class': 'kc-bingo-lines', viewBox: '0 0 500 500', preserveAspectRatio: 'none', 'aria-hidden': 'true' });
+    if (!bg.full) bg.lines.forEach(function (L) { var a = L[0], z = L[4], p = function (n) { return [50 + 100 * (n % 5), 50 + 100 * Math.floor(n / 5)]; }; var A = p(a), Z = p(z); sv('line', { x1: A[0], y1: A[1], x2: Z[0], y2: Z[1], stroke: INK, 'stroke-width': 10, 'stroke-linecap': 'round', opacity: 0.7, 'vector-effect': 'non-scaling-stroke' }, lineArt); sv('line', { x1: A[0], y1: A[1], x2: Z[0], y2: Z[1], stroke: '#F3C613', 'stroke-width': 5, 'stroke-linecap': 'round', 'vector-effect': 'non-scaling-stroke' }, lineArt); });
+    grid.appendChild(lineArt);
+    body.appendChild(wrap);
+    // the prizes: what each bingo wins, and the whole card
+    var ph = el('div', 'kc-sechead kc-prizehead'); ph.appendChild(el('h2', 'kc-h2', 'Prizes')); body.appendChild(ph);
+    var row = el('div', 'kc-prizes'), ever = linesWon(k);
+    BINGO_PRIZE.forEach(function (x) {
+      var it = WEAR_BY[x[0]], open = ever >= x[1], one = {}; one[it.slot] = it.id;
+      var c = el('div', 'kc-prize' + (open ? ' won' : ''));
+      c.appendChild(drawBulb(kidBulb({ b: k.av ? k.av.b : 'classic', c: k.av ? k.av.c : 0, w: one }), open ? '' : 'off kc-unpicked'));
+      c.appendChild(el('b', null, it.name)); c.appendChild(el('span', 'kc-lock', open ? 'Won!' : x[1] === 1 ? '1st bingo' : x[1] === 2 ? '2nd bingo' : '3rd bingo'));
+      row.appendChild(c);
+    });
+    var ct = tierOfLines(bg.had), top = el('div', 'kc-prize big' + (ct ? ' won' : ''));   // this card's own pin
+    top.appendChild(drawPin(cardPin(b), ct));
+    var tx = el('div', 'kc-prize-txt'); tx.appendChild(el('b', null, 'Your ' + cardPin(b).label + ' pin'));
+    tx.appendChild(el('span', null, 'Bronze for 1 bingo, then silver, gold and emerald. DIAMOND and the champ ribbon for the WHOLE card!'));
+    top.appendChild(tx); top.appendChild(el('span', 'kc-lock', ct ? TIER[ct] + '!' : '1st bingo'));
+    row.appendChild(top);
+    body.appendChild(row);
+    if (bingoNews(bg)) setTimeout(function () { celebrateBingo(k, bg, grid); }, 350);
+  };
+  var sqUpClose = function (c) {
+    return overlay(function (card, close) {
+      card.classList.add('kc-pinbig', 'kc-sqbig');
+      var art = el('div', 'kc-sq big' + (c.done ? ' on' : '')); art.appendChild(sqArt(c.q)); art.appendChild(el('b', null, c.q.label)); if (c.done) { var d = el('i', 'kc-daub'); d.style.background = daubColors[c.i % daubColors.length]; art.appendChild(d); }
+      card.appendChild(art); bounce(art);
+      card.appendChild(el('h2', 'kc-h', c.done ? 'Daubed!' : 'Not yet!'));
+      card.appendChild(el('p', 'kc-say', c.q.say));
+      if (!c.done && !c.here) card.appendChild(el('p', 'kc-say small', 'Your grown-up adds your classes.'));
+      card.appendChild(btn('kc-big go', 'OK!', function () { Sound.play('tap'); close(); }));
+    });
+  };
+  // New squares get daubed one by one, then a BINGO! for each new row (with what it won), then the whole card.
+  var celebrateBingo = function (k, bg, grid) {
+    if (celebrating || S.view !== 'kid' || S.tab !== 'bingo' || !grid.isConnected) return;
+    var sig = k.name + '|' + bg.b + '|' + bg.got + '|' + bg.lines.length + '|' + bg.full;   // once per change, even if a save goes astray
+    if (S.bingoSig === sig) return;
+    S.bingoSig = sig; celebrating = true;
+    var fresh = bg.cells.filter(function (c) { return !c.free && c.done && !c.shown; });
+    var chain = Promise.resolve();
+    fresh.forEach(function (c, j) {
+      chain = chain.then(function () {
+        var cell = grid.querySelector('[data-i="' + c.i + '"]'); if (!cell) return;
+        cell.classList.remove('fresh'); Sound.play('pop');
+        return anim(cell.querySelector('.kc-daub'), [{ transform: 'scale(2.2)', opacity: 0 }, { transform: 'scale(.85)', opacity: 0.9, offset: 0.6 }, { transform: 'scale(1)', opacity: 0.78 }], { duration: 380, easing: 'ease-out' }).then(function () { return wait(j < 6 ? 120 : 40); });
+      });
+    });
+    var before = linesWon(k), now = before + Math.max(0, bg.lines.length - bg.had);
+    if (bg.lines.length > bg.had) chain = chain.then(function () { return bingoWin(k, bg, before, now); });
+    if (bg.full && !bg.hadFull) chain = chain.then(function () { return wholeCard(k, bg); });
+    chain.then(function () {
+      var seen = {}, b = bg.b, bits = +k.seen['bingo:' + b] || 0;
+      Object.keys(k.seen).forEach(function (f) { seen[f] = k.seen[f]; });
+      bg.cells.forEach(function (c) { if (!c.free && c.done) bits |= (1 << c.i); });
+      seen['bingo:' + b] = bits;
+      if (bg.lines.length > bg.had) seen['bingo:' + b + ':l'] = bg.lines.length;
+      if (bg.full) seen['bingo:' + b + ':f'] = 1;
+      save({ seen: seen }, function () { celebrating = false; if (S.tryOn) { S.tryOn = false; go('avatar'); } else draw(); });
+    });
+  };
+  var bingoWin = function (k, bg, before, now) {
+    return overlay(function (card, close) {
+      card.classList.add('kc-reveal', 'kc-bingowin');
+      card.appendChild(rays());
+      card.appendChild(el('p', 'kc-burst', now - before > 1 ? (now - before) + ' BINGOS!' : 'BINGO!'));
+      var t0 = tierOfLines(bg.had), t1 = tierOfLines(bg.full ? 11 : bg.lines.length);   // the whole card's diamond comes next, on its own
+      if (t1 > t0) { var pv = drawPin(cardPin(bg.b), t1); card.appendChild(pv); card.appendChild(el('p', 'kc-say', 'Your ' + cardPin(bg.b).label + ' pin is ' + TIER[t1].toUpperCase() + '!')); anim(pv, [{ transform: 'scale(0) rotate(-200deg)' }, { transform: 'scale(1.15) rotate(10deg)', offset: 0.7 }, { transform: 'scale(1) rotate(0)' }], { duration: 700, easing: 'cubic-bezier(.2,.8,.3,1.2)' }); }
+      else card.appendChild(el('p', 'kc-say', 'Five in a row!'));
+      var prizes = BINGO_PRIZE.filter(function (x) { return x[1] > before && x[1] <= now; }).map(function (x) { return WEAR_BY[x[0]]; });
+      if (prizes.length) {
+        card.classList.add('kc-hasnew');
+        card.appendChild(el('p', 'kc-say', 'You won something to wear!'));
+        var row = el('div', 'kc-newwear');
+        prizes.forEach(function (it) { var one = {}; one[it.slot] = it.id; var c = el('div', 'kc-newitem'); c.appendChild(drawBulb(kidBulb({ b: k.av.b, c: k.av.c, w: one }), 'bob')); c.appendChild(el('b', null, it.name)); row.appendChild(c); });
+        card.appendChild(row);
+        card.appendChild(btn('kc-big go', 'Try it on!', function () { Sound.play('tap'); S.tryOn = true; close(); }));
+        card.appendChild(btn('kc-big ghost', 'Later', function () { Sound.play('tap'); close(); }));
+      } else {
+        card.appendChild(btn('kc-big go', 'Woo-hoo!', function () { Sound.play('tap'); close(); }));
+      }
+      Sound.play('fanfare'); confetti(90);
+    }, 'reveal');
+  };
+  var wholeCard = function (k, bg) {
+    return overlay(function (card, close) {
+      card.classList.add('kc-reveal', 'kc-bingowin');
+      card.appendChild(rays());
+      card.appendChild(el('p', 'kc-burst', 'THE WHOLE CARD!'));
+      var pv = drawPin(cardPin(bg.b), TOP); card.appendChild(pv);
+      card.appendChild(el('h2', 'kc-h', 'Bingo Champ'));
+      card.appendChild(el('p', 'kc-say', 'Your ' + cardPin(bg.b).label + ' pin is DIAMOND, and you won the champ ribbon for your bulb!'));
+      var one = { neck: 'rosette' }; var m = drawBulb(kidBulb({ b: k.av.b, c: k.av.c, w: one }), 'bob'); m.classList.add('kc-champbulb'); card.appendChild(m);
+      card.appendChild(btn('kc-big go', 'Try it on!', function () { Sound.play('tap'); S.tryOn = true; close(); }));
+      card.appendChild(btn('kc-big ghost', 'Yay!', function () { Sound.play('tap'); close(); }));
+      Sound.play('levelup'); confetti(140);
+      anim(pv, [{ transform: 'scale(0) rotate(-200deg)' }, { transform: 'scale(1.25) rotate(10deg)', offset: 0.7 }, { transform: 'scale(1) rotate(0)' }], { duration: 750, easing: 'cubic-bezier(.2,.8,.3,1.2)' });
+    }, 'reveal');
   };
   // The classes that counted for a part of the map, or for each side of Broad Street: "A, B and C".
   var names = function (keys) {
@@ -912,9 +1165,13 @@
   };
   // A found secret Philly pin's part of the city: a small map with its neighborhoods colored in and the famous thing there
   // circled.
-  var areaOf = function (p) { var id = !p.how ? '' : p.how.indexOf('area:') === 0 ? p.how.slice(5) : p.how.indexOf('mix:') === 0 ? p.how.split(':')[2] : ''; return id ? (D.areas || []).filter(function (a) { return a.id === id; })[0] || null : null; };
+  var areasOf = function (p) {
+    var ids = !p.how ? [] : p.how.indexOf('area:') === 0 ? [p.how.slice(5)] : p.how.indexOf('mix:') === 0 ? p.how.split(':').slice(2) : [];
+    return (D.areas || []).filter(function (a) { return ids.indexOf(a.id) >= 0 && a.hoods && a.hoods.length; });
+  };
   var miniMap = function (card, p) {
-    var a = areaOf(p); if (!a || !a.hoods || !a.hoods.length) return;
+    var all = areasOf(p); if (!all.length) return;
+    var a = all.length === 1 ? all[0] : { name: '', hoods: [].concat.apply([], all.map(function (x) { return x.hoods; })), items: [] };
     var box = el('div', 'kc-minimap'); card.appendChild(box); card.classList.add('has-map');
     loadMap().then(function (M) {
       if (!box.isConnected) return;
@@ -925,9 +1182,10 @@
       M.hoods.forEach(function (h) { if (on[h.id]) sv('path', { d: h.d, fill: p.color, stroke: '#fff', 'stroke-width': 2 }, svg); });
       M.hoods.forEach(function (h) { if (!on[h.id]) sv('path', { d: h.d, fill: 'none', stroke: 'rgba(11,33,64,.18)', 'stroke-width': 1.2 }, svg); });
       sv('path', { d: M.outline, fill: 'none', stroke: INK, 'stroke-width': 5, 'stroke-linejoin': 'round' }, svg);
-      var lm = (a.items || [])[0]; if (lm && lm.x != null) sv('circle', { cx: lm.x, cy: lm.y, r: 16, fill: '#fff', stroke: INK, 'stroke-width': 5 }, svg);
+      all.forEach(function (x) { var m = (x.items || [])[0]; if (m && m.x != null) sv('circle', { cx: m.x, cy: m.y, r: 16, fill: '#fff', stroke: INK, 'stroke-width': 5 }, svg); });
       box.appendChild(svg);
-      box.appendChild(el('p', 'kc-mini-say', 'The colored part of Philly is ' + a.name + (lm && lm.x != null && a.mark ? '. The circle is ' + a.mark + '!' : '!')));
+      var lm = (a.items || [])[0];
+      box.appendChild(el('p', 'kc-mini-say', all.length > 1 ? 'You need a class in each colored part of Philly!' : 'The colored part of Philly is ' + a.name + (lm && lm.x != null && a.mark ? '. The circle is ' + a.mark + '!' : '!')));
     });
   };
   var pinUpClose = function (p, x, st) {
@@ -947,14 +1205,14 @@
       else if (p.group === 'repeat' && !p.how) card.appendChild(el('p', 'kc-say', x.c ? 'You went back to classes you love ' + plural(x.c, 'time', 'times') + '!' : 'Go back to a class you love to get this pin!'));
       else if (p.how) {
         card.appendChild(el('p', 'kc-say', x.c ? 'You have ' + plural(x.c, p.one, p.many) + '!' : p.get || p.rule || p.hint));
-        // which classes counted, so "around Old City" isn't a mystery
+        // which classes counted, so "in Old City or Society Hill" isn't a mystery
         var mx = p.how.indexOf('mix:') === 0 ? p.how.split(':') : null;
-        var w = !x.c || !st ? '' : mx && p.parts ? p.parts[0] + ': ' + names(st.typeKeys[mx[1]]) + '. ' + p.parts[1] + ': ' + names(st.near[mx[2]]) + '.'
+        var w = !x.c || !st ? '' : mx && p.parts ? p.parts.map(function (part, i) { return part + ': ' + names(i ? st.near[mx[i + 1]] : st.typeKeys[mx[1]]) + '.'; }).join(' ')
           : p.how.indexOf('area:') === 0 ? names(st.near[p.how.slice(5)]) && 'Counted: ' + names(st.near[p.how.slice(5)]) + '.'
           : p.how === 'broad' ? 'East of Broad: ' + names(st.side.e) + '. West of Broad: ' + names(st.side.w) + '.' : '';
         if (w) card.appendChild(el('p', 'kc-say small kc-counted', w));
       }
-      else card.appendChild(el('p', 'kc-say', x.c ? 'You’ve been to ' + plural(x.c, p.one, p.many) + '!' : 'Go to a ' + p.one + ' to get this pin!'));
+      else card.appendChild(el('p', 'kc-say', x.c ? 'You’ve been to ' + plural(x.c, p.one, p.many) + '!' : p.get || 'Go to ' + (/^[aeiou]/i.test(p.one) ? 'an ' : 'a ') + p.one + ' to get this pin!'));   // "an after-school program", "a music class"
       if (x.c && x.tier < TOP) card.appendChild(el('p', 'kc-say small', (x.next - x.c) + ' more ' + unitWord(p, x.next - x.c) + ' for ' + TIER[x.tier + 1].toUpperCase() + '!'));
       if (x.c && x.tier < TOP && p.rule) { var how = el('p', 'kc-say small kc-rule'); how.appendChild(el('b', null, 'To level up: ')); how.appendChild(document.createTextNode(p.rule)); card.appendChild(how); }   // a found secret pin's rule, in plain words
       if (p.secret && x.tier < TOP) miniMap(card, p);
@@ -977,7 +1235,13 @@
     if (celebrating || S.view !== 'kid') return;
     celebrating = true;
     var done = function () {
-      var seen = shownNow(k, st);
+      // what was just shown that the bingo card has a square for: a new pin, a pin going up, a secret pin, a new level
+      var marks = [];
+      if (news.pins.some(function (x) { return x.tier === 1; })) marks.push('newpin');
+      if (news.pins.some(function (x) { return x.tier > 1; })) marks.push('pinup');
+      if (news.pins.some(function (x) { return x.p.secret && x.tier === 1; })) marks.push('secretpin');
+      if (news.level) marks.push('levelup');
+      var seen = withMarks(k, marks, shownNow(k, st));
       save({ seen: seen, lvl: st.level.n }, function () { celebrating = false; if (S.tryOn) { S.tryOn = false; go('avatar'); } else if (S.toMap) { S.toMap = false; go('kid', 'map'); } else draw(); });
     };
     // A present to tap open: sounds can only start after a tap.
@@ -1336,6 +1600,8 @@
     var compass = sv('g', { transform: 'translate(985 1085)', 'pointer-events': 'none' }, svg);
     sv('circle', { r: 26, fill: '#fff', stroke: INK, 'stroke-width': 3 }, compass); sv('path', { d: 'M0 -20L6 0L0 -4L-6 0Z', fill: '#E03131', stroke: INK, 'stroke-width': 1.5 }, compass); sv('path', { d: 'M0 20L6 0L0 4L-6 0Z', fill: '#fff', stroke: INK, 'stroke-width': 1.5 }, compass);
     var nt = sv('text', { x: 0, y: -30, 'text-anchor': 'middle', 'font-size': 16, 'font-family': 'Luckiest Guy, Arial Black, sans-serif', fill: INK }, compass); nt.textContent = 'N';
+    // the outline that lights up around a neighborhood picked from the list under the map
+    var hilite = sv('path', { d: '', fill: 'none', stroke: '#FFD43B', 'stroke-width': 6, 'stroke-linejoin': 'round', 'vector-effect': 'non-scaling-stroke', 'class': 'kc-hoodhi', 'pointer-events': 'none' }, svg);
     // Things standing on the map are sized for the zoom, so they stay tappable.
     var things = [];
     var place = function (node, x, y, base, lift) { things.push({ n: node, x: x, y: y, base: base, lift: lift === undefined ? 1 : lift }); svg.appendChild(node); };
@@ -1391,13 +1657,16 @@
     place(you, home[0] + 16, home[1], 1.35, 1); things[things.length - 1].you = true;
     // zoom and drag, by changing what part of the map is in view
     var vb = { x: 0, y: 0, w: W, h: H };
+    var boxOf = function (ids) {   // the box around some neighborhoods, from their outlines
+      var x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+      ids.forEach(function (id) { var n = byId[id].d.match(/-?\d+(\.\d+)?/g); for (var i = 0; i + 1 < n.length; i += 2) { var x = +n[i], y = +n[i + 1]; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; } });
+      return { x0: x0, y0: y0, x1: x1, y1: y1, cx: (x0 + x1) / 2, cy: (y0 + y1) / 2 };
+    };
     var fit = function () {
       var ids = Object.keys(open);
       if (!ids.length) { vb = { x: 0, y: 0, w: W, h: H }; return; }
-      var x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
-      ids.forEach(function (id) { var n = byId[id].d.match(/-?\d+(\.\d+)?/g); for (var i = 0; i + 1 < n.length; i += 2) { var x = +n[i], y = +n[i + 1]; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; } });
-      var cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, w = Math.max(360, (x1 - x0) * 1.5), h = Math.max(w * H / W, (y1 - y0) * 1.5);
-      w = h * W / H; vb = { x: cx - w / 2, y: cy - h / 2, w: w, h: h }; clamp();
+      var bb = boxOf(ids), w = Math.max(360, (bb.x1 - bb.x0) * 1.5), h = Math.max(w * H / W, (bb.y1 - bb.y0) * 1.5);
+      w = h * W / H; vb = { x: bb.cx - w / 2, y: bb.cy - h / 2, w: w, h: h }; clamp();
     };
     var clamp = function () {
       vb.w = Math.max(160, Math.min(W, vb.w)); vb.h = vb.w * H / W;
@@ -1425,13 +1694,25 @@
       var nw = Math.max(160, Math.min(W, vb.w * f)), r = nw / vb.w;
       vb.x = cx - (cx - vb.x) * r; vb.y = cy - (cy - vb.y) * r; vb.w = nw; vb.h = nw * H / W; clamp(); apply();
     };
+    // glide to a part of the map (or jump there, for someone who asked for less motion)
+    var flyTo = function (to, done) {
+      var from = { x: vb.x, y: vb.y, w: vb.w }, t0 = 0;
+      if (CALM) { vb = to; apply(); if (done) done(); return; }
+      var step = function (now) {
+        if (!t0) t0 = now;
+        var f = Math.min(1, (now - t0) / 450), e = f < 0.5 ? 2 * f * f : 1 - Math.pow(-2 * f + 2, 2) / 2;
+        vb.w = from.w + (to.w - from.w) * e; vb.h = vb.w * H / W; vb.x = from.x + (to.x - from.x) * e; vb.y = from.y + (to.y - from.y) * e; apply();
+        if (f < 1) requestAnimationFrame(step); else if (done) done();
+      };
+      requestAnimationFrame(step);
+    };
     fit(); apply();
     box.appendChild(svg);
     var ctl = el('div', 'kc-mapctl');
     var zb = function (label, txt, f) { var b = btn('kc-zoom', txt, function () { Sound.play('tap'); f(); }); b.setAttribute('aria-label', label); return b; };
     ctl.appendChild(zb('Zoom in', '+', function () { zoom(0.66); }));
     ctl.appendChild(zb('Zoom out', '−', function () { zoom(1.5); }));
-    ctl.appendChild(zb('Whole city', '⤢', function () { vb = { x: 0, y: 0, w: W, h: H }; apply(); }));
+    ctl.appendChild(zb('Whole city', '⤢', function () { hilite.classList.remove('on'); vb = { x: 0, y: 0, w: W, h: H }; apply(); }));
     box.appendChild(ctl);
     var bubble = el('div', 'kc-bubble'); bubble.hidden = true; box.appendChild(bubble);
     var say = function (cx, cy, title, line, more) {
@@ -1441,6 +1722,24 @@
       var bx = Math.max(8, Math.min(r.width - bubble.offsetWidth - 8, cx - r.left - bubble.offsetWidth / 2)), by = Math.max(8, cy - r.top - bubble.offsetHeight - 16);
       bubble.style.left = bx + 'px'; bubble.style.top = by + 'px';
       anim(bubble, [{ transform: 'scale(.6)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], { duration: 180, easing: 'ease-out' });
+    };
+    var hoodSay = function (h, cx, cy) {   // a neighborhood's bubble: the classes there, or still cloudy
+      if (open[h.id]) { var here = []; st.places.forEach(function (pl) { if (pl.st.m === h.id && here.indexOf(nameOf(pl.k)) < 0) here.push(nameOf(pl.k)); }); say(cx, cy, h.name, 'You explored here!', here); }
+      else say(cx, cy, h.name, 'Still cloudy! A class here clears the clouds.');
+    };
+    // a neighborhood picked from the list under the map: light it up, glide in close, and say what's there
+    var showHood = function (id) {
+      var h = byId[id], bb = boxOf([id]);
+      var w = Math.max(220, (bb.x1 - bb.x0) * 2.2, (bb.y1 - bb.y0) * 2.2 * W / H);
+      var save = vb; vb = { x: bb.cx - w / 2, y: bb.cy - w * H / W / 2, w: w, h: w * H / W }; clamp(); var to = vb; vb = save;
+      bubble.hidden = true;
+      hilite.setAttribute('d', h.d); hilite.classList.remove('on'); void hilite.getBoundingClientRect(); hilite.classList.add('on');
+      var r = box.getBoundingClientRect();
+      if (r.top < 0 || r.bottom > (window.innerHeight || 0)) box.scrollIntoView({ behavior: CALM ? 'auto' : 'smooth', block: 'center' });
+      flyTo(to, function () {
+        var sr = svg.getBoundingClientRect();
+        hoodSay(h, sr.left + (bb.cx - vb.x) / vb.w * sr.width, sr.top + (bb.y0 - vb.y) / vb.h * sr.height);   // the bubble sits just above it
+      });
     };
     var tapAt = function (ev) {
       var t = document.elementFromPoint(ev.clientX, ev.clientY) || ev.target;   // the drag holds the pointer, so ask what is under it
@@ -1463,12 +1762,7 @@
         Sound.play('whoosh'); say(ev.clientX, ev.clientY, 'A secret spot!', 'Go to ' + (need === 1 ? '1 more class' : need + ' more classes') + ' near here to find out what it is!');
         return;
       }
-      if (hood) {
-        var h = byId[hood.getAttribute('data-hood')];
-        if (open[h.id]) { Sound.play('sparkle'); var here = []; st.places.forEach(function (pl) { if (pl.st.m === h.id && here.indexOf(nameOf(pl.k)) < 0) here.push(nameOf(pl.k)); }); say(ev.clientX, ev.clientY, h.name, 'You explored here!', here); }
-        else { Sound.play('whoosh'); say(ev.clientX, ev.clientY, h.name, 'Still cloudy! A class here clears the clouds.'); }
-        return;
-      }
+      if (hood) { var h = byId[hood.getAttribute('data-hood')]; Sound.play(open[h.id] ? 'sparkle' : 'whoosh'); hoodSay(h, ev.clientX, ev.clientY); return; }
       bubble.hidden = true;
     };
     // drag to move, pinch or buttons to zoom; a touch that doesn't move is a tap
@@ -1498,10 +1792,17 @@
     };
     svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up);
     svg.addEventListener('wheel', function (ev) { ev.preventDefault(); var c = toMap(ev.clientX, ev.clientY); zoom(ev.deltaY > 0 ? 1.2 : 0.83, c[0], c[1]); }, { passive: false });
-    // the places explored, in words too
+    // the places explored, in words too: a tap on one zooms the map in on it
     if (st.nh) {
-      var names = []; Object.keys(open).forEach(function (id) { names.push(byId[id].name); });
-      var ul = el('ul', 'kc-placelist'); names.sort().forEach(function (n) { ul.appendChild(el('li', null, n)); });
+      var ul = el('ul', 'kc-placelist');
+      Object.keys(open).sort(function (a, b) { return byId[a].name.localeCompare(byId[b].name); }).forEach(function (id) {
+        var li = el('li'), b = btn('kc-placebtn', byId[id].name, function () {
+          Sound.play('whoosh');
+          ul.querySelectorAll('.kc-placebtn').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+          showHood(id);
+        });
+        b.setAttribute('aria-pressed', 'false'); b.setAttribute('data-place', id); li.appendChild(b); ul.appendChild(li);
+      });
       box.parentNode.insertBefore(ul, box.parentNode.querySelector('.kc-grown'));
     }
   };
@@ -1969,7 +2270,7 @@
     app.appendChild(page);
     Sound.play('fanfare'); setTimeout(function () { Sound.play('cheer'); }, 500); confetti(100);
     anim(big, [{ transform: 'translateY(40%) scale(.4)' }, { transform: 'translateY(-10%) scale(1.15)', offset: 0.7 }, { transform: 'translateY(0) scale(1)' }], { duration: 700, easing: 'ease-out' });
-    save({ fav: fav }, function () { /* kept; the page stays on the champion */ });
+    save({ fav: fav, seen: withMarks(k, ['showdown']) }, function () { /* kept; the page stays on the champion */ });
   };
   var trophyArt = function () {
     var s = sv('svg', { viewBox: '0 0 100 100', 'class': 'kc-trophy', 'aria-hidden': 'true' });
@@ -2104,6 +2405,13 @@
     var rs = el('div', 'panel'); rs.appendChild(el('h3', null, 'Start ' + possessive(k.name) + ' Kids’ Playground over'));
     rs.appendChild(startOver(k, function () { S.tour = null; S.bracket = null; S.said = ''; go('kid', 'pins'); }));
     page.appendChild(rs);
+
+    // This season's bingo card: how far along, and a way to print it (with the whole card, it's a certificate).
+    var bg = bingo(k), bp = el('div', 'panel');
+    bp.appendChild(el('h3', null, possessive(k.name) + ' bingo card, ' + boardName(bg.b)));
+    bp.appendChild(el('p', 'hint', plural(bg.got, 'square', 'squares') + ' of 24' + (bg.lines.length ? ', ' + plural(bg.lines.length, 'bingo', 'bingos') : '') + (bg.full ? ': the whole card!' : '.') + ' A square is a class you confirmed for this ' + (bg.b.charAt(0) === 's' ? 'summer' : 'school year') + ', or something ' + k.name + ' did here (a showdown, a new pin, a new look). The first three bingos win things for the bulb to wear, and each bingo makes this card’s own pin shinier: diamond for the whole card, with a certificate to print. A new card comes with the summer, and another with the school year.'));
+    var ba = el('div', 'actions'); ba.appendChild(btn('btn', bg.full ? 'Print the Bingo Champ certificate' : 'Print the bingo card', function () { go('kid', 'bingo', false); setTimeout(function () { window.print(); }, 500); }));
+    bp.appendChild(ba); page.appendChild(bp);
 
     // A picture to share (no name, no map), and print.
     var sh = el('div', 'panel'); sh.appendChild(el('h3', null, 'Share the pins'));
@@ -2279,7 +2587,7 @@
       if (p.kids.length === 1) S.kid = 0;   // one child: straight to their page
       var want = null; try { want = sessionStorage.getItem('kc-open'); sessionStorage.removeItem('kc-open'); } catch (e) { /* storage blocked */ }
       if (want) p.kids.forEach(function (k, i) { if (k.name === want) S.kid = i; });   // opened for one child from the account page
-      if (/^(pins|map|battle)$/.test(h)) S.tab = h;
+      if (/^(pins|bingo|map|battle)$/.test(h)) S.tab = h;
       S.view = h === 'grownup' ? 'grownup' : S.kid > -1 ? 'kid' : 'pick';
       try { history.replaceState({ kc: S.view, tab: S.tab, kid: S.kid }, '', location.pathname + (S.view === 'pick' ? '' : S.view === 'kid' ? '#' + S.tab : '#' + S.view)); } catch (e) { /* no history */ }
       draw();

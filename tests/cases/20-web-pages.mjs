@@ -46,25 +46,53 @@ test('the privacy page says what the account notice promises: encryption, no pub
   await t.close();
 });
 
-test('the sign-up page: the notice about your info and your kids’ info sits at the foot of the sign-in card', async (ctx) => {
+test('the sign-up page: a line of fine print at the foot of the sign-in card opens how we use your info and your kids’ info', async (ctx) => {
   const b = await ctx.browser();
   const t = await b.context(ctx.site);
   const page = await t.open('/register/');
   await page.waitForSelector('#acct-notice:not([hidden])');
   const notice = page.locator('#acct-notice');
-  const text = (await notice.innerText()).replace(/\s+/g, ' ');
-  includes(text, 'How we use your info:'); includes(text, 'How we use your kids’ info:'); includes(text, 'we don’t');
-  includes(text, 'encrypted'); includes(text, 'no public link and no public page'); includes(text, 'Who can see what');
+  const fine = (await notice.locator('.acct-fine').innerText()).replace(/\s+/g, ' ');
+  includes(fine, 'Want to know how we use your and your kids’ data responsibly?');
+  eq(await page.locator('#acct-data').isVisible(), false, 'the details wait in a popup');
   // It is inside the sign-in card, after the email form.
   const placed = await page.evaluate(() => {
     const n = document.getElementById('acct-notice'), card = n.closest('.signin'), form = card && card.querySelector('form.signin-row');
-    return { inCard: !!card, afterForm: !!form && !!(form.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_FOLLOWING), link: n.querySelector('a') && n.querySelector('a').getAttribute('href') };
+    return { inCard: !!card, afterForm: !!form && !!(form.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_FOLLOWING) };
   });
   ok(placed.inCard, 'inside the sign-in card'); ok(placed.afterForm, 'under the email form');
-  matches(placed.link || '', /privacy\/#groups$/, 'the link goes to "Who can see what"');
-  // Under Google's button, what Google passes on (its slot is there even when Google's script can't load).
-  const g = await page.evaluate(() => { const n = document.getElementById('acct-google'); return n && n.previousElementSibling && n.previousElementSibling.className; });
-  eq(g, 'g-google', 'the Google hint sits right under the Google button');
+  // "Click here!" opens it, with both parts and the link to who can see what; Esc closes it, and so does a tap outside.
+  await notice.locator('[data-dialog="acct-data"]').click();
+  await page.waitForSelector('#acct-data[open]');
+  const text = (await page.locator('#acct-data').innerText()).replace(/\s+/g, ' ');
+  includes(text, 'How we use your info:'); includes(text, 'How we use your kids’ info:'); includes(text, 'we don’t');
+  includes(text, 'encrypted'); includes(text, 'no public link and no public page'); includes(text, 'Who can see what');
+  matches(await page.locator('#acct-data a').first().getAttribute('href') || '', /privacy\/#groups$/, 'the link goes to "Who can see what"');
+  await page.keyboard.press('Escape');
+  eq(await page.locator('#acct-data').evaluate(d => d.open), false, 'Esc closes it');
+  await notice.locator('[data-dialog="acct-data"]').click();
+  await page.locator('#acct-data [data-dialog-close]').click();
+  eq(await page.locator('#acct-data').evaluate(d => d.open), false, '“Got it” closes it');
+  await notice.locator('[data-dialog="acct-data"]').click();
+  await page.mouse.click(4, 4);
+  eq(await page.locator('#acct-data').evaluate(d => d.open), false, 'a tap outside closes it');
+  // Beside the heading: a few lines on what you get, and the example week.
+  ok(await page.locator('.acct-gets li').count() >= 3, 'what a free account gets you');
+  includes(await page.locator('.acct-hero-ex').innerText(), 'Sam’s week');
+  // No intro line in the sign-in card here, and "Already have an account? Log in" sits under it, on the right.
+  const side = await page.evaluate(() => {
+    const login = document.getElementById('acct-login'), card = document.querySelector('.g-page .signin');
+    return { text: (document.querySelector('.g-page') || {}).textContent || '', shown: !!login && !login.hidden && login.offsetParent !== null,
+      inForm: !!login && !!login.closest('.acct-hero-form'), after: !!login && !!card && !!(card.compareDocumentPosition(login) & Node.DOCUMENT_POSITION_FOLLOWING) };
+  });
+  ok(!/One step for both/.test(side.text), 'no intro line on the sign-up page');
+  ok(side.shown && side.inForm && side.after, 'the log-in line sits under the sign-in card');
+  matches(await page.locator('#acct-login a').getAttribute('href') || '', /account\/$/, 'and goes to the log-in page');
+  // Under Google's button, what Google passes on (its slot is there even when Google's script can't load), unless
+  // that line has been taken off the page in the editor: then nothing shows there.
+  const g = await page.evaluate(() => { const n = document.getElementById('acct-google'); return n ? { text: n.textContent.trim(), shown: !n.hidden, after: n.previousElementSibling && n.previousElementSibling.className } : null; });
+  if (g && g.text) eq(g.after, 'g-google', 'the Google hint sits right under the Google button');
+  else ok(!g || !g.shown, 'an empty Google hint stays hidden');
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
 });

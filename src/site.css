@@ -1128,6 +1128,8 @@ html.signed .when-out{display:none!important}
 html.signed .acct-hero-art{display:none}
 html.signed.form-up .acct-hero-art{display:block}
 .acct-invite{margin:0}
+.acct-login{margin:0;font-size:1rem;color:var(--ink)}
+.acct-login a{font-weight:700}
 .acct-hero-form{min-width:0}
 .acct-hero-form:not(:has(.g-page)){display:none}
 .acct-hero-form .acct-hero-art{margin-top:18px}
@@ -1137,6 +1139,10 @@ html.signed.form-up .acct-hero-art{display:block}
 .acct-hero-form .g-callout{box-shadow:none}
 @media (min-width:880px){
   .acct-head .hero:has(.acct-hero-form .g-page){grid-template-columns:minmax(0,1fr) minmax(0,460px);gap:48px;align-items:start}
+  /* the sign-up page: about two thirds for the heading, what you get and the example; a third for the form */
+  .acct-head .hero:has(.acct-hero-form .g-page[data-mode="register"]){grid-template-columns:minmax(0,2fr) minmax(320px,1fr);gap:40px}
+  .acct-hero-form .g-page[data-mode="register"] .acct-who{grid-template-columns:minmax(0,1fr);gap:8px}   /* the narrow column: the two kinds of account one above the other */
+  .acct-hero-form .g-page[data-mode="register"] .acct-who-on,.acct-hero-form .g-page[data-mode="register"] .acct-who-go{padding:10px 14px}
 }
 .acct-main:empty{display:none}
 .acct-why{display:flex;flex-direction:column;gap:30px;min-width:0}
@@ -2220,11 +2226,48 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .acct-who-on,.acct-who-go{display:flex;flex-direction:column;gap:2px;border-radius:14px;padding:12px 16px;min-width:0;border:2px solid var(--line);background:var(--surface);color:var(--ink);text-decoration:none}
 .acct-who-on{border-color:var(--yellow);background:var(--warn);color:var(--warn-ink)}
 .acct-who b{font-family:var(--display);font-size:1.02rem}
-.acct-notice{display:flex;flex-direction:column;gap:6px;margin:4px 0 0;padding:10px 14px;border-left:4px solid var(--yellow);background:var(--bg);border-radius:0 12px 12px 0;font-size:.92rem;line-height:1.4;color:var(--muted)}
+.acct-notice{margin:4px 0 0}
 .acct-notice[hidden]{display:none}
-.acct-notice p{margin:0}
-.acct-notice b{color:var(--ink);font-weight:700}
-.acct-notice a{color:var(--link);white-space:nowrap}
+.acct-fine{margin:0;font-size:.86rem;line-height:1.4;color:var(--muted)}
+.linkish{background:none;border:0;padding:0;font:inherit;color:var(--link);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.linkish:hover{text-decoration-thickness:2px}
+/* a small window over the page: opened by a button with data-dialog, closed by Esc, its own button, or a tap outside */
+dialog.pas-dialog{border:0;border-radius:18px;padding:0;width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 48px);overflow:auto;color:var(--ink);background:var(--surface);box-shadow:0 20px 60px rgba(11,33,64,.32)}
+dialog.pas-dialog::backdrop{background:rgba(11,33,64,.45)}
+.pas-dialog-in{display:flex;flex-direction:column;gap:12px;padding:24px 24px 22px;line-height:1.45}
+.pas-dialog-in h2{margin:0}
+.pas-dialog-in p{margin:0}
+.pas-dialog-in b{font-weight:700}
+.pas-dialog-in .btn{align-self:flex-start;cursor:pointer;font:inherit;font-weight:700}
+/* beside the sign-up form: the five days across, made small so it doesn't take over the first screen; when its
+   column is too narrow for that (a phone, where it comes after the form), one row per day */
+.acct-hero-ex{container-type:inline-size}
+.acct-hero-ex .ex{max-width:520px;padding:10px 12px;gap:8px}
+.acct-hero-ex .ex figcaption b{font-size:.98rem}
+.acct-hero-ex .ex-tag,.acct-hero-ex .ex-kids i{font-size:.7rem}
+.acct-hero-ex .ex-days{gap:4px}
+.acct-hero-ex .ex-days li{padding:6px 5px;gap:4px;border-radius:10px}
+.acct-hero-ex .ex-days li > b{font-size:.68rem}
+.acct-hero-ex .ex-chip{font-size:.74rem;padding:4px 5px 4px 6px;border-left-width:4px;border-radius:7px;line-height:1.2;overflow-wrap:normal;hyphens:auto}
+.acct-hero-ex .ex-chip small{font-size:.64rem}
+.acct-hero-ex .ex-foot{display:none}
+@container (max-width:430px){
+  .acct-hero-ex .ex-days{grid-template-columns:minmax(0,1fr)}
+  .acct-hero-ex .ex-days li{flex-direction:row;flex-wrap:wrap;align-items:center;padding:6px 8px}
+  .acct-hero-ex .ex-days li > b{width:2.4rem;flex:none}
+  .acct-hero-ex .ex-days .ex-chip{flex:1 1 8rem}
+}
+/* what a free account gets you, under the heading */
+.acct-gets{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:1.02rem;line-height:1.35}
+.acct-gets li{position:relative;padding-left:30px}
+.acct-gets li::before{content:"";position:absolute;left:0;top:.08em;width:20px;height:20px;border-radius:50%;background:var(--yellow) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='%230B2140' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/20px no-repeat}
+/* on a phone the form comes first, then what you get and the example, so creating the account doesn't start below the fold */
+@media (max-width:879px){
+  .acct-head .acct-hero-text:has(.acct-hero-ex){display:contents}
+  .acct-head .hero:has(.acct-hero-ex) .acct-hero-form{order:1}
+  .acct-head .hero .acct-gets{order:2}
+  .acct-head .hero .acct-hero-ex{order:3;margin-top:0}
+}
 .signin-alt>.hint{margin:-4px 0 0;text-align:center;font-size:.85rem}
 .acct-who span{font-size:.9rem;color:var(--muted)}
 .acct-who-on span{color:inherit}
@@ -2345,6 +2388,16 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .pm-grid figure{margin:0;border-radius:14px;overflow:hidden;background:var(--cell-off)}
 .pm-grid img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
 .pm-ask > .btn{align-self:flex-start;cursor:pointer;font:inherit;font-weight:700}
+.pm-social-row{display:flex;flex-wrap:wrap;gap:10px;margin:0}
+.pm-soc{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font-weight:700;text-decoration:none}
+a.pm-soc::after{content:"↗";font-weight:400;color:var(--muted)}
+a.pm-soc:hover{border-color:var(--ink)}
+.pm-ig-posts{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;align-items:start;max-width:980px}
+.pm-ig-posts .instagram-media{margin:0 !important;min-width:0 !important;width:100% !important}
+.pm-ig-links{margin:0;padding-left:1.2em}
+.pm-ig-links[hidden]{display:none}
+.pm-ig > .btn{align-self:flex-start;cursor:pointer;font:inherit;font-weight:700}
+.pm-ig > .btn[hidden]{display:none}
 .pm-ask-form{max-width:560px;display:flex;flex-direction:column;gap:14px}
 .pm-ask-form[hidden]{display:none}
 .pm-ask-form input,.pm-ask-form textarea{font:inherit;width:100%;padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}
@@ -2404,6 +2457,8 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .pmd-words{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:12px}
 .pmd-h{margin:0;font-family:var(--display);font-stretch:112%;font-weight:800;font-size:1.05rem;display:flex;align-items:center}
 .pm-demo .pm-by{font-size:.84rem;gap:10px}
+.pmd-social{position:relative;display:flex;gap:6px;margin:8px 0 0}
+.pmd-social span{border:1.5px solid var(--line);border-radius:999px;padding:3px 10px;font-size:.78rem;font-weight:700;background:#FFFFFF}
 .pmd-logo{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:#FFFFFF;flex:none;overflow:hidden;line-height:0}
 .pmd-logo svg{width:100%;height:100%;display:block}
 .pmd-text{margin:0;font-size:.93rem;line-height:1.45}
@@ -2632,15 +2687,15 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-lvl{font-weight:800;color:var(--kblue);font-size:.92rem;line-height:1.2}
 .kc-xp{height:16px;border:3px solid var(--kink);border-radius:999px;background:#F1F3F5;overflow:hidden}
 .kc-xp i{display:block;height:100%;border-radius:999px;background:repeating-linear-gradient(-45deg,#F3C613 0 7px,#E0B400 7px 14px);background-size:28px 100%;animation:kc-stripes 1s linear infinite}
-.kc-tabs{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);width:min(520px,calc(100% - 20px));display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#fff;border:3px solid var(--kink);border-radius:28px;padding:6px;box-shadow:0 6px 0 var(--kink);z-index:40}
-.kc-tabbtn{font-family:var(--title);font-weight:400;font-size:1.15rem;letter-spacing:.03em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:0;padding:8px 4px 4px;border:0;border-radius:20px;background:transparent;color:var(--kink);cursor:pointer}
+.kc-tabs{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);width:min(560px,calc(100% - 20px));display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#fff;border:3px solid var(--kink);border-radius:28px;padding:6px;box-shadow:0 6px 0 var(--kink);z-index:40}
+.kc-tabbtn{position:relative;font-family:var(--title);font-weight:400;font-size:clamp(.9rem,3.6vw,1.15rem);letter-spacing:.03em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:0;padding:8px 4px 4px;border:0;border-radius:20px;background:transparent;color:var(--kink);cursor:pointer}
 .kc-tabbtn svg{width:30px;height:30px}
 .kc-tabbtn.on{background:var(--kyellow);box-shadow:inset 0 0 0 3px var(--kink)}
 /* On a laptop the tabs sit under the child's header, stuck there with it, instead of a phone's bar at the bottom. */
 @media (min-width:900px){
   .kc-page{display:flex;flex-direction:column;padding-bottom:40px}
   .kc-page > .kc-top{order:0}.kc-page > .kc-tabs{order:1}.kc-page > .kc-body{order:2}
-  .kc-tabs{position:sticky;top:99px;left:auto;bottom:auto;transform:none;width:auto;margin:0 0 14px;z-index:29;grid-template-columns:repeat(3,minmax(0,1fr));box-shadow:0 5px 0 var(--kink);border-radius:24px}
+  .kc-tabs{position:sticky;top:99px;left:auto;bottom:auto;transform:none;width:auto;margin:0 0 14px;z-index:29;grid-template-columns:repeat(4,minmax(0,1fr));box-shadow:0 5px 0 var(--kink);border-radius:24px}
   .kc-tabbtn{flex-direction:row;justify-content:center;gap:10px;padding:10px 8px 7px;font-size:1.25rem}
   .kc-tabbtn svg{width:26px;height:26px;margin-top:-3px}
 }
@@ -2706,7 +2761,13 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-bubble-li{color:var(--kblue)}
 .kc-credit{color:rgba(255,255,255,.85);font-size:.8rem;margin:12px 0 0;text-align:center}
 .kc-placelist{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-wrap:wrap;gap:8px}
-.kc-placelist li{background:#fff;border:2.5px solid var(--kink);border-radius:999px;padding:4px 12px;font-weight:800}
+.kc-placelist .kc-placebtn{font:inherit;font-weight:800;color:var(--kink);background:#fff;border:2.5px solid var(--kink);border-radius:999px;padding:4px 12px;cursor:pointer;transition:transform .12s,background .12s}
+.kc-placelist .kc-placebtn:hover{transform:translateY(-1px)}
+.kc-placelist .kc-placebtn[aria-pressed="true"]{background:#FFD43B}
+.kc-hoodhi{opacity:0}
+.kc-hoodhi.on{opacity:1;animation:kc-hoodhi 1.2s ease-out}
+@keyframes kc-hoodhi{0%,40%,80%{opacity:1}20%,60%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.kc-hoodhi.on{animation:none}}
 /* the battle */
 .kc-podium{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-items:end}
 .kc-step{background:#fff;border:3px solid var(--kink);border-radius:20px 20px 10px 10px;box-shadow:0 5px 0 var(--kink);display:flex;flex-direction:column;align-items:center;padding:10px 6px 12px;text-align:center;gap:4px}
@@ -2958,6 +3019,7 @@ html.kc-kid .kc-hold{background:rgba(255,255,255,.85);border-color:rgba(11,33,64
 .kc-picked{font-weight:700;margin:6px 0 0}
 @media (max-width:420px){.kc-me{width:56px;height:56px}.kc-top .kc-back,.kc-top .kc-mute{width:44px;height:44px}.kc-top{gap:8px;padding:8px}.kc-vs{width:54px;height:54px;font-size:1.6rem}.kc-arena{padding:92px 6px 16px}.kc-fighter b{font-size:.85rem;padding:5px 7px}.kc-ref .kc-eddie-say{font-size:1.05rem}.kc-eddie-img{width:52px}}
 @media (prefers-reduced-motion:reduce){.kc-tour0 .kc-tour-big,.kc-map .kc-secret > g,.kc-map .kc-surq > g,.kc-pinrays,.kc-twinkle,.kc-flame,.kc-parasol-spin,.kc-glow,.kc-eddie-img,.kc-bulb.beam .kc-glow,.kc-bulb.bob,.kc-eyes,.kc-prop,.kc-pin .kc-shine,.kc-waves,.kc-rays,.kc-giftart,.kc-xp i,.kc-meter i{animation:none}}
+@media print{.kc-tab-bingo .kc-host,.kc-prizes,.kc-prizehead,.kc-tabdot{display:none!important}.kc-bingo,.kc-cert{box-shadow:none;break-inside:avoid}.kc-sq.fresh .kc-daub{opacity:.5}}
 @media print{html.kc-kid body{background:#fff}html.kc-kid body::before,html.kc-kid .kc-tabs,html.kc-kid .kc-grown,html.kc-kid .kc-mute,html.kc-kid .kc-back{display:none}html.kc-kid .kc-top{position:static}.kc-h2,.kc-say{color:var(--kink);text-shadow:none}.kc-pincard,.kc-top{box-shadow:none;break-inside:avoid}}
 
 /* a child's favorites from the Passport, offered first in the planners */
@@ -2994,3 +3056,44 @@ html.kc-kid .kc-hold{background:rgba(255,255,255,.85);border-color:rgba(11,33,64
 .pm-pin-prev figure{margin:0;text-align:center;font-size:.85rem;font-weight:700}
 .pm-pin-prev svg{width:110px;height:auto;overflow:visible}
 .pm-form select{font:inherit;font-size:1rem;padding:10px 12px;border:2px solid #C5D2E4;border-radius:12px;background:#fff;color:inherit;max-width:100%}
+
+/* Bingo: this season's card (kids-corner.js, drawBingoTab) */
+.kc-tabdot{position:absolute;top:4px;right:12%;width:14px;height:14px;border-radius:50%;background:var(--kred);border:2.5px solid #fff;box-shadow:0 0 0 2px var(--kink)}
+.kc-bingo{background:#fff;border:3px solid var(--kink);border-radius:26px;box-shadow:0 6px 0 var(--kink);padding:10px 10px 12px;max-width:620px;margin:0 auto 6px}
+.kc-bingo-letters{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:0 0 6px}
+.kc-bingo-letters b{font-family:var(--title);font-weight:400;font-size:clamp(1.5rem,7vw,2.3rem);line-height:1;text-align:center;padding:6px 0 2px;border-radius:12px;color:#fff;text-shadow:0 2px 0 var(--kink),1.5px 1.5px 0 var(--kink),-1.5px -1.5px 0 var(--kink),1.5px -1.5px 0 var(--kink),-1.5px 1.5px 0 var(--kink);border:2.5px solid var(--kink)}
+.kc-bingo-letters b:nth-child(1){background:#CC3000}.kc-bingo-letters b:nth-child(2){background:#2176D2}.kc-bingo-letters b:nth-child(3){background:var(--kyellow)}.kc-bingo-letters b:nth-child(4){background:#3FA34D}.kc-bingo-letters b:nth-child(5){background:#C2255C}
+.kc-bingo-grid{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.kc-sq{position:relative;aspect-ratio:1;min-width:0;font:inherit;color:#4D607A;background:#F1F5FB;border:2.5px solid #8E9AB0;border-radius:14px;padding:4px 3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;overflow:hidden;transition:transform .08s}
+.kc-sq b{position:relative;z-index:1;font-weight:800;font-size:clamp(.58rem,2.5vw,.86rem);line-height:1.05;text-align:center;overflow-wrap:anywhere;hyphens:auto}
+.kc-sqicon{position:relative;z-index:1;width:46%;height:auto;flex:none;opacity:.55}
+.kc-sq.on{color:var(--kink);background:#FFF7D6;border-color:var(--kink)}
+.kc-sq.on .kc-sqicon{opacity:1}
+.kc-daub{position:absolute;left:50%;top:50%;width:84%;aspect-ratio:1;margin:-42% 0 0 -42%;border-radius:50%;opacity:0;mix-blend-mode:multiply;pointer-events:none}
+.kc-sq.on .kc-daub{opacity:.5}
+.kc-sq.fresh .kc-daub{opacity:0}
+.kc-sq.free{background:var(--kyellow);border-color:var(--kink);color:var(--kink)}
+.kc-sq.free b{font-family:var(--title);font-weight:400;font-size:clamp(.8rem,3.4vw,1.2rem);text-transform:uppercase;letter-spacing:.03em}
+.kc-sq-eddie{width:auto;height:58%;filter:drop-shadow(0 2px 0 rgba(11,33,64,.3))}
+.kc-sq:active{transform:translateY(2px)}
+.kc-sq:focus-visible{outline:4px solid var(--kyellow);outline-offset:2px}
+.kc-bingo-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.kc-sqbig .kc-sq.big{width:150px;font-size:1rem;cursor:default}
+.kc-sqbig .kc-sq.big b{font-size:1.05rem}
+.kc-prizes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-width:620px;margin:0 auto}
+.kc-prize{position:relative;background:#E4ECF6;color:#4D607A;border:3px solid #8E9AB0;border-radius:18px;box-shadow:0 4px 0 #8E9AB0;padding:26px 6px 10px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px}
+.kc-prize .kc-bulb{width:min(84px,100%)}
+.kc-prize b{font-weight:800;font-size:.92rem;line-height:1.15}
+.kc-prize .kc-lock{left:50%;right:auto;transform:translateX(-50%);white-space:nowrap}
+.kc-prize.won{background:#fff;color:var(--kink);border-color:var(--kink);box-shadow:0 4px 0 var(--kink)}
+.kc-prize.won .kc-lock{background:var(--kgreen)}
+.kc-prize.big{grid-column:1/-1;flex-direction:row;justify-content:center;gap:12px;padding:26px 12px 10px}
+.kc-prize.big .kc-pin{width:96px;height:auto;overflow:visible}
+.kc-prize-txt{display:flex;flex-direction:column;gap:3px;text-align:left;max-width:22em}
+.kc-prize-txt b{font-size:1.05rem}.kc-prize-txt span{font-weight:700;font-size:.88rem;line-height:1.3}
+.kc-cert{text-align:center;background:#FFF4DA;border:3px solid var(--kink);outline:3px dashed var(--kyellow);outline-offset:-12px;border-radius:26px;box-shadow:0 6px 0 var(--kink);padding:22px 16px 18px;max-width:620px;margin:0 auto 10px}
+.kc-cert .kc-pin{width:150px;height:auto;overflow:visible;margin:6px auto}
+.kc-cert-say{font-family:var(--title);font-weight:400;text-transform:uppercase;letter-spacing:.02em;font-size:clamp(1.2rem,5vw,1.7rem);line-height:1.1;color:var(--kink);margin:6px 0}
+.kc-cert-sign{font-weight:800;font-style:italic;color:var(--kink);margin:4px 0 0}
+.kc-bingowin .kc-champbulb{width:110px}
+.kc-wearbtn.bingo.locked .kc-lock{background:var(--kred)}

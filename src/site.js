@@ -1,5 +1,18 @@
 // Small enhancements. Every page reads fine without JavaScript; this adds the school search,
 // the grade/type filter, the rosters, and a few form conveniences.
+// A small window over the page (a <dialog>): a button with data-dialog="id" opens it; Esc, a button with
+// data-dialog-close, or a tap outside the window closes it.
+document.addEventListener('click', function (e) {
+  var t = e.target, open = t.closest && t.closest('[data-dialog]');
+  if (open) {
+    var dlg = document.getElementById(open.getAttribute('data-dialog'));
+    if (dlg) { e.preventDefault(); if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); }
+    return;
+  }
+  var shut = t.closest && t.closest('[data-dialog-close]');
+  if (shut) { var d = shut.closest('dialog'); if (d) { if (d.close) d.close(); else d.removeAttribute('open'); } return; }
+  if (t.tagName === 'DIALOG' && t.open && t.close) t.close();   // the backdrop, outside the window's own box
+});
 (function () {
   // The menu bar sticks to the top of the screen. Its height goes into --bar-h so the things that stick under it, and
   // links that jump down a page, leave room for it.
@@ -404,6 +417,41 @@
         String(d.words).split(/\n{2,}/).forEach(function (para) { if (para.replace(/\s+/g, '')) w.appendChild(el('p', 'pm-text', para)); });
         pmBox.appendChild(w);
       }
+      // the program's own accounts, and up to three Instagram posts it picked. A post loads Instagram only when a parent
+      // asks for it: until then the page lists plain links, and nothing is fetched from Instagram.
+      var SOC = [['ig', 'Instagram', /^https:\/\/www\.instagram\.com\//], ['fb', 'Facebook', /^https:\/\/www\.facebook\.com\//], ['tt', 'TikTok', /^https:\/\/www\.tiktok\.com\/@/], ['yt', 'YouTube', /^https:\/\/www\.youtube\.com\//]];
+      var socs = SOC.filter(function (x) { return d.social && typeof d.social[x[0]] === 'string' && (demo || x[2].test(d.social[x[0]])); });
+      if (socs.length) {
+        var so = el('section', 'section pm-social'); so.id = 'social';
+        so.appendChild(el('h2', null, 'Follow ' + name));
+        var row = el('p', 'pm-social-row');
+        socs.forEach(function (x) { var a = el(demo ? 'span' : 'a', 'pm-soc ' + x[0], x[1]); if (!demo) { a.href = d.social[x[0]]; a.rel = 'noopener'; } row.appendChild(a); });
+        so.appendChild(row);
+        pmBox.appendChild(so);
+      }
+      var posts = (d.posts || []).filter(function (u) { return typeof u === 'string' && (demo || /^https:\/\/www\.instagram\.com\/(p|reel)\/[A-Za-z0-9_-]+\/$/.test(u)); }).slice(0, 3);
+      if (posts.length) {
+        var ig = el('section', 'section pm-ig'); ig.id = 'instagram';
+        ig.appendChild(el('h2', null, 'From ' + name + ' on Instagram'));
+        var posted = el('div', 'pm-ig-posts'), links = el('ul', 'pm-ig-links');
+        posts.forEach(function (u, i) { var li = el('li'), a = el(demo ? 'span' : 'a', null, (posts.length > 1 ? 'Post ' + (i + 1) : 'Their post') + ' on Instagram'); if (!demo) { a.href = u; a.rel = 'noopener'; } li.appendChild(a); links.appendChild(li); });
+        posted.appendChild(links);
+        var load = el('button', 'btn', posts.length > 1 ? 'Show the posts here' : 'Show the post here'); load.type = 'button';
+        var igNote = el('p', 'hint', 'Picked by ' + name + '. Showing ' + (posts.length > 1 ? 'them' : 'it') + ' here loads Instagram, which may set its own cookies.');
+        load.addEventListener('click', function () {
+          if (demo) { igNote.textContent = 'This is a sample, so there are no posts to show.'; return; }
+          load.hidden = true; links.hidden = true;
+          posts.forEach(function (u) {
+            var bq = document.createElement('blockquote'); bq.className = 'instagram-media'; bq.setAttribute('data-instgrm-permalink', u); bq.setAttribute('data-instgrm-version', '14');
+            var a = document.createElement('a'); a.href = u; a.rel = 'noopener'; a.textContent = 'View this post on Instagram'; bq.appendChild(a); posted.appendChild(bq);
+          });
+          if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process();
+          else { var sc = document.createElement('script'); sc.async = true; sc.src = 'https://www.instagram.com/embed.js'; document.body.appendChild(sc); }
+          track({ event: 'pas_instagram', program_id: key.slice(2), listing_kind: key.charAt(0) === 'c' ? 'camp' : 'program' });
+        });
+        ig.appendChild(posted); ig.appendChild(load); ig.appendChild(igNote);
+        pmBox.appendChild(ig);
+      }
       // the rest of the photos
       if (photos.length > 1) {
         var g = el('section', 'section pm-gallery'); g.id = 'photos';
@@ -460,7 +508,8 @@
       var block = function (fill, label) { return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520"><rect width="800" height="520" fill="' + fill + '"/><text x="400" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="700" fill="#0B2140">' + label + '</text></svg>'); };
       show({ offer: { t: 'Open house on November 12 at 6 pm. Come see the space and meet the staff.' }, logo: 1, logoSrc: block('#F3C613', 'Logo'),
         words: 'This is where the program describes itself: what an afternoon looks like, who the staff are, and what makes it theirs.\n\nIt is always marked as written by the program, and a person reads it before it shows.',
-        photos: [{ src: block('#C3E1FF', 'Sample photo 1'), alt: 'A sample photo' }, { src: block('#DAEDFE', 'Sample photo 2'), alt: 'A sample photo' }, { src: block('#FFF4C2', 'Sample photo 3'), alt: 'A sample photo' }, { src: block('#D6F3D2', 'Sample photo 4'), alt: 'A sample photo' }], ask: true }, true);
+        photos: [{ src: block('#C3E1FF', 'Sample photo 1'), alt: 'A sample photo' }, { src: block('#DAEDFE', 'Sample photo 2'), alt: 'A sample photo' }, { src: block('#FFF4C2', 'Sample photo 3'), alt: 'A sample photo' }, { src: block('#D6F3D2', 'Sample photo 4'), alt: 'A sample photo' }], ask: true,
+        social: { ig: '', fb: '' }, posts: ['', '', ''] }, true);
       return;
     }
     if (!api) return;
