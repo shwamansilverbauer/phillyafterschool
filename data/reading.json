@@ -142,5 +142,11 @@
     "how": "person",
     "why": "Yous’s Sawyer sign-up page answered HTTP 403 to a plain fetch on 2026-11-10, and Sawyer’s booking pages have refused automated reading before (see Dandelion and Sawubona).",
     "seen": "2026-11-10"
+  },
+  {
+    "match": "brooklynrobotfoundry.com",
+    "how": "browser",
+    "why": "A plain fetch gets a Cloudflare “Just a moment…” page; in a browser the Philadelphia after-school page shows its schedule of school sites, including Delaplaine McDaniel.",
+    "seen": "2026-11-12"
   }
 ]

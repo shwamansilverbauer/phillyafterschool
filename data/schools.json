@@ -540,7 +540,7 @@
     "phone": "215-400-3360",
     "website": "https://jsjenks.philasd.org/",
     "lastReviewed": "2026-11-11",
-    "added": "2026-11-11",
+    "added": "2026-11-12",
     "notes": [
       "Jenks’s own site names no after-school program of its own. It lists clubs and activities, among them chess, debate, Girls on the Run, Body Empowerment and elementary intramural sports, without saying when they meet, so ask the office which run after dismissal.",
       "School ends at 2:09 pm. Two Mount Airy programs name Jenks on their pickup lists, Zhang Sah and Philly Art Center; ask each what time they collect children and how they handle half days, when Jenks lets out earlier still.",
@@ -660,7 +660,7 @@
       ]
     },
     "lastReviewed": "2026-11-11",
-    "added": "2026-11-11",
+    "added": "2026-11-12",
     "notes": [
       "Russell Byers’s 2026–27 Parent & Guardian Handbook mentions an RBCS After School Program at the school, but the site gives no hours, grades or cost for it. It has a listing here; ask the office how it works and how to sign up.",
       "Byers keeps its own calendar, and its days off aren’t the District’s: it is closed for interim conferences on October 8 and December 21, on March 10 for Eid al-Fitr and on May 17 for Eid al-Adha, for instance, and its last day is June 3. The days off on this page come from the Byers calendar; the days-off planner and the list of who’s open go by the District’s, so check a camp’s dates against Byers’s.",
@@ -693,7 +693,7 @@
     "phone": "215-400-3430",
     "website": "https://cookwissahickon.philasd.org/",
     "lastReviewed": "2026-11-11",
-    "added": "2026-11-11",
+    "added": "2026-11-12",
     "notes": [
       "Cook-Wissahickon’s own site names one after-school partner, the Urban Youth Afterschool Program (Urban Youth King & Queens, or UYKQ), which runs before and after care in the building. It has a listing here.",
       "The clubs the school’s site lists (robotics, intramural sports, volleyball, art club, yearbook) are described as running during the school day, so they aren’t listed here as after-school care.",
@@ -718,7 +718,7 @@
     "phone": "215-400-7320",
     "website": "https://morris.philasd.org/",
     "lastReviewed": "2026-11-11",
-    "added": "2026-11-11",
+    "added": "2026-11-12",
     "notes": [
       "Two things run in the building after school. Caring People Alliance runs a free after-school program there, Monday to Friday until 6:00 pm, for Morris students only; it is listed in the City’s program locator. The school runs its own clubs too: tech, music, volleyball and writing.",
       "The school doesn’t post a dismissal time, half days or how the after-school program handles early dismissals. Ask the office.",
@@ -745,11 +745,243 @@
     "phone": "215-400-3480",
     "website": "https://henry.philasd.org/",
     "lastReviewed": "2026-11-11",
-    "added": "2026-11-11",
+    "added": "2026-11-12",
     "notes": [
       "Henry’s own site names Urban Youth King and Queens (UYKQ) among its community partners; UYKQ runs before and after care in the building and has a listing here. Philly Art Center’s Mount Airy studio is a block away on Carpenter Lane, and it and Zhang Sah both name Henry on their pickup lists.",
       "The school’s site lists clubs and activities too, among them debate, robotics, chess, yoga, cooking, Students Run Philly Style and the spring musical, without saying when they meet. It links an up-to-date list; ask the office which run after dismissal.",
       "If you know a program that serves C.W. Henry and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "mastery-thomas",
+    "name": "Mastery Charter School: Thomas Elementary",
+    "shortName": "Mastery Thomas",
+    "aliases": [
+      "Mastery Thomas",
+      "Thomas Elementary",
+      "Mastery Thomas Elementary",
+      "Mastery Charter Thomas Elementary",
+      "Mastery School Thomas Campus",
+      "Mastery Charter School Thomas Elementary"
+    ],
+    "address": "814 Bigler St, Philadelphia, PA 19148",
+    "neighborhood": "Whitman",
+    "grades": "K-6",
+    "dismissal": "3:15 pm",
+    "dismissalNote": "the school day is 8:00 am to 3:15 pm",
+    "phone": "267-296-7000",
+    "website": "https://masterycharter.org/elementary-schools/thomas",
+    "lastReviewed": "2026-11-12",
+    "added": "2026-11-12",
+    "notes": [
+      "Thomas Elementary’s own page says it offers aftercare through two providers, Mastermindz and SafeHaven, from dismissal to 6:00 pm, Monday to Friday. It says SafeHaven is free and Mastermindz accepts childcare subsidies. Neither provider has a website we could find, so both listings rest on the school’s page; the school’s page gives a contact number for each.",
+      "Thomas follows the Mastery Schools calendar, not the District’s. Its days off on this page come from Mastery’s 2026–27 Philadelphia calendar: it closes for Yom Kippur, Eid al-Fitr and Eid al-Adha, and its spring break is March 22 to 26. The days-off planner and the list of who’s open go by the District’s days, so check a camp’s dates against Mastery’s.",
+      "Mastery’s calendar marks early dismissals on November 10, December 23, February 9, May 7 and June 11 (the last day). Ask each aftercare provider whether it covers those afternoons.",
+      "Thomas Elementary teaches kindergarten to 6th grade; its students can go on to the Mastery Thomas Campus for 7th to 12th grade, which is a separate building at 927 Johnston St.",
+      "If you know a program that serves Mastery Thomas and isn’t here, send it in and it goes on this page."
+    ],
+    "calendar": {
+      "source": {
+        "label": "Mastery Schools 2026–27 calendar (Philadelphia)",
+        "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf"
+      },
+      "checked": "2026-11-12",
+      "lastDay": "2027-06-11",
+      "days": [
+        {
+          "date": "2026-09-07",
+          "name": "Labor Day"
+        },
+        {
+          "date": "2026-09-21",
+          "name": "Yom Kippur"
+        },
+        {
+          "date": "2026-10-12",
+          "name": "Indigenous Peoples’ Day"
+        },
+        {
+          "date": "2026-10-23",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2026-11-03",
+          "name": "Election Day"
+        },
+        {
+          "date": "2026-11-11",
+          "name": "Veterans Day"
+        },
+        {
+          "date": "2026-11-25",
+          "end": "2026-11-27",
+          "name": "Thanksgiving break"
+        },
+        {
+          "date": "2026-12-11",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2026-12-24",
+          "end": "2027-01-01",
+          "name": "Winter break"
+        },
+        {
+          "date": "2027-01-18",
+          "name": "Martin Luther King Jr. Day"
+        },
+        {
+          "date": "2027-01-22",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2027-02-15",
+          "name": "Presidents’ Day"
+        },
+        {
+          "date": "2027-02-26",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2027-03-10",
+          "name": "Eid al-Fitr"
+        },
+        {
+          "date": "2027-03-22",
+          "end": "2027-03-26",
+          "name": "Spring break"
+        },
+        {
+          "date": "2027-04-09",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2027-05-17",
+          "name": "Eid al-Adha"
+        },
+        {
+          "date": "2027-05-18",
+          "name": "Primary Election Day"
+        },
+        {
+          "date": "2027-05-31",
+          "name": "Memorial Day"
+        }
+      ]
+    }
+  },
+  {
+    "id": "emlen",
+    "name": "Eleanor C. Emlen School",
+    "shortName": "Emlen",
+    "aliases": [
+      "Emlen",
+      "Emlen Elementary",
+      "Emlen Elementary School",
+      "Eleanor Emlen",
+      "Eleanor C. Emlen",
+      "Emlen School"
+    ],
+    "address": "6501 Chew Ave, Philadelphia, PA 19119",
+    "neighborhood": "Mount Airy",
+    "grades": "PK-5",
+    "dismissal": "2:54 pm",
+    "dismissalNote": "the school day is 8:15 am to 2:54 pm",
+    "phone": "215-400-3470",
+    "website": "https://emlen.philasd.org/",
+    "lastReviewed": "2026-11-12",
+    "added": "2026-11-12",
+    "notes": [
+      "Emlen’s own site says the Boys & Girls Club provides after-school and summer programming for its students, and the Boys & Girls Clubs of Philadelphia list Emlen as one of their school sites, for enrolled students. The school also lists an After School Choir and an After School Step Club of its own.",
+      "Neither the school nor the club posts the club’s hours or how it handles half days. Ask the office, or the club’s site number on its listing.",
+      "If you know a program that serves Emlen and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "wright",
+    "name": "Richard R. Wright School",
+    "shortName": "Wright",
+    "aliases": [
+      "Richard R. Wright",
+      "Richard Wright",
+      "R.R. Wright",
+      "RR Wright",
+      "R. Wright",
+      "Wright Elementary",
+      "Richard R. Wright Elementary",
+      "Richard R Wright Elementary",
+      "Wright RR Elementary Community School"
+    ],
+    "address": "2201 N 28th St, Philadelphia, PA 19132",
+    "neighborhood": "Strawberry Mansion",
+    "grades": "PK-5",
+    "dismissal": "2:09 pm",
+    "dismissalNote": "the school day is 7:30 am to 2:09 pm",
+    "phone": "215-400-7030",
+    "website": "https://wright.philasd.org/",
+    "lastReviewed": "2026-11-12",
+    "added": "2026-11-12",
+    "notes": [
+      "Two free programs run in the building after school. LEGACY Youth Tennis and Education runs Champions on the Rise there, part of the City’s Out-of-School Time program, and Shoot Basketballs NOT People runs an after-school program at Wright for 3rd to 5th graders. Wright’s own site describes after-school enrichment but doesn’t name the providers.",
+      "Wright is a Community School. Its site says children can’t be picked up for an early dismissal after 1:30 pm, and sends families to its handbook for early dismissals and weather closings. Ask each program what happens on a half day.",
+      "If you know a program that serves Wright and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "jb-kelly",
+    "name": "John B. Kelly School",
+    "shortName": "J.B. Kelly",
+    "aliases": [
+      "John B. Kelly",
+      "John B Kelly",
+      "JB Kelly",
+      "J.B. Kelly",
+      "John B. Kelly School",
+      "Kelly School",
+      "John B. Kelly Elementary"
+    ],
+    "address": "5116 Pulaski Ave, Philadelphia, PA 19144",
+    "neighborhood": "Germantown",
+    "grades": "K-5",
+    "dismissal": "3:29 pm",
+    "dismissalNote": "the school day is 8:50 am to 3:29 pm",
+    "phone": "215-400-3580",
+    "website": "https://kelly.philasd.org/",
+    "lastReviewed": "2026-11-12",
+    "added": "2026-11-12",
+    "notes": [
+      "Two programs run in the building. Urban Youth King & Queens (UYKQ) runs after care at Kelly for kindergarten to 3rd grade, and Zhang Sah lists John B. Kelly among its school-based programs. Kelly’s own site names both among its community partners.",
+      "Neither UYKQ’s page nor Zhang Sah’s says how half days are handled at Kelly. Ask both programs, and the office, before counting on an early-dismissal afternoon.",
+      "If you know a program that serves J.B. Kelly and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "edmonds",
+    "name": "Franklin S. Edmonds School",
+    "shortName": "Edmonds",
+    "aliases": [
+      "Franklin S. Edmonds",
+      "Franklin Edmonds",
+      "F.S. Edmonds",
+      "FS Edmonds",
+      "Edmonds Elementary",
+      "Edmonds Elementary School",
+      "Edmonds Community School",
+      "Franklin S. Edmonds Elementary School"
+    ],
+    "address": "8025 Thouron Ave, Philadelphia, PA 19150",
+    "neighborhood": "Cedarbrook",
+    "grades": "PK-8",
+    "dismissal": "2:09 pm",
+    "dismissalNote": "the school day is 7:30 am to 2:09 pm",
+    "phone": "215-400-3370",
+    "website": "https://edmonds.philasd.org/",
+    "lastReviewed": "2026-11-12",
+    "added": "2026-11-12",
+    "notes": [
+      "Two programs run in the building, both listed in the City’s program locator. The Indochinese American Council (IAC) runs an after-school program for kindergarten to 8th grade, Monday to Friday until 5:30 pm, and Young Men and Women In Charge (YMWIC) runs a free STEM program for 6th to 8th graders on Tuesdays and Wednesdays. The City’s listing for IAC doesn’t give a cost.",
+      "Edmonds’s own site posts its bell schedule but doesn’t mention after school, half days or how the programs handle early dismissals. Ask the office, and each program.",
+      "If you know a program that serves Edmonds and isn’t here, send it in and it goes on this page."
     ]
   }
 ]

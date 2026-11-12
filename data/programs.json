@@ -12101,11 +12101,14 @@
       "C.W. Henry",
       "Cook-Wissahickon",
       "Mount Airy",
-      "Roxborough"
+      "Roxborough",
+      "J.B. Kelly",
+      "John B. Kelly",
+      "Germantown"
     ],
-    "address": "Inside Houston, C.W. Henry and Cook-Wissahickon schools",
+    "address": "Inside Houston, C.W. Henry, Cook-Wissahickon and John B. Kelly schools",
     "grades": "PK-5",
-    "gradeNote": "Pre-K to 5th grade at Cook-Wissahickon, K–5 at Houston and C.W. Henry",
+    "gradeNote": "Pre-K to 5th grade at Cook-Wissahickon, K–5 at Houston and C.W. Henry, K–3 at John B. Kelly",
     "hours": "From dismissal to 5:45 pm, Monday to Friday, including early-dismissal days. Before care from as early as 7:30 am at C.W. Henry and Cook-Wissahickon. No care on days the school is closed, or when it closes early for weather.",
     "days": [
       "mon",
@@ -12189,6 +12192,21 @@
           }
         ],
         "checked": "2026-11-11"
+      },
+      "jb-kelly": {
+        "relation": "onsite",
+        "note": "UYKQ’s page lists John B. Kelly School for after care, grades K–3, and Kelly’s own site names the UYKQ Afterschool Program among its community partners.",
+        "sources": [
+          {
+            "label": "UYKQ after-school",
+            "url": "https://www.urbanyouthkq.com/after-school"
+          },
+          {
+            "label": "J.B. Kelly community partnerships",
+            "url": "https://kelly.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-12"
       }
     }
   },
@@ -12461,6 +12479,744 @@
         "distance": "a couple of blocks east, on Hartwell Lane",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-11"
+      }
+    }
+  },
+  {
+    "id": "mastermindz-thomas",
+    "name": "Mastermindz Aftercare at Mastery Thomas",
+    "what": "Aftercare inside Mastery Thomas Elementary, from dismissal to 6:00 pm",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after care",
+      "childcare",
+      "subsidy",
+      "CCIS",
+      "Mastermindz",
+      "Mastery Thomas",
+      "Thomas Elementary",
+      "Bigler Street",
+      "South Philadelphia"
+    ],
+    "address": "814 Bigler St",
+    "neighborhoods": [
+      "Whitman"
+    ],
+    "grades": null,
+    "gradeNote": "Not published; ask the provider",
+    "hours": "From dismissal (3:15 pm) to 6:00 pm, Monday to Friday",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not published. The school’s page says Mastermindz accepts childcare subsidies.",
+    "phone": "215-620-7970",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/thomas",
+    "register": {
+      "how": "phone",
+      "note": "The school’s page gives this number to call Mastermindz for more information."
+    },
+    "note": "Everything here comes from Mastery Thomas Elementary’s own page; we couldn’t find a website for Mastermindz. Ask about the price, which grades it takes and what happens on early-dismissal days.",
+    "sources": [
+      {
+        "label": "Mastery Thomas Elementary: aftercare",
+        "url": "https://masterycharter.org/elementary-schools/thomas"
+      }
+    ],
+    "lastVerified": "2026-11-12",
+    "schools": {
+      "mastery-thomas": {
+        "relation": "onsite",
+        "note": "Thomas Elementary’s own page names Mastermindz as one of its two aftercare providers, running from dismissal to 6:00 pm, Monday to Friday.",
+        "sources": [
+          {
+            "label": "Mastery Thomas Elementary: aftercare",
+            "url": "https://masterycharter.org/elementary-schools/thomas"
+          }
+        ],
+        "checked": "2026-11-12"
+      }
+    }
+  },
+  {
+    "id": "safehaven-thomas",
+    "name": "SafeHaven Aftercare at Mastery Thomas",
+    "what": "Free aftercare inside Mastery Thomas Elementary, from dismissal to 6:00 pm",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after care",
+      "childcare",
+      "free",
+      "SafeHaven",
+      "Safe Haven",
+      "Mastery Thomas",
+      "Thomas Elementary",
+      "Bigler Street",
+      "South Philadelphia"
+    ],
+    "address": "814 Bigler St",
+    "neighborhoods": [
+      "Whitman"
+    ],
+    "grades": null,
+    "gradeNote": "Not published; ask the provider",
+    "hours": "From dismissal (3:15 pm) to 6:00 pm, Monday to Friday",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free, according to the school’s page",
+    "price": "free",
+    "phone": "215-452-8666",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/thomas",
+    "register": {
+      "how": "phone",
+      "note": "The school’s page gives this number to call SafeHaven for more information."
+    },
+    "note": "Everything here comes from Mastery Thomas Elementary’s own page; we couldn’t find a website for this SafeHaven program. Ask how to sign up, which grades it takes and what happens on early-dismissal days.",
+    "sources": [
+      {
+        "label": "Mastery Thomas Elementary: aftercare",
+        "url": "https://masterycharter.org/elementary-schools/thomas"
+      }
+    ],
+    "lastVerified": "2026-11-12",
+    "schools": {
+      "mastery-thomas": {
+        "relation": "onsite",
+        "note": "Thomas Elementary’s own page names SafeHaven as one of its two aftercare providers and says it is free.",
+        "sources": [
+          {
+            "label": "Mastery Thomas Elementary: aftercare",
+            "url": "https://masterycharter.org/elementary-schools/thomas"
+          }
+        ],
+        "checked": "2026-11-12"
+      }
+    }
+  },
+  {
+    "id": "bgc-emlen",
+    "name": "Boys & Girls Club at Emlen",
+    "what": "A Boys & Girls Clubs of Philadelphia school site inside Emlen, with after-school and summer programming for Emlen students",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "Boys & Girls Club",
+      "Boys and Girls Club",
+      "BGC",
+      "Emlen",
+      "Chew Avenue",
+      "Mount Airy"
+    ],
+    "address": "6501 Chew Ave",
+    "grades": null,
+    "gradeNote": "For enrolled Emlen students; grades not published",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-251-8285",
+    "email": "",
+    "website": "https://bgcphila.org/club-locations/",
+    "register": {
+      "how": "contact",
+      "note": "Call the club’s site number, or ask the school office, about signing up."
+    },
+    "note": "The Boys & Girls Clubs of Philadelphia list Emlen as a school extension site for enrolled students, and Emlen’s own site says the club provides its after-school and summer programming. Neither posts hours, days or cost, so ask the club.",
+    "sources": [
+      {
+        "label": "Boys & Girls Clubs of Philadelphia: club locations",
+        "url": "https://bgcphila.org/club-locations/"
+      },
+      {
+        "label": "Emlen: after-school programming and clubs",
+        "url": "https://emlen.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-12",
+    "schools": {
+      "emlen": {
+        "relation": "onsite",
+        "note": "The Boys & Girls Clubs’ own list of locations names Emlen as a school extension site, and Emlen’s site lists the club for after-school and summer programming.",
+        "sources": [
+          {
+            "label": "Boys & Girls Clubs of Philadelphia: club locations",
+            "url": "https://bgcphila.org/club-locations/"
+          },
+          {
+            "label": "Emlen: after-school programming and clubs",
+            "url": "https://emlen.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-12"
+      }
+    }
+  },
+  {
+    "id": "emlen-clubs",
+    "name": "School clubs",
+    "what": "After School Choir and After School Step Club, run by Emlen",
+    "types": [
+      "clubs",
+      "music",
+      "movement"
+    ],
+    "keywords": [
+      "clubs",
+      "choir",
+      "singing",
+      "step",
+      "step team",
+      "dance",
+      "Emlen"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published; ask the school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-3470",
+    "email": "",
+    "website": "https://emlen.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office or the club’s teacher."
+    },
+    "note": "Emlen’s own site lists an After School Choir and an After School Step Club but gives no days, times or grades. Ask the office which are running this year. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Emlen: after-school programming and clubs",
+        "url": "https://emlen.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-12",
+    "schools": {
+      "emlen": {
+        "relation": "onsite",
+        "checked": "2026-11-12"
+      }
+    }
+  },
+  {
+    "id": "legacy-champions-on-the-rise",
+    "name": "LEGACY Champions on the Rise",
+    "what": "A free after-school program inside the school, built around tennis, with homework help, literacy, STEM, the arts and social-emotional learning",
+    "types": [
+      "aftercare",
+      "movement"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "tennis",
+      "sports",
+      "homework",
+      "literacy",
+      "STEM",
+      "LEGACY",
+      "Legacy Youth Tennis",
+      "Wright",
+      "Strawberry Mansion"
+    ],
+    "address": "2201 N 28th St",
+    "grades": "K-5",
+    "gradeNote": "Wright students",
+    "hours": "3:00–6:00 pm, Monday to Friday, September 1, 2026 to June 8, 2027, according to the City’s listing.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-487-3477",
+    "email": "",
+    "website": "https://legacyyte.org/community-programs/after-school-program/",
+    "register": {
+      "how": "online",
+      "url": "https://legacyyte.jotform.com/form/wright-ost",
+      "label": "Register",
+      "note": "The City’s listing says registration is required; this is the sign-up form it links for Wright."
+    },
+    "note": "Hours and dates come from the City’s program locator, which also says the program serves healthy snacks and provides no transportation. LEGACY’s own page lists Wright as one of its four school sites.",
+    "sources": [
+      {
+        "label": "LEGACY Champions on the Rise",
+        "url": "https://legacyyte.org/community-programs/after-school-program/"
+      },
+      {
+        "label": "City program locator: LEGACY at R. Wright After School 26–27",
+        "url": "https://www.phila.gov/ost/program-locator/?address=2201+N+28th+St&resource=ost_154"
+      }
+    ],
+    "lastVerified": "2026-11-12",
+    "schools": {
+      "wright": {
+        "relation": "onsite",
+        "note": "LEGACY’s own page lists Richard R. Wright Elementary as one of its four school sites, and the City’s program locator lists the program at the school.",
+        "sources": [
+          {
+            "label": "LEGACY Champions on the Rise",
+            "url": "https://legacyyte.org/community-programs/after-school-program/"
+          },
+          {
+            "label": "City program locator: LEGACY at R. Wright After School 26–27",
+            "url": "https://www.phila.gov/ost/program-locator/?address=2201+N+28th+St&resource=ost_154"
+          }
+        ],
+        "checked": "2026-11-12"
+      }
+    }
+  },
+  {
+    "id": "sbnp-wright",
+    "name": "Shoot Basketballs NOT People: After School at Wright",
+    "what": "A free after-school program for 3rd to 5th graders at Wright: basketball, yoga, fitness, breathwork and mindfulness",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "basketball",
+      "sports",
+      "yoga",
+      "fitness",
+      "mindfulness",
+      "free",
+      "SBNP",
+      "Shoot Basketballs NOT People",
+      "Wright",
+      "Strawberry Mansion"
+    ],
+    "address": "2201 N 28th St",
+    "grades": "3-5",
+    "gradeNote": "Wright students in 3rd to 5th grade",
+    "hours": "2:30–4:30 pm, Mondays and Wednesdays, November 2, 2026 to June 7, 2027, according to the City’s listing.",
+    "days": [
+      "mon",
+      "wed"
+    ],
+    "pickupBy": "4:30 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-303-2974",
+    "email": "",
+    "website": "https://joinsbnp.org/",
+    "register": {
+      "how": "contact",
+      "note": "The City’s listing says registration is required and the program is only for Wright students. Ask the school office or call the program."
+    },
+    "note": "SBNP’s own page says its after school program is running now at Steel and Wright, with 69 spots across the two schools. The days, hours and grades come from the City’s program locator, which says meals are provided and there is no transportation; its entry doesn’t show the school’s name, so the link to Wright rests on SBNP’s page.",
+    "sources": [
+      {
+        "label": "Shoot Basketballs NOT People: our work",
+        "url": "https://joinsbnp.org/our-work"
+      },
+      {
+        "label": "City program locator: Shoot Basketballs NOT People",
+        "url": "https://www.phila.gov/ost/program-locator/?keyword=SHOOT,,BASKETBALLS"
+      }
+    ],
+    "lastVerified": "2026-11-12",
+    "schools": {
+      "wright": {
+        "relation": "onsite",
+        "note": "SBNP’s own page lists Wright Elementary (EDEY After School Program) among its school partners and says its after school program is running at Steel and Wright.",
+        "sources": [
+          {
+            "label": "Shoot Basketballs NOT People: our work",
+            "url": "https://joinsbnp.org/our-work"
+          }
+        ],
+        "checked": "2026-11-12"
+      }
+    }
+  },
+  {
+    "id": "zhang-sah-school-based",
+    "name": "Zhang Sah School-Based Programs",
+    "what": "Zhang Sah’s after-school martial arts program run inside partner schools",
+    "types": [
+      "movement",
+      "aftercare"
+    ],
+    "keywords": [
+      "martial arts",
+      "taekwondo",
+      "tae kwon do",
+      "karate",
+      "after school",
+      "Zhang Sah",
+      "J.B. Kelly",
+      "John B. Kelly",
+      "Germantown"
+    ],
+    "address": "Inside John B. Kelly School, 5116 Pulaski Ave",
+    "grades": null,
+    "gradeNote": "Not published for the school-based programs; ask Zhang Sah",
+    "hours": "Not published for the school-based programs. Zhang Sah’s page says its after-school programming runs until 6:00 pm, Monday to Friday.",
+    "cost": "Not published",
+    "phone": "215-923-6676",
+    "email": "",
+    "website": "https://zhangsah.org/after-school-program/",
+    "register": {
+      "how": "contact",
+      "note": "Use the form on Zhang Sah’s page or call, and ask about the program at your school."
+    },
+    "note": "Zhang Sah’s page lists its school-based programs by school name only, without days, hours, grades or price. Ask Zhang Sah what runs at your school and when.",
+    "sources": [
+      {
+        "label": "Zhang Sah after-school program",
+        "url": "https://zhangsah.org/after-school-program/"
+      }
+    ],
+    "lastVerified": "2026-11-12",
+    "schools": {
+      "jb-kelly": {
+        "relation": "onsite",
+        "note": "Zhang Sah’s page lists John B. Kelly among its school-based programs, and Kelly’s own site names Zhang Sah among its community partners.",
+        "sources": [
+          {
+            "label": "Zhang Sah after-school program",
+            "url": "https://zhangsah.org/after-school-program/"
+          },
+          {
+            "label": "J.B. Kelly community partnerships",
+            "url": "https://kelly.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-12"
+      }
+    },
+    "pickupLists": [
+      {
+        "where": "Zhang Sah school-based programs",
+        "text": "Francis Willard, Samuel Pennypacker, Robert Pollock, John B. Kelly, Elizabeth Waring, Joseph Catharine",
+        "url": "https://zhangsah.org/after-school-program/",
+        "read": "2026-11-12",
+        "how": "browser"
+      }
+    ]
+  },
+  {
+    "id": "iac-edmonds",
+    "name": "Indochinese American Council (IAC) Afterschool at Edmonds",
+    "what": "An after-school program inside Edmonds with homework and literacy help, a snack, physical activity and clubs (drama, science, media, Scrabble and chess)",
+    "types": [
+      "aftercare",
+      "clubs"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "homework",
+      "literacy",
+      "clubs",
+      "drama",
+      "science",
+      "chess",
+      "Scrabble",
+      "field trips",
+      "IAC",
+      "Indochinese American Council",
+      "Edmonds",
+      "Cedarbrook"
+    ],
+    "address": "8025 Thouron Ave",
+    "grades": "K-8",
+    "gradeNote": "Edmonds students",
+    "hours": "2:00–5:30 pm, Monday to Friday, September 1, 2026 to June 8, 2027, according to the City’s listing.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Not published in the City’s listing",
+    "phone": "215-457-0272",
+    "email": "",
+    "website": "https://www.iacphila.org",
+    "register": {
+      "how": "online",
+      "url": "https://www.cognitoforms.com/IndochineseAmericanCouncil/IACEdmondsCommunitySchool20262027Afterschool",
+      "label": "Apply",
+      "note": "The City’s listing gives registration dates of August 10 to September 30, 2026. Ask IAC whether it still has room."
+    },
+    "note": "The details come from the City’s program locator, which lists no cost. Ask IAC what it costs, if anything, and how it handles early dismissals. The City also lists an IAC winter break camp at Edmonds.",
+    "sources": [
+      {
+        "label": "City program locator: IAC Afterschool Program at Edmonds",
+        "url": "https://www.phila.gov/ost/program-locator/?address=8025+Thouron+Ave&resource=ost_141"
+      }
+    ],
+    "lastVerified": "2026-11-12",
+    "schools": {
+      "edmonds": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists IAC’s after-school program at Edmonds, 8025 Thouron Ave.",
+        "sources": [
+          {
+            "label": "City program locator: IAC Afterschool Program at Edmonds",
+            "url": "https://www.phila.gov/ost/program-locator/?address=8025+Thouron+Ave&resource=ost_141"
+          }
+        ],
+        "checked": "2026-11-12"
+      }
+    }
+  },
+  {
+    "id": "ymwic-edmonds",
+    "name": "Young Men and Women In Charge (YMWIC) at Edmonds",
+    "what": "A free after-school STEM program for middle schoolers at Edmonds: coding, robotics, engineering and math, with career exploration",
+    "types": [
+      "stem"
+    ],
+    "keywords": [
+      "STEM",
+      "coding",
+      "robotics",
+      "engineering",
+      "math",
+      "middle school",
+      "free",
+      "YMWIC",
+      "Young Men and Women In Charge",
+      "Edmonds",
+      "Cedarbrook"
+    ],
+    "address": "8025 Thouron Ave",
+    "grades": "6-8",
+    "gradeNote": "6th to 8th grade",
+    "hours": "2:15–5:00 pm, Tuesdays and Wednesdays, August 25, 2026 to June 9, 2027, according to the City’s listing.",
+    "days": [
+      "tue",
+      "wed"
+    ],
+    "pickupBy": "5:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-680-6519",
+    "email": "",
+    "website": "https://ymwicfoundation.org/",
+    "register": {
+      "how": "online",
+      "url": "https://ymwicfoundation.org/philadelphia-scholar-application/",
+      "label": "Apply",
+      "note": "The City’s listing says registration is required and open until November 23, 2026."
+    },
+    "note": "The details come from the City’s program locator, which says meals are provided. It is for 6th to 8th graders only.",
+    "sources": [
+      {
+        "label": "City program locator: YMWIC at Franklin Edmonds",
+        "url": "https://www.phila.gov/ost/program-locator/?address=8025+Thouron+Ave&resource=ost_281"
+      }
+    ],
+    "lastVerified": "2026-11-12",
+    "schools": {
+      "edmonds": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists YMWIC’s after-school program at Franklin Edmonds, 8025 Thouron Ave.",
+        "sources": [
+          {
+            "label": "City program locator: YMWIC at Franklin Edmonds",
+            "url": "https://www.phila.gov/ost/program-locator/?address=8025+Thouron+Ave&resource=ost_281"
+          }
+        ],
+        "checked": "2026-11-12"
+      }
+    }
+  },
+  {
+    "id": "mander-playground",
+    "name": "Mander Playground",
+    "what": "City rec center after-school program: homework help, tutoring, arts and crafts, sports and enrichment",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "tutoring",
+      "sports",
+      "free",
+      "aftercare",
+      "Strawberry Mansion",
+      "33rd Street",
+      "Wright"
+    ],
+    "address": "2140 N 33rd St",
+    "neighborhoods": [
+      "Strawberry Mansion"
+    ],
+    "grades": "K-8",
+    "gradeNote": "Ages 6–13 in the City’s 2025–26 entry; ages 5–12 in an older one",
+    "hours": "3:00–6:00 pm, Monday to Friday, in the City’s older entry",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free in the City’s listing",
+    "price": "free",
+    "phone": "215-685-3894",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The City’s finder lists two after-school entries here, both open for registration: a general one entered in 2017 (Monday to Friday, 3:00–6:00 pm) and one headed for the 2025–26 school year, for grades K–8. Call to ask what is running this year.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-12",
+    "schools": {
+      "wright": {
+        "relation": "nearby",
+        "distance": "about half a mile west, on 33rd St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-12"
+      }
+    }
+  },
+  {
+    "id": "gathers-rec",
+    "name": "Gathers Recreation Center",
+    "what": "City rec center after-school program: homework help, a snack, games and play",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "homework",
+      "snack",
+      "games",
+      "aftercare",
+      "Strawberry Mansion",
+      "Diamond Street",
+      "Wright"
+    ],
+    "address": "2501 W Diamond St",
+    "neighborhoods": [
+      "Strawberry Mansion"
+    ],
+    "grades": "K-4",
+    "gradeNote": "Ages 5–10 in the City’s description (6–10 in its age range)",
+    "hours": "Not published in the City’s listing",
+    "cost": "$20 in the City’s listing, which dates from 2016; call to ask what it costs now.",
+    "price": "paid",
+    "phone": "215-685-2710",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The City’s finder lists an after-school program here for children aged 5 to 10, entered in 2016 and marked as registering. Call to ask whether it is running this year, its hours and what it costs.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-12",
+    "schools": {
+      "wright": {
+        "relation": "nearby",
+        "distance": "about a quarter mile southeast, on Diamond St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-12"
+      }
+    }
+  },
+  {
+    "id": "happy-hollow-playground",
+    "name": "Happy Hollow Playground",
+    "what": "City rec center after-school program: sports and games, outdoor activities, the arts, reading and STEM",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "sports",
+      "games",
+      "free",
+      "aftercare",
+      "Germantown",
+      "Wayne Avenue",
+      "Kelly"
+    ],
+    "address": "4800 Wayne Ave",
+    "neighborhoods": [
+      "Germantown"
+    ],
+    "grades": "K-7",
+    "gradeNote": "Ages 5–12",
+    "hours": "Not published in the City’s listing",
+    "cost": "Free in the City’s listing, which dates from 2016",
+    "price": "free",
+    "phone": "215-685-2195",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The City’s finder lists its standard after-school program here for ages 5 to 12, entered in 2016 and marked “Planning: Seeking registrants!”. Call to ask whether it is running this year and its hours.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-12",
+    "schools": {
+      "jb-kelly": {
+        "relation": "nearby",
+        "distance": "about a third of a mile east, on Wayne Ave",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-12"
       }
     }
   }
