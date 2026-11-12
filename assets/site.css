@@ -2220,11 +2220,31 @@ html:not(.js) .pshow-panel + .pshow-panel{border-top:1px solid var(--line)}
 .acct-who-on,.acct-who-go{display:flex;flex-direction:column;gap:2px;border-radius:14px;padding:12px 16px;min-width:0;border:2px solid var(--line);background:var(--surface);color:var(--ink);text-decoration:none}
 .acct-who-on{border-color:var(--yellow);background:var(--warn);color:var(--warn-ink)}
 .acct-who b{font-family:var(--display);font-size:1.02rem}
-.acct-notice{display:flex;flex-direction:column;gap:6px;margin:4px 0 0;padding:10px 14px;border-left:4px solid var(--yellow);background:var(--bg);border-radius:0 12px 12px 0;font-size:.92rem;line-height:1.4;color:var(--muted)}
+.acct-notice{margin:4px 0 0}
 .acct-notice[hidden]{display:none}
-.acct-notice p{margin:0}
-.acct-notice b{color:var(--ink);font-weight:700}
-.acct-notice a{color:var(--link);white-space:nowrap}
+.acct-fine{margin:0;font-size:.86rem;line-height:1.4;color:var(--muted)}
+.linkish{background:none;border:0;padding:0;font:inherit;color:var(--link);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.linkish:hover{text-decoration-thickness:2px}
+/* a small window over the page: opened by a button with data-dialog, closed by Esc, its own button, or a tap outside */
+dialog.pas-dialog{border:0;border-radius:18px;padding:0;width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 48px);overflow:auto;color:var(--ink);background:var(--surface);box-shadow:0 20px 60px rgba(11,33,64,.32)}
+dialog.pas-dialog::backdrop{background:rgba(11,33,64,.45)}
+.pas-dialog-in{display:flex;flex-direction:column;gap:12px;padding:24px 24px 22px;line-height:1.45}
+.pas-dialog-in h2{margin:0}
+.pas-dialog-in p{margin:0}
+.pas-dialog-in b{font-weight:700}
+.pas-dialog-in .btn{align-self:flex-start;cursor:pointer;font:inherit;font-weight:700}
+.acct-hero-ex .ex{max-width:520px}
+/* beside the sign-up form the column is too narrow for five day columns: one row per day, as on a phone */
+.acct-hero-ex .ex-days{grid-template-columns:minmax(0,1fr)}
+.acct-hero-ex .ex-days li{flex-direction:row;flex-wrap:wrap;align-items:center;padding:7px 8px}
+.acct-hero-ex .ex-days li > b{width:2.6rem;flex:none}
+.acct-hero-ex .ex-days .ex-chip{flex:1 1 9rem}
+/* on a phone the form comes first and the example after it, so creating the account doesn't start below the fold */
+@media (max-width:879px){
+  .acct-head .acct-hero-text:has(.acct-hero-ex){display:contents}
+  .acct-head .hero:has(.acct-hero-ex) .acct-hero-form{order:1}
+  .acct-head .hero .acct-hero-ex{order:2;margin-top:0}
+}
 .signin-alt>.hint{margin:-4px 0 0;text-align:center;font-size:.85rem}
 .acct-who span{font-size:.9rem;color:var(--muted)}
 .acct-who-on span{color:inherit}

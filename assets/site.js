@@ -1,5 +1,18 @@
 // Small enhancements. Every page reads fine without JavaScript; this adds the school search,
 // the grade/type filter, the rosters, and a few form conveniences.
+// A small window over the page (a <dialog>): a button with data-dialog="id" opens it; Esc, a button with
+// data-dialog-close, or a tap outside the window closes it.
+document.addEventListener('click', function (e) {
+  var t = e.target, open = t.closest && t.closest('[data-dialog]');
+  if (open) {
+    var dlg = document.getElementById(open.getAttribute('data-dialog'));
+    if (dlg) { e.preventDefault(); if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); }
+    return;
+  }
+  var shut = t.closest && t.closest('[data-dialog-close]');
+  if (shut) { var d = shut.closest('dialog'); if (d) { if (d.close) d.close(); else d.removeAttribute('open'); } return; }
+  if (t.tagName === 'DIALOG' && t.open && t.close) t.close();   // the backdrop, outside the window's own box
+});
 (function () {
   // The menu bar sticks to the top of the screen. Its height goes into --bar-h so the things that stick under it, and
   // links that jump down a page, leave room for it.

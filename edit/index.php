@@ -177,7 +177,7 @@ if (!edit_signed_in()) {
 <meta name="theme-color" content="#0A3566">
 <link rel="preload" href="../assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/luckiest-guy-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/site.css?v=9fa7eb1f">
+<link rel="stylesheet" href="../assets/site.css?v=3cdf6f6d">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
@@ -281,7 +281,7 @@ if (!edit_signed_in()) {
     </div>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=aa454751" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=aefbcec2" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 
 </body>
 </html>
@@ -320,7 +320,7 @@ if (!edit_signed_in()) {
 <meta name="theme-color" content="#0A3566">
 <link rel="preload" href="../assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/luckiest-guy-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/site.css?v=9fa7eb1f">
+<link rel="stylesheet" href="../assets/site.css?v=3cdf6f6d">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
@@ -499,7 +499,7 @@ if (!edit_signed_in()) {
     </div>
   </div>
 </div></footer>
-<script src="../assets/site.js?v=aa454751" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
+<script src="../assets/site.js?v=aefbcec2" data-edit="{&quot;js&quot;:&quot;../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../edit/send.php&quot;,&quot;home&quot;:&quot;../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../groups/api.php"></script>
 
 </body>
 </html>
