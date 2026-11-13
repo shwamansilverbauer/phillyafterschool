@@ -56,7 +56,9 @@
   // the three read as one place and none of them is a long scroll. A tab whose part is on the page in view switches in
   // place; the others are links to the page that has them. (sessionStorage "pas-tabs" = "all" shows every part at once:
   // the tests use it, and so can anyone who would rather have the one long page.)
-  var ACCT_TABS = [['overview', 'Overview', 'account/', ''], ['todo', 'To do', 'to-do/', ''], ['profile', 'Profile', 'profile/', ''], ['you', 'Details', 'account/', '#you'], ['school', 'School & kids', 'account/', '#school'], ['kids', 'Kids’ Playground', 'account/', '#kids'], ['emails', 'Emails & following', 'account/', '#emails'], ['plans', 'Plans & sharing', 'account/', '#plans'], ['listings', 'Listings', 'managers/', '']];
+  // The kids, the school, the neighborhood, grades and ages, and what you follow are changed on the profile itself;
+  // the emails are under Account.
+  var ACCT_TABS = [['overview', 'Overview', 'account/', ''], ['todo', 'To do', 'to-do/', ''], ['profile', 'Profile', 'profile/', ''], ['you', 'Account', 'account/', '#you'], ['kids', 'Kids’ Playground', 'account/', '#kids'], ['favorites', 'Favorites', 'account/', '#favorites'], ['plans', 'Plans & sharing', 'account/', '#plans'], ['listings', 'Listings', 'managers/', '']];
   function tabsAll() { return sget('pas-tabs') === 'all'; }
   function acctStrip(box, active, hasListings, here, pick) {
     var nav = el('nav', 'jump acct-tabs'), links = {}; nav.setAttribute('aria-label', 'Your account');
@@ -66,7 +68,7 @@
       if (t[0] === 'todo' && !yearOn) return;
       if (t[0] === 'kids' && !host.getAttribute('data-kids')) return;   // Kids' Playground is on the live site only
       if (t[0] === 'overview' && get('pas-role') === 'manager' && get('pas-parent') !== '1') return;   // the overview is a parent's: a program manager with no kids or plans starts on Details
-      var a = el('a', t[0] === 'todo' ? 'tab-cta' : null, t[1]); a.href = page(t[2]) + t[3]; a.setAttribute('data-tab-go', t[0]);
+      var a = el('a', null, t[1]); a.href = page(t[2]) + t[3]; a.setAttribute('data-tab-go', t[0]);
       if (t[2] === here && pick) a.addEventListener('click', function (e) { if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return; e.preventDefault(); pick(t[0]); });
       links[t[0]] = a; nav.appendChild(a);
     });
@@ -80,9 +82,10 @@
       if (nav.pasEnds) { nav.pasEnds(); window.setTimeout(nav.pasEnds, 400); }
     };
     nav.pasMark(active);
-    // how many camp days wait on the to-do list, on its tab
+    // how many camp days wait on the to-do list, on its tab: yellow only while there are some
     nav.pasTodo = function (n) {
       var a = links.todo; if (!a) return;
+      a.classList.toggle('tab-cta', n > 0);
       var old = a.querySelector('.tab-n'); if (old) a.removeChild(old);
       if (n > 0) { var b = el('span', 'tab-n', String(n)); b.setAttribute('aria-label', n + (n === 1 ? ' camp day' : ' camp days') + ' to sign up for'); a.appendChild(b); }
     };
@@ -473,10 +476,11 @@
     // /account/ is where everything is changed: name, email address, phone, school and grades, emails, follows, kept
     // plans, sharing, signing out. A link to a part that lives on the other page (/profile/#following) is sent there.
     var view = account.getAttribute('data-view') === 'profile' ? 'profile' : 'account';
-    var PARTS = { profile: ['card', 'new'], account: ['overview', 'new', 'you', 'email', 'texts', 'school', 'kids', 'emails', 'push', 'following', 'favorites', 'plans', 'sharing', 'listings', 'sign-out'] };
+    // The profile's rows that open to change in place ("#school" opens the school's), and the account page's parts.
+    var PARTS = { profile: ['card', 'new', 'add-kid', 'school', 'hood', 'grades', 'ages', 'following'], account: ['overview', 'new', 'you', 'email', 'texts', 'emails', 'push', 'muted', 'kids', 'favorites', 'kid-favs', 'plans', 'sharing', 'listings', 'sign-out'] };
     var MOVED = { profile: 'you' };   // names a part has had
     // the account page is tabs: which tab each part of it is on
-    var TAB_OF = { overview: 'overview', 'new': 'overview', you: 'you', email: 'you', texts: 'you', listings: 'you', 'sign-out': 'you', school: 'school', kids: 'kids', emails: 'emails', push: 'emails', following: 'emails', favorites: 'emails', plans: 'plans', sharing: 'plans' };
+    var TAB_OF = { overview: 'overview', 'new': 'overview', you: 'you', email: 'you', texts: 'you', emails: 'you', push: 'you', muted: 'you', listings: 'you', 'sign-out': 'you', kids: 'kids', favorites: 'favorites', 'kid-favs': 'favorites', plans: 'plans', sharing: 'plans' };
     var onHash = null;   // set once the signed-in page is drawn
     var fresh = false;   // someone signed in on this visit, rather than arriving signed in
     // a link followed while the page is already open (the address changes, the page doesn't load again)
@@ -532,6 +536,7 @@
       signInBox(box, wantNext, function (d) { fresh = true; if (wantNext !== 'account' && d.user.ready && goNext(wantNext)) return; drawProfile(d); }, registering ? false : 'One step for both: if you’re new, this makes your account. No password. With email, we send a 6-digit code and you type it here.');
       var sh = box.querySelector('h3');
       if (sh) sh.textContent = registering ? 'Create your account' : 'Log in, or create an account';
+      var sb = registering && box.querySelector('.signin-row button[type="submit"]'); if (sb) sb.textContent = 'Create Free Account';   // it emails the code all the same
       // On /register/, what an account is for and what happens to the information, from the page (so it can be edited
       // there), at the foot of the form under the email field; and under Google's button, what Google passes on.
       var notice = document.getElementById('acct-notice'), signin = box.querySelector('.signin');
@@ -649,7 +654,7 @@
       var OV = [
         ['week', 'Build your kids’ week', 'After-school programs, day by day, for each child.', 'board/', ''],
         ['daysoff', 'Plan your days off', 'A camp for every day school is closed.', 'days-off/', '#plan', hasYearPage],
-        ['profile', 'Update your profile', 'Your school, and your kids’ names, grades and ages. The lists start from these.', 'account/', '#school'],
+        ['profile', 'Update your profile', 'Your school, and your kids’ names, grades and ages. The lists start from these.', 'profile/', ''],
         ['todo', 'Manage your to-do list', 'The camp days you’ve planned and haven’t signed up for yet.', 'to-do/', '', hasYearPage],
         ['year', 'Build your year calendar', 'Every plan you make, together, month by month.', 'calendar/', '', hasYearPage],
         ['kids', 'Have your kids play', 'Kids’ Playground: pins to earn, a map of Philly to explore, a bulb to dress up, and picking favorites.', 'kids-playground/', '', !!host.getAttribute('data-kids')],
@@ -662,7 +667,6 @@
         if (o.length > 5 && !o[5]) return;
         var a = el('a', 'ov-card ov-' + o[0]); a.href = o[0] === 'app' ? '#getapp' : page(o[3]) + o[4];
         if (o[0] === 'app') a.setAttribute('data-getapp', '');
-        if (o[0] === 'profile') a.addEventListener('click', function (e) { if (view !== 'account' || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return; e.preventDefault(); showTab('school', true); });   // on this page: just switch tabs
         var ic = el('span', 'ov-icon'); var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('viewBox', o[0] === 'kids' ? '0 0 24 28' : '0 0 24 24'); svg.setAttribute('aria-hidden', 'true'); svg.setAttribute('focusable', 'false');
         var pth = document.createElementNS('http://www.w3.org/2000/svg', 'path'); pth.setAttribute('d', OV_ICON[o[0]]); pth.setAttribute('fill', 'currentColor'); svg.appendChild(pth); ic.appendChild(svg); a.appendChild(ic);
         a.appendChild(el('b', null, o[1])); a.appendChild(el('span', 'ov-text', o[2]));
@@ -775,11 +779,9 @@
       phoneDrop.addEventListener('click', function () { savePhone('', false); });
       you.appendChild(phoneForm);
       put(you, 'account', 'you');
-      // your school, your children's grades and your neighborhood
-      var sch = part(el('section', 'panel'), 'school');
-      sch.appendChild(el('h2', null, 'Your school and kids'));
-      var kidsBox = el('div', 'g-kids'); sch.appendChild(kidsBox);   // filled once the profile is read (paintKidsTab)
-      put(sch, 'account', 'school');
+      // your school, your children's grades and ages, and your neighborhood: changed on the profile, in the row they're
+      // on. The pieces are made once, below, and moved into whichever row is open (paintCard).
+      var sch = el('div');
       // Kids' Playground at a glance: each child's bulb, level, pins and places, and the classes waiting for a yes or no.
       // Its script and data (kids-corner.js and its JSON) load only when this tab is opened; it draws into kcBody.
       var kcBody = null, kcScript = null;
@@ -799,11 +801,15 @@
         kcScript.onerror = function () { kcScript = null; kcBody.textContent = ''; kcBody.appendChild(el('p', 'g-status bad', 'Couldn’t open Kids’ Playground just now. Try again in a moment.')); };
         document.head.appendChild(kcScript);
       };
-      // the Sunday email (its tick box goes in further down, once the school is known)
+      // the emails, on the Account tab: the Sunday email (its tick box goes in further down, once the school is known),
+      // notifications on this device, and listings stopped from an email
       var mail = part(el('section', 'panel'), 'emails');
       mail.appendChild(el('h2', null, 'Emails and notifications'));
-      mail.appendChild(el('p', null, 'Sign-up dates come by email for whatever you follow, below. The Sunday email and notifications on your phone are extra, and both are off until you turn them on.'));
-      put(mail, 'account', 'emails');
+      var mailIntro = el('p', null, 'Sign-up dates come by email for whatever you follow: the morning after one is posted, then the day before and that morning. Every email has a link to stop that one listing. ');
+      var mailFol = el('a', null, 'See what you follow'); mailFol.href = page('profile/') + '#following'; mailIntro.appendChild(mailFol);
+      mailIntro.appendChild(document.createTextNode(' on your profile. The Sunday email and notifications on your phone are extra, and both are off until you turn them on.'));
+      mail.appendChild(mailIntro);
+      put(mail, 'account', 'you');
       // what's new on the site, for someone who has been before
       var NEWS = ainfo.news || [];
       if (NEWS.length) {
@@ -831,18 +837,16 @@
           var dot = document.querySelector('.nav-cta .news-dot'); if (dot) dot.hidden = true;
         }
       }
-      // what you follow (its dates come by email) and your favorites (kept here, nothing emailed)
+      // The Favorites tab: what they saved (kept here, nothing emailed), then each kid's favorites from Kids' Playground.
+      // What they follow is on the profile, where it can be stopped; listings stopped from an email are with the emails.
       var MK = window.pasMarks;
       if (MK) {
-        var fol = part(el('section', 'panel g-marks'), 'following');
-        fol.appendChild(el('h2', null, 'Places you follow'));
-        fol.appendChild(el('p', null, 'When one of these posts a sign-up date or a deadline, you get an email the next morning, then reminders the day before and at about 8 that morning. Every email has a link to stop that one listing. Days off come in a Sunday round-up. Follow a program, a camp or a school from its own page.'));
-        var folBox = el('div'); fol.appendChild(folBox);
-        var mutedBox = el('div'); fol.appendChild(mutedBox);
-        fol.appendChild(part(el('h3', null, 'Favorites'), 'favorites'));
-        fol.appendChild(el('p', 'hint', 'Saved so you can find them again. A favorite sends no email.'));
+        var fol = part(el('section', 'panel g-marks'), 'favorites');
+        fol.appendChild(el('h2', null, 'Favorites'));
+        fol.appendChild(el('p', 'hint', 'Saved so you can find them again. A favorite sends no email. Tap “Save to favorites” on a program’s or camp’s page to add one.'));
         var favBox = el('div'); fol.appendChild(favBox);
         var marksNote = el('p', 'g-status'); marksNote.setAttribute('aria-live', 'polite'); fol.appendChild(marksNote);
+        var mutedBox = part(el('div', 'g-muted'), 'muted'); mail.appendChild(mutedBox);
         var kindWord = { p: 'Program', c: 'Summer camp', s: 'School', w: 'Sunday email' };
         var drawMarks = function () {
           var named = MK.state.named || { follows: [], favs: [], muted: [] };
@@ -862,7 +866,6 @@
             });
             box.appendChild(ul);
           };
-          fill(folBox, named.follows, 'You aren’t following anything yet.', 'Stop following', function (x) { return MK.follow(x.k, false).then(function (r) { paintWeek(); return r; }); });
           // listings stopped from an email: nothing about them is sent, even by way of a school that is followed
           mutedBox.textContent = '';
           if ((named.muted || []).length) {
@@ -874,10 +877,28 @@
           fill(favBox, named.favs, 'No favorites yet. Tap “Save to favorites” on a program’s or camp’s page.', 'Remove', function (x) { return MK.fav(x.k, false); }, true);
         };
         MK.load().then(function () { drawMarks(); paintWeek(); paintCard(); });
-        put(fol, 'account', 'emails');
+        put(fol, 'account', 'favorites');
       }
+      // each kid's favorites from Kids' Playground: the showdowns' ranking, best first (the planners offer them first)
+      var kidFavs = part(el('section', 'panel g-kidfavs'), 'kid-favs');
+      kidFavs.appendChild(el('h2', null, 'Your kids’ favorites'));
+      kidFavs.appendChild(el('p', 'hint', 'From the showdowns in Kids’ Playground, best first. The planners offer these first when you plan.'));
+      var kidFavBox = el('div'); kidFavs.appendChild(kidFavBox);
+      var paintKidFavs = function () {
+        kidFavBox.textContent = '';
+        var list = ((lastP || {}).favorites || []).filter(function (x) { return x && x.fav && x.fav.length; });
+        if (!list.length) { kidFavBox.appendChild(el('p', 'hint', lastP ? 'None yet. In Kids’ Playground, a showdown has your kid pick between the classes and camps they’ve been to, and the winner comes first.' : '')); return; }
+        list.forEach(function (x) {
+          var named = x.fav.map(function (k) { var id = k.slice(2), n = k.charAt(0) === 'c' ? (ainfo.camps || {})[id] : (ainfo.programs || {})[id]; return n ? { k: k, n: typeof n === 'string' ? n : n.name } : null; }).filter(Boolean);
+          if (!named.length) return;
+          kidFavBox.appendChild(el('h3', null, possessive(x.name)));
+          var ol = el('ol', 'g-list g-favrank');
+          named.forEach(function (f) { var li = el('li'), a = el('a', null, f.n); a.href = markHref(f.k); li.appendChild(a); ol.appendChild(li); });
+          kidFavBox.appendChild(ol);
+        });
+      };
+      if (host.getAttribute('data-kids')) put(kidFavs, 'account', 'favorites');
       // the plans kept in the account get a panel of their own
-      sch.appendChild(el('p', 'hint', 'Kept in your profile, so every list starts in the right place on any device you sign in on.'));
       var prof = part(el('section', 'panel'), 'plans');
       prof.appendChild(el('h2', null, 'Plans you’ve kept'));
       prof.appendChild(el('p', null, 'A week, a summer and a days-off plan can live in your profile, so they’re there when you sign in on another phone or computer.'));
@@ -955,7 +976,7 @@
         var name = schoolName(me.school || '');
         wkRow.hidden = !MK;
         wk.disabled = !name; wk.checked = weekOn();
-        wkText.textContent = name ? 'Email me “This week at ' + name + '” on Sunday mornings: days off, the school’s own dates and sign-ups for the week ahead. It only comes in weeks with something out of the ordinary.' : 'Email me “This week at your school” on Sunday mornings. Keep your school above to turn this on.';
+        wkText.textContent = name ? 'Email me “This week at ' + name + '” on Sunday mornings: days off, the school’s own dates and sign-ups for the week ahead. It only comes in weeks with something out of the ordinary.' : 'Email me “This week at your school” on Sunday mornings. Add your school on your profile to turn this on.';
       };
       wk.addEventListener('change', function () {
         var k = weekKey(), want = wk.checked; if (!k || !MK) return;
@@ -975,6 +996,7 @@
       var pushBody = el('div', 'g-push-body'), pushNote = el('p', 'hint'); pushNote.setAttribute('aria-live', 'polite');
       pushBox.appendChild(pushBody); pushBox.appendChild(pushNote);
       mail.appendChild(pushBox);
+      if (mutedBox) mail.appendChild(mutedBox);   // listings stopped from an email, last
       var swUrl = page('sw.js');
       var canPush = !!API && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
       var isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -1091,6 +1113,7 @@
             // the Sunday email follows the school: off for the old one, on for the new
             if (hadWeek && oldKey !== weekKey()) MK.follow(oldKey, false).then(function () { return weekKey() ? MK.follow(weekKey(), true) : null; }).then(function () { paintWeek(); if (typeof drawMarks === 'function') drawMarks(); wkNote.textContent = weekKey() ? 'The Sunday email moved to ' + schoolName(me.school) + '.' : 'The Sunday email is off, because no school is kept.'; });
             else paintWeek();
+            if (view === 'profile') { paintCard(); ss.focus(); }   // the row shows the new school; the list stays open
           }
         });
       };
@@ -1108,7 +1131,7 @@
           gradeNote.textContent = 'Saving…';
           call('grades_save', { grades: want }).then(function (r) {
             if (!r.ok) { gradeNote.textContent = r.message; return; }
-            adoptGrades(r.grades); paintGrades(r.grades);
+            adoptGrades(r.grades); paintGrades(r.grades); if (lastP) lastP.grades = r.grades;   // the profile's row says so once Done is tapped
             gradeNote.textContent = r.grades.length ? 'Kept. Lists of programs now start on “My kid' + (r.grades.length === 1 ? '' : 's') + '”: programs that take ' + r.grades.map(gradeWord).join(' or ') + '.' : 'No grades kept.';
           });
         });
@@ -1116,7 +1139,7 @@
       });
       var paintGrades = function (list) { keptGrades = list || []; gradeBtns.forEach(function (x) { x[1].setAttribute('aria-pressed', String(keptGrades.indexOf(x[0]) > -1)); }); };
       gradeRow.appendChild(gradeRail); gradeRow.appendChild(gradeNote);
-      gradeRow.appendChild(el('span', 'hint', 'Filled in from your kids above. Rather not add names? Tap each grade you have a child in instead.'));
+      gradeRow.appendChild(el('span', 'hint', 'Filled in from your kids. Rather not add names? Tap each grade you have a child in instead.'));
       if ((ainfo.grades || []).length) sch.appendChild(gradeRow);
       // their ages, the same way: weekend classes, day camps and summer camps go by age
       var ageRow = el('div', 'g-grades g-ages');
@@ -1131,7 +1154,7 @@
           ageNote.textContent = 'Saving…';
           call('ages_save', { ages: want }).then(function (r) {
             if (!r.ok) { ageNote.textContent = r.message; return; }
-            adoptAges(r.ages); paintAges(r.ages);
+            adoptAges(r.ages); paintAges(r.ages); if (lastP) lastP.ages = r.ages;
             ageNote.textContent = r.ages.length ? 'Kept. Weekend classes, day camps and summer camps now start on “My kid' + (r.ages.length === 1 ? '' : 's') + '”: the ones that take ' + (r.ages.length === 1 ? 'age ' : 'ages ') + r.ages.map(ageWord).join(' or ') + '.' : 'No ages kept.';
           });
         });
@@ -1139,7 +1162,7 @@
       });
       var paintAges = function (list) { keptAges = list || []; ageBtns.forEach(function (x) { x[1].setAttribute('aria-pressed', String(keptAges.indexOf(x[0]) > -1)); }); };
       ageRow.appendChild(ageRail); ageRow.appendChild(ageNote);
-      ageRow.appendChild(el('span', 'hint', 'Filled in from your kids above, and from ages you give on the summer planner. Or tap each age yourself.'));
+      ageRow.appendChild(el('span', 'hint', 'Filled in from your kids, and from ages you give on the summer planner. Or tap each age yourself.'));
       if ((ainfo.ages || []).length) sch.appendChild(ageRow);
       if ((ainfo.hoods || []).length) {
         var hoodRow = el('form', 'g-row');
@@ -1149,7 +1172,7 @@
         ainfo.hoods.forEach(function (x) { var o = el('option', null, x.name); o.value = x.id; hs.appendChild(o); });
         hs.value = me.hood || '';
         var hn = el('span', 'hint'); hn.setAttribute('aria-live', 'polite');
-        hs.addEventListener('change', function () { hn.textContent = 'Saving…'; call('hood_save', { hood: hs.value }).then(function (r) { hn.textContent = r.ok ? (r.hood ? 'Kept.' : 'Taken out of your profile.') : r.message; if (r.ok) { me.hood = r.hood; noteRole(me); adoptHood(r.hood); } }); });
+        hs.addEventListener('change', function () { hn.textContent = 'Saving…'; call('hood_save', { hood: hs.value }).then(function (r) { hn.textContent = r.ok ? (r.hood ? 'Kept.' : 'Taken out of your profile.') : r.message; if (r.ok) { me.hood = r.hood; noteRole(me); adoptHood(r.hood); if (view === 'profile') { paintCard(); hs.focus(); } } }); });
         hoodRow.addEventListener('submit', function (e) { e.preventDefault(); });
         hoodRow.appendChild(hl); hoodRow.appendChild(hs); hoodRow.appendChild(hn);
         sch.appendChild(hoodRow);
@@ -1330,51 +1353,10 @@
           if ((r.kids || []).length && get('pas-parent') !== '1') { me.family = true; set('pas-parent', '1'); if (window.pasNavRole) window.pasNavRole(); }
           adoptGrades(r.grades); adoptAges(r.ages); paintGrades(r.grades || []); paintAges(r.ages || []);
           seedKids(r.kids, null);
-          kidsSay = said; paintCard(); paintKidsTab(); kidsSay = '';
+          kidsSay = said; paintCard(); kidsSay = '';
         });
       };
-      // The account page's "School & kids" tab: each kid by first name, with grade and age, to add, change or remove.
-      // The same list the profile card shows, the planners start from and Kids' Playground has a page for.
-      var kidsOpen = '';   // which form is open: 'add', or a kid's name being changed
-      var paintKidsTab = function () {
-        if (view !== 'account' || !kidsBox) return;
-        kidsBox.textContent = '';
-        var p = lastP || {}, kids = p.kids || [], fromPlans = kidNames(p).filter(function (n) { return !kids.some(function (k) { return k.n.toLowerCase() === n.toLowerCase(); }); });
-        var head = el('div', 'g-kids-head'); head.appendChild(el('h3', null, 'Your kids'));
-        kidsBox.appendChild(head);
-        kidsBox.appendChild(el('p', 'hint', 'First names only (a nickname or an initial works), with the grade and age if you like. The planners start with them, and each gets a page of their own in Kids’ Playground. Only you, and a co-parent you’ve linked, see them.'));
-        if (kids.length || fromPlans.length) {
-          var ul = el('ul', 'g-list g-kidlist');
-          kids.forEach(function (k) {
-            var li = el('li'), who = el('div', 'g-kid');
-            who.appendChild(el('span', 'g-kid-ini', k.n.charAt(0).toUpperCase()));
-            var t = el('div'); t.appendChild(el('b', null, k.n));
-            var bits = []; if (k.g) bits.push(k.g === 'PK' ? 'Pre-K' : k.g === 'K' ? 'Kindergarten' : gradeName(k.g) + ' grade'); if (k.a) bits.push('age ' + ageWord(k.a));
-            t.appendChild(el('span', 'hint', bits.join(', ') || 'No grade or age yet')); who.appendChild(t); li.appendChild(who);
-            var acts = el('div', 'g-acts-row');
-            var ch = btn('btn', 'Change'); ch.setAttribute('aria-label', 'Change ' + possessive(k.n) + ' grade or age');
-            ch.addEventListener('click', function () { kidsOpen = kidsOpen === k.n ? '' : k.n; paintKidsTab(); });
-            var rm = btn('clear', 'Remove'); rm.setAttribute('aria-label', 'Remove ' + k.n);
-            twoTap(rm, 'Tap again to remove ' + k.n, function () { saveKids(kids.filter(function (x) { return x !== k; }), k.n + ' is off your profile. Plans with that name stay, and their Kids’ Playground comes back if you add ' + k.n + ' again.'); });
-            acts.appendChild(ch); acts.appendChild(rm); li.appendChild(acts);
-            if (kidsOpen === k.n) li.appendChild(kidForm(function (x) { kidsOpen = ''; saveKids(kids.map(function (y) { return y === k ? { n: k.n, g: x.g, a: x.a } : y; }), 'Saved.'); }, function () { kidsOpen = ''; paintKidsTab(); }, k, 'ak-' + kids.indexOf(k)));
-            ul.appendChild(li);
-          });
-          fromPlans.forEach(function (n) {
-            var li = el('li'), who = el('div', 'g-kid');
-            who.appendChild(el('span', 'g-kid-ini quiet', n.charAt(0).toUpperCase()));
-            var t = el('div'); t.appendChild(el('b', null, n)); t.appendChild(el('span', 'hint', 'From a plan, not on your list yet')); who.appendChild(t); li.appendChild(who);
-            var add = btn('btn', 'Add ' + n); add.addEventListener('click', function () { add.disabled = true; saveKids(kids.concat([{ n: n, g: '', a: '' }]), n + ' is on your list now.'); });
-            var acts = el('div', 'g-acts-row'); acts.appendChild(add); li.appendChild(acts);
-            ul.appendChild(li);
-          });
-          kidsBox.appendChild(ul);
-        } else kidsBox.appendChild(el('p', null, 'No kids on your list yet.'));
-        if (kidsSay) kidsBox.appendChild(el('p', 'g-status good', kidsSay));
-        if (kidsOpen === 'add') kidsBox.appendChild(kidForm(function (x) { kidsOpen = ''; saveKids(kids.concat([x]), x.n + ' is on your list, on every planner, and in Kids’ Playground.'); }, function () { kidsOpen = ''; paintKidsTab(); }, null, 'ak-new'));
-        else if (kids.length < 8) { var addKid = btn('btn primary', kids.length ? 'Add another kid' : 'Add a kid'); addKid.addEventListener('click', function () { kidsOpen = 'add'; paintKidsTab(); var i = kidsBox.querySelector('#ak-new-name'); if (i) i.focus(); }); kidsBox.appendChild(addKid); }
-        var form0 = kidsBox.querySelector('.kid-form input:not([readonly])') || kidsBox.querySelector('.kid-form select'); if (form0 && kidsOpen) form0.focus();
-      };
+      var cardOpen = '';   // the profile row open for changing: add-kid, kid:<name>, grades, ages, school, hood or following
       var paintCard = function () {
         if (view !== 'profile') return;
         var p = lastP || { grades: me.grades || [], weeks: [] }, named = (MK && MK.state.named) || { follows: [], favs: [], muted: [] };
@@ -1386,11 +1368,21 @@
         var edit = el('a', 'btn primary pc-edit', 'Edit my account'); edit.href = page('account/') + '#you';
         head.appendChild(mark); head.appendChild(hw); head.appendChild(edit); card.appendChild(head);
         var rows = el('dl', 'pc-rows'); card.appendChild(rows);
-        var row = function (label, fill, go, href) {
+        // A row's link goes elsewhere; a row with an editor opens it in place instead, under the row (cardOpen says which
+        // is open, so it stays open when the card is drawn again after a save).
+        var row = function (label, fill, go, href, edit) {
           var r = el('div', 'pc-row'), dd = el('dd');
           fill(dd); r.appendChild(el('dt', null, label)); r.appendChild(dd);
-          if (go) { var a = el('a', 'pc-go', go); a.href = href; a.setAttribute('aria-label', go + ': ' + label.toLowerCase()); r.appendChild(a); }
+          if (edit) {
+            r.id = edit.id;
+            var open = cardOpen === edit.id, t = btn('linklike pc-go', open ? 'Done' : go);
+            t.setAttribute('aria-expanded', String(open)); t.setAttribute('aria-label', (open ? 'Done: ' : go + ': ') + label.toLowerCase());
+            t.addEventListener('click', function () { cardOpen = open ? '' : edit.id; paintCard(); var f = card.querySelector('#' + edit.id + ' .pc-editor select, #' + edit.id + ' .pc-editor input, #' + edit.id + ' .pc-editor button'); if (!open && f) f.focus(); else { var b2 = card.querySelector('#' + edit.id + ' .pc-go'); if (b2) b2.focus(); } });
+            r.appendChild(t);
+            if (open) { var box = el('div', 'pc-editor pc-wide'); edit.draw(box); dd.appendChild(box); }
+          } else if (go) { var a = el('a', 'pc-go', go); a.href = href; a.setAttribute('aria-label', go + ': ' + label.toLowerCase()); r.appendChild(a); }
           rows.appendChild(r);
+          return r;
         };
         var say = function (text, quiet) { return function (dd) { dd.appendChild(el('span', quiet ? 'hint' : null, text)); }; };
         var chips = function (items, empty) {
@@ -1403,44 +1395,62 @@
             dd.appendChild(box);
           };
         };
-        // kids: the ones kept on the profile (with grade and age), then names that come only from plans; add one here
+        // kids: the ones kept on the profile (with grade and age), then names that come only from plans. "Add a kid"
+        // opens the form under the row; each kid's Change opens it for their grade and age.
         var profKids = p.kids || [], planKids = kidNames(p).filter(function (n) { return !profKids.some(function (k) { return k.n.toLowerCase() === n.toLowerCase(); }); }), grades = p.grades || [];
-        row('Kids', (profKids.length || planKids.length) ? function (dd) {
-          dd.appendChild(el('b', 'pc-n', String(profKids.length + planKids.length)));
-          var ul = el('ul', 'pc-list');
-          profKids.forEach(function (k) {
-            var li = el('li'); li.appendChild(el('b', null, k.n));
-            var bits = []; if (k.g) bits.push(gradeName(k.g) + (k.g === 'PK' || k.g === 'K' ? '' : ' grade')); if (k.a) bits.push('age ' + ageWord(k.a));
-            li.appendChild(el('span', 'hint', bits.join(', ') || 'no grade or age yet'));
-            var rm = btn('clear', 'Remove'); rm.setAttribute('aria-label', 'Remove ' + k.n + ' from your profile');
-            rm.addEventListener('click', function () { rm.disabled = true; saveKids(profKids.filter(function (x) { return x !== k; }), k.n + ' is off your profile. Any plans with that name stay.'); });
-            li.appendChild(rm); ul.appendChild(li);
-          });
-          planKids.forEach(function (n) {
-            var li = el('li'); li.appendChild(el('b', null, n)); li.appendChild(el('span', 'hint', 'from a plan'));
-            var keep = btn('clear', 'Add to profile'); keep.addEventListener('click', function () { keep.disabled = true; saveKids(profKids.concat([{ n: n, g: '', a: '' }]), n + ' is on your profile now.'); });
-            li.appendChild(keep); ul.appendChild(li);
-          });
-          dd.appendChild(ul);
-          if (kidsSay) dd.appendChild(el('span', 'hint pc-wide', kidsSay));
-        } : function (dd) { dd.appendChild(el('span', 'hint', 'No kids yet. Add one here, and every planner starts with them.')); if (kidsSay) dd.appendChild(el('span', 'hint pc-wide', kidsSay)); }, '', '');
-        var kidsRow = rows.lastChild, addKid = btn('linklike pc-go', 'Add a kid'); addKid.setAttribute('aria-expanded', 'false'); kidsRow.appendChild(addKid);
-        addKid.addEventListener('click', function () {
-          var dd = kidsRow.querySelector('dd'), old = dd.querySelector('.kid-form');
-          if (old) { dd.removeChild(old); addKid.setAttribute('aria-expanded', 'false'); return; }
-          var f = kidForm(function (k) { saveKids(profKids.concat([k]), k.n + ' is on your profile, and on every planner on this device.'); }, function () { dd.removeChild(f); addKid.setAttribute('aria-expanded', 'false'); addKid.focus(); });
-          dd.appendChild(f); addKid.setAttribute('aria-expanded', 'true'); f.querySelector('input').focus();
-        });
-        row('Grades', grades.length ? say(listWords(grades.map(gradeName))) : say('None kept', true), grades.length ? 'Change' : 'Add', page('account/') + '#school');
+        row('Kids', function (dd) {
+          if (profKids.length || planKids.length) {
+            dd.appendChild(el('b', 'pc-n', String(profKids.length + planKids.length)));
+            var ul = el('ul', 'pc-list pc-kids');
+            profKids.forEach(function (k, ki) {
+              var li = el('li'); li.appendChild(el('b', null, k.n));
+              var bits = []; if (k.g) bits.push(gradeName(k.g) + (k.g === 'PK' || k.g === 'K' ? '' : ' grade')); if (k.a) bits.push('age ' + ageWord(k.a));
+              li.appendChild(el('span', 'hint', bits.join(', ') || 'no grade or age yet'));
+              var ch = btn('clear', cardOpen === 'kid:' + k.n ? 'Close' : 'Change'); ch.setAttribute('aria-label', 'Change ' + possessive(k.n) + ' grade or age'); ch.setAttribute('aria-expanded', String(cardOpen === 'kid:' + k.n));
+              ch.addEventListener('click', function () { cardOpen = cardOpen === 'kid:' + k.n ? '' : 'kid:' + k.n; paintCard(); });
+              var rm = btn('clear', 'Remove'); rm.setAttribute('aria-label', 'Remove ' + k.n + ' from your profile');
+              twoTap(rm, 'Tap again to remove ' + k.n, function () { saveKids(profKids.filter(function (x) { return x !== k; }), k.n + ' is off your profile. Plans with that name stay, and their Kids’ Playground comes back if you add ' + k.n + ' again.'); });
+              li.appendChild(ch); li.appendChild(rm);
+              if (cardOpen === 'kid:' + k.n) li.appendChild(kidForm(function (x) { cardOpen = ''; saveKids(profKids.map(function (y) { return y === k ? { n: k.n, g: x.g, a: x.a } : y; }), 'Saved.'); }, function () { cardOpen = ''; paintCard(); }, k, 'ak-' + ki));
+              ul.appendChild(li);
+            });
+            planKids.forEach(function (n) {
+              var li = el('li'); li.appendChild(el('b', null, n)); li.appendChild(el('span', 'hint', 'from a plan'));
+              var keep = btn('clear', 'Add to profile'); keep.addEventListener('click', function () { keep.disabled = true; saveKids(profKids.concat([{ n: n, g: '', a: '' }]), n + ' is on your profile now.'); });
+              li.appendChild(keep); ul.appendChild(li);
+            });
+            dd.appendChild(ul);
+          } else dd.appendChild(el('span', 'hint', 'No kids yet. Add one here, and every planner starts with them.'));
+          if (kidsSay) dd.appendChild(el('span', 'hint pc-wide pc-said', kidsSay));
+        }, profKids.length < 8 ? (profKids.length ? 'Add another kid' : 'Add a kid') : '', '', profKids.length < 8 ? { id: 'add-kid', draw: function (box) {
+          box.appendChild(kidForm(function (k) { cardOpen = ''; saveKids(profKids.concat([k]), k.n + ' is on your profile, on every planner, and in Kids’ Playground.'); }, function () { cardOpen = ''; paintCard(); }, null, 'ak-new'));
+        } } : null);
+        // grades and ages: the buttons from before, each tapped on or off (filled in from the kids, too)
+        var doneBtn = function (box) { var d = btn('btn quiet', 'Done'); d.addEventListener('click', function () { cardOpen = ''; paintCard(); }); var r0 = el('div', 'actions'); r0.appendChild(d); box.appendChild(r0); };
+        if ((ainfo.grades || []).length) row('Grades', grades.length ? say(listWords(grades.map(gradeName))) : say('None kept', true), grades.length ? 'Change' : 'Add', '', { id: 'grades', draw: function (box) { box.appendChild(gradeRow); doneBtn(box); } });
         var ages = p.ages || [];
-        row('Ages', ages.length ? say(listWords(ages.map(ageWord))) : say('None kept', true), ages.length ? 'Change' : 'Add', page('account/') + '#school');
+        if ((ainfo.ages || []).length) row('Ages', ages.length ? say(listWords(ages.map(ageWord))) : say('None kept', true), ages.length ? 'Change' : 'Add', '', { id: 'ages', draw: function (box) { box.appendChild(ageRow); doneBtn(box); } });
+        // the school and the neighborhood: a list to pick from, kept as soon as it's picked
         var sName = schoolName(me.school || '');
-        row('School', sName ? function (dd) { var a = el('a', null, sName); a.href = page(me.school + '/'); dd.appendChild(a); } : say('None kept', true), sName ? 'Change' : 'Add', page('account/') + '#school');
+        row('School', sName ? function (dd) { var a = el('a', null, sName); a.href = page(me.school + '/'); dd.appendChild(a); } : say('None kept', true), sName ? 'Change' : 'Add', '', { id: 'school', draw: function (box) { box.appendChild(schoolRow); box.appendChild(devNote); doneBtn(box); } });
         var hName = ((ainfo.hoods || []).filter(function (x) { return x.id === me.hood; })[0] || {}).name || '';
-        if ((ainfo.hoods || []).length) row('Neighborhood', hName ? say(hName) : say('None kept', true), hName ? 'Change' : 'Add', page('account/') + '#school');
-        // what they follow (the Sunday email is counted with the emails, below) and their favorites
+        if (hoodRow) row('Neighborhood', hName ? say(hName) : say('None kept', true), hName ? 'Change' : 'Add', '', { id: 'hood', draw: function (box) { box.appendChild(hoodRow); doneBtn(box); } });
+        // what they follow (the Sunday email is counted with the emails, below): Change opens the list, to stop one
         var follows = named.follows.filter(function (x) { return x.k.charAt(0) !== 'w'; });
-        row('Following', chips(follows, 'Nothing yet. Follow a program, a camp or a school from its page to get its sign-up dates by email.'), follows.length ? 'Change' : '', page('account/') + '#following');
+        var folRow = row('Following', chips(follows, 'Nothing yet. Follow a program, a camp or a school from its page to get its sign-up dates by email.'), follows.length ? 'Change' : '', '', follows.length && MK ? { id: 'following', draw: function (box) {
+          box.appendChild(el('p', 'hint', 'When one of these posts a sign-up date or a deadline, you get an email the next morning, then reminders the day before and at about 8 that morning. Days off come in a Sunday round-up.'));
+          var ul = el('ul', 'g-list');
+          follows.forEach(function (x) {
+            var li = el('li'), a = el('a', null, x.n); a.href = markHref(x.k);
+            var b0 = el('b'); b0.appendChild(a); li.appendChild(b0);
+            var stop = btn('clear', 'Stop following'); stop.setAttribute('aria-label', 'Stop following ' + x.n);
+            stop.addEventListener('click', function () { stop.disabled = true; MK.follow(x.k, false).then(function (r) { if (r && r.ok === false) { stop.disabled = false; return; } paintWeek(); if (typeof drawMarks === 'function') drawMarks(); paintCard(); }); });
+            li.appendChild(stop); ul.appendChild(li);
+          });
+          box.appendChild(ul); doneBtn(box);
+        } } : null);
+        folRow.id = 'following';   // a link to #following finds the row even with nothing to change in it
+        if (cardOpen === 'following' && !follows.length) cardOpen = '';
         row('Favorites', chips(named.favs, 'None yet. Tap “Save to favorites” on a program’s or camp’s page.'), named.favs.length ? 'Change' : '', page('account/') + '#favorites');
         // schedules made, kept in the account
         var made = [];
@@ -1505,7 +1515,7 @@
           paintSchool(p.school); paintGrades(p.grades || []); paintAges(p.ages || []); paintWeeks(p.weeks || []); paintSummer(p.summer || null); paintDaysOff(p.daysoff || null);
           seedKids(p.kids, null);
           if (strip.pasTodo) strip.pasTodo(todoLeft(p.daysoff));
-          lastP = p; paintCard(); paintKidsTab(); paintOverview();
+          lastP = p; paintCard(); paintOverview(); paintKidFavs();
         });
       };
       paintSchool(me.school || ''); paintGrades(me.grades || []); paintAges(me.ages || []); paintWeek(); loadProfile();
@@ -1608,13 +1618,21 @@
       put(out, 'account', 'you');
       // Arriving on a link to one part of the account: open the tab it is on. A part further down its tab is scrolled
       // to as well (the page was empty when the browser looked for it).
+      // On the profile, a link to one of its rows (#school, #following, #add-kid) opens that row to change.
+      var openRow = function (h) {
+        if (view !== 'profile' || PARTS.profile.indexOf(h) < 2) return;
+        cardOpen = h; paintCard();
+        var r = document.getElementById(h); if (r && r.scrollIntoView) r.scrollIntoView({ block: 'center' });
+      };
       var openPart = function (h) {
+        if (view === 'profile') { openRow(h); return; }
         if (view !== 'account' || !TAB_OF[h]) return;
         showTab(TAB_OF[h]);
         var want = h !== TAB_OF[h] ? document.getElementById(h) : null;
         if (want && want.scrollIntoView) want.scrollIntoView();
       };
       if (view === 'account') { showTab(firstTab); openPart(hashPart); }
+      else if (PARTS.profile.indexOf(hashPart) > 1) openRow(hashPart);
       else { var wantP = hashPart ? document.getElementById(hashPart) : null; if (wantP && wantP.scrollIntoView) wantP.scrollIntoView(); }
       onHash = openPart;
     };

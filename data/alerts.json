@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-11-12",
+  "generated": "2026-11-13",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -1184,40 +1184,6 @@
     "reason": "you asked to be told when this school was added"
   },
   "alerts": [
-    {
-      "id": "added-greenfield",
-      "kind": "added",
-      "date": "2026-11-10",
-      "sendOn": "2026-11-10",
-      "expires": "2026-11-12",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "albert-m-greenfield-school"
-      ],
-      "when": "New",
-      "title": "Greenfield now has a page",
-      "text": "You asked to be told. 13 programs are listed for Greenfield so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/greenfield/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
-    {
-      "id": "added-independence-charter",
-      "kind": "added",
-      "date": "2026-11-10",
-      "sendOn": "2026-11-10",
-      "expires": "2026-11-12",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "independence-charter-school"
-      ],
-      "when": "New",
-      "title": "Independence Charter now has a page",
-      "text": "You asked to be told. 14 programs are listed for Independence Charter so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
     {
       "id": "reg-fleisher-art-memorial-2026-11-14",
       "schools": [
