@@ -2820,21 +2820,33 @@
       "note": "Applications go through Brightwheel (the “After School 26–27 application” link on the page), first come, first served. Current PIC families get preference through early March; then anyone can enroll.",
       "nextTerm": ""
     },
-    "note": "Listed for Lea, Penn Alexander and Powel, which don’t have pages here yet. Teachers walk children over from Lea and Penn Alexander; the Powel van has very limited space and isn’t guaranteed.",
+    "note": "Listed for Lea, Penn Alexander and Powel. Penn Alexander and Powel don’t have pages here yet. Teachers walk children over from Lea and Penn Alexander; the Powel van has very limited space and isn’t guaranteed.",
     "sources": [
       {
         "label": "PIC After School Center",
         "url": "https://parentinfantcenter.org/programs/after-school-center"
       }
     ],
-    "lastVerified": "2026-11-07",
-    "schools": {},
+    "lastVerified": "2026-11-13",
+    "schools": {
+      "lea": {
+        "relation": "pickup",
+        "note": "PIC’s own page says its teachers meet children at Lea and walk them over. It takes kindergarten to 4th grade.",
+        "sources": [
+          {
+            "label": "PIC After School Center",
+            "url": "https://parentinfantcenter.org/programs/after-school-center"
+          }
+        ],
+        "checked": "2026-11-13"
+      }
+    },
     "pickupLists": [
       {
         "text": "Samuel Powel School (van, limited space); Lea School and Penn Alexander School (teachers walk children over)",
         "url": "https://parentinfantcenter.org/programs/after-school-center",
-        "read": "2026-11-07",
-        "how": "fetch"
+        "read": "2026-11-13",
+        "how": "browser"
       }
     ]
   },
@@ -13242,6 +13254,700 @@
         "distance": "about a third of a mile east, on Wayne Ave",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-12"
+      }
+    }
+  },
+  {
+    "id": "ela-willard",
+    "name": "Early Life Academy at Willard",
+    "what": "Free before and after care inside Willard, with homework help, a meal, clubs and enrichment",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "free",
+      "homework",
+      "clubs",
+      "STEM",
+      "Early Life Academy",
+      "ELA",
+      "Willard",
+      "Kensington"
+    ],
+    "address": "1930 E Elkhart St",
+    "grades": "K-4",
+    "gradeNote": "Willard students (the school teaches kindergarten to 4th grade)",
+    "hours": "After care 3:30–6:00 pm and before care 7:30–8:30 am, Monday to Friday, September 1, 2026 to June 8, 2027, according to the City’s listing.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-992-2162",
+    "email": "",
+    "website": "https://www.earlylifeacademy.org/school-age-program",
+    "register": {
+      "how": "online",
+      "url": "https://schools.procareconnect.com/form/a603e139-39fe-4887-a5a2-8151f4b817ea",
+      "label": "Register",
+      "note": "The City’s listing links this sign-up form. Early Life Academy’s own page asks families to fill in its online registration form first, then a paper application once the child is accepted."
+    },
+    "note": "The hours and dates come from the City’s program locator, which says the program is free, provides meals and no transportation. Early Life Academy’s own page lists Willard among the schools it serves and says it follows the District’s closings and holidays. The City also lists a free Early Life Academy winter mini camp at Willard, December 23 to 30.",
+    "sources": [
+      {
+        "label": "Early Life Academy: schools we serve",
+        "url": "https://www.earlylifeacademy.org/schools-we-serve"
+      },
+      {
+        "label": "Early Life Academy: school age program",
+        "url": "https://www.earlylifeacademy.org/school-age-program"
+      },
+      {
+        "label": "City program locator: ELA at Willard EDEY (Aftercare)",
+        "url": "https://www.phila.gov/ost/program-locator/?address=1930+E+Elkhart+St&resource=ost_90"
+      }
+    ],
+    "lastVerified": "2026-11-13",
+    "schools": {
+      "willard": {
+        "relation": "onsite",
+        "note": "Early Life Academy’s own page lists Frances E. Willard Elementary School among the schools it serves, and the City’s program locator lists its before and after care at the school.",
+        "sources": [
+          {
+            "label": "Early Life Academy: schools we serve",
+            "url": "https://www.earlylifeacademy.org/schools-we-serve"
+          },
+          {
+            "label": "City program locator: ELA at Willard EDEY (Aftercare)",
+            "url": "https://www.phila.gov/ost/program-locator/?address=1930+E+Elkhart+St&resource=ost_90"
+          }
+        ],
+        "checked": "2026-11-13"
+      }
+    }
+  },
+  {
+    "id": "wes-willard",
+    "name": "WES Health: WLCAS at Willard",
+    "what": "A free after-school group at Willard run by WES Health, focused on social and emotional support and mindfulness",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "after school",
+      "free",
+      "social emotional",
+      "mindfulness",
+      "behavioral health",
+      "WES Health",
+      "WLCAS",
+      "Willard",
+      "Kensington"
+    ],
+    "address": "1930 E Elkhart St",
+    "grades": "K-4",
+    "gradeNote": "Willard students (the City lists kindergarten to 5th grade)",
+    "hours": "3:30–5:30 pm, Monday to Thursday, October 6, 2026 to June 10, 2027, according to the City’s listing.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-510-3015",
+    "email": "",
+    "website": "https://weshealth.org/",
+    "register": {
+      "how": "contact",
+      "note": "The City’s listing says registration is required. Call the program or ask the school office."
+    },
+    "note": "Everything here comes from the City’s program locator, which describes the program as a trauma group with behavioral-health and social-emotional support, staff trained in trauma-informed care, meals provided and no transportation. WES Health’s own site doesn’t describe it. Ask the program who it is for before signing up.",
+    "sources": [
+      {
+        "label": "City program locator: WLCAS at Willard",
+        "url": "https://www.phila.gov/ost/program-locator/?address=1930+E+Elkhart+St&resource=ost_268"
+      }
+    ],
+    "lastVerified": "2026-11-13",
+    "schools": {
+      "willard": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists WES Health’s WLCAS program at Willard, 1930 E Elkhart St.",
+        "sources": [
+          {
+            "label": "City program locator: WLCAS at Willard",
+            "url": "https://www.phila.gov/ost/program-locator/?address=1930+E+Elkhart+St&resource=ost_268"
+          }
+        ],
+        "checked": "2026-11-13"
+      }
+    }
+  },
+  {
+    "id": "uacs-lea",
+    "name": "UACS After-School Program at Lea",
+    "what": "Penn’s free after-school program inside Lea: a meal, homework help, clubs, sports and play",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "clubs",
+      "chess",
+      "choir",
+      "drama",
+      "anime",
+      "garden",
+      "Penn",
+      "Netter Center",
+      "UACS",
+      "Lea",
+      "West Philadelphia"
+    ],
+    "address": "4700 Locust St",
+    "grades": "K-8",
+    "gradeNote": "Lea students",
+    "hours": "3:30–6:00 pm on weekdays, according to Lea’s site. The City’s listing gives 3:45–6:00 pm, September 9, 2026 to June 8, 2027.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-435-0314",
+    "email": "",
+    "website": "https://lea.philasd.org/",
+    "register": {
+      "how": "online",
+      "url": "https://upenn.co1.qualtrics.com/jfe/form/SV_1ZGteK38f4E88RM",
+      "label": "Register",
+      "note": "The City’s listing links this sign-up form and gave a registration window of August 3 to September 30, 2026. Ask the program whether it still has room."
+    },
+    "offers": [
+      "Anime Club",
+      "Chess Club",
+      "Choir Club",
+      "Drama Club",
+      "Garden Club",
+      "Student Council"
+    ],
+    "note": "Lea’s own site says the University-Assisted Community School (UACS) program runs the after-school and summer programs at the school, free for Lea students in kindergarten to 8th grade, with an after-school meal, homework help, sports and clubs that meet once or twice a week. The City lists it under the University of Pennsylvania (Netter Center).",
+    "sources": [
+      {
+        "label": "Lea: after-school program, clubs and summer program",
+        "url": "https://lea.philasd.org/"
+      },
+      {
+        "label": "City program locator: University of Pennsylvania at Lea OST Afterschool",
+        "url": "https://www.phila.gov/ost/program-locator/?address=4700+Locust+St&resource=ost_265"
+      }
+    ],
+    "lastVerified": "2026-11-13",
+    "schools": {
+      "lea": {
+        "relation": "onsite",
+        "note": "Lea’s own site says the UACS After-School Program runs at the school, and the City’s program locator lists Penn’s after-school program at Lea.",
+        "sources": [
+          {
+            "label": "Lea: after-school program, clubs and summer program",
+            "url": "https://lea.philasd.org/"
+          },
+          {
+            "label": "City program locator: University of Pennsylvania at Lea OST Afterschool",
+            "url": "https://www.phila.gov/ost/program-locator/?address=4700+Locust+St&resource=ost_265"
+          }
+        ],
+        "checked": "2026-11-13"
+      }
+    }
+  },
+  {
+    "id": "safe-haven-rhoads",
+    "name": "Safe Haven IV at Rhoads",
+    "what": "Free before and after care inside Rhoads from To Our Children’s Future with Health: STEM projects, homework help and social-emotional learning",
+    "types": [
+      "aftercare",
+      "stem"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "free",
+      "homework",
+      "STEM",
+      "mindfulness",
+      "Safe Haven",
+      "TOCFWH",
+      "To Our Children’s Future with Health",
+      "Rhoads",
+      "West Philadelphia"
+    ],
+    "address": "4901 Parrish St",
+    "grades": "K-8",
+    "gradeNote": "Rhoads students",
+    "hours": "After care 3:00–6:00 pm and before care 7:30–8:15 am, Monday to Friday, September 1, 2026 to June 8, 2027, according to the City’s listing.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "267-251-5778",
+    "email": "",
+    "website": "https://tocfwh.org/",
+    "register": {
+      "how": "online",
+      "url": "https://www.cognitoforms.com/ToOurChildrensFutureWithHealthInc/TOCFWH20262027APPLICATION",
+      "label": "Apply",
+      "note": "The City’s listing says every child needs a completed paper application, a current physical and immunization records on file, and that the program is only for Rhoads students."
+    },
+    "note": "The hours come from the City’s program locator. The City lists the before care as free; its after-school entry shows no cost, and the principal’s letter on Rhoads’s site calls Safe Haven free. The City also lists a free Rhoads winter mini camp, December 23 to 30. To Our Children’s Future with Health lists Safe Haven IV-EDEY for kindergarten to 8th grade on its own site but doesn’t name the school.",
+    "sources": [
+      {
+        "label": "City program locator: Rhoads Safe Haven IV OST-EDEY 2026–27",
+        "url": "https://www.phila.gov/ost/program-locator/?address=4901+Parrish+St&resource=ost_261"
+      },
+      {
+        "label": "City program locator: Rhoads Safe Haven IV before care",
+        "url": "https://www.phila.gov/ost/program-locator/?address=4901+Parrish+St&resource=ost_262"
+      },
+      {
+        "label": "James Rhoads School: principal’s letter",
+        "url": "https://rhoads.philasd.org/"
+      },
+      {
+        "label": "To Our Children’s Future with Health",
+        "url": "https://tocfwh.org/"
+      }
+    ],
+    "lastVerified": "2026-11-13",
+    "schools": {
+      "rhoads": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists Safe Haven IV before and after care at Rhoads, and the principal’s letter on the school’s site names the Safe Haven partnership.",
+        "sources": [
+          {
+            "label": "City program locator: Rhoads Safe Haven IV OST-EDEY 2026–27",
+            "url": "https://www.phila.gov/ost/program-locator/?address=4901+Parrish+St&resource=ost_261"
+          },
+          {
+            "label": "James Rhoads School: principal’s letter",
+            "url": "https://rhoads.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-13"
+      }
+    }
+  },
+  {
+    "id": "rebel-tumblers-rhoads",
+    "name": "Rebel Arts Movement: Rebel Tumblers at Rhoads",
+    "what": "A free tumbling, acrobatics and circus arts class after school at Rhoads",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "tumbling",
+      "acrobatics",
+      "circus",
+      "gymnastics",
+      "free",
+      "Rebel Arts",
+      "Rebel Tumblers",
+      "Rhoads",
+      "West Philadelphia"
+    ],
+    "address": "4901 Parrish St",
+    "grades": "K-8",
+    "gradeNote": "Rhoads students",
+    "hours": "3:00–5:30 pm, Mondays and Tuesdays, October 6, 2026 to June 1, 2027, according to the City’s listing.",
+    "days": [
+      "mon",
+      "tue"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "610-506-1287",
+    "email": "",
+    "website": "https://rebelartsmovement.com/",
+    "register": {
+      "how": "contact",
+      "note": "The City’s listing says registration is required. Call the program or ask the school office."
+    },
+    "note": "Everything here comes from the City’s program locator, which says the class is free, provides meals, and serves children with disabilities. Rebel Arts Movement’s own site describes its tumbling and circus classes and its school partnerships but doesn’t name Rhoads.",
+    "sources": [
+      {
+        "label": "City program locator: Rebel Tumblers at Rhoads",
+        "url": "https://www.phila.gov/ost/program-locator/?address=4901+Parrish+St&resource=ost_5"
+      },
+      {
+        "label": "Rebel Arts Movement",
+        "url": "https://rebelartsmovement.com/"
+      }
+    ],
+    "lastVerified": "2026-11-13",
+    "schools": {
+      "rhoads": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists Rebel Tumblers at Rhoads, 4901 Parrish St.",
+        "sources": [
+          {
+            "label": "City program locator: Rebel Tumblers at Rhoads",
+            "url": "https://www.phila.gov/ost/program-locator/?address=4901+Parrish+St&resource=ost_5"
+          }
+        ],
+        "checked": "2026-11-13"
+      }
+    }
+  },
+  {
+    "id": "ymca-juniata-park",
+    "name": "YMCA OST School Program at Juniata Park",
+    "what": "Free before and after care inside Juniata Park Academy from the Greater Philadelphia YMCA: academic support, enrichment and social-emotional development",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "free",
+      "homework",
+      "YMCA",
+      "Y",
+      "Juniata Park"
+    ],
+    "address": "801 E Hunting Park Ave",
+    "grades": "K-8",
+    "gradeNote": "Juniata Park students",
+    "hours": "After school 2:45–6:00 pm and before care 7:00–8:30 am, Monday to Friday, September 1, 2026 to June 8, 2027, according to the City’s listing. The school’s own site gives 3:00–4:30 pm for the after-school programming.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-608-5823",
+    "email": "",
+    "website": "https://philaymca.org/",
+    "register": {
+      "how": "online",
+      "url": "https://gpy.tfaforms.net/134",
+      "label": "Register",
+      "note": "The City’s listing links this sign-up form and says registration is open until June 1, 2027."
+    },
+    "note": "The City’s program locator and the school’s site give different end times (6:00 pm and 4:30 pm). Ask the YMCA how late children can stay. The City says meals are provided and there is no transportation, and lists a winter break mini camp at the school.",
+    "sources": [
+      {
+        "label": "Juniata Park Academy: after-school and summer programming",
+        "url": "https://juniatapark.philasd.org/"
+      },
+      {
+        "label": "City program locator: YMCA OST School Program at Juniata Park (PM)",
+        "url": "https://www.phila.gov/ost/program-locator/?address=801+E+Hunting+Park+Ave&resource=ost_128"
+      },
+      {
+        "label": "City program locator: YMCA OST School Program at Juniata Park (AM)",
+        "url": "https://www.phila.gov/ost/program-locator/?address=801+E+Hunting+Park+Ave&resource=ost_127"
+      }
+    ],
+    "lastVerified": "2026-11-13",
+    "schools": {
+      "juniata-park": {
+        "relation": "onsite",
+        "note": "Juniata Park’s own site says its after-school programming is provided by the YMCA, and the City’s program locator lists the YMCA’s before and after care at the school.",
+        "sources": [
+          {
+            "label": "Juniata Park Academy: after-school and summer programming",
+            "url": "https://juniatapark.philasd.org/"
+          },
+          {
+            "label": "City program locator: YMCA OST School Program at Juniata Park (PM)",
+            "url": "https://www.phila.gov/ost/program-locator/?address=801+E+Hunting+Park+Ave&resource=ost_128"
+          }
+        ],
+        "checked": "2026-11-13"
+      }
+    }
+  },
+  {
+    "id": "asas-juniata-park",
+    "name": "After-School All-Stars at Juniata Park",
+    "what": "A free after-school program featuring dance, for 5th to 8th graders at Juniata Park Academy",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "dance",
+      "after school",
+      "free",
+      "middle school",
+      "After-School All-Stars",
+      "ASAS",
+      "Juniata Park"
+    ],
+    "address": "801 E Hunting Park Ave",
+    "grades": "5-8",
+    "gradeNote": "Juniata Park students in 5th to 8th grade",
+    "hours": "3:00–6:00 pm, Tuesdays and Thursdays, November 5, 2026 to June 10, 2027, according to the City’s listing.",
+    "days": [
+      "tue",
+      "thu"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-995-2239",
+    "email": "",
+    "website": "https://afterschoolallstars.org/",
+    "register": {
+      "how": "contact",
+      "note": "The City’s listing says registration is required and the program is only for Juniata Park students. Call After-School All-Stars or ask the school office."
+    },
+    "note": "Everything here comes from the City’s program locator, which describes it as a specialized Extended Day program featuring dance, with healthy snacks.",
+    "sources": [
+      {
+        "label": "City program locator: After-School All-Stars at Juniata Park",
+        "url": "https://www.phila.gov/ost/program-locator/?address=801+E+Hunting+Park+Ave&resource=ost_0"
+      }
+    ],
+    "lastVerified": "2026-11-13",
+    "schools": {
+      "juniata-park": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists After-School All-Stars’ program at Juniata Park Academy, for 5th to 8th grade.",
+        "sources": [
+          {
+            "label": "City program locator: After-School All-Stars at Juniata Park",
+            "url": "https://www.phila.gov/ost/program-locator/?address=801+E+Hunting+Park+Ave&resource=ost_0"
+          }
+        ],
+        "checked": "2026-11-13"
+      }
+    }
+  },
+  {
+    "id": "bgc-greenberg",
+    "name": "Boys & Girls Club at Greenberg",
+    "what": "A Boys & Girls Clubs of Philadelphia school site inside Greenberg, with free after-school programming for Greenberg students",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "Boys & Girls Club",
+      "Boys and Girls Club",
+      "BGC",
+      "Greenberg",
+      "Bustleton"
+    ],
+    "address": "600 Sharon Ln",
+    "grades": "K-8",
+    "gradeNote": "For enrolled Greenberg students",
+    "hours": "2:15–6:00 pm, Monday to Friday, September 1, 2026 to June 11, 2027, according to the City’s listing.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-910-5301",
+    "email": "",
+    "website": "https://bgcphila.org/club-locations/",
+    "register": {
+      "how": "online",
+      "url": "https://www.cognitoforms.com/BoysGirlsClubsOfPhiladelphia/BoysGirlsClubsOfPhiladelphiaEDEYRegistrationFormGreenberg",
+      "label": "Register",
+      "note": "The City’s listing links this sign-up form. The phone number is the one the Boys & Girls Clubs give for the Greenberg site."
+    },
+    "note": "The Boys & Girls Clubs of Philadelphia list Greenberg as a school extension site for enrolled students. The hours come from the City’s program locator, which lists it as a free Extended Day program with healthy snacks and no transportation.",
+    "sources": [
+      {
+        "label": "Boys & Girls Clubs of Philadelphia: club locations",
+        "url": "https://bgcphila.org/club-locations/"
+      },
+      {
+        "label": "City program locator: Boys & Girls Club at Greenberg EDEY Program",
+        "url": "https://www.phila.gov/ost/program-locator/?address=600+Sharon+Ln&resource=ost_13"
+      }
+    ],
+    "lastVerified": "2026-11-13",
+    "schools": {
+      "greenberg": {
+        "relation": "onsite",
+        "note": "The Boys & Girls Clubs’ own list of locations names Joseph Greenberg Elementary School as a school extension site, and the City’s program locator lists the club’s program at the school.",
+        "sources": [
+          {
+            "label": "Boys & Girls Clubs of Philadelphia: club locations",
+            "url": "https://bgcphila.org/club-locations/"
+          },
+          {
+            "label": "City program locator: Boys & Girls Club at Greenberg EDEY Program",
+            "url": "https://www.phila.gov/ost/program-locator/?address=600+Sharon+Ln&resource=ost_13"
+          }
+        ],
+        "checked": "2026-11-13"
+      }
+    }
+  },
+  {
+    "id": "philly-kidz-greenberg",
+    "name": "Philly KiDZ Initiative at Greenberg",
+    "what": "A free after-school program inside Greenberg: homework time with School District teachers, then activities such as music, art, drama, chess, sports and martial arts",
+    "types": [
+      "aftercare",
+      "music",
+      "art"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "music",
+      "choir",
+      "art",
+      "drama",
+      "chess",
+      "martial arts",
+      "ESL",
+      "Philly KiDZ",
+      "Philly Kids Initiative",
+      "Greenberg",
+      "Bustleton"
+    ],
+    "address": "600 Sharon Ln",
+    "grades": "K-8",
+    "gradeNote": "Greenberg students",
+    "hours": "2:00–6:00 pm, Monday to Friday, September 1, 2026 to June 10, 2027, according to the City’s listing. Philly KiDZ’s own site says it runs from dismissal to 6:00 pm, with no extended hours.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-378-9700",
+    "email": "",
+    "website": "https://www.phillykidzinitiative.com/",
+    "register": {
+      "how": "online",
+      "url": "https://www.phillykidzinitiative.com/registration/edey-ost-registration",
+      "label": "Register",
+      "note": "The City’s listing links this sign-up page."
+    },
+    "note": "The City’s program locator lists the program at Greenberg as free, with meals and no transportation, and a free winter break camp there December 23 to 30. Philly KiDZ’s own site says it is closed on national and school holidays, but doesn’t name its schools.",
+    "sources": [
+      {
+        "label": "City program locator: Philly KiDZ Initiative EDEY After School at Greenberg",
+        "url": "https://www.phila.gov/ost/program-locator/?address=600+Sharon+Ln&resource=ost_223"
+      },
+      {
+        "label": "Philly KiDZ Initiative",
+        "url": "https://www.phillykidzinitiative.com/"
+      }
+    ],
+    "lastVerified": "2026-11-13",
+    "schools": {
+      "greenberg": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists the Philly KiDZ Initiative’s after-school program at Greenberg, 600 Sharon Ln.",
+        "sources": [
+          {
+            "label": "City program locator: Philly KiDZ Initiative EDEY After School at Greenberg",
+            "url": "https://www.phila.gov/ost/program-locator/?address=600+Sharon+Ln&resource=ost_223"
+          }
+        ],
+        "checked": "2026-11-13"
+      }
+    }
+  },
+  {
+    "id": "pennypack-environmental-center",
+    "name": "Pennypack Environmental Center: Afterschool Adventures",
+    "what": "A City drop-off program of themed hikes and activities for 8 to 12-year-olds",
+    "types": [
+      "nature",
+      "rec-center"
+    ],
+    "keywords": [
+      "nature",
+      "hiking",
+      "outdoors",
+      "environmental",
+      "parks and rec",
+      "city",
+      "Pennypack",
+      "Bustleton",
+      "Greenberg"
+    ],
+    "address": "8600 Verree Rd",
+    "neighborhoods": [
+      "Bustleton"
+    ],
+    "grades": "3-7",
+    "gradeNote": "Ages 8–12",
+    "hours": "Not published in the City’s listing",
+    "cost": "$5 for the season in the City’s 2022 listing",
+    "price": "paid",
+    "phone": "215-685-0470",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "The City’s listing says registration is required. Call the center."
+    },
+    "note": "The City’s finder lists “Afterschool Adventures” here for ages 8 to 12, a drop-off program with a themed hike and activity, marked “Planning: Seeking registrants!”, in entries made in 2020 and 2022. Call to ask when it runs.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-13",
+    "schools": {
+      "greenberg": {
+        "relation": "nearby",
+        "note": "The City’s listing doesn’t mention pickup from any school. It is a drop-off program, so plan on taking your child over.",
+        "distance": "about a third of a mile south, on Verree Rd",
+        "checked": "2026-11-13"
       }
     }
   }
