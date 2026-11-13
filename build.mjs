@@ -2422,7 +2422,8 @@ function termsPage() {
   <h2>${T(`Children’s information`)}</h2>
   <ul>
     <li>${T(`Looking things up works without telling us anything about a child. A plan you make while signed in is kept in your profile, and you can share a week: you decide what first name to use, and you can use a nickname or an initial.`)}</li>
-    <li>${T(`Only add a child you are the parent or guardian of, or have that person’s permission to add.`)}</li>
+    <li>${T(`Only add a child you are the parent or guardian of, or have that person’s permission to add.`)}</li>${KIDS ? `
+    <li>${T(`Kids’ Playground is for your child to use with you, on a device you are signed in on. Only a parent or guardian may open it for a child. By doing so you agree to what the privacy page says we keep for it, and you are responsible for your child’s use of it.`)}</li>` : ''}
     <li>${T(`What we store, and how to delete it, is on the privacy page.`)} <a href="${link('privacy/', 1)}">${T(`Read the privacy page.`)}</a></li>
   </ul>
   ${GROUPS ? `<h2>${T(`Sharing a week, and groups`)}</h2>
@@ -2445,6 +2446,24 @@ function termsPage() {
     <li>${T(`Changes you propose are read before they go on the site. We may edit them to fit the page, decline them, or remove a claim.`)}</li>
     <li>${T(`A listing doesn’t make us your partner, agent or advertiser, and we don’t promise it will bring enrollments.`)}</li>
   </ul>` : ''}
+  ${PM_LISTED ? `<h2 id="premium">${T(`Premium listings`)}</h2>
+  <ul>
+    <li>${T(`Premium is an optional paid addition to a listing you have claimed. What it includes and what it costs are on the premium page, and the price you pay is the one shown there on the day you sign up.`)} <a href="${link('premium/', 1)}">${T(`See the premium page.`)}</a></li>
+    <li>${T(`You pay by card on Stripe’s page. Premium renews by itself, each month or each year depending on the plan you picked, and your card is charged the same price each time until you cancel.`)}</li>
+    <li>${T(`A founding price stays yours for as long as your premium runs without a break. If it ends and you sign up again later, you pay the price shown then.`)}</li>
+    <li>${T(`You can cancel at any time by emailing us from the address on your account. Premium then stays on until the end of the month or year you have paid for, and it doesn’t renew. If a renewal is charged after you wrote to cancel, we refund it.`)}</li>
+    <li>${T(`Apart from that, we don’t refund a month or a year that has already started. If something went wrong with a payment, write to us and we’ll put it right.`)}</li>
+    <li>${T(`When premium ends, what it added comes off the listing: the photos, logo, your section, the offer line, the social links, the question button and the pin. Your free listing and your claim stay as they were.`)}</li>
+    <li>${T(`Everything you add is read before it shows, and we may decline or remove any of it. Add only what is accurate and yours to use. For a photo with children in it, you need permission from their families.`)}</li>
+    <li>${T(`Premium doesn’t change where a listing appears, and we don’t promise it will bring enrollments, questions or visits.`)}</li>
+    <li>${T(`If we change the price of a plan you are on, we will email you at least 30 days before the renewal it would apply to, so you can cancel first. If we end your premium because we stop offering it, we refund the part you paid for and didn’t get. If we end it because these terms were broken, we don’t.`)}</li>
+  </ul>` : ''}
+  ${cfg.supportUrl ? `<h2 id="support">${T(`Chipping in`)}</h2>
+  <ul>
+    <li>${T(`A contribution on the “Help the site keep going” page is voluntary. It buys nothing on the site, and it is not a charitable donation, so it isn’t tax-deductible.`)}</li>
+    <li>${T(`A monthly contribution is charged each month until you stop it. To change or stop it, email us and we will end it before the next charge.`)}</li>
+    <li>${T(`Contributions aren’t refunded as a rule. If you gave by mistake, or gave more than you meant to, write to us and we’ll sort it out.`)}</li>
+  </ul>` : ''}
   <h2>${T(`What’s not allowed`)}</h2>
   <ul>
     <li>${T(`Don’t use the site to harass anyone, to pretend to be someone else, or to collect information about children or families.`)}</li>
@@ -2460,23 +2479,25 @@ function termsPage() {
   <ul>
     <li>${T(`The site is provided as it is, free of charge, without any promise that it is complete, accurate, available or free of errors.`)}</li>
     <li>${T(`As far as the law allows, {who} is not liable for loss or harm that comes from using the site, from relying on a listing, from a program you chose, or from your dealings with other people who use the site.`, { who })}</li>
+    <li>${T(`If you have paid us for something, the most {who} can owe you for any claim about it is what you paid us in the 12 months before the claim arose.`, { who })}</li>
+    <li>${T(`If someone brings a claim against us because of something you posted, sent us or did through the site that broke these terms, you agree to cover what that claim costs us.`)}</li>
     <li>${T(`Nothing here limits any right you have that the law doesn’t allow to be limited.`)}</li>
   </ul>
   <h2>${T(`Changes, and how to reach us`)}</h2>
   <ul>
     <li>${T(`We may change the site or these terms. When the terms change in a way that matters, the date below changes with them. If you keep using the site after that, the new terms apply.`)}</li>
-    <li>${T(`These terms are governed by the laws of Pennsylvania.`)}</li>
+    <li>${T(`These terms are governed by the laws of Pennsylvania. Any dispute about them or about the site is to be brought in the state or federal courts in Philadelphia.`)}</li>
     <li>${T(`Questions about any of this:`)} ${mail}</li>
   </ul>
   <p class="hint">${T(`Last updated {date}.`, { date: longDate(cfg.termsUpdated || TODAY) })}</p>
 </div>`;
-  return layout({ title: 'Terms of use', description: `The rules for using ${cfg.siteName}: what the site is and isn’t, accounts, sharing, reviews and listings.`, pathName: 'terms/', depth: 1, current: null, hero, body, showStreet: 'parked', noindex: cfg.termsLive !== true });
+  return layout({ title: 'Terms of use', description: `The rules for using ${cfg.siteName}: what the site is and isn’t, accounts, sharing, reviews, listings and premium.`, pathName: 'terms/', depth: 1, current: null, hero, body, showStreet: 'parked', noindex: cfg.termsLive !== true });
 }
 
 function privacyPage() {
   const mail = cfg.contactEmail ? `<a href="mailto:${esc(cfg.contactEmail)}">${esc(cfg.contactEmail)}</a>` : '';
   const hero = `    <h1>${T(`Privacy, in plain English`)}</h1>
-    <p class="lede">${T(`This site is run by one parent. It collects as little as it can. Here is what it does collect, where it goes, and how to have it removed.`)}</p>`;
+    <p class="lede">${cfg.termsOperator ? T(`This site is run by {who}, a small family company in Philadelphia. It collects as little as it can. Here is what it does collect, where it goes, and how to have it removed.`, { who: cfg.termsOperator }) : T(`This site is run by one parent. It collects as little as it can. Here is what it does collect, where it goes, and how to have it removed.`)}</p>`;
   const body = `<div class="prose">
   ${jumpNav()}
   <h2 id="short" data-jump-to="In short">${T(`The short version`)}</h2>
@@ -2555,6 +2576,7 @@ ${GROUPS.photos || GROUPS.premium !== 'off' ? `    <li>${T(`A photo you send for
     <li>${T(`What you type into a form is emailed to the site’s inbox, and a backup copy is kept on our web host in case the email goes missing.`)}</li>
     <li>${T(`Your email address is used only to reply to you or to confirm something. It is never published.`)}</li>
     <li>${T(`A review that is approved appears on the site with your first name, your child’s school and the month. Nothing else about you is shown.`)}</li>
+    <li>${T(`A review in your child’s words is sent by you, not by your child. If it is approved it shows their grade, and their first name only if you chose to show it. You can ask us to take it down at any time.`)}</li>
     <li>${T(`When a program has been on your week for a few weeks, the site may ask whether you’d review it. That is worked out in your browser, from the rosters on your device. Your device remembers the day it first saw each program on a roster, when it last asked, and which programs you reviewed or said not to ask about. None of that is sent to us, and “Don’t ask about this one” ends it for that program.`)}</li>${GROUPS ? `
     <li>${T(`If you are signed in, the review form fills in your first name and email address from your account so you don’t have to type them. You can change either before you send it.`)}</li>` : ''}
     <li>${T(`Asking for a school to be covered sends only the school’s name.`)}</li>
@@ -2610,9 +2632,21 @@ ${GROUPS.photos || GROUPS.premium !== 'off' ? `    <li>${T(`A photo you send for
   <p>${T(`Program websites, registration pages, calendars and Stripe’s checkout pages are run by other organizations and have their own privacy practices.`)}</p>
   <p>${T(`Links to a program’s own site carry a short tag saying the visit came from {site}, and from which school’s page. The tag says nothing about you.`, { site: cfg.siteName })}</p>
   <h2 id="children" data-jump-to="Children">${T(`Children`)}</h2>
-  <p>${T(`This site is written for parents and caregivers. It is not meant to be used by children, and we do not knowingly collect information from them.`)}</p>
+  <ul>
+    <li>${T(`This site is written for adults: parents, guardians, caregivers and the people who run programs. Accounts are for people 18 and over. A child can’t make an account, and the site never asks a child for a name, an email address, a phone number, a photo or a location.`)}</li>
+    <li>${T(`What we hold about a child comes from that child’s parent or guardian, in the adult’s own account: a first name or nickname, a grade or an age, the plans the adult makes, and what the adult confirms the child has been to. All of it is optional, and it is listed in “Accounts, profiles and sharing” above.`)}</li>${KIDS ? `
+    <li>${T(`Kids’ Playground is the one part of the site a child may use, and only on a device where a parent or guardian is signed in and has opened it for them. There a child can tap to pick a lightbulb, colors and dress-up items and to choose favorites among the classes they have been to. Those picks are saved in the parent’s account. A child can’t type anything, send anything, or see or contact anyone else there, and the page carries no ads, no analytics and no recordings.`)}</li>
+    <li>${T(`By adding a child to your account and opening Kids’ Playground for them, you are telling us you are that child’s parent or guardian and that you agree to us keeping what is described here.`)}</li>
+    <li>${T(`A pin from a premium program reaches a child only after you confirm they went there. The program is never told anything about a child or a family.`)}</li>` : ''}
+    <li>${T(`We don’t sell children’s information, use it for advertising, or give it to the programs listed here or to anyone else. It is kept encrypted on our web host, which stores it for us and does nothing else with it.`)}</li>
+    <li>${T(`You can see everything we hold about your child in your profile${KIDS ? ' and the Playground Portal' : ''}. You can change it or delete it there at any time: take a child or a plan off your account${KIDS ? ', start a child’s Playground over with its classes taken off, which deletes what was kept for it,' : ''} or delete the account, which deletes all of it. You can also email us and we will show you what we hold, delete it, and keep nothing further about that child.`)}</li>
+    <li>${T(`We keep a child’s information for as long as it is in your account and no longer. What you delete is gone from the site straight away, and from the safety copies as they are replaced, usually within a month.`)}</li>
+    <li>${T(`If we learn that a child has made an account or sent us something themselves, we delete it. If you think that has happened, email us.`)}</li>
+  </ul>
   <h2 id="remove" data-jump-to="Removing things">${T(`Seeing or removing what you sent`)}</h2>
-  <p>${T(`To have a review taken down, your email address removed from the date emails, or a suggestion and your contact details deleted, email`)} ${mail}${T(`. Say what you sent and roughly when, and it will be removed.`)}</p>
+  <p>${T(`To have a review taken down, your email address removed from the date emails, or a suggestion and your contact details deleted, email`)} ${mail}${T(`. Say what you sent and roughly when, and it will be removed.`)}</p>${GROUPS ? `
+  <p>${T(`You can delete your account, and everything kept with it, from your account page. To ask what we hold about you or your child, or for anything else about your information, write to the same address.`)}</p>` : ''}${cfg.termsOperator ? `
+  <p>${T(`{site} is run by {who}, a Pennsylvania limited liability company.`, { site: cfg.siteName, who: cfg.termsOperator })}</p>` : ''}
   <p class="hint">${T(`Last updated {date}. If this page changes in a way that matters, the date changes with it.`, { date: longDate(cfg.privacyUpdated || TODAY) })}</p>
 </div>`;
   return layout({ title: 'Privacy', description: `What ${cfg.siteName} collects, where it goes and how to have it removed, in plain English.`, pathName: 'privacy/', depth: 1, current: null, hero, body, showStreet: 'parked' });
@@ -4182,7 +4216,7 @@ function premiumPage() {
   const hero = `    <h1>${T(`Premium listings`)}</h1>
     <p class="lede">${T(`Your listing on {site} is free, and it stays free. Premium adds your photos, your words and your offers to it, and shows you what families do with it.`, { site: cfg.siteName })}</p>
     ${plans(false)}
-    ${P.laterMonth && P.laterYear ? `<p class="pm-founding">${T(`This is the founding price, for the first programs to sign up. It stays yours for as long as you stay signed up. Later, premium will cost {m} a month or {y} a year.`, { m: money(P.laterMonth), y: money(P.laterYear) })}</p>` : ''}
+    ${P.laterMonth && P.laterYear ? `<p class="pm-founding">${T(`These are the founding prices, monthly and yearly, for the first programs to sign up. Yours stays the same for as long as you stay signed up. Later, premium will cost {m} a month or {y} a year.`, { m: money(P.laterMonth), y: money(P.laterYear) })}</p>` : ''}
     <p class="hero-fine">${T(`Run a free program, a school club or a rec center?`)} <a href="${link('contact/', D)}">${T(`Write to us before you sign up.`)}</a></p>`;
   const body = `<div ${groupsAttrs(D)} style="display:contents">
 ${pageNav(jumpNav(), `<a class="btn primary pagenav-go" href="#signup">${T(`Sign up`)}</a>`)}
@@ -4219,6 +4253,7 @@ ${gets.map(([k, h, p], i) => `      <div class="pm-get"><span class="pm-get-ic" 
   <section class="section pm-close" id="signup">
     <h2>${T(`Sign up`)}</h2>
     ${plans(true)}
+    <p class="hint" id="premium-terms">${T(`Premium renews each month or each year until you cancel. To cancel, email {email}: it stays on until the end of the time you’ve paid for, and that time isn’t refunded.`, { email: cfg.contactEmail || '' })}${cfg.termsLive === true ? ` <a href="${link('terms/', D)}#premium">${T(`The full terms for premium.`)}</a>` : ''}</p>
     <noscript><p class="ask">${T(`Signing up needs JavaScript turned on.`)}</p></noscript>
     <div class="g-page" id="premium-signup" data-clarity-mask="true" data-month="${P.month}" data-year="${P.year}"${PM_PAY ? ` data-pay-month="${esc(PM_PAY.month)}" data-pay-year="${esc(PM_PAY.year)}"` : ''}></div>
   </section>
