@@ -15,13 +15,25 @@ test('the account tabs: each hash opens its tab, and the tab bar says which', as
   eq(await page.locator('.acct-tabs [aria-current="page"]').innerText(), 'Overview', 'the Parent Portal opens on its overview');
   ok(await page.locator('#overview').isVisible(), 'the overview shows');
   ok(!(await page.locator('#you').isVisible()), 'the details wait on their own tab');
-  for (const [hash, label, probe] of [['you', 'Details', '#you'], ['school', 'School & kids', '#school'], ['emails', 'Emails & following', '#emails'], ['plans', 'Plans & sharing', '#plans']]) {
+  eq(await page.locator('.acct-tabs [data-tab-go="school"], .acct-tabs [data-tab-go="emails"]').count(), 0, 'no School & kids tab, no Emails & following tab');
+  matches(await page.locator('.acct-tabs [data-tab-go="todo"]').getAttribute('class') || '', /^(?!.*tab-cta)/, 'To do isn’t yellow with nothing on it');
+  for (const [hash, label, probe] of [['you', 'Account', '#you'], ['favorites', 'Favorites', '#favorites'], ['plans', 'Plans & sharing', '#plans']]) {
     await page.click(`.acct-tabs [data-tab-go="${hash}"]`);
     await page.waitForTimeout(300);
     eq(flat(await page.locator('.acct-tabs [aria-current="page"]').innerText()), label, `tab for #${hash}`);
     ok(!(await page.locator('#overview').isVisible()), `overview hidden on #${hash}`);
     ok(await page.locator(probe).first().isVisible(), `#${hash} shows its content`);
   }
+  // The emails are on the Account tab now; an old link to them still opens it.
+  await page.click('.acct-tabs [data-tab-go="you"]');
+  ok(await page.locator('#emails').isVisible(), 'Emails and notifications on the Account tab');
+  await page.goto(ctx.site.base + '/account/#emails', { waitUntil: 'networkidle' }); await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('#account .acct-tabs');
+  eq(flat(await page.locator('.acct-tabs [aria-current="page"]').innerText()), 'Account', '#emails opens Account');
+  // An old link to School & kids goes to the profile, with the school's row open.
+  await page.goto(ctx.site.base + '/account/#school', { waitUntil: 'networkidle' });
+  await page.waitForURL(/profile\/#school$/);
+  await page.waitForSelector('#school .pc-editor select#prof-school');
   const prof = await t.open('/profile/');
   await prof.waitForSelector('.prof-card');
   includes(flat(await prof.locator('.prof-card').innerText()), 'Pat Lee', 'the profile card names the person');
@@ -36,8 +48,8 @@ test('share a kept week from the Plans tab: the panel, the email, and who has it
   await pat.okay('POST', 'week_save', { week: { name: 'Sam', now: { ...empty(), mon: [entry] }, next: empty() } });
   const t = await b.context(ctx.site, { sid: pat.cookie });
   const page = await t.open('/account/#plans');
-  await page.waitForSelector('text=Sam’s week');
-  const row = page.locator('li', { hasText: 'Sam’s week' }).first();
+  await page.waitForSelector('#plans >> text=Sam’s week');
+  const row = page.locator('#plans li', { hasText: 'Sam’s week' }).first();
   includes(flat(await row.innerText()), '1 program');
   await row.locator('button', { hasText: 'Share' }).first().click();
   const email = row.locator('input[type=email]');
@@ -104,40 +116,55 @@ test('co-parents on the Plans tab: invite, the invitation with its merge warning
   await tp.close(); await td.close();
 });
 
-test('School & kids: the kids by name on top, to add, change and remove; the planners’ grades follow', async (ctx) => {
+test('the profile: kids added, changed and removed in their row, the school and neighborhood picked in theirs, and following stopped there', async (ctx) => {
   const b = await ctx.browser();
   const pat = ctx.api().as(someone('kids'), 'Pat', 'Lee');
   await pat.okay('POST', 'week_save', { week: { name: 'Rae', now: empty(), next: empty() } });   // a name that only a plan has
+  const { program, school } = pickupPair();
+  await pat.okay('POST', 'follow', { key: 'p:' + program.id, on: true });
   const t = await b.context(ctx.site, { sid: pat.cookie });
-  const page = await t.open('/account/#school');
-  await page.waitForSelector('.g-kids h3');
-  includes(flat(await page.locator('.g-kidlist').innerText()), 'From a plan', 'a name from a plan is offered');
-  // Add one.
-  await page.locator('.g-kids button', { hasText: 'Add a kid' }).click();
+  const page = await t.open('/profile/');
+  await page.waitForSelector('.prof-card #add-kid');
+  const kidsRow = page.locator('#add-kid');
+  includes(flat(await kidsRow.innerText()), 'from a plan', 'a name from a plan is offered');
+  // Add one: the form drops down under the row.
+  await kidsRow.locator('.pc-go').click();
   await page.fill('#ak-new-name', 'Sam');
   await page.selectOption('#ak-new-grade', '2');
   await page.selectOption('#ak-new-age', '7');
-  await page.locator('.g-kids .kid-form button[type=submit]').click();
-  await page.waitForSelector('.g-kidlist li:has-text("2nd grade, age 7")');
+  await page.locator('#add-kid .pc-editor .kid-form button[type=submit]').click();
+  await page.waitForSelector('#add-kid li:has-text("2nd grade, age 7")');
+  eq(await page.locator('#add-kid .pc-editor').count(), 0, 'the form closes once saved');
   // Take the one from the plan.
-  await page.locator('.g-kidlist button', { hasText: 'Add Rae' }).click();
-  await page.waitForFunction(() => document.querySelectorAll('.g-kidlist .g-kid-ini:not(.quiet)').length === 2);
+  await page.locator('#add-kid button', { hasText: 'Add to profile' }).click();
+  await page.waitForFunction(() => !/from a plan/.test(document.querySelector('#add-kid').textContent));
   // Change Sam's grade: the name stays.
-  await page.locator('.g-kidlist li', { hasText: 'Sam' }).locator('button', { hasText: 'Change' }).click();
-  ok(await page.locator('.g-kidlist .kid-form input[readonly]').count() === 1, 'the name can’t be changed here');
-  await page.locator('.g-kidlist .kid-form select').first().selectOption('3');
-  await page.locator('.g-kidlist .kid-form button[type=submit]').click();
-  await page.waitForSelector('.g-kidlist li:has-text("3rd grade, age 7")');
+  await page.locator('#add-kid li', { hasText: 'Sam' }).locator('button', { hasText: 'Change' }).click();
+  ok(await page.locator('#add-kid .kid-form input[readonly]').count() === 1, 'the name can’t be changed here');
+  await page.locator('#add-kid .kid-form select').first().selectOption('3');
+  await page.locator('#add-kid .kid-form button[type=submit]').click();
+  await page.waitForSelector('#add-kid li:has-text("3rd grade, age 7")');
   let prof = await pat.okay('GET', 'profile');
   eq(JSON.stringify(prof.kids), JSON.stringify([{ n: 'Sam', g: '3', a: '7' }, { n: 'Rae', g: '', a: '' }]));
   ok(prof.grades.includes('3'), 'the grade the lists start on follows');
   // Remove takes two taps.
-  const rm = page.locator('.g-kidlist li', { hasText: 'Rae' }).locator('button', { hasText: 'Remove' });
-  await rm.click();
-  await page.locator('.g-kidlist li', { hasText: 'Rae' }).locator('button[data-armed]').click();
-  await page.waitForSelector('.g-kids .g-status:has-text("Rae is off your profile")');
+  await page.locator('#add-kid li', { hasText: 'Rae' }).locator('button', { hasText: 'Remove' }).click();
+  await page.locator('#add-kid li', { hasText: 'Rae' }).locator('button[data-armed]').click();
+  await page.waitForSelector('#add-kid .pc-said:has-text("Rae is off your profile")');
   prof = await pat.okay('GET', 'profile');
   eq(prof.kids.length, 1); eq(prof.kids[0].n, 'Sam');
+  // The school: Add opens the list under the row, and picking one keeps it.
+  await page.locator('#school .pc-go').click();
+  await page.selectOption('#school .pc-editor select#prof-school', school);
+  await page.waitForFunction(() => /Change|Done/.test(document.querySelector('#school .pc-go').textContent) && !/None kept/.test(document.querySelector('#school dd').textContent));
+  eq((await pat.okay('GET', 'profile')).school, school, 'kept on the server');
+  await page.locator('#school .pc-editor button', { hasText: 'Done' }).click();
+  eq(await page.locator('#school .pc-editor').count(), 0, 'Done closes it');
+  // Following: Change opens the list, to stop one.
+  await page.locator('#following .pc-go').click();
+  await page.locator('#following .pc-editor button', { hasText: 'Stop following' }).first().click();
+  await page.waitForFunction(() => /Nothing yet/.test(document.querySelector('#following').textContent));
+  eq((await pat.okay('GET', 'marks')).follows.length, 0, 'stopped on the server');
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
 });
@@ -173,10 +200,8 @@ test('the menu signed in: My Profile, the Parent Portal button, Kids’ Playgrou
   ok(!/kids/.test(await page.locator('#overview .ov-kids').evaluate(a => getComputedStyle(a).backgroundColor === 'rgb(15, 77, 144)' ? 'kids' : '')), 'not dark like a button');
   ok(await page.locator('#new').isVisible(), 'What’s new is on the overview');
   ok(!(await nav.locator('a.nav-cta.when-in .news-dot').isVisible()), 'seen: the dot goes');
-  // Update your profile switches to School & kids, here on the page.
-  await page.locator('#overview .ov-profile').click();
-  await page.waitForTimeout(300);
-  eq(flat(await page.locator('.acct-tabs [aria-current="page"]').innerText()), 'School & kids');
+  // Update your profile goes to the profile.
+  matches(await page.locator('#overview .ov-profile').getAttribute('href'), /profile\/$/);
   // Names given, the week's program waits to be confirmed; confirmed and a bulb picked, the child is playing.
   await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '3' }] });
   const waitKids = re => page.waitForFunction(r => new RegExp(r).test((document.querySelector('#overview .ov-kids .ov-state') || {}).textContent || ''), re.source);
@@ -222,7 +247,7 @@ test('a program manager who also plans for kids keeps Parent Portal and Kids’ 
   await p2.waitForFunction(() => !document.querySelector('header.sitebar nav a.nav-mgr'), null, { timeout: 8000 });
   await p2.reload({ waitUntil: 'networkidle' });
   await p2.waitForSelector('#account .acct-tabs');
-  eq(await p2.locator('.acct-tabs [aria-current="page"]').innerText(), 'Details');
+  eq(await p2.locator('.acct-tabs [aria-current="page"]').innerText(), 'Account');
   eq(await p2.locator('.acct-tabs [data-tab-go="overview"]').count(), 0, 'no overview tab');
   matches(flat(await p2.locator('header.sitebar nav a.nav-cta.when-in').innerText()), /Your listings|Go premium/);
   ok(!(await p2.locator('header.sitebar nav a.nav-kc').isVisible()), 'no Kids’ Playground button');

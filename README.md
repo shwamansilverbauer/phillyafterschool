@@ -589,7 +589,7 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   first, marked "★ Sam's favorite". Matching is by the child's first name, the way plans match.
 - **Share and print.** The grown-ups' corner makes a picture (`drawShare()`, a canvas) of the pins, the level and the
   child's bulb, with no name and no map, and is never a link; the page itself has no link to share.
-- **On the account page.** A Kids' Playground tab (between School & kids and Emails) shows each child at a glance: their
+- **On the account page.** A Kids' Playground tab (between Account and Favorites) shows each child at a glance: their
   bulb, level, pins, neighborhoods, classes, the whole showdown ranking best first (`rankList()`, also a Favorites
   panel in the grown-ups' corner), and the suggestions waiting for a yes or no, answered right
   there. Buttons open the child's own page (straight to them, past the picker: `sessionStorage` "kc-open", on the
@@ -1799,12 +1799,12 @@ These are the only parts of the site that store anything about a child on the se
   closing "Create a free account" band that scrolls back to the form. Under the heading on `/register/` sit a few
   lines on what a free account gets you (`.acct-gets`) and the example "Sam's week" (`planExample('week')`, the five
   days across, made small; one row per day where its column is narrower than 430px; on a phone both come after the
-  form), and on
-  `/account/` a drawing of the school year on one ribbon (`artYearRibbon()`), both hidden once someone is signed in.
+  form), and `/account/`'s log-in has the same example week beside its heading, both hidden once someone is signed in.
   On `/register/` on a computer the heading side takes two thirds and the form one third (the account-type tiles
   stacked), the sign-in card has no intro line ("One step for both..." stays on `/account/` only; `signInBox()` takes
-  `false` for no line), and "Already have an account? Log in" (`#acct-login`) moves from the hero to just under the
-  card.
+  `false` for no line), its button says "Create Free Account" (it emails the 6-digit code all the same; on
+  `/account/` it says "Email me a code"), and "Already have an account? Log in" (`#acct-login`) moves from the hero to
+  just under the card.
   At the foot of the sign-in card one line of fine print, "Want to know how we use your and your kids' data
   responsibly? Click here!", opens a small window (`#acct-data`, a `<dialog>`; any button with `data-dialog` opens
   one, and Esc, its "Got it" or a tap outside closes it) with how we use your info and your kids' info and a link to
@@ -2042,8 +2042,12 @@ wide box on a school page, the home page, the days-off page and `/alerts/` (thos
   unfollow unappends. Each `follows` row has a `synced` flag, and a turned-off follow stays as a row until the
   browser confirms Klaviyo has dropped it, so a change made just before a connection died is finished next time.
   An address marked `follows_from_account` hears about exactly what it follows, even when that is nothing.
-- **The account page** lists "Places you follow" and "Favorites" (`.g-marks`), each with a way to stop, and a
-  favorite program has "Add to your week". Deleting the account unfollows everything first.
+- **Where they're changed.** What you follow is the profile's Following row: "Change" opens the list under it,
+  each with "Stop following". Favorites are the account page's Favorites tab (`.g-marks`), each with "Remove", and
+  a favorite program has "Add to your week"; under them, each kid's favorites from Kids' Playground (the
+  showdowns' ranking, best first, from `favorites` in the `profile` call; `paintKidFavs()`). Listings stopped from
+  an email ("Stopped from an email", `#muted`) are with the emails, on the Account tab. Deleting the account
+  unfollows everything first.
 - **Counts.** `follow`, `fav` and `hood_saved` in the tally; tiles on `/edit/stats/`. The analytics event for a
   follow is still `pas_alert_signup`; a favorite is `pas_favorite` (action, listing, place).
 
@@ -2111,17 +2115,19 @@ The things a family has to remember that aren't on the district calendar: pictur
 
 None of the three signed-in pages is a long scroll. The code is in `groups.js`.
 
-- **One strip across all four** (`acctStrip()`, `nav.jump.acct-tabs`): To do · Profile · Details · School & kids ·
-  Emails & following · Plans & sharing, and Listings for an account that holds a listing. To do comes first and
-  wears the call-to-action color (`a.tab-cta`), with a count of the camp days still to sign up for once the
-  profile is read (`nav.pasTodo(n)`, from `todoLeft()`); it is a link to `/to-do/`, which draws the same strip
-  above its list. A tab whose part is on the page in view switches in place; the others are links to the page that
-  has them (`/profile/`, `/account/#school`, `/managers/`), so the pages read as one place. It stays under the menu bar, and scrolls sideways on a phone
+- **One strip across all four** (`acctStrip()`, `nav.jump.acct-tabs`): Overview · To do · Profile · Account ·
+  Kids' Playground · Favorites · Plans & sharing, and Listings for an account that holds a listing. To do wears the
+  call-to-action color (`a.tab-cta`) only while camp days wait on it, with their count, once the profile is read
+  (`nav.pasTodo(n)`, from `todoLeft()`); otherwise it looks like the other tabs. It is a link to `/to-do/`, which
+  draws the same strip above its list. A tab whose part is on the page in view switches in place; the others are
+  links to the page that has them (`/profile/`, `/managers/`), so the pages read as one place. It stays under the menu bar, and scrolls sideways on a phone
   with the open tab brought into view (`window.pasRail()` in `site.js`, shared with the jump links).
 - **On the account page** each panel is put on a tab with `put(panel, 'account', tab)`, and `TAB_OF` says which tab
-  every linkable part is on, so `/account/#following`, `#favorites`, `#sign-out` and the rest open the right tab
-  and scroll to the part. Choosing a tab puts it in the address (`#school`, `#emails`, `#plans`; Details is the
-  plain address), so a reload or the Back button keeps it. "Signed in as …" and "Sign out" sit above every tab.
+  every linkable part is on, so `/account/#emails` (the Account tab), `#favorites`, `#sign-out` and the rest open
+  the right tab and scroll to the part. A part that lives on the profile now (`#school`, `#following`, `#add-kid`,
+  `#grades`, `#ages`, `#hood`: `PARTS.profile`) sends the link there, and the profile opens that row. Choosing a
+  tab puts it in the address (`#favorites`, `#plans`; the first tab is the plain address), so a reload or the Back
+  button keeps it. "Signed in as …" and "Sign out" sit above every tab.
   A manager's account has the Listings tab in place of the "Run a program or camp?" box, and an old link to
   `/account/#listings` goes to the managers page.
 - **On the managers page**, someone who already holds a listing gets a page about the listing: the heading becomes
@@ -2158,15 +2164,23 @@ its own page.
   Manage your to-do list, Build your year calendar, Have your kids play, Plan your summer, Help the site keep going),
   each with how far it has got from the plans kept in the account, then "What's new". Kids' Playground's card looks like
   the others; its line says "Add your kids first", "2 classes to confirm", "Not started" (no child has picked a bulb
-  or met Eddie yet) or "Playing", from the same `passport` call the page makes. The other tabs: Details (`#you`:
-  name, email address, mobile number, signing out and deleting), School & kids, Kids' Playground, Emails & following, and
-  Plans & sharing. A program manager's account has no overview and opens on Details. Signed out, it is still where
-  people log in.
+  or met Eddie yet) or "Playing", from the same `passport` call the page makes; Update your profile goes to the
+  profile. The other tabs: Account (`#you`: name, email address, mobile number, then "Emails and notifications": the
+  Sunday email, notifications on this device and listings stopped from an email; then signing out and deleting),
+  Kids' Playground, Favorites, and Plans & sharing. A program manager's account has no overview and opens on
+  Account. Signed out, it is where people log in, with the same example week ("Sam's week") beside the heading as
+  the sign-up page.
+- **The profile is where the kids, the school and the rest are changed** (`paintCard()`). Each of those rows opens
+  under itself, like the kids' form: Kids ("Add a kid", and each kid's Change and Remove; Remove takes two taps),
+  Grades and Ages (the buttons to tap on or off), School and Neighborhood (a list; picking one keeps it, and the
+  Sunday email moves with the school), Following ("Stop following" for each). "Done" closes a row. `cardOpen` says
+  which row is open, so it stays open when the card is drawn again after a save. The pieces are made once in
+  `groups.js` and moved into the open row.
 - **Getting there.** Signed in, the menu has "My Profile" as a plain link, then the yellow "Parent Portal" button (to
   the overview), then the Kids' Playground button with a little bulb, which just says "Playground" ("Kids' " is there
-  for screen readers only). In the phone menu, Parent Portal, Playground and My
-  Profile are the first things listed: Parent Portal as the big yellow button, Playground as a small pill under it,
-  so the portal leads. The footer's Schedule Builder column has "My Profile" as well.
+  for screen readers only). In the phone menu, Parent Portal (the big yellow button) and My Profile come first, and
+  Kids' Playground has the foot of the menu as a section of its own: a dashed line above it and a big button in its
+  own colors, with its full name. The footer's Schedule Builder column has "My Profile" as well.
 - **Changing the email address.** "Change my email address" under Your details asks for the new address
   (`email_start`), which is sent a 6-digit code, and then for the code (`email_finish`). Until the code is typed
   nothing changes. Then the account's address is replaced, every other device is signed out, a note goes to the old

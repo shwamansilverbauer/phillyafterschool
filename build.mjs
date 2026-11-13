@@ -3884,7 +3884,7 @@ function accountPage(register = false) {
     : `    <h1><span class="when-out">${T(`Log in to your account`)}</span><span class="when-in">${T(`Parent Portal`)}</span></h1>
     <p class="lede when-out">${T(`Your school, your plans and your kids’ calendar for the year, on any device. There’s no password to remember.`)} ${T(`New here?`)} <a href="${link('register/', 1)}">${T(`Create a free account`)}</a></p>
     <p class="lede when-in">${T(`Everything for planning your kids’ year in one place: their week, the days off, the summer, your calendar and to-do list, Kids’ Playground, and your account.`)}</p>
-    <div class="acct-hero-art">${artYearRibbon()}</div>`;
+    <div class="acct-hero-art acct-hero-ex">${planExample('week')}</div>`;
   const page = `<div class="g-page" id="account"${register ? ' data-mode="register" data-clarity-mask="true"' : ''}></div>`;
   // the heading on the left, the form on the right: on /register/ the form starts there; on /account/ it moves up while signed out
   const heroGrid = `    <div class="acct-hero-text">
@@ -3939,11 +3939,11 @@ ${hero}
   <section class="acct-close when-out">
     <h2>${T(`Create a free account`)}</h2>
     <p>${T(`It’s free. The plans you make are kept in your profile, so they’re on your phone and your computer, and you can delete the account whenever you like.`)}</p>
-    <p class="actions"><a class="btn primary big" href="${register ? '#account' : link('register/', 1)}">${register ? T(`Create your account`) : T(`Create a free account`)}</a></p>${cfg.termsLive === true ? `
+    <p class="actions"><a class="btn primary big" href="${register ? '#account' : link('register/', 1)}">${register ? T(`Create Free Account`) : T(`Create a free account`)}</a></p>${cfg.termsLive === true ? `
     <p class="hint">${T(`Making an account means you agree to the`)} <a href="${link('terms/', 1)}">${T(`terms of use`)}</a>.</p>` : ''}
     <p class="hint">${T(`Run a program or camp?`)} <a href="${link('managers/', 1)}">${T(`Claim your listing`)}</a>${T(`. It’s the same account.`)}</p>
   </section>
-  <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, ages: AGES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })), hoods: accountHoods(), news: NEWS.slice(0, 5) }).replace(/</g, '\\u003c')}</script>
+  <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, ages: AGES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })), hoods: accountHoods(), news: NEWS.slice(0, 5), ...(register ? {} : { programs: Object.fromEntries(programs.map(p => [p.id, p.name])), camps: Object.fromEntries(summerCamps.map(c => [c.id, c.name])) }) }).replace(/</g, '\\u003c')}</script>
 </div>`;
   return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to keep your week, days-off and summer plans, see the whole year in one private calendar, plan with your co-parent, and give your kids a Kids’ Playground of their own.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero: heroGrid, body, noindex: true, quiet: !register, theme: 'acct-head', scripts: groupsScript(1) });
 }
@@ -5913,7 +5913,7 @@ function kidsData() {
     // the pictures a premium program can pick for its own pin (the server's PIN_ICONS)
     picons: { ...Object.fromEntries(TYPES.map(t => [t.id, t.icon])), star: kidsStar(12, 12.5, 10.5), heart: 'M12 21C5 15.5 2 12 2 8.2C2 5.3 4.3 3 7.1 3C9 3 10.8 4 12 5.6C13.2 4 15 3 16.9 3C19.7 3 22 5.3 22 8.2C22 12 19 15.5 12 21Z', bolt: 'M13 2L4 14H11L10 22L20 9H13Z' },
     kinds: { after: 'After school', weekend: 'Weekend class', off: 'Day-off camp', summer: 'Summer camp' },
-    links: { kids: link('account/', D) + '#school', account: link('account/', D), review: link('review/', D), corner: link(kidsPath, D) },
+    links: { kids: link('profile/', D) + '#add-kid', account: link('account/', D), review: link('review/', D), corner: link(kidsPath, D) },
   };
   return KIDS_DATA;
 }

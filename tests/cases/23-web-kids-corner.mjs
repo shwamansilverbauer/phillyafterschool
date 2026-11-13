@@ -51,7 +51,7 @@ test('signed out, Kids’ Playground explains itself and offers the account; sig
   const p2 = await t2.open('/kids-playground/');
   await p2.waitForSelector('.kc-none');
   includes(flat(await p2.locator('.kc-none').innerText()), 'Add your kids’ first names');
-  matches(await p2.locator('.kc-none a').getAttribute('href'), /account\/#school$/);
+  matches(await p2.locator('.kc-none a').getAttribute('href'), /profile\/#add-kid$/);
   // The site's menu has the way in: a button beside Parent Portal.
   eq(await p2.locator('header.sitebar a.nav-kc').count(), 1);
   eq(t2.errors.length, 0, t2.errors.join(' | '));

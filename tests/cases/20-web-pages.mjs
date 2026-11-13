@@ -2,6 +2,7 @@
 // and signing in through the page works end to end.
 import { test, ok, eq, includes, excludes, matches, someone, codeIn } from '../lib/harness.mjs';
 import { schools, programs } from '../lib/data.mjs';
+const flat = s => s.replace(/\s+/g, ' ').trim();
 
 const ANALYTICS = /googletagmanager|google-analytics|clarity\.ms|klaviyo/;
 
@@ -88,6 +89,11 @@ test('the sign-up page: a line of fine print at the foot of the sign-in card ope
   ok(!/One step for both/.test(side.text), 'no intro line on the sign-up page');
   ok(side.shown && side.inForm && side.after, 'the log-in line sits under the sign-in card');
   matches(await page.locator('#acct-login a').getAttribute('href') || '', /account\/$/, 'and goes to the log-in page');
+  // The log-in page has the same example week beside its heading.
+  const lp = await t.open('/account/');
+  await lp.waitForSelector('.signin');
+  includes(await lp.locator('.acct-hero-ex').innerText(), 'Sam’s week', 'the log-in page’s picture');
+  includes(flat(await lp.locator('.signin-row button[type=submit]').first().innerText()), 'Email me a code', 'and its button stays');
   // Under Google's button, what Google passes on (its slot is there even when Google's script can't load), unless
   // that line has been taken off the page in the editor: then nothing shows there.
   const g = await page.evaluate(() => { const n = document.getElementById('acct-google'); return n ? { text: n.textContent.trim(), shown: !n.hidden, after: n.previousElementSibling && n.previousElementSibling.className } : null; });
@@ -103,7 +109,8 @@ test('signing in through the page: the code from the email lands a new account o
   const page = await t.open('/register/');
   const email = someone('web');
   await page.fill('.signin input[type=email]', email);
-  await page.click('.signin button:has-text("Email me a code")');
+  eq(flat(await page.locator('.signin-row button[type=submit]').first().innerText()), 'Create Free Account', 'the sign-up button');
+  await page.click('.signin button:has-text("Create Free Account")');
   const m = await ctx.mail.waitFor(email, /sign-in/i);
   await page.waitForSelector('.signin-code:not([hidden]) input.code-input');
   await page.fill('.signin-code input.code-input', codeIn(m));
