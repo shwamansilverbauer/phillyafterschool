@@ -528,7 +528,7 @@ test('bingo: a card for the school year, squares daubed from confirmed classes a
   await t.close();
 });
 
-test('the account page’s Kids’ Playground tab: each child at a glance, a class confirmed there, and a way into their page', async (ctx) => {
+test('the account page’s Kids’ Playground tab: each child at a glance, a class confirmed there, one added with a search, and a way into their page', async (ctx) => {
   const b = await ctx.browser();
   const pat = ctx.api().as(someone('kca'), 'Pat', 'Lee');
   const { entry, program } = pickupPair();
@@ -558,6 +558,29 @@ test('the account page’s Kids’ Playground tab: each child at a glance, a cla
   await page.waitForFunction(() => { const c = [...document.querySelectorAll('#kids .kc-sum')].find(x => /Rae/.test(x.textContent)); return c && !c.querySelector('.kc-sum-wait'); });
   const pp = await pat.okay('GET', 'passport');
   eq(pp.kids.find(k => k.name === 'Rae').done[0].k, 'p:' + program.id, 'saved for Rae');
+  // A class no plan had, added from Rae's card: the box opens under its button, a search finds it, the card counts it.
+  await rae.locator('.kc-sum-add > button', { hasText: 'Add a class or camp' }).click();
+  const q = rae.locator('.kc-sum-add input[role=combobox]');
+  await q.waitFor();
+  eq(await q.evaluate(x => x === document.activeElement), true, 'the search has the cursor');
+  await q.fill(wp.name);
+  await rae.locator('.kc-sum-add .kc-hits button', { hasText: wp.name }).filter({ hasNotText: '(summer camp)' }).first().click();
+  includes(flat(await rae.locator('.kc-picked').innerText()), wp.name);
+  await rae.locator('.kc-sum-add select[id$="-kind"]').selectOption('weekend');
+  await rae.locator('.kc-sum-add button[type=submit]').click();
+  await page.waitForSelector('#kids .kc-sum-add .g-status.good');
+  const raeNow = flat(await rae.innerText());
+  includes(raeNow, 'Added ' + wp.name, 'it says what was added'); includes(raeNow, '2 classes and camps', 'and the card counts it');
+  ok((await pat.okay('GET', 'passport')).kids.find(k => k.name === 'Rae').done.some(x => x.k === 'p:' + wp.id && x.kind === 'weekend' && x.y === y), 'saved for Rae, as a weekend class this school year');
+  // The same one again is turned away in the box; Cancel closes it.
+  await rae.locator('.kc-sum-add > button', { hasText: 'Add a class or camp' }).click();
+  await q.fill(wp.name);
+  await rae.locator('.kc-sum-add .kc-hits button', { hasText: wp.name }).filter({ hasNotText: '(summer camp)' }).first().click();
+  await rae.locator('.kc-sum-add select[id$="-kind"]').selectOption('weekend');
+  await rae.locator('.kc-sum-add button[type=submit]').click();
+  includes(flat(await rae.locator('.kc-sum-add .g-status.bad').innerText()), 'already there');
+  await rae.locator('.kc-sum-add button', { hasText: 'Cancel' }).click();
+  await page.waitForFunction(() => !document.querySelector('#kids .kc-sum-add.open') && !document.querySelector('#kids .g-status.good'));
   // Start over, from the Parent Portal: the box opens in Sam's card; the class stays unless the box is ticked.
   const samCard = () => page.locator('#kids .kc-sum', { hasText: 'Sam' });
   await samCard().locator('button', { hasText: 'Start over' }).first().click();

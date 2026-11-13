@@ -593,7 +593,9 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
 - **On the account page.** A Kids' Playground tab (between Account and Favorites) shows each child at a glance: their
   bulb, level, pins, neighborhoods, classes, the whole showdown ranking best first (`rankList()`, also a Favorites
   panel in the grown-ups' corner), and the suggestions waiting for a yes or no, answered right
-  there. Buttons open the child's own page (straight to them, past the picker: `sessionStorage` "kc-open", on the
+  there. "Add a class or camp" opens, in the card, the same search of the site's programs and camps (with what kind
+  and when) as the grown-ups' corner's "Add one the plans missed" (`addForm()`), for one no plan had; a listing with
+  several places asks which in the grown-ups' corner. Buttons open the child's own page (straight to them, past the picker: `sessionStorage` "kc-open", on the
   device only) or the grown-ups' corner ("Playground Portal": confirming classes, favorites, sharing, starting over). It loads `kids-corner.js` and `assets/kids-corner.json` (the same data the
   page has inline) only when the tab is opened, through `window.pasKids.summary()`; the account page's
   `data-kids` and `data-kids-data` say where they are.

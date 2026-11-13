@@ -3002,6 +3002,12 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-sum-wait{background:var(--warn);border-radius:12px;padding:12px 14px}
 .kc-sum-wait h4{margin:0 0 4px;font-family:var(--display);font-size:1rem}
 .kc-sum .actions{margin:0}
+.kc-sum-add.open{padding:12px 14px;background:#F4F8FD;border:1px solid #D6E3F2;border-radius:12px;display:grid;gap:8px}
+.kc-sum-add h4{margin:0;font-family:var(--display);font-size:1rem}
+.kc-sum-add .hint{margin:0}
+.kc-sum-add .pair{gap:12px 18px}
+.kc-sum-add .actions{margin-top:6px}
+.kc-sum-add > .g-status{margin:8px 0 0}
 /* the grown-ups' corner (looks like the rest of the site) */
 .kc-grown{margin:30px 0 10px;display:flex;justify-content:center}
 .kc-hold{position:relative;overflow:hidden;font:inherit;font-weight:700;color:var(--muted);background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:12px 22px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none}
