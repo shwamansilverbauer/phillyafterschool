@@ -1,5 +1,5 @@
 // The account page in a browser: its tabs, sharing a kept week from the Plans tab, and the co-parent box.
-import { test, ok, eq, includes, excludes, matches, someone } from '../lib/harness.mjs';
+import { test, ok, eq, deepEq, includes, excludes, matches, someone } from '../lib/harness.mjs';
 import { pickupPair } from '../lib/data.mjs';
 
 const DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
@@ -41,25 +41,27 @@ test('the account tabs: each hash opens its tab, and the tab bar says which', as
   await t.close();
 });
 
-test('share a kept week from the Plans tab: the panel, the email, and who has it', async (ctx) => {
+test('share a kept week by email under Sharing: the form, the email, who has it, and the week’s line in Plans you’ve kept', async (ctx) => {
   const b = await ctx.browser();
   const pat = ctx.api().as(someone('share'), 'Pat', 'Lee');
   const { entry } = pickupPair();
   await pat.okay('POST', 'week_save', { week: { name: 'Sam', now: { ...empty(), mon: [entry] }, next: empty() } });
   const t = await b.context(ctx.site, { sid: pat.cookie });
-  const page = await t.open('/account/#plans');
-  await page.waitForSelector('#plans >> text=Sam’s week');
-  const row = page.locator('#plans li', { hasText: 'Sam’s week' }).first();
-  includes(flat(await row.innerText()), '1 program');
-  await row.locator('button', { hasText: 'Share' }).first().click();
-  const email = row.locator('input[type=email]');
-  await email.waitFor();
+  const page = await t.open('/account/#sharing');
+  await page.waitForSelector('.g-share-one');
+  // The four ways, in order, then the plans.
+  const heads = (await page.locator('.g-sharing .g-way > h3').allInnerTexts()).map(flat);
+  deepEq(heads, ['Share with a co-parent', 'Share a week by email', 'Share with a group', 'Have an invite?'], 'every way to share, together');
+  ok(await page.evaluate(() => { const s = document.querySelector('.g-sharing'), p = document.getElementById('plans'); return !!(s && p && (s.compareDocumentPosition(p) & Node.DOCUMENT_POSITION_FOLLOWING)); }), 'Sharing comes before the plans');
+  includes(flat(await page.locator('.g-share-one').innerText()), 'Sam’s week', 'one week: named, not a list');
   const aunt = someone('aunt');
-  await email.fill(aunt);
-  await row.locator('button[type=submit]', { hasText: 'Share' }).click();
-  await page.waitForSelector(`text=${aunt}`);
-  const after = flat(await row.innerText());
-  includes(after, aunt, 'the row lists who has the week');
+  await page.fill('#share-email', aunt);
+  await page.locator('.g-share-one button[type=submit]').click();
+  await page.waitForSelector(`.g-sharing >> text=${aunt}`);
+  includes(flat(await page.locator('.g-sharing').innerText()), 'Sam’s week · invited', 'the list says which week and that it hasn’t been opened');
+  const row = page.locator('#plans li', { hasText: 'Sam’s week' }).first();
+  const line = flat(await row.innerText());
+  includes(line, '1 program'); includes(line, 'shared with one person', 'the week’s line says it’s shared');
   const m = await ctx.mail.waitFor(aunt, /Sam/);
   includes(m.TextBody, 'Pat Lee');
   // The server agrees.
@@ -69,38 +71,45 @@ test('share a kept week from the Plans tab: the panel, the email, and who has it
   await t.close();
 });
 
-test('co-parents on the Plans tab: invite, the invitation with its merge warning, accept, linked, stop', async (ctx) => {
+test('co-parents under Sharing: invite, the invitation asking whose plans to share, accept, linked, stop', async (ctx) => {
   const b = await ctx.browser();
   const pat = ctx.api().as(someone('cop'), 'Pat', 'Lee');
   const dana = ctx.api().as(someone('copd'), 'Dana', 'Reyes');
   const { entry } = pickupPair();
   await pat.okay('POST', 'week_save', { week: { name: 'Sam', now: { ...empty(), mon: [entry] }, next: empty() } });
   await dana.okay('POST', 'week_save', { week: { name: 'Rae', now: { ...empty(), tue: [entry] }, next: empty() } });
-  const open = async (sid) => { const t = await b.context(ctx.site, { sid }); await t.open('/account/#plans'); await t.page.waitForSelector('.g-coparent h3'); await t.page.waitForTimeout(300); return t; };
+  const open = async (sid) => { const t = await b.context(ctx.site, { sid }); await t.open('/account/#plans'); await t.page.waitForSelector('.g-coparent #cop-email, .g-coparent .g-cop-head'); await t.page.waitForTimeout(300); return t; };
   // Pat invites Dana.
   const tp = await open(pat.cookie);
-  includes(flat(await tp.page.locator('.g-coparent').innerText()), 'Share everything with a co-parent');
+  includes(flat(await tp.page.locator('.g-way', { has: tp.page.locator('.g-coparent') }).innerText()), 'Share with a co-parent');
   await tp.page.fill('#cop-email', dana.email);
   await tp.page.locator('.g-coparent button[type=submit]').click();
   await tp.page.waitForSelector('.g-coparent button:has-text("Send again")');
   let text = flat(await tp.page.locator('.g-coparent').innerText());
   includes(text, dana.email, 'the box names who was invited'); includes(text, 'Cancel');
-  // Dana sees the invitation, with what accepting does to her own week.
+  // Dana sees the invitation. They both have a week, so she picks whose plans the two of them share before accepting.
   const td = await open(dana.cookie);
   text = flat(await td.page.locator('.g-coparent').innerText());
   includes(text, 'Pat Lee'); matches(text, /Accept/); matches(text, /Decline/);
-  matches(text, /1 week/i, 'the merge warning counts her week');
-  await td.page.locator('.g-coparent button', { hasText: 'Accept' }).click();
+  includes(text, 'Whose should the two of you share');
+  const picks = (await td.page.locator('.g-pick-one b').allInnerTexts()).map(flat);
+  deepEq(picks, ['Use Pat’s', 'Use mine']);
+  matches(flat(await td.page.locator('.g-pick-one', { hasText: 'Use mine' }).innerText()), /1 week/, 'each choice says what’s in it');
+  const yes = td.page.locator('.g-coparent button', { hasText: 'Accept' });
+  eq(await yes.isDisabled(), true, 'Accept waits for a choice');
+  await td.page.locator('.g-pick-one', { hasText: 'Use Pat’s' }).click();
+  eq(await yes.isDisabled(), false);
+  await yes.click();
   await td.page.waitForSelector('.g-coparent button:has-text("Stop sharing everything")');
   text = flat(await td.page.locator('.g-coparent').innerText());
   includes(text, 'Pat Lee', 'linked with Pat');
-  const weeks = (await td.page.locator('.g-list > li > b').allInnerTexts()).map(flat);
-  ok(weeks.some(w => /Sam/.test(w)) && weeks.some(w => /Rae/.test(w)), 'Dana sees both weeks: ' + weeks.join(', '));
+  const weeks = (await td.page.locator('#plans .g-list > li > b').allInnerTexts()).map(flat);
+  deepEq(weeks, ['Sam’s week'], 'Dana now sees Pat’s week, and hers is set aside');
   // Pat's page, reloaded, agrees.
   await tp.page.reload({ waitUntil: 'networkidle' });
   await tp.page.waitForSelector('.g-coparent button:has-text("Stop sharing everything")');
   includes(flat(await tp.page.locator('.g-coparent').innerText()), 'Dana Reyes');
-  eq((await tp.page.locator('.g-list > li > b').allInnerTexts()).length, 2, 'Pat sees both weeks');
+  deepEq((await tp.page.locator('#plans .g-list > li > b').allInnerTexts()).map(flat), ['Sam’s week'], 'Pat sees the same');
   // Stopping takes two taps: the first arms the button and says what the second does.
   const stop = tp.page.locator('.g-coparent button', { hasText: 'Stop sharing everything' });
   await stop.click();
@@ -111,7 +120,7 @@ test('co-parents on the Plans tab: invite, the invitation with its merge warning
   await armed.click();
   await tp.page.waitForSelector('#cop-email');
   eq((await pat.okay('GET', 'me')).user.coparent, null, 'ended on the server');
-  eq((await dana.okay('GET', 'profile')).weeks.length, 0, 'Dana’s week stayed with the home account');
+  deepEq((await dana.okay('GET', 'profile')).weeks.map(w => w.name), ['Rae'], 'Dana has her own week back');
   eq(tp.errors.length + td.errors.length, 0, tp.errors.concat(td.errors).join(' | '));
   await tp.close(); await td.close();
 });

@@ -149,6 +149,10 @@ const expandGrades = g => {
   return GRADES.slice(i, j + 1);
 };
 const longDate = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+// When a listing was last checked: the day its details were confirmed, or a later day its sources were read without
+// confirming them (the City's finder showing no program this year, say), which the listing's note then describes.
+const checkedOn = p => p.looked && p.looked > p.lastVerified ? p.looked : p.lastVerified;
+const checkedLine = p => checkedOn(p) === p.lastVerified ? `Checked ${longDate(p.lastVerified)}.` : `Checked ${longDate(p.looked)}. Details last confirmed ${longDate(p.lastVerified)}.`;
 const telHref = p => 'tel:+1' + p.replace(/\D/g, '');
 
 // ---------- validation: fail the build on bad data, so mistakes never reach the site ----------
@@ -192,6 +196,7 @@ for (const p of programs) {
   ids.add(p.id);
   for (const f of ['name', 'what', 'hours', 'cost', 'lastVerified']) if (!p[f]) errors.push(`${at}: missing ${f}`);
   if (p.lastVerified && !/^\d{4}-\d{2}-\d{2}$/.test(p.lastVerified)) errors.push(`${at}: lastVerified must be YYYY-MM-DD`);
+  if (p.looked !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(p.looked)) errors.push(`${at}: looked must be YYYY-MM-DD`);   // one no later than lastVerified is ignored
   if (!isUrl(p.website)) errors.push(`${at}: website must be an https URL`);
   try { p._grades = expandGrades(p.grades); } catch (e) { errors.push(`${at}: ${e.message}`); }
   if (!p.register || !HOW.includes(p.register.how)) errors.push(`${at}: register.how must be one of ${HOW.join(', ')}`);
@@ -1230,7 +1235,7 @@ function card(p, school) {
   <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(outUrl(p.website, { type: 'website', school, program: p }))}" target="_blank" rel="noopener">Website</a><button type="button" class="btn needs-js" data-board-toggle data-clarity-mask="true" aria-expanded="false">Add to roster</button>
     <div class="days" data-clarity-mask="true" hidden><span class="kid-row" hidden></span><span class="which" role="group" aria-label="Current or upcoming roster"><button type="button" class="wb" data-board="next" aria-pressed="true">Upcoming session</button><button type="button" class="wb" data-board="now" aria-pressed="false">Current session</button></span><span class="hint">Which days?</span>${BOARD_DAYS.map(([k, n]) => `<button type="button" class="day${p.days && !p.days.includes(k) ? ' off" title="Not listed for ' + DAY_NAME[k] + 's' : ''}" data-day="${k}" aria-pressed="false">${n}</button>`).join('')}${p.offers?.length ? `<span class="cls-row"><span class="hint">Which class? Optional.</span>${p.offers.map(o => `<button type="button" class="cl" data-class="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join('')}</span>` : ''}<a href="${link('board/', 1)}">See the roster</a></div></div>
   <div class="rev">${revHtml}</div>
-  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks([...p.sources, ...(l.sources || [])], p, school)}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
+  <p class="src">${checkedLine(p)} Sources: ${sourceLinks([...p.sources, ...(l.sources || [])], p, school)}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
 </article>`;
 }
 
@@ -1705,7 +1710,7 @@ ${p.clubs.map(c => `      <article class="club">
     spotItem('reviews', 'Reviews', revs.length ? `<b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'review' : 'reviews'}` : ''),
     spotItem('spots', 'Spots', spaceSlot('p:' + p.id, D), 'spot-live'),
     spotItem('listing', 'Listing', claimedMark('p:' + p.id, D), 'spot-live'),
-    spotItem('checked', 'Checked', longDate(p.lastVerified)),
+    spotItem('checked', 'Checked', longDate(checkedOn(p))),
   ]);
   const body = `<div data-program-page="${esc(p.id)}" style="display:contents">
   ${pageNav(jumpNav())}
@@ -1741,7 +1746,7 @@ ${schoolRows}
     <p class="actions"><a class="btn" href="${reviewUrl}" data-track="review">${revs.length ? T(`Write a review`) : T(`Write the first review`)}</a></p>
     <p class="hint">${T(`Reviews are first-hand notes from parents and caregivers. Each one is read before it’s posted.`)}</p>
   </section>
-  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks(p.sources, p)}${tied ? ` Summer: ${sourceLinks(tied.sources, tied)}` : ''}${p.told ? ` ${T(`Some of this came from the program itself, on {date}.`, { date: longDate([...p.told].sort((a, b) => a.on.localeCompare(b.on)).pop().on) })}` : ''}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
+  <p class="src">${checkedLine(p)} Sources: ${sourceLinks(p.sources, p)}${tied ? ` Summer: ${sourceLinks(tied.sources, tied)}` : ''}${p.told ? ` ${T(`Some of this came from the program itself, on {date}.`, { date: longDate([...p.told].sort((a, b) => a.on.localeCompare(b.on)).pop().on) })}` : ''}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
 </div>`;
   const url = `${cfg.siteUrl}/${programPath(p)}`;
   const thing = {
@@ -1906,6 +1911,9 @@ ${kindSections(byKind, D, { lead: { after: T(`A program that doesn’t publish i
 
 // ---------- pages ----------
 const forSchool = s => programs.filter(p => p.schools[s.id]);
+// When a school's page was last checked: its own review, or the newest day one of its programs' links was confirmed
+// (a monthly check confirms them all), whichever is later.
+const schoolChecked = s => [s.lastReviewed, s.added, ...forSchool(s).map(p => p.schools[s.id].checked)].filter(x => /^\d{4}-\d{2}-\d{2}$/.test(x || '')).sort().pop();
 const tally = s => Object.fromEntries(Object.keys(REL).map(k => [k, forSchool(s).filter(p => p.schools[s.id].relation === k).length]));
 const clock = s => s.dismissal ? s.dismissal.replace(/\s*[ap]m$/i, '') : '';   // a school that doesn't post its dismissal time has none here
 const gradeSpan = s => { const g = expandGrades(s.grades); const nm = x => x === 'PK' ? 'Pre-K' : x === 'K' ? 'K' : x; return `${nm(g[0])} to ${nm(g[g.length - 1])}`; };
@@ -2157,7 +2165,7 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
       <span>School office <b><a href="${telHref(s.phone)}">${esc(s.phone)}</a></b></span>
       ${s.calendar ? `<span>Calendar <b><a href="${esc(s.calendar.source.url)}" rel="noopener">${esc(s.calendar.source.label)}</a></b></span>` : ''}
       ${schoolHoods(s).length ? `<span>Neighborhood <b>${hoodLinks(schoolHoods(s), 1)}</b></span>` : ''}
-      <span>Reviewed <b>${longDate(s.lastReviewed)}</b></span>
+      <span>Checked <b>${longDate(schoolChecked(s))}</b></span>
     </div>`;
   const wk0 = schoolWeek(s, thisMonday());
   const body = `<div data-school-page="${esc(s.id)}" style="display:contents">
@@ -6905,7 +6913,7 @@ if (!PREVIEW) {
   // review, the calendar's check), not the day of the build: a date that moves every night teaches a search engine
   // to ignore it. Pages whose words live in this file, with no date of their own, carry none.
   const newest = (...xs) => xs.flat(Infinity).filter(x => /^\d{4}-\d{2}-\d{2}$/.test(x || '')).sort().pop() || '';
-  const progDate = p => newest(p.lastVerified, Object.values(p.schools).map(l => l.checked), p.weekend?.checked, reviewsFor(p.id).map(r => r.date));
+  const progDate = p => newest(p.lastVerified, p.looked, Object.values(p.schools).map(l => l.checked), p.weekend?.checked, reviewsFor(p.id).map(r => r.date));
   const listDate = list => newest(list.map(progDate));
   const schoolDate = s => newest(s.lastReviewed, s.added, listDate(forSchool(s)));
   const campsDate = newest(summerCamps.map(c => c.checked));

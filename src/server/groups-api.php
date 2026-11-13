@@ -1193,9 +1193,13 @@ function ready(array $u): bool { return $u['first'] !== '' && $u['last'] !== '';
 
 // ---------- co-parents: two accounts, one set of plans ----------
 // An account can name one co-parent, by email. Once they accept, the two accounts use one set of plans: the weeks,
-// the days off, the summer and the children on the profile all live under the account that invited (the "home"),
-// and either account reads and changes them. Everything else stays each account's own: follows, emails, groups,
-// listings. Either side can end it; the plans stay with the home account.
+// the days off, the summer and the children on the profile all live under one of the two accounts (the "home"), and
+// either account reads and changes them. Whoever accepts picks whose plans those are, when both have some: the
+// inviter's ("theirs", and the inviter's account is the home) or their own ("mine", and theirs is). The kids lists and
+// Kids' Playground are put together on the home account either way, and a summer or days-off plan the home doesn't
+// have comes over from the other. The other account's own plans aren't touched: unused while the two are linked, and
+// its own again if they stop. Everything else stays each account's own: follows, emails, groups, listings. Either side
+// can end it; the shared plans stay with the home account.
 function home_id(array $u): int { return !empty($u['home']) ? (int) $u['home'] : (int) $u['id']; }
 function household(array $u): array {   // the account ids that share these plans: the home account and, if linked, the other one
   $h = home_id($u); $ids = array($h);
@@ -1223,7 +1227,9 @@ function coparent_out(array $u): ?array {
     // what accepting would do with this account's own plans
     $mine = array('weeks' => (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($u['id'])), 'kids' => count(kids_list($u)),
       'summer' => (bool) val('SELECT 1 FROM summers WHERE user_id = ?', array($u['id'])), 'daysoff' => (bool) val('SELECT 1 FROM daysoffs WHERE user_id = ?', array($u['id'])));
-    $theirs = array('summer' => (bool) val('SELECT 1 FROM summers WHERE user_id = ?', array($i['owner_id'])), 'daysoff' => (bool) val('SELECT 1 FROM daysoffs WHERE user_id = ?', array($i['owner_id'])));
+    $ow = row('SELECT id, kids FROM users WHERE id = ?', array($i['owner_id']));
+    $theirs = array('weeks' => (int) val('SELECT COUNT(*) FROM weeks WHERE user_id = ?', array($i['owner_id'])), 'kids' => $ow ? count(kids_list($ow)) : 0,
+      'summer' => (bool) val('SELECT 1 FROM summers WHERE user_id = ?', array($i['owner_id'])), 'daysoff' => (bool) val('SELECT 1 FROM daysoffs WHERE user_id = ?', array($i['owner_id'])));
     return array('role' => 'invited', 'from' => named($i), 'since' => (int) $i['created'], 'mine' => $mine, 'theirs' => $theirs);
   }
   return null;
@@ -2376,46 +2382,53 @@ switch ($method . ' ' . $action) {
     q('DELETE FROM coparent WHERE partner_id IS NULL AND (owner_id = ? OR email = ?)', array($u['id'], $u['email']));
     out(array('ok' => true, 'coparent' => coparent_out($u)));
   }
-  // Accept: this account's plans join the inviter's, and from here on both accounts use that one set.
+  // Accept, with whose plans the two accounts will share ("keep": "theirs", the inviter's, or "mine"). See above.
   case 'POST coparent_accept': {
     $u = need_user();
     $c = row('SELECT owner_id FROM coparent WHERE email = ? AND partner_id IS NULL', array($u['email']));
     if (!$c) fail('none', 'There’s no invitation for this address.', 404);
-    $owner = (int) $c['owner_id'];
+    $inviter = (int) $c['owner_id']; $me = (int) $u['id'];
     if (!empty($u['home'])) fail('linked', 'You already share everything with someone. End that first.');
-    if (row('SELECT 1 FROM coparent WHERE owner_id = ?', array($u['id']))) fail('one', 'You have a co-parent invitation of your own out. Cancel it first.');
-    if (!row('SELECT id FROM users WHERE id = ?', array($owner))) fail('gone', 'That account is gone.', 404);
+    if (row('SELECT 1 FROM coparent WHERE owner_id = ?', array($me))) fail('one', 'You have a co-parent invitation of your own out. Cancel it first.');
+    $iu = row('SELECT id, email, kids FROM users WHERE id = ?', array($inviter));
+    if (!$iu) fail('gone', 'That account is gone.', 404);
+    $keep = str($in, 'keep', 10) === 'mine' ? 'mine' : 'theirs';
+    $home = $keep === 'mine' ? $me : $inviter; $other = $keep === 'mine' ? $inviter : $me;
     db()->beginTransaction();
-    // weeks move over (their shares and group copies keep their links); the kids lists merge; one summer and one
-    // days-off plan per household, the inviter's if both have one
-    q('UPDATE weeks SET user_id = ? WHERE user_id = ?', array($owner, $u['id']));
-    $ho = row('SELECT id, kids, grades, ages FROM users WHERE id = ?', array($owner));
-    $mine = kids_list($u); $theirs = kids_list($ho); $seen = array();
-    foreach ($theirs as $k) $seen[mb_strtolower($k['n'], 'UTF-8')] = true;
-    foreach ($mine as $k) { if (!isset($seen[mb_strtolower($k['n'], 'UTF-8')]) && count($theirs) < 8) { $theirs[] = $k; $seen[mb_strtolower($k['n'], 'UTF-8')] = true; } }
-    q('UPDATE users SET kids = ? WHERE id = ?', array($theirs ? seal(json_encode($theirs)) : '', $owner));
-    q('UPDATE users SET kids = ? WHERE id = ?', array('', $u['id']));
+    // the kids lists put together on the home account (the other account keeps its own list)
+    $hu = row('SELECT id, kids FROM users WHERE id = ?', array($home)); $ou = row('SELECT id, kids FROM users WHERE id = ?', array($other));
+    $kids = kids_list($hu); $seen = array();
+    foreach ($kids as $k) $seen[mb_strtolower($k['n'], 'UTF-8')] = true;
+    foreach (kids_list($ou) as $k) { if (!isset($seen[mb_strtolower($k['n'], 'UTF-8')]) && count($kids) < 8) { $kids[] = $k; $seen[mb_strtolower($k['n'], 'UTF-8')] = true; } }
+    q('UPDATE users SET kids = ? WHERE id = ?', array($kids ? seal(json_encode($kids)) : '', $home));
+    // a summer or days-off plan the home doesn't have comes over, as a copy
     foreach (array('summers', 'daysoffs') as $tbl) {
-      if (row('SELECT user_id FROM ' . $tbl . ' WHERE user_id = ?', array($owner))) q('DELETE FROM ' . $tbl . ' WHERE user_id = ?', array($u['id']));
-      else q('UPDATE ' . $tbl . ' SET user_id = ? WHERE user_id = ?', array($owner, $u['id']));
+      if (!row('SELECT user_id FROM ' . $tbl . ' WHERE user_id = ?', array($home))) q('INSERT INTO ' . $tbl . ' (user_id, year, json, updated) SELECT ?, year, json, updated FROM ' . $tbl . ' WHERE user_id = ?', array($home, $other));
     }
-    foreach (q('SELECT id, name, json FROM passports WHERE user_id = ?', array($u['id'])) as $pp) {
-      $had = passport_row($owner, unseal($pp['name']));
-      if (!$had) { q('UPDATE passports SET user_id = ? WHERE id = ?', array($owner, $pp['id'])); continue; }
-      $a = passport_data($had); $b = passport_data($pp);   // the same first name on both sides: one passport, with both lists
+    // Kids' Playground: each child's page copied to the home account; the same first name on both, one page with both lists
+    foreach (q('SELECT id, name, json FROM passports WHERE user_id = ?', array($other)) as $pp) {
+      $had = passport_row($home, unseal($pp['name']));
+      if (!$had) { q('INSERT INTO passports (user_id, name, json, updated) SELECT ?, name, json, ? FROM passports WHERE id = ?', array($home, now(), $pp['id'])); continue; }
+      $a = passport_data($had); $b = passport_data($pp);
       $m = passport_clean(array('done' => array_merge($a['done'], $b['done']), 'skip' => array_merge($a['skip'], $b['skip']), 'fav' => array_merge($a['fav'], $b['fav']),
         'av' => isset($a['av']) ? $a['av'] : (isset($b['av']) ? $b['av'] : null), 'seen' => (isset($a['seen']) ? $a['seen'] : array()) + (isset($b['seen']) ? $b['seen'] : array()), 'lvl' => max(isset($a['lvl']) ? $a['lvl'] : 0, isset($b['lvl']) ? $b['lvl'] : 0)));
       q('UPDATE passports SET json = ?, updated = ? WHERE id = ?', array(seal(json_encode($m)), now(), $had['id']));
-      q('DELETE FROM passports WHERE id = ?', array($pp['id']));
     }
-    q('UPDATE users SET home = ? WHERE id = ?', array($owner, $u['id']));
-    q('UPDATE coparent SET partner_id = ?, accepted = ? WHERE owner_id = ?', array($u['id'], now(), $owner));
+    // the link: the home account owns it, the other reads and changes the home's plans
+    if ($keep === 'mine') {
+      q('DELETE FROM coparent WHERE owner_id = ?', array($inviter));
+      q('INSERT INTO coparent (owner_id, email, partner_id, created, accepted) VALUES (?, ?, ?, ?, ?)', array($me, $iu['email'], $inviter, now(), now()));
+      q('UPDATE users SET home = ? WHERE id = ?', array($me, $inviter));
+    } else {
+      q('UPDATE users SET home = ? WHERE id = ?', array($inviter, $me));
+      q('UPDATE coparent SET partner_id = ?, accepted = ? WHERE owner_id = ?', array($me, now(), $inviter));
+    }
     db()->commit();
     bump('coparent_linked');
-    $u['home'] = $owner;
-    out(array('ok' => true, 'coparent' => coparent_out($u)));
+    $u['home'] = $keep === 'mine' ? 0 : $inviter;
+    out(array('ok' => true, 'kept' => $keep, 'coparent' => coparent_out($u)));
   }
-  // Either side ends it. The plans stay with the account that invited; the other account starts fresh.
+  // Either side ends it. The shared plans stay with the home account; the other goes back to its own plans, if it had any.
   case 'POST coparent_end': {
     $u = need_user();
     $c = row('SELECT owner_id, partner_id FROM coparent WHERE partner_id IS NOT NULL AND (owner_id = ? OR partner_id = ?)', array($u['id'], $u['id']));

@@ -581,7 +581,8 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   fav: [listings, best first], av?: { b: <body>, c: <colour 0-9>, w?: { <place>: <item> } }, seen?: { <pin>: <level> }, lvl?: <level> }`.
   `GET passport` gives every child on the kids list with all of that and the suggestions; `POST passport_save { kid,
   done, skip, fav, av?, seen?, lvl? }` replaces one child's lists, and keeps `av`, `seen` and `lvl` when they are left
-  out. Co-parents share them (a partner's rows move to the home account on accepting, same first names merge).
+  out. Co-parents share them (on accepting, the other account's rows are copied to the home account, same first names
+  merge; the other account keeps its own for if the link ends).
   Deleting the account deletes them. Pins and levels are never stored, only which were already celebrated.
 - **Favorites.** `GET profile` carries `favorites: [{ name, fav }]`, and the accounts script hands them to each
   planner (`favorites()` on `window.pasBoard`, `pasSummer` and `pasDaysOff`): Build your week shows the child's
@@ -672,6 +673,10 @@ Fields worth knowing:
   - `sources`: optional, extra sources that apply to this school only (the school's own aftercare sheet, for example).
   - `checked`: the day this program-to-school link was last confirmed against a source (`YYYY-MM-DD`). `lastVerified` stays
     the day the listing's own details (hours, price, registration) were last checked.
+- `looked`: optional, a day after `lastVerified` when the listing's sources were read but didn't confirm its details
+  (the City's finder showing no program this year, say); the `note` says what was found. Pages then say "Checked
+  {looked}. Details last confirmed {lastVerified}." Once `lastVerified` catches up it is ignored, and can be dropped.
+  A school page's "Checked" date is the later of the school's `lastReviewed` and the newest `checked` among its links.
 - `pickupLists`: the provider's pickup lists as they were last read, one entry per list the provider publishes. See
   "Keeping it current".
 - `told`: what the program itself told us, as opposed to what its site says. A list of
@@ -1850,25 +1855,33 @@ These are the only parts of the site that store anything about a child on the se
   recipient must sign in with that address, goes straight in, and can look and print but not change anything.
   More addresses can be added to the same list; each can be removed, and "Stop sharing with everyone" deletes
   it. What is shared is the same as in a group: first name and program ids, never the school, address or notes.
-- **Sharing from the account page** (since November 7, 2026). Each week kept in the profile (Plans & sharing tab)
-  has a Share button: one person by email (`share_one` with `week`), or a group this account is in (`kid_save` with
-  `week`), and it lists who has it, with "Send again", "Stop sharing" and "Take out of the group". A copy made this
+- **Sharing from the account page** (since November 7, 2026; one Sharing section since November 12). The Plans &
+  sharing tab opens with every way to share, together (`.g-sharing`, `#sharing`), then "Plans you've kept"
+  (`#plans`): "Share with a co-parent" (everything, both ways), "Share a week by email" (one week with one person,
+  view-only: a week picker and an address, `share_one` with `week`, then each address with "Send again" and "Stop
+  sharing", then "Shared with you"), "Share with a group" (the groups, which week is in each with "Take it out", adding
+  a week with `kid_save` and `week`, and "Start a group"), and "Have an invite?" (the join code). Each kept week's row
+  just says who has it ("shared with one person · in a group") and keeps "Remove from my profile". A copy made this
   way carries the week's id (`kids.week_id`), so `week_save` and the device's `sync` bring every copy up to date
   (`week_follow`, which also renames the shared week after the child) and removing the week from the profile ends
   its shared weeks and takes its copies out of groups (`week_delete`). Build your week passes `week` too when the
   roster is kept in the profile, so new shares made there show on the account page; older ones don't, and still work
   from the device as before. The profile's "program.school" entries become the group's "program" ones (`week_from_full`).
-- **Co-parents: two accounts, one set of plans** (since November 7, 2026). On the Plans & sharing tab an account names
-  one other adult by email (`coparent_invite`; the email is "{Name} wants to share all plans with you"). The invited
-  account sees the invitation under the same tab once signed in with that address, with what accepting does to its
-  own plans, and accepts or declines (`coparent_accept`, `coparent_cancel`). On accepting, its weeks move to the
-  inviter's account, the kids lists merge, and one summer and one days-off plan are kept per household (the inviter's
-  if both had one); `users.home` then points the partner at the inviter's plans, and every plan action reads and
-  writes through `home_id()` / `household()` (weeks, summer, days off, the kids list; shares and group copies made
-  from a week follow it for both). Grades and ages stay each account's own filters, as do follows, emails, groups and
-  listings. Either side ends it (`coparent_end`): the plans stay with the inviter; the partner starts empty. Deleting
-  the inviter's account unlinks the partner. One row per inviter in `coparent`; `coparent_out()` is the state the
-  account page draws from (`me.coparent`).
+- **Co-parents: two accounts, one set of plans** (since November 7, 2026; whose plans, since November 12). Under
+  Sharing an account names one other adult by email (`coparent_invite`; the email is "{Name} wants to share all plans
+  with you"). The invited account sees the invitation there once signed in with that address, with what each side
+  holds (`me.coparent.mine` and `.theirs`: weeks, kids, summer, days off). When both have plans it must choose whose
+  the two share ("Use Pat's" / "Use mine"; Accept waits for the choice); otherwise the side with plans is used. It
+  accepts (`coparent_accept { keep: 'theirs' | 'mine' }`) or declines (`coparent_cancel`). The chosen account becomes
+  the home account: it owns the `coparent` row (with `keep: 'mine'` the invitation is turned around), the other's
+  `users.home` points at it, and every plan action reads and writes through `home_id()` / `household()` (weeks,
+  summer, days off, the kids list; shares and group copies made from a week follow it for both). The other account's
+  plans aren't moved or deleted: unused while linked, and its own again if the link ends. What comes across: the kids
+  lists put together on the home account, a summer or days-off plan only the other has (copied), and Kids'
+  Playground pages (copied, same first names merged). Grades and ages stay each account's own filters, as do follows,
+  emails, groups and listings. Either side ends it (`coparent_end`): the shared plans stay with the home account and
+  the other goes back to its own. Deleting the home account unlinks the other, which goes back to its own plans. One
+  row per home account in `coparent`; `coparent_out()` is the state the account page draws from (`me.coparent`).
 - **Week links are retired.** A week used to be shareable as a link that held the whole week after the `#`.
   Anyone could open one and it could not be taken back, so the buttons are gone and an old link now shows a
   notice instead of a week. "Copy as text", "Email it to myself" and the share-sheet button went with them (on the day-off planner too): a
@@ -2629,7 +2642,9 @@ How a check uses it:
 3. A provider that publishes a pickup list and has none stored gets one.
 4. If a page that used to read fine returns something implausible (an earlier school year, a much shorter list than
    the stored one), add it to `data/reading.json` rather than trusting it.
-5. Set `lastVerified` only on listings whose own details were re-read, and `checked` only on links confirmed.
+5. Set `lastVerified` only on listings whose own details were re-read, and `checked` only on links confirmed. When a
+   listing's own page was read (in a browser where `data/reading.json` says so) but didn't confirm its details, set
+   `looked` to today and say in `note` what it showed, so the listing doesn't look unchecked.
 6. **What the program told us wins over its site.** `check.json` has `told`: every field a program gave us itself
    (by email, or as a change proposed from its claim), with the date. A check does not change those fields from the
    site. When the site says something different, it adds an `asks` entry on the listing with the two versions as a
