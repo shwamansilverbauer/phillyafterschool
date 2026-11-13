@@ -3125,3 +3125,21 @@ dialog.getapp .pas-dialog-in{text-align:left}
 .g-favrank{list-style:decimal;padding-left:1.4em}
 .g-favrank li{display:list-item}
 .g-kidfavs h3{margin:14px 0 4px}
+/* Plans & sharing: the four ways to share, together (groups.js, shareSec), then the plans */
+.g-sharing .g-way{padding:16px 0 18px;border-top:1px solid var(--line)}
+.g-sharing h2 + .g-way{border-top:0;padding-top:6px}
+.g-way h3{margin:0 0 2px}
+.g-way-line{margin:0 0 10px;color:var(--muted)}
+.g-way-body > .hint:first-child{margin-top:0}
+.g-cop-head{font-weight:800;margin:0 0 4px}
+.g-pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:10px 0}
+.g-pick-one{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border:2px solid var(--line);border-radius:12px;cursor:pointer;background:var(--surface)}
+.g-pick-one:has(input:checked){border-color:var(--blue);background:#EEF6FF}
+.g-pick-one input{margin-top:4px}
+.g-pick-one > span{display:flex;flex-direction:column;gap:2px}
+.g-share-one,.g-way-body form.g-row{margin:4px 0 6px}
+.g-week-one{font-weight:700}
+.g-field{display:inline-flex;align-items:center;gap:8px}
+.g-in-group{flex-basis:100%;font-size:.92rem}
+.g-make{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.g-make h4{margin:12px 0 6px}
