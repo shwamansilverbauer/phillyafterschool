@@ -2283,6 +2283,56 @@
   };
 
   // ----- the grown-ups' side: confirm, add, take off, share, print -----
+  // Adding a class or camp by hand: a search of the site's listings, what kind, and when. The Playground Portal and
+  // the account page's Kids' Playground tab both use it. add(entry, fail) saves; a repeat is turned away here.
+  var addForm = function (k, id, add, cancel) {
+    var form = el('form', 'kc-add');
+    var f1 = el('div', 'field'); var lab = el('label', null, 'Program or camp'); lab.htmlFor = id + '-q'; f1.appendChild(lab);
+    var q = el('input'); q.id = id + '-q'; q.type = 'text'; q.autocomplete = 'off'; q.placeholder = 'Start typing a name'; q.setAttribute('role', 'combobox'); q.setAttribute('aria-expanded', 'false'); q.setAttribute('aria-controls', id + '-hits'); f1.appendChild(q);
+    var hits = el('ul', 'finder-list kc-hits'); hits.id = id + '-hits'; hits.hidden = true; hits.setAttribute('role', 'listbox'); f1.appendChild(hits);
+    form.appendChild(f1);
+    var picked = null, pickedLine = el('p', 'kc-picked'); pickedLine.hidden = true; form.appendChild(pickedLine);
+    var f2 = el('div', 'pair');
+    var kindSel = el('select'); kindSel.id = id + '-kind'; Object.keys(D.kinds).forEach(function (kd) { var o = el('option', null, D.kinds[kd]); o.value = kd; kindSel.appendChild(o); });
+    var yearSel = el('select'); yearSel.id = id + '-year';
+    var kf = el('div', 'field'), kl = el('label', null, 'What kind'); kl.htmlFor = kindSel.id; kf.appendChild(kl); kf.appendChild(kindSel);
+    var yf = el('div', 'field'), yl = el('label', null, 'When'); yl.htmlFor = yearSel.id; yf.appendChild(yl); yf.appendChild(yearSel);
+    f2.appendChild(kf); f2.appendChild(yf); form.appendChild(f2);
+    var fillYears = function () {
+      yearSel.textContent = '';
+      var summer = kindSel.value === 'summer';
+      for (var y = D.year; y >= D.year - 4; y--) { var o = el('option', null, summer ? 'Summer ' + y : y + '–' + String(y + 1).slice(2)); o.value = String(y); yearSel.appendChild(o); }
+    };
+    fillYears(); kindSel.addEventListener('change', fillYears);
+    var said = el('p', 'g-status bad'); said.hidden = true; said.setAttribute('aria-live', 'polite');
+    var addBtn = el('button', 'btn primary', 'Add it'); addBtn.type = 'submit'; addBtn.disabled = true;
+    var fa = el('div', 'actions'); fa.appendChild(addBtn);
+    if (cancel) fa.appendChild(btn('btn', 'Cancel', cancel));
+    form.appendChild(fa); form.appendChild(said);
+    q.addEventListener('input', function () {
+      var words = q.value.toLowerCase().split(/\s+/).filter(Boolean);
+      hits.textContent = '';
+      if (!words.length) { hits.hidden = true; q.setAttribute('aria-expanded', 'false'); return; }
+      var found = Object.keys(D.listings).filter(function (key) { var n = D.listings[key].n.toLowerCase(); return words.every(function (w) { return n.indexOf(w) > -1; }); }).slice(0, 8);
+      found.forEach(function (key) {
+        var li = el('li'); li.setAttribute('role', 'option');
+        li.appendChild(btn('', D.listings[key].n + (key.charAt(0) === 'c' ? ' (summer camp)' : ''), function () { picked = key; pickedLine.textContent = 'Adding: ' + D.listings[key].n; pickedLine.hidden = false; said.hidden = true; if (key.charAt(0) === 'c') { kindSel.value = 'summer'; fillYears(); } q.value = ''; hits.hidden = true; q.setAttribute('aria-expanded', 'false'); addBtn.disabled = false; kindSel.focus(); }));
+        hits.appendChild(li);
+      });
+      if (!found.length) hits.appendChild(el('li', 'finder-note', 'Nothing by that name on the site yet.'));
+      hits.hidden = false; q.setAttribute('aria-expanded', 'true');
+    });
+    q.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') { hits.hidden = true; q.setAttribute('aria-expanded', 'false'); } });
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault(); if (!picked) return;
+      var e = { k: picked, kind: kindSel.value, y: parseInt(yearSel.value, 10), s: '' };
+      if (k.done.some(function (x) { return x.k === e.k && x.kind === e.kind && x.y === e.y; })) { said.textContent = 'That one is already there for that year.'; said.hidden = false; return; }
+      addBtn.disabled = true;
+      add(e, function (msg) { addBtn.disabled = false; said.textContent = msg; said.hidden = false; });
+    });
+    form.q = q;
+    return form;
+  };
   var drawGrownup = function () {
     setKidMode(false);
     var k = kid();
@@ -2327,46 +2377,8 @@
 
     // Add one by hand.
     var ad = el('div', 'panel'); ad.appendChild(el('h3', null, 'Add one the plans missed'));
-    var form = el('form', 'kc-add');
-    var f1 = el('div', 'field'); var lab = el('label', null, 'Program or camp'); lab.htmlFor = 'kc-add-q'; f1.appendChild(lab);
-    var q = el('input'); q.id = 'kc-add-q'; q.type = 'text'; q.autocomplete = 'off'; q.placeholder = 'Start typing a name'; q.setAttribute('role', 'combobox'); q.setAttribute('aria-expanded', 'false'); f1.appendChild(q);
-    var hits = el('ul', 'finder-list kc-hits'); hits.hidden = true; hits.setAttribute('role', 'listbox'); f1.appendChild(hits);
-    form.appendChild(f1);
-    var picked = null, pickedLine = el('p', 'kc-picked'); pickedLine.hidden = true; form.appendChild(pickedLine);
-    var f2 = el('div', 'pair');
-    var kindSel = el('select'); kindSel.id = 'kc-add-kind'; Object.keys(D.kinds).forEach(function (kd) { var o = el('option', null, D.kinds[kd]); o.value = kd; kindSel.appendChild(o); });
-    var yearSel = el('select'); yearSel.id = 'kc-add-year';
-    var kf = el('div', 'field'), kl = el('label', null, 'What kind'); kl.htmlFor = kindSel.id; kf.appendChild(kl); kf.appendChild(kindSel);
-    var yf = el('div', 'field'), yl = el('label', null, 'When'); yl.htmlFor = yearSel.id; yf.appendChild(yl); yf.appendChild(yearSel);
-    f2.appendChild(kf); f2.appendChild(yf); form.appendChild(f2);
-    var fillYears = function () {
-      yearSel.textContent = '';
-      var summer = kindSel.value === 'summer';
-      for (var y = D.year; y >= D.year - 4; y--) { var o = el('option', null, summer ? 'Summer ' + y : y + '–' + String(y + 1).slice(2)); o.value = String(y); yearSel.appendChild(o); }
-    };
-    fillYears(); kindSel.addEventListener('change', fillYears);
-    var addBtn = el('button', 'btn primary', 'Add it'); addBtn.type = 'submit'; addBtn.disabled = true;
-    var fa = el('div', 'actions'); fa.appendChild(addBtn); form.appendChild(fa);
-    q.addEventListener('input', function () {
-      var words = q.value.toLowerCase().split(/\s+/).filter(Boolean);
-      hits.textContent = '';
-      if (!words.length) { hits.hidden = true; q.setAttribute('aria-expanded', 'false'); return; }
-      var found = Object.keys(D.listings).filter(function (key) { var n = D.listings[key].n.toLowerCase(); return words.every(function (w) { return n.indexOf(w) > -1; }); }).slice(0, 8);
-      found.forEach(function (key) {
-        var li = el('li'); li.setAttribute('role', 'option');
-        li.appendChild(btn('', D.listings[key].n + (key.charAt(0) === 'c' ? ' (summer camp)' : ''), function () { picked = key; pickedLine.textContent = 'Adding: ' + D.listings[key].n; pickedLine.hidden = false; if (key.charAt(0) === 'c') { kindSel.value = 'summer'; fillYears(); } q.value = ''; hits.hidden = true; addBtn.disabled = false; }));
-        hits.appendChild(li);
-      });
-      if (!found.length) hits.appendChild(el('li', 'finder-note', 'Nothing by that name on the site yet.'));
-      hits.hidden = false; q.setAttribute('aria-expanded', 'true');
-    });
-    form.addEventListener('submit', function (ev) {
-      ev.preventDefault(); if (!picked) return;
-      var e = { k: picked, kind: kindSel.value, y: parseInt(yearSel.value, 10), s: '' };
-      if (k.done.some(function (x) { return x.k === e.k && x.kind === e.kind && x.y === e.y; })) { S.said = 'That one is already there for that year.'; draw(); return; }
-      save({ done: k.done.concat([e]) });
-    });
-    ad.appendChild(form); page.appendChild(ad);
+    ad.appendChild(addForm(k, 'kc-add', function (e) { save({ done: k.done.concat([e]) }); }));
+    page.appendChild(ad);
 
     // What's on it, with a way to take one off, and a review in the child's words.
     var dl = el('div', 'panel'); dl.appendChild(el('h3', null, 'Where ' + k.name + ' has been'));
@@ -2498,19 +2510,19 @@
 
   // ----- for the account page's Kids' Playground tab: each child's page at a glance, and the classes waiting to confirm -----
   // groups.js loads this script and its data only when that tab is opened, then calls window.pasKids.summary().
-  var summaryBox = null;
+  var summaryBox = null, sumSaid = {};   // what to say on a child's card after a change, across the repaint
   var paintSummary = function (box, p) {
     box.textContent = '';
     box.appendChild(el('p', 'hint', 'What each child has on Kids’ Playground, and the classes waiting for you to say yes or no. Only you, and a co-parent you’ve linked, see this.'));
     box.appendChild(el('p', 'hint', 'Program pins: a program with a premium listing can have a pin of its own. Kids see it only after going there, and every program counts toward all the other pins the same way.'));
     if (!p.kids.length) {
-      var none = el('p', null, 'Add your kids’ first names on School & kids, and each gets a page in Kids’ Playground.');
+      var none = el('p', null, 'Add your kids’ first names on your profile, and each gets a page in Kids’ Playground.');
       box.appendChild(none);
       var go2 = el('a', 'btn primary', 'Add their names'); go2.href = D.links.kids; box.appendChild(go2);
       return;
     }
     var openOn = function (k, hash) { return function () { try { sessionStorage.setItem('kc-open', k.name); } catch (e) { /* storage blocked: the picker asks */ } location.href = D.links.corner + (hash || ''); }; };
-    p.kids.forEach(function (k) {
+    p.kids.forEach(function (k, i) {
       if (!k.seen || Array.isArray(k.seen)) k.seen = {};
       var st = stats(k), got = 0; PINS().filter(countable).forEach(function (x) { if (st.pins[x.id].tier) got++; });
       var card = el('div', 'kc-sum');
@@ -2542,6 +2554,25 @@
         });
         wait.appendChild(ul); card.appendChild(wait);
       }
+      // Add a class or camp the child went to, right here: the form opens under its button.
+      var addBox = el('div', 'kc-sum-add');
+      var addOpen = btn('btn', 'Add a class or camp', function () {
+        addOpen.hidden = true;
+        var hint = el('p', 'hint', 'Search the site’s programs and camps. It counts toward ' + possessive(k.name) + ' pins, map and bingo card as soon as it’s added.');
+        var form = addForm(k, 'kc-sum-add-' + i, function (e, fail) {
+          call('passport_save', { kid: k.name, done: k.done.concat([e]), skip: k.skip, fav: k.fav }).then(function (d) {
+            if (!d.ok) { fail(d.message || 'That didn’t save. Try again.'); return; }
+            ['done', 'skip', 'fav', 'suggest', 'av', 'seen', 'lvl'].forEach(function (fl) { if (d.kid[fl] !== undefined) k[fl] = d.kid[fl]; });
+            sumSaid[k.name] = 'Added ' + nameOf(e.k) + ', ' + yearLabel(e) + '. ' + k.name + ' sees the new pins next time on Kids’ Playground.' + (needsSite(e) ? ' It runs in more than one place: pick which in the Playground Portal, so the map shows it.' : '');
+            paintSummary(box, p);
+          });
+        }, function () { paintSummary(box, p); });
+        addBox.appendChild(el('h4', null, 'What did ' + k.name + ' go to?')); addBox.appendChild(hint); addBox.appendChild(form);
+        addBox.classList.add('open'); form.q.focus();
+      });
+      addBox.appendChild(addOpen);
+      if (sumSaid[k.name]) { addBox.appendChild(el('p', 'g-status good', sumSaid[k.name])); delete sumSaid[k.name]; }
+      card.appendChild(addBox);
       var acts = el('div', 'actions');
       acts.appendChild(btn('btn primary', 'Open ' + possessive(k.name) + ' Kids’ Playground', openOn(k)));
       acts.appendChild(btn('btn', 'Playground Portal', openOn(k, '#grownup')));

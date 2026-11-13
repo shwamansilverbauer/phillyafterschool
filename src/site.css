@@ -2306,6 +2306,7 @@ dialog.pas-dialog::backdrop{background:rgba(11,33,64,.45)}
 .pc-list li{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
 .pc-list a{font-weight:700}
 .pc-go{font-size:.92rem;font-weight:700;white-space:nowrap}
+.pc-row button.pc-go{font-size:.92rem;font-weight:700}
 .pc-foot{margin:0;padding:14px 24px 20px;border-top:1px solid var(--line)}
 @media (max-width:620px){
   .pc-head{padding:18px 16px}
@@ -2317,14 +2318,17 @@ dialog.pas-dialog::backdrop{background:rgba(11,33,64,.45)}
   .pc-row dd{grid-column:1/-1}
   .g-page .prof-card a.pc-edit{width:100%;text-align:center}
 }
-/* in the phone menu, someone signed in finds their own pages first: Parent Portal, Kids' Playground, then My Profile */
+/* in the phone menu, someone signed in finds their own pages first: Parent Portal, then My Profile; Kids' Playground has the foot */
 @media (max-width:1099px){
   /* the phone menu, signed in: Parent Portal leads (big, yellow, with an ink edge); Kids' Playground and My Profile come
      under it, smaller and quieter */
   .js .nav.open > a.nav-cta.when-in{order:-3;margin:0 0 10px;padding:15px 12px;font-size:1.2rem;font-weight:800;border:3px solid #0B2140;box-shadow:0 4px 0 #0B2140}
-  .js .nav.open > a.nav-kc{order:-2;display:flex;align-items:center;justify-content:center;gap:6px;margin:0 0 8px;font-family:inherit;font-stretch:normal;font-weight:700;font-size:.98rem;padding:8px 12px;border:2px solid #9CC3EE;border-radius:999px;box-shadow:none;background:#EEF6FF;transform:none}
-  .js .nav.open > a.nav-kc .nav-kc-bulb{width:16px;height:20px}
-  .js .nav.open > a.nav-kc:hover{background:#DAEDFE}
+  /* Kids' Playground: at the foot of the menu, a section of its own (a line above, its name, the button in its colors) */
+  .js .nav.open > a.nav-kc{order:99;position:relative;display:flex;align-items:center;justify-content:center;gap:10px;margin:30px 0 6px;padding:16px 12px 13px;font-family:var(--title);font-weight:400;font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;color:#0B2140;background:#96C9FF;border:3px solid #0B2140;border-radius:18px;box-shadow:0 4px 0 #0B2140;transform:none}
+  .js .nav.open > a.nav-kc::before{content:"";position:absolute;left:-4px;right:-4px;top:-19px;border-top:2px dashed #9CC3EE}
+  .js .nav.open > a.nav-kc .vh{position:static;width:auto;height:auto;margin:0;clip:auto;clip-path:none;overflow:visible;white-space:nowrap}
+  .js .nav.open > a.nav-kc .nav-kc-bulb{width:24px;height:30px}
+  .js .nav.open > a.nav-kc:hover{background:#C3E1FF}
   .js .nav.open > a.nav-acct{order:-1;text-align:center;border:2px solid #0B2140;border-radius:999px;margin-bottom:8px;padding:8px 12px}
 }
 /* Kids' Playground, beside Parent Portal: a button that looks like it belongs on Kids' Playground */
@@ -2998,6 +3002,12 @@ html.kc-kid main.wrap{padding-top:8px;position:relative;z-index:1}
 .kc-sum-wait{background:var(--warn);border-radius:12px;padding:12px 14px}
 .kc-sum-wait h4{margin:0 0 4px;font-family:var(--display);font-size:1rem}
 .kc-sum .actions{margin:0}
+.kc-sum-add.open{padding:12px 14px;background:#F4F8FD;border:1px solid #D6E3F2;border-radius:12px;display:grid;gap:8px}
+.kc-sum-add h4{margin:0;font-family:var(--display);font-size:1rem}
+.kc-sum-add .hint{margin:0}
+.kc-sum-add .pair{gap:12px 18px}
+.kc-sum-add .actions{margin-top:6px}
+.kc-sum-add > .g-status{margin:8px 0 0}
 /* the grown-ups' corner (looks like the rest of the site) */
 .kc-grown{margin:30px 0 10px;display:flex;justify-content:center}
 .kc-hold{position:relative;overflow:hidden;font:inherit;font-weight:700;color:var(--muted);background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:12px 22px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none}
@@ -3097,3 +3107,45 @@ html.kc-kid .kc-hold{background:rgba(255,255,255,.85);border-color:rgba(11,33,64
 .kc-cert-sign{font-weight:800;font-style:italic;color:var(--kink);margin:4px 0 0}
 .kc-bingowin .kc-champbulb{width:110px}
 .kc-wearbtn.bingo.locked .kc-lock{background:var(--kred)}
+
+/* "Get the app": hidden until site.js says this device can have it (html.app-ok); in the menu only on a phone or tablet */
+html:not(.app-ok) [data-getapp]{display:none!important}
+.nav > .nav-app{color:inherit;text-decoration:none;font-weight:700}
+@media (min-width:1100px){.nav > .nav-app{display:none!important}}
+.foot-app{margin:10px 0 0}
+.foot-app-btn{display:inline-flex;align-items:center;gap:8px}
+.foot-app-btn svg{width:18px;height:18px;flex:none}
+dialog.getapp .pas-dialog-in{text-align:left}
+.getapp-ic{display:block;width:64px;height:64px;border-radius:16px;margin:0 0 8px;box-shadow:0 2px 8px rgba(11,33,64,.18)}
+.getapp-steps{margin:8px 0 10px;padding-left:1.4em;line-height:1.45}
+.getapp-steps li{margin:4px 0}
+
+/* the profile's rows that open to change in place, and the kids' favorites */
+.pc-editor{margin-top:10px;padding:12px 14px;background:#F4F8FD;border:1px solid #D6E3F2;border-radius:12px}
+.pc-editor .g-row,.pc-editor .g-grades{margin:0}
+.pc-editor .actions{margin-top:10px}
+.pc-editor .g-list{margin:6px 0 0}
+.pc-kids li{flex-wrap:wrap}
+.pc-kids .kid-form{flex-basis:100%;margin-top:8px}
+.pc-said{display:block;margin-top:6px}
+.g-favrank{list-style:decimal;padding-left:1.4em}
+.g-favrank li{display:list-item}
+.g-kidfavs h3{margin:14px 0 4px}
+/* Plans & sharing: the four ways to share, together (groups.js, shareSec), then the plans */
+.g-sharing .g-way{padding:16px 0 18px;border-top:1px solid var(--line)}
+.g-sharing h2 + .g-way{border-top:0;padding-top:6px}
+.g-way h3{margin:0 0 2px}
+.g-way-line{margin:0 0 10px;color:var(--muted)}
+.g-way-body > .hint:first-child{margin-top:0}
+.g-cop-head{font-weight:800;margin:0 0 4px}
+.g-pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:10px 0}
+.g-pick-one{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border:2px solid var(--line);border-radius:12px;cursor:pointer;background:var(--surface)}
+.g-pick-one:has(input:checked){border-color:var(--blue);background:#EEF6FF}
+.g-pick-one input{margin-top:4px}
+.g-pick-one > span{display:flex;flex-direction:column;gap:2px}
+.g-share-one,.g-way-body form.g-row{margin:4px 0 6px}
+.g-week-one{font-weight:700}
+.g-field{display:inline-flex;align-items:center;gap:8px}
+.g-in-group{flex-basis:100%;font-size:.92rem}
+.g-make{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.g-make h4{margin:12px 0 6px}

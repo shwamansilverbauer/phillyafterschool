@@ -149,6 +149,10 @@ const expandGrades = g => {
   return GRADES.slice(i, j + 1);
 };
 const longDate = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+// When a listing was last checked: the day its details were confirmed, or a later day its sources were read without
+// confirming them (the City's finder showing no program this year, say), which the listing's note then describes.
+const checkedOn = p => p.looked && p.looked > p.lastVerified ? p.looked : p.lastVerified;
+const checkedLine = p => checkedOn(p) === p.lastVerified ? `Checked ${longDate(p.lastVerified)}.` : `Checked ${longDate(p.looked)}. Details last confirmed ${longDate(p.lastVerified)}.`;
 const telHref = p => 'tel:+1' + p.replace(/\D/g, '');
 
 // ---------- validation: fail the build on bad data, so mistakes never reach the site ----------
@@ -192,6 +196,7 @@ for (const p of programs) {
   ids.add(p.id);
   for (const f of ['name', 'what', 'hours', 'cost', 'lastVerified']) if (!p[f]) errors.push(`${at}: missing ${f}`);
   if (p.lastVerified && !/^\d{4}-\d{2}-\d{2}$/.test(p.lastVerified)) errors.push(`${at}: lastVerified must be YYYY-MM-DD`);
+  if (p.looked !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(p.looked)) errors.push(`${at}: looked must be YYYY-MM-DD`);   // one no later than lastVerified is ignored
   if (!isUrl(p.website)) errors.push(`${at}: website must be an https URL`);
   try { p._grades = expandGrades(p.grades); } catch (e) { errors.push(`${at}: ${e.message}`); }
   if (!p.register || !HOW.includes(p.register.how)) errors.push(`${at}: register.how must be one of ${HOW.join(', ')}`);
@@ -614,6 +619,35 @@ function street(mode) {   // 'go': the bus drives in; 'parked': still; 'out': sc
 
 // Kids' Playground's little bulb, on its menu button
 const KC_BULB = '<svg class="nav-kc-bulb" viewBox="0 0 24 30" width="20" height="25" aria-hidden="true" focusable="false"><path d="M8.5 20C8.5 17 3 15 3 10C3 5 7 1.5 12 1.5S21 5 21 10C21 15 15.5 17 15.5 20Z" fill="#F3C613" stroke="#0B2140" stroke-width="1.6"/><rect x="8.3" y="20" width="7.4" height="3" rx="1.5" fill="#E6F2FF" stroke="#0B2140" stroke-width="1.3"/><rect x="8.8" y="23" width="6.4" height="3" rx="1.5" fill="#96C9FF" stroke="#0B2140" stroke-width="1.3"/><circle cx="9.3" cy="9.5" r="1.4" fill="#0B2140"/><circle cx="14.7" cy="9.5" r="1.4" fill="#0B2140"/><path d="M9.3 12.6Q12 15.4 14.7 12.6" fill="none" stroke="#0B2140" stroke-width="1.4" stroke-linecap="round"/></svg>';
+// "Get the app" (the menu on a phone, the footer, the Parent Portal): where the browser offers its own install prompt
+// (Chrome, Edge and Samsung Internet, on Android and on computers) the button opens it; everywhere else site.js opens
+// this window at the steps for that device (data-plat): an iPhone or iPad, Safari on a Mac, an Android browser that
+// didn't offer a prompt, a computer whose browser didn't (most often because it's already installed).
+const APP_PHONE = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7 1h10a2 2 0 0 1 2 2v18a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 3v14h10V4zm5 15.2a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"/></svg>';
+const getAppDialog = () => `
+<dialog id="getapp" class="pas-dialog getapp" aria-labelledby="getapp-h"><div class="pas-dialog-in">
+  <img class="getapp-ic" src="/icon-192.png${stamp('src/static/icon-192.png')}" alt="" width="64" height="64">
+  <h2 id="getapp-h">${T(`Get the Philly After School app`)}</h2>
+  <div data-plat="ios" hidden>
+    <p>${T(`On an iPhone or iPad, Apple has you add it yourself. It takes three taps:`)}</p>
+    <ol class="getapp-steps"><li>${T(`Tap Share (the square with an arrow).`)}</li><li>${T(`Choose “Add to Home Screen”, then “Add”.`)}</li><li>${T(`Open it from your Home Screen. With an account, log in there once.`)}</li></ol>
+    <p class="hint">${T(`Reading this inside Instagram or Facebook? Open the page in Safari first.`)} ${T(`On an iPhone, the Home Screen copy is also how notifications for the dates you follow reach you.`)}</p>
+  </div>
+  <div data-plat="android" hidden>
+    <ol class="getapp-steps"><li>${T(`Open your browser’s menu (the three dots).`)}</li><li>${T(`Choose “Add to Home screen” or “Install app”.`)}</li></ol>
+    <p class="hint">${T(`Reading this inside Instagram or Facebook? Open the page in Chrome first.`)}</p>
+  </div>
+  <div data-plat="mac" hidden>
+    <ol class="getapp-steps"><li>${T(`In the menu bar at the top of the screen, choose File.`)}</li><li>${T(`Choose “Add to Dock”, then “Add”.`)}</li></ol>
+    <p class="hint">${T(`It opens in its own window, from the Dock. Safari on an older Mac doesn’t have this; Chrome or Edge can install it there.`)}</p>
+  </div>
+  <div data-plat="desktop" hidden>
+    <p>${T(`Your browser didn’t offer to install it just now. Most often that means it’s already installed, so look for it with your apps. If not:`)}</p>
+    <ol class="getapp-steps"><li>${T(`Click the install icon at the right end of the address bar.`)}</li><li>${T(`Or open the browser’s menu and choose “Install Philly After School” (Chrome keeps it under “Cast, save and share”, Edge under “Apps”).`)}</li></ol>
+  </div>
+  <p class="hint">${T(`It’s this same site, kept like an app: free, nothing from an app store, and it opens right to your plans.`)}</p>
+  <button type="button" class="btn primary" data-dialog-close>${T(`Got it`)}</button>
+</div></dialog>`;
 function layout({ title, description, pathName, depth, current, hero, body, scripts = '', fragment = false, showStreet = false, noindex = false, jsonLd = null, roomy = false, first = '', theme = '', shareImage = null, shareText = '', quiet = false, next = '' }) {
   const canonical = cfg.siteUrl + '/' + pathName;
   // Search results show roughly 60 characters of a title and 155 of a description. The site name is added
@@ -637,7 +671,7 @@ function layout({ title, description, pathName, depth, current, hero, body, scri
     const here = items.some(([to]) => !to.includes('#') && pathName.startsWith(to));
     return `<details class="menu${cls ? ' ' + cls : ''}${here ? ' here' : ''}" data-top="${navHref(top)}"><summary>${label}</summary><ul>${items.map(([to, text]) => `<li${to === top ? ' class="menu-all"' : ''}><a href="${navHref(to)}"${to === pathName ? ' aria-current="page"' : ''}>${text}</a></li>`).join('')}</ul></details>`;
   };
-  const nav = menus.map(group).join('') + (featMenu ? group(featMenu) : '') + `<a class="nav-more" href="${link('suggest/', depth)}"${pathName.startsWith('suggest/') || pathName.startsWith('ideas/') || pathName.startsWith('schools/request/') ? ' aria-current="page"' : ''}>Suggestion Box</a><a class="nav-more" href="${link('about/', depth)}"${pathName === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
+  const nav = menus.map(group).join('') + (featMenu ? group(featMenu) : '') + `${GROUPS && !PREVIEW ? '<a class="nav-app" href="#getapp" data-getapp>Get the app</a>' : ''}<a class="nav-more" href="${link('suggest/', depth)}"${pathName.startsWith('suggest/') || pathName.startsWith('ideas/') || pathName.startsWith('schools/request/') ? ' aria-current="page"' : ''}>Suggestion Box</a><a class="nav-more" href="${link('about/', depth)}"${pathName === 'about/' ? ' aria-current="page"' : ''}>About</a>${GROUPS
     ? `<a class="when-in nav-acct" href="${link('profile/', depth)}"${pathName === 'profile/' ? ' aria-current="page"' : ''}>My Profile</a><a class="nav-cta when-out" href="${link('register/', depth)}${next ? '?next=' + next : ''}">Create a free account</a><a class="nav-cta when-in" href="${link('account/', depth)}"${pathName === 'account/' ? ' aria-current="page"' : ''}${NEWS.length ? ` data-news="${NEWS[0].date}"` : ''}${PM_LISTED ? ' data-pm="1"' : ''}>Parent Portal<span class="news-dot" hidden><span class="vh"> (something new)</span></span></a>${KIDS ? `<a class="when-in nav-kc" href="${link(kidsPath, depth)}"${pathName === kidsPath ? ' aria-current="page"' : ''}>${KC_BULB}<span class="vh">Kids’ </span>Playground</a>` : ''}`
     : `<a class="nav-cta" href="${link('support/', depth)}"${current === 'support/' ? ' aria-current="page"' : ''}>Help the site keep going</a>`}`;
   const head = `${first}${fragment || quiet ? '' : roleHead + gtmHead + '\n' + klaviyoHead}<title>${esc(fullTitle)}</title>
@@ -696,6 +730,7 @@ ${body}
       <a class="brand" href="${link('', depth)}"><img class="logo" src="${link('logo-text.png', depth)}${stamp('src/static/logo-text.png')}" alt="${esc(cfg.siteName)}" width="479" height="184"></a>
       <p>${T(`After-school programs in Philadelphia, sorted by the school your child goes to.`)}</p>
       ${cfg.supportUrl ? `<p class="foot-support"><span>${T(`Created and run by the Silverbauers.`)}</span> <a class="btn foot-cta" href="${link('support/', depth)}">Help the site keep going</a></p>` : ''}
+      ${GROUPS && !PREVIEW ? `<p class="foot-app"><button type="button" class="btn foot-app-btn" data-getapp>${APP_PHONE}${T(`Get the app`)}</button></p>` : ''}
       ${isUrl(cfg.instagram) ? `<p class="foot-social"><a href="${esc(cfg.instagram)}" target="_blank" rel="noopener me"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/></svg>${T(`@phillyafterschool on Instagram`)}</a></p>` : ''}
     </div>
     <div>
@@ -752,7 +787,7 @@ ${body}
     ${cfg.designBy ? `<p>Logo and design zhuzhing by ${esc(cfg.designBy.name)}.</p>` : ''}
     </div>
   </div>
-</div></footer>
+</div></footer>${GROUPS && !PREVIEW ? getAppDialog() : ''}
 <script src="${link('assets/site.js', depth)}${JS_V}" data-edit="${esc(JSON.stringify(editCfg))}"${GROUPS && !PREVIEW ? ` data-api="${link('groups/api.php', depth)}"` : ''}></script>
 ${scripts}`;
   if (fragment) return head + '\n' + page;
@@ -1200,7 +1235,7 @@ function card(p, school) {
   <div class="actions">${regUrl ? `<a class="btn primary" data-track="register" href="${esc(regUrl)}" target="_blank" rel="noopener">${esc(r.label || 'Register')}</a>` : ''}<a class="btn" data-track="website" href="${esc(outUrl(p.website, { type: 'website', school, program: p }))}" target="_blank" rel="noopener">Website</a><button type="button" class="btn needs-js" data-board-toggle data-clarity-mask="true" aria-expanded="false">Add to roster</button>
     <div class="days" data-clarity-mask="true" hidden><span class="kid-row" hidden></span><span class="which" role="group" aria-label="Current or upcoming roster"><button type="button" class="wb" data-board="next" aria-pressed="true">Upcoming session</button><button type="button" class="wb" data-board="now" aria-pressed="false">Current session</button></span><span class="hint">Which days?</span>${BOARD_DAYS.map(([k, n]) => `<button type="button" class="day${p.days && !p.days.includes(k) ? ' off" title="Not listed for ' + DAY_NAME[k] + 's' : ''}" data-day="${k}" aria-pressed="false">${n}</button>`).join('')}${p.offers?.length ? `<span class="cls-row"><span class="hint">Which class? Optional.</span>${p.offers.map(o => `<button type="button" class="cl" data-class="${esc(o)}" aria-pressed="false">${esc(o)}</button>`).join('')}</span>` : ''}<a href="${link('board/', 1)}">See the roster</a></div></div>
   <div class="rev">${revHtml}</div>
-  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks([...p.sources, ...(l.sources || [])], p, school)}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
+  <p class="src">${checkedLine(p)} Sources: ${sourceLinks([...p.sources, ...(l.sources || [])], p, school)}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
 </article>`;
 }
 
@@ -1675,7 +1710,7 @@ ${p.clubs.map(c => `      <article class="club">
     spotItem('reviews', 'Reviews', revs.length ? `<b>${avg.toFixed(1)} out of 5</b> from ${revs.length} ${revs.length === 1 ? 'review' : 'reviews'}` : ''),
     spotItem('spots', 'Spots', spaceSlot('p:' + p.id, D), 'spot-live'),
     spotItem('listing', 'Listing', claimedMark('p:' + p.id, D), 'spot-live'),
-    spotItem('checked', 'Checked', longDate(p.lastVerified)),
+    spotItem('checked', 'Checked', longDate(checkedOn(p))),
   ]);
   const body = `<div data-program-page="${esc(p.id)}" style="display:contents">
   ${pageNav(jumpNav())}
@@ -1711,7 +1746,7 @@ ${schoolRows}
     <p class="actions"><a class="btn" href="${reviewUrl}" data-track="review">${revs.length ? T(`Write a review`) : T(`Write the first review`)}</a></p>
     <p class="hint">${T(`Reviews are first-hand notes from parents and caregivers. Each one is read before it’s posted.`)}</p>
   </section>
-  <p class="src">Checked ${longDate(p.lastVerified)}. Sources: ${sourceLinks(p.sources, p)}${tied ? ` Summer: ${sourceLinks(tied.sources, tied)}` : ''}${p.told ? ` ${T(`Some of this came from the program itself, on {date}.`, { date: longDate([...p.told].sort((a, b) => a.on.localeCompare(b.on)).pop().on) })}` : ''}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
+  <p class="src">${checkedLine(p)} Sources: ${sourceLinks(p.sources, p)}${tied ? ` Summer: ${sourceLinks(tied.sources, tied)}` : ''}${p.told ? ` ${T(`Some of this came from the program itself, on {date}.`, { date: longDate([...p.told].sort((a, b) => a.on.localeCompare(b.on)).pop().on) })}` : ''}${fix ? `<a href="${esc(fix)}">Suggest a correction</a>` : ''}</p>
 </div>`;
   const url = `${cfg.siteUrl}/${programPath(p)}`;
   const thing = {
@@ -1876,6 +1911,9 @@ ${kindSections(byKind, D, { lead: { after: T(`A program that doesn’t publish i
 
 // ---------- pages ----------
 const forSchool = s => programs.filter(p => p.schools[s.id]);
+// When a school's page was last checked: its own review, or the newest day one of its programs' links was confirmed
+// (a monthly check confirms them all), whichever is later.
+const schoolChecked = s => [s.lastReviewed, s.added, ...forSchool(s).map(p => p.schools[s.id].checked)].filter(x => /^\d{4}-\d{2}-\d{2}$/.test(x || '')).sort().pop();
 const tally = s => Object.fromEntries(Object.keys(REL).map(k => [k, forSchool(s).filter(p => p.schools[s.id].relation === k).length]));
 const clock = s => s.dismissal ? s.dismissal.replace(/\s*[ap]m$/i, '') : '';   // a school that doesn't post its dismissal time has none here
 const gradeSpan = s => { const g = expandGrades(s.grades); const nm = x => x === 'PK' ? 'Pre-K' : x === 'K' ? 'K' : x; return `${nm(g[0])} to ${nm(g[g.length - 1])}`; };
@@ -2127,7 +2165,7 @@ ${list.filter(p => p.schools[s.id].relation === k).map(p => card(p, s)).join('\n
       <span>School office <b><a href="${telHref(s.phone)}">${esc(s.phone)}</a></b></span>
       ${s.calendar ? `<span>Calendar <b><a href="${esc(s.calendar.source.url)}" rel="noopener">${esc(s.calendar.source.label)}</a></b></span>` : ''}
       ${schoolHoods(s).length ? `<span>Neighborhood <b>${hoodLinks(schoolHoods(s), 1)}</b></span>` : ''}
-      <span>Reviewed <b>${longDate(s.lastReviewed)}</b></span>
+      <span>Checked <b>${longDate(schoolChecked(s))}</b></span>
     </div>`;
   const wk0 = schoolWeek(s, thisMonday());
   const body = `<div data-school-page="${esc(s.id)}" style="display:contents">
@@ -3854,7 +3892,7 @@ function accountPage(register = false) {
     : `    <h1><span class="when-out">${T(`Log in to your account`)}</span><span class="when-in">${T(`Parent Portal`)}</span></h1>
     <p class="lede when-out">${T(`Your school, your plans and your kids’ calendar for the year, on any device. There’s no password to remember.`)} ${T(`New here?`)} <a href="${link('register/', 1)}">${T(`Create a free account`)}</a></p>
     <p class="lede when-in">${T(`Everything for planning your kids’ year in one place: their week, the days off, the summer, your calendar and to-do list, Kids’ Playground, and your account.`)}</p>
-    <div class="acct-hero-art">${artYearRibbon()}</div>`;
+    <div class="acct-hero-art acct-hero-ex">${planExample('week')}</div>`;
   const page = `<div class="g-page" id="account"${register ? ' data-mode="register" data-clarity-mask="true"' : ''}></div>`;
   // the heading on the left, the form on the right: on /register/ the form starts there; on /account/ it moves up while signed out
   const heroGrid = `    <div class="acct-hero-text">
@@ -3909,11 +3947,11 @@ ${hero}
   <section class="acct-close when-out">
     <h2>${T(`Create a free account`)}</h2>
     <p>${T(`It’s free. The plans you make are kept in your profile, so they’re on your phone and your computer, and you can delete the account whenever you like.`)}</p>
-    <p class="actions"><a class="btn primary big" href="${register ? '#account' : link('register/', 1)}">${register ? T(`Create your account`) : T(`Create a free account`)}</a></p>${cfg.termsLive === true ? `
+    <p class="actions"><a class="btn primary big" href="${register ? '#account' : link('register/', 1)}">${register ? T(`Create Free Account`) : T(`Create a free account`)}</a></p>${cfg.termsLive === true ? `
     <p class="hint">${T(`Making an account means you agree to the`)} <a href="${link('terms/', 1)}">${T(`terms of use`)}</a>.</p>` : ''}
     <p class="hint">${T(`Run a program or camp?`)} <a href="${link('managers/', 1)}">${T(`Claim your listing`)}</a>${T(`. It’s the same account.`)}</p>
   </section>
-  <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, ages: AGES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })), hoods: accountHoods(), news: NEWS.slice(0, 5) }).replace(/</g, '\\u003c')}</script>
+  <script type="application/json" id="groups-data">${JSON.stringify({ grades: GRADES, ages: AGES, schools: [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => ({ id: s.id, name: s.shortName })), hoods: accountHoods(), news: NEWS.slice(0, 5), ...(register ? {} : { programs: Object.fromEntries(programs.map(p => [p.id, p.name])), camps: Object.fromEntries(summerCamps.map(c => [c.id, c.name])) }) }).replace(/</g, '\\u003c')}</script>
 </div>`;
   return layout({ title: register ? 'Create a free account' : 'Your account', description: register ? `Create a free ${cfg.siteName} account to keep your week, days-off and summer plans, see the whole year in one private calendar, plan with your co-parent, and give your kids a Kids’ Playground of their own.` : `Sign in to ${cfg.siteName} to keep your school and week in a profile, or to share a week.`, pathName: register ? 'register/' : 'account/', depth: 1, current: null, hero: heroGrid, body, noindex: true, quiet: !register, theme: 'acct-head', scripts: groupsScript(1) });
 }
@@ -5883,7 +5921,7 @@ function kidsData() {
     // the pictures a premium program can pick for its own pin (the server's PIN_ICONS)
     picons: { ...Object.fromEntries(TYPES.map(t => [t.id, t.icon])), star: kidsStar(12, 12.5, 10.5), heart: 'M12 21C5 15.5 2 12 2 8.2C2 5.3 4.3 3 7.1 3C9 3 10.8 4 12 5.6C13.2 4 15 3 16.9 3C19.7 3 22 5.3 22 8.2C22 12 19 15.5 12 21Z', bolt: 'M13 2L4 14H11L10 22L20 9H13Z' },
     kinds: { after: 'After school', weekend: 'Weekend class', off: 'Day-off camp', summer: 'Summer camp' },
-    links: { kids: link('account/', D) + '#school', account: link('account/', D), review: link('review/', D), corner: link(kidsPath, D) },
+    links: { kids: link('profile/', D) + '#add-kid', account: link('account/', D), review: link('review/', D), corner: link(kidsPath, D) },
   };
   return KIDS_DATA;
 }
@@ -6824,7 +6862,7 @@ write('assets/edit.js', fs.readFileSync(path.join(ROOT, 'src/edit.js')));
 if (GROUPS && !PREVIEW) {
   write('sw.js', fs.readFileSync(path.join(ROOT, 'src/sw.js')));
   write('manifest.json', JSON.stringify({ name: cfg.siteName, short_name: cfg.siteName.length > 12 ? cfg.siteName.replace(/^Philly /, '') : cfg.siteName, description: 'After-school programs in Philadelphia, sorted by the school your child goes to.',
-    start_url: '/?utm_source=homescreen&utm_medium=app', scope: '/', display: 'standalone', background_color: '#96C9FF', theme_color: '#96C9FF',
+    id: '/?utm_source=homescreen&utm_medium=app', start_url: '/?utm_source=homescreen&utm_medium=app', scope: '/', display: 'standalone', background_color: '#96C9FF', theme_color: '#96C9FF',
     icons: [{ src: '/icon-192.png' + stamp('src/static/icon-192.png'), sizes: '192x192', type: 'image/png' }, { src: '/icon-512.png' + stamp('src/static/icon-512.png'), sizes: '512x512', type: 'image/png' }] }, null, 2) + '\n');
 }
 if (GROUPS && GROUPS.premium !== 'off') write('assets/qr.js', fs.readFileSync(path.join(ROOT, 'src/qr.js')));   // draws the code on a premium listing's flyer; loaded only when one is asked for
@@ -6875,7 +6913,7 @@ if (!PREVIEW) {
   // review, the calendar's check), not the day of the build: a date that moves every night teaches a search engine
   // to ignore it. Pages whose words live in this file, with no date of their own, carry none.
   const newest = (...xs) => xs.flat(Infinity).filter(x => /^\d{4}-\d{2}-\d{2}$/.test(x || '')).sort().pop() || '';
-  const progDate = p => newest(p.lastVerified, Object.values(p.schools).map(l => l.checked), p.weekend?.checked, reviewsFor(p.id).map(r => r.date));
+  const progDate = p => newest(p.lastVerified, p.looked, Object.values(p.schools).map(l => l.checked), p.weekend?.checked, reviewsFor(p.id).map(r => r.date));
   const listDate = list => newest(list.map(progDate));
   const schoolDate = s => newest(s.lastReviewed, s.added, listDate(forSchool(s)));
   const campsDate = newest(summerCamps.map(c => c.checked));

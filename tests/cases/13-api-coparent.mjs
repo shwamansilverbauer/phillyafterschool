@@ -1,5 +1,5 @@
-// Co-parents: two accounts, one set of plans. The invitation, what accepting merges, both reading and changing
-// everything, ending it, and what deleting an account does to the other.
+// Co-parents: two accounts, one set of plans. The invitation, whose plans the invitee keeps on accepting, what comes
+// across, both reading and changing everything, ending it, and what deleting an account does to the other.
 import { test, ok, eq, deepEq, includes, excludes, person } from '../lib/harness.mjs';
 import { pickupPair, twoCamps, upcomingDaysOff, schoolYearStart } from '../lib/data.mjs';
 
@@ -37,7 +37,7 @@ test('inviting a co-parent: named accounts only, one per account, the email, res
   await pat.fails('POST', 'coparent_resend', {}, 'none', 404);
 });
 
-test('accepting merges into one household: weeks move, children merge, the inviter’s summer and days off win', async (ctx) => {
+test('accepting with the inviter’s plans: one household on Pat’s calendar, children merged, Dana’s own plans set aside and back when it ends', async (ctx) => {
   const pat = person(ctx, 'Pat', 'Lee');
   const dana = person(ctx, 'Dana', 'Reyes', 'dana');
   const { entry, program } = pickupPair();
@@ -52,29 +52,34 @@ test('accepting merges into one household: weeks move, children merge, the invit
   await dana.okay('POST', 'summer_save', { summer: { y: season, kids: [{ name: 'Zoe', w: { [`${season}-07-06`]: [ids[1]] } }] } });
   await dana.okay('POST', 'daysoff_save', { daysoff: { y, kids: [{ name: 'Zoe', d: { [day]: program.id } }] } });
   await pat.okay('POST', 'coparent_invite', { email: dana.email });
+  // The invitation counts both sides, so the page can ask whose plans to keep.
   const inv = (await dana.okay('GET', 'me')).user.coparent;
-  eq(inv.mine.weeks, 1); eq(inv.mine.kids, 2); eq(inv.mine.summer, true); eq(inv.mine.daysoff, true); eq(inv.theirs.summer, true); eq(inv.theirs.daysoff, false);
+  eq(inv.mine.weeks, 1); eq(inv.mine.kids, 2); eq(inv.mine.summer, true); eq(inv.mine.daysoff, true);
+  eq(inv.theirs.weeks, 1); eq(inv.theirs.kids, 2); eq(inv.theirs.summer, true); eq(inv.theirs.daysoff, false);
   // Only the invited address can accept.
-  await person(ctx, 'Sly', 'Fox', 'str').fails('POST', 'coparent_accept', {}, 'none', 404);
-  const acc = await dana.okay('POST', 'coparent_accept');
-  eq(acc.coparent.role, 'partner'); eq(acc.coparent.with.name, 'Pat Lee');
+  await person(ctx, 'Sly', 'Fox', 'str').fails('POST', 'coparent_accept', { keep: 'theirs' }, 'none', 404);
+  const acc = await dana.okay('POST', 'coparent_accept', { keep: 'theirs' });
+  eq(acc.kept, 'theirs'); eq(acc.coparent.role, 'partner'); eq(acc.coparent.with.name, 'Pat Lee');
   const own = (await pat.okay('GET', 'me')).user.coparent;
   eq(own.role, 'owner'); eq(own.with.name, 'Dana Reyes'); eq(own.with.email, dana.email);
-  // Both see the same household.
+  // Both see Pat's calendar: Pat's week only, the children put together, Pat's summer, and Dana's days off (Pat had none).
   const pp = await pat.okay('GET', 'profile'), dp = await dana.okay('GET', 'profile');
-  deepEq(pp.weeks.map(w => w.id).sort(), [pw.id, dw.id].sort(), 'both weeks under one roof');
-  deepEq(dp.weeks.map(w => w.id).sort(), [pw.id, dw.id].sort());
+  deepEq(pp.weeks.map(w => w.id), [pw.id], 'Pat’s week, not Dana’s');
+  deepEq(dp.weeks.map(w => w.id), [pw.id]);
   deepEq(pp.kids.map(k => k.n), ['Sam', 'Rae', 'Zoe'], 'children merged, the duplicate first name once');
   deepEq(dp.kids, pp.kids);
   eq(pp.summer.kids[0].name, 'Sam', 'the inviter’s summer stays'); eq(dp.summer.kids[0].name, 'Sam');
-  eq(pp.daysoff.kids[0].name, 'Zoe', 'Dana’s days-off plan came across, since Pat had none'); eq(dp.daysoff.kids[0].d[day], program.id);
-  eq((await pat.okay('GET', 'me')).user.weeks, 2); eq((await dana.okay('GET', 'me')).user.weeks, 2, '"me" counts the household’s weeks for both');
-  // Either can change anything: Dana edits Pat's week and the children; Pat deletes Dana's week.
+  eq(pp.daysoff.kids[0].name, 'Zoe', 'Dana’s days-off plan was copied over, since Pat had none'); eq(dp.daysoff.kids[0].d[day], program.id);
+  eq((await pat.okay('GET', 'me')).user.weeks, 1); eq((await dana.okay('GET', 'me')).user.weeks, 1, '"me" counts the household’s weeks for both');
+  // Either can change anything: Dana edits Pat's week, adds one and changes the children; Pat deletes the one Dana added.
   await dana.okay('POST', 'week_save', { week: { id: pw.id, name: 'Sammy', now: { ...empty(), fri: [entry] }, next: empty() } });
   eq((await pat.okay('GET', 'profile')).weeks.find(w => w.id === pw.id).name, 'Sammy');
+  const nw = (await dana.okay('POST', 'week_save', { week: { name: 'Zoe', now: empty(), next: empty() } })).week;
+  ok((await pat.okay('GET', 'profile')).weeks.some(w => w.id === nw.id), 'a week Dana adds lands on the shared calendar');
+  await dana.fails('POST', 'week_save', { week: { id: dw.id, name: 'Nope', now: empty(), next: empty() } }, 'gone', 404);
   await dana.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '3' }] });
   deepEq((await pat.okay('GET', 'profile')).kids.map(k => k.n), ['Sam']);
-  await pat.okay('POST', 'week_delete', { week: dw.id });
+  await pat.okay('POST', 'week_delete', { week: nw.id });
   eq((await dana.okay('GET', 'profile')).weeks.length, 1);
   await dana.okay('POST', 'summer_delete');
   eq((await pat.okay('GET', 'profile')).summer, null);
@@ -84,14 +89,47 @@ test('accepting merges into one household: weeks move, children merge, the invit
   // Neither can start another while linked.
   await pat.fails('POST', 'coparent_invite', { email: 'x@example.test' }, 'one');
   await dana.fails('POST', 'coparent_invite', { email: 'x@example.test' }, 'linked');
-  // Ending it, from the partner's side: the plans stay with the inviter.
+  // Ending it, from Dana's side: the shared plans stay with Pat, and Dana's own come back as she left them.
   const end = await dana.okay('POST', 'coparent_end');
   eq(end.coparent, null);
   eq((await pat.okay('GET', 'me')).user.coparent, null);
-  eq((await pat.okay('GET', 'profile')).weeks.length, 1, 'Pat keeps the household’s week');
-  eq((await dana.okay('GET', 'profile')).weeks.length, 0, 'Dana starts again with nothing');
-  deepEq((await dana.okay('GET', 'profile')).kids, []);
+  deepEq((await pat.okay('GET', 'profile')).weeks.map(w => w.name), ['Sammy'], 'Pat keeps the household’s week');
+  const back = await dana.okay('GET', 'profile');
+  deepEq(back.weeks.map(w => [w.id, w.name]), [[dw.id, 'Rae']], 'Dana’s own week, untouched');
+  deepEq(back.kids.map(k => k.n), ['rae', 'Zoe'], 'and her own children’s list');
+  eq(back.summer.kids[0].name, 'Zoe', 'and her own summer');
   await dana.fails('POST', 'coparent_end', {}, 'none', 404);
+});
+
+test('accepting with your own plans: the invitee’s calendar becomes the household’s, and the inviter’s comes back when it ends', async (ctx) => {
+  const pat = person(ctx, 'Pat', 'Lee');
+  const dana = person(ctx, 'Dana', 'Reyes', 'dana');
+  const { entry } = pickupPair();
+  const pw = (await pat.okay('POST', 'week_save', { week: { name: 'Sam', now: { ...empty(), mon: [entry] }, next: empty() } })).week;
+  await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '2' }] });
+  const dw = (await dana.okay('POST', 'week_save', { week: { name: 'Rae', now: { ...empty(), tue: [entry] }, next: empty() } })).week;
+  await dana.okay('POST', 'kids_save', { kids: [{ n: 'Rae', g: 'K' }] });
+  await pat.okay('POST', 'coparent_invite', { email: dana.email });
+  const acc = await dana.okay('POST', 'coparent_accept', { keep: 'mine' });
+  eq(acc.kept, 'mine'); eq(acc.coparent.role, 'owner', 'Dana now holds the household'); eq(acc.coparent.with.name, 'Pat Lee');
+  const pc = (await pat.okay('GET', 'me')).user.coparent;
+  eq(pc.role, 'partner'); eq(pc.with.name, 'Dana Reyes');
+  const pp = await pat.okay('GET', 'profile'), dp = await dana.okay('GET', 'profile');
+  deepEq(pp.weeks.map(w => w.id), [dw.id], 'Pat sees Dana’s week, not his own');
+  deepEq(dp.weeks.map(w => w.id), [dw.id]);
+  deepEq(pp.kids.map(k => k.n), ['Rae', 'Sam'], 'Pat’s children added to Dana’s list');
+  // Pat can change the household's week; his own is out of reach while linked.
+  await pat.okay('POST', 'week_save', { week: { id: dw.id, name: 'Rae B', now: empty(), next: empty() } });
+  eq((await dana.okay('GET', 'profile')).weeks[0].name, 'Rae B');
+  await pat.fails('POST', 'week_save', { week: { id: pw.id, name: 'Nope', now: empty(), next: empty() } }, 'gone', 404);
+  // Pat's old invitation is gone, so neither can start another; then Pat ends it and has his week back.
+  await pat.fails('POST', 'coparent_invite', { email: 'x@example.test' }, 'linked');
+  await dana.fails('POST', 'coparent_invite', { email: 'x@example.test' }, 'one');
+  await pat.okay('POST', 'coparent_end');
+  eq((await dana.okay('GET', 'me')).user.coparent, null);
+  deepEq((await pat.okay('GET', 'profile')).weeks.map(w => [w.id, w.name]), [[pw.id, 'Sam']], 'Pat’s own week is back');
+  deepEq((await pat.okay('GET', 'profile')).kids.map(k => k.n), ['Sam']);
+  deepEq((await dana.okay('GET', 'profile')).weeks.map(w => w.name), ['Rae B'], 'Dana keeps the household’s week');
 });
 
 test('deleting an account: the co-parent goes back to plans of their own, and an invitation out dies with it', async (ctx) => {

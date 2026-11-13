@@ -44,6 +44,19 @@ test('every school, program, camp and neighborhood has its page, and the sitemap
   excludes(site.read('data/programs.json'), 'test-listing', 'the public program data never carries the test listings');
 });
 
+test('checked dates: a school page shows its newest check, and a listing read later than it was confirmed says both', async ({ site }) => {
+  const long = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+  for (const s of schools()) {
+    const newest = [s.lastReviewed, s.added, ...programs().filter(p => p.schools[s.id]).map(p => p.schools[s.id].checked)].filter(Boolean).sort().pop();
+    includes(site.read(`${s.id}/index.html`), `Checked <b>${long(newest)}</b>`, `${s.id}: the school’s newest check`);
+  }
+  for (const p of programs()) {
+    const html = site.read(`programs/${p.id}/index.html`);
+    if (p.looked && p.looked > p.lastVerified) includes(html, `Checked ${long(p.looked)}. Details last confirmed ${long(p.lastVerified)}.`, p.id);
+    else includes(html, `Checked ${long(p.lastVerified)}.`, p.id);
+  }
+});
+
 test('link previews: each day-off, school, summer-camp and weekend page names a picture of its own, stamped by its words', async ({ site }) => {
   const og = rel => (site.read(rel).match(/<meta property="og:image" content="([^"]+)"/) || [])[1] || '';
   matches(og('index.html'), /\/share\.png\?v=[0-9a-f]{8}$/, 'the home page keeps the site-wide picture');
