@@ -6,7 +6,7 @@ METHOD:PUBLISH
 BEGIN:VEVENT
 UID:school-of-philadelphia-ballet-2027-03-01@phillyafterscho
  ol.org
-DTSTAMP:20261113T120000Z
+DTSTAMP:20261114T120000Z
 DTSTART;VALUE=DATE:20270301
 DTEND;VALUE=DATE:20270302
 SUMMARY:School of Philadelphia Ballet: Children’s Program: e
