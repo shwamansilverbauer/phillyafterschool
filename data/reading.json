@@ -142,5 +142,23 @@
     "how": "person",
     "why": "Yous’s Sawyer sign-up page answered HTTP 403 to a plain fetch on 2026-11-10, and Sawyer’s booking pages have refused automated reading before (see Dandelion and Sawubona).",
     "seen": "2026-11-10"
+  },
+  {
+    "match": "brooklynrobotfoundry.com",
+    "how": "browser",
+    "why": "A plain fetch gets a Cloudflare “Just a moment…” page; in a browser the Philadelphia after-school page shows its schedule of school sites, including Delaplaine McDaniel.",
+    "seen": "2026-11-12"
+  },
+  {
+    "match": "zhangsah.org",
+    "how": "person",
+    "why": "Its robots.txt closes the site to ClaudeBot and other AI agents, and a browser got HTTP 403 on 2026-11-13. A person needs to read the after-school page and its list of school-based programs.",
+    "seen": "2026-11-13"
+  },
+  {
+    "match": "phillyasap.org",
+    "how": "person",
+    "why": "On 2026-11-14 the site answered a browser with a 403, so it has to be read by a person.",
+    "seen": "2026-11-14"
   }
 ]

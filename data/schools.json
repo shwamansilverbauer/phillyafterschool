@@ -519,5 +519,774 @@
         "After School Philly (2210 Walnut St), which the list describes as working with MoveMakers Philly, Martial Posture and Philly Music Factory. afterschoolphilly.com"
       ]
     }
+  },
+  {
+    "id": "jenks",
+    "name": "Jenks Academy for the Arts and Sciences",
+    "shortName": "J.S. Jenks",
+    "aliases": [
+      "J.S. Jenks",
+      "JS Jenks",
+      "John Story Jenks",
+      "Jenks Academy",
+      "Jenks Academy for Arts and Sciences",
+      "Jenks Academy for the Arts & Sciences"
+    ],
+    "address": "8301 Germantown Ave, Philadelphia, PA 19118",
+    "neighborhood": "Chestnut Hill",
+    "grades": "K-8",
+    "dismissal": "2:09 pm",
+    "dismissalNote": "the school day is 7:30 am to 2:09 pm, earlier than at most schools",
+    "phone": "215-400-3360",
+    "website": "https://jsjenks.philasd.org/",
+    "lastReviewed": "2026-11-11",
+    "added": "2026-11-14",
+    "notes": [
+      "Jenks’s own site names no after-school program of its own. It lists clubs and activities, among them chess, debate, Girls on the Run, Body Empowerment and elementary intramural sports, without saying when they meet, so ask the office which run after dismissal.",
+      "School ends at 2:09 pm. Two Mount Airy programs name Jenks on their pickup lists, Zhang Sah and Philly Art Center; ask each what time they collect children and how they handle half days, when Jenks lets out earlier still.",
+      "If you know a program that serves J.S. Jenks and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "byers",
+    "name": "Russell Byers Charter School",
+    "shortName": "Russell Byers",
+    "aliases": [
+      "Russell Byers",
+      "Russell Byers Charter",
+      "Russell Byers Elementary School",
+      "Russell Byers Elementary",
+      "RBCS",
+      "Byers School"
+    ],
+    "address": "1911 Arch St, Philadelphia, PA 19103",
+    "neighborhood": "Logan Square",
+    "grades": "PK-8",
+    "dismissal": "3:30 pm",
+    "dismissalNote": "7th and 8th graders who ride SEPTA leave at 3:20, and the handbook asks families to collect children by 4:00 pm",
+    "phone": "215-972-1700",
+    "website": "https://www.byerschool.org/",
+    "calendar": {
+      "source": {
+        "label": "Russell Byers 2026–27 academic calendar",
+        "url": "https://docs.google.com/document/d/15tIP0VBpsllBziBmuL8nXBW97xzcX-4k/edit"
+      },
+      "checked": "2026-11-11",
+      "lastDay": "2027-06-03",
+      "days": [
+        {
+          "date": "2026-09-07",
+          "name": "Labor Day"
+        },
+        {
+          "date": "2026-10-08",
+          "name": "Interim conferences"
+        },
+        {
+          "date": "2026-10-09",
+          "name": "Staff professional development"
+        },
+        {
+          "date": "2026-10-12",
+          "name": "Indigenous Peoples’ Day"
+        },
+        {
+          "date": "2026-11-03",
+          "name": "Staff professional development"
+        },
+        {
+          "date": "2026-11-11",
+          "name": "Veterans Day"
+        },
+        {
+          "date": "2026-11-25",
+          "end": "2026-11-27",
+          "name": "Thanksgiving break"
+        },
+        {
+          "date": "2026-12-21",
+          "name": "Interim conferences"
+        },
+        {
+          "date": "2026-12-22",
+          "end": "2027-01-01",
+          "name": "Winter break"
+        },
+        {
+          "date": "2027-01-04",
+          "name": "Staff professional development"
+        },
+        {
+          "date": "2027-01-18",
+          "name": "Dr. Martin Luther King Jr. Day"
+        },
+        {
+          "date": "2027-02-12",
+          "name": "Staff professional development"
+        },
+        {
+          "date": "2027-02-15",
+          "name": "Presidents’ Day"
+        },
+        {
+          "date": "2027-03-10",
+          "name": "Eid al-Fitr"
+        },
+        {
+          "date": "2027-03-19",
+          "name": "Student-led conferences"
+        },
+        {
+          "date": "2027-03-22",
+          "end": "2027-03-29",
+          "name": "Spring break"
+        },
+        {
+          "date": "2027-04-09",
+          "name": "Staff professional development"
+        },
+        {
+          "date": "2027-05-14",
+          "name": "Staff professional development"
+        },
+        {
+          "date": "2027-05-17",
+          "name": "Eid al-Adha"
+        },
+        {
+          "date": "2027-05-31",
+          "name": "Memorial Day"
+        }
+      ]
+    },
+    "lastReviewed": "2026-11-11",
+    "added": "2026-11-14",
+    "notes": [
+      "Russell Byers’s 2026–27 Parent & Guardian Handbook mentions an RBCS After School Program at the school, but the site gives no hours, grades or cost for it. It has a listing here; ask the office how it works and how to sign up.",
+      "Byers keeps its own calendar, and its days off aren’t the District’s: it is closed for interim conferences on October 8 and December 21, on March 10 for Eid al-Fitr and on May 17 for Eid al-Adha, for instance, and its last day is June 3. The days off on this page come from the Byers calendar; the days-off planner and the list of who’s open go by the District’s, so check a camp’s dates against Byers’s.",
+      "Kids on 12th picks up from Byers. Ask how it handles Byers’s own days off and early dismissals, which aren’t the District’s.",
+      "If you know a program that serves Russell Byers and isn’t here, send it in and it goes on this page."
+    ],
+    "alsoListed": {
+      "title": "Also named for Russell Byers elsewhere",
+      "intro": "A third-party roundup of after-school pickup lists names this program for Byers too, but its own pages don’t.",
+      "items": [
+        "Philly Art Center (2333 Fairmount Ave and other studios): the roundup lists Russell Byers Charter among its pickup schools, but the art center’s own pickup lists name only Bache-Martin, Greenfield, St. Francis Xavier and Independence Charter for Fairmount. phillyartcenter.com"
+      ]
+    }
+  },
+  {
+    "id": "cook-wissahickon",
+    "name": "Cook-Wissahickon School",
+    "shortName": "Cook-Wissahickon",
+    "aliases": [
+      "Cook-Wissahickon",
+      "Cooke-Wissahickon",
+      "Cook Wissahickon",
+      "Cook-Wissahickon Elementary"
+    ],
+    "address": "201 E Salaignac St, Philadelphia, PA 19128",
+    "neighborhood": "Roxborough",
+    "grades": "K-8",
+    "dismissal": "3:29 pm",
+    "dismissalNote": "the school day is 8:50 am to 3:29 pm",
+    "phone": "215-400-3430",
+    "website": "https://cookwissahickon.philasd.org/",
+    "lastReviewed": "2026-11-11",
+    "added": "2026-11-14",
+    "notes": [
+      "Cook-Wissahickon’s own site names one after-school partner, the Urban Youth Afterschool Program (Urban Youth King & Queens, or UYKQ), which runs before and after care in the building. It has a listing here.",
+      "The clubs the school’s site lists (robotics, intramural sports, volleyball, art club, yearbook) are described as running during the school day, so they aren’t listed here as after-school care.",
+      "UYKQ runs on early-dismissal days but not when the school closes early for weather. Ask Zhang Sah, which also picks up here, how it handles half days.",
+      "If you know a program that serves Cook-Wissahickon and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "morris",
+    "name": "Robert Morris School",
+    "shortName": "Robert Morris",
+    "aliases": [
+      "Robert Morris",
+      "Robert Morris Elementary",
+      "Robert Morris Elementary School",
+      "Morris Elementary"
+    ],
+    "address": "2600 W Thompson St, Philadelphia, PA 19121",
+    "neighborhood": "Brewerytown",
+    "grades": "K-8",
+    "dismissalNote": "the school’s bell schedule page is empty; its after-school clubs start at 3:45 pm and the Caring People Alliance program at 3:30 pm",
+    "phone": "215-400-7320",
+    "website": "https://morris.philasd.org/",
+    "lastReviewed": "2026-11-11",
+    "added": "2026-11-14",
+    "notes": [
+      "Two things run in the building after school. Caring People Alliance runs a free after-school program there, Monday to Friday until 6:00 pm, for Morris students only; it is listed in the City’s program locator. The school runs its own clubs too: tech, music, volleyball and writing.",
+      "The school doesn’t post a dismissal time, half days or how the after-school program handles early dismissals. Ask the office.",
+      "If you know a program that serves Robert Morris and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "henry",
+    "name": "Charles W. Henry School",
+    "shortName": "C.W. Henry",
+    "aliases": [
+      "C.W. Henry",
+      "CW Henry",
+      "C. W. Henry",
+      "Charles W. Henry",
+      "Charles W. Henry School",
+      "Henry School"
+    ],
+    "address": "601 Carpenter Ln, Philadelphia, PA 19119",
+    "neighborhood": "Mount Airy",
+    "grades": "K-8",
+    "dismissal": "3:24 pm",
+    "dismissalNote": "the school day is 8:45 am to 3:24 pm",
+    "phone": "215-400-3480",
+    "website": "https://henry.philasd.org/",
+    "lastReviewed": "2026-11-11",
+    "added": "2026-11-14",
+    "notes": [
+      "Henry’s own site names Urban Youth King and Queens (UYKQ) among its community partners; UYKQ runs before and after care in the building and has a listing here. Philly Art Center’s Mount Airy studio is a block away on Carpenter Lane, and it and Zhang Sah both name Henry on their pickup lists.",
+      "The school’s site lists clubs and activities too, among them debate, robotics, chess, yoga, cooking, Students Run Philly Style and the spring musical, without saying when they meet. It links an up-to-date list; ask the office which run after dismissal.",
+      "If you know a program that serves C.W. Henry and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "mastery-thomas",
+    "name": "Mastery Charter School: Thomas Elementary",
+    "shortName": "Mastery Thomas",
+    "aliases": [
+      "Mastery Thomas",
+      "Thomas Elementary",
+      "Mastery Thomas Elementary",
+      "Mastery Charter Thomas Elementary",
+      "Mastery School Thomas Campus",
+      "Mastery Charter School Thomas Elementary"
+    ],
+    "address": "814 Bigler St, Philadelphia, PA 19148",
+    "neighborhood": "Whitman",
+    "grades": "K-6",
+    "dismissal": "3:15 pm",
+    "dismissalNote": "the school day is 8:00 am to 3:15 pm",
+    "phone": "267-296-7000",
+    "website": "https://masterycharter.org/elementary-schools/thomas",
+    "lastReviewed": "2026-11-12",
+    "added": "2026-11-14",
+    "notes": [
+      "Thomas Elementary’s own page says it offers aftercare through two providers, Mastermindz and SafeHaven, from dismissal to 6:00 pm, Monday to Friday. It says SafeHaven is free and Mastermindz accepts childcare subsidies. Neither provider has a website we could find, so both listings rest on the school’s page; the school’s page gives a contact number for each.",
+      "Thomas follows the Mastery Schools calendar, not the District’s. Its days off on this page come from Mastery’s 2026–27 Philadelphia calendar: it closes for Yom Kippur, Eid al-Fitr and Eid al-Adha, and its spring break is March 22 to 26. The days-off planner and the list of who’s open go by the District’s days, so check a camp’s dates against Mastery’s.",
+      "Mastery’s calendar marks early dismissals on November 10, December 23, February 9, May 7 and June 11 (the last day). Ask each aftercare provider whether it covers those afternoons.",
+      "Thomas Elementary teaches kindergarten to 6th grade; its students can go on to the Mastery Thomas Campus for 7th to 12th grade, which is a separate building at 927 Johnston St.",
+      "If you know a program that serves Mastery Thomas and isn’t here, send it in and it goes on this page."
+    ],
+    "calendar": {
+      "source": {
+        "label": "Mastery Schools 2026–27 calendar (Philadelphia)",
+        "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf"
+      },
+      "checked": "2026-11-12",
+      "lastDay": "2027-06-11",
+      "days": [
+        {
+          "date": "2026-09-07",
+          "name": "Labor Day"
+        },
+        {
+          "date": "2026-09-21",
+          "name": "Yom Kippur"
+        },
+        {
+          "date": "2026-10-12",
+          "name": "Indigenous Peoples’ Day"
+        },
+        {
+          "date": "2026-10-23",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2026-11-03",
+          "name": "Election Day"
+        },
+        {
+          "date": "2026-11-11",
+          "name": "Veterans Day"
+        },
+        {
+          "date": "2026-11-25",
+          "end": "2026-11-27",
+          "name": "Thanksgiving break"
+        },
+        {
+          "date": "2026-12-11",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2026-12-24",
+          "end": "2027-01-01",
+          "name": "Winter break"
+        },
+        {
+          "date": "2027-01-18",
+          "name": "Martin Luther King Jr. Day"
+        },
+        {
+          "date": "2027-01-22",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2027-02-15",
+          "name": "Presidents’ Day"
+        },
+        {
+          "date": "2027-02-26",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2027-03-10",
+          "name": "Eid al-Fitr"
+        },
+        {
+          "date": "2027-03-22",
+          "end": "2027-03-26",
+          "name": "Spring break"
+        },
+        {
+          "date": "2027-04-09",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2027-05-17",
+          "name": "Eid al-Adha"
+        },
+        {
+          "date": "2027-05-18",
+          "name": "Primary Election Day"
+        },
+        {
+          "date": "2027-05-31",
+          "name": "Memorial Day"
+        }
+      ]
+    }
+  },
+  {
+    "id": "emlen",
+    "name": "Eleanor C. Emlen School",
+    "shortName": "Emlen",
+    "aliases": [
+      "Emlen",
+      "Emlen Elementary",
+      "Emlen Elementary School",
+      "Eleanor Emlen",
+      "Eleanor C. Emlen",
+      "Emlen School"
+    ],
+    "address": "6501 Chew Ave, Philadelphia, PA 19119",
+    "neighborhood": "Mount Airy",
+    "grades": "PK-5",
+    "dismissal": "2:54 pm",
+    "dismissalNote": "the school day is 8:15 am to 2:54 pm",
+    "phone": "215-400-3470",
+    "website": "https://emlen.philasd.org/",
+    "lastReviewed": "2026-11-12",
+    "added": "2026-11-14",
+    "notes": [
+      "Emlen’s own site says the Boys & Girls Club provides after-school and summer programming for its students, and the Boys & Girls Clubs of Philadelphia list Emlen as one of their school sites, for enrolled students. The school also lists an After School Choir and an After School Step Club of its own.",
+      "Neither the school nor the club posts the club’s hours or how it handles half days. Ask the office, or the club’s site number on its listing.",
+      "If you know a program that serves Emlen and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "wright",
+    "name": "Richard R. Wright School",
+    "shortName": "Wright",
+    "aliases": [
+      "Richard R. Wright",
+      "Richard Wright",
+      "R.R. Wright",
+      "RR Wright",
+      "R. Wright",
+      "Wright Elementary",
+      "Richard R. Wright Elementary",
+      "Richard R Wright Elementary",
+      "Wright RR Elementary Community School"
+    ],
+    "address": "2201 N 28th St, Philadelphia, PA 19132",
+    "neighborhood": "Strawberry Mansion",
+    "grades": "PK-5",
+    "dismissal": "2:09 pm",
+    "dismissalNote": "the school day is 7:30 am to 2:09 pm",
+    "phone": "215-400-7030",
+    "website": "https://wright.philasd.org/",
+    "lastReviewed": "2026-11-12",
+    "added": "2026-11-14",
+    "notes": [
+      "Two free programs run in the building after school. LEGACY Youth Tennis and Education runs Champions on the Rise there, part of the City’s Out-of-School Time program, and Shoot Basketballs NOT People runs an after-school program at Wright for 3rd to 5th graders. Wright’s own site describes after-school enrichment but doesn’t name the providers.",
+      "Wright is a Community School. Its site says children can’t be picked up for an early dismissal after 1:30 pm, and sends families to its handbook for early dismissals and weather closings. Ask each program what happens on a half day.",
+      "If you know a program that serves Wright and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "jb-kelly",
+    "name": "John B. Kelly School",
+    "shortName": "J.B. Kelly",
+    "aliases": [
+      "John B. Kelly",
+      "John B Kelly",
+      "JB Kelly",
+      "J.B. Kelly",
+      "John B. Kelly School",
+      "Kelly School",
+      "John B. Kelly Elementary"
+    ],
+    "address": "5116 Pulaski Ave, Philadelphia, PA 19144",
+    "neighborhood": "Germantown",
+    "grades": "K-5",
+    "dismissal": "3:29 pm",
+    "dismissalNote": "the school day is 8:50 am to 3:29 pm",
+    "phone": "215-400-3580",
+    "website": "https://kelly.philasd.org/",
+    "lastReviewed": "2026-11-12",
+    "added": "2026-11-14",
+    "notes": [
+      "Two programs run in the building. Urban Youth King & Queens (UYKQ) runs after care at Kelly for kindergarten to 3rd grade, and Zhang Sah lists John B. Kelly among its school-based programs. Kelly’s own site names both among its community partners.",
+      "Neither UYKQ’s page nor Zhang Sah’s says how half days are handled at Kelly. Ask both programs, and the office, before counting on an early-dismissal afternoon.",
+      "If you know a program that serves J.B. Kelly and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "edmonds",
+    "name": "Franklin S. Edmonds School",
+    "shortName": "Edmonds",
+    "aliases": [
+      "Franklin S. Edmonds",
+      "Franklin Edmonds",
+      "F.S. Edmonds",
+      "FS Edmonds",
+      "Edmonds Elementary",
+      "Edmonds Elementary School",
+      "Edmonds Community School",
+      "Franklin S. Edmonds Elementary School"
+    ],
+    "address": "8025 Thouron Ave, Philadelphia, PA 19150",
+    "neighborhood": "Cedarbrook",
+    "grades": "PK-8",
+    "dismissal": "2:09 pm",
+    "dismissalNote": "the school day is 7:30 am to 2:09 pm",
+    "phone": "215-400-3370",
+    "website": "https://edmonds.philasd.org/",
+    "lastReviewed": "2026-11-12",
+    "added": "2026-11-14",
+    "notes": [
+      "Two programs run in the building, both listed in the City’s program locator. The Indochinese American Council (IAC) runs an after-school program for kindergarten to 8th grade, Monday to Friday until 5:30 pm, and Young Men and Women In Charge (YMWIC) runs a free STEM program for 6th to 8th graders on Tuesdays and Wednesdays. The City’s listing for IAC doesn’t give a cost.",
+      "Edmonds’s own site posts its bell schedule but doesn’t mention after school, half days or how the programs handle early dismissals. Ask the office, and each program.",
+      "If you know a program that serves Edmonds and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "willard",
+    "name": "Frances E. Willard School",
+    "shortName": "Willard",
+    "aliases": [
+      "Frances E. Willard",
+      "Frances Willard",
+      "Francis Willard",
+      "Willard Elementary",
+      "Frances E. Willard Elementary School",
+      "Willard, Frances E School"
+    ],
+    "address": "1930 E Elkhart St, Philadelphia, PA 19134",
+    "neighborhood": "Kensington",
+    "grades": "K-4",
+    "dismissal": "3:39 pm",
+    "dismissalNote": "the school’s schedule page gives school hours of 9:00 am to 3:39 pm, and 12:39 pm on early-dismissal days",
+    "phone": "215-400-7180",
+    "website": "https://willard.philasd.org/",
+    "lastReviewed": "2026-11-13",
+    "added": "2026-11-14",
+    "notes": [
+      "Two free programs run in the building after school, both part of the City’s Out-of-School Time program: Early Life Academy’s before and after care, and WES Health’s WLCAS group on Monday to Thursday afternoons. Willard’s own site doesn’t mention after school.",
+      "Willard’s schedule page says children are dismissed at 12:39 pm on early-dismissal days. Early Life Academy says it follows the District’s closings and holidays; ask it whether it opens early on a half day.",
+      "Zhang Sah lists Willard among the schools where it runs its school-based martial arts program, but its site now turns away automated reading, so we couldn’t read it this time. Ask the office whether it runs this year.",
+      "If you know a program that serves Willard and isn’t here, send it in and it goes on this page."
+    ],
+    "alsoListed": {
+      "title": "Also named for Willard",
+      "intro": "These are named for Willard, but we couldn’t confirm them on the program’s own page this time.",
+      "items": [
+        "Zhang Sah School-Based Programs: Zhang Sah’s after-school page has listed “Francis Willard” among its school-based programs. zhangsah.org"
+      ]
+    }
+  },
+  {
+    "id": "lea",
+    "name": "Henry C. Lea School",
+    "shortName": "Lea",
+    "aliases": [
+      "Henry C. Lea",
+      "Henry Lea",
+      "Lea School",
+      "Lea Elementary",
+      "Henry C. Lea Elementary and Middle School",
+      "Lea, Henry C"
+    ],
+    "address": "4700 Locust St, Philadelphia, PA 19139",
+    "neighborhood": "West Philadelphia",
+    "grades": "PK-8",
+    "dismissal": "3:39 pm",
+    "dismissalNote": "the school day is 9:00 am to 3:39 pm",
+    "phone": "215-400-7660",
+    "website": "https://lea.philasd.org/",
+    "lastReviewed": "2026-11-13",
+    "added": "2026-11-14",
+    "notes": [
+      "Lea’s own site says the University-Assisted Community School (UACS) After-School Program, from Penn’s Netter Center, runs at the school from 3:30 to 6:00 pm on weekdays, free for Lea students in kindergarten to 8th grade. Its clubs (anime, chess, choir, drama, garden and student council) meet during those hours.",
+      "Parent Infant Center’s After School Center, at 4205 Spruce St, says its teachers meet and walk children over from Lea. It takes kindergarten to 4th grade, for a fee.",
+      "Lea’s site says families can’t walk children to class, and that a child leaving early is brought to the main office. It sends families to its handbook for early dismissals and weather closings.",
+      "If you know a program that serves Lea and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "rhoads",
+    "name": "James Rhoads School",
+    "shortName": "Rhoads",
+    "aliases": [
+      "James Rhoads",
+      "Rhoads Elementary",
+      "James Rhoads Elementary",
+      "James Rhoads Elementary School",
+      "Rhoads School"
+    ],
+    "address": "4901 Parrish St, Philadelphia, PA 19139",
+    "neighborhood": "West Philadelphia",
+    "grades": "K-8",
+    "dismissal": "2:54 pm",
+    "dismissalNote": "the principal’s letter for 2025–26 on the school’s site says school starts at 8:10 am and ends at 2:54 pm",
+    "phone": "215-400-7680",
+    "website": "https://rhoads.philasd.org/",
+    "lastReviewed": "2026-11-13",
+    "added": "2026-11-14",
+    "notes": [
+      "To Our Children’s Future with Health runs Safe Haven IV, free before and after care in the building, part of the City’s Extended Day program. Rhoads’s own site names its Safe Haven partnership.",
+      "Rebel Arts Movement runs Rebel Tumblers, a free tumbling class, at Rhoads on Monday and Tuesday afternoons.",
+      "The principal’s letter on the school’s site, written for 2025–26, also named the Community Council’s Artistic and Cultural Enrichment (A.C.E.) program at Rhoads. The City’s 2026–27 listings show A.C.E. at Locke and Martha Washington instead, so ask the office whether it runs at Rhoads this year.",
+      "If you know a program that serves Rhoads and isn’t here, send it in and it goes on this page."
+    ],
+    "alsoListed": {
+      "title": "Also named by Rhoads",
+      "intro": "The school’s site names this program, but we couldn’t confirm it for this school year.",
+      "items": [
+        "The Community Council’s Artistic and Cultural Enrichment (A.C.E.) program, named in the principal’s 2025–26 letter as free before and after care. cchss.org"
+      ]
+    }
+  },
+  {
+    "id": "juniata-park",
+    "name": "Juniata Park Academy",
+    "shortName": "Juniata Park",
+    "aliases": [
+      "Juniata Park",
+      "JPA",
+      "Juniata Park Academy School"
+    ],
+    "address": "801 E Hunting Park Ave, Philadelphia, PA 19124",
+    "neighborhood": "Juniata Park",
+    "grades": "K-8",
+    "dismissalNote": "kindergarten to 2nd grade at 2:45 pm, 3rd and 4th at 2:50 pm, and 5th to 8th at 2:54 pm; on half days 11:50 am (11:54 am for 5th to 8th)",
+    "phone": "215-400-7010",
+    "website": "https://juniatapark.philasd.org/",
+    "lastReviewed": "2026-11-13",
+    "added": "2026-11-14",
+    "notes": [
+      "Juniata Park’s own site says its after-school program is run by the YMCA. The City lists the YMCA’s free before care (7:00 to 8:30 am) and after school (2:45 to 6:00 pm) at the school for kindergarten to 8th grade.",
+      "After-School All-Stars runs a free program at the school on Tuesdays and Thursdays for 5th to 8th graders.",
+      "The school’s site also lists clubs (STEAM, robotics, art, Girls on the Run and others) without days or times. Ask the office which run after school.",
+      "If you know a program that serves Juniata Park and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "greenberg",
+    "name": "Joseph Greenberg School",
+    "shortName": "Greenberg",
+    "aliases": [
+      "Joseph Greenberg",
+      "Joseph J. Greenberg",
+      "Greenberg Elementary",
+      "Joseph Greenberg Elementary School",
+      "Joseph J. Greenberg Elementary School",
+      "Greenberg, Joseph School"
+    ],
+    "address": "600 Sharon Ln, Philadelphia, PA 19115",
+    "neighborhood": "Bustleton",
+    "grades": "K-8",
+    "dismissal": "2:09 pm",
+    "dismissalNote": "the school’s bell schedule, last updated in 2021, shows homeroom at 7:30 am and dismissal at 2:05 to 2:09 pm",
+    "phone": "215-400-3080",
+    "website": "https://greenberg.philasd.org/",
+    "lastReviewed": "2026-11-13",
+    "added": "2026-11-14",
+    "notes": [
+      "Two free after-school programs run in the building, both part of the City’s Extended Day program: the Boys & Girls Club at Greenberg, which the Boys & Girls Clubs of Philadelphia list as a school extension site for enrolled students, and the Philly KiDZ Initiative. Greenberg’s own site doesn’t describe either one.",
+      "Greenberg’s bell schedule page was last updated in 2021. Ask the office for this year’s dismissal time, and ask each program what it does on half days.",
+      "If you know a program that serves Greenberg and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "fell",
+    "name": "D. Newlin Fell School",
+    "shortName": "Fell",
+    "aliases": [
+      "D. Newlin Fell",
+      "Newlin Fell",
+      "D.N. Fell",
+      "Fell Elementary",
+      "D. Newlin Fell Elementary School",
+      "Fell, D. Newlin Elementary School",
+      "Fell, D. Newlin School"
+    ],
+    "address": "900 W Oregon Ave, Philadelphia, PA 19148",
+    "neighborhood": "Whitman",
+    "grades": "K-8",
+    "dismissal": "3:39 pm",
+    "dismissalNote": "the school’s bell schedule gives a school day of 9:00 am to 3:39 pm, with breakfast from 8:30 am",
+    "phone": "215-400-8260",
+    "website": "https://fell.philasd.org/",
+    "lastReviewed": "2026-11-14",
+    "added": "2026-11-14",
+    "notes": [
+      "Greater Philadelphia Community Alliance (GPCA) runs Fell’s after-school program: GPCA’s own page lists Fell among the schools it serves, and Fell names GPCA as a community partner. Girls on the Run also has a team at Fell this fall.",
+      "Fell’s page lists clubs, among them art, chess, choir, reading, Scrabble and intramural sports, without saying whether they meet after school. Ask the office which ones run after dismissal.",
+      "Fell’s site points to its parent and student handbook for early dismissals. Ask GPCA what it does on half days.",
+      "If you know a program that serves Fell and isn’t here, send it in and it goes on this page."
+    ],
+    "alsoListed": {
+      "title": "Also named by Fell",
+      "intro": "Fell’s own site names these, but we couldn’t confirm them on the program’s own page this time.",
+      "items": [
+        "ASAP Philly (After-school Activities Program): on Fell’s list of community partners. ASAP’s site turned away our reader, so we couldn’t check which schools it serves. phillyasap.org"
+      ]
+    }
+  },
+  {
+    "id": "locke",
+    "name": "Alain Locke School",
+    "shortName": "Locke",
+    "aliases": [
+      "Alain Locke",
+      "Locke Elementary",
+      "Alain Locke Elementary School",
+      "Locke Elementary Community School",
+      "Alain Locke School",
+      "Locke, Alain School"
+    ],
+    "address": "4550 Haverford Ave, Philadelphia, PA 19139",
+    "neighborhood": "West Philadelphia",
+    "grades": "K-8",
+    "dismissalNote": "the school’s site says school starts at 8:45 am and doesn’t post a dismissal time",
+    "phone": "215-400-7670",
+    "website": "https://locke.philasd.org/",
+    "lastReviewed": "2026-11-14",
+    "added": "2026-11-14",
+    "notes": [
+      "Community Council’s ACE (Artistic & Cultural Enrichment) after-school program runs at Locke, free, 3:00 to 6:00 pm on weekdays, according to the City’s program locator. Girls on the Run also has a team at Locke this fall.",
+      "Locke’s own site is thin: it gives the start of the school day but no dismissal time, after-school page or partners list. Ask the office for the dismissal time and what happens on half days.",
+      "Lee Cultural Center, a City rec center about a fifth of a mile east on Haverford Avenue, lists an after-school program for ages 6 to 12. Its listing doesn’t mention picking children up from the school.",
+      "If you know a program that serves Locke and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "richmond",
+    "name": "Richmond School",
+    "shortName": "Richmond",
+    "aliases": [
+      "Richmond Elementary",
+      "Richmond Elementary School",
+      "Richmond School"
+    ],
+    "address": "2944 Belgrade St, Philadelphia, PA 19134",
+    "neighborhood": "Port Richmond",
+    "grades": "K-5",
+    "dismissal": "3:39 pm",
+    "dismissalNote": "the school’s daily schedule gives a school day of 9:00 am to 3:39 pm; before-school clubs may start at 7:45 am, first come, first served, and it says after-school programs end at 4:45 pm",
+    "phone": "215-400-7150",
+    "website": "https://richmond.philasd.org/",
+    "lastReviewed": "2026-11-14",
+    "added": "2026-11-14",
+    "notes": [
+      "Early Life Academy runs free after care at Richmond: its own page lists the school, and the City’s program locator gives 3:30 to 6:00 pm on weekdays. Richmond’s schedule page says after-school programs end at 4:45 pm, so ask Early Life Academy which time applies. Girls on the Run also has a team at Richmond this fall.",
+      "Richmond’s schedule page has a separate half-day lunch schedule. Ask Early Life Academy whether it opens early on half days.",
+      "Cohocksink Recreation Center, a City rec center about a fifth of a mile away, lists an after-school program for ages 6 to 13. Its listing doesn’t mention picking children up from the school.",
+      "If you know a program that serves Richmond and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "stephen-girard",
+    "name": "Stephen Girard School",
+    "shortName": "Stephen Girard",
+    "aliases": [
+      "Stephen Girard",
+      "Girard Elementary",
+      "Stephen Girard Elementary",
+      "Stephen Girard Elementary School",
+      "Girard, Stephen School"
+    ],
+    "address": "1800 Snyder Ave, Philadelphia, PA 19145",
+    "neighborhood": "Point Breeze",
+    "grades": "K-6",
+    "dismissal": "2:45 pm",
+    "dismissalNote": "the school’s bell schedule gives a school day of 8:15 am to 2:45 pm, with breakfast from 7:45 am",
+    "phone": "215-400-8180",
+    "website": "https://girard.philasd.org/",
+    "lastReviewed": "2026-11-14",
+    "added": "2026-11-14",
+    "notes": [
+      "The Boys & Girls Clubs of Philadelphia list Stephen Girard as one of their school extension sites, and Girard names the club among its community partners; neither posts the site’s hours. Girls on the Run also has a team at Girard this fall.",
+      "Girard’s page lists clubs (Cub Scouts, robotics, math, garden, art, STEM) and intramural sports without saying when they meet. Ask the office which ones run after school.",
+      "Two places within about half a mile run after-school programs, though neither says it picks up from Girard: Caring People Alliance’s South Philadelphia Boys & Girls Club on South 15th Street, and DiSilvestro Playground at 15th and Morris.",
+      "If you know a program that serves Stephen Girard and isn’t here, send it in and it goes on this page."
+    ],
+    "alsoListed": {
+      "title": "Also named by Stephen Girard",
+      "intro": "Girard’s site lists these among its community partners, but we couldn’t confirm an after-school program at the school on the program’s own page or the City’s locator this time.",
+      "items": [
+        "Al-Bustan Seeds of Culture: Arab arts classes. The City’s locator lists Al-Bustan’s after-school program at another school this year, not Girard. albustanseeds.org",
+        "Young Chances Foundation: a Grays Ferry youth organization. Its site doesn’t mention Girard. youngchances.org",
+        "Rock Reach and Dance Exchange / BalletX: named as partners, with no details on Girard’s site."
+      ]
+    }
+  },
+  {
+    "id": "mifflin",
+    "name": "Thomas Mifflin School",
+    "shortName": "Mifflin",
+    "aliases": [
+      "Thomas Mifflin",
+      "Mifflin Elementary",
+      "Thomas Mifflin Elementary School",
+      "Mifflin, Thomas School"
+    ],
+    "address": "3624 Conrad St, Philadelphia, PA 19129",
+    "neighborhood": "East Falls",
+    "grades": "K-8",
+    "dismissal": "3:39 pm",
+    "dismissalNote": "the school’s bell schedule gives a school day of 9:00 am to 3:39 pm, with breakfast at 8:45 am",
+    "phone": "215-400-3830",
+    "website": "https://mifflin.philasd.org/",
+    "lastReviewed": "2026-11-14",
+    "added": "2026-11-14",
+    "notes": [
+      "The Boys & Girls Clubs of Philadelphia list Mifflin as one of their school extension sites, and Mifflin names the Wissahickon Boys and Girls Club among its partners; neither posts the site’s hours. Girls on the Run also has a team at Mifflin this fall.",
+      "Mifflin’s page lists clubs, among them anime, chess, debate, LEGO STEM, Scrabble and a spring musical, without saying when they meet. Ask the office which ones run after school.",
+      "No City rec center after-school program is listed within a mile of Mifflin.",
+      "If you know a program that serves Mifflin and isn’t here, send it in and it goes on this page."
+    ],
+    "alsoListed": {
+      "title": "Also named by Mifflin",
+      "intro": "Mifflin’s own site names these, but we couldn’t confirm them on the program’s own page this time.",
+      "items": [
+        "Philadelphia Youth Basketball: on Mifflin’s list of clubs and activities. PYB’s own site doesn’t name the school; its Sixth Man Center is on Wissahickon Avenue, about a mile away. phillyyouthbasketball.org"
+      ]
+    }
   }
 ]
