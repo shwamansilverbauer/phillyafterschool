@@ -314,6 +314,69 @@
           }
         ],
         "checked": "2026-11-07"
+      },
+      "fell": {
+        "relation": "onsite",
+        "note": "GOTR’s own Fall 2026 site list includes D. Newlin Fell. Fell’s page lists Girls on the Run among its clubs and activities. GOTR’s list doesn’t give the team’s days, and the fall season ends with the 5K on December 6, so ask the school about the spring season.",
+        "sources": [
+          {
+            "label": "GOTR team locations (Fall 2026)",
+            "url": "https://www.gotrphiladelphia.org/locations"
+          },
+          {
+            "label": "Fell School: community partnerships and clubs",
+            "url": "https://fell.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-14"
+      },
+      "locke": {
+        "relation": "onsite",
+        "note": "GOTR’s own Fall 2026 site list includes Alain Locke School. GOTR’s list doesn’t give the team’s days, and the fall season ends with the 5K on December 6, so ask the school about the spring season.",
+        "sources": [
+          {
+            "label": "GOTR team locations (Fall 2026)",
+            "url": "https://www.gotrphiladelphia.org/locations"
+          }
+        ],
+        "checked": "2026-11-14"
+      },
+      "richmond": {
+        "relation": "onsite",
+        "note": "GOTR’s own Fall 2026 site list includes Richmond Elementary School. GOTR’s list doesn’t give the team’s days, and the fall season ends with the 5K on December 6, so ask the school about the spring season.",
+        "sources": [
+          {
+            "label": "GOTR team locations (Fall 2026)",
+            "url": "https://www.gotrphiladelphia.org/locations"
+          }
+        ],
+        "checked": "2026-11-14"
+      },
+      "stephen-girard": {
+        "relation": "onsite",
+        "note": "GOTR’s own Fall 2026 site list includes Stephen Girard Elementary. GOTR’s list doesn’t give the team’s days, and the fall season ends with the 5K on December 6, so ask the school about the spring season.",
+        "sources": [
+          {
+            "label": "GOTR team locations (Fall 2026)",
+            "url": "https://www.gotrphiladelphia.org/locations"
+          }
+        ],
+        "checked": "2026-11-14"
+      },
+      "mifflin": {
+        "relation": "onsite",
+        "note": "GOTR’s own Fall 2026 site list includes Thomas Mifflin. Mifflin’s page lists Girls on the Run among its clubs and activities. GOTR’s list doesn’t give the team’s days, and the fall season ends with the 5K on December 6, so ask the school about the spring season.",
+        "sources": [
+          {
+            "label": "GOTR team locations (Fall 2026)",
+            "url": "https://www.gotrphiladelphia.org/locations"
+          },
+          {
+            "label": "Mifflin School: community partnerships and clubs",
+            "url": "https://mifflin.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-14"
       }
     },
     "price": "paid",
@@ -1719,6 +1782,12 @@
         "distance": "about a third of a mile south, at 15th and Morris",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-07"
+      },
+      "stephen-girard": {
+        "relation": "nearby",
+        "distance": "about half a mile northeast",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-14"
       }
     }
   },
@@ -13948,6 +14017,549 @@
         "note": "The City’s listing doesn’t mention pickup from any school. It is a drop-off program, so plan on taking your child over.",
         "distance": "about a third of a mile south, on Verree Rd",
         "checked": "2026-11-13"
+      }
+    }
+  },
+  {
+    "id": "gpca-fell",
+    "name": "GPCA Out of School Time at Fell",
+    "what": "Free after-school care for Fell students, run by Greater Philadelphia Community Alliance, with homework help, clubs, sports and games",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "clubs",
+      "sports",
+      "GPCA",
+      "Greater Philadelphia Community Alliance",
+      "OST",
+      "Fell",
+      "South Philadelphia"
+    ],
+    "address": "900 W Oregon Ave",
+    "grades": "K-8",
+    "gradeNote": "GPCA lists Fell for kindergarten to 8th grade",
+    "hours": "GPCA gives its after-school hours as 2:30–6:00 pm, “may vary slightly by location”. Fell’s school day ends at 3:39 pm, so ask GPCA when the Fell site starts.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "GPCA’s page gives the cost of its programs as “Sliding Scale + Free”. Ask whether the Fell site is free.",
+    "phone": "215-336-5505",
+    "email": "info@gpca-phila.org",
+    "website": "https://www.gpca-phila.org/prek-8",
+    "register": {
+      "how": "contact",
+      "note": "GPCA says families can pick up paper applications at the school or the program site, and that the online application link goes out on flyers, ClassDojo and the District’s program locator. It contacts families within about a week."
+    },
+    "note": "GPCA’s page describes the program as licensed by the state, with academic enrichment, special-interest clubs, sports and games. It doesn’t give Fell’s own days or hours, so confirm them with GPCA or the school office.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia Community Alliance: Pre K–8 programs",
+        "url": "https://www.gpca-phila.org/prek-8"
+      },
+      {
+        "label": "Fell School: community partnerships and clubs",
+        "url": "https://fell.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-14",
+    "pickupLists": [
+      {
+        "where": "Out of School Time, K–8",
+        "text": "Childs Elementary School, D. Newlin Fell Elementary School, George Sharswood Elementary School, Edward Steel Elementary School, Vare Washington School",
+        "url": "https://www.gpca-phila.org/prek-8",
+        "read": "2026-11-14",
+        "how": "browser",
+        "by": "provider",
+        "note": "The page says “We pick up children from the following schools (K-8)”, and further down lists the same schools with grade bands (Fell: K-8th grade)."
+      }
+    ],
+    "schools": {
+      "fell": {
+        "relation": "onsite",
+        "note": "GPCA’s own page lists D. Newlin Fell Elementary School among the schools its after-school program serves, and Fell’s site names GPCA as a community partner. Ask GPCA whether children stay in the building or go to another site.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia Community Alliance: Pre K–8 programs",
+            "url": "https://www.gpca-phila.org/prek-8"
+          },
+          {
+            "label": "Fell School: community partnerships and clubs",
+            "url": "https://fell.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-14"
+      }
+    }
+  },
+  {
+    "id": "ace-locke",
+    "name": "Community Council ACE Program at Locke",
+    "what": "A free after-school program inside Locke with homework help, arts, music, dance, sports and STEM",
+    "types": [
+      "aftercare",
+      "art"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "arts",
+      "music",
+      "dance",
+      "STEM",
+      "robotics",
+      "sports",
+      "Community Council",
+      "ACE",
+      "Artistic & Cultural Enrichment",
+      "Locke",
+      "West Philadelphia"
+    ],
+    "address": "4550 Haverford Ave",
+    "grades": "K-8",
+    "gradeNote": "Kindergarten to 8th grade, according to the City’s listing",
+    "hours": "3:00–6:00 pm, Monday to Friday, September 1, 2026 to June 9, 2027, according to the City’s listing.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "267-975-6992",
+    "email": "",
+    "website": "https://www.cchss.org/",
+    "register": {
+      "how": "online",
+      "url": "https://www.cognitoforms.com/CommunityCouncilHealthSystems/ACEOSTSY20262027Application",
+      "label": "Apply",
+      "note": "The City’s listing links this application and says registration is required; it gave a registration window of August 10 to September 30, 2026, so ask whether there is still room. The phone number is the program’s own in the City’s listing; Community Council’s main number is 215-473-7033."
+    },
+    "daysOff": {
+      "summary": "The City’s locator lists a free Community Council winter break mini camp at Locke, December 23 to 30, 2026 (Monday to Wednesday, 8:30 am to 4:30 pm), with art, music, sports and trips.",
+      "url": "https://www.phila.gov/ost/program-locator/?address=4550+Haverford+Ave&resource=ost_65",
+      "dates": [
+        "2026-12-23",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30"
+      ],
+      "sources": [
+        {
+          "label": "City program locator: Community Council at Locke winter mini break",
+          "url": "https://www.phila.gov/ost/program-locator/?address=4550+Haverford+Ave&resource=ost_65"
+        }
+      ],
+      "hours": "8:30 am to 4:30 pm",
+      "cost": "Free"
+    },
+    "note": "Everything here comes from the City’s After School and Summer Program Locator. It describes ACE (Artistic & Cultural Enrichment) as homework help, literacy and math, STEM, robotics, computer science, arts, music, dance, social-emotional learning and fitness, with meals and no transportation. Community Council’s own site doesn’t describe the program.",
+    "sources": [
+      {
+        "label": "City program locator: Community Council ACE Program at Locke",
+        "url": "https://www.phila.gov/ost/program-locator/?address=4550+Haverford+Ave&resource=ost_64"
+      },
+      {
+        "label": "City program locator: Community Council at Locke winter mini break",
+        "url": "https://www.phila.gov/ost/program-locator/?address=4550+Haverford+Ave&resource=ost_65"
+      }
+    ],
+    "lastVerified": "2026-11-14",
+    "schools": {
+      "locke": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists Community Council’s ACE program at Alain Locke School.",
+        "sources": [
+          {
+            "label": "City program locator: Community Council ACE Program at Locke",
+            "url": "https://www.phila.gov/ost/program-locator/?address=4550+Haverford+Ave&resource=ost_64"
+          }
+        ],
+        "checked": "2026-11-14"
+      }
+    }
+  },
+  {
+    "id": "ela-richmond",
+    "name": "Early Life Academy at Richmond",
+    "what": "Free after care inside Richmond, with homework help, a meal and club-based enrichment",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "clubs",
+      "STEM",
+      "Early Life Academy",
+      "ELA",
+      "Richmond",
+      "Port Richmond"
+    ],
+    "address": "2944 Belgrade St",
+    "grades": "K-5",
+    "gradeNote": "Richmond students (the school teaches kindergarten to 5th grade)",
+    "hours": "3:30–6:00 pm, Monday to Friday, September 1, 2026 to June 8, 2027, according to the City’s listing. Richmond’s own schedule page says after-school programs end at 4:45 pm, so ask which applies.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-992-2162",
+    "email": "",
+    "website": "https://www.earlylifeacademy.org/school-age-program",
+    "register": {
+      "how": "online",
+      "url": "https://schools.procareconnect.com/form/f9ac68d2-17b9-44dd-9f01-2c24dc4bd77e",
+      "label": "Register",
+      "note": "The City’s listing links this sign-up form and says registration is required."
+    },
+    "note": "The hours and dates come from the City’s program locator, which says the program is free, provides meals and no transportation, and runs in 8 to 12 week club sessions that end in a showcase for families.",
+    "sources": [
+      {
+        "label": "Early Life Academy: schools we serve",
+        "url": "https://www.earlylifeacademy.org/schools-we-serve"
+      },
+      {
+        "label": "Early Life Academy: school age program",
+        "url": "https://www.earlylifeacademy.org/school-age-program"
+      },
+      {
+        "label": "City program locator: ELA at Richmond OST",
+        "url": "https://www.phila.gov/ost/program-locator/?address=2944+Belgrade+St&resource=ost_86"
+      }
+    ],
+    "lastVerified": "2026-11-14",
+    "schools": {
+      "richmond": {
+        "relation": "onsite",
+        "note": "Early Life Academy’s own page lists Richmond Elementary School, 2944 Belgrade Street, among the schools it serves, and the City’s program locator lists its after care at the school.",
+        "sources": [
+          {
+            "label": "Early Life Academy: schools we serve",
+            "url": "https://www.earlylifeacademy.org/schools-we-serve"
+          },
+          {
+            "label": "City program locator: ELA at Richmond OST",
+            "url": "https://www.phila.gov/ost/program-locator/?address=2944+Belgrade+St&resource=ost_86"
+          }
+        ],
+        "checked": "2026-11-14"
+      }
+    }
+  },
+  {
+    "id": "bgc-stephen-girard",
+    "name": "Boys & Girls Club at Stephen Girard",
+    "what": "A Boys & Girls Clubs of Philadelphia school extension site inside Stephen Girard",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "Boys & Girls Club",
+      "Boys and Girls Club",
+      "BGC",
+      "Stephen Girard",
+      "Girard",
+      "South Philadelphia"
+    ],
+    "address": "1800 Snyder Ave",
+    "grades": "K-6",
+    "gradeNote": "Stephen Girard teaches kindergarten to 6th grade; the Clubs don’t publish grades for the site",
+    "hours": "Not published. The Boys & Girls Clubs list the site and its phone number but not its hours or days.",
+    "cost": "Not published",
+    "phone": "215-980-6314",
+    "email": "",
+    "website": "https://bgcphila.org/club-locations/",
+    "register": {
+      "how": "phone",
+      "note": "Call the site’s number from the Boys & Girls Clubs’ list, or ask the school office."
+    },
+    "note": "Neither the Boys & Girls Clubs nor the school gives the days, hours or cost, and the City’s program locator doesn’t list it, so call before counting on it.",
+    "sources": [
+      {
+        "label": "Boys & Girls Clubs of Philadelphia: club locations",
+        "url": "https://bgcphila.org/club-locations/"
+      },
+      {
+        "label": "Stephen Girard School: community partnerships",
+        "url": "https://girard.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-14",
+    "schools": {
+      "stephen-girard": {
+        "relation": "onsite",
+        "note": "The Boys & Girls Clubs’ own list of locations names Stephen Girard Elementary School, 1800 Snyder Avenue, as a school extension site, and Girard’s site names the Boys and Girls Club of Philadelphia among its community partners.",
+        "sources": [
+          {
+            "label": "Boys & Girls Clubs of Philadelphia: club locations",
+            "url": "https://bgcphila.org/club-locations/"
+          },
+          {
+            "label": "Stephen Girard School: community partnerships",
+            "url": "https://girard.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-14"
+      }
+    }
+  },
+  {
+    "id": "bgc-mifflin",
+    "name": "Boys & Girls Club at Mifflin",
+    "what": "A Boys & Girls Clubs of Philadelphia school extension site inside Mifflin",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "Boys & Girls Club",
+      "Boys and Girls Club",
+      "BGC",
+      "Wissahickon Boys and Girls Club",
+      "Mifflin",
+      "East Falls"
+    ],
+    "address": "3624 Conrad St",
+    "grades": "K-8",
+    "gradeNote": "Mifflin teaches kindergarten to 8th grade; the Clubs don’t publish grades for the site",
+    "hours": "Not published. The Boys & Girls Clubs list the site and its phone number but not its hours or days.",
+    "cost": "Not published",
+    "phone": "215-406-0866",
+    "email": "",
+    "website": "https://bgcphila.org/club-locations/",
+    "register": {
+      "how": "phone",
+      "note": "Call the site’s number from the Boys & Girls Clubs’ list, or ask the school office."
+    },
+    "note": "Neither the Boys & Girls Clubs nor the school gives the days, hours or cost, and the City’s program locator doesn’t list it, so call before counting on it.",
+    "sources": [
+      {
+        "label": "Boys & Girls Clubs of Philadelphia: club locations",
+        "url": "https://bgcphila.org/club-locations/"
+      },
+      {
+        "label": "Mifflin School: community partnerships and clubs",
+        "url": "https://mifflin.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-14",
+    "schools": {
+      "mifflin": {
+        "relation": "onsite",
+        "note": "The Boys & Girls Clubs’ own list of locations names Thomas Mifflin School, 3624 Conrad Street, as a school extension site, and Mifflin’s site names the Wissahickon Boys and Girls Club among its community partners.",
+        "sources": [
+          {
+            "label": "Boys & Girls Clubs of Philadelphia: club locations",
+            "url": "https://bgcphila.org/club-locations/"
+          },
+          {
+            "label": "Mifflin School: community partnerships and clubs",
+            "url": "https://mifflin.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-14"
+      }
+    }
+  },
+  {
+    "id": "cpa-south-bgc",
+    "name": "Caring People Alliance: South Philadelphia Boys & Girls Club",
+    "what": "A free Boys & Girls Club with an after-school program for elementary children: homework help, reading, STEM, sports and a meal",
+    "types": [
+      "aftercare",
+      "rec-center"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "Boys & Girls Club",
+      "Boys and Girls Club",
+      "Caring People Alliance",
+      "CPA",
+      "homework",
+      "STEM",
+      "basketball",
+      "South Philadelphia"
+    ],
+    "address": "2433 S 15th St",
+    "neighborhoods": [
+      "South Philadelphia"
+    ],
+    "grades": "K-5",
+    "gradeNote": "The City’s listing for the elementary program names kindergarten to 5th grade",
+    "hours": "Monday to Friday until 6:00 pm, according to the City’s listing (it gives 8:30 am to 6:00 pm, July 8, 2026 to June 4, 2027, which covers the summer too). Ask for the after-school hours.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free; the City’s listing also says it is CCIS approved.",
+    "price": "free",
+    "phone": "215-218-0800",
+    "email": "",
+    "website": "https://www.caringpeoplealliance.org/our-boys-girls-clubs",
+    "register": {
+      "how": "online",
+      "url": "https://www.caringpeoplealliance.org/contact-us/enroll-today",
+      "label": "Enroll",
+      "note": "The City’s listing says registration is required and drop-ins are welcome."
+    },
+    "note": "The City’s program locator lists this as an after-school program focused on healthy living and STEM, with meals and snacks, near bus and subway stops. Caring People Alliance’s own page gives the club’s address and phone number. It doesn’t say it picks children up from any school.",
+    "sources": [
+      {
+        "label": "City program locator: Caring People Alliance South Boys & Girls Club, elementary",
+        "url": "https://www.phila.gov/ost/program-locator/?address=1800+Snyder+Ave&resource=ost_24"
+      },
+      {
+        "label": "Caring People Alliance: our Boys & Girls Clubs",
+        "url": "https://www.caringpeoplealliance.org/our-boys-girls-clubs"
+      }
+    ],
+    "lastVerified": "2026-11-14",
+    "schools": {
+      "stephen-girard": {
+        "relation": "nearby",
+        "distance": "about two-fifths of a mile southeast",
+        "note": "Neither the City’s listing nor the club says it picks up from Stephen Girard, so plan on walking over or ask the club.",
+        "sources": [
+          {
+            "label": "City program locator: Caring People Alliance South Boys & Girls Club, elementary",
+            "url": "https://www.phila.gov/ost/program-locator/?address=1800+Snyder+Ave&resource=ost_24"
+          }
+        ],
+        "checked": "2026-11-14"
+      }
+    }
+  },
+  {
+    "id": "lee-cultural-center",
+    "name": "Lee Cultural Center",
+    "what": "City rec center after-school program",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "after school",
+      "free",
+      "aftercare",
+      "West Philadelphia"
+    ],
+    "address": "4328 Haverford Ave",
+    "neighborhoods": [
+      "West Philadelphia"
+    ],
+    "grades": "1-6",
+    "gradeNote": "Ages 6–12",
+    "hours": "Not published in the City’s listing",
+    "cost": "$0 for the season in the City’s listing, which dates from 2016; registration there shows open.",
+    "price": "free",
+    "phone": "215-685-7655",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the center. There is no online sign-up."
+    },
+    "note": "The City’s Parks & Rec data lists an after-school program here for ages 6 to 12, entered in 2016 and open for registration, with no fee shown. Call to confirm this year’s days, hours and cost.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-14",
+    "schools": {
+      "locke": {
+        "relation": "nearby",
+        "distance": "about a fifth of a mile east",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-14"
+      }
+    }
+  },
+  {
+    "id": "cohocksink-rec",
+    "name": "Cohocksink Recreation Center",
+    "what": "City rec center after-school program",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "after school",
+      "aftercare",
+      "low cost",
+      "Port Richmond"
+    ],
+    "address": "2889 Cedar St",
+    "neighborhoods": [
+      "Port Richmond"
+    ],
+    "grades": "1-7",
+    "gradeNote": "Ages 6–13",
+    "hours": "Not published in the City’s listing",
+    "cost": "$50 a month in the City’s listing, which dates from 2016; registration there shows open.",
+    "price": "paid",
+    "phone": "215-685-9884",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The City’s Parks & Rec data lists an after-school program here for ages 6 to 13, entered in 2016 and open for registration. Call to confirm this year’s days, hours and price.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-14",
+    "schools": {
+      "richmond": {
+        "relation": "nearby",
+        "distance": "about a fifth of a mile west",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-14"
       }
     }
   }

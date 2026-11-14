@@ -154,5 +154,11 @@
     "how": "person",
     "why": "Its robots.txt closes the site to ClaudeBot and other AI agents, and a browser got HTTP 403 on 2026-11-13. A person needs to read the after-school page and its list of school-based programs.",
     "seen": "2026-11-13"
+  },
+  {
+    "match": "phillyasap.org",
+    "how": "person",
+    "why": "On 2026-11-14 the site answered a browser with a 403, so it has to be read by a person.",
+    "seen": "2026-11-14"
   }
 ]
