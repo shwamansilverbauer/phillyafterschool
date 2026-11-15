@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-11-14",
+  "generated": "2026-11-15",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -68,6 +68,106 @@
     {
       "id": "greenfield",
       "name": "Greenfield"
+    },
+    {
+      "id": "jenks",
+      "name": "J.S. Jenks"
+    },
+    {
+      "id": "byers",
+      "name": "Russell Byers"
+    },
+    {
+      "id": "cook-wissahickon",
+      "name": "Cook-Wissahickon"
+    },
+    {
+      "id": "morris",
+      "name": "Robert Morris"
+    },
+    {
+      "id": "henry",
+      "name": "C.W. Henry"
+    },
+    {
+      "id": "mastery-thomas",
+      "name": "Mastery Thomas"
+    },
+    {
+      "id": "emlen",
+      "name": "Emlen"
+    },
+    {
+      "id": "wright",
+      "name": "Wright"
+    },
+    {
+      "id": "jb-kelly",
+      "name": "J.B. Kelly"
+    },
+    {
+      "id": "edmonds",
+      "name": "Edmonds"
+    },
+    {
+      "id": "willard",
+      "name": "Willard"
+    },
+    {
+      "id": "lea",
+      "name": "Lea"
+    },
+    {
+      "id": "rhoads",
+      "name": "Rhoads"
+    },
+    {
+      "id": "juniata-park",
+      "name": "Juniata Park"
+    },
+    {
+      "id": "greenberg",
+      "name": "Greenberg"
+    },
+    {
+      "id": "fell",
+      "name": "Fell"
+    },
+    {
+      "id": "locke",
+      "name": "Locke"
+    },
+    {
+      "id": "richmond",
+      "name": "Richmond"
+    },
+    {
+      "id": "stephen-girard",
+      "name": "Stephen Girard"
+    },
+    {
+      "id": "mifflin",
+      "name": "Mifflin"
+    },
+    {
+      "id": "dunbar",
+      "name": "Dunbar"
+    },
+    {
+      "id": "cayuga",
+      "name": "Cayuga"
+    },
+    {
+      "id": "bayard-taylor",
+      "name": "Bayard Taylor"
+    },
+    {
+      "id": "moffet",
+      "name": "Moffet"
+    },
+    {
+      "id": "anne-frank",
+      "name": "Anne Frank"
     }
   ],
   "programs": [
@@ -278,6 +378,7 @@
       "id": "parent-infant-center",
       "name": "Parent Infant Center After School Center",
       "parts": [
+        "after",
         "off"
       ]
     },
@@ -966,6 +1067,316 @@
       "parts": [
         "after"
       ]
+    },
+    {
+      "id": "uykq-after-care",
+      "name": "Urban Youth King & Queens (UYKQ) After-School",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "byers-after-school",
+      "name": "Russell Byers Charter School: After School Program",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "cpa-robert-morris",
+      "name": "Caring People Alliance at Robert Morris",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "morris-clubs",
+      "name": "School clubs at Robert Morris",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "water-tower-rec",
+      "name": "Water Tower Recreation Center",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "mastermindz-thomas",
+      "name": "Mastermindz Aftercare at Mastery Thomas",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "safehaven-thomas",
+      "name": "SafeHaven Aftercare at Mastery Thomas",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "bgc-emlen",
+      "name": "Boys & Girls Club at Emlen",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "emlen-clubs",
+      "name": "School clubs at Emlen",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "legacy-champions-on-the-rise",
+      "name": "LEGACY Champions on the Rise at Wright",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "sbnp-wright",
+      "name": "Shoot Basketballs NOT People: After School at Wright",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "zhang-sah-school-based",
+      "name": "Zhang Sah School-Based Programs at J.B. Kelly",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "iac-edmonds",
+      "name": "Indochinese American Council (IAC) Afterschool at Edmonds",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ymwic-edmonds",
+      "name": "Young Men and Women In Charge (YMWIC) at Edmonds",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "mander-playground",
+      "name": "Mander Playground",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "gathers-rec",
+      "name": "Gathers Recreation Center",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "happy-hollow-playground",
+      "name": "Happy Hollow Playground",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ela-willard",
+      "name": "Early Life Academy at Willard",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "wes-willard",
+      "name": "WES Health: WLCAS at Willard",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "uacs-lea",
+      "name": "UACS After-School Program at Lea",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "safe-haven-rhoads",
+      "name": "Safe Haven IV at Rhoads",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "rebel-tumblers-rhoads",
+      "name": "Rebel Arts Movement: Rebel Tumblers at Rhoads",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ymca-juniata-park",
+      "name": "YMCA OST School Program at Juniata Park",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "asas-juniata-park",
+      "name": "After-School All-Stars at Juniata Park",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "bgc-greenberg",
+      "name": "Boys & Girls Club at Greenberg",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "philly-kidz-greenberg",
+      "name": "Philly KiDZ Initiative at Greenberg",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "pennypack-environmental-center",
+      "name": "Pennypack Environmental Center: Afterschool Adventures",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "gpca-fell",
+      "name": "GPCA Out of School Time at Fell",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ace-locke",
+      "name": "Community Council ACE Program at Locke",
+      "parts": [
+        "after",
+        "off"
+      ]
+    },
+    {
+      "id": "ela-richmond",
+      "name": "Early Life Academy at Richmond",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "bgc-stephen-girard",
+      "name": "Boys & Girls Club at Stephen Girard",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "bgc-mifflin",
+      "name": "Boys & Girls Club at Mifflin",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "cpa-south-bgc",
+      "name": "Caring People Alliance: South Philadelphia Boys & Girls Club",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "lee-cultural-center",
+      "name": "Lee Cultural Center",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "cohocksink-rec",
+      "name": "Cohocksink Recreation Center",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ymca-dunbar",
+      "name": "YMCA Out of School Time at Dunbar",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "catholic-charities-cayuga",
+      "name": "Catholic Charities OST at Cayuga",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "bgc-bayard-taylor",
+      "name": "Boys & Girls Club at Bayard Taylor",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "xiente-moffet",
+      "name": "Xiente After Care at Moffet",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "al-bustan-moffet",
+      "name": "Al-Bustan Drumming at Moffet",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "philly-kidz-anne-frank",
+      "name": "Philly KiDZ Initiative at Anne Frank",
+      "parts": [
+        "after",
+        "off"
+      ]
+    },
+    {
+      "id": "dendy-rec",
+      "name": "Dendy Recreation Center",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "hunting-park-rec",
+      "name": "Hunting Park Recreation Area",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "towey-playground",
+      "name": "Towey Playground",
+      "parts": [
+        "after"
+      ]
     }
   ],
   "camps": [
@@ -1185,74 +1596,429 @@
   },
   "alerts": [
     {
-      "id": "reg-fleisher-art-memorial-2026-11-14",
-      "schools": [
-        "nebinger",
-        "meredith",
-        "coppin",
-        "vare-washington",
-        "mccall",
-        "kirkbride"
+      "id": "added-anne-frank",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "anne-frank-school"
       ],
-      "programs": [
-        "fleisher-art-memorial"
-      ],
-      "part": "after",
-      "title": "Fleisher Art Memorial",
-      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "register",
-      "date": "2026-11-14",
-      "sendOn": "2026-11-08",
-      "when": "Saturday, November 14",
-      "text": "Winter term registration opens for enrolled students."
+      "when": "New",
+      "title": "Anne Frank now has a page",
+      "text": "You asked to be told. 2 programs are listed for Anne Frank so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/anne-frank/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
     },
     {
-      "id": "reg-fleisher-art-memorial-2026-11-14-day",
-      "schools": [
-        "nebinger",
-        "meredith",
-        "coppin",
-        "vare-washington",
-        "mccall",
-        "kirkbride"
+      "id": "added-bayard-taylor",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "bayard-taylor-school"
       ],
-      "programs": [
-        "fleisher-art-memorial"
-      ],
-      "part": "after",
-      "title": "Fleisher Art Memorial",
-      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "today",
-      "date": "2026-11-14",
-      "sendOn": "2026-11-14",
-      "when": "Today, Saturday, November 14",
-      "text": "Winter term registration opens for enrolled students."
+      "when": "New",
+      "title": "Bayard Taylor now has a page",
+      "text": "You asked to be told. 2 programs are listed for Bayard Taylor so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/bayard-taylor/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
     },
     {
-      "id": "reg-fleisher-art-memorial-2026-11-14-eve",
-      "schools": [
-        "nebinger",
-        "meredith",
-        "coppin",
-        "vare-washington",
-        "mccall",
-        "kirkbride"
+      "id": "added-byers",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "russell-byers-charter-school"
       ],
-      "programs": [
-        "fleisher-art-memorial"
+      "when": "New",
+      "title": "Russell Byers now has a page",
+      "text": "You asked to be told. 4 programs are listed for Russell Byers so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-cayuga",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "cayuga-school"
       ],
-      "part": "after",
-      "title": "Fleisher Art Memorial",
-      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "soon",
-      "date": "2026-11-14",
-      "sendOn": "2026-11-13",
-      "expires": "2026-11-13",
-      "when": "Tomorrow, Saturday, November 14",
-      "text": "Winter term registration opens for enrolled students."
+      "when": "New",
+      "title": "Cayuga now has a page",
+      "text": "You asked to be told. 3 programs are listed for Cayuga so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/cayuga/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-cook-wissahickon",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "cook-wissahickon-school"
+      ],
+      "when": "New",
+      "title": "Cook-Wissahickon now has a page",
+      "text": "You asked to be told. 2 programs are listed for Cook-Wissahickon so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/cook-wissahickon/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-dunbar",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "paul-l-dunbar-school"
+      ],
+      "when": "New",
+      "title": "Dunbar now has a page",
+      "text": "You asked to be told. 3 programs are listed for Dunbar so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/dunbar/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-edmonds",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "franklin-s-edmonds-school"
+      ],
+      "when": "New",
+      "title": "Edmonds now has a page",
+      "text": "You asked to be told. 2 programs are listed for Edmonds so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/edmonds/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-emlen",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "eleanor-c-emlen-school"
+      ],
+      "when": "New",
+      "title": "Emlen now has a page",
+      "text": "You asked to be told. 2 programs are listed for Emlen so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/emlen/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-fell",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "d-newlin-fell-school"
+      ],
+      "when": "New",
+      "title": "Fell now has a page",
+      "text": "You asked to be told. 2 programs are listed for Fell so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/fell/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-greenberg",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "joseph-greenberg-school"
+      ],
+      "when": "New",
+      "title": "Greenberg now has a page",
+      "text": "You asked to be told. 3 programs are listed for Greenberg so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/greenberg/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-henry",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "charles-w-henry-school"
+      ],
+      "when": "New",
+      "title": "C.W. Henry now has a page",
+      "text": "You asked to be told. 3 programs are listed for C.W. Henry so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/henry/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-jb-kelly",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "john-b-kelly-school"
+      ],
+      "when": "New",
+      "title": "J.B. Kelly now has a page",
+      "text": "You asked to be told. 3 programs are listed for J.B. Kelly so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/jb-kelly/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-jenks",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "jenks-academy-for-arts-and-sciences"
+      ],
+      "when": "New",
+      "title": "J.S. Jenks now has a page",
+      "text": "You asked to be told. 3 programs are listed for J.S. Jenks so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/jenks/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-juniata-park",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "juniata-park-academy"
+      ],
+      "when": "New",
+      "title": "Juniata Park now has a page",
+      "text": "You asked to be told. 2 programs are listed for Juniata Park so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/juniata-park/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-lea",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "henry-c-lea-school"
+      ],
+      "when": "New",
+      "title": "Lea now has a page",
+      "text": "You asked to be told. 2 programs are listed for Lea so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/lea/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-locke",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "alain-locke-school"
+      ],
+      "when": "New",
+      "title": "Locke now has a page",
+      "text": "You asked to be told. 3 programs are listed for Locke so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/locke/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-mastery-thomas",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "mastery-school-thomas-campus"
+      ],
+      "when": "New",
+      "title": "Mastery Thomas now has a page",
+      "text": "You asked to be told. 2 programs are listed for Mastery Thomas so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-mifflin",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "thomas-mifflin-school"
+      ],
+      "when": "New",
+      "title": "Mifflin now has a page",
+      "text": "You asked to be told. 2 programs are listed for Mifflin so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/mifflin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-moffet",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "john-moffet-school"
+      ],
+      "when": "New",
+      "title": "Moffet now has a page",
+      "text": "You asked to be told. 4 programs are listed for Moffet so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/moffet/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-morris",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "robert-morris-school"
+      ],
+      "when": "New",
+      "title": "Robert Morris now has a page",
+      "text": "You asked to be told. 2 programs are listed for Robert Morris so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/morris/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-rhoads",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "james-rhoads-school"
+      ],
+      "when": "New",
+      "title": "Rhoads now has a page",
+      "text": "You asked to be told. 2 programs are listed for Rhoads so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/rhoads/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-richmond",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "richmond-school"
+      ],
+      "when": "New",
+      "title": "Richmond now has a page",
+      "text": "You asked to be told. 3 programs are listed for Richmond so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/richmond/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-stephen-girard",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "stephen-girard-school"
+      ],
+      "when": "New",
+      "title": "Stephen Girard now has a page",
+      "text": "You asked to be told. 4 programs are listed for Stephen Girard so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/stephen-girard/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-willard",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "frances-e-willard-school"
+      ],
+      "when": "New",
+      "title": "Willard now has a page",
+      "text": "You asked to be told. 2 programs are listed for Willard so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/willard/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-wright",
+      "kind": "added",
+      "date": "2026-11-15",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-17",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "richard-r-wright-school"
+      ],
+      "when": "New",
+      "title": "Wright now has a page",
+      "text": "You asked to be told. 4 programs are listed for Wright so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/wright/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
     },
     {
       "id": "reg-the-philadelphia-school-2026-11-15",
@@ -1549,13 +2315,39 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Monday, November 16",
       "title": "No school: Report card conferences",
       "text": "12 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, MoveMakers Philly, NLArts, Philly Art Center, Queen Village, Philly InMovement: MOVE After School, PlayArts day camps, The NeighborHub, The Schuylkill Center for Environmental Education and ZAZZ.",
       "url": "https://phillyafterschool.org/days-off/report-card-conferences-2026-11-16/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "week-anne-frank-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "anne-frank"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Anne Frank",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/anne-frank/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Anne Frank’s week"
     },
     {
       "id": "week-bache-martin-2026-11-16",
@@ -1580,6 +2372,54 @@
       "first": "Monday: no school, Report card conferences",
       "url": "https://phillyafterschool.org/bache-martin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Bache-Martin’s week"
+    },
+    {
+      "id": "week-bayard-taylor-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "bayard-taylor"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Bayard Taylor",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/bayard-taylor/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Bayard Taylor’s week"
+    },
+    {
+      "id": "week-cayuga-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "cayuga"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Cayuga",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/cayuga/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Cayuga’s week"
     },
     {
       "id": "week-childs-2026-11-16",
@@ -1630,6 +2470,30 @@
       "button": "See Columbus Charter’s week"
     },
     {
+      "id": "week-cook-wissahickon-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "cook-wissahickon"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Cook-Wissahickon",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/cook-wissahickon/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Cook-Wissahickon’s week"
+    },
+    {
       "id": "week-coppin-2026-11-16",
       "kind": "week",
       "date": "2026-11-20",
@@ -1658,6 +2522,126 @@
       "button": "See Coppin’s week"
     },
     {
+      "id": "week-dunbar-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "dunbar"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Dunbar",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/dunbar/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Dunbar’s week"
+    },
+    {
+      "id": "week-edmonds-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "edmonds"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Edmonds",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/edmonds/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Edmonds’s week"
+    },
+    {
+      "id": "week-emlen-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "emlen"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Emlen",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/emlen/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Emlen’s week"
+    },
+    {
+      "id": "week-fell-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "fell"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Fell",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/fell/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Fell’s week"
+    },
+    {
+      "id": "week-greenberg-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "greenberg"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Greenberg",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/greenberg/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Greenberg’s week"
+    },
+    {
       "id": "week-greenfield-2026-11-16",
       "kind": "week",
       "date": "2026-11-20",
@@ -1682,6 +2666,30 @@
       "button": "See Greenfield’s week"
     },
     {
+      "id": "week-henry-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "henry"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at C.W. Henry",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/henry/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See C.W. Henry’s week"
+    },
+    {
       "id": "week-houston-2026-11-16",
       "kind": "week",
       "date": "2026-11-20",
@@ -1704,6 +2712,78 @@
       "first": "Monday: no school, Report card conferences",
       "url": "https://phillyafterschool.org/houston/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Houston’s week"
+    },
+    {
+      "id": "week-jb-kelly-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "jb-kelly"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at J.B. Kelly",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/jb-kelly/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See J.B. Kelly’s week"
+    },
+    {
+      "id": "week-jenks-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "jenks"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at J.S. Jenks",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/jenks/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See J.S. Jenks’s week"
+    },
+    {
+      "id": "week-juniata-park-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "juniata-park"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Juniata Park",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/juniata-park/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Juniata Park’s week"
     },
     {
       "id": "week-kirkbride-2026-11-16",
@@ -1734,6 +2814,30 @@
       "button": "See Kirkbride’s week"
     },
     {
+      "id": "week-lea-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "lea"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Lea",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/lea/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Lea’s week"
+    },
+    {
       "id": "week-lingelbach-2026-11-16",
       "kind": "week",
       "date": "2026-11-20",
@@ -1756,6 +2860,30 @@
       "first": "Monday: no school, Report card conferences",
       "url": "https://phillyafterschool.org/lingelbach/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Lingelbach’s week"
+    },
+    {
+      "id": "week-locke-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "locke"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Locke",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/locke/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Locke’s week"
     },
     {
       "id": "week-marian-anderson-2026-11-16",
@@ -1838,6 +2966,78 @@
       "button": "See Meredith’s week"
     },
     {
+      "id": "week-mifflin-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mifflin"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Mifflin",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/mifflin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mifflin’s week"
+    },
+    {
+      "id": "week-moffet-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "moffet"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Moffet",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/moffet/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Moffet’s week"
+    },
+    {
+      "id": "week-morris-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "morris"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Robert Morris",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/morris/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Robert Morris’s week"
+    },
+    {
       "id": "week-nebinger-2026-11-16",
       "kind": "week",
       "date": "2026-11-20",
@@ -1868,6 +3068,54 @@
       "first": "Monday: no school, Report card conferences; Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students",
       "url": "https://phillyafterschool.org/nebinger/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Nebinger’s week"
+    },
+    {
+      "id": "week-rhoads-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "rhoads"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Rhoads",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/rhoads/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Rhoads’s week"
+    },
+    {
+      "id": "week-richmond-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "richmond"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Richmond",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/richmond/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Richmond’s week"
     },
     {
       "id": "week-southwark-2026-11-16",
@@ -1918,6 +3166,30 @@
       "button": "See Stanton’s week"
     },
     {
+      "id": "week-stephen-girard-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "stephen-girard"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Stephen Girard",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/stephen-girard/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Stephen Girard’s week"
+    },
+    {
       "id": "week-vare-washington-2026-11-16",
       "kind": "week",
       "date": "2026-11-20",
@@ -1944,6 +3216,54 @@
       "first": "Monday: no school, Report card conferences; Saturday: Sign-ups, Fleisher Art Memorial: Last day of winter term registration for enrolled students",
       "url": "https://phillyafterschool.org/vare-washington/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Vare-Washington’s week"
+    },
+    {
+      "id": "week-willard-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "willard"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Willard",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/willard/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Willard’s week"
+    },
+    {
+      "id": "week-wright-2026-11-16",
+      "kind": "week",
+      "date": "2026-11-20",
+      "sendOn": "2026-11-15",
+      "expires": "2026-11-18",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "wright"
+      ],
+      "when": "Week of November 16",
+      "title": "This week at Wright",
+      "text": "Monday: No school: Report card conferences.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "No school: Report card conferences"
+        }
+      ],
+      "first": "Monday: no school, Report card conferences",
+      "url": "https://phillyafterschool.org/wright/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Wright’s week"
     },
     {
       "id": "reg-fleisher-art-memorial-2026-11-21",
@@ -2246,13 +3566,30 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Wednesday, November 25",
       "title": "No school: Staff professional development",
       "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
       "url": "https://phillyafterschool.org/days-off/staff-professional-development-2026-11-25/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-byers-2026-11-25",
+      "kind": "dayoff",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "byers"
+      ],
+      "programs": [],
+      "when": "Wednesday, November 25 to Friday, November 27",
+      "title": "No school at Russell Byers: Thanksgiving break",
+      "text": "From Russell Byers’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Russell Byers’s week"
     },
     {
       "id": "off-independence-charter-2026-11-25",
@@ -2268,6 +3605,21 @@
       "text": "From Independence Charter’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
       "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Independence Charter’s week"
+    },
+    {
+      "id": "off-mastery-thomas-2026-11-25",
+      "kind": "dayoff",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "mastery-thomas"
+      ],
+      "programs": [],
+      "when": "Wednesday, November 25 to Friday, November 27",
+      "title": "No school at Mastery Thomas: Thanksgiving break",
+      "text": "From Mastery Thomas’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Thomas’s week"
     },
     {
       "id": "camp-elite-sports-factory-2026-11-26",
@@ -2296,7 +3648,9 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Thursday, November 26 to Friday, November 27",
       "title": "No school: Thanksgiving recess",
@@ -2354,6 +3708,38 @@
       "text": "Arden early-bird ends: $15 off each winter Play-in-a-Day (code WINTERPIAD15) and $25 off 8-week classes (code WINTERSTAGE) when you enroll by November 27."
     },
     {
+      "id": "week-anne-frank-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "anne-frank"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Anne Frank",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/anne-frank/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Anne Frank’s week"
+    },
+    {
       "id": "week-bache-martin-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -2384,6 +3770,102 @@
       "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
       "url": "https://phillyafterschool.org/bache-martin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Bache-Martin’s week"
+    },
+    {
+      "id": "week-bayard-taylor-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "bayard-taylor"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Bayard Taylor",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/bayard-taylor/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Bayard Taylor’s week"
+    },
+    {
+      "id": "week-byers-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "byers"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Russell Byers",
+      "text": "Wednesday: No school: Thanksgiving break. Thursday: No school: Thanksgiving break. Friday: No school: Thanksgiving break.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving break"
+        }
+      ],
+      "first": "Wednesday: no school, Thanksgiving break; Thursday: no school, Thanksgiving break",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Russell Byers’s week"
+    },
+    {
+      "id": "week-cayuga-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "cayuga"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Cayuga",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/cayuga/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Cayuga’s week"
     },
     {
       "id": "week-childs-2026-11-23",
@@ -2450,6 +3932,38 @@
       "button": "See Columbus Charter’s week"
     },
     {
+      "id": "week-cook-wissahickon-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "cook-wissahickon"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Cook-Wissahickon",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/cook-wissahickon/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Cook-Wissahickon’s week"
+    },
+    {
       "id": "week-coppin-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -2486,6 +4000,166 @@
       "button": "See Coppin’s week"
     },
     {
+      "id": "week-dunbar-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "dunbar"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Dunbar",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/dunbar/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Dunbar’s week"
+    },
+    {
+      "id": "week-edmonds-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "edmonds"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Edmonds",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/edmonds/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Edmonds’s week"
+    },
+    {
+      "id": "week-emlen-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "emlen"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Emlen",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/emlen/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Emlen’s week"
+    },
+    {
+      "id": "week-fell-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "fell"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Fell",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/fell/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Fell’s week"
+    },
+    {
+      "id": "week-greenberg-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "greenberg"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Greenberg",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/greenberg/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Greenberg’s week"
+    },
+    {
       "id": "week-greenfield-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -2516,6 +4190,38 @@
       "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
       "url": "https://phillyafterschool.org/greenfield/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Greenfield’s week"
+    },
+    {
+      "id": "week-henry-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "henry"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at C.W. Henry",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/henry/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See C.W. Henry’s week"
     },
     {
       "id": "week-houston-2026-11-23",
@@ -2582,6 +4288,102 @@
       "button": "See Independence Charter’s week"
     },
     {
+      "id": "week-jb-kelly-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "jb-kelly"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at J.B. Kelly",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/jb-kelly/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See J.B. Kelly’s week"
+    },
+    {
+      "id": "week-jenks-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "jenks"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at J.S. Jenks",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/jenks/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See J.S. Jenks’s week"
+    },
+    {
+      "id": "week-juniata-park-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "juniata-park"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Juniata Park",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/juniata-park/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Juniata Park’s week"
+    },
+    {
       "id": "week-kirkbride-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -2618,6 +4420,38 @@
       "button": "See Kirkbride’s week"
     },
     {
+      "id": "week-lea-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "lea"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Lea",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/lea/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Lea’s week"
+    },
+    {
       "id": "week-lingelbach-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -2650,6 +4484,38 @@
       "button": "See Lingelbach’s week"
     },
     {
+      "id": "week-locke-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "locke"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Locke",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/locke/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Locke’s week"
+    },
+    {
       "id": "week-marian-anderson-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -2680,6 +4546,38 @@
       "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
       "url": "https://phillyafterschool.org/marian-anderson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Marian Anderson’s week"
+    },
+    {
+      "id": "week-mastery-thomas-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mastery-thomas"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Mastery Thomas",
+      "text": "Wednesday: No school: Thanksgiving break. Thursday: No school: Thanksgiving break. Friday: No school: Thanksgiving break.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving break"
+        }
+      ],
+      "first": "Wednesday: no school, Thanksgiving break; Thursday: no school, Thanksgiving break",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Thomas’s week"
     },
     {
       "id": "week-mccall-2026-11-23",
@@ -2754,6 +4652,102 @@
       "button": "See Meredith’s week"
     },
     {
+      "id": "week-mifflin-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mifflin"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Mifflin",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/mifflin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mifflin’s week"
+    },
+    {
+      "id": "week-moffet-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "moffet"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Moffet",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/moffet/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Moffet’s week"
+    },
+    {
+      "id": "week-morris-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "morris"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Robert Morris",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/morris/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Robert Morris’s week"
+    },
+    {
       "id": "week-nebinger-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -2788,6 +4782,70 @@
       "first": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students; Wednesday: no school, Staff professional development",
       "url": "https://phillyafterschool.org/nebinger/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Nebinger’s week"
+    },
+    {
+      "id": "week-rhoads-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "rhoads"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Rhoads",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/rhoads/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Rhoads’s week"
+    },
+    {
+      "id": "week-richmond-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "richmond"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Richmond",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/richmond/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Richmond’s week"
     },
     {
       "id": "week-southwark-2026-11-23",
@@ -2854,6 +4912,38 @@
       "button": "See Stanton’s week"
     },
     {
+      "id": "week-stephen-girard-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "stephen-girard"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Stephen Girard",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/stephen-girard/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Stephen Girard’s week"
+    },
+    {
       "id": "week-vare-washington-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -2888,6 +4978,70 @@
       "first": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students; Wednesday: no school, Staff professional development",
       "url": "https://phillyafterschool.org/vare-washington/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Vare-Washington’s week"
+    },
+    {
+      "id": "week-willard-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "willard"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Willard",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/willard/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Willard’s week"
+    },
+    {
+      "id": "week-wright-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "wright"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Wright",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/wright/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Wright’s week"
     },
     {
       "id": "campreg-macguffin-camps-2026-11-30",
@@ -3721,6 +5875,21 @@
       "button": "See Independence Charter’s week"
     },
     {
+      "id": "off-mastery-thomas-2026-12-11",
+      "kind": "dayoff",
+      "date": "2026-12-11",
+      "sendOn": "2026-11-29",
+      "schools": [
+        "mastery-thomas"
+      ],
+      "programs": [],
+      "when": "Friday, December 11",
+      "title": "No school at Mastery Thomas: Professional development day",
+      "text": "From Mastery Thomas’s own calendar. One listed program has posted a camp: ZAZZ.",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Thomas’s week"
+    },
+    {
       "id": "reg-philly-pack-2026-12-12",
       "schools": [],
       "programs": [
@@ -3840,6 +6009,21 @@
       "text": "Last day of winter term registration for new students."
     },
     {
+      "id": "off-byers-2026-12-21",
+      "kind": "dayoff",
+      "date": "2026-12-21",
+      "sendOn": "2026-12-06",
+      "schools": [
+        "byers"
+      ],
+      "programs": [],
+      "when": "Monday, December 21",
+      "title": "No school at Russell Byers: Interim conferences",
+      "text": "From Russell Byers’s own calendar. 3 listed programs have posted a camp: Camp TPS at The Philadelphia School, NLArts and Philly Art Center, Queen Village.",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Russell Byers’s week"
+    },
+    {
       "id": "off-independence-charter-2026-12-21",
       "kind": "dayoff",
       "date": "2026-12-21",
@@ -3850,9 +6034,41 @@
       "programs": [],
       "when": "Monday, December 21 to Friday, January 1",
       "title": "No school at Independence Charter: Winter break",
-      "text": "From Independence Charter’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The NeighborHub.",
+      "text": "From Independence Charter’s own calendar. 13 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
       "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Independence Charter’s week"
+    },
+    {
+      "id": "off-byers-2026-12-22",
+      "kind": "dayoff",
+      "date": "2026-12-22",
+      "sendOn": "2026-12-06",
+      "schools": [
+        "byers"
+      ],
+      "programs": [],
+      "when": "Tuesday, December 22 to Friday, January 1",
+      "title": "No school at Russell Byers: Winter break",
+      "text": "From Russell Byers’s own calendar. 13 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Russell Byers’s week"
+    },
+    {
+      "id": "camp-ace-locke-2026-12-23",
+      "kind": "camp",
+      "part": "off",
+      "date": "2026-12-23",
+      "sendOn": "2026-12-13",
+      "schools": [],
+      "programs": [
+        "ace-locke"
+      ],
+      "within": "off-2026-12-23",
+      "when": "Wednesday, December 23 to Wednesday, December 30",
+      "title": "Community Council ACE Program at Locke: camp on a day off",
+      "text": "School is closed (Winter recess). Community Council ACE Program at Locke has posted a camp for Dec 23, Dec 28, Dec 29 and Dec 30.",
+      "url": "https://phillyafterschool.org/programs/ace-locke/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
     },
     {
       "id": "camp-arden-drama-school-2026-12-23",
@@ -4025,6 +6241,23 @@
       "button": "See the listing"
     },
     {
+      "id": "camp-philly-kidz-anne-frank-2026-12-23",
+      "kind": "camp",
+      "part": "off",
+      "date": "2026-12-23",
+      "sendOn": "2026-12-13",
+      "schools": [],
+      "programs": [
+        "philly-kidz-anne-frank"
+      ],
+      "within": "off-2026-12-23",
+      "when": "Wednesday, December 23 to Wednesday, December 30",
+      "title": "Philly KiDZ Initiative at Anne Frank: camp on a day off",
+      "text": "School is closed (Winter recess). Philly KiDZ Initiative at Anne Frank has posted a camp for Dec 23, Dec 28, Dec 29 and Dec 30.",
+      "url": "https://phillyafterschool.org/programs/philly-kidz-anne-frank/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
       "id": "camp-the-philadelphia-school-2026-12-23",
       "kind": "camp",
       "part": "off",
@@ -4051,13 +6284,30 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Wednesday, December 23 to Friday, January 1",
       "title": "No school: Winter recess",
-      "text": "11 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The NeighborHub.",
+      "text": "13 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
       "url": "https://phillyafterschool.org/days-off/winter-break-2026-12-23/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-mastery-thomas-2026-12-24",
+      "kind": "dayoff",
+      "date": "2026-12-24",
+      "sendOn": "2026-12-13",
+      "schools": [
+        "mastery-thomas"
+      ],
+      "programs": [],
+      "when": "Thursday, December 24 to Friday, January 1",
+      "title": "No school at Mastery Thomas: Winter break",
+      "text": "From Mastery Thomas’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, Hudson Table, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Thomas’s week"
     },
     {
       "id": "campreg-macguffin-camps-2026-12-31",
@@ -4156,6 +6406,21 @@
       "expires": "2026-12-30",
       "when": "Tomorrow, Thursday, December 31",
       "text": "Last day for 20% off all camps with code EARLYBIRD27 (register before January 1)."
+    },
+    {
+      "id": "off-byers-2027-01-04",
+      "kind": "dayoff",
+      "date": "2027-01-04",
+      "sendOn": "2026-12-20",
+      "schools": [
+        "byers"
+      ],
+      "programs": [],
+      "when": "Monday, January 4",
+      "title": "No school at Russell Byers: Staff professional development",
+      "text": "From Russell Byers’s own calendar. One listed program has posted a camp: The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Russell Byers’s week"
     },
     {
       "id": "off-independence-charter-2027-01-04",
@@ -4416,7 +6681,9 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Friday, January 15",
       "title": "No school: Staff professional development",
@@ -4553,13 +6820,30 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Monday, January 18",
       "title": "No school: Dr. Martin Luther King Jr. Day",
       "text": "7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/dr-martin-luther-king-jr-day-2027-01-18/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-byers-2027-01-18",
+      "kind": "dayoff",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [
+        "byers"
+      ],
+      "programs": [],
+      "when": "Monday, January 18",
+      "title": "No school at Russell Byers: Dr. Martin Luther King Jr. Day",
+      "text": "From Russell Byers’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Russell Byers’s week"
     },
     {
       "id": "off-independence-charter-2027-01-18",
@@ -4575,6 +6859,21 @@
       "text": "From Independence Charter’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Independence Charter’s week"
+    },
+    {
+      "id": "off-mastery-thomas-2027-01-18",
+      "kind": "dayoff",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [
+        "mastery-thomas"
+      ],
+      "programs": [],
+      "when": "Monday, January 18",
+      "title": "No school at Mastery Thomas: Martin Luther King Jr. Day",
+      "text": "From Mastery Thomas’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Thomas’s week"
     },
     {
       "id": "campreg-ymca-day-camps-2027-01-20",
@@ -4624,6 +6923,21 @@
       "expires": "2027-01-19",
       "when": "Tomorrow, Wednesday, January 20",
       "text": "Summer 2027 day camp sign-ups open for non-members."
+    },
+    {
+      "id": "off-mastery-thomas-2027-01-22",
+      "kind": "dayoff",
+      "date": "2027-01-22",
+      "sendOn": "2027-01-10",
+      "schools": [
+        "mastery-thomas"
+      ],
+      "programs": [],
+      "when": "Friday, January 22",
+      "title": "No school at Mastery Thomas: Professional development day",
+      "text": "From Mastery Thomas’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Thomas’s week"
     },
     {
       "id": "campreg-awbury-adventures-2027-01-25",
@@ -4803,7 +7117,9 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Friday, January 29",
       "title": "No school: Report card conferences",
@@ -5070,13 +7386,30 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Friday, February 12",
       "title": "No school: Staff professional development",
       "text": "8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/staff-professional-development-2027-02-12/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-byers-2027-02-12",
+      "kind": "dayoff",
+      "date": "2027-02-12",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "byers"
+      ],
+      "programs": [],
+      "when": "Friday, February 12",
+      "title": "No school at Russell Byers: Staff professional development",
+      "text": "From Russell Byers’s own calendar. 8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Russell Byers’s week"
     },
     {
       "id": "camp-arden-drama-school-2027-02-15",
@@ -5275,13 +7608,30 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Monday, February 15",
       "title": "No school: Presidents’ Day",
       "text": "11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
       "url": "https://phillyafterschool.org/days-off/presidents-day-2027-02-15/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-byers-2027-02-15",
+      "kind": "dayoff",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "byers"
+      ],
+      "programs": [],
+      "when": "Monday, February 15",
+      "title": "No school at Russell Byers: Presidents’ Day",
+      "text": "From Russell Byers’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Russell Byers’s week"
     },
     {
       "id": "off-independence-charter-2027-02-15",
@@ -5297,6 +7647,21 @@
       "text": "From Independence Charter’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
       "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Independence Charter’s week"
+    },
+    {
+      "id": "off-mastery-thomas-2027-02-15",
+      "kind": "dayoff",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "mastery-thomas"
+      ],
+      "programs": [],
+      "when": "Monday, February 15",
+      "title": "No school at Mastery Thomas: Presidents’ Day",
+      "text": "From Mastery Thomas’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Thomas’s week"
     },
     {
       "id": "reg-philadelphia-dance-academy-2027-02-15",
@@ -5333,6 +7698,21 @@
       "sendOn": "2027-02-15",
       "when": "Today, Monday, February 15",
       "text": "Last day to enroll in most classes for 2026–27 (tuition prorated)."
+    },
+    {
+      "id": "off-mastery-thomas-2027-02-26",
+      "kind": "dayoff",
+      "date": "2027-02-26",
+      "sendOn": "2027-02-14",
+      "schools": [
+        "mastery-thomas"
+      ],
+      "programs": [],
+      "when": "Friday, February 26",
+      "title": "No school at Mastery Thomas: Professional development day",
+      "text": "From Mastery Thomas’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Thomas’s week"
     },
     {
       "id": "reg-philadelphia-dance-academy-2027-03-01",
@@ -5582,13 +7962,45 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Wednesday, March 10",
       "title": "No school: Eid al-Fitr",
       "text": "10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/eid-al-fitr-2027-03-10/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-byers-2027-03-10",
+      "kind": "dayoff",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [
+        "byers"
+      ],
+      "programs": [],
+      "when": "Wednesday, March 10",
+      "title": "No school at Russell Byers: Eid al-Fitr",
+      "text": "From Russell Byers’s own calendar. 10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Russell Byers’s week"
+    },
+    {
+      "id": "off-mastery-thomas-2027-03-10",
+      "kind": "dayoff",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [
+        "mastery-thomas"
+      ],
+      "programs": [],
+      "when": "Wednesday, March 10",
+      "title": "No school at Mastery Thomas: Eid al-Fitr",
+      "text": "From Mastery Thomas’s own calendar. 10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Thomas’s week"
     },
     {
       "id": "reg-blue-chip-flag-south-philadelphia-2027-03-15",
@@ -5621,6 +8033,21 @@
       "sendOn": "2027-03-15",
       "when": "Today, Monday, March 15",
       "text": "Spring 2027 registration closes."
+    },
+    {
+      "id": "off-byers-2027-03-19",
+      "kind": "dayoff",
+      "date": "2027-03-19",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "byers"
+      ],
+      "programs": [],
+      "when": "Friday, March 19",
+      "title": "No school at Russell Byers: Student-led conferences",
+      "text": "From Russell Byers’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Russell Byers’s week"
     },
     {
       "id": "off-independence-charter-2027-03-19",
@@ -5834,13 +8261,30 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Monday, March 22 to Friday, March 26",
       "title": "No school: Spring recess and Good Friday",
       "text": "11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/spring-break-and-good-friday-2027-03-22/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-byers-2027-03-22",
+      "kind": "dayoff",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "byers"
+      ],
+      "programs": [],
+      "when": "Monday, March 22 to Monday, March 29",
+      "title": "No school at Russell Byers: Spring break",
+      "text": "From Russell Byers’s own calendar. 12 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Russell Byers’s week"
     },
     {
       "id": "off-independence-charter-2027-03-22",
@@ -5856,6 +8300,21 @@
       "text": "From Independence Charter’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Independence Charter’s week"
+    },
+    {
+      "id": "off-mastery-thomas-2027-03-22",
+      "kind": "dayoff",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "mastery-thomas"
+      ],
+      "programs": [],
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "No school at Mastery Thomas: Spring break",
+      "text": "From Mastery Thomas’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Thomas’s week"
     },
     {
       "id": "camp-butchers-sew-shop-2027-03-29",
@@ -5986,13 +8445,30 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Monday, March 29",
       "title": "No school: Staff professional development",
       "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/staff-professional-development-2027-03-29/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-byers-2027-04-09",
+      "kind": "dayoff",
+      "date": "2027-04-09",
+      "sendOn": "2027-03-28",
+      "schools": [
+        "byers"
+      ],
+      "programs": [],
+      "when": "Friday, April 9",
+      "title": "No school at Russell Byers: Staff professional development",
+      "text": "From Russell Byers’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Russell Byers’s week"
     },
     {
       "id": "off-independence-charter-2027-04-09",
@@ -6008,6 +8484,21 @@
       "text": "From Independence Charter’s own calendar. No listed program has posted a camp for it yet.",
       "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Independence Charter’s week"
+    },
+    {
+      "id": "off-mastery-thomas-2027-04-09",
+      "kind": "dayoff",
+      "date": "2027-04-09",
+      "sendOn": "2027-03-28",
+      "schools": [
+        "mastery-thomas"
+      ],
+      "programs": [],
+      "when": "Friday, April 9",
+      "title": "No school at Mastery Thomas: Professional development day",
+      "text": "From Mastery Thomas’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Thomas’s week"
     },
     {
       "id": "camp-butchers-sew-shop-2027-04-16",
@@ -6155,13 +8646,30 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Friday, April 16",
       "title": "No school: Report card conferences",
       "text": "8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/report-card-conferences-2027-04-16/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-byers-2027-05-14",
+      "kind": "dayoff",
+      "date": "2027-05-14",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "byers"
+      ],
+      "programs": [],
+      "when": "Friday, May 14",
+      "title": "No school at Russell Byers: Staff professional development",
+      "text": "From Russell Byers’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Russell Byers’s week"
     },
     {
       "id": "reg-philadelphia-dance-academy-2027-05-15",
@@ -6398,13 +8906,45 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Monday, May 17",
       "title": "No school: Eid al-Adha",
       "text": "10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/eid-al-adha-2027-05-17/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-byers-2027-05-17",
+      "kind": "dayoff",
+      "date": "2027-05-17",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "byers"
+      ],
+      "programs": [],
+      "when": "Monday, May 17",
+      "title": "No school at Russell Byers: Eid al-Adha",
+      "text": "From Russell Byers’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Russell Byers’s week"
+    },
+    {
+      "id": "off-mastery-thomas-2027-05-17",
+      "kind": "dayoff",
+      "date": "2027-05-17",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "mastery-thomas"
+      ],
+      "programs": [],
+      "when": "Monday, May 17",
+      "title": "No school at Mastery Thomas: Eid al-Adha",
+      "text": "From Mastery Thomas’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Thomas’s week"
     },
     {
       "id": "camp-awbury-arboretum-2027-05-18",
@@ -6586,13 +9126,30 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Tuesday, May 18",
       "title": "No school: Election Day",
       "text": "10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/election-day-2027-05-18/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-mastery-thomas-2027-05-18",
+      "kind": "dayoff",
+      "date": "2027-05-18",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "mastery-thomas"
+      ],
+      "programs": [],
+      "when": "Tuesday, May 18",
+      "title": "No school at Mastery Thomas: Primary Election Day",
+      "text": "From Mastery Thomas’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Thomas’s week"
     },
     {
       "id": "camp-elite-sports-factory-2027-05-31",
@@ -6621,13 +9178,30 @@
       ],
       "programs": [],
       "notSchools": [
-        "independence-charter"
+        "independence-charter",
+        "byers",
+        "mastery-thomas"
       ],
       "when": "Monday, May 31",
       "title": "No school: Memorial Day",
       "text": "One listed program has posted a camp: Elite Sports Factory.",
       "url": "https://phillyafterschool.org/days-off/memorial-day-2027-05-31/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-byers-2027-05-31",
+      "kind": "dayoff",
+      "date": "2027-05-31",
+      "sendOn": "2027-05-16",
+      "schools": [
+        "byers"
+      ],
+      "programs": [],
+      "when": "Monday, May 31",
+      "title": "No school at Russell Byers: Memorial Day",
+      "text": "From Russell Byers’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Russell Byers’s week"
     },
     {
       "id": "off-independence-charter-2027-05-31",
@@ -6643,6 +9217,21 @@
       "text": "From Independence Charter’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
       "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Independence Charter’s week"
+    },
+    {
+      "id": "off-mastery-thomas-2027-05-31",
+      "kind": "dayoff",
+      "date": "2027-05-31",
+      "sendOn": "2027-05-16",
+      "schools": [
+        "mastery-thomas"
+      ],
+      "programs": [],
+      "when": "Monday, May 31",
+      "title": "No school at Mastery Thomas: Memorial Day",
+      "text": "From Mastery Thomas’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Thomas’s week"
     }
   ]
 }

@@ -1,12 +1,12 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 204,
-    "pagesNeedingABrowser": 18,
-    "pagesNeedingAPerson": 9,
-    "links": 206,
-    "pickupLinks": 120,
-    "pickupOnAStoredList": 104,
+    "pages": 283,
+    "pagesNeedingABrowser": 42,
+    "pagesNeedingAPerson": 12,
+    "links": 273,
+    "pickupLinks": 127,
+    "pickupOnAStoredList": 111,
     "pickupFromAThirdPartyList": 0,
     "pickupOnItsOwnSource": 16,
     "pickupWithNothingBehindIt": 0,
@@ -1929,6 +1929,36 @@
       }
     },
     {
+      "program": "byers-after-school",
+      "school": "byers",
+      "relation": "onsite",
+      "checked": "2026-11-11"
+    },
+    {
+      "program": "cpa-robert-morris",
+      "school": "morris",
+      "relation": "onsite",
+      "checked": "2026-11-11"
+    },
+    {
+      "program": "evolve-dance",
+      "school": "byers",
+      "relation": "nearby",
+      "checked": "2026-11-11"
+    },
+    {
+      "program": "kids-on-12th",
+      "school": "byers",
+      "relation": "pickup",
+      "checked": "2026-11-11",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-01",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
       "program": "makom-community",
       "school": "childs",
       "relation": "pickup",
@@ -1953,6 +1983,425 @@
         "how": "fetch",
         "by": "provider"
       }
+    },
+    {
+      "program": "morris-clubs",
+      "school": "morris",
+      "relation": "onsite",
+      "checked": "2026-11-11"
+    },
+    {
+      "program": "philly-art-center-mt-airy",
+      "school": "henry",
+      "relation": "pickup",
+      "checked": "2026-11-11",
+      "basis": "list",
+      "list": {
+        "where": "Mt. Airy Pickup Schools",
+        "read": "2026-11-08",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "philly-art-center-mt-airy",
+      "school": "jenks",
+      "relation": "pickup",
+      "checked": "2026-11-11",
+      "basis": "list",
+      "list": {
+        "where": "Mt. Airy Pickup Schools",
+        "read": "2026-11-08",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "uykq-after-care",
+      "school": "cook-wissahickon",
+      "relation": "onsite",
+      "checked": "2026-11-11"
+    },
+    {
+      "program": "uykq-after-care",
+      "school": "henry",
+      "relation": "onsite",
+      "checked": "2026-11-11"
+    },
+    {
+      "program": "uykq-after-care",
+      "school": "houston",
+      "relation": "onsite",
+      "checked": "2026-11-11"
+    },
+    {
+      "program": "water-tower-rec",
+      "school": "jenks",
+      "relation": "nearby",
+      "checked": "2026-11-11"
+    },
+    {
+      "program": "zazz-dance",
+      "school": "byers",
+      "relation": "nearby",
+      "checked": "2026-11-11"
+    },
+    {
+      "program": "zhang-sah-mt-airy",
+      "school": "cook-wissahickon",
+      "relation": "pickup",
+      "checked": "2026-11-11",
+      "basis": "list",
+      "list": {
+        "where": "Mt. Airy, 6110 Wissahickon Ave",
+        "read": "2026-11-08",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zhang-sah-mt-airy",
+      "school": "henry",
+      "relation": "pickup",
+      "checked": "2026-11-11",
+      "basis": "list",
+      "list": {
+        "where": "Mt. Airy, 6110 Wissahickon Ave",
+        "read": "2026-11-08",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "zhang-sah-mt-airy",
+      "school": "jenks",
+      "relation": "pickup",
+      "checked": "2026-11-11",
+      "basis": "list",
+      "list": {
+        "where": "Mt. Airy, 6110 Wissahickon Ave",
+        "read": "2026-11-08",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "bgc-emlen",
+      "school": "emlen",
+      "relation": "onsite",
+      "checked": "2026-11-12"
+    },
+    {
+      "program": "emlen-clubs",
+      "school": "emlen",
+      "relation": "onsite",
+      "checked": "2026-11-12"
+    },
+    {
+      "program": "gathers-rec",
+      "school": "wright",
+      "relation": "nearby",
+      "checked": "2026-11-12"
+    },
+    {
+      "program": "happy-hollow-playground",
+      "school": "jb-kelly",
+      "relation": "nearby",
+      "checked": "2026-11-12"
+    },
+    {
+      "program": "iac-edmonds",
+      "school": "edmonds",
+      "relation": "onsite",
+      "checked": "2026-11-12"
+    },
+    {
+      "program": "legacy-champions-on-the-rise",
+      "school": "wright",
+      "relation": "onsite",
+      "checked": "2026-11-12"
+    },
+    {
+      "program": "mander-playground",
+      "school": "wright",
+      "relation": "nearby",
+      "checked": "2026-11-12"
+    },
+    {
+      "program": "mastermindz-thomas",
+      "school": "mastery-thomas",
+      "relation": "onsite",
+      "checked": "2026-11-12"
+    },
+    {
+      "program": "safehaven-thomas",
+      "school": "mastery-thomas",
+      "relation": "onsite",
+      "checked": "2026-11-12"
+    },
+    {
+      "program": "sbnp-wright",
+      "school": "wright",
+      "relation": "onsite",
+      "checked": "2026-11-12"
+    },
+    {
+      "program": "uykq-after-care",
+      "school": "jb-kelly",
+      "relation": "onsite",
+      "checked": "2026-11-12"
+    },
+    {
+      "program": "ymwic-edmonds",
+      "school": "edmonds",
+      "relation": "onsite",
+      "checked": "2026-11-12"
+    },
+    {
+      "program": "zhang-sah-school-based",
+      "school": "jb-kelly",
+      "relation": "onsite",
+      "checked": "2026-11-12"
+    },
+    {
+      "program": "asas-juniata-park",
+      "school": "juniata-park",
+      "relation": "onsite",
+      "checked": "2026-11-13"
+    },
+    {
+      "program": "bgc-greenberg",
+      "school": "greenberg",
+      "relation": "onsite",
+      "checked": "2026-11-13"
+    },
+    {
+      "program": "ela-willard",
+      "school": "willard",
+      "relation": "onsite",
+      "checked": "2026-11-13"
+    },
+    {
+      "program": "parent-infant-center",
+      "school": "lea",
+      "relation": "pickup",
+      "checked": "2026-11-13",
+      "basis": "list",
+      "list": {
+        "read": "2026-11-13",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "pennypack-environmental-center",
+      "school": "greenberg",
+      "relation": "nearby",
+      "checked": "2026-11-13"
+    },
+    {
+      "program": "philly-kidz-greenberg",
+      "school": "greenberg",
+      "relation": "onsite",
+      "checked": "2026-11-13"
+    },
+    {
+      "program": "rebel-tumblers-rhoads",
+      "school": "rhoads",
+      "relation": "onsite",
+      "checked": "2026-11-13"
+    },
+    {
+      "program": "safe-haven-rhoads",
+      "school": "rhoads",
+      "relation": "onsite",
+      "checked": "2026-11-13"
+    },
+    {
+      "program": "uacs-lea",
+      "school": "lea",
+      "relation": "onsite",
+      "checked": "2026-11-13"
+    },
+    {
+      "program": "wes-willard",
+      "school": "willard",
+      "relation": "onsite",
+      "checked": "2026-11-13"
+    },
+    {
+      "program": "ymca-juniata-park",
+      "school": "juniata-park",
+      "relation": "onsite",
+      "checked": "2026-11-13"
+    },
+    {
+      "program": "ace-locke",
+      "school": "locke",
+      "relation": "onsite",
+      "checked": "2026-11-14"
+    },
+    {
+      "program": "bgc-mifflin",
+      "school": "mifflin",
+      "relation": "onsite",
+      "checked": "2026-11-14"
+    },
+    {
+      "program": "bgc-stephen-girard",
+      "school": "stephen-girard",
+      "relation": "onsite",
+      "checked": "2026-11-14"
+    },
+    {
+      "program": "cohocksink-rec",
+      "school": "richmond",
+      "relation": "nearby",
+      "checked": "2026-11-14"
+    },
+    {
+      "program": "cpa-south-bgc",
+      "school": "stephen-girard",
+      "relation": "nearby",
+      "checked": "2026-11-14"
+    },
+    {
+      "program": "disilvestro-playground",
+      "school": "stephen-girard",
+      "relation": "nearby",
+      "checked": "2026-11-14"
+    },
+    {
+      "program": "ela-richmond",
+      "school": "richmond",
+      "relation": "onsite",
+      "checked": "2026-11-14"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "fell",
+      "relation": "onsite",
+      "checked": "2026-11-14"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "locke",
+      "relation": "onsite",
+      "checked": "2026-11-14"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "mifflin",
+      "relation": "onsite",
+      "checked": "2026-11-14"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "richmond",
+      "relation": "onsite",
+      "checked": "2026-11-14"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "stephen-girard",
+      "relation": "onsite",
+      "checked": "2026-11-14"
+    },
+    {
+      "program": "gpca-fell",
+      "school": "fell",
+      "relation": "onsite",
+      "checked": "2026-11-14"
+    },
+    {
+      "program": "lee-cultural-center",
+      "school": "locke",
+      "relation": "nearby",
+      "checked": "2026-11-14"
+    },
+    {
+      "program": "al-bustan-moffet",
+      "school": "moffet",
+      "relation": "onsite",
+      "checked": "2026-11-15"
+    },
+    {
+      "program": "bgc-bayard-taylor",
+      "school": "bayard-taylor",
+      "relation": "onsite",
+      "checked": "2026-11-15"
+    },
+    {
+      "program": "catholic-charities-cayuga",
+      "school": "cayuga",
+      "relation": "onsite",
+      "checked": "2026-11-15"
+    },
+    {
+      "program": "dendy-rec",
+      "school": "dunbar",
+      "relation": "nearby",
+      "checked": "2026-11-15"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "anne-frank",
+      "relation": "onsite",
+      "checked": "2026-11-15"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "bayard-taylor",
+      "relation": "onsite",
+      "checked": "2026-11-15"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "cayuga",
+      "relation": "onsite",
+      "checked": "2026-11-15"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "dunbar",
+      "relation": "onsite",
+      "checked": "2026-11-15"
+    },
+    {
+      "program": "girls-on-the-run",
+      "school": "moffet",
+      "relation": "onsite",
+      "checked": "2026-11-15"
+    },
+    {
+      "program": "hunting-park-rec",
+      "school": "cayuga",
+      "relation": "nearby",
+      "checked": "2026-11-15"
+    },
+    {
+      "program": "philly-kidz-anne-frank",
+      "school": "anne-frank",
+      "relation": "onsite",
+      "checked": "2026-11-15"
+    },
+    {
+      "program": "towey-playground",
+      "school": "moffet",
+      "relation": "nearby",
+      "checked": "2026-11-15"
+    },
+    {
+      "program": "xiente-moffet",
+      "school": "moffet",
+      "relation": "onsite",
+      "checked": "2026-11-15"
+    },
+    {
+      "program": "ymca-dunbar",
+      "school": "dunbar",
+      "relation": "onsite",
+      "checked": "2026-11-15"
     }
   ],
   "pages": [
@@ -1976,7 +2425,17 @@
         "hawthorne-cultural-center",
         "starr-garden-rec",
         "palumbo-rec",
-        "east-passyunk-rec"
+        "east-passyunk-rec",
+        "water-tower-rec",
+        "mander-playground",
+        "gathers-rec",
+        "happy-hollow-playground",
+        "pennypack-environmental-center",
+        "lee-cultural-center",
+        "cohocksink-rec",
+        "dendy-rec",
+        "hunting-park-rec",
+        "towey-playground"
       ],
       "lists": []
     },
@@ -2047,6 +2506,18 @@
         "francisville-rec",
         "bache-martin-clubs",
         "philly-art-center-fairmount"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://bgcphila.org/club-locations/",
+      "how": "fetch",
+      "programs": [
+        "bgc-emlen",
+        "bgc-greenberg",
+        "bgc-stephen-girard",
+        "bgc-mifflin",
+        "bgc-bayard-taylor"
       ],
       "lists": []
     },
@@ -2141,65 +2612,13 @@
       ]
     },
     {
-      "url": "https://emstanton.philasd.org/",
-      "how": "fetch",
-      "programs": [
-        "sunrise-stanton",
-        "stanton-clubs"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://mariananderson.philasd.org/",
-      "how": "fetch",
-      "programs": [
-        "girls-on-the-run",
-        "marian-anderson-clubs"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://schools.procareconnect.com/form/7417c5d3-b696-426e-913c-b9f0144431bb",
-      "how": "fetch",
-      "programs": [
-        "zhang-sah",
-        "zhang-sah-mt-airy"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://web.vwtigers.com/before-and-aftercare-at-vw/",
-      "how": "fetch",
-      "programs": [
-        "vare-washington-edey",
-        "vare-washington-clubs"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://www.phila.gov/programs/extended-day-extended-year/",
-      "how": "fetch",
-      "programs": [
-        "vare-washington-edey",
-        "sunrise-southwark"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://www.sunriseofphila.org/program-sites",
-      "how": "fetch",
-      "programs": [
-        "sunrise-mccall",
-        "sunrise-stanton"
-      ],
-      "lists": []
-    },
-    {
       "url": "https://zhangsah.org/after-school-program/",
-      "how": "fetch",
+      "how": "person",
+      "why": "Its robots.txt closes the site to ClaudeBot and other AI agents, and a browser got HTTP 403 on 2026-11-13. A person needs to read the after-school page and its list of school-based programs.",
       "programs": [
         "zhang-sah",
-        "zhang-sah-mt-airy"
+        "zhang-sah-mt-airy",
+        "zhang-sah-school-based"
       ],
       "lists": [
         {
@@ -2217,15 +2636,230 @@
           "read": "2026-11-08",
           "how": "fetch",
           "by": "provider"
+        },
+        {
+          "program": "zhang-sah-school-based",
+          "where": "Zhang Sah school-based programs",
+          "text": "Francis Willard, Samuel Pennypacker, Robert Pollock, John B. Kelly, Elizabeth Waring, Joseph Catharine",
+          "read": "2026-11-12",
+          "how": "browser",
+          "by": "provider"
         }
       ]
     },
     {
-      "url": "https://zhangsah.org/camps/",
+      "url": "https://annefrank.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "girls-on-the-run",
+        "philly-kidz-anne-frank"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://emlen.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "bgc-emlen",
+        "emlen-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://emstanton.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "sunrise-stanton",
+        "stanton-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://fell.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "girls-on-the-run",
+        "gpca-fell"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://gpy.tfaforms.net/134",
+      "how": "fetch",
+      "programs": [
+        "ymca-juniata-park",
+        "ymca-dunbar"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://kelly.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "uykq-after-care",
+        "zhang-sah-school-based"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://mariananderson.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "girls-on-the-run",
+        "marian-anderson-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://masterycharter.org/elementary-schools/thomas",
+      "how": "fetch",
+      "programs": [
+        "mastermindz-thomas",
+        "safehaven-thomas"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://mifflin.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "girls-on-the-run",
+        "bgc-mifflin"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://moffet.philasd.org/extra-curriculars/",
+      "how": "fetch",
+      "programs": [
+        "girls-on-the-run",
+        "al-bustan-moffet"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://schools.procareconnect.com/form/7417c5d3-b696-426e-913c-b9f0144431bb",
       "how": "fetch",
       "programs": [
         "zhang-sah",
         "zhang-sah-mt-airy"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://taylor.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "girls-on-the-run",
+        "bgc-bayard-taylor"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://web.vwtigers.com/before-and-aftercare-at-vw/",
+      "how": "fetch",
+      "programs": [
+        "vare-washington-edey",
+        "vare-washington-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.caringpeoplealliance.org/contact-us/enroll-today",
+      "how": "fetch",
+      "programs": [
+        "cpa-robert-morris",
+        "cpa-south-bgc"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.earlylifeacademy.org/school-age-program",
+      "how": "fetch",
+      "programs": [
+        "ela-willard",
+        "ela-richmond"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.earlylifeacademy.org/schools-we-serve",
+      "how": "fetch",
+      "programs": [
+        "ela-willard",
+        "ela-richmond"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.gpca-phila.org/prek-8",
+      "how": "fetch",
+      "programs": [
+        "vare-washington-edey",
+        "gpca-fell"
+      ],
+      "lists": [
+        {
+          "program": "gpca-fell",
+          "where": "Out of School Time, K–8",
+          "text": "Childs Elementary School, D. Newlin Fell Elementary School, George Sharswood Elementary School, Edward Steel Elementary School, Vare Washington School",
+          "read": "2026-11-14",
+          "how": "browser",
+          "by": "provider"
+        }
+      ]
+    },
+    {
+      "url": "https://www.phila.gov/programs/extended-day-extended-year/",
+      "how": "fetch",
+      "programs": [
+        "vare-washington-edey",
+        "sunrise-southwark"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phillykidzinitiative.com/",
+      "how": "fetch",
+      "programs": [
+        "philly-kidz-greenberg",
+        "philly-kidz-anne-frank"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phillykidzinitiative.com/registration/edey-ost-registration",
+      "how": "fetch",
+      "programs": [
+        "philly-kidz-greenberg",
+        "philly-kidz-anne-frank"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.sunriseofphila.org/program-sites",
+      "how": "fetch",
+      "programs": [
+        "sunrise-mccall",
+        "sunrise-stanton"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://zhangsah.org/camps/",
+      "how": "person",
+      "why": "Its robots.txt closes the site to ClaudeBot and other AI agents, and a browser got HTTP 403 on 2026-11-13. A person needs to read the after-school page and its list of school-based programs.",
+      "programs": [
+        "zhang-sah",
+        "zhang-sah-mt-airy"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://afterschoolallstars.org/",
+      "how": "fetch",
+      "programs": [
+        "asas-juniata-park"
       ],
       "lists": []
     },
@@ -2393,6 +3027,22 @@
       "lists": []
     },
     {
+      "url": "https://ccphila.org/",
+      "how": "fetch",
+      "programs": [
+        "catholic-charities-cayuga"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/65abe8d39ea0112409954ada/6a71daf93fceabbecf9eb050_UYKQ%20Before%20%26%20After-Care%20Parent%20Handbook_Updated%20Aug%202026.docx%20(1).pdf",
+      "how": "fetch",
+      "programs": [
+        "uykq-after-care"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://childs.philasd.org/",
       "how": "fetch",
       "programs": [
@@ -2425,10 +3075,26 @@
       "lists": []
     },
     {
+      "url": "https://cookwissahickon.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "uykq-after-care"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://coppin.philasd.org/",
       "how": "fetch",
       "programs": [
         "coppin-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://docs.google.com/document/d/1iIV6Jx7TeBi0Nmg-DJxO-hF4vt8gQVRtxMrYIkw7cG0/edit",
+      "how": "fetch",
+      "programs": [
+        "byers-after-school"
       ],
       "lists": []
     },
@@ -2569,10 +3235,26 @@
       "lists": []
     },
     {
+      "url": "https://girard.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "bgc-stephen-girard"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://gpy.my.site.com/s/login/",
       "how": "fetch",
       "programs": [
         "christian-street-ymca"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://henry.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "uykq-after-care"
       ],
       "lists": []
     },
@@ -2617,6 +3299,30 @@
       "lists": []
     },
     {
+      "url": "https://joinsbnp.org/",
+      "how": "fetch",
+      "programs": [
+        "sbnp-wright"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://joinsbnp.org/our-work",
+      "how": "fetch",
+      "programs": [
+        "sbnp-wright"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://juniatapark.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "ymca-juniata-park"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://ko12.org/after-school-pick-up-philadelphia",
       "how": "fetch",
       "programs": [
@@ -2645,6 +3351,30 @@
       "how": "fetch",
       "programs": [
         "kids-on-12th"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://lea.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "uacs-lea"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://legacyyte.jotform.com/form/wright-ost",
+      "how": "fetch",
+      "programs": [
+        "legacy-champions-on-the-rise"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://legacyyte.org/community-programs/after-school-program/",
+      "how": "fetch",
+      "programs": [
+        "legacy-champions-on-the-rise"
       ],
       "lists": []
     },
@@ -2803,6 +3533,14 @@
       "lists": []
     },
     {
+      "url": "https://morris.philasd.org/summer-programs/",
+      "how": "fetch",
+      "programs": [
+        "morris-clubs"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://movementgyms.com/callowhill",
       "how": "fetch",
       "programs": [
@@ -2876,8 +3614,8 @@
         {
           "program": "parent-infant-center",
           "text": "Samuel Powel School (van, limited space); Lea School and Penn Alexander School (teachers walk children over)",
-          "read": "2026-11-07",
-          "how": "fetch",
+          "read": "2026-11-13",
+          "how": "browser",
           "by": "provider"
         }
       ]
@@ -2959,6 +3697,14 @@
       "how": "fetch",
       "programs": [
         "philly-rock-gym-day-camps"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://philaymca.org/",
+      "how": "fetch",
+      "programs": [
+        "ymca-juniata-park"
       ],
       "lists": []
     },
@@ -3057,7 +3803,8 @@
     },
     {
       "url": "https://phillyfamily.com/after-school-programs/",
-      "how": "fetch",
+      "how": "person",
+      "why": "On 2026-11-15 the after-school roundup answered a browser with HTTP 429 (too many requests), so it has to be read by a person.",
       "programs": [
         "queen-and-rook"
       ],
@@ -3131,10 +3878,42 @@
       "lists": []
     },
     {
+      "url": "https://rebelartsmovement.com/",
+      "how": "fetch",
+      "programs": [
+        "rebel-tumblers-rhoads"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://reg137.imperisoft.com/Fleisher/Search/Registration.aspx",
       "how": "fetch",
       "programs": [
         "fleisher-art-memorial"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://rhoads.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "safe-haven-rhoads"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://schools.procareconnect.com/form/a603e139-39fe-4887-a5a2-8151f4b817ea",
+      "how": "fetch",
+      "programs": [
+        "ela-willard"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://schools.procareconnect.com/form/f9ac68d2-17b9-44dd-9f01-2c24dc4bd77e",
+      "how": "fetch",
+      "programs": [
+        "ela-richmond"
       ],
       "lists": []
     },
@@ -3203,6 +3982,22 @@
       "lists": []
     },
     {
+      "url": "https://tocfwh.org/",
+      "how": "fetch",
+      "programs": [
+        "safe-haven-rhoads"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://upenn.co1.qualtrics.com/jfe/form/SV_1ZGteK38f4E88RM",
+      "how": "fetch",
+      "programs": [
+        "uacs-lea"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://vare.philasd.org/",
       "how": "fetch",
       "programs": [
@@ -3215,6 +4010,22 @@
       "how": "fetch",
       "programs": [
         "walnut-street-theatre-school"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://weshealth.org/",
+      "how": "fetch",
+      "programs": [
+        "wes-willard"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.albustanseeds.org/",
+      "how": "fetch",
+      "programs": [
+        "al-bustan-moffet"
       ],
       "lists": []
     },
@@ -3261,6 +4072,38 @@
       "lists": []
     },
     {
+      "url": "https://www.byerschool.org/pghandbook",
+      "how": "fetch",
+      "programs": [
+        "byers-after-school"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.caringpeoplealliance.org/",
+      "how": "fetch",
+      "programs": [
+        "cpa-robert-morris"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.caringpeoplealliance.org/our-boys-girls-clubs",
+      "how": "fetch",
+      "programs": [
+        "cpa-south-bgc"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.cchss.org/",
+      "how": "fetch",
+      "programs": [
+        "ace-locke"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.cocoacademyphl.com/afterschool-bellavista",
       "how": "person",
       "why": "A plain fetch got HTTP 429 on 2026-10-06 and the browser extension is not allowed on the site. Josh pastes the page text.",
@@ -3300,6 +4143,46 @@
       "how": "fetch",
       "programs": [
         "coco-academy"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.cognitoforms.com/BoysGirlsClubsOfPhiladelphia/BoysGirlsClubsOfPhiladelphiaEDEYRegistrationFormGreenberg",
+      "how": "fetch",
+      "programs": [
+        "bgc-greenberg"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.cognitoforms.com/CatholicSocialServices5/CayugaElementaryCayugaOSTSY20262027",
+      "how": "fetch",
+      "programs": [
+        "catholic-charities-cayuga"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.cognitoforms.com/CommunityCouncilHealthSystems/ACEOSTSY20262027Application",
+      "how": "fetch",
+      "programs": [
+        "ace-locke"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.cognitoforms.com/IndochineseAmericanCouncil/IACEdmondsCommunitySchool20262027Afterschool",
+      "how": "fetch",
+      "programs": [
+        "iac-edmonds"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.cognitoforms.com/ToOurChildrensFutureWithHealthInc/TOCFWH20262027APPLICATION",
+      "how": "fetch",
+      "programs": [
+        "safe-haven-rhoads"
       ],
       "lists": []
     },
@@ -3385,10 +4268,10 @@
       "lists": []
     },
     {
-      "url": "https://www.gpca-phila.org/prek-8",
+      "url": "https://www.himama.com/online_registration/apply/uykq",
       "how": "fetch",
       "programs": [
-        "vare-washington-edey"
+        "uykq-after-care"
       ],
       "lists": []
     },
@@ -3432,6 +4315,14 @@
       "why": "Yous’s Sawyer sign-up page answered HTTP 403 to a plain fetch on 2026-11-10, and Sawyer’s booking pages have refused automated reading before (see Dandelion and Sawubona).",
       "programs": [
         "yous-fitfulness"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.iacphila.org",
+      "how": "fetch",
+      "programs": [
+        "iac-edmonds"
       ],
       "lists": []
     },
@@ -3632,6 +4523,213 @@
       "lists": []
     },
     {
+      "url": "https://www.phila.gov/ost/program-locator/?address=127+W+Oxford+St&resource=ost_170",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "xiente-moffet"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=1800+Snyder+Ave&resource=ost_24",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "cpa-south-bgc"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=1930+E+Elkhart+St&resource=ost_268",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "wes-willard"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=1930+E+Elkhart+St&resource=ost_90",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "ela-willard"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=2000+Bowler+St&resource=ost_220",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "philly-kidz-anne-frank"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=2000+Bowler+St&resource=ost_221",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "philly-kidz-anne-frank"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=2201+N+28th+St&resource=ost_154",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "legacy-champions-on-the-rise"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=2944+Belgrade+St&resource=ost_86",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "ela-richmond"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=4344+N+5th+St&resource=ost_31",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "catholic-charities-cayuga"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=4550+Haverford+Ave&resource=ost_64",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "ace-locke"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=4550+Haverford+Ave&resource=ost_65",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "ace-locke"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=4700+Locust+St&resource=ost_265",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "uacs-lea"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=4901+Parrish+St&resource=ost_261",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "safe-haven-rhoads"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=4901+Parrish+St&resource=ost_262",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "safe-haven-rhoads"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=4901+Parrish+St&resource=ost_5",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "rebel-tumblers-rhoads"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=600+Sharon+Ln&resource=ost_13",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "bgc-greenberg"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=600+Sharon+Ln&resource=ost_223",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "philly-kidz-greenberg"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=801+E+Hunting+Park+Ave&resource=ost_0",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "asas-juniata-park"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=801+E+Hunting+Park+Ave&resource=ost_127",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "ymca-juniata-park"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=801+E+Hunting+Park+Ave&resource=ost_128",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "ymca-juniata-park"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=8025+Thouron+Ave&resource=ost_141",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "iac-edmonds"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=8025+Thouron+Ave&resource=ost_281",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "ymwic-edmonds"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?keyword=SHOOT,,BASKETBALLS",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "sbnp-wright"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.phila.gov/ost/program-locator/?resource=ost_102",
       "how": "browser",
       "why": "A JavaScript app: a plain fetch returns no listings.",
@@ -3655,6 +4753,15 @@
       "why": "A JavaScript app: a plain fetch returns no listings.",
       "programs": [
         "vare-washington-edey"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?resource=ost_22",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "cpa-robert-morris"
       ],
       "lists": []
     },
@@ -3722,6 +4829,14 @@
       "how": "fetch",
       "programs": [
         "christian-street-ymca"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+      "how": "fetch",
+      "programs": [
+        "ymca-dunbar"
       ],
       "lists": []
     },
@@ -3912,6 +5027,14 @@
       "lists": []
     },
     {
+      "url": "https://www.urbanyouthkq.com/after-school",
+      "how": "fetch",
+      "programs": [
+        "uykq-after-care"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.wissskating.com/index.php/membership/about-mywsconnect-com/",
       "how": "fetch",
       "programs": [
@@ -3924,6 +5047,38 @@
       "how": "fetch",
       "programs": [
         "wissahickon-skating-club"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.xiente.org/",
+      "how": "fetch",
+      "programs": [
+        "xiente-moffet"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://xiente.jotform.com/260824637337058",
+      "how": "fetch",
+      "programs": [
+        "xiente-moffet"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://ymwicfoundation.org/",
+      "how": "fetch",
+      "programs": [
+        "ymwic-edmonds"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://ymwicfoundation.org/philadelphia-scholar-application/",
+      "how": "fetch",
+      "programs": [
+        "ymwic-edmonds"
       ],
       "lists": []
     },
@@ -4272,7 +5427,7 @@
         "schools.*.address"
       ],
       "says": "Old Pine Community Center and The Neighborhub are the same building after a rebrand, at 401 Lombard St; Fall II starts November 2, 2026, registration is open, and families can join whenever there is space, with the fee pro-rated.",
-      "daysAgo": 26,
+      "daysAgo": 27,
       "stale": false
     },
     {
@@ -4287,7 +5442,7 @@
         "daysNote"
       ],
       "says": "After-school care is $250 a month for full time, 4 or more days a week, or $175 a month for part time, 3 days a week, with a snack included.",
-      "daysAgo": 10,
+      "daysAgo": 11,
       "stale": false
     },
     {
@@ -4308,7 +5463,7 @@
         "schools.meredith"
       ],
       "says": "Homework Club is Everland’s Monday aftercare, run with Prep Academy Tutors, for 2nd to 4th graders at Meredith only: staff pick up from Meredith and walk the group to Everland, children do homework in small groups with certified teachers and then have organized downtime, parents pick up from Everland between 5:45 and 6:00 pm, 1:1 tutoring during the club is $65 per 40-minute session, and the 2027 semester is 17 Mondays from January 4 to June 7, ending with a showcase.",
-      "daysAgo": 5,
+      "daysAgo": 6,
       "stale": false
     },
     {
@@ -4323,7 +5478,7 @@
         "rate"
       ],
       "says": "The base cost of Homework Club for the 2027 semester is $1,190, which works out to $70 per 3-hour session over its 17 Mondays.",
-      "daysAgo": 5,
+      "daysAgo": 6,
       "stale": false
     },
     {
@@ -4345,7 +5500,7 @@
         "schools.childs"
       ],
       "says": "Makom is aftercare and a day camp, at 2401 Washington Ave, Unit C1. Aftercare runs 4 to 6 pm, five days a week, with days that differ by age group; K–5 starts at $280 a month for Fridays only and grades 6 and 7 at $746 a month for 3 days, with tuition assistance. Day camps are for ages 4 and up. It does not pick up at Nebinger or Coppin (it needs at least four children from a school to pick up there); at Independence Charter it picks up for early dismissal on Wednesdays, and at Childs it has a special early Friday pickup for pre-K children. It also picks up at The Philadelphia School, and runs summer camp.",
-      "daysAgo": 3,
+      "daysAgo": 4,
       "stale": false
     },
     {
@@ -4362,7 +5517,7 @@
         "note"
       ],
       "says": "Enrollment is open. Dandelion After School runs 3 to 6 pm and costs $165 a month for each weekday enrolled, and tuition includes certain day-off camps. It is a self-directed space with cooking, group games, park trips, arts and crafts, messy science and building projects, and each child decides how to spend their afternoon.",
-      "daysAgo": 2,
+      "daysAgo": 3,
       "stale": false
     }
   ],
