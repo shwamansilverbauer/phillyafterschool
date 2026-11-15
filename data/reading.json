@@ -160,5 +160,11 @@
     "how": "person",
     "why": "On 2026-11-14 the site answered a browser with a 403, so it has to be read by a person.",
     "seen": "2026-11-14"
+  },
+  {
+    "match": "phillyfamily.com/after-school-programs",
+    "how": "person",
+    "why": "On 2026-11-15 the after-school roundup answered a browser with HTTP 429 (too many requests), so it has to be read by a person.",
+    "seen": "2026-11-15"
   }
 ]
