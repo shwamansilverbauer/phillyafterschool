@@ -11168,7 +11168,7 @@
     "website": "https://phillycircus.com/afterschool/",
     "register": {
       "how": "online",
-      "url": "https://app.iclasspro.com/portal/phillycircus/classes",
+      "url": "https://portal.iclasspro.com/phillycircus/classes",
       "note": "The 2026–27 year runs August 24 to June 9. Slots are first come, first served.",
       "nextTerm": "Enrollment is open through the year while there are slots.",
       "label": "Register"
@@ -11497,7 +11497,7 @@
     "hours": "Camps run 9 am to 3 pm.",
     "daysOff": {
       "summary": "Climbing camps for ages 6–13, 9 am to 3 pm, $125 a day: a School Day Off camp on most single-day school holidays, a Winter Break camp on December 23 and 28–31, and a Spring Break camp March 22–26 ($600 for the week). Climbing, teamwork, games and challenges. Its page doesn’t print the year on the break dates, which match this school year’s breaks; its sign-up portal has the exact sessions.",
-      "url": "https://movementgyms.com/callowhill/climbing/youth-programs/camps/",
+      "url": "https://movementgyms.com/callowhill/climbing/youth-programs/",
       "dates": [
         "2026-12-23",
         "2026-12-28",
@@ -11513,7 +11513,7 @@
       "sources": [
         {
           "label": "Movement Callowhill youth camps",
-          "url": "https://movementgyms.com/callowhill/climbing/youth-programs/camps/"
+          "url": "https://movementgyms.com/callowhill/climbing/youth-programs/"
         }
       ],
       "hours": "9 am to 3 pm",
@@ -11525,7 +11525,7 @@
     "price": "paid",
     "phone": "215-444-7625",
     "email": "",
-    "website": "https://movementgyms.com/callowhill/climbing/youth-programs/camps/",
+    "website": "https://movementgyms.com/callowhill/climbing/youth-programs/",
     "register": {
       "how": "online",
       "url": "https://portal.movementgyms.com/callowhill/programs/winter-break-camp",
@@ -11536,7 +11536,7 @@
     "sources": [
       {
         "label": "Movement Callowhill youth camps",
-        "url": "https://movementgyms.com/callowhill/climbing/youth-programs/camps/"
+        "url": "https://movementgyms.com/callowhill/climbing/youth-programs/"
       },
       {
         "label": "Movement Callowhill",
@@ -12180,7 +12180,7 @@
     "price": "paid",
     "phone": "215-765-2787",
     "email": "info@phillyartcenter.com",
-    "website": "https://phillyartcenter.com/afterschool/program-information/locations/fairmount",
+    "website": "https://phillyartcenter.com/locations/fairmount/",
     "register": {
       "how": "online",
       "url": "https://phillyartcenter.captyn.com/find?department=clu8qqzk2009293r866a7j7wg&filter=4&program=clv479d4y02clfsymtfne5rg3&program=clwtkcaoi00kmsudp98n0ecv5&day=Monday&day=Tuesday&day=Thursday&day=Friday&day=Wednesday&location=clu8gpdpx0aagxkl2fbdh6u7v&tag=clv494qhk032olgi2d9i70vw6&tag=clv494xs6032plgi2z23yr0a8",
@@ -13793,7 +13793,7 @@
     "price": "free",
     "phone": "215-608-5823",
     "email": "",
-    "website": "https://philaymca.org/",
+    "website": "https://www.philaymca.org/",
     "register": {
       "how": "online",
       "url": "https://gpy.tfaforms.net/134",
