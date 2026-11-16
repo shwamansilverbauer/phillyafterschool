@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-11-15",
+  "generated": "2026-11-16",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -2019,55 +2019,6 @@
       "text": "You asked to be told. 4 programs are listed for Wright so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/wright/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
-    },
-    {
-      "id": "reg-the-philadelphia-school-2026-11-15",
-      "schools": [],
-      "programs": [
-        "the-philadelphia-school"
-      ],
-      "part": "off",
-      "title": "Camp TPS at The Philadelphia School",
-      "url": "https://phillyafterschool.org/programs/the-philadelphia-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "register",
-      "date": "2026-11-15",
-      "sendOn": "2026-11-08",
-      "when": "Sunday, November 15",
-      "text": "Camp TPS: last day to register online for Winter Break Camp (closes at midnight; later enrollments pay in full and may incur a $50 late fee)."
-    },
-    {
-      "id": "reg-the-philadelphia-school-2026-11-15-day",
-      "schools": [],
-      "programs": [
-        "the-philadelphia-school"
-      ],
-      "part": "off",
-      "title": "Camp TPS at The Philadelphia School",
-      "url": "https://phillyafterschool.org/programs/the-philadelphia-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "today",
-      "date": "2026-11-15",
-      "sendOn": "2026-11-15",
-      "when": "Today, Sunday, November 15",
-      "text": "Camp TPS: last day to register online for Winter Break Camp (closes at midnight; later enrollments pay in full and may incur a $50 late fee)."
-    },
-    {
-      "id": "reg-the-philadelphia-school-2026-11-15-eve",
-      "schools": [],
-      "programs": [
-        "the-philadelphia-school"
-      ],
-      "part": "off",
-      "title": "Camp TPS at The Philadelphia School",
-      "url": "https://phillyafterschool.org/programs/the-philadelphia-school/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "soon",
-      "date": "2026-11-15",
-      "sendOn": "2026-11-14",
-      "expires": "2026-11-14",
-      "when": "Tomorrow, Sunday, November 15",
-      "text": "Camp TPS: last day to register online for Winter Break Camp (closes at midnight; later enrollments pay in full and may incur a $50 late fee)."
     },
     {
       "id": "camp-butchers-sew-shop-2026-11-16",
