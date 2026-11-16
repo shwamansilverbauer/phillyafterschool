@@ -2956,7 +2956,7 @@
       "note": "Applications go through Brightwheel (the “After School 26–27 application” link on the page), first come, first served. Current PIC families get preference through early March; then anyone can enroll.",
       "nextTerm": ""
     },
-    "note": "Listed for Lea, Penn Alexander and Powel. Penn Alexander and Powel don’t have pages here yet. Teachers walk children over from Lea and Penn Alexander; the Powel van has very limited space and isn’t guaranteed.",
+    "note": "Listed for Lea, Penn Alexander and Powel. Powel doesn’t have a page here yet. Teachers walk children over from Lea and Penn Alexander; the Powel van has very limited space and isn’t guaranteed.",
     "sources": [
       {
         "label": "PIC After School Center",
@@ -2975,13 +2975,24 @@
           }
         ],
         "checked": "2026-11-13"
+      },
+      "penn-alexander": {
+        "relation": "pickup",
+        "note": "PIC’s own page says its teachers meet children at Penn Alexander and walk them over. It takes kindergarten to 4th grade.",
+        "sources": [
+          {
+            "label": "PIC After School Center",
+            "url": "https://parentinfantcenter.org/programs/after-school-center"
+          }
+        ],
+        "checked": "2026-11-16"
       }
     },
     "pickupLists": [
       {
         "text": "Samuel Powel School (van, limited space); Lea School and Penn Alexander School (teachers walk children over)",
         "url": "https://parentinfantcenter.org/programs/after-school-center",
-        "read": "2026-11-13",
+        "read": "2026-11-16",
         "how": "browser"
       }
     ]
@@ -13282,6 +13293,18 @@
         "distance": "about half a mile west, on 33rd St",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-12"
+      },
+      "blaine": {
+        "relation": "nearby",
+        "distance": "about a third of a mile northwest, on 33rd St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-16"
+      },
+      "gideon": {
+        "relation": "nearby",
+        "distance": "about half a mile northwest, on 33rd St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-16"
       }
     }
   },
@@ -13336,6 +13359,18 @@
         "distance": "about a quarter mile southeast, on Diamond St",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-12"
+      },
+      "gideon": {
+        "relation": "nearby",
+        "distance": "about a third of a mile northeast, on Diamond St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-16"
+      },
+      "blaine": {
+        "relation": "nearby",
+        "distance": "about half a mile east, on Diamond St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-16"
       }
     }
   },
@@ -15218,5 +15253,835 @@
         "checked": "2026-11-15"
       }
     }
+  },
+  {
+    "id": "ymca-kelley",
+    "name": "YMCA Out of School Time at Kelley",
+    "what": "Free after care inside Kelley from the Greater Philadelphia YMCA: homework help, STEM, art, fitness and social-emotional learning",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "STEM",
+      "art",
+      "YMCA",
+      "Y",
+      "OST",
+      "Kelley",
+      "Brewerytown"
+    ],
+    "address": "1601 N 28th St",
+    "grades": "K-8",
+    "gradeNote": "The YMCA lists William D. Kelley School (as “William D. Kelly School”) for kindergarten to 8th grade",
+    "hours": "From the end of the school day to 5:30 pm, according to the YMCA’s page. Kelley’s school day ends at 2:54 pm.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free. The YMCA says the program is offered at no charge at the schools it lists.",
+    "price": "free",
+    "phone": "215-608-5823",
+    "email": "",
+    "website": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+    "register": {
+      "how": "online",
+      "url": "https://gpy.tfaforms.net/134",
+      "label": "Apply",
+      "note": "The YMCA’s page links this application. Applying doesn’t guarantee a place: the YMCA confirms enrollment afterwards."
+    },
+    "note": "The YMCA’s page lists William D. Kelley School (as “William D. Kelly School”) among the District schools where it runs its free, City-funded after-school program. The City’s program data has the YMCA at Kelley, Monday to Friday, 3:45–6:00 pm, September 9, 2026 to June 8, 2027, free with meals and no transportation, but the City’s locator page doesn’t show the entry, so ask the YMCA how late children can stay. Kelley’s own site lists a “YMCA Afterschool Program” among its activities.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "kelley": {
+        "relation": "onsite",
+        "note": "The Greater Philadelphia YMCA’s own page lists William D. Kelley School (as “William D. Kelly School”), 1601 N 28th St, as one of its funded after-school sites, for kindergarten to 8th grade.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+          }
+        ],
+        "checked": "2026-11-16"
+      }
+    }
+  },
+  {
+    "id": "ymca-gideon",
+    "name": "YMCA Out of School Time at Gideon",
+    "what": "Free after care inside Gideon from the Greater Philadelphia YMCA: homework help, STEM, art, fitness and social-emotional learning",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "STEM",
+      "art",
+      "YMCA",
+      "Y",
+      "OST",
+      "Gideon",
+      "Strawberry Mansion",
+      "before care"
+    ],
+    "address": "2817 W Glenwood Ave",
+    "grades": "K-8",
+    "gradeNote": "The YMCA lists Edward Gideon School for kindergarten to 8th grade",
+    "hours": "From the end of the school day to 5:30 pm, according to the YMCA’s page. Gideon’s school day ends at 3:39 pm.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free. The YMCA says the program is offered at no charge at the schools it lists.",
+    "price": "free",
+    "phone": "215-608-5823",
+    "email": "",
+    "website": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+    "register": {
+      "how": "online",
+      "url": "https://gpy.tfaforms.net/134",
+      "label": "Apply",
+      "note": "The YMCA’s page links this application. Applying doesn’t guarantee a place: the YMCA confirms enrollment afterwards."
+    },
+    "note": "The YMCA’s page lists Edward Gideon School among the District schools where it runs its free, City-funded after-school program. The City’s program data has the YMCA at Gideon after school, Monday to Friday, 3:30–6:00 pm, and before school, 7:00–8:45 am, September 1, 2026 to June 8, 2027, free with meals and no transportation, but the City’s locator page doesn’t show those entries, so ask the YMCA how late children can stay and whether the morning program has room. Gideon’s own site names the YMCA among its community partners.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "gideon": {
+        "relation": "onsite",
+        "note": "The Greater Philadelphia YMCA’s own page lists Edward Gideon School, 2817 W Glenwood Ave, as one of its funded after-school sites, for kindergarten to 8th grade.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+          }
+        ],
+        "checked": "2026-11-16"
+      }
+    }
+  },
+  {
+    "id": "ymca-blaine",
+    "name": "YMCA Out of School Time at Blaine",
+    "what": "Free after care inside Blaine from the Greater Philadelphia YMCA: homework help, STEM, art, fitness and social-emotional learning",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "STEM",
+      "art",
+      "YMCA",
+      "Y",
+      "OST",
+      "Blaine",
+      "Strawberry Mansion"
+    ],
+    "address": "3001 W Berks St",
+    "grades": "K-8",
+    "gradeNote": "The YMCA lists James G. Blaine School for kindergarten to 8th grade",
+    "hours": "From the end of the school day to 5:30 pm, according to the YMCA’s page. Blaine’s school day ends at 2:54 pm.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free. The YMCA says the program is offered at no charge at the schools it lists.",
+    "price": "free",
+    "phone": "215-608-5823",
+    "email": "",
+    "website": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+    "register": {
+      "how": "online",
+      "url": "https://gpy.tfaforms.net/134",
+      "label": "Apply",
+      "note": "The YMCA’s page links this application. Applying doesn’t guarantee a place: the YMCA confirms enrollment afterwards."
+    },
+    "note": "The YMCA’s page lists James G. Blaine School among the District schools where it runs its free, City-funded after-school program. The City’s program locator lists the YMCA at Blaine, Monday to Friday, 3:00–6:00 pm, September 9, 2026 to June 8, 2027, free with meals and no transportation, so the two disagree on the end time: ask the YMCA how late children can stay. Blaine’s own site lists the YMCA among its extracurricular programs and says sign-up is posted on Class Dojo.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+      },
+      {
+        "label": "City program locator: YMCA OST School Program at Blaine",
+        "url": "https://www.phila.gov/ost/program-locator/?address=3001+W+Berks+St&resource=ost_117"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "blaine": {
+        "relation": "onsite",
+        "note": "The Greater Philadelphia YMCA’s own page lists James G. Blaine School, 3001 W Berks St, as one of its funded after-school sites, for kindergarten to 8th grade.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+          },
+          {
+            "label": "City program locator: YMCA OST School Program at Blaine",
+            "url": "https://www.phila.gov/ost/program-locator/?address=3001+W+Berks+St&resource=ost_117"
+          },
+          {
+            "label": "Blaine: extracurricular programs",
+            "url": "https://blaine.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-16"
+      }
+    }
+  },
+  {
+    "id": "ymca-hopkinson",
+    "name": "YMCA Out of School Time at Hopkinson",
+    "what": "Free after care inside Hopkinson from the Greater Philadelphia YMCA: homework help, STEM, art, fitness and social-emotional learning",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "STEM",
+      "art",
+      "YMCA",
+      "Y",
+      "OST",
+      "Hopkinson",
+      "Juniata Park"
+    ],
+    "address": "4001 L St",
+    "grades": "K-8",
+    "gradeNote": "The YMCA lists Francis Hopkinson School for kindergarten to 8th grade",
+    "hours": "From the end of the school day to 5:30 pm, according to the YMCA’s page.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free. The YMCA says the program is offered at no charge at the schools it lists.",
+    "price": "free",
+    "phone": "215-608-5823",
+    "email": "",
+    "website": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+    "register": {
+      "how": "online",
+      "url": "https://gpy.tfaforms.net/134",
+      "label": "Apply",
+      "note": "The YMCA’s page links this application. Applying doesn’t guarantee a place: the YMCA confirms enrollment afterwards."
+    },
+    "note": "The YMCA’s page lists Francis Hopkinson School among the District schools where it runs its free, City-funded after-school program. The City’s program data has the YMCA at Hopkinson, Monday to Friday, 2:45–6:00 pm, September 9, 2026 to June 8, 2027, free with meals and no transportation, but the City’s locator page doesn’t show the entry, so ask the YMCA how late children can stay. Hopkinson’s own site doesn’t mention the YMCA.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "hopkinson": {
+        "relation": "onsite",
+        "note": "The Greater Philadelphia YMCA’s own page lists Francis Hopkinson School, 4001 L St, as one of its funded after-school sites, for kindergarten to 8th grade.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+          }
+        ],
+        "checked": "2026-11-16"
+      }
+    }
+  },
+  {
+    "id": "kelley-clubs",
+    "name": "School clubs and teams",
+    "what": "Art Club, WHYY Media Club, Girls Inc., a fitness club and other activities Kelley lists on its own site",
+    "types": [
+      "clubs",
+      "art",
+      "movement",
+      "academics"
+    ],
+    "keywords": [
+      "clubs",
+      "art",
+      "media",
+      "WHYY",
+      "Girls Inc.",
+      "girls",
+      "mentoring",
+      "tutoring",
+      "fitness",
+      "choir",
+      "band",
+      "Kelley"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published for each club; ask the school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-7370",
+    "email": "",
+    "website": "https://kelley.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office or the club’s teacher."
+    },
+    "note": "Kelley’s own site lists these among its extracurricular programs, clubs and activities, with no days, times or grades. Girls Inc. isn’t confirmed on Girls Inc.’s own site (it couldn’t be read today). Ask the office which are running this year and for which grades. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Kelley: extracurricular programs, clubs and activities",
+        "url": "https://kelley.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "kelley": {
+        "relation": "onsite",
+        "checked": "2026-11-16"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "WHYY Media Club",
+        "what": "Media making with WHYY",
+        "tags": [
+          "art",
+          "stem"
+        ]
+      },
+      {
+        "name": "Girls Inc.",
+        "what": "Girls Inc. of Greater Philadelphia & Southern New Jersey, listed by the school among its clubs and activities",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Rites of Passage Male Mentoring Program",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Grandmom’s Tutoring",
+        "what": "Tutoring",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Fitness Club",
+        "tags": [
+          "movement"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gideon-clubs",
+    "name": "School clubs and teams",
+    "what": "Brass and string lessons, drumline, a dance ensemble, Philadelphia Youth Basketball, Girls Inc.’s HYPE, Mural Arts, gardening and cooking clubs, as Gideon lists them",
+    "types": [
+      "clubs",
+      "music",
+      "movement",
+      "art"
+    ],
+    "keywords": [
+      "clubs",
+      "brass",
+      "strings",
+      "drumline",
+      "drums",
+      "dance",
+      "basketball",
+      "Philadelphia Youth Basketball",
+      "Girls Inc.",
+      "HYPE",
+      "Mural Arts",
+      "gardening",
+      "cooking",
+      "Gideon"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published for each club; ask the school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-7360",
+    "email": "",
+    "website": "https://gideon.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office or the club’s teacher."
+    },
+    "note": "Gideon’s own site lists these among its extracurricular programs, clubs and activities, with no days, times or grades. Philadelphia Youth Basketball’s and Girls Inc.’s own sites don’t name Gideon (Girls Inc.’s couldn’t be read today). Ask the office which are running this year and for which grades. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Gideon: extracurricular programs, clubs and activities",
+        "url": "https://gideon.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "gideon": {
+        "relation": "onsite",
+        "checked": "2026-11-16"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Brass and String Instrument Program",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Drumline",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Dance Ensemble",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Philadelphia Youth Basketball",
+        "what": "Listed by the school under its clubs and its sports",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Mural Arts",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "HYPE (Girls Inc.)",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Reading and Math Games",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Gardening Club",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Cooking Club",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Student Council",
+        "tags": [
+          "clubs"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "blaine-clubs",
+    "name": "School clubs and teams",
+    "what": "Arts with the Philadelphia Arts in Education Partnership, optional strings lessons and middle-grades teams, as Blaine lists them",
+    "types": [
+      "clubs",
+      "art",
+      "music",
+      "movement"
+    ],
+    "keywords": [
+      "clubs",
+      "arts",
+      "PAEP",
+      "strings",
+      "volleyball",
+      "soccer",
+      "basketball",
+      "softball",
+      "baseball",
+      "sports",
+      "Blaine"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published for each club; ask the school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-7330",
+    "email": "",
+    "website": "https://blaine.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office or the club’s teacher."
+    },
+    "note": "Blaine’s own site lists the Philadelphia Arts in Education Partnership among its extracurricular programs, optional weekly strings lessons, and fall, winter and spring teams for 6th to 8th graders. It gives no days or times. Ask the office what is running this year. These don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Blaine: extracurricular programs, arts and sports",
+        "url": "https://blaine.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "blaine": {
+        "relation": "onsite",
+        "checked": "2026-11-16"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Philadelphia Arts in Education Partnership (PAEP)",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Strings lessons",
+        "what": "Optional weekly strings lessons",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Volleyball (girls)",
+        "grades": "6-8",
+        "when": "Fall",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "grades": "6-8",
+        "when": "Fall",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Basketball",
+        "grades": "6-8",
+        "when": "Winter",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Softball (girls)",
+        "grades": "6-8",
+        "when": "Spring",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Baseball (boys)",
+        "grades": "6-8",
+        "when": "Spring",
+        "tags": [
+          "movement"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hopkinson-clubs",
+    "name": "School clubs and teams",
+    "what": "Book Club, Coding, Dance, STEM, Math24, Yoga, running and school teams, as Hopkinson lists them",
+    "types": [
+      "clubs",
+      "stem",
+      "movement",
+      "academics"
+    ],
+    "keywords": [
+      "clubs",
+      "book club",
+      "reading",
+      "coding",
+      "dance",
+      "STEM",
+      "Math24",
+      "yoga",
+      "running",
+      "baseball",
+      "basketball",
+      "football",
+      "softball",
+      "track",
+      "Hopkinson"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published for each club; ask the school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-3970",
+    "email": "",
+    "website": "https://hopkinson.philasd.org/students/extracurriculars/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office or the club’s teacher."
+    },
+    "note": "Hopkinson’s extracurriculars page lists these with no days, times or grades. Ask the office which are running this year and for which grades. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Hopkinson: extracurriculars",
+        "url": "https://hopkinson.philasd.org/students/extracurriculars/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "hopkinson": {
+        "relation": "onsite",
+        "checked": "2026-11-16"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Book Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Coding",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Dance",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Givin’ Flowers",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Math24",
+        "tags": [
+          "academics",
+          "games"
+        ]
+      },
+      {
+        "name": "STEM",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Students Run",
+        "what": "Running",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Yoga",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "School teams",
+        "tags": [
+          "movement"
+        ],
+        "what": "Baseball, basketball, football, softball and track"
+      }
+    ]
+  },
+  {
+    "id": "penn-alexander-clubs",
+    "name": "School clubs and teams",
+    "what": "Seasonal clubs at Penn Alexander, from debate and coding to ping pong and the annual musical, as the school lists them",
+    "types": [
+      "clubs",
+      "academics",
+      "stem",
+      "music",
+      "theater"
+    ],
+    "keywords": [
+      "clubs",
+      "debate",
+      "coding",
+      "ping pong",
+      "table tennis",
+      "Math Counts",
+      "math",
+      "choir",
+      "instrumental music",
+      "musical",
+      "media",
+      "WHYY",
+      "GSA",
+      "student council",
+      "volleyball",
+      "basketball",
+      "track",
+      "Penn Alexander"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published for each club; ask the school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-7760",
+    "email": "",
+    "website": "https://pennalexander.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office or the club’s teacher."
+    },
+    "note": "Penn Alexander’s own site says its clubs run in fall, winter and spring cycles, depending on student interest and teacher availability, and gives no days, times or grades. Ask the office which are running this season. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Penn Alexander: extracurricular programs, clubs and activities",
+        "url": "https://pennalexander.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "penn-alexander": {
+        "relation": "onsite",
+        "checked": "2026-11-16"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Annual Musical",
+        "tags": [
+          "theater",
+          "music"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "GSA Club",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Instrumental Music and Choir",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Math Counts",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Need in Deed Club",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Penn-Fife Coding Academy Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Ping Pong Club",
+        "tags": [
+          "games",
+          "movement"
+        ]
+      },
+      {
+        "name": "Student Council",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "WHYY Media Lab Club",
+        "tags": [
+          "art",
+          "stem"
+        ]
+      },
+      {
+        "name": "School teams",
+        "what": "Volleyball, basketball and track",
+        "tags": [
+          "movement"
+        ]
+      }
+    ]
   }
 ]

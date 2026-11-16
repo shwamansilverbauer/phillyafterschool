@@ -166,5 +166,17 @@
     "how": "person",
     "why": "On 2026-11-15 the after-school roundup answered a browser with HTTP 429 (too many requests), so it has to be read by a person.",
     "seen": "2026-11-15"
+  },
+  {
+    "match": "philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time",
+    "how": "browser",
+    "why": "The page shows only six of its funded after-school schools until “Show all locations” is pressed, so read it in a browser and open the full list.",
+    "seen": "2026-11-16"
+  },
+  {
+    "match": "studentsrunphilly.org",
+    "how": "person",
+    "why": "The site’s robots.txt closes it to anthropic-ai and other AI crawlers (seen 2026-11-16), so a person has to read it.",
+    "seen": "2026-11-16"
   }
 ]
