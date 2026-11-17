@@ -3300,7 +3300,7 @@ document.addEventListener('click', function (e) {
       addPanel.appendChild(foot);
     };
     var closeAdd = function () { addList.hidden = true; addInput.setAttribute('aria-expanded', 'false'); addInput.removeAttribute('aria-activedescendant'); addActive = -1; };
-    var pickAdd = function (id, schoolId, how) {
+    var pickAdd = function (id, schoolId, how, day) {
       var prog = data.programs[id];
       if (!prog) return;
       adding = { id: id, school: schoolId && prog.schools[schoolId] && data.schools[schoolId] ? schoolId : guessSchool(prog) };
@@ -3308,7 +3308,7 @@ document.addEventListener('click', function (e) {
       addInput.value = ''; closeAdd(); addStatus.textContent = '';
       drawAdd();
       track({ event: 'pas_program_pick', program_id: id, method: how });
-      var first = addPanel.querySelector(adding.school ? '.day' : '.kd');
+      var first = addPanel.querySelector(adding.school ? (day ? '.day[data-day="' + day + '"]' : '.day') : '.kd') || addPanel.querySelector('.day');
       if (first) first.focus();
     };
     var renderAdd = function () {
@@ -3488,7 +3488,8 @@ document.addEventListener('click', function (e) {
       }
       if (asked.add && data.programs[asked.add] && !shared && mayPlan()) {
         if (window.history && history.replaceState) { try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* file preview */ } }
-        window.setTimeout(function () { pickAdd(asked.add, asked.school || '', 'program_page'); if (adder.scrollIntoView) adder.scrollIntoView({ block: 'center' }); }, 0);
+        var askDay = /^(mon|tue|wed|thu|fri|sat|sun)$/.test(asked.day || '') ? asked.day : '';   // from Kids' Playground's "Plan my week": the day picked
+        window.setTimeout(function () { pickAdd(asked.add, asked.school || '', askDay ? 'plan_my_week' : 'program_page', askDay); if (adder.scrollIntoView) adder.scrollIntoView({ block: 'center' }); }, 0);
       }
     }
 

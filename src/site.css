@@ -3069,6 +3069,49 @@ html.kc-kid .kc-hold{background:rgba(255,255,255,.85);border-color:rgba(11,33,64
 
 /* Bingo: this season's card (kids-corner.js, drawBingoTab) */
 .kc-tabdot{position:absolute;top:4px;right:12%;width:14px;height:14px;border-radius:50%;background:var(--kred);border:2.5px solid #fff;box-shadow:0 0 0 2px var(--kink)}
+/* "Plan my week": the child's side (a call to help, the choices, the week so far) */
+.kc-plancall{font:inherit;color:var(--kink);display:flex;align-items:center;gap:12px;width:100%;margin:6px 0 4px;padding:8px 16px 8px 8px;background:var(--kyellow);border:3px solid var(--kink);border-radius:20px;box-shadow:0 5px 0 var(--kink);cursor:pointer;text-align:left;font-family:var(--title);font-size:1.25rem;line-height:1.15;letter-spacing:.02em;text-transform:uppercase}
+.kc-plancall .kc-bulb{width:58px;flex:none}
+.kc-plancall:active{transform:translateY(4px);box-shadow:0 2px 0 var(--kink)}
+.kc-plancall:focus-visible{outline:4px solid #fff;outline-offset:3px}
+.kc-plan-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:10px;margin:6px 0 14px}
+.kc-plan-opt,.kc-plan-day{background:#fff;border:3px solid var(--kink);border-radius:20px;box-shadow:0 5px 0 var(--kink);padding:8px 6px 10px;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
+.kc-plan-opt .kc-bulb{width:86px}.kc-plan-opt b,.kc-plan-day b{font-weight:800;font-size:.95rem;line-height:1.15}
+.kc-plan-week{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;margin:14px 0 6px}
+.kc-plan-day .kc-bulb{width:70px}
+.kc-plan-dname{font-family:var(--title);font-size:1.05rem;letter-spacing:.03em;text-transform:uppercase;background:var(--kyellow);border:2px solid var(--kink);border-radius:999px;padding:2px 10px 0}
+/* the grown-ups' box */
+.kc-plan{display:grid;gap:10px;padding:12px 14px;background:#F4F8FD;border:1px solid #D6E3F2;border-radius:12px}
+.kc-plan h4{margin:0;font-family:var(--display);font-size:1rem}
+.kc-plan > .hint,.kc-plan > .g-status{margin:0}
+.kc-plan-panel .kc-plan{background:none;border:0;padding:0}
+.kc-plan-row{background:#fff;border:1px solid #D6E3F2;border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.kc-plan-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.kc-plan-dayname{min-width:6.5em;font-weight:800}
+.kc-plan-wait{flex:1 1 220px;color:#4D607A}
+.kc-plan-rank{flex:1 1 220px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px;margin:0;padding:0;list-style:none;counter-reset:pr}
+.kc-plan-rank li{counter-increment:pr;display:flex;align-items:center;gap:4px;color:#4D607A}
+.kc-plan-rank li::before{content:counter(pr) ".";font-weight:800}
+.kc-plan-rank li.won{color:var(--ink,#0B2140);font-weight:800}
+.kc-plan-rank li.won .kc-bulb{width:34px}
+.kc-plan-acts{display:flex;gap:8px;margin-left:auto}
+.kc-plan-acts .btn{padding:6px 12px;min-height:0}
+.kc-plan-fits{display:grid;gap:6px}
+.kc-plan-for{margin:0;font-weight:700}
+.kc-plan-list{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.kc-plan-list li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px;padding:8px 0;border-top:1px solid #E6EDF6}
+.kc-plan-list li:first-child{border-top:0}
+.kc-plan-list .btn{padding:6px 12px;min-height:0}
+.kc-plan-edit{display:grid;gap:10px;background:#fff;border:1px solid #D6E3F2;border-radius:10px;padding:12px}
+.kc-plan-edit .field{max-width:16rem}
+.kc-plan-pick{border:0;margin:0;padding:0;min-width:0}
+.kc-plan-pick legend{font-weight:700;padding:0;margin-bottom:6px}
+.kc-plan-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:6px}
+.kc-plan-chip{font:inherit;color:var(--ink,#0B2140);background:#fff;border:2px solid #D6E3F2;border-radius:12px;padding:4px 4px 6px;display:flex;flex-direction:column;align-items:center;gap:0;cursor:pointer;font-size:.8rem;font-weight:700;line-height:1.15;text-align:center}
+.kc-plan-chip .kc-bulb{width:46px}
+.kc-plan-chip[aria-pressed="true"]{border-color:#2176D2;background:#E7F1FC;box-shadow:inset 0 0 0 1px #2176D2}
+.kc-plan-chip:focus-visible{outline:3px solid #2176D2;outline-offset:2px}
+.kc-plan-pick .hint{margin:6px 0 0}
 .kc-bingo{background:#fff;border:3px solid var(--kink);border-radius:26px;box-shadow:0 6px 0 var(--kink);padding:10px 10px 12px;max-width:620px;margin:0 auto 6px}
 .kc-bingo-letters{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:0 0 6px}
 .kc-bingo-letters b{font-family:var(--title);font-weight:400;font-size:clamp(1.5rem,7vw,2.3rem);line-height:1;text-align:center;padding:6px 0 2px;border-radius:12px;color:#fff;text-shadow:0 2px 0 var(--kink),1.5px 1.5px 0 var(--kink),-1.5px -1.5px 0 var(--kink),1.5px -1.5px 0 var(--kink),-1.5px 1.5px 0 var(--kink);border:2.5px solid var(--kink)}

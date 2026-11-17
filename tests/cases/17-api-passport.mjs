@@ -177,3 +177,36 @@ test('Kids’ Playground keeps each child’s lightbulb, the pins already shown 
   const rows = ctx.site.sql(`SELECT json FROM passports WHERE user_id = ${pat.id}`);
   ok(rows.every(x => !/mushroom|holiday|type:music|crown/.test(x.json)), 'stored sealed');
 });
+
+test('Plan my week: the days a parent sets up, the kinds of class the build knows, the child’s order once played, kept until changed or started over', async (ctx) => {
+  const pat = person(ctx, 'Pat', 'Lee');
+  await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '2' }] });
+  eq((await pat.okay('GET', 'passport')).school, '', 'no school yet');
+  await pat.okay('POST', 'school_save', { school: 'nebinger' });
+  eq((await pat.okay('GET', 'passport')).school, 'nebinger', 'the school, for the classes that fit');
+  // A plan alone keeps the row; what isn't right is dropped: an unknown kind, a day with one kind, a second Monday, a
+  // made-up day, more than six kinds, and an order that isn't the day's kinds.
+  const saved = (await pat.okay('POST', 'passport_save', { kid: 'Sam', plan: [
+    { d: 'wed', o: ['drums', 'karate'], r: ['karate', 'drums'] },
+    { d: 'mon', o: ['art', 'chess', 'nope', 'art'] },
+    { d: 'mon', o: ['soccer', 'dance'] },
+    { d: 'tue', o: ['soccer'] },
+    { d: 'xyz', o: ['soccer', 'dance'] },
+    { d: 'thu', o: ['soccer', 'dance', 'yoga', 'chess', 'art', 'drums', 'piano'], r: ['art'] },
+    { d: 'fri', o: ['soccer', 'dance'], r: ['soccer', 'chess'] },
+  ] })).kid.plan;
+  deepEq(saved, [
+    { d: 'mon', o: ['art', 'chess'] },
+    { d: 'wed', o: ['drums', 'karate'], r: ['karate', 'drums'] },
+    { d: 'thu', o: ['soccer', 'dance', 'yoga', 'chess', 'art', 'drums'] },
+    { d: 'fri', o: ['soccer', 'dance'] },
+  ], 'in the week’s order, cleaned');
+  // Saves that leave the plan out keep it (a class confirmed, the bulb picked); one with it replaces it.
+  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [], av: { b: 'heart', c: 1 } });
+  eq((await pat.okay('GET', 'passport')).kids[0].plan.length, 4, 'kept');
+  await pat.okay('POST', 'passport_save', { kid: 'Sam', plan: [{ d: 'mon', o: ['art', 'chess'], r: ['chess', 'art'] }] });
+  deepEq((await pat.okay('GET', 'passport')).kids[0].plan, [{ d: 'mon', o: ['art', 'chess'], r: ['chess', 'art'] }]);
+  // Starting over takes the picks with the rest.
+  await pat.okay('POST', 'passport_reset', { kid: 'Sam' });
+  deepEq((await pat.okay('GET', 'passport')).kids[0].plan, []);
+});

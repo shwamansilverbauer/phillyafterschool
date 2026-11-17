@@ -603,3 +603,66 @@ test('the account page’s Kids’ Playground tab: each child at a glance, a cla
   eq(t.errors.length, 0, t.errors.join(' | '));
   await t.close();
 });
+
+test('Plan my week: a parent sets up a day on the account page, the child plays it off as a showdown, and the pick comes back with classes that fit', async (ctx) => {
+  const b = await ctx.browser();
+  const pat = ctx.api().as(someone('kcplan'), 'Pat', 'Lee');
+  await pat.okay('POST', 'kids_save', { kids: [{ n: 'Sam', g: '2' }] });
+  await pat.okay('POST', 'school_save', { school: 'nebinger' });
+  await pat.okay('POST', 'passport_save', { kid: 'Sam', done: [], av: { b: 'heart', c: 1 }, seen: { intro: 1 }, lvl: 1 });
+  const t = await b.context(ctx.site, { sid: pat.cookie });
+  const page = await t.open('/account/#kids');
+  await page.waitForSelector('#kids .kc-plan');
+  await page.locator('.kc-plan button', { hasText: 'Set up a day' }).click();
+  await page.waitForSelector('.kc-plan-edit');
+  eq(await page.locator('.kc-plan-chip').count() >= 20, true, 'the kinds of class, each drawn');
+  eq(await page.locator('.kc-plan-chip .kc-bulb').count(), await page.locator('.kc-plan-chip').count());
+  const go = page.locator('.kc-plan-edit button[type=submit]');
+  await page.selectOption('.kc-plan-edit select', 'mon');
+  await page.locator('.kc-plan-chip[data-act="art"]').click();
+  eq(await go.isDisabled(), true, 'two at least');
+  await page.locator('.kc-plan-chip[data-act="chess"]').click();
+  await go.click();
+  await page.waitForSelector('.kc-plan-row');
+  const waiting = flat(await page.locator('.kc-plan-row').innerText());
+  includes(waiting, 'Monday'); includes(waiting, 'Waiting for Sam to play');
+  deepEq((await pat.okay('GET', 'passport')).kids[0].plan, [{ d: 'mon', o: ['art', 'chess'] }]);
+  // Sam's page calls Sam to help, the Showdown tab has the day, and the showdown asks about the day.
+  const k = await b.context(ctx.site, { sid: pat.cookie, width: 430, height: 900, mobile: true });
+  const kp = await k.open('/kids-playground/#pins');
+  await kp.waitForSelector('.kc-plancall');
+  matches(flat(await kp.locator('.kc-plancall').innerText()), /help plan monday/i);
+  eq(await kp.locator('.kc-tabbtn[aria-label="Showdown: help plan your week"] .kc-tabdot').count(), 1, 'a dot on the Showdown tab');
+  await kp.locator('.kc-plancall').click();
+  await kp.waitForSelector('.kc-plan-opts');
+  deepEq((await kp.locator('.kc-plan-opt b').allInnerTexts()).map(x => flat(x).toLowerCase()).sort(), ['art', 'chess']);
+  await kp.locator('button', { hasText: 'Pick Monday!' }).click();
+  await kp.waitForSelector('.kc-fighter');
+  matches(flat(await kp.locator('.kc-ask').innerText()), /what do you want to do on mondays\?/i);
+  const left = flat(await kp.locator('.kc-fighter.left b').innerText());
+  await kp.locator('.kc-fighter.left').click();
+  await kp.waitForSelector('.kc-champ', { timeout: 15000 });
+  const champ = flat(await kp.locator('.kc-champ').innerText());
+  includes(champ, 'Your pick for Mondays'); matches(champ, new RegExp(left, 'i'), 'the one tapped wins');
+  await kp.locator('.kc-champ button', { hasText: 'Yay!' }).click();
+  await kp.waitForSelector('.kc-plan-week');
+  const order = /^art$/i.test(left) ? ['art', 'chess'] : ['chess', 'art'];
+  deepEq((await pat.okay('GET', 'passport')).kids[0].plan, [{ d: 'mon', o: ['art', 'chess'], r: order }], 'the order, best first');
+  eq(await kp.locator('.kc-plancall').count(), 0, 'nothing more to plan');
+  // The parent sees the pick, and the classes that fit it on Mondays at or near the school.
+  await page.reload(); await page.waitForSelector('#kids .kc-plan-row.played');
+  const row = page.locator('.kc-plan-row.played');
+  includes(flat(await row.locator('.kc-plan-rank li.won').innerText()), order[0] === 'art' ? 'Painting & drawing' : 'Chess & games');
+  eq(t.outside.filter(u => !/^https:\/\/a\.klaviyo\.com\/client\//.test(u)).length + counted(k).length, 0, 'nothing asked of another site, nothing counted');
+  const fits = row.locator('.kc-plan-list li');
+  if (await fits.count()) {   // "Add to a week" opens the week builder on the program, at the day
+    includes(flat(await row.locator('.kc-plan-for').innerText()), 'on Mondays at or near Nebinger');
+    const add = fits.first().locator('a.btn', { hasText: 'Add to a week' });
+    matches(await add.getAttribute('href'), /board\/\?add=[a-z0-9-]+&school=nebinger&day=mon$/);
+    await add.click();
+    await page.waitForURL(/\/board\//);
+    await page.waitForFunction(() => document.activeElement && document.activeElement.getAttribute('data-day') === 'mon', null, { timeout: 8000 });
+  } else includes(flat(await row.innerText()), 'Nothing on the site for');
+  eq(t.errors.length + k.errors.length, 0, t.errors.concat(k.errors).join(' | '));
+  await t.close(); await k.close();
+});
