@@ -578,12 +578,30 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
 - **The data.** `passports` in the accounts database, one row per child per household (by first name, the way weeks
   match), encrypted like the plans: `{ done: [{ k: "p:<program>" | "c:<camp>", kind: after | weekend | off | summer,
   y: <year>, s: <school or "">, h?: <site's neighborhood>, n?: <times, 2 to 20> }], skip: [suggestion keys the parent waved away],
-  fav: [listings, best first], av?: { b: <body>, c: <colour 0-9>, w?: { <place>: <item> } }, seen?: { <pin>: <level> }, lvl?: <level> }`.
-  `GET passport` gives every child on the kids list with all of that and the suggestions; `POST passport_save { kid,
-  done, skip, fav, av?, seen?, lvl? }` replaces one child's lists, and keeps `av`, `seen` and `lvl` when they are left
-  out. Co-parents share them (on accepting, the other account's rows are copied to the home account, same first names
+  fav: [listings, best first], av?: { b: <body>, c: <colour 0-9>, w?: { <place>: <item> } }, seen?: { <pin>: <level> }, lvl?: <level>,
+  plan?: [{ d: mon…sun, o: [2 to 6 kinds of class], r?: [the same, best first, once played] }] }`.
+  `GET passport` gives every child on the kids list with all of that and the suggestions, and `school` (the account's,
+  or the household's); `POST passport_save { kid, done, skip, fav, av?, seen?, lvl?, plan? }` replaces one child's
+  lists, and keeps `av`, `seen`, `lvl` and `plan` when they are left out. Co-parents share them (on accepting, the other account's rows are copied to the home account, same first names
   merge; the other account keeps its own for if the link ends).
   Deleting the account deletes them. Pins and levels are never stored, only which were already celebrated.
+- **Plan my week** (since November 16, 2026). For a child who won't choose: on the account page's Kids' Playground
+  tab or in the grown-ups' corner (`planBox()`), a parent picks a day and two to six kinds of class from
+  `KIDS_ACTS` in build.mjs (soccer, karate, drums, sewing and so on, 27 of them; the server takes only those ids).
+  Each kind is drawn as a classic bulb dressed for it (`GEAR` in kids-corner.js: a karate gi and black belt, a soccer
+  ball, a drum, a sewing tape measure), with its own special move (`move`, `shot`). The child's page calls them to
+  help ("Help plan Monday!", and a dot on the Showdown tab); the Showdown tab shows the choices, and "Pick Monday!"
+  plays them off two at a time in the usual contests, asking "What do you want to do on Mondays?" (`startPlan()`,
+  `planChamp()`). The order they drop out in is saved as the day's `r`, and the next day waits. Back with the parent,
+  each played day shows the order and the classes that fit the winner (`planFits()`): at or near the account's school
+  on that weekday (in the school first, then picking up from it, then near it, on that day when the listing gives its
+  days, for the child's grade when both say), or a weekend class that day; a school's clubs count one by one. When
+  nothing fits the winner, the next in line's. Each has "Add to a week", which opens the week builder on that program
+  at that day (`board/?add=&school=&day=`, the day marked `.asked` and focused). Which listings are each kind is worked out by the build
+  (`actHits()`: the words in a listing's name, "what" and keywords, or a club's name, plus club tags and listing
+  kinds) and travels in `assets/kids-corner.json` as `acts`, with each listing's days (`d`), weekend days (`w`),
+  grades (`g`) and nearby schools (`nb`). Starting a child over clears the plan. Nothing about it is counted on Kids' Playground or the account page; the week
+  builder counts a program picked from it like any other (`pas_program_pick` with method `plan_my_week`, no child).
 - **Favorites.** `GET profile` carries `favorites: [{ name, fav }]`, and the accounts script hands them to each
   planner (`favorites()` on `window.pasBoard`, `pasSummer` and `pasDaysOff`): Build your week shows the child's
   favorite programs as chips under the search, and the summer and days-off choosers list a favorite camp or program
@@ -2542,7 +2560,7 @@ Set `gtmId` to load Google Tag Manager on every page. Every page view and event 
   results show what parents want that isn't listed. `pas_near` (from) and `pas_map_open`. `pas_school_pick` (school,
   covered) when someone picks a school in the finder, `pas_school_request` (school) when they ask for one that isn't
   covered, `pas_school_save` (school) when they save a school as theirs, `pas_school_notify` (school).
-  `pas_program_pick` (program_id, method): method is `home_search`, `roster_search`, or `program_page`.
+  `pas_program_pick` (program_id, method): method is `home_search`, `roster_search`, `program_page`, or `plan_my_week` (from Kids' Playground's "Plan my week" classes, with the day picked).
 - **Moving around a page.** `pas_page_view` (view) fires when someone switches a page's view by hand: the roster's
   `week`, `cost`, `card` and `keep`, or the day-camps page's `who` and `days`. It doesn't fire for the view a page opens
   on. (The planners' List, Month, Who's open and Make it a calendar switches report through `pas_summer` and

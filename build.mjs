@@ -4537,7 +4537,7 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, repo: /^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : '', backupRepo: /^[\w.-]+\/[\w.-]+$/.test(cfg.backupRepo || '') ? cfg.backupRepo : '', from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])), citySchools: Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])) });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, repo: /^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : '', backupRepo: /^[\w.-]+\/[\w.-]+$/.test(cfg.backupRepo || '') ? cfg.backupRepo : '', from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])), acts: KIDS_ACTS.map(a => a.id), citySchools: Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])) });
   const src = phpCopy(fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8'));
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   if (!src.includes('/*MAILER*/')) throw new Error('src/server/groups-api.php has lost its /*MAILER*/ marker');
@@ -5892,6 +5892,52 @@ const KIDS_BINGO = {
     brainy: ['Brainy camp', 'Go to a science, nature or reading camp!', 'stem'], play: ['Games or rec', 'Go to a games camp, a club or a rec center camp!', 'games'],
   }),
 };
+// "Plan my week": the kinds of class a parent can set against each other for a day, for the child to pick on Kids'
+// Playground. Each is drawn its own way there (a bulb dressed for it, in src/kids-corner.js, by id). n: what the child
+// sees; full: what the parent sees; c: the bulb's glass; move and shot: its special move in a showdown. re: words in a
+// listing's name, "what" and keywords (or a school club's name) that make it that kind; tags: the club tags that do too;
+// types: the listing kinds that do. Ids are kept (they're saved in a child's plan); the server takes only these.
+const KIDS_ACTS = [
+  { id: 'soccer', n: 'Soccer', c: '#51CF66', move: 'GOOOAL!', shot: 'soccer', re: /\bsoccer|f[uú]tbol/i, tags: ['soccer'] },
+  { id: 'basketball', n: 'Basketball', c: '#FF922B', move: 'SWISH!', shot: 'ball', re: /basketball|\bhoops\b/i, tags: ['basketball'] },
+  { id: 'baseball', n: 'Baseball', full: 'Baseball & softball', c: '#FF8787', move: 'HOME RUN!', shot: 'baseball', re: /baseball|softball|\bt-?ball\b/i, tags: ['baseball', 'softball'] },
+  { id: 'tennis', n: 'Tennis', full: 'Tennis & racket sports', c: '#C0EB75', move: 'ACE!', shot: 'tennis', re: /tennis|squash|pickleball/i, tags: ['pickleball'] },
+  { id: 'swimming', n: 'Swimming', c: '#74C0FC', move: 'SPLASH!', shot: 'drop', re: /\bswim|aquatic/i, tags: [] },
+  { id: 'karate', n: 'Karate', full: 'Karate & martial arts', c: '#F1F3F5', move: 'HI-YAH!', shot: 'board', re: /karate|martial art|taekwondo|tae kwon do|kung fu|jiu.?jitsu|judo|kickbox|capoeira|fencing|wrestl/i, tags: [] },
+  { id: 'gymnastics', n: 'Gymnastics', full: 'Gymnastics & tumbling', c: '#F783AC', move: 'FLIP!', shot: 'swirl', re: /gymnast|tumbl|\bninja warrior|parkour|acrobat|circus|trapeze|cheerlead/i, tags: ['cheerleading'] },
+  { id: 'dance', n: 'Dance', c: '#E599F7', move: 'SPIN!', shot: 'star', re: /danc|ballet|hip.?hop|step team|majorette/i, tags: ['dance'] },
+  { id: 'yoga', n: 'Yoga', full: 'Yoga & mindfulness', c: '#B197FC', move: 'OMMM…', shot: 'leaf', re: /\byoga|mindful/i, tags: ['wellness'] },
+  { id: 'climbing', n: 'Climbing', full: 'Rock climbing', c: '#FFA94D', move: 'TO THE TOP!', shot: 'star', re: /climb|boulder/i, tags: [] },
+  { id: 'biking', n: 'Biking', c: '#63E6BE', move: 'WHEELIE!', shot: 'dust', re: /\bbik(e|ing)\b|bicycl|cycling/i, tags: [] },
+  { id: 'running', n: 'Running', full: 'Running & track', c: '#FFD43B', move: 'ZOOM!', shot: 'dust', re: /\brunning\b|track and field|girls on the run|cross.country/i, tags: ['running'] },
+  { id: 'drums', n: 'Drums', c: '#FFA8A8', move: 'DRUM ROLL!', shot: 'note', re: /drum|percussion/i, tags: [] },
+  { id: 'piano', n: 'Piano', c: '#DEE2E6', move: 'PLINK PLONK!', shot: 'note', re: /piano|keyboard/i, tags: [] },
+  { id: 'guitar', n: 'Guitar', full: 'Guitar & rock band', c: '#FF6B6B', move: 'ROCK ON!', shot: 'note', re: /guitar|ukulele|rock band|rock school/i, tags: ['band'] },
+  { id: 'violin', n: 'Violin', full: 'Violin & orchestra', c: '#E8B567', move: 'BRAVO!', shot: 'note', re: /violin|viola|cello|string|orchestra/i, tags: ['orchestra'] },
+  { id: 'singing', n: 'Singing', c: '#FCC2D7', move: 'LA LA LAAA!', shot: 'note', re: /\bsing(ing|ers?)?\b|choir|chorus|vocal|glee/i, tags: ['singing', 'choir'] },
+  { id: 'theater', n: 'Theater', full: 'Theater & acting', c: '#FA5252', move: 'TA-DA!', shot: 'star', re: /theat|drama|acting|improv|musical/i, tags: ['theater', 'drama', 'improv', 'stage crew'], types: ['theater'] },
+  { id: 'art', n: 'Art', full: 'Painting & drawing', c: '#FFC078', move: 'SPLAT!', shot: 'splat', re: /\bpaint|drawing|pottery|ceramic|comic|art studio|art class|visual art|\bcrafts?\b/i, tags: ['art', 'painting', 'crafts'], types: ['art'] },
+  { id: 'sewing', n: 'Sewing', full: 'Sewing & fashion', c: '#FFDEEB', move: 'STITCH!', shot: 'button', re: /\bsew|fashion|knit|crochet|fiber art|textile|embroider/i, tags: [] },
+  { id: 'cooking', n: 'Cooking', full: 'Cooking & baking', c: '#FFE8CC', move: 'YUM!', shot: 'cookie', re: /\bcook|chef|\bbak(e|ing)\b|culinary|kitchen/i, tags: ['cooking'] },
+  { id: 'coding', n: 'Coding', full: 'Coding & robots', c: '#66D9E8', move: 'BEEP BOOP!', shot: 'code', re: /\bcod(e|ing)\b|robot|computer|programming|minecraft|game design/i, tags: ['coding', 'robotics'] },
+  { id: 'science', n: 'Science', c: '#8CE99A', move: 'FIZZ!', shot: 'bolt', re: /scien|\blab\b|chemist|experiment/i, tags: ['science', 'Science Olympiad'], types: ['stem'] },
+  { id: 'building', n: 'Building', full: 'LEGO & building', c: '#FFE066', move: 'CLICK!', shot: 'brick', re: /lego|\bmakers?\b|woodwork|engineering|k'?nex/i, tags: [] },
+  { id: 'chess', n: 'Chess', full: 'Chess & games', c: '#CED4DA', move: 'CHECKMATE!', shot: 'die', re: /chess|board game/i, tags: ['chess', 'games'], types: ['games'] },
+  { id: 'nature', n: 'Nature', full: 'Nature & gardening', c: '#69DB7C', move: 'SPROUT!', shot: 'leaf', re: /nature|garden|outdoor|farm|environment|\bhik(e|ing)\b|wildlife/i, tags: ['nature', 'gardening', 'outdoors', 'environment'], types: ['nature'] },
+  { id: 'reading', n: 'Reading', full: 'Reading & writing', c: '#FFD8A8', move: 'THE END!', shot: 'letter', re: /\breading\b|book club|literacy|creative writing|poetry|homework help|tutor/i, tags: ['reading', 'book club', 'writing', 'homework help', 'newspaper'], types: ['academics'] },
+];
+// Which listings are each kind: a school's clubs one by one (the ones that are, with their days when the school gives
+// them), any other listing as a whole. [key] or [key, [[club, days?], ...]].
+const actHits = a => {
+  const hits = [];
+  for (const p of programs) {
+    if (p.clubs && p.clubs.length) {
+      const cl = p.clubs.filter(c => a.re.test(c.name) || (c.tags || []).some(t => a.tags.includes(t))).map(c => c.days ? [c.name, c.days] : [c.name]);
+      if (cl.length) hits.push(['p:' + p.id, cl]);
+    } else if (a.re.test([p.name, p.what, ...(p.keywords || [])].join(' | ')) || (p.types || []).some(t => (a.types || []).includes(t))) hits.push(['p:' + p.id]);
+  }
+  return hits;
+};
 // What Kids' Playground works from: the listings (name, kinds, sites on the map), the schools, the pins, and where things
 // are. One copy, for pages one folder down: inline on Kids' Playground, and as assets/kids-corner.json for the Kids'
 // Playground tab on the account page, which loads it only when that tab is opened.
@@ -5905,7 +5951,9 @@ function kidsData() {
   const sites = (hoods, lls) => hoods.map((h, i) => { const ll = hoods.length === 1 ? (lls[0] || null) : hoods.length === lls.length ? lls[i] : null, m = mapHood(ll, h), a = mapArea(ll, m, h); return a ? { h, ll, m, a } : { h, ll, m }; });
   for (const p of programs) {
     const r = Object.fromEntries(Object.entries(p.schools || {}).filter(([, x]) => x && (x.relation === 'onsite' || x.relation === 'pickup')).map(([id, x]) => [id, x.relation === 'onsite' ? 'o' : 'p']));
-    listings['p:' + p.id] = { n: p.name, t: p.types || [], sites: sites(programHoods(p), placesOf(p)), ...(Object.keys(r).length ? { r } : {}) };   // r: the schools it runs in ("o") or picks up from ("p")
+    const nb = Object.entries(p.schools || {}).filter(([, x]) => x && x.relation === 'nearby').map(([id]) => id);
+    listings['p:' + p.id] = { n: p.name, t: p.types || [], sites: sites(programHoods(p), placesOf(p)), ...(Object.keys(r).length ? { r } : {}),   // r: the schools it runs in ("o") or picks up from ("p")
+      ...(nb.length ? { nb } : {}), ...(p.days ? { d: p.days } : {}), ...(p.weekend ? { w: p.weekend.days } : {}), ...(p.grades ? { g: p.grades } : {}) };   // nb: near these schools; d: weekdays it runs; w: weekend days; g: grades, as "K-5"
   }
   for (const c of summerCamps) listings['c:' + c.id] = { n: c.name, t: c.types || [], sites: sites(c.neighborhoods || [], coordsOf(c.address)) };
   if (mapHood.missed && mapHood.missed.size) console.log(`Note: ${mapHood.missed.size} neighborhood name(s) aren't on the Kids' Playground map, so places there without an address don't show on it: ${[...mapHood.missed].join(', ')}. Add them to MAP_ALIAS in build.mjs.`);
@@ -5921,7 +5969,9 @@ function kidsData() {
     // the pictures a premium program can pick for its own pin (the server's PIN_ICONS)
     picons: { ...Object.fromEntries(TYPES.map(t => [t.id, t.icon])), star: kidsStar(12, 12.5, 10.5), heart: 'M12 21C5 15.5 2 12 2 8.2C2 5.3 4.3 3 7.1 3C9 3 10.8 4 12 5.6C13.2 4 15 3 16.9 3C19.7 3 22 5.3 22 8.2C22 12 19 15.5 12 21Z', bolt: 'M13 2L4 14H11L10 22L20 9H13Z' },
     kinds: { after: 'After school', weekend: 'Weekend class', off: 'Day-off camp', summer: 'Summer camp' },
-    links: { kids: link('profile/', D) + '#add-kid', account: link('account/', D), review: link('review/', D), corner: link(kidsPath, D) },
+    // "Plan my week": the kinds of class, and the listings that are each
+    acts: KIDS_ACTS.map(a => ({ id: a.id, n: a.n, full: a.full || a.n, c: a.c, move: a.move, shot: a.shot, hits: actHits(a) })), grades: GRADES,
+    links: { kids: link('profile/', D) + '#add-kid', account: link('account/', D), review: link('review/', D), corner: link(kidsPath, D), root: link('', D), school: link('profile/', D) + '#school', weekend: link(weekendPath, D) },
   };
   return KIDS_DATA;
 }

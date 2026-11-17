@@ -993,12 +993,29 @@ function passport_clean($raw): array {
     if ($sn) $out['seen'] = $sn;
   }
   if (isset($raw['lvl']) && is_numeric($raw['lvl']) && (int) $raw['lvl'] >= 1 && (int) $raw['lvl'] <= 99) $out['lvl'] = (int) $raw['lvl'];
+  // "Plan my week": the days a parent has set up, each with two to six kinds of class (the build's list) for the child to
+  // play off, and the child's order once played ("r", best first). One per day, in the week's order.
+  if (isset($raw['plan']) && is_array($raw['plan'])) {
+    global $CFG;
+    $acts = isset($CFG['acts']) && is_array($CFG['acts']) ? $CFG['acts'] : array(); $plan = array();
+    foreach (array_slice($raw['plan'], 0, 7) as $x) {
+      if (!is_array($x) || !isset($x['d'], $x['o']) || !is_string($x['d']) || !in_array($x['d'], DAYS, true) || isset($plan[$x['d']]) || !is_array($x['o'])) continue;
+      $o = array(); foreach (array_slice($x['o'], 0, 6) as $a) if (is_string($a) && in_array($a, $acts, true) && !in_array($a, $o, true)) $o[] = $a;
+      if (count($o) < 2) continue;
+      $e = array('d' => $x['d'], 'o' => $o);
+      if (isset($x['r']) && is_array($x['r'])) { $r = array_values(array_filter($x['r'], 'is_string')); $a1 = $r; $a2 = $o; sort($a1); sort($a2); if ($a1 === $a2) $e['r'] = $r; }
+      $plan[$x['d']] = $e;
+    }
+    $sorted = array(); foreach (DAYS as $d) if (isset($plan[$d])) $sorted[] = $plan[$d];
+    if ($sorted) $out['plan'] = $sorted;
+  }
   return $out;
 }
 // One child as the page gets it.
 function passport_kid(int $home, array $k, ?array $r, array $d): array {
   return array('name' => $k['n'], 'grade' => isset($k['g']) ? $k['g'] : '', 'age' => isset($k['a']) ? $k['a'] : '', 'done' => $d['done'], 'skip' => $d['skip'], 'fav' => $d['fav'],
     'av' => isset($d['av']) ? $d['av'] : null, 'seen' => (object) (isset($d['seen']) ? $d['seen'] : array()), 'lvl' => isset($d['lvl']) ? $d['lvl'] : 0,
+    'plan' => isset($d['plan']) ? $d['plan'] : array(),
     'suggest' => passport_suggest($home, $k['n'], $d), 'updated' => $r ? (int) $r['updated'] : 0);
 }
 function passport_row(int $home, string $name): ?array {
@@ -1074,7 +1091,8 @@ function passport_out(array $u): array {
     $r = passport_row($home, $k['n']);
     $kids[] = passport_kid($home, $k, $r, passport_data($r));
   }
-  return array('kids' => $kids, 'year' => school_year(), 'ppins' => program_pins($kids));
+  $hu = home_user($u); $school = (string) $u['school'] !== '' ? (string) $u['school'] : (isset($hu['school']) ? (string) $hu['school'] : '');   // for the classes that fit a plan: this account's school, or the household's
+  return array('kids' => $kids, 'year' => school_year(), 'ppins' => program_pins($kids), 'school' => in_array($school, schools(), true) ? $school : '');
 }
 // The pins of premium listings a child in the household has gone to, approved by the owner. Only while premium listings
 // are open to everyone (or for the owner's test listing). The page shows one only once a child has earned it.
@@ -1210,7 +1228,7 @@ function household(array $u): array {   // the account ids that share these plan
 function in_list(array $ids): string { return implode(',', array_map('intval', $ids)); }   // for "IN (...)" with ids the server made
 function home_user(array $u): array {   // the row the children's list lives on
   if (home_id($u) === (int) $u['id']) return $u;
-  $r = row('SELECT id, email, name, first, last, kids, grades, ages FROM users WHERE id = ?', array(home_id($u)));
+  $r = row('SELECT id, email, name, first, last, kids, grades, ages, school FROM users WHERE id = ?', array(home_id($u)));
   return $r ? $r + array('home' => 0) : $u;
 }
 function named(array $r): array { return array('name' => trim((string) $r['first'] . ' ' . (string) $r['last']) ?: (string) $r['name'], 'email' => (string) $r['email']); }
@@ -2904,13 +2922,13 @@ switch ($method . ' ' . $action) {
     $name = first_name(str($in, 'kid', 40));
     if ($name === '') fail('kid', 'Which child?');
     $known = false; foreach (kids_list(home_user($u)) as $k) if (mb_strtolower($k['n'], 'UTF-8') === mb_strtolower($name, 'UTF-8')) { $known = true; $name = $k['n']; }
-    if (!$known) fail('kid', 'Add this child’s first name on your account page first (School & kids).', 404);
+    if (!$known) fail('kid', 'Add this child’s first name on your profile first.', 404);
     $home = home_id($u);
     $r = passport_row($home, $name);
     $d = passport_clean($in);
     $old = passport_data($r);   // what the request leaves out of Kids' Playground's own fields stays as it was
-    foreach (array('av', 'seen', 'lvl') as $f) if (!array_key_exists($f, $in) && isset($old[$f])) $d[$f] = $old[$f];
-    if (count($d['done']) === 0 && count($d['skip']) === 0 && count($d['fav']) === 0 && !isset($d['av'])) {
+    foreach (array('av', 'seen', 'lvl', 'plan') as $f) if (!array_key_exists($f, $in) && isset($old[$f])) $d[$f] = $old[$f];
+    if (count($d['done']) === 0 && count($d['skip']) === 0 && count($d['fav']) === 0 && !isset($d['av']) && !isset($d['plan'])) {
       if ($r) q('DELETE FROM passports WHERE id = ?', array($r['id']));
     } elseif ($r) {
       q('UPDATE passports SET json = ?, updated = ? WHERE id = ?', array(seal(json_encode($d)), now(), $r['id']));
@@ -2931,7 +2949,7 @@ switch ($method . ' ' . $action) {
     $name = first_name(str($in, 'kid', 40));
     if ($name === '') fail('kid', 'Which child?');
     $known = false; foreach (kids_list(home_user($u)) as $k) if (mb_strtolower($k['n'], 'UTF-8') === mb_strtolower($name, 'UTF-8')) { $known = true; $name = $k['n']; }
-    if (!$known) fail('kid', 'Add this child’s first name on your account page first (School & kids).', 404);
+    if (!$known) fail('kid', 'Add this child’s first name on your profile first.', 404);
     $home = home_id($u);
     $r = passport_row($home, $name);
     if ($r) {
