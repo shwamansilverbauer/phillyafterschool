@@ -597,7 +597,7 @@ name. The code keeps the Kid's Corner one: `src/kids-corner.js`, `assets/kids-co
   on that weekday (in the school first, then picking up from it, then near it, on that day when the listing gives its
   days, for the child's grade when both say), or a weekend class that day; a school's clubs count one by one. When
   nothing fits the winner, the next in line's. Each has "Add to a week", which opens the week builder on that program
-  at that day (`board/?add=&school=&day=`, focusing the day). Which listings are each kind is worked out by the build
+  at that day (`board/?add=&school=&day=`, the day marked `.asked` and focused). Which listings are each kind is worked out by the build
   (`actHits()`: the words in a listing's name, "what" and keywords, or a club's name, plus club tags and listing
   kinds) and travels in `assets/kids-corner.json` as `acts`, with each listing's days (`d`), weekend days (`w`),
   grades (`g`) and nearby schools (`nb`). Starting a child over clears the plan. Nothing about it is counted on Kids' Playground or the account page; the week

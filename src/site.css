@@ -272,6 +272,7 @@ button.btn{cursor:pointer;font-family:inherit}
 .days{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding-top:4px}
 .day{font:inherit;font-size:.95rem;min-width:54px;padding:9px 10px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
 .day[aria-pressed="true"]{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-ink);font-weight:700}
+.day.asked:not([aria-pressed="true"]){box-shadow:0 0 0 3px var(--yellow);font-weight:700}
 .days a{font-size:.93rem;margin-left:4px}
 .rev{grid-area:rev;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;font-size:.95rem;border-top:1px solid var(--line);padding-top:12px;color:var(--muted)}
 .rev details{flex:1 1 100%;min-width:0;color:var(--ink)}

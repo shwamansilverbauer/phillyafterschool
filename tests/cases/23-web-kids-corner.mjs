@@ -661,7 +661,8 @@ test('Plan my week: a parent sets up a day on the account page, the child plays 
     matches(await add.getAttribute('href'), /board\/\?add=[a-z0-9-]+&school=nebinger&day=mon$/);
     await add.click();
     await page.waitForURL(/\/board\//);
-    await page.waitForFunction(() => document.activeElement && document.activeElement.getAttribute('data-day') === 'mon', null, { timeout: 8000 });
+    await page.waitForSelector('.day.asked[data-day="mon"]', { timeout: 15000 });   // the day picked, marked (and focused, when nothing else takes it)
+    eq(await page.locator('.day.asked').count(), 1, 'only that day');
   } else includes(flat(await row.innerText()), 'Nothing on the site for');
   eq(t.errors.length + k.errors.length, 0, t.errors.concat(k.errors).join(' | '));
   await t.close(); await k.close();

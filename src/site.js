@@ -3288,6 +3288,7 @@ document.addEventListener('click', function (e) {
         var isOn = !!adding.school && findEntry(b.days[d[0]], key) > -1;
         bt.setAttribute('aria-pressed', String(isOn));
         if (prog.days && prog.days.indexOf(d[0]) < 0) { bt.className += ' off'; bt.title = 'Not listed for ' + d[1] + 's'; }
+        if (adding.day === d[0]) bt.className += ' asked';
         if (isOn) { picked.push(d[0]); var at0 = findEntry(b.days[d[0]], key); if (!pickedNote) pickedNote = entryNote(b.days[d[0]][at0]); }
         days.appendChild(bt);
       });
@@ -3303,7 +3304,7 @@ document.addEventListener('click', function (e) {
     var pickAdd = function (id, schoolId, how, day) {
       var prog = data.programs[id];
       if (!prog) return;
-      adding = { id: id, school: schoolId && prog.schools[schoolId] && data.schools[schoolId] ? schoolId : guessSchool(prog) };
+      adding = { id: id, school: schoolId && prog.schools[schoolId] && data.schools[schoolId] ? schoolId : guessSchool(prog), day: day || '' };   // day: the one Plan my week picked, marked until the panel closes
       if (fillTabs && fill !== 'add') setFill('add');   // a program picked from elsewhere lands on the Add tab
       addInput.value = ''; closeAdd(); addStatus.textContent = '';
       drawAdd();
