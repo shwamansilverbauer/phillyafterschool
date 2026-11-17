@@ -3288,6 +3288,7 @@ document.addEventListener('click', function (e) {
         var isOn = !!adding.school && findEntry(b.days[d[0]], key) > -1;
         bt.setAttribute('aria-pressed', String(isOn));
         if (prog.days && prog.days.indexOf(d[0]) < 0) { bt.className += ' off'; bt.title = 'Not listed for ' + d[1] + 's'; }
+        if (adding.day === d[0]) bt.className += ' asked';
         if (isOn) { picked.push(d[0]); var at0 = findEntry(b.days[d[0]], key); if (!pickedNote) pickedNote = entryNote(b.days[d[0]][at0]); }
         days.appendChild(bt);
       });
@@ -3300,15 +3301,15 @@ document.addEventListener('click', function (e) {
       addPanel.appendChild(foot);
     };
     var closeAdd = function () { addList.hidden = true; addInput.setAttribute('aria-expanded', 'false'); addInput.removeAttribute('aria-activedescendant'); addActive = -1; };
-    var pickAdd = function (id, schoolId, how) {
+    var pickAdd = function (id, schoolId, how, day) {
       var prog = data.programs[id];
       if (!prog) return;
-      adding = { id: id, school: schoolId && prog.schools[schoolId] && data.schools[schoolId] ? schoolId : guessSchool(prog) };
+      adding = { id: id, school: schoolId && prog.schools[schoolId] && data.schools[schoolId] ? schoolId : guessSchool(prog), day: day || '' };   // day: the one Plan my week picked, marked until the panel closes
       if (fillTabs && fill !== 'add') setFill('add');   // a program picked from elsewhere lands on the Add tab
       addInput.value = ''; closeAdd(); addStatus.textContent = '';
       drawAdd();
       track({ event: 'pas_program_pick', program_id: id, method: how });
-      var first = addPanel.querySelector(adding.school ? '.day' : '.kd');
+      var first = addPanel.querySelector(adding.school ? (day ? '.day[data-day="' + day + '"]' : '.day') : '.kd') || addPanel.querySelector('.day');
       if (first) first.focus();
     };
     var renderAdd = function () {
@@ -3488,7 +3489,8 @@ document.addEventListener('click', function (e) {
       }
       if (asked.add && data.programs[asked.add] && !shared && mayPlan()) {
         if (window.history && history.replaceState) { try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* file preview */ } }
-        window.setTimeout(function () { pickAdd(asked.add, asked.school || '', 'program_page'); if (adder.scrollIntoView) adder.scrollIntoView({ block: 'center' }); }, 0);
+        var askDay = /^(mon|tue|wed|thu|fri|sat|sun)$/.test(asked.day || '') ? asked.day : '';   // from Kids' Playground's "Plan my week": the day picked
+        window.setTimeout(function () { pickAdd(asked.add, asked.school || '', askDay ? 'plan_my_week' : 'program_page', askDay); if (adder.scrollIntoView) adder.scrollIntoView({ block: 'center' }); }, 0);
       }
     }
 

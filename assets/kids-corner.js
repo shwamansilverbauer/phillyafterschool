@@ -54,7 +54,11 @@
     return new Promise(function (res) { a.onfinish = res; a.oncancel = res; });
   };
   var listing = function (k) { return D.listings[k] || null; };
-  var nameOf = function (k) { var l = listing(k); return l ? l.n : k.replace(/^[pc]:/, ''); };
+  // "Plan my week": the kinds of class a parent sets against each other for a day, by id ("a:karate" as a contender)
+  var ACT = null;
+  var actOf = function (id) { if (!ACT) { ACT = {}; (D.acts || []).forEach(function (a) { ACT[a.id] = a; }); } return ACT[id] || null; };
+  var DAY_FULL = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' }, DAY_ORDER = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+  var nameOf = function (k) { if (k.slice(0, 2) === 'a:') { var a = actOf(k.slice(2)); return a ? a.n : k.slice(2); } var l = listing(k); return l ? l.n : k.replace(/^[pc]:/, ''); };
   // The child's whole ranking from the showdowns, best first, for the grown-ups (the Parent Portal's Kids' Playground tab
   // and the grown-ups' corner). The planners offer them in this order.
   var rankList = function (k, cls) {
@@ -203,7 +207,12 @@
   };
   var speciesOf = function (key) { var l = listing(key), t = l && l.t && l.t.length ? l.t[0] : ''; return SPECIES[t] ? t : '_'; };
   // A program's bulb: its family's shape and gear, glass tinted with its kind's colour, the face varied by its id.
+  var ACT_HAT = { baseball: 'ballcap', art: 'beret', science: 'goggles', nature: 'sprout' };   // the gear the bulbs already have
   var bulbFor = function (key) {
+    if (key.slice(0, 2) === 'a:') {
+      var a = actOf(key.slice(2)) || { id: '', c: '#FFD43B', shot: 'star', move: 'Star power!' }, x = hexHsl(a.c);
+      return { shape: 'classic', glass: a.c, dark: hsl(x[0], Math.min(x[1], 55), Math.max(x[2] - 42, 18)), glow: a.c, eyes: 2, mouth: 0, spots: false, blush: true, shades: false, acc: ACT_HAT[a.id] || '', act: a.id, atk: a.shot, move: a.move };
+    }
     var t = speciesOf(key), sp = SPECIES[t], r = rng(hash(key)), base = t !== '_' && D.types[t] ? hexHsl(D.types[t].color) : [48, 90, 55];
     var h = base[0] + (r() * 16 - 8), L = 66 + Math.round(r() * 10);
     return { shape: sp.shape, glass: hsl(h, 80, L), dark: hsl(h, 60, L - 36), glow: hsl(h, 95, 72), eyes: r() < 0.3 ? 1 : 2, mouth: Math.floor(r() * 4), spots: r() < 0.35, blush: r() < 0.4, shades: r() < 0.12, acc: sp.acc, atk: sp.atk, move: sp.move };
@@ -328,8 +337,201 @@
     if (a === 'crown') { sv('path', ink({ d: 'M36 ' + (T + 4) + 'L35 ' + (T - 12) + 'L43 ' + (T - 4) + 'L50 ' + (T - 16) + 'L57 ' + (T - 4) + 'L65 ' + (T - 12) + 'L64 ' + (T + 4) + 'Z', fill: '#F3C613' }, 2.5), g); sv('circle', { cx: 50, cy: T - 3, r: 2.6, fill: '#CC3000' }, g); sv('circle', { cx: 42, cy: T, r: 2, fill: '#2176D2' }, g); sv('circle', { cx: 58, cy: T, r: 2, fill: '#2176D2' }, g); }
     if (wr.hat === 'halo') { sv('ellipse', { cx: 50, cy: T - 12, rx: 17, ry: 4.8, fill: 'none', stroke: '#E0B400', 'stroke-width': 6 }, g); sv('ellipse', { cx: 50, cy: T - 12, rx: 17, ry: 4.8, fill: 'none', stroke: '#FFF3B0', 'stroke-width': 2.5 }, g); }
     if (wr.glow === 'sparkle') [[6, 8, 0], [94, 2, 0.6], [97, 58, 1.2], [3, 64, 1.8], [50, T - 26, 0.9]].forEach(function (q) { sv('path', { 'class': 'kc-twinkle', d: TWINKLE, transform: 'translate(' + q[0] + ' ' + q[1] + ')', fill: '#FFF3B0', stroke: '#E0B400', 'stroke-width': 1.2, style: 'animation-delay:' + q[2] + 's' }, g); });
+    if (m.act && GEAR[m.act]) GEAR[m.act](g, inner);   // a kind of class, dressed for it
     return s;
   };
+  // "Plan my week": what each kind of class wears and holds, on the classic bulb (eyes at 30, hands at 12,64 and
+  // 88,64, feet at 97). g is on top of everything; inner is clipped to the glass.
+  var GEAR = (function () {
+    var O = function (o, w) { o.stroke = INK; o['stroke-width'] = w || 2.5; o['stroke-linejoin'] = 'round'; o['stroke-linecap'] = 'round'; return o; };
+    var band = function (i, c) { sv('rect', { x: 0, y: 12, width: 100, height: 6.5, fill: c }, i); };   // a sweatband round the glass
+    var hand = function (g, x) { sv('circle', O({ cx: x, cy: 64, r: 4.5, fill: '#fff' }), g); };
+    var stick = function (g, d, c, w) { sv('path', { d: d, fill: 'none', stroke: INK, 'stroke-width': w + 2.6, 'stroke-linecap': 'round' }, g); sv('path', { d: d, fill: 'none', stroke: c, 'stroke-width': w, 'stroke-linecap': 'round' }, g); };
+    var feet = function (g, c) { [40.5, 59.5].forEach(function (x) { sv('ellipse', O({ cx: x, cy: 97, rx: 6.5, ry: 3.6, fill: c }, 2), g); }); };
+    var note = function (g, x, y, sc, c) { sv('path', { d: 'M-2 -11v13.6A4.6 4.6 0 1 0 1 7V-4h8v-7z', transform: 'translate(' + x + ' ' + y + ') scale(' + sc + ')', fill: c, stroke: INK, 'stroke-width': 1.6 }, g); };
+    var gid = 0;
+    var pent = function (cx, cy, r, rot) { var d = ''; for (var i = 0; i < 5; i++) { var a = rot - Math.PI / 2 + i * Math.PI * 2 / 5; d += (i ? 'L' : 'M') + (cx + r * Math.cos(a)).toFixed(1) + ' ' + (cy + r * Math.sin(a)).toFixed(1); } return d + 'Z'; };
+    var ball5 = function (g, x, y, r) {   // a soccer ball: a black pentagon in the middle, five more round the edge, seams between
+      var id = 'kcsb' + (++gid);
+      sv('circle', { cx: x, cy: y, r: r }, sv('clipPath', { id: id }, sv('defs', null, g)));
+      sv('circle', { cx: x, cy: y, r: r, fill: '#fff' }, g);
+      var in1 = sv('g', { 'clip-path': 'url(#' + id + ')' }, g), sp = '';
+      for (var i = 0; i < 5; i++) {
+        var a = -Math.PI / 2 + i * Math.PI * 2 / 5, a2 = a + Math.PI / 5;
+        sp += 'M' + (x + r * 0.36 * Math.cos(a)).toFixed(1) + ' ' + (y + r * 0.36 * Math.sin(a)).toFixed(1) + 'L' + (x + r * 0.62 * Math.cos(a)).toFixed(1) + ' ' + (y + r * 0.62 * Math.sin(a)).toFixed(1) + 'L' + (x + r * 0.78 * Math.cos(a2)).toFixed(1) + ' ' + (y + r * 0.78 * Math.sin(a2)).toFixed(1) + 'M' + (x + r * 0.62 * Math.cos(a)).toFixed(1) + ' ' + (y + r * 0.62 * Math.sin(a)).toFixed(1) + 'L' + (x + r * 0.78 * Math.cos(a - Math.PI / 5)).toFixed(1) + ' ' + (y + r * 0.78 * Math.sin(a - Math.PI / 5)).toFixed(1);
+        sv('path', { d: pent(x + r * 1.0 * Math.cos(a2), y + r * 1.0 * Math.sin(a2), r * 0.3, a2 + Math.PI / 2), fill: INK }, in1);
+      }
+      sv('path', { d: sp, stroke: INK, 'stroke-width': 1.2 }, in1); sv('path', { d: pent(x, y, r * 0.38, 0), fill: INK }, in1);
+      sv('circle', { cx: x, cy: y, r: r, fill: 'none', stroke: INK, 'stroke-width': 2.4 }, g);
+    };
+    return {
+      soccer: function (g, i) { band(i, '#2F9E44'); ball5(g, 82, 87, 11.5); },
+      basketball: function (g, i) {
+        band(i, '#E03131');
+        sv('circle', O({ cx: 88, cy: 53, r: 10, fill: '#FF8C1A' }), g);
+        sv('path', { d: 'M78 53H98M88 43V63M81 46C85 50 85 56 81 60M95 46C91 50 91 56 95 60', fill: 'none', stroke: INK, 'stroke-width': 1.4 }, g);
+        hand(g, 88);
+      },
+      baseball: function (g) {
+        stick(g, 'M86 70L91 48', '#E8B567', 4); stick(g, 'M91 48L97 25', '#E8B567', 8); hand(g, 88);
+        sv('circle', O({ cx: 12, cy: 56, r: 6, fill: '#fff' }, 2), g); sv('path', { d: 'M8.5 52Q11 56 8.5 60M15.5 52Q13 56 15.5 60', fill: 'none', stroke: '#E03131', 'stroke-width': 1.3 }, g); hand(g, 12);
+      },
+      tennis: function (g, i) {
+        band(i, '#fff'); sv('path', O({ d: 'M29 16Q50 25 71 16L73 21Q50 31 27 21Z', fill: '#94D82D' }, 2), g);
+        stick(g, 'M88 64L90 48', '#343A40', 3);
+        sv('ellipse', { cx: 91, cy: 35, rx: 8, ry: 11, fill: '#fff', opacity: 0.5 }, g);
+        sv('path', { d: 'M87 26V44M91 24V46M95 26V44M84 30H98M83 35H99M84 40H98', fill: 'none', stroke: '#ADB5BD', 'stroke-width': 0.9 }, g);
+        sv('ellipse', { cx: 91, cy: 35, rx: 8, ry: 11, fill: 'none', stroke: INK, 'stroke-width': 4.4 }, g); sv('ellipse', { cx: 91, cy: 35, rx: 8, ry: 11, fill: 'none', stroke: '#E03131', 'stroke-width': 2.2 }, g);
+        hand(g, 88);
+        sv('circle', O({ cx: 12, cy: 57, r: 5.5, fill: '#D8F5A2' }, 1.8), g); sv('path', { d: 'M7 55Q12 58.5 17 55', fill: 'none', stroke: '#fff', 'stroke-width': 1.3 }, g);
+      },
+      swimming: function (g, i) {
+        sv('rect', { x: 0, y: -10, width: 100, height: 26, fill: '#E64980' }, i); sv('rect', { x: 0, y: 15, width: 100, height: 3.5, fill: INK }, i);
+        [39, 61].forEach(function (x) { sv('circle', O({ cx: x, cy: 17, r: 6, fill: '#C3E1FF' }), g); sv('path', { d: 'M' + (x - 3) + ' 14.5l2.4 -1.6', stroke: '#fff', 'stroke-width': 1.8, 'stroke-linecap': 'round' }, g); });
+        sv('path', O({ d: 'M0 94Q7 89 14 94T28 94T42 94T56 94T70 94T84 94T98 94V102H0Z', fill: '#74C0FC' }, 2), g);
+      },
+      karate: function (g, i) {
+        sv('path', { d: 'M31 45L50 57L69 45', fill: 'none', stroke: '#868E96', 'stroke-width': 2.6 }, i);
+        sv('rect', { x: 0, y: 52.5, width: 100, height: 5.5, fill: INK }, i); band(i, '#E03131');
+        sv('rect', { x: 45.5, y: 51.5, width: 9, height: 7.5, rx: 2, fill: INK }, g);
+        sv('path', { d: 'M47.5 58L43 70M52.5 58L57 69', fill: 'none', stroke: INK, 'stroke-width': 3.4, 'stroke-linecap': 'round' }, g);
+        stick(g, 'M76 15L88 10M76 17L87 22', '#E03131', 3);
+      },
+      gymnastics: function (g, i) {
+        band(i, '#F06595'); [[36, 52], [63, 55]].forEach(function (q) { sv('path', { d: TWINKLE, transform: 'translate(' + q[0] + ' ' + q[1] + ') scale(.55)', fill: '#fff' }, i); });
+        stick(g, 'M88 64L93 42', '#868E96', 1.6);
+        sv('path', { d: 'M93 42C103 34 82 28 92 16S100 2 86 -4S80 -14 92 -19', fill: 'none', stroke: '#F06595', 'stroke-width': 4, 'stroke-linecap': 'round' }, g);
+        hand(g, 88);
+      },
+      dance: function (g) {
+        var tutu = function (x0, x1, y, h, c) { var n = 8, w = (x1 - x0) / n, d = 'M' + x0 + ' ' + y; for (var k = 0; k < n; k++) d += 'q' + (w / 2).toFixed(2) + ' ' + h + ' ' + w.toFixed(2) + ' 0'; sv('path', O({ d: d + 'Q50 ' + (y - 7) + ' ' + x0 + ' ' + y + 'Z', fill: c }, 2), g); };
+        tutu(23, 77, 63, 10, '#FCC2D7'); tutu(27, 73, 63, 7, '#F783AC');
+        sv('path', O({ d: 'M50 7L40 1V13ZM50 7L60 1V13Z', fill: '#F06595' }, 2), g); sv('circle', O({ cx: 50, cy: 7, r: 2.6, fill: '#E64980' }, 1.6), g);
+      },
+      yoga: function (g, i) {
+        band(i, '#9775FA');
+        sv('rect', O({ x: 8, y: 94, width: 84, height: 6, rx: 3, fill: '#B197FC' }, 2), g); feet(g, INK);
+        [[10, 30], [90, 24], [16, 4]].forEach(function (q) { sv('path', { 'class': 'kc-twinkle', d: TWINKLE, transform: 'translate(' + q[0] + ' ' + q[1] + ') scale(.6)', fill: '#E5DBFF', stroke: '#9775FA', 'stroke-width': 1 }, g); });
+      },
+      climbing: function (g) {
+        sv('path', O({ d: 'M26 20C26 -1 74 -1 74 20Z', fill: '#FD7E14' }), g); sv('path', { d: 'M34 10Q50 4 66 10', fill: 'none', stroke: '#fff', 'stroke-width': 2, opacity: 0.6 }, g);
+        [0, 5].forEach(function (o) { sv('ellipse', { cx: 76, cy: 50 + o, rx: 11, ry: 7.5, fill: 'none', stroke: INK, 'stroke-width': 4.6 }, g); sv('ellipse', { cx: 76, cy: 50 + o, rx: 11, ry: 7.5, fill: 'none', stroke: '#F03E3E', 'stroke-width': 2.6 }, g); });
+        sv('path', O({ d: 'M62 58a3.5 5 0 1 0 7 0v-4a3.5 3.5 0 0 0 -7 0z', fill: '#ADB5BD' }, 1.6), g);
+      },
+      biking: function (g) {
+        sv('path', { d: 'M28 19L31 44M72 19L69 44', stroke: INK, 'stroke-width': 1.6 }, g);
+        sv('path', O({ d: 'M24 20C24 1 70 -3 79 17L74 18L70 21Z', fill: '#20C997' }), g);
+        [[38, 9, -30], [49, 6, -8], [60, 7, 14]].forEach(function (q) { sv('rect', { x: q[0] - 2.2, y: q[1] - 4.5, width: 4.4, height: 9, rx: 2.2, fill: INK, transform: 'rotate(' + q[2] + ' ' + q[0] + ' ' + q[1] + ')' }, g); });
+        sv('path', { d: 'M27 19H70', stroke: '#0CA678', 'stroke-width': 2.6 }, g);
+        sv('circle', { cx: 84, cy: 86, r: 12, fill: 'none', stroke: INK, 'stroke-width': 4 }, g);
+        sv('path', { d: 'M84 74V98M72 86H96M75.5 77.5L92.5 94.5M92.5 77.5L75.5 94.5', stroke: '#868E96', 'stroke-width': 1 }, g); sv('circle', { cx: 84, cy: 86, r: 2.2, fill: INK }, g);
+      },
+      running: function (g, i) {
+        band(i, '#FAB005');
+        sv('rect', { x: 41, y: 53, width: 18, height: 11, rx: 2, fill: '#fff', stroke: INK, 'stroke-width': 1.4 }, i);
+        var t = sv('text', { x: 50, y: 62, 'text-anchor': 'middle', 'font-size': 9, 'font-family': 'Luckiest Guy, Arial Black, sans-serif', fill: INK }, i); t.textContent = '7';
+        sv('path', { d: 'M1 30H11M0 40H9M2 50H12', stroke: '#ADB5BD', 'stroke-width': 3, 'stroke-linecap': 'round' }, g);
+        feet(g, '#FA5252'); sv('path', { d: 'M36 96.5H45M55 96.5H64', stroke: '#fff', 'stroke-width': 1.6, 'stroke-linecap': 'round' }, g);
+      },
+      drums: function (g) {
+        stick(g, 'M12 62L36 72', '#E8B567', 2.2); stick(g, 'M88 62L64 72', '#E8B567', 2.2);
+        sv('path', O({ d: 'M30 75V88Q50 95 70 88V75', fill: '#E03131' }), g);
+        sv('path', { d: 'M32 79L38 87L44 79L50 88L56 79L62 87L68 79', fill: 'none', stroke: '#fff', 'stroke-width': 1.6 }, g);
+        sv('ellipse', O({ cx: 50, cy: 75, rx: 20, ry: 5, fill: '#F8F9FA' }), g);
+        hand(g, 12); hand(g, 88);
+      },
+      piano: function (g) {
+        sv('rect', O({ x: 18, y: 70, width: 64, height: 6, rx: 2, fill: '#343A40' }), g);
+        sv('rect', O({ x: 20, y: 75, width: 60, height: 14, rx: 2, fill: '#fff' }), g);
+        var d = ''; for (var x = 27.5; x < 80; x += 7.5) d += 'M' + x + ' 75V89'; sv('path', { d: d, stroke: INK, 'stroke-width': 1.2 }, g);
+        [25.5, 33, 48, 55.5, 63].forEach(function (x) { sv('rect', { x: x, y: 75, width: 4, height: 8, fill: INK }, g); });
+      },
+      guitar: function (g) {
+        stick(g, 'M66 54L94 21', '#8B5A2B', 4);
+        sv('circle', O({ cx: 68, cy: 52, r: 8.5, fill: '#E8590C' }), g); sv('circle', O({ cx: 60, cy: 62, r: 11, fill: '#E8590C' }), g);
+        sv('circle', { cx: 68, cy: 52, r: 7.2, fill: '#E8590C' }, g); sv('circle', { cx: 63, cy: 58, r: 3.4, fill: INK }, g);
+        sv('path', { d: 'M55 69L93 22', stroke: '#fff', 'stroke-width': 0.8 }, g);
+        sv('rect', O({ x: 91, y: 15, width: 6, height: 9, rx: 1.5, fill: '#5C3A1E', transform: 'rotate(40 94 19)' }, 1.6), g);
+      },
+      violin: function (g) {
+        var v = sv('g', { transform: 'rotate(-30 24 52)' }, g);
+        sv('rect', { x: 22.6, y: 20, width: 3, height: 22, fill: INK }, v); sv('circle', { cx: 24.1, cy: 19, r: 2.8, fill: INK }, v);
+        sv('ellipse', O({ cx: 24, cy: 60, rx: 9, ry: 8.5, fill: '#C2410C' }, 2), v); sv('ellipse', O({ cx: 24, cy: 47, rx: 7, ry: 7, fill: '#C2410C' }, 2), v);
+        sv('ellipse', { cx: 24, cy: 53, rx: 7.6, ry: 6, fill: '#C2410C' }, v); sv('path', { d: 'M20 50Q18.5 54 20 58M28 50Q29.5 54 28 58', fill: 'none', stroke: INK, 'stroke-width': 1.2 }, v);
+        stick(g, 'M90 66L54 34', '#8B5A2B', 1.6); sv('path', { d: 'M88 68L53 37', stroke: '#F1F3F5', 'stroke-width': 1 }, g);
+        hand(g, 88);
+      },
+      singing: function (g) {
+        stick(g, 'M88 64L84 51', '#343A40', 3); sv('circle', O({ cx: 83, cy: 46, r: 6.2, fill: '#ADB5BD' }, 2.2), g);
+        sv('path', { d: 'M78.5 44H87.5M78.5 48H87.5M81 41V51M85 41V51', stroke: INK, 'stroke-width': 0.9 }, g);
+        hand(g, 88); note(g, 14, 8, 0.75, '#F06595'); note(g, 6, -8, 0.55, '#9775FA');
+      },
+      theater: function (g) {
+        var mask = function (x, y, rot, c, happy) {
+          var m = sv('g', { transform: 'translate(' + x + ' ' + y + ') rotate(' + rot + ')' }, g);
+          sv('path', O({ d: 'M-9 -10H9V2C9 9 4 12 0 12C-4 12 -9 9 -9 2Z', fill: c }, 2), m);
+          sv('path', { d: 'M-6 -4Q-4 -7 -2 -4M2 -4Q4 -7 6 -4', fill: 'none', stroke: INK, 'stroke-width': 1.8, 'stroke-linecap': 'round' }, m);
+          sv('path', { d: happy ? 'M-5 3Q0 9 5 3' : 'M-5 7Q0 2 5 7', fill: 'none', stroke: INK, 'stroke-width': 2, 'stroke-linecap': 'round' }, m);
+        };
+        mask(77, 44, -14, '#74C0FC', false); mask(88, 52, 10, '#FFD43B', true);
+      },
+      art: function (g) {
+        sv('path', O({ d: 'M2 58C2 48 14 44 22 48C26 50 22 54 20 56C18 58 22 62 18 66C12 70 2 66 2 58Z', fill: '#E8B567' }, 2), g);
+        [[8, 53, '#FA5252'], [14, 50, '#4DABF7'], [7, 61, '#FFD43B'], [13, 64, '#69DB7C']].forEach(function (q) { sv('circle', { cx: q[0], cy: q[1], r: 2.4, fill: q[2] }, g); });
+        stick(g, 'M88 64L95 42', '#8B5A2B', 2); stick(g, 'M95 42L97 35', '#4DABF7', 3.4); hand(g, 88);
+      },
+      sewing: function (g) {
+        [['M28 56Q50 72 72 56'], ['M29 57L25 77'], ['M71 57L75 81']].forEach(function (q) { stick(g, q[0], '#FCC419', 4); });
+        sv('path', { d: 'M34 60l1 2.5M40 63l.6 2.6M46 64.5l.2 2.6M52 64.5l-.2 2.6M58 63l-.6 2.6M64 60l-1 2.5', stroke: INK, 'stroke-width': 1 }, g);
+        sv('rect', O({ x: 6, y: 51, width: 12, height: 13, rx: 1.5, fill: '#E64980' }, 1.8), g); sv('path', { d: 'M5 51H19M5 64H19', stroke: '#E8B567', 'stroke-width': 3, 'stroke-linecap': 'round' }, g); hand(g, 12);
+        sv('path', { d: 'M88 64L93 44', stroke: '#868E96', 'stroke-width': 2, 'stroke-linecap': 'round' }, g); sv('ellipse', { cx: 93, cy: 45.5, rx: 1, ry: 2, fill: '#fff', stroke: INK, 'stroke-width': 0.8 }, g);
+        sv('path', { d: 'M93 44C99 40 96 31 90 33S84 23 92 18', fill: 'none', stroke: '#E64980', 'stroke-width': 1.6, 'stroke-linecap': 'round' }, g); hand(g, 88);
+      },
+      cooking: function (g) {
+        [[39, -1, 9], [61, -1, 9], [50, -6, 10]].forEach(function (q) { sv('circle', O({ cx: q[0], cy: q[1], r: q[2], fill: '#fff' }), g); });
+        sv('rect', O({ x: 33, y: 3, width: 34, height: 12, rx: 2, fill: '#fff' }), g); sv('path', { d: 'M41 6V12M50 6V12M59 6V12', stroke: '#DEE2E6', 'stroke-width': 1.6 }, g);
+        stick(g, 'M88 64L92 42', '#E8B567', 2.8); sv('ellipse', O({ cx: 92.5, cy: 37, rx: 4, ry: 6, fill: '#E8B567' }, 2), g); hand(g, 88);
+      },
+      coding: function (g) {
+        sv('path', { d: 'M50 6V-5', stroke: INK, 'stroke-width': 2.5 }, g); sv('circle', O({ cx: 50, cy: -8, r: 4, fill: '#FF6B6B' }, 2), g);
+        sv('rect', O({ x: 30, y: 62, width: 40, height: 22, rx: 2, fill: '#343A40' }), g);
+        var t = sv('text', { x: 50, y: 77, 'text-anchor': 'middle', 'font-size': 11, 'font-family': 'ui-monospace, Menlo, monospace', 'font-weight': 700, fill: '#69DB7C' }, g); t.textContent = '</>';
+        sv('path', O({ d: 'M24 84H76L72 90H28Z', fill: '#ADB5BD' }), g);
+      },
+      science: function (g) {
+        sv('path', O({ d: 'M85 36H91V44L97 58Q98.5 62 94 62H82Q77.5 62 79 58L85 44Z', fill: '#fff' }, 2.2), g);
+        sv('path', { d: 'M81.6 52H94.4L97 58Q98.5 62 94 62H82Q77.5 62 79 58Z', fill: '#69DB7C' }, g);
+        sv('path', O({ d: 'M85 36H91V44L97 58Q98.5 62 94 62H82Q77.5 62 79 58L85 44Z', fill: 'none' }, 2.2), g);
+        [[86, 30, 2], [90, 24, 2.6], [85, 18, 1.6]].forEach(function (q) { sv('circle', O({ cx: q[0], cy: q[1], r: q[2], fill: '#C3FAE8' }, 1.2), g); });
+        hand(g, 88);
+      },
+      building: function (g) {
+        sv('path', O({ d: 'M28 18C28 0 72 0 72 18Z', fill: '#FCC419' }), g); sv('path', { d: 'M50 2V17', stroke: '#E8A600', 'stroke-width': 3 }, g);
+        sv('rect', O({ x: 23, y: 16, width: 54, height: 5, rx: 2.5, fill: '#FCC419' }), g);
+        [82.5, 90.5].forEach(function (x) { sv('rect', O({ x: x, y: 46, width: 5, height: 5, rx: 1, fill: '#FA5252' }, 1.6), g); });
+        sv('rect', O({ x: 80, y: 50, width: 18, height: 11, rx: 1.5, fill: '#FA5252' }, 2), g); hand(g, 88);
+      },
+      chess: function (g) {
+        sv('rect', O({ x: 18, y: 92, width: 64, height: 8, fill: '#fff' }, 2), g);
+        for (var x = 18; x < 82; x += 16) sv('rect', { x: x, y: 92, width: 8, height: 4, fill: INK }, g), sv('rect', { x: x + 8, y: 96, width: 8, height: 4, fill: INK }, g);
+        sv('path', O({ d: 'M81 63H97V59H95C96 52 96 44 90 38C86 34 82 36 79.5 39L82.5 42L79 47C81 49.5 84.5 48.5 86.5 47.5C85.5 52 83 55 83 59H81Z', fill: '#343A40' }, 1.6), g);
+        sv('circle', { cx: 86, cy: 41.5, r: 1.4, fill: '#fff' }, g); sv('rect', O({ x: 79, y: 62, width: 20, height: 4, rx: 1.5, fill: '#343A40' }, 1.6), g);
+      },
+      nature: function (g) {
+        sv('path', { d: 'M88 64L90 44', stroke: '#2B8A3E', 'stroke-width': 2.4 }, g); sv('path', O({ d: 'M89 54C84 50 82 53 84 56C86 57 88 56 89 54Z', fill: '#51CF66' }, 1.3), g);
+        for (var k2 = 0; k2 < 5; k2++) { var an = k2 * Math.PI * 2 / 5; sv('circle', O({ cx: (90 + 4.2 * Math.cos(an)).toFixed(1), cy: (39 + 4.2 * Math.sin(an)).toFixed(1), r: 3.4, fill: '#F783AC' }, 1.2), g); }
+        sv('circle', { cx: 90, cy: 39, r: 2.6, fill: '#FFD43B', stroke: INK, 'stroke-width': 1 }, g); hand(g, 88);
+        var bf = sv('g', { transform: 'translate(13 10) rotate(-15)' }, g);
+        sv('ellipse', O({ cx: -4, cy: -2, rx: 4.5, ry: 6, fill: '#74C0FC' }, 1.4), bf); sv('ellipse', O({ cx: 4, cy: -2, rx: 4.5, ry: 6, fill: '#74C0FC' }, 1.4), bf); sv('path', { d: 'M0 -6V5', stroke: INK, 'stroke-width': 2, 'stroke-linecap': 'round' }, bf);
+      },
+      reading: function (g) {
+        [39.1, 60.9].forEach(function (x) { sv('circle', { cx: x, cy: 30, r: 11, fill: 'none', stroke: INK, 'stroke-width': 2.2 }, g); }); sv('path', { d: 'M50.1 29H49.9', stroke: INK, 'stroke-width': 2.2 }, g);
+        sv('path', O({ d: 'M26 70Q38 64 50 70Q62 64 74 70V89Q62 83 50 89Q38 83 26 89Z', fill: '#4DABF7' }), g);
+        sv('path', O({ d: 'M28.5 70Q39 65.5 50 71V86.5Q39 81 28.5 86.5ZM71.5 70Q61 65.5 50 71V86.5Q61 81 71.5 86.5Z', fill: '#fff' }, 1.4), g);
+        sv('path', { d: 'M32 74Q38 71 46 74M32 78Q38 75 46 78M54 74Q62 71 68 74M54 78Q62 75 68 78', fill: 'none', stroke: '#ADB5BD', 'stroke-width': 1.2 }, g);
+      }
+    };
+  })();
   // A bulb nobody has picked yet: dark, with a question mark.
   var unlitBulb = function () {
     var m = kidBulb({ b: 'classic', c: 9 }); m.acc = ''; m.mouth = -1; m.blush = false;
@@ -364,7 +566,16 @@
     plane: function (g) { sv('path', { d: 'M-12 2L12 -9L4 11L1 3Z', fill: '#fff', stroke: INK, 'stroke-width': 1.6, 'stroke-linejoin': 'round' }, g); sv('path', { d: 'M1 3L12 -9', stroke: INK, 'stroke-width': 1.2 }, g); },
     flake: function (g) { var d = 'M0 -11V11M-3.5 -8L0 -4.5L3.5 -8M-3.5 8L0 4.5L3.5 8'; [[INK, 4.2], ['#D0EBFF', 2]].forEach(function (k) { for (var i = 0; i < 3; i++) sv('path', { d: d, fill: 'none', stroke: k[0], 'stroke-width': k[1], 'stroke-linecap': 'round', 'stroke-linejoin': 'round', transform: 'rotate(' + (i * 60) + ')' }, g); }); },
     drop: function (g) { sv('path', { d: 'M0 -11C5 -3 8 2 8 5A8 8 0 0 1 -8 5C-8 2 -5 -3 0 -11Z', fill: '#74C0FC', stroke: INK, 'stroke-width': 1.5 }, g); sv('path', { d: 'M-3.5 3Q-3.5 7 0 8', fill: 'none', stroke: '#fff', 'stroke-width': 1.6, 'stroke-linecap': 'round' }, g); },
-    dust: function (g) { [[-5, 2, 5], [4, -2, 4], [3, 6, 3.5]].forEach(function (c) { sv('circle', { cx: c[0], cy: c[1], r: c[2], fill: '#DEE2E6', stroke: INK, 'stroke-width': 1.1 }, g); }); }
+    dust: function (g) { [[-5, 2, 5], [4, -2, 4], [3, 6, 3.5]].forEach(function (c) { sv('circle', { cx: c[0], cy: c[1], r: c[2], fill: '#DEE2E6', stroke: INK, 'stroke-width': 1.1 }, g); }); },
+    // "Plan my week": a soccer ball, a baseball, a tennis ball, a board karate-chopped in two, a button, a cookie, code, a brick
+    soccer: function (g) { sv('circle', { r: 9.5, fill: '#fff', stroke: INK, 'stroke-width': 1.8 }, g); sv('path', { d: 'M0 -3.8L3.6 -1.2L2.2 3.1H-2.2L-3.6 -1.2Z', fill: INK }, g); sv('path', { d: 'M0 -3.8V-9M3.6 -1.2L8.8 -2.8M2.2 3.1L5.4 7.5M-2.2 3.1L-5.4 7.5M-3.6 -1.2L-8.8 -2.8', stroke: INK, 'stroke-width': 1.1 }, g); },
+    baseball: function (g) { sv('circle', { r: 9, fill: '#fff', stroke: INK, 'stroke-width': 1.8 }, g); sv('path', { d: 'M-5 -7Q-1 0 -5 7M5 -7Q1 0 5 7', fill: 'none', stroke: '#E03131', 'stroke-width': 1.4, 'stroke-dasharray': '1.6 1.2' }, g); },
+    tennis: function (g) { sv('circle', { r: 8.5, fill: '#D8F5A2', stroke: INK, 'stroke-width': 1.6 }, g); sv('path', { d: 'M-8 -3Q0 2 8 -3M-8 4Q0 -1 8 4', fill: 'none', stroke: '#fff', 'stroke-width': 1.4 }, g); },
+    board: function (g) { sv('path', { d: 'M-12 -5H-1L1 -1.5L-1.5 1.5L0 5H-12Z', fill: '#E8B567', stroke: INK, 'stroke-width': 1.5, 'stroke-linejoin': 'round', transform: 'rotate(-14)' }, g); sv('path', { d: 'M2 -5H12V5H3L4.5 1.5L2 -1.5L4 -5Z', fill: '#E8B567', stroke: INK, 'stroke-width': 1.5, 'stroke-linejoin': 'round', transform: 'rotate(14)' }, g); },
+    button: function (g) { sv('circle', { r: 9, fill: pick(['#E64980', '#4DABF7', '#FCC419', '#69DB7C']), stroke: INK, 'stroke-width': 1.6 }, g); [[-2.4, -2.4], [2.4, -2.4], [-2.4, 2.4], [2.4, 2.4]].forEach(function (q) { sv('circle', { cx: q[0], cy: q[1], r: 1.4, fill: INK }, g); }); },
+    cookie: function (g) { sv('circle', { r: 9.5, fill: '#D9A066', stroke: INK, 'stroke-width': 1.6 }, g); [[-4, -3], [3, -5], [4, 3], [-2, 4], [0, -0.5]].forEach(function (q) { sv('circle', { cx: q[0], cy: q[1], r: 1.5, fill: '#5C3A1E' }, g); }); },
+    code: function (g) { var t = sv('text', { x: 0, y: 5, 'text-anchor': 'middle', 'font-size': 13, 'font-weight': 700, 'font-family': 'ui-monospace, Menlo, monospace', fill: '#20C997', stroke: INK, 'stroke-width': 0.7 }, g); t.textContent = '</>'; },
+    brick: function (g) { var c = pick(['#FA5252', '#4DABF7', '#FCC419', '#69DB7C']); [-6, 2].forEach(function (x) { sv('rect', { x: x, y: -8, width: 4, height: 3.5, rx: 0.8, fill: c, stroke: INK, 'stroke-width': 1.2 }, g); }); sv('rect', { x: -10, y: -5, width: 20, height: 11, rx: 1.5, fill: c, stroke: INK, 'stroke-width': 1.6 }, g); }
   };
   var drawShot = function (kind) { var s = sv('svg', { viewBox: '-14 -14 28 28', 'class': 'kc-shot', 'aria-hidden': 'true' }); (SHOT[kind] || SHOT.star)(sv('g', null, s)); return s; };
 
@@ -636,7 +847,7 @@
   // they've been shown, Eddie's welcome and their favorites go; the classes stay unless the box is ticked. Two taps.
   var startOver = function (k, then) {
     var box = el('div', 'kc-reset');
-    box.appendChild(el('p', 'hint', 'Like new for ' + k.name + ': Eddie’s welcome, picking a bulb, and unwrapping every pin, secret spot and surprise again. The showdown favorites go too. This can’t be undone.'));
+    box.appendChild(el('p', 'hint', 'Like new for ' + k.name + ': Eddie’s welcome, picking a bulb, and unwrapping every pin, secret spot and surprise again. The showdown favorites and week picks go too. This can’t be undone.'));
     var cb = null;
     if (k.done.length) {
       var lab = el('label', 'g-check'); cb = el('input'); cb.type = 'checkbox'; cb.id = 'kc-reset-' + (++uid);
@@ -662,11 +873,11 @@
     var k = kid(); if (!k || S.saving) return;
     S.saving = true;
     var body = { kid: k.name, done: changes.done || k.done, skip: changes.skip || k.skip, fav: changes.fav || k.fav };
-    ['av', 'seen', 'lvl'].forEach(function (f) { if (changes[f] !== undefined) body[f] = changes[f]; });
+    ['av', 'seen', 'lvl', 'plan'].forEach(function (f) { if (changes[f] !== undefined) body[f] = changes[f]; });
     call('passport_save', body).then(function (d) {
       S.saving = false;
       if (!d.ok) { S.said = d.message || 'That didn’t save. Try again.'; draw(); return; }
-      ['done', 'skip', 'fav', 'suggest', 'updated', 'av', 'seen', 'lvl'].forEach(function (f) { if (d.kid[f] !== undefined) k[f] = d.kid[f]; });
+      ['done', 'skip', 'fav', 'suggest', 'updated', 'av', 'seen', 'lvl', 'plan'].forEach(function (f) { if (d.kid[f] !== undefined) k[f] = d.kid[f]; });
       S.said = '';
       if (then) then(); else draw();
     });
@@ -838,6 +1049,12 @@
     top.appendChild(muteBtn());
     page.appendChild(top);
     var body = el('div', 'kc-body'); page.appendChild(body);
+    var todo = planTodo(k);
+    if (todo.length && S.tab !== 'battle') {   // a grown-up wants help planning a day: straight to the Showdown tab
+      var callP = btn('kc-plancall', '', function () { Sound.play('tap'); go('kid', 'battle'); });
+      callP.appendChild(drawBulb(bulbFor('a:' + todo[0].o[0]), 'bob')); callP.appendChild(el('span', null, 'Help plan ' + DAY_FULL[todo[0].d] + '! Tap to pick.'));
+      body.appendChild(callP);
+    }
     if (S.tab === 'map') drawMapTab(body, k, st);
     else if (S.tab === 'battle') drawBattleTab(body, k, st);
     else if (S.tab === 'bingo') drawBingoTab(body, k);
@@ -850,6 +1067,7 @@
       if (S.tab === t[0]) b.setAttribute('aria-current', 'page');
       b.appendChild(Array.isArray(t[2]) ? icons(t[2]) : icon(t[2])); b.appendChild(el('span', null, t[1]));
       if (t[0] === 'bingo' && bnew) { b.appendChild(el('i', 'kc-tabdot')); b.setAttribute('aria-label', 'Bingo: something new'); }
+      if (t[0] === 'battle' && todo.length && S.tab !== 'battle') { b.appendChild(el('i', 'kc-tabdot')); b.setAttribute('aria-label', 'Showdown: help plan your week'); }
       tabs.appendChild(b);
     });
     page.appendChild(tabs);
@@ -1815,6 +2033,7 @@
   // the child's ranking of favorites.
   var drawBattleTab = function (body, k, st) {
     var keys = st.keys;
+    drawPlanKid(body, k);
     if (k.fav.length) {
       var head = el('div', 'kc-sechead'); head.appendChild(el('h2', 'kc-h2', 'My champions')); body.appendChild(head);
       var pod = el('div', 'kc-podium');
@@ -2019,7 +2238,7 @@
     top.appendChild(el('p', 'kc-round', left <= 2 ? 'THE FINAL!' : 'Round ' + b.n + ' · ' + left + ' left'));
     top.appendChild(muteBtn());
     page.appendChild(top);
-    page.appendChild(el('h1', 'kc-h kc-ask', 'Which did you have more fun at?'));   // what the child is choosing; the contest is only how the winner celebrates
+    page.appendChild(el('h1', 'kc-h kc-ask', b.plan ? 'What do you want to do on ' + DAY_FULL[b.plan] + 's?' : 'Which did you have more fun at?'));   // what the child is choosing; the contest is only how the winner celebrates
     page.appendChild(el('p', 'kc-evname', ev.title));
     // the stage for this contest, Eddie hosting, and two bulbs
     var ring = el('div', 'kc-arena kc-show kc-ev-' + ev.id), fx = el('div', 'kc-fx');
@@ -2050,7 +2269,7 @@
       if (ev.id === 'pothole') { wrap.appendChild(bikeArt()); c.appendChild(holesArt()); }
       if (ev.id === 'mural') c.appendChild(wallArt());
       c.appendChild(el('b', null, nameOf(key)));
-      c.setAttribute('aria-label', 'I had more fun at ' + nameOf(key));
+      c.setAttribute('aria-label', (b.plan ? 'I want to do ' : 'I had more fun at ') + nameOf(key));
       cards.push(c); ring.appendChild(c);
       if (!idx) ring.appendChild(el('span', 'kc-vs', 'VS'));
     });
@@ -2253,6 +2472,7 @@
     };
   };
   var champion = function (k, b) {
+    if (b.plan) { planChamp(k, b); return; }
     var winner = b.next[0], fav = [winner].concat(b.out.slice().reverse());
     S.bracket = null;
     var page = el('section', 'kc-fight kc-champ');
@@ -2280,6 +2500,179 @@
     sv('rect', { x: 30, y: 76, width: 40, height: 12, rx: 3, fill: '#0F4D90', stroke: INK, 'stroke-width': 3 }, s);
     sv('path', { d: 'M38 18V34', stroke: '#fff', 'stroke-width': 4, 'stroke-linecap': 'round', opacity: 0.7 }, s);
     return s;
+  };
+
+  // ----- "Plan my week", the child's side -----
+  // A grown-up picks a day and two to six kinds of class (on the account page or in the grown-ups' corner); the child
+  // plays them off here like a showdown, two at a time, and the order they drop out in is the day's pick, best first.
+  var planTodo = function (k) { return (k.plan || []).filter(function (x) { return !x.r; }); };
+  var startPlan = function (x) {
+    var m = Math.floor(Math.random() * EVENTS.length), want = WANT_CONTEST;
+    for (var i = 0; i < EVENTS.length; i++) if (EVENTS[i].id === want) m = i;
+    S.bracket = { round: shuffle(x.o.map(function (a) { return 'a:' + a; })), next: [], out: [], i: 0, n: 1, m: m, plan: x.d }; go('fight');
+  };
+  var drawPlanKid = function (body, k) {
+    var plan = k.plan || []; if (!plan.length) return;
+    var todo = planTodo(k), done = plan.filter(function (x) { return x.r; });
+    var head = el('div', 'kc-sechead'); head.appendChild(el('h2', 'kc-h2', 'Plan my week')); body.appendChild(head);
+    if (todo.length) {
+      var x = todo[0];
+      body.appendChild(eddie('Your grown-up wants your help! What do you want to do on ' + DAY_FULL[x.d] + 's? I’ll show you two at a time. Tap the one you want more!', 'kc-host'));
+      var row = el('div', 'kc-plan-opts');
+      x.o.forEach(function (a) { var c = el('div', 'kc-plan-opt'); c.appendChild(drawBulb(bulbFor('a:' + a), 'bob')); c.appendChild(el('b', null, nameOf('a:' + a))); row.appendChild(c); });
+      body.appendChild(row);
+      body.appendChild(btn('kc-big go fight', 'Pick ' + DAY_FULL[x.d] + '!', function () { Sound.play('go'); startPlan(x); }));
+    }
+    if (done.length) {
+      var wk = el('div', 'kc-plan-week');
+      done.forEach(function (y) { var c = el('div', 'kc-plan-day'); c.appendChild(el('span', 'kc-plan-dname', DAY_FULL[y.d].slice(0, 3))); c.appendChild(drawBulb(bulbFor('a:' + y.r[0]))); c.appendChild(el('b', null, nameOf('a:' + y.r[0]))); wk.appendChild(c); });
+      body.appendChild(wk);
+      if (!todo.length) body.appendChild(el('p', 'kc-say', 'Your grown-up can see your picks, and look for classes that fit.'));
+    }
+  };
+  var planChamp = function (k, b) {
+    var winner = b.next[0], day = b.plan, order = [winner].concat(b.out.slice().reverse()).map(function (x) { return x.slice(2); });
+    S.bracket = null;
+    k.plan = (k.plan || []).map(function (x) { return x.d === day ? { d: x.d, o: x.o, r: order } : x; });
+    var next = planTodo(k)[0];
+    var page = el('section', 'kc-fight kc-champ');
+    page.appendChild(rays());
+    page.appendChild(el('p', 'kc-burst', 'CHAMPION!'));
+    page.appendChild(eddie('On ' + DAY_FULL[day] + 's, it’s…', 'kc-host'));
+    var big = drawBulb(bulbFor(winner), 'bob big beam'); page.appendChild(big);
+    page.appendChild(trophyArt());
+    page.appendChild(el('h1', 'kc-h', nameOf(winner)));
+    page.appendChild(el('p', 'kc-say', 'Your pick for ' + DAY_FULL[day] + 's! Your grown-up will see it, and look for a class.'));
+    var acts = el('div', 'kc-avacts');
+    if (next) { acts.appendChild(btn('kc-big go fight', 'Next: ' + DAY_FULL[next.d] + '!', function () { Sound.play('go'); startPlan(next); })); acts.appendChild(btn('kc-big', 'Later', function () { Sound.play('tap'); go('kid', 'battle'); })); }
+    else acts.appendChild(btn('kc-big go', 'Yay!', function () { Sound.play('tap'); go('kid', 'battle'); }));
+    page.appendChild(acts);
+    var cheer = el('div', 'kc-cheer'); var me = drawBulb(kidBulb(k.av), 'bob'); cheer.appendChild(me); cheer.appendChild(el('span', 'kc-cheerbubble', 'We did it!')); page.appendChild(cheer);
+    app.appendChild(page);
+    Sound.play('fanfare'); setTimeout(function () { Sound.play('cheer'); }, 500); confetti(100);
+    anim(big, [{ transform: 'translateY(40%) scale(.4)' }, { transform: 'translateY(-10%) scale(1.15)', offset: 0.7 }, { transform: 'translateY(0) scale(1)' }], { duration: 700, easing: 'ease-out' });
+    save({ plan: k.plan, seen: withMarks(k, ['showdown']) }, function () { /* kept; the page stays on the champion */ });
+  };
+
+  // ----- "Plan my week", the grown-ups' side -----
+  // Which listings fit a kind of class on a day: at the family's school (in it, picking up from it, or near it) on that
+  // weekday, or a weekend class on that weekend day; for the child's grade when both say. A school's clubs count one by
+  // one, on the club's days when the school gives them.
+  var gradeOk = function (g, kg) {
+    var G = D.grades || [], x = G.indexOf(kg), m = /^(PK|K|\d+)-(PK|K|\d+)$/.exec(g || '');
+    if (!g || x < 0) return true;
+    if (!m) return G.indexOf(g) < 0 || G.indexOf(g) === x;
+    var a = G.indexOf(m[1]), b = G.indexOf(m[2]);
+    return a < 0 || b < 0 || (x >= a && x <= b);
+  };
+  var planFits = function (k, act, day, school) {
+    var A = actOf(act); if (!A) return [];
+    var wk = day === 'sat' || day === 'sun', out = [];
+    A.hits.forEach(function (h) {
+      var l = listing(h[0]); if (!l || !gradeOk(l.g, k.grade)) return;
+      var rel = '';
+      if (wk) { if (!l.w || l.w.indexOf(day) < 0) return; }
+      else {
+        rel = school && l.r && l.r[school] ? l.r[school] : school && l.nb && l.nb.indexOf(school) > -1 ? 'n' : '';
+        if (!rel || (l.d && l.d.indexOf(day) < 0)) return;
+      }
+      var clubs = null;
+      if (h[1]) { clubs = h[1].filter(function (c) { return !c[1] || c[1].indexOf(day) > -1; }); if (!clubs.length) return; }
+      out.push({ k: h[0], l: l, rel: rel, clubs: clubs });
+    });
+    var ord = { o: 0, p: 1, n: 2, '': 3 };
+    return out.sort(function (a, b) { return ord[a.rel] - ord[b.rel] || a.l.n.localeCompare(b.l.n); });
+  };
+  var actFull = function (a) { var x = actOf(a); return x ? x.full : a; };
+  var planSaid = {};   // what to say in a child's plan box after a change, across the repaint
+  // The classes that fit the day's pick: the winner's, or (when nothing fits it) the next in line's.
+  var planFitsBox = function (k, x, school) {
+    var wrap = el('div', 'kc-plan-fits'), wk = x.d === 'sat' || x.d === 'sun', sn = school && D.schools[school] ? D.schools[school].n : '', day = DAY_FULL[x.d];
+    if (!wk && !sn) {
+      var np = el('p', 'hint', 'Pick your school on your profile, and the classes that fit show here. ');
+      var go1 = el('a', null, 'Pick your school'); go1.href = D.links.school; np.appendChild(go1); wrap.appendChild(np);
+      return wrap;
+    }
+    var where = wk ? ' on ' + day + 's' : ' on ' + day + 's at or near ' + sn;
+    for (var j = 0; j < x.r.length; j++) {
+      var fits = planFits(k, x.r[j], x.d, school);
+      if (!fits.length) continue;
+      wrap.appendChild(el('p', 'kc-plan-for', (j ? 'Nothing for ' + actFull(x.r[0]) + where + ' on the site yet. Next in line, ' + actFull(x.r[j]) + ':' : 'Classes for ' + actFull(x.r[j]) + where + ':')));
+      var ul = el('ul', 'kc-plan-list');
+      fits.slice(0, 6).forEach(function (f) {
+        var li = el('li'), what = el('div', 'kc-sg-what'), id = f.k.slice(2);
+        var a = el('a', null, f.l.n); a.href = D.links.root + 'programs/' + id + '/'; var nm = el('b'); nm.appendChild(a); what.appendChild(nm);
+        var bits = [wk ? 'Weekend class' : f.rel === 'o' ? 'In ' + sn : f.rel === 'p' ? 'Picks up from ' + sn : 'Near ' + sn];
+        if (f.clubs) bits.push((f.clubs.length === 1 ? 'Club: ' : 'Clubs: ') + f.clubs.map(function (c) { return c[0]; }).join(', '));
+        if (!wk) bits.push(f.l.d ? f.l.d.map(function (d) { return DAY_FULL[d].slice(0, 3); }).join(', ') : 'Days not listed');
+        what.appendChild(el('span', null, bits.join(' · '))); li.appendChild(what);
+        var add = el('a', 'btn', 'Add to a week'); add.href = D.links.root + 'board/?' + (wk ? 'wk=' + id + '&day=' + x.d : 'add=' + id + '&school=' + school + '&day=' + x.d);
+        li.appendChild(add); ul.appendChild(li);
+      });
+      wrap.appendChild(ul);
+      if (fits.length > 6 && !wk) { var more = el('a', null, (fits.length - 6) + ' more on ' + possessive(sn) + ' page'); more.href = D.links.root + school + '/'; var mp = el('p', 'hint'); mp.appendChild(more); wrap.appendChild(mp); }
+      return wrap;
+    }
+    var none = el('p', 'hint', 'Nothing on the site for ' + x.r.map(actFull).join(', ') + where + ' yet. ');
+    var see = el('a', null, wk ? 'See the weekend classes' : 'See everything at ' + sn); see.href = wk ? D.links.weekend : D.links.root + school + '/'; none.appendChild(see);
+    wrap.appendChild(none);
+    return wrap;
+  };
+  // The grown-ups' box, on the account page and in the grown-ups' corner: the days set up, each waiting for the child or
+  // with their pick and the classes that fit, and a way to set up a day. put(plan, said, fail) saves.
+  var planBox = function (k, school, idp, put) {
+    var box = el('div', 'kc-plan'), plan = k.plan || [];
+    box.appendChild(el('h4', null, 'Plan my week'));
+    box.appendChild(el('p', 'hint', 'Can’t get ' + k.name + ' to choose? Pick a day and a few kinds of class. ' + k.name + ' plays them off on Kids’ Playground, two at a time, and the winner shows here with the classes that fit.'));
+    if (planSaid[k.name]) { box.appendChild(el('p', 'g-status good', planSaid[k.name])); delete planSaid[k.name]; }
+    var editor = function (x, anchor) {
+      var form = el('form', 'kc-plan-edit'), picked = x ? x.o.slice() : [];
+      var df = el('div', 'field'), dl = el('label', null, 'Which day'), ds = el('select'); ds.id = idp + '-day'; dl.htmlFor = ds.id;
+      DAY_ORDER.forEach(function (d) { if (x ? d !== x.d && plan.some(function (y) { return y.d === d; }) : plan.some(function (y) { return y.d === d; })) return; var o = el('option', null, DAY_FULL[d]); o.value = d; if (x && x.d === d) o.selected = true; ds.appendChild(o); });
+      df.appendChild(dl); df.appendChild(ds); form.appendChild(df);
+      var fs = el('fieldset', 'kc-plan-pick'); fs.appendChild(el('legend', null, 'What ' + k.name + ' chooses between (2 to 6)'));
+      var chips = el('div', 'kc-plan-chips'), count = el('p', 'hint'), saveB = el('button', 'btn primary', x ? 'Save' : 'Start the showdown'); saveB.type = 'submit';
+      var sync = function () { count.textContent = picked.length + ' picked' + (picked.length < 2 ? ': pick at least 2.' : picked.length > 6 ? ': 6 at most.' : '.'); saveB.disabled = picked.length < 2 || picked.length > 6; };
+      (D.acts || []).forEach(function (a) {
+        var c = btn('kc-plan-chip', '', function () { var at = picked.indexOf(a.id); if (at > -1) picked.splice(at, 1); else picked.push(a.id); c.setAttribute('aria-pressed', String(at < 0)); sync(); });
+        c.setAttribute('aria-pressed', String(picked.indexOf(a.id) > -1)); c.setAttribute('data-act', a.id);
+        c.appendChild(drawBulb(bulbFor('a:' + a.id))); c.appendChild(el('span', null, a.full)); chips.appendChild(c);
+      });
+      fs.appendChild(chips); fs.appendChild(count); form.appendChild(fs);
+      var said = el('p', 'g-status bad'); said.hidden = true;
+      var fa = el('div', 'actions'); fa.appendChild(saveB); fa.appendChild(btn('btn', 'Cancel', function () { form.remove(); if (anchor) anchor.hidden = false; })); form.appendChild(fa); form.appendChild(said);
+      sync();
+      form.addEventListener('submit', function (ev) {
+        ev.preventDefault(); if (picked.length < 2 || picked.length > 6) return;
+        var d = ds.value, same = x && x.d === d && x.r && picked.slice().sort().join() === x.o.slice().sort().join();
+        var e = { d: d, o: picked.slice() }; if (same) e.r = x.r;
+        var next = plan.filter(function (y) { return y.d !== d && (!x || y.d !== x.d); }).concat([e]).sort(function (a, b) { return DAY_ORDER.indexOf(a.d) - DAY_ORDER.indexOf(b.d); });
+        saveB.disabled = true;
+        put(next, same ? 'Saved.' : 'Set up ' + DAY_FULL[d] + '. Open ' + possessive(k.name) + ' Kids’ Playground, and the Showdown tab has it.', function (msg) { saveB.disabled = false; said.textContent = msg; said.hidden = false; });
+      });
+      return form;
+    };
+    plan.forEach(function (x) {
+      var row = el('div', 'kc-plan-row' + (x.r ? ' played' : ''));
+      var top = el('div', 'kc-plan-top'); top.appendChild(el('b', 'kc-plan-dayname', DAY_FULL[x.d]));
+      if (x.r) {
+        var ol = el('ol', 'kc-plan-rank');
+        x.r.forEach(function (a, n) { var li = el('li', n ? '' : 'won'); if (!n) li.appendChild(drawBulb(bulbFor('a:' + a))); li.appendChild(el('span', null, actFull(a))); ol.appendChild(li); });
+        top.appendChild(ol);
+      } else top.appendChild(el('span', 'kc-plan-wait', x.o.map(actFull).join(' vs ') + '. Waiting for ' + k.name + ' to play.'));
+      var acts = el('div', 'kc-plan-acts');
+      var ch = btn('btn', 'Change', function () { row.hidden = true; box.insertBefore(editor(x, row), row.nextSibling); });
+      acts.appendChild(ch);
+      acts.appendChild(btn('btn', 'Take off', function () { put(plan.filter(function (y) { return y !== x; }), 'Took off ' + DAY_FULL[x.d] + '.', function () {}); }));
+      top.appendChild(acts); row.appendChild(top);
+      if (x.r) row.appendChild(planFitsBox(k, x, school));
+      box.appendChild(row);
+    });
+    if (plan.length < 7) {
+      var addD = btn('btn', plan.length ? 'Set up another day' : 'Set up a day', function () { addD.hidden = true; var f = editor(null, addD); box.appendChild(f); var first = f.querySelector('select'); if (first) first.focus(); });
+      box.appendChild(addD);
+    }
+    return box;
   };
 
   // ----- the grown-ups' side: confirm, add, take off, share, print -----
@@ -2374,6 +2767,11 @@
     if (rk) { rk.removeChild(rk.firstChild); fv.appendChild(rk); }
     else fv.appendChild(el('p', 'hint', 'No showdown yet. Once ' + k.name + ' has two classes or camps, the Showdown tab picks a favorite, and the whole ranking shows here.'));
     page.appendChild(fv);
+
+    // Plan my week.
+    var pw = el('div', 'panel kc-plan-panel');
+    pw.appendChild(planBox(k, S.data.school || '', 'kc-plan', function (plan, said, fail) { planSaid[k.name] = said; save({ plan: plan }); }));
+    page.appendChild(pw);
 
     // Add one by hand.
     var ad = el('div', 'panel'); ad.appendChild(el('h3', null, 'Add one the plans missed'));
@@ -2547,13 +2945,20 @@
           var li = el('li');
           var what = el('div', 'kc-sg-what'); what.appendChild(el('b', null, nameOf(sgt.k))); what.appendChild(el('span', null, sgLine(sgt))); li.appendChild(what);
           var row = el('div', 'kc-sg-acts');
-          var answer = function (changes) { return function () { row.querySelectorAll('button').forEach(function (x) { x.disabled = true; }); call('passport_save', { kid: k.name, done: changes.done || k.done, skip: changes.skip || k.skip, fav: k.fav }).then(function (d) { if (!d.ok) { row.appendChild(el('span', 'g-status bad', d.message || 'That didn’t save. Try again.')); row.querySelectorAll('button').forEach(function (x) { x.disabled = false; }); return; } ['done', 'skip', 'fav', 'suggest', 'av', 'seen', 'lvl'].forEach(function (fl) { if (d.kid[fl] !== undefined) k[fl] = d.kid[fl]; }); paintSummary(box, p); }); }; };
+          var answer = function (changes) { return function () { row.querySelectorAll('button').forEach(function (x) { x.disabled = true; }); call('passport_save', { kid: k.name, done: changes.done || k.done, skip: changes.skip || k.skip, fav: k.fav }).then(function (d) { if (!d.ok) { row.appendChild(el('span', 'g-status bad', d.message || 'That didn’t save. Try again.')); row.querySelectorAll('button').forEach(function (x) { x.disabled = false; }); return; } ['done', 'skip', 'fav', 'suggest', 'av', 'seen', 'lvl', 'plan'].forEach(function (fl) { if (d.kid[fl] !== undefined) k[fl] = d.kid[fl]; }); paintSummary(box, p); }); }; };
           row.appendChild(btn('btn primary', sgt.up ? 'Yes, update it' : 'Yes, add it', answer(sgAnswer(k, sgt, true))));
           row.appendChild(btn('btn', 'No', answer(sgAnswer(k, sgt, false))));
           li.appendChild(row); ul.appendChild(li);
         });
         wait.appendChild(ul); card.appendChild(wait);
       }
+      card.appendChild(planBox(k, p.school || '', 'kc-sum-plan-' + i, function (plan, said, fail) {
+        call('passport_save', { kid: k.name, done: k.done, skip: k.skip, fav: k.fav, plan: plan }).then(function (d) {
+          if (!d.ok) { fail(d.message || 'That didn’t save. Try again.'); return; }
+          ['done', 'skip', 'fav', 'suggest', 'av', 'seen', 'lvl', 'plan'].forEach(function (fl) { if (d.kid[fl] !== undefined) k[fl] = d.kid[fl]; });
+          planSaid[k.name] = said; paintSummary(box, p);
+        });
+      }));
       // Add a class or camp the child went to, right here: the form opens under its button.
       var addBox = el('div', 'kc-sum-add');
       var addOpen = btn('btn', 'Add a class or camp', function () {
@@ -2562,7 +2967,7 @@
         var form = addForm(k, 'kc-sum-add-' + i, function (e, fail) {
           call('passport_save', { kid: k.name, done: k.done.concat([e]), skip: k.skip, fav: k.fav }).then(function (d) {
             if (!d.ok) { fail(d.message || 'That didn’t save. Try again.'); return; }
-            ['done', 'skip', 'fav', 'suggest', 'av', 'seen', 'lvl'].forEach(function (fl) { if (d.kid[fl] !== undefined) k[fl] = d.kid[fl]; });
+            ['done', 'skip', 'fav', 'suggest', 'av', 'seen', 'lvl', 'plan'].forEach(function (fl) { if (d.kid[fl] !== undefined) k[fl] = d.kid[fl]; });
             sumSaid[k.name] = 'Added ' + nameOf(e.k) + ', ' + yearLabel(e) + '. ' + k.name + ' sees the new pins next time on Kids’ Playground.' + (needsSite(e) ? ' It runs in more than one place: pick which in the Playground Portal, so the map shows it.' : '');
             paintSummary(box, p);
           });
