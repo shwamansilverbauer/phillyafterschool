@@ -14,6 +14,18 @@
       "dates": [
         { "date": "2027-05-28", "title": "Half day: dismissal at noon", "by": "school", "url": "https://drive.google.com/file/d/1sMqzJPf5XSenLlDXFcJlGyL_Eu8hh8kb/view" }
       ]
+    },
+    "ad-prima": {
+      "weekly": [],
+      "dates": [
+        { "date": "2026-11-18", "title": "Early dismissal at 12:00 pm: report card conferences", "by": "school", "url": "https://4.files.edl.io/052f/11/02/26/164732-ed10b44d-ca17-41aa-a507-cf3c88c6b2b4.pdf" },
+        { "date": "2027-01-22", "title": "Early dismissal: professional development", "by": "school", "url": "https://4.files.edl.io/e8bb/04/21/26/132236-5a4b0d35-70b2-4d7b-b0a1-062454a55091.pdf" },
+        { "date": "2027-02-04", "title": "Early dismissal: report card conferences", "by": "school", "url": "https://4.files.edl.io/e8bb/04/21/26/132236-5a4b0d35-70b2-4d7b-b0a1-062454a55091.pdf" },
+        { "date": "2027-02-05", "title": "Early dismissal: report card conferences", "by": "school", "url": "https://4.files.edl.io/e8bb/04/21/26/132236-5a4b0d35-70b2-4d7b-b0a1-062454a55091.pdf" },
+        { "date": "2027-04-02", "title": "Early dismissal: professional development", "by": "school", "url": "https://4.files.edl.io/e8bb/04/21/26/132236-5a4b0d35-70b2-4d7b-b0a1-062454a55091.pdf" },
+        { "date": "2027-04-15", "title": "Early dismissal: report card conferences", "by": "school", "url": "https://4.files.edl.io/e8bb/04/21/26/132236-5a4b0d35-70b2-4d7b-b0a1-062454a55091.pdf" },
+        { "date": "2027-04-16", "title": "Early dismissal: report card conferences", "by": "school", "url": "https://4.files.edl.io/e8bb/04/21/26/132236-5a4b0d35-70b2-4d7b-b0a1-062454a55091.pdf" }
+      ]
     }
   }
 }

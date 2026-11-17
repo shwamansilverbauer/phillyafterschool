@@ -444,6 +444,36 @@
           }
         ],
         "checked": "2026-11-15"
+      },
+      "steel": {
+        "relation": "onsite",
+        "note": "GOTR’s own Fall 2026 site list has an Edward Steel team for girls in grades 3–5, meeting Mondays and Wednesdays, 3:45–5:15 pm; registration for the season is closed. Steel’s own page lists Girls on the Run among its clubs.",
+        "sources": [
+          {
+            "label": "GOTR team locations (Fall 2026)",
+            "url": "https://www.gotrphiladelphia.org/locations"
+          },
+          {
+            "label": "Steel: extracurricular activities",
+            "url": "https://steel.philasd.org/students/extracurricular-activities/"
+          }
+        ],
+        "checked": "2026-11-17"
+      },
+      "ad-prima": {
+        "relation": "onsite",
+        "note": "GOTR’s own Fall 2026 site list has an Ad Prima Mt. Airy team for girls in grades 3–5, “Mon & Thurs 4:15 - 5:30 pm”; Ad Prima’s November calendar shows it on Mondays and Thursdays from 4:00 pm. Registration for the fall season is closed.",
+        "sources": [
+          {
+            "label": "GOTR team locations (Fall 2026)",
+            "url": "https://www.gotrphiladelphia.org/locations"
+          },
+          {
+            "label": "Ad Prima Mt. Airy campus calendar, November 2026",
+            "url": "https://4.files.edl.io/052f/11/02/26/164732-ed10b44d-ca17-41aa-a507-cf3c88c6b2b4.pdf"
+          }
+        ],
+        "checked": "2026-11-17"
       }
     },
     "price": "paid",
@@ -2990,9 +3020,9 @@
     },
     "pickupLists": [
       {
-        "text": "Samuel Powel School (van, limited space); Lea School and Penn Alexander School (teachers walk children over)",
+        "text": "We currently provide transportation by van from the Samuel Powel School. Van space is very limited and cannot be guaranteed. Teachers meet and walk with children from Lea School and Penn Alexander School.",
         "url": "https://parentinfantcenter.org/programs/after-school-center",
-        "read": "2026-11-16",
+        "read": "2026-11-17",
         "how": "browser"
       }
     ]
@@ -14611,6 +14641,18 @@
         "distance": "about a fifth of a mile east",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-14"
+      },
+      "mya": {
+        "relation": "nearby",
+        "distance": "about a third of a mile east",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-17"
+      },
+      "martha-washington": {
+        "relation": "nearby",
+        "distance": "about a quarter mile southeast",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-17"
       }
     }
   },
@@ -16078,6 +16120,849 @@
       {
         "name": "School teams",
         "what": "Volleyball, basketball and track",
+        "tags": [
+          "movement"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gpca-steel",
+    "name": "GPCA After School at Steel",
+    "what": "Free after-school care and before care inside Steel for its students, run by Greater Philadelphia Community Alliance",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "free",
+      "homework",
+      "GPCA",
+      "Greater Philadelphia Community Alliance",
+      "EDEY",
+      "Steel",
+      "Nicetown"
+    ],
+    "address": "4301 Wayne Ave",
+    "grades": "K-8",
+    "gradeNote": "Kindergarten to 8th grade, Steel students only, according to the City’s listing",
+    "hours": "3:30–6:00 pm, Monday to Friday, September 1, 2026 to June 9, 2027, according to the City’s listing. Before care runs 7:30–9:00 am. GPCA’s own page gives its after-school hours as 2:30–6:00 pm, “may vary slightly by location”.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free. GPCA’s 2026–27 enrollment form says there is no charge for its after-school program or before care.",
+    "price": "free",
+    "phone": "215-908-8778",
+    "email": "info@gpca-phila.org",
+    "website": "https://www.gpca-phila.org/prek-8",
+    "register": {
+      "how": "online",
+      "url": "https://form.jotform.com/262154951033048",
+      "label": "Enrollment form",
+      "note": "GPCA’s 2026–27 K–8 enrollment form lists “EDEY - Steel” as a site; GPCA also says paper applications are available at the school. The City’s listing says the program is only open to Steel students. The phone number is the program’s own in the City’s listing; GPCA’s main number is 215-336-5505."
+    },
+    "daysOff": {
+      "summary": "The City’s locator lists a free GPCA winter break mini camp for Steel students, December 23 to 30, 2026 (Monday to Wednesday, 8:30 am to 5:30 pm). Registration runs November 12 to December 15.",
+      "url": "https://www.phila.gov/ost/program-locator/?address=4301+Wayne+Ave",
+      "dates": [
+        "2026-12-23",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30"
+      ],
+      "sources": [
+        {
+          "label": "City program locator: GPCA at Steel",
+          "url": "https://www.phila.gov/ost/program-locator/?address=4301+Wayne+Ave"
+        }
+      ],
+      "hours": "8:30 am to 5:30 pm",
+      "cost": "Free"
+    },
+    "note": "The City’s program locator lists GPCA’s after-school program, before care and winter camp at Steel, with meals and snacks and no transportation. GPCA’s own page names Edward Steel among its K–8 sites but lists before care only at Childs and Vare, so confirm before care with GPCA.",
+    "sources": [
+      {
+        "label": "City program locator: GPCA at Steel",
+        "url": "https://www.phila.gov/ost/program-locator/?address=4301+Wayne+Ave"
+      },
+      {
+        "label": "Greater Philadelphia Community Alliance: Pre K–8 programs",
+        "url": "https://www.gpca-phila.org/prek-8"
+      },
+      {
+        "label": "GPCA K–8 enrollment form, 2026–27",
+        "url": "https://form.jotform.com/262154951033048"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "steel": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists GPCA’s after-school program at Steel’s address, open only to Steel students, and GPCA’s own page names Edward Steel Elementary School among the schools its program serves.",
+        "sources": [
+          {
+            "label": "City program locator: GPCA at Steel",
+            "url": "https://www.phila.gov/ost/program-locator/?address=4301+Wayne+Ave"
+          },
+          {
+            "label": "Greater Philadelphia Community Alliance: Pre K–8 programs",
+            "url": "https://www.gpca-phila.org/prek-8"
+          }
+        ],
+        "checked": "2026-11-17"
+      }
+    }
+  },
+  {
+    "id": "steel-clubs",
+    "name": "School clubs and teams",
+    "what": "Homework clubs, drama, math, STEAM, track and field, basketball and a step team that Steel lists on its own site",
+    "types": [
+      "clubs",
+      "academics",
+      "movement",
+      "theater"
+    ],
+    "keywords": [
+      "clubs",
+      "homework",
+      "drama",
+      "math",
+      "STEAM",
+      "track",
+      "basketball",
+      "step team",
+      "Steel"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Homework clubs for K–2 and 6–8; the other clubs don’t give grades",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-3910",
+    "email": "",
+    "website": "https://steel.philasd.org/students/extracurricular-activities/",
+    "register": {
+      "how": "school",
+      "note": "Steel’s page says to visit the main office to find out how to join."
+    },
+    "note": "Steel’s own page lists these after-school clubs, run by its staff, with no days or times. The page was last updated in January 2025, so ask the office which are running this year. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Steel: extracurricular activities",
+        "url": "https://steel.philasd.org/students/extracurricular-activities/"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "steel": {
+        "relation": "onsite",
+        "checked": "2026-11-17"
+      }
+    },
+    "clubs": [
+      {
+        "name": "After School Club",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Homework Club (K–2)",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Homework Club (6–8)",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Drama Club",
+        "tags": [
+          "theater"
+        ]
+      },
+      {
+        "name": "Math Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "STEAM",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Track and Field Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Steel Parliament Basketball Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Steel Steppers Step Team",
+        "tags": [
+          "movement"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ad-prima-clubs",
+    "name": "School clubs and teams",
+    "what": "Chess, robotics, theater, spirit team, orators and other clubs that meet after the 4:00 pm dismissal at Ad Prima’s Mt. Airy campus",
+    "types": [
+      "clubs",
+      "stem",
+      "theater",
+      "games"
+    ],
+    "keywords": [
+      "clubs",
+      "chess",
+      "robotics",
+      "coding",
+      "theater",
+      "spirit team",
+      "dance",
+      "orators",
+      "public speaking",
+      "comics",
+      "tutoring",
+      "tennis",
+      "Ad Prima"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published for each club; ask the school",
+    "hours": "4:00–5:30 pm on the days each club meets, according to Ad Prima’s November 2026 calendar for the Mt. Airy campus.",
+    "daysNote": "In November 2026: chess on Mondays, robotics on Tuesdays and Thursdays, spirit team and orators on some Tuesdays, theater on Thursdays.",
+    "cost": "Not published",
+    "phone": "215-488-7095",
+    "email": "",
+    "website": "https://www.adprimacharterschools.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school how to join."
+    },
+    "note": "Ad Prima’s FAQ lists after-school tutoring, tennis, robotics, a comic club, spirit and dance team, theater, coding, chess and an oratorical club, and says activities vary by campus. Its November 2026 calendar for the Mt. Airy campus shows which meet on which days, and a Legacy Tennis session on November 4. Ad Prima says it has no before- or after-school care.",
+    "sources": [
+      {
+        "label": "Ad Prima enrollment FAQ",
+        "url": "https://www.adprimacharterschools.org/apps/pages/index.jsp?uREC_ID=1737661&type=d&pREC_ID=2420497"
+      },
+      {
+        "label": "Ad Prima Mt. Airy campus calendar, November 2026",
+        "url": "https://4.files.edl.io/052f/11/02/26/164732-ed10b44d-ca17-41aa-a507-cf3c88c6b2b4.pdf"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "ad-prima": {
+        "relation": "onsite",
+        "checked": "2026-11-17"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Chess Club",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Robotics Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Coding Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Theater Club",
+        "tags": [
+          "theater"
+        ]
+      },
+      {
+        "name": "Spirit and Dance Team",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Orators Club",
+        "what": "Public speaking",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Comic Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "After School Tutoring",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Tennis",
+        "what": "Legacy Tennis, on the school’s calendar",
+        "tags": [
+          "movement"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pyn-conwell",
+    "name": "PYN AIM Afterschool at Conwell",
+    "what": "A free after-school program for Conwell students run by the Philadelphia Youth Network, with homework help, mentoring, career-connected learning, STEAM, arts and sports",
+    "types": [
+      "aftercare",
+      "academics"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "middle school",
+      "homework",
+      "mentoring",
+      "career",
+      "STEAM",
+      "dance",
+      "theater",
+      "soccer",
+      "PYN",
+      "Philadelphia Youth Network",
+      "AIM",
+      "Conwell",
+      "Kensington"
+    ],
+    "address": "1849 E Clearfield St",
+    "grades": "5-8",
+    "gradeNote": "Middle school; open to students at PYN’s participating schools",
+    "hours": "PYN’s 2026–27 page doesn’t give hours. Conwell’s flyer for 2025–26 gave Monday to Friday, 2:34–5:45 pm, so ask for this year’s.",
+    "cost": "Free, according to Conwell’s 2025–26 flyer. PYN’s page doesn’t give a price.",
+    "price": "free",
+    "phone": "267-502-3800",
+    "email": "afterschool@pyninc.org",
+    "website": "https://www.pyninc.org/afterschool",
+    "register": {
+      "how": "online",
+      "url": "https://ct.caseworthy.net/portal/default.aspx?CustomerID=PYN",
+      "label": "Enroll",
+      "note": "PYN says enrollment is open all year, online only, and that youth must be enrolled at one of its participating schools."
+    },
+    "note": "Conwell’s 2025–26 flyer listed dance, journalism, Philadelphia Ballet, music, drama with Walnut Street Theatre, Kensington Soccer Club, visual arts, study groups, sports and field trips, with a snack, for up to 60 students. Ask what this year’s program includes.",
+    "sources": [
+      {
+        "label": "PYN after school",
+        "url": "https://www.pyninc.org/afterschool"
+      },
+      {
+        "label": "Conwell: after-school program flyer, 2025–26",
+        "url": "https://conwell.philasd.org/wp-content/uploads/sites/255/2025/08/Conwell-OST-Flyer-Updated.jpg"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "conwell": {
+        "relation": "onsite",
+        "note": "PYN’s own page lists Russell Conwell Middle School among its 2026–27 sites, and Conwell’s site posts the program’s flyer.",
+        "sources": [
+          {
+            "label": "PYN after school",
+            "url": "https://www.pyninc.org/afterschool"
+          },
+          {
+            "label": "Conwell: after-school program flyer, 2025–26",
+            "url": "https://conwell.philasd.org/wp-content/uploads/sites/255/2025/08/Conwell-OST-Flyer-Updated.jpg"
+          }
+        ],
+        "checked": "2026-11-17"
+      }
+    }
+  },
+  {
+    "id": "lets-dance-conwell",
+    "name": "Philadelphia Ballet: Let’s Dance at Conwell",
+    "what": "A free dance program Philadelphia Ballet brings to Conwell for 5th to 8th graders, with three styles of dance, an end-of-year performance and a trip to see a performance",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "dance",
+      "ballet",
+      "free",
+      "middle school",
+      "Philadelphia Ballet",
+      "Let’s Dance",
+      "Conwell",
+      "Kensington"
+    ],
+    "address": "1849 E Clearfield St",
+    "grades": "5-8",
+    "gradeNote": "Open to all 5th to 8th graders at Conwell",
+    "hours": "Not published",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-400-7210",
+    "email": "",
+    "website": "https://conwell.philasd.org/wp-content/uploads/sites/255/2026/09/Lets-Dance_Flyer_2026-1.jpg",
+    "register": {
+      "how": "school",
+      "note": "Conwell’s flyer says to ask a teacher how to sign up."
+    },
+    "note": "This comes from the flyer on Conwell’s own site for the 2026–27 school year, which doesn’t give days or times. Philadelphia Ballet’s own site refused automated reading, so ask the school when it meets. The phone number is Conwell’s.",
+    "sources": [
+      {
+        "label": "Conwell: Let’s Dance flyer, 2026–27",
+        "url": "https://conwell.philasd.org/wp-content/uploads/sites/255/2026/09/Lets-Dance_Flyer_2026-1.jpg"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "conwell": {
+        "relation": "onsite",
+        "checked": "2026-11-17"
+      }
+    }
+  },
+  {
+    "id": "conwell-clubs",
+    "name": "School clubs and teams",
+    "what": "World Affairs Council, flag football, track and field, art, music and other activities Conwell lists on its own site",
+    "types": [
+      "clubs",
+      "movement",
+      "art",
+      "music"
+    ],
+    "keywords": [
+      "clubs",
+      "World Affairs Council",
+      "honor society",
+      "flag football",
+      "track",
+      "Penn Relays",
+      "art",
+      "music",
+      "trips",
+      "Conwell"
+    ],
+    "address": "",
+    "grades": "5-8",
+    "gradeNote": "Conwell is a 5th to 8th grade school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-7210",
+    "email": "",
+    "website": "https://conwell.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Conwell’s own site lists these on a flyer posted in November 2026, with no days or times. Ask the office which meet after school. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Conwell: “Conwell the #1 Choice” flyer",
+        "url": "https://conwell.philasd.org/wp-content/uploads/sites/255/2026/11/English-819x1024.png"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "conwell": {
+        "relation": "onsite",
+        "checked": "2026-11-17"
+      }
+    },
+    "clubs": [
+      {
+        "name": "World Affairs Council",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "National Junior Honor Society",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Flag Football",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Penn Relays Track and Field",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Art",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Music",
+        "tags": [
+          "music"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ecs-mya",
+    "name": "Episcopal Community Services: After School at MYA",
+    "what": "A free after-school program inside MYA for its middle schoolers, with STEAM, cooking, basketball, arts and career exploration",
+    "types": [
+      "aftercare",
+      "stem"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "middle school",
+      "cooking",
+      "basketball",
+      "STEAM",
+      "career",
+      "field trips",
+      "ECS",
+      "Episcopal Community Services",
+      "MYA",
+      "Middle Years",
+      "West Philadelphia"
+    ],
+    "address": "4725 Fairmount Ave",
+    "grades": "5-8",
+    "gradeNote": "5th to 8th grade, according to the City’s listing",
+    "hours": "3:00–6:00 pm, Monday to Friday, September 1, 2026 to June 9, 2027, according to the City’s listing.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-456-0448",
+    "email": "info@ecsphilly.org",
+    "website": "https://www.ecsphilly.org/programs/out-of-school-time/",
+    "register": {
+      "how": "contact",
+      "note": "The City’s listing says registration is required and gave a window of August 10 to September 30, 2026; the sign-up form on ECS’s site is still last year’s. Call to ask whether there is room. The phone number is the program’s own in the City’s listing; ECS’s number there is 215-456-3160."
+    },
+    "note": "The City’s listing says healthy snacks are provided and there is no transportation. ECS’s own after-school page doesn’t list MYA among its sites, so confirm the details with ECS or the school.",
+    "sources": [
+      {
+        "label": "City program locator: ECS OST at MYA",
+        "url": "https://www.phila.gov/ost/program-locator/?address=4725+Fairmount+Ave"
+      },
+      {
+        "label": "MYA: Points of Pride",
+        "url": "https://mya.philasd.org/points-of-pride/"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "mya": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists ECS’s after-school program at MYA’s address, and MYA’s own site names ECS.",
+        "sources": [
+          {
+            "label": "City program locator: ECS OST at MYA",
+            "url": "https://www.phila.gov/ost/program-locator/?address=4725+Fairmount+Ave"
+          },
+          {
+            "label": "MYA: Points of Pride",
+            "url": "https://mya.philasd.org/points-of-pride/"
+          }
+        ],
+        "checked": "2026-11-17"
+      }
+    }
+  },
+  {
+    "id": "mya-clubs",
+    "name": "School clubs and teams",
+    "what": "Football, soccer, volleyball, basketball, baseball, softball and track teams, and the string, wind and concert bands and drumline MYA lists on its own site",
+    "types": [
+      "clubs",
+      "movement",
+      "music"
+    ],
+    "keywords": [
+      "sports",
+      "football",
+      "golf",
+      "soccer",
+      "volleyball",
+      "basketball",
+      "baseball",
+      "softball",
+      "track",
+      "band",
+      "strings",
+      "drumline",
+      "MYA"
+    ],
+    "address": "",
+    "grades": "5-8",
+    "gradeNote": "MYA is a 5th to 8th grade school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-7720",
+    "email": "",
+    "website": "https://mya.philasd.org/mya-sports/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office or the coach."
+    },
+    "note": "MYA’s sports page (updated August 2025) lists its teams by season, with no days or times. Its music groups are on a page last updated in May 2024, so ask whether they meet after school this year.",
+    "sources": [
+      {
+        "label": "MYA sports",
+        "url": "https://mya.philasd.org/mya-sports/"
+      },
+      {
+        "label": "MYA: Points of Pride",
+        "url": "https://mya.philasd.org/points-of-pride/"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "mya": {
+        "relation": "onsite",
+        "checked": "2026-11-17"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Football (fall)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Golf (fall)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Soccer (fall)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Girls Volleyball (fall)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Boys and Girls Basketball (winter)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Boys Volleyball (spring)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Baseball and Softball (spring)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Track and Field (spring)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "String and wind ensembles",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Concert band and drumline",
+        "tags": [
+          "music"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ace-martha-washington",
+    "name": "Community Council ACE Program at Martha Washington",
+    "what": "A free after-school program inside Martha Washington with homework help, arts, music, dance, sports and STEM",
+    "types": [
+      "aftercare",
+      "art"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "arts",
+      "music",
+      "dance",
+      "drums",
+      "STEM",
+      "robotics",
+      "coding",
+      "gardening",
+      "sports",
+      "Community Council",
+      "ACE",
+      "Artistic & Cultural Enrichment",
+      "Martha Washington",
+      "West Philadelphia"
+    ],
+    "address": "766 N 44th St",
+    "grades": "K-8",
+    "gradeNote": "Kindergarten to 8th grade, according to the City’s listing; the school’s own page, from 2024, says K–6",
+    "hours": "3:30–6:00 pm, Monday to Friday, September 8, 2026 to June 9, 2027, according to the City’s listing.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-473-7033",
+    "email": "",
+    "website": "https://www.cchss.org/child-adolescent-services",
+    "register": {
+      "how": "contact",
+      "note": "The City’s listing says registration is required and gave a window of August 10 to September 30, 2026, so ask whether there is still room. Community Council’s site has a referral form for the ACE after-school program: https://www.cchss.org/ost-referral"
+    },
+    "note": "The City’s listing describes ACE as homework help, literacy and math, STEM, robotics, computer science, arts, music, dance, social-emotional learning and fitness, with meals and no transportation. Martha Washington’s own page, last updated in February 2024, lists homework help, drama, dance, drums, computers, ceramics, robotics, a farm, healthy eating and field trips. Community Council’s own site describes ACE but doesn’t name its sites.",
+    "sources": [
+      {
+        "label": "City program locator: Community Council ACE at Martha Washington",
+        "url": "https://www.phila.gov/ost/program-locator/?address=766+N+44th+St"
+      },
+      {
+        "label": "Martha Washington: after-school activities",
+        "url": "https://mwashington.philasd.org/students/after-school-activities/"
+      },
+      {
+        "label": "Community Council: child and adolescent services",
+        "url": "https://www.cchss.org/child-adolescent-services"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "martha-washington": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists Community Council’s ACE program at Martha Washington’s address, and the school’s own after-school page names ACE.",
+        "sources": [
+          {
+            "label": "City program locator: Community Council ACE at Martha Washington",
+            "url": "https://www.phila.gov/ost/program-locator/?address=766+N+44th+St"
+          },
+          {
+            "label": "Martha Washington: after-school activities",
+            "url": "https://mwashington.philasd.org/students/after-school-activities/"
+          }
+        ],
+        "checked": "2026-11-17"
+      }
+    }
+  },
+  {
+    "id": "martha-washington-clubs",
+    "name": "School clubs and teams",
+    "what": "An after-school dance group that Martha Washington lists on its own site",
+    "types": [
+      "clubs",
+      "movement"
+    ],
+    "keywords": [
+      "clubs",
+      "dance",
+      "Martha Washington"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published; ask the school",
+    "hours": "4:00–5:30 pm, according to the school’s page (last updated February 2024).",
+    "days": [
+      "mon",
+      "wed"
+    ],
+    "cost": "Not published",
+    "phone": "215-400-7770",
+    "email": "",
+    "website": "https://mwashington.philasd.org/students/after-school-activities/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Martha Washington’s own after-school page lists After School Dance on Mondays and Wednesdays, 4:00–5:30 pm. The page was last updated in February 2024, so ask the office whether it meets this year.",
+    "sources": [
+      {
+        "label": "Martha Washington: after-school activities",
+        "url": "https://mwashington.philasd.org/students/after-school-activities/"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "martha-washington": {
+        "relation": "onsite",
+        "checked": "2026-11-17"
+      }
+    },
+    "clubs": [
+      {
+        "name": "After School Dance",
         "tags": [
           "movement"
         ]

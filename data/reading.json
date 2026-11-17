@@ -178,5 +178,29 @@
     "how": "person",
     "why": "The site’s robots.txt closes it to anthropic-ai and other AI crawlers (seen 2026-11-16), so a person has to read it.",
     "seen": "2026-11-16"
+  },
+  {
+    "match": "locations.gotrwebsite.us",
+    "how": "browser",
+    "why": "The team locator Girls on the Run’s locations page embeds: a JavaScript app, where a team’s days and grades show only after its site is clicked.",
+    "seen": "2026-11-17"
+  },
+  {
+    "match": "conwell.philasd.org/wp-content/uploads",
+    "how": "person",
+    "why": "Conwell posts its after-school details as flyer pictures, so the text has to be read from the image.",
+    "seen": "2026-11-17"
+  },
+  {
+    "match": "philadelphiaballet.org",
+    "how": "person",
+    "why": "The site answered HTTP 403 with a “Blocked” page, even for robots.txt, on 2026-11-17.",
+    "seen": "2026-11-17"
+  },
+  {
+    "match": "ecsphilly.org",
+    "how": "browser",
+    "why": "A plain fetch got a Cloudflare “Attention Required” challenge on 2026-11-17; a browser showed the page.",
+    "seen": "2026-11-17"
   }
 ]
