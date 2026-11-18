@@ -26,6 +26,37 @@
         { "date": "2027-04-15", "title": "Early dismissal: report card conferences", "by": "school", "url": "https://4.files.edl.io/e8bb/04/21/26/132236-5a4b0d35-70b2-4d7b-b0a1-062454a55091.pdf" },
         { "date": "2027-04-16", "title": "Early dismissal: report card conferences", "by": "school", "url": "https://4.files.edl.io/e8bb/04/21/26/132236-5a4b0d35-70b2-4d7b-b0a1-062454a55091.pdf" }
       ]
+    },
+    "community-academy": {
+      "weekly": [],
+      "dates": [
+        { "date": "2027-03-18", "title": "B schedule: elementary dismissal at 1:00 pm", "by": "school", "url": "https://drive.google.com/file/d/1NqC07DTlAVBUjaJj3SPGKyeGiAu66YKR/view" },
+        { "date": "2027-04-29", "title": "B schedule: elementary dismissal at 1:00 pm", "note": "Report card conferences, 2:00 to 5:00 pm", "by": "school", "url": "https://drive.google.com/file/d/1NqC07DTlAVBUjaJj3SPGKyeGiAu66YKR/view" },
+        { "date": "2027-06-07", "title": "B schedule: K–8 dismissal at 1:00 pm", "note": "Exams for grades 5–7", "by": "school", "url": "https://drive.google.com/file/d/1NqC07DTlAVBUjaJj3SPGKyeGiAu66YKR/view" },
+        { "date": "2027-06-08", "title": "B schedule: K–8 dismissal at 1:00 pm", "note": "Exams for grades 5–7", "by": "school", "url": "https://drive.google.com/file/d/1NqC07DTlAVBUjaJj3SPGKyeGiAu66YKR/view" },
+        { "date": "2027-06-09", "title": "B schedule: K–8 dismissal at 1:00 pm", "note": "Exams for grades 5–7", "by": "school", "url": "https://drive.google.com/file/d/1NqC07DTlAVBUjaJj3SPGKyeGiAu66YKR/view" }
+      ]
+    },
+    "mastery-prep": {
+      "weekly": [],
+      "dates": [
+        { "date": "2026-12-23", "title": "Early dismissal", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" },
+        { "date": "2027-02-09", "title": "Early dismissal", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" },
+        { "date": "2027-05-07", "title": "Early dismissal: staff appreciation", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" },
+        { "date": "2027-06-11", "title": "Last day of school", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" }
+      ]
+    },
+    "esperanza-elementary": {
+      "weekly": [
+        { "day": "wed", "title": "Early release at 1:00 pm", "note": "Most Wednesdays (professional learning days); the calendar lists each one", "by": "school", "url": "https://drive.google.com/file/d/1rPPa_ez8sS-JxumiE_GWaS3R9y6zwUQ2/view" }
+      ],
+      "dates": [
+        { "date": "2026-12-04", "title": "Early release: professional development", "by": "school", "url": "https://drive.google.com/file/d/1rPPa_ez8sS-JxumiE_GWaS3R9y6zwUQ2/view" },
+        { "date": "2026-12-22", "title": "Early release at 1:00 pm", "by": "school", "url": "https://drive.google.com/file/d/1rPPa_ez8sS-JxumiE_GWaS3R9y6zwUQ2/view" },
+        { "date": "2027-03-19", "title": "Early release at 1:00 pm", "by": "school", "url": "https://drive.google.com/file/d/1rPPa_ez8sS-JxumiE_GWaS3R9y6zwUQ2/view" },
+        { "date": "2027-05-14", "title": "Early release: professional development", "by": "school", "url": "https://drive.google.com/file/d/1rPPa_ez8sS-JxumiE_GWaS3R9y6zwUQ2/view" },
+        { "date": "2027-06-09", "title": "Last day of school: early release at 1:00 pm", "by": "school", "url": "https://drive.google.com/file/d/1rPPa_ez8sS-JxumiE_GWaS3R9y6zwUQ2/view" }
+      ]
     }
   }
 }

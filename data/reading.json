@@ -202,5 +202,11 @@
     "how": "browser",
     "why": "A plain fetch got a Cloudflare “Attention Required” challenge on 2026-11-17; a browser showed the page.",
     "seen": "2026-11-17"
+  },
+  {
+    "match": "www.playartsphilly.com/afterschool-program",
+    "how": "browser",
+    "why": "A plain fetch shows the school links pointing at 2024–25 pages that no longer exist; in a browser the page links to the 2026–27 pages for Adaire, Hackett and Moffet.",
+    "seen": "2026-11-18"
   }
 ]
