@@ -504,6 +504,17 @@
           }
         ],
         "checked": "2026-11-18"
+      },
+      "gla-southwest": {
+        "relation": "onsite",
+        "note": "GOTR’s own Fall 2026 site list includes a team at GLA Southwest (listed as GLASW, 5200 Pine St). The list doesn’t give the team’s days or grades, so ask the school or GOTR.",
+        "sources": [
+          {
+            "label": "GOTR team locations (Fall 2026)",
+            "url": "https://www.gotrphiladelphia.org/locations"
+          }
+        ],
+        "checked": "2026-11-19"
       }
     },
     "price": "paid",
@@ -1844,6 +1855,12 @@
         "distance": "about half a mile southwest, at 23rd and Wharton",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-07"
+      },
+      "mcdaniel": {
+        "relation": "nearby",
+        "distance": "about a third of a mile north, at 23rd and Wharton",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-19"
       }
     }
   },
@@ -15329,6 +15346,12 @@
         "distance": "about half a mile northwest",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the playground.",
         "checked": "2026-11-18"
+      },
+      "hackett": {
+        "relation": "nearby",
+        "distance": "about half a mile southwest",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-19"
       }
     }
   },
@@ -17008,7 +17031,7 @@
   {
     "id": "playarts-afterschool",
     "name": "PlayArts AfterSchool",
-    "what": "Aftercare inside Adaire and Moffet with daily outdoor play, art lessons and homework help",
+    "what": "Aftercare inside Adaire, Hackett and Moffet with daily outdoor play, art lessons and homework help",
     "types": [
       "aftercare",
       "art"
@@ -17024,6 +17047,7 @@
       "PlayArts",
       "Adaire",
       "Moffet",
+      "Hackett",
       "Fishtown"
     ],
     "address": "",
@@ -17032,7 +17056,7 @@
       "South Kensington"
     ],
     "grades": "K-5",
-    "gradeNote": "Kindergarten to 5th grade; Pre-K too at Moffet (PlayArts says it has no Pre-K space at Adaire)",
+    "gradeNote": "Kindergarten to 5th grade; Pre-K too at Hackett and Moffet (PlayArts says it has no Pre-K space at Adaire)",
     "hours": "From dismissal to 6:00 pm on school days. PlayArts says the 2026–27 price also covers any early-dismissal day, from noon at the school.",
     "days": [
       "mon",
@@ -17042,7 +17066,7 @@
       "fri"
     ],
     "pickupBy": "6:00 pm",
-    "cost": "$445 a month for 2026–27 (kindergarten to 5th grade), covering every regular program day, 3:00 to 6:00 pm. A nonrefundable deposit of one month’s tuition holds a spot and counts as the last payment. Pre-K at Moffet is $585 a month with Fridays and early dismissals, or $370 a month Monday to Thursday.",
+    "cost": "$445 a month for 2026–27 (kindergarten to 5th grade), covering every regular program day, 3:00 to 6:00 pm. A nonrefundable deposit of one month’s tuition holds a spot and counts as the last payment. Pre-K at Moffet is $585 a month with Fridays and early dismissals, or $370 a month Monday to Thursday; at Hackett, Pre-K is $585 a month with Fridays and early dismissals, or $175 a month for the early-dismissal Fridays only.",
     "rate": {
       "per": "month",
       "flat": 445
@@ -17057,7 +17081,7 @@
       "note": "Enrollment for 2026–27 is open. Full-day camps on days the District is closed are booked separately (PlayArts day camps has its own listing).",
       "nextTerm": "Enrollment for the 2026–27 school year is open now."
     },
-    "note": "PlayArts runs its after-school program at Adaire, Hackett and Moffet. At Adaire, children are dismissed by their teachers and meet PlayArts staff by the auditorium; at Moffet, PlayArts staff collect Pre-K to 2nd graders from their classrooms. Parents keep in touch through the Remind app.",
+    "note": "PlayArts runs its after-school program at Adaire, Hackett and Moffet. At Adaire, children are dismissed by their teachers and meet PlayArts staff by the auditorium; at Hackett, kindergarten to 5th graders go to the cafetorium to meet PlayArts teachers and Pre-K children are collected from their classrooms; at Moffet, PlayArts staff collect Pre-K to 2nd graders from their classrooms. Parents keep in touch through the Remind app.",
     "sources": [
       {
         "label": "PlayArts AfterSchool Program",
@@ -17066,6 +17090,10 @@
       {
         "label": "PlayArts at Adaire, 2026–27",
         "url": "https://www.playartsphilly.com/adaire-2627"
+      },
+      {
+        "label": "PlayArts at Hackett, 2026–27",
+        "url": "https://www.playartsphilly.com/hackett-2627"
       },
       {
         "label": "PlayArts at Moffet, 2026–27",
@@ -17099,6 +17127,21 @@
           }
         ],
         "checked": "2026-11-18"
+      },
+      "hackett": {
+        "relation": "onsite",
+        "note": "PlayArts’ own Hackett page gives the daily schedule: dismissal at 3:15–3:30, snack in the cafetorium, outdoor play on the Hackett playground, then art, homework and games inside, with pickup from the playground (or the main doors on York Street in bad weather) until 6:00 pm. Hackett’s site lists PlayArts too.",
+        "sources": [
+          {
+            "label": "PlayArts at Hackett, 2026–27",
+            "url": "https://www.playartsphilly.com/hackett-2627"
+          },
+          {
+            "label": "Horatio B. Hackett School",
+            "url": "https://hackett.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-19"
       }
     },
     "pickupLists": [
@@ -17221,7 +17264,8 @@
       "arts and crafts",
       "Fishtown",
       "Blair Street",
-      "Adaire"
+      "Adaire",
+      "Hackett"
     ],
     "address": "1800 Blair St",
     "neighborhoods": [
@@ -17239,7 +17283,7 @@
       "how": "phone",
       "note": "Call or stop by the rec center. There is no online sign-up."
     },
-    "note": "The City’s Parks & Rec data lists an after-school program here for ages 6 to 12 at $100 a month (entered in 2022, marked as registering), and the “Shissler Afterschool Program” with homework help, meals and snacks, arts and crafts and sports (entered in 2023). Call to confirm this year’s days and hours.",
+    "note": "The City’s Parks & Rec data lists an after-school program here for ages 6 to 12 at $100 a month (entered in 2022, marked as registering), and the “Shissler Afterschool Program” with homework help, meals and snacks, arts and crafts and sports (entered in 2023). Call to confirm this year’s days and hours. The City’s 2026–27 program data (behind its after-school program locator, which doesn’t show the entry) lists Shissler’s after-school program Monday to Friday, 2:30 to 6:00 pm, September 8, 2026 to June 9, 2027, for ages 6 to 12 at $100 a month, and says it serves students at Hackett and Adaire with pickup daily and on half days.",
     "sources": [
       {
         "label": "City Parks & Rec finder",
@@ -17262,6 +17306,21 @@
           }
         ],
         "checked": "2026-11-18"
+      },
+      "hackett": {
+        "relation": "pickup",
+        "note": "The City’s 2026–27 program data says Shissler’s after-school program serves students at Hackett and Adaire, with pickup daily and on half days, and Hackett’s own site lists Shissler among its after-school programs. Ask the rec center how children get there.",
+        "sources": [
+          {
+            "label": "Horatio B. Hackett School",
+            "url": "https://hackett.philasd.org/"
+          },
+          {
+            "label": "City after-school program locator",
+            "url": "https://www.phila.gov/ost/program-locator/"
+          }
+        ],
+        "checked": "2026-11-19"
       }
     }
   },
@@ -18186,6 +18245,664 @@
         "name": "Chess Club",
         "tags": [
           "games"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "baywaycares-mastery-cleveland",
+    "name": "Baywaycares at Mastery Cleveland",
+    "what": "Before- and after-school care inside Mastery’s Grover Cleveland Elementary, from dismissal to 6:00 pm",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after care",
+      "before care",
+      "childcare",
+      "Baywaycares",
+      "Bayway",
+      "Mastery Cleveland",
+      "Grover Cleveland",
+      "Tioga",
+      "Nicetown"
+    ],
+    "address": "3701 N 19th St",
+    "neighborhoods": [
+      "Nicetown"
+    ],
+    "grades": "K-8",
+    "gradeNote": "For Mastery Cleveland students",
+    "hours": "Before school from 6:30 am, and from dismissal (3:15 pm) to 6:00 pm, Monday to Friday",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not published. The school’s page says childcare subsidies are accepted.",
+    "phone": "215-227-5042",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/grover-cleveland",
+    "register": {
+      "how": "contact",
+      "note": "The school’s page gives an email address for Baywaycares; ask the main office (215-227-5042) if you can’t reach it."
+    },
+    "note": "Everything here comes from Mastery Cleveland’s own page; we couldn’t find a website for Baywaycares. The phone number is the school’s main office. Ask about the price and what happens on Mastery’s early-dismissal days.",
+    "sources": [
+      {
+        "label": "Mastery Grover Cleveland Elementary",
+        "url": "https://masterycharter.org/elementary-schools/grover-cleveland"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "mastery-cleveland": {
+        "relation": "onsite",
+        "note": "Mastery Cleveland’s own page names Baywaycares for before care and aftercare, Monday to Friday, 6:30 am to the start of school and dismissal to 6:00 pm, and says childcare subsidies are accepted.",
+        "sources": [
+          {
+            "label": "Mastery Grover Cleveland Elementary",
+            "url": "https://masterycharter.org/elementary-schools/grover-cleveland"
+          }
+        ],
+        "checked": "2026-11-19"
+      }
+    }
+  },
+  {
+    "id": "mastery-cleveland-clubs",
+    "name": "School clubs and teams",
+    "what": "Teams and clubs Mastery Cleveland lists on its own page: basketball, cheer, flag football, track, soccer, volleyball, a band and a dozen clubs",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "basketball",
+      "cheerleading",
+      "flag football",
+      "track",
+      "soccer",
+      "volleyball",
+      "band",
+      "book club",
+      "gaming",
+      "fashion",
+      "Mastery Cleveland"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; see each one",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-227-5042",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/grover-cleveland",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Mastery Cleveland’s own page lists these extracurricular and athletic programs with no days, times or grades, so ask the school which are running and for whom.",
+    "sources": [
+      {
+        "label": "Mastery Grover Cleveland Elementary",
+        "url": "https://masterycharter.org/elementary-schools/grover-cleveland"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "mastery-cleveland": {
+        "relation": "onsite",
+        "checked": "2026-11-19"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Basketball (boys and girls)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Flag football (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Outdoor track and field (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Volleyball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Settlement Band",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Girls Mentoring Club"
+      },
+      {
+        "name": "Photography and Yearbook Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Hairstyling Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Book Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Fashion Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Fitness Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Gaming Club",
+        "tags": [
+          "games"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "asas-mcdaniel",
+    "name": "After-School All-Stars at McDaniel",
+    "what": "Free before- and after-school program inside McDaniel for kindergarten to 8th grade, with meals",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "free",
+      "After-School All-Stars",
+      "ASAS",
+      "All Stars",
+      "McDaniel",
+      "Point Breeze",
+      "STEM",
+      "robotics"
+    ],
+    "address": "",
+    "grades": "K-8",
+    "gradeNote": "McDaniel students, kindergarten to 8th grade",
+    "hours": "3:45–6:00 pm, Monday to Friday, September 1, 2026 to June 4, 2027, according to the City’s listing; McDaniel’s own site gives 3:40–6:00 pm, and before care from 7:30 to 8:45 am.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-995-2239",
+    "email": "",
+    "website": "https://afterschoolallstars.org/",
+    "register": {
+      "how": "contact",
+      "note": "The City’s listing says registration is required, open until April 30, 2027. Call After-School All-Stars or ask the school office."
+    },
+    "note": "The City’s program locator lists the after-school program and a separate before-care program at McDaniel, both run by After-School All-Stars, free, with meals. It lists math and robotics as the program’s focus. McDaniel’s own site lists All Stars at the school, Monday to Friday, 7:30–8:45 am and 3:40–6:00 pm.",
+    "sources": [
+      {
+        "label": "City program locator: ASAS PM at McDaniel",
+        "url": "https://www.phila.gov/ost/program-locator/?address=1801+S+22nd+St&resource=ost_3"
+      },
+      {
+        "label": "Delaplaine McDaniel School",
+        "url": "https://mcdaniel.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "mcdaniel": {
+        "relation": "onsite",
+        "note": "McDaniel’s own site lists All Stars at the school, Monday to Friday, mornings and after school until 6:00 pm; the City’s locator lists After-School All-Stars at McDaniel for kindergarten to 8th grade.",
+        "sources": [
+          {
+            "label": "City program locator: ASAS PM at McDaniel",
+            "url": "https://www.phila.gov/ost/program-locator/?address=1801+S+22nd+St&resource=ost_3"
+          },
+          {
+            "label": "Delaplaine McDaniel School",
+            "url": "https://mcdaniel.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-19"
+      }
+    }
+  },
+  {
+    "id": "brooklyn-robot-foundry-mcdaniel",
+    "name": "Brooklyn Robot Foundry at McDaniel",
+    "what": "Free after-school robotics at McDaniel: children build and take home a robot, for McDaniel students in the City’s Extended Day program",
+    "types": [
+      "stem"
+    ],
+    "keywords": [
+      "robotics",
+      "robots",
+      "STEM",
+      "engineering",
+      "building",
+      "Brooklyn Robot Foundry",
+      "EDEY",
+      "free",
+      "McDaniel"
+    ],
+    "address": "",
+    "grades": "K-6",
+    "gradeNote": "The City’s data lists kindergarten to 6th grade; the program is for McDaniel students only",
+    "hours": "3:00–5:30 pm, October 13, 2026 to June 8, 2027, according to Brooklyn Robot Foundry’s schedule, which says the class runs all week. The City’s program data has it on Tuesdays, Wednesdays and Thursdays, 3:30–5:30 pm, so ask which days.",
+    "pickupBy": "5:30 pm",
+    "cost": "Free, according to the City’s program data",
+    "price": "free",
+    "phone": "215-326-9325",
+    "email": "",
+    "website": "https://brooklynrobotfoundry.com/philadelphia/welcome/",
+    "register": {
+      "how": "online",
+      "url": "https://brooklynrobotfoundry.com/philadelphia/product/philadelphia-after-school-robotics-stem-enrichment-kids/",
+      "note": "Brooklyn Robot Foundry’s schedule has an enroll link for McDaniel. It says the program is part of the Mayor’s Office of Education’s Extended Day, Extended Year (EDEY) program and children must attend McDaniel."
+    },
+    "note": "Brooklyn Robot Foundry’s own schedule lists the class at McDaniel. The City’s program data has it too (free, with meals and snacks), but the City’s locator page doesn’t show the entry. McDaniel’s own site names Brooklyn Robotics among its partners.",
+    "sources": [
+      {
+        "label": "Brooklyn Robot Foundry Philly: after-school classes",
+        "url": "https://brooklynrobotfoundry.com/philadelphia/product/philadelphia-after-school-robotics-stem-enrichment-kids/"
+      },
+      {
+        "label": "Delaplaine McDaniel School",
+        "url": "https://mcdaniel.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "mcdaniel": {
+        "relation": "onsite",
+        "note": "Brooklyn Robot Foundry’s own schedule lists its after-school program at Delaplaine McDaniel School, October 13, 2026 to June 8, 2027, for McDaniel students only.",
+        "sources": [
+          {
+            "label": "Brooklyn Robot Foundry Philly: after-school classes",
+            "url": "https://brooklynrobotfoundry.com/philadelphia/product/philadelphia-after-school-robotics-stem-enrichment-kids/"
+          }
+        ],
+        "checked": "2026-11-19"
+      }
+    }
+  },
+  {
+    "id": "sunrise-blankenburg",
+    "name": "Sunrise of Philadelphia at Blankenburg",
+    "what": "Free after-school program inside Blankenburg, with homework help and a snack",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "Sunrise",
+      "homework help",
+      "Blankenburg",
+      "childcare"
+    ],
+    "address": "4600 W Girard Ave",
+    "grades": "K-8",
+    "gradeNote": "For Blankenburg students",
+    "hours": "3:30–5:45 pm, Monday to Friday, September 1, 2026 to June 8, 2027, according to the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:45 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "445-238-2608",
+    "email": "",
+    "website": "https://www.sunriseofphila.org/school-year",
+    "register": {
+      "how": "online",
+      "url": "https://www.cognitoforms.com/SunriseOfPhiladelphia1/SchoolYear202627SunriseOfPhiladelphiaApplication",
+      "note": "The City’s listing links Sunrise’s 2026–27 application and says the program is only for Blankenburg students; registration is open until June 1, 2027."
+    },
+    "note": "The details here come from the City’s program locator. The phone number is the one the City lists for the program at Blankenburg; Sunrise’s main number is 215-952-2730. Blankenburg’s own page of programs names Sunrise too.",
+    "sources": [
+      {
+        "label": "City program locator: Sunrise at Blankenburg",
+        "url": "https://www.phila.gov/ost/program-locator/?address=4600+W+Girard+Ave&resource=ost_243"
+      },
+      {
+        "label": "Blankenburg: educational programs",
+        "url": "https://blankenburg.philasd.org/about-us/search-results/"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "blankenburg": {
+        "relation": "onsite",
+        "note": "The City’s locator lists Sunrise’s 2026–27 after-school program at Blankenburg, and the school’s own page of programs names Sunrise of Philadelphia.",
+        "sources": [
+          {
+            "label": "City program locator: Sunrise at Blankenburg",
+            "url": "https://www.phila.gov/ost/program-locator/?address=4600+W+Girard+Ave&resource=ost_243"
+          },
+          {
+            "label": "Blankenburg: educational programs",
+            "url": "https://blankenburg.philasd.org/about-us/search-results/"
+          }
+        ],
+        "checked": "2026-11-19"
+      }
+    }
+  },
+  {
+    "id": "blankenburg-clubs",
+    "name": "School clubs and programs",
+    "what": "Programs Blankenburg lists at the school: Dancing Classrooms, Girls Inc., Girls Who Code, instrumental music, Philadelphia Youth Basketball, Spiral Q and more",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "dance",
+      "coding",
+      "music",
+      "basketball",
+      "puppets",
+      "running",
+      "reading",
+      "Blankenburg"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by program; ask the school",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-400-7280",
+    "email": "",
+    "website": "https://blankenburg.philasd.org/about-us/search-results/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Blankenburg’s page of programs was last updated in August 2023 and gives no days, times or grades, so ask the school which are running this year and whether they meet after school.",
+    "sources": [
+      {
+        "label": "Blankenburg: educational programs",
+        "url": "https://blankenburg.philasd.org/about-us/search-results/"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "blankenburg": {
+        "relation": "onsite",
+        "checked": "2026-11-19"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Dancing Classrooms",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Girls Inc."
+      },
+      {
+        "name": "Girls Who Code",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Instrumental music program",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Philadelphia Youth Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Reading Olympics",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Spiral Q Puppet Theater",
+        "tags": [
+          "art",
+          "theater"
+        ]
+      },
+      {
+        "name": "Students Run Philly Style",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Black Men Lead"
+      },
+      {
+        "name": "Christian Stronghold Baptist Church"
+      }
+    ]
+  },
+  {
+    "id": "gla-southwest-clubs",
+    "name": "School sports",
+    "what": "After-school sports at GLA Southwest: golf, cheerleading, flag football and basketball",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "sports",
+      "golf",
+      "cheerleading",
+      "flag football",
+      "basketball",
+      "GLA Southwest",
+      "GLASW"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school which grades each sport takes",
+    "hours": "After school; the handbook gives no days or times",
+    "cost": "A small activity fee, according to the handbook, with scholarships for families who meet the hardship requirement",
+    "phone": "215-471-2978",
+    "email": "",
+    "website": "https://glacharter.org/southwest",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "GLA Southwest’s 2026–27 family handbook says after-school sports are offered, “such as golf, cheerleading, flag football and basketball”. Ask the school which are running this season.",
+    "sources": [
+      {
+        "label": "GLA Southwest 2026–27 family handbook",
+        "url": "https://glacharter.org/s/GLASW-Family-Scholar-Handbook-2026.pdf"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "gla-southwest": {
+        "relation": "onsite",
+        "checked": "2026-11-19"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Golf",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Flag football",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hackett-clubs",
+    "name": "School clubs and activities",
+    "what": "Hackett’s own clubs and activities: the Green Team, choir, band, strings, the Page Turners, Movement Makers, a spelling bee and science fair",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "choir",
+      "band",
+      "strings",
+      "music",
+      "reading",
+      "book club",
+      "science fair",
+      "spelling bee",
+      "gardening",
+      "Hackett"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-400-7470",
+    "email": "",
+    "website": "https://hackett.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Hackett’s own site lists these with no days, times or grades, so ask the school which meet after school and for whom.",
+    "sources": [
+      {
+        "label": "Horatio B. Hackett School",
+        "url": "https://hackett.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "hackett": {
+        "relation": "onsite",
+        "checked": "2026-11-19"
+      }
+    },
+    "clubs": [
+      {
+        "name": "The Green Team",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Choir",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Band",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Strings",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "The Page Turners",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Movement Makers",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Fishtown Spelling Bee and March Madness",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Science Fair",
+        "tags": [
+          "stem"
         ]
       }
     ]

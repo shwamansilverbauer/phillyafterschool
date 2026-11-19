@@ -57,6 +57,25 @@
         { "date": "2027-05-14", "title": "Early release: professional development", "by": "school", "url": "https://drive.google.com/file/d/1rPPa_ez8sS-JxumiE_GWaS3R9y6zwUQ2/view" },
         { "date": "2027-06-09", "title": "Last day of school: early release at 1:00 pm", "by": "school", "url": "https://drive.google.com/file/d/1rPPa_ez8sS-JxumiE_GWaS3R9y6zwUQ2/view" }
       ]
+    },
+    "mastery-cleveland": {
+      "weekly": [],
+      "dates": [
+        { "date": "2026-12-23", "title": "Early dismissal", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" },
+        { "date": "2027-02-09", "title": "Early dismissal", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" },
+        { "date": "2027-05-07", "title": "Early dismissal: staff appreciation", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" },
+        { "date": "2027-06-11", "title": "Last day of school", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" }
+      ]
+    },
+    "gla-southwest": {
+      "weekly": [],
+      "dates": [
+        { "date": "2027-04-27", "title": "Dismissal at 12:00 pm: state testing", "by": "school", "url": "https://glacharter.org/s/Annual-Calendar-2026-2027.pdf" },
+        { "date": "2027-04-28", "title": "Dismissal at 12:00 pm: state testing", "by": "school", "url": "https://glacharter.org/s/Annual-Calendar-2026-2027.pdf" },
+        { "date": "2027-04-29", "title": "Dismissal at 12:00 pm: state testing", "by": "school", "url": "https://glacharter.org/s/Annual-Calendar-2026-2027.pdf" },
+        { "date": "2027-05-04", "title": "Dismissal at 12:00 pm: state testing", "by": "school", "url": "https://glacharter.org/s/Annual-Calendar-2026-2027.pdf" },
+        { "date": "2027-05-05", "title": "Dismissal at 12:00 pm: state testing", "by": "school", "url": "https://glacharter.org/s/Annual-Calendar-2026-2027.pdf" }
+      ]
     }
   }
 }

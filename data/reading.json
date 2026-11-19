@@ -208,5 +208,11 @@
     "how": "browser",
     "why": "A plain fetch shows the school links pointing at 2024–25 pages that no longer exist; in a browser the page links to the 2026–27 pages for Adaire, Hackett and Moffet.",
     "seen": "2026-11-18"
+  },
+  {
+    "match": "brooklynrobotfoundry.com/philadelphia/product/philadelphia-after-school-robotics-stem-enrichment-kids",
+    "how": "browser",
+    "why": "The class schedule, with the schools and dates, is loaded by script: a plain fetch of the page doesn’t include McDaniel or any other site.",
+    "seen": "2026-11-19"
   }
 ]
