@@ -18906,5 +18906,924 @@
         ]
       }
     ]
+  },
+  {
+    "id": "uacs-hamilton",
+    "name": "UACS After-School Program at Hamilton",
+    "what": "Penn’s free after-school program inside Hamilton: academic support, arts, recreation and projects",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "arts",
+      "Penn",
+      "Netter Center",
+      "UACS",
+      "Hamilton",
+      "Cobbs Creek",
+      "West Philadelphia"
+    ],
+    "address": "5640 Spruce St",
+    "grades": "K-8",
+    "gradeNote": "Hamilton students",
+    "hours": "3:00–6:00 pm on weekdays, according to Hamilton’s site. The City’s listing gives 2:45–5:30 pm, September 9, 2026 to June 8, 2027.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "cost": "Free",
+    "price": "free",
+    "phone": "267-665-7686",
+    "email": "",
+    "website": "https://hamilton.philasd.org/",
+    "register": {
+      "how": "online",
+      "url": "https://upenn.co1.qualtrics.com/jfe/form/SV_eVdnOLqxxR2gff8",
+      "label": "Register",
+      "note": "The City’s listing links this sign-up form and gave a registration window of August 3 to September 30, 2026. Ask the program whether it still has room."
+    },
+    "note": "Hamilton’s own site says the University of Pennsylvania’s Netter Center runs the after-school program (3:00–6:00 pm) and a summer program (8:00 am–3:00 pm) for kindergarten to 8th grade, with academic support, arts and cultural enrichment, recreation and project-based learning. The City lists it under the University of Pennsylvania with 2:45–5:30 pm as its hours, so ask which is right. The phone number is the one the City lists for the program.",
+    "sources": [
+      {
+        "label": "Hamilton: after-school programming, sports and bell schedule",
+        "url": "https://hamilton.philasd.org/"
+      },
+      {
+        "label": "City program locator: University of Pennsylvania at Hamilton OST Afterschool",
+        "url": "https://www.phila.gov/ost/program-locator/?address=5640+Spruce+St&resource=ost_272"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "hamilton": {
+        "relation": "onsite",
+        "note": "Hamilton’s own site names Penn’s Netter Center after-school program, and the City’s program locator lists Penn’s after-school program at Hamilton.",
+        "sources": [
+          {
+            "label": "Hamilton: after-school programming, sports and bell schedule",
+            "url": "https://hamilton.philasd.org/"
+          },
+          {
+            "label": "City program locator: University of Pennsylvania at Hamilton OST Afterschool",
+            "url": "https://www.phila.gov/ost/program-locator/?address=5640+Spruce+St&resource=ost_272"
+          }
+        ],
+        "checked": "2026-11-20"
+      }
+    }
+  },
+  {
+    "id": "hamilton-clubs",
+    "name": "School sports and teams",
+    "what": "Sports Hamilton lists on its own site: basketball, track, cheerleading and intramurals for K–5",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "sports",
+      "basketball",
+      "track",
+      "cheerleading",
+      "intramurals",
+      "Hamilton"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Intramurals are for K–5; ask about the teams",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-400-7650",
+    "email": "",
+    "website": "https://hamilton.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office. A physical form signed by a doctor is needed to play."
+    },
+    "note": "Hamilton’s site lists these with no days or times. It says team schedules are on arbiterlive.com.",
+    "sources": [
+      {
+        "label": "Hamilton: after-school programming, sports and bell schedule",
+        "url": "https://hamilton.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "hamilton": {
+        "relation": "onsite",
+        "checked": "2026-11-20"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Track",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Elementary intramural sports (K–5)",
+        "tags": [
+          "movement"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "christy-rec",
+    "name": "Christy Recreation Center",
+    "what": "City rec center after-school program: homework help, snacks, computer lab, gym, arts and crafts",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "after school",
+      "aftercare",
+      "homework",
+      "computer lab",
+      "gym",
+      "arts and crafts",
+      "free",
+      "Cobbs Creek",
+      "West Philadelphia"
+    ],
+    "address": "728 S 55th St",
+    "neighborhoods": [
+      "West Philadelphia"
+    ],
+    "grades": "1-6",
+    "gradeNote": "Ages 6–12",
+    "hours": "Not published in the City’s listing",
+    "cost": "Free in the City’s listing, which dates from October 2025; registration there shows open.",
+    "price": "free",
+    "phone": "215-685-1997",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The City’s Parks & Rec data lists the Christy After School Program for ages 6 to 12, free, with homework help, snacks, the computer lab, the gym and arts and crafts, entered in October 2025 and open for registration. It also lists free flag football on Wednesdays at 5:00 pm for ages 8 to 13. Call to confirm this year’s days and hours.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "mastery-harrity": {
+        "relation": "nearby",
+        "distance": "a couple of blocks east, on 55th St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-20"
+      },
+      "hamilton": {
+        "relation": "nearby",
+        "distance": "about half a mile south",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-20"
+      }
+    }
+  },
+  {
+    "id": "baywaycares-mastery-harrity",
+    "name": "Baywaycares at Mastery Harrity",
+    "what": "Aftercare inside Mastery’s Harrity Elementary, from dismissal to 6:00 pm",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after care",
+      "childcare",
+      "Baywaycares",
+      "Bayway",
+      "Mastery Harrity",
+      "Harrity",
+      "Cobbs Creek",
+      "West Philadelphia"
+    ],
+    "address": "5601 Christian St",
+    "neighborhoods": [
+      "West Philadelphia"
+    ],
+    "grades": "K-8",
+    "gradeNote": "For Mastery Harrity students",
+    "hours": "From dismissal (3:15 pm) to 6:00 pm, Monday to Friday",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not published. The school’s page says childcare subsidies are accepted.",
+    "phone": "215-471-2908",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/harrity",
+    "register": {
+      "how": "contact",
+      "note": "The school’s page gives an email address for Baywaycares; ask the main office (215-471-2908) if you can’t reach it."
+    },
+    "note": "Everything here comes from Mastery Harrity’s own page; we couldn’t find a website for Baywaycares. The phone number is the school’s main office. Ask about the price and what happens on Mastery’s early-dismissal days.",
+    "sources": [
+      {
+        "label": "Mastery Harrity Elementary",
+        "url": "https://masterycharter.org/elementary-schools/harrity"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "mastery-harrity": {
+        "relation": "onsite",
+        "note": "Mastery Harrity’s own page names Baywaycares for aftercare, Monday to Friday, dismissal to 6:00 pm, and says childcare subsidies are accepted.",
+        "sources": [
+          {
+            "label": "Mastery Harrity Elementary",
+            "url": "https://masterycharter.org/elementary-schools/harrity"
+          }
+        ],
+        "checked": "2026-11-20"
+      }
+    }
+  },
+  {
+    "id": "mastery-harrity-clubs",
+    "name": "School clubs and teams",
+    "what": "Teams and clubs Mastery Harrity lists on its own page: football, basketball, wrestling, track, dance, boxing and a dozen clubs",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "football",
+      "basketball",
+      "cheerleading",
+      "cross country",
+      "track",
+      "wrestling",
+      "bowling",
+      "volleyball",
+      "dance",
+      "boxing",
+      "anime",
+      "art",
+      "poetry",
+      "Mastery Harrity"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-471-2908",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/harrity",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Mastery Harrity’s own page lists these extracurricular and athletic programs with no days, times or grades, so ask the school which are running and for whom. The page links a 2026–27 athletics document.",
+    "sources": [
+      {
+        "label": "Mastery Harrity Elementary",
+        "url": "https://masterycharter.org/elementary-schools/harrity"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "mastery-harrity": {
+        "relation": "onsite",
+        "checked": "2026-11-20"
+      }
+    },
+    "clubs": [
+      {
+        "name": "7-on-7 football",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Basketball (boys and girls)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cheerleading (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cross country (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Outdoor track and field (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Wrestling (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Bowling (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Volleyball (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Dance",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Boxing Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Anime Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Art Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Jewelry Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Poetry Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Social Justice Club"
+      },
+      {
+        "name": "Harrity Little Medical School",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "National Elementary Honor Society",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "National STEM Honor Society",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Student government"
+      }
+    ]
+  },
+  {
+    "id": "right-at-school-ethel-allen",
+    "name": "Right At School at Dr. Ethel Allen",
+    "what": "Free after-school program inside Ethel Allen: homework help, STEM, arts, games and physical activity",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "free",
+      "Right At School",
+      "RAS",
+      "homework help",
+      "STEM",
+      "Ethel Allen",
+      "North Philadelphia"
+    ],
+    "address": "3200 W Lehigh Ave",
+    "neighborhoods": [
+      "North Philadelphia"
+    ],
+    "grades": "K-8",
+    "gradeNote": "For Ethel Allen students",
+    "hours": "From dismissal to 5:30 pm, Monday to Friday, according to Right At School’s page. The City’s listing gives 2:45–6:00 pm, September 1, 2026 to June 9, 2027.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free ($0.00 a month on Right At School’s page)",
+    "price": "free",
+    "phone": "215-934-9323",
+    "email": "",
+    "website": "https://www.rightatschool.com/school/?school=dr-ethel-allen-school&district=pa-philadelphia-city&tab=2026-27-after-school",
+    "register": {
+      "how": "online",
+      "url": "https://www.rightatschool.com/school/?school=dr-ethel-allen-school&district=pa-philadelphia-city&tab=2026-27-after-school",
+      "label": "Join the waitlist",
+      "note": "On November 20, 2026 Right At School’s page said the program was at capacity, with a waitlist."
+    },
+    "note": "Right At School’s own page for Ethel Allen lists the 2026–27 after-school program at no charge, 1 to 5 days a week, ending at 5:30 pm, and says it is full, with a waitlist. Ethel Allen’s site says Right At School runs before- and after-school programs there; the City lists the after-school program for Ethel Allen students, K–8, 2:45–6:00 pm. Ask which end time is right. The phone number is the one on Right At School’s page.",
+    "sources": [
+      {
+        "label": "Right At School at Dr. Ethel Allen School",
+        "url": "https://www.rightatschool.com/school/?school=dr-ethel-allen-school&district=pa-philadelphia-city&tab=2026-27-after-school"
+      },
+      {
+        "label": "Dr. Ethel Allen School: after-school programming and clubs",
+        "url": "https://ethelallen.philasd.org/"
+      },
+      {
+        "label": "City program locator: Right At School at Dr. Ethel Allen",
+        "url": "https://www.phila.gov/ost/program-locator/?address=3200+W+Lehigh+Ave&resource=ost_234"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "ethel-allen": {
+        "relation": "onsite",
+        "note": "Right At School’s own page lists its program at Dr. Ethel Allen School, and the school’s site and the City’s locator name it too.",
+        "sources": [
+          {
+            "label": "Right At School at Dr. Ethel Allen School",
+            "url": "https://www.rightatschool.com/school/?school=dr-ethel-allen-school&district=pa-philadelphia-city&tab=2026-27-after-school"
+          },
+          {
+            "label": "Dr. Ethel Allen School: after-school programming and clubs",
+            "url": "https://ethelallen.philasd.org/"
+          },
+          {
+            "label": "City program locator: Right At School at Dr. Ethel Allen",
+            "url": "https://www.phila.gov/ost/program-locator/?address=3200+W+Lehigh+Ave&resource=ost_234"
+          }
+        ],
+        "checked": "2026-11-20"
+      }
+    }
+  },
+  {
+    "id": "ethel-allen-clubs",
+    "name": "School clubs and teams",
+    "what": "Basketball, track and a crochet club, from Ethel Allen’s own site",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "basketball",
+      "track",
+      "crochet",
+      "Ethel Allen"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-400-7040",
+    "email": "",
+    "website": "https://ethelallen.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Ethel Allen’s site lists these with no days, times or grades, so ask the school which are running and for whom.",
+    "sources": [
+      {
+        "label": "Dr. Ethel Allen School: after-school programming and clubs",
+        "url": "https://ethelallen.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "ethel-allen": {
+        "relation": "onsite",
+        "checked": "2026-11-20"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Track",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Crochet Club",
+        "tags": [
+          "art"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "joshuas-academy-mastery-wister",
+    "name": "Joshua’s Academy at Mastery Wister",
+    "what": "Aftercare inside Mastery’s John Wister Elementary, from dismissal to 6:00 pm",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after care",
+      "childcare",
+      "Joshua’s Academy",
+      "Joshuas Academy",
+      "Mastery Wister",
+      "John Wister",
+      "Germantown"
+    ],
+    "address": "67 E Bringhurst St",
+    "neighborhoods": [
+      "Germantown"
+    ],
+    "grades": "K-5",
+    "gradeNote": "For Mastery Wister students",
+    "hours": "From dismissal (3:00 pm) to 6:00 pm, Monday to Friday",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not published. The school’s page says childcare subsidies are accepted.",
+    "phone": "215-951-4003",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/john-wister",
+    "register": {
+      "how": "contact",
+      "note": "The school’s page gives a contact number for Joshua’s Academy; ask the main office (215-951-4003) for it."
+    },
+    "note": "Everything here comes from Mastery Wister’s own page; we couldn’t find a website for Joshua’s Academy. The phone number is the school’s main office. Ask about the price and what happens on Mastery’s early-dismissal days.",
+    "sources": [
+      {
+        "label": "Mastery John Wister Elementary",
+        "url": "https://masterycharter.org/elementary-schools/john-wister"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "mastery-wister": {
+        "relation": "onsite",
+        "note": "Mastery Wister’s own page names Joshua’s Academy for aftercare, Monday to Friday, dismissal to 6:00 pm, and says childcare subsidies are accepted.",
+        "sources": [
+          {
+            "label": "Mastery John Wister Elementary",
+            "url": "https://masterycharter.org/elementary-schools/john-wister"
+          }
+        ],
+        "checked": "2026-11-20"
+      }
+    }
+  },
+  {
+    "id": "mastery-wister-clubs",
+    "name": "School clubs and teams",
+    "what": "Clubs and teams Mastery Wister lists on its own page: art, basketball, cheer, Lego, performing arts, step and more",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "art",
+      "basketball",
+      "book club",
+      "cheerleading",
+      "games",
+      "mentoring",
+      "homework",
+      "tutoring",
+      "Lego",
+      "performing arts",
+      "reading",
+      "step",
+      "Mastery Wister"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-951-4003",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/john-wister",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Mastery Wister’s own page lists these extracurricular and athletic programs with no days, times or grades, so ask the school which are running and for whom.",
+    "sources": [
+      {
+        "label": "Mastery John Wister Elementary",
+        "url": "https://masterycharter.org/elementary-schools/john-wister"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "mastery-wister": {
+        "relation": "onsite",
+        "checked": "2026-11-20"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Book Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Games Club",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Girls Mentoring Group"
+      },
+      {
+        "name": "Homework and Tutoring Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Lego Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Performing Arts",
+        "tags": [
+          "theater"
+        ]
+      },
+      {
+        "name": "Reading Enrichment",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Step Club",
+        "tags": [
+          "movement"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "girls-inc-heston",
+    "name": "Girls Inc. H.Y.P.E. at Heston",
+    "what": "Free after-school enrichment program inside Heston, with meals and snacks",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "Girls Inc",
+      "HYPE",
+      "girls",
+      "enrichment",
+      "Heston",
+      "West Philadelphia"
+    ],
+    "address": "1621 N 54th St",
+    "neighborhoods": [
+      "West Philadelphia"
+    ],
+    "grades": "K-8",
+    "gradeNote": "For Heston students",
+    "hours": "2:45–5:00 pm, Monday to Friday, September 10, 2026 to June 9, 2027, according to the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-892-7658",
+    "email": "",
+    "website": "https://girlsincpa-nj.org/what-we-do/our-programs/ost",
+    "register": {
+      "how": "contact",
+      "note": "The City’s listing says registration is required and the program is only for Heston students; it links a sign-up form from Girls Inc. Call the program or ask the school office."
+    },
+    "note": "The details here come from the City’s program locator, which describes it as a daily after-school enrichment program for K–8 students at Heston. Girls Inc.’s own site describes its out-of-school-time programs as for girls aged 5 to 18 and doesn’t name its school sites, so ask whether boys can join. The phone number is the one the City lists for the program; Girls Inc.’s main number is 215-735-7775.",
+    "sources": [
+      {
+        "label": "City program locator: Girls Inc at Heston (H.Y.P.E.)",
+        "url": "https://www.phila.gov/ost/program-locator/?address=1621+N+54th+St&resource=ost_105"
+      },
+      {
+        "label": "Girls Inc. of Greater Philadelphia & Southern New Jersey: out-of-school-time programs",
+        "url": "https://girlsincpa-nj.org/what-we-do/our-programs/ost"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "heston": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists Girls Inc.’s 2026–27 after-school program at Heston.",
+        "sources": [
+          {
+            "label": "City program locator: Girls Inc at Heston (H.Y.P.E.)",
+            "url": "https://www.phila.gov/ost/program-locator/?address=1621+N+54th+St&resource=ost_105"
+          }
+        ],
+        "checked": "2026-11-20"
+      }
+    }
+  },
+  {
+    "id": "heston-clubs",
+    "name": "School clubs and teams",
+    "what": "Clubs and teams Heston lists on its own site: book club, dance and cheer, technology, basketball, track and flag football",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "book club",
+      "dance",
+      "cheer",
+      "reading",
+      "technology",
+      "basketball",
+      "track",
+      "flag football",
+      "intramurals",
+      "Heston"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Intramurals are for K–5; ask about the rest",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-400-7290",
+    "email": "",
+    "website": "https://heston.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office. A physical form signed by a doctor is needed to play a sport."
+    },
+    "note": "Heston’s site lists these with no days or times. It says team schedules are on arbiterlive.com.",
+    "sources": [
+      {
+        "label": "Heston: clubs, activities and sports",
+        "url": "https://heston.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "heston": {
+        "relation": "onsite",
+        "checked": "2026-11-20"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Book Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Dance and Cheer Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Reading Enrichment",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Technology Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Basketball (girls and boys)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Track and field (girls and boys)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Flag football (girls and boys)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Dance team",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Elementary intramural sports (K–5)",
+        "tags": [
+          "movement"
+        ]
+      }
+    ]
   }
 ]

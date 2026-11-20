@@ -67,6 +67,24 @@
         { "date": "2027-06-11", "title": "Last day of school", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" }
       ]
     },
+    "mastery-harrity": {
+      "weekly": [],
+      "dates": [
+        { "date": "2026-12-23", "title": "Early dismissal", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" },
+        { "date": "2027-02-09", "title": "Early dismissal", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" },
+        { "date": "2027-05-07", "title": "Early dismissal: staff appreciation", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" },
+        { "date": "2027-06-11", "title": "Last day of school", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" }
+      ]
+    },
+    "mastery-wister": {
+      "weekly": [],
+      "dates": [
+        { "date": "2026-12-23", "title": "Early dismissal", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" },
+        { "date": "2027-02-09", "title": "Early dismissal", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" },
+        { "date": "2027-05-07", "title": "Early dismissal: staff appreciation", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" },
+        { "date": "2027-06-11", "title": "Last day of school", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" }
+      ]
+    },
     "gla-southwest": {
       "weekly": [],
       "dates": [

@@ -214,5 +214,11 @@
     "how": "browser",
     "why": "The class schedule, with the schools and dates, is loaded by script: a plain fetch of the page doesn’t include McDaniel or any other site.",
     "seen": "2026-11-19"
+  },
+  {
+    "match": "factschool.org",
+    "how": "person",
+    "why": "Folk Arts-Cultural Treasures Charter School’s site answers with a “request is being verified” bot check, in a plain fetch and in a browser, so its after-school offerings and calendar couldn’t be read.",
+    "seen": "2026-11-20"
   }
 ]
