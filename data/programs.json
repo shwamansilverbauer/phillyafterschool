@@ -19825,5 +19825,992 @@
         ]
       }
     ]
+  },
+  {
+    "id": "sunrise-mcmichael",
+    "name": "Sunrise of Philadelphia at McMichael",
+    "what": "Free after-school program inside McMichael, with small-group academic help, a snack, STEM and social-emotional activities",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "Sunrise",
+      "homework help",
+      "McMichael",
+      "Mantua",
+      "Powelton",
+      "West Philadelphia",
+      "childcare"
+    ],
+    "address": "3543 Fairmount Ave",
+    "grades": "K-8",
+    "gradeNote": "For McMichael students",
+    "hours": "After school on every open school day until June 8, 2027. Sunrise’s typical day ends with pickup between 5:00 and 5:30 pm; it says start and end times differ by school.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-952-2730",
+    "email": "",
+    "website": "https://www.sunriseofphila.org/school-year",
+    "register": {
+      "how": "contact",
+      "note": "Sunrise’s page has a contact form and its main number, 215-952-2730. It says students in K–5 must come at least 4 days a week, and 6th–8th graders at least 3."
+    },
+    "note": "Sunrise’s own page lists Morton McMichael Elementary among its sites, at the school’s address, and says its after-school programs are free at every site. McMichael’s own page lists Sunrise among its after-school programs. The City’s program locator doesn’t list Sunrise at McMichael this year, so ask Sunrise for this site’s hours. The phone number is Sunrise’s main number.",
+    "sources": [
+      {
+        "label": "Sunrise of Philadelphia: school-year program and sites",
+        "url": "https://www.sunriseofphila.org/school-year"
+      },
+      {
+        "label": "McMichael: after-school programming and partners",
+        "url": "https://mcmichael.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "mcmichael": {
+        "relation": "onsite",
+        "note": "Sunrise’s own list of sites names Morton McMichael Elementary, and McMichael’s own page lists Sunrise among its after-school programs.",
+        "sources": [
+          {
+            "label": "Sunrise of Philadelphia: school-year program and sites",
+            "url": "https://www.sunriseofphila.org/school-year"
+          },
+          {
+            "label": "McMichael: after-school programming and partners",
+            "url": "https://mcmichael.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-21"
+      }
+    }
+  },
+  {
+    "id": "mcmichael-clubs",
+    "name": "School clubs and programs",
+    "what": "Clubs and programs McMichael lists under after-school programming: art, robotics, Dancing Classrooms, Mighty Writers, reading and more",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "art club",
+      "robotics",
+      "dance",
+      "Dancing Classrooms",
+      "Mighty Writers",
+      "writing",
+      "reading",
+      "homework club",
+      "McMichael"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-400-7750",
+    "email": "",
+    "website": "https://mcmichael.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "McMichael’s own page lists these under after-school and summer programming with no days, times or grades, so ask the school which are running this year and for whom. The Morning Homework Club meets before school.",
+    "sources": [
+      {
+        "label": "McMichael: after-school programming and partners",
+        "url": "https://mcmichael.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "mcmichael": {
+        "relation": "onsite",
+        "checked": "2026-11-21"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Robotics",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Dancing Classrooms",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Mighty Writers",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Joyful Readers",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "PSTV"
+      },
+      {
+        "name": "Friendship Group"
+      },
+      {
+        "name": "SHINE Group"
+      },
+      {
+        "name": "Temple Scholars Program (middle school)",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Morning Homework Club",
+        "what": "Before school",
+        "roster": false,
+        "tags": [
+          "academics"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "squashsmarts",
+    "name": "SquashSmarts",
+    "what": "Free squash and academic tutoring program for students recruited from its partner schools, at two squash centers",
+    "types": [
+      "movement",
+      "academics"
+    ],
+    "keywords": [
+      "squash",
+      "tutoring",
+      "mentoring",
+      "sports",
+      "free",
+      "SquashSmarts",
+      "Drexel",
+      "McMichael",
+      "middle school"
+    ],
+    "address": "25 N 33rd St",
+    "neighborhoods": [
+      "University City"
+    ],
+    "grades": "5-8",
+    "gradeNote": "Students are selected in 5th to 8th grade from its partner schools",
+    "hours": "Practices three days a week; days and times not published",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-221-6860",
+    "email": "",
+    "website": "https://www.squashsmarts.org/",
+    "register": {
+      "how": "contact",
+      "note": "SquashSmarts recruits students from its five partner schools, chosen for commitment, effort and attitude. Ask the school or call SquashSmarts."
+    },
+    "note": "SquashSmarts’ own pages say it is a free out-of-school-time program of academic tutoring and squash, that it recruits students in 5th to 8th grade from five partner schools (Esperanza Academy Charter, Morton McMichael, E.W. Rhodes, Overbrook Educational Center and Carver), and that students practice three days a week at the Arlen Specter US Squash Center at Drexel (25 N 33rd St) or the Lenfest Center (3890 N 10th St). It doesn’t say how students get there or which center serves which school, so ask.",
+    "sources": [
+      {
+        "label": "SquashSmarts: what is SquashSmarts?",
+        "url": "https://www.squashsmarts.org/what-is-squashsmarts-copy.html"
+      },
+      {
+        "label": "SquashSmarts: partners",
+        "url": "https://www.squashsmarts.org/partners.html"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "mcmichael": {
+        "relation": "nearby",
+        "distance": "about 0.7 mile southeast, at the Arlen Specter US Squash Center at Drexel",
+        "note": "SquashSmarts names McMichael as one of its five partner schools and recruits 5th to 8th graders there. It doesn’t say whether it picks up, so ask how students get to practice.",
+        "sources": [
+          {
+            "label": "SquashSmarts: partners",
+            "url": "https://www.squashsmarts.org/partners.html"
+          }
+        ],
+        "checked": "2026-11-21"
+      }
+    }
+  },
+  {
+    "id": "miles-mack-playground",
+    "name": "Miles Mack Playground",
+    "what": "City rec center after-school programs: recreation, fitness, homework support, arts and games",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "after school",
+      "aftercare",
+      "homework",
+      "fitness",
+      "Miles Mack",
+      "Mantua",
+      "West Philadelphia"
+    ],
+    "address": "732 N 36th St",
+    "neighborhoods": [
+      "West Philadelphia"
+    ],
+    "grades": "1-6",
+    "gradeNote": "Ages 6–12",
+    "hours": "Not published in the City’s listing",
+    "cost": "$50 a month for Xpress Yourself in the City’s listing, which dates from September 2026; it also lists a free program, Going the X-tra Mile, entered in 2018.",
+    "price": "both",
+    "phone": "215-685-7654",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. The City’s listing shows registration open."
+    },
+    "note": "The City’s Parks & Rec data lists Xpress Yourself, an after-school program at Miles Mack for ages 6 to 12 (recreation, fitness, creative expression, homework support, games and group discussions), $50 a month, entered in September 2026 and open for registration. Call to confirm this year’s days, hours and cost.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "mcmichael": {
+        "relation": "nearby",
+        "distance": "a block west, on N 36th St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-21"
+      }
+    }
+  },
+  {
+    "id": "cora-northwood",
+    "name": "YouthCOR at Northwood",
+    "what": "CORA Services’ free after-school program inside Northwood: STEM, literacy, social-emotional learning, clubs and field trips",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "CORA",
+      "YouthCOR",
+      "STEM",
+      "literacy",
+      "Northwood",
+      "Frankford",
+      "childcare"
+    ],
+    "address": "4621 Castor Ave",
+    "neighborhoods": [
+      "Northwood"
+    ],
+    "grades": "K-8",
+    "gradeNote": "For Northwood students",
+    "hours": "3:00–6:00 pm, Monday to Friday, August 31, 2026 to June 16, 2027, according to the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-669-8060",
+    "email": "",
+    "website": "https://www.coraservices.org/",
+    "register": {
+      "how": "online",
+      "url": "https://www.cognitoforms.com/CORAServices1/SY2027NorthwoodApplication",
+      "label": "Apply",
+      "note": "The City’s listing links CORA’s 2026–27 application for Northwood; registration opened August 3, 2026. Ask whether there is room."
+    },
+    "note": "The details come from the City’s program locator, which lists CORA Services’ after-school program at Northwood for kindergarten to 8th grade, free, with snacks and no transportation. Northwood’s 2026–27 handbook says the school partners with CORA Services and BayWay Cares for before- and after-school care, and its partners page names CORA. Northwood dismisses at 12:00 pm on its many early-dismissal days, so ask CORA whether the program starts early on those days. The phone number is the one the City lists for the program.",
+    "sources": [
+      {
+        "label": "City program locator: CORA Services at Northwood Academy Charter School",
+        "url": "https://www.phila.gov/ost/program-locator/?address=4621+Castor+Ave&resource=ost_83"
+      },
+      {
+        "label": "Northwood 2026–27 student and parent handbook",
+        "url": "https://docs.google.com/document/d/1pOKdS912fVj19PajTgZx76Eg1EOQmfS7pXruLQ7wQ-Y/edit?usp=sharing"
+      },
+      {
+        "label": "Northwood: community partnerships",
+        "url": "https://www.northwoodcs.org/community-partnerships"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "northwood": {
+        "relation": "onsite",
+        "note": "The City’s locator lists CORA’s 2026–27 after-school program at Northwood, and Northwood’s handbook names CORA Services for after-school care.",
+        "sources": [
+          {
+            "label": "City program locator: CORA Services at Northwood Academy Charter School",
+            "url": "https://www.phila.gov/ost/program-locator/?address=4621+Castor+Ave&resource=ost_83"
+          },
+          {
+            "label": "Northwood 2026–27 student and parent handbook",
+            "url": "https://docs.google.com/document/d/1pOKdS912fVj19PajTgZx76Eg1EOQmfS7pXruLQ7wQ-Y/edit?usp=sharing"
+          }
+        ],
+        "checked": "2026-11-21"
+      }
+    }
+  },
+  {
+    "id": "northwood-clubs",
+    "name": "School clubs and sports",
+    "what": "Clubs and teams Northwood lists on its own site: soccer, basketball, baseball, softball, track, cheer, and clubs from gardening to Dungeons & Dragons",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "sports",
+      "soccer",
+      "basketball",
+      "baseball",
+      "softball",
+      "cross country",
+      "track",
+      "cheerleading",
+      "book club",
+      "gardening",
+      "Dungeons and Dragons",
+      "theater",
+      "Northwood"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-289-5606",
+    "email": "",
+    "website": "https://www.northwoodcs.org/clubs-sports",
+    "register": {
+      "how": "school",
+      "note": "Northwood says families sign up for after-school clubs and Friday electives on forms sent home to each grade."
+    },
+    "note": "Northwood’s own pages list these clubs and sports with no days, times or grades. It says joining is a privilege for students with good grades and behavior, and that the current clubs are in its weekly Bulldog Blast newsletter.",
+    "sources": [
+      {
+        "label": "Northwood: clubs and sports",
+        "url": "https://www.northwoodcs.org/clubs-sports"
+      },
+      {
+        "label": "Northwood: enrichment and extracurriculars",
+        "url": "https://www.northwoodcs.org/enrichment-extracurriculars"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "northwood": {
+        "relation": "onsite",
+        "checked": "2026-11-21"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Soccer Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Baseball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Softball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Basketball (junior varsity and varsity)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cross country",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Track and field",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Percy Jackson Book Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Arts and crafts",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Bulldog Productions",
+        "tags": [
+          "theater"
+        ]
+      },
+      {
+        "name": "Comic book club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Dungeons and Dragons",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Environmental club",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Games",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Gardening",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Magic",
+        "tags": [
+          "games"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "uacs-comegys",
+    "name": "UACS After-School Program at Comegys",
+    "what": "Penn’s free after-school program inside Comegys: academic support, arts, recreation and projects",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "arts",
+      "Penn",
+      "Netter Center",
+      "UACS",
+      "Comegys",
+      "Kingsessing",
+      "Southwest Philadelphia"
+    ],
+    "address": "5100 Greenway Ave",
+    "neighborhoods": [
+      "Kingsessing"
+    ],
+    "grades": "K-8",
+    "gradeNote": "Comegys students",
+    "hours": "3:00–6:00 pm on weekdays, according to Comegys’ site. The City’s listing gives 3:30–6:00 pm, September 9, 2026 to June 8, 2027.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "445-213-3013",
+    "email": "",
+    "website": "https://comegys.philasd.org/",
+    "register": {
+      "how": "online",
+      "url": "https://upenn.co1.qualtrics.com/jfe/form/SV_egoCRYhRZhgKOI6",
+      "label": "Register",
+      "note": "The City’s listing links this sign-up form and gave a registration window of August 3 to September 30, 2026. Ask the program whether it still has room."
+    },
+    "note": "Comegys’ own site says the University of Pennsylvania’s Netter Center runs the after-school program (3:00–6:00 pm) and a summer program (8:00 am–3:00 pm) for kindergarten to 8th grade, with academic support, arts and cultural enrichment, recreation and project-based learning. The City lists it under the University of Pennsylvania, free, with snacks, and 3:30–6:00 pm as its hours. Comegys’ school day ends at 3:39 pm, so ask the program when it starts. The phone number is the one the City lists for the program.",
+    "sources": [
+      {
+        "label": "Comegys: after-school programming, sports and bell schedule",
+        "url": "https://comegys.philasd.org/"
+      },
+      {
+        "label": "City program locator: University of Pennsylvania at Comegys OST Afterschool",
+        "url": "https://www.phila.gov/ost/program-locator/?address=5100+Greenway+Ave&resource=ost_271"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "comegys": {
+        "relation": "onsite",
+        "note": "Comegys’ own site names Penn’s Netter Center after-school program, and the City’s program locator lists Penn’s after-school program at Comegys.",
+        "sources": [
+          {
+            "label": "Comegys: after-school programming, sports and bell schedule",
+            "url": "https://comegys.philasd.org/"
+          },
+          {
+            "label": "City program locator: University of Pennsylvania at Comegys OST Afterschool",
+            "url": "https://www.phila.gov/ost/program-locator/?address=5100+Greenway+Ave&resource=ost_271"
+          }
+        ],
+        "checked": "2026-11-21"
+      }
+    }
+  },
+  {
+    "id": "comegys-clubs",
+    "name": "School sports",
+    "what": "Sports Comegys lists on its own site: track, lacrosse, and intramurals for K–5",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "sports",
+      "track",
+      "lacrosse",
+      "intramurals",
+      "Comegys"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Intramurals are for K–5; middle-grades teams for 6–8",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-400-7860",
+    "email": "",
+    "website": "https://comegys.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office. A physical form signed by a doctor is needed to play."
+    },
+    "note": "Comegys’ site lists these sports with no days or times, and says grades 6–8 play in the District’s Middle Grades Conference.",
+    "sources": [
+      {
+        "label": "Comegys: after-school programming, sports and bell schedule",
+        "url": "https://comegys.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "comegys": {
+        "relation": "onsite",
+        "checked": "2026-11-21"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Track",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Lacrosse",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Elementary intramural sports (K–5)",
+        "tags": [
+          "movement"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "baywaycares-mastery-clymer",
+    "name": "Baywaycares at Mastery Clymer",
+    "what": "Aftercare inside Mastery’s Clymer Elementary, from dismissal to 6:00 pm",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after care",
+      "childcare",
+      "Baywaycares",
+      "Bayway",
+      "Mastery Clymer",
+      "Clymer",
+      "Hartranft",
+      "Fairhill",
+      "North Philadelphia"
+    ],
+    "address": "1201 W Rush St",
+    "neighborhoods": [
+      "North Philadelphia"
+    ],
+    "grades": "K-6",
+    "gradeNote": "For Mastery Clymer students",
+    "hours": "From dismissal (3:15 pm) to 6:00 pm, Monday to Friday",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not published. The school’s page says childcare subsidies are accepted.",
+    "phone": "215-223-2243",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/clymer",
+    "register": {
+      "how": "contact",
+      "note": "The school’s page gives an email address for Baywaycares; ask the main office (215-223-2243) if you can’t reach it."
+    },
+    "note": "Everything here comes from Mastery Clymer’s own page; we couldn’t find a website for Baywaycares. The phone number is the school’s main office. Ask about the price and what happens on Mastery’s early-dismissal days.",
+    "sources": [
+      {
+        "label": "Mastery Clymer Elementary",
+        "url": "https://masterycharter.org/elementary-schools/clymer"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "mastery-clymer": {
+        "relation": "onsite",
+        "note": "Mastery Clymer’s own page names Baywaycares for aftercare, Monday to Friday, dismissal to 6:00 pm, and says childcare subsidies are accepted.",
+        "sources": [
+          {
+            "label": "Mastery Clymer Elementary",
+            "url": "https://masterycharter.org/elementary-schools/clymer"
+          }
+        ],
+        "checked": "2026-11-21"
+      }
+    }
+  },
+  {
+    "id": "mastery-clymer-clubs",
+    "name": "School clubs and teams",
+    "what": "Teams and clubs Mastery Clymer lists on its own page: basketball, cheerleading, dance, flag football, homework club, weight lifting, and yoga and movement",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "basketball",
+      "cheerleading",
+      "dance",
+      "flag football",
+      "homework club",
+      "weight lifting",
+      "yoga",
+      "Mastery Clymer"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; see each one",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-223-2243",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/clymer",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Mastery Clymer’s own page lists these extracurricular and athletic programs with no days, times or grades, so ask the school which are running and for whom.",
+    "sources": [
+      {
+        "label": "Mastery Clymer Elementary",
+        "url": "https://masterycharter.org/elementary-schools/clymer"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "mastery-clymer": {
+        "relation": "onsite",
+        "checked": "2026-11-21"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Basketball (boys and girls)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Dance",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Flag football",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Homework Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Weight lifting",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Yoga and movement",
+        "tags": [
+          "movement"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "harlem-lacrosse-olney",
+    "name": "Harlem Lacrosse at Olney Elementary",
+    "what": "Lacrosse with academic coaching and mentoring for Olney Elementary’s middle-school students",
+    "types": [
+      "movement",
+      "academics"
+    ],
+    "keywords": [
+      "lacrosse",
+      "sports",
+      "mentoring",
+      "tutoring",
+      "Harlem Lacrosse",
+      "Olney",
+      "middle school"
+    ],
+    "address": "5301 N Water St",
+    "neighborhoods": [
+      "Olney"
+    ],
+    "grades": "6-8",
+    "gradeNote": "For Olney Elementary students in 6th to 8th grade",
+    "hours": "3:45–5:30 pm, Monday to Thursday, September 14, 2026 to June 9, 2027, according to the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu"
+    ],
+    "pickupBy": "5:30 pm",
+    "phone": "215-962-9351",
+    "email": "",
+    "website": "https://www.harlemlacrosse.org/philadelphia",
+    "register": {
+      "how": "online",
+      "url": "https://secure.harlemlacrosse.org/signup",
+      "label": "Sign up",
+      "note": "The City’s listing links this sign-up and gave a registration window of September 1 to 11, 2026. Ask whether there is still room."
+    },
+    "note": "The details come from the City’s program locator, which lists Harlem Lacrosse’s 2026–27 program at Olney Elementary for 6th to 8th graders and says it is only for students enrolled at Olney Elementary. It doesn’t give a cost, so ask. Olney’s own page names Harlem Lacrosse among its partners. The phone number is the organization’s number from the City’s listing.",
+    "sources": [
+      {
+        "label": "City program locator: Harlem Lacrosse at Olney Elementary",
+        "url": "https://www.phila.gov/ost/program-locator/?address=5301+N+Water+St&resource=ost_145"
+      },
+      {
+        "label": "Olney Elementary: About Us (partnerships)",
+        "url": "https://olney.philasd.org/about-us/"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "olney": {
+        "relation": "onsite",
+        "note": "The City’s locator lists Harlem Lacrosse’s 2026–27 program at Olney Elementary, and Olney’s own page names Harlem Lacrosse among its partners.",
+        "sources": [
+          {
+            "label": "City program locator: Harlem Lacrosse at Olney Elementary",
+            "url": "https://www.phila.gov/ost/program-locator/?address=5301+N+Water+St&resource=ost_145"
+          },
+          {
+            "label": "Olney Elementary: About Us (partnerships)",
+            "url": "https://olney.philasd.org/about-us/"
+          }
+        ],
+        "checked": "2026-11-21"
+      }
+    },
+    "cost": "Not given in the City’s listing; ask"
+  },
+  {
+    "id": "cora-olney",
+    "name": "CORA Services before and after care at Olney",
+    "what": "Before- and after-school care at Olney Elementary run by CORA Services",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after care",
+      "before care",
+      "childcare",
+      "CORA",
+      "YouthCOR",
+      "Olney"
+    ],
+    "address": "5301 N Water St",
+    "neighborhoods": [
+      "Olney"
+    ],
+    "grades": null,
+    "gradeNote": "For Olney students; grades not published",
+    "hours": "Not published; ask the school or CORA",
+    "cost": "Not published",
+    "phone": "215-342-7660",
+    "email": "",
+    "website": "https://www.coraservices.org/",
+    "register": {
+      "how": "contact",
+      "note": "Ask the school office (215-400-3790) or CORA Services."
+    },
+    "note": "Olney’s own About Us page, last updated in September 2025, lists “Cora before and after care” among the school’s partnerships. CORA’s own site doesn’t list its after-school sites, and the City’s program locator doesn’t list CORA at Olney this year, so ask the school whether it is running in 2026–27. The phone number is CORA Services’ main number.",
+    "sources": [
+      {
+        "label": "Olney Elementary: About Us (partnerships)",
+        "url": "https://olney.philasd.org/about-us/"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "olney": {
+        "relation": "onsite",
+        "note": "Olney’s own page (last updated September 2025) names CORA for before and after care. Ask the office whether it runs this year.",
+        "sources": [
+          {
+            "label": "Olney Elementary: About Us (partnerships)",
+            "url": "https://olney.philasd.org/about-us/"
+          }
+        ],
+        "checked": "2026-11-21"
+      }
+    }
+  },
+  {
+    "id": "ziehler-playground",
+    "name": "Ziehler Playground",
+    "what": "City rec center after-school program, 3:00 to 6:00 pm: homework help, STEM, arts and crafts and a snack",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "after school",
+      "aftercare",
+      "homework",
+      "STEM",
+      "arts and crafts",
+      "Ziehler",
+      "Olney"
+    ],
+    "address": "200 E Olney Ave",
+    "neighborhoods": [
+      "Olney"
+    ],
+    "grades": "K-6",
+    "gradeNote": "Ages 5–12",
+    "hours": "3:00–6:00 pm, according to the City’s listing",
+    "pickupBy": "6:00 pm",
+    "cost": "$20 a month in the City’s listing, which dates from August 2026; registration there shows open.",
+    "price": "paid",
+    "phone": "215-685-9145",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The City’s Parks & Rec data lists Ziehler After School for ages 5 to 12, 3:00 to 6:00 pm, with homework help, STEM, arts and crafts and a snack, $20 a month, entered in August 2026 and open for registration. Call to confirm this year’s days.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "olney": {
+        "relation": "nearby",
+        "distance": "about a third of a mile northeast, on E Olney Ave",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-21"
+      }
+    }
   }
 ]

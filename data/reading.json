@@ -220,5 +220,17 @@
     "how": "person",
     "why": "Folk Arts-Cultural Treasures Charter School’s site answers with a “request is being verified” bot check, in a plain fetch and in a browser, so its after-school offerings and calendar couldn’t be read.",
     "seen": "2026-11-20"
+  },
+  {
+    "match": "acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58",
+    "how": "browser",
+    "why": "Northwood’s 2026–27 calendar is shared through Adobe’s online viewer, a JavaScript app; a plain fetch gets no dates, and the days off are shown by color as well as listed.",
+    "seen": "2026-11-21"
+  },
+  {
+    "match": "www.harlemlacrosse.org",
+    "how": "person",
+    "why": "Its robots.txt closes the site to ClaudeBot and other AI crawlers, so its program sites are taken from the City’s locator.",
+    "seen": "2026-11-21"
   }
 ]

@@ -94,6 +94,35 @@
         { "date": "2027-05-04", "title": "Dismissal at 12:00 pm: state testing", "by": "school", "url": "https://glacharter.org/s/Annual-Calendar-2026-2027.pdf" },
         { "date": "2027-05-05", "title": "Dismissal at 12:00 pm: state testing", "by": "school", "url": "https://glacharter.org/s/Annual-Calendar-2026-2027.pdf" }
       ]
+    },
+    "northwood": {
+      "weekly": [
+        { "day": "wed", "title": "Dismissal at 12:00 pm", "by": "school", "url": "https://acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58-e7ee-415d-a027-fa1a311884d5" }
+      ],
+      "dates": [
+        { "date": "2026-12-10", "title": "Dismissal at 12:00 pm: conferences", "by": "school", "url": "https://acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58-e7ee-415d-a027-fa1a311884d5" },
+        { "date": "2026-12-11", "title": "Dismissal at 12:00 pm: conferences", "by": "school", "url": "https://acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58-e7ee-415d-a027-fa1a311884d5" },
+        { "date": "2027-03-18", "title": "Dismissal at 12:00 pm: conferences", "by": "school", "url": "https://acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58-e7ee-415d-a027-fa1a311884d5" },
+        { "date": "2027-03-19", "title": "Dismissal at 12:00 pm: conferences", "by": "school", "url": "https://acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58-e7ee-415d-a027-fa1a311884d5" },
+        { "date": "2027-04-26", "title": "Dismissal at 12:00 pm: state testing", "by": "school", "url": "https://acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58-e7ee-415d-a027-fa1a311884d5" },
+        { "date": "2027-04-27", "title": "Dismissal at 12:00 pm: state testing", "by": "school", "url": "https://acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58-e7ee-415d-a027-fa1a311884d5" },
+        { "date": "2027-04-29", "title": "Dismissal at 12:00 pm: state testing", "by": "school", "url": "https://acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58-e7ee-415d-a027-fa1a311884d5" },
+        { "date": "2027-04-30", "title": "Dismissal at 12:00 pm: state testing", "by": "school", "url": "https://acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58-e7ee-415d-a027-fa1a311884d5" },
+        { "date": "2027-05-03", "title": "Dismissal at 12:00 pm: state testing", "by": "school", "url": "https://acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58-e7ee-415d-a027-fa1a311884d5" },
+        { "date": "2027-05-04", "title": "Dismissal at 12:00 pm: state testing", "by": "school", "url": "https://acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58-e7ee-415d-a027-fa1a311884d5" },
+        { "date": "2027-05-06", "title": "Dismissal at 12:00 pm: state testing", "by": "school", "url": "https://acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58-e7ee-415d-a027-fa1a311884d5" },
+        { "date": "2027-05-07", "title": "Dismissal at 12:00 pm: state testing", "by": "school", "url": "https://acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58-e7ee-415d-a027-fa1a311884d5" },
+        { "date": "2027-06-11", "title": "Last day of school: dismissal at 12:00 pm", "by": "school", "url": "https://acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58-e7ee-415d-a027-fa1a311884d5" }
+      ]
+    },
+    "mastery-clymer": {
+      "weekly": [],
+      "dates": [
+        { "date": "2026-12-23", "title": "Early dismissal", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" },
+        { "date": "2027-02-09", "title": "Early dismissal", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" },
+        { "date": "2027-05-07", "title": "Early dismissal: staff appreciation", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" },
+        { "date": "2027-06-11", "title": "Last day of school", "by": "school", "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf" }
+      ]
     }
   }
 }
