@@ -2197,19 +2197,19 @@
     "Graduate Hospital"
    ],
    "phone": "484-278-1335",
-   "website": "https://makomcommunity.org/schools-out-camp-2/",
+   "website": "https://makomcommunity.org/schools-out-camp/",
    "registerUrl": "https://makomcommunity.org/enroll/",
    "price": "paid",
    "program": "makom-community",
    "sources": [
     {
      "label": "Makom School’s Out Camps",
-     "url": "https://makomcommunity.org/schools-out-camp-2/"
+     "url": "https://makomcommunity.org/schools-out-camp/"
     }
    ],
    "checked": "2026-11-11",
    "check": {
-    "url": "https://makomcommunity.org/schools-out-camp-2/",
+    "url": "https://makomcommunity.org/schools-out-camp/",
     "how": "fetch",
     "look": "“Camp Days for the 2026-2027 school year” is a dated list; Summer Break Camp is the last line. The $90 day price and the $100 late price are in the text above it.",
     "notes": "The site lists two addresses (2401 Washington Ave and 1311 S Juniper St) without saying which holds camp; Makom’s manager told us camp is at 2401 Washington Ave."

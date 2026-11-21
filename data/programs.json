@@ -11585,7 +11585,7 @@
     "hours": "Camps run 9 am to 3 pm.",
     "daysOff": {
       "summary": "Climbing camps for ages 6–13, 9 am to 3 pm, $125 a day: a School Day Off camp on most single-day school holidays, a Winter Break camp on December 23 and 28–31, and a Spring Break camp March 22–26 ($600 for the week). Climbing, teamwork, games and challenges. Its page doesn’t print the year on the break dates, which match this school year’s breaks; its sign-up portal has the exact sessions.",
-      "url": "https://movementgyms.com/callowhill/climbing/youth-programs/camps/",
+      "url": "https://movementgyms.com/callowhill/climbing/youth-programs/",
       "dates": [
         "2026-12-23",
         "2026-12-28",
@@ -11601,7 +11601,7 @@
       "sources": [
         {
           "label": "Movement Callowhill youth camps",
-          "url": "https://movementgyms.com/callowhill/climbing/youth-programs/camps/"
+          "url": "https://movementgyms.com/callowhill/climbing/youth-programs/"
         }
       ],
       "hours": "9 am to 3 pm",
@@ -11613,7 +11613,7 @@
     "price": "paid",
     "phone": "215-444-7625",
     "email": "",
-    "website": "https://movementgyms.com/callowhill/climbing/youth-programs/camps/",
+    "website": "https://movementgyms.com/callowhill/climbing/youth-programs/",
     "register": {
       "how": "online",
       "url": "https://portal.movementgyms.com/callowhill/programs/winter-break-camp",
@@ -11624,7 +11624,7 @@
     "sources": [
       {
         "label": "Movement Callowhill youth camps",
-        "url": "https://movementgyms.com/callowhill/climbing/youth-programs/camps/"
+        "url": "https://movementgyms.com/callowhill/climbing/youth-programs/"
       },
       {
         "label": "Movement Callowhill",
@@ -13905,7 +13905,7 @@
     "price": "free",
     "phone": "215-608-5823",
     "email": "",
-    "website": "https://philaymca.org/",
+    "website": "https://www.philaymca.org/",
     "register": {
       "how": "online",
       "url": "https://gpy.tfaforms.net/134",
