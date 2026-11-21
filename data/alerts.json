@@ -168,6 +168,126 @@
     {
       "id": "anne-frank",
       "name": "Anne Frank"
+    },
+    {
+      "id": "kelley",
+      "name": "Kelley"
+    },
+    {
+      "id": "penn-alexander",
+      "name": "Penn Alexander"
+    },
+    {
+      "id": "gideon",
+      "name": "Gideon"
+    },
+    {
+      "id": "blaine",
+      "name": "Blaine"
+    },
+    {
+      "id": "hopkinson",
+      "name": "Hopkinson"
+    },
+    {
+      "id": "steel",
+      "name": "Steel"
+    },
+    {
+      "id": "ad-prima",
+      "name": "Ad Prima"
+    },
+    {
+      "id": "conwell",
+      "name": "Conwell"
+    },
+    {
+      "id": "mya",
+      "name": "MYA"
+    },
+    {
+      "id": "martha-washington",
+      "name": "Martha Washington"
+    },
+    {
+      "id": "adaire",
+      "name": "Adaire"
+    },
+    {
+      "id": "community-academy",
+      "name": "Community Academy"
+    },
+    {
+      "id": "mastery-prep",
+      "name": "Mastery Prep"
+    },
+    {
+      "id": "gamp",
+      "name": "GAMP"
+    },
+    {
+      "id": "esperanza-elementary",
+      "name": "Esperanza Elementary"
+    },
+    {
+      "id": "hackett",
+      "name": "Hackett"
+    },
+    {
+      "id": "mastery-cleveland",
+      "name": "Mastery Cleveland"
+    },
+    {
+      "id": "mcdaniel",
+      "name": "McDaniel"
+    },
+    {
+      "id": "blankenburg",
+      "name": "Blankenburg"
+    },
+    {
+      "id": "gla-southwest",
+      "name": "GLA Southwest"
+    },
+    {
+      "id": "hamilton",
+      "name": "Hamilton"
+    },
+    {
+      "id": "mastery-harrity",
+      "name": "Mastery Harrity"
+    },
+    {
+      "id": "ethel-allen",
+      "name": "Ethel Allen"
+    },
+    {
+      "id": "mastery-wister",
+      "name": "Mastery Wister"
+    },
+    {
+      "id": "heston",
+      "name": "Heston"
+    },
+    {
+      "id": "mcmichael",
+      "name": "McMichael"
+    },
+    {
+      "id": "northwood",
+      "name": "Northwood"
+    },
+    {
+      "id": "comegys",
+      "name": "Comegys"
+    },
+    {
+      "id": "mastery-clymer",
+      "name": "Mastery Clymer"
+    },
+    {
+      "id": "olney",
+      "name": "Olney Elementary"
     }
   ],
   "programs": [
@@ -1377,6 +1497,443 @@
       "parts": [
         "after"
       ]
+    },
+    {
+      "id": "ymca-kelley",
+      "name": "YMCA Out of School Time at Kelley",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ymca-gideon",
+      "name": "YMCA Out of School Time at Gideon",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ymca-blaine",
+      "name": "YMCA Out of School Time at Blaine",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ymca-hopkinson",
+      "name": "YMCA Out of School Time at Hopkinson",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "kelley-clubs",
+      "name": "School clubs and teams at Kelley",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "gideon-clubs",
+      "name": "School clubs and teams at Gideon",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "blaine-clubs",
+      "name": "School clubs and teams at Blaine",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "hopkinson-clubs",
+      "name": "School clubs and teams at Hopkinson",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "penn-alexander-clubs",
+      "name": "School clubs and teams at Penn Alexander",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "gpca-steel",
+      "name": "GPCA After School at Steel",
+      "parts": [
+        "after",
+        "off"
+      ]
+    },
+    {
+      "id": "steel-clubs",
+      "name": "School clubs and teams at Steel",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ad-prima-clubs",
+      "name": "School clubs and teams at Ad Prima",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "pyn-conwell",
+      "name": "PYN AIM Afterschool at Conwell",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "lets-dance-conwell",
+      "name": "Philadelphia Ballet: Let’s Dance at Conwell",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "conwell-clubs",
+      "name": "School clubs and teams at Conwell",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ecs-mya",
+      "name": "Episcopal Community Services: After School at MYA",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "mya-clubs",
+      "name": "School clubs and teams at MYA",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ace-martha-washington",
+      "name": "Community Council ACE Program at Martha Washington",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "martha-washington-clubs",
+      "name": "School clubs and teams at Martha Washington",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "playarts-afterschool",
+      "name": "PlayArts AfterSchool",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "fishtown-rec",
+      "name": "Fishtown Recreation Center",
+      "parts": [
+        "after",
+        "off"
+      ]
+    },
+    {
+      "id": "shissler-rec",
+      "name": "Shissler Recreation Center",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "stem-prep",
+      "name": "STEM Prep: After-School STEM",
+      "parts": [
+        "after",
+        "off"
+      ]
+    },
+    {
+      "id": "adaire-clubs",
+      "name": "School clubs and teams at Adaire",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "community-academy-clubs",
+      "name": "School clubs and teams at Community Academy",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "change-4-a-dollar-mastery-prep",
+      "name": "Change 4 A Dollar at Mastery Prep",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "mastery-prep-clubs",
+      "name": "School clubs and teams at Mastery Prep",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "gamp-clubs",
+      "name": "School clubs and teams at GAMP",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "aspira-acap-esperanza",
+      "name": "ASPIRA Children’s Achievement Program at Esperanza at Esperanza Elementary",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "esperanza-elementary-clubs",
+      "name": "School clubs and teams at Esperanza Elementary",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "baywaycares-mastery-cleveland",
+      "name": "Baywaycares at Mastery Cleveland",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "mastery-cleveland-clubs",
+      "name": "School clubs and teams at Mastery Cleveland",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "asas-mcdaniel",
+      "name": "After-School All-Stars at McDaniel",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "brooklyn-robot-foundry-mcdaniel",
+      "name": "Brooklyn Robot Foundry at McDaniel",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "sunrise-blankenburg",
+      "name": "Sunrise of Philadelphia at Blankenburg",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "blankenburg-clubs",
+      "name": "School clubs and programs at Blankenburg",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "gla-southwest-clubs",
+      "name": "School sports at GLA Southwest",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "hackett-clubs",
+      "name": "School clubs and activities at Hackett",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "uacs-hamilton",
+      "name": "UACS After-School Program at Hamilton",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "hamilton-clubs",
+      "name": "School sports and teams at Hamilton",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "christy-rec",
+      "name": "Christy Recreation Center",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "baywaycares-mastery-harrity",
+      "name": "Baywaycares at Mastery Harrity",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "mastery-harrity-clubs",
+      "name": "School clubs and teams at Mastery Harrity",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "right-at-school-ethel-allen",
+      "name": "Right At School at Dr. Ethel Allen",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ethel-allen-clubs",
+      "name": "School clubs and teams at Ethel Allen",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "joshuas-academy-mastery-wister",
+      "name": "Joshua’s Academy at Mastery Wister",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "mastery-wister-clubs",
+      "name": "School clubs and teams at Mastery Wister",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "girls-inc-heston",
+      "name": "Girls Inc. H.Y.P.E. at Heston",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "heston-clubs",
+      "name": "School clubs and teams at Heston",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "sunrise-mcmichael",
+      "name": "Sunrise of Philadelphia at McMichael",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "mcmichael-clubs",
+      "name": "School clubs and programs at McMichael",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "squashsmarts",
+      "name": "SquashSmarts",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "miles-mack-playground",
+      "name": "Miles Mack Playground",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "cora-northwood",
+      "name": "YouthCOR at Northwood",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "northwood-clubs",
+      "name": "School clubs and sports at Northwood",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "uacs-comegys",
+      "name": "UACS After-School Program at Comegys",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "comegys-clubs",
+      "name": "School sports at Comegys",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "baywaycares-mastery-clymer",
+      "name": "Baywaycares at Mastery Clymer",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "mastery-clymer-clubs",
+      "name": "School clubs and teams at Mastery Clymer",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "harlem-lacrosse-olney",
+      "name": "Harlem Lacrosse at Olney Elementary",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "cora-olney",
+      "name": "CORA Services before and after care at Olney at Olney Elementary",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ziehler-playground",
+      "name": "Ziehler Playground",
+      "parts": [
+        "after"
+      ]
     }
   ],
   "camps": [
@@ -1595,6 +2152,516 @@
     "reason": "you asked to be told when this school was added"
   },
   "alerts": [
+    {
+      "id": "added-ad-prima",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "ad-prima-charter-school-2"
+      ],
+      "when": "New",
+      "title": "Ad Prima now has a page",
+      "text": "You asked to be told. 2 programs are listed for Ad Prima so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/ad-prima/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-adaire",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "alexander-adaire-school"
+      ],
+      "when": "New",
+      "title": "Adaire now has a page",
+      "text": "You asked to be told. 6 programs are listed for Adaire so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/adaire/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-blaine",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "james-g-blaine-school"
+      ],
+      "when": "New",
+      "title": "Blaine now has a page",
+      "text": "You asked to be told. 4 programs are listed for Blaine so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/blaine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-blankenburg",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "rudolph-blankenburg-school"
+      ],
+      "when": "New",
+      "title": "Blankenburg now has a page",
+      "text": "You asked to be told. 2 programs are listed for Blankenburg so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/blankenburg/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-comegys",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "benjamin-b-comegys-school"
+      ],
+      "when": "New",
+      "title": "Comegys now has a page",
+      "text": "You asked to be told. 2 programs are listed for Comegys so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/comegys/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-community-academy",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "community-academy-of-philadelphia-charter-school"
+      ],
+      "when": "New",
+      "title": "Community Academy now has a page",
+      "text": "You asked to be told. 2 programs are listed for Community Academy so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/community-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-conwell",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "russell-h-conwell-school"
+      ],
+      "when": "New",
+      "title": "Conwell now has a page",
+      "text": "You asked to be told. 3 programs are listed for Conwell so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/conwell/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-esperanza-elementary",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "esperanza-academy-charter-school-2"
+      ],
+      "when": "New",
+      "title": "Esperanza Elementary now has a page",
+      "text": "You asked to be told. 2 programs are listed for Esperanza Elementary so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/esperanza-elementary/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-ethel-allen",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "dr-ethel-allen-school"
+      ],
+      "when": "New",
+      "title": "Ethel Allen now has a page",
+      "text": "You asked to be told. 2 programs are listed for Ethel Allen so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/ethel-allen/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-gamp",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "girard-academic-music-program"
+      ],
+      "when": "New",
+      "title": "GAMP now has a page",
+      "text": "You asked to be told. 2 programs are listed for GAMP so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/gamp/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-gideon",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "edward-gideon-school"
+      ],
+      "when": "New",
+      "title": "Gideon now has a page",
+      "text": "You asked to be told. 4 programs are listed for Gideon so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/gideon/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-gla-southwest",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "global-leadership-academy-at-huey"
+      ],
+      "when": "New",
+      "title": "GLA Southwest now has a page",
+      "text": "You asked to be told. 2 programs are listed for GLA Southwest so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-hackett",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "horatio-b-hackett-school"
+      ],
+      "when": "New",
+      "title": "Hackett now has a page",
+      "text": "You asked to be told. 4 programs are listed for Hackett so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/hackett/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-hamilton",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "andrew-hamilton-school"
+      ],
+      "when": "New",
+      "title": "Hamilton now has a page",
+      "text": "You asked to be told. 3 programs are listed for Hamilton so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/hamilton/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-heston",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "edward-heston-school"
+      ],
+      "when": "New",
+      "title": "Heston now has a page",
+      "text": "You asked to be told. 2 programs are listed for Heston so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/heston/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-hopkinson",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "francis-hopkinson-school"
+      ],
+      "when": "New",
+      "title": "Hopkinson now has a page",
+      "text": "You asked to be told. 2 programs are listed for Hopkinson so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/hopkinson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-kelley",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "william-d-kelley-school"
+      ],
+      "when": "New",
+      "title": "Kelley now has a page",
+      "text": "You asked to be told. 2 programs are listed for Kelley so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/kelley/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-martha-washington",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "martha-washington-school"
+      ],
+      "when": "New",
+      "title": "Martha Washington now has a page",
+      "text": "You asked to be told. 3 programs are listed for Martha Washington so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/martha-washington/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-mastery-cleveland",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "mastery-charter-school-at-cleveland"
+      ],
+      "when": "New",
+      "title": "Mastery Cleveland now has a page",
+      "text": "You asked to be told. 2 programs are listed for Mastery Cleveland so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-mastery-clymer",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "mastery-charter-school-at-clymer"
+      ],
+      "when": "New",
+      "title": "Mastery Clymer now has a page",
+      "text": "You asked to be told. 2 programs are listed for Mastery Clymer so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-mastery-harrity",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "mastery-charter-school-at-harrity"
+      ],
+      "when": "New",
+      "title": "Mastery Harrity now has a page",
+      "text": "You asked to be told. 3 programs are listed for Mastery Harrity so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-mastery-prep",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "mastery-prep-elementary-charter-school"
+      ],
+      "when": "New",
+      "title": "Mastery Prep now has a page",
+      "text": "You asked to be told. 2 programs are listed for Mastery Prep so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-mastery-wister",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "mastery-charter-school-at-wister"
+      ],
+      "when": "New",
+      "title": "Mastery Wister now has a page",
+      "text": "You asked to be told. 2 programs are listed for Mastery Wister so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-mcdaniel",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "delaplaine-mcdaniel-school"
+      ],
+      "when": "New",
+      "title": "McDaniel now has a page",
+      "text": "You asked to be told. 3 programs are listed for McDaniel so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/mcdaniel/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-mcmichael",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "morton-mcmichael-school"
+      ],
+      "when": "New",
+      "title": "McMichael now has a page",
+      "text": "You asked to be told. 4 programs are listed for McMichael so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/mcmichael/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-mya",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "middle-years-alternative-school"
+      ],
+      "when": "New",
+      "title": "MYA now has a page",
+      "text": "You asked to be told. 3 programs are listed for MYA so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/mya/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-northwood",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "northwood-academy-charter-school"
+      ],
+      "when": "New",
+      "title": "Northwood now has a page",
+      "text": "You asked to be told. 2 programs are listed for Northwood so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/northwood/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-olney",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "olney-school"
+      ],
+      "when": "New",
+      "title": "Olney Elementary now has a page",
+      "text": "You asked to be told. 3 programs are listed for Olney Elementary so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/olney/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-penn-alexander",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "sadie-alexander-school"
+      ],
+      "when": "New",
+      "title": "Penn Alexander now has a page",
+      "text": "You asked to be told. 2 programs are listed for Penn Alexander so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/penn-alexander/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-steel",
+      "kind": "added",
+      "date": "2026-11-21",
+      "sendOn": "2026-11-21",
+      "expires": "2026-11-23",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "edward-t-steel-school"
+      ],
+      "when": "New",
+      "title": "Steel now has a page",
+      "text": "You asked to be told. 3 programs are listed for Steel so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/steel/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
     {
       "id": "reg-fleisher-art-memorial-2026-11-21",
       "schools": [
@@ -1898,13 +2965,38 @@
       "notSchools": [
         "independence-charter",
         "byers",
-        "mastery-thomas"
+        "mastery-thomas",
+        "ad-prima",
+        "community-academy",
+        "mastery-prep",
+        "esperanza-elementary",
+        "mastery-cleveland",
+        "gla-southwest",
+        "mastery-harrity",
+        "mastery-wister",
+        "northwood",
+        "mastery-clymer"
       ],
       "when": "Wednesday, November 25",
       "title": "No school: Staff professional development",
       "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
       "url": "https://phillyafterschool.org/days-off/staff-professional-development-2026-11-25/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-ad-prima-2026-11-25",
+      "kind": "dayoff",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "ad-prima"
+      ],
+      "programs": [],
+      "when": "Wednesday, November 25 to Friday, November 27",
+      "title": "No school at Ad Prima: Thanksgiving recess",
+      "text": "From Ad Prima’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
+      "url": "https://phillyafterschool.org/ad-prima/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Ad Prima’s week"
     },
     {
       "id": "off-byers-2026-11-25",
@@ -1922,6 +3014,36 @@
       "button": "See Russell Byers’s week"
     },
     {
+      "id": "off-community-academy-2026-11-25",
+      "kind": "dayoff",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "community-academy"
+      ],
+      "programs": [],
+      "when": "Wednesday, November 25 to Friday, November 27",
+      "title": "No school at Community Academy: Thanksgiving holiday",
+      "text": "From Community Academy’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
+      "url": "https://phillyafterschool.org/community-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Community Academy’s week"
+    },
+    {
+      "id": "off-gla-southwest-2026-11-25",
+      "kind": "dayoff",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Wednesday, November 25",
+      "title": "No school at GLA Southwest: Staff professional development day",
+      "text": "From GLA Southwest’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
+    },
+    {
       "id": "off-independence-charter-2026-11-25",
       "kind": "dayoff",
       "date": "2026-11-25",
@@ -1937,6 +3059,66 @@
       "button": "See Independence Charter’s week"
     },
     {
+      "id": "off-mastery-cleveland-2026-11-25",
+      "kind": "dayoff",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "mastery-cleveland"
+      ],
+      "programs": [],
+      "when": "Wednesday, November 25 to Friday, November 27",
+      "title": "No school at Mastery Cleveland: Thanksgiving break",
+      "text": "From Mastery Cleveland’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Cleveland’s week"
+    },
+    {
+      "id": "off-mastery-clymer-2026-11-25",
+      "kind": "dayoff",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "mastery-clymer"
+      ],
+      "programs": [],
+      "when": "Wednesday, November 25 to Friday, November 27",
+      "title": "No school at Mastery Clymer: Thanksgiving break",
+      "text": "From Mastery Clymer’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Clymer’s week"
+    },
+    {
+      "id": "off-mastery-harrity-2026-11-25",
+      "kind": "dayoff",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "mastery-harrity"
+      ],
+      "programs": [],
+      "when": "Wednesday, November 25 to Friday, November 27",
+      "title": "No school at Mastery Harrity: Thanksgiving break",
+      "text": "From Mastery Harrity’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-prep-2026-11-25",
+      "kind": "dayoff",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "mastery-prep"
+      ],
+      "programs": [],
+      "when": "Wednesday, November 25 to Friday, November 27",
+      "title": "No school at Mastery Prep: Thanksgiving break",
+      "text": "From Mastery Prep’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Prep’s week"
+    },
+    {
       "id": "off-mastery-thomas-2026-11-25",
       "kind": "dayoff",
       "date": "2026-11-25",
@@ -1950,6 +3132,21 @@
       "text": "From Mastery Thomas’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "off-mastery-wister-2026-11-25",
+      "kind": "dayoff",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "mastery-wister"
+      ],
+      "programs": [],
+      "when": "Wednesday, November 25 to Friday, November 27",
+      "title": "No school at Mastery Wister: Thanksgiving break",
+      "text": "From Mastery Wister’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Wister’s week"
     },
     {
       "id": "camp-elite-sports-factory-2026-11-26",
@@ -1980,13 +3177,68 @@
       "notSchools": [
         "independence-charter",
         "byers",
-        "mastery-thomas"
+        "mastery-thomas",
+        "ad-prima",
+        "community-academy",
+        "mastery-prep",
+        "esperanza-elementary",
+        "mastery-cleveland",
+        "gla-southwest",
+        "mastery-harrity",
+        "mastery-wister",
+        "northwood",
+        "mastery-clymer"
       ],
       "when": "Thursday, November 26 to Friday, November 27",
       "title": "No school: Thanksgiving recess",
       "text": "One listed program has posted a camp: Elite Sports Factory.",
       "url": "https://phillyafterschool.org/days-off/thanksgiving-break-2026-11-26/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-esperanza-elementary-2026-11-26",
+      "kind": "dayoff",
+      "date": "2026-11-26",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "esperanza-elementary"
+      ],
+      "programs": [],
+      "when": "Thursday, November 26 to Friday, November 27",
+      "title": "No school at Esperanza Elementary: Thanksgiving holiday",
+      "text": "From Esperanza Elementary’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/esperanza-elementary/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Esperanza Elementary’s week"
+    },
+    {
+      "id": "off-gla-southwest-2026-11-26",
+      "kind": "dayoff",
+      "date": "2026-11-26",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Thursday, November 26 to Friday, November 27",
+      "title": "No school at GLA Southwest: Thanksgiving break",
+      "text": "From GLA Southwest’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
+    },
+    {
+      "id": "off-northwood-2026-11-26",
+      "kind": "dayoff",
+      "date": "2026-11-26",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "northwood"
+      ],
+      "programs": [],
+      "when": "Thursday, November 26 to Friday, November 27",
+      "title": "No school at Northwood: Thanksgiving break",
+      "text": "From Northwood’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/northwood/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Northwood’s week"
     },
     {
       "id": "reg-arden-drama-school-2026-11-27",
@@ -2036,6 +3288,70 @@
       "expires": "2026-11-26",
       "when": "Tomorrow, Friday, November 27",
       "text": "Arden early-bird ends: $15 off each winter Play-in-a-Day (code WINTERPIAD15) and $25 off 8-week classes (code WINTERSTAGE) when you enroll by November 27."
+    },
+    {
+      "id": "week-ad-prima-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "ad-prima"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Ad Prima",
+      "text": "Wednesday: No school: Thanksgiving recess. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Thanksgiving recess; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/ad-prima/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Ad Prima’s week"
+    },
+    {
+      "id": "week-adaire-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "adaire"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Adaire",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/adaire/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Adaire’s week"
     },
     {
       "id": "week-anne-frank-2026-11-23",
@@ -2132,6 +3448,70 @@
       "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
       "url": "https://phillyafterschool.org/bayard-taylor/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Bayard Taylor’s week"
+    },
+    {
+      "id": "week-blaine-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "blaine"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Blaine",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/blaine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Blaine’s week"
+    },
+    {
+      "id": "week-blankenburg-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "blankenburg"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Blankenburg",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/blankenburg/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Blankenburg’s week"
     },
     {
       "id": "week-byers-2026-11-23",
@@ -2260,6 +3640,102 @@
       "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
       "url": "https://phillyafterschool.org/columbus-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Columbus Charter’s week"
+    },
+    {
+      "id": "week-comegys-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "comegys"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Comegys",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/comegys/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Comegys’s week"
+    },
+    {
+      "id": "week-community-academy-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "community-academy"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Community Academy",
+      "text": "Wednesday: No school: Thanksgiving holiday. Thursday: No school: Thanksgiving holiday. Friday: No school: Thanksgiving holiday.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Thanksgiving holiday"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving holiday"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving holiday"
+        }
+      ],
+      "first": "Wednesday: no school, Thanksgiving holiday; Thursday: no school, Thanksgiving holiday",
+      "url": "https://phillyafterschool.org/community-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Community Academy’s week"
+    },
+    {
+      "id": "week-conwell-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "conwell"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Conwell",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/conwell/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Conwell’s week"
     },
     {
       "id": "week-cook-wissahickon-2026-11-23",
@@ -2426,6 +3902,70 @@
       "button": "See Emlen’s week"
     },
     {
+      "id": "week-esperanza-elementary-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "esperanza-elementary"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Esperanza Elementary",
+      "text": "Wednesday: Early release at 1:00 pm (Most Wednesdays (professional learning days); the calendar lists each one). Thursday: No school: Thanksgiving holiday. Friday: No school: Thanksgiving holiday.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "Early release at 1:00 pm (Most Wednesdays (professional learning days); the calendar lists each one)"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving holiday"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving holiday"
+        }
+      ],
+      "first": "Thursday: no school, Thanksgiving holiday; Friday: no school, Thanksgiving holiday",
+      "url": "https://phillyafterschool.org/esperanza-elementary/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Esperanza Elementary’s week"
+    },
+    {
+      "id": "week-ethel-allen-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "ethel-allen"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Ethel Allen",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/ethel-allen/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Ethel Allen’s week"
+    },
+    {
       "id": "week-fell-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -2456,6 +3996,102 @@
       "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
       "url": "https://phillyafterschool.org/fell/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Fell’s week"
+    },
+    {
+      "id": "week-gamp-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "gamp"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at GAMP",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/gamp/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GAMP’s week"
+    },
+    {
+      "id": "week-gideon-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "gideon"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Gideon",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/gideon/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Gideon’s week"
+    },
+    {
+      "id": "week-gla-southwest-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "gla-southwest"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at GLA Southwest",
+      "text": "Wednesday: No school: Staff professional development day. Thursday: No school: Thanksgiving break. Friday: No school: Thanksgiving break.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development day"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving break"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development day; Thursday: no school, Thanksgiving break",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
     },
     {
       "id": "week-greenberg-2026-11-23",
@@ -2522,6 +4158,70 @@
       "button": "See Greenfield’s week"
     },
     {
+      "id": "week-hackett-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "hackett"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Hackett",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/hackett/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Hackett’s week"
+    },
+    {
+      "id": "week-hamilton-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "hamilton"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Hamilton",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/hamilton/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Hamilton’s week"
+    },
+    {
       "id": "week-henry-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -2552,6 +4252,70 @@
       "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
       "url": "https://phillyafterschool.org/henry/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See C.W. Henry’s week"
+    },
+    {
+      "id": "week-heston-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "heston"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Heston",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/heston/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Heston’s week"
+    },
+    {
+      "id": "week-hopkinson-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "hopkinson"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Hopkinson",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/hopkinson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Hopkinson’s week"
     },
     {
       "id": "week-houston-2026-11-23",
@@ -2712,6 +4476,38 @@
       "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
       "url": "https://phillyafterschool.org/juniata-park/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Juniata Park’s week"
+    },
+    {
+      "id": "week-kelley-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "kelley"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Kelley",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/kelley/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Kelley’s week"
     },
     {
       "id": "week-kirkbride-2026-11-23",
@@ -2878,6 +4674,166 @@
       "button": "See Marian Anderson’s week"
     },
     {
+      "id": "week-martha-washington-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "martha-washington"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Martha Washington",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/martha-washington/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Martha Washington’s week"
+    },
+    {
+      "id": "week-mastery-cleveland-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mastery-cleveland"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Mastery Cleveland",
+      "text": "Wednesday: No school: Thanksgiving break. Thursday: No school: Thanksgiving break. Friday: No school: Thanksgiving break.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving break"
+        }
+      ],
+      "first": "Wednesday: no school, Thanksgiving break; Thursday: no school, Thanksgiving break",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Cleveland’s week"
+    },
+    {
+      "id": "week-mastery-clymer-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mastery-clymer"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Mastery Clymer",
+      "text": "Wednesday: No school: Thanksgiving break. Thursday: No school: Thanksgiving break. Friday: No school: Thanksgiving break.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving break"
+        }
+      ],
+      "first": "Wednesday: no school, Thanksgiving break; Thursday: no school, Thanksgiving break",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Clymer’s week"
+    },
+    {
+      "id": "week-mastery-harrity-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mastery-harrity"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Mastery Harrity",
+      "text": "Wednesday: No school: Thanksgiving break. Thursday: No school: Thanksgiving break. Friday: No school: Thanksgiving break.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving break"
+        }
+      ],
+      "first": "Wednesday: no school, Thanksgiving break; Thursday: no school, Thanksgiving break",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "week-mastery-prep-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mastery-prep"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Mastery Prep",
+      "text": "Wednesday: No school: Thanksgiving break. Thursday: No school: Thanksgiving break. Friday: No school: Thanksgiving break.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving break"
+        }
+      ],
+      "first": "Wednesday: no school, Thanksgiving break; Thursday: no school, Thanksgiving break",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Prep’s week"
+    },
+    {
       "id": "week-mastery-thomas-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -2908,6 +4864,38 @@
       "first": "Wednesday: no school, Thanksgiving break; Thursday: no school, Thanksgiving break",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "week-mastery-wister-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mastery-wister"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Mastery Wister",
+      "text": "Wednesday: No school: Thanksgiving break. Thursday: No school: Thanksgiving break. Friday: No school: Thanksgiving break.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving break"
+        }
+      ],
+      "first": "Wednesday: no school, Thanksgiving break; Thursday: no school, Thanksgiving break",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Wister’s week"
     },
     {
       "id": "week-mccall-2026-11-23",
@@ -2944,6 +4932,70 @@
       "first": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students; Wednesday: no school, Staff professional development",
       "url": "https://phillyafterschool.org/mccall/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See McCall’s week"
+    },
+    {
+      "id": "week-mcdaniel-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mcdaniel"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at McDaniel",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/mcdaniel/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See McDaniel’s week"
+    },
+    {
+      "id": "week-mcmichael-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mcmichael"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at McMichael",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/mcmichael/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See McMichael’s week"
     },
     {
       "id": "week-meredith-2026-11-23",
@@ -3078,6 +5130,38 @@
       "button": "See Robert Morris’s week"
     },
     {
+      "id": "week-mya-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mya"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at MYA",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/mya/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See MYA’s week"
+    },
+    {
       "id": "week-nebinger-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -3112,6 +5196,102 @@
       "first": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students; Wednesday: no school, Staff professional development",
       "url": "https://phillyafterschool.org/nebinger/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Nebinger’s week"
+    },
+    {
+      "id": "week-northwood-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "northwood"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Northwood",
+      "text": "Wednesday: Dismissal at 12:00 pm. Thursday: No school: Thanksgiving break. Friday: No school: Thanksgiving break.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "Dismissal at 12:00 pm"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving break"
+        }
+      ],
+      "first": "Thursday: no school, Thanksgiving break; Friday: no school, Thanksgiving break",
+      "url": "https://phillyafterschool.org/northwood/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Northwood’s week"
+    },
+    {
+      "id": "week-olney-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "olney"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Olney Elementary",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/olney/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Olney Elementary’s week"
+    },
+    {
+      "id": "week-penn-alexander-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "penn-alexander"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Penn Alexander",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/penn-alexander/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Penn Alexander’s week"
     },
     {
       "id": "week-rhoads-2026-11-23",
@@ -3240,6 +5420,38 @@
       "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
       "url": "https://phillyafterschool.org/stanton/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Stanton’s week"
+    },
+    {
+      "id": "week-steel-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "steel"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Steel",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/steel/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Steel’s week"
     },
     {
       "id": "week-stephen-girard-2026-11-23",
@@ -3930,6 +6142,34 @@
       "button": "See Coppin’s week"
     },
     {
+      "id": "week-esperanza-elementary-2026-11-30",
+      "kind": "week",
+      "date": "2026-12-04",
+      "sendOn": "2026-11-29",
+      "expires": "2026-12-02",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "esperanza-elementary"
+      ],
+      "when": "Week of November 30",
+      "title": "This week at Esperanza Elementary",
+      "text": "Wednesday: Early release at 1:00 pm (Most Wednesdays (professional learning days); the calendar lists each one). Friday: Early release: professional development.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "Early release at 1:00 pm (Most Wednesdays (professional learning days); the calendar lists each one)"
+        },
+        {
+          "when": "Friday",
+          "what": "Early release: professional development"
+        }
+      ],
+      "first": "Friday: Early release: professional development",
+      "url": "https://phillyafterschool.org/esperanza-elementary/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Esperanza Elementary’s week"
+    },
+    {
       "id": "week-independence-charter-2026-11-30",
       "kind": "week",
       "date": "2026-12-04",
@@ -4205,6 +6445,66 @@
       "button": "See Independence Charter’s week"
     },
     {
+      "id": "off-mastery-cleveland-2026-12-11",
+      "kind": "dayoff",
+      "date": "2026-12-11",
+      "sendOn": "2026-11-29",
+      "schools": [
+        "mastery-cleveland"
+      ],
+      "programs": [],
+      "when": "Friday, December 11",
+      "title": "No school at Mastery Cleveland: Professional development day",
+      "text": "From Mastery Cleveland’s own calendar. One listed program has posted a camp: ZAZZ.",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Cleveland’s week"
+    },
+    {
+      "id": "off-mastery-clymer-2026-12-11",
+      "kind": "dayoff",
+      "date": "2026-12-11",
+      "sendOn": "2026-11-29",
+      "schools": [
+        "mastery-clymer"
+      ],
+      "programs": [],
+      "when": "Friday, December 11",
+      "title": "No school at Mastery Clymer: Professional development day",
+      "text": "From Mastery Clymer’s own calendar. One listed program has posted a camp: ZAZZ.",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Clymer’s week"
+    },
+    {
+      "id": "off-mastery-harrity-2026-12-11",
+      "kind": "dayoff",
+      "date": "2026-12-11",
+      "sendOn": "2026-11-29",
+      "schools": [
+        "mastery-harrity"
+      ],
+      "programs": [],
+      "when": "Friday, December 11",
+      "title": "No school at Mastery Harrity: Professional development day",
+      "text": "From Mastery Harrity’s own calendar. One listed program has posted a camp: ZAZZ.",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-prep-2026-12-11",
+      "kind": "dayoff",
+      "date": "2026-12-11",
+      "sendOn": "2026-11-29",
+      "schools": [
+        "mastery-prep"
+      ],
+      "programs": [],
+      "when": "Friday, December 11",
+      "title": "No school at Mastery Prep: Professional development day",
+      "text": "From Mastery Prep’s own calendar. One listed program has posted a camp: ZAZZ.",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Prep’s week"
+    },
+    {
       "id": "off-mastery-thomas-2026-12-11",
       "kind": "dayoff",
       "date": "2026-12-11",
@@ -4218,6 +6518,21 @@
       "text": "From Mastery Thomas’s own calendar. One listed program has posted a camp: ZAZZ.",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "off-mastery-wister-2026-12-11",
+      "kind": "dayoff",
+      "date": "2026-12-11",
+      "sendOn": "2026-11-29",
+      "schools": [
+        "mastery-wister"
+      ],
+      "programs": [],
+      "when": "Friday, December 11",
+      "title": "No school at Mastery Wister: Professional development day",
+      "text": "From Mastery Wister’s own calendar. One listed program has posted a camp: ZAZZ.",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Wister’s week"
     },
     {
       "id": "week-coppin-2026-12-07",
@@ -4276,6 +6591,102 @@
       "button": "See Independence Charter’s week"
     },
     {
+      "id": "week-mastery-cleveland-2026-12-07",
+      "kind": "week",
+      "date": "2026-12-11",
+      "sendOn": "2026-12-06",
+      "expires": "2026-12-09",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mastery-cleveland"
+      ],
+      "when": "Week of December 7",
+      "title": "This week at Mastery Cleveland",
+      "text": "Friday: No school: Professional development day.",
+      "lines": [
+        {
+          "when": "Friday",
+          "what": "No school: Professional development day"
+        }
+      ],
+      "first": "Friday: no school, Professional development day",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Cleveland’s week"
+    },
+    {
+      "id": "week-mastery-clymer-2026-12-07",
+      "kind": "week",
+      "date": "2026-12-11",
+      "sendOn": "2026-12-06",
+      "expires": "2026-12-09",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mastery-clymer"
+      ],
+      "when": "Week of December 7",
+      "title": "This week at Mastery Clymer",
+      "text": "Friday: No school: Professional development day.",
+      "lines": [
+        {
+          "when": "Friday",
+          "what": "No school: Professional development day"
+        }
+      ],
+      "first": "Friday: no school, Professional development day",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Clymer’s week"
+    },
+    {
+      "id": "week-mastery-harrity-2026-12-07",
+      "kind": "week",
+      "date": "2026-12-11",
+      "sendOn": "2026-12-06",
+      "expires": "2026-12-09",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mastery-harrity"
+      ],
+      "when": "Week of December 7",
+      "title": "This week at Mastery Harrity",
+      "text": "Friday: No school: Professional development day.",
+      "lines": [
+        {
+          "when": "Friday",
+          "what": "No school: Professional development day"
+        }
+      ],
+      "first": "Friday: no school, Professional development day",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "week-mastery-prep-2026-12-07",
+      "kind": "week",
+      "date": "2026-12-11",
+      "sendOn": "2026-12-06",
+      "expires": "2026-12-09",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mastery-prep"
+      ],
+      "when": "Week of December 7",
+      "title": "This week at Mastery Prep",
+      "text": "Friday: No school: Professional development day.",
+      "lines": [
+        {
+          "when": "Friday",
+          "what": "No school: Professional development day"
+        }
+      ],
+      "first": "Friday: no school, Professional development day",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Prep’s week"
+    },
+    {
       "id": "week-mastery-thomas-2026-12-07",
       "kind": "week",
       "date": "2026-12-11",
@@ -4298,6 +6709,30 @@
       "first": "Friday: no school, Professional development day",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "week-mastery-wister-2026-12-07",
+      "kind": "week",
+      "date": "2026-12-11",
+      "sendOn": "2026-12-06",
+      "expires": "2026-12-09",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mastery-wister"
+      ],
+      "when": "Week of December 7",
+      "title": "This week at Mastery Wister",
+      "text": "Friday: No school: Professional development day.",
+      "lines": [
+        {
+          "when": "Friday",
+          "what": "No school: Professional development day"
+        }
+      ],
+      "first": "Friday: no school, Professional development day",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Wister’s week"
     },
     {
       "id": "week-mccall-2026-12-07",
@@ -4374,6 +6809,38 @@
       "first": "Monday: Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration",
       "url": "https://phillyafterschool.org/nebinger/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Nebinger’s week"
+    },
+    {
+      "id": "week-northwood-2026-12-07",
+      "kind": "week",
+      "date": "2026-12-11",
+      "sendOn": "2026-12-06",
+      "expires": "2026-12-09",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "northwood"
+      ],
+      "when": "Week of December 7",
+      "title": "This week at Northwood",
+      "text": "Wednesday: Dismissal at 12:00 pm. Thursday: Dismissal at 12:00 pm: conferences. Friday: Dismissal at 12:00 pm: conferences.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "Dismissal at 12:00 pm"
+        },
+        {
+          "when": "Thursday",
+          "what": "Dismissal at 12:00 pm: conferences"
+        },
+        {
+          "when": "Friday",
+          "what": "Dismissal at 12:00 pm: conferences"
+        }
+      ],
+      "first": "Thursday: Dismissal at 12:00 pm: conferences; Friday: Dismissal at 12:00 pm: conferences",
+      "url": "https://phillyafterschool.org/northwood/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Northwood’s week"
     },
     {
       "id": "week-southwark-2026-12-07",
@@ -4473,6 +6940,21 @@
       "text": "Spring 2027 registration opens."
     },
     {
+      "id": "off-gla-southwest-2026-12-14",
+      "kind": "dayoff",
+      "date": "2026-12-14",
+      "sendOn": "2026-11-29",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Monday, December 14 to Friday, December 18",
+      "title": "No school at GLA Southwest: Intersession 1, school closed",
+      "text": "From GLA Southwest’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
+    },
+    {
       "id": "reg-fleisher-art-memorial-2026-12-18",
       "schools": [
         "nebinger",
@@ -4558,6 +7040,36 @@
       "button": "See Russell Byers’s week"
     },
     {
+      "id": "off-community-academy-2026-12-21",
+      "kind": "dayoff",
+      "date": "2026-12-21",
+      "sendOn": "2026-12-06",
+      "schools": [
+        "community-academy"
+      ],
+      "programs": [],
+      "when": "Monday, December 21 to Friday, January 1",
+      "title": "No school at Community Academy: Winter break",
+      "text": "From Community Academy’s own calendar. 14 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "url": "https://phillyafterschool.org/community-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Community Academy’s week"
+    },
+    {
+      "id": "off-gla-southwest-2026-12-21",
+      "kind": "dayoff",
+      "date": "2026-12-21",
+      "sendOn": "2026-12-06",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Monday, December 21 to Friday, January 1",
+      "title": "No school at GLA Southwest: Winter recess",
+      "text": "From GLA Southwest’s own calendar. 14 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
+    },
+    {
       "id": "off-independence-charter-2026-12-21",
       "kind": "dayoff",
       "date": "2026-12-21",
@@ -4568,7 +7080,7 @@
       "programs": [],
       "when": "Monday, December 21 to Friday, January 1",
       "title": "No school at Independence Charter: Winter break",
-      "text": "From Independence Charter’s own calendar. 13 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "text": "From Independence Charter’s own calendar. 14 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
       "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Independence Charter’s week"
     },
@@ -4583,7 +7095,7 @@
       "programs": [],
       "when": "Tuesday, December 22 to Friday, January 1",
       "title": "No school at Russell Byers: Winter break",
-      "text": "From Russell Byers’s own calendar. 13 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "text": "From Russell Byers’s own calendar. 14 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
       "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Russell Byers’s week"
     },
@@ -4653,6 +7165,23 @@
       "title": "Elite Sports Factory: camp on a day off",
       "text": "School is closed (Winter recess). Elite Sports Factory has posted a camp for Dec 23, Dec 28, Dec 29 and Dec 30.",
       "url": "https://phillyafterschool.org/programs/elite-sports-factory/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the listing"
+    },
+    {
+      "id": "camp-gpca-steel-2026-12-23",
+      "kind": "camp",
+      "part": "off",
+      "date": "2026-12-23",
+      "sendOn": "2026-12-13",
+      "schools": [],
+      "programs": [
+        "gpca-steel"
+      ],
+      "within": "off-2026-12-23",
+      "when": "Wednesday, December 23 to Wednesday, December 30",
+      "title": "GPCA After School at Steel: camp on a day off",
+      "text": "School is closed (Winter recess). GPCA After School at Steel has posted a camp for Dec 23, Dec 28, Dec 29 and Dec 30.",
+      "url": "https://phillyafterschool.org/programs/gpca-steel/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the listing"
     },
     {
@@ -4820,13 +7349,128 @@
       "notSchools": [
         "independence-charter",
         "byers",
-        "mastery-thomas"
+        "mastery-thomas",
+        "ad-prima",
+        "community-academy",
+        "mastery-prep",
+        "esperanza-elementary",
+        "mastery-cleveland",
+        "gla-southwest",
+        "mastery-harrity",
+        "mastery-wister",
+        "northwood",
+        "mastery-clymer"
       ],
       "when": "Wednesday, December 23 to Friday, January 1",
       "title": "No school: Winter recess",
-      "text": "13 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "text": "14 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
       "url": "https://phillyafterschool.org/days-off/winter-break-2026-12-23/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-ad-prima-2026-12-23",
+      "kind": "dayoff",
+      "date": "2026-12-23",
+      "sendOn": "2026-12-13",
+      "schools": [
+        "ad-prima"
+      ],
+      "programs": [],
+      "when": "Wednesday, December 23 to Friday, January 1",
+      "title": "No school at Ad Prima: Winter recess and New Year’s Day",
+      "text": "From Ad Prima’s own calendar. 14 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "url": "https://phillyafterschool.org/ad-prima/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Ad Prima’s week"
+    },
+    {
+      "id": "off-esperanza-elementary-2026-12-23",
+      "kind": "dayoff",
+      "date": "2026-12-23",
+      "sendOn": "2026-12-13",
+      "schools": [
+        "esperanza-elementary"
+      ],
+      "programs": [],
+      "when": "Wednesday, December 23 to Tuesday, January 5",
+      "title": "No school at Esperanza Elementary: Winter recess",
+      "text": "From Esperanza Elementary’s own calendar. 15 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/esperanza-elementary/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Esperanza Elementary’s week"
+    },
+    {
+      "id": "off-northwood-2026-12-23",
+      "kind": "dayoff",
+      "date": "2026-12-23",
+      "sendOn": "2026-12-13",
+      "schools": [
+        "northwood"
+      ],
+      "programs": [],
+      "when": "Wednesday, December 23",
+      "title": "No school at Northwood: Professional learning day",
+      "text": "From Northwood’s own calendar. 10 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Kids on 12th, Movement Callowhill, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "url": "https://phillyafterschool.org/northwood/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Northwood’s week"
+    },
+    {
+      "id": "off-mastery-cleveland-2026-12-24",
+      "kind": "dayoff",
+      "date": "2026-12-24",
+      "sendOn": "2026-12-13",
+      "schools": [
+        "mastery-cleveland"
+      ],
+      "programs": [],
+      "when": "Thursday, December 24 to Friday, January 1",
+      "title": "No school at Mastery Cleveland: Winter break",
+      "text": "From Mastery Cleveland’s own calendar. 12 listed programs have posted a camp: Arden Drama School, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Cleveland’s week"
+    },
+    {
+      "id": "off-mastery-clymer-2026-12-24",
+      "kind": "dayoff",
+      "date": "2026-12-24",
+      "sendOn": "2026-12-13",
+      "schools": [
+        "mastery-clymer"
+      ],
+      "programs": [],
+      "when": "Thursday, December 24 to Friday, January 1",
+      "title": "No school at Mastery Clymer: Winter break",
+      "text": "From Mastery Clymer’s own calendar. 12 listed programs have posted a camp: Arden Drama School, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Clymer’s week"
+    },
+    {
+      "id": "off-mastery-harrity-2026-12-24",
+      "kind": "dayoff",
+      "date": "2026-12-24",
+      "sendOn": "2026-12-13",
+      "schools": [
+        "mastery-harrity"
+      ],
+      "programs": [],
+      "when": "Thursday, December 24 to Friday, January 1",
+      "title": "No school at Mastery Harrity: Winter break",
+      "text": "From Mastery Harrity’s own calendar. 12 listed programs have posted a camp: Arden Drama School, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-prep-2026-12-24",
+      "kind": "dayoff",
+      "date": "2026-12-24",
+      "sendOn": "2026-12-13",
+      "schools": [
+        "mastery-prep"
+      ],
+      "programs": [],
+      "when": "Thursday, December 24 to Friday, January 1",
+      "title": "No school at Mastery Prep: Winter break",
+      "text": "From Mastery Prep’s own calendar. 12 listed programs have posted a camp: Arden Drama School, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Prep’s week"
     },
     {
       "id": "off-mastery-thomas-2026-12-24",
@@ -4839,9 +7483,39 @@
       "programs": [],
       "when": "Thursday, December 24 to Friday, January 1",
       "title": "No school at Mastery Thomas: Winter break",
-      "text": "From Mastery Thomas’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, Hudson Table, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "text": "From Mastery Thomas’s own calendar. 12 listed programs have posted a camp: Arden Drama School, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "off-mastery-wister-2026-12-24",
+      "kind": "dayoff",
+      "date": "2026-12-24",
+      "sendOn": "2026-12-13",
+      "schools": [
+        "mastery-wister"
+      ],
+      "programs": [],
+      "when": "Thursday, December 24 to Friday, January 1",
+      "title": "No school at Mastery Wister: Winter break",
+      "text": "From Mastery Wister’s own calendar. 12 listed programs have posted a camp: Arden Drama School, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Wister’s week"
+    },
+    {
+      "id": "off-northwood-2026-12-24",
+      "kind": "dayoff",
+      "date": "2026-12-24",
+      "sendOn": "2026-12-13",
+      "schools": [
+        "northwood"
+      ],
+      "programs": [],
+      "when": "Thursday, December 24 to Friday, January 1",
+      "title": "No school at Northwood: Winter break",
+      "text": "From Northwood’s own calendar. 12 listed programs have posted a camp: Arden Drama School, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "url": "https://phillyafterschool.org/northwood/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Northwood’s week"
     },
     {
       "id": "campreg-macguffin-camps-2026-12-31",
@@ -4957,6 +7631,21 @@
       "button": "See Russell Byers’s week"
     },
     {
+      "id": "off-gla-southwest-2027-01-04",
+      "kind": "dayoff",
+      "date": "2027-01-04",
+      "sendOn": "2026-12-20",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Monday, January 4 to Tuesday, January 5",
+      "title": "No school at GLA Southwest: Staff professional development day",
+      "text": "From GLA Southwest’s own calendar. One listed program has posted a camp: The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
+    },
+    {
       "id": "off-independence-charter-2027-01-04",
       "kind": "dayoff",
       "date": "2027-01-04",
@@ -5019,6 +7708,21 @@
       "expires": "2027-01-05",
       "when": "Tomorrow, Wednesday, January 6",
       "text": "Summer 2027 day camp sign-ups open for family memberships."
+    },
+    {
+      "id": "off-esperanza-elementary-2027-01-06",
+      "kind": "dayoff",
+      "date": "2027-01-06",
+      "sendOn": "2026-12-27",
+      "schools": [
+        "esperanza-elementary"
+      ],
+      "programs": [],
+      "when": "Wednesday, January 6",
+      "title": "No school at Esperanza Elementary: Professional development day",
+      "text": "From Esperanza Elementary’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/esperanza-elementary/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Esperanza Elementary’s week"
     },
     {
       "id": "campreg-ymca-day-camps-2027-01-13",
@@ -5217,7 +7921,17 @@
       "notSchools": [
         "independence-charter",
         "byers",
-        "mastery-thomas"
+        "mastery-thomas",
+        "ad-prima",
+        "community-academy",
+        "mastery-prep",
+        "esperanza-elementary",
+        "mastery-cleveland",
+        "gla-southwest",
+        "mastery-harrity",
+        "mastery-wister",
+        "northwood",
+        "mastery-clymer"
       ],
       "when": "Friday, January 15",
       "title": "No school: Staff professional development",
@@ -5356,13 +8070,38 @@
       "notSchools": [
         "independence-charter",
         "byers",
-        "mastery-thomas"
+        "mastery-thomas",
+        "ad-prima",
+        "community-academy",
+        "mastery-prep",
+        "esperanza-elementary",
+        "mastery-cleveland",
+        "gla-southwest",
+        "mastery-harrity",
+        "mastery-wister",
+        "northwood",
+        "mastery-clymer"
       ],
       "when": "Monday, January 18",
       "title": "No school: Dr. Martin Luther King Jr. Day",
       "text": "7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/dr-martin-luther-king-jr-day-2027-01-18/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-ad-prima-2027-01-18",
+      "kind": "dayoff",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [
+        "ad-prima"
+      ],
+      "programs": [],
+      "when": "Monday, January 18",
+      "title": "No school at Ad Prima: Dr. Martin Luther King Jr. Day",
+      "text": "From Ad Prima’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/ad-prima/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Ad Prima’s week"
     },
     {
       "id": "off-byers-2027-01-18",
@@ -5380,6 +8119,51 @@
       "button": "See Russell Byers’s week"
     },
     {
+      "id": "off-community-academy-2027-01-18",
+      "kind": "dayoff",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [
+        "community-academy"
+      ],
+      "programs": [],
+      "when": "Monday, January 18",
+      "title": "No school at Community Academy: Martin Luther King Jr. Day",
+      "text": "From Community Academy’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/community-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Community Academy’s week"
+    },
+    {
+      "id": "off-esperanza-elementary-2027-01-18",
+      "kind": "dayoff",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [
+        "esperanza-elementary"
+      ],
+      "programs": [],
+      "when": "Monday, January 18",
+      "title": "No school at Esperanza Elementary: Martin Luther King Jr. Day",
+      "text": "From Esperanza Elementary’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/esperanza-elementary/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Esperanza Elementary’s week"
+    },
+    {
+      "id": "off-gla-southwest-2027-01-18",
+      "kind": "dayoff",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Monday, January 18",
+      "title": "No school at GLA Southwest: Martin Luther King Jr. Day of Service",
+      "text": "From GLA Southwest’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
+    },
+    {
       "id": "off-independence-charter-2027-01-18",
       "kind": "dayoff",
       "date": "2027-01-18",
@@ -5395,6 +8179,66 @@
       "button": "See Independence Charter’s week"
     },
     {
+      "id": "off-mastery-cleveland-2027-01-18",
+      "kind": "dayoff",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [
+        "mastery-cleveland"
+      ],
+      "programs": [],
+      "when": "Monday, January 18",
+      "title": "No school at Mastery Cleveland: Martin Luther King Jr. Day",
+      "text": "From Mastery Cleveland’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Cleveland’s week"
+    },
+    {
+      "id": "off-mastery-clymer-2027-01-18",
+      "kind": "dayoff",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [
+        "mastery-clymer"
+      ],
+      "programs": [],
+      "when": "Monday, January 18",
+      "title": "No school at Mastery Clymer: Martin Luther King Jr. Day",
+      "text": "From Mastery Clymer’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Clymer’s week"
+    },
+    {
+      "id": "off-mastery-harrity-2027-01-18",
+      "kind": "dayoff",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [
+        "mastery-harrity"
+      ],
+      "programs": [],
+      "when": "Monday, January 18",
+      "title": "No school at Mastery Harrity: Martin Luther King Jr. Day",
+      "text": "From Mastery Harrity’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-prep-2027-01-18",
+      "kind": "dayoff",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [
+        "mastery-prep"
+      ],
+      "programs": [],
+      "when": "Monday, January 18",
+      "title": "No school at Mastery Prep: Martin Luther King Jr. Day",
+      "text": "From Mastery Prep’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Prep’s week"
+    },
+    {
       "id": "off-mastery-thomas-2027-01-18",
       "kind": "dayoff",
       "date": "2027-01-18",
@@ -5408,6 +8252,36 @@
       "text": "From Mastery Thomas’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "off-mastery-wister-2027-01-18",
+      "kind": "dayoff",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [
+        "mastery-wister"
+      ],
+      "programs": [],
+      "when": "Monday, January 18",
+      "title": "No school at Mastery Wister: Martin Luther King Jr. Day",
+      "text": "From Mastery Wister’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Wister’s week"
+    },
+    {
+      "id": "off-northwood-2027-01-18",
+      "kind": "dayoff",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [
+        "northwood"
+      ],
+      "programs": [],
+      "when": "Monday, January 18",
+      "title": "No school at Northwood: Martin Luther King Jr. Day",
+      "text": "From Northwood’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/northwood/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Northwood’s week"
     },
     {
       "id": "campreg-ymca-day-camps-2027-01-20",
@@ -5459,6 +8333,66 @@
       "text": "Summer 2027 day camp sign-ups open for non-members."
     },
     {
+      "id": "off-mastery-cleveland-2027-01-22",
+      "kind": "dayoff",
+      "date": "2027-01-22",
+      "sendOn": "2027-01-10",
+      "schools": [
+        "mastery-cleveland"
+      ],
+      "programs": [],
+      "when": "Friday, January 22",
+      "title": "No school at Mastery Cleveland: Professional development day",
+      "text": "From Mastery Cleveland’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Cleveland’s week"
+    },
+    {
+      "id": "off-mastery-clymer-2027-01-22",
+      "kind": "dayoff",
+      "date": "2027-01-22",
+      "sendOn": "2027-01-10",
+      "schools": [
+        "mastery-clymer"
+      ],
+      "programs": [],
+      "when": "Friday, January 22",
+      "title": "No school at Mastery Clymer: Professional development day",
+      "text": "From Mastery Clymer’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Clymer’s week"
+    },
+    {
+      "id": "off-mastery-harrity-2027-01-22",
+      "kind": "dayoff",
+      "date": "2027-01-22",
+      "sendOn": "2027-01-10",
+      "schools": [
+        "mastery-harrity"
+      ],
+      "programs": [],
+      "when": "Friday, January 22",
+      "title": "No school at Mastery Harrity: Professional development day",
+      "text": "From Mastery Harrity’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-prep-2027-01-22",
+      "kind": "dayoff",
+      "date": "2027-01-22",
+      "sendOn": "2027-01-10",
+      "schools": [
+        "mastery-prep"
+      ],
+      "programs": [],
+      "when": "Friday, January 22",
+      "title": "No school at Mastery Prep: Professional development day",
+      "text": "From Mastery Prep’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Prep’s week"
+    },
+    {
       "id": "off-mastery-thomas-2027-01-22",
       "kind": "dayoff",
       "date": "2027-01-22",
@@ -5472,6 +8406,21 @@
       "text": "From Mastery Thomas’s own calendar. No listed program has posted a camp for it yet.",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "off-mastery-wister-2027-01-22",
+      "kind": "dayoff",
+      "date": "2027-01-22",
+      "sendOn": "2027-01-10",
+      "schools": [
+        "mastery-wister"
+      ],
+      "programs": [],
+      "when": "Friday, January 22",
+      "title": "No school at Mastery Wister: Professional development day",
+      "text": "From Mastery Wister’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Wister’s week"
     },
     {
       "id": "campreg-awbury-adventures-2027-01-25",
@@ -5653,13 +8602,38 @@
       "notSchools": [
         "independence-charter",
         "byers",
-        "mastery-thomas"
+        "mastery-thomas",
+        "ad-prima",
+        "community-academy",
+        "mastery-prep",
+        "esperanza-elementary",
+        "mastery-cleveland",
+        "gla-southwest",
+        "mastery-harrity",
+        "mastery-wister",
+        "northwood",
+        "mastery-clymer"
       ],
       "when": "Friday, January 29",
       "title": "No school: Report card conferences",
       "text": "8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/report-card-conferences-2027-01-29/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-gla-southwest-2027-01-29",
+      "kind": "dayoff",
+      "date": "2027-01-29",
+      "sendOn": "2027-01-17",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Friday, January 29",
+      "title": "No school at GLA Southwest: Staff professional development day",
+      "text": "From GLA Southwest’s own calendar. 8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
     },
     {
       "id": "reg-moore-young-artists-workshop-2027-01-29",
@@ -5922,7 +8896,17 @@
       "notSchools": [
         "independence-charter",
         "byers",
-        "mastery-thomas"
+        "mastery-thomas",
+        "ad-prima",
+        "community-academy",
+        "mastery-prep",
+        "esperanza-elementary",
+        "mastery-cleveland",
+        "gla-southwest",
+        "mastery-harrity",
+        "mastery-wister",
+        "northwood",
+        "mastery-clymer"
       ],
       "when": "Friday, February 12",
       "title": "No school: Staff professional development",
@@ -5944,6 +8928,21 @@
       "text": "From Russell Byers’s own calendar. 8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Russell Byers’s week"
+    },
+    {
+      "id": "off-gla-southwest-2027-02-12",
+      "kind": "dayoff",
+      "date": "2027-02-12",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Friday, February 12",
+      "title": "No school at GLA Southwest: Staff professional development day",
+      "text": "From GLA Southwest’s own calendar. 8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
     },
     {
       "id": "camp-arden-drama-school-2027-02-15",
@@ -6144,13 +9143,38 @@
       "notSchools": [
         "independence-charter",
         "byers",
-        "mastery-thomas"
+        "mastery-thomas",
+        "ad-prima",
+        "community-academy",
+        "mastery-prep",
+        "esperanza-elementary",
+        "mastery-cleveland",
+        "gla-southwest",
+        "mastery-harrity",
+        "mastery-wister",
+        "northwood",
+        "mastery-clymer"
       ],
       "when": "Monday, February 15",
       "title": "No school: Presidents’ Day",
       "text": "11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
       "url": "https://phillyafterschool.org/days-off/presidents-day-2027-02-15/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-ad-prima-2027-02-15",
+      "kind": "dayoff",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "ad-prima"
+      ],
+      "programs": [],
+      "when": "Monday, February 15",
+      "title": "No school at Ad Prima: Presidents’ Day",
+      "text": "From Ad Prima’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
+      "url": "https://phillyafterschool.org/ad-prima/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Ad Prima’s week"
     },
     {
       "id": "off-byers-2027-02-15",
@@ -6168,6 +9192,51 @@
       "button": "See Russell Byers’s week"
     },
     {
+      "id": "off-community-academy-2027-02-15",
+      "kind": "dayoff",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "community-academy"
+      ],
+      "programs": [],
+      "when": "Monday, February 15",
+      "title": "No school at Community Academy: Presidents’ Day",
+      "text": "From Community Academy’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
+      "url": "https://phillyafterschool.org/community-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Community Academy’s week"
+    },
+    {
+      "id": "off-esperanza-elementary-2027-02-15",
+      "kind": "dayoff",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "esperanza-elementary"
+      ],
+      "programs": [],
+      "when": "Monday, February 15",
+      "title": "No school at Esperanza Elementary: Presidents’ Day",
+      "text": "From Esperanza Elementary’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
+      "url": "https://phillyafterschool.org/esperanza-elementary/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Esperanza Elementary’s week"
+    },
+    {
+      "id": "off-gla-southwest-2027-02-15",
+      "kind": "dayoff",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Monday, February 15",
+      "title": "No school at GLA Southwest: Presidents’ Day",
+      "text": "From GLA Southwest’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
+    },
+    {
       "id": "off-independence-charter-2027-02-15",
       "kind": "dayoff",
       "date": "2027-02-15",
@@ -6183,6 +9252,66 @@
       "button": "See Independence Charter’s week"
     },
     {
+      "id": "off-mastery-cleveland-2027-02-15",
+      "kind": "dayoff",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "mastery-cleveland"
+      ],
+      "programs": [],
+      "when": "Monday, February 15",
+      "title": "No school at Mastery Cleveland: Presidents’ Day",
+      "text": "From Mastery Cleveland’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Cleveland’s week"
+    },
+    {
+      "id": "off-mastery-clymer-2027-02-15",
+      "kind": "dayoff",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "mastery-clymer"
+      ],
+      "programs": [],
+      "when": "Monday, February 15",
+      "title": "No school at Mastery Clymer: Presidents’ Day",
+      "text": "From Mastery Clymer’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Clymer’s week"
+    },
+    {
+      "id": "off-mastery-harrity-2027-02-15",
+      "kind": "dayoff",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "mastery-harrity"
+      ],
+      "programs": [],
+      "when": "Monday, February 15",
+      "title": "No school at Mastery Harrity: Presidents’ Day",
+      "text": "From Mastery Harrity’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-prep-2027-02-15",
+      "kind": "dayoff",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "mastery-prep"
+      ],
+      "programs": [],
+      "when": "Monday, February 15",
+      "title": "No school at Mastery Prep: Presidents’ Day",
+      "text": "From Mastery Prep’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Prep’s week"
+    },
+    {
       "id": "off-mastery-thomas-2027-02-15",
       "kind": "dayoff",
       "date": "2027-02-15",
@@ -6196,6 +9325,36 @@
       "text": "From Mastery Thomas’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "off-mastery-wister-2027-02-15",
+      "kind": "dayoff",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "mastery-wister"
+      ],
+      "programs": [],
+      "when": "Monday, February 15",
+      "title": "No school at Mastery Wister: Presidents’ Day",
+      "text": "From Mastery Wister’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Wister’s week"
+    },
+    {
+      "id": "off-northwood-2027-02-15",
+      "kind": "dayoff",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "northwood"
+      ],
+      "programs": [],
+      "when": "Monday, February 15",
+      "title": "No school at Northwood: Presidents’ Day",
+      "text": "From Northwood’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
+      "url": "https://phillyafterschool.org/northwood/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Northwood’s week"
     },
     {
       "id": "reg-philadelphia-dance-academy-2027-02-15",
@@ -6234,6 +9393,66 @@
       "text": "Last day to enroll in most classes for 2026–27 (tuition prorated)."
     },
     {
+      "id": "off-mastery-cleveland-2027-02-26",
+      "kind": "dayoff",
+      "date": "2027-02-26",
+      "sendOn": "2027-02-14",
+      "schools": [
+        "mastery-cleveland"
+      ],
+      "programs": [],
+      "when": "Friday, February 26",
+      "title": "No school at Mastery Cleveland: Professional development day",
+      "text": "From Mastery Cleveland’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Cleveland’s week"
+    },
+    {
+      "id": "off-mastery-clymer-2027-02-26",
+      "kind": "dayoff",
+      "date": "2027-02-26",
+      "sendOn": "2027-02-14",
+      "schools": [
+        "mastery-clymer"
+      ],
+      "programs": [],
+      "when": "Friday, February 26",
+      "title": "No school at Mastery Clymer: Professional development day",
+      "text": "From Mastery Clymer’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Clymer’s week"
+    },
+    {
+      "id": "off-mastery-harrity-2027-02-26",
+      "kind": "dayoff",
+      "date": "2027-02-26",
+      "sendOn": "2027-02-14",
+      "schools": [
+        "mastery-harrity"
+      ],
+      "programs": [],
+      "when": "Friday, February 26",
+      "title": "No school at Mastery Harrity: Professional development day",
+      "text": "From Mastery Harrity’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-prep-2027-02-26",
+      "kind": "dayoff",
+      "date": "2027-02-26",
+      "sendOn": "2027-02-14",
+      "schools": [
+        "mastery-prep"
+      ],
+      "programs": [],
+      "when": "Friday, February 26",
+      "title": "No school at Mastery Prep: Professional development day",
+      "text": "From Mastery Prep’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Prep’s week"
+    },
+    {
       "id": "off-mastery-thomas-2027-02-26",
       "kind": "dayoff",
       "date": "2027-02-26",
@@ -6247,6 +9466,21 @@
       "text": "From Mastery Thomas’s own calendar. No listed program has posted a camp for it yet.",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "off-mastery-wister-2027-02-26",
+      "kind": "dayoff",
+      "date": "2027-02-26",
+      "sendOn": "2027-02-14",
+      "schools": [
+        "mastery-wister"
+      ],
+      "programs": [],
+      "when": "Friday, February 26",
+      "title": "No school at Mastery Wister: Professional development day",
+      "text": "From Mastery Wister’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Wister’s week"
     },
     {
       "id": "reg-philadelphia-dance-academy-2027-03-01",
@@ -6315,6 +9549,21 @@
       "sendOn": "2027-03-01",
       "when": "Today, Monday, March 1",
       "text": "Children’s Program: enrollment for 2026–27 closes."
+    },
+    {
+      "id": "off-gla-southwest-2027-03-05",
+      "kind": "dayoff",
+      "date": "2027-03-05",
+      "sendOn": "2027-02-21",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Friday, March 5",
+      "title": "No school at GLA Southwest: Staff professional development day",
+      "text": "From GLA Southwest’s own calendar. One listed program has posted a camp: The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
     },
     {
       "id": "camp-arden-drama-school-2027-03-10",
@@ -6498,13 +9747,38 @@
       "notSchools": [
         "independence-charter",
         "byers",
-        "mastery-thomas"
+        "mastery-thomas",
+        "ad-prima",
+        "community-academy",
+        "mastery-prep",
+        "esperanza-elementary",
+        "mastery-cleveland",
+        "gla-southwest",
+        "mastery-harrity",
+        "mastery-wister",
+        "northwood",
+        "mastery-clymer"
       ],
       "when": "Wednesday, March 10",
       "title": "No school: Eid al-Fitr",
       "text": "10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/eid-al-fitr-2027-03-10/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-ad-prima-2027-03-10",
+      "kind": "dayoff",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [
+        "ad-prima"
+      ],
+      "programs": [],
+      "when": "Wednesday, March 10",
+      "title": "No school at Ad Prima: Eid al-Fitr",
+      "text": "From Ad Prima’s own calendar. 10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/ad-prima/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Ad Prima’s week"
     },
     {
       "id": "off-byers-2027-03-10",
@@ -6522,6 +9796,81 @@
       "button": "See Russell Byers’s week"
     },
     {
+      "id": "off-gla-southwest-2027-03-10",
+      "kind": "dayoff",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Wednesday, March 10",
+      "title": "No school at GLA Southwest: Eid al-Fitr",
+      "text": "From GLA Southwest’s own calendar. 10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
+    },
+    {
+      "id": "off-mastery-cleveland-2027-03-10",
+      "kind": "dayoff",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [
+        "mastery-cleveland"
+      ],
+      "programs": [],
+      "when": "Wednesday, March 10",
+      "title": "No school at Mastery Cleveland: Eid al-Fitr",
+      "text": "From Mastery Cleveland’s own calendar. 10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Cleveland’s week"
+    },
+    {
+      "id": "off-mastery-clymer-2027-03-10",
+      "kind": "dayoff",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [
+        "mastery-clymer"
+      ],
+      "programs": [],
+      "when": "Wednesday, March 10",
+      "title": "No school at Mastery Clymer: Eid al-Fitr",
+      "text": "From Mastery Clymer’s own calendar. 10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Clymer’s week"
+    },
+    {
+      "id": "off-mastery-harrity-2027-03-10",
+      "kind": "dayoff",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [
+        "mastery-harrity"
+      ],
+      "programs": [],
+      "when": "Wednesday, March 10",
+      "title": "No school at Mastery Harrity: Eid al-Fitr",
+      "text": "From Mastery Harrity’s own calendar. 10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-prep-2027-03-10",
+      "kind": "dayoff",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [
+        "mastery-prep"
+      ],
+      "programs": [],
+      "when": "Wednesday, March 10",
+      "title": "No school at Mastery Prep: Eid al-Fitr",
+      "text": "From Mastery Prep’s own calendar. 10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Prep’s week"
+    },
+    {
       "id": "off-mastery-thomas-2027-03-10",
       "kind": "dayoff",
       "date": "2027-03-10",
@@ -6535,6 +9884,36 @@
       "text": "From Mastery Thomas’s own calendar. 10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "off-mastery-wister-2027-03-10",
+      "kind": "dayoff",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [
+        "mastery-wister"
+      ],
+      "programs": [],
+      "when": "Wednesday, March 10",
+      "title": "No school at Mastery Wister: Eid al-Fitr",
+      "text": "From Mastery Wister’s own calendar. 10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Wister’s week"
+    },
+    {
+      "id": "off-northwood-2027-03-10",
+      "kind": "dayoff",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [
+        "northwood"
+      ],
+      "programs": [],
+      "when": "Wednesday, March 10",
+      "title": "No school at Northwood: Eid al-Fitr",
+      "text": "From Northwood’s own calendar. 10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/northwood/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Northwood’s week"
     },
     {
       "id": "reg-blue-chip-flag-south-philadelphia-2027-03-15",
@@ -6569,6 +9948,21 @@
       "text": "Spring 2027 registration closes."
     },
     {
+      "id": "off-gla-southwest-2027-03-18",
+      "kind": "dayoff",
+      "date": "2027-03-18",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Thursday, March 18",
+      "title": "No school at GLA Southwest: Report card conferences, school closed",
+      "text": "From GLA Southwest’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
+    },
+    {
       "id": "off-byers-2027-03-19",
       "kind": "dayoff",
       "date": "2027-03-19",
@@ -6582,6 +9976,36 @@
       "text": "From Russell Byers’s own calendar. No listed program has posted a camp for it yet.",
       "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Russell Byers’s week"
+    },
+    {
+      "id": "off-community-academy-2027-03-19",
+      "kind": "dayoff",
+      "date": "2027-03-19",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "community-academy"
+      ],
+      "programs": [],
+      "when": "Friday, March 19",
+      "title": "No school at Community Academy: Founder’s Day observed",
+      "text": "From Community Academy’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/community-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Community Academy’s week"
+    },
+    {
+      "id": "off-gla-southwest-2027-03-19",
+      "kind": "dayoff",
+      "date": "2027-03-19",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Friday, March 19",
+      "title": "No school at GLA Southwest: Staff professional development day",
+      "text": "From GLA Southwest’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
     },
     {
       "id": "off-independence-charter-2027-03-19",
@@ -6797,13 +10221,38 @@
       "notSchools": [
         "independence-charter",
         "byers",
-        "mastery-thomas"
+        "mastery-thomas",
+        "ad-prima",
+        "community-academy",
+        "mastery-prep",
+        "esperanza-elementary",
+        "mastery-cleveland",
+        "gla-southwest",
+        "mastery-harrity",
+        "mastery-wister",
+        "northwood",
+        "mastery-clymer"
       ],
       "when": "Monday, March 22 to Friday, March 26",
       "title": "No school: Spring recess and Good Friday",
       "text": "11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/spring-break-and-good-friday-2027-03-22/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-ad-prima-2027-03-22",
+      "kind": "dayoff",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "ad-prima"
+      ],
+      "programs": [],
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "No school at Ad Prima: Spring recess and Good Friday",
+      "text": "From Ad Prima’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/ad-prima/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Ad Prima’s week"
     },
     {
       "id": "off-byers-2027-03-22",
@@ -6821,6 +10270,36 @@
       "button": "See Russell Byers’s week"
     },
     {
+      "id": "off-esperanza-elementary-2027-03-22",
+      "kind": "dayoff",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "esperanza-elementary"
+      ],
+      "programs": [],
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "No school at Esperanza Elementary: Spring break",
+      "text": "From Esperanza Elementary’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/esperanza-elementary/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Esperanza Elementary’s week"
+    },
+    {
+      "id": "off-gla-southwest-2027-03-22",
+      "kind": "dayoff",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "No school at GLA Southwest: Spring recess",
+      "text": "From GLA Southwest’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
+    },
+    {
       "id": "off-independence-charter-2027-03-22",
       "kind": "dayoff",
       "date": "2027-03-22",
@@ -6836,6 +10315,66 @@
       "button": "See Independence Charter’s week"
     },
     {
+      "id": "off-mastery-cleveland-2027-03-22",
+      "kind": "dayoff",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "mastery-cleveland"
+      ],
+      "programs": [],
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "No school at Mastery Cleveland: Spring break",
+      "text": "From Mastery Cleveland’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Cleveland’s week"
+    },
+    {
+      "id": "off-mastery-clymer-2027-03-22",
+      "kind": "dayoff",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "mastery-clymer"
+      ],
+      "programs": [],
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "No school at Mastery Clymer: Spring break",
+      "text": "From Mastery Clymer’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Clymer’s week"
+    },
+    {
+      "id": "off-mastery-harrity-2027-03-22",
+      "kind": "dayoff",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "mastery-harrity"
+      ],
+      "programs": [],
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "No school at Mastery Harrity: Spring break",
+      "text": "From Mastery Harrity’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-prep-2027-03-22",
+      "kind": "dayoff",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "mastery-prep"
+      ],
+      "programs": [],
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "No school at Mastery Prep: Spring break",
+      "text": "From Mastery Prep’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Prep’s week"
+    },
+    {
       "id": "off-mastery-thomas-2027-03-22",
       "kind": "dayoff",
       "date": "2027-03-22",
@@ -6849,6 +10388,51 @@
       "text": "From Mastery Thomas’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "off-mastery-wister-2027-03-22",
+      "kind": "dayoff",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "mastery-wister"
+      ],
+      "programs": [],
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "No school at Mastery Wister: Spring break",
+      "text": "From Mastery Wister’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Wister’s week"
+    },
+    {
+      "id": "off-northwood-2027-03-22",
+      "kind": "dayoff",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "northwood"
+      ],
+      "programs": [],
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "No school at Northwood: Spring break",
+      "text": "From Northwood’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/northwood/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Northwood’s week"
+    },
+    {
+      "id": "off-community-academy-2027-03-24",
+      "kind": "dayoff",
+      "date": "2027-03-24",
+      "sendOn": "2027-03-14",
+      "schools": [
+        "community-academy"
+      ],
+      "programs": [],
+      "when": "Wednesday, March 24 to Monday, March 29",
+      "title": "No school at Community Academy: Spring break",
+      "text": "From Community Academy’s own calendar. 12 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/community-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Community Academy’s week"
     },
     {
       "id": "camp-butchers-sew-shop-2027-03-29",
@@ -6981,13 +10565,53 @@
       "notSchools": [
         "independence-charter",
         "byers",
-        "mastery-thomas"
+        "mastery-thomas",
+        "ad-prima",
+        "community-academy",
+        "mastery-prep",
+        "esperanza-elementary",
+        "mastery-cleveland",
+        "gla-southwest",
+        "mastery-harrity",
+        "mastery-wister",
+        "northwood",
+        "mastery-clymer"
       ],
       "when": "Monday, March 29",
       "title": "No school: Staff professional development",
       "text": "7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/staff-professional-development-2027-03-29/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-esperanza-elementary-2027-03-29",
+      "kind": "dayoff",
+      "date": "2027-03-29",
+      "sendOn": "2027-03-14",
+      "schools": [
+        "esperanza-elementary"
+      ],
+      "programs": [],
+      "when": "Monday, March 29",
+      "title": "No school at Esperanza Elementary: Professional development day",
+      "text": "From Esperanza Elementary’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/esperanza-elementary/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Esperanza Elementary’s week"
+    },
+    {
+      "id": "off-northwood-2027-03-29",
+      "kind": "dayoff",
+      "date": "2027-03-29",
+      "sendOn": "2027-03-14",
+      "schools": [
+        "northwood"
+      ],
+      "programs": [],
+      "when": "Monday, March 29",
+      "title": "No school at Northwood: Spring break",
+      "text": "From Northwood’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/northwood/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Northwood’s week"
     },
     {
       "id": "off-byers-2027-04-09",
@@ -7020,6 +10644,66 @@
       "button": "See Independence Charter’s week"
     },
     {
+      "id": "off-mastery-cleveland-2027-04-09",
+      "kind": "dayoff",
+      "date": "2027-04-09",
+      "sendOn": "2027-03-28",
+      "schools": [
+        "mastery-cleveland"
+      ],
+      "programs": [],
+      "when": "Friday, April 9",
+      "title": "No school at Mastery Cleveland: Professional development day",
+      "text": "From Mastery Cleveland’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Cleveland’s week"
+    },
+    {
+      "id": "off-mastery-clymer-2027-04-09",
+      "kind": "dayoff",
+      "date": "2027-04-09",
+      "sendOn": "2027-03-28",
+      "schools": [
+        "mastery-clymer"
+      ],
+      "programs": [],
+      "when": "Friday, April 9",
+      "title": "No school at Mastery Clymer: Professional development day",
+      "text": "From Mastery Clymer’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Clymer’s week"
+    },
+    {
+      "id": "off-mastery-harrity-2027-04-09",
+      "kind": "dayoff",
+      "date": "2027-04-09",
+      "sendOn": "2027-03-28",
+      "schools": [
+        "mastery-harrity"
+      ],
+      "programs": [],
+      "when": "Friday, April 9",
+      "title": "No school at Mastery Harrity: Professional development day",
+      "text": "From Mastery Harrity’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-prep-2027-04-09",
+      "kind": "dayoff",
+      "date": "2027-04-09",
+      "sendOn": "2027-03-28",
+      "schools": [
+        "mastery-prep"
+      ],
+      "programs": [],
+      "when": "Friday, April 9",
+      "title": "No school at Mastery Prep: Professional development day",
+      "text": "From Mastery Prep’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Prep’s week"
+    },
+    {
       "id": "off-mastery-thomas-2027-04-09",
       "kind": "dayoff",
       "date": "2027-04-09",
@@ -7033,6 +10717,36 @@
       "text": "From Mastery Thomas’s own calendar. No listed program has posted a camp for it yet.",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "off-mastery-wister-2027-04-09",
+      "kind": "dayoff",
+      "date": "2027-04-09",
+      "sendOn": "2027-03-28",
+      "schools": [
+        "mastery-wister"
+      ],
+      "programs": [],
+      "when": "Friday, April 9",
+      "title": "No school at Mastery Wister: Professional development day",
+      "text": "From Mastery Wister’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Wister’s week"
+    },
+    {
+      "id": "off-esperanza-elementary-2027-04-14",
+      "kind": "dayoff",
+      "date": "2027-04-14",
+      "sendOn": "2027-04-04",
+      "schools": [
+        "esperanza-elementary"
+      ],
+      "programs": [],
+      "when": "Wednesday, April 14",
+      "title": "No school at Esperanza Elementary: Report card conferences (no classes)",
+      "text": "From Esperanza Elementary’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/esperanza-elementary/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Esperanza Elementary’s week"
     },
     {
       "id": "camp-butchers-sew-shop-2027-04-16",
@@ -7182,13 +10896,53 @@
       "notSchools": [
         "independence-charter",
         "byers",
-        "mastery-thomas"
+        "mastery-thomas",
+        "ad-prima",
+        "community-academy",
+        "mastery-prep",
+        "esperanza-elementary",
+        "mastery-cleveland",
+        "gla-southwest",
+        "mastery-harrity",
+        "mastery-wister",
+        "northwood",
+        "mastery-clymer"
       ],
       "when": "Friday, April 16",
       "title": "No school: Report card conferences",
       "text": "8 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/report-card-conferences-2027-04-16/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-community-academy-2027-04-23",
+      "kind": "dayoff",
+      "date": "2027-04-23",
+      "sendOn": "2027-04-11",
+      "schools": [
+        "community-academy"
+      ],
+      "programs": [],
+      "when": "Friday, April 23",
+      "title": "No school at Community Academy: No school",
+      "text": "From Community Academy’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/community-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Community Academy’s week"
+    },
+    {
+      "id": "off-gla-southwest-2027-04-23",
+      "kind": "dayoff",
+      "date": "2027-04-23",
+      "sendOn": "2027-04-11",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Friday, April 23",
+      "title": "No school at GLA Southwest: Staff professional development day",
+      "text": "From GLA Southwest’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
     },
     {
       "id": "off-byers-2027-05-14",
@@ -7204,6 +10958,21 @@
       "text": "From Russell Byers’s own calendar. No listed program has posted a camp for it yet.",
       "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Russell Byers’s week"
+    },
+    {
+      "id": "off-northwood-2027-05-14",
+      "kind": "dayoff",
+      "date": "2027-05-14",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "northwood"
+      ],
+      "programs": [],
+      "when": "Friday, May 14",
+      "title": "No school at Northwood: Professional learning day",
+      "text": "From Northwood’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/northwood/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Northwood’s week"
     },
     {
       "id": "reg-philadelphia-dance-academy-2027-05-15",
@@ -7442,7 +11211,17 @@
       "notSchools": [
         "independence-charter",
         "byers",
-        "mastery-thomas"
+        "mastery-thomas",
+        "ad-prima",
+        "community-academy",
+        "mastery-prep",
+        "esperanza-elementary",
+        "mastery-cleveland",
+        "gla-southwest",
+        "mastery-harrity",
+        "mastery-wister",
+        "northwood",
+        "mastery-clymer"
       ],
       "when": "Monday, May 17",
       "title": "No school: Eid al-Adha",
@@ -7466,6 +11245,66 @@
       "button": "See Russell Byers’s week"
     },
     {
+      "id": "off-mastery-cleveland-2027-05-17",
+      "kind": "dayoff",
+      "date": "2027-05-17",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "mastery-cleveland"
+      ],
+      "programs": [],
+      "when": "Monday, May 17",
+      "title": "No school at Mastery Cleveland: Eid al-Adha",
+      "text": "From Mastery Cleveland’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Cleveland’s week"
+    },
+    {
+      "id": "off-mastery-clymer-2027-05-17",
+      "kind": "dayoff",
+      "date": "2027-05-17",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "mastery-clymer"
+      ],
+      "programs": [],
+      "when": "Monday, May 17",
+      "title": "No school at Mastery Clymer: Eid al-Adha",
+      "text": "From Mastery Clymer’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Clymer’s week"
+    },
+    {
+      "id": "off-mastery-harrity-2027-05-17",
+      "kind": "dayoff",
+      "date": "2027-05-17",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "mastery-harrity"
+      ],
+      "programs": [],
+      "when": "Monday, May 17",
+      "title": "No school at Mastery Harrity: Eid al-Adha",
+      "text": "From Mastery Harrity’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-prep-2027-05-17",
+      "kind": "dayoff",
+      "date": "2027-05-17",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "mastery-prep"
+      ],
+      "programs": [],
+      "when": "Monday, May 17",
+      "title": "No school at Mastery Prep: Eid al-Adha",
+      "text": "From Mastery Prep’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Prep’s week"
+    },
+    {
       "id": "off-mastery-thomas-2027-05-17",
       "kind": "dayoff",
       "date": "2027-05-17",
@@ -7479,6 +11318,21 @@
       "text": "From Mastery Thomas’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "off-mastery-wister-2027-05-17",
+      "kind": "dayoff",
+      "date": "2027-05-17",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "mastery-wister"
+      ],
+      "programs": [],
+      "when": "Monday, May 17",
+      "title": "No school at Mastery Wister: Eid al-Adha",
+      "text": "From Mastery Wister’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Wister’s week"
     },
     {
       "id": "camp-awbury-arboretum-2027-05-18",
@@ -7662,13 +11516,83 @@
       "notSchools": [
         "independence-charter",
         "byers",
-        "mastery-thomas"
+        "mastery-thomas",
+        "ad-prima",
+        "community-academy",
+        "mastery-prep",
+        "esperanza-elementary",
+        "mastery-cleveland",
+        "gla-southwest",
+        "mastery-harrity",
+        "mastery-wister",
+        "northwood",
+        "mastery-clymer"
       ],
       "when": "Tuesday, May 18",
       "title": "No school: Election Day",
       "text": "10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/days-off/election-day-2027-05-18/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-mastery-cleveland-2027-05-18",
+      "kind": "dayoff",
+      "date": "2027-05-18",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "mastery-cleveland"
+      ],
+      "programs": [],
+      "when": "Tuesday, May 18",
+      "title": "No school at Mastery Cleveland: Primary Election Day",
+      "text": "From Mastery Cleveland’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Cleveland’s week"
+    },
+    {
+      "id": "off-mastery-clymer-2027-05-18",
+      "kind": "dayoff",
+      "date": "2027-05-18",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "mastery-clymer"
+      ],
+      "programs": [],
+      "when": "Tuesday, May 18",
+      "title": "No school at Mastery Clymer: Primary Election Day",
+      "text": "From Mastery Clymer’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Clymer’s week"
+    },
+    {
+      "id": "off-mastery-harrity-2027-05-18",
+      "kind": "dayoff",
+      "date": "2027-05-18",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "mastery-harrity"
+      ],
+      "programs": [],
+      "when": "Tuesday, May 18",
+      "title": "No school at Mastery Harrity: Primary Election Day",
+      "text": "From Mastery Harrity’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-prep-2027-05-18",
+      "kind": "dayoff",
+      "date": "2027-05-18",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "mastery-prep"
+      ],
+      "programs": [],
+      "when": "Tuesday, May 18",
+      "title": "No school at Mastery Prep: Primary Election Day",
+      "text": "From Mastery Prep’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Prep’s week"
     },
     {
       "id": "off-mastery-thomas-2027-05-18",
@@ -7684,6 +11608,36 @@
       "text": "From Mastery Thomas’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "off-mastery-wister-2027-05-18",
+      "kind": "dayoff",
+      "date": "2027-05-18",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "mastery-wister"
+      ],
+      "programs": [],
+      "when": "Tuesday, May 18",
+      "title": "No school at Mastery Wister: Primary Election Day",
+      "text": "From Mastery Wister’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Wister’s week"
+    },
+    {
+      "id": "off-community-academy-2027-05-28",
+      "kind": "dayoff",
+      "date": "2027-05-28",
+      "sendOn": "2027-05-16",
+      "schools": [
+        "community-academy"
+      ],
+      "programs": [],
+      "when": "Friday, May 28 to Monday, May 31",
+      "title": "No school at Community Academy: Memorial Day",
+      "text": "From Community Academy’s own calendar. 2 listed programs have posted a camp: Elite Sports Factory and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/community-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Community Academy’s week"
     },
     {
       "id": "camp-elite-sports-factory-2027-05-31",
@@ -7714,13 +11668,38 @@
       "notSchools": [
         "independence-charter",
         "byers",
-        "mastery-thomas"
+        "mastery-thomas",
+        "ad-prima",
+        "community-academy",
+        "mastery-prep",
+        "esperanza-elementary",
+        "mastery-cleveland",
+        "gla-southwest",
+        "mastery-harrity",
+        "mastery-wister",
+        "northwood",
+        "mastery-clymer"
       ],
       "when": "Monday, May 31",
       "title": "No school: Memorial Day",
       "text": "One listed program has posted a camp: Elite Sports Factory.",
       "url": "https://phillyafterschool.org/days-off/memorial-day-2027-05-31/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See who’s open"
+    },
+    {
+      "id": "off-ad-prima-2027-05-31",
+      "kind": "dayoff",
+      "date": "2027-05-31",
+      "sendOn": "2027-05-16",
+      "schools": [
+        "ad-prima"
+      ],
+      "programs": [],
+      "when": "Monday, May 31",
+      "title": "No school at Ad Prima: Memorial Day",
+      "text": "From Ad Prima’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/ad-prima/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Ad Prima’s week"
     },
     {
       "id": "off-byers-2027-05-31",
@@ -7738,6 +11717,36 @@
       "button": "See Russell Byers’s week"
     },
     {
+      "id": "off-esperanza-elementary-2027-05-31",
+      "kind": "dayoff",
+      "date": "2027-05-31",
+      "sendOn": "2027-05-16",
+      "schools": [
+        "esperanza-elementary"
+      ],
+      "programs": [],
+      "when": "Monday, May 31",
+      "title": "No school at Esperanza Elementary: Memorial Day",
+      "text": "From Esperanza Elementary’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/esperanza-elementary/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Esperanza Elementary’s week"
+    },
+    {
+      "id": "off-gla-southwest-2027-05-31",
+      "kind": "dayoff",
+      "date": "2027-05-31",
+      "sendOn": "2027-05-16",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Monday, May 31",
+      "title": "No school at GLA Southwest: Memorial Day",
+      "text": "From GLA Southwest’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
+    },
+    {
       "id": "off-independence-charter-2027-05-31",
       "kind": "dayoff",
       "date": "2027-05-31",
@@ -7753,6 +11762,66 @@
       "button": "See Independence Charter’s week"
     },
     {
+      "id": "off-mastery-cleveland-2027-05-31",
+      "kind": "dayoff",
+      "date": "2027-05-31",
+      "sendOn": "2027-05-16",
+      "schools": [
+        "mastery-cleveland"
+      ],
+      "programs": [],
+      "when": "Monday, May 31",
+      "title": "No school at Mastery Cleveland: Memorial Day",
+      "text": "From Mastery Cleveland’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/mastery-cleveland/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Cleveland’s week"
+    },
+    {
+      "id": "off-mastery-clymer-2027-05-31",
+      "kind": "dayoff",
+      "date": "2027-05-31",
+      "sendOn": "2027-05-16",
+      "schools": [
+        "mastery-clymer"
+      ],
+      "programs": [],
+      "when": "Monday, May 31",
+      "title": "No school at Mastery Clymer: Memorial Day",
+      "text": "From Mastery Clymer’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/mastery-clymer/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Clymer’s week"
+    },
+    {
+      "id": "off-mastery-harrity-2027-05-31",
+      "kind": "dayoff",
+      "date": "2027-05-31",
+      "sendOn": "2027-05-16",
+      "schools": [
+        "mastery-harrity"
+      ],
+      "programs": [],
+      "when": "Monday, May 31",
+      "title": "No school at Mastery Harrity: Memorial Day",
+      "text": "From Mastery Harrity’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-prep-2027-05-31",
+      "kind": "dayoff",
+      "date": "2027-05-31",
+      "sendOn": "2027-05-16",
+      "schools": [
+        "mastery-prep"
+      ],
+      "programs": [],
+      "when": "Monday, May 31",
+      "title": "No school at Mastery Prep: Memorial Day",
+      "text": "From Mastery Prep’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/mastery-prep/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Prep’s week"
+    },
+    {
       "id": "off-mastery-thomas-2027-05-31",
       "kind": "dayoff",
       "date": "2027-05-31",
@@ -7766,6 +11835,66 @@
       "text": "From Mastery Thomas’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "off-mastery-wister-2027-05-31",
+      "kind": "dayoff",
+      "date": "2027-05-31",
+      "sendOn": "2027-05-16",
+      "schools": [
+        "mastery-wister"
+      ],
+      "programs": [],
+      "when": "Monday, May 31",
+      "title": "No school at Mastery Wister: Memorial Day",
+      "text": "From Mastery Wister’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Wister’s week"
+    },
+    {
+      "id": "off-northwood-2027-05-31",
+      "kind": "dayoff",
+      "date": "2027-05-31",
+      "sendOn": "2027-05-16",
+      "schools": [
+        "northwood"
+      ],
+      "programs": [],
+      "when": "Monday, May 31",
+      "title": "No school at Northwood: Memorial Day",
+      "text": "From Northwood’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/northwood/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Northwood’s week"
+    },
+    {
+      "id": "off-gla-southwest-2027-06-11",
+      "kind": "dayoff",
+      "date": "2027-06-11",
+      "sendOn": "2027-05-30",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Friday, June 11",
+      "title": "No school at GLA Southwest: Staff professional development day",
+      "text": "From GLA Southwest’s own calendar. One listed program has posted a camp: Kids on 12th.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
+    },
+    {
+      "id": "off-gla-southwest-2027-06-18",
+      "kind": "dayoff",
+      "date": "2027-06-18",
+      "sendOn": "2027-06-06",
+      "schools": [
+        "gla-southwest"
+      ],
+      "programs": [],
+      "when": "Friday, June 18",
+      "title": "No school at GLA Southwest: Juneteenth",
+      "text": "From GLA Southwest’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See GLA Southwest’s week"
     }
   ]
 }

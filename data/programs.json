@@ -461,6 +461,77 @@
           }
         ],
         "checked": "2026-11-15"
+      },
+      "steel": {
+        "relation": "onsite",
+        "note": "GOTR’s own Fall 2026 site list has an Edward Steel team for girls in grades 3–5, meeting Mondays and Wednesdays, 3:45–5:15 pm; registration for the season is closed. Steel’s own page lists Girls on the Run among its clubs.",
+        "sources": [
+          {
+            "label": "GOTR team locations (Fall 2026)",
+            "url": "https://www.gotrphiladelphia.org/locations"
+          },
+          {
+            "label": "Steel: extracurricular activities",
+            "url": "https://steel.philasd.org/students/extracurricular-activities/"
+          }
+        ],
+        "checked": "2026-11-17"
+      },
+      "ad-prima": {
+        "relation": "onsite",
+        "note": "GOTR’s own Fall 2026 site list has an Ad Prima Mt. Airy team for girls in grades 3–5, “Mon & Thurs 4:15 - 5:30 pm”; Ad Prima’s November calendar shows it on Mondays and Thursdays from 4:00 pm. Registration for the fall season is closed.",
+        "sources": [
+          {
+            "label": "GOTR team locations (Fall 2026)",
+            "url": "https://www.gotrphiladelphia.org/locations"
+          },
+          {
+            "label": "Ad Prima Mt. Airy campus calendar, November 2026",
+            "url": "https://4.files.edl.io/052f/11/02/26/164732-ed10b44d-ca17-41aa-a507-cf3c88c6b2b4.pdf"
+          }
+        ],
+        "checked": "2026-11-17"
+      },
+      "community-academy": {
+        "relation": "onsite",
+        "note": "GOTR’s own Fall 2026 site list includes Community Academy of Philadelphia. The school’s 2026–27 club guide lists its Heart & Sole team for grades 6–8 on Mondays, 2:30–4:00 pm, and Wednesdays, 1:00–2:30 pm; GOTR’s list doesn’t give the days for the 3rd–5th grade team, so ask the school.",
+        "sources": [
+          {
+            "label": "GOTR team locations (Fall 2026)",
+            "url": "https://www.gotrphiladelphia.org/locations"
+          },
+          {
+            "label": "Community Academy club guide, 5th–8th (2026–27)",
+            "url": "https://4.files.edl.io/639c/09/02/26/133406-3ac8f94c-fadc-491a-b521-2b61eac13fc4.pdf"
+          }
+        ],
+        "checked": "2026-11-18"
+      },
+      "gamp": {
+        "relation": "onsite",
+        "note": "GOTR’s own Fall 2026 site list includes the Girard Academic Music Program. GAMP’s club schedule lists Girls on the Run on Tuesdays and Thursdays, 3:00–4:30 pm, from March to May, meeting in the school and at Girard Park. GAMP teaches 5th to 12th grade, so ask which grades the team takes.",
+        "sources": [
+          {
+            "label": "GOTR team locations (Fall 2026)",
+            "url": "https://www.gotrphiladelphia.org/locations"
+          },
+          {
+            "label": "GAMP weekly club schedule",
+            "url": "https://docs.google.com/document/d/1PJFZfaEZrqXjfG9UttnCSmhLACeUdSQRAVIw7VmdG2c"
+          }
+        ],
+        "checked": "2026-11-18"
+      },
+      "gla-southwest": {
+        "relation": "onsite",
+        "note": "GOTR’s own Fall 2026 site list includes a team at GLA Southwest (listed as GLASW, 5200 Pine St). The list doesn’t give the team’s days or grades, so ask the school or GOTR.",
+        "sources": [
+          {
+            "label": "GOTR team locations (Fall 2026)",
+            "url": "https://www.gotrphiladelphia.org/locations"
+          }
+        ],
+        "checked": "2026-11-19"
       }
     },
     "price": "paid",
@@ -1882,6 +1953,12 @@
         "distance": "about half a mile southwest, at 23rd and Wharton",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-07"
+      },
+      "mcdaniel": {
+        "relation": "nearby",
+        "distance": "about a third of a mile north, at 23rd and Wharton",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-19"
       }
     }
   },
@@ -3054,7 +3131,7 @@
       "note": "Applications go through Brightwheel (the “After School 26–27 application” link on the page), first come, first served. Current PIC families get preference through early March; then anyone can enroll.",
       "nextTerm": ""
     },
-    "note": "Listed for Lea, Penn Alexander and Powel. Penn Alexander and Powel don’t have pages here yet. Teachers walk children over from Lea and Penn Alexander; the Powel van has very limited space and isn’t guaranteed.",
+    "note": "Listed for Lea, Penn Alexander and Powel. Powel doesn’t have a page here yet. Teachers walk children over from Lea and Penn Alexander; the Powel van has very limited space and isn’t guaranteed.",
     "sources": [
       {
         "label": "PIC After School Center",
@@ -3073,13 +3150,24 @@
           }
         ],
         "checked": "2026-11-13"
+      },
+      "penn-alexander": {
+        "relation": "pickup",
+        "note": "PIC’s own page says its teachers meet children at Penn Alexander and walk them over. It takes kindergarten to 4th grade.",
+        "sources": [
+          {
+            "label": "PIC After School Center",
+            "url": "https://parentinfantcenter.org/programs/after-school-center"
+          }
+        ],
+        "checked": "2026-11-16"
       }
     },
     "pickupLists": [
       {
-        "text": "Samuel Powel School (van, limited space); Lea School and Penn Alexander School (teachers walk children over)",
+        "text": "We currently provide transportation by van from the Samuel Powel School. Van space is very limited and cannot be guaranteed. Teachers meet and walk with children from Lea School and Penn Alexander School.",
         "url": "https://parentinfantcenter.org/programs/after-school-center",
-        "read": "2026-11-13",
+        "read": "2026-11-17",
         "how": "browser"
       }
     ]
@@ -13691,6 +13779,18 @@
         "distance": "about half a mile west, on 33rd St",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-12"
+      },
+      "blaine": {
+        "relation": "nearby",
+        "distance": "about a third of a mile northwest, on 33rd St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-16"
+      },
+      "gideon": {
+        "relation": "nearby",
+        "distance": "about half a mile northwest, on 33rd St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-16"
       }
     }
   },
@@ -13745,6 +13845,18 @@
         "distance": "about a quarter mile southeast, on Diamond St",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-12"
+      },
+      "gideon": {
+        "relation": "nearby",
+        "distance": "about a third of a mile northeast, on Diamond St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-16"
+      },
+      "blaine": {
+        "relation": "nearby",
+        "distance": "about half a mile east, on Diamond St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-16"
       }
     }
   },
@@ -14985,6 +15097,18 @@
         "distance": "about a fifth of a mile east",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-14"
+      },
+      "mya": {
+        "relation": "nearby",
+        "distance": "about a third of a mile east",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-17"
+      },
+      "martha-washington": {
+        "relation": "nearby",
+        "distance": "about a quarter mile southeast",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-17"
       }
     }
   },
@@ -15625,6 +15749,5976 @@
         "distance": "about a quarter mile north",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the playground.",
         "checked": "2026-11-15"
+      },
+      "adaire": {
+        "relation": "nearby",
+        "distance": "about half a mile northwest",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the playground.",
+        "checked": "2026-11-18"
+      },
+      "hackett": {
+        "relation": "nearby",
+        "distance": "about half a mile southwest",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-19"
+      }
+    }
+  },
+  {
+    "id": "ymca-kelley",
+    "name": "YMCA Out of School Time at Kelley",
+    "what": "Free after care inside Kelley from the Greater Philadelphia YMCA: homework help, STEM, art, fitness and social-emotional learning",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "STEM",
+      "art",
+      "YMCA",
+      "Y",
+      "OST",
+      "Kelley",
+      "Brewerytown"
+    ],
+    "address": "1601 N 28th St",
+    "grades": "K-8",
+    "gradeNote": "The YMCA lists William D. Kelley School (as “William D. Kelly School”) for kindergarten to 8th grade",
+    "hours": "From the end of the school day to 5:30 pm, according to the YMCA’s page. Kelley’s school day ends at 2:54 pm.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free. The YMCA says the program is offered at no charge at the schools it lists.",
+    "price": "free",
+    "phone": "215-608-5823",
+    "email": "",
+    "website": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+    "register": {
+      "how": "online",
+      "url": "https://gpy.tfaforms.net/134",
+      "label": "Apply",
+      "note": "The YMCA’s page links this application. Applying doesn’t guarantee a place: the YMCA confirms enrollment afterwards."
+    },
+    "note": "The YMCA’s page lists William D. Kelley School (as “William D. Kelly School”) among the District schools where it runs its free, City-funded after-school program. The City’s program data has the YMCA at Kelley, Monday to Friday, 3:45–6:00 pm, September 9, 2026 to June 8, 2027, free with meals and no transportation, but the City’s locator page doesn’t show the entry, so ask the YMCA how late children can stay. Kelley’s own site lists a “YMCA Afterschool Program” among its activities.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "kelley": {
+        "relation": "onsite",
+        "note": "The Greater Philadelphia YMCA’s own page lists William D. Kelley School (as “William D. Kelly School”), 1601 N 28th St, as one of its funded after-school sites, for kindergarten to 8th grade.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+          }
+        ],
+        "checked": "2026-11-16"
+      }
+    }
+  },
+  {
+    "id": "ymca-gideon",
+    "name": "YMCA Out of School Time at Gideon",
+    "what": "Free after care inside Gideon from the Greater Philadelphia YMCA: homework help, STEM, art, fitness and social-emotional learning",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "STEM",
+      "art",
+      "YMCA",
+      "Y",
+      "OST",
+      "Gideon",
+      "Strawberry Mansion",
+      "before care"
+    ],
+    "address": "2817 W Glenwood Ave",
+    "grades": "K-8",
+    "gradeNote": "The YMCA lists Edward Gideon School for kindergarten to 8th grade",
+    "hours": "From the end of the school day to 5:30 pm, according to the YMCA’s page. Gideon’s school day ends at 3:39 pm.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free. The YMCA says the program is offered at no charge at the schools it lists.",
+    "price": "free",
+    "phone": "215-608-5823",
+    "email": "",
+    "website": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+    "register": {
+      "how": "online",
+      "url": "https://gpy.tfaforms.net/134",
+      "label": "Apply",
+      "note": "The YMCA’s page links this application. Applying doesn’t guarantee a place: the YMCA confirms enrollment afterwards."
+    },
+    "note": "The YMCA’s page lists Edward Gideon School among the District schools where it runs its free, City-funded after-school program. The City’s program data has the YMCA at Gideon after school, Monday to Friday, 3:30–6:00 pm, and before school, 7:00–8:45 am, September 1, 2026 to June 8, 2027, free with meals and no transportation, but the City’s locator page doesn’t show those entries, so ask the YMCA how late children can stay and whether the morning program has room. Gideon’s own site names the YMCA among its community partners.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "gideon": {
+        "relation": "onsite",
+        "note": "The Greater Philadelphia YMCA’s own page lists Edward Gideon School, 2817 W Glenwood Ave, as one of its funded after-school sites, for kindergarten to 8th grade.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+          }
+        ],
+        "checked": "2026-11-16"
+      }
+    }
+  },
+  {
+    "id": "ymca-blaine",
+    "name": "YMCA Out of School Time at Blaine",
+    "what": "Free after care inside Blaine from the Greater Philadelphia YMCA: homework help, STEM, art, fitness and social-emotional learning",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "STEM",
+      "art",
+      "YMCA",
+      "Y",
+      "OST",
+      "Blaine",
+      "Strawberry Mansion"
+    ],
+    "address": "3001 W Berks St",
+    "grades": "K-8",
+    "gradeNote": "The YMCA lists James G. Blaine School for kindergarten to 8th grade",
+    "hours": "From the end of the school day to 5:30 pm, according to the YMCA’s page. Blaine’s school day ends at 2:54 pm.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free. The YMCA says the program is offered at no charge at the schools it lists.",
+    "price": "free",
+    "phone": "215-608-5823",
+    "email": "",
+    "website": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+    "register": {
+      "how": "online",
+      "url": "https://gpy.tfaforms.net/134",
+      "label": "Apply",
+      "note": "The YMCA’s page links this application. Applying doesn’t guarantee a place: the YMCA confirms enrollment afterwards."
+    },
+    "note": "The YMCA’s page lists James G. Blaine School among the District schools where it runs its free, City-funded after-school program. The City’s program locator lists the YMCA at Blaine, Monday to Friday, 3:00–6:00 pm, September 9, 2026 to June 8, 2027, free with meals and no transportation, so the two disagree on the end time: ask the YMCA how late children can stay. Blaine’s own site lists the YMCA among its extracurricular programs and says sign-up is posted on Class Dojo.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+      },
+      {
+        "label": "City program locator: YMCA OST School Program at Blaine",
+        "url": "https://www.phila.gov/ost/program-locator/?address=3001+W+Berks+St&resource=ost_117"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "blaine": {
+        "relation": "onsite",
+        "note": "The Greater Philadelphia YMCA’s own page lists James G. Blaine School, 3001 W Berks St, as one of its funded after-school sites, for kindergarten to 8th grade.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+          },
+          {
+            "label": "City program locator: YMCA OST School Program at Blaine",
+            "url": "https://www.phila.gov/ost/program-locator/?address=3001+W+Berks+St&resource=ost_117"
+          },
+          {
+            "label": "Blaine: extracurricular programs",
+            "url": "https://blaine.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-16"
+      }
+    }
+  },
+  {
+    "id": "ymca-hopkinson",
+    "name": "YMCA Out of School Time at Hopkinson",
+    "what": "Free after care inside Hopkinson from the Greater Philadelphia YMCA: homework help, STEM, art, fitness and social-emotional learning",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "STEM",
+      "art",
+      "YMCA",
+      "Y",
+      "OST",
+      "Hopkinson",
+      "Juniata Park"
+    ],
+    "address": "4001 L St",
+    "grades": "K-8",
+    "gradeNote": "The YMCA lists Francis Hopkinson School for kindergarten to 8th grade",
+    "hours": "From the end of the school day to 5:30 pm, according to the YMCA’s page.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free. The YMCA says the program is offered at no charge at the schools it lists.",
+    "price": "free",
+    "phone": "215-608-5823",
+    "email": "",
+    "website": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+    "register": {
+      "how": "online",
+      "url": "https://gpy.tfaforms.net/134",
+      "label": "Apply",
+      "note": "The YMCA’s page links this application. Applying doesn’t guarantee a place: the YMCA confirms enrollment afterwards."
+    },
+    "note": "The YMCA’s page lists Francis Hopkinson School among the District schools where it runs its free, City-funded after-school program. The City’s program data has the YMCA at Hopkinson, Monday to Friday, 2:45–6:00 pm, September 9, 2026 to June 8, 2027, free with meals and no transportation, but the City’s locator page doesn’t show the entry, so ask the YMCA how late children can stay. Hopkinson’s own site doesn’t mention the YMCA.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "hopkinson": {
+        "relation": "onsite",
+        "note": "The Greater Philadelphia YMCA’s own page lists Francis Hopkinson School, 4001 L St, as one of its funded after-school sites, for kindergarten to 8th grade.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+          }
+        ],
+        "checked": "2026-11-16"
+      }
+    }
+  },
+  {
+    "id": "kelley-clubs",
+    "name": "School clubs and teams",
+    "what": "Art Club, WHYY Media Club, Girls Inc., a fitness club and other activities Kelley lists on its own site",
+    "types": [
+      "clubs",
+      "art",
+      "movement",
+      "academics",
+      "stem"
+    ],
+    "keywords": [
+      "clubs",
+      "art",
+      "media",
+      "WHYY",
+      "Girls Inc.",
+      "girls",
+      "mentoring",
+      "tutoring",
+      "fitness",
+      "choir",
+      "band",
+      "Kelley"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published for each club; ask the school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-7370",
+    "email": "",
+    "website": "https://kelley.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office or the club’s teacher."
+    },
+    "note": "Kelley’s own site lists these among its extracurricular programs, clubs and activities, with no days, times or grades. Girls Inc. isn’t confirmed on Girls Inc.’s own site (it couldn’t be read today). Ask the office which are running this year and for which grades. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Kelley: extracurricular programs, clubs and activities",
+        "url": "https://kelley.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "kelley": {
+        "relation": "onsite",
+        "checked": "2026-11-16"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "WHYY Media Club",
+        "what": "Media making with WHYY",
+        "tags": [
+          "art",
+          "stem"
+        ]
+      },
+      {
+        "name": "Girls Inc.",
+        "what": "Girls Inc. of Greater Philadelphia & Southern New Jersey, listed by the school among its clubs and activities",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Rites of Passage Male Mentoring Program",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Grandmom’s Tutoring",
+        "what": "Tutoring",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Fitness Club",
+        "tags": [
+          "movement"
+        ]
+      }
+    ],
+    "offers": [
+      "Art Club",
+      "WHYY Media Club",
+      "Girls Inc.",
+      "Rites of Passage Male Mentoring Program",
+      "Grandmom’s Tutoring",
+      "Fitness Club"
+    ]
+  },
+  {
+    "id": "gideon-clubs",
+    "name": "School clubs and teams",
+    "what": "Brass and string lessons, drumline, a dance ensemble, Philadelphia Youth Basketball, Girls Inc.’s HYPE, Mural Arts, gardening and cooking clubs, as Gideon lists them",
+    "types": [
+      "clubs",
+      "music",
+      "movement",
+      "art",
+      "academics",
+      "nature"
+    ],
+    "keywords": [
+      "clubs",
+      "brass",
+      "strings",
+      "drumline",
+      "drums",
+      "dance",
+      "basketball",
+      "Philadelphia Youth Basketball",
+      "Girls Inc.",
+      "HYPE",
+      "Mural Arts",
+      "gardening",
+      "cooking",
+      "Gideon"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published for each club; ask the school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-7360",
+    "email": "",
+    "website": "https://gideon.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office or the club’s teacher."
+    },
+    "note": "Gideon’s own site lists these among its extracurricular programs, clubs and activities, with no days, times or grades. Philadelphia Youth Basketball’s and Girls Inc.’s own sites don’t name Gideon (Girls Inc.’s couldn’t be read today). Ask the office which are running this year and for which grades. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Gideon: extracurricular programs, clubs and activities",
+        "url": "https://gideon.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "gideon": {
+        "relation": "onsite",
+        "checked": "2026-11-16"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Brass and String Instrument Program",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Drumline",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Dance Ensemble",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Philadelphia Youth Basketball",
+        "what": "Listed by the school under its clubs and its sports",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Mural Arts",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "HYPE (Girls Inc.)",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Reading and Math Games",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Gardening Club",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Cooking Club",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Student Council",
+        "tags": [
+          "clubs"
+        ]
+      }
+    ],
+    "offers": [
+      "Brass and String Instrument Program",
+      "Drumline",
+      "Dance Ensemble",
+      "Philadelphia Youth Basketball",
+      "Mural Arts",
+      "HYPE (Girls Inc.)",
+      "Reading and Math Games",
+      "Gardening Club",
+      "Cooking Club",
+      "Student Council"
+    ]
+  },
+  {
+    "id": "blaine-clubs",
+    "name": "School clubs and teams",
+    "what": "Arts with the Philadelphia Arts in Education Partnership, optional strings lessons and middle-grades teams, as Blaine lists them",
+    "types": [
+      "clubs",
+      "art",
+      "music",
+      "movement"
+    ],
+    "keywords": [
+      "clubs",
+      "arts",
+      "PAEP",
+      "strings",
+      "volleyball",
+      "soccer",
+      "basketball",
+      "softball",
+      "baseball",
+      "sports",
+      "Blaine"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published for each club; ask the school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-7330",
+    "email": "",
+    "website": "https://blaine.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office or the club’s teacher."
+    },
+    "note": "Blaine’s own site lists the Philadelphia Arts in Education Partnership among its extracurricular programs, optional weekly strings lessons, and fall, winter and spring teams for 6th to 8th graders. It gives no days or times. Ask the office what is running this year. These don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Blaine: extracurricular programs, arts and sports",
+        "url": "https://blaine.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "blaine": {
+        "relation": "onsite",
+        "checked": "2026-11-16"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Philadelphia Arts in Education Partnership (PAEP)",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Strings lessons",
+        "what": "Optional weekly strings lessons",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Volleyball (girls)",
+        "grades": "6-8",
+        "when": "Fall",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "grades": "6-8",
+        "when": "Fall",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Basketball",
+        "grades": "6-8",
+        "when": "Winter",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Softball (girls)",
+        "grades": "6-8",
+        "when": "Spring",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Baseball (boys)",
+        "grades": "6-8",
+        "when": "Spring",
+        "tags": [
+          "movement"
+        ]
+      }
+    ],
+    "offers": [
+      "Philadelphia Arts in Education Partnership (PAEP)",
+      "Strings lessons",
+      "Volleyball (girls)",
+      "Soccer",
+      "Basketball",
+      "Softball (girls)",
+      "Baseball (boys)"
+    ]
+  },
+  {
+    "id": "hopkinson-clubs",
+    "name": "School clubs and teams",
+    "what": "Book Club, Coding, Dance, STEM, Math24, Yoga, running and school teams, as Hopkinson lists them",
+    "types": [
+      "clubs",
+      "stem",
+      "movement",
+      "academics",
+      "games"
+    ],
+    "keywords": [
+      "clubs",
+      "book club",
+      "reading",
+      "coding",
+      "dance",
+      "STEM",
+      "Math24",
+      "yoga",
+      "running",
+      "baseball",
+      "basketball",
+      "football",
+      "softball",
+      "track",
+      "Hopkinson"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published for each club; ask the school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-3970",
+    "email": "",
+    "website": "https://hopkinson.philasd.org/students/extracurriculars/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office or the club’s teacher."
+    },
+    "note": "Hopkinson’s extracurriculars page lists these with no days, times or grades. Ask the office which are running this year and for which grades. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Hopkinson: extracurriculars",
+        "url": "https://hopkinson.philasd.org/students/extracurriculars/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "hopkinson": {
+        "relation": "onsite",
+        "checked": "2026-11-16"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Book Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Coding",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Dance",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Givin’ Flowers",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Math24",
+        "tags": [
+          "academics",
+          "games"
+        ]
+      },
+      {
+        "name": "STEM",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Students Run",
+        "what": "Running",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Yoga",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "School teams",
+        "tags": [
+          "movement"
+        ],
+        "what": "Baseball, basketball, football, softball and track"
+      }
+    ],
+    "offers": [
+      "Book Club",
+      "Coding",
+      "Dance",
+      "Givin’ Flowers",
+      "Math24",
+      "STEM",
+      "Students Run",
+      "Yoga",
+      "School teams"
+    ]
+  },
+  {
+    "id": "penn-alexander-clubs",
+    "name": "School clubs and teams",
+    "what": "Seasonal clubs at Penn Alexander, from debate and coding to ping pong and the annual musical, as the school lists them",
+    "types": [
+      "clubs",
+      "academics",
+      "stem",
+      "music",
+      "theater",
+      "games",
+      "movement",
+      "art"
+    ],
+    "keywords": [
+      "clubs",
+      "debate",
+      "coding",
+      "ping pong",
+      "table tennis",
+      "Math Counts",
+      "math",
+      "choir",
+      "instrumental music",
+      "musical",
+      "media",
+      "WHYY",
+      "GSA",
+      "student council",
+      "volleyball",
+      "basketball",
+      "track",
+      "Penn Alexander"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published for each club; ask the school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-7760",
+    "email": "",
+    "website": "https://pennalexander.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office or the club’s teacher."
+    },
+    "note": "Penn Alexander’s own site says its clubs run in fall, winter and spring cycles, depending on student interest and teacher availability, and gives no days, times or grades. Ask the office which are running this season. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Penn Alexander: extracurricular programs, clubs and activities",
+        "url": "https://pennalexander.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-16",
+    "schools": {
+      "penn-alexander": {
+        "relation": "onsite",
+        "checked": "2026-11-16"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Annual Musical",
+        "tags": [
+          "theater",
+          "music"
+        ]
+      },
+      {
+        "name": "Debate Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "GSA Club",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Instrumental Music and Choir",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Math Counts",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Need in Deed Club",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Penn-Fife Coding Academy Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Ping Pong Club",
+        "tags": [
+          "games",
+          "movement"
+        ]
+      },
+      {
+        "name": "Student Council",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "WHYY Media Lab Club",
+        "tags": [
+          "art",
+          "stem"
+        ]
+      },
+      {
+        "name": "School teams",
+        "what": "Volleyball, basketball and track",
+        "tags": [
+          "movement"
+        ]
+      }
+    ],
+    "offers": [
+      "Annual Musical",
+      "Debate Club",
+      "GSA Club",
+      "Instrumental Music and Choir",
+      "Math Counts",
+      "Need in Deed Club",
+      "Penn-Fife Coding Academy Club",
+      "Ping Pong Club",
+      "Student Council",
+      "WHYY Media Lab Club",
+      "School teams"
+    ]
+  },
+  {
+    "id": "gpca-steel",
+    "name": "GPCA After School at Steel",
+    "what": "Free after-school care and before care inside Steel for its students, run by Greater Philadelphia Community Alliance",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "free",
+      "homework",
+      "GPCA",
+      "Greater Philadelphia Community Alliance",
+      "EDEY",
+      "Steel",
+      "Nicetown"
+    ],
+    "address": "4301 Wayne Ave",
+    "grades": "K-8",
+    "gradeNote": "Kindergarten to 8th grade, Steel students only, according to the City’s listing",
+    "hours": "3:30–6:00 pm, Monday to Friday, September 1, 2026 to June 9, 2027, according to the City’s listing. Before care runs 7:30–9:00 am. GPCA’s own page gives its after-school hours as 2:30–6:00 pm, “may vary slightly by location”.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free. GPCA’s 2026–27 enrollment form says there is no charge for its after-school program or before care.",
+    "price": "free",
+    "phone": "215-908-8778",
+    "email": "info@gpca-phila.org",
+    "website": "https://www.gpca-phila.org/prek-8",
+    "register": {
+      "how": "online",
+      "url": "https://form.jotform.com/262154951033048",
+      "label": "Enrollment form",
+      "note": "GPCA’s 2026–27 K–8 enrollment form lists “EDEY - Steel” as a site; GPCA also says paper applications are available at the school. The City’s listing says the program is only open to Steel students. The phone number is the program’s own in the City’s listing; GPCA’s main number is 215-336-5505."
+    },
+    "daysOff": {
+      "summary": "The City’s locator lists a free GPCA winter break mini camp for Steel students, December 23 to 30, 2026 (Monday to Wednesday, 8:30 am to 5:30 pm). Registration runs November 12 to December 15.",
+      "url": "https://www.phila.gov/ost/program-locator/?address=4301+Wayne+Ave",
+      "dates": [
+        "2026-12-23",
+        "2026-12-28",
+        "2026-12-29",
+        "2026-12-30"
+      ],
+      "sources": [
+        {
+          "label": "City program locator: GPCA at Steel",
+          "url": "https://www.phila.gov/ost/program-locator/?address=4301+Wayne+Ave"
+        }
+      ],
+      "hours": "8:30 am to 5:30 pm",
+      "cost": "Free"
+    },
+    "note": "The City’s program locator lists GPCA’s after-school program, before care and winter camp at Steel, with meals and snacks and no transportation. GPCA’s own page names Edward Steel among its K–8 sites but lists before care only at Childs and Vare, so confirm before care with GPCA.",
+    "sources": [
+      {
+        "label": "City program locator: GPCA at Steel",
+        "url": "https://www.phila.gov/ost/program-locator/?address=4301+Wayne+Ave"
+      },
+      {
+        "label": "Greater Philadelphia Community Alliance: Pre K–8 programs",
+        "url": "https://www.gpca-phila.org/prek-8"
+      },
+      {
+        "label": "GPCA K–8 enrollment form, 2026–27",
+        "url": "https://form.jotform.com/262154951033048"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "steel": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists GPCA’s after-school program at Steel’s address, open only to Steel students, and GPCA’s own page names Edward Steel Elementary School among the schools its program serves.",
+        "sources": [
+          {
+            "label": "City program locator: GPCA at Steel",
+            "url": "https://www.phila.gov/ost/program-locator/?address=4301+Wayne+Ave"
+          },
+          {
+            "label": "Greater Philadelphia Community Alliance: Pre K–8 programs",
+            "url": "https://www.gpca-phila.org/prek-8"
+          }
+        ],
+        "checked": "2026-11-17"
+      }
+    }
+  },
+  {
+    "id": "steel-clubs",
+    "name": "School clubs and teams",
+    "what": "Homework clubs, drama, math, STEAM, track and field, basketball and a step team that Steel lists on its own site",
+    "types": [
+      "clubs",
+      "academics",
+      "movement",
+      "theater",
+      "stem"
+    ],
+    "keywords": [
+      "clubs",
+      "homework",
+      "drama",
+      "math",
+      "STEAM",
+      "track",
+      "basketball",
+      "step team",
+      "Steel"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Homework clubs for K–2 and 6–8; the other clubs don’t give grades",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-3910",
+    "email": "",
+    "website": "https://steel.philasd.org/students/extracurricular-activities/",
+    "register": {
+      "how": "school",
+      "note": "Steel’s page says to visit the main office to find out how to join."
+    },
+    "note": "Steel’s own page lists these after-school clubs, run by its staff, with no days or times. The page was last updated in January 2025, so ask the office which are running this year. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Steel: extracurricular activities",
+        "url": "https://steel.philasd.org/students/extracurricular-activities/"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "steel": {
+        "relation": "onsite",
+        "checked": "2026-11-17"
+      }
+    },
+    "clubs": [
+      {
+        "name": "After School Club",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Homework Club (K–2)",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Homework Club (6–8)",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Drama Club",
+        "tags": [
+          "theater"
+        ]
+      },
+      {
+        "name": "Math Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "STEAM",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Track and Field Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Steel Parliament Basketball Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Steel Steppers Step Team",
+        "tags": [
+          "movement"
+        ]
+      }
+    ],
+    "offers": [
+      "After School Club",
+      "Homework Club (K–2)",
+      "Homework Club (6–8)",
+      "Drama Club",
+      "Math Club",
+      "STEAM",
+      "Track and Field Club",
+      "Steel Parliament Basketball Club",
+      "Steel Steppers Step Team"
+    ]
+  },
+  {
+    "id": "ad-prima-clubs",
+    "name": "School clubs and teams",
+    "what": "Chess, robotics, theater, spirit team, orators and other clubs that meet after the 4:00 pm dismissal at Ad Prima’s Mt. Airy campus",
+    "types": [
+      "clubs",
+      "stem",
+      "theater",
+      "games",
+      "movement",
+      "academics",
+      "art"
+    ],
+    "keywords": [
+      "clubs",
+      "chess",
+      "robotics",
+      "coding",
+      "theater",
+      "spirit team",
+      "dance",
+      "orators",
+      "public speaking",
+      "comics",
+      "tutoring",
+      "tennis",
+      "Ad Prima"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published for each club; ask the school",
+    "hours": "4:00–5:30 pm on the days each club meets, according to Ad Prima’s November 2026 calendar for the Mt. Airy campus.",
+    "daysNote": "In November 2026: chess on Mondays, robotics on Tuesdays and Thursdays, spirit team and orators on some Tuesdays, theater on Thursdays.",
+    "cost": "Not published",
+    "phone": "215-488-7095",
+    "email": "",
+    "website": "https://www.adprimacharterschools.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school how to join."
+    },
+    "note": "Ad Prima’s FAQ lists after-school tutoring, tennis, robotics, a comic club, spirit and dance team, theater, coding, chess and an oratorical club, and says activities vary by campus. Its November 2026 calendar for the Mt. Airy campus shows which meet on which days, and a Legacy Tennis session on November 4. Ad Prima says it has no before- or after-school care.",
+    "sources": [
+      {
+        "label": "Ad Prima enrollment FAQ",
+        "url": "https://www.adprimacharterschools.org/apps/pages/index.jsp?uREC_ID=1737661&type=d&pREC_ID=2420497"
+      },
+      {
+        "label": "Ad Prima Mt. Airy campus calendar, November 2026",
+        "url": "https://4.files.edl.io/052f/11/02/26/164732-ed10b44d-ca17-41aa-a507-cf3c88c6b2b4.pdf"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "ad-prima": {
+        "relation": "onsite",
+        "checked": "2026-11-17"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Chess Club",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Robotics Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Coding Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Theater Club",
+        "tags": [
+          "theater"
+        ]
+      },
+      {
+        "name": "Spirit and Dance Team",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Orators Club",
+        "what": "Public speaking",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Comic Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "After School Tutoring",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Tennis",
+        "what": "Legacy Tennis, on the school’s calendar",
+        "tags": [
+          "movement"
+        ]
+      }
+    ],
+    "offers": [
+      "Chess Club",
+      "Robotics Club",
+      "Coding Club",
+      "Theater Club",
+      "Spirit and Dance Team",
+      "Orators Club",
+      "Comic Club",
+      "After School Tutoring",
+      "Tennis"
+    ]
+  },
+  {
+    "id": "pyn-conwell",
+    "name": "PYN AIM Afterschool at Conwell",
+    "what": "A free after-school program for Conwell students run by the Philadelphia Youth Network, with homework help, mentoring, career-connected learning, STEAM, arts and sports",
+    "types": [
+      "aftercare",
+      "academics"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "middle school",
+      "homework",
+      "mentoring",
+      "career",
+      "STEAM",
+      "dance",
+      "theater",
+      "soccer",
+      "PYN",
+      "Philadelphia Youth Network",
+      "AIM",
+      "Conwell",
+      "Kensington"
+    ],
+    "address": "1849 E Clearfield St",
+    "grades": "5-8",
+    "gradeNote": "Middle school; open to students at PYN’s participating schools",
+    "hours": "PYN’s 2026–27 page doesn’t give hours. Conwell’s flyer for 2025–26 gave Monday to Friday, 2:34–5:45 pm, so ask for this year’s.",
+    "cost": "Free, according to Conwell’s 2025–26 flyer. PYN’s page doesn’t give a price.",
+    "price": "free",
+    "phone": "267-502-3800",
+    "email": "afterschool@pyninc.org",
+    "website": "https://www.pyninc.org/afterschool",
+    "register": {
+      "how": "online",
+      "url": "https://ct.caseworthy.net/portal/default.aspx?CustomerID=PYN",
+      "label": "Enroll",
+      "note": "PYN says enrollment is open all year, online only, and that youth must be enrolled at one of its participating schools."
+    },
+    "note": "Conwell’s 2025–26 flyer listed dance, journalism, Philadelphia Ballet, music, drama with Walnut Street Theatre, Kensington Soccer Club, visual arts, study groups, sports and field trips, with a snack, for up to 60 students. Ask what this year’s program includes.",
+    "sources": [
+      {
+        "label": "PYN after school",
+        "url": "https://www.pyninc.org/afterschool"
+      },
+      {
+        "label": "Conwell: after-school program flyer, 2025–26",
+        "url": "https://conwell.philasd.org/wp-content/uploads/sites/255/2025/08/Conwell-OST-Flyer-Updated.jpg"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "conwell": {
+        "relation": "onsite",
+        "note": "PYN’s own page lists Russell Conwell Middle School among its 2026–27 sites, and Conwell’s site posts the program’s flyer.",
+        "sources": [
+          {
+            "label": "PYN after school",
+            "url": "https://www.pyninc.org/afterschool"
+          },
+          {
+            "label": "Conwell: after-school program flyer, 2025–26",
+            "url": "https://conwell.philasd.org/wp-content/uploads/sites/255/2025/08/Conwell-OST-Flyer-Updated.jpg"
+          }
+        ],
+        "checked": "2026-11-17"
+      }
+    }
+  },
+  {
+    "id": "lets-dance-conwell",
+    "name": "Philadelphia Ballet: Let’s Dance at Conwell",
+    "what": "A free dance program Philadelphia Ballet brings to Conwell for 5th to 8th graders, with three styles of dance, an end-of-year performance and a trip to see a performance",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "dance",
+      "ballet",
+      "free",
+      "middle school",
+      "Philadelphia Ballet",
+      "Let’s Dance",
+      "Conwell",
+      "Kensington"
+    ],
+    "address": "1849 E Clearfield St",
+    "grades": "5-8",
+    "gradeNote": "Open to all 5th to 8th graders at Conwell",
+    "hours": "Not published",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-400-7210",
+    "email": "",
+    "website": "https://conwell.philasd.org/wp-content/uploads/sites/255/2026/09/Lets-Dance_Flyer_2026-1.jpg",
+    "register": {
+      "how": "school",
+      "note": "Conwell’s flyer says to ask a teacher how to sign up."
+    },
+    "note": "This comes from the flyer on Conwell’s own site for the 2026–27 school year, which doesn’t give days or times. Philadelphia Ballet’s own site refused automated reading, so ask the school when it meets. The phone number is Conwell’s.",
+    "sources": [
+      {
+        "label": "Conwell: Let’s Dance flyer, 2026–27",
+        "url": "https://conwell.philasd.org/wp-content/uploads/sites/255/2026/09/Lets-Dance_Flyer_2026-1.jpg"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "conwell": {
+        "relation": "onsite",
+        "checked": "2026-11-17"
+      }
+    }
+  },
+  {
+    "id": "conwell-clubs",
+    "name": "School clubs and teams",
+    "what": "World Affairs Council, flag football, track and field, art, music and other activities Conwell lists on its own site",
+    "types": [
+      "clubs",
+      "movement",
+      "art",
+      "music",
+      "academics"
+    ],
+    "keywords": [
+      "clubs",
+      "World Affairs Council",
+      "honor society",
+      "flag football",
+      "track",
+      "Penn Relays",
+      "art",
+      "music",
+      "trips",
+      "Conwell"
+    ],
+    "address": "",
+    "grades": "5-8",
+    "gradeNote": "Conwell is a 5th to 8th grade school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-7210",
+    "email": "",
+    "website": "https://conwell.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Conwell’s own site lists these on a flyer posted in November 2026, with no days or times. Ask the office which meet after school. Clubs don’t cover every afternoon, so treat them as a supplement to daily care.",
+    "sources": [
+      {
+        "label": "Conwell: “Conwell the #1 Choice” flyer",
+        "url": "https://conwell.philasd.org/wp-content/uploads/sites/255/2026/11/English-819x1024.png"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "conwell": {
+        "relation": "onsite",
+        "checked": "2026-11-17"
+      }
+    },
+    "clubs": [
+      {
+        "name": "World Affairs Council",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "National Junior Honor Society",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Flag Football",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Penn Relays Track and Field",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Art",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Music",
+        "tags": [
+          "music"
+        ]
+      }
+    ],
+    "offers": [
+      "World Affairs Council",
+      "National Junior Honor Society",
+      "Flag Football",
+      "Penn Relays Track and Field",
+      "Art",
+      "Music"
+    ]
+  },
+  {
+    "id": "ecs-mya",
+    "name": "Episcopal Community Services: After School at MYA",
+    "what": "A free after-school program inside MYA for its middle schoolers, with STEAM, cooking, basketball, arts and career exploration",
+    "types": [
+      "aftercare",
+      "stem"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "middle school",
+      "cooking",
+      "basketball",
+      "STEAM",
+      "career",
+      "field trips",
+      "ECS",
+      "Episcopal Community Services",
+      "MYA",
+      "Middle Years",
+      "West Philadelphia"
+    ],
+    "address": "4725 Fairmount Ave",
+    "grades": "5-8",
+    "gradeNote": "5th to 8th grade, according to the City’s listing",
+    "hours": "3:00–6:00 pm, Monday to Friday, September 1, 2026 to June 9, 2027, according to the City’s listing.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-456-0448",
+    "email": "info@ecsphilly.org",
+    "website": "https://www.ecsphilly.org/programs/out-of-school-time/",
+    "register": {
+      "how": "contact",
+      "note": "The City’s listing says registration is required and gave a window of August 10 to September 30, 2026; the sign-up form on ECS’s site is still last year’s. Call to ask whether there is room. The phone number is the program’s own in the City’s listing; ECS’s number there is 215-456-3160."
+    },
+    "note": "The City’s listing says healthy snacks are provided and there is no transportation. ECS’s own after-school page doesn’t list MYA among its sites, so confirm the details with ECS or the school.",
+    "sources": [
+      {
+        "label": "City program locator: ECS OST at MYA",
+        "url": "https://www.phila.gov/ost/program-locator/?address=4725+Fairmount+Ave"
+      },
+      {
+        "label": "MYA: Points of Pride",
+        "url": "https://mya.philasd.org/points-of-pride/"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "mya": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists ECS’s after-school program at MYA’s address, and MYA’s own site names ECS.",
+        "sources": [
+          {
+            "label": "City program locator: ECS OST at MYA",
+            "url": "https://www.phila.gov/ost/program-locator/?address=4725+Fairmount+Ave"
+          },
+          {
+            "label": "MYA: Points of Pride",
+            "url": "https://mya.philasd.org/points-of-pride/"
+          }
+        ],
+        "checked": "2026-11-17"
+      }
+    }
+  },
+  {
+    "id": "mya-clubs",
+    "name": "School clubs and teams",
+    "what": "Football, soccer, volleyball, basketball, baseball, softball and track teams, and the string, wind and concert bands and drumline MYA lists on its own site",
+    "types": [
+      "clubs",
+      "movement",
+      "music"
+    ],
+    "keywords": [
+      "sports",
+      "football",
+      "golf",
+      "soccer",
+      "volleyball",
+      "basketball",
+      "baseball",
+      "softball",
+      "track",
+      "band",
+      "strings",
+      "drumline",
+      "MYA"
+    ],
+    "address": "",
+    "grades": "5-8",
+    "gradeNote": "MYA is a 5th to 8th grade school",
+    "hours": "Not published",
+    "cost": "Not published",
+    "phone": "215-400-7720",
+    "email": "",
+    "website": "https://mya.philasd.org/mya-sports/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office or the coach."
+    },
+    "note": "MYA’s sports page (updated August 2025) lists its teams by season, with no days or times. Its music groups are on a page last updated in May 2024, so ask whether they meet after school this year.",
+    "sources": [
+      {
+        "label": "MYA sports",
+        "url": "https://mya.philasd.org/mya-sports/"
+      },
+      {
+        "label": "MYA: Points of Pride",
+        "url": "https://mya.philasd.org/points-of-pride/"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "mya": {
+        "relation": "onsite",
+        "checked": "2026-11-17"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Football (fall)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Golf (fall)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Soccer (fall)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Girls Volleyball (fall)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Boys and Girls Basketball (winter)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Boys Volleyball (spring)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Baseball and Softball (spring)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Track and Field (spring)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "String and wind ensembles",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Concert band and drumline",
+        "tags": [
+          "music"
+        ]
+      }
+    ],
+    "offers": [
+      "Football (fall)",
+      "Golf (fall)",
+      "Soccer (fall)",
+      "Girls Volleyball (fall)",
+      "Boys and Girls Basketball (winter)",
+      "Boys Volleyball (spring)",
+      "Baseball and Softball (spring)",
+      "Track and Field (spring)",
+      "String and wind ensembles",
+      "Concert band and drumline"
+    ]
+  },
+  {
+    "id": "ace-martha-washington",
+    "name": "Community Council ACE Program at Martha Washington",
+    "what": "A free after-school program inside Martha Washington with homework help, arts, music, dance, sports and STEM",
+    "types": [
+      "aftercare",
+      "art"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "arts",
+      "music",
+      "dance",
+      "drums",
+      "STEM",
+      "robotics",
+      "coding",
+      "gardening",
+      "sports",
+      "Community Council",
+      "ACE",
+      "Artistic & Cultural Enrichment",
+      "Martha Washington",
+      "West Philadelphia"
+    ],
+    "address": "766 N 44th St",
+    "grades": "K-8",
+    "gradeNote": "Kindergarten to 8th grade, according to the City’s listing; the school’s own page, from 2024, says K–6",
+    "hours": "3:30–6:00 pm, Monday to Friday, September 8, 2026 to June 9, 2027, according to the City’s listing.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-473-7033",
+    "email": "",
+    "website": "https://www.cchss.org/child-adolescent-services",
+    "register": {
+      "how": "contact",
+      "note": "The City’s listing says registration is required and gave a window of August 10 to September 30, 2026, so ask whether there is still room. Community Council’s site has a referral form for the ACE after-school program: https://www.cchss.org/ost-referral"
+    },
+    "note": "The City’s listing describes ACE as homework help, literacy and math, STEM, robotics, computer science, arts, music, dance, social-emotional learning and fitness, with meals and no transportation. Martha Washington’s own page, last updated in February 2024, lists homework help, drama, dance, drums, computers, ceramics, robotics, a farm, healthy eating and field trips. Community Council’s own site describes ACE but doesn’t name its sites.",
+    "sources": [
+      {
+        "label": "City program locator: Community Council ACE at Martha Washington",
+        "url": "https://www.phila.gov/ost/program-locator/?address=766+N+44th+St"
+      },
+      {
+        "label": "Martha Washington: after-school activities",
+        "url": "https://mwashington.philasd.org/students/after-school-activities/"
+      },
+      {
+        "label": "Community Council: child and adolescent services",
+        "url": "https://www.cchss.org/child-adolescent-services"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "martha-washington": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists Community Council’s ACE program at Martha Washington’s address, and the school’s own after-school page names ACE.",
+        "sources": [
+          {
+            "label": "City program locator: Community Council ACE at Martha Washington",
+            "url": "https://www.phila.gov/ost/program-locator/?address=766+N+44th+St"
+          },
+          {
+            "label": "Martha Washington: after-school activities",
+            "url": "https://mwashington.philasd.org/students/after-school-activities/"
+          }
+        ],
+        "checked": "2026-11-17"
+      }
+    }
+  },
+  {
+    "id": "martha-washington-clubs",
+    "name": "School clubs and teams",
+    "what": "An after-school dance group that Martha Washington lists on its own site",
+    "types": [
+      "clubs",
+      "movement"
+    ],
+    "keywords": [
+      "clubs",
+      "dance",
+      "Martha Washington"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Not published; ask the school",
+    "hours": "4:00–5:30 pm, according to the school’s page (last updated February 2024).",
+    "days": [
+      "mon",
+      "wed"
+    ],
+    "cost": "Not published",
+    "phone": "215-400-7770",
+    "email": "",
+    "website": "https://mwashington.philasd.org/students/after-school-activities/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Martha Washington’s own after-school page lists After School Dance on Mondays and Wednesdays, 4:00–5:30 pm. The page was last updated in February 2024, so ask the office whether it meets this year.",
+    "sources": [
+      {
+        "label": "Martha Washington: after-school activities",
+        "url": "https://mwashington.philasd.org/students/after-school-activities/"
+      }
+    ],
+    "lastVerified": "2026-11-17",
+    "schools": {
+      "martha-washington": {
+        "relation": "onsite",
+        "checked": "2026-11-17"
+      }
+    },
+    "clubs": [
+      {
+        "name": "After School Dance",
+        "tags": [
+          "movement"
+        ]
+      }
+    ],
+    "offers": [
+      "After School Dance"
+    ]
+  },
+  {
+    "id": "playarts-afterschool",
+    "name": "PlayArts AfterSchool",
+    "what": "Aftercare inside Adaire, Hackett and Moffet with daily outdoor play, art lessons and homework help",
+    "types": [
+      "aftercare",
+      "art"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "art",
+      "arts",
+      "play",
+      "outdoor play",
+      "homework",
+      "PlayArts",
+      "Adaire",
+      "Moffet",
+      "Hackett",
+      "Fishtown"
+    ],
+    "address": "",
+    "neighborhoods": [
+      "Fishtown",
+      "South Kensington"
+    ],
+    "grades": "K-5",
+    "gradeNote": "Kindergarten to 5th grade; Pre-K too at Hackett and Moffet (PlayArts says it has no Pre-K space at Adaire)",
+    "hours": "From dismissal to 6:00 pm on school days. PlayArts says the 2026–27 price also covers any early-dismissal day, from noon at the school.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "$445 a month for 2026–27 (kindergarten to 5th grade), covering every regular program day, 3:00 to 6:00 pm. A nonrefundable deposit of one month’s tuition holds a spot and counts as the last payment. Pre-K at Moffet is $585 a month with Fridays and early dismissals, or $370 a month Monday to Thursday; at Hackett, Pre-K is $585 a month with Fridays and early dismissals, or $175 a month for the early-dismissal Fridays only.",
+    "rate": {
+      "per": "month",
+      "flat": 445
+    },
+    "price": "paid",
+    "phone": "856-661-7861",
+    "email": "",
+    "website": "https://www.playartsphilly.com/afterschool-program",
+    "register": {
+      "how": "online",
+      "url": "https://www.playartsphilly.com/playloud-registration",
+      "note": "Enrollment for 2026–27 is open. Full-day camps on days the District is closed are booked separately (PlayArts day camps has its own listing).",
+      "nextTerm": "Enrollment for the 2026–27 school year is open now."
+    },
+    "note": "PlayArts runs its after-school program at Adaire, Hackett and Moffet. At Adaire, children are dismissed by their teachers and meet PlayArts staff by the auditorium; at Hackett, kindergarten to 5th graders go to the cafetorium to meet PlayArts teachers and Pre-K children are collected from their classrooms; at Moffet, PlayArts staff collect Pre-K to 2nd graders from their classrooms. Parents keep in touch through the Remind app.",
+    "sources": [
+      {
+        "label": "PlayArts AfterSchool Program",
+        "url": "https://www.playartsphilly.com/afterschool-program"
+      },
+      {
+        "label": "PlayArts at Adaire, 2026–27",
+        "url": "https://www.playartsphilly.com/adaire-2627"
+      },
+      {
+        "label": "PlayArts at Hackett, 2026–27",
+        "url": "https://www.playartsphilly.com/hackett-2627"
+      },
+      {
+        "label": "PlayArts at Moffet, 2026–27",
+        "url": "https://www.playartsphilly.com/moffet-2627"
+      }
+    ],
+    "lastVerified": "2026-11-18",
+    "schools": {
+      "adaire": {
+        "relation": "onsite",
+        "note": "PlayArts’ own Adaire page gives the daily schedule: dismissal at 3:09, snack, outdoor play on the Adaire playground, then art, homework and games inside, with pickup from the playground (or the gym in bad weather) until 6:00 pm. Adaire’s handbook lists PlayArts as on site too.",
+        "sources": [
+          {
+            "label": "PlayArts at Adaire, 2026–27",
+            "url": "https://www.playartsphilly.com/adaire-2627"
+          },
+          {
+            "label": "Adaire family handbook (2025–26)",
+            "url": "https://docs.google.com/document/d/1An3hiO7hUIEciW9wIM0vp1SzocfmYl8cDN3TvNdJeHU/edit?usp=sharing"
+          }
+        ],
+        "checked": "2026-11-18"
+      },
+      "moffet": {
+        "relation": "onsite",
+        "note": "PlayArts’ own Moffet page gives the daily schedule from the 2:54 dismissal to 6:00 pm, and takes Pre-K children at Moffet as well as kindergarten to 5th grade.",
+        "sources": [
+          {
+            "label": "PlayArts at Moffet, 2026–27",
+            "url": "https://www.playartsphilly.com/moffet-2627"
+          }
+        ],
+        "checked": "2026-11-18"
+      },
+      "hackett": {
+        "relation": "onsite",
+        "note": "PlayArts’ own Hackett page gives the daily schedule: dismissal at 3:15–3:30, snack in the cafetorium, outdoor play on the Hackett playground, then art, homework and games inside, with pickup from the playground (or the main doors on York Street in bad weather) until 6:00 pm. Hackett’s site lists PlayArts too.",
+        "sources": [
+          {
+            "label": "PlayArts at Hackett, 2026–27",
+            "url": "https://www.playartsphilly.com/hackett-2627"
+          },
+          {
+            "label": "Horatio B. Hackett School",
+            "url": "https://hackett.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-19"
+      }
+    },
+    "pickupLists": [
+      {
+        "where": "Its after-school locations",
+        "text": "Alexander Adaire Elementary, Horatio B. Hackett Elementary, John Moffet Elementary",
+        "url": "https://www.playartsphilly.com/afterschool-program",
+        "read": "2026-11-18",
+        "how": "fetch"
+      }
+    ]
+  },
+  {
+    "id": "fishtown-rec",
+    "name": "Fishtown Recreation Center",
+    "what": "City rec center after-school program for kindergarten to 5th grade, with staff who collect children from Adaire",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "after school",
+      "aftercare",
+      "Afterschool Unplugged",
+      "science",
+      "field trips",
+      "Fishtown",
+      "Adaire"
+    ],
+    "address": "1202 E Montgomery Ave",
+    "neighborhoods": [
+      "Fishtown"
+    ],
+    "grades": "K-5",
+    "gradeNote": "Ages 5–11; the City’s listing says grades K–5",
+    "hours": "School days from dismissal to 6:00 pm, according to the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "daysOff": {
+      "summary": "The City’s listing has an “OST for Off Days” program here on School District days off, generally 8 am to 4 pm, for kindergarten to 4th grade, at $30 a day. It was entered in 2023, so call to ask which days it runs this year.",
+      "url": "https://www.phila.gov/parks-rec-finder/#/locations",
+      "dates": [],
+      "sources": [
+        {
+          "label": "City Parks & Rec finder",
+          "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+        }
+      ],
+      "hours": "8 am to 4 pm",
+      "cost": "$30 a day",
+      "ageMin": 5,
+      "ageMax": 11
+    },
+    "cost": "$100 a month in the City’s listing, which dates from 2017; registration there shows open. Call to confirm the price this year.",
+    "price": "paid",
+    "phone": "215-685-9885",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The City’s Parks & Rec data lists “Afterschool Unplugged” here for grades K–5, on School District days from dismissal to 6:00 pm, with physical activity, nutrition, science and technology and field trips, and says staff pick up students from Alexander Adaire at dismissal. The entry dates from 2017, so call to confirm this year’s days, hours and price.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "Adaire family handbook (2025–26)",
+        "url": "https://docs.google.com/document/d/1An3hiO7hUIEciW9wIM0vp1SzocfmYl8cDN3TvNdJeHU/edit?usp=sharing"
+      }
+    ],
+    "lastVerified": "2026-11-18",
+    "schools": {
+      "adaire": {
+        "relation": "pickup",
+        "note": "The City’s listing says staff pick up students from Alexander Adaire at dismissal, and Adaire’s 2025–26 handbook says Fishtown Rec walks children over from the school.",
+        "sources": [
+          {
+            "label": "City Parks & Rec finder",
+            "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+          },
+          {
+            "label": "Adaire family handbook (2025–26)",
+            "url": "https://docs.google.com/document/d/1An3hiO7hUIEciW9wIM0vp1SzocfmYl8cDN3TvNdJeHU/edit?usp=sharing"
+          }
+        ],
+        "checked": "2026-11-18"
+      }
+    }
+  },
+  {
+    "id": "shissler-rec",
+    "name": "Shissler Recreation Center",
+    "what": "City rec center after-school program with homework time, meals and snacks, arts and crafts and sports",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "after school",
+      "aftercare",
+      "homework",
+      "sports",
+      "arts and crafts",
+      "Fishtown",
+      "Blair Street",
+      "Adaire",
+      "Hackett"
+    ],
+    "address": "1800 Blair St",
+    "neighborhoods": [
+      "Fishtown"
+    ],
+    "grades": "K-6",
+    "gradeNote": "Ages 5–12 and 6–12 in the City’s listings",
+    "hours": "Not published in the City’s listing",
+    "cost": "$100 a month in the City’s listings, entered in 2022 and 2023 (one marked as registering, one closed). Call to ask what it costs this year.",
+    "price": "paid",
+    "phone": "215-685-9888",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The City’s Parks & Rec data lists an after-school program here for ages 6 to 12 at $100 a month (entered in 2022, marked as registering), and the “Shissler Afterschool Program” with homework help, meals and snacks, arts and crafts and sports (entered in 2023). Call to confirm this year’s days and hours. The City’s 2026–27 program data (behind its after-school program locator, which doesn’t show the entry) lists Shissler’s after-school program Monday to Friday, 2:30 to 6:00 pm, September 8, 2026 to June 9, 2027, for ages 6 to 12 at $100 a month, and says it serves students at Hackett and Adaire with pickup daily and on half days.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "Adaire family handbook (2025–26)",
+        "url": "https://docs.google.com/document/d/1An3hiO7hUIEciW9wIM0vp1SzocfmYl8cDN3TvNdJeHU/edit?usp=sharing"
+      }
+    ],
+    "lastVerified": "2026-11-18",
+    "schools": {
+      "adaire": {
+        "relation": "pickup",
+        "note": "Adaire’s 2025–26 handbook says Shissler walks children over from the school. The City’s listing doesn’t mention pickup, so ask the rec center whether it still does this year.",
+        "sources": [
+          {
+            "label": "Adaire family handbook (2025–26)",
+            "url": "https://docs.google.com/document/d/1An3hiO7hUIEciW9wIM0vp1SzocfmYl8cDN3TvNdJeHU/edit?usp=sharing"
+          }
+        ],
+        "checked": "2026-11-18"
+      },
+      "hackett": {
+        "relation": "pickup",
+        "note": "The City’s 2026–27 program data says Shissler’s after-school program serves students at Hackett and Adaire, with pickup daily and on half days, and Hackett’s own site lists Shissler among its after-school programs. Ask the rec center how children get there.",
+        "sources": [
+          {
+            "label": "Horatio B. Hackett School",
+            "url": "https://hackett.philasd.org/"
+          },
+          {
+            "label": "City after-school program locator",
+            "url": "https://www.phila.gov/ost/program-locator/"
+          }
+        ],
+        "checked": "2026-11-19"
+      }
+    }
+  },
+  {
+    "id": "stem-prep",
+    "name": "STEM Prep: After-School STEM",
+    "what": "Hands-on science, engineering and making every weekday afternoon, with coding, robotics and engineering clubs",
+    "types": [
+      "stem",
+      "aftercare"
+    ],
+    "keywords": [
+      "STEM",
+      "science",
+      "engineering",
+      "robotics",
+      "coding",
+      "makers",
+      "aftercare",
+      "STEM Prep",
+      "Girard Avenue",
+      "Fishtown",
+      "Adaire"
+    ],
+    "address": "604 E Girard Ave",
+    "neighborhoods": [
+      "Fishtown"
+    ],
+    "grades": "PK-4",
+    "gradeNote": "Ages 3–10; its site says Pre-K to 4th grade",
+    "hours": "2:30 to 5:30 pm, Monday to Friday, according to its site. Weekly clubs: coding on Tuesdays, robotics on Wednesdays and junior engineers on Thursdays (ages 5–10).",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "daysOff": {
+      "summary": "STEM Prep runs drop-in “School-Out Camp” days for school holidays and half days, booked by the day with no long-term commitment. Its calendar posts the dates.",
+      "url": "https://stempreparatory.org/programs",
+      "dates": [],
+      "sources": [
+        {
+          "label": "STEM Prep programs",
+          "url": "https://stempreparatory.org/programs"
+        },
+        {
+          "label": "STEM Prep calendar",
+          "url": "https://stempreparatory.org/calendar"
+        }
+      ]
+    },
+    "cost": "Not on the page; its rates are in a form linked from the site (“View Rates”). It offers scholarships.",
+    "phone": "267-687-2402",
+    "email": "info@stempreparatory.org",
+    "website": "https://stempreparatory.org/programs",
+    "register": {
+      "how": "contact",
+      "note": "The site’s “Enroll Now” and “Schedule a Tour” buttons lead to its programs and contact pages. Call or email to ask about rates and pickup."
+    },
+    "note": "STEM Prep’s own site doesn’t name the schools it collects from. Adaire’s 2025–26 handbook lists it among the programs that provide after-school care and pick up at Adaire, so ask STEM Prep how pickup works.",
+    "sources": [
+      {
+        "label": "STEM Prep",
+        "url": "https://stempreparatory.org/"
+      },
+      {
+        "label": "STEM Prep programs",
+        "url": "https://stempreparatory.org/programs"
+      },
+      {
+        "label": "Adaire family handbook (2025–26)",
+        "url": "https://docs.google.com/document/d/1An3hiO7hUIEciW9wIM0vp1SzocfmYl8cDN3TvNdJeHU/edit?usp=sharing"
+      }
+    ],
+    "lastVerified": "2026-11-18",
+    "schools": {
+      "adaire": {
+        "relation": "pickup",
+        "note": "Adaire’s 2025–26 handbook lists STEM Prep among the programs that provide after-school care and pick up at Adaire. STEM Prep’s own site doesn’t name schools, so ask how pickup from Adaire works and from which grades.",
+        "sources": [
+          {
+            "label": "Adaire family handbook (2025–26)",
+            "url": "https://docs.google.com/document/d/1An3hiO7hUIEciW9wIM0vp1SzocfmYl8cDN3TvNdJeHU/edit?usp=sharing"
+          }
+        ],
+        "checked": "2026-11-18"
+      }
+    }
+  },
+  {
+    "id": "adaire-clubs",
+    "name": "School clubs and teams",
+    "what": "Clubs Adaire lists in its family handbook: drama, Catapult STEM, journalism, flag football, basketball and a middle school STEAM program",
+    "types": [
+      "clubs",
+      "theater",
+      "stem",
+      "movement",
+      "art"
+    ],
+    "keywords": [
+      "clubs",
+      "drama",
+      "theater",
+      "STEM",
+      "journalism",
+      "flag football",
+      "basketball",
+      "Adaire"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; see each one",
+    "hours": "60 to 90 minutes after school on different days, according to the handbook",
+    "cost": "Not published",
+    "phone": "215-400-7480",
+    "email": "",
+    "website": "https://adaire.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "A permission form comes home when a child is eligible; ask your child’s teacher."
+    },
+    "note": "Adaire’s 2025–26 family handbook lists these as recent after-school offerings and says the list changes during the year: clubs meet for 60 to 90 minutes on different days and are not full-time care. Some are open only to certain grades or to students a teacher invites; a form comes home when a child is eligible. Ask your child’s teacher which are running this year.",
+    "sources": [
+      {
+        "label": "Adaire family handbook (2025–26)",
+        "url": "https://docs.google.com/document/d/1An3hiO7hUIEciW9wIM0vp1SzocfmYl8cDN3TvNdJeHU/edit?usp=sharing"
+      },
+      {
+        "label": "Adaire School",
+        "url": "https://adaire.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-18",
+    "schools": {
+      "adaire": {
+        "relation": "onsite",
+        "checked": "2026-11-18"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Drama Club",
+        "tags": [
+          "theater"
+        ]
+      },
+      {
+        "name": "Catapult STEM",
+        "grades": "3-4",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Journalism"
+      },
+      {
+        "name": "Flag Football",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "PAEP STEAM Middle School After School Program",
+        "grades": "5-8",
+        "tags": [
+          "stem",
+          "art"
+        ]
+      }
+    ],
+    "offers": [
+      "Drama Club",
+      "Catapult STEM",
+      "Journalism",
+      "Flag Football",
+      "Basketball",
+      "PAEP STEAM Middle School After School Program"
+    ]
+  },
+  {
+    "id": "community-academy-clubs",
+    "name": "School clubs and teams",
+    "what": "After-school clubs run by Community Academy’s teachers, from kindergarten to 8th grade, until 3:45 pm",
+    "types": [
+      "clubs",
+      "art",
+      "academics",
+      "theater",
+      "stem",
+      "games",
+      "movement",
+      "music"
+    ],
+    "keywords": [
+      "clubs",
+      "art",
+      "science",
+      "coding",
+      "robotics",
+      "Lego",
+      "French",
+      "Girl Scouts",
+      "homework",
+      "musical",
+      "Community Academy"
+    ],
+    "address": "",
+    "grades": "K-8",
+    "gradeNote": "Kindergarten to 8th grade; each club names its grades",
+    "hours": "After school until 3:45 pm",
+    "days": [
+      "mon",
+      "tue",
+      "thu",
+      "fri"
+    ],
+    "cost": "Not published",
+    "phone": "215-533-6700",
+    "email": "",
+    "website": "https://www.communityacademy.org/apps/pages/index.jsp?uREC_ID=2651387&type=d&pREC_ID=2275819",
+    "register": {
+      "how": "school",
+      "note": "Email the teacher named in the club guide for a permission slip."
+    },
+    "note": "Community Academy’s 2026–27 club guides list clubs on Mondays, Tuesdays, Thursdays and Fridays, in two sessions (September to December and January to May). Clubs end at 3:45 pm sharp; a child who is often picked up late can lose their place. Places are limited and first come, first served: email the teacher the guide names for a permission slip. Clubs and days may change at the end of the first semester. 7th and 8th graders can also play sports such as soccer, basketball, flag football, golf, bowling and track.",
+    "sources": [
+      {
+        "label": "Community Academy club guide, K–4th (2026–27)",
+        "url": "https://4.files.edl.io/7ea9/09/02/26/133406-141723f2-3d59-4758-9417-25cd865d2ffa.pdf"
+      },
+      {
+        "label": "Community Academy club guide, 5th–8th (2026–27)",
+        "url": "https://4.files.edl.io/639c/09/02/26/133406-3ac8f94c-fadc-491a-b521-2b61eac13fc4.pdf"
+      }
+    ],
+    "lastVerified": "2026-11-18",
+    "schools": {
+      "community-academy": {
+        "relation": "onsite",
+        "checked": "2026-11-18"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Drawing Club",
+        "grades": "K",
+        "days": [
+          "mon"
+        ],
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Friendship Builders Club",
+        "grades": "K-2",
+        "days": [
+          "mon"
+        ]
+      },
+      {
+        "name": "Art Club",
+        "grades": "1-2",
+        "days": [
+          "mon"
+        ],
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Girl Scouts",
+        "grades": "2-3",
+        "days": [
+          "mon"
+        ]
+      },
+      {
+        "name": "ESL Homework Help",
+        "grades": "3-5",
+        "days": [
+          "mon"
+        ],
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "French Club",
+        "grades": "3-5",
+        "days": [
+          "mon"
+        ]
+      },
+      {
+        "name": "Art in Mindfulness Club",
+        "grades": "5-6",
+        "days": [
+          "mon"
+        ],
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Book Club",
+        "grades": "5-6",
+        "days": [
+          "mon"
+        ],
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Musical (Willy Wonka)",
+        "grades": "5-8",
+        "days": [
+          "mon",
+          "tue",
+          "wed",
+          "thu"
+        ],
+        "note": "Students commit to four days a week.",
+        "tags": [
+          "theater"
+        ]
+      },
+      {
+        "name": "Storybook Art",
+        "grades": "K",
+        "days": [
+          "tue"
+        ],
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Math Games",
+        "grades": "1-2",
+        "days": [
+          "tue"
+        ],
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Student Government and Field Day",
+        "grades": "1-5",
+        "days": [
+          "tue"
+        ]
+      },
+      {
+        "name": "Craft Beading",
+        "grades": "2-3",
+        "days": [
+          "tue"
+        ],
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Computer Club",
+        "grades": "3-4",
+        "days": [
+          "tue"
+        ],
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Math Club",
+        "grades": "5-6",
+        "days": [
+          "tue"
+        ],
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Relax and Recharge Club",
+        "grades": "K",
+        "days": [
+          "thu"
+        ]
+      },
+      {
+        "name": "Science Fun",
+        "grades": "1-2",
+        "days": [
+          "thu"
+        ],
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Story Time",
+        "grades": "1-2",
+        "days": [
+          "thu"
+        ]
+      },
+      {
+        "name": "Kindness and Leadership Club",
+        "grades": "3-4",
+        "days": [
+          "thu"
+        ]
+      },
+      {
+        "name": "Team Building Games Club",
+        "grades": "4-5",
+        "days": [
+          "thu"
+        ],
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Lego and Building",
+        "grades": "1-2",
+        "days": [
+          "thu"
+        ],
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "All Things Science",
+        "grades": "5-6",
+        "days": [
+          "thu"
+        ],
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Robotics and Coding",
+        "grades": "6-8",
+        "days": [
+          "thu"
+        ],
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Music and Movement",
+        "grades": "K",
+        "days": [
+          "fri"
+        ],
+        "tags": [
+          "movement",
+          "music"
+        ]
+      },
+      {
+        "name": "Puzzle Club",
+        "grades": "1-2",
+        "days": [
+          "fri"
+        ],
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Spelling Bee",
+        "grades": "3-8",
+        "days": [
+          "fri"
+        ],
+        "note": "Weekly, September to February.",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Math Tutoring and Homework Club",
+        "grades": "3-4",
+        "days": [
+          "fri"
+        ],
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "AI Explorers",
+        "grades": "5-6",
+        "days": [
+          "fri"
+        ],
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Anime Club",
+        "grades": "5-8",
+        "days": [
+          "fri"
+        ],
+        "tags": [
+          "art"
+        ]
+      }
+    ],
+    "offers": [
+      "Drawing Club",
+      "Friendship Builders Club",
+      "Art Club",
+      "Girl Scouts",
+      "ESL Homework Help",
+      "French Club",
+      "Art in Mindfulness Club",
+      "Book Club",
+      "Musical (Willy Wonka)",
+      "Storybook Art",
+      "Math Games",
+      "Student Government and Field Day",
+      "Craft Beading",
+      "Computer Club",
+      "Math Club",
+      "Relax and Recharge Club",
+      "Science Fun",
+      "Story Time",
+      "Kindness and Leadership Club",
+      "Team Building Games Club",
+      "Lego and Building",
+      "All Things Science",
+      "Robotics and Coding",
+      "Music and Movement",
+      "Puzzle Club",
+      "Spelling Bee",
+      "Math Tutoring and Homework Club",
+      "AI Explorers",
+      "Anime Club"
+    ],
+    "offerDays": {
+      "Drawing Club": [
+        "mon"
+      ],
+      "Friendship Builders Club": [
+        "mon"
+      ],
+      "Art Club": [
+        "mon"
+      ],
+      "Girl Scouts": [
+        "mon"
+      ],
+      "ESL Homework Help": [
+        "mon"
+      ],
+      "French Club": [
+        "mon"
+      ],
+      "Art in Mindfulness Club": [
+        "mon"
+      ],
+      "Book Club": [
+        "mon"
+      ],
+      "Musical (Willy Wonka)": [
+        "mon",
+        "tue",
+        "wed",
+        "thu"
+      ],
+      "Storybook Art": [
+        "tue"
+      ],
+      "Math Games": [
+        "tue"
+      ],
+      "Student Government and Field Day": [
+        "tue"
+      ],
+      "Craft Beading": [
+        "tue"
+      ],
+      "Computer Club": [
+        "tue"
+      ],
+      "Math Club": [
+        "tue"
+      ],
+      "Relax and Recharge Club": [
+        "thu"
+      ],
+      "Science Fun": [
+        "thu"
+      ],
+      "Story Time": [
+        "thu"
+      ],
+      "Kindness and Leadership Club": [
+        "thu"
+      ],
+      "Team Building Games Club": [
+        "thu"
+      ],
+      "Lego and Building": [
+        "thu"
+      ],
+      "All Things Science": [
+        "thu"
+      ],
+      "Robotics and Coding": [
+        "thu"
+      ],
+      "Music and Movement": [
+        "fri"
+      ],
+      "Puzzle Club": [
+        "fri"
+      ],
+      "Spelling Bee": [
+        "fri"
+      ],
+      "Math Tutoring and Homework Club": [
+        "fri"
+      ],
+      "AI Explorers": [
+        "fri"
+      ],
+      "Anime Club": [
+        "fri"
+      ]
+    }
+  },
+  {
+    "id": "change-4-a-dollar-mastery-prep",
+    "name": "Change 4 A Dollar at Mastery Prep",
+    "what": "Before- and after-school care inside Mastery Prep Elementary, from dismissal to 6:00 pm",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after care",
+      "before care",
+      "childcare",
+      "Change 4 A Dollar",
+      "Mastery Prep",
+      "Pike Street",
+      "Nicetown"
+    ],
+    "address": "1801 W Pike St",
+    "neighborhoods": [
+      "Nicetown"
+    ],
+    "grades": "K-6",
+    "gradeNote": "The school’s page says all students are eligible",
+    "hours": "From dismissal (3:35 pm) to 6:00 pm, Monday to Friday; before-school care too",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not published",
+    "phone": "215-866-0067",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/mastery-prep",
+    "register": {
+      "how": "school",
+      "note": "The school’s page says enrollment details come to families through ParentSquare; ask the main office."
+    },
+    "note": "Everything here comes from Mastery Prep Elementary’s own page; we couldn’t find a website for Change 4 A Dollar’s program. Ask the school about the price and what happens on early-dismissal days.",
+    "sources": [
+      {
+        "label": "Mastery Prep Elementary",
+        "url": "https://masterycharter.org/elementary-schools/mastery-prep"
+      }
+    ],
+    "lastVerified": "2026-11-18",
+    "schools": {
+      "mastery-prep": {
+        "relation": "onsite",
+        "note": "Mastery Prep’s own page names Change 4 A Dollar as one of its two after-school care options, from dismissal to 6:00 pm, Monday to Friday, open to all students.",
+        "sources": [
+          {
+            "label": "Mastery Prep Elementary",
+            "url": "https://masterycharter.org/elementary-schools/mastery-prep"
+          }
+        ],
+        "checked": "2026-11-18"
+      }
+    }
+  },
+  {
+    "id": "mastery-prep-clubs",
+    "name": "School clubs and teams",
+    "what": "Teams and clubs Mastery Prep lists on its own page: basketball, dance, homework club, drumline and art club",
+    "types": [
+      "clubs",
+      "movement",
+      "academics",
+      "music",
+      "art"
+    ],
+    "keywords": [
+      "clubs",
+      "basketball",
+      "dance",
+      "drumline",
+      "art",
+      "homework",
+      "Mastery Prep"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; see each one",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-866-0067",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/mastery-prep",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Mastery Prep’s own page lists these extracurricular and athletic programs with no days, times or grades, so ask the school which are running and for whom.",
+    "sources": [
+      {
+        "label": "Mastery Prep Elementary",
+        "url": "https://masterycharter.org/elementary-schools/mastery-prep"
+      }
+    ],
+    "lastVerified": "2026-11-18",
+    "schools": {
+      "mastery-prep": {
+        "relation": "onsite",
+        "checked": "2026-11-18"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Basketball (boys and girls)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Dance",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Homework club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Drumline",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Art Club",
+        "tags": [
+          "art"
+        ]
+      }
+    ],
+    "offers": [
+      "Basketball (boys and girls)",
+      "Dance",
+      "Homework club",
+      "Drumline",
+      "Art Club"
+    ]
+  },
+  {
+    "id": "gamp-clubs",
+    "name": "School clubs and teams",
+    "what": "Clubs on GAMP’s weekly schedule, 3:00 to 4:00 pm: gospel choir, arts and crafts, chess, board games, Dungeons and Dragons, Scrabble, dance and more",
+    "types": [
+      "clubs",
+      "music",
+      "art",
+      "games",
+      "movement",
+      "theater"
+    ],
+    "keywords": [
+      "clubs",
+      "choir",
+      "chess",
+      "Dungeons and Dragons",
+      "Scrabble",
+      "dance",
+      "arts and crafts",
+      "music",
+      "GAMP"
+    ],
+    "address": "",
+    "grades": "5-8",
+    "gradeNote": "GAMP teaches 5th to 12th grade; some of these clubs are for middle or high school only",
+    "hours": "3:00 to 4:00 pm on the days shown",
+    "cost": "Not published",
+    "phone": "215-400-8230",
+    "email": "",
+    "website": "https://gamp.philasd.org/extracurricular-activities/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "GAMP’s own weekly club schedule (undated) gives the days and times here; its extracurricular page (last updated August 2025) lists more music groups, crews and special-interest clubs, many of them for high school only. Ask the school which clubs are meeting this year and which are open to 5th graders.",
+    "sources": [
+      {
+        "label": "GAMP weekly club schedule",
+        "url": "https://docs.google.com/document/d/1PJFZfaEZrqXjfG9UttnCSmhLACeUdSQRAVIw7VmdG2c"
+      },
+      {
+        "label": "GAMP extracurricular activities",
+        "url": "https://gamp.philasd.org/extracurricular-activities/"
+      }
+    ],
+    "lastVerified": "2026-11-18",
+    "schools": {
+      "gamp": {
+        "relation": "onsite",
+        "checked": "2026-11-18"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Gospel Choir",
+        "days": [
+          "mon"
+        ],
+        "time": "3:00–4:00 pm",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Arts and Crafts Club",
+        "days": [
+          "tue"
+        ],
+        "time": "3:00–4:00 pm",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Board Game Club",
+        "days": [
+          "tue"
+        ],
+        "time": "3:00–4:00 pm",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Chess Club",
+        "days": [
+          "tue"
+        ],
+        "time": "3:00–4:00 pm",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Dungeons and Dragons Club",
+        "days": [
+          "wed"
+        ],
+        "time": "3:00–4:00 pm",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Scrabble Club (middle school)",
+        "days": [
+          "wed"
+        ],
+        "time": "3:00–4:00 pm",
+        "when": "October to March",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Dance Club",
+        "days": [
+          "wed",
+          "thu"
+        ],
+        "time": "3:00–4:00 pm",
+        "note": "Scheduled as needed.",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Swing Band (middle school)",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Musical theatre production",
+        "note": "Open to all grades, by audition.",
+        "tags": [
+          "theater"
+        ]
+      },
+      {
+        "name": "WHYY Film Club"
+      },
+      {
+        "name": "Yearbook"
+      }
+    ],
+    "offers": [
+      "Gospel Choir",
+      "Arts and Crafts Club",
+      "Board Game Club",
+      "Chess Club",
+      "Dungeons and Dragons Club",
+      "Scrabble Club (middle school)",
+      "Dance Club",
+      "Swing Band (middle school)",
+      "Musical theatre production",
+      "WHYY Film Club",
+      "Yearbook"
+    ],
+    "offerDays": {
+      "Gospel Choir": [
+        "mon"
+      ],
+      "Arts and Crafts Club": [
+        "tue"
+      ],
+      "Board Game Club": [
+        "tue"
+      ],
+      "Chess Club": [
+        "tue"
+      ],
+      "Dungeons and Dragons Club": [
+        "wed"
+      ],
+      "Scrabble Club (middle school)": [
+        "wed"
+      ],
+      "Dance Club": [
+        "wed",
+        "thu"
+      ]
+    }
+  },
+  {
+    "id": "aspira-acap-esperanza",
+    "name": "ASPIRA Children’s Achievement Program at Esperanza",
+    "what": "Free after-school program for Esperanza’s elementary students: homework help, projects, STEM and arts, chess and Scrabble, with a hot meal and a snack",
+    "types": [
+      "aftercare",
+      "academics"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "ASPIRA",
+      "ACAP",
+      "ACAP-E",
+      "homework",
+      "project-based learning",
+      "STEM",
+      "arts",
+      "chess",
+      "Scrabble",
+      "meals",
+      "bilingual",
+      "Spanish",
+      "Esperanza",
+      "Hunting Park"
+    ],
+    "address": "301 W Hunting Park Ave",
+    "neighborhoods": [
+      "Hunting Park"
+    ],
+    "grades": "K-5",
+    "gradeNote": "Ages 5–10; the City’s listing says grades K–5 (its description says K–6)",
+    "hours": "2:45 to 6:00 pm, Monday to Friday, November 4, 2026 to June 8, 2027, according to the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free, according to the City’s listing",
+    "price": "free",
+    "phone": "215-455-1300",
+    "email": "",
+    "website": "https://www.aspirapa.org/apps/pages/index.jsp?uREC_ID=1415541&type=d&pREC_ID=2768785",
+    "register": {
+      "how": "contact",
+      "note": "The City’s listing says registration is required, from October 5, 2026 to June 4, 2027. ASPIRA’s own page says more information is coming soon; call ASPIRA or ask Esperanza’s office."
+    },
+    "note": "The City’s program locator lists this as ASPIRA’s after-school program at Esperanza for grades K–5, free, with homework help, project-based learning, STEM and arts, chess, Scrabble, field trips and a daily hot meal and snack, and bilingual services. ASPIRA’s own page names the program (ACAP-E) and says more information is coming soon.",
+    "sources": [
+      {
+        "label": "City program locator: ASPIRA after school at Esperanza",
+        "url": "https://www.phila.gov/ost/program-locator/?address=201+W+Hunting+Park+Ave&resource=ost_10"
+      },
+      {
+        "label": "ASPIRA: ACAP-Esperanza",
+        "url": "https://www.aspirapa.org/apps/pages/index.jsp?uREC_ID=1415541&type=d&pREC_ID=2768785"
+      }
+    ],
+    "lastVerified": "2026-11-18",
+    "schools": {
+      "esperanza-elementary": {
+        "relation": "onsite",
+        "address": "301 W Hunting Park Ave",
+        "distance": "at Esperanza’s upper-grades building, a block west",
+        "note": "The City’s listing names this as ASPIRA’s program for Esperanza, grades K–5, at 301 W Hunting Park Ave, Esperanza’s upper-grades building. Ask ASPIRA or the school where elementary children meet it and how they get there.",
+        "sources": [
+          {
+            "label": "City program locator: ASPIRA after school at Esperanza",
+            "url": "https://www.phila.gov/ost/program-locator/?address=201+W+Hunting+Park+Ave&resource=ost_10"
+          }
+        ],
+        "checked": "2026-11-18"
+      }
+    }
+  },
+  {
+    "id": "esperanza-elementary-clubs",
+    "name": "School clubs and teams",
+    "what": "Robotics and chess clubs for Esperanza’s elementary students, led by its own teachers",
+    "types": [
+      "clubs",
+      "stem",
+      "games"
+    ],
+    "keywords": [
+      "clubs",
+      "robotics",
+      "chess",
+      "Lego",
+      "coding",
+      "Esperanza"
+    ],
+    "address": "",
+    "grades": "K-5",
+    "gradeNote": "Elementary students; ask which grades each club takes",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-999-0203",
+    "email": "",
+    "website": "https://www.esperanzaacademycs.org/elementary-school-extracurriculars/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Esperanza’s elementary extracurriculars page lists two after-school clubs: robotics, two days a week, where students program Lego WeDo robots, Snap Circuits, Ozobots and Dash & Dot, and chess, whose team plays in tournaments. It doesn’t give days or times, so ask the school.",
+    "sources": [
+      {
+        "label": "Esperanza elementary extracurriculars",
+        "url": "https://www.esperanzaacademycs.org/elementary-school-extracurriculars/"
+      }
+    ],
+    "lastVerified": "2026-11-18",
+    "schools": {
+      "esperanza-elementary": {
+        "relation": "onsite",
+        "checked": "2026-11-18"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Robotics Club",
+        "when": "Two days a week",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Chess Club",
+        "tags": [
+          "games"
+        ]
+      }
+    ],
+    "offers": [
+      "Robotics Club",
+      "Chess Club"
+    ]
+  },
+  {
+    "id": "baywaycares-mastery-cleveland",
+    "name": "Baywaycares at Mastery Cleveland",
+    "what": "Before- and after-school care inside Mastery’s Grover Cleveland Elementary, from dismissal to 6:00 pm",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after care",
+      "before care",
+      "childcare",
+      "Baywaycares",
+      "Bayway",
+      "Mastery Cleveland",
+      "Grover Cleveland",
+      "Tioga",
+      "Nicetown"
+    ],
+    "address": "3701 N 19th St",
+    "neighborhoods": [
+      "Nicetown"
+    ],
+    "grades": "K-8",
+    "gradeNote": "For Mastery Cleveland students",
+    "hours": "Before school from 6:30 am, and from dismissal (3:15 pm) to 6:00 pm, Monday to Friday",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not published. The school’s page says childcare subsidies are accepted.",
+    "phone": "215-227-5042",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/grover-cleveland",
+    "register": {
+      "how": "contact",
+      "note": "The school’s page gives an email address for Baywaycares; ask the main office (215-227-5042) if you can’t reach it."
+    },
+    "note": "Everything here comes from Mastery Cleveland’s own page; we couldn’t find a website for Baywaycares. The phone number is the school’s main office. Ask about the price and what happens on Mastery’s early-dismissal days.",
+    "sources": [
+      {
+        "label": "Mastery Grover Cleveland Elementary",
+        "url": "https://masterycharter.org/elementary-schools/grover-cleveland"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "mastery-cleveland": {
+        "relation": "onsite",
+        "note": "Mastery Cleveland’s own page names Baywaycares for before care and aftercare, Monday to Friday, 6:30 am to the start of school and dismissal to 6:00 pm, and says childcare subsidies are accepted.",
+        "sources": [
+          {
+            "label": "Mastery Grover Cleveland Elementary",
+            "url": "https://masterycharter.org/elementary-schools/grover-cleveland"
+          }
+        ],
+        "checked": "2026-11-19"
+      }
+    }
+  },
+  {
+    "id": "mastery-cleveland-clubs",
+    "name": "School clubs and teams",
+    "what": "Teams and clubs Mastery Cleveland lists on its own page: basketball, cheer, flag football, track, soccer, volleyball, a band and a dozen clubs",
+    "types": [
+      "clubs",
+      "movement",
+      "music",
+      "art",
+      "academics",
+      "games"
+    ],
+    "keywords": [
+      "clubs",
+      "basketball",
+      "cheerleading",
+      "flag football",
+      "track",
+      "soccer",
+      "volleyball",
+      "band",
+      "book club",
+      "gaming",
+      "fashion",
+      "Mastery Cleveland"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; see each one",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-227-5042",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/grover-cleveland",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Mastery Cleveland’s own page lists these extracurricular and athletic programs with no days, times or grades, so ask the school which are running and for whom.",
+    "sources": [
+      {
+        "label": "Mastery Grover Cleveland Elementary",
+        "url": "https://masterycharter.org/elementary-schools/grover-cleveland"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "mastery-cleveland": {
+        "relation": "onsite",
+        "checked": "2026-11-19"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Basketball (boys and girls)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Flag football (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Outdoor track and field (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Volleyball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Settlement Band",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Girls Mentoring Club"
+      },
+      {
+        "name": "Photography and Yearbook Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Hairstyling Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Book Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Fashion Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Fitness Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Gaming Club",
+        "tags": [
+          "games"
+        ]
+      }
+    ],
+    "offers": [
+      "Basketball (boys and girls)",
+      "Cheerleading",
+      "Flag football (co-ed)",
+      "Outdoor track and field (co-ed)",
+      "Soccer",
+      "Volleyball",
+      "Settlement Band",
+      "Girls Mentoring Club",
+      "Photography and Yearbook Club",
+      "Hairstyling Club",
+      "Book Club",
+      "Fashion Club",
+      "Fitness Club",
+      "Gaming Club"
+    ]
+  },
+  {
+    "id": "asas-mcdaniel",
+    "name": "After-School All-Stars at McDaniel",
+    "what": "Free before- and after-school program inside McDaniel for kindergarten to 8th grade, with meals",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "free",
+      "After-School All-Stars",
+      "ASAS",
+      "All Stars",
+      "McDaniel",
+      "Point Breeze",
+      "STEM",
+      "robotics"
+    ],
+    "address": "",
+    "grades": "K-8",
+    "gradeNote": "McDaniel students, kindergarten to 8th grade",
+    "hours": "3:45–6:00 pm, Monday to Friday, September 1, 2026 to June 4, 2027, according to the City’s listing; McDaniel’s own site gives 3:40–6:00 pm, and before care from 7:30 to 8:45 am.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-995-2239",
+    "email": "",
+    "website": "https://afterschoolallstars.org/",
+    "register": {
+      "how": "contact",
+      "note": "The City’s listing says registration is required, open until April 30, 2027. Call After-School All-Stars or ask the school office."
+    },
+    "note": "The City’s program locator lists the after-school program and a separate before-care program at McDaniel, both run by After-School All-Stars, free, with meals. It lists math and robotics as the program’s focus. McDaniel’s own site lists All Stars at the school, Monday to Friday, 7:30–8:45 am and 3:40–6:00 pm.",
+    "sources": [
+      {
+        "label": "City program locator: ASAS PM at McDaniel",
+        "url": "https://www.phila.gov/ost/program-locator/?address=1801+S+22nd+St&resource=ost_3"
+      },
+      {
+        "label": "Delaplaine McDaniel School",
+        "url": "https://mcdaniel.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "mcdaniel": {
+        "relation": "onsite",
+        "note": "McDaniel’s own site lists All Stars at the school, Monday to Friday, mornings and after school until 6:00 pm; the City’s locator lists After-School All-Stars at McDaniel for kindergarten to 8th grade.",
+        "sources": [
+          {
+            "label": "City program locator: ASAS PM at McDaniel",
+            "url": "https://www.phila.gov/ost/program-locator/?address=1801+S+22nd+St&resource=ost_3"
+          },
+          {
+            "label": "Delaplaine McDaniel School",
+            "url": "https://mcdaniel.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-19"
+      }
+    }
+  },
+  {
+    "id": "brooklyn-robot-foundry-mcdaniel",
+    "name": "Brooklyn Robot Foundry at McDaniel",
+    "what": "Free after-school robotics at McDaniel: children build and take home a robot, for McDaniel students in the City’s Extended Day program",
+    "types": [
+      "stem"
+    ],
+    "keywords": [
+      "robotics",
+      "robots",
+      "STEM",
+      "engineering",
+      "building",
+      "Brooklyn Robot Foundry",
+      "EDEY",
+      "free",
+      "McDaniel"
+    ],
+    "address": "",
+    "grades": "K-6",
+    "gradeNote": "The City’s data lists kindergarten to 6th grade; the program is for McDaniel students only",
+    "hours": "3:00–5:30 pm, October 13, 2026 to June 8, 2027, according to Brooklyn Robot Foundry’s schedule, which says the class runs all week. The City’s program data has it on Tuesdays, Wednesdays and Thursdays, 3:30–5:30 pm, so ask which days.",
+    "pickupBy": "5:30 pm",
+    "cost": "Free, according to the City’s program data",
+    "price": "free",
+    "phone": "215-326-9325",
+    "email": "",
+    "website": "https://brooklynrobotfoundry.com/philadelphia/welcome/",
+    "register": {
+      "how": "online",
+      "url": "https://brooklynrobotfoundry.com/philadelphia/product/philadelphia-after-school-robotics-stem-enrichment-kids/",
+      "note": "Brooklyn Robot Foundry’s schedule has an enroll link for McDaniel. It says the program is part of the Mayor’s Office of Education’s Extended Day, Extended Year (EDEY) program and children must attend McDaniel."
+    },
+    "note": "Brooklyn Robot Foundry’s own schedule lists the class at McDaniel. The City’s program data has it too (free, with meals and snacks), but the City’s locator page doesn’t show the entry. McDaniel’s own site names Brooklyn Robotics among its partners.",
+    "sources": [
+      {
+        "label": "Brooklyn Robot Foundry Philly: after-school classes",
+        "url": "https://brooklynrobotfoundry.com/philadelphia/product/philadelphia-after-school-robotics-stem-enrichment-kids/"
+      },
+      {
+        "label": "Delaplaine McDaniel School",
+        "url": "https://mcdaniel.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "mcdaniel": {
+        "relation": "onsite",
+        "note": "Brooklyn Robot Foundry’s own schedule lists its after-school program at Delaplaine McDaniel School, October 13, 2026 to June 8, 2027, for McDaniel students only.",
+        "sources": [
+          {
+            "label": "Brooklyn Robot Foundry Philly: after-school classes",
+            "url": "https://brooklynrobotfoundry.com/philadelphia/product/philadelphia-after-school-robotics-stem-enrichment-kids/"
+          }
+        ],
+        "checked": "2026-11-19"
+      }
+    }
+  },
+  {
+    "id": "sunrise-blankenburg",
+    "name": "Sunrise of Philadelphia at Blankenburg",
+    "what": "Free after-school program inside Blankenburg, with homework help and a snack",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "Sunrise",
+      "homework help",
+      "Blankenburg",
+      "childcare"
+    ],
+    "address": "4600 W Girard Ave",
+    "grades": "K-8",
+    "gradeNote": "For Blankenburg students",
+    "hours": "3:30–5:45 pm, Monday to Friday, September 1, 2026 to June 8, 2027, according to the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:45 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "445-238-2608",
+    "email": "",
+    "website": "https://www.sunriseofphila.org/school-year",
+    "register": {
+      "how": "online",
+      "url": "https://www.cognitoforms.com/SunriseOfPhiladelphia1/SchoolYear202627SunriseOfPhiladelphiaApplication",
+      "note": "The City’s listing links Sunrise’s 2026–27 application and says the program is only for Blankenburg students; registration is open until June 1, 2027."
+    },
+    "note": "The details here come from the City’s program locator. The phone number is the one the City lists for the program at Blankenburg; Sunrise’s main number is 215-952-2730. Blankenburg’s own page of programs names Sunrise too.",
+    "sources": [
+      {
+        "label": "City program locator: Sunrise at Blankenburg",
+        "url": "https://www.phila.gov/ost/program-locator/?address=4600+W+Girard+Ave&resource=ost_243"
+      },
+      {
+        "label": "Blankenburg: educational programs",
+        "url": "https://blankenburg.philasd.org/about-us/search-results/"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "blankenburg": {
+        "relation": "onsite",
+        "note": "The City’s locator lists Sunrise’s 2026–27 after-school program at Blankenburg, and the school’s own page of programs names Sunrise of Philadelphia.",
+        "sources": [
+          {
+            "label": "City program locator: Sunrise at Blankenburg",
+            "url": "https://www.phila.gov/ost/program-locator/?address=4600+W+Girard+Ave&resource=ost_243"
+          },
+          {
+            "label": "Blankenburg: educational programs",
+            "url": "https://blankenburg.philasd.org/about-us/search-results/"
+          }
+        ],
+        "checked": "2026-11-19"
+      }
+    }
+  },
+  {
+    "id": "blankenburg-clubs",
+    "name": "School clubs and programs",
+    "what": "Programs Blankenburg lists at the school: Dancing Classrooms, Girls Inc., Girls Who Code, instrumental music, Philadelphia Youth Basketball, Spiral Q and more",
+    "types": [
+      "clubs",
+      "movement",
+      "stem",
+      "music",
+      "academics",
+      "art",
+      "theater"
+    ],
+    "keywords": [
+      "clubs",
+      "dance",
+      "coding",
+      "music",
+      "basketball",
+      "puppets",
+      "running",
+      "reading",
+      "Blankenburg"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by program; ask the school",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-400-7280",
+    "email": "",
+    "website": "https://blankenburg.philasd.org/about-us/search-results/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Blankenburg’s page of programs was last updated in August 2023 and gives no days, times or grades, so ask the school which are running this year and whether they meet after school.",
+    "sources": [
+      {
+        "label": "Blankenburg: educational programs",
+        "url": "https://blankenburg.philasd.org/about-us/search-results/"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "blankenburg": {
+        "relation": "onsite",
+        "checked": "2026-11-19"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Dancing Classrooms",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Girls Inc."
+      },
+      {
+        "name": "Girls Who Code",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Instrumental music program",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Philadelphia Youth Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Reading Olympics",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Spiral Q Puppet Theater",
+        "tags": [
+          "art",
+          "theater"
+        ]
+      },
+      {
+        "name": "Students Run Philly Style",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Black Men Lead"
+      },
+      {
+        "name": "Christian Stronghold Baptist Church"
+      }
+    ],
+    "offers": [
+      "Dancing Classrooms",
+      "Girls Inc.",
+      "Girls Who Code",
+      "Instrumental music program",
+      "Philadelphia Youth Basketball",
+      "Reading Olympics",
+      "Spiral Q Puppet Theater",
+      "Students Run Philly Style",
+      "Black Men Lead",
+      "Christian Stronghold Baptist Church"
+    ]
+  },
+  {
+    "id": "gla-southwest-clubs",
+    "name": "School sports",
+    "what": "After-school sports at GLA Southwest: golf, cheerleading, flag football and basketball",
+    "types": [
+      "clubs",
+      "movement"
+    ],
+    "keywords": [
+      "sports",
+      "golf",
+      "cheerleading",
+      "flag football",
+      "basketball",
+      "GLA Southwest",
+      "GLASW"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school which grades each sport takes",
+    "hours": "After school; the handbook gives no days or times",
+    "cost": "A small activity fee, according to the handbook, with scholarships for families who meet the hardship requirement",
+    "phone": "215-471-2978",
+    "email": "",
+    "website": "https://glacharter.org/southwest",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "GLA Southwest’s 2026–27 family handbook says after-school sports are offered, “such as golf, cheerleading, flag football and basketball”. Ask the school which are running this season.",
+    "sources": [
+      {
+        "label": "GLA Southwest 2026–27 family handbook",
+        "url": "https://glacharter.org/s/GLASW-Family-Scholar-Handbook-2026.pdf"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "gla-southwest": {
+        "relation": "onsite",
+        "checked": "2026-11-19"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Golf",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Flag football",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      }
+    ],
+    "offers": [
+      "Golf",
+      "Cheerleading",
+      "Flag football",
+      "Basketball"
+    ]
+  },
+  {
+    "id": "hackett-clubs",
+    "name": "School clubs and activities",
+    "what": "Hackett’s own clubs and activities: the Green Team, choir, band, strings, the Page Turners, Movement Makers, a spelling bee and science fair",
+    "types": [
+      "clubs",
+      "nature",
+      "music",
+      "academics",
+      "movement",
+      "stem"
+    ],
+    "keywords": [
+      "clubs",
+      "choir",
+      "band",
+      "strings",
+      "music",
+      "reading",
+      "book club",
+      "science fair",
+      "spelling bee",
+      "gardening",
+      "Hackett"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-400-7470",
+    "email": "",
+    "website": "https://hackett.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Hackett’s own site lists these with no days, times or grades, so ask the school which meet after school and for whom.",
+    "sources": [
+      {
+        "label": "Horatio B. Hackett School",
+        "url": "https://hackett.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-19",
+    "schools": {
+      "hackett": {
+        "relation": "onsite",
+        "checked": "2026-11-19"
+      }
+    },
+    "clubs": [
+      {
+        "name": "The Green Team",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Choir",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Band",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Strings",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "The Page Turners",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Movement Makers",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Fishtown Spelling Bee and March Madness",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Science Fair",
+        "tags": [
+          "stem"
+        ]
+      }
+    ],
+    "offers": [
+      "The Green Team",
+      "Choir",
+      "Band",
+      "Strings",
+      "The Page Turners",
+      "Movement Makers",
+      "Fishtown Spelling Bee and March Madness",
+      "Science Fair"
+    ]
+  },
+  {
+    "id": "uacs-hamilton",
+    "name": "UACS After-School Program at Hamilton",
+    "what": "Penn’s free after-school program inside Hamilton: academic support, arts, recreation and projects",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "arts",
+      "Penn",
+      "Netter Center",
+      "UACS",
+      "Hamilton",
+      "Cobbs Creek",
+      "West Philadelphia"
+    ],
+    "address": "5640 Spruce St",
+    "grades": "K-8",
+    "gradeNote": "Hamilton students",
+    "hours": "3:00–6:00 pm on weekdays, according to Hamilton’s site. The City’s listing gives 2:45–5:30 pm, September 9, 2026 to June 8, 2027.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "cost": "Free",
+    "price": "free",
+    "phone": "267-665-7686",
+    "email": "",
+    "website": "https://hamilton.philasd.org/",
+    "register": {
+      "how": "online",
+      "url": "https://upenn.co1.qualtrics.com/jfe/form/SV_eVdnOLqxxR2gff8",
+      "label": "Register",
+      "note": "The City’s listing links this sign-up form and gave a registration window of August 3 to September 30, 2026. Ask the program whether it still has room."
+    },
+    "note": "Hamilton’s own site says the University of Pennsylvania’s Netter Center runs the after-school program (3:00–6:00 pm) and a summer program (8:00 am–3:00 pm) for kindergarten to 8th grade, with academic support, arts and cultural enrichment, recreation and project-based learning. The City lists it under the University of Pennsylvania with 2:45–5:30 pm as its hours, so ask which is right. The phone number is the one the City lists for the program.",
+    "sources": [
+      {
+        "label": "Hamilton: after-school programming, sports and bell schedule",
+        "url": "https://hamilton.philasd.org/"
+      },
+      {
+        "label": "City program locator: University of Pennsylvania at Hamilton OST Afterschool",
+        "url": "https://www.phila.gov/ost/program-locator/?address=5640+Spruce+St&resource=ost_272"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "hamilton": {
+        "relation": "onsite",
+        "note": "Hamilton’s own site names Penn’s Netter Center after-school program, and the City’s program locator lists Penn’s after-school program at Hamilton.",
+        "sources": [
+          {
+            "label": "Hamilton: after-school programming, sports and bell schedule",
+            "url": "https://hamilton.philasd.org/"
+          },
+          {
+            "label": "City program locator: University of Pennsylvania at Hamilton OST Afterschool",
+            "url": "https://www.phila.gov/ost/program-locator/?address=5640+Spruce+St&resource=ost_272"
+          }
+        ],
+        "checked": "2026-11-20"
+      }
+    }
+  },
+  {
+    "id": "hamilton-clubs",
+    "name": "School sports and teams",
+    "what": "Sports Hamilton lists on its own site: basketball, track, cheerleading and intramurals for K–5",
+    "types": [
+      "clubs",
+      "movement"
+    ],
+    "keywords": [
+      "clubs",
+      "sports",
+      "basketball",
+      "track",
+      "cheerleading",
+      "intramurals",
+      "Hamilton"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Intramurals are for K–5; ask about the teams",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-400-7650",
+    "email": "",
+    "website": "https://hamilton.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office. A physical form signed by a doctor is needed to play."
+    },
+    "note": "Hamilton’s site lists these with no days or times. It says team schedules are on arbiterlive.com.",
+    "sources": [
+      {
+        "label": "Hamilton: after-school programming, sports and bell schedule",
+        "url": "https://hamilton.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "hamilton": {
+        "relation": "onsite",
+        "checked": "2026-11-20"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Track",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Elementary intramural sports (K–5)",
+        "tags": [
+          "movement"
+        ]
+      }
+    ],
+    "offers": [
+      "Basketball",
+      "Track",
+      "Cheerleading",
+      "Elementary intramural sports (K–5)"
+    ]
+  },
+  {
+    "id": "christy-rec",
+    "name": "Christy Recreation Center",
+    "what": "City rec center after-school program: homework help, snacks, computer lab, gym, arts and crafts",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "after school",
+      "aftercare",
+      "homework",
+      "computer lab",
+      "gym",
+      "arts and crafts",
+      "free",
+      "Cobbs Creek",
+      "West Philadelphia"
+    ],
+    "address": "728 S 55th St",
+    "neighborhoods": [
+      "West Philadelphia"
+    ],
+    "grades": "1-6",
+    "gradeNote": "Ages 6–12",
+    "hours": "Not published in the City’s listing",
+    "cost": "Free in the City’s listing, which dates from October 2025; registration there shows open.",
+    "price": "free",
+    "phone": "215-685-1997",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The City’s Parks & Rec data lists the Christy After School Program for ages 6 to 12, free, with homework help, snacks, the computer lab, the gym and arts and crafts, entered in October 2025 and open for registration. It also lists free flag football on Wednesdays at 5:00 pm for ages 8 to 13. Call to confirm this year’s days and hours.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "mastery-harrity": {
+        "relation": "nearby",
+        "distance": "a couple of blocks east, on 55th St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-20"
+      },
+      "hamilton": {
+        "relation": "nearby",
+        "distance": "about half a mile south",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-20"
+      }
+    }
+  },
+  {
+    "id": "baywaycares-mastery-harrity",
+    "name": "Baywaycares at Mastery Harrity",
+    "what": "Aftercare inside Mastery’s Harrity Elementary, from dismissal to 6:00 pm",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after care",
+      "childcare",
+      "Baywaycares",
+      "Bayway",
+      "Mastery Harrity",
+      "Harrity",
+      "Cobbs Creek",
+      "West Philadelphia"
+    ],
+    "address": "5601 Christian St",
+    "neighborhoods": [
+      "West Philadelphia"
+    ],
+    "grades": "K-8",
+    "gradeNote": "For Mastery Harrity students",
+    "hours": "From dismissal (3:15 pm) to 6:00 pm, Monday to Friday",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not published. The school’s page says childcare subsidies are accepted.",
+    "phone": "215-471-2908",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/harrity",
+    "register": {
+      "how": "contact",
+      "note": "The school’s page gives an email address for Baywaycares; ask the main office (215-471-2908) if you can’t reach it."
+    },
+    "note": "Everything here comes from Mastery Harrity’s own page; we couldn’t find a website for Baywaycares. The phone number is the school’s main office. Ask about the price and what happens on Mastery’s early-dismissal days.",
+    "sources": [
+      {
+        "label": "Mastery Harrity Elementary",
+        "url": "https://masterycharter.org/elementary-schools/harrity"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "mastery-harrity": {
+        "relation": "onsite",
+        "note": "Mastery Harrity’s own page names Baywaycares for aftercare, Monday to Friday, dismissal to 6:00 pm, and says childcare subsidies are accepted.",
+        "sources": [
+          {
+            "label": "Mastery Harrity Elementary",
+            "url": "https://masterycharter.org/elementary-schools/harrity"
+          }
+        ],
+        "checked": "2026-11-20"
+      }
+    }
+  },
+  {
+    "id": "mastery-harrity-clubs",
+    "name": "School clubs and teams",
+    "what": "Teams and clubs Mastery Harrity lists on its own page: football, basketball, wrestling, track, dance, boxing and a dozen clubs",
+    "types": [
+      "clubs",
+      "movement",
+      "art",
+      "academics",
+      "stem"
+    ],
+    "keywords": [
+      "clubs",
+      "football",
+      "basketball",
+      "cheerleading",
+      "cross country",
+      "track",
+      "wrestling",
+      "bowling",
+      "volleyball",
+      "dance",
+      "boxing",
+      "anime",
+      "art",
+      "poetry",
+      "Mastery Harrity"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-471-2908",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/harrity",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Mastery Harrity’s own page lists these extracurricular and athletic programs with no days, times or grades, so ask the school which are running and for whom. The page links a 2026–27 athletics document.",
+    "sources": [
+      {
+        "label": "Mastery Harrity Elementary",
+        "url": "https://masterycharter.org/elementary-schools/harrity"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "mastery-harrity": {
+        "relation": "onsite",
+        "checked": "2026-11-20"
+      }
+    },
+    "clubs": [
+      {
+        "name": "7-on-7 football",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Basketball (boys and girls)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cheerleading (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cross country (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Outdoor track and field (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Wrestling (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Bowling (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Volleyball (co-ed)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Dance",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Boxing Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Anime Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Art Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Jewelry Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Poetry Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Social Justice Club"
+      },
+      {
+        "name": "Harrity Little Medical School",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "National Elementary Honor Society",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "National STEM Honor Society",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Student government"
+      }
+    ],
+    "offers": [
+      "7-on-7 football",
+      "Basketball (boys and girls)",
+      "Cheerleading (co-ed)",
+      "Cross country (co-ed)",
+      "Outdoor track and field (co-ed)",
+      "Wrestling (co-ed)",
+      "Bowling (co-ed)",
+      "Volleyball (co-ed)",
+      "Dance",
+      "Boxing Club",
+      "Anime Club",
+      "Art Club",
+      "Jewelry Club",
+      "Poetry Club",
+      "Social Justice Club",
+      "Harrity Little Medical School",
+      "National Elementary Honor Society",
+      "National STEM Honor Society",
+      "Student government"
+    ]
+  },
+  {
+    "id": "right-at-school-ethel-allen",
+    "name": "Right At School at Dr. Ethel Allen",
+    "what": "Free after-school program inside Ethel Allen: homework help, STEM, arts, games and physical activity",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "free",
+      "Right At School",
+      "RAS",
+      "homework help",
+      "STEM",
+      "Ethel Allen",
+      "North Philadelphia"
+    ],
+    "address": "3200 W Lehigh Ave",
+    "neighborhoods": [
+      "North Philadelphia"
+    ],
+    "grades": "K-8",
+    "gradeNote": "For Ethel Allen students",
+    "hours": "From dismissal to 5:30 pm, Monday to Friday, according to Right At School’s page. The City’s listing gives 2:45–6:00 pm, September 1, 2026 to June 9, 2027.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free ($0.00 a month on Right At School’s page)",
+    "price": "free",
+    "phone": "215-934-9323",
+    "email": "",
+    "website": "https://www.rightatschool.com/school/?school=dr-ethel-allen-school&district=pa-philadelphia-city&tab=2026-27-after-school",
+    "register": {
+      "how": "online",
+      "url": "https://www.rightatschool.com/school/?school=dr-ethel-allen-school&district=pa-philadelphia-city&tab=2026-27-after-school",
+      "label": "Join the waitlist",
+      "note": "On November 20, 2026 Right At School’s page said the program was at capacity, with a waitlist."
+    },
+    "note": "Right At School’s own page for Ethel Allen lists the 2026–27 after-school program at no charge, 1 to 5 days a week, ending at 5:30 pm, and says it is full, with a waitlist. Ethel Allen’s site says Right At School runs before- and after-school programs there; the City lists the after-school program for Ethel Allen students, K–8, 2:45–6:00 pm. Ask which end time is right. The phone number is the one on Right At School’s page.",
+    "sources": [
+      {
+        "label": "Right At School at Dr. Ethel Allen School",
+        "url": "https://www.rightatschool.com/school/?school=dr-ethel-allen-school&district=pa-philadelphia-city&tab=2026-27-after-school"
+      },
+      {
+        "label": "Dr. Ethel Allen School: after-school programming and clubs",
+        "url": "https://ethelallen.philasd.org/"
+      },
+      {
+        "label": "City program locator: Right At School at Dr. Ethel Allen",
+        "url": "https://www.phila.gov/ost/program-locator/?address=3200+W+Lehigh+Ave&resource=ost_234"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "ethel-allen": {
+        "relation": "onsite",
+        "note": "Right At School’s own page lists its program at Dr. Ethel Allen School, and the school’s site and the City’s locator name it too.",
+        "sources": [
+          {
+            "label": "Right At School at Dr. Ethel Allen School",
+            "url": "https://www.rightatschool.com/school/?school=dr-ethel-allen-school&district=pa-philadelphia-city&tab=2026-27-after-school"
+          },
+          {
+            "label": "Dr. Ethel Allen School: after-school programming and clubs",
+            "url": "https://ethelallen.philasd.org/"
+          },
+          {
+            "label": "City program locator: Right At School at Dr. Ethel Allen",
+            "url": "https://www.phila.gov/ost/program-locator/?address=3200+W+Lehigh+Ave&resource=ost_234"
+          }
+        ],
+        "checked": "2026-11-20"
+      }
+    }
+  },
+  {
+    "id": "ethel-allen-clubs",
+    "name": "School clubs and teams",
+    "what": "Basketball, track and a crochet club, from Ethel Allen’s own site",
+    "types": [
+      "clubs",
+      "movement",
+      "art"
+    ],
+    "keywords": [
+      "clubs",
+      "basketball",
+      "track",
+      "crochet",
+      "Ethel Allen"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-400-7040",
+    "email": "",
+    "website": "https://ethelallen.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Ethel Allen’s site lists these with no days, times or grades, so ask the school which are running and for whom.",
+    "sources": [
+      {
+        "label": "Dr. Ethel Allen School: after-school programming and clubs",
+        "url": "https://ethelallen.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "ethel-allen": {
+        "relation": "onsite",
+        "checked": "2026-11-20"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Track",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Crochet Club",
+        "tags": [
+          "art"
+        ]
+      }
+    ],
+    "offers": [
+      "Basketball",
+      "Track",
+      "Crochet Club"
+    ]
+  },
+  {
+    "id": "joshuas-academy-mastery-wister",
+    "name": "Joshua’s Academy at Mastery Wister",
+    "what": "Aftercare inside Mastery’s John Wister Elementary, from dismissal to 6:00 pm",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after care",
+      "childcare",
+      "Joshua’s Academy",
+      "Joshuas Academy",
+      "Mastery Wister",
+      "John Wister",
+      "Germantown"
+    ],
+    "address": "67 E Bringhurst St",
+    "neighborhoods": [
+      "Germantown"
+    ],
+    "grades": "K-5",
+    "gradeNote": "For Mastery Wister students",
+    "hours": "From dismissal (3:00 pm) to 6:00 pm, Monday to Friday",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not published. The school’s page says childcare subsidies are accepted.",
+    "phone": "215-951-4003",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/john-wister",
+    "register": {
+      "how": "contact",
+      "note": "The school’s page gives a contact number for Joshua’s Academy; ask the main office (215-951-4003) for it."
+    },
+    "note": "Everything here comes from Mastery Wister’s own page; we couldn’t find a website for Joshua’s Academy. The phone number is the school’s main office. Ask about the price and what happens on Mastery’s early-dismissal days.",
+    "sources": [
+      {
+        "label": "Mastery John Wister Elementary",
+        "url": "https://masterycharter.org/elementary-schools/john-wister"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "mastery-wister": {
+        "relation": "onsite",
+        "note": "Mastery Wister’s own page names Joshua’s Academy for aftercare, Monday to Friday, dismissal to 6:00 pm, and says childcare subsidies are accepted.",
+        "sources": [
+          {
+            "label": "Mastery John Wister Elementary",
+            "url": "https://masterycharter.org/elementary-schools/john-wister"
+          }
+        ],
+        "checked": "2026-11-20"
+      }
+    }
+  },
+  {
+    "id": "mastery-wister-clubs",
+    "name": "School clubs and teams",
+    "what": "Clubs and teams Mastery Wister lists on its own page: art, basketball, cheer, Lego, performing arts, step and more",
+    "types": [
+      "clubs",
+      "art",
+      "movement",
+      "academics",
+      "games",
+      "stem",
+      "theater"
+    ],
+    "keywords": [
+      "clubs",
+      "art",
+      "basketball",
+      "book club",
+      "cheerleading",
+      "games",
+      "mentoring",
+      "homework",
+      "tutoring",
+      "Lego",
+      "performing arts",
+      "reading",
+      "step",
+      "Mastery Wister"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-951-4003",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/john-wister",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Mastery Wister’s own page lists these extracurricular and athletic programs with no days, times or grades, so ask the school which are running and for whom.",
+    "sources": [
+      {
+        "label": "Mastery John Wister Elementary",
+        "url": "https://masterycharter.org/elementary-schools/john-wister"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "mastery-wister": {
+        "relation": "onsite",
+        "checked": "2026-11-20"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Book Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Games Club",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Girls Mentoring Group"
+      },
+      {
+        "name": "Homework and Tutoring Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Lego Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Performing Arts",
+        "tags": [
+          "theater"
+        ]
+      },
+      {
+        "name": "Reading Enrichment",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Step Club",
+        "tags": [
+          "movement"
+        ]
+      }
+    ],
+    "offers": [
+      "Art Club",
+      "Basketball",
+      "Book Club",
+      "Cheerleading",
+      "Games Club",
+      "Girls Mentoring Group",
+      "Homework and Tutoring Club",
+      "Lego Club",
+      "Performing Arts",
+      "Reading Enrichment",
+      "Step Club"
+    ]
+  },
+  {
+    "id": "girls-inc-heston",
+    "name": "Girls Inc. H.Y.P.E. at Heston",
+    "what": "Free after-school enrichment program inside Heston, with meals and snacks",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "Girls Inc",
+      "HYPE",
+      "girls",
+      "enrichment",
+      "Heston",
+      "West Philadelphia"
+    ],
+    "address": "1621 N 54th St",
+    "neighborhoods": [
+      "West Philadelphia"
+    ],
+    "grades": "K-8",
+    "gradeNote": "For Heston students",
+    "hours": "2:45–5:00 pm, Monday to Friday, September 10, 2026 to June 9, 2027, according to the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-892-7658",
+    "email": "",
+    "website": "https://girlsincpa-nj.org/what-we-do/our-programs/ost",
+    "register": {
+      "how": "contact",
+      "note": "The City’s listing says registration is required and the program is only for Heston students; it links a sign-up form from Girls Inc. Call the program or ask the school office."
+    },
+    "note": "The details here come from the City’s program locator, which describes it as a daily after-school enrichment program for K–8 students at Heston. Girls Inc.’s own site describes its out-of-school-time programs as for girls aged 5 to 18 and doesn’t name its school sites, so ask whether boys can join. The phone number is the one the City lists for the program; Girls Inc.’s main number is 215-735-7775.",
+    "sources": [
+      {
+        "label": "City program locator: Girls Inc at Heston (H.Y.P.E.)",
+        "url": "https://www.phila.gov/ost/program-locator/?address=1621+N+54th+St&resource=ost_105"
+      },
+      {
+        "label": "Girls Inc. of Greater Philadelphia & Southern New Jersey: out-of-school-time programs",
+        "url": "https://girlsincpa-nj.org/what-we-do/our-programs/ost"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "heston": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists Girls Inc.’s 2026–27 after-school program at Heston.",
+        "sources": [
+          {
+            "label": "City program locator: Girls Inc at Heston (H.Y.P.E.)",
+            "url": "https://www.phila.gov/ost/program-locator/?address=1621+N+54th+St&resource=ost_105"
+          }
+        ],
+        "checked": "2026-11-20"
+      }
+    }
+  },
+  {
+    "id": "heston-clubs",
+    "name": "School clubs and teams",
+    "what": "Clubs and teams Heston lists on its own site: book club, dance and cheer, technology, basketball, track and flag football",
+    "types": [
+      "clubs",
+      "academics",
+      "movement",
+      "stem"
+    ],
+    "keywords": [
+      "clubs",
+      "book club",
+      "dance",
+      "cheer",
+      "reading",
+      "technology",
+      "basketball",
+      "track",
+      "flag football",
+      "intramurals",
+      "Heston"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Intramurals are for K–5; ask about the rest",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-400-7290",
+    "email": "",
+    "website": "https://heston.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office. A physical form signed by a doctor is needed to play a sport."
+    },
+    "note": "Heston’s site lists these with no days or times. It says team schedules are on arbiterlive.com.",
+    "sources": [
+      {
+        "label": "Heston: clubs, activities and sports",
+        "url": "https://heston.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-20",
+    "schools": {
+      "heston": {
+        "relation": "onsite",
+        "checked": "2026-11-20"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Book Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Dance and Cheer Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Reading Enrichment",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Technology Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Basketball (girls and boys)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Track and field (girls and boys)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Flag football (girls and boys)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Dance team",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Elementary intramural sports (K–5)",
+        "tags": [
+          "movement"
+        ]
+      }
+    ],
+    "offers": [
+      "Book Club",
+      "Dance and Cheer Club",
+      "Reading Enrichment",
+      "Technology Club",
+      "Basketball (girls and boys)",
+      "Track and field (girls and boys)",
+      "Flag football (girls and boys)",
+      "Dance team",
+      "Elementary intramural sports (K–5)"
+    ]
+  },
+  {
+    "id": "sunrise-mcmichael",
+    "name": "Sunrise of Philadelphia at McMichael",
+    "what": "Free after-school program inside McMichael, with small-group academic help, a snack, STEM and social-emotional activities",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "Sunrise",
+      "homework help",
+      "McMichael",
+      "Mantua",
+      "Powelton",
+      "West Philadelphia",
+      "childcare"
+    ],
+    "address": "3543 Fairmount Ave",
+    "grades": "K-8",
+    "gradeNote": "For McMichael students",
+    "hours": "After school on every open school day until June 8, 2027. Sunrise’s typical day ends with pickup between 5:00 and 5:30 pm; it says start and end times differ by school.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-952-2730",
+    "email": "",
+    "website": "https://www.sunriseofphila.org/school-year",
+    "register": {
+      "how": "contact",
+      "note": "Sunrise’s page has a contact form and its main number, 215-952-2730. It says students in K–5 must come at least 4 days a week, and 6th–8th graders at least 3."
+    },
+    "note": "Sunrise’s own page lists Morton McMichael Elementary among its sites, at the school’s address, and says its after-school programs are free at every site. McMichael’s own page lists Sunrise among its after-school programs. The City’s program locator doesn’t list Sunrise at McMichael this year, so ask Sunrise for this site’s hours. The phone number is Sunrise’s main number.",
+    "sources": [
+      {
+        "label": "Sunrise of Philadelphia: school-year program and sites",
+        "url": "https://www.sunriseofphila.org/school-year"
+      },
+      {
+        "label": "McMichael: after-school programming and partners",
+        "url": "https://mcmichael.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "mcmichael": {
+        "relation": "onsite",
+        "note": "Sunrise’s own list of sites names Morton McMichael Elementary, and McMichael’s own page lists Sunrise among its after-school programs.",
+        "sources": [
+          {
+            "label": "Sunrise of Philadelphia: school-year program and sites",
+            "url": "https://www.sunriseofphila.org/school-year"
+          },
+          {
+            "label": "McMichael: after-school programming and partners",
+            "url": "https://mcmichael.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-21"
+      }
+    }
+  },
+  {
+    "id": "mcmichael-clubs",
+    "name": "School clubs and programs",
+    "what": "Clubs and programs McMichael lists under after-school programming: art, robotics, Dancing Classrooms, Mighty Writers, reading and more",
+    "types": [
+      "clubs",
+      "art",
+      "stem",
+      "movement",
+      "academics"
+    ],
+    "keywords": [
+      "clubs",
+      "art club",
+      "robotics",
+      "dance",
+      "Dancing Classrooms",
+      "Mighty Writers",
+      "writing",
+      "reading",
+      "homework club",
+      "McMichael"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-400-7750",
+    "email": "",
+    "website": "https://mcmichael.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "McMichael’s own page lists these under after-school and summer programming with no days, times or grades, so ask the school which are running this year and for whom. The Morning Homework Club meets before school.",
+    "sources": [
+      {
+        "label": "McMichael: after-school programming and partners",
+        "url": "https://mcmichael.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "mcmichael": {
+        "relation": "onsite",
+        "checked": "2026-11-21"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Robotics",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Dancing Classrooms",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Mighty Writers",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Joyful Readers",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "PSTV"
+      },
+      {
+        "name": "Friendship Group"
+      },
+      {
+        "name": "SHINE Group"
+      },
+      {
+        "name": "Temple Scholars Program (middle school)",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Morning Homework Club",
+        "what": "Before school",
+        "roster": false,
+        "tags": [
+          "academics"
+        ]
+      }
+    ],
+    "offers": [
+      "Art Club",
+      "Robotics",
+      "Dancing Classrooms",
+      "Mighty Writers",
+      "Joyful Readers",
+      "PSTV",
+      "Friendship Group",
+      "SHINE Group",
+      "Temple Scholars Program (middle school)"
+    ]
+  },
+  {
+    "id": "squashsmarts",
+    "name": "SquashSmarts",
+    "what": "Free squash and academic tutoring program for students recruited from its partner schools, at two squash centers",
+    "types": [
+      "movement",
+      "academics"
+    ],
+    "keywords": [
+      "squash",
+      "tutoring",
+      "mentoring",
+      "sports",
+      "free",
+      "SquashSmarts",
+      "Drexel",
+      "McMichael",
+      "middle school"
+    ],
+    "address": "25 N 33rd St",
+    "neighborhoods": [
+      "University City"
+    ],
+    "grades": "5-8",
+    "gradeNote": "Students are selected in 5th to 8th grade from its partner schools",
+    "hours": "Practices three days a week; days and times not published",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-221-6860",
+    "email": "",
+    "website": "https://www.squashsmarts.org/",
+    "register": {
+      "how": "contact",
+      "note": "SquashSmarts recruits students from its five partner schools, chosen for commitment, effort and attitude. Ask the school or call SquashSmarts."
+    },
+    "note": "SquashSmarts’ own pages say it is a free out-of-school-time program of academic tutoring and squash, that it recruits students in 5th to 8th grade from five partner schools (Esperanza Academy Charter, Morton McMichael, E.W. Rhodes, Overbrook Educational Center and Carver), and that students practice three days a week at the Arlen Specter US Squash Center at Drexel (25 N 33rd St) or the Lenfest Center (3890 N 10th St). It doesn’t say how students get there or which center serves which school, so ask.",
+    "sources": [
+      {
+        "label": "SquashSmarts: what is SquashSmarts?",
+        "url": "https://www.squashsmarts.org/what-is-squashsmarts-copy.html"
+      },
+      {
+        "label": "SquashSmarts: partners",
+        "url": "https://www.squashsmarts.org/partners.html"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "mcmichael": {
+        "relation": "nearby",
+        "distance": "about 0.7 mile southeast, at the Arlen Specter US Squash Center at Drexel",
+        "note": "SquashSmarts names McMichael as one of its five partner schools and recruits 5th to 8th graders there. It doesn’t say whether it picks up, so ask how students get to practice.",
+        "sources": [
+          {
+            "label": "SquashSmarts: partners",
+            "url": "https://www.squashsmarts.org/partners.html"
+          }
+        ],
+        "checked": "2026-11-21"
+      }
+    }
+  },
+  {
+    "id": "miles-mack-playground",
+    "name": "Miles Mack Playground",
+    "what": "City rec center after-school programs: recreation, fitness, homework support, arts and games",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "after school",
+      "aftercare",
+      "homework",
+      "fitness",
+      "Miles Mack",
+      "Mantua",
+      "West Philadelphia"
+    ],
+    "address": "732 N 36th St",
+    "neighborhoods": [
+      "West Philadelphia"
+    ],
+    "grades": "1-6",
+    "gradeNote": "Ages 6–12",
+    "hours": "Not published in the City’s listing",
+    "cost": "$50 a month for Xpress Yourself in the City’s listing, which dates from September 2026; it also lists a free program, Going the X-tra Mile, entered in 2018.",
+    "price": "both",
+    "phone": "215-685-7654",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. The City’s listing shows registration open."
+    },
+    "note": "The City’s Parks & Rec data lists Xpress Yourself, an after-school program at Miles Mack for ages 6 to 12 (recreation, fitness, creative expression, homework support, games and group discussions), $50 a month, entered in September 2026 and open for registration. Call to confirm this year’s days, hours and cost.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "mcmichael": {
+        "relation": "nearby",
+        "distance": "a block west, on N 36th St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-21"
+      }
+    }
+  },
+  {
+    "id": "cora-northwood",
+    "name": "YouthCOR at Northwood",
+    "what": "CORA Services’ free after-school program inside Northwood: STEM, literacy, social-emotional learning, clubs and field trips",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "CORA",
+      "YouthCOR",
+      "STEM",
+      "literacy",
+      "Northwood",
+      "Frankford",
+      "childcare"
+    ],
+    "address": "4621 Castor Ave",
+    "neighborhoods": [
+      "Northwood"
+    ],
+    "grades": "K-8",
+    "gradeNote": "For Northwood students",
+    "hours": "3:00–6:00 pm, Monday to Friday, August 31, 2026 to June 16, 2027, according to the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-669-8060",
+    "email": "",
+    "website": "https://www.coraservices.org/",
+    "register": {
+      "how": "online",
+      "url": "https://www.cognitoforms.com/CORAServices1/SY2027NorthwoodApplication",
+      "label": "Apply",
+      "note": "The City’s listing links CORA’s 2026–27 application for Northwood; registration opened August 3, 2026. Ask whether there is room."
+    },
+    "note": "The details come from the City’s program locator, which lists CORA Services’ after-school program at Northwood for kindergarten to 8th grade, free, with snacks and no transportation. Northwood’s 2026–27 handbook says the school partners with CORA Services and BayWay Cares for before- and after-school care, and its partners page names CORA. Northwood dismisses at 12:00 pm on its many early-dismissal days, so ask CORA whether the program starts early on those days. The phone number is the one the City lists for the program.",
+    "sources": [
+      {
+        "label": "City program locator: CORA Services at Northwood Academy Charter School",
+        "url": "https://www.phila.gov/ost/program-locator/?address=4621+Castor+Ave&resource=ost_83"
+      },
+      {
+        "label": "Northwood 2026–27 student and parent handbook",
+        "url": "https://docs.google.com/document/d/1pOKdS912fVj19PajTgZx76Eg1EOQmfS7pXruLQ7wQ-Y/edit?usp=sharing"
+      },
+      {
+        "label": "Northwood: community partnerships",
+        "url": "https://www.northwoodcs.org/community-partnerships"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "northwood": {
+        "relation": "onsite",
+        "note": "The City’s locator lists CORA’s 2026–27 after-school program at Northwood, and Northwood’s handbook names CORA Services for after-school care.",
+        "sources": [
+          {
+            "label": "City program locator: CORA Services at Northwood Academy Charter School",
+            "url": "https://www.phila.gov/ost/program-locator/?address=4621+Castor+Ave&resource=ost_83"
+          },
+          {
+            "label": "Northwood 2026–27 student and parent handbook",
+            "url": "https://docs.google.com/document/d/1pOKdS912fVj19PajTgZx76Eg1EOQmfS7pXruLQ7wQ-Y/edit?usp=sharing"
+          }
+        ],
+        "checked": "2026-11-21"
+      }
+    }
+  },
+  {
+    "id": "northwood-clubs",
+    "name": "School clubs and sports",
+    "what": "Clubs and teams Northwood lists on its own site: soccer, basketball, baseball, softball, track, cheer, and clubs from gardening to Dungeons & Dragons",
+    "types": [
+      "clubs",
+      "movement",
+      "academics",
+      "art",
+      "theater",
+      "games",
+      "nature"
+    ],
+    "keywords": [
+      "clubs",
+      "sports",
+      "soccer",
+      "basketball",
+      "baseball",
+      "softball",
+      "cross country",
+      "track",
+      "cheerleading",
+      "book club",
+      "gardening",
+      "Dungeons and Dragons",
+      "theater",
+      "Northwood"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-289-5606",
+    "email": "",
+    "website": "https://www.northwoodcs.org/clubs-sports",
+    "register": {
+      "how": "school",
+      "note": "Northwood says families sign up for after-school clubs and Friday electives on forms sent home to each grade."
+    },
+    "note": "Northwood’s own pages list these clubs and sports with no days, times or grades. It says joining is a privilege for students with good grades and behavior, and that the current clubs are in its weekly Bulldog Blast newsletter.",
+    "sources": [
+      {
+        "label": "Northwood: clubs and sports",
+        "url": "https://www.northwoodcs.org/clubs-sports"
+      },
+      {
+        "label": "Northwood: enrichment and extracurriculars",
+        "url": "https://www.northwoodcs.org/enrichment-extracurriculars"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "northwood": {
+        "relation": "onsite",
+        "checked": "2026-11-21"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Soccer Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Baseball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Softball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Basketball (junior varsity and varsity)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cross country",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Track and field",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Percy Jackson Book Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Arts and crafts",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Bulldog Productions",
+        "tags": [
+          "theater"
+        ]
+      },
+      {
+        "name": "Comic book club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Dungeons and Dragons",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Environmental club",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Games",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Gardening",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Magic",
+        "tags": [
+          "games"
+        ]
+      }
+    ],
+    "offers": [
+      "Soccer Club",
+      "Baseball",
+      "Softball",
+      "Basketball (junior varsity and varsity)",
+      "Cross country",
+      "Cheerleading",
+      "Track and field",
+      "Percy Jackson Book Club",
+      "Arts and crafts",
+      "Bulldog Productions",
+      "Comic book club",
+      "Dungeons and Dragons",
+      "Environmental club",
+      "Games",
+      "Gardening",
+      "Magic"
+    ]
+  },
+  {
+    "id": "uacs-comegys",
+    "name": "UACS After-School Program at Comegys",
+    "what": "Penn’s free after-school program inside Comegys: academic support, arts, recreation and projects",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "arts",
+      "Penn",
+      "Netter Center",
+      "UACS",
+      "Comegys",
+      "Kingsessing",
+      "Southwest Philadelphia"
+    ],
+    "address": "5100 Greenway Ave",
+    "neighborhoods": [
+      "Kingsessing"
+    ],
+    "grades": "K-8",
+    "gradeNote": "Comegys students",
+    "hours": "3:00–6:00 pm on weekdays, according to Comegys’ site. The City’s listing gives 3:30–6:00 pm, September 9, 2026 to June 8, 2027.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "445-213-3013",
+    "email": "",
+    "website": "https://comegys.philasd.org/",
+    "register": {
+      "how": "online",
+      "url": "https://upenn.co1.qualtrics.com/jfe/form/SV_egoCRYhRZhgKOI6",
+      "label": "Register",
+      "note": "The City’s listing links this sign-up form and gave a registration window of August 3 to September 30, 2026. Ask the program whether it still has room."
+    },
+    "note": "Comegys’ own site says the University of Pennsylvania’s Netter Center runs the after-school program (3:00–6:00 pm) and a summer program (8:00 am–3:00 pm) for kindergarten to 8th grade, with academic support, arts and cultural enrichment, recreation and project-based learning. The City lists it under the University of Pennsylvania, free, with snacks, and 3:30–6:00 pm as its hours. Comegys’ school day ends at 3:39 pm, so ask the program when it starts. The phone number is the one the City lists for the program.",
+    "sources": [
+      {
+        "label": "Comegys: after-school programming, sports and bell schedule",
+        "url": "https://comegys.philasd.org/"
+      },
+      {
+        "label": "City program locator: University of Pennsylvania at Comegys OST Afterschool",
+        "url": "https://www.phila.gov/ost/program-locator/?address=5100+Greenway+Ave&resource=ost_271"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "comegys": {
+        "relation": "onsite",
+        "note": "Comegys’ own site names Penn’s Netter Center after-school program, and the City’s program locator lists Penn’s after-school program at Comegys.",
+        "sources": [
+          {
+            "label": "Comegys: after-school programming, sports and bell schedule",
+            "url": "https://comegys.philasd.org/"
+          },
+          {
+            "label": "City program locator: University of Pennsylvania at Comegys OST Afterschool",
+            "url": "https://www.phila.gov/ost/program-locator/?address=5100+Greenway+Ave&resource=ost_271"
+          }
+        ],
+        "checked": "2026-11-21"
+      }
+    }
+  },
+  {
+    "id": "comegys-clubs",
+    "name": "School sports",
+    "what": "Sports Comegys lists on its own site: track, lacrosse, and intramurals for K–5",
+    "types": [
+      "clubs",
+      "movement"
+    ],
+    "keywords": [
+      "clubs",
+      "sports",
+      "track",
+      "lacrosse",
+      "intramurals",
+      "Comegys"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Intramurals are for K–5; middle-grades teams for 6–8",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-400-7860",
+    "email": "",
+    "website": "https://comegys.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office. A physical form signed by a doctor is needed to play."
+    },
+    "note": "Comegys’ site lists these sports with no days or times, and says grades 6–8 play in the District’s Middle Grades Conference.",
+    "sources": [
+      {
+        "label": "Comegys: after-school programming, sports and bell schedule",
+        "url": "https://comegys.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "comegys": {
+        "relation": "onsite",
+        "checked": "2026-11-21"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Track",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Lacrosse",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Elementary intramural sports (K–5)",
+        "tags": [
+          "movement"
+        ]
+      }
+    ],
+    "offers": [
+      "Track",
+      "Lacrosse",
+      "Elementary intramural sports (K–5)"
+    ]
+  },
+  {
+    "id": "baywaycares-mastery-clymer",
+    "name": "Baywaycares at Mastery Clymer",
+    "what": "Aftercare inside Mastery’s Clymer Elementary, from dismissal to 6:00 pm",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after care",
+      "childcare",
+      "Baywaycares",
+      "Bayway",
+      "Mastery Clymer",
+      "Clymer",
+      "Hartranft",
+      "Fairhill",
+      "North Philadelphia"
+    ],
+    "address": "1201 W Rush St",
+    "neighborhoods": [
+      "North Philadelphia"
+    ],
+    "grades": "K-6",
+    "gradeNote": "For Mastery Clymer students",
+    "hours": "From dismissal (3:15 pm) to 6:00 pm, Monday to Friday",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not published. The school’s page says childcare subsidies are accepted.",
+    "phone": "215-223-2243",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/clymer",
+    "register": {
+      "how": "contact",
+      "note": "The school’s page gives an email address for Baywaycares; ask the main office (215-223-2243) if you can’t reach it."
+    },
+    "note": "Everything here comes from Mastery Clymer’s own page; we couldn’t find a website for Baywaycares. The phone number is the school’s main office. Ask about the price and what happens on Mastery’s early-dismissal days.",
+    "sources": [
+      {
+        "label": "Mastery Clymer Elementary",
+        "url": "https://masterycharter.org/elementary-schools/clymer"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "mastery-clymer": {
+        "relation": "onsite",
+        "note": "Mastery Clymer’s own page names Baywaycares for aftercare, Monday to Friday, dismissal to 6:00 pm, and says childcare subsidies are accepted.",
+        "sources": [
+          {
+            "label": "Mastery Clymer Elementary",
+            "url": "https://masterycharter.org/elementary-schools/clymer"
+          }
+        ],
+        "checked": "2026-11-21"
+      }
+    }
+  },
+  {
+    "id": "mastery-clymer-clubs",
+    "name": "School clubs and teams",
+    "what": "Teams and clubs Mastery Clymer lists on its own page: basketball, cheerleading, dance, flag football, homework club, weight lifting, and yoga and movement",
+    "types": [
+      "clubs",
+      "movement",
+      "academics"
+    ],
+    "keywords": [
+      "clubs",
+      "basketball",
+      "cheerleading",
+      "dance",
+      "flag football",
+      "homework club",
+      "weight lifting",
+      "yoga",
+      "Mastery Clymer"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; see each one",
+    "hours": "Not published; ask the school",
+    "cost": "Not published",
+    "phone": "215-223-2243",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/clymer",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office."
+    },
+    "note": "Mastery Clymer’s own page lists these extracurricular and athletic programs with no days, times or grades, so ask the school which are running and for whom.",
+    "sources": [
+      {
+        "label": "Mastery Clymer Elementary",
+        "url": "https://masterycharter.org/elementary-schools/clymer"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "mastery-clymer": {
+        "relation": "onsite",
+        "checked": "2026-11-21"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Basketball (boys and girls)",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Dance",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Flag football",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Homework Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Weight lifting",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Yoga and movement",
+        "tags": [
+          "movement"
+        ]
+      }
+    ],
+    "offers": [
+      "Basketball (boys and girls)",
+      "Cheerleading",
+      "Dance",
+      "Flag football",
+      "Homework Club",
+      "Weight lifting",
+      "Yoga and movement"
+    ]
+  },
+  {
+    "id": "harlem-lacrosse-olney",
+    "name": "Harlem Lacrosse at Olney Elementary",
+    "what": "Lacrosse with academic coaching and mentoring for Olney Elementary’s middle-school students",
+    "types": [
+      "movement",
+      "academics"
+    ],
+    "keywords": [
+      "lacrosse",
+      "sports",
+      "mentoring",
+      "tutoring",
+      "Harlem Lacrosse",
+      "Olney",
+      "middle school"
+    ],
+    "address": "5301 N Water St",
+    "neighborhoods": [
+      "Olney"
+    ],
+    "grades": "6-8",
+    "gradeNote": "For Olney Elementary students in 6th to 8th grade",
+    "hours": "3:45–5:30 pm, Monday to Thursday, September 14, 2026 to June 9, 2027, according to the City’s listing",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu"
+    ],
+    "pickupBy": "5:30 pm",
+    "phone": "215-962-9351",
+    "email": "",
+    "website": "https://www.harlemlacrosse.org/philadelphia",
+    "register": {
+      "how": "online",
+      "url": "https://secure.harlemlacrosse.org/signup",
+      "label": "Sign up",
+      "note": "The City’s listing links this sign-up and gave a registration window of September 1 to 11, 2026. Ask whether there is still room."
+    },
+    "note": "The details come from the City’s program locator, which lists Harlem Lacrosse’s 2026–27 program at Olney Elementary for 6th to 8th graders and says it is only for students enrolled at Olney Elementary. It doesn’t give a cost, so ask. Olney’s own page names Harlem Lacrosse among its partners. The phone number is the organization’s number from the City’s listing.",
+    "sources": [
+      {
+        "label": "City program locator: Harlem Lacrosse at Olney Elementary",
+        "url": "https://www.phila.gov/ost/program-locator/?address=5301+N+Water+St&resource=ost_145"
+      },
+      {
+        "label": "Olney Elementary: About Us (partnerships)",
+        "url": "https://olney.philasd.org/about-us/"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "olney": {
+        "relation": "onsite",
+        "note": "The City’s locator lists Harlem Lacrosse’s 2026–27 program at Olney Elementary, and Olney’s own page names Harlem Lacrosse among its partners.",
+        "sources": [
+          {
+            "label": "City program locator: Harlem Lacrosse at Olney Elementary",
+            "url": "https://www.phila.gov/ost/program-locator/?address=5301+N+Water+St&resource=ost_145"
+          },
+          {
+            "label": "Olney Elementary: About Us (partnerships)",
+            "url": "https://olney.philasd.org/about-us/"
+          }
+        ],
+        "checked": "2026-11-21"
+      }
+    },
+    "cost": "Not given in the City’s listing; ask"
+  },
+  {
+    "id": "cora-olney",
+    "name": "CORA Services before and after care at Olney",
+    "what": "Before- and after-school care at Olney Elementary run by CORA Services",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after care",
+      "before care",
+      "childcare",
+      "CORA",
+      "YouthCOR",
+      "Olney"
+    ],
+    "address": "5301 N Water St",
+    "neighborhoods": [
+      "Olney"
+    ],
+    "grades": null,
+    "gradeNote": "For Olney students; grades not published",
+    "hours": "Not published; ask the school or CORA",
+    "cost": "Not published",
+    "phone": "215-342-7660",
+    "email": "",
+    "website": "https://www.coraservices.org/",
+    "register": {
+      "how": "contact",
+      "note": "Ask the school office (215-400-3790) or CORA Services."
+    },
+    "note": "Olney’s own About Us page, last updated in September 2025, lists “Cora before and after care” among the school’s partnerships. CORA’s own site doesn’t list its after-school sites, and the City’s program locator doesn’t list CORA at Olney this year, so ask the school whether it is running in 2026–27. The phone number is CORA Services’ main number.",
+    "sources": [
+      {
+        "label": "Olney Elementary: About Us (partnerships)",
+        "url": "https://olney.philasd.org/about-us/"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "olney": {
+        "relation": "onsite",
+        "note": "Olney’s own page (last updated September 2025) names CORA for before and after care. Ask the office whether it runs this year.",
+        "sources": [
+          {
+            "label": "Olney Elementary: About Us (partnerships)",
+            "url": "https://olney.philasd.org/about-us/"
+          }
+        ],
+        "checked": "2026-11-21"
+      }
+    }
+  },
+  {
+    "id": "ziehler-playground",
+    "name": "Ziehler Playground",
+    "what": "City rec center after-school program, 3:00 to 6:00 pm: homework help, STEM, arts and crafts and a snack",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "after school",
+      "aftercare",
+      "homework",
+      "STEM",
+      "arts and crafts",
+      "Ziehler",
+      "Olney"
+    ],
+    "address": "200 E Olney Ave",
+    "neighborhoods": [
+      "Olney"
+    ],
+    "grades": "K-6",
+    "gradeNote": "Ages 5–12",
+    "hours": "3:00–6:00 pm, according to the City’s listing",
+    "pickupBy": "6:00 pm",
+    "cost": "$20 a month in the City’s listing, which dates from August 2026; registration there shows open.",
+    "price": "paid",
+    "phone": "215-685-9145",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The City’s Parks & Rec data lists Ziehler After School for ages 5 to 12, 3:00 to 6:00 pm, with homework help, STEM, arts and crafts and a snack, $20 a month, entered in August 2026 and open for registration. Call to confirm this year’s days.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-21",
+    "schools": {
+      "olney": {
+        "relation": "nearby",
+        "distance": "about a third of a mile northeast, on E Olney Ave",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-21"
       }
     }
   }
