@@ -207,7 +207,8 @@ and late August (rec centers post their listings).
 Two scheduled tasks in the owner's Claude app do the research. Neither one pushes to `main` or to `live`, and neither
 touches `data/reviews.json`, `data/copy.json`, `data/news.json`, `data/school-dates.json`, `data/all-schools.json`,
 `data/card-qr.json`, `scripts/`, `email/`, `.github/`, `src/`, `build.mjs` or the settings that run the emails,
-accounts and terms. Each ends in a pull request for the owner to merge.
+accounts and terms. Each ends in a pull request for the owner to merge, with an evidence file the autopilot gate checks
+(see "The autopilot gate"; while it is in shadow mode the gate only comments).
 
 - **The monthly check** (the first of the month) re-reads every listing, weekend block and summer camp against the
   provider's own site, using the worklist above, and the district calendar.
@@ -234,3 +235,155 @@ calendar): status code and final address only, six at a time, honoring `robots.t
 ClaudeBot, Claude-Web, anthropic-ai or GPTBot is reported as not checked, never fetched). `--list` only prints the
 addresses and where each is used. It writes `linkcheck.json` (ignored by git) and prints what didn't answer 200 and
 what moved.
+
+## The autopilot gate
+
+The research runs (five schools a day, the weekly run, the monthly check, and later the queue run) end in a pull
+request. The gate decides whether one can publish without Josh reading it. It keeps the site's one publishing rule,
+that only a provider's own page or word is published, and replaces Josh's review with a check a script can repeat: every
+changed value must come with a quote, and the gate re-reads that quote on the page it came from. Anything it can't
+confirm, or anything on the hold list below, waits for Josh.
+
+**Where it stands.** `data/autopilot.json` on `main` holds the switch: `off` (the gate does nothing), `shadow` (it
+comments on each run's pull request and merges nothing; Josh merges by hand) or `on` (a run's pull request with nothing
+held and the tests passed merges itself and the site publishes). It starts in `shadow`. A run's pull request can never
+change the switch: the file isn't on the gate's allowlist, so touching it holds the pull request.
+
+### The evidence file
+
+Every run that changes data writes one file, `evidence/<branch>.json`, committed on the pull request's own branch (the
+build ignores the folder). It holds one record per item worked, an item with no data change included, so its sender
+can be answered:
+
+```
+{
+  "run": "queue-2026-11-30-0610",
+  "items": [
+    {
+      "item": "s1a2b3c4d5",
+      "kind": "update",
+      "listing": "p:example-program",
+      "outcome": "published",
+      "fields": [
+        { "path": "hours", "old": "3:00 to 6:00 pm", "new": "3:00 to 6:30 pm",
+          "source": "https://provider.example/after-school/",
+          "quote": "After School runs from dismissal until 6:30 pm.", "read": "2026-11-30", "how": "fetch" }
+      ]
+    }
+  ]
+}
+```
+
+- `item` is the queue item's id. Work that didn't come from the queue uses `school:<id>`, `monthly:<listing>` or
+  `link:<listing>`.
+- `kind` is one of `update`, `new-listing`, `new-school`, `link`, `date`, `note`, `told`, `review`, `news`.
+- `outcome` is one of `published`, `held`, `declined`, `duplicate`, `needs-info`, `no-change`.
+- `listing` names the record: `p:<program id>`, `s:<school id>`, `c:<camp id>`, or `d:<school id>` for a school's
+  entries in `data/school-dates.json`.
+- `path` is where the value sits in that record, written the way the gate writes it: keys joined by dots
+  (`register.nextTerm`, `schools.meredith.relation`), and an element of a list of objects by its key in brackets
+  (`register.dates[2027-01-15]`, `sources[https://provider.example/camp]`, `updates[2026-11-04]`, `clubs[Chess]`).
+  The key is the element's `id`, `date`, `url`, `name`, `day`, `on` or `match`, whichever every element has; a repeated
+  key gets `#2`. A list of plain values (`types`, `daysOff.dates`) is one value. `""` is the whole record, for a new
+  listing written in one go. A record for a part covers everything inside it, so `schools.meredith` covers its
+  `relation` and `note`.
+- `old` and `new` are the values before and after, `null` for nothing. They must match the data exactly, bookkeeping
+  dates aside.
+- `quote` is copied from the page, 300 characters at most, and contains the numbers, times, prices and dates that are
+  new in `new`. Several records for the same path count together, when one stretch of a page doesn't hold them all. A
+  new link needs no quote; the page it is on is the source.
+- `source` is on the listing's own website, already one of the listing's addresses, on a school's own site, or on the
+  City's own pages, as the rules have always allowed.
+- `how` follows `data/reading.json`: `fetch`, `browser` or `person`. The gate reads the page the stricter of the two ways.
+- Bookkeeping fields need no record: `lastVerified`, `checked`, `read`, `looked`, `lastReviewed`, a school's `added`,
+  `seen` in `data/reading.json`, a camp's `check` notes, and the places `scripts/geocode.mjs` writes to
+  `data/geo.json`. An `updates` note's own `date` is a label and needs no quote.
+- Nothing a parent or manager wrote goes in the file. A suggestion is a reason to look and never a source. The one
+  exception is a manager's proposal recorded as a `told` entry, in the program's own words.
+
+`node scripts/gate.mjs --local --draft` writes a record for every changed value that has none yet, with the path, old
+and new values filled in, for the run to add the source, quote and how.
+
+### What the gate checks
+
+`.github/workflows/autopilot.yml` runs on every pull request whose branch starts with `queue-`, `new-schools-`,
+`weekly-` or `monthly-check-`, from this repository (never a fork) and from the account the runs use. Anything else is
+left alone. It runs the workflow file and the gate as they are on `main`: GitHub's test merge of the pull request is
+fetched as git objects and only the allowlisted data files are copied out of it, next to `main`'s code. Nothing else
+from the pull request is run. Then `scripts/gate.mjs`:
+
+1. **Paths.** Only these files may change: `data/programs.json`, `schools.json`, `camps.json`, `geo.json`,
+   `reading.json`, `news.json`, `school-dates.json`, `reviews.json`, and the one evidence file. No `id` changes, and no
+   program, school, camp, review, `told` or `asks` entry is removed.
+2. **Coverage.** Every changed value has a record with the same path, old value and new value.
+3. **Source.** Each record's source is allowed, as above.
+4. **Re-read.** The gate fetches the source (in a browser where `data/reading.json` says so, honoring robots.txt as the
+   pre-read does), finds the quote on the page with spaces and punctuation ignored, then finds the new numbers,
+   times, prices and dates inside the quote. A page only a person can read, a PDF, or a Google Drive file can't be
+   re-read, so its change waits. New links must open, or be linked from the page read, or be where the old link now
+   leads. A new email address must be on the page.
+5. **The hold list,** below.
+6. **Size.** No more than `limits` in `scripts/gate.config.json` for that kind of run.
+7. **Build and tests.** A second job builds and tests `main`'s code with the pull request's data, with a read-only
+   token. A note from the build that the change caused, or a failed test, holds it.
+
+It then posts one comment in plain words (what would publish, what is held, and why; replaced, never repeated, when the
+pull request changes) and adds the label `needs-josh` when anything is held. In `on`, with nothing held and the tests
+passed, it squash-merges the exact commit it checked, only if `main` hasn't moved meanwhile (if it has, it starts
+itself again), and then starts `publish.yml` itself, because a merge made with the workflow's own token starts no
+other workflow.
+
+**One held item mustn't block forty good ones.** A run checks itself before opening its pull request:
+`node scripts/gate.mjs --local` compares the working tree with `main` and prints, listing by listing, what would
+publish and what is held and why (exit code 1 when anything is held). The run moves held listings into a second pull
+request and keeps the first one clean. If the gate still holds something in the clean one, it holds the whole pull
+request and names the listing to split out.
+
+### What waits for Josh
+
+The working definition of "suspicious". Anything that matches a row is held, with the row's reason in the comment.
+Everything else publishes. The rows marked *later* need the private queue, the mailbox or the accounts database, and
+arrive with those phases.
+
+| Area | Held when |
+|---|---|
+| Any change | It touches a file off the allowlist, changes an `id`, or removes a program, school, camp, review, `told` or `asks` entry |
+| Any change | A changed value has no evidence, the quote isn't on the page, or the quote lacks the new value's numbers |
+| Any change | The source isn't the provider's own site, a school's own site or the City's listing, or the page can only be read by a person (or is a PDF) |
+| Any change | The build prints a note the change caused, or a test fails |
+| Any change | The run went over its size limit: 15 listings in a queue or weekly run, 6 schools in a schools run, 40 values in a monthly check |
+| New listing | Its website is new to the data and nothing vouches for it (no school site, City listing or existing provider's page quoted names it), and the domain is under two years old or the site shows no Philadelphia street address or phone |
+| New listing | The site is a bare payment or sign-up page, or doesn't read as a children's program |
+| Pickup and on-site links | No quote names the school, a school has dropped off a provider's pickup list, or a school link is removed |
+| Closing | A program or camp reads as closed. A run never removes one |
+| What a program told us | A field the program told us would change to what its site says (it becomes a question to its managers instead), a `told` entry is added (the gate can't see the message until Phase 2), or an `asks` question is added (until the gate can tell claimed listings apart) |
+| Prices and hours | A price moves by more than 40 percent, flips between free and paid, or a closing time moves by more than an hour |
+| Dates emailed to parents | The date is past or more than 12 months out, the quote gives no year and the date is more than 120 days away, the quote holds two dates for one label, or the change moves or removes a date that may already have been emailed (`register.dates`, `daysOff.dates`, a camp's `dates`, a school's `dates`) |
+| Notes emailed to parents | An `updates` note or a school's date title isn't built from an approved template (`noteTemplates` in `scripts/gate.config.json`), or a school date was sent in by a parent |
+| Schools | A new school has fewer than two confirmed programs, or it's a charter with no calendar of its own |
+| Email addresses | A new address is at a free-mail domain (Gmail and the like), which can be a person's own |
+| Hidden instructions | A quote, a new value or a page read addresses an AI, or asks to skip a rule |
+| What's new | Always, for now: it's the site's own words, with no provider page to check |
+| Reviews | Always, until Phase 6 supplies the account checks; the comment also says when a review holds a link, contact details or what may be an accusation |
+| `data/reading.json`, `data/geo.json` | A page's reading is loosened or removed; a map place already there moves, or a new one isn't in Philadelphia |
+| The sender, mail, manager words, photos, claims, payments | *Later* (Phases 2, 5 and 6) |
+
+**Where the numbers live.** The data thresholds and the templates are starting values in `scripts/gate.config.json`.
+Sender and spam thresholds will live in a private file on the host, because the repository is public.
+
+**Tuning.** After a month, review the holds. A rule that held ten items which Josh approved every time gets loosened.
+A merged change that Josh undid becomes a new test fixture in `tests/cases/06-gate.mjs` and, where it fits, a new row.
+
+### Shadow mode, the replay and the report
+
+Phase 1 ends with the switch at `shadow`, and Josh keeps merging by hand for five days. The switch to `on` needs at least
+30 changes judged, and none that the gate would have merged and Josh rejected.
+
+- **The shadow report.** `node scripts/gate.mjs --report` (or Actions > Autopilot gate > Run workflow, with "report"
+  set to `yes`) lists each run's pull request with what the gate said beside what Josh did, and says whether the test
+  for switching on has been passed.
+- **The replay.** `node scripts/gate.mjs --replay 10` runs the checks on run pull requests that were already decided,
+  from #10 on. Ones from before evidence files have none, so the replay builds what it can: for each changed value it
+  reads the listing's own stored pages (its sources, pickup lists and links) and looks for the shortest stretch, 300
+  characters at most, that holds every new number, or for the words a value added. It reports the share it could
+  verify. The build and tests aren't repeated, since the code has moved on.

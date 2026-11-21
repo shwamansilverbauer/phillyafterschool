@@ -3,11 +3,11 @@
 export const UA_BASE = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36';
 const AGENTS = ['*', 'claudebot', 'claude-web', 'anthropic-ai', 'gptbot'];
 const robotsCache = new Map();
-export async function robots(origin, UA) {
+export async function robots(origin, UA, get = fetch) {
   if (robotsCache.has(origin)) return robotsCache.get(origin);
   const rules = [];
   try {
-    const r = await fetch(origin + '/robots.txt', { headers: { 'user-agent': UA }, redirect: 'follow', signal: AbortSignal.timeout(15000) });
+    const r = await get(origin + '/robots.txt', { headers: { 'user-agent': UA }, redirect: 'follow', signal: AbortSignal.timeout(15000) });
     if (r.ok && /text/.test(r.headers.get('content-type') || 'text')) {
       const text = await r.text();
       let agents = [], groupOpen = false;
