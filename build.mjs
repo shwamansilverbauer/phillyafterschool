@@ -304,7 +304,7 @@ function checkList() {
   links.sort((a, b) => rank(a) - rank(b) || a.checked.localeCompare(b.checked) || a.program.localeCompare(b.program) || a.school.localeCompare(b.school));
   const pickup = links.filter(r => r.relation === 'pickup');
   return {
-    about: 'Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, "Keeping it current", says how to use it.',
+    about: 'Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. docs/listings.md, "Keeping it current", says how to use it.',
     summary: { pages: pages.size, pagesNeedingABrowser: [...pages.values()].filter(x => x.how === 'browser').length, pagesNeedingAPerson: [...pages.values()].filter(x => x.how === 'person').length,
       links: links.length, pickupLinks: pickup.length, pickupOnAStoredList: pickup.filter(r => r.basis === 'list').length, pickupFromAThirdPartyList: pickup.filter(r => r.basis === 'third-party-list').length,
       pickupOnItsOwnSource: pickup.filter(r => r.basis === 'own-source').length, pickupWithNothingBehindIt: pickup.filter(r => r.basis === 'none').length, pickupNotOnTheProvidersList: pickup.filter(r => r.notOnProviderList).length,
@@ -6985,7 +6985,7 @@ if (!PREVIEW) {
   if (/^[a-f0-9]{32}$/.test(cfg.indexNowKey || '')) write(`${cfg.indexNowKey}.txt`, cfg.indexNowKey);
   write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.siteUrl}/sitemap.xml\n`);
   const bare = cfg.siteUrl.replace(/^https?:\/\//, '');
-  // Other addresses that should land on this one (see "Changing the site's address" in the README).
+  // Other addresses that should land on this one (see "Changing the site's address" in docs/setup.md).
   const formerHosts = (cfg.formerHosts || []).filter(h => /^[a-z0-9.-]+\.[a-z]{2,}$/.test(h) && h !== bare && h !== 'www.' + bare);
   const goneDays = (daysOff?.days || []).filter(d => (d.end || d.date) < TODAY).map(daySlug);
   // Security headers for every response (pages, files and the PHP endpoints): HTTPS only from now on (a year, this

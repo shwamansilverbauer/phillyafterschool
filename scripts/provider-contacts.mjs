@@ -14,7 +14,7 @@
 // row each. The email: the listing's own "email" if it has one, else the best address on the provider's site (its
 // home page, then its contact and about pages): one at the site's own domain, a general one (info@, hello@, camp@…)
 // before a named person's, never press, HR, rentals or no-reply. "Can they claim" follows the claim rule: the
-// address must be at the listing's website (README, "Program managers: claiming a listing"). robots.txt is honored,
+// address must be at the listing's website (docs/accounts.md, "Program managers: claiming a listing"). robots.txt is honored,
 // and a page data/reading.json says a person has to read is never requested.
 import fs from 'node:fs';
 import path from 'node:path';

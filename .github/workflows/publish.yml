@@ -91,3 +91,17 @@ jobs:
       # Bing and the search engines that share its index: here are the pages that changed. Never fails the job.
       - name: Tell search engines which pages changed
         run: node scripts/indexnow.mjs before-sitemap.xml dist/sitemap.xml || true
+
+      # docs/code-map.md lists the functions of build.mjs and groups-api.php with their line numbers, so an agent reads
+      # only the lines it needs (scripts/code-map.mjs). When a change has moved them, the map is rewritten and committed
+      # to main here. A push made with this job's own token starts no other workflow, so this never publishes twice.
+      # Never fails the job: if main has moved on, or a rule on main refuses the push, the next publish tries again.
+      - name: Keep the code map current
+        run: |
+          node scripts/code-map.mjs
+          if git diff --quiet -- docs/code-map.md; then echo "The code map is current."; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/code-map.md
+          git commit --quiet -m "Code map: line numbers as of ${GITHUB_SHA::7}"
+          git push --quiet origin HEAD:main || echo "The code map could not be pushed to main (main moved on, or a rule on main refused it). The next publish tries again."
