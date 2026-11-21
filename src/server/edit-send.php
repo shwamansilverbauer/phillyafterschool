@@ -32,7 +32,8 @@ function tidy($v, $max) {
   $v = trim(preg_replace('/\s+/u', ' ', $v));
   return function_exists('mb_substr') ? mb_substr($v, 0, $max, 'UTF-8') : substr($v, 0, $max);
 }
-function signed_in_here() { return function_exists('edit_signed_in') ? edit_signed_in() : true; }
+// Fails closed: a copy of this handler built without the sign-in code accepts nothing.
+function signed_in_here() { return function_exists('edit_signed_in') ? edit_signed_in() : false; }
 
 /*GH*/
 // The copy file as the repository holds it now: its entries and the sha a write must quote.
@@ -82,7 +83,7 @@ if (!signed_in_here()) out(false, 'You are signed out.', 401);
 // ----- notes on sentences: left for an editor (or anyone), listed in the editor and on the edit page, emailed on
 // request, and closed by a Done button or by publishing a change to that sentence. Needs the accounts database. -----
 function me_here() {
-  // who is asking: an admin account, an editor's account, or the edit password (then only the typed name is known)
+  // who is asking: an admin's account or an editor's account (the only ways in)
   $a = function_exists('edit_account') ? edit_account() : null;
   $admin = function_exists('edit_admin') ? edit_admin() : '';
   $ed = function_exists('edit_editor') ? edit_editor() : null;

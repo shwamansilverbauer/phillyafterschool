@@ -131,9 +131,10 @@ test('nothing tracked in the repository or built into the site carries a secret'
   const ignore = fs.readFileSync(path.join(ROOT, '.gitignore'), 'utf8');
   for (const pat of ['phillyafterschool-*.key', 'phillyafterschool-*.json', 'phillyafterschool-data/', 'tests/.scratch/']) includes(ignore, pat, '.gitignore');
   ok(!tracked().some(f => /\.key$/.test(f) || /^phillyafterschool-/.test(f)), 'no key file is tracked');
-  // The edit page keeps only a password hash.
+  // The edit pages open for admin and editor accounts: no shared password, not even a hash of one.
   const cfg = config();
-  if (cfg.editLogin) matches(cfg.editLogin.passwordHash || '', /^\$2[aby]\$\d\d\$[./A-Za-z0-9]{53}$/, 'editLogin holds a bcrypt hash');
+  ok(cfg.editLogin === undefined, 'site.config.json has no editLogin');
+  ok(Array.isArray(cfg.admins) && cfg.admins.length > 0, 'site.config.json names at least one admin, or /edit/ has no way in');
 });
 
 // Words that must never appear in the repository or the built site: the family's own names, private addresses,

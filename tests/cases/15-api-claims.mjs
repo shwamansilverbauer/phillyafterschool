@@ -108,7 +108,6 @@ test('a review in a kid’s words: the form’s handler emails the owner a ready
 });
 
 test('a premium listing’s social links and Instagram posts: sent by its manager, checked by the owner, then on its page, with Instagram loaded only on a tap', async (ctx) => {
-  if (!ctx.site.edit) return;
   const t = Date.now().toString(36);
   const manager = ctx.api().as(`soc${t}@phillyafterschool.org`, 'Pat', 'Lee');
   await manager.okay('POST', 'claim_add', { listing: PREMIUM });
@@ -129,8 +128,7 @@ test('a premium listing’s social links and Instagram posts: sent by its manage
   eq(before.social, null); deepEq(before.posts, []);
   // The owner checks the links and publishes both on the review page.
   const form = o => Object.entries(o).map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v)).join('&');
-  const login = await fetch(`${ctx.site.base}/edit/`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: form({ user: ctx.site.edit.user, pass: ctx.site.edit.password }), redirect: 'manual' });
-  const cookie = login.headers.getSetCookie().find(c => c.startsWith('pas_edit=')).split(';')[0];
+  const cookie = ctx.site.adminCookie();   // the owner's pages open for a site admin's account
   const page = await (await fetch(`${ctx.site.base}/edit/claims/`, { headers: { Cookie: cookie } })).text();
   includes(page, 'Social links'); includes(page, 'Instagram posts (parents tap to load them)');
   includes(page, 'href="https://www.instagram.com/reel/AAAAA2/"', 'each link opens for a look');
@@ -164,7 +162,6 @@ test('a premium listing’s social links and Instagram posts: sent by its manage
 });
 
 test('a premium listing’s pin in Kids’ Playground: sent by its manager, checked by the owner, then only for a family whose child went there', async (ctx) => {
-  if (!ctx.site.edit) return;
   const t = Date.now().toString(36);
   const manager = ctx.api().as(`pin${t}@phillyafterschool.org`, 'Pat', 'Lee');
   await manager.okay('POST', 'claim_add', { listing: PREMIUM });
@@ -187,8 +184,7 @@ test('a premium listing’s pin in Kids’ Playground: sent by its manager, chec
   deepEq((await pat.okay('GET', 'passport')).ppins, [], 'not before the owner says yes');
   // The owner publishes it on the review page.
   const form = o => Object.entries(o).map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v)).join('&');
-  const login = await fetch(`${ctx.site.base}/edit/`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: form({ user: ctx.site.edit.user, pass: ctx.site.edit.password }), redirect: 'manual' });
-  const cookie = login.headers.getSetCookie().find(c => c.startsWith('pas_edit=')).split(';')[0];
+  const cookie = ctx.site.adminCookie();   // the owner's pages open for a site admin's account
   const page = await (await fetch(`${ctx.site.base}/edit/claims/`, { headers: { Cookie: cookie } })).text();
   includes(page, 'Kids’ Playground pin (kids see it only after going there)'); includes(page, 'Name: Dance Star'); includes(page, 'Color: green');
   const csrf = /name="csrf" value="([^"]+)"/.exec(page)[1];

@@ -5,9 +5,9 @@
 Headlines, intros, section text, form labels and footer text can be edited on the site itself, and published from
 there.
 
-1. Open `/edit/`, sign in (when `editLogin` is set, or with a site admin's account), and choose "Start editing". The
-   page isn't linked from anywhere and is hidden from search engines. A sign-in lasts 30 days on that device, and
-   edits can only be published or sent while signed in. Eight wrong tries from one address lock the form for 15 minutes.
+1. Sign in to your account on the site with a site admin's or an editor's address, open `/edit/`, and choose "Start
+   editing". The page isn't linked from anywhere and is hidden from search engines. An account's sign-in lasts until
+   the device goes 14 days without a visit (90 days at most), and edits can only be published or sent while signed in.
 2. Click any outlined text on any page and type. To take a sentence off the page, click it and choose "Remove this
    sentence" in the bar; it shows struck through until it is published. Edits are kept in that browser only.
 3. "Review and publish" lists each change beside the original, with a tick per change. "Publish" writes the ticked
@@ -33,7 +33,7 @@ there.
    are only readable behind the edit sign-in; at most 10 note emails an hour.
 7. Editors. A site admin (an account on `admins`) can let someone in by the address they sign in to the site with,
    on `/edit/` under "Editors" (the `editors` table; at most 10). That account then opens every page behind the edit
-   sign-in without the password, is named as "for" in notes, and gets the note emails. Removing them closes the pages
+   sign-in, is named as "for" in notes, and gets the note emails. Removing them closes the pages
    to that account again. Admins alone add or remove editors and delete notes; an editor marks notes done.
 
 Publishing needs one thing on the host: a file named `phillyafterschool-github.key` next to the public folder (the
