@@ -166,5 +166,71 @@
     "how": "person",
     "why": "On 2026-11-15 the after-school roundup answered a browser with HTTP 429 (too many requests), so it has to be read by a person.",
     "seen": "2026-11-15"
+  },
+  {
+    "match": "philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time",
+    "how": "browser",
+    "why": "The page shows only six of its funded after-school schools until “Show all locations” is pressed, so read it in a browser and open the full list.",
+    "seen": "2026-11-16"
+  },
+  {
+    "match": "studentsrunphilly.org",
+    "how": "person",
+    "why": "The site’s robots.txt closes it to anthropic-ai and other AI crawlers (seen 2026-11-16), so a person has to read it.",
+    "seen": "2026-11-16"
+  },
+  {
+    "match": "locations.gotrwebsite.us",
+    "how": "browser",
+    "why": "The team locator Girls on the Run’s locations page embeds: a JavaScript app, where a team’s days and grades show only after its site is clicked.",
+    "seen": "2026-11-17"
+  },
+  {
+    "match": "conwell.philasd.org/wp-content/uploads",
+    "how": "person",
+    "why": "Conwell posts its after-school details as flyer pictures, so the text has to be read from the image.",
+    "seen": "2026-11-17"
+  },
+  {
+    "match": "philadelphiaballet.org",
+    "how": "person",
+    "why": "The site answered HTTP 403 with a “Blocked” page, even for robots.txt, on 2026-11-17.",
+    "seen": "2026-11-17"
+  },
+  {
+    "match": "ecsphilly.org",
+    "how": "browser",
+    "why": "A plain fetch got a Cloudflare “Attention Required” challenge on 2026-11-17; a browser showed the page.",
+    "seen": "2026-11-17"
+  },
+  {
+    "match": "www.playartsphilly.com/afterschool-program",
+    "how": "browser",
+    "why": "A plain fetch shows the school links pointing at 2024–25 pages that no longer exist; in a browser the page links to the 2026–27 pages for Adaire, Hackett and Moffet.",
+    "seen": "2026-11-18"
+  },
+  {
+    "match": "brooklynrobotfoundry.com/philadelphia/product/philadelphia-after-school-robotics-stem-enrichment-kids",
+    "how": "browser",
+    "why": "The class schedule, with the schools and dates, is loaded by script: a plain fetch of the page doesn’t include McDaniel or any other site.",
+    "seen": "2026-11-19"
+  },
+  {
+    "match": "factschool.org",
+    "how": "person",
+    "why": "Folk Arts-Cultural Treasures Charter School’s site answers with a “request is being verified” bot check, in a plain fetch and in a browser, so its after-school offerings and calendar couldn’t be read.",
+    "seen": "2026-11-20"
+  },
+  {
+    "match": "acrobat.adobe.com/id/urn:aaid:sc:va6c2:54083b58",
+    "how": "browser",
+    "why": "Northwood’s 2026–27 calendar is shared through Adobe’s online viewer, a JavaScript app; a plain fetch gets no dates, and the days off are shown by color as well as listed.",
+    "seen": "2026-11-21"
+  },
+  {
+    "match": "www.harlemlacrosse.org",
+    "how": "person",
+    "why": "Its robots.txt closes the site to ClaudeBot and other AI crawlers, so its program sites are taken from the City’s locator.",
+    "seen": "2026-11-21"
   }
 ]
