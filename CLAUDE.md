@@ -22,7 +22,7 @@ accounts, plans, claims and the edit pages. This repository is **public**.
 | `PREVIEW=1 node build.mjs` | A copy to open without a server: `preview/index.html` |
 | `PAS_TODAY=2026-10-12 node build.mjs` | Builds as if today were that day. Tests only, never publish it |
 | `node tests/run.mjs` | All tests, about half a minute. `node tests/run.mjs api` runs files matching "api"; `--list` lists them |
-| `node scripts/code-map.mjs` | Rewrites `docs/code-map.md`. `--check` says whether it is current |
+| `node scripts/code-map.mjs --out /tmp/code-map.md` | Fresh line numbers for your branch. Never commit `docs/code-map.md`: the publishing job writes it |
 | `node scripts/sweep.mjs <school id or address>` | The provider sweep before a school page goes up |
 | `node scripts/next-schools.mjs [n]` | Which schools to add next |
 | `node scripts/geocode.mjs` | Puts new addresses in `data/geo.json` (the build notes any missing) |
@@ -128,8 +128,8 @@ every session and every scheduled run.
 - Every feature ships with tests in `tests/cases/`. `node build.mjs` and `node tests/run.mjs` pass before the pull
   request opens. Tests never reach a real inbox or service.
 - Every new email the site sends is editable on `/edit/emails/`, like the existing ones.
-- The docs change in the same pull request as the code. After changing `build.mjs` or `groups-api.php`, run
-  `node scripts/code-map.mjs` and commit the map with the change.
+- The docs change in the same pull request as the code. Never commit `docs/code-map.md`: the publishing job rewrites
+  it on `main` after every merge, and a copy in a pull request would conflict with it.
 
 **The pull request description, written for a non-developer**
 

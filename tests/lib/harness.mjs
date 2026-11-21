@@ -123,10 +123,8 @@ export async function startSite({ scratch, standin, log = () => {} } = {}) {
   fs.mkdirSync(copy, { recursive: true });
   // A copy of what the build reads, so the repository's own dist/ is left alone.
   for (const f of ['build.mjs', 'site.config.json', 'data', 'src', 'email', 'scripts']) fs.cpSync(path.join(ROOT, f), path.join(copy, f), { recursive: true });
-  // The edit page's sign-in, with a password made up for this run (the real one is only ever a hash in the config).
-  const edit = { user: 'tester', password: 'pw-' + Math.random().toString(36).slice(2) + Date.now().toString(36) };
+  // /edit/ opens for the accounts in "admins" (and the editors they add): no shared password to make up.
   const cfgFile = path.join(copy, 'site.config.json'), cfg = JSON.parse(fs.readFileSync(cfgFile, 'utf8'));
-  if (cfg.editLogin) { cfg.editLogin = { user: edit.user, passwordHash: execFileSync('php', ['-r', 'echo password_hash($argv[1], PASSWORD_BCRYPT, array("cost" => 4));', '--', edit.password], { encoding: 'utf8' }).trim() }; fs.writeFileSync(cfgFile, JSON.stringify(cfg, null, 2)); }
   log(`building for ${TODAY} …`);
   const out = execFileSync('node', ['build.mjs'], { cwd: copy, encoding: 'utf8', env: { ...process.env, PAS_TODAY: TODAY, PAS_NO_HISTORY: '1' }, maxBuffer: 64e6 });
   fs.renameSync(path.join(copy, 'dist'), pub);
@@ -149,7 +147,7 @@ export async function startSite({ scratch, standin, log = () => {} } = {}) {
   }
   log(`serving ${pub} at ${base}`);
   return {
-    dir, copy, pub, dataDir, base, port, buildOutput: out, logFile, edit: cfg.editLogin ? edit : null,
+    dir, copy, pub, dataDir, base, port, buildOutput: out, logFile, admins: Array.isArray(cfg.admins) ? cfg.admins.map(a => String(a).toLowerCase()) : [],
     dbBytes() {   // everything SQLite has on disk for the accounts database, journal included
       const parts = [];
       for (const f of ['groups.sqlite', 'groups.sqlite-wal', 'groups.sqlite-journal']) { const p = path.join(dataDir, f); if (fs.existsSync(p)) parts.push(fs.readFileSync(p)); }
@@ -162,6 +160,11 @@ export async function startSite({ scratch, standin, log = () => {} } = {}) {
     seed(email, first = '', last = '', origin = '') {
       const out = execFileSync('php', [path.join(ROOT, 'tests/lib/db.php'), path.join(dataDir, 'groups.sqlite'), 'seed', email, first, last, origin], { encoding: 'utf8' });
       return JSON.parse(out);
+    },
+    // A Cookie header for a fresh session on a site admin's account: the way into /edit/ and the owner's pages.
+    adminCookie() {
+      if (!this.admins.length) throw new Failure('no address in "admins" in site.config.json');
+      return 'pas_s=' + this.seed(this.admins[0], 'Admin').sid;
     },
     // Make a sign-in look as if it was last used, and began, so many days ago.
     ageSession(sid, idleDays, ageDays) { return JSON.parse(execFileSync('php', [path.join(ROOT, 'tests/lib/db.php'), path.join(dataDir, 'groups.sqlite'), 'age', sid, String(idleDays), String(ageDays)], { encoding: 'utf8' })); },

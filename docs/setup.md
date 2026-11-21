@@ -32,10 +32,9 @@ Fill in `site.config.json`:
   "@phillyafterschool on Instagram" with a small camera glyph, opening in a new tab, and into the home page's
   Organization schema as `sameAs`.
 - `gtmId`: optional, e.g. `GTM-XXXXXXX`.
-- `admins`: optional, a list of email addresses whose accounts open `/edit/` and its pages (see "Site admins").
-- `editLogin`: optional, `{ "user": "...", "passwordHash": "..." }`. Puts a sign-in on `/edit/`. The hash is a bcrypt hash, never the
-  password itself. To change the password, make a new hash with `php -r 'echo password_hash("new password", PASSWORD_BCRYPT);'`
-  and replace `passwordHash`. Changing it signs everyone out.
+- `admins`: a list of email addresses whose accounts open `/edit/` and its pages (see "Site admins"). The build needs at
+  least one, with accounts on (`groups` and `contactEmail`): without them `/edit/` would have no sign-in.
+- `editLogin` is retired (Nov 2026). It was a shared username and password for `/edit/`; the build now refuses it.
 - `privacyUpdated`: the date shown at the bottom of `/privacy/`. Change it when that page changes in a way that matters.
 - `repo`: optional, `owner/name` on GitHub. Used only to put a link to `data/copy.json` in copy-edit emails.
 
@@ -101,9 +100,10 @@ database does not move: both addresses are served from the same folder.
 
 `admins` in `site.config.json` is a list of email addresses. An account on the site with one of those addresses is a
 site admin: while it is signed in (by the emailed code or by Google, like any account), `/edit/`, `/edit/stats/` and
-`/edit/claims/` open with no second password, and the menu at the top of every page gains an **Admin** group with
+`/edit/claims/` open, and the menu at the top of every page gains an **Admin** group with
 the three links (Site numbers, Claims and changes, Edit the site's wording). The account and profile pages say
-nothing about admin: those are the person's own. The username and password in `editLogin` keep working by themselves.
+nothing about admin: those are the person's own. An admin's account and an editor's account (see "Editing the site's
+wording") are the only ways into these pages: there is no shared password.
 
 - The pages do the checking, not the browser: `edit_admin()` in `editAuthPhp()` (`build.mjs`) looks the session
   cookie up in the accounts database and compares the account's address with the list. The menu only shows the

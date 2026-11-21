@@ -1,33 +1,55 @@
-// The wording editor at /edit/: behind a username and password, with only a hash of the password anywhere.
-import { test, ok, eq, includes, excludes, Failure } from '../lib/harness.mjs';
+// The wording editor at /edit/ and the owner's pages: open only to a site admin's or an editor's account.
+import { test, ok, eq, includes, excludes } from '../lib/harness.mjs';
 
 const form = o => new URLSearchParams(o).toString();
 
-test('the edit page asks for a sign-in, refuses a wrong password, and lets the right one in', async ({ site }) => {
-  if (!site.edit) throw Object.assign(new Failure('editLogin is not set in site.config.json'), { skip: true });
-  const gate = await fetch(`${site.base}/edit/`);
+test('the edit pages open only for a site admin’s or an editor’s account: no password, and a stranger can send nothing', async ({ site }) => {
+  const t = Date.now().toString(36);
+  const send = (cookie, body) => fetch(`${site.base}/edit/send.php`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...(cookie ? { Cookie: cookie } : {}) }, body: JSON.stringify(body) });
+  const page = async (rel, cookie) => fetch(`${site.base}/${rel}`, { headers: cookie ? { Cookie: cookie } : {}, redirect: 'manual' });
+
+  // A stranger: a page that points to the account sign-in, and no password form anywhere.
+  const gate = await page('edit/');
   eq(gate.status, 200);
   const h = await gate.text();
-  includes(h, '<title>Sign in |', 'the sign-in form shows'); includes(h, 'name="pass"'); includes(h, 'noindex', 'kept out of search engines');
-  excludes(h, site.edit.password);
-  const wrong = await fetch(`${site.base}/edit/`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: form({ user: site.edit.user, pass: 'not-it' }), redirect: 'manual' });
-  eq(wrong.status, 401, 'a wrong password is refused');
-  includes(await wrong.text(), 'isn’t right');
-  const right = await fetch(`${site.base}/edit/`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: form({ user: site.edit.user.toUpperCase(), pass: site.edit.password }), redirect: 'manual' });
-  eq(right.status, 303, 'signed in: sent back to the editor');
-  const cookie = (right.headers.getSetCookie ? right.headers.getSetCookie() : []).find(c => c.startsWith('pas_edit='));
-  ok(cookie, 'a signed cookie'); ok(/httponly/i.test(cookie), 'HttpOnly'); ok(/path=\/edit\//i.test(cookie), 'scoped to /edit/');
-  const token = cookie.split(';')[0];
-  const editor = await fetch(`${site.base}/edit/`, { headers: { Cookie: token } });
-  const eh = await editor.text();
-  includes(eh, '<title>Edit the copy |', 'the editor shows, not the gate'); excludes(eh, 'name="pass"');
-  // The queue page and the sender want the same cookie.
-  const q = await fetch(`${site.base}/edit/queue/`, { redirect: 'manual' });
-  eq(q.status, 303, 'the queue sends a stranger back to sign in');
-  const qin = await fetch(`${site.base}/edit/queue/`, { headers: { Cookie: token }, redirect: 'manual' });
-  eq(qin.status, 200, 'the queue opens when signed in');
-  const send = await fetch(`${site.base}/edit/send.php`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
-  ok(send.status >= 400, `nothing can be sent without signing in (got ${send.status})`);
+  includes(h, '<title>Sign in |', 'the sign-in page shows'); includes(h, 'href="../account/"', 'it points to the account sign-in');
+  includes(h, 'noindex', 'kept out of search engines'); excludes(h, 'name="pass"', 'no password form');
+  // The old username-and-password sign-in is gone: posting one, or bringing its old cookie, opens nothing.
+  const post = await fetch(`${site.base}/edit/`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: form({ user: 'tester', pass: 'anything' }), redirect: 'manual' });
+  ok(!(post.headers.getSetCookie ? post.headers.getSetCookie() : []).some(c => c.startsWith('pas_edit=')), 'no edit cookie is handed out');
+  includes(await post.text(), '<title>Sign in |', 'still the sign-in page');
+  includes(await (await page('edit/', `pas_edit=${Math.floor(Date.now() / 1000) + 86400}.${'a'.repeat(64)}`)).text(), '<title>Sign in |', 'an old password cookie opens nothing');
+  eq((await page('edit/queue/')).status, 303, 'the queue sends a stranger back to sign in');
+  ok((await send('', {})).status >= 400, 'a stranger can send nothing');
+
+  // A parent's account is an account, but not an admin's or an editor's.
+  const parent = 'pas_s=' + site.seed(`edit-parent-${t}@example.org`, 'Pat').sid;
+  includes(await (await page('edit/', parent)).text(), '<title>Sign in |', 'a parent’s account is not let in');
+  eq((await page('edit/queue/', parent)).status, 303, 'nor into the queue');
+  ok((await send(parent, {})).status >= 400, 'nor can it send');
+
+  // A site admin's account opens every owner page, and can let someone in as an editor.
+  const admin = site.adminCookie();
+  const eh = await (await page('edit/', admin)).text();
+  includes(eh, '<title>Edit the copy |', 'the editor shows for an admin'); includes(eh, 'id="edit-admin"', 'and says which account let them in');
+  for (const rel of ['edit/queue/', 'edit/stats/', 'edit/claims/']) eq((await page(rel, admin)).status, 200, `${rel} opens for an admin`);
+  const editorEmail = `edit-editor-${t}@example.org`;
+  const added = await send(admin, { action: 'editor_add', email: editorEmail, name: 'Robin' });
+  eq(added.status, 200, 'an admin adds an editor');
+
+  // The editor's account then opens the edit pages, but can't change who edits.
+  const editor = 'pas_s=' + site.seed(editorEmail, 'Robin').sid;
+  const edh = await (await page('edit/', editor)).text();
+  includes(edh, '<title>Edit the copy |', 'the editor shows for an editor'); includes(edh, 'id="edit-editor"');
+  eq((await page('edit/queue/', editor)).status, 200, 'the queue opens for an editor');
+  eq((await send(editor, { action: 'editor_add', email: `x-${t}@example.org`, name: 'X' })).status, 403, 'only an admin changes who edits');
+  // Taken off the list, the editor is out again.
+  eq((await send(admin, { action: 'editor_drop', email: editorEmail })).status, 200);
+  includes(await (await page('edit/', editor)).text(), '<title>Sign in |', 'a dropped editor is out');
+
+  // Signing out from the edit page goes where every account signs out.
+  const out = await page('edit/?out=1', admin);
+  eq(out.status, 303); ok(/account\/#sign-out$/.test(out.headers.get('location') || ''), `sent to sign out (got ${out.headers.get('location')})`);
 });
 
 test('a suggestion needs a name and an email: the forms ask for them, and the sender refuses one without', async ({ site, open }) => {
