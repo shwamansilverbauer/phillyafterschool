@@ -2,7 +2,7 @@
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
   "summary": {
     "pages": 367,
-    "pagesNeedingABrowser": 60,
+    "pagesNeedingABrowser": 61,
     "pagesNeedingAPerson": 18,
     "links": 354,
     "pickupLinks": 132,
@@ -3624,14 +3624,6 @@
       "lists": []
     },
     {
-      "url": "https://app.iclasspro.com/portal/phillycircus/classes",
-      "how": "fetch",
-      "programs": [
-        "philadelphia-school-of-circus-arts"
-      ],
-      "lists": []
-    },
-    {
       "url": "https://app.jackrabbitclass.com/regv2.asp?id=552627",
       "how": "fetch",
       "programs": [
@@ -4638,7 +4630,7 @@
       "lists": []
     },
     {
-      "url": "https://phillyartcenter.com/afterschool/program-information/locations/fairmount",
+      "url": "https://phillyartcenter.com/locations/fairmount/",
       "how": "fetch",
       "programs": [
         "philly-art-center-fairmount"
@@ -4767,6 +4759,15 @@
       "how": "fetch",
       "programs": [
         "philly-inmovement"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://portal.iclasspro.com/phillycircus/classes",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns only 'Customer Portal Loading…', so the Kid’s Day Off Camp dates on the circus school’s sign-up page were not read.",
+      "programs": [
+        "philadelphia-school-of-circus-arts"
       ],
       "lists": []
     },
