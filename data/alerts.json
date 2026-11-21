@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-11-20",
+  "generated": "2026-11-21",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -4218,6 +4218,210 @@
       "text": "From Mastery Thomas’s own calendar. One listed program has posted a camp: ZAZZ.",
       "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "week-coppin-2026-12-07",
+      "kind": "week",
+      "date": "2026-12-11",
+      "sendOn": "2026-12-06",
+      "expires": "2026-12-09",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "coppin"
+      ],
+      "when": "Week of December 7",
+      "title": "This week at Coppin",
+      "text": "Monday: Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration"
+        }
+      ],
+      "first": "Monday: Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration",
+      "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Coppin’s week"
+    },
+    {
+      "id": "week-independence-charter-2026-12-07",
+      "kind": "week",
+      "date": "2026-12-11",
+      "sendOn": "2026-12-06",
+      "expires": "2026-12-09",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "independence-charter"
+      ],
+      "when": "Week of December 7",
+      "title": "This week at Independence Charter",
+      "text": "Monday: Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration. Wednesday: Early dismissal. Friday: No school: Report card day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration"
+        },
+        {
+          "when": "Wednesday",
+          "what": "Early dismissal"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Report card day"
+        }
+      ],
+      "first": "Monday: Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration; Friday: no school, Report card day",
+      "url": "https://phillyafterschool.org/independence-charter/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Independence Charter’s week"
+    },
+    {
+      "id": "week-mastery-thomas-2026-12-07",
+      "kind": "week",
+      "date": "2026-12-11",
+      "sendOn": "2026-12-06",
+      "expires": "2026-12-09",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mastery-thomas"
+      ],
+      "when": "Week of December 7",
+      "title": "This week at Mastery Thomas",
+      "text": "Friday: No school: Professional development day.",
+      "lines": [
+        {
+          "when": "Friday",
+          "what": "No school: Professional development day"
+        }
+      ],
+      "first": "Friday: no school, Professional development day",
+      "url": "https://phillyafterschool.org/mastery-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Thomas’s week"
+    },
+    {
+      "id": "week-mccall-2026-12-07",
+      "kind": "week",
+      "date": "2026-12-11",
+      "sendOn": "2026-12-06",
+      "expires": "2026-12-09",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mccall"
+      ],
+      "when": "Week of December 7",
+      "title": "This week at McCall",
+      "text": "Monday: Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration"
+        }
+      ],
+      "first": "Monday: Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration",
+      "url": "https://phillyafterschool.org/mccall/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See McCall’s week"
+    },
+    {
+      "id": "week-meredith-2026-12-07",
+      "kind": "week",
+      "date": "2026-12-11",
+      "sendOn": "2026-12-06",
+      "expires": "2026-12-09",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "meredith"
+      ],
+      "when": "Week of December 7",
+      "title": "This week at Meredith",
+      "text": "Monday: Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration"
+        }
+      ],
+      "first": "Monday: Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration",
+      "url": "https://phillyafterschool.org/meredith/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Meredith’s week"
+    },
+    {
+      "id": "week-nebinger-2026-12-07",
+      "kind": "week",
+      "date": "2026-12-11",
+      "sendOn": "2026-12-06",
+      "expires": "2026-12-09",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "nebinger"
+      ],
+      "when": "Week of December 7",
+      "title": "This week at Nebinger",
+      "text": "Monday: Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration. Wednesday: Pretzel day.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration"
+        },
+        {
+          "when": "Wednesday",
+          "what": "Pretzel day"
+        }
+      ],
+      "first": "Monday: Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration",
+      "url": "https://phillyafterschool.org/nebinger/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Nebinger’s week"
+    },
+    {
+      "id": "week-southwark-2026-12-07",
+      "kind": "week",
+      "date": "2026-12-11",
+      "sendOn": "2026-12-06",
+      "expires": "2026-12-09",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "southwark"
+      ],
+      "when": "Week of December 7",
+      "title": "This week at Southwark",
+      "text": "Monday: Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration"
+        }
+      ],
+      "first": "Monday: Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration",
+      "url": "https://phillyafterschool.org/southwark/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Southwark’s week"
+    },
+    {
+      "id": "week-vare-washington-2026-12-07",
+      "kind": "week",
+      "date": "2026-12-11",
+      "sendOn": "2026-12-06",
+      "expires": "2026-12-09",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "vare-washington"
+      ],
+      "when": "Week of December 7",
+      "title": "This week at Vare-Washington",
+      "text": "Monday: Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration.",
+      "lines": [
+        {
+          "when": "Monday",
+          "what": "Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration"
+        }
+      ],
+      "first": "Monday: Sign-ups, Philly Art Center, Queen Village: Last day to change a Winter/Spring registration",
+      "url": "https://phillyafterschool.org/vare-washington/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Vare-Washington’s week"
     },
     {
       "id": "reg-philly-pack-2026-12-12",
