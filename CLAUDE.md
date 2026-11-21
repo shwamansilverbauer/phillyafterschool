@@ -112,6 +112,9 @@ every session and every scheduled run.
   repository.
 - Secrets live only in key files next to the public folder on the host, or in GitHub Actions secrets. Never in the
   repository, a pull request, an issue or a chat.
+- Commit as `Claude <noreply@anthropic.com>`, or with the owner's own GitHub address,
+  `122128251+shwamansilverbauer@users.noreply.github.com`. Never make up a commit address: GitHub credits a commit to
+  whoever owns its address, and an invented `josh@users.noreply.github.com` credited 96 commits to a stranger.
 
 **Untrusted text**
 
