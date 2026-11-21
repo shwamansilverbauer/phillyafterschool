@@ -1,5 +1,5 @@
 {
-  "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. README.md, \"Keeping it current\", says how to use it.",
+  "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. docs/listings.md, \"Keeping it current\", says how to use it.",
   "summary": {
     "pages": 367,
     "pagesNeedingABrowser": 61,
@@ -4426,7 +4426,7 @@
       "lists": []
     },
     {
-      "url": "https://movementgyms.com/callowhill/climbing/youth-programs/camps/",
+      "url": "https://movementgyms.com/callowhill/climbing/youth-programs/",
       "how": "fetch",
       "programs": [
         "movement-callowhill"
@@ -4591,14 +4591,6 @@
       "how": "fetch",
       "programs": [
         "philly-rock-gym-day-camps"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://philaymca.org/",
-      "how": "fetch",
-      "programs": [
-        "ymca-juniata-park"
       ],
       "lists": []
     },
@@ -5982,6 +5974,14 @@
       "lists": []
     },
     {
+      "url": "https://www.philaymca.org/",
+      "how": "fetch",
+      "programs": [
+        "ymca-juniata-park"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
       "how": "fetch",
       "programs": [
@@ -7313,7 +7313,7 @@
         "name": "Makom Community",
         "season": 2027,
         "checked": "2026-11-11",
-        "url": "https://makomcommunity.org/schools-out-camp-2/",
+        "url": "https://makomcommunity.org/schools-out-camp/",
         "how": "fetch",
         "look": "“Camp Days for the 2026-2027 school year” is a dated list; Summer Break Camp is the last line. The $90 day price and the $100 late price are in the text above it.",
         "notes": "The site lists two addresses (2401 Washington Ave and 1311 S Juniper St) without saying which holds camp; Makom’s manager told us camp is at 2401 Washington Ave."
