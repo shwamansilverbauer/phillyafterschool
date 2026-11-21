@@ -29,10 +29,6 @@ jobs:
       - name: Build (stops here if the data has a problem)
         run: node build.mjs
 
-      # A reminder only, never a red cross: the publishing job rewrites the map anyway.
-      - name: Is the code map current?
-        run: node scripts/code-map.mjs --check || echo "::warning title=Code map::docs/code-map.md is out of date. Run node scripts/code-map.mjs and commit it with the change."
-
       - name: Playwright for the browser tests
         id: pw
         run: |

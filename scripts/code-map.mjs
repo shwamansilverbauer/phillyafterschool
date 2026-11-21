@@ -1,8 +1,10 @@
 // Writes docs/code-map.md: the sections and main functions of build.mjs and src/server/groups-api.php, with their
 // line numbers, and the API's routes. An agent opens the map, then reads only the lines it needs, instead of a
-// 700 KB file. The publishing job runs this and commits the map when the line numbers move (CLAUDE.md, docs/setup.md).
+// 700 KB file. Only the publishing job commits the map, on main after every merge: a copy committed from a branch
+// would conflict with it. On a branch, write a fresh one somewhere else with --out.
 //
-//   node scripts/code-map.mjs           rewrite docs/code-map.md
+//   node scripts/code-map.mjs           rewrite docs/code-map.md (the publishing job does this)
+//   node scripts/code-map.mjs --out <file>   write it there instead: fresh line numbers for a branch
 //   node scripts/code-map.mjs --check   say whether it is current (exit 1 if not); writes nothing
 //
 // Plain Node, no packages. The output carries no date, so it only changes when the code does.
@@ -95,8 +97,9 @@ const routeCount = routes.reduce((n, g) => n + g.items.length, 0);
 
 const md = `# Code map
 
-Written by \`scripts/code-map.mjs\`. Don't edit it by hand: run \`node scripts/code-map.mjs\` after changing
-\`build.mjs\` or \`src/server/groups-api.php\`, and the publishing job rewrites it on \`main\` when the line numbers move.
+Written by \`scripts/code-map.mjs\`. The publishing job rewrites it on \`main\` after every merge, so it matches \`main\`.
+Don't edit it or commit it from a branch: that copy would conflict. For a branch's own line numbers, run
+\`node scripts/code-map.mjs --out /tmp/code-map.md\`.
 
 Use it to open only the lines you need: find the function here, then read from its line.
 
