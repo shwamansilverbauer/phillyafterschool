@@ -1,11 +1,12 @@
 # Code map
 
-Written by `scripts/code-map.mjs`. Don't edit it by hand: run `node scripts/code-map.mjs` after changing
-`build.mjs` or `src/server/groups-api.php`, and the publishing job rewrites it on `main` when the line numbers move.
+Written by `scripts/code-map.mjs`. The publishing job rewrites it on `main` after every merge, so it matches `main`.
+Don't edit it or commit it from a branch: that copy would conflict. For a branch's own line numbers, run
+`node scripts/code-map.mjs --out /tmp/code-map.md`.
 
 Use it to open only the lines you need: find the function here, then read from its line.
 
-## build.mjs (7056 lines)
+## build.mjs (7007 lines)
 
 Run as `node build.mjs`. Reads `data/` and `src/`, writes the finished site to `dist/`.
 
@@ -15,49 +16,49 @@ Run as `node build.mjs`. Reads `data/` and `src/`, writes the finished site to `
 | 77–135 | site copy | `copyId` 83, `isRemoved` 87, `T` 88, `copyNow` 101, `emailCopy` 106, `dropEmpty` 119, `stamp` 127, `sharePagePath` 131, `sharePageStamp` 133 |
 | 136–157 | helpers | `esc` 137, `link` 138, `expandGrades` 144, `longDate` 151, `checkedOn` 154, `checkedLine` 155, `telHref` 156 |
 | 158–170 | validation | `isUrl` 170 |
-| 171–477 | links out to programs | `outUrl` 179, `bareHost` 187, `ownHosts` 189, `howToRead` 273, `flat` 275, `namesSchool` 276, `checkList` 279, `isIso` 371, `okDays` 372 |
-| 478–807 | page shell | `correctionHref` 493, `dayScene` 498, `weekendScene` 529, `summerScene` 562, `street` 588, `getAppDialog` 627, `layout` 651 |
-| 808–813 | calendar files for registration dates | — |
-| 814–886 | ↳ days of the week, and days off | `daysText` 815, `daysLine` 816, `pickyDays` 817, `isoAdd` 818, `weekday` 819, `dayDate` 820, `closedDays` 822, `schoolOff` 830, `schoolLastDay` 831, `campsOn` 834, `nextOff` 843, `ordinal` 850, `ordDate` 851, `offSpan` 852, `lowerSeason` 853, `offAsk` 854, `nextOffBar` 855, `ymd` 858, `nextDay` 859, `shortDate` 860, `upcomingDates` 861, `calTitle` 862, `calDetails` 863, `gcalUrl` 864, `icsFile` 868 |
-| 887–898 | reviews | `stars` 888, `allReviewsFor` 889, `reviewsFor` 890, `kidReviewsFor` 891, `gradeWord` 892, `kidBy` 894, `monthYear` 895, `schoolShort` 896 |
-| 899–935 | pieces shared by the program card and the program page | `gradeText` 900, `gradeStrip` 901, `phoneLink` 906, `contactHtml` 907, `registerText` 908, `datesHtml` 916, `average` 917, `reviewItems` 918, `reviewsBlock` 920, `sourceLinks` 928, `programPath` 929, `fullName` 931 |
-| 936–972 | neighborhoods | `hoodSlug` 939, `dayLabel` 941, `daySlug` 942, `dayPath` 943, `schoolHoods` 944, `programHoods` 945, `hoods` 947, `hoodPath` 954, `hoodLinks` 955, `plural` 956, `schoolRow` 959, `haystack` 969 |
-| 973–1039 | where things are | `coordsOf` 979, `milesApart` 986, `placesOf` 989, `milesFrom` 994, `milesText` 995, `kindsOf` 996, `saysHelp` 1001, `offersHelp` 1002, `costKinds` 1003, `freeOnlyFor` 1007, `schoolRun` 1010, `campOnly` 1013, `clubGrades` 1015, `clubsOfType` 1016, `clubDays` 1018, `clubBrief` 1019, `clubsByType` 1020, `itemAttrs` 1022, `typeTags` 1023, `mini` 1026, `servedLines` 1028, `programRow` 1032 |
-| 1040–1207 | one row for every list | `offBreaks` 1048, `campAgeList` 1054, `shapeFor` 1055, `listRow` 1059, `heroGo` 1092, `planLine` 1095, `nearRow` 1106, `nearMap` 1107, `sortedSchools` 1116, `focusOn` 1117, `schoolSelect` 1118, `focusCard` 1119, `filterBar` 1144, `bulb` 1205, `noMatch` 1206 |
-| 1208–1241 | program card | `card` 1209 |
-| 1242–1244 | a page per program | `listNames` 1243 |
-| 1245–1256 | dates by email | `longDay` 1254, `sendOn` 1256 |
-| 1257–1282 | ↳ this week at a school | `weekMonday` 1261, `schoolWeek` 1263, `weekLabel` 1279, `thisMonday` 1281 |
-| 1283–1570 | ↳ when did each date reach the site? | `phillyDay` 1289, `firstSeen` 1290, `postedOn` 1313, `dayAfter` 1314, `signupItems` 1318, `noteDays` 1330, `mailUrl` 1332, `mailLink` 1334, `leadPart` 1348, `lateAlertItems` 1394, `alertsFeed` 1424, `alertsBox` 1435, `followBox` 1471, `datesBox` 1495, `stopPage` 1498, `alertsPage` 1510, `servedBy` 1534, `servedSummary` 1536, `servedPills` 1545, `programAddress` 1549, `programTitle` 1557, `fold` 1566 |
-| 1571–1796 | a program's page | `campOf` 1576, `partsOf` 1578, `runsStrip` 1580, `kindSection` 1581, `offDatesHtml` 1587, `spotItem` 1611, `spotlight` 1612, `programPage` 1620, `programsPage` 1776 |
-| 1797–1885 | program types | `KIND_LIST` 1802, `ofKind` 1804, `typeCount` 1805, `liveTypes` 1806, `typeChips` 1807, `kindSections` 1810, `shapedAll` 1817, `typeSections` 1821, `pageNav` 1834, `typesPage` 1835, `typePage` 1845 |
-| 1886–1911 | by day of the week | `byDayPage` 1888 |
-| 1912–1920 | pages | `forSchool` 1913, `schoolChecked` 1916, `tally` 1917, `clock` 1918, `gradeSpan` 1919 |
-| 1921–1971 | the school finder | `streetKey` 1923, `milesBetween` 1924, `finderData` 1929, `finderBox` 1943, `schoolsPage` 1951 |
-| 1972–2404 | a page for each school that isn't covered yet | `uncoveredPath` 1981, `nearTo` 1982, `milesPill` 1983, `nearbyFor` 1984, `askPanel` 1996, `uncoveredSchoolPage` 2009, `uncoveredIndexed` 2066, `schoolRequestPage` 2069, `schoolRequestPhp` 2093, `schoolWeekSection` 2105, `schoolPage` 2141, `homePage` 2221, `neighborhoodsPage` 2307, `neighborhoodPage` 2335 |
-| 2405–3006 | terms of use | `termsPage` 2409, `privacyPage` 2505, `supportPage` 2663, `aboutPage` 2689, `suggestPage` 2762, `ideasPage` 2850, `ideasThanksPage` 2889, `thanksPage` 2895, `sendPhp` 2903, `fail` 2910, `field` 2916, `one_line` 2921 |
-| 3007–3123 | contact | `contactPage` 3008, `contactThanksPage` 3058, `contactPhp` 3063, `fail` 3070, `field` 3076, `one_line` 3081 |
-| 3124 | days off | — |
-| 3125–3381 | a page for each day, or break, that school is closed | `fullDay` 3130, `monthDay` 3131, `dayOffPage` 3132, `daysOffBits` 3208, `offFacts` 3238, `headsUpBox` 3245, `dayCampsPage` 3249, `daysOffPage` 3290 |
-| 3382–3415 | share groups (accounts, class codes) | `premiumMode` 3387, `PM_PRICE` 3393, `PM_PAY` 3403 |
-| 3416–3474 | what each planner looks like, for someone who hasn't signed in | `planExample` 3421 |
-| 3475–3689 | the planners, for someone who hasn't signed in | `showIcon` 3496, `miniArt` 3518, `heroCta` 3520, `showExample` 3523, `planShow` 3622, `groupsAttrs` 3689 |
-| 3690–3758 | directors | `baseDomain` 3696, `claimMode` 3698, `daysSince` 3721, `staleTold` 3722, `asksFor` 3723, `claimListings` 3727, `listingTools` 3735, `photoSlot` 3743, `premiumSlot` 3746, `spaceSlot` 3748, `claimedMark` 3749, `jumpNav` 3751, `accountHoods` 3753, `groupsScript` 3758 |
-| 3759–4013 | small drawings for the account and managers pages, in the site's colors | `artWeek` 3763, `artChip` 3765, `artBox` 3766, `artKid` 3768, `artYearRibbon` 3771, `artPencil` 3781, `artListingKept` 3783, `artStar` 3819, `artBulb` 3820, `artPin` 3821, `artCloudQ` 3822, `artRow` 3824, `accountArt` 3827, `accountPage` 3909, `profilePage` 3994, `movedPage` 4006 |
-| 4014–5025 | for the people who manage a program | `CLAIM_GETS` 4016, `CLAIM_GETS_ALL` 4017, `claimDemo` 4025, `directorsPage` 4065, `premiumPage` 4146, `editClaimsPhp` 4273, `tell` 4396, `groupsInfo` 4537, `joinPage` 4542, `groupPage` 4561, `groupsApiPhp` 4573, `phpCopy` 4586, `boardPage` 4607, `rvNames` 4820, `reviewPage` 4821, `reviewThanksPage` 4897, `reviewPhp` 4906, `fail` 4917, `field` 4923, `one_line` 4928 |
-| 5026–5091 | sending mail | `pas_mail_key` 5032, `pas_mail_via` 5040, `pas_mail_note` 5042, `pas_mail_state` 5051, `pas_postmark` 5057, `pas_mail_via` 5085, `pas_mail_note` 5086, `pas_mail_state` 5087, `pas_postmark` 5088, `mailerPhp` 5090 |
-| 5092–5514 | edit mode | `editAuthPhp` 5100, `edit_key` 5106, `edit_token` 5121, `edit_db` 5126, `edit_account` 5148, `edit_admin` 5171, `edit_editor` 5179, `edit_signed_in` 5195, `editSignInPage` 5206, `editIndexPhp` 5228, `edit_cookie` 5233, `editStatsPhp` 5284, `editEmailsPage` 5418, `editEmailsPhp` 5429, `editPage` 5438, `editPhp` 5499, `ghPhp` 5513 |
-| 5515–5576 | the weekly run's queue | `editQueuePhp` 5516 |
-| 5577–5598 | summer camps | `campAreas` 5597, `seasonPill` 5598 |
-| 5599–5652 | summer schedule | `utcDay` 5608, `plusDays` 5609, `mondayOf` 5610, `campWeeks` 5611, `summerPlan` 5638 |
-| 5653–5658 | my kids' calendar | — |
-| 5659–6075 | Kids' Playground | `mapHood` 5681, `HOOD_AREA` 5741, `mapArea` 5753, `mapAreas` 5754, `surpriseHoods` 5771, `kidsStar` 5808, `kidsDot` 5809, `kidsIcon` 5900, `bingoCard` 5909, `actHits` 5966, `kidsData` 5980, `kidsDataV` 6013, `kidsShowcase` 6018, `kidsHow` 6046, `kidsPage` 6057 |
-| 6076–6194 | Account Features | `FEATS` 6080, `featArt` 6083, `featPage` 6115 |
-| 6195–6607 | the planners in one place | `schedulesPage` 6197, `todoPage` 6265, `calendarPage` 6304, `summerSchedulePage` 6436, `summerWeeksPage` 6556 |
-| 6608–6765 | a page per summer camp | `campPath` 6610, `campLink` 6612, `campAsListing` 6614, `campAges` 6615, `campPrice` 6616, `campHoursShort` 6617, `campWeeksShort` 6618, `summerBlock` 6622, `campPage` 6655, `campMovedPage` 6712, `summerCampsPage` 6726 |
-| 6766–6801 | weekend classes | `weekendAreas` 6771, `weekendByArea` 6772, `weekendRow` 6773, `weekendPage` 6778 |
-| 6802–6891 | all programs | `allProgramsPage` 6807, `notFoundPage` 6885 |
-| 6892–7056 | write | `write` 6894 |
+| 171–479 | links out to programs | `outUrl` 179, `bareHost` 187, `ownHosts` 189, `howToRead` 273, `flat` 275, `namesSchool` 276, `checkList` 279, `isIso` 371, `okDays` 372 |
+| 480–809 | page shell | `correctionHref` 495, `dayScene` 500, `weekendScene` 531, `summerScene` 564, `street` 590, `getAppDialog` 629, `layout` 653 |
+| 810–815 | calendar files for registration dates | — |
+| 816–888 | ↳ days of the week, and days off | `daysText` 817, `daysLine` 818, `pickyDays` 819, `isoAdd` 820, `weekday` 821, `dayDate` 822, `closedDays` 824, `schoolOff` 832, `schoolLastDay` 833, `campsOn` 836, `nextOff` 845, `ordinal` 852, `ordDate` 853, `offSpan` 854, `lowerSeason` 855, `offAsk` 856, `nextOffBar` 857, `ymd` 860, `nextDay` 861, `shortDate` 862, `upcomingDates` 863, `calTitle` 864, `calDetails` 865, `gcalUrl` 866, `icsFile` 870 |
+| 889–900 | reviews | `stars` 890, `allReviewsFor` 891, `reviewsFor` 892, `kidReviewsFor` 893, `gradeWord` 894, `kidBy` 896, `monthYear` 897, `schoolShort` 898 |
+| 901–937 | pieces shared by the program card and the program page | `gradeText` 902, `gradeStrip` 903, `phoneLink` 908, `contactHtml` 909, `registerText` 910, `datesHtml` 918, `average` 919, `reviewItems` 920, `reviewsBlock` 922, `sourceLinks` 930, `programPath` 931, `fullName` 933 |
+| 938–974 | neighborhoods | `hoodSlug` 941, `dayLabel` 943, `daySlug` 944, `dayPath` 945, `schoolHoods` 946, `programHoods` 947, `hoods` 949, `hoodPath` 956, `hoodLinks` 957, `plural` 958, `schoolRow` 961, `haystack` 971 |
+| 975–1041 | where things are | `coordsOf` 981, `milesApart` 988, `placesOf` 991, `milesFrom` 996, `milesText` 997, `kindsOf` 998, `saysHelp` 1003, `offersHelp` 1004, `costKinds` 1005, `freeOnlyFor` 1009, `schoolRun` 1012, `campOnly` 1015, `clubGrades` 1017, `clubsOfType` 1018, `clubDays` 1020, `clubBrief` 1021, `clubsByType` 1022, `itemAttrs` 1024, `typeTags` 1025, `mini` 1028, `servedLines` 1030, `programRow` 1034 |
+| 1042–1209 | one row for every list | `offBreaks` 1050, `campAgeList` 1056, `shapeFor` 1057, `listRow` 1061, `heroGo` 1094, `planLine` 1097, `nearRow` 1108, `nearMap` 1109, `sortedSchools` 1118, `focusOn` 1119, `schoolSelect` 1120, `focusCard` 1121, `filterBar` 1146, `bulb` 1207, `noMatch` 1208 |
+| 1210–1243 | program card | `card` 1211 |
+| 1244–1246 | a page per program | `listNames` 1245 |
+| 1247–1258 | dates by email | `longDay` 1256, `sendOn` 1258 |
+| 1259–1284 | ↳ this week at a school | `weekMonday` 1263, `schoolWeek` 1265, `weekLabel` 1281, `thisMonday` 1283 |
+| 1285–1572 | ↳ when did each date reach the site? | `phillyDay` 1291, `firstSeen` 1292, `postedOn` 1315, `dayAfter` 1316, `signupItems` 1320, `noteDays` 1332, `mailUrl` 1334, `mailLink` 1336, `leadPart` 1350, `lateAlertItems` 1396, `alertsFeed` 1426, `alertsBox` 1437, `followBox` 1473, `datesBox` 1497, `stopPage` 1500, `alertsPage` 1512, `servedBy` 1536, `servedSummary` 1538, `servedPills` 1547, `programAddress` 1551, `programTitle` 1559, `fold` 1568 |
+| 1573–1798 | a program's page | `campOf` 1578, `partsOf` 1580, `runsStrip` 1582, `kindSection` 1583, `offDatesHtml` 1589, `spotItem` 1613, `spotlight` 1614, `programPage` 1622, `programsPage` 1778 |
+| 1799–1887 | program types | `KIND_LIST` 1804, `ofKind` 1806, `typeCount` 1807, `liveTypes` 1808, `typeChips` 1809, `kindSections` 1812, `shapedAll` 1819, `typeSections` 1823, `pageNav` 1836, `typesPage` 1837, `typePage` 1847 |
+| 1888–1913 | by day of the week | `byDayPage` 1890 |
+| 1914–1922 | pages | `forSchool` 1915, `schoolChecked` 1918, `tally` 1919, `clock` 1920, `gradeSpan` 1921 |
+| 1923–1973 | the school finder | `streetKey` 1925, `milesBetween` 1926, `finderData` 1931, `finderBox` 1945, `schoolsPage` 1953 |
+| 1974–2406 | a page for each school that isn't covered yet | `uncoveredPath` 1983, `nearTo` 1984, `milesPill` 1985, `nearbyFor` 1986, `askPanel` 1998, `uncoveredSchoolPage` 2011, `uncoveredIndexed` 2068, `schoolRequestPage` 2071, `schoolRequestPhp` 2095, `schoolWeekSection` 2107, `schoolPage` 2143, `homePage` 2223, `neighborhoodsPage` 2309, `neighborhoodPage` 2337 |
+| 2407–3008 | terms of use | `termsPage` 2411, `privacyPage` 2507, `supportPage` 2665, `aboutPage` 2691, `suggestPage` 2764, `ideasPage` 2852, `ideasThanksPage` 2891, `thanksPage` 2897, `sendPhp` 2905, `fail` 2912, `field` 2918, `one_line` 2923 |
+| 3009–3125 | contact | `contactPage` 3010, `contactThanksPage` 3060, `contactPhp` 3065, `fail` 3072, `field` 3078, `one_line` 3083 |
+| 3126 | days off | — |
+| 3127–3383 | a page for each day, or break, that school is closed | `fullDay` 3132, `monthDay` 3133, `dayOffPage` 3134, `daysOffBits` 3210, `offFacts` 3240, `headsUpBox` 3247, `dayCampsPage` 3251, `daysOffPage` 3292 |
+| 3384–3417 | share groups (accounts, class codes) | `premiumMode` 3389, `PM_PRICE` 3395, `PM_PAY` 3405 |
+| 3418–3476 | what each planner looks like, for someone who hasn't signed in | `planExample` 3423 |
+| 3477–3691 | the planners, for someone who hasn't signed in | `showIcon` 3498, `miniArt` 3520, `heroCta` 3522, `showExample` 3525, `planShow` 3624, `groupsAttrs` 3691 |
+| 3692–3760 | directors | `baseDomain` 3698, `claimMode` 3700, `daysSince` 3723, `staleTold` 3724, `asksFor` 3725, `claimListings` 3729, `listingTools` 3737, `photoSlot` 3745, `premiumSlot` 3748, `spaceSlot` 3750, `claimedMark` 3751, `jumpNav` 3753, `accountHoods` 3755, `groupsScript` 3760 |
+| 3761–4015 | small drawings for the account and managers pages, in the site's colors | `artWeek` 3765, `artChip` 3767, `artBox` 3768, `artKid` 3770, `artYearRibbon` 3773, `artPencil` 3783, `artListingKept` 3785, `artStar` 3821, `artBulb` 3822, `artPin` 3823, `artCloudQ` 3824, `artRow` 3826, `accountArt` 3829, `accountPage` 3911, `profilePage` 3996, `movedPage` 4008 |
+| 4016–5027 | for the people who manage a program | `CLAIM_GETS` 4018, `CLAIM_GETS_ALL` 4019, `claimDemo` 4027, `directorsPage` 4067, `premiumPage` 4148, `editClaimsPhp` 4275, `tell` 4398, `groupsInfo` 4539, `joinPage` 4544, `groupPage` 4563, `groupsApiPhp` 4575, `phpCopy` 4588, `boardPage` 4609, `rvNames` 4822, `reviewPage` 4823, `reviewThanksPage` 4899, `reviewPhp` 4908, `fail` 4919, `field` 4925, `one_line` 4930 |
+| 5028–5093 | sending mail | `pas_mail_key` 5034, `pas_mail_via` 5042, `pas_mail_note` 5044, `pas_mail_state` 5053, `pas_postmark` 5059, `pas_mail_via` 5087, `pas_mail_note` 5088, `pas_mail_state` 5089, `pas_postmark` 5090, `mailerPhp` 5092 |
+| 5094–5465 | edit mode | `editAuthPhp` 5103, `edit_key` 5107, `edit_db` 5123, `edit_account` 5145, `edit_admin` 5168, `edit_editor` 5176, `edit_signed_in` 5193, `editSignInPage` 5199, `editIndexPhp` 5213, `editStatsPhp` 5235, `editEmailsPage` 5369, `editEmailsPhp` 5380, `editPage` 5389, `editPhp` 5450, `ghPhp` 5464 |
+| 5466–5527 | the weekly run's queue | `editQueuePhp` 5467 |
+| 5528–5549 | summer camps | `campAreas` 5548, `seasonPill` 5549 |
+| 5550–5603 | summer schedule | `utcDay` 5559, `plusDays` 5560, `mondayOf` 5561, `campWeeks` 5562, `summerPlan` 5589 |
+| 5604–5609 | my kids' calendar | — |
+| 5610–6026 | Kids' Playground | `mapHood` 5632, `HOOD_AREA` 5692, `mapArea` 5704, `mapAreas` 5705, `surpriseHoods` 5722, `kidsStar` 5759, `kidsDot` 5760, `kidsIcon` 5851, `bingoCard` 5860, `actHits` 5917, `kidsData` 5931, `kidsDataV` 5964, `kidsShowcase` 5969, `kidsHow` 5997, `kidsPage` 6008 |
+| 6027–6145 | Account Features | `FEATS` 6031, `featArt` 6034, `featPage` 6066 |
+| 6146–6558 | the planners in one place | `schedulesPage` 6148, `todoPage` 6216, `calendarPage` 6255, `summerSchedulePage` 6387, `summerWeeksPage` 6507 |
+| 6559–6716 | a page per summer camp | `campPath` 6561, `campLink` 6563, `campAsListing` 6565, `campAges` 6566, `campPrice` 6567, `campHoursShort` 6568, `campWeeksShort` 6569, `summerBlock` 6573, `campPage` 6606, `campMovedPage` 6663, `summerCampsPage` 6677 |
+| 6717–6752 | weekend classes | `weekendAreas` 6722, `weekendByArea` 6723, `weekendRow` 6724, `weekendPage` 6729 |
+| 6753–6842 | all programs | `allProgramsPage` 6758, `notFoundPage` 6836 |
+| 6843–7007 | write | `write` 6845 |
 
 ## src/server/groups-api.php (3410 lines)
 
